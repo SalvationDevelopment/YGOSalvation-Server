@@ -1,0 +1,50 @@
+{
+    "name": "ygopro-js-server",
+    "description": "Salvation Development YGOPro Server",
+    "main": "ygoserver.js",
+    "version": "0.0.0",
+    "keywords": [
+        "ygopro",
+        "my-card",
+        "Salvation Development",
+        "yugioh",
+        "irc"
+    ],
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/salvationdevelopment/ygocorejs.git"
+    },
+    "window": {
+        "toolbar": false,
+        "frame": false,
+        "width": 1024,
+        "min_width": 1024,
+        "height": 535
+    },
+    "dependencies": {
+        "ws": "*",
+        "primus": "*",
+        "primus-rooms": "*",
+        "irc": "*",
+        "busy": "*",
+        "redis": "*",
+        "mocha": "*",
+        "portscanner": "*",
+        "watchjs": "*"
+    },
+    "optionalDependencies": {
+        "httpsys": "*",
+        "node-ffi": "*"
+    },
+    "bugs": "https://github.com/salvationdevelopment/ygocorejs/issues",
+    "author": "panthrowzay@gmail.com",
+    "homepage": "http://salvationdevelopment.com",
+    "window": {
+        "toolbar": true,
+        "frame": true,
+        "width": 1024,
+        "min_width": 1024,
+        "height": 535,
+        "icon": "application/icon.png"
+    }
+}

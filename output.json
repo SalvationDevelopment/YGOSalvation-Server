@@ -1,0 +1,50 @@
+[
+    {
+        "path": "core",
+        "modified": 1393102599000
+    },
+    {
+        "path": "ocg",
+        "modified": 1397427413000
+    },
+    {
+        "path": "sample.deck.json",
+        "modified": 1392318948000
+    },
+    {
+        "path": "tcg",
+        "modified": 1397427401000
+    },
+    {
+        "path": "ygocore.js",
+        "modified": 1397408154000
+    },
+    {
+        "path": "card.json",
+        "modified": 1392318948000
+    },
+    {
+        "path": "common.js",
+        "modified": 1392318948000
+    },
+    {
+        "path": "common.json",
+        "modified": 1392318948000
+    },
+    {
+        "path": "duel.json",
+        "modified": 1392318948000
+    },
+    {
+        "path": "effect.json",
+        "modified": 1392318948000
+    },
+    {
+        "path": "field.json",
+        "modified": 1393102599000
+    },
+    {
+        "path": "interpreter.json",
+        "modified": 1392318948000
+    }
+]
