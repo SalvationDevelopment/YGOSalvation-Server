@@ -105,6 +105,19 @@ function isChecked(id) {
 
 
 $('document').ready(function () {
-    $('main').load('launcher.html');
+    $('#servermessages').text('You are currently offline, please restart the application while you have an internet connection');
+    $('main').load('http://salvationdevelopment.com/launcher/launcher.html');
+    
 });
 
+function closeAllScreens() {
+    $('#salvationdevelopment').css('display', 'block');
+    $('#staticbar section').css('display', 'none');
+}
+
+function openScreen(id) {
+
+    closeAllScreens();
+    $('#salvationdevelopment').css('display', 'none');
+    $(id).toggle();
+}
