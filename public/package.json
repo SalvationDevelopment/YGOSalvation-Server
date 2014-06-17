@@ -3,11 +3,12 @@
     "description": "Salvation Development YGOPro Server",
     "main": "application/index.html",
     "window": {
-        "toolbar": true,
+        "toolbar": false,
         "frame": true,
         "width": 1024,
         "min_width": 1024,
         "height": 535,
+        "min-height": 535,
         "icon": "application/icon.png"
     },
     "webkit": {
