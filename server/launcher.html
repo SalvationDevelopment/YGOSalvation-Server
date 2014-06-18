@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <meta charset="utf-8">
+
+    <title>SalvationDevelopment International Launcher</title>
+    <style>
+        @import url(http://weloveiconfonts.com/api/?family=fontawesome);
+        
+        /* fontawesome */
+        [class*="fontawesome-"]:before {
+          font-family: 'FontAwesome', sans-serif;
+        }
+    </style>
+
+    <!-- Place favicon.ico and apple-touch-icon(s) in the root directory -->
+
+    <link rel="stylesheet" href="css/normalize.css">
+    <link rel="stylesheet" href="css/main.css">
+
+    <link rel="stylesheet" href="css/viewanimations.css">
+    <link rel="stylesheet" href="css/z-index.css">
+
+    <script src="js\vendor\primus.js"></script>
+    <script src="js/vendor/jquery-1.11.0.min.js"></script>
+</head>
+
+<body>
+    <iframe height="92%" id="salvationdevelopment" role="main" src="http://salvationdevelopment.com" width="100%" style="border:none;"></iframe>
+
+<script>var good = true</script>
+    <footer id="staticbar">
+        <section id="hostSettings">
+            <div class="container">
+                <h2>Settings</h2>
+                <label>Ranked</label>
+                <input type="radio" name="ranked" value="R" />Yes
+                <input type="radio" name="ranked" value="U" checked />No
+                <br />
+                <label>Ban List</label>
+                <select id="creategamebanlist">
+                    <option value="0" selected>2013.9.1(TCG)</option>
+                    <option value="1">2013.9.1(OCG)</option>
+                    <option value="2">2013.3.1</option>
+                    <option value="3">2012.9.1</option>
+                    <option value="4">2012.3.1</option>
+                    <option value="5">2011.9.1</option>
+                    <option value="6">Traditional</option>
+                    <option value="7">Unlimited</option>
+                    <option value="8">Mega-Banned</option>
+                    <option value="9">TBC</option>
+                </select>
+                <br />
+                <label>Card Pool</label>
+                <select id="creategamecardpool">
+                    <option value="0">OCG</option>
+                    <option value="1">TCG</option>
+                    <option value="2" selected>OCG/TCG</option>
+                    <option value="3">Anime</option>
+
+                </select>
+                <br />
+                <label>Duel Mode</label>
+                <select id="creategameduelmode">
+                    <option value="0" selected>Single</option>
+                    <option value="1">Match</option>
+                    <option value="2">Tag</option>
+
+                </select>
+                <br />
+                <label>Time Limit</label>
+                <select id="creategametimelimit">
+                    <option value="0" selected>3 Minutes</option>
+                    <option value="1">5 Minutes</option>
+
+                </select>
+                <br />
+
+                <h2>Additional Options</h2>
+                <label>Enable Priority</label>
+                <input type="checkbox" id="enableprio">
+                <br />
+                <label>Disable Check Deck</label>
+                <input type="checkbox" id="discheckdeck">
+                <br />
+                <label>Disable Shuffle Deck</label>
+                <input type="checkbox" id="disshuffledeck">
+                <br />
+                <br />
+                <label>Lifepoints</label>
+                <input type="number" value="8000" id="creategamelp" min="1" />
+                <br />
+                <label>Password</label>
+                <input type="text" id="creategamepassword" id="creategamepass" max="5" />
+                <br />
+                <div class="button" id="creategameok" onclick='setHostSettings();closeAllScreens();'>OK</div>
+                <div class="button" id="creategamecancel" onclick='closeAllScreens();'>Cancel</div>
+
+            </div>
+        </section>
+        <section id="settings">
+            <div class='section-content'>
+
+                <div>
+                    <h3>Game Settings</h3>
+                    <label>Auto Card Placement</label>
+                    <input type="checkbox" data-localhost="auto_card_placing" />
+                    <br />
+                    <label>Random Card Placement</label>
+                    <input type="checkbox" data-localhost="random_card_placing" />
+                    <br />
+                    <label>Auto Chain Order</label>
+                    <input type="checkbox" data-localhost="auto_chain_order" />
+                    <br />
+                    <label>Enable Sound</label>
+                    <input type="checkbox" data-localhost="enable_music" />
+                    <br />
+                    <label>Enable DirectX</label>
+                    <input type="checkbox" data-localhost="use_d3d" />
+                    <br />
+                    <label>No Delay for Chains</label>
+                    <input type="checkbox" data-localhost="no_delay_for_chain" />
+                    <br />
+                    <label>Enable Music</label>
+                    <input type="checkbox" data-localhost="enable_music" />
+                    <br />
+                    <label>Fullscreen</label>
+                    <input type="checkbox" data-localhost="fullscreen" />
+                    <br />
+                    <label>Enable User Covers</label>
+                    <input type="checkbox" data-localhost="enable_sleeve_loading" />
+                    <br />
+                    <label>Anti Aliasing</label>
+                    <input type="checkbox" data-localhost="antialias" />
+                    <label>Enable Microphone</label>
+
+                    <label>Skin</label>
+                    <select>
+                        <option value="default">Default</option>
+                    </select>
+                    <button onclick="saveSettings();closeAllScreens()">Save</button>
+                    <button onclick="applySettings();closeAllScreens()">Cancel</button>
+                    <br />
+                </div>
+        </section>
+        <marquee id='servermessages'>
+
+        </marquee>
+        <div id="staticcontrols">
+            <div id="LANMode" onclick="ygopro('');">
+                LAN Mode
+            </div>
+            <div id="rundeckedit" onclick="ygopro('-d');">
+                Deck Edit
+            </div>
+            <div id="runereplays" onclick="ygopro('-r');">
+                Replays
+            </div>
+            <div id="runHost" onclick="openScreen('#hostSettings');">
+                Host
+            </div>
+            <div id="checkmateServer" onclick="connectToCheckmateServer();">
+                Checkmate Server
+            </div>
+            <div id="runHost" onclick="openScreen('#settings');">
+                Settings
+            </div>
+
+        </div>
+    </footer>
+    <script src="http://salvationdevelopment.com/launcher/js/launcher.js">
+
+    </script>
+
+
+    <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
+
+   
+</body>
+
+</html>
+
