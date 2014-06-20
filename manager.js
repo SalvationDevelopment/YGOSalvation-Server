@@ -1,10 +1,14 @@
 /* jslint node : true */
+try {
+    require('httpsys').slipStream();
+} catch (error) {
+    console.log('Windows 8+ spefic enhancements not enabled.');
+}
 var gamelist = Object.create(null);
 
 var enums = require('./enums.js');
 var net = require('net');
 var childProcess = require('child_process');
-//var portfinder = require('portfinder');
 var Primus = require('primus');
 var Rooms = require('primus-rooms');
 var http = require('http');
@@ -39,6 +43,9 @@ var server = net.createServer(function (socket) {
     });
     socket.on('error', function (error) {
         //console.log('CLIENT ERROR', error);
+        if (active_ygocore) {
+            active_ygocore.end();
+        }
     });
     active = false;
 
@@ -102,7 +109,7 @@ var server = net.createServer(function (socket) {
                 socket.username = task[i].CTOS_PLAYER_INFO;
             }
         }
-        console.log(socket.hostString);
+        //console.log(socket.hostString);
         if (active) {
             if (gamelist[socket.hostString] && !active_ygocore) {
                 connectToCore(gamelist[socket.hostString].port, data);
@@ -139,6 +146,7 @@ var server = net.createServer(function (socket) {
                             //console.log(gamelist);
                         } else {
                             delete gamelist[socket.hostString];
+                            core.end();
                         }
 
                     });
@@ -154,7 +162,7 @@ var server = net.createServer(function (socket) {
 
 });
 
-server.listen(8911, '127.0.0.1');
+server.listen(8911);
 
 function SendCommunication(message, commandEnum) {
 
@@ -214,10 +222,9 @@ function RecieveCTOS(packet, usernameOfC, room) {
         {
             var username = packet.message.toString('utf16le'); 
             console.log(username);
-            username = username.split('\r');
-            //username = username[0].split("\u0000");
-            console.log(username);
+            username = username.split('\u0000');
             username = username[0];
+            console.log(username);
             todo.CTOS_PLAYER_INFO = username;
             break;
         }
@@ -426,7 +433,7 @@ function RecieveSTOC(packet, tempData) {
 
 }
 
-var server = http.createServer().listen(5000, '127.0.0.1');
+var server = http.createServer().listen(5000);
 var primus = new Primus(server, {
     parser: 'JSON'
 });

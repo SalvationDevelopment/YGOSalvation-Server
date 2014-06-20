@@ -4,7 +4,9 @@
 
 <head>
     <meta charset="utf-8">
-
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
     <title>SalvationDevelopment International Launcher</title>
     <style>
         @import url(http://weloveiconfonts.com/api/?family=fontawesome);
@@ -12,6 +14,17 @@
         /* fontawesome */
         [class*="fontawesome-"]:before {
           font-family: 'FontAwesome', sans-serif;
+        
+        }
+        #staticbar section {
+            height:460px;
+        }
+        .game {
+            width: 50%;
+            float:left;
+            font-size: 14px;
+            padding: 10px;
+            border: 1px solid black;
         }
     </style>
 
@@ -30,7 +43,9 @@
 <body>
     <iframe height="92%" id="salvationdevelopment" role="main" src="http://salvationdevelopment.com" width="100%" style="border:none;"></iframe>
 
-<script>var good = true</script>
+    <script>
+        var good = true
+    </script>
     <footer id="staticbar">
         <section id="hostSettings">
             <div class="container">
@@ -100,6 +115,10 @@
 
             </div>
         </section>
+        <section id='gamelistsection'>
+            <div id="gamelist"></div>
+            <button onclick="closeAllScreens()">Close</button>
+        </section>
         <section id="settings">
             <div class='section-content'>
 
@@ -145,10 +164,10 @@
                     <br />
                 </div>
         </section>
-        <marquee id='servermessages'>
+        <div id='servermessages' style='text-align: center;'>
 
-        </marquee>
-        <div id="staticcontrols">
+        </div>
+        <div id="staticcontrols" style=' width:703px'>
             <div id="LANMode" onclick="ygopro('');">
                 LAN Mode
             </div>
@@ -157,6 +176,9 @@
             </div>
             <div id="runereplays" onclick="ygopro('-r');">
                 Replays
+            </div>
+            <div id="rungamelist" onclick="openScreen('#gamelistsection');connectgamelist();">
+                Gamelist
             </div>
             <div id="runHost" onclick="openScreen('#hostSettings');">
                 Host
@@ -171,13 +193,12 @@
         </div>
     </footer>
     <script src="http://salvationdevelopment.com/launcher/js/launcher.js">
-
     </script>
 
 
     <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
 
-   
+
 </body>
 
 </html>

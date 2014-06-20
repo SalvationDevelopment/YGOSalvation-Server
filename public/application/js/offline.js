@@ -105,7 +105,7 @@ function isChecked(id) {
 
 
 $('document').ready(function () {
-    $('#servermessages').text('You are currently offline, please restart the application while you have an internet connection');
+    $('#servermessages').text('You are currently offline, please restart the when you have an internet connection');
     $('main').load('http://salvationdevelopment.com/launcher/launcher.html');
     
 });

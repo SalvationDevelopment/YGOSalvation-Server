@@ -123,11 +123,11 @@ body {
 #servermessages {
     height: 30px;
     float: left;
-    width: 410px;
+    width: 310px;
     color: black;
-    padding: 5px;
     overflow: auto;
-    padding-top: 10px;
+    font-size: 10px;
+    line-height: 1.5em;
 }
 #staticcontrols {
     padding: 5px;
