@@ -3,8 +3,11 @@
 /* jslint jquery : true */
 /* global alert, prompt */
 
-var child_process = require('child_process');
+//development, stage, production
+var mode = 'development';
 
+var child_process = require('child_process');
+var developmentstage = require('application/servercontrol.json');
 var http = require('http');
 var fs = require('fs');
 var walk = require('fs-walk');
@@ -64,8 +67,22 @@ function ygopro(mode) {
             throw err;
         }
         //console.log('It\'s saved!');
-        child_process.execFile('devpro.dll', [mode], {
+        child_process.execFile('ygopro.exe', [mode], {
             cwd: 'ygopro'
+        }, function (error) {
+            if (error !== null) {
+                //write crash report;
+                alert('YGOPro Crashed');
+                var filelocation = 'crash_report_YGOPro_' + (new Date().toDateString) + '.log';
+                fs.writeFile(filelocation, error, function () {});
+            }
+            fs.readFile('ygopro/system.conf', function (error, file) {
+                if (error !== null) {
+                    alert('file permission error, cant read system.conf');
+                    throw err;
+                }
+                var options = file.split('\r\n');
+            });
         });
     });
 }
@@ -106,8 +123,8 @@ function isChecked(id) {
 
 $('document').ready(function () {
     $('#servermessages').text('You are currently offline, please restart the when you have an internet connection');
-    $('main').load('http://salvationdevelopment.com/launcher/launcher.html');
-    
+    $('main').load(developmentstage[mode]);
+
 });
 
 function closeAllScreens() {
