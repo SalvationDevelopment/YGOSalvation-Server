@@ -51,6 +51,11 @@ var server = net.createServer(function (socket) {
         if (active_ygocore) {
             active_ygocore.end();
         }
+        if (socket.core) {
+            socket.core.kill();
+            delete socket.core;
+            delete gamelist[socket.hostString];
+        }
     });
     active = false;
 
@@ -76,10 +81,18 @@ var server = net.createServer(function (socket) {
 
             });
             active_ygocore.on('error', function (error) {
-                //console.log('CORE ERROR', error);
+                if (socket.core) {
+                    socket.core.kill();
+                    delete socket.core;
+                    delete gamelist[socket.hostString];
+                }
             });
             active_ygocore.on('close', function () {
-                //console.log('CORE conenction closed');
+                if (socket.core) {
+                    socket.core.kill();
+                    delete socket.core;
+                    delete gamelist[socket.hostString];
+                }
                 socket.end();
             });
         });
@@ -118,11 +131,11 @@ var server = net.createServer(function (socket) {
         if (active) {
             if (gamelist[socket.hostString] && !active_ygocore) {
                 connectToCore(gamelist[socket.hostString].port, data);
-                console.log(socket.username+ ' connecting to existing core');
+                console.log(socket.username + ' connecting to existing core');
                 gamelist[socket.hostString].players.push(socket.username);
             } else if (!gamelist[socket.hostString] && !active_ygocore) {
 
-                console.log(socket.username+ ' connecting to new core');
+                console.log(socket.username + ' connecting to new core');
                 portfinder.getPort(function (err, port) {
                     //console.log('connecting to new core @', port);
                     //console.log('found port ', port);
@@ -142,7 +155,7 @@ var server = net.createServer(function (socket) {
                     });
                     socket.core.stdout.on('data', function (core_message) {
                         core_message = core_message.toString();
-                        console.log(port+': Core Message: ', core_message);
+                        console.log(port + ': Core Message: ', core_message);
                         if (core_message[0] === 'S') {
 
                             connectToCore(port, data);
@@ -156,7 +169,7 @@ var server = net.createServer(function (socket) {
                             //console.log(gamelist);
                         } else {
                             socket.core.kill();
-                            console.log('attempting to kill game hosted by',gamelist[socket.hostString].players[0]);
+                            console.log('attempting to kill game hosted by', gamelist[socket.hostString].players[0]);
                             delete socket.core;
                             delete gamelist[socket.hostString];
 
@@ -235,8 +248,8 @@ function RecieveCTOS(packet, usernameOfC, room) {
         {
             var username = packet.message.toString('utf16le');
             username = username.split('\u0000');
-            console.log(username);
-            todo.CTOS_PLAYER_INFO = username;
+            console.log(username[0]);
+            todo.CTOS_PLAYER_INFO = username[0];
             break;
         }
     case ('CTOS_JOIN_GAME'):
