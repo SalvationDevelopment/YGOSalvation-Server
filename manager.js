@@ -118,11 +118,11 @@ var server = net.createServer(function (socket) {
         if (active) {
             if (gamelist[socket.hostString] && !active_ygocore) {
                 connectToCore(gamelist[socket.hostString].port, data);
-                console.log('connecting to existing core');
+                console.log(socket.username+ ' connecting to existing core');
                 gamelist[socket.hostString].players.push(socket.username);
             } else if (!gamelist[socket.hostString] && !active_ygocore) {
 
-                //console.log('locking for port');
+                console.log(socket.username+ ' connecting to new core');
                 portfinder.getPort(function (err, port) {
                     //console.log('connecting to new core @', port);
                     //console.log('found port ', port);
@@ -142,7 +142,7 @@ var server = net.createServer(function (socket) {
                     });
                     socket.core.stdout.on('data', function (core_message) {
                         core_message = core_message.toString();
-                        console.log('Core Message: ', core_message);
+                        console.log(port+': Core Message: ', core_message);
                         if (core_message[0] === 'S') {
 
                             connectToCore(port, data);
@@ -156,6 +156,7 @@ var server = net.createServer(function (socket) {
                             //console.log(gamelist);
                         } else {
                             socket.core.kill();
+                            console.log('attempting to kill game hosted by',gamelist[socket.hostString].players[0]);
                             delete socket.core;
                             delete gamelist[socket.hostString];
 
@@ -233,9 +234,7 @@ function RecieveCTOS(packet, usernameOfC, room) {
     case ('CTOS_PLAYER_INFO'):
         {
             var username = packet.message.toString('utf16le');
-            console.log(username);
             username = username.split('\u0000');
-            username = username[0];
             console.log(username);
             todo.CTOS_PLAYER_INFO = username;
             break;
