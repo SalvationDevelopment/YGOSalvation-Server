@@ -135,7 +135,11 @@ var server = net.createServer(function (socket) {
                             //console.log('exec error: ' + error);
                         }
                     });
-
+                    socket.core.stdout.on('error', function () {
+                        delete socket.core;
+                        delete gamelist[socket.hostString];
+                        console.log('core error');
+                    });
                     socket.core.stdout.on('data', function (core_message) {
                         core_message = core_message.toString();
                         console.log('Core Message: ', core_message);
