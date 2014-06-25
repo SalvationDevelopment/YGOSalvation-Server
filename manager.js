@@ -40,6 +40,11 @@ var server = net.createServer(function (socket) {
         if (active_ygocore) {
             active_ygocore.end();
         }
+        if (socket.core) {
+            socket.core.kill();
+            delete socket.core;
+            delete gamelist[socket.hostString];
+        }
     });
     socket.on('error', function (error) {
         //console.log('CLIENT ERROR', error);
@@ -121,7 +126,7 @@ var server = net.createServer(function (socket) {
                 portfinder.getPort(function (err, port) {
                     //console.log('connecting to new core @', port);
                     //console.log('found port ', port);
-                    var core = childProcess.spawn('ygocoreSD3.exe ', [port], {
+                    socket.core = childProcess.spawn('ygocoreSD3.exe ', [port], {
                         cwd: 'public/ygopro/'
                     }, function (error, stdout, stderr) {
                         //console.log('CORE Terminated', stderr, stdout);
@@ -131,8 +136,9 @@ var server = net.createServer(function (socket) {
                         }
                     });
 
-                    core.stdout.on('data', function (core_message) {
+                    socket.core.stdout.on('data', function (core_message) {
                         core_message = core_message.toString();
+                        console.log('Core Message: ', core_message);
                         if (core_message[0] === 'S') {
 
                             connectToCore(port, data);
@@ -145,8 +151,10 @@ var server = net.createServer(function (socket) {
 
                             //console.log(gamelist);
                         } else {
+                            socket.core.kill();
+                            delete socket.core;
                             delete gamelist[socket.hostString];
-                            core.end();
+
                         }
 
                     });
@@ -220,7 +228,7 @@ function RecieveCTOS(packet, usernameOfC, room) {
     switch (packet.CTOS) {
     case ('CTOS_PLAYER_INFO'):
         {
-            var username = packet.message.toString('utf16le'); 
+            var username = packet.message.toString('utf16le');
             console.log(username);
             username = username.split('\u0000');
             username = username[0];
@@ -238,7 +246,7 @@ function RecieveCTOS(packet, usernameOfC, room) {
             if (gamelist[roomname]) {
 
                 todo.CTOS_JOIN_GAME = roomname;
-                
+
             } else {
 
                 //requesting to host a new game.

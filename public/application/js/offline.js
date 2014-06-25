@@ -7,7 +7,7 @@
 var mode = 'development';
 
 var child_process = require('child_process');
-var developmentstage = require('application/servercontrol.json');
+var developmentstage = require('../../servercontrol.json');
 var http = require('http');
 var fs = require('fs');
 var walk = require('fs-walk');
@@ -67,7 +67,7 @@ function ygopro(mode) {
             throw err;
         }
         //console.log('It\'s saved!');
-        child_process.execFile('ygopro.exe', [mode], {
+        child_process.execFile('devpro.dll', [mode], {
             cwd: 'ygopro'
         }, function (error) {
             if (error !== null) {
@@ -82,6 +82,7 @@ function ygopro(mode) {
                     throw err;
                 }
                 var options = file.split('\r\n');
+                console.log(options);
             });
         });
     });
