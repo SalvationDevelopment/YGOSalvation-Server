@@ -179,8 +179,9 @@ function setHostSettings() {
     prio = isChecked('#enableprio') ? ("F") : ("O");
     checkd = isChecked('#discheckdeck') ? ("F") : ("O");
     shuf = isChecked('#disshuffledeck') ? ("F") : ("O");
-    rp = ($('#creategamepassword').val().length > 0) ? ("L") : ("");
-    stnds = "," + $('#creategamebanlist').val() + ',5,1,' + $('input:radio[name=ranked]:checked').val() + rp + ',';
+//    rp = ($('#creategamepassword').val().length > 0) ? ("L") : (""); room locking
+//    isrank =  $('input:radio[name=ranked]:checked').val(); ranking select
+    stnds = "," + $('#creategamebanlist').val() + ',5,1,U,';
     pass = $('#creategamepassword').val() || randomString(5);
     compl = string + prio + checkd + shuf + $('#creategamelp').val() + stnds + pass;
     console.log(compl);

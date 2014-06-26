@@ -44,6 +44,7 @@ var server = net.createServer(function (socket) {
             socket.core.kill();
             delete socket.core;
             delete gamelist[socket.hostString];
+            primus.room('activegames').write(JSON.stringify(gamelist));
         }
     });
     socket.on('error', function (error) {
@@ -55,6 +56,7 @@ var server = net.createServer(function (socket) {
             socket.core.kill();
             delete socket.core;
             delete gamelist[socket.hostString];
+            primus.room('activegames').write(JSON.stringify(gamelist));
         }
     });
     active = false;
@@ -85,6 +87,7 @@ var server = net.createServer(function (socket) {
                     socket.core.kill();
                     delete socket.core;
                     delete gamelist[socket.hostString];
+                    primus.room('activegames').write(JSON.stringify(gamelist));
                 }
             });
             active_ygocore.on('close', function () {
@@ -92,6 +95,7 @@ var server = net.createServer(function (socket) {
                     socket.core.kill();
                     delete socket.core;
                     delete gamelist[socket.hostString];
+                    primus.room('activegames').write(JSON.stringify(gamelist));
                 }
                 socket.end();
             });
@@ -151,6 +155,7 @@ var server = net.createServer(function (socket) {
                     socket.core.stdout.on('error', function () {
                         delete socket.core;
                         delete gamelist[socket.hostString];
+                        primus.room('activegames').write(JSON.stringify(gamelist));
                         console.log('core error');
                     });
                     socket.core.stdout.on('data', function (core_message) {
@@ -172,6 +177,7 @@ var server = net.createServer(function (socket) {
                             console.log('attempting to kill game hosted by', gamelist[socket.hostString].players[0]);
                             delete socket.core;
                             delete gamelist[socket.hostString];
+                            primus.room('activegames').write(JSON.stringify(gamelist));
 
                         }
 
