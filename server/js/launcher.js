@@ -1,11 +1,10 @@
 /* jslint node : true */
 /* jslint browser : true */
-/* global applySettings, ygopro, $, isChecked, alert, Primus, console, process, applysettings, prompt */
+/* global ygopro, $, isChecked, alert, Primus, console, process, applysettings, prompt */
 
 applySettings();
 var siteLocation = 'http://salvationdevelopment.com/launcher/';
-var request = require('request');
-var async = require('async');
+
 
 var http = require('http');
 var fs = require('fs');
@@ -30,7 +29,7 @@ http.get(options, function (res) {
 
 function update(location, file) {
     var files = {};
-    walk.walkSync(location, function (basedir, filename, stat, next) {
+    walk.walkSync(location, function (basedir, filename, stat) {
         files[filename] = stat.mtime.getTime() || 0;
     });
     return files;
@@ -65,21 +64,8 @@ var screenMessage = $('#servermessages');
 
 var nodecrypto = require('crypto');
 
-function checksum(str, algorithm, encoding) {
-    return nodecrypto
-        .createHash(algorithm || 'md5')
-        .update(str, 'utf8')
-        .digest(encoding || 'hex');
-}
 
-function getCrc(s) {
-    var result = 0;
-    for (var i = 0; i < s.length; i++) {
-        var c = s[i];
-        result = (result << 1) ^ c;
-    }
-    return result;
-}
+var downloadList = [];
 
 function hashcheck() {
     if (completeList.length === 0) {
@@ -105,7 +91,6 @@ function hashcheck() {
         hashcheck();
     });
 }
-var downloadList = [];
 
 function download() {
     if (downloadList.length === 0) {
@@ -137,7 +122,7 @@ function download() {
 
 
 
-var child_process = require('child_process');
+
 $('#servermessages').text('Server Messages will spawn here.');
 
 
@@ -174,7 +159,7 @@ function setHostSettings() {
         return randomstring;
     }
 
-    var string, prio, checkd, shuf, rp, stnds, pass, compl;
+    var string, prio, checkd, shuf,  stnds, pass, compl;
     string = "" + $('#creategamecardpool').val() + $('#creategameduelmode').val() + $('#creategametimelimit').val();
     prio = isChecked('#enableprio') ? ("F") : ("O");
     checkd = isChecked('#discheckdeck') ? ("F") : ("O");
