@@ -4,7 +4,6 @@ var path = require('path');
 var startTime = new Date();
 console.log(startTime);
 function dirTree(filename) {
-    var data;
     var stats = fs.lstatSync(filename),
         info = {
             path: filename,
