@@ -124,7 +124,6 @@ module.exports.STOC = {
 
         },
         MSG_NEW_PHASE: {
-
             0x01: "PHASE_DRAW",
             0x02: "PHASE_STANDBY",
             0x04: "PHASE_MAIN1",
@@ -138,9 +137,8 @@ module.exports.STOC = {
     }
 };
 module.exports.CTOS = {
-
     0x1: "CTOS_RESPONSE",
-    0x2: "CTOS_UPDATE_DECK	",
+    0x2: "CTOS_UPDATE_DECK",
     0x3: "CTOS_HAND_RESULT",
     0x4: "CTOS_TP_RESULT",
     0x10: "CTOS_PLAYER_INFO",
@@ -183,7 +181,6 @@ module.exports.STOCCheck = {
     "STOC_HS_WATCH_CHANGE": false,
 };
 module.exports.CTOSCheck = {
-
     "CTOS_RESPONSE": false,
     "CTOS_UPDATE_DECK": false,
     "CTOS_HAND_RESULT": false,
@@ -201,5 +198,4 @@ module.exports.CTOSCheck = {
     "CTOS_HS_NOTREADY": false,
     "CTOS_HS_KICK": false,
     "CTOS_HS_START": false
-
 };
