@@ -7,6 +7,7 @@ try {
 var gamelist = Object.create(null);
 
 var enums = require('./enums.js');
+var parsePackets= require('parsepackets.js');
 var net = require('net');
 var childProcess = require('child_process');
 var Primus = require('primus');
@@ -257,28 +258,7 @@ function SendCommunication(message, commandEnum) {
     return new Buffer(communication);
 }
 
-function parsePackets(command, message) {
-    var task = [];
-    var buffer_read_position = 0;
-    //The message is stripped and turned into a normal packet so we can understand it as:
-    //{length, +length, type of message, the message itself }
-    //the server may send more than one at a time so lets take it one at a time.
-    while (buffer_read_position < message.length) {
-        var read = message[buffer_read_position] + message[(buffer_read_position + 1)];
-        var packet = {
-            LENGTH: read,
-            message: message.slice((buffer_read_position + 3), (buffer_read_position + 1 + read)),
-            readposition: 0
-        };
-        packet[command] = enums[command][message[(buffer_read_position + 2)]] || message[(buffer_read_position + 2)];
 
-
-        task.push(packet);
-
-        buffer_read_position = buffer_read_position + 2 + read;
-    }
-    return task;
-}
 
 function RecieveCTOS(packet, usernameOfC, room) {
     var todo = Object.create(enums.CTOSCheck);
