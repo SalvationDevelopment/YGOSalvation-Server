@@ -112,6 +112,7 @@ $('#servermessages').text('Server Messages will spawn here.');
 
 
 var primus = Primus.connect('http://salvationdevelopment.com:5000');
+
 function joinGamelist() {
     primus.write({
         action: 'join'
@@ -132,27 +133,22 @@ function hostGame(parameters) {
 }
 
 
-function tetraCompare(test, option1, option2){
-    return test ? option1 : option2;
+function randomString(len, charSet) {
+    charSet = charSet || 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    var randomstring = '';
+    for (var i = 0; i < len; i++) {
+        var randomPoz = Math.floor(Math.random() * charSet.length);
+        randomstring += charSet.substring(randomPoz, randomPoz + 1);
+    }
+    return randomstring;
 }
 
 function setHostSettings() {
-
-    function randomString(len, charSet) {
-        charSet = charSet || 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-        var randomstring = '';
-        for (var i = 0; i < len; i++) {
-            var randomPoz = Math.floor(Math.random() * charSet.length);
-            randomstring += charSet.substring(randomPoz, randomPoz + 1);
-        }
-        return randomstring;
-    }
-
     var string, prio, checkd, shuf, stnds, pass, compl;
     string = "" + $('#creategamecardpool').val() + $('#creategameduelmode').val() + $('#creategametimelimit').val();
-    prio = tetraCompare(isChecked('#enableprio') , "F" , "O");
-    checkd = tetraCompare(isChecked('#discheckdeck') ,"F","O");
-    shuf = tetraCompare(isChecked('#disshuffledeck') , "F" , "O");
+    prio = isChecked('#enableprio') ? ("F") : ("O");
+    checkd = isChecked('#discheckdeck') ? ("F") : ("O");
+    shuf = isChecked('#disshuffledeck') ? ("F") : ("O");
     stnds = "," + $('#creategamebanlist').val() + ',5,1,U,';
     pass = $('#creategamepassword').val() || randomString(5);
     compl = string + prio + checkd + shuf + $('#creategamelp').val() + stnds + pass;
@@ -161,19 +157,25 @@ function setHostSettings() {
     localStorage.lastip = '192.99.11.19\r\n';
     localStorage.serverport = '8911\r\n';
     localStorage.lastport = '8911\r\n';
-
-    if ($('#creategamecardpool').val() === 2 && $('input:radio[name=ranked]:checked').val() === 'R') {
-        alert('OCG/TCG is not a valid mode for ranked, please select a different mode for ranked play');
-        return false;
-    }
-    if (prio + checkd + shuf !== "OOO" && $('input:radio[name=ranked]:checked').val() === 'R') {
-        alert('You may not cheat here.');
-        return false;
-    }
+    
+    if (!secure(prio, checkd, shuf)) return;
+    
+    
     locallogin();
     ygopro('-j');
 }
 
+function secure(prio, checkd, shuf){
+    if (prio + checkd + shuf !== "OOO" && $('input:radio[name=ranked]:checked').val() === 'R') {
+        alert('You may not cheat here.');
+        return false;
+    }
+    if ($('#creategamecardpool').val() === 2 && $('input:radio[name=ranked]:checked').val() === 'R') {
+        alert('OCG/TCG is not a valid mode for ranked, please select a different mode for ranked play');
+        return false;
+    }
+    return true;
+}
 
 function connectgamelist() {
     primus.write({
