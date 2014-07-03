@@ -1,7 +1,7 @@
 /* jslint node : true */
 /* jslint browser : true */
 /* global ygopro, $, isChecked, alert, Primus, console, process, applySettings, prompt */
-/* exported joinGamelist, leaveGamelist, hostGame, connectgamelist, enterGame*/
+/* exported joinGamelist, leaveGamelist, hostGame, connectgamelist, enterGame, setHostSettings, gui*/
 
 applySettings();
 var siteLocation = 'http://salvationdevelopment.com/launcher/';
@@ -11,7 +11,7 @@ var http = require('http');
 var fs = require('fs');
 var walk = require('fs-walk');
 var url = require('url');
-
+var gui = require('nw.gui');
 
 var manifest = '';
 var options = {
@@ -28,13 +28,7 @@ http.get(options, function (res) {
     });
 });
 
-function update(location, file) {
-    var files = {};
-    walk.walkSync(location, function (basedir, filename, stat) {
-        files[filename] = stat.mtime.getTime() || 0;
-    });
-    return files;
-}
+
 
 process.on('uncaughtException', function (err) {
     console.log('Caught exception: ' + err);
@@ -142,7 +136,6 @@ function hostGame(parameters) {
         format: parameters
     });
 }
-var gui = require('nw.gui');
 
 function setHostSettings() {
 
@@ -172,11 +165,11 @@ function setHostSettings() {
     localStorage.serverport = '8911\r\n';
     localStorage.lastport = '8911\r\n';
 
-    if ($('#creategamecardpool').val() == 2 && $('input:radio[name=ranked]:checked').val() == 'R') {
+    if ($('#creategamecardpool').val() === 2 && $('input:radio[name=ranked]:checked').val() === 'R') {
         alert('OCG/TCG is not a valid mode for ranked, please select a different mode for ranked play');
         return false;
     }
-    if (prio + checkd + shuf !== "OOO" && $('input:radio[name=ranked]:checked').val() == 'R') {
+    if (prio + checkd + shuf !== "OOO" && $('input:radio[name=ranked]:checked').val() === 'R') {
         alert('You may not cheat here.');
         return false;
     }
@@ -274,7 +267,7 @@ function parseDuelOptions(duelOptions) {
     lifePoints = duelOptionsParts[0].substring(6);
 
     //Determine Banlist
-    banList = parseInt(duelOptionsParts[1]);
+    banList = parseInt(duelOptionsParts[1], 10);
 
     //Select how many cards to draw on first hand
     openDraws = duelOptionsParts[2];
