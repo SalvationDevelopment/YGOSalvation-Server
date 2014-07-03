@@ -7,7 +7,7 @@ try {
 var gamelist = Object.create(null);
 
 var enums = require('./enums.js');
-var parsePackets= require('./parsepackets.js');
+var parsePackets = require('./parsepackets.js');
 var net = require('net');
 var childProcess = require('child_process');
 var Primus = require('primus');
@@ -17,7 +17,7 @@ var server = http.createServer().listen(5000);
 var primus = new Primus(server, {
     parser: 'JSON'
 });
-
+var RecieveCTOS = require('./recieveCTOS');
 var RecieveSTOC = require('./recieveSTOC.js');
 primus.use('rooms', Rooms);
 
@@ -55,6 +55,7 @@ primus.on('disconnection', function (socket) {
     console.log('Duel Room Disconnection');
     // the spark that disconnected
 });
+
 function PortFinder() {
     this.getPort = function (callback) {
         var activerooms = [];
@@ -162,15 +163,27 @@ var server = net.createServer(function (socket) {
         })();
 
         for (var i = 0; task.length > i; i++) {
-            if (task[i].CTOS_JOIN_GAME !== false) {
+            if (task[i].CTOS_JOIN_GAME) {
                 active = true;
                 //console.log('I am changing the hostString!!!');
                 //console.log('because it =', task[i].CTOS_JOIN_GAME, typeof (task[i].CTOS_JOIN_GAME));
                 socket.hostString = task[i].CTOS_JOIN_GAME;
                 //console.log(task);
             }
-            if (task[i].CTOS_PLAYER_INFO !== false) {
+            if (task[i].CTOS_PLAYER_INFO) {
                 socket.username = task[i].CTOS_PLAYER_INFO;
+            }
+            if (task[i].CTOS_HS_TODUELIST) {
+                gamelist[socket.hostString].players.push(socket.username);
+                primus.room('activegames').write(JSON.stringify(gamelist));
+            }
+            if (task[i].CTOS_HS_TOOBSERVER || task[i].CTOS_LEAVE_GAME ) {
+                gamelist[socket.hostString].players.splice(gamelist[socket.hostString].players.indexOf(socket.username), 1);
+                primus.room('activegames').write(JSON.stringify(gamelist));
+            }
+            if (task[i].CTOS_HS_START) {
+                gamelist[socket.hostString].started = true;
+                primus.room('activegames').write(JSON.stringify(gamelist));
             }
         }
         //console.log(socket.hostString);
@@ -241,86 +254,4 @@ server.listen(8911);
 
 
 
-
-function RecieveCTOS(packet, usernameOfC, room) {
-    var todo = Object.create(enums.CTOSCheck);
-
-   
-    switch (packet.CTOS) {
-    case ('CTOS_PLAYER_INFO'):
-        {
-            var username = packet.message.toString('utf16le');
-            username = username.split('\u0000');
-            console.log(username[0]);
-            todo.CTOS_PLAYER_INFO = username[0];
-            break;
-        }
-    case ('CTOS_JOIN_GAME'):
-        {
-            //Player joined the game/server
-            //var version = packet.message[0] + packet.message[1];
-            var roomname = packet.message.toString('utf16le', 8, 56);
-            //console.log('version:', '0x' + parseInt(version, 16), 'roomname:', roomname);
-
-            if (gamelist[roomname]) {
-
-                todo.CTOS_JOIN_GAME = roomname;
-
-            } else {
-
-                //requesting to host a new game.
-
-
-                todo.CTOS_JOIN_GAME = roomname;
-
-            }
-            primus.room('activegames').write(JSON.stringify(gamelist));
-            break;
-        }
-    case ('CTOS_HS_READY'):
-        {
-            break;
-        }
-    case ('CTOS_HS_NOTREADY'):
-        {
-            break;
-        }
-    case ('CTOS_HS_TODUELIST'):
-        {
-            ////console.log(packet.message.toString('binary'), packet);
-            //            var type = packet.message.readUInt8(0);
-            //            var selftype = type & 0xF;
-
-            //console.log(usernameOfC, room);
-            gamelist[room].players.push(usernameOfC);
-            console.log(gamelist[room]);
-            primus.room('activegames').write(JSON.stringify(gamelist));
-            break;
-        }
-    case ('CTOS_HS_TOOBSERVER'):
-        {
-            ////console.log(packet.message.toString('binary'), packet);
-            //            var type = packet.message.readUInt8(0);
-            //            var selftype = type & 0xF;
-
-            //console.log(usernameOfC, room);
-            gamelist[room].players.splice(gamelist[room].players.indexOf(usernameOfC), 1);
-            primus.room('activegames').write(JSON.stringify(gamelist));
-            break;
-        }
-    case ('CTOS_LEAVE_GAME'):
-        {
-            gamelist[room].players.splice(gamelist[room].players.indexOf(usernameOfC), 1);
-            primus.room('activegames').write(JSON.stringify(gamelist));
-            break;
-        }
-    case ('CTOS_HS_START'):
-        {
-            gamelist[room].started = true;
-            primus.room('activegames').write(JSON.stringify(gamelist));
-            break;
-        }
-    }
-    return todo;
-}
 
