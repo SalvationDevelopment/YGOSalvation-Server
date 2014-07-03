@@ -157,45 +157,14 @@ module.exports.CTOS = {
     //defunc 0x26: "DEVPRO_GAME_INFO"
 
 };
-module.exports.STOCCheck = {
-    "STOC_UNKNOWN": false,
-    "STOC_GAME_MSG": false,
-    "STOC_ERROR_MSG": false,
-    "STOC_SELECT_HAND": false,
-    "STOC_SELECT_TP": false,
-    "STOC_HAND_RESULT": false,
-    "STOC_TP_RESULT": false,
-    "STOC_CHANGE_SIDE": false,
-    "STOC_WAITING_SIDE": false,
-    "STOC_CREATE_GAME": false,
-    "STOC_JOIN_GAME": false,
-    "STOC_TYPE_CHANGE": false,
-    "STOC_LEAVE_GAME": false,
-    "STOC_DUEL_START": false,
-    "STOC_DUEL_END": false,
-    "STOC_REPLAY": false,
-    "STOC_TIME_LIMIT": false,
-    "STOC_CHAT": false,
-    "STOC_HS_PLAYER_ENTER": false,
-    "STOC_HS_PLAYER_CHANGE": false,
-    "STOC_HS_WATCH_CHANGE": false,
-};
-module.exports.CTOSCheck = {
-    "CTOS_RESPONSE": false,
-    "CTOS_UPDATE_DECK": false,
-    "CTOS_HAND_RESULT": false,
-    "CTOS_TP_RESULT": false,
-    "CTOS_PLAYER_INFO": false,
-    "CTOS_CREATE_GAME": false,
-    "CTOS_JOIN_GAME": false,
-    "CTOS_LEAVE_GAME": false,
-    "CTOS_SURRENDER": false,
-    "CTOS_TIME_COMFIRM": false,
-    "CTOS_CHAT": false,
-    "CTOS_HS_TODUELIST": false,
-    "CTOS_HS_TOOBSERVER": false, //to observer
-    "CTOS_HS_READY": false,
-    "CTOS_HS_NOTREADY": false,
-    "CTOS_HS_KICK": false,
-    "CTOS_HS_START": false
-};
+function makeCheck(target){
+    var destination = target + 'Check';
+    module.exports[destination] = {};
+    for(var value in module.exports[target]){
+        if(module.exports[target].hasOwnProperty(value)){
+            module.exports[destination][value] = false;
+        }
+    }
+}
+makeCheck('STOC');
+makeCheck('CTOS');
