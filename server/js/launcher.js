@@ -143,24 +143,32 @@ function randomString(len, charSet) {
     return randomstring;
 }
 
+function getDuelRequest(){
+    return {
+        string : "" + $('#creategamecardpool').val() + $('#creategameduelmode').val() + $('#creategametimelimit').val(),
+        prio: isChecked('#enableprio') ? ("F") : ("O"),
+        checkd : isChecked('#discheckdeck') ? ("F") : ("O"),
+        shuf: isChecked('#disshuffledeck') ? ("F") : ("O"),
+        stnds: "," + $('#creategamebanlist').val() + ',5,1,U,',
+        pass: randomString(5)
+    };
+}
+
 function setHostSettings() {
-    var string, prio, checkd, shuf, stnds, pass, compl;
-    string = "" + $('#creategamecardpool').val() + $('#creategameduelmode').val() + $('#creategametimelimit').val();
-    prio = isChecked('#enableprio') ? ("F") : ("O");
-    checkd = isChecked('#discheckdeck') ? ("F") : ("O");
-    shuf = isChecked('#disshuffledeck') ? ("F") : ("O");
-    stnds = "," + $('#creategamebanlist').val() + ',5,1,U,';
-    pass = $('#creategamepassword').val() || randomString(5);
-    compl = string + prio + checkd + shuf + $('#creategamelp').val() + stnds + pass;
-    console.log(compl);
-    localStorage.roompass = compl;
+
+    var duelRequest = getDuelRequest();
+    localStorage.roompass = 
+        duelRequest.string + duelRequest.prio + 
+        duelRequest.checkd + duelRequest.shuf + 
+        $('#creategamelp').val() + duelRequest.stnds + 
+        duelRequest.pass;
+    
     localStorage.lastip = '192.99.11.19\r\n';
     localStorage.serverport = '8911\r\n';
     localStorage.lastport = '8911\r\n';
     
-    if (!secure(prio, checkd, shuf)) return;
-    
-    
+    if (!secure(duelRequest.prio, duelRequest.checkd, duelRequest.shuf)) return;
+
     locallogin();
     ygopro('-j');
 }
