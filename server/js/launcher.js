@@ -1,6 +1,7 @@
 /* jslint node : true */
 /* jslint browser : true */
-/* global ygopro, $, isChecked, alert, Primus, console, process, applysettings, prompt */
+/* global ygopro, $, isChecked, alert, Primus, console, process, applySettings, prompt */
+/* exported joinGamelist, leaveGamelist, hostGame, connectgamelist, enterGame*/
 
 applySettings();
 var siteLocation = 'http://salvationdevelopment.com/launcher/';
@@ -60,10 +61,6 @@ function updateCheckFile(file, initial) {
     }
 }
 var screenMessage = $('#servermessages');
-
-
-var nodecrypto = require('crypto');
-
 
 var downloadList = [];
 
@@ -126,7 +123,7 @@ function download() {
 $('#servermessages').text('Server Messages will spawn here.');
 
 
-
+var primus = Primus.connect('http://salvationdevelopment.com:5000');
 function joinGamelist() {
     primus.write({
         action: 'join'
@@ -159,13 +156,13 @@ function setHostSettings() {
         return randomstring;
     }
 
-    var string, prio, checkd, shuf,  stnds, pass, compl;
+    var string, prio, checkd, shuf, stnds, pass, compl;
     string = "" + $('#creategamecardpool').val() + $('#creategameduelmode').val() + $('#creategametimelimit').val();
     prio = isChecked('#enableprio') ? ("F") : ("O");
     checkd = isChecked('#discheckdeck') ? ("F") : ("O");
     shuf = isChecked('#disshuffledeck') ? ("F") : ("O");
-//    rp = ($('#creategamepassword').val().length > 0) ? ("L") : (""); room locking
-//    isrank =  $('input:radio[name=ranked]:checked').val(); ranking select
+    //    rp = ($('#creategamepassword').val().length > 0) ? ("L") : (""); room locking
+    //    isrank =  $('input:radio[name=ranked]:checked').val(); ranking select
     stnds = "," + $('#creategamebanlist').val() + ',5,1,U,';
     pass = $('#creategamepassword').val() || randomString(5);
     compl = string + prio + checkd + shuf + $('#creategamelp').val() + stnds + pass;
@@ -186,7 +183,7 @@ function setHostSettings() {
     locallogin();
     ygopro('-j');
 }
-var primus = Primus.connect('http://salvationdevelopment.com:5000');
+
 
 function connectgamelist() {
     primus.write({
@@ -322,8 +319,8 @@ function renderList(JSONdata) {
     for (var rooms in JSONdata) {
         if (JSONdata.hasOwnProperty(rooms)) {
             var translated = parseDuelOptions(rooms);
-            var content = '<div class="game" onclick=enterGame("'+rooms+'")>'+
-             JSONdata[rooms].players[0] + ' for ' + translated.isRanked + '  ' + translated.gameMode + '</div>';
+            var content = '<div class="game" onclick=enterGame("' + rooms + '")>' +
+                JSONdata[rooms].players[0] + ' for ' + translated.isRanked + '  ' + translated.gameMode + '</div>';
 
             $('#gamelist').append(content);
         }
@@ -332,11 +329,11 @@ function renderList(JSONdata) {
 }
 
 function locallogin(init) {
-    if (localStorage.nickname.indexOf('\u0000') < 1 || init ===  true) {
+    if (localStorage.nickname.indexOf('\u0000') < 1 || init === true) {
         var username = prompt('Username: ', localStorage.nickname);
-        while(!username){
-		    username = prompt('Username: ', localStorage.nickname);
-    	}
+        while (!username) {
+            username = prompt('Username: ', localStorage.nickname);
+        }
         localStorage.nickname = username + '\u0000\r\n';
     }
 }
