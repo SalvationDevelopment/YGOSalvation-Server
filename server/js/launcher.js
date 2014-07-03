@@ -9,7 +9,6 @@ var siteLocation = 'http://salvationdevelopment.com/launcher/';
 
 var http = require('http');
 var fs = require('fs');
-var walk = require('fs-walk');
 var url = require('url');
 var gui = require('nw.gui');
 
@@ -109,11 +108,6 @@ function download() {
     });
 }
 
-
-
-
-
-
 $('#servermessages').text('Server Messages will spawn here.');
 
 
@@ -137,6 +131,11 @@ function hostGame(parameters) {
     });
 }
 
+
+function tetraCompare(test, option1, option2){
+    return test ? option1 : option2;
+}
+
 function setHostSettings() {
 
     function randomString(len, charSet) {
@@ -151,11 +150,9 @@ function setHostSettings() {
 
     var string, prio, checkd, shuf, stnds, pass, compl;
     string = "" + $('#creategamecardpool').val() + $('#creategameduelmode').val() + $('#creategametimelimit').val();
-    prio = isChecked('#enableprio') ? ("F") : ("O");
-    checkd = isChecked('#discheckdeck') ? ("F") : ("O");
-    shuf = isChecked('#disshuffledeck') ? ("F") : ("O");
-    //    rp = ($('#creategamepassword').val().length > 0) ? ("L") : (""); room locking
-    //    isrank =  $('input:radio[name=ranked]:checked').val(); ranking select
+    prio = tetraCompare(isChecked('#enableprio') , "F" , "O");
+    checkd = tetraCompare(isChecked('#discheckdeck') ,"F","O");
+    shuf = tetraCompare(isChecked('#disshuffledeck') , "F" , "O");
     stnds = "," + $('#creategamebanlist').val() + ',5,1,U,';
     pass = $('#creategamepassword').val() || randomString(5);
     compl = string + prio + checkd + shuf + $('#creategamelp').val() + stnds + pass;
