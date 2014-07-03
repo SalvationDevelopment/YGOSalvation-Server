@@ -54,9 +54,7 @@ function structureDefinition(structure) {
             }
         },
         write: function (jsStructure) {
-            var outputLength = names.length * maxLength;
             var output = [];
-            var writeposition = 0;
             for (var property in structure) {
                 if (hasOwnProperty(property)) {
                     var data = jsStructure[property];

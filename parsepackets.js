@@ -23,7 +23,7 @@ module.exports = function parsePackets(command, message) {
     return task;
 };
 
-
+/*
 function SendCommunication(message, commandEnum) {
 
     var communication = [];
@@ -45,3 +45,4 @@ function SendCommunication(message, commandEnum) {
     }
     return new Buffer(communication);
 }
+*/

@@ -2,15 +2,13 @@
 /* jslint browser : true */
 /* jslint jquery : true */
 /* global alert, prompt */
-
+/* exports connectToCheckmateServer, applySettings, saveSettings, isChecked, openScreen*/
 //development, stage, production
 var mode = 'development';
 
 var child_process = require('child_process');
 var developmentstage = require('../../servercontrol.json');
-var http = require('http');
 var fs = require('fs');
-var walk = require('fs-walk');
 var template;
 fs.readFile('application/template.ini', 'utf-8', function (error, data) {
     template = data;
@@ -106,7 +104,7 @@ function connectToCheckmateServer() {
 }
 
 function applySettings() {
-    $('[data-localhost]').each(function (i) {
+    $('[data-localhost]').each(function () {
         var property = $(this).attr('data-localhost');
         var value = ('1\r\n' === localStorage[property]) ? true : false;
         $(this).prop('checked', value);
@@ -114,7 +112,7 @@ function applySettings() {
 }
 
 function saveSettings() {
-    $('[data-localhost]').each(function (i) {
+    $('[data-localhost]').each(function () {
         var property = $(this).attr('data-localhost');
         localStorage[property] = Number($(this).prop('checked')) + '\r\n';
     });

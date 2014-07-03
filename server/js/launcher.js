@@ -167,7 +167,7 @@ function setHostSettings() {
     localStorage.serverport = '8911\r\n';
     localStorage.lastport = '8911\r\n';
     
-    if (!secure(duelRequest.prio, duelRequest.checkd, duelRequest.shuf)) return;
+    if (!secure(duelRequest.prio, duelRequest.checkd, duelRequest.shuf)) {return;}
 
     locallogin();
     ygopro('-j');
