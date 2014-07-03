@@ -144,24 +144,7 @@ var server = net.createServer(function (socket) {
             });
         });
     }
-
-    function processIncomingTrasmission(data) {
-        //console.log(socket.hostString);
-        if (active_ygocore) {
-            active_ygocore.write(data);
-        }
-
-
-        // eventing shifted server wont overload due to constant dueling.
-        var task = parsePackets('CTOS', data);
-        task = (function () {
-            var output = [];
-            for (var i = 0; task.length > i; i++) {
-                output.push(RecieveCTOS(task[i], socket.username, socket.hostString));
-            }
-            return output;
-        })();
-
+    function processTask(task){
         for (var i = 0; task.length > i; i++) {
             if (task[i].CTOS_JOIN_GAME) {
                 active = true;
@@ -186,6 +169,25 @@ var server = net.createServer(function (socket) {
                 primus.room('activegames').write(JSON.stringify(gamelist));
             }
         }
+    }
+    function processIncomingTrasmission(data) {
+        //console.log(socket.hostString);
+        if (active_ygocore) {
+            active_ygocore.write(data);
+        }
+
+
+        // eventing shifted server wont overload due to constant dueling.
+        var task = parsePackets('CTOS', data);
+        task = (function () {
+            var output = [];
+            for (var i = 0; task.length > i; i++) {
+                output.push(RecieveCTOS(task[i], socket.username, socket.hostString));
+            }
+            return output;
+        })();
+        processTask(task);
+        
         //console.log(socket.hostString);
         if (active) {
             if (gamelist[socket.hostString] && !active_ygocore) {
@@ -250,8 +252,3 @@ var server = net.createServer(function (socket) {
 });
 
 server.listen(8911);
-
-
-
-
-
