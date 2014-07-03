@@ -7,7 +7,7 @@ try {
 var gamelist = Object.create(null);
 
 var enums = require('./enums.js');
-var parsePackets= require('parsepackets.js');
+var parsePackets= require('./parsepackets.js');
 var net = require('net');
 var childProcess = require('child_process');
 var Primus = require('primus');
@@ -17,6 +17,8 @@ var server = http.createServer().listen(5000);
 var primus = new Primus(server, {
     parser: 'JSON'
 });
+
+var RecieveSTOC = require('./recieveSTOC.js');
 primus.use('rooms', Rooms);
 
 primus.on('connection', function (client) {
@@ -236,27 +238,7 @@ var server = net.createServer(function (socket) {
 
 server.listen(8911);
 
-function SendCommunication(message, commandEnum) {
 
-    var communication = [];
-
-    communication[0] = message.length * 2 + 1;
-    communication[2] = commandEnum;
-    var write_position = 3;
-
-    var i, strLen, c, arrLen;
-    if (typeof message === 'string') {
-        for (i = 0, strLen = message.length, c = 0; i < strLen; i++, c = c + 2) {
-            communication[(c + write_position)] = message.charCodeAt(i);
-        }
-    }
-    if (message instanceof Array) {
-        for (i = 0, arrLen = message.length; i < arrLen; i++) {
-            communication[(i + write_position)] = message[i];
-        }
-    }
-    return new Buffer(communication);
-}
 
 
 
@@ -342,138 +324,3 @@ function RecieveCTOS(packet, usernameOfC, room) {
     return todo;
 }
 
-function RecieveSTOC(packet, tempData) {
-    var todo = Object.create(enums.STOCCheck);
-
-    ////console.log(packet.STOC);
-    var intro;
-    switch (packet.STOC) {
-
-    case ('STOC_GAME_MSG'):
-        {
-            //game data dont need to process
-
-        }
-        break;
-    case ('STOC_ERROR_MSG'):
-        {
-            //game died, recover it!
-        }
-        break;
-    case ('STOC_SELECT_HAND'):
-        {
-            //play rps
-        }
-        break;
-    case ('STOC_HAND_RESULT'):
-        {
-            //rps result
-        }
-        break;
-    case ('STOC_CHANGE_SIDE'):
-        {
-            //side decking
-        }
-        break;
-    case ('STOC_WAITING_SIDE'):
-        {
-            //waiting on side decking.
-        }
-        break;
-    case ('STOC_CREATE_GAME'):
-        {
-
-        }
-        break;
-    case ('STOC_TYPE_CHANGE'):
-        {
-
-        }
-        break;
-    case ('STOC_JOIN_GAME'):
-        {
-            //Player requesting to join room.
-            //var version = packet.message[0] + packet.message[1];
-            //var roomname = packet.message.toString('utf16le', 8, 52);
-            ////console.log(packet.message.toString('utf16le'));
-            ////console.log('version:', '0x' + parseInt(version, 16), 'roomname:', roomname);
-            ////console.log('gamestring',hostString, '')
-
-
-
-
-        }
-        break;
-    case ('STOC_LEAVE_GAME'):
-        {
-            //name of player that just left the duel.
-            intro = packet.message.toString('utf16le');
-            //console.log(intro, intro.length);
-        }
-        break;
-    case ('STOC_DUEL_START'):
-        {
-            //Game started
-            todo.STOC_DUEL_START = true;
-        }
-        break;
-
-    case ('STOC_REPLAY'):
-        {
-            // catch this packet and do ranking on it.
-            todo.STOC_REPLAY = true;
-        }
-        break;
-    case ('STOC_TIME_LIMIT'):
-        {
-            // User went over time.
-            return false;
-        }
-        break;
-    case ('STOC_CHAT'):
-        {
-            // A user said something, we should record this.
-            return 'chat';
-        }
-        break;
-    case ('STOC_HS_PLAYER_ENTER'):
-        {
-            //name of player that just entered the duel.
-            intro = packet.message.toString('utf16le');
-            //console.log('player enter', intro, intro.length);
-
-        }
-        break;
-    case ('STOC_HS_PLAYER_CHANGE'):
-        {
-            //A player swaped places
-            //gamelist is done here
-            //console.log('packet length %l', packet.LENGTH);
-            //console.log('packet message %l', packet.message);
-            //console.log('packet message', parseInt(packet.message[0]), packet.message[0]);
-            //console.log('packet message', parseInt(packet.message[1]), packet.message[1]);
-            return 'player swap';
-        }
-        break;
-    case ('STOC_HS_WATCH_CHANGE'):
-        {
-            //A player is no longer dueling and is instead watching.
-            //console.log('packet length %l', packet.LENGTH);
-            //console.log('packet message %l', packet.message);
-            //console.log('packet message', parseInt(packet.message[0]), packet.message[0]);
-            //console.log('packet message', parseInt(packet.message[1]), packet.message[1]);
-        }
-        break;
-    case ('STOC_TYPE_CHANGE'):
-        {
-            //A player is no longer dueling and is instead watching.
-            //console.log('packet length %l', packet.LENGTH);
-            //console.log('packet message %l', packet.message);
-            //console.log('packet message', parseInt(packet.message[0]), packet.message[0]);
-            //console.log('packet message', parseInt(packet.message[1]), packet.message[1]);
-
-        }
-        break;
-    }
-
-}
