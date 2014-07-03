@@ -12,7 +12,46 @@ var childProcess = require('child_process');
 var Primus = require('primus');
 var Rooms = require('primus-rooms');
 var http = require('http');
+var server = http.createServer().listen(5000);
+var primus = new Primus(server, {
+    parser: 'JSON'
+});
+primus.use('rooms', Rooms);
 
+primus.on('connection', function (client) {
+    client.on('data', function (data) {
+
+        data = data || {};
+        //console.log(data);
+        var action = data.action;
+
+        switch (action) {
+
+        case ('join'):
+            {
+                client.join('activegames', function () {
+
+                    // send message to this client
+                    client.write('you joined room activegames');
+                    client.write(JSON.stringify(gamelist));
+
+                });
+                break;
+            }
+
+        case ('leave'):
+            {
+                client.leave('activegames');
+                break;
+            }
+
+        }
+    });
+});
+primus.on('disconnection', function (socket) {
+    console.log('Duel Room Disconnection');
+    // the spark that disconnected
+});
 function PortFinder() {
     this.getPort = function (callback) {
         var activerooms = [];
@@ -47,7 +86,7 @@ var server = net.createServer(function (socket) {
             primus.room('activegames').write(JSON.stringify(gamelist));
         }
     });
-    socket.on('error', function (error) {
+    socket.on('error', function () {
         //console.log('CLIENT ERROR', error);
         if (active_ygocore) {
             active_ygocore.end();
@@ -242,13 +281,9 @@ function parsePackets(command, message) {
 }
 
 function RecieveCTOS(packet, usernameOfC, room) {
-    if (packet.CTOS) {
-        var stc = parseInt(packet.CTOS, 16) || '--';
-        //console.log('0x' + stc, packet.CTOS);
-    }
     var todo = Object.create(enums.CTOSCheck);
 
-    var intro;
+   
     switch (packet.CTOS) {
     case ('CTOS_PLAYER_INFO'):
         {
@@ -261,7 +296,7 @@ function RecieveCTOS(packet, usernameOfC, room) {
     case ('CTOS_JOIN_GAME'):
         {
             //Player joined the game/server
-            var version = packet.message[0] + packet.message[1];
+            //var version = packet.message[0] + packet.message[1];
             var roomname = packet.message.toString('utf16le', 8, 56);
             //console.log('version:', '0x' + parseInt(version, 16), 'roomname:', roomname);
 
@@ -462,43 +497,3 @@ function RecieveSTOC(packet, tempData) {
     }
 
 }
-
-var server = http.createServer().listen(5000);
-var primus = new Primus(server, {
-    parser: 'JSON'
-});
-primus.use('rooms', Rooms);
-
-primus.on('connection', function (client) {
-    client.on('data', function (data) {
-
-        data = data || {};
-        //console.log(data);
-        var action = data.action;
-
-        switch (action) {
-
-        case ('join'):
-            {
-                client.join('activegames', function () {
-
-                    // send message to this client
-                    client.write('you joined room activegames');
-                    client.write(JSON.stringify(gamelist));
-
-                });
-                break;
-            }
-
-        case ('leave'):
-            {
-                client.leave('activegames');
-                break;
-            }
-
-        }
-    });
-});
-primus.on('disconnection', function (spark) {
-    // the spark that disconnected
-});
