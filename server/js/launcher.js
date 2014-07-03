@@ -334,6 +334,9 @@ function renderList(JSONdata) {
 function locallogin(init) {
     if (localStorage.nickname.indexOf('\u0000') < 1 || init ===  true) {
         var username = prompt('Username: ', localStorage.nickname);
+        while(!username){
+		    username = prompt('Username: ', localStorage.nickname);
+    	}
         localStorage.nickname = username + '\u0000\r\n';
     }
 }

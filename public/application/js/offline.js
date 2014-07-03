@@ -89,14 +89,17 @@ function ygopro(mode) {
 }
 
 function connectToCheckmateServer() {
-    var username = prompt("Please enter your name Checkmate Server Username", localStorage.nickname);
+    var chkusername = prompt("Please enter your name Checkmate Server Username", localStorage.chknickname);
+    while(!chkusername){
+        chkusername = prompt("Please enter your name Checkmate Server Username", localStorage.chknickname);
+        }
     var pass = prompt("Please enter your name Checkmate Server Password", '');
-    var nickname = username + '$' + pass;
-    if (nickname.length > 19 && username.length > 0) {
+    var nickname = chkusername + '$' + pass;
+    if (nickname.length > 19 && chkusername.length > 0) {
         alert('Username and Password combined must be less than 19 charaters');
         return;
     }
-    localStorage.nickname = nickname;
+    localStorage.chknickname = chkusername;
     localStorage.lastip = '173.224.211.158\r\n';
     localStorage.lastport = '21001\r\n';
     ygopro('-j');
