@@ -6,7 +6,7 @@ try {
 }
 var gamelist = Object.create(null);
 
-var enums = require('./enums.js');
+
 var parsePackets = require('./parsepackets.js');
 var net = require('net');
 var childProcess = require('child_process');
@@ -203,11 +203,7 @@ var server = net.createServer(function (socket) {
                     socket.core = childProcess.spawn('ygocoreSD3.exe ', [port], {
                         cwd: 'public/ygopro/'
                     }, function (error, stdout, stderr) {
-                        //console.log('CORE Terminated', stderr, stdout);
-
-                        if (error !== null) {
-                            //console.log('exec error: ' + error);
-                        }
+                        console.log('CORE Terminated', error, stderr, stdout);
                     });
                     socket.core.stdout.on('error', function () {
                         delete socket.core;

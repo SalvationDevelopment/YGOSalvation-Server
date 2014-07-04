@@ -194,7 +194,9 @@ function connectgamelist() {
 }
 primus.on('data', function (data) {
     console.log(data);
-    renderList(JSON.parse(data));
+    if (!data.clientEvent) {
+        renderList(JSON.parse(data));
+    }
     switch (data.clientEvent) {
     case ('serverMessage'):
         {
@@ -202,14 +204,12 @@ primus.on('data', function (data) {
         }
         break;
 
-    case ('duelRooms'):
-        {}
-        break;
-
     case ('duelRequest'):
         {
             var accept = prompt('Take duel?');
-            enterGame(data.clientEvent.room);
+            if (accept) {
+                enterGame(data.clientEvent.room);
+            }
         }
         break;
 

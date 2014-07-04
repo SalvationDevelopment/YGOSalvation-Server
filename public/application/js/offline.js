@@ -2,7 +2,7 @@
 /* jslint browser : true */
 /* jslint jquery : true */
 /* global alert, prompt */
-/* exports connectToCheckmateServer, applySettings, saveSettings, isChecked, openScreen*/
+/* exported  connectToCheckmateServer, applySettings, saveSettings, isChecked, openScreen*/
 //development, stage, production
 var mode = 'development';
 
