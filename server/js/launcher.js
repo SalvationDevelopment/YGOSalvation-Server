@@ -143,11 +143,11 @@ function randomString(len, charSet) {
     return randomstring;
 }
 
-function getDuelRequest(){
+function getDuelRequest() {
     return {
-        string : "" + $('#creategamecardpool').val() + $('#creategameduelmode').val() + $('#creategametimelimit').val(),
+        string: "" + $('#creategamecardpool').val() + $('#creategameduelmode').val() + $('#creategametimelimit').val(),
         prio: isChecked('#enableprio') ? ("F") : ("O"),
-        checkd : isChecked('#discheckdeck') ? ("F") : ("O"),
+        checkd: isChecked('#discheckdeck') ? ("F") : ("O"),
         shuf: isChecked('#disshuffledeck') ? ("F") : ("O"),
         stnds: "," + $('#creategamebanlist').val() + ',5,1,U,',
         pass: randomString(5)
@@ -157,23 +157,25 @@ function getDuelRequest(){
 function setHostSettings() {
 
     var duelRequest = getDuelRequest();
-    localStorage.roompass = 
-        duelRequest.string + duelRequest.prio + 
-        duelRequest.checkd + duelRequest.shuf + 
-        $('#creategamelp').val() + duelRequest.stnds + 
+    localStorage.roompass =
+        duelRequest.string + duelRequest.prio +
+        duelRequest.checkd + duelRequest.shuf +
+        $('#creategamelp').val() + duelRequest.stnds +
         duelRequest.pass;
-    
+
     localStorage.lastip = '192.99.11.19\r\n';
     localStorage.serverport = '8911\r\n';
     localStorage.lastport = '8911\r\n';
-    
-    if (!secure(duelRequest.prio, duelRequest.checkd, duelRequest.shuf)) {return;}
+
+    if (!secure(duelRequest.prio, duelRequest.checkd, duelRequest.shuf)) {
+        return;
+    }
 
     locallogin();
     ygopro('-j');
 }
 
-function secure(prio, checkd, shuf){
+function secure(prio, checkd, shuf) {
     if (prio + checkd + shuf !== "OOO" && $('input:radio[name=ranked]:checked').val() === 'R') {
         alert('You may not cheat here.');
         return false;
@@ -197,23 +199,27 @@ primus.on('data', function (data) {
     case ('serverMessage'):
         {
             $('#servermessages').text(data.serverMessage);
-            break;
         }
-    case ('duelRooms'):
-        {
+        break;
 
-            break;
-        }
+    case ('duelRooms'):
+        {}
+        break;
+
     case ('duelRequest'):
         {
-
-            break;
+            var accept = prompt('Take duel?');
+            enterGame(data.clientEvent.room);
         }
+        break;
+
     case ('die'):
         {
-
-            break;
+            alert(data.clientEvent.message);
+            $('body').html('');
         }
+        break;
+
     }
 });
 
