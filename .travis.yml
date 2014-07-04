@@ -2,3 +2,15 @@ language: node_js
 node_js:
   - "0.10"
 
+before_install:
+  - npm install -g mocha
+  - npm install -g istanbul
+  - npm install -g codeclimate-test-reporter
+  
+addons:
+  code_climate:
+    repo_token: 6764db5cccd1a7d62f6acaf5c9316101b683ee711ad3800e4f9a3a115ceacdb1 
+
+after_script:
+  - cat lcov.info | codeclimate
+  

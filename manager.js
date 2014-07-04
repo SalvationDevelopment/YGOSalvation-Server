@@ -53,7 +53,7 @@ primus.on('connection', function (socket) {
             }
         case ('core'):
             {
-                processIncomingTrasmission(socket);
+                processIncomingTrasmission(data.transmission,socket);
             }
 
         }
