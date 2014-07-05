@@ -1,3 +1,4 @@
+[![Stories in Ready](https://badge.waffle.io/salvationdevelopment/ygopro-support-system.png?label=ready&title=Ready)](https://waffle.io/salvationdevelopment/ygopro-support-system)
 [![Dependencies](https://david-dm.org/SalvationDevelopment/YGOPro-Support-System.svg)](https://david-dm.org/)
 [![Code Climate](https://codeclimate.com/github/SalvationDevelopment/YGOPro-Support-System.png)](https://codeclimate.com/github/SalvationDevelopment/YGOPro-Support-System)
 [![Code Climate](https://codeclimate.com/github/SalvationDevelopment/YGOPro-Support-System/coverage.png)](https://codeclimate.com/github/SalvationDevelopment/YGOPro-Support-System)
