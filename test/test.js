@@ -46,16 +46,29 @@ describe('Proxy Server', function () {
 
 describe('TOS & Licences are Included', function () {
     it('Terms of Service', function () {
-        assert((fs.existsSync('../server/licence/sdlauncher-tos.text')), true);
+        assert((fs.existsSync('../server/licence/sdlauncher-tos.text') !== null), true);
     });
     it('YGOPro', function () {
-        assert((fs.existsSync('../server/licence/ygopro.txt')), true);
+        assert((fs.existsSync('../server/licence/ygopro.txt' !== null)), true);
     });
     it('Node-Webkit', function () {
-        assert((fs.existsSync('../server/licence/node-webkit.text')), true);
+        assert((fs.existsSync('../server/licence/node-webkit.text') !== null), true);
     });
     it('Machinima Sound', function () {
-        assert((fs.existsSync('../server/licence/machinimasound.text')), true);
+        assert((fs.existsSync('../server/licence/machinimasound.text') !== null), true);
+    });
+    it('Machinima Sound', function () {
+        assert((fs.existsSync('../server/licence/sdlauncher-tos.text') !== null), false);
+        console.log(fs.existsSync('../server/licence/fake.text'));
     });
 
+});
+
+describe('Test TCP Network Server Connection', function () {
+    it('Loaded Development/Stage/Production Markers', function () {
+        net.createConnection(5000, function (socket) {
+            var message = new Buffer([0, 0]);
+            socket.write(message);
+        });
+    });
 });
