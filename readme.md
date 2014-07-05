@@ -5,7 +5,7 @@
 [![Build Status](https://travis-ci.org/SalvationDevelopment/YGOPro-Support-System.svg?branch=master)](https://travis-ci.org/SalvationDevelopment/YGOPro-Support-System)
 [![Support via Gittip](http://img.shields.io/gittip/Zayelion.svg)](https://www.gittip.com/Zayelion/)
 #YGOPro Support System
-*by Salvation Development*
+**by Salvation Development**
 
 Salvation Development is a large scale social engineering non-profit project set out to tackle the 'wicked problem' of Yu-Gi-Oh! Online Simulators via enterprise level software design. To do so it employs a merit of interconnected support software based around the core software of YGOPro, WordPress, and IRC housed in this repository. The project addresses administrator megalomania, social stablity, competitive player group think, extremely high lack of public project oversight, developer negligence,  funding, and automation. The following facilitates this:
 * A server system based on NodeJS 

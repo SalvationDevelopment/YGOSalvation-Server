@@ -68,5 +68,25 @@ describe('Test TCP Network Server Connection', function () {
             var message = new Buffer([0, 0]);
             socket.write(message);
         });
+        it('Loaded YGOCore Management System', function () {
+
+        });
+    });
+});
+
+describe('Structures Test', function () {
+    var structureDefinition = require('../objectifier.js');
+
+
+    it('strut creation', function () {
+        var strut = new structureDefinition({
+            test: 'int',
+            long: "long"
+        });
+        var out = strut.write({
+            test: 1,
+            long: 34
+        });
+        console.log(out);
     });
 });
