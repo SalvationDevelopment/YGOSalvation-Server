@@ -227,11 +227,8 @@ function processIncomingTrasmission(data, socket) {
 
                         //console.log(gamelist);
                     } else {
-                        socket.core.kill();
                         console.log('attempting to kill game hosted by', gamelist[socket.hostString].players[0]);
-                        delete socket.core;
-                        delete gamelist[socket.hostString];
-                        primus.room('activegames').write(JSON.stringify(gamelist));
+                        killCore(socket);
 
                     }
 
