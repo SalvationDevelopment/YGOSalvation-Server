@@ -45,7 +45,7 @@ describe('TOS & Licences are Included', function () {
         assert((fs.existsSync('../server/licence/sdlauncher-tos.text') !== null), true);
     });
     it('YGOPro', function () {
-        assert((fs.existsSync('../server/licence/ygopro.txt' !== null)), true);
+        assert((fs.existsSync('../server/licence/ygopro.txt') !== null), true);
     });
     it('Node-Webkit', function () {
         assert((fs.existsSync('../server/licence/node-webkit.text') !== null), true);
@@ -65,7 +65,8 @@ describe('Test TCP Network Server Connection', function () {
     it('Loaded YGOCore Management System', function () {
         var socket = net.createConnection(8911);
         socket.on('connect', function (connect) {
-            var message = new Buffer([0, 0]);
+            var playerconnect1 = require('./playerconnect1.json');
+            var message = new Buffer(playerconnect1);
             socket.write(message);
         });
         it('Loaded YGOCore Management System', function () {
