@@ -10,6 +10,7 @@ before_install:
   - cd server
   - git clone https://github.com/Fluorohydride/ygopro.git
   - ls -p | grep "/"
+  - cd ../
   - npm install -g mocha-phantomjs
   - npm install -g mocha
   - npm install -g istanbul
