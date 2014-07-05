@@ -22,17 +22,12 @@
         "height": 535
     },
     "dependencies": {
-        "ws": "*",
         "primus": "*",
         "primus-rooms": "*",
-        "irc": "*",
-        "busy": "*",
-        "redis": "*",
         "mocha": "*"
     },
     "optionalDependencies": {
-        "httpsys": "*",
-        "node-ffi": "*"
+        "httpsys": "*"
     },
     "scripts": {
         "test": "istanbul cover _mocha -- -R spec"
