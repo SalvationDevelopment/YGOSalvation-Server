@@ -32,10 +32,6 @@ describe('Testing that Dependencies Load', function () {
         var target = require('../server/update.js');
         var manifest = require('../server/manifest/ygopro.json');
     });
-    it('Loaded YGOCore Management System', function () {
-        var target = require('../manager.js');
-    });
-
 });
 
 describe('Proxy Server', function () {
@@ -57,15 +53,17 @@ describe('TOS & Licences are Included', function () {
     it('Machinima Sound', function () {
         assert((fs.existsSync('../server/licence/machinimasound.text') !== null), true);
     });
-    it('Machinima Sound', function () {
+    it('Fake Detection', function () {
         assert((fs.existsSync('../server/licence/sdlauncher-tos.text') !== null), false);
-        console.log(fs.existsSync('../server/licence/fake.text'));
     });
 
 });
 
 describe('Test TCP Network Server Connection', function () {
-    it('Loaded Development/Stage/Production Markers', function () {
+    it('Test connecting to server', function () {
+        it('Loaded YGOCore Management System', function () {
+            var target = require('../manager.js');
+        });
         net.createConnection(5000, function (socket) {
             var message = new Buffer([0, 0]);
             socket.write(message);
