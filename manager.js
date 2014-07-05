@@ -43,17 +43,18 @@ primus.on('connection', function (socket) {
                     socket.write(JSON.stringify(gamelist));
 
                 });
-                break;
-            }
 
+            }
+            break;
         case ('leave'):
             {
                 socket.leave('activegames');
-                break;
+
             }
+            break;
         case ('core'):
             {
-                processIncomingTrasmission(data.transmission,socket);
+                processIncomingTrasmission(data.transmission, socket);
             }
 
         }
@@ -153,21 +154,13 @@ function connectToCore(port, data, socket) {
 
         });
         socket.active_ygocore.on('error', function (error) {
-            if (socket.core) {
-                socket.core.kill();
-                delete socket.core;
-                delete gamelist[socket.hostString];
-                primus.room('activegames').write(JSON.stringify(gamelist));
-            }
+            killCore(socket);
+            delete gamelist[socket.hostString];
+
+
         });
         socket.active_ygocore.on('close', function () {
-            if (socket.core) {
-                socket.core.kill();
-                delete socket.core;
-                delete gamelist[socket.hostString];
-                primus.room('activegames').write(JSON.stringify(gamelist));
-            }
-            socket.end();
+            killCore(socket);
         });
     });
 }
