@@ -71,7 +71,7 @@ primus.on('error', function (socket) {
 
 
 
-var server = net.createServer(function (socket) {
+var ygoserver = net.createServer(function (socket) {
     socket.active_ygocore = false;
     socket.active = false;
     socket.on('data', function (data) {
@@ -85,6 +85,7 @@ var server = net.createServer(function (socket) {
         killCore(socket);
     });
 });
+ygoserver.listen(8911);
 
 function killCore(socket) {
     if (socket.active_ygocore) {
@@ -241,4 +242,3 @@ function processIncomingTrasmission(data, socket) {
         }
     }
 }
-server.listen(8911);

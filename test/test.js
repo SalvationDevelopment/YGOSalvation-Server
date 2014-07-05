@@ -63,13 +63,25 @@ describe('Test TCP Network Server Connection', function () {
     var target = require('../manager.js');
 
     it('Loaded YGOCore Management System', function () {
-        var socket = net.createConnection(5000);
+        var socket = net.createConnection(8911);
         socket.on('connect', function (connect) {
             var message = new Buffer([0, 0]);
             socket.write(message);
         });
         it('Loaded YGOCore Management System', function () {
+            var http = require('http');
+            var server = http.createServer().listen(5000);
+            var Primus = require('primus');
+            var primus = new Primus(server),
+                Socket = primus.Socket;
 
+            var client = new Socket('http://localhost:5000');
+            client.write({
+                action: 'join'
+            });
+            client.write({
+                action: 'leave'
+            });
         });
     });
 });
