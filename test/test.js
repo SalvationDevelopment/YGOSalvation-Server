@@ -58,45 +58,6 @@ describe('TOS & Licences are Included', function () {
     });
 
 });
-
-describe('Test Network Connection Methods', function () {
-    var target = require('../manager.js');
-
-    it('TCP Native', function () {
-        var socket = net.createConnection(8911);
-        socket.on('connect', function (connect) {
-            var playerconnect1 = require('./playerconnect1.js');
-            var message = new Buffer(playerconnect1);
-            socket.write(message);
-            socket.end();
-        });
-    });
-    it('Primus Websocket', function () {
-        var http = require('net');
-        var server = http.createServer().listen(5000);
-        var Primus = require('primus');
-        var primus = new Primus(server);
-        var Socket = primus.Socket;
-
-        var client = new Socket('http://localhost:5000');
-        var playerconnect1 = require('./playerconnect1.js');
-        var message = new Buffer(playerconnect1);
-        client.write({
-            action: 'core',
-            transmission: message
-        });
-        client.write({
-            action: 'join'
-        });
-        client.write({
-            action: 'leave'
-        });
-        primus.destroy({
-            timeout: 300
-        });
-    });
-});
-
 describe('Structures Test', function () {
     var structureDefinition = require('../objectifier.js');
     it('Structure Creation', function () {
@@ -125,6 +86,56 @@ describe('Structures Test', function () {
         var out = strut.write({
             test: 1,
             long: 34
+        });
+    });
+});
+describe('Test Network Connection Methods', function () {
+    var target = require('../manager.js');
+
+    it('TCP Native', function () {
+        var socket = net.createConnection(8911);
+        socket.on('connect', function (connect) {
+            var playerconnect1 = require('./playerconnect1.js');
+            var message = new Buffer(playerconnect1);
+            socket.write(message);
+            socket.end();
+        });
+    });
+    it('Primus Websocket Connects', function () {
+        var http = require('net');
+        var server = http.createServer().listen(5000);
+        var Primus = require('primus');
+        var primus = new Primus(server);
+        var Socket = primus.Socket;
+
+        var client = new Socket('http://localhost:5000');
+        client.write({
+
+        });
+
+    });
+    it('Primus Websocket Connects', function () {
+        var http = require('net');
+        var server = http.createServer().listen(5000);
+        var Primus = require('primus');
+        var primus = new Primus(server);
+        var Socket = primus.Socket;
+
+        var client = new Socket('http://localhost:5000');
+        var playerconnect1 = require('./playerconnect1.js');
+        var message = new Buffer(playerconnect1);
+        client.write({
+            action: 'core',
+            transmission: message
+        });
+        client.write({
+            action: 'join'
+        });
+        client.write({
+            action: 'leave'
+        });
+        primus.destroy({
+            timeout: 300
         });
     });
 });
