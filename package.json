@@ -35,7 +35,7 @@
         "node-ffi": "*"
     },
     "scripts": {
-        "test": "istanbul cover test/test.js"
+        "test": "istanbul cover _mocha -- -R spec"
     },
     "bugs": "https://github.com/salvationdevelopment/YGOPro-Support-System/issues",
     "author": "panthrowzay@gmail.com",
