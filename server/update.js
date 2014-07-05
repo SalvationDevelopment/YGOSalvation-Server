@@ -37,4 +37,3 @@ var installation = {
 };
 
 fs.writeFile('manifest/ygopro.json', JSON.stringify(installation, null, 4), function () {});
-console.log((new Date()).getTime() - startTime.getTime(), 'ms');

@@ -73,7 +73,7 @@ describe('Test Network Connection Methods', function () {
     });
     it('Primus Websocket', function () {
         var http = require('net');
-        var server = net.createSocket().listen(5000);
+        var server = http.createServer().listen(5000);
         var Primus = require('primus');
         var primus = new Primus(server);
         var Socket = primus.Socket;
@@ -99,9 +99,15 @@ describe('Test Network Connection Methods', function () {
 
 describe('Structures Test', function () {
     var structureDefinition = require('../objectifier.js');
-
-
-    it('strut creation', function () {
+    it('Structure Creation', function () {
+        var strut = null;
+        strut = new structureDefinition({
+            test: 'int',
+            long: "long"
+        });
+        assert((strut !== null), true);
+    });
+    it('Structure Read', function () {
         var strut = new structureDefinition({
             test: 'int',
             long: "long"
@@ -110,6 +116,15 @@ describe('Structures Test', function () {
             test: 1,
             long: 34
         });
-        console.log(out);
+    });
+    it('Structure Write', function () {
+        var strut = new structureDefinition({
+            test: 'int',
+            long: "long"
+        });
+        var out = strut.write({
+            test: 1,
+            long: 34
+        });
     });
 });
