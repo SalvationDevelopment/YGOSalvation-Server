@@ -56,7 +56,7 @@ function structureDefinition(structure) {
         write: function (jsStructure) {
             var output = [];
             for (var property in structure) {
-                if (hasOwnProperty(property)) {
+                if (structure.hasOwnProperty(property)) {
                     var data = jsStructure[property];
                     var segment = new Array(maxLength);
                     segment.fill(0);
