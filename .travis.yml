@@ -9,7 +9,7 @@ before_install:
   - mkdir coverage
   - cd server
   - git clone https://github.com/Fluorohydride/ygopro.git
-  - ls -l | egrep `^d'
+  - ls -p | grep "/"
   - mv ygopro-master ygopro
   - npm install -g mocha-phantomjs
   - npm install -g mocha

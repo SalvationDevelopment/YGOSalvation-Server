@@ -61,12 +61,13 @@ describe('TOS & Licences are Included', function () {
 
 describe('Test TCP Network Server Connection', function () {
     it('Test connecting to server', function () {
+        var target = require('../manager.js');
         it('Loaded YGOCore Management System', function () {
-            var target = require('../manager.js');
+            net.createConnection(5000, function (socket) {
+                var message = new Buffer([0, 0]);
+                socket.write(message);
+            });
         });
-        net.createConnection(5000, function (socket) {
-            var message = new Buffer([0, 0]);
-            socket.write(message);
-        });
+
     });
 });

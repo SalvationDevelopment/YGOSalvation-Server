@@ -6,7 +6,7 @@
 #YGOPro Support System
 by Salvation Development
 
-This is the YGOPro Support System, it includes:
+Salvation Development is a large scale social engineering non-profit project to tackle the 'wicked problem' of Yu-Gi-Oh! Online Simulators. To do so it imploys a merit of interconnected support software based around the core software of YGOPro, WordPress, and IRC housed in this repository. The project addresses administrator megalomania, maximixing the allowance of ad hoc cliques for social stablity, extremely high public project oversight, developer negligence, mixed private and public funding, and automation at all levels except deck constuction. The following facilitates this:
 * A server system based on NodeJS 
 * A server GUI based on node-webkit
 * node-webkit based YGOPro Launcher
@@ -17,12 +17,15 @@ This is the YGOPro Support System, it includes:
 
 YGOCore not included
 
-## Planned Features
+## Planned Features & Goals
 * Automatic redeployment based on community activity
 * IRC intergration
 * Web browser launcher/client
 * Launcher-Client persistent settings control
-* IRC intergration
+* Format specific card pools
+* TCG rule support
+
+It isnt our goal to be the best simulator as far as feature sets, we have a defined system in mind that is not a reproduction of any other simulator or official game. It is something unique inspired from all previous system taking the best elements and working them into something each type of duelist can appreciate.
 
 
 ## Installation
