@@ -59,30 +59,40 @@ describe('TOS & Licences are Included', function () {
 
 });
 
-describe('Test TCP Network Server Connection', function () {
+describe('Test Network Connection Methods', function () {
     var target = require('../manager.js');
 
-    it('Loaded YGOCore Management System', function () {
+    it('TCP Native', function () {
         var socket = net.createConnection(8911);
         socket.on('connect', function (connect) {
-            var playerconnect1 = require('./playerconnect1.json');
+            var playerconnect1 = require('./playerconnect1.js');
             var message = new Buffer(playerconnect1);
             socket.write(message);
+            socket.end();
         });
-        it('Loaded YGOCore Management System', function () {
-            var http = require('http');
-            var server = http.createServer().listen(5000);
-            var Primus = require('primus');
-            var primus = new Primus(server),
-                Socket = primus.Socket;
+    });
+    it('Primus Websocket', function () {
+        var http = require('http');
+        var server = http.createSocket().listen(5000);
+        var Primus = require('primus');
+        var primus = new Primus(server);
+        var Socket = primus.Socket;
 
-            var client = new Socket('http://localhost:5000');
-            client.write({
-                action: 'join'
-            });
-            client.write({
-                action: 'leave'
-            });
+        var client = new Socket('http://localhost:5000');
+        var playerconnect1 = require('./playerconnect1.js');
+        var message = new Buffer(playerconnect1);
+        client.write({
+            action: 'core',
+            transmission: message
+        });
+        client.write({
+            action: 'join'
+        });
+        client.write({
+            action: 'leave'
+        });
+        primus.destroy({
+            timeout: 300
         });
     });
 });
