@@ -72,6 +72,6 @@ function structureDefinition(structure) {
 }
 
 /*export all this work to an nodejs/commonjs module so I/others can use it everywhere. */
-module.exports.define = structureDefinition;
+module.exports = structureDefinition;
 
 /* todo: add static typing */
