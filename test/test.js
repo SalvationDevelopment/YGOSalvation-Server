@@ -72,8 +72,8 @@ describe('Test Network Connection Methods', function () {
         });
     });
     it('Primus Websocket', function () {
-        var http = require('http');
-        var server = http.createSocket().listen(5000);
+        var http = require('net');
+        var server = net.createSocket().listen(5000);
         var Primus = require('primus');
         var primus = new Primus(server);
         var Socket = primus.Socket;
