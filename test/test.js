@@ -62,14 +62,14 @@ describe('Structures Test', function () {
     var structureDefinition = require('../objectifier.js');
     it('Structure Creation', function () {
         var strut = null;
-        strut = new structureDefinition({
+        strut = structureDefinition({
             test: 'int',
             long: "long"
         });
         assert((strut !== null), true);
     });
     it('Structure Read', function () {
-        var strut = new structureDefinition({
+        var strut = structureDefinition({
             test: 'int',
             long: "long"
         });
@@ -79,7 +79,7 @@ describe('Structures Test', function () {
         });
     });
     it('Structure Write', function () {
-        var strut = new structureDefinition({
+        var strut = structureDefinition({
             test: 'int',
             long: "long"
         });
