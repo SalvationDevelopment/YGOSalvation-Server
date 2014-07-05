@@ -34,7 +34,7 @@
         "httpsys": "*",
         "node-ffi": "*"
     },
-    "script": {
+    "scripts": {
         "test": "istanbul cover test/test.js"
     },
     "bugs": "https://github.com/salvationdevelopment/YGOPro-Support-System/issues",
