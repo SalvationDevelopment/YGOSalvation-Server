@@ -2,6 +2,8 @@
 /* jshint mocha : true */
 
 var assert = require('assert');
+var net = require('net');
+var fs = require('fs');
 
 console.log('Running test');
 
@@ -36,10 +38,24 @@ describe('Testing that Dependencies Load', function () {
 
 });
 
-describe('Licences are Included', function () {
-
+describe('Proxy Server', function () {
+    it('Loaded Development/Stage/Production Markers', function () {
+        var target = require('../server/js/webconnectivity.js');
+    });
 });
 
-describe('Licences are Included', function () {
+describe('TOS & Licences are Included', function () {
+    it('Terms of Service', function () {
+        assert((fs.existsSync('../server/licence/sdlauncher-tos.text')), true);
+    });
+    it('YGOPro', function () {
+        assert((fs.existsSync('../server/licence/ygopro.txt')), true);
+    });
+    it('Node-Webkit', function () {
+        assert((fs.existsSync('../server/licence/node-webkit.text')), true);
+    });
+    it('Machinima Sound', function () {
+        assert((fs.existsSync('../server/licence/machinimasound.text')), true);
+    });
 
 });

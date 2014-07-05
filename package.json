@@ -22,6 +22,7 @@
         "height": 535
     },
     "dependencies": {
+        "ws": "*",
         "primus": "*",
         "primus-rooms": "*",
         "mocha": "*"
