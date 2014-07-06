@@ -10,7 +10,7 @@ try {
 var gamelist = Object.create(null);
 
 
-
+var fs = require('fs');
 var net = require('net');
 var childProcess = require('child_process');
 var Primus = require('primus');
@@ -201,44 +201,53 @@ function processIncomingTrasmission(data, socket) {
             gamelist[socket.hostString].players.push(socket.username);
         } else if (!gamelist[socket.hostString] && !socket.active_ygocore) {
             console.log(socket.username + ' connecting to new core');
-            portfinder(7000, 9001, gamelist, function (err, port) {
-                //console.log('connecting to new core @', port);
-                //console.log('found port ', port);
-                socket.core = childProcess.spawn('ygocoreSD3.exe ', [port], {
-                    cwd: 'public/ygopro/'
-                }, function (error, stdout, stderr) {
-                    console.log('CORE Terminated', error, stderr, stdout);
-                });
-                socket.core.stdout.on('error', function () {
-                    delete socket.core;
-                    delete gamelist[socket.hostString];
+            portfinder(7000, 9001, gamelist, function (error, port) {
+                startCore(port);
+            });
+        }
+    }
+
+    function startCore(port) {
+        fs.exist('public/ygopro/ygocoreSD3.exe', function (exist) {
+            if (!exist) {
+                console.log('core not found at ' + __dirname + '/' + 'public/ygopro');
+                return;
+            }
+            //console.log('connecting to new core @', port);
+            //console.log('found port ', port);
+            socket.core = childProcess.spawn('ygocoreSD3.exe ', [port], {
+                cwd: 'public/ygopro/'
+            }, function (error, stdout, stderr) {
+                console.log('CORE Terminated', error, stderr, stdout);
+            });
+            socket.core.stdout.on('error', function () {
+                delete socket.core;
+                delete gamelist[socket.hostString];
+                primus.room('activegames').write(JSON.stringify(gamelist));
+                console.log('core error');
+            });
+            socket.core.stdout.on('data', function (core_message) {
+                core_message = core_message.toString();
+                console.log(port + ': Core Message: ', core_message);
+                if (core_message[0] === 'S') {
+
+                    connectToCore(port, data);
+                    gamelist[socket.hostString] = {
+                        port: port,
+                        players: [socket.username],
+                        started: false
+                    };
                     primus.room('activegames').write(JSON.stringify(gamelist));
-                    console.log('core error');
-                });
-                socket.core.stdout.on('data', function (core_message) {
-                    core_message = core_message.toString();
-                    console.log(port + ': Core Message: ', core_message);
-                    if (core_message[0] === 'S') {
 
-                        connectToCore(port, data);
-                        gamelist[socket.hostString] = {
-                            port: port,
-                            players: [socket.username],
-                            started: false
-                        };
-                        primus.room('activegames').write(JSON.stringify(gamelist));
+                    //console.log(gamelist);
+                } else {
+                    console.log('attempting to kill game hosted by', gamelist[socket.hostString].players[0]);
+                    killCore(socket);
 
-                        //console.log(gamelist);
-                    } else {
-                        console.log('attempting to kill game hosted by', gamelist[socket.hostString].players[0]);
-                        killCore(socket);
+                }
 
-                    }
-
-                });
             });
 
-
-        }
+        });
     }
 }
