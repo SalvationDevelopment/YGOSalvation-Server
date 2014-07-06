@@ -60,9 +60,8 @@ function structureDefinition(structure) {
                 if (structure.hasOwnProperty(property)) {
                     var data = jsStructure[property];
                     var segment = new Array(maxLength);
-                    segment.fill(0);
-                    for (var i = 0, items = data.length; items > i; i++) {
-                        segment[i] = data[i];
+                    for (var i = 0, items = segment.length; items > i; i++) {
+                        segment[i] = data[i] || 0;
                     }
                     output.concat(segment);
                 }
