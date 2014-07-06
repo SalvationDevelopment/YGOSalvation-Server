@@ -103,7 +103,7 @@ describe('Test Network Connection Methods', function () {
     });
     it('Primus Websocket Connects', function () {
         var http = require('net');
-        var server = http.createServer().listen(5000);
+        var server = http.createServer().listen(5001);
         var Primus = require('primus');
         var primus = new Primus(server);
         var Socket = primus.Socket;
@@ -116,7 +116,7 @@ describe('Test Network Connection Methods', function () {
     });
     it('Primus Websocket Connects', function () {
         var http = require('net');
-        var server = http.createServer().listen(5000);
+        var server = http.createServer().listen(5002);
         var Primus = require('primus');
         var primus = new Primus(server);
         var Socket = primus.Socket;
