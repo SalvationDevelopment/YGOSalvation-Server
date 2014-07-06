@@ -239,3 +239,6 @@ function processIncomingTrasmission(data, socket) {
         }
     }
 }
+process.on('uncaughtException', function (err) {
+    console.log('Caught exception: ' + err);
+});
