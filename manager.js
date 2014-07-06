@@ -208,7 +208,7 @@ function processIncomingTrasmission(data, socket) {
     }
 
     function startCore(port) {
-        fs.exist('public/ygopro/ygocoreSD3.exe', function (exist) {
+        fs.exists('public/ygopro/ygocoreSD3.exe', function (exist) {
             if (!exist) {
                 console.log('core not found at ' + __dirname + '/' + 'public/ygopro');
                 return;
