@@ -90,7 +90,7 @@ describe('Test Network Connection Methods', function () {
             socket.end();
         });
     });
-    it('Primus Websocket Connects, Joins, and Leaves', function () {
+    it('Primus Websocket Connects, Starts Receieving Gamelist', function () {
         var http = require('net');
         var server = http.createServer().listen(5003);
         var Primus = require('primus');
@@ -102,12 +102,6 @@ describe('Test Network Connection Methods', function () {
         var message = new Buffer(playerconnect1);
         client.write({
             action: 'join'
-        });
-        client.write({
-            action: 'leave'
-        });
-        primus.destroy({
-            timeout: 300
         });
     });
     it('Primus Websocket Connects and Request Duel', function () {
