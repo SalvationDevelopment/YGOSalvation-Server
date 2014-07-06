@@ -35,5 +35,7 @@ var installation = {
     "type": "folder",
     "subfolder": [ygopro, plugins, license]
 };
-
+if (!fs.existsSync(updatelocation + 'manifest')) {
+    fs.mkdir(updatelocation + 'manifest');
+}
 fs.writeFile(updatelocation + 'manifest/ygopro.json', JSON.stringify(installation, null, 4), function () {});
