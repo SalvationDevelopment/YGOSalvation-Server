@@ -1,8 +1,8 @@
 /* jslint node: true */
+
 var fs = require('fs');
 var path = require('path');
-var startTime = new Date();
-console.log(startTime);
+var updatelocation = __filename.replace('update.js', '');
 
 function dirTree(filename) {
     var stats = fs.lstatSync(filename),
@@ -26,9 +26,9 @@ function dirTree(filename) {
 
     return info;
 }
-var ygopro = dirTree('ygopro');
-var plugins = dirTree('plugins');
-var license = dirTree('license');
+var ygopro = dirTree(updatelocation + 'ygopro');
+var plugins = dirTree(updatelocation + 'plugins');
+var license = dirTree(updatelocation + 'license');
 var installation = {
     "path": "/",
     "name": "/",
@@ -36,4 +36,4 @@ var installation = {
     "subfolder": [ygopro, plugins, license]
 };
 
-fs.writeFile('manifest/ygopro.json', JSON.stringify(installation, null, 4), function () {});
+fs.writeFile(updatelocation + 'manifest/ygopro.json', JSON.stringify(installation, null, 4), function () {});

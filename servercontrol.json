@@ -1,5 +1,6 @@
 {
-        "production": "http://salvationdevelopment.com/launcher/",
-        "stage": "http://localhost:80/wordpress/launcher/",
-        "development": "../../server/"  
+    "production": "http://salvationdevelopment.com/launcher/",
+    "stage": "http://localhost:80/wordpress/launcher/",
+    "development": "../../server/"
+    "updatelocation": "../server/"
 }
