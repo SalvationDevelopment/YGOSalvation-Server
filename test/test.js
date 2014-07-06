@@ -24,19 +24,27 @@ describe('Testing that Dependencies Load', function () {
         var target = require('../servercontrol.json');
         assert((target.production === 'http://salvationdevelopment.com/launcher/'), true);
     });
-    it('Loaded Development/Stage/Production Markers', function () {
-        var target = require('../servercontrol.json');
-        assert((target.production === 'http://salvationdevelopment.com/launcher/'), true);
-    });
     it('Loaded Update System', function () {
         var target = require('../server/update.js');
+    });
+    it('Manifest file was outputed', function () {
         var manifest = require('../server/manifest/ygopro.json');
     });
 });
 
 describe('Proxy Server', function () {
-    it('Loaded Development/Stage/Production Markers', function () {
+    it('Web Connectivity Proxy Loads', function () {
         var target = require('../server/js/webconnectivity.js');
+    });
+    it('Web Connectivity Proxy Recieves data', function () {
+        var target = require('../server/js/webconnectivity.js');
+        var socket = net.createConnection(8913);
+        socket.on('connect', function (connect) {
+            var playerconnect1 = require('./playerconnect1.js');
+            var message = new Buffer(playerconnect1);
+            socket.write(message);
+            socket.end();
+        });
     });
 });
 
