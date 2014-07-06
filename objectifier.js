@@ -31,7 +31,6 @@ var dataMap = {
 function structureDefinition(structure) {
     /* take the definition of the structure of the buffer/array you are decoding,
     then compare each value in it to see how big each 'data bucket' needs to be */
-    console.log(structure);
     var maxLength = 1;
     var names = [];
     for (var property in structure) {
