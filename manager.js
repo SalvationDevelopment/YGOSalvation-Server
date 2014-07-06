@@ -1,4 +1,7 @@
 /* jslint node : true */
+process.on('uncaughtException', function (err) {
+    //console.log('Caught exception: ' + err);
+});
 try {
     require('httpsys').slipStream();
 } catch (error) {
@@ -239,6 +242,3 @@ function processIncomingTrasmission(data, socket) {
         }
     }
 }
-process.on('uncaughtException', function (err) {
-    console.log('Caught exception: ' + err);
-});
