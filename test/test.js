@@ -114,7 +114,7 @@ describe('Test Network Connection Methods', function () {
         });
 
     });
-    it('Primus Websocket Connects', function () {
+    it('Primus Websocket Connects and Joins', function () {
         var http = require('net');
         var server = http.createServer().listen(5002);
         var Primus = require('primus');
@@ -125,14 +125,45 @@ describe('Test Network Connection Methods', function () {
         var playerconnect1 = require('./playerconnect1.js');
         var message = new Buffer(playerconnect1);
         client.write({
-            action: 'core',
-            transmission: message
+            action: 'join'
         });
+        primus.destroy({
+            timeout: 300
+        });
+    });
+    it('Primus Websocket Connects, Joins, and Leaves', function () {
+        var http = require('net');
+        var server = http.createServer().listen(5003);
+        var Primus = require('primus');
+        var primus = new Primus(server);
+        var Socket = primus.Socket;
+
+        var client = new Socket('http://localhost:5000');
+        var playerconnect1 = require('./playerconnect1.js');
+        var message = new Buffer(playerconnect1);
         client.write({
             action: 'join'
         });
         client.write({
             action: 'leave'
+        });
+        primus.destroy({
+            timeout: 300
+        });
+    });
+    it('Primus Websocket Connects and Request Duel', function () {
+        var http = require('net');
+        var server = http.createServer().listen(5004);
+        var Primus = require('primus');
+        var primus = new Primus(server);
+        var Socket = primus.Socket;
+
+        var client = new Socket('http://localhost:5000');
+        var playerconnect1 = require('./playerconnect1.js');
+        var message = new Buffer(playerconnect1);
+        client.write({
+            action: 'core',
+            transmission: message
         });
         primus.destroy({
             timeout: 300
