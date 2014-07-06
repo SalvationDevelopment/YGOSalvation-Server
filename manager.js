@@ -239,7 +239,6 @@ function processIncomingTrasmission(data, socket) {
         }
     }
 }
-process.on('uncaughtException', function () {
-    // fail silent for now. console.log('Caught exception: ' + err);
+process.on('uncaughtException', function (err) {
+    console.log('Caught exception: ' + err);
 });
-process.spawn.on('error', function () {});
