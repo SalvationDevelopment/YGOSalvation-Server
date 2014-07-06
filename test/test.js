@@ -38,21 +38,7 @@ describe('Testing that NodeWebkit Files Load', function () {
         var target = require('../server/js/launcher.js');
     });
 });
-describe('Proxy Server', function () {
-    it('Web Connectivity Proxy Loads', function () {
-        var target = require('../server/js/webconnectivity.js');
-    });
-    it('Web Connectivity Proxy Recieves data', function () {
-        var target = require('../server/js/webconnectivity.js');
-        var socket = net.createConnection(8913);
-        socket.on('connect', function (connect) {
-            var playerconnect1 = require('./playerconnect1.js');
-            var message = new Buffer(playerconnect1);
-            socket.write(message);
-            socket.end();
-        });
-    });
-});
+
 
 describe('TOS & Licences are Included', function () {
     it('Terms of Service', function () {
