@@ -27,11 +27,17 @@ describe('Testing that Dependencies Load', function () {
     it('Loaded Update System', function () {
         var target = require('../server/update.js');
     });
-    it('Manifest file was outputed', function () {
-        var manifest = require('../server/manifest/ygopro.json');
-    });
 });
 
+describe('Testing that NodeWebkit Files Load', function () {
+    it('Loaded Offline', function () {
+        var target = require('../public/application/js/offline.js');
+    });
+
+    it('Loaded Launcher', function () {
+        var target = require('../server/js/launcher.js');
+    });
+});
 describe('Proxy Server', function () {
     it('Web Connectivity Proxy Loads', function () {
         var target = require('../server/js/webconnectivity.js');
