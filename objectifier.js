@@ -52,6 +52,7 @@ function structureDefinition(structure) {
                 var segment = buffer.slice(readposition, readposition + maxLength);
                 output[names[i]] = segment.slice(0, dataMap[structure[names[i]].toLowerCase()]);
             }
+            return output;
         },
         write: function (jsStructure) {
             var output = [];
