@@ -1,9 +1,9 @@
-[![Stories in Ready](https://badge.waffle.io/salvationdevelopment/ygopro-support-system.png?label=ready&title=Ready)](https://waffle.io/salvationdevelopment/ygopro-support-system)
 [![Dependencies](https://david-dm.org/SalvationDevelopment/YGOPro-Support-System.svg)](https://david-dm.org/)
 [![Code Climate](https://codeclimate.com/github/SalvationDevelopment/YGOPro-Support-System.png)](https://codeclimate.com/github/SalvationDevelopment/YGOPro-Support-System)
 [![Code Climate](https://codeclimate.com/github/SalvationDevelopment/YGOPro-Support-System/coverage.png)](https://codeclimate.com/github/SalvationDevelopment/YGOPro-Support-System)
 [![Build Status](https://travis-ci.org/SalvationDevelopment/YGOPro-Support-System.svg?branch=master)](https://travis-ci.org/SalvationDevelopment/YGOPro-Support-System)
 [![Support via Gittip](http://img.shields.io/gittip/Zayelion.svg)](https://www.gittip.com/Zayelion/)
+[![Stories in Ready](https://badge.waffle.io/salvationdevelopment/ygopro-support-system.png?label=ready&title=Ready)](https://waffle.io/salvationdevelopment/ygopro-support-system)
 #YGOPro Support System
 **by Salvation Development**
 
@@ -32,10 +32,12 @@ It isnt our goal to be the best simulator as far as feature sets, we have a defi
 ## Installation
 Download the server, run it. Thats it. *(Config in development hince vagueness)*
 ###Development Area
-Install `nodejs` this will also install `npm`, download the program from this git and unzip it. Navigate to that folder in `cmd` or `console`. Run:
-* `npm install -g istanbul`
-* `npm install -g mocha`
-* `npm install -g http-server`
+Install `nodejs` this will also install `npm`, download the program from this git and unzip it. Navigate to that folder in `cmd` or `console`.
+* `npm install` **installs the actual program**
+* `npm install -g istanbul` ** installs the code coverage check system **
+* `npm install -g mocha`  ** installs the test harnss **
+* `npm install -g http-server` ** an overpowered http server to run the server folder **
+* 
 This will give you two test harnesses and an http server. Edit the `servercontrol.json` file with the name of your remote installations for production and stage (You shouldnt have a production area see License).
 
 ## Licensing and Contributing
