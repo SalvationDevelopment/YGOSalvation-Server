@@ -32,13 +32,13 @@ It isnt our goal to be the best simulator as far as feature sets, we have a defi
 ## Installation
 Download the server, run it. Thats it. *(Config in development hince vagueness)*
 ###Development Area
-Install `nodejs` this will also install `npm`, download the program from this git and unzip it. Navigate to that folder in `cmd` or `console`.
-* `npm install` **installs the actual program**
-* `npm install -g istanbul` ** installs the code coverage check system **
-* `npm install -g mocha`  ** installs the test harnss **
-* `npm install -g http-server` ** an overpowered http server to run the server folder **
-* 
-This will give you two test harnesses and an http server. Edit the `servercontrol.json` file with the name of your remote installations for production and stage (You shouldnt have a production area see License).
+Install `nodejs` this will also install `npm`, download the program from this git and unzip it. Navigate to that folder in `cmd` or `console`. Run the following commands:
+* `npm install` installs the actual program.
+* `npm install -g istanbul` installs the code coverage check system.
+* `npm install -g mocha`  installs the test harnss.
+* `npm install -g http-server`  an overpowered http server to run the server folder.
+
+This will setup a run enviroment  you two test harnesses and an http server. In the future it will download an install the YGOCore and compile it to your systems native architure. Edit the `servercontrol.json` file with the name of your remote installations for production and stage (You shouldnt have a production area see License).
 
 ## Licensing and Contributing
 *This software was developed and designed to help the Yu-Gi-Oh! Online community which for years has been socially suffering. In line with that, to protect the community this project is 'mostly open'. This software can not be used at scale without my written permission. That means no more than 10 users. There is a very speific use case I have in mind where I will not give out an a flexible licence if asked, by companies and major community leaders. I've seen this software abused I do not want to see that happen again. Basically you are not allowed to use this without asking its creators permission first.*
