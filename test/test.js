@@ -57,7 +57,7 @@ describe('Structures Test', function () {
         });
         assert((strut !== null), true);
     });
-    it('Structure Read', function () {
+    it('Structure Read and write', function () {
         var strut = structureDefinition({
             test: 'int',
             long: "long"
@@ -66,17 +66,15 @@ describe('Structures Test', function () {
             test: 1,
             long: 34
         });
-    });
-    it('Structure Write', function () {
-        var strut = structureDefinition({
-            test: 'int',
-            long: "long"
-        });
-        var out = strut.write({
+        var validate = strut.read(out);
+        console.log(out);
+        assert((validate === {
             test: 1,
             long: 34
-        });
+        }), true);
+        console.log(validate);
     });
+
 });
 describe('Test Network Connection Methods', function () {
     var target = require('../manager.js');
