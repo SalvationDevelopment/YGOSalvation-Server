@@ -225,7 +225,7 @@ primus.on('data', function (data) {
 
 
 
-function initializeOptions() {
+function parseDuelOptions(duelOptions) {
     var allowedCards;
     var gameMode;
     var timeLimit;
