@@ -240,10 +240,7 @@ function initializeOptions() {
     var password;
     var duelOptionsParts = duelOptions.split(',');
 
-}
 
-
-function parseDuelOptions(duelOptions) {
     //Determine allowed cards
     if (duelOptionsParts[0][0] === '0') {
         allowedCards = 'tcg';
