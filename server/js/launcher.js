@@ -225,7 +225,7 @@ primus.on('data', function (data) {
 
 
 
-function parseDuelOptions(duelOptions) {
+function initializeOptions() {
     var allowedCards;
     var gameMode;
     var timeLimit;
@@ -240,8 +240,10 @@ function parseDuelOptions(duelOptions) {
     var password;
     var duelOptionsParts = duelOptions.split(',');
 
+}
 
 
+function parseDuelOptions(duelOptions) {
     //Determine allowed cards
     if (duelOptionsParts[0][0] === '0') {
         allowedCards = 'tcg';
