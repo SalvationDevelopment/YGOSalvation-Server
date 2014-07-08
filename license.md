@@ -1,4 +1,4 @@
-[![Dependencies](http://img.shields.io/badge/licence-open%20conditional-000000.svg)](https://david-dm.org/)
+[![Dependencies](http://img.shields.io/badge/licence-MIT%20conditional-000000.svg)](https://david-dm.org/)
 
 YOU ARE NOT ALLOWED TO USE THIS SOFTWARE AT SCALE WITHOUT THE WRITTEN CONSENT OF JAMES GLADNEY.
 
