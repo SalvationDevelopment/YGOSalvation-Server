@@ -1,6 +1,7 @@
 /* jslint node : true */
 /* jslint browser : true */
-/* global ygopro, $, isChecked, alert, Primus, console, process, applysettings, prompt */
+/* global ygopro, $, isChecked, alert, Primus, console, process, applySettings, prompt */
+/* exported joinGamelist, leaveGamelist, hostGame, connectgamelist, enterGame, setHostSettings, gui*/
 
 applySettings();
 var siteLocation = 'http://salvationdevelopment.com/launcher/';
@@ -8,9 +9,8 @@ var siteLocation = 'http://salvationdevelopment.com/launcher/';
 
 var http = require('http');
 var fs = require('fs');
-var walk = require('fs-walk');
 var url = require('url');
-
+var gui = require('nw.gui');
 
 var manifest = '';
 var options = {
@@ -27,13 +27,7 @@ http.get(options, function (res) {
     });
 });
 
-function update(location, file) {
-    var files = {};
-    walk.walkSync(location, function (basedir, filename, stat) {
-        files[filename] = stat.mtime.getTime() || 0;
-    });
-    return files;
-}
+
 
 process.on('uncaughtException', function (err) {
     console.log('Caught exception: ' + err);
@@ -60,10 +54,6 @@ function updateCheckFile(file, initial) {
     }
 }
 var screenMessage = $('#servermessages');
-
-
-var nodecrypto = require('crypto');
-
 
 var downloadList = [];
 
@@ -118,14 +108,10 @@ function download() {
     });
 }
 
-
-
-
-
-
 $('#servermessages').text('Server Messages will spawn here.');
 
 
+var primus = Primus.connect('http://salvationdevelopment.com:5000');
 
 function joinGamelist() {
     primus.write({
@@ -145,48 +131,61 @@ function hostGame(parameters) {
         format: parameters
     });
 }
-var gui = require('nw.gui');
+
+
+function randomString(len, charSet) {
+    charSet = charSet || 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    var randomstring = '';
+    for (var i = 0; i < len; i++) {
+        var randomPoz = Math.floor(Math.random() * charSet.length);
+        randomstring += charSet.substring(randomPoz, randomPoz + 1);
+    }
+    return randomstring;
+}
+
+function getDuelRequest() {
+    return {
+        string: "" + $('#creategamecardpool').val() + $('#creategameduelmode').val() + $('#creategametimelimit').val(),
+        prio: isChecked('#enableprio') ? ("F") : ("O"),
+        checkd: isChecked('#discheckdeck') ? ("F") : ("O"),
+        shuf: isChecked('#disshuffledeck') ? ("F") : ("O"),
+        stnds: "," + $('#creategamebanlist').val() + ',5,1,U,',
+        pass: randomString(5)
+    };
+}
 
 function setHostSettings() {
 
-    function randomString(len, charSet) {
-        charSet = charSet || 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-        var randomstring = '';
-        for (var i = 0; i < len; i++) {
-            var randomPoz = Math.floor(Math.random() * charSet.length);
-            randomstring += charSet.substring(randomPoz, randomPoz + 1);
-        }
-        return randomstring;
-    }
+    var duelRequest = getDuelRequest();
+    localStorage.roompass =
+        duelRequest.string + duelRequest.prio +
+        duelRequest.checkd + duelRequest.shuf +
+        $('#creategamelp').val() + duelRequest.stnds +
+        duelRequest.pass;
 
-    var string, prio, checkd, shuf,  stnds, pass, compl;
-    string = "" + $('#creategamecardpool').val() + $('#creategameduelmode').val() + $('#creategametimelimit').val();
-    prio = isChecked('#enableprio') ? ("F") : ("O");
-    checkd = isChecked('#discheckdeck') ? ("F") : ("O");
-    shuf = isChecked('#disshuffledeck') ? ("F") : ("O");
-//    rp = ($('#creategamepassword').val().length > 0) ? ("L") : (""); room locking
-//    isrank =  $('input:radio[name=ranked]:checked').val(); ranking select
-    stnds = "," + $('#creategamebanlist').val() + ',5,1,U,';
-    pass = $('#creategamepassword').val() || randomString(5);
-    compl = string + prio + checkd + shuf + $('#creategamelp').val() + stnds + pass;
-    console.log(compl);
-    localStorage.roompass = compl;
     localStorage.lastip = '192.99.11.19\r\n';
     localStorage.serverport = '8911\r\n';
     localStorage.lastport = '8911\r\n';
 
-    if ($('#creategamecardpool').val() == 2 && $('input:radio[name=ranked]:checked').val() == 'R') {
-        alert('OCG/TCG is not a valid mode for ranked, please select a different mode for ranked play');
-        return false;
+    if (!secure(duelRequest.prio, duelRequest.checkd, duelRequest.shuf)) {
+        return;
     }
-    if (prio + checkd + shuf !== "OOO" && $('input:radio[name=ranked]:checked').val() == 'R') {
-        alert('You may not cheat here.');
-        return false;
-    }
+
     locallogin();
     ygopro('-j');
 }
-var primus = Primus.connect('http://salvationdevelopment.com:5000');
+
+function secure(prio, checkd, shuf) {
+    if (prio + checkd + shuf !== "OOO" && $('input:radio[name=ranked]:checked').val() === 'R') {
+        alert('You may not cheat here.');
+        return false;
+    }
+    if ($('#creategamecardpool').val() === 2 && $('input:radio[name=ranked]:checked').val() === 'R') {
+        alert('OCG/TCG is not a valid mode for ranked, please select a different mode for ranked play');
+        return false;
+    }
+    return true;
+}
 
 function connectgamelist() {
     primus.write({
@@ -195,28 +194,32 @@ function connectgamelist() {
 }
 primus.on('data', function (data) {
     console.log(data);
-    renderList(JSON.parse(data));
+    if (!data.clientEvent) {
+        renderList(JSON.parse(data));
+    }
     switch (data.clientEvent) {
     case ('serverMessage'):
         {
             $('#servermessages').text(data.serverMessage);
-            break;
         }
-    case ('duelRooms'):
-        {
+        break;
 
-            break;
-        }
     case ('duelRequest'):
         {
-
-            break;
+            var accept = prompt('Take duel?');
+            if (accept) {
+                enterGame(data.clientEvent.room);
+            }
         }
+        break;
+
     case ('die'):
         {
-
-            break;
+            alert(data.clientEvent.message);
+            $('body').html('');
         }
+        break;
+
     }
 });
 
@@ -277,7 +280,7 @@ function parseDuelOptions(duelOptions) {
     lifePoints = duelOptionsParts[0].substring(6);
 
     //Determine Banlist
-    banList = parseInt(duelOptionsParts[1]);
+    banList = parseInt(duelOptionsParts[1], 10);
 
     //Select how many cards to draw on first hand
     openDraws = duelOptionsParts[2];
@@ -305,6 +308,7 @@ function parseDuelOptions(duelOptions) {
         turnDraws: turnDraws,
         password: password
     };
+
 }
 
 //{"200OOO8000,0,5,1,U,AvE":{"port":8000,"players":[],"started":false}}
@@ -322,8 +326,8 @@ function renderList(JSONdata) {
     for (var rooms in JSONdata) {
         if (JSONdata.hasOwnProperty(rooms)) {
             var translated = parseDuelOptions(rooms);
-            var content = '<div class="game" onclick=enterGame("'+rooms+'")>'+
-             JSONdata[rooms].players[0] + ' for ' + translated.isRanked + '  ' + translated.gameMode + '</div>';
+            var content = '<div class="game" onclick=enterGame("' + rooms + '")>' +
+                JSONdata[rooms].players[0] + ' for ' + translated.isRanked + '  ' + translated.gameMode + '</div>';
 
             $('#gamelist').append(content);
         }
@@ -332,11 +336,11 @@ function renderList(JSONdata) {
 }
 
 function locallogin(init) {
-    if (localStorage.nickname.indexOf('\u0000') < 1 || init ===  true) {
+    if (localStorage.nickname.indexOf('\u0000') < 1 || init === true) {
         var username = prompt('Username: ', localStorage.nickname);
-        while(!username){
-		    username = prompt('Username: ', localStorage.nickname);
-    	}
+        while (!username) {
+            username = prompt('Username: ', localStorage.nickname);
+        }
         localStorage.nickname = username + '\u0000\r\n';
     }
 }
