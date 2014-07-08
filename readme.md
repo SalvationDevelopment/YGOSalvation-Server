@@ -3,7 +3,8 @@
 [![Code Climate](https://codeclimate.com/github/SalvationDevelopment/YGOPro-Support-System/coverage.png)](https://codeclimate.com/github/SalvationDevelopment/YGOPro-Support-System)
 [![Build Status](https://travis-ci.org/SalvationDevelopment/YGOPro-Support-System.svg?branch=master)](https://travis-ci.org/SalvationDevelopment/YGOPro-Support-System)
 [![Support via Gittip](http://img.shields.io/gittip/Zayelion.svg)](https://www.gittip.com/Zayelion/)
-[![Stories in Backlog](https://badge.waffle.io/salvationdevelopment/ygopro-support-system.png?label=ready&title=Plans )](https://waffle.io/salvationdevelopment/ygopro-support-system)
+[![Stories in Backlog](https://badge.waffle.io/salvationdevelopment/ygopro-support-system.png?label=ready&title=Planned )](https://waffle.io/salvationdevelopment/ygopro-support-system)
+[![Stories in Progress](https://badge.waffle.io/salvationdevelopment/ygopro-support-system.png?label=In%20Progress&title=In%20Progress )](https://waffle.io/salvationdevelopment/ygopro-support-system)
 #YGOPro Support System
 **by Salvation Development**
 
