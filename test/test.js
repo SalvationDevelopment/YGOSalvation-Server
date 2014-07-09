@@ -63,7 +63,6 @@ describe('Structures Test', function () {
         var validate = strut.read(out);
         assert((header.test === validate.test), true);
     });
-
 });
 describe('Test Network Connection Methods', function () {
     var target = require('../manager.js');
