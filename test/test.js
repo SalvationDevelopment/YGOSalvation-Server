@@ -61,7 +61,8 @@ describe('Structures Test', function () {
             long: "abcd    "
         });
         var validate = strut.read(out);
-        assert((header.test === validate.test), true);
+        assert((validate.test === "a"), true);
+        assert((validate.long === "abcd    "), true);
     });
 });
 describe('Test Network Connection Methods', function () {
