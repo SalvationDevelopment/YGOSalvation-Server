@@ -48,9 +48,7 @@ function structureDefinition(structure) {
         read: function (buffer) {
             var output = {};
             var readposition = 0;
-            console.log(names.length);
             for (var i = 0, items = names.length; items > i; i++) {
-                console.log('i', dataMap[structure[names[i]].toLowerCase()]);
                 var segment = buffer.slice(readposition, (dataMap[structure[names[i]].toLowerCase()] * 2));
                 output[names[i]] = segment.slice(0, dataMap[structure[names[i]].toLowerCase()]).toString();
                 readposition = readposition + maxLength;
