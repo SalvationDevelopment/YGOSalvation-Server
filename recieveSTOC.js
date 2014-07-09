@@ -3,7 +3,7 @@ var enums = require('./enums.js');
 module.exports = function RecieveSTOC(packet) {
     var todo = Object.create(enums.STOCCheck);
     todo[packet.STOC] = true;
-/*
+
     switch (packet.STOC) {
 
     case ('STOC_REPLAY'):
@@ -26,7 +26,7 @@ module.exports = function RecieveSTOC(packet) {
         break;
     case ('STOC_HS_PLAYER_ENTER'):
         {
-      
+
             todo[packet.STOC] = packet.message.toString('utf16le');
         }
         break;
@@ -62,6 +62,6 @@ module.exports = function RecieveSTOC(packet) {
 
         }
         break;
-    }*/
+    }
     return todo;
 };
