@@ -50,29 +50,18 @@ describe('TOS & Licences are Included', function () {
 describe('Structures Test', function () {
     var structureDefinition = require('../objectifier.js');
     it('Structure Creation', function () {
-        var strut = null;
-        strut = structureDefinition({
-            test: 'int',
-            long: "long"
-        });
-        assert((strut !== null), true);
-    });
-    it('Structure Read and write', function () {
-        var strut = structureDefinition({
-            test: 'int',
-            long: "long"
-        });
+        var structureDefinition = require('../objectifier.js');
+        var header = {
+            test: 'char',
+            long: 'long'
+        };
+        var strut = structureDefinition(header);
         var out = strut.write({
-            test: 1,
-            long: 34
+            test: 'a',
+            long: "abcd    "
         });
         var validate = strut.read(out);
-        console.log(out);
-        assert((validate === {
-            test: 1,
-            long: 34
-        }), true);
-        console.log(validate);
+        assert((header.test === validate.test), true);
     });
 
 });
