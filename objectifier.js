@@ -48,9 +48,12 @@ function structureDefinition(structure) {
         read: function (buffer) {
             var output = {};
             var readposition = 0;
-            for (var i, items = names.length; items > i; i++) {
-                var segment = buffer.slice(readposition, readposition + maxLength);
-                output[names[i]] = segment.slice(0, dataMap[structure[names[i]].toLowerCase()]);
+            console.log(names.length);
+            for (var i = 0, items = names.length; items > i; i++) {
+                console.log('i', dataMap[structure[names[i]].toLowerCase()]);
+                var segment = buffer.slice(readposition, (dataMap[structure[names[i]].toLowerCase()] * 2));
+                output[names[i]] = segment.slice(0, dataMap[structure[names[i]].toLowerCase()]).toString();
+                readposition = readposition + maxLength;
             }
             return output;
         },
@@ -58,15 +61,16 @@ function structureDefinition(structure) {
             var output = [];
             for (var property in structure) {
                 if (structure.hasOwnProperty(property)) {
-                    var data = jsStructure[property];
-                    var segment = new Array(maxLength);
-                    for (var i = 0, items = segment.length; items > i; i++) {
-                        segment[i] = data[i] || 0;
+                    var data = new Buffer(jsStructure[property]);
+                    data = data.slice(0, (dataMap[structure[property].toLowerCase()] * 2));
+                    for (var i = 0, items = maxLength; items > i; i++) {
+                        var insert = data[i] || 0;
+                        output.push(insert);
                     }
-                    output.concat(segment);
+
                 }
             }
-            return output;
+            return new Buffer(output);
         }
     };
 }
