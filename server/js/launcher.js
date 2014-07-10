@@ -241,6 +241,7 @@ function parseDuelOptions(duelOptions) {
     var duelOptionsParts = duelOptions.split(',');
 
 
+
     //Determine allowed cards
     if (duelOptionsParts[0][0] === '0') {
         allowedCards = 'tcg';
@@ -317,7 +318,7 @@ function enterGame(string) {
     ygopro('-j');
 }
 //primus.write({
-// action: 'join'
+//    action: 'join'
 //});
 
 function renderList(JSONdata) {
@@ -326,7 +327,7 @@ function renderList(JSONdata) {
         if (JSONdata.hasOwnProperty(rooms)) {
             var translated = parseDuelOptions(rooms);
             var content = '<div class="game" onclick=enterGame("' + rooms + '")>' +
-                JSONdata[rooms].players[0] + ' for ' + translated.isRanked + ' ' + translated.gameMode + '</div>';
+                JSONdata[rooms].players[0] + ' for ' + translated.isRanked + '  ' + translated.gameMode + '</div>';
 
             $('#gamelist').append(content);
         }
