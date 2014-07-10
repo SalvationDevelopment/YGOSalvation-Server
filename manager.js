@@ -22,8 +22,8 @@ var primus = new Primus(server, {
 });
 
 var parsePackets = require('./parsepackets.js');
-var RecieveCTOS = require('./recieveCTOS');
-var RecieveSTOC = require('./recieveSTOC.js');
+var recieveCTOS = require('./recieveCTOS');
+var recieveSTOC = require('./recieveSTOC.js');
 primus.use('rooms', Rooms);
 
 primus.on('connection', function (socket) {
@@ -106,7 +106,7 @@ function processTask(task, socket) {
     task = (function () {
         var output = [];
         for (var i = 0; task.length > i; i++) {
-            output.push(RecieveCTOS(task[i], socket.username, socket.hostString));
+            output.push(recieveCTOS(task[i], socket.username, socket.hostString));
         }
         return output;
     })();
@@ -147,21 +147,16 @@ function connectToCore(port, data, socket) {
             task = (function () {
                 var output = [];
                 for (var i = 0; task.length > i; i++) {
-                    output.push(RecieveSTOC(task[i], socket.hostString));
+                    output.push(recieveSTOC(task[i], socket.hostString));
                 }
                 return output;
             })();
-            for (var i = 0; task.length > i; i++) {
-                // //console.log('task', i, task[i]);
-            }
             socket.write(core_data);
 
         });
         socket.active_ygocore.on('error', function (error) {
             killCore(socket);
-            delete gamelist[socket.hostString];
-
-
+            console.log(error);
         });
         socket.active_ygocore.on('close', function () {
             killCore(socket);
@@ -172,7 +167,9 @@ function connectToCore(port, data, socket) {
 function portfinder(min, max, gamelist, callback) {
     var activerooms = [];
     for (var rooms in gamelist) {
-        activerooms.push(gamelist[rooms].port);
+        if (gamelist.hasOwnProperty(rooms)) {
+            activerooms.push(gamelist[rooms].port);
+        }
     }
     for (var i = min; max > i; i++) {
         if (activerooms.indexOf(i) === -1) {
@@ -220,11 +217,9 @@ function processIncomingTrasmission(data, socket) {
             }, function (error, stdout, stderr) {
                 console.log('CORE Terminated', error, stderr, stdout);
             });
-            socket.core.stdout.on('error', function () {
-                delete socket.core;
-                delete gamelist[socket.hostString];
-                primus.room('activegames').write(JSON.stringify(gamelist));
-                console.log('core error');
+            socket.core.stdout.on('error', function (error) {
+                killCore(socket);
+                console.log('core error', error);
             });
             socket.core.stdout.on('data', function (core_message) {
                 core_message = core_message.toString();
