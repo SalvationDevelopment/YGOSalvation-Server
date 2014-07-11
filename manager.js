@@ -7,8 +7,6 @@ try {
 } catch (error) {
     console.log('Windows 8+ spefic enhancements not enabled.');
 }
-var gamelist = Object.create(null);
-
 
 var fs = require('fs');
 var net = require('net');
@@ -24,55 +22,48 @@ var primus = new Primus(server, {
 var parsePackets = require('./parsepackets.js');
 var recieveCTOS = require('./recieveCTOS');
 var recieveSTOC = require('./recieveSTOC.js');
-primus.use('rooms', Rooms);
+var gamelist = Object.create(null);
 
+
+
+primus.use('rooms', Rooms);
 primus.on('connection', function (socket) {
     socket.active_ygocore = false;
     socket.active = false;
     socket.on('data', function (data) {
-
         data = data || {};
-        //console.log(data);
         var action = data.action;
-
         switch (action) {
-
         case ('join'):
             {
                 socket.join('activegames', function () {
-
-                    // send message to this client
-                    socket.write('you joined room activegames');
                     socket.write(JSON.stringify(gamelist));
-
                 });
-
             }
             break;
         case ('leave'):
             {
                 socket.leave('activegames');
-
             }
             break;
         case ('core'):
             {
                 processIncomingTrasmission(data.transmission, socket);
             }
-
+            break;
+        default:
+            {
+                console.log(data);
+            }
         }
     });
 });
 primus.on('disconnection', function (socket) {
-    console.log('Duel Room Disconnection');
     killCore(socket); // allow reconnection?
 });
 primus.on('error', function (socket) {
-    console.log('Duel Room Disconnection');
     killCore(socket); // allow reconncetion?
 });
-
-
 
 var ygoserver = net.createServer(function (socket) {
     socket.active_ygocore = false;
@@ -84,7 +75,6 @@ var ygoserver = net.createServer(function (socket) {
         killCore(socket);
     });
     socket.on('error', function () {
-        //console.log('CLIENT ERROR', error);
         killCore(socket);
     });
 });
@@ -113,8 +103,6 @@ function processTask(task, socket) {
     for (var i = 0; task.length > i; i++) {
         if (task[i].CTOS_JOIN_GAME) {
             socket.active = true;
-            //console.log('I am changing the hostString!!!');
-            //console.log('because it =', task[i].CTOS_JOIN_GAME, typeof (task[i].CTOS_JOIN_GAME));
             socket.hostString = task[i].CTOS_JOIN_GAME;
             //console.log(task);
         }
@@ -138,7 +126,6 @@ function processTask(task, socket) {
 
 function connectToCore(port, data, socket) {
     socket.active_ygocore = net.connect(port, '127.0.0.1', function () {
-        ////console.log('connected on', port);
         socket.active_ygocore.write(data);
         primus.room('activegames').write(JSON.stringify(gamelist));
         socket.active = false;
@@ -152,7 +139,6 @@ function connectToCore(port, data, socket) {
                 return output;
             })();
             socket.write(core_data);
-
         });
         socket.active_ygocore.on('error', function (error) {
             killCore(socket);
@@ -183,10 +169,8 @@ function processIncomingTrasmission(data, socket) {
     //console.log(socket.hostString);
     if (socket.active_ygocore) {
         socket.active_ygocore.write(data);
+        // eventing shifted server wont overload due to constant dueling.
     }
-
-
-    // eventing shifted server wont overload due to constant dueling.
     var task = parsePackets('CTOS', data);
     processTask(task, socket);
 
@@ -199,50 +183,46 @@ function processIncomingTrasmission(data, socket) {
         } else if (!gamelist[socket.hostString] && !socket.active_ygocore) {
             console.log(socket.username + ' connecting to new core');
             portfinder(7000, 9001, gamelist, function (error, port) {
-                startCore(port);
+                startCore(port, socket, data);
             });
         }
     }
+}
 
-    function startCore(port) {
-        fs.exists('public/ygopro/ygocoreSD3.exe', function (exist) {
-            if (!exist) {
-                console.log('core not found at ' + __dirname + '/' + 'public/ygopro');
-                return;
-            }
-            //console.log('connecting to new core @', port);
-            //console.log('found port ', port);
-            socket.core = childProcess.spawn('ygocoreSD3.exe ', [port], {
-                cwd: 'public/ygopro/'
-            }, function (error, stdout, stderr) {
-                console.log('CORE Terminated', error, stderr, stdout);
-            });
-            socket.core.stdout.on('error', function (error) {
+function startCore(port, socket, data) {
+    fs.exists('public/ygopro/ygocoreSD3.exe', function (exist) {
+        if (!exist) {
+            console.log('core not found at ' + __dirname + '/' + 'public/ygopro');
+            return;
+        }
+        //console.log('connecting to new core @', port);
+        //console.log('found port ', port);
+        socket.core = childProcess.spawn('ygocoreSD3.exe ', [port], {
+            cwd: 'public/ygopro/'
+        }, function (error, stdout, stderr) {
+            console.log('CORE Terminated', error, stderr, stdout);
+        });
+        socket.core.stdout.on('error', function (error) {
+            killCore(socket);
+            console.log('core error', error);
+        });
+        socket.core.stdout.on('data', function (core_message) {
+            core_message = core_message.toString();
+            console.log(port + ': Core Message: ', core_message);
+            if (core_message[0] === 'S') {
+
+                connectToCore(port, data);
+                gamelist[socket.hostString] = {
+                    port: port,
+                    players: [socket.username],
+                    started: false
+                };
+                primus.room('activegames').write(JSON.stringify(gamelist));
+            } else {
                 killCore(socket);
-                console.log('core error', error);
-            });
-            socket.core.stdout.on('data', function (core_message) {
-                core_message = core_message.toString();
-                console.log(port + ': Core Message: ', core_message);
-                if (core_message[0] === 'S') {
-
-                    connectToCore(port, data);
-                    gamelist[socket.hostString] = {
-                        port: port,
-                        players: [socket.username],
-                        started: false
-                    };
-                    primus.room('activegames').write(JSON.stringify(gamelist));
-
-                    //console.log(gamelist);
-                } else {
-                    console.log('attempting to kill game hosted by', gamelist[socket.hostString].players[0]);
-                    killCore(socket);
-
-                }
-
-            });
+            }
 
         });
-    }
+
+    });
 }
