@@ -226,11 +226,39 @@ primus.on('data', function (data) {
 
 
 function parseDuelOptions(duelOptions) {
-    var settings;
     var duelOptionsParts = duelOptions.split(',');
+    
+    var settings = { //Determine time limit
+        timeLimit : (duelOptionsParts[0][2] === '0') ? '3 minutes' : '5 minutes',
+        //Use classic TCG rules?
+        isTCGRuled : (duelOptionsParts[0][3] === 'O') ? 'OCG rules' : 'TCG Rules',
 
+        //Check Deck for Illegal cards?
+        isDeckChecked : (duelOptionsParts[0][4] === 'O') ? 'Check' : 'Dont Check',
 
+        //Shuffle deck at start?
+        isShuffled : (duelOptionsParts[0][5] === 'O') ? 'Shuffle' : 'Dont Shuffle',
 
+        //Choose Starting Life Points
+        lifePoints : duelOptionsParts[0].substring(6),
+
+        //Determine Banlist
+        banList : parseInt(duelOptionsParts[1], 10),
+
+        //Select how many cards to draw on first hand
+        openDraws : duelOptionsParts[2],
+
+        //Select how many cards to draw each turn
+        turnDraws : duelOptionsParts[3],
+
+        //Choose whether duel is ranked
+        isRanked : (duelOptionsParts[4] === 'U') ? 'Unranked' : 'Ranked',
+
+        //Copy password
+        password : duelOptionsParts[5],
+    };
+    
+    
     //Determine allowed cards
     if (duelOptionsParts[0][0] === '0') {
         settings.allowedCards = 'tcg';
@@ -253,35 +281,7 @@ function parseDuelOptions(duelOptions) {
         settings.gameMode = 'tag';
     }
 
-    //Determine time limit
-    settings.timeLimit = (duelOptionsParts[0][2] === '0') ? '3 minutes' : '5 minutes';
 
-    //Use classic TCG rules?
-    settings.isTCGRuled = (duelOptionsParts[0][3] === 'O') ? 'OCG rules' : 'TCG Rules';
-
-    //Check Deck for Illegal cards?
-    settings.isDeckChecked = (duelOptionsParts[0][4] === 'O') ? 'Check' : 'Dont Check';
-
-    //Shuffle deck at start?
-    settings.isShuffled = (duelOptionsParts[0][5] === 'O') ? 'Shuffle' : 'Dont Shuffle';
-
-    //Choose Starting Life Points
-    settings.lifePoints = duelOptionsParts[0].substring(6);
-
-    //Determine Banlist
-    settings.banList = parseInt(duelOptionsParts[1], 10);
-
-    //Select how many cards to draw on first hand
-    settings.openDraws = duelOptionsParts[2];
-
-    //Select how many cards to draw each turn
-    settings.turnDraws = duelOptionsParts[3];
-
-    //Choose whether duel is ranked
-    settings.isRanked = (duelOptionsParts[4] === 'U') ? 'Unranked' : 'Ranked';
-
-    //Copy password
-    settings.password = duelOptionsParts[5];
 
     return settings;
         
