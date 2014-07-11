@@ -36,18 +36,25 @@ function structureDefinition(structure) {
     var iterationMap = [];
     for (var property in structure) {
         if (structure.hasOwnProperty(property)) {
-            if (typeof (property) !== 'string') {
-                names.push(property[0].toLowerCase());
-                iterationMap.push(property[1]);
-            } else {
-                names.push(property.toLowerCase());
+            console.log(typeof (structure[property]), property)
+            if (typeof (structure[property]) !== 'string') {
+                names.push(property);
+                iterationMap.push(structure[property][1]);
+                if (dataMap[structure[property]] > maxLength) {
+                    maxLength = dataMap[structure[property]];
+                }
+            }
+            if (typeof (structure[property]) === 'string') {
+                names.push(property);
                 iterationMap.push(1);
+                if (dataMap[structure[property]] > maxLength) {
+                    maxLength = dataMap[structure[property]];
+                }
             }
-            if (dataMap[structure[property].toLowerCase()] > maxLength) {
-                maxLength = dataMap[structure[property].toLowerCase()];
-            }
+
         }
     }
+    console.log(iterationMap)
     /* Using the definition return a function that processes an inputed buffer and,
     outputs an object that follows/mirrors the structure defined with a proper naming,
     schema. Data is returned in buffer/arrays. */
@@ -57,8 +64,9 @@ function structureDefinition(structure) {
             var readposition = 0;
             for (var i = 0, items = names.length; items > i; i++) {
                 for (var j = 0, arrayItem = iterationMap[i]; arrayItem > j; j++) {
-                    var segment = buffer.slice(readposition, (dataMap[structure[names[i]].toLowerCase()] * 2)) || '';
-                    output[names[i]] = segment.slice(0, dataMap[structure[names[i]].toLowerCase()]).toString() || '';
+                    console.log(j, i, dataMap[structure[names[i]]] * 2)
+                    var segment = buffer.slice(readposition, (dataMap[structure[names[i]]] * 2)) || '';
+                    output[names[i]] = segment.slice(0, dataMap[structure[names[i]]]).toString() || '';
                     readposition = readposition + maxLength;
                 }
             }
@@ -70,7 +78,8 @@ function structureDefinition(structure) {
                 var maxArrayLength = names.indexOf(property);
                 if (structure.hasOwnProperty(property)) {
                     var data = new Buffer(jsStructure[property]);
-                    data = data.slice(0, (dataMap[structure[property].toLowerCase()] * 2 * iterationMap[maxArrayLength]));
+                    var size = dataMap[structure[property]] || dataMap[structure[property][0]];
+                    data = data.slice(0, (size * 2 * iterationMap[maxArrayLength]));
                     var insert;
                     for (var i = 0, items = maxLength; items > i; i++) {
                         insert = data[i];
