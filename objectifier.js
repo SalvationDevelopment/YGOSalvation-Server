@@ -67,7 +67,7 @@ function structureDefinition(structure) {
         write: function (jsStructure) {
             var output = [];
             for (var property in structure) {
-                var maxArrayLength = iterationMap.indexOf(property);
+                var maxArrayLength = names.indexOf(property);
                 if (structure.hasOwnProperty(property)) {
                     var data = new Buffer(jsStructure[property]);
                     data = data.slice(0, (dataMap[structure[property].toLowerCase()] * 2 * iterationMap[maxArrayLength]));
