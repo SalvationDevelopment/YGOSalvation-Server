@@ -226,88 +226,66 @@ primus.on('data', function (data) {
 
 
 function parseDuelOptions(duelOptions) {
-    var allowedCards;
-    var gameMode;
-    var timeLimit;
-    var isTCGRuled;
-    var isDeckChecked;
-    var isShuffled;
-    var lifePoints;
-    var banList;
-    var openDraws;
-    var turnDraws;
-    var isRanked;
-    var password;
+    var settings;
     var duelOptionsParts = duelOptions.split(',');
 
 
 
     //Determine allowed cards
     if (duelOptionsParts[0][0] === '0') {
-        allowedCards = 'tcg';
+        settings.allowedCards = 'tcg';
     }
     if (duelOptionsParts[0][0] === '1') {
-        allowedCards = 'ocg';
+        settings.allowedCards = 'ocg';
     }
     if (duelOptionsParts[0][0] === '2') {
-        allowedCards = 'tcg/ocg';
+        settings.allowedCards = 'tcg/ocg';
     }
 
     //Determine game mode
     if (duelOptionsParts[0][1] === '0') {
-        gameMode = 'single';
+        settings.gameMode = 'single';
     }
     if (duelOptionsParts[0][1] === '1') {
-        gameMode = 'match';
+        settings.gameMode = 'match';
     }
     if (duelOptionsParts[0][1] === '2') {
-        gameMode = 'tag';
+        settings.gameMode = 'tag';
     }
 
     //Determine time limit
-    timeLimit = (duelOptionsParts[0][2] === '0') ? '3 minutes' : '5 minutes';
+    settings.timeLimit = (duelOptionsParts[0][2] === '0') ? '3 minutes' : '5 minutes';
 
     //Use classic TCG rules?
-    isTCGRuled = (duelOptionsParts[0][3] === 'O') ? 'OCG rules' : 'TCG Rules';
+    settings.isTCGRuled = (duelOptionsParts[0][3] === 'O') ? 'OCG rules' : 'TCG Rules';
 
     //Check Deck for Illegal cards?
-    isDeckChecked = (duelOptionsParts[0][4] === 'O') ? 'Check' : 'Dont Check';
+    settings.isDeckChecked = (duelOptionsParts[0][4] === 'O') ? 'Check' : 'Dont Check';
 
     //Shuffle deck at start?
-    isShuffled = (duelOptionsParts[0][5] === 'O') ? 'Shuffle' : 'Dont Shuffle';
+    settings.isShuffled = (duelOptionsParts[0][5] === 'O') ? 'Shuffle' : 'Dont Shuffle';
 
     //Choose Starting Life Points
-    lifePoints = duelOptionsParts[0].substring(6);
+    settings.lifePoints = duelOptionsParts[0].substring(6);
 
     //Determine Banlist
-    banList = parseInt(duelOptionsParts[1], 10);
+    settings.banList = parseInt(duelOptionsParts[1], 10);
 
     //Select how many cards to draw on first hand
-    openDraws = duelOptionsParts[2];
+    settings.openDraws = duelOptionsParts[2];
 
     //Select how many cards to draw each turn
-    turnDraws = duelOptionsParts[3];
+    settings.turnDraws = duelOptionsParts[3];
 
     //Choose whether duel is ranked
-    isRanked = (duelOptionsParts[4] === 'U') ? 'Unranked' : 'Ranked';
+    settings.isRanked = (duelOptionsParts[4] === 'U') ? 'Unranked' : 'Ranked';
 
     //Copy password
-    password = duelOptionsParts[5];
+    settings.password = duelOptionsParts[5];
 
-    return {
-        gameMode: gameMode,
-        timeLimit: timeLimit,
-        isRanked: isRanked,
-        isDeckChecked: isDeckChecked,
-        allowedCards: allowedCards,
-        isTCGRuled: isTCGRuled,
-        isShuffled: isShuffled,
-        lifePoints: lifePoints,
-        banList: banList,
-        openDraws: openDraws,
-        turnDraws: turnDraws,
-        password: password
-    };
+    return settings;
+        
+
 
 }
 
