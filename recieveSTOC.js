@@ -15,42 +15,55 @@ var STOC_HS_WatchChange = defineStructure({
     watch_count: 'unsigned short'
 });
 
-
-
-
-
-
-module.exports = function RecieveSTOC(packet) {
+module.exports = function recieveSTOC(packet) {
     var output;
-    var todo = Object.create(enums.STOCCheck);
-    todo[packet.STOC] = true;
+    var task = Object.create(enums.STOCCheck);
+    task[packet.STOC] = true;
 
     switch (packet.STOC) {
-
+    case ('STOC_UNKNOWN'):
+        {
+            task.STOC_UNKNOWN = packet;
+        }
+        break;
+    case ('STOC_GAME_MSG'):
+        {
+            task.STOC_GAME_MSG = packet;
+        }
+        break;
+    case ('STOC_ERROR_MSG'):
+        {
+            task.STOC_ERROR_MSG = packet;
+        }
+        break;
+    case ('STOC_SELECT_HAND'):
+        {
+            task.STOC_SELECT_HAND = packet;
+        }
+        break;
     case ('STOC_REPLAY'):
         {
             // catch this packet and do ranking on it.
-            todo.STOC_REPLAY = true;
+            task.STOC_REPLAY = true;
         }
         break;
     case ('STOC_TIME_LIMIT'):
         {
-            // User went over time.
+            //update time.
             output = STOC_TimeLimit.read(packet);
-            console.log('STOC_TIME_LIMIT', output);
-            todo[packet.STOC] = output;
+            task.STOC_TIME_LIMIT = output;
         }
         break;
     case ('STOC_CHAT'):
         {
             // A user said something, we should record this.
-            todo[packet.STOC] = packet;
+            task[packet.STOC] = packet;
         }
         break;
     case ('STOC_HS_PLAYER_ENTER'):
         {
 
-            todo[packet.STOC] = packet.message.toString('utf16le');
+            task[packet.STOC] = packet.message.toString('utf16le');
         }
         break;
     case ('STOC_HS_PLAYER_CHANGE'):
@@ -61,7 +74,7 @@ module.exports = function RecieveSTOC(packet) {
             //console.log('packet message %l', packet.message);
             //console.log('packet message', parseInt(packet.message[0]), packet.message[0]);
             //console.log('packet message', parseInt(packet.message[1]), packet.message[1]);
-            todo[packet.STOC] = packet;
+            task[packet.STOC] = packet;
         }
         break;
     case ('STOC_HS_WATCH_CHANGE'):
@@ -73,7 +86,7 @@ module.exports = function RecieveSTOC(packet) {
             //console.log('packet message', parseInt(packet.message[1]), packet.message[1]);
             output = STOC_HS_WatchChange.read(packet);
             console.log('watch change', output);
-            todo[packet.STOC] = output;
+            task[packet.STOC] = output;
         }
         break;
     case ('STOC_TYPE_CHANGE'):
@@ -83,14 +96,14 @@ module.exports = function RecieveSTOC(packet) {
             //console.log('packet message %l', packet.message);
             //console.log('packet message', parseInt(packet.message[0]), packet.message[0]);
             //console.log('packet message', parseInt(packet.message[1]), packet.message[1]);
-            todo[packet.STOC] = packet;
+            task[packet.STOC] = packet;
 
         }
         break;
     default:
         {
-            todo.UNKOWN = packet;
+            task.UNKOWN = packet;
         }
     }
-    return todo;
+    return task;
 };
