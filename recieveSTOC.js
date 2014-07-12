@@ -38,13 +38,13 @@ module.exports = function RecieveSTOC(packet) {
             // User went over time.
             output = STOC_TimeLimit.read(packet);
             console.log('STOC_TIME_LIMIT', output);
-            todo[packet.STOC] = true;
+            todo[packet.STOC] = output;
         }
         break;
     case ('STOC_CHAT'):
         {
             // A user said something, we should record this.
-            todo[packet.STOC] = true;
+            todo[packet.STOC] = packet;
         }
         break;
     case ('STOC_HS_PLAYER_ENTER'):
@@ -61,7 +61,7 @@ module.exports = function RecieveSTOC(packet) {
             //console.log('packet message %l', packet.message);
             //console.log('packet message', parseInt(packet.message[0]), packet.message[0]);
             //console.log('packet message', parseInt(packet.message[1]), packet.message[1]);
-            todo[packet.STOC] = true;
+            todo[packet.STOC] = packet;
         }
         break;
     case ('STOC_HS_WATCH_CHANGE'):
@@ -73,7 +73,7 @@ module.exports = function RecieveSTOC(packet) {
             //console.log('packet message', parseInt(packet.message[1]), packet.message[1]);
             output = STOC_HS_WatchChange.read(packet);
             console.log('watch change', output);
-            todo[packet.STOC] = true;
+            todo[packet.STOC] = output;
         }
         break;
     case ('STOC_TYPE_CHANGE'):
@@ -83,10 +83,14 @@ module.exports = function RecieveSTOC(packet) {
             //console.log('packet message %l', packet.message);
             //console.log('packet message', parseInt(packet.message[0]), packet.message[0]);
             //console.log('packet message', parseInt(packet.message[1]), packet.message[1]);
-            todo[packet.STOC] = true;
+            todo[packet.STOC] = packet;
 
         }
         break;
+    default:
+        {
+            todo.UNKOWN = packet;
+        }
     }
     return todo;
 };

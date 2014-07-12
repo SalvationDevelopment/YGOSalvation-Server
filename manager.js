@@ -1,6 +1,6 @@
 /* jslint node : true */
-process.on('uncaughtException', function (err) {
-    //console.log('Caught exception: ' + err);
+process.on('uncaughtException', function (error) {
+    console.log('Caught exception: ' + error);
 });
 try {
     require('httpsys').slipStream();
