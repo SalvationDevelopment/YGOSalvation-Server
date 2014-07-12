@@ -36,7 +36,7 @@ function structureDefinition(structure) {
     var iterationMap = [];
     for (var property in structure) {
         if (structure.hasOwnProperty(property)) {
-            console.log(typeof (structure[property]), property)
+//            console.log(typeof (structure[property]), property)
             if (typeof (structure[property]) !== 'string') {
                 names.push(property);
                 iterationMap.push(structure[property][1]);
@@ -54,7 +54,7 @@ function structureDefinition(structure) {
 
         }
     }
-    console.log(iterationMap)
+//    console.log(iterationMap)
     /* Using the definition return a function that processes an inputed buffer and,
     outputs an object that follows/mirrors the structure defined with a proper naming,
     schema. Data is returned in buffer/arrays. */
@@ -64,7 +64,7 @@ function structureDefinition(structure) {
             var readposition = 0;
             for (var i = 0, items = names.length; items > i; i++) {
                 for (var j = 0, arrayItem = iterationMap[i]; arrayItem > j; j++) {
-                    console.log(j, i, dataMap[structure[names[i]]] * 2)
+//                    console.log(j, i, dataMap[structure[names[i]]] * 2)
                     var segment = buffer.slice(readposition, (dataMap[structure[names[i]]] * 2)) || '';
                     output[names[i]] = segment.slice(0, dataMap[structure[names[i]]]).toString() || '';
                     readposition = readposition + maxLength;
