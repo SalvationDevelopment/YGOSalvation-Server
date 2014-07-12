@@ -33,14 +33,28 @@ function structureDefinition(structure) {
     then compare each value in it to see how big each 'data bucket' needs to be */
     var maxLength = 1;
     var names = [];
+    var iterationMap = [];
     for (var property in structure) {
         if (structure.hasOwnProperty(property)) {
-            names.push(property.toLowerCase());
-            if (dataMap[structure[property].toLowerCase()] > maxLength) {
-                maxLength = dataMap[structure[property].toLowerCase()];
+//            console.log(typeof (structure[property]), property)
+            if (typeof (structure[property]) !== 'string') {
+                names.push(property);
+                iterationMap.push(structure[property][1]);
+                if (dataMap[structure[property]] > maxLength) {
+                    maxLength = dataMap[structure[property]];
+                }
             }
+            if (typeof (structure[property]) === 'string') {
+                names.push(property);
+                iterationMap.push(1);
+                if (dataMap[structure[property]] > maxLength) {
+                    maxLength = dataMap[structure[property]];
+                }
+            }
+
         }
     }
+//    console.log(iterationMap)
     /* Using the definition return a function that processes an inputed buffer and,
     outputs an object that follows/mirrors the structure defined with a proper naming,
     schema. Data is returned in buffer/arrays. */
@@ -49,23 +63,28 @@ function structureDefinition(structure) {
             var output = {};
             var readposition = 0;
             for (var i = 0, items = names.length; items > i; i++) {
-                var segment = buffer.slice(readposition, (dataMap[structure[names[i]].toLowerCase()] * 2));
-                output[names[i]] = segment.slice(0, dataMap[structure[names[i]].toLowerCase()]).toString();
-                readposition = readposition + maxLength;
+                for (var j = 0, arrayItem = iterationMap[i]; arrayItem > j; j++) {
+//                    console.log(j, i, dataMap[structure[names[i]]] * 2)
+                    var segment = buffer.slice(readposition, (dataMap[structure[names[i]]] * 2)) || '';
+                    output[names[i]] = segment.slice(0, dataMap[structure[names[i]]]).toString() || '';
+                    readposition = readposition + maxLength;
+                }
             }
             return output;
         },
         write: function (jsStructure) {
             var output = [];
             for (var property in structure) {
+                var maxArrayLength = names.indexOf(property);
                 if (structure.hasOwnProperty(property)) {
                     var data = new Buffer(jsStructure[property]);
-                    data = data.slice(0, (dataMap[structure[property].toLowerCase()] * 2));
+                    var size = dataMap[structure[property]] || dataMap[structure[property][0]];
+                    data = data.slice(0, (size * 2 * iterationMap[maxArrayLength]));
+                    var insert;
                     for (var i = 0, items = maxLength; items > i; i++) {
-                        var insert = data[i] || 0;
+                        insert = data[i];
                         output.push(insert);
                     }
-
                 }
             }
             return new Buffer(output);
