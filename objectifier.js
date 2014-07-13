@@ -5,6 +5,7 @@ var dataMap = {
     'char': 1,
     'signed char': 1,
     'unsigned char': 1,
+    'bool': 1,
     'short': 2,
     'short int': 2,
     'signed short': 2,
@@ -29,6 +30,9 @@ var dataMap = {
 };
 
 function structureDefinition(structure) {
+    if (structure === undefined) {
+        return;
+    }
     /* take the definition of the structure of the buffer/array you are decoding,
     then compare each value in it to see how big each 'data bucket' needs to be */
     var maxLength = 1;
@@ -36,7 +40,7 @@ function structureDefinition(structure) {
     var iterationMap = [];
     for (var property in structure) {
         if (structure.hasOwnProperty(property)) {
-//            console.log(typeof (structure[property]), property)
+            //            console.log(typeof (structure[property]), property)
             if (typeof (structure[property]) !== 'string') {
                 names.push(property);
                 iterationMap.push(structure[property][1]);
@@ -54,17 +58,20 @@ function structureDefinition(structure) {
 
         }
     }
-//    console.log(iterationMap)
+    //    console.log(iterationMap)
     /* Using the definition return a function that processes an inputed buffer and,
     outputs an object that follows/mirrors the structure defined with a proper naming,
     schema. Data is returned in buffer/arrays. */
     return {
         read: function (buffer) {
+            if (buffer === undefined) {
+                return;
+            }
             var output = {};
             var readposition = 0;
             for (var i = 0, items = names.length; items > i; i++) {
                 for (var j = 0, arrayItem = iterationMap[i]; arrayItem > j; j++) {
-//                    console.log(j, i, dataMap[structure[names[i]]] * 2)
+                    //                    console.log(j, i, dataMap[structure[names[i]]] * 2)
                     var segment = buffer.slice(readposition, (dataMap[structure[names[i]]] * 2)) || '';
                     output[names[i]] = segment.slice(0, dataMap[structure[names[i]]]).toString() || '';
                     readposition = readposition + maxLength;
@@ -73,6 +80,9 @@ function structureDefinition(structure) {
             return output;
         },
         write: function (jsStructure) {
+            if (jsStructure === undefined) {
+                return;
+            }
             var output = [];
             for (var property in structure) {
                 var maxArrayLength = names.indexOf(property);

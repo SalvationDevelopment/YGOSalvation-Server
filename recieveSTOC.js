@@ -10,6 +10,18 @@ var STOC_TimeLimit = defineStructure({
 //	player:'unsigned short',
 //	'unsigned short', msg[256];
 //});
+var HostInfo = defineStructure({
+    lflist: 'unsigned int',
+    rule: 'unsigned char',
+    mode: 'unsigned char',
+    enable_priority: 'bool',
+    no_check_deck: 'bool',
+    no_shuffle_deck: 'bool',
+    start_lp: 'unsigned int',
+    start_hand: 'unsigned char',
+    draw_count: 'unsigned char',
+    time_limit: 'unsigned short',
+});
 
 var STOC_HS_WatchChange = defineStructure({
     watch_count: 'unsigned short'
@@ -39,6 +51,41 @@ module.exports = function recieveSTOC(packet) {
     case ('STOC_SELECT_HAND'):
         {
             task.STOC_SELECT_HAND = packet;
+        }
+        break;
+    case ('STOC_SELECT_TP'):
+        {
+            task.STOC_SELECT_TP = packet;
+        }
+        break;
+    case ('STOC_HAND_RESULT'):
+        {
+            task.STOC_HAND_RESULT = packet;
+        }
+        break;
+    case ('STOC_TP_RESULT'):
+        {
+            task.STOC_TP_RESULT = packet;
+        }
+        break;
+    case ('STOC_CHANGE_SIDE'):
+        {
+            task.STOC_CHANGE_SIDE = packet;
+        }
+        break;
+    case ('STOC_WAITING_SIDE'):
+        {
+            task.STOC_WAITING_SIDE = packet;
+        }
+        break;
+    case ('STOC_CREATE_GAME'):
+        {
+            task.STOC_CREATE_GAME = packet;
+        }
+        break;
+    case ('STOC_JOIN_GAME'):
+        {
+            task.STOC_JOIN_GAME = HostInfo.read();
         }
         break;
     case ('STOC_REPLAY'):
