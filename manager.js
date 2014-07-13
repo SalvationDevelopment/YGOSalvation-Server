@@ -1,7 +1,7 @@
 /* jslint node : true */
-process.on('uncaughtException', function (error) {
-    console.log('Caught exception: ' + error);
-});
+//process.on('uncaughtException', function (error) {
+//    console.log('Caught exception: ' + error);
+//});
 try {
     require('httpsys').slipStream();
 } catch (error) {
@@ -14,6 +14,7 @@ var childProcess = require('child_process');
 var Primus = require('primus');
 var Rooms = require('primus-rooms');
 var http = require('http');
+var servercontrol = require('./servercontrol.json');
 var server = http.createServer().listen(5000);
 var primus = new Primus(server, {
     parser: 'JSON'
@@ -24,12 +25,8 @@ var recieveCTOS = require('./recieveCTOS');
 var recieveSTOC = require('./recieveSTOC.js');
 var gamelist = Object.create(null);
 
-
-
 primus.use('rooms', Rooms);
 primus.on('connection', function (socket) {
-    socket.active_ygocore = false;
-    socket.active = false;
     socket.on('data', function (data) {
         data = data || {};
         var action = data.action;
@@ -44,11 +41,6 @@ primus.on('connection', function (socket) {
         case ('leave'):
             {
                 socket.leave('activegames');
-            }
-            break;
-        case ('core'):
-            {
-                processIncomingTrasmission(data.transmission, socket);
             }
             break;
         default:
@@ -79,6 +71,25 @@ var ygoserver = net.createServer(function (socket) {
     });
 });
 ygoserver.listen(8911);
+
+var WebSocketServer = require('ws').Server;
+var wss = new WebSocketServer({
+    port: 8912
+});
+
+wss.on('connection', function (socket) {
+    socket.active_ygocore = false;
+    socket.active = false;
+    socket.on('message', function (data) {
+        processIncomingTrasmission(data, socket);
+    });
+    socket.on('close', function () {
+        killCore(socket);
+    });
+    socket.on('error', function () {
+        killCore(socket);
+    });
+});
 
 function killCore(socket) {
     if (socket.active_ygocore) {
@@ -177,7 +188,7 @@ function processIncomingTrasmission(data, socket) {
     //console.log(socket.hostString);
     if (socket.active) {
         if (gamelist[socket.hostString] && !socket.active_ygocore) {
-            connectToCore(gamelist[socket.hostString].port, data);
+            connectToCore(gamelist[socket.hostString].port, data, socket);
             console.log(socket.username + ' connecting to existing core');
             gamelist[socket.hostString].players.push(socket.username);
         } else if (!gamelist[socket.hostString] && !socket.active_ygocore) {
@@ -211,7 +222,7 @@ function startCore(port, socket, data) {
             console.log(port + ': Core Message: ', core_message);
             if (core_message[0] === 'S') {
 
-                connectToCore(port, data);
+                connectToCore(port, data, socket);
                 gamelist[socket.hostString] = {
                     port: port,
                     players: [socket.username],

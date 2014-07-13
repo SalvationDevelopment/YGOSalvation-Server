@@ -14,7 +14,8 @@ var parsePackets = require('../../parsepackets.js');
 var recieveSTOC = require('../../recieveSTOC.js');
 
 var proxy = net.createServer(function (socket) {
-    var client = new Socket('http://localhost:5000');
+    console.log('new client starting a proxy.');
+    var client = new Socket('http://127.0.0.1:5000'); //192.99.11.19
     client.on('data', function (data) {
         proxy.write(data.transmission);
         var task = parsePackets('STOC', data);
@@ -33,9 +34,9 @@ var proxy = net.createServer(function (socket) {
             action: 'core',
             transmission: data
         });
-        console.log(data);
+        //        console.log(data);
         var task = parsePackets('CTOS', data);
-        console.log(task);
+        //console.log(task);
     });
     socket.on('close', function () {
 
@@ -81,9 +82,15 @@ function processTask(task, socket) {
         if (task[i].STOC_TYPE_CHANGE) {
             console.log('Chat', task[i].STOC_TYPE_CHANGE);
         }
+        if (task[i].STOC_SELECT_TP) {
+            console.log('Chat', task[i].STOC_TYPE_CHANGE);
+        }
+        if (task[i].STOC_JOIN_GAME) {
+            console.log('Join Game', task[i].STOC_TYPE_CHANGE);
+        }
         if (task[i].UNKONW) {
             console.log('????', task[i].UNKNOWN);
         }
     }
 }
-proxy.listen(8911);
+proxy.listen(8912);
