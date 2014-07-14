@@ -67,14 +67,22 @@ describe('Structures Test', function () {
 });
 describe('Test Network Connection Methods', function () {
     var target = require('../manager.js');
-
+    var proxy = require('../server/js/proxy.js');
     it('TCP Native', function () {
         var socket = net.createConnection(8911);
         socket.on('connect', function (connect) {
             var playerconnect1 = require('./playerconnect1.js');
             var message = new Buffer(playerconnect1);
             socket.write(message);
-            socket.end();
+
+        });
+    });
+    it('TCP To Websocket Proxy', function () {
+        var socket = net.createConnection(8912);
+        socket.on('connect', function (connect) {
+            var playerconnect1 = require('./playerconnect1.js');
+            var message = new Buffer(playerconnect1);
+            socket.write(message);
         });
     });
     it('Primus Websocket Connects, Starts Receieving Gamelist, and Request Duel', function () {
@@ -91,8 +99,7 @@ describe('Test Network Connection Methods', function () {
             action: 'join'
         });
         client.write({
-            action: 'core',
-            transmission: message
+            action: 'leave'
         });
     });
 });
