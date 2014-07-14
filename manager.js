@@ -23,7 +23,7 @@ var primus = new Primus(server, {
 var parsePackets = require('./parsepackets.js');
 var recieveCTOS = require('./recieveCTOS');
 var recieveSTOC = require('./recieveSTOC.js');
-var gamelist = Object.create(null);
+var gamelist = {};
 
 primus.use('rooms', Rooms);
 primus.on('connection', function (socket) {
@@ -74,12 +74,18 @@ ygoserver.listen(8911);
 
 var WebSocketServer = require('ws').Server;
 var wss = new WebSocketServer({
-    port: 8912
+    port: 8913
 });
 
 wss.on('connection', function (socket) {
     socket.active_ygocore = false;
     socket.active = false;
+    socket.write = function (data) {
+        socket.send(data, {
+            binary: true,
+            mask: true
+        });
+    };
     socket.on('message', function (data) {
         processIncomingTrasmission(data, socket);
     });
