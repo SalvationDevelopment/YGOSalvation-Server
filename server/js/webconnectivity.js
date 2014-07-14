@@ -5,46 +5,33 @@ var Primus = require('primus');
 var net = require('net');
 var http = require('http');
 var server = http.createServer().listen(5010);
-var primus = new Primus(server, {
-    parser: 'JSON'
-});
-var Socket = primus.Socket;
+
 var parsePackets = require('../../parsepackets.js');
 //var recieveCTOS = require('../../recieveCTOS');
 var recieveSTOC = require('../../recieveSTOC.js');
 
 var proxy = net.createServer(function (socket) {
     console.log('new client starting a proxy.');
-    var client = new Socket('http://127.0.0.1:5000'); //192.99.11.19
-    client.on('data', function (data) {
-        proxy.write(data.transmission);
-        var task = parsePackets('STOC', data);
-        task = (function () {
-            var output = [];
-            for (var i = 0; task.length > i; i++) {
-                output.push(recieveSTOC(task[i]), viewModel);
-            }
-            return output;
-        })();
+    var WebSocket = require('ws');
+    var ws = new WebSocket('ws://127.0.0.1:8912/path');
+    ws.on('open', function () {
+
     });
+    ws.on('message', function (data) {
+        socket.write(data);
+    });
+
+
     socket.active_ygocore = false;
     socket.active = false;
     socket.on('data', function (data) {
-        client.write({
-            action: 'core',
-            transmission: data
+        ws.send(data, {
+            binary: true,
+            mask: true
         });
-        //        console.log(data);
-        var task = parsePackets('CTOS', data);
-        //console.log(task);
-    });
-    socket.on('close', function () {
 
     });
-    socket.on('error', function () {
-        //console.log('CLIENT ERROR', error);
 
-    });
 });
 
 function processTask(task, socket) {
