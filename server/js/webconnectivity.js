@@ -4,34 +4,28 @@ var viewModel = viewModel || {};
 var Primus = require('primus');
 var net = require('net');
 var http = require('http');
-var server = http.createServer().listen(5010);
 
+var WebSocket = require('ws');
 var parsePackets = require('../../parsepackets.js');
 //var recieveCTOS = require('../../recieveCTOS');
 var recieveSTOC = require('../../recieveSTOC.js');
-
-var proxy = net.createServer(function (socket) {
+var ws = new WebSocket('ws://127.0.0.1:8913/path');
+var proxy = net.createServer(function () {});
+proxy.on('connection', function (socket) {
     console.log('new client starting a proxy.');
-    var WebSocket = require('ws');
-    var ws = new WebSocket('ws://127.0.0.1:8912/path');
-    ws.on('open', function () {
+
+
+    socket.on('data', function (data) {
+        console.log('sending data');
+        ws.send(data);
+
+    });
+    ws.on('connection', function (data) {
 
     });
     ws.on('message', function (data) {
         socket.write(data);
     });
-
-
-    socket.active_ygocore = false;
-    socket.active = false;
-    socket.on('data', function (data) {
-        ws.send(data, {
-            binary: true,
-            mask: true
-        });
-
-    });
-
 });
 
 function processTask(task, socket) {
