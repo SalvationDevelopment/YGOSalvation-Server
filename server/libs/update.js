@@ -26,16 +26,16 @@ function dirTree(filename) {
 
     return info;
 }
-var ygopro = dirTree(updatelocation + 'ygopro');
-var plugins = dirTree(updatelocation + 'plugins');
-var license = dirTree(updatelocation + 'license');
+var ygopro = dirTree(updatelocation + '../http/ygopro');
+var plugins = dirTree(updatelocation + '../http/plugins');
+var license = dirTree(updatelocation + '../http/license');
 var installation = {
     "path": "/",
     "name": "/",
     "type": "folder",
     "subfolder": [ygopro, plugins, license]
 };
-if (!fs.existsSync(updatelocation + 'manifest')) {
-    fs.mkdir(updatelocation + 'manifest');
+if (!fs.existsSync(updatelocation + '../http/manifest')) {
+    fs.mkdir(updatelocation + '../http/manifest');
 }
-fs.writeFile(updatelocation + 'manifest/ygopro.json', JSON.stringify(installation, null, 4), function () {});
+fs.writeFile(updatelocation + '../http/manifest/ygopro.json', JSON.stringify(installation, null, 4), function () {});
