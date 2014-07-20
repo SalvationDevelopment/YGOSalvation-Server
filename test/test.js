@@ -48,9 +48,8 @@ describe('TOS & Licences are Included', function () {
 
 });
 describe('Structures Test', function () {
-    var structureDefinition = require('../http/objectifier.js');
+    var structureDefinition = require('../server/libs/objectifier.js');
     it('Structure Creation', function () {
-        var structureDefinition = require('../http/objectifier.js');
         var header = {
             test: 'char',
             long: 'long'
@@ -67,7 +66,7 @@ describe('Structures Test', function () {
 });
 describe('Test Network Connection Methods', function () {
     var target = require('../server/server.jss');
-    var proxy = require('../server/js/proxy.js');
+    var proxy = require('../server/http/js/proxy.js');
     it('TCP Native', function () {
         var socket = net.createConnection(8911);
         socket.on('connect', function (connect) {
