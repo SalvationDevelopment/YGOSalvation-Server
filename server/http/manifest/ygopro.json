@@ -7,7 +7,21 @@
             "path": "C:\\Users\\owner\\Documents\\GitHub\\YGOPro-Support-System\\server\\libs\\../http/ygopro",
             "name": "ygopro",
             "type": "folder",
-            "subfolder": []
+            "subfolder": [
+                {
+                    "path": "C:\\Users\\owner\\Documents\\GitHub\\YGOPro-Support-System\\server\\libs\\../http/ygopro/scripts",
+                    "name": "scripts",
+                    "type": "folder",
+                    "subfolder": [
+                        {
+                            "path": "C:\\Users\\owner\\Documents\\GitHub\\YGOPro-Support-System\\server\\libs\\../http/ygopro/scripts/constants.lua",
+                            "name": "constants.lua",
+                            "type": "file",
+                            "size": 0
+                        }
+                    ]
+                }
+            ]
         },
         {
             "path": "C:\\Users\\owner\\Documents\\GitHub\\YGOPro-Support-System\\server\\libs\\../http/plugins",
@@ -31,19 +45,19 @@
                     "path": "C:\\Users\\owner\\Documents\\GitHub\\YGOPro-Support-System\\server\\libs\\../http/license/html5bp.txt",
                     "name": "html5bp.txt",
                     "type": "file",
-                    "size": 1055
+                    "size": 1061
                 },
                 {
                     "path": "C:\\Users\\owner\\Documents\\GitHub\\YGOPro-Support-System\\server\\libs\\../http/license/machinimasound.md",
                     "name": "machinimasound.md",
                     "type": "file",
-                    "size": 3224
+                    "size": 3268
                 },
                 {
                     "path": "C:\\Users\\owner\\Documents\\GitHub\\YGOPro-Support-System\\server\\libs\\../http/license/node-webkit.txt",
                     "name": "node-webkit.txt",
                     "type": "file",
-                    "size": 1175
+                    "size": 1194
                 },
                 {
                     "path": "C:\\Users\\owner\\Documents\\GitHub\\YGOPro-Support-System\\server\\libs\\../http/license/sdlauncher-tos.txt",
@@ -55,7 +69,7 @@
                     "path": "C:\\Users\\owner\\Documents\\GitHub\\YGOPro-Support-System\\server\\libs\\../http/license/ygopro.txt",
                     "name": "ygopro.txt",
                     "type": "file",
-                    "size": 1197
+                    "size": 1221
                 }
             ]
         }
