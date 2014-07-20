@@ -20,9 +20,9 @@ var primus = new Primus(server, {
     parser: 'JSON'
 });
 
-var parsePackets = require('./parsepackets.js');
-var recieveCTOS = require('./recieveCTOS');
-var recieveSTOC = require('./recieveSTOC.js');
+var parsePackets = require('./libs/parsepackets.js');
+var recieveCTOS = require('./libs/recieveCTOS');
+var recieveSTOC = require('./libs/recieveSTOC.js');
 var gamelist = {};
 
 primus.use('rooms', Rooms);
