@@ -7,6 +7,11 @@ var fs = require('fs');
 
 console.log('Running test');
 describe('YGOCore is assembled correctly', function () {
+    it('Scripts Folder Included', function () {
+        fs.exists('../server/http/ygopro/scripts', function (exist) {
+            assert(!exist, false);
+        });
+    });
     it('YGOCore built', function () {
         fs.exists('../server/http/ygopro/YGOServer.exe', function (exist) {
             assert(!exist, false);
@@ -14,11 +19,6 @@ describe('YGOCore is assembled correctly', function () {
     });
     it('Card Database included', function () {
         fs.exists('../server/http/ygopro/card.cdb', function (exist) {
-            assert(!exist, false);
-        });
-    });
-    it('Ban List included', function () {
-        fs.exists('../server/http/ygopro/lflist.conf', function (exist) {
             assert(!exist, false);
         });
     });
