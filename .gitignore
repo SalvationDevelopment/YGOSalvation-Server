@@ -216,8 +216,8 @@ pip-log.txt
 
 #nodejs
 node_modules/*
-private/*
-public/ygopro/*
+server/node_modules/*
+client/ygopro/*
 
 #project-Agnotistic
 *.conf
