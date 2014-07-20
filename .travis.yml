@@ -14,10 +14,14 @@ before_install:
   - git clone https://github.com/Fluorohydride/ygopro.git
   - git clone https://github.com/Buttys/YGOCore.git
   - cd YGOCore
+  - ls -p | grep "/"
   - xbuild /p:TargetFrameworkProfile="" /p:Configuration=Release
   - cd ../
+  - ls -p | grep "/"
   - cp YGOCore/bin/Release/OcgWrapper.dll YGOCore/bin/Release/YGOServer.exe ygopro
+  - ls -p | grep "/"
   - cd ygopro
+  - ls -p | grep "/"
   - sudo add-apt-repository -y ppa:codegear/release
   - sudo add-apt-repository -y ppa:sonkun/sfml-stable
   - sudo wget -q -O- http://archive.getdeb.net/getdeb-archive.key | sudo apt-key add -
