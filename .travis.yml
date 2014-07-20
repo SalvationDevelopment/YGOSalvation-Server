@@ -17,6 +17,7 @@ before_install:
   - ls -p | grep "/"
   - xbuild /p:TargetFrameworkProfile="" /p:Configuration=Release
   - cd ../
+  - ls -p | grep "/"
   - cp YGOCore/YGOCore/bin/Release/OcgWrapper.dll YGOCore/YGOCore/bin/Release/YGOServer.exe ../ygopro
   - cd ygopro
   - sudo add-apt-repository -y ppa:codegear/release
