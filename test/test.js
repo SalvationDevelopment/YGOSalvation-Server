@@ -65,7 +65,7 @@ describe('Structures Test', function () {
     });
 });
 describe('Test Network Connection Methods', function () {
-    var target = require('../server/server.jss');
+    var target = require('../server/server.js');
     var proxy = require('../server/http/js/proxy.js');
     it('TCP Native', function () {
         var socket = net.createConnection(8911);
