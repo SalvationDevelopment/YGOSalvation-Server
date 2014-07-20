@@ -11,7 +11,7 @@ before_install:
   - cd server
   - ls -p | grep "/"
   - cd http
-  - git clone https://github.com/Fluorohydride/ygopro.git
+  - git clone https://github.com/Buttys/ygopro.git
   - git clone https://github.com/Buttys/YGOCore.git
   - cd YGOCore
   - ls -p | grep "/"
@@ -20,6 +20,9 @@ before_install:
   - ls -p | grep "/"
   - cp YGOCore/YGOCore/bin/Release/OcgWrapper.dll YGOCore/YGOCore/bin/Release/YGOServer.exe ./ygopro
   - cd ygopro
+  - rm ocgcore/premake4.lua
+  - cp ../../../test/ocgcore_linux_premake.lua ./ocgcore
+  - mv ocgcore/ocgcore_linux_premake.lua ocgcore/premake4.lua
   - sudo add-apt-repository -y ppa:codegear/release
   - sudo add-apt-repository -y ppa:sonkun/sfml-stable
   - sudo wget -q -O- http://archive.getdeb.net/getdeb-archive.key | sudo apt-key add -
