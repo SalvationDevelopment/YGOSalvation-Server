@@ -207,15 +207,15 @@ function processIncomingTrasmission(data, socket) {
 }
 
 function startCore(port, socket, data) {
-    fs.exists('public/ygopro/ygocoreSD3.exe', function (exist) {
+    fs.exists('http/ygopro/YGOServer.exe', function (exist) {
         if (!exist) {
-            console.log('core not found at ' + __dirname + '/' + 'public/ygopro');
+            console.log('core not found at ' + __dirname + '/' + 'http/ygopro');
             return;
         }
         //console.log('connecting to new core @', port);
         //console.log('found port ', port);
-        socket.core = childProcess.spawn('ygocoreSD3.exe ', [port], {
-            cwd: 'public/ygopro/'
+        socket.core = childProcess.spawn('YGOServer.exe ', [port], {
+            cwd: 'http/ygopro/'
         }, function (error, stdout, stderr) {
             console.log('CORE Terminated', error, stderr, stdout);
         });
