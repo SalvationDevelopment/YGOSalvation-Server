@@ -1,9 +1,7 @@
 /* jshint node: true */
 
 var viewModel = viewModel || {};
-var Primus = require('primus');
 var net = require('net');
-var http = require('http');
 
 var WebSocket = require('ws');
 var parsePackets = require('../../parsepackets.js');
@@ -25,6 +23,8 @@ proxy.on('connection', function (socket) {
     });
     ws.on('message', function (data) {
         socket.write(data);
+        var task = parsePackets('STOC', data);
+        processTask(task, socket);
     });
 });
 
