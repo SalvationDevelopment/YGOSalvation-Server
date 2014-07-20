@@ -14,7 +14,7 @@ var childProcess = require('child_process');
 var Primus = require('primus');
 var Rooms = require('primus-rooms');
 var http = require('http');
-var servercontrol = require('./servercontrol.json');
+var servercontrol = require('./libs/servercontrol.json');
 var server = http.createServer().listen(5000);
 var primus = new Primus(server, {
     parser: 'JSON'
