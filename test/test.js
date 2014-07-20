@@ -9,48 +9,48 @@ console.log('Running test');
 
 describe('Testing that Dependencies Load', function () {
     it('Loaded Objectifier', function () {
-        var target = require('../objectifier.js');
+        var target = require('../server/libs/objectifier.js');
     });
     it('Loaded Packet Decoder', function () {
-        var target = require('../parsepackets.js');
+        var target = require('../server/libs/parsepackets.js');
     });
     it('Loaded Recieve Client to Server Message Marker', function () {
-        var target = require('../recieveCTOS.js');
+        var target = require('../server/libs/recieveCTOS.js');
     });
     it('Loaded Recieve Server to Client Message Marker', function () {
-        var target = require('../recieveSTOC.js');
+        var target = require('../server/libs/recieveSTOC.js');
     });
     it('Loaded Development/Stage/Production Markers', function () {
-        var target = require('../servercontrol.json');
+        var target = require('../server/libs/servercontrol.json');
         assert((target.production === 'http://salvationdevelopment.com/launcher/'), true);
     });
     it('Loaded Update System', function () {
-        var target = require('../server/update.js');
+        var target = require('../server/libs/update.js');
     });
 });
 
 describe('TOS & Licences are Included', function () {
     it('Terms of Service', function () {
-        assert((fs.existsSync('../server/licence/sdlauncher-tos.text') !== null), true);
+        assert((fs.existsSync('../server/http/licence/sdlauncher-tos.text') !== null), true);
     });
     it('YGOPro', function () {
-        assert((fs.existsSync('../server/licence/ygopro.txt') !== null), true);
+        assert((fs.existsSync('../server/http/licence/ygopro.txt') !== null), true);
     });
     it('Node-Webkit', function () {
-        assert((fs.existsSync('../server/licence/node-webkit.text') !== null), true);
+        assert((fs.existsSync('../server/http/licence/node-webkit.text') !== null), true);
     });
     it('Machinima Sound', function () {
-        assert((fs.existsSync('../server/licence/machinimasound.text') !== null), true);
+        assert((fs.existsSync('../server/http/licence/machinimasound.text') !== null), true);
     });
     it('Fake Detection', function () {
-        assert((fs.existsSync('../server/licence/sdlauncher-tos.text') !== null), false);
+        assert((fs.existsSync('../server/http/licence/sdlauncher-tos.text') !== null), false);
     });
 
 });
 describe('Structures Test', function () {
-    var structureDefinition = require('../objectifier.js');
+    var structureDefinition = require('../http/objectifier.js');
     it('Structure Creation', function () {
-        var structureDefinition = require('../objectifier.js');
+        var structureDefinition = require('../http/objectifier.js');
         var header = {
             test: 'char',
             long: 'long'
@@ -66,7 +66,7 @@ describe('Structures Test', function () {
     });
 });
 describe('Test Network Connection Methods', function () {
-    var target = require('../manager.js');
+    var target = require('../server/server.jss');
     var proxy = require('../server/js/proxy.js');
     it('TCP Native', function () {
         var socket = net.createConnection(8911);
