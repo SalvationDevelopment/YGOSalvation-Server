@@ -4,9 +4,9 @@ var viewModel = viewModel || {};
 var net = require('net');
 
 var WebSocket = require('ws');
-var parsePackets = require('../../parsepackets.js');
+var parsePackets = require('../../libs/parsepackets.js');
 //var recieveCTOS = require('../../recieveCTOS');
-var recieveSTOC = require('../../recieveSTOC.js');
+var recieveSTOC = require('../../libs/recieveSTOC.js');
 var ws = new WebSocket('ws://127.0.0.1:8913/path');
 var proxy = net.createServer(function () {});
 proxy.on('connection', function (socket) {

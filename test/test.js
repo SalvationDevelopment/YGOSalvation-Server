@@ -37,7 +37,7 @@ describe('TOS & Licences are Included', function () {
         assert((fs.existsSync('../server/http/licence/ygopro.txt') !== null), true);
     });
     it('Node-Webkit', function () {
-        assert((fs.existsSync('../server/http/licence/node-webkit.text') !== null), true);
+        assert((fs.existsSync('../server/http/licence/node-webkit.txt') !== null), true);
     });
     it('Machinima Sound', function () {
         assert((fs.existsSync('../server/http/licence/machinimasound.text') !== null), true);
