@@ -6,51 +6,83 @@ var net = require('net');
 var fs = require('fs');
 
 console.log('Running test');
-
+describe('YGOCore is assembled correctly', function () {
+    it('Scripts Folder Included', function () {
+        fs.exists('../server/http/ygopro/scripts', function (exist) {
+            assert(!exist, false);
+        });
+    });
+    it('YGOCore built', function () {
+        fs.exists('../server/http/ygopro/YGOServer.exe', function (exist) {
+            assert(!exist, false);
+        });
+    });
+    it('Card Database included', function () {
+        fs.exists('../server/http/ygopro/card.cdb', function (exist) {
+            assert(!exist, false);
+        });
+    });
+    it('Ban List included', function () {
+        fs.exists('../server/http/ygopro/lflist.conf', function (exist) {
+            assert(!exist, false);
+        });
+    });
+    it('SQLite.dll included', function () {
+        fs.exists('../server/http/ygopro/System.Data.SQLite.dll', function (exist) {
+            assert(!exist, false);
+        });
+    });
+    it('OCGCOre built', function () {
+        fs.exists('../server/http/ygopro/libocgcore.so', function (linux) {
+            fs.exists('../server/http/ygopro/ocgcore.dll', function (windows) {
+                assert((!linux || !windows), false);
+            });
+        });
+    });
+});
 describe('Testing that Dependencies Load', function () {
     it('Loaded Objectifier', function () {
-        var target = require('../objectifier.js');
+        var target = require('../server/libs/objectifier.js');
     });
     it('Loaded Packet Decoder', function () {
-        var target = require('../parsepackets.js');
+        var target = require('../server/libs/parsepackets.js');
     });
     it('Loaded Recieve Client to Server Message Marker', function () {
-        var target = require('../recieveCTOS.js');
+        var target = require('../server/libs/recieveCTOS.js');
     });
     it('Loaded Recieve Server to Client Message Marker', function () {
-        var target = require('../recieveSTOC.js');
+        var target = require('../server/libs/recieveSTOC.js');
     });
     it('Loaded Development/Stage/Production Markers', function () {
-        var target = require('../servercontrol.json');
+        var target = require('../server/libs/servercontrol.json');
         assert((target.production === 'http://salvationdevelopment.com/launcher/'), true);
     });
     it('Loaded Update System', function () {
-        var target = require('../server/update.js');
+        var target = require('../server/libs/update.js');
     });
 });
 
 describe('TOS & Licences are Included', function () {
     it('Terms of Service', function () {
-        assert((fs.existsSync('../server/licence/sdlauncher-tos.text') !== null), true);
+        assert((fs.existsSync('../server/http/licence/sdlauncher-tos.text') !== null), true);
     });
     it('YGOPro', function () {
-        assert((fs.existsSync('../server/licence/ygopro.txt') !== null), true);
+        assert((fs.existsSync('../server/http/licence/ygopro.txt') !== null), true);
     });
     it('Node-Webkit', function () {
-        assert((fs.existsSync('../server/licence/node-webkit.text') !== null), true);
+        assert((fs.existsSync('../server/http/licence/node-webkit.txt') !== null), true);
     });
     it('Machinima Sound', function () {
-        assert((fs.existsSync('../server/licence/machinimasound.text') !== null), true);
+        assert((fs.existsSync('../server/http/licence/machinimasound.text') !== null), true);
     });
     it('Fake Detection', function () {
-        assert((fs.existsSync('../server/licence/sdlauncher-tos.text') !== null), false);
+        assert((fs.existsSync('../server/http/licence/sdlauncher-tos.text') !== null), false);
     });
 
 });
 describe('Structures Test', function () {
-    var structureDefinition = require('../objectifier.js');
+    var structureDefinition = require('../server/libs/objectifier.js');
     it('Structure Creation', function () {
-        var structureDefinition = require('../objectifier.js');
         var header = {
             test: 'char',
             long: 'long'
@@ -66,15 +98,23 @@ describe('Structures Test', function () {
     });
 });
 describe('Test Network Connection Methods', function () {
-    var target = require('../manager.js');
-
+    var target = require('../server/server.js');
+    var proxy = require('../server/http/js/proxy.js');
     it('TCP Native', function () {
         var socket = net.createConnection(8911);
         socket.on('connect', function (connect) {
             var playerconnect1 = require('./playerconnect1.js');
             var message = new Buffer(playerconnect1);
             socket.write(message);
-            socket.end();
+
+        });
+    });
+    it('TCP To Websocket Proxy', function () {
+        var socket = net.createConnection(8912);
+        socket.on('connect', function (connect) {
+            var playerconnect1 = require('./playerconnect1.js');
+            var message = new Buffer(playerconnect1);
+            socket.write(message);
         });
     });
     it('Primus Websocket Connects, Starts Receieving Gamelist, and Request Duel', function () {
@@ -91,8 +131,26 @@ describe('Test Network Connection Methods', function () {
             action: 'join'
         });
         client.write({
-            action: 'core',
-            transmission: message
+            action: 'leave'
         });
     });
 });
+/*
+var structureDefinition = require('../objectifier.js');
+
+var structureDefinition = require('../objectifier.js');
+var header = {
+    test: ['char', 10],
+    long: 'long'
+};
+var strut = structureDefinition(header);
+var out = strut.write({
+    test: 'a123456789',
+    long: "abcd    "
+});
+var validate = strut.read(out);
+console.log(validate)
+//console.log(validate.test.length, "a123456789".length, true);
+//console.log(validate.long.length, "abcd    ".length, true);
+console.log(validate.test, "a", true);
+console.log(validate.long, "abcd    ", true);*/
