@@ -6,14 +6,35 @@ cache:
     - node_modules
 
 before_install:
-  - "export DISPLAY=:99.0"
-  - "sh -e /etc/init.d/xvfb start"
-  - sleep 3 # give xvfb some time to start
-  - mkdir coverage
+  - sudo apt-get update
+  - sudo apt-get -y install mono-complete libmono-sqlite4.0-cil
   - cd server
-  - git clone https://github.com/Fluorohydride/ygopro.git
   - ls -p | grep "/"
+  - cd http
+  - git clone https://github.com/Fluorohydride/ygopro.git
+  - git clone https://github.com/Buttys/YGOCore.git
+  - cd YGOCore
+  - xbuild /p:TargetFrameworkProfile="" /p:Configuration=Release
   - cd ../
+  - cp YGOCore/bin/Release/OcgWrapper.dll YGOCore/bin/Release/YGOServer.exe ygopro
+  - cd ygopro
+  - sudo add-apt-repository -y ppa:codegear/release
+  - sudo add-apt-repository -y ppa:sonkun/sfml-stable
+  - sudo wget -q -O- http://archive.getdeb.net/getdeb-archive.key | sudo apt-key add -
+  - sudo sh -c "echo 'deb http://archive.getdeb.net/ubuntu/ precise-getdeb games' >> /etc/apt/sources.list"
+  - sudo apt-get update
+  - sudo apt-get -y install build-essential git premake4 libfreetype6-dev libevent-dev libsqlite3-dev libirrlicht1.8-dev liblua5.2-dev libgl1-mesa-dev-lts-raring libglu-dev libsfml-dev
+  - sudo ln -s /usr/lib/x86_64-linux-gnu/liblua5.2.so /usr/lib/liblua.so
+  - sudo ln -s /usr/include/irrlicht1.8 /usr/include/irrlicht
+  - wget 'http://www.ambiera.at/downloads/irrKlang-64bit-1.5.0.zip'
+  - unzip 'irrKlang-64bit-1.5.0.zip'
+  - ln -s irrKlang-64bit-1.5.0 irrKlang-1.5.0
+  - sudo cp 'irrKlang-64bit-1.5.0/bin/linux-gcc-64/libIrrKlang.so' /usr/lib/libirrKlang.so
+  - sudo ldconfig
+  - premake4 gmake && make config=release ocgcore -C build
+  - cd build
+  - ls -p | grep "/"
+  - cd ../../../../
   - npm install -g mocha-phantomjs
   - npm install -g mocha
   - npm install -g istanbul
