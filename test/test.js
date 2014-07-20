@@ -6,7 +6,40 @@ var net = require('net');
 var fs = require('fs');
 
 console.log('Running test');
-
+describe('YGOCore is assembled correctly', function () {
+    it('YGOCore built', function () {
+        fs.exists('../server/http/ygopro/YGOServer.exe', function (exist) {
+            assert(!exist, false);
+        });
+    });
+    it('Card Database included', function () {
+        fs.exists('../server/http/ygopro/card.cdb', function (exist) {
+            assert(!exist, false);
+        });
+    });
+    it('Ban List included', function () {
+        fs.exists('../server/http/ygopro/lflist.conf', function (exist) {
+            assert(!exist, false);
+        });
+    });
+    it('Ban List included', function () {
+        fs.exists('../server/http/ygopro/lflist.conf', function (exist) {
+            assert(!exist, false);
+        });
+    });
+    it('SQLite.dll included', function () {
+        fs.exists('../server/http/ygopro/System.Data.SQLite.dll', function (exist) {
+            assert(!exist, false);
+        });
+    });
+    it('OCGCOre built', function () {
+        fs.exists('../server/http/ygopro/libocgcore.so', function (linux) {
+            fs.exists('../server/http/ygopro/ocgcore.dll', function (windows) {
+                assert((!linux || !windows), false);
+            });
+        });
+    });
+});
 describe('Testing that Dependencies Load', function () {
     it('Loaded Objectifier', function () {
         var target = require('../server/libs/objectifier.js');
