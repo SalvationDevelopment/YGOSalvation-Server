@@ -209,8 +209,9 @@ function processIncomingTrasmission(data, socket) {
 function startCore(port, socket, data) {
     //console.log('connecting to new core @', port);
     //console.log('found port ', port);
+    console.log(__dirname, __dirname + '/http/ygopro/', 'http/ygopro/');
     socket.core = childProcess.spawn('YGOServer.exe ', [port], {
-        cwd: __dirname + '/http/ygopro/'
+        cwd: 'http/ygopro/'
     }, function (error, stdout, stderr) {
         console.log('CORE Terminated', error, stderr, stdout);
     });
