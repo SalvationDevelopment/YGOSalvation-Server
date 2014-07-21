@@ -9,7 +9,7 @@ var net = require('net');
 console.log('Running test');
 describe('YGOCore is assembled correctly', function () {
     it('Scripts Folder Included', function () {
-        assert((fs.existsSync('server/http/ygopro/script/')), true);
+        assert((fs.existsSync('server/http/ygopro/script')), true);
     });
     it('YGOCore built', function () {
         assert((fs.existsSync('server/http/ygopro/YGOServer.exe')), true);
