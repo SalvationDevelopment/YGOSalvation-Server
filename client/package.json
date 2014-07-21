@@ -1,0 +1,22 @@
+{
+    "name": "ygopro-client",
+    "description": "Salvation Development YGOPro Launcher",
+    "main": "interface/index.html",
+    "window": {
+        "toolbar": true,
+        "frame": true,
+        "width": 1024,
+        "min_width": 1024,
+        "height": 535,
+        "min-height": 535,
+        "icon": "interface/icon.png"
+    },
+    "webkit": {
+        "plugin": true,
+        "page-cache": true
+    },
+    "maintainers": [{
+        "name": "James Gladney",
+        "email": "panthrowzay@gmail.com"
+}]
+}

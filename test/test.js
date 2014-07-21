@@ -4,40 +4,25 @@
 var assert = require('assert');
 var net = require('net');
 var fs = require('fs');
+var net = require('net');
 
 console.log('Running test');
 describe('YGOCore is assembled correctly', function () {
-    it('Scripts Folder Included', function () {
-        fs.exists('../server/http/ygopro/scripts', function (exist) {
-            assert(!exist, false);
-        });
-    });
     it('YGOCore built', function () {
-        fs.exists('../server/http/ygopro/YGOServer.exe', function (exist) {
-            assert(!exist, false);
-        });
+        assert((fs.existsSync('server/http/ygopro/YGOServer.exe')), true);
     });
     it('Card Database included', function () {
-        fs.exists('../server/http/ygopro/card.cdb', function (exist) {
-            assert(!exist, false);
-        });
+        assert((fs.existsSync('server/http/ygopro/cards.cdb')), true);
     });
     it('Ban List included', function () {
-        fs.exists('../server/http/ygopro/lflist.conf', function (exist) {
-            assert(!exist, false);
-        });
+        assert((fs.existsSync('server/http/ygopro/lflist.conf')), true);
     });
     it('SQLite.dll included', function () {
-        fs.exists('../server/http/ygopro/System.Data.SQLite.dll', function (exist) {
-            assert(!exist, false);
-        });
+        assert((fs.existsSync('server/http/ygopro/System.Data.SQLite.dll')), true);
     });
     it('OCGCOre built', function () {
-        fs.exists('../server/http/ygopro/libocgcore.so', function (linux) {
-            fs.exists('../server/http/ygopro/ocgcore.dll', function (windows) {
-                assert((!linux || !windows), false);
-            });
-        });
+        assert((fs.existsSync('server/http/ygopro/libocgcore.so') ||
+            (fs.existsSync('server/http/ygopro/ocgcore.dll')), true));
     });
 });
 describe('Testing that Dependencies Load', function () {
