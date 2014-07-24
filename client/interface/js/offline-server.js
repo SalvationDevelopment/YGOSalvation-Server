@@ -49,7 +49,6 @@ for (var i = 0; settings.length > i; i++) {
 console.log('Starting Offline Server');
 http.createServer(function (request, response) {
     var parameter = url.parse(request.url);
-    console.log('request', parameter);
     if (parameter.path.length > 1) {
         fs.readFile('..' + parameter.path, function (error, file) {
             if (file) {

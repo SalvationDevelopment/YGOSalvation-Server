@@ -126,13 +126,19 @@ describe('Test Network Connection Methods', function () {
 describe('Test Offline Server', function () {
     this.timeout(5000);
     var server = require('../client/interface/js/offline-server.js');
-    var browser = new Browser();
+    before(function (done) {
+        this.browser = new Browser();
+        this.browser
+            .visit("http://localhost:9467/index.html")
+            .then(done, done);
+    });
 
     it('Offline Mode Loads', function () {
-        browser.visit("http://localhost:9467/index.html", function () {
-            console.log(browser.text("title"), "SalvationDevelopment International Launcher");
-            assert(browser.text("title"), "SalvationDevelopment International Launcher");
-        });
+
+
+        console.log(this.browser.text("title"), "SalvationDevelopment International Launcher");
+        assert(this.browser.text("title"), "SalvationDevelopment International Launcher");
+
     });
 });
 /*
