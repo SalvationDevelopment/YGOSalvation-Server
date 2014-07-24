@@ -125,22 +125,22 @@ describe('Test Offline Server', function () {
     var server = require('../client/interface/js/offline-server.js');
     var browser = new Browser();
 
-    it('Offline Mode Loads', function () {
+    it('Title is Defered zombies', function () {
         browser.visit("http://localhost:9467/index.html").
         then(function () {
-            assert.equal(browser.text("H1"), "Deferred zombies");
-        }).
-        fail(function (error) {
-            throw error;
+            assert(browser.text("title"), "Deferred zombies");
         });
     });
     it('Offline Mode Loads', function () {
         browser.visit("http://localhost:9467/index.html").
         then(function () {
-            assert.equal(browser.text("title"), "SalvationDevelopment International Launcher");
-        }).
-        fail(function (error) {
-            throw error;
+            assert(browser.text("title"), "SalvationDevelopment International Launcher");
+        });
+    });
+    it('Offline Mode Loads', function () {
+        browser.visit("http://localhost:9467/index.html").
+        then(function () {
+            assert(browser.text("title"), "SalvationDevelopment International Launcher");
         });
     });
 });
