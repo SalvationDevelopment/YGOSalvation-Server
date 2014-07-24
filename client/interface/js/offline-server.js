@@ -66,6 +66,7 @@ http.createServer(function (request, response) {
 }).listen(9467, '127.0.0.1');
 
 function runYGOPro(mode, template) {
+    console.log(template);
     var systemConf = template;
 
     function fillInData(form, placeholder, value) {
