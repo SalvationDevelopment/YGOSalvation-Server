@@ -8,8 +8,6 @@ var fs = require('fs');
 var net = require('net');
 
 console.log('Running test');
-var server = require('../client/interface/js/offline-server.js');
-
 describe('YGOCore is assembled correctly', function () {
     it('YGOCore built', function () {
         assert((fs.existsSync('server/http/ygopro/YGOServer.exe')), true);
@@ -127,67 +125,56 @@ describe('Test Network Connection Methods', function () {
 });
 describe('Test Offline Server', function () {
     this.timeout(10000);
-    before(function (done) {
-        this.browser = new Browser();
-        this.browser
+    var server = require('../client/interface/js/offline-server.js');
+    before(function (test0) {
+        this.browser0 = new Browser();
+        this.browser0
             .visit("http://localhost:9467/index.html")
-            .then(done, done);
+            .then(test0, test0);
     });
-
-    it('Offline Mode Loads', function (done) {
-        console.log(this.browser.text("title"), "SalvationDevelopment International Launcher");
-        assert((this.browser.text("title") === "SalvationDevelopment International Launcher"), true);
-        done();
+    before(function (test1) {
+        this.browser1 = new Browser();
+        this.browser1
+            .visit("http://localhost:9467/")
+            .then(test1, test1);
     });
-});
-describe('Test deck edit', function () {
-    this.timeout(10000);
-
-    before(function (done) {
-        this.browser = new Browser();
-        this.browser
+    before(function (test2) {
+        this.browser2 = new Browser();
+        this.browser2
             .visit("http://localhost:9467/d")
-            .then(done, done);
+            .then(test2, test2);
     });
-
-    it('Offline Mode Loads', function (done) {
-        console.log(this.browser.text("title"), "SalvationDevelopment International Launcher");
-        assert((this.browser.text("title") === "SalvationDevelopment International Launcher"), true);
-        done();
-    });
-});
-describe('Test deck replay load', function () {
-    this.timeout(10000);
-
-    before(function (done) {
-        this.browser = new Browser();
-        this.browser
+    before(function (test3) {
+        this.browser3 = new Browser();
+        this.browser3
             .visit("http://localhost:9467/r")
-            .then(done, done);
+            .then(test3, test3);
     });
-
-    it('Offline Mode Loads', function (done) {
-        console.log(this.browser.text("title"), "SalvationDevelopment International Launcher");
-        assert((this.browser.text("title") === "SalvationDevelopment International Launcher"), true);
-        done();
-    });
-});
-describe('Test deck game start', function () {
-    this.timeout(10000);
-
-    before(function (done) {
+    before(function (test4) {
         this.browser = new Browser();
-        this.browser
+        this.browser4
             .visit("http://localhost:9467/j")
-            .then(done, done);
+            .then(test4, test4);
     });
 
-    it('Offline Mode Loads', function (done) {
-        console.log(this.browser.text("title"), "SalvationDevelopment International Launcher");
+    it('Offline Mode Loads', function (test0) {
         assert((this.browser.text("title") === "SalvationDevelopment International Launcher"), true);
-        done();
+        test0();
+    });
+    it('Offline Mode Loads', function (test1) {
+        test1();
+    });
+    it('Offline Mode Loads', function (test2) {
+        test2();
+    });
+    it('Offline Mode Loads', function (test3) {
+        test3();
+    });
+    it('Offline Mode Loads', function (test4) {
+        test4();
     });
 });
+
 /*
 var structureDefinition = require('../objectifier.js');
 
