@@ -1,6 +1,7 @@
 /* jshint node : true */
 /* jshint mocha : true */
 
+var Browser = require("zombie");
 var assert = require('assert');
 var net = require('net');
 var fs = require('fs');
@@ -117,6 +118,30 @@ describe('Test Network Connection Methods', function () {
         });
         client.write({
             action: 'leave'
+        });
+    });
+});
+describe('Test Offline Server', function () {
+    var server = require('../client/interface/js/offline-server.js');
+    var browser = new Browser();
+
+    it('Title is Defered zombies', function () {
+        browser.visit("http://localhost:9467/index.html").
+        then(function () {
+            assert(browser.text("title"), "Deferred zombies");
+        });
+    });
+    it('Offline Mode Loads', function () {
+        browser.visit("http://localhost:9467/index.html").
+        then(function () {
+            assert(browser.text("title"), "SalvationDevelopment International Launcher");
+        });
+    });
+    it('Offline Mode Loads', function () {
+        browser.visit("http://localhost:9467/index.html").
+        then(function () {
+            console.log(browser.text("title"), "SalvationDevelopment International Launcher");
+            assert(browser.text("title"), "SalvationDevelopment International Launcher");
         });
     });
 });
