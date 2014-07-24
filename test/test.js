@@ -96,6 +96,7 @@ describe('Test Network Connection Methods', function () {
         });
     });
     it('TCP To Websocket Proxy', function () {
+        this.timeout(3500);
         var socket = net.createConnection(8912);
         socket.on('connect', function (connect) {
             var playerconnect1 = require('./playerconnect1.js');
@@ -104,6 +105,7 @@ describe('Test Network Connection Methods', function () {
         });
     });
     it('Primus Websocket Connects, Starts Receieving Gamelist, and Request Duel', function () {
+        this.timeout(2000);
         var http = require('net');
         var server = http.createServer().listen(5003);
         var Primus = require('primus');
@@ -122,6 +124,7 @@ describe('Test Network Connection Methods', function () {
     });
 });
 describe('Test Offline Server', function () {
+    this.timeout(5000);
     var server = require('../client/interface/js/offline-server.js');
     var browser = new Browser();
 
