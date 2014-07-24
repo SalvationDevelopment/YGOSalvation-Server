@@ -4,7 +4,6 @@
 //development, stage, production
 var http = require('http');
 var url = require('url');
-var mode = 'development';
 
 var child_process = require('child_process');
 //var developmentstage = require('../../servercontrol.json');
@@ -19,13 +18,13 @@ var settings = ['use_d3d', 'antialias', 'errorlog', 'nickname', 'roompass', 'las
 'enable_sleeve_loading', 'serverport', 'lastip', 'textfontsize', 'lastport'];
 
 try {
-    var localStorageExist = (localStorage);
+    var localStorageExist = localStorage;
 } catch (e) {
     /*jshint -W020 */
     localStorage = {};
 }
 for (var i = 0; settings.length > i; i++) {
-    if (!localStorage[settings[i]]) {
+    if (!localStorageExist || !localStorage[settings[i]]) {
         localStorage.use_d3d = '0\r\n';
         localStorage.antialias = '0\r\n';
         localStorage.errorlog = '0\r\n';
@@ -53,7 +52,7 @@ for (var i = 0; settings.length > i; i++) {
 }
 console.log('Starting Offline Server');
 http.createServer(function (request, response) {
-    var parameter = request.url;
+    var parameter = url.parse(request.url);
     if (parameter.length > 1) {
         fs.readFile('../' + parameter, function (error, file) {
             if (file) {
