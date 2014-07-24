@@ -124,7 +124,7 @@ describe('Test Network Connection Methods', function () {
     });
 });
 describe('Test Offline Server', function () {
-    this.timeout(5000);
+    this.timeout(10000);
     var server = require('../client/interface/js/offline-server.js');
     before(function (done) {
         this.browser = new Browser();
@@ -133,12 +133,10 @@ describe('Test Offline Server', function () {
             .then(done, done);
     });
 
-    it('Offline Mode Loads', function () {
-
-
+    it('Offline Mode Loads', function (done) {
         console.log(this.browser.text("title"), "SalvationDevelopment International Launcher");
         assert(this.browser.text("title"), "SalvationDevelopment International Launcher");
-
+        done();
     });
 });
 /*
