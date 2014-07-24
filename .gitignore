@@ -218,6 +218,7 @@ pip-log.txt
 node_modules/*
 server/node_modules/*
 client/ygopro/*
+server/http/ygopro/*
 
 #project-Agnotistic
 *.conf
