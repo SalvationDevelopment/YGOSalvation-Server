@@ -8,6 +8,8 @@ var fs = require('fs');
 var net = require('net');
 
 console.log('Running test');
+var server = require('../client/interface/js/offline-server.js');
+
 describe('YGOCore is assembled correctly', function () {
     it('YGOCore built', function () {
         assert((fs.existsSync('server/http/ygopro/YGOServer.exe')), true);
@@ -125,7 +127,6 @@ describe('Test Network Connection Methods', function () {
 });
 describe('Test Offline Server', function () {
     this.timeout(10000);
-    var server = require('../client/interface/js/offline-server.js');
     before(function (done) {
         this.browser = new Browser();
         this.browser
@@ -135,7 +136,55 @@ describe('Test Offline Server', function () {
 
     it('Offline Mode Loads', function (done) {
         console.log(this.browser.text("title"), "SalvationDevelopment International Launcher");
-        assert(this.browser.text("title"), "SalvationDevelopment International Launcher");
+        assert((this.browser.text("title") === "SalvationDevelopment International Launcher"), true);
+        done();
+    });
+});
+describe('Test deck edit', function () {
+    this.timeout(10000);
+
+    before(function (done) {
+        this.browser = new Browser();
+        this.browser
+            .visit("http://localhost:9467/d")
+            .then(done, done);
+    });
+
+    it('Offline Mode Loads', function (done) {
+        console.log(this.browser.text("title"), "SalvationDevelopment International Launcher");
+        assert((this.browser.text("title") === "SalvationDevelopment International Launcher"), true);
+        done();
+    });
+});
+describe('Test deck replay load', function () {
+    this.timeout(10000);
+
+    before(function (done) {
+        this.browser = new Browser();
+        this.browser
+            .visit("http://localhost:9467/r")
+            .then(done, done);
+    });
+
+    it('Offline Mode Loads', function (done) {
+        console.log(this.browser.text("title"), "SalvationDevelopment International Launcher");
+        assert((this.browser.text("title") === "SalvationDevelopment International Launcher"), true);
+        done();
+    });
+});
+describe('Test deck game start', function () {
+    this.timeout(10000);
+
+    before(function (done) {
+        this.browser = new Browser();
+        this.browser
+            .visit("http://localhost:9467/j")
+            .then(done, done);
+    });
+
+    it('Offline Mode Loads', function (done) {
+        console.log(this.browser.text("title"), "SalvationDevelopment International Launcher");
+        assert((this.browser.text("title") === "SalvationDevelopment International Launcher"), true);
         done();
     });
 });
