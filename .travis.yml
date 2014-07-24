@@ -41,8 +41,8 @@ before_install:
   - cp bin/release/libocgcore.so ./
   - ls -p 
   - cd ../../../
-  - npm install -g mocha-phantomjs
   - npm install -g mocha
+  - npm install -g zombie
   - npm install -g istanbul
   - npm install -g codeclimate-test-reporter
   

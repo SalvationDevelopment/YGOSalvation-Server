@@ -24,8 +24,8 @@
     "dependencies": {
         "ws": "*",
         "primus": "*",
-        "primus-rooms": "*",
-        "mocha": "*"
+        "primus-rooms": "*"
+
     },
     "optionalDependencies": {
         "httpsys": "*"
