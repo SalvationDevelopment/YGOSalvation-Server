@@ -4,9 +4,7 @@
 //development, stage, production
 var http = require('http');
 var url = require('url');
-
 var child_process = require('child_process');
-//var developmentstage = require('../../servercontrol.json');
 var fs = require('fs');
 var template;
 var settings = ['use_d3d', 'antialias', 'errorlog', 'nickname', 'roompass', 'lastdeck', 'textfont', 'numfont', 'fullscreen', 'enable_sound',
@@ -58,17 +56,16 @@ http.createServer(function (request, response) {
     } else {
         fs.readFile('application/template.ini', 'utf-8', function (error, data) {
             template = data;
-            runYGOPro('-' + parameter.path);
+            runYGOPro('-' + parameter.path, template);
             response.writeHead(200, {
                 'Content-Type': 'text/plain'
             });
             response.end('');
         });
-
     }
 }).listen(9467, '127.0.0.1');
 
-function runYGOPro(mode) {
+function runYGOPro(mode, template) {
     var systemConf = template;
 
     function fillInData(form, placeholder, value) {
