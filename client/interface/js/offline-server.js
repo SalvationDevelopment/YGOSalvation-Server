@@ -51,7 +51,7 @@ for (var i = 0; settings.length > i; i++) {
         localStorage.enable_sleeve_loading = '0\r\n';
     }
 }
-console.log('Starting Offline Server')
+console.log('Starting Offline Server');
 http.createServer(function (request, response) {
     var parameter = request.url;
     if (parameter.length > 1) {

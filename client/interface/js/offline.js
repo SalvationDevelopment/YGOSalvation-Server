@@ -12,10 +12,8 @@ var mode = 'development';
 
 
 function ygopro(parameter) {
-    $.ajax('http://127.0.0.1:9467/?' + parameter);
+    $.ajax('http://127.0.0.1:9467/' + parameter);
 }
-
-
 
 function connectToCheckmateServer() {
     var chkusername = prompt("Please enter your name Checkmate Server Username", localStorage.chknickname);

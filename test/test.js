@@ -126,12 +126,21 @@ describe('Test Offline Server', function () {
     var browser = new Browser();
 
     it('Offline Mode Loads', function () {
-        browser.visit("http://localhost:3000/index.html").
+        browser.visit("http://localhost:9467/index.html").
         then(function () {
             assert.equal(browser.text("H1"), "Deferred zombies");
         }).
         fail(function (error) {
-            console.log("Oops", error);
+            throw error;
+        });
+    });
+    it('Offline Mode Loads', function () {
+        browser.visit("http://localhost:9467/index.html").
+        then(function () {
+            assert.equal(browser.text("title"), "SalvationDevelopment International Launcher");
+        }).
+        fail(function (error) {
+            throw error;
         });
     });
 });
