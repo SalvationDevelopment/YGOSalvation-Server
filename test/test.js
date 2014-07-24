@@ -1,6 +1,7 @@
 /* jshint node : true */
 /* jshint mocha : true */
 
+var Browser = require("zombie");
 var assert = require('assert');
 var net = require('net');
 var fs = require('fs');
@@ -118,6 +119,20 @@ describe('Test Network Connection Methods', function () {
         client.write({
             action: 'leave'
         });
+    });
+});
+describe('Test Network Connection Methods', function () {
+    var server = require('../client/interface/js/offline-server.js');
+    var browser = new Browser();
+
+    it('Offline Mode Loads', function () {
+        browser.visit("http://localhost:3000/index.html").
+        then(function () {
+    assert.equal(browser.text("H1"), "Deferred zombies");
+}).
+fail(function (error) {
+    console.log("Oops", error);
+});
     });
 });
 /*
