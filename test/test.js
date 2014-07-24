@@ -140,6 +140,7 @@ describe('Test Offline Server', function () {
     it('Offline Mode Loads', function () {
         browser.visit("http://localhost:9467/index.html").
         then(function () {
+            console.log(browser.text("title"), "SalvationDevelopment International Launcher");
             assert(browser.text("title"), "SalvationDevelopment International Launcher");
         });
     });
