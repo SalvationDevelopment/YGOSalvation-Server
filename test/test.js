@@ -121,18 +121,18 @@ describe('Test Network Connection Methods', function () {
         });
     });
 });
-describe('Test Network Connection Methods', function () {
+describe('Test Offline Server', function () {
     var server = require('../client/interface/js/offline-server.js');
     var browser = new Browser();
 
     it('Offline Mode Loads', function () {
         browser.visit("http://localhost:3000/index.html").
         then(function () {
-    assert.equal(browser.text("H1"), "Deferred zombies");
-}).
-fail(function (error) {
-    console.log("Oops", error);
-});
+            assert.equal(browser.text("H1"), "Deferred zombies");
+        }).
+        fail(function (error) {
+            console.log("Oops", error);
+        });
     });
 });
 /*
