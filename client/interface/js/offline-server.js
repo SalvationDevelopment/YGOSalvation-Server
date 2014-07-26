@@ -64,7 +64,7 @@ http.createServer(function (request, response) {
                 });
                 response.end('');
             } else {
-                response.writeHead(404, {
+                response.writeHead(200, {
                     'Content-Type': 'text/plain'
 
                 });
