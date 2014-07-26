@@ -6,6 +6,7 @@ var assert = require('assert');
 var net = require('net');
 var fs = require('fs');
 var net = require('net');
+var server = require('../client/interface/js/offline-server.js');
 
 console.log('Running test');
 describe('YGOCore is assembled correctly', function () {
@@ -84,7 +85,6 @@ describe('Structures Test', function () {
     });
 });
 describe('Test Network Connection Methods', function () {
-    var target = require('../server/server.js');
     var proxy = require('../server/http/js/proxy.js');
     it('TCP Native', function () {
         var socket = net.createConnection(8911);
@@ -125,7 +125,7 @@ describe('Test Network Connection Methods', function () {
 });
 describe('Test Offline Server', function () {
     this.timeout(10000);
-    var server = require('../client/interface/js/offline-server.js');
+
     before(function (test0) {
         this.browser0 = new Browser();
         this.browser0
