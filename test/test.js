@@ -6,8 +6,12 @@ var assert = require('assert');
 var net = require('net');
 var fs = require('fs');
 var net = require('net');
-var server = require('../client/interface/js/offline-server.js');
-
+try {
+    var server = require('../server/server.js');
+    var server = require('../client/interface/js/offline-server.js');
+} catch (error) {
+    console.log("fundemental issue!");
+}
 console.log('Running test');
 describe('YGOCore is assembled correctly', function () {
     it('YGOCore built', function () {
@@ -107,7 +111,7 @@ describe('Test Network Connection Methods', function () {
     it('Primus Websocket Connects, Starts Receieving Gamelist, and Request Duel', function () {
         this.timeout(2000);
         var http = require('net');
-        var server = http.createServer().listen(5003);
+        var server = http.createServer().listen(8003);
         var Primus = require('primus');
         var primus = new Primus(server);
         var Socket = primus.Socket;
