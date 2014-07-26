@@ -55,7 +55,7 @@ http.createServer(function (request, response) {
             }
         });
     } else {
-        fs.readFile('../template.ini', 'utf-8', function (error, data) {
+        fs.readFile(__dirname + '/../template.ini', 'utf-8', function (error, data) {
             if (data) {
                 template = data;
                 runYGOPro('-' + parameter.path, template);
@@ -68,7 +68,7 @@ http.createServer(function (request, response) {
                     'Content-Type': 'text/plain'
 
                 });
-                console.log(__dirname + '../template.ini');
+                console.log(__dirname + '/../template.ini');
                 response.end('template.ini is not found');
             }
         });
