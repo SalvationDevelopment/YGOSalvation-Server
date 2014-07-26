@@ -2,6 +2,7 @@
 //process.on('uncaughtException', function (error) {
 //    console.log('Caught exception: ' + error);
 //});
+console.log('Salvation Development YGOPro Server')
 try {
     require('httpsys').slipStream();
 } catch (error) {
@@ -197,7 +198,7 @@ function processIncomingTrasmission(data, socket) {
             console.log(socket.username + ' connecting to existing core');
             gamelist[socket.hostString].players.push(socket.username);
         } else if (!gamelist[socket.hostString] && !socket.active_ygocore) {
-            console.log(socket.username + ' connecting to new core');
+            //console.log(socket.username + ' connecting to new core');
             portfinder(7000, 9001, gamelist, function (error, port) {
                 startCore(port, socket, data);
             });
@@ -213,7 +214,8 @@ function startCore(port, socket, data) {
         }
         //console.log('connecting to new core @', port);
         //console.log('found port ', port);
-        socket.core = childProcess.spawn('YGOServer.exe ', [port], {
+        console.log('initiating core for ' + socket.username + ' on port:' + port);
+        socket.core = childProcess.spawn('YGOServer ', [port], {
             cwd: __dirname + '/http/ygopro'
         }, function (error, stdout, stderr) {
             console.log('CORE Terminated', error, stderr, stdout);
