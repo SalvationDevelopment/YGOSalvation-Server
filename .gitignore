@@ -218,6 +218,10 @@ pip-log.txt
 node_modules/*
 server/node_modules/*
 client/ygopro/*
+server/ygocore/*.dll
+server/ygocore/*.exe
+server/ygocore/ErrorLog.txt
+server/ygocore/error_log/*
 server/http/ygopro/*
 
 #project-Agnotistic

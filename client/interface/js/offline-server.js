@@ -4,28 +4,21 @@
 //development, stage, production
 var http = require('http');
 var url = require('url');
-var mode = 'development';
-
 var child_process = require('child_process');
-//var developmentstage = require('../../servercontrol.json');
 var fs = require('fs');
 var template;
-fs.readFile('application/template.ini', 'utf-8', function (error, data) {
-    template = data;
-    // there is a data race here.
-});
 var settings = ['use_d3d', 'antialias', 'errorlog', 'nickname', 'roompass', 'lastdeck', 'textfont', 'numfont', 'fullscreen', 'enable_sound',
 'sound_volume', 'enable_music', 'music_volume', 'skin_index', 'auto_card_placing', 'random_card_placing', 'auto_chain_order', 'no_delay_for_chain',
 'enable_sleeve_loading', 'serverport', 'lastip', 'textfontsize', 'lastport'];
 
 try {
-    var localStorageExist = (localStorage);
+    var localStorageExist = localStorage;
 } catch (e) {
     /*jshint -W020 */
     localStorage = {};
 }
 for (var i = 0; settings.length > i; i++) {
-    if (!localStorage[settings[i]]) {
+    if (!localStorageExist || !localStorage[settings[i]]) {
         localStorage.use_d3d = '0\r\n';
         localStorage.antialias = '0\r\n';
         localStorage.errorlog = '0\r\n';
@@ -53,23 +46,37 @@ for (var i = 0; settings.length > i; i++) {
 }
 console.log('Starting Offline Server');
 http.createServer(function (request, response) {
-    var parameter = request.url;
-    if (parameter.length > 1) {
-        fs.readFile('../' + parameter, function (error, file) {
+    var parameter = url.parse(request.url);
+    if (parameter.path.length > 1) {
+        fs.readFile('..' + parameter.path, function (error, file) {
+            console.log('..' + parameter.path);
             if (file) {
                 response.end(file);
             }
         });
     } else {
-        runYGOPro('-' + parameter.path);
-        response.writeHead(200, {
-            'Content-Type': 'text/plain'
+        fs.readFile('../template.ini', 'utf-8', function (error, data) {
+            if (data) {
+                template = data;
+                runYGOPro('-' + parameter.path, template);
+                response.writeHead(200, {
+                    'Content-Type': 'text/plain'
+                });
+                response.end('');
+            } else {
+                response.writeHead(200, {
+                    'Content-Type': 'text/plain'
+
+                });
+                console.log(__dirname + '../template.ini');
+                response.end('template.ini is not found');
+            }
         });
-        response.end('');
     }
 }).listen(9467, '127.0.0.1');
 
-function runYGOPro(mode) {
+function runYGOPro(mode, template) {
+    console.log(template);
     var systemConf = template;
 
     function fillInData(form, placeholder, value) {
@@ -80,15 +87,15 @@ function runYGOPro(mode) {
         systemConf = fillInData(systemConf, '{' + settings[i] + '}', localStorage[settings[i]]);
     }
 
-    //console.log(systemConf)
-    fs.writeFile('ygopro/system.conf', systemConf, function (err) {
+    //console.log(systemConf);
+    fs.writeFile('../../ygopro/system.CONF', systemConf, function (err) {
         if (err) {
             console.log('file permission error, cant edit system.conf');
             throw err;
         }
         //console.log('It\'s saved!');
         child_process.execFile('devpro.dll', [mode], {
-            cwd: 'ygopro'
+            cwd: '../../ygopro'
         }, function (error) {
             if (error !== null) {
                 //write crash report;
@@ -96,13 +103,14 @@ function runYGOPro(mode) {
                 var filelocation = 'crash_report_YGOPro_' + (new Date().toDateString) + '.log';
                 fs.writeFile(filelocation, error, function () {});
             }
-            fs.readFile('ygopro/system.conf', function (error, file) {
+            fs.readFile('../../ygopro/system.CONF', function (error, file) {
                 if (error !== null) {
                     console.log('file permission error, cant read system.conf');
                     throw err;
                 }
-                var options = file.split('\r\n');
-                console.log(options);
+                //                console.log("file os =", file, typeof file);
+                //                var options = file.split('\r\n');
+                //                console.log(options);
             });
         });
     });

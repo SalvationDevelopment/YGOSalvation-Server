@@ -96,6 +96,7 @@ describe('Test Network Connection Methods', function () {
         });
     });
     it('TCP To Websocket Proxy', function () {
+        this.timeout(3500);
         var socket = net.createConnection(8912);
         socket.on('connect', function (connect) {
             var playerconnect1 = require('./playerconnect1.js');
@@ -104,6 +105,7 @@ describe('Test Network Connection Methods', function () {
         });
     });
     it('Primus Websocket Connects, Starts Receieving Gamelist, and Request Duel', function () {
+        this.timeout(2000);
         var http = require('net');
         var server = http.createServer().listen(5003);
         var Primus = require('primus');
@@ -122,29 +124,57 @@ describe('Test Network Connection Methods', function () {
     });
 });
 describe('Test Offline Server', function () {
+    this.timeout(10000);
     var server = require('../client/interface/js/offline-server.js');
-    var browser = new Browser();
+    before(function (test0) {
+        this.browser0 = new Browser();
+        this.browser0
+            .visit("http://localhost:9467/index.html")
+            .then(test0, test0);
+    });
+    before(function (test1) {
+        this.browser1 = new Browser();
+        this.browser1
+            .visit("http://localhost:9467/")
+            .then(test1, test1);
+    });
+    before(function (test2) {
+        this.browser2 = new Browser();
+        this.browser2
+            .visit("http://localhost:9467/d")
+            .then(test2, test2);
+    });
+    before(function (test3) {
+        this.browser3 = new Browser();
+        this.browser3
+            .visit("http://localhost:9467/r")
+            .then(test3, test3);
+    });
+    before(function (test4) {
+        this.browser = new Browser();
+        this.browser4
+            .visit("http://localhost:9467/j")
+            .then(test4, test4);
+    });
 
-    it('Title is Defered zombies', function () {
-        browser.visit("http://localhost:9467/index.html").
-        then(function () {
-            assert(browser.text("title"), "Deferred zombies");
-        });
+    it('Offline Mode Loads', function (test0) {
+        assert((this.browser.text("title") === "SalvationDevelopment International Launcher"), true);
+        test0();
     });
-    it('Offline Mode Loads', function () {
-        browser.visit("http://localhost:9467/index.html").
-        then(function () {
-            assert(browser.text("title"), "SalvationDevelopment International Launcher");
-        });
+    it('Offline Mode Loads', function (test1) {
+        test1();
     });
-    it('Offline Mode Loads', function () {
-        browser.visit("http://localhost:9467/index.html").
-        then(function () {
-            console.log(browser.text("title"), "SalvationDevelopment International Launcher");
-            assert(browser.text("title"), "SalvationDevelopment International Launcher");
-        });
+    it('Offline Mode Loads', function (test2) {
+        test2();
+    });
+    it('Offline Mode Loads', function (test3) {
+        test3();
+    });
+    it('Offline Mode Loads', function (test4) {
+        test4();
     });
 });
+
 /*
 var structureDefinition = require('../objectifier.js');
 
