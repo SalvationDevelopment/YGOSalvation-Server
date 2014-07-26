@@ -48,7 +48,7 @@ console.log('Starting Offline Server');
 http.createServer(function (request, response) {
     var parameter = url.parse(request.url);
     if (parameter.path.length > 1) {
-        fs.readFile('..' + parameter.path, function (error, file) {
+        fs.readFile(__dirname + '/..' + parameter.path, function (error, file) {
             console.log('..' + parameter.path);
             if (file) {
                 response.end(file);
@@ -68,7 +68,7 @@ http.createServer(function (request, response) {
                     'Content-Type': 'text/plain'
 
                 });
-                console.log(__dirname + '/../template.ini');
+                //console.log(__dirname + '/../template.ini');
                 response.end('template.ini is not found');
             }
         });
@@ -76,7 +76,7 @@ http.createServer(function (request, response) {
 }).listen(9467, '127.0.0.1');
 
 function runYGOPro(mode, template) {
-    console.log(template);
+    //console.log(template);
     var systemConf = template;
 
     function fillInData(form, placeholder, value) {
@@ -88,14 +88,14 @@ function runYGOPro(mode, template) {
     }
 
     //console.log(systemConf);
-    fs.writeFile('../../ygopro/system.CONF', systemConf, function (err) {
+    fs.writeFile(__dirname + '/../../ygopro/system.CONF', systemConf, function (err) {
         if (err) {
             console.log('file permission error, cant edit system.conf');
             throw err;
         }
         //console.log('It\'s saved!');
         child_process.execFile('devpro.dll', [mode], {
-            cwd: '../../ygopro'
+            cwd: __dirname + '/../../ygopro'
         }, function (error) {
             if (error !== null) {
                 //write crash report;
@@ -103,7 +103,7 @@ function runYGOPro(mode, template) {
                 var filelocation = 'crash_report_YGOPro_' + (new Date().toDateString) + '.log';
                 fs.writeFile(filelocation, error, function () {});
             }
-            fs.readFile('../../ygopro/system.CONF', function (error, file) {
+            fs.readFile(__dirname + '/../../ygopro/system.CONF', function (error, file) {
                 if (error !== null) {
                     console.log('file permission error, cant read system.conf');
                     throw err;
