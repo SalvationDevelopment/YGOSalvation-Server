@@ -223,6 +223,7 @@ server/ygocore/*.exe
 server/ygocore/ErrorLog.txt
 server/ygocore/error_log/*
 server/http/ygopro/*
+server/http/manifest/*
 
 #project-Agnotistic
 *.conf
