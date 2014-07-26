@@ -49,18 +49,26 @@ http.createServer(function (request, response) {
     var parameter = url.parse(request.url);
     if (parameter.path.length > 1) {
         fs.readFile('..' + parameter.path, function (error, file) {
+            console.log('..' + parameter.path);
             if (file) {
                 response.end(file);
             }
         });
     } else {
-        fs.readFile('application/template.ini', 'utf-8', function (error, data) {
-            template = data;
-            runYGOPro('-' + parameter.path, template);
-            response.writeHead(200, {
-                'Content-Type': 'text/plain'
-            });
-            response.end('');
+        fs.readFile('../template.ini', 'utf-8', function (error, data) {
+            if (data) {
+                template = data;
+                runYGOPro('-' + parameter.path, template);
+                response.writeHead(200, {
+                    'Content-Type': 'text/plain'
+                });
+                response.end('');
+            } else {
+                response.writeHead(404, {
+                    'Content-Type': 'text/plain'
+                });
+                response.end('template.ini is not found');
+            }
         });
     }
 }).listen(9467, '127.0.0.1');
@@ -77,15 +85,15 @@ function runYGOPro(mode, template) {
         systemConf = fillInData(systemConf, '{' + settings[i] + '}', localStorage[settings[i]]);
     }
 
-    //console.log(systemConf)
-    fs.writeFile('ygopro/system.conf', systemConf, function (err) {
+    console.log(systemConf)
+    fs.writeFile('../../ygopro/system.CONF', systemConf, function (err) {
         if (err) {
             console.log('file permission error, cant edit system.conf');
             throw err;
         }
         //console.log('It\'s saved!');
         child_process.execFile('devpro.dll', [mode], {
-            cwd: 'ygopro'
+            cwd: '../../ygopro'
         }, function (error) {
             if (error !== null) {
                 //write crash report;
@@ -93,13 +101,14 @@ function runYGOPro(mode, template) {
                 var filelocation = 'crash_report_YGOPro_' + (new Date().toDateString) + '.log';
                 fs.writeFile(filelocation, error, function () {});
             }
-            fs.readFile('ygopro/system.conf', function (error, file) {
+            fs.readFile('../../ygopro/system.CONF', function (error, file) {
                 if (error !== null) {
                     console.log('file permission error, cant read system.conf');
                     throw err;
                 }
-                var options = file.split('\r\n');
-                console.log(options);
+//                console.log("file os =", file, typeof file);
+//                var options = file.split('\r\n');
+//                console.log(options);
             });
         });
     });
