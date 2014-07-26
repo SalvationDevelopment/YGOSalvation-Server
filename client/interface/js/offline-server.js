@@ -66,7 +66,9 @@ http.createServer(function (request, response) {
             } else {
                 response.writeHead(404, {
                     'Content-Type': 'text/plain'
+
                 });
+                console.log(__dirname + '../template.ini');
                 response.end('template.ini is not found');
             }
         });
@@ -85,7 +87,7 @@ function runYGOPro(mode, template) {
         systemConf = fillInData(systemConf, '{' + settings[i] + '}', localStorage[settings[i]]);
     }
 
-    console.log(systemConf)
+    //console.log(systemConf);
     fs.writeFile('../../ygopro/system.CONF', systemConf, function (err) {
         if (err) {
             console.log('file permission error, cant edit system.conf');
@@ -106,9 +108,9 @@ function runYGOPro(mode, template) {
                     console.log('file permission error, cant read system.conf');
                     throw err;
                 }
-//                console.log("file os =", file, typeof file);
-//                var options = file.split('\r\n');
-//                console.log(options);
+                //                console.log("file os =", file, typeof file);
+                //                var options = file.split('\r\n');
+                //                console.log(options);
             });
         });
     });
