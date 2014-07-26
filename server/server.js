@@ -215,8 +215,8 @@ function startCore(port, socket, data) {
         //console.log('connecting to new core @', port);
         //console.log('found port ', port);
         console.log('initiating core for ' + socket.username + ' on port:' + port);
-        socket.core = childProcess.spawn('YGOServer ', [port], {
-            cwd: __dirname + '/http/ygopro'
+        socket.core = childProcess.spawn(__dirname + '/http/ygopro/YGOServer.exe', [port], {
+            cwd: 'http/ygopro'
         }, function (error, stdout, stderr) {
             console.log('CORE Terminated', error, stderr, stdout);
         });
