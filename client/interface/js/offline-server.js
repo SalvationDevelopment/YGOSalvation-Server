@@ -88,7 +88,7 @@ function runYGOPro(mode, template) {
     }
 
     //console.log(systemConf);
-    fs.writeFile(__dirname + '/../../ygopro/system.CONF', systemConf, function (err) {
+    fs.writeFile(__dirname + '/../ygopro/system.CONF', systemConf, function (err) {
         if (err) {
             console.log('file permission error, cant edit system.conf');
             throw err;
@@ -103,7 +103,7 @@ function runYGOPro(mode, template) {
                 var filelocation = 'crash_report_YGOPro_' + (new Date().toDateString) + '.log';
                 fs.writeFile(filelocation, error, function () {});
             }
-            fs.readFile(__dirname + '/../../ygopro/system.CONF', function (error, file) {
+            fs.readFile(__dirname + '/../ygopro/system.CONF', function (error, file) {
                 if (error !== null) {
                     console.log('file permission error, cant read system.conf');
                     throw err;
