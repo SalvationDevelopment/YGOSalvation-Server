@@ -1,27 +1,17 @@
 /* jshint node:true */
-/* global module */
-/* jslint browser : true */
 var fs = require('fs');
 var net = require('net');
 var banlist = require('./banlist.json');
-var sqlite3 = require('sqlite3').verbose();
-var scripts = {};
-var ffi = require('ffi'); /* allows dynamic linking of the ocgapi.dll, critical; */
-var ref = require('ref'); /* allows use of C++ pointers for C++ JS interactions, critical */
-var struct = require('ref-struct'); /* allows use of C++ structures for C++ JS interactions, critical */
+var ocgcore = require('./ygocore-ocgcore-interface.js');
 var MersenneTwister = require('mersennetwister'); /* seed number generator to give the shuffler, makes a random number.*/
 var mt = new MersenneTwister();
 
-var cardDatabase = new sqlite3.Database('cards.cbd', function () {
-    updateScripts();
 
-});
 
-function getScript(identificationNumber) {
-    return new Buffer(scripts['c' + identificationNumber]);
-}
+var scripts = {};
 
 function updateScripts() {
+    /* The following function causes the server to lock up! */
     console.log('Loading Scripts, please wait');
     var scriptfilenames = fs.lstatSync('../http/ygopro/scripts');
     scriptfilenames.forEach(function (iteration) {
@@ -30,50 +20,13 @@ function updateScripts() {
     console.log('Scripts loaded');
 }
 
-function card_reader(request) {
-    var code = request.code;
-    var data = request.data;
-    var query = cardDatabase.query = "SELECT id, ot, alias, setcode, type, level, race, attribute, atk, def FROM datas";
-    return struct({
-        code: request.code,
-        alias: 'uint32',
-        setcode: 'uint64',
-        type: 'uint32',
-        level: 'uint32',
-        attribute: 'uint32',
-        race: 'uint32',
-        attack: 'int32',
-        defence: 'int32'
-    });
-}
+
+
 
 function GameConstructor() {
-    "use strict";
-    var seed = mt.int();
-    this.ocgapi = ffi.Library(__dirname + '/ocgcore.dll', {
-        'set_script_reader': ['void', getScript],
-        'set_card_reader': ['void', card_reader],
-        'set_message_handler': ['void', console.log],
-        'create_duel': ['pointer', ['uint32']],
-        'start_duel': ['void', ['pointer', 'int']],
-        'end_duel': ['void', ['pointer']],
-        'set_player_info': ['void', ['pointer', 'int32', 'int32', 'int32', 'int32']],
-        'get_log_message': ['void', ['pointer', 'byte*']],
-        'get_message': ['int32', ['pointer' /*, get_message_pointer*/ ]],
-        'process': ['int32', ['pointer']],
-        'new_card': ['void', ['pointer', 'uint32', 'uint8', 'uint8', 'uint8', 'uint8', 'uint8']],
-        'new_tag_card': ['void', ['pointer', 'uint32', 'uint8', 'uint8']],
-        'query_card': ['int32', ['pointer', 'uint8', 'uint8', 'int32', 'byte*', 'int32']],
-        'query_field_count': ['int32', ['pointer', 'uint8', 'uint8']],
-        'query_field_card': ['int32', ['pointer', 'uint8', 'uint8', 'int32', 'byte*', 'int32']],
-        'query_field_info': ['int32', ['pointer', 'byte*']],
-        'set_responsei': ['void', ['pointer', 'int32']],
-        'set_responseb': ['void', ['pointer', 'byte*']],
-        'preload_script': ['int32', ['pointer', 'char*', 'int32']]
-    });
-    var pduel = this.ocgapi.create_duel(seed);
+    var core = new ocgcore(scripts);
+    var pduel = core.ocgapi.create_duel(mt.int());
     var model = {
-        username: localStorage.username,
         gamestate: 'off',
         gametype: 'single',
         lobby: {
