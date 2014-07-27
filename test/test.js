@@ -88,45 +88,7 @@ describe('Structures Test', function () {
         assert((validate.long === "abcd    "), true);
     });
 });
-describe('Test Network Connection Methods', function () {
-    var proxy = require('../server/http/js/proxy.js');
-    it('TCP Native', function () {
-        var socket = net.createConnection(8911);
-        socket.on('connect', function (connect) {
-            var playerconnect1 = require('./playerconnect1.js');
-            var message = new Buffer(playerconnect1);
-            socket.write(message);
 
-        });
-    });
-    it('TCP To Websocket Proxy', function () {
-        this.timeout(3500);
-        var socket = net.createConnection(8912);
-        socket.on('connect', function (connect) {
-            var playerconnect1 = require('./playerconnect1.js');
-            var message = new Buffer(playerconnect1);
-            socket.write(message);
-        });
-    });
-    it('Primus Websocket Connects, Starts Receieving Gamelist, and Request Duel', function () {
-        this.timeout(2000);
-        var http = require('net');
-        var server = http.createServer().listen(8003);
-        var Primus = require('primus');
-        var primus = new Primus(server);
-        var Socket = primus.Socket;
-
-        var client = new Socket('http://localhost:5000');
-        var playerconnect1 = require('./playerconnect1.js');
-        var message = new Buffer(playerconnect1);
-        client.write({
-            action: 'join'
-        });
-        client.write({
-            action: 'leave'
-        });
-    });
-});
 describe('Test Offline Server', function () {
     this.timeout(10000);
 
@@ -178,7 +140,45 @@ describe('Test Offline Server', function () {
         test4();
     });
 });
+describe('Test Network Connection Methods', function () {
+    var proxy = require('../server/http/js/proxy.js');
+    it('TCP Native', function () {
+        var socket = net.createConnection(8911);
+        socket.on('connect', function (connect) {
+            var playerconnect1 = require('./playerconnect1.js');
+            var message = new Buffer(playerconnect1);
+            socket.write(message);
 
+        });
+    });
+    it('TCP To Websocket Proxy', function () {
+        this.timeout(3500);
+        var socket = net.createConnection(8912);
+        socket.on('connect', function (connect) {
+            var playerconnect1 = require('./playerconnect1.js');
+            var message = new Buffer(playerconnect1);
+            socket.write(message);
+        });
+    });
+    it('Primus Websocket Connects, Starts Receieving Gamelist, and Request Duel', function () {
+        this.timeout(2000);
+        var http = require('net');
+        var server = http.createServer().listen(8003);
+        var Primus = require('primus');
+        var primus = new Primus(server);
+        var Socket = primus.Socket;
+
+        var client = new Socket('http://localhost:5000');
+        var playerconnect1 = require('./playerconnect1.js');
+        var message = new Buffer(playerconnect1);
+        client.write({
+            action: 'join'
+        });
+        client.write({
+            action: 'leave'
+        });
+    });
+});
 /*
 var structureDefinition = require('../objectifier.js');
 
