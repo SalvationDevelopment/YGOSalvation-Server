@@ -141,7 +141,7 @@ function processTask(task, socket) {
     }
 }
 
-function connectToCore(port, data, socket) {
+function connectToCore(port, data, socket, callback) {
     socket.active_ygocore = net.connect(port, '127.0.0.1', function () {
         socket.active_ygocore.write(data);
         primus.room('activegames').write(JSON.stringify(gamelist));
@@ -156,6 +156,9 @@ function connectToCore(port, data, socket) {
                 return output;
             })();
             socket.write(core_data);
+            if (callback) {
+                callback(true);
+            }
         });
         socket.active_ygocore.on('error', function (error) {
             killCore(socket);
@@ -268,5 +271,6 @@ module.exports = {
     processIncomingTrasmission: processIncomingTrasmission,
     startCore: startCore,
     pickCoreConfig: pickCoreConfig,
-    parsePackets: parsePackets
+    parsePackets: parsePackets,
+    killCore: killCore
 };

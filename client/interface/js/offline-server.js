@@ -55,24 +55,13 @@ http.createServer(function (request, response) {
             }
         });
     } else {
-
-        if (template) {
-            runYGOPro('-' + parameter.path, function () {
-                console.log('!');
-            });
-            response.writeHead(200, {
-                'Content-Type': 'text/plain'
-            });
-            response.end('');
-        } else {
-            response.writeHead(200, {
-                'Content-Type': 'text/plain'
-
-            });
-            //console.log(__dirname + '/../template.ini');
-            response.end('template.ini is not found');
-        }
-
+        runYGOPro('-' + parameter.path, function () {
+            console.log('!');
+        });
+        response.writeHead(200, {
+            'Content-Type': 'text/plain'
+        });
+        response.end('');
     }
 }).listen(9467, '127.0.0.1');
 
