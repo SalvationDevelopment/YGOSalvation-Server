@@ -200,7 +200,7 @@ function processIncomingTrasmission(data, socket) {
         } else if (!gamelist[socket.hostString] && !socket.active_ygocore) {
             //console.log(socket.username + ' connecting to new core');
             portfinder(7000, 9001, gamelist, function (error, port) {
-                startCore(port, socket, data);
+                startCore(port, socket, data, success);
             });
         }
     }
@@ -249,13 +249,19 @@ function startCore(port, socket, data, callback) {
 }
 
 function pickCoreConfig(socket) {
-    if (socket.hostString.length > 3) {
+    if (socket.hostString[0] === '0' || //OCG
+        socket.hostString[0] === '1' || //TCG
+        socket.hostString[0] === '2') { //TCG/OCG
         return '' + socket.hostString[0] + '-config.txt';
     } else {
+        /*load default configuration */
         return 'config.txt';
     }
 }
 
+function success(status) {
+    return status;
+}
 module.exports = {
     connectToCore: connectToCore,
     processTask: processTask,
