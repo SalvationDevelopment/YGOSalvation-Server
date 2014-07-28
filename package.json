@@ -24,7 +24,8 @@
     "dependencies": {
         "ws": "*",
         "primus": "*",
-        "primus-rooms": "*"
+        "primus-rooms": "*",
+        "request": "*"
 
     },
     "optionalDependencies": {

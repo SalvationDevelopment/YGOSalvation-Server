@@ -7,19 +7,28 @@ var net = require('net');
 var fs = require('fs');
 var net = require('net');
 console.log('Running test');
+var request = require('request');
 try {
     var server = require('../server/server.js');
     var offline = require('../client/interface/js/offline-server.js');
 } catch (error) {
     console.log("fundemental issue!");
 }
+request('http://localhost:9467', function (error, response, body) {
+    if (!error && response.statusCode == 200) {
+        console.log('response ran');
+    }
+});
+request('http://localhost:9467/index.html', function (error, response, body) {
+    if (!error && response.statusCode == 200) {}
+});
 var playerconnect1 = new Buffer(require('./playerconnect1.js'));
 
 server.startCore(9001, {
     hostString: 'game'
-}, playerconnect1, function (started) {
-
-});
+}, playerconnect1, server.connectToCore(9001, playerconnect1, {
+    hostString: 'game'
+}));
 
 describe('YGOCore is assembled correctly', function () {
     it('YGOCore built', function () {
@@ -128,36 +137,38 @@ describe('Test Offline Server', function () {
 });
 describe('Test Network Connection Methods', function () {
 
+    var message = new Buffer(playerconnect1);
+    var socket = net.createConnection(8911);
+    socket.on('connect', function (connect) {
+
+
+        socket.write(message);
+
+    });
+    var wsp = net.createConnection(8912);
+    wsp.on('connect', function (connect) {
+        wsp.write(message);
+        var server = net.createServer().listen(8003);
+        var Primus = require('primus');
+        var primus = new Primus(server);
+        var Socket = primus.Socket;
+
+        var client = new Socket('http://localhost:5000');
+        client.write({
+            action: 'join'
+        });
+
+        setTimeout(function () {
+            client.write({
+                action: 'leave'
+            });
+            console.log(assert(true, true));
+        }, 100);
+    });
+    var request = require('request');
 
     it('TCP Connection Attempt', function () {
-        var message = new Buffer(playerconnect1);
-        var socket = net.createConnection(8911);
-        socket.on('connect', function (connect) {
 
-
-            socket.write(message);
-
-        });
-        var wsp = net.createConnection(8912);
-        wsp.on('connect', function (connect) {
-            wsp.write(message);
-            var server = net.createServer().listen(8003);
-            var Primus = require('primus');
-            var primus = new Primus(server);
-            var Socket = primus.Socket;
-
-            var client = new Socket('http://localhost:5000');
-            client.write({
-                action: 'join'
-            });
-
-            setTimeout(function () {
-                client.write({
-                    action: 'leave'
-                });
-                console.log(assert(true, true));
-            }, 100);
-        });
     });
 
 
