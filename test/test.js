@@ -138,38 +138,39 @@ describe('Test Offline Server', function () {
 });
 describe('Test Network Connection Methods', function () {
 
-    var message = new Buffer(playerconnect1);
-    var socket = net.createConnection(8911);
-    socket.on('connect', function (connect) {
+    before(function (done) {
+        var message = new Buffer(playerconnect1);
+        var socket = net.createConnection(8911);
+        socket.on('connect', function (connect) {
 
 
-        socket.write(message);
+            socket.write(message);
 
-    });
-    var wsp = net.createConnection(8912);
-    wsp.on('connect', function (connect) {
-        wsp.write(message);
-        var server = net.createServer().listen(8003);
-        var Primus = require('primus');
-        var primus = new Primus(server);
-        var Socket = primus.Socket;
-
-        var client = new Socket('http://localhost:5000');
-        client.write({
-            action: 'join'
         });
+        var wsp = net.createConnection(8912);
+        wsp.on('connect', function (connect) {
+            wsp.write(message);
+            var server = net.createServer().listen(8003);
+            var Primus = require('primus');
+            var primus = new Primus(server);
+            var Socket = primus.Socket;
 
-        setTimeout(function () {
+            var client = new Socket('http://localhost:5000');
             client.write({
-                action: 'leave'
+                action: 'join'
             });
-            console.log(assert(true, true));
-        }, 100);
+
+            setTimeout(function () {
+                client.write({
+                    action: 'leave'
+                });
+                console.log(assert(true, true));
+                done();
+            }, 100);
+        });
     });
-    var request = require('request');
-
-    it('TCP Connection Attempt', function () {
-
+    it('TCP Connection Attempt', function (done) {
+        done();
     });
 
 
