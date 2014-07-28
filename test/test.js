@@ -15,7 +15,7 @@ try {
 console.log('Running test');
 describe('YGOCore is assembled correctly', function () {
     it('YGOCore built', function () {
-        assert((fs.existsSync('server/http/ygopro/YGOServer.exe')), true);
+        assert((fs.existsSync('server/ygocore/YGOServer.exe')), true);
     });
     it('Card Database included', function () {
         assert((fs.existsSync('server/http/ygopro/cards.cdb')), true);
@@ -24,11 +24,11 @@ describe('YGOCore is assembled correctly', function () {
         assert((fs.existsSync('server/http/ygopro/lflist.conf')), true);
     });
     it('SQLite.dll included', function () {
-        assert((fs.existsSync('server/http/ygopro/System.Data.SQLite.dll')), true);
+        assert((fs.existsSync('server/ygocore/System.Data.SQLite.dll')), true);
     });
     it('OCGCOre built', function () {
-        assert((fs.existsSync('server/http/ygopro/libocgcore.so') ||
-            (fs.existsSync('server/http/ygopro/ocgcore.dll')), true));
+        assert((fs.existsSync('server/ygocore/libocgcore.so') ||
+            (fs.existsSync('server/ygocore/ocgcore.dll')), true));
     });
 });
 describe('Testing that Dependencies Load', function () {
