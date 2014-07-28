@@ -147,9 +147,13 @@ describe('Test Network Connection Methods', function () {
             client.write({
                 action: 'join'
             });
-            client.write({
-                action: 'leave'
-            });
+
+            setTimeout(function () {
+                client.write({
+                    action: 'leave'
+                });
+                console.log(assert(true, true));
+            }, 100);
         });
     });
 
@@ -158,7 +162,12 @@ describe('Test Network Connection Methods', function () {
             hostString: 'game'
         }, playerconnect1, function (started) {
             assert(started, true);
+            server.startCore(9001, {
+                hostString: 'game'
+            }, playerconnect1, function (started) {
+                assert(started, true);
 
+            });
         });
     });
 });
