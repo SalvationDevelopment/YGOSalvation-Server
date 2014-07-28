@@ -37,6 +37,7 @@ before_install:
   - sudo ldconfig
   - premake4 gmake && make config=release ocgcore -C build
   - cp bin/release/libocgcore.so ../../
+  - premake4 gmake && make config=release ygopro -C build
   - ls -p 
   - cd ../../../
   - npm install -g mocha

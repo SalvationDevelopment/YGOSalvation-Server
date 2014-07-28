@@ -6,7 +6,7 @@ var http = require('http');
 var url = require('url');
 var child_process = require('child_process');
 var fs = require('fs');
-var template;
+var template = fs.readFileSync(__dirname + '/../template.ini', 'utf-8');
 var settings = ['use_d3d', 'antialias', 'errorlog', 'nickname', 'roompass', 'lastdeck', 'textfont', 'numfont', 'fullscreen', 'enable_sound',
 'sound_volume', 'enable_music', 'music_volume', 'skin_index', 'auto_card_placing', 'random_card_placing', 'auto_chain_order', 'no_delay_for_chain',
 'enable_sleeve_loading', 'serverport', 'lastip', 'textfontsize', 'lastport'];
@@ -55,27 +55,28 @@ http.createServer(function (request, response) {
             }
         });
     } else {
-        fs.readFile(__dirname + '/../template.ini', 'utf-8', function (error, data) {
-            if (data) {
-                template = data;
-                runYGOPro('-' + parameter.path, template);
-                response.writeHead(200, {
-                    'Content-Type': 'text/plain'
-                });
-                response.end('');
-            } else {
-                response.writeHead(200, {
-                    'Content-Type': 'text/plain'
 
-                });
-                //console.log(__dirname + '/../template.ini');
-                response.end('template.ini is not found');
-            }
-        });
+        if (template) {
+            runYGOPro('-' + parameter.path, function () {
+                console.log('!');
+            });
+            response.writeHead(200, {
+                'Content-Type': 'text/plain'
+            });
+            response.end('');
+        } else {
+            response.writeHead(200, {
+                'Content-Type': 'text/plain'
+
+            });
+            //console.log(__dirname + '/../template.ini');
+            response.end('template.ini is not found');
+        }
+
     }
 }).listen(9467, '127.0.0.1');
 
-function runYGOPro(mode, template) {
+function runYGOPro(mode, callback) {
     //console.log(template);
     var systemConf = template;
 
@@ -113,6 +114,7 @@ function runYGOPro(mode, template) {
             //                console.log(options);
             //            });
         });
+        callback();
     });
 }
 
