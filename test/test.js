@@ -40,9 +40,9 @@ describe('Testing that Dependencies Load', function () {
     });
     it('Loaded Recieve Client to Server Message Marker', function () {
         var target = require('../server/libs/recieveCTOS.js');
-        target({
+        assert(target({
             CTOS: 'CTOS_HS_READY'
-        });
+        }), true)
         target({
             CTOS: 'CTOS_HS_NOTREADY'
         });
@@ -157,18 +157,12 @@ describe('Test Network Connection Methods', function () {
         });
     });
 
-    it('Server ', function () {
-        server.startCore(9001, {
-            hostString: 'game'
-        }, playerconnect1, function (started) {
-            assert(started, true);
-            server.startCore(9001, {
-                hostString: 'game'
-            }, playerconnect1, function (started) {
-                assert(started, true);
 
-            });
-        });
+    server.startCore(9001, {
+        hostString: 'game'
+    }, playerconnect1, function (started) {
+        assert(started, true);
+
     });
 });
 
