@@ -1,7 +1,7 @@
 /* jshint node : true */
 /* jshint mocha : true */
 
-var Browser = require("zombie");
+
 var assert = require('assert');
 var net = require('net');
 var fs = require('fs');
@@ -115,15 +115,12 @@ describe('Test Offline Server', function () {
     this.timeout(10000);
 
     before(function (test0) {
+        var Browser = require("zombie");
         this.browser0 = new Browser();
         this.browser0
             .visit("http://localhost:9467/index.html")
             .then(test0, test0);
     });
-
-
-
-
 
 });
 describe('Test Network Connection Methods', function () {
