@@ -246,5 +246,9 @@ function startCore(port, socket, data) {
 }
 
 function pickCoreConfig(socket) {
-    return '' + socket.hostString[0] + '-config.txt';
+    if (socket.hostString.length > 3) {
+        return '' + socket.hostString[0] + '-config.txt';
+    } else {
+        return 'config.txt';
+    }
 }

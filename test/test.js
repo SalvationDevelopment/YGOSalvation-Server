@@ -169,8 +169,6 @@ describe('Test Network Connection Methods', function () {
         var Socket = primus.Socket;
 
         var client = new Socket('http://localhost:5000');
-        var playerconnect1 = require('./playerconnect1.js');
-        var message = new Buffer(playerconnect1);
         client.write({
             action: 'join'
         });
