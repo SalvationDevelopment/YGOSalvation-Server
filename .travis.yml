@@ -9,21 +9,18 @@ before_install:
   - sudo apt-get update
   - sudo apt-get -y install mono-complete libmono-sqlite4.0-cil
   - cd server
-  - ls -p | grep "/"
   - cd http
-  - git clone https://github.com/Buttys/ygopro.git
-  - git clone https://github.com/Buttys/YGOCore.git
+  - git clone https://github.com/Buttys/ygopro.git --depth 1
+  - git clone https://github.com/SalvationDevelopment/YGOCore.git --depth 1 --branch SalvationDevelopment-Customizations
   - cd YGOCore
-  - ls -p | grep "/"
   - xbuild /p:TargetFrameworkProfile="" /p:Configuration=Release
   - cd ../
-  - ls -p | grep "/"
-  - cp YGOCore/YGOCore/bin/Release/OcgWrapper.dll YGOCore/YGOCore/bin/Release/YGOServer.exe ./ygopro
+  - cp YGOCore/YGOCore/bin/Release/OcgWrapper.dll YGOCore/YGOCore/bin/Release/YGOServer.exe ../ygocore
+  - cp YGOCore/YGOCore/bin/Release/System.Data.SQLite.dll ../ygocore
   - cd ygopro
   - rm ocgcore/premake4.lua
   - mv ../../../test/ocgcore_linux_premake.lua ocgcore/premake4.lua
-  - cp ../../../test/cards.cdb ./
-  - cp ../../../test/System.Data.SQLite.dll ./
+  - cp ../../../test/cards.cdb ../../ygocore
   - sudo add-apt-repository -y ppa:codegear/release
   - sudo add-apt-repository -y ppa:sonkun/sfml-stable
   - sudo wget -q -O- http://archive.getdeb.net/getdeb-archive.key | sudo apt-key add -

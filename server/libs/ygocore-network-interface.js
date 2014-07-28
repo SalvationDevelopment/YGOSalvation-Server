@@ -1,7 +1,7 @@
 /* jshint node:true */
-var fs = require('fs');
-var net = require('net');
-var banlist = require('./banlist.json');
+var fs = require('fs'); /* load file system functionality*/
+var net = require('net'); /* load network functionality */
+var banlist = require('./banlist.json'); /* load banlist that should be a json file */
 var ocgcore = require('./ygocore-ocgcore-interface.js');
 var MersenneTwister = require('mersennetwister'); /* seed number generator to give the shuffler, makes a random number.*/
 var mt = new MersenneTwister();
@@ -11,7 +11,9 @@ var mt = new MersenneTwister();
 var scripts = {};
 
 function updateScripts() {
-    /* The following function causes the server to lock up! */
+    /* The following function causes the server to lock up!
+    load all the scripts into memory! Prevent the server from asking questions
+    of the file system when people are using it*/
     console.log('Loading Scripts, please wait');
     var scriptfilenames = fs.lstatSync('../http/ygopro/scripts');
     scriptfilenames.forEach(function (iteration) {
@@ -19,8 +21,6 @@ function updateScripts() {
     });
     console.log('Scripts loaded');
 }
-
-
 
 
 function GameConstructor() {
@@ -85,6 +85,8 @@ function NetworkInstanceConstructor() {
     var game = new GameConstructor();
     var instance = new InstanceConstructor();
     var network = net.createServer(function (socket) {
+        /* socket is the concept of a single connection,
+        look at it as a person and we are doing 'work' on that person. */
         socket.on('data', function (data) {
             processCommunication(data, socket);
         });

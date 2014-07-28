@@ -2,7 +2,7 @@
 //process.on('uncaughtException', function (error) {
 //    console.log('Caught exception: ' + error);
 //});
-console.log('Salvation Development YGOPro Server')
+console.log('Salvation Development YGOPro Server');
 try {
     require('httpsys').slipStream();
 } catch (error) {
@@ -207,15 +207,15 @@ function processIncomingTrasmission(data, socket) {
 }
 
 function startCore(port, socket, data) {
-    fs.exists(__dirname + '/http/ygopro/YGOServer.exe', function (exist) {
+    fs.exists(__dirname + '/ygocore/YGOServer.exe', function (exist) {
         if (!exist) {
-            console.log('core not found at ' + __dirname + '/' + 'http/ygopro');
+            console.log('core not found at ' + __dirname + '/' + 'ygocore');
             return;
         }
         //console.log('connecting to new core @', port);
         //console.log('found port ', port);
         console.log('initiating core for ' + socket.username + ' on port:' + port);
-        socket.core = childProcess.spawn(__dirname + '/http/ygopro/YGOServer.exe', [port], {
+        socket.core = childProcess.spawn(__dirname + '/ygocore/YGOServer.exe', [port, pickCoreConfig()], {
             cwd: 'http/ygopro'
         }, function (error, stdout, stderr) {
             console.log('CORE Terminated', error, stderr, stdout);
@@ -243,4 +243,8 @@ function startCore(port, socket, data) {
         });
 
     });
+}
+
+function pickCoreConfig(socket) {
+    return '' + socket.hostString[0] + '-config.text';
 }
