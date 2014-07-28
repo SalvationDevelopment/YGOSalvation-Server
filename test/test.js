@@ -20,9 +20,7 @@ request('http://localhost:9467', function (error, response, body) {
     }
 });
 request('http://localhost:9467/index.html', function (error, response, body) {
-    if (!error && response.statusCode == 200) {
-        console.log(body);
-    }
+    if (!error && response.statusCode == 200) {}
 });
 var playerconnect1 = new Buffer(require('./playerconnect1.js'));
 
