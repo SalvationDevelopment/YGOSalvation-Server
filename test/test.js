@@ -118,7 +118,9 @@ describe('Structures Test', function () {
         assert((validate.long === "abcd    "), true);
     });
 });
-offline('-j', '');
+offline('-j', function () {});
+offline('-r', function () {});
+offline('-d', function () {});
 describe('Test Offline Server', function () {
     it('j attempt', function () {
 
