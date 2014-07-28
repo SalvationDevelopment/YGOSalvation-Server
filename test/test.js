@@ -101,10 +101,7 @@ describe('Test Offline Server', function () {
 
 
 
-    it('Offline Mode Loads', function (test0) {
-        assert((this.browser.text("title") === "SalvationDevelopment International Launcher"), true);
-        test0();
-    });
+
 
 });
 describe('Test Network Connection Methods', function () {
