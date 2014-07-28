@@ -200,13 +200,13 @@ function processIncomingTrasmission(data, socket) {
         } else if (!gamelist[socket.hostString] && !socket.active_ygocore) {
             //console.log(socket.username + ' connecting to new core');
             portfinder(7000, 9001, gamelist, function (error, port) {
-                startCore(port, socket, data);
+                startCore(port, socket, data, success);
             });
         }
     }
 }
 
-function startCore(port, socket, data) {
+function startCore(port, socket, data, callback) {
     fs.exists(__dirname + '/ygocore/YGOServer.exe', function (exist) {
         if (!exist) {
             console.log('core not found at ' + __dirname + '/' + 'ygocore');
@@ -237,6 +237,9 @@ function startCore(port, socket, data) {
                     started: false
                 };
                 primus.room('activegames').write(JSON.stringify(gamelist));
+                if (callback) {
+                    callback(true);
+                }
             } else if (core_message.indexOf('End') > -1) {
                 killCore(socket);
             }
@@ -246,9 +249,24 @@ function startCore(port, socket, data) {
 }
 
 function pickCoreConfig(socket) {
-    if (socket.hostString.length > 3) {
+    if (socket.hostString[0] === '0' || //OCG
+        socket.hostString[0] === '1' || //TCG
+        socket.hostString[0] === '2') { //TCG/OCG
         return '' + socket.hostString[0] + '-config.txt';
     } else {
+        /*load default configuration */
         return 'config.txt';
     }
 }
+
+function success(status) {
+    return status;
+}
+module.exports = {
+    connectToCore: connectToCore,
+    processTask: processTask,
+    processIncomingTrasmission: processIncomingTrasmission,
+    startCore: startCore,
+    pickCoreConfig: pickCoreConfig,
+    parsePackets: parsePackets
+};

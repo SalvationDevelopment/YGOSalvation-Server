@@ -1,14 +1,14 @@
 /* jshint node : true */
 /* jshint mocha : true */
 
-var Browser = require("zombie");
+
 var assert = require('assert');
 var net = require('net');
 var fs = require('fs');
 var net = require('net');
 try {
     var server = require('../server/server.js');
-    var server = require('../client/interface/js/offline-server.js');
+    var offline = require('../client/interface/js/offline-server.js');
 } catch (error) {
     console.log("fundemental issue!");
 }
@@ -40,9 +40,31 @@ describe('Testing that Dependencies Load', function () {
     });
     it('Loaded Recieve Client to Server Message Marker', function () {
         var target = require('../server/libs/recieveCTOS.js');
+        target({
+            CTOS: 'CTOS_HS_READY'
+        });
+        target({
+            CTOS: 'CTOS_HS_NOTREADY'
+        });
+        target({
+            CTOS: 'CTOS_HS_TODUELIST'
+        });
+        target({
+            CTOS: 'CTOS_HS_TOOBSERVER'
+        });
+        target({
+            CTOS: 'CTOS_LEAVE_GAME'
+        });
+        target({
+            CTOS: 'CTOS_HS_START'
+        });
+
     });
     it('Loaded Recieve Server to Client Message Marker', function () {
         var target = require('../server/libs/recieveSTOC.js');
+        target({
+            STOC: 'test'
+        });
     });
     it('Loaded Development/Stage/Production Markers', function () {
         var target = require('../server/libs/servercontrol.json');
@@ -93,21 +115,18 @@ describe('Test Offline Server', function () {
     this.timeout(10000);
 
     before(function (test0) {
+        var Browser = require("zombie");
         this.browser0 = new Browser();
         this.browser0
             .visit("http://localhost:9467/index.html")
             .then(test0, test0);
     });
 
-
-
-
-
 });
 describe('Test Network Connection Methods', function () {
     var proxy = require('../server/http/js/proxy.js');
-    it('TCP Native', function () {
-        var playerconnect1 = require('./playerconnect1.js');
+    var playerconnect1 = require('./playerconnect1.js');
+    it('TCP Connection Attempt', function () {
         var message = new Buffer(playerconnect1);
         var socket = net.createConnection(8911);
         socket.on('connect', function (connect) {
@@ -128,12 +147,29 @@ describe('Test Network Connection Methods', function () {
             client.write({
                 action: 'join'
             });
-            client.write({
-                action: 'leave'
-            });
+
+            setTimeout(function () {
+                client.write({
+                    action: 'leave'
+                });
+                console.log(assert(true, true));
+            }, 100);
         });
     });
 
+    it('Server ', function () {
+        server.startCore(9001, {
+            hostString: 'game'
+        }, playerconnect1, function (started) {
+            assert(started, true);
+            server.startCore(9001, {
+                hostString: 'game'
+            }, playerconnect1, function (started) {
+                assert(started, true);
+
+            });
+        });
+    });
 });
 
 /*
