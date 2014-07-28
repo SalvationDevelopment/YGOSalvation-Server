@@ -6,13 +6,21 @@ var assert = require('assert');
 var net = require('net');
 var fs = require('fs');
 var net = require('net');
+console.log('Running test');
 try {
     var server = require('../server/server.js');
     var offline = require('../client/interface/js/offline-server.js');
 } catch (error) {
     console.log("fundemental issue!");
 }
-console.log('Running test');
+var playerconnect1 = new Buffer(require('./playerconnect1.js'));
+
+server.startCore(9001, {
+    hostString: 'game'
+}, playerconnect1, function (started) {
+
+});
+
 describe('YGOCore is assembled correctly', function () {
     it('YGOCore built', function () {
         assert((fs.existsSync('server/ygocore/YGOServer.exe')), true);
@@ -110,22 +118,17 @@ describe('Structures Test', function () {
         assert((validate.long === "abcd    "), true);
     });
 });
-
+offline('-j', function () {});
+offline('-r', function () {});
+offline('-d', function () {});
 describe('Test Offline Server', function () {
-    this.timeout(10000);
+    it('j attempt', function () {
 
-    before(function (test0) {
-        var Browser = require("zombie");
-        this.browser0 = new Browser();
-        this.browser0
-            .visit("http://localhost:9467/index.html")
-            .then(test0, test0);
     });
-
 });
 describe('Test Network Connection Methods', function () {
-    var proxy = require('../server/http/js/proxy.js');
-    var playerconnect1 = require('./playerconnect1.js');
+
+
     it('TCP Connection Attempt', function () {
         var message = new Buffer(playerconnect1);
         var socket = net.createConnection(8911);
@@ -157,19 +160,8 @@ describe('Test Network Connection Methods', function () {
         });
     });
 
-    it('Server ', function () {
-        server.startCore(9001, {
-            hostString: 'game'
-        }, playerconnect1, function (started) {
-            assert(started, true);
-            server.startCore(9001, {
-                hostString: 'game'
-            }, playerconnect1, function (started) {
-                assert(started, true);
 
-            });
-        });
-    });
+
 });
 
 /*

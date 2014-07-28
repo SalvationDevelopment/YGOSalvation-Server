@@ -37,10 +37,10 @@ before_install:
   - sudo ldconfig
   - premake4 gmake && make config=release ocgcore -C build
   - cp bin/release/libocgcore.so ../../
+
   - ls -p 
   - cd ../../../
   - npm install -g mocha
-  - npm install -g zombie
   - npm install -g istanbul
   - npm install -g codeclimate-test-reporter
   
