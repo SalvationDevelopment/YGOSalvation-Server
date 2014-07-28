@@ -86,11 +86,11 @@ function runYGOPro(mode, template) {
     for (var i = 0; settings.length > i; i++) {
         systemConf = fillInData(systemConf, '{' + settings[i] + '}', localStorage[settings[i]]);
     }
-
+    var path = __dirname + '/../../ygopro/system.CONF';
     //console.log(systemConf);
-    fs.writeFile(__dirname + '/../ygopro/system.CONF', systemConf, function (err) {
+    fs.writeFile(path, systemConf, function (err) {
         if (err) {
-            console.log('file permission error, cant edit system.conf');
+            console.log('file permission error, cant edit ' + path);
             throw err;
         }
         //console.log('It\'s saved!');
@@ -103,15 +103,15 @@ function runYGOPro(mode, template) {
                 var filelocation = 'crash_report_YGOPro_' + (new Date().toDateString) + '.log';
                 fs.writeFile(filelocation, error, function () {});
             }
-            fs.readFile(__dirname + '/../ygopro/system.CONF', function (error, file) {
-                if (error !== null) {
-                    console.log('file permission error, cant read system.conf');
-                    throw err;
-                }
-                //                console.log("file os =", file, typeof file);
-                //                var options = file.split('\r\n');
-                //                console.log(options);
-            });
+//            fs.readFile(__dirname + '/../../ygopro/system.CONF', function (error, file) {
+        //                if (error !== null) {
+        //                    console.log('file permission error, cant read system.conf');
+        //                    throw err;
+        //                }
+        //                console.log("file os =", file, typeof file);
+        //                var options = file.split('\r\n');
+        //                console.log(options);
+        //            });
         });
     });
 }
