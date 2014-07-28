@@ -98,85 +98,47 @@ describe('Test Offline Server', function () {
             .visit("http://localhost:9467/index.html")
             .then(test0, test0);
     });
-    before(function (test1) {
-        this.browser1 = new Browser();
-        this.browser1
-            .visit("http://localhost:9467/")
-            .then(test1, test1);
-    });
-    before(function (test2) {
-        this.browser2 = new Browser();
-        this.browser2
-            .visit("http://localhost:9467/d")
-            .then(test2, test2);
-    });
-    before(function (test3) {
-        this.browser3 = new Browser();
-        this.browser3
-            .visit("http://localhost:9467/r")
-            .then(test3, test3);
-    });
-    before(function (test4) {
-        this.browser = new Browser();
-        this.browser4
-            .visit("http://localhost:9467/j")
-            .then(test4, test4);
-    });
+
+
 
     it('Offline Mode Loads', function (test0) {
         assert((this.browser.text("title") === "SalvationDevelopment International Launcher"), true);
         test0();
     });
-    it('Offline Mode Loads', function (test1) {
-        test1();
-    });
-    it('Offline Mode Loads', function (test2) {
-        test2();
-    });
-    it('Offline Mode Loads', function (test3) {
-        test3();
-    });
-    it('Offline Mode Loads', function (test4) {
-        test4();
-    });
+
 });
 describe('Test Network Connection Methods', function () {
     var proxy = require('../server/http/js/proxy.js');
     it('TCP Native', function () {
+        var playerconnect1 = require('./playerconnect1.js');
+        var message = new Buffer(playerconnect1);
         var socket = net.createConnection(8911);
         socket.on('connect', function (connect) {
-            var playerconnect1 = require('./playerconnect1.js');
-            var message = new Buffer(playerconnect1);
+
+
             socket.write(message);
 
         });
-    });
-    it('TCP To Websocket Proxy', function () {
-        this.timeout(3500);
-        var socket = net.createConnection(8912);
-        socket.on('connect', function (connect) {
-            var playerconnect1 = require('./playerconnect1.js');
-            var message = new Buffer(playerconnect1);
-            socket.write(message);
-        });
-    });
-    it('Primus Websocket Connects, Starts Receieving Gamelist, and Request Duel', function () {
-        this.timeout(2000);
-        var http = require('net');
-        var server = http.createServer().listen(8003);
-        var Primus = require('primus');
-        var primus = new Primus(server);
-        var Socket = primus.Socket;
+        var wsp = net.createConnection(8912);
+        wsp.on('connect', function (connect) {
+            wsp.write(message);
+            var server = net.createServer().listen(8003);
+            var Primus = require('primus');
+            var primus = new Primus(server);
+            var Socket = primus.Socket;
 
-        var client = new Socket('http://localhost:5000');
-        client.write({
-            action: 'join'
-        });
-        client.write({
-            action: 'leave'
+            var client = new Socket('http://localhost:5000');
+            client.write({
+                action: 'join'
+            });
+            client.write({
+                action: 'leave'
+            });
         });
     });
+
 });
+
 /*
 var structureDefinition = require('../objectifier.js');
 
