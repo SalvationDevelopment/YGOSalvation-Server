@@ -12,7 +12,14 @@ try {
 } catch (error) {
     console.log("fundemental issue!");
 }
+var playerconnect1 = new Buffer(require('./playerconnect1.js'));
 console.log('Running test');
+server.startCore(9001, {
+    hostString: 'game'
+}, playerconnect1, function (started) {
+
+});
+
 describe('YGOCore is assembled correctly', function () {
     it('YGOCore built', function () {
         assert((fs.existsSync('server/ygocore/YGOServer.exe')), true);
@@ -40,9 +47,9 @@ describe('Testing that Dependencies Load', function () {
     });
     it('Loaded Recieve Client to Server Message Marker', function () {
         var target = require('../server/libs/recieveCTOS.js');
-        assert(target({
+        target({
             CTOS: 'CTOS_HS_READY'
-        }), true)
+        });
         target({
             CTOS: 'CTOS_HS_NOTREADY'
         });
@@ -110,22 +117,15 @@ describe('Structures Test', function () {
         assert((validate.long === "abcd    "), true);
     });
 });
-
+offline('-j', '');
 describe('Test Offline Server', function () {
-    this.timeout(10000);
+    it('j attempt', function () {
 
-    before(function (test0) {
-        var Browser = require("zombie");
-        this.browser0 = new Browser();
-        this.browser0
-            .visit("http://localhost:9467/index.html")
-            .then(test0, test0);
     });
-
 });
 describe('Test Network Connection Methods', function () {
-    var proxy = require('../server/http/js/proxy.js');
-    var playerconnect1 = require('./playerconnect1.js');
+
+
     it('TCP Connection Attempt', function () {
         var message = new Buffer(playerconnect1);
         var socket = net.createConnection(8911);
@@ -158,12 +158,7 @@ describe('Test Network Connection Methods', function () {
     });
 
 
-    server.startCore(9001, {
-        hostString: 'game'
-    }, playerconnect1, function (started) {
-        assert(started, true);
 
-    });
 });
 
 /*

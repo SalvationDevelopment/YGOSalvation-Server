@@ -115,3 +115,5 @@ function runYGOPro(mode, template) {
         });
     });
 }
+
+module.exports = runYGOPro;
