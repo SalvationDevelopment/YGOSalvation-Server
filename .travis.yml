@@ -23,7 +23,7 @@ before_install:
   - rm ocgcore/premake4.lua
   - mv ../../../test/ocgcore_linux_premake.lua ocgcore/premake4.lua
   - cp ../../../test/cards.cdb ./
-  - cp ../../../test/System.Data.SQLite.dll ./
+  - cp ../../../test/System.Data.SQLite.dll ../../ygocore
   - sudo add-apt-repository -y ppa:codegear/release
   - sudo add-apt-repository -y ppa:sonkun/sfml-stable
   - sudo wget -q -O- http://archive.getdeb.net/getdeb-archive.key | sudo apt-key add -
