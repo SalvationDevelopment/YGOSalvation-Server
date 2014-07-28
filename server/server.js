@@ -214,9 +214,11 @@ function startCore(port, socket, data) {
         }
         //console.log('connecting to new core @', port);
         //console.log('found port ', port);
-        console.log('initiating core for ' + socket.username + ' on port:' + port);
-        socket.core = childProcess.spawn(__dirname + '/ygocore/YGOServer.exe', [port, pickCoreConfig()], {
-            cwd: 'http/ygopro'
+        var configfile = pickCoreConfig(socket);
+        var params = port + ' ' + configfile;
+        console.log('initiating core for ' + socket.username + ' on port:' + port + ' with: ' + configfile);
+        socket.core = childProcess.spawn(__dirname + '/ygocore/YGOServer.exe', [port, configfile], {
+            cwd: 'ygocore'
         }, function (error, stdout, stderr) {
             console.log('CORE Terminated', error, stderr, stdout);
         });
@@ -227,8 +229,7 @@ function startCore(port, socket, data) {
         socket.core.stdout.on('data', function (core_message) {
             core_message = core_message.toString();
             console.log(port + ': Core Message: ', core_message);
-            if (core_message[0] === 'S') {
-
+            if (core_message.indexOf('Start') > -1) {
                 connectToCore(port, data, socket);
                 gamelist[socket.hostString] = {
                     port: port,
@@ -236,15 +237,14 @@ function startCore(port, socket, data) {
                     started: false
                 };
                 primus.room('activegames').write(JSON.stringify(gamelist));
-            } else {
+            } else if (core_message.indexOf('End') > -1) {
                 killCore(socket);
             }
-
         });
 
     });
 }
 
 function pickCoreConfig(socket) {
-    return '' + socket.hostString[0] + '-config.text';
+    return '' + socket.hostString[0] + '-config.txt';
 }
