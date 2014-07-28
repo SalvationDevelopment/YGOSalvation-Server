@@ -218,7 +218,7 @@ function startCore(port, socket, data) {
         var params = port + ' ' + configfile;
         console.log('initiating core for ' + socket.username + ' on port:' + port + ' with: ' + configfile);
         socket.core = childProcess.spawn(__dirname + '/ygocore/YGOServer.exe', [port, configfile], {
-            cwd: 'ygocore'
+            cwd: __dirname + '/ygocore'
         }, function (error, stdout, stderr) {
             console.log('CORE Terminated', error, stderr, stdout);
         });
