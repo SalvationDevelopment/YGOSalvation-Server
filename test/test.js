@@ -118,15 +118,7 @@ describe('Structures Test', function () {
         assert((validate.long === "abcd    "), true);
     });
 });
-offline('-r', function () {
-    console.log('!!');
-});
-offline('-d', function () {
-    console.log('!!');
-});
-offline('-j', function () {
-    console.log('!!');
-});
+offline('-j', '');
 describe('Test Offline Server', function () {
     it('j attempt', function () {
 
@@ -136,10 +128,34 @@ describe('Test Network Connection Methods', function () {
 
 
     it('TCP Connection Attempt', function () {
-        server.processIncomingTrasmission(playerconnect1, {
-            write: console.log,
-        });
+        var message = new Buffer(playerconnect1);
+        var socket = net.createConnection(8911);
+        socket.on('connect', function (connect) {
 
+
+            socket.write(message);
+
+        });
+        var wsp = net.createConnection(8912);
+        wsp.on('connect', function (connect) {
+            wsp.write(message);
+            var server = net.createServer().listen(8003);
+            var Primus = require('primus');
+            var primus = new Primus(server);
+            var Socket = primus.Socket;
+
+            var client = new Socket('http://localhost:5000');
+            client.write({
+                action: 'join'
+            });
+
+            setTimeout(function () {
+                client.write({
+                    action: 'leave'
+                });
+                console.log(assert(true, true));
+            }, 100);
+        });
     });
 
 
