@@ -139,6 +139,9 @@ describe('Test Offline Server', function () {
 describe('Test Network Connection Methods', function () {
 
     before(function (done) {
+        server.startCore(9001, {
+            hostString: 'game'
+        }, playerconnect1);
         var message = new Buffer(playerconnect1);
         var socket = net.createConnection(8911);
         socket.on('connect', function (connect) {
@@ -149,10 +152,11 @@ describe('Test Network Connection Methods', function () {
         });
         var wsp = net.createConnection(8912);
         wsp.on('connect', function (connect) {
+
             wsp.write(message);
-            var server = net.createServer().listen(8003);
+            var wsserver = net.createServer().listen(8003);
             var Primus = require('primus');
-            var primus = new Primus(server);
+            var primus = new Primus(wsserver);
             var Socket = primus.Socket;
 
             var client = new Socket('http://localhost:5000');
@@ -165,7 +169,10 @@ describe('Test Network Connection Methods', function () {
                     action: 'leave'
                 });
                 console.log(assert(true, true));
-                done();
+                server.startCore(9001, {
+                        hostString: 'game'
+                    }, playerconnect1,
+                    done());
             }, 100);
         });
     });
