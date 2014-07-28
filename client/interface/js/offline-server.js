@@ -91,7 +91,7 @@ function runYGOPro(mode, template) {
     fs.writeFile(path, systemConf, function (err) {
         if (err) {
             console.log('file permission error, cant edit ' + path);
-            throw err;
+
         }
         //console.log('It\'s saved!');
         child_process.execFile('devpro.dll', [mode], {
@@ -103,15 +103,15 @@ function runYGOPro(mode, template) {
                 var filelocation = 'crash_report_YGOPro_' + (new Date().toDateString) + '.log';
                 fs.writeFile(filelocation, error, function () {});
             }
-//            fs.readFile(__dirname + '/../../ygopro/system.CONF', function (error, file) {
-        //                if (error !== null) {
-        //                    console.log('file permission error, cant read system.conf');
-        //                    throw err;
-        //                }
-        //                console.log("file os =", file, typeof file);
-        //                var options = file.split('\r\n');
-        //                console.log(options);
-        //            });
+            //            fs.readFile(__dirname + '/../../ygopro/system.CONF', function (error, file) {
+            //                if (error !== null) {
+            //                    console.log('file permission error, cant read system.conf');
+            //                    throw err;
+            //                }
+            //                console.log("file os =", file, typeof file);
+            //                var options = file.split('\r\n');
+            //                console.log(options);
+            //            });
         });
     });
 }
