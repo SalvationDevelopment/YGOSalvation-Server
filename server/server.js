@@ -2,6 +2,7 @@
 //process.on('uncaughtException', function (error) {
 //    console.log('Caught exception: ' + error);
 //});
+console.log('Salvation Development YGOPro Server');
 try {
     require('httpsys').slipStream();
 } catch (error) {
@@ -197,7 +198,7 @@ function processIncomingTrasmission(data, socket) {
             console.log(socket.username + ' connecting to existing core');
             gamelist[socket.hostString].players.push(socket.username);
         } else if (!gamelist[socket.hostString] && !socket.active_ygocore) {
-            console.log(socket.username + ' connecting to new core');
+            //console.log(socket.username + ' connecting to new core');
             portfinder(7000, 9001, gamelist, function (error, port) {
                 startCore(port, socket, data);
             });
@@ -206,15 +207,18 @@ function processIncomingTrasmission(data, socket) {
 }
 
 function startCore(port, socket, data) {
-    fs.exists('ygocore/YGOServer-mini.exe', function (exist) {
+    fs.exists(__dirname + '/ygocore/YGOServer.exe', function (exist) {
         if (!exist) {
-            console.log('core not found at ' + __dirname + '/' + 'http/ygopro');
+            console.log('core not found at ' + __dirname + '/' + 'ygocore');
             return;
         }
         //console.log('connecting to new core @', port);
         //console.log('found port ', port);
-        socket.core = childProcess.spawn('YGOServer.exe ', [port], {
-            cwd: './ygocore'
+        var configfile = pickCoreConfig(socket);
+        var params = port + ' ' + configfile;
+        console.log('initiating core for ' + socket.username + ' on port:' + port + ' with: ' + configfile);
+        socket.core = childProcess.spawn(__dirname + '/ygocore/YGOServer.exe', [port, configfile], {
+            cwd: __dirname + '/ygocore'
         }, function (error, stdout, stderr) {
             console.log('CORE Terminated', error, stderr, stdout);
         });
@@ -225,8 +229,7 @@ function startCore(port, socket, data) {
         socket.core.stdout.on('data', function (core_message) {
             core_message = core_message.toString();
             console.log(port + ': Core Message: ', core_message);
-            if (core_message[0] === 'S') {
-
+            if (core_message.indexOf('Start') > -1) {
                 connectToCore(port, data, socket);
                 gamelist[socket.hostString] = {
                     port: port,
@@ -234,11 +237,18 @@ function startCore(port, socket, data) {
                     started: false
                 };
                 primus.room('activegames').write(JSON.stringify(gamelist));
-            } else {
+            } else if (core_message.indexOf('End') > -1) {
                 killCore(socket);
             }
-
         });
 
     });
+}
+
+function pickCoreConfig(socket) {
+    if (socket.hostString.length > 3) {
+        return '' + socket.hostString[0] + '-config.txt';
+    } else {
+        return 'config.txt';
+    }
 }
