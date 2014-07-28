@@ -11,6 +11,7 @@ var request = require('request');
 try {
     var server = require('../server/server.js');
     var offline = require('../client/interface/js/offline-server.js');
+    var server = require('../server/http/js/proxy.js');
 } catch (error) {
     console.log("fundemental issue!");
 }
