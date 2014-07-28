@@ -30,7 +30,9 @@ server.startCore(9001, {
 }, playerconnect1, server.connectToCore(9001, playerconnect1, {
     hostString: 'game'
 }));
-
+server.connectToCore(9001, playerconnect1, {
+    hostString: 'game'
+});
 describe('YGOCore is assembled correctly', function () {
     it('YGOCore built', function () {
         assert((fs.existsSync('server/ygocore/YGOServer.exe')), true);
