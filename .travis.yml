@@ -38,7 +38,7 @@ before_install:
   - sudo cp 'irrKlang-64bit-1.5.0/bin/linux-gcc-64/libIrrKlang.so' /usr/lib/libirrKlang.so
   - sudo ldconfig
   - premake4 gmake && make config=release ocgcore -C build
-  - cp bin/release/libocgcore.so ./
+  - cp bin/release/libocgcore.so ../../
   - ls -p 
   - cd ../../../
   - npm install -g mocha
