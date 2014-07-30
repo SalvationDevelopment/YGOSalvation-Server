@@ -219,20 +219,19 @@ function startCore(port, socket, data, callback) {
         //console.log('found port ', port);
         var configfile = pickCoreConfig(socket);
         var params = port + ' ' + configfile;
-		var currentDate = new Date();
-        console.log(createDateString(currentDate) + ' initiating core for ' + socket.username + ' on port:' + port + ' with: ' + configfile);
+        console.log(createDateString(new Date()) + ' initiating core for ' + socket.username + ' on port:' + port + ' with: ' + configfile);
         socket.core = childProcess.spawn(__dirname + '/ygocore/YGOServer.exe', [port, configfile], {
             cwd: __dirname + '/ygocore'
         }, function (error, stdout, stderr) {
-            console.log(createDateString(currentDate) + ' CORE Terminated', error, stderr, stdout);
+            console.log(createDateString(new Date()) + ' CORE Terminated', error, stderr, stdout);
         });
         socket.core.stdout.on('error', function (error) {
             killCore(socket);
-            console.log(createDateString(currentDate)+' core error', error);
+            console.log(createDateString(new Date())+' core error', error);
         });
         socket.core.stdout.on('data', function (core_message) {
             core_message = core_message.toString();
-            console.log(createDateString(currentDate) + ' ' + port + ': Core Message: ', core_message);
+            console.log(createDateString(new Date()) + ' ' + port + ': Core Message: ', core_message);
             if (core_message.indexOf('Start') > -1) {
                 connectToCore(port, data, socket);
                 gamelist[socket.hostString] = {
