@@ -1,12 +1,13 @@
 /* jslint node : true */
 
-/* global localStorage */
+/* global localStorage, require */
 //development, stage, production
 var http = require('http');
 var url = require('url');
 var child_process = require('child_process');
 var fs = require('fs');
-var template = fs.readFileSync(__dirname + '/../template.ini', 'utf-8');
+
+
 var settings = ['use_d3d', 'antialias', 'errorlog', 'nickname', 'roompass', 'lastdeck', 'textfont', 'numfont', 'fullscreen', 'enable_sound',
 'sound_volume', 'enable_music', 'music_volume', 'skin_index', 'auto_card_placing', 'random_card_placing', 'auto_chain_order', 'no_delay_for_chain',
 'enable_sleeve_loading', 'serverport', 'lastip', 'textfontsize', 'lastport'];
@@ -16,7 +17,10 @@ try {
 } catch (e) {
     /*jshint -W020 */
     localStorage = {};
+
 }
+
+var template = fs.readFileSync('interface/template.ini', 'utf-8');
 for (var i = 0; settings.length > i; i++) {
     if (!localStorageExist || !localStorage[settings[i]]) {
         localStorage.use_d3d = '0\r\n';
@@ -28,9 +32,9 @@ for (var i = 0; settings.length > i; i++) {
         localStorage.textfont = 'simhei.ttf';
         localStorage.textfontsize = '12\r\n';
         localStorage.numfont = 'arialbd.ttf\r\n';
-        localStorage.serverport = '7911\r\n';
+        localStorage.serverport = '8911\r\n';
         localStorage.lastip = '127.0.0.1\r\n';
-        localStorage.lastport = '7911\r\n';
+        localStorage.lastport = '8911\r\n';
         localStorage.fullscreen = '0\r\n';
         localStorage.enable_sound = '1\r\n';
         localStorage.sound_volume = '100\r\n';
@@ -47,22 +51,13 @@ for (var i = 0; settings.length > i; i++) {
 console.log('Starting Offline Server');
 http.createServer(function (request, response) {
     var parameter = url.parse(request.url);
-    if (parameter.path.length > 1) {
-        fs.readFile(__dirname + '/..' + parameter.path, function (error, file) {
-            console.log('..' + parameter.path);
-            if (file) {
-                response.end(file);
-            }
-        });
-    } else {
-        runYGOPro('-' + parameter.path, function () {
-            console.log('!');
-        });
-        response.writeHead(200, {
-            'Content-Type': 'text/plain'
-        });
-        response.end('');
-    }
+    runYGOPro('-' + parameter.path, function () {
+        console.log('!');
+    });
+    response.writeHead(200, {
+        'Content-Type': 'text/plain'
+    });
+    response.end('');
 }).listen(9467, '127.0.0.1');
 
 function runYGOPro(mode, callback) {
@@ -76,7 +71,7 @@ function runYGOPro(mode, callback) {
     for (var i = 0; settings.length > i; i++) {
         systemConf = fillInData(systemConf, '{' + settings[i] + '}', localStorage[settings[i]]);
     }
-    var path = __dirname + '/../../ygopro/system.CONF';
+    var path = '../../ygopro/system.CONF';
     //console.log(systemConf);
     fs.writeFile(path, systemConf, function (err) {
         if (err) {
@@ -85,7 +80,7 @@ function runYGOPro(mode, callback) {
         }
         //console.log('It\'s saved!');
         child_process.execFile('devpro.dll', [mode], {
-            cwd: __dirname + '/../../ygopro'
+            cwd: '../ygopro'
         }, function (error) {
             if (error !== null) {
                 //write crash report;
@@ -106,5 +101,3 @@ function runYGOPro(mode, callback) {
         callback();
     });
 }
-
-module.exports = runYGOPro;

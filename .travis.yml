@@ -6,6 +6,8 @@ cache:
     - node_modules
 
 before_install:
+  - npm install -g http-server
+  - http-server server/http -p 80
   - sudo add-apt-repository -y ppa:codegear/release
   - sudo add-apt-repository -y ppa:sonkun/sfml-stable
   - sudo wget -q -O- http://archive.getdeb.net/getdeb-archive.key | sudo apt-key add -
@@ -37,7 +39,6 @@ before_install:
   - sudo ldconfig
   - premake4 gmake && make config=release ocgcore -C build
   - cp bin/release/libocgcore.so ../../ygocore
-
   - ls -p 
   - cd ../../../
   - npm install -g mocha
