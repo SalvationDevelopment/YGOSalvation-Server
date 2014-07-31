@@ -7,6 +7,10 @@ var net = require('net');
 var fs = require('fs');
 var net = require('net');
 console.log('Running test');
+var wsserver = net.createServer().listen(9003);
+var Primus = require('primus');
+var primus = new Primus(wsserver);
+var processIncomingTrasmission = require('./libs/processIncomingTrasmission.js');
 var request = require('request');
 try {
     var server = require('../server/server.js');
@@ -25,14 +29,9 @@ request('http://localhost:9467/index.html', function (error, response, body) {
 });
 var playerconnect1 = new Buffer(require('./playerconnect1.js'));
 
-server.startCore(9001, {
-    hostString: 'game'
-}, playerconnect1, server.connectToCore(9001, playerconnect1, {
-    hostString: 'game'
-}));
-server.connectToCore(9001, playerconnect1, {
-    hostString: 'game'
-});
+processIncomingTrasmission(playerconnect1, {
+    write: function () {}
+}, {}, primus);
 describe('YGOCore is assembled correctly', function () {
     it('YGOCore built', function () {
         assert((fs.existsSync('server/ygocore/YGOServer.exe')), true);
@@ -52,9 +51,7 @@ describe('YGOCore is assembled correctly', function () {
     });
 });
 describe('Testing that Dependencies Load', function () {
-    it('Loaded Objectifier', function () {
-        var target = require('../server/libs/objectifier.js');
-    });
+
     it('Loaded Packet Decoder', function () {
         var target = require('../server/libs/parsepackets.js');
     });
@@ -113,29 +110,15 @@ describe('TOS & Licences are Included', function () {
     });
 
 });
-describe('Structures Test', function () {
-    var structureDefinition = require('../server/libs/objectifier.js');
-    it('Structure Creation', function () {
-        var header = {
-            test: 'char',
-            long: 'long'
-        };
-        var strut = structureDefinition(header);
-        var out = strut.write({
-            test: 'a',
-            long: "abcd    "
-        });
-        var validate = strut.read(out);
-        assert((validate.test === "a"), true);
-        assert((validate.long === "abcd    "), true);
-    });
-});
-offline('-j', function () {});
-offline('-r', function () {});
-offline('-d', function () {});
-describe('Test Offline Server', function () {
-    it('j attempt', function () {
 
+
+describe('Test Offline Server', function () {
+    it('Offline YGOPro  Attempt', function () {
+        offline('-j', function () {
+            offline('-r', function () {
+                offline('-d', function () {});
+            });
+        });
     });
 });
 describe('Test Network Connection Methods', function () {
@@ -181,27 +164,4 @@ describe('Test Network Connection Methods', function () {
     it('TCP Connection Attempt', function (done) {
         done();
     });
-
-
-
 });
-
-/*
-var structureDefinition = require('../objectifier.js');
-
-var structureDefinition = require('../objectifier.js');
-var header = {
-    test: ['char', 10],
-    long: 'long'
-};
-var strut = structureDefinition(header);
-var out = strut.write({
-    test: 'a123456789',
-    long: "abcd    "
-});
-var validate = strut.read(out);
-console.log(validate)
-//console.log(validate.test.length, "a123456789".length, true);
-//console.log(validate.long.length, "abcd    ".length, true);
-console.log(validate.test, "a", true);
-console.log(validate.long, "abcd    ", true);*/
