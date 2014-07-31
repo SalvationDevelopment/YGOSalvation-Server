@@ -8,7 +8,6 @@ var parsePackets = require('./parsepackets.js');
 var recieveCTOS = require('./recieveCTOS');
 var recieveSTOC = require('./recieveSTOC.js');
 var killCore = require('./killcore.js');
-var processIncomingTrasmission = require('./libs/cs-core-connection.js');
 
 var gamelist = {};
 var primus;
