@@ -1,24 +1,18 @@
 /* jshint node: true */
-
 var viewModel = viewModel || {};
 var net = require('net');
 
 var WebSocket = require('ws');
-var parsePackets = require('../../libs/parsepackets.js');
+var parsePackets = require('../../server/libs/parsepackets.js');
 //var recieveCTOS = require('../../recieveCTOS');
 var recieveSTOC = require('../../libs/recieveSTOC.js');
 var ws = new WebSocket('ws://127.0.0.1:8913/path');
 var proxy = net.createServer(function () {});
 proxy.on('connection', function (socket) {
     console.log('new client starting a proxy.');
-
-
     socket.on('data', function (data) {
         console.log('sending data');
         ws.send(data);
-
-    });
-    ws.on('connection', function (data) {
 
     });
     ws.on('message', function (data) {
@@ -32,7 +26,7 @@ function processTask(task, socket) {
     task = (function () {
         var output = [];
         for (var i = 0; task.length > i; i++) {
-            output.push(recieveSTOC(task[i], socket.username, socket.hostString));
+            output.push(recieveSTOC(task[i]));
         }
         return output;
     })();
@@ -43,7 +37,7 @@ function processTask(task, socket) {
             //console.log(task);
         }
         if (task[i].STOC_REPLAY) {
-            //save replay file
+            console.log('Replay Information', task[i].STOC_TIME_LIMIT);
         }
         if (task[i].STOC_TIME_LIMIT) {
             console.log('Time Limit', task[i].STOC_TIME_LIMIT);

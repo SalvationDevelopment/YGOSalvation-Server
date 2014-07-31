@@ -2,6 +2,7 @@
 //process.on('uncaughtException', function (error) {
 //    console.log('Caught exception: ' + error);
 //});
+console.log('Salvation Development YGOPro Server');
 try {
     require('httpsys').slipStream();
 } catch (error) {
@@ -14,7 +15,6 @@ var childProcess = require('child_process');
 var Primus = require('primus');
 var Rooms = require('primus-rooms');
 var http = require('http');
-var servercontrol = require('./libs/servercontrol.json');
 var server = http.createServer().listen(5000);
 var primus = new Primus(server, {
     parser: 'JSON'
@@ -141,7 +141,7 @@ function processTask(task, socket) {
     }
 }
 
-function connectToCore(port, data, socket) {
+function connectToCore(port, data, socket, callback) {
     socket.active_ygocore = net.connect(port, '127.0.0.1', function () {
         socket.active_ygocore.write(data);
         primus.room('activegames').write(JSON.stringify(gamelist));
@@ -156,6 +156,9 @@ function connectToCore(port, data, socket) {
                 return output;
             })();
             socket.write(core_data);
+            if (callback) {
+                callback(true);
+            }
         });
         socket.active_ygocore.on('error', function (error) {
             killCore(socket);
@@ -198,24 +201,27 @@ function processIncomingTrasmission(data, socket) {
             console.log(socket.username + ' connecting to existing core');
             gamelist[socket.hostString].players.push(socket.username);
         } else if (!gamelist[socket.hostString] && !socket.active_ygocore) {
-            console.log(socket.username + ' connecting to new core');
+            //console.log(socket.username + ' connecting to new core');
             portfinder(7000, 9001, gamelist, function (error, port) {
-                startCore(port, socket, data);
+                startCore(port, socket, data, success);
             });
         }
     }
 }
 
-function startCore(port, socket, data) {
-    fs.exists('./http/ygopro/YGOServer.exe', function (exist) {
+function startCore(port, socket, data, callback) {
+    fs.exists(__dirname + '/ygocore/YGOServer.exe', function (exist) {
         if (!exist) {
-            console.log('core not found at ' + __dirname + '/' + 'http/ygopro');
+            console.log('core not found at ' + __dirname + '/' + 'ygocore');
             return;
         }
         //console.log('connecting to new core @', port);
         //console.log('found port ', port);
-        socket.core = childProcess.spawn('YGOServer.exe ', [port], {
-            cwd: './http/ygopro/'
+        var configfile = pickCoreConfig(socket);
+        var params = port + ' ' + configfile;
+        console.log('initiating core for ' + socket.username + ' on port:' + port + ' with: ' + configfile);
+        socket.core = childProcess.spawn(__dirname + '/ygocore/YGOServer.exe', [port, configfile], {
+            cwd: __dirname + '/ygocore'
         }, function (error, stdout, stderr) {
             console.log('CORE Terminated', error, stderr, stdout);
         });
@@ -226,8 +232,7 @@ function startCore(port, socket, data) {
         socket.core.stdout.on('data', function (core_message) {
             core_message = core_message.toString();
             console.log(port + ': Core Message: ', core_message);
-            if (core_message[0] === 'S') {
-
+            if (core_message.indexOf('Start') > -1) {
                 connectToCore(port, data, socket);
                 gamelist[socket.hostString] = {
                     port: port,
@@ -235,11 +240,37 @@ function startCore(port, socket, data) {
                     started: false
                 };
                 primus.room('activegames').write(JSON.stringify(gamelist));
-            } else {
+                if (callback) {
+                    callback(true);
+                }
+            } else if (core_message.indexOf('End') > -1) {
                 killCore(socket);
             }
-
         });
 
     });
 }
+
+function pickCoreConfig(socket) {
+    if (socket.hostString[0] === '0' || //OCG
+        socket.hostString[0] === '1' || //TCG
+        socket.hostString[0] === '2') { //TCG/OCG
+        return '' + socket.hostString[0] + '-config.txt';
+    } else {
+        /*load default configuration */
+        return 'config.txt';
+    }
+}
+
+function success(status) {
+    return status;
+}
+module.exports = {
+    connectToCore: connectToCore,
+    processTask: processTask,
+    processIncomingTrasmission: processIncomingTrasmission,
+    startCore: startCore,
+    pickCoreConfig: pickCoreConfig,
+    parsePackets: parsePackets,
+    killCore: killCore
+};

@@ -1,16 +1,5 @@
 /* jshint node: true */
 var enums = require('./enums.js');
-var defineStructure = require('./objectifier.js');
-
-var CTOS_HandResult = defineStructure({
-    response: 'unsigned char'
-});
-var CTOS_TPResult = defineStructure({
-    response: 'unsigned char'
-});
-var CTOS_Kick = defineStructure({
-    response: 'unsigned char'
-});
 
 
 module.exports = function RecieveCTOS(packet) {
