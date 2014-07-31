@@ -10,7 +10,7 @@ console.log('Running test');
 var wsserver = net.createServer().listen(9003);
 var Primus = require('primus');
 var primus = new Primus(wsserver);
-var processIncomingTrasmission = require('./libs/processIncomingTrasmission.js');
+var processIncomingTrasmission = require('../server//libs/processIncomingTrasmission.js');
 var request = require('request');
 try {
     var server = require('../server/server.js');
