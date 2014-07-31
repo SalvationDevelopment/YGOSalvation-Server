@@ -6,8 +6,6 @@ cache:
     - node_modules
 
 before_install:
-  - npm install http-server -g
-  - http-server server/http -p 80
   - sudo add-apt-repository -y ppa:codegear/release
   - sudo add-apt-repository -y ppa:sonkun/sfml-stable
   - sudo wget -q -O- http://archive.getdeb.net/getdeb-archive.key | sudo apt-key add -
