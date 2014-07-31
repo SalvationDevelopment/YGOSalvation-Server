@@ -2,8 +2,8 @@
 /* jslint browser : true */
 /* global ygopro, $, isChecked, alert, Primus, console, process, applySettings, prompt */
 /* exported joinGamelist, leaveGamelist, hostGame, connectgamelist, enterGame, setHostSettings, gui*/
-alert('loading launcherjs')
-/*applySettings();
+alert('loading launcherjs');
+applySettings();
 var siteLocation = 'http://salvationdevelopment.com/launcher/';
 
 
@@ -227,38 +227,38 @@ primus.on('data', function (data) {
 
 function parseDuelOptions(duelOptions) {
     var duelOptionsParts = duelOptions.split(',');
-    
+
     var settings = { //Determine time limit
-        timeLimit : (duelOptionsParts[0][2] === '0') ? '3 minutes' : '5 minutes',
+        timeLimit: (duelOptionsParts[0][2] === '0') ? '3 minutes' : '5 minutes',
         //Use classic TCG rules?
-        isTCGRuled : (duelOptionsParts[0][3] === 'O') ? 'OCG rules' : 'TCG Rules',
+        isTCGRuled: (duelOptionsParts[0][3] === 'O') ? 'OCG rules' : 'TCG Rules',
 
         //Check Deck for Illegal cards?
-        isDeckChecked : (duelOptionsParts[0][4] === 'O') ? 'Check' : 'Dont Check',
+        isDeckChecked: (duelOptionsParts[0][4] === 'O') ? 'Check' : 'Dont Check',
 
         //Shuffle deck at start?
-        isShuffled : (duelOptionsParts[0][5] === 'O') ? 'Shuffle' : 'Dont Shuffle',
+        isShuffled: (duelOptionsParts[0][5] === 'O') ? 'Shuffle' : 'Dont Shuffle',
 
         //Choose Starting Life Points
-        lifePoints : duelOptionsParts[0].substring(6),
+        lifePoints: duelOptionsParts[0].substring(6),
 
         //Determine Banlist
-        banList : parseInt(duelOptionsParts[1], 10),
+        banList: parseInt(duelOptionsParts[1], 10),
 
         //Select how many cards to draw on first hand
-        openDraws : duelOptionsParts[2],
+        openDraws: duelOptionsParts[2],
 
         //Select how many cards to draw each turn
-        turnDraws : duelOptionsParts[3],
+        turnDraws: duelOptionsParts[3],
 
         //Choose whether duel is ranked
-        isRanked : (duelOptionsParts[4] === 'U') ? 'Unranked' : 'Ranked',
+        isRanked: (duelOptionsParts[4] === 'U') ? 'Unranked' : 'Ranked',
 
         //Copy password
-        password : duelOptionsParts[5],
+        password: duelOptionsParts[5],
     };
-    
-    
+
+
     //Determine allowed cards
     if (duelOptionsParts[0][0] === '0') {
         settings.allowedCards = 'tcg';
@@ -284,7 +284,7 @@ function parseDuelOptions(duelOptions) {
 
 
     return settings;
-        
+
 
 
 }
@@ -314,12 +314,16 @@ function renderList(JSONdata) {
 }
 
 function locallogin(init) {
-    if (localStorage.nickname.indexOf('\u0000') < 1 || init === true) {
-        var username = prompt('Username: ', localStorage.nickname);
-        while (!username) {
-            username = prompt('Username: ', localStorage.nickname);
+    localStorage.nickname = localStorage.nickname || '\u0000\r\n';
+    if (localStorage.nickname) {
+        if (localStorage.nickname.indexOf('\u0000') < 1 || init === true) {
+            var username = prompt('Username: ', localStorage.nickname);
+            while (!username) {
+                username = prompt('Username: ', localStorage.nickname);
+            }
+            localStorage.nickname = username + '\u0000\r\n';
         }
-        localStorage.nickname = username + '\u0000\r\n';
     }
 }
-locallogin(true);*/
+
+locallogin(true);
