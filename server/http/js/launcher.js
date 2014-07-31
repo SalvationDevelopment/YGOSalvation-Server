@@ -2,8 +2,8 @@
 /* jslint browser : true */
 /* global ygopro, $, isChecked, alert, Primus, console, process, applySettings, prompt */
 /* exported joinGamelist, leaveGamelist, hostGame, connectgamelist, enterGame, setHostSettings, gui*/
-
-applySettings();
+alert('loading launcherjs')
+/*applySettings();
 var siteLocation = 'http://salvationdevelopment.com/launcher/';
 
 
@@ -343,4 +343,4 @@ function locallogin(init) {
         localStorage.nickname = username + '\u0000\r\n';
     }
 }
-locallogin(true);
+locallogin(true);*/
