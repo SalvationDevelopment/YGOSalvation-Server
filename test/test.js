@@ -13,7 +13,7 @@ var primus = new Primus(wsserver);
 var processIncomingTrasmission = require('../server/libs/cs-core-connection.js');
 var request = require('request');
 try {
-    var server = require('../server/server.js');
+
     var offline = require('../client/interface/js/offline-server.js');
     var proxy = require('../client/interface/js/proxy.js');
 } catch (error) {
@@ -163,4 +163,6 @@ describe('Test Network Connection Methods', function () {
         done();
     });
 });
+try {
 processIncomingTrasmission(playerconnect1, {write:console.log(inpu)}, {}, primus) ;
+}catch(e){}
