@@ -29,9 +29,7 @@ request('http://localhost:9467/index.html', function (error, response, body) {
 });
 var playerconnect1 = new Buffer(require('./playerconnect1.js'));
 
-processIncomingTrasmission(playerconnect1, {
-    write: function () {}
-}, {}, primus);
+
 describe('YGOCore is assembled correctly', function () {
     it('YGOCore built', function () {
         assert((fs.existsSync('server/ygocore/YGOServer.exe')), true);
@@ -165,3 +163,4 @@ describe('Test Network Connection Methods', function () {
         done();
     });
 });
+processIncomingTrasmission(playerconnect1, {write:console.log(inpu)}, {}, primus) ;
