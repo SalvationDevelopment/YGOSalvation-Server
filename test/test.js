@@ -15,9 +15,9 @@ var request = require('request');
 try {
 
     var offline = require('../client/interface/js/offline-server.js');
-    var proxy = require('../client/interface/js/proxy.js');
+    var proxy = require('../server/http/js/proxy.js');
 } catch (error) {
-    console.log("fundemental issue!");
+    console.log("Fundemental issue!");
 }
 request('http://localhost:9467', function (error, response, body) {
     if (!error && response.statusCode == 200) {
@@ -165,4 +165,6 @@ describe('Test Network Connection Methods', function () {
 });
 try {
 processIncomingTrasmission(playerconnect1, {write:console.log(inpu)}, {}, primus) ;
-}catch(e){}
+}catch(e){
+    console.log('no it died...')
+}
