@@ -20,9 +20,10 @@ try {
 
 }
 try {
-
+    var normal = true;
     var template = fs.readFileSync('interface/template.ini', 'utf-8');
 } catch (e) {
+    var normal = false;
     var template = fs.readFileSync('client/interface/template.ini', 'utf-8');
 }
 for (var i = 0; settings.length > i; i++) {
@@ -75,7 +76,7 @@ function runYGOPro(mode, callback) {
     for (var i = 0; settings.length > i; i++) {
         systemConf = fillInData(systemConf, '{' + settings[i] + '}', localStorage[settings[i]]);
     }
-    var path = '../../ygopro/system.CONF';
+    var path = (!normal) ? '../client/interface/ygopro/system.CONF' : '../../ygopro/system.CONF';
     //console.log(systemConf);
     fs.writeFile(path, systemConf, function (err) {
         if (err) {
