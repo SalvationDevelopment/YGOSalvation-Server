@@ -11,7 +11,11 @@ var coreRequest = new Buffer(require('./playerconnect1'));
 require('../server/server.js');
 require('../server/http/js/proxy.js');
 require('../client/interface/js/offline-server.js');
-
+describe('Update System', function () {
+    it('Runs Properly', function () {
+        require('../server/libs/update.js');
+    });
+});
 describe('Main Server', function () {
     it('Accepts TCP Connections', function (complete) {
         var connection = net.connect(8911, '127.0.0.1', function () {
