@@ -18,18 +18,20 @@ describe('Main Server', function () {
         function instance(target, timeout, callback) {
             target = net.connect(8911, '127.0.0.1', function () {
                 target.write(coreRequest);
-                setTimeout(callback, timeout);
+                setTimeout(function () {}, timeout);
             });
+            if (callback) {
+                setTimeout(callback, timeout);
+            }
             return target;
         }
         var player1 = instance(player1, 150, everyoneElseConnects);
 
         function everyoneElseConnects() {
-            var player2 = instance(player2, 200, player2.close);
-            var player3 = instance(player3, 400, player3.close);
-            var player4 = instance(player4, 450, player4.close);
+            var player2 = instance(player2, 200);
+            var player3 = instance(player3, 400);
+            var player4 = instance(player4, 450);
             var spectator = instance(spectator, 490, complete);
-            player1.close();
         }
     });
 });
