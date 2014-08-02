@@ -110,10 +110,8 @@ function startCore(port, socket, data, callback) {
                     players: [socket.username],
                     started: false
                 };
+                console.log(gamelist, 'activepoint');
                 servercallback('update', gamelist);
-                if (callback) {
-                    callback(true);
-                }
             } else if (core_message.indexOf('End') > -1) {
                 servercallback('kill', gamelist);
             }

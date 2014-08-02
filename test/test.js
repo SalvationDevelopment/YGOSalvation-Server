@@ -10,12 +10,18 @@ var coreRequest = new Buffer(require('./playerconnect1'));
 
 require('../server/server.js');
 require('../server/http/js/proxy.js');
+require('../client/interface/js/offline-server.js');
 
 describe('Main Server', function () {
     it('Accepts TCP Connections', function (complete) {
         var connection = net.connect(8911, '127.0.0.1', function () {
             connection.write(coreRequest);
-            setTimeout(complete, 350);
+            setTimeout(function () {
+                connection.write(coreRequest);
+            }, 250);
+            setTimeout(function () {
+                complete();
+            }, 450);
         });
     });
     it('Accepts Multiple TCP Connections', function (complete) {
@@ -43,6 +49,21 @@ describe('Main Server', function () {
             connection.write(coreRequest);
             setTimeout(complete, 350);
         });
+    });
+
+});
+describe('Offline Server', function () {
+    it('YGOPro No Parameters', function (complete) {
+        request('http://127.0.0.1:9467/', complete);
+    });
+    it('YGOPro Replay', function (complete) {
+        request('http://127.0.0.1:9467/r', complete);
+    });
+    it('YGOPro Deck Edit', function (complete) {
+        request('http://127.0.0.1:9467/d', complete);
+    });
+    it('YGOPro Join', function (complete) {
+        request('http://127.0.0.1:9467/j', complete);
     });
 
 });
