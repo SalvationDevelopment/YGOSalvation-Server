@@ -1,4 +1,4 @@
 scriptfolder = ../http/ygopro/script
 cardcdb = ../http/ygopro/cards.cdb 
 banlist = ../http/ygopro/lflist.conf
-consolelog = true
+consolelog = false

@@ -19,8 +19,12 @@ try {
     localStorage = {};
 
 }
+try {
 
-var template = fs.readFileSync('interface/template.ini', 'utf-8');
+    var template = fs.readFileSync('interface/template.ini', 'utf-8');
+} catch (e) {
+    var template = fs.readFileSync('client/interface/template.ini', 'utf-8');
+}
 for (var i = 0; settings.length > i; i++) {
     if (!localStorageExist || !localStorage[settings[i]]) {
         localStorage.use_d3d = '0\r\n';

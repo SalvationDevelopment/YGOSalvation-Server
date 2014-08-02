@@ -61,6 +61,7 @@ var ygoserver = net.createServer(function (socket) {
         gamelist = processIncomingTrasmission(data, socket, gamelist, function (command, newlist) {
             if (command === 'update') {
                 primus.room('activegames').write(JSON.stringify(newlist));
+                gamelist = newlist;
             }
             if (command === 'kill') {
                 killCore(socket, newlist, primus);
