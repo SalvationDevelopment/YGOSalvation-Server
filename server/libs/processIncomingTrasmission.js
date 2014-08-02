@@ -70,22 +70,17 @@ function processTask(task, socket) {
         }
     }
 }
-module.exports = {
-    processTask: processTask,
-    processIncomingTrasmission: processIncomingTrasmission,
-    startCore: startCore,
-    parsePackets: parsePackets,
 
-};
 
 function createDateString(dateObject) {
     return "[" + dateObject.getHours() + ":" + dateObject.getMinutes() + "]";
 }
 
 function startCore(port, socket, data, callback) {
-    fs.exists(__dirname + '/ygocore/YGOServer.exe', function (exist) {
+    console.log(__dirname)
+    fs.exists(__dirname + '/../ygocore/YGOServer.exe', function (exist) {
         if (!exist) {
-            console.log('core not found at ' + __dirname + '/' + 'ygocore');
+            console.log('core not found at ' + __dirname + '/' + '../ygocore');
             return;
         }
         //console.log('connecting to new core @', port);
@@ -94,8 +89,8 @@ function startCore(port, socket, data, callback) {
         var params = port + ' ' + configfile;
         var currentDate = new Date();
         console.log(createDateString(currentDate) + ' initiating core for ' + socket.username + ' on port:' + port + ' with: ' + configfile);
-        socket.core = childProcess.spawn(__dirname + '/ygocore/YGOServer.exe', [port, configfile], {
-            cwd: __dirname + '/ygocore'
+        socket.core = childProcess.spawn(__dirname + '/../ygocore/YGOServer.exe', [port, configfile], {
+            cwd: __dirname + '/../ygocore'
         }, function (error, stdout, stderr) {
             console.log(createDateString(currentDate) + ' CORE Terminated', error, stderr, stdout);
         });

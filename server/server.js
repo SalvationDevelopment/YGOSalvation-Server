@@ -12,7 +12,7 @@ try {
 var gamelist = {};
 var net = require('net');
 var processIncomingTrasmission = require('./libs/processIncomingTrasmission.js');
-var killCore = require('./killcore.js');
+var killCore = require('./libs/killcore.js');
 var Primus = require('primus');
 var Rooms = require('primus-rooms');
 var http = require('http');
@@ -20,7 +20,6 @@ var server = http.createServer().listen(5000);
 var primus = new Primus(server, {
     parser: 'JSON'
 });
-
 
 
 primus.use('rooms', Rooms);
@@ -59,7 +58,7 @@ var ygoserver = net.createServer(function (socket) {
     socket.active_ygocore = false;
     socket.active = false;
     socket.on('data', function (data) {
-        gamelist = processIncomingTrasmission(data, socket, gamelist, primus);
+        gamelist = processIncomingTrasmission(data, socket, gamelist);
     });
     socket.on('close', function () {
         killCore(socket, gamelist, primus);
