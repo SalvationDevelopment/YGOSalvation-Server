@@ -1,11 +1,15 @@
 /* jshint node : true */
 /* jshint mocha : true */
 
-var assert = require('assert');
+var ws = require('ws');
 var net = require('net');
+var assert = require('assert');
+var request = require('request');
+
 var coreRequest = new Buffer(require('./playerconnect1'));
 
 require('../server/server.js');
+require('../server/http/js/proxy.js');
 
 describe('Main Server', function () {
     it('Accepts TCP Connections', function (complete) {
@@ -34,4 +38,11 @@ describe('Main Server', function () {
             var spectator = instance(spectator, 490, complete);
         }
     });
+    it('Accepts local TCP Connections proxy them to WS connection', function (complete) {
+        var connection = net.connect(8912, '127.0.0.1', function () {
+            connection.write(coreRequest);
+            setTimeout(complete, 350);
+        });
+    });
+
 });

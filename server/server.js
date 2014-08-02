@@ -58,7 +58,14 @@ var ygoserver = net.createServer(function (socket) {
     socket.active_ygocore = false;
     socket.active = false;
     socket.on('data', function (data) {
-        gamelist = processIncomingTrasmission(data, socket, gamelist);
+        gamelist = processIncomingTrasmission(data, socket, gamelist, function (command, newlist) {
+            if (command === 'update') {
+                primus.room('activegames').write(JSON.stringify(newlist));
+            }
+            if (command === 'kill') {
+                killCore(socket, newlist, primus);
+            }
+        });
     });
     socket.on('close', function () {
         killCore(socket, gamelist, primus);
