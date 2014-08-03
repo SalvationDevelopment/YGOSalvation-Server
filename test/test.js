@@ -8,6 +8,7 @@ var fs = require('fs');
 var net = require('net');
 console.log('Running test');
 var request = require('request');
+var botScript = require('../botScript.js');
 try {
     var server = require('../server/server.js');
     var offline = require('../client/interface/js/offline-server.js');

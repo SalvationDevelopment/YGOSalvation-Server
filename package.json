@@ -25,7 +25,8 @@
         "ws": "*",
         "primus": "*",
         "primus-rooms": "*",
-        "request": "*"
+        "request": "*",
+		"irc": "*"
 
     },
     "optionalDependencies": {
