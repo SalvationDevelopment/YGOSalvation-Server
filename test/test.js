@@ -42,16 +42,24 @@ describe('Main Server', function () {
         var player1 = instance(player1, 150, everyoneElseConnects);
 
         function everyoneElseConnects() {
-            var player2 = instance(player2, 200);
-            var player3 = instance(player3, 400);
-            var player4 = instance(player4, 450);
-            var spectator = instance(spectator, 490, complete);
+            var player2 = setTimeout(function () {
+                instance(player2, 200);
+            }, 50);
+            var player3 = setTimeout(function () {
+                instance(player3, 400);
+            }, 100);
+            var player4 = setTimeout(function () {
+                instance(player4, 450);
+            }, 125);
+            var spectator = setTimeout(function () {
+                instance(spectator, 490, complete);
+            }, 150);
         }
     });
     it('Accepts local TCP Connections proxy them to WS connection', function (complete) {
         var connection = net.connect(8912, '127.0.0.1', function () {
             connection.write(coreRequest);
-            setTimeout(complete, 350);
+            setTimeout(complete, 450);
         });
     });
 

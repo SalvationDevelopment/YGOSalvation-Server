@@ -157,14 +157,67 @@ module.exports.CTOS = {
     //defunc 0x26: "DEVPRO_GAME_INFO"
 
 };
-function makeCheck(target){
+
+function makeCheck(target) {
     var destination = target + 'Check';
     module.exports[destination] = {};
-    for(var value in module.exports[target]){
-        if(module.exports[target].hasOwnProperty(value)){
+    for (var value in module.exports[target]) {
+        if (module.exports[target].hasOwnProperty(value)) {
             module.exports[destination][value] = false;
         }
     }
 }
 makeCheck('STOC');
 makeCheck('CTOS');
+
+module.exports.locations = {
+    0x01: 'DECK',
+    0x02: 'HAND',
+    0x04: 'MONSTERZONE',
+    0x08: 'SPELLZONE',
+    0x10: 'GRAVE',
+    0x20: 'REMOVED',
+    0x40: 'EXTRA',
+    0x80: 'OVERLAY',
+    0x0C: 'ONFIELD',
+};
+
+module.exports.RPS = {
+    0: 'Rock',
+    2: 'Scissors',
+    4: 'Paper'
+};
+
+module.exports.query = {
+    Code: 0x01,
+    Position: 0x02,
+    Alias: 0x04,
+    Type: 0x08,
+    Level: 0x10,
+    Rank: 0x20,
+    Attribute: 0x40,
+    Race: 0x80,
+    Attack: 0x100,
+    Defence: 0x200,
+    BaseAttack: 0x400,
+    BaseDefence: 0x800,
+    Reason: 0x1000,
+    ReasonCard: 0x2000,
+    EquipCard: 0x4000,
+    TargetCard: 0x8000,
+    OverlayCard: 0x10000,
+    Counters: 0x20000,
+    Owner: 0x40000,
+    IsDisabled: 0x80000,
+    IsPublic: 0x100000
+};
+module.exports.phase = {
+    1: 'Draw Phase',
+    2: 'Standby Phase',
+    3: 'Main Phase 1',
+    4: 'Battle Phase',
+    5: 'Battle Phase: Damage',
+    6: 'Battle Phase: Damage Calculation',
+    7: 'Main Phase 2',
+    8: 'End Phase'
+};
