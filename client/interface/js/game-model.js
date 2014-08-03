@@ -3,7 +3,6 @@
 function InstanceConstuctor() {
     "use strict";
     var model = {
-        username: localStorage.username,
         gamestate: 'off',
         gametype: 'single',
         lobby: {
@@ -47,3 +46,4 @@ function InstanceConstuctor() {
     };
     return model;
 }
+module.exports = InstanceConstuctor;
