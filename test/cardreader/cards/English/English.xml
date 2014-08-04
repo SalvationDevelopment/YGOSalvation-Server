@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageInfo xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <QuickHostSetting>Quick Host Settings</QuickHostSetting>
+  <QuickHostBtn>Confirm</QuickHostBtn>
+  <pmsbProgRun>Program already running</pmsbProgRun>
+  <pMsbErrorToServer>Error Connecting to server</pMsbErrorToServer>
+  <pMsbBadLog>Bad Login</pMsbBadLog>
+  <pMsbOldVers>You have a too old version of the launcher. Please reinstall it.</pMsbOldVers>
+  <pMsbException>Oooops! Something bad happened! Software will now exit!</pMsbException>
+  <LoginUserName>Username</LoginUserName>
+  <LoginPassWord>Password</LoginPassWord>
+  <LoginLanguage>Language</LoginLanguage>
+  <LoginLoginButton>Login</LoginLoginButton>
+  <LoginRegisterButton>Register</LoginRegisterButton>
+  <LoginAutoLogin>Log me in automatically next time</LoginAutoLogin>
+  <LoginMsb1>Not connected to the server.</LoginMsb1>
+  <LoginMsb2>Please enter username.</LoginMsb2>
+  <LoginMsb3>Please enter password.</LoginMsb3>
+  <LoginSavePass>Save Password</LoginSavePass>
+  <RegistLbUser>Username</RegistLbUser>
+  <RegistLbPw>Password</RegistLbPw>
+  <RegistLbPw2>Confirm Password</RegistLbPw2>
+  <RegistBtnRegister>Register</RegistBtnRegister>
+  <RegistBtnCancel>Cancel</RegistBtnCancel>
+  <RegistMsb1>Please confirm your password</RegistMsb1>
+  <RegistMsb2>Please enter password</RegistMsb2>
+  <RegistMsb3>Please enter username.</RegistMsb3>
+  <RegistMsb4>Registering Complete!</RegistMsb4>
+  <RegistMsb5>This username has been taken.</RegistMsb5>
+  <RegistMsb6>Username cannot contain special characters</RegistMsb6>
+  <GameRanked>Ranked</GameRanked>
+  <GameUnranked>Unranked</GameUnranked>
+  <GameDefualtDeck>Default Deck</GameDefualtDeck>
+  <GameSearch>Search</GameSearch>
+  <GameFormat>Format</GameFormat>
+  <GameType>Game Type</GameType>
+  <GameBanList>Banlist</GameBanList>
+  <GameTimeLimit>Time Limit</GameTimeLimit>
+  <GameActive>Active Games</GameActive>
+  <GameIlligal>Illegal Games</GameIlligal>
+  <GameUserFilter>User Filter</GameUserFilter>
+  <GameBtnSearch>Search</GameBtnSearch>
+  <GameBtnHost>Host</GameBtnHost>
+  <GameBtnQuick>Quick</GameBtnQuick>
+  <GameNotUpdating>Status: Not Updating</GameNotUpdating>
+  <GameUpdating1>Status: Updating for </GameUpdating1>
+  <GameUpdating2> seconds.</GameUpdating2>
+  <GameNoServers>No servers are available.</GameNoServers>
+  <GamePasswordExsists>A room with that password already exists.</GamePasswordExsists>
+  <GameLocked>Locked</GameLocked>
+  <GameOpen>Open</GameOpen>
+  <GameLPChange>Your quick host settings does not follow the recommend lifepoints rule, do you want to change this to the default?</GameLPChange>
+  <GameEnterPassword>Enter password</GameEnterPassword>
+  <GameWrongPassword>Incorrect password</GameWrongPassword>
+  <optionGb1>User Settings</optionGb1>
+  <optionGb2>Game Settings</optionGb2>
+  <optionGb3>Font Settings</optionGb3>
+  <optionGb4>Launcher Settings</optionGb4>
+  <optionMsbForget>Do you really want to forget auto login credentials?</optionMsbForget>
+  <optionUser>Default Username</optionUser>
+  <optionDeck>Default Deck</optionDeck>
+  <optionBtnAutoLogin>Forget Auto Login</optionBtnAutoLogin>
+  <optionAntialias>Antialias</optionAntialias>
+  <optionCbSound>Enable Sound</optionCbSound>
+  <optionCbMusic>Enable Music</optionCbMusic>
+  <optionCbDirect>Enable Directx</optionCbDirect>
+  <optionCbFull>Fullscreen</optionCbFull>
+  <optionTexts>Font Size</optionTexts>
+  <optionTextf>Game Font</optionTextf>
+  <optionBtnQuick>Quick Host Settings</optionBtnQuick>
+  <optionBtnSave>Save</optionBtnSave>
+  <optionBtnCancel>Cancel</optionBtnCancel>
+  <optionCbCustomSkin>Use Custom Skin</optionCbCustomSkin>
+  <optionCbAutoPlacing>Auto Card Placing</optionCbAutoPlacing>
+  <optionCbRandomPlacing>Random Card Placing</optionCbRandomPlacing>
+  <optionCbAutoChain>Auto Chain Order</optionCbAutoChain>
+  <optionCbNoChainDelay>No Delay for Chain</optionCbNoChainDelay>
+  <optionCbEnableSleeves>Enable User Covers</optionCbEnableSleeves>
+  <hostGb1>Settings</hostGb1>
+  <hostGb2>Additional Options</hostGb2>
+  <hostBanlist>Ban List</hostBanlist>
+  <hostTimeLimit>Time Limit</hostTimeLimit>
+  <hostRules>Card Rules</hostRules>
+  <hostMode>Duel Mode</hostMode>
+  <hostPrio>Enable Priority</hostPrio>
+  <hostCheckDeck>Disable Check Deck</hostCheckDeck>
+  <hostShuffle>Disable Shuffle Deck</hostShuffle>
+  <hostLifep>Lifepoints</hostLifep>
+  <hostGameN>Game Name</hostGameN>
+  <hostBtnHost>Host</hostBtnHost>
+  <hostBtnCancel>Cancel</hostBtnCancel>
+  <hostpassword>Password</hostpassword>
+  <fileBtnRename>Rename</fileBtnRename>
+  <fileBtnDelete>Delete</fileBtnDelete>
+  <fileBtnFolder>Open Folder</fileBtnFolder>
+  <fileBtnGame>Open Game</fileBtnGame>
+  <fileMsgNoExist>Does not exist</fileMsgNoExist>
+  <fileMsgNoSelect>Nothing selected</fileMsgNoSelect>
+  <fileMsbMulti>Can't Rename multiple items</fileMsbMulti>
+  <fileAskDelete>Are you sure you want to delete the following item(s) </fileAskDelete>
+  <fileNewName>Enter new name</fileNewName>
+  <fileInputConfirm>Rename</fileInputConfirm>
+  <fileBtnRefresh>Refresh</fileBtnRefresh>
+  <fileBtnImport>Import</fileBtnImport>
+  <aboutLabel1>About DevPro</aboutLabel1>
+  <aAboutText>The YGOPro Online Development Group is a rag tag team of programmers, philanthropist, and generally knowledgeable people in the YGOPro community that seek to better and progress the Yu-Gi-Oh! Online community as a whole by providing services and software to allow duelist to grow by dueling and forming lasting friendships.</aAboutText>
+  <aboutLabel5>DevPro Contributors</aboutLabel5>
+  <cusRemoveBtn>Remove</cusRemoveBtn>
+  <cusAddThemeBtn>Add</cusAddThemeBtn>
+  <cusAddContentBtn>Add</cusAddContentBtn>
+  <cusPreview>Preview</cusPreview>
+  <cusBackup>Back Up</cusBackup>
+  <cusLabelTheme>Theme</cusLabelTheme>
+  <cusLabelCont>Content</cusLabelCont>
+  <profileName>Profile</profileName>
+  <profileWin>Win</profileWin>
+  <profileLose>Lose</profileLose>
+  <profileGb1>User Info</profileGb1>
+  <profileGb2>Stats</profileGb2>
+  <profileGb3>Condition</profileGb3>
+  <profileGb4>Ranked</profileGb4>
+  <profileGb5>Unranked</profileGb5>
+  <profileLblLP>LP Reached 0</profileLblLP>
+  <profileLblSurrendered>Surrendered</profileLblSurrendered>
+  <profileLbl0Cards>0 Cards Left</profileLbl0Cards>
+  <profileLblTimeLimit>Time Limit Up</profileLblTimeLimit>
+  <profileLblDisconnect>Rage Quit/D/C</profileLblDisconnect>
+  <profileLblExodia>Exodia</profileLblExodia>
+  <profileLblFinalCountdown>Final Countdown</profileLblFinalCountdown>
+  <profileLblVennominaga>Vennominaga</profileLblVennominaga>
+  <profileLblHorakhty>Horakhty</profileLblHorakhty>
+  <profileLblExodius>Exodius</profileLblExodius>
+  <profileLblDestinyBoard>Destiny Board</profileLblDestinyBoard>
+  <profileLblLastTurn>Last Turn</profileLblLastTurn>
+  <profileLblDestinyLeo>Destiny Leo</profileLblDestinyLeo>
+  <profileLblUnknown>Unknown</profileLblUnknown>
+  <profileLblUsername>Username: </profileLblUsername>
+  <profileLblwld>Win/Lose/Draw</profileLblwld>
+  <profileLblRank>Rank: </profileLblRank>
+  <profileLblTeam>Team: </profileLblTeam>
+  <chatoptionsFormName>Chat Options</chatoptionsFormName>
+  <chatoptionsGb1>Chat Settings</chatoptionsGb1>
+  <chatoptionsGb2>Other Settings</chatoptionsGb2>
+  <chatoptionsGb3>Color Style</chatoptionsGb3>
+  <chatoptionsGb4>Channel Settings</chatoptionsGb4>
+  <chatoptionsLblHideJoinLeave>Hide Join/Leave</chatoptionsLblHideJoinLeave>
+  <chatoptionsLblPmWindows>PM Windows</chatoptionsLblPmWindows>
+  <chatoptionsLblColorBlindMode>Color Blind Mode</chatoptionsLblColorBlindMode>
+  <chatoptionsLblShowTimeStamp>Show Time Stamp</chatoptionsLblShowTimeStamp>
+  <chatoptionsLblRefuseDuelRequests>Refuse Duel Requests</chatoptionsLblRefuseDuelRequests>
+  <chatoptionsLblChatBackground>Chat Background</chatoptionsLblChatBackground>
+  <chatoptionsLblNormalText>Normal Text</chatoptionsLblNormalText>
+  <chatoptionsLblLevel99>Level 99</chatoptionsLblLevel99>
+  <chatoptionsLblLevel2>Level 2</chatoptionsLblLevel2>
+  <chatoptionsLblLevel1>Level 1</chatoptionsLblLevel1>
+  <chatoptionsLblNormalUser>Normal Username</chatoptionsLblNormalUser>
+  <chatoptionsLblServerMessages>Server Message</chatoptionsLblServerMessages>
+  <chatoptionsLblMeMessage>/Me Message</chatoptionsLblMeMessage>
+  <chatoptionsLblJoin>Join</chatoptionsLblJoin>
+  <chatoptionsLblLeave>Leave</chatoptionsLblLeave>
+  <chatoptionsLblSystem>System</chatoptionsLblSystem>
+  <chatoptionsBtnRequestSettings>Request Settings</chatoptionsBtnRequestSettings>
+  <chatoptionsBtnSave>Save</chatoptionsBtnSave>
+  <chatoptionsBtnCancel>Cancel</chatoptionsBtnCancel>
+  <chatoptionsRequestFormText>Duel Request Settings</chatoptionsRequestFormText>
+  <chatBtnoptions>Settings</chatBtnoptions>
+  <chatTabUsers>Users</chatTabUsers>
+  <chatTabFriends>Friends</chatTabFriends>
+  <chatTabIgnore>Ignore</chatTabIgnore>
+  <chatUserCount>User Count: </chatUserCount>
+  <chatAddFriend>Add to Friends</chatAddFriend>
+  <chatRequestDuel>Request Duel</chatRequestDuel>
+  <chatIgnoreUser>Ignore User</chatIgnoreUser>
+  <chatViewProfile>View Profile</chatViewProfile>
+  <chatRemoveFriend>Remove Friend</chatRemoveFriend>
+  <chatRemoveIgnore>Remove</chatRemoveIgnore>
+  <chatAutoScroll>Auto-Scroll</chatAutoScroll>
+  <MainFormTitle>YGOPro Launcher </MainFormTitle>
+  <MainChatTab>Chat (Beta)</MainChatTab>
+  <MainRankingTab>Ranking</MainRankingTab>
+  <MainTornyTab>Tournament Room</MainTornyTab>
+  <MainYoutubeTab>Youtube</MainYoutubeTab>
+  <MainFileManagerTab>File Manager</MainFileManagerTab>
+  <MainFileDeckTab>Decks</MainFileDeckTab>
+  <MainFileReplayTab>Replays</MainFileReplayTab>
+  <MainCustomizeTab>Customize</MainCustomizeTab>
+  <MainAboutTab>About</MainAboutTab>
+  <MainSyncBtn>Dropbox Sync</MainSyncBtn>
+  <MainSiteBtn>Site</MainSiteBtn>
+  <MainDeckBtn>Deck Edit</MainDeckBtn>
+  <MainReplaysBtn>Replays</MainReplaysBtn>
+  <MainOfflineBtn>Offline</MainOfflineBtn>
+  <MainProfileBtn>Profile</MainProfileBtn>
+  <MainServerMessage>Server messages will spawn here.</MainServerMessage>
+  <DuelReqestMessage> has challenged you to a ranked duel! Do you accept?</DuelReqestMessage>
+  <DuelRequestBanlist> Banlist: </DuelRequestBanlist>
+  <DuelRequestRules> Rules: </DuelRequestRules>
+  <DuelRequestMode> Type: </DuelRequestMode>
+  <SupportItem1Name>Donator Status</SupportItem1Name>
+  <SupportItem1Des>Unlocks Donator status in chat, Orange username and additional chat commands.</SupportItem1Des>
+  <SupportItem2Name>Change Username</SupportItem2Name>
+  <SupportItem2Des>Change your account name while retaining all your ranked stats.</SupportItem2Des>
+  <SupportItem3Name>Reset Ranking Stats</SupportItem3Name>
+  <SupportItem3Des>Reset your ranking stats.</SupportItem3Des>
+  <SupportItem4Name>Unban User</SupportItem4Name>
+  <SupportItem4Des>Unban a user who was banned.</SupportItem4Des>
+  <SupportItem5Name>Custom Username Color</SupportItem5Name>
+  <SupportItem5Des>Change the color of your username in chat.</SupportItem5Des>
+  <SupportItem6Name>Create Team</SupportItem6Name>
+  <SupportItem6Des>Create a team.</SupportItem6Des>
+  <SupportItem7Name>Send Server Message</SupportItem7Name>
+  <SupportItem7Des>Send a server message to everyone.(Limited: 3 Messages per day)</SupportItem7Des>
+  <SupportItem8Name>Custom Sleeves</SupportItem8Name>
+  <SupportItem8Des>Upload a custom sleeve that all users will be able to see in duels.</SupportItem8Des>
+  <SupportBalance>Balance</SupportBalance>
+  <Supportgb2>Support DevPro</Supportgb2>
+  <Supportgb2text>The DevPoint system is here to reward users who help out and support DevPro. While the 2 options below will earn you DevPoints you can also earn points for helping DevPro too!  || ||- Taking part in DevPro Events  - Fixing DevPro bugs Launcher or card scripts! || - Supporting the growth of DevPro</Supportgb2text>
+  <Supportgb3>Earn DevPoints</Supportgb3>
+  <Supportgb3text>Earn points by completing offfers.</Supportgb3text>
+  <Supportgb4>Donate!</Supportgb4>
+  <Supportgb4text>Earn by donating (Paypal, PaySafe, SMS and more)</Supportgb4text>
+  <SupportRenameInput>Enter New Username</SupportRenameInput>
+  <SupportUnbanInput>Enter Username</SupportUnbanInput>
+  <SupportTeamNameInput>Enter Team Name</SupportTeamNameInput>
+  <SupportMSGInput>Enter Message</SupportMSGInput>
+</LanguageInfo>

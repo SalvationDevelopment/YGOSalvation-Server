@@ -1,0 +1,19 @@
+# humanstxt.org/
+# The humans responsible & technology colophon
+
+# TEAM
+
+    Buttys          Unity Programming
+    Tenkei          Network Logic
+    AccessDenied    Interface
+    Benblub         External System & Storage
+    
+# THANKS
+
+    <name>
+
+# TECHNOLOGY COLOPHON
+
+    HTML5, CSS3
+    jQuery, Modernizr
+    C#, Unity

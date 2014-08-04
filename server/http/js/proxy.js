@@ -77,9 +77,21 @@ function processTask(task, socket) {
                 model.activePlayer = !model.activePlayer;
                 model.phase = 0;
                 console.log('Player' + (model.activePlayer + 1) + '\'s turn');
+            } else if (command === 'MSG_WIN') {
+                console.log('Win', task[i].STOC_GAME_MSG.message[1]);
             } else if (command === 'MSG_NEW_PHASE') {
                 model.phase++;
                 console.log(enums.phase[model.phase]);
+            } else if (command === 'MSG_DRAW') {
+                var drawplayer = task[i].STOC_GAME_MSG.message[1];
+                var draw = task[i].STOC_GAME_MSG.message[2];
+                console.log(('Player' + (drawplayer + 1)), 'drew', draw, 'cards');
+            } else if (command === 'MSG_SHUFFLE_DECK') {
+                var deckshuffleplayer = task[i].STOC_GAME_MSG.message[1];
+                console.log(('Player' + (deckshuffleplayer + 1)), 'shuffled the deck');
+            } else if (command === 'MSG_SHUFFLE_HAND') {
+                var handshuffleplayer = task[i].STOC_GAME_MSG.message[1];
+                console.log(('Player' + (handshuffleplayer + 1)), 'shuffled the deck');
             } else if (command === 'MSG_CHAINED') {
                 model.chainsolved = 0;
                 console.log('Chain in progress');
@@ -97,6 +109,43 @@ function processTask(task, socket) {
                 player = task[i].STOC_GAME_MSG.message[1];
                 var damage = task[i].STOC_GAME_MSG.message.readUInt16LE(2);
                 console.log(('Player' + (player + 1)), 'took', damage, 'damage');
+            } else if (command === 'MSG_SUMMONING ') {
+                //ignoring
+                console.log('Normal summon preformed');
+            } else if (command === 'MSG_SELECT_IDLECMD') {
+                var idleplayer = task[i].STOC_GAME_MSG.message[1];
+                model.idle = true;
+                var idlereadposition = 2;
+                for (var k = 0; k < 5; k++) {
+                    var idlecount = task[i].STOC_GAME_MSG.message[idlereadposition];
+                    idlereadposition++;
+                    //                    for (var j = 0; j < idlecount; ++j) {
+                    //                        var idlecard = task[i].STOC_GAME_MSG.message.readUInt16LE(idlereadposition);
+                    //                        idlereadposition = idlereadposition + 4;
+                    //                    }
+                }
+            } else if (command === 'MSG_MOVE') {
+                var movecardid = task[i].STOC_GAME_MSG.message[1];
+                var pc = task[i].STOC_GAME_MSG.message[2];
+                var pl = task[i].STOC_GAME_MSG.message[3];
+                var ps = task[i].STOC_GAME_MSG.message[4];
+                var pp = task[i].STOC_GAME_MSG.message[5];
+                var cc = task[i].STOC_GAME_MSG.message[6];
+                var cl = task[i].STOC_GAME_MSG.message[7];
+                var cs = task[i].STOC_GAME_MSG.message[8];
+                var reason = task[i].STOC_GAME_MSG.message[3];
+                console.log('Move', pc, pl, ps, 'to', cc, cl, cs, 'due to', pp, reason);
+            } else if (command === 'MSG_SET') {
+                var smovecardid = task[i].STOC_GAME_MSG.message[1];
+                var spc = task[i].STOC_GAME_MSG.message[2];
+                var spl = task[i].STOC_GAME_MSG.message[3];
+                var sps = task[i].STOC_GAME_MSG.message[4];
+                var spp = task[i].STOC_GAME_MSG.message[5];
+                var scc = task[i].STOC_GAME_MSG.message[6];
+                var scl = task[i].STOC_GAME_MSG.message[7];
+                var scs = task[i].STOC_GAME_MSG.message[8];
+                var sreason = task[i].STOC_GAME_MSG.message[3];
+                console.log('Move', spc, spl, sps, 'to', scc, scl, scs, 'due to', spp, sreason);
             } else if (command === 'MSG_UPDATE_DATA') {
                 var player = task[i].STOC_GAME_MSG.message[1];
                 var fieldlocation = task[i].STOC_GAME_MSG.message[2];
@@ -107,14 +156,16 @@ function processTask(task, socket) {
                 var udfieldlocation = task[i].STOC_GAME_MSG.message[2];
                 var udindex = task[i].STOC_GAME_MSG.message[3];
 
-                var udcard = makeCard(task[i].STOC_GAME_MSG.message, udplayer);
+                var udcard = makeCard(task[i].STOC_GAME_MSG.message, 0, udplayer).card;
                 console.log('MSG_UPDATE_CARD',
-                    'Player' + (udplayer + 1), enums.locations[udfieldlocation], udindex, udcard, task[i].STOC_GAME_MSG.message);
+                    'Player' + (udplayer + 1), enums.locations[udfieldlocation], udindex, udcard);
             } else {
                 console.log(command, task[i].STOC_GAME_MSG.message);
             }
         } else if (task[i].STOC_DUEL_START) {
             console.log('Starting Duel!');
+        } else if (task[i].STOC_SELECT_TP) {
+            console.log('Select who goes first');
         } else if (task[i].STOC_HAND_RESULT) {
             var rpschoice = task[i].STOC_HAND_RESULT.message[0];
             console.log('Opponent used', enums.RPS[rpschoice]);
@@ -150,7 +201,7 @@ function processTask(task, socket) {
     }
 }
 
-function makeCard(buffer, controller) {
+function makeCard(buffer, start, controller) {
     if (buffer.length < 12) {
         return;
     }
@@ -160,28 +211,7 @@ function makeCard(buffer, controller) {
         return;
     }
     var card = {};
-    card.flag = flag;
-    card.Code = 0;
-    card.Position = 0;
-    card.Alias = 0;
-    card.Type = 0;
-    card.Level = 0;
-    card.Rank = 0;
-    card.Attribute = 0;
-    card.Race = 0;
-    card.Attack = 0;
-    card.Defence = 0;
-    card.BaseAttack = 0;
-    card.BaseDefence = 0;
-    card.Reason = 0;
-    card.ReasonCard = 0;
-    card.EquipCard = 0;
-    card.TargetCard = 0;
-    card.OverlayCard = 0;
-    card.Counters = 0;
-    card.Owner = 0;
-    card.IsDisabled = 0;
-    card.IsPublic = 0;
+
     //console.log('flag:', flag);
     var readposition = 12;
 
@@ -243,12 +273,21 @@ function makeCard(buffer, controller) {
         readposition = readposition + 4;
     }
     if (flag & enums.query.EquipCard) {
-        card.EquipCard = buffer.readUInt32LE(readposition);
+        card.EquipCard = {
+            c: buffer[readposition + 0],
+            l: buffer[readposition + 1],
+            s: buffer[readposition + 2]
+        };
         readposition = readposition + 4;
     }
     if (flag & enums.query.TargetCard) {
 
         for (var i = 0; i < buffer.readUInt32LE(readposition); ++i) {
+            card.TargetCard.push({
+                c: buffer[readposition + 0],
+                l: buffer[readposition + 1],
+                s: buffer[readposition + 2]
+            });
             readposition = readposition + 4;
         }
     }
@@ -281,7 +320,18 @@ function makeCard(buffer, controller) {
         card.EquipCard = buffer.readUInt32LE(readposition);
         readposition = readposition + 4;
     }
-    return card;
+    if (flag & enums.query.lscale) {
+        card.lscale = buffer.readUInt32LE(readposition);
+        readposition = readposition + 4;
+    }
+    if (flag & enums.query.rscale) {
+        card.rscale = buffer.readUInt32LE(readposition);
+        readposition = readposition + 4;
+    }
+    return {
+        card: card,
+        readposition: readposition
+    };
 
 
 }

@@ -1,0 +1,194 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<LanguageInfo xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <QuickHostSetting>Configuração da Criação de Sala</QuickHostSetting>
+  <QuickHostBtn>Salvar</QuickHostBtn>
+  <pmsbProgRun>O programa já está em execução!</pmsbProgRun>
+  <pMsbErrorToServer>Erro ao conectar com o servidor!</pMsbErrorToServer>
+  <pMsbBadLog>Usuário ou Senha Errada!</pMsbBadLog>
+  <pMsbOldVers>Versão desatualizada do programa. Por favor reinstale!</pMsbOldVers>
+  <pMsbException>Oooops! Aconteceu algum problema. O programa será fechado agora!</pMsbException>
+  <LoginUserName>Usuário</LoginUserName>
+  <LoginPassWord>Senha</LoginPassWord>
+  <LoginLanguage>Idioma</LoginLanguage>
+  <LoginLoginButton>Entrar</LoginLoginButton>
+  <LoginRegisterButton>Registrar</LoginRegisterButton>
+  <LoginAutoLogin>Iniciar sessão automaticamente na próxima vez.</LoginAutoLogin>
+  <LoginMsb1>Não está conectado ao servidor.</LoginMsb1>
+  <LoginMsb2>Por favor, digite o nome de usuário!</LoginMsb2>
+  <LoginMsb3>Por favor, digite sua senha!</LoginMsb3>
+  <LoginBtnOffline>Modo Offline</LoginBtnOffline>
+  <RegistLbUser>Usuário</RegistLbUser>
+  <RegistLbPw>Senha</RegistLbPw>
+  <RegistLbPw2>Confirmar Senha</RegistLbPw2>
+  <RegistBtnRegister>Registrar</RegistBtnRegister>
+  <RegistBtnCancel>Cancelar</RegistBtnCancel>
+  <RegistMsb1>Por favor, confirme sua senha!</RegistMsb1>
+  <RegistMsb2>Por favor, digite a senha!</RegistMsb2>
+  <RegistMsb3>Por favor, digite seu nome de usuário!</RegistMsb3>
+  <RegistMsb4>Registro completo!</RegistMsb4>
+  <RegistMsb5>Este nome de usuário já existe!</RegistMsb5>
+  <RegistMsb6>O nome de usuário não pode conter caracteres especiais!</RegistMsb6>
+  <GameServerInfo>Detalhes do Servidor</GameServerInfo>
+  <GameTabRanked>Com Classificação</GameTabRanked>
+  <GameTabUnranked>Sem Classificação</GameTabUnranked>
+  <GameofRooms>de Salas</GameofRooms>
+  <GameofUnranked>c/ Classificação</GameofUnranked>
+  <GameofRanked>s/ Classificação</GameofRanked>
+  <GameofOpenRooms>de Salas Abertas</GameofOpenRooms>
+  <GameofPlayers>de Jogadores</GameofPlayers>
+  <GameFilterActive>Apenas salas abertas</GameFilterActive>
+  <GameColumnRoomName>Nome da Sala</GameColumnRoomName>
+  <GameColumnType>Tipo</GameColumnType>
+  <GameColumnRules>Regras/Cartas</GameColumnRules>
+  <GameColumnMode>Modo</GameColumnMode>
+  <GameColumnState>Situação</GameColumnState>
+  <GameColumnPlayers>Jogadores</GameColumnPlayers>
+  <GameColumnBanList>Banidas</GameColumnBanList>
+  <GameColumnTimer>Tempo</GameColumnTimer>
+  <GameBtnDeck>Edit. Deck</GameBtnDeck>
+  <GameBtnReplay>Replays</GameBtnReplay>
+  <GameBtnOption>Opções</GameBtnOption>
+  <GameBtnProfile>Perfil</GameBtnProfile>
+  <GameBtnHost>Criar</GameBtnHost>
+  <GameBtnQuick>Entrar</GameBtnQuick>
+  <GameLabWLD>Vitória/Derrota/Empate</GameLabWLD>
+  <GameLabDeck>Deck:</GameLabDeck>
+  <GameLabUser>Usuário:</GameLabUser>
+  <GameBtnOffline>Offline</GameBtnOffline>
+  <GameBtnLogout>Sair</GameBtnLogout>
+  <optionGb1>Configurações de Usuário</optionGb1>
+  <optionGb2>Configurações de Jogo</optionGb2>
+  <optionGb3>Configurações de Fonte</optionGb3>
+  <optionGb4>Configurações do Programa</optionGb4>
+  <optionMsbForget>Deseja apagar suas configurações de sessão automática?</optionMsbForget>
+  <optionUser>Usuário Padrão</optionUser>
+  <optionDeck>Deck Padrão</optionDeck>
+  <optionBtnAutoLogin>Apagar Auto-Sessão</optionBtnAutoLogin>
+  <optionAntialias>Anti-Serrilhado</optionAntialias>
+  <optionCbSound>Ligar Som</optionCbSound>
+  <optionCbMusic>Ligar Música</optionCbMusic>
+  <optionCbDirect>Ligar Directx (D3D)</optionCbDirect>
+  <optionCbFull>Tela-Cheia</optionCbFull>
+  <optionTexts>Tamanho da Fonte</optionTexts>
+  <optionTextf>Fonte do Jogo</optionTextf>
+  <optionBtnQuick>Configurar Criação</optionBtnQuick>
+  <optionBtnSave>Salvar</optionBtnSave>
+  <optionBtnCancel>Cancelar</optionBtnCancel>
+  <optionCbCustomSkin>Usar Pele</optionCbCustomSkin>
+  <optionCbAutoPlacing>Auto-Posicionamento</optionCbAutoPlacing>
+  <optionCbRandomPlacing>Disposição Aleatória</optionCbRandomPlacing>
+  <optionCbAutoChain>SEGOC Automático</optionCbAutoChain>
+  <optionCbNoChainDelay>Não esperar Corrente</optionCbNoChainDelay>
+  <hostGb1>Configurações</hostGb1>
+  <hostGb2>Opções Adicionais</hostGb2>
+  <hostBanlist>Lista de Banidas</hostBanlist>
+  <hostTimeLimit>Tempo Limite</hostTimeLimit>
+  <hostRules>Regra das Cartas</hostRules>
+  <hostMode>Modo de Duelo</hostMode>
+  <hostPrio>Ativar Prioridade (TCG)</hostPrio>
+  <hostCheckDeck>Desativar Verificação de Deck</hostCheckDeck>
+  <hostShuffle>Desativar Embaralhar Deck</hostShuffle>
+  <hostLifep>Pontos de Vida</hostLifep>
+  <hostGameN>Nome da Sala</hostGameN>
+  <hostBtnHost>Criar</hostBtnHost>
+  <hostBtnCancel>Cancelar</hostBtnCancel>
+  <fileBtnRename>Renomear</fileBtnRename>
+  <fileBtnDelete>Deletar</fileBtnDelete>
+  <fileBtnFolder>Abrir Pasta</fileBtnFolder>
+  <fileBtnGame>Abrir Jogo</fileBtnGame>
+  <fileMsgNoExist>Não existe</fileMsgNoExist>
+  <fileMsgNoSelect>Nada selecionado</fileMsgNoSelect>
+  <fileMsbMulti>Impossível renomear múltiplos itens ao mesmo tempo.</fileMsbMulti>
+  <fileAskDelete>Tem certeza que deseja deletar o(s) seguinte(s) item(s)?</fileAskDelete>
+  <fileNewName>Digite um novo nome</fileNewName>
+  <fileInputConfirm>Renomear</fileInputConfirm>
+  <fileBtnRefresh>Atualizar</fileBtnRefresh>
+  <fileBtnImport>Importar</fileBtnImport>
+  <aboutLabel1>Sobre o DevPro</aboutLabel1>
+  <aAboutText>O YGOPro Online Development Group (Grupo de Desenvolvimento YGOPro Online) é uma equipe simples de programadores, filantropos e pessoas com conhecimentos gerais na comunidade YGOPro que se esforçam buscando melhorar e evoluir a comunidade Yu-Gi-Oh! Online como um todo, fornecendo serviços e programas que permitam ao duelista crescer e criar amizades duradouras através do duelo.</aAboutText>
+  <aboutLabel5>Contribuidores DevPro</aboutLabel5>
+  <cusRemoveBtn>Remover</cusRemoveBtn>
+  <cusAddThemeBtn>Adicionar</cusAddThemeBtn>
+  <cusAddContentBtn>Adicionar</cusAddContentBtn>
+  <cusPreview>Visualizar</cusPreview>
+  <cusBackup>Guardar</cusBackup>
+  <cusLabelTheme>Tema</cusLabelTheme>
+  <cusLabelCont>Conteúdo</cusLabelCont>
+  <profileName>Perfil</profileName>
+  <profileWin>Vitórias</profileWin>
+  <profileLose>Derrotas</profileLose>
+  <profileGb1>Informações do Jogador</profileGb1>
+  <profileGb2>Estatísticas</profileGb2>
+  <profileGb3>Situação</profileGb3>
+  <profileGb4>Com Classificação</profileGb4>
+  <profileGb5>Sem Classificação</profileGb5>
+  <profileLblLP>0 Pontos de Vida</profileLblLP>
+  <profileLblSurrendered>Se rendeu</profileLblSurrendered>
+  <profileLbl0Cards>Sem cartas para Draw</profileLbl0Cards>
+  <profileLblTimeLimit>Acabou o tempo</profileLblTimeLimit>
+  <profileLblDisconnect>Fechou/Desconectou</profileLblDisconnect>
+  <profileLblExodia>Exodia</profileLblExodia>
+  <profileLblFinalCountdown>Final Countdown</profileLblFinalCountdown>
+  <profileLblVennominaga>Vennominaga</profileLblVennominaga>
+  <profileLblHorakhty>Horakhty</profileLblHorakhty>
+  <profileLblExodius>Exodius</profileLblExodius>
+  <profileLblDestinyBoard>Destiny Board</profileLblDestinyBoard>
+  <profileLblLastTurn>Last Turn</profileLblLastTurn>
+  <profileLblDestinyLeo>Destiny Leo</profileLblDestinyLeo>
+  <profileLblUnknown>Desconhecido</profileLblUnknown>
+  <profileLblUsername>Usuário: </profileLblUsername>
+  <profileLblwld>Vitórias/Derrotas/Empates: </profileLblwld>
+  <profileLblRank>Classificação: </profileLblRank>
+  <profileLblTeam>Time: </profileLblTeam>
+  <chatoptionsFormName>Opções de Bate-Papo</chatoptionsFormName>
+  <chatoptionsGb1>Configurações de Bate-Papo</chatoptionsGb1>
+  <chatoptionsGb2>Outras Configurações</chatoptionsGb2>
+  <chatoptionsGb3>Estilo de Cor</chatoptionsGb3>
+  <chatoptionsGb4>Configurações do Canal</chatoptionsGb4>
+  <chatoptionsLblHideJoinLeave>Ocultar Entrada/Saída</chatoptionsLblHideJoinLeave>
+  <chatoptionsLblPmWindows>Janela de Mensagem Privada (PM)</chatoptionsLblPmWindows>
+  <chatoptionsLblColorBlindMode>Escala de Cinza</chatoptionsLblColorBlindMode>
+  <chatoptionsLblShowTimeStamp>Exibir o Horário</chatoptionsLblShowTimeStamp>
+  <chatoptionsLblRefuseDuelRequests>Negar Pedidos (Duelo)</chatoptionsLblRefuseDuelRequests>
+  <chatoptionsLblChatBackground>Plano de fundo do Bate-Papo</chatoptionsLblChatBackground>
+  <chatoptionsLblNormalText>Texto Normal</chatoptionsLblNormalText>
+  <chatoptionsLblLevel99>Nivel 99</chatoptionsLblLevel99>
+  <chatoptionsLblLevel2>Nível 2</chatoptionsLblLevel2>
+  <chatoptionsLblLevel1>Nível 1</chatoptionsLblLevel1>
+  <chatoptionsLblNormalUser>Nome de usuário normal</chatoptionsLblNormalUser>
+  <chatoptionsLblServerMessages>Mensagem do Servidor</chatoptionsLblServerMessages>
+  <chatoptionsLblMeMessage>Mensagens /Me</chatoptionsLblMeMessage>
+  <chatoptionsLblJoin>Entrada</chatoptionsLblJoin>
+  <chatoptionsLblLeave>Saída</chatoptionsLblLeave>
+  <chatoptionsLblSystem>Mensagem do Sistema</chatoptionsLblSystem>
+  <chatoptionsBtnRequestSettings>Configurar Pedidos</chatoptionsBtnRequestSettings>
+  <chatoptionsBtnSave>Salvar</chatoptionsBtnSave>
+  <chatoptionsBtnCancel>Cancelar</chatoptionsBtnCancel>
+  <chatoptionsRequestFormText>Configuração dos Pedidos de Duelo</chatoptionsRequestFormText>
+  <chatBtnoptions>Opções</chatBtnoptions>
+  <chatTabUsers>Jogadores</chatTabUsers>
+  <chatTabFriends>Amigos</chatTabFriends>
+  <chatTabIgnore>Ignorados</chatTabIgnore>
+  <chatUserCount>Jogadores Conectados: </chatUserCount>
+  <chatAddFriend>Adicionar aos Amigos</chatAddFriend>
+  <chatRequestDuel>Solicitar Duelo</chatRequestDuel>
+  <chatIgnoreUser>Ignorar Usuário</chatIgnoreUser>
+  <chatViewProfile>Ver Perfil</chatViewProfile>
+  <chatRemoveFriend>Remover Amigo</chatRemoveFriend>
+  <chatRemoveIgnore>Remover</chatRemoveIgnore>
+  <chatAutoScroll>Rolagem Automática</chatAutoScroll>
+  <MainFormTitle>Lançador YGOPro</MainFormTitle>
+  <MainChatTab>Bate-Papo (Beta)</MainChatTab>
+  <MainRankingTab>Classificação</MainRankingTab>
+  <MainTornyTab>Sala de Torneios</MainTornyTab>
+  <MainYoutubeTab>Youtube</MainYoutubeTab>
+  <MainFileManagerTab>Gerenciar Arquivos</MainFileManagerTab>
+  <MainFileDeckTab>Decks</MainFileDeckTab>
+  <MainFileReplayTab>Replays</MainFileReplayTab>
+  <MainCustomizeTab>Customize</MainCustomizeTab>
+  <MainAboutTab>Sobre</MainAboutTab>
+  <DuelReqestMessage> desafiou você para um duelo c/ Classificação! Você aceita?</DuelReqestMessage>
+  <DuelRequestBanlist> Banidas: </DuelRequestBanlist>
+  <DuelRequestRules> Regras: </DuelRequestRules>
+  <DuelRequestMode> Tipo: </DuelRequestMode>
+</LanguageInfo>

@@ -1,0 +1,18 @@
+.loginscreen{
+    position: absolute;
+    left: 820px;
+}
+#loginbtn{
+    border-radius: 5px;
+    border: 1px solid silver;
+    background: #00CC00;
+    text-align: center;
+    width: 150px;
+    padding: 10px;
+    color: #fff;
+    cursor: pointer;
+}
+#loginbtn:hover{
+    background: #00FF00;
+}
+
