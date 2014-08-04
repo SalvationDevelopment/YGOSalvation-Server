@@ -1,0 +1,331 @@
+/* DECKZONE 1 & 2 */
+#dzone1{
+    position: absolute;
+    border: 1px solid black;
+    width: 100px;
+    height: 144px;
+    left: 100px;
+}
+#dzone2{
+    position: absolute;
+    border: 1px solid black;
+    width: 100px;
+    height: 144px;
+    top: 778px;
+    left: 700px;
+}
+/* Xtra ZONE 1 & 2 */
+#xzone1{
+    position: absolute;
+    border: 1px solid black;
+    width: 100px;
+    height: 144px;
+    left: 700px;
+}
+#xzone2{
+    position: absolute;
+    border: 1px solid black;
+    width: 100px;
+    height: 144px;
+    top: 778px;
+    left: 100px;
+}
+/* HANDZONE 1 & 2 */
+#hzone1{
+    position: absolute;
+    border: 1px solid black;
+    width: 500px;
+    height: 144px;
+    left: 200px;
+}
+#hzone2{
+    position: absolute;
+    border: 1px solid black;
+    width: 500px;
+    height: 144px;
+    left: 200px;
+    top: 778px;
+}
+/* GRAVE 1 & 2 */
+#gzone1{
+    position: absolute;
+    border: 1px solid black;
+    width: 100px;
+    height: 144px;
+    left: 100px;
+    top: 160px;
+}
+#gzone2{
+    position: absolute;
+    border: 1px solid black;
+    width: 100px;
+    height: 144px;
+    left: 700px;
+    top: 634px;
+}
+/* REMOVE 1 & 2 */
+#rzone1{
+    position: absolute;
+    border: 1px solid black;
+    width: 100px;
+    height: 144px;
+    left: 100px;
+    top: 304px;
+}
+#rzone2{
+    position: absolute;
+    border: 1px solid black;
+    width: 100px;
+    height: 144px;
+    left: 700px;
+    top: 490px;
+}
+/* FIELD 1 & 2 */
+#fzone1{
+    position: absolute;
+    border: 1px solid black;
+    width: 100px;
+    height: 144px;
+    left: 700px;
+    top: 160px;
+}
+#fzone2{
+    position: absolute;
+    border: 1px solid black;
+    width: 100px;
+    height: 144px;
+    left: 100px;
+    top: 634px;
+}
+/* TRAPZONES */
+#tzone1{
+    position: absolute;
+    border: 1px solid black;
+    width: 100px;
+    height: 144px;
+    left: 200px;
+    top: 160px;
+}
+#tzone2{
+    position: absolute;
+    border: 1px solid black;
+    width: 100px;
+    height: 144px;
+    left: 300px;
+    top: 160px;
+}
+#tzone3{
+    position: absolute;
+    border: 1px solid black;
+    width: 100px;
+    height: 144px;
+    left: 400px;
+    top: 160px;
+}
+#tzone4{
+    position: absolute;
+    border: 1px solid black;
+    width: 100px;
+    height: 144px;
+    left: 500px;
+    top: 160px;
+}
+#tzone5{
+    position: absolute;
+    border: 1px solid black;
+    width: 100px;
+    height: 144px;
+    left: 600px;
+    top: 160px;
+}
+
+#mzone1{
+    position: absolute;
+    border: 1px solid black;
+    width: 100px;
+    height: 144px;
+    left: 200px;
+    top: 304px;
+}
+#mzone2{
+    position: absolute;
+    border: 1px solid black;
+    width: 100px;
+    height: 144px;
+    left: 300px;
+    top: 304px;
+}
+#mzone3{
+    position: absolute;
+    border: 1px solid black;
+    width: 100px;
+    height: 144px;
+    left: 400px;
+    top: 304px;
+}
+#mzone4{
+    position: absolute;
+    border: 1px solid black;
+    width: 100px;
+    height: 144px;
+    left: 500px;
+    top: 304px;
+}
+#mzone5{
+    position: absolute;
+    border: 1px solid black;
+    width: 100px;
+    height: 144px;
+    left: 600px;
+    top: 304px;
+}
+
+/* DUELL PHASEN */
+#dp{
+    position: absolute;
+    width: 50px;
+    padding: 5px;
+    border: 1px solid black;
+    top: 455px;
+    left: 100px;
+    text-align: center;
+}
+#sp{
+    position: absolute;
+    width: 50px;
+    padding: 5px;
+    border: 1px solid black;
+    top: 455px;
+    left: 165px;
+    text-align: center;
+}
+#mp1{
+    position: absolute;
+    width: 50px;
+    padding: 5px;
+    border: 1px solid black;
+    top: 455px;
+    left: 230px;
+    text-align: center;
+}
+#bp{
+    position: absolute;
+    width: 50px;
+    padding: 5px;
+    border: 1px solid black;
+    top: 455px;
+    left: 295px;
+    text-align: center;
+}
+#mp2{
+    position: absolute;
+    width: 50px;
+    padding: 5px;
+    border: 1px solid black;
+    top: 455px;
+    left: 360px;
+    text-align: center;
+}
+#ep{
+    position: absolute;
+    width: 50px;
+    padding: 5px;
+    border: 1px solid black;
+    top: 455px;
+    left: 425px;
+    text-align: center;
+}
+#nextPhase{
+    position: absolute;
+    width: 100px;
+    padding: 5px;
+    border: 1px solid black;
+    top: 455px;
+    left: 550px;
+    text-align: center;
+    cursor: pointer;
+}
+/* MONSTERZONE 2*/ 
+#mzone6{
+    position: absolute;
+    border: 1px solid black;
+    width: 100px;
+    height: 144px;
+    left: 200px;
+    top: 490px;
+}
+#mzone7{
+    position: absolute;
+    border: 1px solid black;
+    width: 100px;
+    height: 144px;
+    left: 300px;
+    top: 490px;
+}
+#mzone8{
+    position: absolute;
+    border: 1px solid black;
+    width: 100px;
+    height: 144px;
+    left: 400px;
+    top: 490px;
+}
+#mzone9{
+    position: absolute;
+    border: 1px solid black;
+    width: 100px;
+    height: 144px;
+    left: 500px;
+    top: 490px;
+}
+#mzone10{
+    position: absolute;
+    border: 1px solid black;
+    width: 100px;
+    height: 144px;
+    left: 600px;
+    top: 490px;
+}
+/* TRAPZONE 2*/ 
+#tzone6{
+    position: absolute;
+    border: 1px solid black;
+    width: 100px;
+    height: 144px;
+    left: 200px;
+    top: 634px;
+}
+#tzone7{
+    position: absolute;
+    border: 1px solid black;
+    width: 100px;
+    height: 144px;
+    left: 300px;
+    top: 634px;
+}
+#tzone8{
+    position: absolute;
+    border: 1px solid black;
+    width: 100px;
+    height: 144px;
+    left: 400px;
+    top: 634px;
+}
+#tzone9{
+    position: absolute;
+    border: 1px solid black;
+    width: 100px;
+    height: 144px;
+    left: 500px;
+    top: 634px;
+}
+#tzone10{
+    position: absolute;
+    border: 1px solid black;
+    width: 100px;
+    height: 144px;
+    left: 600px;
+    top: 634px;
+}
+
+/* LP BAR Anzeige */
