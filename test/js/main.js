@@ -1,11 +1,9 @@
 /* jshint browser : true */
 /* jshint jquery : true */
 /* globals alert, console */
-/* globals isChecked, randomString, shuffle,  layouthand, animateState, cardplace, animateDrawCard, enumPhase, animateChaining, animateRemoveChaining*/
+/* globals isChecked, randomString */
 
 //Define all the globals you are going to use. Avoid using to many globals. All Globals should be databases of sorts.
-var saftey = false;
-var Unityconsole = false;
 
 var playerStart = [0, 0];
 var cardIndex = {};
@@ -13,7 +11,6 @@ var cardData;
 var deckData;
 var decklistData;
 var decklist = [];
-var currenterror;
 var player1StartLP;
 var player2StartLP;
 
@@ -48,82 +45,12 @@ var duel = {
 
 
 
-/* create Unity object */
-
-
-//The following jquery events define user interactions; When they click, answer questions, the creation and movement of screens.
-$(document).ready(function () {
-
-    $('.downloadbutton, header').on('click', function () {
-
-
-        $('#intro').toggle();
-        $('.login').toggle();
-        $('header').toggle();
-
-
-    });
-
-
-
-    $('#creategameok').on('click', function () {
-        var string, prio, checkd, shuf, rp, stnds, pass, compl;
-        string = "" + $('#creategamecardpool').val() + $('#creategameduelmode').val() + $('#creategametimelimit').val();
-        prio = isChecked('#enableprio') ? ("F") : ("O");
-        checkd = isChecked('#discheckdeck') ? ("F") : ("O");
-        shuf = isChecked('#disshuffledeck') ? ("F") : ("O");
-        rp = ($('#creategamepassword').val().length > 0) ? ("L") : ("");
-        stnds = "," + $('#creategamebanlist').val() + ',5,1,' + $('input:radio[name=ranked]:checked').val() + rp + ',';
-        pass = $('#creategamepassword').val() || randomString(5);
-        compl = string + prio + checkd + shuf + $('#creategamelp').val() + stnds + pass;
-        // console.log(compl);
-
-
-        if ($('#creategamecardpool').val() == 2 && $('input:radio[name=ranked]:checked').val() == 'R') {
-            MessagePopUp('OCG/TCG is not a valid mode for ranked, please select a different mode for ranked play');
-            return false;
-        }
-        if (prio + checkd + shuf !== "OOO" && $('input:radio[name=ranked]:checked').val() == 'R') {
-            MessagePopUp('You may not cheet on DevPro');
-            return false;
-        }
-
-
-
-        $('#creategame').toggle();
-        $('.game').toggle();
-        $('#lobbyforbidden').html($('#creategamebanlist option:selected').text());
-        $('#lobbycardpool').html($('#creategamecardpool option:selected').text());
-        $('#lobbymode').html($('#creategameduelmode option:selected').text());
-        $('#lobbytime').html($('#creategametimelimit option:selected').text());
-        $('#lobbystartlp').html($('#creategamelp').val() + "/Player");
-
-
-    });
-    $('.rps').on("click", function () {
-        $('#rps').toggle();
-
-
-    });
-    $('#igofirst').on("click", function () {
-        $('#selectduelist').toggle();
-
-
-    });
-    $('#opponentfirst').on("click", function () {
-        $('#selectduelist').toggle();
-
-
-    });
-
-});
-
 
 
 
 //Functions used by the websocket object
 
-
+game = {}
 
 function MessagePopUp(message) {
     alert(message);
@@ -131,27 +58,27 @@ function MessagePopUp(message) {
 
 
 
-function PosUpdate(pos) { // Used in the lobby to notify the viewer of who is in the lobby.
+game.PosUpdate = function (pos) { // Used in the lobby to notify the viewer of who is in the lobby.
     console.log('PosUpdate: ' + pos);
 }
 
-function PlayerEnter(username, pos) { // Used in the lobby to notify the viewer of who is in the lobby.
+game.PlayerEnter = function (username, pos) { // Used in the lobby to notify the viewer of who is in the lobby.
     console.log('PlayerEnter: ' + username + ", " + pos);
     $('#lobbyplayer' + pos).html(username);
 }
 
-function PlayerLeave(pos) { // Used in the lobby to notify the viewer of who is in the lobby.
+game.PlayerLeave = function (pos) { // Used in the lobby to notify the viewer of who is in the lobby.
     $('#lobbyplayer' + pos).html("");
     $('#lobbystart').attr('class', 'button ready0');
 }
 
-function UpdatePlayer(pos, newpos) { // Used in the lobby to notify the viewer of who is in the lobby.
+game.UpdatePlayer = function (pos, newpos) { // Used in the lobby to notify the viewer of who is in the lobby.
     var UpdatePlayerposscache = $('#lobbyplayer' + pos).html();
     $('#lobbyplayer' + pos).html("");
     $('#lobbyplayer' + newpos).html(UpdatePlayerposscache);
 }
 
-function PlayerReady(pos, ready) { // Used in the lobby to notify the viewer of who is in the lobby.
+game.PlayerReady = function (pos, ready) { // Used in the lobby to notify the viewer of who is in the lobby.
     ready = (ready) ? 1 : 0;
     playerStart[pos] = ready;
     var state = playerStart[0] + playerStart[1];
@@ -170,11 +97,11 @@ function PlayerReady(pos, ready) { // Used in the lobby to notify the viewer of 
 
 }
 
-function KickPlayer(pos) {
+game.KickPlayer = function (pos) {
     pos = (pos) ? pos : 1;
 }
 
-function PlayerMessage(player, message) { //YGOPro messages.
+PlayerMessage = function (player, message) { //YGOPro messages.
     var playername;
     if (player) {
         playername = $('#lobbyplayer' + player).html();
@@ -191,21 +118,21 @@ function PlayerMessage(player, message) { //YGOPro messages.
 
 
 
-function DeckError(card) { //When you have an illegal card in your deck.
+game.DeckError = function (card) { //When you have an illegal card in your deck.
     MessagePopUp(cardIndex('c' + card).name + " is not legal for this game format");
 }
 
-function SelectRPS(value) { // Toggle RPS Screen. Screen will diengage when used.
+game.SelectRPS = function (value) { // Toggle RPS Screen. Screen will diengage when used.
     $('#rps').toggle();
 
 }
 
-function SelectFirstPlayer(value) { // Select the player that goes first.
+game.SelectFirstPlayer = function (value) { // Select the player that goes first.
     $('#selectduelist').toggle();
 
 }
 
-function StartDuel(data) { // Interface signalled the game has started
+game.StartDuel = function (data) { // Interface signalled the game has started
     var duelData = JSON.parse(data);
     console.log(duelData);
     player1StartLP = duelData.LifePoints[0];
@@ -214,10 +141,10 @@ function StartDuel(data) { // Interface signalled the game has started
     $('#player1lp').html("div class='width' style='width:" + (duelData.LifePoints[0] / player1StartLP) + "'></div>" + duelData.LifePoints[0] + "</div>");
     $('#player2lp').html("div class='width' style='width:" + (duelData.LifePoints[1] / player2StartLP) + "'></div>" + duelData.LifePoints[1] + "</div>");
 
-    DOMWriter(duelData.PlayerOneDeckSize, 'Deck', 'p0');
-    DOMWriter(duelData.PlayerTwoDeckSize, 'Deck', 'p1');
-    DOMWriter(duelData.PlayerOneExtraSize, 'Extra', 'p0');
-    DOMWriter(duelData.PlayerTwoExtraSize, 'Extra', 'p1');
+    game.DOMWriter(duelData.PlayerOneDeckSize, 'Deck', 'p0');
+    game.DOMWriter(duelData.PlayerTwoDeckSize, 'Deck', 'p1');
+    game.DOMWriter(duelData.PlayerOneExtraSize, 'Extra', 'p0');
+    game.DOMWriter(duelData.PlayerTwoExtraSize, 'Extra', 'p1');
     shuffle('p0', 'Deck');
     shuffle('p1', 'Deck');
     shuffle('p0', 'Extra');
@@ -226,7 +153,7 @@ function StartDuel(data) { // Interface signalled the game has started
     layouthand('p1');
 }
 
-function DOMWriter(size, movelocation, player) {
+game.DOMWriter = function (size, movelocation, player) {
     for (var i = 0; i < size; i++) {
         animateState('none', 'unknown', 0, player, movelocation, i, 1);
         //animateState(player, clocation, index, moveplayer, movelocation, movezone, moveposition){
@@ -234,7 +161,7 @@ function DOMWriter(size, movelocation, player) {
 
 }
 
-function UpdateCards(player, clocation, data) { //YGOPro is constantly sending data about game state, this function stores and records that information to allow access to a properly understood gamestate for reference. 
+game.UpdateCards = function (player, clocation, data) { //YGOPro is constantly sending data about game state, this function stores and records that information to allow access to a properly understood gamestate for reference. 
     var update = JSON.parse(data);
     player = 'p' + player;
     var place = cardplace[clocation];
@@ -254,7 +181,7 @@ function UpdateCards(player, clocation, data) { //YGOPro is constantly sending d
 
 }
 
-function UpdateCard(player, clocation, index, data) {
+game.UpdateCard = function (player, clocation, index, data) {
     var update = JSON.parse(data);
     player = 'p' + player;
     console.log("Updating Single Card Position", update, player + " ", "Card : " + index, cardplace[clocation]);
@@ -267,32 +194,32 @@ function UpdateCard(player, clocation, index, data) {
 
 }
 
-function DrawCard(player, numberOfCards) {
+game.DrawCard = function (player, numberOfCards) {
     console.log("p" + player + " drew " + numberOfCards + " card(s)");
     animateDrawCard("p" + player, numberOfCards);
     layouthand('p' + player);
 }
 
-function NewPhase(phase) {
+game.NewPhase = function (phase) {
     console.log(enumPhase[phase]);
 }
 
-function NewTurn(turn) {
+game.NewTurn = function (turn) {
     console.log("It is now p" + turn + "'s turn.");
 }
 
-function MoveCard(player, clocation, index, moveplayer, movelocation, movezone, moveposition) {
+game.MoveCard(player, clocation, index, moveplayer, movelocation, movezone, moveposition) {
     console.log('p' + player + "'s' ", cardplace[clocation], index, "Moved to p" + moveplayer + "s", cardplace[movelocation], movezone, moveposition);
     animateState('p' + player, cardplace[clocation], index, 'p' + moveplayer, cardplace[movelocation], movezone, moveposition);
     //animateState(player, clocation, index, moveplayer, movelocation, movezone, moveposition);
     layouthand('p' + moveplayer);
 }
 
-function OnWin(result) {
+game.OnWin = function (result) {
     console.log("Function OnWin: " + result);
 }
 
-function SelectCards(cards, min, max, cancelable) {
+game.SelectCards = function (cards, min, max, cancelable) {
     var debugObject = {
         cards: cards,
         min: min,
@@ -302,35 +229,35 @@ function SelectCards(cards, min, max, cancelable) {
     console.log('Function SelectCards:' + JSON.stringify(debugObject));
 }
 
-function DuelEnd() {
+game.DuelEnd = function () {
     console.log('Duel has ended.');
 }
 
-function SelectYn(description) {
+game.SelectYn = function (description) {
     console.log("Function SelectYn :" + description);
 }
 
-function IdleCommands(main) {
+game.IdleCommands = function (main) {
     var update = JSON.parse(main);
     console.log('IdleCommands', update);
 }
 
-function SelectPosition(positions) {
+game.SelectPosition = function (positions) {
     var debugObject = JSON.Strigify(positions);
     console.log(debugObject);
 }
 
-function SelectOption(options) {
+game.SelectOption = function (options) {
     var debugObject = JSON.Strigify(options);
     console.log(debugObject);
 }
 
-function AnnounceCard() {
+game.AnnounceCard = function () {
     //Select a card from all known cards.
     console.log('AnnounceCard');
 }
 
-function OnChaining(cards, desc, forced) {
+game.OnChaining = function (cards, desc, forced) {
     var cardIDs = JSON.parse(cards);
 
     for (var i = 0; i < cardIDs.length; i++) {
@@ -349,21 +276,163 @@ function OnChaining(cards, desc, forced) {
 
 }
 
-function ShuffleDeck(player) {
+game.ShuffleDeck = function (player) {
     console.log(player);
     shuffle('p' + player, 'Deck');
 }
 
-function debugField() {
+debugField() {
     $('.field').toggle();
-    DOMWriter(40, 'Deck', 'p0');
-    DOMWriter(40, 'Deck', 'p1');
-    DOMWriter(15, 'Extra', 'p0');
-    DOMWriter(15, 'Extra', 'p1');
-    DrawCard('p0', 5);
-    DrawCard('p1', 5);
+    game.DOMWriter(40, 'Deck', 'p0');
+    game.DOMWriter(40, 'Deck', 'p1');
+    game.DOMWriter(15, 'Extra', 'p0');
+    game.DOMWriter(15, 'Extra', 'p1');
+    game.DrawCard('p0', 5);
+    game.DrawCard('p1', 5);
     layouthand('p0');
     layouthand('p1');
 
 
 }
+
+var deckpositionx = 735;
+var currenterror;
+var positions = {
+    extra: {
+        x: 25
+    }
+};
+var shuffler, fix;
+
+$(document).ready(function () {
+    $('.card').on('click', function () {
+        complete(deckpositionx);
+    });
+});
+
+
+// Animation functions
+
+function cardmargin(player, deck) {
+    var orientation = (player === 'p0') ? ({
+        x: 'left',
+        y: 'bottom',
+        direction: 1,
+        multiple: 2
+    }) : ({
+        x: 'right',
+        y: 'top',
+        direction: -1,
+        multiple: 3
+    });
+    $('.card.' + player + '.' + deck).each(function (i) {
+        // console.log($('.card.'+player+'.'+deck), cardlocations[player],player,deck);
+        var decklocationx = (orientation.direction * i / orientation.multiple) + (cardlocations[player][deck].x_origin);
+        var decklocationy = (orientation.direction * i / orientation.multiple) + (cardlocations[player][deck].y_origin);
+        //console.log(decklocationx,decklocationy);
+
+        $(this).css(
+            orientation.y, decklocationy + 'px').css(
+            orientation.x, decklocationx + 'px'
+        );
+
+    });
+}
+
+function shuffle(player, deck) {
+    var orientation = (player === 'p0') ? ({
+        x: 'left',
+        y: 'bottom',
+        direction: 1
+    }) : ({
+        x: 'right',
+        y: 'top',
+        direction: -1
+    });
+    cardmargin(player, deck);
+    $($('.card.' + player + '.' + deck).get().reverse()).each(function (i) {
+        var cache = $(this).css(orientation.x);
+        var spatical = Math.floor((Math.random() * 150) - 75);
+        $(this).css(orientation.x, '-=' + spatical + 'px');
+    });
+    fix = setTimeout(function () {
+        cardmargin(player, deck);
+    }, 50);
+}
+
+function complete(x) {
+    var started = Date.now();
+
+    // make it loop every 100 milliseconds
+
+    var interval = setInterval(function () {
+
+        // for 1.5 seconds
+        if (Date.now() - started > 500) {
+
+            // and then pause it
+            clearInterval(interval);
+
+        } else {
+
+            // the thing to do every 100ms
+            shuffle('p0');
+
+        }
+    }, 100); // every 100 milliseconds
+}
+
+
+function animateDrawCard(player, amount) {
+    var c = $('.' + player + '.Deck').splice(0, amount);
+    //    console.log('.'+player+'.Deck');
+    //    console.log(c.length);
+    $(c).each(function (i) {
+        $(this).attr('class', "card " + player + ' ' + 'Hand i' + (i + duel[player].Hand.length) + ' AttackFaceUp')
+            .attr('style', '');
+    });
+}
+
+function animateState(player, clocation, index, moveplayer, movelocation, movezone, moveposition, count) {
+    if (count === undefined) {
+        count = 1;
+    }
+    var query = "." + player + "." + clocation + ".i" + index;
+    $(query).slice(0, count).attr('class', "card " + moveplayer + " " + movelocation + " i" + movezone + " " + cardPositions[moveposition])
+        .attr('style', '');
+}
+
+function animateChaining(player, clocation, index) {
+    $(player + '.' + clocation + '.i' + index).addClass('chainable');
+}
+
+function animateRemoveChaining() {
+    $('.chainable').removeClass('chainable');
+}
+
+function layouthand(player) {
+    var count = $('.' + player + '.Hand').length;
+    var f = 83 / 0.8;
+    var xCoord;
+    //    console.log(count,f,xCoord);
+    for (var sequence = 0; sequence < count; sequence++) {
+        if (duel[player].Hand.length < 6) {
+            xCoord = (5.5 * f - 0.8 * f * count) / 2 + 1.55 * f + sequence * 0.8 * f;
+        } else {
+            xCoord = 1.9 * f + sequence * 4.0 * f / (count - 1);
+        }
+        // console.log('.'+player+'.Hand.i'+sequence);
+        //console.log(xCoord);
+        if (player === 'p0') {
+            $('.' + player + '.Hand.i' + sequence).css('left', '' + xCoord + 'px');
+        } else {
+            $('.' + player + '.Hand.i' + sequence).css('right', '' + xCoord + 'px');
+        }
+    }
+}
+
+//    
+//    if (count <= 6)
+//    t->X = (5.5f - 0.8f * count) / 2 + 1.55f + sequence * 0.8f;
+//   else
+//    t->X = 1.9f + sequence * 4.0f / (count - 1);
