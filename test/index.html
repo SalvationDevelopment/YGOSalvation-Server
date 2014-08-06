@@ -17,10 +17,12 @@
     <link href="http://fonts.googleapis.com/css?family=Poiret+One" rel="stylesheet" type="text/css">
     <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="css/animation.css">
-    <script type="application/javascript" src="http://ygopro.de/cardreader/index.php?folder=English&callback=">
+    <script>
+        process.on('error', function () {
+            console.log('error')
+        })
     </script>
     <script src="js/vendor/modernizr-2.6.2.min.js"></script>
-    <script type="text/javascript" src="http://webplayer.unity3d.com/download_webplayer-3.x/3.0/uo/UnityObject2.js"></script>
 
 </head>
 
@@ -190,7 +192,7 @@
             <div class="button" id="opponentfirst">Opponent</div>
         </div>
     </section>
-    <div class="field" style="display:none;">
+    <div class="field">
         <div class="fieldcontainer">
             <!-- <div class="info-controls">
                     <div class="info-image">
@@ -688,21 +690,14 @@
         YGOPro, Salvation Development and our sister systems are not affliated with Konami. Powered by Yu-Jo Friendship &amp; Love.
     </footer>
 
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
-
-    <script type="text/javascript" src="/js/jquery.jplayer.min.js"></script>
-    <div id="jquery_jplayer_1" class="jp-jplayer"></div>
 
 
-
-
-
-
+    <script type="text/javascript" src="js/vendor/jquery-1.10.1.min.js"></script>
     <script src="js/plugins.js"></script>
     <script src="js/enums.js"></script>
     <script src="js/animations.js"></script>
     <script src="js/main.js"></script>
-    <script src="enviorment.js"></script>
+
 </body>
 
 </html>
