@@ -6,15 +6,66 @@
 //Define all the globals you are going to use. Avoid using to many globals. All Globals should be databases of sorts.
 // ReadInt32() = readUInt16LE()
 /* jshint node: true */
-/* globals game */
+/* globals */
+/* global module */
+/* jslint browser : true */
+
+var game = {};
+
+function Model() {
+    "use strict";
+    var model = {
+        gamestate: 'off',
+        gametype: 'single',
+        lobby: {
+            player1_username: '',
+            player2_username: '',
+            player3_username: '',
+            player4_username: '',
+            player1_loaded: false,
+            player2_loaded: false,
+            player3_loaded: false,
+            player4_loaded: false,
+            spectators: 0
+        },
+        player1_rps_choice: 0,
+        player2_rps_choice: 0,
+        activePlayer: 0,
+        phase: 0,
+        player1_lifepoints: 8000,
+        player2_lifepoints: 8000,
+        player1_cards: {
+            deck: [],
+            extra: [],
+            side: [],
+            hand: [],
+            monsters: [null, null, null, null, null],
+            spells: [null, null, null, null, null, null, null, null]
+        },
+        player2_cards: {
+            deck: [],
+            extra: [],
+            side: [],
+            hand: [],
+            monsters: [null, null, null, null, null],
+            spells: [null, null, null, null, null, null, null, null]
+        },
+        wincondition: 'none',
+        replaysave: false,
+        replayfile: '',
+        gamelog: [],
+        cardunderexamine: 0
+    };
+    return model;
+}
+
 console.log('Runing DevPro Packet Sniffing Proxy');
 
 var net = require('net');
 
-var WebSocket = require('ws');
 var parsePackets = require('../server/libs/parsepackets.js');
 var enums = require('../server/libs/enums.js');
-var Model = require('../client/interface/js/game-model.js');
+
 //var recieveCTOS = require('../../recieveCTOS');
 var recieveSTOC = require('../server/libs/recieveSTOC.js');
 var ws = new WebSocket('ws://192.99.11.19:8913/path');
@@ -94,6 +145,7 @@ function processTask(task, socket) {
                 var drawplayer = task[i].STOC_GAME_MSG.message[1];
                 var draw = task[i].STOC_GAME_MSG.message[2];
                 console.log(('Player' + (drawplayer + 1)), 'drew', draw, 'cards');
+                game.DrawCard(drawplayer, draw);
             } else if (command === 'MSG_SHUFFLE_DECK') {
                 var deckshuffleplayer = task[i].STOC_GAME_MSG.message[1];
                 console.log(('Player' + (deckshuffleplayer + 1)), 'shuffled the deck');
@@ -142,6 +194,7 @@ function processTask(task, socket) {
                 var cl = task[i].STOC_GAME_MSG.message[7];
                 var cs = task[i].STOC_GAME_MSG.message[8];
                 var reason = task[i].STOC_GAME_MSG.message[3];
+                animateState(pc, pl, ps, cc, cl, cs, pp, reason);
                 console.log('Move', pc, pl, ps, 'to', cc, cl, cs, 'due to', pp, reason);
             } else if (command === 'MSG_SET') {
                 var smovecardid = task[i].STOC_GAME_MSG.message[1];
@@ -159,6 +212,7 @@ function processTask(task, socket) {
                 var fieldlocation = task[i].STOC_GAME_MSG.message[2];
                 var fieldmodel = enums.locations[fieldlocation];
                 //console.log('MSG_UPDATE_DATA', 'Player' + (player + 1), fieldmodel);
+                updateMassCards(player, fieldlocation, task[i].STOC_GAME_MSG.message);
             } else if (command === 'MSG_UPDATE_CARD') {
                 var udplayer = task[i].STOC_GAME_MSG.message[1];
                 var udfieldlocation = task[i].STOC_GAME_MSG.message[2];
@@ -167,6 +221,7 @@ function processTask(task, socket) {
                 var udcard = makeCard(task[i].STOC_GAME_MSG.message, 0, udplayer).card;
                 console.log('MSG_UPDATE_CARD',
                     'Player' + (udplayer + 1), enums.locations[udfieldlocation], udindex, udcard);
+                game.UpdateCard(udplayer, udfieldlocation, udindex, udcard);
             } else {
                 console.log(command, task[i].STOC_GAME_MSG.message);
             }
@@ -211,12 +266,17 @@ function processTask(task, socket) {
 
 function makeCard(buffer, start, controller) {
     if (buffer.length < 12) {
-        return;
+        return {
+            card: {},
+            readposition: start
+        };
     }
-
-    var flag = buffer.readUInt32LE(8);
+    var flag = buffer.readUInt32LE(start + 8);
     if (!flag) {
-        return;
+        return {
+            card: {},
+            readposition: start + 9
+        };
     }
     var card = {};
 
@@ -343,6 +403,38 @@ function makeCard(buffer, start, controller) {
 
 
 }
+
+function cardCollections(player) {
+    return {
+        DECK: $('.p' + player + '.deck').length,
+        EXTRA: $('.p' + player + '.extra').length,
+        GRAVE: $('.p' + player + '.grave').length,
+        REMOVED: $('.p' + player + '.removed').length,
+        SPELLZONE: 8,
+        MONSTERZONE: 5
+
+    };
+}
+
+function updateMassCards(player, clocation, buffer) {
+    var field = cardCollections(player);
+    var output = [];
+    var readposition = 0;
+    if (field[clocation]) {
+        for (var i = 0, count = field[clocation]; count > i; i++) {
+            var len = buffer.readUInt16LE(readposition);
+            if (len < 8) {
+                readposition = readposition + 4;
+                var result = makeCard(buffer, readposition, player);
+                output.push(result.card);
+                readposition = result.readposition + len - 4;
+            } else {
+                output.push({});
+            }
+        }
+    }
+    return output;
+}
 var playerStart = [0, 0];
 var cardIndex = {};
 var cardData;
@@ -388,7 +480,7 @@ var duel = {
 
 //Functions used by the websocket object
 
-game = {}
+game.images = 'http://salvationdevelopment.com/launcher/ygopro/pics/c';
 
 function MessagePopUp(message) {
     alert(message);
@@ -398,23 +490,23 @@ function MessagePopUp(message) {
 
 game.PosUpdate = function (pos) { // Used in the lobby to notify the viewer of who is in the lobby.
     console.log('PosUpdate: ' + pos);
-}
+};
 
 game.PlayerEnter = function (username, pos) { // Used in the lobby to notify the viewer of who is in the lobby.
     console.log('PlayerEnter: ' + username + ", " + pos);
     $('#lobbyplayer' + pos).html(username);
-}
+};
 
 game.PlayerLeave = function (pos) { // Used in the lobby to notify the viewer of who is in the lobby.
     $('#lobbyplayer' + pos).html("");
     $('#lobbystart').attr('class', 'button ready0');
-}
+};
 
 game.UpdatePlayer = function (pos, newpos) { // Used in the lobby to notify the viewer of who is in the lobby.
     var UpdatePlayerposscache = $('#lobbyplayer' + pos).html();
     $('#lobbyplayer' + pos).html("");
     $('#lobbyplayer' + newpos).html(UpdatePlayerposscache);
-}
+};
 
 game.PlayerReady = function (pos, ready) { // Used in the lobby to notify the viewer of who is in the lobby.
     ready = (ready) ? 1 : 0;
@@ -433,13 +525,13 @@ game.PlayerReady = function (pos, ready) { // Used in the lobby to notify the vi
     }
 
 
-}
+};
 
 game.KickPlayer = function (pos) {
     pos = (pos) ? pos : 1;
-}
+};
 
-PlayerMessage = function (player, message) { //YGOPro messages.
+game.PlayerMessage = function (player, message) { //YGOPro messages.
     var playername;
     if (player) {
         playername = $('#lobbyplayer' + player).html();
@@ -452,26 +544,25 @@ PlayerMessage = function (player, message) { //YGOPro messages.
         scrollTop: $('#messagerbox ul').height()
     }, "fast");
     console.log(playername + " :" + message);
-}
+};
 
 
 
 game.DeckError = function (card) { //When you have an illegal card in your deck.
     MessagePopUp(cardIndex('c' + card).name + " is not legal for this game format");
-}
+};
 
 game.SelectRPS = function (value) { // Toggle RPS Screen. Screen will diengage when used.
     $('#rps').toggle();
 
-}
+};
 
 game.SelectFirstPlayer = function (value) { // Select the player that goes first.
     $('#selectduelist').toggle();
 
-}
+};
 
 game.StartDuel = function (player1StartLP, player2StartLP, OneDeck, TwoDeck, OneExtra, TwoExtra) { // Interface signalled the game has started
-
     $('#player1lp').html("div class='width' style='width:" + (player1StartLP) + "'></div>" + player1StartLP + "</div>");
     $('#player2lp').html("div class='width' style='width:" + (player2StartLP) + "'></div>" + player1StartLP + "</div>");
 
@@ -485,7 +576,7 @@ game.StartDuel = function (player1StartLP, player2StartLP, OneDeck, TwoDeck, One
     shuffle('p1', 'Extra');
     layouthand('p0');
     layouthand('p1');
-}
+};
 
 game.DOMWriter = function (size, movelocation, player) {
     for (var i = 0; i < size; i++) {
@@ -493,65 +584,44 @@ game.DOMWriter = function (size, movelocation, player) {
         //animateState(player, clocation, index, moveplayer, movelocation, movezone, moveposition){
     }
 
-}
+};
 
 game.UpdateCards = function (player, clocation, data) { //YGOPro is constantly sending data about game state, this function stores and records that information to allow access to a properly understood gamestate for reference. 
-    var update = JSON.parse(data);
-    player = 'p' + player;
-    var place = cardplace[clocation];
-    console.log("Updating Multiple Card Positions for", player + "'s", place);
-    try {
-        if (update != duel[player][place]) {
-            // console.log(update);     
-        }
-        duel[player][place] = update;
-        //console.log(duel);
-    } catch (error) {
-        console.log(error);
-        console.log(duel, player, place, update);
+
+
+    for (var i = 0; data.length > i; i++) {
+        $('.p' + player + '.' + clocation + '.i' + i).attr('src', game.images + data[i].Id);
     }
-
-
-
-}
+};
 
 game.UpdateCard = function (player, clocation, index, data) {
-    var update = JSON.parse(data);
-    player = 'p' + player;
-    console.log("Updating Single Card Position", update, player + " ", "Card : " + index, cardplace[clocation]);
-    if (duel[player][cardplace[clocation]][index] != update) {
-        $('.card.' + player + '.' + [cardplace[clocation]] + '.i' + index + ' .front').css('background',
-            "yellow url(http://ygopro.de/img/cardpics/" + update.Id + '.jpg) no-repeat auto 0 0 cover');
-    }
-
-    duel[player][cardplace[clocation]][index] = update;
-
-}
+    $('.p' + player + '.' + clocation + '.i' + index).attr('src', game.images + data[index].Id);
+};
 
 game.DrawCard = function (player, numberOfCards) {
     console.log("p" + player + " drew " + numberOfCards + " card(s)");
     animateDrawCard("p" + player, numberOfCards);
     layouthand('p' + player);
-}
+};
 
 game.NewPhase = function (phase) {
-    console.log(enumPhase[phase]);
-}
+    console.log(enums.phase[phase]);
+};
 
 game.NewTurn = function (turn) {
     console.log("It is now p" + turn + "'s turn.");
-}
+};
 
 game.MoveCard = function (player, clocation, index, moveplayer, movelocation, movezone, moveposition) {
-    console.log('p' + player + "'s' ", cardplace[clocation], index, "Moved to p" + moveplayer + "s", cardplace[movelocation], movezone, moveposition);
-    animateState('p' + player, cardplace[clocation], index, 'p' + moveplayer, cardplace[movelocation], movezone, moveposition);
+    console.log('p' + player + "'s' ", enums.locations[clocation], index, "Moved to p" + moveplayer + "s", enums.locations[movelocation], movezone, moveposition);
+    animateState('p' + player, enums.locations[clocation], index, 'p' + moveplayer, enums.locations[movelocation], movezone, moveposition);
     //animateState(player, clocation, index, moveplayer, movelocation, movezone, moveposition);
     layouthand('p' + moveplayer);
-}
+};
 
 game.OnWin = function (result) {
     console.log("Function OnWin: " + result);
-}
+};
 
 game.SelectCards = function (cards, min, max, cancelable) {
     var debugObject = {
@@ -561,41 +631,41 @@ game.SelectCards = function (cards, min, max, cancelable) {
         cancelable: cancelable
     };
     console.log('Function SelectCards:' + JSON.stringify(debugObject));
-}
+};
 
 game.DuelEnd = function () {
     console.log('Duel has ended.');
-}
+};
 
 game.SelectYn = function (description) {
     console.log("Function SelectYn :" + description);
-}
+};
 
 game.IdleCommands = function (main) {
     var update = JSON.parse(main);
     console.log('IdleCommands', update);
-}
+};
 
 game.SelectPosition = function (positions) {
     var debugObject = JSON.Strigify(positions);
     console.log(debugObject);
-}
+};
 
 game.SelectOption = function (options) {
     var debugObject = JSON.Strigify(options);
     console.log(debugObject);
-}
+};
 
 game.AnnounceCard = function () {
     //Select a card from all known cards.
     console.log('AnnounceCard');
-}
+};
 
 game.OnChaining = function (cards, desc, forced) {
     var cardIDs = JSON.parse(cards);
 
     for (var i = 0; i < cardIDs.length; i++) {
-        animateChaining(('p' + cardIDs[i].Player), cardplace[cardIDs[i].location], cardIDs[i].Index);
+        animateChaining(('p' + cardIDs[i].Player), enums.locations[cardIDs[i].location], cardIDs[i].Index);
     }
 
     //auto say no
@@ -608,12 +678,12 @@ game.OnChaining = function (cards, desc, forced) {
     }
     console.log('chaining', cardIDs, desc);
 
-}
+};
 
 game.ShuffleDeck = function (player) {
     console.log(player);
     shuffle('p' + player, 'Deck');
-}
+};
 
 function debugField() {
     $('.field').toggle();
@@ -732,7 +802,7 @@ function animateState(player, clocation, index, moveplayer, movelocation, movezo
         count = 1;
     }
     var query = "." + player + "." + clocation + ".i" + index;
-    $(query).slice(0, count).attr('class', "card " + moveplayer + " " + movelocation + " i" + movezone + " " + cardPositions[moveposition])
+    $(query).slice(0, count).attr('class', "card " + moveplayer + " " + movelocation + " i" + movezone + " index" + index)
         .attr('style', '');
 }
 
