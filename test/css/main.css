@@ -582,8 +582,8 @@ article {
     background: brown;
 }
 .gameplayarea {
-    width: 1000px;
-    height: 1000px;
+    width: 750px;
+    height: 750px;
     margin: 0 auto;
 }
 .fieldimage {
