@@ -1,10 +1,10 @@
 
 .p0 {position:absolute; display:block}
 
-.p0.Deck         {bottom : 43px; left: 735px; }
-.p0.Hand         {bottom : -10px; left: 124px; }
-.p0.Extra        {bottom : 43px; left: 22px; }
-.p0.Grave        {bottom : 181px; left: 735px; }
+.p0.DECK         {bottom : 43px; left: 735px; }
+.p0.HAND         {bottom : -10px; left: 124px; }
+.p0.EXTRA        {bottom : 43px; left: 22px; }
+.p0.GRAVE        {bottom : 181px; left: 735px; }
 
 
 
@@ -16,19 +16,19 @@
 .p0.SpellZone.i5     {bottom :188px; left:;}
 
 
-.p0.MonsterZone.i0     {bottom :250px; left:144px;}
-.p0.MonsterZone.i1     {bottom :250px; left:261px;}
-.p0.MonsterZone.i2     {bottom :250px; left:379px;}
-.p0.MonsterZone.i3     {bottom :250px; left:497px;}
-.p0.MonsterZone.i4     {bottom :250px; left:614px;}
+.p0.MONSTERZONE.i0     {bottom :250px; left:144px;}
+.p0.MONSTERZONE.i1     {bottom :250px; left:261px;}
+.p0.MONSTERZONE.i2     {bottom :250px; left:379px;}
+.p0.MONSTERZONE.i3     {bottom :250px; left:497px;}
+.p0.MONSTERZONE.i4     {bottom :250px; left:614px;}
 
 
 .p1 {position:absolute; display:block}
 
-.p1.Deck         {top : 43px;right: 744px; }
-.p1.Hand         {top : -10px; right: 124px; }
-.p1.Extra        {top : 43px; right: 32px; }
-.p1.Grave        {top : 181px; right: 735px; }
+.p1.DECK         {top : 43px;right: 744px; }
+.p1.HAND         {top : -10px; right: 124px; }
+.p1.EXTRA        {top : 43px; right: 32px; }
+.p1.GRAVE        {top : 181px; right: 735px; }
  
 
 .p1.SpellZone.i0     {top :117px; right:144px;}
@@ -39,11 +39,11 @@
 .p1.SpellZone.i5     {top :188px; right:;}
 
 
-.p1.MonsterZone.i0     {top :250px; right:144px;}
-.p1.MonsterZone.i1     {top :250px; right:261px;}
-.p1.MonsterZone.i2     {top :250px; right:379px;}
-.p1.MonsterZone.i3     {top :250px; right:497px;}
-.p1.MonsterZone.i4     {top :250px; right:614px;}
+.p1.MONSTERZONE.i0     {top :250px; right:144px;}
+.p1.MONSTERZONE.i1     {top :250px; right:261px;}
+.p1.MONSTERZONE.i2     {top :250px; right:379px;}
+.p1.MONSTERZONE.i3     {top :250px; right:497px;}
+.p1.MONSTERZONE.i4     {top :250px; right:614px;}
 
 .card { -webkit-transform-style: preserve-3d; width:83px; height:124px; background:blue; position:absolute; -z-index: 3; -webkit-transition: all 500ms;}
 .card.deck { -webkit-transition: left 150ms;}
