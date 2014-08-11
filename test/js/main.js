@@ -185,17 +185,16 @@ function processTask(task, socket) {
                     //                    }
                 }
             } else if (command === 'MSG_MOVE') {
-                var movecardid = task[i].STOC_GAME_MSG.message[1];
-                var pc = task[i].STOC_GAME_MSG.message[2];
-                var pl = task[i].STOC_GAME_MSG.message[3];
-                var ps = task[i].STOC_GAME_MSG.message[4];
-                var pp = task[i].STOC_GAME_MSG.message[5];
-                var cc = task[i].STOC_GAME_MSG.message[6];
-                var cl = task[i].STOC_GAME_MSG.message[7];
-                var cs = task[i].STOC_GAME_MSG.message[8];
-                var reason = task[i].STOC_GAME_MSG.message[3];
-                animateState(pc, pl, ps, cc, cl, cs, pp, reason);
-                console.log('Move', pc, pl, ps, 'to', cc, cl, cs, 'due to', pp, reason);
+                var movecardid = task[i].STOC_GAME_MSG.message.readUInt16LE(1);
+                var original_player = task[i].STOC_GAME_MSG.message[5];
+                var original_clocation = task[i].STOC_GAME_MSG.message[6];
+                var original_index = task[i].STOC_GAME_MSG.message[7];
+                var pp = task[i].STOC_GAME_MSG.message[8];// padding
+                var new_player = task[i].STOC_GAME_MSG.message[9];
+                var new_clocation = task[i].STOC_GAME_MSG.message[10];
+                var new_index = task[i].STOC_GAME_MSG.message[11];
+                var reason = task[i].STOC_GAME_MSG.message.readUInt16LE[12];
+                console.log('Move', original_player, original_clocation, original_index, 'to', new_player, new_clocation, reason, 'due to', pp, reason);
             } else if (command === 'MSG_SET') {
                 var smovecardid = task[i].STOC_GAME_MSG.message[1];
                 var spc = task[i].STOC_GAME_MSG.message[2];
@@ -208,17 +207,18 @@ function processTask(task, socket) {
                 var sreason = task[i].STOC_GAME_MSG.message[3];
                 console.log('Move', spc, spl, sps, 'to', scc, scl, scs, 'due to', spp, sreason);
             } else if (command === 'MSG_UPDATE_DATA') {
-                var player = task[i].STOC_GAME_MSG.message[1];
+                 player = task[i].STOC_GAME_MSG.message[1];
                 var fieldlocation = task[i].STOC_GAME_MSG.message[2];
                 var fieldmodel = enums.locations[fieldlocation];
-                //console.log('MSG_UPDATE_DATA', 'Player' + (player + 1), fieldmodel);
-                updateMassCards(player, fieldlocation, task[i].STOC_GAME_MSG.message);
+                var udata =  updateMassCards(player, fieldlocation, task[i].STOC_GAME_MSG.message);
+                console.log('MSG_UPDATE_DATA', 'Player' + (player + 1), fieldmodel, udata);
+                game.UpdateCards(player, fieldlocation, udata);
             } else if (command === 'MSG_UPDATE_CARD') {
                 var udplayer = task[i].STOC_GAME_MSG.message[1];
                 var udfieldlocation = task[i].STOC_GAME_MSG.message[2];
                 var udindex = task[i].STOC_GAME_MSG.message[3];
 
-                var udcard = makeCard(task[i].STOC_GAME_MSG.message, 0, udplayer).card;
+                var udcard = makeCard(task[i].STOC_GAME_MSG.message, 8, udplayer).card;
                 console.log('MSG_UPDATE_CARD',
                     'Player' + (udplayer + 1), enums.locations[udfieldlocation], udindex, udcard);
                 game.UpdateCard(udplayer, udfieldlocation, udindex, udcard);
@@ -265,14 +265,16 @@ function processTask(task, socket) {
 }
 
 function makeCard(buffer, start, controller) {
-    if (buffer.length < 12) {
+    if (buffer.length < 4) {
         return {
             card: {},
             readposition: start
         };
     }
-    var flag = buffer.readUInt32LE(start + 8);
+    var flag = buffer.readUInt32LE(start);
+    
     if (!flag) {
+        console.log('no flag');
         return {
             card: {},
             readposition: start + 9
@@ -281,7 +283,7 @@ function makeCard(buffer, start, controller) {
     var card = {};
 
     //console.log('flag:', flag);
-    var readposition = 12;
+    var readposition = start + 4;
 
     if (flag & enums.query.Code) {
         card.Code = buffer.readUInt32LE(readposition);
@@ -349,7 +351,7 @@ function makeCard(buffer, start, controller) {
         readposition = readposition + 4;
     }
     if (flag & enums.query.TargetCard) {
-
+        card.TargetCard = [];
         for (var i = 0; i < buffer.readUInt32LE(readposition); ++i) {
             card.TargetCard.push({
                 c: buffer[readposition + 0],
@@ -406,10 +408,11 @@ function makeCard(buffer, start, controller) {
 
 function cardCollections(player) {
     return {
-        DECK: $('.p' + player + '.deck').length,
-        EXTRA: $('.p' + player + '.extra').length,
-        GRAVE: $('.p' + player + '.grave').length,
-        REMOVED: $('.p' + player + '.removed').length,
+        DECK: $('.p' + player + '.DECK').length,
+        HAND: $('.p' + player + '.HAND').length,
+        EXTRA: $('.p' + player + '.EXTRA').length,
+        GRAVE: $('.p' + player + '.GRAVE').length,
+        REMOVED: $('.p' + player + '.REMOVED').length,
         SPELLZONE: 8,
         MONSTERZONE: 5
 
@@ -420,14 +423,17 @@ function updateMassCards(player, clocation, buffer) {
     var field = cardCollections(player);
     var output = [];
     var readposition = 0;
-    if (field[clocation]) {
-        for (var i = 0, count = field[clocation]; count > i; i++) {
-            var len = buffer.readUInt16LE(readposition);
+    //console.log(field);
+    if (field[enums.locations[clocation]] !== undefined){
+        for (var i = 0, count = field[enums.locations[clocation]]; count > i; i++) {
+             var len = buffer.readUInt8(readposition);
+            readposition = readposition + 4;
+            console.log('LEN:',len);
             if (len < 8) {
-                readposition = readposition + 4;
+                
                 var result = makeCard(buffer, readposition, player);
                 output.push(result.card);
-                readposition = result.readposition + len - 4;
+                readposition = readposition + len - 4;
             } else {
                 output.push({});
             }
@@ -480,7 +486,7 @@ var duel = {
 
 //Functions used by the websocket object
 
-game.images = 'http://salvationdevelopment.com/launcher/ygopro/pics/c';
+game.images = 'http://salvationdevelopment.com/launcher/ygopro/pics/';
 
 function MessagePopUp(message) {
     alert(message);
@@ -566,10 +572,10 @@ game.StartDuel = function (player1StartLP, player2StartLP, OneDeck, TwoDeck, One
     $('#player1lp').html("div class='width' style='width:" + (player1StartLP) + "'></div>" + player1StartLP + "</div>");
     $('#player2lp').html("div class='width' style='width:" + (player2StartLP) + "'></div>" + player1StartLP + "</div>");
 
-    game.DOMWriter(OneDeck, 'Deck', 'p0');
-    game.DOMWriter(TwoDeck, 'Deck', 'p1');
-    game.DOMWriter(OneExtra, 'Extra', 'p0');
-    game.DOMWriter(TwoExtra, 'Extra', 'p1');
+    game.DOMWriter(OneDeck, 'Deck', 0);
+    game.DOMWriter(TwoDeck, 'Deck', 1);
+    game.DOMWriter(OneExtra, 'Extra', 0);
+    game.DOMWriter(TwoExtra, 'Extra', 1);
     shuffle('p0', 'Deck');
     shuffle('p1', 'Deck');
     shuffle('p0', 'Extra');
@@ -590,12 +596,15 @@ game.UpdateCards = function (player, clocation, data) { //YGOPro is constantly s
 
 
     for (var i = 0; data.length > i; i++) {
-        $('.p' + player + '.' + clocation + '.i' + i).attr('src', game.images + data[i].Id);
+        console.log('.card.p' + player + '.' + enums.locations[clocation] + '.i' + i, data[i].Code);
+        $('.card.p' + player + '.' + enums.locations[clocation] + '.i' + i).attr('src', game.images + data[i].Code+'.jpg');
     }
 };
 
 game.UpdateCard = function (player, clocation, index, data) {
-    $('.p' + player + '.' + clocation + '.i' + index).attr('src', game.images + data[index].Id);
+
+    console.log('.card.p' + player + '.' + enums.locations[clocation] + '.i' + index);
+    $('.card.p' + player + '.' + enums.locations[clocation] + '.i' + index).attr('src', game.images + data.Code+'.jpg');
 };
 
 game.DrawCard = function (player, numberOfCards) {
@@ -792,7 +801,7 @@ function animateDrawCard(player, amount) {
     //    console.log('.'+player+'.Deck');
     //    console.log(c.length);
     $(c).each(function (i) {
-        $(this).attr('class', "card " + player + ' ' + 'Hand i' + (i + duel[player].Hand.length) + ' AttackFaceUp')
+        $(this).attr('class', "card " + player + ' ' + 'HAND i' + (i + duel[player].Hand.length) + ' AttackFaceUp')
             .attr('style', '');
     });
 }
@@ -801,9 +810,9 @@ function animateState(player, clocation, index, moveplayer, movelocation, movezo
     if (count === undefined) {
         count = 1;
     }
-    var query = "." + player + "." + clocation + ".i" + index;
-    $(query).slice(0, count).attr('class', "card " + moveplayer + " " + movelocation + " i" + movezone + " index" + index)
-        .attr('style', '');
+    var query = "." + player + "." + enums.locations[clocation] + ".i" + index;
+    $(query).slice(0, count).attr('class', "card p" + moveplayer + " " + movelocation + " i" + movezone)
+        .attr('style', '').attr('data-position', moveposition);
 }
 
 function animateChaining(player, clocation, index) {
