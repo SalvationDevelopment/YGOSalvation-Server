@@ -586,7 +586,7 @@ game.StartDuel = function (player1StartLP, player2StartLP, OneDeck, TwoDeck, One
 
 game.DOMWriter = function (size, movelocation, player) {
     for (var i = 0; i < size; i++) {
-        animateState('none', 'unknown', 0, player, movelocation, i, 1);
+        animateState('none', 'unknown', 0, player, movelocation, i, 'DefenseFaceDown');
         //animateState(player, clocation, index, moveplayer, movelocation, movezone, moveposition){
     }
 
@@ -609,7 +609,7 @@ game.UpdateCard = function (player, clocation, index, data) {
 
 game.DrawCard = function (player, numberOfCards) {
     console.log("p" + player + " drew " + numberOfCards + " card(s)");
-    animateDrawCard("p" + player, numberOfCards);
+    animateDrawCard(player, numberOfCards);
     layouthand('p' + player);
 };
 
@@ -700,8 +700,8 @@ function debugField() {
     game.DOMWriter(40, 'Deck', 'p1');
     game.DOMWriter(15, 'Extra', 'p0');
     game.DOMWriter(15, 'Extra', 'p1');
-    game.DrawCard('p0', 5);
-    game.DrawCard('p1', 5);
+    game.DrawCard(0, 5);
+    game.DrawCard(1, 5);
     layouthand('p0');
     layouthand('p1');
 
@@ -797,12 +797,13 @@ function complete(x) {
 
 
 function animateDrawCard(player, amount) {
-    var c = $('.' + player + '.Deck').splice(0, amount);
+    var numCardsInHand = $('.p' + player + '.DECK').length;
+    var deck = $('.p' + player + '.DECK').splice(0, amount);
     //    console.log('.'+player+'.Deck');
     //    console.log(c.length);
-    $(c).each(function (i) {
-        $(this).attr('class', "card " + player + ' ' + 'HAND i' + (i + duel[player].Hand.length) + ' AttackFaceUp')
-            .attr('style', '');
+    $(deck).each(function (i) {
+        $(this).attr('class', "card " + player + ' ' + 'HAND i' + (i + numCardsInHand))
+            .attr('style', '').attr('data-position', 'AttackFaceUp');
     });
 }
 
@@ -849,3 +850,135 @@ function layouthand(player) {
 //    t->X = (5.5f - 0.8f * count) / 2 + 1.55f + sequence * 0.8f;
 //   else
 //    t->X = 1.9f + sequence * 4.0f / (count - 1);
+var cardlocations = {
+    
+    'p0' : { 
+        Deck : {
+            x_origin :735, // player 1
+            y_origin : 43
+        },
+        Hand : {
+            x_origin : 124,
+            y_origin : -10
+        },
+        Extra : {
+            x_origin :22,
+            y_origin :43
+        },
+        Field :{
+            x_origin :22,
+            y_origin :181
+        },
+        Spells : {
+            zone1: {
+                x_origin : 144,
+                y_origin : 188
+            },
+            zone2: {
+                x_origin : 261,
+                y_origin : 188
+            },
+            zone3: {
+                x_origin : 379,
+                y_oirgin : 188
+            },
+            zone4: {
+                x_origin : 497,
+                y_origin : 188
+            },
+            zone5: {
+                x_origin : 614,
+                y_origin : 188
+            }
+        },
+        MonsterZone : {
+            zone1: {
+                x_origin : 144,
+                y_origin : 250
+            },
+            zone2: {
+                x_origin : 261,
+                y_origin : 250
+            },
+            zone3: {
+                x_origin : 379,
+                y_oirgin : 250
+            },
+            zone4: {
+                x_origin : 497,
+                y_origin : 250
+            },
+            zone5: {
+                x_origin : 614,
+                y_origin : 250
+            }
+        }
+    
+    
+    },
+    'p1' : { 
+        Deck : {
+            x_origin :744, // player 1
+            y_origin : 43
+        },
+        Hand : {
+            x_origin : 124,
+            y_origin : -10
+        },
+        Extra : {
+            x_origin :32,
+            y_origin :43
+        },
+        Field :{
+            x_origin :22,
+            y_origin :181
+        },
+        Spells : {
+            zone1: {
+                x_origin : 144,
+                y_origin : 188
+            },
+            zone2: {
+                x_origin : 261,
+                y_origin : 188
+            },
+            zone3: {
+                x_origin : 379,
+                y_oirgin : 188
+            },
+            zone4: {
+                x_origin : 497,
+                y_origin : 188
+            },
+            zone5: {
+                x_origin : 614,
+                y_origin : 188
+            }
+        },
+        MonsterZone : {
+            zone1: {
+                x_origin : 144,
+                y_origin : 250
+            },
+            zone2: {
+                x_origin : 261,
+                y_origin : 250
+            },
+            zone3: {
+                x_origin : 379,
+                y_oirgin : 250
+            },
+            zone4: {
+                x_origin : 497,
+                y_origin : 250
+            },
+            zone5: {
+                x_origin : 614,
+                y_origin : 250
+            }
+        }
+    
+    
+    }
+    
+};
