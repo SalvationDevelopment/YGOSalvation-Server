@@ -12,53 +12,6 @@
 
 var game = {};
 
-function Model() {
-    "use strict";
-    var model = {
-        gamestate: 'off',
-        gametype: 'single',
-        lobby: {
-            player1_username: '',
-            player2_username: '',
-            player3_username: '',
-            player4_username: '',
-            player1_loaded: false,
-            player2_loaded: false,
-            player3_loaded: false,
-            player4_loaded: false,
-            spectators: 0
-        },
-        player1_rps_choice: 0,
-        player2_rps_choice: 0,
-        activePlayer: 0,
-        phase: 0,
-        player1_lifepoints: 8000,
-        player2_lifepoints: 8000,
-        player1_cards: {
-            deck: [],
-            extra: [],
-            side: [],
-            hand: [],
-            monsters: [null, null, null, null, null],
-            spells: [null, null, null, null, null, null, null, null]
-        },
-        player2_cards: {
-            deck: [],
-            extra: [],
-            side: [],
-            hand: [],
-            monsters: [null, null, null, null, null],
-            spells: [null, null, null, null, null, null, null, null]
-        },
-        wincondition: 'none',
-        replaysave: false,
-        replayfile: '',
-        gamelog: [],
-        cardunderexamine: 0
-    };
-    return model;
-}
-
 console.log('Runing DevPro Packet Sniffing Proxy');
 
 var net = require('net');
@@ -425,7 +378,7 @@ function updateMassCards(player, clocation, buffer) {
     var readposition = 0;
     //console.log(field);
     if (field[enums.locations[clocation]] !== undefined){
-        for (var i = 0, count = field[enums.locations[clocation]]; count > i; i++) {
+        for (var i = 0, count = 1; /*field[enums.locations[clocation]];*/ count > i; i++) {
              var len = buffer.readUInt8(readposition);
             readposition = readposition + 4;
             console.log('LEN:',len);
@@ -439,6 +392,7 @@ function updateMassCards(player, clocation, buffer) {
             }
         }
     }
+    console.log(output);
     return output;
 }
 var playerStart = [0, 0];
@@ -572,21 +526,22 @@ game.StartDuel = function (player1StartLP, player2StartLP, OneDeck, TwoDeck, One
     $('#player1lp').html("div class='width' style='width:" + (player1StartLP) + "'></div>" + player1StartLP + "</div>");
     $('#player2lp').html("div class='width' style='width:" + (player2StartLP) + "'></div>" + player1StartLP + "</div>");
 
-    game.DOMWriter(OneDeck, 'Deck', 0);
-    game.DOMWriter(TwoDeck, 'Deck', 1);
-    game.DOMWriter(OneExtra, 'Extra', 0);
-    game.DOMWriter(TwoExtra, 'Extra', 1);
-    shuffle('p0', 'Deck');
-    shuffle('p1', 'Deck');
-    shuffle('p0', 'Extra');
-    shuffle('p1', 'Extra');
-    layouthand('p0');
-    layouthand('p1');
+    game.DOMWriter(OneDeck, 'DECK', 0);
+    game.DOMWriter(TwoDeck, 'DECK', 1);
+    game.DOMWriter(OneExtra, 'EXTRA', 0);
+    game.DOMWriter(TwoExtra, 'EXTRA', 1);
+    shuffle(0, 'DECK');
+    shuffle(1, 'DECK');
+    shuffle(0, 'EXTRA');
+    shuffle(1, 'EXTRA');
+    layouthand(0);
+    layouthand(0);
+    return [cardCollections(0),cardCollections(1)];
 };
 
 game.DOMWriter = function (size, movelocation, player) {
     for (var i = 0; i < size; i++) {
-        animateState('none', 'unknown', 0, player, movelocation, i, 'DefenseFaceDown');
+        animateState('ignore', 'unknown', 0, player, movelocation, i, 'DefenseFaceDown');
         //animateState(player, clocation, index, moveplayer, movelocation, movezone, moveposition){
     }
 
@@ -608,9 +563,14 @@ game.UpdateCard = function (player, clocation, index, data) {
 };
 
 game.DrawCard = function (player, numberOfCards) {
+    var currenthand = $('.p'+player+'.HAND').length;
+    for (var i = 0; i < numberOfCards; i++) {
+        animateState(player, 0x01, 'ignore', player, 'HAND', currenthand+i, 'AttackFaceUp');
+        //animateState(player, clocation, index, moveplayer, movelocation, movezone, moveposition){
+    }
+
+    layouthand(player);
     console.log("p" + player + " drew " + numberOfCards + " card(s)");
-    animateDrawCard(player, numberOfCards);
-    layouthand('p' + player);
 };
 
 game.NewPhase = function (phase) {
@@ -625,7 +585,7 @@ game.MoveCard = function (player, clocation, index, moveplayer, movelocation, mo
     console.log('p' + player + "'s' ", enums.locations[clocation], index, "Moved to p" + moveplayer + "s", enums.locations[movelocation], movezone, moveposition);
     animateState('p' + player, enums.locations[clocation], index, 'p' + moveplayer, enums.locations[movelocation], movezone, moveposition);
     //animateState(player, clocation, index, moveplayer, movelocation, movezone, moveposition);
-    layouthand('p' + moveplayer);
+    layouthand(moveplayer);
 };
 
 game.OnWin = function (result) {
@@ -691,7 +651,7 @@ game.OnChaining = function (cards, desc, forced) {
 
 game.ShuffleDeck = function (player) {
     console.log(player);
-    shuffle('p' + player, 'Deck');
+    shuffle(player, 'DECK');
 };
 
 function debugField() {
@@ -751,8 +711,11 @@ function cardmargin(player, deck) {
 
     });
 }
-
+process.on('UncaughtException',function(error){
+ console.log(error);
+});
 function shuffle(player, deck) {
+    player = 'p'+player;
     var orientation = (player === 'p0') ? ({
         x: 'left',
         y: 'bottom',
@@ -796,24 +759,21 @@ function complete(x) {
 }
 
 
-function animateDrawCard(player, amount) {
-    var numCardsInHand = $('.p' + player + '.DECK').length;
-    var deck = $('.p' + player + '.DECK').splice(0, amount);
-    //    console.log('.'+player+'.Deck');
-    //    console.log(c.length);
-    $(deck).each(function (i) {
-        $(this).attr('class', "card " + player + ' ' + 'HAND i' + (i + numCardsInHand))
-            .attr('style', '').attr('data-position', 'AttackFaceUp');
-    });
-}
+
 
 function animateState(player, clocation, index, moveplayer, movelocation, movezone, moveposition, count) {
+
     if (count === undefined) {
         count = 1;
     }
-    var query = "." + player + "." + enums.locations[clocation] + ".i" + index;
+    var searchindex = (index === 'ignore') ? '': ".i" + index;
+    var searchplayer = (player === 'ignore') ? '': ".p" + player ;
+    
+    var query = searchplayer+"." + enums.locations[clocation] + searchindex;
     $(query).slice(0, count).attr('class', "card p" + moveplayer + " " + movelocation + " i" + movezone)
         .attr('style', '').attr('data-position', moveposition);
+    console.log(player, clocation, index, moveplayer, movelocation, movezone, moveposition, count);
+    console.log(query,'changed to', "card .p" + moveplayer + "." + movelocation + ".i" + movezone);
 }
 
 function animateChaining(player, clocation, index) {
@@ -825,22 +785,22 @@ function animateRemoveChaining() {
 }
 
 function layouthand(player) {
-    var count = $('.' + player + '.Hand').length;
+    var count = $('.p' + player + '.HAND').length;
     var f = 83 / 0.8;
     var xCoord;
     //    console.log(count,f,xCoord);
     for (var sequence = 0; sequence < count; sequence++) {
-        if (duel[player].Hand.length < 6) {
+        if (count < 6) {
             xCoord = (5.5 * f - 0.8 * f * count) / 2 + 1.55 * f + sequence * 0.8 * f;
         } else {
             xCoord = 1.9 * f + sequence * 4.0 * f / (count - 1);
         }
         // console.log('.'+player+'.Hand.i'+sequence);
         //console.log(xCoord);
-        if (player === 'p0') {
-            $('.' + player + '.Hand.i' + sequence).css('left', '' + xCoord + 'px');
+        if (player === 0) {
+            $('.p' + player + '.HAND.i' + sequence).css('left', '' + xCoord + 'px');
         } else {
-            $('.' + player + '.Hand.i' + sequence).css('right', '' + xCoord + 'px');
+            $('.' + player + '.HAND.i' + sequence).css('right', '' + xCoord + 'px');
         }
     }
 }
@@ -853,15 +813,15 @@ function layouthand(player) {
 var cardlocations = {
     
     'p0' : { 
-        Deck : {
+        DECK : {
             x_origin :735, // player 1
             y_origin : 43
         },
-        Hand : {
+        HAND : {
             x_origin : 124,
             y_origin : -10
         },
-        Extra : {
+        EXTRA : {
             x_origin :22,
             y_origin :43
         },
@@ -917,15 +877,15 @@ var cardlocations = {
     
     },
     'p1' : { 
-        Deck : {
+        DECK : {
             x_origin :744, // player 1
             y_origin : 43
         },
-        Hand : {
+        HAND : {
             x_origin : 124,
             y_origin : -10
         },
-        Extra : {
+        EXTRA : {
             x_origin :32,
             y_origin :43
         },
@@ -982,3 +942,49 @@ var cardlocations = {
     }
     
 };
+function Model() {
+    "use strict";
+    var model = {
+        gamestate: 'off',
+        gametype: 'single',
+        lobby: {
+            player1_username: '',
+            player2_username: '',
+            player3_username: '',
+            player4_username: '',
+            player1_loaded: false,
+            player2_loaded: false,
+            player3_loaded: false,
+            player4_loaded: false,
+            spectators: 0
+        },
+        player1_rps_choice: 0,
+        player2_rps_choice: 0,
+        activePlayer: 0,
+        phase: 0,
+        player1_lifepoints: 8000,
+        player2_lifepoints: 8000,
+        player1_cards: {
+            deck: [],
+            extra: [],
+            side: [],
+            hand: [],
+            monsters: [null, null, null, null, null],
+            spells: [null, null, null, null, null, null, null, null]
+        },
+        player2_cards: {
+            deck: [],
+            extra: [],
+            side: [],
+            hand: [],
+            monsters: [null, null, null, null, null],
+            spells: [null, null, null, null, null, null, null, null]
+        },
+        wincondition: 'none',
+        replaysave: false,
+        replayfile: '',
+        gamelog: [],
+        cardunderexamine: 0
+    };
+    return model;
+}
