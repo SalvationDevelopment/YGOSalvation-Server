@@ -177,15 +177,37 @@ module.exports.locations = {
     0x08: 'SPELLZONE',
     0x10: 'GRAVE',
     0x20: 'REMOVED',
-    0x40: 'EXTRA',
-    0x80: 'OVERLAY',
-    0x0C: 'ONFIELD',
+    0x40: 'EXTRA'
+};
+module.exports.race = {
+    0x1: 'Warrior',
+    0x2: 'SpellCaster',
+    0x4: 'Fairy',
+    0x8: 'Fiend',
+    0x10: 'Zombie',
+    0x20: 'Machine',
+    0x40: 'Aqua',
+    0x80: 'Pyro',
+    0x100: 'Rock',
+    0x200: 'WindBeast',
+    0x400: 'Plant',
+    0x800: 'Insect',
+    0x1000: 'Thunder',
+    0x2000: 'Dragon',
+    0x4000: 'Beast',
+    0x8000: 'BestWarrior',
+    0x10000: 'Dinosaur',
+    0x20000: 'Fish',
+    0x40000: 'SeaSerpent',
+    0x80000: 'Reptile',
+    0x100000: 'Psychic',
+    0x200000: 'DivineBeast'
 };
 
 module.exports.RPS = {
-    0: 'Rock',
-    2: 'Scissors',
-    4: 'Paper'
+    0x01: 'Rock',
+    0x02: 'Scissors',
+    0x04: 'Paper'
 };
 
 module.exports.query = {
@@ -211,6 +233,15 @@ module.exports.query = {
     IsDisabled: 0x80000,
     IsPublic: 0x100000
 };
+module.exports.cardAttributes = {
+    0x01: 'Earth',
+    0x02: 'Water',
+    0x04: 'Fire',
+    0x08: 'Wind',
+    0x10: 'Light',
+    0x20: 'Dark',
+    0x40: 'Divine',
+};
 module.exports.phase = {
     1: 'Draw Phase',
     2: 'Standby Phase',
@@ -220,4 +251,38 @@ module.exports.phase = {
     6: 'Battle Phase: Damage Calculation',
     7: 'Main Phase 2',
     8: 'End Phase'
+};
+module.exports.Postions = {
+    0x1: 'FaceUpAttack',
+    0x2: 'FaceDownAttack',
+    0x4: 'FaceUpDefence',
+    0x8: 'FaceDownDefence',
+    0x5: 'FaceUp',
+    0xA: 'FaceDown',
+    0x3: 'Attack',
+    0xC: 'Defence'
+};
+module.exports.cardTypes = {
+    0x1: 'Monster',
+    0x2: 'Spell',
+    0x4: 'Trap',
+    0x10: 'Normal',
+    0x20: 'Effect',
+    0x40: 'Fusion',
+    0x80: 'Ritual',
+    0x100: 'TrapMonster',
+    0x200: 'Spirit',
+    0x400: 'Union',
+    0x800: 'Dual',
+    0x1000: 'Tuner',
+    0x2000: 'Synchro',
+    0x4000: 'Token',
+    0x10000: 'QuickPlay',
+    0x20000: 'Continuous',
+    0x40000: 'Equip',
+    0x80000: 'Field',
+    0x100000: 'Counter',
+    0x200000: 'Flip',
+    0x400000: 'Toon',
+    0x800000: 'Xyz'
 };
