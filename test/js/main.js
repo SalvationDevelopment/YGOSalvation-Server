@@ -230,7 +230,10 @@ function makeCard(buffer, start, controller) {
     if (!flag) {
         console.log('no flag');
         return {
-            card: {},
+            card: {
+                Code: 'cover',
+                Position: 'FaceDownAttack',
+            },
             readposition: start + 9
         };
     }
@@ -485,8 +488,8 @@ game.StartDuel = function (player1StartLP, player2StartLP, OneDeck, TwoDeck, One
     shuffle(1, 'EXTRA');
     layouthand(0);
     layouthand(0);
-    game.DrawCard(0,5);
-    game.DrawCard(1,5);
+    game.DrawCard(0, 5);
+    game.DrawCard(1, 5);
     return [cardCollections(0), cardCollections(1)];
 };
 
@@ -504,7 +507,7 @@ game.UpdateCards = function (player, clocation, data) { //YGOPro is constantly s
     for (var i = 0; data.length > i; i++) {
         console.log('.card.p' + player + '.' + enums.locations[clocation] + '.i' + i, data[i].Code);
         $('.card.p' + player + '.' + enums.locations[clocation] + '.i' + i).attr('src', game.images + data[i].Code + '.jpg')
-        .attr('data-position', data.Position);
+            .attr('data-position', data.Position);
     }
 };
 
@@ -512,7 +515,7 @@ game.UpdateCard = function (player, clocation, index, data) {
 
     console.log('.card.p' + player + '.' + enums.locations[clocation] + '.i' + index);
     $('.card.p' + player + '.' + enums.locations[clocation] + '.i' + index).attr('src', game.images + data.Code + '.jpg')
-    .attr('data-position', data.Position);
+        .attr('data-position', data.Position);
 };
 
 game.DrawCard = function (player, numberOfCards) {
@@ -528,17 +531,17 @@ game.DrawCard = function (player, numberOfCards) {
 
 game.NewPhase = function (phase) {
     $('#phases .phase').text(enums.phase[phase]);
-    
+
 };
 
 game.NewTurn = function (turn) {
     console.log("It is now p" + turn + "'s turn.");
-    $('#phases .player').text('Player '+(1+turn)+':');
+    $('#phases .player').text('Player ' + (1 + turn) + ':');
 };
 
 game.MoveCard = function (player, clocation, index, moveplayer, movelocation, movezone, moveposition) {
     console.log('p' + player + "'s' ", enums.locations[clocation], index, "Moved to p" + moveplayer + "s", enums.locations[movelocation], movezone, moveposition);
-    animateState('p' + player, enums.locations[clocation], index, 'p' + moveplayer, enums.locations[movelocation], movezone, moveposition);
+    animateState(player, clocation, index, moveplayer, enums.locations[movelocation], movezone, moveposition);
     //animateState(player, clocation, index, moveplayer, movelocation, movezone, moveposition);
     layouthand(moveplayer);
 };
@@ -666,8 +669,8 @@ function cardmargin(player, deck) {
 
     });
 }
-process.on('uncaughtException', function(err) {
-  console.log('Caught exception: ' + err);
+process.on('uncaughtException', function (err) {
+    console.log('Caught exception: ' + err);
 });
 
 function shuffle(player, deck) {
