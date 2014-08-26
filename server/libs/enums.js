@@ -252,7 +252,7 @@ module.exports.phase = {
     7: 'Main Phase 2',
     8: 'End Phase'
 };
-module.exports.Postions = {
+module.exports.Positions = {
     0x1: 'FaceUpAttack',
     0x2: 'FaceDownAttack',
     0x4: 'FaceUpDefence',
