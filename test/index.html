@@ -22,17 +22,12 @@
             console.log('error')
         })
     </script>
-    <script src="js/vendor/modernizr-2.6.2.min.js"></script>
+<!--    <script src="js/vendor/modernizr-2.6.2.min.js"></script>-->
 
 </head>
 
 <body>
-    <!--[if lt IE 7]>
-            <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
-        <![endif]-->
-
     <header>
-
         <h1>
 <!--            <img src="img/logo.png" alt="" id="logo" />-->
             <span style="color:hotpink; font-family:'MKStencilsansBlack', sans-serif">Salvation</span>Development</h1>
@@ -59,7 +54,7 @@
         <div style="font-size:.5em; text-align:center; padding-top:20px;">Version 2 : Production 2 : Revision 0</div>
     </header>
 
-    <section class="game">
+    <section class="game" style="display:none;">
         <div class="gamelobby">
             <h2>Game Lobby</h2>
             <div id="lobbyplayers">
@@ -99,23 +94,6 @@
         <div id="lobbycancel" class="button">Cancel</div>
 
     </section>
-    <section id="rps" style="display:none">
-        <div>
-            <div class="container">
-                <div class="rps" id="scissor" data-value="1">Scissors</div>
-                <div class="rps" id="rock" data-value="2">Rock</div>
-                <div class="rps" id="paper" data-value="3">Paper</div>
-            </div>
-        </div>
-
-    </section>
-    <section id="selectduelist" style="display:none">
-        <div class="container">
-            <h3>Who goes First?</h3>
-            <div class="button" id="igofirst">You</div>
-            <div class="button" id="opponentfirst">Opponent</div>
-        </div>
-    </section>
     <div class="field">
         <div class="fieldcontainer">
             <!-- <div class="info-controls">
@@ -133,448 +111,106 @@
                             <div class="width"></div>0</div>
                         <div class="lifepoints" id="player2lp">
                             <div class="width"></div>0</div>
-                        <div id="pileofcards">
-                            <img class="none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>
-                                 
-                                
-                            </div>
-                            <img class="none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>
-                                 
-                                
-                             
-                            <img class="none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>
-                                 
-                                
-                             
-                            <img class="none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>
-                                 
-                                
-                             
-                            <img class="none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>
-                                 
-                                
-                             
-                            <img class="none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>
-                                 
-                                
-                             
-                            <img class="none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>
-                                 
-                                
-                             
-                            <img class="none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>
-                                 
-                                
-                             
-                            <img class="none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>
-                                 
-                                
-                             
-                            <img class="none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>
-                                 
-                                
-                             
-                            <img class="none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>
-                                 
-                                
-                             
-                            <img class="none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>
-                                 
-                                
-                             
-                            <img class="none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>
-                                 
-                                
-                             
-                            <img class="none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>
-                                 
-                                
-                             
-                            <img class="none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>
-                                 
-                                
-                             
-                            <img class="none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>
-                                 
-                                
-                             
-                            <img class="none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>
-                                 
-                                
-                             
-                            <img class="none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>
-                                 
-                                
-                             
-                            <img class="none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>
-                                 
-                                
-                             
-                            <img class="none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>
-                                 
-                                
-                             
-                            <img class="none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>
-                                 
-                                
-                             
-                            <img class="none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>
-                                 
-                                
-                             
-                            <img class="none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>
-                                 
-                                
-                             
-                            <img class="none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>
-                                 
-                                
-                             
-                            <img class="none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>
-                                 
-                                
-                             
-                            <img class="none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>
-                                 
-                                
-                             
-                            <img class="none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>
-                                 
-                                
-                             
-                            <img class="none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>
-                                 
-                                
-                             
-                            <img class="none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>
-                                 
-                                
-                             
-                            <img class="none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>
-                                 
-                                
-                             
-                            <img class="none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>
-                                 
-                                
-                             
-                            <img class="none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>
-                                 
-                                
-                             
-                            <img class="none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>
-                                 
-                                
-                             
-                            <img class="none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>
-                                 
-                                
-                             
-                            <img class="none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>
-                                 
-                                
-                             
-                            <img class="none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>
-                                 
-                                
-                             
-                            <img class="none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>
-                                 
-                                
-                             
-                            <img class="none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>
-                                 
-                                
-                             
-                            <img class="none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>
-                                 
-                                
-                             
-                            <img class="none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>
-                                 
-                                
-                             
-                            <img class="none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>
-                                 
-                                
-                             
-                            <img class="none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>
-                                 
-                                
-                             
-                            <img class="none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>
-                                 
-                                
-                             
-                            <img class="none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>
-                                 
-                                
-                             
-                            <img class="none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>
-                                 
-                                
-                             
-                            <img class="none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>
-                                 
-                                
-                             
-                            <img class="none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>
-                                 
-                                
-                             
-                            <img class="none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>
-                                 
-                                
-                             
-                            <img class="none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>
-                                 
-                                
-                             
-                            <img class="none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>
-                                 
-                                
-                             
-                            <img class="none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>
-                                 
-                                
-                             
-                            <img class="none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>
-                                 
-                                
-                             
-                            <img class="none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>
-                                 
-                                
-                             
-                            <img class="none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>
-                                 
-                                
-                             
-                            <img class="none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>
-                                 
-                                
-                             
-                            <img class="none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>
-                                 
-                                
-                             
-                            <img class="none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>
-                                 
-                                
-                             
-                            <img class="none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>
-                                 
-                                
-                             
-                            <img class="none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>
-                                 
-                                
-                             
-                            <img class="none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>
-                                 
-                                
-                             
-                            <img class="none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>
-                                 
-                                
-                             
-                            <img class="none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>
-                                 
-                                
-                             
-                            <img class="none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>
-                                 
-                                
-                             
-                            <img class="none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>
-                                 
-                                
-                             
-                            <img class="none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>
-                                 
-                                
-                             
-                            <img class="none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>
-                                 
-                                
-                             
-                            <img class="none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>
-                                 
-                                
-                             
-                            <img class="none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>
-                                 
-                                
-                             
-                            <img class="none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>
-                                 
-                                
-                             
-                            <img class="none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>
-                                 
-                                
-                             
-                            <img class="none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>
-                                 
-                                
-                             
-                            <img class="none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>
-                                 
-                                
-                             
-                            <img class="none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>
-                                 
-                                
-                             
-                            <img class="none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>
-                                 
-                                
-                             
-                            <img class="none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>
-                                 
-                                
-                             
-                            <img class="none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>
-                                 
-                                
-                             
-                            <img class="none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>
-                                 
-                                
-                             
-                            <img class="none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>
-                                 
-                                
-                             
-                            <img class="none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>
-                                 
-                                
-                             
-                            <img class="none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>
-                                 
-                                
-                             
-                            <img class="none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>
-                                 
-                                
-                             
-                            <img class="none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>
-                                 
-                                
-                             
-                            <img class="none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>
-                                 
-                                
-                             
-                            <img class="none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>
-                                 
-                                
-                             
-                            <img class="none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>
-                                 
-                                
-                             
-                            <img class="none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>
-                                 
-                                
-                             
-                            <img class="none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>
-                                 
-                                
-                             
-                            <img class="none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>
-                                 
-                                
-                             
-                            <img class="none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>
-                                 
-                                
-                             
-                            <img class="none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>
-                                 
-                                
-                             
-                            <img class="none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>
-                                 
-                                
-                             
-                            <img class="none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>
-                                 
-                                
-                             
-                            <img class="none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>
-                                 
-                                
-                             
-                            <img class="none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>
-                                 
-                                
-                             
-                            <img class="none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>
-                                 
-                                
-                             
-                            <img class="none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>
-                                 
-                                
-                             
-                            <img class="none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>
-                                 
-                                
-                             
-                            <img class="none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>
-                                 
-                                
-                             
-                            <img class="none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>
-                                 
-                                
-                             
-                            <img class="none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>
-                                 
-                                
-                             
-                            <img class="none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>
-                                 
-                                
-                             
-                            <img class="none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>
-                                 
-                                
-                             
-                            <img class="none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>
-                                 
-                                
-                             
-                            <img class="none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>
-                                 
-                                
-                             
-                            <img class="none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>
-                                 
-                                
-                             
-                            <img class="none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>
-                                 
-                                
-                             
-                            <img class="none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>
-                                 
-                                
-                             
-                            <img class="none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>
-                                 
-                                
-                             
-                            <img class="none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>
-                                 
-                                
-                             
-                            <img class="none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>
-                                 
-                                
-                             
-
+                                <img class="card none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>
+                                <img class="card none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>
+                                <img class="card none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>                           
+                                <img class="card none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>                     
+                                <img class="card none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>                         
+                                <img class="card none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>                     
+                                <img class="card none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>                             
+                                <img class="card none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>                     
+                                <img class="card none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>               
+                                <img class="card none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>                            <img class="card none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>
+                                <img class="card none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>
+                                <img class="card none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>                           
+                                <img class="card none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>                     
+                                <img class="card none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>                         
+                                <img class="card none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>                     
+                                <img class="card none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>                             
+                                <img class="card none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>                     
+                                <img class="card none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>               
+                                <img class="card none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>                            <img class="card none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>
+                                <img class="card none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>
+                                <img class="card none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>                           
+                                <img class="card none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>                     
+                                <img class="card none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>                         
+                                <img class="card none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>                     
+                                <img class="card none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>                             
+                                <img class="card none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>                     
+                                <img class="card none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>               
+                                <img class="card none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>                            <img class="card none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>
+                                <img class="card none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>
+                                <img class="card none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>                           
+                                <img class="card none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>                     
+                                <img class="card none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>                         
+                                <img class="card none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>                     
+                                <img class="card none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>                             
+                                <img class="card none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>                     
+                                <img class="card none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>               
+                                <img class="card none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>                            <img class="card none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>
+                                <img class="card none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>
+                                <img class="card none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>                           
+                                <img class="card none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>                     
+                                <img class="card none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>                         
+                                <img class="card none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>                     
+                                <img class="card none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>                             
+                                <img class="card none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>                     
+                                <img class="card none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>               
+                                <img class="card none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>                            <img class="card none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>
+                                <img class="card none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>
+                                <img class="card none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>                           
+                                <img class="card none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>                     
+                                <img class="card none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>                         
+                                <img class="card none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>                     
+                                <img class="card none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>                             
+                                <img class="card none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>                     
+                                <img class="card none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>               
+                                <img class="card none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>                            <img class="card none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>
+                                <img class="card none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>
+                                <img class="card none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>                           
+                                <img class="card none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>                     
+                                <img class="card none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>                         
+                                <img class="card none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>                     
+                                <img class="card none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>                             
+                                <img class="card none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>                     
+                                <img class="card none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>               
+                                <img class="card none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>                            <img class="card none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>
+                                <img class="card none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>
+                                <img class="card none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>                           
+                                <img class="card none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>                     
+                                <img class="card none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>                         
+                                <img class="card none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>                     
+                                <img class="card none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>                             
+                                <img class="card none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>                     
+                                <img class="card none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>               
+                                <img class="card none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>                            <img class="card none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>
+                                <img class="card none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>
+                                <img class="card none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>                           
+                                <img class="card none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>                     
+                                <img class="card none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>                         
+                                <img class="card none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>                     
+                                <img class="card none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>                             
+                                <img class="card none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>                     
+                                <img class="card none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>               
+                                <img class="card none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>                            <img class="card none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>
+                                <img class="card none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>
+                                <img class="card none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>                           
+                                <img class="card none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>                     
+                                <img class="card none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>                         
+                                <img class="card none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>                     
+                                <img class="card none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>                             
+                                <img class="card none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>                     
+                                <img class="card none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>               
+                                <img class="card none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>                            <img class="card none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>
+                                <img class="card none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>
+                                <img class="card none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>                           
+                                <img class="card none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>                     
+                                <img class="card none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>                         
+                                <img class="card none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>                     
+                                <img class="card none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>                             
+                                <img class="card none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>                     
+                                <img class="card none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>               
+                                <img class="card none undefined i0" data-position="position" src='http://savlvationdevelopment.com/launcher'/>
 
                         </div>
                     </div>
@@ -582,32 +218,11 @@
             </div>
         </div>
     </div>
-    <section class="login" style="display:none">
-        <div class="loginscreen">
-            <h3>Login</h3>
-            <label>Username</label>
-            <input type="text" id="username">
-            <br />
-            <label>Password</label>
-            <input type="password" id="password">
-            <br />
-            <div class="button" id="loginbutton">Login</div>
-        </div>
 
-    </section>
-    <div id="majorpopup" style="display:none;">
-        <div class="message">
-            WARNING : System Incomplete
-            <br />You will not be able to duel, abort now!
-        </div>
-    </div>
+
     <div id="phases">
-        <div class="phase draw"></div>
-        <div class="phase standby"></div>
-        <div class="phase main1"></div>
-        <div class="phase battle"></div>
-        <div class="phase main2"></div>
-        <div class="phase end"></div>
+        <div class='player'></div>
+        <div class='phase'></div>
     </div>
 
     <footer class="superfooter">

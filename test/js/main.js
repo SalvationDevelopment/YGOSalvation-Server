@@ -88,12 +88,13 @@ function processTask(task, socket) {
             } else if (command === 'MSG_NEW_TURN') {
                 model.activePlayer = !model.activePlayer;
                 model.phase = 0;
-                console.log('Player' + (model.activePlayer + 1) + '\'s turn');
+                game.NewTurn(model.activePlayer);
+                game.NewPhase(model.phase);
             } else if (command === 'MSG_WIN') {
                 console.log('Win', task[i].STOC_GAME_MSG.message[1]);
             } else if (command === 'MSG_NEW_PHASE') {
                 model.phase++;
-                console.log(enums.phase[model.phase]);
+                game.NewPhase(model.phase);
             } else if (command === 'MSG_DRAW') {
                 var drawplayer = task[i].STOC_GAME_MSG.message[1];
                 var draw = task[i].STOC_GAME_MSG.message[2];
@@ -142,7 +143,7 @@ function processTask(task, socket) {
                 var original_player = task[i].STOC_GAME_MSG.message[5];
                 var original_clocation = task[i].STOC_GAME_MSG.message[6];
                 var original_index = task[i].STOC_GAME_MSG.message[7];
-                var pp = task[i].STOC_GAME_MSG.message[8];// padding
+                var pp = task[i].STOC_GAME_MSG.message[8]; // padding
                 var new_player = task[i].STOC_GAME_MSG.message[9];
                 var new_clocation = task[i].STOC_GAME_MSG.message[10];
                 var new_index = task[i].STOC_GAME_MSG.message[11];
@@ -160,10 +161,10 @@ function processTask(task, socket) {
                 var sreason = task[i].STOC_GAME_MSG.message[3];
                 console.log('Move', spc, spl, sps, 'to', scc, scl, scs, 'due to', spp, sreason);
             } else if (command === 'MSG_UPDATE_DATA') {
-                 player = task[i].STOC_GAME_MSG.message[1];
+                player = task[i].STOC_GAME_MSG.message[1];
                 var fieldlocation = task[i].STOC_GAME_MSG.message[2];
                 var fieldmodel = enums.locations[fieldlocation];
-                var udata =  updateMassCards(player, fieldlocation, task[i].STOC_GAME_MSG.message);
+                var udata = updateMassCards(player, fieldlocation, task[i].STOC_GAME_MSG.message);
                 console.log('MSG_UPDATE_DATA', 'Player' + (player + 1), fieldmodel, udata);
                 game.UpdateCards(player, fieldlocation, udata);
             } else if (command === 'MSG_UPDATE_CARD') {
@@ -225,7 +226,7 @@ function makeCard(buffer, start, controller) {
         };
     }
     var flag = buffer.readUInt32LE(start);
-    
+
     if (!flag) {
         console.log('no flag');
         return {
@@ -233,7 +234,10 @@ function makeCard(buffer, start, controller) {
             readposition: start + 9
         };
     }
-    var card = {};
+    var card = {
+        Code: 'cover',
+        Position: 'FaceDownAttack',
+    };
 
     //console.log('flag:', flag);
     var readposition = start + 4;
@@ -244,7 +248,7 @@ function makeCard(buffer, start, controller) {
     }
     if (flag & enums.query.Position) {
         card.Controller = buffer[readposition + 0];
-        card.Position = buffer[readposition + 3];
+        card.Position = enums.Positions[buffer[readposition + 3]];
         readposition = readposition + 4;
     }
     if (flag & enums.query.Alias) {
@@ -252,7 +256,7 @@ function makeCard(buffer, start, controller) {
         readposition = readposition + 4;
     }
     if (flag & enums.query.Type) {
-        card.Type = buffer.readUInt32LE(readposition);
+        card.Type = enums.cardTypes[buffer.readUInt32LE(readposition)];
         readposition = readposition + 4;
     }
     if (flag & enums.query.Level) {
@@ -264,11 +268,11 @@ function makeCard(buffer, start, controller) {
         readposition = readposition + 4;
     }
     if (flag & enums.query.Attribute) {
-        card.Attribute = buffer.readUInt32LE(readposition);
+        card.Attribute = enums.cardAttributes[buffer.readUInt32LE(readposition)];
         readposition = readposition + 4;
     }
     if (flag & enums.query.Race) {
-        card.Race = buffer.readUInt32LE(readposition);
+        card.Race = enums.race[buffer.readUInt32LE(readposition)];
         readposition = readposition + 4;
     }
     if (flag & enums.query.Attack) {
@@ -375,20 +379,20 @@ function cardCollections(player) {
 function updateMassCards(player, clocation, buffer) {
     var field = cardCollections(player);
     var output = [];
-    var readposition = 0;
+    var readposition = 3;
     //console.log(field);
-    if (field[enums.locations[clocation]] !== undefined){
-        for (var i = 0, count = 1; /*field[enums.locations[clocation]];*/ count > i; i++) {
-             var len = buffer.readUInt8(readposition);
+    if (field[enums.locations[clocation]] !== undefined) {
+        for (var i = 0, count = field[enums.locations[clocation]]; count > i; i++) {
+            var len = buffer.readUInt8(readposition);
             readposition = readposition + 4;
-            console.log('LEN:',len);
-            if (len < 8) {
-                
+            if (len > 8) {
                 var result = makeCard(buffer, readposition, player);
                 output.push(result.card);
                 readposition = readposition + len - 4;
             } else {
-                output.push({});
+                output.push({
+                    Code: 'nocard'
+                });
             }
         }
     }
@@ -442,55 +446,6 @@ var duel = {
 
 game.images = 'http://salvationdevelopment.com/launcher/ygopro/pics/';
 
-function MessagePopUp(message) {
-    alert(message);
-}
-
-
-
-game.PosUpdate = function (pos) { // Used in the lobby to notify the viewer of who is in the lobby.
-    console.log('PosUpdate: ' + pos);
-};
-
-game.PlayerEnter = function (username, pos) { // Used in the lobby to notify the viewer of who is in the lobby.
-    console.log('PlayerEnter: ' + username + ", " + pos);
-    $('#lobbyplayer' + pos).html(username);
-};
-
-game.PlayerLeave = function (pos) { // Used in the lobby to notify the viewer of who is in the lobby.
-    $('#lobbyplayer' + pos).html("");
-    $('#lobbystart').attr('class', 'button ready0');
-};
-
-game.UpdatePlayer = function (pos, newpos) { // Used in the lobby to notify the viewer of who is in the lobby.
-    var UpdatePlayerposscache = $('#lobbyplayer' + pos).html();
-    $('#lobbyplayer' + pos).html("");
-    $('#lobbyplayer' + newpos).html(UpdatePlayerposscache);
-};
-
-game.PlayerReady = function (pos, ready) { // Used in the lobby to notify the viewer of who is in the lobby.
-    ready = (ready) ? 1 : 0;
-    playerStart[pos] = ready;
-    var state = playerStart[0] + playerStart[1];
-    $('#lobbyplayer' + pos).toggleClass('ready');
-    console.log('button ready' + state);
-    $('#lobbystart').attr('class', 'button ready' + state);
-    if (state === 2) {
-        $('.button.ready2').on('click', function () {
-
-            $('.game').toggle();
-            $('.field').toggle();
-
-        });
-    }
-
-
-};
-
-game.KickPlayer = function (pos) {
-    pos = (pos) ? pos : 1;
-};
-
 game.PlayerMessage = function (player, message) { //YGOPro messages.
     var playername;
     if (player) {
@@ -504,12 +459,6 @@ game.PlayerMessage = function (player, message) { //YGOPro messages.
         scrollTop: $('#messagerbox ul').height()
     }, "fast");
     console.log(playername + " :" + message);
-};
-
-
-
-game.DeckError = function (card) { //When you have an illegal card in your deck.
-    MessagePopUp(cardIndex('c' + card).name + " is not legal for this game format");
 };
 
 game.SelectRPS = function (value) { // Toggle RPS Screen. Screen will diengage when used.
@@ -536,7 +485,9 @@ game.StartDuel = function (player1StartLP, player2StartLP, OneDeck, TwoDeck, One
     shuffle(1, 'EXTRA');
     layouthand(0);
     layouthand(0);
-    return [cardCollections(0),cardCollections(1)];
+    game.DrawCard(0,5);
+    game.DrawCard(1,5);
+    return [cardCollections(0), cardCollections(1)];
 };
 
 game.DOMWriter = function (size, movelocation, player) {
@@ -552,20 +503,22 @@ game.UpdateCards = function (player, clocation, data) { //YGOPro is constantly s
 
     for (var i = 0; data.length > i; i++) {
         console.log('.card.p' + player + '.' + enums.locations[clocation] + '.i' + i, data[i].Code);
-        $('.card.p' + player + '.' + enums.locations[clocation] + '.i' + i).attr('src', game.images + data[i].Code+'.jpg');
+        $('.card.p' + player + '.' + enums.locations[clocation] + '.i' + i).attr('src', game.images + data[i].Code + '.jpg')
+        .attr('data-position', data.Position);
     }
 };
 
 game.UpdateCard = function (player, clocation, index, data) {
 
     console.log('.card.p' + player + '.' + enums.locations[clocation] + '.i' + index);
-    $('.card.p' + player + '.' + enums.locations[clocation] + '.i' + index).attr('src', game.images + data.Code+'.jpg');
+    $('.card.p' + player + '.' + enums.locations[clocation] + '.i' + index).attr('src', game.images + data.Code + '.jpg')
+    .attr('data-position', data.Position);
 };
 
 game.DrawCard = function (player, numberOfCards) {
-    var currenthand = $('.p'+player+'.HAND').length;
+    var currenthand = $('.p' + player + '.HAND').length;
     for (var i = 0; i < numberOfCards; i++) {
-        animateState(player, 0x01, 'ignore', player, 'HAND', currenthand+i, 'AttackFaceUp');
+        animateState(player, 0x01, 'ignore', player, 'HAND', currenthand + i, 'AttackFaceUp');
         //animateState(player, clocation, index, moveplayer, movelocation, movezone, moveposition){
     }
 
@@ -574,11 +527,13 @@ game.DrawCard = function (player, numberOfCards) {
 };
 
 game.NewPhase = function (phase) {
-    console.log(enums.phase[phase]);
+    $('#phases .phase').text(enums.phase[phase]);
+    
 };
 
 game.NewTurn = function (turn) {
     console.log("It is now p" + turn + "'s turn.");
+    $('#phases .player').text('Player '+(1+turn)+':');
 };
 
 game.MoveCard = function (player, clocation, index, moveplayer, movelocation, movezone, moveposition) {
@@ -711,11 +666,12 @@ function cardmargin(player, deck) {
 
     });
 }
-process.on('UncaughtException',function(error){
- console.log(error);
+process.on('uncaughtException', function(err) {
+  console.log('Caught exception: ' + err);
 });
+
 function shuffle(player, deck) {
-    player = 'p'+player;
+    player = 'p' + player;
     var orientation = (player === 'p0') ? ({
         x: 'left',
         y: 'bottom',
@@ -766,14 +722,14 @@ function animateState(player, clocation, index, moveplayer, movelocation, movezo
     if (count === undefined) {
         count = 1;
     }
-    var searchindex = (index === 'ignore') ? '': ".i" + index;
-    var searchplayer = (player === 'ignore') ? '': ".p" + player ;
-    
-    var query = searchplayer+"." + enums.locations[clocation] + searchindex;
+    var searchindex = (index === 'ignore') ? '' : ".i" + index;
+    var searchplayer = (player === 'ignore') ? '' : ".p" + player;
+
+    var query = '.card' + searchplayer + "." + enums.locations[clocation] + searchindex;
     $(query).slice(0, count).attr('class', "card p" + moveplayer + " " + movelocation + " i" + movezone)
         .attr('style', '').attr('data-position', moveposition);
     console.log(player, clocation, index, moveplayer, movelocation, movezone, moveposition, count);
-    console.log(query,'changed to', "card .p" + moveplayer + "." + movelocation + ".i" + movezone);
+    console.log(query, 'changed to', "card .p" + moveplayer + "." + movelocation + ".i" + movezone);
 }
 
 function animateChaining(player, clocation, index) {
@@ -811,137 +767,138 @@ function layouthand(player) {
 //   else
 //    t->X = 1.9f + sequence * 4.0f / (count - 1);
 var cardlocations = {
-    
-    'p0' : { 
-        DECK : {
-            x_origin :735, // player 1
-            y_origin : 43
+
+    'p0': {
+        DECK: {
+            x_origin: 735, // player 1
+            y_origin: 43
         },
-        HAND : {
-            x_origin : 124,
-            y_origin : -10
+        HAND: {
+            x_origin: 124,
+            y_origin: -10
         },
-        EXTRA : {
-            x_origin :22,
-            y_origin :43
+        EXTRA: {
+            x_origin: 22,
+            y_origin: 43
         },
-        Field :{
-            x_origin :22,
-            y_origin :181
+        Field: {
+            x_origin: 22,
+            y_origin: 181
         },
-        Spells : {
+        Spells: {
             zone1: {
-                x_origin : 144,
-                y_origin : 188
+                x_origin: 144,
+                y_origin: 188
             },
             zone2: {
-                x_origin : 261,
-                y_origin : 188
+                x_origin: 261,
+                y_origin: 188
             },
             zone3: {
-                x_origin : 379,
-                y_oirgin : 188
+                x_origin: 379,
+                y_oirgin: 188
             },
             zone4: {
-                x_origin : 497,
-                y_origin : 188
+                x_origin: 497,
+                y_origin: 188
             },
             zone5: {
-                x_origin : 614,
-                y_origin : 188
+                x_origin: 614,
+                y_origin: 188
             }
         },
-        MonsterZone : {
+        MonsterZone: {
             zone1: {
-                x_origin : 144,
-                y_origin : 250
+                x_origin: 144,
+                y_origin: 250
             },
             zone2: {
-                x_origin : 261,
-                y_origin : 250
+                x_origin: 261,
+                y_origin: 250
             },
             zone3: {
-                x_origin : 379,
-                y_oirgin : 250
+                x_origin: 379,
+                y_oirgin: 250
             },
             zone4: {
-                x_origin : 497,
-                y_origin : 250
+                x_origin: 497,
+                y_origin: 250
             },
             zone5: {
-                x_origin : 614,
-                y_origin : 250
+                x_origin: 614,
+                y_origin: 250
             }
         }
-    
-    
+
+
     },
-    'p1' : { 
-        DECK : {
-            x_origin :744, // player 1
-            y_origin : 43
+    'p1': {
+        DECK: {
+            x_origin: 744, // player 1
+            y_origin: 43
         },
-        HAND : {
-            x_origin : 124,
-            y_origin : -10
+        HAND: {
+            x_origin: 124,
+            y_origin: -10
         },
-        EXTRA : {
-            x_origin :32,
-            y_origin :43
+        EXTRA: {
+            x_origin: 32,
+            y_origin: 43
         },
-        Field :{
-            x_origin :22,
-            y_origin :181
+        Field: {
+            x_origin: 22,
+            y_origin: 181
         },
-        Spells : {
+        Spells: {
             zone1: {
-                x_origin : 144,
-                y_origin : 188
+                x_origin: 144,
+                y_origin: 188
             },
             zone2: {
-                x_origin : 261,
-                y_origin : 188
+                x_origin: 261,
+                y_origin: 188
             },
             zone3: {
-                x_origin : 379,
-                y_oirgin : 188
+                x_origin: 379,
+                y_oirgin: 188
             },
             zone4: {
-                x_origin : 497,
-                y_origin : 188
+                x_origin: 497,
+                y_origin: 188
             },
             zone5: {
-                x_origin : 614,
-                y_origin : 188
+                x_origin: 614,
+                y_origin: 188
             }
         },
-        MonsterZone : {
+        MonsterZone: {
             zone1: {
-                x_origin : 144,
-                y_origin : 250
+                x_origin: 144,
+                y_origin: 250
             },
             zone2: {
-                x_origin : 261,
-                y_origin : 250
+                x_origin: 261,
+                y_origin: 250
             },
             zone3: {
-                x_origin : 379,
-                y_oirgin : 250
+                x_origin: 379,
+                y_oirgin: 250
             },
             zone4: {
-                x_origin : 497,
-                y_origin : 250
+                x_origin: 497,
+                y_origin: 250
             },
             zone5: {
-                x_origin : 614,
-                y_origin : 250
+                x_origin: 614,
+                y_origin: 250
             }
         }
-    
-    
+
+
     }
-    
+
 };
+
 function Model() {
     "use strict";
     var model = {
