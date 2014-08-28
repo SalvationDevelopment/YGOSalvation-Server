@@ -85,6 +85,15 @@ function processTask(task, socket) {
                 model.player2extrasize = task[i].STOC_GAME_MSG.message.readUInt8(16);
                 game.StartDuel(model.lifepoints1, model.lifepoints2, model.player1decksize, model.player1extrasize,
                     model.player2decksize, model.player2extrasize);
+            } else if (command === 'MSG_HINT') {
+                console.log('MSG_HINT', task[i].STOC_GAME_MSG.message);
+                var hintplayer = task[i].STOC_GAME_MSG.message[1];
+                var hintcont = task[i].STOC_GAME_MSG.message[2];
+                var hintspeccount = task[i].STOC_GAME_MSG.message[3];
+                var hintforce = task[i].STOC_GAME_MSG.message[4];
+                
+                
+                console.log('Win', task[i].STOC_GAME_MSG.message[1]);
             } else if (command === 'MSG_NEW_TURN') {
                 model.activePlayer = !model.activePlayer;
                 model.phase = 0;
@@ -198,16 +207,24 @@ function processTask(task, socket) {
             console.log('Chat:', chat);
         } else if (task[i].STOC_HS_PLAYER_ENTER) {
             var person = task[i].STOC_HS_PLAYER_ENTER.message.toString('utf16le', 0, 40);
-            var position = task[i].STOC_HS_PLAYER_ENTER.message.toString('utf16le', 41);
-            console.log(person, 'entered', 'the duel', position.length);
+            var position = task[i].STOC_HS_PLAYER_ENTER.message[41];
+            console.log(person, 'entered', 'the duel', position);
         } else if (task[i].STOC_HS_PLAYER_CHANGE) {
-            model.singlelock = !model.singlelock;
-            var ready = model.singlelock ? 'now' : 'not';
-            console.log('Opponent is', ready, 'ready');
+            var change = task[i].STOC_HS_PLAYER_CHANGE.message[0];
+            var changepos = (change >> 4) & 0xF;
+            var state = change & 0xF;
+            console.log('position',changepos, enums.lobbyStates[state]);
+            
+            
         } else if (task[i].STOC_HS_WATCH_CHANGE) {
             console.log('Spectators:', task[i].STOC_HS_WATCH_CHANGE.message[0]);
         } else if (task[i].STOC_TYPE_CHANGE) {
-            console.log('STOC_TYPE_CHANGE', task[i].STOC_TYPE_CHANGE);
+            
+            var typec = task[i].STOC_TYPE_CHANGE.message[0];
+            var pos = typec & 0xF;
+            var ishost = ((typec >> 4) & 0xF) !== 0;
+            console.log('STOC_TYPE_CHANGE', task[i].STOC_TYPE_CHANGE, 'type',typec,'pos',pos,'ishost',ishost);
+            
         } else if (task[i].STOC_SELECT_TP) {
             console.log('Chat', task[i].STOC_SELECT_TP);
         } else if (task[i].STOC_JOIN_GAME) {
