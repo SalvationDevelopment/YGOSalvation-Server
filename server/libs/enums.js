@@ -286,3 +286,11 @@ module.exports.cardTypes = {
     0x400000: 'Toon',
     0x800000: 'Xyz'
 };
+
+module.exports.lobbyStates = {
+    0x8: 'Observe',
+    0x9: 'Ready',
+    0xA: 'NotReady',
+    0xB: 'Leave'
+
+};
