@@ -727,6 +727,9 @@ border-color: rgba(255,255,255,.05);
     width: 200px;
     height: 2em;
 }
+#duelzone{
+    display:none;
+}
 #phases {
     position: fixed;
     bottom: 45px;
@@ -734,6 +737,7 @@ border-color: rgba(255,255,255,.05);
     width: 100%;
     background: rgba(0, 0, 0, .5);
     text-align: center;
+    display:none;
 }
 #phases div {
     display: inline-block;

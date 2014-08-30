@@ -7,7 +7,7 @@
 .p0 {position:absolute; display:block}
 
 .p0.DECK         {bottom : 43px; left: 675px; }
-.p0.HAND         {bottom : -10px; left: 124px; }
+.p0.HAND         {bottom : 10px; left: 124px; }
 .p0.EXTRA        {bottom : 43px; left: 22px; }
 .p0.GRAVE        {bottom : 181px; left: 735px; }
 
