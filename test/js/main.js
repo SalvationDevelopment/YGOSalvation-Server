@@ -245,7 +245,6 @@ function makeCard(buffer, start, controller) {
     var flag = buffer.readUInt32LE(start);
 
     if (!flag) {
-        console.log('no flag');
         return {
             card: {
                 Code: 'cover',
@@ -492,9 +491,12 @@ game.SelectFirstPlayer = function (value) { // Select the player that goes first
 };
 
 game.StartDuel = function (player1StartLP, player2StartLP, OneDeck, TwoDeck, OneExtra, TwoExtra) { // Interface signalled the game has started
+    $('#duelzone').css('display','block').get(0).scrollIntoView();
+    $('img.card').attr('class','card none undefined i0');
     $('#player1lp').html("div class='width' style='width:" + (player1StartLP) + "'></div>" + player1StartLP + "</div>");
     $('#player2lp').html("div class='width' style='width:" + (player2StartLP) + "'></div>" + player1StartLP + "</div>");
-
+    $('#phases').css('display','block');
+    
     game.DOMWriter(OneDeck, 'DECK', 0);
     game.DOMWriter(TwoDeck, 'DECK', 1);
     game.DOMWriter(OneExtra, 'EXTRA', 0);
@@ -505,8 +507,8 @@ game.StartDuel = function (player1StartLP, player2StartLP, OneDeck, TwoDeck, One
     shuffle(1, 'EXTRA');
     layouthand(0);
     layouthand(0);
-    game.DrawCard(0, 5);
-    game.DrawCard(1, 5);
+    //game.DrawCard(0, 5);
+    //game.DrawCard(1, 5);
     return [cardCollections(0), cardCollections(1)];
 };
 
@@ -524,7 +526,7 @@ game.UpdateCards = function (player, clocation, data) { //YGOPro is constantly s
     for (var i = 0; data.length > i; i++) {
         console.log('.card.p' + player + '.' + enums.locations[clocation] + '.i' + i, data[i].Code);
         $('.card.p' + player + '.' + enums.locations[clocation] + '.i' + i).attr('src', game.images + data[i].Code + '.jpg')
-            .attr('data-position', data.Position);
+            .attr('data-position', data[i].Position);
     }
 };
 
@@ -748,8 +750,8 @@ function animateState(player, clocation, index, moveplayer, movelocation, movezo
     var query = '.card' + searchplayer + "." + enums.locations[clocation] + searchindex;
     $(query).slice(0, count).attr('class', "card p" + moveplayer + " " + movelocation + " i" + movezone)
         .attr('style', '').attr('data-position', moveposition);
-    console.log(player, clocation, index, moveplayer, movelocation, movezone, moveposition, count);
-    console.log(query, 'changed to', "card .p" + moveplayer + "." + movelocation + ".i" + movezone);
+    //console.log(player, clocation, index, moveplayer, movelocation, movezone, moveposition, count);
+    //console.log(query, 'changed to', "card .p" + moveplayer + "." + movelocation + ".i" + movezone);
 }
 
 function animateChaining(player, clocation, index) {
@@ -776,7 +778,7 @@ function layouthand(player) {
         if (player === 0) {
             $('.p' + player + '.HAND.i' + sequence).css('left', '' + xCoord + 'px');
         } else {
-            $('.' + player + '.HAND.i' + sequence).css('right', '' + xCoord + 'px');
+            $('.p' + player + '.HAND.i' + sequence).css('right', '' + xCoord + 'px');
         }
     }
 }
@@ -854,7 +856,7 @@ var cardlocations = {
     },
     'p1': {
         DECK: {
-            x_origin: 744, // player 1
+            x_origin: 675, // player 1
             y_origin: 43
         },
         HAND: {
