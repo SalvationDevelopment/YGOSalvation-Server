@@ -91,8 +91,8 @@ function processTask(task, socket) {
                 var hintcont = task[i].STOC_GAME_MSG.message[2];
                 var hintspeccount = task[i].STOC_GAME_MSG.message[3];
                 var hintforce = task[i].STOC_GAME_MSG.message[4];
-                
-                
+
+
                 console.log('Win', task[i].STOC_GAME_MSG.message[1]);
             } else if (command === 'MSG_NEW_TURN') {
                 model.activePlayer = !model.activePlayer;
@@ -107,7 +107,7 @@ function processTask(task, socket) {
             } else if (command === 'MSG_DRAW') {
                 var drawplayer = task[i].STOC_GAME_MSG.message[1];
                 var draw = task[i].STOC_GAME_MSG.message[2];
-                console.log(('Player' + (drawplayer + 1)), 'drew', draw, 'cards');
+                console.log('%c' + ('Player' + (drawplayer + 1)) + ' drew' + draw + ' cards', 'background: #222; color: #bada55');
                 game.DrawCard(drawplayer, draw);
             } else if (command === 'MSG_SHUFFLE_DECK') {
                 var deckshuffleplayer = task[i].STOC_GAME_MSG.message[1];
@@ -157,7 +157,10 @@ function processTask(task, socket) {
                 var new_clocation = task[i].STOC_GAME_MSG.message[10];
                 var new_index = task[i].STOC_GAME_MSG.message[11];
                 var reason = task[i].STOC_GAME_MSG.message.readUInt16LE[12];
-                console.log('Move', original_player, original_clocation, original_index, 'to', new_player, new_clocation, reason, 'due to', pp, reason);
+                console.log('Move',movecardid, original_player, original_clocation, original_index, 'to', new_player, new_clocation, reason, 'due to', pp, reason);
+                animateState(original_player, enums.locations[original_clocation], original_index,
+                             original_player, enums.locations[new_clocation],pp, 'DefenseFaceDown');
+        //animateState(player, clocation, index, moveplayer, movelocation, movezone, moveposition){
             } else if (command === 'MSG_SET') {
                 var smovecardid = task[i].STOC_GAME_MSG.message[1];
                 var spc = task[i].STOC_GAME_MSG.message[2];
@@ -168,13 +171,15 @@ function processTask(task, socket) {
                 var scl = task[i].STOC_GAME_MSG.message[7];
                 var scs = task[i].STOC_GAME_MSG.message[8];
                 var sreason = task[i].STOC_GAME_MSG.message[3];
-                console.log('Move', spc, spl, sps, 'to', scc, scl, scs, 'due to', spp, sreason);
+                console.log('Set', spc, spl, sps, 'to', scc, scl, scs, 'due to', spp, sreason);
+                animateState(spc, enums.locations[spl], sps,
+                             scc, enums.locations[scl],scs, 'DefenseFaceDown');
             } else if (command === 'MSG_UPDATE_DATA') {
                 player = task[i].STOC_GAME_MSG.message[1];
                 var fieldlocation = task[i].STOC_GAME_MSG.message[2];
                 var fieldmodel = enums.locations[fieldlocation];
                 var udata = updateMassCards(player, fieldlocation, task[i].STOC_GAME_MSG.message);
-                console.log('MSG_UPDATE_DATA', 'Player' + (player + 1), fieldmodel, udata);
+                //console.log('MSG_UPDATE_DATA', 'Player' + (player + 1), fieldmodel, udata);
                 game.UpdateCards(player, fieldlocation, udata);
             } else if (command === 'MSG_UPDATE_CARD') {
                 var udplayer = task[i].STOC_GAME_MSG.message[1];
@@ -182,8 +187,8 @@ function processTask(task, socket) {
                 var udindex = task[i].STOC_GAME_MSG.message[3];
 
                 var udcard = makeCard(task[i].STOC_GAME_MSG.message, 8, udplayer).card;
-                console.log('MSG_UPDATE_CARD',
-                    'Player' + (udplayer + 1), enums.locations[udfieldlocation], udindex, udcard);
+                //console.log('MSG_UPDATE_CARD',
+                    //'Player' + (udplayer + 1), enums.locations[udfieldlocation], udindex, udcard);
                 game.UpdateCard(udplayer, udfieldlocation, udindex, udcard);
             } else {
                 console.log(command, task[i].STOC_GAME_MSG.message);
@@ -213,18 +218,18 @@ function processTask(task, socket) {
             var change = task[i].STOC_HS_PLAYER_CHANGE.message[0];
             var changepos = (change >> 4) & 0xF;
             var state = change & 0xF;
-            console.log('position',changepos, enums.lobbyStates[state]);
-            
-            
+            console.log('position', changepos, enums.lobbyStates[state]);
+
+
         } else if (task[i].STOC_HS_WATCH_CHANGE) {
             console.log('Spectators:', task[i].STOC_HS_WATCH_CHANGE.message[0]);
         } else if (task[i].STOC_TYPE_CHANGE) {
-            
+
             var typec = task[i].STOC_TYPE_CHANGE.message[0];
             var pos = typec & 0xF;
             var ishost = ((typec >> 4) & 0xF) !== 0;
-            console.log('STOC_TYPE_CHANGE', task[i].STOC_TYPE_CHANGE, 'type',typec,'pos',pos,'ishost',ishost);
-            
+            console.log('STOC_TYPE_CHANGE', task[i].STOC_TYPE_CHANGE, 'type', typec, 'pos', pos, 'ishost', ishost);
+
         } else if (task[i].STOC_SELECT_TP) {
             console.log('Chat', task[i].STOC_SELECT_TP);
         } else if (task[i].STOC_JOIN_GAME) {
@@ -415,7 +420,7 @@ function updateMassCards(player, clocation, buffer) {
             }
         }
     }
-    console.log(output);
+    //console.log(output);
     return output;
 }
 var playerStart = [0, 0];
@@ -491,12 +496,12 @@ game.SelectFirstPlayer = function (value) { // Select the player that goes first
 };
 
 game.StartDuel = function (player1StartLP, player2StartLP, OneDeck, TwoDeck, OneExtra, TwoExtra) { // Interface signalled the game has started
-    $('#duelzone').css('display','block').get(0).scrollIntoView();
-    $('img.card').attr('class','card none undefined i0');
+    $('#duelzone').css('display', 'block').get(0).scrollIntoView();
+    $('img.card').attr('class', 'card none undefined i0');
     $('#player1lp').html("div class='width' style='width:" + (player1StartLP) + "'></div>" + player1StartLP + "</div>");
     $('#player2lp').html("div class='width' style='width:" + (player2StartLP) + "'></div>" + player1StartLP + "</div>");
-    $('#phases').css('display','block');
-    
+    $('#phases').css('display', 'block');
+
     game.DOMWriter(OneDeck, 'DECK', 0);
     game.DOMWriter(TwoDeck, 'DECK', 1);
     game.DOMWriter(OneExtra, 'EXTRA', 0);
@@ -524,17 +529,20 @@ game.UpdateCards = function (player, clocation, data) { //YGOPro is constantly s
 
 
     for (var i = 0; data.length > i; i++) {
-        console.log('.card.p' + player + '.' + enums.locations[clocation] + '.i' + i, data[i].Code);
-        $('.card.p' + player + '.' + enums.locations[clocation] + '.i' + i).attr('src', game.images + data[i].Code + '.jpg')
-            .attr('data-position', data[i].Position);
+        if (data[i].Code !== 'nocard') {
+            console.log('.card.p' + player + '.' + enums.locations[clocation] + '.i' + i, data[i].Code);
+            $('.card.p' + player + '.' + enums.locations[clocation] + '.i' + i).attr('src', game.images + data[i].Code + '.jpg')
+                .attr('data-position', data[i].Position);
+        }
     }
 };
 
 game.UpdateCard = function (player, clocation, index, data) {
-
+ if (data.Code !== 'nocard') {
     console.log('.card.p' + player + '.' + enums.locations[clocation] + '.i' + index);
     $('.card.p' + player + '.' + enums.locations[clocation] + '.i' + index).attr('src', game.images + data.Code + '.jpg')
         .attr('data-position', data.Position);
+ }
 };
 
 game.DrawCard = function (player, numberOfCards) {
@@ -545,7 +553,7 @@ game.DrawCard = function (player, numberOfCards) {
     }
 
     layouthand(player);
-    console.log("p" + player + " drew " + numberOfCards + " card(s)");
+    //console.log("p" + player + " drew " + numberOfCards + " card(s)");
 };
 
 game.NewPhase = function (phase) {
