@@ -1,7 +1,12 @@
+.card { -webkit-transform-style: preserve-3d; width:83px; height:124px; background:rgba(200,100,200,.2);
+    position:absolute; -z-index: 3; -webkit-transition: all 500ms;
+    z-index: 1;
+}
+.card.deck { -webkit-transition: left 150ms;}
 
 .p0 {position:absolute; display:block}
 
-.p0.DECK         {bottom : 43px; left: 735px; }
+.p0.DECK         {bottom : 43px; left: 675px; }
 .p0.HAND         {bottom : -10px; left: 124px; }
 .p0.EXTRA        {bottom : 43px; left: 22px; }
 .p0.GRAVE        {bottom : 181px; left: 735px; }
@@ -31,12 +36,14 @@
 .p1.GRAVE        {top : 181px; right: 735px; }
  
 
-.p1.SpellZone.i0     {top :117px; right:144px;}
-.p1.SpellZone.i1     {top :117px; right:261px;}
-.p1.SpellZone.i2     {top :117px; right:379px;}
-.p1.SpellZone.i3     {top :117px; right:497px;}
-.p1.SpellZone.i4     {top :117px; right:614px;}
-.p1.SpellZone.i5     {top :188px; right:;}
+.p1.SPELLZONE.i0     {top :117px; right:144px;}
+.p1.SPELLZONE.i1     {top :117px; right:261px;}
+.p1.SPELLZONE.i2     {top :117px; right:379px;}
+.p1.SPELLZONE.i3     {top :117px; right:497px;}
+.p1.SPELLZONE.i4     {top :117px; right:614px;}
+.p1.SPELLZONE.i5     {top :188px; right:; border: 5px solid green;}
+.p1.SPELLZONE.i6     {top :188px; right:; border: 5px solid green;}
+.p1.SPELLZONE.i7     {top :188px; right:; border: 5px solid green;}
 
 
 .p1.MONSTERZONE.i0     {top :250px; right:144px;}
@@ -45,8 +52,7 @@
 .p1.MONSTERZONE.i3     {top :250px; right:497px;}
 .p1.MONSTERZONE.i4     {top :250px; right:614px;}
 
-.card { -webkit-transform-style: preserve-3d; width:83px; height:124px; background:rgba(200,100,200,.2); position:absolute; -z-index: 3; -webkit-transition: all 500ms;}
-.card.deck { -webkit-transition: left 150ms;}
+
 
 .nocard {
     display:none;
@@ -73,8 +79,6 @@
 .Defense .back {-webkit-transform: rotate3d(0,1,0, 180deg );}
 
 
-.FaceDownAttack  {-webkit-transform: rotate3d(0,1,0,180deg ); }
-.FaceUpDefence { -webkit-transform: rotate3d(0,0,1, 90deg ) rotate3d(0,1,0, 180deg ); }
-.AttackFaceUp div, .FaceUp div {
-    -webkit-backface-visibility: hidden
-}
+[data-position=FaceDownAttack]  {-webkit-transform: rotate3d(0,1,0,180deg ); }
+[data-position=FaceUpDefence] { -webkit-transform: rotate3d(0,0,1, 90deg ) rotate3d(0,1,0, 180deg ); }
+[data-position=AttackFaceUp]  {-webkit-transform: rotate3d(0,0,0,0deg ); }
