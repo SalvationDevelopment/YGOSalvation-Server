@@ -148,19 +148,17 @@ function processTask(task, socket) {
                     //                    }
                 }
             } else if (command === 'MSG_MOVE') {
-                var movecardid = task[i].STOC_GAME_MSG.message.readUInt16LE(1);
-                var original_player = task[i].STOC_GAME_MSG.message[5];
-                var original_clocation = task[i].STOC_GAME_MSG.message[6];
-                var original_index = task[i].STOC_GAME_MSG.message[7];
-                var pp = task[i].STOC_GAME_MSG.message[8]; // padding
-                var new_player = task[i].STOC_GAME_MSG.message[9];
-                var new_clocation = task[i].STOC_GAME_MSG.message[10];
-                var new_index = task[i].STOC_GAME_MSG.message[11];
-                var reason = task[i].STOC_GAME_MSG.message.readUInt16LE[12];
-                console.log('Move',movecardid, original_player, original_clocation, original_index, 'to', new_player, new_clocation, reason, 'due to', pp, reason);
-                animateState(original_player, enums.locations[original_clocation], original_index,
-                             original_player, enums.locations[new_clocation],pp, 'DefenseFaceDown');
-        //animateState(player, clocation, index, moveplayer, movelocation, movezone, moveposition){
+                var code = task[i].STOC_GAME_MSG.message.readUInt16LE(1);
+                var pc = task[i].STOC_GAME_MSG.message[5]; // original controller
+                var pl = task[i].STOC_GAME_MSG.message[6]; // original cLocation
+                var ps = task[i].STOC_GAME_MSG.message[7]; // original sequence (index)
+                var pp = task[i].STOC_GAME_MSG.message[8]; // padding??
+                var cc = task[i].STOC_GAME_MSG.message[9]; // current controller
+                var cl = task[i].STOC_GAME_MSG.message[10]; // current cLocation
+                var cs = task[i].STOC_GAME_MSG.message[11]; // current sequence (index)
+                var cp = task[i].STOC_GAME_MSG.message[11]; // current position
+                var reason = task[i].STOC_GAME_MSG.message.readUInt16LE[12]; //debug data??
+                game.MoveCard(code, pc, pl, ps, pp, cc, cl, cs, cp, reason);
             } else if (command === 'MSG_SET') {
                 var smovecardid = task[i].STOC_GAME_MSG.message[1];
                 var spc = task[i].STOC_GAME_MSG.message[2];
@@ -173,7 +171,7 @@ function processTask(task, socket) {
                 var sreason = task[i].STOC_GAME_MSG.message[3];
                 console.log('Set', spc, spl, sps, 'to', scc, scl, scs, 'due to', spp, sreason);
                 animateState(spc, enums.locations[spl], sps,
-                             scc, enums.locations[scl],scs, 'DefenseFaceDown');
+                    scc, enums.locations[scl], scs, 'DefenseFaceDown');
             } else if (command === 'MSG_UPDATE_DATA') {
                 player = task[i].STOC_GAME_MSG.message[1];
                 var fieldlocation = task[i].STOC_GAME_MSG.message[2];
@@ -188,7 +186,7 @@ function processTask(task, socket) {
 
                 var udcard = makeCard(task[i].STOC_GAME_MSG.message, 8, udplayer).card;
                 //console.log('MSG_UPDATE_CARD',
-                    //'Player' + (udplayer + 1), enums.locations[udfieldlocation], udindex, udcard);
+                //'Player' + (udplayer + 1), enums.locations[udfieldlocation], udindex, udcard);
                 game.UpdateCard(udplayer, udfieldlocation, udindex, udcard);
             } else {
                 console.log(command, task[i].STOC_GAME_MSG.message);
@@ -536,13 +534,32 @@ game.UpdateCards = function (player, clocation, data) { //YGOPro is constantly s
         }
     }
 };
-
+game.MoveCard = function (code, pc, pl, ps, pp, cc, cl, cs, cp, reason) {
+    if (pl === 0) {
+        var newcard = '<img class="card p' + cc + ' ' + enums.locations[cl] + ' i' + cs + '" dataposition="">';
+        $('.fieldimage').append(newcard);
+    } else if (cl === 0) {
+        var query = '.card.p' + pc + '.' + enums.locations[pl] + '.i' + ps;
+        $(query).detach();
+    } else {
+        if (!(pl & 0x80) && !(cl & 0x80)) { //duelclient line 1885
+            animateState(pc, enums.locations[pl], pc, cc, cl, cs, cp);
+            //animateState(player, clocation, index, moveplayer, movelocation, movezone, moveposition)
+        } else if (!(pl & 0x80)) {
+            console.log('targeting a xyz unit....');
+        } else if (!(cl & 0x80)) {
+            console.log('turning something into a xyz unit....');
+        } else {
+            console.log('update a monster that had overlay units....');
+        }
+    }
+};
 game.UpdateCard = function (player, clocation, index, data) {
- if (data.Code !== 'nocard') {
-    console.log('.card.p' + player + '.' + enums.locations[clocation] + '.i' + index);
-    $('.card.p' + player + '.' + enums.locations[clocation] + '.i' + index).attr('src', game.images + data.Code + '.jpg')
-        .attr('data-position', data.Position);
- }
+    if (data.Code !== 'nocard') {
+        console.log('.card.p' + player + '.' + enums.locations[clocation] + '.i' + index);
+        $('.card.p' + player + '.' + enums.locations[clocation] + '.i' + index).attr('src', game.images + data.Code + '.jpg')
+            .attr('data-position', data.Position);
+    }
 };
 
 game.DrawCard = function (player, numberOfCards) {
