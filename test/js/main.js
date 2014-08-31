@@ -64,7 +64,7 @@ function processTask(task, socket) {
     var player, clocation, index, data;
 
     //card movement vars
-    var code, pc, pl, ps, pp, cc, cl, cs, cp, reason,ct;
+    var code, pc, pl, ps, pp, cc, cl, cs, cp, reason, ct;
     task = (function () {
         var output = [];
         for (var i = 0; task.length > i; i++) {
@@ -78,16 +78,18 @@ function processTask(task, socket) {
         } else
         if (task[i].STOC_GAME_MSG) {
             var command = enums.STOC.STOC_GAME_MSG[task[i].STOC_GAME_MSG.message[0]];
+            console.log(command);
             if (command === 'MSG_START') {
                 var type = task[i].STOC_GAME_MSG.message[1];
-                model.lifepoints1 = task[i].STOC_GAME_MSG.message.readUInt16LE(2);
-                model.lifepoints2 = task[i].STOC_GAME_MSG.message.readUInt16LE(6);
-                model.player1decksize = task[i].STOC_GAME_MSG.message.readUInt8(10);
-                model.player1extrasize = task[i].STOC_GAME_MSG.message.readUInt8(12);
-                model.player2decksize = task[i].STOC_GAME_MSG.message.readUInt8(14);
-                model.player2extrasize = task[i].STOC_GAME_MSG.message.readUInt8(16);
-                game.StartDuel(model.lifepoints1, model.lifepoints2, model.player1decksize, model.player1extrasize,
-                    model.player2decksize, model.player2extrasize);
+                var lifepoints1 = task[i].STOC_GAME_MSG.message.readUInt16LE(2);
+                var lifepoints2 = task[i].STOC_GAME_MSG.message.readUInt16LE(6);
+                var player1decksize = task[i].STOC_GAME_MSG.message.readUInt8(10);
+                var player1extrasize = task[i].STOC_GAME_MSG.message.readUInt8(12);
+                var player2decksize = task[i].STOC_GAME_MSG.message.readUInt8(14);
+                var player2extrasize = task[i].STOC_GAME_MSG.message.readUInt8(16);
+                game.StartDuel(lifepoints1, lifepoints2,
+                               player1decksize, player2decksize,
+                               player1extrasize, player2extrasize);
             } else if (command === 'MSG_HINT') {
                 console.log('MSG_HINT', task[i].STOC_GAME_MSG.message);
                 var hintplayer = task[i].STOC_GAME_MSG.message[1];
@@ -110,8 +112,14 @@ function processTask(task, socket) {
             } else if (command === 'MSG_DRAW') {
                 var drawplayer = task[i].STOC_GAME_MSG.message[1];
                 var draw = task[i].STOC_GAME_MSG.message[2];
+                var cards = [];
+                var drawReadposition = 3;
+                for (var drawcount; draw > drawcount; drawcount++) {
+                    cards.push(task[i].STOC_GAME_MSG.message.readUInt16LE(drawReadposition));
+
+                }
                 console.log('%c' + ('Player' + (drawplayer + 1)) + ' drew' + draw + ' cards', 'background: #222; color: #bada55');
-                game.DrawCard(drawplayer, draw);
+                game.DrawCard(drawplayer, draw, cards);
             } else if (command === 'MSG_SHUFFLE_DECK') {
                 var deckshuffleplayer = task[i].STOC_GAME_MSG.message[1];
                 console.log(('Player' + (deckshuffleplayer + 1)), 'shuffled the deck');
@@ -133,16 +141,16 @@ function processTask(task, socket) {
                 console.log('Solved Chain');
             } else if (command === 'MSG_CHAIN_END') {
                 // remove any liggering chain parts
-            } else if (command === 'MSG_CHAIN_NEGATED' || command === 'MSG_CHAIN_DISABLED' ) {
-                 //graphical and trigger only for replay
+            } else if (command === 'MSG_CHAIN_NEGATED' || command === 'MSG_CHAIN_DISABLED') {
+                //graphical and trigger only for replay
             } else if (command === 'MSG_CARD_SELECTED') {
                 // trigger
             } else if (command === 'MSG_CARD_SELECTED') {
                 /*  player = task[i].STOC_GAME_MSG.message[1];*/
                 var count = task[i].STOC_GAME_MSG.message[2];
                 var randomRead = 3;
-                for (var randomcount = 0; count > randomcount; randomcount++){
-                    
+                for (var randomcount = 0; count > randomcount; randomcount++) {
+
                 }
                 game.showRandomSelected();
             } else if (command === 'MSG_PAY_LPCOST') {
@@ -177,7 +185,7 @@ function processTask(task, socket) {
                 cc = task[i].STOC_GAME_MSG.message[9]; // current controller
                 cl = task[i].STOC_GAME_MSG.message[10]; // current cLocation
                 cs = task[i].STOC_GAME_MSG.message[11]; // current sequence (index)
-                cp = task[i].STOC_GAME_MSG.message[11]; // current position
+                cp = task[i].STOC_GAME_MSG.message[12]; // current position
                 reason = task[i].STOC_GAME_MSG.message.readUInt16LE[12]; //debug data??
                 game.MoveCard(code, pc, pl, ps, pp, cc, cl, cs, cp, reason);
             } else if (command === 'MSG_POS_CHANGE') {
@@ -433,6 +441,7 @@ function cardCollections(player) {
 }
 
 function updateMassCards(player, clocation, buffer) {
+    //console.log(enums.locations[clocation]);
     var field = cardCollections(player);
     var output = [];
     var readposition = 3;
@@ -529,7 +538,7 @@ game.SelectFirstPlayer = function (value) { // Select the player that goes first
 
 game.StartDuel = function (player1StartLP, player2StartLP, OneDeck, TwoDeck, OneExtra, TwoExtra) { // Interface signalled the game has started
     $('#duelzone').css('display', 'block').get(0).scrollIntoView();
-    $('img.card').attr('class', 'card none undefined i0');
+    $('img.card').attr('class', 'card none undefined i0').attr('src', game.images + '.jpg');
     $('#player1lp').html("div class='width' style='width:" + (player1StartLP) + "'></div>" + player1StartLP + "</div>");
     $('#player2lp').html("div class='width' style='width:" + (player2StartLP) + "'></div>" + player1StartLP + "</div>");
     $('#phases').css('display', 'block');
@@ -576,6 +585,7 @@ game.UpdateCard = function (player, clocation, index, data) {
     }
 };
 game.MoveCard = function (code, pc, pl, ps, pp, cc, cl, cs, cp, reason) {
+    console.log(code, pc, pl, ps, pp, cc, cl, cs, cp, reason);
     if (pl === 0) {
         var newcard = '<img class="card p' + cc + ' ' + enums.locations[cl] + ' i' + cs + '" dataposition="">';
         $('.fieldimage').append(newcard);
@@ -601,12 +611,12 @@ game.ChangeCardPosition = function (code, cc, cl, cs, cp) {
     //animateState(player, clocation, index, moveplayer, movelocation, movezone, moveposition)
 };
 
-
-game.DrawCard = function (player, numberOfCards) {
+game.DrawCard = function (player, numberOfCards, cards) {
     var currenthand = $('.p' + player + '.HAND').length;
     for (var i = 0; i < numberOfCards; i++) {
         animateState(player, 0x01, 'ignore', player, 'HAND', currenthand + i, 'AttackFaceUp');
         //animateState(player, clocation, index, moveplayer, movelocation, movezone, moveposition){
+        $('.p' + player + '.HAND' + 'i' + (currenthand + i)).attr('src', game.images + cards[i] + '.jpg');
     }
 
     layouthand(player);
