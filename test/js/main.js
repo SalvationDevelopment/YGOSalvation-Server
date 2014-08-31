@@ -171,18 +171,11 @@ function processTask(task, socket) {
                 cp = task[i].STOC_GAME_MSG.message[9]; // current position
                 game.ChangeCardPosition(code, cc, cl, cs, cp);
             } else if (command === 'MSG_SET') {
-                var smovecardid = task[i].STOC_GAME_MSG.message[1];
-                var spc = task[i].STOC_GAME_MSG.message[2];
-                var spl = task[i].STOC_GAME_MSG.message[3];
-                var sps = task[i].STOC_GAME_MSG.message[4];
-                var spp = task[i].STOC_GAME_MSG.message[5];
-                var scc = task[i].STOC_GAME_MSG.message[6];
-                var scl = task[i].STOC_GAME_MSG.message[7];
-                var scs = task[i].STOC_GAME_MSG.message[8];
-                var sreason = task[i].STOC_GAME_MSG.message[3];
-                console.log('Set', spc, spl, sps, 'to', scc, scl, scs, 'due to', spp, sreason);
-                animateState(spc, enums.locations[spl], sps,
-                    scc, enums.locations[scl], scs, 'DefenseFaceDown');
+                // All the vars are commented out in the source.
+                console.log('MSG_SET');
+                } else if (command === 'MSG_SWAP') {
+                    console.log('MSG_SWAP');
+                // code vars are commented out in the source, assuming graphical only.
             } else if (command === 'MSG_UPDATE_DATA') {
                 player = task[i].STOC_GAME_MSG.message[1];
                 var fieldlocation = task[i].STOC_GAME_MSG.message[2];
