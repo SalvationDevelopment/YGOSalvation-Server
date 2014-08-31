@@ -64,7 +64,7 @@ function processTask(task, socket) {
     var player, clocation, index, data;
 
     //card movement vars
-    var code, pc, pl, ps, pp, cc, cl, cs, cp, reason;
+    var code, pc, pl, ps, pp, cc, cl, cs, cp, reason,ct;
     task = (function () {
         var output = [];
         for (var i = 0; task.length > i; i++) {
@@ -118,15 +118,33 @@ function processTask(task, socket) {
             } else if (command === 'MSG_SHUFFLE_HAND') {
                 var handshuffleplayer = task[i].STOC_GAME_MSG.message[1];
                 console.log(('Player' + (handshuffleplayer + 1)), 'shuffled the deck');
+            } else if (command === 'MSG_CHAINING') {
+                console.log('Chain in acknolweleged');
             } else if (command === 'MSG_CHAINED') {
-                model.chainsolved = 0;
+                ct = task[i].STOC_GAME_MSG.message[1];
+                // "push back chain"
                 console.log('Chain in progress');
             } else if (command === 'MSG_CHAIN_SOLVING') {
+                ct = task[i].STOC_GAME_MSG.message[1];
                 model.chainsolved = 1;
                 console.log('Resolving Chain');
             } else if (command === 'MSG_CHAIN_SOLVED') {
-                model.chainsolved = 3;
+                // graphical or a trigger
                 console.log('Solved Chain');
+            } else if (command === 'MSG_CHAIN_END') {
+                // remove any liggering chain parts
+            } else if (command === 'MSG_CHAIN_NEGATED' || command === 'MSG_CHAIN_DISABLED' ) {
+                 //graphical and trigger only for replay
+            } else if (command === 'MSG_CARD_SELECTED') {
+                // trigger
+            } else if (command === 'MSG_CARD_SELECTED') {
+                /*  player = task[i].STOC_GAME_MSG.message[1];*/
+                var count = task[i].STOC_GAME_MSG.message[2];
+                var randomRead = 3;
+                for (var randomcount = 0; count > randomcount; randomcount++){
+                    
+                }
+                game.showRandomSelected();
             } else if (command === 'MSG_PAY_LPCOST') {
                 player = task[i].STOC_GAME_MSG.message[1];
                 var lpcost = task[i].STOC_GAME_MSG.message.readUInt16LE(2);
