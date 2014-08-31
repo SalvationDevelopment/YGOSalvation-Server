@@ -151,16 +151,16 @@ function processTask(task, socket) {
                     //                    }
                 }
             } else if (command === 'MSG_MOVE') {
-                 code = task[i].STOC_GAME_MSG.message.readUInt16LE(1);
-                 pc = task[i].STOC_GAME_MSG.message[5]; // original controller
-                 pl = task[i].STOC_GAME_MSG.message[6]; // original cLocation
-                 ps = task[i].STOC_GAME_MSG.message[7]; // original sequence (index)
-                 pp = task[i].STOC_GAME_MSG.message[8]; // padding??
-                 cc = task[i].STOC_GAME_MSG.message[9]; // current controller
-                 cl = task[i].STOC_GAME_MSG.message[10]; // current cLocation
-                 cs = task[i].STOC_GAME_MSG.message[11]; // current sequence (index)
-                 cp = task[i].STOC_GAME_MSG.message[11]; // current position
-                 reason = task[i].STOC_GAME_MSG.message.readUInt16LE[12]; //debug data??
+                code = task[i].STOC_GAME_MSG.message.readUInt16LE(1);
+                pc = task[i].STOC_GAME_MSG.message[5]; // original controller
+                pl = task[i].STOC_GAME_MSG.message[6]; // original cLocation
+                ps = task[i].STOC_GAME_MSG.message[7]; // original sequence (index)
+                pp = task[i].STOC_GAME_MSG.message[8]; // padding??
+                cc = task[i].STOC_GAME_MSG.message[9]; // current controller
+                cl = task[i].STOC_GAME_MSG.message[10]; // current cLocation
+                cs = task[i].STOC_GAME_MSG.message[11]; // current sequence (index)
+                cp = task[i].STOC_GAME_MSG.message[11]; // current position
+                reason = task[i].STOC_GAME_MSG.message.readUInt16LE[12]; //debug data??
                 game.MoveCard(code, pc, pl, ps, pp, cc, cl, cs, cp, reason);
             } else if (command === 'MSG_POS_CHANGE') {
                 code = task[i].STOC_GAME_MSG.message.readUInt16LE(1);
@@ -173,9 +173,21 @@ function processTask(task, socket) {
             } else if (command === 'MSG_SET') {
                 // All the vars are commented out in the source.
                 console.log('MSG_SET');
-                } else if (command === 'MSG_SWAP') {
-                    console.log('MSG_SWAP');
+            } else if (command === 'MSG_SWAP') {
+                console.log('MSG_SWAP');
                 // code vars are commented out in the source, assuming graphical only.
+            } else if (command === 'MSG_SUMMONING' || command === 'MSG_SPSUMMONING') {
+                code = task[i].STOC_GAME_MSG.message.readUInt16LE(1);
+            } else if (command === 'MSG_SUMMONED' || command == 'MSG_SPSUMMONED' || command === 'MSG_FLIPSUMMONED') {
+                //graphical only
+            } else if (command === 'MSG_FLIPSUMMONING') {
+                // notice pp is missing, and everything is upshifted; not repeating code.
+                code = task[i].STOC_GAME_MSG.message.readUInt16LE(1);
+                cc = task[i].STOC_GAME_MSG.message[5]; // current controller
+                cl = task[i].STOC_GAME_MSG.message[6]; // current cLocation
+                cs = task[i].STOC_GAME_MSG.message[7]; // current sequence (index)
+                cp = task[i].STOC_GAME_MSG.message[8]; // current position
+                game.ChangeCardPosition(code, cc, cl, cs, cp);
             } else if (command === 'MSG_UPDATE_DATA') {
                 player = task[i].STOC_GAME_MSG.message[1];
                 var fieldlocation = task[i].STOC_GAME_MSG.message[2];
