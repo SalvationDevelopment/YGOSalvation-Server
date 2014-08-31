@@ -62,6 +62,9 @@ proxy.listen(8914);
 
 function processTask(task, socket) {
     var player, clocation, index, data;
+
+    //card movement vars
+    var code, pc, pl, ps, pp, cc, cl, cs, cp, reason;
     task = (function () {
         var output = [];
         for (var i = 0; task.length > i; i++) {
@@ -148,17 +151,25 @@ function processTask(task, socket) {
                     //                    }
                 }
             } else if (command === 'MSG_MOVE') {
-                var code = task[i].STOC_GAME_MSG.message.readUInt16LE(1);
-                var pc = task[i].STOC_GAME_MSG.message[5]; // original controller
-                var pl = task[i].STOC_GAME_MSG.message[6]; // original cLocation
-                var ps = task[i].STOC_GAME_MSG.message[7]; // original sequence (index)
-                var pp = task[i].STOC_GAME_MSG.message[8]; // padding??
-                var cc = task[i].STOC_GAME_MSG.message[9]; // current controller
-                var cl = task[i].STOC_GAME_MSG.message[10]; // current cLocation
-                var cs = task[i].STOC_GAME_MSG.message[11]; // current sequence (index)
-                var cp = task[i].STOC_GAME_MSG.message[11]; // current position
-                var reason = task[i].STOC_GAME_MSG.message.readUInt16LE[12]; //debug data??
+                 code = task[i].STOC_GAME_MSG.message.readUInt16LE(1);
+                 pc = task[i].STOC_GAME_MSG.message[5]; // original controller
+                 pl = task[i].STOC_GAME_MSG.message[6]; // original cLocation
+                 ps = task[i].STOC_GAME_MSG.message[7]; // original sequence (index)
+                 pp = task[i].STOC_GAME_MSG.message[8]; // padding??
+                 cc = task[i].STOC_GAME_MSG.message[9]; // current controller
+                 cl = task[i].STOC_GAME_MSG.message[10]; // current cLocation
+                 cs = task[i].STOC_GAME_MSG.message[11]; // current sequence (index)
+                 cp = task[i].STOC_GAME_MSG.message[11]; // current position
+                 reason = task[i].STOC_GAME_MSG.message.readUInt16LE[12]; //debug data??
                 game.MoveCard(code, pc, pl, ps, pp, cc, cl, cs, cp, reason);
+            } else if (command === 'MSG_POS_CHANGE') {
+                code = task[i].STOC_GAME_MSG.message.readUInt16LE(1);
+                cc = task[i].STOC_GAME_MSG.message[5]; // current controller
+                cl = task[i].STOC_GAME_MSG.message[6]; // current cLocation
+                cs = task[i].STOC_GAME_MSG.message[7]; // current sequence (index)
+                pp = task[i].STOC_GAME_MSG.message[8]; // padding??
+                cp = task[i].STOC_GAME_MSG.message[9]; // current position
+                game.ChangeCardPosition(code, cc, cl, cs, cp);
             } else if (command === 'MSG_SET') {
                 var smovecardid = task[i].STOC_GAME_MSG.message[1];
                 var spc = task[i].STOC_GAME_MSG.message[2];
@@ -534,6 +545,13 @@ game.UpdateCards = function (player, clocation, data) { //YGOPro is constantly s
         }
     }
 };
+game.UpdateCard = function (player, clocation, index, data) {
+    if (data.Code !== 'nocard') {
+        console.log('.card.p' + player + '.' + enums.locations[clocation] + '.i' + index);
+        $('.card.p' + player + '.' + enums.locations[clocation] + '.i' + index).attr('src', game.images + data.Code + '.jpg')
+            .attr('data-position', data.Position);
+    }
+};
 game.MoveCard = function (code, pc, pl, ps, pp, cc, cl, cs, cp, reason) {
     if (pl === 0) {
         var newcard = '<img class="card p' + cc + ' ' + enums.locations[cl] + ' i' + cs + '" dataposition="">';
@@ -543,7 +561,7 @@ game.MoveCard = function (code, pc, pl, ps, pp, cc, cl, cs, cp, reason) {
         $(query).detach();
     } else {
         if (!(pl & 0x80) && !(cl & 0x80)) { //duelclient line 1885
-            animateState(pc, enums.locations[pl], pc, cc, cl, cs, cp);
+            animateState(pc, enums.locations[pl], ps, cc, cl, cs, cp);
             //animateState(player, clocation, index, moveplayer, movelocation, movezone, moveposition)
         } else if (!(pl & 0x80)) {
             console.log('targeting a xyz unit....');
@@ -554,13 +572,12 @@ game.MoveCard = function (code, pc, pl, ps, pp, cc, cl, cs, cp, reason) {
         }
     }
 };
-game.UpdateCard = function (player, clocation, index, data) {
-    if (data.Code !== 'nocard') {
-        console.log('.card.p' + player + '.' + enums.locations[clocation] + '.i' + index);
-        $('.card.p' + player + '.' + enums.locations[clocation] + '.i' + index).attr('src', game.images + data.Code + '.jpg')
-            .attr('data-position', data.Position);
-    }
+game.ChangeCardPosition = function (code, cc, cl, cs, cp) {
+    animateState(cc, enums.locations[cl], cs, cc, cl, cs, cp);
+    //var query = '.card.p' + cc + '.' + enums.locations[cl] + '.i' + cs;
+    //animateState(player, clocation, index, moveplayer, movelocation, movezone, moveposition)
 };
+
 
 game.DrawCard = function (player, numberOfCards) {
     var currenthand = $('.p' + player + '.HAND').length;
