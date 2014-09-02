@@ -1,56 +1,59 @@
-.card { -webkit-transform-style: preserve-3d; width:83px; height:124px; background:rgba(200,100,200,.2);
+.card { -webkit-transform-style: preserve-3d; width:63px; height:86px; background:rgba(200,100,200,.2);
     position:absolute; -z-index: 3; -webkit-transition: all 500ms;
     z-index: 1;
 }
-.card.deck { -webkit-transition: left 150ms;}
+.card.DECK { -webkit-transition: left 150ms;}
 
-.p0 {position:absolute; display:block}
+.p0,.p1 {position:absolute; display:block}
 
-.p0.DECK         {bottom : 43px; left: 675px; }
-.p0.HAND         {bottom : 10px; left: 124px; }
-.p0.EXTRA        {bottom : 43px; left: 22px; }
-.p0.GRAVE        {bottom : 181px; left: 735px; }
-
-
-
-.p0.SpellZone.i0     {bottom :188px; left:144px;}
-.p0.SpellZone.i1     {bottom :188px; left:261px;}
-.p0.SpellZone.i2     {bottom :188px; left:379px;}
-.p0.SpellZone.i3     {bottom :188px; left:497px;}
-.p0.SpellZone.i4     {bottom :188px; left:614px;}
-.p0.SpellZone.i5     {bottom :188px; left:;}
+.p0.DECK         {bottom : 10; left: 632px; }
+.p0.HAND         {bottom : -10px; left: 124px; }
+.p0.EXTRA        {bottom : 10px; left: 97px; }
+.p0.GRAVE        {bottom : 207px; left: 633px; }
+.p0.REMOVED        {bottom : 207px; left: 713px; }
 
 
-.p0.MONSTERZONE.i0     {bottom :250px; left:144px;}
-.p0.MONSTERZONE.i1     {bottom :250px; left:261px;}
-.p0.MONSTERZONE.i2     {bottom :250px; left:379px;}
-.p0.MONSTERZONE.i3     {bottom :250px; left:497px;}
-.p0.MONSTERZONE.i4     {bottom :250px; left:614px;}
+
+.p0.SPELLZONE.i0     {bottom :64px; left:190px;}
+.p0.SPELLZONE.i1     {bottom :64px; left:276px;}
+.p0.SPELLZONE.i2     {bottom :64px; left:364px;}
+.p0.SPELLZONE.i3     {bottom :64px; left:453px;}
+.p0.SPELLZONE.i4     {bottom :64px; left:541px;}
+.p0.SPELLZONE.i5     {bottom :207px; left:97px;}/*fiendspell*/
+.p0.SPELLZONE.i6     {bottom :108px; left:97px;}/*penzoneblue*/
+.p0.SPELLZONE.i7     {bottom :108px; left:633px;}/*penzonered*/
 
 
-.p1 {position:absolute; display:block}
+.p0.MONSTERZONE.i0     {bottom :154px; left:190px;}
+.p0.MONSTERZONE.i1     {bottom :154px; left:276px;}
+.p0.MONSTERZONE.i2     {bottom :154px; left:364px;}
+.p0.MONSTERZONE.i3     {bottom :154px; left:453px;}
+.p0.MONSTERZONE.i4     {bottom :154px; left:541px;}
 
-.p1.DECK         {top : 43px;right: 744px; }
+
+.p1.DECK         {top : 10; right: 632px; }
 .p1.HAND         {top : -10px; right: 124px; }
-.p1.EXTRA        {top : 43px; right: 32px; }
-.p1.GRAVE        {top : 181px; right: 735px; }
- 
-
-.p1.SPELLZONE.i0     {top :117px; right:144px;}
-.p1.SPELLZONE.i1     {top :117px; right:261px;}
-.p1.SPELLZONE.i2     {top :117px; right:379px;}
-.p1.SPELLZONE.i3     {top :117px; right:497px;}
-.p1.SPELLZONE.i4     {top :117px; right:614px;}
-.p1.SPELLZONE.i5     {top :188px; right:; border: 5px solid green;}
-.p1.SPELLZONE.i6     {top :188px; right:; border: 5px solid green;}
-.p1.SPELLZONE.i7     {top :188px; right:; border: 5px solid green;}
+.p1.EXTRA        {top : 10px; right: 97px; }
+.p1.GRAVE        {top : 207px; right: 633px; }
+.p1.REMOVED      {top : 207px; right: 713px; }
 
 
-.p1.MONSTERZONE.i0     {top :250px; right:144px;}
-.p1.MONSTERZONE.i1     {top :250px; right:261px;}
-.p1.MONSTERZONE.i2     {top :250px; right:379px;}
-.p1.MONSTERZONE.i3     {top :250px; right:497px;}
-.p1.MONSTERZONE.i4     {top :250px; right:614px;}
+
+.p1.SPELLZONE.i0     {top :64px; right:190px;}
+.p1.SPELLZONE.i1     {top :64px; right:276px;}
+.p1.SPELLZONE.i2     {top :64px; right:364px;}
+.p1.SPELLZONE.i3     {top :64px; right:453px;}
+.p1.SPELLZONE.i4     {top :64px; right:541px;}
+.p1.SPELLZONE.i5     {top :207px; right:97px;}/*fiendspell*/
+.p1.SPELLZONE.i6     {top :108px; right:97px;}/*penzoneblue*/
+.p1.SPELLZONE.i7     {top :108px; right:633px;}/*penzonered*/
+
+
+.p1.MONSTERZONE.i0     {top :154px; right:190px;}
+.p1.MONSTERZONE.i1     {top :154px; right:276px;}
+.p1.MONSTERZONE.i2     {top :154px; right:364px;}
+.p1.MONSTERZONE.i3     {top :154px; right:453px;}
+.p1.MONSTERZONE.i4     {top :154px; right:541px;}
 
 
 
