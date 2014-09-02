@@ -54,7 +54,7 @@ proxy.on('connection', function (socket) {
     connection.on('error', function () {});
     socket.on('error', function () {});
 });
-$(document).on('ready',function(){
+$(document).on('ready', function () {
     proxy.listen(8914);
 });
 
@@ -560,7 +560,7 @@ game.DOMWriter = function (size, movelocation, player) {
     var field = $('.fieldimage');
     $(field).detach();
     for (var i = 0; i < size; i++) {
-        $(field).append('<img class="card p'+player+' '+movelocation+' i'+i+ '" src="'+game.images+'cover.jpg" datapostition="FaceDownAttack" />');
+        $(field).append('<img class="card p' + player + ' ' + movelocation + ' i' + i + '" src="' + game.images + 'cover.jpg" datapostition="FaceDownAttack" />');
     }
     $(field).appendTo('.fieldcontainer');
 };
@@ -573,6 +573,12 @@ game.UpdateCards = function (player, clocation, data) { //YGOPro is constantly s
             console.log('.card.p' + player + '.' + enums.locations[clocation] + '.i' + i, data[i].Code);
             $('.card.p' + player + '.' + enums.locations[clocation] + '.i' + i).attr('src', game.images + data[i].Code + '.jpg')
                 .attr('data-position', data[i].Position);
+        }else{
+            var deadcard = $('.card.p' + player + '.' + enums.locations[clocation] + '.i' + i);
+            if (deadcard){
+                var grave = $('.card.p' + player + '.' + 'GRAVE').length -1;
+                $('.card.p' + player + '.' + enums.locations[clocation] + '.i' + grave).attr('data-position', 'FaceUpAttack');
+            }
         }
     }
 };
@@ -586,7 +592,7 @@ game.UpdateCard = function (player, clocation, index, data) {
 game.MoveCard = function (code, pc, pl, ps, pp, cc, cl, cs, cp) {
 
     console.log(code, pc, pl, ps, pp, cc, cl, cs, cp);
-    
+
     if (pl === 0) {
         var newcard = '<img class="card p' + cc + ' ' + enums.locations[cl] + ' i' + cs + '" dataposition="">';
         $('.fieldimage').append(newcard);
@@ -596,11 +602,13 @@ game.MoveCard = function (code, pc, pl, ps, pp, cc, cl, cs, cp) {
         $(query).detach();
         return;
     } else {
-        
+
         if (!(pl & 0x80) && !(cl & 0x80)) { //duelclient line 1885
             console.log(pl);
-            animateState(pc, pl, ps, cc, cl, cs, cp,1);
+            animateState(pc, pl, ps, cc, cl, cs, cp, 1);
             //animateState(player, clocation, index, moveplayer, movelocation, movezone, moveposition)
+
+
             layouthand(cc);
         } else if (!(pl & 0x80)) {
             console.log('targeting a xyz unit....');
@@ -619,8 +627,9 @@ game.ChangeCardPosition = function (code, cc, cl, cs, cp) {
 
 game.DrawCard = function (player, numberOfCards, cards) {
     var currenthand = $('.p' + player + '.HAND').length;
+    var topcard = $('.p' + player + '.DECK').length -1;
     for (var i = 0; i < numberOfCards; i++) {
-        animateState(player, 1, 'ignore', player, 2, currenthand + i, 'AttackFaceUp');
+        animateState(player, 1, topcard, player, 2, currenthand + i, 'AttackFaceUp');
         //animateState(player, clocation, index, moveplayer, movelocation, movezone, moveposition){
         if (cards[i]) {
             $('.p' + player + '.HAND' + 'i' + (currenthand + i)).attr('src', game.images + cards[i] + '.jpg');
@@ -728,12 +737,12 @@ $(document).ready(function () {
 // Animation functions
 
 function cardmargin(player, deck) {
-    var size = $('.card.' + player + '.' + deck).length ;
+    var size = $('.card.' + player + '.' + deck).length;
     $('.card.' + player + '.' + deck).each(function (i) {
-        
-        $(this).attr('style','').css('z-index', i)
-        .css('-webkit-transform' ,'translate3d(0,0,'+i+'px)');
-        
+
+        $(this).attr('style', '').css('z-index', i)
+            .css('-webkit-transform', 'translate3d(0,0,' + i + 'px)');
+
 
     });
 }
@@ -801,6 +810,28 @@ function animateState(player, clocation, index, moveplayer, movelocation, movezo
         .attr('style', '').attr('data-position', moveposition);
     //console.log(player, clocation, index, moveplayer, movelocation, movezone, moveposition, count);
     console.log(query, 'changed to', ".card.p" + moveplayer + "." + enums.locations[movelocation] + ".i" + movezone);
+    if (enums.locations[clocation] === 'DECK' ||
+        enums.locations[clocation] === 'EXTRA' ||
+        enums.locations[clocation] === 'GRAVE' ||
+        enums.locations[clocation] === 'REMOVED') {
+        cardmargin(player, enums.locations[clocation]);
+    }
+    if (enums.locations[movelocation] === 'DECK' ||
+        enums.locations[movelocation] === 'EXTRA' ||
+        enums.locations[movelocation] === 'GRAVE' ||
+        enums.locations[clocation] === 'REMOVED') {
+        cardmargin(moveplayer, enums.locations[movelocation]);
+    }
+    if (enums.locations[clocation] === 'HAND' ||
+        enums.locations[movelocation] === 'HAND') {
+        $('.card.p0.HAND').each(function (sequence) {
+            $(this).attr('class', 'card p0 HAND i' + sequence);
+        });
+        $('.card.p1.HAND').each(function (sequence) {
+            $(this).attr('class', 'card p1 HAND i' + sequence);
+        });
+
+    }
 }
 
 function animateChaining(player, clocation, index) {
