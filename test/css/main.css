@@ -615,8 +615,8 @@ article {
     margin: 0 auto;
 }
 .fieldimage {
-    width: 85%;
-    height: 85%;
+    width: 600;
+    height: 800;
     -webkit-transform: rotate3d(1, 0, 0, 0deg);
     margin: 0 auto;
     background-image: url(../img/field.png);
