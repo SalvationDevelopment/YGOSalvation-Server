@@ -709,22 +709,8 @@ game.ShuffleDeck = function (player) {
     shuffle(player, 'DECK');
 };
 
-function debugField() {
-    $('.field').toggle();
-    game.DOMWriter(40, 'Deck', 'p0');
-    game.DOMWriter(40, 'Deck', 'p1');
-    game.DOMWriter(15, 'Extra', 'p0');
-    game.DOMWriter(15, 'Extra', 'p1');
-    game.DrawCard(0, 5);
-    game.DrawCard(1, 5);
-    layouthand('p0');
-    layouthand('p1');
-
-
-}
-
 var deckpositionx = 735;
-var currenterror;
+
 var positions = {
     extra: {
         x: 25
@@ -742,27 +728,12 @@ $(document).ready(function () {
 // Animation functions
 
 function cardmargin(player, deck) {
-    var orientation = (player === 'p0') ? ({
-        x: 'left',
-        y: 'bottom',
-        direction: 1,
-        multiple: 2
-    }) : ({
-        x: 'right',
-        y: 'top',
-        direction: -1,
-        multiple: 3
-    });
+    var size = $('.card.' + player + '.' + deck).length ;
     $('.card.' + player + '.' + deck).each(function (i) {
-        // console.log($('.card.'+player+'.'+deck), cardlocations[player],player,deck);
-        var decklocationx = (orientation.direction * i / orientation.multiple) + (cardlocations[player][deck].x_origin);
-        var decklocationy = (orientation.direction * i / orientation.multiple) + (cardlocations[player][deck].y_origin);
-        //console.log(decklocationx,decklocationy);
-
-        $(this).css(
-            orientation.y, decklocationy + 'px').css(
-            orientation.x, decklocationx + 'px'
-        );
+        
+        $(this).attr('style','').css('z-index', i)
+        .css('-webkit-transform' ,'translate3d(0,0,'+i+'px)');
+        
 
     });
 }
@@ -842,7 +813,7 @@ function animateRemoveChaining() {
 
 function layouthand(player) {
     var count = $('.p' + player + '.HAND').length;
-    var f = 83 / 0.8;
+    var f = 63 / 0.8;
     var xCoord;
     //    console.log(count,f,xCoord);
     for (var sequence = 0; sequence < count; sequence++) {
@@ -870,8 +841,8 @@ var cardlocations = {
 
     'p0': {
         DECK: {
-            x_origin: 735, // player 1
-            y_origin: 43
+            x_origin: 632, // player 1
+            y_origin: 10
         },
         HAND: {
             x_origin: 124,
@@ -934,8 +905,8 @@ var cardlocations = {
     },
     'p1': {
         DECK: {
-            x_origin: 675, // player 1
-            y_origin: 43
+            x_origin: 632, // player 1
+            y_origin: 10
         },
         HAND: {
             x_origin: 124,

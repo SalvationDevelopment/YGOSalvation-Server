@@ -6,11 +6,11 @@
 
 .p0,.p1 {position:absolute; display:block}
 
-.p0.DECK         {bottom : 10; left: 632px; }
+.p0.DECK         {bottom : 10px; left: 632px; }
 .p0.HAND         {bottom : -10px; left: 124px; }
 .p0.EXTRA        {bottom : 10px; left: 97px; }
 .p0.GRAVE        {bottom : 207px; left: 633px; }
-.p0.REMOVED        {bottom : 207px; left: 713px; }
+.p0.REMOVED      {bottom : 207px; left: 713px; }
 
 
 
@@ -31,9 +31,9 @@
 .p0.MONSTERZONE.i4     {bottom :154px; left:541px;}
 
 
-.p1.DECK         {top : 10; right: 632px; }
+.p1.DECK         {top : 10px; right: 639px; }
 .p1.HAND         {top : -10px; right: 124px; }
-.p1.EXTRA        {top : 10px; right: 97px; }
+.p1.EXTRA        {top : 10px; right: 106px; }
 .p1.GRAVE        {top : 207px; right: 633px; }
 .p1.REMOVED      {top : 207px; right: 713px; }
 
@@ -44,8 +44,8 @@
 .p1.SPELLZONE.i2     {top :64px; right:364px;}
 .p1.SPELLZONE.i3     {top :64px; right:453px;}
 .p1.SPELLZONE.i4     {top :64px; right:541px;}
-.p1.SPELLZONE.i5     {top :207px; right:97px;}/*fiendspell*/
-.p1.SPELLZONE.i6     {top :108px; right:97px;}/*penzoneblue*/
+.p1.SPELLZONE.i5     {top :207px; right:106px;}/*fiendspell*/
+.p1.SPELLZONE.i6     {top :108px; right:106px;}/*penzoneblue*/
 .p1.SPELLZONE.i7     {top :108px; right:633px;}/*penzonered*/
 
 
