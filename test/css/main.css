@@ -626,7 +626,7 @@ background-repeat: no-repeat;
 background-position: center;
 -webkit-transform-style: flat;
 -webkit-perspective: 1000px;
--webkit-perspective-origin-x: 230px;
+-webkit-perspective-origin-x: 500px;
 -webkit-perspective-origin-y: 1000px;
 .button.ready0 {
     display: none;
