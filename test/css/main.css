@@ -381,9 +381,12 @@ aside {
     font-size: 10px;
     color: grey;
     text-align: center;
-    padding: 0;
-    margin: 0
+    padding: 5px;
+    text-align: center;
+    margin: 0 auto;
+    width:30%;
 }
+
 .featurelist li {
     list-style: none;
     display: inline-block;
@@ -412,6 +415,26 @@ aside {
 .downloadbutton:hover {
     background: rgba(50, 200, 50, 1);
 }
+.lander-main ul {
+    text-align: center;
+    margin: 0 auto;
+
+    width:20%;
+}
+.lander-main li {
+
+    display: inline-block;
+    text-shadow: 0 0 5px rgba(255, 255, 255, .2);
+    color:hotpink;
+    padding:5px;
+    margin:5px;
+    font-size: .8em;
+    display: inline-block;
+}
+.lander-main li:first-child {
+    background: rgba(0, 0, 0, .2);
+    border:5px solid rgba(255, 200, 200, .2);
+}
 article {
     width: 50%;
     float: left;
@@ -437,6 +460,7 @@ article {
     width: 100%;
     z-index: 10;
     border-top: 1px solid white;
+    font-size:.8em;
 }
 .iconic {
     background: green;
@@ -567,9 +591,8 @@ article {
     -webkit-transform-style: preserve-3d;
     clear: both;
     float: left;
-    overflow: hidden;
     border-top: 3px solid #444;
-border-color: rgba(255,255,255,.05);
+    border-color: rgba(255, 255, 255, .05);
 }
 .fieldcontainer {
     width: 1000px;
@@ -594,13 +617,12 @@ border-color: rgba(255,255,255,.05);
 .fieldimage {
     width: 85%;
     height: 85%;
-    -webkit-transform: rotate3d(1, 0, 0, 45deg);
+    -webkit-transform: rotate3d(1, 0, 0, 0deg);
     margin: 0 auto;
     background-image: url(../img/field.png);
     background-size: 100% 100%;
-}
-.red {
-    background: red
+    background-repeat: no-repeat;
+    background-position: center;
 }
 .button.ready0 {
     display: none;
@@ -727,8 +749,8 @@ border-color: rgba(255,255,255,.05);
     width: 200px;
     height: 2em;
 }
-#duelzone{
-    display:none;
+#duelzone {
+    display: none;
 }
 #phases {
     position: fixed;
@@ -737,12 +759,12 @@ border-color: rgba(255,255,255,.05);
     width: 100%;
     background: rgba(0, 0, 0, .5);
     text-align: center;
-    display:none;
+    display: none;
 }
 #phases div {
     display: inline-block;
-    padding:1em;
-    color:white;
+    padding: 1em;
+    color: white;
 }
 .undefined {
     display: none

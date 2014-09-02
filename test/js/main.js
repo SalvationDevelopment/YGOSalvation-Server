@@ -21,9 +21,7 @@ var enums = require('../server/libs/enums.js');
 
 //var recieveCTOS = require('../../recieveCTOS');
 var recieveSTOC = require('../server/libs/recieveSTOC.js');
-var ws = new WebSocket('ws://192.99.11.19:8913/path');
-var wsproxy = net.createServer(function () {});
-wsproxy.listen(8912);
+
 //wsproxy.on('connection', function (socket) {
 //    console.log('new client starting a proxy.');
 //    socket.on('data', function (data) {
@@ -56,9 +54,9 @@ proxy.on('connection', function (socket) {
     connection.on('error', function () {});
     socket.on('error', function () {});
 });
-proxy.listen(8914);
-
-
+$(document).on('ready',function(){
+    proxy.listen(8914);
+});
 
 function processTask(task, socket) {
     var player, clocation, index, data;
@@ -88,8 +86,8 @@ function processTask(task, socket) {
                 var player2decksize = task[i].STOC_GAME_MSG.message.readUInt8(14);
                 var player2extrasize = task[i].STOC_GAME_MSG.message.readUInt8(16);
                 game.StartDuel(lifepoints1, lifepoints2,
-                               player1decksize, player2decksize,
-                               player1extrasize, player2extrasize);
+                    player1decksize, player2decksize,
+                    player1extrasize, player2extrasize);
             } else if (command === 'MSG_HINT') {
                 console.log('MSG_HINT', task[i].STOC_GAME_MSG.message);
                 var hintplayer = task[i].STOC_GAME_MSG.message[1];
@@ -441,7 +439,7 @@ function cardCollections(player) {
 }
 
 function updateMassCards(player, clocation, buffer) {
-    //console.log(enums.locations[clocation]);
+    console.log(enums.locations[clocation]);
     var field = cardCollections(player);
     var output = [];
     var readposition = 3;
@@ -538,7 +536,7 @@ game.SelectFirstPlayer = function (value) { // Select the player that goes first
 
 game.StartDuel = function (player1StartLP, player2StartLP, OneDeck, TwoDeck, OneExtra, TwoExtra) { // Interface signalled the game has started
     $('#duelzone').css('display', 'block').get(0).scrollIntoView();
-    $('img.card').attr('class', 'card none undefined i0').attr('src', game.images + '.jpg');
+    $('img.card').attr('class', 'card none undefined i0').attr('src', game.images + 'cover.jpg');
     $('#player1lp').html("div class='width' style='width:" + (player1StartLP) + "'></div>" + player1StartLP + "</div>");
     $('#player2lp').html("div class='width' style='width:" + (player2StartLP) + "'></div>" + player1StartLP + "</div>");
     $('#phases').css('display', 'block');
@@ -553,8 +551,8 @@ game.StartDuel = function (player1StartLP, player2StartLP, OneDeck, TwoDeck, One
     shuffle(1, 'EXTRA');
     layouthand(0);
     layouthand(0);
-    //game.DrawCard(0, 5);
-    //game.DrawCard(1, 5);
+    game.DrawCard(0, 5, []);
+    game.DrawCard(1, 5, []);
     return [cardCollections(0), cardCollections(1)];
 };
 
@@ -584,18 +582,22 @@ game.UpdateCard = function (player, clocation, index, data) {
             .attr('data-position', data.Position);
     }
 };
-game.MoveCard = function (code, pc, pl, ps, pp, cc, cl, cs, cp, reason) {
-    console.log(code, pc, pl, ps, pp, cc, cl, cs, cp, reason);
+game.MoveCard = function (code, pc, pl, ps, pp, cc, cl, cs, cp) {
+
+    console.log(code, pc, pl, ps, pp, cc, cl, cs, cp);
     if (pl === 0) {
         var newcard = '<img class="card p' + cc + ' ' + enums.locations[cl] + ' i' + cs + '" dataposition="">';
         $('.fieldimage').append(newcard);
+        return;
     } else if (cl === 0) {
         var query = '.card.p' + pc + '.' + enums.locations[pl] + '.i' + ps;
         $(query).detach();
+        return;
     } else {
         if (!(pl & 0x80) && !(cl & 0x80)) { //duelclient line 1885
-            animateState(pc, enums.locations[pl], ps, cc, cl, cs, cp);
+            animateState(pc, enums.locations[pl], ps, cc, enums.locations[cl], cs, cp);
             //animateState(player, clocation, index, moveplayer, movelocation, movezone, moveposition)
+            layouthand(cc);
         } else if (!(pl & 0x80)) {
             console.log('targeting a xyz unit....');
         } else if (!(cl & 0x80)) {
@@ -616,7 +618,9 @@ game.DrawCard = function (player, numberOfCards, cards) {
     for (var i = 0; i < numberOfCards; i++) {
         animateState(player, 0x01, 'ignore', player, 'HAND', currenthand + i, 'AttackFaceUp');
         //animateState(player, clocation, index, moveplayer, movelocation, movezone, moveposition){
-        $('.p' + player + '.HAND' + 'i' + (currenthand + i)).attr('src', game.images + cards[i] + '.jpg');
+        if (cards[i]) {
+            $('.p' + player + '.HAND' + 'i' + (currenthand + i)).attr('src', game.images + cards[i] + '.jpg');
+        }
     }
 
     layouthand(player);
@@ -633,12 +637,7 @@ game.NewTurn = function (turn) {
     $('#phases .player').text('Player ' + (1 + turn) + ':');
 };
 
-game.MoveCard = function (player, clocation, index, moveplayer, movelocation, movezone, moveposition) {
-    console.log('p' + player + "'s' ", enums.locations[clocation], index, "Moved to p" + moveplayer + "s", enums.locations[movelocation], movezone, moveposition);
-    animateState(player, clocation, index, moveplayer, enums.locations[movelocation], movezone, moveposition);
-    //animateState(player, clocation, index, moveplayer, movelocation, movezone, moveposition);
-    layouthand(moveplayer);
-};
+
 
 game.OnWin = function (result) {
     console.log("Function OnWin: " + result);
@@ -826,7 +825,7 @@ function animateState(player, clocation, index, moveplayer, movelocation, movezo
     $(query).slice(0, count).attr('class', "card p" + moveplayer + " " + movelocation + " i" + movezone)
         .attr('style', '').attr('data-position', moveposition);
     //console.log(player, clocation, index, moveplayer, movelocation, movezone, moveposition, count);
-    //console.log(query, 'changed to', "card .p" + moveplayer + "." + movelocation + ".i" + movezone);
+    console.log(query, 'changed to', ".card.p" + moveplayer + "." + movelocation + ".i" + movezone);
 }
 
 function animateChaining(player, clocation, index) {
