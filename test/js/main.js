@@ -586,6 +586,7 @@ game.UpdateCard = function (player, clocation, index, data) {
 game.MoveCard = function (code, pc, pl, ps, pp, cc, cl, cs, cp) {
 
     console.log(code, pc, pl, ps, pp, cc, cl, cs, cp);
+    
     if (pl === 0) {
         var newcard = '<img class="card p' + cc + ' ' + enums.locations[cl] + ' i' + cs + '" dataposition="">';
         $('.fieldimage').append(newcard);
@@ -595,8 +596,10 @@ game.MoveCard = function (code, pc, pl, ps, pp, cc, cl, cs, cp) {
         $(query).detach();
         return;
     } else {
+        
         if (!(pl & 0x80) && !(cl & 0x80)) { //duelclient line 1885
-            animateState(pc, enums.locations[pl], ps, cc, enums.locations[cl], cs, cp);
+            console.log(pl);
+            animateState(pc, pl, ps, cc, cl, cs, cp,1);
             //animateState(player, clocation, index, moveplayer, movelocation, movezone, moveposition)
             layouthand(cc);
         } else if (!(pl & 0x80)) {
@@ -609,7 +612,7 @@ game.MoveCard = function (code, pc, pl, ps, pp, cc, cl, cs, cp) {
     }
 };
 game.ChangeCardPosition = function (code, cc, cl, cs, cp) {
-    animateState(cc, enums.locations[cl], cs, cc, cl, cs, cp);
+    animateState(cc, cl, cs, cc, cl, cs, cp);
     //var query = '.card.p' + cc + '.' + enums.locations[cl] + '.i' + cs;
     //animateState(player, clocation, index, moveplayer, movelocation, movezone, moveposition)
 };
@@ -617,7 +620,7 @@ game.ChangeCardPosition = function (code, cc, cl, cs, cp) {
 game.DrawCard = function (player, numberOfCards, cards) {
     var currenthand = $('.p' + player + '.HAND').length;
     for (var i = 0; i < numberOfCards; i++) {
-        animateState(player, 0x01, 'ignore', player, 'HAND', currenthand + i, 'AttackFaceUp');
+        animateState(player, 1, 'ignore', player, 2, currenthand + i, 'AttackFaceUp');
         //animateState(player, clocation, index, moveplayer, movelocation, movezone, moveposition){
         if (cards[i]) {
             $('.p' + player + '.HAND' + 'i' + (currenthand + i)).attr('src', game.images + cards[i] + '.jpg');
@@ -823,10 +826,10 @@ function animateState(player, clocation, index, moveplayer, movelocation, movezo
     var searchplayer = (player === 'ignore') ? '' : ".p" + player;
 
     var query = '.card' + searchplayer + "." + enums.locations[clocation] + searchindex;
-    $(query).slice(0, count).attr('class', "card p" + moveplayer + " " + movelocation + " i" + movezone)
+    $(query).slice(0, count).attr('class', "card p" + moveplayer + " " + enums.locations[movelocation] + " i" + movezone)
         .attr('style', '').attr('data-position', moveposition);
     //console.log(player, clocation, index, moveplayer, movelocation, movezone, moveposition, count);
-    console.log(query, 'changed to', ".card.p" + moveplayer + "." + movelocation + ".i" + movezone);
+    console.log(query, 'changed to', ".card.p" + moveplayer + "." + enums.locations[movelocation] + ".i" + movezone);
 }
 
 function animateChaining(player, clocation, index) {
