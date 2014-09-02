@@ -557,11 +557,12 @@ game.StartDuel = function (player1StartLP, player2StartLP, OneDeck, TwoDeck, One
 };
 
 game.DOMWriter = function (size, movelocation, player) {
+    var field = $('.fieldimage');
+    $(field).detach();
     for (var i = 0; i < size; i++) {
-        animateState('ignore', 'unknown', 0, player, movelocation, i, 'DefenseFaceDown');
-        //animateState(player, clocation, index, moveplayer, movelocation, movezone, moveposition){
+        $(field).append('<img class="card p'+player+' '+movelocation+' i'+i+ '" src="'+game.images+'cover.jpg" datapostition="FaceDownAttack" />');
     }
-
+    $(field).appendTo('.fieldcontainer');
 };
 
 game.UpdateCards = function (player, clocation, data) { //YGOPro is constantly sending data about game state, this function stores and records that information to allow access to a properly understood gamestate for reference. 
