@@ -101,7 +101,7 @@ function processTask(task, socket) {
                 model.activePlayer = !model.activePlayer;
                 model.phase = 0;
                 game.NewTurn(model.activePlayer);
-                game.NewPhase(model.phase);
+                game.NewPhase(+model.phase);
             } else if (command === 'MSG_WIN') {
                 console.log('Win', task[i].STOC_GAME_MSG.message[1]);
             } else if (command === 'MSG_NEW_PHASE') {
@@ -281,7 +281,7 @@ function processTask(task, socket) {
 function makeCard(buffer, start, controller) {
     if (buffer.length < 4) {
         return {
-            card: {},
+            card: {Code : 'nocard'},
             readposition: start
         };
     }
@@ -573,11 +573,17 @@ game.UpdateCards = function (player, clocation, data) { //YGOPro is constantly s
             console.log('.card.p' + player + '.' + enums.locations[clocation] + '.i' + i, data[i].Code);
             $('.card.p' + player + '.' + enums.locations[clocation] + '.i' + i).attr('src', game.images + data[i].Code + '.jpg')
                 .attr('data-position', data[i].Position);
+            return;
         }else{
-            var deadcard = $('.card.p' + player + '.' + enums.locations[clocation] + '.i' + i);
+            var deadcard = $('.card.p' + player + '.' + enums.locations[clocation] + '.i' + i).length;
+            var deadzone = (enums.locations[clocation] + '.i' + i === 'SPELLZONE.i6' || 
+                            enums.locations[clocation] + '.i' + i === 'SPELLZONE.i7'  )
+                            ? 'EXTRA'
+                            : 'GRAVE'
             if (deadcard){
-                var grave = $('.card.p' + player + '.' + 'GRAVE').length -1;
-                $('.card.p' + player + '.' + enums.locations[clocation] + '.i' + grave).attr('data-position', 'FaceUpAttack');
+                var index = $('.card.p' + player + '.' + deadzone).length -1;
+                animateState(player, clocation, i, player,  0x10, index, 'AttackFaceUp');
+                //animateState(player, clocation, index, moveplayer, movelocation, movezone, moveposition)
             }
         }
     }
@@ -612,6 +618,7 @@ game.MoveCard = function (code, pc, pl, ps, pp, cc, cl, cs, cp) {
             layouthand(cc);
         } else if (!(pl & 0x80)) {
             console.log('targeting a xyz unit....');
+            
         } else if (!(cl & 0x80)) {
             console.log('turning something into a xyz unit....');
         } else {
@@ -627,9 +634,10 @@ game.ChangeCardPosition = function (code, cc, cl, cs, cp) {
 
 game.DrawCard = function (player, numberOfCards, cards) {
     var currenthand = $('.p' + player + '.HAND').length;
-    var topcard = $('.p' + player + '.DECK').length -1;
+    
     for (var i = 0; i < numberOfCards; i++) {
-        animateState(player, 1, topcard, player, 2, currenthand + i, 'AttackFaceUp');
+        var topcard = $('.p' + player + '.DECK').length -1;
+        animateState(player, 1, topcard, player, 2, currenthand + i, 'FaceUp');
         //animateState(player, clocation, index, moveplayer, movelocation, movezone, moveposition){
         if (cards[i]) {
             $('.p' + player + '.HAND' + 'i' + (currenthand + i)).attr('src', game.images + cards[i] + '.jpg');
@@ -641,13 +649,20 @@ game.DrawCard = function (player, numberOfCards, cards) {
 };
 
 game.NewPhase = function (phase) {
+    console.log('it is now' + enums.phase[phase]);
     $('#phases .phase').text(enums.phase[phase]);
+    if (phase === 1 && turn !== 0){
+        game.DrawCard(turn,1,[]);
+    }
 
 };
-
-game.NewTurn = function (turn) {
-    console.log("It is now p" + turn + "'s turn.");
-    $('#phases .player').text('Player ' + (1 + turn) + ':');
+var turn = 0;
+var turnplayer = 0;
+game.NewTurn = function (turnx) {
+    turnx = +turnx;
+    console.log("It is now p" + turnx + "'s turn.");
+    $('#phases .player').text('Player ' + (1 + turnx) + ':');
+    turnplayer = turnx;
 };
 
 
