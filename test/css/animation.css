@@ -7,7 +7,7 @@
 .p0,.p1 {position:absolute; display:block}
 
 .p0.DECK         {bottom : 10px; left: 632px; }
-.p0.HAND         {bottom : -10px; left: 124px; }
+.p0.HAND         {bottom : -50px; left: 124px; }
 .p0.EXTRA        {bottom : 10px; left: 97px; }
 .p0.GRAVE        {bottom : 207px; left: 633px; }
 .p0.REMOVED      {bottom : 207px; left: 713px; }
@@ -26,16 +26,16 @@
 
 .p0.MONSTERZONE.i0     {bottom :154px; left:190px;}
 .p0.MONSTERZONE.i1     {bottom :154px; left:276px;}
-.p0.MONSTERZONE.i2     {bottom :154px; left:364px;}
+.p0.MONSTERZONE.i2     {bottom :154px; left:360px;}
 .p0.MONSTERZONE.i3     {bottom :154px; left:453px;}
 .p0.MONSTERZONE.i4     {bottom :154px; left:541px;}
 
 
 .p1.DECK         {top : 10px; right: 639px; }
-.p1.HAND         {top : -10px; right: 124px; }
+.p1.HAND         {top : -50px; right: 124px; }
 .p1.EXTRA        {top : 10px; right: 106px; }
 .p1.GRAVE        {top : 207px; right: 633px; }
-.p1.REMOVED      {top : 207px; right: 713px; }
+.p1.REMOVED      {top : 207px; right: 719px; }
 
 
 
@@ -60,28 +60,20 @@
 .nocard {
     display:none;
 }
-.card div {
-    display: block;
-  position: absolute;
-  width: 100%;
-  height: 100%;
-    background-size:cover;
-   
-}
-.card .front {
-  background:yellow;
-}
-.card .back {background-image:url('../img/cover.jpg');
-    background-size: 100% 100%;
-    -webkit-transform: rotate3d(0,1,0, 180deg );
-
-}
-.Defense{
-    -webkit-transform: rotate3d(0,0,1, 90deg );
-}
-.Defense .back {-webkit-transform: rotate3d(0,1,0, 180deg );}
 
 
-[data-position=FaceDownAttack]  {-webkit-transform: rotate3d(0,1,0,180deg ); }
-[data-position=FaceUpDefence] { -webkit-transform: rotate3d(0,0,1, 90deg ) rotate3d(0,1,0, 180deg ); }
-[data-position=AttackFaceUp]  {-webkit-transform: rotate3d(0,0,0,0deg ); }
+
+
+.p0 [data-position=FaceDownAttack],.p0 [data-position=FaceDown]  {-webkit-transform: rotate3d(0,0,0,0deg );
+    url(http://salvationdevelopment.com/launcher/ygopro/pics/cover.jpg) }
+.p0 [data-position=FaceDownDefense]{-webkit-transform: rotate(90deg );
+    url(http://salvationdevelopment.com/launcher/ygopro/pics/cover.jpg) }
+.p0 [data-position=FaceUpDefence] { -webkit-transform: rotate(90deg ); }
+.p0 [data-position=AttackFaceUp],.p0 [data-position=FaceUp]  {-webkit-transform: rotate3d(0,0,0,0deg ); }
+
+.p1 [data-position=FaceDownAttack],.p1 [data-position=FaceDown]  {-webkit-transform: rotate3d(0,0,1,180deg );
+    url(http://salvationdevelopment.com/launcher/ygopro/pics/cover.jpg) }
+.p1 [data-position=FaceDownDefense]{-webkit-transform: rotate(90deg ) rotate3d(0,0,1,180deg );
+    url(http://salvationdevelopment.com/launcher/ygopro/pics/cover.jpg) }
+.p1 [data-position=FaceUpDefence] { -webkit-transform: rotate(90deg ) rotate3d(0,0,1,180deg ); }
+.p1 [data-position=AttackFaceUp],.p1 [data-position=FaceUp]  {-webkit-transform: rotate3d(0,0,1,180deg ); }
