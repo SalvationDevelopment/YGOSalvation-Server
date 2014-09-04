@@ -1,3 +1,4 @@
+/* jshint node: true */
 var irc = require("irc");
 var config = {
 	channels: ["#lobby"],
