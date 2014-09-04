@@ -155,10 +155,12 @@ function processTask(task, socket) {
                 player = task[i].STOC_GAME_MSG.message[1];
                 var lpcost = task[i].STOC_GAME_MSG.message.readUInt16LE(2);
                 console.log(('Player' + (player + 1)), 'paid', lpcost, 'lifepoints');
+                game.updatelifepoints(player,-1,lpcost);
             } else if (command === 'MSG_DAMAGE') {
                 player = task[i].STOC_GAME_MSG.message[1];
                 var damage = task[i].STOC_GAME_MSG.message.readUInt16LE(2);
                 console.log(('Player' + (player + 1)), 'took', damage, 'damage');
+                game.updatelifepoints(player,-1,damage);
             } else if (command === 'MSG_SUMMONING ') {
                 //ignoring
                 console.log('Normal summon preformed');
@@ -232,7 +234,8 @@ function processTask(task, socket) {
                 console.log(command, task[i].STOC_GAME_MSG.message);
             }
         } else if (task[i].STOC_DUEL_START) {
-            console.log('Starting Duel!');
+            game.LoadField();
+
         } else if (task[i].STOC_SELECT_TP) {
             console.log('Select who goes first');
         } else if (task[i].STOC_HAND_RESULT) {
@@ -281,7 +284,9 @@ function processTask(task, socket) {
 function makeCard(buffer, start, controller) {
     if (buffer.length < 4) {
         return {
-            card: {Code : 'nocard'},
+            card: {
+                Code: 'nocard'
+            },
             readposition: start
         };
     }
@@ -533,13 +538,14 @@ game.SelectFirstPlayer = function (value) { // Select the player that goes first
     $('#selectduelist').toggle();
 
 };
-
-game.StartDuel = function (player1StartLP, player2StartLP, OneDeck, TwoDeck, OneExtra, TwoExtra) { // Interface signalled the game has started
+game.LoadField = function () {
     $('#duelzone').css('display', 'block').get(0).scrollIntoView();
     $('img.card').attr('class', 'card none undefined i0').attr('src', game.images + 'cover.jpg');
-    $('#player1lp').html("div class='width' style='width:" + (player1StartLP) + "'></div>" + player1StartLP + "</div>");
-    $('#player2lp').html("div class='width' style='width:" + (player2StartLP) + "'></div>" + player1StartLP + "</div>");
+    
     $('#phases').css('display', 'block');
+    console.log('Starting Duel!');
+};
+game.StartDuel = function (player1StartLP, player2StartLP, OneDeck, TwoDeck, OneExtra, TwoExtra) { // Interface signalled the game has started
 
     game.DOMWriter(OneDeck, 'DECK', 0);
     game.DOMWriter(TwoDeck, 'DECK', 1);
@@ -550,7 +556,9 @@ game.StartDuel = function (player1StartLP, player2StartLP, OneDeck, TwoDeck, One
     shuffle(0, 'EXTRA');
     shuffle(1, 'EXTRA');
     layouthand(0);
-    layouthand(0);
+    layouthand(1);
+    $('.p0lp').val(player1StartLP);
+    $('.p1lp').val(player2StartLP);
     game.DrawCard(0, 5, []);
     game.DrawCard(1, 5, []);
     return [cardCollections(0), cardCollections(1)];
@@ -560,11 +568,14 @@ game.DOMWriter = function (size, movelocation, player) {
     var field = $('.fieldimage');
     $(field).detach();
     for (var i = 0; i < size; i++) {
-        $(field).append('<img class="card p' + player + ' ' + movelocation + ' i' + i + '" src="' + game.images + 'cover.jpg" datapostition="FaceDownAttack" />');
+        $(field).append('<img class="card p' + player + ' ' + movelocation + ' i' + i + '" src="' + game.images + 'cover.jpg" data-postition="FaceDownAttack" />');
     }
     $(field).appendTo('.fieldcontainer');
 };
-
+game.updatelifepoints = function (player,multiplier,lp){
+    var lifepoints = +$('.p'+player+'lp').eq(0).val() + (lp * multiplier) ;
+    $('.p'+player+'lp').eq(0).val(lifepoints);
+};
 game.UpdateCards = function (player, clocation, data) { //YGOPro is constantly sending data about game state, this function stores and records that information to allow access to a properly understood gamestate for reference. 
 
 
@@ -574,15 +585,14 @@ game.UpdateCards = function (player, clocation, data) { //YGOPro is constantly s
             $('.card.p' + player + '.' + enums.locations[clocation] + '.i' + i).attr('src', game.images + data[i].Code + '.jpg')
                 .attr('data-position', data[i].Position);
             return;
-        }else{
+        } else {
             var deadcard = $('.card.p' + player + '.' + enums.locations[clocation] + '.i' + i).length;
-            var deadzone = (enums.locations[clocation] + '.i' + i === 'SPELLZONE.i6' || 
-                            enums.locations[clocation] + '.i' + i === 'SPELLZONE.i7'  )
-                            ? 'EXTRA'
-                            : 'GRAVE'
-            if (deadcard){
-                var index = $('.card.p' + player + '.' + deadzone).length -1;
-                animateState(player, clocation, i, player,  0x10, index, 'AttackFaceUp');
+            var deadzone = (enums.locations[clocation] + '.i' + i === 'SPELLZONE.i6' ||
+                enums.locations[clocation] + '.i' + i === 'SPELLZONE.i7'
+            ) ? 'EXTRA' : 'GRAVE';
+            if (deadcard) {
+                var index = $('.card.p' + player + '.' + deadzone).length - 1;
+                animateState(player, clocation, i, player, 0x10, index, 'AttackFaceUp');
                 //animateState(player, clocation, index, moveplayer, movelocation, movezone, moveposition)
             }
         }
@@ -600,7 +610,7 @@ game.MoveCard = function (code, pc, pl, ps, pp, cc, cl, cs, cp) {
     console.log(code, pc, pl, ps, pp, cc, cl, cs, cp);
 
     if (pl === 0) {
-        var newcard = '<img class="card p' + cc + ' ' + enums.locations[cl] + ' i' + cs + '" dataposition="">';
+        var newcard = '<img class="card p' + cc + ' ' + enums.locations[cl] + ' i' + cs + '" data-position="">';
         $('.fieldimage').append(newcard);
         return;
     } else if (cl === 0) {
@@ -618,7 +628,7 @@ game.MoveCard = function (code, pc, pl, ps, pp, cc, cl, cs, cp) {
             layouthand(cc);
         } else if (!(pl & 0x80)) {
             console.log('targeting a xyz unit....');
-            
+
         } else if (!(cl & 0x80)) {
             console.log('turning something into a xyz unit....');
         } else {
@@ -634,9 +644,9 @@ game.ChangeCardPosition = function (code, cc, cl, cs, cp) {
 
 game.DrawCard = function (player, numberOfCards, cards) {
     var currenthand = $('.p' + player + '.HAND').length;
-    
+
     for (var i = 0; i < numberOfCards; i++) {
-        var topcard = $('.p' + player + '.DECK').length -1;
+        var topcard = $('.p' + player + '.DECK').length - 1;
         animateState(player, 1, topcard, player, 2, currenthand + i, 'FaceUp');
         //animateState(player, clocation, index, moveplayer, movelocation, movezone, moveposition){
         if (cards[i]) {
@@ -651,8 +661,8 @@ game.DrawCard = function (player, numberOfCards, cards) {
 game.NewPhase = function (phase) {
     console.log('it is now' + enums.phase[phase]);
     $('#phases .phase').text(enums.phase[phase]);
-    if (phase === 1 && turn !== 0){
-        game.DrawCard(turn,1,[]);
+    if (phase === 1 && turn !== 0) {
+        game.DrawCard(turn, 1, []);
     }
 
 };
