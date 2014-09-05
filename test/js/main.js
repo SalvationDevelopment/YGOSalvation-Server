@@ -1,45 +1,21 @@
-/* jshint browser : true */
-/* jshint jquery : true */
-/* globals alert, console */
-/* globals isChecked, randomString */
-
 //Define all the globals you are going to use. Avoid using to many globals. All Globals should be databases of sorts.
 // ReadInt32() = readUInt16LE()
 /* jshint node: true */
-/* globals */
-/* global module */
+/* globals $*/
 /* jslint browser : true */
+console.log('Runing DevPro Packet Sniffing Proxy');
+process.on('uncaughtException', function (err) {
+    console.log('Caught exception: ' + err);
+});
 
 var game = {};
-
-console.log('Runing DevPro Packet Sniffing Proxy');
-
+var model = {};
 var net = require('net');
-
 var parsePackets = require('../server/libs/parsepackets.js');
 var enums = require('../server/libs/enums.js');
-
-//var recieveCTOS = require('../../recieveCTOS');
 var recieveSTOC = require('../server/libs/recieveSTOC.js');
+var proxy = net.createServer(function () {}).listen(8914);
 
-//wsproxy.on('connection', function (socket) {
-//    console.log('new client starting a proxy.');
-//    socket.on('data', function (data) {
-//        console.log('sending data');
-//        ws.send(data);
-//
-//    });
-//    ws.on('message', function (data) {
-//        console.log('recieving data');
-//        socket.write(data);
-//        var task = parsePackets('STOC', data);
-//        console.log(task)
-//        processTask(task, socket);
-//    });
-//});
-var model = new Model();
-model.singlelock = false;
-var proxy = net.createServer(function () {});
 proxy.on('connection', function (socket) {
 
     var connection = net.connect(8911, '91.250.87.52');
@@ -53,9 +29,6 @@ proxy.on('connection', function (socket) {
     });
     connection.on('error', function () {});
     socket.on('error', function () {});
-});
-$(document).on('ready', function () {
-    proxy.listen(8914);
 });
 
 function processTask(task, socket) {
@@ -76,62 +49,63 @@ function processTask(task, socket) {
         } else
         if (task[i].STOC_GAME_MSG) {
             var command = enums.STOC.STOC_GAME_MSG[task[i].STOC_GAME_MSG.message[0]];
+            var game_message = game_message;
             console.log(command);
             if (command === 'MSG_START') {
-                var type = task[i].STOC_GAME_MSG.message[1];
-                var lifepoints1 = task[i].STOC_GAME_MSG.message.readUInt16LE(2);
-                var lifepoints2 = task[i].STOC_GAME_MSG.message.readUInt16LE(6);
-                var player1decksize = task[i].STOC_GAME_MSG.message.readUInt8(10);
-                var player1extrasize = task[i].STOC_GAME_MSG.message.readUInt8(12);
-                var player2decksize = task[i].STOC_GAME_MSG.message.readUInt8(14);
-                var player2extrasize = task[i].STOC_GAME_MSG.message.readUInt8(16);
+                var type = game_message[1];
+                var lifepoints1 = game_message.readUInt16LE(2);
+                var lifepoints2 = game_message.readUInt16LE(6);
+                var player1decksize = game_message.readUInt8(10);
+                var player1extrasize = game_message.readUInt8(12);
+                var player2decksize = game_message.readUInt8(14);
+                var player2extrasize = game_message.readUInt8(16);
                 game.StartDuel(lifepoints1, lifepoints2,
                     player1decksize, player2decksize,
                     player1extrasize, player2extrasize);
             } else if (command === 'MSG_HINT') {
-                console.log('MSG_HINT', task[i].STOC_GAME_MSG.message);
-                var hintplayer = task[i].STOC_GAME_MSG.message[1];
-                var hintcont = task[i].STOC_GAME_MSG.message[2];
-                var hintspeccount = task[i].STOC_GAME_MSG.message[3];
-                var hintforce = task[i].STOC_GAME_MSG.message[4];
+                console.log('MSG_HINT', game_message);
+                var hintplayer = game_message[1];
+                var hintcont = game_message[2];
+                var hintspeccount = game_message[3];
+                var hintforce = game_message[4];
 
 
-                console.log('Win', task[i].STOC_GAME_MSG.message[1]);
+                console.log('Win', game_message[1]);
             } else if (command === 'MSG_NEW_TURN') {
                 model.activePlayer = !model.activePlayer;
                 model.phase = 0;
                 game.NewTurn(model.activePlayer);
                 game.NewPhase(+model.phase);
             } else if (command === 'MSG_WIN') {
-                console.log('Win', task[i].STOC_GAME_MSG.message[1]);
+                console.log('Win', game_message[1]);
             } else if (command === 'MSG_NEW_PHASE') {
                 model.phase++;
                 game.NewPhase(model.phase);
             } else if (command === 'MSG_DRAW') {
-                var drawplayer = task[i].STOC_GAME_MSG.message[1];
-                var draw = task[i].STOC_GAME_MSG.message[2];
+                var drawplayer = game_message[1];
+                var draw = game_message[2];
                 var cards = [];
                 var drawReadposition = 3;
                 for (var drawcount; draw > drawcount; drawcount++) {
-                    cards.push(task[i].STOC_GAME_MSG.message.readUInt16LE(drawReadposition));
+                    cards.push(game_message.readUInt16LE(drawReadposition));
 
                 }
                 console.log('%c' + ('Player' + (drawplayer + 1)) + ' drew' + draw + ' cards', 'background: #222; color: #bada55');
                 game.DrawCard(drawplayer, draw, cards);
             } else if (command === 'MSG_SHUFFLE_DECK') {
-                var deckshuffleplayer = task[i].STOC_GAME_MSG.message[1];
+                var deckshuffleplayer = game_message[1];
                 console.log(('Player' + (deckshuffleplayer + 1)), 'shuffled the deck');
             } else if (command === 'MSG_SHUFFLE_HAND') {
-                var handshuffleplayer = task[i].STOC_GAME_MSG.message[1];
+                var handshuffleplayer = game_message[1];
                 console.log(('Player' + (handshuffleplayer + 1)), 'shuffled the deck');
             } else if (command === 'MSG_CHAINING') {
                 console.log('Chain in acknolweleged');
             } else if (command === 'MSG_CHAINED') {
-                ct = task[i].STOC_GAME_MSG.message[1];
+                ct = game_message[1];
                 // "push back chain"
                 console.log('Chain in progress');
             } else if (command === 'MSG_CHAIN_SOLVING') {
-                ct = task[i].STOC_GAME_MSG.message[1];
+                ct = game_message[1];
                 model.chainsolved = 1;
                 console.log('Resolving Chain');
             } else if (command === 'MSG_CHAIN_SOLVED') {
@@ -144,57 +118,57 @@ function processTask(task, socket) {
             } else if (command === 'MSG_CARD_SELECTED') {
                 // trigger
             } else if (command === 'MSG_CARD_SELECTED') {
-                /*  player = task[i].STOC_GAME_MSG.message[1];*/
-                var count = task[i].STOC_GAME_MSG.message[2];
+                /*  player = game_message[1];*/
+                var count = game_message[2];
                 var randomRead = 3;
                 for (var randomcount = 0; count > randomcount; randomcount++) {
 
                 }
                 game.showRandomSelected();
             } else if (command === 'MSG_PAY_LPCOST') {
-                player = task[i].STOC_GAME_MSG.message[1];
-                var lpcost = task[i].STOC_GAME_MSG.message.readUInt16LE(2);
+                player = game_message[1];
+                var lpcost = game_message.readUInt16LE(2);
                 console.log(('Player' + (player + 1)), 'paid', lpcost, 'lifepoints');
                 game.updatelifepoints(player,-1,lpcost);
             } else if (command === 'MSG_DAMAGE') {
-                player = task[i].STOC_GAME_MSG.message[1];
-                var damage = task[i].STOC_GAME_MSG.message.readUInt16LE(2);
+                player = game_message[1];
+                var damage = game_message.readUInt16LE(2);
                 console.log(('Player' + (player + 1)), 'took', damage, 'damage');
                 game.updatelifepoints(player,-1,damage);
             } else if (command === 'MSG_SUMMONING ') {
                 //ignoring
                 console.log('Normal summon preformed');
             } else if (command === 'MSG_SELECT_IDLECMD') {
-                var idleplayer = task[i].STOC_GAME_MSG.message[1];
+                var idleplayer = game_message[1];
                 model.idle = true;
                 var idlereadposition = 2;
                 for (var k = 0; k < 5; k++) {
-                    var idlecount = task[i].STOC_GAME_MSG.message[idlereadposition];
+                    var idlecount = game_message[idlereadposition];
                     idlereadposition++;
                     //                    for (var j = 0; j < idlecount; ++j) {
-                    //                        var idlecard = task[i].STOC_GAME_MSG.message.readUInt16LE(idlereadposition);
+                    //                        var idlecard = game_message.readUInt16LE(idlereadposition);
                     //                        idlereadposition = idlereadposition + 4;
                     //                    }
                 }
             } else if (command === 'MSG_MOVE') {
-                code = task[i].STOC_GAME_MSG.message.readUInt16LE(1);
-                pc = task[i].STOC_GAME_MSG.message[5]; // original controller
-                pl = task[i].STOC_GAME_MSG.message[6]; // original cLocation
-                ps = task[i].STOC_GAME_MSG.message[7]; // original sequence (index)
-                pp = task[i].STOC_GAME_MSG.message[8]; // padding??
-                cc = task[i].STOC_GAME_MSG.message[9]; // current controller
-                cl = task[i].STOC_GAME_MSG.message[10]; // current cLocation
-                cs = task[i].STOC_GAME_MSG.message[11]; // current sequence (index)
-                cp = task[i].STOC_GAME_MSG.message[12]; // current position
-                reason = task[i].STOC_GAME_MSG.message.readUInt16LE[12]; //debug data??
+                code = game_message.readUInt16LE(1);
+                pc = game_message[5]; // original controller
+                pl = game_message[6]; // original cLocation
+                ps = game_message[7]; // original sequence (index)
+                pp = game_message[8]; // padding??
+                cc = game_message[9]; // current controller
+                cl = game_message[10]; // current cLocation
+                cs = game_message[11]; // current sequence (index)
+                cp = game_message[12]; // current position
+                reason = game_message.readUInt16LE[12]; //debug data??
                 game.MoveCard(code, pc, pl, ps, pp, cc, cl, cs, cp, reason);
             } else if (command === 'MSG_POS_CHANGE') {
-                code = task[i].STOC_GAME_MSG.message.readUInt16LE(1);
-                cc = task[i].STOC_GAME_MSG.message[5]; // current controller
-                cl = task[i].STOC_GAME_MSG.message[6]; // current cLocation
-                cs = task[i].STOC_GAME_MSG.message[7]; // current sequence (index)
-                pp = task[i].STOC_GAME_MSG.message[8]; // padding??
-                cp = task[i].STOC_GAME_MSG.message[9]; // current position
+                code = game_message.readUInt16LE(1);
+                cc = game_message[5]; // current controller
+                cl = game_message[6]; // current cLocation
+                cs = game_message[7]; // current sequence (index)
+                pp = game_message[8]; // padding??
+                cp = game_message[9]; // current position
                 game.ChangeCardPosition(code, cc, cl, cs, cp);
             } else if (command === 'MSG_SET') {
                 // All the vars are commented out in the source.
@@ -203,35 +177,35 @@ function processTask(task, socket) {
                 console.log('MSG_SWAP');
                 // code vars are commented out in the source, assuming graphical only.
             } else if (command === 'MSG_SUMMONING' || command === 'MSG_SPSUMMONING') {
-                code = task[i].STOC_GAME_MSG.message.readUInt16LE(1);
+                code = game_message.readUInt16LE(1);
             } else if (command === 'MSG_SUMMONED' || command == 'MSG_SPSUMMONED' || command === 'MSG_FLIPSUMMONED') {
                 //graphical only
             } else if (command === 'MSG_FLIPSUMMONING') {
                 // notice pp is missing, and everything is upshifted; not repeating code.
-                code = task[i].STOC_GAME_MSG.message.readUInt16LE(1);
-                cc = task[i].STOC_GAME_MSG.message[5]; // current controller
-                cl = task[i].STOC_GAME_MSG.message[6]; // current cLocation
-                cs = task[i].STOC_GAME_MSG.message[7]; // current sequence (index)
-                cp = task[i].STOC_GAME_MSG.message[8]; // current position
+                code = game_message.readUInt16LE(1);
+                cc = game_message[5]; // current controller
+                cl = game_message[6]; // current cLocation
+                cs = game_message[7]; // current sequence (index)
+                cp = game_message[8]; // current position
                 game.ChangeCardPosition(code, cc, cl, cs, cp);
             } else if (command === 'MSG_UPDATE_DATA') {
-                player = task[i].STOC_GAME_MSG.message[1];
-                var fieldlocation = task[i].STOC_GAME_MSG.message[2];
+                player = game_message[1];
+                var fieldlocation = game_message[2];
                 var fieldmodel = enums.locations[fieldlocation];
-                var udata = updateMassCards(player, fieldlocation, task[i].STOC_GAME_MSG.message);
+                var udata = updateMassCards(player, fieldlocation, game_message);
                 //console.log('MSG_UPDATE_DATA', 'Player' + (player + 1), fieldmodel, udata);
                 game.UpdateCards(player, fieldlocation, udata);
             } else if (command === 'MSG_UPDATE_CARD') {
-                var udplayer = task[i].STOC_GAME_MSG.message[1];
-                var udfieldlocation = task[i].STOC_GAME_MSG.message[2];
-                var udindex = task[i].STOC_GAME_MSG.message[3];
+                var udplayer = game_message[1];
+                var udfieldlocation = game_message[2];
+                var udindex = game_message[3];
 
-                var udcard = makeCard(task[i].STOC_GAME_MSG.message, 8, udplayer).card;
+                var udcard = makeCard(game_message, 8, udplayer).card;
                 //console.log('MSG_UPDATE_CARD',
                 //'Player' + (udplayer + 1), enums.locations[udfieldlocation], udindex, udcard);
                 game.UpdateCard(udplayer, udfieldlocation, udindex, udcard);
             } else {
-                console.log(command, task[i].STOC_GAME_MSG.message);
+                console.log(command, game_message);
             }
         } else if (task[i].STOC_DUEL_START) {
             game.LoadField();
@@ -467,48 +441,6 @@ function updateMassCards(player, clocation, buffer) {
     //console.log(output);
     return output;
 }
-var playerStart = [0, 0];
-var cardIndex = {};
-var cardData;
-var deckData;
-var decklistData;
-var decklist = [];
-var player1StartLP;
-var player2StartLP;
-
-var duelData;
-
-
-//This Global defines the duel state at all times via update functions. It has no impact on the DOM but may be referenced to provide information to the user or draw images.
-var duel = {
-    'p0': {
-        'Deck': [],
-        'Hand': [],
-        'MonsterZone': [],
-        'SpellZone': [],
-        'Grave': [],
-        'Removed': [],
-        'Extra': [],
-        'Overlay': [],
-        'Onfield': []
-    },
-    'p1': {
-        'Deck': [],
-        'Hand': [],
-        'MonsterZone': [],
-        'SpellZone': [],
-        'Grave': [],
-        'Removed': [],
-        'Extra': [],
-        'Overlay': [],
-        'Onfield': []
-    }
-};
-
-
-
-
-
 
 //Functions used by the websocket object
 
@@ -743,20 +675,11 @@ game.ShuffleDeck = function (player) {
     shuffle(player, 'DECK');
 };
 
-var deckpositionx = 735;
 
-var positions = {
-    extra: {
-        x: 25
-    }
-};
+
 var shuffler, fix;
 
-$(document).ready(function () {
-    $('.card').on('click', function () {
-        complete(deckpositionx);
-    });
-});
+
 
 
 // Animation functions
@@ -771,9 +694,7 @@ function cardmargin(player, deck) {
 
     });
 }
-process.on('uncaughtException', function (err) {
-    console.log('Caught exception: ' + err);
-});
+
 
 function shuffle(player, deck) {
     player = 'p' + player;
@@ -893,182 +814,3 @@ function layouthand(player) {
 //    t->X = (5.5f - 0.8f * count) / 2 + 1.55f + sequence * 0.8f;
 //   else
 //    t->X = 1.9f + sequence * 4.0f / (count - 1);
-var cardlocations = {
-
-    'p0': {
-        DECK: {
-            x_origin: 632, // player 1
-            y_origin: 10
-        },
-        HAND: {
-            x_origin: 124,
-            y_origin: -10
-        },
-        EXTRA: {
-            x_origin: 22,
-            y_origin: 43
-        },
-        Field: {
-            x_origin: 22,
-            y_origin: 181
-        },
-        Spells: {
-            zone1: {
-                x_origin: 144,
-                y_origin: 188
-            },
-            zone2: {
-                x_origin: 261,
-                y_origin: 188
-            },
-            zone3: {
-                x_origin: 379,
-                y_oirgin: 188
-            },
-            zone4: {
-                x_origin: 497,
-                y_origin: 188
-            },
-            zone5: {
-                x_origin: 614,
-                y_origin: 188
-            }
-        },
-        MonsterZone: {
-            zone1: {
-                x_origin: 144,
-                y_origin: 250
-            },
-            zone2: {
-                x_origin: 261,
-                y_origin: 250
-            },
-            zone3: {
-                x_origin: 379,
-                y_oirgin: 250
-            },
-            zone4: {
-                x_origin: 497,
-                y_origin: 250
-            },
-            zone5: {
-                x_origin: 614,
-                y_origin: 250
-            }
-        }
-
-
-    },
-    'p1': {
-        DECK: {
-            x_origin: 632, // player 1
-            y_origin: 10
-        },
-        HAND: {
-            x_origin: 124,
-            y_origin: -10
-        },
-        EXTRA: {
-            x_origin: 32,
-            y_origin: 43
-        },
-        Field: {
-            x_origin: 22,
-            y_origin: 181
-        },
-        Spells: {
-            zone1: {
-                x_origin: 144,
-                y_origin: 188
-            },
-            zone2: {
-                x_origin: 261,
-                y_origin: 188
-            },
-            zone3: {
-                x_origin: 379,
-                y_oirgin: 188
-            },
-            zone4: {
-                x_origin: 497,
-                y_origin: 188
-            },
-            zone5: {
-                x_origin: 614,
-                y_origin: 188
-            }
-        },
-        MonsterZone: {
-            zone1: {
-                x_origin: 144,
-                y_origin: 250
-            },
-            zone2: {
-                x_origin: 261,
-                y_origin: 250
-            },
-            zone3: {
-                x_origin: 379,
-                y_oirgin: 250
-            },
-            zone4: {
-                x_origin: 497,
-                y_origin: 250
-            },
-            zone5: {
-                x_origin: 614,
-                y_origin: 250
-            }
-        }
-
-
-    }
-
-};
-
-function Model() {
-    "use strict";
-    var model = {
-        gamestate: 'off',
-        gametype: 'single',
-        lobby: {
-            player1_username: '',
-            player2_username: '',
-            player3_username: '',
-            player4_username: '',
-            player1_loaded: false,
-            player2_loaded: false,
-            player3_loaded: false,
-            player4_loaded: false,
-            spectators: 0
-        },
-        player1_rps_choice: 0,
-        player2_rps_choice: 0,
-        activePlayer: 0,
-        phase: 0,
-        player1_lifepoints: 8000,
-        player2_lifepoints: 8000,
-        player1_cards: {
-            deck: [],
-            extra: [],
-            side: [],
-            hand: [],
-            monsters: [null, null, null, null, null],
-            spells: [null, null, null, null, null, null, null, null]
-        },
-        player2_cards: {
-            deck: [],
-            extra: [],
-            side: [],
-            hand: [],
-            monsters: [null, null, null, null, null],
-            spells: [null, null, null, null, null, null, null, null]
-        },
-        wincondition: 'none',
-        replaysave: false,
-        replayfile: '',
-        gamelog: [],
-        cardunderexamine: 0
-    };
-    return model;
-}
