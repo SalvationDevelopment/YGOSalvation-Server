@@ -3,7 +3,9 @@
     z-index: 1;
 }
 .card.DECK { -webkit-transition: left 150ms;}
-
+.nocard {
+    display:none;
+}
 .p0,.p1 {position:absolute; display:block}
 
 .p0.DECK         {bottom : 10px; left: 632px; }
@@ -11,8 +13,6 @@
 .p0.EXTRA        {bottom : 10px; left: 97px; }
 .p0.GRAVE        {bottom : 207px; left: 633px; }
 .p0.REMOVED      {bottom : 207px; left: 713px; }
-
-
 
 .p0.SPELLZONE.i0     {bottom :64px; left:190px;}
 .p0.SPELLZONE.i1     {bottom :64px; left:276px;}
@@ -23,12 +23,11 @@
 .p0.SPELLZONE.i6     {bottom :108px; left:97px;}/*penzoneblue*/
 .p0.SPELLZONE.i7     {bottom :108px; left:633px;}/*penzonered*/
 
-
-.p0.MONSTERZONE.i0     {bottom :154px; left:190px;}
-.p0.MONSTERZONE.i1     {bottom :154px; left:276px;}
-.p0.MONSTERZONE.i2     {bottom :154px; left:360px;}
-.p0.MONSTERZONE.i3     {bottom :154px; left:453px;}
-.p0.MONSTERZONE.i4     {bottom :154px; left:541px;}
+.p0.MONSTERZONE.i0,.p0.OVERLAY.i0   {bottom :154px; left:190px;}
+.p0.MONSTERZONE.i1,.p0.OVERLAY.i1   {bottom :154px; left:276px;}
+.p0.MONSTERZONE.i2,.p0.OVERLAY.i2   {bottom :154px; left:360px;}
+.p0.MONSTERZONE.i3,.p0.OVERLAY.i3   {bottom :154px; left:453px;}
+.p0.MONSTERZONE.i4,.p0.OVERLAY.i4   {bottom :154px; left:541px;}
 
 
 .p1.DECK         {top : 10px; right: 639px; }
@@ -36,8 +35,6 @@
 .p1.EXTRA        {top : 10px; right: 106px; }
 .p1.GRAVE        {top : 207px; right: 633px; }
 .p1.REMOVED      {top : 207px; right: 719px; }
-
-
 
 .p1.SPELLZONE.i0     {top :64px; right:190px;}
 .p1.SPELLZONE.i1     {top :64px; right:276px;}
@@ -48,20 +45,11 @@
 .p1.SPELLZONE.i6     {top :108px; right:106px;}/*penzoneblue*/
 .p1.SPELLZONE.i7     {top :108px; right:633px;}/*penzonered*/
 
-
-.p1.MONSTERZONE.i0     {top :154px; right:190px;}
-.p1.MONSTERZONE.i1     {top :154px; right:276px;}
-.p1.MONSTERZONE.i2     {top :154px; right:364px;}
-.p1.MONSTERZONE.i3     {top :154px; right:453px;}
-.p1.MONSTERZONE.i4     {top :154px; right:541px;}
-
-
-
-.nocard {
-    display:none;
-}
-
-
+.p1.MONSTERZONE.i0,.p1.OVERLAY.i0     {top :154px; right:190px;}
+.p1.MONSTERZONE.i1,.p1.OVERLAY.i1     {top :154px; right:276px;}
+.p1.MONSTERZONE.i2,.p1.OVERLAY.i2     {top :154px; right:364px;}
+.p1.MONSTERZONE.i3,.p1.OVERLAY.i3     {top :154px; right:453px;}
+.p1.MONSTERZONE.i4,.p1.OVERLAY.i4     {top :154px; right:541px;}
 
 
 .p0 [data-postition=FaceDownAttack],.p0 [data-position=FaceDown]  {-webkit-transform: rotate3d(0,0,0,0deg );
@@ -77,3 +65,11 @@
     content:url(http://salvationdevelopment.com/launcher/ygopro/pics/cover.jpg) }
 .p1 [data-position=FaceUpDefence] { -webkit-transform: rotate(90deg ) rotate3d(0,0,1,180deg ); }
 .p1 [data-position=AttackFaceUp],.p1 [data-position=FaceUp]  {-webkit-transform: rotate3d(0,0,1,180deg ); }
+
+p0.OVERLAY[data-overlayunit=0] { -webkit-transform: translateX(3px)}
+p0.OVERLAY[data-overlayunit=1] { -webkit-transform: translateX(-3px)}
+p0.OVERLAY[data-overlayunit=2] { -webkit-transform: translateX(6px)}
+
+p1.OVERLAY[data-overlayunit=0] { -webkit-transform: translateX(-3px)}
+p1.OVERLAY[data-overlayunit=1] { -webkit-transform: translateX(3px)}
+p1.OVERLAY[data-overlayunit=3] { -webkit-transform: translateX(-6px)}

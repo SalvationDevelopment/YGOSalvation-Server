@@ -49,7 +49,7 @@ function processTask(task, socket) {
         } else
         if (task[i].STOC_GAME_MSG) {
             var command = enums.STOC.STOC_GAME_MSG[task[i].STOC_GAME_MSG.message[0]];
-            var game_message = game_message;
+            var game_message = task[i].STOC_GAME_MSG.message;
             console.log(command);
             if (command === 'MSG_START') {
                 var type = game_message[1];
@@ -129,12 +129,12 @@ function processTask(task, socket) {
                 player = game_message[1];
                 var lpcost = game_message.readUInt16LE(2);
                 console.log(('Player' + (player + 1)), 'paid', lpcost, 'lifepoints');
-                game.updatelifepoints(player,-1,lpcost);
+                game.updatelifepoints(player, -1, lpcost);
             } else if (command === 'MSG_DAMAGE') {
                 player = game_message[1];
                 var damage = game_message.readUInt16LE(2);
                 console.log(('Player' + (player + 1)), 'took', damage, 'damage');
-                game.updatelifepoints(player,-1,damage);
+                game.updatelifepoints(player, -1, damage);
             } else if (command === 'MSG_SUMMONING ') {
                 //ignoring
                 console.log('Normal summon preformed');
@@ -471,9 +471,10 @@ game.SelectFirstPlayer = function (value) { // Select the player that goes first
 
 };
 game.LoadField = function () {
+    console.log('GAME INITIATE!');
     $('#duelzone').css('display', 'block').get(0).scrollIntoView();
     $('img.card').attr('class', 'card none undefined i0').attr('src', game.images + 'cover.jpg');
-    
+
     $('#phases').css('display', 'block');
     console.log('Starting Duel!');
 };
@@ -500,13 +501,13 @@ game.DOMWriter = function (size, movelocation, player) {
     var field = $('.fieldimage');
     $(field).detach();
     for (var i = 0; i < size; i++) {
-        $(field).append('<img class="card p' + player + ' ' + movelocation + ' i' + i + '" src="' + game.images + 'cover.jpg" data-postition="FaceDownAttack" />');
+        $(field).append('<img class="card p' + player + ' ' + movelocation + ' i' + i + ' o" src="' + game.images + 'cover.jpg" data-postition="FaceDown" />');
     }
     $(field).appendTo('.fieldcontainer');
 };
-game.updatelifepoints = function (player,multiplier,lp){
-    var lifepoints = +$('.p'+player+'lp').eq(0).val() + (lp * multiplier) ;
-    $('.p'+player+'lp').eq(0).val(lifepoints);
+game.updatelifepoints = function (player, multiplier, lp) {
+    var lifepoints = +$('.p' + player + 'lp').eq(0).val() + (lp * multiplier);
+    $('.p' + player + 'lp').eq(0).val(lifepoints);
 };
 game.UpdateCards = function (player, clocation, data) { //YGOPro is constantly sending data about game state, this function stores and records that information to allow access to a properly understood gamestate for reference. 
 
@@ -553,18 +554,34 @@ game.MoveCard = function (code, pc, pl, ps, pp, cc, cl, cs, cp) {
 
         if (!(pl & 0x80) && !(cl & 0x80)) { //duelclient line 1885
             console.log(pl);
-            animateState(pc, pl, ps, cc, cl, cs, cp, 1);
+            animateState(pc, pl, ps, cc, cl, cs, cp);
             //animateState(player, clocation, index, moveplayer, movelocation, movezone, moveposition)
-
-
-            layouthand(cc);
         } else if (!(pl & 0x80)) {
-            console.log('targeting a xyz unit....');
+            console.log('targeting a card to become a xyz unit....');
+            $('.card.p' + cc + '.OVERLAY.i' + cs).each(function (i) {
+                $(this).attr('data-overlayunit', (0 + i));
+            });
+            animateState(pc, pl, ps, cc, (cl & 0x7f), cs, cp, undefined, true);
+
 
         } else if (!(cl & 0x80)) {
+            console.log('turning an xyz unit into a normal card....');
+            animateState(pc, (pl & 0x7f), ps, cc, cl, cs, cp, pp);
+            $('.card.p' + pc + '.OVERLAY.i' + ps).each(function (i) {
+                $(this).attr('data-overlayunit', (0 + i));
+            });
             console.log('turning something into a xyz unit....');
         } else {
-            console.log('update a monster that had overlay units....');
+            console.log('move one xyz unit to become the xyz unit of something else....');
+            $('.card.p' + cc + '.OVERLAY.i' + cs).each(function (i) {
+                $(this).attr('data-overlayunit', (0 + i));
+            });
+            animateState(pc, (pl & 0x7f), ps, cc, (cl & 0x7f), cs, cp, pp, true);
+            $('.card.p' + pc + '.OVERLAY.i' + ps).each(function (i) {
+                $(this).attr('data-overlayunit', (0 + i));
+            });
+
+
         }
     }
 };
@@ -743,19 +760,28 @@ function complete(x) {
 
 
 
-function animateState(player, clocation, index, moveplayer, movelocation, movezone, moveposition, count) {
-
-    if (count === undefined) {
-        count = 1;
-    }
+function animateState(player, clocation, index, moveplayer, movelocation, movezone, moveposition, overlayindex, isBecomingCard) {
+    var isCard = (overlayindex === undefined) ? '.card' : '.overlayunit';
+    isBecomingCard = (isBecomingCard) ? 'card' : 'overlayunit';
+    overlayindex = (overlayindex === undefined) ? '' : 0;
     var searchindex = (index === 'ignore') ? '' : ".i" + index;
     var searchplayer = (player === 'ignore') ? '' : ".p" + player;
+    var origin = isCard + searchplayer + "." + enums.locations[clocation] + searchindex;
+    var destination = isBecomingCard + " p" + moveplayer + " " + enums.locations[movelocation] + " i" + movezone;
 
-    var query = '.card' + searchplayer + "." + enums.locations[clocation] + searchindex;
-    $(query).slice(0, count).attr('class', "card p" + moveplayer + " " + enums.locations[movelocation] + " i" + movezone)
-        .attr('style', '').attr('data-position', moveposition);
-    //console.log(player, clocation, index, moveplayer, movelocation, movezone, moveposition, count);
-    console.log(query, 'changed to', ".card.p" + moveplayer + "." + enums.locations[movelocation] + ".i" + movezone);
+    $(origin)
+    //.each(function(i){
+    /*$(this)*/
+    .attr({
+        'style': '',
+        'data-position': moveposition,
+        'data-overlayunit': overlayindex,
+        'class': destination
+    });
+    //   });
+
+
+    console.log(origin, 'changed to', destination);
     if (enums.locations[clocation] === 'DECK' ||
         enums.locations[clocation] === 'EXTRA' ||
         enums.locations[clocation] === 'GRAVE' ||
