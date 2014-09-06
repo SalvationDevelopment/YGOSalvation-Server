@@ -177,7 +177,8 @@ module.exports.locations = {
     0x08: 'SPELLZONE',
     0x10: 'GRAVE',
     0x20: 'REMOVED',
-    0x40: 'EXTRA'
+    0x40: 'EXTRA',
+    0x80: 'OVERLAY'
 };
 module.exports.race = {
     0x1: 'Warrior',
