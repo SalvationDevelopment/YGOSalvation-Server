@@ -501,7 +501,7 @@ game.DOMWriter = function (size, movelocation, player) {
     var field = $('.fieldimage');
     $(field).detach();
     for (var i = 0; i < size; i++) {
-        $(field).append('<img class="card p' + player + ' ' + movelocation + ' i' + i + ' o" src="' + game.images + 'cover.jpg" data-postition="FaceDown" />');
+        $(field).append('<img class="card p' + player + ' ' + movelocation + ' i' + i + ' o" src="' + game.images + 'cover.jpg" data-position="FaceDown" />');
     }
     $(field).appendTo('.fieldcontainer');
 };
@@ -558,7 +558,7 @@ game.MoveCard = function (code, pc, pl, ps, pp, cc, cl, cs, cp) {
             //animateState(player, clocation, index, moveplayer, movelocation, movezone, moveposition)
         } else if (!(pl & 0x80)) {
             console.log('targeting a card to become a xyz unit....');
-            $('.card.p' + cc + '.OVERLAY.i' + cs).each(function (i) {
+            $('.card.p' + cc + '.i' + cs).each(function (i) {
                 $(this).attr('data-overlayunit', (0 + i));
             });
             animateState(pc, pl, ps, cc, (cl & 0x7f), cs, cp, undefined, true);
@@ -567,13 +567,13 @@ game.MoveCard = function (code, pc, pl, ps, pp, cc, cl, cs, cp) {
         } else if (!(cl & 0x80)) {
             console.log('turning an xyz unit into a normal card....');
             animateState(pc, (pl & 0x7f), ps, cc, cl, cs, cp, pp);
-            $('.card.p' + pc + '.OVERLAY.i' + ps).each(function (i) {
+            $('.overlayunit.p' + pc + '.i' + ps).each(function (i) {
                 $(this).attr('data-overlayunit', (0 + i));
             });
             console.log('turning something into a xyz unit....');
         } else {
             console.log('move one xyz unit to become the xyz unit of something else....');
-            $('.card.p' + cc + '.OVERLAY.i' + cs).each(function (i) {
+            $('.overlayunit.p' + cc + '.i' + cs).each(function (i) {
                 $(this).attr('data-overlayunit', (0 + i));
             });
             animateState(pc, (pl & 0x7f), ps, cc, (cl & 0x7f), cs, cp, pp, true);
@@ -762,14 +762,14 @@ function complete(x) {
 
 function animateState(player, clocation, index, moveplayer, movelocation, movezone, moveposition, overlayindex, isBecomingCard) {
     var isCard = (overlayindex === undefined) ? '.card' : '.overlayunit';
-    isBecomingCard = (isBecomingCard) ? 'card' : 'overlayunit';
+    isBecomingCard = (isBecomingCard) ? 'overlayunit' : 'card';
     overlayindex = (overlayindex === undefined) ? '' : 0;
     var searchindex = (index === 'ignore') ? '' : ".i" + index;
     var searchplayer = (player === 'ignore') ? '' : ".p" + player;
     var origin = isCard + searchplayer + "." + enums.locations[clocation] + searchindex;
     var destination = isBecomingCard + " p" + moveplayer + " " + enums.locations[movelocation] + " i" + movezone;
 
-    $(origin)
+    var card = $(origin)
     //.each(function(i){
     /*$(this)*/
     .attr({
@@ -804,6 +804,7 @@ function animateState(player, clocation, index, moveplayer, movelocation, movezo
         });
 
     }
+    return card;
 }
 
 function animateChaining(player, clocation, index) {
@@ -816,7 +817,7 @@ function animateRemoveChaining() {
 
 function layouthand(player) {
     var count = $('.p' + player + '.HAND').length;
-    var f = 63 / 0.8;
+    var f = 75 / 0.8;
     var xCoord;
     //    console.log(count,f,xCoord);
     for (var sequence = 0; sequence < count; sequence++) {
