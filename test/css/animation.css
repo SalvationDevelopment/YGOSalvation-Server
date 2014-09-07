@@ -66,10 +66,12 @@
 .p1 [data-position=FaceUpDefence] { -webkit-transform: rotate(90deg ) rotate3d(0,0,1,180deg ); }
 .p1 [data-position=AttackFaceUp],.p1 [data-position=FaceUp]  {-webkit-transform: rotate3d(0,0,1,180deg ); }
 
-p0.OVERLAY[data-overlayunit=0] { -webkit-transform: translateX(3px)}
-p0.OVERLAY[data-overlayunit=1] { -webkit-transform: translateX(-3px)}
-p0.OVERLAY[data-overlayunit=2] { -webkit-transform: translateX(6px)}
+overlayunit.p0[data-overlayunit="0"] { -webkit-transform: translateX(3px)}
+overlayunit.p0[data-overlayunit="1"] { -webkit-transform: translateX(-3px)}
+overlayunit.p0[data-overlayunit="2"] { -webkit-transform: translateX(6px)}
 
-p1.OVERLAY[data-overlayunit=0] { -webkit-transform: translateX(-3px)}
-p1.OVERLAY[data-overlayunit=1] { -webkit-transform: translateX(3px)}
-p1.OVERLAY[data-overlayunit=3] { -webkit-transform: translateX(-6px)}
+overlayunit.p1[data-overlayunit="0"] { -webkit-transform: translateX(-3px)}
+overlayunit.p1[data-overlayunit="1"] { -webkit-transform: translateX(3px)}
+overlayunit.p1[data-overlayunit="3"] { -webkit-transform: translateX(-6px)}
+
+meter.p1lp {-webkit-transform: rotateY(180deg);}
