@@ -56,13 +56,6 @@ describe('Main Server', function () {
             }, 150);
         }
     });
-    it('Accepts local TCP Connections proxy them to WS connection', function (complete) {
-        var connection = net.connect(8912, '127.0.0.1', function () {
-            connection.write(coreRequest);
-            setTimeout(complete, 450);
-        });
-    });
-
 });
 describe('Offline Server', function () {
     it('YGOPro No Parameters', function (complete) {
