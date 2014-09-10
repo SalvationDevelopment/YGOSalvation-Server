@@ -9,7 +9,6 @@ var request = require('request');
 var coreRequest = new Buffer(require('./playerconnect1'));
 
 require('../server/server.js');
-require('../server/http/js/proxy.js');
 require('../client/interface/js/offline-server.js');
 describe('Update System', function () {
     it('Runs Properly', function () {
