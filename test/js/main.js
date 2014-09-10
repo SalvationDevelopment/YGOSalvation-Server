@@ -408,7 +408,7 @@ function cardCollections(player) {
     return {
         DECK: $('.p' + player + '.DECK').length,
         HAND: $('.p' + player + '.HAND').length,
-        EXTRA: $('.p' + player + '.EXTRA').length,
+        EXTRA: $('.p' + player + '.EXTRA').not('.overlayunit').length,
         GRAVE: $('.p' + player + '.GRAVE').length,
         REMOVED: $('.p' + player + '.REMOVED').length,
         SPELLZONE: 8,
@@ -507,7 +507,7 @@ game.DOMWriter = function (size, movelocation, player) {
 };
 game.updatelifepoints = function (player, multiplier, lp) {
     var lifepoints = +$('.p' + player + 'lp').eq(0).val() + (lp * multiplier);
-    $('.p' + player + 'lp').eq(0).val(lifepoints);
+    $('.p' + player + 'lp').val(lifepoints);
 };
 game.UpdateCards = function (player, clocation, data) { //YGOPro is constantly sending data about game state, this function stores and records that information to allow access to a properly understood gamestate for reference. 
 
@@ -515,7 +515,8 @@ game.UpdateCards = function (player, clocation, data) { //YGOPro is constantly s
     for (var i = 0; data.length > i; i++) {
         if (data[i].Code !== 'nocard') {
             console.log('.card.p' + player + '.' + enums.locations[clocation] + '.i' + i, data[i].Code);
-            $('.card.p' + player + '.' + enums.locations[clocation] + '.i' + i).attr('src', game.images + data[i].Code + '.jpg')
+            $('.card.p' + player + '.' + enums.locations[clocation] + '.i' + i).not('.overlayunit')
+            .attr('src', game.images + data[i].Code + '.jpg')
                 .attr('data-position', data[i].Position);
             return;
         } else {
@@ -524,7 +525,7 @@ game.UpdateCards = function (player, clocation, data) { //YGOPro is constantly s
                 enums.locations[clocation] + '.i' + i === 'SPELLZONE.i7'
             ) ? 'EXTRA' : 'GRAVE';
             if (deadcard) {
-                var index = $('.card.p' + player + '.' + deadzone).length - 1;
+                var index = $('.p' + player + '.' + deadzone).length - 1;
                 animateState(player, clocation, i, player, 0x10, index, 'AttackFaceUp');
                 //animateState(player, clocation, index, moveplayer, movelocation, movezone, moveposition)
             }
@@ -558,7 +559,7 @@ game.MoveCard = function (code, pc, pl, ps, pp, cc, cl, cs, cp) {
             //animateState(player, clocation, index, moveplayer, movelocation, movezone, moveposition)
         } else if (!(pl & 0x80)) {
             console.log('targeting a card to become a xyz unit....');
-            $('.card.p' + cc + '.i' + cs).each(function (i) {
+            $('.overlayunit.p' + cc + '.i' + cs).each(function (i) {
                 $(this).attr('data-overlayunit', (0 + i));
             });
             animateState(pc, pl, ps, cc, (cl & 0x7f), cs, cp, undefined, true);
@@ -577,7 +578,7 @@ game.MoveCard = function (code, pc, pl, ps, pp, cc, cl, cs, cp) {
                 $(this).attr('data-overlayunit', (0 + i));
             });
             animateState(pc, (pl & 0x7f), ps, cc, (cl & 0x7f), cs, cp, pp, true);
-            $('.card.p' + pc + '.OVERLAY.i' + ps).each(function (i) {
+            $('.overlayunit.p' + pc + '.OVERLAY.i' + ps).each(function (i) {
                 $(this).attr('data-overlayunit', (0 + i));
             });
 
@@ -761,8 +762,8 @@ function complete(x) {
 
 
 function animateState(player, clocation, index, moveplayer, movelocation, movezone, moveposition, overlayindex, isBecomingCard) {
-    var isCard = (overlayindex === undefined) ? '.card' : '.overlayunit';
-    isBecomingCard = (isBecomingCard) ? 'overlayunit' : 'card';
+    var isCard = (overlayindex === undefined) ? '.card' : '.card.overlayunit';
+    isBecomingCard = (isBecomingCard) ? 'card overlayunit' : 'card';
     overlayindex = (overlayindex === undefined) ? '' : 0;
     var searchindex = (index === 'ignore') ? '' : ".i" + index;
     var searchplayer = (player === 'ignore') ? '' : ".p" + player;
@@ -791,7 +792,7 @@ function animateState(player, clocation, index, moveplayer, movelocation, movezo
     if (enums.locations[movelocation] === 'DECK' ||
         enums.locations[movelocation] === 'EXTRA' ||
         enums.locations[movelocation] === 'GRAVE' ||
-        enums.locations[clocation] === 'REMOVED') {
+        enums.locations[movelocation] === 'REMOVED') {
         cardmargin(moveplayer, enums.locations[movelocation]);
     }
     if (enums.locations[clocation] === 'HAND' ||
