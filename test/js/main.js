@@ -93,11 +93,10 @@ function processTask(task, socket) {
                 console.log('%c' + ('Player' + (drawplayer + 1)) + ' drew' + draw + ' cards', 'background: #222; color: #bada55');
                 game.DrawCard(drawplayer, draw, cards);
             } else if (command === 'MSG_SHUFFLE_DECK') {
-                var deckshuffleplayer = game_message[1];
-                console.log(('Player' + (deckshuffleplayer + 1)), 'shuffled the deck');
+                shuffle(game_message[1], 'DECK');
+                
             } else if (command === 'MSG_SHUFFLE_HAND') {
-                var handshuffleplayer = game_message[1];
-                console.log(('Player' + (handshuffleplayer + 1)), 'shuffled the deck');
+                layouthand(game_message[1]);
             } else if (command === 'MSG_CHAINING') {
                 console.log('Chain in acknolweleged');
             } else if (command === 'MSG_CHAINED') {
@@ -222,6 +221,8 @@ function processTask(task, socket) {
         } else if (task[i].STOC_TIME_LIMIT) {
 
             //console.log('Player' + (task[i].STOC_TIME_LIMIT.message[0] + 1), 'has ' + (task[i].STOC_TIME_LIMIT.message[1] + task[i].STOC_TIME_LIMIT.message[2]) + 'sec left');
+            game.UpdateTime(task[i].STOC_TIME_LIMIT.message[0], (task[i].STOC_TIME_LIMIT.message[1] + task[i].STOC_TIME_LIMIT.message[2]));
+
         } else if (task[i].STOC_CHAT) {
             var chat = task[i].STOC_CHAT.message.toString('utf16le', 2);
             console.log('Chat:', chat);
@@ -446,30 +447,11 @@ function updateMassCards(player, clocation, buffer) {
 
 game.images = 'http://salvationdevelopment.com/launcher/ygopro/pics/';
 
-game.PlayerMessage = function (player, message) { //YGOPro messages.
-    var playername;
-    if (player) {
-        playername = $('#lobbyplayer' + player).html();
-    } else {
-        playername = 'Spectator';
-    }
-    $('#messagerbox').css('height', '150px');
-    $('#messagerbox ul').append('<li>' + playername + ": " + message + '</li>');
-    $('#messagerbox ul, #messagerbox').animate({
-        scrollTop: $('#messagerbox ul').height()
-    }, "fast");
-    console.log(playername + " :" + message);
+
+game.UpdateTime = function (player, time) {
+    $('.p' + player + 'time').val(time);
 };
 
-game.SelectRPS = function (value) { // Toggle RPS Screen. Screen will diengage when used.
-    $('#rps').toggle();
-
-};
-
-game.SelectFirstPlayer = function (value) { // Select the player that goes first.
-    $('#selectduelist').toggle();
-
-};
 game.LoadField = function () {
     console.log('GAME INITIATE!');
     $('#duelzone').css('display', 'block').get(0).scrollIntoView();
@@ -484,10 +466,10 @@ game.StartDuel = function (player1StartLP, player2StartLP, OneDeck, TwoDeck, One
     game.DOMWriter(TwoDeck, 'DECK', 1);
     game.DOMWriter(OneExtra, 'EXTRA', 0);
     game.DOMWriter(TwoExtra, 'EXTRA', 1);
-    shuffle(0, 'DECK');
-    shuffle(1, 'DECK');
-    shuffle(0, 'EXTRA');
-    shuffle(1, 'EXTRA');
+    cardmargin(0, 'DECK');
+    cardmargin(1, 'DECK');
+    cardmargin(0, 'EXTRA');
+    cardmargin(1, 'EXTRA');
     layouthand(0);
     layouthand(1);
     $('.p0lp').val(player1StartLP);
@@ -507,6 +489,7 @@ game.DOMWriter = function (size, movelocation, player) {
 };
 game.updatelifepoints = function (player, multiplier, lp) {
     var lifepoints = +$('.p' + player + 'lp').eq(0).val() + (lp * multiplier);
+    if (lifepoints < 0){ lifepoints = 0;}
     $('.p' + player + 'lp').val(lifepoints);
 };
 game.UpdateCards = function (player, clocation, data) { //YGOPro is constantly sending data about game state, this function stores and records that information to allow access to a properly understood gamestate for reference. 
@@ -516,7 +499,7 @@ game.UpdateCards = function (player, clocation, data) { //YGOPro is constantly s
         if (data[i].Code !== 'nocard') {
             console.log('.card.p' + player + '.' + enums.locations[clocation] + '.i' + i, data[i].Code);
             $('.card.p' + player + '.' + enums.locations[clocation] + '.i' + i).not('.overlayunit')
-            .attr('src', game.images + data[i].Code + '.jpg')
+                .attr('src', game.images + data[i].Code + '.jpg')
                 .attr('data-position', data[i].Position);
             return;
         } else {
@@ -704,9 +687,9 @@ var shuffler, fix;
 
 function cardmargin(player, deck) {
     var size = $('.card.' + player + '.' + deck).length;
-    $('.card.' + player + '.' + deck).each(function (i) {
+    $('.card.p' + player + '.' + deck).each(function (i) {
 
-        $(this).attr('style', '').css('z-index', i)
+        $(this).css('z-index', i).attr('style','')
             .css('-webkit-transform', 'translate3d(0,0,' + i + 'px)');
 
 
@@ -736,7 +719,7 @@ function shuffle(player, deck) {
     }, 50);
 }
 
-function complete(x) {
+function complete(player,deck) {
     var started = Date.now();
 
     // make it loop every 100 milliseconds
@@ -752,7 +735,8 @@ function complete(x) {
         } else {
 
             // the thing to do every 100ms
-            shuffle('p0');
+            shuffle(player, deck);
+            cardmargin(player, deck);
 
         }
     }, 100); // every 100 milliseconds
@@ -771,14 +755,14 @@ function animateState(player, clocation, index, moveplayer, movelocation, movezo
     var destination = isBecomingCard + " p" + moveplayer + " " + enums.locations[movelocation] + " i" + movezone;
 
     var card = $(origin)
-    //.each(function(i){
-    /*$(this)*/
-    .attr({
-        'style': '',
-        'data-position': moveposition,
-        'data-overlayunit': overlayindex,
-        'class': destination
-    });
+        //.each(function(i){
+        /*$(this)*/
+        .attr({
+            'style': '',
+            'data-position': moveposition,
+            'data-overlayunit': overlayindex,
+            'class': destination
+        });
     //   });
 
 
@@ -795,16 +779,16 @@ function animateState(player, clocation, index, moveplayer, movelocation, movezo
         enums.locations[movelocation] === 'REMOVED') {
         cardmargin(moveplayer, enums.locations[movelocation]);
     }
-    if (enums.locations[clocation] === 'HAND' ||
-        enums.locations[movelocation] === 'HAND') {
-        $('.card.p0.HAND').each(function (sequence) {
-            $(this).attr('class', 'card p0 HAND i' + sequence);
-        });
-        $('.card.p1.HAND').each(function (sequence) {
-            $(this).attr('class', 'card p1 HAND i' + sequence);
-        });
 
-    }
+    $('.card.p0.HAND').each(function (sequence) {
+        $(this).attr('class', 'card p0 HAND i' + sequence);
+    });
+    $('.card.p1.HAND').each(function (sequence) {
+        $(this).attr('class', 'card p1 HAND i' + sequence);
+    });
+
+    layouthand(0);
+    layouthand(1);
     return card;
 }
 
@@ -832,7 +816,7 @@ function layouthand(player) {
         if (player === 0) {
             $('.p' + player + '.HAND.i' + sequence).css('left', '' + xCoord + 'px');
         } else {
-            $('.p' + player + '.HAND.i' + sequence).css('right', '' + xCoord + 'px');
+            $('.p' + player + '.HAND.i' + sequence).css('left', '' + xCoord + 'px');
         }
     }
 }
