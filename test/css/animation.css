@@ -33,12 +33,12 @@
 .p1.DECK         {top : 10px; right: 639px; }
 .p1.HAND         {top : -50px; right: 124px; }
 .p1.EXTRA        {top : 10px; right: 106px; }
-.p1.GRAVE        {top : 207px; right: 633px; }
+.p1.GRAVE        {top : 207px; right: 640px; }
 .p1.REMOVED      {top : 207px; right: 719px; }
 
 .p1.SPELLZONE.i0     {top :64px; right:190px;}
 .p1.SPELLZONE.i1     {top :64px; right:276px;}
-.p1.SPELLZONE.i2     {top :64px; right:364px;}
+.p1.SPELLZONE.i2     {top :64px; right:373px;}
 .p1.SPELLZONE.i3     {top :64px; right:453px;}
 .p1.SPELLZONE.i4     {top :64px; right:541px;}
 .p1.SPELLZONE.i5     {top :207px; right:106px;}/*fiendspell*/
