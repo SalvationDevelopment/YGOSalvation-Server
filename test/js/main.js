@@ -94,7 +94,7 @@ function processTask(task, socket) {
                 game.DrawCard(drawplayer, draw, cards);
             } else if (command === 'MSG_SHUFFLE_DECK') {
                 shuffle(game_message[1], 'DECK');
-                
+
             } else if (command === 'MSG_SHUFFLE_HAND') {
                 layouthand(game_message[1]);
             } else if (command === 'MSG_CHAINING') {
@@ -251,6 +251,11 @@ function processTask(task, socket) {
         } else if (task[i].STOC_JOIN_GAME) {
             console.log('Join Game', task[i].STOC_JOIN_GAME);
         } else {
+            if (game.needsadditional){
+                updateMassCards(game.needsadditional.player,
+                                game.needsadditional.location,
+                                Buffer.concat([task[i], game.needsadditional.buffer]));
+            }
             console.log('????', task[i]);
         }
     }
@@ -418,31 +423,44 @@ function cardCollections(player) {
     };
 }
 
+
 function updateMassCards(player, clocation, buffer) {
     console.log(enums.locations[clocation]);
     var field = cardCollections(player);
-    var output = [];
+    var output = game.output || [];
     var readposition = 3;
     //console.log(field);
     if (field[enums.locations[clocation]] !== undefined) {
         for (var i = 0, count = field[enums.locations[clocation]]; count > i; i++) {
-            var len = buffer.readUInt8(readposition);
-            readposition = readposition + 4;
-            if (len > 8) {
-                var result = makeCard(buffer, readposition, player);
-                output.push(result.card);
-                readposition = readposition + len - 4;
-            } else {
-                output.push({
-                    Code: 'nocard'
-                });
+            try {
+                var len = buffer.readUInt8(readposition);
+                readposition = readposition + 4;
+                if (len > 8) {
+                    var result = makeCard(buffer, readposition, player);
+                    output.push(result.card);
+                    readposition = readposition + len - 4;
+
+                } else {
+                    output.push({
+                        Code: 'nocard'
+                    });
+                }
+            } catch (e) {
+                console.log('overshot', e);
+                game.output = output;
+                game.needsadditional = {
+                    player: player,
+                    clocation: clocation,
+                    buffer : buffer
+                };
+                return;
             }
         }
+        //console.log(output);
+        game.output = undefined;
+        return output;
     }
-    //console.log(output);
-    return output;
 }
-
 //Functions used by the websocket object
 
 game.images = 'http://salvationdevelopment.com/launcher/ygopro/pics/';
@@ -489,7 +507,9 @@ game.DOMWriter = function (size, movelocation, player) {
 };
 game.updatelifepoints = function (player, multiplier, lp) {
     var lifepoints = +$('.p' + player + 'lp').eq(0).val() + (lp * multiplier);
-    if (lifepoints < 0){ lifepoints = 0;}
+    if (lifepoints < 0) {
+        lifepoints = 0;
+    }
     $('.p' + player + 'lp').val(lifepoints);
 };
 game.UpdateCards = function (player, clocation, data) { //YGOPro is constantly sending data about game state, this function stores and records that information to allow access to a properly understood gamestate for reference. 
@@ -583,6 +603,7 @@ game.DrawCard = function (player, numberOfCards, cards) {
         animateState(player, 1, topcard, player, 2, currenthand + i, 'FaceUp');
         //animateState(player, clocation, index, moveplayer, movelocation, movezone, moveposition){
         if (cards[i]) {
+            console.log('.p' + player + '.HAND' + 'i' + (currenthand + i) + ' changed to ' + game.images + cards[i] + '.jpg');
             $('.p' + player + '.HAND' + 'i' + (currenthand + i)).attr('src', game.images + cards[i] + '.jpg');
         }
     }
@@ -689,7 +710,7 @@ function cardmargin(player, deck) {
     var size = $('.card.' + player + '.' + deck).length;
     $('.card.p' + player + '.' + deck).each(function (i) {
 
-        $(this).css('z-index', i).attr('style','')
+        $(this).css('z-index', i).attr('style', '')
             .css('-webkit-transform', 'translate3d(0,0,' + i + 'px)');
 
 
@@ -719,7 +740,7 @@ function shuffle(player, deck) {
     }, 50);
 }
 
-function complete(player,deck) {
+function complete(player, deck) {
     var started = Date.now();
 
     // make it loop every 100 milliseconds
