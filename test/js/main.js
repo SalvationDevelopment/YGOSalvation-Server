@@ -191,9 +191,9 @@ function processTask(task, socket) {
                 player = game_message[1];
                 var fieldlocation = game_message[2];
                 var fieldmodel = enums.locations[fieldlocation];
-                var udata = updateMassCards(player, fieldlocation, game_message);
+                updateMassCards(player, fieldlocation, game_message);
                 //console.log('MSG_UPDATE_DATA', 'Player' + (player + 1), fieldmodel, udata);
-                game.UpdateCards(player, fieldlocation, udata);
+                
             } else if (command === 'MSG_UPDATE_CARD') {
                 var udplayer = game_message[1];
                 var udfieldlocation = game_message[2];
@@ -251,12 +251,17 @@ function processTask(task, socket) {
         } else if (task[i].STOC_JOIN_GAME) {
             console.log('Join Game', task[i].STOC_JOIN_GAME);
         } else {
+            console.log('????');
             if (game.needsadditional){
-                updateMassCards(game.needsadditional.player,
+                console.log('retry',game.additional);
+                var additional = Buffer.concat([task[i].reference,
+                                                game.needsadditional.buffer]);
+                console.log(game.additional);
+               updateMassCards(game.needsadditional.player,
                                 game.needsadditional.location,
-                                Buffer.concat([task[i], game.needsadditional.buffer]));
+                                additional);
             }
-            console.log('????', task[i]);
+            
         }
     }
 }
@@ -425,9 +430,10 @@ function cardCollections(player) {
 
 
 function updateMassCards(player, clocation, buffer) {
-    console.log(enums.locations[clocation]);
+    console.log("Location:",enums.locations[clocation],clocation);
+    if (enums.locations[clocation] === 'EXTRA')return;
     var field = cardCollections(player);
-    var output = game.output || [];
+    var output = [];
     var readposition = 3;
     //console.log(field);
     if (field[enums.locations[clocation]] !== undefined) {
@@ -447,7 +453,7 @@ function updateMassCards(player, clocation, buffer) {
                 }
             } catch (e) {
                 console.log('overshot', e);
-                game.output = output;
+
                 game.needsadditional = {
                     player: player,
                     clocation: clocation,
@@ -457,8 +463,8 @@ function updateMassCards(player, clocation, buffer) {
             }
         }
         //console.log(output);
-        game.output = undefined;
-        return output;
+        game.needsadditional = undefined;
+        game.UpdateCards(player, clocation, output);
     }
 }
 //Functions used by the websocket object
@@ -492,8 +498,8 @@ game.StartDuel = function (player1StartLP, player2StartLP, OneDeck, TwoDeck, One
     layouthand(1);
     $('.p0lp').val(player1StartLP);
     $('.p1lp').val(player2StartLP);
-    game.DrawCard(0, 5, []);
-    game.DrawCard(1, 5, []);
+    //game.DrawCard(0, 5, []);
+    //game.DrawCard(1, 5, []);
     return [cardCollections(0), cardCollections(1)];
 };
 
