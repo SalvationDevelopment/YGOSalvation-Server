@@ -8,8 +8,10 @@ process.on('uncaughtException', function (err) {
     console.log('Caught exception: ' + err);
 });
 
-var game = {};
-var model = {};
+var game = {
+    images : 'http://salvationdevelopment.com/launcher/ygopro/pics/'
+};
+
 var net = require('net');
 var parsePackets = require('../server/libs/parsepackets.js');
 var enums = require('../server/libs/enums.js');
@@ -72,15 +74,15 @@ function processTask(task, socket) {
 
                 console.log('Win', game_message[1]);
             } else if (command === 'MSG_NEW_TURN') {
-                model.activePlayer = !model.activePlayer;
-                model.phase = 0;
-                game.NewTurn(model.activePlayer);
-                game.NewPhase(+model.phase);
+                game.activePlayer = !game.activePlayer;
+                game.phase = 0;
+                game.NewTurn(game.activePlayer);
+                game.NewPhase(+game.phase);
             } else if (command === 'MSG_WIN') {
                 console.log('Win', game_message[1]);
             } else if (command === 'MSG_NEW_PHASE') {
-                model.phase++;
-                game.NewPhase(model.phase);
+                game.phase++;
+                game.NewPhase(game.phase);
             } else if (command === 'MSG_DRAW') {
                 var drawplayer = game_message[1];
                 var draw = game_message[2];
@@ -105,7 +107,7 @@ function processTask(task, socket) {
                 console.log('Chain in progress');
             } else if (command === 'MSG_CHAIN_SOLVING') {
                 ct = game_message[1];
-                model.chainsolved = 1;
+                game.chainsolved = 1;
                 console.log('Resolving Chain');
             } else if (command === 'MSG_CHAIN_SOLVED') {
                 // graphical or a trigger
@@ -139,7 +141,7 @@ function processTask(task, socket) {
                 console.log('Normal summon preformed');
             } else if (command === 'MSG_SELECT_IDLECMD') {
                 var idleplayer = game_message[1];
-                model.idle = true;
+                game.idle = true;
                 var idlereadposition = 2;
                 for (var k = 0; k < 5; k++) {
                     var idlecount = game_message[idlereadposition];
@@ -252,13 +254,13 @@ function processTask(task, socket) {
             console.log('Join Game', task[i].STOC_JOIN_GAME);
         } else {
             console.log('????');
-            if (game.needsadditional){
+            if (game.additional){
                 console.log('retry',game.additional);
                 var additional = Buffer.concat([task[i].reference,
-                                                game.needsadditional.buffer]);
-                console.log(game.additional);
-               updateMassCards(game.needsadditional.player,
-                                game.needsadditional.location,
+                                                game.additional.buffer]);
+                console.log(additional);
+               updateMassCards(game.additional.player,
+                                game.additional.clocation,
                                 additional);
             }
             
@@ -430,11 +432,12 @@ function cardCollections(player) {
 
 
 function updateMassCards(player, clocation, buffer) {
-    console.log("Location:",enums.locations[clocation],clocation);
-    if (enums.locations[clocation] === 'EXTRA')return;
+    console.log("Location:",enums.locations[clocation],clocation,player);
+    //if (enums.locations[clocation] === 'EXTRA')return;
     var field = cardCollections(player);
     var output = [];
     var readposition = 3;
+    var failed = false;
     //console.log(field);
     if (field[enums.locations[clocation]] !== undefined) {
         for (var i = 0, count = field[enums.locations[clocation]]; count > i; i++) {
@@ -453,23 +456,25 @@ function updateMassCards(player, clocation, buffer) {
                 }
             } catch (e) {
                 console.log('overshot', e);
-
-                game.needsadditional = {
+                failed = true;
+                game.additional = {
                     player: player,
                     clocation: clocation,
                     buffer : buffer
                 };
-                return;
             }
         }
+        if (!failed){
+            game.additional = false;
+        }
         //console.log(output);
-        game.needsadditional = undefined;
+
         game.UpdateCards(player, clocation, output);
     }
 }
 //Functions used by the websocket object
 
-game.images = 'http://salvationdevelopment.com/launcher/ygopro/pics/';
+
 
 
 game.UpdateTime = function (player, time) {
