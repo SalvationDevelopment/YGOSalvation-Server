@@ -10,6 +10,7 @@ var coreRequest = new Buffer(require('./playerconnect1'));
 
 require('../server/server.js');
 require('../client/interface/js/offline-server.js');
+require('../server/libs/carddb-update.js');
 describe('Update System', function () {
     it('Runs Properly', function () {
         require('../server/libs/update.js');
