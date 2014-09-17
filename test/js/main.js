@@ -401,11 +401,11 @@ function makeCard(buffer, start, controller) {
         card.EquipCard = buffer.readUInt32LE(readposition);
         readposition = readposition + 4;
     }
-    if (flag & enums.query.lscale) {
+    if (flag & enums.query.LScale) {
         card.lscale = buffer.readUInt32LE(readposition);
         readposition = readposition + 4;
     }
-    if (flag & enums.query.rscale) {
+    if (flag & enums.query.RScale) {
         card.rscale = buffer.readUInt32LE(readposition);
         readposition = readposition + 4;
     }
