@@ -6,7 +6,7 @@ API
 Each call starts with `::::`, this is a standard signal to tell the core it is an API call and not a debug message.
 
 * `::::network-ready` signal that the core has loaded and is listening on its given port
-* `::::network-end` signalal that the game has ended, replays have been sent out and the core should be recycled, ie killed.
+* `::::network-end` signal that the game has ended,  ie kill core request.
 * `::::join-slot-1|PlayerName` PlayerName has joined the duel in slot 1.
 * `::::join-slot-2|PlayerName` PlayerName has joined the duel in slot 2.
 * `::::join-slot-3|PlayerName` PlayerName has joined the duel in slot 3.
@@ -24,6 +24,11 @@ Each call starts with `::::`, this is a standard signal to tell the core it is a
 * `::::unlock-slot-2` slot 2's deck has been unlocked.
 * `::::unlock-slot-3` slot 3's deck has been unlocked.
 * `::::unlock-slot-4` slot 4's deck has been unlocked.
-* `::::startduel` RPS has started, this signals that the game has started. All players have locked in decks and no one may leave the duel without loss.
-* `::::endduel|WinningPlayer|Reason` the winning player slot, and how they won.
-::::
+* `::::startduel` RPS has started, this signals that the game has started.
+* `::::endduel|WinningPlayerSlot#|Reason` the winning player slot integer, and how they won.
+* `::::chat|PlayerName|msg` PlayerName sent a message containing the text of `msg`. If the server speaks PlayerName is `[Server]`.
+
+Config
+======
+
+By default these commands are off.
