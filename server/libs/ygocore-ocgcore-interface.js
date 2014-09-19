@@ -1,16 +1,48 @@
 /* jshint node:true */
 /* global module */
 /* jslint browser : true */
-var sqlite3 = require('sqlite3').verbose();
-var ffi = require('ffi'); /* allows dynamic linking of the ocgapi.dll, critical; */
-var ref = require('ref'); /* allows use of C++ pointers for C++ JS interactions, critical */
-var struct = require('ref-struct'); /* allows use of C++ structures for C++ JS interactions, critical */
+var sqlite3 = require('sqlite3').verbose(),
+    ffi = require('ffi') /* allows dynamic linking of the ocgapi.dll, critical; */ ,
+    ref = require('ref') /* allows use of C++ pointers for C++ JS interactions, critical */ ,
+    struct = require('ref-struct') /* allows use of C++ structures for C++ JS interactions, critical */ ,
+    queryfor = require('./sql-queries');
 
 
-var cardDatabase = new sqlite3.Database('cards.cbd', function () {
+function constructDatabase(targetDB) {
+    var database,
+        cards = {};
 
+    function handleQueryRow(error, row) {
+        if (error) {
+            //throw error;
+            console.log(error); //fuck it keep moving.
+        }
+        cards[row.id] = row;
+    }
 
-});
+    database = new sqlite3.Database(targetDB, sqlite3.OPEN_READ);
+    database.on("open", console.log("database was opened successfully"));
+    database.on("close", console.log("database was closed successfully"));
+    database.each(queryfor.statistics, {}, handleQueryRow, function () {});
+    database.end();
+
+    return function (request) {
+        var code = request.code;
+        
+        return struct({
+            code: code,
+            alias: cards[code].alias || code,
+            setcode: cards[code].setcode || 0,
+            type: cards[code].type || 0,
+            level: cards[code].level ||1,
+            attribute: cards[code].attribute ||0,
+            race: cards[code].race ||0,
+            attack: cards[code].attack || 0,
+            defence: cards[code].defense ||0
+        });
+    };
+}
+var card_reader = constructDatabase('../ygocore/card.cdb');
 
 module.exports = function (scripts) {
     function getScript(identificationNumber) {
@@ -18,23 +50,7 @@ module.exports = function (scripts) {
         return new Buffer(scripts['c' + identificationNumber]);
     }
 
-    function card_reader(request) {
-        /* incomplete */
-        var code = request.code;
-        var data = request.data;
-        var query = cardDatabase.query = "SELECT id, ot, alias, setcode, type, level, race, attribute, atk, def FROM datas";
-        return struct({
-            code: request.code,
-            alias: 'uint32',
-            setcode: 'uint64',
-            type: 'uint32',
-            level: 'uint32',
-            attribute: 'uint32',
-            race: 'uint32',
-            attack: 'int32',
-            defence: 'int32'
-        });
-    }
+
     this.ocgapi = ffi.Library(__dirname + '/ocgcore.dll', {
         'set_script_reader': ['void', getScript],
         'set_card_reader': ['void', card_reader],
