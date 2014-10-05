@@ -9,21 +9,43 @@ process.on('uncaughtException', function (err) {
 });
 
 var game = {
-    images : 'http://salvationdevelopment.com/launcher/ygopro/pics/'
+    images: 'http://salvationdevelopment.com/launcher/ygopro/pics/'
 };
 
 var net = require('net');
-var parsePackets = require('../server/libs/parsepackets.js');
+//var parsePackets = require('../server/libs/parsepackets.js');
+var framemaker = require('../server/libs/parseframes.js');
 var enums = require('../server/libs/enums.js');
 var recieveSTOC = require('../server/libs/recieveSTOC.js');
 var proxy = net.createServer(function () {}).listen(8914);
 
-proxy.on('connection', function (socket) {
+//proxy.on('connection', function (socket) {
+//
+//    var connection = net.connect(8911, '91.250.87.52');
+//    connection.on('data', function (data) {
+//        socket.write(data);
+//        var task = parsePackets('STOC', data);
+//        processTask(task, socket);
+//    });
+//    socket.on('data', function (data) {
+//        connection.write(data);
+//    });
+//    connection.on('error', function () {});
+//    socket.on('error', function () {});
+//});
 
+proxy.on('connection', function (socket) {
+    var framer = new framemaker();
     var connection = net.connect(8911, '91.250.87.52');
+
     connection.on('data', function (data) {
+        //console.log(data)
+        var frame = framer.input(data);
+        if (frame === null){
+            return;
+        } 
+        var task = parsePackets('STOC', frame);
         socket.write(data);
-        var task = parsePackets('STOC', data);
         processTask(task, socket);
     });
     socket.on('data', function (data) {
@@ -32,6 +54,23 @@ proxy.on('connection', function (socket) {
     connection.on('error', function () {});
     socket.on('error', function () {});
 });
+
+
+
+function parsePackets(command, message) {
+    var task = [];
+
+
+    var packet = {
+        message: message.slice(1)
+    };
+    packet[command] = enums[command][message[0]];
+
+
+    task.push(packet);
+    console.log(task);
+    return task;
+}
 
 function processTask(task, socket) {
     var player, clocation, index, data;
@@ -195,7 +234,7 @@ function processTask(task, socket) {
                 var fieldmodel = enums.locations[fieldlocation];
                 updateMassCards(player, fieldlocation, game_message);
                 //console.log('MSG_UPDATE_DATA', 'Player' + (player + 1), fieldmodel, udata);
-                
+
             } else if (command === 'MSG_UPDATE_CARD') {
                 var udplayer = game_message[1];
                 var udfieldlocation = game_message[2];
@@ -254,16 +293,16 @@ function processTask(task, socket) {
             console.log('Join Game', task[i].STOC_JOIN_GAME);
         } else {
             console.log('????');
-            if (game.additional){
-                console.log('retry',game.additional);
+            if (game.additional) {
+                console.log('retry', game.additional);
                 var additional = Buffer.concat([task[i].reference,
                                                 game.additional.buffer]);
                 console.log(additional);
-               updateMassCards(game.additional.player,
-                                game.additional.clocation,
-                                additional);
+                updateMassCards(game.additional.player,
+                    game.additional.clocation,
+                    additional);
             }
-            
+
         }
     }
 }
@@ -432,7 +471,7 @@ function cardCollections(player) {
 
 
 function updateMassCards(player, clocation, buffer) {
-    console.log("Location:",enums.locations[clocation],clocation,player);
+    console.log("Location:", enums.locations[clocation], clocation, player);
     //if (enums.locations[clocation] === 'EXTRA')return;
     var field = cardCollections(player);
     var output = [];
@@ -460,11 +499,11 @@ function updateMassCards(player, clocation, buffer) {
                 game.additional = {
                     player: player,
                     clocation: clocation,
-                    buffer : buffer
+                    buffer: buffer
                 };
             }
         }
-        if (!failed){
+        if (!failed) {
             game.additional = false;
         }
         //console.log(output);
