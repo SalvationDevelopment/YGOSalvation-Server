@@ -41,12 +41,11 @@ proxy.on('connection', function (socket) {
     connection.on('data', function (data) {
         //console.log(data)
         var frame = framer.input(data);
-        if (frame === null){
-            return;
-        } 
-        var task = parsePackets('STOC', frame);
         socket.write(data);
-        processTask(task, socket);
+        for (var newframes = 0; frames.length > newframes; newframes++) {
+            var task = parsePackets('STOC', frame[newframes]);
+            processTask(task, socket);
+        }
     });
     socket.on('data', function (data) {
         connection.write(data);
