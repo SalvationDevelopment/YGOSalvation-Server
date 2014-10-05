@@ -6,7 +6,9 @@ module.exports = function () {
     this.input = function (buffer) {
         var x = true;
         var output = [];
-        while (x === true) {
+        var xx = 0;
+        while (x === true && xx < 10) {
+            xx++;
             console.log('before', memory.length, 'bytes in memory');
             memory = Buffer.concat([memory, buffer]);
             console.log('concated', memory.length);
