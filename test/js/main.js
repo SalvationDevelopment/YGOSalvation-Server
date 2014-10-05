@@ -9,22 +9,44 @@ process.on('uncaughtException', function (err) {
 });
 
 var game = {
-    images : 'http://salvationdevelopment.com/launcher/ygopro/pics/'
+    images: 'http://salvationdevelopment.com/launcher/ygopro/pics/'
 };
 
 var net = require('net');
-var parsePackets = require('../server/libs/parsepackets.js');
+//var parsePackets = require('../server/libs/parsepackets.js');
+var framemaker = require('../server/libs/parseframes.js');
 var enums = require('../server/libs/enums.js');
 var recieveSTOC = require('../server/libs/recieveSTOC.js');
 var proxy = net.createServer(function () {}).listen(8914);
 
-proxy.on('connection', function (socket) {
+//proxy.on('connection', function (socket) {
+//
+//    var connection = net.connect(8911, '91.250.87.52');
+//    connection.on('data', function (data) {
+//        socket.write(data);
+//        var task = parsePackets('STOC', data);
+//        processTask(task, socket);
+//    });
+//    socket.on('data', function (data) {
+//        connection.write(data);
+//    });
+//    connection.on('error', function () {});
+//    socket.on('error', function () {});
+//});
 
+proxy.on('connection', function (socket) {
+    var framer = new framemaker();
     var connection = net.connect(8911, '91.250.87.52');
+
     connection.on('data', function (data) {
+        //console.log(data)
+        var frame = framer.input(data);
+        console.log(frame.length);
         socket.write(data);
-        var task = parsePackets('STOC', data);
-        processTask(task, socket);
+        for (var newframes = 0; frame.length > newframes; newframes++) {
+            var task = parsePackets('STOC', new Buffer(frame[newframes]));
+            processTask(task, socket);
+        }
     });
     socket.on('data', function (data) {
         connection.write(data);
@@ -32,6 +54,22 @@ proxy.on('connection', function (socket) {
     connection.on('error', function () {});
     socket.on('error', function () {});
 });
+
+
+
+function parsePackets(command, message) {
+    var task = [];
+
+
+    var packet = {
+        message: message.slice(1)
+    };
+    packet[command] = enums[command][message[0]];
+
+
+    task.push(packet);
+    return task;
+}
 
 function processTask(task, socket) {
     var player, clocation, index, data;
@@ -49,18 +87,21 @@ function processTask(task, socket) {
         if (task[i].STOC_UNKNOWN) {
             //console.log('-----', makeCard(task[i].STOC_UNKNOWN.message));
         } else
-        if (task[i].STOC_GAME_MSG) {
+        if (task[i].STOC_GAME_MSG && task[i].STOC_GAME_MSG.message) {
             var command = enums.STOC.STOC_GAME_MSG[task[i].STOC_GAME_MSG.message[0]];
             var game_message = task[i].STOC_GAME_MSG.message;
+            if (command === undefined){
+                console.log('figure out STOC',task[i].STOC_GAME_MSG);
+            }
             console.log(command);
             if (command === 'MSG_START') {
                 var type = game_message[1];
-                var lifepoints1 = game_message.readUInt16LE(2);
-                var lifepoints2 = game_message.readUInt16LE(6);
-                var player1decksize = game_message.readUInt8(10);
-                var player1extrasize = game_message.readUInt8(12);
-                var player2decksize = game_message.readUInt8(14);
-                var player2extrasize = game_message.readUInt8(16);
+                var lifepoints1 = game_message.readUInt16LE(2);console.log('lp1',lifepoints1);
+                var lifepoints2 = game_message.readUInt16LE(6);console.log('lp2',lifepoints2);
+                var player1decksize = game_message.readUInt8(10);console.log('d1',player1decksize);
+                var player1extrasize = game_message.readUInt8(12);console.log('e1',player1extrasize);
+                var player2decksize = game_message.readUInt8(14);console.log('d2',player2decksize);
+                var player2extrasize = game_message[15];console.log('e2',player2extrasize,game_message);
                 game.StartDuel(lifepoints1, lifepoints2,
                     player1decksize, player2decksize,
                     player1extrasize, player2extrasize);
@@ -195,7 +236,7 @@ function processTask(task, socket) {
                 var fieldmodel = enums.locations[fieldlocation];
                 updateMassCards(player, fieldlocation, game_message);
                 //console.log('MSG_UPDATE_DATA', 'Player' + (player + 1), fieldmodel, udata);
-                
+
             } else if (command === 'MSG_UPDATE_CARD') {
                 var udplayer = game_message[1];
                 var udfieldlocation = game_message[2];
@@ -254,16 +295,7 @@ function processTask(task, socket) {
             console.log('Join Game', task[i].STOC_JOIN_GAME);
         } else {
             console.log('????');
-            if (game.additional){
-                console.log('retry',game.additional);
-                var additional = Buffer.concat([task[i].reference,
-                                                game.additional.buffer]);
-                console.log(additional);
-               updateMassCards(game.additional.player,
-                                game.additional.clocation,
-                                additional);
-            }
-            
+
         }
     }
 }
@@ -432,7 +464,7 @@ function cardCollections(player) {
 
 
 function updateMassCards(player, clocation, buffer) {
-    console.log("Location:",enums.locations[clocation],clocation,player);
+    //console.log("Location:", enums.locations[clocation], clocation, player);
     //if (enums.locations[clocation] === 'EXTRA')return;
     var field = cardCollections(player);
     var output = [];
@@ -460,11 +492,11 @@ function updateMassCards(player, clocation, buffer) {
                 game.additional = {
                     player: player,
                     clocation: clocation,
-                    buffer : buffer
+                    buffer: buffer
                 };
             }
         }
-        if (!failed){
+        if (!failed) {
             game.additional = false;
         }
         //console.log(output);
@@ -626,9 +658,7 @@ game.DrawCard = function (player, numberOfCards, cards) {
 game.NewPhase = function (phase) {
     console.log('it is now' + enums.phase[phase]);
     $('#phases .phase').text(enums.phase[phase]);
-    if (phase === 1 && turn !== 0) {
-        game.DrawCard(turn, 1, []);
-    }
+
 
 };
 var turn = 0;
