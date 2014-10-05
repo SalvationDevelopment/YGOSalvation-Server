@@ -12,21 +12,19 @@ module.exports = function () {
         while (x === true && memory.length > 2) {    
             
             var frame_length = memory[0] + memory[1];
-            console.log('read', frame_length, 'of', memory.length, 'bytes');
+            console.log('read', frame_length, '(+2) of', memory.length, 'bytes');
             if ((memory.length - 2) < frame_length) {
                 console.log('not enough');
                 x = false;
             } else {
-                var recordOfBuffer = memory.slice(2, frame_length).toJSON();
-                var frame = new Buffer(recordOfBuffer.data);
-                console.log(frame.length);
-                output.push(frame);
+                var recordOfBuffer = memory.slice(0, frame_length).toJSON();
+
+                output.push(recordOfBuffer.data);
                 if (memory.length === (frame_length + 2)) {
                     memory = new Buffer([]);
                     x = false;
                 } else {
                     memory = memory.slice((frame_length + 2));
-                    this.input(new Buffer([]));
                 }
                 console.log('after', memory.length);
             }
