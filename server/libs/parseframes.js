@@ -19,7 +19,7 @@ module.exports = function () {
                 //console.log('not enough');
                 x = false;
             } else {
-                var recordOfBuffer = memory.slice(2, frame_length).toJSON();
+                var recordOfBuffer = memory.slice(2).toJSON();
 
                 output.push(recordOfBuffer.data);
                 if (memory.length === (frame_length + 2)) {
