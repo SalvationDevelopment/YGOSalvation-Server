@@ -296,8 +296,13 @@ function processTask(task, socket) {
         } else if (task[i].STOC_ERROR_MSG) {
             var errormessage = enums.STOC.STOC_ERROR_MSG[task[i].STOC_ERROR_MSG.message[0]];
             if(errormessage ===  "ERRMSG_JOINERROR"){
-                game.VersionError(task[i].STOC_ERROR_MSG.message[1]);
+                console.log(enums.STOC.STOC_ERROR_MSG.ERRMSG_DECKERROR[task[i].STOC_ERROR_MSG.message[1]])
             }else if(errormessage ===  "ERRMSG_DECKERROR"){
+                if(task[i].STOC_ERROR_MSG.message[1] === 1){
+                    console.log('Invalid Deck');
+                }else{
+                console.log('[%ls] not allowed. Check the TCG/OCG card list and check the banlist',
+                            task[i].STOC_ERROR_MSG.message.readUInt32LE(4));}
             }else if(errormessage ===  "ERRMSG_SIDEERROR"){
                 console.log('Side decking failed');
             }else if(errormessage ===  "ERRMSG_VERERROR"){
