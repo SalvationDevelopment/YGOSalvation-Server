@@ -266,39 +266,43 @@ module.exports.STOC = {
         0x1: "ERRMSG_JOINERROR",
         0x2: "ERRMSG_DECKERROR",
         0x3: "ERRMSG_SIDEERROR",
-        0x4: "ERRMSG_VERERROR"
-    }
-};
-module.exports.CTOS = {
-    0x1: "CTOS_RESPONSE",
-    0x2: "CTOS_UPDATE_DECK",
-    0x3: "CTOS_HAND_RESULT",
-    0x4: "CTOS_TP_RESULT",
-    0x10: "CTOS_PLAYER_INFO",
-    0x11: "CTOS_CREATE_GAME",
-    0x12: "CTOS_JOIN_GAME",
-    0x13: "CTOS_LEAVE_GAME",
-    0x14: "CTOS_SURRENDER",
-    0x15: "CTOS_TIME_COMFIRM",
-    0x16: "CTOS_CHAT",
-    0x20: "CTOS_HS_TODUELIST",
-    0x21: "CTOS_HS_TOOBSERVER", //to observer
-    0x22: "CTOS_HS_READY",
-    0x23: "CTOS_HS_NOTREADY",
-    0x24: "CTOS_HS_KICK",
-    0x25: "CTOS_HS_START"
-    //defunc 0x26: "DEVPRO_GAME_INFO"
+        0x4: "ERRMSG_VERERROR",
+        ERRMSG_DECKERROR: [
+            "Can't join host",
+            "Password is incorrect.",
+            "The host refused the connection."
+        ]
+    };
+    module.exports.CTOS = {
+        0x1: "CTOS_RESPONSE",
+        0x2: "CTOS_UPDATE_DECK",
+        0x3: "CTOS_HAND_RESULT",
+        0x4: "CTOS_TP_RESULT",
+        0x10: "CTOS_PLAYER_INFO",
+        0x11: "CTOS_CREATE_GAME",
+        0x12: "CTOS_JOIN_GAME",
+        0x13: "CTOS_LEAVE_GAME",
+        0x14: "CTOS_SURRENDER",
+        0x15: "CTOS_TIME_COMFIRM",
+        0x16: "CTOS_CHAT",
+        0x20: "CTOS_HS_TODUELIST",
+        0x21: "CTOS_HS_TOOBSERVER", //to observer
+        0x22: "CTOS_HS_READY",
+        0x23: "CTOS_HS_NOTREADY",
+        0x24: "CTOS_HS_KICK",
+        0x25: "CTOS_HS_START"
+        //defunc 0x26: "DEVPRO_GAME_INFO"
 
-};
+    };
 
-function makeCheck(target) {
-    var destination = target + 'Check';
-    module.exports[destination] = {};
-    for (var value in module.exports[target]) {
-        if (module.exports[target].hasOwnProperty(value)) {
-            module.exports[destination][value] = false;
+    function makeCheck(target) {
+        var destination = target + 'Check';
+        module.exports[destination] = {};
+        for (var value in module.exports[target]) {
+            if (module.exports[target].hasOwnProperty(value)) {
+                module.exports[destination][value] = false;
+            }
         }
     }
-}
-makeCheck('STOC');
-makeCheck('CTOS');
+    makeCheck('STOC');
+    makeCheck('CTOS');
