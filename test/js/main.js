@@ -125,16 +125,19 @@ function processTask(task, socket) {
                 game.phase++;
                 game.NewPhase(game.phase);
             } else if (command === 'MSG_DRAW') {
+                console.log(game_message);
                 var drawplayer = game_message[1];
                 var draw = game_message[2];
-                var cards = [];
+                var cardslist = [];
                 var drawReadposition = 3;
-                for (var drawcount; draw > drawcount; drawcount++) {
-                    cards.push(game_message.readUInt16LE(drawReadposition));
-
+                for (var drawcount = 0; draw > drawcount; drawcount++) {
+                    var cardcode =game_message.readUInt32LE(drawReadposition) || 'cover';
+                    cardslist.push(cardcode);
+                    console.log(drawReadposition)
+                    drawReadposition = drawReadposition + 4;
                 }
-                console.log('%c' + ('Player' + (drawplayer + 1)) + ' drew' + draw + ' cards', 'background: #222; color: #bada55', cards);
-                game.DrawCard(drawplayer, draw, cards);
+                console.log('%c' + ('Player' + (drawplayer + 1)) + ' drew' + draw + ' cards', 'background: #222; color: #bada55', cardslist);
+                game.DrawCard(drawplayer, draw, cardslist);
             } else if (command === 'MSG_SHUFFLE_DECK') {
                 shuffle(game_message[1], 'DECK');
 
@@ -659,8 +662,9 @@ game.DrawCard = function (player, numberOfCards, cards) {
         var topcard = $('.p' + player + '.DECK').length - 1;
         animateState(player, 1, topcard, player, 2, currenthand + i, 'FaceUp');
         //animateState(player, clocation, index, moveplayer, movelocation, movezone, moveposition){
-        console.log('.p' + player + '.HAND' + 'i' + (currenthand + i) + ' changed to ' + game.images + cards[i] + '.jpg');
-        $('.p' + player + '.HAND' + '.i' + (currenthand + i)).attr('src', game.images + cards[i] + '.jpg');
+        var query = '.p' + player + '.HAND' + '.i' + (currenthand + i);
+        console.log(query + ' changed to ' + game.images + cards[i] + '.jpg');
+        $(query).attr('src', game.images + cards[i] + '.jpg');
 
     }
 
