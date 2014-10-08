@@ -296,7 +296,7 @@ function processTask(task, socket) {
         } else if (task[i].STOC_ERROR_MSG) {
             var errormessage = enums.STOC.STOC_ERROR_MSG[task[i].STOC_ERROR_MSG.message[0]];
             if (errormessage === "ERRMSG_JOINERROR") {
-                console.log(enums.STOC.STOC_ERROR_MSG.ERRMSG_DECKERROR[task[i].STOC_ERROR_MSG.message[1]])
+                console.log(enums.STOC.STOC_ERROR_MSG.ERRMSG_DECKERROR[task[i].STOC_ERROR_MSG.message[1]]);
             } else if (errormessage === "ERRMSG_DECKERROR") {
                 if (task[i].STOC_ERROR_MSG.message[1] === 1) {
                     console.log('Invalid Deck');
@@ -307,7 +307,7 @@ function processTask(task, socket) {
             } else if (errormessage === "ERRMSG_SIDEERROR") {
                 console.log('Side decking failed');
             } else if (errormessage === "ERRMSG_VERERROR") {
-                console.log('Version mismatch.')
+                console.log('Version mismatch.');
             }
         } else {
             console.log('????', task[i]);
