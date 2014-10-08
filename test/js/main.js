@@ -90,8 +90,8 @@ function processTask(task, socket) {
         if (task[i].STOC_GAME_MSG && task[i].STOC_GAME_MSG.message) {
             var command = enums.STOC.STOC_GAME_MSG[task[i].STOC_GAME_MSG.message[0]];
             var game_message = task[i].STOC_GAME_MSG.message;
-            if (command === undefined){
-                console.log('figure out STOC',task[i].STOC_GAME_MSG);
+            if (command === undefined) {
+                console.log('figure out STOC', task[i].STOC_GAME_MSG);
             }
             console.log(command);
             if (command === 'MSG_START') {
@@ -295,17 +295,19 @@ function processTask(task, socket) {
             console.log('Join Game', task[i].STOC_JOIN_GAME);
         } else if (task[i].STOC_ERROR_MSG) {
             var errormessage = enums.STOC.STOC_ERROR_MSG[task[i].STOC_ERROR_MSG.message[0]];
-            if(errormessage ===  "ERRMSG_JOINERROR"){
+            if (errormessage === "ERRMSG_JOINERROR") {
                 console.log(enums.STOC.STOC_ERROR_MSG.ERRMSG_DECKERROR[task[i].STOC_ERROR_MSG.message[1]])
-            }else if(errormessage ===  "ERRMSG_DECKERROR"){
-                if(task[i].STOC_ERROR_MSG.message[1] === 1){
+            } else if (errormessage === "ERRMSG_DECKERROR") {
+                if (task[i].STOC_ERROR_MSG.message[1] === 1) {
                     console.log('Invalid Deck');
-                }else{
-                console.log('[%ls] not allowed. Check the TCG/OCG card list and check the banlist',
-                            task[i].STOC_ERROR_MSG.message.readUInt32LE(4));}
-            }else if(errormessage ===  "ERRMSG_SIDEERROR"){
+                } else {
+                    console.log('[%ls] not allowed. Check the TCG/OCG card list and check the banlist',
+                        task[i].STOC_ERROR_MSG.message.readUInt32LE(4));
+                }
+            } else if (errormessage === "ERRMSG_SIDEERROR") {
                 console.log('Side decking failed');
-            }else if(errormessage ===  "ERRMSG_VERERROR"){
+            } else if (errormessage === "ERRMSG_VERERROR") {
+                console.log('Version mismatch.')
             }
         } else {
             console.log('????', task[i]);
@@ -657,9 +659,9 @@ game.DrawCard = function (player, numberOfCards, cards) {
         var topcard = $('.p' + player + '.DECK').length - 1;
         animateState(player, 1, topcard, player, 2, currenthand + i, 'FaceUp');
         //animateState(player, clocation, index, moveplayer, movelocation, movezone, moveposition){
-            console.log('.p' + player + '.HAND' + 'i' + (currenthand + i) + ' changed to ' + game.images + cards[i] + '.jpg');
-            $('.p' + player + '.HAND' + '.i' + (currenthand + i)).attr('src', game.images + cards[i] + '.jpg');
-        
+        console.log('.p' + player + '.HAND' + 'i' + (currenthand + i) + ' changed to ' + game.images + cards[i] + '.jpg');
+        $('.p' + player + '.HAND' + '.i' + (currenthand + i)).attr('src', game.images + cards[i] + '.jpg');
+
     }
 
     layouthand(player);
