@@ -90,18 +90,18 @@ function processTask(task, socket) {
         if (task[i].STOC_GAME_MSG && task[i].STOC_GAME_MSG.message) {
             var command = enums.STOC.STOC_GAME_MSG[task[i].STOC_GAME_MSG.message[0]];
             var game_message = task[i].STOC_GAME_MSG.message;
-            if (command === undefined){
-                console.log('figure out STOC',task[i].STOC_GAME_MSG);
+            if (command === undefined) {
+                console.log('figure out STOC', task[i].STOC_GAME_MSG);
             }
             console.log(command);
             if (command === 'MSG_START') {
                 var type = game_message[1];
-                var lifepoints1 = game_message.readUInt16LE(2);console.log('lp1',lifepoints1);
-                var lifepoints2 = game_message.readUInt16LE(6);console.log('lp2',lifepoints2);
-                var player1decksize = game_message.readUInt8(10);console.log('d1',player1decksize);
-                var player1extrasize = game_message.readUInt8(12);console.log('e1',player1extrasize);
-                var player2decksize = game_message.readUInt8(14);console.log('d2',player2decksize);
-                var player2extrasize = game_message[15];console.log('e2',player2extrasize,game_message);
+                var lifepoints1 = game_message.readUInt16LE(2);
+                var lifepoints2 = game_message.readUInt16LE(6);
+                var player1decksize = game_message.readUInt8(10);
+                var player1extrasize = game_message.readUInt8(12);
+                var player2decksize = game_message.readUInt8(14);
+                var player2extrasize = game_message.readUInt8(16);
                 game.StartDuel(lifepoints1, lifepoints2,
                     player1decksize, player2decksize,
                     player1extrasize, player2extrasize);
@@ -125,16 +125,19 @@ function processTask(task, socket) {
                 game.phase++;
                 game.NewPhase(game.phase);
             } else if (command === 'MSG_DRAW') {
+                console.log(game_message);
                 var drawplayer = game_message[1];
                 var draw = game_message[2];
-                var cards = [];
+                var cardslist = [];
                 var drawReadposition = 3;
-                for (var drawcount; draw > drawcount; drawcount++) {
-                    cards.push(game_message.readUInt16LE(drawReadposition));
-
+                for (var drawcount = 0; draw > drawcount; drawcount++) {
+                    var cardcode =game_message.readUInt32LE(drawReadposition) || 'cover';
+                    cardslist.push(cardcode);
+                    console.log(drawReadposition)
+                    drawReadposition = drawReadposition + 4;
                 }
-                console.log('%c' + ('Player' + (drawplayer + 1)) + ' drew' + draw + ' cards', 'background: #222; color: #bada55');
-                game.DrawCard(drawplayer, draw, cards);
+                console.log('%c' + ('Player' + (drawplayer + 1)) + ' drew' + draw + ' cards', 'background: #222; color: #bada55', cardslist);
+                game.DrawCard(drawplayer, draw, cardslist);
             } else if (command === 'MSG_SHUFFLE_DECK') {
                 shuffle(game_message[1], 'DECK');
 
@@ -293,8 +296,24 @@ function processTask(task, socket) {
             console.log('Chat', task[i].STOC_SELECT_TP);
         } else if (task[i].STOC_JOIN_GAME) {
             console.log('Join Game', task[i].STOC_JOIN_GAME);
+        } else if (task[i].STOC_ERROR_MSG) {
+            var errormessage = enums.STOC.STOC_ERROR_MSG[task[i].STOC_ERROR_MSG.message[0]];
+            if (errormessage === "ERRMSG_JOINERROR") {
+                console.log(enums.STOC.STOC_ERROR_MSG.ERRMSG_DECKERROR[task[i].STOC_ERROR_MSG.message[1]]);
+            } else if (errormessage === "ERRMSG_DECKERROR") {
+                if (task[i].STOC_ERROR_MSG.message[1] === 1) {
+                    console.log('Invalid Deck');
+                } else {
+                    console.log('[%ls] not allowed. Check the TCG/OCG card list and check the banlist',
+                        task[i].STOC_ERROR_MSG.message.readUInt32LE(4));
+                }
+            } else if (errormessage === "ERRMSG_SIDEERROR") {
+                console.log('Side decking failed');
+            } else if (errormessage === "ERRMSG_VERERROR") {
+                console.log('Version mismatch.');
+            }
         } else {
-            console.log('????');
+            console.log('????', task[i]);
 
         }
     }
@@ -535,8 +554,6 @@ game.StartDuel = function (player1StartLP, player2StartLP, OneDeck, TwoDeck, One
     layouthand(1);
     $('.p0lp').val(player1StartLP);
     $('.p1lp').val(player2StartLP);
-    //game.DrawCard(0, 5, []);
-    //game.DrawCard(1, 5, []);
     return [cardCollections(0), cardCollections(1)];
 };
 
@@ -645,10 +662,10 @@ game.DrawCard = function (player, numberOfCards, cards) {
         var topcard = $('.p' + player + '.DECK').length - 1;
         animateState(player, 1, topcard, player, 2, currenthand + i, 'FaceUp');
         //animateState(player, clocation, index, moveplayer, movelocation, movezone, moveposition){
-        if (cards[i]) {
-            console.log('.p' + player + '.HAND' + 'i' + (currenthand + i) + ' changed to ' + game.images + cards[i] + '.jpg');
-            $('.p' + player + '.HAND' + 'i' + (currenthand + i)).attr('src', game.images + cards[i] + '.jpg');
-        }
+        var query = '.p' + player + '.HAND' + '.i' + (currenthand + i);
+        console.log(query + ' changed to ' + game.images + cards[i] + '.jpg');
+        $(query).attr('src', game.images + cards[i] + '.jpg');
+
     }
 
     layouthand(player);

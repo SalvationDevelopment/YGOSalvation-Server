@@ -62,8 +62,8 @@ module.exports = {
         Owner: 0x40000,
         IsDisabled: 0x80000,
         IsPublic: 0x100000,
-        LScale : 0x200000,
-        RScale : 0x400000
+        LScale: 0x200000,
+        RScale: 0x400000
     },
     cardAttributes: {
         0x01: 'Earth',
@@ -261,6 +261,17 @@ module.exports.STOC = {
             0x80: "PHASE_END",
         }
 
+    },
+    STOC_ERROR_MSG: {
+        0x1: "ERRMSG_JOINERROR",
+        0x2: "ERRMSG_DECKERROR",
+        0x3: "ERRMSG_SIDEERROR",
+        0x4: "ERRMSG_VERERROR",
+        ERRMSG_DECKERROR: [
+            "Can't join host",
+            "Password is incorrect.",
+            "The host refused the connection."
+        ]
     }
 };
 module.exports.CTOS = {
