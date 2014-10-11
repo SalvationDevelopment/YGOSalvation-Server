@@ -28,6 +28,18 @@ Each call starts with `::::`, this is a standard signal to tell the core it is a
 * `::::endduel|WinningPlayerSlot#|Reason` the winning player slot integer, and how they won.
 * `::::chat|PlayerName|msg` PlayerName sent a message containing the text of `msg`. If the server speaks PlayerName is `[Server]`.
 
+Implemented
+###########
+* `::::network-ready`
+* `::::network-end`
+* `::::join-slot-1|PlayerName`
+* `::::join-slot-2|PlayerName`
+* `::::join-slot-3|PlayerName`
+* `::::join-slot-4|PlayerName`
+* `::::endduel|WinningPlayerSlot#|Reason`
+* `::::startduel`
+* `::::chat|PlayerName|msg` 
+
 Config
 ======
 
