@@ -123,7 +123,7 @@ function startCore(port, socket, data, callback) {
 function pickCoreConfig(socket) {
     if (socket.hostString[0] === '0' || //OCG
         socket.hostString[0] === '1' || //TCG
-        socket.hostString[0] === '2') { //TCG/OCG
+        socket.hostString[0] === '2') { //TCG/OCG : Sim format
         return '' + socket.hostString[0] + '-config.txt';
     } else {
         /*load default configuration */
