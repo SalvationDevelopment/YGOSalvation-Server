@@ -2,7 +2,7 @@
 var fs = require('fs');
 var childProcess = require('child_process');
 var cluster = require('cluster');
-var numCPUs = require('os').cpus().length -1;
+var numCPUs = require('os').cpus().length - 1;
 var net = require('net');
 
 if (cluster.isMaster) {
@@ -12,8 +12,8 @@ if (cluster.isMaster) {
             PORT: port
         });
     }
-    cluster.on('exit', function(worker, code, signal) {
-    var port = (8912 + worker.id);
+    cluster.on('exit', function (worker, code, signal) {
+        var port = (8912 + worker.id);
         cluster.fork({
             PORT: port
         });
@@ -30,16 +30,27 @@ if (cluster.isMaster) {
         socket.on('data', function (data) {
             connection.write(data);
         });
-        connection.on('error', function () {});
-        socket.on('error', function () {});
+        connection.on('error', function () {
+            //core died
+        });
+        socket.on('error', function () {
+            //player DC'd abruptly
+            connection.end();
+            socket.destroy();
+        });
+        socket.on('end', function () {
+            connection.end();
+            socket.destroy();
+        });
+
     });
-    
+
 }
 
 function createDateString(dateObject) {
     var hours = ('00' + dateObject.getHours()).slice(-2);
-    var Minutes = ('00' + dateObject.getMinutes()).slice(-2);
-    return "[" + hours + ":" + dateObject.Minutes() + "]";
+    var minutes = ('00' + dateObject.getMinutes()).slice(-2);
+    return process.env.PORT + "-[" + hours + ":" + minutes + "]";
 }
 
 function startCore(port) {
@@ -56,10 +67,10 @@ function startCore(port) {
         });
         core.stdout.on('error', function (error) {
             console.log(createDateString(new Date()) + ' core error', error);
-            throw error;
+            process.exit(0);
         });
         core.stdout.on('data', function (core_message) {
-            console.log(createDateString(new Date()), core_message);
+            console.log(createDateString(new Date()), core_message.toString());
         });
 
     });
