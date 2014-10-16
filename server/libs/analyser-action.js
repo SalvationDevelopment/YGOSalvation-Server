@@ -5,8 +5,8 @@ var CardLocation = {};
 var Program = {};
 var GameMessage = require('enums').analysis;
 var CardPosition = require('enums').CardPosition;
-var SendToAll = function () {};
-var SendToPlayer = function () {};
+var sendToAll = function () {};
+var sendToPlayer = function () {};
 var process = {};
 
 process.OnRetry = function () {
@@ -38,13 +38,13 @@ process.OnHint = function (msg) {
     case 7:
     case 8:
     case 9:
-        Game.SendToAllBut(packet, player);
+        Game.sendToAllBut(packet, player);
         break;
     case 10:
         if (Game.IsTag)
             Game.CurPlayers[player].Send(packet);
         else
-            Game.SendToAll(packet);
+            Game.sendToAll(packet);
         break;
     }
 };
@@ -54,7 +54,7 @@ process.OnWin = function (msg) {
     var reason = msg.Reader.ReadByte();
     Game.MatchSaveResult(player);
     Game.RecordWin(player, reason);
-    SendToAll(msg);
+    sendToAll(msg);
 };
 
 process.OnSelectBattleCmd = function (msg) {
@@ -65,7 +65,7 @@ process.OnSelectBattleCmd = function (msg) {
     msg.Reader.ReadBytes(count * 8 + 2);
     Game.RefreshAll();
     Game.WaitForResponse(player);
-    SendToPlayer(msg, player);
+    sendToPlayer(msg, player);
 };
 
 process.OnSelectIdleCmd = function (msg) {
@@ -85,21 +85,21 @@ process.OnSelectIdleCmd = function (msg) {
 
     Game.RefreshAll();
     Game.WaitForResponse(player);
-    SendToPlayer(msg, player);
+    sendToPlayer(msg, player);
 };
 
 process.OnSelectEffectYn = function (msg) {
     var player = msg.Reader.ReadByte();
     msg.Reader.ReadBytes(8);
     Game.WaitForResponse(player);
-    SendToPlayer(msg, player);
+    sendToPlayer(msg, player);
 };
 
 process.OnSelectYesNo = function (msg) {
     var player = msg.Reader.ReadByte();
     msg.Reader.ReadBytes(4);
     Game.WaitForResponse(player);
-    SendToPlayer(msg, player);
+    sendToPlayer(msg, player);
 };
 
 process.OnSelectOption = function (msg) {
@@ -107,7 +107,7 @@ process.OnSelectOption = function (msg) {
     var count = msg.Reader.ReadByte();
     msg.Reader.ReadBytes(count * 4);
     Game.WaitForResponse(player);
-    SendToPlayer(msg, player);
+    sendToPlayer(msg, player);
 };
 
 process.OnSelectCard = function (msg) {
@@ -144,7 +144,7 @@ process.OnSelectChain = function (msg) {
 
     if (count > 0) {
         Game.WaitForResponse(player);
-        SendToPlayer(msg, player);
+        sendToPlayer(msg, player);
         return 1;
     }
 
@@ -156,7 +156,7 @@ process.OnSelectPlace = function (msg) {
     var player = msg.Reader.ReadByte();
     msg.Reader.ReadBytes(5);
     Game.WaitForResponse(player);
-    SendToPlayer(msg, player);
+    sendToPlayer(msg, player);
 };
 
 process.OnSelectCounter = function (msg) {
@@ -165,7 +165,7 @@ process.OnSelectCounter = function (msg) {
     var count = msg.Reader.ReadByte();
     msg.Reader.ReadBytes(count * 8);
     Game.WaitForResponse(player);
-    SendToPlayer(msg, player);
+    sendToPlayer(msg, player);
 };
 
 process.OnSelectSum = function (msg) {
@@ -175,7 +175,7 @@ process.OnSelectSum = function (msg) {
     var count = msg.Reader.ReadByte();
     msg.Reader.ReadBytes(count * 11);
     Game.WaitForResponse(player);
-    SendToPlayer(msg, player);
+    sendToPlayer(msg, player);
 };
 
 process.OnSortCard = function (msg) {
@@ -183,14 +183,14 @@ process.OnSortCard = function (msg) {
     var count = msg.Reader.ReadByte();
     msg.Reader.ReadBytes(count * 7);
     Game.WaitForResponse(player);
-    SendToPlayer(msg, player);
+    sendToPlayer(msg, player);
 };
 
 process.OnConfirmDecktop = function (msg) {
     msg.Reader.ReadByte();
     var count = msg.Reader.ReadByte();
     msg.Reader.ReadBytes(count * 7);
-    SendToAll(msg);
+    sendToAll(msg);
 };
 
 process.OnConfirmCards = function (msg) {
@@ -202,7 +202,7 @@ process.OnConfirmCards = function (msg) {
     var packet = new GameServerPacket(msg.Message);
     packet.Write(buffer);
     if (buffer[7] === CardLocation.Hand)
-        Game.SendToAll(packet);
+        Game.sendToAll(packet);
     else
         Game.CurPlayers[player].Send(packet);
 };
@@ -218,21 +218,21 @@ process.OnShuffleHand = function (msg) {
     for (var i = 0; i < count; i++)
         packet.Write(0);
 
-    SendToPlayer(msg, player);
-    Game.SendToAllBut(packet, player);
+    sendToPlayer(msg, player);
+    Game.sendToAllBut(packet, player);
     Game.RefreshHand(player, 0x181fff, false);
 };
 
 process.OnSwapGraveDeck = function (msg) {
     var player = msg.Reader.ReadByte();
-    SendToAll(msg);
+    sendToAll(msg);
     Game.RefreshGrave(player);
 };
 
 process.OnShuffleSetCard = function (msg) {
     var count = msg.Reader.ReadByte();
     msg.Reader.ReadBytes(count * 8);
-    SendToAll(msg);
+    sendToAll(msg);
     Game.RefreshMonsters(0, 0x181fff, false);
     Game.RefreshMonsters(1, 0x181fff, false);
 };
@@ -242,7 +242,7 @@ process.OnNewTurn = function (msg) {
     if (!Game.IsTag)
         Game.RefreshAll();
     Game.CurrentPlayer = msg.Reader.ReadByte();
-    SendToAll(msg);
+    sendToAll(msg);
 
     if (Game.IsTag && Game.TurnCount > 0) {
         if (Game.TurnCount % 2 === 0) {
@@ -262,7 +262,7 @@ process.OnNewTurn = function (msg) {
 
 process.OnNewPhase = function (msg) {
     msg.Reader.ReadByte();
-    SendToAll(msg);
+    sendToAll(msg);
     Game.RefreshAll();
 };
 
@@ -275,14 +275,14 @@ process.OnMove = function (msg) {
     var cs = raw[10];
     var cp = raw[11];
 
-    SendToPlayer(msg, cc);
+    sendToPlayer(msg, cc);
     var packet = new GameServerPacket(msg.Message);
     packet.Write(raw);
     if (!Boolean((cl & (CardLocation.Grave + CardLocation.Overlay))) && Boolean((cl & (CardLocation.Deck + CardLocation.Hand))) || Boolean((cp & CardPosition.FaceDown))) {
         packet.SetPosition(2);
         packet.Write(0);
     }
-    Game.SendToAllBut(packet, cc);
+    Game.sendToAllBut(packet, cc);
 
     if (cl !== 0 && (cl & 0x80) === 0 && (cl !== pl || pc !== cc))
         Game.RefreshSingle(cc, cl, cs);
@@ -290,7 +290,7 @@ process.OnMove = function (msg) {
 
 process.OnPosChange = function (msg) {
     var raw = msg.Reader.ReadBytes(9);
-    SendToAll(msg);
+    sendToAll(msg);
 
     var cc = raw[4];
     var cl = raw[5];
@@ -307,13 +307,13 @@ process.OnSet = function (msg) {
     var packet = new GameServerPacket(GameMessage.Set);
     packet.Write(0);
     packet.Write(raw);
-    Game.SendToAll(packet);
+    Game.sendToAll(packet);
 };
 
 process.OnFlipSummoning = function (msg) {
     var raw = msg.Reader.ReadBytes(8);
     Game.RefreshSingle(raw[4], raw[5], raw[6]);
-    SendToAll(msg);
+    sendToAll(msg);
 };
 
 process.OnCardSelected = function (msg) {
@@ -326,13 +326,13 @@ process.OnRandomSelected = function (msg) {
     msg.Reader.ReadByte();
     var count = msg.Reader.ReadByte();
     msg.Reader.ReadBytes(count * 4);
-    SendToAll(msg);
+    sendToAll(msg);
 };
 
 process.OnBecomeTarget = function (msg) {
     var count = msg.Reader.ReadByte();
     msg.Reader.ReadBytes(count * 4);
-    SendToAll(msg);
+    sendToAll(msg);
 };
 
 process.OnDraw = function (msg) {
@@ -350,8 +350,8 @@ process.OnDraw = function (msg) {
             packet.Write(0);
     }
 
-    SendToPlayer(msg, player);
-    Game.SendToAllBut(packet, player);
+    sendToPlayer(msg, player);
+    Game.sendToAllBut(packet, player);
 };
 
 process.OnLpUpdate = function (msg) {
@@ -373,40 +373,40 @@ process.OnLpUpdate = function (msg) {
         break;
     }
 
-    SendToAll(msg);
+    sendToAll(msg);
 };
 
 process.OnMissedEffect = function (msg) {
     var player = msg.Reader.ReadByte();
     msg.Reader.ReadBytes(7);
-    SendToPlayer(msg, player);
+    sendToPlayer(msg, player);
 };
 
 process.OnTossCoin = function (msg) {
     msg.Reader.ReadByte();
     var count = msg.Reader.ReadByte();
     msg.Reader.ReadBytes(count);
-    SendToAll(msg);
+    sendToAll(msg);
 };
 
 process.OnAnnounceRace = function (msg) {
     var player = msg.Reader.ReadByte();
     msg.Reader.ReadBytes(5);
     Game.WaitForResponse(player);
-    SendToPlayer(msg, player);
+    sendToPlayer(msg, player);
 };
 
 process.OnAnnounceAttrib = function (msg) {
     var player = msg.Reader.ReadByte();
     msg.Reader.ReadBytes(5);
     Game.WaitForResponse(player);
-    SendToPlayer(msg, player);
+    sendToPlayer(msg, player);
 };
 
 process.OnAnnounceCard = function (msg) {
     var player = msg.Reader.ReadByte();
     Game.WaitForResponse(player);
-    SendToPlayer(msg, player);
+    sendToPlayer(msg, player);
 };
 
 process.OnAnnounceNumber = function (msg) {
@@ -414,14 +414,14 @@ process.OnAnnounceNumber = function (msg) {
     var count = msg.Reader.ReadByte();
     msg.Reader.ReadBytes(count * 4);
     Game.WaitForResponse(player);
-    SendToPlayer(msg, player);
+    sendToPlayer(msg, player);
 };
 
 process.OnMatchKill = function (msg) {
     msg.Reader.ReadInt32();
     if (Game.IsMatch) {
         Game.MatchKill();
-        SendToAll(msg);
+        sendToAll(msg);
     }
 };
 
@@ -443,8 +443,8 @@ process.OnTagSwap = function (msg) {
             packet.Write(0);
     }
 
-    SendToPlayer(msg, player);
-    Game.SendToAllBut(packet, player);
+    sendToPlayer(msg, player);
+    Game.sendToAllBut(packet, player);
 
     Game.RefreshExtra(player);
     Game.RefreshMonsters(0, 0x81fff, false);
@@ -455,23 +455,23 @@ process.OnTagSwap = function (msg) {
     Game.RefreshHand(1, 0x181fff, false);
 };
 
-process.SendToAll = function (msg) {
+process.sendToAll = function (msg) {
     var buffer = msg.CreateBuffer();
     var packet = new GameServerPacket(msg.Message);
     packet.Write(buffer);
-    Game.SendToAll(packet);
+    Game.sendToAll(packet);
 };
 
-process.SendToAll = function (msg, length) {
+process.sendToAll = function (msg, length) {
     if (length === 0) {
-        Game.SendToAll(new GameServerPacket(msg.Message));
+        Game.sendToAll(new GameServerPacket(msg.Message));
         return;
     }
     msg.Reader.ReadBytes(length);
-    SendToAll(msg);
+    sendToAll(msg);
 };
 
-process.SendToPlayer = function (msg, player) {
+process.sendToPlayer = function (msg, player) {
     if (player !== 0 && player !== 1)
         return;
     var buffer = msg.CreateBuffer();
