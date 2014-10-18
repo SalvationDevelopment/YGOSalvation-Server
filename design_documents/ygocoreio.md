@@ -36,6 +36,11 @@ Implemented
 * `::::join-slot-2|PlayerName`
 * `::::join-slot-3|PlayerName`
 * `::::join-slot-4|PlayerName`
+* `::::left-slot-1|PlayerName`
+* `::::left-slot-2|PlayerName`
+* `::::left-slot-3|PlayerName`
+* `::::left-slot-4|PlayerName`
+* `::::spectator|#
 * `::::endduel|WinningPlayerSlot#|Reason`
 * `::::startduel`
 * `::::chat|PlayerName|msg` 
