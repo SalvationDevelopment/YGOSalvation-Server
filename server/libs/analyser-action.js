@@ -41,10 +41,10 @@ process.OnHint = function (msg) {
         Game.SendToAllBut(packet, player);
         break;
     case 10:
-        if (Game.IsTag)
-            Game.CurPlayers[player].Send(packet);
-        else
-            Game.SendToAll(packet);
+        if (Game.IsTag){
+            Game.CurPlayers[player].Send(packet);}
+        else{
+            Game.SendToAll(packet);}
         break;
     }
 };
@@ -201,10 +201,10 @@ process.OnConfirmCards = function (msg) {
     var buffer = msg.CreateBuffer();
     var packet = new GameServerPacket(msg.Message);
     packet.Write(buffer);
-    if (buffer[7] === CardLocation.Hand)
-        Game.SendToAll(packet);
-    else
-        Game.CurPlayers[player].Send(packet);
+    if (buffer[7] === CardLocation.Hand){
+        Game.SendToAll(packet);}
+    else{
+        Game.CurPlayers[player].Send(packet);}
 };
 
 process.OnShuffleHand = function (msg) {
@@ -239,22 +239,22 @@ process.OnShuffleSetCard = function (msg) {
 
 process.OnNewTurn = function (msg) {
     Game.TimeReset();
-    if (!Game.IsTag)
-        Game.RefreshAll();
+    if (!Game.IsTag){
+        Game.RefreshAll();}
     Game.CurrentPlayer = msg.Reader.ReadByte();
     SendToAll(msg);
 
     if (Game.IsTag && Game.TurnCount > 0) {
         if (Game.TurnCount % 2 === 0) {
-            if (Game.CurPlayers[0].Equals(Game.Players[0]))
-                Game.CurPlayers[0] = Game.Players[1];
-            else
-                Game.CurPlayers[0] = Game.Players[0];
+            if (Game.CurPlayers[0].Equals(Game.Players[0])){
+                Game.CurPlayers[0] = Game.Players[1];}
+            else{
+                Game.CurPlayers[0] = Game.Players[0];}
         } else {
-            if (Game.CurPlayers[1].Equals(Game.Players[2]))
-                Game.CurPlayers[1] = Game.Players[3];
-            else
-                Game.CurPlayers[1] = Game.Players[2];
+            if (Game.CurPlayers[1].Equals(Game.Players[2])){
+                Game.CurPlayers[1] = Game.Players[3];}
+            else{
+                Game.CurPlayers[1] = Game.Players[2];}
         }
     }
     Game.TurnCount++;
@@ -284,8 +284,8 @@ process.OnMove = function (msg) {
     }
     Game.SendToAllBut(packet, cc);
 
-    if (cl !== 0 && (cl & 0x80) === 0 && (cl !== pl || pc !== cc))
-        Game.RefreshSingle(cc, cl, cs);
+    if (cl !== 0 && (cl & 0x80) === 0 && (cl !== pl || pc !== cc)){
+        Game.RefreshSingle(cc, cl, cs);}
 };
 
 process.OnPosChange = function (msg) {
@@ -297,8 +297,8 @@ process.OnPosChange = function (msg) {
     var cs = raw[6];
     var pp = raw[7];
     var cp = raw[8];
-    if ((pp & CardPosition.FaceDown) !== 0 && (cp & CardPosition.FaceUp) !== 0)
-        Game.RefreshSingle(cc, cl, cs);
+    if ((pp & CardPosition.FaceDown) !== 0 && (cp & CardPosition.FaceUp) !== 0){
+        Game.RefreshSingle(cc, cl, cs);}
 };
 
 process.OnSet = function (msg) {
@@ -344,10 +344,10 @@ process.OnDraw = function (msg) {
 
     for (var i = 0; i < count; i++) {
         var code = msg.Reader.ReadUInt32();
-        if ((code & 0x80000000) !== 0)
-            packet.Write(code);
-        else
-            packet.Write(0);
+        if ((code & 0x80000000) !== 0){
+            packet.Write(code);}
+        else{
+            packet.Write(0);}
     }
 
     SendToPlayer(msg, player);
@@ -365,8 +365,8 @@ process.OnLpUpdate = function (msg) {
     case GameMessage.PayLpCost:
     case GameMessage.Damage:
         Game.LifePoints[player] -= value;
-        if (Game.LifePoints[player] < 0)
-            Game.LifePoints[player] = 0;
+        if (Game.LifePoints[player] < 0){
+            Game.LifePoints[player] = 0;}
         break;
     case GameMessage.Recover:
         Game.LifePoints[player] += value;
@@ -437,10 +437,10 @@ process.OnTagSwap = function (msg) {
 
     for (var i = 0; i < count; i++) {
         var code = msg.Reader.ReadUInt32();
-        if ((code & 0x80000000) !== 0)
-            packet.Write(code);
-        else
-            packet.Write(0);
+        if ((code & 0x80000000) !== 0){
+            packet.Write(code);}
+        else{
+            packet.Write(0);}
     }
 
     SendToPlayer(msg, player);
@@ -472,8 +472,8 @@ process.SendToAll = function (msg, length) {
 };
 
 process.SendToPlayer = function (msg, player) {
-    if (player !== 0 && player !== 1)
-        return;
+    if (player !== 0 && player !== 1){
+        return;}
     var buffer = msg.CreateBuffer();
     var packet = new GameServerPacket(msg.Message);
     packet.Write(buffer);
