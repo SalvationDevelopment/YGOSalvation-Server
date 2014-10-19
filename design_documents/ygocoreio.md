@@ -7,43 +7,13 @@ Each call starts with `::::`, this is a standard signal to tell the core it is a
 
 * `::::network-ready` signal that the core has loaded and is listening on its given port
 * `::::network-end` signal that the game has ended,  ie kill core request.
-* `::::join-slot-1|PlayerName` PlayerName has joined the duel in slot 1.
-* `::::join-slot-2|PlayerName` PlayerName has joined the duel in slot 2.
-* `::::join-slot-3|PlayerName` PlayerName has joined the duel in slot 3.
-* `::::join-slot-4|PlayerName` PlayerName has joined the duel in slot 4.
-* `::::left-slot-1|PlayerName` PlayerName has left the duel in slot 1.
-* `::::left-slot-2|PlayerName` PlayerName has left the duel in slot 2.
-* `::::left-slot-3|PlayerName` PlayerName has left the duel in slot 3.
-* `::::left-slot-4|PlayerName` PlayerName has left the duel in slot 4.
+* `::::join-slot|#|PlayerName` PlayerName has joined the duel in slot #.
+* `::::left-slot|#|PlayerName` PlayerName has left the duel in slot #.
 * `::::spectator|#` number of spectators where # is an integer.
-* `::::lock-slot-1` slot 1's deck is locked in.
-* `::::lock-slot-2` slot 2's deck is locked in.
-* `::::lock-slot-3` slot 3's deck is locked in.
-* `::::lock-slot-4` slot 4's deck is locked in.
-* `::::unlock-slot-1` slot 1's deck has been unlocked.
-* `::::unlock-slot-2` slot 2's deck has been unlocked.
-* `::::unlock-slot-3` slot 3's deck has been unlocked.
-* `::::unlock-slot-4` slot 4's deck has been unlocked.
+* `::::lock-slot|#|bool` slot #'s deck is locked in/out.
 * `::::startduel` RPS has started, this signals that the game has started.
 * `::::endduel|WinningPlayerSlot#|Reason` the winning player slot integer, and how they won.
 * `::::chat|PlayerName|msg` PlayerName sent a message containing the text of `msg`. If the server speaks PlayerName is `[Server]`.
-
-Implemented
-###########
-* `::::network-ready`
-* `::::network-end`
-* `::::join-slot-1|PlayerName`
-* `::::join-slot-2|PlayerName`
-* `::::join-slot-3|PlayerName`
-* `::::join-slot-4|PlayerName`
-* `::::left-slot-1|PlayerName`
-* `::::left-slot-2|PlayerName`
-* `::::left-slot-3|PlayerName`
-* `::::left-slot-4|PlayerName`
-* `::::spectator|#
-* `::::endduel|WinningPlayerSlot#|Reason`
-* `::::startduel`
-* `::::chat|PlayerName|msg` 
 
 Config
 ======
