@@ -1,4 +1,10 @@
-scriptfolder = ../http/ygopro/script
-cardcdb = ../http/ygopro/cards.cdb 
-banlist = ../http/ygopro/lflist.conf
+clientversion = 0
+scriptfolder = ../script
+cardcdb = cards.cdb 	
+banlist = lflist.conf
+log = false
 consolelog = false
+HandShuffle = false
+AutoEndTurn = true
+splashscreen = true
+stdoutsupport = true
