@@ -1,6 +1,6 @@
 /* jshint node :true */
 
-var process = {};
+var anyalsis = {};
 var enums = require('enums').analysis;
 var Game = {};
 
@@ -10,100 +10,100 @@ module.exports = function Analyse(msg) {
     //Logger.WriteLine(msg);
     switch (msg) {
     case enums.Retry:
-        process.OnRetry();
+        anyalsis.OnRetry();
         return 1;
     case enums.Hint:
-        process.OnHint(cmsg);
+        anyalsis.OnHint(cmsg);
         break;
     case enums.Win:
-        process.OnWin(cmsg);
+        anyalsis.OnWin(cmsg);
         return 2;
     case enums.SelectBattleCmd:
-        process.OnSelectBattleCmd(cmsg);
+        anyalsis.OnSelectBattleCmd(cmsg);
         return 1;
     case enums.SelectIdleCmd:
-        process.OnSelectIdleCmd(cmsg);
+        anyalsis.OnSelectIdleCmd(cmsg);
         return 1;
     case enums.SelectEffectYn:
-        process.OnSelectEffectYn(cmsg);
+        anyalsis.OnSelectEffectYn(cmsg);
         return 1;
     case enums.SelectYesNo:
-        process.OnSelectYesNo(cmsg);
+        anyalsis.OnSelectYesNo(cmsg);
         return 1;
     case enums.SelectOption:
-        process.OnSelectOption(cmsg);
+        anyalsis.OnSelectOption(cmsg);
         return 1;
     case enums.SelectCard:
     case enums.SelectTribute:
-        process.OnSelectCard(cmsg);
+        anyalsis.OnSelectCard(cmsg);
         return 1;
     case enums.SelectChain:
-        return process.OnSelectChain(cmsg);
+        return anyalsis.OnSelectChain(cmsg);
     case enums.SelectPlace:
     case enums.SelectDisfield:
     case enums.SelectPosition:
-        process.OnSelectPlace(cmsg);
+        anyalsis.OnSelectPlace(cmsg);
         return 1;
     case enums.SelectCounter:
-        process.OnSelectCounter(cmsg);
+        anyalsis.OnSelectCounter(cmsg);
         return 1;
     case enums.SelectSum:
-        process.OnSelectSum(cmsg);
+        anyalsis.OnSelectSum(cmsg);
         return 1;
     case enums.SortCard:
     case enums.SortChain:
-        process.OnSortCard(cmsg);
+        anyalsis.OnSortCard(cmsg);
         return 1;
     case enums.ConfirmDecktop:
-        process.OnConfirmDecktop(cmsg);
+        anyalsis.OnConfirmDecktop(cmsg);
         break;
     case enums.ConfirmCards:
-        process.OnConfirmCards(cmsg);
+        anyalsis.OnConfirmCards(cmsg);
         break;
     case enums.ShuffleDeck:
     case enums.RefreshDeck:
-        process.SendToAll(cmsg, 1);
+        anyalsis.SendToAll(cmsg, 1);
         break;
     case enums.ShuffleHand:
-        process.OnShuffleHand(cmsg);
+        anyalsis.OnShuffleHand(cmsg);
         break;
     case enums.SwapGraveDeck:
-        process.OnSwapGraveDeck(cmsg);
+        anyalsis.OnSwapGraveDeck(cmsg);
         break;
     case enums.ReverseDeck:
-        process.SendToAll(cmsg, 0);
+        anyalsis.SendToAll(cmsg, 0);
         break;
     case enums.DeckTop:
-        process.SendToAll(cmsg, 6);
+        anyalsis.SendToAll(cmsg, 6);
         break;
     case enums.ShuffleSetCard:
-        process.OnShuffleSetCard(cmsg);
+        anyalsis.OnShuffleSetCard(cmsg);
         break;
     case enums.NewTurn:
-        process.OnNewTurn(cmsg);
+        anyalsis.OnNewTurn(cmsg);
         break;
     case enums.NewPhase:
-        process.OnNewPhase(cmsg);
+        anyalsis.OnNewPhase(cmsg);
         break;
     case enums.Move:
-        process.OnMove(cmsg);
+        anyalsis.OnMove(cmsg);
         break;
     case enums.PosChange:
-        process.OnPosChange(cmsg);
+        anyalsis.OnPosChange(cmsg);
         break;
     case enums.Set:
-        process.OnSet(cmsg);
+        anyalsis.OnSet(cmsg);
         break;
     case enums.Swap:
-        process.SendToAll(cmsg, 16);
+        anyalsis.SendToAll(cmsg, 16);
         break;
     case enums.FieldDisabled:
-        process.SendToAll(cmsg, 4);
+        anyalsis.SendToAll(cmsg, 4);
         break;
     case enums.Summoned:
     case enums.SpSummoned:
     case enums.FlipSummoned:
-        process.SendToAll(cmsg, 0);
+        anyalsis.SendToAll(cmsg, 0);
         Game.RefreshMonsters(0);
         Game.RefreshMonsters(1);
         Game.RefreshSpells(0);
@@ -111,107 +111,107 @@ module.exports = function Analyse(msg) {
         break;
     case enums.Summoning:
     case enums.SpSummoning:
-        process.SendToAll(cmsg, 8);
+        anyalsis.SendToAll(cmsg, 8);
         break;
     case enums.FlipSummoning:
-        process.OnFlipSummoning(cmsg);
+        anyalsis.OnFlipSummoning(cmsg);
         break;
     case enums.Chaining:
-        process.SendToAll(cmsg, 16);
+        anyalsis.SendToAll(cmsg, 16);
         break;
     case enums.Chained:
-        process.SendToAll(cmsg, 1);
+        anyalsis.SendToAll(cmsg, 1);
         Game.RefreshAll();
         break;
     case enums.ChainSolving:
-        process.SendToAll(cmsg, 1);
+        anyalsis.SendToAll(cmsg, 1);
         break;
     case enums.ChainSolved:
-        process.SendToAll(cmsg, 1);
+        anyalsis.SendToAll(cmsg, 1);
         Game.RefreshAll();
         break;
     case enums.ChainEnd:
-        process.SendToAll(cmsg, 0);
+        anyalsis.SendToAll(cmsg, 0);
         Game.RefreshAll();
         break;
     case enums.ChainNegated:
     case enums.ChainDisabled:
-        process.SendToAll(cmsg, 1);
+        anyalsis.SendToAll(cmsg, 1);
         break;
     case enums.CardSelected:
-        process.OnCardSelected(cmsg);
+        anyalsis.OnCardSelected(cmsg);
         break;
     case enums.RandomSelected:
-        process.OnRandomSelected(cmsg);
+        anyalsis.OnRandomSelected(cmsg);
         break;
     case enums.BecomeTarget:
-        process.OnBecomeTarget(cmsg);
+        anyalsis.OnBecomeTarget(cmsg);
         break;
     case enums.Draw:
-        process.OnDraw(cmsg);
+        anyalsis.OnDraw(cmsg);
         break;
     case enums.Damage:
     case enums.Recover:
     case enums.LpUpdate:
     case enums.PayLpCost:
-        process.OnLpUpdate(cmsg);
+        anyalsis.OnLpUpdate(cmsg);
         break;
     case enums.Equip:
-        process.SendToAll(cmsg, 8);
+        anyalsis.SendToAll(cmsg, 8);
         break;
     case enums.Unequip:
-        process.SendToAll(cmsg, 4);
+        anyalsis.SendToAll(cmsg, 4);
         break;
     case enums.CardTarget:
     case enums.CancelTarget:
-        process.SendToAll(cmsg, 8);
+        anyalsis.SendToAll(cmsg, 8);
         break;
     case enums.AddCounter:
     case enums.RemoveCounter:
-        process.SendToAll(cmsg, 6);
+        anyalsis.SendToAll(cmsg, 6);
         break;
     case enums.Attack:
-        process.SendToAll(cmsg, 8);
+        anyalsis.SendToAll(cmsg, 8);
         break;
     case enums.Battle:
-        process.SendToAll(cmsg, 26);
+        anyalsis.SendToAll(cmsg, 26);
         break;
     case enums.AttackDiabled:
-        process.SendToAll(cmsg, 0);
+        anyalsis.SendToAll(cmsg, 0);
         break;
     case enums.DamageStepStart:
     case enums.DamageStepEnd:
-        process.SendToAll(cmsg, 0);
+        anyalsis.SendToAll(cmsg, 0);
         Game.RefreshMonsters(0);
         Game.RefreshMonsters(1);
         break;
     case enums.MissedEffect:
-        process.OnMissedEffect(cmsg);
+        anyalsis.OnMissedEffect(cmsg);
         break;
     case enums.TossCoin:
     case enums.TossDice:
-        process.OnTossCoin(cmsg);
+        anyalsis.OnTossCoin(cmsg);
         break;
     case enums.AnnounceRace:
-        process.OnAnnounceRace(cmsg);
+        anyalsis.OnAnnounceRace(cmsg);
         return 1;
     case enums.AnnounceAttrib:
-        process.OnAnnounceAttrib(cmsg);
+        anyalsis.OnAnnounceAttrib(cmsg);
         return 1;
     case enums.AnnounceCard:
-        process.OnAnnounceCard(cmsg);
+        anyalsis.OnAnnounceCard(cmsg);
         return 1;
     case enums.AnnounceNumber:
-        process.OnAnnounceNumber(cmsg);
+        anyalsis.OnAnnounceNumber(cmsg);
         return 1;
     case enums.CardHint:
-        process.SendToAll(cmsg, 9);
+        anyalsis.SendToAll(cmsg, 9);
         break;
     case enums.MatchKill:
-        process.OnMatchKill(cmsg);
+        anyalsis.OnMatchKill(cmsg);
         break;
     case enums.TagSwap:
-        process.OnTagSwap(cmsg);
+        anyalsis.OnTagSwap(cmsg);
         break;
     default:
         throw ("[GameAnalyser] Unhandled packet id: " + msg);
