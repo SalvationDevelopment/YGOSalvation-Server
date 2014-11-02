@@ -103,7 +103,8 @@ function download() {
         }).on('end', function () {
             file.end();
             downloadList.shift();
-            download();
+            setTimeout(function(){download();},200);
+            
         });
     });
 }

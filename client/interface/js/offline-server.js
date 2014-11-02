@@ -6,6 +6,7 @@ var http = require('http');
 var url = require('url');
 var child_process = require('child_process');
 var fs = require('fs');
+var executable = 'ygopro.exe';
 
 
 var settings = ['use_d3d', 'antialias', 'errorlog', 'nickname', 'roompass', 'lastdeck', 'textfont', 'numfont', 'fullscreen', 'enable_sound',
@@ -84,7 +85,7 @@ function runYGOPro(mode, callback) {
 
         }
         //console.log('It\'s saved!');
-        child_process.execFile('devpro.dll', [mode], {
+        child_process.execFile(executable, [mode], {
             cwd: '../ygopro'
         }, function (error) {
             if (error !== null) {
