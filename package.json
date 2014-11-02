@@ -23,13 +23,15 @@
     "icon": "application/icon.png"
   },
   "dependencies": {
-    "ws": "*",
+    "async": "^0.9.0",
+    "frame-stream": "^0.3.1",
+    "fs-walk": "0.0.1",
     "primus": "*",
     "primus-rooms": "*",
     "request": "*",
     "sqlite3": "*",
     "stream-frame": "0.0.4",
-    "frame-stream": "^0.3.1"
+    "ws": "*"
   },
   "optionalDependencies": {
     "httpsys": "*"

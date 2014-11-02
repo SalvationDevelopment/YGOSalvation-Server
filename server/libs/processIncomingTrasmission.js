@@ -58,18 +58,6 @@ function processTask(task, socket) {
         if (task[i].CTOS_PLAYER_INFO) {
             socket.username = task[i].CTOS_PLAYER_INFO;
         }
-        if (task[i].CTOS_HS_TODUELIST) {
-            gamelist[socket.hostString].players.push(socket.username);
-            servercallback('update', gamelist);
-        }
-        if (task[i].CTOS_HS_TOOBSERVER || task[i].CTOS_LEAVE_GAME) {
-            gamelist[socket.hostString].players.splice(gamelist[socket.hostString].players.indexOf(socket.username), 1);
-            servercallback('update', gamelist);
-        }
-        if (task[i].CTOS_HS_START) {
-            gamelist[socket.hostString].started = true;
-            servercallback('update', gamelist);
-        }
     }
 }
 
@@ -90,7 +78,8 @@ function startCore(port, socket, data, callback) {
         var configfile = pickCoreConfig(socket);
         var params = port + ' ' + configfile;
         var currentDate = new Date();
-        console.log(createDateString(currentDate) + ' initiating core for ' + socket.username + ' on port:' + port + ' with: ' + configfile);
+        console.log(createDateString(currentDate) +
+            ' initiating core for ' + socket.username + ' on port:' + port + ' with: ' + configfile);
         socket.core = childProcess.spawn(__dirname + '/../ygocore/YGOServer.exe', [port, configfile], {
             cwd: __dirname + '/../ygocore'
         }, function (error, stdout, stderr) {
@@ -101,85 +90,93 @@ function startCore(port, socket, data, callback) {
             console.log(createDateString(currentDate) + ' core error', error);
         });
         socket.core.stdout.on('data', function (core_message_raw) {
-            var core_message = core_message_raw.toString();
-            console.log(createDateString(currentDate) + ' ' + port + ': Core Message: \r\n', core_message);
-            if (core_message.substring(0, 4) === '::::') {
-                core_message = core_message.split('|');
-                switch (core_message[0]) {
-                case ('::::network-ready'):
-                    {
-                        connectToCore(port, data, socket);
-                        gamelist[socket.hostString] = {
-                            port: port,
-                            players: [socket.username,null,null,null],
-                            locked: [false,false,false,false],
-                            started: false,
-                            spectators:0
-                        };
-                        console.log(gamelist, 'activepoint');
-                        servercallback('update', gamelist);
-                    }
-                    break;
-                case ('::::network-end'):
-                    {
-                        servercallback('kill', gamelist);
-                    }
-                    break;
-                case ('::::join-slot'):
-                    {
-                        var join_slot = parseInt(core_message[1],10);
-                        if (join_slot === -1){
-                            return;
-                        }
-                        gamelist[socket.hostString].players[join_slot] = core_message[2]; 
-                    }
-                    break;
-                case ('::::leave-slot'):
-                    {
-                        var leave_slot = parseInt(core_message[1],10);
-                        if (leave_slot === -1){
-                            return;
-                        }
-                        gamelist[socket.hostString].players[leave_slot]= null; 
-                    }
-                    break;
-                case ('::::spectator'):
-                    {
-                    gamelist[socket.hostString].spectators = parseInt(core_message[1],10);
-                    
-                    }
-                    break;
-                case ('::::lock-slot'):
-                    {
-                        var lock_slot = parseInt(core_message[1],10);
-                        gamelist[socket.hostString].lock[lock_slot]= Boolean(core_message[2]); 
-                    }
-                    break;
-                case ('::::endduel'):
-                    {
-                        //do ranking here
-                        servercallback('kill', gamelist);
-                    }
-                    break;
-                case ('::::startduel'):
-                    {
-                        gamelist[socket.hostString].started = true;
-                    }
-                    break;
-                case ('::::chat'):
-                    {
-                        var msg = socket.hostString+':'+core_message_raw.toString();
-                        //fs.appendFile(socket.hostString'-message.txt', msg, function (error) {
-
-                        //});         
-                    }
-                    break;
-                }
-            }
-
+            handleCoreMessage(core_message_raw, port, socket, data);
         });
 
     });
+}
+
+function handleCoreMessage(core_message_raw, port, socket, data) {
+    var core_message_txt = core_message_raw.toString();
+    console.log(core_message_txt);
+    if (core_message_txt.substring(0, 4) !== '::::') {
+        return;
+    }
+    var core_message = core_message_txt.split('|');
+    switch (core_message[0]) {
+    case ('::::network-ready'):
+        {
+            connectToCore(port, data, socket);
+            gamelist[socket.hostString] = {
+                port: port,
+                players: [null, null, null, null],
+                locked: [false, false, false, false],
+                started: false,
+                spectators: 0
+            };
+            console.log(gamelist, 'activepoint');
+        }
+        break;
+    case ('::::network-end'):
+        {
+            servercallback('kill', gamelist);
+        }
+        break;
+    case ('::::join-slot'):
+        {
+            var join_slot = parseInt(core_message[2], 10);
+            if (join_slot === -1) {
+                return;
+            }
+            gamelist[core_message[1]].players[join_slot] = core_message[3];
+            servercallback('update', gamelist);
+        }
+        break;
+    case ('::::leave-slot'):
+        {
+            var leave_slot = parseInt(core_message[2], 10);
+            if (leave_slot === -1) {
+                return;
+            }
+            gamelist[core_message[1]].players[leave_slot] = null;
+            servercallback('update', gamelist);
+        }
+        break;
+    case ('::::spectator'):
+        {
+            gamelist[core_message[1]].spectators = parseInt(core_message[2], 10);
+            servercallback('update', gamelist);
+
+        }
+        break;
+    case ('::::lock-slot'):
+        {
+            var lock_slot = parseInt(core_message[2], 10);
+            gamelist[core_message[1]].lock[lock_slot] = Boolean(core_message[2]);
+            servercallback('update', gamelist);
+        }
+        break;
+    case ('::::endduel'):
+        {
+            //do ranking here
+            servercallback('kill', gamelist);
+        }
+        break;
+    case ('::::startduel'):
+        {
+            gamelist[socket.hostString].started = true;
+            servercallback('update', gamelist);
+        }
+        break;
+    case ('::::chat'):
+        {
+            var msg = socket.hostString + ':' + core_message_raw.toString();
+            //fs.appendFile(socket.hostString'-message.txt', msg, function (error) {
+
+            //});         
+        }
+        break;
+    }
 }
 
 function pickCoreConfig(socket) {
