@@ -3,7 +3,7 @@
     "description": "Salvation Development YGOPro Launcher",
     "main": "interface/index.html",
     "window": {
-        "toolbar": true,
+        "toolbar": false,
         "frame": true,
         "width": 1024,
         "min_width": 1024,
