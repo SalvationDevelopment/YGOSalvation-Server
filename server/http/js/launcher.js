@@ -2,7 +2,6 @@
 /* jslint browser : true */
 /* global ygopro, $, isChecked, alert, Primus, console, process, applySettings, prompt */
 /* exported joinGamelist, leaveGamelist, hostGame, connectgamelist, enterGame, setHostSettings, gui*/
-alert('loading launcherjs');
 applySettings();
 var siteLocation = 'http://salvationdevelopment.com/launcher/';
 
@@ -22,7 +21,11 @@ http.get(options, function (res) {
     res.on('data', function (data) {
         manifest = manifest + data;
     }).on('end', function () {
+        try{
         manifest = JSON.parse(manifest);
+        }catch(error){
+            screenMessage.text('Failed to get update manifest.');
+        }
         updateCheckFile(manifest, true);
     });
 });
