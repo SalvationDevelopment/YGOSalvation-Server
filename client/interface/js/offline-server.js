@@ -85,7 +85,7 @@ function runYGOPro(mode, callback) {
         systemConf = fillInData(systemConf, '{' + settings[i] + '}', localStorage[settings[i]]);
     }
     var path = (!normal) ? '../client/interface/ygopro/system.CONF' : '../../ygopro/system.CONF';
-    //console.log(systemConf);
+console.log(systemConf);
     fs.writeFile(path, systemConf, function (err) {
         if (err) {
             console.log('file permission error, cant edit ' + path);
