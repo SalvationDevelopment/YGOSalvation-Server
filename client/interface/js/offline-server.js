@@ -29,10 +29,10 @@ try {
 }
 try {
     var normal = true;
-    var template = fs.readFileSync('interface/template.ini', 'utf-8');
+    var template = fs.readFileSync('./interface/template.ini', 'utf-8');
 } catch (e) {
     var normal = false;
-    var template = fs.readFileSync('client/interface/template.ini', 'utf-8');
+    var template = fs.readFileSync('./interface/template.ini', 'utf-8');
 }
 for (var i = 0; settings.length > i; i++) {
     if (!localStorageExist || !localStorage[settings[i]]) {
@@ -84,8 +84,7 @@ function runYGOPro(mode, callback) {
     for (var i = 0; settings.length > i; i++) {
         systemConf = fillInData(systemConf, '{' + settings[i] + '}', localStorage[settings[i]]);
     }
-    var path = (!normal) ? '../client/interface/ygopro/system.CONF' : '../../ygopro/system.CONF';
-console.log(systemConf);
+    var path =  './ygopro/system.CONF';
     fs.writeFile(path, systemConf, function (err) {
         if (err) {
             console.log('file permission error, cant edit ' + path);
@@ -93,7 +92,7 @@ console.log(systemConf);
         }
         //console.log('It\'s saved!');
         child_process.execFile(executable, [mode], {
-            cwd: '../ygopro'
+            cwd: './ygopro'
         }, function (error) {
             if (error !== null) {
                 //write crash report;
