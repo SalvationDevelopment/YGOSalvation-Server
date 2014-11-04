@@ -3,11 +3,11 @@
 /* exported  connectToCheckmateServer, applySettings, saveSettings, isChecked, openScreen*/
 //development, stage, production
 var developmentstage = {
-    "production": "http://salvationdevelopment.com/launcher/launcher.html",
+    "production": "http://salvationdevelopment.com:8080/launcher.html",
     "stage": "http://localhost:80/launcher.html",
     "development": "../../server/http/launcher.html",
 };
-var mode = 'development';
+var mode = 'production';
 
 
 
