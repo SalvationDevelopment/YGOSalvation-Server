@@ -4,8 +4,8 @@
 //development, stage, production
 var developmentstage = {
     "production": "http://salvationdevelopment.com:8080/launcher.html",
-    "stage": "http://localhost:80/launcher.html",
-    "development": "../../server/http/launcher.html",
+    "stage": "http://salvationdevelopment.com:8080/launcher.html",
+    "development": "http://salvationdevelopment.com:8080/launcher.html",
 };
 var mode = 'production';
 
@@ -54,7 +54,7 @@ function isChecked(id) {
 
 $('document').ready(function () {
     $('#servermessages').text('You are currently offline, please restart when you have an internet connection');
-    $('main').load(developmentstage[mode]);
+    $('main').load('http://salvationdevelopment.com:8080/launcher.html');
 
 });
 
