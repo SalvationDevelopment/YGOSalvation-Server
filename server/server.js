@@ -20,7 +20,14 @@ var server = http.createServer().listen(5000);
 var primus = new Primus(server, {
     parser: 'JSON'
 });
+var static = require('node-static');
+var file = new static.Server('./http');
 
+require('http').createServer(function (request, response) {
+    request.addListener('end', function () {
+        file.serve(request, response);
+    }).resume();
+}).listen(8080);
 
 primus.use('rooms', Rooms);
 primus.on('connection', function (socket) {
