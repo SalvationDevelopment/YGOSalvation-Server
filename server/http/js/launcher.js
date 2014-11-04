@@ -13,9 +13,9 @@ var gui = require('nw.gui');
 
 var manifest = '';
 var options = {
-    host: url.parse('http://salvationdevelopment.com/launcher/manifest/ygopro.json').host,
+    host: url.parse('http://salvationdevelopment.com:8080/manifest/ygopro.json').host,
     port: 80,
-    path: url.parse('http://salvationdevelopment.com/launcher/manifest/ygopro.json').pathname
+    path: url.parse('http://salvationdevelopment.com:8080/manifest/ygopro.json').pathname
 };
 http.get(options, function (res) {
     res.on('data', function (data) {
