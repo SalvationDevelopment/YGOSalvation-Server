@@ -64,8 +64,9 @@ for (var i = 0; settings.length > i; i++) {
 console.log('Starting Offline Server');
 http.createServer(function (request, response) {
     var parameter = url.parse(request.url);
-    runYGOPro('-' + parameter.path, function () {
-        console.log('!');
+    var letter = parameter.path.slice(-1);
+    runYGOPro('-' + letter, function () {
+        console.log('!',parameter.path);
     });
     response.writeHead(200, {
         'Content-Type': 'text/plain'
@@ -76,7 +77,7 @@ http.createServer(function (request, response) {
 function runYGOPro(mode, callback) {
     //console.log(template);
     var systemConf = template;
-
+    
     function fillInData(form, placeholder, value) {
         form = form.replace(placeholder, value);
         return form;
@@ -90,6 +91,7 @@ function runYGOPro(mode, callback) {
             console.log('file permission error, cant edit ' + path);
 
         }
+        console.log(mode);
         //console.log('It\'s saved!');
         child_process.execFile(executable, [mode], {
             cwd: './ygopro'
