@@ -192,18 +192,11 @@ function pickCoreConfig(socket) {
 
 function connectToCore(port, data, socket, callback) {
     socket.active_ygocore = net.connect(port, '127.0.0.1', function () {
+        console.log('routed to',port, data, socket, callback);
         socket.active_ygocore.write(data);
         servercallback('update', gamelist);
         socket.active = false;
         socket.active_ygocore.on('data', function (core_data) {
-            var task = parsePackets('STOC', data);
-            task = (function () {
-                var output = [];
-                for (var i = 0; task.length > i; i++) {
-                    output.push(recieveSTOC(task[i], socket.hostString));
-                }
-                return output;
-            })();
             socket.write(core_data);
             if (callback) {
                 callback(true);
