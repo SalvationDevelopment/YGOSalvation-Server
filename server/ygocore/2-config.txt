@@ -1,4 +1,10 @@
+clientversion = 0
 scriptfolder = ../http/ygopro/script
-cardcdb = ../http/ygopro/cards.cdb 
+cardcdb = ../http/ygopro/cards.cdb 	
 banlist = ../http/ygopro/lflist.conf
+log = true
 consolelog = true
+handshuffle = false
+autoendturn = true
+splashscreen = false
+stdoutsupport = true
