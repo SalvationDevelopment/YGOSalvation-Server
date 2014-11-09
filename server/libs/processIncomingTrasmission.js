@@ -67,7 +67,7 @@ function createDateString(dateObject) {
 }
 
 function startCore(port, socket, data, callback) {
-    console.log(socket.hostString, port, socket, data.toString(), callback);
+    console.log(socket.hostString);
     fs.exists(__dirname + '/../ygocore/YGOServer.exe', function (exist) {
         if (!exist) {
             console.log('core not found at ' + __dirname + '/' + '../ygocore');
@@ -99,10 +99,9 @@ function startCore(port, socket, data, callback) {
 function handleCoreMessage(core_message_raw, port, socket, data) {
     var core_message_txt = core_message_raw.toString();
     console.log(core_message_txt);
-    if (core_message_txt.substring(0, 4) !== '::::') {
-        return;
-    }
+
     var core_message = core_message_txt.split('|');
+    console.log(core_message[0], (core_message[0] === '::::network-ready'));
     switch (core_message[0]) {
     case ('::::network-ready'):
         {
@@ -192,7 +191,6 @@ function pickCoreConfig(socket) {
 
 function connectToCore(port, data, socket, callback) {
     socket.active_ygocore = net.connect(port, '127.0.0.1', function () {
-        console.log('routed to',port, data, socket, callback);
         socket.active_ygocore.write(data);
         servercallback('update', gamelist);
         socket.active = false;
