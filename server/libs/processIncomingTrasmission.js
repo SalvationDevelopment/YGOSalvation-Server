@@ -101,9 +101,9 @@ function handleCoreMessage(core_message_raw, port, socket, data) {
     console.log(core_message_txt);
 
     var core_message = core_message_txt.split('|');
-    console.log(core_message[0], (core_message[0] === '::::network-ready'));
+    console.log('Test :!',core_message, (core_message[0] === '::::network-ready'));
     switch (core_message[0]) {
-    case ('::::network-ready'):
+    case ('::::network-ready\r\n' || '::::network-ready'):
         {
             connectToCore(port, data, socket);
             gamelist[socket.hostString] = {
@@ -116,7 +116,7 @@ function handleCoreMessage(core_message_raw, port, socket, data) {
             console.log(gamelist, 'activepoint');
         }
         break;
-    case ('::::network-end'):
+    case ('::::network-end' || '::::network-end\r\n'):
         {
             servercallback('kill', gamelist);
         }
