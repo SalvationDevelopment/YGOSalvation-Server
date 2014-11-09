@@ -67,7 +67,7 @@ function createDateString(dateObject) {
 }
 
 function startCore(port, socket, data, callback) {
-    console.log(socket.hostString);
+    console.log(socket.hostString, port, socket, data.toString(), callback);
     fs.exists(__dirname + '/../ygocore/YGOServer.exe', function (exist) {
         if (!exist) {
             console.log('core not found at ' + __dirname + '/' + '../ygocore');
