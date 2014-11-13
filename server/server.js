@@ -1,34 +1,59 @@
 /* jslint node : true */
-//process.on('uncaughtException', function (error) {
-//    console.log('Caught exception: ' + error);
-//});
-console.log('Salvation Development YGOPro Server');
-try {
-    require('httpsys').slipStream();
-} catch (error) {
-    console.log('Windows 8+ spefic enhancements not enabled.');
-}
+console.log('Salvation Development YGOPro Server'); //Title
 
-var gamelist = {};
+// load modules built into Node.js
 var net = require('net');
-var processIncomingTrasmission = require('./libs/processIncomingTrasmission.js');
-var killCore = require('./libs/killcore.js');
+var http = require('http');
+var spawn = require('child_process').spawn;
+
+//load modules pulled down from NPM, externals
+var gith = require('gith');
 var Primus = require('primus');
 var Rooms = require('primus-rooms');
-var http = require('http');
-var server = http.createServer().listen(5000);
-var primus = new Primus(server, {
-    parser: 'JSON'
-});
 var static = require('node-static');
-var file = new static.Server('./http');
+var WebSocketServer = require('ws').Server;
 
-require('http').createServer(function (request, response) {
+//load modules that are an internal part of the application
+var processIncomingTrasmission = require('./libs/processIncomingTrasmission.js');
+var killCore = require('./libs/killcore.js');
+var gamelist = {};
+
+
+
+/*
+Start various sub-servers.
+--------------------------
+- Gamelist on port 5000
+- YGOPro listener on port 8911, YGOPro applications connect to this port
+- YGOPro Web listener on port 8913, browser version connects to this port,
+  and is stripped and routed to the same place as the application.
+- HTTP server running static files out of port 8080
+- Githooks listener on port 4901. Self updating system.
+*/
+
+ygoserver.listen(8911);
+var serverGITHUB = gith.create(4901);
+var serverWS = http.createServer().listen(5000);
+var serverHTTP = new static.Server('./http');
+
+var serverWSProxy = new WebSocketServer({
+    port: 8913
+});
+
+/*
+Static file server:
+Via nginx /server/http/ is routed to http://ygopro.us/
+*/
+http.createServer(function (request, response) {
     request.addListener('end', function () {
-        file.serve(request, response);
+        serverHTTP.serve(request, response);
     }).resume();
 }).listen(8080);
 
+
+var primus = new Primus(serverWS, {
+    parser: 'JSON'
+});
 primus.use('rooms', Rooms);
 primus.on('connection', function (socket) {
     socket.on('data', function (data) {
@@ -57,10 +82,12 @@ primus.on('connection', function (socket) {
 primus.on('disconnection', function (socket) {
     killCore(socket, gamelist, primus); // allow reconnection?
 });
+
 primus.on('error', function (socket) {
     killCore(socket, gamelist, primus); // allow reconncetion?
 });
 
+// When a user connects, create an instance and allow the to duel, clean up after.
 var ygoserver = net.createServer(function (socket) {
     socket.active_ygocore = false;
     socket.active = false;
@@ -82,14 +109,9 @@ var ygoserver = net.createServer(function (socket) {
         killCore(socket, gamelist, primus);
     });
 });
-ygoserver.listen(8911);
 
-var WebSocketServer = require('ws').Server;
-var wss = new WebSocketServer({
-    port: 8913
-});
-
-wss.on('connection', function (socket) {
+// When a user connects via websockets, create an instance and allow the to duel, clean up after.
+serverWSProxy.on('connection', function (socket) {
     socket.active_ygocore = false;
     socket.active = false;
     socket.write = function (data) {
@@ -106,5 +128,17 @@ wss.on('connection', function (socket) {
     });
     socket.on('error', function () {
         killCore(socket, gamelist, primus);
+    });
+});
+
+//When http://gitub.com/salvationdevelopment contacts you, update the current git.
+gith({
+    owner: 'salvationdevelopment'
+}).on('all', function (payload) {
+    var updateinstance = spawn('git', ['pull']);
+    updateinstance.on('close', function preformupdate() {
+        spawn('node', ['update.js'], {
+            cwd: './http'
+        });
     });
 });
