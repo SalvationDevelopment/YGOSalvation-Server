@@ -24,12 +24,13 @@
         <h1>
 <!--            <img src="img/logo.png" alt="" id="logo" />-->
             <span style="color:hotpink; font-family:'MKStencilsansBlack', sans-serif">YGOPro</span> Salvation Server</h1>
-        <h2>Massively Multiplayer Online Yu-Gi-Oh! Simulator</h2>
+        <h2>Real-Time Online Yu-Gi-Oh! Simulator</h2>
         <ul class="featurelist" style="font-size:small">
-            <li>Massive</li>
             <li>Automated</li>
             <li>Updated</li>
             <li>Open Source</li>
+            <li>Free</li>
+            
         </ul>
         <nav class="lander-main">
             <div class="downloadbutton" style="display:none">Play Now</div>
@@ -44,93 +45,13 @@
         </div>
         <div style="font-size:.5em; text-align:center; padding-top:20px;">Version 2 : Production 0 : Revision 0</div>
     </header>
-
-    <section class="game" style="display:none;">
-        <div class="gamelobby">
-            <h2>Game Lobby</h2>
-            <div id="lobbyplayers">
-                <div id="lobbyplayer0" placeholder="click to Join" /></div>
-            <span style="display:inline-block; width:32%; text-align:center">VS</span>
-            <div id="lobbyplayer1" placeholder="click to Join" default="Player" /></div>
-
-        <div class="lobbycenter">
-
-            <div id="lobbyspectate" class="button">Spectate</div>
-        </div>
-
-        <div class="lobby">
-            <label>Forbidden List</label>
-            <span id="lobbyforbidden" class="major">Current</span>
-            <br/>
-            <label>Card Pool</label>
-            <span id="lobbycardpool" class="major">TCG/OCG</span>
-            <br/>
-            <label>Mode</label>
-            <span id="lobbymode">Single</span>
-            <br/>
-            <label>Time Limit</label>
-            <span id="lobbytime">180s/Player</span>
-            <br/>
-            <label>Starting LP</label>
-            <span id="lobbystartlp">8000/Player</span>
-            <br/>
-
-            <select id="selectdeck">
-
-            </select>
-        </div>
-
-        <div id="lobbylock" class="button">Lock Deck</div>
-        <div id="lobbystart" class="button ready0">Start</div>
-        <div id="lobbycancel" class="button">Cancel</div>
-
-    </section>
-    <div class="field" id="duelzone">
-        <div class="fieldcontainer">
-            <div class="fieldimage">
-
-
-            </div>
-
-        </div>
-    </div>
-
-
-    <div id="phases">
-
-        <div id="lifepoints">
-            <div class="left">
-                <meter class="p0lp" value="8000" min="0" low="2000" max="8000"></meter>
-                <meter class="p0time" value="300" min="0" low="150" max="300"></meter>
-                <input class="p0time" type="value" value="300" />
-                <input class="p0lp" type="value" value="8000" />
-                
-            </div>
-            <div class='center'>
-                <div class='player'></div>
-                <div class='phase'></div>
-            </div>
-            <div class="right">
-                <meter class="p1lp" value="8000" min="0" low="2000" max="8000"></meter>
-                <meter class="p1time" value="300" min="0" low="150" max="300"></meter>
-                <input class="p1time" type="value" value="300" />
-                <input class="p1lp" type="value" value="8000" />
-            </div>
-        </div>
-    </div>
-
-    <footer class="superfooter">
-        YGOPro, Salvation Development and our sister systems are not affliated with Konami. Salvation Development &copy; 2013-2014, all rights reserved by respective parties. Powered by Yu-Jo Friendship &amp; Love.
+    <footer class="superfooter"><div style='max-width:1000px; margin:0 auto'>
+        YGOPro, Salvation Server, are not affliated with Konami or Kazuki Takahashi. Salvation Server &copy; 2013-2014, all rights reserved by respective parties. Powered by Yu-Jo Friendship and fans of Yu-Gi-Oh! worldwide.</div>
     </footer>
 
 
 
     <script type="text/javascript" src="js/vendor/jquery-1.10.1.min.js"></script>
-    <script src="js/plugins.js"></script>
-    <script src="js/enums.js"></script>
-    <script src="js/animations.js"></script>
-    <script src="js/main.js"></script>
-
 </body>
 
 </html>
