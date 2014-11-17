@@ -315,6 +315,20 @@ section#settings {
 iframe .home header.header.clear {
     height: 100%;
 }
+#control div {
+    height: 8px;
+    width: 20px;
+    margin: 5px;
+    background: white;
+    float: right;
+}
+#control {
+    position: fixed;
+    top: 0;
+    right: 0;
+    height: 40px;
+    width: 120px;
+}
 /* ==========================================================================
    Helper classes
    ========================================================================== */
