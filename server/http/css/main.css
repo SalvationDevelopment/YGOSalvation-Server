@@ -1,0 +1,1181 @@
+/*! normalize.css v1.1.2 | MIT License | git.io/normalize */
+
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+main,
+nav,
+section,
+summary {
+    display: block
+}
+audio,
+canvas,
+video {
+    display: inline-block;
+    *display: inline;
+    *zoom: 1
+}
+audio:not([controls]) {
+    display: none;
+    height: 0
+}
+[hidden] {
+    display: none
+}
+html {
+    font-size: 100%;
+    -ms-text-size-adjust: 100%;
+    -webkit-text-size-adjust: 100%
+}
+html,
+button,
+input,
+select,
+textarea {
+    font-family: sans-serif
+}
+body {
+    margin: 0
+}
+a:focus {
+    outline: thin dotted
+}
+a:active,
+a:hover {
+    outline: 0
+}
+h1 {
+    font-size: 2em;
+    margin: .67em 0
+}
+h2 {
+    font-size: 1.5em;
+    margin: .83em 0
+}
+h3 {
+    font-size: 1.17em;
+    margin: 1em 0
+}
+h4 {
+    font-size: 1em;
+    margin: 1.33em 0
+}
+h5 {
+    font-size: .83em;
+    margin: 1.67em 0
+}
+h6 {
+    font-size: .67em;
+    margin: 2.33em 0
+}
+abbr[title] {
+    border-bottom: 1px dotted
+}
+b,
+strong {
+    font-weight: bold
+}
+blockquote {
+    margin: 1em 40px
+}
+dfn {
+    font-style: italic
+}
+hr {
+    -moz-box-sizing: content-box;
+    box-sizing: content-box;
+    height: 0
+}
+mark {
+    background: #ff0;
+    color: #000
+}
+p,
+pre {
+    margin: 1em 0
+}
+code,
+kbd,
+pre,
+samp {
+    font-family: monospace, serif;
+    _font-family: 'courier new', monospace;
+    font-size: 1em
+}
+pre {
+    white-space: pre;
+    white-space: pre-wrap;
+    word-wrap: break-word
+}
+q {
+    quotes: none
+}
+q:before,
+q:after {
+    content: '';
+    content: none
+}
+small {
+    font-size: 80%
+}
+sub,
+sup {
+    font-size: 75%;
+    line-height: 0;
+    position: relative;
+    vertical-align: baseline
+}
+sup {
+    top: -0.5em
+}
+sub {
+    bottom: -0.25em
+}
+dl,
+menu,
+ol,
+ul {
+    margin: 1em 0
+}
+dd {
+    margin: 0 0 0 40px
+}
+menu,
+ol,
+ul {
+    padding: 0 0 0 40px
+}
+nav ul,
+nav ol {
+    list-style: none;
+    list-style-image: none
+}
+img {
+    border: 0;
+    -ms-interpolation-mode: bicubic
+}
+svg:not(:root) {
+    overflow: hidden
+}
+figure {
+    margin: 0
+}
+form {
+    margin: 0
+}
+fieldset {
+    border: 1px solid silver;
+    margin: 0 2px;
+    padding: .35em .625em .75em
+}
+legend {
+    border: 0;
+    padding: 0;
+    white-space: normal;
+    *margin-left: -7px
+}
+button,
+input,
+select,
+textarea {
+    font-size: 100%;
+    margin: 0;
+    vertical-align: baseline;
+    *vertical-align: middle
+}
+button,
+input {
+    line-height: normal
+}
+button,
+select {
+    text-transform: none
+}
+button,
+html input[type="button"],
+input[type="reset"],
+input[type="submit"] {
+    -webkit-appearance: button;
+    cursor: pointer;
+    *overflow: visible
+}
+button[disabled],
+html input[disabled] {
+    cursor: default
+}
+input[type="checkbox"],
+input[type="radio"] {
+    box-sizing: border-box;
+    padding: 0;
+    *height: 13px;
+    *width: 13px
+}
+input[type="search"] {
+    -webkit-appearance: textfield;
+    -moz-box-sizing: content-box;
+    -webkit-box-sizing: content-box;
+    box-sizing: content-box
+}
+input[type="search"]::-webkit-search-cancel-button,
+input[type="search"]::-webkit-search-decoration {
+    -webkit-appearance: none
+}
+button::-moz-focus-inner,
+input::-moz-focus-inner {
+    border: 0;
+    padding: 0
+}
+textarea {
+    overflow: auto;
+    vertical-align: top
+}
+table {
+    border-collapse: collapse;
+    border-spacing: 0
+}
+/* ==========================================================================
+   HTML5 Boilerplate styles - h5bp.com (generated via initializr.com)
+   ========================================================================== */
+
+html,
+button,
+input,
+select,
+textarea {
+    color: #222;
+}
+body {
+    font-size: 1em;
+    line-height: 1.4;
+}
+::-moz-selection {
+    background: #b3d4fc;
+    text-shadow: none;
+}
+::selection {
+    background: #b3d4fc;
+    text-shadow: none;
+}
+hr {
+    display: block;
+    height: 1px;
+    border: 0;
+    border-top: 1px solid #ccc;
+    margin: 1em 0;
+    padding: 0;
+}
+img {
+    vertical-align: middle;
+}
+fieldset {
+    border: 0;
+    margin: 0;
+    padding: 0;
+}
+textarea {
+    resize: vertical;
+}
+.chromeframe {
+    margin: 0.2em 0;
+    background: #ccc;
+    color: #000;
+    padding: 0.2em 0;
+}
+/* ==========================================================================
+   Author's custom styles
+   ========================================================================== */
+
+/* apply a natural box layout model to all elements */
+
+*,
+*:before,
+*:after {
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+}
+@font-face
+
+{
+    font-family: MKStencilsansBlack;
+    src: url('/font/MKStencilsansBlack.ttf'),
+}
+body {
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    background-color: black;
+    background-image: url(../img/bg.jpg);
+    background-size: 100%;
+    font-family: 'Roboto', sans-serif;
+    font-size: 15px;
+    font-weight: 400;
+}
+html,
+body,
+header,
+.game,
+.field {
+    height: 100% !important;
+}
+#logo {
+    margin-top: -35px;
+    margin-right: -20px;
+    height: 150px;
+    width: 150px;
+    display: inline-block;
+    text-align: center;
+}
+h1 {
+    color: darkgrey;
+    font-size: 80px;
+    margin: 0 auto;
+    padding: 0;
+    text-align: center;
+    padding: 0;
+    line-height: 1.2em;
+    font-family: 'Poiret One', cursive;
+    text-shadow: 0 0 1px darkgrey;
+    font-weight: 200
+}
+h2 {
+    margin-top: -0px;
+    text-align: center;
+    maring: 0 auto;
+    padding: 0;
+    font-family: 'Poiret One', cursive;
+    text-shadow: 0 0 1px white;
+    font-weight: 200;
+}
+header,
+.game {
+    min-height: 450px;
+    margin: 0 auto;
+    padding: 160px 0;
+    color: white;
+    background: rgba(0, 0, 0, .65);
+    overflow: auto;
+}
+section {
+    width: 100%;
+    min-height: 800px;
+    background-color: white;
+    padding-top: 40px;
+}
+aside {
+    width: 50%;
+    float: left;
+    padding: 0 20px;
+}
+.container {
+    width: 980px;
+    margin: 0 auto;
+    overflow: auto;
+}
+.featurelist {
+    font-size: 10px;
+    color: grey;
+    text-align: center;
+    padding: 5px;
+    text-align: center;
+    margin: 0 auto;
+    width: 30%;
+}
+.featurelist li {
+    list-style: none;
+    display: inline-block;
+    padding: 0 10px;
+    text-transform: uppercase;
+}
+.featurelist li:first-child {
+    padding-left: 0;
+}
+.featurelist li:last-child {
+    padding-right: 0;
+}
+.downloadbutton {
+    background: rgba(5, 100, 0, .5);
+    border-radius: 21px;
+    width: 134px;
+    display: block;
+    height: 43px;
+    color: #fff;
+    margin: 0 auto;
+    margin-top: 20px;
+    padding: 10px;
+    text-align: center;
+    box-shadow: 0 0 20px black, inset 0 0 2px #fff;
+}
+.downloadbutton:hover {
+    background: rgba(50, 200, 50, 1);
+}
+.lander-main ul {
+    text-align: center;
+    margin: 0 auto;
+    width: 20%;
+}
+.lander-main li {
+    display: inline-block;
+    text-shadow: 0 0 5px rgba(255, 255, 255, .2);
+    color: hotpink;
+    padding: 5px;
+    margin: 5px;
+    font-size: .8em;
+    display: inline-block;
+}
+.lander-main li:first-child {
+    background: rgba(0, 0, 0, .2);
+    border: 5px solid rgba(255, 200, 200, .2);
+}
+article {
+    width: 50%;
+    float: left;
+    text-align: justify;
+    padding: 20px;
+    height: 300px;
+    margin-bottom: 100px;
+}
+.container footer {
+    float: left;
+    text-align: center;
+    width: 100%;
+}
+.superfooter {
+    background: black;
+    color: white;
+    font-weight: 200;
+    height: 3em;
+    line-height: 3em;
+    text-align: center;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    z-index: 10;
+    border-top: 1px solid white;
+    font-size: .8em;
+}
+.iconic {
+    background: green;
+    width: 80%;
+    height: 80%;
+    margin: 10% auto;
+    color: white;
+    text-align: center;
+    font-size: 140px;
+}
+.lobby h2 {
+    font-size: 2em;
+    width: 100%;
+}
+.game {
+    background: rgba(0, 0, 0, .65);
+    height: 100%;
+    min-height: 40px;
+    width: 100%
+}
+.gamelobby {
+    width: 580px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid white;
+    box-shadow: 0 0 30px black, inset 0 0 2px #fff;
+    background: rgba(0, 0, 0, .75);
+    overflow: auto
+}
+.lobby {
+    width: 60%;
+    margin: 30px auto;
+    height: 200px;
+    font-size: .8em;
+}
+.button {
+    background: rgba(50, 100, 0, .50);
+    width: 86px;
+    display: block;
+    width: 86px;
+    cursor: pointer;
+    color: #fff;
+    margin: 20px 0;
+    padding: 5px;
+    text-align: center;
+    box-shadow: 0 0 20px black, inset 0 0 2px #fff;
+    display: inline-block;
+    margin-bottom: 10px;
+    border-width: 1px;
+    -webkit-animation: colorRotate 6s linear 0s infinite;
+}
+.game label {
+    width: 150px;
+    padding: 0px 30px 0px 0;
+    display: inline-block;
+}
+.game input {
+    display: inline-block;
+    margin-bottom: 10px;
+    height: 1.8em;
+    width: 33.33%;
+    text-align: center
+}
+#lobbycancel {
+    float: right;
+}
+.game span {
+    text-align: right;
+    width: 50%;
+    display: inline-block;
+}
+.game span.major {
+    text-shadow: 0 0 3px #fff;
+}
+#lobbyplayer2 {
+    float: right
+}
+.lobbycenter {
+    margin: 0 auto;
+    width: 33%;
+}
+.game select {
+    width: 100%;
+    display: inline-block;
+    margin-top: 30px;
+}
+#lobbyspectate {
+    width: 50%;
+    margin: 0 auto;
+    display: block;
+}
+#lobbyplayer0,
+#lobbyplayer1 {
+    width: 33%;
+    display: inline-block;
+}
+#majorpopup {
+    position: absolute;
+    z-index: 99999999999;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    background: rgba(0, 0, 0, .95);
+}
+.message {
+    width: 300px;
+    margin: 25% auto;
+    color: white;
+    text-align: center;
+    border: 1px solid white;
+    padding: 20px;
+}
+.message:before {
+    content: '!';
+    font-size: 130px;
+    position: absolute;
+    left: 25%;
+    width: 50%;
+    text-align: center;
+    color: #fff;
+    top: 30%;
+}
+.field {
+    width: 100%;
+    background: rgba(0, 0, 0, .65);
+    -webkit-perspective: 1000px;
+    position: relative;
+    -webkit-transform-style: preserve-3d;
+    clear: both;
+    float: left;
+    border-top: 3px solid #444;
+    border-color: rgba(255, 255, 255, .05);
+    padding-top: 100px;
+}
+.fieldcontainer {
+    width: 1000px;
+    margin: 0 auto;
+    height: 1000px;
+    margin-top: -160px;
+}
+.info-controls {
+    float: left;
+}
+.info-image {
+    height: 294px;
+    padding: 20px;
+    width: 198px;
+    background: brown;
+}
+meter {
+    float: left;
+    margin: 0 5%;
+    width: 90%;
+}
+meter::-webkit-meter-optimum-value {
+    background: none;
+    background-color: purple;
+/*    border-right: 1px solid hotpink;*/
+/*    box-shadow: 0 0 12px rgba(255, 0, 255, .3);*/
+}
+meter::-webkit-meter-bar {
+    background: rgba(0, 0, 0, .8);
+/*    border-top: 1px solid rgba(100, 100, 100, 0.3);*/
+    box-shadow: inset 0px 1px 10px black;
+    background: white;
+}
+meter.p0time, meter.p1time {
+height: 3px;
+border: none;
+}
+.p0time::-webkit-meter-bar,.p1time::-webkit-meter-bar {
+border: none;
+background: none;
+}
+.p0time::-webkit-meter-optimum-value,.p1time::-webkit-meter-optimum-value {
+background: rgba(200,200,200,.5);
+border: none;
+}
+#lifepoints input.p0time,#lifepoints input.p1time {
+height: 10px;
+font-size: 8px;
+width: 5%;
+margin: 0 5%;
+}
+#lifepoints {
+    width: 100%
+}
+#lifepoints input {
+    text-align: center;
+    float: left;
+    background: transparent;
+    color: white;
+    border: none;
+    margin: 10px 5%;
+    width: 90%;
+    clear: left;
+    margin-top:0;
+}
+#lifepoints .p1lp {
+    float: right;
+}
+#lifepoints {
+    width: 1000px;
+    margin: 10px auto;
+}
+.center {
+    height: 35px;
+    border: 1px dashed white;
+}
+.center div {
+    font-size: .7em;
+    color: white;
+    float: left;
+    width: 50%;
+}
+.left,
+.right,
+.center {
+    float: left;
+    width: 33%;
+}
+.gameplayarea {
+    width: 750px;
+    height: 750px;
+    margin: 0 auto;
+}
+.fieldimage {
+    width: 800px;
+    height: 600px;
+    -webkit-transform: rotate3d(1, 0, 0, 50deg);
+    -webkit-perspective-origin: 0;
+    margin: 0 auto;
+    background-image: url(../img/field.png);
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    background-position: center;
+    -webkit-transform-style: flat;
+    -webkit-perspective: 1000px;
+    -webkit-perspective-origin-x: 500px;
+    -webkit-perspective-origin-y: 1000px;
+}
+.button.ready0 {
+    display: none;
+}
+.button.ready1 {
+    display: inline-block;
+    background: yellow
+}
+.button.ready2 {
+    display: inline-block;
+}
+#rps,
+#selectduelist {
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, .8);
+    z-index: 100;
+    position: fixed;
+    top: 0;
+    color: white;
+}
+#rps .container,
+#selectduelist .container {
+    width: 1000px;
+    margin: 0 auto;
+    height: 1000px;
+}
+.rps {
+    width: 23%;
+    border: 1px solid white;
+    height: 46%;
+    padding: 50px;
+    text-align: center;
+    float: left;
+    color: white;
+    background: black;
+    margin: 0 5%;
+}
+.login,
+,
+#creategame {
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, .85);
+    color: white;
+}
+#launcher {
+    background: transparent;
+}
+.loginscreen {
+    width: 350px;
+    margin: 300px auto;
+    box-shadow: 0 0 20px black, inset 0 0 2px #fff;
+    background: rgba(0, 0, 0, .85);
+    padding: 20px;
+    border-radius: 20px;
+}
+.login label {
+    width: 150px;
+    padding: 0px 30px 10px 0;
+    display: inline-block;
+}
+.login input {
+    width: 150px;
+    padding: 0px 30px 0px 0;
+    display: inline-block;
+    color: #444;
+}
+.login h3 {
+    text-align: center;
+    margin-bottom: 30px;
+}
+#loginbutton {
+    margin: 30px 110px;
+    margin-bottom: 10px;
+}
+#creategame .container {
+    width: 360px;
+    margin: 100px auto;
+    box-shadow: 0 0 20px black, inset 0 0 2px #fff;
+    background: rgba(0, 0, 0, .85);
+    padding: 20px;
+    border-radius: 20px;
+}
+#creategame label {
+    width: 175px;
+    padding: 0px 30px 10px 0;
+    display: inline-block;
+}
+#creategame input,
+#creategame select,
+#creategame option {
+    width: 135px;
+    padding: 0px 30px 0px 0;
+    display: inline-block;
+    color: #444;
+}
+#creategame select,
+#creategame option {
+    padding: 0;
+}
+#creategamecancel {
+    float: right;
+}
+#creategame input[type="radio"] {
+    width: 25px;
+}
+#messagerbox {
+    position: fixed;
+    width: 100%;
+    height: 0;
+    background: rgba(0, 0, 0, .5);
+    bottom: 0;
+    z-index: 9;
+    overflow: scroll;
+    border-top: 1px solid black;
+    color: #ddd;
+    padding-bottom: 3em;
+}
+#messagerbox .close {
+    position: fixed;
+    top: 0;
+    right: 20px;
+    width: 200px;
+    height: 2em;
+}
+#duelzone {
+    display: none;
+}
+#phases {
+    position: fixed;
+    bottom: 35px;
+    height: 65px;
+    width: 100%;
+    background: rgba(0, 0, 0, .5);
+    text-align: center;
+    display: none;
+}
+/*
+#phases div {
+    display: inline-block;
+    padding: 1em;
+    color: white;
+}
+*/
+
+.undefined {
+    display: none
+}
+.card.real {
+    display: block
+}
+#stats {
+    padding: 30px;
+    width: 90%;
+    border: 1px solid black;
+    margin: 0 auto;
+}
+#duelrooms {
+    height: 600px;
+    width: 1200px;
+    margin-bottom: 50px;
+    padding: 20px;
+    display: none;
+    border: 1px solid #eee;
+    box-shadow: 0 0 50px 20px black;
+}
+#chat {
+    height: 700px;
+    width: 980px;
+    box-shadow: 0 0 50px 20px black;
+}
+#roomlist {
+    float: left;
+    height: 100%;
+    width: 70%;
+    background: none;
+}
+#roomlist > tr >th {
+    height: 3em;
+}
+#roomlist td {
+    vertical-align: top;
+    height: 100%;
+    width: 50%;
+    padding: 0;
+    background: none;
+    text-align: center;
+}
+#roomlist ul {
+    height: 600px;
+    float: left;
+    width: 100%;
+    border: 1px solid black;
+    height: 100%;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    overflow-y: auto;
+}
+#roomlist ul li {
+    font-size: .8em;
+    border: 1px solid black;
+    border-width: 1px 0 0;
+    height: 42px;
+    background: -moz-linear-gradient(top, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0) 100%);
+    /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, rgba(255, 255, 255, 1)), color-stop(100%, rgba(255, 255, 255, 0)));
+    /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0) 100%);
+    /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0) 100%);
+    /* Opera 11.10+ */
+    background: -ms-linear-gradient(top, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0) 100%);
+    /* IE10+ */
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0) 100%);
+    /* W3C */
+    filter: progid: DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#00ffffff', GradientType=0);
+    /* IE6-9 */
+}
+#chatbody {
+    float: left;
+    height: 80%;
+    width: 100%;
+}
+.usercount {
+    float: right;
+    margin-top: -25px;
+    color: #fff;
+    text-shadow: 0 0 3px #000;
+    font-size: .8em;
+}
+#chatbox {
+    float: left;
+    width: 80%;
+    height: 100%;
+    overflow-y: hidden;
+}
+#login {
+    box-shadow: 0 0 50px 10px black;
+}
+#chat ul {} #users {
+    background: white;
+    height: 100%;
+    float: left;
+    list-style: none;
+    overflow-y: scroll;
+    margin: 0;
+    padding: 0;
+    float: right;
+    width: 20%;
+    background: rgba(255, 255, 255, .3);
+    padding: 5px;
+    font-weight: bold;
+    font-size: 75%;
+    padding-left: 10px;
+    border: 2px solid black;
+    border-left: none;
+}
+#chatbox ul {
+    background: rgba(255, 255, 255, .2);
+    height: 100%;
+    float: left;
+    list-style: none;
+    overflow: scroll;
+    margin: 0;
+    padding: 0;
+    border: 2px solid black;
+    width: 100%;
+    overflow-x: hidden;
+    overflow-y
+}
+#chatbox ul li {
+    border-bottom: 1px solid #ccc;
+    padding: 2px 5px;
+    margin-bottom: 2px;
+    font-size: 12px;
+}
+#chat input {
+    width: 100%;
+    height: 3em;
+    padding: .5em;
+    width: 100%;
+    border: 1px ridge rgba(50, 50, 50, .3)
+}
+#chatbody em {
+    color: #999;
+}
+#chatform {
+    float: left;
+    margin: 0;
+    width: 100%;
+    padding: 0;
+}
+.dev-1 {
+    color: blue;
+    font-weight: normal
+}
+.dev-2 {
+    color: red;
+    font-weight: normal
+}
+.dev-3 {
+    color: red;
+    font-weight: normal
+}
+.dev-4 {
+    color: blue;
+    font-weight: normal
+}
+.dev-99 {
+    color: green;
+    font-weight: normal
+}
+.dev-100 {
+    color: silver;
+    font-weight: normal
+}
+#chatrooms {
+    width: 100%;
+    list-style: none;
+    height: 37px;
+    margin: 0;
+    overflow: auto;
+    float: left;
+    color: white;
+    padding: 0;
+    margin: 0;
+}
+#chatrooms li {
+    float: left;
+    border: 1px solid white;
+    float: left;
+    overflow: auto;
+    padding: 4px;
+}
+#chatbody {
+    width: ;
+}
+.servermessage {
+    background: rgba(255, 0, 0, .65);
+    color: white;
+    font-weight: bold;
+    box-shadow: 0 0 21px white, 0 0 59px 21px rgba(255, 0, 0, .5);
+    border: none !important;
+}
+.roomstarted {
+    display: none;
+}
+#room-controls {
+    float: right;
+    width: 28%;
+    border: 1px solid white;
+    box-shadow: 0 0 50px black;
+    border-radius: 15px;
+    background: rgba(255, 255, 255, .5);
+    height: 250px;
+    height: 90%;
+}
+/* =========================================
+=================================
+   Media Queries
+   ========================================================================== */
+
+@media only screen and (min-width: 35em) {}@media print,
+(-o-min-device-pixel-ratio: 5/4),
+(-webkit-min-device-pixel-ratio: 1.25),
+(min-resolution: 120dpi) {}
+/* ==========================================================================
+   Helper classes
+   ========================================================================== */
+
+.ir {
+    background-color:transparent;
+    border:0;
+    overflow:hidden;
+    *text-indent:-9999px;
+}
+.ir:before {
+    content: "";
+    display: block;
+    width: 0;
+    height: 150%;
+}
+.hidden {
+    display: none !important;
+    visibility: hidden;
+}
+.visuallyhidden {
+    border: 0;
+    clip: rect(0 0 0 0);
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    width: 1px;
+}
+.visuallyhidden.focusable:active,
+.visuallyhidden.focusable:focus {
+    clip: auto;
+    height: auto;
+    margin: 0;
+    overflow: visible;
+    position: static;
+    width: auto;
+}
+.invisible {
+    visibility: hidden;
+}
+.clearfix:before,
+.clearfix:after {
+    content: " ";
+    display: table;
+}
+.clearfix:after {
+    clear: both;
+}
+.clearfix {
+    *zoom: 1;
+}
+/* ==========================================================================
+   Print styles
+   ========================================================================== */
+
+@media print {
+    * {
+        background: transparent !important;
+        color: #000 !important;
+        /* Black prints faster: h5bp.com/s */
+        box-shadow: none !important;
+        text-shadow: none !important;
+    }
+    a,
+    a:visited {
+        text-decoration: underline;
+    }
+    a[href]:after {
+        content: " (" attr(href)")";
+    }
+    abbr[title]:after {
+        content: " (" attr(title)")";
+    }
+    /*
+     * Don't show links for images, or javascript/internal links
+     */
+    .ir a:after,
+    a[href^="javascript:"]:after,
+    a[href^="#"]:after {
+        content: "";
+    }
+    pre,
+    blockquote {
+        border: 1px solid #999;
+        page-break-inside: avoid;
+    }
+    thead {
+        display: table-header-group;
+        /* h5bp.com/t */
+    }
+    tr,
+    img {
+        page-break-inside: avoid;
+    }
+    img {
+        max-width: 100% !important;
+    }
+    @page {
+        margin: 0.5cm;
+    }
+    p,
+    h2,
+    h3 {
+        orphans: 3;
+        widows: 3;
+    }
+    h2,
+    h3 {
+        page-break-after: avoid;
+    }
+}
