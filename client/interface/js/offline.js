@@ -3,9 +3,9 @@
 /* exported  connectToCheckmateServer, applySettings, saveSettings, isChecked, openScreen*/
 //development, stage, production
 var developmentstage = {
-    "production": "http://salvationdevelopment.com:8080/launcher.html",
-    "stage": "http://salvationdevelopment.com:8080/launcher.html",
-    "development": "http://salvationdevelopment.com:8080/launcher.html",
+    "production": "http://ygopro.us/launcher.html",
+    "stage": "http://ygopro.us/launcher.html",
+    "development": "http://ygopro.us/launcher.html",
 };
 var mode = 'production';
 
@@ -27,15 +27,15 @@ function connectToCheckmateServer() {
         return;
     }
     localStorage.chknickname = chkusername;
-    localStorage.lastip = '173.224.211.158\r\n';
-    localStorage.lastport = '21001\r\n';
+    localStorage.lastip = '173.224.211.158';
+    localStorage.lastport = '21001';
     ygopro('j');
 }
 
 function applySettings() {
     $('[data-localhost]').each(function () {
         var property = $(this).attr('data-localhost');
-        var value = ('1\r\n' === localStorage[property]) ? true : false;
+        var value = ('1' === localStorage[property]) ? true : false;
         $(this).prop('checked', value);
     });
 }
@@ -43,7 +43,7 @@ function applySettings() {
 function saveSettings() {
     $('[data-localhost]').each(function () {
         var property = $(this).attr('data-localhost');
-        localStorage[property] = Number($(this).prop('checked')) + '\r\n';
+        localStorage[property] = Number($(this).prop('checked')) ;
     });
 }
 
@@ -54,7 +54,8 @@ function isChecked(id) {
 
 $('document').ready(function () {
     $('#servermessages').text('You are currently offline, please restart when you have an internet connection');
-    $('main').load('http://salvationdevelopment.com:8080/launcher.html');
+    console.log('loading',developmentstage[mode]);
+    $('main').load(developmentstage[mode]);
 
 });
 
