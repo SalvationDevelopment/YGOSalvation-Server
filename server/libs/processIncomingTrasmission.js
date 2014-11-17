@@ -18,6 +18,7 @@ function processIncomingTrasmission(data, socket, input, callback) {
 
     //console.log(socket.hostString);
     if (socket.active_ygocore) {
+        console.log('-->');
         socket.active_ygocore.write(data);
         // eventing shifted server wont overload due to constant dueling.
     }
@@ -193,13 +194,10 @@ function pickCoreConfig(socket) {
 function connectToCore(port, data, socket, callback) {
     socket.active_ygocore = net.connect(port, '127.0.0.1', function () {
         socket.active_ygocore.write(data);
-        servercallback('update', gamelist);
         socket.active = false;
         socket.active_ygocore.on('data', function (core_data) {
             socket.write(core_data);
-            if (callback) {
-                callback(true);
-            }
+            console.log('-->');
         });
         socket.active_ygocore.on('error', function (error) {
             servercallback('kill', gamelist);
@@ -227,12 +225,12 @@ function portfinder(min, max, callback) {
     }
 }
 
-function existanceCheck(gameInstance) {
+function existanceCheck(gameInstance,port) {
     if (gamelist[gameInstance]) {
         return;
     } else {
         gamelist[gameInstance] = {
-            port: 0,
+            port: port,
             players: [null, null, null, null],
             locked: [false, false, false, false],
             started: false,

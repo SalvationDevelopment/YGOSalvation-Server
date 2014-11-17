@@ -15,6 +15,8 @@ html {
     font-size: 1em;
     line-height: 1.4;
 }
+
+body {border:none;}
 /*
  * Remove text-shadow in selection highlight: h5bp.com/i
  * These selection rule sets have to be separate.
@@ -97,7 +99,7 @@ html {
 }
 body {
     background-color: rgba(255, 255, 255, .75);
-    border: 1px solid #aaa;
+
 }
 #content {
     padding: 10px;
