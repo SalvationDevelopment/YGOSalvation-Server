@@ -20,6 +20,10 @@
 </head>
 
 <body>
+    <script>
+        var gui = require('nw.gui');
+        var win = gui.Window.get();
+    </script>
     <div id="control">
         <div style="background:red;" onclick="gui.App.quit();"></div>
         <div onclick="win.minimize();"></div>
