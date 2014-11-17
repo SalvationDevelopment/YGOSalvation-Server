@@ -321,15 +321,36 @@ section#settings {
 iframe .home header.header.clear {
     height: 100%;
 }
+#control div:hover {
+    opacity:.5;
+}
 #control div {
     height: 16px;
     width: 40px;
-    margin: 5px;
+    margin-top:0;
+    margin-right:0;
     background: transparent;
     float: right;
     cursor: pointer;
     border: 2px solid white;
     text-align: center;
+    opacity:.3;
+}
+#control div:first-child{
+    border-bottom-right-radius: 10px;
+    margin-right:5px;
+}
+#control div:first-child:hover{
+    background:red;
+}
+#control div:nth-child(2){
+    border-bottom-left-radius: 10px;
+    border-right:none;
+    width:30px;
+    
+}
+#control div:nth-child(2):hover{
+    background:white;
 }
 #control {
     position: fixed;
@@ -337,7 +358,7 @@ iframe .home header.header.clear {
     right: 0;
     height: 40px;
     width: 100%;
-    opacity:.5;
+    
     font-size:.55em;
     color:white;
     
