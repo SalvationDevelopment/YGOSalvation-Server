@@ -120,7 +120,8 @@ body {
     padding: 5px;
     font-size: 8px;
     overflow: hidden;
-    background: -webkit-linear-gradient(white, #ccc
+    background: -webkit-linear-gradient(#222, #000);
+    border-top: 1px solid #555;
 }
 #staticcontrols>div {
     background: white;
@@ -130,7 +131,7 @@ body {
     height: 30px;
     float: left;
     width: 310px;
-    color: black;
+    color: white;
     overflow: auto;
     font-size: 10px;
     line-height: 1.5em;
@@ -321,18 +322,25 @@ iframe .home header.header.clear {
     height: 100%;
 }
 #control div {
-    height: 8px;
-    width: 20px;
+    height: 16px;
+    width: 40px;
     margin: 5px;
-    background: white;
+    background: transparent;
     float: right;
+    cursor: pointer;
+    border: 2px solid white;
+    text-align: center;
 }
 #control {
     position: fixed;
     top: 0;
     right: 0;
     height: 40px;
-    width: 120px;
+    width: 100%;
+    opacity:.5;
+    font-size:.55em;
+    color:white;
+    
 }
 /* ==========================================================================
    Helper classes
