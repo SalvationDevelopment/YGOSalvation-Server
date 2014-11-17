@@ -36,29 +36,29 @@ try {
 }
 for (var i = 0; settings.length > i; i++) {
     if (!localStorageExist || !localStorage[settings[i]]) {
-        localStorage.use_d3d = '0\r\n';
-        localStorage.antialias = '0\r\n';
-        localStorage.errorlog = '0\r\n';
-        localStorage.nickname = 'Player\r\n';
-        localStorage.roompass = '\r\n';
-        localStorage.lastdeck = '\r\n';
+        localStorage.use_d3d = '0';
+        localStorage.antialias = '0';
+        localStorage.errorlog = '0';
+        localStorage.nickname = 'Player';
+        localStorage.roompass = '';
+        localStorage.lastdeck = '';
         localStorage.textfont = 'simhei.ttf';
-        localStorage.textfontsize = '12\r\n';
-        localStorage.numfont = 'arialbd.ttf\r\n';
-        localStorage.serverport = '8911\r\n';
-        localStorage.lastip = '127.0.0.1\r\n';
-        localStorage.lastport = '8911\r\n';
-        localStorage.fullscreen = '0\r\n';
-        localStorage.enable_sound = '1\r\n';
-        localStorage.sound_volume = '100\r\n';
-        localStorage.enable_music = '0\r\n';
-        localStorage.music_volume = '100\r\n';
-        localStorage.skin_index = '-1\r\n';
-        localStorage.auto_card_placing = '1\r\n';
-        localStorage.random_card_placing = '0\r\n';
-        localStorage.auto_chain_order = '1\r\n';
-        localStorage.no_delay_for_chain = '0\r\n';
-        localStorage.enable_sleeve_loading = '0\r\n';
+        localStorage.textfontsize = '12';
+        localStorage.numfont = 'arialbd.ttf';
+        localStorage.serverport = '8911';
+        localStorage.lastip = '127.0.0.1';
+        localStorage.lastport = '8911';
+        localStorage.fullscreen = '0';
+        localStorage.enable_sound = '1';
+        localStorage.sound_volume = '100';
+        localStorage.enable_music = '0';
+        localStorage.music_volume = '100';
+        localStorage.skin_index = '-1';
+        localStorage.auto_card_placing = '1';
+        localStorage.random_card_placing = '0';
+        localStorage.auto_chain_order = '1';
+        localStorage.no_delay_for_chain = '0';
+        localStorage.enable_sleeve_loading = '0';
     }
 }
 console.log('Starting Offline Server');
