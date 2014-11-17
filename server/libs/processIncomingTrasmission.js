@@ -98,6 +98,19 @@ function startCore(port, socket, data, callback) {
 }
 
 function handleCoreMessage(core_message_raw, port, socket, data) {
+    function existanceCheck(gameInstance, port) {
+        if (gamelist[gameInstance]) {
+            return;
+        } else {
+            gamelist[gameInstance] = {
+                port: port,
+                players: [null, null, null, null],
+                locked: [false, false, false, false],
+                started: false,
+                spectators: 0
+            };
+        }
+    }
     var core_message_txt = core_message_raw.toString();
     console.log(core_message_txt);
     if (core_message_txt.indexOf("::::") < 0) {
@@ -222,19 +235,5 @@ function portfinder(min, max, callback) {
             callback(null, i);
             return;
         }
-    }
-}
-
-function existanceCheck(gameInstance,port) {
-    if (gamelist[gameInstance]) {
-        return;
-    } else {
-        gamelist[gameInstance] = {
-            port: port,
-            players: [null, null, null, null],
-            locked: [false, false, false, false],
-            started: false,
-            spectators: 0
-        };
     }
 }
