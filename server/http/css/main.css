@@ -316,13 +316,7 @@ body {
     font-size: 15px;
     font-weight: 400;
 }
-html,
-body,
-header,
-.game,
-.field {
-    height: 100% !important;
-}
+
 #logo {
     margin-top: -35px;
     margin-right: -20px;
@@ -457,7 +451,11 @@ article {
     width: 100%;
     z-index: 10;
     border-top: 1px solid white;
-    font-size: .8em;
+    font-size: .7em;
+}
+header {
+    height: 100vh;
+    overflow: hidden;
 }
 .iconic {
     background: green;
