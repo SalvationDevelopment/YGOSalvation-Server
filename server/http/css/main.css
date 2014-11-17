@@ -1187,8 +1187,11 @@ meter.p1time {
     background: white;
     float: right;
 }
-div#controls {
+
+#controls {
 position: absolute;
 top: 0;
 right: 0;
+    height:40px;
+    width:120px;
 }
