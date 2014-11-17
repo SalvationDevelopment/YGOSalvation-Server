@@ -138,6 +138,7 @@ function handleCoreMessage(core_message_raw, port, socket, data) {
                 return;
             }
             gamelist[core_message[1]].players[join_slot] = core_message[3];
+            gamelist[core_message[1]].port = port;
             servercallback('update', gamelist);
         }
         break;
