@@ -120,6 +120,11 @@ body {
     padding: 5px;
     font-size: 8px;
     overflow: hidden;
+    background: -webkit-linear-gradient(white, #ccc
+}
+#staticcontrols>div {
+    background: white;
+    font-weight: bold;
 }
 #servermessages {
     height: 30px;
