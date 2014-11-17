@@ -54,7 +54,6 @@ function isChecked(id) {
 
 $('document').ready(function () {
     $('#servermessages').text('You are currently offline, please restart when you have an internet connection');
-    console.log('loading',developmentstage[mode]);
     $('main').load(developmentstage[mode]);
 
 });

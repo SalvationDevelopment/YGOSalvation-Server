@@ -449,7 +449,6 @@ article {
     bottom: 0;
     width: 100%;
     z-index: 10;
-    border-top: 1px solid white;
     font-size: .7em;
 }
 header {
