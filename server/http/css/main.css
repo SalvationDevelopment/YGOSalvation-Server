@@ -1058,6 +1058,20 @@ meter.p1time {
     height: 250px;
     height: 90%;
 }
+#control div {
+    height: 5px;
+    width: 15px;
+    margin: 4px;
+    background: white;
+    float: right;
+}
+#control {
+    position: fixed;
+    top: 0;
+    right: 0;
+    height: 40px;
+    width: 120px;
+}
 /* =========================================
 =================================
    Media Queries
@@ -1179,19 +1193,4 @@ meter.p1time {
     h3 {
         page-break-after: avoid;
     }
-}
-#controls div {
-    height: 5px;
-    width: 15px;
-    margin: 4px;
-    background: white;
-    float: right;
-}
-
-#controls {
-position: absolute;
-top: 0;
-right: 0;
-    height:40px;
-    width:120px;
 }
