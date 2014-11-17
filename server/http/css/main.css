@@ -316,7 +316,6 @@ body {
     font-size: 15px;
     font-weight: 400;
 }
-
 #logo {
     margin-top: -35px;
     margin-right: -20px;
@@ -613,32 +612,36 @@ meter {
 meter::-webkit-meter-optimum-value {
     background: none;
     background-color: purple;
-/*    border-right: 1px solid hotpink;*/
-/*    box-shadow: 0 0 12px rgba(255, 0, 255, .3);*/
+    /*    border-right: 1px solid hotpink;*/
+    /*    box-shadow: 0 0 12px rgba(255, 0, 255, .3);*/
 }
 meter::-webkit-meter-bar {
     background: rgba(0, 0, 0, .8);
-/*    border-top: 1px solid rgba(100, 100, 100, 0.3);*/
+    /*    border-top: 1px solid rgba(100, 100, 100, 0.3);*/
     box-shadow: inset 0px 1px 10px black;
     background: white;
 }
-meter.p0time, meter.p1time {
-height: 3px;
-border: none;
+meter.p0time,
+meter.p1time {
+    height: 3px;
+    border: none;
 }
-.p0time::-webkit-meter-bar,.p1time::-webkit-meter-bar {
-border: none;
-background: none;
+.p0time::-webkit-meter-bar,
+.p1time::-webkit-meter-bar {
+    border: none;
+    background: none;
 }
-.p0time::-webkit-meter-optimum-value,.p1time::-webkit-meter-optimum-value {
-background: rgba(200,200,200,.5);
-border: none;
+.p0time::-webkit-meter-optimum-value,
+.p1time::-webkit-meter-optimum-value {
+    background: rgba(200, 200, 200, .5);
+    border: none;
 }
-#lifepoints input.p0time,#lifepoints input.p1time {
-height: 10px;
-font-size: 8px;
-width: 5%;
-margin: 0 5%;
+#lifepoints input.p0time,
+#lifepoints input.p1time {
+    height: 10px;
+    font-size: 8px;
+    width: 5%;
+    margin: 0 5%;
 }
 #lifepoints {
     width: 100%
@@ -652,7 +655,7 @@ margin: 0 5%;
     margin: 10px 5%;
     width: 90%;
     clear: left;
-    margin-top:0;
+    margin-top: 0;
 }
 #lifepoints .p1lp {
     float: right;
@@ -1176,4 +1179,16 @@ margin: 0 5%;
     h3 {
         page-break-after: avoid;
     }
+}
+#controls div {
+    height: 5px;
+    width: 15px;
+    margin: 4px;
+    background: white;
+    float: right;
+}
+div#controls {
+position: absolute;
+top: 0;
+right: 0;
 }

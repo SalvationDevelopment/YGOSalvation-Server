@@ -167,9 +167,9 @@ function setHostSettings() {
         $('#creategamelp').val() + duelRequest.stnds +
         duelRequest.pass;
 
-    localStorage.lastip = '192.99.11.19\r\n';
-    localStorage.serverport = '8911\r\n';
-    localStorage.lastport = '8911\r\n';
+    localStorage.lastip = '192.99.11.19';
+    localStorage.serverport = '8911';
+    localStorage.lastport = '8911';
 
     if (!secure(duelRequest.prio, duelRequest.checkd, duelRequest.shuf)) {
         return;
