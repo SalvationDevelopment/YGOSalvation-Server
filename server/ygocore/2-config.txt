@@ -1,9 +1,9 @@
 clientversion = 0
-scriptfolder = ../http/ygopro/script
-cardcdb = ../http/ygopro/cards.cdb 	
-banlist = ../http/ygopro/lflist.conf
-log = true
-consolelog = true
+scriptfolder = C:\Users\Owner\Documents\GitHub\YGOPro-Support-System\client\ygopro/script
+cardcdb = C:\Users\Owner\Documents\GitHub\YGOPro-Support-System\client\ygopro/cards.cdb 	
+banlist = C:\Users\Owner\Documents\GitHub\YGOPro-Support-System\client\ygopro/lflist.conf
+log = false
+consolelog = false
 handshuffle = false
 autoendturn = true
 splashscreen = false
