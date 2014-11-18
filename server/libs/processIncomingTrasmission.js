@@ -32,7 +32,7 @@ function processIncomingTrasmission(data, socket, input, callback) {
             console.log(socket.username + ' connecting to existing core');
             gamelist[socket.hostString].players.push(socket.username);
         } else if (!gamelist[socket.hostString] && !socket.active_ygocore) {
-            //console.log(socket.username + ' connecting to new core');
+            console.log(socket.username + ' connecting to new core');
             portfinder(7000, 9001, function (error, port) {
                 startCore(port, socket, data);
             });
@@ -206,12 +206,15 @@ function pickCoreConfig(socket) {
 }
 
 function connectToCore(port, data, socket, callback) {
+    console.log('attempting link up');
     socket.active_ygocore = net.connect(port, '127.0.0.1', function () {
+        console.log('linkup established');
         socket.active_ygocore.write(data);
+        console.log('-->');
         socket.active = false;
         socket.active_ygocore.on('data', function (core_data) {
             socket.write(core_data);
-            console.log('-->');
+            console.log('<--');
         });
         socket.active_ygocore.on('error', function (error) {
             servercallback('kill', gamelist);
