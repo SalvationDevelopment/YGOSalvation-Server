@@ -3,7 +3,7 @@
 /* global ygopro, $, isChecked, alert, Primus, console, process, applySettings, prompt */
 /* exported joinGamelist, leaveGamelist, hostGame, connectgamelist, enterGame, setHostSettings, gui*/
 applySettings();
-var siteLocation = 'http://salvationdevelopment.com:8080/';
+var siteLocation = 'http://ygopro.us/';
 
 
 var http = require('http');
