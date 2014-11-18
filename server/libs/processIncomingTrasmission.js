@@ -33,7 +33,7 @@ function processIncomingTrasmission(data, socket, input, callback) {
             gamelist[socket.hostString].players.push(socket.username);
         } else if (!gamelist[socket.hostString] && !socket.active_ygocore) {
             console.log(socket.username + ' connecting to new core');
-            portfinder(5000, 9001, function (error, port) {
+            portfinder(23500, 27000, function (error, port) {
                 startCore(port, socket, data);
             });
         }
