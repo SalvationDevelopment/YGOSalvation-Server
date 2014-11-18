@@ -26,7 +26,9 @@ http.get(options, function (res) {
         }catch(error){
             screenMessage.text('Failed to get update manifest.');
         }
+        console.log(manifest,'doing manifest')
         updateCheckFile(manifest, true);
+        
     });
 });
 
