@@ -338,7 +338,6 @@ iframe .home header.header.clear {
     margin-right:0;
     float: right;
     cursor: pointer;
-    border: 2px solid white;
     text-align: center;
     -webkit-app-region: no-drag;
 border-top:none;
@@ -348,8 +347,7 @@ border-top:none;
     border-bottom-right-radius: 5px;
     margin-right:3px;
     border-left:none;
-    box-shadow: inset 0px 0px 5px red;
-    background: -webkit-linear-gradient(#fff, red);
+    background: -webkit-linear-gradient(#f7f, #aaa);
 
 }
 #control div:first-child:hover{
@@ -358,10 +356,9 @@ border-top:none;
 }
 #control div:nth-child(2){
     border-bottom-left-radius: 5px;
-    width:30px;
+    width:25px;
     border-right:none;
-    box-shadow: inset 0px 0px 5px white;
-    background: -webkit-linear-gradient(#fff, #aaa);
+    background: -webkit-linear-gradient(#aaa, #777);
 
     
 }
@@ -378,6 +375,7 @@ border-top:none;
     font-size:.55em;
     color:white;
 }
+
     
 }
 /* ==========================================================================

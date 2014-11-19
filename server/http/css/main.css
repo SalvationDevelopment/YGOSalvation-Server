@@ -1058,6 +1058,11 @@ meter.p1time {
     height: 250px;
     height: 90%;
 }
+#gamefilter {
+    background:white;
+    width:25vh;
+    height: 60vh;
+}
 
 /* =========================================
 =================================
