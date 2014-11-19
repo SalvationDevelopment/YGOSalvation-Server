@@ -1063,6 +1063,9 @@ meter.p1time {
     width:25vh;
     height: 60vh;
 }
+.in-iframe .featurelist {
+  display:none;
+}
 
 /* =========================================
 =================================
