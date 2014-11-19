@@ -309,7 +309,7 @@ function enterGame(string) {
 //});
 
 function renderList(JSONdata) {
-    $('#gamelist').html('');
+    $('#gamelist #thelist').html('');
     for (var rooms in JSONdata) {
         if (JSONdata.hasOwnProperty(rooms)) {
             var translated = parseDuelOptions(rooms);

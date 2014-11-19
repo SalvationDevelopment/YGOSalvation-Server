@@ -36,7 +36,7 @@ Start various sub-servers.
 var ygoserver; //listen(8911);
 var serverGITHUB = gith.create(4901);
 var serverWS = http.createServer().listen(5000);
-var serverHTTP = new static.Server('./http',{ gzip: true });
+var serverHTTP = new static.Server('./http');
 
 var serverWSProxy = new WebSocketServer({
     port: 8913
