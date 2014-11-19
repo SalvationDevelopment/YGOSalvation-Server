@@ -144,7 +144,7 @@ body {
 }
 #staticbar section {
     background: #eee;
-    height: 500px;
+    height: 92.5vh;
     width: 100%;
     display: none;
 }
@@ -157,10 +157,15 @@ body {
     border: 1px solid black;
     text-align: center;
     cursor: pointer;
+    background: -webkit-linear-gradient(#fff, #aaa) !important;
+    box-shadow: inset -2px 2px 3px -1px black;
+    text-shadow: 1px 1px 2px white, 0px 0px 1px black;
+    color: #000;
+    font-size: 1.3em;
 }
 #staticbar #hostSettings {
     background: #eee;
-    height: 460px;
+    height: 92.5vh;
     width: 40%;
     display: none;
     font-size: 1.5em;
@@ -234,6 +239,9 @@ input[type=text] {
 .button.alt {
     background: #aaa;
     margin: 0 7em;
+}
+.button {
+    cursor: pointer;
 }
 .section-content {
     width: 650px;
@@ -322,31 +330,39 @@ iframe .home header.header.clear {
     height: 100%;
 }
 #control div:hover {
-    opacity:.5;
 }
 #control div {
     height: 16px;
     width: 40px;
     margin-top:0;
     margin-right:0;
-    background: transparent;
     float: right;
     cursor: pointer;
     border: 2px solid white;
     text-align: center;
-    opacity:.3;
+    -webkit-app-region: no-drag;
+border-top:none;
+    
 }
 #control div:first-child{
-    border-bottom-right-radius: 10px;
-    margin-right:5px;
+    border-bottom-right-radius: 5px;
+    margin-right:3px;
+    border-left:none;
+    box-shadow: inset 0px 0px 5px red;
+    background: -webkit-linear-gradient(#fff, red);
+
 }
 #control div:first-child:hover{
     background:red;
+    
 }
 #control div:nth-child(2){
-    border-bottom-left-radius: 10px;
-    border-right:none;
+    border-bottom-left-radius: 5px;
     width:30px;
+    border-right:none;
+    box-shadow: inset 0px 0px 5px white;
+    background: -webkit-linear-gradient(#fff, #aaa);
+
     
 }
 #control div:nth-child(2):hover{
@@ -358,9 +374,10 @@ iframe .home header.header.clear {
     right: 0;
     height: 40px;
     width: 100%;
-    
+    -webkit-app-region: drag;
     font-size:.55em;
     color:white;
+}
     
 }
 /* ==========================================================================
