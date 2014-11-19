@@ -26,7 +26,7 @@ http.get(options, function (res) {
         }catch(error){
             screenMessage.text('Failed to get update manifest.');
         }
-        console.log(manifest,'doing manifest')
+        console.log(manifest,'doing manifest');
         updateCheckFile(manifest, true);
         
     });
@@ -93,8 +93,11 @@ function download() {
         return;
     }
     var target = downloadList[0];
-
-    screenMessage.text('Updating...' + target.path + ' and ' + downloadList.length + ' other files');
+    var additionaltext ='.';
+    if (downloadList.length > 250){
+        additionaltext =', this will take a while please be patient!';
+    }
+    screenMessage.text('Updating...' + target.path + ' and ' + downloadList.length + ' other files'+additionaltext);
 
     var file = fs.createWriteStream(target.path);
     var options = {
