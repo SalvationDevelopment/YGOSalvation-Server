@@ -333,38 +333,35 @@ iframe .home header.header.clear {
 }
 #control div {
     height: 16px;
-    width: 40px;
+    width: 25px;
     margin-top:0;
     margin-right:0;
     float: right;
     cursor: pointer;
     text-align: center;
     -webkit-app-region: no-drag;
-border-top:none;
+    border-left:1px solid black;
+    background: -webkit-linear-gradient(#fff, #aaa);
+    box-shadow:0px 0px 2px white;
     
 }
 #control div:first-child{
     border-bottom-right-radius: 5px;
     margin-right:3px;
-    border-left:none;
-    background: -webkit-linear-gradient(#f7f, #aaa);
+    width: 50px;
 
 }
 #control div:first-child:hover{
     background:red;
-    
 }
-#control div:nth-child(2){
-    border-bottom-left-radius: 5px;
-    width:25px;
-    border-right:none;
-    background: -webkit-linear-gradient(#aaa, #777);
+#control div:hover{
+    background:steelblue;
+}
+#control div:nth-child(3){
+    border-bottom-left-radius: 5px;   
+    border:none; 
+}
 
-    
-}
-#control div:nth-child(2):hover{
-    background:white;
-}
 #control {
     position: fixed;
     top: 0;
