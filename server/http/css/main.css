@@ -344,7 +344,7 @@ h2 {
     font-family: 'Poiret One', cursive;
     text-shadow: 0 0 1px #777;
     font-weight: 200;
-    color:#aaa;
+    color: #aaa;
 }
 header,
 .game {
@@ -1059,18 +1059,42 @@ meter.p1time {
     height: 90%;
 }
 #gamefilter {
-    background:white;
-    width:25vh;
-    height: 60vh;
+    background: white;
+    width: 30vw;
+    font-size: 12px;
+    float: right;
+    padding: 5px;
+    height: 92vh;
+    padding-top: 28px;
+}
+#gamefilter label {
+    display: block;
+    border: 1px solid black;
+    width: 100%;
+    line-height: 1.5em;
+    padding: 0;
+    margin-top: 1vh;
+}
+#gamefilter label select,#gamefilter label input {
+    float:right;
+    display: block;
+}
+.incasing {
+padding: 5px;
+border: 1px solid silver;
+}
+#gamefilter button {
+    margin-top:20px;
 }
 .in-iframe .webonly {
-  display:none;
+    display: none;
 }
-
-.in-iframe #versioninfo {position: absolute;
-top: 5px;
-left: 5px;
-display:block}
+.in-iframe #versioninfo {
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    display: block
+}
 /* =========================================
 =================================
    Media Queries
