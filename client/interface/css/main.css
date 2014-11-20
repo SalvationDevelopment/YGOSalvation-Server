@@ -371,6 +371,7 @@ iframe .home header.header.clear {
     -webkit-app-region: drag;
     font-size:.55em;
     color:white;
+    z-index: 99999
 }
 
     
