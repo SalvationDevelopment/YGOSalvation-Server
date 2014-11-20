@@ -2,6 +2,7 @@
 
 /* global localStorage, require */
 //development, stage, production
+require('nw.gui').Window.get().showDevTools();
 var os = require('os');
 var http = require('http');
 var url = require('url');
@@ -9,12 +10,11 @@ var child_process = require('child_process');
 var fs = require('fs');
 var operating_system = os.platform();
 var platform = {
-    win32 : 'ygopro.exe',
-    win64 : 'ygopro.exe'
+    win32 : 'application_ygopro.exe',
+    win64 : 'application_ygopro.exe'
 };
-console.log(operating_system);
 var executable = platform[operating_system] || 'ygopro';
-require('nw.gui').Window.get().showDevTools();
+console.log(operating_system, executable);
 
 var settings = ['use_d3d', 'antialias', 'errorlog', 'nickname', 'roompass', 'lastdeck', 'textfont', 'numfont', 'fullscreen', 'enable_sound',
 'sound_volume', 'enable_music', 'music_volume', 'skin_index', 'auto_card_placing', 'random_card_placing', 'auto_chain_order', 'no_delay_for_chain',
