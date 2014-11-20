@@ -26,9 +26,9 @@ params.language                     = "en";
 params.styleURL                     = "css/black.css";
 
 /* Nick to be used. A % character will be replaced by a random number */
-params.nick                         = "lightIRC_%";
+params.nick                         = "Duelist_%";
 /* Channel to be joined after connecting. Multiple channels can be added like this: #lightIRC,#test,#help */
-params.autojoin                     = "#test";
+params.autojoin                     = "#lobby";
 /* Commands to be executed after connecting. E.g.: /mode %nick% +x */
 params.perform                      = "";
 
