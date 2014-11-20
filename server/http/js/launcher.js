@@ -298,7 +298,7 @@ function parseDuelOptions(duelOptions) {
 
 }
 
-//{"200OOO8000,0,5,1,U,AvE":{"port":8000,"players":[],"started":false}}
+//{"200OOO8000,0,5,1,U,PaS5w":{"port":8000,"players":[],"started":false}}
 
 function enterGame(string) {
     localStorage.roompass = string;
@@ -309,7 +309,7 @@ function enterGame(string) {
 //});
 
 function renderList(JSONdata) {
-    $('#gamelist #thelist').html('');
+    $('#gamelist').html('');
     for (var rooms in JSONdata) {
         if (JSONdata.hasOwnProperty(rooms)) {
             var translated = parseDuelOptions(rooms);
