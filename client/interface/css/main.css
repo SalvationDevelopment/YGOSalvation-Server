@@ -15,8 +15,9 @@ html {
     font-size: 1em;
     line-height: 1.4;
 }
-
-body {border:none;}
+body {
+    border: none;
+}
 /*
  * Remove text-shadow in selection highlight: h5bp.com/i
  * These selection rule sets have to be separate.
@@ -99,7 +100,6 @@ html {
 }
 body {
     background-color: rgba(255, 255, 255, .75);
-
 }
 #content {
     padding: 10px;
@@ -329,39 +329,33 @@ section#settings {
 iframe .home header.header.clear {
     height: 100%;
 }
-#control div:hover {
-}
-#control div {
+#control div:hover {} #control div {
     height: 16px;
     width: 25px;
-    margin-top:0;
-    margin-right:0;
+    margin-top: 0;
+    margin-right: 0;
     float: right;
     cursor: pointer;
     text-align: center;
     -webkit-app-region: no-drag;
-    border:1px solid black;
+    border: 1px solid black;
     background: -webkit-linear-gradient(#fff, #aaa);
-    box-shadow:0px 0px 2px white;
-    
-    
+    box-shadow: 0px 0px 2px white;
 }
-#control div:first-child{
+#control div:first-child {
     border-bottom-right-radius: 5px;
-    margin-right:3px;
+    margin-right: 3px;
     width: 50px;
-
 }
-#control div:first-child:hover{
-    background:red;
+#control div:first-child:hover {
+    background: red;
 }
-#control div:hover{
-    background:steelblue;
+#control div:hover {
+    background: steelblue;
 }
-#control div:nth-child(3){
-    border-bottom-left-radius: 5px;   
+#control div:nth-child(3) {
+    border-bottom-left-radius: 5px;
 }
-
 #control {
     position: fixed;
     top: 0;
@@ -369,8 +363,8 @@ iframe .home header.header.clear {
     height: 40px;
     width: 100%;
     -webkit-app-region: drag;
-    font-size:.55em;
-    color:white;
+    font-size: .55em;
+    color: white;
     z-index: 99999
 }
 .roomstarted {
@@ -386,6 +380,24 @@ iframe .home header.header.clear {
     height: 250px;
     height: 90%;
 }
+#gamelist {
+    overflow-y: scroll;
+    width: 69vw;
+    float: left;
+    height: 92vh;
+}
+.game {
+    width: 50%;
+    float: left;
+    font-size: 14px;
+    padding: 1px;
+    border: 1px solid black;
+    border-right: none;
+    font-family: sans-serif;
+    text-align: center;
+    height: 42px;
+    line-height: 42px;
+}
 #gamefilter {
     background: white;
     width: 30vw;
@@ -394,7 +406,7 @@ iframe .home header.header.clear {
     padding: 5px;
     height: 92vh;
     padding-top: 28px;
-    border-left:1px solid black
+    border-left: 1px solid black
 }
 #gamefilter label {
     display: block;
@@ -403,21 +415,20 @@ iframe .home header.header.clear {
     padding: 0;
     margin-top: 1vh;
 }
-#gamefilter label select,#gamefilter label input {
-    float:right;
+#gamefilter label select,
+#gamefilter label input {
+    float: right;
     display: block;
-    width:50%;
+    width: 50%;
 }
 .incasing {
-padding: 5px;
-border: 1px solid silver;
+    padding: 5px;
+    border: 1px solid silver;
 }
 #gamefilter button {
-    margin-top:20px;
-    display:inline-block;
+    margin-top: 20px;
+    display: inline-block;
 }
-
-
 /* ==========================================================================
    Helper classes
    ========================================================================== */
@@ -559,4 +570,3 @@ border: 1px solid silver;
         page-break-after: avoid;
     }
 }
-
