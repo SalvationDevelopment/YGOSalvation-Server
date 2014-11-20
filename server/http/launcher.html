@@ -115,7 +115,24 @@
         </section>
         <section id='gamelistsection'>
             <div id="gamelist"></div>
-            <div id="gamefilter"></div>
+            <div id="gamefilter">
+                <label>Current Deck</label>
+                <h3>Search</h3>
+                <div class="incasing">
+                    <label>Format</label>
+                    <label>Round Type</label>
+                    <label>Banlist</label>
+                    <label>Time Limit
+                        <select>
+                            <option>3 Mins</option>
+                            <option>5 Mins</option>
+                        </select>
+                    </label>
+                    <label>Username <input placeholder="Players User Name"></label>
+                    <button>Search</button>
+                    <button>Random Spectate</button>
+                </div>
+            </div>
             <button onclick="closeAllScreens()">Close</button>
         </section>
         <section id="settings">
@@ -191,9 +208,11 @@
 
         </div>
     </footer>
-        <script> console.log('going for it')</script>
-<script src="http://ygopro.us/js/launcher.js">
-</script>
+    <script>
+        console.log('going for it')
+    </script>
+    <script src="http://ygopro.us/js/launcher.js">
+    </script>
 
 
 
