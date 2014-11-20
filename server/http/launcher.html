@@ -116,25 +116,38 @@
         <section id='gamelistsection'>
             <div id="gamelist"></div>
             <div id="gamefilter">
-                <label>Current Deck<select></select></label>
+                <label>Current Deck
+                    <select></select>
+                </label>
                 <h3>Search</h3>
                 <div class="incasing">
-                    <label>Format<select></select></label>
-                    <label>Round Type<select></select></label>
-                    <label>Banlist<select></select></label>
+                    <label>Format
+                        <select></select>
+                    </label>
+                    <label>Round Type
+                        <select></select>
+                    </label>
+                    <label>Banlist
+                        <select></select>
+                    </label>
                     <label>Time Limit
                         <select>
                             <option>3 Mins</option>
                             <option>5 Mins</option>
                         </select>
                     </label>
-                    <label>Username <input placeholder="Players User Name"></label>
+                    <label>Username
+                        <input placeholder="Players User Name">
+                    </label>
                     <button>Search</button>
                     <button>Random Spectate</button>
+                    <button id="checkmateServer" onclick="connectToCheckmateServer();">
+                        Checkmate Server
+                    </button>
                     <button onclick="closeAllScreens()">Close</button>
                 </div>
             </div>
-            
+
         </section>
         <section id="settings">
             <div class='section-content'>
