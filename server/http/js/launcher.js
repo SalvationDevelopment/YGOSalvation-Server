@@ -120,7 +120,7 @@ function download() {
 $('#servermessages').text('Server Messages will spawn here.');
 
 
-var primus = Primus.connect('http://salvationdevelopment.com:5000');
+var primus = Primus.connect('http://salvationdevelopment.com:24555');
 
 function joinGamelist() {
     primus.write({

@@ -25,7 +25,7 @@ var gamelist = {};
 /*
 Start various sub-servers.
 --------------------------
-- Gamelist on port 5000
+- Gamelist on port 24555
 - YGOPro listener on port 8911, YGOPro applications connect to this port
 - YGOPro Web listener on port 8913, browser version connects to this port,
   and is stripped and routed to the same place as the application.
@@ -35,7 +35,7 @@ Start various sub-servers.
 
 var ygoserver; //listen(8911);
 var serverGITHUB = gith.create(4901);
-var serverWS = http.createServer().listen(5000);
+var serverWS = http.createServer().listen(24555);
 var serverHTTP = new static.Server('./http');
 
 var serverWSProxy = new WebSocketServer({
