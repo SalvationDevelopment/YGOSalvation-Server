@@ -844,7 +844,13 @@ meter.p1time {
     color: white;
 }
 */
-
+header a,header a:visited, header {
+color: inherit;
+text-decoration: none;
+}
+header a:hover {
+    color:pink;
+}
 .undefined {
     display: none
 }
