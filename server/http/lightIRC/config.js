@@ -12,7 +12,7 @@ var params = {};
 var swfobject;
 
 /* Change these parameters */
-params.host                         = "salvationdevelopment.com";
+params.host                         = "ygopro.us";
 params.port                         = 6667;
 params.policyPort                   = 843;
 
