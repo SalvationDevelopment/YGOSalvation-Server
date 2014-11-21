@@ -165,7 +165,7 @@ function handleCoreMessage(core_message_raw, port, socket, data) {
         {
             existanceCheck(core_message[1]);
             var lock_slot = parseInt(core_message[2], 10);
-            gamelist[core_message[1]].lock[lock_slot] = Boolean(core_message[2]);
+            gamelist[core_message[1]].locked[lock_slot] = Boolean(core_message[2]);
             servercallback('update', gamelist);
         }
         break;
