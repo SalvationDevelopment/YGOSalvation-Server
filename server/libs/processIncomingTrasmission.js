@@ -82,7 +82,7 @@ function startCore(port, socket, data, callback) {
         var params = port + ' ' + configfile;
         var currentDate = new Date();
         //console.log(createDateString(currentDate) +
-           // ' initiating core for ' + socket.username + ' on port:' + port + ' with: ' + configfile);
+        // ' initiating core for ' + socket.username + ' on port:' + port + ' with: ' + configfile);
         socket.core = childProcess.spawn(__dirname + '/../ygocore/YGOServer.exe', [port, configfile], {
             cwd: __dirname + '/../ygocore'
         }, function (error, stdout, stderr) {
@@ -101,18 +101,20 @@ function startCore(port, socket, data, callback) {
 
 function handleCoreMessage(core_message_raw, port, socket, data) {
     function existanceCheck(gameInstance, port) {
-        console.log(socket.alpha);
-        if (gamelist[gameInstance] || !socket.alpha) {
-            return;
-        } else {
-            console.log('adding new game');
-            gamelist[gameInstance] = {
-                port: port,
-                players: [null, null, null, null],
-                locked: [false, false, false, false],
-                started: false,
-                spectators: 0
-            };
+        if (socket.alpha) {
+            console.log(socket.alpha);
+            if (gamelist[gameInstance] || !socket.alpha) {
+                return;
+            } else {
+                console.log('adding new game');
+                gamelist[gameInstance] = {
+                    port: port,
+                    players: [null, null, null, null],
+                    locked: [false, false, false, false],
+                    started: false,
+                    spectators: 0
+                };
+            }
         }
     }
     var core_message_txt = core_message_raw.toString();
@@ -123,80 +125,84 @@ function handleCoreMessage(core_message_raw, port, socket, data) {
     var core_message = core_message_txt.split('|');
     //console.log(core_message);
     core_message[0] = core_message[0].trim();
-    switch (core_message[0]) {
-    case ('::::network-ready'):
-        {
-            connectToCore(port, data, socket);
-        }
-        break;
-    case ('::::network-end'):
-        {
-            //servercallback('kill', gamelist);
-        }
-        break;
-    case ('::::join-slot'):
-        {
-            existanceCheck(core_message[1]);
-            var join_slot = parseInt(core_message[2], 10);
-            if (join_slot === -1) {
-                return;
+    try {
+        switch (core_message[0]) {
+        case ('::::network-ready'):
+            {
+                connectToCore(port, data, socket);
             }
-            gamelist[core_message[1]].players[join_slot] = core_message[3];
-            gamelist[core_message[1]].port = port;
-            socket.hostString = core_message[1];
-            servercallback('update', gamelist);
-        }
-        break;
-    case ('::::leave-slot'):
-        {
-            existanceCheck(core_message[1]);
-            var leave_slot = parseInt(core_message[2], 10);
-            if (leave_slot === -1) {
-                return;
+            break;
+        case ('::::network-end'):
+            {
+                //servercallback('kill', gamelist);
             }
-            gamelist[core_message[1]].players[leave_slot] = null;
-            servercallback('update', gamelist);
-        }
-        break;
-    case ('::::spectator'):
-        {
-            existanceCheck(core_message[1]);
-            gamelist[core_message[1]].spectators = parseInt(core_message[2], 10);
-            servercallback('update', gamelist);
+            break;
+        case ('::::join-slot'):
+            {
+                existanceCheck(core_message[1]);
+                var join_slot = parseInt(core_message[2], 10);
+                if (join_slot === -1) {
+                    return;
+                }
+                gamelist[core_message[1]].players[join_slot] = core_message[3];
+                gamelist[core_message[1]].port = port;
+                socket.hostString = core_message[1];
+                servercallback('update', gamelist);
+            }
+            break;
+        case ('::::leave-slot'):
+            {
+                existanceCheck(core_message[1]);
+                var leave_slot = parseInt(core_message[2], 10);
+                if (leave_slot === -1) {
+                    return;
+                }
+                gamelist[core_message[1]].players[leave_slot] = null;
+                servercallback('update', gamelist);
+            }
+            break;
+        case ('::::spectator'):
+            {
+                existanceCheck(core_message[1]);
+                gamelist[core_message[1]].spectators = parseInt(core_message[2], 10);
+                servercallback('update', gamelist);
 
-        }
-        break;
-    case ('::::lock-slot'):
-        {
-            existanceCheck(core_message[1]);
-            var lock_slot = parseInt(core_message[2], 10);
-            gamelist[core_message[1]].locked[lock_slot] = Boolean(core_message[2]);
-            servercallback('update', gamelist);
-        }
-        break;
-    case ('::::endduel'):
-        {
-            //do ranking here
-            existanceCheck(core_message[1]);
-            delete gamelist[core_message[1]];
-            servercallback('update', gamelist);
-        }
-        break;
-    case ('::::startduel'): // rockpaperscissors
-        {
-            existanceCheck(core_message[1]);
-            gamelist[socket.hostString].started = true;
-            servercallback('update', gamelist);
-        }
-        break;
-    case ('::::chat'):
-        {
-            var msg = socket.hostString + ':' + core_message_raw.toString();
-            //fs.appendFile(socket.hostString'-message.txt', msg, function (error) {
+            }
+            break;
+        case ('::::lock-slot'):
+            {
+                existanceCheck(core_message[1]);
+                var lock_slot = parseInt(core_message[2], 10);
+                gamelist[core_message[1]].locked[lock_slot] = Boolean(core_message[2]);
+                servercallback('update', gamelist);
+            }
+            break;
+        case ('::::endduel'):
+            {
+                //do ranking here
+                existanceCheck(core_message[1]);
+                delete gamelist[core_message[1]];
+                servercallback('update', gamelist);
+            }
+            break;
+        case ('::::startduel'): // rockpaperscissors
+            {
+                existanceCheck(core_message[1]);
+                gamelist[socket.hostString].started = true;
+                servercallback('update', gamelist);
+            }
+            break;
+        case ('::::chat'):
+            {
+                var msg = socket.hostString + ':' + core_message_raw.toString();
+                //fs.appendFile(socket.hostString'-message.txt', msg, function (error) {
 
-            //});         
+                //});         
+            }
+            break;
         }
-        break;
+    } catch (error_message) {
+        console.log(error_message);
     }
 }
 
