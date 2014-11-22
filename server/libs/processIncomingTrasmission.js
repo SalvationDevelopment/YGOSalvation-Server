@@ -101,12 +101,11 @@ function startCore(port, socket, data, callback) {
 
 function handleCoreMessage(core_message_raw, port, socket, data) {
     function existanceCheck(gameInstance, port) {
-        if (!socket.alpha && !gamelist[gameInstance] ){
-            console.log('not alpha and trying to check existance');
-        }
+        console.log(socket.alpha);
         if (gamelist[gameInstance] || !socket.alpha) {
             return;
         } else {
+            console.log('adding new game');
             gamelist[gameInstance] = {
                 port: port,
                 players: [null, null, null, null],

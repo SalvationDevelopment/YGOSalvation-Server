@@ -308,9 +308,12 @@ function enterGame(string) {
 //    action: 'join'
 //});
 
+var renderlist
 function renderList(JSONdata) {
     $('#gamelist').html('');
     for (var rooms in JSONdata) {
+        renderlist = JSONdata
+        console.log(renderlist)
         if (JSONdata.hasOwnProperty(rooms)) {
             var translated = parseDuelOptions(rooms);
             var content = '<div class="game" onclick=enterGame("' + rooms + '")>' +
