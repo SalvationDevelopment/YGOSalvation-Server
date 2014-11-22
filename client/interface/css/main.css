@@ -143,10 +143,11 @@ body {
     height: 30px;
 }
 #staticbar section {
-    background: #eee;
+    background-image: url(http://ygopro.us/img/bg.jpg);
     height: 92.5vh;
     width: 100%;
     display: none;
+    background-size: 100%;
 }
 #staticcontrols > div {
     float: left;
@@ -360,7 +361,7 @@ iframe .home header.header.clear {
     position: fixed;
     top: 0;
     right: 0;
-    height: 40px;
+    height: 16px;
     width: 100%;
     -webkit-app-region: drag;
     font-size: .55em;
@@ -384,7 +385,8 @@ iframe .home header.header.clear {
     overflow-y: scroll;
     width: 69vw;
     float: left;
-    height: 92vh;
+    height: 92.5vh;
+    background: RGBA(0, 0, 0, .5);
 }
 .game {
     width: 50%;
@@ -396,17 +398,20 @@ iframe .home header.header.clear {
     font-family: sans-serif;
     text-align: center;
     height: 42px;
+    color:white;
+    background:
     line-height: 42px;
 }
 #gamefilter {
     background: white;
-    width: 30vw;
+    width: 18vw;
+    margin 1vh 2vw;
     font-size: 12px;
     float: right;
     padding: 5px;
-    height: 92vh;
+    height: 92.5vh;
     padding-top: 28px;
-    border-left: 1px solid black
+    border-left: 1px solid black;
 }
 #gamefilter label {
     display: block;
@@ -428,6 +433,21 @@ iframe .home header.header.clear {
 #gamefilter button {
     margin-top: 20px;
     display: inline-block;
+}
+::-webkit-scrollbar {
+    height: 12px;
+    width: 12px;
+    background: #000;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #393812;
+    -webkit-border-radius: 1ex;
+    -webkit-box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.75);
+}
+
+::-webkit-scrollbar-corner {
+    background: #000;
 }
 /* ==========================================================================
    Helper classes
