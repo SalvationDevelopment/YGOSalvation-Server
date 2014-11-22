@@ -19,7 +19,6 @@ var WebSocketServer = require('ws').Server;
 
 //load modules that are an internal part of the application
 var processIncomingTrasmission = require('./libs/processIncomingTrasmission.js');
-var killCore = require('./libs/killcore.js');
 var gamelist = {};
 
 /*
@@ -86,23 +85,34 @@ var ygoserver = net.createServer(function (socket) {
     socket.active = false;
     socket.on('data', function (data) {
         gamelist = processIncomingTrasmission(data, socket, gamelist, function (command, newlist) {
-            if (command === 'update') {
-                primus.room('activegames').write(JSON.stringify(newlist));
-                gamelist = newlist;
+            gamelist = newlist;
+            if (command ==='kill'){
+                delete gamelist[socket.hostString];
             }
-            if (command === 'kill') {
-                killCore(socket, newlist, primus);
-            }
+            
+            primus.room('activegames').write(JSON.stringify(newlist));
         });
     });
     socket.on('close', function () {
-        killCore(socket, gamelist, primus);
+        killCore(socket);
     });
     socket.on('error', function () {
-        killCore(socket, gamelist, primus);
+        killCore(socket);
     });
 });
+
 ygoserver.listen(8911);
+
+function killCore(socket) {
+    if (socket.active_ygocore) {
+        socket.active_ygocore.end();
+    }
+    if (socket.core) {
+        socket.core.kill();
+        delete socket.core;
+        delete gamelist[socket.hostString];
+    }
+}
 
 // When a user connects via websockets, create an instance and allow the to duel, clean up after.
 serverWSProxy.on('connection', function (socket) {

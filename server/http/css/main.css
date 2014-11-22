@@ -306,7 +306,7 @@ textarea {
     font-family: MKStencilsansBlack;
     src: url('/font/MKStencilsansBlack.ttf'),
 }
-body, #gamelist {
+body {
     background-attachment: fixed;
     background-repeat: no-repeat;
     background-color: black;
