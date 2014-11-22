@@ -21,14 +21,14 @@ http.get(options, function (res) {
     res.on('data', function (data) {
         manifest = manifest + data;
     }).on('end', function () {
-        try{
-        manifest = JSON.parse(manifest);
-        }catch(error){
+        try {
+            manifest = JSON.parse(manifest);
+        } catch (error) {
             screenMessage.text('Failed to get update manifest.');
         }
-        console.log(manifest,'doing manifest');
+        console.log(manifest, 'doing manifest');
         updateCheckFile(manifest, true);
-        
+
     });
 });
 
@@ -93,11 +93,11 @@ function download() {
         return;
     }
     var target = downloadList[0];
-    var additionaltext ='.';
-    if (downloadList.length > 250){
-        additionaltext =', this will take a while please be patient!';
+    var additionaltext = '.';
+    if (downloadList.length > 250) {
+        additionaltext = ', this will take a while please be patient!';
     }
-    screenMessage.text('Updating...' + target.path + ' and ' + downloadList.length + ' other files'+additionaltext);
+    screenMessage.text('Updating...' + target.path + ' and ' + downloadList.length + ' other files' + additionaltext);
 
     var file = fs.createWriteStream(target.path);
     var options = {
@@ -111,8 +111,10 @@ function download() {
         }).on('end', function () {
             file.end();
             downloadList.shift();
-            setTimeout(function(){download();},200);
-            
+            setTimeout(function () {
+                download();
+            }, 200);
+
         });
     });
 }
@@ -290,7 +292,10 @@ function parseDuelOptions(duelOptions) {
         settings.gameMode = 'tag';
     }
 
+    if (settings.gameMode === 'single' ||
+        settings.gameMode === 'match') {
 
+    }
 
     return settings;
 
@@ -308,16 +313,25 @@ function enterGame(string) {
 //    action: 'join'
 //});
 
-var renderlist
 function renderList(JSONdata) {
     $('#gamelist').html('');
     for (var rooms in JSONdata) {
-        renderlist = JSONdata
-        console.log(renderlist)
         if (JSONdata.hasOwnProperty(rooms)) {
+            var player1 = JSONdata[rooms].players[0] || '___';
+            var player2 = JSONdata[rooms].players[2] || '___';
+            var player3 = JSONdata[rooms].players[3] || '___';
+            var player4 = JSONdata[rooms].players[4] || '___';
+            var duelist;
             var translated = parseDuelOptions(rooms);
+            if (translated.gameMode === 'single' ||
+                translated.gameMode === 'match') {
+                duelist = player1 +' vs '+player2;
+            }else{
+            duelist = player1 +'&amp'+player2+' vs '+player3 +'&amp'+player4;
+            }
+            console.log(translated);
             var content = '<div class="game" onclick=enterGame("' + rooms + '")>' +
-                JSONdata[rooms].players[0] + ' for ' + translated.isRanked + '  ' + translated.gameMode + '</div>';
+                duelist+ '  ' + translated.gameMode + '</div>';
 
             $('#gamelist').append(content);
         }
