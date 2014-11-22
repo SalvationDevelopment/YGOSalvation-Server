@@ -399,12 +399,12 @@ iframe .home header.header.clear {
     text-align: center;
     height: 42px;
     color:white;
-    background: -webkit-linear-gradient(#eee, #ddd);
+    background: -webkit-linear-gradient(#aaa, #ddd);
     line-height: 42px;
 }
 #gamefilter {
     background: white;
-    width: 28vw;
+    width: 30vw;
     margin 1vh 2vw;
     font-size: 12px;
     float: right;
