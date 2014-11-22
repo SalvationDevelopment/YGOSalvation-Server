@@ -139,6 +139,7 @@ function handleCoreMessage(core_message_raw, port, socket, data) {
             break;
         case ('::::join-slot'):
             {
+                socket.hostString = core_message[1];
                 existanceCheck(core_message[1]);
                 var join_slot = parseInt(core_message[2], 10);
                 if (join_slot === -1) {
@@ -146,13 +147,13 @@ function handleCoreMessage(core_message_raw, port, socket, data) {
                 }
                 gamelist[core_message[1]].players[join_slot] = core_message[3];
                 gamelist[core_message[1]].port = port;
-                socket.hostString = core_message[1];
+                
                 servercallback('update', gamelist);
             }
             break;
         case ('::::leave-slot'):
             {
-                existanceCheck(core_message[1]);
+               
                 var leave_slot = parseInt(core_message[2], 10);
                 if (leave_slot === -1) {
                     return;
@@ -163,7 +164,7 @@ function handleCoreMessage(core_message_raw, port, socket, data) {
             break;
         case ('::::spectator'):
             {
-                existanceCheck(core_message[1]);
+            
                 gamelist[core_message[1]].spectators = parseInt(core_message[2], 10);
                 servercallback('update', gamelist);
 
@@ -171,7 +172,7 @@ function handleCoreMessage(core_message_raw, port, socket, data) {
             break;
         case ('::::lock-slot'):
             {
-                existanceCheck(core_message[1]);
+
                 var lock_slot = parseInt(core_message[2], 10);
                 gamelist[core_message[1]].locked[lock_slot] = Boolean(core_message[2]);
                 servercallback('update', gamelist);
@@ -180,14 +181,14 @@ function handleCoreMessage(core_message_raw, port, socket, data) {
         case ('::::endduel'):
             {
                 //do ranking here
-                existanceCheck(core_message[1]);
+     
                 delete gamelist[core_message[1]];
                 servercallback('update', gamelist);
             }
             break;
         case ('::::startduel'): // rockpaperscissors
             {
-                existanceCheck(core_message[1]);
+
                 gamelist[socket.hostString].started = true;
                 servercallback('update', gamelist);
             }
