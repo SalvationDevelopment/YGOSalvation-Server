@@ -312,7 +312,7 @@ function enterGame(string) {
 //primus.write({
 //    action: 'join'
 //});
-
+var banlist_names = ['TCG-Current', 'OCG-Current', 'Something older'];
 function renderList(JSONdata) {
     $('#gamelist').html('');
     for (var rooms in JSONdata) {
@@ -331,7 +331,8 @@ function renderList(JSONdata) {
             }
             console.log(translated);
             var content = '<div class="game" onclick=enterGame("' + rooms + '")>' +
-                duelist+ '  ' + translated.gameMode + '</div>';
+                duelist+ '<br><span class="subtext" style="font-size:.8em">'+translated.allowedCards+'  ' + translated.gameMode +
+                ' '+ banlist_names[translated.banlist]+'</span></div>';
 
             $('#gamelist').append(content);
         }
