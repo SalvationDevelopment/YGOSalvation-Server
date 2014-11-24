@@ -7,20 +7,20 @@ var net = require('net');
 
 if (cluster.isMaster) {
     for (var instances = 0; instances < numCPUs; instances++) {
-        var port = (8912 + instances);
+        var port = (28912 + instances);
         cluster.fork({
             PORT: port
         });
     }
     cluster.on('exit', function (worker, code, signal) {
-        var port = (8912 + worker.id);
+        var port = (28912 + worker.id);
         cluster.fork({
             PORT: port
         });
     });
 } else {
     startCore(process.env.PORT);
-    var proxy = net.createServer(function () {}).listen(8911);
+    var proxy = net.createServer(function () {}).listen(28911);
     proxy.on('connection', function (socket) {
         var connection = net.connect(process.env.PORT, '127.0.0.1');
 
@@ -72,6 +72,7 @@ function startCore(port) {
         core.stdout.on('data', function (core_message) {
             console.log(createDateString(new Date()), core_message.toString());
         });
+        console.log('running on' , port);
 
     });
 }
