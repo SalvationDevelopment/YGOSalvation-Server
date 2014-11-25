@@ -68,7 +68,12 @@ var downloadList = [];
 
 function hashcheck() {
     if (completeList.length === 0) {
+        
         if (downloadList.length > 500) {
+            var lastchance = confirm(' More than 500 files are missing, do full install?');
+            if (!lastchance){
+                download();
+            }
             var downloadfile = "http://ygopro.us/ygopro.zip";
             var host = url.parse(downloadfile).hostname;
             var filename = url.parse(downloadfile).pathname.split("/").pop();
