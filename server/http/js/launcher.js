@@ -69,72 +69,73 @@ var downloadList = [];
 
 function hashcheck() {
     if (completeList.length === 0) {
-
-        if (downloadList.length > 500) {
-            var lastchance = confirm(' More than 500 files are missing, do full install?');
-            if (!lastchance) {
-                download();
-            }
-            var downloadfile = "http://192.99.11.19:8080/ygopro.zip";
-            var host = url.parse(downloadfile).hostname;
-            var filename = url.parse(downloadfile).pathname.split("/").pop();
-            var theurl = http.createClient(80, host);
-            var requestUrl = downloadfile;
-            var request = theurl.request('GET', requestUrl, {
-                "host": host
-            });
-
-            request.end();
-            var dlprogress = 0;
-
-            request.addListener('response', function (response) {
-                var downloadfile = fs.createWriteStream(filename, {
-                    'flags': 'a'
-                });
-                var queueCheck = setInterval(function () {
-                    screenMessage.text("Download progress: " + ((dlprogress / response.headers['content-length'] * 100)).toFixed(2) + " %" +
-                        ", do not close the launcher!");
-                }, 1000);
-                screenMessage.text("File size " + filename + ": " + response.headers['content-length'] + " bytes.");
-                response.addListener('data', function (chunk) {
-                    dlprogress += chunk.length;
-                    downloadfile.write(chunk, 'binary');
-                });
-                response.addListener('error', function (error) {
-                    clearInterval(queueCheck);
-                    console.log(error);
-                    screenMessage.text('Error Downloading full update, try another method.');
-                });
-                response.addListener("end", function () {
-                    downloadfile.end();
-                    screenMessage.text("Finished downloading full installation, one moment, do not close the launcher!");
-                    clearInterval(queueCheck);
-                    setTimeout(function () {
-                        var unzipper = fs.createReadStream(filename).pipe(unzip.Extract({
-                            path: 'ygopro'
-                        }));
-                        screenMessage.text("Installing, please do not close the launcher! Nearly done!");
-                        unzipper.addListener('end', function () {
-                            fs.unlink(filename, function () {
-                                createmanifest();
-                            });
-                        });
-                        unzipper.addListener('error', function () {
-                            screenMessage.text('Error extracting full update, try another method.');
-                            createmanifest();
-                        });
-
-                    }, 3500);
-                });
-
-            });
-            return;
-        } else {
-
-
-            download();
-            return;
-        }
+        download();
+//
+//        if (downloadList.length > 500) {
+//            var lastchance = confirm(' More than 500 files are missing, do full install?');
+//            if (!lastchance) {
+//                download();
+//            }
+//            var downloadfile = "http://192.99.11.19:8080/ygopro.zip";
+//            var host = url.parse(downloadfile).hostname;
+//            var filename = url.parse(downloadfile).pathname.split("/").pop();
+//            var theurl = http.createClient(80, host);
+//            var requestUrl = downloadfile;
+//            var request = theurl.request('GET', requestUrl, {
+//                "host": host
+//            });
+//
+//            request.end();
+//            var dlprogress = 0;
+//
+//            request.addListener('response', function (response) {
+//                var downloadfile = fs.createWriteStream(filename, {
+//                    'flags': 'a'
+//                });
+//                var queueCheck = setInterval(function () {
+//                    screenMessage.text("Download progress: " + ((dlprogress / response.headers['content-length'] * 100)).toFixed(2) + " %" +
+//                        ", do not close the launcher!");
+//                }, 1000);
+//                screenMessage.text("File size " + filename + ": " + response.headers['content-length'] + " bytes.");
+//                response.addListener('data', function (chunk) {
+//                    dlprogress += chunk.length;
+//                    downloadfile.write(chunk, 'binary');
+//                });
+//                response.addListener('error', function (error) {
+//                    clearInterval(queueCheck);
+//                    console.log(error);
+//                    screenMessage.text('Error Downloading full update, try another method.');
+//                });
+//                response.addListener("end", function () {
+//                    downloadfile.end();
+//                    screenMessage.text("Finished downloading full installation, one moment, do not close the launcher!");
+//                    clearInterval(queueCheck);
+//                    setTimeout(function () {
+//                        var unzipper = fs.createReadStream(filename).pipe(unzip.Extract({
+//                            path: 'ygopro'
+//                        }));
+//                        screenMessage.text("Installing, please do not close the launcher! Nearly done!");
+//                        unzipper.addListener('end', function () {
+//                            fs.unlink(filename, function () {
+//                                createmanifest();
+//                            });
+//                        });
+//                        unzipper.addListener('error', function () {
+//                            screenMessage.text('Error extracting full update, try another method.');
+//                            createmanifest();
+//                        });
+//
+//                    }, 3500);
+//                });
+//
+//            });
+//            return;
+//        } else {
+//
+//
+//            download();
+//            return;
+//        }
     }
     var target = completeList[0];
     fs.stat(target.path, function (err, stats) {
