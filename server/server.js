@@ -8,6 +8,7 @@ var http = require('http');
 var cluster = require('cluster');
 var numCPUs = require('os').cpus().length;
 var spawn = require('child_process').spawn;
+var fs = require('fs');
 
 //load modules pulled down from NPM, externals
 //if you dont run `npm install` these requires will fail.
@@ -86,11 +87,15 @@ var ygoserver = net.createServer(function (socket) {
     socket.on('data', function (data) {
         gamelist = processIncomingTrasmission(data, socket, gamelist, function (command, newlist) {
             gamelist = newlist;
-            if (command ==='kill'){
+            
+            if (command === 'kill') {
                 delete gamelist[socket.hostString];
             }
-            
+
             primus.room('activegames').write(JSON.stringify(newlist));
+            fs.writeFile('http/gamelist.json', JSON.stringify(gamelist, null, 4), function (err) {
+                if (err) console.log(err);
+            });
         });
     });
     socket.on('close', function () {
@@ -148,7 +153,7 @@ if (cluster.isMaster) {
             });
         });
     });
-    
+
     /*
     Static file server:
     Via nginx /server/http/ is routed to http://ygopro.us/
