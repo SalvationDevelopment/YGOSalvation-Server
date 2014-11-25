@@ -1,6 +1,6 @@
 /* jslint node : true */
 /* jslint browser : true */
-/* global ygopro, $, isChecked, alert, Primus, console, process, applySettings, prompt */
+/* global ygopro, $, isChecked, alert, Primus, console, process, applySettings, prompt, confirm */
 /* exported joinGamelist, leaveGamelist, hostGame, connectgamelist, enterGame, setHostSettings, gui*/
 applySettings();
 var siteLocation = 'http://ygopro.us/';
@@ -68,10 +68,10 @@ var downloadList = [];
 
 function hashcheck() {
     if (completeList.length === 0) {
-        
+
         if (downloadList.length > 500) {
             var lastchance = confirm(' More than 500 files are missing, do full install?');
-            if (!lastchance){
+            if (!lastchance) {
                 download();
             }
             var downloadfile = "http://ygopro.us/ygopro.zip";
@@ -99,6 +99,11 @@ function hashcheck() {
                     dlprogress += chunk.length;
                     downloadfile.write(chunk, 'binary');
                 });
+                response.addListener('error', function (error) {
+                    clearInterval(queueCheck);
+                    console.log(error);
+                    screenMessage.text('Error Downloading full update, try another method.');
+                });
                 response.addListener("end", function () {
                     downloadfile.end();
                     screenMessage.text("Finished downloading full installation, one moment, do not close the launcher!");
@@ -113,6 +118,11 @@ function hashcheck() {
                                 createmanifest();
                             });
                         });
+                        unzipper.addListener('error', function () {
+                            screenMessage.text('Error extracting full update, try another method.');
+                            createmanifest();
+                        });
+
                     }, 3500);
                 });
 
