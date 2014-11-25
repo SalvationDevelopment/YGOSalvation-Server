@@ -399,9 +399,9 @@ iframe .home header.header.clear {
     text-align: center;
     min-height: 42px;
     overflow:auto;
-    color:white;
+    color:black;
     background: -webkit-linear-gradient(#aaa, #ddd);
-    line-height: 42px;
+    line-height: 21px;
 }
 #gamefilter {
     background: white;
