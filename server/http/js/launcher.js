@@ -10,6 +10,7 @@ var http = require('http');
 var fs = require('fs');
 var url = require('url');
 var gui = require('nw.gui');
+var unzip = require('unzip');
 
 var manifest = '';
 var options = {
@@ -17,22 +18,24 @@ var options = {
     port: 80,
     path: url.parse('http://ygopro.us/manifest/ygopro.json').pathname
 };
-http.get(options, function (res) {
-    res.on('data', function (data) {
-        manifest = manifest + data;
-    }).on('end', function () {
-        try {
-            manifest = JSON.parse(manifest);
-        } catch (error) {
-            screenMessage.text('Failed to get update manifest.');
-        }
-        console.log(manifest, 'doing manifest');
-        updateCheckFile(manifest, true);
 
+function createmanifest() {
+    http.get(options, function (res) {
+        res.on('data', function (data) {
+            manifest = manifest + data;
+        }).on('end', function () {
+            try {
+                manifest = JSON.parse(manifest);
+            } catch (error) {
+                screenMessage.text('Failed to get update manifest.');
+            }
+            console.log(manifest, 'doing manifest');
+            updateCheckFile(manifest, true);
+
+        });
     });
-});
-
-
+}
+createmanifest();
 
 process.on('uncaughtException', function (err) {
     console.log('Caught exception: ' + err);
@@ -64,6 +67,52 @@ var downloadList = [];
 
 function hashcheck() {
     if (completeList.length === 0) {
+        if (downloadList.length > 500) {
+            var downloadfile = "http://ygopro.us/ygopro.zip";
+            var host = url.parse(downloadfile).hostname;
+            var filename = url.parse(downloadfile).pathname.split("/").pop();
+            var theurl = http.createClient(80, host);
+            var requestUrl = downloadfile;
+            var request = theurl.request('GET', requestUrl, {
+                "host": host
+            });
+
+            request.end();
+            var dlprogress = 0;
+            var queueCheck = setInterval(function () {
+                screenMessage.text("Download progress: " + dlprogress + " bytes, do not close the launcher!");
+            }, 1000);
+            request.addListener('response', function (response) {
+                var downloadfile = fs.createWriteStream(filename, {
+                    'flags': 'a'
+                });
+                screenMessage.text("File size " + filename + ": " + response.headers['content-length'] + " bytes.");
+                response.addListener('data', function (chunk) {
+                    dlprogress += chunk.length;
+                    downloadfile.write(chunk, 'binary');
+                });
+                response.addListener("end", function () {
+                    downloadfile.end();
+                    screenMessage.text("Finished downloading full installation, one moment, do not close the launcher!");
+                    clearInterval(queueCheck);
+                    setTimeout(function () {
+                        var unzipper = fs.createReadStream(filename).pipe(unzip.Extract({
+                            path: 'ygopro'
+                        }));
+                        screenMessage.text("Installing, please do not close the launcher! Nearly done!");
+                        unzipper.addListener('end', function () {
+                            fs.unlink(filename, function () {
+                                createmanifest();
+                            });
+                        });
+                    }, 3500);
+                });
+
+            });
+            return;
+        }
+
+
         download();
         return;
     }
@@ -313,6 +362,7 @@ function enterGame(string) {
 //    action: 'join'
 //});
 var banlist_names = ['TCG-Current', 'OCG-Current', 'Something older'];
+
 function renderList(JSONdata) {
     $('#gamelist').html('');
     for (var rooms in JSONdata) {
@@ -325,14 +375,14 @@ function renderList(JSONdata) {
             var translated = parseDuelOptions(rooms);
             if (translated.gameMode === 'single' ||
                 translated.gameMode === 'match') {
-                duelist = player1 +' vs '+player2;
-            }else{
-            duelist = player1 +'&amp'+player2+' vs '+player3 +'&amp'+player4;
+                duelist = player1 + ' vs ' + player2;
+            } else {
+                duelist = player1 + '&amp' + player2 + ' vs ' + player3 + '&amp' + player4;
             }
             console.log(translated);
             var content = '<div class="game" onclick=enterGame("' + rooms + '")>' +
-                duelist+ '<br><span class="subtext" style="font-size:.8em">'+translated.allowedCards+'  ' + translated.gameMode +
-                ' '+ banlist_names[translated.banlist]+'</span></div>';
+                duelist + '<br><span class="subtext" style="font-size:.8em">' + translated.allowedCards + '  ' + translated.gameMode +
+                ' ' + banlist_names[translated.banlist] + '</span></div>';
 
             $('#gamelist').append(content);
         }
