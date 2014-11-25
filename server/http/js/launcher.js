@@ -110,11 +110,12 @@ function hashcheck() {
 
             });
             return;
-        }
+        }else{
 
 
         download();
         return;
+        }
     }
     var target = completeList[0];
     fs.stat(target.path, function (err, stats) {
