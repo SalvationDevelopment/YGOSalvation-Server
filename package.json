@@ -34,7 +34,8 @@
     "sqlite3": "*",
     "stream-frame": "0.0.4",
     "ws": "*",
-    "gith" : "*"
+    "gith" : "*",
+    "unzip" : "*"
   },
   "optionalDependencies": {
     "httpsys": "*"
