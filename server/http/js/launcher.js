@@ -402,7 +402,7 @@ function renderList(JSONdata) {
             }
             console.log(translated);
             var content = '<div class="game" onclick=enterGame("' + rooms + '")>' +
-                duelist + '<br><span class="subtext" style="font-size:.8em">' + translated.allowedCards + '  ' + translated.gameMode +
+                duelist + '<span class="subtext" style="font-size:.5em"><br>' + translated.allowedCards + '  ' + translated.gameMode +
                 ' ' + banlist_names[translated.banlist] + '</span></div>';
 
             $('#gamelist').append(content);
