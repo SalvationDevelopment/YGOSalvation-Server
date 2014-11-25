@@ -10,13 +10,17 @@ var child_process = require('child_process');
 var fs = require('fs');
 var operating_system = os.platform();
 var platform = {
-    linux : './application_ygopro',
+    linux: './application_ygopro',
     win32: 'application_ygopro.exe',
     win64: 'application_ygopro.exe'
 };
 var executable = platform[operating_system] || 'ygopro';
 console.log(operating_system, executable);
-
+if (operating_system === 'linux') {
+    fs.fchmod('ygopro/application_ygopro', '+x', function (error) {
+        if (error) console.log(error);
+    });// creates race condition requiring launcher restart.
+}
 var settings = ['use_d3d', 'antialias', 'errorlog', 'nickname', 'roompass', 'lastdeck', 'textfont', 'numfont', 'fullscreen', 'enable_sound',
 'sound_volume', 'enable_music', 'music_volume', 'skin_index', 'auto_card_placing', 'random_card_placing', 'auto_chain_order', 'no_delay_for_chain',
 'enable_sleeve_loading', 'serverport', 'lastip', 'textfontsize', 'lastport'];
