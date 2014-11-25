@@ -18,6 +18,7 @@ var options = {
     port: 80,
     path: url.parse('http://ygopro.us/manifest/ygopro.json').pathname
 };
+fs.unlink('ygopro.zip', function () {});
 
 function createmanifest() {
     http.get(options, function (res) {
@@ -79,13 +80,15 @@ function hashcheck() {
 
             request.end();
             var dlprogress = 0;
-            var queueCheck = setInterval(function () {
-                screenMessage.text("Download progress: " + dlprogress + " bytes, do not close the launcher!");
-            }, 1000);
+
             request.addListener('response', function (response) {
                 var downloadfile = fs.createWriteStream(filename, {
                     'flags': 'a'
                 });
+                var queueCheck = setInterval(function () {
+                    screenMessage.text("Download progress: " + ((dlprogress / response.headers['content-length'] * 100)).toFixed(2) + " %" +
+                        ", do not close the launcher!");
+                }, 1000);
                 screenMessage.text("File size " + filename + ": " + response.headers['content-length'] + " bytes.");
                 response.addListener('data', function (chunk) {
                     dlprogress += chunk.length;
@@ -110,11 +113,11 @@ function hashcheck() {
 
             });
             return;
-        }else{
+        } else {
 
 
-        download();
-        return;
+            download();
+            return;
         }
     }
     var target = completeList[0];
