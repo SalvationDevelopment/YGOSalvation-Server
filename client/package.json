@@ -13,7 +13,7 @@
     },
     "webkit": {
         "plugin": true,
-        "page-cache": true
+        "page-cache": false
     },
     "maintainers": [{
         "name": "James Gladney",
