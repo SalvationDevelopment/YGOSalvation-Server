@@ -10,6 +10,7 @@ var child_process = require('child_process');
 var fs = require('fs');
 var operating_system = os.platform();
 var platform = {
+    linux : './application_ygopro',
     win32: 'application_ygopro.exe',
     win64: 'application_ygopro.exe'
 };
