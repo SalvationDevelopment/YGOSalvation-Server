@@ -10,7 +10,7 @@ var http = require('http');
 var fs = require('fs');
 var url = require('url');
 var gui = require('nw.gui');
-var unzip = require('unzip');
+//var unzip = require('unzip');
 
 var manifest = '';
 var options = {
