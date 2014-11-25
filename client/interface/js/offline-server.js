@@ -10,14 +10,15 @@ var child_process = require('child_process');
 var fs = require('fs');
 var operating_system = os.platform();
 var platform = {
+    darwin: './application_mac_ygopro'
     linux: './application_ygopro',
     win32: 'application_ygopro.exe',
     win64: 'application_ygopro.exe'
 };
 var executable = platform[operating_system] || 'ygopro';
 console.log(operating_system, executable);
-if (operating_system === 'linux') {
-    fs.fchmod('ygopro/application_ygopro', '+x', function (error) {
+if (operating_system === 'linux' || operating_system === 'darwin') {
+    fs.fchmod('ygopro/'+executable, '+x', function (error) {
         if (error) console.log(error);
     });// creates race condition requiring launcher restart.
 }
