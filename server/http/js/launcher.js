@@ -24,13 +24,13 @@ function createmanifest() {
     http.get(options, function (res) {
         res.on('data', function (data) {
             manifest = manifest + data;
+            screenMessage.text('Downloading manifest');
         }).on('end', function () {
             try {
                 manifest = JSON.parse(manifest);
             } catch (error) {
                 screenMessage.text('Failed to get update manifest.');
             }
-            console.log(manifest, 'doing manifest');
             updateCheckFile(manifest, true);
 
         });
@@ -45,6 +45,7 @@ var completeList = [];
 
 
 function updateCheckFile(file, initial) {
+    screenMessage.text('Processing manifest');
     if (file.type !== 'folder') {
 
         completeList.push(file);
@@ -77,7 +78,7 @@ function hashcheck() {
             var downloadfile = "http://192.99.11.19:8080/ygopro.zip";
             var host = url.parse(downloadfile).hostname;
             var filename = url.parse(downloadfile).pathname.split("/").pop();
-            var theurl = http.createClient(80, host);
+            var theurl = http.request(80, host);
             var requestUrl = downloadfile;
             var request = theurl.request('GET', requestUrl, {
                 "host": host
