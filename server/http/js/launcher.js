@@ -78,9 +78,9 @@ function hashcheck() {
             var downloadfile = "http://192.99.11.19:8080/ygopro.zip";
             var host = url.parse(downloadfile).hostname;
             var filename = url.parse(downloadfile).pathname.split("/").pop();
-            var theurl = http.request(80, host);
+            var theurl = http.createClient(80, host);
             var requestUrl = downloadfile;
-            var request = theurl.createClient('GET', requestUrl, {
+            var request = theurl.request('GET', requestUrl, {
                 "host": host
             });
 
