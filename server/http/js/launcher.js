@@ -74,7 +74,7 @@ function hashcheck() {
             if (!lastchance) {
                 download();
             }
-            var downloadfile = "http://ygopro.us:8080/ygopro.zip";
+            var downloadfile = "http://192.99.11.19:8080/ygopro.zip";
             var host = url.parse(downloadfile).hostname;
             var filename = url.parse(downloadfile).pathname.split("/").pop();
             var theurl = http.createClient(80, host);
