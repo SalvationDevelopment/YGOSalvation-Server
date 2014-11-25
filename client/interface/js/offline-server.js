@@ -2,7 +2,7 @@
 
 /* global localStorage, require */
 //development, stage, production
-require('nw.gui').Window.get().showDevTools();
+
 var os = require('os');
 var http = require('http');
 var url = require('url');
@@ -10,8 +10,8 @@ var child_process = require('child_process');
 var fs = require('fs');
 var operating_system = os.platform();
 var platform = {
-    win32 : 'application_ygopro.exe',
-    win64 : 'application_ygopro.exe'
+    win32: 'application_ygopro.exe',
+    win64: 'application_ygopro.exe'
 };
 var executable = platform[operating_system] || 'ygopro';
 console.log(operating_system, executable);
@@ -26,6 +26,11 @@ try {
     /*jshint -W020 */
     localStorage = {};
 
+}
+try {
+    require('nw.gui').Window.get().showDevTools();
+} catch (error) {
+    console.log('Cant open development tools');
 }
 try {
     var normal = true;
@@ -66,7 +71,7 @@ http.createServer(function (request, response) {
     var parameter = url.parse(request.url);
     var letter = parameter.path.slice(-1);
     runYGOPro('-' + letter, function () {
-        console.log('!',parameter.path);
+        console.log('!', parameter.path);
     });
     response.writeHead(200, {
         'Content-Type': 'text/plain'
@@ -77,7 +82,7 @@ http.createServer(function (request, response) {
 function runYGOPro(mode, callback) {
     //console.log(template);
     var systemConf = template;
-    
+
     function fillInData(form, placeholder, value) {
         form = form.replace(placeholder, value);
         return form;
@@ -85,7 +90,7 @@ function runYGOPro(mode, callback) {
     for (var i = 0; settings.length > i; i++) {
         systemConf = fillInData(systemConf, '{' + settings[i] + '}', localStorage[settings[i]]);
     }
-    var path =  './ygopro/system.CONF';
+    var path = './ygopro/system.CONF';
     fs.writeFile(path, systemConf, function (err) {
         if (err) {
             console.log('file permission error, cant edit ' + path);

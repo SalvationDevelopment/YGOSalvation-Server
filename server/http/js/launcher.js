@@ -80,7 +80,7 @@ function hashcheck() {
             var filename = url.parse(downloadfile).pathname.split("/").pop();
             var theurl = http.request(80, host);
             var requestUrl = downloadfile;
-            var request = theurl.request('GET', requestUrl, {
+            var request = theurl.createClient('GET', requestUrl, {
                 "host": host
             });
 
