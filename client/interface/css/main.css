@@ -326,6 +326,8 @@ table {
 }
 section#settings {
     font-size: 1.5em;
+    color:white;
+    background:rgba(0,0,0,.5);
 }
 iframe .home header.header.clear {
     height: 100%;
@@ -340,7 +342,7 @@ iframe .home header.header.clear {
     text-align: center;
     -webkit-app-region: no-drag;
     border: 1px solid black;
-    background: -webkit-linear-gradient(#fff, #aaa);
+    background: -webkit-linear-gradient(#777, #222);
     box-shadow: 0px 0px 2px white;
 }
 #control div:first-child {
