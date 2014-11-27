@@ -188,7 +188,7 @@ function download() {
             downloadList.shift();
             setTimeout(function () {
                 download();
-            }, 200);
+            }, 0);
 
         });
     });
