@@ -5,7 +5,10 @@
 applySettings();
 var siteLocation = 'http://ygopro.us/';
 
-
+process.on('uncaughtException', function (err) {
+    console.log(err);
+    alert('An error occured,... f#<& it.');
+})
 var http = require('http');
 var fs = require('fs');
 var url = require('url');
