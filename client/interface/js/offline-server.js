@@ -9,6 +9,7 @@ var url = require('url');
 var child_process = require('child_process');
 var fs = require('fs');
 var operating_system = os.platform();
+console.log(process.execPath);
 var platform = {
     darwin: './application_mac_ygopro',
     linux: './application_ygopro',
@@ -105,7 +106,7 @@ function runYGOPro(mode, callback) {
         console.log(mode);
         //console.log('It\'s saved!');
         child_process.execFile(executable, [mode], {
-            cwd: './ygopro'
+            cwd: (process.execPath.replace('launcher.exe','ygopro'))
         }, function (error) {
             if (error !== null) {
                 //write crash report;
