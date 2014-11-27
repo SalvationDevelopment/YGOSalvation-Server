@@ -3,6 +3,7 @@
 /* global localStorage, require */
 //development, stage, production
 
+
 var os = require('os');
 var http = require('http');
 var url = require('url');
@@ -19,9 +20,9 @@ var platform = {
 var executable = platform[operating_system] || 'ygopro';
 console.log(operating_system, executable);
 if (operating_system === 'linux' || operating_system === 'darwin') {
-    fs.fchmod('ygopro/'+executable, '+x', function (error) {
+    fs.fchmod('ygopro/' + executable, '+x', function (error) {
         if (error) console.log(error);
-    });// creates race condition requiring launcher restart.
+    }); // creates race condition requiring launcher restart.
 }
 var settings = ['use_d3d', 'antialias', 'errorlog', 'nickname', 'roompass', 'lastdeck', 'textfont', 'numfont', 'fullscreen', 'enable_sound',
 'sound_volume', 'enable_music', 'music_volume', 'skin_index', 'auto_card_placing', 'random_card_placing', 'auto_chain_order', 'no_delay_for_chain',
@@ -106,7 +107,7 @@ function runYGOPro(mode, callback) {
         console.log(mode);
         //console.log('It\'s saved!');
         child_process.execFile(executable, [mode], {
-            cwd: (process.execPath.replace('launcher.exe','ygopro'))
+            cwd: (process.execPath.replace('launcher.exe', 'ygopro'))
         }, function (error) {
             if (error !== null) {
                 //write crash report;
