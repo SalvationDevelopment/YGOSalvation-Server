@@ -8,7 +8,8 @@
         "width": 1024,
         "min_width": 1024,
         "height": 535,
-        "min-height": 535,
+        "max_height": 535,
+        "min_height": 535,
         "icon": "interface/icon.png"
     },
     "webkit": {
