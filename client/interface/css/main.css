@@ -358,7 +358,7 @@ iframe .home header.header.clear {
 #control div:hover {
     background: steelblue;
 }
-#control div:nth-child(3) {
+#control div:nth-child(2) {
     border-bottom-left-radius: 5px;
 }
 #control {

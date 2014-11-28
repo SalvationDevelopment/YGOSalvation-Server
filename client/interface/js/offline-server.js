@@ -3,7 +3,6 @@
 /* global localStorage, require */
 //development, stage, production
 
-
 var os = require('os');
 var http = require('http');
 var url = require('url');
@@ -106,7 +105,8 @@ function runYGOPro(mode, callback) {
         }
         console.log(mode);
         //console.log('It\'s saved!');
-        child_process.execFile(executable, [mode], {
+        try {
+        var instance = child_process.execFile(executable, [mode], {
             cwd: (process.execPath.replace('launcher.exe', 'ygopro'))
         }, function (error) {
             if (error !== null) {
@@ -125,7 +125,13 @@ function runYGOPro(mode, callback) {
             //                console.log(options);
             //            });
         });
-        callback();
+        }catch(error){
+            var inform = confirm(executable+' is not executable, it likely doesnt exist; Would you like more information?');
+            if (inform){
+                alert('If on Windows let the launcher keep downloading till it gets to application_ygopro.exe, the program is not on your computer. The automatic update system will figure this out and correct this error so just wait till this file is downloaded along with its dependencies.');
+            }
+        }
+      
     });
 }
 
