@@ -36,7 +36,7 @@ try {
 
 }
 try {
-    //require('nw.gui').Window.get().showDevTools();
+    require('nw.gui').Window.get().showDevTools();
 } catch (error) {
     console.log('Cant open development tools');
 }
@@ -128,3 +128,8 @@ function runYGOPro(mode, callback) {
         callback();
     });
 }
+
+function fileError(mainError){
+    var filename = 'errorReport' + (new Date().toDateString) + '.log';
+    fs.writeFile(filename, mainError, function () {});        
+} 

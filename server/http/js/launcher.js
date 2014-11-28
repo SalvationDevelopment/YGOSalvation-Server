@@ -4,11 +4,11 @@
 /* exported joinGamelist, leaveGamelist, hostGame, connectgamelist, enterGame, setHostSettings, gui*/
 applySettings();
 var siteLocation = 'http://ygopro.us/';
-
+var os = require('os');
 process.on('uncaughtException', function (err) {
     console.log(err);
-    alert('An error occured,... f#<& it.');
-})
+    alert('An error occured,... That hurt T.T; Stop hitting me!');
+});
 var http = require('http');
 var fs = require('fs');
 var url = require('url');
@@ -73,97 +73,35 @@ var downloadList = [];
 function hashcheck() {
     if (completeList.length === 0) {
         download();
-        //
-        //        if (downloadList.length > 500) {
-        //            var lastchance = confirm(' More than 500 files are missing, do full install?');
-        //            if (!lastchance) {
-        //                download();
-        //            }
-        //            var downloadfile = "http://192.99.11.19:8080/ygopro.zip";
-        //            var host = url.parse(downloadfile).hostname;
-        //            var filename = url.parse(downloadfile).pathname.split("/").pop();
-        //            var theurl = http.createClient(80, host);
-        //            var requestUrl = downloadfile;
-        //            var request = theurl.request('GET', requestUrl, {
-        //                "host": host
-        //            });
-        //
-        //            request.end();
-        //            var dlprogress = 0;
-        //
-        //            request.addListener('response', function (response) {
-        //                var downloadfile = fs.createWriteStream(filename, {
-        //                    'flags': 'a'
-        //                });
-        //                var queueCheck = setInterval(function () {
-        //                    screenMessage.text("Download progress: " + ((dlprogress / response.headers['content-length'] * 100)).toFixed(2) + " %" +
-        //                        ", do not close the launcher!");
-        //                }, 1000);
-        //                screenMessage.text("File size " + filename + ": " + response.headers['content-length'] + " bytes.");
-        //                response.addListener('data', function (chunk) {
-        //                    dlprogress += chunk.length;
-        //                    downloadfile.write(chunk, 'binary');
-        //                });
-        //                response.addListener('error', function (error) {
-        //                    clearInterval(queueCheck);
-        //                    console.log(error);
-        //                    screenMessage.text('Error Downloading full update, try another method.');
-        //                });
-        //                response.addListener("end", function () {
-        //                    downloadfile.end();
-        //                    screenMessage.text("Finished downloading full installation, one moment, do not close the launcher!");
-        //                    clearInterval(queueCheck);
-        //                    setTimeout(function () {
-        //                        var unzipper = fs.createReadStream(filename).pipe(unzip.Extract({
-        //                            path: 'ygopro'
-        //                        }));
-        //                        screenMessage.text("Installing, please do not close the launcher! Nearly done!");
-        //                        unzipper.addListener('end', function () {
-        //                            fs.unlink(filename, function () {
-        //                                createmanifest();
-        //                            });
-        //                        });
-        //                        unzipper.addListener('error', function () {
-        //                            screenMessage.text('Error extracting full update, try another method.');
-        //                            createmanifest();
-        //                        });
-        //
-        //                    }, 3500);
-        //                });
-        //
-        //            });
-        //            return;
-        //        } else {
-        //
-        //
-        //            download();
-        //            return;
-        //        }
     }
     var target = completeList[0];
-    fs.stat(target.path, function (err, stats) {
-        if (err) {
-            //bad file keep going and add it.
-            downloadList.push(target);
-            completeList.shift();
-            hashcheck();
-            return;
-        }
-        //screenMessage.text('Analysing...' + target.path);
+    if (target) {
+        if (target.path) {
+            fs.stat(target.path, function (err, stats) {
+                if (err) {
+                    //bad file keep going and add it.
+                    downloadList.push(target);
+                    completeList.shift();
+                    hashcheck();
+                    return;
+                }
+                //screenMessage.text('Analysing...' + target.path);
 
-        if (stats.size !== target.size) {
-            //console.log(stats.size, target.checksum, target.path);
-            downloadList.push(target);
+                if (stats.size !== target.size) {
+                    //console.log(stats.size, target.checksum, target.path);
+                    downloadList.push(target);
+                }
+                completeList.shift();
+                hashcheck();
+            });
         }
-        completeList.shift();
-        hashcheck();
-    });
+    }
 }
 
 function download() {
     if (downloadList.length === 0) {
         screenMessage.text('Update Complete! System Messages will appear here.');
-        if (operating_system === 'linux') {
+        if (os.platform() === 'linux') {
             fs.fchmod('ygopro/application_ygopro', '+x', function (error) {
                 if (error) console.log(error);
             }); // creates race condition requiring launcher restart.
@@ -431,5 +369,7 @@ function locallogin(init) {
         }
     }
 }
+$(document).on('ready', function () {
 
-locallogin(true);
+    locallogin(true);
+});

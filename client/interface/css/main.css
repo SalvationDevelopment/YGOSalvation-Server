@@ -99,7 +99,7 @@ html {
     background-color: white;
 }
 body {
-    background-color: rgba(255, 255, 255, .75);
+    background-color:black;
 }
 #content {
     padding: 10px;
@@ -332,7 +332,9 @@ section#settings {
 iframe .home header.header.clear {
     height: 100%;
 }
-#control div:hover {} #control div {
+#control div:hover {
+
+} #control div {
     height: 16px;
     width: 25px;
     margin-top: 0;
@@ -342,7 +344,7 @@ iframe .home header.header.clear {
     text-align: center;
     -webkit-app-region: no-drag;
     border: 1px solid black;
-    background: -webkit-linear-gradient(#777, #222);
+    background: -webkit-linear-gradient(#fff, #777);
     box-shadow: 0px 0px 2px white;
 }
 #control div:first-child {
