@@ -19,7 +19,7 @@ var platform = {
 var executable = platform[operating_system] || 'ygopro';
 console.log(operating_system, executable);
 if (operating_system === 'linux' || operating_system === 'darwin') {
-    fs.fchmod('ygopro/' + executable, '+x', function (error) {
+    fs.chmod('ygopro/' + executable, 0755, function (error) {
         if (error) console.log(error);
     }); // creates race condition requiring launcher restart.
 }
