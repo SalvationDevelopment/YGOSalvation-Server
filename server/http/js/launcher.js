@@ -102,7 +102,7 @@ function download() {
     if (downloadList.length === 0) {
         screenMessage.text('Update Complete! System Messages will appear here.');
         if (os.platform() === 'linux') {
-            fs.fchmod('ygopro/application_ygopro', '+x', function (error) {
+            fs.chmod('ygopro/application_ygopro', 0755, function (error) {
                 if (error) console.log(error);
             }); // creates race condition requiring launcher restart.
         }
