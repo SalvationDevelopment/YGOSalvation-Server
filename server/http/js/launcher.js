@@ -107,7 +107,7 @@ function download() {
     if (downloadList.length === 0) {
         screenMessage.text('Update Complete! System Messages will appear here.');
         if (os.platform() === 'linux') {
-            fs.fchmod('ygopro/application_ygopro', '+x', function (error) {
+            fs.chmod('ygopro/application_ygopro', '0777', function (error) {
                 if (error) console.log(error);
             }); // creates race condition requiring launcher restart.
         }
@@ -358,9 +358,10 @@ function renderList(JSONdata) {
             $('#gamelist').append(content);
         }
     }
-
 }
-
+function filterlist(list){
+    
+}
 function locallogin(init) {
     localStorage.nickname = localStorage.nickname || '\u0000\r\n';
     if (localStorage.nickname) {

@@ -1,6 +1,6 @@
 /* jslint node : true */
-
-/* global localStorage, require */
+/* jslint browser : true */
+/* global localStorage, require, confirm, alert */
 //development, stage, production
 
 var os = require('os');
@@ -19,7 +19,7 @@ var platform = {
 var executable = platform[operating_system] || 'ygopro';
 console.log(operating_system, executable);
 if (operating_system === 'linux' || operating_system === 'darwin') {
-    fs.chmod('ygopro/' + executable, '+x', function (error) {
+    fs.chmod('ygopro/' + executable, '0777', function (error) {
         if (error) console.log(error);
     }); // creates race condition requiring launcher restart.
 }
