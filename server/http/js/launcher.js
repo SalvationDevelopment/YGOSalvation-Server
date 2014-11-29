@@ -39,7 +39,12 @@ function createmanifest() {
         });
     });
 }
-createmanifest();
+$(document).on('ready', function () {
+
+    locallogin(true);
+    createmanifest();
+});
+
 
 process.on('uncaughtException', function (err) {
     console.log('Caught exception: ' + err);
@@ -368,7 +373,3 @@ function locallogin(init) {
         }
     }
 }
-$(document).on('ready', function () {
-
-    locallogin(true);
-});
