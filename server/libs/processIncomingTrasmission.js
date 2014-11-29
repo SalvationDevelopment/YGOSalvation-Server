@@ -27,6 +27,11 @@ function processIncomingTrasmission(data, socket, input, callback) {
 
     //console.log(socket.hostString);
     if (socket.active) {
+        try{
+            console.log(socket.username, socket.hostString,gamelist[socket.hostString]);
+        }catch(error){
+            console.log(socket.username, socket.hostString,'not on gamelist');                                                    
+        }
         if (gamelist[socket.hostString] && !socket.active_ygocore) {
             socket.alpha = false;
             connectToCore(gamelist[socket.hostString].port, data, socket);
