@@ -198,7 +198,6 @@ function setHostSettings() {
         return;
     }
 
-    locallogin();
     ygopro('-j');
 }
 
