@@ -197,8 +197,6 @@ function setHostSettings() {
     if (!secure(duelRequest.prio, duelRequest.checkd, duelRequest.shuf)) {
         return;
     }
-
-    locallogin();
     ygopro('-j');
 }
 
