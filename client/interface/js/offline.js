@@ -57,15 +57,21 @@ $('document').ready(function () {
     $('main').load(developmentstage[mode]);
 
 });
-
+var openid = '';
 function closeAllScreens() {
     $('#salvationdevelopment').css('display', 'block');
     $('#staticbar section').css('display', 'none');
+    openid = '';
 }
 
 function openScreen(id) {
-
+    if(id === openid){
+        closeAllScreens();
+        return;
+    }
     closeAllScreens();
     $('#salvationdevelopment').css('display', 'none');
     $(id).toggle();
+    id = openid;
+    return;
 }
