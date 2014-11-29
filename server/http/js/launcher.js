@@ -360,7 +360,23 @@ function renderList(JSONdata) {
     }
 }
 function filterlist(list){
-    
+    var filter = {
+        banlist : $('#creategamebanlist').val()
+    };
+}
+function populatealllist(){
+    fs.readdir('./ygopro/deck', function(error,filenames){
+        $('#currentdeck').html('');
+        for(var files = 0; filenames.length > files; files++){
+            $('#currentdeck').append('<option value="'+filenames[files]+'">'+filenames[files]+'+</option>');
+        }
+    });
+    fs.readdir('./ygopro/skins', function(error,filenames){
+        $('#skinlist').html('');
+        for(var files = 0; filenames.length > files; files++){
+            $('#currentdeck').append('<option value="'+filenames[files]+'">'+filenames[files]+'+</option>');
+        }
+    });
 }
 function locallogin(init) {
     localStorage.nickname = localStorage.nickname || '\u0000\r\n';

@@ -389,6 +389,9 @@ aside {
 .featurelist li:first-child {
     padding-left: 0;
 }
+ul#mirrors {
+    width: 100%;
+}
 .featurelist li:last-child {
     padding-right: 0;
 }
@@ -425,8 +428,12 @@ aside {
 .lander-main li:first-child {
     background: rgba(0, 0, 0, .9);
     border: 1px solid rgba(255, 200, 200, .2);
-    padding: 16px 56px;
+    padding: 10px 52px;
     border-radius: 40px;
+    clear: both;
+    display: block;
+    width: 287px;
+    margin: 0 auto;
 }
 article {
     width: 50%;
