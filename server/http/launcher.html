@@ -126,7 +126,7 @@
             <div id="gamelist"></div>
             <div id="gamefilter">
                 <label>Current Deck
-                    <select></select>
+                    <select id='currentdeck'></select>
                 </label>
                 <h3>Search</h3>
                 <div class="incasing">
@@ -195,11 +195,12 @@
                     <label>Enable Microphone</label>
 
                     <label>Skin</label>
-                    <select>
+                    <select id="skinlist">
                         <option value="default">Default</option>
                     </select>
                     <button onclick="saveSettings();closeAllScreens()" style="color:black">Save</button>
                     <button onclick="applySettings();closeAllScreens()" style="color:black">Cancel</button>
+                    <button onclick="locallogin(true);closeAllScreens()" style="color:black">Change Username</button>
                     <br />
                 </div>
         </section>
