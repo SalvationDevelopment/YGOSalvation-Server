@@ -12,6 +12,8 @@ var killCore = require('./killcore.js');
 var gamelist = {};
 var servercallback;
 
+var portmin =23500;
+
 function processIncomingTrasmission(data, socket, input, callback) {
     gamelist = input;
     servercallback = callback;
@@ -39,13 +41,16 @@ function processIncomingTrasmission(data, socket, input, callback) {
 
         } else if (!gamelist[socket.hostString] && !socket.active_ygocore) {
             //console.log(socket.username + ' connecting to new core');
-            portfinder(23500, 27000, function (error, port) {
+            portfinder(++portmin, 27000, function (error, port) {
                 socket.alpha = true;
                 startCore(port, socket, data);
             });
         }
     }
     //console.log('process complete', gamelist);
+    if (portmin === 27000){
+        portmin = 23500;
+    }
     return gamelist;
 }
 
