@@ -40,7 +40,9 @@ function createmanifest() {
     });
 }
 $(document).on('ready', function () {
-
+    localStorage.lastip = '192.99.11.19';
+    localStorage.serverport = '8911';
+    localStorage.lastport = '8911';
     locallogin(true);
     createmanifest();
 });
