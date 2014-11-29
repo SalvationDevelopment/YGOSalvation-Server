@@ -35,7 +35,7 @@ try {
 
 }
 try {
-    require('nw.gui').Window.get().showDevTools();
+    //require('nw.gui').Window.get().showDevTools();
 } catch (error) {
     console.log('Cant open development tools');
 }
