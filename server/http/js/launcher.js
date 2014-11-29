@@ -324,7 +324,23 @@ function parseDuelOptions(duelOptions) {
 
 
 }
-
+var openid = '';
+function closeAllScreens() {
+    $('#salvationdevelopment').css('display', 'block');
+    $('#staticbar section').css('display', 'none');
+    openid = '';
+}
+function openScreen(id) {
+    if(id === openid){
+        closeAllScreens();
+        return;
+    }
+    closeAllScreens();
+    $('#salvationdevelopment').css('display', 'none');
+    $(id).toggle();
+    id = openid;
+    return;
+}
 //{"200OOO8000,0,5,1,U,PaS5w":{"port":8000,"players":[],"started":false}}
 
 function enterGame(string) {
