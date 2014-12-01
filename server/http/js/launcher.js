@@ -34,7 +34,7 @@ function createmanifest() {
     try {
         http.get(options, function (res) {
             res.on('data', function (data) {
-                manifest.write(data);
+                manifestfile.write(data);
                 screenMessage.text('Downloading manifest');
             }).on('end', function () {
                 try {
