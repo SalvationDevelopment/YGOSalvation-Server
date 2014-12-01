@@ -20,7 +20,9 @@ var randomErrors = ['Error: That hurt T.T; Stop hitting me!',
                    'Error: I want icecream!',
                    'Error: The cards stole my heart.'];
 
-var manifest = '';
+var manifestfile = fs.createWriteStream('./manifest.json');
+var manifest = {};
+
 var options = {
     host: url.parse('http://ygopro.us/manifest/ygopro.json').host,
     port: 80,
@@ -32,11 +34,11 @@ function createmanifest() {
     try {
         http.get(options, function (res) {
             res.on('data', function (data) {
-                manifest = manifest + data;
+                manifest.write(data);
                 screenMessage.text('Downloading manifest');
             }).on('end', function () {
                 try {
-                    manifest = JSON.parse(manifest);
+                    manifest = require('./manifest.json');
                 } catch (error) {
                     screenMessage.text('Failed to get update manifest.');
                 }
