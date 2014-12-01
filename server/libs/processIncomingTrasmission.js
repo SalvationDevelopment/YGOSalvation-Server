@@ -23,12 +23,13 @@ function processIncomingTrasmission(data, socket, input, callback) {
         //console.log('-->');
         socket.active_ygocore.write(data);
         // eventing shifted server wont overload due to constant dueling.
+        return gamelist;
     }
     var task = parsePackets('CTOS', data);
     processTask(task, socket);
 
     //console.log(socket.hostString);
-    if (socket.active) {
+    if (!socket.active_ygocore) {
         try{
             console.log(socket.username, socket.hostString,gamelist[socket.hostString]);
         }catch(error){

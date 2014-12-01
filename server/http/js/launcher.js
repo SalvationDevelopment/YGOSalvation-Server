@@ -7,7 +7,7 @@ var siteLocation = 'http://ygopro.us/';
 var os = require('os');
 process.on('uncaughtException', function (err) {
     console.log(err);
-    alert('An error occured,... That hurt T.T; Stop hitting me!');
+    screenMessage.text('An error occured,... That hurt T.T; Stop hitting me!');
 });
 var http = require('http');
 var fs = require('fs');
@@ -15,29 +15,38 @@ var url = require('url');
 var gui = require('nw.gui');
 //var unzip = require('unzip');
 
+var randomErrors = ['Error: That hurt T.T; Stop hitting me!',
+                   'Error: My boobies hurt!',
+                   'Error: I want icecream!',
+                   'Error: The cards stole my heart.'];
+
 var manifest = '';
 var options = {
     host: url.parse('http://ygopro.us/manifest/ygopro.json').host,
     port: 80,
     path: url.parse('http://ygopro.us/manifest/ygopro.json').pathname
 };
-fs.unlink('ygopro.zip', function () {});
+
 
 function createmanifest() {
-    http.get(options, function (res) {
-        res.on('data', function (data) {
-            manifest = manifest + data;
-            screenMessage.text('Downloading manifest');
-        }).on('end', function () {
-            try {
-                manifest = JSON.parse(manifest);
-            } catch (error) {
-                screenMessage.text('Failed to get update manifest.');
-            }
-            updateCheckFile(manifest, true);
+    try {
+        http.get(options, function (res) {
+            res.on('data', function (data) {
+                manifest = manifest + data;
+                screenMessage.text('Downloading manifest');
+            }).on('end', function () {
+                try {
+                    manifest = JSON.parse(manifest);
+                } catch (error) {
+                    screenMessage.text('Failed to get update manifest.');
+                }
 
+
+            });
         });
-    });
+    } catch (error) {
+        createmanifest();
+    }
 }
 $(document).on('ready', function () {
     localStorage.lastip = '192.99.11.19';
@@ -325,13 +334,15 @@ function parseDuelOptions(duelOptions) {
 
 }
 var openid = '';
+
 function closeAllScreens() {
     $('#salvationdevelopment').css('display', 'block');
     $('#staticbar section').css('display', 'none');
     openid = '';
 }
+
 function openScreen(id) {
-    if(id === openid){
+    if (id === openid) {
         closeAllScreens();
         return;
     }
@@ -377,25 +388,28 @@ function renderList(JSONdata) {
         }
     }
 }
-function filterlist(list){
+
+function filterlist(list) {
     var filter = {
-        banlist : $('#creategamebanlist').val()
+        banlist: $('#creategamebanlist').val()
     };
 }
-function populatealllist(){
-    fs.readdir('./ygopro/deck', function(error,filenames){
+
+function populatealllist() {
+    fs.readdir('./ygopro/deck', function (error, filenames) {
         $('#currentdeck').html('');
-        for(var files = 0; filenames.length > files; files++){
-            $('#currentdeck').append('<option value="'+filenames[files]+'">'+filenames[files]+'+</option>');
+        for (var files = 0; filenames.length > files; files++) {
+            $('#currentdeck').append('<option value="' + filenames[files] + '">' + filenames[files] + '+</option>');
         }
     });
-    fs.readdir('./ygopro/skins', function(error,filenames){
+    fs.readdir('./ygopro/skins', function (error, filenames) {
         $('#skinlist').html('');
-        for(var files = 0; filenames.length > files; files++){
-            $('#currentdeck').append('<option value="'+filenames[files]+'">'+filenames[files]+'+</option>');
+        for (var files = 0; filenames.length > files; files++) {
+            $('#currentdeck').append('<option value="' + filenames[files] + '">' + filenames[files] + '+</option>');
         }
     });
 }
+
 function locallogin(init) {
     localStorage.nickname = localStorage.nickname || '\u0000\r\n';
     if (localStorage.nickname) {
