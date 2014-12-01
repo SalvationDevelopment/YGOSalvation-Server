@@ -37,6 +37,7 @@ function createmanifest() {
                 manifestfile.write(data);
                 screenMessage.text('Downloading manifest');
             }).on('end', function () {
+                manifestfile.end();
                 try {
                     manifest = require('./manifest.json');
                 } catch (error) {
