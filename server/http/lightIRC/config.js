@@ -56,7 +56,7 @@ params.navigationPosition           = "bottom";
 
 params.fontSize = 10;
 params.showInfoMessages = false;
-params.emoticonPath = 'http://ygopro.us/lightIRC/emoticons/'
+params.emoticonPath = 'http://ygopro.us/lightIRC/emoticons/';
 
 
 /* Use this method to send a command to lightIRC with JavaScript */
@@ -101,7 +101,11 @@ function onActiveWindowChange(window) {
 
 /* This event ensures that lightIRC sends the default quit message when the user closes the browser window */
 window.onbeforeunload = function() {
+    try{
   swfobject.getObjectById('lightIRC').sendQuit();
+    }catch(error){
+        console.log('lightirc error');
+        }
 };
 
 /* This loop escapes % signs in parameters. You should not change it */
