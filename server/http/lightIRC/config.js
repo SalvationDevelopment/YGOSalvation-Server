@@ -33,7 +33,7 @@ params.autojoin                     = "#lobby";
 params.perform                      = "";
 
 /* Whether the server window (and button) should be shown */
-params.showServerWindow             = true;
+params.showServerWindow             = false;
 
 /* Show a popup to enter a nickname */
 params.showNickSelection            = true;
@@ -41,7 +41,7 @@ params.showNickSelection            = true;
 params.showIdentifySelection        = false;
 
 /* Show button to register a nickname */
-params.showRegisterNicknameButton   = false;
+params.showRegisterNicknameButton   = true;
 /* Show button to register a channel */
 params.showRegisterChannelButton    = false;
 
@@ -54,7 +54,9 @@ params.navigationPosition           = "bottom";
 
 /* See more parameters at http://redmine.lightirc.com/projects/lightirc/wiki/Customization_parameters */
 
-
+params.fontSize = 10;
+params.showInfoMessages = false;
+params.emoticonPath = 'http://ygopro.us/lightIRC/emoticons/'
 
 
 /* Use this method to send a command to lightIRC with JavaScript */
