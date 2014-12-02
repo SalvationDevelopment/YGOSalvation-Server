@@ -64,8 +64,8 @@ DataGrid {
 
 /* Configures the main chat area */
 TextArea {
-	chromeColor:#666666;
-	contentbackgroundColor:transparent;
+	chromeColor:#000000;
+	contentbackgroundColor:#000000;
 	color:#ffffff;
 	borderColor:#d5d5d5;
 }
@@ -77,7 +77,7 @@ Scroller {
 
 /* Configures the text input boxes and other TextInput elements*/
 TextInput {
-	contentbackgroundColor:transparent;
+	contentbackgroundColor:#000000;
 	color:#ffffff;
 }
 
@@ -154,6 +154,7 @@ RadioButton {
 .channelHeader {
 	color:#eaeaea;
 }
-TextArea, List, TextInput {
-	contentBackgroundAlpha:0.75;
+TextArea, List, TextInput,DataGrid {
+    contentBackgroundColor:#000000;
+	contentBackgroundAlpha:.5;
 }
