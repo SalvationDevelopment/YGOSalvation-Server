@@ -26,7 +26,7 @@ var options = {
     port: 80,
     path: url.parse('http://ygopro.us/manifest/ygopro.json').pathname
 };
-
+trycount = 3
 
 function createmanifest() {
     try {
@@ -34,22 +34,16 @@ function createmanifest() {
             res.on('data', function (data) {
                 manifest = manifest + data;
                 screenMessage.text('Downloading manifest');
-            }).on('end', function () {
-                try {
+            }).on('end', function () {              
                     manifest = JSON.parse(manifest);
-                } catch (error) {
-                    screenMessage.text('Failed to get update manifest retrying,...');
-                    var manifest = '';
-                    setInterval(function(){
-                        createmanifest()
-                    },3000);
-                }
-
-
             });
         });
     } catch (error) {
-        createmanifest();
+        screenMessage.text('Failed to get update manifest retrying,...');
+        var manifest = '';
+        setInterval(function () {
+            createmanifest()
+        }, 3000);
     }
 }
 $(document).on('ready', function () {
