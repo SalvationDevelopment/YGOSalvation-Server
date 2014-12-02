@@ -55,7 +55,7 @@ $(document).on('ready', function () {
     localStorage.serverport = '8911';
     localStorage.lastport = '8911';
     locallogin(true);
-    populatealllist()
+    populatealllist();
     createmanifest();
     
 });
@@ -403,13 +403,14 @@ function populatealllist() {
     fs.readdir('./ygopro/deck', function (error, deckfilenames) {
         $('#currentdeck').html('');
         for (var dfiles = 0; deckfilenames.length > dfiles; dfiles++) {
-            $('#currentdeck').append('<option value="' + deckfilenames[dfiles] + '">' + deckfilenames[dfiles] + '+</option>');
+            var deck =deckfilenames[dfiles].replace('.ydk','')
+            $('#currentdeck').append('<option value="' + deck + '">' + deck + '</option>');
         }
     });
     fs.readdir('./ygopro/skins', function (error, skinfilenames) {
         $('#skinlist').html('');
         for (var sfiles = 0; skinfilenames.length > sfiles; sfiles++) {
-            $('#currentdeck').append('<option value="' + skinfilenames[sfiles] + '">' + skinfilenames[sfiles] + '+</option>');
+            $('#skinlist').append('<option value="' + skinfilenames[sfiles] + '">' + skinfilenames[sfiles] + '</option>');
         }
     });
 }
