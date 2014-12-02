@@ -9,7 +9,10 @@
         "min_width": 1024,
         "height": 535,
         "min-height": 535,
-        "icon": "interface/icon.png"
+        "icon": "interface/icon.png", 
+        "show": false,
+        "transparent": true,
+         "resizable": false,
     },
     "webkit": {
         "plugin": true,

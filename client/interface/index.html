@@ -165,7 +165,7 @@
             </div>
 
     </main>
-         <script>
+    <script>
         (function (i, s, o, g, r, a, m) {
             i['GoogleAnalyticsObject'] = r;
             i[r] = i[r] || function () {
@@ -189,6 +189,13 @@
                 $(document.body).addClass("in-iframe");
             }
         });
+    </script>
+    <script>
+        var gui = require('nw.gui');
+
+        onload = function () {
+            gui.Window.get().show();
+        }
     </script>
 </body>
 
