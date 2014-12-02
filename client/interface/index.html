@@ -187,15 +187,10 @@
         $(function () {
             if (window.self != window.top) {
                 $(document.body).addClass("in-iframe");
+                var gui = require('nw.gui');
+                gui.Window.get().show();
             }
         });
-    </script>
-    <script>
-        var gui = require('nw.gui');
-
-        onload = function () {
-            gui.Window.get().show();
-        }
     </script>
 </body>
 
