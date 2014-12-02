@@ -2,7 +2,6 @@
 /* jslint browser : true */
 /* global ygopro, $, isChecked, alert, Primus, console, process, applySettings, prompt, confirm */
 /* exported joinGamelist, leaveGamelist, hostGame, connectgamelist, enterGame, setHostSettings, gui*/
-applySettings();
 var siteLocation = 'http://ygopro.us/';
 var os = require('os');
 process.on('uncaughtException', function (err) {
@@ -26,7 +25,6 @@ var options = {
     port: 80,
     path: url.parse('http://ygopro.us/manifest/ygopro.json').pathname
 };
-trycount = 3
 
 function createmanifest() {
     try {
@@ -47,11 +45,13 @@ function createmanifest() {
     }
 }
 $(document).on('ready', function () {
+    applySettings();
     localStorage.lastip = '192.99.11.19';
     localStorage.serverport = '8911';
     localStorage.lastport = '8911';
     locallogin(true);
     createmanifest();
+    populatealllist();
 });
 
 
