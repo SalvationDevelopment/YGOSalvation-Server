@@ -17,10 +17,10 @@ lightIRC {
 
 /* Background gradient settings. Set both items to the same value if you want a solid background color */
 .backgroundGradientTop {
-	color:#000000;
+	color:transparent;
 }
 .backgroundGradientBottom {
-	color:#000000;
+	color:transparent;
 }
 
 /* Configures buttons */
