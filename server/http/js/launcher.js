@@ -2,6 +2,7 @@
 /* jslint browser : true */
 /* global ygopro, $, isChecked, alert, Primus, console, process, applySettings, prompt, confirm */
 /* exported joinGamelist, leaveGamelist, hostGame, connectgamelist, enterGame, setHostSettings, gui*/
+applySettings();
 var siteLocation = 'http://ygopro.us/';
 var os = require('os');
 process.on('uncaughtException', function (err) {
@@ -26,32 +27,35 @@ var options = {
     path: url.parse('http://ygopro.us/manifest/ygopro.json').pathname
 };
 
+
 function createmanifest() {
     try {
         http.get(options, function (res) {
             res.on('data', function (data) {
                 manifest = manifest + data;
                 screenMessage.text('Downloading manifest');
-            }).on('end', function () {              
+            }).on('end', function () {
+                try {
                     manifest = JSON.parse(manifest);
+                    updateCheckFile(manifest, true);
+                } catch (error) {
+                    screenMessage.text('Failed to get update manifest. You may manually retrigger in Settings.');
+                }
+
+
             });
         });
     } catch (error) {
-        screenMessage.text('Failed to get update manifest retrying,...');
-        var manifest = '';
-        setInterval(function () {
-            createmanifest()
-        }, 3000);
+        createmanifest();
     }
 }
+
 $(document).on('ready', function () {
-    applySettings();
     localStorage.lastip = '192.99.11.19';
     localStorage.serverport = '8911';
     localStorage.lastport = '8911';
     locallogin(true);
     createmanifest();
-    populatealllist();
 });
 
 
