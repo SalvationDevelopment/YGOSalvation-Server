@@ -36,7 +36,7 @@ params.perform                      = "";
 params.showServerWindow             = false;
 
 /* Show a popup to enter a nickname */
-params.showNickSelection            = true;
+params.showNickSelection            = false;
 /* Adds a password field to the nick selection box */
 params.showIdentifySelection        = false;
 
