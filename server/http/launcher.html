@@ -55,24 +55,24 @@
                 <label>Ban List</label>
                 <select id="creategamebanlist">
                     <option value="0" selected>2014.10.1(TCG)</option>
-                    <option value="1" >2014.10.1(OCG)</option>
-                    <option value="2" >2014.7.1(OCG)</option>
-                    <option value="3" >2014.4.1(TCG)</option>
-                    <option value="4" >2014.4.1(OCG)</option>
-                    <option value="5" >2014.1.1(TCG)</option>
-                    <option value="6" >2014.2.1(OCG)</option>
-                    <option value="7" >2013.9.1(TCG)</option>
-                    <option value="8" >2013.9.1(OCG)</option>
-                    <option value="9" >2013.3.1</option>
-                    <option value="10" >2012.9.1</option>
-                    <option value="11" >2012.3.1</option>
-                    <option value="12" >2011.9.1</option>
-                    <option value="13" >Traditional</option>
-                    <option value="14" >Unlimited</option>
-                    <option value="15" >Mega-Banned</option>
-                    <option value="16" >TBC</option>
+                    <option value="1">2014.10.1(OCG)</option>
+                    <option value="2">2014.7.1(OCG)</option>
+                    <option value="3">2014.4.1(TCG)</option>
+                    <option value="4">2014.4.1(OCG)</option>
+                    <option value="5">2014.1.1(TCG)</option>
+                    <option value="6">2014.2.1(OCG)</option>
+                    <option value="7">2013.9.1(TCG)</option>
+                    <option value="8">2013.9.1(OCG)</option>
+                    <option value="9">2013.3.1</option>
+                    <option value="10">2012.9.1</option>
+                    <option value="11">2012.3.1</option>
+                    <option value="12">2011.9.1</option>
+                    <option value="13">Traditional</option>
+                    <option value="14">Unlimited</option>
+                    <option value="15">Mega-Banned</option>
+                    <option value="16">TBC</option>
                     <option value="17">N/A</option>
-                    
+
                 </select>
                 <br />
                 <label>Card Pool</label>
@@ -134,7 +134,9 @@
                         <select></select>
                     </label>
                     <label>Round Type
-                        <select></select>
+                        <select value='0' selected>Single</select>
+                        <select value='1'>Match</select>
+                        <select value='2'>Tag</select>
                     </label>
                     <label>Banlist
                         <select></select>
@@ -148,12 +150,14 @@
                     <label>Username
                         <input placeholder="Players User Name">
                     </label>
-                    <button>Search</button>
-                    <button>Random Spectate</button>
-                    <button id="checkmateServer" onclick="connectToCheckmateServer();">
-                        Checkmate Server
-                    </button>
-                    <button onclick="closeAllScreens()">Close</button>
+                    <div style="font-size:smaller">
+                        <button>Search</button>
+                        <button>Random Spectate</button>
+                        <button id="checkmateServer" onclick="connectToCheckmateServer();">
+                            Checkmate Server
+                        </button>
+                        <button onclick="closeAllScreens()">Close</button>
+                    </div>
                 </div>
             </div>
 

@@ -55,7 +55,6 @@ $(document).on('ready', function () {
     localStorage.serverport = '8911';
     localStorage.lastport = '8911';
     locallogin(true);
-    populatealllist();
     createmanifest();
     
 });
@@ -217,7 +216,7 @@ function setHostSettings() {
     if (!secure(duelRequest.prio, duelRequest.checkd, duelRequest.shuf)) {
         return;
     }
-
+    localStorage.lastdeck = $('#currentdeck').val();
     ygopro('-j');
 }
 
@@ -359,6 +358,7 @@ function openScreen(id) {
 //{"200OOO8000,0,5,1,U,PaS5w":{"port":8000,"players":[],"started":false}}
 
 function enterGame(string) {
+    localStorage.lastdeck = $('#currentdeck').val();
     localStorage.roompass = string;
     ygopro('-j');
 }
@@ -427,3 +427,5 @@ function locallogin(init) {
         }
     }
 }
+
+populatealllist();
