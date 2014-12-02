@@ -50,7 +50,7 @@ List {
 	rollOverColor:#333333;
 	selectionColor:#666666;
 	alternatingItemColors:#000000, #000000;
-	backgroundColor:#000000;
+	backgroundColor:transparent;
 }
 
 /* Configures the channel list popup and other DataGrid elements */
@@ -59,13 +59,13 @@ DataGrid {
 	rollOverColor:#333333;
 	selectionColor:#666666;
 	alternatingItemColors:#000000, #000000;
-	backgroundColor:#000000;
+	backgroundColor:transparent;
 }
 
 /* Configures the main chat area */
 TextArea {
 	chromeColor:#666666;
-	contentBackgroundColor:#000000;
+	contentbackgroundColor:transparent;
 	color:#ffffff;
 	borderColor:#d5d5d5;
 }
@@ -77,7 +77,7 @@ Scroller {
 
 /* Configures the text input boxes and other TextInput elements*/
 TextInput {
-	contentBackgroundColor:#000000;
+	contentbackgroundColor:transparent;
 	color:#ffffff;
 }
 
