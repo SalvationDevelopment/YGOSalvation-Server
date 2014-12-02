@@ -55,7 +55,9 @@ $(document).on('ready', function () {
     localStorage.serverport = '8911';
     localStorage.lastport = '8911';
     locallogin(true);
+    populatealllist()
     createmanifest();
+    
 });
 
 
@@ -398,16 +400,16 @@ function filterlist(list) {
 }
 
 function populatealllist() {
-    fs.readdir('./ygopro/deck', function (error, filenames) {
+    fs.readdir('./ygopro/deck', function (error, deckfilenames) {
         $('#currentdeck').html('');
-        for (var files = 0; filenames.length > files; files++) {
-            $('#currentdeck').append('<option value="' + filenames[files] + '">' + filenames[files] + '+</option>');
+        for (var dfiles = 0; deckfilenames.length > dfiles; dfiles++) {
+            $('#currentdeck').append('<option value="' + deckfilenames[dfiles] + '">' + deckfilenames[dfiles] + '+</option>');
         }
     });
-    fs.readdir('./ygopro/skins', function (error, filenames) {
+    fs.readdir('./ygopro/skins', function (error, skinfilenames) {
         $('#skinlist').html('');
-        for (var files = 0; filenames.length > files; files++) {
-            $('#currentdeck').append('<option value="' + filenames[files] + '">' + filenames[files] + '+</option>');
+        for (var sfiles = 0; skinfilenames.length > sfiles; sfiles++) {
+            $('#currentdeck').append('<option value="' + skinfilenames[sfiles] + '">' + skinfilenames[sfiles] + '+</option>');
         }
     });
 }
