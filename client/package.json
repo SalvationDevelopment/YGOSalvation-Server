@@ -10,7 +10,8 @@
         "height": 535,
         "max_height": 535,
         "min_height": 535,
-        "icon": "interface/icon.png"
+        "icon": "interface/icon.png",
+        "transparent": true
     },
     "webkit": {
         "plugin": true,

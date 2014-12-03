@@ -29,26 +29,12 @@ var options = {
 
 
 function createmanifest() {
-    try {
-        http.get(options, function (res) {
-            res.on('data', function (data) {
-                manifest = manifest + data;
-                screenMessage.text('Downloading manifest');
-            }).on('end', function () {
-                try {
-                    manifest = JSON.parse(manifest);
-                    updateCheckFile(manifest, true);
-                } catch (error) {
-                    screenMessage.text('Failed to get update manifest. You may manually retrigger in Settings.');
-                }
-
-
-            });
-        });
-    } catch (error) {
-        createmanifest();
-    }
+    $.getJSON("ajax/test.json", function (data) {
+        manifest = data;
+        updateCheckFile(manifest, true);
+    });
 }
+
 
 $(document).on('ready', function () {
     localStorage.lastip = '192.99.11.19';
@@ -56,7 +42,7 @@ $(document).on('ready', function () {
     localStorage.lastport = '8911';
     locallogin(true);
     createmanifest();
-    
+
 });
 
 
@@ -403,7 +389,7 @@ function populatealllist() {
     fs.readdir('./ygopro/deck', function (error, deckfilenames) {
         $('#currentdeck').html('');
         for (var dfiles = 0; deckfilenames.length > dfiles; dfiles++) {
-            var deck =deckfilenames[dfiles].replace('.ydk','')
+            var deck = deckfilenames[dfiles].replace('.ydk', '')
             $('#currentdeck').append('<option value="' + deck + '">' + deck + '</option>');
         }
     });
