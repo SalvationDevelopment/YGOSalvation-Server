@@ -23,7 +23,8 @@ var randomErrors = ['Error: That hurt T.T; Stop hitting me!',
 var manifest = '';
 
 function createmanifest() {
-    $.getJSON('http://ygopro.us/manifest/ygopro.json', function (data) {
+    screenMessage.text('Downloading Manifest');
+    var dlattempt = $.getJSON('http://ygopro.us/manifest/ygopro.json', function (data) {
         manifest = data;
         updateCheckFile(manifest, true);
     });
