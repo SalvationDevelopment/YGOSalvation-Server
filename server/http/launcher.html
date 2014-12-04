@@ -48,9 +48,17 @@
         <section id="hostSettings">
             <div class="container">
                 <h2>Settings</h2>
-                <label>Ranked</label>
+                <!--<label>Ranked</label>
                 <input type="radio" name="ranked" value="R" />Yes
                 <input type="radio" name="ranked" value="U" checked />No
+                <br />-->
+                <label>Card Pool</label>
+                <select id="creategamecardpool">
+                    <option value="0">OCG</option>
+                    <option value="1">TCG</option>
+                    <option value="2" selected>OCG/TCG</option>
+                    <option value="3">Anime</option>
+                </select>
                 <br />
                 <label>Ban List</label>
                 <select id="creategamebanlist">
@@ -75,15 +83,7 @@
 
                 </select>
                 <br />
-                <label>Card Pool</label>
-                <select id="creategamecardpool">
-                    <option value="0">OCG</option>
-                    <option value="1">TCG</option>
-                    <option value="2" selected>OCG/TCG</option>
-                    <option value="3">Anime</option>
 
-                </select>
-                <br />
                 <label>Duel Mode</label>
                 <select id="creategameduelmode">
                     <option value="0" selected>Single</option>
@@ -130,30 +130,54 @@
                 </label>
                 <h3>Search</h3>
                 <div class="incasing">
-                    <label>Format
-                        <select></select>
+                    <label>Card Pool
+                        <select id='filercardpool'>
+                            <option value="0">OCG</option>
+                            <option value="1">TCG</option>
+                            <option value="2" selected>OCG/TCG</option>
+                            <option value="3">Anime</option>
+                        </select>
                     </label>
                     <label>Round Type
-                        <select id="roundtype">
+                        <select id="filterroundtype">
                             <option value='0'>Single</option>
                             <option value='1'>Match</option>
                             <option value='2'>Tag</option>
                         </select>
                     </label>
                     <label>Banlist
-                        <select></select>
+                        <select id='filterbanlist'>
+                        <option value="0" selected>2014.10.1(TCG)</option>
+                        <option value="1">2014.10.1(OCG)</option>
+                        <option value="2">2014.7.1(OCG)</option>
+                        <option value="3">2014.4.1(TCG)</option>
+                        <option value="4">2014.4.1(OCG)</option>
+                        <option value="5">2014.1.1(TCG)</option>
+                        <option value="6">2014.2.1(OCG)</option>
+                        <option value="7">2013.9.1(TCG)</option>
+                        <option value="8">2013.9.1(OCG)</option>
+                        <option value="9">2013.3.1</option>
+                        <option value="10">2012.9.1</option>
+                        <option value="11">2012.3.1</option>
+                        <option value="12">2011.9.1</option>
+                        <option value="13">Traditional</option>
+                        <option value="14">Unlimited</option>
+                        <option value="15">Mega-Banned</option>
+                        <option value="16" disabled>TBC</option>
+                        <option value="17">N/A</option>
+                            </select>
                     </label>
                     <label>Time Limit
-                        <select>
+                        <select id="filtertimelimit">
                             <option value=3>3 Mins</option>
                             <option value=5>5 Mins</option>
                         </select>
                     </label>
                     <label>Username
-                        <input placeholder="Players User Name">
+                        <input placeholder="Players User Name" id='filterusername'>
                     </label>
                     <div style="font-size:smaller">
-                        <button>Search</button>
+                        <button onclick='setfilter();'>Search</button>
                         <button>Random Spectate</button>
                         <button id="checkmateServer" onclick="connectToCheckmateServer();">
                             Checkmate Server

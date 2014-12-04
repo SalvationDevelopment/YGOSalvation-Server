@@ -374,11 +374,13 @@ function renderList(JSONdata) {
     }
 }
 
-function filterlist(list) {
+function set(list) {
     var filter = {
         banlist: $('#creategamebanlist').val()
     };
 }
+
+function setfilter(){};
 
 function populatealllist() {
     fs.readdir('./ygopro/deck', function (error, deckfilenames) {
