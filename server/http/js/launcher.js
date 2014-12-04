@@ -21,15 +21,9 @@ var randomErrors = ['Error: That hurt T.T; Stop hitting me!',
                    'Error: The cards stole my heart.'];
 
 var manifest = '';
-var options = {
-    host: url.parse('http://ygopro.us/manifest/ygopro.json').host,
-    port: 80,
-    path: url.parse('http://ygopro.us/manifest/ygopro.json').pathname
-};
-
 
 function createmanifest() {
-    $.getJSON("ajax/test.json", function (data) {
+    $.getJSON('http://ygopro.us/manifest/ygopro.json', function (data) {
         manifest = data;
         updateCheckFile(manifest, true);
     });
