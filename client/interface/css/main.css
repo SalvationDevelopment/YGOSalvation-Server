@@ -96,10 +96,10 @@ body {
 }
 html {
     /*    border: 1px solid #aaa;*/
-    background-color: white;
+    background-color: transparent;
 }
 body {
-    background-color:black;
+    background-color:transparent;
 }
 #content {
     padding: 10px;
@@ -349,6 +349,7 @@ iframe .home header.header.clear {
 }
 #control div:first-child {
     border-bottom-right-radius: 5px;
+    border-top-right-radius:5px;
     margin-right: 3px;
     width: 50px;
 }
@@ -360,6 +361,7 @@ iframe .home header.header.clear {
 }
 #control div:nth-child(2) {
     border-bottom-left-radius: 5px;
+    border-top-left-radius:5px;
 }
 #control {
     position: fixed;
