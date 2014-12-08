@@ -2,6 +2,12 @@
 var fs = require('fs');
 var path = require('path');
 var startTime = new Date();
+
+var normal = fs.existsSync('ygopro');
+if (!normal){
+    fs.mkdirSync('ygopro');
+}
+
 console.log(startTime);
 function dirTree(filename) {
     var data;
