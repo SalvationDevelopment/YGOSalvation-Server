@@ -13,7 +13,7 @@ require('../client/interface/js/offline-server.js');
 require('../server/libs/carddb-update.js');
 describe('Update System', function () {
     it('Runs Properly', function () {
-        require('../server/libs/update.js');
+        require('../server/http/update.js');
     });
 });
 describe('Main Server', function () {
