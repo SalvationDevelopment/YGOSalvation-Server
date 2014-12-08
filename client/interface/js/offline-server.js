@@ -32,7 +32,6 @@ try {
 } catch (e) {
     /*jshint -W020 */
     localStorage = {};
-
 }
 try {
     //require('nw.gui').Window.get().showDevTools();
@@ -44,7 +43,7 @@ try {
     var template = fs.readFileSync('./interface/template.ini', 'utf-8');
 } catch (e) {
     var normal = false;
-    var template = fs.readFileSync('./interface/template.ini', 'utf-8');
+    var template = fs.readFileSync('../client/interface/template.ini', 'utf-8');
 }
 for (var i = 0; settings.length > i; i++) {
     if (!localStorageExist || !localStorage[settings[i]]) {
