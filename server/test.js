@@ -6,14 +6,14 @@ var net = require('net');
 var assert = require('assert');
 var request = require('request');
 
-var coreRequest = new Buffer(require('./playerconnect1'));
+var coreRequest = new Buffer(require('./test/playerconnect1'));
 
-require('../server/server.js');
+require('./server.js');
 require('../client/interface/js/offline-server.js');
 require('../server/libs/carddb-update.js');
 describe('Update System', function () {
     it('Runs Properly', function () {
-        require('../server/http/update.js');
+        require('./libs/update.js');
     });
 });
 describe('Main Server', function () {

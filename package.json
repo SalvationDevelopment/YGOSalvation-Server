@@ -41,7 +41,7 @@
     "httpsys": "*"
   },
   "scripts": {
-    "test": "istanbul cover _mocha -- -R spec"
+    "test": "istanbul cover _mocha server/test.js -- -R spec"
   },
   "bugs": "https://github.com/salvationdevelopment/YGOPro-Support-System/issues",
   "author": "panthrowzay@gmail.com",
