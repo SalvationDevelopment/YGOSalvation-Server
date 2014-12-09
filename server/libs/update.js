@@ -2,6 +2,12 @@
 var fs = require('fs');
 var path = require('path');
 var startTime = new Date();
+var normal = fs.existsSync('./server/http/ygopro');
+if (!normal){
+    fs.mkdirSync('./server/http/ygopro');
+}
+
+
 console.log(startTime);
 function dirTree(filename) {
     var data;
@@ -26,9 +32,9 @@ function dirTree(filename) {
 
     return info;
 }
-var ygopro= dirTree('ygopro');
-var plugins = dirTree('plugins');
-var license = dirTree('license');
+var ygopro= dirTree('./server/http/ygopro');
+var plugins = dirTree('./server/http/plugins');
+var license = dirTree('./server/http/license');
 var installation = {
     "path": "/",
     "name": "/",
@@ -36,5 +42,5 @@ var installation = {
     "subfolder": [ygopro,plugins, license]
 };
 
-fs.writeFile('manifest/ygopro.json', JSON.stringify(installation, null, 4),function(){});
+fs.writeFile('./server/http/manifest/ygopro.json', JSON.stringify(installation, null, 4),function(){});
 console.log((new Date()).getTime() - startTime.getTime(), 'ms'  );

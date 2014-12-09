@@ -2,6 +2,29 @@
 /* jslint browser : true */
 /* global localStorage, require, confirm, alert */
 //development, stage, production
+var template =
+    "use_d3d = {use_d3d}\
+antialias = {antialias}\
+errorlog = {errorlog}\
+nickname = {nickname}\
+roompass = {roompass}\
+lastdeck = {lastdeck}\
+textfont = fonts/{textfont} {textfontsize}\
+serverport = {serverport}\
+lastip = {lastip}\
+lastport = {lastport}\
+numfont = fonts/{numfont}\
+fullscreen = {fullscreen}\
+enable_sound = {enable_sound}\
+sound_volume = {sound_volume}\
+enable_music = {enable_music}\
+music_volume = {music_volume}\
+skin_index = {skin_index}\
+auto_card_placing = {auto_card_placing}\
+random_card_placing = {random_card_placing}\
+auto_chain_order = {auto_chain_order}\
+no_delay_for_chain = {no_delay_for_chain}\
+enable_sleeve_loading = {enable_sleeve_loading}";
 
 var os = require('os');
 var http = require('http');
@@ -32,7 +55,6 @@ try {
 } catch (e) {
     /*jshint -W020 */
     localStorage = {};
-
 }
 try {
     //require('nw.gui').Window.get().showDevTools();
@@ -44,7 +66,7 @@ try {
     var template = fs.readFileSync('./interface/template.ini', 'utf-8');
 } catch (e) {
     var normal = false;
-    var template = fs.readFileSync('./interface/template.ini', 'utf-8');
+
 }
 for (var i = 0; settings.length > i; i++) {
     if (!localStorageExist || !localStorage[settings[i]]) {
@@ -106,36 +128,36 @@ function runYGOPro(mode, callback) {
         console.log(mode);
         //console.log('It\'s saved!');
         try {
-        var instance = child_process.execFile(executable, [mode], {
-            cwd: (process.execPath.replace('launcher.exe', 'ygopro'))
-        }, function (error) {
-            if (error !== null) {
-                //write crash report;
-                console.log('YGOPro Crashed');
-                var filelocation = 'crash_report_YGOPro_' + (new Date().toDateString) + '.log';
-                fs.writeFile(filelocation, error, function () {});
-            }
-            //            fs.readFile(__dirname + '/../../ygopro/system.conf', function (error, file) {
-            //                if (error !== null) {
-            //                    console.log('file permission error, cant read system.conf');
-            //                    throw err;
-            //                }
-            //                console.log("file os =", file, typeof file);
-            //                var options = file.split('\r\n');
-            //                console.log(options);
-            //            });
-        });
-        }catch(error){
-            var inform = confirm(executable+' is not executable, it likely doesnt exist; Would you like more information?');
-            if (inform){
+            var instance = child_process.execFile(executable, [mode], {
+                cwd: (process.execPath.replace('launcher.exe', 'ygopro'))
+            }, function (error) {
+                if (error !== null) {
+                    //write crash report;
+                    console.log('YGOPro Crashed');
+                    var filelocation = 'crash_report_YGOPro_' + (new Date().toDateString) + '.log';
+                    fs.writeFile(filelocation, error, function () {});
+                }
+                //            fs.readFile(__dirname + '/../../ygopro/system.conf', function (error, file) {
+                //                if (error !== null) {
+                //                    console.log('file permission error, cant read system.conf');
+                //                    throw err;
+                //                }
+                //                console.log("file os =", file, typeof file);
+                //                var options = file.split('\r\n');
+                //                console.log(options);
+                //            });
+            });
+        } catch (error) {
+            var inform = confirm(executable + ' is not executable, it likely doesnt exist; Would you like more information?');
+            if (inform) {
                 alert('If on Windows let the launcher keep downloading till it gets to application_ygopro.exe, the program is not on your computer. The automatic update system will figure this out and correct this error so just wait till this file is downloaded along with its dependencies.');
             }
         }
-      
+
     });
 }
 
-function fileError(mainError){
+function fileError(mainError) {
     var filename = 'errorReport' + (new Date().toDateString) + '.log';
-    fs.writeFile(filename, mainError, function () {});        
-} 
+    fs.writeFile(filename, mainError, function () {});
+}
