@@ -15,7 +15,7 @@ before_install:
   - cd server
   - ls -p | grep "/"
   - cd http
-  - git clone https://github.com/Buttys/ygopro.git --depth 1
+  - git clone https://github.com/SalvationDevelopment/ygopro.git --depth 1
   - git clone https://github.com/SalvationDevelopment/YGOCore.git --depth 1 --branch master
   - cd YGOCore
   - ls -p | grep "/"
