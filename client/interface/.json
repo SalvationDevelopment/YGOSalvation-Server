@@ -1,5 +1,0 @@
-{
-    "production": "http://salvationdevelopment.com:8080/launcher.html",
-    "stage": "http://localhost:80/wordpress/launcher/launcher.html",
-    "development": "launcher.html"
-}
