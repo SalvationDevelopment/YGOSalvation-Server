@@ -25,9 +25,9 @@ before_install:
   - cp YGOCore/YGOCore/bin/Release/OcgWrapper.dll YGOCore/YGOCore/bin/Release/YGOServer.exe ../ygocore
   - cd ygopro
   - rm ocgcore/premake4.lua
-  - mv ../../../test/ocgcore_linux_premake.lua ocgcore/premake4.lua
-  - cp ../../../test/cards.cdb ./
-  - cp ../../../test/System.Data.SQLite.dll ../../ygocore
+  - mv ../../../server/test/ocgcore_linux_premake.lua ocgcore/premake4.lua
+  - cp ../../../server/test/cards.cdb ./
+  - cp ../../../server/test/System.Data.SQLite.dll ../../ygocore
   - sudo ln -s /usr/lib/x86_64-linux-gnu/liblua5.2.so /usr/lib/liblua.so
   - sudo ln -s /usr/include/irrlicht1.8 /usr/include/irrlicht
   - wget 'http://www.ambiera.at/downloads/irrKlang-64bit-1.5.0.zip'
