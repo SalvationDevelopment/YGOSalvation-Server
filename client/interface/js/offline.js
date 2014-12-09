@@ -1,13 +1,9 @@
 /* jslint jquery : true */
-/* global  prompt, alert, localStorage */
+/* global  prompt, alert, localStorage, developmentstage */
 /* exported  connectToCheckmateServer, applySettings, saveSettings, isChecked, openScreen*/
-//development, stage, production
-var developmentstage = {
-    "production": "http://ygopro.us/launcher.html",
-    "stage": "http://ygopro.us/launcher.html",
-    "development": "http://ygopro.us/launcher.html",
-};
-var mode = 'production';
+
+
+var mode = 'stage';
 
 
 
