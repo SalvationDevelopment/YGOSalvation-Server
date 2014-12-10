@@ -588,6 +588,12 @@ header {
     color: #fff;
     top: 30%;
 }
+.psudolinksingle {
+    cursor: pointer;
+}
+.psudolinksingle:hover {
+    color:white;
+}
 .field {
     width: 100%;
     background: rgba(0, 0, 0, .65);
@@ -871,193 +877,7 @@ header a:hover {
 .card.real {
     display: block
 }
-#stats {
-    padding: 30px;
-    width: 90%;
-    border: 1px solid black;
-    margin: 0 auto;
-}
-#duelrooms {
-    height: 600px;
-    width: 1200px;
-    margin-bottom: 50px;
-    padding: 20px;
-    display: none;
-    border: 1px solid #eee;
-    box-shadow: 0 0 50px 20px black;
-}
-#chat {
-    height: 700px;
-    width: 980px;
-    box-shadow: 0 0 50px 20px black;
-}
-#roomlist {
-    float: left;
-    height: 100%;
-    width: 70%;
-    background: none;
-}
-#roomlist > tr >th {
-    height: 3em;
-}
-#roomlist td {
-    vertical-align: top;
-    height: 100%;
-    width: 50%;
-    padding: 0;
-    background: none;
-    text-align: center;
-}
-#roomlist ul {
-    height: 600px;
-    float: left;
-    width: 100%;
-    border: 1px solid black;
-    height: 100%;
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    overflow-y: auto;
-}
-#roomlist ul li {
-    font-size: .8em;
-    border: 1px solid black;
-    border-width: 1px 0 0;
-    height: 42px;
-    background: -moz-linear-gradient(top, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0) 100%);
-    /* FF3.6+ */
-    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, rgba(255, 255, 255, 1)), color-stop(100%, rgba(255, 255, 255, 0)));
-    /* Chrome,Safari4+ */
-    background: -webkit-linear-gradient(top, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0) 100%);
-    /* Chrome10+,Safari5.1+ */
-    background: -o-linear-gradient(top, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0) 100%);
-    /* Opera 11.10+ */
-    background: -ms-linear-gradient(top, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0) 100%);
-    /* IE10+ */
-    background: linear-gradient(to bottom, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0) 100%);
-    /* W3C */
-    filter: progid: DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#00ffffff', GradientType=0);
-    /* IE6-9 */
-}
-#chatbody {
-    float: left;
-    height: 80%;
-    width: 100%;
-}
-.usercount {
-    float: right;
-    margin-top: -25px;
-    color: #fff;
-    text-shadow: 0 0 3px #000;
-    font-size: .8em;
-}
-#chatbox {
-    float: left;
-    width: 80%;
-    height: 100%;
-    overflow-y: hidden;
-}
-#login {
-    box-shadow: 0 0 50px 10px black;
-}
-#chat ul {} #users {
-    background: white;
-    height: 100%;
-    float: left;
-    list-style: none;
-    overflow-y: scroll;
-    margin: 0;
-    padding: 0;
-    float: right;
-    width: 20%;
-    background: rgba(255, 255, 255, .3);
-    padding: 5px;
-    font-weight: bold;
-    font-size: 75%;
-    padding-left: 10px;
-    border: 2px solid black;
-    border-left: none;
-}
-#chatbox ul {
-    background: rgba(255, 255, 255, .2);
-    height: 100%;
-    float: left;
-    list-style: none;
-    overflow: scroll;
-    margin: 0;
-    padding: 0;
-    border: 2px solid black;
-    width: 100%;
-    overflow-x: hidden;
-    overflow-y
-}
-#chatbox ul li {
-    border-bottom: 1px solid #ccc;
-    padding: 2px 5px;
-    margin-bottom: 2px;
-    font-size: 12px;
-}
-#chat input {
-    width: 100%;
-    height: 3em;
-    padding: .5em;
-    width: 100%;
-    border: 1px ridge rgba(50, 50, 50, .3)
-}
-#chatbody em {
-    color: #999;
-}
-#chatform {
-    float: left;
-    margin: 0;
-    width: 100%;
-    padding: 0;
-}
-.dev-1 {
-    color: blue;
-    font-weight: normal
-}
-.dev-2 {
-    color: red;
-    font-weight: normal
-}
-.dev-3 {
-    color: red;
-    font-weight: normal
-}
-.dev-4 {
-    color: blue;
-    font-weight: normal
-}
-.dev-99 {
-    color: green;
-    font-weight: normal
-}
-.dev-100 {
-    color: silver;
-    font-weight: normal
-}
-#chatrooms {
-    width: 100%;
-    list-style: none;
-    height: 37px;
-    margin: 0;
-    overflow: auto;
-    float: left;
-    color: white;
-    padding: 0;
-    margin: 0;
-}
-#chatrooms li {
-    float: left;
-    border: 1px solid white;
-    float: left;
-    overflow: auto;
-    padding: 4px;
-}
-#chatbody {
-    width: ;
-}
+
 .servermessage {
     background: rgba(255, 0, 0, .65);
     color: white;
