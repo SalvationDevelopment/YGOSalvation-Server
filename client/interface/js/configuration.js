@@ -4,6 +4,11 @@ var developmentstage = {
     "stage": "http://dev.ygopro.us/launcher.html",
     "development": "http://127.0.0.1:8080/launcher.html"
 };
+var sitelocationdir = {
+    "production": "http://ygopro.us",
+    "stage": "http://dev.ygopro.us",
+    "development": "http://127.0.0.1:8080/"
+};
 var mode = 'development';
 
 if (mode === 'development') {
