@@ -18,31 +18,37 @@
     <link href='http://fonts.googleapis.com/css?family=Alegreya+Sans+SC:100,400,800,900' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="css/animation.css">
+    <script>
+        function singlesitenav(target){
+            console.log(target)
+            $('header').css('display','none');
+            $('#'+target).css('display','block');
+        }
+    </script>
 
 </head>
 
 <body>
 
-    <header style="padding-top:10px;">
-        <a href="index.html">
+    <header style="padding-top:10px; display:block" id='home'>
+
             <div style="font-size:1.2em">
                 <br />
             </div>
             <ul class="featurelist" style="font-size:small">
-                <li><a href="news.html">News</a>
+                <li><span class="psudolinksingle" onclick="singlesitenav('news')">News</span>
                 </li>
-                <li><a href="forum.html">Forum</a>
+                <li><span class="psudolinksingle" onclick="singlesitenav('forum')">Forum</span>
                 </li>
-                <li><a href="chat.html">Chat</a>
+                <li><span class="psudolinksingle" onclick="singlesitenav('chat')">Chat</span>
                 </li>
-                <li><a href="faq.html">FAQ</a>
+                <li><span class="psudolinksingle" onclick="singlesitenav('faq')">FAQ</span>
                 </li>
             </ul>
-            <a href="index.html">
+            <span class="psudolinksingle" onclick="singlesitenav('home')">
                 <h1 style="padding-top:140px;">
-<!--            <img src="img/logo.png" alt="" id="logo" />-->
             <span style="color:#e4a;">YGOPro</span> Salvation Server</h1>
-            </a>
+            </span>
             <h2>Online Yu-Gi-Oh! Simulator</h2>
             <nav class="lander-main">
 
@@ -64,74 +70,87 @@
             </nav>
 
             <div style="font-size:.5em; text-align:center; color:#747" id="versioninfo">Version 3 : Production 1 : Revision 0</div>
-            <div style="font-size:1.5em; text-align:center; color:pink" class='webonly'>
+        <div style="font-size:1.5em; text-align:center; color:pink" class='webonly'></div>
     </header>
-            <header style="padding-top:10px;">
-        <a href="index.html"><h1 style="font-size:1.2em">
-<!--            <img src="img/logo.png" alt="" id="logo" />-->
-            <span style="color:#e4a;">YGOPro</span> Salvation Server</h1></a>
+    <header style="padding-top:10px; display:none" id="news">
+        <span class="psudolinksingle" onclick="singlesitenav('home')"><h1 style="font-size:1.2em">
+            <span style="color:#e4a;">YGOPro</span> Salvation Server</h1></span>
         <ul class="featurelist" style="font-size:small">
-            <li><a href="news.html">News</a></li>
-            <li><a href="forum.html">Forum</a></li>
-            <li><a href="chat.html">Chat</a></li>
-            <li><a href="faq.html">FAQ</a></li>
-        </ul>
+                <li><span class="psudolinksingle" onclick="singlesitenav('news')">News</span>
+                </li>
+                <li><span class="psudolinksingle" onclick="singlesitenav('forum')">Forum</span>
+                </li>
+                <li><span class="psudolinksingle" onclick="singlesitenav('chat')">Chat</span>
+                </li>
+                <li><span class="psudolinksingle" onclick="singlesitenav('faq')">FAQ</span>
+                </li>
+            </ul>
         <div style="font-size:.5em; text-align:center;" id="versioninfo">Version 3 : Production 1 : Revision 0</div>
-       upcoming blog
-        </div>
+        upcoming blog
+        
     </header>
-    <header style="padding-top:10px;">
-        <a href="index.html"><h1 style="font-size:1.2em">
-<!--            <img src="img/logo.png" alt="" id="logo" />-->
-           <span style="color:#e4a;">YGOPro</span> Salvation Server</h1></a>
+    <header style="padding-top:10px; display:none" id="forum">
+        <span class="psudolinksingle" onclick="singlesitenav('home')"><h1 style="font-size:1.2em">
+            <span style="color:#e4a;">YGOPro</span> Salvation Server</h1></span>
         <ul class="featurelist" style="font-size:small">
-            <li><a href="news.html">News</a>
-            </li>
-            <li><a href="forum.html">Forum</a>
-            </li>
-            <li><a href="chat.html">Chat</a>
-            </li>
-            <li><a href="faq.html">FAQ</a>
-            </li>
-        </ul>
+                <li><span class="psudolinksingle" onclick="singlesitenav('news')">News</span>
+                </li>
+                <li><span class="psudolinksingle" onclick="singlesitenav('forum')">Forum</span>
+                </li>
+                <li><span class="psudolinksingle" onclick="singlesitenav('chat')">Chat</span>
+                </li>
+                <li><span class="psudolinksingle" onclick="singlesitenav('faq')">FAQ</span>
+                </li>
+            </ul>
         <div style="font-size:.5em; text-align:center;" id="versioninfo">Version 3 : Production 1 : Revision 0</div>
-        <p></p>
+        upcoming forum
+      
     </header>
-         <header style="padding-top:10px;">
-        <a href="index.html"><h1 style="font-size:1.2em">
-<!--            <img src="img/logo.png" alt="" id="logo" />-->
-            <span style="color:#e4a;">YGOPro</span> Salvation Server</h1></a>
+    <header style="padding-top:10px; display:none" id="chat">
+        <span class="psudolinksingle" onclick="singlesitenav('home')"><h1 style="font-size:1.2em">
+            <span style="color:#e4a;">YGOPro</span> Salvation Server</h1></span>
         <ul class="featurelist" style="font-size:small">
-            <li><a href="news.html">News</a></li>
-            <li><a href="forum.html">Forum</a></li>
-            <li><a href="chat.html">Chat</a></li>
-            <li><a href="faq.html">FAQ</a></li>
-        </ul>
+                <li><span class="psudolinksingle" onclick="singlesitenav('news')">News</span>
+                </li>
+                <li><span class="psudolinksingle" onclick="singlesitenav('forum')">Forum</span>
+                </li>
+                <li><span class="psudolinksingle" onclick="singlesitenav('chat')">Chat</span>
+                </li>
+                <li><span class="psudolinksingle" onclick="singlesitenav('faq')">FAQ</span>
+                </li>
+            </ul>
         <div style="font-size:.5em; text-align:center;" id="versioninfo">Version 3 : Production 1 : Revision 0</div>
         <div id="lightIRC" style="height:92%; text-align:center;">
- </div>
- 
- <script type="text/javascript">
-	swfobject.embedSWF("lightIRC/lightIRC.swf", "lightIRC", "100%", "92%", "10.0.0", "expressInstall.swf", params, {wmode:"transparent"});
- </script>
+        </div>
+
+        <script type="text/javascript">
+            swfobject.embedSWF("lightIRC/lightIRC.swf", "lightIRC", "100%", "92%", "10.0.0", "expressInstall.swf", params, {
+                wmode: "transparent"
+            });
+        </script>
     </header>
-        <header style="padding-top:10px;">
-       <a href="index.html"> <h1 style="font-size:1.2em">
-<!--            <img src="img/logo.png" alt="" id="logo" />-->
-            <span style="color:#e4a;">YGOPro</span> Salvation Server</h1></a>
+    <header style="padding-top:10px; display:none" id="faq">
+        <span class="psudolinksingle" onclick="singlesitenav('home')">
+            <h1 style="font-size:1.2em">
+            <span style="color:#e4a;">YGOPro</span> Salvation Server</h1>
+        </span>
         <ul class="featurelist" style="font-size:small">
-            <li><a href="news.html">News</a></li>
-            <li><a href="forum.html">Forum</a></li>
-            <li><a href="chat.html">Chat</a></li>
-            <li><a href="faq.html">FAQ</a></li>
-        </ul>
+                <li><span class="psudolinksingle" onclick="singlesitenav('news')">News</span>
+                </li>
+                <li><span class="psudolinksingle" onclick="singlesitenav('forum')">Forum</span>
+                </li>
+                <li><span class="psudolinksingle" onclick="singlesitenav('chat')">Chat</span>
+                </li>
+                <li><span class="psudolinksingle" onclick="singlesitenav('faq')">FAQ</span>
+                </li>
+            </ul>
         <div style="font-size:.5em; text-align:center;" id="versioninfo">Version 3 : Production 1 : Revision 0</div>
         <div style="color:white; width:600px; margin:0 auto;">
-        <p>Q: How Can I install the web installer<br />
-        A: copy the contence of the file to a workable location like %appdata% when started it will create a ygopro folder. Then copy your DevPro or YGOPro scripts pics and decks to the folder.</p>
-             <p>Q: I can not save a deck how can I correct this?<br />
-                 A: Create a deck folder in the /ygopro/ folder of the installation.</p>
-            </div>
+            <p>Q: How Can I install the web installer
+                <br />A: copy the contence of the file to a workable location like %appdata% when started it will create a ygopro folder. Then copy your DevPro or YGOPro scripts pics and decks to the folder.</p>
+            <p>Q: I can not save a deck how can I correct this?
+                <br />A: Create a deck folder in the /ygopro/ folder of the installation.</p>
+        </div>
     </header>
     <footer class="superfooter">
         <div style='max-width:1000px; margin:0 auto'>
