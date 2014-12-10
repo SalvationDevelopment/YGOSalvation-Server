@@ -14,9 +14,12 @@ html {
     color: #222;
     font-size: 1em;
     line-height: 1.4;
+    
 }
 body {
     border: none;
+    overflow: hidden;
+
 }
 /*
  * Remove text-shadow in selection highlight: h5bp.com/i
@@ -292,30 +295,9 @@ table {
     background: rgba(255, 255, 255, .4);
     text-align: center;
 }
-#file ul li div {
-    float: left;
-    margin: 5px auto;
-    padding: 5px;
-}
-#file ul li {
-    border-bottom: 1px solid black;
-    overflow: auto;
-    list-style: none;
-}
-#file > div > div > ul {
-    border: 1px solid #ddd;
-    background: rgba(255, 255, 255, .4);
-    padding: 0;
-}
-#deckeditor > * {
-    border: 1px solid black;
-    display: inline-block;
-    height: 100%;
-}
-#detailedcardinformation {
-    height: 100%;
-    width: 200px;
-    float: left;
+main {
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
 }
 #querysystem {
     height: 100px;
@@ -348,9 +330,9 @@ iframe .home header.header.clear {
     box-shadow: 0px 0px 2px white;
 }
 #control div:first-child {
-    border-bottom-right-radius: 5px;
-    border-top-right-radius:5px;
-    margin-right: 3px;
+    border-bottom-right-radius: 3px;
+
+    margin-right: 10px;
     width: 50px;
 }
 #control div:first-child:hover {
@@ -359,9 +341,9 @@ iframe .home header.header.clear {
 #control div:hover {
     background: steelblue;
 }
-#control div:nth-child(2) {
-    border-bottom-left-radius: 5px;
-    border-top-left-radius:5px;
+#control div:nth-child(3) {
+    border-bottom-left-radius: 3px;
+
 }
 #control {
     position: fixed;
