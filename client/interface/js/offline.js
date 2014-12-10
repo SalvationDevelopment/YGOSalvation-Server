@@ -1,11 +1,6 @@
 /* jslint jquery : true */
-/* global  prompt, alert, localStorage, developmentstage */
+/* global  prompt, alert, localStorage, developmentstage, mode */
 /* exported  connectToCheckmateServer, applySettings, saveSettings, isChecked, openScreen*/
-
-
-var mode = 'stage';
-
-
 
 function ygopro(parameter) {
     $.ajax('http://127.0.0.1:9467/' + parameter);
