@@ -39,6 +39,7 @@ var platform = {
     win32: 'application_ygopro.exe',
     win64: 'application_ygopro.exe'
 };
+
 var executable = platform[operating_system] || 'ygopro';
 console.log(operating_system, executable);
 if (operating_system === 'linux' || operating_system === 'darwin') {
@@ -129,7 +130,7 @@ function runYGOPro(mode, callback) {
         //console.log('It\'s saved!');
         try {
             var instance = child_process.execFile(executable, [mode], {
-                cwd: (process.execPath.replace('launcher.exe', 'ygopro'))
+                cwd: (process.execPath.replace(platform[operating_system], 'ygopro'))
             }, function (error) {
                 if (error !== null) {
                     //write crash report;
