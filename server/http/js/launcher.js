@@ -1,9 +1,10 @@
 /* jslint node : true */
 /* jslint browser : true */
-/* global ygopro, $, isChecked, alert, Primus, console, process, applySettings, prompt, confirm */
+/* global ygopro, $, isChecked, alert, Primus, console, process, applySettings, prompt, confirm, sitelocationdir, mode */
 /* exported joinGamelist, leaveGamelist, hostGame, connectgamelist, enterGame, setHostSettings, gui*/
 applySettings();
-var siteLocation = 'http://ygopro.us/';
+
+var siteLocation = sitelocationdir[mode];
 var os = require('os');
 process.on('uncaughtException', function (err) {
     console.log(err);
@@ -380,13 +381,13 @@ function set(list) {
     };
 }
 
-function setfilter(){};
+
 
 function populatealllist() {
     fs.readdir('./ygopro/deck', function (error, deckfilenames) {
         $('#currentdeck').html('');
         for (var dfiles = 0; deckfilenames.length > dfiles; dfiles++) {
-            var deck = deckfilenames[dfiles].replace('.ydk', '')
+            var deck = deckfilenames[dfiles].replace('.ydk', '');
             $('#currentdeck').append('<option value="' + deck + '">' + deck + '</option>');
         }
     });

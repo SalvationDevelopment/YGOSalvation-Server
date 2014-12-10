@@ -39,8 +39,10 @@
 </head>
 
 <body>
-    <iframe height="93%" id="salvationdevelopment" role="main" src="http://ygopro.us" width="100%" style="border:none;"></iframe>
-
+    <iframe id="iframemainbody" height="93%" id="salvationdevelopment" role="main" width="100%" style="border:none;"></iframe>
+    <script>
+        $('#iframemainbody').attr('src', sitelocationdir[mode]);
+    </script>
     <script>
         var good = true
     </script>
@@ -147,25 +149,25 @@
                     </label>
                     <label>Banlist
                         <select id='filterbanlist'>
-                        <option value="0" selected>2014.10.1(TCG)</option>
-                        <option value="1">2014.10.1(OCG)</option>
-                        <option value="2">2014.7.1(OCG)</option>
-                        <option value="3">2014.4.1(TCG)</option>
-                        <option value="4">2014.4.1(OCG)</option>
-                        <option value="5">2014.1.1(TCG)</option>
-                        <option value="6">2014.2.1(OCG)</option>
-                        <option value="7">2013.9.1(TCG)</option>
-                        <option value="8">2013.9.1(OCG)</option>
-                        <option value="9">2013.3.1</option>
-                        <option value="10">2012.9.1</option>
-                        <option value="11">2012.3.1</option>
-                        <option value="12">2011.9.1</option>
-                        <option value="13">Traditional</option>
-                        <option value="14">Unlimited</option>
-                        <option value="15">Mega-Banned</option>
-                        <option value="16" disabled>TBC</option>
-                        <option value="17">N/A</option>
-                            </select>
+                            <option value="0" selected>2014.10.1(TCG)</option>
+                            <option value="1">2014.10.1(OCG)</option>
+                            <option value="2">2014.7.1(OCG)</option>
+                            <option value="3">2014.4.1(TCG)</option>
+                            <option value="4">2014.4.1(OCG)</option>
+                            <option value="5">2014.1.1(TCG)</option>
+                            <option value="6">2014.2.1(OCG)</option>
+                            <option value="7">2013.9.1(TCG)</option>
+                            <option value="8">2013.9.1(OCG)</option>
+                            <option value="9">2013.3.1</option>
+                            <option value="10">2012.9.1</option>
+                            <option value="11">2012.3.1</option>
+                            <option value="12">2011.9.1</option>
+                            <option value="13">Traditional</option>
+                            <option value="14">Unlimited</option>
+                            <option value="15">Mega-Banned</option>
+                            <option value="16" disabled>TBC</option>
+                            <option value="17">N/A</option>
+                        </select>
                     </label>
                     <label>Time Limit
                         <select id="filtertimelimit">
@@ -261,15 +263,36 @@
 
         </div>
     </footer>
+    <script src="js/launcher.js">
+        $.getScript(sitelocationdir[mode] + "/js/launcher.js",
+    </script>
     <script>
-        console.log('going for it')
+        (function (i, s, o, g, r, a, m) {
+            i['GoogleAnalyticsObject'] = r;
+            i[r] = i[r] || function () {
+                (i[r].q = i[r].q || []).push(arguments)
+            }, i[r].l = 1 * new Date();
+            a = s.createElement(o),
+            m = s.getElementsByTagName(o)[0];
+            a.async = 1;
+            a.src = g;
+            m.parentNode.insertBefore(a, m)
+        })(window, document, 'script', 'http://www.google-analytics.com/analytics.js', 'ga');
+
+        ga('create', 'UA-56840301-1', 'auto');
+        ga('require', 'displayfeatures');
+        ga('send', 'pageview');
     </script>
-    <script src="http://ygopro.us/js/launcher.js">
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script>
+        $(function () {
+            if (window.self != window.top) {
+                $(document.body).addClass("in-iframe");
+                var gui = require('nw.gui');
+                gui.Window.get().show();
+            }
+        });
     </script>
-
-
-
-    <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
 
 
 </body>
