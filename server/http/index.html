@@ -54,10 +54,14 @@
 
                 <div class="downloadbutton" style="display:none">Play Now</div>
 
-                <ul class="webonly" style="text-align:center; padding:0;" id="mirrors">
+                <ul class="webonly" style="text-align:center; padding:0;" id="mirrors" itemscope itemtype="http://schema.org/SoftwareApplication">
                     <!--<li>Login</li>
                 <li>Sign Up</li>-->
                     <li><a href="http://d-h.st/iVP">Full Windows Client </a>
+                        <span itemprop="downloadURL" style="display:none">http://d-h.st/iVP</span>
+                        <span itemprop="fileSize" style="display:none">473MB</span>
+                        <span itemprop="operatingSystem" style="display:none">Windows</span>
+                        <span itemprop="SoftwarVersion" style="display:none">4.0.0</span>
                     </li>
                     <!--
                 <li><a href="http://salvationdevelopment.com/setup.msi"> Mirror 1</a></li>
@@ -103,7 +107,7 @@
                 </li>
             </ul>
         <div style="font-size:.5em; text-align:center;" id="versioninfo">Version 4 : Production 0 : Revision 0</div>
-        upcoming forum
+        <iframe src="http://forum.ygopro.us" height="100%" width="100%" style="min-height: 422px; border: none;"></iframe>
       
     </header>
     <header style="padding-top:10px; display:none" id="chat">
@@ -124,7 +128,7 @@
         </div>
 
         <script type="text/javascript">
-            swfobject.embedSWF("lightIRC/lightIRC.swf", "lightIRC", "100%", "92%", "10.0.0", "expressInstall.swf", params, {
+            swfobject.embedSWF("http://ygopro.us/lightIRC/lightIRC.swf", "lightIRC", "100%", "92%", "10.0.0", "expressInstall.swf", params, {
                 wmode: "transparent"
             });
         </script>
