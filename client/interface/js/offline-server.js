@@ -130,7 +130,7 @@ function runYGOPro(mode, callback) {
         //console.log('It\'s saved!');
         try {
             var instance = child_process.execFile(executable, [mode], {
-                cwd: (process.execPath.replace(platform[operating_system], 'ygopro'))
+                cwd: (process.cwd() + '/ygopro')
             }, function (error) {
                 if (error !== null) {
                     //write crash report;
