@@ -467,6 +467,9 @@ article {
 header {
     height: 100vh;
     overflow: hidden;
+    position: absolute;
+    top:100vh;
+    width: 100vw;
 }
 .iconic {
     background: green;
