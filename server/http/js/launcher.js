@@ -1,24 +1,26 @@
 /* jslint node : true */
 /* jslint browser : true */
-/* global ygopro, $, isChecked, alert, Primus, console, process, applySettings, prompt, confirm */
+/* global ygopro, $, isChecked, alert, Primus, console, process, applySettings, prompt, confirm, sitelocationdir, mode */
 /* exported joinGamelist, leaveGamelist, hostGame, connectgamelist, enterGame, setHostSettings, gui*/
+console.log('loading server launcher js');
 applySettings();
-var siteLocation = 'http://ygopro.us/';
+
+var siteLocation = sitelocationdir[mode];
 var os = require('os');
 process.on('uncaughtException', function (err) {
     console.log(err);
-    screenMessage.text('An error occured,... That hurt T.T; Stop hitting me!');
+    screenMessage.text(randomErrors[Math.floor(Math.random() * (6 - 0))]);
 });
 var http = require('http');
 var fs = require('fs');
-var url = require('url');
 var gui = require('nw.gui');
 //var unzip = require('unzip');
 
 var randomErrors = ['Error: That hurt T.T; Stop hitting me!',
                    'Error: My boobies hurt!',
                    'Error: I want icecream!',
-                   'Error: The cards stole my heart.'];
+                   'Error: The cards stole my heart.',
+                   'Error: That hurt T.T; Stop hitting me!'];
 
 var manifest = '';
 
@@ -26,7 +28,10 @@ function createmanifest() {
     screenMessage.text('Downloading Manifest');
     var dlattempt = $.getJSON('http://ygopro.us/manifest/ygopro.json', function (data) {
         manifest = data;
+        console.log(manifest);
         updateCheckFile(manifest, true);
+    }).fail(function(){
+        screenMessage.text('Failed to get mainfest');
     });
 }
 
@@ -116,23 +121,22 @@ function download() {
     screenMessage.text('Updating...' + target.path + ' and ' + downloadList.length + ' other files' + additionaltext);
 
     var file = fs.createWriteStream(target.path);
-    var options = {
-        host: url.parse(siteLocation + target.path).host,
-        port: 80,
-        path: url.parse(siteLocation + target.path).pathname
-    };
-    http.get(options, function (res) {
-        res.on('data', function (data) {
-            file.write(data);
-        }).on('end', function () {
+    var jqxhr = $.get('http://ygopro.us/' + target.path, function (filedata) {
+            file.write(filedata);
             file.end();
             downloadList.shift();
             setTimeout(function () {
                 download();
             }, 0);
-
+        })
+        .fail(function () {
+            screenMessage.text('Unable to download and update '+target.path+', sorry.');
+            file.end();
+            downloadList.shift();
+            setTimeout(function () {
+                download();
+            }, 1000);
         });
-    });
 }
 
 $('#servermessages').text('Server Messages will spawn here.');
@@ -380,13 +384,13 @@ function set(list) {
     };
 }
 
-function setfilter(){};
+
 
 function populatealllist() {
     fs.readdir('./ygopro/deck', function (error, deckfilenames) {
         $('#currentdeck').html('');
         for (var dfiles = 0; deckfilenames.length > dfiles; dfiles++) {
-            var deck = deckfilenames[dfiles].replace('.ydk', '')
+            var deck = deckfilenames[dfiles].replace('.ydk', '');
             $('#currentdeck').append('<option value="' + deck + '">' + deck + '</option>');
         }
     });

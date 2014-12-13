@@ -13,51 +13,159 @@
     <link rel="shortcut icon" href="/favicon.png" />
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width">
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
     <link href="http://fonts.googleapis.com/css?family=Roboto:400,100,100italic,300,300italic,400italic,500,500italic,700,700italic,900" rel="stylesheet" type="text/css">
     <link href="http://fonts.googleapis.com/css?family=Poiret+One" rel="stylesheet" type="text/css">
     <link href='http://fonts.googleapis.com/css?family=Alegreya+Sans+SC:100,400,800,900' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="css/animation.css">
+    <script>
+        function singlesitenav(target){
+            console.log(target)
+            $('header').css('top','100vh');
+            $('#'+target).css('top','0');
+        }
+    </script>
 
 </head>
 
 <body>
 
-<header style="padding-top:10px;">
-       <a href="index.html"> <div style="font-size:1.2em"><br /></div>
-        <ul class="featurelist" style="font-size:small">
-            <li><a href="news.html">News</a></li>
-            <li><a href="forum.html">Forum</a></li>
-            <li><a href="chat.html">Chat</a></li>
-            <li><a href="faq.html">FAQ</a></li>
-        </ul>
-    <a href="index.html"> <h1 style="padding-top:140px;">
-<!--            <img src="img/logo.png" alt="" id="logo" />-->
-            <span style="color:#e4a;">YGOPro</span> Salvation Server</h1></a>
-           <h2>Online Yu-Gi-Oh! Simulator</h2>
-        <nav class="lander-main">
-            
+    <header style="padding-top:10px;top:0vh;" id='home'>
+
+            <div style="font-size:1.2em">
+                <br />
+            </div>
+            <ul class="featurelist" style="font-size:small; margin-top: -4px;">
+                <li><span class="psudolinksingle" onclick="singlesitenav('news')">News</span>
+                </li>
+                <li><span class="psudolinksingle" onclick="singlesitenav('forum')">Forum</span>
+                </li>
+                <li><span class="psudolinksingle" onclick="singlesitenav('chat')">Chat</span>
+                </li>
+                <li><span class="psudolinksingle" onclick="singlesitenav('faq')">FAQ</span>
+                </li>
+            </ul>
+            <span class="psudolinksingle" onclick="singlesitenav('home')">
+                <h1 style="padding-top:140px;">
+            <span style="color:#e4a;">YGOPro</span> Salvation Server</h1>
+            </span>
+            <h2>Online Yu-Gi-Oh! Simulator</h2>
+            <nav class="lander-main">
+
                 <div class="downloadbutton" style="display:none">Play Now</div>
-           
-            <ul class="webonly" style="text-align:center; padding:0;" id="mirrors">
-                <!--<li>Login</li>
+
+                <ul class="webonly" style="text-align:center; padding:0;" id="mirrors" itemscope itemtype="http://schema.org/SoftwareApplication">
+                    <!--<li>Login</li>
                 <li>Sign Up</li>-->
-                <li><a href="http://d-h.st/iVP">Full Windows Client </a></li><!--
+                    <li><a href="http://d-h.st/iVP">Full Windows Client </a>
+                        <span itemprop="downloadURL" style="display:none">http://d-h.st/iVP</span>
+                        <span itemprop="fileSize" style="display:none">473MB</span>
+                        <span itemprop="operatingSystem" style="display:none">Windows</span>
+                        <span itemprop="SoftwarVersion" style="display:none">4.0.0</span>
+                    </li>
+                    <!--
                 <li><a href="http://salvationdevelopment.com/setup.msi"> Mirror 1</a></li>
                 <li><a href="https://drive.google.com/file/d/0B1ytOVM5sj4CV19EN2VRODhDQXc/view?usp=sharing">Mirror 2</a></li>
                 <li><a href="http://d-h.st/5PC6">Mirror 3</a></li>
                 <li><a href="https://www.mediafire.com/?xrm3rko4ln3e64z">Mirror 4</a></li>-->
-                
+
+                </ul>
+
+            </nav>
+
+            <div style="font-size:.5em; text-align:center; color:#747" id="versioninfo">Version 4 : Production 0 : Revision 0</div>
+        <div style="font-size:1.5em; text-align:center; color:pink" class='webonly'></div>
+    </header>
+    <header style="padding-top:10px" id="news">
+        <span class="psudolinksingle" onclick="singlesitenav('home')"><h1 style="font-size:1.2em">
+            <span style="color:#e4a;">YGOPro</span> Salvation Server</h1></span>
+        <ul class="featurelist" style="font-size:small">
+                <li><span class="psudolinksingle" onclick="singlesitenav('news')">News</span>
+                </li>
+                <li><span class="psudolinksingle" onclick="singlesitenav('forum')">Forum</span>
+                </li>
+                <li><span class="psudolinksingle" onclick="singlesitenav('chat')">Chat</span>
+                </li>
+                <li><span class="psudolinksingle" onclick="singlesitenav('faq')">FAQ</span>
+                </li>
             </ul>
+        <div style="font-size:.5em; text-align:center;" id="versioninfo">Version 4 : Production 0 : Revision 0</div>
+        upcoming blog
+        
+    </header>
+    <header style="padding-top:10px" id="forum">
+        <span class="psudolinksingle" onclick="singlesitenav('home')"><h1 style="font-size:1.2em">
+            <span style="color:#e4a;">YGOPro</span> Salvation Server</h1></span>
+        <ul class="featurelist" style="font-size:small">
+                <li><span class="psudolinksingle" onclick="singlesitenav('news')">News</span>
+                </li>
+                <li><span class="psudolinksingle" onclick="singlesitenav('forum')">Forum</span>
+                </li>
+                <li><span class="psudolinksingle" onclick="singlesitenav('chat')">Chat</span>
+                </li>
+                <li><span class="psudolinksingle" onclick="singlesitenav('faq')">FAQ</span>
+                </li>
+            </ul>
+        <div style="font-size:.5em; text-align:center;" id="versioninfo">Version 4 : Production 0 : Revision 0</div>
+        <iframe src="about:blank" height="100%" width="100%" style="min-height: 422px; border: none;"></iframe>
+      
+    </header>
+    <header style="padding-top:10px" id="chat">
+        <span class="psudolinksingle" onclick="singlesitenav('home')"><h1 style="font-size:1.2em">
+            <span style="color:#e4a;">YGOPro</span> Salvation Server</h1></span>
+        <ul class="featurelist" style="font-size:small">
+                <li><span class="psudolinksingle" onclick="singlesitenav('news')">News</span>
+                </li>
+                <li><span class="psudolinksingle" onclick="singlesitenav('forum')">Forum</span>
+                </li>
+                <li><span class="psudolinksingle" onclick="singlesitenav('chat')">Chat</span>
+                </li>
+                <li><span class="psudolinksingle" onclick="singlesitenav('faq')">FAQ</span>
+                </li>
+            </ul>
+        <div style="font-size:.5em; text-align:center;" id="versioninfo">Version 4 : Production 0 : Revision 0</div>
+        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/swfobject/2.2/swfobject.js"></script>
+ <script type="text/javascript" src="lightIRC/config.js"></script>
+        <div id="lightIRC" style="height:92%; text-align:center;">
+        </div>
+        <script type="text/javascript">
+          
+            swfobject.embedSWF("lightIRC/lightIRC.swf", "lightIRC", "100%", "92%", "10.0.0", "expressInstall.swf", params, {
+                wmode: "transparent"
+            });
 
-        </nav>
-
-        <div style="font-size:.5em; text-align:center; color:#747" id="versioninfo">Version 3 : Production 1 : Revision 0</div>
-        <div style="font-size:1.5em; text-align:center; color:pink" class='webonly'>
+        </script>
+    </header>
+    <header style="padding-top:10px" id="faq">
+        <span class="psudolinksingle" onclick="singlesitenav('home')">
+            <h1 style="font-size:1.2em">
+            <span style="color:#e4a;">YGOPro</span> Salvation Server</h1>
+        </span>
+        <ul class="featurelist" style="font-size:small">
+                <li><span class="psudolinksingle" onclick="singlesitenav('news')">News</span>
+                </li>
+                <li><span class="psudolinksingle" onclick="singlesitenav('forum')">Forum</span>
+                </li>
+                <li><span class="psudolinksingle" onclick="singlesitenav('chat')">Chat</span>
+                </li>
+                <li><span class="psudolinksingle" onclick="singlesitenav('faq')">FAQ</span>
+                </li>
+            </ul>
+        <div style="font-size:.5em; text-align:center;" id="versioninfo">Version 4 : Production 0 : Revision 0</div>
+        <div style="color:white; width:600px; margin:0 auto;">
+            <p>Q: How Can I install the web installer
+                <br />A: copy the contence of the file to a workable location like %appdata% when started it will create a ygopro folder. Then copy your DevPro or YGOPro scripts pics and decks to the folder.</p>
+            <p>Q: I can not save a deck how can I correct this?
+                <br />A: Create a deck folder in the /ygopro/ folder of the installation.</p>
+        </div>
     </header>
     <footer class="superfooter">
         <div style='max-width:1000px; margin:0 auto'>
-            YGOPro &amp Salvation Server are not affliated with Konami or Kazuki Takahashi. Salvation Server &copy; 2013-2014, all rights reserved by respective parties. Powered by Yu-Jo Friendship and fans of Yu-Gi-Oh! worldwide.</div>
+            <span itemscope itemtype="http://schema.org/SoftwareApplication">YGOPro</span> &amp 
+            <span itemscope itemtype="http://schema.org/SoftwareApplication">Salvation Server</span>span> are not affliated with
+            <span itemscope itemtype="http://schema.org/Organization" itemprop="name">Konami</span>span or 
+            <span itemscope itemtype="http://schema.org/Person" itemprop="name">Kazuki Takahashi</span>. Salvation Server &copy; 2013-2014, all rights reserved by respective parties. Powered by Yu-Jo Friendship and fans of Yu-Gi-Oh! worldwide.</div>
     </footer>
     <script>
         (function (i, s, o, g, r, a, m) {
