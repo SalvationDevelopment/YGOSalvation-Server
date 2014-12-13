@@ -1,10 +1,27 @@
 /* jslint node : true */
 /* jslint browser : true */
-/* global ygopro, $, isChecked, alert, Primus, console, process, applySettings, prompt, confirm, sitelocationdir, mode */
+/* global ygopro, $, isChecked, alert, Primus, console, process, applySettings, prompt, confirm */
 /* exported joinGamelist, leaveGamelist, hostGame, connectgamelist, enterGame, setHostSettings, gui*/
 console.log('loading server launcher js');
 applySettings();
+/* jslint node : true */
+var developmentstage = {
+    "production": "http://ygopro.us/launcher.html",
+    "stage": "http://dev.ygopro.us/launcher.html",
+    "development": "http://127.0.0.1:8080/launcher.html"
+};
+var sitelocationdir = {
+    "production": "http://ygopro.us",
+    "stage": "http://dev.ygopro.us",
+    "development": "http://127.0.0.1:8080/"
+};
+var mode = "production";
 
+if (mode === 'development') {
+    try {
+        require('nw.gui').Window.get().showDevTools();
+    } catch (error) {}
+}
 var siteLocation = sitelocationdir[mode];
 var os = require('os');
 process.on('uncaughtException', function (err) {
