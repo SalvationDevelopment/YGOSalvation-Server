@@ -9,7 +9,7 @@ var sitelocationdir = {
     "stage": "http://dev.ygopro.us",
     "development": "http://127.0.0.1:8080/"
 };
-var mode = 'development';
+var mode = "production";
 
 if (mode === 'development') {
     try {
