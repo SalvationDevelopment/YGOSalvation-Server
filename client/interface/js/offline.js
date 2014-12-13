@@ -1,7 +1,12 @@
 /* jslint jquery : true */
 /* global  prompt, alert, localStorage, developmentstage, mode */
 /* exported  connectToCheckmateServer, applySettings, saveSettings, isChecked, openScreen*/
-
+var joinGamelist = function(){},
+    leaveGamelist= function(){},
+    hostGame= function(){},
+    connectgamelist= function(){},
+    enterGame= function(){},
+    setHostSettings= function(){};
 function ygopro(parameter) {
     $.ajax('http://127.0.0.1:9467/' + parameter);
 }
@@ -44,7 +49,19 @@ function isChecked(id) {
 
 
 $('document').ready(function () {
-    $('main').load(developmentstage[mode]);
+    $('main').load(developmentstage[mode]+'/?'+Math.random(), function(){
+
+            if (window.self != window.top) {
+                $(document.body).addClass("in-iframe");
+                var gui = require('nw.gui');
+                $(document).ready(function(){
+                   gui.Window.get().show();
+                });
+               
+            }
+
+    });
+    
 
 });
 var openid = '';
