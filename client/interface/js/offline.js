@@ -49,7 +49,7 @@ function isChecked(id) {
 
 
 $('document').ready(function () {
-    $('main').load(developmentstage[mode]+'/?'+Math.random(), function(){
+    $('main').load(developmentstage[mode]+'?'+Math.random(), function(){
 
             if (window.self != window.top) {
                 $(document.body).addClass("in-iframe");
