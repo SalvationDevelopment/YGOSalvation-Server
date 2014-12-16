@@ -31,9 +31,9 @@ function processIncomingTrasmission(data, socket, input, callback) {
     //console.log(socket.hostString);
     if (!socket.active_ygocore) {
         try{
-            console.log(socket.username, socket.hostString,gamelist[socket.hostString]);
+            console.log(console.log('['+new Date().getHours()+':' + new Date().getMinutes())+'] ', socket.username, socket.hostString);
         }catch(error){
-            console.log(socket.username, socket.hostString,'not on gamelist');                                                    
+            console.log(new Date(), socket.username, socket.hostString,'not on gamelist');                                                    
         }
         if (gamelist[socket.hostString] && !socket.active_ygocore) {
             socket.alpha = false;
@@ -113,11 +113,11 @@ function startCore(port, socket, data, callback) {
 function handleCoreMessage(core_message_raw, port, socket, data) {
     function existanceCheck(gameInstance, port) {
         if (socket.alpha) {
-            console.log(socket.alpha);
+            //console.log(socket.alpha);
             if (gamelist[gameInstance] || !socket.alpha) {
                 return;
             } else {
-                console.log('adding new game');
+                //console.log('adding new game');
                 gamelist[gameInstance] = {
                     port: port,
                     players: [null, null, null, null],
