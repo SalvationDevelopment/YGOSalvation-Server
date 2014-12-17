@@ -136,7 +136,9 @@
         <div id="lightIRC" style="height:92%; text-align:center;">
         </div>
         <script type="text/javascript">
-          
+            if (localStorage.nickname !== 'Player'){
+                params.nick =  localStorage.nickname;
+            }
             swfobject.embedSWF("lightIRC/lightIRC.swf", "lightIRC", "100%", "92%", "10.0.0", "expressInstall.swf", params, {
                 wmode: "transparent"
             });
