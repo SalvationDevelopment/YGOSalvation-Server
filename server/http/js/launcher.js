@@ -33,11 +33,17 @@ var fs = require('fs');
 var gui = require('nw.gui');
 //var unzip = require('unzip');
 
-var randomErrors = ['Error: That hurt T.T; Stop hitting me!',
+var randomErrors = ['Error: My face is up here buddy!',
                    'Error: My boobies hurt!',
                    'Error: I want icecream!',
                    'Error: The cards stole my heart.',
-                   'Error: That hurt T.T; Stop hitting me!'];
+                   'Error: Are you cheating on me with another Sim?',
+                   'Error: You never listen to me!'];
+
+var randomWarnings = ['Warning : Parent over shoulder',
+                      'Warning : You are trying to hard.',
+                      'Warning : Youre,... dirty...',
+];
 
 var manifest = '';
 
@@ -420,14 +426,14 @@ function populatealllist() {
 }
 
 function locallogin(init) {
-    localStorage.nickname = localStorage.nickname || '\u0000\r\n';
+    localStorage.nickname = localStorage.nickname || '';
     if (localStorage.nickname) {
-        if (localStorage.nickname.indexOf('\u0000') < 1 || init === true) {
+        if (localStorage.nickname.length < 1 || init === true) {
             var username = prompt('Username: ', localStorage.nickname);
             while (!username) {
                 username = prompt('Username: ', localStorage.nickname);
             }
-            localStorage.nickname = username + '\u0000\r\n';
+            localStorage.nickname = username;
         }
     }
 }
