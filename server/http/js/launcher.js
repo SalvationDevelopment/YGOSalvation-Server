@@ -145,9 +145,10 @@ function download() {
     }
     screenMessage.text('Updating...' + target.path + ' and ' + downloadList.length + ' other files' + additionaltext);
 
-    var file = fs.createWriteStream(target.path);
+    
     var jqxhr = $.get('http://ygopro.us/' + target.path, function (filedata) {
-            file.write(filedata);
+         var file = fs.createWriteStream(target.path);   
+         file.write(filedata);
             file.end();
             downloadList.shift();
             setTimeout(function () {
@@ -156,7 +157,6 @@ function download() {
         })
         .fail(function () {
             screenMessage.text('Unable to download and update ' + target.path + ', sorry.');
-            file.end();
             downloadList.shift();
             setTimeout(function () {
                 download();
