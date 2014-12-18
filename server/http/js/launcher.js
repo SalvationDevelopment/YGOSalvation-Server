@@ -59,16 +59,15 @@ function createmanifest() {
 }
 
 
-$(document).on('ready', function () {
-    $('#servermessages').text('Interface loaded, querying user for critical information,...');
-    localStorage.lastip = '192.99.11.19';
-    localStorage.serverport = '8911';
-    localStorage.lastport = '8911';
-    locallogin(true);
-    populatealllist();
-    createmanifest();
+$('#servermessages').text('Interface loaded, querying user for critical information,...');
+localStorage.lastip = '192.99.11.19';
+localStorage.serverport = '8911';
+localStorage.lastport = '8911';
+locallogin(true);
+populatealllist();
+createmanifest();
 
-});
+
 
 
 process.on('uncaughtException', function (err) {
@@ -143,18 +142,19 @@ function download() {
     if (downloadList.length > 250) {
         additionaltext = ', this will take a while please be patient!';
     }
-    screenMessage.text('Updating...' + target.path + ' and ' + downloadList.length + ' other files' + additionaltext);
 
-    
-    var jqxhr = $.get('http://ygopro.us/' + target.path, function (filedata) {
-         var file = fs.createWriteStream(target.path);   
-         file.write(filedata);
-            file.end();
-            downloadList.shift();
-            setTimeout(function () {
-                download();
-            }, 0);
-        })
+
+
+    $.get('http://ygopro.us/' + target.path, function (filedata) {
+        var file = fs.createWriteStream(target.path);
+        screenMessage.text('Updating...' + target.path + ' and ' + downloadList.length + ' other files' + additionaltext);
+        file.write(filedata);
+        file.end();
+        downloadList.shift();
+        setTimeout(function () {
+            download();
+        }, 0);
+    })
         .fail(function () {
             screenMessage.text('Unable to download and update ' + target.path + ', sorry.');
             downloadList.shift();
