@@ -127,42 +127,32 @@ function hashcheck() {
         }
     }
 }
-
+var url = require('url');
 function download() {
     if (downloadList.length === 0) {
         screenMessage.text('Update Complete! System Messages will appear here.');
-        if (os.platform() === 'linux') {
-            fs.chmod('ygopro/application_ygopro', '0777', function (error) {
-                if (error) console.log(error);
-            }); // creates race condition requiring launcher restart.
-        }
         return;
     }
     var target = downloadList[0];
-    var additionaltext = '.';
-    if (downloadList.length > 250) {
-        additionaltext = ', this will take a while please be patient!';
-    }
 
+    screenMessage.text('Updating...' + target.path + ' and ' + downloadList.length + ' other files');
 
-
-    $.get('http://ygopro.us/' + target.path, function (filedata) {
-            var file = fs.createWriteStream(target.path);
-            screenMessage.text('Updating...' + target.path + ' and ' + downloadList.length + ' other files' + additionaltext);
-            file.write(filedata);
+    var file = fs.createWriteStream(target.path);
+    var options = {
+        host: url.parse(siteLocation + target.path).host,
+        port: 80,
+        path: url.parse(siteLocation + target.path).pathname
+    };
+    http.get(options, function (res) {
+        res.on('data', function (data) {
+            file.write(data);
+        }).on('end', function () {
             file.end();
             downloadList.shift();
-            setTimeout(function () {
-                download();
-            }, 0);
-        })
-        .fail(function () {
-            screenMessage.text('Unable to download and update ' + target.path + ', sorry.');
-            downloadList.shift();
-            setTimeout(function () {
-                download();
-            }, 1000);
+            setTimeout(function(){download();},200);
+            
         });
+    });
 }
 
 
