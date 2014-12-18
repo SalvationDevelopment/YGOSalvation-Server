@@ -139,9 +139,9 @@ function download() {
 
     var file = fs.createWriteStream(target.path);
     var options = {
-        host: url.parse(siteLocation + target.path).host,
+        host: url.parse(siteLocation +'/'+ target.path).host,
         port: 80,
-        path: url.parse(siteLocation + target.path).pathname
+        path: url.parse(siteLocation +'/'+ target.path).pathname
     };
     http.get(options, function (res) {
         res.on('data', function (data) {
