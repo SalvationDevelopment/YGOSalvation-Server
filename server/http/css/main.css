@@ -352,7 +352,7 @@ header,
 .game {
     min-height: 450px;
     margin: 0 auto;
-    padding-bottom: 20px;
+    padding-bottom: 40px;
     color: white;
     background: rgba(0, 0, 0, .65);
     overflow: auto;

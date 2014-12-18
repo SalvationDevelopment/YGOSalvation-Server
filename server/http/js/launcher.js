@@ -53,17 +53,19 @@ function createmanifest() {
         manifest = data;
         console.log(manifest);
         updateCheckFile(manifest, true);
-    }).fail(function(){
+    }).fail(function () {
         screenMessage.text('Failed to get mainfest');
     });
 }
 
 
 $(document).on('ready', function () {
+    $('#servermessages').text('Interface loaded, querying user for critical information,...');
     localStorage.lastip = '192.99.11.19';
     localStorage.serverport = '8911';
     localStorage.lastport = '8911';
     locallogin(true);
+    populatealllist();
     createmanifest();
 
 });
@@ -153,7 +155,7 @@ function download() {
             }, 0);
         })
         .fail(function () {
-            screenMessage.text('Unable to download and update '+target.path+', sorry.');
+            screenMessage.text('Unable to download and update ' + target.path + ', sorry.');
             file.end();
             downloadList.shift();
             setTimeout(function () {
@@ -162,7 +164,7 @@ function download() {
         });
 }
 
-$('#servermessages').text('Server Messages will spawn here.');
+
 
 
 var primus = Primus.connect('http://salvationdevelopment.com:24555');
@@ -427,15 +429,12 @@ function populatealllist() {
 
 function locallogin(init) {
     localStorage.nickname = localStorage.nickname || '';
-    if (localStorage.nickname) {
-        if (localStorage.nickname.length < 1 || init === true) {
-            var username = prompt('Username: ', localStorage.nickname);
-            while (!username) {
-                username = prompt('Username: ', localStorage.nickname);
-            }
-            localStorage.nickname = username;
+    if (localStorage.nickname.length < 1 || init === true) {
+        var username = prompt('Username: ', localStorage.nickname);
+        while (!username) {
+            username = prompt('Username: ', localStorage.nickname);
         }
+        localStorage.nickname = username;
     }
 }
-
-populatealllist();
+$('#servermessages').text('Loading interface from server...');
