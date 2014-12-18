@@ -9,3 +9,6 @@ The follow card ID's are not official and should be changed when a card is prope
 13790403 Astellarknight - Sephira Byuuto
 13790404 Sephira Exa the Flame Beast Nekroz
 13790405 Sephira Fuushi, Treasure of the Yang Zing
+13715000 Dark Burning Attack
+13715001 Eternal Soul
+13715002 Ring of Peace
