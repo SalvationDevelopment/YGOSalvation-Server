@@ -1,6 +1,5 @@
 The following card ID's are not official and should be changed when a card is properly released. This includes changing the database entry, script file and both pictures. Other changes may be required later.
 
-*s
 * 13725000 Ultimaya Tzolk'in
 * 13725006 Dark Burning Magic
 * 97007933 High Speed Roid Magical Sword Dharma
