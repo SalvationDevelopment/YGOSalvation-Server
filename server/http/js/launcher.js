@@ -54,20 +54,22 @@ function createmanifest() {
         manifest = data;
         console.log(manifest);
         updateCheckFile(manifest, true);
-    }).fail(function(){
+    }).fail(function () {
         screenMessage.text('Failed to get mainfest');
     });
 }
 
 
-$(document).on('ready', function () {
+setTimeout(function () {
+    $('#servermessages').text('Interface loaded, querying user for critical information,...');
     localStorage.lastip = '192.99.11.19';
     localStorage.serverport = '8911';
     localStorage.lastport = '8911';
     locallogin(true);
+    populatealllist();
     createmanifest();
 
-});
+},10000);
 
 
 process.on('uncaughtException', function (err) {
@@ -126,44 +128,35 @@ function hashcheck() {
         }
     }
 }
-
+var url = require('url');
 function download() {
     if (downloadList.length === 0) {
         screenMessage.text('Update Complete! System Messages will appear here.');
-        if (os.platform() === 'linux') {
-            fs.chmod('ygopro/application_ygopro', '0777', function (error) {
-                if (error) console.log(error);
-            }); // creates race condition requiring launcher restart.
-        }
         return;
     }
     var target = downloadList[0];
-    var additionaltext = '.';
-    if (downloadList.length > 250) {
-        additionaltext = ', this will take a while please be patient!';
-    }
-    screenMessage.text('Updating...' + target.path + ' and ' + downloadList.length + ' other files' + additionaltext);
+
+    screenMessage.text('Updating...' + target.path + ' and ' + downloadList.length + ' other files');
 
     var file = fs.createWriteStream(target.path);
-    var jqxhr = $.get('http://ygopro.us/' + target.path, function (filedata) {
-            file.write(filedata);
+    var options = {
+        host: url.parse(siteLocation +'/'+ target.path).host,
+        port: 80,
+        path: url.parse(siteLocation +'/'+ target.path).pathname
+    };
+    http.get(options, function (res) {
+        res.on('data', function (data) {
+            file.write(data);
+        }).on('end', function () {
             file.end();
             downloadList.shift();
-            setTimeout(function () {
-                download();
-            }, 0);
-        })
-        .fail(function () {
-            screenMessage.text('Unable to download and update '+target.path+', sorry.');
-            file.end();
-            downloadList.shift();
-            setTimeout(function () {
-                download();
-            }, 1000);
+            setTimeout(function(){download();},200);
+            
         });
+    });
 }
 
-$('#servermessages').text('Server Messages will spawn here.');
+
 
 
 var primus = Primus.connect('http://salvationdevelopment.com:24555');
@@ -523,16 +516,15 @@ function populatealllist() {
 
 function locallogin(init) {
     localStorage.nickname = localStorage.nickname || '';
-    if (localStorage.nickname) {
-        if (localStorage.nickname.length < 1 || init === true) {
-            var username = prompt('Username: ', localStorage.nickname);
-            while (!username) {
-                username = prompt('Username: ', localStorage.nickname);
-            }
-            localStorage.nickname = username;
+    if (localStorage.nickname.length < 1 || init === true) {
+        var username = prompt('Username: ', localStorage.nickname);
+        while (!username) {
+            username = prompt('Username: ', localStorage.nickname);
         }
+        localStorage.nickname = username;
     }
 }
+
 
 Array.prototype.searchFor = function(candid) {
     for (var i=0; i<this.length; i++)
@@ -542,3 +534,6 @@ Array.prototype.searchFor = function(candid) {
 };
 
 populatealllist();
+
+$('#servermessages').text('Loading interface from server...');
+
