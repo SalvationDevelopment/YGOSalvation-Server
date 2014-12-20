@@ -351,8 +351,8 @@ function parseDuelOptions(duelOptions) {
 
 function parseFilters() {
 
-    var settings = { //Determine time limit
-        timeLimit: ($('#filtertimelimit option:selected').val() == 3) ? '3 minutes' : '5 minutes',
+    var settings = { 
+        //timeLimit: ($('#filtertimelimit option:selected').val() == 3) ? '3 minutes' : '5 minutes',
 
         //Determine Banlist
         banList: parseInt($('#filterbanlist option:selected').val()),
@@ -362,6 +362,17 @@ function parseFilters() {
 
     };
 
+    //Determine time limit
+    if ($('#filtertimelimit option:selected').val() == '0') {
+        settings.timeLimit = 'All';
+    }
+    if ($('#filtertimelimit option:selected').val() == '3') {
+        settings.timeLimit = '3 minutes';
+    }
+    if ($('#filtertimelimitoption:selected').val() == '5') {
+        settings.timeLimit = '5 minutes';
+        
+    }
     
     //Determine allowed cards
     if ($('#filercardpool option:selected').val() == '0') {
@@ -377,6 +388,9 @@ function parseFilters() {
     if ($('#filercardpool option:selected').val() == '3') {
         settings.allowedCards = 'anime';
     }
+    if ($('#filercardpool option:selected').val() == '4') {
+        settings.allowedCards = 'All';
+    }
 
     //Determine game mode
     if ($('#filterroundtype option:selected').val() == '0'){
@@ -388,6 +402,10 @@ function parseFilters() {
     if ($('#filterroundtype option:selected').val() == '2') {
         settings.gameMode = 'tag';
     }
+    if ($('#filterroundtype option:selected').val() == '3') {
+        settings.gameMode = 'All';
+    }
+    settings.userName = $('#filterusername').val();
 
 
     return settings;
@@ -433,8 +451,6 @@ var banlist_names = ['TCG-Current', 'OCG-Current', 'Something older'];
 
 function renderList(JSONdata) {
     var filterm = parseFilters();
-    //console.log(filterm.allowedCards +'  ' + $('#filercardpool option:selected').val());
-    //console.log($('#filercardpool option:selected').val() == 2);
     $('#gamelist').html('');
     for (var rooms in JSONdata) {
         if (JSONdata.hasOwnProperty(rooms)) {
@@ -445,17 +461,22 @@ function renderList(JSONdata) {
             var player4 = JSONdata[rooms].players[4] || '___';
             var duelist;
             var translated = parseDuelOptions(rooms);
+            var players= [player1,player2,player3,player4];
             
-            if (translated.gameMode != filterm.gameMode){
+            if (translated.gameMode != filterm.gameMode && filterm.gameMode != 'All'){
                 OK=false;
             }
-            if (translated.allowedCards != filterm.allowedCards){
+            if (translated.allowedCards != filterm.allowedCards && filterm.allowedCards != 'All'){
                 OK=false;
             }
-            if (translated.timeLimit != filterm.timeLimit){
+            if (translated.timeLimit != filterm.timeLimit && filterm.timeLimit != 'All'){
+                OK=false;
+
+            }
+            if (translated.banList != filterm.banList && filterm.banList != '20'){
                 OK=false;
             }
-            if (translated.banList != filterm.banList){
+            if (players.searchFor(filterm.userName) === -1){
                 OK=false;
             }
             if(OK){
@@ -472,7 +493,6 @@ function renderList(JSONdata) {
 
                 $('#gamelist').append(content);
             }
-            console.log(OK);
         }
     }
 }
@@ -513,5 +533,12 @@ function locallogin(init) {
         }
     }
 }
+
+Array.prototype.searchFor = function(candid) {
+    for (var i=0; i<this.length; i++)
+        if (this[i].toLowerCase().indexOf(candid.toLowerCase()) == '0')
+            return i;
+    return -1;
+};
 
 populatealllist();
