@@ -7,33 +7,32 @@ var net = require('net');
 var parsePackets = require('./parsepackets.js');
 var recieveCTOS = require('./recieveCTOS');
 var recieveSTOC = require('./recieveSTOC.js');
-var killCore = require('./killcore.js');
-
 var gamelist = {};
-var servercallback;
 
-var portmin =23500;
+process.on('message',function(message){
+    if (message.messagetype === 'gamelist'){
+        gamelist = message.gamelist;
+    }
+});
 
-function processIncomingTrasmission(data, socket, input, callback) {
-    gamelist = input;
-    servercallback = callback;
+var portmin = 23500;
 
-    //console.log(socket.hostString);
+function processIncomingTrasmission(data, socket) {
     if (socket.active_ygocore) {
         //console.log('-->');
         socket.active_ygocore.write(data);
         // eventing shifted server wont overload due to constant dueling.
-        return gamelist;
+        return true;
     }
     var task = parsePackets('CTOS', data);
     processTask(task, socket);
 
     //console.log(socket.hostString);
     if (!socket.active_ygocore) {
-        try{
-            console.log(console.log('['+new Date().getHours()+':' + new Date().getMinutes())+'] ', socket.username, socket.hostString);
-        }catch(error){
-            console.log(new Date(), socket.username, socket.hostString,'not on gamelist');                                                    
+        try {
+            console.log('[' + new Date().getHours() + ':' + new Date().getMinutes() + ']', socket.username, socket.hostString);
+        } catch (error) {
+            console.log(new Date(), socket.username, socket.hostString, 'not on gamelist');
         }
         if (gamelist[socket.hostString] && !socket.active_ygocore) {
             socket.alpha = false;
@@ -49,10 +48,9 @@ function processIncomingTrasmission(data, socket, input, callback) {
         }
     }
     //console.log('process complete', gamelist);
-    if (portmin === 27000){
+    if (portmin === 27000) {
         portmin = 23500;
     }
-    return gamelist;
 }
 
 function processTask(task, socket) {
@@ -100,8 +98,7 @@ function startCore(port, socket, data, callback) {
             //console.log(createDateString(currentDate) + ' CORE Terminated', error, stderr, stdout);
         });
         socket.core.stdout.on('error', function (error) {
-            servercallback('kill', gamelist);
-            //console.log(createDateString(currentDate) + ' core error', error);
+            
         });
         socket.core.stdout.on('data', function (core_message_raw) {
             handleCoreMessage(core_message_raw, port, socket, data);
@@ -110,24 +107,7 @@ function startCore(port, socket, data, callback) {
     });
 }
 
-function handleCoreMessage(core_message_raw, port, socket, data) {
-    function existanceCheck(gameInstance, port) {
-        if (socket.alpha) {
-            //console.log(socket.alpha);
-            if (gamelist[gameInstance] || !socket.alpha) {
-                return;
-            } else {
-                //console.log('adding new game');
-                gamelist[gameInstance] = {
-                    port: port,
-                    players: [null, null, null, null],
-                    locked: [false, false, false, false],
-                    started: false,
-                    spectators: 0
-                };
-            }
-        }
-    }
+function handleCoreMessage(core_message_raw, port, data, socket) {
     var core_message_txt = core_message_raw.toString();
     //console.log(core_message_txt);
     if (core_message_txt.indexOf("::::") < 0) {
@@ -136,92 +116,19 @@ function handleCoreMessage(core_message_raw, port, socket, data) {
     var core_message = core_message_txt.split('|');
     //console.log(core_message);
     core_message[0] = core_message[0].trim();
-    try {
-        switch (core_message[0]) {
-        case ('::::network-ready'):
-            {
-                connectToCore(port, data, socket);
-            }
-            break;
-        case ('::::network-end'):
-            {
-                //servercallback('kill', gamelist);
-            }
-            break;
-        case ('::::join-slot'):
-            {
-                socket.hostString = core_message[1];
-                existanceCheck(core_message[1]);
-                var join_slot = parseInt(core_message[2], 10);
-                if (join_slot === -1) {
-                    return;
-                }
-                gamelist[core_message[1]].players[join_slot] = core_message[3];
-                gamelist[core_message[1]].port = port;
-                
-                servercallback('update', gamelist);
-            }
-            break;
-        case ('::::leave-slot'):
-            {
-               
-                var leave_slot = parseInt(core_message[2], 10);
-                if (leave_slot === -1) {
-                    return;
-                }
-                gamelist[core_message[1]].players[leave_slot] = null;
-                servercallback('update', gamelist);
-            }
-            break;
-        case ('::::spectator'):
-            {
-            
-                gamelist[core_message[1]].spectators = parseInt(core_message[2], 10);
-                servercallback('update', gamelist);
-
-            }
-            break;
-        case ('::::lock-slot'):
-            {
-
-                var lock_slot = parseInt(core_message[2], 10);
-                gamelist[core_message[1]].locked[lock_slot] = Boolean(core_message[2]);
-                servercallback('update', gamelist);
-            }
-            break;
-        case ('::::endduel'):
-            {
-                //do ranking here
-     
-                delete gamelist[core_message[1]];
-                servercallback('update', gamelist);
-            }
-            break;
-        case ('::::startduel'): // rockpaperscissors
-            {
-
-                gamelist[socket.hostString].started = true;
-                servercallback('update', gamelist);
-            }
-            break;
-        case ('::::chat'):
-            {
-                var msg = socket.hostString + ':' + core_message_raw.toString();
-                //fs.appendFile(socket.hostString'-message.txt', msg, function (error) {
-
-                //});         
-            }
-            break;
-        }
-    } catch (error_message) {
-        console.log(error_message);
+    if (core_message[0] === '::::network-ready') {
+        connectToCore(port, data, socket);
+    } else {
+        process.send(core_message_raw);
     }
 }
+
 
 function pickCoreConfig(socket) {
     if (socket.hostString[0] === '0' || //OCG
         socket.hostString[0] === '1' || //TCG
-        socket.hostString[0] === '2') { //TCG/OCG : Sim format
+        socket.hostString[0] === '2' || //TCG/OCG : Sim format
+        socket.hostString[0] === 'c') { //Chibimode : Sim format
         return '' + socket.hostString[0] + '-config.txt';
     } else {
         /*load default configuration */
@@ -229,9 +136,10 @@ function pickCoreConfig(socket) {
     }
 }
 
-function connectToCore(port, data, socket, callback) {
+function connectToCore(port, data, socket) {
     //console.log('attempting link up');
     socket.active_ygocore = net.connect(port, '127.0.0.1', function () {
+        socket.active_ygocore.setNoDelay(true);
         //console.log('linkup established');
         socket.active_ygocore.write(data);
         //console.log('-->');
@@ -241,13 +149,17 @@ function connectToCore(port, data, socket, callback) {
             //console.log('<--',core_data.toString());
         });
         socket.active_ygocore.on('error', function (error) {
-            servercallback('kill', gamelist);
-            //console.log(error);
+           
         });
         socket.active_ygocore.on('close', function () {
-            servercallback('kill', gamelist);
-            //console.log(gamelist);
+            
         });
+    });
+    socket.on('close', function () {
+        socket.active_ygocore.destroy();
+    });
+    socket.on('error', function () {
+        socket.active_ygocore.destroy();
     });
 }
 
