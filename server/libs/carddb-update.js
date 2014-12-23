@@ -6,10 +6,14 @@ var http = require("http"),
     wikiaQuery = "/api.php?action=query&format=json&redirects&prop=revisions&rvprop=content&titles=",
     events = require("events"),
     phases = new events.EventEmitter(),
-    aliases = {},
-    statistics = [],
-    failQueue = [],
     log = console.log; // works (nodeJS) because the method was created using Function.prototype.bind
+
+function logIteration (iteration) {
+    var s = iteration.statistics,
+        m = [iteration.name, ' (', s.progress, '/', s.total, '): ',
+             'success: ', s.success, ', fail: ', s.fail].join('');
+    log(m);
+}
 
 function getDatabaseCards (callback) {
     var database = new sqlite3.Database(filepath, sqlite3.OPEN_READONLY),
@@ -23,18 +27,12 @@ function getDatabaseCards (callback) {
     database.each(query, function (error, row) {
         var ids = null;
         
-        if ( error ) {
+        if (error) {
             queryError = error;
             return;
         }
         
-        if ( row.alias ) {
-            ids = aliases[row.alias] || [];
-            ids.push(row.id);
-            aliases[row.alias] = ids;
-        } else {
-            cards.push(row);
-        }
+        cards.push(row);
     });
     
     database.close();
@@ -62,17 +60,7 @@ function updateDatabase (changes, callback)  {
         });
         
         Object.keys(changes).forEach(function (id) {
-            var desc = changes[id].lore;
-            
-            log("updating #", id);
-            statement.run({ $id: id, $desc:  desc });
-            
-            // wish I could use a join, but the sqlite syntax for UPDATE doesn't allow it
-            // http://sqlite.org/lang_update.html
-            (aliases[id] || []).forEach(function (alias) {
-                log("updating #", alias, " (alias for #", id, ")");
-                statement.run({ $id: alias, $desc: desc });
-            });
+            statement.run({ $id: id, $desc:  changes[id].lore });
         });
         
         statement.finalize();
@@ -134,7 +122,6 @@ function getWikiaPayload (titles, callback) {
     }
     
     http.get(options, handleResponse).on('error', handleRequestError);
-    log("request for ", titlesComponent ," was sent to wikia");
 }
 
 function getLoreReplacement (match, capture) {
@@ -160,10 +147,47 @@ function sanitize (data) {
     return data;
 }
 
+// had to do it manually, couldn't rely on regex for this job
+function getCardDataFromWikiaRevision (input) {
+	var i = 0, 
+        len = input.length,
+		stack = [], 
+        sections = [],
+		from = 0,
+        until = 0,
+		openToken = '{',
+        closeToken = '}',
+		cardTableSection = '{{CardTable2';
+		
+	for (; i < len; i += 1) {
+		if ( input.charAt(i) === openToken && input.charAt(i + 1) === openToken ) {
+			stack.push(i);
+		} else if ( input.charAt(i) === closeToken && input.charAt(i + 1) === closeToken ) {
+			from = stack.pop();
+			until = i + 2;
+			sections.push(input.substring(from, until));
+		}
+	}
+	
+	i = 0;
+	len = sections.length;
+	for (; i < len; i += 1) {
+		if ( sections[i].indexOf(cardTableSection) === 0 ) {
+			break;
+		}
+	}
+	
+	if ( typeof sections[i] === 'string' ) {
+		return sections[i].substring(cardTableSection.length, sections[i].length - 2);
+	}
+	
+	return null;
+}
+
 function parseWikiaPage (page) {
     var content = "",
         body = null,
-        matches = null,
+        cardData = null,
         parts = null,
         parsed = null,
         i = 0,
@@ -179,17 +203,15 @@ function parseWikiaPage (page) {
     content = content["*"];
     
     if ( content ) {
-        matches =  /\{\{CardTable2([\s\S]+)\}\}/.exec(content);
+        cardData = getCardDataFromWikiaRevision(content);
         
-        if ( matches ) {
-            parts = matches[1].split(/\|(\w+)\s*=/);
+        if ( cardData ) {
+            parts = cardData.split(/\|(\w+)\s*=/);
 
             body = {};
             
             for (i = 1, len = parts.length - 1; i < len; i += 2) {
-                if ( !body[ parts[i] ] ) {
-                    body[ parts[i] ] = parts[i + 1].trim();
-                }
+                body[ parts[i] ] = parts[i + 1].trim();
             }
 
             // all cards should have a 'lore' section
@@ -243,49 +265,58 @@ function parseWikiaPayload (payload) {
     };
 }
 
-function update (cards, queryComponentSelector, callback) {
+function update (cards, iteration, callback) {
     var titles = [],
         map = {};
     
     cards.forEach(function (card) {
-        var title = queryComponentSelector(card);
-        
-        map[title] = card;
+        var title = iteration.query(card),
+			values = map[ title ] || [];
+			
+		values.push(card);
+		map[ title ] = values;
+		
         titles.push(title);
     });
     
     getWikiaPayload(titles, function (json) {
        var results = parseWikiaPayload(json),
-           successCollection = results.successCollection,
-           failCollection = results.failCollection,
-           stats = statistics[statistics.length - 1],
-           changes = {};
+           changes = {},
+           success = 0,
+           fail = 0;
         
-        successCollection.forEach(function (parsed) {
-            var id = map[parsed.queryTitle].id;
-            changes[id] = parsed.body;
+        results.successCollection.forEach(function (parsed) {
+            var values = map[ parsed.queryTitle ];
+			
+            success += values.length;
+			values.forEach(function (card) {
+				changes[ card.id ] = parsed.body;
+			});
         });
         
-        failCollection.forEach(function (parsed) {
-           failQueue.push(map[parsed.queryTitle]); 
+        results.failCollection.forEach(function (parsed) {
+			var values = map[ parsed.queryTitle ];
+            
+            fail += values.length;
+			iteration.failQueue = iteration.failQueue.concat(values); 
         });
         
-        stats.success += successCollection.length;
-        stats.fail += failCollection.length;
+        iteration.statistics.success += success;
+        iteration.statistics.fail += fail;
+        iteration.statistics.progress += cards.length;
         
-        log(stats);
-        log("failQueue: ", failQueue);
-         
+        logIteration(iteration);
+
         updateDatabase(changes, callback);
     });
 }
 
-function processCards (iterator, queryComponentSelector, completionEventName) {
+function processCards (iterator, iteration, completionEventName) {
     var cards = iterator.getNextBatch();
     
     if ( cards.length ) {
-        update(cards, queryComponentSelector, function () {
-            processCards(iterator, queryComponentSelector, completionEventName);
+        update(cards, iteration, function () {
+            processCards(iterator, iteration, completionEventName);
         });
     } else {
         process.nextTick(function () {
@@ -294,7 +325,7 @@ function processCards (iterator, queryComponentSelector, completionEventName) {
     }
 }
 
-function createBatchIterator(list, start, length) {
+function createBatchIterator (list, start, length) {
     var from = start;
     
     function getNextBatch () {
@@ -327,44 +358,52 @@ function normalize (id) {
     return padding.join("0") + stringId;
 }
 
-function queryUsingId (card) {
+function getId (card) {
     return normalize(card.id);
 }
 
-function queryUsingName (card) {
+function getAlias (card) {
+    return normalize(card.alias);
+}
+
+function getName (card) {
     return card.name;
 }
 
-function processDbCards (dbCards, callback) {
-    var dbCardsIterator = createBatchIterator(dbCards, 0, 5);
-    
-    log("db cards processing started");
-    statistics.push({ name: "initial iteration", success: 0, fail: 0 });
+function startIteration (cards, options, callback) {
+    var step = 5, // cards per request
+        iterator = createBatchIterator(cards, 0, step),
+        completionEventName = "iterationCompleted",
+        iteration = {};
 
-    processCards(dbCardsIterator, queryUsingId, "dbCardsProcessingCompleted");
+    iteration.name = options.name;
+    iteration.query = options.query;
+    iteration.statistics = { success: 0, fail: 0, progress: 0, total: cards.length };
+    iteration.failQueue = [];
+    
+    log(iteration.name + " started");
         
-    phases.on("dbCardsProcessingCompleted", function () {
-        log("db cards processing ended");
-        callback();
+    processCards(iterator, iteration, completionEventName);
+    
+    phases.once(completionEventName, function () {
+        log(iteration.name + " ended");
+        callback(iteration);
     });
 }
 
-function processFailedCards () {
-    var failedCards = failQueue.slice(0),
-        failedCardsIterator = createBatchIterator(failedCards, 0, 5);
+getDatabaseCards (function (dbCards) {
+    var trials = [], current = 0;
     
-    failQueue.length = 0;
-        
-    log("failed cards processing started");
-    statistics.push({ name: "failed cards iteration", success: 0, fail: 0 });
-        
-    processCards(failedCardsIterator, queryUsingName, "failedCardsProcessingCompleted");
+    trials.push({ name: 'initial iteration', query: getId });
+    trials.push({ name: 'failed cards iteration #1', query: getAlias });
+    trials.push({ name: 'failed cards iteration #2', query: getName });
     
-    phases.on("failedCardsProcessingCompleted", function () {
-        log("failed cards processing ended");
-    });
-}
+    function handleIterationCompleted (iteration) {
+        current += 1;
+        if ( current < trials.length ) {
+            startIteration(iteration.failQueue, trials[current], handleIterationCompleted);
+        }
+    }
 
-getDatabaseCards(function (dbCards) {
-    processDbCards(dbCards, processFailedCards);
+    startIteration(dbCards, trials[0], handleIterationCompleted);
 });
