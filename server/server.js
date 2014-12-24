@@ -34,12 +34,14 @@ Run `npm install` in the directory above.
 
     function setupWorker() {
         var worker = cluster.fork();
-        worker.on('message', function () {
-            var gamelist = gamelistManager();
+        worker.on('message', function (message) {
+            if (message.messagetype ='coreMessage'){
+            var gamelist = gamelistManager(message.coreMessage);
             worker.send({
-                messagetype: gamelist,
+                messagetype: 'gamelist',
                 gamelist: gamelist
             });
+            }
         });
     }
     if (require('os').cpus().length > 1) {
