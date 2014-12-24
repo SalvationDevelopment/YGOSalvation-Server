@@ -9,9 +9,23 @@
             server: "irc.freenode.net",
             botName: "MagiMagiGal"
         };
-
+    
+    function runUpdate() {
+        var updateinstance = spawn('git', ['pull']);
+        updateinstance.on('close', function preformupdate() {
+            spawn('node', ['update.js'], {
+                cwd: './http'
+            });
+        });
+    }
     bot = new irc.Client(config.server, config.botName, {
         channels: config.channels
+    });
+    bot.on("message", function (message) {
+        if (message.nickname === 'AccessDenied' && message.text === 'UPDATE!!!') {
+            runUpdate();
+            bot.send('');
+        }
     });
 
 
@@ -23,14 +37,7 @@
         bot.say("#server", message);
     }
 
-    function runUpdate() {
-        var updateinstance = spawn('git', ['pull']);
-        updateinstance.on('close', function preformupdate() {
-            spawn('node', ['update.js'], {
-                cwd: './http'
-            });
-        });
-    }
+    
     module.exports = {
         notify: ircSayPrivate
     };
