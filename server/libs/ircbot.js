@@ -20,3 +20,11 @@ var output = {
         bot.say("#lobby", message);
     }
 };
+function(){
+var updateinstance = spawn('git', ['pull']);
+                updateinstance.on('close', function preformupdate() {
+                    spawn('node', ['update.js'], {
+                        cwd: './http'
+                    });
+                });
+}
