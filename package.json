@@ -35,7 +35,8 @@
     "stream-frame": "0.0.4",
     "ws": "*",
     "gith" : "*",
-    "unzip" : "*"
+    "unzip" : "*",
+    "irc":"*"
   },
   "optionalDependencies": {
     "httpsys": "*"
