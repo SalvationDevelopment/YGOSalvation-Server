@@ -27,7 +27,7 @@ Run `npm install` in the directory above.
         net = require('net'),
         http = require('http'),
         cluster = require('cluster'),
-        
+
         //WebSocketServer = require('ws').Server,
         processIncomingTrasmission = require('./libs/processIncomingTrasmission.js');
 
@@ -48,7 +48,7 @@ Run `npm install` in the directory above.
         numCPUs = require('os').cpus().length;
         numCPUs = (numCPUs > 4) ? 4 : numCPUs;
     }
-    
+
     if (cluster.isMaster) {
         console.log('YGOPro Salvation Server - Saving Yu-Gi-Oh!');
         console.log('    Starting Master');
@@ -81,13 +81,18 @@ Run `npm install` in the directory above.
             socket.active_ygocore = false;
             socket.active = false;
             socket.on('data', function (data) {
-                processIncomingTrasmission(data, socket, data);
+                if (socket.active_ygocore) {
+                    socket.active_ygocore.write(data);
+                } else {
+                    processIncomingTrasmission(data, socket, data);
+                }
+
             });
             socket.on('close', function () {
-                //nothing needed.
+                socket.active_ygocore.close();
             });
             socket.on('error', function () {
-                //nothing needed
+                socket.active_ygocore.close();
             });
             socket.setTimeout(300000, function () {
                 socket.end(); //Security precaution
