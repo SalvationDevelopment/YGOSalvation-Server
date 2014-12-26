@@ -6,7 +6,7 @@
         spawn = require('child_process').spawn,
         config = {
             channels: ["#lobby", "#server"],
-            server: "irc.freenode.net",
+            server: "ygopro.us",
             botName: "MagiMagiGal"
         };
     
