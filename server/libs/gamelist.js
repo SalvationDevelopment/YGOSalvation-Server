@@ -11,7 +11,7 @@
 
     function handleCoreMessage(core_message_raw, port, data) {
         if (core_message_raw.toString().indexOf("::::") < 0) {
-            return;
+            return gamelist;
         }
 
         var chat,
@@ -19,10 +19,20 @@
             leave_slot,
             lock_slot,
             core_message = core_message_raw.toString().split('|');
-
-
+        core_message[0] = core_message[0].trim();
+        if (core_message[1] === undefined){
+            return gamelist;
+        }
         try {
-            core_message[0] = core_message[0].trim();
+            
+            if (gamelist[core_message[1]] === undefined){
+                gamelist[core_message[1]] = {
+                    players : [],
+                    locked : [],
+                    spectators : 0,
+                    started : false
+                }
+            }
             switch (core_message[0]) {
 
             case ('::::join-slot'):
@@ -68,7 +78,8 @@
             return gamelist;
         } catch (error_message) {
             console.log(error_message);
-            return null;
+            console.log('ISSUE!')
+            return gamelist;
         }
     }
 

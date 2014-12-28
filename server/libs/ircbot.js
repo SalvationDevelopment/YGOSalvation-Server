@@ -5,7 +5,7 @@
         irc = require("irc"),
         spawn = require('child_process').spawn,
         config = {
-            channels: ["#lobby", "#server"],
+            channels: ["#server"],
             server: "ygopro.us",
             botName: "MagiMagiGal"
         };

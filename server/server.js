@@ -29,20 +29,7 @@ var ygoserver, //port 8911 ygopro Server
     //WebSocketServer = require('ws').Server,
     processIncomingTrasmission = require('./libs/processIncomingTrasmission.js');
 
-function setupWorker(x) {
-    'use strict';
-    console.log('        Starting Slave ' + x);
-    var worker = cluster.fork();
-    worker.on('message', function (message) {
-        if (message.messagetype === 'coreMessage') {
-            var gamelist = gamelistManager(message.coreMessage);
-            worker.send({
-                messagetype: 'gamelist',
-                gamelist: gamelist
-            });
-        }
-    });
-}
+
 
 function initiateMaster() {
     'use strict';
@@ -51,6 +38,26 @@ function initiateMaster() {
     process.title = 'YGOPro Salvation Server';
     ircManager = require('./libs/ircbot.js');
     gamelistManager = require('./libs/gamelist.js');
+
+    function setupWorker(x) {
+        //'use strict';
+        console.log('        Starting Slave ' + x);
+        var worker = cluster.fork();
+        worker.on('message', function (message) {
+            //console.log('    '+x,message);
+            if (message.messagetype === 'coreMessage') {
+                var gamelist = gamelistManager(message.coreMessage);
+                //console.log(gamelist);
+
+                Object.keys(cluster.workers).forEach(function (id) {
+                    cluster.workers[id].send({
+                        messagetype: 'gamelist',
+                        gamelist: gamelist
+                    });
+                });
+            }
+        });
+    }
     for (clusterIterator; clusterIterator < numCPUs; clusterIterator++) {
         setupWorker(clusterIterator);
     }
@@ -87,14 +94,6 @@ function initiateSlave() {
             }
 
         });
-        socket.on('close', function () {
-            if (socket.active_ygocore) {
-                socket.active_ygocore.close();
-            }
-        });
-        socket.on('error', function () {
-            socket.active_ygocore.close();
-        });
         socket.setTimeout(300000, function () {
             socket.end(); //Security precaution
         });
@@ -113,5 +112,5 @@ function initiateSlave() {
         initiateMaster();
     } else {
         initiateSlave();
-    } // end cluster split
+    }
 }()); // end main
