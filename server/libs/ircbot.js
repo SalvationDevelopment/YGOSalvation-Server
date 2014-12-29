@@ -7,9 +7,9 @@
         config = {
             channels: ["#server"],
             server: "ygopro.us",
-            botName: "MagiMagiGal"
+            botName: "EXODIUS_" + require('os').hostname()
         };
-    
+
     function runUpdate() {
         var updateinstance = spawn('git', ['pull']);
         updateinstance.on('close', function preformupdate() {
@@ -37,7 +37,7 @@
         bot.say("#server", message);
     }
 
-    
+
     module.exports = {
         notify: ircSayPrivate
     };
