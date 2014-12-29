@@ -1,166 +1,116 @@
-/* jslint node : true */
-console.log('YGOPro US Server (Salvation) - Saving Yu-Gi-Oh!'); //Title
-process.title = 'Salvation';
-
-// load modules built into Node.js
-var net = require('net');
-var http = require('http');
-var cluster = require('cluster');
-var numCPUs = require('os').cpus().length;
-var spawn = require('child_process').spawn;
-var fs = require('fs');
-
-//load modules pulled down from NPM, externals
-//if you dont run `npm install` these requires will fail.
-var gith = require('gith');
-var Primus = require('primus');
-var Rooms = require('primus-rooms');
-var static = require('node-static');
-var WebSocketServer = require('ws').Server;
-
-//load modules that are an internal part of the application
-var processIncomingTrasmission = require('./libs/processIncomingTrasmission.js');
-var gamelist = {};
-
 /*
 Start various sub-servers.
 --------------------------
 - Gamelist on port 24555
 - YGOPro listener on port 8911, YGOPro applications connect to this port
-- YGOPro Web listener on port 8913, browser version connects to this port,
-  and is stripped and routed to the same place as the application.
-- HTTP server running static files out of port 8080
-- Githooks listener on port 4901. Self updating system.
+- YGOPro Web listener on port 8913, browser version connects to this port, 
+  and is stripped and routed to the same place as the application. *disabled
+- HTTP server running static files out of port 80
+- IRC bot connects to #lobby, is named MagiMagiGal
+
+Installation
+------------
+Run `npm install` in the directory above.
 */
 
-var ygoserver; //listen(8911);
-var serverGITHUB = gith.create(4901);
-var serverWS = http.createServer().listen(24555);
-var serverHTTP = new static.Server('./http');
+/*jslint  node: true, plusplus: true, white: false*/
+var ygoserver, //port 8911 ygopro Server
+    staticserv, // static http processor
+    httpServer, // http://ygopro.us
+    ircManager, // magimagigal
+    numCPUs = 1, // atleast 1 slave and 1 master.
+    notification = '', // its a string, make memory.
+    gamelistManager, // primus and gamelist
+    clusterIterator = 0, // its a number make memory
+    net = require('net'),
+    http = require('http'),
+    cluster = require('cluster'),
 
-var serverWSProxy = new WebSocketServer({
-    port: 8913
-});
+    //WebSocketServer = require('ws').Server,
+    processIncomingTrasmission = require('./libs/processIncomingTrasmission.js');
 
 
 
-var primus = new Primus(serverWS, {
-    parser: 'JSON'
-});
-primus.use('rooms', Rooms);
-primus.on('connection', function (socket) {
-    socket.on('data', function (data) {
-        data = data || {};
-        var action = data.action;
-        switch (action) {
-        case ('join'):
-            {
-                socket.join('activegames', function () {
-                    socket.write(JSON.stringify(gamelist));
+function initiateMaster() {
+    'use strict';
+    console.log('YGOPro Salvation Server - Saving Yu-Gi-Oh!');
+    console.log('    Starting Master');
+    process.title = 'YGOPro Salvation Server';
+    ircManager = require('./libs/ircbot.js');
+    gamelistManager = require('./libs/gamelist.js');
+
+    function setupWorker(x) {
+        //'use strict';
+        console.log('        Starting Slave ' + x);
+        var worker = cluster.fork();
+        worker.on('message', function (message) {
+            //console.log('    '+x,message);
+            if (message.messagetype === 'coreMessage') {
+                var gamelist = gamelistManager(message.coreMessage);
+                //console.log(gamelist);
+
+                Object.keys(cluster.workers).forEach(function (id) {
+                    cluster.workers[id].send({
+                        messagetype: 'gamelist',
+                        gamelist: gamelist
+                    });
                 });
             }
-            break;
-        case ('leave'):
-            {
-                socket.leave('activegames');
-            }
-            break;
-        default:
-            {
-                console.log(data);
-            }
-        }
-    });
-});
-primus.on('disconnection', function (socket) {
-    killCore(socket, gamelist, primus); // allow reconnection?
-});
-
-primus.on('error', function (socket) {
-    killCore(socket, gamelist, primus); // allow reconncetion?
-});
-
-// When a user connects, create an instance and allow the to duel, clean up after.
-var ygoserver = net.createServer(function (socket) {
-    socket.active_ygocore = false;
-    socket.active = false;
-    socket.on('data', function (data) {
-        gamelist = processIncomingTrasmission(data, socket, gamelist, function (command, newlist) {
-            gamelist = newlist;
-            
-            if (command === 'kill') {
-                delete gamelist[socket.hostString];
-            }
-
-            primus.room('activegames').write(JSON.stringify(newlist));
-            fs.writeFile('http/gamelist.json', JSON.stringify(gamelist, null, 4), function (err) {
-                if (err) console.log(err);
-            });
         });
-    });
-    socket.on('close', function () {
-        killCore(socket);
-    });
-    socket.on('error', function () {
-        killCore(socket);
-    });
-});
-
-ygoserver.listen(8911);
-
-function killCore(socket) {
-    if (socket.active_ygocore) {
-        socket.active_ygocore.end();
     }
-    if (socket.core) {
-        socket.core.kill();
-        delete socket.core;
-        delete gamelist[socket.hostString];
+    for (clusterIterator; clusterIterator < numCPUs; clusterIterator++) {
+        setupWorker(clusterIterator);
     }
+    cluster.on('exit', function (worker, code, signal) {
+        notification = 'worker ' + worker.process.pid + ' died ' + code + ' ' + signal;
+        ircManager.notify(notification);
+        console.log(notification);
+        setupWorker(clusterIterator++);
+    });
 }
 
-// When a user connects via websockets, create an instance and allow the to duel, clean up after.
-serverWSProxy.on('connection', function (socket) {
-    socket.active_ygocore = false;
-    socket.active = false;
-    socket.write = function (data) {
-        socket.send(data, {
-            binary: true,
-            mask: true
-        });
-    };
-    socket.on('message', function (data) {
-        gamelist = processIncomingTrasmission(data, socket, gamelist, primus);
-    });
-    socket.on('close', function () {
-        killCore(socket, gamelist, primus);
-    });
-    socket.on('error', function () {
-        killCore(socket, gamelist, primus);
-    });
-});
-
-if (cluster.isMaster) {
-    //When http://gitub.com/salvationdevelopment contacts you, update the current git.
-    //We want to limit this to just the master cluster.
-    serverGITHUB({
-        owner: 'salvationdevelopment'
-    }).on('all', function (payload) {
-        var updateinstance = spawn('git', ['pull']);
-        updateinstance.on('close', function preformupdate() {
-            spawn('node', ['update.js'], {
-                cwd: './http'
-            });
-        });
-    });
-
-    /*
-    Static file server:
-    Via nginx /server/http/ is routed to http://ygopro.us/
-    */
+function initiateSlave() {
+    'use strict';
+    staticserv = require('node-static');
+    //listen on 80, main http server is clustered.
+    httpServer = new staticserv.Server('./http');
     http.createServer(function (request, response) {
         request.addListener('end', function () {
-            serverHTTP.serve(request, response);
+            httpServer.serve(request, response);
         }).resume();
-    }).listen(8080);
+    }).listen(8098);
+
+
+    // When a user connects, create an instance and allow the to duel, clean up after.
+    ygoserver = net.createServer(function (socket) {
+        socket.setNoDelay(true);
+        socket.active_ygocore = false;
+        socket.active = false;
+        socket.on('data', function (data) {
+            if (socket.active_ygocore) {
+                socket.active_ygocore.write(data);
+            } else {
+                processIncomingTrasmission(data, socket, data);
+            }
+
+        });
+        socket.setTimeout(300000, function () {
+            socket.end(); //Security precaution
+        });
+    });
+    ygoserver.listen(8911);
 }
+
+(function main() {
+    'use strict';
+    if (require('os').cpus().length > 1) {
+        numCPUs = require('os').cpus().length;
+        numCPUs = (numCPUs > 8) ? 8 : numCPUs;
+    }
+
+    if (cluster.isMaster) {
+        initiateMaster();
+    } else {
+        initiateSlave();
+    }
+}()); // end main
