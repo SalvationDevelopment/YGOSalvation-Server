@@ -177,14 +177,14 @@ function processIncomingTrasmission(data, socket) {
         } catch (error) {
             console.log(createDateString(), socket.username, socket.hostString, 'not on gamelist');
         }
-        console.log(gamelist);
+        //console.log(gamelist);
         if (gamelist[socket.hostString] && !socket.active_ygocore) {
             socket.alpha = false;
             connectToCore(gamelist[socket.hostString].port, data, socket);
             //console.log(socket.username + ' connecting to existing core');
 
         } else if (!gamelist[socket.hostString] && !socket.active_ygocore) {
-            console.log(socket.username + ' connecting to new core');
+            //console.log(socket.username + ' connecting to new core');
             portfinder(++portmin, 27000, function (error, port) {
                 socket.alpha = true;
                 startCore(port, socket, data);
