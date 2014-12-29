@@ -1,6 +1,6 @@
 /*jslint node: true, plusplus: true, unparam: false, nomen: true*/
 /*global ygopro, $, isChecked, alert, Primus, console, process, applySettings, prompt, sitelocationdir */
-/*exported joinGamelist, leaveGamelist, hostGame, connectgamelist, enterGame, setHostSettings, gui*/
+/*exported joinGamelist, leaveGamelist, hostGame, connectgamelist, enterGame, setHostSettings, gui, setfilter*/
 
 applySettings();
 /* jslint node : true */
@@ -119,7 +119,7 @@ var manifest = '';
 function createmanifest() {
     'use strict';
     screenMessage.text('Downloading Manifest');
-    var dlattempt = $.getJSON('http://ygopro.us/manifest/ygopro.json', function (data) {
+    $.getJSON('http://ygopro.us/manifest/ygopro.json', function (data) {
         manifest = data;
         console.log(manifest);
         updateCheckFile(manifest, true);
@@ -168,12 +168,6 @@ setTimeout(function () {
     populatealllist();
     createmanifest();
 }, 10000);
-
-
-
-
-
-
 
 var primus = Primus.connect('http://salvationdevelopment.com:24555');
 
@@ -224,7 +218,9 @@ function getDuelRequest() {
         pass: randomString(5)
     };
 }
+
 function secure(prio, checkd, shuf) {
+    'use strict';
     if (prio + checkd + shuf !== "OOO" && $('input:radio[name=ranked]:checked').val() === 'R') {
         alert('You may not cheat here.');
         return false;
@@ -259,77 +255,107 @@ function setHostSettings() {
 
 
 function connectgamelist() {
+    'use strict';
     primus.write({
         action: 'join'
     });
 }
-primus.on('data', function (data) {
-    console.log(data);
-    if (!data.clientEvent) {
-        gamelistcache = JSON.parse(data);
-        renderList(gamelistcache);
 
-    }
-    switch (data.clientEvent) {
-    case ('serverMessage'):
-        {
-            $('#servermessages').text(data.serverMessage);
-        }
-        break;
-
-    case ('duelRequest'):
-        {
-            var accept = prompt('Take duel?');
-            if (accept) {
-                enterGame(data.clientEvent.room);
-            }
-        }
-        break;
-
-    case ('die'):
-        {
-            alert(data.clientEvent.message);
-            $('body').html('');
-        }
-        break;
-
-    }
-});
-
-
-
-function parseDuelOptions(duelOptions) {
-    var duelOptionsParts = duelOptions.split(',');
-
-    var settings = { //Determine time limit
-        timeLimit: (duelOptionsParts[0][2] === '0') ? '3 minutes' : '5 minutes',
-        //Use classic TCG rules?
-        isTCGRuled: (duelOptionsParts[0][3] === 'O') ? 'OCG rules' : 'TCG Rules',
-
-        //Check Deck for Illegal cards?
-        isDeckChecked: (duelOptionsParts[0][4] === 'O') ? 'Check' : 'Dont Check',
-
-        //Shuffle deck at start?
-        isShuffled: (duelOptionsParts[0][5] === 'O') ? 'Shuffle' : 'Dont Shuffle',
-
-        //Choose Starting Life Points
-        lifePoints: duelOptionsParts[0].substring(6),
+function parseFilters() {
+    'use strict';
+    var settings = {
+        //timeLimit: ($('#filtertimelimit option:selected').val() == 3) ? '3 minutes' : '5 minutes',
 
         //Determine Banlist
-        banList: parseInt(duelOptionsParts[1], 10),
-
-        //Select how many cards to draw on first hand
-        openDraws: duelOptionsParts[2],
-
-        //Select how many cards to draw each turn
-        turnDraws: duelOptionsParts[3],
+        banList: parseInt($('#filterbanlist option:selected').val(), 10)
 
         //Choose whether duel is ranked
-        isRanked: (duelOptionsParts[4] === 'U') ? 'Unranked' : 'Ranked',
+        //isRanked: (duelOptionsParts[4] === 'U') ? 'Unranked' : 'Ranked',
 
-        //Copy password
-        password: duelOptionsParts[5],
     };
+
+    //Determine time limit
+    if ($('#filtertimelimit option:selected').val() === '0') {
+        settings.timeLimit = 'All';
+    }
+    if ($('#filtertimelimit option:selected').val() === '3') {
+        settings.timeLimit = '3 minutes';
+    }
+    if ($('#filtertimelimitoption:selected').val() === '5') {
+        settings.timeLimit = '5 minutes';
+
+    }
+
+    //Determine allowed cards
+    if ($('#filercardpool option:selected').val() === '0') {
+        settings.allowedCards = 'tcg';
+    }
+    if ($('#filercardpool option:selected').val() === '1') {
+        settings.allowedCards = 'ocg';
+    }
+    if ($('#filercardpool option:selected').val() === '2') {
+        settings.allowedCards = 'tcg/ocg';
+
+    }
+    if ($('#filercardpool option:selected').val() === '3') {
+        settings.allowedCards = 'anime';
+    }
+    if ($('#filercardpool option:selected').val() === '4') {
+        settings.allowedCards = 'All';
+    }
+
+    //Determine game mode
+    if ($('#filterroundtype option:selected').val() === '0') {
+        settings.gameMode = 'single';
+    }
+    if ($('#filterroundtype option:selected').val() === '1') {
+        settings.gameMode = 'match';
+    }
+    if ($('#filterroundtype option:selected').val() === '2') {
+        settings.gameMode = 'tag';
+    }
+    if ($('#filterroundtype option:selected').val() === '3') {
+        settings.gameMode = 'All';
+    }
+    settings.userName = $('#filterusername').val();
+
+
+    return settings;
+
+}
+
+function parseDuelOptions(duelOptions) {
+    'use strict';
+    var duelOptionsParts = duelOptions.split(','),
+        settings = { //Determine time limit
+            timeLimit: (duelOptionsParts[0][2] === '0') ? '3 minutes' : '5 minutes',
+            //Use classic TCG rules?
+            isTCGRuled: (duelOptionsParts[0][3] === 'O') ? 'OCG rules' : 'TCG Rules',
+
+            //Check Deck for Illegal cards?
+            isDeckChecked: (duelOptionsParts[0][4] === 'O') ? 'Check' : 'Dont Check',
+
+            //Shuffle deck at start?
+            isShuffled: (duelOptionsParts[0][5] === 'O') ? 'Shuffle' : 'Dont Shuffle',
+
+            //Choose Starting Life Points
+            lifePoints: duelOptionsParts[0].substring(6),
+
+            //Determine Banlist
+            banList: parseInt(duelOptionsParts[1], 10),
+
+            //Select how many cards to draw on first hand
+            openDraws: duelOptionsParts[2],
+
+            //Select how many cards to draw each turn
+            turnDraws: duelOptionsParts[3],
+
+            //Choose whether duel is ranked
+            isRanked: (duelOptionsParts[4] === 'U') ? 'Unranked' : 'Ranked',
+
+            //Copy password
+            password: duelOptionsParts[5]
+        };
 
 
 
@@ -355,158 +381,63 @@ function parseDuelOptions(duelOptions) {
         settings.gameMode = 'tag';
     }
 
-    if (settings.gameMode === 'single' ||
-        settings.gameMode === 'match') {
-
-    }
-
+    //    if (settings.gameMode === 'single' || settings.gameMode === 'match') {
+    //
+    //    }
     return settings;
 
 }
-//$('#filercardpool option:selected').val()
-
-
-function parseFilters() {
-
-    var settings = {
-        //timeLimit: ($('#filtertimelimit option:selected').val() == 3) ? '3 minutes' : '5 minutes',
-
-        //Determine Banlist
-        banList: parseInt($('#filterbanlist option:selected').val()),
-
-        //Choose whether duel is ranked
-        //isRanked: (duelOptionsParts[4] === 'U') ? 'Unranked' : 'Ranked',
-
-    };
-
-    //Determine time limit
-    if ($('#filtertimelimit option:selected').val() == '0') {
-        settings.timeLimit = 'All';
-    }
-    if ($('#filtertimelimit option:selected').val() == '3') {
-        settings.timeLimit = '3 minutes';
-    }
-    if ($('#filtertimelimitoption:selected').val() == '5') {
-        settings.timeLimit = '5 minutes';
-
-    }
-
-    //Determine allowed cards
-    if ($('#filercardpool option:selected').val() == '0') {
-        settings.allowedCards = 'tcg';
-    }
-    if ($('#filercardpool option:selected').val() == '1') {
-        settings.allowedCards = 'ocg';
-    }
-    if ($('#filercardpool option:selected').val() == '2') {
-        settings.allowedCards = 'tcg/ocg';
-
-    }
-    if ($('#filercardpool option:selected').val() == '3') {
-        settings.allowedCards = 'anime';
-    }
-    if ($('#filercardpool option:selected').val() == '4') {
-        settings.allowedCards = 'All';
-    }
-
-    //Determine game mode
-    if ($('#filterroundtype option:selected').val() == '0') {
-        settings.gameMode = 'single';
-    }
-    if ($('#filterroundtype option:selected').val() == '1') {
-        settings.gameMode = 'match';
-    }
-    if ($('#filterroundtype option:selected').val() == '2') {
-        settings.gameMode = 'tag';
-    }
-    if ($('#filterroundtype option:selected').val() == '3') {
-        settings.gameMode = 'All';
-    }
-    settings.userName = $('#filterusername').val();
-
-
-    return settings;
-
-}
-
-function setfilter() {
-    renderList(gamelistcache);
-
-}
-
-
-var openid = '';
-
-function closeAllScreens() {
-    $('#salvationdevelopment').css('display', 'block');
-    $('#staticbar section').css('display', 'none');
-    openid = '';
-}
-
-function openScreen(id) {
-    if (id === openid) {
-        closeAllScreens();
-        return;
-    }
-    closeAllScreens();
-    $('#salvationdevelopment').css('display', 'none');
-    $(id).toggle();
-    id = openid;
-    return;
-}
-//{"200OOO8000,0,5,1,U,PaS5w":{"port":8000,"players":[],"started":false}}
-
-function enterGame(string) {
-    localStorage.lastdeck = $('#currentdeck').val();
-    localStorage.roompass = string;
-    ygopro('-j');
-}
-//primus.write({
-//    action: 'join'
-//});
-var banlist_names = ['TCG-Current', 'OCG-Current', 'Something older'];
 
 function renderList(JSONdata) {
-    var filterm = parseFilters();
+    'use strict';
+    var OK,
+        player1,
+        player2,
+        player3,
+        player4,
+        duelist,
+        translated,
+        players,
+        rooms,
+        filterm = parseFilters(),
+        content;
     $('#gamelist').html('');
-    for (var rooms in JSONdata) {
+    for (rooms in JSONdata) {
         if (JSONdata.hasOwnProperty(rooms)) {
-            var OK = true;
-            var player1 = JSONdata[rooms].players[0] || '___';
-            var player2 = JSONdata[rooms].players[2] || '___';
-            var player3 = JSONdata[rooms].players[3] || '___';
-            var player4 = JSONdata[rooms].players[4] || '___';
-            var duelist;
-            var translated = parseDuelOptions(rooms);
-            var players = [player1, player2, player3, player4];
+            OK = true;
+            player1 = JSONdata[rooms].players[0] || '___';
+            player2 = JSONdata[rooms].players[2] || '___';
+            player3 = JSONdata[rooms].players[3] || '___';
+            player4 = JSONdata[rooms].players[4] || '___';
+            translated = parseDuelOptions(rooms);
+            players = [player1, player2, player3, player4];
 
-            if (translated.gameMode != filterm.gameMode && filterm.gameMode != 'All') {
+            if (translated.gameMode !== filterm.gameMode && filterm.gameMode !== 'All') {
                 OK = false;
             }
-            if (translated.allowedCards != filterm.allowedCards && filterm.allowedCards != 'All') {
+            if (translated.allowedCards !== filterm.allowedCards && filterm.allowedCards !== 'All') {
                 OK = false;
             }
-            if (translated.timeLimit != filterm.timeLimit && filterm.timeLimit != 'All') {
+            if (translated.timeLimit !== filterm.timeLimit && filterm.timeLimit !== 'All') {
                 OK = false;
 
             }
-            if (translated.banList != filterm.banList && filterm.banList != '20') {
+            if (translated.banList !== filterm.banList && filterm.banList !== '20') {
                 OK = false;
             }
             if (players.searchFor(filterm.userName) === -1) {
                 OK = false;
             }
             if (OK) {
-                if (translated.gameMode === 'single' ||
-                    translated.gameMode === 'match') {
+                if (translated.gameMode === 'single' || translated.gameMode === 'match') {
                     duelist = player1 + ' vs ' + player2;
                 } else {
                     duelist = player1 + '&amp' + player2 + ' vs ' + player3 + '&amp' + player4;
                 }
                 console.log(translated);
-                var content = '<div class="game" onclick=enterGame("' + rooms + '")>' +
+                content = '<div class="game" onclick=enterGame("' + rooms + '")>' +
                     duelist + '<span class="subtext" style="font-size:.5em"><br>' + translated.allowedCards + '  ' + translated.gameMode +
-                    ' ' + banlist_names[translated.banlist] + '</span></div>';
+                    ' ' + $('#creategamebanlist option[value=' + translated.banlist + ']').text() + '</span></div>';
 
                 $('#gamelist').append(content);
             }
@@ -514,7 +445,79 @@ function renderList(JSONdata) {
     }
 }
 
+function enterGame(string) {
+    'use strict';
+    localStorage.lastdeck = $('#currentdeck').val();
+    localStorage.roompass = string;
+    ygopro('-j');
+}
+primus.on('data', function (data) {
+    'use strict';
+    console.log(data);
+    if (!data.clientEvent) {
+        gamelistcache = JSON.parse(data);
+        renderList(gamelistcache);
+
+    }
+    switch (data.clientEvent) {
+    case ('serverMessage'):
+
+        $('#servermessages').text(data.serverMessage);
+
+        break;
+
+    case ('duelRequest'):
+
+        var accept = prompt('Take duel?');
+        if (accept) {
+            enterGame(data.clientEvent.room);
+        }
+
+        break;
+
+    case ('die'):
+
+        alert(data.clientEvent.message);
+        $('body').html('');
+
+        break;
+
+    }
+});
+
+
+
+
+//$('#filercardpool option:selected').val()
+
+
+
+
+function setfilter() {
+    'use strict';
+    renderList(gamelistcache);
+
+}
+
+function closeAllScreens() {
+    'use strict';
+    $('#salvationdevelopment').css('display', 'block');
+    $('#staticbar section').css('display', 'none');
+
+}
+
+//{"200OOO8000,0,5,1,U,PaS5w":{"port":8000,"players":[],"started":false}}
+
+
+//primus.write({
+//    action: 'join'
+//});
+var banlist_names = ['TCG-Current', 'OCG-Current', 'Something older'];
+
+
+
 function set(list) {
+    'use strict';
     var filter = {
         banlist: $('#creategamebanlist').val()
     };
@@ -528,17 +531,22 @@ function set(list) {
 
 
 Array.prototype.searchFor = function (candid) {
-    for (var i = 0; i < this.length; i++)
-        if (this[i].toLowerCase().indexOf(candid.toLowerCase()) == '0')
+    'use strict';
+    var i = 0,
+        alternative = -1;
+    for (i; i < this.length; i++) {
+        if (this[i].toLowerCase().indexOf(candid.toLowerCase()) === '0') {
             return i;
-    return -1;
+        }
+        return -1;
+    }
 };
 
-populatealllist();
+
 
 $('#servermessages').text('Loading interface from server...');
 process.on('uncaughtException', function (err) {
     'use strict';
     console.log(err);
-    screenMessage.text(randomErrors[Math.floor(Math.random() * (6 - 0))]);
+    screenMessage.text(randomErrors[Math.floor(Math.random() * (6))]);
 });
