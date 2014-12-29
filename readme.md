@@ -30,7 +30,7 @@ Install `nodejs` this will also install `npm`, download the program from this gi
 * `npm install -g mocha`  installs the test harnss.
 * `npm install -g http-server`  an overpowered http server to run the server folder.
 
-This will setup a run enviroment  you two test harnesses and an http server. Next download and install [YGOCore](https://github.com/SalvationDevelopment/YGOCore) follow its readme instuctions carefully to compile. Place the executable and its dependencies in `server/ygocore`. Place a copy of `ygopro` in `server/http/ygopro`. Make sure the config files in the `ygocore` directory are pointing to the correct locations. Refer to the YGOCore documentation.
+This will setup a run enviroment  you two test harnesses and an http server. Next download and install [YGOCore](https://github.com/SalvationDevelopment/YGOCore) follow its readme instuctions carefully to compile. Place the executable and its dependencies in `server/ygocore`. Place a copy of `ygopro` in `server/http/ygopro`. Make sure the config files in the `ygocore` directory are pointing to the correct locations. Refer to the YGOCore documentation. Congrats you know have a fully functional server you are not allowed to use. Open `client\interface\js\configuration.js` set `mode` to `development`, the launcher will now connect to this new server.
 
 ## Licensing and Contributing
 **Do not use our software without our permission.** It is ment for use at http://ygopro.us if you want to use this software for something please leave open an issue explaining your intended use and we will write you a custom licence.
