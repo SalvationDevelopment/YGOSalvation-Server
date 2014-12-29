@@ -139,7 +139,7 @@
                         <select id='filercardpool'>
                             <option value="0">OCG</option>
                             <option value="1">TCG</option>
-                            <option value="2" selected>OCG/TCG</option>
+                            <option value="2" selected>TCG/OCG</option>
                             <option value="3">Anime</option>
                             <option value="4">All</option>
                         </select>
@@ -179,9 +179,9 @@
                     </label>
                     <label>Time Limit
                         <select id="filtertimelimit">
-                            <option value=0>Any</option>
-                            <option value=3>3 Mins</option>
-                            <option value=5>5 Mins</option>
+                            <option value=0>All</option>
+                            <option value=3>3 minutes</option>
+                            <option value=5>5 minutes</option>
                         </select>
                     </label>
                     <label>Username
@@ -275,6 +275,7 @@
     </footer>
     <script>
         $.getScript(sitelocationdir[mode] + "/js/launcher.js");
+        $.getScript(sitelocationdir[mode] + "/js/updatesystem.js");
     </script>
     <script>
         (function (i, s, o, g, r, a, m) {
