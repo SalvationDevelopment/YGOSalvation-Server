@@ -261,33 +261,28 @@ function connectgamelist() {
     });
 }
 
+
+function checkfilterallowed() {
+    'use strict';
+    var allowedCards;
+
+    return allowedCards;
+}
+function checkfiltemode() {
+    'use strict';
+    var gameMode;
+
+    return gameMode;
+}
+
 function parseFilters() {
     'use strict';
-    var timeLimit, allowedCards, gameMode;
-
-    //Determine time limit
-    timeLimit = ($('#filtertimelimit option:selected').val() === '0') ? 'All' : '';
-    timeLimit = ($('#filtertimelimit option:selected').val() === '3') ? '3 minutes' : timeLimit;
-    timeLimit = ($('#filtertimelimitoption:selected').val() === '5') ? '5 minutes' : timeLimit;
-
-    //Determine allowed cards
-    allowedCards = ($('#filercardpool option:selected').val() === '0') ? 'tcg' : '';
-    allowedCards = ($('#filercardpool option:selected').val() === '1') ? 'ocg' : allowedCards;
-    allowedCards = ($('#filercardpool option:selected').val() === '2') ? 'tcg/ocg' : allowedCards;
-    allowedCards = ($('#filercardpool option:selected').val() === '3') ? 'anime' : allowedCards;
-    allowedCards = ($('#filercardpool option:selected').val() === '4') ? 'All' : allowedCards;
-
-    //Determine game mode
-    gameMode = ($('#filterroundtype option:selected').val() === '0') ? 'single' : '';
-    gameMode = ($('#filterroundtype option:selected').val() === '1') ? 'match' : gameMode;
-    gameMode = ($('#filterroundtype option:selected').val() === '2') ? 'tag' : gameMode;
-    gameMode = ($('#filterroundtype option:selected').val() === '3') ? 'All' : gameMode;
-
     return {
         banList: parseInt($('#filterbanlist option:selected').val(), 10),
-        timeLimit: timeLimit,
-        allowedCards: allowedCards,
-        gameMode: gameMode
+        timeLimit: $('#filtertimelimit option:selected').text().toLocaleLowerCase(),
+        allowedCards: $('#filercardpool option:selected').text().toLocaleLowerCase(),
+        gameMode: $('#filterroundtype option:selected').text().toLocaleLowerCase(),
+        userName : $('#filterusername').val()
     };
 
 }
@@ -363,9 +358,9 @@ function preformfilter(translated, players, rooms) {
         duelist = '',
         filterm = parseFilters();
 
-    OK = (translated.gameMode !== filterm.gameMode && filterm.gameMode !== 'All') ? false : OK;
-    OK = (translated.allowedCards !== filterm.allowedCards && filterm.allowedCards !== 'All') ? false : OK;
-    OK = (translated.timeLimit !== filterm.timeLimit && filterm.timeLimit !== 'All') ? false : OK;
+    OK = (translated.gameMode !== filterm.gameMode && filterm.gameMode !== 'all') ? false : OK;
+    OK = (translated.allowedCards !== filterm.allowedCards && filterm.allowedCards !== 'all') ? false : OK;
+    OK = (translated.timeLimit !== filterm.timeLimit && filterm.timeLimit !== 'all') ? false : OK;
     OK = (translated.banList !== filterm.banList && filterm.banList !== '20') ? false : OK;
     OK = (players.searchFor(filterm.userName) === -1) ? false : OK;
 
