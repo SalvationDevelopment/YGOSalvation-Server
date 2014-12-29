@@ -1,6 +1,6 @@
 /*jslint node: true, plusplus: true, unparam: false, nomen: true*/
 /*global ygopro, $, isChecked, alert, Primus, console, process, applySettings, prompt, sitelocationdir */
-/*exported joinGamelist, leaveGamelist, hostGame, connectgamelist, enterGame, setHostSettings, gui, setfilter*/
+/*exported joinGamelist, leaveGamelist, hostGame, connectgamelist, enterGame, setHostSettings, gui, setfilter, closeAllScreens*/
 
 applySettings();
 /* jslint node : true */
@@ -412,31 +412,20 @@ function renderList(JSONdata) {
             translated = parseDuelOptions(rooms);
             players = [player1, player2, player3, player4];
 
-            if (translated.gameMode !== filterm.gameMode && filterm.gameMode !== 'All') {
-                OK = false;
-            }
-            if (translated.allowedCards !== filterm.allowedCards && filterm.allowedCards !== 'All') {
-                OK = false;
-            }
-            if (translated.timeLimit !== filterm.timeLimit && filterm.timeLimit !== 'All') {
-                OK = false;
-
-            }
-            if (translated.banList !== filterm.banList && filterm.banList !== '20') {
-                OK = false;
-            }
-            if (players.searchFor(filterm.userName) === -1) {
-                OK = false;
-            }
+            OK = (translated.gameMode !== filterm.gameMode && filterm.gameMode !== 'All') ? false : OK;
+            OK =  (translated.allowedCards !== filterm.allowedCards && filterm.allowedCards !== 'All')  ? false : OK;
+            OK =  (translated.timeLimit !== filterm.timeLimit && filterm.timeLimit !== 'All')  ? false : OK;
+            OK =  (translated.banList !== filterm.banList && filterm.banList !== '20')  ? false : OK;
+            OK =  (players.searchFor(filterm.userName) === -1) ? false : OK;
             if (OK) {
                 if (translated.gameMode === 'single' || translated.gameMode === 'match') {
                     duelist = player1 + ' vs ' + player2;
                 } else {
                     duelist = player1 + '&amp' + player2 + ' vs ' + player3 + '&amp' + player4;
                 }
-                console.log(translated);
-                content = '<div class="game" onclick=enterGame("' + rooms + '")>' +
-                    duelist + '<span class="subtext" style="font-size:.5em"><br>' + translated.allowedCards + '  ' + translated.gameMode +
+                //console.log(translated);
+                content = '<div class="game" onclick=enterGame("' + rooms + '")>' + duelist +
+                    '<span class="subtext" style="font-size:.5em"><br>' + translated.allowedCards + '  ' + translated.gameMode +
                     ' ' + $('#creategamebanlist option[value=' + translated.banlist + ']').text() + '</span></div>';
 
                 $('#gamelist').append(content);
@@ -508,32 +497,9 @@ function closeAllScreens() {
 
 //{"200OOO8000,0,5,1,U,PaS5w":{"port":8000,"players":[],"started":false}}
 
-
-//primus.write({
-//    action: 'join'
-//});
-var banlist_names = ['TCG-Current', 'OCG-Current', 'Something older'];
-
-
-
-function set(list) {
-    'use strict';
-    var filter = {
-        banlist: $('#creategamebanlist').val()
-    };
-}
-
-
-
-
-
-
-
-
 Array.prototype.searchFor = function (candid) {
     'use strict';
-    var i = 0,
-        alternative = -1;
+    var i = 0;
     for (i; i < this.length; i++) {
         if (this[i].toLowerCase().indexOf(candid.toLowerCase()) === '0') {
             return i;
