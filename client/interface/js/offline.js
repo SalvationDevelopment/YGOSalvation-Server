@@ -1,23 +1,22 @@
-/* jslint jquery : true */
-/* global  prompt, alert, localStorage, developmentstage, mode */
-/* exported  connectToCheckmateServer, applySettings, saveSettings, isChecked, openScreen*/
-var joinGamelist = function(){},
-    leaveGamelist= function(){},
-    hostGame= function(){},
-    connectgamelist= function(){},
-    enterGame= function(){},
-    setHostSettings= function(){};
+/*jslint browser: true, node: true, plusplus: true*/
+/*global  prompt, alert, localStorage, developmentstage, mode, $*/
+/*exported  connectToCheckmateServer, applySettings, saveSettings, isChecked, openScreen*/
+
 function ygopro(parameter) {
+    'use strict';
     $.ajax('http://127.0.0.1:9467/' + parameter);
 }
 
 function connectToCheckmateServer() {
-    var chkusername = prompt("Please enter your name Checkmate Server Username", localStorage.chknickname);
+    'use strict';
+    var pass,
+        nickname,
+        chkusername = prompt("Please enter your name Checkmate Server Username", localStorage.chknickname);
     while (!chkusername) {
         chkusername = prompt("Please enter your name Checkmate Server Username", localStorage.chknickname);
     }
-    var pass = prompt("Please enter your name Checkmate Server Password", '');
-    var nickname = chkusername + '$' + pass;
+    pass = prompt("Please enter your name Checkmate Server Password", '');
+    nickname = chkusername + '$' + pass;
     if (nickname.length > 19 && chkusername.length > 0) {
         alert('Username and Password combined must be less than 19 charaters');
         return;
@@ -29,56 +28,48 @@ function connectToCheckmateServer() {
 }
 
 function applySettings() {
+    'use strict';
     $('[data-localhost]').each(function () {
-        var property = $(this).attr('data-localhost');
-        var value = ('1' === localStorage[property]) ? true : false;
+        var property = $(this).attr('data-localhost'),
+            value = ('1' === localStorage[property]) ? true : false;
         $(this).prop('checked', value);
     });
 }
 
 function saveSettings() {
+    'use strict';
     $('[data-localhost]').each(function () {
         var property = $(this).attr('data-localhost');
-        localStorage[property] = Number($(this).prop('checked')) ;
+        localStorage[property] = Number($(this).prop('checked'));
     });
 }
 
 function isChecked(id) {
+    'use strict';
     return ($(id).is(':checked'));
 }
 
 
 $('document').ready(function () {
-    $('main').load(developmentstage[mode]+'?'+Math.random(), function(){
+    'use strict';
+    $('main').load(developmentstage[mode] + '?' + Math.random(), function () {
 
-            if (window.self != window.top) {
-                $(document.body).addClass("in-iframe");
-                var gui = require('nw.gui');
-                $(document).ready(function(){
-                   gui.Window.get().show();
-                });
-               
-            }
+        if (window.self !== window.top) {
+            $(document.body).addClass("in-iframe");
+            var gui = require('nw.gui');
+            $(document).ready(function () {
+                gui.Window.get().show();
+            });
+
+        }
 
     });
-    
+
 
 });
-var openid = '';
 function closeAllScreens() {
+    'use strict';
     $('#salvationdevelopment').css('display', 'block');
     $('#staticbar section').css('display', 'none');
-    openid = '';
-}
 
-function openScreen(id) {
-    if(id === openid){
-        closeAllScreens();
-        return;
-    }
-    closeAllScreens();
-    $('#salvationdevelopment').css('display', 'none');
-    $(id).toggle();
-    id = openid;
-    return;
 }
