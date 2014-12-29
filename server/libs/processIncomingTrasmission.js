@@ -2,6 +2,7 @@
 
 
 var portmin = 23500,
+    handleCoreMessage,
     startDirectory = __dirname,
     fs = require('fs'),
     childProcess = require('child_process'),
@@ -58,12 +59,7 @@ function connectToCore(port, data, socket) {
             socket.write(core_data);
             //console.log('<--',core_data.toString());
         });
-        socket.active_ygocore.on('error', function (error) {
-            socket.end();
-        });
-        socket.active_ygocore.on('close', function () {
-            socket.end();
-        });
+
         socket.on('close', function () {
             if (socket.active_ygocore) {
                 socket.active_ygocore.end();
@@ -73,6 +69,14 @@ function connectToCore(port, data, socket) {
             console.log(error);
             socket.active_ygocore.end();
         });
+    });
+    socket.active_ygocore.on('error', function (error) {
+        handleCoreMessage('::::endduel|' + socket.hostString, port, socket, data);
+        socket.end();
+    });
+    socket.active_ygocore.on('close', function () {
+        handleCoreMessage('::::endduel|' + socket.hostString, port, socket, data);
+        socket.end();
     });
 
 }
@@ -110,7 +114,7 @@ function pickCoreConfig(socket) {
 function handleCoreMessage(core_message_raw, port, socket, data) {
     'use strict';
     if (core_message_raw.toString().indexOf("::::") < 0) {
-        console.log(core_message_raw.toString());
+        return;
     }
     var core_message = core_message_raw.toString().split('|'),
         gamelistmessage = {
@@ -139,7 +143,7 @@ function startCore(port, socket, data, callback) {
 
         var configfile = pickCoreConfig(socket),
             params = port + ' ' + configfile;
-        console.log(' initiating core for ' + socket.username + ' on port:' + port + ' with: ' + configfile);
+        //console.log(' initiating core for ' + socket.username + ' on port:' + port + ' with: ' + configfile);
         socket.core = childProcess.spawn(startDirectory + '/../ygocore/YGOServer.exe', [port, configfile], {
             cwd: startDirectory + '/../ygocore'
         }, function (error, stdout, stderr) {
