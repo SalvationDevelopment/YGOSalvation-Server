@@ -43,7 +43,7 @@ var platform = {
 var executable = platform[operating_system] || 'ygopro';
 console.log(operating_system, executable);
 if (operating_system === 'linux' || operating_system === 'darwin') {
-    fs.chmod('ygopro/' + executable, '0777', function (error) {
+    fs.chmod('./ygopro/' + executable, '0777', function (error) {
         if (error) console.log(error);
     }); // creates race condition requiring launcher restart.
 }
@@ -130,7 +130,7 @@ function runYGOPro(mode, callback) {
         //console.log('It\'s saved!');
         try {
             var instance = child_process.execFile(executable, [mode], {
-                cwd: (process.cwd() + '/ygopro')
+                cwd: (process.cwd() + './ygopro')
             }, function (error) {
                 if (error !== null) {
                     //write crash report;
