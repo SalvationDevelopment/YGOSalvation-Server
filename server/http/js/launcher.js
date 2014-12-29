@@ -388,48 +388,52 @@ function parseDuelOptions(duelOptions) {
 
 }
 
+function preformfilter(translated, players, rooms) {
+    'use strict';
+    var OK = true,
+        content = '',
+        duelist = '',
+        filterm = parseFilters();
+
+    OK = (translated.gameMode !== filterm.gameMode && filterm.gameMode !== 'All') ? false : OK;
+    OK = (translated.allowedCards !== filterm.allowedCards && filterm.allowedCards !== 'All') ? false : OK;
+    OK = (translated.timeLimit !== filterm.timeLimit && filterm.timeLimit !== 'All') ? false : OK;
+    OK = (translated.banList !== filterm.banList && filterm.banList !== '20') ? false : OK;
+    OK = (players.searchFor(filterm.userName) === -1) ? false : OK;
+
+    if (OK) {
+        duelist = (translated.gameMode === 'single' || translated.gameMode === 'match') ? true : false;
+        duelist = (duelist) ? players[0] + ' vs ' + players[1] : players[0] + '&amp' + players[1] + ' vs ' + players[2] + '&amp' + players[3];
+        //console.log(translated);
+        content = '<div class="game" onclick=enterGame("' + rooms + '")>' + duelist +
+            '<span class="subtext" style="font-size:.5em"><br>' + translated.allowedCards + '  ' + translated.gameMode +
+            ' ' + $('#creategamebanlist option[value=' + translated.banlist + ']').text() + '</span></div>';
+    }
+    return content;
+}
+
 function renderList(JSONdata) {
     'use strict';
-    var OK,
-        player1,
+    var player1,
         player2,
         player3,
         player4,
-        duelist,
         translated,
         players,
         rooms,
-        filterm = parseFilters(),
         content;
+
     $('#gamelist').html('');
     for (rooms in JSONdata) {
         if (JSONdata.hasOwnProperty(rooms)) {
-            OK = true;
             player1 = JSONdata[rooms].players[0] || '___';
             player2 = JSONdata[rooms].players[2] || '___';
             player3 = JSONdata[rooms].players[3] || '___';
             player4 = JSONdata[rooms].players[4] || '___';
             translated = parseDuelOptions(rooms);
             players = [player1, player2, player3, player4];
-
-            OK = (translated.gameMode !== filterm.gameMode && filterm.gameMode !== 'All') ? false : OK;
-            OK =  (translated.allowedCards !== filterm.allowedCards && filterm.allowedCards !== 'All')  ? false : OK;
-            OK =  (translated.timeLimit !== filterm.timeLimit && filterm.timeLimit !== 'All')  ? false : OK;
-            OK =  (translated.banList !== filterm.banList && filterm.banList !== '20')  ? false : OK;
-            OK =  (players.searchFor(filterm.userName) === -1) ? false : OK;
-            if (OK) {
-                if (translated.gameMode === 'single' || translated.gameMode === 'match') {
-                    duelist = player1 + ' vs ' + player2;
-                } else {
-                    duelist = player1 + '&amp' + player2 + ' vs ' + player3 + '&amp' + player4;
-                }
-                //console.log(translated);
-                content = '<div class="game" onclick=enterGame("' + rooms + '")>' + duelist +
-                    '<span class="subtext" style="font-size:.5em"><br>' + translated.allowedCards + '  ' + translated.gameMode +
-                    ' ' + $('#creategamebanlist option[value=' + translated.banlist + ']').text() + '</span></div>';
-
-                $('#gamelist').append(content);
-            }
+            content = preformfilter(translated, players, rooms);
+            $('#gamelist').append(content);
         }
     }
 }
