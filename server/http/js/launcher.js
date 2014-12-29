@@ -2,174 +2,12 @@
 /*global ygopro, $, isChecked, alert, Primus, console, process, applySettings, prompt, sitelocationdir */
 /*exported joinGamelist, leaveGamelist, hostGame, connectgamelist, enterGame, setHostSettings, gui, setfilter, closeAllScreens*/
 
-applySettings();
-/* jslint node : true */
-
-
-
-var http = require('http'),
-    fs = require('fs'),
-    gui = require('nw.gui'),
-    downloadList = [],
-    url = require('url'),
-    completeList = [],
-    mode = "production",
+var mode = "production",
     gamelistcache,
-    screenMessage = $('#servermessages'),
-    siteLocation = sitelocationdir[mode];
-
-if (mode === 'development') {
-    try {
-        require('nw.gui').Window.get().showDevTools();
-    } catch (error) {}
-}
-
-function download() {
-    'use strict';
-    if (downloadList.length === 0) {
-        screenMessage.text('Update Complete! System Messages will appear here.');
-        return;
-    }
-    var target = downloadList[0],
-        file = fs.createWriteStream(target.path),
-        options = {
-            host: url.parse(siteLocation + '/' + target.path).host,
-            port: 80,
-            path: url.parse(siteLocation + '/' + target.path).pathname
-        };
-    screenMessage.text('Updating...' + target.path + ' and ' + downloadList.length + ' other files');
-    http.get(options, function (res) {
-        res.on('data', function (data) {
-            file.write(data);
-        }).on('end', function () {
-            file.end();
-            downloadList.shift();
-            setTimeout(function () {
-                download();
-            }, 200);
-
-        });
-    });
-}
-
-function hashcheck() {
-    'use strict';
-    if (completeList.length === 0) {
-        download();
-    }
-    var target = completeList[0];
-    if (target) {
-        if (target.path) {
-            fs.stat(target.path, function (err, stats) {
-                if (err) {
-                    //bad file keep going and add it.
-                    downloadList.push(target);
-                    completeList.shift();
-                    hashcheck();
-                    return;
-                }
-                //screenMessage.text('Analysing...' + target.path);
-
-                if (stats.size !== target.size) {
-                    //console.log(stats.size, target.checksum, target.path);
-                    downloadList.push(target);
-                }
-                completeList.shift();
-                hashcheck();
-            });
-        }
-    }
-}
-
-function updateCheckFile(file, initial) {
-    'use strict';
-    var i = 0;
-    screenMessage.text('Processing manifest');
-    if (file.type !== 'folder') {
-
-        completeList.push(file);
-    } else if (file.type === 'folder') {
-        for (i = 0; file.subfolder.length > i; i++) {
-            try {
-                fs.mkdirSync(file.path);
-            } catch (e) {}
-            updateCheckFile(file.subfolder[i], false);
-        }
-
-    }
-    if (initial) {
-        console.log(completeList);
-        hashcheck();
-    }
-}
-
-
-
-//var unzip = require('unzip');
-
-var randomErrors = ['Error: My face is up here buddy!',
-                   'Error: My boobies hurt!',
-                   'Error: I want icecream!',
-                   'Error: The cards stole my heart.',
-                   'Error: Are you cheating on me with another Sim?',
-                   'Error: You never listen to me!'];
-
-var manifest = '';
-
-function createmanifest() {
-    'use strict';
-    screenMessage.text('Downloading Manifest');
-    $.getJSON('http://ygopro.us/manifest/ygopro.json', function (data) {
-        manifest = data;
-        console.log(manifest);
-        updateCheckFile(manifest, true);
-    }).fail(function () {
-        screenMessage.text('Failed to get mainfest');
-    });
-}
-
-function locallogin(init) {
-    'use strict';
-    localStorage.nickname = localStorage.nickname || '';
-    if (localStorage.nickname.length < 1 || init === true) {
-        var username = prompt('Username: ', localStorage.nickname);
-        while (!username) {
-            username = prompt('Username: ', localStorage.nickname);
-        }
-        localStorage.nickname = username;
-    }
-}
-
-function populatealllist() {
-    'use strict';
-    var dfiles = 0,
-        sfiles = 0;
-    fs.readdir('./ygopro/deck', function (error, deckfilenames) {
-        $('#currentdeck').html('');
-        for (dfiles; deckfilenames.length > dfiles; dfiles++) {
-            var deck = deckfilenames[dfiles].replace('.ydk', '');
-            $('#currentdeck').append('<option value="' + deck + '">' + deck + '</option>');
-        }
-    });
-    fs.readdir('./ygopro/skins', function (error, skinfilenames) {
-        $('#skinlist').html('');
-        for (sfiles; skinfilenames.length > sfiles; sfiles++) {
-            $('#skinlist').append('<option value="' + skinfilenames[sfiles] + '">' + skinfilenames[sfiles] + '</option>');
-        }
-    });
-}
-setTimeout(function () {
-    'use strict';
-    $('#servermessages').text('Interface loaded, querying user for critical information,...');
-    localStorage.lastip = '192.99.11.19';
-    localStorage.serverport = '8911';
-    localStorage.lastport = '8911';
-    locallogin(true);
-    populatealllist();
-    createmanifest();
-}, 10000);
+    screenMessage = $('#servermessages');
 
 var primus = Primus.connect('http://salvationdevelopment.com:24555');
+$('#servermessages').text('Loading interface from server...');
 
 function joinGamelist() {
     'use strict';
@@ -191,6 +29,29 @@ function hostGame(parameters) {
         serverEvent: 'hostgame',
         format: parameters
     });
+}
+
+function connectgamelist() {
+    'use strict';
+    primus.write({
+        action: 'join'
+    });
+}
+
+function enterGame(string) {
+    'use strict';
+    localStorage.lastdeck = $('#currentdeck').val();
+    localStorage.roompass = string;
+    ygopro('-j');
+}
+
+
+
+function closeAllScreens() {
+    'use strict';
+    $('#salvationdevelopment').css('display', 'block');
+    $('#staticbar section').css('display', 'none');
+
 }
 
 function randomString(len, charSet) {
@@ -253,28 +114,6 @@ function setHostSettings() {
 }
 
 
-
-function connectgamelist() {
-    'use strict';
-    primus.write({
-        action: 'join'
-    });
-}
-
-
-function checkfilterallowed() {
-    'use strict';
-    var allowedCards;
-
-    return allowedCards;
-}
-function checkfiltemode() {
-    'use strict';
-    var gameMode;
-
-    return gameMode;
-}
-
 function parseFilters() {
     'use strict';
     return {
@@ -289,6 +128,7 @@ function parseFilters() {
 
 function parseDuelOptions(duelOptions) {
     'use strict';
+    //{"200OOO8000,0,5,1,U,PaS5w":{"port":8000,"players":[],"started":false}}
     var duelOptionsParts = duelOptions.split(','),
         settings = { //Determine time limit
             timeLimit: (duelOptionsParts[0][2] === '0') ? '3 minutes' : '5 minutes',
@@ -400,68 +240,20 @@ function renderList(JSONdata) {
     }
 }
 
-function enterGame(string) {
-    'use strict';
-    localStorage.lastdeck = $('#currentdeck').val();
-    localStorage.roompass = string;
-    ygopro('-j');
-}
-primus.on('data', function (data) {
-    'use strict';
-    console.log(data);
-    if (!data.clientEvent) {
-        gamelistcache = JSON.parse(data);
-        renderList(gamelistcache);
-
-    }
-    switch (data.clientEvent) {
-    case ('serverMessage'):
-
-        $('#servermessages').text(data.serverMessage);
-
-        break;
-
-    case ('duelRequest'):
-
-        var accept = prompt('Take duel?');
-        if (accept) {
-            enterGame(data.clientEvent.room);
-        }
-
-        break;
-
-    case ('die'):
-
-        alert(data.clientEvent.message);
-        $('body').html('');
-
-        break;
-
-    }
-});
-
-
-
-
-//$('#filercardpool option:selected').val()
-
-
-
-
 function setfilter() {
     'use strict';
     renderList(gamelistcache);
 
 }
 
-function closeAllScreens() {
+primus.on('data', function (data) {
     'use strict';
-    $('#salvationdevelopment').css('display', 'block');
-    $('#staticbar section').css('display', 'none');
-
-}
-
-//{"200OOO8000,0,5,1,U,PaS5w":{"port":8000,"players":[],"started":false}}
+    console.log(data);
+    if (!data.clientEvent) {
+        gamelistcache = JSON.parse(data);
+        renderList(gamelistcache);
+    }
+});
 
 Array.prototype.searchFor = function (candid) {
     'use strict';
@@ -473,12 +265,3 @@ Array.prototype.searchFor = function (candid) {
         return -1;
     }
 };
-
-
-
-$('#servermessages').text('Loading interface from server...');
-process.on('uncaughtException', function (err) {
-    'use strict';
-    console.log(err);
-    screenMessage.text(randomErrors[Math.floor(Math.random() * (6))]);
-});
