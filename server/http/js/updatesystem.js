@@ -155,7 +155,7 @@ setTimeout(function () {
     locallogin(true);
     if (mode === 'development') {
         try {
-            require('nw.gui').Window.get().showDevTools();
+            gui.Window.get().showDevTools();
         } catch (error) {}
     }
     populatealllist();
