@@ -1,6 +1,4 @@
 /*jslint node: true, plusplus: true, unparam: false, nomen: true*/
-
-
 var portmin = 23500,
     handleCoreMessage,
     startDirectory = __dirname,
