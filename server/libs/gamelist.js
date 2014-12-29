@@ -20,18 +20,18 @@
             lock_slot,
             core_message = core_message_raw.toString().split('|');
         core_message[0] = core_message[0].trim();
-        if (core_message[1] === undefined){
+        if (core_message[1] === undefined) {
             return gamelist;
         }
         try {
             
-            if (gamelist[core_message[1]] === undefined){
+            if (gamelist[core_message[1]] === undefined) {
                 gamelist[core_message[1]] = {
                     players : [],
                     locked : [],
                     spectators : 0,
                     started : false
-                }
+                };
             }
             switch (core_message[0]) {
 
@@ -78,7 +78,7 @@
             return gamelist;
         } catch (error_message) {
             console.log(error_message);
-            console.log('ISSUE!')
+            console.log('ISSUE!');
             return gamelist;
         }
     }

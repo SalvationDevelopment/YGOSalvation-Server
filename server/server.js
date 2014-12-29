@@ -21,7 +21,8 @@ var ygoserver, //port 8911 ygopro Server
     numCPUs = 1, // atleast 1 slave and 1 master.
     notification = '', // its a string, make memory.
     gamelistManager, // primus and gamelist
-    clusterIterator = 0, // its a number make memory
+    clusterIterator = 0, // its a number make memory,
+    activegames = 0,
     net = require('net'),
     http = require('http'),
     cluster = require('cluster'),
@@ -35,7 +36,7 @@ function initiateMaster() {
     'use strict';
     console.log('YGOPro Salvation Server - Saving Yu-Gi-Oh!');
     console.log('    Starting Master');
-    process.title = 'YGOPro Salvation Server';
+    process.title = 'YGOPro Salvation Server [' + activegames + ']';
     ircManager = require('./libs/ircbot.js');
     gamelistManager = require('./libs/gamelist.js');
 
@@ -44,18 +45,24 @@ function initiateMaster() {
         console.log('        Starting Slave ' + x);
         var worker = cluster.fork();
         worker.on('message', function (message) {
-            //console.log('    '+x,message);
             if (message.messagetype === 'coreMessage') {
-                var gamelist = gamelistManager(message.coreMessage);
-                //console.log(gamelist);
-
+                var rooms,
+                    gamelist = gamelistManager(message.coreMessage);
+                activegames = 0;
                 Object.keys(cluster.workers).forEach(function (id) {
                     cluster.workers[id].send({
                         messagetype: 'gamelist',
                         gamelist: gamelist
                     });
                 });
+                for (rooms in gamelist) {
+                    if (gamelist.hasOwnProperty(rooms)) {
+                        activegames++;
+                    }
+                }
+
             }
+
         });
     }
     for (clusterIterator; clusterIterator < numCPUs; clusterIterator++) {
@@ -78,7 +85,7 @@ function initiateSlave() {
         request.addListener('end', function () {
             httpServer.serve(request, response);
         }).resume();
-    }).listen(8098);
+    }).listen(80);
 
 
     // When a user connects, create an instance and allow the to duel, clean up after.
