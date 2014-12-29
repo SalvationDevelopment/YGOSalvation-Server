@@ -263,64 +263,32 @@ function connectgamelist() {
 
 function parseFilters() {
     'use strict';
-    var settings = {
-        //timeLimit: ($('#filtertimelimit option:selected').val() == 3) ? '3 minutes' : '5 minutes',
-
-        //Determine Banlist
-        banList: parseInt($('#filterbanlist option:selected').val(), 10)
-
-        //Choose whether duel is ranked
-        //isRanked: (duelOptionsParts[4] === 'U') ? 'Unranked' : 'Ranked',
-
-    };
+    var timeLimit, allowedCards, gameMode;
 
     //Determine time limit
-    if ($('#filtertimelimit option:selected').val() === '0') {
-        settings.timeLimit = 'All';
-    }
-    if ($('#filtertimelimit option:selected').val() === '3') {
-        settings.timeLimit = '3 minutes';
-    }
-    if ($('#filtertimelimitoption:selected').val() === '5') {
-        settings.timeLimit = '5 minutes';
-
-    }
+    timeLimit = ($('#filtertimelimit option:selected').val() === '0') ? 'All' : '';
+    timeLimit = ($('#filtertimelimit option:selected').val() === '3') ? '3 minutes' : timeLimit;
+    timeLimit = ($('#filtertimelimitoption:selected').val() === '5') ? '5 minutes' : timeLimit;
 
     //Determine allowed cards
-    if ($('#filercardpool option:selected').val() === '0') {
-        settings.allowedCards = 'tcg';
-    }
-    if ($('#filercardpool option:selected').val() === '1') {
-        settings.allowedCards = 'ocg';
-    }
-    if ($('#filercardpool option:selected').val() === '2') {
-        settings.allowedCards = 'tcg/ocg';
-
-    }
-    if ($('#filercardpool option:selected').val() === '3') {
-        settings.allowedCards = 'anime';
-    }
-    if ($('#filercardpool option:selected').val() === '4') {
-        settings.allowedCards = 'All';
-    }
+    allowedCards = ($('#filercardpool option:selected').val() === '0') ? 'tcg' : '';
+    allowedCards = ($('#filercardpool option:selected').val() === '1') ? 'ocg' : allowedCards;
+    allowedCards = ($('#filercardpool option:selected').val() === '2') ? 'tcg/ocg' : allowedCards;
+    allowedCards = ($('#filercardpool option:selected').val() === '3') ? 'anime' : allowedCards;
+    allowedCards = ($('#filercardpool option:selected').val() === '4') ? 'All' : allowedCards;
 
     //Determine game mode
-    if ($('#filterroundtype option:selected').val() === '0') {
-        settings.gameMode = 'single';
-    }
-    if ($('#filterroundtype option:selected').val() === '1') {
-        settings.gameMode = 'match';
-    }
-    if ($('#filterroundtype option:selected').val() === '2') {
-        settings.gameMode = 'tag';
-    }
-    if ($('#filterroundtype option:selected').val() === '3') {
-        settings.gameMode = 'All';
-    }
-    settings.userName = $('#filterusername').val();
+    gameMode = ($('#filterroundtype option:selected').val() === '0') ? 'single' : '';
+    gameMode = ($('#filterroundtype option:selected').val() === '1') ? 'match' : gameMode;
+    gameMode = ($('#filterroundtype option:selected').val() === '2') ? 'tag' : gameMode;
+    gameMode = ($('#filterroundtype option:selected').val() === '3') ? 'All' : gameMode;
 
-
-    return settings;
+    return {
+        banList: parseInt($('#filterbanlist option:selected').val(), 10),
+        timeLimit: timeLimit,
+        allowedCards: allowedCards,
+        gameMode: gameMode
+    };
 
 }
 
@@ -402,8 +370,7 @@ function preformfilter(translated, players, rooms) {
     OK = (players.searchFor(filterm.userName) === -1) ? false : OK;
 
     if (OK) {
-        duelist = (translated.gameMode === 'single' || translated.gameMode === 'match') ? true : false;
-        duelist = (duelist) ? players[0] + ' vs ' + players[1] : players[0] + '&amp' + players[1] + ' vs ' + players[2] + '&amp' + players[3];
+        duelist = (translated.gameMode === 'single' || translated.gameMode === 'match') ? players[0] + ' vs ' + players[1] : players[0] + '&amp' + players[1] + ' vs ' + players[2] + '&amp' + players[3];
         //console.log(translated);
         content = '<div class="game" onclick=enterGame("' + rooms + '")>' + duelist +
             '<span class="subtext" style="font-size:.5em"><br>' + translated.allowedCards + '  ' + translated.gameMode +
