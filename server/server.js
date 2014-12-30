@@ -112,7 +112,7 @@ function initiateSlave() {
     'use strict';
     if (require('os').cpus().length > 1) {
         numCPUs = require('os').cpus().length;
-        numCPUs = (numCPUs > 8) ? 8 : numCPUs;
+        numCPUs = (numCPUs > 4) ? 4 : numCPUs;
     }
 
     if (cluster.isMaster) {
