@@ -14,6 +14,7 @@ Run `npm install` in the directory above.
 */
 
 /*jslint  node: true, plusplus: true, white: false*/
+
 var ygoserver, //port 8911 ygopro Server
     staticserv, // static http processor
     httpServer, // http://ygopro.us
@@ -26,6 +27,7 @@ var ygoserver, //port 8911 ygopro Server
     net = require('net'),
     http = require('http'),
     cluster = require('cluster'),
+    colors = require('colors'),
 
     //WebSocketServer = require('ws').Server,
     processIncomingTrasmission = require('./libs/processIncomingTrasmission.js');
@@ -34,7 +36,9 @@ var ygoserver, //port 8911 ygopro Server
 
 function initiateMaster() {
     'use strict';
-    console.log('YGOPro Salvation Server - Saving Yu-Gi-Oh!');
+    
+
+    console.log('YGOPro Salvation Server - Saving Yu-Gi-Oh!'.bold.yellow);
     console.log('    Starting Master');
     process.title = 'YGOPro Salvation Server [' + activegames + ']';
     ircManager = require('./libs/ircbot.js');
@@ -42,7 +46,7 @@ function initiateMaster() {
 
     function setupWorker(x) {
         //'use strict';
-        console.log('        Starting Slave ' + x);
+        console.log(('        Starting Slave ' + x).grey);
         var worker = cluster.fork();
         worker.on('message', function (message) {
             if (message.messagetype === 'coreMessage') {

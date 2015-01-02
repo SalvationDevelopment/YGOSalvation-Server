@@ -36,7 +36,8 @@
     "ws": "*",
     "gith" : "*",
     "unzip" : "*",
-    "irc":"*"
+    "irc":"*",
+    "colors":"*"
   },
   "optionalDependencies": {
     "httpsys": "*"
