@@ -24,13 +24,13 @@
             return gamelist;
         }
         try {
-            
+
             if (gamelist[core_message[1]] === undefined) {
                 gamelist[core_message[1]] = {
-                    players : [],
-                    locked : [],
-                    spectators : 0,
-                    started : false
+                    players: [],
+                    locked: [],
+                    spectators: 0,
+                    started: false
                 };
             }
             switch (core_message[0]) {
@@ -73,6 +73,11 @@
                 chat = core_message[1] + '|' + core_message[2];
                 break;
 
+            }
+            if (gamelist[core_message[1]]) {
+                if (gamelist[core_message[1]].players.join() === '') {
+                    delete gamelist[core_message[1]].players[0];
+                }
             }
             primus.room('activegames').write(JSON.stringify(gamelist));
             return gamelist;

@@ -73,3 +73,9 @@ function closeAllScreens() {
     $('#staticbar section').css('display', 'none');
 
 }
+function openScreen(id) {
+
+    closeAllScreens();
+    $('#salvationdevelopment').css('display', 'none');
+    $(id).toggle();
+}
