@@ -30,18 +30,17 @@
                     players: [],
                     locked: [],
                     spectators: 0,
-                    started: false,
-                    fail: setTimeout(function () {
+                    started: false
+                };
+
+            }
+	setTimeout(function () {
                         try {
-                            delete gamelist[core_message[1]];
+                            delete gamelist[''+core_message[1]];
                         } catch (IntentedError) {
                             //do nothing;
                         }
                     }, 58000000)
-                };
-
-            }
-
             switch (core_message[0]) {
 
             case ('::::join-slot'):
