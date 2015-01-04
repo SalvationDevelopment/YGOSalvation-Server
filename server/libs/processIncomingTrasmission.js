@@ -41,6 +41,10 @@ function processTask(task, socket) {
             socket.hostString = task[l].CTOS_JOIN_GAME;
             //console.log(task);
         }
+        if (task[l].CTOS_PLAYER_INFO) {
+            socket.username = task[l].CTOS_PLAYER_INFO;
+            //console.log(task);
+        }
     }
 }
 
