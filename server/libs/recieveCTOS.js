@@ -10,7 +10,7 @@ module.exports = function RecieveCTOS(packet) {
 
             var username = packet.message.toString('utf16le');
             username = username.split('\u0000');
-            console.log(username[0]);
+            //console.log(username[0]);
             todo.CTOS_PLAYER_INFO = username[0];
         }
         break;
