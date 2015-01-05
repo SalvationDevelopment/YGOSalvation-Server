@@ -37,7 +37,7 @@
                 <br />
             </div>
             <ul class="featurelist" style="font-size:small; margin-top: -4px;">
-                <li><span class="psudolinksingle" onclick="singlesitenav('news')">News</span>
+                <li>
                 </li>
                 <li><span class="psudolinksingle" onclick="singlesitenav('forum')">Forum</span>
                 </li>
@@ -64,7 +64,7 @@
                     <!--<li><a href="http://ygopro.us/setup.exe">Windows Mirror 1 </a>
                         
                     </li>-->
-                    <li><a href=" http://ygopro.us/client.tar.gz">Win/Linux32 Tarball</a>
+                    <li><a href=" http://ygopro.us/client.tar.gz">Win/Linux/Mac tar.gz</a>
                        
                     </li>
                     <!--
@@ -84,7 +84,7 @@
         <span class="psudolinksingle" onclick="singlesitenav('home')"><h1 style="font-size:1.2em">
             <span style="color:#e4a;">YGOPro</span> Salvation Server</h1></span>
         <ul class="featurelist" style="font-size:small">
-                <li><span class="psudolinksingle" onclick="singlesitenav('news')">News</span>
+                <li>
                 </li>
                 <li><span class="psudolinksingle" onclick="singlesitenav('forum')">Forum</span>
                 </li>
@@ -101,7 +101,7 @@
         <span class="psudolinksingle" onclick="singlesitenav('home')"><h1 style="font-size:1.2em">
             <span style="color:#e4a;">YGOPro</span> Salvation Server</h1></span>
         <ul class="featurelist" style="font-size:small">
-                <li><span class="psudolinksingle" onclick="singlesitenav('news')">News</span>
+                <li>
                 </li>
                 <li><span class="psudolinksingle" onclick="singlesitenav('forum')">Forum</span>
                 </li>
@@ -118,7 +118,7 @@
         <span class="psudolinksingle" onclick="singlesitenav('home')"><h1 style="font-size:1.2em">
             <span style="color:#e4a;">YGOPro</span> Salvation Server</h1></span>
         <ul class="featurelist" style="font-size:small">
-                <li><span class="psudolinksingle" onclick="singlesitenav('news')">News</span>
+                <li>
                 </li>
                 <li><span class="psudolinksingle" onclick="singlesitenav('forum')">Forum</span>
                 </li>
@@ -128,16 +128,24 @@
                 </li>
             </ul>
         <div style="font-size:.5em; text-align:center;" id="versioninfo">Version 4 : Production 0 : Revision 1</div>
-        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/swfobject/2.2/swfobject.js"></script>
- <script type="text/javascript" src="lightIRC/config.js"></script>
-        <div id="lightIRC" style="height:92%; text-align:center;">
+        <div class="chatcontainer">
+            <div class="chattitle">
+                title text
+            </div>
+            <div class="chatbody">
+                
+            </div>
+            <div class="chatroomlist">
+            
+            </div>
+            <div class='chatcontrolls'>
+            
+            </div>
+            <input id="chatinput" />
+            <div class='chatsubmit' onclick='speak()'>
+            
+            </div>
         </div>
-        <script type="text/javascript">
-            swfobject.embedSWF("lightIRC/lightIRC.swf", "lightIRC", "100%", "92%", "10.0.0", "expressInstall.swf", params, {
-                wmode: "transparent"
-            });
-
-        </script>
     </header>
     <header style="padding-top:10px" id="faq">
         <span class="psudolinksingle" onclick="singlesitenav('home')">
@@ -145,7 +153,7 @@
             <span style="color:#e4a;">YGOPro</span> Salvation Server</h1>
         </span>
         <ul class="featurelist" style="font-size:small">
-                <li><span class="psudolinksingle" onclick="singlesitenav('news')">News</span>
+                <li>
                 </li>
                 <li><span class="psudolinksingle" onclick="singlesitenav('forum')">Forum</span>
                 </li>

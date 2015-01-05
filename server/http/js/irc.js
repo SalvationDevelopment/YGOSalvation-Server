@@ -1,5 +1,5 @@
 /*jslint browser: true, devel: true, plusplus: true, sub: false*/
-/*global WebSocket*/
+/*global WebSocket, $*/
 
 var replies = {
     "200": "RPL_TRACELINK",
@@ -232,21 +232,22 @@ var ircparse = function (text) {
     };
 };
 
-
+var JOIN;
 function WebSocketOpen() {
     'use strict';
     console.log("open");
     var nickname = localStorage.nickname || 'Duelist_Bot';
     this.send('NICK ' + nickname + '\r\n');
     this.send('USER ' + nickname + ' * 0 :' + nickname + '\r\n');
+    
 }
 
 var command,
     state = {
         nick: 'Duelist_Bot',
         currentChannel: '',
-        rooms : new Array(10),
-        roomList : []
+        rooms: {},
+        roomList: []
     },
     i = 0;
 
@@ -260,7 +261,7 @@ function WebSocketMessage(event, socket) {
         server_message = ircparse(raw_message[i]);
         if (server_message.command.length) {
             server_message.command = replies[server_message.command] || server_message.command;
-            server_message.command = server_message.command.trim();
+            //server_message.prefix = replies[server_message.prefix]// || state.nickname + '!' + state.displayHostre;
             command(server_message);
         }
         //console.log(raw_message[i]);
@@ -287,10 +288,12 @@ webSocket.onmessage = WebSocketMessage;
 webSocket.onerror = WebSocketError;
 webSocket.onclose = WebSocketClose;
 
+var checkroom;
 function JOIN(channel) {
     'use strict';
     webSocket.send('JOIN ' + channel + '\n');
     state.currentChannel = channel;
+    checkroom(channel);
 }
 
 function PART(channel) {
@@ -317,6 +320,7 @@ function NICK(nickname) {
     'use strict';
     webSocket.send('NICK ' + nickname + '\r\n');
 }
+
 function LIST(nickname) {
     'use strict';
     webSocket.send('LIST \n');
@@ -331,18 +335,67 @@ function MODE(parameters) {
 
 function PRIVMSG(roomOrPerson, statement) {
     'use strict';
-    webSocket.send('PRIVMSG ' + roomOrPerson + ' :' + statement + '\n');
+    var toSend = 'PRIVMSG ' + roomOrPerson + ' :' + statement + '\n';
+    webSocket.send(toSend);
+    webSocket.onmessage({
+        data: toSend
+    });
 }
 
-function speak(statement) {
+function speak() {
     'use strict';
-    PRIVMSG(state.currentChannel, statement);
+    var inputmessage = $('#chatinput').val();
+    if (inputmessage === '') {
+        return;
+    }
+    if (inputmessage.split(' ') === '/me') {
+        PRIVMSG(state.currentChannel, '\u0001ACTION' + inputmessage.substring(4) + '\u0001');
+    } else if (inputmessage.split(' ')[0].toLowerCase() === '/list') {
+        LIST();
+    } else if (inputmessage.split(' ')[0].toLowerCase() === '/nick') {
+        NICK(inputmessage.split(' ')[1]);
+    } else {
+        PRIVMSG(state.currentChannel, inputmessage);
+    }
+    $('#chatinput').val('');
+}
+
+function renderRoom() {
+    'use strict';
+    if (!state.currentChannel) {
+        return;
+    }
+    var chatIter = 0;
+    $('.chattitle').text(state.rooms[state.currentChannel].title);
+    $('.chatbody').html('');
+    for (chatIter; state.rooms[state.currentChannel].history.length > chatIter; chatIter++) {
+        $('.chatbody').append('<li>' + state.rooms[state.currentChannel].history[chatIter] + '</li>');
+    }
+    chatIter = 0;
+    $('.chatroomlist').html('');
+    for (chatIter; state.rooms[state.currentChannel].users.length > chatIter; chatIter++) {
+        $('.chatroomlist').prepend('<div>' + state.rooms[state.currentChannel].users[chatIter] + '</div>');
+    }
+    
+}
+
+function checkroom(roomname) {
+    'use strict';
+    if (!state.rooms[roomname]) {
+        state.rooms[roomname] = {
+            users: [],
+            title: '',
+            history: []
+        };
+    }
 }
 
 function command(message) {
     'use strict';
     var nameListIter = 0,
-        nameList;
+        nameList,
+        privmsg,
+        timestamp;
     switch (message.command) {
     case ('NOTICE'):
         console.log('%c' + message.params[1], 'color:#00f');
@@ -391,7 +444,8 @@ function command(message) {
         break;
 
     case ('RPL_ENDOFMOTD'):
-        console.log(state.MOTD);
+        JOIN('#lobby');
+        //console.log(state.MOTD);
         break;
 
     case ('PING'):
@@ -406,16 +460,24 @@ function command(message) {
 
     case ('PRIVMSG'):
         console.log(message);
-        if (message.params[1].substring(0, 7) === 'ACTION ') {
-            console.log(message.params[0] + '|' + message.prefix.split('!')[0] + ' ' + message.params[1].substring(7));
+        privmsg = '';
+        timestamp = '[' + new Date().toTimeString().substring(0, 8) + '] ';
+        if (message.prefix) {
+
+            if (message.params[1].substring(0, 7) === '\u0001ACTION') {
+                privmsg = message.prefix.split('!')[0] + ' ' + message.params[1].substring(7);
+            } else {
+                privmsg = '&lt' + message.prefix.split('!')[0] + '&gt:' + message.params[1];
+            }
+
         } else {
-            console.log('%c' + message.params[0] + '|' + message.prefix.split('!')[0] + ':', 'color:#00f', message.params[1]);
+            if (message.params[1].substring(0, 7) === '\u0001ACTION') {
+                privmsg = state.nickname + ' ' + message.params[1].substring(7);
+            } else {
+                privmsg = state.nickname + ':' + message.params[1];
+            }
         }
-        state.rooms[message.params[0]].history.push({
-            name : message.prefix.split('!')[0],
-            action : (message.params[1].substring(0, 7) === 'ACTION '),
-            raw : message.raw
-        });
+        state.rooms[message.params[0]].history.push(timestamp + privmsg);
         break;
 
     case ('396'):
@@ -423,12 +485,7 @@ function command(message) {
         break;
 
     case ('RPL_NAMREPLY'):
-        if (!state.rooms[message.params[2]]) {
-            state.rooms[message.params[2]] = {
-                users: new Array(25),
-                title : ''
-            };
-        }
+        checkroom(message.params[2]);
         nameList = message.params[3].split(' ');
         for (nameListIter; nameList.length > nameListIter; nameListIter++) {
             state.rooms[message.params[2]].users.push(nameList[nameListIter]);
@@ -441,7 +498,7 @@ function command(message) {
 
     case ('JOIN'):
         break;
-    
+
     case ('PART'):
         delete state.rooms[message.params[0]];
         break;
@@ -450,14 +507,23 @@ function command(message) {
         break;
     case ('RPL_LIST'):
         state.roomList.push({
-            name : message.params[1],
-            usercount : message.params[2],
-            modetitle : message.params[3]
+            name: message.params[1],
+            usercount: message.params[2],
+            modetitle: message.params[3]
         });
         break;
     case ('RPL_LISTEND'):
         //render the list
         console.log(state.roomList);
+        break;
+    case ('RPL_TOPIC'):
+        checkroom(message.params[1]);
+        state.rooms[message.params[1]].title = message.params[2];
+        break;
+    case ('RPL_TOPIC_WHO_TIME'):
+        checkroom(message.params[1]);
+        state.rooms[message.params[1]].titleSetBy = message.params[2];
+        state.rooms[message.params[1]].titleSetTime = new Date(message.params[3]);
         break;
     case (''):
         //do nothing
@@ -465,4 +531,5 @@ function command(message) {
     default:
         console.log('%c' + message.command, 'color:#555', message.params);
     }
+    renderRoom();
 }

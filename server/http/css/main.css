@@ -342,7 +342,8 @@ h2 {
     text-align: center;
     margin: 0 auto;
     padding-top: 0;
-    padding-bottom: 10px;;
+    padding-bottom: 10px;
+    ;
     font-family: 'Poiret One', cursive;
     text-shadow: 0 0 1px #777;
     font-weight: 200;
@@ -468,7 +469,7 @@ header {
     height: 98vh;
     overflow: hidden;
     position: absolute;
-    top:100vh;
+    top: 100vh;
     width: 100vw;
 }
 .iconic {
@@ -596,7 +597,7 @@ header {
     cursor: pointer;
 }
 .psudolinksingle:hover {
-    color:white;
+    color: white;
 }
 .field {
     width: 100%;
@@ -881,7 +882,6 @@ header a:hover {
 .card.real {
     display: block
 }
-
 .servermessage {
     background: rgba(255, 0, 0, .65);
     color: white;
@@ -897,6 +897,67 @@ header a:hover {
     top: 5px;
     left: 5px;
     display: block
+}
+.chatcontainer {
+width: 98%;
+height: 100%;
+overflow: auto;
+padding: 1%;
+margin: 0 auto;
+color: white;
+
+}
+.chattitle {
+    border: 1px solid white;
+    color: white;
+    padding: 2px;
+    float: left;
+    width: 100%%;
+}
+.chatbody {
+    width: 80%;
+    border: 1px solid white;
+    margin-top: 5px;
+    height: 70%;
+    float: left;
+    padding: 2px;
+    overflow: scroll;
+    font-size: 10px;
+}
+.chatroomlist {
+    float: left;
+    width: 10px;
+    border: 1px solid white;
+    height: 70%;
+    margin-top: 5px;
+    margin-left: 10px;
+    width: 18%;
+    overflow: scroll;
+}
+.chatcontrolls {
+    float: left;
+    width: 10%;
+    height: 5%;
+    margin-top: 5px;
+    border: 1px solid white;
+}
+input#chatinput {
+background: transparent;
+border: 1px solid white;
+margin-top: 5px;
+height: 5%;
+padding: 2px;
+margin-left: .5%;
+width: 69.5%;
+float: left;
+}
+.chatsubmit {
+border: 1px solid white;
+width: 5%;
+height: 5%;
+float: left;
+margin-top: 5px;
+margin-left: .5%;
 }
 /* =========================================
 =================================
