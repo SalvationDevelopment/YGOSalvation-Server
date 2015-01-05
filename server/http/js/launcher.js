@@ -203,8 +203,8 @@ function preformfilter(translated, players, rooms) {
     OK = (translated.timeLimit !== filterm.timeLimit && filterm.timeLimit !== 'all') ? false : OK;
     OK = (translated.banList !== filterm.banList && filterm.banList !== '20') ? false : OK;
     OK = (players.searchFor(filterm.userName) === -1) ? false : OK;
-
-    if (true) {
+    OK = true;//disabling filter for now.
+    if (OK) {
         duelist = (translated.gameMode === 'single' || translated.gameMode === 'match') ? players[0] + ' vs ' + players[1] : players[0] + '&amp' + players[1] + ' vs ' + players[2] + '&amp' + players[3];
         //console.log(translated);
         content = '<div class="game" onclick=enterGame("' + rooms + '")>' + duelist +
