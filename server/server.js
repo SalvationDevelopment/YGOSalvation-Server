@@ -64,7 +64,7 @@ function initiateMaster() {
                         activegames++;
                     }
                 }
-
+                process.title = 'YGOPro Salvation Server [' + activegames + ']';
             }
 
         });
