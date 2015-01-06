@@ -27,7 +27,7 @@ function handleCoreMessage(core_message_raw, port) {
         if (gamelist[core_message[1]] === undefined) {
             gamelist[core_message[1]] = {
                 players: [],
-                locked: [],
+                locked: [false, false, false, false],
                 spectators: 0,
                 started: false
             };
@@ -74,17 +74,10 @@ function handleCoreMessage(core_message_raw, port) {
             break;
 
         }
-        if (gamelist[core_message[1]]) {
-            if (gamelist[core_message[1]].players.join() === '') {
-                delete gamelist[core_message[1]].players[0];
-            }
-        }
-        primus.room('activegames').write(JSON.stringify(gamelist));
     } catch (error_message) {
-        console.log(error_message);
+        console.log(error_message, core_message_raw, port);
         console.log('ISSUE!');
     }
-    return gamelist;
 }
 
 module.exports = function messageListener(message) {
@@ -103,6 +96,7 @@ module.exports = function messageListener(message) {
             }
         }
     }
+    primus.room('activegames').write(JSON.stringify(gamelist));
     return gamelist;
 };
 
