@@ -52,7 +52,7 @@
                 gamelist[core_message[1]].port = port;
                 break;
 
-            case ('::::leave-slot'):
+            case ('::::left-slot'):
                 leave_slot = parseInt(core_message[2], 10);
                 if (leave_slot === -1) {
                     return;
