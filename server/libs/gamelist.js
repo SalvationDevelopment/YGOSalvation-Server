@@ -34,13 +34,13 @@
                 };
 
             }
-	setTimeout(function () {
-                        try {
-                            delete gamelist[''+core_message[1]];
-                        } catch (IntentedError) {
-                            //do nothing;
-                        }
-                    }, 58000000)
+            setTimeout(function () {
+                try {
+                    delete gamelist['' + core_message[1]];
+                } catch (IntentedError) {
+                    //do nothing;
+                }
+            }, 58000000)
             switch (core_message[0]) {
 
             case ('::::join-slot'):
@@ -48,7 +48,7 @@
                 if (join_slot === -1) {
                     return;
                 }
-                gamelist[core_message[1]].players[join_slot] = core_message[3];
+                gamelist[core_message[1]].players[join_slot] = core_message[3].trim();
                 gamelist[core_message[1]].port = port;
                 break;
 
