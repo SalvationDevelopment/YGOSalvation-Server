@@ -1,137 +1,143 @@
 /*jslint  node: true, plusplus: true, white: false*/
 // Gamelist object acts similar to a Redis server, could be replaced with on but its the gamelist state.
-(function () {
+var primus,
+    gamelist = {},
+    http = require('http'),
+    Primus = require('primus'),
+    Rooms = require('primus-rooms'),
+    primusServer = http.createServer().listen(24555);
+
+function handleCoreMessage(core_message_raw, port) {
     'use strict';
-    var primus,
-        gamelist = {},
-        http = require('http'),
-        Primus = require('primus'),
-        Rooms = require('primus-rooms'),
-        primusServer = http.createServer().listen(24555);
-
-    function handleCoreMessage(core_message_raw, port, data) {
-        if (core_message_raw.toString().indexOf("::::") < 0) {
-            return gamelist;
-        }
-
-        var chat,
-            join_slot,
-            leave_slot,
-            lock_slot,
-            core_message = core_message_raw.toString().split('|');
-        core_message[0] = core_message[0].trim();
-        if (core_message[1] === undefined) {
-            return gamelist;
-        }
-        try {
-
-            if (gamelist[core_message[1]] === undefined) {
-                gamelist[core_message[1]] = {
-                    players: [],
-                    locked: [],
-                    spectators: 0,
-                    started: false
-                };
-
-            }
-            setTimeout(function () {
-                try {
-                    delete gamelist['' + core_message[1]];
-                } catch (IntentedError) {
-                    //do nothing;
-                }
-            }, 58000000)
-            switch (core_message[0]) {
-
-            case ('::::join-slot'):
-                join_slot = parseInt(core_message[2], 10);
-                if (join_slot === -1) {
-                    return;
-                }
-                gamelist[core_message[1]].players[join_slot] = core_message[3].trim();
-                gamelist[core_message[1]].port = port;
-                break;
-
-            case ('::::left-slot'):
-                leave_slot = parseInt(core_message[2], 10);
-                if (leave_slot === -1) {
-                    return;
-                }
-                gamelist[core_message[1]].players[leave_slot] = null;
-                break;
-
-            case ('::::spectator'):
-                gamelist[core_message[1]].spectators = parseInt(core_message[2], 10);
-                break;
-
-            case ('::::lock-slot'):
-                lock_slot = parseInt(core_message[2], 10);
-                gamelist[core_message[1]].locked[lock_slot] = Boolean(core_message[2]);
-                break;
-
-            case ('::::endduel'):
-                delete gamelist[core_message[1]];
-                break;
-
-            case ('::::startduel'):
-                gamelist[core_message[1]].started = true;
-                break;
-
-            case ('::::chat'):
-                chat = core_message[1] + '|' + core_message[2];
-                break;
-
-            }
-            if (gamelist[core_message[1]]) {
-                if (gamelist[core_message[1]].players.join() === '') {
-                    delete gamelist[core_message[1]].players[0];
-                }
-            }
-            primus.room('activegames').write(JSON.stringify(gamelist));
-            return gamelist;
-        } catch (error_message) {
-            console.log(error_message);
-            console.log('ISSUE!');
-            return gamelist;
-        }
+    if (core_message_raw.toString().indexOf("::::") < 0) {
+        return gamelist;
     }
 
-    module.exports = function messageListener(message) {
-        return handleCoreMessage(message.core_message_raw, message.port, message.data);
-    };
+    var chat,
+        join_slot,
+        leave_slot,
+        lock_slot,
+        core_message = core_message_raw.toString().split('|');
+    core_message[0] = core_message[0].trim();
+    if (core_message[1] === undefined) {
+        return gamelist;
+    }
+    try {
 
-    primus = new Primus(primusServer, {
-        parser: 'JSON'
-    });
-    primus.use('rooms', Rooms);
-    primus.on('connection', function (socket) {
-        socket.on('data', function (data) {
-            data = data || {};
-            var action = data.action;
-            switch (action) {
-            case ('join'):
-                socket.join('activegames', function () {
-                    socket.write(JSON.stringify(gamelist));
-                });
-                break;
+        if (gamelist[core_message[1]] === undefined) {
+            gamelist[core_message[1]] = {
+                players: [],
+                locked: [],
+                spectators: 0,
+                started: false
+            };
 
-            case ('leave'):
-                socket.leave('activegames');
-                break;
+        }
+        switch (core_message[0]) {
 
-            default:
-                console.log(data);
-
+        case ('::::join-slot'):
+            join_slot = parseInt(core_message[2], 10);
+            if (join_slot === -1) {
+                return;
             }
-        });
-    });
-    primus.on('disconnection', function (socket) {
-        //nothing required
-    });
+            gamelist[core_message[1]].players[join_slot] = core_message[3].trim();
+            gamelist[core_message[1]].port = port;
+            break;
 
-    primus.on('error', function (socket) {
-        //nothing required
+        case ('::::left-slot'):
+            leave_slot = parseInt(core_message[2], 10);
+            if (leave_slot === -1) {
+                return;
+            }
+            gamelist[core_message[1]].players[leave_slot] = null;
+            break;
+
+        case ('::::spectator'):
+            gamelist[core_message[1]].spectators = parseInt(core_message[2], 10);
+            break;
+
+        case ('::::lock-slot'):
+            lock_slot = parseInt(core_message[2], 10);
+            gamelist[core_message[1]].locked[lock_slot] = Boolean(core_message[2]);
+            break;
+
+        case ('::::endduel'):
+            delete gamelist[core_message[1]];
+            break;
+
+        case ('::::startduel'):
+            gamelist[core_message[1]].started = true;
+            break;
+
+        case ('::::chat'):
+            chat = core_message[1] + '|' + core_message[2];
+            break;
+
+        }
+        if (gamelist[core_message[1]]) {
+            if (gamelist[core_message[1]].players.join() === '') {
+                delete gamelist[core_message[1]].players[0];
+            }
+        }
+        primus.room('activegames').write(JSON.stringify(gamelist));
+    } catch (error_message) {
+        console.log(error_message);
+        console.log('ISSUE!');
+    }
+    return gamelist;
+}
+
+module.exports = function messageListener(message) {
+    'use strict';
+    var brokenup = message.core_message_raw.toString().split('\r\n'),
+        game,
+        i = 0,
+        gamelistmessage;
+    for (i; brokenup.length > i; i++) {
+        handleCoreMessage(brokenup[i], message.port);
+    }
+    for (game in gamelist) {
+        if (gamelist.hasOwnProperty(game)) {
+            if (gamelist[game].players.length === 0 && gamelist[game].spectators.length === 0) {
+                delete gamelist[game];
+            }
+        }
+    }
+    return gamelist;
+};
+
+primus = new Primus(primusServer, {
+    parser: 'JSON'
+});
+primus.use('rooms', Rooms);
+primus.on('connection', function (socket) {
+    'use strict';
+    socket.on('data', function (data) {
+        data = data || {};
+        var action = data.action;
+        switch (action) {
+        case ('join'):
+            socket.join('activegames', function () {
+                socket.write(JSON.stringify(gamelist));
+            });
+            break;
+
+        case ('leave'):
+            socket.leave('activegames');
+            break;
+
+        default:
+            console.log(data);
+
+        }
     });
+});
+primus.on('disconnection', function (socket) {
+    'use strict';
+    //nothing required
+});
 
-
-}());
+primus.on('error', function (socket) {
+    'use strict';
+    //nothing required
+});
