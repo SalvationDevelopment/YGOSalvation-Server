@@ -115,16 +115,10 @@ function pickCoreConfig(socket) {
 
 function handleCoreMessage(core_message_raw, port, socket, data) {
     'use strict';
-    console.log(core_message_raw.toString());
     if (core_message_raw.toString().indexOf("::::") < 0) {
         return;
     }
-    var brokenup = core_message_raw.toString().split('\n'),
-        i = 0,
-        core_message,
-        gamelistmessage;
-    for (i; brokenup.length > i; i++) {
-        core_message = brokenup[i].toString().split('|');
+    var core_message = core_message_raw.toString().split('|'),
         gamelistmessage = {
             messagetype: 'coreMessage',
             coreMessage: {
@@ -132,12 +126,11 @@ function handleCoreMessage(core_message_raw, port, socket, data) {
                 port: port
             }
         };
-        if (core_message[0].trim() === '::::network-ready') {
-            connectToCore(port, data, socket);
-        }
-
-        process.send(gamelistmessage);
+    if (core_message[0].trim() === '::::network-ready') {
+        connectToCore(port, data, socket);
     }
+
+    process.send(gamelistmessage);
 }
 
 
@@ -156,6 +149,7 @@ function startCore(port, socket, data, callback) {
         socket.core = childProcess.spawn(startDirectory + '/../ygocore/YGOServer.exe', [port, configfile], {
             cwd: startDirectory + '/../ygocore'
         }, function (error, stdout, stderr) {
+            console.log(error, stdout, stderr);
             handleCoreMessage('::::endduel|' + socket.hostString, port, socket, data);
         });
         socket.core.stdout.on('error', function (error) {
