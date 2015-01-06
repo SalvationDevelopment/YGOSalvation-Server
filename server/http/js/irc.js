@@ -1,6 +1,6 @@
 /*jslint browser: true, devel: true, plusplus: true, sub: false*/
-/*global WebSocket, $*/
-
+/*global WebSocket, $, ircStylize,Handlebars*/
+ircStylize.template = Handlebars.compile("<span class='{{style}}'>{{{text}}}</span>");
 var replies = {
     "200": "RPL_TRACELINK",
     "201": "RPL_TRACECONNECTING",
@@ -301,11 +301,10 @@ function PART(channel) {
     webSocket.send('JOIN ' + channel + '\n');
 }
 
-function OPER(user, password) {
+function OPER(login) {
     'use strict';
-    user = user || '';
-    password = password || '';
-    webSocket('OPER ' + user + '\n');
+    login = login || '';
+    webSocket('OPER ' + login + '\n');
 }
 
 function QUIT(quitmessage) {
@@ -352,6 +351,8 @@ function speak() {
         PRIVMSG(state.currentChannel, '\u0001ACTION' + inputmessage.substring(4) + '\u0001');
     } else if (inputmessage.split(' ')[0].toLowerCase() === '/list') {
         LIST();
+    } else if (inputmessage.split(' ')[0].toLowerCase() === '/mode') {
+        MODE(inputmessage.substring(5));
     } else if (inputmessage.split(' ')[0].toLowerCase() === '/nick') {
         NICK(inputmessage.split(' ')[1]);
     } else {
@@ -518,7 +519,7 @@ function command(message) {
         break;
     case ('RPL_TOPIC'):
         checkroom(message.params[1]);
-        state.rooms[message.params[1]].title = message.params[2];
+        state.rooms[message.params[1]].title = $(ircStylize(message.params[2]));
         break;
     case ('RPL_TOPIC_WHO_TIME'):
         checkroom(message.params[1]);
