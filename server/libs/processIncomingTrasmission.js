@@ -119,7 +119,7 @@ function handleCoreMessage(core_message_raw, port, socket, data) {
     if (core_message_raw.toString().indexOf("::::") < 0) {
         return;
     }
-    var brokenup = core_message_raw.split('\n'),
+    var brokenup = core_message_raw.toString().split('\n'),
         i = 0,
         core_message,
         gamelistmessage;
