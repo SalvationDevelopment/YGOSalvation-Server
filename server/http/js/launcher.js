@@ -229,9 +229,9 @@ function renderList(JSONdata) {
     for (rooms in JSONdata) {
         if (JSONdata.hasOwnProperty(rooms)) {
             player1 = JSONdata[rooms].players[0] || '___';
-            player2 = JSONdata[rooms].players[2] || '___';
-            player3 = JSONdata[rooms].players[3] || '___';
-            player4 = JSONdata[rooms].players[4] || '___';
+            player2 = JSONdata[rooms].players[1] || '___';
+            player3 = JSONdata[rooms].players[2] || '___';
+            player4 = JSONdata[rooms].players[3] || '___';
             translated = parseDuelOptions(rooms);
             players = [player1, player2, player3, player4];
             content = preformfilter(translated, players, rooms);
