@@ -115,7 +115,7 @@ function pickCoreConfig(socket) {
 
 function handleCoreMessage(core_message_raw, port, socket, data) {
     'use strict';
-    console.log(core_message_raw);
+    console.log(core_message_raw.toString());
     if (core_message_raw.toString().indexOf("::::") < 0) {
         return;
     }
