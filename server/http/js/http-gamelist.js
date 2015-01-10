@@ -1,10 +1,92 @@
-/*jslint node: true, plusplus: true, unparam: false, nomen: true*/
-/*global ygopro, $, isChecked, alert, Primus, console, process, applySettings, prompt, sitelocationdir */
-/*exported joinGamelist, leaveGamelist, hostGame, connectgamelist, enterGame, setHostSettings, gui, setfilter, closeAllScreens*/
+/*jslint plusplus: true*/
+/*global localStorage, $, Primus, prompt, console*/
+
+var settings = ['use_d3d',
+                'antialias',
+                'errorlog',
+                'nickname',
+                'roompass',
+                'lastdeck',
+                'textfont',
+                'numfont',
+                'fullscreen',
+                'enable_sound',
+                'sound_volume',
+                'enable_music',
+                'music_volume',
+                'skin_index',
+                'auto_card_placing',
+                'random_card_placing',
+                'auto_chain_order',
+                'no_delay_for_chain',
+                'enable_sleeve_loading',
+                'serverport',
+                'lastip',
+                'textfontsize',
+                'lastport'],
+    localstorageIter = 0;
+
+for (localstorageIter; settings.length > localstorageIter; localstorageIter++) {
+    if (!localStorage[settings[localstorageIter]]) {
+        localStorage.use_d3d = '0';
+        localStorage.antialias = '0';
+        localStorage.errorlog = '0';
+        localStorage.nickname = 'Player';
+        localStorage.roompass = '';
+        localStorage.lastdeck = '';
+        localStorage.textfont = 'simhei.ttf';
+        localStorage.textfontsize = '12';
+        localStorage.numfont = 'arialbd.ttf';
+        localStorage.serverport = '8911';
+        localStorage.lastip = '127.0.0.1';
+        localStorage.lastport = '8911';
+        localStorage.fullscreen = '0';
+        localStorage.enable_sound = '1';
+        localStorage.sound_volume = '100';
+        localStorage.enable_music = '0';
+        localStorage.music_volume = '100';
+        localStorage.skin_index = '-1';
+        localStorage.auto_card_placing = '1';
+        localStorage.random_card_placing = '0';
+        localStorage.auto_chain_order = '1';
+        localStorage.no_delay_for_chain = '0';
+        localStorage.enable_sleeve_loading = '0';
+    }
+}
 
 var mode = "production",
     gamelistcache,
     screenMessage = $('#servermessages');
+
+function ygopro(parameter) {
+    'use strict';
+    $.ajax('http://127.0.0.1:9467/' + parameter);
+}
+
+function connectToCheckmateServer() {
+    'use strict';
+    var pass,
+        nickname,
+        chkusername = prompt("Please enter your name Checkmate Server Username", localStorage.chknickname);
+    while (!chkusername) {
+        chkusername = prompt("Please enter your name Checkmate Server Username", localStorage.chknickname);
+    }
+    pass = prompt("Please enter your name Checkmate Server Password", '');
+    nickname = chkusername + '$' + pass;
+    if (nickname.length > 19 && chkusername.length > 0) {
+        $('#servermessages').text('Username and Password combined must be less than 19 charaters');
+        return;
+    }
+    localStorage.chknickname = chkusername;
+    localStorage.lastip = '173.224.211.158';
+    localStorage.lastport = '21001';
+    ygopro('j');
+}
+
+function isChecked(id) {
+    'use strict';
+    return ($(id).is(':checked'));
+}
 
 var primus = Primus.connect('http://salvationdevelopment.com:24555');
 $('#servermessages').text('Loading interface from server...');
@@ -83,11 +165,11 @@ function getDuelRequest() {
 function secure(prio, checkd, shuf) {
     'use strict';
     if (prio + checkd + shuf !== "OOO" && $('input:radio[name=ranked]:checked').val() === 'R') {
-        alert('You may not cheat here.');
+        $('#servermessages').text('You may not cheat here.');
         return false;
     }
     if ($('#creategamecardpool').val() === 2 && $('input:radio[name=ranked]:checked').val() === 'R') {
-        alert('OCG/TCG is not a valid mode for ranked, please select a different mode for ranked play');
+        $('#servermessages').text('OCG/TCG is not a valid mode for ranked, please select a different mode for ranked play');
         return false;
     }
     return true;
