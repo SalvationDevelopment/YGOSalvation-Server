@@ -1,6 +1,5 @@
 /*jslint plusplus: true*/
 /*global localStorage, $, Primus, prompt, console*/
-
 var settings = ['use_d3d',
                 'antialias',
                 'errorlog',
