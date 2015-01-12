@@ -152,7 +152,40 @@ body {
     display: none;
     background-size: 100%;
 }
-
+#staticcontrols > div {
+    float: left;
+    width: 79px;
+    height: 20px;
+    line-height: 20px;
+    margin: 0 10px;
+    border: 1px solid black;
+    text-align: center;
+    cursor: pointer;
+    background: -webkit-linear-gradient(#fff, #aaa) !important;
+    box-shadow: inset -2px 2px 3px -1px black;
+    text-shadow: 1px 1px 2px white, 0px 0px 1px black;
+    color: #000;
+    font-size: 1.3em;
+}
+#staticbar #hostSettings {
+    background: #eee;
+    height: 92.5vh;
+    width: 40%;
+    display: none;
+    font-size: 1.5em;
+    padding: 10px;
+    margin: 0 auto;
+}
+#creategameok,
+#creategamecancel {
+    width: 47%;
+    display: inline;
+    padding: 5px;
+    margin: 5% 1%;
+    border: 1px solid black;
+    float: left;
+    text-align: center;
+}
 select,
 input[type=number],
 input[type=text] {
@@ -358,7 +391,38 @@ iframe .home header.header.clear {
     background: -webkit-linear-gradient(#aaa, #ddd);
     line-height: 21px;
 }
-
+#gamefilter {
+    background: white;
+    width: 30vw;
+    margin 1vh 2vw;
+    font-size: 12px;
+    float: right;
+    padding: 5px;
+    height: 92.5vh;
+    padding-top: 28px;
+    border-left: 1px solid black;
+}
+#gamefilter label {
+    display: block;
+    width: 100%;
+    line-height: 1.5em;
+    padding: 0;
+    margin-top: 1vh;
+}
+#gamefilter label select,
+#gamefilter label input {
+    float: right;
+    display: block;
+    width: 50%;
+}
+.incasing {
+    padding: 5px;
+    border: 1px solid silver;
+}
+#gamefilter button {
+    margin-top: 20px;
+    display: inline-block;
+}
 ::-webkit-scrollbar {
     height: 12px;
     width: 12px;
