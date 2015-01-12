@@ -59,7 +59,7 @@ var mode = "production",
 
 function ygopro(parameter) {
     'use strict';
-    $.ajax('http://127.0.0.1:9467/' + parameter);
+    $.post('http://127.0.0.1:9468/' + parameter, localStorage);
 }
 
 function connectToCheckmateServer() {
@@ -79,7 +79,7 @@ function connectToCheckmateServer() {
     localStorage.chknickname = chkusername;
     localStorage.lastip = '173.224.211.158';
     localStorage.lastport = '21001';
-    ygopro('j');
+    ygopro('-j');
 }
 
 function isChecked(id) {
@@ -88,6 +88,7 @@ function isChecked(id) {
 }
 
 var primus = Primus.connect('http://salvationdevelopment.com:24555');
+
 $('#servermessages').text('Loading interface from server...');
 
 function joinGamelist() {
@@ -96,7 +97,7 @@ function joinGamelist() {
         action: 'join'
     });
 }
-
+joinGamelist();
 function leaveGamelist() {
     'use strict';
     primus.write({
@@ -123,6 +124,7 @@ function enterGame(string) {
     'use strict';
     localStorage.lastdeck = $('#currentdeck').val();
     localStorage.roompass = string;
+    localStorage.lastip = "192.99.11.19";
     ygopro('-j');
 }
 
@@ -202,7 +204,7 @@ function parseFilters() {
         timeLimit: $('#filtertimelimit option:selected').text().toLocaleLowerCase(),
         allowedCards: $('#filercardpool option:selected').text().toLocaleLowerCase(),
         gameMode: $('#filterroundtype option:selected').text().toLocaleLowerCase(),
-        userName : $('#filterusername').val()
+        userName: $('#filterusername').val()
     };
 
 }
@@ -272,7 +274,7 @@ function parseDuelOptions(duelOptions) {
 
 }
 
-function preformfilter(translated, players, rooms) {
+function preformfilter(translated, players, rooms, started) {
     'use strict';
     var OK = true,
         content = '',
@@ -284,11 +286,11 @@ function preformfilter(translated, players, rooms) {
     OK = (translated.timeLimit !== filterm.timeLimit && filterm.timeLimit !== 'all') ? false : OK;
     OK = (translated.banList !== filterm.banList && filterm.banList !== '20') ? false : OK;
     OK = (players.searchFor(filterm.userName) === -1) ? false : OK;
-    OK = true;//disabling filter for now.
+    OK = true; //disabling filter for now.
     if (OK) {
         duelist = (translated.gameMode === 'single' || translated.gameMode === 'match') ? players[0] + ' vs ' + players[1] : players[0] + '&amp' + players[1] + ' vs ' + players[2] + '&amp' + players[3];
         //console.log(translated);
-        content = '<div class="game" onclick=enterGame("' + rooms + '")>' + duelist +
+        content = '<div class="game ' + rooms + ' ' + started + '" onclick=enterGame("' + rooms + '")>' + duelist +
             '<span class="subtext" style="font-size:.5em"><br>' + translated.allowedCards + '  ' + translated.gameMode +
             ' ' + $('#creategamebanlist option[value=' + translated.banlist + ']').text() + '</span></div>';
     }
@@ -304,19 +306,21 @@ function renderList(JSONdata) {
         translated,
         players,
         rooms,
-        content;
+        content,
+        started;
 
-    $('#gamelist').html('');
+    $('#gamelistitems').html('');
     for (rooms in JSONdata) {
         if (JSONdata.hasOwnProperty(rooms)) {
             player1 = JSONdata[rooms].players[0] || '___';
             player2 = JSONdata[rooms].players[1] || '___';
             player3 = JSONdata[rooms].players[2] || '___';
             player4 = JSONdata[rooms].players[3] || '___';
+            started = (JSONdata[rooms].started) ? 'started' : 'avaliable';
             translated = parseDuelOptions(rooms);
             players = [player1, player2, player3, player4];
-            content = preformfilter(translated, players, rooms);
-            $('#gamelist').prepend(content);
+            content = preformfilter(translated, players, rooms, started);
+            $('#gamelistitems').prepend(content);
         }
     }
 }
@@ -335,7 +339,14 @@ primus.on('data', function (data) {
         renderList(gamelistcache);
     }
 });
-
+primus.on('connect', function () {
+    'use strict';
+    console.log('!!!!!! connect');
+});
+primus.on('close', function () {
+    'use strict';
+    console.log('!!!!!! close');
+});
 Array.prototype.searchFor = function (candid) {
     'use strict';
     var i = 0;
