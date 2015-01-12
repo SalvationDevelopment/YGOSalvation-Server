@@ -9,7 +9,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>YGOPro Salvation Server  Online Yu-Gi-Oh! Simulator Version 4.0.1</title>
+    <title>YGOPro Salvation Server Online Yu-Gi-Oh! Simulator Version 4.0.1</title>
     <link rel="shortcut icon" href="/favicon.png" />
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width">
@@ -19,11 +19,14 @@
     <link href='http://fonts.googleapis.com/css?family=Alegreya+Sans+SC:100,400,800,900' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="css/animation.css">
+    <script src="js/primus.js"></script>
+
+
     <script>
-        function singlesitenav(target){
+        function singlesitenav(target) {
             console.log(target)
-            $('header').css('top','100vh');
-            $('#'+target).css('top','0');
+            $('header').css('top', '100vh');
+            $('#' + target).css('top', '0');
         }
     </script>
 
@@ -33,110 +36,332 @@
 
     <header style="padding-top:10px;top:0vh;" id='home'>
 
-            <div style="font-size:1.2em">
-                <br />
-            </div>
-            <ul class="featurelist" style="font-size:small; margin-top: -4px;">
-                <li><span class="psudolinksingle" onclick="singlesitenav('news')">News</span>
-                </li>
-                <li><span class="psudolinksingle" onclick="singlesitenav('forum')">Forum</span>
-                </li>
-                <li><span class="psudolinksingle" onclick="singlesitenav('chat')">Chat</span>
-                </li>
-                <li><span class="psudolinksingle" onclick="singlesitenav('faq')">FAQ</span>
-                </li>
-            </ul>
-            <span class="psudolinksingle" onclick="singlesitenav('home')">
+        <div style="font-size:1.2em">
+            <br />
+        </div>
+        <ul class="featurelist" style="font-size:small; margin-top: -4px;">
+            <li class="launcheronly"><span class="psudolinksingle " onclick='ygopro("-l")'>LAN Mode</span>
+            </li>
+            <li class="launcheronly"><span class="psudolinksingle" onclick='ygopro("-d")'>Deck Edit</span>
+            </li>
+            <li class="launcheronly"><span class="psudolinksingle" onclick='ygopro("-r")'>Replays</span>
+            </li>
+            <li><span class="psudolinksingle" onclick="singlesitenav('gamelist')">Game List</span>
+            </li>
+            <li class="launcheronly"><span class="psudolinksingle" onclick="singlesitenav('host')">Host</span>
+            </li>
+            <li><span class="psudolinksingle" onclick="singlesitenav('forum')">Forum</span>
+            </li>
+            <li><span class="psudolinksingle" onclick="singlesitenav('chat')">Chat</span>
+            </li>
+            <li><span class="psudolinksingle" onclick="singlesitenav('faq')">FAQ</span>
+            </li>
+            <li class="launcheronly"><span class="psudolinksingle" onclick="singlesitenav('settings')">Settings</span>
+            </li>
+        </ul>
+        <span class="psudolinksingle" onclick="singlesitenav('home')">
                 <h1 style="padding-top:140px;">
             <span style="color:#e4a;">YGOPro</span> Salvation Server</h1>
-            </span>
-            <h2>Online Yu-Gi-Oh! Simulator</h2>
-            <nav class="lander-main">
+        </span>
+        <h2>Online Yu-Gi-Oh! Simulator</h2>
+        <nav class="lander-main">
 
-                <div class="downloadbutton" style="display:none">Play Now</div>
+            <div class="downloadbutton" style="display:none">Play Now</div>
 
-                <ul class="webonly" style="text-align:center; padding:0;" id="mirrors" itemscope itemtype="http://schema.org/SoftwareApplication">
-                    <!--<li>Login</li>
+            <ul class="webonly" style="text-align:center; padding:0;" id="mirrors" itemscope itemtype="http://schema.org/SoftwareApplication">
+                <!--<li>Login</li>
                 <li>Sign Up</li>-->
-                    <li><a href="http://www.mediafire.com/download/4pbfs1cv1b67c8o/setup.exe">Full Windows Client </a>
-                        
-                    </li>
-                    <!--<li><a href="http://ygopro.us/setup.exe">Windows Mirror 1 </a>
+                <li><a href="http://www.mediafire.com/download/4pbfs1cv1b67c8o/setup.exe">Full Windows Client </a>
+
+                </li>
+                <!--<li><a href="http://ygopro.us/setup.exe">Windows Mirror 1 </a>
                         
                     </li>-->
-                    <li><a href=" http://ygopro.us/client.tar.gz">Win/Linux32 Tarball</a>
-                       
-                    </li>
-                    <!--
+                <li><a href=" http://ygopro.us/client.tar.gz">Win/Linux32 Tarball</a>
+
+                </li>
+                <!--
                 <li><a href="http://salvationdevelopment.com/setup.msi"> Mirror 1</a></li>
                 <li><a href="https://drive.google.com/file/d/0B1ytOVM5sj4CV19EN2VRODhDQXc/view?usp=sharing">Mirror 2</a></li>
                 <li><a href="http://d-h.st/5PC6">Mirror 3</a></li>
                 <li><a href="https://www.mediafire.com/?xrm3rko4ln3e64z">Mirror 4</a></li>-->
 
-                </ul>
+            </ul>
 
-            </nav>
+        </nav>
 
-            <div style="font-size:.5em; text-align:center; color:#747" id="versioninfo">Version 4 : Production 0 : Revision 1</div>
+        <div style="font-size:.5em; text-align:center; color:#747" id="versioninfo">Version 4 : Production 0 : Revision 1</div>
         <div style="font-size:1.5em; text-align:center; color:pink" class='webonly'></div>
     </header>
-    <header style="padding-top:10px" id="news">
+    <header style="padding-top:10px" id="gamelist">
         <span class="psudolinksingle" onclick="singlesitenav('home')"><h1 style="font-size:1.2em">
-            <span style="color:#e4a;">YGOPro</span> Salvation Server</h1></span>
+            <span style="color:#e4a;">YGOPro</span> Salvation Server</h1>
+        </span>
         <ul class="featurelist" style="font-size:small">
-                <li><span class="psudolinksingle" onclick="singlesitenav('news')">News</span>
-                </li>
-                <li><span class="psudolinksingle" onclick="singlesitenav('forum')">Forum</span>
-                </li>
-                <li><span class="psudolinksingle" onclick="singlesitenav('chat')">Chat</span>
-                </li>
-                <li><span class="psudolinksingle" onclick="singlesitenav('faq')">FAQ</span>
-                </li>
-            </ul>
+            <li class="launcheronly"><span class="psudolinksingle " onclick='ygopro("-l")'>LAN Mode</span>
+            </li>
+            <li class="launcheronly"><span class="psudolinksingle" onclick='ygopro("-d")'>Deck Edit</span>
+            </li>
+            <li class="launcheronly"><span class="psudolinksingle" onclick='ygopro("-r")'>Replays</span>
+            </li>
+            <li><span class="psudolinksingle" onclick="singlesitenav('gamelist')">Game List</span>
+            </li>
+            <li class="launcheronly"><span class="psudolinksingle" onclick="singlesitenav('host')">Host</span>
+            </li>
+            <li><span class="psudolinksingle" onclick="singlesitenav('forum')">Forum</span>
+            </li>
+            <li><span class="psudolinksingle" onclick="singlesitenav('chat')">Chat</span>
+            </li>
+            <li><span class="psudolinksingle" onclick="singlesitenav('faq')">FAQ</span>
+            </li>
+            <li class="launcheronly"><span class="psudolinksingle" onclick="singlesitenav('settings')">Settings</span>
+            </li>
+        </ul>
         <div style="font-size:.5em; text-align:center;" id="versioninfo">Version 4 : Production 0 : Revision 1</div>
-        upcoming blog
-        
+        <section id='gamelistsection'>
+            <div id="gamelistitems"></div>
+            <div id="gamefilter" class="launcheronly">
+                <label>Current Deck
+                    <select id='currentdeck'></select>
+                </label>
+                <h3>Search</h3>
+                <div class="incasing">
+                    <label>Card Pool
+                        <select id='filercardpool'>
+                            <option value="0">OCG</option>
+                            <option value="1">TCG</option>
+                            <option value="2" selected>TCG/OCG</option>
+                            <option value="3">Anime</option>
+                            <option value="4">All</option>
+                        </select>
+                    </label>
+                    <label>Round Type
+                        <select id="filterroundtype">
+                            <option value='0'>Single</option>
+                            <option value='1'>Match</option>
+                            <option value='2'>Tag</option>
+                            <option value="3">All</option>
+                        </select>
+                    </label>
+                    <label>Banlist
+                        <select id='filterbanlist'>
+                            <option value="0" selected>2015.1.1(TCG)</option>
+                            <option value="1">2015.1.1(OCG)</option>
+                            <option value="2">2014.10.1(TCG)</option>
+                            <option value="3">2014.10.1(OCG)</option>
+                            <option value="4">2014.7.1(OCG)</option>
+                            <option value="5">2014.4.1(TCG)</option>
+                            <option value="6">2014.4.1(OCG)</option>
+                            <option value="7">2014.1.1(TCG)</option>
+                            <option value="8">2014.2.1(OCG)</option>
+                            <option value="9">2013.9.1(TCG)</option>
+                            <option value="10">2013.9.1(OCG)</option>
+                            <option value="11">2013.3.1</option>
+                            <option value="12">2012.9.1</option>
+                            <option value="13">2012.3.1</option>
+                            <option value="14">2011.9.1</option>
+                            <option value="15">Traditional</option>
+                            <option value="16">Unlimited</option>
+                            <option value="17">Mega-Banned</option>
+                            <option value="18" disabled>TBC</option>
+                            <option value="19">N/A</option>
+                            <option value="20">All</option>
+                        </select>
+                    </label>
+                    <label>Time Limit
+                        <select id="filtertimelimit">
+                            <option value=0>All</option>
+                            <option value=3>3 minutes</option>
+                            <option value=5>5 minutes</option>
+                        </select>
+                    </label>
+                    <label>Username
+                        <input placeholder="Players User Name" id='filterusername'>
+                    </label>
+                    <div style="font-size:smaller">
+                        <button onclick='setfilter();'>Search</button>
+                        <button>Random Spectate</button>
+                        <button id="checkmateServer" onclick="connectToCheckmateServer();">
+                            Checkmate Server
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+
+    </header>
+    <header style="padding-top:10px" id="host">
+        <span class="psudolinksingle" onclick="singlesitenav('home')"><h1 style="font-size:1.2em">
+            <span style="color:#e4a;">YGOPro</span> Salvation Server</h1>
+        </span>
+        <ul class="featurelist" style="font-size:small">
+            <li class="launcheronly"><span class="psudolinksingle " onclick='ygopro("-l")'>LAN Mode</span>
+            </li>
+            <li class="launcheronly"><span class="psudolinksingle" onclick='ygopro("-d")'>Deck Edit</span>
+            </li>
+            <li class="launcheronly"><span class="psudolinksingle" onclick='ygopro("-r")'>Replays</span>
+            </li>
+            <li><span class="psudolinksingle" onclick="singlesitenav('gamelist')">Game List</span>
+            </li>
+            <li class="launcheronly"><span class="psudolinksingle" onclick="singlesitenav('host')">Host</span>
+            </li>
+            <li><span class="psudolinksingle" onclick="singlesitenav('forum')">Forum</span>
+            </li>
+            <li><span class="psudolinksingle" onclick="singlesitenav('chat')">Chat</span>
+            </li>
+            <li><span class="psudolinksingle" onclick="singlesitenav('faq')">FAQ</span>
+            </li>
+            <li class="launcheronly"><span class="psudolinksingle" onclick="singlesitenav('settings')">Settings</span>
+            </li>
+        </ul>
+        <div style="font-size:.5em; text-align:center;" id="versioninfo">Version 4 : Production 0 : Revision 1</div>
+        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/swfobject/2.2/swfobject.js"></script>
+        <script type="text/javascript" src="lightIRC/config.js"></script>
+        <section id="hostSettings">
+            <div>
+                <h2>Settings</h2>
+                <!--<label>Ranked</label>
+                <input type="radio" name="ranked" value="R" />Yes
+                <input type="radio" name="ranked" value="U" checked />No
+                <br />-->
+                <label>Card Pool</label>
+                <select id="creategamecardpool">
+                    <option value="0">OCG</option>
+                    <option value="1">TCG</option>
+                    <option value="2" selected>OCG/TCG</option>
+                    <option value="3">Anime</option>
+                </select>
+                <br />
+                <label>Ban List</label>
+                <select id="creategamebanlist">
+                    <option value="0" selected>2015.1.1(TCG)</option>
+                    <option value="1">2015.1.1(OCG)</option>
+
+                    <option value="2">2014.10.1(TCG)</option>
+                    <option value="3">2014.10.1(OCG)</option>
+                    <option value="4">2014.7.1(OCG)</option>
+                    <option value="5">2014.4.1(TCG)</option>
+                    <option value="6">2014.4.1(OCG)</option>
+                    <option value="7">2014.1.1(TCG)</option>
+                    <option value="8">2014.2.1(OCG)</option>
+                    <option value="9">2013.9.1(TCG)</option>
+                    <option value="10">2013.9.1(OCG)</option>
+                    <option value="11">2013.3.1</option>
+                    <option value="12">2012.9.1</option>
+                    <option value="13">2012.3.1</option>
+                    <option value="14">2011.9.1</option>
+                    <option value="15">Traditional</option>
+                    <option value="16">Unlimited</option>
+                    <option value="17">Mega-Banned</option>
+                    <option value="18" disabled>TBC</option>
+                    <option value="19">N/A</option>
+
+                </select>
+                <br />
+
+                <label>Duel Mode</label>
+                <select id="creategameduelmode">
+                    <option value="0" selected>Single</option>
+                    <option value="1">Match</option>
+                    <option value="2">Tag</option>
+
+                </select>
+                <br />
+                <label>Time Limit</label>
+                <select id="creategametimelimit">
+                    <option value="0" selected>3 Minutes</option>
+                    <option value="1">5 Minutes</option>
+
+                </select>
+                <br />
+
+                <h2>Additional Options</h2>
+                <label>Enable Priority</label>
+                <input type="checkbox" id="enableprio">
+                <br />
+                <label>Disable Check Deck</label>
+                <input type="checkbox" id="discheckdeck">
+                <br />
+                <label>Disable Shuffle Deck</label>
+                <input type="checkbox" id="disshuffledeck">
+                <br />
+                <br />
+                <label>Lifepoints</label>
+                <input type="number" value="8000" id="creategamelp" min="1" />
+                <br />
+                <!--
+                        <label>Password</label>
+                        <input type="text" id="creategamepassword" id="creategamepass" max="5" />
+                        <br />
+-->
+                <div class="button" id="creategameok" onclick='setHostSettings();'>Host</div>
+
+            </div>
+        </section>
     </header>
     <header style="padding-top:10px" id="forum">
         <span class="psudolinksingle" onclick="singlesitenav('home')"><h1 style="font-size:1.2em">
-            <span style="color:#e4a;">YGOPro</span> Salvation Server</h1></span>
+            <span style="color:#e4a;">YGOPro</span> Salvation Server</h1>
+        </span>
         <ul class="featurelist" style="font-size:small">
-                <li><span class="psudolinksingle" onclick="singlesitenav('news')">News</span>
-                </li>
-                <li><span class="psudolinksingle" onclick="singlesitenav('forum')">Forum</span>
-                </li>
-                <li><span class="psudolinksingle" onclick="singlesitenav('chat')">Chat</span>
-                </li>
-                <li><span class="psudolinksingle" onclick="singlesitenav('faq')">FAQ</span>
-                </li>
-            </ul>
+            <li class="launcheronly"><span class="psudolinksingle " onclick='ygopro("-l")'>LAN Mode</span>
+            </li>
+            <li class="launcheronly"><span class="psudolinksingle" onclick='ygopro("-d")'>Deck Edit</span>
+            </li>
+            <li class="launcheronly"><span class="psudolinksingle" onclick='ygopro("-r")'>Replays</span>
+            </li>
+            <li><span class="psudolinksingle" onclick="singlesitenav('gamelist')">Game List</span>
+            </li>
+            <li class="launcheronly"><span class="psudolinksingle" onclick="singlesitenav('host')">Host</span>
+            </li>
+            <li><span class="psudolinksingle" onclick="singlesitenav('forum')">Forum</span>
+            </li>
+            <li><span class="psudolinksingle" onclick="singlesitenav('chat')">Chat</span>
+            </li>
+            <li><span class="psudolinksingle" onclick="singlesitenav('faq')">FAQ</span>
+            </li>
+            <li class="launcheronly"><span class="psudolinksingle" onclick="singlesitenav('settings')">Settings</span>
+            </li>
+        </ul>
         <div style="font-size:.5em; text-align:center;" id="versioninfo">Version 4 : Production 0 : Revision 1</div>
         <iframe src="http://ygopro.us:8080/forums/" height="100%" width="100%" style="min-height: 422px; border: none;"></iframe>
-      
+
     </header>
     <header style="padding-top:10px" id="chat">
         <span class="psudolinksingle" onclick="singlesitenav('home')"><h1 style="font-size:1.2em">
-            <span style="color:#e4a;">YGOPro</span> Salvation Server</h1></span>
+            <span style="color:#e4a;">YGOPro</span> Salvation Server</h1>
+        </span>
         <ul class="featurelist" style="font-size:small">
-                <li><span class="psudolinksingle" onclick="singlesitenav('news')">News</span>
-                </li>
-                <li><span class="psudolinksingle" onclick="singlesitenav('forum')">Forum</span>
-                </li>
-                <li><span class="psudolinksingle" onclick="singlesitenav('chat')">Chat</span>
-                </li>
-                <li><span class="psudolinksingle" onclick="singlesitenav('faq')">FAQ</span>
-                </li>
-            </ul>
+            <li class="launcheronly"><span class="psudolinksingle " onclick='ygopro("-l")'>LAN Mode</span>
+            </li>
+            <li class="launcheronly"><span class="psudolinksingle" onclick='ygopro("-d")'>Deck Edit</span>
+            </li>
+            <li class="launcheronly"><span class="psudolinksingle" onclick='ygopro("-r")'>Replays</span>
+            </li>
+            <li><span class="psudolinksingle" onclick="singlesitenav('gamelist')">Game List</span>
+            </li>
+            <li class="launcheronly"><span class="psudolinksingle" onclick="singlesitenav('host')">Host</span>
+            </li>
+            <li><span class="psudolinksingle" onclick="singlesitenav('forum')">Forum</span>
+            </li>
+            <li><span class="psudolinksingle" onclick="singlesitenav('chat')">Chat</span>
+            </li>
+            <li><span class="psudolinksingle" onclick="singlesitenav('faq')">FAQ</span>
+            </li>
+            <li class="launcheronly"><span class="psudolinksingle" onclick="singlesitenav('settings')">Settings</span>
+            </li>
+        </ul>
         <div style="font-size:.5em; text-align:center;" id="versioninfo">Version 4 : Production 0 : Revision 1</div>
         <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/swfobject/2.2/swfobject.js"></script>
- <script type="text/javascript" src="lightIRC/config.js"></script>
+        <script type="text/javascript" src="lightIRC/config.js"></script>
         <div id="lightIRC" style="height:92%; text-align:center;">
         </div>
         <script type="text/javascript">
             swfobject.embedSWF("lightIRC/lightIRC.swf", "lightIRC", "100%", "92%", "10.0.0", "expressInstall.swf", params, {
                 wmode: "transparent"
             });
-
         </script>
     </header>
     <header style="padding-top:10px" id="faq">
@@ -145,15 +370,25 @@
             <span style="color:#e4a;">YGOPro</span> Salvation Server</h1>
         </span>
         <ul class="featurelist" style="font-size:small">
-                <li><span class="psudolinksingle" onclick="singlesitenav('news')">News</span>
-                </li>
-                <li><span class="psudolinksingle" onclick="singlesitenav('forum')">Forum</span>
-                </li>
-                <li><span class="psudolinksingle" onclick="singlesitenav('chat')">Chat</span>
-                </li>
-                <li><span class="psudolinksingle" onclick="singlesitenav('faq')">FAQ</span>
-                </li>
-            </ul>
+            <li class="launcheronly"><span class="psudolinksingle " onclick='ygopro("-l")'>LAN Mode</span>
+            </li>
+            <li class="launcheronly"><span class="psudolinksingle" onclick='ygopro("-d")'>Deck Edit</span>
+            </li>
+            <li class="launcheronly"><span class="psudolinksingle" onclick='ygopro("-r")'>Replays</span>
+            </li>
+            <li><span class="psudolinksingle" onclick="singlesitenav('gamelist')">Game List</span>
+            </li>
+            <li class="launcheronly"><span class="psudolinksingle" onclick="singlesitenav('host')">Host</span>
+            </li>
+            <li><span class="psudolinksingle" onclick="singlesitenav('forum')">Forum</span>
+            </li>
+            <li><span class="psudolinksingle" onclick="singlesitenav('chat')">Chat</span>
+            </li>
+            <li><span class="psudolinksingle" onclick="singlesitenav('faq')">FAQ</span>
+            </li>
+            <li class="launcheronly"><span class="psudolinksingle" onclick="singlesitenav('settings')">Settings</span>
+            </li>
+        </ul>
         <div style="font-size:.5em; text-align:center;" id="versioninfo">Version 4 : Production 0 : Revision 1</div>
         <div style="color:white; width:600px; margin:0 auto;">
             <p>Q: How Can I install the web installer
@@ -162,11 +397,87 @@
                 <br />A: Create a deck folder in the /ygopro/ folder of the installation.</p>
         </div>
     </header>
+    <header style="padding-top:10px" id="settings">
+        <span class="psudolinksingle" onclick="singlesitenav('home')">
+            <h1 style="font-size:1.2em">
+            <span style="color:#e4a;">YGOPro</span> Salvation Server</h1>
+        </span>
+        <ul class="featurelist" style="font-size:small">
+            <li class="launcheronly"><span class="psudolinksingle " onclick='ygopro("-l")'>LAN Mode</span>
+            </li>
+            <li class="launcheronly"><span class="psudolinksingle" onclick='ygopro("-d")'>Deck Edit</span>
+            </li>
+            <li class="launcheronly"><span class="psudolinksingle" onclick='ygopro("-r")'>Replays</span>
+            </li>
+            <li><span class="psudolinksingle" onclick="singlesitenav('gamelist')">Game List</span>
+            </li>
+            <li class="launcheronly"><span class="psudolinksingle" onclick="singlesitenav('host')">Host</span>
+            </li>
+            <li><span class="psudolinksingle" onclick="singlesitenav('forum')">Forum</span>
+            </li>
+            <li><span class="psudolinksingle" onclick="singlesitenav('chat')">Chat</span>
+            </li>
+            <li><span class="psudolinksingle" onclick="singlesitenav('faq')">FAQ</span>
+            </li>
+            <li class="launcheronly"><span class="psudolinksingle" onclick="singlesitenav('settings')">Settings</span>
+            </li>
+        </ul>
+        <div style="font-size:.5em; text-align:center;" id="versioninfo">Version 4 : Production 0 : Revision 1</div>
+        <div style="color:white; width:600px; margin:0 auto;">
+            <section id="settings">
+                <div class='section-content'>
+
+                    <div>
+                        <h3>Game Settings</h3>
+                        <label>Auto Card Placement</label>
+                        <input type="checkbox" data-localhost="auto_card_placing" />
+                        <br />
+                        <label>Random Card Placement</label>
+                        <input type="checkbox" data-localhost="random_card_placing" />
+                        <br />
+                        <label>Auto Chain Order</label>
+                        <input type="checkbox" data-localhost="auto_chain_order" />
+                        <br />
+                        <label>Enable Sound</label>
+                        <input type="checkbox" data-localhost="enable_music" />
+                        <br />
+                        <label>Enable DirectX</label>
+                        <input type="checkbox" data-localhost="use_d3d" />
+                        <br />
+                        <label>No Delay for Chains</label>
+                        <input type="checkbox" data-localhost="no_delay_for_chain" />
+                        <br />
+                        <label>Enable Music</label>
+                        <input type="checkbox" data-localhost="enable_music" />
+                        <br />
+                        <label>Fullscreen</label>
+                        <input type="checkbox" data-localhost="fullscreen" />
+                        <br />
+                        <label>Enable User Covers</label>
+                        <input type="checkbox" data-localhost="enable_sleeve_loading" />
+                        <br />
+                        <label>Anti Aliasing</label>
+                        <input type="checkbox" data-localhost="antialias" />
+                        <label>Skin</label>
+                        <select id="skinlist">
+                            <option value="default">Default</option>
+                        </select><br />
+                        <button onclick="saveSettings();closeAllScreens()" style="color:black">Save</button>
+                        <button onclick="applySettings();closeAllScreens()" style="color:black">Cancel</button>
+                        <button onclick="locallogin(true);closeAllScreens()" style="color:black">Change Username</button>
+                        <button onclick="createmanifest();closeAllScreens()" style="color:black">Update Launcher</button>
+                        <button onclick="require('nw.gui').App.clearCache();closeAllScreens()" style="color:black">Clear Cache</button>
+                        <br />
+                    </div>
+                </div>
+            </section>
+        </div>
+    </header>
     <footer class="superfooter">
         <div style='max-width:1000px; margin:0 auto'>
-            <span itemscope itemtype="http://schema.org/SoftwareApplication">YGOPro</span> &amp 
+            <span itemscope itemtype="http://schema.org/SoftwareApplication">YGOPro</span> &amp
             <span itemscope itemtype="http://schema.org/SoftwareApplication">Salvation Server</span> are not affliated with
-            <span itemscope itemtype="http://schema.org/Organization" itemprop="name">Konami</span>span or 
+            <span itemscope itemtype="http://schema.org/Organization" itemprop="name">Konami</span>span or
             <span itemscope itemtype="http://schema.org/Person" itemprop="name">Kazuki Takahashi</span>. Salvation Server &copy; 2013-2014, all rights reserved by respective parties. Powered by Yu-Jo Friendship and fans of Yu-Gi-Oh! worldwide.</div>
     </footer>
     <script>
@@ -188,12 +499,47 @@
     </script>
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
     <script>
+        var launcher = false;
         $(function () {
             if (window.self != window.top) {
                 $(document.body).addClass("in-iframe");
+                launcher = true;
+            } else {
+                $(document.body).addClass("web");
             }
         });
+        $(document).ready(function () {
+            console.log('nickname:', localStorage.nickname);
+
+            function locallogin(init) {
+                'use strict';
+                localStorage.nickname = localStorage.nickname || '';
+                if (localStorage.nickname.length < 1 || init === true) {
+                    var username = prompt('Username: ', localStorage.nickname);
+                    while (!username) {
+                        username = prompt('Username: ', localStorage.nickname);
+                    }
+                    localStorage.nickname = username;
+                }
+
+            }
+            if (launcher) {
+                locallogin(true);
+            }
+            console.log('nickname:', localStorage.nickname, 'after');
+            setInterval(function () {
+                $.getJSON('http://localhost:9468/', function (data) {
+                    var selected = $( "#currentdeck option:selected" ).val();
+                    $('#currentdeck').html(data.currentdeck);
+                    $('#skinlist').html(data.skinlist);
+                    $('#currentdeck option[value="' + selected + '"]').attr('selected', 'selected');
+                }).fail(function () {
+                    
+                });
+            },10000);
+        });
     </script>
+    <script src="js/http-gamelist.js"></script>
 </body>
 
 </html>
