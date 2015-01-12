@@ -14,6 +14,4 @@ The following card ID's are not official and should be changed when a card is pr
 * 13790408 Jesshaddoll - Sephira Naga
 * 13790409 Sword Saint of the Nekroz - Sephira Saber
 * 13790406 Soprano the Melodious Songstress
-* 13790300 Good and Evil in the Burning Abyss
-* 13790301 Malacoda, Netherlord of the Burning Abyss
 * 80100200 Dragoons of Draconia
