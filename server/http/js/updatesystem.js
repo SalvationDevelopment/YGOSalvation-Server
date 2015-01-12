@@ -1,5 +1,5 @@
 /*jslint node: true, plusplus: true, unparam: false, nomen: true*/
-/*global $, sitelocationdir, prompt */
+/*global $, sitelocationdir, prompt, runYGOPro*/
 
 var manifest = '',
     downloadList = [],
@@ -38,6 +38,11 @@ function download() {
             port: 80,
             path: url.parse(siteLocation + '/' + target.path).pathname
         };
+    if (target.path.indexOf('Thumbs.db') > -1) {
+        downloadList.shift();
+        download();
+        return;
+    }
     screenMessage.text('Updating...' + target.path + ' and ' + downloadList.length + ' other files');
     http.get(options, function (res) {
         res.on('data', function (data) {
@@ -115,44 +120,37 @@ function createmanifest() {
         screenMessage.text('Failed to get mainfest');
     });
 }
-
+var list = {
+    currentdeck : '',
+    skinlist : ''
+};
 function populatealllist() {
     'use strict';
     var dfiles = 0,
         sfiles = 0;
     fs.readdir('./ygopro/deck', function (error, deckfilenames) {
-        $('#currentdeck').html('');
+        list.currentdeck = '';
         for (dfiles; deckfilenames.length > dfiles; dfiles++) {
             var deck = deckfilenames[dfiles].replace('.ydk', '');
-            $('#currentdeck').append('<option value="' + deck + '">' + deck + '</option>');
+            list.currentdeck = list.currentdeck + '<option value="' + deck + '">' + deck + '</option>';
         }
     });
     fs.readdir('./ygopro/skins', function (error, skinfilenames) {
+        list.skinlist = '';
         $('#skinlist').html('');
         for (sfiles; skinfilenames.length > sfiles; sfiles++) {
-            $('#skinlist').append('<option value="' + skinfilenames[sfiles] + '">' + skinfilenames[sfiles] + '</option>');
+            list.skinlist = list.skinlist + '<option value="' + skinfilenames[sfiles] + '">' + skinfilenames[sfiles] + '</option>';
         }
     });
 }
 
-function locallogin(init) {
-    'use strict';
-    localStorage.nickname = localStorage.nickname || '';
-    if (localStorage.nickname.length < 1 || init === true) {
-        var username = prompt('Username: ', localStorage.nickname);
-        while (!username) {
-            username = prompt('Username: ', localStorage.nickname);
-        }
-        localStorage.nickname = username;
-    }
-}
+
 setTimeout(function () {
     'use strict';
     $('#servermessages').text('Interface loaded, querying user for critical information,...');
     localStorage.lastip = '192.99.11.19';
     localStorage.serverport = '8911';
     localStorage.lastport = '8911';
-    locallogin(true);
     if (mode === 'development') {
         try {
             gui.Window.get().showDevTools();
@@ -161,3 +159,84 @@ setTimeout(function () {
     populatealllist();
     createmanifest();
 }, 10000);
+
+var http = require('http');
+var querystring = require('querystring');
+
+function processPost(request, response, callback) {
+    "use strict";
+    var queryData = "";
+    if (typeof callback !== 'function') {
+        return null;
+    }
+    if (request.method === 'POST') {
+        request.on('data', function (data) {
+            queryData += data;
+            if (queryData.length > 1e6) {
+                queryData = "";
+                response.writeHead(413, {
+                    'Content-Type': 'text/plain'
+                }).end();
+                request.connection.destroy();
+            }
+        });
+
+        request.on('end', function () {
+            request.post = querystring.parse(queryData);
+            callback();
+        });
+
+    } else {
+        response.writeHead(200, {
+            'Content-Type': 'text/plain'
+        });
+        response.end(JSON.stringify(list));
+    }
+}
+
+
+http.createServer(function (request, response) {
+    'use strict';
+    response.setHeader('Access-Control-Allow-Origin', '*');
+
+    // Request methods you wish to allow
+    response.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+
+    // Request headers you wish to allow
+    response.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
+
+    // Set to true if you need the website to include cookies in the requests sent
+    // to the API (e.g. in case you use sessions)
+    response.setHeader('Access-Control-Allow-Credentials', true);
+
+    if (request.method === 'POST') {
+        processPost(request, response, function () {
+            console.log(request.post);
+            var storage,
+                parameter = url.parse(request.url),
+                letter = parameter.path.slice(-1);
+            for (storage in request.post) {
+                if (request.post.hasOwnProperty(storage)) {
+                    localStorage[storage] = request.post[storage];
+                }
+            }
+            
+             
+            runYGOPro('-' + letter, function () {
+                console.log('!', parameter.path);
+            });
+            // Use request.post here
+
+            response.writeHead(200, "OK", {
+                'Content-Type': 'text/plain'
+            });
+            response.end();
+        });
+    } else {
+        response.writeHead(200, "OK", {
+            'Content-Type': 'text/plain'
+        });
+        response.end(response.end(JSON.stringify(list)));
+    }
+
+}).listen(9468);

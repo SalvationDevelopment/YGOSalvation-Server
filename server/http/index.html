@@ -19,6 +19,9 @@
     <link href='http://fonts.googleapis.com/css?family=Alegreya+Sans+SC:100,400,800,900' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="css/animation.css">
+    <script src="js/primus.js"></script>
+
+
     <script>
         function singlesitenav(target) {
             console.log(target)
@@ -45,13 +48,15 @@
             </li>
             <li><span class="psudolinksingle" onclick="singlesitenav('gamelist')">Game List</span>
             </li>
-            <li class="launcheronly"><span class="psudolinksingle" onclick=''>Host</span>
+            <li class="launcheronly"><span class="psudolinksingle" onclick="singlesitenav('host')">Host</span>
             </li>
             <li><span class="psudolinksingle" onclick="singlesitenav('forum')">Forum</span>
             </li>
             <li><span class="psudolinksingle" onclick="singlesitenav('chat')">Chat</span>
             </li>
             <li><span class="psudolinksingle" onclick="singlesitenav('faq')">FAQ</span>
+            </li>
+            <li class="launcheronly"><span class="psudolinksingle" onclick="singlesitenav('settings')">Settings</span>
             </li>
         </ul>
         <span class="psudolinksingle" onclick="singlesitenav('home')">
@@ -101,7 +106,7 @@
             </li>
             <li><span class="psudolinksingle" onclick="singlesitenav('gamelist')">Game List</span>
             </li>
-            <li class="launcheronly"><span class="psudolinksingle" onclick=''>Host</span>
+            <li class="launcheronly"><span class="psudolinksingle" onclick="singlesitenav('host')">Host</span>
             </li>
             <li><span class="psudolinksingle" onclick="singlesitenav('forum')">Forum</span>
             </li>
@@ -109,10 +114,12 @@
             </li>
             <li><span class="psudolinksingle" onclick="singlesitenav('faq')">FAQ</span>
             </li>
+            <li class="launcheronly"><span class="psudolinksingle" onclick="singlesitenav('settings')">Settings</span>
+            </li>
         </ul>
         <div style="font-size:.5em; text-align:center;" id="versioninfo">Version 4 : Production 0 : Revision 1</div>
         <section id='gamelistsection'>
-            <div id="gamelist"></div>
+            <div id="gamelistitems"></div>
             <div id="gamefilter" class="launcheronly">
                 <label>Current Deck
                     <select id='currentdeck'></select>
@@ -180,166 +187,119 @@
                     </div>
                 </div>
             </div>
-            <script src="js/http-gamelist.js"></script>
-            <footer id="staticbar" class="launcheronly">
-                <section id="hostSettings">
-                    <div class="container">
-                        <h2>Settings</h2>
-                        <!--<label>Ranked</label>
+
+        </section>
+
+
+    </header>
+    <header style="padding-top:10px" id="host">
+        <span class="psudolinksingle" onclick="singlesitenav('home')"><h1 style="font-size:1.2em">
+            <span style="color:#e4a;">YGOPro</span> Salvation Server</h1>
+        </span>
+        <ul class="featurelist" style="font-size:small">
+            <li class="launcheronly"><span class="psudolinksingle " onclick='ygopro("-l")'>LAN Mode</span>
+            </li>
+            <li class="launcheronly"><span class="psudolinksingle" onclick='ygopro("-d")'>Deck Edit</span>
+            </li>
+            <li class="launcheronly"><span class="psudolinksingle" onclick='ygopro("-r")'>Replays</span>
+            </li>
+            <li><span class="psudolinksingle" onclick="singlesitenav('gamelist')">Game List</span>
+            </li>
+            <li class="launcheronly"><span class="psudolinksingle" onclick="singlesitenav('host')">Host</span>
+            </li>
+            <li><span class="psudolinksingle" onclick="singlesitenav('forum')">Forum</span>
+            </li>
+            <li><span class="psudolinksingle" onclick="singlesitenav('chat')">Chat</span>
+            </li>
+            <li><span class="psudolinksingle" onclick="singlesitenav('faq')">FAQ</span>
+            </li>
+            <li class="launcheronly"><span class="psudolinksingle" onclick="singlesitenav('settings')">Settings</span>
+            </li>
+        </ul>
+        <div style="font-size:.5em; text-align:center;" id="versioninfo">Version 4 : Production 0 : Revision 1</div>
+        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/swfobject/2.2/swfobject.js"></script>
+        <script type="text/javascript" src="lightIRC/config.js"></script>
+        <section id="hostSettings">
+            <div>
+                <h2>Settings</h2>
+                <!--<label>Ranked</label>
                 <input type="radio" name="ranked" value="R" />Yes
                 <input type="radio" name="ranked" value="U" checked />No
                 <br />-->
-                        <label>Card Pool</label>
-                        <select id="creategamecardpool">
-                            <option value="0">OCG</option>
-                            <option value="1">TCG</option>
-                            <option value="2" selected>OCG/TCG</option>
-                            <option value="3">Anime</option>
-                        </select>
-                        <br />
-                        <label>Ban List</label>
-                        <select id="creategamebanlist">
-                            <option value="0" selected>2015.1.1(TCG)</option>
-                            <option value="1">2015.1.1(OCG)</option>
+                <label>Card Pool</label>
+                <select id="creategamecardpool">
+                    <option value="0">OCG</option>
+                    <option value="1">TCG</option>
+                    <option value="2" selected>OCG/TCG</option>
+                    <option value="3">Anime</option>
+                </select>
+                <br />
+                <label>Ban List</label>
+                <select id="creategamebanlist">
+                    <option value="0" selected>2015.1.1(TCG)</option>
+                    <option value="1">2015.1.1(OCG)</option>
 
-                            <option value="2">2014.10.1(TCG)</option>
-                            <option value="3">2014.10.1(OCG)</option>
-                            <option value="4">2014.7.1(OCG)</option>
-                            <option value="5">2014.4.1(TCG)</option>
-                            <option value="6">2014.4.1(OCG)</option>
-                            <option value="7">2014.1.1(TCG)</option>
-                            <option value="8">2014.2.1(OCG)</option>
-                            <option value="9">2013.9.1(TCG)</option>
-                            <option value="10">2013.9.1(OCG)</option>
-                            <option value="11">2013.3.1</option>
-                            <option value="12">2012.9.1</option>
-                            <option value="13">2012.3.1</option>
-                            <option value="14">2011.9.1</option>
-                            <option value="15">Traditional</option>
-                            <option value="16">Unlimited</option>
-                            <option value="17">Mega-Banned</option>
-                            <option value="18" disabled>TBC</option>
-                            <option value="19">N/A</option>
+                    <option value="2">2014.10.1(TCG)</option>
+                    <option value="3">2014.10.1(OCG)</option>
+                    <option value="4">2014.7.1(OCG)</option>
+                    <option value="5">2014.4.1(TCG)</option>
+                    <option value="6">2014.4.1(OCG)</option>
+                    <option value="7">2014.1.1(TCG)</option>
+                    <option value="8">2014.2.1(OCG)</option>
+                    <option value="9">2013.9.1(TCG)</option>
+                    <option value="10">2013.9.1(OCG)</option>
+                    <option value="11">2013.3.1</option>
+                    <option value="12">2012.9.1</option>
+                    <option value="13">2012.3.1</option>
+                    <option value="14">2011.9.1</option>
+                    <option value="15">Traditional</option>
+                    <option value="16">Unlimited</option>
+                    <option value="17">Mega-Banned</option>
+                    <option value="18" disabled>TBC</option>
+                    <option value="19">N/A</option>
 
-                        </select>
-                        <br />
+                </select>
+                <br />
 
-                        <label>Duel Mode</label>
-                        <select id="creategameduelmode">
-                            <option value="0" selected>Single</option>
-                            <option value="1">Match</option>
-                            <option value="2">Tag</option>
+                <label>Duel Mode</label>
+                <select id="creategameduelmode">
+                    <option value="0" selected>Single</option>
+                    <option value="1">Match</option>
+                    <option value="2">Tag</option>
 
-                        </select>
-                        <br />
-                        <label>Time Limit</label>
-                        <select id="creategametimelimit">
-                            <option value="0" selected>3 Minutes</option>
-                            <option value="1">5 Minutes</option>
+                </select>
+                <br />
+                <label>Time Limit</label>
+                <select id="creategametimelimit">
+                    <option value="0" selected>3 Minutes</option>
+                    <option value="1">5 Minutes</option>
 
-                        </select>
-                        <br />
+                </select>
+                <br />
 
-                        <h2>Additional Options</h2>
-                        <label>Enable Priority</label>
-                        <input type="checkbox" id="enableprio">
-                        <br />
-                        <label>Disable Check Deck</label>
-                        <input type="checkbox" id="discheckdeck">
-                        <br />
-                        <label>Disable Shuffle Deck</label>
-                        <input type="checkbox" id="disshuffledeck">
-                        <br />
-                        <br />
-                        <label>Lifepoints</label>
-                        <input type="number" value="8000" id="creategamelp" min="1" />
-                        <br />
+                <h2>Additional Options</h2>
+                <label>Enable Priority</label>
+                <input type="checkbox" id="enableprio">
+                <br />
+                <label>Disable Check Deck</label>
+                <input type="checkbox" id="discheckdeck">
+                <br />
+                <label>Disable Shuffle Deck</label>
+                <input type="checkbox" id="disshuffledeck">
+                <br />
+                <br />
+                <label>Lifepoints</label>
+                <input type="number" value="8000" id="creategamelp" min="1" />
+                <br />
+                <!--
                         <label>Password</label>
                         <input type="text" id="creategamepassword" id="creategamepass" max="5" />
                         <br />
-                        <div class="button" id="creategameok" onclick='setHostSettings();closeAllScreens();'>OK</div>
-                        <div class="button" id="creategamecancel" onclick='closeAllScreens();'>Cancel</div>
+-->
+                <div class="button" id="creategameok" onclick='setHostSettings();'>Host</div>
 
-                    </div>
-                </section>
-
-                <section id="settings">
-                    <div class='section-content'>
-
-                        <div>
-                            <h3>Game Settings</h3>
-                            <label>Auto Card Placement</label>
-                            <input type="checkbox" data-localhost="auto_card_placing" />
-                            <br />
-                            <label>Random Card Placement</label>
-                            <input type="checkbox" data-localhost="random_card_placing" />
-                            <br />
-                            <label>Auto Chain Order</label>
-                            <input type="checkbox" data-localhost="auto_chain_order" />
-                            <br />
-                            <label>Enable Sound</label>
-                            <input type="checkbox" data-localhost="enable_music" />
-                            <br />
-                            <label>Enable DirectX</label>
-                            <input type="checkbox" data-localhost="use_d3d" />
-                            <br />
-                            <label>No Delay for Chains</label>
-                            <input type="checkbox" data-localhost="no_delay_for_chain" />
-                            <br />
-                            <label>Enable Music</label>
-                            <input type="checkbox" data-localhost="enable_music" />
-                            <br />
-                            <label>Fullscreen</label>
-                            <input type="checkbox" data-localhost="fullscreen" />
-                            <br />
-                            <label>Enable User Covers</label>
-                            <input type="checkbox" data-localhost="enable_sleeve_loading" />
-                            <br />
-                            <label>Anti Aliasing</label>
-                            <input type="checkbox" data-localhost="antialias" />
-                            <label>Skin</label>
-                            <select id="skinlist">
-                                <option value="default">Default</option>
-                            </select>
-                            <button onclick="saveSettings();closeAllScreens()" style="color:black">Save</button>
-                            <button onclick="applySettings();closeAllScreens()" style="color:black">Cancel</button>
-                            <button onclick="locallogin(true);closeAllScreens()" style="color:black">Change Username</button>
-                            <button onclick="createmanifest();closeAllScreens()" style="color:black">Update Launcher</button>
-                            <button onclick="require('nw.gui').App.clearCache();closeAllScreens()" style="color:black">Clear Cache</button>
-                            <br />
-                        </div>
-                    </div>
-                </section>
-                <div id='servermessages' style='text-align: center;'>
-
-                </div>
-                <div id="staticcontrols" style=' width:703px'>
-                    <div id="LANMode" onclick="ygopro('');">
-                        LAN Mode
-                    </div>
-                    <div id="rundeckedit" onclick="ygopro('-d');">
-                        Deck Edit
-                    </div>
-                    <div id="runereplays" onclick="ygopro('-r');">
-                        Replays
-                    </div>
-                    <div id="rungamelist" onclick="openScreen('#gamelistsection');connectgamelist();">
-                        Gamelist
-                    </div>
-                    <div id="runHost" onclick="openScreen('#hostSettings');">
-                        Host
-                    </div>
-                    <div id="customize" onclick="" style="color:#777;cursor: default;">
-                        Customize
-                    </div>
-                    <div id="runHost" onclick="openScreen('#settings');">
-                        Settings
-                    </div>
-
-                </div>
-            </footer>
+            </div>
         </section>
-
     </header>
     <header style="padding-top:10px" id="forum">
         <span class="psudolinksingle" onclick="singlesitenav('home')"><h1 style="font-size:1.2em">
@@ -354,13 +314,15 @@
             </li>
             <li><span class="psudolinksingle" onclick="singlesitenav('gamelist')">Game List</span>
             </li>
-            <li class="launcheronly"><span class="psudolinksingle" onclick=''>Host</span>
+            <li class="launcheronly"><span class="psudolinksingle" onclick="singlesitenav('host')">Host</span>
             </li>
             <li><span class="psudolinksingle" onclick="singlesitenav('forum')">Forum</span>
             </li>
             <li><span class="psudolinksingle" onclick="singlesitenav('chat')">Chat</span>
             </li>
             <li><span class="psudolinksingle" onclick="singlesitenav('faq')">FAQ</span>
+            </li>
+            <li class="launcheronly"><span class="psudolinksingle" onclick="singlesitenav('settings')">Settings</span>
             </li>
         </ul>
         <div style="font-size:.5em; text-align:center;" id="versioninfo">Version 4 : Production 0 : Revision 1</div>
@@ -380,13 +342,15 @@
             </li>
             <li><span class="psudolinksingle" onclick="singlesitenav('gamelist')">Game List</span>
             </li>
-            <li class="launcheronly"><span class="psudolinksingle" onclick=''>Host</span>
+            <li class="launcheronly"><span class="psudolinksingle" onclick="singlesitenav('host')">Host</span>
             </li>
             <li><span class="psudolinksingle" onclick="singlesitenav('forum')">Forum</span>
             </li>
             <li><span class="psudolinksingle" onclick="singlesitenav('chat')">Chat</span>
             </li>
             <li><span class="psudolinksingle" onclick="singlesitenav('faq')">FAQ</span>
+            </li>
+            <li class="launcheronly"><span class="psudolinksingle" onclick="singlesitenav('settings')">Settings</span>
             </li>
         </ul>
         <div style="font-size:.5em; text-align:center;" id="versioninfo">Version 4 : Production 0 : Revision 1</div>
@@ -414,13 +378,15 @@
             </li>
             <li><span class="psudolinksingle" onclick="singlesitenav('gamelist')">Game List</span>
             </li>
-            <li class="launcheronly"><span class="psudolinksingle" onclick=''>Host</span>
+            <li class="launcheronly"><span class="psudolinksingle" onclick="singlesitenav('host')">Host</span>
             </li>
             <li><span class="psudolinksingle" onclick="singlesitenav('forum')">Forum</span>
             </li>
             <li><span class="psudolinksingle" onclick="singlesitenav('chat')">Chat</span>
             </li>
             <li><span class="psudolinksingle" onclick="singlesitenav('faq')">FAQ</span>
+            </li>
+            <li class="launcheronly"><span class="psudolinksingle" onclick="singlesitenav('settings')">Settings</span>
             </li>
         </ul>
         <div style="font-size:.5em; text-align:center;" id="versioninfo">Version 4 : Production 0 : Revision 1</div>
@@ -429,6 +395,82 @@
                 <br />A: copy the contence of the file to a workable location like %appdata% when started it will create a ygopro folder. Then copy your DevPro or YGOPro scripts pics and decks to the folder.</p>
             <p>Q: I can not save a deck how can I correct this?
                 <br />A: Create a deck folder in the /ygopro/ folder of the installation.</p>
+        </div>
+    </header>
+    <header style="padding-top:10px" id="settings">
+        <span class="psudolinksingle" onclick="singlesitenav('home')">
+            <h1 style="font-size:1.2em">
+            <span style="color:#e4a;">YGOPro</span> Salvation Server</h1>
+        </span>
+        <ul class="featurelist" style="font-size:small">
+            <li class="launcheronly"><span class="psudolinksingle " onclick='ygopro("-l")'>LAN Mode</span>
+            </li>
+            <li class="launcheronly"><span class="psudolinksingle" onclick='ygopro("-d")'>Deck Edit</span>
+            </li>
+            <li class="launcheronly"><span class="psudolinksingle" onclick='ygopro("-r")'>Replays</span>
+            </li>
+            <li><span class="psudolinksingle" onclick="singlesitenav('gamelist')">Game List</span>
+            </li>
+            <li class="launcheronly"><span class="psudolinksingle" onclick="singlesitenav('host')">Host</span>
+            </li>
+            <li><span class="psudolinksingle" onclick="singlesitenav('forum')">Forum</span>
+            </li>
+            <li><span class="psudolinksingle" onclick="singlesitenav('chat')">Chat</span>
+            </li>
+            <li><span class="psudolinksingle" onclick="singlesitenav('faq')">FAQ</span>
+            </li>
+            <li class="launcheronly"><span class="psudolinksingle" onclick="singlesitenav('settings')">Settings</span>
+            </li>
+        </ul>
+        <div style="font-size:.5em; text-align:center;" id="versioninfo">Version 4 : Production 0 : Revision 1</div>
+        <div style="color:white; width:600px; margin:0 auto;">
+            <section id="settings">
+                <div class='section-content'>
+
+                    <div>
+                        <h3>Game Settings</h3>
+                        <label>Auto Card Placement</label>
+                        <input type="checkbox" data-localhost="auto_card_placing" />
+                        <br />
+                        <label>Random Card Placement</label>
+                        <input type="checkbox" data-localhost="random_card_placing" />
+                        <br />
+                        <label>Auto Chain Order</label>
+                        <input type="checkbox" data-localhost="auto_chain_order" />
+                        <br />
+                        <label>Enable Sound</label>
+                        <input type="checkbox" data-localhost="enable_music" />
+                        <br />
+                        <label>Enable DirectX</label>
+                        <input type="checkbox" data-localhost="use_d3d" />
+                        <br />
+                        <label>No Delay for Chains</label>
+                        <input type="checkbox" data-localhost="no_delay_for_chain" />
+                        <br />
+                        <label>Enable Music</label>
+                        <input type="checkbox" data-localhost="enable_music" />
+                        <br />
+                        <label>Fullscreen</label>
+                        <input type="checkbox" data-localhost="fullscreen" />
+                        <br />
+                        <label>Enable User Covers</label>
+                        <input type="checkbox" data-localhost="enable_sleeve_loading" />
+                        <br />
+                        <label>Anti Aliasing</label>
+                        <input type="checkbox" data-localhost="antialias" />
+                        <label>Skin</label>
+                        <select id="skinlist">
+                            <option value="default">Default</option>
+                        </select><br />
+                        <button onclick="saveSettings();closeAllScreens()" style="color:black">Save</button>
+                        <button onclick="applySettings();closeAllScreens()" style="color:black">Cancel</button>
+                        <button onclick="locallogin(true);closeAllScreens()" style="color:black">Change Username</button>
+                        <button onclick="createmanifest();closeAllScreens()" style="color:black">Update Launcher</button>
+                        <button onclick="require('nw.gui').App.clearCache();closeAllScreens()" style="color:black">Clear Cache</button>
+                        <br />
+                    </div>
+                </div>
+            </section>
         </div>
     </header>
     <footer class="superfooter">
@@ -457,14 +499,47 @@
     </script>
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
     <script>
+        var launcher = false;
         $(function () {
             if (window.self != window.top) {
                 $(document.body).addClass("in-iframe");
+                launcher = true;
             } else {
                 $(document.body).addClass("web");
             }
         });
+        $(document).ready(function () {
+            console.log('nickname:', localStorage.nickname);
+
+            function locallogin(init) {
+                'use strict';
+                localStorage.nickname = localStorage.nickname || '';
+                if (localStorage.nickname.length < 1 || init === true) {
+                    var username = prompt('Username: ', localStorage.nickname);
+                    while (!username) {
+                        username = prompt('Username: ', localStorage.nickname);
+                    }
+                    localStorage.nickname = username;
+                }
+
+            }
+            if (launcher) {
+                locallogin(true);
+            }
+            console.log('nickname:', localStorage.nickname, 'after');
+            setInterval(function () {
+                $.getJSON('http://localhost:9468/', function (data) {
+                    var selected = $( "#currentdeck option:selected" ).val();
+                    $('#currentdeck').html(data.currentdeck);
+                    $('#skinlist').html(data.skinlist);
+                    $('#currentdeck option[value="' + selected + '"]').attr('selected', 'selected');
+                }).fail(function () {
+                    
+                });
+            },10000);
+        });
     </script>
+    <script src="js/http-gamelist.js"></script>
 </body>
 
 </html>

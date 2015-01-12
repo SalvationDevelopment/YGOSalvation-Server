@@ -152,40 +152,7 @@ body {
     display: none;
     background-size: 100%;
 }
-#staticcontrols > div {
-    float: left;
-    width: 79px;
-    height: 20px;
-    line-height: 20px;
-    margin: 0 10px;
-    border: 1px solid black;
-    text-align: center;
-    cursor: pointer;
-    background: -webkit-linear-gradient(#fff, #aaa) !important;
-    box-shadow: inset -2px 2px 3px -1px black;
-    text-shadow: 1px 1px 2px white, 0px 0px 1px black;
-    color: #000;
-    font-size: 1.3em;
-}
-#staticbar #hostSettings {
-    background: #eee;
-    height: 92.5vh;
-    width: 40%;
-    display: none;
-    font-size: 1.5em;
-    padding: 10px;
-    margin: 0 auto;
-}
-#creategameok,
-#creategamecancel {
-    width: 47%;
-    display: inline;
-    padding: 5px;
-    margin: 5% 1%;
-    border: 1px solid black;
-    float: left;
-    text-align: center;
-}
+
 select,
 input[type=number],
 input[type=text] {
