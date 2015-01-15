@@ -9,7 +9,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>YGOPro Salvation Server Online Yu-Gi-Oh! Simulator Version 4.0.1</title>
+    <title>YGOPro Salvation Server Online Yu-Gi-Oh! Simulator Version 4.1.0</title>
     <link rel="shortcut icon" href="/favicon.png" />
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width">
@@ -90,7 +90,7 @@
 
         </nav>
 
-        <div style="font-size:.5em; text-align:center; color:#747" id="versioninfo">Version 4 : Production 0 : Revision 1</div>
+        <div style="font-size:.5em; text-align:center; color:#747" id="versioninfo">Version 4 : Production 1 : Revision 0</div>
         <div style="font-size:1.5em; text-align:center; color:pink" class='webonly'></div>
     </header>
     <header style="padding-top:10px" id="gamelist">
@@ -117,7 +117,7 @@
             <li class="launcheronly"><span class="psudolinksingle" onclick="singlesitenav('settings')">Settings</span>
             </li>
         </ul>
-        <div style="font-size:.5em; text-align:center;" id="versioninfo">Version 4 : Production 0 : Revision 1</div>
+        
         <section id='gamelistsection'>
             <div id="gamelistitems"></div>
             <div id="gamefilter" class="launcheronly">
@@ -216,7 +216,7 @@
             <li class="launcheronly"><span class="psudolinksingle" onclick="singlesitenav('settings')">Settings</span>
             </li>
         </ul>
-        <div style="font-size:.5em; text-align:center;" id="versioninfo">Version 4 : Production 0 : Revision 1</div>
+        
         <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/swfobject/2.2/swfobject.js"></script>
         <script type="text/javascript" src="lightIRC/config.js"></script>
         <section id="hostSettings">
@@ -325,7 +325,7 @@
             <li class="launcheronly"><span class="psudolinksingle" onclick="singlesitenav('settings')">Settings</span>
             </li>
         </ul>
-        <div style="font-size:.5em; text-align:center;" id="versioninfo">Version 4 : Production 0 : Revision 1</div>
+        
         <iframe src="http://ygopro.us:8080/forums/" height="100%" width="100%" style="min-height: 422px; border: none;"></iframe>
 
     </header>
@@ -353,7 +353,7 @@
             <li class="launcheronly"><span class="psudolinksingle" onclick="singlesitenav('settings')">Settings</span>
             </li>
         </ul>
-        <div style="font-size:.5em; text-align:center;" id="versioninfo">Version 4 : Production 0 : Revision 1</div>
+        
         <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/swfobject/2.2/swfobject.js"></script>
         <script type="text/javascript" src="lightIRC/config.js"></script>
         <div id="lightIRC" style="height:92%; text-align:center;">
@@ -389,7 +389,7 @@
             <li class="launcheronly"><span class="psudolinksingle" onclick="singlesitenav('settings')">Settings</span>
             </li>
         </ul>
-        <div style="font-size:.5em; text-align:center;" id="versioninfo">Version 4 : Production 0 : Revision 1</div>
+        
         <div style="color:white; width:600px; margin:0 auto;">
             <p>Q: How Can I install the web installer
                 <br />A: copy the contence of the file to a workable location like %appdata% when started it will create a ygopro folder. Then copy your DevPro or YGOPro scripts pics and decks to the folder.</p>
@@ -422,7 +422,7 @@
             <li class="launcheronly"><span class="psudolinksingle" onclick="singlesitenav('settings')">Settings</span>
             </li>
         </ul>
-        <div style="font-size:.5em; text-align:center;" id="versioninfo">Version 4 : Production 0 : Revision 1</div>
+        
         <div style="color:white; width:600px; margin:0 auto;">
             <section id="settings">
                 <div class='section-content'>
@@ -525,9 +525,7 @@
             }
             if (launcher) {
                 locallogin(true);
-            }
-            console.log('nickname:', localStorage.nickname, 'after');
-            setInterval(function () {
+                setInterval(function () {
                 $.getJSON('http://localhost:9468/', function (data) {
                     var selected = $( "#currentdeck option:selected" ).val();
                     $('#currentdeck').html(data.currentdeck);
@@ -537,6 +535,9 @@
                     
                 });
             },10000);
+            }
+            console.log('nickname:', localStorage.nickname, 'after');
+            
         });
     </script>
     <script src="js/http-gamelist.js"></script>
