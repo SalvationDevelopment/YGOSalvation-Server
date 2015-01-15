@@ -52,7 +52,24 @@ for (localstorageIter; settings.length > localstorageIter; localstorageIter++) {
         localStorage.enable_sleeve_loading = '0';
     }
 }
+function applySettings() {
+    'use strict';
+    $('[data-localhost]').each(function () {
+        var property = $(this).attr('data-localhost'),
+            value = ('1' === localStorage[property]) ? true : false;
+        $(this).prop('checked', value);
+    });
+}
+applySettings();
 
+function saveSettings() {
+    'use strict';
+    $('[data-localhost]').each(function () {
+        var property = $(this).attr('data-localhost');
+        localStorage[property] = Number($(this).prop('checked'));
+    });
+    localStorage.skin_index = $('#skinlist').val();
+}
 var mode = "production",
     gamelistcache,
     screenMessage = $('#servermessages');

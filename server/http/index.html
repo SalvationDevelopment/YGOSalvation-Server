@@ -27,6 +27,7 @@
             console.log(target)
             $('header').css('top', '100vh');
             $('#' + target).css('top', '0');
+            saveSettings();
         }
     </script>
 
@@ -78,6 +79,9 @@
                         
                     </li>-->
                 <li><a href=" http://ygopro.us/client.tar.gz">Win/Linux32 Tarball</a>
+
+                </li>
+                <li><a href="">Mac OSX 10.7+ App</a>
 
                 </li>
                 <!--
@@ -462,10 +466,10 @@
                         <select id="skinlist">
                             <option value="default">Default</option>
                         </select><br />
-                        <button onclick="saveSettings();closeAllScreens()" style="color:black">Save</button>
-                        <button onclick="applySettings();closeAllScreens()" style="color:black">Cancel</button>
-                        <button onclick="locallogin(true);closeAllScreens()" style="color:black">Change Username</button>
-                        <button onclick="createmanifest();closeAllScreens()" style="color:black">Update Launcher</button>
+                        
+                        
+                        <button onclick="locallogin(true);" style="color:black">Change Username</button>
+                        <button onclick="createmanifest();" style="color:black">Update Launcher</button>
                         <button onclick="require('nw.gui').App.clearCache();closeAllScreens()" style="color:black">Clear Cache</button>
                         <br />
                     </div>
@@ -528,9 +532,12 @@
                 setInterval(function () {
                 $.getJSON('http://localhost:9468/', function (data) {
                     var selected = $( "#currentdeck option:selected" ).val();
+                    var selectedskin = $( "#skinlist option:selected" ).val();
                     $('#currentdeck').html(data.currentdeck);
                     $('#skinlist').html(data.skinlist);
                     $('#currentdeck option[value="' + selected + '"]').attr('selected', 'selected');
+                    $('#skinlist option[value="' + selectedskin + '"]').attr('selected', 'selected');
+                    console.log(data);
                 }).fail(function () {
                     
                 });
