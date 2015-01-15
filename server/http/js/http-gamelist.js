@@ -76,6 +76,7 @@ var mode = "production",
 
 function ygopro(parameter) {
     'use strict';
+	saveSettings();
     $.post('http://127.0.0.1:9468/' + parameter, localStorage);
 }
 
