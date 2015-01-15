@@ -24,6 +24,19 @@
             padding: 10px;
             border: 1px solid black;
         }
+        .servermessage {
+position: absolute;
+top: 0;
+left: 0;
+background: black;
+height: 1.5em;
+/* width: 17em; */
+color: #444;
+padding: 0 1em;
+font-family: monospace;
+font-size: .8em;
+box-shadow: 0 0 10px 5px black;
+}
     </style>
 
     <!-- Place favicon.ico and apple-touch-icon(s) in the root directory -->
@@ -39,7 +52,9 @@
 </head>
 
 <body>
+    <div class='servermessage' style='display:none'></div>
     <iframe id="iframemainbody" height="100%" id="salvationdevelopment" role="main" width="100%" style="border:none;"></iframe>
+    
     <script>
         $('#iframemainbody').attr('src', sitelocationdir[mode]);
     </script>
@@ -77,7 +92,6 @@
                 gui.Window.get().show();
             }
         });
-
     </script>
 
 
