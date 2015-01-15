@@ -13,7 +13,6 @@ var portmin = 23500,
     gamelist = {};
 
 if (cluster.isWorker) {
-    'use strict';
     process.on('message', function (message) {
         if (message.gamelist) {
             gamelist = message.gamelist;
@@ -73,11 +72,15 @@ function connectToCore(port, data, socket) {
         });
     });
     socket.active_ygocore.on('error', function (error) {
-        handleCoreMessage('::::endduel|' + socket.hostString, port, socket, data);
+         if (socket.alpha){
+            handleCoreMessage('::::endduel|' + socket.hostString, port, socket, data);
+        }
         socket.end();
     });
     socket.active_ygocore.on('close', function () {
-        handleCoreMessage('::::endduel|' + socket.hostString, port, socket, data);
+        if (socket.alpha){
+            handleCoreMessage('::::endduel|' + socket.hostString, port, socket, data);
+        }
         socket.end();
     });
 

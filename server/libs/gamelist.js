@@ -33,6 +33,7 @@ function handleCoreMessage(core_message_raw, port) {
             };
 
         }
+        console.log(core_message[0]);
         switch (core_message[0]) {
 
         case ('::::join-slot'):
