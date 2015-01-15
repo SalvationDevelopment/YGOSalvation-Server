@@ -87,7 +87,8 @@ function isChecked(id) {
     return ($(id).is(':checked'));
 }
 
-var primus = Primus.connect('http://salvationdevelopment.com:24555');
+
+var primus = Primus.connect(window.location.origin + ':24555');
 
 $('#servermessages').text('Loading interface from server...');
 
