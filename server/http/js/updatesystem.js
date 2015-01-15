@@ -10,7 +10,7 @@ var manifest = '',
     fs = require('fs'),
     gui = require('nw.gui'),
     mode = "production",
-    screenMessage = $('#servermessages'),
+    screenMessage = $('.servermessage'),
     siteLocation = sitelocationdir[mode],
     randomErrors = ['Error: My face is up here buddy!',
                    'Error: My boobies hurt!',
@@ -22,7 +22,7 @@ var manifest = '',
 process.on('uncaughtException', function (err) {
     'use strict';
     console.log(err);
-    screenMessage.text(randomErrors[Math.floor(Math.random() * (6))]);
+    screenMessage.text(randomErrors[Math.floor(Math.random() * (6))], err);
 });
 
 function download() {
@@ -111,6 +111,7 @@ function updateCheckFile(file, initial) {
 
 function createmanifest() {
     'use strict';
+    screenMessage.toggle();
     screenMessage.text('Downloading Manifest');
     $.getJSON('http://ygopro.us/manifest/ygopro.json', function (data) {
         manifest = data;
@@ -236,7 +237,8 @@ http.createServer(function (request, response) {
         response.writeHead(200, "OK", {
             'Content-Type': 'text/plain'
         });
-        response.end(response.end(JSON.stringify(list)));
+        
+        response.end(JSON.stringify(list));
     }
 
 }).listen(9468);
