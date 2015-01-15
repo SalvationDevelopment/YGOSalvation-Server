@@ -1,9 +1,11 @@
 /*jslint node: true, plusplus: true, unparam: false, nomen: true*/
+process.title = 'Update Detection System';
+setInterval(function(){
 var fs = require('fs');
 var path = require('path');
 var startTime = new Date();
 
-console.log(startTime);
+//console.log(startTime);
 
 function dirTree(filename) {
     'use strict';
@@ -41,3 +43,4 @@ fs.writeFile('manifest/ygopro.json', JSON.stringify(installation, null, 4), func
     'use strict';
 });
 console.log((new Date()).getTime() - startTime.getTime(), 'ms');
+},1200000);
