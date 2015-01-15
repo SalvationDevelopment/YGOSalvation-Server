@@ -122,13 +122,15 @@ function createmanifest() {
     });
 }
 var list = {
+    databases : '',
     currentdeck : '',
     skinlist : ''
 };
 function populatealllist() {
     'use strict';
     var dfiles = 0,
-        sfiles = 0;
+        sfiles = 0,
+        dbfiles = 0;
     fs.readdir('./ygopro/deck', function (error, deckfilenames) {
         list.currentdeck = '';
         for (dfiles; deckfilenames.length > dfiles; dfiles++) {
@@ -138,9 +140,14 @@ function populatealllist() {
     });
     fs.readdir('./ygopro/skins', function (error, skinfilenames) {
         list.skinlist = '';
-        $('#skinlist').html('');
         for (sfiles; skinfilenames.length > sfiles; sfiles++) {
-            list.skinlist = list.skinlist + '<option value="' + skinfilenames[sfiles] + '">' + skinfilenames[sfiles] + '</option>';
+            list.skinlist = list.skinlist + '<option value="' + sfiles + '">' + skinfilenames[sfiles] + '</option>';
+        }
+    });
+    fs.readdir('./ygopro/databases', function (error, database) {
+        list.databases = '';
+        for (dbfiles; database.length > dbfiles; dbfiles++) {
+            list.databases = list.databases + '<option value="' + dbfiles + '">' + database[dbfiles] + '</option>';
         }
     });
 }
