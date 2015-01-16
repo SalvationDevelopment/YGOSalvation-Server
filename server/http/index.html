@@ -78,10 +78,10 @@
                 <!--<li><a href="http://ygopro.us/setup.exe">Windows Mirror 1 </a>
                         
                     </li>-->
-                <li><a href=" http://ygopro.us/client.tar.gz">Win/Linux32 Tarball</a>
+                <li><a href=" http://ygopro.us/client.tar.gz">Linux32 TarGz</a>
 
                 </li>
-                <li><a href="">Mac OSX 10.7+ App</a>
+                <li><a href="http://ygopro.us/salvationmac.zip">Mac OSX 10.7+ App Zip</a>
 
                 </li>
                 <!--
@@ -462,6 +462,15 @@
                         <br />
                         <label>Anti Aliasing</label>
                         <input type="checkbox" data-localhost="antialias" />
+                        <br />
+                        <label>Font-size</label>
+                        <input type="number" min="8" max="18">
+                        <br />
+                        <label>Font</label>
+                        <select id="fontlist">
+                            <option value="default">Default</option>
+                        </select>
+                        <br />
                         <label>Skin</label>
                         <select id="skinlist">
                             <option value="default">Default</option>
@@ -533,10 +542,13 @@
                 $.getJSON('http://localhost:9468/', function (data) {
                     var selected = $( "#currentdeck option:selected" ).val();
                     var selectedskin = $( "#skinlist option:selected" ).val();
+                    var selectedfont = $( "#skinlist option:selected" ).val();
                     $('#currentdeck').html(data.currentdeck);
                     $('#skinlist').html(data.skinlist);
+                    $('#fontlist').html(data.fonts);
                     $('#currentdeck option[value="' + selected + '"]').attr('selected', 'selected');
                     $('#skinlist option[value="' + selectedskin + '"]').attr('selected', 'selected');
+                    $('#fontlist option[value="' + selectedfont + '"]').attr('selected', 'selected');
                     console.log(data);
                 }).fail(function () {
                     
