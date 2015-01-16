@@ -69,6 +69,7 @@ function saveSettings() {
         localStorage[property] = Number($(this).prop('checked'));
     });
     localStorage.skin_index = $('#skinlist').val();
+    localStorage.textfont =  $('#fontlist').val();
 }
 var mode = "production",
     gamelistcache,

@@ -124,13 +124,15 @@ function createmanifest() {
 var list = {
     databases : '',
     currentdeck : '',
-    skinlist : ''
+    skinlist : '',
+    fonts: ''
 };
 function populatealllist() {
     'use strict';
     var dfiles = 0,
         sfiles = 0,
-        dbfiles = 0;
+        dbfiles = 0,
+        fontfiles = 0;
     fs.readdir('./ygopro/deck', function (error, deckfilenames) {
         list.currentdeck = '';
         for (dfiles; deckfilenames.length > dfiles; dfiles++) {
@@ -150,7 +152,14 @@ function populatealllist() {
             list.databases = list.databases + '<option value="' + dbfiles + '">' + database[dbfiles] + '</option>';
         }
     });
+    fs.readdir('./ygopro/fonts', function (error, fonts) {
+        list.fonts = '';
+        for (fontfiles; fonts.length > fontfiles; fontfiles++) {
+            list.fonts = list.fonts + '<option value="' + fonts[fontfiles] + '">' + fonts[fontfiles] + '</option>';
+        }
+    });
 }
+
 
 
 setTimeout(function () {
@@ -164,8 +173,12 @@ setTimeout(function () {
             gui.Window.get().showDevTools();
         } catch (error) {}
     }
-    populatealllist();
     createmanifest();
+    populatealllist();
+    fs.watch('./ygopro/deck', populatealllist);
+    fs.watch('./ygopro/skins', populatealllist);
+    fs.watch('./ygopro/databases', populatealllist);
+    fs.watch('./ygopro/fonts', populatealllist);
 }, 10000);
 
 var http = require('http');
