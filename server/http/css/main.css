@@ -358,21 +358,20 @@ header {
     overflow: auto;
 }
 .game {
-background: rgba(0, 0, 0, .65);
-width: 48%;
-height: 40px;
-float: left;
-border: 1px solid;
-margin: 2px 1%;
-padding: 5px;
+    background: rgba(0, 0, 0, .65);
+    width: 48%;
+    height: 40px;
+    float: left;
+    border: 1px solid;
+    margin: 2px 1%;
+    padding: 5px;
     color: white;
-
 }
 .in-iframe #gamelistitems {
-width: 70vw;
+    width: 70vw;
 }
 .game.started {
-    opacity:.2;
+    opacity: .2;
 }
 section {
     width: 100%;
@@ -499,7 +498,6 @@ header {
     font-size: 2em;
     width: 100%;
 }
-
 .gamelobby {
     width: 580px;
     margin: 0 auto;
@@ -516,7 +514,7 @@ header {
     font-size: .8em;
 }
 .button {
-    background: rgba(50, 100, 0, .50);
+    background: rgba(190, 0, 100, .50);
     width: 86px;
     display: block;
     width: 86px;
@@ -547,16 +545,16 @@ header {
     float: right;
 }
 .game span {
-text-align: right;
-/* width: 30%; */
-display: inline-block;
-padding: 2px;
-border: 1px solid silver;
-line-height: 1em;
-float: right;
-margin-top: 4px;
-padding-top: 0px;
-padding-bottom: 6px;
+    text-align: right;
+    /* width: 30%; */
+    display: inline-block;
+    padding: 2px;
+    border: 1px solid silver;
+    line-height: 1em;
+    float: right;
+    margin-top: 4px;
+    padding-top: 0px;
+    padding-bottom: 6px;
 }
 .game span.major {
     text-shadow: 0 0 3px #fff;
@@ -611,9 +609,10 @@ padding-bottom: 6px;
 }
 .psudolinksingle {
     cursor: pointer;
+    color: white;
 }
 .psudolinksingle:hover {
-    color: white;
+    color: hotpink;
 }
 .field {
     width: 100%;
@@ -930,8 +929,10 @@ header a:hover {
     margin-top: 2.5%;
 }
 #hostSettings select,
-#hostSettings input,#settings select,
-#settings input,  {
+#hostSettings input,
+#settings select,
+#settings input,
+{
     width: 45%;
     border: 1px solid whitesmoke;
     height: 1.5em;
@@ -941,7 +942,8 @@ header a:hover {
     line-height: 1.1em;
     padding: .1em;
 }
-#hostSettings label,#settings label {
+#hostSettings label,
+#settings label {
     display: inline-block;
     padding-bottom: 2px;
     width: 50%;
@@ -1016,15 +1018,16 @@ input#chatinput {
     margin-left: .5%;
 }
 #gamefilter {
-    background: white;
+    background: rgba(0, 0, 0, .8);
     width: 30vw;
-    margin 1vh 2vw;
     font-size: 12px;
     float: right;
     padding: 5px;
-    height: 92.5vh;
+    /* height: 92.5vh; */
     padding-top: 28px;
-    border-left: 1px solid black;
+    border: 1px solid black;
+    color: white;
+    margin-top: 12vh;
 }
 #gamefilter label {
     display: block;
