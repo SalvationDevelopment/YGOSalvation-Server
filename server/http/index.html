@@ -428,7 +428,7 @@
             <section id="settings">
                 <div class='section-content'>
 
-                    <div>
+                    <div style="width:50%">
                         <h3>Game Settings</h3>
                         <label>Auto Card Placement</label>
                         <input type="checkbox" data-localhost="auto_card_placing" />
@@ -460,8 +460,8 @@
                         <label>Anti Aliasing</label>
                         <input type="checkbox" data-localhost="antialias" />
                         <br />
-                        <label>Font-size</label>
-                        <input type="number" min="8" max="18">
+                        <label>Font Size</label>
+                        <input type="range" min="8" max="18" value="10" id="fontsize">
                         <br />
                         <label>Font</label>
                         <select id="fontlist">
@@ -474,10 +474,19 @@
                         </select><br />
                         
                         
-                        <button onclick="locallogin(true);" style="color:black">Change Username</button>
-                        <button onclick="createmanifest();" style="color:black">Update Launcher</button>
-                        <button onclick="require('nw.gui').App.clearCache();closeAllScreens()" style="color:black">Clear Cache</button>
+                        
                         <br />
+                    </div>
+                    <div style="width:50%">
+                        <label>Sound Volume</label>
+                        <input type="range" min="0" max="100" value="50" id="sound_volume">
+                        <br />
+                        <label>Music Volume</label>
+                        <input type="range" min="0" max="100" value="50" id="music_volume">
+                        <br />
+                        <button onclick="locallogin(true);">Change Username</button><br />
+                        <button onclick="createmanifest();">Update Launcher</button><br />
+                        <!--<button onclick="require('nw.gui').App.clearCache();">Clear Cache</button>-->
                     </div>
                 </div>
             </section>
@@ -518,10 +527,7 @@
                 $(document.body).addClass("web");
             }
         });
-        $(document).ready(function () {
-            console.log('nickname:', localStorage.nickname);
-
-            function locallogin(init) {
+        function locallogin(init) {
                 'use strict';
                 localStorage.nickname = localStorage.nickname || '';
                 if (localStorage.nickname.length < 1 || init === true) {
@@ -533,6 +539,10 @@
                 }
 
             }
+        $(document).ready(function () {
+            console.log('nickname:', localStorage.nickname);
+
+            
             if (launcher) {
                 locallogin(true);
                 setInterval(function () {

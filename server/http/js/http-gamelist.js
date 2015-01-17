@@ -27,6 +27,7 @@ var settings = ['use_d3d',
 
 for (localstorageIter; settings.length > localstorageIter; localstorageIter++) {
     if (!localStorage[settings[localstorageIter]]) {
+        console.log('overwrite triggered on ', settings[localstorageIter]);
         localStorage.use_d3d = '0';
         localStorage.antialias = '0';
         localStorage.errorlog = '0';
@@ -52,6 +53,7 @@ for (localstorageIter; settings.length > localstorageIter; localstorageIter++) {
         localStorage.enable_sleeve_loading = '0';
     }
 }
+
 function applySettings() {
     'use strict';
     $('[data-localhost]').each(function () {
@@ -59,7 +61,13 @@ function applySettings() {
             value = ('1' === localStorage[property]) ? true : false;
         $(this).prop('checked', value);
     });
+    $('#skinlist').append('<option selected value="' + localStorage.skin_index + '"></option>');
+    $('#fontlist').append('<option selected value="' + localStorage.textfont + '"></option>');
+    $('#sound_volume').val(Number(localStorage.sound_volume));
+    $('#music_volume').val(Number(localStorage.music_volume));
+    $('#music_volume').val(Number(localStorage.textfontsize));
 }
+
 applySettings();
 
 function saveSettings() {
@@ -69,7 +77,10 @@ function saveSettings() {
         localStorage[property] = Number($(this).prop('checked'));
     });
     localStorage.skin_index = $('#skinlist').val();
-    localStorage.textfont =  $('#fontlist').val();
+    localStorage.textfont = $('#fontlist').val();
+    localStorage.sound_volume = $('#sound_volume').val();
+    localStorage.music_volume = $('#music_volume').val();
+    localStorage.textfontsize = $('#fontsize').val();
 }
 var mode = "production",
     gamelistcache,
@@ -77,7 +88,7 @@ var mode = "production",
 
 function ygopro(parameter) {
     'use strict';
-	saveSettings();
+    saveSettings();
     $.post('http://127.0.0.1:9468/' + parameter, localStorage);
 }
 
@@ -118,6 +129,7 @@ function joinGamelist() {
     });
 }
 joinGamelist();
+
 function leaveGamelist() {
     'use strict';
     primus.write({
