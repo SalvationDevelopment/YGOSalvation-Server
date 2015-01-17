@@ -228,3 +228,5 @@ server/http/manifest/*
 #project-Agnotistic
 *.conf
 *.manifest
+
+*crash*
