@@ -423,13 +423,13 @@
             <li class="launcheronly"><span class="psudolinksingle" onclick="singlesitenav('settings')">Settings</span>
             </li>
         </ul>
-        
-        <div style="color:white; width:600px; margin:0 auto;">
+        <h3>Game Settings</h3>
+        <div style="color:#a07; width:720px; margin:0 auto;">
             <section id="settings">
                 <div class='section-content'>
 
                     <div style="width:50%; float:left;">
-                        <h3>Game Settings</h3>
+                        
                         <label>Auto Card Placement</label>
                         <input type="checkbox" data-localhost="auto_card_placing" />
                         <br />
@@ -486,7 +486,7 @@
                         <br />
                         <button onclick="locallogin(true);">Change Username</button><br />
                         <button onclick="createmanifest();">Update Launcher</button><br />
-                        <!--<button onclick="require('nw.gui').App.clearCache();">Clear Cache</button>-->
+                        <button onclick="clearCacheRequest()">Clear Cache</button>
                     </div>
                 </div>
             </section>
