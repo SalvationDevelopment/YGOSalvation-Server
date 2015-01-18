@@ -45,7 +45,7 @@ function update() {
     fs.writeFile('manifest/ygopro.json', JSON.stringify(installation, null, 4), function () {
         //'use strict';
     });
-    process.title = 'Update Detection System[' + (new Date()).getTime() - startTime.getTime() + 'ms]';
+    process.title = 'Update Detection System[' + ((new Date()).getTime() - startTime.getTime()) + 'ms]';
 }
 setInterval(update, 60000);
 update();
