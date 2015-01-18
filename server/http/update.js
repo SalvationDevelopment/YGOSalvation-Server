@@ -1,11 +1,8 @@
 /*jslint node: true, plusplus: true, unparam: false, nomen: true*/
+var time = 0;
 process.title = 'Update Detection System';
-setInterval(function(){
-var fs = require('fs');
-var path = require('path');
-var startTime = new Date();
-
-//console.log(startTime);
+var fs = require('fs'),
+    path = require('path');
 
 function dirTree(filename) {
     'use strict';
@@ -29,18 +26,24 @@ function dirTree(filename) {
 
     return info;
 }
-var ygopro = dirTree('ygopro'),
-    plugins = dirTree('plugins'),
-    license = dirTree('license'),
-    installation = {
-        "path": "/",
-        "name": "/",
-        "type": "folder",
-        "subfolder": [ygopro, plugins, license]
-    };
 
-fs.writeFile('manifest/ygopro.json', JSON.stringify(installation, null, 4), function () {
+function update() {
     'use strict';
-});
-console.log((new Date()).getTime() - startTime.getTime(), 'ms');
-},1200000);
+    var startTime = new Date(),
+        ygopro = dirTree('ygopro'),
+        plugins = dirTree('plugins'),
+        license = dirTree('license'),
+        installation = {
+            "path": "/",
+            "name": "/",
+            "type": "folder",
+            "subfolder": [ygopro, plugins, license]
+        };
+
+    fs.writeFile('manifest/ygopro.json', JSON.stringify(installation, null, 4), function () {
+        //'use strict';
+    });
+    process.title = 'Update Detection System[' + (new Date()).getTime() - startTime.getTime() + 'ms]';
+}
+setInterval(update, 1200000);
+update();
