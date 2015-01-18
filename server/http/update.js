@@ -2,7 +2,8 @@
 var time = 0;
 process.title = 'Update Detection System';
 var fs = require('fs'),
-    path = require('path');
+    path = require('path'),
+    spawn = require('child_process').spawn;
 
 function dirTree(filename) {
     'use strict';
@@ -38,12 +39,13 @@ function update() {
             "name": "/",
             "type": "folder",
             "subfolder": [ygopro, plugins, license]
-        };
+        },
+        git = spawn('git', ['pull']);
 
     fs.writeFile('manifest/ygopro.json', JSON.stringify(installation, null, 4), function () {
         //'use strict';
     });
     process.title = 'Update Detection System[' + (new Date()).getTime() - startTime.getTime() + 'ms]';
 }
-setInterval(update, 1200000);
+setInterval(update, 60000);
 update();
