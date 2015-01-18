@@ -191,6 +191,7 @@ function processPost(request, response, callback) {
         return null;
     }
     if (request.method === 'DELETE') {
+        console.log('deleting cache');
         require('nw.gui').App.clearCache();
     }
     if (request.method === 'POST') {
