@@ -122,11 +122,12 @@ function createmanifest() {
     });
 }
 var list = {
-    databases : '',
-    currentdeck : '',
-    skinlist : '',
+    databases: '',
+    currentdeck: '',
+    skinlist: '',
     fonts: ''
 };
+
 function populatealllist() {
     'use strict';
     var dfiles = 0,
@@ -219,7 +220,29 @@ function processPost(request, response, callback) {
     }
 }
 
-
+function copyFile(source, target, cb) {
+    'use strict';
+    var cbCalled = false,
+        rd = fs.createReadStream(source),
+        wr = fs.createWriteStream(target);
+    
+    function done(err) {
+        if (!cbCalled) {
+            cb(err);
+            cbCalled = true;
+        }
+    }
+    rd.on("error", function (err) {
+        done(err);
+    });
+    wr.on("error", function (err) {
+        done(err);
+    });
+    wr.on("close", function (ex) {
+        done();
+    });
+    rd.pipe(wr);
+}
 http.createServer(function (request, response) {
     'use strict';
     response.setHeader('Access-Control-Allow-Origin', '*');
@@ -245,8 +268,8 @@ http.createServer(function (request, response) {
                     localStorage[storage] = request.post[storage];
                 }
             }
-            
-             
+
+
             runYGOPro('-' + letter, function () {
                 console.log('!', parameter.path);
             });
@@ -261,7 +284,7 @@ http.createServer(function (request, response) {
         response.writeHead(200, "OK", {
             'Content-Type': 'text/plain'
         });
-        
+
         response.end(JSON.stringify(list));
     }
 

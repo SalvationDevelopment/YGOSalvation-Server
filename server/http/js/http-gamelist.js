@@ -63,6 +63,7 @@ function applySettings() {
     });
     $('#skinlist').append('<option selected value="' + localStorage.skin_index + '">' + localStorage.skin_text + '</option>');
     $('#fontlist').append('<option selected value="' + localStorage.textfont + '">' + localStorage.textfont + '</option>');
+    $('#dblistlist').append('<option selected value="' + localStorage.database + '">' + localStorage.database + '</option>');
     $('#sound_volume').val(Number(localStorage.sound_volume));
     $('#music_volume').val(Number(localStorage.music_volume));
     $('#music_volume').val(Number(localStorage.textfontsize));
@@ -79,6 +80,7 @@ function saveSettings() {
     localStorage.skin_index = $('#skinlist').val();
     localStorage.skin_text = $('#skinlist option:selected').text();
     localStorage.font_text = $('#cfontlist option:selected').text();
+    localStorage.database = $('#dblist option:selected').text();
     localStorage.textfont = $('#fontlist').val();
     localStorage.sound_volume = $('#sound_volume').val();
     localStorage.music_volume = $('#music_volume').val();
