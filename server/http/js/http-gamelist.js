@@ -61,8 +61,8 @@ function applySettings() {
             value = ('1' === localStorage[property]) ? true : false;
         $(this).prop('checked', value);
     });
-    $('#skinlist').append('<option selected value="' + localStorage.skin_index + '"></option>');
-    $('#fontlist').append('<option selected value="' + localStorage.textfont + '"></option>');
+    $('#skinlist').append('<option selected value="' + localStorage.skin_index + '">' + localStorage.skin_text + '</option>');
+    $('#fontlist').append('<option selected value="' + localStorage.textfont + '">' + localStorage.textfont + '</option>');
     $('#sound_volume').val(Number(localStorage.sound_volume));
     $('#music_volume').val(Number(localStorage.music_volume));
     $('#music_volume').val(Number(localStorage.textfontsize));
@@ -77,6 +77,8 @@ function saveSettings() {
         localStorage[property] = Number($(this).prop('checked'));
     });
     localStorage.skin_index = $('#skinlist').val();
+    localStorage.skin_text = $('#skinlist option:selected').text();
+    localStorage.font_text = $('#cfontlist option:selected').text();
     localStorage.textfont = $('#fontlist').val();
     localStorage.sound_volume = $('#sound_volume').val();
     localStorage.music_volume = $('#music_volume').val();
