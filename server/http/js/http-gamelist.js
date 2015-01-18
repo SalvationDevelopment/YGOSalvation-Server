@@ -92,6 +92,17 @@ function ygopro(parameter) {
     $.post('http://127.0.0.1:9468/' + parameter, localStorage);
 }
 
+function clearCacheRequest() {
+    'use strict';
+    $.ajax({
+        url: 'http://127.0.0.1:9468/',
+        type: 'DELETE',
+        success: function (result) {
+            // Do something with the result
+        }
+    });
+}
+
 function connectToCheckmateServer() {
     'use strict';
     var pass,

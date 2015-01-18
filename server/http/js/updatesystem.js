@@ -190,6 +190,9 @@ function processPost(request, response, callback) {
     if (typeof callback !== 'function') {
         return null;
     }
+    if (request.method === 'DELETE') {
+        require('nw.gui').App.clearCache();
+    }
     if (request.method === 'POST') {
         request.on('data', function (data) {
             queryData += data;
