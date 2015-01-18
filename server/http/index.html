@@ -484,6 +484,10 @@
                         <label>Music Volume</label>
                         <input type="range" min="0" max="100" value="50" id="music_volume">
                         <br />
+                        <label>Database File</label>
+                        <select id="dblist">
+                        </select>
+                        <br />
                         <button onclick="locallogin(true);">Change Username</button><br />
                         <button onclick="createmanifest();">Update Launcher</button><br />
                         <button onclick="clearCacheRequest();">Clear Cache</button>
@@ -550,12 +554,15 @@
                     var selected = $( "#currentdeck option:selected" ).val();
                     var selectedskin = $( "#skinlist option:selected" ).val();
                     var selectedfont = $( "#fontlist option:selected" ).val();
+                    var selecteddb = $( "#dblist option:selected" ).val();
                     $('#currentdeck').html(data.currentdeck);
                     $('#skinlist').html(data.skinlist);
                     $('#fontlist').html(data.fonts);
+                    $('#dblist').html(data.databases);
                     $('#currentdeck option[value="' + selected + '"]').attr('selected', 'selected');
                     $('#skinlist option[value="' + selectedskin + '"]').attr('selected', 'selected');
                     $('#fontlist option[value="' + selectedfont + '"]').attr('selected', 'selected');
+                    $('#dblist option[value="' + selecteddb + '"]').attr('selected', 'selected');
                     //console.log(data);
                 }).fail(function () {
                     
@@ -564,6 +571,9 @@
             }
             console.log('nickname:', localStorage.nickname, 'after');
             
+        });
+        $( "#dblist" ).change(function() {
+          console.log( "Handler for .change() called." );
         });
     </script>
     <script src="js/http-gamelist.js"></script>
