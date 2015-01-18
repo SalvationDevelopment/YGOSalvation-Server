@@ -549,7 +549,7 @@
                 $.getJSON('http://localhost:9468/', function (data) {
                     var selected = $( "#currentdeck option:selected" ).val();
                     var selectedskin = $( "#skinlist option:selected" ).val();
-                    var selectedfont = $( "#skinlist option:selected" ).val();
+                    var selectedfont = $( "#fontlist option:selected" ).val();
                     $('#currentdeck').html(data.currentdeck);
                     $('#skinlist').html(data.skinlist);
                     $('#fontlist').html(data.fonts);

@@ -529,6 +529,10 @@ header {
     border-width: 1px;
     -webkit-animation: colorRotate 6s linear 0s infinite;
 }
+#settings select,
+#settings button {
+    width: 45%;
+}
 .game label {
     width: 150px;
     padding: 0px 30px 0px 0;
