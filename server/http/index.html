@@ -486,7 +486,7 @@
                         <br />
                         <button onclick="locallogin(true);">Change Username</button><br />
                         <button onclick="createmanifest();">Update Launcher</button><br />
-                        <button onclick="clearCacheRequest()">Clear Cache</button>
+                        <button onclick="clearCacheRequest();">Clear Cache</button>
                     </div>
                 </div>
             </section>
@@ -556,7 +556,7 @@
                     $('#currentdeck option[value="' + selected + '"]').attr('selected', 'selected');
                     $('#skinlist option[value="' + selectedskin + '"]').attr('selected', 'selected');
                     $('#fontlist option[value="' + selectedfont + '"]').attr('selected', 'selected');
-                    console.log(data);
+                    //console.log(data);
                 }).fail(function () {
                     
                 });
