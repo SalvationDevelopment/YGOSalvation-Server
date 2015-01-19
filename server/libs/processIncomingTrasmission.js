@@ -14,6 +14,7 @@ var portmin = 23500,
 
 if (cluster.isWorker) {
     process.on('message', function (message) {
+        'use strict';
         if (message.gamelist) {
             gamelist = message.gamelist;
         }
@@ -67,18 +68,19 @@ function connectToCore(port, data, socket) {
             }
         });
         socket.on('error', function (error) {
-            console.log(error);
+            console.log('::CLIENT', error);
             socket.active_ygocore.end();
         });
     });
     socket.active_ygocore.on('error', function (error) {
-         if (socket.alpha){
+        console.log('::CORE', error);
+        if (socket.alpha) {
             handleCoreMessage('::::endduel|' + socket.hostString, port, socket, data);
         }
         socket.end();
     });
     socket.active_ygocore.on('close', function () {
-        if (socket.alpha){
+        if (socket.alpha) {
             handleCoreMessage('::::endduel|' + socket.hostString, port, socket, data);
         }
         socket.end();
