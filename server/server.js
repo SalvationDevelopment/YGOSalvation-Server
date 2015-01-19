@@ -36,7 +36,7 @@ var ygoserver, //port 8911 ygopro Server
 
 function initiateMaster() {
     'use strict';
-    
+
 
     console.log('YGOPro Salvation Server - Saving Yu-Gi-Oh!'.bold.yellow);
     console.log('    Starting Master');
@@ -107,6 +107,14 @@ function initiateSlave() {
         });
         socket.setTimeout(300000, function () {
             socket.end(); //Security precaution
+        });
+        socket.on('error', function (error) {
+            console.log('::CLIENT', error);
+            try {
+                socket.active_ygocore.end();
+            } catch (e) {
+                console.log('::CLIENT ERROR Before connect', e);
+            }
         });
     });
     ygoserver.listen(8911);
