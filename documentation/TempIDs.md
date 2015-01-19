@@ -15,3 +15,5 @@ The following card ID's are not official and should be changed when a card is pr
 * 13790409 Sword Saint of the Nekroz - Sephira Saber
 * 13790406 Soprano the Melodious Songstress
 * 80100200 Dragoons of Draconia
+* 10820001 Utopia the Lightning
+* 10820002 Superheavy Samurai Tama-C
