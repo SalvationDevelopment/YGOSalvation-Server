@@ -29,7 +29,8 @@ function handleCoreMessage(core_message_raw, port) {
                 players: [],
                 locked: [false, false, false, false],
                 spectators: 0,
-                started: false
+                started: false,
+                time: new Date()
             };
 
         }
@@ -93,6 +94,9 @@ module.exports = function messageListener(message) {
     for (game in gamelist) {
         if (gamelist.hasOwnProperty(game)) {
             if (gamelist[game].players.length === 0 && gamelist[game].spectators.length === 0) {
+                delete gamelist[game];
+            }
+            if (((new Date()) - (gamelist[game].time))  > 600000) {
                 delete gamelist[game];
             }
         }
