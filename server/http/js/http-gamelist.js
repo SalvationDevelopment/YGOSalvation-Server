@@ -25,35 +25,6 @@ var settings = ['use_d3d',
                 'lastport'],
     localstorageIter = 0;
 
-for (localstorageIter; settings.length > localstorageIter; localstorageIter++) {
-    if (!localStorage[settings[localstorageIter]]) {
-        console.log('overwrite triggered on ', settings[localstorageIter]);
-        localStorage.use_d3d = '0';
-        localStorage.antialias = '0';
-        localStorage.errorlog = '0';
-        localStorage.nickname = 'Player';
-        localStorage.roompass = '';
-        localStorage.lastdeck = '';
-        localStorage.textfont = 'simhei.ttf';
-        localStorage.textfontsize = '12';
-        localStorage.numfont = 'arialbd.ttf';
-        localStorage.serverport = '8911';
-        localStorage.lastip = '127.0.0.1';
-        localStorage.lastport = '8911';
-        localStorage.fullscreen = '0';
-        localStorage.enable_sound = '1';
-        localStorage.sound_volume = '100';
-        localStorage.enable_music = '0';
-        localStorage.music_volume = '100';
-        localStorage.skin_index = '-1';
-        localStorage.auto_card_placing = '1';
-        localStorage.random_card_placing = '0';
-        localStorage.auto_chain_order = '1';
-        localStorage.no_delay_for_chain = '0';
-        localStorage.enable_sleeve_loading = '0';
-    }
-}
-
 function applySettings() {
     'use strict';
     $('[data-localhost]').each(function () {
@@ -92,6 +63,9 @@ var mode = "production",
 
 function ygopro(parameter) {
     'use strict';
+    localStorage.serverport = '8911';
+    localStorage.lastip = '127.0.0.1';
+    localStorage.lastport = '8911';
     saveSettings();
     $.post('http://127.0.0.1:9468/' + parameter, localStorage);
 }
