@@ -17,3 +17,4 @@ The following card ID's are not official and should be changed when a card is pr
 * 80100200 Dragoons of Draconia
 * 10820001 Utopia the Lightning
 * 10820002 Superheavy Samurai Tama-C
+* 10820010 Ritual Beast Ulti-Gaiapelio
