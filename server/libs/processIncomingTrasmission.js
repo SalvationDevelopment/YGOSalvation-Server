@@ -1,5 +1,6 @@
 /*jslint node: true, plusplus: true, unparam: false, nomen: true*/
-var portmin = 23500,
+var portmin = process.x * 100,
+    portmax = (process.x * 100) + 100,
     handleCoreMessage,
     startDirectory = __dirname,
     fs = require('fs'),
@@ -196,15 +197,15 @@ function processIncomingTrasmission(data, socket) {
 
         } else if (!gamelist[socket.hostString] && !socket.active_ygocore) {
             //console.log(socket.username + ' connecting to new core');
-            portfinder(++portmin, 27000, function (error, port) {
+            portfinder(++portmin, portmax, function (error, port) {
                 socket.alpha = true;
                 startCore(port, socket, data);
             });
         }
     }
     //console.log('process complete', gamelist);
-    if (portmin === 27000) {
-        portmin = 23500;
+    if (portmin === portmax) {
+        portmin = process.x * 100;
     }
 }
 
