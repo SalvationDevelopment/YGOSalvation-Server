@@ -64,7 +64,6 @@ var mode = "production",
 function ygopro(parameter) {
     'use strict';
     localStorage.serverport = '8911';
-    localStorage.lastip = '127.0.0.1';
     localStorage.lastport = '8911';
     saveSettings();
     $.post('http://127.0.0.1:9468/' + parameter, localStorage);

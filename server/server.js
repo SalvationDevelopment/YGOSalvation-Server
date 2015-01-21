@@ -48,6 +48,7 @@ function initiateMaster() {
         //'use strict';
         console.log(('        Starting Slave ' + x).grey);
         var worker = cluster.fork();
+        worker.x = x;
         worker.on('message', function (message) {
             if (message.messagetype === 'coreMessage') {
                 var rooms,
