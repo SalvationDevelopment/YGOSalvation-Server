@@ -22,9 +22,6 @@ if (cluster.isWorker) {
     });
 }
 
-
-
-
 function processTask(task, socket) {
     'use strict';
     var i = 0,
