@@ -10,6 +10,7 @@ function applySettings() {
         $(this).prop('checked', value);
     });
     $('#skinlist').append('<option selected value="' + localStorage.skin_index + '">' + localStorage.skin_text + '</option>');
+    $('#currentdeck').append('<option selected value="' + localStorage.lastdeck + '">' + localStorage.lastdeck + '</option>');
     $('#fontlist').append('<option selected value="' + localStorage.textfont + '">' + localStorage.textfont + '</option>');
     $('#dblistlist').append('<option selected value="' + localStorage.database + '">' + localStorage.database + '</option>');
     $('#sound_volume').val(Number(localStorage.sound_volume));
