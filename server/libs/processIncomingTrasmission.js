@@ -1,6 +1,6 @@
 /*jslint node: true, plusplus: true, unparam: false, nomen: true*/
-var portmin = process.x * 100,
-    portmax = (process.x * 100) + 100,
+var portmin = 30000 + process.env.PORTRANGE * 100,
+    portmax = (30000 +  process.env.PORTRANGE * 100) + 100,
     handleCoreMessage,
     startDirectory = __dirname,
     fs = require('fs'),
@@ -53,7 +53,7 @@ function connectToCore(port, data, socket) {
         socket.active_ygocore.setNoDelay(true);
         //console.log('linkup established');
         socket.active_ygocore.write(data);
-        //console.log('-->');
+        //console.log('-->', data.toString());
         socket.active = false;
         socket.active_ygocore.on('data', function (core_data) {
             socket.write(core_data);
@@ -148,7 +148,7 @@ function startCore(port, socket, data, callback) {
 
         var configfile = pickCoreConfig(socket),
             params = port + ' ' + configfile;
-        //console.log(' initiating core for ' + socket.username + ' on port:' + port + ' with: ' + configfile);
+        console.log(' initiating core for ' + socket.username + ' on port:' + port + ' with: ' + configfile);
         socket.core = childProcess.spawn(startDirectory + '/../ygocore/YGOServer.exe', [port, configfile], {
             cwd: startDirectory + '/../ygocore'
         }, function (error, stdout, stderr) {
@@ -180,6 +180,7 @@ function processIncomingTrasmission(data, socket) {
     processTask(task, socket);
 
     //console.log(socket.hostString);
+    //console.log((!socket.active_ygocore),(gamelist[socket.hostString] && !socket.active_ygocore),(!gamelist[socket.hostString] && !socket.active_ygocore))
     if (!socket.active_ygocore) {
         try {
             console.log(createDateString(), socket.username, socket.hostString);
@@ -194,6 +195,7 @@ function processIncomingTrasmission(data, socket) {
 
         } else if (!gamelist[socket.hostString] && !socket.active_ygocore) {
             //console.log(socket.username + ' connecting to new core');
+            
             portfinder(++portmin, portmax, function (error, port) {
                 socket.alpha = true;
                 startCore(port, socket, data);
@@ -202,7 +204,7 @@ function processIncomingTrasmission(data, socket) {
     }
     //console.log('process complete', gamelist);
     if (portmin === portmax) {
-        portmin = process.x * 100;
+        portmin = 30000 + process.env.PORTRANGE * 100;
     }
 }
 
