@@ -14,6 +14,7 @@
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width">
     <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/2.0.0/handlebars.min.js"></script>
     <link href="http://fonts.googleapis.com/css?family=Roboto:400,100,100italic,300,300italic,400italic,500,500italic,700,700italic,900" rel="stylesheet" type="text/css">
     <link href="http://fonts.googleapis.com/css?family=Poiret+One" rel="stylesheet" type="text/css">
     <link href='http://fonts.googleapis.com/css?family=Alegreya+Sans+SC:100,400,800,900' rel='stylesheet' type='text/css'>
@@ -220,9 +221,6 @@
             <li class="launcheronly"><span class="psudolinksingle" onclick="singlesitenav('settings')">Settings</span>
             </li>
         </ul>
-        
-        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/swfobject/2.2/swfobject.js"></script>
-        <script type="text/javascript" src="lightIRC/config.js"></script>
         <section id="hostSettings">
             <div>
                 <h2>Settings</h2>
@@ -461,7 +459,7 @@
                         <input type="checkbox" data-localhost="antialias" />
                         <br />
                         <label>Font Size</label>
-                        <input type="range" min="8" max="18" value="10" id="fontsize">
+                        <input type="range" min="8" max="18" value="12" id="fontsize">
                         <br />
                         <label>Font</label>
                         <select id="fontlist">
@@ -544,7 +542,6 @@
 
             }
         $(document).ready(function () {
-            console.log('nickname:', localStorage.nickname);
 
             
             if (launcher) {
@@ -569,11 +566,7 @@
                 });
             },10000);
             }
-            console.log('nickname:', localStorage.nickname, 'after');
             
-        });
-        $( "#dblist" ).change(function() {
-          console.log( "Handler for .change() called." );
         });
     </script>
     <script src="js/http-gamelist.js"></script>

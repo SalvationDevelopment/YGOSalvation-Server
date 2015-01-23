@@ -32,7 +32,7 @@ var url = require('url');
 var child_process = require('child_process');
 var fs = require('fs');
 var operating_system = os.platform();
-console.log(process.execPath);
+
 var platform = {
     darwin: 'application_mac_ygopro',
     linux: 'application_ygopro',
@@ -41,7 +41,7 @@ var platform = {
 };
 
 var executable = platform[operating_system] || 'ygopro';
-console.log(operating_system, executable);
+
 if (operating_system === 'linux' || operating_system === 'darwin') {
     fs.chmod('./ygopro/' + executable, '0777', function (error) {
         if (error) console.log(error);
@@ -96,7 +96,7 @@ for (var i = 0; settings.length > i; i++) {
         localStorage.enable_sleeve_loading = '0';
     }
 }
-console.log('Starting Offline Server');
+
 http.createServer(function (request, response) {
     var parameter = url.parse(request.url);
     var letter = parameter.path.slice(-1);

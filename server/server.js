@@ -40,7 +40,7 @@ function initiateMaster() {
 
     console.log('YGOPro Salvation Server - Saving Yu-Gi-Oh!'.bold.yellow);
     console.log('    Starting Master');
-    process.title = 'YGOPro Salvation Server [' + activegames + ']';
+    process.title = 'YGOPro Salvation Server [' + activegames + '] ' + new Date();
     ircManager = require('./libs/ircbot.js');
     gamelistManager = require('./libs/gamelist.js');
 

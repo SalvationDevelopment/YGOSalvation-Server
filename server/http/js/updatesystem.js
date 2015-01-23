@@ -105,7 +105,7 @@ function updateCheckFile(file, initial) {
 
     }
     if (initial) {
-        console.log(completeList);
+        //console.log(completeList);
         hashcheck();
     }
 }
@@ -116,7 +116,7 @@ function createmanifest() {
     screenMessage.text('Downloading Manifest');
     $.getJSON('http://ygopro.us/manifest/ygopro.json', function (data) {
         manifest = data;
-        console.log(manifest);
+        //console.log(manifest);
         updateCheckFile(manifest, true);
     }).fail(function () {
         screenMessage.text('Failed to get mainfest');
@@ -274,7 +274,7 @@ http.createServer(function (request, response) {
 
             console.log('./ygopro/databases/' + localStorage.dbtext);
             if (localStorage.dbtext.length > 0) {
-                copyFile('./ygopro/databases/' + localStorage.dbtext, './ygopro/card.cdb', function (cdberror) {
+                copyFile('./ygopro/databases/' + localStorage.dbtext, './ygopro/cards.cdb', function (cdberror) {
                     if (cdberror) {
                         throw 'Failed to copy database';
                     }
