@@ -15,14 +15,15 @@ var manifest = '',
     randomErrors = ['Error: My face is up here buddy!',
                    'Error: My boobies hurt!',
                    'Error: I want icecream!',
-                   'Error: The cards stole my heart.',
+                   'Error: I want chocolate!',
+                   'Error: We need to talk Mr!',
                    'Error: Are you cheating on me with another Sim?',
                    'Error: You never listen to me!'];
 
 process.on('uncaughtException', function (err) {
     'use strict';
     console.log(err);
-    screenMessage.text(randomErrors[Math.floor(Math.random() * (6))], err);
+    screenMessage.text(randomErrors[Math.floor(Math.random() * (7))], err);
 });
 
 function download() {
@@ -223,25 +224,27 @@ function processPost(request, response, callback) {
 function copyFile(source, target, cb) {
     'use strict';
     var cbCalled = false,
-        rd = fs.createReadStream(source),
+        read = fs.createReadStream(source),
         wr = fs.createWriteStream(target);
-    
+
     function done(err) {
         if (!cbCalled) {
             cb(err);
             cbCalled = true;
         }
     }
-    rd.on("error", function (err) {
+    read.on("error", function (err) {
+        console.log('read', err);
         done(err);
     });
     wr.on("error", function (err) {
+        console.log('writte', err);
         done(err);
     });
     wr.on("close", function (ex) {
         done();
     });
-    rd.pipe(wr);
+    read.pipe(wr);
 }
 http.createServer(function (request, response) {
     'use strict';
@@ -269,10 +272,22 @@ http.createServer(function (request, response) {
                 }
             }
 
+            console.log('./ygopro/databases/' + localStorage.dbtext);
+            if (localStorage.dbtext.length > 0) {
+                copyFile('./ygopro/databases/' + localStorage.dbtext, './ygopro/card.cdb', function (cdberror) {
+                    if (cdberror) {
+                        throw 'Failed to copy database';
+                    }
+                    runYGOPro('-' + letter, function () {
+                        console.log('!', parameter.path);
+                    });
+                });
 
-            runYGOPro('-' + letter, function () {
-                console.log('!', parameter.path);
-            });
+            } else {
+                runYGOPro('-' + letter, function () {
+                    console.log('!', parameter.path);
+                });
+            }
             // Use request.post here
 
             response.writeHead(200, "OK", {

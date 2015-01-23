@@ -1,29 +1,6 @@
 /*jslint plusplus: true*/
 /*global localStorage, $, Primus, prompt, console*/
-var settings = ['use_d3d',
-                'antialias',
-                'errorlog',
-                'nickname',
-                'roompass',
-                'lastdeck',
-                'textfont',
-                'numfont',
-                'fullscreen',
-                'enable_sound',
-                'sound_volume',
-                'enable_music',
-                'music_volume',
-                'skin_index',
-                'auto_card_placing',
-                'random_card_placing',
-                'auto_chain_order',
-                'no_delay_for_chain',
-                'enable_sleeve_loading',
-                'serverport',
-                'lastip',
-                'textfontsize',
-                'lastport'],
-    localstorageIter = 0;
+var localstorageIter = 0;
 
 function applySettings() {
     'use strict';
@@ -37,7 +14,8 @@ function applySettings() {
     $('#dblistlist').append('<option selected value="' + localStorage.database + '">' + localStorage.database + '</option>');
     $('#sound_volume').val(Number(localStorage.sound_volume));
     $('#music_volume').val(Number(localStorage.music_volume));
-    $('#music_volume').val(Number(localStorage.textfontsize));
+    $('#fontsize').val(Number(localStorage.textfontsize));
+    $('#dblist').val(Number(localStorage.dblist));
 }
 
 applySettings();
@@ -56,6 +34,8 @@ function saveSettings() {
     localStorage.sound_volume = $('#sound_volume').val();
     localStorage.music_volume = $('#music_volume').val();
     localStorage.textfontsize = $('#fontsize').val();
+    localStorage.dblist = $('#dblist').val();
+    localStorage.dbtext = $('#dblist option:selected').text();
 }
 var mode = "production",
     gamelistcache,
@@ -150,12 +130,6 @@ function enterGame(string) {
 
 
 
-function closeAllScreens() {
-    'use strict';
-    $('#salvationdevelopment').css('display', 'block');
-    $('#staticbar section').css('display', 'none');
-
-}
 
 function randomString(len, charSet) {
     'use strict';
