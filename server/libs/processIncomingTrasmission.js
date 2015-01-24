@@ -108,7 +108,7 @@ function portfinder(min, max, callback) {
 function pickCoreConfig(socket) {
     'use strict';
     var output = '';
-    if (socket.hostString[0] > '4') {
+    if (socket.hostString[0] > '2') {
         return output + socket.hostString[0] + '-config.txt';
     } else {
         /*load default configuration */
