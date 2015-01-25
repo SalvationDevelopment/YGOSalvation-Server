@@ -83,16 +83,7 @@ function initiateMaster() {
 
 function initiateSlave() {
     'use strict';
-    staticserv = require('node-static');
-    //listen on 80, main http server is clustered.
-    httpServer = new staticserv.Server('./http');
-    http.createServer(function (request, response) {
-        request.addListener('end', function () {
-            httpServer.serve(request, response);
-        }).resume();
-    }).listen(80);
-
-
+    
     // When a user connects, create an instance and allow the to duel, clean up after.
     ygoserver = net.createServer(function (socket) {
         socket.setNoDelay(true);
