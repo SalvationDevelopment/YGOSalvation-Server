@@ -24,24 +24,34 @@
 
 
     <script>
-        function singlesitenav(target) {
-            console.log(target)
+        function singlesitenav (target) {
+            console.log(target, event)
+            if (launcher && target === 'forum'){
+                event.preventDefault();
+            }else if (!launcher && target === 'forum'){
+                return true;
+            }
             $('header').css('top', '100vh');
             $('#' + target).css('top', '0');
             saveSettings();
+            if (target = 'home') {
+                $('#psudologo').css('display', 'inline');
+            } else {
+                $('#psudologo').css('display', 'none');
+            }
+            return false;
         }
     </script>
 
 </head>
 
 <body>
-
-    <header style="padding-top:10px;top:0vh;" id='home'>
-
-        <div style="font-size:1.2em">
-            <br />
-        </div>
-        <ul class="featurelist" style="font-size:small; margin-top: -4px;">
+    <div style="z-index:40; position:relative;">
+        <span class="psudolinksingle" onclick="singlesitenav('home')" id='psudologo' style='display:none;'>
+            <h1 style="font-size:1.2em">
+            <span style="color:#e4a;">YGOPro</span> Salvation Server</h1>
+        </span>
+        <ul class="featurelist" style="font-size:small">
             <li class="launcheronly"><span class="psudolinksingle " onclick='ygopro("-l")'>LAN Mode</span>
             </li>
             <li class="launcheronly"><span class="psudolinksingle" onclick='ygopro("-d")'>Deck Edit</span>
@@ -52,7 +62,7 @@
             </li>
             <li class="launcheronly"><span class="psudolinksingle" onclick="singlesitenav('host')">Host</span>
             </li>
-            <li><span class="psudolinksingle" onclick="singlesitenav('forum')">Forum</span>
+            <li><a class="psudolinksingle" style='text-decoration:none' onclick="singlesitenav('forum')" target="_blank" href="http://forum.ygopro.us">Forum</a>
             </li>
             <li><span class="psudolinksingle" onclick="singlesitenav('chat')">Chat</span>
             </li>
@@ -61,6 +71,13 @@
             <li class="launcheronly"><span class="psudolinksingle" onclick="singlesitenav('settings')">Settings</span>
             </li>
         </ul>
+    </div>
+    <header style="padding-top:50px;top:0vh;" id='home'>
+
+        <div style="font-size:1.2em">
+            <br />
+        </div>
+
         <span class="psudolinksingle" onclick="singlesitenav('home')">
                 <h1 style="padding-top:140px;">
             <span style="color:#e4a;">YGOPro</span> Salvation Server</h1>
@@ -98,31 +115,10 @@
         <div style="font-size:.5em; text-align:center; color:#747" id="versioninfo">Version 4 : Production 1 : Revision 0</div>
         <div style="font-size:1.5em; text-align:center; color:pink" class='webonly'></div>
     </header>
-    <header style="padding-top:10px" id="gamelist">
-        <span class="psudolinksingle" onclick="singlesitenav('home')"><h1 style="font-size:1.2em">
-            <span style="color:#e4a;">YGOPro</span> Salvation Server</h1>
-        </span>
-        <ul class="featurelist" style="font-size:small">
-            <li class="launcheronly"><span class="psudolinksingle " onclick='ygopro("-l")'>LAN Mode</span>
-            </li>
-            <li class="launcheronly"><span class="psudolinksingle" onclick='ygopro("-d")'>Deck Edit</span>
-            </li>
-            <li class="launcheronly"><span class="psudolinksingle" onclick='ygopro("-r")'>Replays</span>
-            </li>
-            <li><span class="psudolinksingle" onclick="joinGamelist();singlesitenav('gamelist');">Game List</span>
-            </li>
-            <li class="launcheronly"><span class="psudolinksingle" onclick="singlesitenav('host')">Host</span>
-            </li>
-            <li><span class="psudolinksingle" onclick="singlesitenav('forum')">Forum</span>
-            </li>
-            <li><span class="psudolinksingle" onclick="singlesitenav('chat')">Chat</span>
-            </li>
-            <li><span class="psudolinksingle" onclick="singlesitenav('faq')">FAQ</span>
-            </li>
-            <li class="launcheronly"><span class="psudolinksingle" onclick="singlesitenav('settings')">Settings</span>
-            </li>
-        </ul>
-        
+    <header style="padding-top:50px" id="gamelist">
+
+
+
         <section id='gamelistsection'>
             <div id="gamelistitems"></div>
             <div id="gamefilter" class="launcheronly">
@@ -197,30 +193,8 @@
 
 
     </header>
-    <header style="padding-top:10px" id="host">
-        <span class="psudolinksingle" onclick="singlesitenav('home')"><h1 style="font-size:1.2em">
-            <span style="color:#e4a;">YGOPro</span> Salvation Server</h1>
-        </span>
-        <ul class="featurelist" style="font-size:small">
-            <li class="launcheronly"><span class="psudolinksingle " onclick='ygopro("-l")'>LAN Mode</span>
-            </li>
-            <li class="launcheronly"><span class="psudolinksingle" onclick='ygopro("-d")'>Deck Edit</span>
-            </li>
-            <li class="launcheronly"><span class="psudolinksingle" onclick='ygopro("-r")'>Replays</span>
-            </li>
-            <li><span class="psudolinksingle" onclick="joinGamelist();singlesitenav('gamelist');">Game List</span>
-            </li>
-            <li class="launcheronly"><span class="psudolinksingle" onclick="singlesitenav('host')">Host</span>
-            </li>
-            <li><span class="psudolinksingle" onclick="singlesitenav('forum')">Forum</span>
-            </li>
-            <li><span class="psudolinksingle" onclick="singlesitenav('chat')">Chat</span>
-            </li>
-            <li><span class="psudolinksingle" onclick="singlesitenav('faq')">FAQ</span>
-            </li>
-            <li class="launcheronly"><span class="psudolinksingle" onclick="singlesitenav('settings')">Settings</span>
-            </li>
-        </ul>
+    <header style="padding-top:50px" id="host">
+
         <section id="hostSettings">
             <div>
                 <h2>Settings</h2>
@@ -303,59 +277,14 @@
             </div>
         </section>
     </header>
-    <header style="padding-top:10px" id="forum">
-        <span class="psudolinksingle" onclick="singlesitenav('home')"><h1 style="font-size:1.2em">
-            <span style="color:#e4a;">YGOPro</span> Salvation Server</h1>
-        </span>
-        <ul class="featurelist" style="font-size:small">
-            <li class="launcheronly"><span class="psudolinksingle " onclick='ygopro("-l")'>LAN Mode</span>
-            </li>
-            <li class="launcheronly"><span class="psudolinksingle" onclick='ygopro("-d")'>Deck Edit</span>
-            </li>
-            <li class="launcheronly"><span class="psudolinksingle" onclick='ygopro("-r")'>Replays</span>
-            </li>
-            <li><span class="psudolinksingle" onclick="joinGamelist();singlesitenav('gamelist');">Game List</span>
-            </li>
-            <li class="launcheronly"><span class="psudolinksingle" onclick="singlesitenav('host')">Host</span>
-            </li>
-            <li><span class="psudolinksingle" onclick="singlesitenav('forum')">Forum</span>
-            </li>
-            <li><span class="psudolinksingle" onclick="singlesitenav('chat')">Chat</span>
-            </li>
-            <li><span class="psudolinksingle" onclick="singlesitenav('faq')">FAQ</span>
-            </li>
-            <li class="launcheronly"><span class="psudolinksingle" onclick="singlesitenav('settings')">Settings</span>
-            </li>
-        </ul>
-        
-        <iframe src="http://ygopro.us:8080/forums/" height="100%" width="100%" style="min-height: 422px; border: none;"></iframe>
+    <header style="padding-top:50px" id="forum">
+
+        <iframe src="http://forums.ygopro.us" height="100%" width="100%" style="min-height: 422px; border: none;"></iframe>
 
     </header>
-    <header style="padding-top:10px" id="chat">
-        <span class="psudolinksingle" onclick="singlesitenav('home')"><h1 style="font-size:1.2em">
-            <span style="color:#e4a;">YGOPro</span> Salvation Server</h1>
-        </span>
-        <ul class="featurelist" style="font-size:small">
-            <li class="launcheronly"><span class="psudolinksingle " onclick='ygopro("-l")'>LAN Mode</span>
-            </li>
-            <li class="launcheronly"><span class="psudolinksingle" onclick='ygopro("-d")'>Deck Edit</span>
-            </li>
-            <li class="launcheronly"><span class="psudolinksingle" onclick='ygopro("-r")'>Replays</span>
-            </li>
-            <li><span class="psudolinksingle" onclick="joinGamelist();singlesitenav('gamelist');">Game List</span>
-            </li>
-            <li class="launcheronly"><span class="psudolinksingle" onclick="singlesitenav('host')">Host</span>
-            </li>
-            <li><span class="psudolinksingle" onclick="singlesitenav('forum')">Forum</span>
-            </li>
-            <li><span class="psudolinksingle" onclick="singlesitenav('chat')">Chat</span>
-            </li>
-            <li><span class="psudolinksingle" onclick="singlesitenav('faq')">FAQ</span>
-            </li>
-            <li class="launcheronly"><span class="psudolinksingle" onclick="singlesitenav('settings')">Settings</span>
-            </li>
-        </ul>
-        
+    <header style="padding-top:50px" id="chat">
+
+
         <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/swfobject/2.2/swfobject.js"></script>
         <script type="text/javascript" src="lightIRC/config.js"></script>
         <div id="lightIRC" style="height:92%; text-align:center;">
@@ -366,68 +295,23 @@
             });
         </script>
     </header>
-    <header style="padding-top:10px" id="faq">
-        <span class="psudolinksingle" onclick="singlesitenav('home')">
-            <h1 style="font-size:1.2em">
-            <span style="color:#e4a;">YGOPro</span> Salvation Server</h1>
-        </span>
-        <ul class="featurelist" style="font-size:small">
-            <li class="launcheronly"><span class="psudolinksingle " onclick='ygopro("-l")'>LAN Mode</span>
-            </li>
-            <li class="launcheronly"><span class="psudolinksingle" onclick='ygopro("-d")'>Deck Edit</span>
-            </li>
-            <li class="launcheronly"><span class="psudolinksingle" onclick='ygopro("-r")'>Replays</span>
-            </li>
-            <li><span class="psudolinksingle" onclick="joinGamelist();singlesitenav('gamelist');">Game List</span>
-            </li>
-            <li class="launcheronly"><span class="psudolinksingle" onclick="singlesitenav('host')">Host</span>
-            </li>
-            <li><span class="psudolinksingle" onclick="singlesitenav('forum')">Forum</span>
-            </li>
-            <li><span class="psudolinksingle" onclick="singlesitenav('chat')">Chat</span>
-            </li>
-            <li><span class="psudolinksingle" onclick="singlesitenav('faq')">FAQ</span>
-            </li>
-            <li class="launcheronly"><span class="psudolinksingle" onclick="singlesitenav('settings')">Settings</span>
-            </li>
-        </ul>
-        
+    <header style="padding-top:50px" id="faq">
+
+
         <div style="color:white; width:600px; margin:0 auto;">
-            <p>Q: How do I install the MacOSX version?<br>A: Install brew, then install freetype via brew. It should then work.</p>
+            <p>Q: How do I install the MacOSX version?
+                <br>A: Install brew, then install freetype via brew. It should then work.</p>
         </div>
     </header>
-    <header style="padding-top:10px" id="settings">
-        <span class="psudolinksingle" onclick="singlesitenav('home')">
-            <h1 style="font-size:1.2em">
-            <span style="color:#e4a;">YGOPro</span> Salvation Server</h1>
-        </span>
-        <ul class="featurelist" style="font-size:small">
-            <li class="launcheronly"><span class="psudolinksingle " onclick='ygopro("-l")'>LAN Mode</span>
-            </li>
-            <li class="launcheronly"><span class="psudolinksingle" onclick='ygopro("-d")'>Deck Edit</span>
-            </li>
-            <li class="launcheronly"><span class="psudolinksingle" onclick='ygopro("-r")'>Replays</span>
-            </li>
-            <li><span class="psudolinksingle" onclick="joinGamelist();singlesitenav('gamelist');">Game List</span>
-            </li>
-            <li class="launcheronly"><span class="psudolinksingle" onclick="singlesitenav('host')">Host</span>
-            </li>
-            <li><span class="psudolinksingle" onclick="singlesitenav('forum')">Forum</span>
-            </li>
-            <li><span class="psudolinksingle" onclick="singlesitenav('chat')">Chat</span>
-            </li>
-            <li><span class="psudolinksingle" onclick="singlesitenav('faq')">FAQ</span>
-            </li>
-            <li class="launcheronly"><span class="psudolinksingle" onclick="singlesitenav('settings')">Settings</span>
-            </li>
-        </ul>
+    <header style="padding-top:50px" id="settings">
+
         <h3 style="text-align:center; color:silver">Game Settings</h3>
         <div style="color:#a07; width:720px; margin:0 auto;">
             <section id="settings">
                 <div class='section-content'>
 
                     <div style="width:50%; float:left;">
-                        
+
                         <label>Auto Card Placement</label>
                         <input type="checkbox" data-localhost="auto_card_placing" />
                         <br />
@@ -469,10 +353,11 @@
                         <label>Skin</label>
                         <select id="skinlist">
                             <option value="default">Default</option>
-                        </select><br />
-                        
-                        
-                        
+                        </select>
+                        <br />
+
+
+
                         <br />
                     </div>
                     <div style="width:50%; float:left;">
@@ -486,8 +371,10 @@
                         <select id="dblist">
                         </select>
                         <br />
-                        <button onclick="locallogin(true);">Change Username</button><br />
-                        <button onclick="createmanifest();">Update Launcher</button><br />
+                        <button onclick="locallogin(true);">Change Username</button>
+                        <br />
+                        <button onclick="createmanifest();">Update Launcher</button>
+                        <br />
                         <button onclick="clearCacheRequest();">Clear Cache</button>
                     </div>
                 </div>
@@ -529,44 +416,45 @@
                 $(document.body).addClass("web");
             }
         });
-        function locallogin(init) {
-                'use strict';
-                localStorage.nickname = localStorage.nickname || '';
-                if (localStorage.nickname.length < 1 || init === true) {
-                    var username = prompt('Username: ', localStorage.nickname);
-                    while (!username) {
-                        username = prompt('Username: ', localStorage.nickname);
-                    }
-                    localStorage.nickname = username;
-                }
 
+        function locallogin(init) {
+            'use strict';
+            localStorage.nickname = localStorage.nickname || '';
+            if (localStorage.nickname.length < 1 || init === true) {
+                var username = prompt('Username: ', localStorage.nickname);
+                while (!username) {
+                    username = prompt('Username: ', localStorage.nickname);
+                }
+                localStorage.nickname = username;
             }
+
+        }
         $(document).ready(function () {
 
-            
+
             if (launcher) {
                 locallogin(true);
                 setInterval(function () {
-                $.getJSON('http://localhost:9468/', function (data) {
-                    var selected = $( "#currentdeck option:selected" ).val();
-                    var selectedskin = $( "#skinlist option:selected" ).val();
-                    var selectedfont = $( "#fontlist option:selected" ).val();
-                    var selecteddb = $( "#dblist option:selected" ).val();
-                    $('#currentdeck').html(data.currentdeck);
-                    $('#skinlist').html(data.skinlist);
-                    $('#fontlist').html(data.fonts);
-                    $('#dblist').html(data.databases);
-                    $('#currentdeck option[value="' + selected + '"]').attr('selected', 'selected');
-                    $('#skinlist option[value="' + selectedskin + '"]').attr('selected', 'selected');
-                    $('#fontlist option[value="' + selectedfont + '"]').attr('selected', 'selected');
-                    $('#dblist option[value="' + selecteddb + '"]').attr('selected', 'selected');
-                    //console.log(data);
-                }).fail(function () {
-                    
-                });
-            },10000);
+                    $.getJSON('http://localhost:9468/', function (data) {
+                        var selected = $("#currentdeck option:selected").val();
+                        var selectedskin = $("#skinlist option:selected").val();
+                        var selectedfont = $("#fontlist option:selected").val();
+                        var selecteddb = $("#dblist option:selected").val();
+                        $('#currentdeck').html(data.currentdeck);
+                        $('#skinlist').html(data.skinlist);
+                        $('#fontlist').html(data.fonts);
+                        $('#dblist').html(data.databases);
+                        $('#currentdeck option[value="' + selected + '"]').attr('selected', 'selected');
+                        $('#skinlist option[value="' + selectedskin + '"]').attr('selected', 'selected');
+                        $('#fontlist option[value="' + selectedfont + '"]').attr('selected', 'selected');
+                        $('#dblist option[value="' + selecteddb + '"]').attr('selected', 'selected');
+                        //console.log(data);
+                    }).fail(function () {
+
+                    });
+                }, 10000);
             }
-            
+
         });
     </script>
     <script src="js/http-gamelist.js"></script>
