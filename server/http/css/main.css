@@ -453,14 +453,6 @@ ul#mirrors {
     width: 287px;
     margin: 0 auto;
 }
-article {
-    width: 50%;
-    float: left;
-    text-align: justify;
-    padding: 20px;
-    height: 300px;
-    margin-bottom: 100px;
-}
 .container footer {
     float: left;
     text-align: center;
@@ -1079,15 +1071,20 @@ div#gamelist {
     margin: 0 auto;
     color: white;
     font-family: Roboto, sans-serif;
+    margin-top:40px;
 }
 #news h3 {
     text-align: center;
-    font-size: .8em;
+    
     margin: 0;
     font-weight: 100;
 }
 #news h2 {
-    padding-bottom: 0;
+
+}
+.newscontent {
+    font-size: .8em;
+    text-align: justify;
 }
 /* =========================================
 =================================
