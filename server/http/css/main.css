@@ -1065,7 +1065,7 @@ div#gamelist {
 }
 .in-iframe div#gamelist {
     width: 70vw;
-    float:left;
+    float: left;
     margin: auto;
 }
 .in-iframe {
@@ -1074,9 +1074,14 @@ div#gamelist {
 #home {
     overflow: auto;
 }
-#home article{
-    width:100%;
-    color:white;
+#home article {
+    width: 100%;
+    color: white;
+}
+#new h3 {
+    font-family: Roboto, sans-serif;
+    text-align: center;
+    font-size: .8;
 }
 /* =========================================
 =================================
