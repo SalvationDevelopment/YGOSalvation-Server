@@ -1,13 +1,13 @@
 {
-    Articles: [
+    "Articles": [
         {
-            Title: "Anime Cards Released",
-            Subtitle: "Salvation Releases New Series of Anime based cards.",
-            Content: ""
+            "Title": "Anime Cards Released",
+            "Subtitle": "Salvation Releases New Series of Anime based cards.",
+            "Content": ""
         },{
-            Title: "Welcome to Salvation",
-            Subtitle: "A new Yu-Gi-Oh! Simulator",
-            Content: ""
+            "Title": "Welcome to Salvation",
+            "Subtitle": "A new Yu-Gi-Oh! Simulator",
+            "Content": ""
         }
     ]
 }
