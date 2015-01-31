@@ -456,7 +456,7 @@
                 }, 10000);
             }
             $.getJSON('news.json',function(news){
-                $.getJSON('handlebars/news.handlebars',function(template){
+                $.get('handlebars/news.handlebars',function(template){
                     var parser = Handlebars.compile (template);
                     $('#news').append (parser(news));
                 });

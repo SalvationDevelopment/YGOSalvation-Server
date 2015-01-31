@@ -1071,6 +1071,13 @@ div#gamelist {
 .in-iframe {
     float: left
 }
+#home {
+    overflow: auto;
+}
+#home article{
+    width:100%;
+    color:white;
+}
 /* =========================================
 =================================
    Media Queries
