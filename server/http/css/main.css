@@ -1075,13 +1075,19 @@ div#gamelist {
     overflow: auto;
 }
 #home article {
-    width: 100%;
+    max-width: 920px;
+    margin: 0 auto;
     color: white;
-}
-#new h3 {
     font-family: Roboto, sans-serif;
+}
+#news h3 {
     text-align: center;
-    font-size: .8;
+    font-size: .8em;
+    margin: 0;
+    font-weight: 100;
+}
+#news h2 {
+    padding-bottom: 0;
 }
 /* =========================================
 =================================
