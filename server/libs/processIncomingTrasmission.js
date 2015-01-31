@@ -132,6 +132,9 @@ function handleCoreMessage(core_message_raw, port, socket, data) {
     if (core_message[0].trim() === '::::network-ready') {
         connectToCore(port, data, socket);
     }
+    if (core_message[0].trim() === '::::end-duel') {
+        socket.core.kill();
+    }
 
     process.send(gamelistmessage);
 }
@@ -158,6 +161,7 @@ function startCore(port, socket, data, callback) {
         socket.core.stdout.on('error', function (error) {
             console.log(error);
             handleCoreMessage('::::endduel|' + socket.hostString, port, socket, data);
+            socket.core.kill();
         });
         socket.core.stdout.on('data', function (core_message_raw) {
             handleCoreMessage(core_message_raw, port, socket, data);

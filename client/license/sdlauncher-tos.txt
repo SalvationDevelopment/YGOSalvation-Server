@@ -1,24 +1,7 @@
-TERMS OF SERVICE
-The Following is the Terms of Service of SalvationDevelopment that all Users have agreed to upon Installation. The Terms of Service is simply a list of guidelines or rules that all Users are expected to follow on SalvationDevelopment, as well as anything officially affiliated with SalvationDevelopment.
-——————————————————————————-
-Summary
-1. Mistreating and abuse of the software and/or site will lead to a ban.
-2. Users MUST be over the age of 17 years old.
-3. All content within the program and/or site is under Copyright protection.
-4. We reserve the right to remove you from our services at ANY time for ANY reason we see fit.
-5. You don’t have the right to complain if something doesn’t work, or doesn’t work as you want it to.
-6. We will update at our leisure, and if its wrong, we aren’t liable, we also don’t claim anything within our system and/or site to be correct.
-7. Feel free to adjust the software to your liking, if you have improvements of your own we’d probably like to hear about them.
-8. We make the rules and maintain them, not you, if you don’t like this, leave now.
-9. For anything not mentioned, see below or contact an admin.
+﻿TERMS OF SERVICE
+The Following is the Terms of Service of SalvationDevelopment that all Users have agreed to upon Installation.
 
 Owners, Developers, Investors, and Interns, Volenteers, and users of higher than standard ranking, access, or otherwise listed within the site, the site, the launcher, server side software, and /or launcher, are hereafter known as SalvationDevelopment, administration, and or software where context is appropriate.
-
-Behavioral Policy
-
-Non-Staff Users will be unconditionally banned if they are found to be harassing other users, abnormally using the software in a way that detrimentally effects the network, other user experience, rights, and/or privacy.
-
-In addition developers and administration may ban and enforce terms of service indiscriminately as they see fit, but please note these individuals do not take the ability of being able to do so in a light matter, nor use it purely for amusement. It is used strictly for the protection of themselves and others. Appointed staff and only appointed staff may enforce the software’s rules.
 
 Privacy Policy
 
@@ -78,6 +61,6 @@ SalvationDevelopment may revise these terms of use for its web site at any time 
 
 8. Governing Law
 
-Any claim relating to SalvationDevelopment’s web site shall be governed by the laws of the State of Delaware without regard to its conflict of law provisions.
+Any claim relating to SalvationDevelopment’s web site shall be governed by the laws of the State of North Caroline without regard to its conflict of law provisions.
 
 General Terms and Conditions applicable to Use of a Web Site.
