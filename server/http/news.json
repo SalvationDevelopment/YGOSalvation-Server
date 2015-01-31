@@ -2,13 +2,16 @@
     "Articles": [
         {
             "Title": "Anime Cards Released",
-            "Subtitle": "Salvation Releases New Series of Anime based cards.",
-            "Content": "<p>Indeed! As we posts this, a large bulk of over 240 Anime cards is reaching our servers and will soon be availible to users of the Salvation Server by updating their client! It is every single card from the Tag Force games, and ONLY those. It will set the foundation for SD's Anime set!</p><p>To access these card, open your SD Launcher, wait for full updates, go to settings, Database, and pick <strong>1-Anime</strong>. You'll immediately see the effect in your deck editor nya. Keep in mind many of these cards were made in a hurry and are likely to contain <strong>many</strong> bugs! We depend on you lovely users testing to be able to find them all. Will be opening a bug report thread right after this, so let us know if anything isn't functioning correctly.</p><p> Above all, have fun, and enjoy this new feature of the Salvation YGOPro Server! Many of our staff have been pushing for it for over one year now and we are very proud to announce the <strong>anime is here at Salvation.</strong>. NYA!</p><a href='http://forum.ygopro.us/index.php?/topic/17-first-batch-of-anime-cards-is-here/'>--more--</a>",
-            "Author": "Chibi Channyan"
+            "Subtitle": "Salvation Releases New Series of Anime based cards",
+            "Content": "<p>As we post this, a large bulk of over 240 Anime cards is reaching our servers and will soon be availible to users of the Salvation YGOPro Server by updating their client! It is every single card from the Tag Force games, and ONLY those. It will set the foundation for SD's Anime set!</p><p>To access these card, open your SD Launcher, wait for full updates, go to settings, Database, and pick <strong>1-Anime</strong>. You'll immediately see the effect in your deck editor nya. Keep in mind many of these cards were made in a hurry and are likely to contain <strong>many</strong> bugs! We depend on you lovely users testing to be able to find them all. Will be opening a bug report thread right after this, so let us know if anything isn't functioning correctly.</p><p> Above all, have fun, and enjoy this new feature of the Salvation YGOPro Server! Many of our staff have been pushing for it for over one year now and we are very proud to announce the <strong>anime is here at Salvation.</strong>. NYA!</p><a href='http://forum.ygopro.us/index.php?/topic/17-first-batch-of-anime-cards-is-here/'>",
+            "Author": "Chibi Channyan",
+            "Date" : "January 30th 2015"
         },{
             "Title": "Welcome to Salvation",
             "Subtitle": "A new Yu-Gi-Oh! Simulator",
-            "Content": ""
+            "Content": "Welcome to the newest YGOPro Server! This server and its unique launcher are geared at helping the community to heal from years of arguments and power struggles. Help us help the community by spreading the word.",
+            "Author": "AccessDenied",
+            "Date": "December 1st 2014"
         }
     ]
 }
