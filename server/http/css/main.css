@@ -1063,8 +1063,10 @@ div#gamelist {
 .in-iframe {
     float: left
 }
-#home {
+#homecontainer {
     overflow: auto;
+    width:100%;
+    margin-top:50px;
 }
 #home article {
     max-width: 920px;
