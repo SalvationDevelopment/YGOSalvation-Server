@@ -299,9 +299,8 @@
     <header style="padding-top:50px" id="faq">
 
 
-        <div style="color:white; width:600px; margin:0 auto;">
-            <p>Q: How do I install the MacOSX version?
-                <br>A: Install brew, then install freetype via brew. It should then work.</p>
+        <div style="color:white; width:600px; margin:0 auto;" id="list">
+
         </div>
     </header>
     <header style="padding-top:50px" id="settings">
@@ -459,6 +458,12 @@
                 $.get('handlebars/news.handlebars',function(template){
                     var parser = Handlebars.compile (template);
                     $('#news').append (parser(news));
+                });
+            });
+            $.getJSON('faq.json',function(news){
+                $.get('handlebars/faq.handlebars',function(template){
+                    var parser = Handlebars.compile (template);
+                    $('#faq #list').append (parser(news));
                 });
             });
 
