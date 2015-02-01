@@ -1067,6 +1067,7 @@ div#gamelist {
     overflow: auto;
     width:100%;
     margin-top:50px;
+    height: inherit;
 }
 #home article {
     max-width: 920px;
