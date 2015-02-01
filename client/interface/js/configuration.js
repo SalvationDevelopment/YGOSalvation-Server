@@ -9,7 +9,7 @@ var sitelocationdir = {
     "stage": "http://ygopro.us",
     "development": "http://127.0.0.1/"
 };
-var mode = "stage";
+var mode = "production";
 
 if (mode !== 'production') {
     try {
