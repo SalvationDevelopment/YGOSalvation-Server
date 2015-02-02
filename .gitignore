@@ -228,5 +228,7 @@ server/http/manifest/*
 #project-Agnotistic
 *.conf
 *.manifest
-
+*.zip
+*.tar
+*.tar.gz
 *crash*
