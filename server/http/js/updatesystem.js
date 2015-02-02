@@ -12,13 +12,13 @@ var manifest = '',
     mode = "production",
     screenMessage = $('.servermessage'),
     siteLocation = sitelocationdir[mode],
-    randomErrors = ['Error: My face is up here buddy!',
-                   'Error: My boobies hurt!',
-                   'Error: I want icecream!',
-                   'Error: I want chocolate!',
-                   'Error: We need to talk Mr!',
-                   'Error: Are you cheating on me with another Sim?',
-                   'Error: You never listen to me!'];
+    randomErrors = ['<span style="color:red">Warning : Stay calm while dueling!</span>',
+                   '<span style="color:red">Warning : Do not insult people, or else!</span>',
+                   '<span style="color:red">Warning : Becareful what tone you use, use emoticons to be clear!</span>',
+                   '<span style="color:red">Warning : Respect others, or else!</span>',
+                   '<span style="color:green">Hint : Ask questions.</span>',
+                   '<span style="color:red">Warning : Negative additudes will not be tolerated!</span>',
+                   '<span style="color:red">Warning : Everything you say here is being recorded!</span>'];
 
 process.on('uncaughtException', function (err) {
     'use strict';
