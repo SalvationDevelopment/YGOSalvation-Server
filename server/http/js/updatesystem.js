@@ -13,11 +13,11 @@ var manifest = '',
     screenMessage = $('.servermessage'),
     siteLocation = sitelocationdir[mode],
     randomErrors = ['<span style="color:red">Warning : Stay calm while dueling!</span>',
-                   '<span style="color:red">Warning : Do not insult people, or else!</span>',
-                   '<span style="color:red">Warning : Becareful what tone you use, use emoticons to be clear!</span>',
-                   '<span style="color:red">Warning : Respect others, or else!</span>',
+                   '<span style="color:red">Warning : Do not insult people or else!</span>',
+                   '<span style="color:red">Warning : Be careful what tone you use. Use emoticons to be clear!</span>',
+                   '<span style="color:red">Warning : Respect others or else!</span>',
                    '<span style="color:green">Hint : Ask questions.</span>',
-                   '<span style="color:red">Warning : Negative additudes will not be tolerated!</span>',
+                   '<span style="color:red">Warning : Negative attitudes will not be tolerated!</span>',
                    '<span style="color:red">Warning : Everything you say here is being recorded!</span>'];
 
 process.on('uncaughtException', function (err) {
