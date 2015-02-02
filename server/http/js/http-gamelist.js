@@ -150,9 +150,9 @@ function getDuelRequest() {
     var pretypecheck = '';
     return {
         string: pretypecheck + $('#creategamecardpool').val() + $('#creategameduelmode').val() + $('#creategametimelimit').val(),
-        prio: isChecked('#enableprio') ? ("F") : ("O"),
-        checkd: isChecked('#discheckdeck') ? ("F") : ("O"),
-        shuf: isChecked('#disshuffledeck') ? ("F") : ("O"),
+        prio: isChecked('#enableprio') ? ("T") : ("O"),
+        checkd: isChecked('#discheckdeck') ? ("T") : ("O"),
+        shuf: isChecked('#disshuffledeck') ? ("T") : ("O"),
         stnds: "," + $('#creategamebanlist').val() + ',5,1,U,',
         pass: randomString(5)
     };
@@ -183,7 +183,8 @@ function setHostSettings() {
     localStorage.lastip = '192.99.11.19';
     localStorage.serverport = '8911';
     localStorage.lastport = '8911';
-
+    //PER CHIBI
+    console.log(localStorage.roompas, 'affter calculation');
     if (!secure(duelRequest.prio, duelRequest.checkd, duelRequest.shuf)) {
         return;
     }
