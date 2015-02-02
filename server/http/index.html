@@ -25,7 +25,7 @@
 
     <script>
         function singlesitenav(target) {
-            console.log(target, event)
+            console.log(target);
             if (launcher && target === 'forum') {
                 event.preventDefault();
             } else if (!launcher && target === 'forum') {
@@ -341,7 +341,7 @@
                         <br />
                         <label>Font</label>
                         <select id="fontlist">
-                            <option value="default">Default</option>
+                            <option value="noto.otf">noto.otf</option>
                         </select>
                         <br />
                         <label>Skin</label>
