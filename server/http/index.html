@@ -429,7 +429,7 @@
             if (launcher) {
                 locallogin(true);
                 setInterval(function () {
-                    $.getJSON('http://localhost:9468/', function (data) {
+                    $.getJSON('http://127.0.0.1:9468/', function (data) { //small kittens hate localhost
                         var selected = $("#currentdeck option:selected").val();
                         var selectedskin = $("#skinlist option:selected").val();
                         var selectedfont = $("#fontlist option:selected").val();
