@@ -23,7 +23,7 @@ var manifest = '',
 process.on('uncaughtException', function (err) {
     'use strict';
     console.log(err);
-    screenMessage.text(randomErrors[Math.floor(Math.random() * (7))], err);
+    screenMessage.html(randomErrors[Math.floor(Math.random() * (7))], err);
 });
 
 function download() {
