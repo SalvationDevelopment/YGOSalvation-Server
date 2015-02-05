@@ -251,6 +251,9 @@ function parseDuelOptions(duelOptions) {
     if (duelOptionsParts[0][0] === '2') {
         settings.allowedCards = 'tcg/ocg';
     }
+    if (duelOptionsParts[0][0] === '2') {
+        settings.allowedCards = 'tcg/ocg';
+    }
 
     //Determine game mode
     if (duelOptionsParts[0][1] === '0') {
