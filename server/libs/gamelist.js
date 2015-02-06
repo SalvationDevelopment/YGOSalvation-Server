@@ -7,7 +7,7 @@ var primus,
     Rooms = require('primus-rooms'),
     primusServer = http.createServer().listen(24555);
 
-function handleCoreMessage(core_message_raw, port) {
+function handleCoreMessage(core_message_raw, port, username, ip) {
     'use strict';
     if (core_message_raw.toString().indexOf("::::") < 0) {
         return gamelist;
@@ -34,7 +34,6 @@ function handleCoreMessage(core_message_raw, port) {
             };
 
         }
-        console.log(core_message[0]);
         switch (core_message[0]) {
 
         case ('::::join-slot'):

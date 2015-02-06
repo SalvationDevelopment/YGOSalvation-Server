@@ -135,7 +135,7 @@ function handleCoreMessage(core_message_raw, port, socket, data) {
     if (core_message[0].trim() === '::::end-duel') {
         socket.core.kill();
     }
-
+    console.log(socket.localAddress, socket.username, core_message.toString());
     process.send(gamelistmessage);
 }
 
