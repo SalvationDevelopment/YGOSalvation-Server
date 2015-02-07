@@ -18,6 +18,16 @@ The following card ID's are not official and should be changed when a card is pr
 * 13790423 Planetellarknight Ptolemaios
 * 13790424 Yuki Usagi
 * 13790425 Rising Void
+* 13790426 Frightfur Mad Chimera
+* 13790427 Frightfur Sheep
+* 13790428 Edge Imp Chain
+* 13790429 Edge Imp Saw
+* 13790430 Fluffal Sheep
+* 13790431 AestellarKnight Zefrathuban
+* 13790432 Oracle of the Zefra
+* 13790433 Zefra Divine Attack
+* 13790434 Raidtaptor Tribute Lanius
+* 13790435 Galaxy Cyclone
 * 80100146 Clear Wing Synchro Dragon
 * 13790401 Zefram Pilica
 * 80100120 Ohr-Shaddoll Sephira Roots
