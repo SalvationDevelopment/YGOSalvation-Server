@@ -47,8 +47,10 @@ function initiateMaster() {
     function setupWorker(x) {
         //'use strict';
         console.log(('        Starting Slave ' + x).grey);
-        var worker = cluster.fork({PORTRANGE: x});
-        
+        var worker = cluster.fork({
+            PORTRANGE: x
+        });
+
         worker.on('message', function (message) {
             if (message.messagetype === 'coreMessage') {
                 var rooms,
@@ -83,7 +85,10 @@ function initiateMaster() {
 
 function initiateSlave() {
     'use strict';
-    
+    process.on('uncaughtException', function (err) {
+        console.log(err);
+    });
+    var userbanlist = require('./configuration/userbans.js') || {};
     // When a user connects, create an instance and allow the to duel, clean up after.
     ygoserver = net.createServer(function (socket) {
         socket.setNoDelay(true);
