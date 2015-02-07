@@ -85,7 +85,6 @@ function initiateMaster() {
 
 function initiateSlave() {
     'use strict';
-    var userbanlist = require('./configuration/userbans.js') || {};
     // When a user connects, create an instance and allow the to duel, clean up after.
     ygoserver = net.createServer(function (socket) {
         socket.setNoDelay(true);
