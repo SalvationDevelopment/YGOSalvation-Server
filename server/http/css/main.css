@@ -1016,7 +1016,7 @@ input#chatinput {
 }
 #gamefilter {
     background: rgba(0, 0, 0, .8);
-    width: 30vw;
+    width: 25vw;
     font-size: 12px;
     float: right;
     padding: 5px;
