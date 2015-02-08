@@ -1,0 +1,13 @@
+"FAQ" = [
+    {
+        "Quesion": "What is the Orgin of this system?",
+        "Answer": "This project is built on the frustrations of many people trying to play Yu-Gi-Oh!"
+    },
+    {
+        "Question":"My YGOPro is closing running slow",
+        "Answer": "Adjust your DirectX and antialiasing settings to match your PC."
+    },
+    {
+        "Question":"how do I use the chat?"
+    }
+]
