@@ -30,7 +30,8 @@ var ygoserver, //port 8911 ygopro Server
     colors = require('colors'),
 
     //WebSocketServer = require('ws').Server,
-    processIncomingTrasmission = require('./libs/processIncomingTrasmission.js');
+    Framemaker = require('./libs/parseframes.js'), //understand YGOPro API.
+    processIncomingTrasmission = require('./libs/processIncomingTrasmission.js'); // gamelist and start games
 
 
 
@@ -86,16 +87,26 @@ function initiateMaster() {
 function initiateSlave() {
     'use strict';
     // When a user connects, create an instance and allow the to duel, clean up after.
+    var parsePackets = require('./libs/parsepackets.js');
     ygoserver = net.createServer(function (socket) {
+        var framer = new Framemaker();
         socket.setNoDelay(true);
         socket.active_ygocore = false;
         socket.active = false;
         socket.on('data', function (data) {
+            var frame,
+                task,
+                newframes = 0;
             if (socket.active_ygocore) {
                 socket.active_ygocore.write(data);
-            } else {
-                processIncomingTrasmission(data, socket, data);
             }
+            frame = framer.input(data);
+            for (newframes; frame.length > newframes; newframes++) {
+                task = parsePackets('CTOS', new Buffer(frame[newframes]));
+                console.log(task);
+                processIncomingTrasmission(data, socket, task);
+            }
+            frame = [];
 
         });
         socket.setTimeout(300000, function () {
