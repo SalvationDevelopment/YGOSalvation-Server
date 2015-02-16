@@ -1211,3 +1211,23 @@ div#gamelist {
         page-break-after: avoid;
     }
 }
+
+div[data-game^"200"]{}
+div[data-game^"201"]{}
+div[data-game^"202"]{}
+div[data-game^"203"]{}
+div[data-game^"210"]{ /* most preferenced */
+    border-color:green;
+}
+div[data-game^"212"]{}
+div[data-game^"213"]{}
+div[data-game^"220"]{}
+div[data-game^"221"]{}
+div[data-game^"222"]{}
+div[data-game^"223"]{}
+div[data-game^"230"]{}
+div[data-game^"231"]{}
+div[data-game^"232"]{}
+div[data-game^"233"]{}
+div[data-game^"300"]{}
+
