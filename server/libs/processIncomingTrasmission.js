@@ -26,21 +26,20 @@ function processTask(task, socket) {
     'use strict';
     var i = 0,
         l = 0;
-    task = (function () {
+   
         var output = [];
         for (i; task.length > i; i++) {
             output.push(recieveCTOS(task[i], socket.username, socket.hostString));
         }
-        return output;
-    }());
-    for (l; task.length > l; l++) {
-        if (task[l].CTOS_JOIN_GAME) {
+       
+    for (l; output.length > l; l++) {
+        if (output[l].CTOS_JOIN_GAME) {
             socket.active = true;
-            socket.hostString = task[l].CTOS_JOIN_GAME;
+            socket.hostString = output[l].CTOS_JOIN_GAME;
             //console.log(task);
         }
-        if (task[l].CTOS_PLAYER_INFO) {
-            socket.username = task[l].CTOS_PLAYER_INFO;
+        if (output[l].CTOS_PLAYER_INFO) {
+            socket.username = output[l].CTOS_PLAYER_INFO;
             //console.log(task);
         }
     }
@@ -172,15 +171,8 @@ function startCore(port, socket, data, callback) {
 
 
 
-function processIncomingTrasmission(data, socket) {
+function processIncomingTrasmission(data, socket, task) {
     'use strict';
-    if (socket.active_ygocore) {
-        //console.log('-->');
-        socket.active_ygocore.write(data);
-        // eventing shifted server wont overload due to constant dueling.
-        //return true;
-    }
-    var task = parsePackets('CTOS', data);
     processTask(task, socket);
 
     //console.log(socket.hostString);
@@ -191,13 +183,14 @@ function processIncomingTrasmission(data, socket) {
         } catch (error) {
             console.log(createDateString(), socket.username, socket.hostString, 'not on gamelist');
         }
+        
         //console.log(gamelist);
         if (gamelist[socket.hostString] && !socket.active_ygocore) {
             socket.alpha = false;
             connectToCore(gamelist[socket.hostString].port, data, socket);
             //console.log(socket.username + ' connecting to existing core');
 
-        } else if (!gamelist[socket.hostString] && !socket.active_ygocore) {
+        } else if (gamelist[socket.hostString] && !socket.active_ygocore) {
             //console.log(socket.username + ' connecting to new core');
             
             portfinder(++portmin, portmax, function (error, port) {
