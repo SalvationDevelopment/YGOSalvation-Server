@@ -1248,7 +1248,7 @@ div[data-game^="32"]{ /* tags */
     border-width: 4px;
 }
 
-div:not([data-game*=",0,5,1,"]), div:not([data-game*="OOO"]){ /* cheating! */
+.game:not([data-game*=",0,5,1,"]), .game:not([data-game*="OOO"]){ /* cheating! */
     background: red;
     font-weight:bold;
     color:white;
