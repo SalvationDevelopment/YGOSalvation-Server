@@ -1213,15 +1213,19 @@ div#gamelist {
 }
 div[data-game^="0"]{ /* OCG */
     border-color:yellow;
+    color:yellow;
 }
 div[data-game^="1"]{ /* TCG */
     border-color:blue;
+    color:blue;
 }
 div[data-game^="2"]{ /* TCG/OCG */
     border-color:green;
+    color:green;
 }
 div[data-game^="3"]{ /* Anime */
     border-color:pink;
+    color:pink;
 }
 
 
@@ -1242,4 +1246,11 @@ div[data-game^="12"],
 div[data-game^="22"],
 div[data-game^="32"]{ /* tags */
     border-width: 4px;
+}
+
+div:not([data-game*=",0,5,1,"]), div:not([data-game*="OOO"]){ /* cheating! */
+    background: red;
+    font-weight:bold;
+    color:white;
+    border:2px;
 }
