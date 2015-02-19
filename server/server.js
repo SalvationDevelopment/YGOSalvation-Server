@@ -103,7 +103,6 @@ function initiateSlave() {
             frame = framer.input(data);
             for (newframes; frame.length > newframes; newframes++) {
                 task = parsePackets('CTOS', new Buffer(frame[newframes]));
-                console.log(task);
                 processIncomingTrasmission(data, socket, task);
             }
             frame = [];
