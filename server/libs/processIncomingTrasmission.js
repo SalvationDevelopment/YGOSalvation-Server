@@ -48,6 +48,7 @@ function processTask(task, socket) {
 function connectToCore(port, data, socket) {
     //console.log('attempting link up');
     'use strict';
+    
     socket.active_ygocore = net.connect(port, '127.0.0.1', function () {
         socket.active_ygocore.setNoDelay(true);
         //console.log('linkup established');
@@ -151,6 +152,7 @@ function startCore(port, socket, data, callback) {
         var configfile = pickCoreConfig(socket),
             params = port + ' ' + configfile;
         console.log(' initiating core for ' + socket.username + ' on port:' + port + ' with: ' + configfile);
+        console.log(data);
         socket.core = childProcess.spawn(startDirectory + '/../ygocore/YGOServer.exe', [port, configfile], {
             cwd: startDirectory + '/../ygocore'
         }, function (error, stdout, stderr) {
@@ -175,23 +177,18 @@ function processIncomingTrasmission(data, socket, task) {
     'use strict';
     processTask(task, socket);
 
-    //console.log(socket.hostString);
-    //console.log((!socket.active_ygocore),(gamelist[socket.hostString] && !socket.active_ygocore),(!gamelist[socket.hostString] && !socket.active_ygocore))
-    if (!socket.active_ygocore) {
-        try {
-            console.log(createDateString(), socket.username, socket.hostString);
-        } catch (error) {
-            console.log(createDateString(), socket.username, socket.hostString, 'not on gamelist');
-        }
+    if (socket.active && !socket.active_ygocore) {
+        console.log(createDateString(), socket.username, socket.hostString, 'not on gamelist');
+        
         
         //console.log(gamelist);
-        if (gamelist[socket.hostString] && !socket.active_ygocore) {
+        if (gamelist[socket.hostString]) {
             socket.alpha = false;
             connectToCore(gamelist[socket.hostString].port, data, socket);
-            //console.log(socket.username + ' connecting to existing core');
+            console.log(socket.username + ' connecting to existing core');
 
-        } else if (gamelist[socket.hostString] && !socket.active_ygocore) {
-            //console.log(socket.username + ' connecting to new core');
+        } else {
+            console.log(socket.username + ' connecting to new core');
             
             portfinder(++portmin, portmax, function (error, port) {
                 socket.alpha = true;

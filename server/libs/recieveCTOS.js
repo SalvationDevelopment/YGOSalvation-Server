@@ -1,8 +1,10 @@
-/* jshint node: true */
+/*jslint node: true */
 var enums = require('./enums.js');
 
 
 module.exports = function RecieveCTOS(packet) {
+    'use strict';
+    console.log(packet.CTOS);
     var todo = Object.create(enums.CTOSCheck);
     switch (packet.CTOS) {
     case ('CTOS_PLAYER_INFO'):
