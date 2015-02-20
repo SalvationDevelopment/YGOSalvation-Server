@@ -44,7 +44,7 @@ function download() {
         download();
         return;
     }
-    screenMessage.html('<span style="color:white; font-weight:bold">Updating...' + target.path + ' and ' + downloadList.length + ' other files'</html>);
+    screenMessage.html('<span style="color:white; font-weight:bold">Updating...' + target.path + ' and ' + downloadList.length + ' other files</span>');
     http.get(options, function (res) {
         res.on('data', function (data) {
             file.write(data);
