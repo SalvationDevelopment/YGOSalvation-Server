@@ -21,7 +21,14 @@ if (cluster.isWorker) {
         }
     });
 }
-
+function custom_error(message) {
+    'use strict';
+    var output = {
+        messagetype : 'custom_error',
+        message : message
+    };
+    process.send(output);
+}
 function processTask(task, socket) {
     'use strict';
     var i = 0,
@@ -140,6 +147,8 @@ function handleCoreMessage(core_message_raw, port, socket, data) {
 }
 
 
+
+
 function startCore(port, socket, data, callback) {
     //console.log(socket.hostString);
     'use strict';
@@ -152,6 +161,7 @@ function startCore(port, socket, data, callback) {
         var configfile = pickCoreConfig(socket),
             params = port + ' ' + configfile;
         console.log(' initiating core for ' + socket.username + ' on port:' + port + ' with: ' + configfile);
+        custom_error(' initiating core for ' + socket.username + ' on port:' + port + ' with: ' + configfile);
         socket.core = childProcess.spawn(startDirectory + '/../ygocore/YGOServer.exe', [port, configfile], {
             cwd: startDirectory + '/../ygocore'
         }, function (error, stdout, stderr) {
@@ -186,11 +196,8 @@ function processIncomingTrasmission(data, socket) {
     //console.log(socket.hostString);
     //console.log((!socket.active_ygocore),(gamelist[socket.hostString] && !socket.active_ygocore),(!gamelist[socket.hostString] && !socket.active_ygocore))
     if (!socket.active_ygocore) {
-        try {
-            console.log(createDateString(), socket.username, socket.hostString);
-        } catch (error) {
-            console.log(createDateString(), socket.username, socket.hostString, 'not on gamelist');
-        }
+        console.log(createDateString(), socket.username, socket.hostString);
+        custom_error(socket.username, socket.hostString);
         //console.log(gamelist);
         if (gamelist[socket.hostString] && !socket.active_ygocore) {
             socket.alpha = false;
