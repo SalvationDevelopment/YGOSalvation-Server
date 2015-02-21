@@ -29,7 +29,7 @@ process.on('uncaughtException', function (err) {
 function download() {
     'use strict';
     if (downloadList.length === 0) {
-        screenMessage.text('Update Complete! System Messages will appear here.');
+        screenMessage.html('<span style="color:white; font-weight:bold">Update Complete! System Messages will appear here.</span>');
         return;
     }
     var target = downloadList[0],
@@ -44,7 +44,7 @@ function download() {
         download();
         return;
     }
-    screenMessage.text('Updating...' + target.path + ' and ' + downloadList.length + ' other files');
+    screenMessage.html('<span style="color:white; font-weight:bold">Updating...' + target.path + ' and ' + downloadList.length + ' other files</span>');
     http.get(options, function (res) {
         res.on('data', function (data) {
             file.write(data);
@@ -91,7 +91,7 @@ function hashcheck() {
 function updateCheckFile(file, initial) {
     'use strict';
     var i = 0;
-    screenMessage.text('Processing manifest');
+    screenMessage.html('<span style="color:white; font-weight:bold">Processing manifest</span>');
     if (file.type !== 'folder') {
 
         completeList.push(file);
@@ -113,13 +113,13 @@ function updateCheckFile(file, initial) {
 function createmanifest() {
     'use strict';
     screenMessage.toggle();
-    screenMessage.text('Downloading Manifest');
+    screenMessage.html('<span style="color:white; font-weight:bold">Downloading Manifest</span');
     $.getJSON('http://ygopro.us/manifest/ygopro.json', function (data) {
         manifest = data;
         //console.log(manifest);
         updateCheckFile(manifest, true);
     }).fail(function () {
-        screenMessage.text('Failed to get mainfest');
+        screenMessage.html('<span style="color:white; font-weight:bold">Failed to get mainfest, restart suggested...</span>');
     });
 }
 var list = {
@@ -166,7 +166,7 @@ function populatealllist() {
 
 setTimeout(function () {
     'use strict';
-    $('#servermessages').text('Interface loaded, querying user for critical information,...');
+    screenMessage.html('Interface loaded, querying user for critical information,...');
     localStorage.lastip = '192.99.11.19';
     localStorage.serverport = '8911';
     localStorage.lastport = '8911';

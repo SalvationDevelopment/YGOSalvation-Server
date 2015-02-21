@@ -69,6 +69,8 @@ function initiateMaster() {
                     }
                 }
                 process.title = 'YGOPro Salvation Server [' + activegames + ']';
+            } else if (message.messagetype === 'custom_error') {
+                ircManager.notify(message.message);
             }
 
         });

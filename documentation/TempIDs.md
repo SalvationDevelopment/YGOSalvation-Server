@@ -7,7 +7,6 @@ The following card ID's are not official and should be changed when a card is pr
 * 13790410 Raidraptor - Mimicry Lanius
 * 13790411 Raidraptor - Impale Lanius
 * 13790411 Raidraptor - Revolution Falcon
-* 13790411 Raidraptor - Blaze Falcon
 * 13790415 Infernoid Belphegor
 * 13790416 Frightfur Leo
 * 13790417 Yosen Tornado
@@ -15,7 +14,6 @@ The following card ID's are not official and should be changed when a card is pr
 * 13790419 Infernoid Shaitan
 * 13790421 Schuberta the Melodious Maestra
 * 13790422 Melodious Illusion
-* 13790423 Planetellarknight Ptolemaios
 * 13790424 Yuki Usagi
 * 13790425 Rising Void
 * 13790426 Frightfur Mad Chimera
@@ -28,6 +26,15 @@ The following card ID's are not official and should be changed when a card is pr
 * 13790433 Zefra Divine Attack
 * 13790434 Raidtaptor Tribute Lanius
 * 13790435 Galaxy Cyclone
+* 13790436 Zefra Path
+* 13790437 Chosen Warriors of Zefra
+* 13790438 Zefra Wendy
+* 13790442 Fusion Conscription
+* 13790442 Frightfur Fusion
+* 13790443 Frightfur Factory
+* 13790444 Chimeratech Rampage
+* 13790445 Edge Imp Tomahawk
+* 13790446 Frightfur Custom
 * 80100146 Clear Wing Synchro Dragon
 * 13790401 Zefram Pilica
 * 80100120 Ohr-Shaddoll Sephira Roots
