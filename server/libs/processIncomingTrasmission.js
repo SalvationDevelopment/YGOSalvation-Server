@@ -1,6 +1,6 @@
 /*jslint node: true, plusplus: true, unparam: false, nomen: true*/
 var portmin = 30000 + process.env.PORTRANGE * 100,
-    portmax = (30000 +  process.env.PORTRANGE * 100) + 100,
+    portmax = (30000 + process.env.PORTRANGE * 100) + 100,
     handleCoreMessage,
     startDirectory = __dirname,
     fs = require('fs'),
@@ -22,16 +22,24 @@ if (cluster.isWorker) {
     });
 }
 
+function custom_error(message) {
+    'use strict';
+    var output = {
+        messagetype: 'custom_error',
+        message: message
+    };
+    process.send(output);
+}
+
 function processTask(task, socket) {
     'use strict';
     var i = 0,
-        l = 0;
-   
-        var output = [];
-        for (i; task.length > i; i++) {
-            output.push(recieveCTOS(task[i], socket.username, socket.hostString));
-        }
-       
+        l = 0,
+        output = [];
+    for (i; task.length > i; i++) {
+        output.push(recieveCTOS(task[i], socket.username, socket.hostString));
+    }
+
     for (l; output.length > l; l++) {
         if (output[l].CTOS_JOIN_GAME) {
             socket.active = true;
@@ -48,7 +56,7 @@ function processTask(task, socket) {
 function connectToCore(port, data, socket) {
     //console.log('attempting link up');
     'use strict';
-    
+
     socket.active_ygocore = net.connect(port, '127.0.0.1', function () {
         socket.active_ygocore.setNoDelay(true);
         //console.log('linkup established');
@@ -140,6 +148,8 @@ function handleCoreMessage(core_message_raw, port, socket, data) {
 }
 
 
+
+
 function startCore(port, socket, data, callback) {
     //console.log(socket.hostString);
     'use strict';
@@ -152,7 +162,11 @@ function startCore(port, socket, data, callback) {
         var configfile = pickCoreConfig(socket),
             params = port + ' ' + configfile;
         console.log(' initiating core for ' + socket.username + ' on port:' + port + ' with: ' + configfile);
-        console.log(data);
+
+
+
+        custom_error(' initiating core for ' + socket.username + ' on port:' + port + ' with: ' + configfile);
+
         socket.core = childProcess.spawn(startDirectory + '/../ygocore/YGOServer.exe', [port, configfile], {
             cwd: startDirectory + '/../ygocore'
         }, function (error, stdout, stderr) {
@@ -176,11 +190,10 @@ function startCore(port, socket, data, callback) {
 function processIncomingTrasmission(data, socket, task) {
     'use strict';
     processTask(task, socket);
+    if (!socket.active_ygocore) {
+        console.log(createDateString(), socket.username, socket.hostString);
+        custom_error(socket.username, socket.hostString);
 
-    if (socket.active && !socket.active_ygocore) {
-        console.log(createDateString(), socket.username, socket.hostString, 'not on gamelist');
-        
-        
         //console.log(gamelist);
         if (gamelist[socket.hostString]) {
             socket.alpha = false;
@@ -189,7 +202,7 @@ function processIncomingTrasmission(data, socket, task) {
 
         } else {
             console.log(socket.username + ' connecting to new core');
-            
+
             portfinder(++portmin, portmax, function (error, port) {
                 socket.alpha = true;
                 startCore(port, socket, data);

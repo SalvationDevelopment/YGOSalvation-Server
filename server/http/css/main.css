@@ -1211,3 +1211,46 @@ div#gamelist {
         page-break-after: avoid;
     }
 }
+div[data-game^="0"]{ /* OCG */
+    border-color:yellow;
+    color:yellow;
+}
+div[data-game^="1"]{ /* TCG */
+    border-color:blue;
+    color:blue;
+}
+div[data-game^="2"]{ /* TCG/OCG */
+    border-color:green;
+    color:green;
+}
+div[data-game^="3"]{ /* Anime */
+    border-color:pink;
+    color:pink;
+}
+
+
+div[data-game^="00"],
+div[data-game^="10"],
+div[data-game^="20"],
+div[data-game^="30"]{ /* single */
+
+}
+div[data-game^="01"],
+div[data-game^="11"],
+div[data-game^="21"],
+div[data-game^="31"]{ /* match */
+    border-width: 2px;
+}
+div[data-game^="02"],
+div[data-game^="12"],
+div[data-game^="22"],
+div[data-game^="32"]{ /* tags */
+    border-width: 4px;
+}
+
+.game:not([data-game*=",0,5,1,"]), .game:not([data-game*="OOO"]){ /* cheating! */
+    background: red;
+    font-weight:bold;
+    color:white;
+    border:2px;
+}
