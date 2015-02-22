@@ -1224,8 +1224,8 @@ div[data-game^="2"]{ /* TCG/OCG */
     color:green;
 }
 div[data-game^="3"]{ /* Anime */
-    border-color:#F2A;
-    color:#e2A; /* more vibrant pink */
+    border-color:pink;
+    color:pink;
 }
 
 
