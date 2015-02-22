@@ -6,7 +6,7 @@ var primus,
     Primus = require('primus'),
     Rooms = require('primus-rooms'),
     primusServer = http.createServer().listen(24555),
-    message_irc = require('./custom_errors.js');
+    message_irc = require('./custom_error.js');
 
 function handleCoreMessage(core_message_raw, port, username, ip) {
     'use strict';
