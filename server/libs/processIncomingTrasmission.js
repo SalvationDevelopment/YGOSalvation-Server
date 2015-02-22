@@ -1,6 +1,6 @@
 /*jslint node: true, plusplus: true, unparam: false, nomen: true*/
 var portmin = 30000 + process.env.PORTRANGE * 100,
-    portmax = (30000 +  process.env.PORTRANGE * 100) + 100,
+    portmax = (30000 + process.env.PORTRANGE * 100) + 100,
     handleCoreMessage,
     startDirectory = __dirname,
     fs = require('fs'),
@@ -11,6 +11,7 @@ var portmin = 30000 + process.env.PORTRANGE * 100,
     recieveCTOS = require('./recieveCTOS'),
     recieveSTOC = require('./recieveSTOC.js'),
     createDateString = require('./datetimestamp.js'),
+    custom_error = require('./custom_error.js'),
     gamelist = {};
 
 if (cluster.isWorker) {
@@ -21,33 +22,24 @@ if (cluster.isWorker) {
         }
     });
 }
-function custom_error(message) {
-    'use strict';
-    var output = {
-        messagetype : 'custom_error',
-        message : message
-    };
-    process.send(output);
-}
+
 function processTask(task, socket) {
     'use strict';
     var i = 0,
-        l = 0;
-    task = (function () {
-        var output = [];
-        for (i; task.length > i; i++) {
-            output.push(recieveCTOS(task[i], socket.username, socket.hostString));
-        }
-        return output;
-    }());
-    for (l; task.length > l; l++) {
-        if (task[l].CTOS_JOIN_GAME) {
+        l = 0,
+        output = [];
+    for (i; task.length > i; i++) {
+        output.push(recieveCTOS(task[i], socket.username, socket.hostString));
+    }
+
+    for (l; output.length > l; l++) {
+        if (output[l].CTOS_JOIN_GAME) {
             socket.active = true;
-            socket.hostString = task[l].CTOS_JOIN_GAME;
+            socket.hostString = output[l].CTOS_JOIN_GAME;
             //console.log(task);
         }
-        if (task[l].CTOS_PLAYER_INFO) {
-            socket.username = task[l].CTOS_PLAYER_INFO;
+        if (output[l].CTOS_PLAYER_INFO) {
+            socket.username = output[l].CTOS_PLAYER_INFO;
             //console.log(task);
         }
     }
@@ -56,6 +48,7 @@ function processTask(task, socket) {
 function connectToCore(port, data, socket) {
     //console.log('attempting link up');
     'use strict';
+
     socket.active_ygocore = net.connect(port, '127.0.0.1', function () {
         socket.active_ygocore.setNoDelay(true);
         //console.log('linkup established');
@@ -160,8 +153,7 @@ function startCore(port, socket, data, callback) {
 
         var configfile = pickCoreConfig(socket),
             params = port + ' ' + configfile;
-        console.log(' initiating core for ' + socket.username + ' on port:' + port + ' with: ' + configfile);
-        custom_error(' initiating core for ' + socket.username + ' on port:' + port + ' with: ' + configfile);
+        custom_error(console.log(' initiating core for ' + socket.username + ' on port:' + port + ' with: ' + configfile));
         socket.core = childProcess.spawn(startDirectory + '/../ygocore/YGOServer.exe', [port, configfile], {
             cwd: startDirectory + '/../ygocore'
         }, function (error, stdout, stderr) {
@@ -182,31 +174,17 @@ function startCore(port, socket, data, callback) {
 
 
 
-function processIncomingTrasmission(data, socket) {
+function processIncomingTrasmission(data, socket, task) {
     'use strict';
-    if (socket.active_ygocore) {
-        //console.log('-->');
-        socket.active_ygocore.write(data);
-        // eventing shifted server wont overload due to constant dueling.
-        //return true;
-    }
-    var task = parsePackets('CTOS', data);
     processTask(task, socket);
-
-    //console.log(socket.hostString);
-    //console.log((!socket.active_ygocore),(gamelist[socket.hostString] && !socket.active_ygocore),(!gamelist[socket.hostString] && !socket.active_ygocore))
     if (!socket.active_ygocore) {
-        console.log(createDateString(), socket.username, socket.hostString);
-        custom_error(socket.username, socket.hostString);
-        //console.log(gamelist);
-        if (gamelist[socket.hostString] && !socket.active_ygocore) {
+        if (gamelist[socket.hostString]) {
             socket.alpha = false;
             connectToCore(gamelist[socket.hostString].port, data, socket);
-            //console.log(socket.username + ' connecting to existing core');
+            console.log(socket.username + ' connecting to existing core');
+        } else {
+            console.log(socket.username + ' connecting to new core');
 
-        } else if (!gamelist[socket.hostString] && !socket.active_ygocore) {
-            //console.log(socket.username + ' connecting to new core');
-            
             portfinder(++portmin, portmax, function (error, port) {
                 socket.alpha = true;
                 startCore(port, socket, data);
