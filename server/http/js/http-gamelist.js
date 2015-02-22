@@ -251,8 +251,8 @@ function parseDuelOptions(duelOptions) {
     if (duelOptionsParts[0][0] === '2') {
         settings.allowedCards = 'tcg/ocg';
     }
-    if (duelOptionsParts[0][0] === '2') {
-        settings.allowedCards = 'tcg/ocg';
+    if (duelOptionsParts[0][0] === '3') {
+        settings.allowedCards = 'Anime';
     }
 
     //Determine game mode
