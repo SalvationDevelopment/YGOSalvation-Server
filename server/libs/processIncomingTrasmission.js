@@ -11,6 +11,7 @@ var portmin = 30000 + process.env.PORTRANGE * 100,
     recieveCTOS = require('./recieveCTOS'),
     recieveSTOC = require('./recieveSTOC.js'),
     createDateString = require('./datetimestamp.js'),
+    custom_error = require('./custom_error.js'),
     gamelist = {};
 
 if (cluster.isWorker) {
@@ -20,15 +21,6 @@ if (cluster.isWorker) {
             gamelist = message.gamelist;
         }
     });
-}
-
-function custom_error(message) {
-    'use strict';
-    var output = {
-        messagetype: 'custom_error',
-        message: message
-    };
-    process.send(output);
 }
 
 function processTask(task, socket) {
@@ -161,12 +153,7 @@ function startCore(port, socket, data, callback) {
 
         var configfile = pickCoreConfig(socket),
             params = port + ' ' + configfile;
-        console.log(' initiating core for ' + socket.username + ' on port:' + port + ' with: ' + configfile);
-
-
-
-        custom_error(' initiating core for ' + socket.username + ' on port:' + port + ' with: ' + configfile);
-
+        custom_error(console.log(' initiating core for ' + socket.username + ' on port:' + port + ' with: ' + configfile));
         socket.core = childProcess.spawn(startDirectory + '/../ygocore/YGOServer.exe', [port, configfile], {
             cwd: startDirectory + '/../ygocore'
         }, function (error, stdout, stderr) {
@@ -191,15 +178,10 @@ function processIncomingTrasmission(data, socket, task) {
     'use strict';
     processTask(task, socket);
     if (!socket.active_ygocore) {
-        console.log(createDateString(), socket.username, socket.hostString);
-        custom_error(socket.username, socket.hostString);
-
-        //console.log(gamelist);
         if (gamelist[socket.hostString]) {
             socket.alpha = false;
             connectToCore(gamelist[socket.hostString].port, data, socket);
             console.log(socket.username + ' connecting to existing core');
-
         } else {
             console.log(socket.username + ' connecting to new core');
 

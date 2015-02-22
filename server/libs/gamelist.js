@@ -5,7 +5,8 @@ var primus,
     http = require('http'),
     Primus = require('primus'),
     Rooms = require('primus-rooms'),
-    primusServer = http.createServer().listen(24555);
+    primusServer = http.createServer().listen(24555),
+    message_irc = require('./custom_errors.js');
 
 function handleCoreMessage(core_message_raw, port, username, ip) {
     'use strict';
@@ -72,6 +73,7 @@ function handleCoreMessage(core_message_raw, port, username, ip) {
 
         case ('::::chat'):
             chat = core_message[1] + '|' + core_message[2];
+            message_irc(chat);
             break;
 
         }
