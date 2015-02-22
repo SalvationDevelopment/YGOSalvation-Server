@@ -177,7 +177,7 @@ function startCore(port, socket, data, callback) {
 function processIncomingTrasmission(data, socket, task) {
     'use strict';
     processTask(task, socket);
-    if (!socket.active_ygocore) {
+    if (!socket.active_ygocore && socket.hostString) {
         if (gamelist[socket.hostString]) {
             socket.alpha = false;
             connectToCore(gamelist[socket.hostString].port, data, socket);
