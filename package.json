@@ -23,7 +23,8 @@
         "sqlite3": "*",
         "ws": "*",
         "irc": "*",
-        "colors": "*"
+        "colors": "*",
+        "lodash" : "*"
     },
     "optionalDependencies": {
         "httpsys": "*",
