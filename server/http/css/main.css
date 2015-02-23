@@ -1053,6 +1053,7 @@ section#gamelistsection {
 }
 div#gamelist {
     width: 70vw;
+    float:left;
     margin: auto 0;
 }
 .in-iframe div#gamelist {

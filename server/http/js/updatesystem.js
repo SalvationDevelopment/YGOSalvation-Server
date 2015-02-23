@@ -119,7 +119,10 @@ function createmanifest() {
         //console.log(manifest);
         updateCheckFile(manifest, true);
     }).fail(function () {
-        screenMessage.html('<span style="color:white; font-weight:bold">Failed to get mainfest, restart suggested...</span>');
+        screenMessage.html('<span style="color:white; font-weight:bold">Failed to get mainfest, .... re-trying</span>');
+        setTimeout(function () {
+            createmanifest();
+        }, 10000);
     });
 }
 var list = {
