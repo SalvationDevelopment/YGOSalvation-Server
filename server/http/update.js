@@ -23,6 +23,9 @@ function dirTree(filename) {
         // something else!
         info.type = "file";
         info.size = stats.size;
+        if (info.path.indexOf('Thumbs.db') > -1) {
+            info.path = 'ygopro/pics/marker.badfile';
+        }
     }
 
     return info;
