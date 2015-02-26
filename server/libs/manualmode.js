@@ -9,9 +9,13 @@ var primus,
     Rooms = require('primus-rooms'),
     primusServer = http.createServer().listen(24556), // +1 from gamelist
     message_irc = require('./custom_error.js'),
-    banlist = fs.readFileSync('../http/ygopro/lflist.conf');
+    banlist = fs.readFileSync('../http/ygopro/lflist.conf'),
+    shuffleMechanic = require('knuth-shuffle').knuthShuffle;
 
-
+function shuffle(array) {
+    'use strict';
+    return shuffle(array.slice(0));
+}
 primus = new Primus(primusServer, {
     parser: 'JSON'
 });
@@ -50,6 +54,14 @@ function leave(socket, id) {
     'use strict';
     manualgamelist[id].lobby[socket.instance] = false;
     socket.instance = '';
+}
+function lock(socket, cards) {
+    'use strict';
+    var player = socket.instance;
+    //checkCards()
+    manualgamelistSecret[socket.id] = socket;
+    manualgamelistSecret[socket.id + 'Deck'] = shuffle(cards[0]);
+    manualgamelistSecret[socket.id + 'Extra'] = shuffle(cards[1]);
 }
 
 function Room(id) {
@@ -182,6 +194,7 @@ primus.on('connection', function (socket) {
             socket.join(data.room, function () {
                 updateSubsGamelist(socket);
             });
+            socket.id = data.room;
             break;
 
         case ('leave'):
@@ -189,6 +202,10 @@ primus.on('connection', function (socket) {
             leave(data.room, socket);
             break;
 
+        case ('lock'):
+            lock(socket, data.cards);
+            break;
+                
         default:
             console.log(data);
 
