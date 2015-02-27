@@ -74,15 +74,13 @@ function connectToCore(port, data, socket) {
         console.log('::CORE', error);
         if (socket.alpha) {
             handleCoreMessage('::::endduel|' + socket.hostString, port, socket, data);
-            socket.active_ygocore.kill();
         }
-        
+        socket.active_ygocore.kill();
         socket.end();
     });
     socket.active_ygocore.on('close', function () {
         if (socket.alpha) {
             handleCoreMessage('::::endduel|' + socket.hostString, port, socket, data);
-            socket.active_ygocore.kill();
         }
         socket.end();
     });
@@ -129,8 +127,7 @@ function handleCoreMessage(core_message_raw, port, socket, data) {
             messagetype: 'coreMessage',
             coreMessage: {
                 core_message_raw: core_message_raw.toString(),
-                port: port,
-                pid : socket.active_ygoro.pid
+                port: port
             }
         };
     if (core_message[0].trim() === '::::network-ready') {
