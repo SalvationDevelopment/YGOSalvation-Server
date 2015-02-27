@@ -8,7 +8,7 @@ var primus,
     primusServer = http.createServer().listen(24555),
     message_irc = require('./custom_error.js');
 
-function handleCoreMessage(core_message_raw, port, username, ip) {
+function handleCoreMessage(core_message_raw, port, pid) {
     'use strict';
     if (core_message_raw.toString().indexOf("::::") < 0) {
         return gamelist;
@@ -65,6 +65,7 @@ function handleCoreMessage(core_message_raw, port, username, ip) {
 
         case ('::::endduel'):
             delete gamelist[core_message[1]];
+            process.kill(pid);
             break;
 
         case ('::::startduel'):
@@ -90,7 +91,7 @@ module.exports = function messageListener(message) {
         i = 0,
         gamelistmessage;
     for (i; brokenup.length > i; i++) {
-        handleCoreMessage(brokenup[i], message.port);
+        handleCoreMessage(brokenup[i], message.port, message.pid);
     }
     for (game in gamelist) {
         if (gamelist.hasOwnProperty(game)) {
