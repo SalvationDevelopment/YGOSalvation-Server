@@ -4,7 +4,6 @@ var enums = require('./enums.js');
 
 module.exports = function RecieveCTOS(packet) {
     'use strict';
-    console.log(packet.CTOS);
     var todo = Object.create(enums.CTOSCheck),
         username,
         roomname,
@@ -29,7 +28,7 @@ module.exports = function RecieveCTOS(packet) {
             
     case ('CTOS_HS_READY'):
         todo.CTOS_HS_READY = true;
-        console.log('ready', packet.message);
+        console.log('ready', packet.message.toString);
         break;
             
             
@@ -63,7 +62,9 @@ module.exports = function RecieveCTOS(packet) {
     case ('CTOS_HS_START'):
         todo.CTOS_HS_START = true;
         break;
-            
+     
+    default:
+        console.log(packet.CTOS);
     }
     return todo;
 };
