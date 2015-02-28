@@ -13,7 +13,7 @@ var swfobject;
 
 /* Change these parameters */
 params.host                         = "ygopro.us";
-params.port                         = 6669;
+params.port                         = 6667;
 params.policyPort                   = 843;
 
 /* Language for the user interface. Currently available translations: ar, bd, bg, br, cz, da, de, el, en, es, et, fi, fr, hu, hr, id, it, ja, lv, nl, no, pl, pt, ro, ru, sk, sl, sq, sr_cyr, sr_lat, sv, th, tr, uk */
