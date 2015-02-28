@@ -65,7 +65,7 @@ function handleCoreMessage(core_message_raw, port, pid) {
 
         case ('::::endduel'):
             delete gamelist[core_message[1]];
-            process.kill(pid);
+            //process.kill(pid);
             break;
 
         case ('::::startduel'):

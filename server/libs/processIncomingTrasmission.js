@@ -190,11 +190,13 @@ function processIncomingTrasmission(data, socket, task) {
                 startCore(port, socket, data);
             });
         }
+        //console.log('process complete', gamelist);
+        if (portmin === portmax) {
+            portmin = 30000 + process.env.PORTRANGE * 100;
+        }
+        return;
     }
-    //console.log('process complete', gamelist);
-    if (portmin === portmax) {
-        portmin = 30000 + process.env.PORTRANGE * 100;
-    }
+    return data;
 }
 
 module.exports = processIncomingTrasmission;
