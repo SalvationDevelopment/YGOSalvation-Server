@@ -28,7 +28,7 @@ module.exports = function RecieveCTOS(packet) {
             
     case ('CTOS_HS_READY'):
         todo.CTOS_HS_READY = true;
-        console.log('ready', packet.message.toString);
+        console.log('ready', packet.message.toString());
         break;
             
             

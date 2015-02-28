@@ -79,10 +79,13 @@ function initiateMaster() {
         setupWorker(clusterIterator);
     }
     cluster.on('exit', function (worker, code, signal) {
-        notification = 'worker ' + worker.process.pid + ' died ' + code + ' ' + signal;
+        notification = 'worker ' + clusterIterator + ' died ' + code + ' ' + signal;
         ircManager.notify(notification);
         console.log(notification);
         setupWorker(clusterIterator++);
+        if (clusterIterator > 20) {
+            clusterIterator = 0;
+        }
     });
 }
 

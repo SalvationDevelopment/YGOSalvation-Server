@@ -75,7 +75,6 @@ function connectToCore(port, data, socket) {
         if (socket.alpha) {
             handleCoreMessage('::::endduel|' + socket.hostString, port, socket, data);
         }
-        socket.active_ygocore.kill();
         socket.end();
     });
     socket.active_ygocore.on('close', function () {
