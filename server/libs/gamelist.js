@@ -6,7 +6,18 @@ var primus,
     Primus = require('primus'),
     Rooms = require('primus-rooms'),
     primusServer = http.createServer().listen(24555),
-    message_irc = require('./custom_error.js');
+    message_irc = require('./custom_error.js'),
+    previousAnnouncement;
+
+function announce(announcement) {
+    'use strict';
+    if (previousAnnouncement === announcement) {
+        return;
+    } else {
+        primus.room('activegames').write(announcement);
+        previousAnnouncement = announcement;
+    }
+}
 
 function handleCoreMessage(core_message_raw, port, pid) {
     'use strict';
@@ -31,7 +42,8 @@ function handleCoreMessage(core_message_raw, port, pid) {
                 locked: [false, false, false, false],
                 spectators: 0,
                 started: false,
-                time: new Date()
+                time: new Date(),
+                pid : pid || null
             };
 
         }
@@ -43,6 +55,7 @@ function handleCoreMessage(core_message_raw, port, pid) {
                 return;
             }
             gamelist[core_message[1]].players[join_slot] = core_message[3].trim();
+            gamelist[core_message[1]].time = new Date();
             gamelist[core_message[1]].port = port;
             break;
 
@@ -70,6 +83,7 @@ function handleCoreMessage(core_message_raw, port, pid) {
 
         case ('::::startduel'):
             gamelist[core_message[1]].started = true;
+            gamelist[core_message[1]].time = new Date();
             break;
 
         case ('::::chat'):
@@ -103,7 +117,8 @@ module.exports = function messageListener(message) {
             }
         }
     }
-    primus.room('activegames').write(JSON.stringify(gamelist));
+    //primus.room('activegames').write(JSON.stringify(gamelist));
+    announce(JSON.stringify(gamelist));
     return gamelist;
 };
 
