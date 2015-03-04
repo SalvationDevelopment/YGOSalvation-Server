@@ -1,6 +1,13 @@
 {
     "Articles": [
         {
+            "Title": "CasinoBot is live bitches! Join the chat today!",
+            "Subtitle": "How brave are you?",
+            "Content": "<p>Reach has recently implemented a CasinoBot live to our chat servers! You can check it out by typing '/join #casino' to enter the channel with the Bot. Using the ".help" command will bring up its list of games you play and how much cash you currently have. If you run into any problems with CasinoBot or it's not live in its channel, let Reach know to look into it.</p>",
+            "Author": "Reach",
+            "Date" : "March 2nd, 2015th"
+        },
+        {
             "Title": "Korean SECE cards are here!",
             "Subtitle": "Some strange new cards are in",
             "Content": "<p>The 5 unique and...Unique Korea-OCG cards from SECE have been added to the server. They are as follows:<br></p><ul><li>Great Old One Hastur</li><li>Fiendish Rhino Warrior</li><li>Cuben</li><li>Carrot Human</li><li>Rocket Hand</li></ul></p>",
