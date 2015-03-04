@@ -61,7 +61,7 @@
             </li>
             <li><span class="psudolinksingle" onclick="singlesitenav('chat')">Chat</span>
             </li>
-            <li><span class="psudolinksingle" onclick="singlesitenav('faq')">FAQ</span>
+            <li><span class="psudolinksingle" onclick="singlesitenav('faq')">News</span>
             </li>
             <li class="launcheronly"><span class="psudolinksingle" onclick="singlesitenav('settings')">Settings</span>
             </li>
@@ -105,7 +105,6 @@
 
             <div style="font-size:.5em; text-align:center; color:#747" id="versioninfo">Version 4 : Production 1 : Revision 0</div>
             <div style="font-size:1.5em; text-align:center; color:pink" class='webonly'></div>
-            <div id="news"></div>
         </div>
     </header>
     <header style="padding-top:50px" id="gamelist">
@@ -291,8 +290,7 @@
         </script>
     </header>
     <header style="padding-top:50px" id="faq">
-
-
+        <div id="news"></div>
         <div style="color:white; width:600px; margin:0 auto;" id="list">
 
         </div>
@@ -413,11 +411,12 @@
 
         function locallogin(init) {
             'use strict';
-            localStorage.nickname = localStorage.nickname || '';
+                localStorage.nickname = localStorage.nickname || '';
             if (localStorage.nickname.length < 1 || init === true) {
                 var username = prompt('Username: ', localStorage.nickname);
                 while (!username) {
                     username = prompt('Username: ', localStorage.nickname);
+                    username.replace(/[^a-zA-Z0-9 ]/g, "");
                 }
                 localStorage.nickname = username;
             }
