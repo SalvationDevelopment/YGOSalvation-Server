@@ -10,36 +10,29 @@ function pick(list) {
     return list[Math.floor(Math.random() * (list.length))];
 }
 
-// Uncaught TypeError: undefined is not a function
 function pickNum(list, num) {
     
+    
     'use strict';
-    
-    //add a check for list > num
+
     var a = 0;
-    
+
     var returnList = [];
-    
+
     var cardToAdd;
-    
     while (a < num)
-    
     {
-        
         cardToAdd = pick(list);
-        
-        if (!returnList.includes(cardToAdd))
-        
+
+	//Prevents duplicates if the number of cards requested isn't bigger than the length of the list
+        if (!(returnList.indexOf(cardToAdd) >= 0) || list.length < num)
         {
-            
             returnList.push(cardToAdd);
-            
             a++;
-        
+
         }
-    
+
     }
-    
     return returnList;
 
 }
