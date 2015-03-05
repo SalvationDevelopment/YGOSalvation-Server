@@ -14,6 +14,7 @@ section,
 summary {
     display: block
 }
+
 audio,
 canvas,
 video {
@@ -21,18 +22,22 @@ video {
     *display: inline;
     *zoom: 1
 }
+
 audio:not([controls]) {
     display: none;
     height: 0
 }
+
 [hidden] {
     display: none
 }
+
 html {
     font-size: 100%;
     -ms-text-size-adjust: 100%;
     -webkit-text-size-adjust: 100%
 }
+
 html,
 button,
 input,
@@ -40,66 +45,83 @@ select,
 textarea {
     font-family: sans-serif
 }
+
 body {
     margin: 0
 }
+
 a:focus {
     outline: thin dotted
 }
+
 a:active,
 a:hover {
     outline: 0
 }
+
 h1 {
     font-size: 2em;
     margin: .67em 0
 }
+
 h2 {
     font-size: 1.5em;
     margin: .83em 0
 }
+
 h3 {
     font-size: 1.17em;
     margin: 1em 0
 }
+
 h4 {
     font-size: 1em;
     margin: 1.33em 0
 }
+
 h5 {
     font-size: .83em;
     margin: 1.67em 0
 }
+
 h6 {
     font-size: .67em;
     margin: 2.33em 0
 }
+
 abbr[title] {
     border-bottom: 1px dotted
 }
+
 b,
 strong {
     font-weight: bold
 }
+
 blockquote {
     margin: 1em 40px
 }
+
 dfn {
     font-style: italic
 }
+
 hr {
     -moz-box-sizing: content-box;
     box-sizing: content-box;
     height: 0
 }
+
 mark {
     background: #ff0;
     color: #000
 }
+
 p,
 pre {
     margin: 1em 0
 }
+
 code,
 kbd,
 pre,
@@ -108,22 +130,27 @@ samp {
     _font-family: 'courier new', monospace;
     font-size: 1em
 }
+
 pre {
     white-space: pre;
     white-space: pre-wrap;
     word-wrap: break-word
 }
+
 q {
     quotes: none
 }
+
 q:before,
 q:after {
     content: '';
     content: none
 }
+
 small {
     font-size: 80%
 }
+
 sub,
 sup {
     font-size: 75%;
@@ -131,55 +158,68 @@ sup {
     position: relative;
     vertical-align: baseline
 }
+
 sup {
     top: -0.5em
 }
+
 sub {
     bottom: -0.25em
 }
+
 dl,
 menu,
 ol,
 ul {
     margin: 1em 0
 }
+
 dd {
     margin: 0 0 0 40px
 }
+
 menu,
 ol,
 ul {
     padding: 0 0 0 40px
 }
+
 nav ul,
 nav ol {
     list-style: none;
     list-style-image: none
 }
+
 img {
     border: 0;
     -ms-interpolation-mode: bicubic
 }
+
 svg:not(:root) {
     overflow: hidden
 }
+
 figure {
     margin: 0
 }
+
 form {
     margin: 0
 }
+
 fieldset {
     border: 1px solid silver;
     margin: 0 2px;
     padding: .35em .625em .75em
 }
+
 legend {
     border: 0;
     padding: 0;
     white-space: normal;
     *margin-left: -7px
 }
+
 button,
 input,
 select,
@@ -189,14 +229,17 @@ textarea {
     vertical-align: baseline;
     *vertical-align: middle
 }
+
 button,
 input {
     line-height: normal
 }
+
 button,
 select {
     text-transform: none
 }
+
 button,
 html input[type="button"],
 input[type="reset"],
@@ -205,10 +248,12 @@ input[type="submit"] {
     cursor: pointer;
     *overflow: visible
 }
+
 button[disabled],
 html input[disabled] {
     cursor: default
 }
+
 input[type="checkbox"],
 input[type="radio"] {
     box-sizing: border-box;
@@ -216,25 +261,30 @@ input[type="radio"] {
     *height: 13px;
     *width: 13px
 }
+
 input[type="search"] {
     -webkit-appearance: textfield;
     -moz-box-sizing: content-box;
     -webkit-box-sizing: content-box;
     box-sizing: content-box
 }
+
 input[type="search"]::-webkit-search-cancel-button,
 input[type="search"]::-webkit-search-decoration {
     -webkit-appearance: none
 }
+
 button::-moz-focus-inner,
 input::-moz-focus-inner {
     border: 0;
     padding: 0
 }
+
 textarea {
     overflow: auto;
     vertical-align: top
 }
+
 table {
     border-collapse: collapse;
     border-spacing: 0
@@ -250,18 +300,22 @@ select,
 textarea {
     color: #222;
 }
+
 body {
     font-size: 1em;
     line-height: 1.4;
 }
+
 ::-moz-selection {
     background: #b3d4fc;
     text-shadow: none;
 }
+
 ::selection {
     background: #b3d4fc;
     text-shadow: none;
 }
+
 hr {
     display: block;
     height: 1px;
@@ -270,17 +324,21 @@ hr {
     margin: 1em 0;
     padding: 0;
 }
+
 img {
     vertical-align: middle;
 }
+
 fieldset {
     border: 0;
     margin: 0;
     padding: 0;
 }
+
 textarea {
     resize: vertical;
 }
+
 .chromeframe {
     margin: 0.2em 0;
     background: #ccc;
@@ -290,7 +348,6 @@ textarea {
 /* ==========================================================================
    Author's custom styles
    ========================================================================== */
-
 /* apply a natural box layout model to all elements */
 
 *,
@@ -300,12 +357,12 @@ textarea {
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
 }
-@font-face
 
-{
+@font-face {
     font-family: MKStencilsansBlack;
     src: url('/font/MKStencilsansBlack.ttf'),
 }
+
 body {
     background-attachment: fixed;
     background-repeat: no-repeat;
@@ -318,6 +375,7 @@ body {
     overflow: hidden;
     width: 100vw;
 }
+
 #logo {
     margin-top: -35px;
     margin-right: -20px;
@@ -326,6 +384,7 @@ body {
     display: inline-block;
     text-align: center;
 }
+
 h1 {
     color: white;
     font-size: 80px;
@@ -338,6 +397,7 @@ h1 {
     text-shadow: 0 0 1px darkgrey;
     font-weight: 200
 }
+
 h2 {
     margin-top: -0px;
     text-align: center;
@@ -350,6 +410,7 @@ h2 {
     font-weight: 200;
     color: #aaa;
 }
+
 header {
     min-height: 450px;
     margin: 0 auto;
@@ -358,6 +419,7 @@ header {
     background: rgba(0, 0, 0, .65);
     overflow: auto;
 }
+
 .game {
     background: rgba(0, 0, 0, .65);
     width: 48%;
@@ -368,26 +430,32 @@ header {
     padding: 5px;
     color: white;
 }
+
 .in-iframe #gamelistitems {
     width: 70vw;
 }
+
 .game.started {
     opacity: .2;
 }
+
 section {
     width: 100%;
     min-height: 800px;
 }
+
 aside {
     width: 50%;
     float: left;
     padding: 0 20px;
 }
+
 .container {
     width: 980px;
     margin: 0 auto;
     overflow: auto;
 }
+
 .featurelist {
     font-size: 10px;
     color: grey;
@@ -397,21 +465,26 @@ aside {
     margin: 0 auto;
     width: 80%;
 }
+
 .featurelist li {
     list-style: none;
     display: inline-block;
     padding: 0 10px;
     text-transform: uppercase;
 }
+
 .featurelist li:first-child {
     padding-left: 0;
 }
+
 ul#mirrors {
     width: 100%;
 }
+
 .featurelist li:last-child {
     padding-right: 0;
 }
+
 .downloadbutton {
     background: rgba(255, 0, 200, .5);
     border-radius: 21px;
@@ -425,14 +498,17 @@ ul#mirrors {
     text-align: center;
     box-shadow: 0 0 20px black, inset 0 0 2px #fff;
 }
+
 .downloadbutton:hover {
     background: rgba(50, 200, 50, 1);
 }
+
 .lander-main ul {
     text-align: center;
     margin: 0 auto;
     width: 20%;
 }
+
 .lander-main li {
     display: inline-block;
     text-shadow: 0 0 5px rgba(255, 255, 255, .2);
@@ -442,6 +518,7 @@ ul#mirrors {
     font-size: .8em;
     display: inline-block;
 }
+
 .lander-main li:first-child {
     background-color: rgba(255, 100, 200, .8);
     color: white;
@@ -453,11 +530,13 @@ ul#mirrors {
     width: 287px;
     margin: 0 auto;
 }
+
 .container footer {
     float: left;
     text-align: center;
     width: 100%;
 }
+
 .superfooter {
     background: black;
     color: #aaa;
@@ -471,6 +550,7 @@ ul#mirrors {
     z-index: 10;
     font-size: .7em;
 }
+
 header {
     height: 98vh;
     overflow: hidden;
@@ -478,6 +558,7 @@ header {
     top: 100vh;
     width: 100vw;
 }
+
 .iconic {
     background: green;
     width: 80%;
@@ -487,10 +568,12 @@ header {
     text-align: center;
     font-size: 140px;
 }
+
 .lobby h2 {
     font-size: 2em;
     width: 100%;
 }
+
 .gamelobby {
     width: 580px;
     margin: 0 auto;
@@ -500,12 +583,14 @@ header {
     background: rgba(0, 0, 0, .75);
     overflow: auto
 }
+
 .lobby {
     width: 60%;
     margin: 30px auto;
     height: 200px;
     font-size: .8em;
 }
+
 .button {
     background: rgba(190, 0, 100, .50);
     width: 86px;
@@ -522,15 +607,18 @@ header {
     border-width: 1px;
     -webkit-animation: colorRotate 6s linear 0s infinite;
 }
+
 #settings select,
 #settings button {
     width: 45%;
 }
+
 .game label {
     width: 150px;
     padding: 0px 30px 0px 0;
     display: inline-block;
 }
+
 .game input {
     display: inline-block;
     margin-bottom: 10px;
@@ -538,12 +626,15 @@ header {
     width: 33.33%;
     text-align: center
 }
+
 #lobbycancel {
     float: right;
 }
+
 .game span {
     text-align: right;
     /* width: 30%; */
+    
     display: inline-block;
     padding: 2px;
     border: 1px solid silver;
@@ -553,31 +644,38 @@ header {
     padding-top: 0px;
     padding-bottom: 6px;
 }
+
 .game span.major {
     text-shadow: 0 0 3px #fff;
 }
+
 #lobbyplayer2 {
     float: right
 }
+
 .lobbycenter {
     margin: 0 auto;
     width: 33%;
 }
+
 .game select {
     width: 100%;
     display: inline-block;
     margin-top: 30px;
 }
+
 #lobbyspectate {
     width: 50%;
     margin: 0 auto;
     display: block;
 }
+
 #lobbyplayer0,
 #lobbyplayer1 {
     width: 33%;
     display: inline-block;
 }
+
 #majorpopup {
     position: absolute;
     z-index: 99999999999;
@@ -586,6 +684,7 @@ header {
     top: 0;
     background: rgba(0, 0, 0, .95);
 }
+
 .message {
     width: 300px;
     margin: 25% auto;
@@ -594,6 +693,7 @@ header {
     border: 1px solid white;
     padding: 20px;
 }
+
 .message:before {
     content: '!';
     font-size: 130px;
@@ -604,13 +704,16 @@ header {
     color: #fff;
     top: 30%;
 }
+
 .psudolinksingle {
     cursor: pointer;
     color: white;
 }
+
 .psudolinksingle:hover {
     color: hotpink;
 }
+
 .field {
     width: 100%;
     background: rgba(0, 0, 0, .65);
@@ -623,53 +726,64 @@ header {
     border-color: rgba(255, 255, 255, .05);
     padding-top: 100px;
 }
+
 .fieldcontainer {
     width: 1000px;
     margin: 0 auto;
     height: 1000px;
     margin-top: -160px;
 }
+
 .info-controls {
     float: left;
 }
+
 .info-image {
     height: 294px;
     padding: 20px;
     width: 198px;
     background: brown;
 }
+
 meter {
     float: left;
     margin: 0 5%;
     width: 90%;
 }
+
 meter::-webkit-meter-optimum-value {
     background: none;
     background-color: purple;
     /*    border-right: 1px solid hotpink;*/
     /*    box-shadow: 0 0 12px rgba(255, 0, 255, .3);*/
 }
+
 meter::-webkit-meter-bar {
     background: rgba(0, 0, 0, .8);
     /*    border-top: 1px solid rgba(100, 100, 100, 0.3);*/
+    
     box-shadow: inset 0px 1px 10px black;
     background: white;
 }
+
 meter.p0time,
 meter.p1time {
     height: 3px;
     border: none;
 }
+
 .p0time::-webkit-meter-bar,
 .p1time::-webkit-meter-bar {
     border: none;
     background: none;
 }
+
 .p0time::-webkit-meter-optimum-value,
 .p1time::-webkit-meter-optimum-value {
     background: rgba(200, 200, 200, .5);
     border: none;
 }
+
 #lifepoints input.p0time,
 #lifepoints input.p1time {
     height: 10px;
@@ -677,9 +791,11 @@ meter.p1time {
     width: 5%;
     margin: 0 5%;
 }
+
 #lifepoints {
     width: 100%
 }
+
 #lifepoints input {
     text-align: center;
     float: left;
@@ -691,34 +807,41 @@ meter.p1time {
     clear: left;
     margin-top: 0;
 }
+
 #lifepoints .p1lp {
     float: right;
 }
+
 #lifepoints {
     width: 1000px;
     margin: 10px auto;
 }
+
 .center {
     height: 35px;
     border: 1px dashed white;
 }
+
 .center div {
     font-size: .7em;
     color: white;
     float: left;
     width: 50%;
 }
+
 .left,
 .right,
 .center {
     float: left;
     width: 33%;
 }
+
 .gameplayarea {
     width: 750px;
     height: 750px;
     margin: 0 auto;
 }
+
 .fieldimage {
     width: 800px;
     height: 600px;
@@ -734,16 +857,20 @@ meter.p1time {
     -webkit-perspective-origin-x: 500px;
     -webkit-perspective-origin-y: 1000px;
 }
+
 .button.ready0 {
     display: none;
 }
+
 .button.ready1 {
     display: inline-block;
     background: yellow
 }
+
 .button.ready2 {
     display: inline-block;
 }
+
 #rps,
 #selectduelist {
     width: 100%;
@@ -754,12 +881,14 @@ meter.p1time {
     top: 0;
     color: white;
 }
+
 #rps .container,
 #selectduelist .container {
     width: 1000px;
     margin: 0 auto;
     height: 1000px;
 }
+
 .rps {
     width: 23%;
     border: 1px solid white;
@@ -771,6 +900,7 @@ meter.p1time {
     background: black;
     margin: 0 5%;
 }
+
 .login,
 ,
 #creategame {
@@ -779,9 +909,11 @@ meter.p1time {
     background: rgba(0, 0, 0, .85);
     color: white;
 }
+
 #launcher {
     background: transparent;
 }
+
 .loginscreen {
     width: 350px;
     margin: 300px auto;
@@ -790,25 +922,30 @@ meter.p1time {
     padding: 20px;
     border-radius: 20px;
 }
+
 .login label {
     width: 150px;
     padding: 0px 30px 10px 0;
     display: inline-block;
 }
+
 .login input {
     width: 150px;
     padding: 0px 30px 0px 0;
     display: inline-block;
     color: #444;
 }
+
 .login h3 {
     text-align: center;
     margin-bottom: 30px;
 }
+
 #loginbutton {
     margin: 30px 110px;
     margin-bottom: 10px;
 }
+
 #creategame .container {
     width: 360px;
     margin: 100px auto;
@@ -817,11 +954,13 @@ meter.p1time {
     padding: 20px;
     border-radius: 20px;
 }
+
 #creategame label {
     width: 175px;
     padding: 0px 30px 10px 0;
     display: inline-block;
 }
+
 #creategame input,
 #creategame select,
 #creategame option {
@@ -830,16 +969,20 @@ meter.p1time {
     display: inline-block;
     color: #444;
 }
+
 #creategame select,
 #creategame option {
     padding: 0;
 }
+
 #creategamecancel {
     float: right;
 }
+
 #creategame input[type="radio"] {
     width: 25px;
 }
+
 #messagerbox {
     position: fixed;
     width: 100%;
@@ -852,6 +995,7 @@ meter.p1time {
     color: #ddd;
     padding-bottom: 3em;
 }
+
 #messagerbox .close {
     position: fixed;
     top: 0;
@@ -859,9 +1003,11 @@ meter.p1time {
     width: 200px;
     height: 2em;
 }
+
 #duelzone {
     display: none;
 }
+
 #phases {
     position: fixed;
     bottom: 35px;
@@ -885,15 +1031,19 @@ header {
     color: inherit;
     text-decoration: none;
 }
+
 header a:hover {
     color: pink;
 }
+
 .undefined {
     display: none
 }
+
 .card.real {
     display: block
 }
+
 .servermessage {
     background: rgba(255, 0, 0, .65);
     color: white;
@@ -901,18 +1051,22 @@ header a:hover {
     box-shadow: 0 0 21px white, 0 0 59px 21px rgba(255, 0, 0, .5);
     border: none !important;
 }
+
 .web .launcheronly {
     display: none !important;
 }
+
 .in-iframe .webonly {
     display: none;
 }
+
 .in-iframe #versioninfo {
     position: absolute;
     top: 5px;
     left: 5px;
     display: block
 }
+
 #hostSettings {
     background: rgba(0, 0, 0, .5);
     width: 40%;
@@ -925,6 +1079,7 @@ header a:hover {
     height: 80%;
     margin-top: 2.5%;
 }
+
 #hostSettings select,
 #hostSettings input,
 #settings select,
@@ -935,16 +1090,19 @@ header a:hover {
     height: 1.5em;
     background: rgba(255, 255, 255, .5);
     /* color: white; */
+    
     font-size: 0.9em;
     line-height: 1.1em;
     padding: .1em;
 }
+
 #hostSettings label,
 #settings label {
     display: inline-block;
     padding-bottom: 2px;
     width: 50%;
 }
+
 #creategameok,
 #creategamecancel {
     width: 100%;
@@ -954,6 +1112,7 @@ header a:hover {
     border: 1px solid black;
     text-align: center;
 }
+
 .chatcontainer {
     width: 98%;
     height: 100%;
@@ -962,6 +1121,7 @@ header a:hover {
     margin: 0 auto;
     color: white;
 }
+
 .chattitle {
     border: 1px solid white;
     color: white;
@@ -969,6 +1129,7 @@ header a:hover {
     float: left;
     width: 100%%;
 }
+
 .chatbody {
     width: 80%;
     border: 1px solid white;
@@ -979,6 +1140,7 @@ header a:hover {
     overflow: scroll;
     font-size: 10px;
 }
+
 .chatroomlist {
     float: left;
     width: 10px;
@@ -989,6 +1151,7 @@ header a:hover {
     width: 18%;
     overflow: scroll;
 }
+
 .chatcontrolls {
     float: left;
     width: 10%;
@@ -996,6 +1159,7 @@ header a:hover {
     margin-top: 5px;
     border: 1px solid white;
 }
+
 input#chatinput {
     background: transparent;
     border: 1px solid white;
@@ -1006,6 +1170,7 @@ input#chatinput {
     width: 69.5%;
     float: left;
 }
+
 .chatsubmit {
     border: 1px solid white;
     width: 5%;
@@ -1014,6 +1179,7 @@ input#chatinput {
     margin-top: 5px;
     margin-left: .5%;
 }
+
 #gamefilter {
     background: rgba(0, 0, 0, .8);
     width: 25vw;
@@ -1021,11 +1187,13 @@ input#chatinput {
     float: right;
     padding: 5px;
     /* height: 92.5vh; */
+    
     padding-top: 28px;
     border: 1px solid black;
     color: white;
     margin-top: 12vh;
 }
+
 #gamefilter label {
     display: block;
     width: 100%;
@@ -1033,59 +1201,68 @@ input#chatinput {
     padding: 0;
     margin-top: 1vh;
 }
+
 #gamefilter label select,
 #gamefilter label input {
     float: right;
     display: block;
     width: 50%;
 }
+
 .incasing {
     padding: 5px;
     border: 1px solid silver;
 }
+
 #gamefilter button {
     margin-top: 20px;
     display: inline-block;
 }
+
 section#gamelistsection {
     padding-top: 0;
     background: transparent;
 }
+
 div#gamelist {
     width: 70vw;
-    float:left;
+    float: left;
     margin: auto 0;
 }
+
 .in-iframe div#gamelist {
     width: 70vw;
     float: left;
     margin: auto;
 }
+
 .in-iframe {
     float: left
 }
+
 #homecontainer {
     overflow: auto;
-    width:100%;
-    margin-top:50px;
+    width: 100%;
+    margin-top: 50px;
     height: 500px;
 }
+
 #home article {
     max-width: 920px;
     margin: 0 auto;
     color: white;
     font-family: Roboto, sans-serif;
-    margin-top:40px;
+    margin-top: 40px;
 }
+
 #news h3 {
     text-align: center;
-    
     margin: 0;
     font-weight: 100;
 }
-#news h2 {
 
-}
+#news h2 {}
+
 .newscontent {
     font-size: .8em;
     text-align: justify;
@@ -1095,7 +1272,9 @@ div#gamelist {
    Media Queries
    ========================================================================== */
 
-@media only screen and (min-width: 35em) {}@media print,
+@media only screen and (min-width: 35em) {}
+
+@media print,
 (-o-min-device-pixel-ratio: 5/4),
 (-webkit-min-device-pixel-ratio: 1.25),
 (min-resolution: 120dppx) {}
@@ -1109,16 +1288,19 @@ div#gamelist {
     overflow:hidden;
     *text-indent:-9999px;
 }
+
 .ir:before {
     content: "";
     display: block;
     width: 0;
     height: 150%;
 }
+
 .hidden {
     display: none !important;
     visibility: hidden;
 }
+
 .visuallyhidden {
     border: 0;
     clip: rect(0 0 0 0);
@@ -1129,6 +1311,7 @@ div#gamelist {
     position: absolute;
     width: 1px;
 }
+
 .visuallyhidden.focusable:active,
 .visuallyhidden.focusable:focus {
     clip: auto;
@@ -1138,17 +1321,21 @@ div#gamelist {
     position: static;
     width: auto;
 }
+
 .invisible {
     visibility: hidden;
 }
+
 .clearfix:before,
 .clearfix:after {
     content: " ";
     display: table;
 }
+
 .clearfix:after {
     clear: both;
 }
+
 .clearfix {
     *zoom: 1;
 }
@@ -1161,6 +1348,7 @@ div#gamelist {
         background: transparent !important;
         color: #000 !important;
         /* Black prints faster: h5bp.com/s */
+        
         box-shadow: none !important;
         text-shadow: none !important;
     }
@@ -1177,6 +1365,7 @@ div#gamelist {
     /*
      * Don't show links for images, or javascript/internal links
      */
+    
     .ir a:after,
     a[href^="javascript:"]:after,
     a[href^="#"]:after {
@@ -1212,46 +1401,74 @@ div#gamelist {
         page-break-after: avoid;
     }
 }
-div[data-game^="0"]{ /* OCG */
-    border-color:yellow;
-    color:yellow;
-}
-div[data-game^="1"]{ /* TCG */
-    border-color:blue;
-    color:blue;
-}
-div[data-game^="2"]{ /* TCG/OCG */
-    border-color:green;
-    color:green;
-}
-div[data-game^="3"]{ /* Anime */
-    border-color:pink;
-    color:pink;
+
+div[data-game^="0"] {
+    /* OCG */
+    
+    border-color: yellow;
+    color: yellow;
 }
 
+div[data-game^="1"] {
+    /* TCG */
+    
+    border-color: blue;
+    color: blue;
+}
+
+div[data-game^="2"] {
+    /* TCG/OCG */
+    
+    border-color: green;
+    color: green;
+}
+
+div[data-game^="3"] {
+    /* Anime */
+    
+    border-color: pink;
+    color: pink;
+}
 
 div[data-game^="00"],
 div[data-game^="10"],
 div[data-game^="20"],
-div[data-game^="30"]{ /* single */
-
+div[data-game^="30"] {
+    /* single */
 }
+
 div[data-game^="01"],
 div[data-game^="11"],
 div[data-game^="21"],
-div[data-game^="31"]{ /* match */
+div[data-game^="31"] {
+    /* match */
+    
     border-width: 2px;
 }
+
 div[data-game^="02"],
 div[data-game^="12"],
 div[data-game^="22"],
-div[data-game^="32"]{ /* tags */
+div[data-game^="32"] {
+    /* tags */
+    
     border-width: 4px;
 }
 
-.game:not([data-game*=",0,5,1,"]), .game:not([data-game*="OOO"]){ /* cheating! */
+.game:not([data-game*=",0,5,1,"]),
+.game:not([data-game*="OOO"]) {
+    /* cheating! */
+    
     background: red;
-    font-weight:bold;
-    color:white;
-    border:2px;
+    font-weight: bold;
+    color: white;
+    border: 2px;
+}
+
+div#news {
+    width: 80%;
+    margin: 0 auto;
+    color: white;
+    height: 85vh;
+    overflow-y: scroll;
 }
