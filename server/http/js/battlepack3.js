@@ -7,7 +7,7 @@ var battlePack3 = {
 
 function pick(list) {
     'use strict';
-    return list[Math.floor(Math.random() * (list.length))];
+    return list[Math.floor(Math.random() * (list.length + 1))];
 }
 
 function makePack() {
@@ -48,7 +48,7 @@ function shuffle(array) {
     return array;
 }
 
-function makeDeck(ofXpacks) {
+function makeDeck(ofXpacks, asPileofCards) {
     'use strict';
     var cardpool = [],
         psudeoDeck = [],
@@ -59,6 +59,9 @@ function makeDeck(ofXpacks) {
     
     for (opening; ofXpacks > opening; opening++) {
         cardpool.concat(makePack);
+    }
+    if (asPileofCards) {
+        return cardpool;
     }
     cardpool = shuffle(cardpool);
     psudeoDeck = cardpool.filter(function (i) {
@@ -98,3 +101,6 @@ function writeDeckList(deck) {
     }
     return ydkfile;
 }
+
+
+
