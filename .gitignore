@@ -222,7 +222,12 @@ server/ygocore/*.dll
 server/ygocore/*.exe
 server/ygocore/ErrorLog.txt
 server/ygocore/error_log/*
-server/http/ygopro/*
+server/http/ygopro/*.exe
+server/http/ygopro/*.dll
+server/http/ygopro/*.so
+server/http/ygopro/*.jpg
+server/http/ygopro/*.jpeg
+server/http/ygopro/*.png
 server/http/manifest/*
 
 #project-Agnotistic

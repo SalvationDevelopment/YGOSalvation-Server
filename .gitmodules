@@ -1,0 +1,3 @@
+[submodule "YGOScripts"]
+	path = server/http/ygopro
+	url = https://github.com/SalvationDevelopment/YGOScripts
