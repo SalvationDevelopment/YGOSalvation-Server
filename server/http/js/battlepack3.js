@@ -7,7 +7,7 @@ var battlePack3 = {
 
 function pick(list) {
     'use strict';
-    return list[Math.floor(Math.random() * (list.length + 1))];
+    return list[Math.floor(Math.random() * (list.length))];
 }
 
 function makePack() {
