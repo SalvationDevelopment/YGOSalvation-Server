@@ -39,11 +39,11 @@ function pickNum(list, num) {
 
 function makePack() {
     'use strict';
-    var pack = [];
+    var pack;
     //ooh a pack of cards
 
     //ick commons;
-    pack.push(pick(battlePack3.commons)).push(pick(battlePack3.commons)).push(pick(battlePack3.commons));
+    pack = pickNum(battlePack3.commons, 3);
 
     //ooh a rare
     pack.push(pick(battlePack3.rares));
