@@ -7,16 +7,43 @@ var battlePack3 = {
 
 function pick(list) {
     'use strict';
-    return list[Math.floor(Math.random() * (list.length + 1))];
+    return list[Math.floor(Math.random() * (list.length))];
+}
+
+function pickNum(list, num) {
+    
+    
+    'use strict';
+
+    var a = 0;
+
+    var returnList = [];
+
+    var cardToAdd;
+    while (a < num)
+    {
+        cardToAdd = pick(list);
+
+	//Prevents duplicates if the number of cards requested isn't bigger than the length of the list
+        if (!(returnList.indexOf(cardToAdd) >= 0) || list.length < num)
+        {
+            returnList.push(cardToAdd);
+            a++;
+
+        }
+
+    }
+    return returnList;
+
 }
 
 function makePack() {
     'use strict';
-    var pack = [];
+    var pack;
     //ooh a pack of cards
 
     //ick commons;
-    pack.push(pick(battlePack3.commons)).push(pick(battlePack3.commons)).push(pick(battlePack3.commons));
+    pack = pickNum(battlePack3.commons, 3);
 
     //ooh a rare
     pack.push(pick(battlePack3.rares));
