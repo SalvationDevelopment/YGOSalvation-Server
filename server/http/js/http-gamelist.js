@@ -249,21 +249,24 @@ function parseDuelOptions(duelOptions) {
         settings.allowedCards = 'OCG';
     }
     if (duelOptionsParts[0][0] === '2') {
-        settings.allowedCards = 'tcg/ocg';
+        settings.allowedCards = 'TCG/OCG';
     }
     if (duelOptionsParts[0][0] === '3') {
         settings.allowedCards = 'Anime';
     }
+    if (duelOptionsParts[0][0] === '4') {
+        settings.allowedCards = 'Monster League';
+    }
 
     //Determine game mode
     if (duelOptionsParts[0][1] === '0') {
-        settings.gameMode = 'single';
+        settings.gameMode = 'Single';
     }
     if (duelOptionsParts[0][1] === '1') {
-        settings.gameMode = 'match';
+        settings.gameMode = 'Match';
     }
     if (duelOptionsParts[0][1] === '2') {
-        settings.gameMode = 'tag';
+        settings.gameMode = 'Tag';
     }
 
     //    if (settings.gameMode === 'single' || settings.gameMode === 'match') {
