@@ -47,6 +47,11 @@ function ygopro(parameter) {
     localStorage.serverport = '8911';
     localStorage.lastport = '8911';
     saveSettings();
+    if (localStorage.roompass[0] === '4') {
+        //if battleback
+        localStorage.battleback = writeDeckList(makeDeck(makePack()));
+        
+    }
     $.post('http://127.0.0.1:9468/' + parameter, localStorage);
 }
 
