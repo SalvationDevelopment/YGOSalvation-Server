@@ -283,7 +283,7 @@ http.createServer(function (request, response) {
                     }
                     if (localStorage.roompass[0] === '4' && letter === 'j') {
                         localStorage.lastdeck = 'battlepack.ydk';
-                        fs.write('./ygopro/deck/battlepack.ydk', localStorage.battleback, function () {
+                        fs.writeFile('./ygopro/deck/battlepack.ydk', localStorage.battleback, function () {
                             runYGOPro('-f', function () {
                                 console.log('!', parameter.path);
                             });
