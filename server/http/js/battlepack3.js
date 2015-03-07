@@ -39,17 +39,17 @@ function pickNum(list, num) {
 
 function makePack() {
     'use strict';
-    var pack;
+    var pack = [];
     //ooh a pack of cards
 
     //ick commons;
-    pack = pickNum(battlePack3.commons, 3);
+    pack = pack.concat(pickNum(battlePack3.commons, 3));
 
     //ooh a rare
-    pack.push(pick(battlePack3.rares));
+    pack = pack.concat(pickNum(battlePack3.rares, 1));
 
     //ooh shinny!
-    pack.push(pick(battlePack3.shatterfoils));
+    pack = pack.concat(pickNum(battlePack3.shatterfoils, 1));
     return pack;
 }
 
@@ -85,21 +85,23 @@ function makeDeck(ofXpacks, asPileofCards) {
         opening = 0;
 
     for (opening; ofXpacks > opening; opening++) {
-        cardpool.concat(makePack);
+        cardpool = cardpool.concat(makePack());
     }
+    console.log(cardpool, cardpool.length);
     if (asPileofCards) {
         return cardpool;
     }
     cardpool = shuffle(cardpool);
     psudeoDeck = cardpool.filter(function (i) {
+        return !(xyzs.indexOf(i) < -1);
+    });
+    console.log(psudeoDeck);
+    extraDeck = cardpool.filter(function (i) {
         return (xyzs.indexOf(i) > -1);
     });
-    extraDeck = cardpool.filter(function (i) {
-        return (xyzs.indexOf(i) < -1);
-    });
-    mainDeck = psudeoDeck.splice(0, 39);
-    sideDeck = psudeoDeck.splice(39);
-
+    mainDeck = psudeoDeck.splice(0, 40);
+    sideDeck = psudeoDeck.splice(41,15);
+    extraDeck = extraDeck.splice(0,15);
     return {
         main: mainDeck,
         extra: extraDeck,
