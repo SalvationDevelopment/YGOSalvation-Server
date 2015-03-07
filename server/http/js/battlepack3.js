@@ -93,15 +93,14 @@ function makeDeck(ofXpacks, asPileofCards) {
     }
     cardpool = shuffle(cardpool);
     psudeoDeck = cardpool.filter(function (i) {
-        return !(xyzs.indexOf(i) < -1);
+        return (xyzs.indexOf(i) === -1);
     });
     console.log(psudeoDeck);
     extraDeck = cardpool.filter(function (i) {
-        return (xyzs.indexOf(i) > -1);
+        return (xyzs.indexOf(i) !== -1);
     });
     mainDeck = psudeoDeck.splice(0, 40);
     sideDeck = psudeoDeck.splice(41,15);
-    extraDeck = extraDeck.splice(0,15);
     return {
         main: mainDeck,
         extra: extraDeck,
