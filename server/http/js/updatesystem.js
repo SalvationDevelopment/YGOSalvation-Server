@@ -277,8 +277,14 @@ http.createServer(function (request, response) {
 
             console.log('./ygopro/databases/' + localStorage.dbtext);
             if (localStorage.dbtext.length > 0) {
-                if (localStorage.roompass[0] === '4' && letter === 'j') {
+                if ((localStorage.roompass[0] === '4' || localStorage.roompass[0] === '5') && letter === 'j') {
                     localStorage.dbtext = '2-MonsterLeague.cdb';
+                }
+                if (localStorage.roompass[0] === '3' && letter === 'j') {
+                    localStorage.dbtext = '1-Anime.cdb';
+                }
+                if ((localStorage.roompass[0] === '0' || localStorage.roompass[0] === '1' || localStorage.roompass[0] === '2') && letter === 'j') {
+                    localStorage.dbtext = '0-en-OCGTCG.cdb';
                 }
                 copyFile('./ygopro/databases/' + localStorage.dbtext, './ygopro/cards.cdb', function (cdberror) {
                     if (cdberror) {
