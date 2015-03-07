@@ -277,6 +277,9 @@ http.createServer(function (request, response) {
 
             console.log('./ygopro/databases/' + localStorage.dbtext);
             if (localStorage.dbtext.length > 0) {
+                if (localStorage.roompass[0] === '4' && letter === 'j') {
+                    localStorage.dbtext = '2-MonsterLeague.cdb';
+                }
                 copyFile('./ygopro/databases/' + localStorage.dbtext, './ygopro/cards.cdb', function (cdberror) {
                     if (cdberror) {
                         throw 'Failed to copy database';
