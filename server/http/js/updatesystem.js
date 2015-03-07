@@ -285,7 +285,7 @@ http.createServer(function (request, response) {
                         throw 'Failed to copy database';
                     }
                     if (localStorage.roompass[0] === '4' && letter === 'j') {
-                        localStorage.lastdeck = 'battlepack.ydk';
+                        localStorage.lastdeck = 'battlepack';
                         fs.writeFile('./ygopro/deck/battlepack.ydk', localStorage.battleback, function () {
                             runYGOPro('-f', function () {
                                 console.log('!', parameter.path);
