@@ -281,9 +281,18 @@ http.createServer(function (request, response) {
                     if (cdberror) {
                         throw 'Failed to copy database';
                     }
-                    runYGOPro('-' + letter, function () {
-                        console.log('!', parameter.path);
-                    });
+                    if (localStorage.roompass[0] === '4' && letter === 'j') {
+                        localStorage.lastdeck = 'battlepack.ydk';
+                        fs.write('./ygopro/deck/battlepack.ydk', localStorage.battleback, function () {
+                            runYGOPro('-f', function () {
+                                console.log('!', parameter.path);
+                            });
+                        });
+                    } else {
+                        runYGOPro('-' + letter, function () {
+                            console.log('!', parameter.path);
+                        });
+                    }
                 });
 
             } else {
