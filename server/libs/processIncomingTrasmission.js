@@ -152,10 +152,9 @@ function startCore(port, socket, data, callback) {
         }
 
         var configfile = pickCoreConfig(socket),
-            params = port + ' ' + configfile,
-            exe = (configfile === '4-config.txt') ? 'BattlePack' : 'YGOServer';
+            params = port + ' ' + configfile;
         custom_error(console.log(' initiating core for ' + socket.username + ' on port:' + port + ' with: ' + configfile));
-        socket.core = childProcess.spawn(startDirectory + '/../ygocore/' + exe + '.exe', [port, configfile], {
+        socket.core = childProcess.spawn(startDirectory + '/../ygocore/YGOServer.exe', [port, configfile], {
             cwd: startDirectory + '/../ygocore'
         }, function (error, stdout, stderr) {
             console.log(error, stdout, stderr);

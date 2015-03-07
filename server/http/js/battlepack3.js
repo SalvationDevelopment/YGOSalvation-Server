@@ -100,7 +100,7 @@ function makeDeck(ofXpacks, asPileofCards) {
         return (xyzs.indexOf(i) !== -1);
     });
     mainDeck = psudeoDeck.splice(0, 40);
-    sideDeck = psudeoDeck.splice(40,15);
+    sideDeck = psudeoDeck.splice(41,15);
     return {
         main: mainDeck,
         extra: extraDeck,
