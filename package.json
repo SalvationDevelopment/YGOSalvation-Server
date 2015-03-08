@@ -24,7 +24,7 @@
         "ws": "*",
         "irc": "*",
         "colors": "*",
-        "knuth-shuffle", "*",
+        "knuth-shuffle": "*",
         "lodash" : "*"
     },
     "optionalDependencies": {
