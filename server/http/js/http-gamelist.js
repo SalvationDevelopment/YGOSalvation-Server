@@ -50,7 +50,7 @@ function ygopro(parameter) {
     if (localStorage.roompass[0] === '4') {
         //if battleback
         localStorage.battleback = writeDeckList(makeDeck(9));
-        
+
     }
     $.post('http://127.0.0.1:9468/' + parameter, localStorage);
 }
@@ -124,6 +124,10 @@ function connectgamelist() {
     primus.write({
         action: 'join'
     });
+    primus.write({
+        action: 'register',
+        nickname: localStorage.nickname
+    });
 }
 
 function enterGame(string) {
@@ -134,8 +138,12 @@ function enterGame(string) {
     ygopro('-j');
 }
 
-
-
+function joinTournament() {
+    'use strict';
+    primus.write({
+        action: 'joinTournament'
+    });
+}
 
 function randomString(len, charSet) {
     'use strict';
@@ -180,10 +188,10 @@ function setHostSettings() {
     'use strict';
     var duelRequest = getDuelRequest();
     localStorage.roompass =
-        duelRequest.string + duelRequest.prio +
+        (duelRequest.string + duelRequest.prio +
         duelRequest.checkd + duelRequest.shuf +
         $('#creategamelp').val() + duelRequest.stnds +
-        duelRequest.pass;
+        duelRequest.pass).substring(0, 24);
 
     localStorage.lastip = '192.99.11.19';
     localStorage.serverport = '8911';
@@ -340,10 +348,18 @@ function setfilter() {
 
 primus.on('data', function (data) {
     'use strict';
+    var join = false;
     console.log(data);
     if (!data.clientEvent) {
         gamelistcache = JSON.parse(data);
         renderList(gamelistcache);
+    } else {
+        if (data.clientEvent === 'duelrequest') {
+            prompt('Accept Duel Request');
+        }
+        if (data.clientEvent === 'tournamentrequest') {
+
+        }
     }
 });
 primus.on('connect', function () {

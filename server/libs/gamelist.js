@@ -142,6 +142,16 @@ primus.on('connection', function (socket) {
         case ('leave'):
             socket.leave('activegames');
             break;
+                
+        case ('register'):
+            socket.nickname = data.nickname;
+            break;
+                
+        case ('joinTournament'):
+            socket.join('tournament', function () {
+                socket.write(JSON.stringify(gamelist));
+            });
+            break;
 
         default:
             console.log(data);
