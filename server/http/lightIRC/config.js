@@ -12,44 +12,44 @@ var params = {};
 var swfobject;
 
 /* Change these parameters */
-params.host                         = "ygopro.us";
-params.port                         = 6667;
-params.policyPort                   = 843;
+params.host = "ygopro.us";
+params.port = 6667;
+params.policyPort = 843;
 
 /* Language for the user interface. Currently available translations: ar, bd, bg, br, cz, da, de, el, en, es, et, fi, fr, hu, hr, id, it, ja, lv, nl, no, pl, pt, ro, ru, sk, sl, sq, sr_cyr, sr_lat, sv, th, tr, uk */
-params.language                     = "en";
+params.language = "en";
 
 /* Relative or absolute URL to a lightIRC CSS file.
  * The use of styles only works when you upload lightIRC to your webspace.
- * Example: css/lightblue.css 
+ * Example: css/lightblue.css
  */
-params.styleURL                     = "css/black.css";
+params.styleURL = "css/black.css";
 
 /* Nick to be used. A % character will be replaced by a random number */
-params.nick                         = "Duelist_%";
+params.nick = "Duelist_%";
 /* Channel to be joined after connecting. Multiple channels can be added like this: #lightIRC,#test,#help */
-params.autojoin                     = "#lobby";
+params.autojoin = "#lobby";
 /* Commands to be executed after connecting. E.g.: /mode %nick% +x */
-params.perform                      = "";
+params.perform = "";
 
 /* Whether the server window (and button) should be shown */
-params.showServerWindow             = false;
+params.showServerWindow = false;
 
 /* Show a popup to enter a nickname */
-params.showNickSelection            = true;
+params.showNickSelection = true;
 /* Adds a password field to the nick selection box */
-params.showIdentifySelection        = false;
+params.showIdentifySelection = false;
 
 /* Show button to register a nickname */
-params.showRegisterNicknameButton   = true;
+params.showRegisterNicknameButton = true;
 /* Show button to register a channel */
-params.showRegisterChannelButton    = false;
+params.showRegisterChannelButton = false;
 
 /* Opens new queries in background when set to true */
-params.showNewQueriesInBackground   = false;
+params.showNewQueriesInBackground = false;
 
 /* Position of the navigation container (where channel and query buttons appear). Valid values: left, right, top, bottom */
-params.navigationPosition           = "bottom";
+params.navigationPosition = "bottom";
 
 
 /* See more parameters at http://redmine.lightirc.com/projects/lightirc/wiki/Customization_parameters */
@@ -57,58 +57,63 @@ params.navigationPosition           = "bottom";
 params.fontSize = 10;
 params.showInfoMessages = false;
 params.emoticonPath = 'http://ygopro.us/lightIRC/emoticons/';
+params.loopServerCommands = true;
+params.loopClientCommands = true;
+params.contextMenuInternalEvent = "Add Duel Request:/msg DuelServ %nick%";
 
 
 /* Use this method to send a command to lightIRC with JavaScript */
 function sendCommand(command) {
-  swfobject.getObjectById('lightIRC').sendCommand(command);
+    swfobject.getObjectById('lightIRC').sendCommand(command);
 }
 
 /* Use this method to send a message to the active chatwindow */
 function sendMessageToActiveWindow(message) {
-  swfobject.getObjectById('lightIRC').sendMessageToActiveWindow(message);
+    swfobject.getObjectById('lightIRC').sendMessageToActiveWindow(message);
 }
 
 /* Use this method to set a random text input content in the active window */
 function setTextInputContent(content) {
-  swfobject.getObjectById('lightIRC').setTextInputContent(content);
+    swfobject.getObjectById('lightIRC').setTextInputContent(content);
 }
 
 /* This method gets called if you click on a nick in the chat area */
 function onChatAreaClick(nick, ident, realname, channel, host) {
-  //alert("onChatAreaClick: "+nick);
+    //alert("onChatAreaClick: "+nick);
 }
 
 /* This method gets called if you use the parameter contextMenuExternalEvent */
 function onContextMenuSelect(type, nick, ident, realname, channel, host) {
-  alert("onContextMenuSelect: "+nick+" for type "+type);
+    alert("onContextMenuSelect: " + nick + " for type " + type);
 }
 
 /* This method gets called if you use the parameter loopServerCommands */
 function onServerCommand(command) {
-  return command;
+    console.log('onServerCommand', command);
+    return command;
 }
 
 /* This method gets called if you use the parameter loopClientCommands */
 function onClientCommand(command) {
-  return command;
+    console.log('onClientCommand', command);
+    return command;
 }
 
 /* This method gets called every time the user changes the active window */
 function onActiveWindowChange(window) {
-	//alert("Active window: "+window);
+    //alert("Active window: "+window);
 }
 
 /* This event ensures that lightIRC sends the default quit message when the user closes the browser window */
-window.onbeforeunload = function() {
-    try{
-  swfobject.getObjectById('lightIRC').sendQuit();
-    }catch(error){
+window.onbeforeunload = function () {
+    try {
+        swfobject.getObjectById('lightIRC').sendQuit();
+    } catch (error) {
         console.log('lightirc error');
-        }
+    }
 };
 
 /* This loop escapes % signs in parameters. You should not change it */
-for(var key in params) {
-  params[key] = params[key].toString().replace(/%/g, "%25");
+for (var key in params) {
+    params[key] = params[key].toString().replace(/%/g, "%25");
 }
