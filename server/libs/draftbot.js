@@ -2,7 +2,7 @@
 var bot,
     irc = require("irc"),
     config = {
-        channels: ["#server", "#lobby", "#oper"],
+        channels: ["#server", "#lobby"],
         server: "ygopro.us",
         botName: "DuelServ"
     };
