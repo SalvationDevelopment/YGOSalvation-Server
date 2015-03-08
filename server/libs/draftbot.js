@@ -1,4 +1,4 @@
-/*jslint node:true*/
+/*jslint node:true, plusplus: true*/
 var bot,
     irc = require("irc"),
     events = require('events'),
@@ -6,7 +6,7 @@ var bot,
     config = {
         channels: ["#server", "#lobby"],
         server: "ygopro.us",
-        botName: "DuelServ"
+        botName: "DuelServTwo"
     };
 
 function randomString(len, charSet) {
@@ -41,7 +41,7 @@ bot.addListener("message", function (from, to, message) {
     'use strict';
     var command = message.split(' '),
         pass = randomString(5);
-    if (command[0] !== '!duel' && command.length !== 2) {
+    if (command[0] !== '!duel' || command.length !== 1) {
         return;
     }
     
