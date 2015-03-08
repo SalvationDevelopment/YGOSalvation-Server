@@ -6,7 +6,7 @@ var bot,
     config = {
         channels: ["#server", "#lobby"],
         server: "ygopro.us",
-        botName: "DuelServTwo"
+        botName: "DuelServ"
     };
 
 function randomString(len, charSet) {
