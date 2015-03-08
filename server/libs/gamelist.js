@@ -175,6 +175,11 @@ function primusListener(message) {
     announce(message);
 }
 
+draftbot.on('announce', function (message) {
+    'use strict';
+    announce(message);
+});
+
 module.exports = {
     messageListener: messageListener,
     primusListener: primusListener
