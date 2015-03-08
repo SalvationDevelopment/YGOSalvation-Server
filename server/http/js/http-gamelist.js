@@ -189,9 +189,9 @@ function setHostSettings() {
     var duelRequest = getDuelRequest();
     localStorage.roompass =
         (duelRequest.string + duelRequest.prio +
-        duelRequest.checkd + duelRequest.shuf +
-        $('#creategamelp').val() + duelRequest.stnds +
-        duelRequest.pass).substring(0, 24);
+            duelRequest.checkd + duelRequest.shuf +
+            $('#creategamelp').val() + duelRequest.stnds +
+            duelRequest.pass).substring(0, 24);
 
     localStorage.lastip = '192.99.11.19';
     localStorage.serverport = '8911';
@@ -354,7 +354,7 @@ primus.on('data', function (data) {
         gamelistcache = JSON.parse(data);
         renderList(gamelistcache);
     } else {
-        if (data.clientEvent === 'duelrequest' && data.target === localStorage.nickname && confirm('Accept Duel Request?')) {
+        if (data.clientEvent === 'duelrequest' && data.target === localStorage.nickname && confirm('Accept Duel Request from ' + data.from + '?')) {
             enterGame(data.roompass);
         }
         if (data.clientEvent === 'tournamentrequest' && confirm('Join Tournament?')) {
