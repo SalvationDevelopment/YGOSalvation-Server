@@ -354,11 +354,11 @@ primus.on('data', function (data) {
         gamelistcache = JSON.parse(data);
         renderList(gamelistcache);
     } else {
-        if (data.clientEvent === 'duelrequest') {
-            prompt('Accept Duel Request');
+        if (data.clientEvent === 'duelrequest' && data.target === localStorage.nickname && comfirm('Accept Duel Request?')) {
+            enterGame(data.roompass);
         }
-        if (data.clientEvent === 'tournamentrequest') {
-
+        if (data.clientEvent === 'tournamentrequest' && comfirm('Join Tournament?')) {
+            joinTournament();
         }
     }
 });

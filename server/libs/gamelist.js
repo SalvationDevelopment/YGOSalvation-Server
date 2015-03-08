@@ -171,7 +171,8 @@ primus.on('error', function (socket) {
 
 function primusListener(message) {
     'use strict';
-
+    //other stuff here maybe?
+    announce(message);
 }
 
 module.exports = {
