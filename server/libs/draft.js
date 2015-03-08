@@ -1,5 +1,6 @@
-var currentDeck = [];
-var currentDraftCards = [];
+/*jslint node:true*/
+var currentDeck = [],
+    currentDraftCards = [];
 
 function newDeck() {
     'use strict';
@@ -42,4 +43,10 @@ function sortDeck(maxPerDeck, extraDeckCards) {
         side: sideDeck
     };
 }
-    
+
+module.exports = {
+    newDeck : newDeck,
+    loadDraftCards : loadDraftCards,
+    chooseDraftCard : chooseDraftCard,
+    sortDeck : sortDeck
+};
