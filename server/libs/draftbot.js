@@ -1,6 +1,8 @@
 /*jslint node:true*/
 var bot,
     irc = require("irc"),
+    events = require('events'),
+    eventEmitter = new events.EventEmitter(),
     config = {
         channels: ["#server", "#lobby"],
         server: "ygopro.us",
@@ -24,25 +26,17 @@ bot = new irc.Client(config.server, config.botName, {
     channels: config.channels
 });
 
-function communicateToPrimus(message, action) {
-    'use strict';
-    var output = {
-        messagetype: 'draft',
-        message : message
-    };
-    process.send(output);
-}
 
 function duelrequest(challenger, challengedParty, roompass) {
     'use strict';
-    communicateToPrimus({
+    eventEmitter.emit('announce', {
         clientEvent : 'duelrequest',
         target : challengedParty,
         from : challenger,
         roompass : roompass
-    }, 'duelrequest');
-
+    });
 }
+
 bot.addListener("message", function (from, to, message) {
     'use strict';
     var command = message.split(' ');
@@ -63,6 +57,4 @@ bot.addListener("message", function (from, to, message) {
 });
 
 
-module.exports = function incomingMsg(message) {
-    'use strict';
-};
+module.exports = eventEmitter;
