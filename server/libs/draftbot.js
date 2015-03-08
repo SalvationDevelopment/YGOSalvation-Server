@@ -41,7 +41,7 @@ bot.addListener("message", function (from, to, message) {
     'use strict';
     var command = message.split(' '),
         pass = randomString(5);
-    if (command[0] !== '!duel' || command.length !== 1) {
+    if (command[0] !== '!duel' || command.length !== 2) {
         return;
     }
     
