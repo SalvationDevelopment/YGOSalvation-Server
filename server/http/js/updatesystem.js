@@ -24,6 +24,7 @@ process.on('uncaughtException', function (err) {
     'use strict';
     console.log(err);
     screenMessage.html(randomErrors[Math.floor(Math.random() * (7))], err);
+    /* http://nodejsreactions.tumblr.com/post/52064099868/process-on-uncaughtexception-function */
 });
 
 function download() {
