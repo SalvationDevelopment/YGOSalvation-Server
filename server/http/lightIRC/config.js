@@ -59,7 +59,7 @@ params.showInfoMessages = false;
 params.emoticonPath = 'http://ygopro.us/lightIRC/emoticons/';
 params.loopServerCommands = true;
 params.loopClientCommands = true;
-params.contextMenuInternalEvent = "Add Duel Request:/msg DuelServ %nick%";
+params.contextMenuInternalEvent = "Add Duel Request:/msg DuelServ !duel %nick%";
 
 
 /* Use this method to send a command to lightIRC with JavaScript */
