@@ -7,6 +7,7 @@ var primus,
     Rooms = require('primus-rooms'),
     primusServer = http.createServer().listen(24555),
     message_irc = require('./custom_error.js'),
+    draftbot = require('./draftbot.js'),
     previousAnnouncement;
 
 function announce(announcement) {
@@ -43,7 +44,7 @@ function handleCoreMessage(core_message_raw, port, pid) {
                 spectators: 0,
                 started: false,
                 time: new Date(),
-                pid : pid || null
+                pid: pid || null
             };
 
         }
@@ -98,7 +99,7 @@ function handleCoreMessage(core_message_raw, port, pid) {
     }
 }
 
-module.exports = function messageListener(message) {
+function messageListener(message) {
     'use strict';
     var brokenup = message.core_message_raw.toString().split('\r\n'),
         game,
@@ -112,7 +113,7 @@ module.exports = function messageListener(message) {
             if (gamelist[game].players.length === 0 && gamelist[game].spectators.length === 0) {
                 delete gamelist[game];
             }
-            if (((new Date()) - (gamelist[game].time))  > 600000 && !gamelist.started) {
+            if (((new Date()) - (gamelist[game].time)) > 600000 && !gamelist.started) {
                 delete gamelist[game];
             }
         }
@@ -120,7 +121,7 @@ module.exports = function messageListener(message) {
     //primus.room('activegames').write(JSON.stringify(gamelist));
     announce(JSON.stringify(gamelist));
     return gamelist;
-};
+}
 
 primus = new Primus(primusServer, {
     parser: 'JSON'
@@ -157,3 +158,13 @@ primus.on('error', function (socket) {
     'use strict';
     //nothing required
 });
+
+function primusListener(message) {
+    'use strict';
+
+}
+
+module.exports = {
+    messageListener: messageListener,
+    primusListener: primusListener
+};
