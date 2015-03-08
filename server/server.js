@@ -55,7 +55,7 @@ function initiateMaster() {
         worker.on('message', function (message) {
             if (message.messagetype === 'coreMessage') {
                 var rooms,
-                    gamelist = gamelistManager(message.coreMessage);
+                    gamelist = gamelistManager.messageListener(message.coreMessage);
                 activegames = 0;
                 Object.keys(cluster.workers).forEach(function (id) {
                     cluster.workers[id].send({
@@ -71,6 +71,8 @@ function initiateMaster() {
                 process.title = 'YGOPro Salvation Server [' + activegames + ']';
             } else if (message.messagetype === 'custom_error') {
                 ircManager.notify(message.message);
+            } else if (message.messagetype === 'draft') {
+                gamelistManager.primusListener(message);
             }
 
         });
