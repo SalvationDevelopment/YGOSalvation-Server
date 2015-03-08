@@ -39,12 +39,14 @@ function duelrequest(challenger, challengedParty, roompass) {
 
 bot.addListener("message", function (from, to, message) {
     'use strict';
-    var command = message.split(' ');
+    var command = message.split(' '),
+        pass = randomString(5);
     if (command[0] !== '!duel' && command.length !== 2) {
         return;
     }
-    duelrequest(from, command[1], '200OOO8000,5,1,' + randomString(5));
-    duelrequest(command[1], from, '200OOO8000,5,1,' + randomString(5));
+    
+    duelrequest(from, command[1], '201OOO8000,0,5,1,U,' + pass);
+    duelrequest(command[1], from, '201OOO8000,0,5,1,U,' + pass);
 });
 
 bot.addListener("message", function (from, to, message) {
