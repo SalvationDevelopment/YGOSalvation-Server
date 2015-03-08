@@ -2,7 +2,7 @@
 var bot,
     irc = require("irc"),
     config = {
-        channels: ["#server"],
+        channels: ["#server", "#lobby", "#oper"],
         server: "ygopro.us",
         botName: "DuelServ"
     };
@@ -46,11 +46,22 @@ function duelrequest(challenger, challengedParty, roompass) {
 bot.addListener("message", function (from, to, message) {
     'use strict';
     var command = message.split(' ');
-    if (command[0] !== '!duel' && command.length !== 2){
+    if (command[0] !== '!duel' && command.length !== 2) {
         return;
     }
-    duelrequest(from, )
+    duelrequest(from, command[1], '200OOO8000,5,1,' + randomString(5));
+    duelrequest(command[1], from, '200OOO8000,5,1,' + randomString(5));
 });
+
+bot.addListener("message", function (from, to, message) {
+    'use strict';
+    var command = message.split(' ');
+    if (command[0] !== '!startDraft' && from !== "#oper") {
+        return;
+    }
+    //start tournament
+});
+
 
 module.exports = function incomingMsg(message) {
     'use strict';
