@@ -40,8 +40,15 @@ function duelrequest(challenger, challengedParty, roompass) {
 bot.addListener("message", function (from, to, message) {
     'use strict';
     var command = message.split(' '),
-        pass = randomString(5);
-    if (command[0] !== '!duel' || command.length !== 2) {
+        pass = randomString(5),
+        types = ['!tcg', '!ocg', '!duel', '!tag'],
+        codes = {
+            '!tcg' : '201OOO8000,0,5,1,U,',
+            '!ocg' : '201OOO8000,0,5,1,U,',
+            '!duel' : '201OOO8000,0,5,1,U,',
+            '!tag' : '201OOO8000,0,5,1,U,'
+        };
+    if (((types.indexOf(command[0]) !== -1) && command.length !== 2) || (command !== '!tag' && command.length !== 4)) {
         return;
     }
     if (command === '!tag' && command.length === 5) {
