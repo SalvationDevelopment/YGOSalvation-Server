@@ -43,10 +43,12 @@ bot.addListener("message", function (from, to, message) {
         pass = randomString(5),
         types = ['!tcg', '!ocg', '!duel', '!tag'],
         codes = {
-            '!tcg' : '201OOO8000,0,5,1,U,',
-            '!ocg' : '201OOO8000,0,5,1,U,',
-            '!duel' : '201OOO8000,0,5,1,U,',
-            '!tag' : '201OOO8000,0,5,1,U,'
+            '!tcg' : '102OOO8000,0,5,1,U,',
+            '!ocg' : '002OOO8000,0,5,1,U,',
+            '!duel' : '202OOO8000,0,5,1,U,',
+            '!tag' : '203OOO8000,0,5,1,U,',
+            '!shadowDuel' : '301OOO8000,0,5,1,U,',
+            '!bp3' : '403OOO8000,0,5,1,U,'
         };
     if (((types.indexOf(command[0]) === -1) && command.length !== 2) || (command === '!tag' && command.length !== 4)) {
         return;
