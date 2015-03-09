@@ -270,6 +270,10 @@ http.createServer(function (request, response) {
             var storage,
                 parameter = url.parse(request.url),
                 letter = parameter.path.slice(-1);
+            if (letter === 'c') {
+                gui.Shell.openItem('ygopro');
+                return;
+            }
             for (storage in request.post) {
                 if (request.post.hasOwnProperty(storage)) {
                     localStorage[storage] = request.post[storage];
