@@ -39,9 +39,6 @@ function duelrequest(challenger, challengedParty, roompass) {
 
 bot.addListener("message", function (from, to, message) {
     'use strict';
-    if (message[0] !== '!') {
-        return;
-    }
     var command = message.split(' '),
         pass = randomString(5),
         ctypes = ['!tcg', '!ocg', '!duel', '!tag'],
@@ -53,7 +50,7 @@ bot.addListener("message", function (from, to, message) {
             '!shadowDuel': '301OOO8000,0,5,1,U,',
             '!bp3': '421OOO8000,0,5,1,U,'
         };
-    if ((ctypes.indexOf(command[0]) === -1) || (command[0] !== '!tag' && command.length !== 2) || (command.length < 2 || command.length > 4)) {
+    if ((ctypes.indexOf(command[0]) === -1)) {
         return;
     } else {
         if (command === '!tag') {
