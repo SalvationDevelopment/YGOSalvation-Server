@@ -48,14 +48,16 @@ bot.addListener("message", function (from, to, message) {
             '!duel' : '201OOO8000,0,5,1,U,',
             '!tag' : '201OOO8000,0,5,1,U,'
         };
-    if (((types.indexOf(command[0]) !== -1) && command.length !== 2) || (command !== '!tag' && command.length !== 4)) {
+    if (((types.indexOf(command[0]) === -1) && command.length !== 2) || (command === '!tag' && command.length !== 4)) {
         return;
     }
-    if (command === '!tag' && command.length === 5) {
+    if (command === '!tag') {
         duelrequest(from, command[1], codes[command[0]] + pass);
         duelrequest(command[1], from, codes[command[0]] + pass);
-        duelrequest(command[2], from, codes[command[0]] + pass);
-        duelrequest(command[3], from, codes[command[0]] + pass);
+        if (command.length === 4) {
+            duelrequest(command[2], from, codes[command[0]] + pass);
+            duelrequest(command[3], from, codes[command[0]] + pass);
+        }
     }
     duelrequest(from, command[1], codes[command[0]] + pass);
     duelrequest(command[1], from, codes[command[0]] + pass);
