@@ -50,7 +50,7 @@ bot.addListener("message", function (from, to, message) {
             '!shadowDuel' : '301OOO8000,0,5,1,U,',
             '!bp3' : '421OOO8000,0,5,1,U,'
         };
-    if (((types.indexOf(command[0]) === -1) && command.length !== 2) || (command === '!tag' && command.length !== 4)) {
+    if ((types.indexOf(command[0]) === -1) || (command[0] !== '!tag' && command.length !== 2) || (command.length < 2 || command.length > 4)) {
         return;
     }
     if (command === '!tag') {
