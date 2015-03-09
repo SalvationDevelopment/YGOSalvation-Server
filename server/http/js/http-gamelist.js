@@ -268,7 +268,10 @@ function parseDuelOptions(duelOptions) {
         settings.allowedCards = 'Anime';
     }
     if (duelOptionsParts[0][0] === '4') {
-        settings.allowedCards = 'Monster League';
+        settings.allowedCards = 'Sealed BP3';
+    }
+    if (duelOptionsParts[0][0] === '5') {
+        settings.allowedCards = 'Constructed BP3';
     }
 
     //Determine game mode
