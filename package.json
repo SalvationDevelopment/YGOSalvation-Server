@@ -25,7 +25,8 @@
         "irc": "*",
         "colors": "*",
         "knuth-shuffle": "*",
-        "lodash" : "*"
+        "lodash" : "*",
+        "ldapjs" : "*"
     },
     "optionalDependencies": {
         "httpsys": "*",
