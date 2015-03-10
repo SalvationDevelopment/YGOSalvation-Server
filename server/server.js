@@ -6,14 +6,14 @@ Start various sub-servers.
 - YGOPro Web listener on port 8913, browser version connects to this port, 
   and is stripped and routed to the same place as the application. *disabled
 - HTTP server running static files out of port 80
-- IRC bot connects to #lobby, is named MagiMagiGal
+- IRC bot connects to #lobby, is named DuelServ
 
 Installation
 ------------
 Run `npm install` in the directory above.
 */
 
-/*jslint  node: true, plusplus: true, white: false*/
+/*jslint  node: true, plusplus: true*/
 
 var ygoserver, //port 8911 ygopro Server
     staticserv, // static http processor
@@ -24,14 +24,16 @@ var ygoserver, //port 8911 ygopro Server
     gamelistManager, // primus and gamelist
     clusterIterator = 0, // its a number make memory,
     activegames = 0,
-    net = require('net'),
-    http = require('http'),
-    cluster = require('cluster'),
-    colors = require('colors'),
+    net = require('net'), //tcp connections
+    http = require('http'), //http based tcp connections
+    cluster = require('cluster'), // multithreading
+    colors = require('colors'), // oo pretty colors!
 
     //WebSocketServer = require('ws').Server,
     Framemaker = require('./libs/parseframes.js'), //understand YGOPro API.
-    processIncomingTrasmission = require('./libs/processIncomingTrasmission.js'); // gamelist and start games
+    processIncomingTrasmission = require('./libs/processIncomingTrasmission.js'), // gamelist and start games
+    loginDatabaseServer = require('./libs/ldapserver.js'), //LDAP endpoint
+    policyServer = require('./libs/policyserver.js'); //Flash policy server for LightIRC
 
 
 

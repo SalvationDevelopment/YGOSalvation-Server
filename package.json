@@ -26,7 +26,8 @@
         "colors": "*",
         "knuth-shuffle": "*",
         "lodash" : "*",
-        "ldapjs" : "*"
+        "ldapjs" : "*",
+        "policyfile" : "*"
     },
     "optionalDependencies": {
         "httpsys": "*",

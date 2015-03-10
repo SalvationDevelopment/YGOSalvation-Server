@@ -1,17 +1,15 @@
-/*jslint node: true, plusplus: true, unparam: false, nomen: true*/
-var path = '../configurations/policy.xml',
-    net = require('net'),
-    fs = require('fs');
+/*jslint node: true, plusplus: true*/
+//https://github.com/3rd-Eden/FlashPolicyFileServer
 
-var server = net.createServer(function (client) {
-    'use strict';
-    fs.read(path, function (policy) {
-        client.write(policy);
-        client.end();
-    });
-});
+var pf = require('policyfile').createServer(['ygopro.us:6667']);
 
-server.listen(843, function () { //'listening' listener
+pf.listen(function (error) {
     'use strict';
-    console.log('    Policy Server Online');
+    if (error) {
+        console.log('Policy Server Error:', error);
+    } else {
+        console.log('Policy Server Online');
+    }
 });
+pf.add('ygopro.us:9870');
+
