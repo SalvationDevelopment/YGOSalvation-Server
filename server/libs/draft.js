@@ -50,3 +50,36 @@ module.exports = {
     chooseDraftCard : chooseDraftCard,
     sortDeck : sortDeck
 };
+
+var battlePack3;
+function newDraft(director) {
+    'use strict';
+    var duelist = [],
+        cardpool = [],
+        brackets = [],
+        open = true;
+    
+    function endSignUp() {
+        open = false;
+    }
+    
+    function signUp(name) {
+        if (open) {
+            duelist.push(name);
+        }
+    }
+    
+    function participants() {
+        return duelist.join(',');
+    }
+    
+    
+    function currentBrackets() {
+        
+    }
+    
+    
+    return {
+        director : director
+    };
+}
