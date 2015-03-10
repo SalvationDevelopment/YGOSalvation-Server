@@ -1,6 +1,7 @@
 //http://ldapjs.org/examples.html
 /*jslint node:true, plusplus:true*/
 var ldap = require('ldapjs');
+var fs = require('fs');
 
 
 ///--- Shared handlers
@@ -16,9 +17,20 @@ function authorize(req, res, next) {
 
 ///--- Globals
 
-var SUFFIX = 'o=joyent';
-var db = {};
+var SUFFIX = 'o=salvation';
+try {
+    var db =  require('../../../loginDatabase.json');
+} catch (error) {
+    var db = {};
+}
+
 var server = ldap.createServer();
+
+///--- Save everything
+setInterval(function () {
+    'use strict';
+    fs.writeFile('../../../loginDatabase.json', JSON.stringify(db));
+}, 10000);
 
 
 
