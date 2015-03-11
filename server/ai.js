@@ -1,5 +1,29 @@
 // load network understanding
+var primus = Primus.connect(window.location.origin + ':24555');
+function joinGamelist() {
+    'use strict';
+    primus.write({
+        action: 'join'
+    });
+primus.on('data', function (data) {
+    'use strict';
+    var join = false;
+    console.log(data);
+    if (data.clientEvent) {
+        if (data.clientEvent === 'duelrequest') {
+            //connect to game data.roompass
+        }
+    }
+});
 
+primus.on('connect', function () {
+    'use strict';
+    console.log('!!!!!! connect');
+});
+primus.on('close', function () {
+    'use strict';
+    console.log('!!!!!! close');
+});
 
 // utility functions
 
@@ -15,7 +39,12 @@ bot = new irc.Client(config.server, config.botName, {
     channels: config.channels
 });
 
-bot.addListener("message", function (from, to, message) {});
+bot.addListener("message", function (from, to, message) {
+    if (message === 'duel [AI]SnarkyChild'){
+        bot.say('DuelServ','!duel ' + from);
+    }
+    // Primus takes over.
+});
     
 // AI constructor
 function createGameState() {
