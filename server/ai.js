@@ -111,14 +111,74 @@ function createGameState() {
   }
   
 }
+
 // response constructor
+
+//  network constructor + AI calls
+function OnSelectOption () {
+    'use strict';
+}
+function OnSelectEffectYesNo() {
+    'use strict';
+    
+}
+function OnSelectYesNo() {
+    'use strict';
+    
+}
+function OnSelectPosition() {
+    'use strict';
+    
+}
+function OnSelectTribute() {
+    'use strict';
+    
+}
+function OnDeclareMonsterType() {
+    'use strict';
+    
+}
+function OnDeclareAttribute() {
+    'use strict';
+    
+}
+function OnDeclareCard() {
+    'use strict';
+    
+}
+function OnSelectNumber() {
+    'use strict';
+    
+}
+function OnSelectChain() {
+    'use strict';
+    
+}
+function OnSelectSum() {
+    'use strict';
+    
+}
+function OnSelectCard() {
+    'use strict';
+    
+}
+function OnSelectBattleCommand() {
+    'use strict';
+    
+}
+function OnSelectInitCommand() {
+    'use strict';
+    
+}
+
 
 
 // duel constructor
 function Duel(roompass) {
     
     var duel  = {},
-        framer = new Framemaker();
+        framer = new Framemaker(),
+        parsePackets = require('libs/parsepackets.js');
       
     duel.server = new DuelConnection(roompass);
     duel.gameState = new createGameState();
@@ -141,4 +201,3 @@ function Duel(roompass) {
     // send join gain messages
 }
 
-//  network constructor + AI calls
