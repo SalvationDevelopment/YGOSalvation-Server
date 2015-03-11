@@ -31,10 +31,9 @@ var ygoserver, //port 8911 ygopro Server
 
     //WebSocketServer = require('ws').Server,
     Framemaker = require('./libs/parseframes.js'), //understand YGOPro API.
-    processIncomingTrasmission = require('./libs/processIncomingTrasmission.js'), // gamelist and start games
-    loginDatabaseServer = require('./libs/ldapserver.js'), //LDAP endpoint
-    policyServer = require('./libs/policyserver.js'); //Flash policy server for LightIRC
-
+    processIncomingTrasmission = require('./libs/processIncomingTrasmission.js'); // gamelist and start games
+    
+   
 
 
 function initiateMaster() {
@@ -52,7 +51,9 @@ function initiateMaster() {
         console.log(('        Starting Slave ' + x).grey);
         var worker = cluster.fork({
             PORTRANGE: x
-        });
+        }),
+        policyServer = require('./libs/policyserver.js'),
+        loginDatabaseServer = require('./libs/ldapserver.js'); //LDAP endpoint; //Flash policy server for LightIRC;
 
         worker.on('message', function (message) {
             if (message.messagetype === 'coreMessage') {
@@ -130,6 +131,8 @@ function initiateSlave() {
         });
     });
     ygoserver.listen(8911);
+    
+
 }
 
 (function main() {
@@ -144,4 +147,5 @@ function initiateSlave() {
     } else {
         initiateSlave();
     }
+    
 }()); // end main
