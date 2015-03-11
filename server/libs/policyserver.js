@@ -3,7 +3,7 @@
 
 var pf = require('policyfile').createServer(['ygopro.us:6667']);
 
-pf.listen(function (error) {
+pf.listen(843, function (error) {
     'use strict';
     if (error) {
         console.log('Policy Server Error:', error);
@@ -12,4 +12,3 @@ pf.listen(function (error) {
     }
 });
 pf.add('ygopro.us:9870');
-
