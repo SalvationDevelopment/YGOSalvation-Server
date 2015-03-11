@@ -1,10 +1,17 @@
 // load network understanding
+/*jslint node:true, plusplus: true*/
+var net = require('net'),
+    Primus = require('Primus'),
+    Framemaker = require('libs/parseframes.js'),
+    internalGames = [];
+
 function DuelConnection(roompass) {
     //console.log('attempting link up');
     'use strict';
     var data = new Buffer(), // needs to be constructed here
-        socket = {};
-        
+        socket = {},
+        duelConnections;
+
     duelConnections = net.connect('8891', '127.0.0.1', function () {
         duelConnections.setNoDelay(true);
     });
@@ -17,32 +24,6 @@ function DuelConnection(roompass) {
     return duelConnections;
 }
 
-//var primus = Primus.connect(window.location.origin + ':24555');
-//repalce with server version
-function joinGamelist() {
-    'use strict';
-    primus.write({
-        action: 'join'
-    });
-primus.on('data', function (data) {
-    'use strict';
-    var join = false;
-    console.log(data);
-    if (data.clientEvent) {
-        if (data.clientEvent === 'duelrequest') {
-            //connect to game data.roompass
-        }
-    }
-});
-
-primus.on('connect', function () {
-    'use strict';
-    console.log('!!!!!! connect');
-});
-primus.on('close', function () {
-    'use strict';
-    console.log('!!!!!! close');
-});
 
 // utility functions
 
@@ -59,145 +40,225 @@ bot = new irc.Client(config.server, config.botName, {
 });
 
 bot.addListener("message", function (from, to, message) {
-    if (message === 'duel [AI]SnarkyChild'){
-        bot.say('DuelServ','!duel ' + from);
+    'use strict';
+    if (message === 'duel [AI]SnarkyChild') {
+        bot.say('DuelServ', '!duel ' + from);
     }
     // goes to duelserv
     // goes to gamelist tree system
     // Primus takes over.
 });
-    
+
 // AI constructor
-function createGameState() {
-  var state = {
-    OppMonsterZones : [],
-    AIMonsterZones : [],
-    OppSpellTrapZones : [],,
-    AISpellTrapZones : [],
-    OppGraveyard : [],
-    AIGraveyard : [],
-    OppBanished : [],
-    AIBanished : [],
-    OppHand : [],
-    AIHand : [],
-    OppExtraDeck : [],
-    AIExtraDeck : [],
-    OppMainDeck : [],
-    AIMainDeck : [],
-  };
-  function move(){
-    
-  }
-  function loadDeck(player, deck, cardList) {
-    
-  }
-  return {
-    move : move,
-    GetOppMonsterZones : GetOppMonsterZones,
-    GetAIMonsterZones : GetAIMonsterZones,
-    GetOppSpellTrapZones : GetOppSpellTrapZones,,
-    GetAISpellTrapZones : GetAISpellTrapZones,
-    GetOppGraveyard : GetOppGraveyard,
-    GetAIGraveyard : GetAIGraveyard,
-    GetOppBanished : GetOppBanished,
-    GetAIBanished : GetAIBanished,
-    GetOppHand : GetOppHand,
-    GetAIHand : GetAIHand,
-    GetOppExtraDeck : GetOppExtraDeck,
-    GetAIExtraDeck : GetAIExtraDeck,
-    GetOppMainDeck : GetOppMainDeck,
-    GetAIMainDeck : GetAIMainDeck,
-    loadDeck : loadDeck
-  }
-  
+function GameState() {
+    'use strict';
+    var state = {
+        OppMonsterZones: [],
+        AIMonsterZones: [],
+        OppSpellTrapZones: [],
+        AISpellTrapZones: [],
+        OppGraveyard: [],
+        AIGraveyard: [],
+        OppBanished: [],
+        AIBanished: [],
+        OppHand: [],
+        AIHand: [],
+        OppExtraDeck: [],
+        AIExtraDeck: [],
+        OppMainDeck: [],
+        AIMainDeck: []
+    };
+
+    function move() {
+
+    }
+
+    function loadDeck(player, deck, cardList) {
+
+    }
+    return {
+        move: move,
+        GetOppMonsterZones: function () {
+            return state.OppMonsterZones;
+        },
+        GetAIMonsterZones: function () {
+            return state.AIMonsterZones;
+        },
+        GetOppSpellTrapZones: function () {
+            return state.OppSpellTrapZones;
+        },
+
+        GetAISpellTrapZones: function () {
+            return state.AISpellTrapZones;
+        },
+        GetOppGraveyard: function () {
+            return state.OppGraveyard;
+        },
+        GetAIGraveyard: function () {
+            return state.AIGraveyard;
+        },
+        GetOppBanished: function () {
+            return state.OppBanished;
+        },
+        GetAIBanished: function () {
+            return state.AIBanished;
+        },
+        GetOppHand: function () {
+            return state.OppHand;
+        },
+        GetAIHand: function () {
+            return state.AIHand;
+        },
+        GetOppExtraDeck: function () {
+            return state.OppExtraDeck;
+        },
+        GetAIExtraDeck: function () {
+            return state.AIExtraDeck;
+        },
+        GetOppMainDeck: function () {
+            return state.OppMainDeck;
+        },
+        GetAIMainDeck: function () {
+            return state.AIMainDeck;
+        },
+        loadDeck: loadDeck
+    };
+
 }
 
 // response constructor
 
 //  network constructor + AI calls
-function OnSelectOption () {
+function OnSelectOption() {
     'use strict';
 }
+
 function OnSelectEffectYesNo() {
     'use strict';
-    
+
 }
+
 function OnSelectYesNo() {
     'use strict';
-    
+
 }
+
 function OnSelectPosition() {
     'use strict';
-    
+
 }
+
 function OnSelectTribute() {
     'use strict';
-    
+
 }
+
 function OnDeclareMonsterType() {
     'use strict';
-    
+
 }
+
 function OnDeclareAttribute() {
     'use strict';
-    
+
 }
+
 function OnDeclareCard() {
     'use strict';
-    
+
 }
+
 function OnSelectNumber() {
     'use strict';
-    
+
 }
+
 function OnSelectChain() {
     'use strict';
-    
+
 }
+
 function OnSelectSum() {
     'use strict';
-    
+
 }
+
 function OnSelectCard() {
     'use strict';
-    
+
 }
+
 function OnSelectBattleCommand() {
     'use strict';
-    
+
 }
+
 function OnSelectInitCommand() {
     'use strict';
-    
+
 }
 
 
 
 // duel constructor
 function Duel(roompass) {
-    
-    var duel  = {},
+    'use strict';
+    var duel = {},
         framer = new Framemaker(),
         parsePackets = require('libs/parsepackets.js');
-      
+
     duel.server = new DuelConnection(roompass);
-    duel.gameState = new createGameState();
+    duel.gameState = new GameState();
     duel.server.on('data', function (data) {
         var frame,
-                task,
-                newframes = 0;
-            if (socket.active_ygocore) {
-                socket.active_ygocore.write(data);
-            }
-            frame = framer.input(data);
-            for (newframes; frame.length > newframes; newframes++) {
-                task = parsePackets('STOC', new Buffer(frame[newframes]));
-                // process AI
-                //processIncomingTrasmission(data, socket, task);
-            }
-            frame = [];
+            task,
+            newframes = 0;
+        
+        frame = framer.input(data);
+        for (newframes; frame.length > newframes; newframes++) {
+            task = parsePackets('STOC', new Buffer(frame[newframes]));
+            // process AI
+            //processIncomingTrasmission(data, socket, task);
+        }
+        frame = [];
     });
     // create join game messages
     // send join gain messages
 }
 
+//
+
+var http = require('http'),
+    server = http.createServer(),
+    primus = new Primus(server),
+    Socket = primus.Socket,
+    client = new Socket('http://ygopro.us:24555');
+
+
+function joinGamelist() {
+    'use strict';
+    primus.write({
+        action: 'join'
+    });
+}
+
+primus.on('data', function (data) {
+    'use strict';
+    var join = false;
+    console.log(data);
+    if (data.clientEvent) {
+        if (data.clientEvent === 'duelrequest') {
+            internalGames.push(new Duel(data.roompass));
+        }
+        return;
+    }
+});
+
+primus.on('connect', function () {
+    'use strict';
+    console.log('!!!!!! connect');
+});
+primus.on('close', function () {
+    'use strict';
+    console.log('!!!!!! close');
+});
