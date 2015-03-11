@@ -1,5 +1,6 @@
-/*jslint plusplus: true*/
-/*global localStorage, $, Primus, prompt, console*/
+/*jslint plusplus: true, browser:true*/
+/*global localStorage, $, Primus, prompt, console, writeDeckList, makeDeck*/
+/*exported connectToCheckmateServer, leaveGamelist, hostGame, connectgamelist, setHostSettings, setfilter,*/
 var localstorageIter = 0;
 
 function applySettings() {
