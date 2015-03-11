@@ -129,8 +129,9 @@ function GameState() {
 // response constructor
 
 //  network constructor + AI calls
-function OnSelectOption() {
+function OnSelectOption(options) {
     'use strict';
+    return 0; //index od option
 }
 
 function OnSelectEffectYesNo() {
@@ -138,19 +139,20 @@ function OnSelectEffectYesNo() {
 
 }
 
-function OnSelectYesNo() {
+function OnSelectYesNo(description_id) {
     'use strict';
+    return 1; // or no 0;
 
 }
 
-function OnSelectPosition() {
+function OnSelectPosition(id, available) {
     'use strict';
-
+    return 0x1; // return from constant.lua
 }
 
-function OnSelectTribute() {
+function OnSelectTribute(cards, minTributes, maxTributes) {
     'use strict';
-
+    return []; // table of indexies
 }
 
 function OnDeclareMonsterType() {
@@ -158,19 +160,21 @@ function OnDeclareMonsterType() {
 
 }
 
-function OnDeclareAttribute() {
+function OnDeclareAttribute(count, choices) {
     'use strict';
+    return 0;
 
 }
 
 function OnDeclareCard() {
     'use strict';
+    return; //random card id
 
 }
 
-function OnSelectNumber() {
+function OnSelectNumber(choices) {
     'use strict';
-
+    return 0; //index of choice
 }
 
 function OnSelectChain() {
@@ -178,7 +182,7 @@ function OnSelectChain() {
 
 }
 
-function OnSelectSum() {
+function OnSelectSum(cards, sum, triggeringCard) {
     'use strict';
 
 }
