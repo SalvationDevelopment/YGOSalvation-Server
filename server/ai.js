@@ -7,10 +7,6 @@ function DuelConnection(roompass) {
         
     duelConnections = net.connect('8891', '127.0.0.1', function () {
         duelConnections.setNoDelay(true);
-        duelConnections.write(data);
-        duelConnections.on('data', function (core_data) {
-            //make emitter
-        });
     });
     duelConnections.on('error', function (error) {
         socket.end();
@@ -115,9 +111,34 @@ function createGameState() {
   }
   
 }
+// response constructor
+
 
 // duel constructor
-
-// response constructor
+function Duel(roompass) {
+    
+    var duel  = {},
+        framer = new Framemaker();
+      
+    duel.server = new DuelConnection(roompass);
+    duel.gameState = new createGameState();
+    duel.server.on('data', function (data) {
+        var frame,
+                task,
+                newframes = 0;
+            if (socket.active_ygocore) {
+                socket.active_ygocore.write(data);
+            }
+            frame = framer.input(data);
+            for (newframes; frame.length > newframes; newframes++) {
+                task = parsePackets('STOC', new Buffer(frame[newframes]));
+                // process AI
+                //processIncomingTrasmission(data, socket, task);
+            }
+            frame = [];
+    });
+    // create join game messages
+    // send join gain messages
+}
 
 //  network constructor + AI calls
