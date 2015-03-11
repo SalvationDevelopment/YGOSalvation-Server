@@ -1,5 +1,28 @@
 // load network understanding
-var primus = Primus.connect(window.location.origin + ':24555');
+function DuelConnection(roompass) {
+    //console.log('attempting link up');
+    'use strict';
+    var data = new Buffer(), // needs to be constructed here
+        socket = {};
+        
+    duelConnections = net.connect('8891', '127.0.0.1', function () {
+        duelConnections.setNoDelay(true);
+        duelConnections.write(data);
+        duelConnections.on('data', function (core_data) {
+            //make emitter
+        });
+    });
+    duelConnections.on('error', function (error) {
+        socket.end();
+    });
+    duelConnections.on('close', function () {
+        socket.end();
+    });
+    return duelConnections;
+}
+
+//var primus = Primus.connect(window.location.origin + ':24555');
+//repalce with server version
 function joinGamelist() {
     'use strict';
     primus.write({
@@ -43,6 +66,8 @@ bot.addListener("message", function (from, to, message) {
     if (message === 'duel [AI]SnarkyChild'){
         bot.say('DuelServ','!duel ' + from);
     }
+    // goes to duelserv
+    // goes to gamelist tree system
     // Primus takes over.
 });
     
