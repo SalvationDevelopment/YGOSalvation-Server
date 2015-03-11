@@ -1,7 +1,22 @@
 // load network understanding
 
-// IRC connection
 
+// utility functions
+
+// IRC connection
+var bot,
+    irc = require("irc"),
+    config = {
+        channels: ["#server", "#lobby"],
+        server: "ygopro.us",
+        botName: "[AI]SnarkyChild"
+    };
+bot = new irc.Client(config.server, config.botName, {
+    channels: config.channels
+});
+
+bot.addListener("message", function (from, to, message) {});
+    
 // AI constructor
 function createGameState() {
   var state = {
