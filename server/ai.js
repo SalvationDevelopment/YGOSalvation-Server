@@ -135,8 +135,9 @@ function OnSelectOption(options) {
     return 0; //index od option
 }
 
-function OnSelectEffectYesNo() {
+function OnSelectEffectYesNo(id, triggeringCard) {
     'use strict';
+    return 1; //or 0;
 
 }
 
@@ -156,9 +157,10 @@ function OnSelectTribute(cards, minTributes, maxTributes) {
     return []; // table of indexies
 }
 
-function OnDeclareMonsterType() {
+function OnDeclareMonsterType(count, choices) {
     'use strict';
-
+    return 0;
+    //https://github.com/Snarkie/YGOProAIScript/blob/master/AI/mod/DeclareMonsterType.lua
 }
 
 function OnDeclareAttribute(count, choices) {
@@ -178,9 +180,9 @@ function OnSelectNumber(choices) {
     return 0; //index of choice
 }
 
-function OnSelectChain() {
+function OnSelectChain(cards, only_chains_by_player, forced) {
     'use strict';
-
+    return 0; //return index of chain;
 }
 
 function OnSelectSum(cards, sum, triggeringCard) {
@@ -188,19 +190,19 @@ function OnSelectSum(cards, sum, triggeringCard) {
 
 }
 
-function OnSelectCard() {
+function OnSelectCard(cards, minTargets, maxTargets, triggeringID, triggeringCard) {
     'use strict';
-
+    return []; //return table of choices
 }
 
-function OnSelectBattleCommand() {
+function OnSelectBattleCommand(cards, attacker) {
     'use strict';
-
+    return 0; //return index
 }
 
-function OnSelectInitCommand() {
+function OnSelectInitCommand(cards, to_bp_allowed, to_ep_allowed) {
     'use strict';
-
+    return 0; //return index
 }
 
 function processTask(task, socket) {
