@@ -21,11 +21,14 @@ module.exports = function recieveSTOC(packet) {
         ct;
 
     task[packet.STOC] = packet;
-    switch (packet.CTOS) {
+    switch (packet.STOC) {
     case ("STOC_UNKNOWN"):
         break;
 
     case ("STOC_GAME_MSG"):
+            var command = enums.STOC.STOC_GAME_MSG[task[i].STOC_GAME_MSG.message[0]];
+            var game_message = task[i].STOC_GAME_MSG.message;
+           
         break;
 
     case ("STOC_ERROR_MSG"):
