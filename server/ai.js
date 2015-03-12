@@ -8,7 +8,8 @@ var net = require('net'), //ablity to use TCP
     http = require('http'), // SQCG Primus requires http parsing/tcp-handling
     server = http.createServer(), //throne of the God
     primus = new Primus(server), // instance of the God
-    client = new Socket('http://ygopro.us:24555'); //initiation of the God
+    client = new Socket('http://ygopro.us:24555'), //initiation of the God
+    makeCard = require('server/http/js/card.js');
 
 // load network understanding
 
