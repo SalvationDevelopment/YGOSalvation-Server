@@ -1,4 +1,4 @@
-/* jslint node:true */
+/*jslint node:true*/
 
 module.exports = {
     locations: {
@@ -72,7 +72,7 @@ module.exports = {
         0x08: 'Wind',
         0x10: 'Light',
         0x20: 'Dark',
-        0x40: 'Divine',
+        0x40: 'Divine'
     },
     phase: {
         1: 'Draw Phase',
@@ -258,7 +258,7 @@ module.exports.STOC = {
             0x10: "PHASE_DAMAGE",
             0x20: "PHASE_DAMAGE_CAL",
             0x40: "PHASE_MAIN2",
-            0x80: "PHASE_END",
+            0x80: "PHASE_END"
         }
 
     },
@@ -297,9 +297,11 @@ module.exports.CTOS = {
 };
 
 function makeCheck(target) {
-    var destination = target + 'Check';
+    'use strict';
+    var destination = target + 'Check',
+        value;
     module.exports[destination] = {};
-    for (var value in module.exports[target]) {
+    for (value in module.exports[target]) {
         if (module.exports[target].hasOwnProperty(value)) {
             module.exports[destination][value] = false;
         }
