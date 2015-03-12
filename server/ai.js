@@ -1,19 +1,26 @@
-// load network understanding
 /*jslint node:true, plusplus: true*/
-var net = require('net'),
-    Primus = require('Primus'),
-    Framemaker = require('libs/parseframes.js'),
-    internalGames = [],
-    recieveSTOC = require('libs/recieveSTOC.js');
+// blah blah load dependencies
+var net = require('net'), //ablity to use TCP
+    Primus = require('Primus'), //Primus, our Sepiroth-Qliphopth Creator God. Websocket connections.
+    Framemaker = require('libs/parseframes.js'), // unfuck Flurohydrides expensive'net culture based network optimizations that make everything unreadable.
+    internalGames = [], // internal list of all games the bot is playing
+    recieveSTOC = require('libs/recieveSTOC.js'), // turn network data into a COMMAND and list of PARAMETERS
+    http = require('http'), // SQCG Primus requires http parsing/tcp-handling
+    server = http.createServer(), //throne of the God
+    primus = new Primus(server), // instance of the God
+    client = new Socket('http://ygopro.us:24555'); //initiation of the God
 
-function DuelConnection(roompass) {
-    //console.log('attempting link up');
+// load network understanding
+
+function DuelConnection(roompass, port, ip) {
+    //taken from /libs/processincomingtransmission.js
+    //conenct to the main server like a user via tcp
     'use strict';
     var data = new Buffer(), // needs to be constructed here
         socket = {},
         duelConnections;
 
-    duelConnections = net.connect('8891', '127.0.0.1', function () {
+    duelConnections = net.connect(port, ip , function () {
         duelConnections.setNoDelay(true);
     });
     duelConnections.on('error', function (error) {
@@ -30,27 +37,34 @@ function DuelConnection(roompass) {
 
 // IRC connection
 var bot,
-    irc = require("irc"),
+    irc = require("irc"), // IRC Client/bot dependency
     config = {
         channels: ["#server", "#lobby"],
         server: "ygopro.us",
         botName: "[AI]SnarkyChild"
     };
+
+//connect the bot
 bot = new irc.Client(config.server, config.botName, {
     channels: config.channels
 });
 
+// connect a stupid simple bot to the IRC and have it listen for a specific command, then do stuff
 bot.addListener("message", function (from, to, message) {
     'use strict';
+    
+    //said specific command
     if (message === 'duel [AI]SnarkyChild') {
         bot.say('DuelServ', '!duel ' + from);
+        //ok the bot heard a duel request,
+        //it is now messaging duelserv to reissue the duel request to both the bot and itself with more details.
     }
-    // goes to duelserv
-    // goes to gamelist tree system
-    // Primus takes over.
+    
 });
 
 // AI constructor
+// The AI needs these state variables to make decisions.
+// STOC (server TO client) commands update this state holder.
 function GameState() {
     'use strict';
     var state = {
@@ -129,7 +143,9 @@ function GameState() {
 
 // response constructor
 
-//  network constructor + AI calls
+//AI calls
+// actual AI decision making itself,
+// network calls pair up as these functions and data to act as thier parameters
 function OnSelectOption(options) {
     'use strict';
     return 0; //index od option
@@ -209,11 +225,19 @@ function processTask(task, socket) {
     'use strict';
     var i = 0,
         l = 0,
-        output = [];
+        output = [],
+        RESPONSE = false;
     for (i; task.length > i; i++) {
         output.push(recieveSTOC(task[i], socket.username, socket.hostString));
     }
-
+    
+    // OK!!!! HARD PART!!!!
+    // recieveSTOC.js should have created obejects with all the parameters as properites, fire the functions.
+    // done try to pull data out of a packet here, should have been done already.
+    // its done here because we might need to pass in STATE to the functions also.
+    // again if you are fiddling with a packet you are doing it wrong!!!
+    
+    // if a COMMAND results in a response, save it as RESPONSE, else return the function false.
     for (l; output.length > l; l++) {
         if (output[l].STOC_UNKNOWN) {
         
@@ -273,10 +297,14 @@ function processTask(task, socket) {
         
         }
     }
+    return RESPONSE;
 }
 
 // duel constructor
-function Duel(roompass) {
+
+//taken from server.js, just done in reverse.
+// represnts a single duel connection.
+function Duel(roompass, botUsername) {
     'use strict';
     var duel = {},
         framer = new Framemaker(),
@@ -284,6 +312,9 @@ function Duel(roompass) {
 
     duel.server = new DuelConnection(roompass);
     duel.gameState = new GameState();
+    duel.server.on('connection', function (){
+        //send game request
+    }
     duel.server.on('data', function (data) {
         var frame,
             task,
@@ -294,21 +325,15 @@ function Duel(roompass) {
             task = parsePackets('STOC', new Buffer(frame[newframes]));
             processTask(task);
             // process AI
-            //processIncomingTrasmission(task);
+            //processTask(task);
         }
         frame = [];
     });
-    // create join game messages
-    // send join gain messages
+    
 }
 
 //
 
-var http = require('http'),
-    server = http.createServer(),
-    primus = new Primus(server),
-    Socket = primus.Socket,
-    client = new Socket('http://ygopro.us:24555');
 
 
 function joinGamelist() {
