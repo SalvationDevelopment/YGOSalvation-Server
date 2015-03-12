@@ -20,7 +20,8 @@ module.exports = function recieveSTOC(packet) {
         reason,
         ct;
 
-    task[packet.STOC] = packet;
+    task[packet.STOC] = {};
+    task[packet.STOC].message = packet;
     switch (packet.STOC) {
     case ("STOC_UNKNOWN"):
         break;
