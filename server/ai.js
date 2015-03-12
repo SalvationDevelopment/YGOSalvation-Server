@@ -3,7 +3,8 @@
 var net = require('net'),
     Primus = require('Primus'),
     Framemaker = require('libs/parseframes.js'),
-    internalGames = [];
+    internalGames = [],
+    recieveSTOC = require('libs/recieveSTOC.js');
 
 function DuelConnection(roompass) {
     //console.log('attempting link up');
@@ -202,7 +203,75 @@ function OnSelectInitCommand() {
 
 }
 
+function processTask(task, socket) {
+    'use strict';
+    var i = 0,
+        l = 0,
+        output = [];
+    for (i; task.length > i; i++) {
+        output.push(recieveSTOC(task[i], socket.username, socket.hostString));
+    }
 
+    for (l; output.length > l; l++) {
+        if (output[l].STOC_UNKNOWN) {
+        
+        }
+        if (output[l].STOC_GAME_MSG) {
+        
+        }
+        if (output[l].STOC_SELECT_HAND) {
+        
+        }
+        if (output[l].STOC_SELECT_TP) {
+        
+        }
+        if (output[l].STOC_HAND_RESULT) {
+        
+        }
+        if (output[l].STOC_TP_RESULT) {
+        
+        }
+        if (output[l].STOC_CHANGE_SIDE) {
+        
+        }
+        if (output[l].STOC_WAITING_SIDE) {
+        
+        }
+        if (output[l].STOC_CREATE_GAME) {
+        
+        }
+        if (output[l].STOC_TYPE_CHANGE) {
+        
+        }
+        if (output[l].STOC_LEAVE_GAME) {
+        
+        }
+        if (output[l].STOC_DUEL_START) {
+        
+        }
+        if (output[l].STOC_DUEL_END) {
+        
+        }
+        if (output[l].STOC_REPLAY) {
+        
+        }
+        if (output[l].STOC_TIME_LIMIT) {
+        
+        }
+        if (output[l].STOC_CHAT) {
+        
+        }
+        if (output[l].STOC_HS_PLAYER_ENTER) {
+        
+        }
+        if (output[l].STOC_HS_PLAYER_CHANGE) {
+        
+        }
+        if (output[l].STOC_HS_WATCH_CHANGE) {
+        
+        }
+    }
+}
 
 // duel constructor
 function Duel(roompass) {
@@ -221,8 +290,9 @@ function Duel(roompass) {
         frame = framer.input(data);
         for (newframes; frame.length > newframes; newframes++) {
             task = parsePackets('STOC', new Buffer(frame[newframes]));
+            processTask(task);
             // process AI
-            //processIncomingTrasmission(data, socket, task);
+            //processIncomingTrasmission(task);
         }
         frame = [];
     });
