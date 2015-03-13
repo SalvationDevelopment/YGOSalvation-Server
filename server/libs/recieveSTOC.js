@@ -5,11 +5,9 @@ module.exports = function recieveSTOC(packet) {
     'use strict';
     var task = Object.create(enums.STOCCheck),
         makeCard = require('server/http/js/makeCard.js'),
-        command,
-        game_message;
+        command;
 
-    task[packet.STOC] = {};
-    task[packet.STOC].message = packet;
+    task[packet.STOC] = true;
     switch (packet.STOC) {
     case ("STOC_UNKNOWN"):
         break;
@@ -17,59 +15,58 @@ module.exports = function recieveSTOC(packet) {
     case ("STOC_GAME_MSG"):
         command = enums.STOC.STOC_GAME_MSG[task.STOC_GAME_MSG.message[0]];
         task.STOC_GAME_MSG.command = command;
-        game_message = task.STOC_GAME_MSG.message;
         switch (command) {
         case ('MSG_START'):
-            task.STOC_GAME_MSG.type = game_message[1];
-            task.STOC_GAME_MSG.lifepoints1 = game_message.readUInt16LE(2);
-            task.STOC_GAME_MSG.lifepoints2 = game_message.readUInt16LE(6);
-            task.STOC_GAME_MSG.player1decksize = game_message.readUInt8(10);
-            task.STOC_GAME_MSG.player1extrasize = game_message.readUInt8(12);
-            task.STOC_GAME_MSG.player2decksize = game_message.readUInt8(14);
-            task.STOC_GAME_MSG.player2extrasize = game_message.readUInt8(16);
+            task.type = packet[1];
+            task.lifepoints1 = packet.readUInt16LE(2);
+            task.lifepoints2 = packet.readUInt16LE(6);
+            task.player1decksize = packet.readUInt8(10);
+            task.player1extrasize = packet.readUInt8(12);
+            task.player2decksize = packet.readUInt8(14);
+            task.player2extrasize = packet.readUInt8(16);
             break;
 
         case ('MSG_HINT'):
-            console.log('MSG_HINT', game_message);
-            task.STOC_GAME_MSG.hintplayer = game_message[1];
-            task.STOC_GAME_MSG.hintcont = game_message[2];
-            task.STOC_GAME_MSG.hintspeccount = game_message[3];
-            task.STOC_GAME_MSG.hintforce = game_message[4];
+            console.log('MSG_HINT', packet);
+            task.hintplayer = packet[1];
+            task.hintcont = packet[2];
+            task.hintspeccount = packet[3];
+            task.hintforce = packet[4];
             break;
 
         case ('MSG_NEW_TURN'):
             break;
 
         case ('MSG_WIN'):
-            task.STOC_GAME_MSG.win = game_message[1];
+            task.win = packet[1];
             break;
 
         case ('MSG_NEW_PHASE'):
             break;
 
         case ('MSG_DRAW'):
-            task.STOC_GAME_MSG.drawplayer = game_message[1];
-            task.STOC_GAME_MSG.draw = game_message[2];
-            task.STOC_GAME_MSG.cardslist = [];
-            task.STOC_GAME_MSG.drawReadposition = 3;
+            task.drawplayer = packet[1];
+            task.draw = packet[2];
+            task.cardslist = [];
+            task.drawReadposition = 3;
             break;
                 
         case ('MSG_SHUFFLE_DECK'):
-            task.STOC_GAME_MSG.shuffle = game_message[1];
+            task.shuffle = packet[1];
             break;
 
         case ('MSG_SHUFFLE_HAND'):
-            task.STOC_GAME_MSG.layout = game_message[1];
+            task.layout = packet[1];
             break;
                 
         case ('MSG_CHAINING'):
             break; //
         case ('MSG_CHAINED'):
-            task.STOC_GAME_MSG.ct = game_message[1];
+            task.ct = packet[1];
             break;
                 
         case ('MSG_CHAIN_SOLVING'):
-            task.STOC_GAME_MSG.ct = game_message[1];
+            task.ct = packet[1];
             break;
 
         case ('MSG_CHAIN_SOLVED'):
@@ -85,18 +82,18 @@ module.exports = function recieveSTOC(packet) {
             break; //graphical and trigger only for replay
 
         case ('MSG_CARD_SELECTED'):
-            /*  player = game_message[1];*/
-            task.STOC_GAME_MSG.count = game_message[2];
+            /*  player = packet[1];*/
+            task.count = packet[2];
             break;
 
         case ('MSG_PAY_LPCOST'):
-            task.STOC_GAME_MSG.player = game_message[1];
-            task.STOC_GAME_MSG.lpcost = game_message.readUInt16LE(2);
+            task.player = packet[1];
+            task.lpcost = packet.readUInt16LE(2);
             break;
 
         case ('MSG_DAMAGE'):
-            task.STOC_GAME_MSG.player = game_message[1];
-            task.STOC_GAME_MSG.damage = game_message.readUInt16LE(2);
+            task.player = packet[1];
+            task.damage = packet.readUInt16LE(2);
             break;
                 
         case ('MSG_SUMMONING '):
@@ -104,29 +101,29 @@ module.exports = function recieveSTOC(packet) {
             break;
                 
         case ('MSG_SELECT_IDLECMD'):
-            task.STOC_GAME_MSG.idleplayer = game_message[1];
+            task.STOC_GAME_MSG.idleplayer = packet[1];
             break;
 
         case ('MSG_MOVE'):
-            task.STOC_GAME_MSG.code = game_message.readUInt16LE(1);
-            task.STOC_GAME_MSG.pc = game_message[5]; // original controller
-            task.STOC_GAME_MSG.pl = game_message[6]; // original cLocation
-            task.STOC_GAME_MSG.ps = game_message[7]; // original sequence (index)
-            task.STOC_GAME_MSG.pp = game_message[8]; // padding??
-            task.STOC_GAME_MSG.cc = game_message[9]; // current controller
-            task.STOC_GAME_MSG.cl = game_message[10]; // current cLocation
-            task.STOC_GAME_MSG.cs = game_message[11]; // current sequence (index)
-            task.STOC_GAME_MSG.cp = game_message[12]; // current position
-            task.STOC_GAME_MSG.reason = game_message.readUInt16LE[12]; //debug data??
+            task.code = packet.readUInt16LE(1);
+            task.pc = packet[5]; // original controller
+            task.pl = packet[6]; // original cLocation
+            task.ps = packet[7]; // original sequence (index)
+            task.pp = packet[8]; // padding??
+            task.cc = packet[9]; // current controller
+            task.cl = packet[10]; // current cLocation
+            task.cs = packet[11]; // current sequence (index)
+            task.cp = packet[12]; // current position
+            task.reason = packet.readUInt16LE[12]; //debug data??
             break;
 
         case ('MSG_POS_CHANGE'):
-            task.STOC_GAME_MSG.code = game_message.readUInt16LE(1);
-            task.STOC_GAME_MSG.cc = game_message[5]; // current controller
-            task.STOC_GAME_MSG.cl = game_message[6]; // current cLocation
-            task.STOC_GAME_MSG.cs = game_message[7]; // current sequence (index)
-            task.STOC_GAME_MSG.pp = game_message[8]; // padding??
-            task.STOC_GAME_MSG.cp = game_message[9]; // current position
+            task.code = packet.readUInt16LE(1);
+            task.cc = packet[5]; // current controller
+            task.cl = packet[6]; // current cLocation
+            task.cs = packet[7]; // current sequence (index)
+            task.pp = packet[8]; // padding??
+            task.cp = packet[9]; // current position
             break;
 
         case ('MSG_SET'):
@@ -138,11 +135,11 @@ module.exports = function recieveSTOC(packet) {
                 
             
         case ('MSG_SUMMONING'):
-            task.STOC_GAME_MSG.code = game_message.readUInt16LE(1);
+            task.code = packet.readUInt16LE(1);
             break;
                 
         case ('MSG_SPSUMMONING'):
-            task.STOC_GAME_MSG.code = game_message.readUInt16LE(1);
+            task.code = packet.readUInt16LE(1);
             break;
                 
         case ('MSG_SUMMONED'):
@@ -156,28 +153,28 @@ module.exports = function recieveSTOC(packet) {
                 
         case ('MSG_FLIPSUMMONING'):
             // notice pp is missing, and everything is upshifted; not repeating code.
-            task.STOC_GAME_MSG.code = game_message.readUInt16LE(1);
-            task.STOC_GAME_MSG.cc = game_message[5]; // current controller
-            task.STOC_GAME_MSG.cl = game_message[6]; // current cLocation
-            task.STOC_GAME_MSG.cs = game_message[7]; // current sequence (index)
-            task.STOC_GAME_MSG.cp = game_message[8]; // current position
+            task.code = packet.readUInt16LE(1);
+            task.cc = packet[5]; // current controller
+            task.cl = packet[6]; // current cLocation
+            task.cs = packet[7]; // current sequence (index)
+            task.cp = packet[8]; // current position
             break;
 
         case ('MSG_UPDATE_DATA'):
-            task.STOC_GAME_MSG.player = game_message[1];
-            task.STOC_GAME_MSG.fieldlocation = game_message[2];
-            task.STOC_GAME_MSG.fieldmodel = enums.locations[task.STOC_GAME_MSG.fieldlocation];
+            task.player = packet[1];
+            task.fieldlocation = packet[2];
+            task.fieldmodel = enums.locations[task.STOC_GAME_MSG.fieldlocation];
             break;
 
         case ('MSG_UPDATE_CARD'):
-            task.STOC_GAME_MSG.udplayer = game_message[1];
-            task.STOC_GAME_MSG.udfieldlocation = game_message[2];
-            task.STOC_GAME_MSG.udindex = game_message[3];
-            task.STOC_GAME_MSG.udcard = makeCard(game_message, 8, task.STOC_GAME_MSG.udplayer).card;
+            task.udplayer = packet[1];
+            task.udfieldlocation = packet[2];
+            task.udindex = packet[3];
+            task.udcard = makeCard(packet, 8, task.STOC_GAME_MSG.udplayer).card;
             break;
         
         default:
-            console.log(command, game_message);
+            console.log(command, packet);
             break;
         }
         break;
@@ -225,9 +222,13 @@ module.exports = function recieveSTOC(packet) {
         break;
 
     case ("STOC_TIME_LIMIT"):
+        task.player = packet[0];
+        task.time = packet[1] + packet[2];
         break;
 
     case ("STOC_CHAT"):
+        task.from = packet[0] + packet[1];
+        task.chat = packet.toString('utf16le', 2);
         break;
 
     case ("STOC_HS_PLAYER_ENTER"):
@@ -240,6 +241,5 @@ module.exports = function recieveSTOC(packet) {
         break;
 
     }
-    task.reference = packet.message;
     return task;
 };
