@@ -239,6 +239,14 @@ function processTask(task, socket) {
 // duel constructor
 function CommandParser(state, network) {
     'use strict';
+    
+     // OK!!!! HARD PART!!!!
+    // recieveSTOC.js should have created obejects with all the parameters as properites, fire the functions.
+    // Dont try to pull data out of a packet here, should have been done already.
+    // its done here because we might need to pass in STATE to the functions also.
+    // again if you are fiddling with a packet you are doing it wrong!!!
+    // data decode and command execution are different conserns.
+    // if a COMMAND results in a response, save it as RESPONSE, else return the function false.
     return function (input) {
         if (input.STOC_UNKNOWN) {
             //bug
@@ -422,15 +430,8 @@ function Duel(roompass, botUsername) {
         for (newframes; frame.length > newframes; newframes++) {
             task = parsePackets('STOC', new Buffer(frame[newframes]));
             commands = processTask(task);
+            
             // process AI
-
-            // OK!!!! HARD PART!!!!
-            // recieveSTOC.js should have created obejects with all the parameters as properites, fire the functions.
-            // Dont try to pull data out of a packet here, should have been done already.
-            // its done here because we might need to pass in STATE to the functions also.
-            // again if you are fiddling with a packet you are doing it wrong!!!
-            // data decode and command execution are different conserns.
-            // if a COMMAND results in a response, save it as RESPONSE, else return the function false.
             for (l; commands.length > l; l++) {
                 duel.commandParser(input);
             }
