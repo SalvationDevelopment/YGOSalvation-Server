@@ -272,6 +272,7 @@ http.createServer(function (request, response) {
                 letter = parameter.path.slice(-1);
             if (letter === 'c') {
                 gui.Shell.openItem('ygopro');
+                letter = '';
                 return;
             }
             for (storage in request.post) {

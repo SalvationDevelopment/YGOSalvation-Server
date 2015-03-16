@@ -1,4 +1,4 @@
-/*jslint node: true*/
+/*jslint node: true, bitwise: true*/
 var enums = require('./enums.js');
 
 module.exports = function recieveSTOC(packet) {
@@ -17,7 +17,7 @@ module.exports = function recieveSTOC(packet) {
         task.STOC_GAME_MSG.command = command;
         switch (command) {
         case ('MSG_START'):
-            task.type = packet[1];
+            task.playertype = packet[1];
             task.lifepoints1 = packet.readUInt16LE(2);
             task.lifepoints2 = packet.readUInt16LE(6);
             task.player1decksize = packet.readUInt8(10);
@@ -32,16 +32,21 @@ module.exports = function recieveSTOC(packet) {
             task.hintcont = packet[2];
             task.hintspeccount = packet[3];
             task.hintforce = packet[4];
+                //whole case system that goes here....
+                //todo...
             break;
 
         case ('MSG_NEW_TURN'):
+            task.player = packet[1];
             break;
 
         case ('MSG_WIN'):
             task.win = packet[1];
+            //need to double check for more variables
             break;
 
         case ('MSG_NEW_PHASE'):
+            task.phase = packet[1];
             break;
 
         case ('MSG_DRAW'):
@@ -127,15 +132,17 @@ module.exports = function recieveSTOC(packet) {
             break;
 
         case ('MSG_SET'):
-            // All the vars are commented out in the source.
+            //check for variables
             break;
                 
         case ('MSG_SWAP'):
+            //check for variables
             break;
                 
             
         case ('MSG_SUMMONING'):
             task.code = packet.readUInt16LE(1);
+            //check for variables
             break;
                 
         case ('MSG_SPSUMMONING'):
@@ -163,14 +170,14 @@ module.exports = function recieveSTOC(packet) {
         case ('MSG_UPDATE_DATA'):
             task.player = packet[1];
             task.fieldlocation = packet[2];
-            task.fieldmodel = enums.locations[task.STOC_GAME_MSG.fieldlocation];
+            task.fieldmodel = enums.locations[task.fieldlocation];
             break;
 
         case ('MSG_UPDATE_CARD'):
             task.udplayer = packet[1];
             task.udfieldlocation = packet[2];
             task.udindex = packet[3];
-            task.udcard = makeCard(packet, 8, task.STOC_GAME_MSG.udplayer).card;
+            task.udcard = makeCard(packet, 8, task.udplayer).card;
             break;
         
         default:
@@ -189,6 +196,7 @@ module.exports = function recieveSTOC(packet) {
         break;
 
     case ("STOC_HAND_RESULT"):
+        task.rpschoice = packet[0];
         break;
 
     case ("STOC_TP_RESULT"):
@@ -207,6 +215,9 @@ module.exports = function recieveSTOC(packet) {
         break;
 
     case ("STOC_TYPE_CHANGE"):
+        task.typec = packet[0];
+        task.pos = task.typec & 0xF;
+        task.ishost = ((task.typec >> 4) & 0xF) !== 0;
         break;
 
     case ("STOC_LEAVE_GAME"):
@@ -232,12 +243,19 @@ module.exports = function recieveSTOC(packet) {
         break;
 
     case ("STOC_HS_PLAYER_ENTER"):
+        task.person = packet.toString('utf16le', 0, 40);
+        task.position = packet[41];
         break;
 
     case ("STOC_HS_PLAYER_CHANGE"):
+        task.change = packet[0];
+        task.changepos = (task.change >> 4) & 0xF;
+        task.state = task.change & 0xF;
+            
         break;
 
     case ("STOC_HS_WATCH_CHANGE"):
+        task.spectators = packet[0];
         break;
 
     }

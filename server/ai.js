@@ -8,6 +8,7 @@ var net = require('net'), //ablity to use TCP
     http = require('http'), // SQCG Primus requires http parsing/tcp-handling
     server = http.createServer(), //throne of the God
     primus = new Primus(server), // instance of the God
+    Socket = primus.Socket(),
     client = new Socket('http://ygopro.us:24555'); //initiation of the God
 
 // load network understanding
@@ -20,7 +21,7 @@ function DuelConnection(roompass, port, ip) {
         socket = {},
         duelConnections;
 
-    duelConnections = net.connect(port, ip , function () {
+    duelConnections = net.connect(port, ip, function () {
         duelConnections.setNoDelay(true);
     });
     duelConnections.on('error', function (error) {
@@ -52,14 +53,14 @@ bot = new irc.Client(config.server, config.botName, {
 // connect a stupid simple bot to the IRC and have it listen for a specific command, then do stuff
 bot.addListener("message", function (from, to, message) {
     'use strict';
-    
+
     //said specific command
     if (message === 'duel [AI]SnarkyChild') {
         bot.say('DuelServ', '!duel ' + from);
         //ok the bot heard a duel request,
         //it is now messaging duelserv to reissue the duel request to both the bot and itself with more details.
     }
-    
+
 });
 
 // AI constructor
@@ -228,79 +229,172 @@ function processTask(task, socket) {
         output = [],
         RESPONSE = false;
     for (i; task.length > i; i++) {
-        output.push(recieveSTOC(task[i], socket.username, socket.hostString));
+        output.push(recieveSTOC(task[i]));
     }
-    
-    // OK!!!! HARD PART!!!!
-    // recieveSTOC.js should have created obejects with all the parameters as properites, fire the functions.
-    // done try to pull data out of a packet here, should have been done already.
-    // its done here because we might need to pass in STATE to the functions also.
-    // again if you are fiddling with a packet you are doing it wrong!!!
-    
-    // if a COMMAND results in a response, save it as RESPONSE, else return the function false.
-    for (l; output.length > l; l++) {
-        if (output[l].STOC_UNKNOWN) {
-        
-        }
-        if (output[l].STOC_GAME_MSG) {
-        
-        }
-        if (output[l].STOC_SELECT_HAND) {
-        
-        }
-        if (output[l].STOC_SELECT_TP) {
-        
-        }
-        if (output[l].STOC_HAND_RESULT) {
-        
-        }
-        if (output[l].STOC_TP_RESULT) {
-        
-        }
-        if (output[l].STOC_CHANGE_SIDE) {
-        
-        }
-        if (output[l].STOC_WAITING_SIDE) {
-        
-        }
-        if (output[l].STOC_CREATE_GAME) {
-        
-        }
-        if (output[l].STOC_TYPE_CHANGE) {
-        
-        }
-        if (output[l].STOC_LEAVE_GAME) {
-        
-        }
-        if (output[l].STOC_DUEL_START) {
-        
-        }
-        if (output[l].STOC_DUEL_END) {
-        
-        }
-        if (output[l].STOC_REPLAY) {
-        
-        }
-        if (output[l].STOC_TIME_LIMIT) {
-        
-        }
-        if (output[l].STOC_CHAT) {
-        
-        }
-        if (output[l].STOC_HS_PLAYER_ENTER) {
-        
-        }
-        if (output[l].STOC_HS_PLAYER_CHANGE) {
-        
-        }
-        if (output[l].STOC_HS_WATCH_CHANGE) {
-        
-        }
-    }
-    return RESPONSE;
+
+    return output;
 }
 
+
 // duel constructor
+function CommandParser(state, network) {
+    'use strict';
+    return function (input) {
+        if (input.STOC_UNKNOWN) {
+            //bug
+            break;
+        }
+        if (input.STOC_GAME_MSG) {
+            //case deeper, actuall gameplay
+            switch (input.STOC_GAME_MSG.command) {
+            case ('MSG_HINT'):
+                break;
+
+            case ('MSG_NEW_TURN'):
+                break;
+
+            case ('MSG_WIN'):
+                break;
+
+            case ('MSG_NEW_PHASE'):
+                break;
+
+            case ('MSG_DRAW'):
+                break;
+
+            case ('MSG_SHUFFLE_DECK'):
+                break;
+
+            case ('MSG_SHUFFLE_HAND'):
+                break;
+
+            case ('MSG_CHAINING'):
+                break;
+
+            case ('MSG_CHAINED'):
+                break;
+
+            case ('MSG_CHAINING_SOLVING'):
+                break;
+
+            case ('MSG_CHAIN_SOLVED'):
+                break;
+
+            case ('MSG_CHIAIN_END'):
+                break;
+
+            case ('MSG_CHAIN_NEGATED'):
+                break;
+
+            case ('MSG_CHAIN_DISABLED'):
+                break;
+
+            case ('MSG_SELECTED'):
+                break;
+
+            case ('MSG_PAY_LPCOST'):
+                break;
+
+            case ('MSG_DAMAGE'):
+                break;
+
+            case ('MSG_SELECT_IDLECMD'):
+                break;
+
+            case ('MSG_MOVE'):
+                break;
+
+            case ('MSG_POS_CHANGE'):
+                break;
+
+            case ('MSG_SET'):
+                break;
+
+            case ('MSG_SWAP'):
+                break;
+
+            case ('MSG_SUMMONING'):
+                break;
+
+            case ('MSG_SPSUMMONING'):
+                break;
+
+            case ('MSG_SUMMNED'):
+                break;
+
+            case ('MSG_FLIPSUMMONED'):
+                break;
+
+            case ('MSG_FLIPSUMMONING'):
+                break;
+
+            case ('MSG_UPDATE_DATA'):
+                break;
+
+            case ('MSG_UPDATE_CARD'):
+                break;
+
+            default:
+                break;
+
+
+            }
+        }
+        if (input.STOC_SELECT_HAND) {
+            //select random
+        }
+        if (input.STOC_SELECT_TP) {
+            //pick who goes first
+        }
+        if (input.STOC_HAND_RESULT) {
+            //get hand result
+        }
+        if (input.STOC_TP_RESULT) {
+            //who is going first after picking
+        }
+        if (input.STOC_CHANGE_SIDE) {
+            //adjust side deck now
+        }
+        if (input.STOC_WAITING_SIDE) {
+            //waiting on opponent to side
+        }
+        if (input.STOC_CREATE_GAME) {
+
+        }
+        if (input.STOC_TYPE_CHANGE) {
+
+        }
+        if (input.STOC_LEAVE_GAME) {
+            //lobby opponent left
+        }
+        if (input.STOC_DUEL_START) {
+            //duel is starting
+        }
+        if (input.STOC_DUEL_END) {
+            //duel ended
+        }
+        if (input.STOC_REPLAY) {
+            //replayfile
+        }
+        if (input.STOC_TIME_LIMIT) {
+            //seconds left
+        }
+        if (input.STOC_CHAT) {
+            //chat message, from
+        }
+        if (input.STOC_HS_PLAYER_ENTER) {
+            //player name enterd in slot
+        }
+        if (input.STOC_HS_PLAYER_CHANGE) {
+            //player slot update
+        }
+        if (input.STOC_HS_WATCH_CHANGE) {
+            //NUMBER OF WTACHERS changes
+        }
+        //processTask(task);
+    }
+
+}
 
 //taken from server.js, just done in reverse.
 // represnts a single duel connection.
@@ -312,24 +406,39 @@ function Duel(roompass, botUsername) {
 
     duel.server = new DuelConnection(roompass);
     duel.gameState = new GameState();
-    duel.server.on('connection', function (){
+    duel.commandParser = new CommandParser(duel.gameState, duel.server);
+    duel.server.on('connection', function () {
         //send game request
-    }
+    });
     duel.server.on('data', function (data) {
         var frame,
             task,
-            newframes = 0;
-        
+            newframes = 0,
+            commands,
+            l = 0,
+            reply;
+
         frame = framer.input(data);
         for (newframes; frame.length > newframes; newframes++) {
             task = parsePackets('STOC', new Buffer(frame[newframes]));
-            processTask(task);
+            commands = processTask(task);
             // process AI
-            //processTask(task);
+
+            // OK!!!! HARD PART!!!!
+            // recieveSTOC.js should have created obejects with all the parameters as properites, fire the functions.
+            // Dont try to pull data out of a packet here, should have been done already.
+            // its done here because we might need to pass in STATE to the functions also.
+            // again if you are fiddling with a packet you are doing it wrong!!!
+            // data decode and command execution are different conserns.
+            // if a COMMAND results in a response, save it as RESPONSE, else return the function false.
+            for (l; commands.length > l; l++) {
+                duel.commandParser(input);
+            }
+
         }
         frame = [];
     });
-    
+
 }
 
 //
