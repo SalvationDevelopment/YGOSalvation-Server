@@ -247,10 +247,11 @@ function CommandParser(state, network) {
     // again if you are fiddling with a packet you are doing it wrong!!!
     // data decode and command execution are different conserns.
     // if a COMMAND results in a response, save it as RESPONSE, else return the function false.
+    
+    var protoResponse = [];
     return function (input) {
         if (input.STOC_UNKNOWN) {
             //bug
-            break;
         }
         if (input.STOC_GAME_MSG) {
             //case deeper, actuall gameplay
@@ -349,9 +350,12 @@ function CommandParser(state, network) {
             }
         }
         if (input.STOC_SELECT_HAND) {
+            protoResponse.push(0x3);
             //select random
+            
         }
         if (input.STOC_SELECT_TP) {
+            protoResponse.push(0x4);
             //pick who goes first
         }
         if (input.STOC_HAND_RESULT) {
@@ -389,15 +393,19 @@ function CommandParser(state, network) {
         }
         if (input.STOC_CHAT) {
             //chat message, from
+            state.log.push([input.player, input.message]);
         }
         if (input.STOC_HS_PLAYER_ENTER) {
             //player name enterd in slot
+            state.lobby[input.loc] = input.player;
         }
         if (input.STOC_HS_PLAYER_CHANGE) {
             //player slot update
+            state.lobby[input.loc] = input.player;
         }
         if (input.STOC_HS_WATCH_CHANGE) {
             //NUMBER OF WTACHERS changes
+            state.lobby.observers = input.count;
         }
         //processTask(task);
     }
