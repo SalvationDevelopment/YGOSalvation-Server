@@ -63,6 +63,14 @@ module.exports = function RecieveCTOS(packet) {
         todo.CTOS_HS_START = true;
         break;
      
+    case ('CTOS_TIME_COMFIRM'):
+        console.log('CTOS_TIME_COMFIRM',JSON.stringify(packet.message));
+        break;
+        
+    case ('CTOS_RESPONSE'):
+        console.log('CTOS_RESPONSE', JSON.stringify(packet.message));
+        break;
+        
     default:
         console.log(packet.CTOS);
     }
