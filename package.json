@@ -39,6 +39,7 @@
     "author": "panthrowzay@gmail.com",
     "homepage": "http://ygopro.us",
     "scripts": {
+        "start" : "node server/server.js",
         "test": "istanbul cover _mocha -- -R spec"
     }
 }
