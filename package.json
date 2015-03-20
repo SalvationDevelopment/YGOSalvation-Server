@@ -40,6 +40,6 @@
     "homepage": "http://ygopro.us",
     "scripts": {
         "start" : "node server/server.js",
-        "test": "istanbul cover _mocha -- -R spec"
+        "test": "istanbul cover _mocha -- -u exports -R spec"
     }
 }
