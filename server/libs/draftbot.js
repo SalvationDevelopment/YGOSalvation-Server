@@ -78,3 +78,12 @@ bot.addListener("message", function (from, to, message) {
 
 
 module.exports = eventEmitter;
+
+function start() {
+    //get users
+    
+    //get piles
+    
+    //send each user pack
+
+}
