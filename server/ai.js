@@ -248,7 +248,8 @@ function CommandParser(state, network) {
     // data decode and command execution are different conserns.
     // if a COMMAND results in a response, save it as RESPONSE, else return the function false.
     
-    var protoResponse = [];
+    var protoResponse = [],
+        responseRequired = false;
     return function (input) {
         if (input.STOC_UNKNOWN) {
             //bug
@@ -350,11 +351,13 @@ function CommandParser(state, network) {
             }
         }
         if (input.STOC_SELECT_HAND) {
+            responseRequired = true;
             protoResponse.push(0x3);
             //select random
             
         }
         if (input.STOC_SELECT_TP) {
+            responseRequired = true;
             protoResponse.push(0x4);
             //pick who goes first
         }
@@ -389,7 +392,7 @@ function CommandParser(state, network) {
             //replayfile
         }
         if (input.STOC_TIME_LIMIT) {
-            protoResponse.push(); // its a blank array on purpose because it doesnt send anything.
+            responseRequired = true; // its a blank array on purpose because it doesnt send anything.
             //seconds left
         }
         if (input.STOC_CHAT) {
