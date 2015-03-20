@@ -389,6 +389,7 @@ function CommandParser(state, network) {
             //replayfile
         }
         if (input.STOC_TIME_LIMIT) {
+            protoResponse.push(); // its a blank array on purpose because it doesnt send anything.
             //seconds left
         }
         if (input.STOC_CHAT) {
