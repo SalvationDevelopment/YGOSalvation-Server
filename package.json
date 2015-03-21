@@ -27,13 +27,12 @@
         "knuth-shuffle": "*",
         "lodash" : "*",
         "ldapjs" : "*",
-        "policyfile" : "*"
+        "policyfile" : "*",
+        "istanbul": "*"
     },
     "optionalDependencies": {
         "httpsys": "*",
-        "mocha": "*",
-        "istanbul": "*",
-        "phantomjs": "*"
+        "mocha": "*"
     },
     "bugs": "https://github.com/salvationdevelopment/YGOPro-Support-System/issues",
     "author": "panthrowzay@gmail.com",
