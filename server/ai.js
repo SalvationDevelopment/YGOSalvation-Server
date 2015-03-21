@@ -252,7 +252,8 @@ function CommandParser(state, network) {
         responseRequired = false;
     return function (input) {
         if (input.STOC_UNKNOWN) {
-            //bug
+            responseRequired = false;
+            //bug this command is never to be hit.
         }
         if (input.STOC_GAME_MSG) {
             //case deeper, actuall gameplay
@@ -362,33 +363,41 @@ function CommandParser(state, network) {
             //pick who goes first
         }
         if (input.STOC_HAND_RESULT) {
+            responseRequired = false;
             //get hand result
         }
         if (input.STOC_TP_RESULT) {
+            responseRequired = false;
             //who is going first after picking
         }
         if (input.STOC_CHANGE_SIDE) {
+            responseRequired = false;
             //adjust side deck now
         }
         if (input.STOC_WAITING_SIDE) {
+            responseRequired = false;
             //waiting on opponent to side
         }
         if (input.STOC_CREATE_GAME) {
-
+            responseRequired = false;
         }
         if (input.STOC_TYPE_CHANGE) {
-
+            responseRequired = false;
         }
         if (input.STOC_LEAVE_GAME) {
+            responseRequired = false;
             //lobby opponent left
         }
         if (input.STOC_DUEL_START) {
+            responseRequired = false;
             //duel is starting
         }
         if (input.STOC_DUEL_END) {
+            responseRequired = false;
             //duel ended
         }
         if (input.STOC_REPLAY) {
+            responseRequired = false;
             //replayfile
         }
         if (input.STOC_TIME_LIMIT) {
@@ -411,8 +420,10 @@ function CommandParser(state, network) {
             //NUMBER OF WTACHERS changes
             state.lobby.observers = input.count;
         }
-        //processTask(task);
-    }
+        if (responseRequired) {
+            return protoResponse;
+        }
+    };
 
 }
 
@@ -445,7 +456,7 @@ function Duel(roompass, botUsername) {
             
             // process AI
             for (l; commands.length > l; l++) {
-                duel.commandParser(input);
+                duel.commandParser(commands);
             }
 
         }
