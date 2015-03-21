@@ -51,9 +51,9 @@ function initiateMaster() {
         console.log(('        Starting Slave ' + x).grey);
         var worker = cluster.fork({
             PORTRANGE: x
-        }),
-        policyServer = require('./libs/policyserver.js'),
-        loginDatabaseServer = require('./libs/ldapserver.js'); //LDAP endpoint; //Flash policy server for LightIRC;
+        });
+        require('./libs/policyserver.js');
+        require('./libs/ldapserver.js'); //LDAP endpoint; //Flash policy server for LightIRC;
 
         worker.on('message', function (message) {
             if (message.messagetype === 'coreMessage') {
@@ -143,6 +143,18 @@ function initiateSlave() {
     }
 
     if (cluster.isMaster) {
+        // if doing a build test on Travis running with istanbul coverage
+        if (process.env.running_under_istanbul) {
+            // use coverage for forked process
+            // disabled reporting and output for child process
+            // enable pid in child process coverage filename
+            cluster.setupMaster({
+                exec: './node_modules/.bin/istanbul',
+                args: [
+                    'cover', '--report', 'none', '--print', 'none', '--include-pid',
+                    process.argv[1], '--'].concat(process.argv.slice(2))
+            });
+        }
         initiateMaster();
     } else {
         initiateSlave();
