@@ -187,16 +187,28 @@ module.exports = function recieveSTOC(packet) {
         break;
             
     case ("STOC_ERROR_MSG"):
+        command = enums.STOC.STOC_ERROR_MSG[task.STOC_ERROR_MSG.message[0]];
+        switch (command) {
+        case (null):
+            break;
+        default:
+        
+        }
         break;
 
     case ("STOC_SELECT_HAND"):
+        //visual only trigger
         break;
 
     case ("STOC_SELECT_TP"):
+        //prompt turn player trigger
         break;
 
     case ("STOC_HAND_RESULT"):
-        task.rpschoice = packet[0];
+        task.showcardcode = 0; //(pkt->res1 - 1) + ((pkt->res2 - 1) << 16);
+		task.showcarddif = 50;
+		task.showcardp = 0;
+		task.showcard = 100;
         break;
 
     case ("STOC_TP_RESULT"):
@@ -224,9 +236,11 @@ module.exports = function recieveSTOC(packet) {
         break;
 
     case ("STOC_DUEL_START"):
+        //trigger to start duel, nothing more.
         break;
 
     case ("STOC_DUEL_END"):
+        //trigger to close the duel, nothing more.
         break;
 
     case ("STOC_REPLAY"):
