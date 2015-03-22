@@ -2,9 +2,11 @@
 // blah blah load dependencies
 var net = require('net'), //ablity to use TCP
     Primus = require('primus'), //Primus, our Sepiroth-Qliphopth Creator God. Websocket connections.
-    Framemaker = require('libs/parseframes.js'), // unfuck Flurohydrides expensive'net culture based network optimizations that make everything unreadable.
+    Framemaker = require('./libs/parseframes.js'), // unfuck Flurohydrides expensive'net culture based network optimizations that make everything unreadable.
     internalGames = [], // internal list of all games the bot is playing
-    recieveSTOC = require('libs/recieveSTOC.js'), // turn network data into a COMMAND and list of PARAMETERS
+    recieveSTOC = require('./libs/recieveSTOC.js'), // turn network data into a COMMAND and list of PARAMETERS
+    parsePackets = require('./libs/parsepackets.js'),
+    enums = require('./libs/enums.js'),
     http = require('http'), // SQCG Primus requires http parsing/tcp-handling
     server = http.createServer(), //throne of the God
     primus = new Primus(server), // instance of the God
@@ -69,75 +71,89 @@ bot.addListener("message", function (from, to, message) {
 function GameState() {
     'use strict';
     var state = {
-        OppMonsterZones: [],
-        AIMonsterZones: [],
-        OppSpellTrapZones: [],
-        AISpellTrapZones: [],
-        OppGraveyard: [],
-        AIGraveyard: [],
-        OppBanished: [],
-        AIBanished: [],
-        OppHand: [],
-        AIHand: [],
-        OppExtraDeck: [],
-        AIExtraDeck: [],
-        OppMainDeck: [],
-        AIMainDeck: []
-    };
+        0: {
+            MonsterZones: [],
+            SpellTrapZones: [],
+            Graveyard: [],
+            Banished: [],
+            Hand: [],
+            ExtraDeck: [],
+            MainDeck: []
+        },
+        1: {
+            MonsterZones: [],
+            SpellTrapZones: [],
+            Graveyard: [],
+            Banished: [],
+            Hand: [],
+            ExtraDeck: [],
+            MainDeck: []
+        }
+    },
+        AIPlayerID = 0,
+        OppPlayerID = 1;
 
-    function move() {
+    function move(player, clocation, index, moveplayer, movelocation, movezone, moveposition, overlayindex, isBecomingCard) {
 
+        //enums.locations[clocation] === 'DECK/EXTRA/REMOVED
+
+        return;
     }
-
+    function setAI_Opp(newID) {
+        AIPlayerID = newID;
+        OppPlayerID = (AIPlayerID === 0) ? 1 : 0;
+    }
+    
     function loadDeck(player, deck, cardList) {
 
     }
     return {
         move: move,
+        loadDeck: loadDeck,
+        setAI_Opp: setAI_Opp,
         GetOppMonsterZones: function () {
-            return state.OppMonsterZones;
+            return state[OppPlayerID].MonsterZones;
         },
         GetAIMonsterZones: function () {
-            return state.AIMonsterZones;
+            return state[AIPlayerID].MonsterZones;
         },
         GetOppSpellTrapZones: function () {
-            return state.OppSpellTrapZones;
+            return state[OppPlayerID].SpellTrapZones;
         },
 
         GetAISpellTrapZones: function () {
-            return state.AISpellTrapZones;
+            return state[AIPlayerID].SpellTrapZones;
         },
         GetOppGraveyard: function () {
-            return state.OppGraveyard;
+            return state[OppPlayerID].Graveyard;
         },
         GetAIGraveyard: function () {
-            return state.AIGraveyard;
+            return state[AIPlayerID].Graveyard;
         },
         GetOppBanished: function () {
-            return state.OppBanished;
+            return state[OppPlayerID].Banished;
         },
         GetAIBanished: function () {
-            return state.AIBanished;
+            return state[AIPlayerID].Banished;
         },
         GetOppHand: function () {
-            return state.OppHand;
+            return state[OppPlayerID].Hand;
         },
         GetAIHand: function () {
-            return state.AIHand;
+            return state[AIPlayerID].Hand;
         },
         GetOppExtraDeck: function () {
-            return state.OppExtraDeck;
+            return state[OppPlayerID].ExtraDeck;
         },
         GetAIExtraDeck: function () {
-            return state.AIExtraDeck;
+            return state[AIPlayerID].ExtraDeck;
         },
         GetOppMainDeck: function () {
-            return state.OppMainDeck;
+            return state[OppPlayerID].MainDeck;
         },
         GetAIMainDeck: function () {
-            return state.AIMainDeck;
-        },
-        loadDeck: loadDeck
+            return state[AIPlayerID].MainDeck;
+        }
     };
 
 }
@@ -239,15 +255,15 @@ function processTask(task, socket) {
 // duel constructor
 function CommandParser(state, network) {
     'use strict';
-    
-     // OK!!!! HARD PART!!!!
+
+    // OK!!!! HARD PART!!!!
     // recieveSTOC.js should have created obejects with all the parameters as properites, fire the functions.
     // Dont try to pull data out of a packet here, should have been done already.
     // its done here because we might need to pass in STATE to the functions also.
     // again if you are fiddling with a packet you are doing it wrong!!!
     // data decode and command execution are different conserns.
     // if a COMMAND results in a response, save it as RESPONSE, else return the function false.
-    
+
     var protoResponse = [],
         responseRequired = false;
     return function (input) {
@@ -355,7 +371,7 @@ function CommandParser(state, network) {
             responseRequired = true;
             protoResponse.push(0x3);
             //select random
-            
+
         }
         if (input.STOC_SELECT_TP) {
             responseRequired = true;
@@ -432,8 +448,7 @@ function CommandParser(state, network) {
 function Duel(roompass, botUsername) {
     'use strict';
     var duel = {},
-        framer = new Framemaker(),
-        parsePackets = require('libs/parsepackets.js');
+        framer = new Framemaker();
 
     duel.server = new DuelConnection(roompass);
     duel.gameState = new GameState();
@@ -453,7 +468,7 @@ function Duel(roompass, botUsername) {
         for (newframes; frame.length > newframes; newframes++) {
             task = parsePackets('STOC', new Buffer(frame[newframes]));
             commands = processTask(task);
-            
+
             // process AI
             for (l; commands.length > l; l++) {
                 duel.commandParser(commands);
