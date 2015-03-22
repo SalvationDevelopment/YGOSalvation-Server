@@ -1,15 +1,15 @@
 /*jslint node:true, plusplus: true*/
 // blah blah load dependencies
 var net = require('net'), //ablity to use TCP
-    Primus = require('Primus'), //Primus, our Sepiroth-Qliphopth Creator God. Websocket connections.
+    Primus = require('primus'), //Primus, our Sepiroth-Qliphopth Creator God. Websocket connections.
     Framemaker = require('libs/parseframes.js'), // unfuck Flurohydrides expensive'net culture based network optimizations that make everything unreadable.
     internalGames = [], // internal list of all games the bot is playing
     recieveSTOC = require('libs/recieveSTOC.js'), // turn network data into a COMMAND and list of PARAMETERS
     http = require('http'), // SQCG Primus requires http parsing/tcp-handling
     server = http.createServer(), //throne of the God
     primus = new Primus(server), // instance of the God
-    Socket = primus.Socket(),
-    client = new Socket('http://ygopro.us:24555'); //initiation of the God
+    Socket = primus.Socket(), //initiation of the God
+    client = new Socket('http://ygopro.us:24555'); //Connect the God to the tree.
 
 // load network understanding
 
