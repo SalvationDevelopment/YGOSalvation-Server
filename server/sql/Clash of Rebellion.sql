@@ -46,6 +46,9 @@ INSERT OR REPLACE INTO "datas" VALUES(13790554,1,0,123,33,1200,1000,3,2048,16,0)
 INSERT OR REPLACE INTO "datas" VALUES(13790555,1,0,89,33,0,2200,4,256,1,0);
 INSERT OR REPLACE INTO "datas" VALUES(13790556,1,0,11,33,1000,2000,4,8,32,0);
 INSERT OR REPLACE INTO "datas" VALUES(13790557,1,0,0,33,2500,0,7,524288,32,0);
+INSERT OR REPLACE INTO "datas" VALUES ("13790558","1","0","67","33","1800","1000","4","1","1","0");
+INSERT OR REPLACE INTO "datas" VALUES ("13790559","1","0","0","33","2500","1000","8","262144","2","0");
+INSERT OR REPLACE INTO "datas" VALUES ("13790560","1","0","0","4129","2700","1500","8","8388608","32","0");
 
 INSERT OR REPLACE INTO "texts" VALUES(13790000,'Sea Dragoons of Draconia','Pendulum Scale = 7
 Pendulum Effect: When a monster is destroyed by battle: You can Special Summon 1 Normal Monster from your hand. You can only use this effect of "Sea Dragoons of Draconia" once per turn.
@@ -151,4 +154,7 @@ INSERT OR REPLACE INTO "texts" VALUES(13790555,'Gogogo Aristera & Dexia','While 
 ● When it is Xyz Summoned: You can target 1 face-up Attack Position monster your opponent controls; change it to Defense Position, and if you do, its DEF becomes 0.','','','','','','','','','','','','','','','','');
 INSERT OR REPLACE INTO "texts" VALUES(13790556,'Infernity Bishop','If this is the only card in your hand, you can Special Summon it (from your hand). You can only Special Summon "Infernity Bishop" once per turn this way. If an "Infernity" monster(s) you control would be destroyed by battle or a card effect while you have no cards in your hand, you can banish this card from your Graveyard instead.','','','','','','','','','','','','','','','','');
 INSERT OR REPLACE INTO "texts" VALUES(13790557,'Wicked Priest Chilam Sabak','If you have 5 or more cards in your hand, you can Normal Summon this card without Tributing. When this card is destroyed by battle and sent to the Graveyard: You can Special Summon this card from your Graveyard in Defense Position, and if you do, it is treated as a Tuner monster. You can only use this effect of "Wicked Priest Chilam Sabak" once per turn.','','','','','','','','','','','','','','','','');
+INSERT OR REPLACE INTO "texts" VALUES ("13790558","Junk Breaker","During your Main Phase 1, if this card was Normal Summoned this turn: You can Tribute this card; negate the effects of all face-up monsters this turn.","","","","","","","","","","","","","","","","");
+INSERT OR REPLACE INTO "texts" VALUES ("13790559","Kaiser Sea Snake","If your opponent controls a monster while you do not, you can Special Summon this card (from your hand). You can only Special Summon “Kaiser Sea Snake” with its procedure once per turn. When this card is Special Summoned by its procedure: You can Special Summon 1 Level 8 Sea Serpent-Type monster from your hand or Graveyard, but its ATK and DEF each become 0. If this card was Special Summoned, its Level becomes 4 and its original ATK becomes 0.","","","","","","","","","","","","","","","","");
+INSERT OR REPLACE INTO "texts" VALUES ("13790560","Bird of Paradise Lost","This card gains 100 ATK and DEF for each Tuner monster in your Graveyard. Once per turn: You can send 1 Tuner monster from your hand to the Graveyard, then target 1 monster your opponent controls; take control of that target, until the End Phase.","","","","","","","","","","","","","","","","");
 COMMIT;
