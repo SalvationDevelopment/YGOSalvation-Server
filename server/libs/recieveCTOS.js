@@ -13,6 +13,7 @@ module.exports = function RecieveCTOS(packet) {
     case ('CTOS_PLAYER_INFO'):
         username = packet.message.toString('utf16le');
         username = username.split('\u0000'); // is this needed?
+        console.log('CTOS_PLAYER_INFO', JSON.stringify(packet.message), username);
         todo.CTOS_PLAYER_INFO = username[0];
         break;
             
@@ -23,12 +24,13 @@ module.exports = function RecieveCTOS(packet) {
         roomname = packet.message.toString('utf16le', 8, 56);
         todo.CTOS_JOIN_GAME = roomname;
         console.log('Version', version, 'roomname', roomname);
+        console.log('CTOS_JOIN_GAME', JSON.stringify(packet.message));
         break;
             
             
     case ('CTOS_HS_READY'):
         todo.CTOS_HS_READY = true;
-        console.log('ready', packet.message.toString());
+        console.log('CTOS_HS_READY', JSON.stringify(packet.message));
         break;
             
             
@@ -64,7 +66,7 @@ module.exports = function RecieveCTOS(packet) {
         break;
      
     case ('CTOS_TIME_COMFIRM'):
-        console.log('CTOS_TIME_COMFIRM',JSON.stringify(packet.message));
+        //console.log('CTOS_TIME_COMFIRM',JSON.stringify(packet.message));
         break;
         
     case ('CTOS_RESPONSE'):
