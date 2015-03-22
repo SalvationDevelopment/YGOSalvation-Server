@@ -52,7 +52,8 @@ server/ygocore/*.exe
 server/ygocore/ErrorLog.txt
 server/ygocore/error_log/*
 server/http/manifest/*
-!server/http/ygopro/script
+server/http/ygopro/*
+!server/http/ygopro/script/*
 
 #project-Agnotistic
 *.conf
