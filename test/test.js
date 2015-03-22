@@ -5,7 +5,7 @@ var assert = require("assert");
 
 //global.__base = __dirname + '/server/';
 
-describe('Array', function () {
+describe('System', function () {
     'use strict';
     it('Should start the server', function () {
         require('../server/server.js');
