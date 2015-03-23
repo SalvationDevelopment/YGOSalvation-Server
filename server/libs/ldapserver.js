@@ -19,7 +19,7 @@ function authorize(req, res, next) {
 
 var SUFFIX = 'o=salvation';
 try {
-    var db =  require('../../../loginDatabase.json');
+    var db =  require('../../../loginDatabase.json') || {};
 } catch (error) {
     var db = {};
 }
