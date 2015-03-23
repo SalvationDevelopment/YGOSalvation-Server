@@ -1,13 +1,16 @@
-/*jslint node: true, bitwise: true*/
+/*jslint node: true, bitwise: true, plusplus:true*/
 var enums = require('./enums.js');
 
 module.exports = function recieveSTOC(packet) {
     'use strict';
     var task = Object.create(enums.STOCCheck),
         makeCard = require('server/http/js/makeCard.js'),
-        command;
+        command,
+        bitreader = 0,
+        iter = 0;
 
     task[packet.STOC] = true;
+    
     switch (packet.STOC) {
     case ("STOC_UNKNOWN"):
         break;
@@ -15,6 +18,7 @@ module.exports = function recieveSTOC(packet) {
     case ("STOC_GAME_MSG"):
         command = enums.STOC.STOC_GAME_MSG[task.STOC_GAME_MSG.message[0]];
         task.STOC_GAME_MSG.command = command;
+        bitreader++;
         switch (command) {
         case ('MSG_START'):
             task.playertype = packet[1];
@@ -106,7 +110,80 @@ module.exports = function recieveSTOC(packet) {
             break;
                 
         case ('MSG_SELECT_IDLECMD'):
-            task.STOC_GAME_MSG.idleplayer = packet[1];
+            //https://github.com/Fluorohydride/ygopro/blob/d9450dbb35676db3d5b7c2a5241a54d7f2c21e98/ocgcore/playerop.cpp#L69
+            task.idleplayer = packet[1];
+            iter = 0;
+            bitreader++;
+            task.summonable_cards = [];
+            for (iter; packet[bitreader] > iter; iter++) {
+                task.summonable.push({
+                    code : packet.readUInt16LE(bitreader + 1),
+                    controller : packet[bitreader + 5],
+                    location : packet[bitreader + 6],
+                    sequence : packet[bitreader + 7]
+                });
+                bitreader = bitreader + 7;
+            }
+            iter = 0;
+            bitreader++;
+            task.spsummonable_cards = [];
+            for (iter; packet[bitreader] > iter; iter++) {
+                task.spsummonable.push({
+                    code : packet.readUInt16LE(bitreader + 1),
+                    controller : packet[bitreader + 5],
+                    location : packet[bitreader + 6],
+                    sequence : packet[bitreader + 7]
+                });
+                bitreader = bitreader + 7;
+            }
+            iter = 0;
+            bitreader++;
+            task.repositionable_cards = [];
+            for (iter; packet[bitreader] > iter; iter++) {
+                task.repositionable_cards.push({
+                    code : packet.readUInt16LE(bitreader + 1),
+                    controller : packet[bitreader + 5],
+                    location : packet[bitreader + 6],
+                    sequence : packet[bitreader + 7]
+                });
+                bitreader = bitreader + 7;
+            }
+            iter = 0;
+            bitreader++;
+            task.msetable_cards = [];
+            for (iter; packet[bitreader] > iter; iter++) {
+                task.msetable_cards.push({
+                    code : packet.readUInt16LE(bitreader + 1),
+                    controller : packet[bitreader + 5],
+                    location : packet[bitreader + 6],
+                    sequence : packet[bitreader + 7]
+                });
+                bitreader = bitreader + 7;
+            }
+            iter = 0;
+            bitreader++;
+            task.select_chains = [];
+            for (iter; packet[bitreader] > iter; iter++) {
+                task.select_chains.push({
+                    code : packet.readUInt16LE(bitreader + 1),
+                    controller : packet[bitreader + 5],
+                    location : packet[bitreader + 6],
+                    sequence : packet[bitreader + 7]
+                });
+                bitreader = bitreader + 7;
+            }
+            iter = 0;
+            bitreader++;
+            task.ssetable_cards = [];
+            for (iter; packet[bitreader] > iter; iter++) {
+                task.ssetable_cards.push({
+                    code : packet.readUInt16LE(bitreader + 1),
+                    controller : packet[bitreader + 5],
+                    location : packet[bitreader + 6],
+                    sequence : packet[bitreader + 7]
+                });
+                bitreader = bitreader + 7;
+            }
             break;
 
         case ('MSG_MOVE'):
