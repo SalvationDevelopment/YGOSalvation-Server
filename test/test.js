@@ -93,26 +93,23 @@ describe('Boot Test', function () {
 describe('Client Boot', function () {
     'use strict';
     it('Should start the client', function () {
-        require('../client/interface/js/js/configuration.js');
-        require('../client/interface/js/js/offline-server.js');
-        require('../client/interface/js/js/offline.js');
+        require('../client/interface/js/configuration.js');
+        require('../client/interface/js/offline-server.js');
+        require('../client/interface/js/offline.js');
         //requires refactor before testable.
         
     });
     it('Test battlepack3.js', function () {
-        require('server/http/js/battlepack3.js');    
+        require('../server/http/js/battlepack3.js');    
     });
     it('Test cardmake.js', function () {
-        require('server/http/js/card.js');    
+        require('../server/http/js/card.js');    
     });
     it('Test http-gamelist.js', function () {
-        require('server/http/js/http-gamelist.js');    
-    });
-    it('Test http-gamelist.js', function () {
-        require('server/http/js/http-gamelist.js');    
+        require('../server/http/js/http-gamelist.js');    
     });
     it('Test updatesystem.js', function () {
-        require('server/http/js/updatesystem.js');    
+        require('../server/http/js/updatesystem.js');    
     });
     
     
