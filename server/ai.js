@@ -96,7 +96,11 @@ function GameState() {
     function move(player, clocation, index, moveplayer, movelocation, movezone, moveposition, overlayindex, isBecomingCard) {
 
         //enums.locations[clocation] === 'DECK/EXTRA/REMOVED
-
+        state[moveplayer][movelocation][moveposition] = state[player][clocation][index];
+        state[player][clocation][index] = undefined;
+        //if grave
+        
+        
         return;
     }
     function setAI_Opp(newID) {
@@ -505,9 +509,9 @@ primus.on('data', function (data) {
 
 primus.on('connect', function () {
     'use strict';
-    console.log('!!!!!! connect');
+    console.log('Connected to Gamelist');
 });
 primus.on('close', function () {
     'use strict';
-    console.log('!!!!!! close');
+    console.log('Lost Connection to Gamelist');
 });
