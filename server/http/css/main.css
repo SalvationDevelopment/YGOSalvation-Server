@@ -1457,8 +1457,6 @@ div[data-game^="32"] {
 
 .game:not([data-game*=",0,5,0,"]),
 .game:not([data-game*=",0,5,1,"]),
-.game:not([data-game*=",0,5,2,"]),
-.game:not([data-game*=",0,5,3,"]),
 .game:not([data-game*="OOO"]) {
     /* cheating! */
     
