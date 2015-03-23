@@ -89,5 +89,39 @@ describe('Boot Test', function () {
         require('../server/libs/ygocore-network-interface.js');
     });
 });
+
+describe('Client Boot', function () {
+    'use strict';
+    it('Should start the client', function () {
+        require('../client/interface/js/js/configuration.js');
+        require('../client/interface/js/js/offline-server.js');
+        require('../client/interface/js/js/offline.js');
+        //requires refactor before testable.
+        
+    });
+    it('Test battlepack3.js', function () {
+        require('server/http/js/battlepack3.js');    
+    });
+    it('Test cardmake.js', function () {
+        require('server/http/js/card.js');    
+    });
+    it('Test http-gamelist.js', function () {
+        require('server/http/js/http-gamelist.js');    
+    });
+    it('Test http-gamelist.js', function () {
+        require('server/http/js/http-gamelist.js');    
+    });
+    it('Test updatesystem.js', function () {
+        require('server/http/js/updatesystem.js');    
+    });
+    
+    
+    it('Should start the AI', function () {
+        require('../server/server.js');
+        require('../server/ai.js');
+
+    });
+
+});
 //check all JSON files are JSON
 //do JSLint on everything
