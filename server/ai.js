@@ -70,29 +70,59 @@ bot.addListener("message", function (from, to, message) {
 // STOC (server TO client) commands update this state holder.
 function GameState() {
     'use strict';
-    var state = {
-        0: {
-            MonsterZones: [],
-            SpellTrapZones: [],
-            Graveyard: [],
-            Banished: [],
-            Hand: [],
-            ExtraDeck: [],
-            MainDeck: []
-        },
-        1: {
-            MonsterZones: [],
-            SpellTrapZones: [],
-            Graveyard: [],
-            Banished: [],
-            Hand: [],
-            ExtraDeck: [],
-            MainDeck: []
-        }
-    },
-        AIPlayerID = 0,
-        OppPlayerID = 1;
+    var AIPlayerID = 0,
+        OppPlayerID = 1,
+        turnPlayer = 0,
+        phase = 0,
+        state = {
+            0: {
+                Lifepoints : 8000,
+                MonsterZones: [],
+                SpellTrapZones: [],
+                Graveyard: [],
+                Banished: [],
+                Hand: [],
+                ExtraDeck: [],
+                MainDeck: []
+            },
+            1: {
+                LifePoints: 8000,
+                MonsterZones: [],
+                SpellTrapZones: [],
+                Graveyard: [],
+                Banished: [],
+                Hand: [],
+                ExtraDeck: [],
+                MainDeck: []
+            }
+        };
+    
+    function start(lp1, lp2, OneDeck, TwoDeck, OneExtra, TwoExtra) {
+//            game.DOMWriter(OneDeck, 'DECK', 0);
+//            game.DOMWriter(TwoDeck, 'DECK', 1);
+//            game.DOMWriter(OneExtra, 'EXTRA', 0);
+//            game.DOMWriter(TwoExtra, 'EXTRA', 1);
 
+        state[0].LifePoints = lp1;
+        state[1].LifePoints = lp2;
+    }
+
+    function update(player, clocation, index, data) {
+        if (index !== 'mass') {
+            state[player][clocation] = data;
+        } else {
+            state[player][clocation][index] = data;
+        }
+    }
+    
+    function updateLifepoints(player, multiplier, lp) {
+        var lifepoints = +state[player].Lifepoints + (lp * multiplier);
+        if (lifepoints < 0) {
+            lifepoints = 0;
+        }
+        state[player].Lifepoints = lifepoints;
+    }
+    
     function move(player, clocation, index, moveplayer, movelocation, movezone, moveposition, overlayindex, isBecomingCard) {
 
         //enums.locations[clocation] === 'DECK/EXTRA/REMOVED
@@ -111,6 +141,11 @@ function GameState() {
         
         return;
     }
+    
+    function newphase(turnx) {
+        turnx = +state.phase;
+    }
+    
     function setAI_Opp(newID) {
         AIPlayerID = newID;
         OppPlayerID = (AIPlayerID === 0) ? 1 : 0;
@@ -121,6 +156,7 @@ function GameState() {
     }
     return {
         move: move,
+        update: update,
         loadDeck: loadDeck,
         setAI_Opp: setAI_Opp,
         GetOppMonsterZones: function () {
