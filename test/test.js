@@ -68,10 +68,16 @@ describe('Boot Test', function () {
         require('../server/libs/processIncomingTrasmission.js');
     });
     it('Should test recieveCTOS.js', function () {
-        require('../server/libs/recieveCTOS.js');
+        var recieveCTOS = require('../server/libs/recieveCTOS.js');
+        for (var 1 = 0; 255 > i; i++) {
+            recieveCTOS(new Buffer[i,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,]);
+        }
     });
     it('Should test recieveSTOC.js', function () {
         require('../server/libs/recieveSTOC.js');
+        for (var 1 = 0; 255 > i; i++) {
+            recieveSTOC(new Buffer[i,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,]);
+        }
     });
     it('Should test servercontrol.json', function () {
         require('../server/libs/servercontrol.json');
