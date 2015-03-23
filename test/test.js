@@ -70,13 +70,13 @@ describe('Boot Test', function () {
     it('Should test recieveCTOS.js', function () {
         var recieveCTOS = require('../server/libs/recieveCTOS.js');
         for (var i = 0; 255 > i; i++) {
-            recieveCTOS(new Buffer[i,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,]);
+            recieveCTOS(new Buffer[i,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]);
         }
     });
     it('Should test recieveSTOC.js', function () {
         require('../server/libs/recieveSTOC.js');
         for (var i = 0; 255 > i; i++) {
-            recieveSTOC(new Buffer[i,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,]);
+            recieveSTOC(new Buffer[i,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]);
         }
     });
     it('Should test servercontrol.json', function () {
