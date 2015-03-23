@@ -74,7 +74,7 @@ describe('Boot Test', function () {
         }
     });
     it('Should test recieveSTOC.js', function () {
-        require('../server/libs/recieveSTOC.js');
+        recieveSTOC = require('../server/libs/recieveSTOC.js');
         for (var i = 0; 255 > i; i++) {
             recieveSTOC([i,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]);
         }
