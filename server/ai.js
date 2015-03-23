@@ -99,6 +99,14 @@ function GameState() {
         state[moveplayer][movelocation][moveposition] = state[player][clocation][index];
         state[player][clocation][index] = undefined;
         //if grave
+        //if banished
+        //if hand
+        //if extraDeck
+        //if maindeck
+        //if above, reshuffle;
+        state[player][clocation] = state[player][clocation].filter(function (element) {
+            return element !== undefined;
+        });
         
         
         return;
