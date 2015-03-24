@@ -4,7 +4,7 @@ var enums = require('./enums.js');
 module.exports = function recieveSTOC(packet) {
     'use strict';
     var task = Object.create(enums.STOCCheck),
-        makeCard = require('server/http/js/makeCard.js'),
+        makeCard = require('../server/http/js/makeCard.js'),
         command,
         bitreader = 0,
         iter = 0;
