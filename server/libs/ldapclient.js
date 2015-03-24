@@ -1,6 +1,6 @@
 /*jslint  node: true, plusplus: true*/
 var ldap = require('ldapjs'),
-    dataBaseKey = require('../../../databasePassword.json');
+    dataBaseKey = require('../../../databasePassword.json') || '';
 client = ldap.createClient({
     url: 'ldap://127.0.0.1:1389'
 });
