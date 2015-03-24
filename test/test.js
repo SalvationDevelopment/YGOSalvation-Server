@@ -69,14 +69,21 @@ describe('Boot Test', function () {
     });
     it('Should test recieveCTOS.js', function () {
         var recieveCTOS = require('../server/libs/recieveCTOS.js');
-        for (var i = 0; 255 > i; i++) {
-            recieveCTOS([i,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]);
+        enums = require('../server/libs/enums.js');
+        loop = Object.create(enums.CTOS);
+        for (var i in loop) {
+            recieveCTOS({CTOS : i,
+            message : [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+            });
         }
     });
     it('Should test recieveSTOC.js', function () {
         recieveSTOC = require('../server/libs/recieveSTOC.js');
-        for (var i = 0; 255 > i; i++) {
-            recieveSTOC([i,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]);
+        loop = Object.create(enums.STOC);
+        for (var i in loop) {
+            recieveCTOS({STOC : i,
+            message : [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+            });
         }
     });
     it('Should test servercontrol.json', function () {
