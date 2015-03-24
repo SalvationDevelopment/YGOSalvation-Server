@@ -49,11 +49,8 @@ describe('Boot Test', function () {
     it('Should test killcore.js', function () {
         require('../server/libs/killcore.js');
     });
-    it('Should test ldapclient.js', function () {
-        require('../server/libs/ldapclient.js');
-    });
-    // it('Should test manualmode.js', function () {
-    //     require('../server/libs/manualmode.js');
+    // it('Should test ldapclient.js', function () {
+    //     require('../server/libs/ldapclient.js');
     // });
     it('Should test parseframes.js', function () {
         require('../server/libs/parseframes.js');
