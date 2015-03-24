@@ -1,3 +1,4 @@
+/*jslint bitwise: false*/
 function makeCard(buffer, start, controller) {
     if (buffer.length < 4) {
         return {
