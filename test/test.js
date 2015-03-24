@@ -100,7 +100,7 @@ describe('Client Boot', function () {
     it('Should start the client', function () {
         require('../client/interface/js/configuration.js');
         require('../client/interface/js/offline-server.js');
-        require('../client/interface/js/offline.js');
+        // require('../client/interface/js/offline.js');
         //requires refactor before testable.
         
     });
@@ -110,19 +110,12 @@ describe('Client Boot', function () {
     it('Test cardmake.js', function () {
         require('../server/http/js/card.js');    
     });
-    it('Test http-gamelist.js', function () {
-        require('../server/http/js/http-gamelist.js');    
-    });
-    it('Test updatesystem.js', function () {
-        require('../server/http/js/updatesystem.js');    
-    });
-    
-    
-    it('Should start the AI', function () {
-        require('../server/server.js');
-        require('../server/ai.js');
-
-    });
+    // it('Test http-gamelist.js', function () {
+    //     require('../server/http/js/http-gamelist.js');    
+    // });
+    // it('Test updatesystem.js', function () {
+    //     require('../server/http/js/updatesystem.js');    
+    // });
 
 });
 //check all JSON files are JSON
