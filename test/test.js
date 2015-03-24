@@ -66,8 +66,8 @@ describe('Boot Test', function () {
     });
     it('Should test recieveCTOS.js', function () {
         var recieveCTOS = require('../server/libs/recieveCTOS.js');
-        enums = require('../server/libs/enums.js');
-        loop = Object.create(enums.CTOS);
+        var enums = require('../server/libs/enums.js');
+        var loop = Object.create(enums.CTOS);
         for (var i in loop) {
             recieveCTOS({CTOS : i,
             message : [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
