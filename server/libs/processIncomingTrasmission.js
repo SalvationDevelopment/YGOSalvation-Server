@@ -108,6 +108,7 @@ function portfinder(min, max, callback) {
 function pickCoreConfig(socket) {
     'use strict';
     var output = '';
+    // if command for goat format check.
     if (socket.hostString[0] > '2') {
         return output + socket.hostString[0] + '-config.txt';
     } else {
