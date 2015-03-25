@@ -1,3 +1,17 @@
+BEGIN TRANSACTION;
+DROP TABLE IF EXISTS "datas";
+CREATE TABLE [datas] (
+  [id] integer PRIMARY KEY, 
+  [ot] integer, 
+  [alias] integet, 
+  [setcode] INT64, 
+  [type] integer, 
+  [atk] integer, 
+  [def] integer, 
+  [level] integer, 
+  [race] integer, 
+  [attribute] integer, 
+  [category] integer);
 INSERT OR REPLACE INTO "datas" VALUES ("32864","3","0","0","17","1200","900","3","16","32","0");
 INSERT OR REPLACE INTO "datas" VALUES ("62121","3","0","0","2097185","920","1930","4","8","32","8192");
 INSERT OR REPLACE INTO "datas" VALUES ("102380","3","0","0","33","3000","2500","8","8","4","4456448");
@@ -1372,11 +1386,14 @@ INSERT OR REPLACE INTO "datas" VALUES ("99050989","3","0","0","33","1600","1100"
 INSERT OR REPLACE INTO "datas" VALUES ("99171160","3","0","0","17","400","400","1","8","32","0");
 INSERT OR REPLACE INTO "datas" VALUES ("99284890","3","0","0","33","1200","1300","3","256","1","256");
 INSERT OR REPLACE INTO "datas" VALUES ("99414168","3","0","0","161","1200","1400","3","2","16","2097152");
-
+COMMIT;
 -------------------------
 --------------------------
 ----------------------
 ---------------------------
+BEGIN TRANSACTION;
+DROP TABLE IF EXISTS "texts";
+CREATE TABLE texts(id integer primary key, name varchar(128), desc varchar(1024), str1 varchar(256), str2 varchar(256),			 str3 varchar(256),  str4 varchar(256),  str5 varchar(256),  str6 varchar(256),  str7 varchar(256),  str8 varchar(256),  str9 varchar(256),			 str10 varchar(256),  str11 varchar(256),  str12 varchar(256),  str13 varchar(256),  str14 varchar(256),  str15 varchar(256),  str16 varchar(256) );
 INSERT OR REPLACE INTO "texts" VALUES ("32864","The 13th Grave","A zombie that suddenly appeared from plot #13 - an empty grave.","","","","","","","","","","","","","","","","");
 INSERT OR REPLACE INTO "texts" VALUES ("62121","Castle of Dark Illusions","FLIP: Increases the ATK and DEF of all Zombie-Type monsters by 200 points. As long as this card remains face-up on the field, the ATK and DEF of Zombie-Type monsters continues to increase by 200 points during each of your Standby Phases. This effect continues until the 4th turn after the card is activated.","Flip","Increase ATK","","","","","","","","","","","","","","");
 INSERT OR REPLACE INTO "texts" VALUES ("102380","Lava Golem","Cannot be Normal Summoned/Set. Must first be Special Summoned (from your hand) to your opponent's side of the field by Tributing 2 monsters they control. You cannot Normal Summon/Set the turn you Special Summon this card. During each of the controller's Standby Phases: The controller takes 1000 damage.","Special Summon","1000 damage","","","","","","","","","","","","","","");
@@ -2815,3 +2832,4 @@ INSERT OR REPLACE INTO "texts" VALUES ("99050989","Drillago","If the only cards 
 INSERT OR REPLACE INTO "texts" VALUES ("99171160","Kozaky","A workaholic fiend who devotes everything to his research into the languages of Dark World. His mind has collapsed because of working too hard.","","","","","","","","","","","","","","","","");
 INSERT OR REPLACE INTO "texts" VALUES ("99284890","Avatar of The Pot","By sending 1 ""Pot of Greed"" from your hand to the Graveyard, draw 3 cards from your Deck.","Draw","","","","","","","","","","","","","","","");
 INSERT OR REPLACE INTO "texts" VALUES ("99414168","Elemental Mistress Doriado","This card can only be Ritual Summoned with the Ritual Spell Card, ""Doriado's Blessing"". The Attribute of this card is also treated as WIND, WATER, FIRE, and EARTH while it is face-up on the field.","","","","","","","","","","","","","","","","");
+COMMIT;
