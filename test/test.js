@@ -10,11 +10,11 @@ describe('System', function () {
     it('Should start the server', function () {
         require('../server/server.js');
     });
-    it('Should start the AI', function () {
-        require('../server/server.js');
-        require('../server/ai.js');
+    // it('Should start the AI', function () {
+    //     require('../server/server.js');
+    //     require('../server/ai.js');
 
-    });
+    // });
 
 });
 describe('Boot Test', function () {
