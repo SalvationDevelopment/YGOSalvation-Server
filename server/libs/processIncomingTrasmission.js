@@ -108,8 +108,10 @@ function portfinder(min, max, callback) {
 function pickCoreConfig(socket) {
     'use strict';
     var output = '';
-    if (socket.hostring.indexOf(",1,5,21,") > -1) {
-      return "goat.ini";
+    if (socket.hostring){
+        if (socket.hostring.indexOf("5,21,") > -1) {
+          return "goat.ini";
+        }
     }
     if (socket.hostString[0] > '2') {
         return output + socket.hostString[0] + '-config.ini';
