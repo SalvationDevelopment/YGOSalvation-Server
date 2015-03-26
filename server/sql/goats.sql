@@ -1386,6 +1386,10 @@ INSERT OR REPLACE INTO "datas" VALUES ("99050989","3","0","0","33","1600","1100"
 INSERT OR REPLACE INTO "datas" VALUES ("99171160","3","0","0","17","400","400","1","8","32","0");
 INSERT OR REPLACE INTO "datas" VALUES ("99284890","3","0","0","33","1200","1300","3","256","1","256");
 INSERT OR REPLACE INTO "datas" VALUES ("99414168","3","0","0","161","1200","1400","3","2","16","2097152");
+INSERT OR REPLACE INTO "datas" VALUES ("511000825","4","83555666","0","4","0","0","0","0","0","4194306");
+INSERT OR REPLACE INTO "datas" VALUES ("511000228","4","95727991","0","33","1000","2000","5","64","2","4194304");
+INSERT OR REPLACE INTO "datas" VALUES ("511000818","4","8131171","0","33","300","250","1","524288","2","1024");
+INSERT OR REPLACE INTO "datas" VALUES ("511000819","4","82301904","0","33","3000","2500","8","8192","32","6553608");
 COMMIT;
 -------------------------
 --------------------------
@@ -2832,4 +2836,8 @@ INSERT OR REPLACE INTO "texts" VALUES ("99050989","Drillago","If the only cards 
 INSERT OR REPLACE INTO "texts" VALUES ("99171160","Kozaky","A workaholic fiend who devotes everything to his research into the languages of Dark World. His mind has collapsed because of working too hard.","","","","","","","","","","","","","","","","");
 INSERT OR REPLACE INTO "texts" VALUES ("99284890","Avatar of The Pot","By sending 1 ""Pot of Greed"" from your hand to the Graveyard, draw 3 cards from your Deck.","Draw","","","","","","","","","","","","","","","");
 INSERT OR REPLACE INTO "texts" VALUES ("99414168","Elemental Mistress Doriado","This card can only be Ritual Summoned with the Ritual Spell Card, ""Doriado's Blessing"". The Attribute of this card is also treated as WIND, WATER, FIRE, and EARTH while it is face-up on the field.","","","","","","","","","","","","","","","","");
+INSERT OR REPLACE INTO "texts" VALUES ("511000825","Ring of Destruction","Target 1 face-up monster: Destroy it and inflict damage to both players equal to its ATK."," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," ");
+INSERT OR REPLACE INTO "texts" VALUES ("511000228","Catapult Turtle","You can Tribute 1 monster; inflict damage to your opponent equal to half the Tributed monster's ATK on the field.","Inflict damage"," "," "," "," "," "," "," "," "," "," "," "," "," "," "," ");
+INSERT OR REPLACE INTO "texts" VALUES ("511000818","Sinister Serpent","During your Standby Phase, if there is a ""Sinister Serpent"" in your Graveyard, you can add this card from your Graveyard to your hand.","Return to hand"," "," "," "," "," "," "," "," "," "," "," "," "," "," "," ");
+INSERT OR REPLACE INTO "texts" VALUES ("511000819","Chaos Emperor Dragon - Envoy of the End","Cannot be Normal Summoned/Set. Must first be Special Summoned (from your hand) by banishing 1 LIGHT and 1 DARK monster in your Graveyard. You can pay 1000 Life Points to send all cards in both players' hands and on the field to the Graveyard and inflict 300 damage to your opponent for each card sent this way.","Special Summon","Send to Grave"," "," "," "," "," "," "," "," "," "," "," "," "," "," ");
 COMMIT;
