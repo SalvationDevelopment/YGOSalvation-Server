@@ -22,6 +22,7 @@ var i,
         'TLM'];
 console.log('mining salt');
 //pretty sure you're trying to concat an array (numbers) and a string (Filesync of file) here.....
+
 for (i = 0; goatfile.length > i; i++) {
     goatnumbers = goatnumbers.concat(fs.readFileSync('./' + goatfile[i] + '.txt').toString().split('\n'));
 }
@@ -31,14 +32,22 @@ if (goatnumbers.length > 0) {
 } else {
     console.log('it failed!');
 }
-for (i = 0; goatnumbers.length > i; i++) {
-    var c = 'SELECT * FROM "datas" WHERE "id" = ' + goatnumbers[i].trim() + ';\n';
+
+goatsql.push('SELECT * FROM "datas" WHERE "id" ="'+ goatnumbers[0].trim() + '"\n');
+
+for (i = 1; goatnumbers.length > i; i++) {
+    var c = 'or "id" = "' + goatnumbers[i].trim() + '"\n';
     goatsql.push(c);
 }
-for (i = 0; goatnumbers.length > i; i++) {
-    var c = 'SELECT * FROM "texts" WHERE "id" = "' + goatnumbers[i].trim() + '";\n';
+goatsql.push(';')
+
+goatsql.push('SELECT * FROM "texts" WHERE "id" ="'+ goatnumbers[0].trim() + '"\n');
+
+for (i = 1; goatnumbers.length > i; i++) {
+    var c = 'or "id" = "' + goatnumbers[i].trim() + '"\n';
     goatsql.push(c);
 }
+goatsql.push(';')
 goatsql.join('');
 
 console.log('saving salt cake');
