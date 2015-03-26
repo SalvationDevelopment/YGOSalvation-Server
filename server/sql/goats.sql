@@ -765,7 +765,6 @@ INSERT OR REPLACE INTO "datas" VALUES ("82999629","3","0","0","524290","0","0","
 INSERT OR REPLACE INTO "datas" VALUES ("83011277","3","0","0","33","1400","1100","4","1024","32","2359296");
 INSERT OR REPLACE INTO "datas" VALUES ("83225447","3","0","0","262146","0","0","0","0","0","8192");
 INSERT OR REPLACE INTO "datas" VALUES ("83464209","3","0","0","17","800","1000","3","16384","1","0");
-INSERT OR REPLACE INTO "datas" VALUES ("83555666","3","0","0","4","0","0","0","0","0","4194306");
 INSERT OR REPLACE INTO "datas" VALUES ("83764996","3","0","110","17","1500","1600","4","2","32","0");
 INSERT OR REPLACE INTO "datas" VALUES ("83887306","3","0","0","4","0","0","0","0","0","2");
 INSERT OR REPLACE INTO "datas" VALUES ("83986578","3","0","0","33","1700","1000","4","16384","1","2");
@@ -866,7 +865,6 @@ INSERT OR REPLACE INTO "datas" VALUES ("95308449","3","0","0","2","0","0","0","0
 INSERT OR REPLACE INTO "datas" VALUES ("95451366","3","0","0","4","0","0","0","0","0","67108864");
 INSERT OR REPLACE INTO "datas" VALUES ("95515060","3","0","0","262146","0","0","0","0","0","-2113921023");
 INSERT OR REPLACE INTO "datas" VALUES ("95638658","3","0","0","262146","0","0","0","0","0","139264");
-INSERT OR REPLACE INTO "datas" VALUES ("95727991","3","0","0","33","1000","2000","5","64","2","4194304");
 INSERT OR REPLACE INTO "datas" VALUES ("95744531","3","0","0","33","350","300","1","1024","1","8388608");
 INSERT OR REPLACE INTO "datas" VALUES ("95841282","3","0","0","33","200","100","1","32768","1","8192");
 INSERT OR REPLACE INTO "datas" VALUES ("95952802","3","0","0","65","1800","1400","5","16384","1","0");
@@ -1298,7 +1296,6 @@ INSERT OR REPLACE INTO "datas" VALUES ("81306586","3","0","90","33","900","1800"
 INSERT OR REPLACE INTO "datas" VALUES ("81383947","3","0","110","33","1200","0","2","2","16","8388608");
 INSERT OR REPLACE INTO "datas" VALUES ("82005435","3","0","43","33","1100","200","3","1","8","2097168");
 INSERT OR REPLACE INTO "datas" VALUES ("82260502","3","0","92","33","2400","1200","6","256","1","65536");
-INSERT OR REPLACE INTO "datas" VALUES ("82301904","3","0","0","33","3000","2500","8","8192","32","6553608");
 INSERT OR REPLACE INTO "datas" VALUES ("82452993","3","0","0","131076","0","0","0","0","0","33554432");
 INSERT OR REPLACE INTO "datas" VALUES ("82482194","3","0","0","33","2000","1800","5","2048","1","8192");
 INSERT OR REPLACE INTO "datas" VALUES ("82529174","3","0","0","4","0","0","0","0","0","32");
@@ -1386,11 +1383,10 @@ INSERT OR REPLACE INTO "datas" VALUES ("99050989","3","0","0","33","1600","1100"
 INSERT OR REPLACE INTO "datas" VALUES ("99171160","3","0","0","17","400","400","1","8","32","0");
 INSERT OR REPLACE INTO "datas" VALUES ("99284890","3","0","0","33","1200","1300","3","256","1","256");
 INSERT OR REPLACE INTO "datas" VALUES ("99414168","3","0","0","161","1200","1400","3","2","16","2097152");
-INSERT OR REPLACE INTO "datas" VALUES ("511000825","4","83555666","0","4","0","0","0","0","0","4194306");
-INSERT OR REPLACE INTO "datas" VALUES ("511000228","4","95727991","0","33","1000","2000","5","64","2","4194304");
-INSERT OR REPLACE INTO "datas" VALUES ("511000818","4","8131171","0","33","300","250","1","524288","2","1024");
-INSERT OR REPLACE INTO "datas" VALUES ("511000819","4","82301904","0","33","3000","2500","8","8192","32","6553608");
-COMMIT;
+INSERT OR REPLACE INTO "datas" VALUES ("511000825","3","83555666","0","4","0","0","0","0","0","4194306");
+INSERT OR REPLACE INTO "datas" VALUES ("511000228","3","95727991","0","33","1000","2000","5","64","2","4194304");
+INSERT OR REPLACE INTO "datas" VALUES ("511000818","3","8131171","0","33","300","250","1","524288","2","1024");
+INSERT OR REPLACE INTO "datas" VALUES ("511000819","3","82301904","0","33","3000","2500","8","8192","32","6553608");
 -------------------------
 --------------------------
 ----------------------
@@ -2190,7 +2186,6 @@ INSERT OR REPLACE INTO "texts" VALUES ("81863068","Hiro's Shadow Scout","FLIP: Y
 INSERT OR REPLACE INTO "texts" VALUES ("81985784","Des Feral Imp","FLIP: Select 1 card from your Graveyard, add it to your Deck and shuffle your Deck.","","","","","","","","","","","","","","","","");
 INSERT OR REPLACE INTO "texts" VALUES ("82003859","Toll","Each player must pay 500 Life Points to declare an attack.","","","","","","","","","","","","","","","","");
 INSERT OR REPLACE INTO "texts" VALUES ("82108372","Mudora","This card gains 200 ATK for each Fairy-Type monster in your Graveyard.","","","","","","","","","","","","","","","","");
-INSERT OR REPLACE INTO "texts" VALUES ("82301904","Chaos Emperor Dragon - Envoy of the End","Cannot be Normal Summoned/Set. Must be Special Summoned (from your hand) by banishing 1 LIGHT and 1 DARK monster from your Graveyard, and cannot be Special Summoned by other ways. During the turn you activate this card’s effect, you cannot activate other effects. Once per turn: You can pay 1000 LP; send all cards on the field and in both players’ hands to the Graveyard, then inflict 300 damage to your opponent for each of your opponent’s cards sent by this effect.","Special Summon","送墓","","","","","","","","","","","","","","");
 INSERT OR REPLACE INTO "texts" VALUES ("82529174","Ray of Hope","Add 2 LIGHT monsters from your Graveyard to your Deck and shuffle it.","","","","","","","","","","","","","","","","");
 INSERT OR REPLACE INTO "texts" VALUES ("82542267","Gravedigger Ghoul","Select up to 2 Monster Card(s) from your opponent's Graveyard. Remove the selected card(s) from play.","","","","","","","","","","","","","","","","");
 INSERT OR REPLACE INTO "texts" VALUES ("82642348","Kryuel","When this card is sent to the Graveyard as a result of battle, toss a coin and call it. If you call it right, destroy 1 monster on your opponent's side of the field.","Coin toss","","","","","","","","","","","","","","","");
@@ -2200,7 +2195,6 @@ INSERT OR REPLACE INTO "texts" VALUES ("83011277","Mystic Tomato","When this car
 INSERT OR REPLACE INTO "texts" VALUES ("83225447","Stim-Pack","The equipped monster gains 700 ATK. During each of your Standby Phases, the equipped monster loses 200 ATK.","","","","","","","","","","","","","","","","");
 INSERT OR REPLACE INTO "texts" VALUES ("83241722","Dice Re-Roll","One time, during the rest of this turn, if either player(s) rolls a die (or dice), you can have the player(s) re-roll. (You can only gain this effect once per turn.)","Re-roll the six-sided die?","","","","","","","","","","","","","","","");
 INSERT OR REPLACE INTO "texts" VALUES ("83464209","Mystical Sheep 2","A monstrous sheep with a long tail for hypnotizing enemies.","","","","","","","","","","","","","","","","");
-INSERT OR REPLACE INTO "texts" VALUES ("83555666","Ring of Destruction","You can only activate 1 “Ring of Destruction” per turn. During your opponent’s turn: Target 1 face-up monster your opponent controls whose ATK is lower than or equal to your opponent’s LP; destroy that face-up monster, and if you do, you take damage equal to that monster’s original ATK, then, inflict damage to your opponent equal to the damage you took.","","","","","","","","","","","","","","","","");
 INSERT OR REPLACE INTO "texts" VALUES ("83764996","The Illusory Gentleman","Wearing odd fashions, this gentleman is very fickle. He sometimes saves people and at other times commits crimes.","","","","","","","","","","","","","","","","");
 INSERT OR REPLACE INTO "texts" VALUES ("83887306","Two-Pronged Attack","Select and destroy 2 of your monsters and 1 of your opponent's monsters.","","","","","","","","","","","","","","","","");
 INSERT OR REPLACE INTO "texts" VALUES ("83986578","King Tiger Wanghu","When a monster(s) with 1400 or less ATK is Normal Summoned or Special Summoned: Destroy those monsters with 1400 or less ATK. This card must be face-up on the field to activate and to resolve this effect.","Destroy","","","","","","","","","","","","","","","");
@@ -2306,7 +2300,6 @@ INSERT OR REPLACE INTO "texts" VALUES ("95308449","Final Countdown","Pay 2000 Li
 INSERT OR REPLACE INTO "texts" VALUES ("95451366","Exhausting Spell","Remove all Spell Counters on both sides of the field.","","","","","","","","","","","","","","","","");
 INSERT OR REPLACE INTO "texts" VALUES ("95515060","Rod of Silence - Kay'est","Increase the DEF of a monster equipped with this card by 500 points. Negate the effect of a Spell Card (excluding this card) that targets the monster equipped with this card and destroy the Spell Card.","","","","","","","","","","","","","","","","");
 INSERT OR REPLACE INTO "texts" VALUES ("95638658","Shooting Star Bow - Ceal","Decrease the ATK of a monster equipped with this card by 1000 points. A monster equipped with this card can attack your opponent's Life Points directly.","","","","","","","","","","","","","","","","");
-INSERT OR REPLACE INTO "texts" VALUES ("95727991","Catapult Turtle","Once per turn: You can Tribute 1 monster; inflict damage to your opponent equal to half the Tributed monster's ATK on the field.","Inflict damage","","","","","","","","","","","","","","","");
 INSERT OR REPLACE INTO "texts" VALUES ("95744531","Griggle","When the control of this face-up card on the field shifts to your opponent, increase your Life Points by 3000 points. This effect can only be used once as long as this card remains face-up on the field.","Recover LP","","","","","","","","","","","","","","","");
 INSERT OR REPLACE INTO "texts" VALUES ("95841282","Cat's Ear Tribe","The original ATK of your opponent's monster(s) that battles with this card during his/her turn becomes 200 points during the Damage Step.","","","","","","","","","","","","","","","","");
 INSERT OR REPLACE INTO "texts" VALUES ("95952802","Flower Wolf","FUSION: ""Silver Fang"" + ""Darkworld Thorns""","","","","","","","","","","","","","","","","");
