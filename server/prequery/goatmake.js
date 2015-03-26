@@ -32,11 +32,11 @@ if (goatnumbers.length > 0) {
     console.log('it failed!');
 }
 for (i = 0; goatnumbers.length > i; i++) {
-    var c = 'SELECT * FROM "datas" WHERE "id" = "' + goatnumbers[i] + '";\n';
+    var c = 'SELECT * FROM "datas" WHERE "id" = ' + goatnumbers[i].trim() + ';\n';
     goatsql.push(c);
 }
 for (i = 0; goatnumbers.length > i; i++) {
-    var c = 'SELECT * FROM "texts" WHERE "id" = "' + goatnumbers[i] + '";\n';
+    var c = 'SELECT * FROM "texts" WHERE "id" = "' + goatnumbers[i].trim() + '";\n';
     goatsql.push(c);
 }
 goatsql.join('');
