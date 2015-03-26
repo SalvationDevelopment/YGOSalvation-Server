@@ -301,7 +301,7 @@ function preformfilter(translated, players, rooms, started) {
         content = '',
         duelist = '',
         filterm = parseFilters(),
-        game = (translated.poolFormat === '') ? 'game' : 'nostalgia';
+        game = (translated.poolFormat !== 'Goat Format') ? 'game' : 'nostalgia';
 
     OK = (translated.gameMode !== filterm.gameMode && filterm.gameMode !== 'all') ? false : OK;
     OK = (translated.allowedCards !== filterm.allowedCards && filterm.allowedCards !== 'all') ? false : OK;
