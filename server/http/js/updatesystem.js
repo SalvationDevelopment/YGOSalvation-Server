@@ -287,7 +287,7 @@ http.createServer(function (request, response) {
                     localStorage.dbtext = '2-MonsterLeague.cdb';
                 }
                 if (localStorage.roompass.substring(11, 13) === '21') {
-                    localStorage.dbtext = '3-Goat.cdb';
+                    localStorage.dbtext = '3-Goats.cdb';
                 }
                 if (localStorage.roompass[0] === '3' && letter === 'j') {
                     localStorage.dbtext = '1-Anime.cdb';
