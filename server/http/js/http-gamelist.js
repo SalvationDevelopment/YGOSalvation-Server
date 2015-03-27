@@ -1,5 +1,5 @@
 /*jslint plusplus: true, browser:true*/
-/*global localStorage, $, Primus, prompt, console, writeDeckList, makeDeck, confirm*/
+/*global localStorage, $, Primus, prompt, console, writeDeckList, makeDeck*/
 /*exported connectToCheckmateServer, leaveGamelist, hostGame, connectgamelist, setHostSettings, setfilter,*/
 var localstorageIter = 0;
 
@@ -167,7 +167,7 @@ function getDuelRequest() {
         prio: isChecked('#enableprio') ? ("T") : ("O"),
         checkd: isChecked('#discheckdeck') ? ("T") : ("O"),
         shuf: isChecked('#disshuffledeck') ? ("T") : ("O"),
-        stnds: "," + $('#creategamebanlist').val() + ',5,1,',
+        stnds: "," + $('#creategamebanlist').val() + ',5,1,U,',
         pass: randomString(5)
     };
 }
@@ -188,7 +188,6 @@ function secure(prio, checkd, shuf) {
 function setHostSettings() {
     'use strict';
     var duelRequest = getDuelRequest();
-    duelRequest.prio = (duelRequest.stnds.indexOf('21') > 0) ? 'T' : duelRequest.prio;
     localStorage.roompass =
         (duelRequest.string + duelRequest.prio +
             duelRequest.checkd + duelRequest.shuf +
