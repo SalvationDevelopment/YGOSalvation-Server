@@ -109,7 +109,7 @@ function pickCoreConfig(socket) {
     'use strict';
     var output = '';
     if (socket.hostring){
-        if (socket.hostring.indexOf("5,21,") > -1) {
+        if (socket.hostring.indexOf(",21,") > -1) {
           return "goat.ini";
         }
     }
