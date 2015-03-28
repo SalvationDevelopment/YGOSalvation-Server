@@ -161,8 +161,9 @@ function randomString(len, charSet) {
 
 function getDuelRequest() {
     'use strict';
-    var pretypecheck = '';
-    return {
+    var pretypecheck = '',
+        out;
+    out = {
         string: pretypecheck + $('#creategamecardpool').val() + $('#creategameduelmode').val() + $('#creategametimelimit').val(),
         prio: isChecked('#enableprio') ? ("T") : ("O"),
         checkd: isChecked('#discheckdeck') ? ("T") : ("O"),
@@ -170,6 +171,8 @@ function getDuelRequest() {
         stnds: "," + $('#creategamebanlist').val() + ',5,1,U,',
         pass: randomString(5)
     };
+
+    return out;
 }
 
 function secure(prio, checkd, shuf) {
