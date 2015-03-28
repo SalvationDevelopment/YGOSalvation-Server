@@ -49,6 +49,9 @@ INSERT OR REPLACE INTO "datas" VALUES(13790557,1,0,0,33,2500,0,7,524288,32,0);
 INSERT OR REPLACE INTO "datas" VALUES ("13790558","1","0","67","33","1800","1000","4","1","1","0");
 INSERT OR REPLACE INTO "datas" VALUES ("13790559","1","0","0","33","2500","1000","8","262144","2","0");
 INSERT OR REPLACE INTO "datas" VALUES ("13790560","1","0","0","4129","2700","1500","8","8388608","32","0");
+INSERT OR REPLACE INTO "datas" VALUES ("13790561","1","0","0","97","2800","1200","8","8192","16","0");
+INSERT OR REPLACE INTO "datas" VALUES ("13790562","1","0","186","33","500","1500","4","512","32","0");
+INSERT OR REPLACE INTO "datas" VALUES ("13790563","1","0","169","33","100","100","1","4","1","0");
 
 INSERT OR REPLACE INTO "texts" VALUES(13790000,'Sea Dragoons of Draconia','Pendulum Scale = 7
 Pendulum Effect: When a monster is destroyed by battle: You can Special Summon 1 Normal Monster from your hand. You can only use this effect of "Sea Dragoons of Draconia" once per turn.
@@ -157,4 +160,9 @@ INSERT OR REPLACE INTO "texts" VALUES(13790557,'Wicked Priest Chilam Sabak','If 
 INSERT OR REPLACE INTO "texts" VALUES ("13790558","Junk Breaker","During your Main Phase 1, if this card was Normal Summoned this turn: You can Tribute this card; negate the effects of all face-up monsters this turn.","","","","","","","","","","","","","","","","");
 INSERT OR REPLACE INTO "texts" VALUES ("13790559","Kaiser Sea Snake","If your opponent controls a monster while you do not, you can Special Summon this card (from your hand). You can only Special Summon “Kaiser Sea Snake” with its procedure once per turn. When this card is Special Summoned by its procedure: You can Special Summon 1 Level 8 Sea Serpent-Type monster from your hand or Graveyard, but its ATK and DEF each become 0. If this card was Special Summoned, its Level becomes 4 and its original ATK becomes 0.","","","","","","","","","","","","","","","","");
 INSERT OR REPLACE INTO "texts" VALUES ("13790560","Bird of Paradise Lost","This card gains 100 ATK and DEF for each Tuner monster in your Graveyard. Once per turn: You can send 1 Tuner monster from your hand to the Graveyard, then target 1 monster your opponent controls; take control of that target, until the End Phase.","","","","","","","","","","","","","","","","");
+INSERT OR REPLACE INTO "texts" VALUES ("13790561","Mirror Force Dragon","Must be Special Summoned with ""The Fang of Critias"" by sending 1 ""Mirror Force"" from your hand or your side of the field to the Graveyard, and cannot be Special Summoned by other ways. During either player's turn, when a monster you control is targeted for an attack, or an opponent's card effect: You can destroy all cards your opponent controls.","","","","","","","","","","","","","","","","");
+INSERT OR REPLACE INTO "texts" VALUES ("13790562","Raidraptor - Fuzzy Lanius","If you control a ""Raidraptor"" monster other than ""Raidraptor - Fuzzy Lanius"": You can Special Summon this card from your hand. If this card is sent to the Graveyard: You can add 1 ""Raidraptor - Fuzzy Lanius"" from your Deck to your hand. You cannot Special Summon monsters during the turn you activate any of this card's effects, except ""Raidraptor"" monsters. You can only use each effect of ""Raidraptor - Fuzzy Lanius"" once per turn.","","","","","","","","","","","","","","","","");
+INSERT OR REPLACE INTO "texts" VALUES ("13790563","Fluffal Mouse","During your Main Phase: You can Special Summon up to 2 ""Fluffal Mouse"" from your Deck. This effect can only be used once while this card is face-up on the field. You cannot Special Summon monsters from your Extra Deck during the turn you activate this effect, except ""Frightfur"" monsters.","","","","","","","","","","","","","","","","");
+
+
 COMMIT;
