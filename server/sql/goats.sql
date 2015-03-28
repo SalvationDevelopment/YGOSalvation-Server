@@ -1387,6 +1387,11 @@ INSERT OR REPLACE INTO "datas" VALUES ("511000825","3","83555666","0","4","0","0
 INSERT OR REPLACE INTO "datas" VALUES ("511000228","3","95727991","0","33","1000","2000","5","64","2","4194304");
 INSERT OR REPLACE INTO "datas" VALUES ("511000818","3","8131171","0","33","300","250","1","524288","2","1024");
 INSERT OR REPLACE INTO "datas" VALUES ("511000819","3","82301904","0","33","3000","2500","8","8192","32","6553608");
+INSERT OR REPLACE INTO "datas" VALUES ("73915052","3","0","0","16401","0","0","1","16384","1","0");
+INSERT OR REPLACE INTO "datas" VALUES ("73915053","3","73915052","0","16401","0","0","1","16384","1","0");
+INSERT OR REPLACE INTO "datas" VALUES ("73915054","3","73915052","0","16401","0","0","1","16384","1","0");
+INSERT OR REPLACE INTO "datas" VALUES ("73915055","3","73915052","0","16401","0","0","1","16384","1","0");
+INSERT OR REPLACE INTO "datas" VALUES ("70903634","3","0","64","17","200","300","1","2","32","0");
 -------------------------
 --------------------------
 ----------------------
@@ -2833,4 +2838,9 @@ INSERT OR REPLACE INTO "texts" VALUES ("511000825","Ring of Destruction","Target
 INSERT OR REPLACE INTO "texts" VALUES ("511000228","Catapult Turtle","You can Tribute 1 monster; inflict damage to your opponent equal to half the Tributed monster's ATK on the field.","Inflict damage"," "," "," "," "," "," "," "," "," "," "," "," "," "," "," ");
 INSERT OR REPLACE INTO "texts" VALUES ("511000818","Sinister Serpent","During your Standby Phase, if there is a ""Sinister Serpent"" in your Graveyard, you can add this card from your Graveyard to your hand.","Return to hand"," "," "," "," "," "," "," "," "," "," "," "," "," "," "," ");
 INSERT OR REPLACE INTO "texts" VALUES ("511000819","Chaos Emperor Dragon - Envoy of the End","Cannot be Normal Summoned/Set. Must first be Special Summoned (from your hand) by banishing 1 LIGHT and 1 DARK monster in your Graveyard. You can pay 1000 Life Points to send all cards in both players' hands and on the field to the Graveyard and inflict 300 damage to your opponent for each card sent this way.","Special Summon","Send to Grave"," "," "," "," "," "," "," "," "," "," "," "," "," "," ");
+INSERT OR REPLACE INTO "texts" VALUES ("73915052","Sheep Token","Summoned by the effect of ""Scapegoat""","","","","","","","","","","","","","","","","");
+INSERT OR REPLACE INTO "texts" VALUES ("73915053","Sheep Token","Summoned by the effect of ""Scapegoat""","","","","","","","","","","","","","","","","");
+INSERT OR REPLACE INTO "texts" VALUES ("73915054","Sheep Token","Summoned by the effect of ""Scapegoat""","","","","","","","","","","","","","","","","");
+INSERT OR REPLACE INTO "texts" VALUES ("73915055","Sheep Token","Summoned by the effect of ""Scapegoat""","","","","","","","","","","","","","","","","");
+INSERT OR REPLACE INTO "texts" VALUES ("70903634","Right Arm of the Forbidden One","A forbidden right arm sealed by magic. Whosoever breaks this seal will know infinite power.","","","","","","","","","","","","","","","","");
 COMMIT;
