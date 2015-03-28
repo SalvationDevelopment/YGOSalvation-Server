@@ -172,7 +172,7 @@ function getDuelRequest() {
         pass: randomString(5)
     };
 
-    out.stnds = ($('#creategamebanlist').val() === "21") ? "T" : out.stnds;
+    out.prio = ($('#creategamebanlist').val() === "21") ? "T" : out.prio;
     return out;
 }
 
