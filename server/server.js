@@ -32,8 +32,8 @@ var ygoserver, //port 8911 ygopro Server
     //WebSocketServer = require('ws').Server,
     Framemaker = require('./libs/parseframes.js'), //understand YGOPro API.
     processIncomingTrasmission = require('./libs/processIncomingTrasmission.js'); // gamelist and start games
-    
-   
+
+
 
 
 function initiateMaster() {
@@ -123,16 +123,16 @@ function initiateSlave() {
         });
         socket.on('error', function (error) {
             console.log('::CLIENT', error);
-            try {
-                socket.active_ygocore.end();
-            } catch (e) {
-                console.log('::CLIENT ERROR Before connect', e);
+            if (socket.active_ygocore) {
+                try {
+                    socket.active_ygocore.end();
+                } catch (e) {
+                    console.log('::CLIENT ERROR Before connect', e);
+                }
             }
         });
     });
     ygoserver.listen(8911);
-    
-
 }
 
 (function main() {
@@ -159,5 +159,5 @@ function initiateSlave() {
     } else {
         initiateSlave();
     }
-    
+
 }()); // end main

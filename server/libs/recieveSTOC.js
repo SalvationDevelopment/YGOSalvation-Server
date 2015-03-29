@@ -184,6 +184,23 @@ module.exports = function recieveSTOC(packet) {
                 });
                 bitreader = bitreader + 7;
             }
+            iter = 0;
+            bitreader++;
+            task.select_chains = [];
+            for (iter; packet[bitreader] > iter; iter++) {
+                task.select_chains.push({
+                    code : packet.readUInt16LE(bitreader + 1),
+                    controller : packet[bitreader + 5],
+                    location : packet[bitreader + 6],
+                    sequence : packet[bitreader + 7]
+                });
+                bitreader = bitreader + 7;
+            }
+            task.bp = packet[bitreader];
+            task.ep = packet[bitreader + 1];
+            task.shufflecount = packet[bitreader + 2];
+            //https://github.com/Fluorohydride/ygopro/blob/d9450dbb35676db3d5b7c2a5241a54d7f2c21e98/ocgcore/playerop.cpp#L147
+            //something is gonna go wrong;
             break;
 
         case ('MSG_MOVE'):
