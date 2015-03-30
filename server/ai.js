@@ -489,10 +489,26 @@ function CommandParser(state, network) {
     };
 
 }
-
+function makeCTOS(command, message) {
+    'use strict';
+    //https://github.com/Fluorohydride/ygopro/blob/25bdab4c6d0000f841aee80c11cbf2e95ee54047/gframe/network.h
+    function CTOS_PlayerInfo(message) {
+        // [len, len, CTOS_PLAYER_INFO, U, S ,E, R, N, A, M, E]
+        var ctos = new Buffer([0x10]),
+            username = new Buffer(message),
+            playerinfo = ctos.concat(username),
+            len = ctos.length;
+        //return [[len,len], playerinfo]
+        // [len, len] is two bytes... read backwards totaled. 
+        //[0, 2] = 2 "", [ 3, 2] = 26 "8 * 8 + 2"
+    }
+    
+    return command();
+}
 //taken from server.js, just done in reverse.
 // represnts a single duel connection.
 function Duel(roompass, botUsername) {
+    
     'use strict';
     var duel = {},
         framer = new Framemaker();
@@ -503,6 +519,7 @@ function Duel(roompass, botUsername) {
     duel.server.on('connection', function () {
         //send game request
         duel.write(new Buffer([0x10]));
+        duel.write(new Buffer([]));
     });
     duel.server.on('data', function (data) {
         var frame,

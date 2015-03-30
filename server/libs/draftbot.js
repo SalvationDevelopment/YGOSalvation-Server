@@ -9,13 +9,13 @@ var bot,
         botName: "DuelServ"
     };
 
-function randomString(len, charSet) {
+function randomString() {
     'use strict';
-    charSet = charSet || 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    var randomPoz,
+    var charSet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789',
+        randomPoz,
         i = 0,
         randomstring = '';
-    for (i; i < len; i++) {
+    for (i; i < 5; i++) {
         randomPoz = Math.floor(Math.random() * charSet.length);
         randomstring += charSet.substring(randomPoz, randomPoz + 1);
     }
@@ -80,6 +80,7 @@ bot.addListener("message", function (from, to, message) {
 module.exports = eventEmitter;
 
 function start() {
+    'use strict';
     //get users
     
     //get piles

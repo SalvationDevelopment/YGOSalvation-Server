@@ -103,8 +103,7 @@ function messageListener(message) {
     'use strict';
     var brokenup = message.core_message_raw.toString().split('\r\n'),
         game,
-        i = 0,
-        gamelistmessage;
+        i = 0;
     for (i; brokenup.length > i; i++) {
         handleCoreMessage(brokenup[i], message.port, message.pid);
     }
@@ -159,12 +158,12 @@ primus.on('connection', function (socket) {
         }
     });
 });
-primus.on('disconnection', function (socket) {
+primus.on('disconnection', function () {
     'use strict';
     //nothing required
 });
 
-primus.on('error', function (socket) {
+primus.on('error', function () {
     'use strict';
     //nothing required
 });
