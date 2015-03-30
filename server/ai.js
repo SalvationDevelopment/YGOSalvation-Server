@@ -492,18 +492,40 @@ function CommandParser(state, network) {
 function makeCTOS(command, message) {
     'use strict';
     //https://github.com/Fluorohydride/ygopro/blob/25bdab4c6d0000f841aee80c11cbf2e95ee54047/gframe/network.h
-    function CTOS_PlayerInfo(message) {
-        // [len, len, CTOS_PLAYER_INFO, U, S ,E, R, N, A, M, E]
+    // [len, len, CTOS_PLAYER_INFO, U, S ,E, R, N, A, M, E]
+    // [len, len] is two bytes... read backwards totaled. 
+    //[0, 2] = 2 "", [ 3, 2] = 26 "8 * 8 + 2"
+    var say = {};
+    
+    say.CTOS_PlayerInfo = function (message) {
         var ctos = new Buffer([0x10]),
             username = new Buffer(message),
             playerinfo = ctos.concat(username),
-            len = ctos.length;
-        //return [[len,len], playerinfo]
-        // [len, len] is two bytes... read backwards totaled. 
-        //[0, 2] = 2 "", [ 3, 2] = 26 "8 * 8 + 2"
-    }
+            len = playerinfo.length,
+            proto = new Buffer();
+        
+        proto = proto.writeUInt16LE(len);
+        proto = proto.concat(playerinfo);
+        return proto;
+    };
+    say.CTOS_JoinGame = function (roompass) {
+        var ctos = new Buffer([0x12]),
+            version = new Buffer(0x1337),
+            gameid = new Buffer([0, 0]),
+            pass = new Buffer(roompass, 'utf16le'),
+            len = pass.length + 7,
+            proto = new Buffer();
+        
+        proto = proto.writeUInt16LE(7);
+        proto = proto.concat(ctos);
+        proto = proto.concat(version);
+        proto = proto.concat(gameid);
+        proto = proto.concat(pass);
+        return proto;
+            
+    };
     
-    return command();
+    return say[command](message);
 }
 //taken from server.js, just done in reverse.
 // represnts a single duel connection.
@@ -518,8 +540,8 @@ function Duel(roompass, botUsername) {
     duel.commandParser = new CommandParser(duel.gameState, duel.server);
     duel.server.on('connection', function () {
         //send game request
-        duel.write(new Buffer([0x10]));
-        duel.write(new Buffer([]));
+        duel.write(makeCTOS('CTOS_PlayerInfo', '[AI]Snarky'));
+        duel.write(makeCTOS('CTOS_JoinGame', roompass));
     });
     duel.server.on('data', function (data) {
         var frame,
