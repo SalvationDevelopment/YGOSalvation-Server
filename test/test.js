@@ -10,11 +10,11 @@ describe('System', function () {
     it('Should start the server', function () {
         require('../server/server.js');
     });
-    // it('Should start the AI', function () {
-    //     require('../server/server.js');
-    //     require('../server/ai.js');
-
-    // });
+    it('Should start the AI', function () {
+        require('../server/server.js');
+        var ai = require('../server/ai.js');
+        ai('2008000,1,5,1,U,0000');
+    });
 
 });
 describe('Boot Test', function () {
@@ -65,22 +65,26 @@ describe('Boot Test', function () {
         require('../server/libs/processIncomingTrasmission.js');
     });
     it('Should test recieveCTOS.js', function () {
-        var recieveCTOS = require('../server/libs/recieveCTOS.js');
-        var enums = require('../server/libs/enums.js');
-        var loop = Object.create(enums.CTOS);
-        for (var i in loop) {
-            recieveCTOS({CTOS : i,
-            message : [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+        var recieveCTOS = require('../server/libs/recieveCTOS.js'),
+            enums = require('../server/libs/enums.js'),
+            loop = Object.create(enums.CTOS),
+            i;
+        for (i in loop) {
+            recieveCTOS({
+                CTOS: i,
+                message: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
             });
         }
     });
     it('Should test recieveSTOC.js', function () {
-        var recieveSTOC = require('../server/libs/recieveSTOC.js');
-        var enums = require('../server/libs/enums.js')
-        var loop = Object.create(enums.STOC);
-        for (var i in loop) {
-            recieveSTOC({STOC : i,
-            message : [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+        var recieveSTOC = require('../server/libs/recieveSTOC.js'),
+            enums = require('../server/libs/enums.js'),
+            loop = Object.create(enums.CTOS),
+            i;
+        for (i in loop) {
+            recieveSTOC({
+                STOC: i,
+                message: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
             });
         }
     });
@@ -102,13 +106,13 @@ describe('Client Boot', function () {
         require('../client/interface/js/offline-server.js');
         // require('../client/interface/js/offline.js');
         //requires refactor before testable.
-        
+
     });
     it('Test battlepack3.js', function () {
-        require('../server/http/js/battlepack3.js');    
+        require('../server/http/js/battlepack3.js');
     });
     it('Test cardmake.js', function () {
-        require('../server/http/js/card.js');    
+        require('../server/http/js/card.js');
     });
     // it('Test http-gamelist.js', function () {
     //     require('../server/http/js/http-gamelist.js');    
