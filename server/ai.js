@@ -10,20 +10,19 @@ var net = require('net'), //ablity to use TCP
     http = require('http'), // SQCG Primus requires http parsing/tcp-handling
     server = http.createServer(), //throne of the God
     primus = new Primus(server), // instance of the God
-    Socket = primus.Socket(), //initiation of the God
-    client = new Socket('http://ygopro.us:24555'); //Connect the God to the tree.
+    Socket = require('primus').createSocket(),
+    client;
 
 // load network understanding
 
-function DuelConnection(roompass, port, ip) {
+function DuelConnection(roompass) {
     //taken from /libs/processincomingtransmission.js
     //conenct to the main server like a user via tcp
     'use strict';
-    var data = new Buffer(), // needs to be constructed here
-        socket = {},
+    var socket = {},
         duelConnections;
 
-    duelConnections = net.connect(port, ip, function () {
+    duelConnections = net.connect(8911, '192.99.11.19', function () {
         duelConnections.setNoDelay(true);
     });
     duelConnections.on('error', function (error) {
@@ -57,7 +56,7 @@ bot.addListener("message", function (from, to, message) {
     'use strict';
 
     //said specific command
-    if (message === 'duel [AI]SnarkyChild') {
+    if (message === 'duel AI') {
         bot.say('DuelServ', '!duel ' + from);
         //ok the bot heard a duel request,
         //it is now messaging duelserv to reissue the duel request to both the bot and itself with more details.
@@ -503,6 +502,7 @@ function Duel(roompass, botUsername) {
     duel.commandParser = new CommandParser(duel.gameState, duel.server);
     duel.server.on('connection', function () {
         //send game request
+        duel.write(new Buffer([0x10]));
     });
     duel.server.on('data', function (data) {
         var frame,
@@ -528,9 +528,10 @@ function Duel(roompass, botUsername) {
 
 }
 
-//
 
 
+
+client = new Socket('http://ygopro.us:24555'); //Connect the God to the tree.
 
 function joinGamelist() {
     'use strict';
@@ -539,23 +540,31 @@ function joinGamelist() {
     });
 }
 
-primus.on('data', function (data) {
+client.on('data', function (data) {
     'use strict';
     var join = false;
-    console.log(data);
+    console.log('...');
     if (data.clientEvent) {
         if (data.clientEvent === 'duelrequest') {
+            console.log(data);
+            console.log('duel Request Recieved');
             internalGames.push(new Duel(data.roompass));
         }
         return;
     }
 });
 
-primus.on('connect', function () {
+client.on('connect', function () {
     'use strict';
     console.log('Connected to Gamelist');
 });
-primus.on('close', function () {
+client.on('close', function () {
     'use strict';
     console.log('Lost Connection to Gamelist');
 });
+
+client.write({
+    action: 'join'
+});
+
+module.exports = Duel;
