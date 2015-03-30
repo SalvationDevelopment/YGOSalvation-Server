@@ -24,6 +24,9 @@ function DuelConnection(roompass) {
 
     duelConnections = net.connect(8911, '192.99.11.19', function () {
         duelConnections.setNoDelay(true);
+        console.log('Send Game request for', roompass);
+        duelConnections.write(makeCTOS('CTOS_PlayerInfo', '[AI]Snarky'));
+        duelConnections.write(makeCTOS('CTOS_JoinGame', roompass));
     });
     duelConnections.on('error', function (error) {
         socket.end();
@@ -500,27 +503,28 @@ function makeCTOS(command, message) {
     say.CTOS_PlayerInfo = function (message) {
         var ctos = new Buffer([0x10]),
             username = new Buffer(message),
-            playerinfo = ctos.concat(username),
-            len = playerinfo.length,
-            proto = new Buffer();
+            len = username.length + 1,
+            proto = new Buffer(0);
         
-        proto = proto.writeUInt16LE(len);
-        proto = proto.concat(playerinfo);
+        //proto.writeUInt16LE(len, 0);
+        proto = Buffer.concat([proto, username]);
+        console.log(proto.toJSON());
         return proto;
     };
     say.CTOS_JoinGame = function (roompass) {
         var ctos = new Buffer([0x12]),
-            version = new Buffer(0x1337),
+            version = new Buffer([0x1337]),
             gameid = new Buffer([0, 0]),
             pass = new Buffer(roompass, 'utf16le'),
             len = pass.length + 7,
-            proto = new Buffer();
+            proto = new Buffer(0);
         
-        proto = proto.writeUInt16LE(7);
-        proto = proto.concat(ctos);
-        proto = proto.concat(version);
-        proto = proto.concat(gameid);
-        proto = proto.concat(pass);
+        //proto.writeUInt16LE(len, 0);
+        proto = Buffer.concat([proto, ctos]);
+        proto = Buffer.concat([proto, version]);
+        proto = Buffer.concat([proto, gameid]);
+        proto = Buffer.concat([proto, pass]);
+        console.log(proto);
         return proto;
             
     };
@@ -540,8 +544,7 @@ function Duel(roompass, botUsername) {
     duel.commandParser = new CommandParser(duel.gameState, duel.server);
     duel.server.on('connection', function () {
         //send game request
-        duel.write(makeCTOS('CTOS_PlayerInfo', '[AI]Snarky'));
-        duel.write(makeCTOS('CTOS_JoinGame', roompass));
+        
     });
     duel.server.on('data', function (data) {
         var frame,
@@ -584,7 +587,7 @@ client.on('data', function (data) {
     var join = false;
     console.log('...');
     if (data.clientEvent) {
-        if (data.clientEvent === 'duelrequest') {
+        if (data.clientEvent === 'duelrequest' && data.target === '[AI]SnarkyChild') {
             console.log(data);
             console.log('duel Request Recieved');
             internalGames.push(new Duel(data.roompass));
