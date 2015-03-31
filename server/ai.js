@@ -29,10 +29,10 @@ function DuelConnection(roompass) {
         duelConnections.write(makeCTOS('CTOS_JoinGame', roompass));
     });
     duelConnections.on('error', function (error) {
-        socket.end();
+        duelConnections.end();
     });
     duelConnections.on('close', function () {
-        socket.end();
+        duelConnections.end();
     });
     return duelConnections;
 }
@@ -502,28 +502,26 @@ function makeCTOS(command, message) {
     
     say.CTOS_PlayerInfo = function (message) {
         var ctos = new Buffer([0x10]),
-            username = new Buffer(message),
-            len = username.length + 1,
-            proto = new Buffer(0);
+            username = new Buffer(message, 'utf16le'),
+            usernamef = Buffer.concat([username], 40),
+            len = usernamef.length + 1,
+            proto = new Buffer(2);
         
-        //proto.writeUInt16LE(len, 0);
-        proto = Buffer.concat([proto, username]);
-        console.log(proto.toJSON());
+        proto.writeUInt16LE(len, 0);
+        proto = Buffer.concat([proto, ctos, username]);
+        console.log(proto);
         return proto;
     };
     say.CTOS_JoinGame = function (roompass) {
         var ctos = new Buffer([0x12]),
-            version = new Buffer([0x1337]),
-            gameid = new Buffer([0, 0]),
+            version = new Buffer([0x17, 0x37]),
+            gameid = new Buffer([0xCC, 0xCC, 0, 0, 0, 0]),
             pass = new Buffer(roompass, 'utf16le'),
-            len = pass.length + 7,
-            proto = new Buffer(0);
+            len = ctos.length + version.length + gameid.length + pass.length,
+            proto = new Buffer(2);
         
-        //proto.writeUInt16LE(len, 0);
-        proto = Buffer.concat([proto, ctos]);
-        proto = Buffer.concat([proto, version]);
-        proto = Buffer.concat([proto, gameid]);
-        proto = Buffer.concat([proto, pass]);
+        proto.writeUInt16LE(len, 0);
+        proto = Buffer.concat([proto, ctos, version, gameid, pass]);
         console.log(proto);
         return proto;
             
