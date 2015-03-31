@@ -89,7 +89,7 @@ function handleCoreMessage(core_message_raw, port, pid) {
 
         case ('::::chat'):
             chat = core_message[1] + '|' + core_message[2];
-            message_irc(chat);
+            //message_irc(chat);
             break;
 
         }
