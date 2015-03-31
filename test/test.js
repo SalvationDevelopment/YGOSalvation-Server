@@ -8,7 +8,9 @@ var assert = require("assert");
 describe('System', function () {
     'use strict';
     it('Should start the server', function () {
-        require('../server/server.js');
+        var server = require('../server/server.js');
+        server.initiateSlave();
+        server.initiateMaster();
     });
     it('Should start the AI', function () {
         require('../server/server.js');

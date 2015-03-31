@@ -161,3 +161,8 @@ function initiateSlave() {
     }
 
 }()); // end main
+
+module.exports = {
+  initiateSlave : initiateSlave,
+  initiateMaster : initiateMaster
+}
