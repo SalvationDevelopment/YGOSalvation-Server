@@ -8,12 +8,14 @@ module.exports = function RecieveCTOS(packet) {
         username,
         roomname,
         version;
-    
+    if (packet.CTOS !== 'CTOS_TIME_COMFIRM' && packet.CTOS !== 'CTOS_RESPONSE') {
+        console.log(packet.CTOS, JSON.stringify(packet.message));
+    }
     switch (packet.CTOS) {
     case ('CTOS_PLAYER_INFO'):
         username = packet.message.toString('utf16le');
         username = username.split('\u0000'); // is this needed?
-        console.log('CTOS_PLAYER_INFO', JSON.stringify(packet.message), username);
+        console.log('username', username);
         todo.CTOS_PLAYER_INFO = username[0];
         break;
             
@@ -24,7 +26,6 @@ module.exports = function RecieveCTOS(packet) {
         roomname = packet.message.toString('utf16le', 8, 56);
         todo.CTOS_JOIN_GAME = roomname;
         console.log('Version', version, 'roomname', roomname);
-        console.log('CTOS_JOIN_GAME', JSON.stringify(packet.message));
         break;
             
             
@@ -36,7 +37,7 @@ module.exports = function RecieveCTOS(packet) {
             
     case ('CTOS_HS_NOTREADY'):
         todo.CTOS_HS_NOTREADY = true;
-        console.log('not ready', packet.message);
+        //console.log('not ready', packet.message);
         break;
             
             
@@ -49,14 +50,14 @@ module.exports = function RecieveCTOS(packet) {
             
     case ('CTOS_HS_TOOBSERVER'):
         todo.CTOS_HS_TOOBSERVER = true;
-        console.log('to observer', packet.message);
+        //console.log('to observer', packet.message);
         //get duelist that became observer
         break;
             
 
     case ('CTOS_LEAVE_GAME'):
         todo.CTOS_LEAVE_GAME = true;
-        console.log('leavegame', packet.message);
+        //console.log('leavegame', packet.message);
         //get duelist that left
         break;
             
@@ -70,11 +71,11 @@ module.exports = function RecieveCTOS(packet) {
         break;
         
     case ('CTOS_RESPONSE'):
-        console.log('CTOS_RESPONSE', JSON.stringify(packet.message));
+        //console.log('CTOS_RESPONSE', JSON.stringify(packet.message));
         break;
         
     default:
-        console.log(packet.CTOS);
+        //console.log(packet.CTOS);
     }
     return todo;
 };

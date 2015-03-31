@@ -514,8 +514,8 @@ function makeCTOS(command, message) {
     };
     say.CTOS_JoinGame = function (roompass) {
         var ctos = new Buffer([0x12]),
-            version = new Buffer([0x17, 0x37]),
-            gameid = new Buffer([0xCC, 0xCC, 0, 0, 0, 0]),
+            version = new Buffer([0x13, 0x34]),
+            gameid = new Buffer([0, 0, 0, 0, 0, 0]),
             pass = new Buffer(roompass, 'utf16le'),
             len = ctos.length + version.length + gameid.length + pass.length,
             proto = new Buffer(2);
@@ -523,6 +523,7 @@ function makeCTOS(command, message) {
         proto.writeUInt16LE(len, 0);
         proto = Buffer.concat([proto, ctos, version, gameid, pass]);
         console.log(proto);
+        console.log(pass.toString('utf16le'));
         return proto;
             
     };
@@ -583,7 +584,6 @@ function joinGamelist() {
 client.on('data', function (data) {
     'use strict';
     var join = false;
-    console.log('...');
     if (data.clientEvent) {
         if (data.clientEvent === 'duelrequest' && data.target === '[AI]SnarkyChild') {
             console.log(data);
@@ -594,7 +594,7 @@ client.on('data', function (data) {
     }
 });
 
-client.on('connect', function () {
+client.on('connected', function () {
     'use strict';
     console.log('Connected to Gamelist');
 });
