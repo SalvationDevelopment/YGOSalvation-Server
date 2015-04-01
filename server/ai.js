@@ -25,8 +25,10 @@ function DuelConnection(roompass) {
     duelConnections = net.connect(8911, '192.99.11.19', function () {
         duelConnections.setNoDelay(true);
         console.log('Send Game request for', roompass);
-        duelConnections.write(makeCTOS('CTOS_PlayerInfo', '[AI]Snarky'));
-        duelConnections.write(makeCTOS('CTOS_JoinGame', roompass));
+        var name = makeCTOS('CTOS_PlayerInfo', '[AI]Snarky'),
+            join = makeCTOS('CTOS_JoinGame', roompass),
+            tosend = Buffer.concat([name, join]);
+        duelConnections.write(tosend);
     });
     duelConnections.on('error', function (error) {
         duelConnections.end();
@@ -517,9 +519,11 @@ function makeCTOS(command, message) {
             version = new Buffer([0x13, 0x34]),
             gameid = new Buffer([0, 0, 0, 0, 0, 0]),
             pass = new Buffer(roompass, 'utf16le'),
-            len = ctos.length + version.length + gameid.length + pass.length,
+            rpass =  Buffer.concat([pass], 30),
+            len = ctos.length + version.length + gameid.length + (pass.length * 2),
             proto = new Buffer(2);
         
+        console.log(pass.length, rpass.length);
         proto.writeUInt16LE(len, 0);
         proto = Buffer.concat([proto, ctos, version, gameid, pass]);
         console.log(proto);
@@ -555,7 +559,9 @@ function Duel(roompass, botUsername) {
 
         frame = framer.input(data);
         for (newframes; frame.length > newframes; newframes++) {
+            
             task = parsePackets('STOC', new Buffer(frame[newframes]));
+            console.log('!', task);
             commands = processTask(task);
 
             // process AI
