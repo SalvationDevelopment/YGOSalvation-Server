@@ -59,7 +59,7 @@ describe('Boot Test', function () {
         require('../server/libs/draft.js');
     });
     it('Should test duelserv.js', function () {
-        require('../server/libs/draftbot.js');
+        require('../server/libs/duelserv.js');
     });
     it('Should test enums.js', function () {
         require('../server/libs/enums.js');
@@ -78,17 +78,20 @@ describe('Boot Test', function () {
     });
     it('Should test parsepackets.js', function () {
         var pack = require('../server/libs/parsepackets.js');
-        pack(join);
+        pack('CTOS', join);
     });
     it('Should test policyserver.js', function () {
         require('../server/libs/policyserver.js');
     });
     it('Should test processIncomingTrasmission.js', function () {
         var processIncomingTrasmission = require('../server/libs/processIncomingTrasmission.js'),
-            parsePackets = require('../server/libs/parseframes.js'),
-            task = parsePackets('CTOS', join);
-        processIncomingTrasmission(join, {}, task);
-        require('../server/libs/processIncomingTrasmission.js');
+            parsePackets = require('../server/libs/parseframes.js');
+            
+        processIncomingTrasmission(join, {}, [{
+            message: join.slice(1),
+            readposition: 0,
+            CTOS : 'CTOS_JOIN_GAME'
+        }]);
     });
     it('Should test recieveCTOS.js', function () {
         var recieveCTOS = require('../server/libs/recieveCTOS.js'),
