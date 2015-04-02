@@ -23,7 +23,6 @@ var ygoserver, //port 8911 ygopro Server
     clusterIterator = 0, // its a number make memory,
     activegames = 0,
     net = require('net'), //tcp connections
-    http = require('http'), //http based tcp connections
     cluster = require('cluster'), // multithreading
     colors = require('colors'), // oo pretty colors!
 
@@ -34,28 +33,21 @@ var ygoserver, //port 8911 ygopro Server
 
 function gamelistMessage(message) {
     'use strict';
-    if (message.messagetype === 'coreMessage') {
-        var rooms,
-            gamelist = gamelistManager.messageListener(message.coreMessage);
-        activegames = 0;
-        Object.keys(cluster.workers).forEach(function (id) {
-            cluster.workers[id].send({
-                messagetype: 'gamelist',
-                gamelist: gamelist
-            });
+    var rooms,
+        gamelist = gamelistManager.messageListener(message.coreMessage);
+    activegames = 0;
+    Object.keys(cluster.workers).forEach(function (id) {
+        cluster.workers[id].send({
+            messagetype: 'gamelist',
+            gamelist: gamelist
         });
-        for (rooms in gamelist) {
-            if (gamelist.hasOwnProperty(rooms)) {
-                activegames++;
-            }
+    });
+    for (rooms in gamelist) {
+        if (gamelist.hasOwnProperty(rooms)) {
+            activegames++;
         }
-        process.title = 'YGOPro Salvation Server [' + activegames + ']';
-    } else if (message.messagetype === 'custom_error') {
-        ircManager.notify(message.message);
-    } else if (message.messagetype === 'draft') {
-        gamelistManager.primusListener(message);
     }
-
+    process.title = 'YGOPro Salvation Server [' + activegames + ']';
 }
 
 function initiateMaster() {
@@ -162,7 +154,7 @@ function initiateSlave() {
 }()); // end main
 
 module.exports = {
-    initiateMaster : initiateMaster,
-    initiateSlave : initiateSlave,
-    gamelistMessage : gamelistMessage
+    initiateMaster: initiateMaster,
+    initiateSlave: initiateSlave,
+    gamelistMessage: gamelistMessage
 };
