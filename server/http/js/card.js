@@ -1,5 +1,6 @@
-/*jslint bitwise: false*/
+/*jslint bitwise: true*/
 function makeCard(buffer, start, controller) {
+    'use strict';
     if (buffer.length < 4) {
         return {
             card: {
@@ -14,14 +15,14 @@ function makeCard(buffer, start, controller) {
         return {
             card: {
                 Code: 'cover',
-                Position: 'FaceDownAttack',
+                Position: 'FaceDownAttack'
             },
             readposition: start + 9
         };
     }
     var card = {
         Code: 'cover',
-        Position: 'FaceDownAttack',
+        Position: 'FaceDownAttack'
     };
 
     //console.log('flag:', flag);
@@ -32,7 +33,7 @@ function makeCard(buffer, start, controller) {
         readposition = readposition + 4;
     }
     if (flag & enums.query.Position) {
-        card.Controller = buffer[readposition + 0];
+        card.Controller = buffer[readposition];
         card.Position = enums.Positions[buffer[readposition + 3]];
         readposition = readposition + 4;
     }
@@ -86,7 +87,7 @@ function makeCard(buffer, start, controller) {
     }
     if (flag & enums.query.EquipCard) {
         card.EquipCard = {
-            c: buffer[readposition + 0],
+            c: buffer[readposition],
             l: buffer[readposition + 1],
             s: buffer[readposition + 2]
         };
@@ -147,3 +148,5 @@ function makeCard(buffer, start, controller) {
 
 
 }
+
+module.exports = makeCard;
