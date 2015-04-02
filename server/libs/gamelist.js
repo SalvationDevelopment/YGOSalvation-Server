@@ -6,7 +6,6 @@ var primus,
     Primus = require('primus'),
     Rooms = require('primus-rooms'),
     primusServer = http.createServer().listen(24555),
-    message_irc = require('./custom_error.js'),
     draftbot = require('./draftbot.js'),
     previousAnnouncement;
 
@@ -89,7 +88,6 @@ function handleCoreMessage(core_message_raw, port, pid) {
 
         case ('::::chat'):
             chat = core_message[1] + '|' + core_message[2];
-            //message_irc(chat);
             break;
 
         }

@@ -16,8 +16,6 @@ Run `npm install` in the directory above.
 /*jslint  node: true, plusplus: true*/
 
 var ygoserver, //port 8911 ygopro Server
-    staticserv, // static http processor
-    httpServer, // http://ygopro.us
     ircManager, // magimagigal
     numCPUs = 1, // atleast 1 slave and 1 master.
     notification = '', // its a string, make memory.
