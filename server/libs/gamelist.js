@@ -6,8 +6,8 @@ var primus,
     Primus = require('primus'),
     Rooms = require('primus-rooms'),
     primusServer = http.createServer().listen(24555),
-    draftbot = require('./draftbot.js'),
-    previousAnnouncement;
+    duelserv = require('./duelserv.js'),
+    previousAnnouncement = "";
 
 function announce(announcement) {
     'use strict';
@@ -172,12 +172,13 @@ function primusListener(message) {
     announce(message);
 }
 
-draftbot.on('announce', function (message) {
+duelserv.on('announce', function (message) {
     'use strict';
     announce(message);
 });
 
 module.exports = {
     messageListener: messageListener,
-    primusListener: primusListener
+    primusListener: primusListener,
+    announce : announce
 };

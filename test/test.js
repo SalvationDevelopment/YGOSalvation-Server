@@ -34,7 +34,15 @@ describe('System', function () {
     it('Should start the AI', function () {
         require('../server/server.js');
         var ai = require('../server/ai.js');
-        ai('2008000,1,5,1,U,0000');
+        ai.ircInterface('', '', '');
+        ai.gamelistUpdate({
+            clientEvent: 'duelrequest',
+            target: '[AI]SnarkyChild',
+            from: 'TravisCI',
+            roompass: '2008000,1,5,1,U,xxxxx'
+        });
+        ai.onConnectGamelist();
+        ai.onCloseGamelist();
     });
 
 });
@@ -50,7 +58,7 @@ describe('Boot Test', function () {
     it('Should test  draft.jsjs', function () {
         require('../server/libs/draft.js');
     });
-    it('Should test draftbot.js', function () {
+    it('Should test duelserv.js', function () {
         require('../server/libs/draftbot.js');
     });
     it('Should test enums.js', function () {
