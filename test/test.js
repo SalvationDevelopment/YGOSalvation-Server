@@ -11,8 +11,10 @@ describe('System', function () {
         var core = require('../server/server.js'),
             i = 0,
             commands = [
-                '::::join-slot|2008000,1,5,1,U,xxxxx|1',
-                '::::leave-slot|2008000,1,5,1,U,xxxxx|1',
+                '::::join-slot|2008000,1,5,1,U,xxxxx|1'
+                '::::left-slot|2008000,1,5,1,U,xxxxx|1',
+                '::::join-slot|2008000,1,5,1,U,xxxxx|-1',
+                '::::chat|2008000,1,5,1,U,xxxxx|1',
                 '::::lock-slot|2008000,1,5,1,U,xxxxx|1',
                 '::::spectator|2008000,1,5,1,U,xxxxx|1',
                 '::::startduel|2008000,1,5,1,U,xxxxx',
