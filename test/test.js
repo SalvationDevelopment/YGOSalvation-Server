@@ -41,9 +41,6 @@ describe('Boot Test', function () {
     it('Should test  CDBUpdate', function () {
         require('../server/libs/carddb-update.js');
     });
-    it('Should test  custom_error.js', function () {
-        require('../server/libs/custom_error.js');
-    });
     it('Should test  datetimestamp.js', function () {
         var datestamp = require('../server/libs/datetimestamp.js');
         datestamp();
