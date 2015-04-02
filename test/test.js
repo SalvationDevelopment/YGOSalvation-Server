@@ -8,7 +8,26 @@ var assert = require("assert");
 describe('System', function () {
     'use strict';
     it('Should start the server', function () {
-        require('../server/server.js');
+        var core = require('../server/server.js'),
+            i = 0,
+            commands = [
+                '::::join-slot|2008000,1,5,1,U,xxxxx|1',
+                '::::leave-slot|2008000,1,5,1,U,xxxxx|1',
+                '::::lock-slot|2008000,1,5,1,U,xxxxx|1',
+                '::::spectator|2008000,1,5,1,U,xxxxx|1',
+                '::::startduel|2008000,1,5,1,U,xxxxx',
+                '::::endduel|2008000,1,5,1,U,xxxxx'];
+        core.initiateSlave();
+        for (i; commands.length > i; i++) {
+            core.gamelistMessage({
+                messagetype: 'coreMessage',
+                coreMessage: {
+                    core_message_raw: commands[i],
+                    port: 100
+                }
+            });
+        }
+        
     });
     it('Should start the AI', function () {
         require('../server/server.js');
@@ -26,7 +45,8 @@ describe('Boot Test', function () {
         require('../server/libs/custom_error.js');
     });
     it('Should test  datetimestamp.js', function () {
-        require('../server/libs/datetimestamp.js');
+        var datestamp = require('../server/libs/datetimestamp.js');
+        datestamp();
     });
     it('Should test  draft.jsjs', function () {
         require('../server/libs/draft.js');
@@ -45,9 +65,6 @@ describe('Boot Test', function () {
     });
     it('Should test ircbot.js', function () {
         require('../server/libs/ircbot.js');
-    });
-    it('Should test killcore.js', function () {
-        require('../server/libs/killcore.js');
     });
     // it('Should test ldapclient.js', function () {
     //     require('../server/libs/ldapclient.js');
