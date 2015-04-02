@@ -139,9 +139,10 @@ describe('Client Boot', function () {
     'use strict';
     it('Should start the client', function () {
         require('../client/interface/js/configuration.js');
-        require('../client/interface/js/offline-server.js');
+        runYGOPro = require('../client/interface/js/offline-server.js').runYGOPro;
         // require('../client/interface/js/offline.js');
         //requires refactor before testable.
+        runYGOPro('-j');
 
     });
     it('Test battlepack3.js', function () {
