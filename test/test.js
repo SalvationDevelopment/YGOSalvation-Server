@@ -4,7 +4,7 @@
 var assert = require("assert");
 
 //global.__base = __dirname + '/server/';
-
+var join = new Buffer([0x15, 0x00, 0x10, 0x5b, 0x00, 0x41, 0x00, 0x49, 0x00, 0x5d, 0x00, 0x53, 0x00, 0x6e, 0x00, 0x61, 0x00, 0x72, 0x00, 0x6b, 0x00, 0x79, 0x00]);
 describe('System', function () {
     'use strict';
     it('Should start the server', function () {
@@ -29,7 +29,7 @@ describe('System', function () {
                 }
             });
         }
-        
+
     });
     it('Should start the AI', function () {
         require('../server/server.js');
@@ -77,12 +77,17 @@ describe('Boot Test', function () {
         require('../server/libs/parseframes.js');
     });
     it('Should test parsepackets.js', function () {
-        require('../server/libs/parsepackets.js');
+        var pack = require('../server/libs/parsepackets.js');
+        pack(join);
     });
     it('Should test policyserver.js', function () {
         require('../server/libs/policyserver.js');
     });
     it('Should test processIncomingTrasmission.js', function () {
+        var processIncomingTrasmission = require('../server/libs/processIncomingTrasmission.js'),
+            parsePackets = require('../server/libs/parseframes.js'),
+            task = parsePackets('CTOS', join);
+        processIncomingTrasmission(join, {}, task);
         require('../server/libs/processIncomingTrasmission.js');
     });
     it('Should test recieveCTOS.js', function () {
@@ -100,7 +105,7 @@ describe('Boot Test', function () {
     it('Should test recieveSTOC.js', function () {
         var recieveSTOC = require('../server/libs/recieveSTOC.js'),
             enums = require('../server/libs/enums.js'),
-            loop = Object.create(enums.CTOS),
+            loop = Object.create(enums.STOC),
             i;
         for (i in loop) {
             recieveSTOC({
@@ -108,6 +113,13 @@ describe('Boot Test', function () {
                 message: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
             });
         }
+        for (i in loop.STOC_GAME_MSG) {
+            recieveSTOC({
+                STOC: 0x1,
+                message: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+            });
+        }
+
     });
     it('Should test servercontrol.json', function () {
         require('../server/libs/servercontrol.json');

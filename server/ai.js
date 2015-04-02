@@ -1,7 +1,7 @@
 /*jslint node:true, plusplus: true*/
 // blah blah load dependencies
 
-/* Ths is the network shell of the AI
+/* Ths is the network shell of the AI, provides UX interface similar to DevBot.
     It connects to the IRC server to act as a user target for the DuelServ
     Duelserv then issues a command on game request to the AI as if it was a normal user
     via the Primus Gamelist connection. The AI can recieve all the same network
@@ -19,23 +19,21 @@ var Primus = require('primus'), //Primus, our Sepiroth-Qliphopth Creator God. We
     primus = new Primus(server), // instance of the God
     Socket = require('primus').createSocket(),
     Duel = require('./ai-instance'),
-    client = new Socket('http://ygopro.us:24555'); //Connect the God to the tree;
-
-// IRC connection
-var bot,
+    client = new Socket('http://ygopro.us:24555'), //Connect the God to the tree;
     irc = require("irc"), // IRC Client/bot dependency
-    config = {
+    config = { // IRC configuration
         channels: ["#server", "#lobby"],
         server: "ygopro.us",
         botName: "[AI]SnarkyChild"
-    };
+    }, // initate the bot
+    bot = new irc.Client(config.server, config.botName, {
+        channels: config.channels
+    });
 
-//connect the bot
-bot = new irc.Client(config.server, config.botName, {
-    channels: config.channels
-});
 
-// connect a stupid simple bot to the IRC and have it listen for a specific command, then do stuff
+
+
+// have bot listen for a specific command, then do stuff
 function ircInterface(from, to, message) {
     'use strict';
 
