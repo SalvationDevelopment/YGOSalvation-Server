@@ -34,7 +34,31 @@ var ygoserver, //port 8911 ygopro Server
     processIncomingTrasmission = require('./libs/processIncomingTrasmission.js'); // gamelist and start games
 
 
+function gamelistMessage(message) {
+    'use strict';
+    if (message.messagetype === 'coreMessage') {
+        var rooms,
+            gamelist = gamelistManager.messageListener(message.coreMessage);
+        activegames = 0;
+        Object.keys(cluster.workers).forEach(function (id) {
+            cluster.workers[id].send({
+                messagetype: 'gamelist',
+                gamelist: gamelist
+            });
+        });
+        for (rooms in gamelist) {
+            if (gamelist.hasOwnProperty(rooms)) {
+                activegames++;
+            }
+        }
+        process.title = 'YGOPro Salvation Server [' + activegames + ']';
+    } else if (message.messagetype === 'custom_error') {
+        ircManager.notify(message.message);
+    } else if (message.messagetype === 'draft') {
+        gamelistManager.primusListener(message);
+    }
 
+}
 
 function initiateMaster() {
     'use strict';
@@ -54,31 +78,7 @@ function initiateMaster() {
         });
         require('./libs/policyserver.js');
         require('./libs/ldapserver.js'); //LDAP endpoint; //Flash policy server for LightIRC;
-
-        worker.on('message', function (message) {
-            if (message.messagetype === 'coreMessage') {
-                var rooms,
-                    gamelist = gamelistManager.messageListener(message.coreMessage);
-                activegames = 0;
-                Object.keys(cluster.workers).forEach(function (id) {
-                    cluster.workers[id].send({
-                        messagetype: 'gamelist',
-                        gamelist: gamelist
-                    });
-                });
-                for (rooms in gamelist) {
-                    if (gamelist.hasOwnProperty(rooms)) {
-                        activegames++;
-                    }
-                }
-                process.title = 'YGOPro Salvation Server [' + activegames + ']';
-            } else if (message.messagetype === 'custom_error') {
-                ircManager.notify(message.message);
-            } else if (message.messagetype === 'draft') {
-                gamelistManager.primusListener(message);
-            }
-
-        });
+        worker.on('message', gamelistMessage);
     }
     for (clusterIterator; clusterIterator < numCPUs; clusterIterator++) {
         setupWorker(clusterIterator);
@@ -103,7 +103,7 @@ function initiateSlave() {
         socket.setNoDelay(true);
         socket.active_ygocore = false;
         socket.active = false;
-        socket.on('data', function (data) {
+        socket.on('data', function listener(data) {
             var frame,
                 task,
                 newframes = 0;
@@ -133,6 +133,7 @@ function initiateSlave() {
         });
     });
     ygoserver.listen(8911);
+    return ygoserver;
 }
 
 (function main() {
@@ -161,3 +162,9 @@ function initiateSlave() {
     }
 
 }()); // end main
+
+module.exports = {
+    initiateMaster : initiateMaster,
+    initiateSlave : initiateSlave,
+    gamelistMessage : gamelistMessage
+};
