@@ -54,9 +54,6 @@ describe('Boot Test', function () {
     it('Should test draftbot.js', function () {
         require('../server/libs/draftbot.js');
     });
-    it('Should test emergency.js', function () {
-        require('../server/libs/emergency.js');
-    });
     it('Should test enums.js', function () {
         require('../server/libs/enums.js');
     });

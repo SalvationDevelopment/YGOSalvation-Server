@@ -11,7 +11,7 @@ var portmin = 30000 + process.env.PORTRANGE * 100,
     recieveCTOS = require('./recieveCTOS'),
     recieveSTOC = require('./recieveSTOC.js'),
     createDateString = require('./datetimestamp.js'),
-    custom_error = require('./custom_error.js'),
+    //custom_error = require('./custom_error.js'),
     gamelist = {};
 
 if (cluster.isWorker) {
@@ -108,9 +108,9 @@ function portfinder(min, max, callback) {
 function pickCoreConfig(socket) {
     'use strict';
     var output = '';
-        if (socket.hostString.indexOf(",21,") > -1) {
-          return "goat.ini";
-        }
+    if (socket.hostString.indexOf(",21,") > -1) {
+        return "goat.ini";
+    }
     if (socket.hostString[0] > '2') {
         return output + socket.hostString[0] + '-config.ini';
     } else {
@@ -156,7 +156,7 @@ function startCore(port, socket, data, callback) {
 
         var configfile = pickCoreConfig(socket),
             params = port + ' ' + configfile;
-        custom_error(console.log(' initiating core for ' + socket.username + ' on port:' + port + ' with: ' + configfile));
+        //custom_error(console.log(' initiating core for ' + socket.username + ' on port:' + port + ' with: ' + configfile));
         socket.core = childProcess.spawn(startDirectory + '/../ygocore/YGOServer.exe', [port, configfile], {
             cwd: startDirectory + '/../ygocore'
         }, function (error, stdout, stderr) {
