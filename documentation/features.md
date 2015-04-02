@@ -53,7 +53,8 @@ Features
   * [ ] TCG Format & Rulings
   * [ ] Korean Format & Rulings
   * [ ] European Format & Rulings
-  * [ ] Sealed/Cube Format with random deck generation and rulings.
+  * [x] Sealed/Cube Format with random deck generation and rulings.
+  * [x] Goat Format with pre-errata
 - [ ] Full Language support
   * [x] English
   * [ ] Spanish
@@ -66,7 +67,7 @@ Features
   * [ ] Korean
   * [ ] Russian.
 - [ ] Ranking with Privacy settings
-- [ ] Anime Cards and Formats
+- [x] Anime Cards and Formats
 - [ ] Automatic Tournament System
   * [x] Admin initated and managed
   * [ ] Server initiated and managed
