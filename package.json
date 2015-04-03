@@ -28,7 +28,8 @@
         "lodash" : "*",
         "ldapjs" : "*",
         "policyfile" : "*",
-        "istanbul": "*"
+        "istanbul": "*",
+        "jsdom" : "*"
     },
     "optionalDependencies": {
         "httpsys": "*",

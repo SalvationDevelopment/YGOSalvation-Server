@@ -162,5 +162,8 @@ function fileError(mainError) {
     var filename = 'errorReport' + (new Date().toDateString) + '.log';
     fs.writeFile(filename, mainError, function () {});
 }
-
+try {
 module.exports = runYGOPro;
+}catch(e){
+    
+    }

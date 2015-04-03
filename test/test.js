@@ -1,10 +1,12 @@
 /*jslint node: true, plusplus: true, unparam: false, nomen: true*/
 /*mocha globals*/
 /*global describe, it*/
-var assert = require("assert");
+var assert = require("assert"),
+    jsdom = require("jsdom");
 
 //global.__base = __dirname + '/server/';
 var join = new Buffer([0x15, 0x00, 0x10, 0x5b, 0x00, 0x41, 0x00, 0x49, 0x00, 0x5d, 0x00, 0x53, 0x00, 0x6e, 0x00, 0x61, 0x00, 0x72, 0x00, 0x6b, 0x00, 0x79, 0x00]);
+
 describe('System', function () {
     'use strict';
     it('Should start the server', function () {
@@ -139,7 +141,7 @@ describe('Client Boot', function () {
     'use strict';
     it('Should start the client', function () {
         require('../client/interface/js/configuration.js');
-        runYGOPro = require('../client/interface/js/offline-server.js').runYGOPro;
+        var runYGOPro = require('../client/interface/js/offline-server.js');
         // require('../client/interface/js/offline.js');
         //requires refactor before testable.
         runYGOPro('-j');
