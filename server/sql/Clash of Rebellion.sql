@@ -46,12 +46,16 @@ INSERT OR REPLACE INTO "datas" VALUES(13790554,1,0,123,33,1200,1000,3,2048,16,0)
 INSERT OR REPLACE INTO "datas" VALUES(13790555,1,0,89,33,0,2200,4,256,1,0);
 INSERT OR REPLACE INTO "datas" VALUES(13790556,1,0,11,33,1000,2000,4,8,32,0);
 INSERT OR REPLACE INTO "datas" VALUES(13790557,1,0,0,33,2500,0,7,524288,32,0);
-INSERT OR REPLACE INTO "datas" VALUES ("13790558","1","0","67","33","1800","1000","4","1","1","0");
-INSERT OR REPLACE INTO "datas" VALUES ("13790559","1","0","0","33","2500","1000","8","262144","2","0");
-INSERT OR REPLACE INTO "datas" VALUES ("13790560","1","0","0","4129","2700","1500","8","8388608","32","0");
-INSERT OR REPLACE INTO "datas" VALUES ("13790561","1","0","0","97","2800","1200","8","8192","16","0");
-INSERT OR REPLACE INTO "datas" VALUES ("13790562","1","0","186","33","500","1500","4","512","32","0");
-INSERT OR REPLACE INTO "datas" VALUES ("13790563","1","0","169","33","100","100","1","4","1","0");
+INSERT OR REPLACE INTO "datas" VALUES("13790558","1","0","67","33","1800","1000","4","1","1","0");
+INSERT OR REPLACE INTO "datas" VALUES("13790559","1","0","0","33","2500","1000","8","262144","2","0");
+INSERT OR REPLACE INTO "datas" VALUES("13790560","1","0","0","4129","2700","1500","8","8388608","32","0");
+INSERT OR REPLACE INTO "datas" VALUES("13790561","1","0","0","97","2800","1200","8","8192","16","0");
+INSERT OR REPLACE INTO "datas" VALUES("13790562","1","0","186","33","500","1500","4","512","32","0");
+INSERT OR REPLACE INTO "datas" VALUES("13790563","1","0","169","33","100","100","1","4","1","0");
+INSERT OR REPLACE INTO "datas" VALUES("13790565","1","0","0","97","1900","1500","4","8192","32","0");
+INSERT OR REPLACE INTO "datas" VALUES("13790566","1","0","0","97","2900","2500","8","8192","16","0");
+INSERT OR REPLACE INTO "datas" VALUES("13790567","1","0","0","4","0","0","0","0","0","0");
+INSERT OR REPLACE INTO "datas" VALUES("13790568","1","0","0","4","0","0","0","0","0","0");
 
 INSERT OR REPLACE INTO "texts" VALUES(13790000,'Sea Dragoons of Draconia','Pendulum Scale = 7
 Pendulum Effect: When a monster is destroyed by battle: You can Special Summon 1 Normal Monster from your hand. You can only use this effect of "Sea Dragoons of Draconia" once per turn.
@@ -163,6 +167,9 @@ INSERT OR REPLACE INTO "texts" VALUES ("13790560","Bird of Paradise Lost","This 
 INSERT OR REPLACE INTO "texts" VALUES ("13790561","Mirror Force Dragon","Must be Special Summoned with ""The Fang of Critias"" by sending 1 ""Mirror Force"" from your hand or your side of the field to the Graveyard, and cannot be Special Summoned by other ways. During either player's turn, when a monster you control is targeted for an attack, or an opponent's card effect: You can destroy all cards your opponent controls.","","","","","","","","","","","","","","","","");
 INSERT OR REPLACE INTO "texts" VALUES ("13790562","Raidraptor - Fuzzy Lanius","If you control a ""Raidraptor"" monster other than ""Raidraptor - Fuzzy Lanius"": You can Special Summon this card from your hand. If this card is sent to the Graveyard: You can add 1 ""Raidraptor - Fuzzy Lanius"" from your Deck to your hand. You cannot Special Summon monsters during the turn you activate any of this card's effects, except ""Raidraptor"" monsters. You can only use each effect of ""Raidraptor - Fuzzy Lanius"" once per turn.","","","","","","","","","","","","","","","","");
 INSERT OR REPLACE INTO "texts" VALUES ("13790563","Fluffal Mouse","During your Main Phase: You can Special Summon up to 2 ""Fluffal Mouse"" from your Deck. This effect can only be used once while this card is face-up on the field. You cannot Special Summon monsters from your Extra Deck during the turn you activate this effect, except ""Frightfur"" monsters.","","","","","","","","","","","","","","","","");
-
+INSERT OR REPLACE INTO "texts" VALUES ("13790565","Doom Virus Dragon","Must be Special Summoned with ""The Fang of Critias"" by sending ""Crush Card Virus"" from your hand or your side of the field to the Graveyard, and cannot be Special Summoned by other ways. If this card is Special Summoned: Check your opponent's hand, all monsters they control, and all cards they draw until the end of your opponent's 3rd turn after this effect's activation, and destroy all monsters with 1500 or more ATK.","","","","","","","","","","","","","","","","");
+INSERT OR REPLACE INTO "texts" VALUES ("13790566","Tyrant Burst Dragon","Must be Special Summoned with ""The Fang of Critias"" sending ""Tyrant Wing"" from your hand or your side of the field to the Graveyard, and cannot be Special Summoned by other ways. This card can attack all monsters your opponent controls once each. You can target 1 monster you control; equip this monster on the field to that target. It gains 400 ATK and DEF. The monster equipped with this card by this effect can make up to 3 attacks during each Battle Phase.","","","","","","","","","","","","","","","","");
+INSERT OR REPLACE INTO "texts" VALUES ("13790567","Double Magical Arm Bind","Tribute 2 monsters, then target 2 face-up monsters your opponent controls; take control of both targets until your End Phase.","","","","","","","","","","","","","","","","");
+INSERT OR REPLACE INTO "texts" VALUES ("13790568","Tyrant Wing","Target 1 Dragon-Type monster on the field; equip this card to that target. It gains 400 ATK and DEF. The monster equipped with this card by this effect can make up 2 attacks on monsters during each Battle Phase. During the End Phase, if the monster equipped with this card by this effect attacked an opponent's monster: Destroy this card.","","","","","","","","","","","","","","","","");
 
 COMMIT;
