@@ -56,6 +56,8 @@ INSERT OR REPLACE INTO "datas" VALUES("13790565","1","0","0","97","1900","1500",
 INSERT OR REPLACE INTO "datas" VALUES("13790566","1","0","0","97","2900","2500","8","8192","16","0");
 INSERT OR REPLACE INTO "datas" VALUES("13790567","1","0","0","4","0","0","0","0","0","0");
 INSERT OR REPLACE INTO "datas" VALUES("13790568","1","0","0","4","0","0","0","0","0","0");
+INSERT OR REPLACE INTO "datas" VALUES("13790569","1","0","69","16777249","800","1000","117899267","8","16","0");
+INSERT OR REPLACE INTO "datas" VALUES("13790570","1","0","0","262146","0","0","0","0","0","0");
 
 INSERT OR REPLACE INTO "texts" VALUES(13790000,'Sea Dragoons of Draconia','Pendulum Scale = 7
 Pendulum Effect: When a monster is destroyed by battle: You can Special Summon 1 Normal Monster from your hand. You can only use this effect of "Sea Dragoons of Draconia" once per turn.
@@ -171,5 +173,12 @@ INSERT OR REPLACE INTO "texts" VALUES ("13790565","Doom Virus Dragon","Must be S
 INSERT OR REPLACE INTO "texts" VALUES ("13790566","Tyrant Burst Dragon","Must be Special Summoned with ""The Fang of Critias"" sending ""Tyrant Wing"" from your hand or your side of the field to the Graveyard, and cannot be Special Summoned by other ways. This card can attack all monsters your opponent controls once each. You can target 1 monster you control; equip this monster on the field to that target. It gains 400 ATK and DEF. The monster equipped with this card by this effect can make up to 3 attacks during each Battle Phase.","","","","","","","","","","","","","","","","");
 INSERT OR REPLACE INTO "texts" VALUES ("13790567","Double Magical Arm Bind","Tribute 2 monsters, then target 2 face-up monsters your opponent controls; take control of both targets until your End Phase.","","","","","","","","","","","","","","","","");
 INSERT OR REPLACE INTO "texts" VALUES ("13790568","Tyrant Wing","Target 1 Dragon-Type monster on the field; equip this card to that target. It gains 400 ATK and DEF. The monster equipped with this card by this effect can make up 2 attacks on monsters during each Battle Phase. During the End Phase, if the monster equipped with this card by this effect attacked an opponent's monster: Destroy this card.","","","","","","","","","","","","","","","","");
+INSERT OR REPLACE INTO "texts" VALUES ("13790569","Eccentric Archfiend","Pendulum Scale = 7
+Pendulum Effect :
+You can only use the Pendulum Effect of “Eccentric Archfiend” once per turn. You can target 1 other Spell/Trap card on the field; destroy both this card and that card.
+
+Monster Effect :
+You can only use the Monster Effect of “Eccentric Archfiend” once per turn. You can Tribute this card, then target 1 monster on the field; destroy it.","","","","","","","","","","","","","","","","");
+INSERT OR REPLACE INTO "texts" VALUES("13790570","Comic Hand","Equip only to an opponent’s monster while you control “Toon World”. Gain control of the equipped monster. It is treated as a Toon Monster, and can attack your opponent directly if they do not control a Toon Monster. If there is no face-up “Toon World” destroy this card.","","","","","","","","","","","","","","","","");
 
 COMMIT;
