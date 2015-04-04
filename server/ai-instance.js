@@ -84,6 +84,20 @@ function OnSelectInitCommand(cards, to_bp_allowed, to_ep_allowed) {
     return 0; //return index
 }
 
+
+function test(subject) {
+    'use strict';
+    var join = [41, 0, 16, 91, 0, 65, 0, 73, 0, 93, 0, 83, 0, 110, 0, 97, 0, 114, 0, 107, 0, 121, 0, 67, 0, 104, 0, 105, 0, 108, 0, 100, 0, 0, 0, 254, 255, 255, 255, 230, 110, 238, 118, 69, 0, 18, 50, 19, 75, 114, 0, 0, 0, 0, 50, 0, 48, 0, 48, 0, 79, 0, 79, 0, 79, 0, 56, 0, 48, 0, 48, 0, 48, 0, 44, 0, 48, 0, 44, 0, 53, 0, 44, 0, 49, 0, 44, 0, 85, 0, 44, 0, 102, 0, 48, 0, 77, 0, 85, 0, 103, 0, 0, 0, 0, 0, 254, 255, 255, 255, 230, 110, 238, 118],
+    
+        r = join.join(),
+        l = subject.join(),
+        real = (r === l);
+    console.log('test', real);
+    console.log('real:', r);
+    console.log('new :', l);
+    
+}
+
 function GameState() {
     'use strict';
     var AIPlayerID = 0,
@@ -231,32 +245,67 @@ function makeCTOS(command, message) {
     
     say.CTOS_PlayerInfo = function (message) {
         var ctos = new Buffer([0x10]),
+            name = Array.apply(null, new Array(40)).map(Number.prototype.valueOf, 0),
             username = new Buffer(message, 'utf16le'),
-            usernamef = Buffer.concat([username], 40),
+            usernamef = new Buffer(name),
+            x = username.copy(usernamef),
             len = usernamef.length + 1,
             proto = new Buffer(2);
-        
         proto.writeUInt16LE(len, 0);
-        proto = Buffer.concat([proto, ctos, username]);
-        console.log(proto);
+        proto = Buffer.concat([proto, ctos, usernamef]);
+        //console.log(proto);
         return proto;
     };
     say.CTOS_JoinGame = function (roompass) {
         var ctos = new Buffer([0x12]),
-            version = new Buffer([0x13, 0x34]),
-            gameid = new Buffer([0, 0, 0, 0, 0, 0]),
+            name = Array.apply(null, new Array(60)).map(Number.prototype.valueOf, 0),
+            version = new Buffer([0x32, 0x13]),
+            gameid = new Buffer([75, 144, 0, 0, 0, 0]),
             pass = new Buffer(roompass, 'utf16le'),
-            rpass =  Buffer.concat([pass], 50),
-            len = ctos.length + version.length + gameid.length + (pass.length * 2),
+            rpass = new Buffer(name),
+            x = pass.copy(rpass),
+            len = ctos.length + version.length + gameid.length + 60,
             proto = new Buffer(2);
-        
-        console.log(pass.length, rpass.length);
+            //unknownDataStructure = new Buffer([0,0,0,0,254,255,255,255,230,110,238,118]);
         proto.writeUInt16LE(len, 0);
-        proto = Buffer.concat([proto, ctos, version, gameid, pass]);
-        console.log(proto);
-        console.log(rpass.toString('utf16le'));
+        
+        proto = Buffer.concat([proto, ctos, version, gameid, rpass]);
+        //console.log(proto);
+        //console.log(rpass.toString('utf16le'));
         return proto;
+        
+    };
+    say.CTOS_UPDATE_DECK = function (message) {
+        var ctos = new Buffer([0x2]),
+            emptydeck = Array.apply(null, new Array(1024)).map(Number.prototype.valueOf, 0),
+            deck = new Buffer(emptydeck),
+            bufmain = new Buffer(message.main),
+            bufextra = new Buffer(message.extra),
+            bufside = new Buffer(message.side),
+            decklist = Buffer.concat([bufmain, bufextra, bufside]),
+            len = ctos.length + 1024,
+            proto = new Buffer(2),
+            readposition = 0;
+        
+        proto.writeUInt16LE(len, 0);
+        deck.writeUInt16LE(message.main.length + deck.extra.length, readposition);
+        readposition = readposition + 2;
+        deck.writeUInt16LE(message.side.length, readposition);
+        readposition = readposition + 2;
+        decklist.copy(deck, readposition);
+        readposition = readposition + decklist.length;
+        
+        return deck;
+    };
+    
+    say.CTOS_HS_READY = function () {
+        var ctos = new Buffer([0x22]),
+            len = ctos.length,
+            proto = new Buffer(2);
             
+        proto.writeUInt16LE(len, 0);
+        proto = Buffer.concat([proto, ctos]);
+        return proto;
     };
  
     return say[command](message);
@@ -268,13 +317,15 @@ function DuelConnection(roompass) {
     'use strict';
     var socket = {},
         duelConnections;
-
+    //'192.99.11.19'
     duelConnections = net.connect(8911, '192.99.11.19', function () {
         duelConnections.setNoDelay(true);
         console.log('Send Game request for', roompass);
-        var name = makeCTOS('CTOS_PlayerInfo', '[AI]Snarky'),
+        var name = makeCTOS('CTOS_PlayerInfo', '[AI]SnarkyChild'),
             join = makeCTOS('CTOS_JoinGame', roompass),
+            updateDeck = makeCTOS('CTOS_UPDATE_DECK', roompass),
             tosend = Buffer.concat([name, join]);
+     
         duelConnections.write(tosend);
     });
     duelConnections.on('error', function (error) {
@@ -536,3 +587,4 @@ function Duel(roompass, botUsername) {
 }
 module.exports = Duel;
 //
+var a = new Duel('200OOO8000,0,5,1,U,f0MUg');
