@@ -246,7 +246,7 @@ function makeCTOS(command, message) {
             version = new Buffer([0x13, 0x34]),
             gameid = new Buffer([0, 0, 0, 0, 0, 0]),
             pass = new Buffer(roompass, 'utf16le'),
-            rpass =  Buffer.concat([pass], 30),
+            rpass =  Buffer.concat([pass], 50),
             len = ctos.length + version.length + gameid.length + (pass.length * 2),
             proto = new Buffer(2);
         
@@ -254,7 +254,7 @@ function makeCTOS(command, message) {
         proto.writeUInt16LE(len, 0);
         proto = Buffer.concat([proto, ctos, version, gameid, pass]);
         console.log(proto);
-        console.log(pass.toString('utf16le'));
+        console.log(rpass.toString('utf16le'));
         return proto;
             
     };
@@ -282,6 +282,9 @@ function DuelConnection(roompass) {
     });
     duelConnections.on('close', function () {
         duelConnections.end();
+    });
+    duelConnections.on('data', function (data) {
+        console.log('data');
     });
     return duelConnections;
 }

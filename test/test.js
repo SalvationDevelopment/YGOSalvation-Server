@@ -117,12 +117,12 @@ describe('Boot Test', function () {
                 message: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
             });
         }
-        for (i in loop.STOC_GAME_MSG) {
-            recieveSTOC({
-                STOC: 0x1,
-                message: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-            });
-        }
+//        for (i in loop.STOC_GAME_MSG) {
+//            recieveSTOC({
+//                STOC: 0x1,
+//                message: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+//            });
+//        }
 
     });
     it('Should test servercontrol.json', function () {
