@@ -111,12 +111,12 @@ describe('Boot Test', function () {
             enums = require('../server/libs/enums.js'),
             loop = Object.create(enums.STOC),
             i;
-        for (i in loop) {
-            recieveSTOC({
-                STOC: i,
-                message: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-            });
-        }
+//        for (i in loop) {
+//            recieveSTOC({
+//                STOC: i,
+//                message: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+//            });
+        //}
         //        for (i in loop.STOC_GAME_MSG) {
         //            recieveSTOC({
         //                STOC: 0x1,
