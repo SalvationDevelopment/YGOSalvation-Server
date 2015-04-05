@@ -331,8 +331,19 @@ function makeCTOS(command, message) {
 
     };
     say.CTOS_UPDATE_DECK = function (message) {
+        //total len (excluding this)
+        //ctos
+        //extradeck count
+        //side count
+        //deck cards
+        //edtra cards
+        //side cards
+        
+        // (toduelist)
+        // this message
+        // ready message
         var ctos = new Buffer([0x2]),
-            emptydeck = Array.apply(null, new Array(1024)).map(Number.prototype.valueOf, 0),
+            //emptydeck = Array.apply(null, new Array(1024)).map(Number.prototype.valueOf, 0),
             deck = new Buffer(0),
             decklist = [].concat(message.main).concat(message.extra).concat(message.side),
             len,
