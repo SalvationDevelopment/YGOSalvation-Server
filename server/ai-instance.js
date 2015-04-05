@@ -3,12 +3,66 @@
 // represnts a single duel connection.
 var Framemaker = require('./libs/parseframes.js'), //queue generator
     net = require('net'), //gain TCP access
+    fs = require('fs'), // gain file system access
     parsePackets = require('./libs/parsepackets.js'), // unfuck Flurohydrides network optimizations that make everything unreadable.
     recieveSTOC = require('./libs/recieveSTOC.js'); // turn network data into a COMMAND and list of PARAMETERS
 
-//AI calls
-// actual AI decision making itself,
-// network calls pair up as these functions and data to act as thier parameters
+
+
+function convertDeck(file, filename) {
+    'use strict';
+    var tempdeck = file.toString().split('!side'),
+        side = tempdeck[1],
+        main = tempdeck[0].split('#extra')[0],
+        extra = tempdeck[0].split('#extra')[1];
+    main = main.split('\r\n').map(function (item) {
+        return parseInt(item, 10);
+    });
+    main = main.filter(function (i) {
+        return (i);
+    });
+    extra = extra.split('\r\n').map(function (item) {
+        return parseInt(item, 10);
+    });
+    extra = extra.filter(function (i) {
+        return (i);
+    });
+    side = side.split('\r\n').map(function (item) {
+        return parseInt(item, 10);
+    });
+    side = side.filter(function (i) {
+        return (i > 0);
+    });
+    return {
+        main : main,
+        side : side,
+        extra : extra
+    };
+}
+
+//Load all decks
+function getDecks() {
+    'use strict';
+    var folder = fs.readdirSync('../client/ygopro/deck'),
+        decks = [],
+
+        i = 0;
+
+    for (i; folder.length > i; i++) {
+        if (folder[i].indexOf('.ydk') !== -1) {
+            decks.push(convertDeck(fs.readFileSync('../client/ygopro/deck/' + folder[i])));
+        }
+    }
+    return decks;
+}
+
+var decks = getDecks();
+console.log(decks[5].main.length);
+console.log(decks[5].side.length);
+console.log(decks[5].extra.length);
+    //AI calls
+    // actual AI decision making itself,
+    // network calls pair up as these functions and data to act as thier parameters
 function OnSelectOption(options) {
     'use strict';
     return 0; //index od option
@@ -88,14 +142,14 @@ function OnSelectInitCommand(cards, to_bp_allowed, to_ep_allowed) {
 function test(subject) {
     'use strict';
     var join = [41, 0, 16, 91, 0, 65, 0, 73, 0, 93, 0, 83, 0, 110, 0, 97, 0, 114, 0, 107, 0, 121, 0, 67, 0, 104, 0, 105, 0, 108, 0, 100, 0, 0, 0, 254, 255, 255, 255, 230, 110, 238, 118, 69, 0, 18, 50, 19, 75, 114, 0, 0, 0, 0, 50, 0, 48, 0, 48, 0, 79, 0, 79, 0, 79, 0, 56, 0, 48, 0, 48, 0, 48, 0, 44, 0, 48, 0, 44, 0, 53, 0, 44, 0, 49, 0, 44, 0, 85, 0, 44, 0, 102, 0, 48, 0, 77, 0, 85, 0, 103, 0, 0, 0, 0, 0, 254, 255, 255, 255, 230, 110, 238, 118],
-    
+
         r = join.join(),
         l = subject.join(),
         real = (r === l);
     console.log('test', real);
     console.log('real:', r);
     console.log('new :', l);
-    
+
 }
 
 function GameState() {
@@ -106,7 +160,7 @@ function GameState() {
         phase = 0,
         state = {
             0: {
-                Lifepoints : 8000,
+                Lifepoints: 8000,
                 MonsterZones: [],
                 SpellTrapZones: [],
                 Graveyard: [],
@@ -126,12 +180,12 @@ function GameState() {
                 MainDeck: []
             }
         };
-    
+
     function start(lp1, lp2, OneDeck, TwoDeck, OneExtra, TwoExtra) {
-//            game.DOMWriter(OneDeck, 'DECK', 0);
-//            game.DOMWriter(TwoDeck, 'DECK', 1);
-//            game.DOMWriter(OneExtra, 'EXTRA', 0);
-//            game.DOMWriter(TwoExtra, 'EXTRA', 1);
+        //            game.DOMWriter(OneDeck, 'DECK', 0);
+        //            game.DOMWriter(TwoDeck, 'DECK', 1);
+        //            game.DOMWriter(OneExtra, 'EXTRA', 0);
+        //            game.DOMWriter(TwoExtra, 'EXTRA', 1);
 
         state[0].LifePoints = lp1;
         state[1].LifePoints = lp2;
@@ -144,7 +198,7 @@ function GameState() {
             state[player][clocation][index] = data;
         }
     }
-    
+
     function updateLifepoints(player, multiplier, lp) {
         var lifepoints = +state[player].Lifepoints + (lp * multiplier);
         if (lifepoints < 0) {
@@ -152,7 +206,7 @@ function GameState() {
         }
         state[player].Lifepoints = lifepoints;
     }
-    
+
     function move(player, clocation, index, moveplayer, movelocation, movezone, moveposition, overlayindex, isBecomingCard) {
 
         //enums.locations[clocation] === 'DECK/EXTRA/REMOVED
@@ -167,20 +221,20 @@ function GameState() {
         state[player][clocation] = state[player][clocation].filter(function (element) {
             return element !== undefined;
         });
-        
-        
+
+
         return;
     }
-    
+
     function newphase(turnx) {
         turnx = +state.phase;
     }
-    
+
     function setAI_Opp(newID) {
         AIPlayerID = newID;
         OppPlayerID = (AIPlayerID === 0) ? 1 : 0;
     }
-    
+
     function loadDeck(player, deck, cardList) {
 
     }
@@ -235,6 +289,7 @@ function GameState() {
     };
 
 }
+
 function makeCTOS(command, message) {
     'use strict';
     //https://github.com/Fluorohydride/ygopro/blob/25bdab4c6d0000f841aee80c11cbf2e95ee54047/gframe/network.h
@@ -242,7 +297,7 @@ function makeCTOS(command, message) {
     // [len, len] is two bytes... read backwards totaled. 
     //[0, 2] = 2 "", [ 3, 2] = 26 "8 * 8 + 2"
     var say = {};
-    
+
     say.CTOS_PlayerInfo = function (message) {
         var ctos = new Buffer([0x10]),
             name = Array.apply(null, new Array(40)).map(Number.prototype.valueOf, 0),
@@ -266,48 +321,48 @@ function makeCTOS(command, message) {
             x = pass.copy(rpass),
             len = ctos.length + version.length + gameid.length + 60,
             proto = new Buffer(2);
-            //unknownDataStructure = new Buffer([0,0,0,0,254,255,255,255,230,110,238,118]);
+        //unknownDataStructure = new Buffer([0,0,0,0,254,255,255,255,230,110,238,118]);
         proto.writeUInt16LE(len, 0);
-        
+
         proto = Buffer.concat([proto, ctos, version, gameid, rpass]);
         //console.log(proto);
         //console.log(rpass.toString('utf16le'));
         return proto;
-        
+
     };
     say.CTOS_UPDATE_DECK = function (message) {
         var ctos = new Buffer([0x2]),
             emptydeck = Array.apply(null, new Array(1024)).map(Number.prototype.valueOf, 0),
-            deck = new Buffer(emptydeck),
-            bufmain = new Buffer(message.main),
-            bufextra = new Buffer(message.extra),
-            bufside = new Buffer(message.side),
-            decklist = Buffer.concat([bufmain, bufextra, bufside]),
-            len = ctos.length + 1024,
+            deck = new Buffer(0),
+            decklist = [].concat(message.main).concat(message.extra).concat(message.side),
+            len,
             proto = new Buffer(2),
-            readposition = 0;
+            readposition = 0,
+            card;
+
         
+        for (readposition; decklist.length > 1; readposition = readposition + 2) {
+            card = new Buffer([decklist[0]]);
+            deck = Buffer.concat([deck, card]);
+            decklist.shift();
+        }
+        len = len = ctos.length + deck.length;
         proto.writeUInt16LE(len, 0);
-        deck.writeUInt16LE(message.main.length + deck.extra.length, readposition);
-        readposition = readposition + 2;
-        deck.writeUInt16LE(message.side.length, readposition);
-        readposition = readposition + 2;
-        decklist.copy(deck, readposition);
-        readposition = readposition + decklist.length;
-        
-        return deck;
+        proto = Buffer.concat([proto, ctos, deck]);
+        console.log(proto.length);
+        return proto;
     };
-    
+
     say.CTOS_HS_READY = function () {
         var ctos = new Buffer([0x22]),
             len = ctos.length,
             proto = new Buffer(2);
-            
+
         proto.writeUInt16LE(len, 0);
         proto = Buffer.concat([proto, ctos]);
         return proto;
     };
- 
+
     return say[command](message);
 }
 
@@ -323,10 +378,16 @@ function DuelConnection(roompass) {
         console.log('Send Game request for', roompass);
         var name = makeCTOS('CTOS_PlayerInfo', '[AI]SnarkyChild'),
             join = makeCTOS('CTOS_JoinGame', roompass),
-            updateDeck = makeCTOS('CTOS_UPDATE_DECK', roompass),
-            tosend = Buffer.concat([name, join]);
-     
+            updateDeck = makeCTOS('CTOS_UPDATE_DECK', decks[5]),
+            check = makeCTOS('CTOS_HS_READY'),
+            tosend = Buffer.concat([name, join]),
+            decksend = Buffer.concat([updateDeck, check]);
+
         duelConnections.write(tosend);
+        setTimeout(function () {
+            duelConnections.write(decksend);
+            console.log('Sent deck');
+        }, 8000);
     });
     duelConnections.on('error', function (error) {
         duelConnections.end();
@@ -339,6 +400,7 @@ function DuelConnection(roompass) {
     });
     return duelConnections;
 }
+
 function CommandParser(state, network) {
     'use strict';
 
