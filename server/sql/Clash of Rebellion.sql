@@ -58,6 +58,9 @@ INSERT OR REPLACE INTO "datas" VALUES("13790567","1","0","0","4","0","0","0","0"
 INSERT OR REPLACE INTO "datas" VALUES("13790568","1","0","0","4","0","0","0","0","0","0");
 INSERT OR REPLACE INTO "datas" VALUES("13790569","1","0","69","16777249","800","1000","117899267","8","16","0");
 INSERT OR REPLACE INTO "datas" VALUES("13790570","1","0","0","262146","0","0","0","0","0","0");
+INSERT OR REPLACE INTO "datas" VALUES ("13790571","1","0","70","131074","0","0","0","0","0","0");
+INSERT OR REPLACE INTO "datas" VALUES ("13790572","1","0","273088583","97","3400","2000","10","256","16","0");
+INSERT OR REPLACE INTO "datas" VALUES ("13790573","1","0","199","33","1600","1200","4","2","16","0");
 
 INSERT OR REPLACE INTO "texts" VALUES(13790000,'Sea Dragoons of Draconia','Pendulum Scale = 7
 Pendulum Effect: When a monster is destroyed by battle: You can Special Summon 1 Normal Monster from your hand. You can only use this effect of "Sea Dragoons of Draconia" once per turn.
@@ -180,5 +183,8 @@ You can only use the Pendulum Effect of “Eccentric Archfiend” once per turn.
 Monster Effect :
 You can only use the Monster Effect of “Eccentric Archfiend” once per turn. You can Tribute this card, then target 1 monster on the field; destroy it.","","","","","","","","","","","","","","","","");
 INSERT OR REPLACE INTO "texts" VALUES("13790570","Comic Hand","Equip only to an opponent’s monster while you control “Toon World”. Gain control of the equipped monster. It is treated as a Toon Monster, and can attack your opponent directly if they do not control a Toon Monster. If there is no face-up “Toon World” destroy this card.","","","","","","","","","","","","","","","","");
-
+INSERT OR REPLACE INTO "texts" VALUES ("13790571","Brilliant Fusion","When this card is activated: Fusion Summon 1 ""Gem-Knight"" Fusion Monster from your Extra Deck, using monsters from your Deck as Fusion Materials, but its ATK and DEF each become 0. When this card leaves the field, destroy that monster. Once per turn: You can discard 1 Spell Card; the monster Special Summoned by this effect gains ATK and DEF equal to its original ATK and DEF, until the end of your opponent's turn. You can only activate 1 ""Brilliant Fusion"" per turn.","","","","","","","","","","","","","","","","");
+INSERT OR REPLACE INTO "texts" VALUES ("13790572","Gem-Knight Lady Brilliant Diamond","3 ""Gem-Knight"" monsters
+Must first be Fusion Summoned with the above Fusion Materials. You can only Special Summon ""Gem-Knight Lady Brilliant Diamond(s)"" once per turn. Once per turn: You can send 1 ""Gem-Knight"" monster you control to the Graveyard, and if you do, Special Summon 1 ""Gem-Knight"" Fusion Monster from your Extra Deck, ignoring its Summoning conditions.","","","","","","","","","","","","","","","","");
+INSERT OR REPLACE INTO "texts" VALUES ("13790573","Performagician Trick Clown","If this card is sent to the Graveyard: You can target 1 ""Performagician"" monster in your Graveyard; Special Summon it, but its ATK and DEF each become 0, then you take 1000 damage. You can only use this effect of ""Performagician Trick Clown"" once per turn.","","","","","","","","","","","","","","","","");
 COMMIT;
