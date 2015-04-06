@@ -343,29 +343,48 @@ function makeCTOS(command, message) {
         // this message
         // ready message
         var ctos = new Buffer([0x2]),
-            //emptydeck = Array.apply(null, new Array(1024)).map(Number.prototype.valueOf, 0),
+            emptydeck = Array.apply(null, new Array(1027)).map(Number.prototype.valueOf, 0),
             deck = new Buffer(0),
             decklist = [].concat(message.main).concat(message.extra).concat(message.side),
+            decksize = new Buffer(8),
             len,
             proto = new Buffer(2),
             readposition = 0,
-            card;
+            card,
+            x = new Buffer(emptydeck);
 
         
         for (readposition; decklist.length > 1; readposition = readposition + 2) {
-            card = new Buffer([decklist[0]]);
+            card = new Buffer(4);
+            card.writeUInt32LE(decklist[0], 0);
+            //console.log(decklist[0], (JSON.stringify(card)));
             deck = Buffer.concat([deck, card]);
             decklist.shift();
         }
-        len = len = ctos.length + deck.length;
+        decksize.writeUInt16LE((message.main.length + message.extra.length), 0);
+        decksize.writeUInt16LE(message.side.length, 4);
+        len = 1025;
         proto.writeUInt16LE(len, 0);
-        proto = Buffer.concat([proto, ctos, deck]);
+        proto = Buffer.concat([proto, ctos, decksize, deck]);
+        
+        proto.copy(x);
         console.log(proto.length);
-        return proto;
+        console.log(proto, JSON.stringify(x));
+        return x;
     };
 
     say.CTOS_HS_READY = function () {
         var ctos = new Buffer([0x22]),
+            len = ctos.length,
+            proto = new Buffer(2);
+
+        proto.writeUInt16LE(len, 0);
+        proto = Buffer.concat([proto, ctos]);
+        return proto;
+    };
+    
+    say.CTOS_HS_TODUELIST = function () {
+        var ctos = new Buffer([0x20]),
             len = ctos.length,
             proto = new Buffer(2);
 
@@ -389,21 +408,24 @@ function DuelConnection(roompass) {
         console.log('Send Game request for', roompass);
         var name = makeCTOS('CTOS_PlayerInfo', '[AI]SnarkyChild'),
             join = makeCTOS('CTOS_JoinGame', roompass),
-            updateDeck = makeCTOS('CTOS_UPDATE_DECK', decks[5]),
+            updateDeck = makeCTOS('CTOS_UPDATE_DECK', decks[0]),
             check = makeCTOS('CTOS_HS_READY'),
+            surejoined = makeCTOS('CTOS_HS_TODUELIST'),
             tosend = Buffer.concat([name, join]),
-            decksend = Buffer.concat([updateDeck, check]);
+            decksend = Buffer.concat([surejoined, updateDeck, check]);
 
         duelConnections.write(tosend);
         setTimeout(function () {
             duelConnections.write(decksend);
             console.log('Sent deck');
-        }, 8000);
+        }, 4000);
     });
     duelConnections.on('error', function (error) {
+        console.log(error);
         duelConnections.end();
     });
     duelConnections.on('close', function () {
+        console.log(roompass, 'closed');
         duelConnections.end();
     });
     duelConnections.on('data', function (data) {
