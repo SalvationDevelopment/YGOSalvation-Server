@@ -116,10 +116,8 @@
 
         <section id='gamelistsection'>
             <div id="gamelistitems"></div>
-            <div id="gamefilter" class="launcheronly">
-                <label>Current Deck
-                    <select id='currentdeck'></select>
-                </label>
+            <!--<div id="gamefilter" class="launcheronly">
+                
                 <h3>Search</h3>
                 <div class="incasing">
                     <label>Card Pool
@@ -175,7 +173,7 @@
                         </button>
                     </div>
                 </div>
-            </div>
+            </div>-->
 
         </section>
 
@@ -185,6 +183,9 @@
 
         <section id="hostSettings">
             <div>
+                <label>Current Deck</label>
+                    <select class='currentdeck'></select>
+                </br>
                 <h2>Settings</h2>
                 <!--<label>Ranked</label>
                 <input type="radio" name="ranked" value="R" />Yes
@@ -410,15 +411,15 @@
                 locallogin(true);
                 setInterval(function () {
                     $.getJSON('http://127.0.0.1:9468/', function (data) { //small kittens hate localhost
-                        var selected = $("#currentdeck option:selected").val();
+                        var selected = $(".currentdeck option:selected").val();
                         var selectedskin = $("#skinlist option:selected").val();
                         var selectedfont = $("#fontlist option:selected").val();
                         var selecteddb = $("#dblist option:selected").val();
-                        $('#currentdeck').html(data.currentdeck);
+                        $('.currentdeck').html(data.currentdeck);
                         $('#skinlist').html(data.skinlist);
                         $('#fontlist').html(data.fonts);
                         $('#dblist').html(data.databases);
-                        $('#currentdeck option[value="' + selected + '"]').attr('selected', 'selected');
+                        $('.currentdeck option[value="' + selected + '"]').attr('selected', 'selected');
                         $('#skinlist option[value="' + selectedskin + '"]').attr('selected', 'selected');
                         $('#fontlist option[value="' + selectedfont + '"]').attr('selected', 'selected');
                         $('#dblist option[value="' + selecteddb + '"]').attr('selected', 'selected');
