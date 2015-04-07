@@ -306,12 +306,12 @@ function preformfilter(translated, players, rooms, started) {
         filterm = parseFilters(),
         game = (translated.poolFormat !== 'Goat Format') ? 'game' : 'nostalgia';
 
-    OK = (translated.gameMode !== filterm.gameMode && filterm.gameMode !== 'all') ? false : OK;
-    OK = (translated.allowedCards !== filterm.allowedCards && filterm.allowedCards !== 'all') ? false : OK;
-    OK = (translated.timeLimit !== filterm.timeLimit && filterm.timeLimit !== 'all') ? false : OK;
-    OK = (translated.banList !== filterm.banList && filterm.banList !== '20') ? false : OK;
-    OK = (players.searchFor(filterm.userName) === -1) ? false : OK;
-    OK = true; //disabling filter for now.
+    //OK = (translated.gameMode !== filterm.gameMode && filterm.gameMode !== 'all') ? false : OK;
+    //OK = (translated.allowedCards !== filterm.allowedCards && filterm.allowedCards !== 'all') ? false : OK;
+    //OK = (translated.timeLimit !== filterm.timeLimit && filterm.timeLimit !== 'all') ? false : OK;
+    //OK = (translated.banList !== filterm.banList && filterm.banList !== '20') ? false : OK;
+    //OK = (players.searchFor(filterm.userName) === -1) ? false : OK;
+    //OK = true; //disabling filter for now.
     
     if (OK) {
         duelist = (translated.gameMode === 'Single' || translated.gameMode === 'Match') ? players[0] + ' vs ' + players[1] : players[0] + '&amp' + players[1] + ' vs ' + players[2] + '&amp' + players[3];
