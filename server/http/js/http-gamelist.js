@@ -11,7 +11,7 @@ function applySettings() {
         $(this).prop('checked', value);
     });
     $('#skinlist').append('<option selected value="' + localStorage.skin_index + '">' + localStorage.skin_text + '</option>');
-    $('#currentdeck').append('<option selected value="' + localStorage.lastdeck + '">' + localStorage.lastdeck + '</option>');
+    $('.currentdeck').append('<option selected value="' + localStorage.lastdeck + '">' + localStorage.lastdeck + '</option>');
     $('#fontlist').append('<option selected value="' + localStorage.textfont + '">' + localStorage.textfont + '</option>');
     $('#dblistlist').append('<option selected value="' + localStorage.database + '">' + localStorage.database + '</option>');
     $('#sound_volume').val(Number(localStorage.sound_volume));
@@ -133,7 +133,7 @@ function connectgamelist() {
 
 function enterGame(string) {
     'use strict';
-    localStorage.lastdeck = $('#currentdeck').val();
+    localStorage.lastdeck = $('.currentdeck').val();
     localStorage.roompass = string;
     localStorage.lastip = "192.99.11.19";
     ygopro('-j');
@@ -206,7 +206,7 @@ function setHostSettings() {
     if (!secure(duelRequest.prio, duelRequest.checkd, duelRequest.shuf)) {
         return;
     }
-    localStorage.lastdeck = $('#currentdeck').val();
+    localStorage.lastdeck = $('.currentdeck').val();
     ygopro('-j');
 }
 
