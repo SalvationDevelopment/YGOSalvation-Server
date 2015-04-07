@@ -392,6 +392,16 @@ function makeCTOS(command, message) {
         proto = Buffer.concat([proto, ctos]);
         return proto;
     };
+    
+    say.CTOS_HS_START = function () {
+        var ctos = new Buffer([0x25]),
+            len = ctos.length,
+            proto = new Buffer(2);
+
+        proto.writeUInt16LE(len, 0);
+        proto = Buffer.concat([proto, ctos]);
+        return proto;
+    };
 
     return say[command](message);
 }
