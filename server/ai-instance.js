@@ -404,13 +404,23 @@ function makeCTOS(command, message) {
     };
     
     say.CTOS_HS_KICK = function (id) {
-        var ctos = new Buffer([0x23]),
+        var ctos = new Buffer([0x21]),
             csk = new Buffer(id),
             len = ctos.length + csk.length,
             proto = new Buffer(2);
 
         proto.writeUInt16LE(len, 0);
         proto = Buffer.concat([proto, ctos, csk]);
+        return proto;
+    };
+    
+    say.CTOS_HS_TOOBSERVER = function () {
+        var ctos = new Buffer([0x25]),
+            len = ctos.length,
+            proto = new Buffer(2);
+
+        proto.writeUInt16LE(len, 0);
+        proto = Buffer.concat([proto, ctos]);
         return proto;
     };
     
