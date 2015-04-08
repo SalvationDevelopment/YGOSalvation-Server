@@ -31,4 +31,4 @@ This will setup a run enviroment  you two test harnesses and an http server. Nex
 *This software was developed and designed to help the Yu-Gi-Oh! Online community which for years has been socially suffering. In line with that, to protect the community this project is 'mostly open'. This software can not be used at scale without written permission. That means no more than 10 users. There is a very speific use case I have in mind where we will give out an a flexible licence if asked, by companies and major community leaders. I've seen this software abused we do not want to see that happen again. Basically you are not allowed to use this without asking its creators permission first.*
 
 ## Contributing
-Feel free to fork the project to change the code around and land patches back via pull request. 
+Feel free to fork the project to change the code around and land patches back via pull request. For JavaScript please make sure it follows standard jslint rules on whitespace.
