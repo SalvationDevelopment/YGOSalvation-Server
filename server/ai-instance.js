@@ -456,13 +456,15 @@ function makeCTOS(command, message) {
         return proto;
     };
     
-    say.CTOS_HS_START = function () {
-        var ctos = new Buffer([0x25]),
+    say.CTOS_CHAT = function (message) {
+        // be sure to add \0 at the end.
+        var ctos = new Buffer([0x16]),
+            chat = new Buffer(message, 'utf16le'),
             len = ctos.length,
             proto = new Buffer(2);
 
         proto.writeUInt16LE(len, 0);
-        proto = Buffer.concat([proto, ctos]);
+        proto = Buffer.concat([proto, ctos, chat]);
         return proto;
     };
 
