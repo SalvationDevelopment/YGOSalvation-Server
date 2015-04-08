@@ -414,6 +414,17 @@ function makeCTOS(command, message) {
         return proto;
     };
     
+    say.CTOS_HAND_RESULT = function (id) {
+        var ctos = new Buffer([0x21]),
+            cshr = new Buffer(id),
+            len = ctos.length + cshr.length,
+            proto = new Buffer(2);
+
+        proto.writeUInt16LE(len, 0);
+        proto = Buffer.concat([proto, ctos, cshr]);
+        return proto;
+    };
+    
     say.CTOS_HS_TOOBSERVER = function () {
         var ctos = new Buffer([0x25]),
             len = ctos.length,
