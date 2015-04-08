@@ -343,7 +343,7 @@ function makeCTOS(command, message) {
         // this message
         // ready message
         var ctos = new Buffer([0x2]),
-            emptydeck = Array.apply(null, new Array(1027)).map(Number.prototype.valueOf, 0),
+            emptydeck,
             deck = new Buffer(0),
             decklist = [].concat(message.main).concat(message.extra).concat(message.side),
             decksize = new Buffer(8),
@@ -351,7 +351,8 @@ function makeCTOS(command, message) {
             proto = new Buffer(2),
             readposition = 0,
             card,
-            x = new Buffer(emptydeck);
+            x,
+            q;
 
         
         for (readposition; decklist.length > 1; readposition = readposition + 2) {
@@ -361,16 +362,20 @@ function makeCTOS(command, message) {
             deck = Buffer.concat([deck, card]);
             decklist.shift();
         }
+        
         decksize.writeUInt16LE((message.main.length + message.extra.length), 0);
         decksize.writeUInt16LE(message.side.length, 4);
-        len = 1025;
+        q = 1024 - 8 - deck.length;
+        emptydeck = Array.apply(null, new Array(q)).map(Number.prototype.valueOf, 0);
+        x = new Buffer(emptydeck);
+        len =  ctos.length + 1024;
         proto.writeUInt16LE(len, 0);
-        proto = Buffer.concat([proto, ctos, decksize, deck]);
+        proto = Buffer.concat([proto, ctos, decksize, deck, x]);
         
-        proto.copy(x);
-        console.log(proto.length);
-        console.log(proto, JSON.stringify(x));
-        return x;
+        
+        console.log(proto.length, len);
+        console.log(proto, JSON.stringify(proto));
+        return proto;
     };
 
     say.CTOS_HS_READY = function () {
