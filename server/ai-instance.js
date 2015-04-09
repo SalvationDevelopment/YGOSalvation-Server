@@ -5,7 +5,9 @@ var Framemaker = require('./libs/parseframes.js'), //queue generator
     net = require('net'), //gain TCP access
     fs = require('fs'), // gain file system access
     parsePackets = require('./libs/parsepackets.js'), // unfuck Flurohydrides network optimizations that make everything unreadable.
-    recieveSTOC = require('./libs/recieveSTOC.js'); // turn network data into a COMMAND and list of PARAMETERS
+    recieveSTOC = require('./libs/recieveSTOC.js'), // turn network data into a COMMAND and list of PARAMETERS,
+    events = require('events');
+    
 
 
 
@@ -136,20 +138,6 @@ function OnSelectBattleCommand(cards, attacker) {
 function OnSelectInitCommand(cards, to_bp_allowed, to_ep_allowed) {
     'use strict';
     return 0; //return index
-}
-
-
-function test(subject) {
-    'use strict';
-    var join = [41, 0, 16, 91, 0, 65, 0, 73, 0, 93, 0, 83, 0, 110, 0, 97, 0, 114, 0, 107, 0, 121, 0, 67, 0, 104, 0, 105, 0, 108, 0, 100, 0, 0, 0, 254, 255, 255, 255, 230, 110, 238, 118, 69, 0, 18, 50, 19, 75, 114, 0, 0, 0, 0, 50, 0, 48, 0, 48, 0, 79, 0, 79, 0, 79, 0, 56, 0, 48, 0, 48, 0, 48, 0, 44, 0, 48, 0, 44, 0, 53, 0, 44, 0, 49, 0, 44, 0, 85, 0, 44, 0, 102, 0, 48, 0, 77, 0, 85, 0, 103, 0, 0, 0, 0, 0, 254, 255, 255, 255, 230, 110, 238, 118],
-
-        r = join.join(),
-        l = subject.join(),
-        real = (r === l);
-    console.log('test', real);
-    console.log('real:', r);
-    console.log('new :', l);
-
 }
 
 function GameState() {
@@ -297,7 +285,17 @@ function makeCTOS(command, message) {
     // [len, len] is two bytes... read backwards totaled. 
     //[0, 2] = 2 "", [ 3, 2] = 26 "8 * 8 + 2"
     var say = {};
+    
+    say.CTOS_LEAVE_GAME = function () {
+        var ctos = new Buffer([0x13]),
+            len = ctos.length,
+            proto = new Buffer(2);
 
+        proto.writeUInt16LE(len, 0);
+        proto = Buffer.concat([proto, ctos]);
+        return proto;
+    };
+    
     say.CTOS_PlayerInfo = function (message) {
         var ctos = new Buffer([0x10]),
             name = Array.apply(null, new Array(40)).map(Number.prototype.valueOf, 0),
@@ -365,16 +363,16 @@ function makeCTOS(command, message) {
         
         decksize.writeUInt16LE((message.main.length + message.extra.length), 0);
         decksize.writeUInt16LE(message.side.length, 4);
-        q = 1024 - 8 - deck.length;
-        emptydeck = Array.apply(null, new Array(q)).map(Number.prototype.valueOf, 0);
+        q = new Array(1024 - 8 - deck.length);
+        emptydeck = Array.apply(null, q.map(Number.prototype.valueOf, 0));
         x = new Buffer(emptydeck);
-        len =  ctos.length + 1024;
+        len =  ctos.length + decksize.length + deck.length;
         proto.writeUInt16LE(len, 0);
-        proto = Buffer.concat([proto, ctos, decksize, deck, x]);
+        proto = Buffer.concat([proto, ctos, decksize, deck]);
         
         
-        console.log(proto.length, len);
-        console.log(proto, JSON.stringify(proto));
+        //console.log(proto.length, len);
+        //console.log(proto, JSON.stringify(proto));
         return proto;
     };
 
@@ -527,10 +525,12 @@ function DuelConnection(roompass) {
     });
     duelConnections.on('close', function () {
         console.log(roompass, 'closed');
+        duelConnections.write(makeCTOS('CTOS_LEAVE_GAME'));
         duelConnections.end();
     });
     duelConnections.on('data', function (data) {
         console.log('data');
+        
     });
     return duelConnections;
 }
@@ -547,8 +547,11 @@ function CommandParser(state, network) {
     // if a COMMAND results in a response, save it as RESPONSE, else return the function false.
 
     var protoResponse = [],
-        responseRequired = false;
+        responseRequired = false,
+        eventEmitter = new events.EventEmitter();
+    
     return function (input) {
+        console.log('trying', input);
         if (input.STOC_UNKNOWN) {
             responseRequired = false;
             //bug this command is never to be hit.
@@ -655,6 +658,12 @@ function CommandParser(state, network) {
             //select random
 
         }
+        if (input.STOC_JOIN_GAME) {
+            responseRequired = true;
+            protoResponse.push(0x3);
+            //select random
+
+        }
         if (input.STOC_SELECT_TP) {
             responseRequired = true;
             protoResponse.push(0x4);
@@ -704,19 +713,21 @@ function CommandParser(state, network) {
         }
         if (input.STOC_CHAT) {
             //chat message, from
-            state.log.push([input.player, input.message]);
+            console.log('chat');
         }
         if (input.STOC_HS_PLAYER_ENTER) {
             //player name enterd in slot
-            state.lobby[input.loc] = input.player;
+            makeCTOS('CTOS_LEAVE_GAME');
         }
         if (input.STOC_HS_PLAYER_CHANGE) {
             //player slot update
-            state.lobby[input.loc] = input.player;
+            //state.lobby[input.loc] = input.player;
+            console.log('trying to start game');
+            network.write(makeCTOS('CTOS_START'));
         }
         if (input.STOC_HS_WATCH_CHANGE) {
             //NUMBER OF WTACHERS changes
-            state.lobby.observers = input.count;
+            state.lobby.observers++;
         }
         if (responseRequired) {
             return protoResponse;
@@ -752,10 +763,6 @@ function Duel(roompass, botUsername) {
     duel.server = new DuelConnection(roompass);
     duel.gameState = new GameState();
     duel.commandParser = new CommandParser(duel.gameState, duel.server);
-    duel.server.on('connection', function () {
-        //send game request
-
-    });
     duel.server.on('data', function (data) {
         var frame,
             task,
@@ -768,12 +775,14 @@ function Duel(roompass, botUsername) {
         for (newframes; frame.length > newframes; newframes++) {
 
             task = parsePackets('STOC', new Buffer(frame[newframes]));
-            console.log('!', task);
+            //console.log('!', task);
             commands = processTask(task);
 
             // process AI
+            console.log(task);
             for (l; commands.length > l; l++) {
-                duel.commandParser(commands);
+                console.log('sending in frame');
+                duel.commandParser(commands[l]);
             }
 
         }
