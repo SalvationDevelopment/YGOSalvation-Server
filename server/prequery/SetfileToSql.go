@@ -64,7 +64,7 @@ func writeLines(lines []string, path string) (err error) {
     for _,item := range lines {
         if _, err := strconv.Atoi(strings.TrimSpace(item)); err == nil {
 	    //fmt.Println(item)
-            _, err := file.WriteString("INSERT OR REPLACE INTO \"temps\" VALUES (\"" + strings.TrimSpace(item) + "\");\r\n"); 
+            _, err := file.WriteString("INSERT OR REPLACE INTO \"temp\" VALUES (\"" + strings.TrimSpace(item) + "\");\r\n"); 
             //file.Write([]byte(item)); 
             if err != nil {
                 //fmt.Println("debug")
@@ -88,6 +88,6 @@ func main() {
         fmt.Println(line)
     }
     //array := []string{"7.0", "8.5", "9.1"}
-    err = writeLines(lines, "foo2.txt")
+    err = writeLines(lines, "sqloutput.txt")
     fmt.Println(err)
 }
