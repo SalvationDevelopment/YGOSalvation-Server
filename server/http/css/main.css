@@ -431,9 +431,11 @@ header {
     color: white;
 }
 
+/*
 .in-iframe #gamelistitems {
     width: 70vw;
 }
+*/
 
 .game.started {
     opacity: .2;
