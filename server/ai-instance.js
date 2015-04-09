@@ -7,7 +7,7 @@ var Framemaker = require('./libs/parseframes.js'), //queue generator
     parsePackets = require('./libs/parsepackets.js'), // unfuck Flurohydrides network optimizations that make everything unreadable.
     recieveSTOC = require('./libs/recieveSTOC.js'), // turn network data into a COMMAND and list of PARAMETERS,
     events = require('events');
-    
+
 
 
 
@@ -36,9 +36,9 @@ function convertDeck(file, filename) {
         return (i > 0);
     });
     return {
-        main : main,
-        side : side,
-        extra : extra
+        main: main,
+        side: side,
+        extra: extra
     };
 }
 
@@ -62,9 +62,9 @@ var decks = getDecks();
 console.log(decks[5].main.length);
 console.log(decks[5].side.length);
 console.log(decks[5].extra.length);
-    //AI calls
-    // actual AI decision making itself,
-    // network calls pair up as these functions and data to act as thier parameters
+//AI calls
+// actual AI decision making itself,
+// network calls pair up as these functions and data to act as thier parameters
 function OnSelectOption(options) {
     'use strict';
     return 0; //index od option
@@ -273,6 +273,9 @@ function GameState() {
         },
         GetAIMainDeck: function () {
             return state[AIPlayerID].MainDeck;
+        },
+        lobby: {
+            totalplayers: 0
         }
     };
 
@@ -285,7 +288,7 @@ function makeCTOS(command, message) {
     // [len, len] is two bytes... read backwards totaled. 
     //[0, 2] = 2 "", [ 3, 2] = 26 "8 * 8 + 2"
     var say = {};
-    
+
     say.CTOS_LEAVE_GAME = function () {
         var ctos = new Buffer([0x13]),
             len = ctos.length,
@@ -295,7 +298,7 @@ function makeCTOS(command, message) {
         proto = Buffer.concat([proto, ctos]);
         return proto;
     };
-    
+
     say.CTOS_PlayerInfo = function (message) {
         var ctos = new Buffer([0x10]),
             name = Array.apply(null, new Array(40)).map(Number.prototype.valueOf, 0),
@@ -336,7 +339,7 @@ function makeCTOS(command, message) {
         //deck cards
         //edtra cards
         //side cards
-        
+
         // (toduelist)
         // this message
         // ready message
@@ -352,7 +355,7 @@ function makeCTOS(command, message) {
             x,
             q;
 
-        
+
         for (readposition; decklist.length > 1; readposition = readposition + 2) {
             card = new Buffer(4);
             card.writeUInt32LE(decklist[0], 0);
@@ -360,17 +363,17 @@ function makeCTOS(command, message) {
             deck = Buffer.concat([deck, card]);
             decklist.shift();
         }
-        
+
         decksize.writeUInt16LE((message.main.length + message.extra.length), 0);
         decksize.writeUInt16LE(message.side.length, 4);
         q = new Array(1024 - 8 - deck.length);
         emptydeck = Array.apply(null, q.map(Number.prototype.valueOf, 0));
         x = new Buffer(emptydeck);
-        len =  ctos.length + decksize.length + deck.length;
+        len = ctos.length + decksize.length + deck.length;
         proto.writeUInt16LE(len, 0);
         proto = Buffer.concat([proto, ctos, decksize, deck]);
-        
-        
+
+
         //console.log(proto.length, len);
         //console.log(proto, JSON.stringify(proto));
         return proto;
@@ -385,7 +388,7 @@ function makeCTOS(command, message) {
         proto = Buffer.concat([proto, ctos]);
         return proto;
     };
-    
+
     say.CTOS_HS_TODUELIST = function () {
         var ctos = new Buffer([0x20]),
             len = ctos.length,
@@ -395,7 +398,7 @@ function makeCTOS(command, message) {
         proto = Buffer.concat([proto, ctos]);
         return proto;
     };
-    
+
     say.CTOS_HS_NOTREADY = function () {
         var ctos = new Buffer([0x23]),
             len = ctos.length,
@@ -405,7 +408,7 @@ function makeCTOS(command, message) {
         proto = Buffer.concat([proto, ctos]);
         return proto;
     };
-    
+
     say.CTOS_SURRENDER = function () {
         var ctos = new Buffer([0x14]),
             len = ctos.length,
@@ -415,7 +418,7 @@ function makeCTOS(command, message) {
         proto = Buffer.concat([proto, ctos]);
         return proto;
     };
-    
+
     say.CTOS_START = function () {
         var ctos = new Buffer([0x25]),
             len = ctos.length,
@@ -425,7 +428,7 @@ function makeCTOS(command, message) {
         proto = Buffer.concat([proto, ctos]);
         return proto;
     };
-    
+
     say.CTOS_HS_KICK = function (id) {
         var ctos = new Buffer([0x21]),
             csk = new Buffer(id),
@@ -436,21 +439,22 @@ function makeCTOS(command, message) {
         proto = Buffer.concat([proto, ctos, csk]);
         return proto;
     };
-    
+
     say.CTOS_HAND_RESULT = function (id) {
         var ctos = new Buffer([0x3]),
-            cshr = new Buffer(id),
-            len = ctos.length + cshr.length,
+            cshr = new Buffer([id]),
+            len = 2,
             proto = new Buffer(2);
 
         proto.writeUInt16LE(len, 0);
         proto = Buffer.concat([proto, ctos, cshr]);
+        console.log('sending result', proto);
         return proto;
     };
-    
+
     say.CTOS_TP_RESULT = function (id) {
         var ctos = new Buffer([0x04]),
-            cstr = new Buffer(id),
+            cstr = new Buffer([id]),
             len = ctos.length + cstr.length,
             proto = new Buffer(2);
 
@@ -458,7 +462,7 @@ function makeCTOS(command, message) {
         proto = Buffer.concat([proto, ctos, cstr]);
         return proto;
     };
-    
+
     say.CTOS_RESPONSE = function (response) {
         // response should already be a buffer.
         var ctos = new Buffer([0x01]),
@@ -469,7 +473,7 @@ function makeCTOS(command, message) {
         proto = Buffer.concat([proto, ctos, response]);
         return proto;
     };
-    
+
     say.CTOS_HS_TOOBSERVER = function () {
         var ctos = new Buffer([0x25]),
             len = ctos.length,
@@ -479,7 +483,7 @@ function makeCTOS(command, message) {
         proto = Buffer.concat([proto, ctos]);
         return proto;
     };
-    
+
     say.CTOS_CHAT = function (message) {
         // be sure to add \0 at the end.
         var ctos = new Buffer([0x16]),
@@ -517,7 +521,7 @@ function DuelConnection(roompass) {
         setTimeout(function () {
             duelConnections.write(decksend);
             console.log('Sent deck');
-        }, 4000);
+        }, 500);
     });
     duelConnections.on('error', function (error) {
         console.log(error);
@@ -530,9 +534,14 @@ function DuelConnection(roompass) {
     });
     duelConnections.on('data', function (data) {
         console.log('data');
-        
+
     });
     return duelConnections;
+}
+
+function rps() {
+    'use strict';
+    return Math.floor(Math.random() * (4 - 1)) + 1;
 }
 
 function CommandParser(state, network) {
@@ -549,7 +558,7 @@ function CommandParser(state, network) {
     var protoResponse = [],
         responseRequired = false,
         eventEmitter = new events.EventEmitter();
-    
+
     return function (input) {
         console.log('trying', input);
         if (input.STOC_UNKNOWN) {
@@ -654,27 +663,29 @@ function CommandParser(state, network) {
         }
         if (input.STOC_SELECT_HAND) {
             responseRequired = true;
-            protoResponse.push(0x3);
+            console.log('Selecting rps');
+            network.write(makeCTOS('CTOS_HAND_RESULT', rps()));
             //select random
 
         }
         if (input.STOC_JOIN_GAME) {
             responseRequired = true;
-            protoResponse.push(0x3);
+            
             //select random
 
         }
         if (input.STOC_SELECT_TP) {
-            responseRequired = true;
-            protoResponse.push(0x4);
+            network.write(makeCTOS('CTOS_TP_RESULT', 0));
             //pick who goes first
         }
         if (input.STOC_HAND_RESULT) {
             responseRequired = false;
+            network.write(makeCTOS('CTOS_TP_RESULT', 0));
             //get hand result
         }
         if (input.STOC_TP_RESULT) {
             responseRequired = false;
+            
             //who is going first after picking
         }
         if (input.STOC_CHANGE_SIDE) {
@@ -717,13 +728,18 @@ function CommandParser(state, network) {
         }
         if (input.STOC_HS_PLAYER_ENTER) {
             //player name enterd in slot
-            makeCTOS('CTOS_LEAVE_GAME');
+            
         }
         if (input.STOC_HS_PLAYER_CHANGE) {
             //player slot update
             //state.lobby[input.loc] = input.player;
-            console.log('trying to start game');
-            network.write(makeCTOS('CTOS_START'));
+            console.log('trying to start game', state.lobby.totalplayers);
+            state.lobby.totalplayers++;
+            if (state.lobby.totalplayers > 1) {
+                network.write(makeCTOS('CTOS_START'));
+                network.write(makeCTOS('CTOS_HAND_RESULT', rps()));
+            }
+            
         }
         if (input.STOC_HS_WATCH_CHANGE) {
             //NUMBER OF WTACHERS changes
