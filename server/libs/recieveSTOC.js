@@ -10,72 +10,72 @@ module.exports = function recieveSTOC(packet) {
         iter = 0;
 
     task[packet.STOC] = true;
-    
+    //console.log(packet);
     switch (packet.STOC) {
     case ("STOC_UNKNOWN"):
         break;
 
     case ("STOC_GAME_MSG"):
-        command = enums.STOC.STOC_GAME_MSG[task.STOC_GAME_MSG.message[0]];
-        task.STOC_GAME_MSG.command = command;
+        command = enums.STOC.STOC_GAME_MSG[packet.message[0]];
+        task.command = command;
         bitreader++;
         switch (command) {
         case ('MSG_START'):
-            task.playertype = packet[1];
-            task.lifepoints1 = packet.readUInt16LE(2);
-            task.lifepoints2 = packet.readUInt16LE(6);
-            task.player1decksize = packet.readUInt8(10);
-            task.player1extrasize = packet.readUInt8(12);
-            task.player2decksize = packet.readUInt8(14);
-            task.player2extrasize = packet.readUInt8(16);
+            task.playertype = packet.message[1];
+            task.lifepoints1 = packet.message.readUInt16LE(2);
+            task.lifepoints2 = packet.message.readUInt16LE(6);
+            task.player1decksize = packet.message.readUInt8(10);
+            task.player1extrasize = packet.message.readUInt8(12);
+            task.player2decksize = packet.message.readUInt8(14);
+            task.player2extrasize = packet.message.readUInt8(16);
             break;
 
         case ('MSG_HINT'):
-            console.log('MSG_HINT', packet);
-            task.hintplayer = packet[1];
-            task.hintcont = packet[2];
-            task.hintspeccount = packet[3];
-            task.hintforce = packet[4];
+            //console.log('MSG_HINT', packet);
+            task.hintplayer = packet.message[1];
+            task.hintcont = packet.message[2];
+            task.hintspeccount = packet.message[3];
+            task.hintforce = packet.message[4];
                 //whole case system that goes here....
                 //todo...
             break;
 
         case ('MSG_NEW_TURN'):
-            task.player = packet[1];
+            task.player = packet.message[1];
             break;
 
         case ('MSG_WIN'):
-            task.win = packet[1];
+            task.win = packet.message[1];
             //need to double check for more variables
             break;
 
         case ('MSG_NEW_PHASE'):
-            task.phase = packet[1];
+            task.phase = packet.message[1];
             break;
 
         case ('MSG_DRAW'):
-            task.drawplayer = packet[1];
-            task.draw = packet[2];
+            task.drawplayer = packet.message[1];
+            task.draw = packet.message[2];
             task.cardslist = [];
             task.drawReadposition = 3;
             break;
                 
         case ('MSG_SHUFFLE_DECK'):
-            task.shuffle = packet[1];
+            task.shuffle = packet.message[1];
             break;
 
         case ('MSG_SHUFFLE_HAND'):
-            task.layout = packet[1];
+            task.layout = packet.message[1];
             break;
                 
         case ('MSG_CHAINING'):
             break; //
         case ('MSG_CHAINED'):
-            task.ct = packet[1];
+            task.ct = packet.message[1];
             break;
                 
         case ('MSG_CHAIN_SOLVING'):
-            task.ct = packet[1];
+            task.ct = packet.message[1];
             break;
 
         case ('MSG_CHAIN_SOLVED'):
@@ -91,18 +91,18 @@ module.exports = function recieveSTOC(packet) {
             break; //graphical and trigger only for replay
 
         case ('MSG_CARD_SELECTED'):
-            /*  player = packet[1];*/
-            task.count = packet[2];
+            /*  player = packet.message[1];*/
+            task.count = packet.message[2];
             break;
 
         case ('MSG_PAY_LPCOST'):
-            task.player = packet[1];
-            task.lpcost = packet.readUInt16LE(2);
+            task.player = packet.message[1];
+            task.lpcost = packet.message.readUInt16LE(2);
             break;
 
         case ('MSG_DAMAGE'):
-            task.player = packet[1];
-            task.damage = packet.readUInt16LE(2);
+            task.player = packet.message[1];
+            task.damage = packet.message.readUInt16LE(2);
             break;
                 
         case ('MSG_SUMMONING '):
@@ -110,119 +110,121 @@ module.exports = function recieveSTOC(packet) {
             break;
                 
         case ('MSG_SELECT_IDLECMD'):
+            console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
+            task.command = 'MSG_SELECT_IDLECMD';
             //https://github.com/Fluorohydride/ygopro/blob/d9450dbb35676db3d5b7c2a5241a54d7f2c21e98/ocgcore/playerop.cpp#L69
-            task.idleplayer = packet[1];
+            task.idleplayer = packet.message[1];
             iter = 0;
             bitreader++;
             task.summonable_cards = [];
-            for (iter; packet[bitreader] > iter; iter++) {
-                task.summonable.push({
-                    code : packet.readUInt16LE(bitreader + 1),
-                    controller : packet[bitreader + 5],
-                    location : packet[bitreader + 6],
-                    sequence : packet[bitreader + 7]
+            for (iter; packet.message[bitreader] > iter; iter++) {
+                task.summonable_cards.push({
+                    code : packet.message.readUInt16LE(bitreader + 1),
+                    controller : packet.message[bitreader + 5],
+                    location : packet.message[bitreader + 6],
+                    sequence : packet.message[bitreader + 7]
                 });
                 bitreader = bitreader + 7;
             }
             iter = 0;
             bitreader++;
             task.spsummonable_cards = [];
-            for (iter; packet[bitreader] > iter; iter++) {
-                task.spsummonable.push({
-                    code : packet.readUInt16LE(bitreader + 1),
-                    controller : packet[bitreader + 5],
-                    location : packet[bitreader + 6],
-                    sequence : packet[bitreader + 7]
+            for (iter; packet.message[bitreader] > iter; iter++) {
+                task.spsummonable_cards.push({
+                    code : packet.message.readUInt16LE(bitreader + 1),
+                    controller : packet.message[bitreader + 5],
+                    location : packet.message[bitreader + 6],
+                    sequence : packet.message[bitreader + 7]
                 });
                 bitreader = bitreader + 7;
             }
             iter = 0;
             bitreader++;
             task.repositionable_cards = [];
-            for (iter; packet[bitreader] > iter; iter++) {
+            for (iter; packet.message[bitreader] > iter; iter++) {
                 task.repositionable_cards.push({
-                    code : packet.readUInt16LE(bitreader + 1),
-                    controller : packet[bitreader + 5],
-                    location : packet[bitreader + 6],
-                    sequence : packet[bitreader + 7]
+                    code : packet.message.readUInt16LE(bitreader + 1),
+                    controller : packet.message[bitreader + 5],
+                    location : packet.message[bitreader + 6],
+                    sequence : packet.message[bitreader + 7]
                 });
                 bitreader = bitreader + 7;
             }
             iter = 0;
             bitreader++;
             task.msetable_cards = [];
-            for (iter; packet[bitreader] > iter; iter++) {
+            for (iter; packet.message[bitreader] > iter; iter++) {
                 task.msetable_cards.push({
-                    code : packet.readUInt16LE(bitreader + 1),
-                    controller : packet[bitreader + 5],
-                    location : packet[bitreader + 6],
-                    sequence : packet[bitreader + 7]
+                    code : packet.message.readUInt16LE(bitreader + 1),
+                    controller : packet.message[bitreader + 5],
+                    location : packet.message[bitreader + 6],
+                    sequence : packet.message[bitreader + 7]
                 });
                 bitreader = bitreader + 7;
             }
             iter = 0;
             bitreader++;
             task.select_chains = [];
-            for (iter; packet[bitreader] > iter; iter++) {
+            for (iter; packet.message[bitreader] > iter; iter++) {
                 task.select_chains.push({
-                    code : packet.readUInt16LE(bitreader + 1),
-                    controller : packet[bitreader + 5],
-                    location : packet[bitreader + 6],
-                    sequence : packet[bitreader + 7]
+                    code : packet.message.readUInt16LE(bitreader + 1),
+                    controller : packet.message[bitreader + 5],
+                    location : packet.message[bitreader + 6],
+                    sequence : packet.message[bitreader + 7]
                 });
                 bitreader = bitreader + 7;
             }
             iter = 0;
             bitreader++;
             task.ssetable_cards = [];
-            for (iter; packet[bitreader] > iter; iter++) {
+            for (iter; packet.message[bitreader] > iter; iter++) {
                 task.ssetable_cards.push({
-                    code : packet.readUInt16LE(bitreader + 1),
-                    controller : packet[bitreader + 5],
-                    location : packet[bitreader + 6],
-                    sequence : packet[bitreader + 7]
+                    code : packet.message.readUInt16LE(bitreader + 1),
+                    controller : packet.message[bitreader + 5],
+                    location : packet.message[bitreader + 6],
+                    sequence : packet.message[bitreader + 7]
                 });
                 bitreader = bitreader + 7;
             }
             iter = 0;
             bitreader++;
             task.select_chains = [];
-            for (iter; packet[bitreader] > iter; iter++) {
+            for (iter; packet.message[bitreader] > iter; iter++) {
                 task.select_chains.push({
-                    code : packet.readUInt16LE(bitreader + 1),
-                    controller : packet[bitreader + 5],
-                    location : packet[bitreader + 6],
-                    sequence : packet[bitreader + 7]
+                    code : packet.message.readUInt16LE(bitreader + 1),
+                    controller : packet.message[bitreader + 5],
+                    location : packet.message[bitreader + 6],
+                    sequence : packet.message[bitreader + 7]
                 });
                 bitreader = bitreader + 7;
             }
-            task.bp = packet[bitreader];
-            task.ep = packet[bitreader + 1];
-            task.shufflecount = packet[bitreader + 2];
+            task.bp = packet.message[bitreader];
+            task.ep = packet.message[bitreader + 1];
+            task.shufflecount = packet.message[bitreader + 2];
             //https://github.com/Fluorohydride/ygopro/blob/d9450dbb35676db3d5b7c2a5241a54d7f2c21e98/ocgcore/playerop.cpp#L147
             //something is gonna go wrong;
             break;
 
         case ('MSG_MOVE'):
-            task.code = packet.readUInt16LE(1);
-            task.pc = packet[5]; // original controller
-            task.pl = packet[6]; // original cLocation
-            task.ps = packet[7]; // original sequence (index)
-            task.pp = packet[8]; // padding??
-            task.cc = packet[9]; // current controller
-            task.cl = packet[10]; // current cLocation
-            task.cs = packet[11]; // current sequence (index)
-            task.cp = packet[12]; // current position
-            task.reason = packet.readUInt16LE[12]; //debug data??
+            task.code = packet.message.readUInt16LE(1);
+            task.pc = packet.message[5]; // original controller
+            task.pl = packet.message[6]; // original cLocation
+            task.ps = packet.message[7]; // original sequence (index)
+            task.pp = packet.message[8]; // padding??
+            task.cc = packet.message[9]; // current controller
+            task.cl = packet.message[10]; // current cLocation
+            task.cs = packet.message[11]; // current sequence (index)
+            task.cp = packet.message[12]; // current position
+            task.reason = packet.message.readUInt16LE[12]; //debug data??
             break;
 
         case ('MSG_POS_CHANGE'):
-            task.code = packet.readUInt16LE(1);
-            task.cc = packet[5]; // current controller
-            task.cl = packet[6]; // current cLocation
-            task.cs = packet[7]; // current sequence (index)
-            task.pp = packet[8]; // padding??
-            task.cp = packet[9]; // current position
+            task.code = packet.message.readUInt16LE(1);
+            task.cc = packet.message[5]; // current controller
+            task.cl = packet.message[6]; // current cLocation
+            task.cs = packet.message[7]; // current sequence (index)
+            task.pp = packet.message[8]; // padding??
+            task.cp = packet.message[9]; // current position
             break;
 
         case ('MSG_SET'):
@@ -235,12 +237,12 @@ module.exports = function recieveSTOC(packet) {
                 
             
         case ('MSG_SUMMONING'):
-            task.code = packet.readUInt16LE(1);
+            task.code = packet.message.readUInt16LE(1);
             //check for variables
             break;
                 
         case ('MSG_SPSUMMONING'):
-            task.code = packet.readUInt16LE(1);
+            task.code = packet.message.readUInt16LE(1);
             break;
                 
         case ('MSG_SUMMONED'):
@@ -254,34 +256,36 @@ module.exports = function recieveSTOC(packet) {
                 
         case ('MSG_FLIPSUMMONING'):
             // notice pp is missing, and everything is upshifted; not repeating code.
-            task.code = packet.readUInt16LE(1);
-            task.cc = packet[5]; // current controller
-            task.cl = packet[6]; // current cLocation
-            task.cs = packet[7]; // current sequence (index)
-            task.cp = packet[8]; // current position
+            task.code = packet.message.readUInt16LE(1);
+            task.cc = packet.message[5]; // current controller
+            task.cl = packet.message[6]; // current cLocation
+            task.cs = packet.message[7]; // current sequence (index)
+            task.cp = packet.message[8]; // current position
             break;
 
         case ('MSG_UPDATE_DATA'):
-            task.player = packet[1];
-            task.fieldlocation = packet[2];
+                console.log('?????????????????????????????');
+            task.player = packet.message[1];
+            task.fieldlocation = packet.message[2];
             task.fieldmodel = enums.locations[task.fieldlocation];
             break;
 
         case ('MSG_UPDATE_CARD'):
-            task.udplayer = packet[1];
-            task.udfieldlocation = packet[2];
-            task.udindex = packet[3];
-            task.udcard = makeCard(packet, 8, task.udplayer).card;
+            task.udplayer = packet.message[1];
+            task.udfieldlocation = packet.message[2];
+            task.udindex = packet.message[3];
+            task.udcard = makeCard(packet.message, 8, task.udplayer).card;
             break;
         
         default:
-            console.log(command, packet);
+            console.log('bad', command, packet, task);
             break;
         }
-        break;
+        return task;
+    
             
     case ("STOC_ERROR_MSG"):
-        command = enums.STOC.STOC_ERROR_MSG[task.STOC_ERROR_MSG.message[0]];
+        command = enums.STOC.STOC_ERROR_MSG[packet.message[0]];
         switch (command) {
         case (null):
             break;
@@ -299,10 +303,12 @@ module.exports = function recieveSTOC(packet) {
         break;
 
     case ("STOC_HAND_RESULT"):
-        task.showcardcode = 0; //(pkt->res1 - 1) + ((pkt->res2 - 1) << 16);
+        task.showcardcode = (packet.message[0] - 1) + ((packet.message[1] - 1) << 16);
 		task.showcarddif = 50;
 		task.showcardp = 0;
 		task.showcard = 100;
+        task.res1 = packet.message[0];
+        task.res2 = packet.message[1];
         break;
 
     case ("STOC_TP_RESULT"):
@@ -321,7 +327,7 @@ module.exports = function recieveSTOC(packet) {
         break;
 
     case ("STOC_TYPE_CHANGE"):
-        task.typec = packet[0];
+        task.typec = packet.message[0];
         task.pos = task.typec & 0xF;
         task.ishost = ((task.typec >> 4) & 0xF) !== 0;
         break;
@@ -341,29 +347,29 @@ module.exports = function recieveSTOC(packet) {
         break;
 
     case ("STOC_TIME_LIMIT"):
-        task.player = packet[0];
-        task.time = packet[1] + packet[2];
+        task.player = packet.message[0];
+        task.time = packet.message[1] + packet.message[2];
         break;
 
     case ("STOC_CHAT"):
-        task.from = packet[0] + packet[1];
+        task.from = packet.message[0] + packet.message[1];
         task.chat = packet.toString('utf16le', 2);
         break;
 
     case ("STOC_HS_PLAYER_ENTER"):
         task.person = packet.toString('utf16le', 0, 40);
-        task.position = packet[41];
+        task.position = packet.message[41];
         break;
 
     case ("STOC_HS_PLAYER_CHANGE"):
-        task.change = packet[0];
+        task.change = packet.message[0];
         task.changepos = (task.change >> 4) & 0xF;
         task.state = task.change & 0xF;
             
         break;
 
     case ("STOC_HS_WATCH_CHANGE"):
-        task.spectators = packet[0];
+        task.spectators = packet.message[0];
         break;
 
     }
