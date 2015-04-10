@@ -533,7 +533,7 @@ function DuelConnection(roompass) {
         duelConnections.end();
     });
     duelConnections.on('data', function (data) {
-        console.log('data');
+        //console.log('data');
 
     });
     return duelConnections;
@@ -560,13 +560,17 @@ function CommandParser(state, network) {
         eventEmitter = new events.EventEmitter();
 
     return function (input) {
-        console.log('trying', input);
+        if (!input.STOC_GAME_MSG) {
+            console.log('trying', input);
+        }
+       
         if (input.STOC_UNKNOWN) {
             responseRequired = false;
             //bug this command is never to be hit.
         }
         if (input.STOC_GAME_MSG) {
             //case deeper, actuall gameplay
+            console.log(input);
             switch (input.STOC_GAME_MSG.command) {
             case ('MSG_HINT'):
                 break;
@@ -620,6 +624,7 @@ function CommandParser(state, network) {
                 break;
 
             case ('MSG_SELECT_IDLECMD'):
+                console.log(input);
                 break;
 
             case ('MSG_MOVE'):
@@ -680,7 +685,13 @@ function CommandParser(state, network) {
         }
         if (input.STOC_HAND_RESULT) {
             responseRequired = false;
-            network.write(makeCTOS('CTOS_TP_RESULT', 0));
+            
+            if (input.res1 === input.res2) {
+                network.write(makeCTOS('CTOS_HAND_RESULT', rps()));
+            } else {
+                network.write(makeCTOS('CTOS_TP_RESULT', 0));
+            }
+            
             //get hand result
         }
         if (input.STOC_TP_RESULT) {
@@ -730,6 +741,7 @@ function CommandParser(state, network) {
             //player name enterd in slot
             
         }
+        
         if (input.STOC_HS_PLAYER_CHANGE) {
             //player slot update
             //state.lobby[input.loc] = input.player;
@@ -748,6 +760,7 @@ function CommandParser(state, network) {
         if (responseRequired) {
             return protoResponse;
         }
+        console.log('fall', input);
     };
 
 }
@@ -795,9 +808,9 @@ function Duel(roompass, botUsername) {
             commands = processTask(task);
 
             // process AI
-            console.log(task);
+            //console.log(task);
             for (l; commands.length > l; l++) {
-                console.log('sending in frame');
+                console.log('sending in frame', l, commands.length);
                 duel.commandParser(commands[l]);
             }
 
