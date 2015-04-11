@@ -264,7 +264,7 @@ module.exports = function recieveSTOC(packet) {
             break;
 
         case ('MSG_UPDATE_DATA'):
-                console.log('?????????????????????????????');
+        
             task.player = packet.message[1];
             task.fieldlocation = packet.message[2];
             task.fieldmodel = enums.locations[task.fieldlocation];

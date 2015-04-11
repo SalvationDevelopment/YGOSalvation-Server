@@ -1,0 +1,5 @@
+INSERT INTO "datas" VALUES ("13790574","1","0","155","33","2300","1000","4","4","16","0");
+INSERT INTO "datas" VALUES ("13790575","1","0","59","97","2400","2000","7","8192","32","0");
+
+INSERT INTO "texts" VALUES ("13790574","Opera the Melodious Diva","This card cannot attack during the turn in which it is Normal Summoned or flipped face-up. If this card is sent to the Graveyard by being used as a Fusion Material, you can activate this effect: “Melodious” monsters you control cannot destroyed by battle or card effects this turn.","","","","","","","","","","","","","","","","");
+INSERT INTO "texts" VALUES ("13790575","Red-Eyes Black Dragon Sword","Must be Special Summoned by sending 1 Dragon-Type monster you control or have in your hand to the Graveyard with “The Claw of Hermos”, and cannot be Special Summoned by other ways. If this card is Special Summoned: target 1 other monster on the field; equip this card to that monster. It gains 1000 ATK. If this card was equipped by its own effect, the equipped monster gains 500 ATK and DEF for each Dragon-Type monster in both player’s Graveyards or that they control.","","","","","","","","","","","","","","","","");
