@@ -517,11 +517,14 @@ function DuelConnection(roompass) {
             tosend = Buffer.concat([name, join]),
             decksend = Buffer.concat([surejoined, updateDeck, check]);
 
-        duelConnections.write(tosend);
+        
+        setTimeout(function () {
+            duelConnections.write(tosend);
+        }, 500);
         setTimeout(function () {
             duelConnections.write(decksend);
             console.log('Sent deck');
-        }, 500);
+        }, 1000);
     });
     duelConnections.on('error', function (error) {
         console.log(error);
@@ -571,7 +574,7 @@ function CommandParser(state, network) {
         if (input.STOC_GAME_MSG) {
             //case deeper, actuall gameplay
             console.log(input);
-            switch (input.STOC_GAME_MSG.command) {
+            switch (input.command) {
             case ('MSG_HINT'):
                 break;
 
@@ -624,7 +627,9 @@ function CommandParser(state, network) {
                 break;
 
             case ('MSG_SELECT_IDLECMD'):
-                console.log(input);
+                console.log(input,'----------------------------------------------------------------------');
+                OnSelectInitCommand([],input.bp,input.ep);
+                network.write(makeCTOS('CTOS_RESPONSE', new Buffer([7])));
                 break;
 
             case ('MSG_MOVE'):
@@ -773,6 +778,7 @@ function processTask(task, socket) {
         RESPONSE = false;
     for (i; task.length > i; i++) {
         output.push(recieveSTOC(task[i]));
+        console.log(output[i].command);
     }
 
     return output;
@@ -802,15 +808,16 @@ function Duel(roompass, botUsername) {
 
         frame = framer.input(data);
         for (newframes; frame.length > newframes; newframes++) {
-
+            console.log('calculating');
             task = parsePackets('STOC', new Buffer(frame[newframes]));
             //console.log('!', task);
             commands = processTask(task);
-
+            console.log(commands.length,l);
             // process AI
             //console.log(task);
+            l = 0;
             for (l; commands.length > l; l++) {
-                console.log('sending in frame', l, commands.length);
+                console.log('sending in frame', l, commands.length, commands[l].command);
                 duel.commandParser(commands[l]);
             }
 
