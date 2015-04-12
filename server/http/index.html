@@ -105,7 +105,7 @@
                 </ul>
 
             </nav>
-
+            <input id="login-username" type="tex"> 
             <div style="font-size:.5em; text-align:center; color:#747" id="versioninfo">Version 4 : Production 3 : Revision 1</div>
             <div style="font-size:1.5em; text-align:center; color:pink" class='webonly'></div>
         </div>
@@ -390,7 +390,23 @@
                 $(document.body).addClass("in-iframe");
                 launcher = true;
             } else {
-                $(document.body).addClass("web");
+               
+            }
+        });
+        function weblogin() {
+            $('#login-usename').val();
+            localStorage.nickname = $(document.body).addClass("web");
+            locallogin();
+            $('#login-usename').css('display':'none');
+        }
+        
+        $('#login-username').bind("enterKey",function(e){
+           weblogin();
+        });
+        $('#login-username').keyup(function(e){
+            if(e.keyCode == 13)
+            {
+                $(this).trigger("enterKey");
             }
         });
 
@@ -404,6 +420,7 @@
                     username.replace(/[^a-zA-Z0-9_]/g, "");
                 }
                 localStorage.nickname = username;
+                $('.launcheronly').css('display', 'inline-block');
             }
 
         }
@@ -411,7 +428,7 @@
 
 
             if (launcher) {
-                locallogin(true);
+                //locallogin(true);
                 setInterval(function () {
                     $.getJSON('http://127.0.0.1:9468/', function (data) { //small kittens hate localhost
                         var selected = $(".currentdeck option:selected").val();

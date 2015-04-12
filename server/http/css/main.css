@@ -1484,3 +1484,19 @@ div#news {
     height: 85vh;
     overflow-y: scroll;
 }
+input#login-username {
+  margin: 30px auto;
+  display: block;
+  background: rgba(255,255,255,.5);
+  border: none;
+  border-radius: 16px;
+  width: 15em;
+  padding: .4em;
+  text-align: center;
+  color: black !important;
+  font-weight: bold;
+}
+
+.web input#login-username {
+    display: none;
+}
