@@ -397,7 +397,7 @@
             $('#login-usename').val();
             localStorage.nickname = $(document.body).addClass("web");
             locallogin();
-            $('#login-usename').css('display':'none');
+            $('#login-usename').css('display','none');
         }
         
         $('#login-username').bind("enterKey",function(e){
@@ -429,7 +429,7 @@
 
             if (launcher) {
                 //locallogin(true);
-                $('webonly').css('display':'none');
+                $('webonly').css('display','none');
                 setInterval(function () {
                     $.getJSON('http://127.0.0.1:9468/', function (data) { //small kittens hate localhost
                         var selected = $(".currentdeck option:selected").val();
