@@ -55,7 +55,9 @@
           50% { background-color: white; -webkit-box-shadow: 0 0 18px white; }
           to { background-color: #ccc; -webkit-box-shadow: 0 0 3px #333; }
         }
-        
+        .unlogged.launcher .loophole {
+            display : none;
+        }
     </style>
 
 
@@ -89,7 +91,7 @@
             </li>
             <li class="launcheronly"><span class="psudolinksingle" onclick='ygopro("-r")'>Replays</span>
             </li>
-            <li><span class="psudolinksingle" onclick="joinGamelist();singlesitenav('gamelist');">Game List</span>
+            <li><span class="psudolinksingle loophole" onclick="joinGamelist();singlesitenav('gamelist');">Game List</span>
             </li>
             <li class="launcheronly"><span class="psudolinksingle" onclick="singlesitenav('host')">Host</span>
             </li>
