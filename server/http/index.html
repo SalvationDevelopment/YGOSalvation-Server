@@ -36,17 +36,26 @@
           background: rgba(255,255,255,.5);
           border: none;
           border-radius: 16px;
-          width: 15em;
+          width: 25em;
           padding: .4em;
           text-align: center;
           color: black !important;
           font-weight: bold;
+        -webkit-animation-name: pulse;
+        -webkit-animation-duration: 2s;
+        -webkit-animation-iteration-count: infinite;
         }
         
         
         .unlogged input#login-username {
             display: block;
         }
+        @-webkit-keyframes pulse {
+          from { background-color: #ccc; -webkit-box-shadow: 0 0 3px #333; }
+          50% { background-color: white; -webkit-box-shadow: 0 0 18px white; }
+          to { background-color: #ccc; -webkit-box-shadow: 0 0 3px #333; }
+        }
+        
     </style>
 
 
@@ -131,7 +140,7 @@
                 </ul>
 
             </nav>
-            <input id="login-username" type="text" class="launcheronly" placeholder="USERNAME"> 
+            <input id="login-username" type="text" class="launcheronly" placeholder="Enter Username to Login"> 
             <div style="font-size:.5em; text-align:center; color:#747" id="versioninfo">Version 4 : Production 3 : Revision 1</div>
             <div style="font-size:1.5em; text-align:center; color:pink" class='webonly'></div>
         </div>
