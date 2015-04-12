@@ -1484,8 +1484,3 @@ div#news {
     height: 85vh;
     overflow-y: scroll;
 }
-
-
-.web input#login-username {
-    display: none;
-}

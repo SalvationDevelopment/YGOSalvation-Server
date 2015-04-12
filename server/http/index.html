@@ -30,9 +30,9 @@
             display:none;
         }
         
-        input#login-username {
-          margin: 30px auto;
-          display: block;
+        #login-username {
+          margin: 20px auto;
+          display: none;
           background: rgba(255,255,255,.5);
           border: none;
           border-radius: 16px;
@@ -44,8 +44,8 @@
         }
         
         
-        .web input#login-username {
-            display: none;
+        .unlogged input#login-username {
+            display: block;
         }
     </style>
 
@@ -97,7 +97,7 @@
     <header style="padding-top:50px;top:0vh;" id='home'>
         <div id="homecontainer">
             <span class="psudolinksingle" onclick="singlesitenav('home')">
-                <h1 style="padding-top:140px;">
+                <h1 style="padding-top:80px;">
             <span style="color:#e4a;">YGOPro</span> Salvation Server</h1>
             </span>
             <h2>Online Yu-Gi-Oh! Simulator</h2>
@@ -416,7 +416,7 @@
                 $(document.body).addClass("in-iframe");
                 launcher = true;
             } else {
-               
+               $(document.body).addClass("web");
             }
         });
         function weblogin() {
