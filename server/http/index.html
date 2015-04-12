@@ -114,7 +114,7 @@
                 </ul>
 
             </nav>
-            <input id="login-username" type="text" class="launcheronly"> 
+            <input id="login-username" type="text" class=""> 
             <div style="font-size:.5em; text-align:center; color:#747" id="versioninfo">Version 4 : Production 3 : Revision 1</div>
             <div style="font-size:1.5em; text-align:center; color:pink" class='webonly'></div>
         </div>
@@ -410,11 +410,14 @@
         }
         
         $('#login-username').bind("enterKey",function(e){
-           weblogin();
+           console.log('detect2');
+            weblogin();
         });
         $('#login-username').keyup(function(e){
+            console.log('detect0');
             if(e.keyCode == 13)
             {
+                console.log('detect1');
                 $(this).trigger("enterKey");
             }
         });
