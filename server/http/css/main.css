@@ -1485,3 +1485,7 @@ div#news {
     overflow-y: scroll;
 }
 
+
+.web input#login-username {
+    display: none;
+}
