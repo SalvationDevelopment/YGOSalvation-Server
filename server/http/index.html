@@ -22,6 +22,15 @@
     <link rel="stylesheet" href="css/animation.css">
     <script src="js/primus.js"></script>
     <script src="js/battlepack3.js"></script>
+    <style>
+        .web .launcheronly {
+            display:none;
+        }
+        .unlogged .launcheronly {
+            display:none;
+        }
+        
+    </style>
 
 
     <script>
@@ -41,7 +50,7 @@
 
 </head>
 
-<body>
+<body class="unlogged">
     <div style="z-index:40; position:relative;">
         <span class="psudolinksingle" onclick="singlesitenav('home')" id='psudologo'>
             <h1 style="font-size:1.2em">
@@ -105,7 +114,7 @@
                 </ul>
 
             </nav>
-            <input id="login-username" type="tex"> 
+            <input id="login-username" type="text" class="launcheronly"> 
             <div style="font-size:.5em; text-align:center; color:#747" id="versioninfo">Version 4 : Production 3 : Revision 1</div>
             <div style="font-size:1.5em; text-align:center; color:pink" class='webonly'></div>
         </div>
@@ -420,7 +429,7 @@
                     username.replace(/[^a-zA-Z0-9_]/g, "");
                 }
                 localStorage.nickname = username;
-                $('.launcheronly').css('display', 'inline-block');
+               $(document.body).removeClass("unlogged");
             }
 
         }
