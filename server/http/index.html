@@ -403,21 +403,21 @@
             }
         });
         function weblogin() {
-            $('#login-usename').val();
-            localStorage.nickname = $(document.body).addClass("web");
+           
+            localStorage.nickname = $('#login-usename').val();
             locallogin();
-            $('#login-usename').css('display','none');
+            
+           
+             console.log('detect');
         }
         
         $('#login-username').bind("enterKey",function(e){
-           console.log('detect2');
+          
             weblogin();
         });
         $('#login-username').keyup(function(e){
-            console.log('detect0');
             if(e.keyCode == 13)
             {
-                console.log('detect1');
                 $(this).trigger("enterKey");
             }
         });
@@ -434,6 +434,8 @@
                 localStorage.nickname = username;
                $(document.body).removeClass("unlogged");
             }
+             
+            $(document.body).addClass("launcher").removeClass('unlogged').removeClass('web');
 
         }
         $(document).ready(function () {
