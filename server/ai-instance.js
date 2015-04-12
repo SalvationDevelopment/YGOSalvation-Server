@@ -1,4 +1,4 @@
-/*jslint node:true, plusplus: true*/
+/*jslint node:true, plusplus: true, bitwise: true*/
 //taken from server.js, just done in reverse.
 // represnts a single duel connection.
 var Framemaker = require('./libs/parseframes.js'), //queue generator
@@ -137,7 +137,9 @@ function OnSelectBattleCommand(cards, attacker) {
 
 function OnSelectInitCommand(cards, to_bp_allowed, to_ep_allowed) {
     'use strict';
-    return 0; //return index
+    var Index = 0,
+        Action = 7;
+    return ((Index << 16) + Action); //return index
 }
 
 function GameState() {
@@ -560,9 +562,11 @@ function CommandParser(state, network) {
 
     var protoResponse = [],
         responseRequired = false,
-        eventEmitter = new events.EventEmitter();
+        eventEmitter = new events.EventEmitter(),
+        r = 0;
 
     return function (input) {
+
         if (!input.STOC_GAME_MSG) {
             console.log('trying', input);
         }
@@ -576,6 +580,12 @@ function CommandParser(state, network) {
             console.log(input);
             switch (input.command) {
             case ('MSG_HINT'):
+                break;
+            case ('MSG_RETRY'):
+                console.log(OnSelectInitCommand([], input.bp, input.ep));
+                r = Math.floor((Math.random() * 16));
+                network.write(makeCTOS('CTOS_RESPONSE', new Buffer([r])));
+                console.log('r', r);
                 break;
 
             case ('MSG_NEW_TURN'):
@@ -622,14 +632,21 @@ function CommandParser(state, network) {
 
             case ('MSG_PAY_LPCOST'):
                 break;
+                    
 
             case ('MSG_DAMAGE'):
                 break;
 
             case ('MSG_SELECT_IDLECMD'):
-                console.log(input,'----------------------------------------------------------------------');
-                OnSelectInitCommand([],input.bp,input.ep);
+                console.log(input, '----------------------------------------------------------------------');
+                OnSelectInitCommand([], input.bp, input.ep);
                 network.write(makeCTOS('CTOS_RESPONSE', new Buffer([7])));
+                break;
+            
+            case ('MSG_SELECT_CARD'):
+                console.log(input);
+                OnSelectCard();
+                network.write(makeCTOS('CTOS_RESPONSE', new Buffer([0])));
                 break;
 
             case ('MSG_MOVE'):
@@ -812,7 +829,7 @@ function Duel(roompass, botUsername) {
             task = parsePackets('STOC', new Buffer(frame[newframes]));
             //console.log('!', task);
             commands = processTask(task);
-            console.log(commands.length,l);
+            console.log(commands.length, l);
             // process AI
             //console.log(task);
             l = 0;
