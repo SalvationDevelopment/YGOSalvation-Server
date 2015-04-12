@@ -401,7 +401,7 @@
                 var username = prompt('Username: ', localStorage.nickname);
                 while (!username) {
                     username = prompt('Username: ', localStorage.nickname);
-                    username.replace(/[^a-zA-Z0-9 ]/g, "");
+                    username.replace(/[^a-zA-Z0-9]/g, "");
                 }
                 localStorage.nickname = username;
             }
