@@ -55,7 +55,7 @@
           50% { background-color: white; -webkit-box-shadow: 0 0 18px white; }
           to { background-color: #ccc; -webkit-box-shadow: 0 0 3px #333; }
         }
-        .unlogged.launcher .loophole {
+        .unlogged.in-iframe .loophole {
             display : none;
         }
     </style>
@@ -90,8 +90,8 @@
             <li class="launcheronly"><span class="psudolinksingle" onclick='ygopro("-d")'>Deck Edit</span>
             </li>
             <li class="launcheronly"><span class="psudolinksingle" onclick='ygopro("-r")'>Replays</span>
-            </li>
-            <li><span class="psudolinksingle loophole" onclick="joinGamelist();singlesitenav('gamelist');">Game List</span>
+            </li class="loophole">
+            <li><span class="psudolinksingle" onclick="joinGamelist();singlesitenav('gamelist');">Game List</span>
             </li>
             <li class="launcheronly"><span class="psudolinksingle" onclick="singlesitenav('host')">Host</span>
             </li>
@@ -432,7 +432,7 @@
         });
         function weblogin() {
            
-            localStorage.nickname = $('#login-usrename').val();
+            localStorage.nickname = $('#login-username').val();
             locallogin();
             
            
