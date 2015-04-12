@@ -22,7 +22,7 @@ var Primus = require('primus'), //Primus, our Sepiroth-Qliphopth Creator God. We
     client = new Socket('http://ygopro.us:24555'), //Connect the God to the tree;
     irc = require("irc"), // IRC Client/bot dependency
     config = { // IRC configuration
-        channels: ["#server", "#lobby"],
+        channels: ["#server"],
         server: "ygopro.us",
         botName: "[AI]SnarkyChild"
     }, // initate the bot

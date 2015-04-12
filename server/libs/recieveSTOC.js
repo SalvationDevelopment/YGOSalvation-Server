@@ -10,6 +10,7 @@ module.exports = function recieveSTOC(packet) {
         iter = 0;
 
     task[packet.STOC] = true;
+    task.command = '';
     //console.log(packet);
     switch (packet.STOC) {
     case ("STOC_UNKNOWN"):
@@ -111,6 +112,7 @@ module.exports = function recieveSTOC(packet) {
                 
         case ('MSG_SELECT_IDLECMD'):
             console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
+            console.log(task.command);
             task.command = 'MSG_SELECT_IDLECMD';
             //https://github.com/Fluorohydride/ygopro/blob/d9450dbb35676db3d5b7c2a5241a54d7f2c21e98/ocgcore/playerop.cpp#L69
             task.idleplayer = packet.message[1];
@@ -373,5 +375,6 @@ module.exports = function recieveSTOC(packet) {
         break;
 
     }
+    console.log(task.command);
     return task;
 };
