@@ -1478,9 +1478,11 @@ div[data-game^="32"] {
 
 }
 div#news {
-    width: 80%;
-    margin: 0 auto;
-    color: white;
-    height: 85vh;
-    overflow-y: scroll;
+  /* width: 80%; */
+  margin: 0 auto;
+  color: white;
+  height: 85vh;
+  overflow-y: scroll;
+  padding-left: 10%;
+  padding-right: 10%;
 }
