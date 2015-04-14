@@ -93,7 +93,7 @@
                 event.preventDefault();
             } else if (!launcher && target === 'forum') {
                 return true;
-            } else if ($('.unlogged').length > 0 && target === 'gamelist') {
+            } else if ($('.unlogged.in-iframe').length > 0 && target === 'gamelist') {
                 return;
             }
             $('header').css('top', '100vh');
