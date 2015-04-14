@@ -52,12 +52,37 @@
         }
         @-webkit-keyframes pulse {
           from { background-color: #ccc; -webkit-box-shadow: 0 0 3px #333; }
-          50% { background-color: white; -webkit-box-shadow: 0 0 18px white; }
+          50% { background-color: white; -webkit-box-shadow: 0 0 50px white; }
           to { background-color: #ccc; -webkit-box-shadow: 0 0 3px #333; }
         }
         .unlogged.in-iframe .loophole {
             display : none;
         }
+        .shine
+{
+    background: #222 -webkit-gradient(linear, left top, right top, from(#000), to(#000), color-stop(0.5, #fff)) 0 0 no-repeat;
+    -webkit-background-size: 20px 100%;
+    
+    color: rgba(255, 255, 255, 0.1);
+    -webkit-background-clip: text;
+    
+    -webkit-animation-name: shine;
+    -webkit-animation-duration: 10s;
+    -webkit-animation-iteration-count: infinite;
+    -webkit-animation-timing-function: linear;
+}
+
+@-webkit-keyframes shine
+{
+    0%
+    {
+        background-position: top left;
+    }
+    100%
+    {
+        background-position: top right;
+    }
+}
     </style>
 
 
@@ -110,7 +135,7 @@
     <header style="padding-top:50px;top:0vh;" id='home'>
         <div id="homecontainer">
             <span class="psudolinksingle" onclick="singlesitenav('home')">
-                <h1 style="padding-top:80px;">
+                <h1 style="padding-top:80px;"   class="shine">
             <span style="color:#e4a;">YGOPro</span> Salvation Server</h1>
             </span>
             <h2>Online Yu-Gi-Oh! Simulator</h2>
