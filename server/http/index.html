@@ -68,6 +68,8 @@
                 event.preventDefault();
             } else if (!launcher && target === 'forum') {
                 return true;
+            } else if ($('.unlogged').length > 0 && target === 'gamelist') {
+                return;
             }
             $('header').css('top', '100vh');
             $('#' + target).css('top', '0');
