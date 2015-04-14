@@ -61,10 +61,12 @@ INSERT OR REPLACE INTO "datas" VALUES("13790570","1","0","0","262146","0","0","0
 INSERT OR REPLACE INTO "datas" VALUES ("13790571","1","0","70","131074","0","0","0","0","0","0");
 INSERT OR REPLACE INTO "datas" VALUES ("13790572","1","0","273088583","97","3400","2000","10","256","16","0");
 INSERT OR REPLACE INTO "datas" VALUES ("13790573","1","0","199","33","1600","1200","4","2","16","0");
+INSERT OR REPLACE INTO "datas" VALUES ("13790576","1","0","152","16777249","1500","1500","84213764","2","16","0");
+INSERT OR REPLACE INTO "datas" VALUES ("13790577","1","0","159","16777249","800","1800","33685508","16384","1","0");
 
 INSERT OR REPLACE INTO "texts" VALUES(13790000,'Sea Dragoons of Draconia','Pendulum Scale = 7
 Pendulum Effect: When a monster is destroyed by battle: You can Special Summon 1 Normal Monster from your hand. You can only use this effect of "Sea Dragoons of Draconia" once per turn.
-===============
+              
 Monster Lore: Silently creeping in from the deep sea, elite black ops marine troops of the Draconia Empire wage an endless battle against the hated Principality of Dinon on the sea''s opposite shores.','','','','','','','','','','','','','','','','');
 INSERT OR REPLACE INTO "texts" VALUES(13790512,'Crystal Rose','Once per turn: You can send 1 "Gem-Knight" or "Melodious" monster from your hand or Deck to the Graveyard, and if you do, this card''s name becomes the sent monster''s, until the End Phase. If this card is in your Graveyard: You can banish 1 Fusion Monster from your Graveyard; Special Summon this card in Defense Position. You can only use this effect of "Crystal Rose" once per turn.','','','','','','','','','','','','','','','','');
 INSERT OR REPLACE INTO "texts" VALUES(13790513,'Protector of the Shrine','This card can be treated as 2 Tributes for the Tribute Summon of a Dragon-Type monster. While this card is in your hand or Graveyard, if a face-up Dragon-Type monster on the field is sent to the Graveyard because of a card effect or being destroyed by battle, except “Protector of the Shrine”: You can Special Summon this card, and if you do, if that monster in your Graveyard is a Dragon-Type Normal Monster, you can add 1 Dragon-Type Normal Monster from your Graveyard to your hand. You can only use this effect of "Protector of the Shrine" once per turn.','','','','','','','','','','','','','','','','');
@@ -72,37 +74,37 @@ INSERT OR REPLACE INTO "texts" VALUES(13790514,'Igknight Avenger','You can targe
 INSERT OR REPLACE INTO "texts" VALUES(13790515,'Igknight Dragnov','Pendulum Scale = 7
 Pendulum Effect:
 If you have an "Igknight" card in your other Pendulum Zone: You can destroy all cards in your Pendulum Zones, and if you do, add 1 FIRE Warrior-Type monster from your Deck or Graveyard to your hand.
-===============================
+                              
 Flavor Text:
 A veteran Igknight warrior with a one-track mind who hates twisted things. Perhaps because of this, from time to time he questions his own weapon.','','','','','','','','','','','','','','','','');
 INSERT OR REPLACE INTO "texts" VALUES(13790516,'Igknight Riot','Pendulum Scale = 7
 Pendulum Effect:
 If you have an "Igknight" card in your other Pendulum Zone: You can destroy all cards in your Pendulum Zones, and if you do, add 1 FIRE Warrior-Type monster from your Deck or Graveyard to your hand.
-===============================
+                              
 Flavor Text:
 A high level warrior of the Igknight. His dual-wield gunblades which are capable of cutting at a wide range regardless of location strikes fear into the hearts of not only the enemies but also his own comrades.','','','','','','','','','','','','','','','','');
 INSERT OR REPLACE INTO "texts" VALUES(13790517,'Igknight Eagle','Pendulum Scale = 2
 Pendulum Effect:
 If you have an "Igknight" card in your other Pendulum Zone: You can destroy all cards in your Pendulum Zones, and if you do, add 1 FIRE Warrior-Type monster from your Deck or Graveyard to your hand.
-===============================
+                              
 Flavor Text:
 An impulsive an action-oriented Igknight Warrior. His comrades call him "Teppoudama no Eagle" all the while keeping a sort of distance from him.','','','','','','','','','','','','','','','','');
 INSERT OR REPLACE INTO "texts" VALUES(13790518,'Igknight Caliber','Pendulum Scale = 2
 Pendulum Effect:
 If you have an "Igknight" card in your other Pendulum Zone: You can destroy all cards in your Pendulum Zones, and if you do, add 1 FIRE Warrior-Type monster from your Deck or Graveyard to your hand.
-===============================
+                              
 Flavor Text:
 The vigorous assault captain of the Igknights. His high vigor and spirit creating problems everywhere is a constant headache for his subordinates.','','','','','','','','','','','','','','','','');
 INSERT OR REPLACE INTO "texts" VALUES(13790519,'Igknight Magnum','Pendulum Scale = 7
 Pendulum Effect:
 If you have an "Igknight" card in your other Pendulum Zone: You can destroy all cards in your Pendulum Zones, and if you do, add 1 FIRE Warrior-Type monster from your Deck or Graveyard to your hand.
-===============================
+                              
 Flavor Text:
 The vigorous assault captain of the Igknights. His high vigor and spirit creating problems everywhere is a constant headache for his subordinates.','','','','','','','','','','','','','','','','');
 INSERT OR REPLACE INTO "texts" VALUES(13790520,'Igknight Musket','Pendulum Scale = 2
 Pendulum Effect:
 If you have an "Igknight" card in your other Pendulum Zone: You can destroy all cards in your Pendulum Zones, and if you do, add 1 FIRE Warrior-Type monster from your Deck or Graveyard to your hand.
-===============================
+                              
 Flavor Text:
 The Tactician of the Igknights who is known for being calm, collected and knowledgeable. In reality, it just takes a while for the blood to actually rush to his head, and he’s always angry inside.','','','','','','','','','','','','','','','','');
 INSERT OR REPLACE INTO "texts" VALUES(13790521,'Card of Red Jewel','Send 1 Level 7 “Red-Eyes” monster from your hand to the Graveyard; draw 2 cards, then you can send 1 Level 7 "Red-Eyes" monster from your Deck to the Graveyard. You can only activate 1 "Card of Red Jewel" per turn.','Do you want send 1 Red-Eyes monster from your deck to the Graveyard?','','','','','','','','','','','','','','','');
@@ -123,20 +125,20 @@ INSERT OR REPLACE INTO "texts" VALUES(13790533,'Igknight Burst','Once per turn, 
 INSERT OR REPLACE INTO "texts" VALUES(13790534,'Odd-Eyes Rebellion Dragon','Pendulum Scale = 4
 Pendulum Effect:
 Once per turn, if you do not have a card in your other Pendulum Zone: You can choose 1 Pendulum Monster from your Deck and place it in that Pendulum Zone.
-======================
+                      
 Monster Effect
 2 Level 7 Dragon-Type monsters
 When you Pendulum Summon; If you can Pendulum Summon Level 7 monsters, you can Pendulum Summon this face-up card from your Extra Deck. If this card is Xyz Summoned by using an Xyz Monster as any of its Materials: Destroy as many Level 7 or lower monsters your opponent controls as possible, and if you do, inflict 1000 damage to your opponent for each monster destroyed by this effect, also this card can make up to 3 attacks during each Battle Phase this turn. If this card in the Monster Zone is destroyed by battle or by card effect: You can destroy all cards in your Pendulum Zones, and if you do, place this card in your Pendulum Zone.','','','','','','','','','','','','','','','','');
 INSERT OR REPLACE INTO "texts" VALUES(13790535,'Creation Magician','Pendulum Scale = 8
 Pendulum Effect:
 Once per turn: You can target 1 Xyz Monster you control and 1 Level 5 or higher monster you control; the Rank of that Xyz Monster becomes the same as the Level of that Level 5 or higher monster, until the end of this turn. If you control more cards than your opponent, this card''s Pendulum Scale becomes 4.
-======================
+                      
 Monster Effect
 Your opponent takes no battle damage from attacks involving this card. Once per turn: You can target 1 other monster on the field; this card''s ATK becomes that monster''s, until the end of this turn.','','','','','','','','','','','','','','','','');
 INSERT OR REPLACE INTO "texts" VALUES(13790536,'Destruction Magician','Pendulum Scale = 3
 Pendulum Effect:
 Once per turn: You can target 1 Xyz Monster you control; this turn, it gains this effect: You can activate this card effect: Xyz Summon a monster using this card as xyz material.
-======================
+                      
 Monster Effect
 Once per turn, during either player’s turn: You can target 1 LIGHT monster on the field; negate its effects until the end of this turn.','Xyz Summon a monster using this card as Xyz Material.','','','','','','','','','','','','','','','');
 INSERT OR REPLACE INTO "texts" VALUES(13790537,'D/D/D D''Arc the Oracle Overlord','2 "D/D" monsters
@@ -187,4 +189,16 @@ INSERT OR REPLACE INTO "texts" VALUES ("13790571","Brilliant Fusion","When this 
 INSERT OR REPLACE INTO "texts" VALUES ("13790572","Gem-Knight Lady Brilliant Diamond","3 ""Gem-Knight"" monsters
 Must first be Fusion Summoned with the above Fusion Materials. You can only Special Summon ""Gem-Knight Lady Brilliant Diamond(s)"" once per turn. Once per turn: You can send 1 ""Gem-Knight"" monster you control to the Graveyard, and if you do, Special Summon 1 ""Gem-Knight"" Fusion Monster from your Extra Deck, ignoring its Summoning conditions.","","","","","","","","","","","","","","","","");
 INSERT OR REPLACE INTO "texts" VALUES ("13790573","Performagician Trick Clown","If this card is sent to the Graveyard: You can target 1 ""Performagician"" monster in your Graveyard; Special Summon it, but its ATK and DEF each become 0, then you take 1000 damage. You can only use this effect of ""Performagician Trick Clown"" once per turn.","","","","","","","","","","","","","","","","");
+INSERT OR REPLACE INTO "texts" VALUES ("13790576","Insight Magician","Pendulum Scale = 5
+Pendulum Effect:
+If you control another “Magician” or “Performapal” card in your other Pendulum Zone: You can destroy this card, and if you do, place 1 “Magician” Pendulum monster from your Deck in your Pendulum Zone, except “Insight Magician”.
+
+Monster Effect:
+You can discard this card from your hand, then target 1 card in your Pendulum Zone whose Pendulum Scale is different than its original value; its Pendulum Scale becomes its Original value until the end of the turn.","","","","","","","","","","","","","","","","");
+INSERT OR REPLACE INTO "texts" VALUES ("13790577","Performapal Camelose","Pendulum Scale = 2
+Pendulum Effect:
+Once per turn: You can target 1 face-up monster you control; all monsters your opponent controls lose 800 DEF until the end of the turn, also if that target attacks a Defense Position monster this turn, inflict piercing battle damage to your opponent.
+
+Monster Effect:
+If this card is destroyed in battle: You can make the monster that destroyed this card in battle lose 800 ATK.","","","","","","","","","","","","","","","","");
 COMMIT;
