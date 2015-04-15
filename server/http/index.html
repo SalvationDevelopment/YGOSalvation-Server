@@ -22,12 +22,7 @@
     <link rel="stylesheet" href="css/animation.css">
     <script src="js/primus.js"></script>
     <script src="js/battlepack3.js"></script>
-    <script src="js/vendor/audiojs/audio.min.js"></script>
-    <script>
-      audiojs.events.ready(function() {
-        var as = audiojs.createAll();
-      });
-    </script>
+
     <style>
         .web .launcheronly {
             display:none;
@@ -95,7 +90,7 @@
             width: 80% !important;
         }
         div#news {
-          height: 82vh;
+          height: 78.5vh;
         }
     </style>
 
@@ -362,7 +357,9 @@
         <div style="color:white; width:600px; margin:0 auto;" id="list">
 
         </div>
-        <audio src="http://ygopro.us/yugioh-ft-dj-harmony-your-move.mp3" style="width:100%" />
+        <audio style="width:100%" />
+            <source src="http://ygopro.us/yugioh-ft-dj-harmony-your-move.mp3" type="audio/mp3">
+        </audio>
     </header>
     <header style="padding-top:50px" id="settings">
 
