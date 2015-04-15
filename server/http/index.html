@@ -22,7 +22,7 @@
     <link rel="stylesheet" href="css/animation.css">
     <script src="js/primus.js"></script>
     <script src="js/battlepack3.js"></script>
-    <script src="vendor/audiojs/audio.min.js"></script>
+    <script src="js/vendor/audiojs/audio.min.js"></script>
     <script>
       audiojs.events.ready(function() {
         var as = audiojs.createAll();
@@ -64,19 +64,16 @@
         .unlogged.in-iframe .loophole {
             display : none;
         }
-        .shine
-{
-    background: #222 -webkit-gradient(linear, left top, right top, from(#000), to(#000), color-stop(0.5, #fff)) 0 0 no-repeat;
-    -webkit-background-size: 20px 100%;
-    
-    color: rgba(255, 255, 255, 0.1);
-    -webkit-background-clip: text;
-    
-    -webkit-animation-name: shine;
-    -webkit-animation-duration: 10s;
-    -webkit-animation-iteration-count: infinite;
-    -webkit-animation-timing-function: linear;
-}
+        .shine {
+          background: -webkit-gradient(linear, left top, right bottom, color-stop(0%,#000000), color-stop(38%,#000000), color-stop(38%,#000000), color-stop(44%,#ee44aa), color-stop(49%,#ffffff), color-stop(51%,#000000), color-stop(100%,#000000));
+  -webkit-background-size: 50% 100%;
+  color: rgba(255, 255, 255, 0.1);
+  -webkit-background-clip: text;
+  -webkit-animation-name: shine;
+  -webkit-animation-duration: 10s;
+  -webkit-animation-iteration-count: infinite;
+  -webkit-animation-timing-function: linear;
+    }
 
 @-webkit-keyframes shine
 {
@@ -175,6 +172,7 @@
                 </ul>
 
             </nav>
+            <audio src="yugioh-ft-dj-harmony-your-move.mp3" />
             <input id="login-username" type="text" class="launcheronly" placeholder="Enter Username to Login"> 
             <div style="font-size:.5em; text-align:center; color:#747" id="versioninfo">Version 4 : Production 3 : Revision 1</div>
             <div style="font-size:1.5em; text-align:center; color:pink" class='webonly'></div>
