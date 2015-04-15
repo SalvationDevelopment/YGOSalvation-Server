@@ -291,7 +291,7 @@ http.createServer(function (request, response) {
                     localStorage.dbtext = '3-Goats.cdb';
                 }
                 if (localStorage.roompass[0] === '3' && letter === 'j') {
-                    localStorage.dbtext = '1-Anime.cdb';
+                    localStorage.dbtext = 'Z-CWA.cdb';
                 }
                 if ((localStorage.roompass[0] === '0' || localStorage.roompass[0] === '1' || localStorage.roompass[0] === '2') && letter === 'j') {
                     localStorage.dbtext = '0-en-OCGTCG.cdb';
