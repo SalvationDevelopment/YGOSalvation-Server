@@ -2,7 +2,7 @@
     "name": "ygopro-js-server",
     "description": "YGOPro US Server (Salvation) - Saving Yu-Gi-Oh!",
     "main": "server/server.js",
-    "version": "4.2.1",
+    "version": "4.4.0",
     "keywords": [
     "ygopro",
     "my-card",
