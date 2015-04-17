@@ -639,7 +639,7 @@ function CommandParser(state, network) {
 
             case ('MSG_SELECT_IDLECMD'):
                 console.log(input, '----------------------------------------------------------------------');
-                OnSelectInitCommand([], input.bp, input.ep);
+                OnSelectInitCommand([input.summonable_cards, input.spsummonable_cards, input.repositionable_cards, input.msetable_cards], input.bp, input.ep);
                 network.write(makeCTOS('CTOS_RESPONSE', new Buffer([7])));
                 break;
             
