@@ -63,6 +63,27 @@ INSERT OR REPLACE INTO "datas" VALUES ("13790572","1","0","273088583","97","3400
 INSERT OR REPLACE INTO "datas" VALUES ("13790573","1","0","199","33","1600","1200","4","2","16","0");
 INSERT OR REPLACE INTO "datas" VALUES ("13790576","1","0","152","16777249","1500","1500","84213764","2","16","0");
 INSERT OR REPLACE INTO "datas" VALUES ("13790577","1","0","159","16777249","800","1800","33685508","16384","1","0");
+INSERT OR REPLACE INTO "datas" VALUES ("13790578","1","0","152","16777233","900","2700","134742023","2","2","0");
+INSERT OR REPLACE INTO "datas" VALUES ("13790579","1","0","152","16777233","1800","900","16842756","2","1","0");
+INSERT OR REPLACE INTO "datas" VALUES ("13790580","1","0","153","8388641","2700","2500","7","8192","2","0");
+INSERT OR REPLACE INTO "datas" VALUES ("13790581","1","0","0","33","-2","-2","10","2097152","64","0");
+INSERT OR REPLACE INTO "datas" VALUES ("13790582","1","0","152","16781345","700","1400","84213763","2","4","0");
+INSERT OR REPLACE INTO "datas" VALUES ("13790583","1","0","152","16777249","2100","1400","33685510","2","8","0");
+INSERT OR REPLACE INTO "datas" VALUES ("13790584","1","0","0","33","1700","1300","4","8","32","0");
+INSERT OR REPLACE INTO "datas" VALUES ("13790585","1","0","0","33","1300","1700","4","2","32","0");
+INSERT OR REPLACE INTO "datas" VALUES ("13790586","1","0","0","65538","0","0","0","0","0","0");
+INSERT OR REPLACE INTO "datas" VALUES ("13790587","1","0","0","4","0","0","0","0","0","0");
+INSERT OR REPLACE INTO "datas" VALUES ("13790588","1","0","4979","33","600","600","2","64","2","0");
+INSERT OR REPLACE INTO "datas" VALUES ("13790589","1","0","4979","33","2000","2000","6","64","2","0");
+INSERT OR REPLACE INTO "datas" VALUES ("13790590","1","0","0","131074","0","0","0","0","0","0");
+INSERT OR REPLACE INTO "datas" VALUES ("13790591","1","0","0","131074","0","0","0","0","0","0");
+INSERT OR REPLACE INTO "datas" VALUES ("13790592","1","0","4980","2097185","1000","1400","4","4","8","0");
+INSERT OR REPLACE INTO "datas" VALUES ("13790593","1","0","4980","161","2700","1200","9","4","16","0");
+INSERT OR REPLACE INTO "datas" VALUES ("13790594","1","0","4980","130","0","0","0","0","0","0");
+INSERT OR REPLACE INTO "datas" VALUES ("13790595","1","0","0","4","0","0","0","0","0","0");
+INSERT OR REPLACE INTO "datas" VALUES ("13790596","1","0","0","2","0","0","0","0","0","0");
+INSERT OR REPLACE INTO "datas" VALUES ("13790597","1","0","487","8225","2850","0","8","8192","4","0");
+INSERT OR REPLACE INTO "datas" VALUES ("13790598","1","0","487","16781345","1850","0","84213764","8192","16","0");
 
 INSERT OR REPLACE INTO "texts" VALUES(13790000,'Sea Dragoons of Draconia','Pendulum Scale = 7
 Pendulum Effect: When a monster is destroyed by battle: You can Special Summon 1 Normal Monster from your hand. You can only use this effect of "Sea Dragoons of Draconia" once per turn.
@@ -194,11 +215,55 @@ Pendulum Effect:
 If you control another “Magician” or “Performapal” card in your other Pendulum Zone: You can destroy this card, and if you do, place 1 “Magician” Pendulum monster from your Deck in your Pendulum Zone, except “Insight Magician”.
 
 Monster Effect:
-You can discard this card from your hand, then target 1 card in your Pendulum Zone whose Pendulum Scale is different than its original value; its Pendulum Scale becomes its Original value until the end of the turn.","","","","","","","","","","","","","","","","");
+You can discard this card from your hand, then target 1 card in your Pendulum Zone whose Pendulum Scale is different than its original value; its Pendulum Scale becomes its Original value until the end of the turn.","Place in Pendulum Zone","Target 1 Pendulum Card and return its Pendulum Scale to its Original Value","","","","","","","","","","","","","","");
 INSERT OR REPLACE INTO "texts" VALUES ("13790577","Performapal Camelose","Pendulum Scale = 2
 Pendulum Effect:
-Once per turn: You can target 1 face-up monster you control; all monsters your opponent controls lose 800 DEF until the end of the turn, also if that target attacks a Defense Position monster this turn, inflict piercing battle damage to your opponent.
+Once per turn: You can target 1 face-up monster you control; until the end of the turn, all monsters your opponent currently controls lose 800 DEF, also if that target attacks a Defense Position monster, inflict piercing battle damage to your opponent.
 
 Monster Effect:
-If this card is destroyed in battle: You can make the monster that destroyed this card in battle lose 800 ATK.","","","","","","","","","","","","","","","","");
+If this card is destroyed by battle: You can make the monster that destroyed it lose 800 ATK.","","","","","","","","","","","","","","","","");
+INSERT OR REPLACE INTO "texts" VALUES ("13790578","Dragonpit Magician","Pendulum Scale = 8
+Pendulum Effect:
+Once per turn, if you have a ""Magician"" card in your other Pendulum Zone: You can discard 1 Pendulum Monster, then target 1 Spell/Trap Card on the field; destroy it.","","","","","","","","","","","","","","","","");
+INSERT OR REPLACE INTO "texts" VALUES ("13790579","Dragonvein Magician","Pendulum Scale = 1
+Pendulum Effect:
+Once per turn, if you have a ""Magician"" card in your other Pendulum Zone: You can discard 1 Pendulum Monster, then target 1 face-up monster on the field; destroy it.","","","","","","","","","","","","","","","","");
+INSERT OR REPLACE INTO "texts" VALUES ("13790580","Odd-Eyes Absolute Dragon","2 Level 7 monsters
+When any player's monster declares an attack: You can detach 1 Xyz Material from this card; negate the attack, then you can Special Summon 1 ""Odd-Eyes"" monster from your hand or Graveyard. If this Xyz Summoned card is sent to the Graveyard: You can Special Summon 1 ""Odd-Eyes"" monster from your Extra Deck, except ""Odd-Eyes Absolute Dragon"". You can only use each effect of ""Odd-Eyes Absolute Dragon"" once per turn.","Special Summon 1 ""Odd-Eyes"" monster from your Hand or Graveyard.","","","","","","","","","","","","","","","");
+INSERT OR REPLACE INTO "texts" VALUES ("13790581","The Winged Dragon of Ra – Sphere Mode","Cannot be Special Summoned. Requires 3 Tributes to Normal Summon to your side of the field, or 3 Tributes of your opponent’s monsters to Normal Summon to your opponent’s side of the field. The control of this Normal Summoned card is returned to its original owner at the End Phase of next turn. Cannot attack, and cannot be targeted for an attack or by an opponent’s card effect. You can Tribute this card: Special Summon 1 “The Winged Dragon of Ra” from your hand or Deck, ignoring the Summoning conditions, but its ATK and DEF each become 4000.","Normal Summon to your opponent's side field?","","","","","","","","","","","","","","","");
+INSERT OR REPLACE INTO "texts" VALUES ("13790582","Noble Dragon Magician","Pendulum Scale = 5
+Pendulum Effect:
+If you do not have a ""Magician"" card in your other Pendulum Zone, destroy this card.
+
+Monster Effect:
+If this card is in your hand or Graveyard: You can target 1 Level 7 or higher ""Odd-Eyes"" monster you control; reduce its Level by 3, and if it does, Special Summon this card. Cannot be used as a Synchro Material, except for the Synchro Summon of a Dragon-Type monster. If this card is used for a Synchro Summon, and the other Synchro Material(s) are not ""Odd-Eyes"" monsters, place this card on the bottom of the Deck.","Place in Pendulum Zone","Special Summon","","","","","","","","","","","","","","");
+INSERT OR REPLACE INTO "texts" VALUES ("13790583","Peasant Dragon Magician","Pendulum Scale = 2
+Pendulum Effect:
+If you have a ""Magician"" card in your other Pendulum Zone: You can add 1 face-up ""Magician"" or ""Odd-Eyes"" Pendulum Monster from your Extra Deck to your hand, except ""Peasant Dragon Magician"". You can only use this effect of ""Peasant Dragon Magician"" once per turn.
+
+Monster Effect:
+If this card is Normal or Special Summoned: You can target 1 ""Magician"" Pendulum Monster or 1 ""Odd-Eyes"" monster in your Graveyard, except ""Peasant Dragon Magician""; add it to your hand. You can only use this effect of ""Peasant Dragon Magician"" once per turn.","","","","","","","","","","","","","","","","");
+INSERT OR REPLACE INTO "texts" VALUES ("13790584","Juragedo","During either player's Battle Step: You can Special Summon this card from your hand, and if you do, gain 1000 LP. During either player's turn: You can Tribute this card, then target 1 face-up monster you control; that target gains 1000 ATK until the end of the next turn.","","","","","","","","","","","","","","","","");
+INSERT OR REPLACE INTO "texts" VALUES ("13790585","Legion the Fiend Jester","During your Main Phase, you can Tribute Summon 1 Spellcaster-Type monster in addition to your Normal Summon/Set. (You can only gain this effect once per turn.) If this card is sent from the field to the Graveyard: You can add 1 Spellcaster-Type Normal Monster from your Deck or Graveyard to your hand. You can only use this effect of ""Legion the Fiend Jester"" once per turn.","","","","","","","","","","","","","","","","");
+INSERT OR REPLACE INTO "texts" VALUES ("13790586","Anti-Magic Arrows","During either player’s Battle Phase: Until the end of the turn, Spells, Traps, and Spell/Trap Effects cannot be activated. Cards and effects cannot be activated in response to this card's activation.","","","","","","","","","","","","","","","","");
+INSERT OR REPLACE INTO "texts" VALUES ("13790587","Multiple Destruction","If both players have 3 or more cards in their hand: Both players place their entire hand on the bottom of the Deck in any order, and if they do, you lose 300 LP for each card returned to the Deck, then both players draw 5 cards. You can only activate 1 ""Multiple Destruction"" per turn.","","","","","","","","","","","","","","","","");
+INSERT OR REPLACE INTO "texts" VALUES ("13790588","Aqua Actress - Guppy","Once per turn: You can Special Summon 1 ""Aqua Actress"" monster from your hand.","","","","","","","","","","","","","","","","");
+INSERT OR REPLACE INTO "texts" VALUES ("13790589","Aqua Actress - Arowana","Once per turn: You can add 1 ""Aqua Actress"" monster from deck to your hand.","","","","","","","","","","","","","","","","");
+INSERT OR REPLACE INTO "texts" VALUES ("13790590","Aquarium Stage","WATER monsters you control cannot be destroyed by battle, except with WATER monsters. ""Aqua Actress"" monsters you control are unaffected by your opponent's monster effects. If this card is sent from the field to the Graveyard: You can target 1 Aqua-Type monster in your Graveyard; Special Summon it, also you cannot Special Summon monsters for the rest of this turn, except Aqua-Type monsters.","","","","","","","","","","","","","","","","");
+INSERT OR REPLACE INTO "texts" VALUES ("13790591","Aquarium Lightning","You can only control 1 ""Aquarium Lighting"". If an ""Aqua Actress"" monster you control battles an opponent's monster, during damage calculation: You can activate this effect; double your battling monster's ATK and DEF during that damage calculation only. If this card is sent from the field to the Graveyard: You can target 1 Aqua-Type monster in your Graveyard; Special Summon it, also you cannot Special Summon monsters for the rest of this turn, except Aqua-Type monsters.","","","","","","","","","","","","","","","","");
+INSERT OR REPLACE INTO "texts" VALUES ("13790592","Arrowsylph the Sibyl","FLIP: You can add 1 Ritual Spell Card from your Deck or Graveyard to your hand.","","","","","","","","","","","","","","","","");
+INSERT OR REPLACE INTO "texts" VALUES ("13790593","Tarotray the Sibylla","You can Ritual Summon this card with ""Ritual of the Sibylla"". During your End Phase: You can Special Summon 1 Flip monster from your hand or Graveyard in face-down Defense Position. You can only use 1 of the following effects of ""Tarotray the Sibylla"" per turn, and only once that turn.
+● During either player’s turn: You can target 1 face-down monster on the field; change it to face-up Attack Position.
+● During either player’s turn: You can target 1 face-up monster on the field; change it to face-down Defense Position.","Special Summon 1 Flip monster in face-down defence.","Flip 1 face-down defence monster to face-up attack","Flip 1 face-up monster to face-down defence","","","","","","","","","","","","","");
+INSERT OR REPLACE INTO "texts" VALUES ("13790594","Ritual of the Sibylla","This card is used to Ritual Summon ""Tarotray the Sibylla‎‎"". You must also Tribute monsters from your hand or field whose total Levels equal 9 or more. During your Main Phase, except the turn this card was sent to the Graveyard: You can banish this card from your Graveyard; add 1 ""Sibyl"" monster from your Deck to your hand.","","","","","","","","","","","","","","","","");
+INSERT OR REPLACE INTO "texts" VALUES ("13790595","Glare of the Black Cat","During your opponent’s Battle Phase, if you control 2 or more face-down Defense Position monsters: End the Battle Phase. You can banish this card from your Graveyard, then target 2 face-up monsters on the field, including at least 1 ""Sibyl"" monster; change them to face-down Defense Position.","flip another monster to face-down defence?","","","","","","","","","","","","","","","");
+INSERT OR REPLACE INTO "texts" VALUES ("13790596","Mimicat","If you control “Toon World” and a Toon Monster: Target 1 card in your opponent’s Graveyard; if it is a monster, Special Summon it to your side of the field. If it is a Spell/Trap Card, Set it to your side of the field. You can only activate 1 ""Mimicat"" per turn.","","","","","","","","","","","","","","","","");
+INSERT OR REPLACE INTO "texts" VALUES ("13790597","Explosive Dragoknight Ignister Prominence","1 Tuner + 1 or more non-Tuner Pendulum monsters
+Once per turn: You can target 1 face-up Pendulum Monster or 1 card in a Pendulum Zones; destroy it, and if you do, shuffle 1 card on the field into the owner’s Deck. Once per turn: You can Special Summon a “Dragoknight” monster from your Deck in face-up Defense Position, but it cannot be used as a Synchro Material.","Destroy 1 Pendulum card","Special Summon a Dragoknight","","","","","","","","","","","","","","");
+INSERT OR REPLACE INTO "texts" VALUES ("13790598","Dragoknight Luster Pendulum","Pendulum Scale = 5
+Pendulum Effect: 
+Once per turn, if you control a card in your other Pendulum Zone: You can destroy that other card, and if you do, add 1 card with the same name from your Deck to your hand.
+
+Monster Effect: 
+This card cannot be used as a Fusion, Synchro or Xyz Material, except for a “Dragoknight” monster.","","","","","","","","","","","","","","","","");
 COMMIT;
