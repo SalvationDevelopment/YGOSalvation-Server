@@ -560,8 +560,8 @@ header {
   position: absolute;
   top: 100vh;
   width: 100vw;
-  background-size: 400% 100%;
-  -webkit-animation: shine 20s infinite;
+  background-size: 500% 100%;
+  -webkit-animation: shine 25s infinite;
   -webkit-animation-direction: alternate;
 }
 
