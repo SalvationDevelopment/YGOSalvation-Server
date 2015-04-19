@@ -1490,3 +1490,6 @@ div#news {
   padding-left: 10%;
   padding-right: 10%;
 }
+select {
+ width: 12em;
+}
