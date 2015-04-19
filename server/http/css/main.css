@@ -555,11 +555,14 @@ ul#mirrors {
 }
 
 header {
-    height: 98vh;
-    overflow: hidden;
-    position: absolute;
-    top: 100vh;
-    width: 100vw;
+  height: 98vh;
+  overflow: hidden;
+  position: absolute;
+  top: 100vh;
+  width: 100vw;
+  background-size: 400% 100%;
+  -webkit-animation: shine 20s infinite;
+  -webkit-animation-direction: alternate;
 }
 
 .iconic {
