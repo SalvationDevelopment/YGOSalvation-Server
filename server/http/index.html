@@ -533,18 +533,21 @@
                     });
                 }, 10000);
             }
-            $.getJSON('news.json', function (news) {
-                $.get('handlebars/news.handlebars', function (template) {
-                    var parser = Handlebars.compile(template);
-                    $('#news').append(parser(news));
+            function updatenews() {
+                $.getJSON('news.json', function (news) {
+                    $.get('handlebars/news.handlebars', function (template) {
+                        var parser = Handlebars.compile(template);
+                        $('#news').append(parser(news));
+                    });
                 });
-            });
-            $.getJSON('faq.json', function (news) {
-                $.get('handlebars/faq.handlebars', function (template) {
-                    var parser = Handlebars.compile(template);
-                    $('#faq #list').append(parser(news));
-                });
-            });
+            }
+            updatenews();
+            setInterval(function() {
+                updatenews();
+            },120000)
+            
+            
+            
 
         });
     </script>
