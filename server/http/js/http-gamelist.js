@@ -359,7 +359,7 @@ function setfilter() {
 primus.on('data', function (data) {
     'use strict';
     var join = false;
-    console.log(data);
+    //console.log(data);
     if (!data.clientEvent) {
         gamelistcache = JSON.parse(data);
         renderList(gamelistcache);
