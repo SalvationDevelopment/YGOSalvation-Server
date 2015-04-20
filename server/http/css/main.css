@@ -561,8 +561,9 @@ header {
   top: 100vh;
   width: 100vw;
   background-size: 500% 100%;
-  -webkit-animation: shine 25s infinite;
+  -webkit-animation: shine 5s;
   -webkit-animation-direction: alternate;
+  -webkit-animation-iteration-count: 2;
 }
 
 .iconic {
