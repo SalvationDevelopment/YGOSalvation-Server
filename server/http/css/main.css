@@ -1489,6 +1489,7 @@ div#news {
   overflow-y: scroll;
   padding-left: 10%;
   padding-right: 10%;
+  text-shadow: 0 0 5px black;
 }
 select {
  width: 12em;
