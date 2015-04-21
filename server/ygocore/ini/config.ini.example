@@ -1,0 +1,15 @@
+clientversion = 0x1332
+scriptfolder = C:\ygopro\script
+cardcdb = C:\ygopro\databases\cards.cdb 	
+banlist = C:\ygopro\lflist.conf
+log = true
+consolelog = false
+handshuffle = false
+autoendturn = true
+splashscreen = false
+stdoutsupport = true
+path = '.'
+recycle = false
+maxdecksize = 60
+mindecksize = 40
+maxextradecksize = 15
