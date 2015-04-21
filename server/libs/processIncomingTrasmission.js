@@ -107,15 +107,15 @@ function portfinder(min, max, callback) {
 
 function pickCoreConfig(socket) {
     'use strict';
-    var output = '';
+    var output = 'ini/';
     if (socket.hostString.indexOf(",21,") > -1) {
-        return "goat.ini";
+        return "ini/goat.ini";
     }
     if (socket.hostString[0] > '2') {
         return output + socket.hostString[0] + '-config.ini';
     } else {
         /*load default configuration */
-        return 'config.ini';
+        return output + 'config.ini';
     }
 }
 
