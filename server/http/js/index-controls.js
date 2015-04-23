@@ -2,6 +2,7 @@
 /*global $, saveSettings, Handlebars, prompt*/
 
 var launcher = false;
+
 function singlesitenav(target) {
     'use strict';
     //console.log(target);
@@ -50,6 +51,7 @@ function locallogin(init) {
 }
 $(document).ready(function () {
     'use strict';
+
     function weblogin() {
         localStorage.nickname = $('#login-username').val();
         locallogin();
@@ -98,8 +100,8 @@ $(document).ready(function () {
         });
     }
     updatenews();
-    //            setInterval(function() {
-    //                updatenews();
-    //            },120000);
+    setInterval(function () {
+        updatenews();
+    }, 120000);
 
 });
