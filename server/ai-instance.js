@@ -513,20 +513,14 @@ function DuelConnection(roompass) {
         console.log('Send Game request for', roompass);
         var name = makeCTOS('CTOS_PlayerInfo', '[AI]SnarkyChild'),
             join = makeCTOS('CTOS_JoinGame', roompass),
-            updateDeck = makeCTOS('CTOS_UPDATE_DECK', decks[0]),
-            check = makeCTOS('CTOS_HS_READY'),
-            surejoined = makeCTOS('CTOS_HS_TODUELIST'),
-            tosend = Buffer.concat([name, join]),
-            decksend = Buffer.concat([surejoined, updateDeck, check]);
+            
+            tosend = Buffer.concat([name, join]);
+            
 
-        
+
         setTimeout(function () {
             duelConnections.write(tosend);
         }, 500);
-        setTimeout(function () {
-            duelConnections.write(decksend);
-            console.log('Sent deck');
-        }, 1000);
     });
     duelConnections.on('error', function (error) {
         console.log(error);
@@ -549,7 +543,7 @@ function rps() {
     return Math.floor(Math.random() * (4 - 1)) + 1;
 }
 
-function CommandParser(state, network) {
+function CommandParser() {
     'use strict';
 
     // OK!!!! HARD PART!!!!
@@ -562,229 +556,75 @@ function CommandParser(state, network) {
 
     var protoResponse = [],
         responseRequired = false,
-        eventEmitter = new events.EventEmitter(),
-        r = 0;
+        output = {};
 
-    return function (input) {
+    output.event = new events.EventEmitter();
 
-        if (!input.STOC_GAME_MSG) {
-            console.log('trying', input);
-        }
-       
-        if (input.STOC_UNKNOWN) {
-            responseRequired = false;
-            //bug this command is never to be hit.
-        }
+    output.input = function (input) {
+        console.log(input);
         if (input.STOC_GAME_MSG) {
-            //case deeper, actuall gameplay
-            console.log(input);
-            switch (input.command) {
-            case ('MSG_HINT'):
-                break;
-            case ('MSG_RETRY'):
-                console.log(OnSelectInitCommand([], input.bp, input.ep));
-                r = Math.floor((Math.random() * 16));
-                network.write(makeCTOS('CTOS_RESPONSE', new Buffer([r])));
-                console.log('r', r);
-                break;
-
-            case ('MSG_NEW_TURN'):
-                break;
-
-            case ('MSG_WIN'):
-                break;
-
-            case ('MSG_NEW_PHASE'):
-                break;
-
-            case ('MSG_DRAW'):
-                break;
-
-            case ('MSG_SHUFFLE_DECK'):
-                break;
-
-            case ('MSG_SHUFFLE_HAND'):
-                break;
-
-            case ('MSG_CHAINING'):
-                break;
-
-            case ('MSG_CHAINED'):
-                break;
-
-            case ('MSG_CHAINING_SOLVING'):
-                break;
-
-            case ('MSG_CHAIN_SOLVED'):
-                break;
-
-            case ('MSG_CHIAIN_END'):
-                break;
-
-            case ('MSG_CHAIN_NEGATED'):
-                break;
-
-            case ('MSG_CHAIN_DISABLED'):
-                break;
-
-            case ('MSG_SELECTED'):
-                break;
-
-            case ('MSG_PAY_LPCOST'):
-                break;
-                    
-
-            case ('MSG_DAMAGE'):
-                break;
-
-            case ('MSG_SELECT_IDLECMD'):
-                console.log(input, '----------------------------------------------------------------------');
-                OnSelectInitCommand([input.summonable_cards, input.spsummonable_cards, input.repositionable_cards, input.msetable_cards], input.bp, input.ep);
-                network.write(makeCTOS('CTOS_RESPONSE', new Buffer([7])));
-                break;
-            
-            case ('MSG_SELECT_CARD'):
-                console.log(input);
-                OnSelectCard();
-                network.write(makeCTOS('CTOS_RESPONSE', new Buffer([0])));
-                break;
-
-            case ('MSG_MOVE'):
-                break;
-
-            case ('MSG_POS_CHANGE'):
-                break;
-
-            case ('MSG_SET'):
-                break;
-
-            case ('MSG_SWAP'):
-                break;
-
-            case ('MSG_SUMMONING'):
-                break;
-
-            case ('MSG_SPSUMMONING'):
-                break;
-
-            case ('MSG_SUMMNED'):
-                break;
-
-            case ('MSG_FLIPSUMMONED'):
-                break;
-
-            case ('MSG_FLIPSUMMONING'):
-                break;
-
-            case ('MSG_UPDATE_DATA'):
-                break;
-
-            case ('MSG_UPDATE_CARD'):
-                break;
-
-            default:
-                break;
-
-
-            }
+            output.event.emit(input.command, input);
+        }
+        if (input.STOC_UNKNOWN) {
+            output.event.emit('STOC_UNKNOWN', input);
         }
         if (input.STOC_SELECT_HAND) {
-            responseRequired = true;
-            console.log('Selecting rps');
-            network.write(makeCTOS('CTOS_HAND_RESULT', rps()));
-            //select random
-
+            output.event.emit('STOC_SELECT_HAND', input);
         }
         if (input.STOC_JOIN_GAME) {
-            responseRequired = true;
-            
-            //select random
-
+            output.event.emit('STOC_JOIN_GAME', input);
         }
         if (input.STOC_SELECT_TP) {
-            network.write(makeCTOS('CTOS_TP_RESULT', 0));
-            //pick who goes first
+            output.event.emit('STOC_SELECT_TP', input);
         }
         if (input.STOC_HAND_RESULT) {
-            responseRequired = false;
-            
-            if (input.res1 === input.res2) {
-                network.write(makeCTOS('CTOS_HAND_RESULT', rps()));
-            } else {
-                network.write(makeCTOS('CTOS_TP_RESULT', 0));
-            }
-            
-            //get hand result
+            output.event.emit('STOC_HAND_RESULT', input);
         }
         if (input.STOC_TP_RESULT) {
-            responseRequired = false;
-            
-            //who is going first after picking
+            output.event.emit('STOC_TP_RESULT', input);
         }
         if (input.STOC_CHANGE_SIDE) {
-            responseRequired = false;
-            //adjust side deck now
+            output.event.emit('STOC_CHANGE_SIDE', input);
         }
         if (input.STOC_WAITING_SIDE) {
-            responseRequired = false;
-            //waiting on opponent to side
+            output.event.emit('STOC_WAITING_SIDE', input);
         }
         if (input.STOC_CREATE_GAME) {
-            responseRequired = false;
+            output.event.emit('STOC_CREATE_GAME', input);
         }
         if (input.STOC_TYPE_CHANGE) {
-            responseRequired = false;
+            output.event.emit('STOC_TYPE_CHANGE', input);
         }
         if (input.STOC_LEAVE_GAME) {
-            responseRequired = false;
-            //lobby opponent left
+            output.event.emit('STOC_LEAVE_GAME', input);
         }
         if (input.STOC_DUEL_START) {
-            responseRequired = false;
-            //duel is starting
+            output.event.emit('STOC_DUEL_START', input);
         }
         if (input.STOC_DUEL_END) {
-            responseRequired = false;
-            //duel ended
+            output.event.emit('STOC_DUEL_END', input);
         }
         if (input.STOC_REPLAY) {
-            responseRequired = false;
-            //replayfile
+            output.event.emit('STOC_REPLAY', input);
         }
         if (input.STOC_TIME_LIMIT) {
-            responseRequired = true; // its a blank array on purpose because it doesnt send anything.
-            //seconds left
+            output.event.emit('STOC_TIME_LIMIT', input);
         }
         if (input.STOC_CHAT) {
-            //chat message, from
-            console.log('chat');
+            output.event.emit('STOC_CHAT', input);
         }
         if (input.STOC_HS_PLAYER_ENTER) {
-            //player name enterd in slot
-            
+            output.event.emit('STOC_HS_PLAYER_ENTER', input);
         }
-        
+
         if (input.STOC_HS_PLAYER_CHANGE) {
-            //player slot update
-            //state.lobby[input.loc] = input.player;
-            console.log('trying to start game', state.lobby.totalplayers);
-            state.lobby.totalplayers++;
-            if (state.lobby.totalplayers > 1) {
-                network.write(makeCTOS('CTOS_START'));
-                network.write(makeCTOS('CTOS_HAND_RESULT', rps()));
-            }
-            
+            output.event.emit('STOC_HS_PLAYER_CHANGE', input);
         }
         if (input.STOC_HS_WATCH_CHANGE) {
-            //NUMBER OF WTACHERS changes
-            state.lobby.observers++;
+            output.event.emit('STOC_HS_WATCH_CHANGE', input);
         }
-        if (responseRequired) {
-            return protoResponse;
-        }
-        console.log('fall', input);
     };
-
+    return output;
 }
 
 function processTask(task, socket) {
@@ -814,7 +654,7 @@ function Duel(roompass, botUsername) {
 
     duel.server = new DuelConnection(roompass);
     duel.gameState = new GameState();
-    duel.commandParser = new CommandParser(duel.gameState, duel.server);
+    duel.commandParser = new CommandParser();
     duel.server.on('data', function (data) {
         var frame,
             task,
@@ -825,21 +665,28 @@ function Duel(roompass, botUsername) {
 
         frame = framer.input(data);
         for (newframes; frame.length > newframes; newframes++) {
-            console.log('calculating');
             task = parsePackets('STOC', new Buffer(frame[newframes]));
             //console.log('!', task);
             commands = processTask(task);
-            console.log(commands.length, l);
             // process AI
             //console.log(task);
             l = 0;
             for (l; commands.length > l; l++) {
-                console.log('sending in frame', l, commands.length, commands[l].command);
-                duel.commandParser(commands[l]);
+                duel.commandParser.input(commands[l]);
             }
+            
 
         }
         frame = [];
+    });
+    duel.commandParser.event.on('STOC_JOIN_GAME', function (input) {
+        var updateDeck = makeCTOS('CTOS_UPDATE_DECK', decks[0]),
+            check = makeCTOS('CTOS_HS_READY'),
+            surejoined = makeCTOS('CTOS_HS_TODUELIST'),
+            decksend = Buffer.concat([surejoined, updateDeck, check]);
+       
+        duel.server.write(decksend);
+        console.log(input);
     });
 
 }

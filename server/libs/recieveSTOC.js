@@ -326,6 +326,7 @@ module.exports = function recieveSTOC(packet) {
         break;
 
     case ("STOC_JOIN_GAME"):
+            
         break;
 
     case ("STOC_TYPE_CHANGE"):
