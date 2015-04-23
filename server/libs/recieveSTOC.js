@@ -270,6 +270,7 @@ module.exports = function recieveSTOC(packet) {
             task.player = packet.message[1];
             task.fieldlocation = packet.message[2];
             task.fieldmodel = enums.locations[task.fieldlocation];
+            task.message = packet.message;
             break;
 
         case ('MSG_UPDATE_CARD'):
@@ -356,12 +357,14 @@ module.exports = function recieveSTOC(packet) {
 
     case ("STOC_CHAT"):
         task.from = packet.message[0] + packet.message[1];
-        task.chat = packet.toString('utf16le', 2);
+        task.chat = packet.message.toString('utf16le', 2).replace(/\0/g, '');
+        task.len = task.chat.length;
         break;
 
     case ("STOC_HS_PLAYER_ENTER"):
-        task.person = packet.toString('utf16le', 0, 40);
-        task.position = packet.message[41];
+        task.person = packet.message.toString('utf16le', 0, 39).replace(/\0/g, '');
+        task.messagelen = task.person.length;
+        task.person = task.person.replace("\u0000", "");
         break;
 
     case ("STOC_HS_PLAYER_CHANGE"):
