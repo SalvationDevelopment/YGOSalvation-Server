@@ -439,7 +439,9 @@ header {
 */
 
 .game.started {
-    opacity: .2;
+    opacity: 1;
+    border-color: grey;
+    color: grey;
 }
 
 section {
@@ -1430,11 +1432,19 @@ div[data-game^="2"] {
     color: green;
 }
 
+div[data-game^="2"]:not(.started) {
+    background: rgba(0,250,0,.5);
+    color: white;
+}
+
 div[data-game^="3"] {
     /* Anime */
-    
     border-color: pink;
     color: pink;
+}
+div[data-game^="3"]:not(.started) {
+    background: rgba(200,50,100,.2);
+    color: white;
 }
 
 div[data-game^="00"],
@@ -1471,6 +1481,8 @@ div[data-game^="32"] {
     color: white;
     border: 2px;
 }
+
+
 [data-nostalgia] {
     background: #e8aa2e; /* Old browsers */
     background: -moz-linear-gradient(left,  #e8aa2e 0%, #ed7d7d 19%, #ed7d7d 19%, #2989d8 66%, #ff0000 100%) !important; /* FF3.6+ */
