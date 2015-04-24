@@ -1507,3 +1507,11 @@ div#news {
 select {
  width: 12em;
 }
+.game:not(.started) {
+  -webkit-animation: outpulse 1s;
+}
+        @-webkit-keyframes outpulse {
+          from {  -webkit-box-shadow: 0 0 3px #000; }
+          50% {  -webkit-box-shadow: 0 0 9px white; }
+          to {  #ccc; -webkit-box-shadow: 0 0 3px #000; }
+        }
