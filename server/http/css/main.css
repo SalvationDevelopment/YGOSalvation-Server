@@ -424,7 +424,7 @@ header {
 .game {
     background: rgba(0, 0, 0, .65);
     width: 48%;
-    height: 40px;
+    height: 60px;
     float: left;
     border: 1px solid;
     margin: 2px 1%;
@@ -1422,6 +1422,10 @@ div[data-game^="1"] {
     
     border-color: blue;
     color: blue;
+}
+div[data-game^="1"]:not(.started) {
+    background: rgba(0,0,250,.5);
+    color: white;
 }
 
 div[data-game^="2"] {
