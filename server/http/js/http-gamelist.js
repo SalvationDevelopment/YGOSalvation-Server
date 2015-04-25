@@ -261,10 +261,10 @@ function parseDuelOptions(duelOptions) {
 
     //Determine allowed cards
     if (duelOptionsParts[0][0] === '0') {
-        settings.allowedCards = 'TCG';
+        settings.allowedCards = 'OCG';
     }
     if (duelOptionsParts[0][0] === '1') {
-        settings.allowedCards = 'OCG';
+        settings.allowedCards = 'TCG';
     }
     if (duelOptionsParts[0][0] === '2') {
         settings.allowedCards = 'TCG/OCG';
