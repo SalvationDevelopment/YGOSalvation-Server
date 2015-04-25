@@ -432,11 +432,10 @@ header {
     color: white;
 }
 
-/*
-.in-iframe #gamelistitems {
-    width: 70vw;
+div#gamelistitems {
+    overflow-y: scroll;
+    height: 85vh;
 }
-*/
 
 .game.started {
     opacity: 1;
@@ -1511,7 +1510,7 @@ select {
   -webkit-animation: outpulse 1s;
 }
         @-webkit-keyframes outpulse {
-          from {  -webkit-box-shadow: 0 0 3px #000; }
-          50% {  -webkit-box-shadow: 0 0 9px white; }
-          to {  #ccc; -webkit-box-shadow: 0 0 3px #000; }
+          from {  -webkit-box-shadow: 0 0 3px rgba(255,255,255,0); }
+          50% {  -webkit-box-shadow: 0 0 18px white; }
+          to {  #ccc; -webkit-box-shadow: 0 0 3px rgba(255,255,255,0); }
         }
