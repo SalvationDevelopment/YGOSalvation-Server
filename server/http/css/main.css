@@ -1438,7 +1438,7 @@ div[data-game^="2"] {
 
 div[data-game^="2"]:not(.started) {
     background-image : url(http://ygopro.us/img/tcgocg.png);
-    background-size : cover;
+    background-size : contain;
     color: white;
 }
 
