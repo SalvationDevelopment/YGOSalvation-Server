@@ -1417,6 +1417,11 @@ div[data-game^="0"] {
     border-color: yellow;
     color: yellow;
 }
+div[data-game^="0"]:not(.started) {
+   background-image : url(http://ygopro.us/img/ocg.png);
+    background-size : 100% 100%;
+    color: white;
+}
 
 div[data-game^="1"] {
     /* TCG */
@@ -1425,7 +1430,8 @@ div[data-game^="1"] {
     color: blue;
 }
 div[data-game^="1"]:not(.started) {
-    background: rgba(0,0,250,.5);
+   background-image : url(http://ygopro.us/img/tcg.png);
+    background-size : 100% 100%;
     color: white;
 }
 
@@ -1513,7 +1519,7 @@ select {
  width: 12em;
 }
 .game:not(.started) {
-  -webkit-animation: outpulse 1s;
+  -webkit-animation: outpulse 300ms;
 }
         @-webkit-keyframes outpulse {
           from {  -webkit-box-shadow: 0 0 3px rgba(255,255,255,0); }
