@@ -1519,7 +1519,7 @@ select {
  width: 12em;
 }
 .game:not(.started) {
-  -webkit-animation: outpulse 300ms;
+  /*-webkit-animation: outpulse 300ms;*/
 }
         @-webkit-keyframes outpulse {
           from {  -webkit-box-shadow: 0 0 3px rgba(255,255,255,0); }
