@@ -47,6 +47,11 @@ if (operating_system === 'linux' || operating_system === 'darwin') {
         if (error) console.log(error);
     }); // creates race condition requiring launcher restart.
 }
+
+if (operating_system === 'linux' && os.arch() === 'x64') {
+    executable = './application_ygopro64'
+}
+
 var settings = ['use_d3d', 'antialias', 'errorlog', 'nickname', 'roompass', 'lastdeck', 'textfont', 'numfont', 'fullscreen', 'enable_sound',
 'sound_volume', 'enable_music', 'music_volume', 'skin_index', 'auto_card_placing', 'random_card_placing', 'auto_chain_order', 'no_delay_for_chain',
 'enable_sleeve_loading', 'serverport', 'lastip', 'textfontsize', 'lastport'];
