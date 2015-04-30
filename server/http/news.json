@@ -1,5 +1,11 @@
 {    "Articles": [
         {
+            "Title": "Clean-Up done!",
+            "Subtitle": "Card clones have been removed.",
+            "Content": "<p>All card clones that appeared as a result of the previous upate have now been removed. With it has come the end of many decks and replays. Make sure to check the list linked in the previous News post to check out what has changed so that you may rebuild  your decks. Again, sorry for the inconvenience.</p>",
+            "Author": "ChibiChanNya",
+            "Date" : "April 29st, 2015th"
+        },{
             "Title": "Big Update- Emergency Changes",
             "Subtitle": "IMPORTANT NEWS",
             "Content": "<p>A big update has been pushed into the server. Many of the latest cards, All of them added since Clash of Rebellion was announced, have had their ID's changed and will be removed from decks and make replays unwatchable. Right now there are two copies of each of those cards on the server, it is your last chance to screenshot your decks before they are likely emptied. We apologize for any inconveniences, but it's an important update regarding ID number standards. Targets will be those with an ID which starts with 13790, adding the new version of the card will be safe. Be quick!</p><p> Here is a link to the list of cards that will receive an ID change, so back them up. <a style='color:hotpink !important' target='_blank' href='http://pastebin.com/cTSpNxhn'> Click here for the list</a></p>",
