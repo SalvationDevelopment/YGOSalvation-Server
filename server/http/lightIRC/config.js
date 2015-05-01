@@ -60,7 +60,6 @@ params.emoticonPath = 'http://ygopro.us/lightIRC/emoticons/';
 params.loopServerCommands = true;
 params.loopClientCommands = true;
 params.contextMenuInternalEvent = "Duel Request:/msg DuelServ !duel %nick%";
-params.contextMenuInternalEvent = "Ignore:/ignore %nick%";
 
 
 /* Use this method to send a command to lightIRC with JavaScript */
