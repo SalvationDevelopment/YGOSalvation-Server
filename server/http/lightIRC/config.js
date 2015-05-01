@@ -26,7 +26,7 @@ params.language = "en";
 params.styleURL = "css/black.css";
 
 /* Nick to be used. A % character will be replaced by a random number */
-params.nick = localhost.nickname || "Duelist_%";
+params.nick = "Duelist_%";
 /* Channel to be joined after connecting. Multiple channels can be added like this: #lightIRC,#test,#help */
 params.autojoin = "#lobby";
 /* Commands to be executed after connecting. E.g.: /mode %nick% +x */
@@ -89,7 +89,8 @@ function onContextMenuSelect(type, nick, ident, realname, channel, host) {
 
 /* This method gets called if you use the parameter loopServerCommands */
 function onServerCommand(command) {
-    console.log('onServerCommand', command);
+    //console.log('onServerCommand', command);
+    $('footer').text(command.split(':')[1]);
     return command;
 }
 
