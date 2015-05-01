@@ -1,5 +1,11 @@
 {    "Articles": [
-        {
+         {
+            "Title": "Tournament time! Our first official one, ever!",
+            "Subtitle": "That's right!",
+            "Content": "<p>Sup guys! This new post is to inform everyone of our first official Salvation Pro tournament! That's right our first EVER! Beginning at 7 PM MST, Friday, May 1st, 2015 will be a single-elimination style tournament played on the 4.1.15 banlist with a TCG/OCG pool. Standard bans will be: No burn, stall, or any variant of Exodia. Come one, come all! Be on your best A-game as we do have Humble Bundle prizes in-store for our top 3 finishers! Registration will open at 6:00 PM EST and close at 6:45 PM EST with the games beginning at 7 PM EST. Don't forget to swing by the #lobby in chat for more information! :) </p>",
+            "Author": "Reach",
+            "Date" : "April 30th, 2015"
+        },{
             "Title": "Clean-Up done!",
             "Subtitle": "Card clones have been removed.",
             "Content": "<p>All card clones that appeared as a result of the previous upate have now been removed. With it has come the end of many decks and replays. Make sure to check the list linked in the previous News post to check out what has changed so that you may rebuild  your decks. Again, sorry for the inconvenience. Let us know in the forums if we overlooked anything!</p>",
