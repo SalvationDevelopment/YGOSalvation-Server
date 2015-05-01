@@ -90,7 +90,7 @@ function onContextMenuSelect(type, nick, ident, realname, channel, host) {
 /* This method gets called if you use the parameter loopServerCommands */
 function onServerCommand(command) {
     //console.log('onServerCommand', command);
-    $('footer').text(command.split(':')[1]);
+    $('footer').text(command.split(':')[2]);
     return command;
 }
 
