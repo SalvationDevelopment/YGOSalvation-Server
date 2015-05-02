@@ -24,6 +24,7 @@ $(function () {
     if (window.self !== window.top) {
         $(document.body).addClass("in-iframe");
         launcher = true;
+        _gaq.push(['_trackEvent', 'Launcher', 'Load', 'default']);
     } else {
         $(document.body).addClass("web");
     }
@@ -46,6 +47,7 @@ function locallogin(init) {
 
     $(document.body).addClass("launcher").removeClass('unlogged').removeClass('web');
     $('#login-username').css('display', 'none');
+    _gaq.push(['_trackEvent', 'Launcher', 'Login', localStorage.nickname]);
     singlesitenav('faq');
 
 }
