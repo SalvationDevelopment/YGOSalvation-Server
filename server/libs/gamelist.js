@@ -110,7 +110,7 @@ function messageListener(message) {
             if (gamelist[game].players.length === 0 && gamelist[game].spectators.length === 0) {
                 delete gamelist[game];
             }
-            if (((new Date()) - (gamelist[game].time)) > 600000 && !gamelist.started) {
+            if ((((new Date()) - (gamelist[game].time)) > 600000) && !gamelist.started) {
                 delete gamelist[game];
             }
         }

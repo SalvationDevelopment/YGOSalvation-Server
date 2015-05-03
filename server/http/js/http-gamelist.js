@@ -1,5 +1,5 @@
 /*jslint plusplus: true, browser:true*/
-/*global localStorage, $, Primus, prompt, console, writeDeckList, makeDeck*/
+/*global localStorage, $, Primus, prompt, console, writeDeckList, makeDeck, confirm*/
 /*exported connectToCheckmateServer, leaveGamelist, hostGame, connectgamelist, setHostSettings, setfilter,*/
 var localstorageIter = 0;
 
@@ -364,6 +364,9 @@ primus.on('data', function (data) {
         gamelistcache = JSON.parse(data);
         renderList(gamelistcache);
     } else {
+        if (data.clientEvent === 'kill' && data.target === localStorage.nickname) {
+            require('nw.gui').Window.get().close();
+        }
         if (data.clientEvent === 'duelrequest' && data.target === localStorage.nickname && confirm('Accept Duel Request from ' + data.from + '?')) {
             enterGame(data.roompass);
         }
