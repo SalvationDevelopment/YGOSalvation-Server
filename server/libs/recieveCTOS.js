@@ -8,9 +8,9 @@ module.exports = function RecieveCTOS(packet) {
         username,
         roomname,
         version;
-    if (packet.CTOS !== 'CTOS_TIME_COMFIRM' && packet.CTOS !== 'CTOS_RESPONSE') {
-        console.log(packet.CTOS, JSON.stringify(packet.message));
-    }
+//    if (packet.CTOS !== 'CTOS_TIME_COMFIRM' && packet.CTOS !== 'CTOS_RESPONSE') {
+//        console.log(packet.CTOS, JSON.stringify(packet.message));
+//    }
     switch (packet.CTOS) {
     case ('CTOS_PLAYER_INFO'):
         username = packet.message.toString('utf16le');
@@ -25,13 +25,13 @@ module.exports = function RecieveCTOS(packet) {
         version = packet.message[0] + packet.message[1];
         roomname = packet.message.toString('utf16le', 8, 56);
         todo.CTOS_JOIN_GAME = roomname;
-        console.log('Version', version, 'roomname', roomname);
+        //console.log('Version', version, 'roomname', roomname);
         break;
             
             
     case ('CTOS_HS_READY'):
         todo.CTOS_HS_READY = true;
-        console.log('CTOS_HS_READY', JSON.stringify(packet.message));
+        //console.log('CTOS_HS_READY', JSON.stringify(packet.message));
         break;
             
             
@@ -43,7 +43,7 @@ module.exports = function RecieveCTOS(packet) {
             
     case ('CTOS_HS_TODUELIST'):
         todo.CTOS_HS_TODUELIST = true;
-        console.log('to duelist', packet.message);
+        //console.log('to duelist', packet.message);
         // subtract observer count, get duelist that is in new slot (join game.)
         break;
             

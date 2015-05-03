@@ -70,7 +70,7 @@ bot.addListener("message", function (from, to, message) {
 bot.addListener("message", function (from, to, message) {
     'use strict';
     var command = message.split(' ');
-    if (command[0] !== '!startDraft' && from !== "#oper") {
+    if (command[0] !== '!startDraft' && from !== "#server") {
         return;
     }
     //start tournament
@@ -79,7 +79,7 @@ bot.addListener("message", function (from, to, message) {
 bot.addListener("message", function (from, to, message) {
     'use strict';
     var command = message.split(' ');
-    if (command[0] !== '!kill' && from !== "#oper") {
+    if (command[0] !== '!kill' && from !== "#server") {
         return;
     }
     eventEmitter.emit('announce', {
