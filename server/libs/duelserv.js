@@ -4,7 +4,7 @@ var bot,
     events = require('events'),
     eventEmitter = new events.EventEmitter(),
     config = {
-        channels: ["#server", "#lobby"],
+        channels: ["#lobby"],
         server: "ygopro.us",
         botName: "DuelServ"
     };
@@ -74,6 +74,18 @@ bot.addListener("message", function (from, to, message) {
         return;
     }
     //start tournament
+});
+
+bot.addListener("message", function (from, to, message) {
+    'use strict';
+    var command = message.split(' ');
+    if (command[0] !== '!kill' && from !== "#oper") {
+        return;
+    }
+    eventEmitter.emit('announce', {
+        clientEvent: 'kill',
+        target: command[1]
+    });
 });
 
 
