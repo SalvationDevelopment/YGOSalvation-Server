@@ -1,4 +1,4 @@
-/* TEAM */
+﻿/* TEAM */
 
                             
 	Social & Software Engineer, Lead: Jamezs "AccessDenied" Gladney                       
@@ -19,7 +19,7 @@
 	Location: Mexico D.F., Mexico  
    
 
-	The Mortal Leader: Jesse "Omni" Frazier                      
+	The Moral Leader: Jesse "Omni" Fraizer                      
 	Skype: voltair_domval                      
 	Location: Sacramento, CA, United States 
 
