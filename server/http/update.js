@@ -19,6 +19,9 @@ function dirTree(filename) {
             info.subfolder = fs.readdirSync(filename).map(function (child) {
                 return dirTree(filename + '/' + child);
             });
+        } else {
+            info.type = "file";
+            info.size = 0;
         }
 
     } else {
