@@ -15,9 +15,12 @@ function dirTree(filename) {
 
     if (stats.isDirectory()) {
         info.type = "folder";
-        info.subfolder = fs.readdirSync(filename).map(function (child) {
-            return dirTree(filename + '/' + child);
-        });
+        if (filename.indexOf('.git') < 0) {
+            info.subfolder = fs.readdirSync(filename).map(function (child) {
+                return dirTree(filename + '/' + child);
+            });
+        }
+
     } else {
         // Assuming it's a file. In real life it could be a symlink or
         // something else!
