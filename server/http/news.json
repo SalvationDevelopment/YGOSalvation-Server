@@ -1,10 +1,16 @@
 {    "Articles": [
         {
-            "Title": "LETS GET READY TO RUMBLE!",
+            "Title": "Phantom Gryphon",
+            "Subtitle": "Change Log",
+            "Content": "<p>Added Phantom Gryphon<br /><br />Normal monsters do not require scripts so it was overlooked, we apologize.</p>",
+            "Author": "AccessDenied",
+            "Date" : "May 9th, 2015"
+        },{
+            "Title": "Hermos Attacks",
             "Subtitle": "Change Log",
             "Content": "<p>New Cards added to the system from YGOHack137:<br /><br />Time Magic Hammer<br />Rocket Hermos Cannon<br />Goddess Bow<br />Roulette Spider<br /><br />We turned the server off for 4 hours to do operating system level updates. If you find a fundemental system is missing or something to that effect let us know. Additionally in a unrelated matter, the server has been tanking a number of DDOS attacks. We are unsure why we are being attacked or if it is specifically our system that is being attacked and not our server neighbors but if you are attacking please contact AccessDenied so we can have talks about the issue that is so conserning you feel the need to attack our servers. Nothing is being accomplished by the terrosim, it is not interupting gameplay only sending the staff annoying emails every few hours.<br /><br /> During the server update I understood that most duelist would be huttled over at DevPro, I kept an eye on matters and communicated the server status to them. On completion of the update I added the above cards and notified the users there. Unfortunately this was right in the middle of DevPro staff explaining why it had not updated its system with the above cards. I was banned for 'promoting another ygo sim'. This seems to be common law within us YGOSims now. I am unsure how things will develop. Salvation is now clearly a threat to the other simulators and I thank the users here for our success in becoming relavant. I do not see peaceful times ahead being business-like to gain users staff and fund our servers each YGOSim must behave in a self protecting way that makes co-operation difficult. <br /><br />Each sim is formed out a selfish need of each founder, and due to that we can not see eye to eye. We each have needs and we each respect each others needs and rights to satify those needs.I simply ask that users not get involved in the fighting.</p>",
             "Author": "AccessDenied",
-            "Date" : "May 5th, 2015"
+            "Date" : "May 9th, 2015"
         },{
             "Title": "LETS GET READY TO RUMBLE!",
             "Subtitle": "Change Log",
