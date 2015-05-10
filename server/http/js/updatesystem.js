@@ -165,7 +165,10 @@ function populatealllist() {
         }
     });
 }
-
+function sprocket(command, local) {
+    'use strict';
+    console.log('sprocket:', command, local);
+}
 
 
 setTimeout(function () {
