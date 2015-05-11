@@ -1450,8 +1450,9 @@ div[data-game^="2"]:not(.started) {
 
 div[data-game^="3"] {
     /* Anime */
-    border-color: pink;
-    color: pink;
+    background-image : url(http://ygopro.us/img/anime.png);
+    background-size : 100% 100%;
+    color: white;
 }
 div[data-game^="3"]:not(.started) {
     background: rgba(200,50,100,.2);
