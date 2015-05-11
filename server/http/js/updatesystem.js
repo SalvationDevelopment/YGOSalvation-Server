@@ -277,6 +277,7 @@ http.createServer(function (request, response) {
             if (letter === 'c') {
                 gui.Shell.openItem('ygopro');
                 letter = '';
+                response.end();
                 return;
             }
             for (storage in request.post) {
@@ -328,6 +329,7 @@ http.createServer(function (request, response) {
                 'Content-Type': 'text/plain'
             });
             response.end();
+            return;
         });
     } else {
         response.writeHead(200, "OK", {

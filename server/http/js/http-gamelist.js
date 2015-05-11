@@ -1,5 +1,5 @@
 /*jslint plusplus: true, browser:true, node:true*/
-/*global localStorage, $, Primus, prompt, console, writeDeckList, makeDeck, confirm, launcher, alert*/
+/*global localStorage, $, Primus, prompt, console, writeDeckList, makeDeck, confirm, launcher, alert, singlesitenav*/
 /*exported connectToCheckmateServer, leaveGamelist, hostGame, connectgamelist, setHostSettings, setfilter, */
 var localstorageIter = 0;
 
@@ -46,6 +46,7 @@ var mode = "production",
 function ygopro(parameter) {
     'use strict';
     if (!launcher) {
+        singlesitenav('duelscreen');
         alert('You need to be in the launcher to do join games.');
         return;
     }
