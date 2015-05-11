@@ -1448,7 +1448,7 @@ div[data-game^="2"]:not(.started) {
     color: white;
 }
 
-div[data-game^="3"] {
+div[data-game^="3"]:not(.started) {
     /* Anime */
     background-image : url(http://ygopro.us/img/anime.png);
     background-size : 100% 100%;
