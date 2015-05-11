@@ -26,7 +26,7 @@ var ygoserver, //port 8911 ygopro Server
     cluster = require('cluster'), // multithreading
     colors = require('colors'), // oo pretty colors!
 
-    WebSocketServer = require('ws').Server,
+    WebSocket = require('ws').Server,
     Framemaker = require('./libs/parseframes.js'), //understand YGOPro API.
     processIncomingTrasmission = require('./libs/processIncomingTrasmission.js'); // gamelist and start games
 
@@ -87,8 +87,9 @@ function initiateMaster() {
 function initiateSlave() {
     'use strict';
     // When a user connects, create an instance and allow the to duel, clean up after.
-    var parsePackets = require('./libs/parsepackets.js');
-    function handleDuel(socket) {
+    var parsePackets = require('./libs/parsepackets.js'),
+        ws;
+    function handleTCP(socket) {
         var framer = new Framemaker();
         socket.setNoDelay(true);
         socket.active_ygocore = false;
@@ -122,8 +123,35 @@ function initiateSlave() {
             }
         });
     }
-    ygoserver = net.createServer(handleDuel);
+    ygoserver = net.createServer(handleTCP);
     ygoserver.listen(8911);
+    
+    ws = new WebSocket({ port: 8080 });
+    ws.on('connection', function connection(socket) {
+        var framer = new Framemaker();
+        socket.setNoDelay(true);
+        socket.active_ygocore = false;
+        socket.active = false;
+        ws.on('message', function incoming(data) {
+            var frame,
+                task,
+                newframes = 0;
+            if (socket.active_ygocore) {
+                socket.active_ygocore.write(data);
+            }
+            frame = framer.input(data);
+            for (newframes; frame.length > newframes; newframes++) {
+                task = parsePackets('CTOS', new Buffer(frame[newframes]));
+                processIncomingTrasmission(data, socket, task);
+            }
+            frame = [];
+
+        });
+        ws.on('close', function close() {
+            //console.log('disconnected');
+        });
+    });
+    
     return ygoserver;
 }
 
