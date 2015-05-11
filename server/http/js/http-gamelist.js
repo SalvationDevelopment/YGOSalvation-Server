@@ -1,6 +1,6 @@
-/*jslint plusplus: true, browser:true*/
-/*global localStorage, $, Primus, prompt, console, writeDeckList, makeDeck, confirm*/
-/*exported connectToCheckmateServer, leaveGamelist, hostGame, connectgamelist, setHostSettings, setfilter,*/
+/*jslint plusplus: true, browser:true, node:true*/
+/*global localStorage, $, Primus, prompt, console, writeDeckList, makeDeck, confirm, launcher, alert*/
+/*exported connectToCheckmateServer, leaveGamelist, hostGame, connectgamelist, setHostSettings, setfilter, */
 var localstorageIter = 0;
 
 function applySettings() {
@@ -45,6 +45,11 @@ var mode = "production",
 
 function ygopro(parameter) {
     'use strict';
+    if (!launcher) {
+        alert('You need to be in the launcher to do join games.');
+        return;
+    }
+    
     localStorage.serverport = '8911';
     localStorage.lastport = '8911';
     saveSettings();
@@ -54,6 +59,7 @@ function ygopro(parameter) {
 
     }
     $.post('http://127.0.0.1:9468/' + parameter, localStorage);
+    
 }
 
 function clearCacheRequest() {

@@ -1013,9 +1013,6 @@ meter.p1time {
     height: 2em;
 }
 
-#duelzone {
-    display: none;
-}
 
 #phases {
     position: fixed;
