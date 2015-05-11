@@ -1454,10 +1454,7 @@ div[data-game^="3"]:not(.started) {
     background-size : 100% 100%;
     color: white;
 }
-div[data-game^="3"]:not(.started) {
-    background: rgba(200,50,100,.2);
-    color: white;
-}
+
 
 div[data-game^="00"],
 div[data-game^="10"],
