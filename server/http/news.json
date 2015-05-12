@@ -1,5 +1,11 @@
 {    "Articles": [
         {
+            "Title": "Secrets of Eternity TCG Legal, Folder bug",
+            "Subtitle": "Change Log",
+            "Content": "<p>We've repaired Secrets of Eternity, fixed a level bug in one of the newer rituals, the folder bug is fixed, and we are starting work on the from browser spectator mode.</p>",
+            "Author": "AccessDenied",
+            "Date" : "May 12th, 2015"
+        },{
             "Title": "Phantom Gryphon",
             "Subtitle": "Change Log",
             "Content": "<p>Added Phantom Gryphon<br /><br />Normal monsters do not require scripts so it was overlooked, we apologize.</p>",
