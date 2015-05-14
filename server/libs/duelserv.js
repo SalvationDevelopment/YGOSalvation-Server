@@ -2,6 +2,7 @@
 var bot,
     irc = require("irc"),
     events = require('events'),
+    ps = require('ps-node'),
     eventEmitter = new events.EventEmitter(),
     config = {
         channels: ["#lobby"],
@@ -76,15 +77,18 @@ bot.addListener("message", function (from, to, message) {
     //start tournament
 });
 
-bot.addListener("message", function (from, to, message) {
+bot.addListener("message#oper", function (from, to, message) {
     'use strict';
     var command = message.split(' ');
-    if (command[0] !== '!kill' && from !== "#server") {
+    if (command[0] !== '!kill') {
         return;
     }
-    eventEmitter.emit('announce', {
-        clientEvent: 'kill',
-        target: command[1]
+    ps.kill(command[1], function (err) {
+        if (err) {
+            bot.say('#oper', new Error(err));
+        } else {
+            bot.say('#oper', 'Process %s has been killed!', command[1]);
+        }
     });
 });
 
