@@ -29,7 +29,8 @@
         "ldapjs" : "*",
         "policyfile" : "*",
         "istanbul": "*",
-        "jsdom" : "*"
+        "jsdom" : "*",
+        "ps-node" : "*"
     },
     "optionalDependencies": {
         "httpsys": "*",

@@ -119,7 +119,7 @@ function pickCoreConfig(socket) {
     }
 }
 
-function handleCoreMessage(core_message_raw, port, socket, data) {
+function handleCoreMessage(core_message_raw, port, socket, data, pid) {
     'use strict';
     if (core_message_raw.toString().indexOf("::::") < 0) {
         return;
@@ -129,7 +129,8 @@ function handleCoreMessage(core_message_raw, port, socket, data) {
             messagetype: 'coreMessage',
             coreMessage: {
                 core_message_raw: core_message_raw.toString(),
-                port: port
+                port: port,
+                pid: pid
             }
         };
     if (core_message[0].trim() === '::::network-ready') {
@@ -161,15 +162,15 @@ function startCore(port, socket, data, callback) {
             cwd: startDirectory + '/../ygocore'
         }, function (error, stdout, stderr) {
             console.log(error, stdout, stderr);
-            handleCoreMessage('::::endduel|' + socket.hostString, port, socket, data);
+            handleCoreMessage('::::endduel|' + socket.hostString, port, socket, data, socket.core.pid);
         });
         socket.core.stdout.on('error', function (error) {
             console.log(error);
-            handleCoreMessage('::::endduel|' + socket.hostString, port, socket, data);
+            handleCoreMessage('::::endduel|' + socket.hostString, port, socket, data, socket.core.pid);
             socket.core.kill();
         });
         socket.core.stdout.on('data', function (core_message_raw) {
-            handleCoreMessage(core_message_raw, port, socket, data);
+            handleCoreMessage(core_message_raw, port, socket, data, socket.core.pid);
         });
 
     });
