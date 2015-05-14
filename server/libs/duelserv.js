@@ -80,7 +80,8 @@ bot.addListener("message", function (from, to, message) {
 bot.addListener("message#oper", function (from, to, message) {
     'use strict';
     console.log(message);
-    command = message;
+    var command = message;
+    console.log(typeof message);
     if (command[0] !== '!kill') {
         return;
     }
