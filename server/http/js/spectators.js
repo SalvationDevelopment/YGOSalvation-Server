@@ -1,8 +1,9 @@
 //Define all the globals you are going to use. Avoid using to many globals. All Globals should be databases of sorts.
 // ReadInt32() = readUInt16LE()
-/* jshint node: true */
-/* globals $*/
-/* jslint browser : true */
+/*jslint node: true*/
+/*globals $*/
+/*jslint browser : true, plusplus:true*/
+'use strict';
 console.log('Runing DevPro Packet Sniffing Proxy');
 process.on('uncaughtException', function (err) {
     console.log('Caught exception: ' + err);
@@ -13,94 +14,47 @@ var game = {
 };
 
 var net = require('net');
-var framemaker = require('../server/libs/parseframes.js');
+var Framemaker = require('../server/libs/parseframes.js');
 var enums = require('../server/libs/enums.js');
 var recieveSTOC = require('../server/libs/recieveSTOC.js');
-var proxy = net.createServer(function () {}).listen(8914);
-
-//proxy.on('connection', function (socket) {
-//
-//    var connection = net.connect(8911, '91.250.87.52');
-//    connection.on('data', function (data) {
-//        socket.write(data);
-//        var task = parsePackets('STOC', data);
-//        processTask(task, socket);
-//    });
-//    socket.on('data', function (data) {
-//        connection.write(data);
-//    });
-//    connection.on('error', function () {});
-//    socket.on('error', function () {});
-//});
-
-proxy.on('connection', function (socket) {
-    var framer = new framemaker();
-    var connection = net.connect(8911, '91.250.87.52');
-
-    connection.on('data', function (data) {
-        //console.log(data)
-        var frame = framer.input(data);
-        console.log(frame.length);
-        socket.write(data);
-        for (var newframes = 0; frame.length > newframes; newframes++) {
-            var task = parsePackets('STOC', new Buffer(frame[newframes]));
-            processTask(task, socket);
-        }
-    });
-    socket.on('data', function (data) {
-        connection.write(data);
-    });
-    connection.on('error', function () {});
-    socket.on('error', function () {});
-});
+var proxy = net.createServer().listen(8914);
 
 
 
-function parsePackets(command, message) {
-    var task = [];
 
 
-    var packet = {
-        message: message.slice(1)
-    };
-    packet[command] = enums[command][message[0]];
 
-
-    task.push(packet);
-    return task;
-}
 
 function processTask(task, socket) {
-    var player, clocation, index, data;
-
-    //card movement vars
-    var code, pc, pl, ps, pp, cc, cl, cs, cp, reason, ct;
+    var player, clocation, index, data,
+        code, pc, pl, ps, pp, cc, cl, cs, cp, reason, ct, i,
+        type, command, game_message, lifepoints1, lifepoints2, player1decksize, player1extradecksize;
     task = (function () {
         var output = [];
-        for (var i = 0; task.length > i; i++) {
+        for (i = 0; task.length > i; i++) {
             output.push(recieveSTOC(task[i]));
         }
         return output;
-    })();
-    for (var i = 0; task.length > i; i++) {
-        if (task[i].STOC_UNKNOWN) {
-            //console.log('-----', makeCard(task[i].STOC_UNKNOWN.message));
-        } else
+    }());
+    for (i = 0; task.length > i; i++) {
+//        if (task[i].STOC_UNKNOWN) {
+//            //console.log('-----', makeCard(task[i].STOC_UNKNOWN.message));
+//        } else
         if (task[i].STOC_GAME_MSG && task[i].STOC_GAME_MSG.message) {
-            var command = enums.STOC.STOC_GAME_MSG[task[i].STOC_GAME_MSG.message[0]];
-            var game_message = task[i].STOC_GAME_MSG.message;
+            command = enums.STOC.STOC_GAME_MSG[task[i].STOC_GAME_MSG.message[0]];
+            game_message = task[i].STOC_GAME_MSG.message;
             if (command === undefined) {
                 console.log('figure out STOC', task[i].STOC_GAME_MSG);
             }
             console.log(command);
             if (command === 'MSG_START') {
-                var type = game_message[1];
-                var lifepoints1 = game_message.readUInt16LE(2);
-                var lifepoints2 = game_message.readUInt16LE(6);
-                var player1decksize = game_message.readUInt8(10);
-                var player1extrasize = game_message.readUInt8(12);
-                var player2decksize = game_message.readUInt8(14);
-                var player2extrasize = game_message.readUInt8(16);
+                type = game_message[1];
+                lifepoints1 = game_message.readUInt16LE(2);
+                lifepoints2 = game_message.readUInt16LE(6);
+                player1decksize = game_message.readUInt8(10);
+                player1extrasize = game_message.readUInt8(12);
+                player2decksize = game_message.readUInt8(14);
+                player2extrasize = game_message.readUInt8(16);
                 game.StartDuel(lifepoints1, lifepoints2,
                     player1decksize, player2decksize,
                     player1extrasize, player2extrasize);
@@ -904,3 +858,42 @@ function layouthand(player) {
 //    t->X = (5.5f - 0.8f * count) / 2 + 1.55f + sequence * 0.8f;
 //   else
 //    t->X = 1.9f + sequence * 4.0f / (count - 1);
+
+
+function parsePackets(command, message) {
+    'use strict';
+    var task = [],
+        packet = {
+            message: message.slice(1)
+        };
+    
+    packet[command] = enums[command][message[0]];
+
+
+    task.push(packet);
+    return task;
+}
+
+proxy.on('connection', function (socket) {
+    'use strict';
+    var framer = new Framemaker(),
+        connection = net.connect(8911, '91.250.87.52');
+
+    connection.on('data', function (data) {
+        //console.log(data)
+        var frame = framer.input(data),
+            newframes,
+            task;
+        console.log(frame.length);
+        socket.write(data);
+        for (newframes = 0; frame.length > newframes; newframes++) {
+            task = parsePackets('STOC', new Buffer(frame[newframes]));
+            processTask(task, socket);
+        }
+    });
+    socket.on('data', function (data) {
+        connection.write(data);
+    });
+    connection.on('error', function () {});
+    socket.on('error', function () {});
+});
