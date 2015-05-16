@@ -1,6 +1,6 @@
 //Define all the globals you are going to use. Avoid using to many globals. All Globals should be databases of sorts.
 // ReadInt32() = readUInt16LE()
-/*jslint node: true*/
+/*jslint node: true, bitwise:true*/
 /*globals $*/
 /*jslint browser : true, plusplus:true*/
 'use strict';
@@ -28,7 +28,11 @@ var proxy = net.createServer().listen(8914);
 function processTask(task, socket) {
     var player, clocation, index, data,
         code, pc, pl, ps, pp, cc, cl, cs, cp, reason, ct, i,
-        type, command, game_message, lifepoints1, lifepoints2, player1decksize, player1extradecksize;
+        type, command, game_message, lifepoints1, lifepoints2, player1decksize, player1extrasize, player2extrasize,
+        player2decksize, hintplayer, hintcont, hintspeccount, hintforce, drawplayer, draw, cardslist, drawReadposition,
+        drawcount, cardcode, shuffle, layoutand, count, randomRead, randomcount, layouthand, lpcost, damage, idleplayer,
+        idlereadposition, k, idlecount, fieldlocation, fieldmodel, updateMassCards, udplayer, udfieldlocation, udindex, udcard,
+        makecard, chat, person, position, change, changepos, state;
     task = (function () {
         var output = [];
         for (i = 0; task.length > i; i++) {
@@ -60,10 +64,10 @@ function processTask(task, socket) {
                     player1extrasize, player2extrasize);
             } else if (command === 'MSG_HINT') {
                 console.log('MSG_HINT', game_message);
-                var hintplayer = game_message[1];
-                var hintcont = game_message[2];
-                var hintspeccount = game_message[3];
-                var hintforce = game_message[4];
+                hintplayer = game_message[1];
+                hintcont = game_message[2];
+                hintspeccount = game_message[3];
+                hintforce = game_message[4];
 
 
                 console.log('Win', game_message[1]);
@@ -79,14 +83,14 @@ function processTask(task, socket) {
                 game.NewPhase(game.phase);
             } else if (command === 'MSG_DRAW') {
                 console.log(game_message);
-                var drawplayer = game_message[1];
-                var draw = game_message[2];
-                var cardslist = [];
-                var drawReadposition = 3;
-                for (var drawcount = 0; draw > drawcount; drawcount++) {
-                    var cardcode =game_message.readUInt32LE(drawReadposition) || 'cover';
+                drawplayer = game_message[1];
+                draw = game_message[2];
+                cardslist = [];
+                drawReadposition = 3;
+                for (drawcount = 0; draw > drawcount; drawcount++) {
+                    cardcode = game_message.readUInt32LE(drawReadposition) || 'cover';
                     cardslist.push(cardcode);
-                    console.log(drawReadposition)
+                    console.log(drawReadposition);
                     drawReadposition = drawReadposition + 4;
                 }
                 console.log('%c' + ('Player' + (drawplayer + 1)) + ' drew' + draw + ' cards', 'background: #222; color: #bada55', cardslist);
@@ -106,42 +110,31 @@ function processTask(task, socket) {
                 ct = game_message[1];
                 game.chainsolved = 1;
                 console.log('Resolving Chain');
-            } else if (command === 'MSG_CHAIN_SOLVED') {
-                // graphical or a trigger
-                console.log('Solved Chain');
-            } else if (command === 'MSG_CHAIN_END') {
-                // remove any liggering chain parts
-            } else if (command === 'MSG_CHAIN_NEGATED' || command === 'MSG_CHAIN_DISABLED') {
-                //graphical and trigger only for replay
-            } else if (command === 'MSG_CARD_SELECTED') {
-                // trigger
+            
             } else if (command === 'MSG_CARD_SELECTED') {
                 /*  player = game_message[1];*/
-                var count = game_message[2];
-                var randomRead = 3;
-                for (var randomcount = 0; count > randomcount; randomcount++) {
-
-                }
+                count = game_message[2];
+                randomRead = 3;
                 game.showRandomSelected();
             } else if (command === 'MSG_PAY_LPCOST') {
                 player = game_message[1];
-                var lpcost = game_message.readUInt16LE(2);
+                lpcost = game_message.readUInt16LE(2);
                 console.log(('Player' + (player + 1)), 'paid', lpcost, 'lifepoints');
                 game.updatelifepoints(player, -1, lpcost);
             } else if (command === 'MSG_DAMAGE') {
                 player = game_message[1];
-                var damage = game_message.readUInt16LE(2);
+                damage = game_message.readUInt16LE(2);
                 console.log(('Player' + (player + 1)), 'took', damage, 'damage');
                 game.updatelifepoints(player, -1, damage);
             } else if (command === 'MSG_SUMMONING ') {
                 //ignoring
                 console.log('Normal summon preformed');
             } else if (command === 'MSG_SELECT_IDLECMD') {
-                var idleplayer = game_message[1];
+                idleplayer = game_message[1];
                 game.idle = true;
-                var idlereadposition = 2;
-                for (var k = 0; k < 5; k++) {
-                    var idlecount = game_message[idlereadposition];
+                idlereadposition = 2;
+                for (k = 0; k < 5; k++) {
+                    idlecount = game_message[idlereadposition];
                     idlereadposition++;
                     //                    for (var j = 0; j < idlecount; ++j) {
                     //                        var idlecard = game_message.readUInt16LE(idlereadposition);
@@ -176,8 +169,6 @@ function processTask(task, socket) {
                 // code vars are commented out in the source, assuming graphical only.
             } else if (command === 'MSG_SUMMONING' || command === 'MSG_SPSUMMONING') {
                 code = game_message.readUInt16LE(1);
-            } else if (command === 'MSG_SUMMONED' || command == 'MSG_SPSUMMONED' || command === 'MSG_FLIPSUMMONED') {
-                //graphical only
             } else if (command === 'MSG_FLIPSUMMONING') {
                 // notice pp is missing, and everything is upshifted; not repeating code.
                 code = game_message.readUInt16LE(1);
@@ -188,17 +179,17 @@ function processTask(task, socket) {
                 game.ChangeCardPosition(code, cc, cl, cs, cp);
             } else if (command === 'MSG_UPDATE_DATA') {
                 player = game_message[1];
-                var fieldlocation = game_message[2];
-                var fieldmodel = enums.locations[fieldlocation];
+                fieldlocation = game_message[2];
+                fieldmodel = enums.locations[fieldlocation];
                 updateMassCards(player, fieldlocation, game_message);
                 //console.log('MSG_UPDATE_DATA', 'Player' + (player + 1), fieldmodel, udata);
 
             } else if (command === 'MSG_UPDATE_CARD') {
-                var udplayer = game_message[1];
-                var udfieldlocation = game_message[2];
-                var udindex = game_message[3];
+                udplayer = game_message[1];
+                udfieldlocation = game_message[2];
+                udindex = game_message[3];
 
-                var udcard = makeCard(game_message, 8, udplayer).card;
+                udcard = makeCard(game_message, 8, udplayer).card;
                 //console.log('MSG_UPDATE_CARD',
                 //'Player' + (udplayer + 1), enums.locations[udfieldlocation], udindex, udcard);
                 game.UpdateCard(udplayer, udfieldlocation, udindex, udcard);
@@ -223,16 +214,16 @@ function processTask(task, socket) {
             game.UpdateTime(task[i].STOC_TIME_LIMIT.message[0], (task[i].STOC_TIME_LIMIT.message[1] + task[i].STOC_TIME_LIMIT.message[2]));
 
         } else if (task[i].STOC_CHAT) {
-            var chat = task[i].STOC_CHAT.message.toString('utf16le', 2);
+            chat = task[i].STOC_CHAT.message.toString('utf16le', 2);
             console.log('Chat:', chat);
         } else if (task[i].STOC_HS_PLAYER_ENTER) {
-            var person = task[i].STOC_HS_PLAYER_ENTER.message.toString('utf16le', 0, 40);
-            var position = task[i].STOC_HS_PLAYER_ENTER.message[41];
+            person = task[i].STOC_HS_PLAYER_ENTER.message.toString('utf16le', 0, 40);
+            position = task[i].STOC_HS_PLAYER_ENTER.message[41];
             console.log(person, 'entered', 'the duel', position);
         } else if (task[i].STOC_HS_PLAYER_CHANGE) {
-            var change = task[i].STOC_HS_PLAYER_CHANGE.message[0];
-            var changepos = (change >> 4) & 0xF;
-            var state = change & 0xF;
+            change = task[i].STOC_HS_PLAYER_CHANGE.message[0];
+            changepos = (change >> 4) & 0xF;
+            state = change & 0xF;
             console.log('position', changepos, enums.lobbyStates[state]);
 
 
@@ -240,9 +231,9 @@ function processTask(task, socket) {
             console.log('Spectators:', task[i].STOC_HS_WATCH_CHANGE.message[0]);
         } else if (task[i].STOC_TYPE_CHANGE) {
 
-            var typec = task[i].STOC_TYPE_CHANGE.message[0];
-            var pos = typec & 0xF;
-            var ishost = ((typec >> 4) & 0xF) !== 0;
+            typec = task[i].STOC_TYPE_CHANGE.message[0];
+            pos = typec & 0xF;
+            ishost = ((typec >> 4) & 0xF) !== 0;
             console.log('STOC_TYPE_CHANGE', task[i].STOC_TYPE_CHANGE, 'type', typec, 'pos', pos, 'ishost', ishost);
 
         } else if (task[i].STOC_SELECT_TP) {
@@ -250,7 +241,7 @@ function processTask(task, socket) {
         } else if (task[i].STOC_JOIN_GAME) {
             console.log('Join Game', task[i].STOC_JOIN_GAME);
         } else if (task[i].STOC_ERROR_MSG) {
-            var errormessage = enums.STOC.STOC_ERROR_MSG[task[i].STOC_ERROR_MSG.message[0]];
+            errormessage = enums.STOC.STOC_ERROR_MSG[task[i].STOC_ERROR_MSG.message[0]];
             if (errormessage === "ERRMSG_JOINERROR") {
                 console.log(enums.STOC.STOC_ERROR_MSG.ERRMSG_DECKERROR[task[i].STOC_ERROR_MSG.message[1]]);
             } else if (errormessage === "ERRMSG_DECKERROR") {
@@ -281,31 +272,36 @@ function makeCard(buffer, start, controller) {
             readposition: start
         };
     }
-    var flag = buffer.readUInt32LE(start);
+    var flag = buffer.readUInt32LE(start),
+        card,
+        readposition,
+        i,
+        ii,
+        iii;
 
     if (!flag) {
         return {
             card: {
                 Code: 'cover',
-                Position: 'FaceDownAttack',
+                Position: 'FaceDownAttack'
             },
             readposition: start + 9
         };
     }
-    var card = {
+    card = {
         Code: 'cover',
-        Position: 'FaceDownAttack',
+        Position: 'FaceDownAttack'
     };
 
     //console.log('flag:', flag);
-    var readposition = start + 4;
+    readposition = start + 4;
 
     if (flag & enums.query.Code) {
         card.Code = buffer.readUInt32LE(readposition);
         readposition = readposition + 4;
     }
     if (flag & enums.query.Position) {
-        card.Controller = buffer[readposition + 0];
+        card.Controller = buffer[readposition];
         card.Position = enums.Positions[buffer[readposition + 3]];
         readposition = readposition + 4;
     }
@@ -359,7 +355,7 @@ function makeCard(buffer, start, controller) {
     }
     if (flag & enums.query.EquipCard) {
         card.EquipCard = {
-            c: buffer[readposition + 0],
+            c: buffer[readposition],
             l: buffer[readposition + 1],
             s: buffer[readposition + 2]
         };
@@ -367,9 +363,9 @@ function makeCard(buffer, start, controller) {
     }
     if (flag & enums.query.TargetCard) {
         card.TargetCard = [];
-        for (var i = 0; i < buffer.readUInt32LE(readposition); ++i) {
+        for (i = 0; i < buffer.readUInt32LE(readposition); ++i) {
             card.TargetCard.push({
-                c: buffer[readposition + 0],
+                c: buffer[readposition],
                 l: buffer[readposition + 1],
                 s: buffer[readposition + 2]
             });
@@ -378,14 +374,14 @@ function makeCard(buffer, start, controller) {
     }
     if (flag & enums.query.OverlayCard) {
         card.OverlayCard = [];
-        for (var ii = 0; ii < buffer.readUInt32LE(readposition); ++ii) {
+        for (ii = 0; ii < buffer.readUInt32LE(readposition); ++ii) {
             card.OverlayCard.push(buffer.readUInt32LE(readposition));
             readposition = readposition + 4;
         }
     }
     if (flag & enums.query.Counters) {
         card.Counters = [];
-        for (var iii = 0; iii < buffer.readUInt32LE(readposition); ++iii) {
+        for (iii = 0; iii < buffer.readUInt32LE(readposition); ++iii) {
             card.Counters.push({
                 counterType: buffer.readUInt16LE(readposition),
                 amount: buffer.readUInt16LE(readposition + 2)
@@ -438,15 +434,18 @@ function cardCollections(player) {
 function updateMassCards(player, clocation, buffer) {
     //console.log("Location:", enums.locations[clocation], clocation, player);
     //if (enums.locations[clocation] === 'EXTRA')return;
-    var field = cardCollections(player);
-    var output = [];
-    var readposition = 3;
-    var failed = false;
+    var field = cardCollections(player),
+        output = [],
+        readposition = 3,
+        failed = false,
+        i,
+        len;
+    
     //console.log(field);
     if (field[enums.locations[clocation]] !== undefined) {
-        for (var i = 0, count = field[enums.locations[clocation]]; count > i; i++) {
+        for (i = 0, count = field[enums.locations[clocation]]; count > i; i++) {
             try {
-                var len = buffer.readUInt8(readposition);
+                len = buffer.readUInt8(readposition);
                 readposition = readposition + 4;
                 if (len > 8) {
                     var result = makeCard(buffer, readposition, player);
@@ -511,9 +510,10 @@ game.StartDuel = function (player1StartLP, player2StartLP, OneDeck, TwoDeck, One
 };
 
 game.DOMWriter = function (size, movelocation, player) {
-    var field = $('.fieldimage');
+    var field = $('.fieldimage'),
+        i;
     $(field).detach();
-    for (var i = 0; i < size; i++) {
+    for (i = 0; i < size; i++) {
         $(field).append('<img class="card p' + player + ' ' + movelocation + ' i' + i + ' o" src="' + game.images + 'cover.jpg" data-position="FaceDown" />');
     }
     $(field).appendTo('.fieldcontainer');
