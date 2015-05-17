@@ -883,22 +883,18 @@ function parsePackets(command, message) {
     task.push(packet);
     return task;
 }
-
+window.ws = {};
 function startgame(roompass) {
-    var ws = new WebSocket("ws://ygopro.us:8080", "duel"),
-        framer = new Framemaker();
-    ws.onconnect = function () {
-        console.log('Send Game request for', roompass);
-        var name = makeCTOS('CTOS_PlayerInfo', 'Spectator'),
-            join = makeCTOS('CTOS_JoinGame', roompass),
-            tosend = Buffer.concat([name, join]);
-        ws.write(tosend);
+    window.ws = new WebSocket("ws://ygopro.us:8080", "duel");
+    var framer = new Framemaker();
+    window.ws.onconnect = function () {
+        
        
     };
-    ws.onclose = function () {
+    window.ws.onclose = function () {
         console.log('Websocket died');
     };
-    ws.onmessage = function (data) {
+    window.ws.onmessage = function (data) {
         //console.log(data)
         var frame = framer.input(data),
             newframes,
@@ -909,7 +905,13 @@ function startgame(roompass) {
             processTask(task);
         }
     };
-    ws.onopen = function () {};
+    window.ws.onopen = function () {
+        console.log('Send Game request for', roompass);
+        var name = makeCTOS('CTOS_PlayerInfo', 'Spectator'),
+            join = makeCTOS('CTOS_JoinGame', roompass),
+            tosend = Buffer.concat([name, join]);
+        window.ws.write(tosend);
+    };
 }
 
 window.startgame = startgame;
