@@ -25,7 +25,7 @@ var proxy = net.createServer().listen(8914);
 
 
 
-function processTask(task, socket) {
+function processTask(task) {
     var player, clocation, index, data,
         code, pc, pl, ps, pp, cc, cl, cs, cp, reason, ct, i,
         type, command, game_message, lifepoints1, lifepoints2, player1decksize, player1extrasize, player2extrasize,
@@ -885,33 +885,22 @@ function parsePackets(command, message) {
 }
 
 function startgame() {
-    var ws = new WebSocket("ws://ygopro.us:8080", "duel");
+    var ws = new WebSocket("ws://ygopro.us:8080", "duel"),
+        framer = new Framemaker();
     ws.onconnect = function () {};
     ws.onclose = function () {};
-    ws.onmessage = function () {};
-    ws.onopen = function () {};
-}
-
-
-proxy.on('connection', function (socket) {
-    var framer = new Framemaker(),
-        connection = net.connect(8911, '91.250.87.52');
-
-    (function (data) {
+    ws.onmessage = function (data) {
         //console.log(data)
         var frame = framer.input(data),
             newframes,
             task;
         console.log(frame.length);
-        socket.write(data);
         for (newframes = 0; frame.length > newframes; newframes++) {
             task = parsePackets('STOC', new Buffer(frame[newframes]));
-            processTask(task, socket);
+            processTask(task);
         }
-    });
-    socket.on('data', function (data) {
-        connection.write(data);
-    });
-    connection.on('error', function () {});
-    socket.on('error', function () {});
-});
+    };
+    ws.onopen = function () {};
+}
+
+
