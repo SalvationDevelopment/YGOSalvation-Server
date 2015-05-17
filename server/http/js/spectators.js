@@ -1,7 +1,7 @@
 //Define all the globals you are going to use. Avoid using to many globals. All Globals should be databases of sorts.
 // ReadInt32() = readUInt16LE()
 /*jslint node: true, bitwise:true*/
-/*globals $*/
+/*globals $, WebSocket*/
 /*jslint browser : true, plusplus:true*/
 'use strict';
 console.log('Runing DevPro Packet Sniffing Proxy');
@@ -884,11 +884,20 @@ function parsePackets(command, message) {
     return task;
 }
 
+function startgame() {
+    var ws = new WebSocket("ws://ygopro.us:8080", "duel");
+    ws.onconnect = function () {};
+    ws.onclose = function () {};
+    ws.onmessage = function () {};
+    ws.onopen = function () {};
+}
+
+
 proxy.on('connection', function (socket) {
     var framer = new Framemaker(),
         connection = net.connect(8911, '91.250.87.52');
 
-    connection.on('data', function (data) {
+    (function (data) {
         //console.log(data)
         var frame = framer.input(data),
             newframes,
