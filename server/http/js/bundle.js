@@ -4707,7 +4707,7 @@ function startgame(roompass) {
         var name = makeCTOS('CTOS_PlayerInfo', 'Spectator'),
             join = makeCTOS('CTOS_JoinGame', roompass),
             tosend = Buffer.concat([name, join]);
-        window.ws.write(tosend);
+        window.ws.send(tosend);
     };
 }
 
