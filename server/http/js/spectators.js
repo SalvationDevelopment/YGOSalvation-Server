@@ -895,7 +895,7 @@ function startgame(roompass) {
         console.log('Websocket died');
     };
     window.ws.onmessage = function (data) {
-        //console.log(data)
+        console.log(data);
         var frame = framer.input(data),
             newframes,
             task;
@@ -910,6 +910,7 @@ function startgame(roompass) {
         var name = makeCTOS('CTOS_PlayerInfo', 'Spectator'),
             join = makeCTOS('CTOS_JoinGame', roompass),
             tosend = Buffer.concat([name, join]);
+        console.log(tosend);
         window.ws.send(tosend);
     };
 }
