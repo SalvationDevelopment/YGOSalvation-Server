@@ -1,4 +1,5 @@
 var assert;
+exports = {};
 exports.Buffer = Buffer;
 exports.SlowBuffer = Buffer;
 Buffer.poolSize = 8192;
