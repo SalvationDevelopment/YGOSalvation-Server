@@ -1,6 +1,4 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
-
-},{}],2:[function(require,module,exports){
 /*!
  * The buffer module from node.js, for the browser.
  *
@@ -1416,7 +1414,7 @@ function decodeUtf8Char (str) {
   }
 }
 
-},{"base64-js":3,"ieee754":4,"is-array":5}],3:[function(require,module,exports){
+},{"base64-js":2,"ieee754":3,"is-array":4}],2:[function(require,module,exports){
 var lookup = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
 
 ;(function (exports) {
@@ -1542,7 +1540,7 @@ var lookup = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
 	exports.fromByteArray = uint8ToBase64
 }(typeof exports === 'undefined' ? (this.base64js = {}) : exports))
 
-},{}],4:[function(require,module,exports){
+},{}],3:[function(require,module,exports){
 exports.read = function (buffer, offset, isLE, mLen, nBytes) {
   var e, m,
       eLen = nBytes * 8 - mLen - 1,
@@ -1628,7 +1626,7 @@ exports.write = function (buffer, value, offset, isLE, mLen, nBytes) {
   buffer[offset + i - d] |= s * 128
 }
 
-},{}],5:[function(require,module,exports){
+},{}],4:[function(require,module,exports){
 
 /**
  * isArray
@@ -1663,7 +1661,7 @@ module.exports = isArray || function (val) {
   return !! val && '[object Array]' == str.call(val);
 };
 
-},{}],6:[function(require,module,exports){
+},{}],5:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -1966,7 +1964,7 @@ function isUndefined(arg) {
   return arg === void 0;
 }
 
-},{}],7:[function(require,module,exports){
+},{}],6:[function(require,module,exports){
 if (typeof Object.create === 'function') {
   // implementation from standard node.js 'util' module
   module.exports = function inherits(ctor, superCtor) {
@@ -1991,7 +1989,7 @@ if (typeof Object.create === 'function') {
   }
 }
 
-},{}],8:[function(require,module,exports){
+},{}],7:[function(require,module,exports){
 // shim for using process in browser
 
 var process = module.exports = {};
@@ -2083,14 +2081,14 @@ process.chdir = function (dir) {
 };
 process.umask = function() { return 0; };
 
-},{}],9:[function(require,module,exports){
+},{}],8:[function(require,module,exports){
 module.exports = function isBuffer(arg) {
   return arg && typeof arg === 'object'
     && typeof arg.copy === 'function'
     && typeof arg.fill === 'function'
     && typeof arg.readUInt8 === 'function';
 }
-},{}],10:[function(require,module,exports){
+},{}],9:[function(require,module,exports){
 (function (process,global){
 // Copyright Joyent, Inc. and other Node contributors.
 //
@@ -2680,7 +2678,7 @@ function hasOwnProperty(obj, prop) {
 }
 
 }).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./support/isBuffer":9,"_process":8,"inherits":7}],11:[function(require,module,exports){
+},{"./support/isBuffer":8,"_process":7,"inherits":6}],10:[function(require,module,exports){
 /*jslint bitwise: true*/
 
 var enums = enums || require('../../libs/enums.js');
@@ -2835,7 +2833,7 @@ function makeCard(buffer, start, controller) {
 }
 
 module.exports = makeCard;
-},{"../../libs/enums.js":12}],12:[function(require,module,exports){
+},{"../../libs/enums.js":11}],11:[function(require,module,exports){
 /*jslint node:true*/
 
 module.exports = {
@@ -3147,7 +3145,7 @@ function makeCheck(target) {
 }
 makeCheck('STOC');
 makeCheck('CTOS');
-},{}],13:[function(require,module,exports){
+},{}],12:[function(require,module,exports){
 (function (Buffer){
 /*jslint node : true*/
 var util         = require("util");
@@ -3187,7 +3185,7 @@ module.exports = function () {
     return this;
 };
 }).call(this,require("buffer").Buffer)
-},{"buffer":2,"events":6,"util":10}],14:[function(require,module,exports){
+},{"buffer":1,"events":5,"util":9}],13:[function(require,module,exports){
 /*jslint node: true, bitwise: true, plusplus:true*/
 var enums = require('./enums.js');
 
@@ -3573,7 +3571,7 @@ module.exports = function recieveSTOC(packet) {
     return task;
 };
 
-},{"../http/js/card.js":11,"./enums.js":12}],15:[function(require,module,exports){
+},{"../http/js/card.js":10,"./enums.js":11}],14:[function(require,module,exports){
 (function (Buffer){
 //Define all the globals you are going to use. Avoid using to many globals. All Globals should be databases of sorts.
 // ReadInt32() = readUInt16LE()
@@ -3591,6 +3589,9 @@ var game = {
 
 
 
+var Framemaker = require('../../../server/libs/parseframes.js');
+var enums = require('../../../server/libs/enums.js');
+var recieveSTOC = require('../../../server/libs/recieveSTOC.js');
 
 
 
@@ -4440,11 +4441,8 @@ function complete(player, deck) {
 
 
 
-var net = require('net');
-var Framemaker = require('../../../server/libs/parseframes.js');
-var enums = require('../../../server/libs/enums.js');
-var recieveSTOC = require('../../../server/libs/recieveSTOC.js');
-var proxy = net.createServer().listen(8914);
+
+
 
 function parsePackets(command, message) {
     var task = [],
@@ -4481,4 +4479,4 @@ window.startgame = startgame;
 
 
 }).call(this,require("buffer").Buffer)
-},{"../../../server/libs/enums.js":12,"../../../server/libs/parseframes.js":13,"../../../server/libs/recieveSTOC.js":14,"buffer":2,"net":1}]},{},[15]);
+},{"../../../server/libs/enums.js":11,"../../../server/libs/parseframes.js":12,"../../../server/libs/recieveSTOC.js":13,"buffer":1}]},{},[14]);
