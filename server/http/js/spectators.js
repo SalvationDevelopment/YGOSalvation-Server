@@ -5,9 +5,7 @@
 /*jslint browser : true, plusplus:true*/
 'use strict';
 console.log('Runing DevPro Packet Sniffing Proxy');
-process.on('uncaughtException', function (err) {
-    console.log('Caught exception: ' + err);
-});
+
 
 var game = {
     images: 'http://ygopro.us/http/ygopro/pics/'
@@ -15,6 +13,11 @@ var game = {
 
 
 
+
+var Framemaker = require('../../../server/libs/parseframes.js');
+var enums = require('../../../server/libs/enums.js');
+var recieveSTOC = require('../../../server/libs/recieveSTOC.js');
+var makeCTOS = require('../../../ai/responseGenerator.js');
 
 
 
@@ -865,11 +868,8 @@ function complete(player, deck) {
 
 
 
-var net = require('net');
-var Framemaker = require('../server/libs/parseframes.js');
-var enums = require('../server/libs/enums.js');
-var recieveSTOC = require('../server/libs/recieveSTOC.js');
-var proxy = net.createServer().listen(8914);
+
+
 
 function parsePackets(command, message) {
     var task = [],
@@ -884,11 +884,20 @@ function parsePackets(command, message) {
     return task;
 }
 
-function startgame() {
+function startgame(roompass) {
     var ws = new WebSocket("ws://ygopro.us:8080", "duel"),
         framer = new Framemaker();
-    ws.onconnect = function () {};
-    ws.onclose = function () {};
+    ws.onconnect = function () {
+        console.log('Send Game request for', roompass);
+        var name = makeCTOS('CTOS_PlayerInfo', 'Spectator'),
+            join = makeCTOS('CTOS_JoinGame', roompass),
+            tosend = Buffer.concat([name, join]);
+        ws.write(tosend);
+       
+    };
+    ws.onclose = function () {
+        console.log('Websocket died');
+    };
     ws.onmessage = function (data) {
         //console.log(data)
         var frame = framer.input(data),
@@ -903,4 +912,5 @@ function startgame() {
     ws.onopen = function () {};
 }
 
+window.startgame = startgame;
 

@@ -1,5 +1,5 @@
 /*jslint plusplus: true, browser:true, node:true*/
-/*global localStorage, $, Primus, prompt, console, writeDeckList, makeDeck, confirm, launcher, alert, singlesitenav*/
+/*global localStorage, $, Primus, prompt, console, writeDeckList, makeDeck, confirm, launcher, alert, singlesitenav, startgame*/
 /*exported connectToCheckmateServer, leaveGamelist, hostGame, connectgamelist, setHostSettings, setfilter, */
 var localstorageIter = 0;
 
@@ -45,11 +45,6 @@ var mode = "production",
 
 function ygopro(parameter) {
     'use strict';
-    if (!launcher) {
-        singlesitenav('duelscreen');
-        alert('You need to be in the launcher to do join games.');
-        return;
-    }
     
     localStorage.serverport = '8911';
     localStorage.lastport = '8911';
@@ -59,6 +54,13 @@ function ygopro(parameter) {
         localStorage.battleback = writeDeckList(makeDeck(9));
 
     }
+    if (!launcher) {
+        singlesitenav('duelscreen');
+        alert('You need to be in the launcher to do join games.');
+        startgame(localStorage.roompass);
+        return;
+    }
+    
     $.post('http://127.0.0.1:9468/' + parameter, localStorage);
     
 }
