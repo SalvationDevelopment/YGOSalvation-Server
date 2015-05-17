@@ -17,7 +17,7 @@ var game = {
 var Framemaker = require('../../../server/libs/parseframes.js');
 var enums = require('../../../server/libs/enums.js');
 var recieveSTOC = require('../../../server/libs/recieveSTOC.js');
-var makeCTOS = require('../../../ai/responseGenerator.js');
+var makeCTOS = require('../../ai/responseGenerator.js');
 
 
 
