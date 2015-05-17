@@ -13,11 +13,6 @@ var game = {
     images: 'http://ygopro.us/http/ygopro/pics/'
 };
 
-var net = require('net');
-var Framemaker = require('../server/libs/parseframes.js');
-var enums = require('../server/libs/enums.js');
-var recieveSTOC = require('../server/libs/recieveSTOC.js');
-var proxy = net.createServer().listen(8914);
 
 
 
@@ -870,6 +865,11 @@ function complete(player, deck) {
 
 
 
+var net = require('net');
+var Framemaker = require('../server/libs/parseframes.js');
+var enums = require('../server/libs/enums.js');
+var recieveSTOC = require('../server/libs/recieveSTOC.js');
+var proxy = net.createServer().listen(8914);
 
 function parsePackets(command, message) {
     var task = [],
