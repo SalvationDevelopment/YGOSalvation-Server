@@ -129,7 +129,6 @@ function initiateSlave() {
     ws = new WebSocket({ port: 8080 });
     ws.on('connection', function connection(socket) {
         var framer = new Framemaker();
-        socket.setNoDelay(true);
         socket.active_ygocore = false;
         socket.active = false;
         ws.on('message', function incoming(data) {
