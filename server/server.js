@@ -136,6 +136,7 @@ function initiateSlave() {
             var frame,
                 task,
                 newframes = 0;
+            console.log(data);
             if (socket.active_ygocore) {
                 socket.active_ygocore.write(data);
             }
