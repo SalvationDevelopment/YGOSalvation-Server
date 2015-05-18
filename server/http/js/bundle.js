@@ -2679,6 +2679,14 @@ function hasOwnProperty(obj, prop) {
 
 }).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 },{"./support/isBuffer":8,"_process":7,"inherits":6}],10:[function(require,module,exports){
+arguments[4][1][0].apply(exports,arguments)
+},{"base64-js":11,"dup":1,"ieee754":12,"is-array":13}],11:[function(require,module,exports){
+arguments[4][2][0].apply(exports,arguments)
+},{"dup":2}],12:[function(require,module,exports){
+arguments[4][3][0].apply(exports,arguments)
+},{"dup":3}],13:[function(require,module,exports){
+arguments[4][4][0].apply(exports,arguments)
+},{"dup":4}],14:[function(require,module,exports){
 (function (Buffer){
 /*jslint node:true*/
 module.exports = function makeCTOS(command, message) {
@@ -2900,7 +2908,7 @@ module.exports = function makeCTOS(command, message) {
 };
 
 }).call(this,require("buffer").Buffer)
-},{"buffer":1}],11:[function(require,module,exports){
+},{"buffer":1}],15:[function(require,module,exports){
 /*jslint bitwise: true*/
 
 var enums = enums || require('../../libs/enums.js');
@@ -3055,7 +3063,7 @@ function makeCard(buffer, start, controller) {
 }
 
 module.exports = makeCard;
-},{"../../libs/enums.js":12}],12:[function(require,module,exports){
+},{"../../libs/enums.js":16}],16:[function(require,module,exports){
 /*jslint node:true*/
 
 module.exports = {
@@ -3367,7 +3375,7 @@ function makeCheck(target) {
 }
 makeCheck('STOC');
 makeCheck('CTOS');
-},{}],13:[function(require,module,exports){
+},{}],17:[function(require,module,exports){
 (function (Buffer){
 /*jslint node : true*/
 var util         = require("util");
@@ -3407,7 +3415,7 @@ module.exports = function () {
     return this;
 };
 }).call(this,require("buffer").Buffer)
-},{"buffer":1,"events":5,"util":9}],14:[function(require,module,exports){
+},{"buffer":1,"events":5,"util":9}],18:[function(require,module,exports){
 /*jslint node: true, bitwise: true, plusplus:true*/
 var enums = require('./enums.js');
 
@@ -3793,8 +3801,7 @@ module.exports = function recieveSTOC(packet) {
     return task;
 };
 
-},{"../http/js/card.js":11,"./enums.js":12}],15:[function(require,module,exports){
-(function (Buffer){
+},{"../http/js/card.js":15,"./enums.js":16}],19:[function(require,module,exports){
 //Define all the globals you are going to use. Avoid using to many globals. All Globals should be databases of sorts.
 // ReadInt32() = readUInt16LE()
 /*jslint node: true, bitwise:true*/
@@ -3815,7 +3822,7 @@ var Framemaker = require('../../../server/libs/parseframes.js');
 var enums = require('../../../server/libs/enums.js');
 var recieveSTOC = require('../../../server/libs/recieveSTOC.js');
 var makeCTOS = require('../../ai/responseGenerator.js');
-
+var Buffer = require('buffer/').Buffer;
 
 
 
@@ -4717,5 +4724,4 @@ function startgame(roompass) {
 window.startgame = startgame;
 
 
-}).call(this,require("buffer").Buffer)
-},{"../../../server/libs/enums.js":12,"../../../server/libs/parseframes.js":13,"../../../server/libs/recieveSTOC.js":14,"../../ai/responseGenerator.js":10,"buffer":1}]},{},[15]);
+},{"../../../server/libs/enums.js":16,"../../../server/libs/parseframes.js":17,"../../../server/libs/recieveSTOC.js":18,"../../ai/responseGenerator.js":14,"buffer/":10}]},{},[19]);
