@@ -132,7 +132,8 @@ function initiateSlave() {
         socket.active_ygocore = false;
         socket.active = false;
         socket.write = socket.send;
-        ws.on('message', function incoming(data) {
+        
+        socket.on('message', function incoming(data) {
             var frame,
                 task,
                 newframes = 0;
@@ -148,7 +149,7 @@ function initiateSlave() {
             frame = [];
 
         });
-        ws.on('close', function close() {
+        socket.on('close', function close() {
             //console.log('disconnected');
         });
     });
