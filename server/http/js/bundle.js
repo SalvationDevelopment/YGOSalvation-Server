@@ -4693,7 +4693,8 @@ function startgame(roompass) {
     };
     window.ws.onmessage = function (data) {
         console.log(data);
-        var frame = framer.input(data),
+        
+        var frame = framer.input(data.data),
             newframes,
             task;
         console.log(frame.length);
