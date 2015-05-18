@@ -886,6 +886,7 @@ function parsePackets(command, message) {
 window.ws = {};
 function startgame(roompass) {
     window.ws = new WebSocket("ws://ygopro.us:8080", "duel");
+    window.ws.binaryType = 'arraybuffer';
     var framer = new Framemaker();
     window.ws.onconnect = function () {
         
@@ -897,7 +898,7 @@ function startgame(roompass) {
     window.ws.onmessage = function (data) {
         console.log(data);
         
-        var frame = framer.input(new Buffer(data.data)),
+        var frame = framer.input(data.data),
             newframes,
             task;
         console.log(frame.length);
