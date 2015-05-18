@@ -132,16 +132,18 @@ function initiateSlave() {
         socket.active_ygocore = false;
         socket.active = false;
         socket.write = socket.send;
+        socket.end = function () {
         
+        };
         socket.on('message', function incoming(data) {
             var frame,
                 task,
                 newframes = 0;
             console.log(data);
             if (socket.active_ygocore) {
-                socket.active_ygocore.write(data);
+                socket.active_ygocore.write(data.data);
             }
-            frame = framer.input(data);
+            frame = framer.input(data.data);
             for (newframes; frame.length > newframes; newframes++) {
                 task = parsePackets('CTOS', new Buffer(frame[newframes]));
                 processIncomingTrasmission(data, socket, task);
