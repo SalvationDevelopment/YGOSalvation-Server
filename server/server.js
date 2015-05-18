@@ -131,7 +131,9 @@ function initiateSlave() {
         var framer = new Framemaker();
         socket.active_ygocore = false;
         socket.active = false;
-        socket.write = socket.send;
+        socket.write = function (message) {
+            socket.send(message, {binary: true, mask: false});
+        };
         socket.end = function () {
         
         };
