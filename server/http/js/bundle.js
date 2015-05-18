@@ -4700,7 +4700,7 @@ function startgame(roompass) {
         console.log('Websocket died');
     };
     window.ws.onmessage = function (data) {
-        console.log(data);
+        console.log(data.data, new Buffer(data.data));
         
         var frame = framer.input(new Buffer(data.data)),
             newframes,
