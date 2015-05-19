@@ -897,9 +897,9 @@ function startgame(roompass) {
     };
     window.ws.onmessage = function (data) {
         var q = new Uint16Array(data.data);
-        console.log(data, q, new Buffer(q));
+        console.log(q);
         
-        var frame = framer.input(q),
+        var frame = framer.input(new Buffer(q)),
             newframes,
             task;
         console.log(frame.length);
