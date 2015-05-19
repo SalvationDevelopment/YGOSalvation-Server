@@ -896,7 +896,7 @@ function startgame(roompass) {
         console.log('Websocket died');
     };
     window.ws.onmessage = function (data) {
-        var q = new Uint16Array(data.data);
+        var q = new Uint8Array(data.data);
         console.log(q);
         
         var frame = framer.input(new Buffer(q)),
