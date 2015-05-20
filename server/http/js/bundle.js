@@ -3808,7 +3808,7 @@ module.exports = function recieveSTOC(packet) {
 /*globals $, WebSocket*/
 /*jslint browser : true, plusplus:true*/
 'use strict';
-console.log('Runing DevPro Packet Sniffing Proxy');
+
 
 
 var game = {
@@ -3919,7 +3919,6 @@ function processTask(task, socket) {
         RESPONSE = false;
     for (i; task.length > i; i++) {
         output.push(recieveSTOC(task[i]));
-        console.log(output[i].command);
     }
 
     return output;
@@ -4306,20 +4305,6 @@ function complete(player, deck) {
         }, 100); // every 100 milliseconds
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 function parsePackets(command, message) {
     var task = [],
         packet = {
@@ -4405,7 +4390,7 @@ function startgame(roompass) {
             l = 0,
             reply;
 
-        console.log(q);
+        
         frame = framer.input(q);
         for (newframes; frame.length > newframes; newframes++) {
             task = parsePackets('STOC', new Buffer(frame[newframes]));
@@ -4510,7 +4495,6 @@ function startgame(roompass) {
         var name = makeCTOS('CTOS_PlayerInfo', 'Spectator'),
             join = makeCTOS('CTOS_JoinGame', roompass),
             tosend = Buffer.concat([name, join]);
-        console.log(tosend);
         window.ws.send(tosend);
     };
 }
