@@ -602,7 +602,19 @@ function startgame(roompass) {
 
         }
         frame = [];
-        duel.commandParser.event.on('STOC_JOIN_GAME', function (input) {
+        
+
+        
+        
+    };
+    window.ws.onopen = function () {
+        console.log('Send Game request for', roompass);
+        var name = makeCTOS('CTOS_PlayerInfo', 'Spectator'),
+            join = makeCTOS('CTOS_JoinGame', roompass),
+            tosend = Buffer.concat([name, join]);
+        window.ws.send(tosend);
+    };
+    duel.commandParser.event.on('STOC_JOIN_GAME', function (input) {
 
         });
         duel.commandParser.event.on('STOC_HS_PLAYER_CHANGE', function (input) {
@@ -682,17 +694,6 @@ function startgame(roompass) {
         duel.commandParser.event.on('STOC_TIME_LIMIT', function (input) {
 
         });
-
-        
-        
-    };
-    window.ws.onopen = function () {
-        console.log('Send Game request for', roompass);
-        var name = makeCTOS('CTOS_PlayerInfo', 'Spectator'),
-            join = makeCTOS('CTOS_JoinGame', roompass),
-            tosend = Buffer.concat([name, join]);
-        window.ws.send(tosend);
-    };
 }
 
 window.startgame = startgame;
