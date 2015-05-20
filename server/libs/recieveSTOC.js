@@ -280,6 +280,9 @@ module.exports = function recieveSTOC(packet) {
             task.udcard = makeCard(packet.message, 8, task.udplayer).card;
             break;
         
+        case ('MSG_WAITING'):
+            break;
+        
         default:
             console.log('bad', command, packet, task);
             break;

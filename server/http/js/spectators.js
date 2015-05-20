@@ -41,7 +41,7 @@ function CommandParser() {
     output.event = new events.EventEmitter();
 
     output.input = function (input) {
-        console.log(input);
+        //console.log(input);
         if (input.STOC_GAME_MSG) {
             output.event.emit(input.command, input);
         }
