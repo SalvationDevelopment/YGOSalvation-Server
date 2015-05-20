@@ -531,6 +531,54 @@ function parsePackets(command, message) {
 
 var duel = {};
 window.ws = {};
+function GameState() {
+    'use strict';
+    var AIPlayerID = 0,
+        OppPlayerID = 1,
+        turnPlayer = 0,
+        phase = 0,
+        state = {
+            0: {
+                Lifepoints: 8000,
+                MonsterZones: [],
+                SpellTrapZones: [],
+                Graveyard: [],
+                Banished: [],
+                Hand: [],
+                ExtraDeck: [],
+                MainDeck: []
+            },
+            1: {
+                LifePoints: 8000,
+                MonsterZones: [],
+                SpellTrapZones: [],
+                Graveyard: [],
+                Banished: [],
+                Hand: [],
+                ExtraDeck: [],
+                MainDeck: []
+            }
+        };
+
+    function start(lp1, lp2, OneDeck, TwoDeck, OneExtra, TwoExtra) {
+        //            game.DOMWriter(OneDeck, 'DECK', 0);
+        //            game.DOMWriter(TwoDeck, 'DECK', 1);
+        //            game.DOMWriter(OneExtra, 'EXTRA', 0);
+        //            game.DOMWriter(TwoExtra, 'EXTRA', 1);
+
+        state[0].LifePoints = lp1;
+        state[1].LifePoints = lp2;
+    }
+
+    function update(player, clocation, index, data) {
+        if (index !== 'mass') {
+            state[player][clocation] = data;
+        } else {
+            state[player][clocation][index] = data;
+        }
+    }
+}
+duel.gameState = new GameState();
 function startgame(roompass) {
     duel.commandParser = new CommandParser();
     window.ws = new WebSocket("ws://ygopro.us:8080", "duel");
