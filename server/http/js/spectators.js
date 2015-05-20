@@ -616,84 +616,86 @@ function startgame(roompass) {
     };
     duel.commandParser.event.on('STOC_JOIN_GAME', function (input) {
 
-        });
-        duel.commandParser.event.on('STOC_HS_PLAYER_CHANGE', function (input) {
-            if (input.pos > 3) {
-                return;
-            }
-            if (input.state > 8) {
-                duel.gameState.lobby.ready[input.changepos] = input.state;
-            }
-            console.log(duel.gameState.lobby.ready[0], duel.gameState.lobby.ready[1]);
-            if ((duel.gameState.lobby.ready[0] + duel.gameState.lobby.ready[0]) === 18) {
-                duel.server.write(makeCTOS('CTOS_START'));
-            }
-        });
-        duel.commandParser.event.on('STOC_HS_PLAYER_CHANGE', function (input) {
-            
-        });
-        duel.commandParser.event.on('STOC_SELECT_TP', function (input) {
-            duel.server.write(makeCTOS('CTOS_TP_RESULT', 0));
-        });
-        duel.commandParser.event.on('MSG_START', function (input) {
-            duel.gameState.fieldside =  input.playertype;
-            duel.gameState.lifepoints1 = input.lifepoints1;
-            duel.gameState.lifepoints2 = input.lifepoints2;
-            duel.gameState.player1decksize = input.player1decksize;
-            duel.gameState.player1extrasize = input.player1extrasize;
-            duel.gameState.player2decksize = input.player2decksize;
-            duel.gameState.player2extrasize = input.player2extrasize;
-        });
-        duel.commandParser.event.on('MSG_UPDATE_DATA', function (input) {
-            var field = duel.gameState[input.player],
-                output = [],
-                readposition = 3,
-                failed = false,
-                player = input.player,
-                clocation = input.clocation,
-                buffer = input.message,
-                i = 0,
-                count,
-                len,
-                result;
+    });
+    duel.commandParser.event.on('STOC_HS_PLAYER_CHANGE', function (input) {
+        if (input.pos > 3) {
+            return;
+        }
+        if (input.state > 8) {
+            duel.gameState.lobby.ready[input.changepos] = input.state;
+        }
+        console.log(duel.gameState.lobby.ready[0], duel.gameState.lobby.ready[1]);
+        if ((duel.gameState.lobby.ready[0] + duel.gameState.lobby.ready[0]) === 18) {
+            duel.server.write(makeCTOS('CTOS_START'));
+        }
+    });
+    duel.commandParser.event.on('STOC_HS_PLAYER_CHANGE', function (input) {
 
-            if (field[enums.locations[clocation]] !== undefined) {
-                for (i, count = field[enums.locations[clocation]]; count > i; i++) {
-                    try {
-                        len = buffer.readUInt8(readposition);
-                        readposition = readposition + 4;
-                        if (len > 8) {
-                            result = makeCard(buffer, readposition, player);
-                            output.push(result.card);
-                            readposition = readposition + len - 4;
+    });
+    duel.commandParser.event.on('STOC_SELECT_TP', function (input) {
 
-                        } else {
-                            output.push({
-                                Code: 'nocard'
-                            });
-                        }
-                    } catch (e) {
-                        console.log('overshot', e);
-                        failed = true;
-                        game.additional = {
-                            player: player,
-                            clocation: clocation,
-                            buffer: buffer
-                        };
+    });
+    duel.commandParser.event.on('MSG_START', function (input) {
+        duel.gameState.fieldside =  input.playertype;
+        duel.gameState.lifepoints1 = input.lifepoints1;
+        duel.gameState.lifepoints2 = input.lifepoints2;
+        duel.gameState.player1decksize = input.player1decksize;
+        duel.gameState.player1extrasize = input.player1extrasize;
+        duel.gameState.player2decksize = input.player2decksize;
+        duel.gameState.player2extrasize = input.player2extrasize;
+        console.log(input);
+    });
+    duel.commandParser.event.on('MSG_UPDATE_DATA', function (input) {
+        console.log(input);
+        var field = duel.gameState[input.player],
+            output = [],
+            readposition = 3,
+            failed = false,
+            player = input.player,
+            clocation = input.clocation,
+            buffer = input.message,
+            i = 0,
+            count,
+            len,
+            result;
+
+        if (field[enums.locations[clocation]] !== undefined) {
+            for (i, count = field[enums.locations[clocation]]; count > i; i++) {
+                try {
+                    len = buffer.readUInt8(readposition);
+                    readposition = readposition + 4;
+                    if (len > 8) {
+                        result = makeCard(buffer, readposition, player);
+                        output.push(result.card);
+                        readposition = readposition + len - 4;
+
+                    } else {
+                        output.push({
+                            Code: 'nocard'
+                        });
                     }
+                } catch (e) {
+                    console.log('overshot', e);
+                    failed = true;
+                    game.additional = {
+                        player: player,
+                        clocation: clocation,
+                        buffer: buffer
+                    };
                 }
-                if (!failed) {
-                    game.additional = false;
-                }
-                //console.log(output);
-
-                game.UpdateCards(player, clocation, output);
             }
+            if (!failed) {
+                game.additional = false;
+            }
+            //console.log(output);
 
-        });
-        duel.commandParser.event.on('STOC_TIME_LIMIT', function (input) {
+            game.UpdateCards(player, clocation, output);
+        }
 
-        });
+    });
+    duel.commandParser.event.on('STOC_TIME_LIMIT', function (input) {
+
+    });
 }
 
 window.startgame = startgame;
