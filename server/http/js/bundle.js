@@ -4452,7 +4452,7 @@ function startgame(roompass) {
             duel.gameState.player2extrasize = input.player2extrasize;
         });
         duel.commandParser.event.on('MSG_UPDATE_DATA', function (input) {
-            var field = duel.gameState.field[input.player],
+            var field = duel.gameState[input.player],
                 output = [],
                 readposition = 3,
                 failed = false,
