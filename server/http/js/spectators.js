@@ -18,462 +18,107 @@ var Framemaker = require('../../../server/libs/parseframes.js');
 var enums = require('../../../server/libs/enums.js');
 var recieveSTOC = require('../../../server/libs/recieveSTOC.js');
 var makeCTOS = require('../../ai/responseGenerator.js');
-var Buffer = require('buffer/').Buffer;
+var Buffer = require('buffer/').Buffer,
+    events = require('events'),
+    makeCard = require('./card.js');
 
 
-
-
-function processTask(task) {
-    var player, clocation, index, data,
-        code, pc, pl, ps, pp, cc, cl, cs, cp, reason, ct, i,
-        type, command, game_message, lifepoints1, lifepoints2, player1decksize, player1extrasize, player2extrasize,
-        player2decksize, hintplayer, hintcont, hintspeccount, hintforce, drawplayer, draw, cardslist, drawReadposition,
-        drawcount, cardcode, shuffle, layoutand, count, randomRead, randomcount, layouthand, lpcost, damage, idleplayer,
-        idlereadposition, k, idlecount, fieldlocation, fieldmodel, updateMassCards, udplayer, udfieldlocation, udindex, udcard,
-        makecard, chat, person, position, change, changepos, state, makeCard, typec, pos, ishost, errormessage, rpschoice;
-    task = (function () {
-        var output = [];
-        for (i = 0; task.length > i; i++) {
-            output.push(recieveSTOC(task[i]));
-        }
-        return output;
-    }());
-    for (i = 0; task.length > i; i++) {
-//        if (task[i].STOC_UNKNOWN) {
-//            //console.log('-----', makeCard(task[i].STOC_UNKNOWN.message));
-//        } else
-        if (task[i].STOC_GAME_MSG && task[i].STOC_GAME_MSG.message) {
-            command = enums.STOC.STOC_GAME_MSG[task[i].STOC_GAME_MSG.message[0]];
-            game_message = task[i].STOC_GAME_MSG.message;
-            if (command === undefined) {
-                console.log('figure out STOC', task[i].STOC_GAME_MSG);
-            }
-            console.log(command);
-            if (command === 'MSG_START') {
-                type = game_message[1];
-                lifepoints1 = game_message.readUInt16LE(2);
-                lifepoints2 = game_message.readUInt16LE(6);
-                player1decksize = game_message.readUInt8(10);
-                player1extrasize = game_message.readUInt8(12);
-                player2decksize = game_message.readUInt8(14);
-                player2extrasize = game_message.readUInt8(16);
-                game.StartDuel(lifepoints1, lifepoints2,
-                    player1decksize, player2decksize,
-                    player1extrasize, player2extrasize);
-            } else if (command === 'MSG_HINT') {
-                console.log('MSG_HINT', game_message);
-                hintplayer = game_message[1];
-                hintcont = game_message[2];
-                hintspeccount = game_message[3];
-                hintforce = game_message[4];
-
-
-                console.log('Win', game_message[1]);
-            } else if (command === 'MSG_NEW_TURN') {
-                game.activePlayer = !game.activePlayer;
-                game.phase = 0;
-                game.NewTurn(game.activePlayer);
-                game.NewPhase(+game.phase);
-            } else if (command === 'MSG_WIN') {
-                console.log('Win', game_message[1]);
-            } else if (command === 'MSG_NEW_PHASE') {
-                game.phase++;
-                game.NewPhase(game.phase);
-            } else if (command === 'MSG_DRAW') {
-                console.log(game_message);
-                drawplayer = game_message[1];
-                draw = game_message[2];
-                cardslist = [];
-                drawReadposition = 3;
-                for (drawcount = 0; draw > drawcount; drawcount++) {
-                    cardcode = game_message.readUInt32LE(drawReadposition) || 'cover';
-                    cardslist.push(cardcode);
-                    console.log(drawReadposition);
-                    drawReadposition = drawReadposition + 4;
-                }
-                console.log('%c' + ('Player' + (drawplayer + 1)) + ' drew' + draw + ' cards', 'background: #222; color: #bada55', cardslist);
-                game.DrawCard(drawplayer, draw, cardslist);
-            } else if (command === 'MSG_SHUFFLE_DECK') {
-                shuffle(game_message[1], 'DECK');
-
-            } else if (command === 'MSG_SHUFFLE_HAND') {
-                layouthand(game_message[1]);
-            } else if (command === 'MSG_CHAINING') {
-                console.log('Chain in acknolweleged');
-            } else if (command === 'MSG_CHAINED') {
-                ct = game_message[1];
-                // "push back chain"
-                console.log('Chain in progress');
-            } else if (command === 'MSG_CHAIN_SOLVING') {
-                ct = game_message[1];
-                game.chainsolved = 1;
-                console.log('Resolving Chain');
-            
-            } else if (command === 'MSG_CARD_SELECTED') {
-                /*  player = game_message[1];*/
-                count = game_message[2];
-                randomRead = 3;
-                game.showRandomSelected();
-            } else if (command === 'MSG_PAY_LPCOST') {
-                player = game_message[1];
-                lpcost = game_message.readUInt16LE(2);
-                console.log(('Player' + (player + 1)), 'paid', lpcost, 'lifepoints');
-                game.updatelifepoints(player, -1, lpcost);
-            } else if (command === 'MSG_DAMAGE') {
-                player = game_message[1];
-                damage = game_message.readUInt16LE(2);
-                console.log(('Player' + (player + 1)), 'took', damage, 'damage');
-                game.updatelifepoints(player, -1, damage);
-            } else if (command === 'MSG_SUMMONING ') {
-                //ignoring
-                console.log('Normal summon preformed');
-            } else if (command === 'MSG_SELECT_IDLECMD') {
-                idleplayer = game_message[1];
-                game.idle = true;
-                idlereadposition = 2;
-                for (k = 0; k < 5; k++) {
-                    idlecount = game_message[idlereadposition];
-                    idlereadposition++;
-                    //                    for (var j = 0; j < idlecount; ++j) {
-                    //                        var idlecard = game_message.readUInt16LE(idlereadposition);
-                    //                        idlereadposition = idlereadposition + 4;
-                    //                    }
-                }
-            } else if (command === 'MSG_MOVE') {
-                code = game_message.readUInt16LE(1);
-                pc = game_message[5]; // original controller
-                pl = game_message[6]; // original cLocation
-                ps = game_message[7]; // original sequence (index)
-                pp = game_message[8]; // padding??
-                cc = game_message[9]; // current controller
-                cl = game_message[10]; // current cLocation
-                cs = game_message[11]; // current sequence (index)
-                cp = game_message[12]; // current position
-                reason = game_message.readUInt16LE[12]; //debug data??
-                game.MoveCard(code, pc, pl, ps, pp, cc, cl, cs, cp, reason);
-            } else if (command === 'MSG_POS_CHANGE') {
-                code = game_message.readUInt16LE(1);
-                cc = game_message[5]; // current controller
-                cl = game_message[6]; // current cLocation
-                cs = game_message[7]; // current sequence (index)
-                pp = game_message[8]; // padding??
-                cp = game_message[9]; // current position
-                game.ChangeCardPosition(code, cc, cl, cs, cp);
-            } else if (command === 'MSG_SET') {
-                // All the vars are commented out in the source.
-                console.log('MSG_SET');
-            } else if (command === 'MSG_SWAP') {
-                console.log('MSG_SWAP');
-                // code vars are commented out in the source, assuming graphical only.
-            } else if (command === 'MSG_SUMMONING' || command === 'MSG_SPSUMMONING') {
-                code = game_message.readUInt16LE(1);
-            } else if (command === 'MSG_FLIPSUMMONING') {
-                // notice pp is missing, and everything is upshifted; not repeating code.
-                code = game_message.readUInt16LE(1);
-                cc = game_message[5]; // current controller
-                cl = game_message[6]; // current cLocation
-                cs = game_message[7]; // current sequence (index)
-                cp = game_message[8]; // current position
-                game.ChangeCardPosition(code, cc, cl, cs, cp);
-            } else if (command === 'MSG_UPDATE_DATA') {
-                player = game_message[1];
-                fieldlocation = game_message[2];
-                fieldmodel = enums.locations[fieldlocation];
-                updateMassCards(player, fieldlocation, game_message);
-                //console.log('MSG_UPDATE_DATA', 'Player' + (player + 1), fieldmodel, udata);
-
-            } else if (command === 'MSG_UPDATE_CARD') {
-                udplayer = game_message[1];
-                udfieldlocation = game_message[2];
-                udindex = game_message[3];
-
-                udcard = makeCard(game_message, 8, udplayer).card;
-                //console.log('MSG_UPDATE_CARD',
-                //'Player' + (udplayer + 1), enums.locations[udfieldlocation], udindex, udcard);
-                game.UpdateCard(udplayer, udfieldlocation, udindex, udcard);
-            } else {
-                console.log(command, game_message);
-            }
-        } else if (task[i].STOC_DUEL_START) {
-            game.LoadField();
-
-        } else if (task[i].STOC_SELECT_TP) {
-            console.log('Select who goes first');
-        } else if (task[i].STOC_HAND_RESULT) {
-            rpschoice = task[i].STOC_HAND_RESULT.message[0];
-            console.log('Opponent used', enums.RPS[rpschoice]);
-        } else if (task[i].STOC_SELECT_HAND) {
-            console.log('Please Select RPS');
-        } else if (task[i].STOC_REPLAY) {
-            console.log('Replay Information', task[i].STOC_REPLAY);
-        } else if (task[i].STOC_TIME_LIMIT) {
-
-            //console.log('Player' + (task[i].STOC_TIME_LIMIT.message[0] + 1), 'has ' + (task[i].STOC_TIME_LIMIT.message[1] + task[i].STOC_TIME_LIMIT.message[2]) + 'sec left');
-            game.UpdateTime(task[i].STOC_TIME_LIMIT.message[0], (task[i].STOC_TIME_LIMIT.message[1] + task[i].STOC_TIME_LIMIT.message[2]));
-
-        } else if (task[i].STOC_CHAT) {
-            chat = task[i].STOC_CHAT.message.toString('utf16le', 2);
-            console.log('Chat:', chat);
-        } else if (task[i].STOC_HS_PLAYER_ENTER) {
-            person = task[i].STOC_HS_PLAYER_ENTER.message.toString('utf16le', 0, 40);
-            position = task[i].STOC_HS_PLAYER_ENTER.message[41];
-            console.log(person, 'entered', 'the duel', position);
-        } else if (task[i].STOC_HS_PLAYER_CHANGE) {
-            change = task[i].STOC_HS_PLAYER_CHANGE.message[0];
-            changepos = (change >> 4) & 0xF;
-            state = change & 0xF;
-            console.log('position', changepos, enums.lobbyStates[state]);
-
-
-        } else if (task[i].STOC_HS_WATCH_CHANGE) {
-            console.log('Spectators:', task[i].STOC_HS_WATCH_CHANGE.message[0]);
-        } else if (task[i].STOC_TYPE_CHANGE) {
-
-            typec = task[i].STOC_TYPE_CHANGE.message[0];
-            pos = typec & 0xF;
-            ishost = ((typec >> 4) & 0xF) !== 0;
-            console.log('STOC_TYPE_CHANGE', task[i].STOC_TYPE_CHANGE, 'type', typec, 'pos', pos, 'ishost', ishost);
-
-        } else if (task[i].STOC_SELECT_TP) {
-            console.log('Chat', task[i].STOC_SELECT_TP);
-        } else if (task[i].STOC_JOIN_GAME) {
-            console.log('Join Game', task[i].STOC_JOIN_GAME);
-        } else if (task[i].STOC_ERROR_MSG) {
-            errormessage = enums.STOC.STOC_ERROR_MSG[task[i].STOC_ERROR_MSG.message[0]];
-            if (errormessage === "ERRMSG_JOINERROR") {
-                console.log(enums.STOC.STOC_ERROR_MSG.ERRMSG_DECKERROR[task[i].STOC_ERROR_MSG.message[1]]);
-            } else if (errormessage === "ERRMSG_DECKERROR") {
-                if (task[i].STOC_ERROR_MSG.message[1] === 1) {
-                    console.log('Invalid Deck');
-                } else {
-                    console.log('[%ls] not allowed. Check the TCG/OCG card list and check the banlist',
-                        task[i].STOC_ERROR_MSG.message.readUInt32LE(4));
-                }
-            } else if (errormessage === "ERRMSG_SIDEERROR") {
-                console.log('Side decking failed');
-            } else if (errormessage === "ERRMSG_VERERROR") {
-                console.log('Version mismatch.');
-            }
-        } else {
-            console.log('????', task[i]);
-
-        }
-    }
-}
-
-function makeCard(buffer, start, controller) {
-    if (buffer.length < 4) {
-        return {
-            card: {
-                Code: 'nocard'
-            },
-            readposition: start
-        };
-    }
-    var flag = buffer.readUInt32LE(start),
-        card,
-        readposition,
-        i,
-        ii,
-        iii;
-
-    if (!flag) {
-        return {
-            card: {
-                Code: 'cover',
-                Position: 'FaceDownAttack'
-            },
-            readposition: start + 9
-        };
-    }
-    card = {
-        Code: 'cover',
-        Position: 'FaceDownAttack'
-    };
-
-    //console.log('flag:', flag);
-    readposition = start + 4;
-
-    if (flag & enums.query.Code) {
-        card.Code = buffer.readUInt32LE(readposition);
-        readposition = readposition + 4;
-    }
-    if (flag & enums.query.Position) {
-        card.Controller = buffer[readposition];
-        card.Position = enums.Positions[buffer[readposition + 3]];
-        readposition = readposition + 4;
-    }
-    if (flag & enums.query.Alias) {
-        card.Alias = buffer.readUInt32LE(readposition);
-        readposition = readposition + 4;
-    }
-    if (flag & enums.query.Type) {
-        card.Type = enums.cardTypes[buffer.readUInt32LE(readposition)];
-        readposition = readposition + 4;
-    }
-    if (flag & enums.query.Level) {
-        card.Level = buffer.readUInt32LE(readposition);
-        readposition = readposition + 4;
-    }
-    if (flag & enums.query.Rank) {
-        card.Rank = buffer.readUInt32LE(readposition);
-        readposition = readposition + 4;
-    }
-    if (flag & enums.query.Attribute) {
-        card.Attribute = enums.cardAttributes[buffer.readUInt32LE(readposition)];
-        readposition = readposition + 4;
-    }
-    if (flag & enums.query.Race) {
-        card.Race = enums.race[buffer.readUInt32LE(readposition)];
-        readposition = readposition + 4;
-    }
-    if (flag & enums.query.Attack) {
-        card.Attack = buffer.readUInt32LE(readposition);
-        readposition = readposition + 4;
-    }
-    if (flag & enums.query.Defense) {
-        card.Defense = buffer.readUInt32LE(readposition);
-        readposition = readposition + 4;
-    }
-    if (flag & enums.query.BaseAttack) {
-        card.Attribute = buffer.readUInt32LE(readposition);
-        readposition = readposition + 4;
-    }
-    if (flag & enums.query.BaseDefense) {
-        card.Attribute = buffer.readUInt32LE(readposition);
-        readposition = readposition + 4;
-    }
-    if (flag & enums.query.Reason) {
-        card.Attribute = buffer.readUInt16LE(readposition);
-        readposition = readposition + 4;
-    }
-    if (flag & enums.query.ReasonCard) {
-        card.Attribute = buffer.readUInt32LE(readposition);
-        readposition = readposition + 4;
-    }
-    if (flag & enums.query.EquipCard) {
-        card.EquipCard = {
-            c: buffer[readposition],
-            l: buffer[readposition + 1],
-            s: buffer[readposition + 2]
-        };
-        readposition = readposition + 4;
-    }
-    if (flag & enums.query.TargetCard) {
-        card.TargetCard = [];
-        for (i = 0; i < buffer.readUInt32LE(readposition); ++i) {
-            card.TargetCard.push({
-                c: buffer[readposition],
-                l: buffer[readposition + 1],
-                s: buffer[readposition + 2]
-            });
-            readposition = readposition + 4;
-        }
-    }
-    if (flag & enums.query.OverlayCard) {
-        card.OverlayCard = [];
-        for (ii = 0; ii < buffer.readUInt32LE(readposition); ++ii) {
-            card.OverlayCard.push(buffer.readUInt32LE(readposition));
-            readposition = readposition + 4;
-        }
-    }
-    if (flag & enums.query.Counters) {
-        card.Counters = [];
-        for (iii = 0; iii < buffer.readUInt32LE(readposition); ++iii) {
-            card.Counters.push({
-                counterType: buffer.readUInt16LE(readposition),
-                amount: buffer.readUInt16LE(readposition + 2)
-            });
-            readposition = readposition + 4;
-        }
-    }
-    if (flag & enums.query.Owner) {
-        card.EquipCard = buffer.readUInt32LE(readposition);
-        readposition = readposition + 4;
-    }
-    if (flag & enums.query.IsDisabled) {
-        card.EquipCard = buffer.readUInt32LE(readposition);
-        readposition = readposition + 4;
-    }
-    if (flag & enums.query.IsPublic) {
-        card.EquipCard = buffer.readUInt32LE(readposition);
-        readposition = readposition + 4;
-    }
-    if (flag & enums.query.LScale) {
-        card.lscale = buffer.readUInt32LE(readposition);
-        readposition = readposition + 4;
-    }
-    if (flag & enums.query.RScale) {
-        card.rscale = buffer.readUInt32LE(readposition);
-        readposition = readposition + 4;
-    }
-    return {
-        card: card,
-        readposition: readposition
-    };
-
-
-}
-
-function cardCollections(player) {
-    return {
-        DECK: $('.p' + player + '.DECK').length,
-        HAND: $('.p' + player + '.HAND').length,
-        EXTRA: $('.p' + player + '.EXTRA').not('.overlayunit').length,
-        GRAVE: $('.p' + player + '.GRAVE').length,
-        REMOVED: $('.p' + player + '.REMOVED').length,
-        SPELLZONE: 8,
-        MONSTERZONE: 5
-
-    };
-}
-
-
-function updateMassCards(player, clocation, buffer) {
-    //console.log("Location:", enums.locations[clocation], clocation, player);
-    //if (enums.locations[clocation] === 'EXTRA')return;
-    var field = cardCollections(player),
-        output = [],
-        readposition = 3,
-        failed = false,
-        i,
-        len,
-        count,
-        result;
+function CommandParser() {
     
-    //console.log(field);
-    if (field[enums.locations[clocation]] !== undefined) {
-        for (i = 0, count = field[enums.locations[clocation]]; count > i; i++) {
-            try {
-                len = buffer.readUInt8(readposition);
-                readposition = readposition + 4;
-                if (len > 8) {
-                    result = makeCard(buffer, readposition, player);
-                    output.push(result.card);
-                    readposition = readposition + len - 4;
 
-                } else {
-                    output.push({
-                        Code: 'nocard'
-                    });
-                }
-            } catch (e) {
-                console.log('overshot', e);
-                failed = true;
-                game.additional = {
-                    player: player,
-                    clocation: clocation,
-                    buffer: buffer
-                };
-            }
-        }
-        if (!failed) {
-            game.additional = false;
-        }
-        //console.log(output);
+    // OK!!!! HARD PART!!!!
+    // recieveSTOC.js should have created obejects with all the parameters as properites, fire the functions.
+    // Dont try to pull data out of a packet here, should have been done already.
+    // its done here because we might need to pass in STATE to the functions also.
+    // again if you are fiddling with a packet you are doing it wrong!!!
+    // data decode and command execution are different conserns.
+    // if a COMMAND results in a response, save it as RESPONSE, else return the function false.
 
-        game.UpdateCards(player, clocation, output);
+    var protoResponse = [],
+        responseRequired = false,
+        output = {};
+
+    output.event = new events.EventEmitter();
+
+    output.input = function (input) {
+        console.log(input);
+        if (input.STOC_GAME_MSG) {
+            output.event.emit(input.command, input);
+        }
+        if (input.STOC_UNKNOWN) {
+            output.event.emit('STOC_UNKNOWN', input);
+        }
+        if (input.STOC_SELECT_HAND) {
+            output.event.emit('STOC_SELECT_HAND', input);
+        }
+        if (input.STOC_JOIN_GAME) {
+            output.event.emit('STOC_JOIN_GAME', input);
+        }
+        if (input.STOC_SELECT_TP) {
+            output.event.emit('STOC_SELECT_TP', input);
+        }
+        if (input.STOC_HAND_RESULT) {
+            output.event.emit('STOC_HAND_RESULT', input);
+        }
+        if (input.STOC_TP_RESULT) {
+            output.event.emit('STOC_TP_RESULT', input);
+        }
+        if (input.STOC_CHANGE_SIDE) {
+            output.event.emit('STOC_CHANGE_SIDE', input);
+        }
+        if (input.STOC_WAITING_SIDE) {
+            output.event.emit('STOC_WAITING_SIDE', input);
+        }
+        if (input.STOC_CREATE_GAME) {
+            output.event.emit('STOC_CREATE_GAME', input);
+        }
+        if (input.STOC_TYPE_CHANGE) {
+            output.event.emit('STOC_TYPE_CHANGE', input);
+        }
+        if (input.STOC_LEAVE_GAME) {
+            output.event.emit('STOC_LEAVE_GAME', input);
+        }
+        if (input.STOC_DUEL_START) {
+            output.event.emit('STOC_DUEL_START', input);
+        }
+        if (input.STOC_DUEL_END) {
+            output.event.emit('STOC_DUEL_END', input);
+        }
+        if (input.STOC_REPLAY) {
+            output.event.emit('STOC_REPLAY', input);
+        }
+        if (input.STOC_TIME_LIMIT) {
+            output.event.emit('STOC_TIME_LIMIT', input);
+        }
+        if (input.STOC_CHAT) {
+            output.event.emit('STOC_CHAT', input);
+        }
+        if (input.STOC_HS_PLAYER_ENTER) {
+            output.event.emit('STOC_HS_PLAYER_ENTER', input);
+        }
+
+        if (input.STOC_HS_PLAYER_CHANGE) {
+            output.event.emit('STOC_HS_PLAYER_CHANGE', input);
+        }
+        if (input.STOC_HS_WATCH_CHANGE) {
+            output.event.emit('STOC_HS_WATCH_CHANGE', input);
+        }
+    };
+    return output;
+}
+
+function processTask(task, socket) {
+   
+    var i = 0,
+        l = 0,
+        output = [],
+        RESPONSE = false;
+    for (i; task.length > i; i++) {
+        output.push(recieveSTOC(task[i]));
+        console.log(output[i].command);
     }
+
+    return output;
 }
 //Functions used by the websocket object
 
@@ -546,7 +191,7 @@ game.StartDuel = function (player1StartLP, player2StartLP, OneDeck, TwoDeck, One
     layouthand(1);
     $('.p0lp').val(player1StartLP);
     $('.p1lp').val(player2StartLP);
-    return [cardCollections(0), cardCollections(1)];
+    //return [cardCollections(0), cardCollections(1)];
 };
 
 game.DOMWriter = function (size, movelocation, player) {
@@ -883,11 +528,15 @@ function parsePackets(command, message) {
     task.push(packet);
     return task;
 }
+
+var duel = {};
 window.ws = {};
 function startgame(roompass) {
+    duel.commandParser = new CommandParser();
     window.ws = new WebSocket("ws://ygopro.us:8080", "duel");
     window.ws.binaryType = 'arraybuffer';
     var framer = new Framemaker();
+    duel.commandParser = new CommandParser();
     window.ws.onconnect = function () {
         
        
@@ -896,17 +545,113 @@ function startgame(roompass) {
         console.log('Websocket died');
     };
     window.ws.onmessage = function (data) {
-        var q = new Uint8Array(data.data);
+        var q = new Buffer(new Uint8Array(data.data)),
+            frame,
+            task,
+            newframes = 0,
+            commands,
+            l = 0,
+            reply;
+
         console.log(q);
-        
-        var frame = framer.input(new Buffer(q)),
-            newframes,
-            task;
-        console.log(frame.length);
-        for (newframes = 0; frame.length > newframes; newframes++) {
+        frame = framer.input(q);
+        for (newframes; frame.length > newframes; newframes++) {
             task = parsePackets('STOC', new Buffer(frame[newframes]));
-            processTask(task);
+            //console.log('!', task);
+            commands = processTask(task);
+            // process AI
+            //console.log(task);
+            l = 0;
+            for (l; commands.length > l; l++) {
+                duel.commandParser.input(commands[l]);
+            }
+            
+
         }
+        frame = [];
+        duel.commandParser.event.on('STOC_JOIN_GAME', function (input) {
+
+        });
+        duel.commandParser.event.on('STOC_HS_PLAYER_CHANGE', function (input) {
+            if (input.pos > 3) {
+                return;
+            }
+            if (input.state > 8) {
+                duel.gameState.lobby.ready[input.changepos] = input.state;
+            }
+            console.log(duel.gameState.lobby.ready[0], duel.gameState.lobby.ready[1]);
+            if ((duel.gameState.lobby.ready[0] + duel.gameState.lobby.ready[0]) === 18) {
+                duel.server.write(makeCTOS('CTOS_START'));
+            }
+        });
+        duel.commandParser.event.on('STOC_HS_PLAYER_CHANGE', function (input) {
+            
+        });
+        duel.commandParser.event.on('STOC_SELECT_TP', function (input) {
+            duel.server.write(makeCTOS('CTOS_TP_RESULT', 0));
+        });
+        duel.commandParser.event.on('MSG_START', function (input) {
+            duel.gameState.fieldside =  input.playertype;
+            duel.gameState.lifepoints1 = input.lifepoints1;
+            duel.gameState.lifepoints2 = input.lifepoints2;
+            duel.gameState.player1decksize = input.player1decksize;
+            duel.gameState.player1extrasize = input.player1extrasize;
+            duel.gameState.player2decksize = input.player2decksize;
+            duel.gameState.player2extrasize = input.player2extrasize;
+        });
+        duel.commandParser.event.on('MSG_UPDATE_DATA', function (input) {
+            var field = duel.gameState.field[input.player],
+                output = [],
+                readposition = 3,
+                failed = false,
+                player = input.player,
+                clocation = input.clocation,
+                buffer = input.message,
+                i = 0,
+                count,
+                len,
+                result;
+
+            if (field[enums.locations[clocation]] !== undefined) {
+                for (i, count = field[enums.locations[clocation]]; count > i; i++) {
+                    try {
+                        len = buffer.readUInt8(readposition);
+                        readposition = readposition + 4;
+                        if (len > 8) {
+                            result = makeCard(buffer, readposition, player);
+                            output.push(result.card);
+                            readposition = readposition + len - 4;
+
+                        } else {
+                            output.push({
+                                Code: 'nocard'
+                            });
+                        }
+                    } catch (e) {
+                        console.log('overshot', e);
+                        failed = true;
+                        game.additional = {
+                            player: player,
+                            clocation: clocation,
+                            buffer: buffer
+                        };
+                    }
+                }
+                if (!failed) {
+                    game.additional = false;
+                }
+                //console.log(output);
+
+                game.UpdateCards(player, clocation, output);
+            }
+
+        });
+        duel.commandParser.event.on('STOC_TIME_LIMIT', function (input) {
+
+        });
+
+        
+        
     };
     window.ws.onopen = function () {
         console.log('Send Game request for', roompass);

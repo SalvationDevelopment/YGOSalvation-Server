@@ -12,7 +12,8 @@ var portmin = 30000 + process.env.PORTRANGE * 100,
     recieveSTOC = require('./recieveSTOC.js'),
     createDateString = require('./datetimestamp.js'),
     //custom_error = require('./custom_error.js'),
-    gamelist = {};
+    gamelist = {},
+    geoip = require('geoip-lite');
 
 if (cluster.isWorker) {
     process.on('message', function (message) {

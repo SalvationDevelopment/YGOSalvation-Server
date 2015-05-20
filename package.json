@@ -30,7 +30,8 @@
         "policyfile" : "*",
         "istanbul": "*",
         "jsdom" : "*",
-        "ps-node" : "*"
+        "ps-node" : "*",
+        "geoip-lite" : "*"
     },
     "optionalDependencies": {
         "httpsys": "*",
