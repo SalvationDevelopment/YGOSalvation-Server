@@ -4597,7 +4597,7 @@ function startgame(roompass) {
 
             game.UpdateCards(player, clocation, output);
         }
-
+        duel.gameState.state[input.player][input.fieldmodel] = output;
     });
     duel.commandParser.event.on('STOC_TIME_LIMIT', function (input) {
 
