@@ -657,7 +657,8 @@ function GameState() {
         },
         time : [0, 0],
         fieldside : 0,
-        state : state
+        state : state,
+        start : start
     };
 
 }
@@ -742,7 +743,7 @@ function startgame(roompass) {
         console.log(input);
     });
     duel.commandParser.event.on('MSG_UPDATE_DATA', function (input) {
-        console.log(input);
+        //console.log(input);
         var field = duel.gameState.state[input.player],
             output = [],
             readposition = 3,
@@ -753,10 +754,11 @@ function startgame(roompass) {
             i = 0,
             count,
             len,
-            result;
+            result,
+            fail = false;
 
         if (field[input.fieldmodel] !== undefined) {
-            for (i, count = field[input.fieldmodel]; count > i; i++) {
+            while (fail) {
                 try {
                     len = buffer.readUInt8(readposition);
                     readposition = readposition + 4;
@@ -782,6 +784,7 @@ function startgame(roompass) {
             }
             if (!failed) {
                 game.additional = false;
+                fail = true;
             }
             //console.log(output);
 
