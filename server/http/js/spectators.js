@@ -517,7 +517,6 @@ function parsePackets(command, message) {
 var duel = {};
 window.ws = {};
 function GameState() {
-    'use strict';
     var AIPlayerID = 0,
         OppPlayerID = 1,
         turnPlayer = 0,
@@ -737,7 +736,7 @@ function startgame(roompass) {
 
     });
     duel.commandParser.event.on('MSG_START', function (input) {
-        duel.gameState.start(input.ifepoints1, input.lifepoints2, input.player1decksize, input.player2decksize, input.player1extrasize, input.player2extrasize)
+        duel.gameState.start(input.ifepoints1, input.lifepoints2, input.player1decksize, input.player2decksize, input.player1extrasize, input.player2extrasize);
         duel.gameState.fieldside =  input.playertype;
         
         console.log(input);
@@ -754,11 +753,10 @@ function startgame(roompass) {
             i = 0,
             count,
             len,
-            result,
-            fail = false;
+            result;
 
         if (field[input.fieldmodel] !== undefined) {
-            while (!fail) {
+            while (!failed) {
                 try {
                     len = buffer.readUInt8(readposition);
                     readposition = readposition + 4;
@@ -782,16 +780,13 @@ function startgame(roompass) {
                     };
                 }
             }
-            if (!failed) {
-                game.additional = false;
-                fail = true;
-            }
+           
             //console.log(output);
 
             game.UpdateCards(player, clocation, output);
         }
         duel.gameState.state[input.player][input.fieldmodel] = output;
-        console.log(output)
+        console.log(output);
     });
     duel.commandParser.event.on('STOC_TIME_LIMIT', function (input) {
 
