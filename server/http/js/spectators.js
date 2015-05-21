@@ -562,7 +562,107 @@ function GameState() {
             state[player][clocation][index] = data;
         }
     }
+
+    function updateLifepoints(player, multiplier, lp) {
+        var lifepoints = +state[player].Lifepoints + (lp * multiplier);
+        if (lifepoints < 0) {
+            lifepoints = 0;
+        }
+        state[player].Lifepoints = lifepoints;
+    }
+
+    function move(player, clocation, index, moveplayer, movelocation, movezone, moveposition, overlayindex, isBecomingCard) {
+
+        //enums.locations[clocation] === 'DECK/EXTRA/REMOVED
+        state[moveplayer][movelocation][moveposition] = state[player][clocation][index];
+        state[player][clocation][index] = undefined;
+        //if grave
+        //if banished
+        //if hand
+        //if extraDeck
+        //if maindeck
+        //if above, reshuffle;
+        state[player][clocation] = state[player][clocation].filter(function (element) {
+            return element !== undefined;
+        });
+
+
+        return;
+    }
+
+    function newphase(turnx) {
+        turnx = +state.phase;
+    }
+
+    function setAI_Opp(newID) {
+        AIPlayerID = newID;
+        OppPlayerID = (AIPlayerID === 0) ? 1 : 0;
+    }
+
+    function loadDeck(player, deck, cardList) {
+
+    }
+    return {
+        move: move,
+        update: update,
+        loadDeck: loadDeck,
+        setAI_Opp: setAI_Opp,
+        GetOppMonsterZones: function () {
+            return state[OppPlayerID].MonsterZones;
+        },
+        GetAIMonsterZones: function () {
+            return state[AIPlayerID].MonsterZones;
+        },
+        GetOppSpellTrapZones: function () {
+            return state[OppPlayerID].SpellTrapZones;
+        },
+
+        GetAISpellTrapZones: function () {
+            return state[AIPlayerID].SpellTrapZones;
+        },
+        GetOppGraveyard: function () {
+            return state[OppPlayerID].Graveyard;
+        },
+        GetAIGraveyard: function () {
+            return state[AIPlayerID].Graveyard;
+        },
+        GetOppBanished: function () {
+            return state[OppPlayerID].Banished;
+        },
+        GetAIBanished: function () {
+            return state[AIPlayerID].Banished;
+        },
+        GetOppHand: function () {
+            return state[OppPlayerID].Hand;
+        },
+        GetAIHand: function () {
+            return state[AIPlayerID].Hand;
+        },
+        GetOppExtraDeck: function () {
+            return state[OppPlayerID].ExtraDeck;
+        },
+        GetAIExtraDeck: function () {
+            return state[AIPlayerID].ExtraDeck;
+        },
+        GetOppMainDeck: function () {
+            return state[OppPlayerID].MainDeck;
+        },
+        GetAIMainDeck: function () {
+            return state[AIPlayerID].MainDeck;
+        },
+        lobby: {
+            ready : [0, 0],
+            duelist : [],
+            totalplayers: 0
+        },
+        time : [0, 0],
+        fieldside : 0,
+        state : state
+    };
+
 }
+
+
 duel.gameState = new GameState();
 function startgame(roompass) {
     duel.commandParser = new CommandParser();
@@ -636,13 +736,9 @@ function startgame(roompass) {
 
     });
     duel.commandParser.event.on('MSG_START', function (input) {
+        duel.gameState.start(input.ifepoints1, input.lifepoints2, input.player1decksize, input.player2decksize, input.player1extrasize, input.player2extrasize)
         duel.gameState.fieldside =  input.playertype;
-        duel.gameState.lifepoints1 = input.lifepoints1;
-        duel.gameState.lifepoints2 = input.lifepoints2;
-        duel.gameState.player1decksize = input.player1decksize;
-        duel.gameState.player1extrasize = input.player1extrasize;
-        duel.gameState.player2decksize = input.player2decksize;
-        duel.gameState.player2extrasize = input.player2extrasize;
+        
         console.log(input);
     });
     duel.commandParser.event.on('MSG_UPDATE_DATA', function (input) {
