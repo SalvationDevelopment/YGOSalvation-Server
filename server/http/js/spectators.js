@@ -758,7 +758,7 @@ function startgame(roompass) {
             fail = false;
 
         if (field[input.fieldmodel] !== undefined) {
-            while (fail) {
+            while (!fail) {
                 try {
                     len = buffer.readUInt8(readposition);
                     readposition = readposition + 4;
