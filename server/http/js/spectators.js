@@ -743,7 +743,7 @@ function startgame(roompass) {
     });
     duel.commandParser.event.on('MSG_UPDATE_DATA', function (input) {
         console.log(input);
-        var field = duel.gameState[input.player],
+        var field = duel.gameState.state[input.player],
             output = [],
             readposition = 3,
             failed = false,
@@ -755,7 +755,7 @@ function startgame(roompass) {
             len,
             result;
 
-        if (field[enums.locations[clocation]] !== undefined) {
+        if (field[fieldmodel] !== undefined) {
             for (i, count = field[enums.locations[clocation]]; count > i; i++) {
                 try {
                     len = buffer.readUInt8(readposition);
@@ -795,4 +795,4 @@ function startgame(roompass) {
 }
 
 window.startgame = startgame;
-
+window.duel = duel;
