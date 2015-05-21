@@ -214,8 +214,8 @@ game.UpdateCards = function (player, clocation, data) { //YGOPro is constantly s
 
     for (i = 0; data.length > i; i++) {
         if (data[i].Code !== 'nocard') {
-            console.log('.card.p' + player + '.' + enums.locations[clocation] + '.i' + i, data[i].Code);
-            $('.card.p' + player + '.' + enums.locations[clocation] + '.i' + i).not('.overlayunit')
+            console.log('.card.p' + player + '.' + clocation + '.i' + i, data[i].Code);
+            $('.card.p' + player + '.' + clocation + '.i' + i).not('.overlayunit')
                 .attr('src', game.images + data[i].Code + '.jpg')
                 .attr('data-position', data[i].Position);
             return;
@@ -771,19 +771,13 @@ function startgame(roompass) {
                         });
                     }
                 } catch (e) {
-                    console.log('overshot', e);
                     failed = true;
-                    game.additional = {
-                        player: player,
-                        clocation: clocation,
-                        buffer: buffer
-                    };
                 }
             }
            
             //console.log(output);
 
-            game.UpdateCards(player, clocation, output);
+            game.UpdateCards(player, input.fieldmodel, output);
         }
         duel.gameState.state[input.player][input.fieldmodel] = output;
         console.log(output);
