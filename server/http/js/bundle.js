@@ -4562,8 +4562,8 @@ function startgame(roompass) {
             len,
             result;
 
-        if (field[fieldmodel] !== undefined) {
-            for (i, count = field[enums.locations[clocation]]; count > i; i++) {
+        if (field[input.fieldmodel] !== undefined) {
+            for (i, count = field[input.fieldmodel]; count > i; i++) {
                 try {
                     len = buffer.readUInt8(readposition);
                     readposition = readposition + 4;
