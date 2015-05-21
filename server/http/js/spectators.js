@@ -743,7 +743,7 @@ function startgame(roompass) {
         console.log(input);
     });
     duel.commandParser.event.on('MSG_UPDATE_DATA', function (input) {
-        //console.log(input);
+        console.log('.');
         var field = duel.gameState.state[input.player],
             output = [],
             readposition = 3,
@@ -791,6 +791,7 @@ function startgame(roompass) {
             game.UpdateCards(player, clocation, output);
         }
         duel.gameState.state[input.player][input.fieldmodel] = output;
+        console.log(output)
     });
     duel.commandParser.event.on('STOC_TIME_LIMIT', function (input) {
 
