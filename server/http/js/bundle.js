@@ -3829,17 +3829,20 @@ var Buffer = require('buffer/').Buffer,
     events = require('events'),
     makeCard = require('./card.js');
 
+function processTask(task, socket) {
+   
+    var i = 0,
+        l = 0,
+        output = [],
+        RESPONSE = false;
+    for (i; task.length > i; i++) {
+        output.push(recieveSTOC(task[i]));
+    }
+
+    return output;
+}
 
 function CommandParser() {
-    
-
-    // OK!!!! HARD PART!!!!
-    // recieveSTOC.js should have created obejects with all the parameters as properites, fire the functions.
-    // Dont try to pull data out of a packet here, should have been done already.
-    // its done here because we might need to pass in STATE to the functions also.
-    // again if you are fiddling with a packet you are doing it wrong!!!
-    // data decode and command execution are different conserns.
-    // if a COMMAND results in a response, save it as RESPONSE, else return the function false.
 
     var protoResponse = [],
         responseRequired = false,
@@ -3914,19 +3917,6 @@ function CommandParser() {
     return output;
 }
 
-function processTask(task, socket) {
-   
-    var i = 0,
-        l = 0,
-        output = [],
-        RESPONSE = false;
-    for (i; task.length > i; i++) {
-        output.push(recieveSTOC(task[i]));
-    }
-
-    return output;
-}
-//Functions used by the websocket object
 
 
 
@@ -4337,7 +4327,8 @@ function GameState() {
                 Banished: [],
                 Hand: [],
                 ExtraDeck: [],
-                MainDeck: []
+                MainDeck: [],
+                Time : 300
             },
             1: {
                 LifePoints: 8000,
@@ -4347,9 +4338,13 @@ function GameState() {
                 Banished: [],
                 Hand: [],
                 ExtraDeck: [],
-                MainDeck: []
+                MainDeck: [],
+                Time : 300
             }
         };
+    function updateTime(player, newTime) {
+        state[player].Time = newTime;
+    }
 
     function start(lp1, lp2, OneDeck, TwoDeck, OneExtra, TwoExtra) {
         //            game.DOMWriter(OneDeck, 'DECK', 0);
@@ -4461,7 +4456,7 @@ function GameState() {
             duelist : [],
             totalplayers: 0
         },
-        time : [0, 0],
+        updateTime : updateTime,
         fieldside : 0,
         state : state,
         start : start
@@ -4604,7 +4599,7 @@ function startgame(roompass) {
         console.log(player, input.fieldmodel, output);
     });
     duel.commandParser.event.on('STOC_TIME_LIMIT', function (input) {
-
+        duel.gameState.updateTime(input.player, input.time);
     });
 }
 
