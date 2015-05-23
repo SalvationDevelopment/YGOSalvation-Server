@@ -159,6 +159,9 @@ function startCore(port, socket, data, callback) {
         var configfile = pickCoreConfig(socket),
             params = port + ' ' + configfile;
         //custom_error(console.log(' initiating core for ' + socket.username + ' on port:' + port + ' with: ' + configfile));
+        if (socket.hostString.length !== 29) {
+            return;
+        }
         socket.core = childProcess.spawn(startDirectory + '/../ygocore/YGOServer.exe', [port, configfile], {
             cwd: startDirectory + '/../ygocore'
         }, function (error, stdout, stderr) {
