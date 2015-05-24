@@ -24,6 +24,13 @@ if (cluster.isWorker) {
     });
 }
 
+Number.prototype.between  = function (a, b) {
+    'use strict';
+    var min = Math.min.apply(Math, [a, b]),
+        max = Math.max.apply(Math, [a, b]);
+    return this > min && this < max;
+};
+
 function processTask(task, socket) {
     'use strict';
     var i = 0,
