@@ -193,3 +193,11 @@ module.exports = {
     initiateSlave: initiateSlave,
     gamelistMessage: gamelistMessage
 };
+
+
+/* This is bad code */
+process.on('uncaughtException', function (err) {
+    'use strict';
+    console.log(err);
+});
+
