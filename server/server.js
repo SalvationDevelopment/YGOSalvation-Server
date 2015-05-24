@@ -25,6 +25,7 @@ var ygoserver, //port 8911 ygopro Server
     net = require('net'), //tcp connections
     cluster = require('cluster'), // multithreading
     colors = require('colors'), // oo pretty colors!
+    domain = require('domain'), // yay error handling
 
     WebSocket = require('ws').Server,
     Framemaker = require('./libs/parseframes.js'), //understand YGOPro API.
