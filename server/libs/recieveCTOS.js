@@ -15,7 +15,7 @@ module.exports = function RecieveCTOS(packet) {
     case ('CTOS_PLAYER_INFO'):
         username = packet.message.toString('utf16le');
         username = username.split('\u0000'); // is this needed?
-        console.log('username', username);
+        //console.log('username', username[0]);
         todo.CTOS_PLAYER_INFO = username[0];
         break;
             
