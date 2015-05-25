@@ -110,22 +110,114 @@ function CommandParser() {
     return output;
 }
 
+function GameState() {
+    var AIPlayerID = 0,
+        OppPlayerID = 1,
+        turnPlayer = 0,
+        phase = 0,
+        state = {
+            0: {
+                Lifepoints: 8000,
+                MonsterZones: [],
+                SpellTrapZones: [],
+                Graveyard: [],
+                Banished: [],
+                Hand: [],
+                ExtraDeck: [],
+                MainDeck: [],
+                Time : 300
+            },
+            1: {
+                LifePoints: 8000,
+                MonsterZones: [],
+                SpellTrapZones: [],
+                Graveyard: [],
+                Banished: [],
+                Hand: [],
+                ExtraDeck: [],
+                MainDeck: [],
+                Time : 300
+            }
+        };
+    function updateTime(player, newTime) {
+        state[player].Time = newTime;
+    }
+
+    function start(lp1, lp2, OneDeck, TwoDeck, OneExtra, TwoExtra) {
+        //            game.DOMWriter(OneDeck, 'DECK', 0);
+        //            game.DOMWriter(TwoDeck, 'DECK', 1);
+        //            game.DOMWriter(OneExtra, 'EXTRA', 0);
+        //            game.DOMWriter(TwoExtra, 'EXTRA', 1);
+
+        state[0].LifePoints = lp1;
+        state[1].LifePoints = lp2;
+    }
+
+    function update(player, clocation, index, data) {
+        if (index !== 'mass') {
+            state[player][clocation] = data;
+        } else {
+            state[player][clocation][index] = data;
+        }
+    }
+
+    function updateLifepoints(player, multiplier, lp) {
+        var lifepoints = +state[player].Lifepoints + (lp * multiplier);
+        if (lifepoints < 0) {
+            lifepoints = 0;
+        }
+        state[player].Lifepoints = lifepoints;
+    }
+
+    function move(player, clocation, index, moveplayer, movelocation, movezone, moveposition, overlayindex, isBecomingCard) {
+
+        //enums.locations[clocation] === 'DECK/EXTRA/REMOVED
+        state[moveplayer][movelocation][moveposition] = state[player][clocation][index];
+        state[player][clocation][index] = undefined;
+        //if grave
+        //if banished
+        //if hand
+        //if extraDeck
+        //if maindeck
+        //if above, reshuffle;
+        state[player][clocation] = state[player][clocation].filter(function (element) {
+            return element !== undefined;
+        });
 
 
+        return;
+    }
 
+    function newphase(turnx) {
+        turnx = +state.phase;
+    }
 
-game.UpdateTime = function (player, time) {
-    $('.p' + player + 'time').val(time);
-};
+    function setAI_Opp(newID) {
+        AIPlayerID = newID;
+        OppPlayerID = (AIPlayerID === 0) ? 1 : 0;
+    }
 
-game.LoadField = function () {
-    console.log('GAME INITIATE!');
-    $('#duelzone').css('display', 'block').get(0).scrollIntoView();
-    $('img.card').attr('class', 'card none undefined i0').attr('src', game.images + 'cover.jpg');
+    function loadDeck(player, deck, cardList) {
 
-    $('#phases').css('display', 'block');
-    console.log('Starting Duel!');
-};
+    }
+    return {
+        move: move,
+        update: update,
+        loadDeck: loadDeck,
+        setAI_Opp: setAI_Opp,
+       
+        lobby: {
+            ready : [0, 0],
+            duelist : [],
+            totalplayers: 0
+        },
+        updateTime : updateTime,
+        fieldside : 0,
+        state : state,
+        start : start
+    };
+
+}
 
 function cardmargin(player, deck) {
     var size = $('.card.' + player + '.' + deck).length;
@@ -506,156 +598,7 @@ function parsePackets(command, message) {
 
 var duel = {};
 window.ws = {};
-function GameState() {
-    var AIPlayerID = 0,
-        OppPlayerID = 1,
-        turnPlayer = 0,
-        phase = 0,
-        state = {
-            0: {
-                Lifepoints: 8000,
-                MonsterZones: [],
-                SpellTrapZones: [],
-                Graveyard: [],
-                Banished: [],
-                Hand: [],
-                ExtraDeck: [],
-                MainDeck: [],
-                Time : 300
-            },
-            1: {
-                LifePoints: 8000,
-                MonsterZones: [],
-                SpellTrapZones: [],
-                Graveyard: [],
-                Banished: [],
-                Hand: [],
-                ExtraDeck: [],
-                MainDeck: [],
-                Time : 300
-            }
-        };
-    function updateTime(player, newTime) {
-        state[player].Time = newTime;
-    }
 
-    function start(lp1, lp2, OneDeck, TwoDeck, OneExtra, TwoExtra) {
-        //            game.DOMWriter(OneDeck, 'DECK', 0);
-        //            game.DOMWriter(TwoDeck, 'DECK', 1);
-        //            game.DOMWriter(OneExtra, 'EXTRA', 0);
-        //            game.DOMWriter(TwoExtra, 'EXTRA', 1);
-
-        state[0].LifePoints = lp1;
-        state[1].LifePoints = lp2;
-    }
-
-    function update(player, clocation, index, data) {
-        if (index !== 'mass') {
-            state[player][clocation] = data;
-        } else {
-            state[player][clocation][index] = data;
-        }
-    }
-
-    function updateLifepoints(player, multiplier, lp) {
-        var lifepoints = +state[player].Lifepoints + (lp * multiplier);
-        if (lifepoints < 0) {
-            lifepoints = 0;
-        }
-        state[player].Lifepoints = lifepoints;
-    }
-
-    function move(player, clocation, index, moveplayer, movelocation, movezone, moveposition, overlayindex, isBecomingCard) {
-
-        //enums.locations[clocation] === 'DECK/EXTRA/REMOVED
-        state[moveplayer][movelocation][moveposition] = state[player][clocation][index];
-        state[player][clocation][index] = undefined;
-        //if grave
-        //if banished
-        //if hand
-        //if extraDeck
-        //if maindeck
-        //if above, reshuffle;
-        state[player][clocation] = state[player][clocation].filter(function (element) {
-            return element !== undefined;
-        });
-
-
-        return;
-    }
-
-    function newphase(turnx) {
-        turnx = +state.phase;
-    }
-
-    function setAI_Opp(newID) {
-        AIPlayerID = newID;
-        OppPlayerID = (AIPlayerID === 0) ? 1 : 0;
-    }
-
-    function loadDeck(player, deck, cardList) {
-
-    }
-    return {
-        move: move,
-        update: update,
-        loadDeck: loadDeck,
-        setAI_Opp: setAI_Opp,
-        GetOppMonsterZones: function () {
-            return state[OppPlayerID].MonsterZones;
-        },
-        GetAIMonsterZones: function () {
-            return state[AIPlayerID].MonsterZones;
-        },
-        GetOppSpellTrapZones: function () {
-            return state[OppPlayerID].SpellTrapZones;
-        },
-
-        GetAISpellTrapZones: function () {
-            return state[AIPlayerID].SpellTrapZones;
-        },
-        GetOppGraveyard: function () {
-            return state[OppPlayerID].Graveyard;
-        },
-        GetAIGraveyard: function () {
-            return state[AIPlayerID].Graveyard;
-        },
-        GetOppBanished: function () {
-            return state[OppPlayerID].Banished;
-        },
-        GetAIBanished: function () {
-            return state[AIPlayerID].Banished;
-        },
-        GetOppHand: function () {
-            return state[OppPlayerID].Hand;
-        },
-        GetAIHand: function () {
-            return state[AIPlayerID].Hand;
-        },
-        GetOppExtraDeck: function () {
-            return state[OppPlayerID].ExtraDeck;
-        },
-        GetAIExtraDeck: function () {
-            return state[AIPlayerID].ExtraDeck;
-        },
-        GetOppMainDeck: function () {
-            return state[OppPlayerID].MainDeck;
-        },
-        GetAIMainDeck: function () {
-            return state[AIPlayerID].MainDeck;
-        },
-        lobby: {
-            ready : [0, 0],
-            duelist : [],
-            totalplayers: 0
-        },
-        updateTime : updateTime,
-        fieldside : 0,
-        state : state,
-        start : start
-    };
-
-}
 
 
 duel.gameState = new GameState();
@@ -793,6 +736,9 @@ function startgame(roompass) {
     });
     duel.commandParser.event.on('STOC_TIME_LIMIT', function (input) {
         duel.gameState.updateTime(input.player, input.time);
+    });
+    duel.commandParser.event.on('STOC_CHAT', function (input) {
+       
     });
 }
 
