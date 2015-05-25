@@ -5,7 +5,7 @@ var bot,
     ps = require('ps-node'),
     eventEmitter = new events.EventEmitter(),
     config = {
-        channels: ["#lobby"],
+        channels: ["#lobby", '#public'],
         server: "ygopro.us",
         botName: "DuelServ"
     };
