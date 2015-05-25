@@ -89,6 +89,7 @@ function handleCoreMessage(core_message_raw, port, pid) {
 
         case ('::::chat'):
             chat = core_message.join(' ');
+            duelserv.bot.say('#public', core_message.join(' '));
             break;
 
         }
