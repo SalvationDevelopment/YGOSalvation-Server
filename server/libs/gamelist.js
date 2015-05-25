@@ -89,7 +89,7 @@ function handleCoreMessage(core_message_raw, port, pid) {
 
         case ('::::chat'):
             chat = core_message.join(' ');
-            duelserv.bot.say('#public', core_message[2] + ':' + core_message[3]);
+            duelserv.bot.say('#public', core_message[2] + ': ' + core_message[3]);
             break;
 
         }
@@ -196,10 +196,9 @@ function pscheck(game) {
         delete gamelist[game];
     }
     
-    ps.lookup({pid: parseInt(gamelist[game].pid, 10)}, function pscheck(err, resultList) {
-        console.log(gamelist[game].pid);
+    ps.lookup({pid: gamelist[game].pid}, function pscheck(err, resultList) {
         var process = resultList[0];
-        if (process) {
+        if (resultList.length > 0) {
             return;
         } else {
             console.log(process);
