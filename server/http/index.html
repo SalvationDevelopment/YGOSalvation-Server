@@ -46,8 +46,11 @@
         }
         
         .unlogged .launcheronly.loginsystem {
-            display:block;
+            display:inline-block;   
         }
+         a.launcheronly.loginsystem {
+            color:white;
+         }
         
         #ips_username, #ips_password {
           margin: 20px auto;
@@ -179,17 +182,19 @@
             <form id="ipblogin" style="text-align:center">
                 <input id="ips_username" type="text" class="launcheronly loginsystem" name="ips_username" tabindex="1" placeholder="Email Address">
                 <input id="ips_password" type="password" class="launcheronly loginsystem" name="ips_password" tabindex="2" placeholder="Password"><br>
-                <button id="dolog">Login</button><br />
+                <button id="dolog" class="launcheronly loginsystem">Login</button><br />
                 <a class="launcheronly loginsystem" href="http://forum.ygopro.us/index.php?app=core&module=global&section=register" target="_blank">Register</a><br />
                 <a class="launcheronly loginsystem" href="http://forum.ygopro.us/index.php?app=core&module=global&section=lostpass">Forgot Password</a>
             </form>
             <div style="font-size:.5em; text-align:center; color:#747" id="versioninfo">Version 4 : Production 4 : Revision 1</div>
             <div style="font-size:1.5em; text-align:center; color:pink" class='webonly'></div>
+            <div class="weboly">
             <SCRIPT language="Javascript">
             var cpmstar_rnd=Math.round(Math.random()*999999);
             var cpmstar_pid=44429;
             document.writeln("<SCR"+"IPT language='Javascript' src='//server.cpmstar.com/view.aspx?poolid="+cpmstar_pid+"&script=1&rnd="+cpmstar_rnd+"'></SCR"+"IPT>");
             </SCRIPT>
+                </div>
         </div>
     </header>
     <header style="padding-top:50px" id="gamelist">
