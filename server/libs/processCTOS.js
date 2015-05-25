@@ -83,9 +83,6 @@ function connectToCore(port, data, socket) {
         console.log('::CORE ERROR', error);
         handleCoreMessage('::::endduel|' + socket.hostString, port, socket, data);
         socket.end();
-        if (socket.core.pid) {
-            ps.kill(socket.core.pid);
-        }
     });
     socket.active_ygocore.on('close', function () {
         if (socket.alpha) {
