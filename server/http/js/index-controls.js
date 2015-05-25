@@ -46,7 +46,7 @@ function locallogin(init) {
     }
 
     $(document.body).addClass("launcher").removeClass('unlogged').removeClass('web');
-    //$('#ips_username').css('display', 'none');
+    $('#ips_username, #ips_password').css('display', 'none');
     _gaq.push(['_trackEvent', 'Launcher', 'Login', localStorage.nickname]);
     singlesitenav('faq');
 
