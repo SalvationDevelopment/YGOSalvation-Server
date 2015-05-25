@@ -78,7 +78,6 @@ function initiateMaster(numCPUs) {
 
 (function main() {
     'use strict';
-    console.log(process.env.SLAVE);
     if (process.env.SLAVE) {
         require('./libs/slave.js');
     } else {
@@ -95,7 +94,6 @@ module.exports = {
     initiateMaster: initiateMaster,
     gamelistMessage: gamelistMessage
 };
-
 
 /* This is bad code */
 process.on('uncaughtException', function (err) {

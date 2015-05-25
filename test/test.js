@@ -20,7 +20,6 @@ describe('System', function () {
                 '::::spectator|2008000,1,5,1,U,xxxxx|1',
                 '::::startduel|2008000,1,5,1,U,xxxxx',
                 '::::endduel|2008000,1,5,1,U,xxxxx'];
-        core.initiateSlave();
         for (i; commands.length > i; i++) {
             core.gamelistMessage({
                 messagetype: 'coreMessage',
@@ -49,6 +48,9 @@ describe('System', function () {
 });
 describe('Boot Test', function () {
     'use strict';
+    it('Should test parseframes.js', function () {
+        require('../server/libs/slave.js');
+    });
     it('Should test  CDBUpdate', function () {
         require('../server/libs/carddb-update.js');
     });
@@ -84,11 +86,11 @@ describe('Boot Test', function () {
     it('Should test policyserver.js', function () {
         require('../server/libs/policyserver.js');
     });
-    it('Should test processIncomingTrasmission.js', function () {
-        var processIncomingTrasmission = require('../server/libs/processIncomingTrasmission.js'),
+    it('Should test processCTOS.js', function () {
+        var processCTOS = require('../server/libs/processCTOS.js'),
             parsePackets = require('../server/libs/parseframes.js');
 
-        processIncomingTrasmission(join, {}, [{
+        processCTOS(join, {}, [{
             message: join.slice(1),
             readposition: 0,
             CTOS: 'CTOS_JOIN_GAME'

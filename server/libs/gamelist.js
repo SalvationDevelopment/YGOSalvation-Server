@@ -182,3 +182,25 @@ module.exports = {
     primusListener: primusListener,
     announce : announce
 };
+
+setInterval(function (){
+    for (game in gamelist) {
+        if (gamelist.hasOwnProperty(game)) {
+            if (gamelist[game].players.length === 0 && gamelist[game].spectators.length === 0) {
+                delete gamelist[game];
+            }
+            if ((((new Date()) - (gamelist[game].time)) > 600000) && !gamelist.started) {
+                delete gamelist[game];
+            }
+            ps.lookup({ pid: gamelist[game].pid }, function(err, resultList ) {
+                var process = resultList[ 0 ];
+                if( process ){
+                    
+                }
+                else {
+                    delete gamelist[game];
+                }
+            });
+        }
+    }
+}, 60000);
