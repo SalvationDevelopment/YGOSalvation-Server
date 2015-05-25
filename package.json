@@ -1,9 +1,9 @@
 {
-    "name": "ygopro-js-server",
-    "description": "YGOPro US Server (Salvation) - Saving Yu-Gi-Oh!",
-    "main": "server/server.js",
-    "version": "4.4.0",
-    "keywords": [
+  "name": "ygopro-js-server",
+  "description": "YGOPro US Server (Salvation) - Saving Yu-Gi-Oh!",
+  "main": "server/server.js",
+  "version": "4.4.0",
+  "keywords": [
     "ygopro",
     "my-card",
     "devpro",
@@ -11,37 +11,38 @@
     "yugioh",
     "irc"
   ],
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/salvationdevelopment/YGOPro-Support-System.git"
-    },
-    "dependencies": {
-        "fs-walk": "*",
-        "node-static": "*",
-        "primus": "*",
-        "primus-rooms": "*",
-        "sqlite3": "*",
-        "ws": "*",
-        "irc": "*",
-        "colors": "*",
-        "knuth-shuffle": "*",
-        "lodash" : "*",
-        "ldapjs" : "*",
-        "policyfile" : "*",
-        "istanbul": "*",
-        "jsdom" : "*",
-        "ps-node" : "*",
-        "geoip-lite" : "*"
-    },
-    "optionalDependencies": {
-        "httpsys": "*",
-        "mocha": "*"
-    },
-    "bugs": "https://github.com/salvationdevelopment/YGOPro-Support-System/issues",
-    "author": "panthrowzay@gmail.com",
-    "homepage": "http://ygopro.us",
-    "scripts": {
-        "start" : "node server/server.js",
-        "test": "istanbul cover _mocha -- -u exports -R spec"
-    }
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/salvationdevelopment/YGOPro-Support-System.git"
+  },
+  "dependencies": {
+    "colors": "*",
+    "fs-walk": "*",
+    "geoip-lite": "*",
+    "ipboard": "0.0.2-2",
+    "irc": "*",
+    "istanbul": "*",
+    "jsdom": "*",
+    "knuth-shuffle": "*",
+    "ldapjs": "*",
+    "lodash": "*",
+    "node-static": "*",
+    "policyfile": "*",
+    "primus": "*",
+    "primus-rooms": "*",
+    "ps-node": "*",
+    "sqlite3": "*",
+    "ws": "*"
+  },
+  "optionalDependencies": {
+    "httpsys": "*",
+    "mocha": "*"
+  },
+  "bugs": "https://github.com/salvationdevelopment/YGOPro-Support-System/issues",
+  "author": "panthrowzay@gmail.com",
+  "homepage": "http://ygopro.us",
+  "scripts": {
+    "start": "node server/server.js",
+    "test": "istanbul cover _mocha -- -u exports -R spec"
+  }
 }

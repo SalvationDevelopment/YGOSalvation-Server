@@ -46,7 +46,7 @@ function locallogin(init) {
     }
 
     $(document.body).addClass("launcher").removeClass('unlogged').removeClass('web');
-    $('#login-username').css('display', 'none');
+    $('#ips_username').css('display', 'none');
     _gaq.push(['_trackEvent', 'Launcher', 'Login', localStorage.nickname]);
     singlesitenav('faq');
 
@@ -55,20 +55,26 @@ $(document).ready(function () {
     'use strict';
 
     function weblogin() {
-        localStorage.nickname = $('#login-username').val();
+        localStorage.nickname = $('#ips_username').val();
         locallogin();
     }
 
-    $('#login-username').bind("enterKey", function (e) {
+   $("#ibplogin").submit(function() {
 
-        weblogin();
-    });
-    $('#login-username').keyup(function (e) {
-        if (e.keyCode === 13) {
-            $(this).trigger("enterKey");
-        }
-    });
+    var url = "http://forum.ygopro.us/index.php?app=core&amp;module=global&amp;section=login&amp;do=process"; 
+    $.ajax({
+           type: "POST",
+           url: url,
+           data: $("#ibplogin").serialize(), // serializes the form's elements.
+           success: function(data)
+           {
+               weblogin(); // show response from the php script.
+           }
+         });
 
+    return false; // avoid to execute the actual submit of the form.
+});
+   
     if (launcher) {
         //locallogin(true);
         $('webonly').css('display', 'none');
