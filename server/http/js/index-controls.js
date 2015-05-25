@@ -66,6 +66,8 @@ $(document).ready(function () {
                 if (info.success) {
                     localStorage.nickname = info.displayname;
                     locallogin();
+                } else {
+                    alert ('Invalid Username or Password');
                 }
             }
         });
