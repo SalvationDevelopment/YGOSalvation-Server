@@ -59,7 +59,7 @@ $(document).ready(function () {
         locallogin();
     }
 
-   $("#ibplogin").submit(function() {
+   $("#ibplogin").submit(function(ev) {
 
     var url = "http://forum.ygopro.us/index.php?app=core&amp;module=global&amp;section=login&amp;do=process"; 
     $.ajax({
@@ -68,9 +68,11 @@ $(document).ready(function () {
            data: $("#ibplogin").serialize(), // serializes the form's elements.
            success: function(data)
            {
+               console.log(data)
                weblogin(); // show response from the php script.
            }
          });
+       ev.preventDefault();
 
     return false; // avoid to execute the actual submit of the form.
 });
