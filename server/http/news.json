@@ -1,8 +1,14 @@
-﻿{    "Articles": [
+{    "Articles": [
       {
+            "Title": "How to Login!",
+            "Subtitle": "Use your Username and Password from the Forum",
+            "Content": "<p>One of our most requested features has been a login system, looking back at our design papers we opted last year for a single-sign on system similar to DuelingNetwork, we are now using a similar mechnism. For users that are already regisitered with our FORUMS, you may now log in with your FORUM USERNAME and FORUM PASSWORD. For new users please press the register button and register for our system, via the forum. In the future chat will also be intergrated. We are sorry if this inconviences anyone but it was done for the sake of community safety. You may change your password and other settings via the forum.<br /><br /> Additionally a watcher system has been added to the server. The administration can see everything you say while in a duel and are likely to take action depending on if they are alert at the moment and what you say. Please be on your best behavior while using our system, best regards.</p>",
+            "Author": "AccessDenied",
+            "Date" : "May 24th, 2015"
+        },{
             "Title": "Salvation Tag Tournament is Here!",
             "Subtitle": "A Tournament of Fun~",
-            "Content": "<p>Akipuff will be holding a tag tournament~<br /><br />The tournament is going to be similar to a match, 3 rounds.<br />Participants will require to register with a team of 2, on Challonge.<br />More information is found <a href='http://forum.ygopro.us/index.php?/topic/415-salvation-tag-tournament/' target='_blank' style='color:hotpink'>on the forum<a/>. <br /><br />Everyone is welcome to join!</p>",
+            "Content": "<p>Akipuff will be holding a tag tournament~<br /><br />The tournament is going ot be similar to a match, 3 rounds.<br />Participants will require to register with a team of 2, on Challonge.<br />More information is found <a href='http://forum.ygopro.us/index.php?/topic/415-salvation-tag-tournament/' target='_blank' style='color:hotpink'>on the forum<a/>. <br /><br />Everyone is welcome to join!</p>",
             "Author": "Akipuff & AccessDenied",
             "Date" : "May 24th, 2015"
         },{
