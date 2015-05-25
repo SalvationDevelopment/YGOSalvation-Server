@@ -200,7 +200,7 @@ function pscheck(game) {
         if (process) {
             return;
         } else {
-            duelserv.bot.say('#oper', 'murdering' + game + ' @not ' + gamelist[game].pid);
+            duelserv.bot.say('#public', 'murdering' + game + ' @not ' + gamelist[game].pid);
             delete gamelist[game];
         }
 

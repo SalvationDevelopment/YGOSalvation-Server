@@ -92,7 +92,7 @@ bot.addListener("message#oper", function (from, to, message) {
     });
 });
 
-
+eventEmitter.bot =  bot;
 module.exports = eventEmitter;
 
 function start() {
