@@ -85,7 +85,8 @@ bot.addListener("message#oper", function (from, to, message) {
     }
     ps.kill(command[1], function (err) {
         if (err) {
-            bot.say('#oper', 'Failed to kill' + command[1] + '!');
+            bot.say('#oper', 'Failed to kill ' + command[1] + '! Deleting it.');
+            eventEmitter.emit('del', command[1]);
         } else {
             bot.say('#oper', 'Process ' + command[1] + ' has been killed!');
         }

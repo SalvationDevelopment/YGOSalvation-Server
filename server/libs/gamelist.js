@@ -179,6 +179,18 @@ duelserv.on('announce', function (message) {
     announce(message);
 });
 
+duelserv.on('del', function (pid) {
+    'use strict';
+    var game;
+    for (game in gamelist) {
+        if (gamelist.hasOwnProperty(game)) {
+            if (gamelist[game].pid === pid) {
+                delete gamelist[game];
+            }
+        }
+    }
+});
+
 module.exports = {
     messageListener: messageListener,
     primusListener: primusListener,
