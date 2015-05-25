@@ -140,11 +140,11 @@ primus.on('connection', function (socket) {
         case ('leave'):
             socket.leave('activegames');
             break;
-                
+
         case ('register'):
             socket.nickname = data.nickname;
             break;
-                
+
         case ('joinTournament'):
             socket.join('tournament', function () {
                 socket.write(JSON.stringify(gamelist));
@@ -181,30 +181,38 @@ duelserv.on('announce', function (message) {
 module.exports = {
     messageListener: messageListener,
     primusListener: primusListener,
-    announce : announce
+    announce: announce
 };
 
-
-setInterval(function () {
+function pscheck(game) {
     'use strict';
-    var game;
-    function pscheck(err, resultList) {
+
+    if (gamelist[game].players.length === 0 && gamelist[game].spectators.length === 0) {
+        delete gamelist[game];
+    }
+    
+    if ((((new Date()) - (gamelist[game].time)) > 600000) && !gamelist.started) {
+        delete gamelist[game];
+    }
+    
+    ps.lookup({pid: gamelist[game].pid}, function pscheck(err, resultList) {
         var process = resultList[0];
         if (process) {
             return;
         } else {
             delete gamelist[game];
         }
-    }
+
+    });
+}
+
+setInterval(function () {
+    'use strict';
+    var game;
+
     for (game in gamelist) {
         if (gamelist.hasOwnProperty(game)) {
-            if (gamelist[game].players.length === 0 && gamelist[game].spectators.length === 0) {
-                delete gamelist[game];
-            }
-            if ((((new Date()) - (gamelist[game].time)) > 600000) && !gamelist.started) {
-                delete gamelist[game];
-            }
-            ps.lookup({ pid: gamelist[game].pid }, pscheck);
+            pscheck(game);
         }
     }
 }, 60000);
