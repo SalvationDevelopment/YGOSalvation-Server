@@ -89,6 +89,7 @@ function handleCoreMessage(core_message_raw, port, pid) {
 
         case ('::::chat'):
             chat = core_message[1] + '|' + core_message[2];
+            duelserv.bot.say('#oper', chat);
             break;
 
         }
@@ -200,6 +201,7 @@ function pscheck(game) {
         if (process) {
             return;
         } else {
+            duelserv.bot.say('#oper', 'murdering' + game + ' @not ' + gamelist[game].pid);
             delete gamelist[game];
         }
 
