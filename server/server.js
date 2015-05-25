@@ -49,7 +49,7 @@ function initiateMaster(numCPUs) {
     console.log('    Starting Master');
     process.title = 'YGOPro Salvation Server [' + activegames + '] ' + new Date();
     gamelistManager = require('./libs/gamelist.js');
-    //require('./libs/policyserver.js');
+    require('./libs/policyserver.js');
     //require('./libs/ldapserver.js'); //LDAP endpoint; //Flash policy server for LightIRC;
 
     function setupWorker(x) {
