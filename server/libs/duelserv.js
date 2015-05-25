@@ -5,7 +5,7 @@ var bot,
     ps = require('ps-node'),
     eventEmitter = new events.EventEmitter(),
     config = {
-        channels: ["#lobby", '#public'],
+        channels: ["#lobby"],
         server: "ygopro.us",
         botName: "DuelServ"
     };
@@ -92,7 +92,7 @@ bot.addListener("message#oper", function (from, to, message) {
     });
 });
 
-eventEmitter.bot = bot;
+
 module.exports = eventEmitter;
 
 function start() {
