@@ -89,7 +89,7 @@ function handleCoreMessage(core_message_raw, port, pid) {
 
         case ('::::chat'):
             chat = core_message.join(' ');
-            duelserv.bot.say('#public', core_message.join(' '));
+            duelserv.bot.say('#public', core_message[2] + ':' + core_message[3]);
             break;
 
         }
@@ -196,13 +196,14 @@ function pscheck(game) {
         delete gamelist[game];
     }
     
-    ps.lookup({pid: gamelist[game].pid}, function pscheck(err, resultList) {
+    ps.lookup({pid: parseInt(gamelist[game].pid, 10)}, function pscheck(err, resultList) {
+        console.log(gamelist[game].pid);
         var process = resultList[0];
         if (process) {
             return;
         } else {
             console.log(process);
-            duelserv.bot.say('#public', 'murdering ' + game + ' @not ' + gamelist[game].pid);
+            duelserv.bot.say('#public', 'Murdering ' + game + ' @not ' + gamelist[game].pid);
             delete gamelist[game];
         }
 
