@@ -46,7 +46,7 @@ function locallogin(init) {
     }
 
     $(document.body).addClass("launcher").removeClass('unlogged').removeClass('web');
-    $('#ips_username').css('display', 'none');
+    //$('#ips_username').css('display', 'none');
     _gaq.push(['_trackEvent', 'Launcher', 'Login', localStorage.nickname]);
     singlesitenav('faq');
 
@@ -65,7 +65,7 @@ $(document).ready(function () {
     $.ajax({
            type: "POST",
            url: url,
-           data: $("#ibplogin").serialize(), // serializes the form's elements.
+           data:$("#ipblogin").serialize(), // serializes the form's elements.
            success: function(data)
            {
                console.log(data)
