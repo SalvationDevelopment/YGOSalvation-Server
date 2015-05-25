@@ -7,6 +7,7 @@ var primus,
     Rooms = require('primus-rooms'),
     primusServer = http.createServer().listen(24555),
     duelserv = require('./duelserv.js'),
+    ps = require('ps-node'),
     previousAnnouncement = "";
 
 function announce(announcement) {
@@ -183,7 +184,18 @@ module.exports = {
     announce : announce
 };
 
-setInterval(function (){
+
+setInterval(function () {
+    'use strict';
+    var game;
+    function pscheck(err, resultList) {
+        var process = resultList[0];
+        if (process) {
+            return;
+        } else {
+            delete gamelist[game];
+        }
+    }
     for (game in gamelist) {
         if (gamelist.hasOwnProperty(game)) {
             if (gamelist[game].players.length === 0 && gamelist[game].spectators.length === 0) {
@@ -192,15 +204,7 @@ setInterval(function (){
             if ((((new Date()) - (gamelist[game].time)) > 600000) && !gamelist.started) {
                 delete gamelist[game];
             }
-            ps.lookup({ pid: gamelist[game].pid }, function(err, resultList ) {
-                var process = resultList[ 0 ];
-                if( process ){
-                    
-                }
-                else {
-                    delete gamelist[game];
-                }
-            });
+            ps.lookup({ pid: gamelist[game].pid }, pscheck);
         }
     }
 }, 60000);
