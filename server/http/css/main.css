@@ -435,7 +435,7 @@ header {
 
 div#gamelistitems {
     overflow-y: scroll;
-    height: 65vh;
+    height: 85vh;
 }
 
 .game.started {

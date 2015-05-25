@@ -148,7 +148,7 @@ function handleCoreMessage(core_message_raw, port, socket, data, pid) {
         socket.core.kill();
     }
     if (core_message[0].trim() === '::::chat') {
-        console.log(socket.remoteAddress, core_message.toString());
+        console.log(socket.remoteAddress, core_message.toString().trim());
     }
     process.send(gamelistmessage);
 }
@@ -198,7 +198,7 @@ function processIncomingTrasmission(data, socket, task) {
         if (gamelist[socket.hostString]) {
             socket.alpha = false;
             connectToCore(gamelist[socket.hostString].port, data, socket);
-            console.log(socket.username + ' connecting to existing core');
+            console.log(socket.username + ' connecting to ' + gamelist[socket.hostString].players[0]);
         } else {
             console.log(socket.username + ' connecting to new core');
 
