@@ -3,7 +3,7 @@ var ygoserver, //port 8911 ygopro Server
     net = require('net'), //tcp connections
     WebSocket = require('ws').Server,
     Framemaker = require('./parseframes.js'), //understand YGOPro API.
-    processIncomingTrasmission = require('./processIncomingTrasmission.js'); // gamelist and start games
+    processIncomingTrasmission = require('./processCTOS.js'); // gamelist and start games
 
 function initiateSlave() {
     'use strict';
@@ -62,7 +62,7 @@ function initiateSlave() {
             var frame,
                 task,
                 newframes = 0;
-            console.log(data);
+
             if (socket.active_ygocore) {
                 socket.active_ygocore.write(data);
             }
