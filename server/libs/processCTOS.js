@@ -13,8 +13,7 @@ var portmin = 30000 + process.env.PORTRANGE * 100,
     createDateString = require('./datetimestamp.js'),
     //custom_error = require('./custom_error.js'),
     gamelist = {},
-    geoip = require('geoip-lite'),
-    ps = require('ps-node');
+    geoip = require('geoip-lite');
 
 if (cluster.isWorker) {
     process.on('message', function (message) {
@@ -80,8 +79,10 @@ function connectToCore(port, data, socket) {
         });
     });
     socket.active_ygocore.on('error', function (error) {
-        console.log('::CORE ERROR', error);
-        handleCoreMessage('::::endduel|' + socket.hostString, port, socket, data);
+        console.log('::CORE', error);
+        if (socket.alpha) {
+            handleCoreMessage('::::endduel|' + socket.hostString, port, socket, data);
+        }
         socket.end();
     });
     socket.active_ygocore.on('close', function () {
@@ -146,7 +147,9 @@ function handleCoreMessage(core_message_raw, port, socket, data, pid) {
     if (core_message[0].trim() === '::::end-duel') {
         socket.core.kill();
     }
-    console.log(socket.remoteAddress, core_message.toString());
+    if (core_message[0].trim() === '::::chat') {
+        console.log(socket.remoteAddress, core_message.toString());
+    }
     process.send(gamelistmessage);
 }
 

@@ -184,39 +184,3 @@ module.exports = {
     primusListener: primusListener,
     announce: announce
 };
-
-function pscheck(game) {
-    'use strict';
-
-    if (gamelist[game].players.length === 0 && gamelist[game].spectators.length === 0) {
-        delete gamelist[game];
-    }
-    
-    if ((((new Date()) - (gamelist[game].time)) > 600000) && !gamelist.started) {
-        delete gamelist[game];
-    }
-    
-    ps.lookup({pid: gamelist[game].pid}, function pscheck(err, resultList) {
-        var process = resultList[0];
-        console.log(resultList);
-        if (resultList.length > 0) {
-            return;
-        } else {
-            console.log(resultList);
-            duelserv.bot.say('#public', 'Murdering ' + game + ' @not ' + gamelist[game].pid);
-            delete gamelist[game];
-        }
-
-    });
-}
-
-setInterval(function () {
-    'use strict';
-    var game;
-
-    for (game in gamelist) {
-        if (gamelist.hasOwnProperty(game)) {
-            pscheck(game);
-        }
-    }
-}, 60000);
