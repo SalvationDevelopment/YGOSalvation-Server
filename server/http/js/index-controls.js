@@ -1,5 +1,5 @@
 /*jslint browser:true, plusplus:true*/
-/*global $, saveSettings, Handlebars, prompt*/
+/*global $, saveSettings, Handlebars, prompt, _gaq*/
 
 var launcher = false;
 
@@ -54,28 +54,24 @@ function locallogin(init) {
 $(document).ready(function () {
     'use strict';
 
-    function weblogin() {
-        localStorage.nickname = $('#ips_username').val();
-        locallogin();
-    }
-
-   $("#ibplogin").submit(function(ev) {
-
-    var url = "http://forum.ygopro.us/index.php?app=core&amp;module=global&amp;section=login&amp;do=process"; 
-    $.ajax({
-           type: "POST",
-           url: url,
-           data:$("#ipblogin").serialize(), // serializes the form's elements.
-           success: function(data)
-           {
-               console.log(data)
-               weblogin(); // show response from the php script.
-           }
-         });
-       ev.preventDefault();
-
-    return false; // avoid to execute the actual submit of the form.
-});
+    $("#dolog").click(function (ev) {
+        var url = "http://forum.ygopro.us/log.php";
+        $.ajax({
+            type: "POST",
+            url: url,
+            data: $("#ipblogin").serialize(), // serializes the form's elements.
+            success: function (data) {
+                var info = JSON.parse(data);
+                console.log(info);
+                if (info.success) {
+                    localStorage.nickname = info.displayname;
+                    locallogin();
+                }
+            }
+        });
+        ev.preventDefault();
+        return false; // avoid to execute the actual submit of the form.
+    });
    
     if (launcher) {
         //locallogin(true);
