@@ -45,9 +45,12 @@
             display:none;
         }
         
+        .unlogged .launcheronly.loginsystem {
+            display:block;
+        }
+        
         #ips_username, #ips_password {
           margin: 20px auto;
-          display: none;
           background: rgba(255,255,255,.5);
           border: none;
           width: 20em;
@@ -174,11 +177,11 @@
 
             </nav>
             <form id="ipblogin" style="text-align:center">
-                <input id="ips_username" type="text" class="launcheronly" name="ips_username" tabindex="1" placeholder="Email Address">
-                <input id="ips_password" type="password" class="launcheronly" name="ips_password" tabindex="2" placeholder="Password"><br>
+                <input id="ips_username" type="text" class="launcheronly loginsystem" name="ips_username" tabindex="1" placeholder="Email Address">
+                <input id="ips_password" type="password" class="launcheronly loginsystem" name="ips_password" tabindex="2" placeholder="Password"><br>
                 <button id="dolog">Login</button><br />
-                <a href="http://forum.ygopro.us/index.php?app=core&module=global&section=register" target="_blank">Register</a><br />
-                <a href="http://forum.ygopro.us/index.php?app=core&module=global&section=lostpass">Forgot Password</a>
+                <a class="launcheronly loginsystem" href="http://forum.ygopro.us/index.php?app=core&module=global&section=register" target="_blank">Register</a><br />
+                <a class="launcheronly loginsystem" href="http://forum.ygopro.us/index.php?app=core&module=global&section=lostpass">Forgot Password</a>
             </form>
             <div style="font-size:.5em; text-align:center; color:#747" id="versioninfo">Version 4 : Production 4 : Revision 1</div>
             <div style="font-size:1.5em; text-align:center; color:pink" class='webonly'></div>
