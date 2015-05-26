@@ -1,5 +1,5 @@
 /*jslint plusplus: true, browser:true, node:true*/
-/*global localStorage, $, Primus, prompt, console, writeDeckList, makeDeck, confirm, launcher, alert, singlesitenav, startgame*/
+/*global localStorage, $, Primus, prompt, console, writeDeckList, makeDeck, confirm, launcher, alert, singlesitenav, startgame, _gaq*/
 /*exported connectToCheckmateServer, leaveGamelist, hostGame, connectgamelist, setHostSettings, setfilter, */
 var localstorageIter = 0;
 
@@ -63,6 +63,8 @@ function ygopro(parameter) {
     
     $.post('http://127.0.0.1:9468/' + parameter, localStorage);
     _gaq.push(['_trackEvent', 'Launcher', 'YGOPro', parameter]);
+     _gaq.push(['_trackEvent', 'Site', 'Navigation Movement', internalLocal + ' - ' + 'YGOPro']);
+    internalLocal = 'YGOPro';
     
 }
 
