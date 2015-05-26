@@ -225,7 +225,7 @@ function setHostSettings() {
     _gaq.push(['_trackEvent', 'Launcher', 'YGOPro', 'Host']);
     _gaq.push(['_trackEvent', 'Launcher', 'YGOPro Host', duelRequest.string + duelRequest.prio +
             duelRequest.checkd + duelRequest.shuf +
-            $('#creategamelp').val()]);
+            $('#creategamelp').val() + duelRequest.stnds]);
 }
 
 
