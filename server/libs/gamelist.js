@@ -113,6 +113,10 @@ function messageListener(message) {
                 delete gamelist[game];
                 continue;
             }
+            if (game.length !== 24) {
+                delete gamelist[game];
+                continue;
+            }
             if ((((new Date()) - (gamelist[game].time)) > 600000) && !gamelist.started) {
                 delete gamelist[game];
                 
