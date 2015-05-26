@@ -109,7 +109,7 @@ function messageListener(message) {
     }
     for (game in gamelist) {
         if (gamelist.hasOwnProperty(game)) {
-            if (gamelist[game].players.length === 0 && gamelist[game].spectators.length === 0) {
+            if (gamelist[game].players.length === 0 && gamelist[game].spectators === 0) {
                 delete gamelist[game];
             }
             if ((((new Date()) - (gamelist[game].time)) > 600000) && !gamelist.started) {
