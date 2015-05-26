@@ -62,6 +62,7 @@ function ygopro(parameter) {
     }
     
     $.post('http://127.0.0.1:9468/' + parameter, localStorage);
+    _gaq.push(['_trackEvent', 'Launcher', 'YGOPro', parameter]);
     
 }
 
@@ -94,6 +95,7 @@ function connectToCheckmateServer() {
     localStorage.lastip = '173.224.211.158';
     localStorage.lastport = '21001';
     ygopro('-j');
+    _gaq.push(['_trackEvent', 'Launcher', 'YGOPro', 'Checkmate']);
 }
 
 function isChecked(id) {
@@ -146,6 +148,7 @@ function enterGame(string) {
     localStorage.roompass = string;
     localStorage.lastip = "192.99.11.19";
     ygopro('-j');
+    _gaq.push(['_trackEvent', 'Launcher', 'YGOPro', 'Join Duel']);
 }
 
 function joinTournament() {
@@ -217,6 +220,10 @@ function setHostSettings() {
     }
     localStorage.lastdeck = $('.currentdeck').val();
     ygopro('-j');
+    _gaq.push(['_trackEvent', 'Launcher', 'YGOPro', 'Host']);
+    _gaq.push(['_trackEvent', 'Launcher', 'YGOPro Host', duelRequest.string + duelRequest.prio +
+            duelRequest.checkd + duelRequest.shuf +
+            $('#creategamelp').val()]);
 }
 
 
@@ -387,10 +394,12 @@ primus.on('data', function (data) {
 primus.on('connect', function () {
     'use strict';
     console.log('!!!!!! connect');
+    _gaq.push(['_trackEvent', 'Launcher', 'Primus', 'Init']);
 });
 primus.on('close', function () {
     'use strict';
     console.log('!!!!!! close');
+    _gaq.push(['_trackEvent', 'Launcher', 'Primus', 'Failure']);
 });
 //Array.prototype.searchFor = function (candid) {
 //    'use strict';

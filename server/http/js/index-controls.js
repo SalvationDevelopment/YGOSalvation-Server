@@ -1,9 +1,13 @@
 /*jslint browser:true, plusplus:true*/
 /*global $, saveSettings, Handlebars, prompt, _gaq*/
 
-var launcher = false;
+var launcher = false,
+    internalLocal = 'home';
 
 function singlesitenav(target) {
+    _gaq.push(['_trackEvent', 'Site', 'Navigation', target]);
+    _gaq.push(['_trackEvent', 'Site', 'Navigation Movement', internalLocal + ' - ' + target]);
+    internalLocal = target;
     'use strict';
     //console.log(target);
     if (launcher && target === 'forum') {
@@ -24,7 +28,7 @@ $(function () {
     if (window.self !== window.top) {
         $(document.body).addClass("in-iframe");
         launcher = true;
-        _gaq.push(['_trackEvent', 'Launcher', 'Load', 'default']);
+        _gaq.push(['_trackEvent', 'Launcher', 'Load', 'Boot Launcher']);
     } else {
         $(document.body).addClass("web");
     }
@@ -47,14 +51,17 @@ function locallogin(init) {
 
     $(document.body).addClass("launcher").removeClass('unlogged').removeClass('web');
     $('#ips_username, #ips_password').css('display', 'none');
+    
     _gaq.push(['_trackEvent', 'Launcher', 'Login', localStorage.nickname]);
     singlesitenav('faq');
+    getLocation();
 
 }
+
 $(document).ready(function () {
     'use strict';
-
     $("#dolog").click(function (ev) {
+        _gaq.push(['_trackEvent', 'Launcher', 'Attempt Login', $('#ips_username').val()]);
         var url = "http://forum.ygopro.us/log.php";
         $.ajax({
             type: "POST",
