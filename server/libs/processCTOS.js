@@ -74,7 +74,7 @@ function connectToCore(port, data, socket) {
             }
         });
         socket.on('error', function (error) {
-            console.log('::CLIENT', error);
+            //console.log('::CLIENT', error);
             socket.active_ygocore.end();
         });
     });
