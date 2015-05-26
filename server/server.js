@@ -100,5 +100,4 @@ process.on('uncaughtException', function (err) {
     'use strict';
     console.error((new Date()).toUTCString() + ' uncaughtException:', err.message);
     console.error(err.stack);
-    process.exit(1);
 });
