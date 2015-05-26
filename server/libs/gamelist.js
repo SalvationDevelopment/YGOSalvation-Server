@@ -111,9 +111,11 @@ function messageListener(message) {
         if (gamelist.hasOwnProperty(game)) {
             if (gamelist[game].players.length === 0 && gamelist[game].spectators === 0) {
                 delete gamelist[game];
+                continue;
             }
             if ((((new Date()) - (gamelist[game].time)) > 600000) && !gamelist.started) {
                 delete gamelist[game];
+                
             }
         }
     }
@@ -196,3 +198,5 @@ module.exports = {
     primusListener: primusListener,
     announce: announce
 };
+
+
