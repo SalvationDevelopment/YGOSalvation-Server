@@ -8,8 +8,7 @@ var primus,
     primusServer = http.createServer().listen(24555),
     duelserv = require('./duelserv.js'),
     ps = require('ps-node'),
-    previousAnnouncement = "",
-    fs = require('fs');
+    previousAnnouncement = "";
 
 function announce(announcement) {
     'use strict';
@@ -28,14 +27,11 @@ function handleCoreMessage(core_message_raw, port, pid) {
     }
 
     var chat,
-        today = new Date(),
-        stamp = [today.getFullYear(), today.getMonth(), today.getDay()],
         join_slot,
         leave_slot,
         lock_slot,
         core_message = core_message_raw.toString().split('|');
     core_message[0] = core_message[0].trim();
-    stamp = stamp.join('-');
     if (core_message[1] === undefined) {
         return gamelist;
     }
@@ -92,12 +88,8 @@ function handleCoreMessage(core_message_raw, port, pid) {
             break;
 
         case ('::::chat'):
-            chat = gamelist[core_message[1]].pid + '|' + core_message[2] + ': ' + core_message[3];
-            
-            duelserv.bot.say('#public', chat);
-            fs.appendFile('../http/' + stamp + '-chat.txt', chat + '\n', function (err) {
-
-            });
+            chat = core_message.join(' ');
+            duelserv.bot.say('#public', gamelist[core_message[1]].pid + '|' + core_message[2] + ': ' + core_message[3]);
             break;
 
         }
