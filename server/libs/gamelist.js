@@ -8,7 +8,16 @@ var primus,
     primusServer = http.createServer().listen(24555),
     duelserv = require('./duelserv.js'),
     ps = require('ps-node'),
-    previousAnnouncement = "";
+    previousAnnouncement = "",
+    fs = require('fs'),
+    winston = require('winston');
+
+var logger = new (winston.Logger)({
+    transports: [
+        new (winston.transports.Console)(),
+        new (winston.transports.DailyRotateFile)({ filename: '../http/somefile.log' })
+    ]
+});
 
 function announce(announcement) {
     'use strict';
@@ -90,6 +99,7 @@ function handleCoreMessage(core_message_raw, port, pid) {
         case ('::::chat'):
             chat = core_message.join(' ');
             duelserv.bot.say('#public', gamelist[core_message[1]].pid + '|' + core_message[2] + ': ' + core_message[3]);
+            logger.log(gamelist[core_message[1]].pid + '|' + core_message[2] + ': ' + core_message[3]);
             break;
 
         }
