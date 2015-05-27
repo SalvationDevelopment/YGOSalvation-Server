@@ -10,12 +10,12 @@ var primus,
     ps = require('ps-node'),
     previousAnnouncement = "",
     fs = require('fs'),
-    winston = require('winston');
+    winston = require('winston'),
+    path = require('path');
 
 var logger = new (winston.Logger)({
     transports: [
-        new (winston.transports.Console)(),
-        new (winston.transports.DailyRotateFile)({ filename: '../http/somefile.log' })
+        new (winston.transports.DailyRotateFile)({ filename: ".\\http\\logs\\chat.log"})
     ]
 });
 
@@ -99,7 +99,7 @@ function handleCoreMessage(core_message_raw, port, pid) {
         case ('::::chat'):
             chat = core_message.join(' ');
             duelserv.bot.say('#public', gamelist[core_message[1]].pid + '|' + core_message[2] + ': ' + core_message[3]);
-            logger.log(gamelist[core_message[1]].pid + '|' + core_message[2] + ': ' + core_message[3]);
+            logger.info(gamelist[core_message[1]].pid + '|' + core_message[2] + ': ' + core_message[3]);
             break;
 
         }
