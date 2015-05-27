@@ -32,6 +32,7 @@
     "primus-rooms": "*",
     "ps-node": "*",
     "sqlite3": "*",
+    "winston": "^1.0.0",
     "ws": "*"
   },
   "optionalDependencies": {

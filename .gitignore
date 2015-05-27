@@ -68,3 +68,4 @@ server/http/setups/*
 *.tar
 *.tar.gz
 *crash*
+*.log.*
