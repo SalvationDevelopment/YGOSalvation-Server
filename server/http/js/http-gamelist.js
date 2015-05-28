@@ -297,7 +297,7 @@ function parseDuelOptions(duelOptions) {
             turnDraws: duelOptionsParts[3],
 
             //Choose whether duel is locked
-            isLocked: (duelOptionsParts[4] === 'U') ? 'unlocked' : 'locked',
+            isLocked: (duelOptionsParts[4] === 'U') ? false : true,
 
             //Copy password
             password: duelOptionsParts[5]
