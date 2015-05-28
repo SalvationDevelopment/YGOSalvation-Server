@@ -153,7 +153,7 @@ function enterGame(string, pass) {
     console.log('checking for pass');
     if (pass) {
         guess = prompt('Password?', guess);
-        if (string.substring(26, 19) !== pass) {
+        if (string.substring(26, 19) !== guess) {
             alert('Wrong Password!');
             return;
         }
