@@ -80,6 +80,9 @@ function initiateMaster(numCPUs) {
     'use strict';
     if (process.env.SLAVE) {
         require('./libs/slave.js');
+        return;
+    } else if (process.env.SERVICE) {
+        return;
     } else {
         var numCPUs = 1; // atleast 1 slave and 1 master.
         if (require('os').cpus().length > 1) {

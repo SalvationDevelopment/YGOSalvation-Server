@@ -1,6 +1,9 @@
 /*jslint plusplus: true, browser:true, node:true*/
+/*jslint nomen: true*/
 /*global localStorage, $, Primus, prompt, console, writeDeckList, makeDeck, confirm, launcher, alert, singlesitenav, startgame, _gaq*/
 /*exported connectToCheckmateServer, leaveGamelist, hostGame, connectgamelist, setHostSettings, setfilter, */
+
+
 var localstorageIter = 0;
 
 function applySettings() {
@@ -63,7 +66,7 @@ function ygopro(parameter) {
     
     $.post('http://127.0.0.1:9468/' + parameter, localStorage);
     _gaq.push(['_trackEvent', 'Launcher', 'YGOPro', parameter]);
-     _gaq.push(['_trackEvent', 'Site', 'Navigation Movement', internalLocal + ' - ' + 'YGOPro']);
+    _gaq.push(['_trackEvent', 'Site', 'Navigation Movement', internalLocal + ' - ' + 'YGOPro']);
     internalLocal = 'YGOPro';
     
 }
@@ -144,8 +147,16 @@ function connectgamelist() {
     });
 }
 
-function enterGame(string) {
+function enterGame(string, pass) {
     'use strict';
+    var guess = '';
+    if (pass) {
+        guess = prompt('Password?', guess);
+        if (guess !== pass) {
+            alert('Wrong Password!');
+            return;
+        }
+    }
     localStorage.lastdeck = $('.currentdeck').val();
     localStorage.roompass = string;
     localStorage.lastip = "192.99.11.19";
@@ -172,18 +183,33 @@ function randomString(len, charSet) {
     }
     return randomstring;
 }
+function setpass() {
+    'use strict';
+    var pass = randomString(5);
+    do {
+        if (pass.length !== 5) {
+            pass = randomString(5);
+        }
+        pass = prompt('Password (5 char):', pass);
+        pass.replace(/[^a-zA-Z0-9]/g, "");
+    } while (pass.length !== 5);
+    prompt('Give this Password to your Opponent(s)!', pass);
+    return pass;
+}
 
 function getDuelRequest() {
     'use strict';
     var pretypecheck = '',
-        out;
+        out,
+        stnds = isChecked('#usepass') ? ',5,1,L,' : ',5,1,U,';
     out = {
         string: pretypecheck + $('#creategamecardpool').val() + $('#creategameduelmode').val() + $('#creategametimelimit').val(),
         prio: isChecked('#enableprio') ? ("T") : ("O"),
         checkd: isChecked('#discheckdeck') ? ("T") : ("O"),
         shuf: isChecked('#disshuffledeck') ? ("T") : ("O"),
-        stnds: "," + $('#creategamebanlist').val() + ',5,1,U,',
-        pass: randomString(5)
+        stnds: "," + $('#creategamebanlist').val() + stnds,
+        pass: isChecked('#usepass') ? setpass() : randomString(5)
+        
     };
 
     out.prio = ($('#creategamebanlist').val() === "21") ? "T" : out.prio;
@@ -268,8 +294,8 @@ function parseDuelOptions(duelOptions) {
             //Select how many cards to draw each turn
             turnDraws: duelOptionsParts[3],
 
-            //Choose whether duel is ranked
-            isRanked: (duelOptionsParts[4] === 'U') ? 'Unranked' : 'Ranked',
+            //Choose whether duel is locked
+            isLocked: (duelOptionsParts[4] === 'U') ? 'unlocked' : 'locked',
 
             //Copy password
             password: duelOptionsParts[5]
@@ -322,7 +348,11 @@ function preformfilter(translated, players, rooms, started, pid) {
         content = '',
         duelist = '',
         filterm = parseFilters(),
-        game = (translated.poolFormat !== 'Goat Format') ? 'game' : 'nostalgia';
+        game = (translated.poolFormat !== 'Goat Format') ? 'game' : 'nostalgia',
+        pass = '';
+    if (translated.isLocked) {
+        pass = translated.password;
+    }
 
     //OK = (translated.gameMode !== filterm.gameMode && filterm.gameMode !== 'all') ? false : OK;
     //OK = (translated.allowedCards !== filterm.allowedCards && filterm.allowedCards !== 'all') ? false : OK;
@@ -334,7 +364,7 @@ function preformfilter(translated, players, rooms, started, pid) {
     if (OK) {
         duelist = (translated.gameMode === 'Single' || translated.gameMode === 'Match') ? players[0] + ' vs ' + players[1] : players[0] + ' &amp ' + players[1] + ' vs ' + players[2] + ' &amp ' + players[3];
         //console.log(translated);
-        content = '<div class="game ' + rooms + ' ' + started + '" onclick=enterGame("' + rooms + '") data-' + game + '="' + rooms + '">' + duelist + '<span class="subtext" style="font-size:.5em"><br>' + translated.gameMode +
+        content = '<div class="game ' + rooms + ' ' + started + ' ' +  translated.isLocked + '" onclick=enterGame("' + rooms + '") data-' + game + '="' + rooms + '">' + duelist + '<span class="subtext" style="font-size:.5em"><br>' + translated.gameMode +
             ' ' + $('#creategamebanlist option[value=' + translated.banlist + ']').text() + ' ' + translated.poolFormat + ' ' + pid + '</span> </div>';
     }
     return content;
