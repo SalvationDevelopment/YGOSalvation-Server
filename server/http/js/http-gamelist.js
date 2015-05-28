@@ -151,9 +151,9 @@ function enterGame(string, pass) {
     'use strict';
     var guess = '';
     console.log('checking for pass');
-    if (pass.length === 5) {
+    if (pass) {
         guess = prompt('Password?', guess);
-        if (guess !== pass) {
+        if (string.substring(26, 19) !== pass) {
             alert('Wrong Password!');
             return;
         }
