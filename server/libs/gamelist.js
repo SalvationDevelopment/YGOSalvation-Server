@@ -127,10 +127,10 @@ function messageListener(message) {
                 delete gamelist[game];
                 continue;
             }
-            if ((((new Date()) - (gamelist[game].time)) > 600000) && !gamelist.started) {
-                delete gamelist[game];
-                
-            }
+//            if ((((new Date()) - (gamelist[game].time)) > 600000) && !gamelist.started) {
+//                delete gamelist[game];
+//                
+//            }
         }
     }
     //primus.room('activegames').write(JSON.stringify(gamelist));
