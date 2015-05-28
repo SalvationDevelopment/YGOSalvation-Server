@@ -150,13 +150,15 @@ function connectgamelist() {
 function enterGame(string, pass) {
     'use strict';
     var guess = '';
-    if (pass) {
+    console.log('checking for pass');
+    if (pass.length === 5) {
         guess = prompt('Password?', guess);
         if (guess !== pass) {
             alert('Wrong Password!');
             return;
         }
     }
+    console.log('entering duel');
     localStorage.lastdeck = $('.currentdeck').val();
     localStorage.roompass = string;
     localStorage.lastip = "192.99.11.19";
