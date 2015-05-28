@@ -1,4 +1,4 @@
-﻿TERMS OF SERVICE
+TERMS OF SERVICE
 The Following is the Terms of Service of SalvationDevelopment that all Users have agreed to upon Installation.
 
 Owners, Developers, Investors, and Interns, Volenteers, and users of higher than standard ranking, access, or otherwise listed within the site, the site, the launcher, server side software, and /or launcher, are hereafter known as SalvationDevelopment, administration, and or software where context is appropriate.
@@ -7,10 +7,11 @@ Privacy Policy
 
 Your privacy is very important to us. Accordingly, we have developed this Policy in order for you to understand how we collect, use, communicate and disclose and make use of personal information. The following outlines our privacy policy.
 
-Materials from all SalvationDevelopment websites identify themselves with unique identifiers, this information may at times be sent back to us along with including but not limited to; the username and the internet protocol and/or media access control address of the computer executing it. This information can be used to terminate the operation of what SalvationDevelopment instance deemed breaching Terms of Service.
+Materials from all SalvationDevelopment websites and applications identify themselves with unique identifiers, this information may at times be sent back to us along with including but not limited to; the username passwords and the internet protocol and/or media access control address of the computer executing it. This information can be used to terminate the operation of what SalvationDevelopment instance deemed breaching Terms of Service. Specific forms of communications from the User to our servers are made public record, it is linked to a user and serves as a public statement.
+
 We will collect and use of personal information solely with the objective of fulfilling those purposes specified by us and for other compatible purposes, unless we obtain the consent of the individual concerned or as required by law.
 
-We will only retain personal information as long as necessary for the fulfillment of those purposes.
+We will only retain personal information as long as necessary for the fulfillment of those purposes, or indefinately to provide accurate records for the community of behavior of specific users.
 
 We will collect personal information by lawful and fair means and, where appropriate; where allowed by law.
 
