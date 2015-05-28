@@ -1,10 +1,16 @@
 {    "Articles": [
       {
+            "Title": "Ban Reviews and Security Hardening",
+            "Subtitle": "Use your Username and Password from the Forum",
+            "Content": "<p>We now have a request user ban protocol. This is our version of a ban system. Our reasonings stem from AccessDenied's lazy and methodical approch to the matter, American laws, and watching DevPro DuelingNetwork and Dawn screw up simple concepts. The server now records to file <a href='http://ygopro.us/logs/' target='_blank' style='color:hotpink'> all messages posted in game while using our server</a> if you feel harassed or that another player is in violations of our terms of service please file a report/request for ban on our <a href='http://forum.ygopro.us/index.php?/forum/23-user-ban-request/' target='_blank' style='color:hotpink'>new subforum.</a> The forum is accessiable to banned users, and the threads are viewable publically. This is purposefully counter to DuelingNetworks policies, and in line with DevPro's, except logs can not be forged because they are publically accessiable to all users unlike at DevPro. US rights do not apply to the internet but we are to the best of our ablity trying to implement something similar to the 6th ammendment in practice. We feel this will solve issues of coruption, public perception of administrative actions, and prevent certain types of misbehavior. We understand that our community borders on the adult side but we ask you to be civil with each other, like adults.<br /><br />Additionally we have added BOPM to our chat server, if you are connecting to our servers via a proxy network it will ban you. This was implemented for community safety.</p>",
+            "Author": "AccessDenied",
+            "Date" : "May 27th, 2015"
+        },{
             "Title": "How to Login!",
             "Subtitle": "Use your Username and Password from the Forum",
             "Content": "<p>One of our most requested features has been a login system, looking back at our design papers we opted last year for a single-sign on system similar to DuelingNetwork, we are now using a similar mechnism. For users that are already regisitered with our FORUMS, you may now log in with your FORUM USERNAME and FORUM PASSWORD. For new users please press the register button and register for our system, via the forum. In the future chat will also be intergrated. We are sorry if this inconviences anyone but it was done for the sake of community safety. You may change your password and other settings via the forum.<br /><br /> Additionally a watcher system has been added to the server. The administration can see everything you say while in a duel and are likely to take action depending on if they are alert at the moment and what you say. Please be on your best behavior while using our system, best regards.</p>",
             "Author": "AccessDenied",
-            "Date" : "May 24th, 2015"
+            "Date" : "May 25th, 2015"
         },{
             "Title": "Salvation Tag Tournament is Here!",
             "Subtitle": "A Tournament of Fun~",
