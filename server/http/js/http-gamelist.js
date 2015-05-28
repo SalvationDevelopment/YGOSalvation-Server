@@ -366,7 +366,7 @@ function preformfilter(translated, players, rooms, started, pid) {
     if (OK) {
         duelist = (translated.gameMode === 'Single' || translated.gameMode === 'Match') ? players[0] + ' vs ' + players[1] : players[0] + ' &amp ' + players[1] + ' vs ' + players[2] + ' &amp ' + players[3];
         //console.log(translated);
-        content = '<div class="game ' + rooms + ' ' + started + ' ' +  translated.isLocked + '" onclick=enterGame("' + rooms + '", "' + pass + '") data-' + game + '="' + rooms + '">' + duelist + '<span class="subtext" style="font-size:.5em"><br>' + translated.gameMode +
+        content = '<div class="game ' + rooms + ' ' + started + ' ' +  translated.isLocked + '" onclick=enterGame("' + rooms + '",' + translated.isLocked + ') data-' + game + '="' + rooms + '">' + duelist + '<span class="subtext" style="font-size:.5em"><br>' + translated.gameMode +
             ' ' + $('#creategamebanlist option[value=' + translated.banlist + ']').text() + ' ' + translated.poolFormat + ' ' + pid + '</span> </div>';
     }
     return content;
