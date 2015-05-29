@@ -200,8 +200,9 @@ duelserv.on('del', function (pid) {
     var game;
     for (game in gamelist) {
         if (gamelist.hasOwnProperty(game)) {
-            if (gamelist[game].pid === pid) {
+            if (String() + gamelist[game].pid === pid) {
                 delete gamelist[game];
+                announce(JSON.stringify(gamelist));
             }
         }
     }
