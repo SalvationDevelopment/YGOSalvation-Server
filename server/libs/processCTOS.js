@@ -1,19 +1,39 @@
 /*jslint node: true, plusplus: true, unparam: false, nomen: true*/
-var portmin = 30000 + process.env.PORTRANGE * 100,
+
+/* This is the YGOCore routing and proxy system. The System checks
+a number of CTOS commands and from them works out if to just route
+the connection to an existing connection or start a new YGOCore.
+If a new YGOCore is needed it works out what config file is needed
+for that instance of dueling based on the `roompass` in the
+connection string of the `CTOS_JOIN` command */
+
+
+var portmin = 30000 + process.env.PORTRANGE * 100, //Port Ranges
     portmax = (30000 + process.env.PORTRANGE * 100) + 100,
-    handleCoreMessage,
+    handleCoreMessage, // Send messages BACK to the MASTER PROCESS
     startDirectory = __dirname,
     fs = require('fs'),
     childProcess = require('child_process'),
     net = require('net'),
     cluster = require('cluster'),
-    parsePackets = require('./parsepackets.js'),
-    recieveCTOS = require('./recieveCTOS'),
-    recieveSTOC = require('./recieveSTOC.js'),
-    createDateString = require('./datetimestamp.js'),
-    //custom_error = require('./custom_error.js'),
+    parsePackets = require('./parsepackets.js'), //Get data sets out of the YGOPro Network API.
+    recieveCTOS = require('./recieveCTOS'), // Translate data sets into messages of the API
+
     gamelist = {},
-    geoip = require('geoip-lite');
+    //geoip = require('geoip-lite');
+    winston = require('winston'),
+    path = require('path');
+
+var logger = new (winston.Logger)({
+    transports: [
+        new (winston.transports.DailyRotateFile)({ filename: ".\\http\\logs\\chat.log"})
+    ]
+});
+
+
+/* Listen to the MASTER  process for messages to the SLAVE 
+processes. That message will be an update to the internal
+gamelist of each SLAVE process */
 
 if (cluster.isWorker) {
     process.on('message', function (message) {
@@ -24,12 +44,7 @@ if (cluster.isWorker) {
     });
 }
 
-Number.prototype.between  = function (a, b) {
-    'use strict';
-    var min = Math.min.apply(Math, [a, b]),
-        max = Math.max.apply(Math, [a, b]);
-    return this > min && this < max;
-};
+
 
 function processTask(task, socket) {
     'use strict';
@@ -44,28 +59,33 @@ function processTask(task, socket) {
         if (output[l].CTOS_JOIN_GAME) {
             socket.active = true;
             socket.hostString = output[l].CTOS_JOIN_GAME;
-            //console.log(task);
         }
         if (output[l].CTOS_PLAYER_INFO) {
             socket.username = output[l].CTOS_PLAYER_INFO;
-            //console.log(task);
         }
     }
 }
 
+
+/* After determining the routing location, then connect the CLIENT to
+the proper YGOCore and monitor the connection */
+
 function connectToCore(port, data, socket) {
-    //console.log('attempting link up');
     'use strict';
 
     socket.active_ygocore = net.connect(port, '127.0.0.1', function () {
+        
+        /* Unlimit the speed of the connection
+        by not doing processing on the data
+        to incease up network optimization */
         socket.active_ygocore.setNoDelay(true);
-        //console.log('linkup established');
+        
+        /*proxy the data*/
         socket.active_ygocore.write(data);
-        //console.log('-->', data.toString());
+        
         socket.active = false;
         socket.active_ygocore.on('data', function (core_data) {
             socket.write(core_data);
-            //console.log('<--',core_data.toString());
         });
 
         socket.on('close', function () {
@@ -74,7 +94,6 @@ function connectToCore(port, data, socket) {
             }
         });
         socket.on('error', function (error) {
-            //console.log('::CLIENT', error);
             socket.active_ygocore.end();
         });
     });
@@ -93,6 +112,11 @@ function connectToCore(port, data, socket) {
     });
 
 }
+
+/* Each YGOCore needs to operate on its own port,
+each SLAVE is given a range to loop through. This
+is actually a very poor way of doing this and
+frequently fails; rewrite is needed*/
 
 function portfinder(min, max, callback) {
     'use strict';
@@ -113,6 +137,10 @@ function portfinder(min, max, callback) {
     }
 }
 
+/* The routing is done based on the
+game string or rather `roompass` in
+connection request */
+
 function pickCoreConfig(socket) {
     'use strict';
     var output = 'ini/';
@@ -126,6 +154,11 @@ function pickCoreConfig(socket) {
         return output + 'config.ini';
     }
 }
+
+/* send the YGOCore API commands back to the main process, some cleanup
+is needed before sending the message. Basic logging for finding idiots
+later after they have misbehaved or providing administrative ablities
+to kill or act on games */
 
 function handleCoreMessage(core_message_raw, port, socket, data, pid) {
     'use strict';

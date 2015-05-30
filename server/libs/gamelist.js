@@ -9,7 +9,6 @@ var primus,
     duelserv = require('./duelserv.js'),
     ps = require('ps-node'),
     previousAnnouncement = "",
-    fs = require('fs'),
     winston = require('winston'),
     path = require('path');
 
