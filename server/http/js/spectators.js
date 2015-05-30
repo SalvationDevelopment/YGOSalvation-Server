@@ -279,7 +279,7 @@ function animateState(player, clocation, index, moveplayer, movelocation, movezo
         card;
     
     if ($(origin).length === 0) {
-        $('.fieldimage').append('<img class="' + origin + '" src="' + game.images + 'cover.jpg" data-position="FaceDown" />');
+        $('.fieldimage').append('<img class="' + origin.replace('.', ' ') + '" src="' + game.images + 'cover.jpg" data-position="FaceDown" />');
     }
     card = $(origin).attr({
         'style': '',
