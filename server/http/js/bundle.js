@@ -4085,15 +4085,13 @@ game.UpdateCard = function (player, clocation, index, data) {
 function animateState(player, clocation, index, moveplayer, movelocation, movezone, moveposition, overlayindex, isBecomingCard) {
     isBecomingCard = ''; //(isBecomingCard) ? 'card overlayunit' : 'card';
     overlayindex = (overlayindex === undefined) ? '' : 0;
-    var isCard = (overlayindex === undefined) ? '.card' : '.card.overlayunit',
+    var isCard = (overlayindex === undefined) ? '.card' : '.card',
         
         searchindex = (index === 'ignore') ? '' : ".i" + index,
         searchplayer = (player === 'ignore') ? '' : ".p" + player,
         origin = isCard + searchplayer + "." + enums.locations[clocation] + searchindex,
-        destination = 'card' + " p" + moveplayer + " " + enums.locations[movelocation] + " i" + movezone,
-        card,
-        e = 'card ' + " p" + player + " " + enums.locations[clocation] + " i" + index;
-    console.log(e);
+        destination = 'card' + " p" + player + " " + enums.locations[movelocation] + " i" + index,
+        card;
     
     if ($(origin).length === 0) {
         $('.fieldimage').append('<img class="' + e + '" src="' + game.images + 'cover.jpg" data-position="FaceDown" />');
