@@ -51,6 +51,7 @@ function CommandParser() {
             if (input.hasOwnProperty(serverToClient)) {
                 if (input[serverToClient] === true) {
                     output.event.emit(input.command, input);
+                    console.log(serverToClient);
                 }
             }
         }
@@ -223,13 +224,7 @@ game.DOMWriter = function (size, movelocation, player) {
     }
     $(field).appendTo('.fieldcontainer');
 };
-game.updatelifepoints = function (player, multiplier, lp) {
-    var lifepoints = +$('.p' + player + 'lp').eq(0).val() + (lp * multiplier);
-    if (lifepoints < 0) {
-        lifepoints = 0;
-    }
-    $('.p' + player + 'lp').val(lifepoints);
-};
+
 game.UpdateCards = function (player, clocation, data) { //YGOPro is constantly sending data about game state, this function stores and records that information to allow access to a properly understood gamestate for reference. 
     var i, deadcard, deadzone, index, animateState;
 
@@ -670,10 +665,10 @@ function startgame(roompass) {
            
             //console.log(output);
 
-            game.UpdateCards(player, input.fieldmodel, output);
+            //game.UpdateCards(player, input.fieldmodel, output);
         }
         duel.gameState.state[input.player][input.fieldmodel] = output;
-        console.log(player, input.fieldmodel, output);
+        //console.log(player, input.fieldmodel, output);
     });
     duel.commandParser.event.on('STOC_TIME_LIMIT', function (input) {
         console.log('STOC_TIME_LIMIT', input);

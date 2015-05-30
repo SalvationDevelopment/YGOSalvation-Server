@@ -772,9 +772,11 @@ meter {
 }
 
 #ingamechat {
-    width: 100%;
-    position: absolute;
-    bottom:0;
+  width: 100%;
+  position: absolute;
+  bottom: 0;
+  min-height: 10%;
+  color: white;
 }
 meter::-webkit-meter-optimum-value {
     background: none;
