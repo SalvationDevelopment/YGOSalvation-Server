@@ -754,6 +754,11 @@ header {
     background: brown;
 }
 
+meter.p1lp, meter.p0lp {
+  width: 45% !important;
+  float: left;
+}
+
 meter {
     float: left;
     margin: 0 5%;
@@ -810,19 +815,18 @@ meter.p0time, meter.p1time {
 }
 
 #lifepoints input {
-    text-align: center;
-    float: left;
-    background: transparent;
-    color: white;
-    border: none;
-    margin: 10px 5%;
-    width: 90%;
-    clear: left;
-    margin-top: 0;
+  text-align: center;
+  float: left;
+  background: transparent;
+  color: white;
+  border: none;
+  margin: 10px 5%;
+  width: 45%;
+  clear: left;
+  margin-top: -17px;
 }
-
-#lifepoints .p1lp {
-    float: right;
+#lifepoints input.p1lp {
+    float:right;
 }
 
 #lifepoints {
