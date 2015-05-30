@@ -89,20 +89,20 @@ function GameState() {
         };
     function updateTime(player, newTime) {
         state[player].Time = newTime;
+        console.log('time', player, newTime, '.p' + player + 'time');
         $('.p' + player + 'time').val(newTime);
     }
 
-    function start(lp1, lp2, OneDeck, TwoDeck, OneExtra, TwoExtra) {
+    function start(p0lp, p1lp, OneDeck, TwoDeck, OneExtra, TwoExtra) {
         //            game.DOMWriter(OneDeck, 'DECK', 0);
         //            game.DOMWriter(TwoDeck, 'DECK', 1);
         //            game.DOMWriter(OneExtra, 'EXTRA', 0);
         //            game.DOMWriter(TwoExtra, 'EXTRA', 1);
 
-        state[0].LifePoints = lp1;
-        state[1].LifePoints = lp2;
-        console.log('lp1', typeof lp1, lp1);
-        $('.p0lp').val(parseInt(lp1, 10));
-        $('.p1lp').val(parseInt(lp2, 10));
+        state[0].LifePoints = p0lp;
+        state[1].LifePoints = p1lp;
+        $('.p0lp').val(parseInt(p0lp, 10));
+        $('.p1lp').val(parseInt(p1lp, 10));
     }
 
     function update(player, clocation, index, data) {
@@ -119,6 +119,7 @@ function GameState() {
             lifepoints = 0;
         }
         state[player].Lifepoints = lifepoints;
+        $('.p' + player + 'lp').val(parseInt(state[player].Lifepoints, 10));
     }
 
     function move(player, clocation, index, moveplayer, movelocation, movezone, moveposition, overlayindex, isBecomingCard) {
@@ -623,7 +624,7 @@ function startgame(roompass) {
     });
     duel.commandParser.event.on('MSG_START', function (input) {
         console.log(input);
-        duel.gameState.start(input.ifepoints1, input.lifepoints2, input.player1decksize, input.player2decksize, input.player1extrasize, input.player2extrasize);
+        duel.gameState.start(input.lifepoints1, input.lifepoints2, input.player1decksize, input.player2decksize, input.player1extrasize, input.player2extrasize);
         duel.gameState.fieldside =  input.playertype;
         
         console.log(input);
