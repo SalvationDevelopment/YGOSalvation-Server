@@ -730,7 +730,7 @@ function startgame(roompass) {
        
     });
     duel.commandParser.event.on('STOC_CHAT', function (input) {
-       
+        $('#ingamechat').append('<div>' + input.from + ' ' + input.chat + '</div>');
     });
 }
 

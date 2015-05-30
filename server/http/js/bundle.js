@@ -4491,8 +4491,53 @@ function startgame(roompass) {
     duel.commandParser.event.on('STOC_TIME_LIMIT', function (input) {
         duel.gameState.updateTime(input.player, input.time);
     });
-    duel.commandParser.event.on('STOC_CHAT', function (input) {
+    duel.commandParser.event.on('STOC_ERROR_MSG', function (input) {
        
+    });
+    duel.commandParser.event.on('STOC_SELECT_HAND', function (input) {
+       
+    });
+    duel.commandParser.event.on('STOC_SELECT_TP', function (input) {
+       
+    });
+    duel.commandParser.event.on('STOC_HAND_RESULT', function (input) {
+        console.log('STOC_HAND_RESULT', input);
+    });
+    duel.commandParser.event.on('STOC_CHANGE_SIDE', function (input) {
+       
+    });
+    duel.commandParser.event.on('STOC_CREATE_GAME', function (input) {
+       
+    });
+    duel.commandParser.event.on('STOC_JOIN_GAME', function (input) {
+       
+    });
+    duel.commandParser.event.on('STOC_TYPE_CHANGE', function (input) {
+       
+    });
+    duel.commandParser.event.on('STOC_LEAVE_GAME', function (input) {
+       
+    });
+    duel.commandParser.event.on('STOC_HS_PLAYER_CHANGE', function (input) {
+       
+    });
+    duel.commandParser.event.on('STOC_DUEL_END', function (input) {
+       
+    });
+    duel.commandParser.event.on('STOC_REPLAY', function (input) {
+       
+    });
+    duel.commandParser.event.on('STOC_DUEL_START', function (input) {
+       
+    });
+    duel.commandParser.event.on('STOC_HS_PLAYER_ENTER', function (input) {
+       
+    });
+    duel.commandParser.event.on('STOC_HS_WATCH_CHANGE', function (input) {
+       
+    });
+    duel.commandParser.event.on('STOC_CHAT', function (input) {
+        $('#ingamechat').append('<div>' + input.from + ' ' + input.chat + '</div>');
     });
 }
 
