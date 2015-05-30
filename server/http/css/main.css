@@ -773,6 +773,7 @@ meter {
 meter::-webkit-meter-optimum-value {
     background: none;
     background-color: purple;
+    -webkit-transition: width .5s;
     /*    border-right: 1px solid hotpink;*/
     /*    box-shadow: 0 0 12px rgba(255, 0, 255, .3);*/
 }
@@ -782,7 +783,7 @@ meter::-webkit-meter-bar {
     /*    border-top: 1px solid rgba(100, 100, 100, 0.3);*/
     
     box-shadow: inset 0px 1px 10px black;
-    background: white;
+    background: rgba(255,255,25,.85);
 }
 
 meter.p0time, meter.p1time {
