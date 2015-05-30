@@ -3919,6 +3919,12 @@ function GameState() {
         shuffle(1, 'DECK');
         shuffle(0, 'EXTRA');
         shuffle(1, 'EXTRA');
+        setTimeout(function () {
+            cardmargin(0, 'DECK');
+            cardmargin(1, 'DECK');
+            cardmargin(0, 'EXTRA');
+            cardmargin(1, 'EXTRA');
+        }, 1000);
 
         state[0].LifePoints = p0lp;
         state[1].LifePoints = p1lp;
