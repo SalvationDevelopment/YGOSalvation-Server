@@ -730,9 +730,6 @@ header {
     position: relative;
     -webkit-transform-style: preserve-3d;
     clear: both;
-    float: left;
-    border-top: 3px solid #444;
-    border-color: rgba(255, 255, 255, .05);
     padding-top: 100px;
 }
 
@@ -764,7 +761,15 @@ meter {
     margin: 0 5%;
     width: 90%;
 }
-
+.p0name, .p1name {
+  display: block;
+  float: left;
+  margin: 10px 5%;
+  color: #aaa;
+}
+.p1name {
+    float:right;
+}
 meter::-webkit-meter-optimum-value {
     background: none;
     background-color: purple;
@@ -781,10 +786,10 @@ meter::-webkit-meter-bar {
 }
 
 meter.p0time, meter.p1time {
-  height: 3px;
+  height: 4px;
   border: none;
   float: left;
-  border: 1px solid white;
+  border-bottom: 1px solid white;
   width: 40%;
 }
 
@@ -829,7 +834,8 @@ meter.p0time, meter.p1time {
 }
 
 #lifepoints input.p1lp {
-    float:right;
+  float: right;
+  margin-top: -29px;
 }
 
 #lifepoints {
