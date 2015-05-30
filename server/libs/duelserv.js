@@ -1,4 +1,5 @@
 /*jslint node:true, plusplus: true*/
+/*global proccess*/
 var bot,
     irc = require("irc"),
     events = require('events'),
@@ -27,7 +28,18 @@ bot = new irc.Client(config.server, config.botName, {
     channels: config.channels
 });
 
-
+bot.on('registered', function () {
+    'use strict';
+    if (process.env.OPERNAME && proccess.ENV.OPERPASS) {
+        setTimeout(function () {
+            bot.send('oper', process.env.OPERNAME, proccess.ENV.OPERPASS);
+            bot.join("#oper", function () {
+                
+            });
+        }, 2000);
+    }
+    
+});
 function duelrequest(challenger, challengedParty, roompass) {
     'use strict';
     eventEmitter.emit('announce', {
