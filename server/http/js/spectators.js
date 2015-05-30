@@ -277,7 +277,7 @@ function animateState(player, clocation, index, moveplayer, movelocation, movezo
         origin = isCard + searchplayer + "." + enums.locations[clocation] + searchindex,
         destination = 'card' + " p" + moveplayer + " " + enums.locations[movelocation] + " i" + movezone,
         card,
-        e = origin.replace('.', ' ');
+        e = 'card ' + " p" + player + " " + enums.locations[clocation] + " i" + index;
     console.log(e);
     
     if ($(origin).length === 0) {
