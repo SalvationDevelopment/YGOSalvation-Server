@@ -24,11 +24,18 @@ var portmin = 30000 + process.env.PORTRANGE * 100, //Port Ranges
     winston = require('winston'),
     path = require('path');
 
-var logger = new (winston.Logger)({
+var cHistory = new (winston.cHistory)({
     transports: [
-        new (winston.transports.DailyRotateFile)({ filename: ".\\http\\logs\\chat.log"})
+        new (winston.transports.Console)(),
+        new (winston.transports.DailyRotateFile)({ filename: ".\\logs\\conection_history.log"})
     ]
 });
+var coreErrors = new (winston.Logger)({
+    transports: [
+        new (winston.transports.DailyRotateFile)({ filename: ".\\logs\\conection_history.log"})
+    ]
+});
+
 
 
 /* Listen to the MASTER  process for messages to the SLAVE 
@@ -98,7 +105,7 @@ function connectToCore(port, data, socket) {
         });
     });
     socket.active_ygocore.on('error', function (error) {
-        console.log('::CORE', error);
+        cHistory.info('--GAME: ERROR');
         if (socket.alpha) {
             handleCoreMessage('::::endduel|' + socket.hostString, port, socket, data);
         }
@@ -120,7 +127,6 @@ frequently fails; rewrite is needed*/
 
 function portfinder(min, max, callback) {
     'use strict';
-    //console.log(gamelist);
     var rooms,
         activerooms = [],
         i = min;
@@ -176,45 +182,51 @@ function handleCoreMessage(core_message_raw, port, socket, data, pid) {
         };
     if (core_message[0].trim() === '::::network-ready') {
         connectToCore(port, data, socket);
+        cHistory.info('++GAME: ' + pid);
     }
     if (core_message[0].trim() === '::::end-duel') {
         socket.core.kill();
-    }
-    if (core_message[0].trim() === '::::chat') {
-        console.log(socket.remoteAddress, core_message.toString().trim());
+        cHistory.info('--GAME: ' + pid);
     }
     process.send(gamelistmessage);
 }
 
-
-
+/* Unlike DevPro, Salvation does not preload its 
+YGOCores. It calls them on demand. This posses a 
+few issues but provides routing flexiblity. When a
+YGOCore is needed it needs to figure out a few
+things. 1.) The configuration file, 2.) a port
+number to use and 3.) if it is a valid duel to use
+server resources on. */
 
 function startCore(port, socket, data, callback) {
-    //console.log(socket.hostString);
     'use strict';
     fs.exists(startDirectory + '../../ygocore/YGOServer.exe', function (exist) {
         if (!exist) {
-            console.log('core not found at ' + __dirname + '/../ygocore/YGOServer.exe');
+            coreErrors.info('YGOCore not found at ' + startDirectory + '../../ygocore/YGOServer.exe');
             return;
         }
 
         var configfile = pickCoreConfig(socket),
             params = port + ' ' + configfile;
-        //custom_error(console.log(' initiating core for ' + socket.username + ' on port:' + port + ' with: ' + configfile));
+        
         if (socket.hostString.length !== 24) {
             return;
         }
+        
         socket.core = childProcess.spawn(startDirectory + '/../ygocore/YGOServer.exe', [port, configfile], {
             cwd: startDirectory + '/../ygocore'
         }, function (error, stdout, stderr) {
-            console.log(error, stdout, stderr);
+            coreErrors.info(error, stdout, stderr);
             handleCoreMessage('::::endduel|' + socket.hostString, port, socket, data, socket.core.pid);
         });
+        
         socket.core.stdout.on('error', function (error) {
-            console.log(error);
+            coreErrors.info(error);
             handleCoreMessage('::::endduel|' + socket.hostString, port, socket, data, socket.core.pid);
             socket.core.kill();
         });
+        
         socket.core.stdout.on('data', function (core_message_raw) {
             handleCoreMessage(core_message_raw, port, socket, data, socket.core.pid);
         });
@@ -223,7 +235,7 @@ function startCore(port, socket, data, callback) {
 }
 
 
-
+/* ..and VOLIA! Game Request Routing */
 function processIncomingTrasmission(data, socket, task) {
     'use strict';
     processTask(task, socket);
@@ -231,16 +243,16 @@ function processIncomingTrasmission(data, socket, task) {
         if (gamelist[socket.hostString]) {
             socket.alpha = false;
             connectToCore(gamelist[socket.hostString].port, data, socket);
-            console.log(socket.username + ' connecting to ' + gamelist[socket.hostString].players[0]);
+            cHistory.info('[' + socket.remoteAddress + ':' + socket.username + '] Connecting to ' + gamelist[socket.hostString].players[0]);
         } else {
-            console.log(socket.username + ' connecting to new core');
+            cHistory.info('[' + socket.remoteAddress + ':' + socket.username + '] Connecting to new CORE');
 
             portfinder(++portmin, portmax, function (error, port) {
                 socket.alpha = true;
                 startCore(port, socket, data);
             });
         }
-        //console.log('process complete', gamelist);
+        /* after looping to much reset the ports*/
         if (portmin === portmax) {
             portmin = 30000 + process.env.PORTRANGE * 100;
         }
