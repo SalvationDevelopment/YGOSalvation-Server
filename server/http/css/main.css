@@ -770,6 +770,10 @@ meter {
 .p1name {
     float:right;
 }
+
+#ingamechat {
+
+}
 meter::-webkit-meter-optimum-value {
     background: none;
     background-color: purple;

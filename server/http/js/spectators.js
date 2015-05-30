@@ -711,7 +711,7 @@ function startgame(roompass) {
     duel.commandParser.event.on('STOC_LEAVE_GAME', function (input) {
        
     });
-    duel.commandParser.event.on('STOC_DUEL_START', function (input) {
+    duel.commandParser.event.on('STOC_HS_PLAYER_CHANGE', function (input) {
        
     });
     duel.commandParser.event.on('STOC_DUEL_END', function (input) {
@@ -723,7 +723,13 @@ function startgame(roompass) {
     duel.commandParser.event.on('STOC_DUEL_START', function (input) {
        
     });
-    duel.commandParser.event.on('STOC_DUEL_START', function (input) {
+    duel.commandParser.event.on('STOC_HS_PLAYER_ENTER', function (input) {
+       
+    });
+    duel.commandParser.event.on('STOC_HS_WATCH_CHANGE', function (input) {
+       
+    });
+    duel.commandParser.event.on('STOC_CHAT', function (input) {
        
     });
 }
