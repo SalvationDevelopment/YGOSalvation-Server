@@ -110,7 +110,7 @@ function GameState() {
             cardmargin(1, 'DECK');
             cardmargin(0, 'EXTRA');
             cardmargin(1, 'EXTRA');
-        }, 1000);
+        }, 100);
 
         state[0].LifePoints = p0lp;
         state[1].LifePoints = p1lp;
@@ -268,6 +268,7 @@ game.UpdateCard = function (player, clocation, index, data) {
     }
 };
 function animateState(player, clocation, index, moveplayer, movelocation, movezone, moveposition, overlayindex, isBecomingCard) {
+    console.log('animating', player, clocation, index, moveplayer, movelocation, movezone, moveposition, overlayindex, isBecomingCard);
     isBecomingCard = (isBecomingCard) ? 'card overlayunit' : 'card';
     overlayindex = (overlayindex === undefined) ? '' : 0;
     var isCard = (overlayindex === undefined) ? '.card' : '.card.overlayunit',
@@ -549,6 +550,7 @@ window.ws = {};
 
 
 function startgame(roompass) {
+    
     duel.gameState = new GameState();
     duel.commandParser = new CommandParser();
     window.ws = new WebSocket("ws://192.99.11.19:8082", "duel");
