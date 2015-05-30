@@ -30,9 +30,10 @@ bot = new irc.Client(config.server, config.botName, {
 
 bot.on('registered', function () {
     'use strict';
-    if (process.env.OPERNAME && proccess.ENV.OPERPASS) {
+    if (process.env.OPERNAME && process.env.OPERPASS) {
+        
         setTimeout(function () {
-            bot.send('oper', process.env.OPERNAME, proccess.ENV.OPERPASS);
+            bot.send('oper', process.env.OPERNAME, process.env.OPERPASS);
             bot.join("#oper", function () {
                 
             });
