@@ -1,0 +1,8 @@
+languages:
+  JavaScript: true
+exclude_paths:
+- "client/interface/js/vendor/primus.js"
+- "server/http/js/primus.js"
+- "server/libs/carddb-update.js"
+- "server/http/js/buffer.js"
+- "server/http/js/bundle.js"
