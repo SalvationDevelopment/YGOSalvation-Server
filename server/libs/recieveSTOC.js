@@ -55,7 +55,7 @@ module.exports = function recieveSTOC(packet) {
             break;
 
         case ('MSG_DRAW'):
-            task.drawplayer = packet.message[1];
+            task.player = packet.message[1];
             task.draw = packet.message[2];
             task.cardslist = [];
             task.drawReadposition = 3;
