@@ -775,10 +775,12 @@ meter::-webkit-meter-bar {
     background: white;
 }
 
-meter.p0time,
-meter.p1time {
-    height: 3px;
-    border: none;
+meter.p0time, meter.p1time {
+  height: 3px;
+  border: none;
+  float: left;
+  border: 1px solid white;
+  width: 40%;
 }
 
 .p0time::-webkit-meter-bar,
@@ -802,7 +804,9 @@ meter.p1time {
 }
 
 #lifepoints {
-    width: 100%
+    width: 75%;
+    margin:20px auto;
+    
 }
 
 #lifepoints input {

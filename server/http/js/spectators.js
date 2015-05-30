@@ -601,8 +601,9 @@ window.ws = {};
 
 
 
-duel.gameState = new GameState();
+
 function startgame(roompass) {
+    duel.gameState = new GameState();
     duel.commandParser = new CommandParser();
     window.ws = new WebSocket("ws://192.99.11.19:8082", "duel");
     window.ws.binaryType = 'arraybuffer';
