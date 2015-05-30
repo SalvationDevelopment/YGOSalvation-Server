@@ -20,9 +20,9 @@ var portmin = 30000 + process.env.PORTRANGE * 100, //Port Ranges
     recieveCTOS = require('./recieveCTOS'), // Translate data sets into messages of the API
 
     gamelist = {},
-    //geoip = require('geoip-lite');
     winston = require('winston'),
-    path = require('path');
+    path = require('path'),
+    coreIsInPlace = false;
 
 var cHistory = new (winston.cHistory)({
     transports: [
@@ -36,6 +36,16 @@ var coreErrors = new (winston.Logger)({
     ]
 });
 
+fs.exists(startDirectory + '../../ygocore/YGOServer.exe', function (exist) {
+    'use strict';
+    if (!exist) {
+        coreErrors.info('YGOCore not found at ' + startDirectory + '../../ygocore/YGOServer.exe');
+        return;
+    } else {
+        coreErrors.info('YGOCore is in place, allowing connections.');
+        coreIsInPlace = true;
+    }
+});
 
 
 /* Listen to the MASTER  process for messages to the SLAVE 
@@ -193,6 +203,7 @@ function handleCoreMessage(core_message_raw, port, socket, data, pid) {
 
 /* Checks if a given password is valid, returns true or false */
 function legalPassword(passIn) {
+    'use strict';
     if (passIn.length !== 24) {
         return false;
     }
@@ -210,41 +221,37 @@ server resources on. */
 
 function startCore(port, socket, data, callback) {
     'use strict';
-    fs.exists(startDirectory + '../../ygocore/YGOServer.exe', function (exist) {
-        if (!exist) {
-            coreErrors.info('YGOCore not found at ' + startDirectory + '../../ygocore/YGOServer.exe');
-            return;
-        }
+    if (!coreIsInPlace) {
+        return;
+    }
+        
+    var configfile = pickCoreConfig(socket),
+        params = port + ' ' + configfile;
 
-        var configfile = pickCoreConfig(socket),
-            params = port + ' ' + configfile;
-        
-        if (socket.hostString.length !== 24) {
-            return;
-        }
+    if (!legalPassword(socket.hostString)) {
+        //deal with bad game request
+        cHistory.info('[' + socket.remoteAddress + ':' + socket.username + '] requested bad game: ' + socket.hostString);
+        return;
+    }
 
-	if (!legalPassword(socket.hostString)) {
-            //deal with bad game request
-        }
-        
-        socket.core = childProcess.spawn(startDirectory + '/../ygocore/YGOServer.exe', [port, configfile], {
-            cwd: startDirectory + '/../ygocore'
-        }, function (error, stdout, stderr) {
-            coreErrors.info(error, stdout, stderr);
-            handleCoreMessage('::::endduel|' + socket.hostString, port, socket, data, socket.core.pid);
-        });
-        
-        socket.core.stdout.on('error', function (error) {
-            coreErrors.info(error);
-            handleCoreMessage('::::endduel|' + socket.hostString, port, socket, data, socket.core.pid);
-            socket.core.kill();
-        });
-        
-        socket.core.stdout.on('data', function (core_message_raw) {
-            handleCoreMessage(core_message_raw, port, socket, data, socket.core.pid);
-        });
-
+    socket.core = childProcess.spawn(startDirectory + '/../ygocore/YGOServer.exe', [port, configfile], {
+        cwd: startDirectory + '/../ygocore'
+    }, function (error, stdout, stderr) {
+        coreErrors.info(error, stdout, stderr);
+        handleCoreMessage('::::endduel|' + socket.hostString, port, socket, data, socket.core.pid);
     });
+
+    socket.core.stdout.on('error', function (error) {
+        coreErrors.info(error);
+        handleCoreMessage('::::endduel|' + socket.hostString, port, socket, data, socket.core.pid);
+        socket.core.kill();
+    });
+
+    /* This is important, handle YGOCore API calls for managing the gamelist */
+    socket.core.stdout.on('data', function (core_message_raw) {
+        handleCoreMessage(core_message_raw, port, socket, data, socket.core.pid);
+    });
+
 }
 
 
@@ -255,8 +262,8 @@ function processIncomingTrasmission(data, socket, task) {
     if (!socket.active_ygocore && socket.hostString) {
         if (gamelist[socket.hostString]) {
             socket.alpha = false;
-            connectToCore(gamelist[socket.hostString].port, data, socket);
             cHistory.info('[' + socket.remoteAddress + ':' + socket.username + '] Connecting to ' + gamelist[socket.hostString].players[0]);
+            connectToCore(gamelist[socket.hostString].port, data, socket);
         } else {
             cHistory.info('[' + socket.remoteAddress + ':' + socket.username + '] Connecting to new CORE');
 
