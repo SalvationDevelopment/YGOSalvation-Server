@@ -58,6 +58,7 @@ function CommandParser() {
         //console.log(input);
         if (input.STOC_GAME_MSG) {
             output.event.emit(input.command, input);
+            console.log(input.command, input);
         }
     };
     return output;
@@ -630,7 +631,6 @@ function startgame(roompass) {
         //game.DrawCard(input.player, input.draw, input.cardslist);
     });
     duel.commandParser.event.on('MSG_UPDATE_DATA', function (input) {
-        console.log('.');
         var field = duel.gameState.state[input.player],
             output = [],
             readposition = 3,
