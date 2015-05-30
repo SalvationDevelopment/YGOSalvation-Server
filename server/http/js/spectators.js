@@ -276,10 +276,12 @@ function animateState(player, clocation, index, moveplayer, movelocation, movezo
         searchplayer = (player === 'ignore') ? '' : ".p" + player,
         origin = isCard + searchplayer + "." + enums.locations[clocation] + searchindex,
         destination = 'card' + " p" + moveplayer + " " + enums.locations[movelocation] + " i" + movezone,
-        card;
+        card,
+        e = origin.replace('.', ' ');
+    console.log(e);
     
     if ($(origin).length === 0) {
-        $('.fieldimage').append('<img class="' + origin.replace('.', ' ') + '" src="' + game.images + 'cover.jpg" data-position="FaceDown" />');
+        $('.fieldimage').append('<img class="' + e + '" src="' + game.images + 'cover.jpg" data-position="FaceDown" />');
     }
     card = $(origin).attr({
         'style': '',
