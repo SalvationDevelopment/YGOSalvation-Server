@@ -44,78 +44,26 @@ function CommandParser() {
     output.event = new events.EventEmitter();
 
     output.input = function (input) {
+        var serverToClient,
+            gameMessage;
+        
+        for (serverToClient in input) {
+            if (input.hasOwnProperty(serverToClient)) {
+                if (input[serverToClient] === true) {
+                    output.event.emit(input.command, input);
+                }
+            }
+        }
         //console.log(input);
         if (input.STOC_GAME_MSG) {
             output.event.emit(input.command, input);
-        }
-        if (input.STOC_UNKNOWN) {
-            output.event.emit('STOC_UNKNOWN', input);
-        }
-        if (input.STOC_SELECT_HAND) {
-            output.event.emit('STOC_SELECT_HAND', input);
-        }
-        if (input.STOC_JOIN_GAME) {
-            output.event.emit('STOC_JOIN_GAME', input);
-        }
-        if (input.STOC_SELECT_TP) {
-            output.event.emit('STOC_SELECT_TP', input);
-        }
-        if (input.STOC_HAND_RESULT) {
-            output.event.emit('STOC_HAND_RESULT', input);
-        }
-        if (input.STOC_TP_RESULT) {
-            output.event.emit('STOC_TP_RESULT', input);
-        }
-        if (input.STOC_CHANGE_SIDE) {
-            output.event.emit('STOC_CHANGE_SIDE', input);
-        }
-        if (input.STOC_WAITING_SIDE) {
-            output.event.emit('STOC_WAITING_SIDE', input);
-        }
-        if (input.STOC_CREATE_GAME) {
-            output.event.emit('STOC_CREATE_GAME', input);
-        }
-        if (input.STOC_TYPE_CHANGE) {
-            output.event.emit('STOC_TYPE_CHANGE', input);
-        }
-        if (input.STOC_LEAVE_GAME) {
-            output.event.emit('STOC_LEAVE_GAME', input);
-        }
-        if (input.STOC_DUEL_START) {
-            output.event.emit('STOC_DUEL_START', input);
-        }
-        if (input.STOC_DUEL_END) {
-            output.event.emit('STOC_DUEL_END', input);
-        }
-        if (input.STOC_REPLAY) {
-            output.event.emit('STOC_REPLAY', input);
-        }
-        if (input.STOC_TIME_LIMIT) {
-            output.event.emit('STOC_TIME_LIMIT', input);
-        }
-        if (input.STOC_CHAT) {
-            output.event.emit('STOC_CHAT', input);
-        }
-        if (input.STOC_HS_PLAYER_ENTER) {
-            output.event.emit('STOC_HS_PLAYER_ENTER', input);
-        }
-
-        if (input.STOC_HS_PLAYER_CHANGE) {
-            output.event.emit('STOC_HS_PLAYER_CHANGE', input);
-        }
-        if (input.STOC_HS_WATCH_CHANGE) {
-            output.event.emit('STOC_HS_WATCH_CHANGE', input);
         }
     };
     return output;
 }
 
 function GameState() {
-    var AIPlayerID = 0,
-        OppPlayerID = 1,
-        turnPlayer = 0,
-        phase = 0,
-        state = {
+    var state = {
             0: {
                 Lifepoints: 8000,
                 MonsterZones: [],
@@ -141,6 +89,7 @@ function GameState() {
         };
     function updateTime(player, newTime) {
         state[player].Time = newTime;
+        $('.p' + player + 'time').val(newTime);
     }
 
     function start(lp1, lp2, OneDeck, TwoDeck, OneExtra, TwoExtra) {
@@ -151,6 +100,8 @@ function GameState() {
 
         state[0].LifePoints = lp1;
         state[1].LifePoints = lp2;
+        $('.p0lp').val(lp1);
+        $('.p0lp').val(lp1);
     }
 
     function update(player, clocation, index, data) {
@@ -192,10 +143,7 @@ function GameState() {
         turnx = +state.phase;
     }
 
-    function setAI_Opp(newID) {
-        AIPlayerID = newID;
-        OppPlayerID = (AIPlayerID === 0) ? 1 : 0;
-    }
+
 
     function loadDeck(player, deck, cardList) {
 
@@ -204,8 +152,6 @@ function GameState() {
         move: move,
         update: update,
         loadDeck: loadDeck,
-        setAI_Opp: setAI_Opp,
-       
         lobby: {
             ready : [0, 0],
             duelist : [],
