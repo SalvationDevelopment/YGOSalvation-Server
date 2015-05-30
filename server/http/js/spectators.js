@@ -275,7 +275,7 @@ function animateState(player, clocation, index, moveplayer, movelocation, movezo
         searchindex = (index === 'ignore') ? '' : ".i" + index,
         searchplayer = (player === 'ignore') ? '' : ".p" + player,
         origin = isCard + searchplayer + "." + enums.locations[clocation] + searchindex,
-        destination = isBecomingCard + " p" + moveplayer + " " + enums.locations[movelocation] + " i" + movezone,
+        destination = 'card' + " p" + moveplayer + " " + enums.locations[movelocation] + " i" + movezone,
         card;
     
     if ($(origin).length === 0) {
