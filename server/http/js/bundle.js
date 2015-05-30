@@ -4085,13 +4085,15 @@ game.UpdateCard = function (player, clocation, index, data) {
 function animateState(player, clocation, index, moveplayer, movelocation, movezone, moveposition, overlayindex, isBecomingCard) {
     isBecomingCard = ''; //(isBecomingCard) ? 'card overlayunit' : 'card';
     overlayindex = (overlayindex === undefined) ? '' : 0;
-    var isCard = (overlayindex === undefined) ? '.card' : '.card',
+    var isCard = (overlayindex === undefined) ? '.card' : '.card.overlayunit',
         
         searchindex = (index === 'ignore') ? '' : ".i" + index,
         searchplayer = (player === 'ignore') ? '' : ".p" + player,
         origin = isCard + searchplayer + "." + enums.locations[clocation] + searchindex,
-        destination = 'card' + " p" + player + " " + enums.locations[movelocation] + " i" + index,
-        card;
+        destination = 'card' + " p" + moveplayer + " " + enums.locations[movelocation] + " i" + movezone,
+        card,
+        e = 'card ' + " p" + player + " " + enums.locations[clocation] + " i" + index;
+    console.log(e);
     
     if ($(origin).length === 0) {
         $('.fieldimage').append('<img class="' + e + '" src="' + game.images + 'cover.jpg" data-position="FaceDown" />');
@@ -4559,6 +4561,10 @@ function startgame(roompass) {
         game.MoveCard(input.code, input.pc, input.pl, input.ps, input.pp, input.cc, input.cl, input.cs, input.cp);
     });
 }
+
+$(document).on("mouseenter", "img.card", function (e) {
+    console.log($(e).attr('src'));
+});
 
 window.startgame = startgame;
 window.duel = duel;
