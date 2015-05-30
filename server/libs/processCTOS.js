@@ -191,6 +191,15 @@ function handleCoreMessage(core_message_raw, port, socket, data, pid) {
     process.send(gamelistmessage);
 }
 
+/* Checks if a given password is valid, returns true or false */
+function legalPassword(passIn) {
+    if (passIn.length !== 24) {
+        return false;
+    }
+    var re = new RegExp("\\d\\d\\d(O|T)(O|T)(O|T)(\\d)+,\\d,\\d,\\d,(\\w)+,(\\w)+");
+    return re.test(passIn);
+}
+
 /* Unlike DevPro, Salvation does not preload its 
 YGOCores. It calls them on demand. This posses a 
 few issues but provides routing flexiblity. When a
@@ -212,6 +221,10 @@ function startCore(port, socket, data, callback) {
         
         if (socket.hostString.length !== 24) {
             return;
+        }
+
+	if (!legalPassword(socket.hostString)) {
+            //deal with bad game request
         }
         
         socket.core = childProcess.spawn(startDirectory + '/../ygocore/YGOServer.exe', [port, configfile], {
