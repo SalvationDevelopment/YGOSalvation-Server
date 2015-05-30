@@ -683,6 +683,7 @@ function startgame(roompass) {
         console.log(player, input.fieldmodel, output);
     });
     duel.commandParser.event.on('STOC_TIME_LIMIT', function (input) {
+        console.log('STOC_TIME_LIMIT', input);
         duel.gameState.updateTime(input.player, input.time);
     });
     duel.commandParser.event.on('STOC_ERROR_MSG', function (input) {
