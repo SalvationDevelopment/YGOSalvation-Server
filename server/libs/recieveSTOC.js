@@ -21,6 +21,9 @@ module.exports = function recieveSTOC(packet) {
         task.command = command;
         bitreader++;
         switch (command) {
+        case ('MSG_RETRY'):
+            break;
+                
         case ('MSG_START'):
             task.playertype = packet.message[1];
             task.lifepoints1 = packet.message.readUInt16LE(2);
@@ -119,8 +122,6 @@ module.exports = function recieveSTOC(packet) {
             break;
                 
         case ('MSG_SELECT_IDLECMD'):
-//            console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
-//            console.log(task.command);
             task.command = 'MSG_SELECT_IDLECMD';
             //https://github.com/Fluorohydride/ygopro/blob/d9450dbb35676db3d5b7c2a5241a54d7f2c21e98/ocgcore/playerop.cpp#L69
             task.idleplayer = packet.message[1];
@@ -272,6 +273,61 @@ module.exports = function recieveSTOC(packet) {
             task.cs = packet.message[7]; // current sequence (index)
             task.cp = packet.message[8]; // current position
             break;
+
+        case ('MSG_REQUEST_DECK'):
+                
+            break;
+        case ('MSG_SELECT_BATTLECMD'):
+                
+            break;
+        case ('MSG_SELECT_EFFECTYN'):
+                
+            break;
+                
+        case ('MSG_SELECT_YESNO'):
+                
+            break;
+        case ('MSG_SELECT_OPTION'):
+                
+            break;
+        case ('MSG_SELECT_CARD'):
+                
+            break;
+        case ('MSG_SELECT_CHAIN'):
+                
+            break;
+        case ('MSG_SELECT_PLACE'):
+                
+            break;
+        case ('MSG_SELECT_POSITION'):
+                
+            break;
+        case ('MSG_SELECT_TRIBUTE'):
+                
+            break;
+                
+        case ('MSG_SORT_CHAIN'):
+                
+            break;
+        case ('MSG_SELECT_COUNTER'):
+                
+            break;
+        case ('MSG_SELECT_SUM'):
+                
+            break;
+        case ('MSG_SELECT_DISFIELD'):
+                
+            break;
+        case ('MSG_SORT_CARD'):
+                
+            break;
+        case ('MSG_CONFIRM_DECKTOP'):
+                
+            break;
+        case ('MSG_CONFIRM_CARDS'):
+                
+            break;
+        
 
         case ('MSG_UPDATE_DATA'):
         
