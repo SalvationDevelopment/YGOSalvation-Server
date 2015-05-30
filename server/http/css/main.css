@@ -755,7 +755,7 @@ header {
 }
 
 meter.p1lp, meter.p0lp {
-  width: 45% !important;
+  width: 40% !important;
   float: left;
 }
 
@@ -824,7 +824,10 @@ meter.p0time, meter.p1time {
   width: 45%;
   clear: left;
   margin-top: -17px;
+  z-index: 1;
+  position: relative;
 }
+
 #lifepoints input.p1lp {
     float:right;
 }
