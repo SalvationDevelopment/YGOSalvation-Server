@@ -100,8 +100,9 @@ function GameState() {
 
         state[0].LifePoints = lp1;
         state[1].LifePoints = lp2;
-        $('.p0lp').val(lp1);
-        $('.p0lp').val(lp1);
+        console.log('lp1', typeof lp1, lp1);
+        $('.p0lp').val(parseInt(lp1, 10));
+        $('.p1lp').val(parseInt(lp2, 10));
     }
 
     function update(player, clocation, index, data) {
