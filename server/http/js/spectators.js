@@ -622,6 +622,7 @@ function startgame(roompass) {
 
     });
     duel.commandParser.event.on('MSG_START', function (input) {
+        console.log(input);
         duel.gameState.start(input.ifepoints1, input.lifepoints2, input.player1decksize, input.player2decksize, input.player1extrasize, input.player2extrasize);
         duel.gameState.fieldside =  input.playertype;
         
