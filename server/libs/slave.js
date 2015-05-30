@@ -47,7 +47,7 @@ function initiateSlave() {
     ygoserver = net.createServer(handleTCP);
     ygoserver.listen(8911);
     
-    ws = new WebSocket({ port: 8080 });
+    ws = new WebSocket({ port: 8082 });
     ws.on('connection', function connection(socket) {
         var framer = new Framemaker();
         socket.active_ygocore = false;
@@ -56,7 +56,7 @@ function initiateSlave() {
             socket.send(message, {binary: true, mask: false});
         };
         socket.end = function () {
-        
+            socket = null;
         };
         socket.on('message', function incoming(data) {
             var frame,
