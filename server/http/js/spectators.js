@@ -8,7 +8,7 @@
 
 
 var game = {
-    images: 'http://ygopro.us/http/ygopro/pics/'
+    images: 'http:\/\/ygopro.us\/http\/ygopro\/pics\/'
 };
 
 
@@ -96,6 +96,7 @@ function GameState() {
     }
 
     function start(p0lp, p1lp, OneDeck, TwoDeck, OneExtra, TwoExtra) {
+        $('.fieldimage').html('');
         game.DOMWriter(OneDeck, 'DECK', 0);
         game.DOMWriter(TwoDeck, 'DECK', 1);
         game.DOMWriter(OneExtra, 'EXTRA', 0);
@@ -634,7 +635,7 @@ function startgame(roompass) {
     });
     duel.commandParser.event.on('MSG_DRAW', function (input) {
         //console.log('MSG_DRAW', input);
-        //game.DrawCard(input.player, input.draw, input.cardslist);
+        game.DrawCard(input.player, input.draw, input.cardslist);
     });
     duel.commandParser.event.on('MSG_PAY_LPCOST', function (input) {
         //console.log('MSG_PAY_LPCOST', input);
@@ -675,7 +676,7 @@ function startgame(roompass) {
            
             //console.log(output);
 
-            //game.UpdateCards(player, input.fieldmodel, output);
+            game.UpdateCards(player, input.fieldmodel, output);
         }
         duel.gameState.state[input.player][input.fieldmodel] = output;
         //console.log(player, input.fieldmodel, output);
@@ -740,6 +741,9 @@ function startgame(roompass) {
     });
     duel.commandParser.event.on('MSG_PAY_LPCOST', function (input) {
         duel.gameState.updatelifepoints(input.player, input.multiplier, input.lp);
+    });
+    duel.commandParser.event.on('MSG_MOVE', function (input) {
+        game.MoveCard(input.code, input.pc, input.pl, input.ps, input.pp, input.cc, input.cl, input.cs, input.cp);
     });
 }
 
