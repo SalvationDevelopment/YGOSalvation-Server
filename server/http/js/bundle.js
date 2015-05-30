@@ -3823,7 +3823,7 @@ module.exports = function recieveSTOC(packet) {
 
 
 var game = {
-    images: 'http:\/\/ygopro.us\/http\/ygopro\/pics\/'
+    images: 'http:\/\/ygopro.us\/ygopro\/pics\/'
 };
 
 
@@ -4402,10 +4402,6 @@ function startgame(roompass) {
 
         }
         frame = [];
-        
-
-        
-        
     };
     window.ws.onopen = function () {
         console.log('Send Game request for', roompass);
