@@ -268,7 +268,7 @@ game.UpdateCard = function (player, clocation, index, data) {
     }
 };
 function animateState(player, clocation, index, moveplayer, movelocation, movezone, moveposition, overlayindex, isBecomingCard) {
-    isBecomingCard = (isBecomingCard) ? 'card overlayunit' : 'card';
+    isBecomingCard = ''; //(isBecomingCard) ? 'card overlayunit' : 'card';
     overlayindex = (overlayindex === undefined) ? '' : 0;
     var isCard = (overlayindex === undefined) ? '.card' : '.card.overlayunit',
         
