@@ -4411,7 +4411,7 @@ window.ws = {};
 duel.gameState = new GameState();
 function startgame(roompass) {
     duel.commandParser = new CommandParser();
-    window.ws = new WebSocket("ws://ygopro.us:8080", "duel");
+    window.ws = new WebSocket("ws://192.99.11.19:8080", "duel");
     window.ws.binaryType = 'arraybuffer';
     var framer = new Framemaker();
     duel.commandParser = new CommandParser();
