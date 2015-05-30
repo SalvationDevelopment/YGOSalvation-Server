@@ -96,10 +96,14 @@ function GameState() {
     }
 
     function start(p0lp, p1lp, OneDeck, TwoDeck, OneExtra, TwoExtra) {
-        //            game.DOMWriter(OneDeck, 'DECK', 0);
-        //            game.DOMWriter(TwoDeck, 'DECK', 1);
-        //            game.DOMWriter(OneExtra, 'EXTRA', 0);
-        //            game.DOMWriter(TwoExtra, 'EXTRA', 1);
+        game.DOMWriter(OneDeck, 'DECK', 0);
+        game.DOMWriter(TwoDeck, 'DECK', 1);
+        game.DOMWriter(OneExtra, 'EXTRA', 0);
+        game.DOMWriter(TwoExtra, 'EXTRA', 1);
+        shuffle(0, 'DECK');
+        shuffle(1, 'DECK');
+        shuffle(0, 'EXTRA');
+        shuffle(1, 'EXTRA');
 
         state[0].LifePoints = p0lp;
         state[1].LifePoints = p1lp;
