@@ -113,15 +113,6 @@ function GameState() {
         }
     }
 
-    function updateLifepoints(player, multiplier, lp) {
-        var lifepoints = +state[player].Lifepoints + (lp * multiplier);
-        if (lifepoints < 0) {
-            lifepoints = 0;
-        }
-        state[player].Lifepoints = lifepoints;
-        $('.p' + player + 'lp').val(parseInt(state[player].Lifepoints, 10));
-    }
-
     function move(player, clocation, index, moveplayer, movelocation, movezone, moveposition, overlayindex, isBecomingCard) {
 
         //enums.locations[clocation] === 'DECK/EXTRA/REMOVED
@@ -735,6 +726,12 @@ function startgame(roompass) {
     });
     duel.commandParser.event.on('STOC_CHAT', function (input) {
         $('#ingamechat').append('<div>' + input.from + ' ' + input.chat + '</div>');
+    });
+    duel.commandParser.event.on('MSG_DAMAGE', function (input) {
+        duel.gameState.updatelifepoints(input.player, input.multiplier, input.damage);
+    });
+    duel.commandParser.event.on('MSG_PAY_LPCOST', function (input) {
+        duel.gameState.updatelifepoints(input.player, input.multiplier, input.damage);
     });
 }
 
