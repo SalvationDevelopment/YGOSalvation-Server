@@ -3517,11 +3517,13 @@ module.exports = function recieveSTOC(packet) {
         case ('MSG_PAY_LPCOST'):
             task.player = packet.message[1];
             task.lpcost = packet.message.readUInt16LE(2);
+            task.multiplier = -1;
             break;
 
         case ('MSG_DAMAGE'):
             task.player = packet.message[1];
             task.damage = packet.message.readUInt16LE(2);
+            task.multiplier = -1;
             break;
                 
         case ('MSG_SUMMONING '):
@@ -3918,15 +3920,6 @@ function GameState() {
         } else {
             state[player][clocation][index] = data;
         }
-    }
-
-    function updateLifepoints(player, multiplier, lp) {
-        var lifepoints = +state[player].Lifepoints + (lp * multiplier);
-        if (lifepoints < 0) {
-            lifepoints = 0;
-        }
-        state[player].Lifepoints = lifepoints;
-        $('.p' + player + 'lp').val(parseInt(state[player].Lifepoints, 10));
     }
 
     function move(player, clocation, index, moveplayer, movelocation, movezone, moveposition, overlayindex, isBecomingCard) {
@@ -4542,6 +4535,12 @@ function startgame(roompass) {
     });
     duel.commandParser.event.on('STOC_CHAT', function (input) {
         $('#ingamechat').append('<div>' + input.from + ' ' + input.chat + '</div>');
+    });
+    duel.commandParser.event.on('MSG_DAMAGE', function (input) {
+        duel.gameState.updatelifepoints(input.player, input.multiplier, input.damage);
+    });
+    duel.commandParser.event.on('MSG_PAY_LPCOST', function (input) {
+        duel.gameState.updatelifepoints(input.player, input.multiplier, input.damage);
     });
 }
 

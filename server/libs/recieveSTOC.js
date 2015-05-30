@@ -99,11 +99,13 @@ module.exports = function recieveSTOC(packet) {
         case ('MSG_PAY_LPCOST'):
             task.player = packet.message[1];
             task.lpcost = packet.message.readUInt16LE(2);
+            task.multiplier = -1;
             break;
 
         case ('MSG_DAMAGE'):
             task.player = packet.message[1];
             task.damage = packet.message.readUInt16LE(2);
+            task.multiplier = -1;
             break;
                 
         case ('MSG_SUMMONING '):
