@@ -268,7 +268,6 @@ game.UpdateCard = function (player, clocation, index, data) {
     }
 };
 function animateState(player, clocation, index, moveplayer, movelocation, movezone, moveposition, overlayindex, isBecomingCard) {
-    console.log('animating', player, clocation, index, moveplayer, movelocation, movezone, moveposition, overlayindex, isBecomingCard);
     isBecomingCard = (isBecomingCard) ? 'card overlayunit' : 'card';
     overlayindex = (overlayindex === undefined) ? '' : 0;
     var isCard = (overlayindex === undefined) ? '.card' : '.card.overlayunit',
@@ -277,13 +276,18 @@ function animateState(player, clocation, index, moveplayer, movelocation, movezo
         searchplayer = (player === 'ignore') ? '' : ".p" + player,
         origin = isCard + searchplayer + "." + enums.locations[clocation] + searchindex,
         destination = isBecomingCard + " p" + moveplayer + " " + enums.locations[movelocation] + " i" + movezone,
-        card = $(origin).attr({
-            'style': '',
-            'data-position': moveposition,
-            'data-overlayunit': overlayindex,
-            'class': destination
-        });
-    //   });
+        card;
+    
+    if ($(origin).length === 0) {
+        $('.fieldimage').append('<img class="' + origin + '" src="' + game.images + 'cover.jpg" data-position="FaceDown" />');
+    }
+    card = $(origin).attr({
+        'style': '',
+        'data-position': moveposition,
+        'data-overlayunit': overlayindex,
+        'class': destination
+    });
+    
 
 
     console.log(origin, 'changed to', destination);
@@ -634,10 +638,6 @@ function startgame(roompass) {
     duel.commandParser.event.on('MSG_DRAW', function (input) {
         //console.log('MSG_DRAW', input);
         game.DrawCard(input.player, input.draw, input.cardslist);
-    });
-    duel.commandParser.event.on('MSG_PAY_LPCOST', function (input) {
-        //console.log('MSG_PAY_LPCOST', input);
-        //game.DrawCard(input.player, input.draw, input.cardslist);
     });
     duel.commandParser.event.on('MSG_UPDATE_DATA', function (input) {
         var field = duel.gameState.state[input.player],
