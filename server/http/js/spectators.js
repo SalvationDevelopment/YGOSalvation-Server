@@ -622,12 +622,12 @@ function startgame(roompass) {
         console.log('MSG_WIN', input);
     });
     duel.commandParser.event.on('MSG_DRAW', function (input) {
-        console.log('MSG_DRAW', input);
-        game.DrawCard(input.player, input.draw, input.cardslist);
+        //console.log('MSG_DRAW', input);
+        //game.DrawCard(input.player, input.draw, input.cardslist);
     });
     duel.commandParser.event.on('MSG_PAY_LPCOST', function (input) {
-        console.log('MSG_PAY_LPCOST', input);
-        game.DrawCard(input.player, input.draw, input.cardslist);
+        //console.log('MSG_PAY_LPCOST', input);
+        //game.DrawCard(input.player, input.draw, input.cardslist);
     });
     duel.commandParser.event.on('MSG_UPDATE_DATA', function (input) {
         console.log('.');
@@ -723,10 +723,13 @@ function startgame(roompass) {
         $('#ingamechat').append('<div>' + input.from + ' ' + input.chat + '</div>');
     });
     duel.commandParser.event.on('MSG_DAMAGE', function (input) {
-        duel.gameState.updatelifepoints(input.player, input.multiplier, input.damage);
+        duel.gameState.updatelifepoints(input.player, input.multiplier, input.lp);
+    });
+    duel.commandParser.event.on('MSG_RECOVER', function (input) {
+        duel.gameState.updatelifepoints(input.player, input.multiplier, input.lp);
     });
     duel.commandParser.event.on('MSG_PAY_LPCOST', function (input) {
-        duel.gameState.updatelifepoints(input.player, input.multiplier, input.damage);
+        duel.gameState.updatelifepoints(input.player, input.multiplier, input.lp);
     });
 }
 
