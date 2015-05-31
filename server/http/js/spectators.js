@@ -745,6 +745,9 @@ function startgame(roompass) {
     duel.commandParser.event.on('MSG_MOVE', function (input) {
         game.MoveCard(input.code, input.pc, input.pl, input.ps, input.pp, input.cc, input.cl, input.cs, input.cp);
     });
+    duel.commandParser.event.on('STOC_JOIN_GAME', function (input) {
+        console.log(input);
+    });
 }
 
 $(document).on("mouseenter", "img.card", function (e) {
