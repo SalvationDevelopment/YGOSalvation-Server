@@ -404,6 +404,7 @@ module.exports = function recieveSTOC(packet) {
         task.start_hand = packet.message.readUInt16LE(9);
         task.draw_count = packet.message[11];
         task.time_limit = packet.message.readUInt16LE(7);
+        task.message = packet.message;
         break;
     case ("STOC_TYPE_CHANGE"):
         task.typec = packet.message[0];
