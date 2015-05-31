@@ -87,8 +87,11 @@ function GameState() {
                 ExtraDeck: [],
                 MainDeck: [],
                 Time : 300
-            }
+            },
+            players : []
         };
+    
+    
     function updateTime(player, newTime) {
         state[player].Time = newTime;
         console.log('time', player, newTime, '.p' + player + 'time');
@@ -724,6 +727,9 @@ function startgame(roompass) {
     });
     duel.commandParser.event.on('STOC_HS_PLAYER_ENTER', function (input) {
         console.log(input);
+        duel.game.state.players.push(input.person);
+        $('.p0name').html(duel.game.state.players[0]);
+        $('.p1ame').html(duel.game.state.players[1]);
     });
     duel.commandParser.event.on('STOC_HS_WATCH_CHANGE', function (input) {
        
@@ -742,6 +748,9 @@ function startgame(roompass) {
     });
     duel.commandParser.event.on('MSG_MOVE', function (input) {
         game.MoveCard(input.code, input.pc, input.pl, input.ps, input.pp, input.cc, input.cl, input.cs, input.cp);
+    });
+    duel.commandParser.event.on('MSG_POS_CHANGE', function (input) {
+        game.ChangeCardPosition(input.code, input.cc, input.cl, input.cs, input.cp);
     });
     duel.commandParser.event.on('STOC_JOIN_GAME', function (input) {
         console.log(input);
