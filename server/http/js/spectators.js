@@ -280,9 +280,6 @@ function animateState(player, clocation, index, moveplayer, movelocation, movezo
         e = 'card ' + " p" + player + " " + enums.locations[clocation] + " i" + index;
     console.log(e);
     
-    if ($(origin).length === 0) {
-        $('.fieldimage').append('<img class="' + e + '" src="' + game.images + 'cover.jpg" data-position="FaceDown" />');
-    }
     card = $(origin).attr({
         'style': '',
         'data-position': moveposition,
@@ -305,6 +302,10 @@ function animateState(player, clocation, index, moveplayer, movelocation, movezo
             enums.locations[movelocation] === 'REMOVED') {
         cardmargin(moveplayer, enums.locations[movelocation]);
     }
+    
+    if ($(destination).length === 0) {
+        $('.fieldimage').append('<img class="' + destination + '" src="' + game.images + 'cover.jpg" data-position="FaceDown" />');
+    }
 
     $('.card.p0.HAND').each(function (sequence) {
         $(this).attr('class', 'card p0 HAND i' + sequence);
@@ -312,7 +313,7 @@ function animateState(player, clocation, index, moveplayer, movelocation, movezo
     $('.card.p1.HAND').each(function (sequence) {
         $(this).attr('class', 'card p1 HAND i' + sequence);
     });
-
+    
     layouthand(0);
     layouthand(1);
     return card;
