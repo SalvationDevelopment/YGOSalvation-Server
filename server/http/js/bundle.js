@@ -3929,7 +3929,7 @@ function CommandParser() {
         for (serverToClient in input) {
             if (input.hasOwnProperty(serverToClient)) {
                 if (input[serverToClient] === true) {
-                    output.event.emit(input.command, input);
+                    output.event.emit(serverToClient, input);
                     console.log(serverToClient);
                 }
             }
@@ -4482,9 +4482,6 @@ function startgame(roompass) {
             tosend = Buffer.concat([name, join]);
         window.ws.send(tosend);
     };
-    duel.commandParser.event.on('STOC_JOIN_GAME', function (input) {
-
-    });
     duel.commandParser.event.on('STOC_HS_PLAYER_CHANGE', function (input) {
         if (input.pos > 3) {
             return;
