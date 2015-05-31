@@ -394,9 +394,17 @@ module.exports = function recieveSTOC(packet) {
         break;
 
     case ("STOC_JOIN_GAME"):
-            
+        task.lflist = packet.message.readUInt16LE(0);
+        task.rule = packet.message[2];
+        task.mode = packet.message[3];
+        task.prio = packet.message[4];
+        task.deckcheck = packet.message[5];
+        task.noshuffle = packet.message[6];
+        task.startLP = packet.message.readUInt16LE(7);
+        task.start_hand = packet.message.readUInt16LE(9);
+        task.draw_count = packet.message[11];
+        task.time_limit = packet.message.readUInt16LE(12);
         break;
-
     case ("STOC_TYPE_CHANGE"):
         task.typec = packet.message[0];
         task.pos = task.typec & 0xF;
