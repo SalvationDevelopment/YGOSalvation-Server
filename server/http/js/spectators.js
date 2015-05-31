@@ -728,8 +728,8 @@ function startgame(roompass) {
     duel.commandParser.event.on('STOC_HS_PLAYER_ENTER', function (input) {
         console.log(input);
         duel.gameState.state.players.push(input.person);
-        $('.p0name').html(duel.game.state.players[0]);
-        $('.p1ame').html(duel.game.state.players[1]);
+        $('.p0name').html(duel.gameState.state.players[0]);
+        $('.p1ame').html(duel.gameState.state.players[1]);
     });
     duel.commandParser.event.on('STOC_HS_WATCH_CHANGE', function (input) {
        
