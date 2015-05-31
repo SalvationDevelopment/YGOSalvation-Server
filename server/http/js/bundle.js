@@ -3818,10 +3818,10 @@ module.exports = function recieveSTOC(packet) {
         task.prio = packet.message[4];
         task.deckcheck = packet.message[5];
         task.noshuffle = packet.message[6];
-        task.startLP = packet.message.readUInt16LE(7);
+        task.startLP = packet.message.readUInt16LE(12);
         task.start_hand = packet.message.readUInt16LE(9);
         task.draw_count = packet.message[11];
-        task.time_limit = packet.message.readUInt16LE(12);
+        task.time_limit = packet.message.readUInt16LE(7);
         break;
     case ("STOC_TYPE_CHANGE"):
         task.typec = packet.message[0];
@@ -4583,7 +4583,7 @@ function startgame(roompass) {
        
     });
     duel.commandParser.event.on('STOC_TYPE_CHANGE', function (input) {
-       
+        console.log('input');
     });
     duel.commandParser.event.on('STOC_LEAVE_GAME', function (input) {
        
@@ -4598,10 +4598,10 @@ function startgame(roompass) {
        
     });
     duel.commandParser.event.on('STOC_DUEL_START', function (input) {
-       
+        console.log(input);
     });
     duel.commandParser.event.on('STOC_HS_PLAYER_ENTER', function (input) {
-       
+        console.log(input);
     });
     duel.commandParser.event.on('STOC_HS_WATCH_CHANGE', function (input) {
        
