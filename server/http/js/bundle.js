@@ -4160,8 +4160,8 @@ function animateState(player, clocation, index, moveplayer, movelocation, movezo
         origin = isCard + searchplayer + "." + enums.locations[clocation] + searchindex,
         destination = 'card' + " p" + moveplayer + " " + enums.locations[movelocation] + " i" + movezone,
         card,
-        e = 'card ' + " p" + player + " " + enums.locations[clocation] + " i" + index;
-    console.log(e);
+        resultingDestination = '.card' + ".p" + moveplayer + "." + enums.locations[movelocation] + ".i" + movezone;
+    
     
     card = $(origin).attr({
         'style': '',
@@ -4169,6 +4169,9 @@ function animateState(player, clocation, index, moveplayer, movelocation, movezo
         'data-overlayunit': overlayindex,
         'class': destination
     });
+    if ($(resultingDestination).length === 0) {
+        $('.fieldimage').append('<img class="' + destination + '" src="' + game.images + 'cover.jpg" data-position="FaceDown" />');
+    }
     
 
 
@@ -4186,9 +4189,7 @@ function animateState(player, clocation, index, moveplayer, movelocation, movezo
         cardmargin(moveplayer, enums.locations[movelocation]);
     }
     
-    if ($(destination).length === 0) {
-        $('.fieldimage').append('<img class="' + destination + '" src="' + game.images + 'cover.jpg" data-position="FaceDown" />');
-    }
+    
 
     $('.card.p0.HAND').each(function (sequence) {
         $(this).attr('class', 'card p0 HAND i' + sequence);
