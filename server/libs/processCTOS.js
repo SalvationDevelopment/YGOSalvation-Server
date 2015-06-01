@@ -25,7 +25,7 @@ var portmin = 30000 + process.env.PORTRANGE * 100, //Port Ranges
     coreIsInPlace = false,
     request = require('request');
 
-var cHistory = new (winston.cHistory)({
+var cHistory = new (winston.Logger)({
     transports: [
         new (winston.transports.Console)(),
         new (winston.transports.DailyRotateFile)({ filename: ".\\logs\\conection_history.log"})
