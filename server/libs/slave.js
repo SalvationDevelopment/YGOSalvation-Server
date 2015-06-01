@@ -34,7 +34,7 @@ function initiateSlave() {
             socket.end(); //Security precaution
         });
         socket.on('error', function (error) {
-            console.log('::CLIENT', error);
+            //console.log('::CLIENT', error);
             if (socket.active_ygocore) {
                 try {
                     socket.active_ygocore.end();

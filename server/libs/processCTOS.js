@@ -115,7 +115,7 @@ function connectToCore(port, data, socket) {
         });
     });
     socket.active_ygocore.on('error', function (error) {
-        cHistory.info('--GAME: ERROR');
+        //cHistory.info('--GAME');
         if (socket.alpha) {
             handleCoreMessage('::::endduel|' + socket.hostString, port, socket, data);
         }
