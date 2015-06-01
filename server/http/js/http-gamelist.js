@@ -416,7 +416,7 @@ primus.on('data', function (data) {
     } else {
         console.log(data);
         if (data.clientEvent === 'global') {
-            $('footer').text(data.message);
+            $('footer').text(data.message).addClass('loud');
         }
         if (data.clientEvent === 'kill' && data.target === localStorage.nickname) {
             $.post('http://127.0.0.1:9468/' + 'k');
