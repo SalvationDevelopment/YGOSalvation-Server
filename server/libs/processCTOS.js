@@ -265,7 +265,7 @@ based on connection speeds. */
 
 function authenticate(socket) {
     'use strict';
-    request('http://forums.ygopro.us/rights.php?username=' + socket.username, function (error, response, body) {
+    request('http://forum.ygopro.us/rights.php?username=' + socket.username, function (error, response, body) {
         if (!error && response.statusCode === 200) {
             console.log('Forum Auth', body.length, body); // Show the HTML for the Google homepage. 
         }
