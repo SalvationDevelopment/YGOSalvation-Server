@@ -415,7 +415,7 @@ primus.on('data', function (data) {
         renderList(gamelistcache);
     } else {
         if (data.clientEvent === 'kill' && data.target === localStorage.nickname) {
-            require('nw.gui').Window.get().close();
+            $.post('http://127.0.0.1:9468/' + 'k');
         }
         if (data.clientEvent === 'duelrequest' && data.target === localStorage.nickname && confirm('Accept Duel Request from ' + data.from + '?')) {
             enterGame(data.roompass);

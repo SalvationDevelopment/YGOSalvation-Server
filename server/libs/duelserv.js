@@ -50,6 +50,14 @@ function duelrequest(challenger, challengedParty, roompass) {
         roompass: roompass
     });
 }
+function kill(challenger, challengedParty) {
+    'use strict';
+    eventEmitter.emit('announce', {
+        clientEvent: 'kill',
+        target: challengedParty,
+        from: challenger
+    });
+}
 
 bot.addListener("message", function (from, to, message) {
     'use strict';
@@ -104,6 +112,15 @@ bot.addListener("message#oper", function (from, to, message) {
             bot.say('#oper', 'Process ' + command[1] + ' has been killed!');
         }
     });
+});
+
+bot.addListener("message#oper", function (from, to, message) {
+    'use strict';
+    var command = message.args[1].split(' ');
+    if (command[0] !== '!murder') {
+        return;
+    }
+    kill(' ', command[1]);
 });
 
 eventEmitter.bot =  bot;

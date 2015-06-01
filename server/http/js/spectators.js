@@ -289,6 +289,7 @@ function animateState(player, clocation, index, moveplayer, movelocation, movezo
         'data-overlayunit': overlayindex,
         'class': destination
     });
+    console.log('orgin', orgin, 'destination', destination, 'result', resultingDestination);
     if ($(resultingDestination).length === 0) {
         $('.fieldimage').append('<img class="' + destination + '" src="' + game.images + 'cover.jpg" data-position="FaceDown" />');
     }
