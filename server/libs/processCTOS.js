@@ -267,16 +267,16 @@ function authenticate(socket) {
     'use strict';
     request('http://forum.ygopro.us/rights.php?username=' + socket.username, function (error, response, body) {
         if (!error && response.statusCode === 200) {
-            console.log('Forum Auth', body.length, body); // Show the HTML for the Google homepage. 
-        }
-        if (body) {
-            try {
-                socket.end();
-            } catch (killerror) {
-                console.log('Something wierd happened with auth', killerror);
+            if (body.length !== 0) {
+                try {
+                    socket.end();
+                } catch (killerror) {
+                    console.log('Something wierd happened with auth', killerror);
+                }
+
             }
-            
         }
+        
     });
 }
 
