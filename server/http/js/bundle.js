@@ -4115,7 +4115,7 @@ game.DOMWriter = function (size, movelocation, player) {
         i;
     $(field).detach();
     for (i = 0; i < size; i++) {
-        $(field).append('<img class="card p' + player + ' ' + movelocation + ' i' + i + ' o" src="' + game.images + 'cover.jpg" data-position="FaceDown" />');
+        $(field).append('<img class="card p' + player + ' ' + movelocation + ' i' + i + '" src="' + game.images + 'cover.jpg" data-position="FaceDown" />');
     }
     $(field).appendTo('.fieldcontainer');
 };
@@ -4644,5 +4644,7 @@ $(document).on("mouseenter", "img.card", function (e) {
 
 window.startgame = startgame;
 window.duel = duel;
+window.animateState = animateState;
+window.game = game;
 
 },{"../../../server/libs/enums.js":16,"../../../server/libs/parseframes.js":17,"../../../server/libs/recieveSTOC.js":18,"../../ai/responseGenerator.js":14,"./card.js":15,"buffer/":10,"events":5}]},{},[19]);
