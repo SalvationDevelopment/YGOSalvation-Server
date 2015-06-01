@@ -54,8 +54,6 @@ function locallogin(init) {
     
     _gaq.push(['_trackEvent', 'Launcher', 'Login', localStorage.nickname]);
     singlesitenav('faq');
-    getLocation();
-
 }
 
 $(document).ready(function () {
