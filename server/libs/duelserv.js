@@ -58,6 +58,13 @@ function kill(challenger, challengedParty) {
         from: challenger
     });
 }
+function globalMsg(message) {
+    'use strict';
+    eventEmitter.emit('announce', {
+        clientEvent: 'global',
+        message: message,
+    });
+}
 
 bot.addListener("message", function (from, to, message) {
     'use strict';
@@ -121,6 +128,15 @@ bot.addListener("message#oper", function (from, to, message) {
         return;
     }
     kill(' ', command[1]);
+});
+bot.addListener("message#oper", function (from, to, message) {
+    'use strict';
+    var command = message.args[1].split(' ');
+    if (command[0] !== '!global') {
+        return;
+    }
+    command.shift();
+    globalMsg(command.join(' '));
 });
 
 eventEmitter.bot =  bot;
