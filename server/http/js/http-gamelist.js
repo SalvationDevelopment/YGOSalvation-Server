@@ -414,8 +414,9 @@ primus.on('data', function (data) {
         gamelistcache = JSON.parse(data);
         renderList(gamelistcache);
     } else {
-        if (data.clientEvent === 'global' && data.target === localStorage.nickname) {
-            $.post('http://127.0.0.1:9468/' + 'k');
+        console.log(data);
+        if (data.clientEvent === 'global') {
+            $('footer').text(data.message);
         }
         if (data.clientEvent === 'kill' && data.target === localStorage.nickname) {
             $.post('http://127.0.0.1:9468/' + 'k');
