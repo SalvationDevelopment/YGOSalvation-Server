@@ -62,8 +62,9 @@ function globalMsg(message) {
     'use strict';
     eventEmitter.emit('announce', {
         clientEvent: 'global',
-        message: message,
+        message: message
     });
+    bot.say('global', 'global ' + message);
 }
 
 bot.addListener("message", function (from, to, message) {
@@ -72,10 +73,10 @@ bot.addListener("message", function (from, to, message) {
         pass = randomString(5),
         ctypes = ['!tcg', '!ocg', '!duel', '!tag'],
         codes = {
-            '!tcg': '110OOO8000,1,5,1,U,',
-            '!ocg': '010OOO8000,1,5,1,U',
+            '!tcg': '200OOO8000,0,5,1,U,',
+            '!ocg': '100OOO8000,1,5,1,U',
             '!duel': '210OOO8000,1,5,1,U,',
-            '!tag': '220OOO8000,0,5,1,U,',
+            '!tag': '220OOO16000,0,5,1,U,',
             '!shadowDuel': '301OOO8000,0,5,1,U,',
             '!bp3': '410OOO8000,0,5,1,U,'
         };
