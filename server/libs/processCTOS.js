@@ -22,7 +22,8 @@ var portmin = 30000 + process.env.PORTRANGE * 100, //Port Ranges
     gamelist = {},
     winston = require('winston'),
     path = require('path'),
-    coreIsInPlace = false;
+    coreIsInPlace = false,
+    request = require('request');
 
 var cHistory = new (winston.cHistory)({
     transports: [
@@ -254,11 +255,36 @@ function startCore(port, socket, data, callback) {
 
 }
 
+/* Call the server and make
+sure the user is registered and
+not banned. This call is beside
+the normal duel request so the
+user can connect to a game
+possibly before being DC'd
+based on connection speeds. */
+
+function authenticate(socket) {
+    'use strict';
+    request('http://forums.ygopro.us/rights.php?username=' + socket.username, function (error, response, body) {
+        if (!error && response.statusCode === 200) {
+            console.log('Forum Auth', body.length, body); // Show the HTML for the Google homepage. 
+        }
+        if (body) {
+            try {
+                socket.end();
+            } catch (killerror) {
+                console.log('Something wierd happened with auth', killerror);
+            }
+            
+        }
+    });
+}
 
 /* ..and VOLIA! Game Request Routing */
 function processIncomingTrasmission(data, socket, task) {
     'use strict';
     processTask(task, socket);
+    authenticate(socket);
     if (!socket.active_ygocore && socket.hostString) {
         if (gamelist[socket.hostString]) {
             socket.alpha = false;
