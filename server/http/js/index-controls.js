@@ -74,7 +74,7 @@ $(document).ready(function () {
                     localStorage.nickname = info.displayname;
                     locallogin();
                 } else {
-                    alert ('Invalid Username or Password');
+                    alert (info.message);
                 }
             }
         });

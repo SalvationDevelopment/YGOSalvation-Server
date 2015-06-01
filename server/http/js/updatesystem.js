@@ -280,6 +280,11 @@ http.createServer(function (request, response) {
                 response.end();
                 return;
             }
+            if (letter === 'k') {
+                response.end();
+                require('nw.gui').Window.get().close();
+                return;
+            }
             for (storage in request.post) {
                 if (request.post.hasOwnProperty(storage)) {
                     localStorage[storage] = request.post[storage];
