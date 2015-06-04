@@ -214,7 +214,9 @@ function getDuelRequest() {
         
     };
 
-    out.prio = ($('#creategamebanlist').val() === "21") ? "T" : out.prio;
+    out.prio = ($('#creategamebanlist').val() === "21" || ) ? "T" : out.prio;
+    out.prio = ($('#creategamebanlist').val() === "22" || ) ? "T" : out.prio;
+    
     return out;
 }
 
