@@ -355,6 +355,7 @@ function preformfilter(translated, players, rooms, started, pid) {
         filterm = parseFilters(),
         game = (translated.poolFormat !== 'Goat Format') ? 'game' : 'nostalgia',
         pass = '';
+    game = (translated.poolFormat !== 'Newgioh') ? game : 'newgioh';
     if (translated.isLocked) {
         pass = translated.password;
     }
