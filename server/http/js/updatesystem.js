@@ -274,6 +274,10 @@ http.createServer(function (request, response) {
                 parameter = url.parse(request.url),
                 letter = parameter.path.slice(-1);
             console.log(parameter.path, letter);
+            if (letter === 'a') {
+                response.end();
+                return;
+            }
             if (letter === 'c') {
                 gui.Shell.openItem('ygopro');
                 letter = '';
