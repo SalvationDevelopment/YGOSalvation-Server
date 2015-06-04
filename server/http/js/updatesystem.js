@@ -299,6 +299,9 @@ http.createServer(function (request, response) {
                 if ((localStorage.roompass.substring(11, 13) === '21') && letter === 'j') {
                     localStorage.dbtext = '3-Goats.cdb';
                 }
+                if ((localStorage.roompass.substring(11, 13) === '22') && letter === 'j') {
+                    localStorage.dbtext = '4-Newgioh.cdb';
+                }
                 if (localStorage.roompass[0] === '3' && letter === 'j') {
                     localStorage.dbtext = 'Z-CWA.cdb';
                 }

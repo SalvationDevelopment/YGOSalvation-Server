@@ -193,11 +193,11 @@ function handleCoreMessage(core_message_raw, port, socket, data, pid) {
         };
     if (core_message[0].trim() === '::::network-ready') {
         connectToCore(port, data, socket);
-        cHistory.info('++GAME: ' + pid);
+        //cHistory.info('++GAME: ' + pid);
     }
     if (core_message[0].trim() === '::::end-duel') {
         socket.core.kill();
-        cHistory.info('--GAME: ' + pid);
+        //cHistory.info('--GAME: ' + pid);
     }
     process.send(gamelistmessage);
 }

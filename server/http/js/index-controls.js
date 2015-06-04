@@ -5,10 +5,10 @@ var launcher = false,
     internalLocal = 'home';
 
 function singlesitenav(target) {
+    'use strict';
     _gaq.push(['_trackEvent', 'Site', 'Navigation', target]);
     _gaq.push(['_trackEvent', 'Site', 'Navigation Movement', internalLocal + ' - ' + target]);
     internalLocal = target;
-    'use strict';
     //console.log(target);
     if (launcher && target === 'forum') {
         event.preventDefault();
