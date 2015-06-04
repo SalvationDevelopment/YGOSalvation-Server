@@ -208,7 +208,7 @@ function legalPassword(passIn) {
     if (passIn.length !== 24) {
         return false;
     }
-    var re = new RegExp("\\d\\d\\d(O|T)(O|T)(O|T)(\\d)+,\\d,\\d,\\d,(\\w)+,(\\w)+");
+    var re = new RegExp("\\d\\d\\d(O|T)(O|T)(O|T)(\\d)+,(\\d)|(\\d\\d),\\d,\\d,(\\w)+,(\\w)+");
     return re.test(passIn);
 }
 
