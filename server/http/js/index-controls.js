@@ -1,5 +1,5 @@
-/*jslint browser:true, plusplus:true*/
-/*global $, saveSettings, Handlebars, prompt, _gaq*/
+/*jslint browser:true, plusplus:true, nomen: true*/
+/*global $, saveSettings, Handlebars, prompt, _gaq, isChecked*/
 
 var launcher = false,
     internalLocal = 'home';
@@ -58,6 +58,13 @@ function locallogin(init) {
 
 $(document).ready(function () {
     'use strict';
+    if (localStorage.loginnick && localStorage.loginpass) {
+        $('#ips_username').val(localStorage.loginnick);
+        $('#ips_password').val(localStorage.loginpass);
+    }
+    if (localStorage.remember){
+        $('#ips_remember').prop('checked', true);
+    }
     $("#dolog").click(function (ev) {
         _gaq.push(['_trackEvent', 'Launcher', 'Attempt Login', $('#ips_username').val()]);
         var url = "http://forum.ygopro.us/log.php";
@@ -67,12 +74,18 @@ $(document).ready(function () {
             data: $("#ipblogin").serialize(), // serializes the form's elements.
             success: function (data) {
                 var info = JSON.parse(data);
-                console.log(info);
                 if (info.success) {
                     localStorage.nickname = info.displayname;
+                    if (isChecked('#ips_remember')) {
+                        localStorage.loginnick = $('#ips_username').val();
+                        localStorage.loginpass = $('#ips_password').val();
+                        localStorage.remember = true;
+                        $('#ips_remember').prop('checked', true);
+                    }
+                   
                     locallogin();
                 } else {
-                    alert (info.message);
+                    alert(info.message);
                 }
             }
         });
