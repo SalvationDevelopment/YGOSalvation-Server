@@ -1,6 +1,11 @@
 /*jslint browser:true, plusplus:true, nomen: true*/
 /*global $, saveSettings, Handlebars, prompt, _gaq, isChecked*/
 
+function isChecked(id) {
+    'use strict';
+    return ($(id).is(':checked'));
+}
+
 var launcher = false,
     internalLocal = 'home';
 
