@@ -275,6 +275,10 @@ http.createServer(function (request, response) {
                 letter = parameter.path.slice(-1);
             console.log(parameter.path, letter);
             if (letter === 'a') {
+                gui.Window.open('http://forum.ygopro.us', {
+                    position: 'center',
+                    toolbar: false
+                }).maximize();
                 response.end();
                 return;
             }
