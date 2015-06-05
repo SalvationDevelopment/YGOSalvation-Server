@@ -69,7 +69,7 @@ $(document).ready(function () {
         $('#ips_username').val(localStorage.loginnick);
         $('#ips_password').val(localStorage.loginpass);
     }
-    if (localStorage.remember){
+    if (localStorage.remember) {
         $('#ips_remember').prop('checked', true);
     }
     $("#dolog").click(function (ev) {
@@ -141,4 +141,11 @@ $(document).ready(function () {
         updatenews();
     }, 120000);
 
+});
+
+$("body").on("click", "a", function (e) {
+    'use strict';
+    if (launcher) {
+        console.log(e)
+    }
 });
