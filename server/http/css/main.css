@@ -1517,10 +1517,13 @@ div[data-game^="32"] {
 
 
 [data-newgioh] {
-    background-image: url('../img/newgiohtoken.png') !important;
-    background-color: black!important;
-    background-size: 100% center;
+  background-image: url('../img/newgiohtoken.png') !important;
+  background-color: #aa0!important;
+  background-size: auto 100% !important;
+  text-shadow: 0px 0px 19px black;
+  background-repeat: no-repeat !important;
 }
+
 [data-nostalgia] {
     background: #e8aa2e; /* Old browsers */
     background: -moz-linear-gradient(left,  #e8aa2e 0%, #ed7d7d 19%, #ed7d7d 19%, #2989d8 66%, #ff0000 100%) !important; /* FF3.6+ */

@@ -34,7 +34,7 @@ bot.on('registered', function () {
         
         setTimeout(function () {
             bot.send('oper', process.env.OPERNAME, process.env.OPERPASS);
-            bot.join("#oper", function () {
+            bot.join("#public", function () {
                 
             });
         }, 2000);
@@ -106,7 +106,7 @@ bot.addListener("message", function (from, to, message) {
     //start tournament
 });
 
-bot.addListener("message#oper", function (from, to, message) {
+bot.addListener("message#public", function (from, to, message) {
     'use strict';
     var command = message.args[1].split(' ');
     if (command[0] !== '!kill') {
@@ -114,15 +114,15 @@ bot.addListener("message#oper", function (from, to, message) {
     }
     ps.kill(command[1], function (err) {
         if (err) {
-            bot.say('#oper', 'Failed to kill ' + command[1] + '! Deleting it.');
+            bot.say('#public', 'Failed to kill ' + command[1] + '! Deleting it.');
             eventEmitter.emit('del', command[1]);
         } else {
-            bot.say('#oper', 'Process ' + command[1] + ' has been killed!');
+            bot.say('#public', 'Process ' + command[1] + ' has been killed!');
         }
     });
 });
 
-bot.addListener("message#oper", function (from, to, message) {
+bot.addListener("message#public", function (from, to, message) {
     'use strict';
     var command = message.args[1].split(' ');
     if (command[0] !== '!murder') {
@@ -130,7 +130,7 @@ bot.addListener("message#oper", function (from, to, message) {
     }
     kill(' ', command[1]);
 });
-bot.addListener("message#oper", function (from, to, message) {
+bot.addListener("message#public", function (from, to, message) {
     'use strict';
     var command = message.args[1].split(' ');
     if (command[0] !== '!global') {

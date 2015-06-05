@@ -97,7 +97,7 @@ function handleCoreMessage(core_message_raw, port, pid) {
 
         case ('::::chat'):
             chat = core_message.join(' ');
-            duelserv.bot.say('#oper', gamelist[core_message[1]].pid + '|' + core_message[2] + ': ' + core_message[3]);
+            duelserv.bot.say('#public', gamelist[core_message[1]].pid + '|' + core_message[2] + ': ' + core_message[3]);
             logger.info(gamelist[core_message[1]].pid + '|' + core_message[2] + ': ' + core_message[3]);
             break;
 
