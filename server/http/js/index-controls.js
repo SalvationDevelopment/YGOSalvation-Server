@@ -17,6 +17,8 @@ function singlesitenav(target) {
     //console.log(target);
     if (launcher && target === 'forum') {
         event.preventDefault();
+        ygopro('-a');
+        return false;
     } else if (!launcher && target === 'forum') {
         return true;
     } else if ($('.unlogged.in-iframe').length > 0 && target === 'gamelist') {
