@@ -85,8 +85,12 @@ $(document).ready(function () {
                         localStorage.loginnick = $('#ips_username').val();
                         localStorage.loginpass = $('#ips_password').val();
                         localStorage.remember = true;
-                        $('#ips_remember').prop('checked', true);
+                    } else {
+                        localStorage.loginnick = '';
+                        localStorage.loginpass = '';
+                        localStorage.remember = false;
                     }
+                    
                    
                     locallogin();
                 } else {
