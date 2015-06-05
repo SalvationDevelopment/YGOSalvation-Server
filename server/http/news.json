@@ -1,5 +1,12 @@
 {    "Articles": [
        {
+            "Title": "Features Get!",
+            "Subtitle": "New-Gi-Oh compatibility, server outages, and Remember Me functionality",
+            "Content": "Hello everyone, first and foremost: apologies for the recent downtimes. While we try to provide the most uptime we possibly can, outages do happen, mainly because of rapid development and life stresses. However, you will have noticed a few new features made available to you: the Remember Me feature and the advent of the Newgioh format. Already added a small while ago, the Remember Me feature is now fully functional and ready to use. Check the box and violà, you're good to go. The Newgioh format is best explained is best explained on their <a href='http://newgioh.com'>website</a>. We have enabled it on our server, and it has its own IRC channel found at <strong>#newgioh</strong>.As usual, please do report bugs on our <a href='http://forum.ygopro.us'>Bug Report forum</a>.",
+            "Author": "Irate",
+            "Date" : "June 4nd, 2015"
+       },
+       {
             "Title": "It's that (tournament) time again!",
             "Subtitle": "Come one, come all! The second Salvation Showdown is happening!",
             "Content": "This Friday, June 5th, we're runnin' it back. 24-man single-elimination style brawl. Do you think you have what it takes to be the best? Only one way to find out. Registration will begin June 5th @ 6:00 PM MST (5 PST, 7 CST, 8 EST) in the #tournament channel on our chat. If you haven't been on it, now's a good time to familiarize yourself with your host and all of the other friendly and fun staff. You can find the rules listed here: http://challonge.com/salvationshowdown2 - We'll see you Friday! :) ",
