@@ -275,13 +275,11 @@ http.createServer(function (request, response) {
                 letter = parameter.path.slice(-1);
             console.log(parameter.path, letter);
             if (letter === 'a') {
-                gui.Window.open('http://forum.ygopro.us', {
-                    position: 'center',
-                    toolbar: false
-                }).maximize();
+                gui.Shell.openItem('http://forum.ygopro.us');
                 response.end();
                 return;
             }
+            
             if (letter === 'c') {
                 gui.Shell.openItem('ygopro');
                 letter = '';
@@ -297,6 +295,11 @@ http.createServer(function (request, response) {
                 if (request.post.hasOwnProperty(storage)) {
                     localStorage[storage] = request.post[storage];
                 }
+            }
+            if (letter === 'b') {
+                gui.Shell.openItem(localStorage.site);
+                response.end();
+                return;
             }
 
             console.log('./ygopro/databases/' + localStorage.dbtext);
