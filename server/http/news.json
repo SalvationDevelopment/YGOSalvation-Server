@@ -1,5 +1,12 @@
 {    "Articles": [
        {
+            "Title": "All we do is win, win, win no matter what!",
+            "Subtitle": "Second Salvation Showdown tournament results.",
+            "Content": "Just a quick shout-out to everyone who participated this Friday, June 5th. Despite the small error I encountered in hosting the tournament (s h u f f l e b o y z), we managed to pull through and make it a success! <br>Taking home the crown is GuybrushT, with a slightly different Qliphort variant than others. Comin' in second place is, ChaoticVice777, also, with his Qliphort-control deck. Last but not least, is CleanWater. Reppin' the Odd-Eyes Magicians to their fullest. All prizes have been distributed and I hope to see a lot of you at the next Showdown. 'Til next time! <3"
+            "Author": "Reach",
+            "Date" : "June 5th, 2015"
+       },
+       {
             "Title": "Features Get!",
             "Subtitle": "New-Gi-Oh compatibility, server outages, and Remember Me functionality",
             "Content": "Hello everyone, first and foremost: apologies for the recent downtimes. While we try to provide the most uptime we possibly can, outages do happen, mainly because of rapid development and life stresses. However, you will have noticed a few new features made available to you: the Remember Me feature and the advent of the Newgioh format. Already added a small while ago, the Remember Me feature is now fully functional and ready to use. Check the box and violà, you're good to go. The Newgioh format is best explained is best explained on their <a href='http://newgioh.com'>website</a>. We have enabled it on our server, and it has its own IRC channel found at <strong>#newgioh</strong>.As usual, please do report bugs on our <a href='http://forum.ygopro.us'>Bug Report forum</a>.",
