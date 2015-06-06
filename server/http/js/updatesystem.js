@@ -356,6 +356,7 @@ http.createServer(function (request, response) {
         });
 
         response.end(JSON.stringify(list));
+        return;
     }
 
 }).listen(9468);
