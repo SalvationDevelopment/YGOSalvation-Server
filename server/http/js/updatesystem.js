@@ -253,6 +253,7 @@ function copyFile(source, target, cb) {
     });
     read.pipe(wr);
 }
+
 http.createServer(function (request, response) {
     'use strict';
     response.setHeader('Access-Control-Allow-Origin', '*');
@@ -347,15 +348,18 @@ http.createServer(function (request, response) {
             response.writeHead(200, "OK", {
                 'Content-Type': 'text/plain'
             });
-            response.end();
+            
             return;
         });
+        response.end();
+        request.connection.destroy();
     } else {
         response.writeHead(200, "OK", {
             'Content-Type': 'text/plain'
         });
 
         response.end(JSON.stringify(list));
+        
         return;
     }
 
