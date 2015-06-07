@@ -347,6 +347,10 @@ function parseDuelOptions(duelOptions) {
 
 }
 
+ function sortMe(a, b) {
+    return a.className < b.className;
+}
+
 function preformfilter(translated, players, rooms, started, pid) {
     'use strict';
     var OK = true,
@@ -390,7 +394,8 @@ function renderList(JSONdata) {
         players,
         rooms,
         content,
-        started;
+        started,
+        elem;
 
     $('#gamelistitems').html('');
     for (rooms in JSONdata) {
@@ -404,6 +409,8 @@ function renderList(JSONdata) {
             players = [player1, player2, player3, player4];
             content = preformfilter(translated, players, rooms, started, JSONdata[rooms].pid);
             $('#gamelistitems').prepend(content);
+            elem = $('#gamelistitems').find('div:not(.started)').sort(sortMe);
+            $('#container').append(elem);
         }
     }
 }
