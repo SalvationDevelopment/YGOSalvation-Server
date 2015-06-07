@@ -409,13 +409,14 @@ function renderList(JSONdata) {
             players = [player1, player2, player3, player4];
             content = preformfilter(translated, players, rooms, started, JSONdata[rooms].pid);
             $('#gamelistitems').prepend(content);
-            elem = $('#gamelistitems').find('div:not(.avaliable)').sort(sortMe);
-            $('#gamelistitems').append(elem);
-            $('.avaliable').last().after('<br style="clear:both"><span class="gamelabel">Spectate<span><br style="clear:both">');
-            $('#gamelistitems').prepend('<span class="gamelabel">Join<span><br style="clear:both">');
+            
             
         }
     }
+    elem = $('#gamelistitems').find('div:not(.avaliable)').sort(sortMe);
+    $('#gamelistitems').append(elem);
+    $('.avaliable').last().after('<br style="clear:both"><span class="gamelabel">Spectate<span><br style="clear:both">');
+    $('#gamelistitems').prepend('<span class="gamelabel">Join<span><br style="clear:both">');
 }
 
 function setfilter() {
