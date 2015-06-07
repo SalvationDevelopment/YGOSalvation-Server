@@ -435,7 +435,7 @@ header {
 
 div#gamelistitems {
     overflow-y: scroll;
-    height: 85vh;
+    height: 70vh;
 }
 
 .game.started {
@@ -1515,7 +1515,14 @@ div[data-game^="32"] {
     border: 2px;
 }
 
+[data-bad] {
+    background:red !important;
+}
 
+.started[data-bad] {
+    background:rgba(255,0,0,.5) !important;
+    border: 1px solid red;
+}
 [data-newgioh] {
   background-image: url('../img/newgiohtoken.png') !important;
   background-color: #aa0!important;

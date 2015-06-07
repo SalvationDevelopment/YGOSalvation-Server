@@ -356,6 +356,10 @@ function preformfilter(translated, players, rooms, started, pid) {
         game = (translated.poolFormat !== 'Goat Format') ? 'game' : 'nostalgia',
         pass = '';
     game = (translated.poolFormat !== 'Newgioh') ? game : 'newgioh';
+    game = (translated.poolFormat !== 'Unlimited') ? game : 'bad';
+    game = (translated.poolFormat !== 'Traditional') ? game : 'bad';
+    game = (translated.poolFormat !== 'Mega-Banned') ? game : 'bad';
+    
     if (translated.isLocked) {
         pass = translated.password;
     }

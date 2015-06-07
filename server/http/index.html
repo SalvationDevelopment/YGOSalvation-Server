@@ -197,7 +197,12 @@
            
        
         </section>
-
+        <div class='gamelistcenter'>
+        <label>Current Deck</label>
+                    <select class='currentdeck'>
+                        <option selected value=""></option>
+                    </select>
+        </div>
 
     </header>
     <header style="padding-top:50px" id="host">
@@ -311,12 +316,18 @@
     <header style="padding-top:50px" id="settings">
 
         <h3 style="text-align:center; color:silver">Game Settings</h3>
-        <div style="color:#a07; width:720px; margin:0 auto;">
+        <div style="color:white; width:970px; margin:0 auto;">
             <section id="settings">
                 <div class='section-content'>
-
-                    <div style="width:50%; float:left;">
-
+                    <div style="width:32%; float:left; color:white;">
+                        <p>Auto Placement will have the game automaticlly pick where cards are placed</p>
+                        <p>If Auto Placement is on, you can randomize it.</p>
+                        <p>If you selected multiple cards in response to a chain suggestion. You may have the game automatically pick the resolution order.</p>
+                        <p>If Auto Placement is on, you can randomize it.</p>
+                        <p>No (obvious) Delay for Chains, add additional pauses to game play to spook your opponent.</p>
+                    </div>
+                    <div style="width:32%; float:left;">
+                        
                         <label>Auto Card Placement</label>
                         <input type="checkbox" data-localhost="auto_card_placing" />
                         <br />
@@ -360,7 +371,7 @@
 
                         <br />
                     </div>
-                    <div style="width:50%; float:left;">
+                    <div style="width:32%; float:left;">
                         <label>Sound Volume</label>
                         <input type="range" min="0" max="100" value="50" id="sound_volume">
                         <br />
