@@ -1512,6 +1512,7 @@ div[data-game^="32"] {
     padding-top:20px;
     display:block;
     text-align: center;
+    color: #aaa;
 }
 
 .game:not([data-game*="OOO"]) {
