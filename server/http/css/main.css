@@ -438,6 +438,10 @@ div#gamelistitems {
     height: 70vh;
 }
 
+div#gamelistitems {
+    overflow-y: scroll;
+    height: 70vh;
+}
 .game.started {
     opacity: 1;
     border-color: grey;
