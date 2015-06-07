@@ -251,7 +251,7 @@ function setHostSettings() {
     if (!secure(duelRequest.prio, duelRequest.checkd, duelRequest.shuf)) {
         return;
     }
-    localStorage.lastdeck = $('.currentdeck').val();
+    localStorage.lastdeck = $('#hostSettings .currentdeck').val();
     ygopro('-j');
     _gaq.push(['_trackEvent', 'Launcher', 'YGOPro', 'Host']);
     _gaq.push(['_trackEvent', 'Launcher', 'YGOPro Host', duelRequest.string + duelRequest.prio +
