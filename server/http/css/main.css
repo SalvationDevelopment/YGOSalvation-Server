@@ -1509,7 +1509,7 @@ div[data-game^="32"] {
 
 }
 .gamelabel {
-    padding-top:20px;
+    padding-top:10px;
     display:block;
     text-align: center;
     color: #aaa;
