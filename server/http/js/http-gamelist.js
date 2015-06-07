@@ -412,7 +412,7 @@ function renderList(JSONdata) {
             elem = $('#gamelistitems').find('div:not(.avaliable)').sort(sortMe);
             $('#gamelistitems').append(elem);
             $('.avaliable').last().after('<br style="clear:both"><span class="gamelabel">Spectate<span><br style="clear:both">');
-            $('.avaliable').last().before('<br style="clear:both"><span class="gamelabel">Join<span><br style="clear:both">');
+            $('.avaliable').first().before('<span class="gamelabel">Join<span><br style="clear:both">');
             
         }
     }

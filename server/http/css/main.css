@@ -1508,7 +1508,11 @@ div[data-game^="32"] {
     
 
 }
-
+.gamelabel {
+    padding-top:20px;
+    display:block;
+    text-align: center;
+}
 
 .game:not([data-game*="OOO"]) {
     /* cheating! */
