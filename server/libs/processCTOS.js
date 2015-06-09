@@ -233,6 +233,16 @@ function startCore(port, socket, data, callback) {
         //deal with bad game request
         cHistory.info('[' + socket.remoteAddress + ':' + socket.username + '] requested bad game: ' + socket.hostString);
         return;
+    } else {
+        //contact main process.
+        process.send({
+            messagetype: 'coreMessage',
+            coreMessage: {
+                core_message_raw: 'passwordQuery',
+                ip : socket.remoteAddress,
+                username : socket.username
+            }
+        });
     }
 
     socket.core = childProcess.spawn(startDirectory + '/../ygocore/YGOServer.exe', [port, configfile], {

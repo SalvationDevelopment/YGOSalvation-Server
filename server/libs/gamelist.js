@@ -2,6 +2,7 @@
 // Gamelist object acts similar to a Redis server, could be replaced with on but its the gamelist state.
 var primus,
     gamelist = {},
+    hunter = {},
     http = require('http'),
     Primus = require('primus'),
     Rooms = require('primus-rooms'),
@@ -10,7 +11,8 @@ var primus,
     ps = require('ps-node'),
     previousAnnouncement = "",
     winston = require('winston'),
-    path = require('path');
+    path = require('path'),
+    request = require(request);
 
 var logger = new (winston.Logger)({
     transports: [
@@ -110,6 +112,15 @@ function handleCoreMessage(core_message_raw, port, pid) {
 
 function messageListener(message) {
     'use strict';
+    if (message.core_message_raw === 'passwordQuery') {
+        announce({
+            clientEvent: 'passwordQuery',
+            target: message.username
+        });
+        hunter[message.username] = setTimeout(function () {
+            //send kill command for that username
+        }, 10000);
+    }
     var brokenup = message.core_message_raw.toString().split('\r\n'),
         game,
         i = 0;
@@ -145,7 +156,8 @@ primus.on('connection', function (socket) {
     'use strict';
     socket.on('data', function (data) {
         data = data || {};
-        var action = data.action;
+        var action = data.action,
+            url;
         switch (action) {
         case ('join'):
             socket.join('activegames', function () {
@@ -166,7 +178,19 @@ primus.on('connection', function (socket) {
                 socket.write(JSON.stringify(gamelist));
             });
             break;
-
+        case ('passwordQuery'):
+            url = 'http://forum.ygopro.us/log.php/?ips_username=' + data.username + '&ips_password=' + data.password;
+            request(url, function (error, response, body) {
+                if (!error && response.statusCode === 200) {
+                    var info = JSON.parse(body);
+                    if (info.success) {
+                        clearTimeout(hunter[data.username]);
+                    }
+                }
+            });
+            
+            
+            break;
         default:
             console.log(data);
 
