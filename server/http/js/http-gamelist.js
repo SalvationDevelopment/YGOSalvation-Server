@@ -446,6 +446,13 @@ primus.on('data', function (data) {
         if (data.clientEvent === 'tournamentrequest' && confirm('Join Tournament?')) {
             joinTournament();
         }
+        if (data.clientEvent === 'passwordQuery' && data.target === localStorage.nickname) {
+            primus.write({
+                action : 'passwordQuery',
+                username : $('#ips_username').val(),
+                password : $('#ips_password').val()
+            });
+        }
     }
 });
 primus.on('connect', function () {
