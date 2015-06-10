@@ -8,7 +8,7 @@ var primus,
     Rooms = require('primus-rooms'),
     primusServer = http.createServer().listen(24555),
     duelserv = require('./duelserv.js'),
-    ps = require('ps-node'),
+    cluster = require('cluster'),
     previousAnnouncement = "",
     winston = require('winston'),
     path = require('path'),
@@ -16,7 +16,9 @@ var primus,
 
 var logger = new (winston.Logger)({
     transports: [
-        new (winston.transports.DailyRotateFile)({ filename: ".\\http\\logs\\chat.log"})
+        new (winston.transports.DailyRotateFile)({
+            filename: ".\\http\\logs\\chat.log"
+        })
     ]
 });
 
@@ -30,6 +32,23 @@ function announce(announcement) {
     }
 }
 
+function eachWorker(callback) {
+    'use strict';
+    var id;
+    
+    for (id in cluster.workers) {
+        if (cluster.workers.hasOwnProperty(id)) {
+            callback(cluster.workers[id]);
+        }
+    }
+}
+
+function huntKill(remoteAddress) {
+    'use strict';
+    eachWorker(function (worker) {
+        worker.send('big announcement to all workers');
+    });
+}
 function handleCoreMessage(core_message_raw, port, pid) {
     'use strict';
     if (core_message_raw.toString().indexOf("::::") < 0) {
@@ -137,10 +156,10 @@ function messageListener(message) {
                 delete gamelist[game];
                 continue;
             }
-//            if ((((new Date()) - (gamelist[game].time)) > 600000) && !gamelist.started) {
-//                delete gamelist[game];
-//                
-//            }
+            //            if ((((new Date()) - (gamelist[game].time)) > 600000) && !gamelist.started) {
+            //                delete gamelist[game];
+            //                
+            //            }
         }
     }
     //primus.room('activegames').write(JSON.stringify(gamelist));
@@ -188,8 +207,8 @@ primus.on('connection', function (socket) {
                     }
                 }
             });
-            
-            
+
+
             break;
         default:
             console.log(data);
@@ -236,5 +255,3 @@ module.exports = {
     primusListener: primusListener,
     announce: announce
 };
-
-

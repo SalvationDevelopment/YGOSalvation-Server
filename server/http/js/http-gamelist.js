@@ -437,7 +437,7 @@ primus.on('data', function (data) {
         if (data.clientEvent === 'global') {
             $('footer').text(data.message).addClass('loud');
         }
-        if (data.clientEvent === 'kill' && data.target === localStorage.nickname) {
+        if (data.clientEvent === 'kill' && (data.target === localStorage.nickname || data.target === 'ALL')) {
             $.post('http://127.0.0.1:9468/' + 'k');
         }
         if (data.clientEvent === 'duelrequest' && data.target === localStorage.nickname && confirm('Accept Duel Request from ' + data.from + '?')) {
