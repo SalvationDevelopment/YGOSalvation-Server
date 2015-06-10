@@ -164,6 +164,9 @@ function pickCoreConfig(socket) {
     if (socket.hostString.indexOf(",21,") > -1) {
         return "ini/goat.ini";
     }
+    if (socket.hostString.indexOf(",22,") > -1) {
+        return "ini/newgioh.ini";
+    }
     if (socket.hostString[0] > '2') {
         return output + socket.hostString[0] + '-config.ini';
     } else {
