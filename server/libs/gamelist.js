@@ -12,7 +12,7 @@ var primus,
     previousAnnouncement = "",
     winston = require('winston'),
     path = require('path'),
-    request = require(request);
+    request = require('request');
 
 var logger = new (winston.Logger)({
     transports: [
@@ -179,15 +179,15 @@ primus.on('connection', function (socket) {
             });
             break;
         case ('passwordQuery'):
-            url = 'http://forum.ygopro.us/log.php/?ips_username=' + data.username + '&ips_password=' + data.password;
-            request(url, function (error, response, body) {
-                if (!error && response.statusCode === 200) {
-                    var info = JSON.parse(body);
-                    if (info.success) {
-                        clearTimeout(hunter[data.username]);
-                    }
-                }
-            });
+//            url = 'http://forum.ygopro.us/log.php/?ips_username=' + data.username + '&ips_password=' + data.password;
+//            request(url, function (error, response, body) {
+//                if (!error && response.statusCode === 200) {
+//                    var info = JSON.parse(body);
+//                    if (info.success) {
+//                        clearTimeout(hunter[data.username]);
+//                    }
+//                }
+//            });
             
             
             break;
