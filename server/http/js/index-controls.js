@@ -138,7 +138,7 @@ $(document).ready(function () {
 
             });
             list = parent.list;
-            console.log(list);
+            console.log(process.list);
         }, 10000);
     }
 
