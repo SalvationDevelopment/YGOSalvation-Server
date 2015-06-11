@@ -43,11 +43,12 @@ function update() {
         ygopro = dirTree('ygopro'),
         plugins = dirTree('plugins'),
         license = dirTree('license'),
+        packagejson = dirTree('package.json'),
         installation = {
             "path": "/",
             "name": "/",
             "type": "folder",
-            "subfolder": [ygopro, plugins, license]
+            "subfolder": [ygopro, plugins, license, packagejson]
         },
         git = spawn('git', ['pull']);
 

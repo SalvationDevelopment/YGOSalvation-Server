@@ -1,0 +1,35 @@
+{
+    "name": "ygopro-client",
+    "description": "Salvation Development YGOPro Launcher",
+    "main": "app://ygopro.us/interface/index.html",
+    "window": {
+        "toolbar": false,
+        "frame": false,
+        "width": 1024,
+        "min_width": 1024,
+        "height": 535,
+        "min_height": 535,
+        "icon": "interface/icon.png",
+        "transparent":true
+    },
+    "webkit": {
+        "plugin": true,
+        "page-cache": false
+    },
+    "maintainers": [{
+        "name": "James Gladney",
+        "email": "panthrowzay@gmail.com"
+}],
+    "manifestUrl": "http://ygopro.us/releases/package.json",
+    "packages": {
+        "mac": {
+            "url": "http://ygopro.us/releases/mac.zip"
+        },
+        "win": {
+            "url": "http://ygopro.us/releases/win.zip"
+        },
+        "linux32": {
+            "url": "http://ygopro.us/releases/linux32.tar.gz"
+        }
+    }
+}
