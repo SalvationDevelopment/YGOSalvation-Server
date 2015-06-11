@@ -137,8 +137,9 @@ $(document).ready(function () {
             $.getJSON('http://127.0.0.1:9468/', processServerCall).fail(function () {
 
             });
+            
+            console.log(parent, window, global);
             list = process.list;
-            console.log(process.list);
         }, 10000);
     }
 
