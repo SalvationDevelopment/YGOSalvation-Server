@@ -27,6 +27,10 @@
             maxxed = !maxxed;
             return;
         }
+        
+        win.on('new-win-policy', function (frame, url, policy) {
+            policy.setNewWindowManifest({"frame" : true}));
+        });
     </script>
     <div id="control">
         <div onclick="win.close(true);"></div>
