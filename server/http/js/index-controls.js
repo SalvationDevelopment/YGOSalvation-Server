@@ -1,5 +1,5 @@
 /*jslint browser:true, plusplus:true, nomen: true*/
-/*global $, saveSettings, Handlebars, prompt, _gaq, isChecked*/
+/*global $, saveSettings, Handlebars, prompt, _gaq, isChecked, alert, primus, ygopro*/
 
 function isChecked(id) {
     'use strict';
@@ -7,7 +7,8 @@ function isChecked(id) {
 }
 
 var launcher = false,
-    internalLocal = 'home';
+    internalLocal = 'home',
+    loggedIn = false;
 
 function singlesitenav(target) {
     'use strict';
@@ -58,9 +59,33 @@ function locallogin(init) {
 
     $(document.body).addClass("launcher").removeClass('unlogged').removeClass('web');
     $('#ips_username, #ips_password').css('display', 'none');
-    
+
     _gaq.push(['_trackEvent', 'Launcher', 'Login', localStorage.nickname]);
     singlesitenav('faq');
+
+    primus.write({
+        action: 'privateServer',
+        username: localStorage.nickname
+    });
+    loggedIn = true;
+
+}
+
+function processServerCall(data) {
+    'use strict'; //small kittens hate localhost
+    var selected = $(".currentdeck option:selected").val(),
+        selectedskin = $("#skinlist option:selected").val(),
+        selectedfont = $("#fontlist option:selected").val(),
+        selecteddb = $("#dblist option:selected").val();
+    $('.currentdeck').html(data.currentdeck);
+    $('#skinlist').html(data.skinlist);
+    $('#fontlist').html(data.fonts);
+    $('#dblist').html(data.databases);
+    $('.currentdeck option[value="' + selected + '"]').attr('selected', 'selected');
+    $('#skinlist option[value="' + selectedskin + '"]').attr('selected', 'selected');
+    $('#fontlist option[value="' + selectedfont + '"]').attr('selected', 'selected');
+    $('#dblist option[value="' + selecteddb + '"]').attr('selected', 'selected');
+    //console.log(data);
 }
 
 $(document).ready(function () {
@@ -92,8 +117,8 @@ $(document).ready(function () {
                         localStorage.loginpass = '';
                         localStorage.remember = false;
                     }
-                    
-                   
+
+
                     locallogin();
                 } else {
                     alert(info.message);
@@ -103,26 +128,12 @@ $(document).ready(function () {
         ev.preventDefault();
         return false; // avoid to execute the actual submit of the form.
     });
-   
+
     if (launcher) {
         //locallogin(true);
         $('webonly').css('display', 'none');
         setInterval(function () {
-            $.getJSON('http://127.0.0.1:9468/', function (data) { //small kittens hate localhost
-                var selected = $(".currentdeck option:selected").val(),
-                    selectedskin = $("#skinlist option:selected").val(),
-                    selectedfont = $("#fontlist option:selected").val(),
-                    selecteddb = $("#dblist option:selected").val();
-                $('.currentdeck').html(data.currentdeck);
-                $('#skinlist').html(data.skinlist);
-                $('#fontlist').html(data.fonts);
-                $('#dblist').html(data.databases);
-                $('.currentdeck option[value="' + selected + '"]').attr('selected', 'selected');
-                $('#skinlist option[value="' + selectedskin + '"]').attr('selected', 'selected');
-                $('#fontlist option[value="' + selectedfont + '"]').attr('selected', 'selected');
-                $('#dblist option[value="' + selecteddb + '"]').attr('selected', 'selected');
-                //console.log(data);
-            }).fail(function () {
+            $.getJSON('http://127.0.0.1:9468/', processServerCall).fail(function () {
 
             });
         }, 10000);
@@ -141,11 +152,4 @@ $(document).ready(function () {
         updatenews();
     }, 120000);
 
-});
-
-$("body").on("click", "a", function (e) {
-    'use strict';
-    if (launcher) {
-        console.log(e)
-    }
 });

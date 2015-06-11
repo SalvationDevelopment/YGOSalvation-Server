@@ -191,6 +191,12 @@ primus.on('connection', function (socket) {
         case ('register'):
             socket.nickname = data.nickname;
             break;
+        
+        case ('privateServer'):
+            socket.join(data.username, function () {
+                socket.write(JSON.stringify(gamelist));
+            });
+            break;
 
         case ('joinTournament'):
             socket.join('tournament', function () {
