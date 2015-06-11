@@ -29,7 +29,8 @@
         }
         
         win.on('new-win-policy', function (frame, url, policy) {
-            policy.setNewWindowManifest({"frame" : true}));
+            policy.ignore();
+            gui.Shell.openItem(url);
         });
     </script>
     <div id="control">
