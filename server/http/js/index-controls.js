@@ -138,6 +138,7 @@ $(document).ready(function () {
 
             });
             list = parent.list;
+            console.log(list);
         }, 10000);
     }
 
