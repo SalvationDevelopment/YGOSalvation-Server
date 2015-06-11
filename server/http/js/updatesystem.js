@@ -185,9 +185,6 @@ setTimeout(function () {
     createmanifest();
     populatealllist();
     fs.watch('./ygopro/deck', populatealllist);
-    fs.watch('./ygopro/skins', populatealllist);
-    fs.watch('./ygopro/databases', populatealllist);
-    fs.watch('./ygopro/fonts', populatealllist);
 }, 10000);
 
 var http = require('http');
