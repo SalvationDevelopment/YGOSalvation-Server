@@ -1,0 +1,581 @@
+/*! HTML5 Boilerplate v4.3.0 | MIT License | http://h5bp.com/ */
+
+/*
+ * What follows is the result of much research on cross-browser styling.
+ * Credit left inline and big thanks to Nicolas Gallagher, Jonathan Neal,
+ * Kroc Camen, and the H5BP dev community and team.
+ */
+
+/* ==========================================================================
+   Base styles: opinionated defaults
+   ========================================================================== */
+
+html {
+    color: #222;
+    font-size: 1em;
+    line-height: 1.4;
+    
+}
+body {
+    border: none;
+    overflow: hidden;
+
+}
+/*
+ * Remove text-shadow in selection highlight: h5bp.com/i
+ * These selection rule sets have to be separate.
+ * Customize the background color to match your design.
+ */
+
+::-moz-selection {
+    background: #b3d4fc;
+    text-shadow: none;
+}
+::selection {
+    background: #b3d4fc;
+    text-shadow: none;
+}
+/*
+ * A better looking default horizontal rule
+ */
+
+hr {
+    display: block;
+    height: 1px;
+    border: 0;
+    border-top: 1px solid #ccc;
+    margin: 1em 0;
+    padding: 0;
+}
+/*
+ * Remove the gap between images, videos, audio and canvas and the bottom of
+ * their containers: h5bp.com/i/440
+ */
+
+audio,
+canvas,
+img,
+svg,
+video {
+    vertical-align: middle;
+}
+/*
+ * Remove default fieldset styles.
+ */
+
+fieldset {
+    border: 0;
+    margin: 0;
+    padding: 0;
+}
+/*
+ * Allow only vertical resizing of textareas.
+ */
+
+textarea {
+    resize: vertical;
+}
+/* ==========================================================================
+   Browse Happy prompt
+   ========================================================================== */
+
+.browsehappy {
+    margin: 0.2em 0;
+    background: #ccc;
+    color: #000;
+    padding: 0.2em 0;
+}
+/* ==========================================================================
+   Author's custom styles
+   ========================================================================== */
+
+* {
+    box-sizing: border-box;
+}
+html,
+body {
+    height: 100%;
+    /*    border:1px solid red;*/
+}
+html {
+    /*    border: 1px solid #aaa;*/
+    background-color: transparent;
+}
+body {
+    background-color:transparent;
+}
+#content {
+    padding: 10px;
+    font-size: 10px;
+    height: 100%;
+    padding-top: 40px;
+    padding-bottom: 40px;
+    font-weight: lighter;
+    overflow: hidden;
+}
+#staticbar {
+    height: auto;
+    position: absolute;
+    background: white;
+    width: 100%;
+    bottom: 0;
+    left: 0;
+    padding: 5px;
+    font-size: 8px;
+    overflow: hidden;
+    background: -webkit-linear-gradient(#222, #000);
+    border-top: 1px solid #555;
+}
+#staticcontrols>div {
+    background: white;
+    font-weight: bold;
+}
+#servermessages {
+    height: 30px;
+    float: left;
+    width: 310px;
+    color: white;
+    overflow: auto;
+    font-size: 10px;
+    line-height: 1.5em;
+}
+#staticcontrols {
+    padding: 5px;
+    width: 604px;
+    float: right;
+    height: 30px;
+}
+#staticbar section {
+    background-image: url(http://ygopro.us/img/bg.jpg);
+    height: 92.5vh;
+    width: 100%;
+    display: none;
+    background-size: 100%;
+}
+#staticcontrols > div {
+    float: left;
+    width: 79px;
+    height: 20px;
+    line-height: 20px;
+    margin: 0 10px;
+    border: 1px solid black;
+    text-align: center;
+    cursor: pointer;
+    background: -webkit-linear-gradient(#fff, #aaa) !important;
+    box-shadow: inset -2px 2px 3px -1px black;
+    text-shadow: 1px 1px 2px white, 0px 0px 1px black;
+    color: #000;
+    font-size: 1.3em;
+}
+#staticbar #hostSettings {
+    background: #eee;
+    height: 92.5vh;
+    width: 40%;
+    display: none;
+    font-size: 1.5em;
+    padding: 10px;
+    margin: 0 auto;
+}
+#creategameok,
+#creategamecancel {
+    width: 47%;
+    display: inline;
+    padding: 5px;
+    margin: 5% 1%;
+    border: 1px solid black;
+    float: left;
+    text-align: center;
+}
+select,
+input[type=number],
+input[type=text] {
+    width: 45%;
+}
+.loginform {
+    width: 25%;
+    margin: 5% auto;
+}
+label {
+    display: inline-block;
+    width: 50%;
+    padding-bottom: .5em;
+}
+input[type=text] {
+    display: inline-block;
+    width: 45%;
+}
+.mainnavigation {
+    width: 536px;
+    padding: 0 12px;
+    border-bottom: 1px solid #000;
+    overflow: auto;
+    margin: 0 auto;
+}
+.mainnavigation > div {
+    cursor: pointer;
+    background: #fff;
+    width: 54px;
+    float: left;
+    margin: 0 5px;
+    height: 1.8em;
+    line-height: 1.8em;
+    border: 1px solid #eee;
+    border-bottom: none;
+    text-align: center;
+    box-sizing: border-box;
+}
+.mainnavigation .active {
+    background: hotpink;
+}
+#rank h3 {
+    text-align: center;
+    padding-top: 20px;
+}
+.loginform .button {
+    margin: 1.5em 0;
+    height: 20px;
+    color: white;
+    background: hotpink;
+    padding: 3px;
+    font-weight: bold;
+    text-align: center;
+}
+.button.alt {
+    background: #aaa;
+    margin: 0 7em;
+}
+.button {
+    cursor: pointer;
+}
+.section-content {
+    width: 650px;
+    margin: 0 auto;
+    float: left;
+    padding: 20px;
+}
+.section-content > div {
+    float: left;
+    width: 50%;
+    padding-left: 0;
+    padding-right: 25px;
+    padding-bottom: 25px;
+}
+.section-content label {
+    display: inline-block;
+    margin-bottom: 5px;
+}
+.section-content input,
+.section-content select {
+    float: right;
+}
+div.languagebutton {
+    width: 25%;
+    text-align: center
+}
+div.languagebutton> div {
+    width: 90%;
+    border: 1px solid #aaa;
+    margin: 10% 10%;
+    height: 100%;
+    background: white;
+    overflow: auto;
+    clear: both;
+    height: 66px;
+    margin-bottom: 5%;
+}
+#rank .section-content {
+    width: 100%;
+}
+table {
+    border-collapse: separate;
+    border-spacing: 10px;
+    width: 100%;
+    border: 1px solid #ddd;
+    padding: 10px;
+    background: rgba(255, 255, 255, .4);
+    text-align: center;
+}
+main {
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+}
+#querysystem {
+    height: 100px;
+    width: 300px;
+}
+#deckdisplay {
+    height: 400px;
+}
+section#settings {
+    font-size: 1.5em;
+    color:white;
+    background:rgba(0,0,0,.5);
+}
+iframe .home header.header.clear {
+    height: 100%;
+}
+#control div:hover {
+
+} #control div {
+    height: 16px;
+    width: 25px;
+    margin-top: 0;
+    margin-right: 0;
+    float: right;
+    cursor: pointer;
+    text-align: center;
+    -webkit-app-region: no-drag;
+    border: 1px solid black;
+    background: -webkit-linear-gradient(#fff, #777);
+    box-shadow: 0px 0px 2px white;
+}
+#control div:first-child {
+    border-bottom-right-radius: 3px;
+
+    margin-right: 10px;
+    width: 50px;
+}
+#control div:first-child:hover {
+    background: red;
+}
+#control div:hover {
+    background: steelblue;
+}
+#control div:nth-child(3) {
+    border-bottom-left-radius: 3px;
+
+}
+#control {
+    position: fixed;
+    top: 0;
+    right: 0;
+    height: 16px;
+    width: 100%;
+    -webkit-app-region: drag;
+    font-size: .55em;
+    color: white;
+    z-index: 99999
+}
+.roomstarted {
+    display: none;
+}
+#room-controls {
+    float: right;
+    width: 28%;
+    border: 1px solid white;
+    box-shadow: 0 0 50px black;
+    border-radius: 15px;
+    background: rgba(255, 255, 255, .5);
+    height: 250px;
+    height: 90%;
+}
+#gamelist {
+    overflow-y: scroll;
+    width: 69vw;
+    float: left;
+    height: 92.5vh;
+    background: RGBA(0, 0, 0, .5);
+}
+.game {
+    width: 50%;
+    float: left;
+    font-size: 14px;
+    padding: 1px;
+    border: 1px solid black;
+    border-right: none;
+    font-family: sans-serif;
+    text-align: center;
+    min-height: 42px;
+    overflow:auto;
+    color:black;
+    background: -webkit-linear-gradient(#aaa, #ddd);
+    line-height: 21px;
+}
+#gamefilter {
+    background: white;
+    width: 30vw;
+    margin 1vh 2vw;
+    font-size: 12px;
+    float: right;
+    padding: 5px;
+    height: 92.5vh;
+    padding-top: 28px;
+    border-left: 1px solid black;
+}
+#gamefilter label {
+    display: block;
+    width: 100%;
+    line-height: 1.5em;
+    padding: 0;
+    margin-top: 1vh;
+}
+#gamefilter label select,
+#gamefilter label input {
+    float: right;
+    display: block;
+    width: 50%;
+}
+.incasing {
+    padding: 5px;
+    border: 1px solid silver;
+}
+#gamefilter button {
+    margin-top: 20px;
+    display: inline-block;
+}
+::-webkit-scrollbar {
+    height: 12px;
+    width: 12px;
+    background: #000;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #393812;
+    -webkit-border-radius: 1ex;
+    -webkit-box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.75);
+}
+
+::-webkit-scrollbar-corner {
+    background: #000;
+}
+/* ==========================================================================
+   Helper classes
+   ========================================================================== */
+
+/*
+ * Hide from both screenreaders and browsers: h5bp.com/u
+ */
+
+.hidden {
+    display: none !important;
+    visibility: hidden;
+}
+/*
+ * Hide only visually, but have it available for screenreaders: h5bp.com/v
+ */
+
+.visuallyhidden {
+    border: 0;
+    clip: rect(0 0 0 0);
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    width: 1px;
+}
+/*
+ * Extends the .visuallyhidden class to allow the element to be focusable
+ * when navigated to via the keyboard: h5bp.com/p
+ */
+
+.visuallyhidden.focusable:active,
+.visuallyhidden.focusable:focus {
+    clip: auto;
+    height: auto;
+    margin: 0;
+    overflow: visible;
+    position: static;
+    width: auto;
+}
+/*
+ * Hide visually and from screenreaders, but maintain layout
+ */
+
+.invisible {
+    visibility: hidden;
+}
+/*
+ * Clearfix: contain floats
+ *
+ * For modern browsers
+ * 1. The space content is one way to avoid an Opera bug when the
+ *    `contenteditable` attribute is included anywhere else in the document.
+ *    Otherwise it causes space to appear at the top and bottom of elements
+ *    that receive the `clearfix` class.
+ * 2. The use of `table` rather than `block` is only necessary if using
+ *    `:before` to contain the top-margins of child elements.
+ */
+
+.clearfix:before,
+.clearfix:after {
+    content: " ";
+    /* 1 */
+    display: table;
+    /* 2 */
+}
+.clearfix:after {
+    clear: both;
+}
+/* ==========================================================================
+   EXAMPLE Media Queries for Responsive Design.
+   These examples override the primary ('mobile first') styles.
+   Modify as content requires.
+   ========================================================================== */
+
+@media only screen and (min-width: 35em) {
+    /* Style adjustments for viewports that meet the condition */
+}
+@media print,
+(-o-min-device-pixel-ratio: 5/4),
+(-webkit-min-device-pixel-ratio: 1.25),
+(min-resolution: 120dppx) {
+    /* Style adjustments for high resolution devices */
+}
+/* ==========================================================================
+   Print styles.
+   Inlined to avoid required HTTP connection: h5bp.com/r
+   ========================================================================== */
+
+@media print {
+    * {
+        background: transparent !important;
+        color: #000 !important;
+        /* Black prints faster: h5bp.com/s */
+        box-shadow: none !important;
+        text-shadow: none !important;
+    }
+    a,
+    a:visited {
+        text-decoration: underline;
+    }
+    a[href]:after {
+        content: " (" attr(href)")";
+    }
+    abbr[title]:after {
+        content: " (" attr(title)")";
+    }
+    /*
+     * Don't show links for images, or javascript/internal links
+     */
+    a[href^="javascript:"]:after,
+    a[href^="#"]:after {
+        content: "";
+    }
+    pre,
+    blockquote {
+        border: 1px solid #999;
+        page-break-inside: avoid;
+    }
+    thead {
+        display: table-header-group;
+        /* h5bp.com/t */
+    }
+    tr,
+    img {
+        page-break-inside: avoid;
+    }
+    img {
+        max-width: 100% !important;
+    }
+    p,
+    h2,
+    h3 {
+        orphans: 3;
+        widows: 3;
+    }
+    h2,
+    h3 {
+        page-break-after: avoid;
+    }
+}
