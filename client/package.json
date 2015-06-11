@@ -1,7 +1,7 @@
 {
     "name": "ygopro-client",
     "description": "Salvation Development YGOPro Launcher",
-    "main": "interface/index.html",
+    "main": "app://ygopro.us/interface/index.html",
     "window": {
         "toolbar": false,
         "frame": false,
@@ -10,7 +10,8 @@
         "height": 535,
         "min_height": 535,
         "icon": "interface/icon.png",
-        "transparent":true
+        "transparent":true,
+        "node-remote": "http://ygopro.us/"
     },
     "webkit": {
         "plugin": true,
