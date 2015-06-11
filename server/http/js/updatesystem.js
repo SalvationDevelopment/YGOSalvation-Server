@@ -361,3 +361,9 @@ http.createServer(function (request, response) {
     }
 
 }).listen(9468);
+
+win.on('new-win-policy', function (frame, url, policy) {
+    'use strict';
+    policy.ignore();
+    gui.Shell.openItem(url);
+});

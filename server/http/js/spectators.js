@@ -96,7 +96,7 @@ $(document).on("mouseenter", "img.card", function (e) {
 });
 
 window.startgame = startgame;
-window.duel = duel;
+window.duel = {};
 window.animateState = animateState;
 window.game = game;
 
