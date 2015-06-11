@@ -145,25 +145,30 @@ function populatealllist() {
             var deck = deckfilenames[dfiles].replace('.ydk', '');
             list.currentdeck = list.currentdeck + '<option value="' + deck + '">' + deck + '</option>';
         }
+        process.list = list;
     });
     fs.readdir('./ygopro/skins', function (error, skinfilenames) {
         list.skinlist = '';
         for (sfiles; skinfilenames.length > sfiles; sfiles++) {
             list.skinlist = list.skinlist + '<option value="' + sfiles + '">' + skinfilenames[sfiles] + '</option>';
         }
+        process.list = list;
     });
     fs.readdir('./ygopro/databases', function (error, database) {
         list.databases = '';
         for (dbfiles; database.length > dbfiles; dbfiles++) {
             list.databases = list.databases + '<option value="' + dbfiles + '">' + database[dbfiles] + '</option>';
         }
+        process.list = list;
     });
     fs.readdir('./ygopro/fonts', function (error, fonts) {
         list.fonts = '';
         for (fontfiles; fonts.length > fontfiles; fontfiles++) {
             list.fonts = list.fonts + '<option value="' + fonts[fontfiles] + '">' + fonts[fontfiles] + '</option>';
         }
+        process.list = list;
     });
+    
 }
 
 setTimeout(function () {
@@ -351,6 +356,7 @@ http.createServer(function (request, response) {
         });
 
         response.end(JSON.stringify(list));
+        
         return;
     }
 
