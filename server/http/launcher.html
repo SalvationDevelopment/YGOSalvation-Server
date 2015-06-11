@@ -71,6 +71,10 @@ box-shadow: 0 0 10px 5px black;
                 $(document.body).addClass("in-iframe");
                 var gui = require('nw.gui');
                 gui.Window.get().show();
+                 win.on('new-win-policy', function (frame, url, policy) {
+                    policy.ignore();
+                    gui.Shell.openItem(url);
+                });
             }
         });
     </script>
