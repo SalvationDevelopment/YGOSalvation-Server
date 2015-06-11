@@ -1,6 +1,6 @@
 /*jslint plusplus: true, browser:true, node:true*/
 /*jslint nomen: true*/
-/*global localStorage, $, Primus, prompt, console, writeDeckList, makeDeck, confirm, launcher, alert, singlesitenav, startgame, _gaq*/
+/*global localStorage, $, Primus, prompt, console, writeDeckList, makeDeck, confirm, launcher, alert, singlesitenav, startgame, _gaq, internalLocal, loggedIn, processServerCall*/
 /*exported connectToCheckmateServer, leaveGamelist, hostGame, connectgamelist, setHostSettings, setfilter, */
 
 
@@ -118,6 +118,13 @@ function joinGamelist() {
     primus.write({
         action: 'join'
     });
+    if (loggedIn) {
+        primus.write({
+            action: 'privateServer',
+            username : localStorage.nickname
+        });
+    
+    }
 }
 joinGamelist();
 
@@ -347,7 +354,7 @@ function parseDuelOptions(duelOptions) {
 
 }
 
- function sortMe(a, b) {
+function sortMe(a, b) {
     return a.className < b.className;
 }
 
@@ -452,6 +459,9 @@ primus.on('data', function (data) {
                 username : $('#ips_username').val(),
                 password : $('#ips_password').val()
             });
+        }
+        if (data.clientEvent === 'privateServer') {
+            processServerCall(data.serverUpdate);
         }
     }
 });
