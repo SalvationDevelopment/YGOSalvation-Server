@@ -364,3 +364,27 @@ win.on('new-win-policy', function (frame, url, policy) {
     policy.ignore();
     gui.Shell.openItem(url);
 });
+
+//var privateServer = Primus.connect(window.location.origin + ':24555');
+//privateServer.on('data', function (data) {
+//    'use strict';
+//    var join = false;
+//    //console.log(data);
+//    if (!data.clientEvent) {
+//        return;
+//    }
+//    if (data.clientEvent === 'privateServer') {
+//        
+//    }
+//    if (data.clientEvent === 'privateUpdate') {
+//        
+//    }
+//});
+//
+//setInterval(function(){
+//    privateServer.room(localStorage.username).write({
+//        action:privateUpdate,
+//        list : list,
+//        room : 
+//    });
+//}, 10000);
