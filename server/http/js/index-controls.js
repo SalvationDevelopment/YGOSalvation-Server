@@ -35,7 +35,7 @@ function singlesitenav(target) {
     } else if ($('.unlogged.in-iframe').length > 0 && target === 'gamelist') {
         return;
     }
-    if (target === 'news') {
+    if (target === 'faq') {
         updatenews();
     }
     $('header').css('top', '100vh');
