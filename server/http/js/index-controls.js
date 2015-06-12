@@ -5,6 +5,15 @@ function isChecked(id) {
     'use strict';
     return ($(id).is(':checked'));
 }
+function updatenews() {
+    'use strict';
+    $.getJSON('news.json', function (news) {
+        $.get('handlebars/news.handlebars', function (template) {
+            var parser = Handlebars.compile(template);
+            $('#news').append(parser(news));
+        });
+    });
+}
 
 var launcher = false,
     internalLocal = 'home',
@@ -25,6 +34,9 @@ function singlesitenav(target) {
         return true;
     } else if ($('.unlogged.in-iframe').length > 0 && target === 'gamelist') {
         return;
+    }
+    if (target === 'news') {
+        updatenews();
     }
     $('header').css('top', '100vh');
     $('#' + target).css('top', '0');
@@ -137,23 +149,11 @@ $(document).ready(function () {
             $.getJSON('http://127.0.0.1:9468/', processServerCall).fail(function () {
 
             });
-            
-            console.log(parent, window, global);
-            list = process.list;
+
         }, 10000);
     }
 
-    function updatenews() {
-        $.getJSON('news.json', function (news) {
-            $.get('handlebars/news.handlebars', function (template) {
-                var parser = Handlebars.compile(template);
-                $('#news').append(parser(news));
-            });
-        });
-    }
-    updatenews();
-    setInterval(function () {
-        updatenews();
-    }, 120000);
+    
+   
 
 });
