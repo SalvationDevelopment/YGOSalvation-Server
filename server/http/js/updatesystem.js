@@ -1,5 +1,5 @@
 /*jslint node: true, plusplus: true, unparam: false, nomen: true*/
-/*global $, sitelocationdir, prompt, runYGOPro*/
+/*global $, sitelocationdir, prompt, runYGOPro, win, Primus*/
 
 var manifest = '',
     downloadList = [],
@@ -365,26 +365,27 @@ win.on('new-win-policy', function (frame, url, policy) {
     gui.Shell.openItem(url);
 });
 
-//var privateServer = Primus.connect(window.location.origin + ':24555');
-//privateServer.on('data', function (data) {
-//    'use strict';
-//    var join = false;
-//    //console.log(data);
-//    if (!data.clientEvent) {
-//        return;
-//    }
-//    if (data.clientEvent === 'privateServer') {
-//        
-//    }
-//    if (data.clientEvent === 'privateUpdate') {
-//        
-//    }
-//});
-//
-//setInterval(function(){
-//    privateServer.room(localStorage.username).write({
-//        action:privateUpdate,
-//        list : list,
-//        room : 
-//    });
-//}, 10000);
+var privateServer = Primus.connect(window.location.origin + ':24555');
+privateServer.on('data', function (data) {
+    'use strict';
+    var join = false;
+    //console.log(data);
+    if (!data.clientEvent) {
+        return;
+    }
+    if (data.clientEvent === 'privateServer') {
+        
+    }
+    if (data.clientEvent === 'privateUpdate') {
+        
+    }
+});
+
+setInterval(function () {
+    'use strict';
+    privateServer.room(localStorage.username).write({
+        action: 'privateUpdate',
+        list : list,
+        room : localStorage.nickname
+    });
+}, 10000);
