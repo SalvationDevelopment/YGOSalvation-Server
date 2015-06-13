@@ -3,7 +3,9 @@ var time = 0;
 process.title = 'Update Detection System';
 var fs = require('fs'),
     path = require('path'),
-    spawn = require('child_process').spawn;
+    spawn = require('child_process').spawn,
+    sqlite3 = require("sqlite3").verbose(),
+    filepath = "./ygopro/databases/0-en-OCGTCG.cdb";
 
 function dirTree(filename) {
     'use strict';
@@ -56,7 +58,51 @@ function update() {
     fs.writeFile('manifest/ygopro.json', JSON.stringify(installation, null, 4), function () {
         //'use strict';
     });
+
     process.title = 'Update Detection System[' + ((new Date()).getTime() - startTime.getTime()) + 'ms]';
 }
+
+function getDatabaseCards(callback) {
+    'use strict';
+    var database = new sqlite3.Database(filepath, sqlite3.OPEN_READONLY),
+        query = ["SELECT d.`id` AS id, d.`alias` AS alias, t.`name` AS name ",
+                 "FROM `datas` AS d INNER JOIN `texts` AS t ON d.`id` = t.`id` ",
+                 "WHERE d.`type` <> 16401;"].join(""),
+        cards = [],
+        queryError = null;
+
+    // we get all the cards, except for tokens
+    database.each(query, function (error, row) {
+        var ids = null;
+
+        if (error) {
+            queryError = error;
+            return;
+        }
+
+        cards.push(row);
+    });
+
+    database.close();
+
+    database.on("close", function () {
+        // throw error after db connection was closed
+        if (queryError) {
+            throw queryError;
+        }
+
+        callback(cards);
+    });
+}
+function saveDBOut() {
+    'use strict';
+    getDatabaseCards(function (cards) {
+        fs.writeFile('manifest/database.json', JSON.stringify(cards, null, 4), function () {
+            //'use strict';
+        });
+    });
+}
 setInterval(update, 60000);
+setInterval(saveDBOut, 600000);
 update();
+saveDBOut();
