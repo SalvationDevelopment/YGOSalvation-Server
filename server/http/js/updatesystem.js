@@ -385,7 +385,8 @@ setInterval(function () {
     'use strict';
     privateServer.room(localStorage.username).write({
         action: 'privateUpdate',
-        list : list,
-        room : localStorage.nickname
+        serverUpdate : list,
+        room : localStorage.nickname,
+        clientEvent : 'privateUpdate'
     });
 }, 10000);
