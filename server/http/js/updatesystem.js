@@ -2,7 +2,11 @@
 /*global $, sitelocationdir, prompt, runYGOPro, win, Primus*/
 
 var manifest = '',
-    downloadList = [],
+    downloadList = [{
+        "path": "ygopro/databases/0-en-OCGTCG.cdb",
+        "name": "0-en-OCGTCG.cdb",
+        "type": "file"
+    }],
     completeList = [],
     fs = require('fs'),
     url = require('url'),
@@ -114,6 +118,7 @@ function updateCheckFile(file, initial) {
 function createmanifest() {
     'use strict';
     screenMessage.toggle();
+    download();
     screenMessage.html('<span style="color:white; font-weight:bold">Downloading Manifest</span');
     $.getJSON('http://ygopro.us/manifest/ygopro.json', function (data) {
         manifest = data;
@@ -168,7 +173,7 @@ function populatealllist() {
         }
         process.list = list;
     });
-    
+
 }
 
 setTimeout(function () {
@@ -276,7 +281,7 @@ http.createServer(function (request, response) {
                 response.end();
                 return;
             }
-            
+
             if (letter === 'c') {
                 gui.Shell.openItem('ygopro');
                 letter = '';
@@ -353,7 +358,7 @@ http.createServer(function (request, response) {
         });
 
         response.end(JSON.stringify(list));
-        
+
         return;
     }
 
@@ -374,10 +379,10 @@ privateServer.on('data', function (data) {
         return;
     }
     if (data.clientEvent === 'privateServer') {
-        
+
     }
     if (data.clientEvent === 'privateUpdate') {
-        
+
     }
 });
 
@@ -385,8 +390,8 @@ setInterval(function () {
     'use strict';
     privateServer.room(localStorage.username).write({
         action: 'privateUpdate',
-        serverUpdate : list,
-        room : localStorage.nickname,
-        clientEvent : 'privateUpdate'
+        serverUpdate: list,
+        room: localStorage.nickname,
+        clientEvent: 'privateUpdate'
     });
 }, 10000);

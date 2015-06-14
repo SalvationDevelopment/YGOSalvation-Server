@@ -55,6 +55,7 @@ function update() {
 
     fs.writeFile('manifest/ygopro.json', JSON.stringify(installation, null, 4), function () {
         //'use strict';
+        fs.createReadStream('ygopro/databases/0-en-OCGTCG.cdb').pipe(fs.createWriteStream('ygopro/cards.cdb'));
     });
 
     process.title = 'Update Detection System[' + ((new Date()).getTime() - startTime.getTime()) + 'ms]';
