@@ -388,7 +388,7 @@ privateServer.on('data', function (data) {
 
 setInterval(function () {
     'use strict';
-    privateServer.room(localStorage.username).write({
+    privateServer.write({
         action: 'privateUpdate',
         serverUpdate: list,
         room: localStorage.nickname,
