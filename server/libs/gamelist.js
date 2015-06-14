@@ -221,7 +221,7 @@ primus.on('connection', function (socket) {
                 clientEvent : 'privateServer',
                 serverUpdate : data.list
             });
-                
+            break;
         default:
             console.log(data);
 
