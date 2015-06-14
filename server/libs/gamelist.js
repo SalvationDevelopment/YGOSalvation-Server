@@ -174,19 +174,31 @@ primus = new Primus(primusServer, {
 primus.use('rooms', Rooms);
 primus.on('connection', function (socket) {
     'use strict';
+    socket.write({
+        clientEvent : 'setup',
+        ip : socket.address
+    });
     socket.on('data', function (data) {
         data = data || {};
         var action = data.action,
             url,
             post;
         switch (action) {
+        case ('securityServer'):
+            socket.join('securityServer', function () {
+                
+            });
+            break;
         case ('join'):
-            socket.join('activegames', function () {
+            socket.join(socket.address, function () {
                 socket.write({
                     clientEvent : 'privateServer',
-                    serverUpdate : userdata[data.room],
-                    ip : [socket.remoteHost, socket.remoteAddress]
+                    serverUpdate : userdata[socket.address],
+                    ip : socket.address
                 });
+            });
+            socket.join('activegames', function () {
+                socket.write(JSON.stringify(gamelist));
             });
             break;
 
@@ -198,9 +210,10 @@ primus.on('connection', function (socket) {
             socket.nickname = data.nickname;
             break;
         
-        case ('privateServer'):
-            socket.join(data.username, function () {
-                socket.write(JSON.stringify(gamelist));
+        case ('privateServerRequest'):
+            primus.room(socket.address).write({
+                clientEvent : 'privateServerRequest',
+                serverUpdate : data.serverUpdate
             });
             break;
 
@@ -225,11 +238,11 @@ primus.on('connection', function (socket) {
             });
             break;
         case ('privateUpdate'):
-            primus.room(data.room).write({
+            primus.room(socket.address).write({
                 clientEvent : 'privateServer',
                 serverUpdate : data.serverUpdate
             });
-            userdata[data.room] = data.serverUpdate;
+            userdata[socket.address] = data.serverUpdate;
             break;
         default:
             console.log(data);
