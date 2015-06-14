@@ -1,5 +1,11 @@
 ﻿{    "Articles": [
        {
+            "Title": "Anime returns!",
+            "Subtitle": "Added new anime cards and fixed ltos of bugs~",
+            "Content": "11 new anime cards added to the database! Theya re as follows: ",
+            "Author": "Chibi",
+            "Date" : "June 14th, 2015"
+       },{
             "Title": "Are you ready?",
             "Subtitle": "We're here.",
             "Content": "<img src='http://i.imgur.com/HUyfrqF.jpg' style='margin: 0 auto;'>",
@@ -44,7 +50,7 @@
        {
             "Title": " New stuff! Sorry for the delay",
             "Subtitle": "Change Log, 4 new cards",
-            "Content": "<p>4 new cards added, they are as follows: <br /><br />Superheavy Samurai Tsuzumi<br />Majespecter Crow<br />Majespecter Tempest<br />Majespecter Cyclone<br /><br /> Be sure to send your thanks to Mr. YuGiOhHack137 nya!</p>",
+            "Content": "<p>4 new cards added, they are as follows: <br /><br />Dark Magic Twin Burst<br />Scrum Force<br />Cursed Synchro<br />Power Zone<br />Volcanic Wall<br />Contaminated Earth<br />Gathering Wishes<br />Declaration of Rebirth<br />Card of Distrain<br />Synchro Spirits<br />Discord Counter<br /><br /> Credit for the missing Tag Force cards goes to Storm Wolf. Remember to report any bugs or issues with these!</p>",
             "Author": "ChibiChan",
             "Date" : "May 29th, 2015"
         },{
