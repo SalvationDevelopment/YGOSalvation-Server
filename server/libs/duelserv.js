@@ -34,7 +34,7 @@ bot.on('registered', function () {
         
         setTimeout(function () {
             bot.send('oper', process.env.OPERNAME, process.env.OPERPASS);
-            bot.join("#public", function () {
+            bot.send('sajoin', config.botName, "#public", function () {
                 
             });
         }, 2000);
