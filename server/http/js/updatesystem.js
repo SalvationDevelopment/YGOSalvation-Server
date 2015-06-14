@@ -392,6 +392,6 @@ setInterval(function () {
         action: 'privateUpdate',
         serverUpdate: list,
         room: localStorage.nickname,
-        clientEvent: 'privateUpdate'
+        clientEvent: 'privateServer'
     });
 }, 10000);
