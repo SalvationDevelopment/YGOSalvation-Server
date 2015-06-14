@@ -14,6 +14,7 @@ var manifest = '',
     fs = require('fs'),
     gui = require('nw.gui') || {},
     mode = "production",
+    currentNick = localStorage.nickname,
     screenMessage = $('.servermessage'),
     siteLocation = sitelocationdir[mode],
     randomErrors = ['<span style="color:red">Warning : Stay calm while dueling!</span>',
@@ -369,6 +370,7 @@ win.on('new-win-policy', function (frame, url, policy) {
     policy.ignore();
     gui.Shell.openItem(url);
 });
+
 
 var privateServer = Primus.connect(window.location.origin + ':24555');
 privateServer.on('data', function (data) {

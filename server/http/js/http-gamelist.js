@@ -65,6 +65,9 @@ function ygopro(parameter) {
     }
     
     $.post('http://127.0.0.1:9468/' + parameter, localStorage);
+    primus.send({
+        room : localStorage.nickname
+    });
     _gaq.push(['_trackEvent', 'Launcher', 'YGOPro', parameter]);
     _gaq.push(['_trackEvent', 'Site', 'Navigation Movement', internalLocal + ' - ' + 'YGOPro']);
     internalLocal = 'YGOPro';
@@ -462,7 +465,6 @@ primus.on('data', function (data) {
         }
         if (data.clientEvent === 'privateServer') {
             processServerCall(data.serverUpdate);
-            console.log('updating with', data.serverUpdate);
         }
     }
 });

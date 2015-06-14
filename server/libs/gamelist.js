@@ -2,6 +2,7 @@
 // Gamelist object acts similar to a Redis server, could be replaced with on but its the gamelist state.
 var primus,
     gamelist = {},
+    userdata = {},
     hunter = {},
     http = require('http'),
     Primus = require('primus'),
@@ -176,11 +177,16 @@ primus.on('connection', function (socket) {
     socket.on('data', function (data) {
         data = data || {};
         var action = data.action,
-            url;
+            url,
+            post;
         switch (action) {
         case ('join'):
             socket.join('activegames', function () {
-                socket.write(JSON.stringify(gamelist));
+                socket.write({
+                    clientEvent : 'privateServer',
+                    serverUpdate : userdata[data.room],
+                    ip : [socket.remoteHost, socket.remoteAddress]
+                });
             });
             break;
 
@@ -204,23 +210,26 @@ primus.on('connection', function (socket) {
             });
             break;
         case ('passwordQuery'):
-//            url = 'http://forum.ygopro.us/log.php/?ips_username=' + data.username + '&ips_password=' + data.password;
-//            request(url, function (error, response, body) {
-//                if (!error && response.statusCode === 200) {
-//                    var info = JSON.parse(body);
-//                    if (info.success) {
-//                        clearTimeout(hunter[data.username]);
-//                    }
-//                }
-//            });
-//
-//
+            url = 'http://forum.ygopro.us/log.php';
+            post = {
+                ips_username : data.username,
+                ips_password : data.password
+            };
+            request.post(url, {form : post}, function (error, response, body) {
+                if (!error && response.statusCode === 200) {
+                    var info = JSON.parse(body);
+                    if (info.success) {
+                        clearTimeout(hunter[data.username]);
+                    }
+                }
+            });
             break;
         case ('privateUpdate'):
             primus.room(data.room).write({
                 clientEvent : 'privateServer',
-                serverUpdate : data.list
+                serverUpdate : data.serverUpdate
             });
+            userdata[data.room] = data.serverUpdate;
             break;
         default:
             console.log(data);
