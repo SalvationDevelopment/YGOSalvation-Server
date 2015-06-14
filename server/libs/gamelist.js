@@ -215,7 +215,13 @@ primus.on('connection', function (socket) {
 //            });
 //
 //
-//            break;
+            break;
+        case ('privateUpdate'):
+            primus.room(data.room).write({
+                clientEvent : 'privateServer',
+                serverUpdate : data.list
+            });
+                
         default:
             console.log(data);
 
