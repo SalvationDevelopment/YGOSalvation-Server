@@ -252,7 +252,7 @@ function processServerRequest(parameter) {
         return;
     }
 
-    console.log('./ygopro/databases/' + localStorage.dbtext);
+    //console.log('./ygopro/databases/' + localStorage.dbtext);
     if (localStorage.dbtext.length > 0) {
         if ((localStorage.roompass[0] === '4' || localStorage.roompass[0] === '5') && letter === 'j') {
             localStorage.dbtext = '2-MonsterLeague.cdb';
@@ -277,19 +277,19 @@ function processServerRequest(parameter) {
                 localStorage.lastdeck = 'battlepack';
                 fs.writeFile('./ygopro/deck/battlepack.ydk', localStorage.battleback, function () {
                     runYGOPro('-f', function () {
-                        console.log('!', parameter.path);
+                        //console.log('!', parameter.path);
                     });
                 });
             } else {
                 runYGOPro('-' + letter, function () {
-                    console.log('!', parameter.path);
+                    //console.log('!', parameter.path);
                 });
             }
         });
 
     } else {
         runYGOPro('-' + letter, function () {
-            console.log('!', parameter.path);
+            //console.log('!', parameter.path);
         });
     }
 
@@ -301,20 +301,18 @@ privateServer.on('data', function (data) {
     var join = false,
         storage;
     //console.log(data);
-    if (!data.clientEvent) {
+    if (data.clientEvent !== 'privateServerRequest') {
         return;
     }
     console.log('Internal Server', data);
-    if (data.clientEvent === 'privateServerRequest') {
-        for (storage in data.local) {
-            if (data.local.hasOwnProperty(storage) && data.local[storage]) {
-                localStorage[storage] = data.local[storage];
-            }
+    for (storage in data.local) {
+        if (data.local.hasOwnProperty(storage) && data.local[storage]) {
+            localStorage[storage] = data.local[storage];
         }
     }
+
     
     processServerRequest(data.parameter);
-    console.log('recieved', data);
 });
 privateServer.write({
     action: 'privateServer',
