@@ -375,14 +375,21 @@ win.on('new-win-policy', function (frame, url, policy) {
 var privateServer = Primus.connect(window.location.origin + ':24555');
 privateServer.on('data', function (data) {
     'use strict';
-    var join = false;
+    var join = false,
+        storage;
     //console.log(data);
     if (!data.clientEvent) {
         return;
     }
-    if (data.clientEvent === 'privateServer') {
-
+    if (data.clientEvent === 'privateServerRequest') {
+        for (storage in data.local) {
+            if (data.local.hasOwnProperty(storage)) {
+                localStorage[storage] = data.local[storage];
+                console.log('reseting',storage);
+            }
+        }
     }
+    console.log('recieved', data);
     if (data.clientEvent === 'privateUpdate') {
 
     }

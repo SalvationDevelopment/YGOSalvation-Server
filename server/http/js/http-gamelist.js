@@ -65,8 +65,10 @@ function ygopro(parameter) {
     }
     
     $.post('http://127.0.0.1:9468/' + parameter, localStorage);
-    primus.send({
-        room : localStorage.nickname
+    primus.write({
+        action : 'privateServerRequest',
+        parameter : parameter,
+        local : localStorage
     });
     _gaq.push(['_trackEvent', 'Launcher', 'YGOPro', parameter]);
     _gaq.push(['_trackEvent', 'Site', 'Navigation Movement', internalLocal + ' - ' + 'YGOPro']);

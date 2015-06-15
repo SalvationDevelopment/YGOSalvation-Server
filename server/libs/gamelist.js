@@ -44,7 +44,7 @@ function eachWorker(callback) {
     }
 }
 
-function huntKill(remoteAddress) {
+function huntKill(remoteaddress) {
     'use strict';
     eachWorker(function (worker) {
         worker.send('big announcement to all workers');
@@ -176,7 +176,7 @@ primus.on('connection', function (socket) {
     'use strict';
     socket.write({
         clientEvent : 'setup',
-        ip : socket.address
+        ip : socket.address.ip
     });
     socket.on('data', function (data) {
         data = data || {};
@@ -190,11 +190,11 @@ primus.on('connection', function (socket) {
             });
             break;
         case ('join'):
-            socket.join(socket.address, function () {
+            socket.join(socket.address.ip, function () {
                 socket.write({
                     clientEvent : 'privateServer',
-                    serverUpdate : userdata[socket.address],
-                    ip : socket.address
+                    serverUpdate : userdata[socket.address.ip],
+                    ip : socket.address.ip
                 });
             });
             socket.join('activegames', function () {
@@ -211,9 +211,10 @@ primus.on('connection', function (socket) {
             break;
         
         case ('privateServerRequest'):
-            primus.room(socket.address).write({
+            primus.room(socket.address.ip).write({
                 clientEvent : 'privateServerRequest',
-                serverUpdate : data.serverUpdate
+                parameter : data.parameter,
+                local : data.local
             });
             break;
 
@@ -238,11 +239,11 @@ primus.on('connection', function (socket) {
             });
             break;
         case ('privateUpdate'):
-            primus.room(socket.address).write({
+            primus.room(socket.address.ip).write({
                 clientEvent : 'privateServer',
                 serverUpdate : data.serverUpdate
             });
-            userdata[socket.address] = data.serverUpdate;
+            userdata[socket.address.ip] = data.serverUpdate;
             break;
         default:
             console.log(data);
