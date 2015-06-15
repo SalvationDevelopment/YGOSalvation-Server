@@ -22,6 +22,7 @@ var launcher = false,
 
 function singlesitenav(target) {
     'use strict';
+    console.log('navigating to:', target);
     _gaq.push(['_trackEvent', 'Site', 'Navigation', target]);
     _gaq.push(['_trackEvent', 'Site', 'Navigation Movement', internalLocal + ' - ' + target]);
     internalLocal = target;
@@ -71,7 +72,7 @@ function locallogin(init) {
     }
 
     $(document.body).addClass("launcher").removeClass('unlogged').removeClass('web');
-    $('#ips_username, #ips_password').css('display', 'none');
+    $('#ipblogin').css('display', 'none');
 
     _gaq.push(['_trackEvent', 'Launcher', 'Login', localStorage.nickname]);
     singlesitenav('faq');
@@ -147,6 +148,7 @@ $(document).ready(function () {
 
     if (launcher) {
         $('webonly').css('display', 'none');
+        $('#ipblogin').css('display', 'none');
     }
 
     
