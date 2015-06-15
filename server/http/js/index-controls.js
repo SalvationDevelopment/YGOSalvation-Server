@@ -71,7 +71,7 @@ function locallogin(init) {
     }
 
     $(document.body).addClass("launcher").removeClass('unlogged').removeClass('web');
-    $('#ips_username, #ips_password').css('display', 'none');
+    $('#ipblogin').css('display', 'none');
 
     _gaq.push(['_trackEvent', 'Launcher', 'Login', localStorage.nickname]);
     singlesitenav('faq');
@@ -147,6 +147,7 @@ $(document).ready(function () {
 
     if (launcher) {
         $('webonly').css('display', 'none');
+        $('#ipblogin').css('display', 'none');
     }
 
     

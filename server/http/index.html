@@ -133,7 +133,7 @@
         <ul class="featurelist" style="font-size:small">
             <!--<li class="launcheronly"><span class="psudolinksingle " onclick='ygopro("-l")'>LAN Mode</span>
             </li>-->
-            <li class="launcheronly"><span class="psudolinksingle" onclick='ygopro("-d")'>Deck Edit</span>
+            <li class="launcheronly"><span class="psudolinksingle" onclick='ygopro("-d");singlesitenav('deckedit');'>Deck Edit</span>
             </li>
             <li class="launcheronly"><span class="psudolinksingle" onclick='ygopro("-r")'>Replays</span>
             </li class="loophole">
@@ -190,9 +190,9 @@
             </nav>
             <form id="ipblogin" style="text-align:center; color: white !important; display:block; margin:0 auto" class="launcheronly loginsystem">
                 <input id="ips_username" type="text" class="launcheronly loginsystem" name="ips_username" tabindex="1" placeholder="Forum Username">
-                <input id="ips_password" type="password" class="launcheronly loginsystem" name="ips_password" tabindex="2" placeholder="Forum Password"><br><input type="checkbox" id="ips_remember" > Remember Username &amp; Password?<br />
-                <button id="dolog" class="launcheronly loginsystem">Login</button><br />
-                <a class="launcheronly loginsystem" href="http://forum.ygopro.us/index.php?app=core&module=global&section=register" target="_blank">Register via Forum</a> || <a class="launcheronly loginsystem" href="http://forum.ygopro.us/index.php?app=core&module=global&section=lostpass">Forgot Password</a>
+                <input id="ips_password" type="password" class="launcheronly loginsystem" name="ips_password" tabindex="2" placeholder="Forum Password"><br><span style="font-size:.7em"><input type="checkbox" id="ips_remember" > Remember Username &amp; Password?</span><br />
+                <button id="dolog" class="launcheronly loginsystem">Login</button><br /><br />
+                <a class="launcheronly loginsystem" href="http://forum.ygopro.us/index.php?app=core&module=global&section=register" target="_blank">Register via Forum</a> | <a class="launcheronly loginsystem" href="http://forum.ygopro.us/index.php?app=core&module=global&section=lostpass">Forgot Password</a>
             </form>
             <div style="font-size:.5em; text-align:center; color:#747" id="versioninfo">Version 4 : Production 4 : Revision 1</div>
             <div style="font-size:1.5em; text-align:center; color:pink" class='webonly'></div>
@@ -297,7 +297,7 @@
             </div>
         </section>
     </header>
-    <header style="padding-top:50px" id="forum">
+    <header style="padding-top:50px" id="deckedit">
 
 
 
