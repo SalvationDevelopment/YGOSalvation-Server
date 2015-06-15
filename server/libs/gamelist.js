@@ -174,20 +174,17 @@ primus = new Primus(primusServer, {
 primus.use('rooms', Rooms);
 primus.on('connection', function (socket) {
     'use strict';
-    socket.write({
-        clientEvent : 'setup',
-        ip : socket.address.ip
-    });
     socket.on('data', function (data) {
         data = data || {};
         var action = data.action,
             url,
             post;
         switch (action) {
-        case ('securityServer'):
-            socket.join('securityServer', function () {
-                
-            });
+        case ('accessSecurityChannel'):
+            if (data.adminChannelPassword === process.env.OPERPASS) {
+                socket.join('securityServer', function () {});
+            }
+            
             break;
         case ('join'):
             socket.join(socket.address.ip, function () {
