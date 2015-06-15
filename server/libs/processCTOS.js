@@ -18,22 +18,53 @@ var portmin = 30000 + process.env.PORTRANGE * 100, //Port Ranges
     cluster = require('cluster'),
     parsePackets = require('./parsepackets.js'), //Get data sets out of the YGOPro Network API.
     recieveCTOS = require('./recieveCTOS'), // Translate data sets into messages of the API
-
+    events = require('events'),
+    bouncer = new events.EventEmitter(),
     gamelist = {},
     winston = require('winston'),
     path = require('path'),
     coreIsInPlace = false,
-    request = require('request');
+    request = require('request'),
+
+    Primus = require('primus'), //Primus, our Sepiroth-Qliphopth Creator God. Websocket connections.
+    http = require('http'), // SQCG Primus requires http parsing/tcp-handling
+    server = http.createServer(), //throne of the God
+    primus = new Primus(server), // instance of the God
+    Socket = require('primus').createSocket(),
+    client = new Socket('http://ygopro.us:24555'); //Connect the God to the tree;
+
+client.on('data', function (data) {
+    'use strict';
+    var join = false,
+        storage;
+    //console.log(data);
+    if (data.clientEvent !== 'killRequest') {
+        return;
+    }
+    bouncer.emit('kill', data.ip);
+});
+
+
+//client.on('connected', function () {});
+//client.on('close', function () {}); // start shutting down server.
+client.write({
+    action: 'accessSecurityChannel',
+    adminChannelPassword : process.env.OPERPASS
+});
 
 var cHistory = new (winston.Logger)({
     transports: [
         new (winston.transports.Console)(),
-        new (winston.transports.DailyRotateFile)({ filename: ".\\logs\\conection_history.log"})
+        new (winston.transports.DailyRotateFile)({
+            filename: ".\\logs\\conection_history.log"
+        })
     ]
 });
 var coreErrors = new (winston.Logger)({
     transports: [
-        new (winston.transports.DailyRotateFile)({ filename: ".\\logs\\conection_history.log"})
+        new (winston.transports.DailyRotateFile)({
+            filename: ".\\logs\\conection_history.log"
+        })
     ]
 });
 
@@ -92,15 +123,15 @@ function connectToCore(port, data, socket) {
     'use strict';
 
     socket.active_ygocore = net.connect(port, '127.0.0.1', function () {
-        
+
         /* Unlimit the speed of the connection
         by not doing processing on the data
         to incease up network optimization */
         socket.active_ygocore.setNoDelay(true);
-        
+
         /*proxy the data*/
         socket.active_ygocore.write(data);
-        
+
         socket.active = false;
         socket.active_ygocore.on('data', function (core_data) {
             socket.write(core_data);
@@ -228,7 +259,7 @@ function startCore(port, socket, data, callback) {
     if (!coreIsInPlace) {
         return;
     }
-        
+
     var configfile = pickCoreConfig(socket),
         params = port + ' ' + configfile;
 
@@ -242,8 +273,8 @@ function startCore(port, socket, data, callback) {
             messagetype: 'coreMessage',
             coreMessage: {
                 core_message_raw: 'passwordQuery',
-                ip : socket.remoteAddress,
-                username : socket.username
+                ip: socket.remoteAddress,
+                username: socket.username
             }
         });
     }
@@ -289,7 +320,12 @@ function authenticate(socket) {
 
             }
         }
-        
+
+    });
+    bouncer.on('kill', function (ip) {
+        if (ip === socket.remoteAddress) {
+            socket.end();
+        }
     });
 }
 

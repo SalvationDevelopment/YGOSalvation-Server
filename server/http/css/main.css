@@ -1446,7 +1446,7 @@ div[data-game^="0"] {
     color: yellow;
 }
 div[data-game^="0"]:not(.started) {
-   background-image : url(http://ygopro.us/img/ocg.png);
+   background-image : url(https://ygopro.us/img/ocg.png);
     background-size : 100% 100%;
     color: white;
 }
@@ -1458,7 +1458,7 @@ div[data-game^="1"] {
     color: blue;
 }
 div[data-game^="1"]:not(.started) {
-   background-image : url(http://ygopro.us/img/tcg.png);
+   background-image : url(https://ygopro.us/img/tcg.png);
     background-size : 100% 100%;
     color: white;
 }
@@ -1471,14 +1471,14 @@ div[data-game^="2"] {
 }
 
 div[data-game^="2"]:not(.started) {
-    background-image : url(http://ygopro.us/img/tcgocg.png);
+    background-image : url(https://ygopro.us/img/tcgocg.png);
     background-size : 100% 100%;
     color: white;
 }
 
 div[data-game^="3"]:not(.started) {
     /* Anime */
-    background-image : url(http://ygopro.us/img/anime.png);
+    background-image : url(https://ygopro.us/img/anime.png);
     background-size : 100% 100%;
     color: white;
 }
