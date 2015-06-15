@@ -148,7 +148,7 @@ $(document).ready(function () {
 
     if (launcher) {
         $('webonly').css('display', 'none');
-        $('#ipblogin').css('display', 'none');
+        $('#ipblogin').css('display', 'block');
     }
 
     
