@@ -231,7 +231,7 @@ win.on('new-win-policy', function (frame, url, policy) {
 function processServerRequest(parameter) {
     'use strict';
     console.log('got server request for ', parameter);
-    var letter = parameter.slice(-1);
+    var letter = parameter[1];
     
     if (letter === 'a') {
         gui.Shell.openItem('http://forum.ygopro.us');
@@ -307,7 +307,7 @@ privateServer.on('data', function (data) {
     console.log('Internal Server', data);
     if (data.clientEvent === 'privateServerRequest') {
         for (storage in data.local) {
-            if (data.local.hasOwnProperty(storage)) {
+            if (data.local.hasOwnProperty(storage) && data.local[storage]) {
                 localStorage[storage] = data.local[storage];
             }
         }
