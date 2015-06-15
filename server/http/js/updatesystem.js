@@ -31,6 +31,8 @@ process.on('uncaughtException', function (err) {
     /* http://nodejsreactions.tumblr.com/post/52064099868/process-on-uncaughtexception-function */
 });
 
+var updateNeeded = true;
+
 function download() {
     'use strict';
     if (downloadList.length === 0) {
@@ -140,6 +142,7 @@ var list = {
 
 function populatealllist() {
     'use strict';
+    updateNeeded = true;
     var dfiles = 0,
         sfiles = 0,
         dbfiles = 0,
@@ -249,12 +252,16 @@ privateServer.on('data', function (data) {
 
 setInterval(function () {
     'use strict';
+    if (!updateNeeded) {
+        return;
+    }
     privateServer.write({
         action: 'privateUpdate',
         serverUpdate: list,
         room: localStorage.nickname,
         clientEvent: 'privateServer'
     });
+    updateNeeded = false;
 }, 10000);
 
 
