@@ -269,14 +269,14 @@ function startCore(port, socket, data, callback) {
         return;
     } else {
         //contact main process.
-        process.send({
-            messagetype: 'coreMessage',
-            coreMessage: {
-                core_message_raw: 'passwordQuery',
-                ip: socket.remoteAddress,
-                username: socket.username
-            }
-        });
+//        process.send({
+//            messagetype: 'coreMessage',
+//            coreMessage: {
+//                core_message_raw: 'passwordQuery',
+//                ip: socket.remoteAddress,
+//                username: socket.username
+//            }
+//        });
     }
 
     socket.core = childProcess.spawn(startDirectory + '/../ygocore/YGOServer.exe', [port, configfile], {
@@ -322,11 +322,11 @@ function authenticate(socket) {
         }
 
     });
-    bouncer.on('kill', function (ip) {
-        if (ip === socket.remoteAddress) {
-            socket.end();
-        }
-    });
+//    bouncer.on('kill', function (ip) {
+//        if (ip === socket.remoteAddress) {
+//            socket.end();
+//        }
+//    });
 }
 
 /* ..and VOLIA! Game Request Routing */
