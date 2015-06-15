@@ -323,9 +323,6 @@ privateServer.write({
 
 setInterval(function () {
     'use strict';
-    if (!updateNeeded) {
-        return;
-    }
     privateServer.write({
         action: 'privateUpdate',
         serverUpdate: list,
@@ -333,6 +330,6 @@ setInterval(function () {
         clientEvent: 'privateServer'
     });
     updateNeeded = false;
-}, 10000);
+}, 15000);
 
 
