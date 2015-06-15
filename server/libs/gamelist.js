@@ -4,10 +4,16 @@ var primus,
     gamelist = {},
     userdata = {},
     hunter = {},
-    http = require('http'),
+    fs = require('fs'),
+    ssloptions = {
+      ca:   fs.readFileSync(process.env.SSL + 'sub.class1.server.ca.pem'),
+      key:  fs.readFileSync(process.env.SSL + 'ssl.key.unsecure'),
+      cert: fs.readFileSync(process.env.SSL + 'ssl.crt')
+    },
+    http = require('https'),
     Primus = require('primus'),
     Rooms = require('primus-rooms'),
-    primusServer = http.createServer().listen(24555),
+    primusServer = http.createServer(ssloptions).listen(24555),
     duelserv = require('./duelserv.js'),
     cluster = require('cluster'),
     previousAnnouncement = "",
@@ -174,10 +180,7 @@ primus = new Primus(primusServer, {
 primus.use('rooms', Rooms);
 primus.on('connection', function (socket) {
     'use strict';
-    socket.write({
-        clientEvent : 'setup',
-        ip : socket.address.ip
-    });
+    socket.join(socket.address.ip, function () {});
     socket.on('data', function (data) {
         data = data || {};
         var action = data.action,

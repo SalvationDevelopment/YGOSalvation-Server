@@ -2,20 +2,16 @@
 /*global $, sitelocationdir, prompt, runYGOPro, win, Primus*/
 
 var manifest = '',
-    downloadList = [{
-        "path": "ygopro/databases/0-en-OCGTCG.cdb",
-        "name": "0-en-OCGTCG.cdb",
-        "type": "file"
-    }],
+    downloadList = [],
     completeList = [],
     fs = require('fs'),
     url = require('url'),
-    http = require('http'),
+    http = require('https'),
     gui = require('nw.gui') || {},
     mode = "production",
     currentNick = localStorage.nickname,
     screenMessage = $('.servermessage'),
-    siteLocation = sitelocationdir[mode],
+    siteLocation = 'https://ygopro.us',
     randomErrors = ['<span style="color:red">Warning : Stay calm while dueling!</span>',
                    '<span style="color:red">Warning : Do not insult people or else!</span>',
                    '<span style="color:red">Warning : Be careful what tone you use. Use emoticons to be clear!</span>',
@@ -43,7 +39,6 @@ function download() {
         file = fs.createWriteStream(target.path),
         options = {
             host: url.parse(siteLocation + '/' + target.path).host,
-            port: 80,
             path: url.parse(siteLocation + '/' + target.path).pathname
         };
     if (target.path.indexOf('Thumbs.db') > -1) {
@@ -122,7 +117,7 @@ function createmanifest() {
     screenMessage.toggle();
     download();
     screenMessage.html('<span style="color:white; font-weight:bold">Downloading Manifest</span');
-    $.getJSON('http://ygopro.us/manifest/ygopro.json', function (data) {
+    $.getJSON('https://ygopro.us/manifest/ygopro.json', function (data) {
         manifest = data;
         //console.log(manifest);
         updateCheckFile(manifest, true);
@@ -252,7 +247,7 @@ function processServerRequest(parameter) {
         return;
     }
 
-    //console.log('./ygopro/databases/' + localStorage.dbtext);
+    console.log('./ygopro/databases/' + localStorage.dbtext);
     if (localStorage.dbtext.length > 0) {
         if ((localStorage.roompass[0] === '4' || localStorage.roompass[0] === '5') && letter === 'j') {
             localStorage.dbtext = '2-MonsterLeague.cdb';
@@ -295,7 +290,7 @@ function processServerRequest(parameter) {
 
 }
 
-var privateServer = Primus.connect(window.location.origin + ':24555');
+var privateServer = Primus.connect('wss://ygopro.us:24555');
 privateServer.on('data', function (data) {
     'use strict';
     var join = false,

@@ -115,7 +115,7 @@ $(document).ready(function () {
     }
     $("#dolog").click(function (ev) {
         _gaq.push(['_trackEvent', 'Launcher', 'Attempt Login', $('#ips_username').val()]);
-        var url = "http://forum.ygopro.us/log.php";
+        var url = "https://forum.ygopro.us/log.php";
         $.ajax({
             type: "POST",
             url: url,
