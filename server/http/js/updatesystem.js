@@ -11,7 +11,6 @@ var manifest = '',
     fs = require('fs'),
     url = require('url'),
     http = require('http'),
-    fs = require('fs'),
     gui = require('nw.gui') || {},
     mode = "production",
     currentNick = localStorage.nickname,
@@ -193,43 +192,6 @@ setTimeout(function () {
     fs.watch('./ygopro/deck', populatealllist);
 }, 10000);
 
-var http = require('http');
-var querystring = require('querystring');
-
-function processPost(request, response, callback) {
-    "use strict";
-    var queryData = "";
-    if (typeof callback !== 'function') {
-        return null;
-    }
-    if (request.method === 'DELETE') {
-        console.log('deleting cache');
-        require('nw.gui').App.clearCache();
-    }
-    if (request.method === 'POST') {
-        request.on('data', function (data) {
-            queryData += data;
-            if (queryData.length > 1e6) {
-                queryData = "";
-                response.writeHead(413, {
-                    'Content-Type': 'text/plain'
-                }).end();
-                request.connection.destroy();
-            }
-        });
-
-        request.on('end', function () {
-            request.post = querystring.parse(queryData);
-            callback();
-        });
-
-    } else {
-        response.writeHead(200, {
-            'Content-Type': 'text/plain'
-        });
-        response.end(JSON.stringify(list));
-    }
-}
 
 function copyFile(source, target, cb) {
     'use strict';
@@ -256,114 +218,6 @@ function copyFile(source, target, cb) {
     });
     read.pipe(wr);
 }
-http.createServer(function (request, response) {
-    'use strict';
-    response.setHeader('Access-Control-Allow-Origin', '*');
-
-    // Request methods you wish to allow
-    response.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
-
-    // Request headers you wish to allow
-    response.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
-
-    // Set to true if you need the website to include cookies in the requests sent
-    // to the API (e.g. in case you use sessions)
-    response.setHeader('Access-Control-Allow-Credentials', true);
-
-    if (request.method === 'POST') {
-        processPost(request, response, function () {
-            console.log(request.post);
-            var storage,
-                parameter = url.parse(request.url),
-                letter = parameter.path.slice(-1);
-            console.log(parameter.path, letter);
-            if (letter === 'a') {
-                gui.Shell.openItem('http://forum.ygopro.us');
-                response.end();
-                return;
-            }
-
-            if (letter === 'c') {
-                gui.Shell.openItem('ygopro');
-                letter = '';
-                response.end();
-                return;
-            }
-            if (letter === 'k') {
-                response.end();
-                require('nw.gui').Window.get().close();
-                return;
-            }
-            for (storage in request.post) {
-                if (request.post.hasOwnProperty(storage)) {
-                    localStorage[storage] = request.post[storage];
-                }
-            }
-            if (letter === 'b') {
-                gui.Shell.openItem(localStorage.site);
-                response.end();
-                return;
-            }
-
-            console.log('./ygopro/databases/' + localStorage.dbtext);
-            if (localStorage.dbtext.length > 0) {
-                if ((localStorage.roompass[0] === '4' || localStorage.roompass[0] === '5') && letter === 'j') {
-                    localStorage.dbtext = '2-MonsterLeague.cdb';
-                }
-                if ((localStorage.roompass.substring(11, 13) === '21') && letter === 'j') {
-                    localStorage.dbtext = '3-Goats.cdb';
-                }
-                if ((localStorage.roompass.substring(11, 13) === '22') && letter === 'j') {
-                    localStorage.dbtext = '4-Newgioh.cdb';
-                }
-                if (localStorage.roompass[0] === '3' && letter === 'j') {
-                    localStorage.dbtext = 'Z-CWA.cdb';
-                }
-                if ((localStorage.roompass[0] === '0' || localStorage.roompass[0] === '1' || localStorage.roompass[0] === '2') && letter === 'j') {
-                    localStorage.dbtext = '0-en-OCGTCG.cdb';
-                }
-                copyFile('./ygopro/databases/' + localStorage.dbtext, './ygopro/cards.cdb', function (cdberror) {
-                    if (cdberror) {
-                        throw 'Failed to copy database';
-                    }
-                    if (localStorage.roompass[0] === '4' && letter === 'j') {
-                        localStorage.lastdeck = 'battlepack';
-                        fs.writeFile('./ygopro/deck/battlepack.ydk', localStorage.battleback, function () {
-                            runYGOPro('-f', function () {
-                                console.log('!', parameter.path);
-                            });
-                        });
-                    } else {
-                        runYGOPro('-' + letter, function () {
-                            console.log('!', parameter.path);
-                        });
-                    }
-                });
-
-            } else {
-                runYGOPro('-' + letter, function () {
-                    console.log('!', parameter.path);
-                });
-            }
-            // Use request.post here
-
-            response.writeHead(200, "OK", {
-                'Content-Type': 'text/plain'
-            });
-            response.end();
-            return;
-        });
-    } else {
-        response.writeHead(200, "OK", {
-            'Content-Type': 'text/plain'
-        });
-
-        response.end(JSON.stringify(list));
-
-        return;
-    }
-
-}).listen(9468);
 
 win.on('new-win-policy', function (frame, url, policy) {
     'use strict';
@@ -385,14 +239,12 @@ privateServer.on('data', function (data) {
         for (storage in data.local) {
             if (data.local.hasOwnProperty(storage)) {
                 localStorage[storage] = data.local[storage];
-                console.log('reseting',storage);
+                console.log('reseting', storage);
             }
         }
     }
+    processServerRequest(data.parameter);
     console.log('recieved', data);
-    if (data.clientEvent === 'privateUpdate') {
-
-    }
 });
 
 setInterval(function () {
@@ -404,3 +256,71 @@ setInterval(function () {
         clientEvent: 'privateServer'
     });
 }, 10000);
+
+
+function processServerRequest(parameter) {
+    'use strict';
+   
+    var letter = parameter.path.slice(-1);
+    
+    if (letter === 'a') {
+        gui.Shell.openItem('http://forum.ygopro.us');
+        return;
+    }
+
+    if (letter === 'c') {
+        gui.Shell.openItem('ygopro');
+        letter = '';
+        return;
+    }
+    if (letter === 'k') {
+        require('nw.gui').Window.get().close();
+        return;
+    }
+    if (letter === 'b') {
+        gui.Shell.openItem(localStorage.site);
+        return;
+    }
+
+    console.log('./ygopro/databases/' + localStorage.dbtext);
+    if (localStorage.dbtext.length > 0) {
+        if ((localStorage.roompass[0] === '4' || localStorage.roompass[0] === '5') && letter === 'j') {
+            localStorage.dbtext = '2-MonsterLeague.cdb';
+        }
+        if ((localStorage.roompass.substring(11, 13) === '21') && letter === 'j') {
+            localStorage.dbtext = '3-Goats.cdb';
+        }
+        if ((localStorage.roompass.substring(11, 13) === '22') && letter === 'j') {
+            localStorage.dbtext = '4-Newgioh.cdb';
+        }
+        if (localStorage.roompass[0] === '3' && letter === 'j') {
+            localStorage.dbtext = 'Z-CWA.cdb';
+        }
+        if ((localStorage.roompass[0] === '0' || localStorage.roompass[0] === '1' || localStorage.roompass[0] === '2') && letter === 'j') {
+            localStorage.dbtext = '0-en-OCGTCG.cdb';
+        }
+        copyFile('./ygopro/databases/' + localStorage.dbtext, './ygopro/cards.cdb', function (cdberror) {
+            if (cdberror) {
+                throw 'Failed to copy database';
+            }
+            if (localStorage.roompass[0] === '4' && letter === 'j') {
+                localStorage.lastdeck = 'battlepack';
+                fs.writeFile('./ygopro/deck/battlepack.ydk', localStorage.battleback, function () {
+                    runYGOPro('-f', function () {
+                        console.log('!', parameter.path);
+                    });
+                });
+            } else {
+                runYGOPro('-' + letter, function () {
+                    console.log('!', parameter.path);
+                });
+            }
+        });
+
+    } else {
+        runYGOPro('-' + letter, function () {
+            console.log('!', parameter.path);
+        });
+    }
+
+}
