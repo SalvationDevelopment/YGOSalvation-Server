@@ -228,46 +228,9 @@ win.on('new-win-policy', function (frame, url, policy) {
     gui.Shell.openItem(url);
 });
 
-
-var privateServer = Primus.connect(window.location.origin + ':24555');
-privateServer.on('data', function (data) {
-    'use strict';
-    var join = false,
-        storage;
-    //console.log(data);
-    if (!data.clientEvent) {
-        return;
-    }
-    if (data.clientEvent === 'privateServerRequest') {
-        for (storage in data.local) {
-            if (data.local.hasOwnProperty(storage)) {
-                localStorage[storage] = data.local[storage];
-                console.log('reseting', storage);
-            }
-        }
-    }
-    processServerRequest(data.parameter);
-    console.log('recieved', data);
-});
-
-setInterval(function () {
-    'use strict';
-    if (!updateNeeded) {
-        return;
-    }
-    privateServer.write({
-        action: 'privateUpdate',
-        serverUpdate: list,
-        room: localStorage.nickname,
-        clientEvent: 'privateServer'
-    });
-    updateNeeded = false;
-}, 10000);
-
-
 function processServerRequest(parameter) {
     'use strict';
-   
+    console.log('got server request for ', parameter);
     var letter = parameter.path.slice(-1);
     
     if (letter === 'a') {
@@ -331,3 +294,41 @@ function processServerRequest(parameter) {
     }
 
 }
+
+var privateServer = Primus.connect(window.location.origin + ':24555');
+privateServer.on('data', function (data) {
+    'use strict';
+    var join = false,
+        storage;
+    //console.log(data);
+    if (!data.clientEvent) {
+        return;
+    }
+    if (data.clientEvent === 'privateServerRequest') {
+        for (storage in data.local) {
+            if (data.local.hasOwnProperty(storage)) {
+                localStorage[storage] = data.local[storage];
+                console.log('reseting', storage);
+            }
+        }
+    }
+    
+    processServerRequest(data.parameter);
+    console.log('recieved', data);
+});
+
+setInterval(function () {
+    'use strict';
+    if (!updateNeeded) {
+        return;
+    }
+    privateServer.write({
+        action: 'privateUpdate',
+        serverUpdate: list,
+        room: localStorage.nickname,
+        clientEvent: 'privateServer'
+    });
+    updateNeeded = false;
+}, 10000);
+
+
