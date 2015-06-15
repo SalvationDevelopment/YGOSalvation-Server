@@ -231,7 +231,7 @@ win.on('new-win-policy', function (frame, url, policy) {
 function processServerRequest(parameter) {
     'use strict';
     console.log('got server request for ', parameter);
-    var letter = parameter.path.slice(-1);
+    var letter = parameter.slice(-1);
     
     if (letter === 'a') {
         gui.Shell.openItem('http://forum.ygopro.us');
@@ -295,7 +295,7 @@ function processServerRequest(parameter) {
 
 }
 
-var privateServer = Primus.connect('http://ygopro.us:24555');
+var privateServer = Primus.connect(window.location.origin + ':24555');
 privateServer.on('data', function (data) {
     'use strict';
     var join = false,
@@ -309,7 +309,6 @@ privateServer.on('data', function (data) {
         for (storage in data.local) {
             if (data.local.hasOwnProperty(storage)) {
                 localStorage[storage] = data.local[storage];
-                console.log('reseting', storage);
             }
         }
     }
