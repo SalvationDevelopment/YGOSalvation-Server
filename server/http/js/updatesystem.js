@@ -295,7 +295,7 @@ function processServerRequest(parameter) {
 
 }
 
-var privateServer = Primus.connect(window.location.origin + ':24555');
+var privateServer = Primus.connect('http://ygopro.us:24555');
 privateServer.on('data', function (data) {
     'use strict';
     var join = false,
@@ -304,6 +304,7 @@ privateServer.on('data', function (data) {
     if (!data.clientEvent) {
         return;
     }
+    console.log('Internal Server', data);
     if (data.clientEvent === 'privateServerRequest') {
         for (storage in data.local) {
             if (data.local.hasOwnProperty(storage)) {
@@ -315,6 +316,10 @@ privateServer.on('data', function (data) {
     
     processServerRequest(data.parameter);
     console.log('recieved', data);
+});
+privateServer.write({
+    action: 'privateServer',
+    username : localStorage.nickname
 });
 
 setInterval(function () {
