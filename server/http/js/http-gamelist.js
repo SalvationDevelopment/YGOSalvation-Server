@@ -64,7 +64,7 @@ function ygopro(parameter) {
         return;
     }
     
-    $.post('http://127.0.0.1:9468/' + parameter, localStorage);
+    //$.post('http://127.0.0.1:9468/' + parameter, localStorage);
     primus.write({
         action : 'privateServerRequest',
         parameter : parameter,

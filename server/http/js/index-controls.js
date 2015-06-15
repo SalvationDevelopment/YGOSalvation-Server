@@ -143,14 +143,7 @@ $(document).ready(function () {
     });
 
     if (launcher) {
-        //locallogin(true);
         $('webonly').css('display', 'none');
-        setInterval(function () {
-            $.getJSON('http://127.0.0.1:9468/', processServerCall).fail(function () {
-
-            });
-
-        }, 10000);
     }
 
     
