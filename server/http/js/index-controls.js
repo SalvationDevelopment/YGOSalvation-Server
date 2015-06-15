@@ -85,7 +85,10 @@ function locallogin(init) {
 }
 
 function processServerCall(data) {
-    'use strict'; //small kittens hate localhost
+    'use strict';
+    if (!data.currentdeck) {
+        return;
+    }
     var selected = $(".currentdeck option:selected").val(),
         selectedskin = $("#skinlist option:selected").val(),
         selectedfont = $("#fontlist option:selected").val(),
