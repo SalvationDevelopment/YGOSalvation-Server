@@ -60,7 +60,14 @@
         -webkit-animation-duration: 1s;
         -webkit-animation-iteration-count: 10;
         }
-        
+        #ips_username {
+            border-top-left-radius: 8px;
+            border-bottom-left-radius: 20px;
+        }
+        #ips_password {
+            border-top-right-radius: 8px;
+            border-bottom-right-radius: 20px;
+        }
         
         .unlogged input#login-username {
             display: block;
@@ -125,6 +132,7 @@
 </head>
 
 <body class="unlogged">
+    <div id="uniqueid" style="display:none"></div>
     <div style="z-index:40; position:relative;">
         <span class="psudolinksingle" onclick="singlesitenav('home')" id='psudologo'>
             <h1 style="font-size:1.2em">
