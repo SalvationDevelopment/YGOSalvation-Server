@@ -10,7 +10,7 @@ var bot,
         server: "ygopro.us",
         botName: "DuelServ"
     };
-console.log('starting Bot');
+
 function randomString() {
     'use strict';
     var charSet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789',
@@ -30,7 +30,6 @@ bot = new irc.Client(config.server, config.botName, {
 
 bot.on('registered', function () {
     'use strict';
-    console.log('IRC connected');
     if (process.env.OPERNAME && process.env.OPERPASS) {
         
         setTimeout(function () {
