@@ -45,7 +45,7 @@ function saveSettings() {
 var mode = "production",
     gamelistcache,
     screenMessage = $('#servermessages'),
-    uniqueID = '';
+    uniqueID = $('#uniqueid').html();
 
 function ygopro(parameter) {
     'use strict';
@@ -53,13 +53,13 @@ function ygopro(parameter) {
     localStorage.serverport = '8911';
     localStorage.lastport = '8911';
     saveSettings();
-     if (localStorage.roompass){
+    if (localStorage.roompass) {
         if (localStorage.roompass[0] === '4') {
             //if battleback
             localStorage.battleback = writeDeckList(makeDeck(9));
     
         }
-     }
+    }
     if (!launcher) {
         singlesitenav('duelscreen');
         alert('You need to be in the launcher to do join games.');
@@ -130,7 +130,8 @@ function joinGamelist() {
     if (loggedIn) {
         primus.write({
             action: 'privateServer',
-            username : localStorage.nickname
+            username : localStorage.nickname,
+            uniqueID : uniqueID
         });
     
     }
