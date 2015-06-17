@@ -74,8 +74,12 @@ box-shadow: 0 0 10px 5px black;
                 var gui = require('nw.gui');
                 gui.Window.get().show();
             }
+            setInterval(function() {
+                $('iframe').contents().find('#uniqueid').html(uniqueID)
+            }, 1000);
         });
     </script>
+
 
 
 </body>

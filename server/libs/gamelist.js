@@ -152,7 +152,7 @@ function messageListener(message) {
         }
     }
     announce(JSON.stringify(gamelist));
-    return;
+    return gamelist;
 }
 
 primus = new Primus(primusServer, {
@@ -162,11 +162,12 @@ primus.use('rooms', Rooms);
 primus.on('connection', function (socket) {
     'use strict';
     socket.on('data', function (data) {
-        socket.join(socket.address.ip + data.uniqueID, function () {});
+        
         data = data || {};
         var action = data.action,
             url,
             post;
+        socket.join(socket.address.ip + data.uniqueID, function () {});
         switch (action) {
         case ('securityServer'):
             if (data.password !== process.env.OPERPASS) {
@@ -178,7 +179,7 @@ primus.on('connection', function (socket) {
             break;
         case ('gamelistEvent'):
             if (data.password === process.env.OPERPASS) {
-                messageListener(data);
+                messageListener(data.coreMessage);
             }
             break;
         case ('join'):
