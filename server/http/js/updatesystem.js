@@ -1,5 +1,5 @@
 /*jslint node: true, plusplus: true, unparam: false, nomen: true*/
-/*global $, sitelocationdir, prompt, runYGOPro, win, Primus*/
+/*global $, sitelocationdir, prompt, runYGOPro, win, Primus, uniqueID*/
 
 var manifest = '',
     downloadList = [],
@@ -311,7 +311,8 @@ privateServer.on('data', function (data) {
 });
 privateServer.write({
     action: 'privateServer',
-    username : localStorage.nickname
+    username : localStorage.nickname,
+    uniqueID : uniqueID
 });
 
 setInterval(function () {
@@ -320,7 +321,8 @@ setInterval(function () {
         action: 'privateUpdate',
         serverUpdate: list,
         room: localStorage.nickname,
-        clientEvent: 'privateServer'
+        clientEvent: 'privateServer',
+        uniqueID : uniqueID
     });
     updateNeeded = false;
 }, 15000);

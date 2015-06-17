@@ -57,10 +57,11 @@ box-shadow: 0 0 10px 5px black;
     
     <script>
         $('#iframemainbody').attr('src', sitelocationdir[mode]);
+        
     </script>
    
     <script>
-        
+        var uniqueID = Math.random().toString(24).substring(7) + Math.random().toString(24).substring(7)
         $.getScript(sitelocationdir[mode] + "/js/updatesystem.js");
         $.getScript(sitelocationdir[mode] + "/js/vendor/primus.js");
     </script>
@@ -69,6 +70,7 @@ box-shadow: 0 0 10px 5px black;
         $(function () {
             if (window.self != window.top) {
                 $(document.body).addClass("in-iframe");
+                $('iframe').contents().find('#uniqueID').html(uniqueID)
                 var gui = require('nw.gui');
                 gui.Window.get().show();
             }
