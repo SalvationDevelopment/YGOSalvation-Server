@@ -49,7 +49,7 @@ var mode = "production",
 
 function ygopro(parameter) {
     'use strict';
-    uniqueID = $('#uniqueID').html();
+    uniqueID = $('#uniqueid').html();
     localStorage.serverport = '8911';
     localStorage.lastport = '8911';
     saveSettings();
