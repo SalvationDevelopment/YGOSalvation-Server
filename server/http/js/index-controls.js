@@ -87,7 +87,7 @@ function locallogin(init) {
 
 function processServerCall(data) {
     'use strict';
-    if (!data.currentdeck) {
+    if (!data || !data.currentdeck) { // secure property lookup if data is undefined
         return;
     }
     var selected = $(".currentdeck option:selected").val(),
