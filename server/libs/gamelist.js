@@ -1,16 +1,20 @@
 /*jslint  node: true, plusplus: true, white: false*/
 // Gamelist object acts similar to a Redis server, could be replaced with on but its the gamelist state.
+try {
+    var fs = require('fs'),
+        ssloptions = {
+            ca:   fs.readFileSync(process.env.SSL + 'sub.class1.server.ca.pem'),
+            key:  fs.readFileSync(process.env.SSL + 'ssl.key.unsecure'),
+            cert: fs.readFileSync(process.env.SSL + 'ssl.crt')
+        },
+        http = require('https');
+} catch (e) {
+    var http = require('http');
+}
 var primus,
     gamelist = {},
     userdata = {},
     hunter = {},
-    fs = require('fs'),
-    ssloptions = {
-      ca:   fs.readFileSync(process.env.SSL + 'sub.class1.server.ca.pem'),
-      key:  fs.readFileSync(process.env.SSL + 'ssl.key.unsecure'),
-      cert: fs.readFileSync(process.env.SSL + 'ssl.crt')
-    },
-    http = require('https'),
     Primus = require('primus'),
     Rooms = require('primus-rooms'),
     primusServer = http.createServer(ssloptions).listen(24555),
@@ -39,23 +43,6 @@ function announce(announcement) {
     }
 }
 
-function eachWorker(callback) {
-    'use strict';
-    var id;
-    
-    for (id in cluster.workers) {
-        if (cluster.workers.hasOwnProperty(id)) {
-            callback(cluster.workers[id]);
-        }
-    }
-}
-
-function huntKill(remoteaddress) {
-    'use strict';
-    eachWorker(function (worker) {
-        worker.send('big announcement to all workers');
-    });
-}
 function handleCoreMessage(core_message_raw, port, pid) {
     'use strict';
     if (core_message_raw.toString().indexOf("::::") < 0) {
@@ -157,21 +144,14 @@ function messageListener(message) {
         if (gamelist.hasOwnProperty(game)) {
             if (gamelist[game].players.length === 0 && gamelist[game].spectators === 0) {
                 delete gamelist[game];
-                continue;
             }
-            if (game.length !== 24) {
+            if (gamelist[game] && game.length !== 24) {
                 delete gamelist[game];
-                continue;
             }
-            //            if ((((new Date()) - (gamelist[game].time)) > 600000) && !gamelist.started) {
-            //                delete gamelist[game];
-            //                
-            //            }
         }
     }
-    //primus.room('activegames').write(JSON.stringify(gamelist));
     announce(JSON.stringify(gamelist));
-    return gamelist;
+    return;
 }
 
 primus = new Primus(primusServer, {
@@ -180,24 +160,32 @@ primus = new Primus(primusServer, {
 primus.use('rooms', Rooms);
 primus.on('connection', function (socket) {
     'use strict';
-    socket.join(socket.address.ip, function () {});
     socket.on('data', function (data) {
+        socket.join(socket.address.ip + data.uniqueID, function () {});
         data = data || {};
         var action = data.action,
             url,
             post;
         switch (action) {
         case ('securityServer'):
+            if (data.password !== process.env.OPERPASS) {
+                return;
+            }
             socket.join('securityServer', function () {
                 
             });
             break;
+        case ('gamelistEvent'):
+            if (data.password === process.env.OPERPASS) {
+                messageListener(data);
+            }
+            break;
         case ('join'):
-            socket.join(socket.address.ip, function () {
+            socket.join(socket.address.ip + data.uniqueID, function () {
                 socket.write({
                     clientEvent : 'privateServer',
-                    serverUpdate : userdata[socket.address.ip],
-                    ip : socket.address.ip
+                    serverUpdate : userdata[socket.address.ip + data.uniqueID],
+                    ip : socket.address.ip + data.uniqueID
                 });
             });
             socket.join('activegames', function () {
@@ -214,11 +202,14 @@ primus.on('connection', function (socket) {
             break;
         
         case ('privateServerRequest'):
-            primus.room(socket.address.ip).write({
+            primus.room(socket.address.ip + data.uniqueID).write({
                 clientEvent : 'privateServerRequest',
                 parameter : data.parameter,
                 local : data.local
             });
+            break;
+                
+        case ('privateServer'):
             break;
 
         case ('joinTournament'):
@@ -242,11 +233,11 @@ primus.on('connection', function (socket) {
             });
             break;
         case ('privateUpdate'):
-            primus.room(socket.address.ip).write({
+            primus.room(socket.address.ip + data.uniqueID).write({
                 clientEvent : 'privateServer',
                 serverUpdate : data.serverUpdate
             });
-            userdata[socket.address.ip] = data.serverUpdate;
+            userdata[socket.address.ip + data.uniqueID] = data.serverUpdate;
             break;
         default:
             console.log(data);
@@ -254,8 +245,9 @@ primus.on('connection', function (socket) {
         }
     });
 });
-primus.on('disconnection', function () {
+primus.on('disconnection', function (socket) {
     'use strict';
+    socket.leaveAll();
     //nothing required
 });
 

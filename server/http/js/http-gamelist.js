@@ -44,11 +44,12 @@ function saveSettings() {
 }
 var mode = "production",
     gamelistcache,
-    screenMessage = $('#servermessages');
+    screenMessage = $('#servermessages'),
+    uniqueID = '';
 
 function ygopro(parameter) {
     'use strict';
-    
+    uniqueID = $('#uniqueID').html();
     localStorage.serverport = '8911';
     localStorage.lastport = '8911';
     saveSettings();
@@ -70,7 +71,8 @@ function ygopro(parameter) {
     primus.write({
         action : 'privateServerRequest',
         parameter : parameter,
-        local : localStorage
+        local : localStorage,
+        uniqueID : uniqueID
     });
     _gaq.push(['_trackEvent', 'Launcher', 'YGOPro', parameter]);
     _gaq.push(['_trackEvent', 'Site', 'Navigation Movement', internalLocal + ' - ' + 'YGOPro']);
@@ -452,7 +454,7 @@ primus.on('data', function (data) {
             $('footer').html(data.message).addClass('loud');
         }
         if (data.clientEvent === 'kill' && (data.target === localStorage.nickname || data.target === 'ALL')) {
-            $.post('http://127.0.0.1:9468/' + 'k');
+            ygopro('kk');
         }
         if (data.clientEvent === 'duelrequest' && data.target === localStorage.nickname && confirm('Accept Duel Request from ' + data.from + '?')) {
             enterGame(data.roompass);
