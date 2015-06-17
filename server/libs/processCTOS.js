@@ -15,7 +15,6 @@ var portmin = 30000 + process.env.PORTRANGE * 100, //Port Ranges
     fs = require('fs'),
     childProcess = require('child_process'),
     net = require('net'),
-    cluster = require('cluster'),
     parsePackets = require('./parsepackets.js'), //Get data sets out of the YGOPro Network API.
     recieveCTOS = require('./recieveCTOS'), // Translate data sets into messages of the API
     events = require('events'),
@@ -26,11 +25,9 @@ var portmin = 30000 + process.env.PORTRANGE * 100, //Port Ranges
     coreIsInPlace = false,
     request = require('request'),
 
-    Primus = require('primus'), //Primus, our Sepiroth-Qliphopth Creator God. Websocket connections.
     http = require('http'), // SQCG Primus requires http parsing/tcp-handling
     server = http.createServer(), //throne of the God
-    primus = new Primus(server), // instance of the God
-    Socket = require('primus').createSocket(),
+    Socket = require('primus').createSocket({iknowclusterwillbreakconnections : true}),
     client = new Socket('http://ygopro.us:24555'); //Connect the God to the tree;
 
 client.on('data', function (data) {
@@ -38,6 +35,9 @@ client.on('data', function (data) {
     var join = false,
         storage;
     //console.log(data);
+    if (!data.clientEvent) {
+        data = gamelist;
+    }
     if (data.clientEvent !== 'killRequest') {
         return;
     }
@@ -47,11 +47,20 @@ client.on('data', function (data) {
 
 //client.on('connected', function () {});
 //client.on('close', function () {}); // start shutting down server.
-client.write({
-    action: 'accessSecurityChannel',
-    adminChannelPassword : process.env.OPERPASS
-});
 
+function joinGamelist() {
+    'use strict';
+    client.write({
+        action: 'accessSecurityChannel',
+        adminChannelPassword : process.env.OPERPASS
+    });
+    client.write({
+        action: 'join'
+    });
+}
+
+setInterval(joinGamelist, 60000);
+joinGamelist();
 var cHistory = new (winston.Logger)({
     transports: [
         new (winston.transports.Console)(),
@@ -83,17 +92,6 @@ fs.exists(startDirectory + '../../ygocore/YGOServer.exe', function (exist) {
 /* Listen to the MASTER  process for messages to the SLAVE 
 processes. That message will be an update to the internal
 gamelist of each SLAVE process */
-
-if (cluster.isWorker) {
-    process.on('message', function (message) {
-        'use strict';
-        if (message.gamelist) {
-            gamelist = message.gamelist;
-        }
-    });
-}
-
-
 
 function processTask(task, socket) {
     'use strict';
@@ -218,6 +216,8 @@ function handleCoreMessage(core_message_raw, port, socket, data, pid) {
     }
     var core_message = core_message_raw.toString().split('|'),
         gamelistmessage = {
+            password : process.env.OPERPASS,
+            action : 'gamelistEvent',
             messagetype: 'coreMessage',
             coreMessage: {
                 core_message_raw: core_message_raw.toString(),
@@ -233,7 +233,7 @@ function handleCoreMessage(core_message_raw, port, socket, data, pid) {
         socket.core.kill();
         //cHistory.info('--GAME: ' + pid);
     }
-    process.send(gamelistmessage);
+    client.write(gamelistmessage);
 }
 
 /* Checks if a given password is valid, returns true or false */
