@@ -26,33 +26,45 @@ var notification = '', // its a string, make memory.
 
 function gamelistMessage(message) {
     'use strict';
-    gamelistManager.messageListener(message.coreMessage);
-}
-
-function setupWorker(x) {
-    'use strict';
-    console.log(('        Starting Slave ' + x).grey);
-    var worker = cluster.fork({
-        PORTRANGE: x,
-        SLAVE: true
+    var rooms,
+        gamelist = gamelistManager.messageListener(message.coreMessage);
+    activegames = 0;
+    Object.keys(cluster.workers).forEach(function (id) {
+        cluster.workers[id].send({
+            messagetype: 'gamelist',
+            gamelist: gamelist
+        });
     });
-
-    worker.on('message', gamelistMessage);
+    for (rooms in gamelist) {
+        if (gamelist.hasOwnProperty(rooms)) {
+            activegames++;
+        }
+    }
+    process.title = 'YGOPro Salvation Server [' + activegames + ']';
 }
 
 function initiateMaster(numCPUs) {
     'use strict';
     console.log('YGOPro Salvation Server - Saving Yu-Gi-Oh!'.bold.yellow);
-    require('./libs/policyserver.js');
-    process.title = 'YGOPro Salvation Server' + new Date();
+    console.log('    Starting Master');
+    process.title = 'YGOPro Salvation Server [' + activegames + '] ' + new Date();
     gamelistManager = require('./libs/gamelist.js');
-    process.nextTick(function () {
-        console.log('    Starting Master');
-        for (clusterIterator; clusterIterator < numCPUs; clusterIterator++) {
-            setupWorker(clusterIterator);
-        }
-    });
-    
+    require('./libs/policyserver.js');
+    //require('./libs/ldapserver.js'); //LDAP endpoint; //Flash policy server for LightIRC;
+
+    function setupWorker(x) {
+        //'use strict';
+        console.log(('        Starting Slave ' + x).grey);
+        var worker = cluster.fork({
+            PORTRANGE: x,
+            SLAVE: true
+        });
+
+        worker.on('message', gamelistMessage);
+    }
+    for (clusterIterator; clusterIterator < numCPUs; clusterIterator++) {
+        setupWorker(clusterIterator);
+    }
     cluster.on('exit', function (worker, code, signal) {
         notification = 'worker ' + clusterIterator + ' died ' + code + ' ' + signal;
         setupWorker(clusterIterator++);
@@ -61,6 +73,7 @@ function initiateMaster(numCPUs) {
         }
     });
 }
+
 
 
 (function main() {

@@ -24,26 +24,22 @@ var portmin = 30000 + process.env.PORTRANGE * 100, //Port Ranges
     path = require('path'),
     coreIsInPlace = false,
     request = require('request'),
-
+    cluster = require('cluster'),
     http = require('http'), // SQCG Primus requires http parsing/tcp-handling
     server = http.createServer(), //throne of the God
     Socket = require('primus').createSocket({iknowclusterwillbreakconnections : true}),
-    client = new Socket('http://ygopro.us:24555'); //Connect the God to the tree;
+    client = new Socket('http://localhost:24555'); //Connect the God to the tree;
 
-client.on('data', function (data) {
-    'use strict';
-    var join = false,
-        storage;
-    //console.log(data);
-    if (!data.clientEvent) {
-        data = gamelist;
-    }
-    if (data.clientEvent !== 'killRequest') {
-        return;
-    }
-    bouncer.emit('kill', data.ip);
-});
 
+
+if (cluster.isWorker) {
+    process.on('message', function (message) {
+        'use strict';
+        if (message.gamelist) {
+            gamelist = message.gamelist;
+        }
+    });
+}
 
 //client.on('connected', function () {});
 //client.on('close', function () {}); // start shutting down server.
@@ -52,14 +48,17 @@ function joinGamelist() {
     'use strict';
     client.write({
         action: 'accessSecurityChannel',
-        adminChannelPassword : process.env.OPERPASS
+        adminChannelPassword : process.env.OPERPASS,
+        uniqueID : '-----'
     });
     client.write({
-        action: 'join'
+        action: 'join',
+        uniqueID : '-----',
+        password : process.env.OPERPASS
     });
 }
 
-setInterval(joinGamelist, 60000);
+setInterval(joinGamelist, 5000);
 joinGamelist();
 var cHistory = new (winston.Logger)({
     transports: [
@@ -233,7 +232,8 @@ function handleCoreMessage(core_message_raw, port, socket, data, pid) {
         socket.core.kill();
         //cHistory.info('--GAME: ' + pid);
     }
-    client.write(gamelistmessage);
+    process.send(gamelistmessage);
+    
 }
 
 /* Checks if a given password is valid, returns true or false */
