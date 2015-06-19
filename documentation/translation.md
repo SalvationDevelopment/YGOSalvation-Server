@@ -4,6 +4,6 @@ For each language there needs to be an offline, and online translation file. On 
 var languageCode = {
     'identifier' : 'translation',
     'en'         : 'translation',
-    'de'         : 'translation,
-    'fr'         : 'translation
+    'de'         : 'translation',
+    'fr'         : 'translation'
 }
