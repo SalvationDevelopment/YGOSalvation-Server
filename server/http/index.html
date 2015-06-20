@@ -136,26 +136,26 @@
     <div style="z-index:40; position:relative;">
         <span class="psudolinksingle" onclick="singlesitenav('home')" id='psudologo'>
             <h1 style="font-size:1.2em">
-            <span style="color:#e4a;">YGOPro</span> Salvation Server</h1>
+            <span data-translation-salvationserver style="color:#e4a;">YGOPro</span> Salvation Server</h1>
         </span>
         <ul class="featurelist" style="font-size:small">
             <!--<li class="launcheronly"><span class="psudolinksingle " onclick='ygopro("-l")'>LAN Mode</span>
             </li>-->
             <li class="launcheronly"><span class="psudolinksingle" onclick='ygopro("-d");singlesitenav("deckedit");'>Deck Edit</span>
             </li>
-            <li class="launcheronly"><span class="psudolinksingle" onclick='ygopro("-r")'>Replays</span>
+            <li data-translation-replays class="launcheronly"><span class="psudolinksingle" onclick='ygopro("-r")'>Replays</span>
             </li class="loophole">
-            <li><span class="psudolinksingle" onclick="joinGamelist();singlesitenav('gamelist');">Game List</span>
+            <li><span data-translation-gamelist class="psudolinksingle" onclick="joinGamelist();singlesitenav('gamelist');">Game List</span>
             </li>
-            <li class="launcheronly"><span class="psudolinksingle" onclick="singlesitenav('host')">Host</span>
+            <li class="launcheronly"><span data-translation-host class="psudolinksingle" onclick="singlesitenav('host')">Host</span>
             </li>
-            <li><a class="psudolinksingle " style='text-decoration:none' onclick="singlesitenav('forum')" target="_blank" href="http://forum.ygopro.us">Forum</a>
+            <li><a data-translation-forum class="psudolinksingle " style='text-decoration:none' onclick="singlesitenav('forum')" target="_blank" href="http://forum.ygopro.us">Forum</a>
             </li>
-            <li><span class="psudolinksingle" onclick="singlesitenav('chat')">Chat</span>
+            <li><span data-translation-chat class="psudolinksingle" onclick="singlesitenav('chat')">Chat</span>
             </li>
-            <li><span class="psudolinksingle" onclick="singlesitenav('faq')">News</span>
+            <li><span data-translation-faq class="psudolinksingle" onclick="singlesitenav('faq')">News</span>
             </li>
-            <li class="launcheronly"><span class="psudolinksingle" onclick="singlesitenav('settings')">Settings</span>
+            <li data-translation-settings class="launcheronly"><span class="psudolinksingle" onclick="singlesitenav('settings')">Settings</span>
             </li>
         </ul>
     </div>
@@ -163,12 +163,12 @@
         <div id="homecontainer">
             <span class="psudolinksingle" onclick="singlesitenav('home')">
                 <h1 style="padding-top:80px;"   class="shine">
-            <span style="color:#e4a;">YGOPro</span> Salvation Server</h1>
+            <span data-translation-salvationserver style="color:#e4a;">YGOPro</span> Salvation Server</h1>
             </span>
-            <h2 class="shine">Online Yu-Gi-Oh! Simulator</h2>
+            <h2 data-translation-onlineyugiohsimulator class="shine">Online Yu-Gi-Oh! Simulator</h2>
             <nav class="lander-main">
 
-                <div class="downloadbutton" style="display:none">Play Now</div>
+                <div data-translation-playnow class="downloadbutton" style="display:none">Play Now</div>
 
                 <ul class="webonly" style="text-align:center; padding:0;" id="mirrors" itemscope itemtype="http://schema.org/SoftwareApplication">
                     <!--<li>Login</li>
@@ -199,8 +199,8 @@
             <form id="ipblogin" style="text-align:center; color: white !important; display:block; margin:0 auto" class="launcheronly loginsystem">
                 <input id="ips_username" type="text" class="launcheronly loginsystem" name="ips_username" tabindex="1" placeholder="Forum Username">
                 <input id="ips_password" type="password" class="launcheronly loginsystem" name="ips_password" tabindex="2" placeholder="Forum Password"><br><span style="font-size:.7em"><input type="checkbox" id="ips_remember" > Remember Username &amp; Password?</span><br />
-                <button id="dolog" class="launcheronly loginsystem">Login</button><br /><br />
-                <a class="launcheronly loginsystem" href="http://forum.ygopro.us/index.php?app=core&module=global&section=register" target="_blank">Register via Forum</a> | <a class="launcheronly loginsystem" href="http://forum.ygopro.us/index.php?app=core&module=global&section=lostpass">Forgot Password</a>
+                <button data-translation-login id="dolog" class="launcheronly loginsystem">Login</button><br /><br />
+                <a data-translation-registerviaforum class="launcheronly loginsystem" href="http://forum.ygopro.us/index.php?app=core&module=global&section=register" target="_blank">Register via Forum</a> | <a class="launcheronly loginsystem" href="http://forum.ygopro.us/index.php?app=core&module=global&section=lostpass">Forgot Password</a>
             </form>
             <div style="font-size:.5em; text-align:center; color:#747" id="versioninfo">Version 4 : Production 4 : Revision 1</div>
             <div style="font-size:1.5em; text-align:center; color:pink" class='webonly'></div>
@@ -307,13 +307,13 @@
     </header>
     <header style="padding-top:50px" id="deckedit">
 
-<div id="mainDeckHeader"><p>MainDeck</p></div>
+<div data-translation-maindeck id="mainDeckHeader"><p>MainDeck</p></div>
     <div id="mainDeck"></div>
     
-    <div id="xtraDeckHeader"><p>XtraDeck</p></div>
+    <div data-translation-xtradeck id="xtraDeckHeader"><p>XtraDeck</p></div>
     <div id="xtraDeck"></div>
     
-    <div id="sideDeckHeader"><p>SideDeck</p></div>
+    <div data-translation-sidedeck id="sideDeckHeader"><p>SideDeck</p></div>
     <div id="sideDeck"></div>
 
     </header>
@@ -343,15 +343,15 @@
     </header>
     <header style="padding-top:50px" id="settings">
 
-        <h3 style="text-align:center; color:silver">Game Settings</h3>
+        <h3 data-translation-gamesettings style="text-align:center; color:silver">Game Settings</h3>
         <div style="color:white; width:970px; margin:0 auto;">
             <section id="settings">
                 <div class='section-content'>
                     <div style="width: 29%;float: left;color: #aaa;margin-right: 4vw;font-size: 11px;text-align: justify;">
-                        <p>Auto Placement will have the game automaticlly pick where cards are placed.</p>
-                        <p>If Auto Placement is on, you can randomize it.</p>
-                        <p>If you selected multiple cards in response to a chain suggestion. You may have the game automatically pick the resolution order. If Auto Placement is on, you can randomize it.</p>
-                        <p>No (obvious) Delay for Chains, add additional pauses to game play to spook your opponent.</p>
+                        <p data-translation-autoplacementwillhavethegameautomaticllypickwherecardsareplaced>Auto Placement will have the game automaticlly pick where cards are placed.</p>
+                        <p data-translation-ifautoplacementisonyoucanrandomizeit>If Auto Placement is on, you can randomize it.</p>
+                        <p data-translation-ifyouselectedmultiplecardsinresponsetoachainsuggestionyoumayhavethegameautomaticallypicktheresolutionorderifautoplacementisonyoucanrandomizeit>If you selected multiple cards in response to a chain suggestion. You may have the game automatically pick the resolution order. If Auto Placement is on, you can randomize it.</p>
+                        <p data-translation-noobviousdelayforchainsaddadditionalpausestogameplaytospookyouropponent>No (obvious) Delay for Chains, add additional pauses to game play to spook your opponent.</p>
                     </div>
                     <div style="width:32%; float:left; border-left:1px solid white; padding-left:1vw">
                         
@@ -390,7 +390,7 @@
                         <br />
                         <label data-translation-skin>Skin</label>
                         <select id="skinlist">
-                            <option value="default">Default</option>
+                            <option data-translation-default value="default">Default</option>
                         </select>
                         <br />
 
