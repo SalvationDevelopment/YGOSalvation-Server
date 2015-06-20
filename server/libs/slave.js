@@ -1,4 +1,22 @@
 /*jslint  node: true, plusplus: true*/
+var httpsServer;
+try {
+    var fs = require('fs'),
+        ssloptions = {
+            ca:   fs.readFileSync(process.env.SSL + 'sub.class1.server.ca.pem'),
+            key:  fs.readFileSync(process.env.SSL + 'ssl.key.unsecure'),
+            cert: fs.readFileSync(process.env.SSL + 'ssl.crt')
+        },
+        http = require('https');
+    var httpsServer = http.createServer(ssloptions);
+    httpsServer.listen(8082);
+} catch (e) {
+    var http = require('http');
+    var httpsServer = http.createServer();
+    httpsServer.listen(8082);
+}
+
+
 var ygoserver, //port 8911 ygopro Server
     net = require('net'), //tcp connections
     WebSocket = require('ws').Server,
@@ -47,7 +65,7 @@ function initiateSlave() {
     ygoserver = net.createServer(handleTCP);
     ygoserver.listen(8911);
     
-    ws = new WebSocket({ port: 8082 });
+    ws = new WebSocket({ server: httpsServer });
     ws.on('connection', function connection(socket) {
         var framer = new Framemaker();
         socket.active_ygocore = false;
