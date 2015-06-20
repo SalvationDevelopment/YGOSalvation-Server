@@ -220,7 +220,7 @@
         <section id='gamelistsection'>
             <div id="gamelistitems"></div>
             <div class='launcheronly gamelistcenter'>
-            <label>Current Deck </label>
+            <label data-translation-currentdeck>Current Deck </label>
                 <select class='currentdeck'>
                     <option selected value=""></option>
                 </select>
@@ -236,16 +236,16 @@
             <div>
                 
                 <h2>Settings</h2>
-                <!--<label>Ranked</label>
+                <!--<label data-translation-ranked>Ranked</label>
                 <input type="radio" name="ranked" value="R" />Yes
                 <input type="radio" name="ranked" value="U" checked />No
                 <br />-->
-                <label>Current Deck</label>
+                <label data-translation-currentdeck>Current Deck</label>
                     <select class='currentdeck'>
                         <option selected value=""></option>
                     </select>
                 </br>
-                <label>Card Pool</label>
+                <label data-translation-cardpool>Card Pool</label>
                 <select id="creategamecardpool">
                     <option value="0">OCG</option>
                     <option value="1">TCG</option>
@@ -255,7 +255,7 @@
                     <option value="5">Constructed BP3</option>
                 </select>
                 <br />
-                <label>Ban List</label>
+                <label data-translation-banlsit>Ban List</label>
                 <select id="creategamebanlist">
                     <option value="0" selected>2015.4.1(TCG)</option>
                     <option value="1">2015.4.1(OCG)</option>
@@ -269,7 +269,7 @@
                 </select>
                 <br />
 
-                <label>Duel Mode</label>
+                <label data-translation-duelmode>Duel Mode</label>
                 <select id="creategameduelmode">
                     <option value="0" selected>Single</option>
                     <option value="1">Match</option>
@@ -277,7 +277,7 @@
 
                 </select>
                 <br />
-                <label>Time Limit</label>
+                <label data-translation-timelimit>Time Limit</label>
                 <select id="creategametimelimit">
                     <option value="0" selected>3 Minutes</option>
                     <option value="1">5 Minutes</option>
@@ -286,17 +286,17 @@
                 <br />
 
                 <h2>Additional Options</h2>
-                <label>Enable Priority</label>
+                <label data-translation-enablepriority>Enable Priority</label>
                 <input type="checkbox" id="enableprio">
                 <br />
-                <label>Disable Check Deck</label>
+                <label data-translation-disablecheckdeck>Disable Check Deck</label>
                 <input type="checkbox" id="discheckdeck">
                 <br />
-                <label>Disable Shuffle Deck</label>
+                <label data-translation-disableshuffledeck>Disable Shuffle Deck</label>
                 <input type="checkbox" id="disshuffledeck">
-                <label>Use Password</label>
+                <label data-translation-usepassword>Use Password</label>
                 <input type="checkbox" id="usepass">
-                <label>Lifepoints</label>
+                <label data-translation-lifepoints>Lifepoints</label>
                 <input type="number" value="8000" id="creategamelp" min="1" />
                 <br />
 
@@ -355,40 +355,40 @@
                     </div>
                     <div style="width:32%; float:left; border-left:1px solid white; padding-left:1vw">
                         
-                        <label>Auto Card Placement</label>
+                        <label data-translation-autocardplacement>Auto Card Placement</label>
                         <input type="checkbox" data-localhost="auto_card_placing" />
                         <br />
-                        <label style="padding-left:1em">Random Card Placement</label>
+                        <label data-translation-randomcardplacement style="padding-left:1em">Random Card Placement</label>
                         <input type="checkbox" data-localhost="random_card_placing" />
                         <br />
-                        <label>Auto Chain Order</label>
+                        <label data-translation-autochainorder>Auto Chain Order</label>
                         <input type="checkbox" data-localhost="auto_chain_order" />
                         <br />
-                        <label>No Delay for Chains</label>
+                        <label data-translation-nodelayforchains>No Delay for Chains</label>
                         <input type="checkbox" data-localhost="no_delay_for_chain" />
                         <br />
                         <br />
-                        <label>Enable Sound</label>
+                        <label data-translation-enablesound>Enable Sound</label>
                         <input type="checkbox" data-localhost="enable_sound" />
                         <br />
-                        <label>Enable Music</label>
+                        <label data-translation-enablemusic>Enable Music</label>
                         <input type="checkbox" data-localhost="enable_music" />
                         <br />
-                        <label>Enable DirectX</label>
+                        <label data-translation-enabledirectx>Enable DirectX</label>
                         <input type="checkbox" data-localhost="use_d3d" />
                         <br />
-                        <label>Anti Aliasing</label>
+                        <label data-translation-antialiasing>Anti Aliasing</label>
                         <input type="checkbox" data-localhost="antialias" />
                         <br />
-                        <label>Font Size</label>
+                        <label data-translation-fontsize>Font Size</label>
                         <input type="range" min="8" max="18" value="14" id="fontsize">
                         <br />
-                        <label>Font</label>
+                        <label data-translation-font>Font</label>
                         <select id="fontlist">
                             <option value="noto.otf">noto.otf</option>
                         </select>
                         <br />
-                        <label>Skin</label>
+                        <label data-translation-skin>Skin</label>
                         <select id="skinlist">
                             <option value="default">Default</option>
                         </select>
@@ -399,13 +399,13 @@
                         <br />
                     </div>
                     <div style="width:32%; float:left;">
-                        <label>Sound Volume</label>
+                        <label data-translation-soundvolume>Sound Volume</label>
                         <input type="range" min="0" max="100" value="50" id="sound_volume">
                         <br />
-                        <label>Music Volume</label>
+                        <label data-translation-musicvolume>Music Volume</label>
                         <input type="range" min="0" max="100" value="50" id="music_volume">
                         <br />
-                        <label>Database File</label>
+                        <label data-translation-databasefile>Database File</label>
                         <select id="dblist">
                         </select>
                         <br />
