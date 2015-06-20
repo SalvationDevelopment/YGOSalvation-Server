@@ -35,9 +35,7 @@ bot.on('registered', function () {
         setTimeout(function () {
             bot.send('oper', process.env.OPERNAME, process.env.OPERPASS);
             process.nextTick(function () {
-                bot.send('sajoin', config.botName, "#public", function () {
-                
-                });
+                bot.send('sajoin', config.botName, "#public");
             });
             
         }, 2000);
