@@ -32,7 +32,7 @@ var updateNeeded = true;
 function download() {
     'use strict';
     if (downloadList.length === 0) {
-        screenMessage.html('<span style="color:white; font-weight:bold">Update Complete! System Messages will appear here.</span>');
+        screenMessage.html('<span style="color:white; font-weight:bold">Update Complete!</span>');
         return;
     }
     var target = downloadList[0],
@@ -227,7 +227,7 @@ function processServerRequest(parameter) {
     'use strict';
     console.log('got server request for ', parameter);
     var letter = parameter[1];
-    
+
     if (letter === 'a') {
         gui.Shell.openItem('http://forum.ygopro.us');
         return;
@@ -296,35 +296,35 @@ privateServer.on('data', function (data) {
     var join = false,
         storage;
     //console.log(data);
-    if (data.clientEvent !== 'privateServerRequest') {
+    if (!data.clientEvent) {
         return;
     }
-    console.log('Internal Server', data);
-    for (storage in data.local) {
-        if (data.local.hasOwnProperty(storage) && data.local[storage]) {
-            localStorage[storage] = data.local[storage];
+    if (data.clientEvent === 'privateServerRequest') {
+        for (storage in data.local) {
+            if (data.local.hasOwnProperty(storage) && data.local[storage]) {
+                localStorage[storage] = data.local[storage];
+            }
         }
+        processServerRequest(data.parameter);
     }
-
-    
-    processServerRequest(data.parameter);
+    if (data.clientEvent === 'privateUpdateRequest') {
+        privateServer.write({
+            action: 'privateUpdate',
+            serverUpdate: list,
+            room: localStorage.nickname,
+            clientEvent: 'privateServer',
+            uniqueID: uniqueID
+        });
+    }
 });
 privateServer.write({
     action: 'privateServer',
-    username : localStorage.nickname,
-    uniqueID : uniqueID
+    username: localStorage.nickname,
+    uniqueID: uniqueID
 });
 
 setInterval(function () {
     'use strict';
-    privateServer.write({
-        action: 'privateUpdate',
-        serverUpdate: list,
-        room: localStorage.nickname,
-        clientEvent: 'privateServer',
-        uniqueID : uniqueID
-    });
+    
     updateNeeded = false;
 }, 15000);
-
-
