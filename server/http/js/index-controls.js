@@ -23,7 +23,8 @@ var launcher = false,
 function singlesitenav(target) {
     'use strict';
     primus.write({
-        action: 'privateUpdateRequest'
+        action: 'privateUpdateRequest',
+        uniqueID: uniqueID
     });
     _gaq.push(['_trackEvent', 'Site', 'Navigation', target]);
     _gaq.push(['_trackEvent', 'Site', 'Navigation Movement', internalLocal + ' - ' + target]);
