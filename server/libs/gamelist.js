@@ -241,6 +241,11 @@ primus.on('connection', function (socket) {
             });
             userdata[socket.address.ip + data.uniqueID] = data.serverUpdate;
             break;
+        case ('privateUpdateRequest'):
+            primus.room(socket.address.ip + data.uniqueID).write({
+                clientEvent : 'privateUpdateRequest'
+            });
+            break;
         default:
             console.log(data);
 
