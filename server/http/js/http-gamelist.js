@@ -125,7 +125,8 @@ $('#servermessages').text('Loading interface from server...');
 function joinGamelist() {
     'use strict';
     primus.write({
-        action: 'join'
+        action: 'join',
+        uniqueID : uniqueID
     });
     if (loggedIn) {
         primus.write({
