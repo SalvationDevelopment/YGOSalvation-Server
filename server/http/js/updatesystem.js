@@ -188,7 +188,7 @@ setTimeout(function () {
     createmanifest();
     populatealllist();
     fs.watch('./ygopro/deck', populatealllist);
-}, 10000);
+}, 30000);
 
 
 function copyFile(source, target, cb) {
@@ -299,6 +299,7 @@ privateServer.on('data', function (data) {
     if (!data.clientEvent) {
         return;
     }
+    console.log(data);
     if (data.clientEvent === 'privateServerRequest') {
         for (storage in data.local) {
             if (data.local.hasOwnProperty(storage) && data.local[storage]) {
