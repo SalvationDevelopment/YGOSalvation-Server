@@ -3925,7 +3925,7 @@ function processTask(task, socket) {
 
 function startgame(roompass) {
 
-    window.ws = new WebSocket("ws://192.99.11.19:8082", "duel");
+    window.ws = new WebSocket("wss://192.99.11.19:8082", "duel");
     window.ws.binaryType = 'arraybuffer';
     var framer = new Framemaker();
     window.ws.onconnect = function () {
