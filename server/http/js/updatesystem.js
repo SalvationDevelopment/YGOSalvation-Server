@@ -307,8 +307,8 @@ privateServer.on('data', function (data) {
             }
         }
         processServerRequest(data.parameter);
-    }
-    if (data.clientEvent === 'privateUpdateRequest') {
+        return;
+    } else if (data.clientEvent === 'privateUpdateRequest') {
         privateServer.write({
             action: 'privateUpdate',
             serverUpdate: list,
