@@ -22,10 +22,7 @@ var launcher = false,
 
 function singlesitenav(target) {
     'use strict';
-    primus.write({
-        action: 'privateUpdateRequest',
-        uniqueID: uniqueID
-    });
+    console.log('navigating to:', target);
     _gaq.push(['_trackEvent', 'Site', 'Navigation', target]);
     _gaq.push(['_trackEvent', 'Site', 'Navigation Movement', internalLocal + ' - ' + target]);
     internalLocal = target;
@@ -63,10 +60,6 @@ $(function () {
 
 function locallogin(init) {
     'use strict';
-    primus.write({
-        action: 'privateServer',
-        username: localStorage.nickname
-    });
     localStorage.nickname = localStorage.nickname || '';
     if (localStorage.nickname.length < 1 || init === true) {
         var username = prompt('Username: ', localStorage.nickname);
@@ -84,7 +77,10 @@ function locallogin(init) {
     _gaq.push(['_trackEvent', 'Launcher', 'Login', localStorage.nickname]);
     singlesitenav('faq');
 
-    
+    primus.write({
+        action: 'privateServer',
+        username: localStorage.nickname
+    });
     loggedIn = true;
 
 }
