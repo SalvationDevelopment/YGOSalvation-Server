@@ -60,10 +60,12 @@ function ygopro(parameter) {
     
         }
     }
-    if (!launcher) {
+    if (!launcher && parameter === '-j') {
         singlesitenav('duelscreen');
-        alert('You need to be in the launcher to do join games.');
         startgame(localStorage.roompass);
+        return;
+    }
+    if (!launcher && parameter === '-d') {
         return;
     }
     
