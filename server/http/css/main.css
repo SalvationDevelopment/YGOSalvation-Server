@@ -1591,6 +1591,7 @@ select {
 }
 
 header#deckedit div {
+    font-size: 12px;
     border: 1px solid white;
     float: left;
     color: white;
@@ -1626,7 +1627,8 @@ div#de_column2 {
 }
 
 div#de_maincolumn {
-    width: 500px;
+    width: 550px;
+    margin: 10px;
 }
 
 header#deckedit div {
@@ -1654,7 +1656,22 @@ div#resultecksummary {
 }
 
 div#cardfilter {
-    height: 120px;
+    height: 100px;
+}
+
+div#maindeck {
+    height: 300px;
+    width: 500px;
+}
+
+div#xtradeck {
+    height: 60px;
+    width: 500px;
+}
+
+div#sidedeck {
+    height: 60px;
+    width: 500px;
 }
 
 @-webkit-keyframes outpulse {
