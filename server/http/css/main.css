@@ -417,15 +417,15 @@ header {
     padding-bottom: 40px;
     color: white;
     background: rgba(0, 0, 0, .65);
-    background: -webkit-gradient(linear, left top, right bottom, color-stop(0%,rgba(0,0,0,1)), color-stop(7%,rgba(1,1,1,1)), color-stop(33%,rgba(6,6,6,0)), color-stop(49%,rgba(9,9,9,0)), color-stop(89%,rgba(17,17,17,1)), color-stop(100%,rgba(19,19,19,1)));
+    background: -webkit-gradient(linear, left top, right bottom, color-stop(0%, rgba(0, 0, 0, 1)), color-stop(7%, rgba(1, 1, 1, 1)), color-stop(33%, rgba(6, 6, 6, 0)), color-stop(49%, rgba(9, 9, 9, 0)), color-stop(89%, rgba(17, 17, 17, 1)), color-stop(100%, rgba(19, 19, 19, 1)));
     overflow: auto;
 }
 
 .game {
     background: rgba(0, 0, 0, .65);
     width: 48%;
-    min-height:40px;
-    max-height:60px;
+    min-height: 40px;
+    max-height: 60px;
     float: left;
     border: 1px solid;
     margin: 2px 1%;
@@ -442,6 +442,7 @@ div#gamelistitems {
     overflow-y: scroll;
     height: 70vh;
 }
+
 .game.started {
     opacity: 1;
     border-color: grey;
@@ -561,15 +562,15 @@ ul#mirrors {
 }
 
 header {
-  height: 98vh;
-  overflow: hidden;
-  position: absolute;
-  top: 100vh;
-  width: 100vw;
-  background-size: 500% 100%;
-  -webkit-animation: shine 5s;
-  -webkit-animation-direction: alternate;
-  -webkit-animation-iteration-count: 2.5;
+    height: 98vh;
+    overflow: hidden;
+    position: absolute;
+    top: 100vh;
+    width: 100vw;
+    background-size: 500% 100%;
+    -webkit-animation: shine 5s;
+    -webkit-animation-direction: alternate;
+    -webkit-animation-iteration-count: 2.5;
 }
 
 .iconic {
@@ -755,9 +756,10 @@ header {
     background: brown;
 }
 
-meter.p1lp, meter.p0lp {
-  width: 40% !important;
-  float: left;
+meter.p1lp,
+meter.p0lp {
+    width: 40% !important;
+    float: left;
 }
 
 meter {
@@ -765,23 +767,27 @@ meter {
     margin: 0 5%;
     width: 90%;
 }
-.p0name, .p1name {
-  display: block;
-  float: left;
-  margin: 10px 5%;
-  color: #aaa;
-}
+
+.p0name,
 .p1name {
-    float:right;
+    display: block;
+    float: left;
+    margin: 10px 5%;
+    color: #aaa;
+}
+
+.p1name {
+    float: right;
 }
 
 #ingamechat {
-  width: 100%;
-  position: absolute;
-  bottom: 0;
-  min-height: 10%;
-  color: white;
+    width: 100%;
+    position: absolute;
+    bottom: 0;
+    min-height: 10%;
+    color: white;
 }
+
 meter::-webkit-meter-optimum-value {
     background: none;
     background-color: purple;
@@ -795,15 +801,16 @@ meter::-webkit-meter-bar {
     /*    border-top: 1px solid rgba(100, 100, 100, 0.3);*/
     
     box-shadow: inset 0px 1px 10px black;
-    background: rgba(255,255,25,.85);
+    background: rgba(255, 255, 25, .85);
 }
 
-meter.p0time, meter.p1time {
-  height: 4px;
-  border: none;
-  float: left;
-  border-bottom: 1px solid white;
-  width: 40%;
+meter.p0time,
+meter.p1time {
+    height: 4px;
+    border: none;
+    float: left;
+    border-bottom: 1px solid white;
+    width: 40%;
 }
 
 .p0time::-webkit-meter-bar,
@@ -828,28 +835,27 @@ meter.p0time, meter.p1time {
 
 #lifepoints {
     width: 75%;
-    margin:20px auto;
-    
+    margin: 20px auto;
 }
 
 #lifepoints input {
-  text-align: center;
-  float: left;
-  background: transparent;
-  color: black;
-  border: none;
-  margin: 10px 5%;
-  width: 45%;
-  clear: left;
-  margin-top: -17px;
-  z-index: 1;
-  position: relative;
- font-weight: bold;
+    text-align: center;
+    float: left;
+    background: transparent;
+    color: black;
+    border: none;
+    margin: 10px 5%;
+    width: 45%;
+    clear: left;
+    margin-top: -17px;
+    z-index: 1;
+    position: relative;
+    font-weight: bold;
 }
 
 #lifepoints input.p1lp {
-  float: right;
-  margin-top: -29px;
+    float: right;
+    margin-top: -29px;
 }
 
 #lifepoints {
@@ -1043,7 +1049,6 @@ meter.p0time, meter.p1time {
     width: 200px;
     height: 2em;
 }
-
 
 #phases {
     position: fixed;
@@ -1445,9 +1450,10 @@ div[data-game^="0"] {
     border-color: yellow;
     color: yellow;
 }
+
 div[data-game^="0"]:not(.started) {
-   background-image : url(https://ygopro.us/img/ocg.png);
-    background-size : 100% 100%;
+    background-image: url(https://ygopro.us/img/ocg.png);
+    background-size: 100% 100%;
     color: white;
 }
 
@@ -1457,9 +1463,10 @@ div[data-game^="1"] {
     border-color: blue;
     color: blue;
 }
+
 div[data-game^="1"]:not(.started) {
-   background-image : url(https://ygopro.us/img/tcg.png);
-    background-size : 100% 100%;
+    background-image: url(https://ygopro.us/img/tcg.png);
+    background-size: 100% 100%;
     color: white;
 }
 
@@ -1471,18 +1478,18 @@ div[data-game^="2"] {
 }
 
 div[data-game^="2"]:not(.started) {
-    background-image : url(https://ygopro.us/img/tcgocg.png);
-    background-size : 100% 100%;
+    background-image: url(https://ygopro.us/img/tcgocg.png);
+    background-size: 100% 100%;
     color: white;
 }
 
 div[data-game^="3"]:not(.started) {
     /* Anime */
-    background-image : url(https://ygopro.us/img/anime.png);
-    background-size : 100% 100%;
+    
+    background-image: url(https://ygopro.us/img/anime.png);
+    background-size: 100% 100%;
     color: white;
 }
-
 
 div[data-game^="00"],
 div[data-game^="10"],
@@ -1505,12 +1512,11 @@ div[data-game^="12"],
 div[data-game^="22"],
 div[data-game^="32"] {
     /* tags */
-    
-
 }
+
 .gamelabel {
-    padding-top:10px;
-    display:block;
+    padding-top: 10px;
+    display: block;
     text-align: center;
     color: #aaa;
 }
@@ -1525,262 +1531,208 @@ div[data-game^="32"] {
 }
 
 [data-bad] {
-    background:red !important;
+    background: red !important;
 }
 
 .started[data-bad] {
-    background:rgba(0,0,0,.5) !important;
+    background: rgba(0, 0, 0, .5) !important;
     border: 1px solid red;
 }
+
 [data-newgioh] {
-  background-image: url('../img/newgiohtoken.png') !important;
-  background-color: rgba(255,255,0,.5) !important;
-  background-size: auto 100% !important;
-  text-shadow: 0px 0px 19px black;
-  background-repeat: no-repeat !important;
+    background-image: url('../img/newgiohtoken.png') !important;
+    background-color: rgba(255, 255, 0, .5) !important;
+    background-size: auto 100% !important;
+    text-shadow: 0px 0px 19px black;
+    background-repeat: no-repeat !important;
 }
+
 .started[data-newgioh] {
     background-image: url('../img/outnewgiohtoken.png') !important;
-    background-color:rgba(0,0,0,.5) !important;
+    background-color: rgba(0, 0, 0, .5) !important;
     border: 1px solid grey;
     color: grey;
 }
 
 [data-nostalgia] {
     background-image: url('../img/goat.png') !important;
-    background-color: rgba(0,0,0,.5) !important;
+    background-color: rgba(0, 0, 0, .5) !important;
     background-size: auto 100% !important;
     text-shadow: 0px 0px 19px black;
     background-repeat: no-repeat !important;
     border: 1px solid pink;
 }
+
 .started[data-nostalgia] {
     background-image: url('../img/outnewgiohtoken.png') !important;
-    background-color:rgba(0,0,0,.5) !important;
+    background-color: rgba(0, 0, 0, .5) !important;
     border: 1px solid grey;
     color: grey;
 }
+
 div#news {
-  /* width: 80%; */
-  margin: 0 auto;
-  color: white;
-  height: 85vh;
-  overflow-y: scroll;
-  padding-left: 10%;
-  padding-right: 10%;
-  text-shadow: 0 0 5px black;
-}
-select {
- width: 12em;
-}
-.game:not(.started) {
-  /*-webkit-animation: outpulse 300ms;*/
-}
-
-
-/* DECKFIELDS */
-#mainDeckHeader{
-    position: absolute;
-    left: 200px;
-    width: 600px;
-    height: 16px;
-    border: 1px solid silver;
-    padding: 10px;
-    border: 1px solid silver;
-    z-index: 10;
-}
-#mainDeck{
-    position: absolute;
-    top: 75px;
-    left: 200px;
-    width: 600px;
-    height: 350px;
-    border: 1px solid silver;
-    padding: 10px;
-    border: 1px solid silver;
-    z-index: 10;
-}
-#xtraDeck{
-    position: absolute;
-    left: 200px;
-    top: 490px;
-    width: 600px;
-    height: 100px;
-    border: 1px solid silver;
-    padding: 10px;
-}
-#xtraDeckHeader{
-    position: absolute;
-    top: 455px;
-    left: 200px;
-    width: 610px;
-    height: 16px;
-    border: 1px solid silver;
-    padding: 5px;
-    border: 1px solid silver;
-}
-#sideDeckHeader{
-    position: absolute;
-    left: 200px;
-    top: 620px;
-    width: 610px;
-    height: 16px;
-    border: 1px solid silver;
-    padding: 5px;
-}
-#sideDeck{
-    position: absolute;
-    left: 200px;
-    top: 655px;
-    width: 600px;
-    height: 100px;
-    border: 1px solid silver;
-    padding: 10px;
-}
-
-/* Dragable Pics */
-.makeMeDraggable {
+    /* width: 80%; */
     
-    width: 44px; 
-    height: 64px;
-    z-index: 999999;
-}
-#card-container{
-    height: 500px;
-    width: 250px;
-    float: right;
-    position: absolute;
-    left: 820px;
-    z-index: 1000;
-    overflow-y:scroll; 
+    margin: 0 auto;
+    color: white;
+    height: 85vh;
+    overflow-y: scroll;
+    padding-left: 10%;
+    padding-right: 10%;
+    text-shadow: 0 0 5px black;
 }
 
-#cardPic{
-    position: absolute;
+select {
+    width: 12em;
+}
 
-    width: 178px;
-    height: 255px;
-    border: 1px solid silver;
-    z-index: 1000;
+.game:not(.started) {
+    /*-webkit-animation: outpulse 300ms;*/
 }
-#cardDesc{
-    position: absolute;
-    top: 270px;
-    width: 178px;
-    height: 255px;
-    border: 1px solid silver;
-    z-index: 1000;
+
+header#deckedit div {
+    border: 1px solid white;
 }
-        @-webkit-keyframes outpulse {
-          from {  -webkit-box-shadow: 0 0 3px rgba(255,255,255,0); }
-          50% {  -webkit-box-shadow: 0 0 18px white; }
-          to {  #ccc; -webkit-box-shadow: 0 0 3px rgba(255,255,255,0); }
-        }
-       footer.superfooter.loud {
-          color: white;
-          font-size: 14px;
-          font-weight: bold;
-        }
-        .webonly {}
-        
-        .web .launcheronly {
-            display:none;
-        }
-        .unlogged .launcheronly {
-            display:none;
-        }
-        
-        .unlogged .launcheronly.loginsystem {
-            display:inline-block;   
-        }
-         a.launcheronly.loginsystem {
-            color:white;
-         }
-		.launcheronly.gamelistcenter {
-			margin-top: 6px;
-		}
-        
-        #ips_username, #ips_password {
-          margin: 20px auto;
-          background: rgba(255,255,255,.5);
-          border: none;
-          width: 20em;
-          padding: .4em;
-          text-align: center;
-          color: black !important;
-          font-weight: bold;
-        -webkit-animation-name: pulse;
-        -webkit-animation-duration: 1s;
-        -webkit-animation-iteration-count: 10;
-        }
-        #ips_username {
-            border-top-left-radius: 8px;
-            border-bottom-left-radius: 20px;
-        }
-        #ips_password {
-            border-top-right-radius: 8px;
-            border-bottom-right-radius: 20px;
-        }
-        
-        .unlogged input#login-username {
-            display: block;
-        }
-        @-webkit-keyframes pulse {
-          from { background-color: #ccc; -webkit-box-shadow: 0 0 3px #333; }
-          50% { background-color: white; -webkit-box-shadow: 0 0 50px white; }
-          to { background-color: #ccc; -webkit-box-shadow: 0 0 3px #333; }
-        }
-        .unlogged.in-iframe .loophole {
-            display : none;
-        }
-        .shine {
-          background: -webkit-gradient(linear, left top, right bottom, color-stop(0%,#000000), color-stop(38%,#000000), color-stop(38%,#000000), color-stop(44%,#ee44aa), color-stop(49%,#ffffff), color-stop(51%,#000000), color-stop(100%,#000000));
-  -webkit-background-size: 50% 100%;
-  color: rgba(255, 255, 255, 0.1);
-  -webkit-background-clip: text;
-  -webkit-animation-name: shine;
-  -webkit-animation-duration: 10s;
-  -webkit-animation-iteration-count: 10;
-  -webkit-animation-timing-function: linear;
+
+@-webkit-keyframes outpulse {
+    from {
+        -webkit-box-shadow: 0 0 3px rgba(255, 255, 255, 0);
     }
-        .gamelistcenter {
-            width: 30%;
-            margin: 0 auto;
-            border: 1px solid#444;
-            color: silver;
-            padding: 10px;
-        }
-        .gamelistcenter select {
-            background: rgba(0,0,0,.5);
-            color: white;
-        }
-        .web .gamelistcenter {
-            display: none;
-        }
+    50% {
+        -webkit-box-shadow: 0 0 18px white;
+    }
+    to {
+        #ccc;
+        -webkit-box-shadow: 0 0 3px rgba(255, 255, 255, 0);
+    }
+}
 
-@-webkit-keyframes shine
-{
-    0%
-    {
+footer.superfooter.loud {
+    color: white;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.webonly {}
+
+.web .launcheronly {
+    display: none;
+}
+
+.unlogged .launcheronly {
+    display: none;
+}
+
+.unlogged .launcheronly.loginsystem {
+    display: inline-block;
+}
+
+a.launcheronly.loginsystem {
+    color: white;
+}
+
+.launcheronly.gamelistcenter {
+    margin-top: 6px;
+}
+
+#ips_username,
+#ips_password {
+    margin: 20px auto;
+    background: rgba(255, 255, 255, .5);
+    border: none;
+    width: 20em;
+    padding: .4em;
+    text-align: center;
+    color: black !important;
+    font-weight: bold;
+    -webkit-animation-name: pulse;
+    -webkit-animation-duration: 1s;
+    -webkit-animation-iteration-count: 10;
+}
+
+#ips_username {
+    border-top-left-radius: 8px;
+    border-bottom-left-radius: 20px;
+}
+
+#ips_password {
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 20px;
+}
+
+.unlogged input#login-username {
+    display: block;
+}
+
+@-webkit-keyframes pulse {
+    from {
+        background-color: #ccc;
+        -webkit-box-shadow: 0 0 3px #333;
+    }
+    50% {
+        background-color: white;
+        -webkit-box-shadow: 0 0 50px white;
+    }
+    to {
+        background-color: #ccc;
+        -webkit-box-shadow: 0 0 3px #333;
+    }
+}
+
+.unlogged.in-iframe .loophole {
+    display: none;
+}
+
+.shine {
+    background: -webkit-gradient(linear, left top, right bottom, color-stop(0%, #000000), color-stop(38%, #000000), color-stop(38%, #000000), color-stop(44%, #ee44aa), color-stop(49%, #ffffff), color-stop(51%, #000000), color-stop(100%, #000000));
+    -webkit-background-size: 50% 100%;
+    color: rgba(255, 255, 255, 0.1);
+    -webkit-background-clip: text;
+    -webkit-animation-name: shine;
+    -webkit-animation-duration: 10s;
+    -webkit-animation-iteration-count: 10;
+    -webkit-animation-timing-function: linear;
+}
+
+.gamelistcenter {
+    width: 30%;
+    margin: 0 auto;
+    border: 1px solid#444;
+    color: silver;
+    padding: 10px;
+}
+
+.gamelistcenter select {
+    background: rgba(0, 0, 0, .5);
+    color: white;
+}
+
+.web .gamelistcenter {
+    display: none;
+}
+
+@-webkit-keyframes shine {
+    0% {
         background-position: top left;
     }
-    50%
-    {
+    50% {
         background-position: top right;
     }
-    0%
-    {
+    0% {
         background-position: top left;
     }
 }
-    audio#podcast {
-        position: absolute;
-        bottom: 17px;
-        background: black;
-    }
-    #news {
-        height: 427px;
-    }
-    .web #news {
-        height: 85;
-    }
+
+audio#podcast {
+    position: absolute;
+    bottom: 17px;
+    background: black;
+}
+
+#news {
+    height: 427px;
+}
+
+.web #news {
+    height: 85;
+}
