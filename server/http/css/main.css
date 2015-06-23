@@ -1635,34 +1635,29 @@ div#de_searchresults {
     border: 1px solid white;
 }
 
-div#de_maincolumn {
-    width: 550px;
-    margin: 10px;
-}
+div#de_maincolumn {}
 
 div#searchresult {
     width: 180px;
     height: 430px;
 }
 
-header#deckedit div {
-    border: 1px solid white;
-    float: left;
-}
-
 div#maindecksummary {
     width: 500px;
     border: 1px solid white;
+    margin-top: 2px;
 }
 
 div#xtradecksummary {
     width: 500px;
     border: 1px solid white;
+    margin-top: 2px;
 }
 
 div#sidedecksummary {
     width: 500px;
     border: 1px solid white;
+    margin-top: 2px;
 }
 
 div#resultecksummary {
@@ -1679,16 +1674,31 @@ div#cardfilter {
 div#maindeck {
     height: 300px;
     width: 500px;
+    border: 1px solid white;
+    margin-top: 2px;
 }
 
 div#xtradeck {
     height: 60px;
     width: 500px;
+    border: 1px solid white;
+    margin-top: 2px;
 }
 
 div#sidedeck {
     height: 60px;
     width: 500px;
+    border: 1px solid white;
+    margin-top: 2px;
+}
+
+div#deckwrapper {
+    width: 1147px;
+    margin: 0 auto;
+    float: none !important;
+    border: 1px solid white;
+    overflow: auto;
+    padding: 0 10px;
 }
 
 @-webkit-keyframes outpulse {
