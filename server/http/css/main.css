@@ -1592,13 +1592,40 @@ select {
 
 header#deckedit div {
     border: 1px solid white;
-}
-div#de_column1 {
-  height: 100%;
-  width: 300px;
-  float: left;
+    float: left;
 }
 
+div#de_column1 {
+    height: 100%;
+    width: 300px;
+}
+
+div#cardpic {
+    height: 300px;
+    margin: 10px;
+    width: 200px;
+}
+
+div#cardinfo {
+    min-height: 242px;
+    width: 100%;
+    border-style: dashed;
+    background-color: rgba(0, 0, 0, .95);
+}
+
+div#cardfilter {
+    width: 100%;
+}
+
+div#de_column2 {
+    margin-left: 10px;
+    width: 800px;
+    height: 100%;
+}
+
+div#cardfilter {
+    height: 120px;
+}
 
 @-webkit-keyframes outpulse {
     from {
