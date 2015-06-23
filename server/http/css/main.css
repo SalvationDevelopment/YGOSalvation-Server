@@ -1593,6 +1593,8 @@ select {
 header#deckedit div {
     border: 1px solid white;
     float: left;
+    color: white;
+    background: rgba(0, 0, 0, .50);
 }
 
 div#de_column1 {
@@ -1621,6 +1623,34 @@ div#de_column2 {
     margin-left: 10px;
     width: 800px;
     height: 100%;
+}
+
+div#de_maincolumn {
+    width: 500px;
+}
+
+header#deckedit div {
+    border: 1px solid white;
+    float: left;
+}
+
+div#maindecksummary {
+    width: 500px;
+}
+
+div#xtradecksummary {
+    width: 500px;
+}
+
+div#sidedecksummary {
+    width: 500px;
+}
+
+div#resultecksummary {
+    float: none;
+    width: 100%;
+    border: none;
+    border-bottom: 1px solid white;
 }
 
 div#cardfilter {
