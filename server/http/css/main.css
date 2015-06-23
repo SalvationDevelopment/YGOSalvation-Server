@@ -1676,3 +1676,111 @@ select {
           50% {  -webkit-box-shadow: 0 0 18px white; }
           to {  #ccc; -webkit-box-shadow: 0 0 3px rgba(255,255,255,0); }
         }
+       footer.superfooter.loud {
+          color: white;
+          font-size: 14px;
+          font-weight: bold;
+        }
+        .webonly {}
+        
+        .web .launcheronly {
+            display:none;
+        }
+        .unlogged .launcheronly {
+            display:none;
+        }
+        
+        .unlogged .launcheronly.loginsystem {
+            display:inline-block;   
+        }
+         a.launcheronly.loginsystem {
+            color:white;
+         }
+		.launcheronly.gamelistcenter {
+			margin-top: 6px;
+		}
+        
+        #ips_username, #ips_password {
+          margin: 20px auto;
+          background: rgba(255,255,255,.5);
+          border: none;
+          width: 20em;
+          padding: .4em;
+          text-align: center;
+          color: black !important;
+          font-weight: bold;
+        -webkit-animation-name: pulse;
+        -webkit-animation-duration: 1s;
+        -webkit-animation-iteration-count: 10;
+        }
+        #ips_username {
+            border-top-left-radius: 8px;
+            border-bottom-left-radius: 20px;
+        }
+        #ips_password {
+            border-top-right-radius: 8px;
+            border-bottom-right-radius: 20px;
+        }
+        
+        .unlogged input#login-username {
+            display: block;
+        }
+        @-webkit-keyframes pulse {
+          from { background-color: #ccc; -webkit-box-shadow: 0 0 3px #333; }
+          50% { background-color: white; -webkit-box-shadow: 0 0 50px white; }
+          to { background-color: #ccc; -webkit-box-shadow: 0 0 3px #333; }
+        }
+        .unlogged.in-iframe .loophole {
+            display : none;
+        }
+        .shine {
+          background: -webkit-gradient(linear, left top, right bottom, color-stop(0%,#000000), color-stop(38%,#000000), color-stop(38%,#000000), color-stop(44%,#ee44aa), color-stop(49%,#ffffff), color-stop(51%,#000000), color-stop(100%,#000000));
+  -webkit-background-size: 50% 100%;
+  color: rgba(255, 255, 255, 0.1);
+  -webkit-background-clip: text;
+  -webkit-animation-name: shine;
+  -webkit-animation-duration: 10s;
+  -webkit-animation-iteration-count: 10;
+  -webkit-animation-timing-function: linear;
+    }
+        .gamelistcenter {
+            width: 30%;
+            margin: 0 auto;
+            border: 1px solid#444;
+            color: silver;
+            padding: 10px;
+        }
+        .gamelistcenter select {
+            background: rgba(0,0,0,.5);
+            color: white;
+        }
+        .web .gamelistcenter {
+            display: none;
+        }
+
+@-webkit-keyframes shine
+{
+    0%
+    {
+        background-position: top left;
+    }
+    50%
+    {
+        background-position: top right;
+    }
+    0%
+    {
+        background-position: top left;
+    }
+}
+    audio#podcast {
+        position: absolute;
+        bottom: 17px;
+        background: black;
+    }
+    #news {
+        height: 427px;
+    }
+    .web #news {
+        height: 85;
+    }
