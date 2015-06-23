@@ -1593,6 +1593,12 @@ select {
 header#deckedit div {
     border: 1px solid white;
 }
+div#de_column1 {
+  height: 100%;
+  width: 300px;
+  float: left;
+}
+
 
 @-webkit-keyframes outpulse {
     from {
