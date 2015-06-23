@@ -359,251 +359,53 @@
         </section>
     </header>
     <header style="padding-top:50px" id="deckedit">
-        <div style="width:1024px; margin:0 auto;">
-            <div id="cardPic"><img id="cardPicDummy" src="../img/cardpics/cover.jpg">
+        <div id="de_column1"></div>
+            <div id="cardpic"></div>
+            <div id="cardinfo">
+                <div id="cardname"></div>
+                <div id="carddata"></div>
             </div>
-            <div id="cardDesc"></div>
-
-
-
-            <form action="index.php" method="post" style='display:none;'>
-                <fieldset>
-                    <legend><img src="pics/plus.png" class="show" id="img_hover" />
-                    </legend>
-                    <span>Suchfilter gef&auml;llig?</span>
-                    <br />
-                    <div style="display: none;" class="hidden">
-                        <h2>Kartenart</h2>
-
-                        <select name="filter_kartenwahl_dropdown" onchange="val()" id="select_id">
-                            <option value="5">Alle</option>
-                            <option value="1">Monster</option>
-                            <option value="2">Zauber</option>
-                            <option value="4">Fallen</option>
-                        </select>
-
-                        <!-- Nur filterbar wenn bei Kategorie Monster gewaehlt wird -->
-                        <select name="filter_monster_dropdown" id="filter_monster_dropdown">
-                            <option value="5">Monster</option>
-                            <option value="17">Normal</option>
-                            <option value="33">Effekt</option>
-                            <option value="97">Fusion</option>
-                            <option value="161">Ritual</option>
-                            <option value="8225">Synchro</option>
-                            <option value="8388641">XYZ</option>
-                            <option value="4129">Empf&auml;nger</option>
-                            <option value="94944637">Zwilling</option>
-                            <option value="1057">Union</option>
-                            <option value="545">Spirit</option>
-                            <option value="2097185">Flip</option>
-                            <option value="4194337">Toon</option>
-                        </select>
-
-                        <!-- Nur filterbar wenn bei Kategorie Zauber gewaehlt wird -->
-                        <select name="filter_zauber_dropdown" id="filter_zauber_dropdown">
-                            <option value="5">Zauber</option>
-                            <option value="2">Normal</option>
-                            <option value="65538">Schnell</option>
-                            <option value="131074">Permanent</option>
-                            <option value="130">Ritual</option>
-                            <option value="262146">Ausr&uuml;stung</option>
-                            <option value="524290">Spielfeld</option>
-                        </select>
-
-                        <!-- Nur filterbar wenn bei Kategorie Fallen gewaehlt wird -->
-                        <select name="filter_fallen_dropdown" id="filter_fallen_dropdown">
-                            <option value="5">Fallen</option>
-                            <option value="4">Normal</option>
-                            <option value="131076">Permanent</option>
-                            <option value="1048580">Konter</option>
-                        </select>
-                        <br />
-                        <br />
-
-
-
-
-
-
-                        <!-- filter_div_monster_erweiterung -->
-                        <div id="filter_div_monster_erweiterung">
-
-                            <h2>Eigenschaft</h2>
-
-                            <input type="checkbox" name="filter_attribute[]" value="1">
-                            <img src="pics/icons/att_earth.png" /> <span>Erde</span>
-
-                            <input class="eigenschaft" type="checkbox" name="filter_attribute[]" value="2">
-                            <img src="pics/icons/att_water.png" /> <span>Wasser</span>
-
-                            <input class="eigenschaft" type="checkbox" name="filter_attribute[]" value="4">
-                            <img src="pics/icons/att_fire.png" /> <span>Feuer</span>
-
-                            <br />
-
-                            <input type="checkbox" name="filter_attribute[]" value="8">
-                            <img src="pics/icons/att_wind.png" /> <span>Wind</span>
-
-                            <input class="eigenschaft" type="checkbox" name="filter_attribute[]" value="16">
-                            <img src="pics/icons/att_light.png" /> <span>Licht</span>
-                            <br />
-
-                            <input type="checkbox" name="filter_attribute[]" value="32">
-                            <img src="pics/icons/att_dark.png" /> <span>Finsternis</span>
-
-                            <br />
-                            <br />
-
-                            <h2>Monster Typ</h2>
-
-                            <select name="filter_race" id="filter_race">
-                                <option value="5">Alle</option>
-                                <option value="1">Krieger</option>
-                                <option value="2">Hexer</option>
-                                <option value="4">Fee</option>
-                                <option value="8">Unterweltler</option>
-                                <option value="16">Zombie</option>
-                                <option value="32">Maschine</option>
-                                <option value="64">Wasser</option>
-                                <option value="128">Pyro</option>
-                                <option value="256">Fels</option>
-                                <option value="512">Gefl&uuml;geltes Ungeheuer</option>
-                                <option value="1024">Pflanze</option>
-                                <option value="2048">Insekt</option>
-                                <option value="4096">Donner</option>
-                                <option value="8192">Drache</option>
-                                <option value="16384">Ungeheuer</option>
-                                <option value="32768">Ungeheuer-Krieger</option>
-                                <option value="65536">Dinosaurier</option>
-                                <option value="131072">Fisch</option>
-                                <option value="262144">Seeschlange</option>
-                                <option value="524288">Reptil</option>
-                                <option value="1048576">Psi</option>
-                                <option value="2097152">G&ouml;ttliches Ungeheuer</option>
-                            </select>
-
-                            <br />
-                            <br />
-
-                            <h2>Level / Rank</h2>
-
-                            <input type="text" name="filter_level" maxlength="2" />
-
-                            <br />
-                            <br />
-
-                            <h2>ATK & DEF</h2>
-
-                            <img style="cursor:help;" src="pics/fragezeichen.png" id="tooltip_3" class="hilfetip" />
-                            <div class="hovertipContent">
-                                <p>Gebt hier die Angriffsst&auml;rke ein nach der Ihr suchen wollt!</p>
-                            </div>
-
-                            <input type="text" name="filter_atk" maxlength="4" size="5" />
-
-                            <img style="cursor:help;" src="pics/fragezeichen.png" id="tooltip_4" class="hilfetip" />
-                            <div class="hovertipContent">
-                                <p>Gebt hier die Verteigungsst&auml;rke ein nach der Ihr suchen wollt!</p>
-                            </div>
-
-                            <input type="text" name="filter_def" maxlength="4" size="5" />
-
-                        </div>
-                        <!-- ENDE DIV BOX filter_div_monster_erweiterung -->
-
-                        <h2>Effekt Filter</h2>
-                        <!-- Effekt Filter sucht in der Beschreibung -->
-                        <select name="filter_effekt_dropdown" id="filter_effekt_dropdown">
-                            <option value="filter">Filter</option>
-                            <option value="Z/F Zerst&ouml;ren">Z/F Zerst&ouml;ren</option>
-                            <option value="auf die hand">Auf die Hand</option>
-                            <option value="ziehen">Karten ziehen</option>
-                            <option value="kontrolle wechseln">Kontrolle wechseln</option>
-                            <option value="nicht angreifen">Angriff beschr&auml;nken</option>
-                            <option value="Typ-Abh&auml;ngig">Typ-Abh&auml;ngig</option>
-                            <option value="Zerst&ouml;ren">Zerst&ouml;ren</option>
-                            <option value="Fusions Verbunden">Fusions Verbunden</option>
-                            <option value="Monster zerst&ouml;ren">Monster zerst&ouml;ren</option>
-                            <option value="deck zur&uuml;ck">Ins Deck zur&uuml;ck</option>
-                            <option value="Suche">Suchen</option>
-                            <option value="Wechsel">Wechsel ATK/DEF</option>
-                            <option value="Direktangriff">Direktangriff</option>
-                            <option value="Eigenschafft">Eigenschafft</option>
-                            <option value="W&auml;hlen">W&auml;hlen</option>
-                            <option value="Empf&auml;nger">Empf&auml;nger-Verbunden</option>
-                            <option value="Handzerst&ouml;rung">Verbannen</option>
-                            <option value="Handzerst&ouml;rung">Handzerst&ouml;rung</option>
-                            <option value="Wiederherstellen">Wiederherstellen</option>
-                            <option value="Durchschlag">Durchschlag schaden</option>
-                            <option value="Spezialbeschw&ouml;rung">Spezialbeschw&ouml;rung</option>
-                            <option value="lebenspunkte Schaden">LP Schaden</option>
-                            <option value="z&auml;hlmarke">Z&auml;hlmarke</option>
-                            <option value="Xyz Verbunden">Xyz Verbunden</option>
-                            <option value="friedhof">Friedhof</option>
-                            <option value="deckzerst&ouml;rung">Deckzerst&ouml;rung</option>
-                            <option value="position wechseln">Position wechseln</option>
-                            <option value="angriff wiederholen">Angriff wiederholen</option>
-                            <option value="spielmarken">Spielmarken</option>
-                            <option value="lepenspunkte wiederherstellen">LP wiederherstellen</option>
-                            <option value="m&uuml;nze">Gl&uuml;cksspiele</option>
-                            <option value="w&uuml;rfel">W&uuml;rfelspiel</option>
-                            <option value="Effekte annulieren">Effekte annulieren</option>
-                        </select>
-
-
-                </fieldset>
-
-                <!-- Ende Hidden Filter Box -->
+        <div id="de_column2">
+            <div id="cardfilter">
+                <div id="cardfilter_c1">
+                    <select id="banlist"></select>
+                    <select id="de_decklist"></select>
                 </div>
-
-
-                <fieldset class="filter">
-                    <legend></legend>
-
-                    <p class="underlined"></p>
-
-                    <input type="text" name="filter_cardname" maxlength="40">
-                    <img style="cursor:help;" src="pics/fragezeichen.png" id="tooltip_1" class="hilfetip" />
-                    <div class="hovertipContent">
-                        <p>Hier k&ouml;nnt Ihr direkt nach dem Karten Namen suchen!</p>
-                    </div>
-                    <input type="submit" value="suchen" class="rechts" />
-                </fieldset>
-            </form>
-
-
-            <!-- Deck DOWNLOADS -->
-            <a href="#" id="deckDownload">DECK DOWNLOAD</a>
-
-            <script>
-                $("#deckDownload").click(function () {
-                    var deck = mainDeckList;
-
-                    $.get("php/deckdownload.php?mainDeck=" + deck + "&xtraDeck=" + xtraDeckList + "&sideDeck=" + sideDeckList, function (deck, status) {
-                        console.log("Data: " + deck + "\nStatus: " + status);
-                    });
-                });
-            </script>
-
-            <!-- Deckfelder -->
-            <div id="mainDeckHeader">
-                <p>MainDeck</p>
+                <div id="cardfilter_c2">
+                
+                </div>
             </div>
-            <div id="mainDeck"></div>
-
-            <div id="xtraDeckHeader">
-                <p>XtraDeck</p>
+            <div id="de_maincolumn">
+                <div id="maindecksummary">
+                    <span>Main Deck:</span>
+                    <span id="maindeckCount"></span>
+                    <span id="maindeckCount"></span>
+                    <span id="maindeckCountTrap"></span>
+                    <span id="maindeckCountSpell"></span>
+                    <span id="maindeckCountMonster"></span>
+                </div>
+                <div id="xtradecksummary">
+                    <span>Extra Deck:</span>
+                    <span id="xtradeckCount"></span>
+                    <span id="xtradeckCount"></span>
+                    <span id="xtradeckCountSynchro"></span>
+                    <span id="xtradeckCountXYZ"></span>
+                    <span id="xtradeckCountFusion"></span>
+                </div>
+                <div id="sidedecksummary">
+                    <span>ExtraDeck:</span>
+                    <span id="sidedeckCount"></span>
+                    <span id="sidedeckCount"></span>
+                    <span id="sidedeckCountTrap"></span>
+                    <span id="sidedeckCountSpell"></span>
+                    <span id="sidedeckCountMonster"></span>
+                </div>
             </div>
-            <div id="xtraDeck"></div>
-
-            <div id="sideDeckHeader">
-                <p>SideDeck</p>
-            </div>
-            <div id="sideDeck"></div>
-
-
-            <div id="card-container">
-
+            <div id="de_searchresults">
+                <div id="resultecksummary">
+                    <span>Results:</span>
+                </div>
+                <div id="searchresult"></div>
             </div>
         </div>
     </header>
