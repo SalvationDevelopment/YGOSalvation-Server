@@ -1592,7 +1592,8 @@ select {
 
 header#deckedit div {
     font-size: 12px;
-    border: 1px solid white;
+    /*    border: 1px solid white;*/
+    
     float: left;
     color: white;
     background: rgba(0, 0, 0, .50);
@@ -1607,6 +1608,7 @@ div#cardpic {
     height: 300px;
     margin: 10px;
     width: 200px;
+    border: 1px solid white;
 }
 
 div#cardinfo {
@@ -1626,9 +1628,21 @@ div#de_column2 {
     height: 100%;
 }
 
+div#de_searchresults {
+    height: 461px;
+    overflow-y: scroll;
+    width: 228px;
+    border: 1px solid white;
+}
+
 div#de_maincolumn {
     width: 550px;
     margin: 10px;
+}
+
+div#searchresult {
+    width: 180px;
+    height: 430px;
 }
 
 header#deckedit div {
@@ -1638,14 +1652,17 @@ header#deckedit div {
 
 div#maindecksummary {
     width: 500px;
+    border: 1px solid white;
 }
 
 div#xtradecksummary {
     width: 500px;
+    border: 1px solid white;
 }
 
 div#sidedecksummary {
     width: 500px;
+    border: 1px solid white;
 }
 
 div#resultecksummary {
