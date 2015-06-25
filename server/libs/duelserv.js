@@ -31,17 +31,18 @@ bot = new irc.Client(config.server, config.botName, {
 bot.on('registered', function () {
     'use strict';
     if (process.env.OPERNAME && process.env.OPERPASS) {
-        
+
         setTimeout(function () {
             bot.send('oper', process.env.OPERNAME, process.env.OPERPASS);
             process.nextTick(function () {
                 bot.send('sajoin', config.botName, "#public");
             });
-            
+
         }, 2000);
     }
-    
+
 });
+
 function duelrequest(challenger, challengedParty, roompass) {
     'use strict';
     eventEmitter.emit('announce', {
@@ -51,6 +52,7 @@ function duelrequest(challenger, challengedParty, roompass) {
         roompass: roompass
     });
 }
+
 function kill(challenger, challengedParty) {
     'use strict';
     eventEmitter.emit('announce', {
@@ -59,6 +61,14 @@ function kill(challenger, challengedParty) {
         from: challenger
     });
 }
+
+function update() {
+    'use strict';
+    eventEmitter.emit('announce', {
+        clientEvent: 'update'
+    });
+}
+
 function globalMsg(message) {
     'use strict';
     eventEmitter.emit('announce', {
@@ -110,6 +120,15 @@ bot.addListener("message", function (from, to, message) {
 bot.addListener("message#public", function (from, to, message) {
     'use strict';
     var command = message.args[1].split(' ');
+    if (command[0] !== '!update') {
+        return;
+    }
+    update();
+});
+
+bot.addListener("message#public", function (from, to, message) {
+    'use strict';
+    var command = message.args[1].split(' ');
     if (command[0] !== '!kill') {
         return;
     }
@@ -141,15 +160,15 @@ bot.addListener("message#public", function (from, to, message) {
     globalMsg(command.join(' '));
 });
 
-eventEmitter.bot =  bot;
+eventEmitter.bot = bot;
 module.exports = eventEmitter;
 
 function start() {
     'use strict';
     //get users
-    
+
     //get piles
-    
+
     //send each user pack
 
 }
