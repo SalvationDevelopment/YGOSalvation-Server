@@ -1,0 +1,259 @@
+[{
+"Salvation Server" : "data-salvationserver",
+"en" : "Salvation Server",
+"es" :
+"de" :
+"fr" : 
+},{
+"Replays" : "data-replays",
+"en" :"Replays",
+"es" :
+"de" :
+"fr" :
+},{
+"Game List" : "data-gamelist",
+"en" : "Game List",
+"es" : 
+"de" :
+"fr" :
+},{
+"Host" : "data-host",
+"en" : "Host",
+"es" :
+"de" :
+"fr" :
+},{
+"Forum" : "data-forum",
+"en" :"Forum",
+"es" :
+"de" :
+"fr" :
+},{
+"Chat" : "data-chat",
+"en" : "Chat",
+"es" : 
+"de" :
+"fr" :
+},{
+"News" : "data-faq",
+"en" : "News",
+"es" :
+"de" :
+"fr" :
+},{
+"Settings" : "data-settings",
+"en" : "Settings",
+"es" :
+"de" :
+"fr" :
+},{
+"Online Yu-Gi-Oh! Simulator" : "data-onlineyugiohsimulator",
+"en" : "Online Yu-Gi-Oh! Simulator",
+"es" :
+"de" :
+"fr" :
+},{
+"Play Now" : "data-playnow",
+"en" : "Play Now",
+"es" :
+"de" :
+"fr" :
+},{
+"Login" : "data-login",
+"en" : "Login",
+"es" :
+"de" :
+"fr" :
+},{
+"Register via Forum" : "data-registerviaforum",
+"en" : "Register via Forum",
+"es" :
+"de" :
+"fr" :
+},{
+"Curr"en"t "de"ck" : "data-curr"en"t"de"ck",
+"en" : "Curr"en"t "de"ck",
+"es" :
+"de" :
+"fr" :
+},{
+"Ranked" : "data-ranked",
+"en" : "Ranked",
+"es" :
+"de" :
+"fr" :
+},{
+"Card Pool" : "data-cardpool",
+"en" : "Card Pool",
+"es" :
+"de" :
+"fr" :
+},{
+"Ban List" : "data-banlist",
+"en" : "Ban List",
+"es" :
+"de" :
+"fr" :
+},{
+"Duel Mo"de"" : "data-duelmo"de"",
+"en" : "Duel Mo"de"",
+"es" :
+"de" :
+"fr" :
+},{
+"Time Limit" : "data-timelimit",
+"en" : "Time Limit",
+"es" :
+"de" :
+"fr" :
+},{
+""en"able Priority" : "data-"en"ablepriority",
+"en" : ""en"able Priority",
+"es" :
+"de" :
+"fr" :
+},{
+"Disable Check "de"ck" : "data-disablecheck"de"ck",
+"en" : "Disable Check "de"ck",
+"es" :
+"de" :
+"fr" :
+},{
+"Disable Shuffle "de"ck" : "data-disabl"es"huffle"de"ck",
+"en" : "Disable Shuffle "de"ck",
+"es" :
+"de" :
+"fr" :
+},{
+"Use Password" : "data-usepassword",
+"en" : "Use Password",
+"es" :
+"de" :
+"fr" :
+},{
+"Lifepoints" : "data-lifepoints",
+"en" : "Lifepoints",
+"es" :
+"de" :
+"fr" :
+},{
+"Game Settings" : "data-gam"es"ettings",
+"en" : "Game Settings",
+"es" :
+"de" :
+"fr" :
+},{
+"Auto Placem"en"t will have the game automatically pick where cards are placed." : "data-autoplacem"en"twillhavethegameautomaticllypickwherecardsareplaced",
+"en" : "Auto Placem"en"t will have the game automatically pick where cards are placed.",
+"es" :
+"de" :
+"fr" :
+},{
+"If Auto Placem"en"t is on, you can randomize it." : "data-ifautoplacem"en"tisonyoucanrandomizeit",
+"en" : "If Auto Placem"en"t is on, you can randomize it.",
+"es" :
+"de" :
+"fr" :
+},{
+"If you selected multiple cards in r"es"ponse to a chain sugg"es"tion. You may have the game automatically pick the r"es"olution or"de"r. If Auto Placem"en"t is on, you can randomize it." : "data-ifyouselectedmultiplecardsinr"es"ponsetoachainsugg"es"tionyoumayhavethegameautomaticallypickther"es"olutionor"de"rifautoplacem"en"tisonyoucanrandomizeit",
+"en" : "If you selected multiple cards in r"es"ponse to a chain sugg"es"tion. You may have the game automatically pick the r"es"olution or"de"r. If Auto Placem"en"t is on, you can randomize it.",
+"es" :
+"de" :
+"fr" :
+},{
+"No (obvious) "de"lay for Chains, add additional paus"es" to game play to spook your oppon"en"t." : "data-noobvious"de"layforchainsaddadditionalpaus"es"togameplaytospookyouroppon"en"",
+"en" : "No (obvious) "de"lay for Chains, add additional paus"es" to game play to spook your oppon"en"t.",
+"es" :
+"de" :
+"fr" :
+},{
+"Auto Card Placem"en"t" : "data-autocardplacem"en"t",
+"en" : "Auto Card Placem"en"t",
+"es" :
+"de" :
+"fr" :
+},{
+"Random Card Placem"en"t" : "data-randomcardplacem"en"t",
+"en" : "Random Card Placem"en"t",
+"es" :
+"de" :
+"fr" :
+},{
+"Auto Chain Or"de"r" : "data-autochainor"de"r",
+"en" : "Auto Chain Or"de"r",
+"es" :
+"de" :
+"fr" :
+},{
+"No "de"lay for Chains" : "data-no"de"layforchains",
+"en" : "No "de"lay for Chains",
+"es" :
+"de" :
+"fr" :
+},{
+""en"able Sound" : "data-"en"abl"es"ound",
+"en" : ""en"able Sound",
+"es" :
+"de" :
+"fr" :
+},{
+""en"able Music" : "data-"en"ablemusic",
+"en" : ""en"able Music",
+"es" :
+"de" :
+"fr" :
+},{
+""en"able DirectX" : "data-"en"abledirectx",
+"en" : ""en"able DirectX",
+"es" :
+"de" :
+"fr" :
+},{
+"Anti Aliasing" : "data-antialiasing",
+"en" : "Anti Aliasing",
+"es" :
+"de" :
+"fr" :
+},{
+"Font Size" : "data-fontsize",
+"en" : "Font Size",
+"es" :
+"de" :
+"fr" :
+},{
+"Font" : "data-font",
+"en" : "Duel Mo"de"",
+"es" :
+"de" :
+"fr" :
+},{
+"Skin" : "data-skin",
+"en" : "Skin",
+"es" :
+"de" :
+"fr" :
+},{
+""de"fault" : "data-"de"fault",
+"en" : "Duel Mo"de"",
+"es" :
+"de" :
+"fr" :
+},{
+"Sound Volume" : "data-soundvolume",
+"en" : "Duel Mo"de"",
+"es" :
+"de" :
+"fr" :
+},{
+"Music Volume" : "data-musicvolume",
+"en" : "Music Volume",
+"es" :
+"de" :
+"fr" :
+},{
+"Database File" : "data-databasefile",
+"en" : "Database File",
+"es" :
+"de" :
+"fr" :
+}]
