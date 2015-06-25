@@ -1,259 +1,299 @@
 [{
-"Salvation Server" : "data-salvationserver",
+"item" : "data-salvationserver",
 "en" : "Salvation Server",
 "es" : "Servidor Salvation",
 "de" :
 "fr" : 
+"pt" :
 },{
-"Replays" : "data-replays",
+"item" : "data-replays",
 "en" :"Replays",
 "es" :"Repeticiones",
 "de" :
 "fr" :
+"pt" :
 },{
-"Game List" : "data-gamelist",
+"item" : "data-gamelist",
 "en" : "Game List",
 "es" : "Partidas",
 "de" :
 "fr" :
+"pt" :
 },{
-"Host" : "data-host",
+"item" : "data-host",
 "en" : "Host",
 "es" : "Host",
 "de" :
 "fr" :
+"pt" :
 },{
-"Forum" : "data-forum",
+"item" : "data-forum",
 "en" :"Forum",
 "es" :"Foro",
 "de" :
 "fr" :
+"pt" :
 },{
-"Chat" : "data-chat",
+"item" : "data-chat",
 "en" : "Chat",
 "es" : "Chat",
 "de" :
 "fr" :
+"pt" :
 },{
-"News" : "data-faq",
+"item" : "data-faq",
 "en" : "News",
 "es" : "Noticias",
 "de" :
 "fr" :
+"pt" :
 },{
-"Settings" : "data-settings",
+"item" : "data-settings",
 "en" : "Settings",
 "es" : "Ajustes",
 "de" :
 "fr" :
+"pt" :
 },{
-"Online Yu-Gi-Oh! Simulator" : "data-onlineyugiohsimulator",
+"item" : "data-onlineyugiohsimulator",
 "en" : "Online Yu-Gi-Oh! Simulator",
 "es" : "Simulador de Yu-Gi-Oh en línea",
 "de" :
 "fr" :
 },{
-"Play Now" : "data-playnow",
+"item" : "data-playnow",
 "en" : "Full Windows Client",
 "es" : "Cliente para Windows",
 "de" :
 "fr" :
+"pt" :
 },{
-"Login" : "data-login",
+"item" : "data-login",
 "en" : "Login",
 "es" : "Iniciar Sesión",
 "de" :
 "fr" :
 },{
-"Register via Forum" : "data-registerviaforum",
+"item" : "data-registerviaforum",
 "en" : "Register via Forum",
 "es" : "Registrarse por el Foro",
 "de" :
 "fr" :
+"pt" :
 },{
-"Current deck" : "data-currentdeck",
-"en" : "Curr"en"t "de"ck",
+"item" : "data-currentdeck",
+"en" : "Current deck",
 "es" : "Mazo Actual",
 "de" :
 "fr" :
+"pt" :
 },{
-"Ranked" : "data-ranked",
+"item" : "data-ranked",
 "en" : "Ranked",
 "es" : "Ranked",
 "de" :
 "fr" :
+"pt" :
 },{
-"Card Pool" : "data-cardpool",
+"item" : "data-cardpool",
 "en" : "Card Pool",
 "es" : "Lista de Cartas",
 "de" :
 "fr" :
+"pt" :
 },{
-"Ban List" : "data-banlist",
+"item" : "data-banlist",
 "en" : "Ban List",
 "es" : "Ban List",
 "de" :
 "fr" :
+"pt" :
 },{
-"Duel Mode" : "data-duelmode",
+"item" : "data-duelmode",
 "en" : "Duel Mode",
 "es" : "Modo de Duelo",
 "de" :
 "fr" :
 },{
-"Time Limit" : "data-timelimit",
+"item" : "data-timelimit",
 "en" : "Time Limit",
 "es" : "Tiempo Límite",
 "de" :
 "fr" :
+"pt" :
 },{
-"enable Priority" : "data-"en"ablepriority",
+"item" : "data-"en"ablepriority",
 "en" : "Enable Priority",
-"es" : "Usar Prioridad"
+"es" : "Usar Prioridad",
 "de" :
 "fr" :
+"pt" :
 },{
-"Disable Check deck" : "data-disablecheckdeck",
-"en" : "Disable Check deck",
+"item" : "data-disablecheckdeck",
+"en" : "Disable Check Deck",
 "es" : "No Revisar Mazo",
 "de" :
 "fr" :
+"pt" :
 },{
-"Disable Shuffle deck" : "data-disableshuffledeck",
-"en" : "Disable Shuffle deck",
+"item" : "data-disableshuffledeck",
+"en" : "Disable Shuffle Deck",
 "es" : "No Barajear Mazo",
 "de" :
 "fr" :
+"pt" :
 },{
-"Use Password" : "data-usepassword",
+"item" : "data-usepassword",
 "en" : "Use Password",
 "es" : "Usar Contraseña",
 "de" :
 "fr" :
+"pt" :
 },{
-"Lifepoints" : "data-lifepoints",
+"item" : "data-lifepoints",
 "en" : "Lifepoints",
 "es" : "Puntos de Vida",
 "de" :
 "fr" :
+"pt" :
 },{
-"Game Settings" : "data-gamesettings",
+"item" : "data-gamesettings",
 "en" : "Game Settings",
 "es" : "Ajustes del Juego",
 "de" :
 "fr" :
+"pt" :
 },{
-"Auto Placement will have the game automatically pick where cards are placed." : "data-autoplacementwillhavethegameautomaticllypickwherecardsareplaced",
+"item" : "data-autoplacementwillhavethegameautomaticllypickwherecardsareplaced",
 "en" : "Auto Placement will have the game automatically pick where cards are placed.",
 "es" : "Posición automática hará que el juego elija donde poner las cartas.",
 "de" :
 "fr" :
+"pt" :
 },{
-"If Auto Placement is on, you can randomize it." : "data-ifautoplacementisonyoucanrandomizeit",
+"item" : "data-ifautoplacementisonyoucanrandomizeit",
 "en" : "If Auto Placement is on, you can randomize it.",
 "es" : "Si Posición Automática esta habilitado, puedes hacerlo aleatorio.",
 "de" :
 "fr" :
+"pt" :
 },{
-"If you selected multiple cards in response to a chain suggestion. You may have the game automatically pick the resolution order. If Auto Placement is on, you can randomize it." : "data-ifyouselectedmultiplecardsinresponsetoachainsuggestionyoumayhavethegameautomaticallypicktheresolutionorderifautoplacementisonyoucanrandomizeit",
+"item" : "data-ifyouselectedmultiplecardsinresponsetoachainsuggestionyoumayhavethegameautomaticallypicktheresolutionorderifautoplacementisonyoucanrandomizeit",
 "en" : "If you selected multiple cards in response to a chain suggestion. You may have the game automatically pick the resolution order. If Auto Placement is on, you can randomize it.",
 "es" : "Si seleccionaste múltiples cartas en respuesta a una sugerencia de cadena. Puedes dejar que el juego automáticamente elija el orden de resolución. Si Posición Automática esta habilitado, puedes hacerlo aleatorio.",
 "de" :
 "fr" :
+"pt" :
 },{
-"No (obvious) delay for Chains, add additional pauses to game play to spook your opponent." : "data-noobviousdelayforchainsaddadditionalpausestogameplaytospookyouropponent",
+"item" : "data-noobviousdelayforchainsaddadditionalpausestogameplaytospookyouropponent",
 "en" : "No (obvious) delay for Chains. Add additional pauses to game play to spook your opponent.",
 "es" : "No Espera (Evidente) en Cadenas. Agrega pausas adicionales al juego para asustar a tu oponente.",
 "de" :
 "fr" :
+"pt" :
 },{
-"Auto Card Placement" : "data-autocardplacement",
+"item" : "data-autocardplacement",
 "en" : "Auto Card Placement",
 "es" : "Posición Automática de Cartas",
 "de" :
 "fr" :
+"pt" :
 },{
-"Random Card Placement" : "data-randomcardplacement",
+"item" : "data-randomcardplacement",
 "en" : "Random Card Placement",
 "es" : "Posición Aleatoria de Cartas",
 "de" :
 "fr" :
+"pt" :
 },{
-"Auto Chain Order" : "data-autochainorder",
+"item" : "data-autochainorder",
 "en" : "Auto Chain Order",
 "es" : "Orden Automático de Cadenas",
 "de" :
 "fr" :
+"pt" :
 },{
-"No delay for Chains" : "data-nodelayforchains",
+"item" : "data-nodelayforchains",
 "en" : "No delay for Chains",
 "es" : "No Espera en Cadenas",
 "de" :
 "fr" :
+"pt" :
 },{
-"enable Sound" : "data-enablesound",
-"en" : "enable Sound",
+"item" : "data-enablesound",
+"en" : "Enable Sound",
 "es" : "habilitar Sonido",
 "de" :
 "fr" :
+"pt" :
 },{
-"enable Music" : "data-enablemusic",
-"en" : "enable Music",
+"item" : "data-enablemusic",
+"en" : "Enable Music",
 "es" : "habilitar Música",
 "de" :
 "fr" :
+"pt" :
 },{
-"enable DirectX" : "data-enabledirectx",
+"item" : "data-enabledirectx",
 "en" : "enable DirectX",
 "es" : "habilitar DirectX",
 "de" :
 "fr" :
+"pt" :
 },{
-"Anti Aliasing" : "data-antialiasing",
+"item" : "data-antialiasing",
 "en" : "Anti Aliasing",
 "es" : "Anti Aliasing",
 "de" :
 "fr" :
+"pt" :
 },{
-"Font Size" : "data-fontsize",
+"item" : "data-fontsize",
 "en" : "Font Size",
 "es" : "Tamaño de Letra",
 "de" :
 "fr" :
+"pt" :
 },{
-"Font" : "data-font",
+"item" : "data-font",
 "en" : "Font,
 "es" : "Fuente",
 "de" :
 "fr" :
+"pt" :
 },{
-"Skin" : "data-skin",
+"item" : "data-skin",
 "en" : "Skin",
 "es" : "Skin",
 "de" :
 "fr" :
+"pt" :
 },{
-"default" : "data-default",
+"item" : "data-default",
 "en" : "Default",
 "es" :"Predeterminadas",
 "de" :
 "fr" :
+"pt" :
 },{
-"Sound Volume" : "data-soundvolume",
+"item" : "data-soundvolume",
 "en" : "Sound Volume",
 "es" :"Volumen de Sonido",
 "de" :
 "fr" :
+"pt" :
 },{
-"Music Volume" : "data-musicvolume",
+"item" : "data-musicvolume",
 "en" : "Music Volume",
 "es" : "Volumen de Música",
 "de" :
 "fr" :
+"pt" :
 },{
-"Database File" : "data-databasefile",
+"item" : "data-databasefile",
 "en" : "Database File",
 "es" : "Archivo Base de Datos",
 "de" :
 "fr" :
+"pt" :
 }]
