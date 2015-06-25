@@ -5,6 +5,7 @@ function isChecked(id) {
     'use strict';
     return ($(id).is(':checked'));
 }
+
 function updatenews() {
     'use strict';
     $.getJSON('news.json', function (news) {
@@ -151,7 +152,17 @@ $(document).ready(function () {
         $('#ipblogin').css('display', 'block');
     }
 
-    
-   
+
+
 
 });
+
+var translationDB = [];
+
+function translateLang(lang) {
+    "use strict";
+    var i = 0;
+    for (i; translationDB.length > i; i++) {
+        $('[' + translationDB[i].item + ']').text(translationDB[i][lang]);
+    }
+}
