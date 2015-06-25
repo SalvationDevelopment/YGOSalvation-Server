@@ -227,7 +227,7 @@ function processServerRequest(parameter) {
     'use strict';
     console.log('got server request for ', parameter);
     var letter = parameter[1];
-    
+
     if (letter === 'a') {
         gui.Shell.openItem('http://forum.ygopro.us');
         return;
@@ -296,6 +296,9 @@ privateServer.on('data', function (data) {
     var join = false,
         storage;
     //console.log(data);
+    if (data.clientEvent === 'update') {
+        createmanifest();
+    }
     if (data.clientEvent !== 'privateServerRequest') {
         return;
     }
@@ -306,13 +309,13 @@ privateServer.on('data', function (data) {
         }
     }
 
-    
+
     processServerRequest(data.parameter);
 });
 privateServer.write({
     action: 'privateServer',
-    username : localStorage.nickname,
-    uniqueID : uniqueID
+    username: localStorage.nickname,
+    uniqueID: uniqueID
 });
 
 setInterval(function () {
@@ -322,9 +325,7 @@ setInterval(function () {
         serverUpdate: list,
         room: localStorage.nickname,
         clientEvent: 'privateServer',
-        uniqueID : uniqueID
+        uniqueID: uniqueID
     });
     updateNeeded = false;
 }, 15000);
-
-
