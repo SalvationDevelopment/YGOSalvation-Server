@@ -1,259 +1,259 @@
 [{
 "Salvation Server" : "data-salvationserver",
 "en" : "Salvation Server",
-"es" :
+"es" : "Servidor Salvation",
 "de" :
 "fr" : 
 },{
 "Replays" : "data-replays",
 "en" :"Replays",
-"es" :
+"es" :"Repeticiones",
 "de" :
 "fr" :
 },{
 "Game List" : "data-gamelist",
 "en" : "Game List",
-"es" : 
+"es" : "Partidas",
 "de" :
 "fr" :
 },{
 "Host" : "data-host",
 "en" : "Host",
-"es" :
+"es" : "Host",
 "de" :
 "fr" :
 },{
 "Forum" : "data-forum",
 "en" :"Forum",
-"es" :
+"es" :"Foro",
 "de" :
 "fr" :
 },{
 "Chat" : "data-chat",
 "en" : "Chat",
-"es" : 
+"es" : "Chat",
 "de" :
 "fr" :
 },{
 "News" : "data-faq",
 "en" : "News",
-"es" :
+"es" : "Noticias",
 "de" :
 "fr" :
 },{
 "Settings" : "data-settings",
 "en" : "Settings",
-"es" :
+"es" : "Ajustes",
 "de" :
 "fr" :
 },{
 "Online Yu-Gi-Oh! Simulator" : "data-onlineyugiohsimulator",
 "en" : "Online Yu-Gi-Oh! Simulator",
-"es" :
+"es" : "Simulador de Yu-Gi-Oh en línea",
 "de" :
 "fr" :
 },{
 "Play Now" : "data-playnow",
-"en" : "Play Now",
-"es" :
+"en" : "Full Windows Client",
+"es" : "Cliente para Windows",
 "de" :
 "fr" :
 },{
 "Login" : "data-login",
 "en" : "Login",
-"es" :
+"es" : "Iniciar Sesión",
 "de" :
 "fr" :
 },{
 "Register via Forum" : "data-registerviaforum",
 "en" : "Register via Forum",
-"es" :
+"es" : "Registrarse por el Foro",
 "de" :
 "fr" :
 },{
-"Curr"en"t "de"ck" : "data-curr"en"t"de"ck",
+"Current deck" : "data-currentdeck",
 "en" : "Curr"en"t "de"ck",
-"es" :
+"es" : "Mazo Actual",
 "de" :
 "fr" :
 },{
 "Ranked" : "data-ranked",
 "en" : "Ranked",
-"es" :
+"es" : "Ranked",
 "de" :
 "fr" :
 },{
 "Card Pool" : "data-cardpool",
 "en" : "Card Pool",
-"es" :
+"es" : "Lista de Cartas",
 "de" :
 "fr" :
 },{
 "Ban List" : "data-banlist",
 "en" : "Ban List",
-"es" :
+"es" : "Ban List",
 "de" :
 "fr" :
 },{
-"Duel Mo"de"" : "data-duelmo"de"",
-"en" : "Duel Mo"de"",
-"es" :
+"Duel Mode" : "data-duelmode",
+"en" : "Duel Mode",
+"es" : "Modo de Duelo",
 "de" :
 "fr" :
 },{
 "Time Limit" : "data-timelimit",
 "en" : "Time Limit",
-"es" :
+"es" : "Tiempo Límite",
 "de" :
 "fr" :
 },{
-""en"able Priority" : "data-"en"ablepriority",
-"en" : ""en"able Priority",
-"es" :
+"enable Priority" : "data-"en"ablepriority",
+"en" : "Enable Priority",
+"es" : "Usar Prioridad"
 "de" :
 "fr" :
 },{
-"Disable Check "de"ck" : "data-disablecheck"de"ck",
-"en" : "Disable Check "de"ck",
-"es" :
+"Disable Check deck" : "data-disablecheckdeck",
+"en" : "Disable Check deck",
+"es" : "No Revisar Mazo",
 "de" :
 "fr" :
 },{
-"Disable Shuffle "de"ck" : "data-disabl"es"huffle"de"ck",
-"en" : "Disable Shuffle "de"ck",
-"es" :
+"Disable Shuffle deck" : "data-disableshuffledeck",
+"en" : "Disable Shuffle deck",
+"es" : "No Barajear Mazo",
 "de" :
 "fr" :
 },{
 "Use Password" : "data-usepassword",
 "en" : "Use Password",
-"es" :
+"es" : "Usar Contraseña",
 "de" :
 "fr" :
 },{
 "Lifepoints" : "data-lifepoints",
 "en" : "Lifepoints",
-"es" :
+"es" : "Puntos de Vida",
 "de" :
 "fr" :
 },{
-"Game Settings" : "data-gam"es"ettings",
+"Game Settings" : "data-gamesettings",
 "en" : "Game Settings",
-"es" :
+"es" : "Ajustes del Juego",
 "de" :
 "fr" :
 },{
-"Auto Placem"en"t will have the game automatically pick where cards are placed." : "data-autoplacem"en"twillhavethegameautomaticllypickwherecardsareplaced",
-"en" : "Auto Placem"en"t will have the game automatically pick where cards are placed.",
-"es" :
+"Auto Placement will have the game automatically pick where cards are placed." : "data-autoplacementwillhavethegameautomaticllypickwherecardsareplaced",
+"en" : "Auto Placement will have the game automatically pick where cards are placed.",
+"es" : "Posición automática hará que el juego elija donde poner las cartas.",
 "de" :
 "fr" :
 },{
-"If Auto Placem"en"t is on, you can randomize it." : "data-ifautoplacem"en"tisonyoucanrandomizeit",
-"en" : "If Auto Placem"en"t is on, you can randomize it.",
-"es" :
+"If Auto Placement is on, you can randomize it." : "data-ifautoplacementisonyoucanrandomizeit",
+"en" : "If Auto Placement is on, you can randomize it.",
+"es" : "Si Posición Automática esta habilitado, puedes hacerlo aleatorio.",
 "de" :
 "fr" :
 },{
-"If you selected multiple cards in r"es"ponse to a chain sugg"es"tion. You may have the game automatically pick the r"es"olution or"de"r. If Auto Placem"en"t is on, you can randomize it." : "data-ifyouselectedmultiplecardsinr"es"ponsetoachainsugg"es"tionyoumayhavethegameautomaticallypickther"es"olutionor"de"rifautoplacem"en"tisonyoucanrandomizeit",
-"en" : "If you selected multiple cards in r"es"ponse to a chain sugg"es"tion. You may have the game automatically pick the r"es"olution or"de"r. If Auto Placem"en"t is on, you can randomize it.",
-"es" :
+"If you selected multiple cards in response to a chain suggestion. You may have the game automatically pick the resolution order. If Auto Placement is on, you can randomize it." : "data-ifyouselectedmultiplecardsinresponsetoachainsuggestionyoumayhavethegameautomaticallypicktheresolutionorderifautoplacementisonyoucanrandomizeit",
+"en" : "If you selected multiple cards in response to a chain suggestion. You may have the game automatically pick the resolution order. If Auto Placement is on, you can randomize it.",
+"es" : "Si seleccionaste múltiples cartas en respuesta a una sugerencia de cadena. Puedes dejar que el juego automáticamente elija el orden de resolución. Si Posición Automática esta habilitado, puedes hacerlo aleatorio.",
 "de" :
 "fr" :
 },{
-"No (obvious) "de"lay for Chains, add additional paus"es" to game play to spook your oppon"en"t." : "data-noobvious"de"layforchainsaddadditionalpaus"es"togameplaytospookyouroppon"en"",
-"en" : "No (obvious) "de"lay for Chains, add additional paus"es" to game play to spook your oppon"en"t.",
-"es" :
+"No (obvious) delay for Chains, add additional pauses to game play to spook your opponent." : "data-noobviousdelayforchainsaddadditionalpausestogameplaytospookyouropponent",
+"en" : "No (obvious) delay for Chains. Add additional pauses to game play to spook your opponent.",
+"es" : "No Espera (Evidente) en Cadenas. Agrega pausas adicionales al juego para asustar a tu oponente.",
 "de" :
 "fr" :
 },{
-"Auto Card Placem"en"t" : "data-autocardplacem"en"t",
-"en" : "Auto Card Placem"en"t",
-"es" :
+"Auto Card Placement" : "data-autocardplacement",
+"en" : "Auto Card Placement",
+"es" : "Posición Automática de Cartas",
 "de" :
 "fr" :
 },{
-"Random Card Placem"en"t" : "data-randomcardplacem"en"t",
-"en" : "Random Card Placem"en"t",
-"es" :
+"Random Card Placement" : "data-randomcardplacement",
+"en" : "Random Card Placement",
+"es" : "Posición Aleatoria de Cartas",
 "de" :
 "fr" :
 },{
-"Auto Chain Or"de"r" : "data-autochainor"de"r",
-"en" : "Auto Chain Or"de"r",
-"es" :
+"Auto Chain Order" : "data-autochainorder",
+"en" : "Auto Chain Order",
+"es" : "Orden Automático de Cadenas",
 "de" :
 "fr" :
 },{
-"No "de"lay for Chains" : "data-no"de"layforchains",
-"en" : "No "de"lay for Chains",
-"es" :
+"No delay for Chains" : "data-nodelayforchains",
+"en" : "No delay for Chains",
+"es" : "No Espera en Cadenas",
 "de" :
 "fr" :
 },{
-""en"able Sound" : "data-"en"abl"es"ound",
-"en" : ""en"able Sound",
-"es" :
+"enable Sound" : "data-enablesound",
+"en" : "enable Sound",
+"es" : "habilitar Sonido",
 "de" :
 "fr" :
 },{
-""en"able Music" : "data-"en"ablemusic",
-"en" : ""en"able Music",
-"es" :
+"enable Music" : "data-enablemusic",
+"en" : "enable Music",
+"es" : "habilitar Música",
 "de" :
 "fr" :
 },{
-""en"able DirectX" : "data-"en"abledirectx",
-"en" : ""en"able DirectX",
-"es" :
+"enable DirectX" : "data-enabledirectx",
+"en" : "enable DirectX",
+"es" : "habilitar DirectX",
 "de" :
 "fr" :
 },{
 "Anti Aliasing" : "data-antialiasing",
 "en" : "Anti Aliasing",
-"es" :
+"es" : "Anti Aliasing",
 "de" :
 "fr" :
 },{
 "Font Size" : "data-fontsize",
 "en" : "Font Size",
-"es" :
+"es" : "Tamaño de Letra",
 "de" :
 "fr" :
 },{
 "Font" : "data-font",
-"en" : "Duel Mo"de"",
-"es" :
+"en" : "Font,
+"es" : "Fuente",
 "de" :
 "fr" :
 },{
 "Skin" : "data-skin",
 "en" : "Skin",
-"es" :
+"es" : "Skin",
 "de" :
 "fr" :
 },{
-""de"fault" : "data-"de"fault",
-"en" : "Duel Mo"de"",
-"es" :
+"default" : "data-default",
+"en" : "Default",
+"es" :"Predeterminadas",
 "de" :
 "fr" :
 },{
 "Sound Volume" : "data-soundvolume",
-"en" : "Duel Mo"de"",
-"es" :
+"en" : "Sound Volume",
+"es" :"Volumen de Sonido",
 "de" :
 "fr" :
 },{
 "Music Volume" : "data-musicvolume",
 "en" : "Music Volume",
-"es" :
+"es" : "Volumen de Música",
 "de" :
 "fr" :
 },{
 "Database File" : "data-databasefile",
 "en" : "Database File",
-"es" :
+"es" : "Archivo Base de Datos",
 "de" :
 "fr" :
 }]
