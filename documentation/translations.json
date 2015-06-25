@@ -1,299 +1,302 @@
 [{
-"item" : "data-salvationserver",
+"item" : "data-translation-salvationserver",
 "en" : "Salvation Server",
 "es" : "Servidor Salvation",
-"de" :
-"fr" : 
-"pt" :
+"de" : "",
+"fr" : "",
+"pt" : ""
 },{
-"item" : "data-replays",
-"en" :"Replays",
-"es" :"Repeticiones",
-"de" :
-"fr" :
-"pt" :
+"item" : "data-translation-replays",
+"en" : "Replays",
+"es" : "Repeticiones",
+"de" : "",
+"fr" : "",
+"pt" : ""
 },{
-"item" : "data-gamelist",
+"item" : "data-translation-gamelist",
 "en" : "Game List",
 "es" : "Partidas",
-"de" :
-"fr" :
-"pt" :
+"de" : "",
+"fr" : "",
+"pt" : ""
 },{
-"item" : "data-host",
+"item" : "data-translation-host",
 "en" : "Host",
 "es" : "Host",
-"de" :
-"fr" :
-"pt" :
+"de" : "",
+"fr" : "",
+"pt" : ""
 },{
-"item" : "data-forum",
+"item" : "data-translation-forum",
 "en" :"Forum",
 "es" :"Foro",
-"de" :
-"fr" :
-"pt" :
+"de" : "",
+"fr" : "",
+"pt" : ""
 },{
-"item" : "data-chat",
+"item" : "data-translation-chat",
 "en" : "Chat",
 "es" : "Chat",
-"de" :
-"fr" :
-"pt" :
+"de" : "",
+"fr" : "",
+"pt" : ""
 },{
-"item" : "data-faq",
+"item" : "data-translation-faq",
 "en" : "News",
 "es" : "Noticias",
-"de" :
-"fr" :
-"pt" :
+"de" : "",
+"fr" : "",
+"pt" : ""
 },{
-"item" : "data-settings",
+"item" : "data-translation-settings",
 "en" : "Settings",
 "es" : "Ajustes",
-"de" :
-"fr" :
-"pt" :
+"de" : "",
+"fr" : "",
+"pt" : ""
 },{
-"item" : "data-onlineyugiohsimulator",
+"item" : "data-translation-onlineyugiohsimulator",
 "en" : "Online Yu-Gi-Oh! Simulator",
 "es" : "Simulador de Yu-Gi-Oh en línea",
-"de" :
-"fr" :
+"de" : "",
+"fr" : "",
+"pt" : ""
 },{
-"item" : "data-playnow",
+"item" : "data-translation-playnow",
 "en" : "Full Windows Client",
 "es" : "Cliente para Windows",
-"de" :
-"fr" :
-"pt" :
+"de" : "",
+"fr" : "",
+"pt" : ""
 },{
-"item" : "data-login",
+"item" : "data-translation-login",
 "en" : "Login",
 "es" : "Iniciar Sesión",
-"de" :
-"fr" :
+"de" : "",
+"fr" : "",
+"pt" : ""
 },{
-"item" : "data-registerviaforum",
+"item" : "data-translation-registerviaforum",
 "en" : "Register via Forum",
 "es" : "Registrarse por el Foro",
-"de" :
-"fr" :
-"pt" :
+"de" : "",
+"fr" : "",
+"pt" : ""
 },{
-"item" : "data-currentdeck",
+"item" : "data-translation-currentdeck",
 "en" : "Current deck",
 "es" : "Mazo Actual",
-"de" :
-"fr" :
-"pt" :
+"de" : "",
+"fr" : "",
+"pt" : ""
 },{
-"item" : "data-ranked",
+"item" : "data-translation-ranked",
 "en" : "Ranked",
 "es" : "Ranked",
-"de" :
-"fr" :
-"pt" :
+"de" : "",
+"fr" : "",
+"pt" : ""
 },{
-"item" : "data-cardpool",
+"item" : "data-translation-cardpool",
 "en" : "Card Pool",
 "es" : "Lista de Cartas",
-"de" :
-"fr" :
-"pt" :
+"de" : "",
+"fr" : "",
+"pt" : ""
 },{
-"item" : "data-banlist",
+"item" : "data-translation-banlist",
 "en" : "Ban List",
 "es" : "Ban List",
-"de" :
-"fr" :
-"pt" :
+"de" : "",
+"fr" : "",
+"pt" : ""
 },{
-"item" : "data-duelmode",
+"item" : "data-translation-duelmode",
 "en" : "Duel Mode",
 "es" : "Modo de Duelo",
-"de" :
-"fr" :
+"de" : "",
+"fr" : "",
+"pt" : ""
 },{
-"item" : "data-timelimit",
+"item" : "data-translation-timelimit",
 "en" : "Time Limit",
 "es" : "Tiempo Límite",
-"de" :
-"fr" :
-"pt" :
+"de" : "",
+"fr" : "",
+"pt" : ""
 },{
-"item" : "data-enablepriority",
+"item" : "data-translation-enablepriority",
 "en" : "Enable Priority",
 "es" : "Usar Prioridad",
-"de" :
-"fr" :
-"pt" :
+"de" : "",
+"fr" : "",
+"pt" : ""
 },{
-"item" : "data-disablecheckdeck",
+"item" : "data-translation-disablecheckdeck",
 "en" : "Disable Check Deck",
 "es" : "No Revisar Mazo",
-"de" :
-"fr" :
-"pt" :
+"de" : "",
+"fr" : "",
+"pt" : ""
 },{
-"item" : "data-disableshuffledeck",
+"item" : "data-translation-disableshuffledeck",
 "en" : "Disable Shuffle Deck",
 "es" : "No Barajear Mazo",
-"de" :
-"fr" :
-"pt" :
+"de" : "",
+"fr" : "",
+"pt" : ""
 },{
-"item" : "data-usepassword",
+"item" : "data-translation-usepassword",
 "en" : "Use Password",
 "es" : "Usar Contraseña",
-"de" :
-"fr" :
-"pt" :
+"de" : "",
+"fr" : "",
+"pt" : ""
 },{
-"item" : "data-lifepoints",
+"item" : "data-translation-lifepoints",
 "en" : "Lifepoints",
 "es" : "Puntos de Vida",
-"de" :
-"fr" :
-"pt" :
+"de" : "",
+"fr" : "",
+"pt" : ""
 },{
-"item" : "data-gamesettings",
+"item" : "data-translation-gamesettings",
 "en" : "Game Settings",
 "es" : "Ajustes del Juego",
-"de" :
-"fr" :
-"pt" :
+"de" : "",
+"fr" : "",
+"pt" : ""
 },{
-"item" : "data-autoplacementwillhavethegameautomaticllypickwherecardsareplaced",
+"item" : "data-translation-autoplacementwillhavethegameautomaticllypickwherecardsareplaced",
 "en" : "Auto Placement will have the game automatically pick where cards are placed.",
 "es" : "Posición automática hará que el juego elija donde poner las cartas.",
-"de" :
-"fr" :
-"pt" :
+"de" : "",
+"fr" : "",
+"pt" : ""
 },{
-"item" : "data-ifautoplacementisonyoucanrandomizeit",
+"item" : "data-translation-ifautoplacementisonyoucanrandomizeit",
 "en" : "If Auto Placement is on, you can randomize it.",
 "es" : "Si Posición Automática esta habilitado, puedes hacerlo aleatorio.",
-"de" :
-"fr" :
-"pt" :
+"de" : "",
+"fr" : "",
+"pt" : ""
 },{
-"item" : "data-ifyouselectedmultiplecardsinresponsetoachainsuggestionyoumayhavethegameautomaticallypicktheresolutionorderifautoplacementisonyoucanrandomizeit",
+"item" : "data-translation-ifyouselectedmultiplecardsinresponsetoachainsuggestionyoumayhavethegameautomaticallypicktheresolutionorderifautoplacementisonyoucanrandomizeit",
 "en" : "If you selected multiple cards in response to a chain suggestion. You may have the game automatically pick the resolution order. If Auto Placement is on, you can randomize it.",
 "es" : "Si seleccionaste múltiples cartas en respuesta a una sugerencia de cadena. Puedes dejar que el juego automáticamente elija el orden de resolución. Si Posición Automática esta habilitado, puedes hacerlo aleatorio.",
-"de" :
-"fr" :
-"pt" :
+"de" : "",
+"fr" : "",
+"pt" : ""
 },{
-"item" : "data-noobviousdelayforchainsaddadditionalpausestogameplaytospookyouropponent",
+"item" : "data-translation-noobviousdelayforchainsaddadditionalpausestogameplaytospookyouropponent",
 "en" : "No (obvious) delay for Chains. Add additional pauses to game play to spook your opponent.",
 "es" : "No Espera (Evidente) en Cadenas. Agrega pausas adicionales al juego para asustar a tu oponente.",
-"de" :
-"fr" :
-"pt" :
+"de" : "",
+"fr" : "",
+"pt" : ""
 },{
-"item" : "data-autocardplacement",
+"item" : "data-translation-autocardplacement",
 "en" : "Auto Card Placement",
 "es" : "Posición Automática de Cartas",
-"de" :
-"fr" :
-"pt" :
+"de" : "",
+"fr" : "",
+"pt" : ""
 },{
-"item" : "data-randomcardplacement",
+"item" : "data-translation-randomcardplacement",
 "en" : "Random Card Placement",
 "es" : "Posición Aleatoria de Cartas",
-"de" :
-"fr" :
-"pt" :
+"de" : "",
+"fr" : "",
+"pt" : ""
 },{
-"item" : "data-autochainorder",
+"item" : "data-translation-autochainorder",
 "en" : "Auto Chain Order",
 "es" : "Orden Automático de Cadenas",
-"de" :
-"fr" :
-"pt" :
+"de" : "",
+"fr" : "",
+"pt" : ""
 },{
-"item" : "data-nodelayforchains",
+"item" : "data-translation-nodelayforchains",
 "en" : "No delay for Chains",
 "es" : "No Espera en Cadenas",
-"de" :
-"fr" :
-"pt" :
+"de" : "",
+"fr" : "",
+"pt" : ""
 },{
-"item" : "data-enablesound",
+"item" : "data-translation-enablesound",
 "en" : "Enable Sound",
 "es" : "habilitar Sonido",
-"de" :
-"fr" :
-"pt" :
+"de" : "",
+"fr" : "",
+"pt" : ""
 },{
-"item" : "data-enablemusic",
+"item" : "data-translation-enablemusic",
 "en" : "Enable Music",
 "es" : "habilitar Música",
-"de" :
-"fr" :
-"pt" :
+"de" : "",
+"fr" : "",
+"pt" : ""
 },{
-"item" : "data-enabledirectx",
+"item" : "data-translation-enabledirectx",
 "en" : "enable DirectX",
 "es" : "habilitar DirectX",
-"de" :
-"fr" :
-"pt" :
+"de" : "",
+"fr" : "",
+"pt" : ""
 },{
-"item" : "data-antialiasing",
+"item" : "data-translation-antialiasing",
 "en" : "Anti Aliasing",
 "es" : "Anti Aliasing",
-"de" :
-"fr" :
-"pt" :
+"de" : "",
+"fr" : "",
+"pt" : ""
 },{
-"item" : "data-fontsize",
+"item" : "data-translation-fontsize",
 "en" : "Font Size",
 "es" : "Tamaño de Letra",
-"de" :
-"fr" :
-"pt" :
+"de" : "",
+"fr" : "",
+"pt" : ""
 },{
-"item" : "data-font",
-"en" : "Font,
+"item" : "data-translation-font",
+"en" : "Font",
 "es" : "Fuente",
-"de" :
-"fr" :
-"pt" :
+"de" : "",
+"fr" : "",
+"pt" : ""
 },{
-"item" : "data-skin",
+"item" : "data-translation-skin",
 "en" : "Skin",
 "es" : "Skin",
-"de" :
-"fr" :
-"pt" :
+"de" : "",
+"fr" : "",
+"pt" : ""
 },{
-"item" : "data-default",
+"item" : "data-translation-default",
 "en" : "Default",
 "es" :"Predeterminadas",
-"de" :
-"fr" :
-"pt" :
+"de" : "",
+"fr" : "",
+"pt" : ""
 },{
-"item" : "data-soundvolume",
+"item" : "data-translation-soundvolume",
 "en" : "Sound Volume",
 "es" :"Volumen de Sonido",
-"de" :
-"fr" :
-"pt" :
+"de" : "",
+"fr" : "",
+"pt" : ""
 },{
-"item" : "data-musicvolume",
+"item" : "data-translation-musicvolume",
 "en" : "Music Volume",
 "es" : "Volumen de Música",
-"de" :
-"fr" :
-"pt" :
+"de" : "",
+"fr" : "",
+"pt" : ""
 },{
-"item" : "data-databasefile",
+"item" : "data-translation-databasefile",
 "en" : "Database File",
 "es" : "Archivo Base de Datos",
-"de" :
-"fr" :
-"pt" :
+"de" : "",
+"fr" : "",
+"pt" : ""
 }]
