@@ -64,7 +64,7 @@ var translationDB = [{
     "es": "Mirar",
     "de": "Betrachten",
     "fr": "Observer",
-    "pt": "Olhar",
+    "pt": "Assistir",
     "nl": "",
     "it": "",
     "tr": ""
