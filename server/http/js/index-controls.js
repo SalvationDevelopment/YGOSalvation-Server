@@ -124,8 +124,25 @@ function processServerCall(data) {
     //console.log(data);
 }
 
+function translateLang(lang) {
+    "use strict";
+    var i = 0;
+    localStorage.language = lang;
+    for (i; translationDB.length > i; i++) {
+        if (translationDB[i].item) {
+            $('[' + translationDB[i].item + ']').text(translationDB[i][lang]);
+        }
+        if (translationDB[i].note) {
+            $('[' + translationDB[i].note + ']').attr('placeholder', translationDB[i][lang]);
+        }
+    }
+    params.language = lang;
+}
+
 $(document).ready(function () {
     'use strict';
+    var useLang = localStorage.language || 'en';
+    translateLang(useLang);
     if (localStorage.loginnick && localStorage.loginpass) {
         $('#ips_username').val(localStorage.loginnick);
         $('#ips_password').val(localStorage.loginpass);
@@ -177,14 +194,3 @@ $(document).ready(function () {
 
 
 });
-
-
-
-function translateLang(lang) {
-    "use strict";
-    var i = 0;
-    for (i; translationDB.length > i; i++) {
-        $('[' + translationDB[i].item + ']').text(translationDB[i][lang]);
-    }
-    params.language = lang;
-}
