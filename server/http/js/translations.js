@@ -51,20 +51,20 @@ var translationDB = [{
 }, {
     "item": "data-translation-join",
     "en": "Join",
-    "es": "",
-    "de": "",
-    "fr": "",
-    "pt": "",
+    "es": "Entrar",
+    "de": "Beitreten",
+    "fr": "Rejoingnez",
+    "pt": "Entrar",
     "nl": "",
     "it": "",
     "tr": ""
 }, {
     "item": "data-translation-spectate",
     "en": "Spectate",
-    "es": "",
-    "de": "",
-    "fr": "",
-    "pt": "",
+    "es": "Mirar",
+    "de": "Betrachten",
+    "fr": "Observer",
+    "pt": "Olhar",
     "nl": "",
     "it": "",
     "tr": ""
