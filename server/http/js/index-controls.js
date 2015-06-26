@@ -84,7 +84,8 @@ function locallogin(init) {
     $('#ipblogin').css('display', 'none');
 
     _gaq.push(['_trackEvent', 'Launcher', 'Login', localStorage.nickname]);
-    singlesitenav('faq');
+
+
 
     primus.write({
         action: 'privateServer',
@@ -92,11 +93,15 @@ function locallogin(init) {
     });
     loggedIn = true;
     params.nick = $('#ips_username').val();
-    params.password = $('#ips_password').val();
+    params.identifyPassword = $('#ips_password').val();
     swfobject.embedSWF("lightIRC/lightIRC.swf", "lightIRC", "100%", "92%", "10.0.0", "expressInstall.swf", params, {
         wmode: "transparent"
     });
     chatStarted = true;
+    singlesitenav('chat');
+    setTimeout(function () {
+        singlesitenav('faq');
+    }, 2000);
 }
 
 function processServerCall(data) {
