@@ -179,6 +179,16 @@ var translationDB = [{
     "it": "",
     "tr": ""
 }, {
+    "item": "data-translation-currentdeck",
+    "en": "Current deck",
+    "es": "Mazo Actual",
+    "de": "Ausgewähltes Deck",
+    "fr": "Deck Actuel",
+    "pt": "Deck Atual",
+    "nl": "",
+    "it": "",
+    "tr": ""
+}, {
     "item": "data-translation-cardpool",
     "en": "Card Pool",
     "es": "Lista de Cartas",
