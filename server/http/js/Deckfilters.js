@@ -5,7 +5,7 @@ $.getJSON('http://ygopro.us/manifest/database.json', function (data) {
 });
 
 
-function filterAttrType(obj, num, at) {
+function filterAttrRace(obj, num, at) {
     'use strict';
     var val = (at === 1) ? obj.Attribute : obj.Type;
     if (val === num) {
@@ -21,7 +21,7 @@ function filterSetcode(obj, sc) {
     var val = obj.setcode,
         hexA = val.toString(16),
         hexB = sc.toString(16);
-    if (val === sc || hexA.substr(hexA.length - 4) === hexB || hexA.substr(hexA.length - 2) === hexB || (val >> 8).toString(16) === hexB) {
+    if (val === sc || parseInt(hexA.substr(hexA.length - 4),16) === parseInt(hexB, 16) || parseInt(hexA.substr(hexA.length - 2),16) === parseInt(hexB, 16)|| (val >> 16).toString(16) === hexB) {
         return true;
     } else {
         return false;
@@ -85,7 +85,7 @@ function filterScale(obj, sc, op) {
 function filterType(obj, ty) {
     'use strict';
     var val = obj['type'];
-    if (val & ty > 0) {
+    if ((val & ty) > 0) {
         return true;
     } else {
         return false;
@@ -96,7 +96,7 @@ function filterAtkDef(obj, num, ad, op) {
     'use strict';
     var val = (ad === 1) ? obj.atk : obj.def;
     if (op === 0) {
-        if (val >= num) {
+        if (val <= num) {
             return true;
         } else {
             return false;
@@ -118,8 +118,8 @@ function filterAtkDef(obj, num, ad, op) {
 
 function filterNameDesc(obj, txt, nd) {
     'use strict';
-    var val = (nd === 1) ? obj.name : obj['desc'];
-    if (val.includes(txt)) {
+    var val = (nd === 1) ? obj.name.toLowerCase() : obj['desc'].toLowerCase();
+    if (val.includes(txt.toLowerCase())) {
         return true;
     } else {
         return false;
