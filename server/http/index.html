@@ -25,6 +25,15 @@
 
 
     <style>
+        #languagesetter {
+            text-align: center;
+            color: purple;
+            font-weight: 800;
+            text-shadow: 0 0 9px mediumblue;
+            padding: 15px;
+            word-spacing: 35px;
+        }
+        
         footer.superfooter.loud {
             color: white;
             font-size: 14px;
@@ -105,11 +114,6 @@
             background: -webkit-gradient(linear, left top, right bottom, color-stop(0%, #000000), color-stop(38%, #000000), color-stop(38%, #000000), color-stop(44%, #ee44aa), color-stop(49%, #ffffff), color-stop(51%, #000000), color-stop(100%, #000000));
             -webkit-background-size: 50% 100%;
             color: rgba(255, 255, 255, 0.1);
-            -webkit-background-clip: text;
-            -webkit-animation-name: shine;
-            -webkit-animation-duration: 10s;
-            -webkit-animation-iteration-count: 10;
-            -webkit-animation-timing-function: linear;
         }
         
         .gamelistcenter {
@@ -186,7 +190,7 @@
             </li>
         </ul>
     </div>
-    <header style="padding-top:50px;top:0vh;" id='home'>
+    <header style="top:0vh;" id='home'>
         <div id="homecontainer">
             <span class="psudolinksingle" onclick="singlesitenav('home')">
                 <h1 style="padding-top:80px;"   class="shine">
@@ -208,7 +212,7 @@
                         
                     </li>
 -->
-<!--
+                    <!--
                     <li><a href=" http://ygopro.us/setups/client.tar.gz" onclick="_gaq.push(['_trackEvent', 'Site', 'Download', 'Portable']);">Linux32 TarGz/ Windows Portable</a>
 
                     </li>
@@ -240,6 +244,14 @@
             </form>
             <div style="font-size:.5em; text-align:center; color:#747" id="versioninfo">Version 4 : Production 4 : Revision 1</div>
             <div style="font-size:1.5em; text-align:center; color:pink" class='webonly'></div>
+            <div id="languagesetter">
+                <span onclick="translateLang('en')">English</span>
+                <span onclick="translateLang('es')">Español</span>
+                <span onclick="translateLang('de')">Deutsch</span>
+                <span onclick="translateLang('fr')">Français</span>
+
+
+            </div>
             <div class="webonly" style="width:728px;margin:0 auto">
                 <SCRIPT language="Javascript">
                     var cpmstar_rnd = Math.round(Math.random() * 999999);
