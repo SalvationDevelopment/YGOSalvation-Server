@@ -1,4 +1,4 @@
-[{
+var translationDB = [{
     "item": "data-translation-salvationserver",
     "en": "Salvation Server",
     "es": "Servidor Salvation",
@@ -438,4 +438,4 @@
     "nl": "",
     "it": "",
     "tr": ""
-}]
+}];
