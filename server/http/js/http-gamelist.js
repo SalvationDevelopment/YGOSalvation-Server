@@ -372,6 +372,7 @@ function parseDuelOptions(duelOptions) {
 }
 
 function sortMe(a, b) {
+    'use strict';
     return a.className < b.className;
 }
 
@@ -439,8 +440,10 @@ function renderList(JSONdata) {
     }
     elem = $('#gamelistitems').find('div:not(.avaliable)').sort(sortMe);
     $('#gamelistitems').append(elem);
-    $('.avaliable').first().before('<br style="clear:both"><span class="gamelabel">Join<span><br style="clear:both">');
-    $('.started').first().before('<br style="clear:both"><span class="gamelabel">Spectate<span><br style="clear:both">');
+    $('.avaliable').first()
+        .before('<br style="clear:both"><span class="gamelabel">' + jsLang.join + '<span><br style="clear:both">');
+    $('.started')
+        .first().before('<br style="clear:both"><span class="gamelabel">' + jsLang.spectate + '<span><br style="clear:both">');
 }
 
 function setfilter() {
