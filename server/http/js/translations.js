@@ -140,7 +140,7 @@ var translationDB = [{
     "tr": ""
 }, {
     "item": "data-translation-rememberusernamepassword",
-    "en": "Remember Username & Password",
+    "en": "Remember Username & Password?",
     "es": "Recordar Nombre y Contraseña",
     "de": "Anmeldedaten speichern",
     "fr": "Se souvenir de moi",
@@ -160,7 +160,7 @@ var translationDB = [{
     "tr": ""
 }, {
     "item": "data-translation-forgotpassword",
-    "en": "Forgot Password?",
+    "en": "Forgot Password",
     "es": "Olvidaste tu Contraseña?",
     "de": "Passwort vergessen?",
     "fr": "Mot de passe oublié?",
