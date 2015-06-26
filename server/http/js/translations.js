@@ -119,6 +119,36 @@ var translationDB = [{
     "it": "",
     "tr": ""
 }, {
+    "item": "data-translation-forumusername",
+    "en": "Username",
+    "es": "Nombre de Usuario",
+    "de": "Benutzername",
+    "fr": "Nom d'utilisateur",
+    "pt": "Nome no Fórum",
+    "nl": "",
+    "it": "",
+    "tr": ""
+}, {
+    "item": "data-translation-forumpassword",
+    "en": "Password",
+    "es": "Contraseña",
+    "de": "Passwort",
+    "fr": "Mot de Passe",
+    "pt": "Senha",
+    "nl": "",
+    "it": "",
+    "tr": ""
+}, {
+    "item": "data-translation-rememberusernamepassword",
+    "en": "Remember Username & Password",
+    "es": "Recordar Nombre y Contraseña",
+    "de": "Anmeldedaten speichern",
+    "fr": "Se souvenir de moi",
+    "pt": "Lembre-se de mim",
+    "nl": "",
+    "it": "",
+    "tr": ""
+}, {
     "item": "data-translation-registerviaforum",
     "en": "Register via Forum",
     "es": "Registrarse por el Foro",
@@ -129,12 +159,12 @@ var translationDB = [{
     "it": "",
     "tr": ""
 }, {
-    "item": "data-translation-currentdeck",
-    "en": "Current deck",
-    "es": "Mazo Actual",
-    "de": "Ausgewähltes Deck",
-    "fr": "Deck Actuel",
-    "pt": "Deck Atual",
+    "item": "data-translation-forgotpassword",
+    "en": "Forgot Password?",
+    "es": "Olvidaste tu Contraseña?",
+    "de": "Passwort vergessen?",
+    "fr": "Mot de passe oublié?",
+    "pt": "Esqueceu a senha?",
     "nl": "",
     "it": "",
     "tr": ""
