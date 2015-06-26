@@ -119,7 +119,7 @@ var translationDB = [{
     "it": "",
     "tr": ""
 }, {
-    "item": "data-translation-forumusername",
+    "note": "data-translation-forumusername",
     "en": "Username",
     "es": "Nombre de Usuario",
     "de": "Benutzername",
@@ -129,7 +129,7 @@ var translationDB = [{
     "it": "",
     "tr": ""
 }, {
-    "item": "data-translation-forumpassword",
+    "note": "data-translation-forumpassword",
     "en": "Password",
     "es": "Contraseña",
     "de": "Passwort",
