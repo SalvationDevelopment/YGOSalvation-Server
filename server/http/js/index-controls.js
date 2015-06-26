@@ -186,4 +186,5 @@ function translateLang(lang) {
     for (i; translationDB.length > i; i++) {
         $('[' + translationDB[i].item + ']').text(translationDB[i][lang]);
     }
+    params.language = lang;
 }
