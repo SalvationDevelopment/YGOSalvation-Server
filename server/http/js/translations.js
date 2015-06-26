@@ -49,6 +49,26 @@ var translationDB = [{
     "it": "",
     "tr": ""
 }, {
+    "item": "data-translation-join",
+    "en": "Join",
+    "es": "",
+    "de": "",
+    "fr": "",
+    "pt": "",
+    "nl": "",
+    "it": "",
+    "tr": ""
+}, {
+    "item": "data-translation-spectate",
+    "en": "Spectate",
+    "es": "",
+    "de": "",
+    "fr": "",
+    "pt": "",
+    "nl": "",
+    "it": "",
+    "tr": ""
+}, {
     "item": "data-translation-forum",
     "en": "Forum",
     "es": "Foro",
