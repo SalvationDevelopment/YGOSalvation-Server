@@ -123,6 +123,7 @@ function processServerCall(data) {
     $('#dblist option[value="' + selecteddb + '"]').attr('selected', 'selected');
     //console.log(data);
 }
+var jsLang = {};
 
 function translateLang(lang) {
     "use strict";
@@ -134,6 +135,12 @@ function translateLang(lang) {
         }
         if (translationDB[i].note) {
             $('[' + translationDB[i].note + ']').attr('placeholder', translationDB[i][lang]);
+        }
+        if (translationDB[i].item === 'data-translation-join') {
+            jsLang.join = translationDB[i][lang];
+        }
+        if (translationDB[i].item === 'data-translation-spectate') {
+            jsLang.spectate = translationDB[i][lang]
         }
     }
     params.language = lang;

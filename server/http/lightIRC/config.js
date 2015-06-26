@@ -32,6 +32,7 @@ params.autojoin = "#lobby";
 /* Commands to be executed after connecting. E.g.: /mode %nick% +x */
 params.perform = '/ns id %pass%';
 params.identifyMessage = "";
+params.showJoinPartMessages = false;
 
 /* Whether the server window (and button) should be shown */
 params.showServerWindow = false;
