@@ -30,7 +30,7 @@ params.nick = "Duelist_%";
 /* Channel to be joined after connecting. Multiple channels can be added like this: #lightIRC,#test,#help */
 params.autojoin = "#lobby";
 /* Commands to be executed after connecting. E.g.: /mode %nick% +x */
-params.perform = "";
+params.perform = '/ns id %pass%';
 
 /* Whether the server window (and button) should be shown */
 params.showServerWindow = false;
