@@ -315,7 +315,7 @@ var translationDB = [{
     "de": "Wenn mehrere Karten als Reaktion auf eine Kette zu Aktivieren angeboten werden, kann das Spiel automatisch entscheiden, in welcher Reihenfolge die Effekte ausgelöst werden. Wenn Automatisches Kartenplatzieren ausgewählt ist, kann dieser Vorgang zusätzlich zufällig ausgewählt werden.",
     "fr": "Si vous selectionnés de cartes multiples en réponse de votre Chaîne. Vous pourez alors choisir l'ordre de vos résolution de Chaînes. Si vous avez Auto Placement activer,elle sera aléser",
     "pt": "Se você selecionou várias cartas em resposta a uma corrente. Você pode deixar o jogo escolher a ordem automaticamente. Se Posição Automática estiver ligada a ordem será aleatória.",
-    "nl": "als je meerder kaarte in reactie tot een chain suggestie selecteert, kan je het spel automatisch de resolve orde laten kiezen. Als automatische plaatsing actief is, kan je het willekeurig laten gebeuren.",
+    "nl": "Als je meerder kaarte in reactie tot een chain suggestie selecteert, kan je het spel automatisch de resolve orde laten kiezen. Als automatische plaatsing actief is, kan je het willekeurig laten gebeuren.",
     "it": "",
     "tr": ""
 }, {
@@ -371,7 +371,7 @@ var translationDB = [{
 }, {
     "item": "data-translation-enablesound",
     "en": "Enable Sound",
-    "es": "habilitar Sonido",
+    "es": "Habilitar Sonido",
     "de": "Ton anstellen",
     "fr": "Activer le son",
     "pt": "Ativar Som",
@@ -381,7 +381,7 @@ var translationDB = [{
 }, {
     "item": "data-translation-enablemusic",
     "en": "Enable Music",
-    "es": "habilitar Música",
+    "es": "Habilitar Música",
     "de": "Musik anstellen",
     "fr": "Activer la Musique",
     "pt": "Ativar Música",
@@ -390,8 +390,8 @@ var translationDB = [{
     "tr": ""
 }, {
     "item": "data-translation-enabledirectx",
-    "en": "enable DirectX",
-    "es": "habilitar DirectX",
+    "en": "Enable DirectX",
+    "es": "Habilitar DirectX",
     "de": "DirectX anstellen",
     "fr": "Activer DirectX",
     "pt": "Ativar DirectX",
