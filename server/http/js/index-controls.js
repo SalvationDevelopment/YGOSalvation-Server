@@ -145,7 +145,7 @@ function translateLang(lang) {
     }
     params.language = lang;
 }
-
+params.showJoinPartMessages = false;
 $(document).ready(function () {
     'use strict';
     var useLang = localStorage.language || 'en';
