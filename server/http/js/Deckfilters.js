@@ -1,6 +1,6 @@
 /*jslint bitwise : true*/
 var cards = [];
-$.getJSON('http://ygopro.us/manifest/database.json', function (data) {
+$.getJSON('https://ygopro.us/manifest/database.json', function (data) {
     cards = data;
 });
 
@@ -21,7 +21,7 @@ function filterSetcode(obj, sc) {
     var val = obj.setcode,
         hexA = val.toString(16),
         hexB = sc.toString(16);
-    if (val === sc || parseInt(hexA.substr(hexA.length - 4),16) === parseInt(hexB, 16) || parseInt(hexA.substr(hexA.length - 2),16) === parseInt(hexB, 16)|| (val >> 16).toString(16) === hexB) {
+    if (val === sc || parseInt(hexA.substr(hexA.length - 4), 16) === parseInt(hexB, 16) || parseInt(hexA.substr(hexA.length - 2), 16) === parseInt(hexB, 16) || (val >> 16).toString(16) === hexB) {
         return true;
     } else {
         return false;
@@ -119,7 +119,7 @@ function filterAtkDef(obj, num, ad, op) {
 function filterNameDesc(obj, txt, nd) {
     'use strict';
     var val = (nd === 1) ? obj.name.toLowerCase() : obj['desc'].toLowerCase();
-    if (val.includes(txt.toLowerCase())) {
+    if (val.indexOf(txt.toLowerCase()) > 1) {
         return true;
     } else {
         return false;
@@ -130,7 +130,7 @@ function filterNameDesc(obj, txt, nd) {
 function filterName(txt) {
     'use strict';
     var output = cards.filter(function (item) {
-        filterNameDesc(item, txt, 1);
+        return filterNameDesc(item, txt, 1);
     });
     return output;
 }
