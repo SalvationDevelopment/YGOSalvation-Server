@@ -57,7 +57,7 @@ function ygopro(parameter) {
         if (localStorage.roompass[0] === '4') {
             //if battleback
             localStorage.battleback = writeDeckList(makeDeck(9));
-    
+
         }
     }
     if (!launcher && parameter === '-j') {
@@ -68,18 +68,18 @@ function ygopro(parameter) {
     if (!launcher && parameter === '-d') {
         return;
     }
-    
+
     //$.post('http://127.0.0.1:9468/' + parameter, localStorage);
     primus.write({
-        action : 'privateServerRequest',
-        parameter : parameter,
-        local : localStorage,
-        uniqueID : uniqueID
+        action: 'privateServerRequest',
+        parameter: parameter,
+        local: localStorage,
+        uniqueID: uniqueID
     });
     _gaq.push(['_trackEvent', 'Launcher', 'YGOPro', parameter]);
     _gaq.push(['_trackEvent', 'Site', 'Navigation Movement', internalLocal + ' - ' + 'YGOPro']);
     internalLocal = 'YGOPro';
-    
+
 }
 
 function clearCacheRequest() {
@@ -128,18 +128,21 @@ function joinGamelist() {
     'use strict';
     primus.write({
         action: 'join',
-        uniqueID : uniqueID
+        uniqueID: uniqueID
     });
     if (loggedIn) {
         primus.write({
             action: 'privateServer',
-            username : localStorage.nickname,
-            uniqueID : uniqueID
+            username: localStorage.nickname,
+            uniqueID: uniqueID
         });
-    
+
     }
 }
 joinGamelist();
+
+setInterval(joinGamelist, 5000);
+
 
 function leaveGamelist() {
     'use strict';
@@ -205,6 +208,7 @@ function randomString(len, charSet) {
     }
     return randomstring;
 }
+
 function setpass() {
     'use strict';
     var pass = randomString(5);
@@ -232,12 +236,12 @@ function getDuelRequest() {
         shuf: isChecked('#disshuffledeck') ? ("T") : ("O"),
         stnds: "," + $('#creategamebanlist').val() + stnds,
         pass: isChecked('#usepass') ? setpass() : randomString(randneed)
-        
+
     };
 
     out.prio = ($('#creategamebanlist').val() === "21") ? "T" : out.prio;
     out.prio = ($('#creategamebanlist').val() === "22") ? "T" : out.prio;
-    
+
     return out;
 }
 
@@ -383,7 +387,7 @@ function preformfilter(translated, players, rooms, started, pid) {
     game = (translated.poolFormat !== 'Unlimited') ? game : 'bad';
     game = (translated.poolFormat !== 'Traditional') ? game : 'bad';
     game = (translated.poolFormat !== 'Mega-Banned') ? game : 'bad';
-    
+
     if (translated.isLocked) {
         pass = translated.password;
     }
@@ -394,11 +398,11 @@ function preformfilter(translated, players, rooms, started, pid) {
     //OK = (translated.banList !== filterm.banList && filterm.banList !== '20') ? false : OK;
     //OK = (players.searchFor(filterm.userName) === -1) ? false : OK;
     //OK = true; //disabling filter for now.
-    
+
     if (OK) {
         duelist = (translated.gameMode === 'Single' || translated.gameMode === 'Match') ? players[0] + ' vs ' + players[1] : players[0] + ' &amp ' + players[1] + ' vs ' + players[2] + ' &amp ' + players[3];
         //console.log(translated);
-        content = '<div class="game ' + rooms + ' ' + started + ' ' +  translated.isLocked + '" onclick=enterGame("' + rooms + '",' + translated.isLocked + ') data-' + game + '="' + rooms + '">' + duelist + '<span class="subtext" style="font-size:.5em"><br>' + translated.gameMode +
+        content = '<div class="game ' + rooms + ' ' + started + ' ' + translated.isLocked + '" onclick=enterGame("' + rooms + '",' + translated.isLocked + ') data-' + game + '="' + rooms + '">' + duelist + '<span class="subtext" style="font-size:.5em"><br>' + translated.gameMode +
             ' ' + $('#creategamebanlist option[value=' + translated.banlist + ']').text() + ' ' + translated.poolFormat + ' ' + pid + '</span> </div>';
     }
     return content;
@@ -429,8 +433,8 @@ function renderList(JSONdata) {
             players = [player1, player2, player3, player4];
             content = preformfilter(translated, players, rooms, started, JSONdata[rooms].pid);
             $('#gamelistitems').prepend(content);
-            
-            
+
+
         }
     }
     elem = $('#gamelistitems').find('div:not(.avaliable)').sort(sortMe);
@@ -468,9 +472,9 @@ primus.on('data', function (data) {
         }
         if (data.clientEvent === 'passwordQuery' && data.target === localStorage.nickname) {
             primus.write({
-                action : 'passwordQuery',
-                username : $('#ips_username').val(),
-                password : $('#ips_password').val()
+                action: 'passwordQuery',
+                username: $('#ips_username').val(),
+                password: $('#ips_password').val()
             });
         }
         if (data.clientEvent === 'privateServer') {
