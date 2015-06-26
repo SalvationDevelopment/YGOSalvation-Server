@@ -16,7 +16,7 @@ var translationDB = [{
     "fr": "Deck Éditeur",
     "pt": "Editar Deck",
     "nl": "Deck bouwen",
-    "it": "",
+    "it": "Modifica decklist",
     "tr": ""
 }, {
     "item": "data-translation-replays",
@@ -26,7 +26,7 @@ var translationDB = [{
     "fr": "Rejouement",
     "pt": "Repetições",
     "nl": "Herhaling",
-    "it": "",
+    "it": "Replay",
     "tr": ""
 }, {
     "item": "data-translation-gamelist",
@@ -96,7 +96,7 @@ var translationDB = [{
     "fr": "Simulateur Yu-Gi-Oh en-ligne",
     "pt": "Simulador de Yu-Gi-Oh Online",
     "nl": "Online Yu-Gi-Oh! Simulator",
-    "it": "",
+    "it": "Simulatore online di yugioh",
     "tr": ""
 }, {
     "item": "data-translation-playnow",
@@ -156,7 +156,7 @@ var translationDB = [{
     "fr": "S'Enregister sur le Forum",
     "pt": "Registrar-se no Fórum",
     "nl": "Via forum registreren",
-    "it": "",
+    "it": "Registrazione tramite forum",
     "tr": ""
 }, {
     "item": "data-translation-forgotpassword",
@@ -176,7 +176,7 @@ var translationDB = [{
     "fr": "Classé",
     "pt": "Ranked",
     "nl": "Gerangschikt",
-    "it": "",
+    "it": "Rango",
     "tr": ""
 }, {
     "item": "data-translation-currentdeck",
@@ -186,7 +186,7 @@ var translationDB = [{
     "fr": "Deck Actuel",
     "pt": "Deck Atual",
     "nl": "Huidig deck",
-    "it": "",
+    "it": "Deck utilizzato correntemente",
     "tr": ""
 }, {
     "item": "data-translation-cardpool",
@@ -196,7 +196,7 @@ var translationDB = [{
     "fr": "Listes des Cartes",
     "pt": "Lista de Cartas",
     "nl": "Kaartenlijst",
-    "it": "",
+    "it": "Raccolta della carta",
     "tr": ""
 }, {
     "item": "data-translation-banlist",
