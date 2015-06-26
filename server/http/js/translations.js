@@ -185,7 +185,7 @@ var translationDB = [{
     "de": "Ausgewähltes Deck",
     "fr": "Deck Actuel",
     "pt": "Deck Atual",
-    "nl": "",
+    "nl": "Huidig deck",
     "it": "",
     "tr": ""
 }, {
