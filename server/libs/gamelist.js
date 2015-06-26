@@ -3,8 +3,8 @@
 try {
     var fs = require('fs'),
         ssloptions = {
-            ca:   fs.readFileSync(process.env.SSL + 'sub.class1.server.ca.pem'),
-            key:  fs.readFileSync(process.env.SSL + 'ssl.key.unsecure'),
+            ca: fs.readFileSync(process.env.SSL + 'sub.class1.server.ca.pem'),
+            key: fs.readFileSync(process.env.SSL + 'ssl.key.unsecure'),
             cert: fs.readFileSync(process.env.SSL + 'ssl.crt')
         },
         http = require('https');
@@ -25,9 +25,9 @@ var primus,
     path = require('path'),
     request = require('request');
 
-var logger = new (winston.Logger)({
+var logger = new(winston.Logger)({
     transports: [
-        new (winston.transports.DailyRotateFile)({
+        new(winston.transports.DailyRotateFile)({
             filename: ".\\http\\logs\\chat.log"
         })
     ]
@@ -162,7 +162,7 @@ primus.use('rooms', Rooms);
 primus.on('connection', function (socket) {
     'use strict';
     socket.on('data', function (data) {
-        
+
         data = data || {};
         var action = data.action,
             url,
@@ -174,7 +174,7 @@ primus.on('connection', function (socket) {
                 return;
             }
             socket.join('securityServer', function () {
-                
+
             });
             break;
         case ('gamelistEvent'):
@@ -185,9 +185,9 @@ primus.on('connection', function (socket) {
         case ('join'):
             socket.join(socket.address.ip + data.uniqueID, function () {
                 socket.write({
-                    clientEvent : 'privateServer',
-                    serverUpdate : userdata[socket.address.ip + data.uniqueID],
-                    ip : socket.address.ip + data.uniqueID
+                    clientEvent: 'privateServer',
+                    serverUpdate: userdata[socket.address.ip + data.uniqueID],
+                    ip: socket.address.ip + data.uniqueID
                 });
             });
             socket.join('activegames', function () {
@@ -202,15 +202,15 @@ primus.on('connection', function (socket) {
         case ('register'):
             socket.nickname = data.nickname;
             break;
-        
+
         case ('privateServerRequest'):
             primus.room(socket.address.ip + data.uniqueID).write({
-                clientEvent : 'privateServerRequest',
-                parameter : data.parameter,
-                local : data.local
+                clientEvent: 'privateServerRequest',
+                parameter: data.parameter,
+                local: data.local
             });
             break;
-                
+
         case ('privateServer'):
             break;
 
@@ -222,22 +222,22 @@ primus.on('connection', function (socket) {
         case ('passwordQuery'):
             url = 'http://forum.ygopro.us/log.php';
             post = {
-                ips_username : data.username,
-                ips_password : data.password
+                ips_username: data.username,
+                ips_password: data.password
             };
-            request.post(url, {form : post}, function (error, response, body) {
+            /* request.post(url, {form : post}, function (error, response, body) {
                 if (!error && response.statusCode === 200) {
                     var info = JSON.parse(body);
                     if (info.success) {
                         clearTimeout(hunter[data.username]);
                     }
                 }
-            });
+            });*/
             break;
         case ('privateUpdate'):
             primus.room(socket.address.ip + data.uniqueID).write({
-                clientEvent : 'privateServer',
-                serverUpdate : data.serverUpdate
+                clientEvent: 'privateServer',
+                serverUpdate: data.serverUpdate
             });
             userdata[socket.address.ip + data.uniqueID] = data.serverUpdate;
             break;

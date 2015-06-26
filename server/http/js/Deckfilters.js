@@ -213,7 +213,7 @@ function filterDef(def, op) {
     });
     return output;
 }
-
+//Just Level.. Zzz as Atk/Def
 function filterLevel(level, op) {
     'use strict';
     var output = cards.filter(function (item) {
@@ -222,6 +222,7 @@ function filterLevel(level, op) {
     return output;
 }
 
+//Same, but for L/R Scale, doesn't matter
 function filterScale(scale, op) {
     'use strict';
     var output = cards.filter(function (item) {

@@ -1,5 +1,7 @@
 /*jslint browser:true, plusplus:true, nomen: true*/
-/*global $, saveSettings, Handlebars, prompt, _gaq, isChecked, alert, primus, ygopro*/
+/*global $, saveSettings, Handlebars, prompt, _gaq, isChecked, alert, primus, ygopro, translationDB, params, swfobject*/
+
+var chatStarted = false;
 
 function isChecked(id) {
     'use strict';
@@ -40,6 +42,12 @@ function singlesitenav(target) {
     if (target === 'faq') {
         updatenews();
     }
+    if (target === 'chat' && !chatStarted) {
+        swfobject.embedSWF("lightIRC/lightIRC.swf", "lightIRC", "100%", "92%", "10.0.0", "expressInstall.swf", params, {
+            wmode: "transparent"
+        });
+        chatStarted = true;
+    }
     $('header').css('top', '100vh');
     $('#' + target).css('top', '0');
     saveSettings();
@@ -76,14 +84,24 @@ function locallogin(init) {
     $('#ipblogin').css('display', 'none');
 
     _gaq.push(['_trackEvent', 'Launcher', 'Login', localStorage.nickname]);
-    singlesitenav('faq');
+
+
 
     primus.write({
         action: 'privateServer',
         username: localStorage.nickname
     });
     loggedIn = true;
-
+    params.nick = $('#ips_username').val();
+    params.identifyPassword = $('#ips_password').val();
+    swfobject.embedSWF("lightIRC/lightIRC.swf", "lightIRC", "100%", "92%", "10.0.0", "expressInstall.swf", params, {
+        wmode: "transparent"
+    });
+    chatStarted = true;
+    singlesitenav('chat');
+    setTimeout(function () {
+        singlesitenav('faq');
+    }, 2000);
 }
 
 function processServerCall(data) {
@@ -106,8 +124,25 @@ function processServerCall(data) {
     //console.log(data);
 }
 
+function translateLang(lang) {
+    "use strict";
+    var i = 0;
+    localStorage.language = lang;
+    for (i; translationDB.length > i; i++) {
+        if (translationDB[i].item) {
+            $('[' + translationDB[i].item + ']').text(translationDB[i][lang]);
+        }
+        if (translationDB[i].note) {
+            $('[' + translationDB[i].note + ']').attr('placeholder', translationDB[i][lang]);
+        }
+    }
+    params.language = lang;
+}
+
 $(document).ready(function () {
     'use strict';
+    var useLang = localStorage.language || 'en';
+    translateLang(useLang);
     if (localStorage.loginnick && localStorage.loginpass) {
         $('#ips_username').val(localStorage.loginnick);
         $('#ips_password').val(localStorage.loginpass);
@@ -141,6 +176,9 @@ $(document).ready(function () {
                 } else {
                     alert(info.message);
                 }
+            },
+            fail: function () {
+                alert('Remain calm, issue was experienced while contacting the login server.');
             }
         });
         ev.preventDefault();
@@ -156,13 +194,3 @@ $(document).ready(function () {
 
 
 });
-
-var translationDB = [];
-
-function translateLang(lang) {
-    "use strict";
-    var i = 0;
-    for (i; translationDB.length > i; i++) {
-        $('[' + translationDB[i].item + ']').text(translationDB[i][lang]);
-    }
-}

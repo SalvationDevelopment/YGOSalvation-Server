@@ -4,8 +4,8 @@ var translationDB = [{
     "es": "Servidor Salvation",
     "de": "Salvation Server",
     "fr": "Serveur Salvation",
-    "pt": "",
-    "nl": "",
+    "pt": "Servidor Salvation",
+    "nl": "Salvation Server",
     "it": "",
     "tr": ""
 }, {
@@ -14,9 +14,9 @@ var translationDB = [{
     "es": "Editar Mazo",
     "de": "Deck bearbeiten",
     "fr": "Deck Éditeur",
-    "pt": "",
-    "nl": "",
-    "it": "",
+    "pt": "Editar Deck",
+    "nl": "Deck bouwen",
+    "it": "Modifica decklist",
     "tr": ""
 }, {
     "item": "data-translation-replays",
@@ -24,9 +24,9 @@ var translationDB = [{
     "es": "Repeticiones",
     "de": "Wiedergabe",
     "fr": "Rejouement",
-    "pt": "",
-    "nl": "",
-    "it": "",
+    "pt": "Repetições",
+    "nl": "Herhaling",
+    "it": "Replay",
     "tr": ""
 }, {
     "item": "data-translation-gamelist",
@@ -34,8 +34,8 @@ var translationDB = [{
     "es": "Partidas",
     "de": "Aktive Duelle",
     "fr": "Duels Actives",
-    "pt": "",
-    "nl": "",
+    "pt": "Duelos",
+    "nl": "Actieve Duels",
     "it": "",
     "tr": ""
 }, {
@@ -44,8 +44,8 @@ var translationDB = [{
     "es": "Host",
     "de": "Duell erstellen",
     "fr": "Créer",
-    "pt": "",
-    "nl": "",
+    "pt": "Duelar",
+    "nl": "Duel maken",
     "it": "",
     "tr": ""
 }, {
@@ -54,8 +54,8 @@ var translationDB = [{
     "es": "Foro",
     "de": "Forum",
     "fr": "Forum",
-    "pt": "",
-    "nl": "",
+    "pt": "Fórum",
+    "nl": "Forum",
     "it": "",
     "tr": ""
 }, {
@@ -64,8 +64,8 @@ var translationDB = [{
     "es": "Chat",
     "de": "Chat",
     "fr": "Chat",
-    "pt": "",
-    "nl": "",
+    "pt": "Chat",
+    "nl": "Chat",
     "it": "",
     "tr": ""
 }, {
@@ -74,8 +74,8 @@ var translationDB = [{
     "es": "Noticias",
     "de": "Neuigkeiten",
     "fr": "Nouvelles",
-    "pt": "",
-    "nl": "",
+    "pt": "Notícias",
+    "nl": "Nieuws",
     "it": "",
     "tr": ""
 }, {
@@ -84,8 +84,8 @@ var translationDB = [{
     "es": "Ajustes",
     "de": "Einstellungen",
     "fr": "Paramètres",
-    "pt": "",
-    "nl": "",
+    "pt": "Configurações",
+    "nl": "Instellingen",
     "it": "",
     "tr": ""
 }, {
@@ -94,9 +94,9 @@ var translationDB = [{
     "es": "Simulador de Yu-Gi-Oh en línea",
     "de": "Online Yu-Gi-Oh!-Simulator",
     "fr": "Simulateur Yu-Gi-Oh en-ligne",
-    "pt": "",
-    "nl": "",
-    "it": "",
+    "pt": "Simulador de Yu-Gi-Oh Online",
+    "nl": "Online Yu-Gi-Oh! Simulator",
+    "it": "Simulatore online di yugioh",
     "tr": ""
 }, {
     "item": "data-translation-playnow",
@@ -104,8 +104,8 @@ var translationDB = [{
     "es": "Cliente para Windows",
     "de": "Vollständiger Windows-Client",
     "fr": "Tous les clients Windows",
-    "pt": "",
-    "nl": "",
+    "pt": "Cliente para Windows",
+    "nl": "Volle Windows Cliënt",
     "it": "",
     "tr": ""
 }, {
@@ -114,8 +114,38 @@ var translationDB = [{
     "es": "Iniciar Sesión",
     "de": "Einloggen",
     "fr": "Se Connecter",
-    "pt": "",
-    "nl": "",
+    "pt": "Entrar",
+    "nl": "Inloggen",
+    "it": "",
+    "tr": ""
+}, {
+    "note": "data-translation-forumusername",
+    "en": "Username",
+    "es": "Nombre de Usuario",
+    "de": "Benutzername",
+    "fr": "Nom d'utilisateur",
+    "pt": "Nome no Fórum",
+    "nl": "Gebruikersnaam",
+    "it": "",
+    "tr": ""
+}, {
+    "note": "data-translation-forumpassword",
+    "en": "Password",
+    "es": "Contraseña",
+    "de": "Passwort",
+    "fr": "Mot de Passe",
+    "pt": "Senha",
+    "nl": "Wachtwoord",
+    "it": "",
+    "tr": ""
+}, {
+    "item": "data-translation-rememberusernamepassword",
+    "en": "Remember Username & Password?",
+    "es": "Recordar Nombre y Contraseña",
+    "de": "Anmeldedaten speichern",
+    "fr": "Se souvenir de moi",
+    "pt": "Lembre-se de mim",
+    "nl": "Onthoud mij",
     "it": "",
     "tr": ""
 }, {
@@ -124,18 +154,18 @@ var translationDB = [{
     "es": "Registrarse por el Foro",
     "de": "Über das Forum anmelden",
     "fr": "S'Enregister sur le Forum",
-    "pt": "",
-    "nl": "",
-    "it": "",
+    "pt": "Registrar-se no Fórum",
+    "nl": "Via forum registreren",
+    "it": "Registrazione tramite forum",
     "tr": ""
 }, {
-    "item": "data-translation-currentdeck",
-    "en": "Current deck",
-    "es": "Mazo Actual",
-    "de": "Ausgewähltes Deck",
-    "fr": "Deck Actuel",
-    "pt": "",
-    "nl": "",
+    "item": "data-translation-forgotpassword",
+    "en": "Forgot Password",
+    "es": "Olvidaste tu Contraseña?",
+    "de": "Passwort vergessen?",
+    "fr": "Mot de passe oublié?",
+    "pt": "Esqueceu a senha?",
+    "nl": "Wachtwoord vergeten",
     "it": "",
     "tr": ""
 }, {
@@ -144,9 +174,19 @@ var translationDB = [{
     "es": "Ranked",
     "de": "Ranglisten-Modus",
     "fr": "Classé",
-    "pt": "",
-    "nl": "",
-    "it": "",
+    "pt": "Ranked",
+    "nl": "Gerangschikt",
+    "it": "Rango",
+    "tr": ""
+}, {
+    "item": "data-translation-currentdeck",
+    "en": "Current deck",
+    "es": "Mazo Actual",
+    "de": "Ausgewähltes Deck",
+    "fr": "Deck Actuel",
+    "pt": "Deck Atual",
+    "nl": "Huidig deck",
+    "it": "Deck utilizzato correntemente",
     "tr": ""
 }, {
     "item": "data-translation-cardpool",
@@ -154,9 +194,9 @@ var translationDB = [{
     "es": "Lista de Cartas",
     "de": "Verfügbare Karten",
     "fr": "Listes des Cartes",
-    "pt": "",
-    "nl": "",
-    "it": "",
+    "pt": "Lista de Cartas",
+    "nl": "Kaartenlijst",
+    "it": "Raccolta della carta",
     "tr": ""
 }, {
     "item": "data-translation-banlist",
@@ -164,8 +204,8 @@ var translationDB = [{
     "es": "Ban List",
     "de": "Verbotenenliste",
     "fr": "Liste Banni",
-    "pt": "",
-    "nl": "",
+    "pt": "Lista de Proibidos",
+    "nl": "Verboden lijst",
     "it": "",
     "tr": ""
 }, {
@@ -174,8 +214,8 @@ var translationDB = [{
     "es": "Modo de Duelo",
     "de": "Duell-Modus",
     "fr": "Mode de Duel",
-    "pt": "",
-    "nl": "",
+    "pt": "Modo de Duelo",
+    "nl": "Duel mode",
     "it": "",
     "tr": ""
 }, {
@@ -184,8 +224,8 @@ var translationDB = [{
     "es": "Tiempo Límite",
     "de": "Zeitlimit",
     "fr": "Temps limité",
-    "pt": "",
-    "nl": "",
+    "pt": "Limite de Tempo",
+    "nl": "Tijd limiet",
     "it": "",
     "tr": ""
 }, {
@@ -194,8 +234,8 @@ var translationDB = [{
     "es": "Usar Prioridad",
     "de": "Priorität benutzen",
     "fr": "Activer Prioritées",
-    "pt": "",
-    "nl": "",
+    "pt": "Ativar Prioridade",
+    "nl": "Prioriteit aanzetten",
     "it": "",
     "tr": ""
 }, {
@@ -204,8 +244,8 @@ var translationDB = [{
     "es": "No Revisar Mazo",
     "de": "Decküberprüfung ausschalten",
     "fr": "Désactiver vérification Deck",
-    "pt": "",
-    "nl": "",
+    "pt": "Não checar Deck",
+    "nl": "Deck nakijken uitzetten",
     "it": "",
     "tr": ""
 }, {
@@ -214,8 +254,8 @@ var translationDB = [{
     "es": "No Barajear Mazo",
     "de": "Deckmischen ausschalten",
     "fr": "Désactiver mélanger Deck",
-    "pt": "",
-    "nl": "",
+    "pt": "Não embaralhar Deck",
+    "nl": "Deck schudden uitzetten",
     "it": "",
     "tr": ""
 }, {
@@ -224,8 +264,8 @@ var translationDB = [{
     "es": "Usar Contraseña",
     "de": "Passwort benutzen",
     "fr": "Mot de passe d'utilisateur",
-    "pt": "",
-    "nl": "",
+    "pt": "Usar senha",
+    "nl": "Wachtwoord gebruiken",
     "it": "",
     "tr": ""
 }, {
@@ -234,8 +274,8 @@ var translationDB = [{
     "es": "Puntos de Vida",
     "de": "Life Points",
     "fr": "Points de vie",
-    "pt": "",
-    "nl": "",
+    "pt": "Pontos de Vida",
+    "nl": "Levenspunten",
     "it": "",
     "tr": ""
 }, {
@@ -244,8 +284,8 @@ var translationDB = [{
     "es": "Ajustes del Juego",
     "de": "Duelleinstellungen",
     "fr": "Ajustements",
-    "pt": "",
-    "nl": "",
+    "pt": "Configurações de Jogo",
+    "nl": "Spel Instellingen",
     "it": "",
     "tr": ""
 }, {
@@ -254,8 +294,8 @@ var translationDB = [{
     "es": "Posición automática hará que el juego elija donde poner las cartas.",
     "de": "Wenn Automatisches Kartenplatzieren ausgewählt ist, wird das Spiel von alleine Karten auf das Spielfeld legen.",
     "fr": "Placement auto va permettre au jeu de choisir les cartes placées automatiquements",
-    "pt": "",
-    "nl": "",
+    "pt": "Posição automática fará o jogo escolher onde colocar as cartas.",
+    "nl": "Automatisch plaatsing zal de kaarten automatisch kiezen waar de kaarten geplaatst worden.",
     "it": "",
     "tr": ""
 }, {
@@ -264,8 +304,8 @@ var translationDB = [{
     "es": "Si Posición Automática esta habilitado, puedes hacerlo aleatorio.",
     "de": "Wenn Automatisches Kartenplatzieren ausgewählt ist, kann es zusätzlich zufällig auswählen, wo die Karten hingelegt werden.",
     "fr": "Si Auto Placement est activer vous pouvez l'aléser",
-    "pt": "",
-    "nl": "",
+    "pt": "Se Posição Automática estiver ligada ela será aleatória.",
+    "nl": "Als automatische plaatsing actief is, kan je het op willekeurig zetten.",
     "it": "",
     "tr": ""
 }, {
@@ -274,8 +314,8 @@ var translationDB = [{
     "es": "Si seleccionaste múltiples cartas en respuesta a una sugerencia de cadena. Puedes dejar que el juego automáticamente elija el orden de resolución. Si Posición Automática esta habilitado, puedes hacerlo aleatorio.",
     "de": "Wenn mehrere Karten als Reaktion auf eine Kette zu Aktivieren angeboten werden, kann das Spiel automatisch entscheiden, in welcher Reihenfolge die Effekte ausgelöst werden. Wenn Automatisches Kartenplatzieren ausgewählt ist, kann dieser Vorgang zusätzlich zufällig ausgewählt werden.",
     "fr": "Si vous selectionnés de cartes multiples en réponse de votre Chaîne. Vous pourez alors choisir l'ordre de vos résolution de Chaînes. Si vous avez Auto Placement activer,elle sera aléser",
-    "pt": "",
-    "nl": "",
+    "pt": "Se você selecionou várias cartas em resposta a uma corrente. Você pode deixar o jogo escolher a ordem automaticamente. Se Posição Automática estiver ligada a ordem será aleatória.",
+    "nl": "Als je meerder kaarte in reactie tot een chain suggestie selecteert, kan je het spel automatisch de resolve orde laten kiezen. Als automatische plaatsing actief is, kan je het willekeurig laten gebeuren.",
     "it": "",
     "tr": ""
 }, {
@@ -284,8 +324,8 @@ var translationDB = [{
     "es": "No Espera (Evidente) en Cadenas. Agrega pausas adicionales al juego para asustar a tu oponente.",
     "de": "Keine (offensichtliche) Verzögerung für Kettenglieder. Tipp: durch absichtliches Pausieren zwischen Aktionen kann ein strategischer Vorteil gewonnen werden.",
     "fr": "Pas de délai (évident) pour les Chaînes,Ajoutement additionel pour le jeux pour effrayer votre adversaire.",
-    "pt": "",
-    "nl": "",
+    "pt": "Sem atrasos (óbvios) em Correntes. Adiciona pausas incrementais ao jogo para confundir o oponente.",
+    "nl": "Geen (duidelijke) vertraging voor chains. Voeg pauses toe aan het duel om je tegenstander op te jagen.",
     "it": "",
     "tr": ""
 }, {
@@ -294,8 +334,8 @@ var translationDB = [{
     "es": "Posición Automática de Cartas",
     "de": "Automatisches Kartenplatzieren",
     "fr": "Placement des Cartes Automatisées",
-    "pt": "",
-    "nl": "",
+    "pt": "Posição Automática",
+    "nl": "Automatische kaartplaatsing",
     "it": "",
     "tr": ""
 }, {
@@ -304,8 +344,8 @@ var translationDB = [{
     "es": "Posición Aleatoria de Cartas",
     "de": "Zufälliges Kartenplatzieren",
     "fr": "Placement aléatoire des cartes",
-    "pt": "",
-    "nl": "",
+    "pt": "Posição Aleatoria",
+    "nl": "Willekeurige kaartplaatsing",
     "it": "",
     "tr": ""
 }, {
@@ -314,8 +354,8 @@ var translationDB = [{
     "es": "Orden Automático de Cadenas",
     "de": "Automatische Kettengliedreihung",
     "fr": "Chainer Auto",
-    "pt": "",
-    "nl": "",
+    "pt": "Corrente Automática",
+    "nl": "Automatische chain orde",
     "it": "",
     "tr": ""
 }, {
@@ -324,38 +364,38 @@ var translationDB = [{
     "es": "No Espera en Cadenas",
     "de": "Keine Verzögerung für Kettenglieder",
     "fr": "Chaîne sans Délai",
-    "pt": "",
-    "nl": "",
+    "pt": "Sem atraso para Correntes",
+    "nl": "Geen vertraging voor chains",
     "it": "",
     "tr": ""
 }, {
     "item": "data-translation-enablesound",
     "en": "Enable Sound",
-    "es": "habilitar Sonido",
+    "es": "Habilitar Sonido",
     "de": "Ton anstellen",
     "fr": "Activer le son",
-    "pt": "",
-    "nl": "",
+    "pt": "Ativar Som",
+    "nl": "Geluid aan",
     "it": "",
     "tr": ""
 }, {
     "item": "data-translation-enablemusic",
     "en": "Enable Music",
-    "es": "habilitar Música",
+    "es": "Habilitar Música",
     "de": "Musik anstellen",
     "fr": "Activer la Musique",
-    "pt": "",
-    "nl": "",
+    "pt": "Ativar Música",
+    "nl": "Muziek aan",
     "it": "",
     "tr": ""
 }, {
     "item": "data-translation-enabledirectx",
-    "en": "enable DirectX",
-    "es": "habilitar DirectX",
+    "en": "Enable DirectX",
+    "es": "Habilitar DirectX",
     "de": "DirectX anstellen",
     "fr": "Activer DirectX",
-    "pt": "",
-    "nl": "",
+    "pt": "Ativar DirectX",
+    "nl": "DirectX aan",
     "it": "",
     "tr": ""
 }, {
@@ -364,8 +404,8 @@ var translationDB = [{
     "es": "Anti Aliasing",
     "de": "Anti Aliasing",
     "fr": "Anti Aliasing",
-    "pt": "",
-    "nl": "",
+    "pt": "Anti Aliasing",
+    "nl": "Anti Aliasing",
     "it": "",
     "tr": ""
 }, {
@@ -374,8 +414,8 @@ var translationDB = [{
     "es": "Tamaño de Letra",
     "de": "Schriftgröße",
     "fr": "Taille de Police",
-    "pt": "",
-    "nl": "",
+    "pt": "Tamanho da Fonte",
+    "nl": "Lettergrootte",
     "it": "",
     "tr": ""
 }, {
@@ -384,8 +424,8 @@ var translationDB = [{
     "es": "Fuente",
     "de": "Schriftart",
     "fr": "Font",
-    "pt": "",
-    "nl": "",
+    "pt": "Fonte",
+    "nl": "Lettertype",
     "it": "",
     "tr": ""
 }, {
@@ -394,8 +434,8 @@ var translationDB = [{
     "es": "Skin",
     "de": "Benutzeroberfläche",
     "fr": "Modéle",
-    "pt": "",
-    "nl": "",
+    "pt": "Tema",
+    "nl": "Thema",
     "it": "",
     "tr": ""
 }, {
@@ -404,8 +444,8 @@ var translationDB = [{
     "es": "Predeterminadas",
     "de": "Standardeinstellungen",
     "fr": "Défaut",
-    "pt": "",
-    "nl": "",
+    "pt": "Padrão",
+    "nl": "Standaardinstellingen",
     "it": "",
     "tr": ""
 }, {
@@ -414,8 +454,8 @@ var translationDB = [{
     "es": "Volumen de Sonido",
     "de": "Tonlautstärke",
     "fr": "Volume du son",
-    "pt": "",
-    "nl": "",
+    "pt": "Volume de Som",
+    "nl": "Geluidsterkte",
     "it": "",
     "tr": ""
 }, {
@@ -424,8 +464,8 @@ var translationDB = [{
     "es": "Volumen de Música",
     "de": "Musiklautstärke",
     "fr": "Volume de musique",
-    "pt": "",
-    "nl": "",
+    "pt": "Volume de Música",
+    "nl": "Muzieksterkte",
     "it": "",
     "tr": ""
 }, {
@@ -434,8 +474,8 @@ var translationDB = [{
     "es": "Archivo Base de Datos",
     "de": "Datenbankdatei",
     "fr": "Base de données du Fichier",
-    "pt": "",
-    "nl": "",
+    "pt": "Arquivo de Dados",
+    "nl": "Database bestanden",
     "it": "",
     "tr": ""
 }];

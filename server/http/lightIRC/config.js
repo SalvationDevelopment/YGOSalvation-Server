@@ -30,18 +30,19 @@ params.nick = "Duelist_%";
 /* Channel to be joined after connecting. Multiple channels can be added like this: #lightIRC,#test,#help */
 params.autojoin = "#lobby";
 /* Commands to be executed after connecting. E.g.: /mode %nick% +x */
-params.perform = "";
+params.perform = '/ns id %pass%';
+params.identifyMessage = "";
 
 /* Whether the server window (and button) should be shown */
 params.showServerWindow = false;
 
 /* Show a popup to enter a nickname */
-params.showNickSelection = true;
+params.showNickSelection = false;
 /* Adds a password field to the nick selection box */
 params.showIdentifySelection = false;
 
 /* Show button to register a nickname */
-params.showRegisterNicknameButton = true;
+params.showRegisterNicknameButton = false;
 /* Show button to register a channel */
 params.showRegisterChannelButton = false;
 
@@ -56,7 +57,7 @@ params.navigationPosition = "bottom";
 
 params.fontSize = 10;
 params.showInfoMessages = false;
-params.emoticonPath = 'http://ygopro.us/lightIRC/emoticons/';
+params.emoticonPath = 'https://ygopro.us/lightIRC/emoticons/';
 params.loopServerCommands = true;
 params.loopClientCommands = true;
 params.contextMenuInternalEvent = "Duel Request:/msg DuelServ !duel %nick%";

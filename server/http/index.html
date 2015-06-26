@@ -25,6 +25,15 @@
 
 
     <style>
+        #languagesetter {
+            text-align: center;
+            color: blueviolet;
+            font-weight: 800;
+            text-shadow: 0 0 9px mediumblue;
+            padding: 15px;
+            word-spacing: 35px;
+        }
+        
         footer.superfooter.loud {
             color: white;
             font-size: 14px;
@@ -163,14 +172,15 @@
     <div style="z-index:40; position:relative;">
         <span class="psudolinksingle" onclick="singlesitenav('home')" id='psudologo'>
             <h1 style="font-size:1.2em">
-            <span data-translation-salvationserver style="color:#e4a;">YGOPro</span> Salvation Server</h1>
+            <span style="color:#e4a;">YGOPro</span> <span data-translation-salvationserver>Salvation Server</span>
+        </h1>
         </span>
         <ul class="featurelist" style="font-size:small">
             <!--<li class="launcheronly"><span class="psudolinksingle " onclick='ygopro("-l")'>LAN Mode</span>
             </li>-->
             <li><span data-translation-deckedit class="psudolinksingle" onclick='ygopro("-d");singlesitenav("deckedit");'>Deck Edit</span>
             </li>
-            <li data-translation-replays class="launcheronly"><span class="psudolinksingle" onclick='ygopro("-r")'>Replays</span>
+            <li class="launcheronly"><span data-translation-replays class="psudolinksingle" onclick='ygopro("-r")'>Replays</span>
             </li class="loophole">
             <li><span data-translation-gamelist class="psudolinksingle" onclick="joinGamelist();singlesitenav('gamelist');">Game List</span>
             </li>
@@ -182,15 +192,16 @@
             </li>
             <li><span data-translation-faq class="psudolinksingle" onclick="singlesitenav('faq')">News</span>
             </li>
-            <li data-translation-settings class="launcheronly"><span class="psudolinksingle" onclick="singlesitenav('settings')">Settings</span>
+            <li class="launcheronly"><span class="psudolinksingle" onclick="singlesitenav('settings')" data-translation-settings>Settings</span>
             </li>
         </ul>
     </div>
-    <header style="padding-top:50px;top:0vh;" id='home'>
+    <header style="top:0vh;" id='home'>
         <div id="homecontainer">
             <span class="psudolinksingle" onclick="singlesitenav('home')">
                 <h1 style="padding-top:80px;"   class="shine">
-            <span data-translation-salvationserver style="color:#e4a;">YGOPro</span> Salvation Server</h1>
+                    <span  style="color:#e4a;">YGOPro</span> <span data-translation-salvationserver>Salvation Server</span>
+            </h1>
             </span>
             <h2 data-translation-onlineyugiohsimulator class="shine">Online Yu-Gi-Oh! Simulator</h2>
             <nav class="lander-main">
@@ -200,7 +211,7 @@
                 <ul class="webonly" style="text-align:center; padding:0;" id="mirrors" itemscope itemtype="http://schema.org/SoftwareApplication">
                     <!--<li>Login</li>
                 <li>Sign Up</li>-->
-                    <li><a href="http://ygopro.us/setups/setup.msi" onclick="_gaq.push(['_trackEvent', 'Site', 'Download', 'Full Windows']);">Full Windows Client </a>
+                    <li><a data-translation-playnow href="https://mega.co.nz/#!q1gW2CTS!oyP2CrbrVaMEhVIvHJ878IU2FviiFtrkBqRouzkFFJw" onclick="_gaq.push(['_trackEvent', 'Site', 'Download', 'Full Windows']);">Full Windows Client </a>
 
                     </li>
                     <!--
@@ -208,6 +219,7 @@
                         
                     </li>
 -->
+                    <!--
                     <li><a href=" http://ygopro.us/setups/client.tar.gz" onclick="_gaq.push(['_trackEvent', 'Site', 'Download', 'Portable']);">Linux32 TarGz/ Windows Portable</a>
 
                     </li>
@@ -217,6 +229,7 @@
 
                     <li><a href="https://mega.co.nz/#!utBRyTzB!EcezmcFqFN10rO2fRT4PYpTxCHy0GkumA8YvYdrwGTM" onclick="_gaq.push(['_trackEvent', 'Site', 'Download', 'Torrent']);"> Mirror 1</a>
                     </li>
+-->
                     <li><a href="http://ygopro.us/setups/setup.msi.torrent">Torrent</a>
                     </li>
                     <!--
@@ -227,17 +240,27 @@
 
             </nav>
             <form id="ipblogin" style="text-align:center; color: white !important; display:block; margin:0 auto" class="launcheronly loginsystem">
-                <input id="ips_username" type="text" class="launcheronly loginsystem" name="ips_username" tabindex="1" placeholder="Forum Username">
-                <input id="ips_password" type="password" class="launcheronly loginsystem" name="ips_password" tabindex="2" placeholder="Forum Password">
-                <br><span style="font-size:.7em"><input type="checkbox" id="ips_remember" > Remember Username &amp; Password?</span>
+                <input data-translation-forumusername id="ips_username" type="text" class="launcheronly loginsystem" name="ips_username" tabindex="1" placeholder="Forum Username">
+                <input data-translation-forumpassword id="ips_password" type="password" class="launcheronly loginsystem" name="ips_password" tabindex="2" placeholder="Forum Password">
+                <br><span style="font-size:.7em"><input type="checkbox" id="ips_remember" ><span data-translation-rememberusernamepassword> Remember Username &amp; Password?</span></span>
                 <br />
                 <button data-translation-login id="dolog" class="launcheronly loginsystem">Login</button>
                 <br />
                 <br />
-                <a data-translation-registerviaforum class="launcheronly loginsystem" href="http://forum.ygopro.us/index.php?app=core&module=global&section=register" target="_blank">Register via Forum</a> | <a class="launcheronly loginsystem" href="http://forum.ygopro.us/index.php?app=core&module=global&section=lostpass">Forgot Password</a>
+                <a data-translation-registerviaforum class="launcheronly loginsystem" href="http://forum.ygopro.us/index.php?app=core&module=global&section=register" target="_blank">Register via Forum</a> | <a data-translation-forgotpassword class="launcheronly loginsystem" href="http://forum.ygopro.us/index.php?app=core&module=global&section=lostpass">Forgot Password</a>
             </form>
             <div style="font-size:.5em; text-align:center; color:#747" id="versioninfo">Version 4 : Production 4 : Revision 1</div>
             <div style="font-size:1.5em; text-align:center; color:pink" class='webonly'></div>
+            <div id="languagesetter">
+                <span onclick="translateLang('en')">English</span>
+                <span onclick="translateLang('es')">Español</span>
+                <span onclick="translateLang('de')">Deutsch</span>
+                <span onclick="translateLang('fr')">Français</span>
+                <span onclick="translateLang('pt')">Português</span>
+		<span onclick="translateLang('nl')">Nederlands</span>
+				
+
+            </div>
             <div class="webonly" style="width:728px;margin:0 auto">
                 <SCRIPT language="Javascript">
                     var cpmstar_rnd = Math.round(Math.random() * 999999);
@@ -403,11 +426,6 @@
         <script type="text/javascript" src="lightIRC/config.js"></script>
         <div id="lightIRC" style="height:92%; text-align:center;">
         </div>
-        <script type="text/javascript">
-            swfobject.embedSWF("lightIRC/lightIRC.swf", "lightIRC", "100%", "92%", "10.0.0", "expressInstall.swf", params, {
-                wmode: "transparent"
-            });
-        </script>
     </header>
     <header style="padding-top:50px" id="faq">
         <div id="news"></div>
