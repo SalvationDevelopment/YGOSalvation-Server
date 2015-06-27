@@ -225,14 +225,16 @@ primus.on('connection', function (socket) {
                 ips_username: data.username,
                 ips_password: data.password
             };
-            /* request.post(url, {form : post}, function (error, response, body) {
+            request.post(url, {
+                form: post
+            }, function (error, response, body) {
                 if (!error && response.statusCode === 200) {
                     var info = JSON.parse(body);
                     if (info.success) {
                         clearTimeout(hunter[data.username]);
                     }
                 }
-            });*/
+            });
             break;
         case ('privateUpdate'):
             primus.room(socket.address.ip + data.uniqueID).write({

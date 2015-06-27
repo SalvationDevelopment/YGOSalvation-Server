@@ -1,10 +1,11 @@
 /*jslint  node: true, plusplus: true*/
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 var httpsServer;
 try {
     var fs = require('fs'),
         ssloptions = {
-            ca:   fs.readFileSync(process.env.SSL + 'sub.class1.server.ca.pem'),
-            key:  fs.readFileSync(process.env.SSL + 'ssl.key.unsecure'),
+            ca: fs.readFileSync(process.env.SSL + 'sub.class1.server.ca.pem'),
+            key: fs.readFileSync(process.env.SSL + 'ssl.key.unsecure'),
             cert: fs.readFileSync(process.env.SSL + 'ssl.crt')
         },
         http = require('https');
@@ -28,6 +29,7 @@ function initiateSlave() {
     // When a user connects, create an instance and allow the to duel, clean up after.
     var parsePackets = require('./parsepackets.js'),
         ws;
+
     function handleTCP(socket) {
         var framer = new Framemaker();
         socket.setNoDelay(true);
@@ -64,14 +66,19 @@ function initiateSlave() {
     }
     ygoserver = net.createServer(handleTCP);
     ygoserver.listen(8911);
-    
-    ws = new WebSocket({ server: httpsServer });
+
+    ws = new WebSocket({
+        server: httpsServer
+    });
     ws.on('connection', function connection(socket) {
         var framer = new Framemaker();
         socket.active_ygocore = false;
         socket.active = false;
         socket.write = function (message) {
-            socket.send(message, {binary: true, mask: false});
+            socket.send(message, {
+                binary: true,
+                mask: false
+            });
         };
         socket.end = function () {
             socket = null;
@@ -96,7 +103,7 @@ function initiateSlave() {
             //console.log('disconnected');
         });
     });
-    
+
     return ygoserver;
 }
 
