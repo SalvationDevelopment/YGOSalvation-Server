@@ -27,7 +27,9 @@ var portmin = 30000 + process.env.PORTRANGE * 100, //Port Ranges
     cluster = require('cluster'),
     http = require('http'), // SQCG Primus requires http parsing/tcp-handling
     server = http.createServer(), //throne of the God
-    Socket = require('primus').createSocket({iknowclusterwillbreakconnections : true}),
+    Socket = require('primus').createSocket({
+        iknowclusterwillbreakconnections: true
+    }),
     client = new Socket('http://localhost:24555'); //Connect the God to the tree;
 
 
@@ -48,29 +50,29 @@ function joinGamelist() {
     'use strict';
     client.write({
         action: 'accessSecurityChannel',
-        adminChannelPassword : process.env.OPERPASS,
-        uniqueID : '-----'
+        adminChannelPassword: process.env.OPERPASS,
+        uniqueID: '-----'
     });
     client.write({
         action: 'join',
-        uniqueID : '-----',
-        password : process.env.OPERPASS
+        uniqueID: '-----',
+        password: process.env.OPERPASS
     });
 }
 
 setInterval(joinGamelist, 5000);
 joinGamelist();
-var cHistory = new (winston.Logger)({
+var cHistory = new(winston.Logger)({
     transports: [
-        new (winston.transports.Console)(),
-        new (winston.transports.DailyRotateFile)({
+        new(winston.transports.Console)(),
+        new(winston.transports.DailyRotateFile)({
             filename: ".\\logs\\conection_history.log"
         })
     ]
 });
-var coreErrors = new (winston.Logger)({
+var coreErrors = new(winston.Logger)({
     transports: [
-        new (winston.transports.DailyRotateFile)({
+        new(winston.transports.DailyRotateFile)({
             filename: ".\\logs\\conection_history.log"
         })
     ]
@@ -215,8 +217,8 @@ function handleCoreMessage(core_message_raw, port, socket, data, pid) {
     }
     var core_message = core_message_raw.toString().split('|'),
         gamelistmessage = {
-            password : process.env.OPERPASS,
-            action : 'gamelistEvent',
+            password: process.env.OPERPASS,
+            action: 'gamelistEvent',
             messagetype: 'coreMessage',
             coreMessage: {
                 core_message_raw: core_message_raw.toString(),
@@ -233,7 +235,7 @@ function handleCoreMessage(core_message_raw, port, socket, data, pid) {
         //cHistory.info('--GAME: ' + pid);
     }
     process.send(gamelistmessage);
-    
+
 }
 
 /* Checks if a given password is valid, returns true or false */
@@ -263,20 +265,21 @@ function startCore(port, socket, data, callback) {
     var configfile = pickCoreConfig(socket),
         params = port + ' ' + configfile;
 
+    console.log(configfile);
     if (!legalPassword(socket.hostString)) {
         //deal with bad game request
         cHistory.info('[' + socket.remoteAddress + ':' + socket.username + '] requested bad game: ' + socket.hostString);
         return;
     } else {
         //contact main process.
-//        process.send({
-//            messagetype: 'coreMessage',
-//            coreMessage: {
-//                core_message_raw: 'passwordQuery',
-//                ip: socket.remoteAddress,
-//                username: socket.username
-//            }
-//        });
+        //        process.send({
+        //            messagetype: 'coreMessage',
+        //            coreMessage: {
+        //                core_message_raw: 'passwordQuery',
+        //                ip: socket.remoteAddress,
+        //                username: socket.username
+        //            }
+        //        });
     }
 
     socket.core = childProcess.spawn(startDirectory + '/../ygocore/YGOServer.exe', [port, configfile], {
@@ -322,11 +325,11 @@ function authenticate(socket) {
         }
 
     });
-//    bouncer.on('kill', function (ip) {
-//        if (ip === socket.remoteAddress) {
-//            socket.end();
-//        }
-//    });
+    //    bouncer.on('kill', function (ip) {
+    //        if (ip === socket.remoteAddress) {
+    //            socket.end();
+    //        }
+    //    });
 }
 
 /* ..and VOLIA! Game Request Routing */
