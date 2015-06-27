@@ -247,7 +247,7 @@ function processServerRequest(parameter) {
         return;
     }
 
-    console.log('./ygopro/databases/' + localStorage.dbtext);
+
     if (localStorage.dbtext.length > 0) {
         if ((localStorage.roompass[0] === '4' || localStorage.roompass[0] === '5') && letter === 'j') {
             localStorage.dbtext = '2-MonsterLeague.cdb';
@@ -268,6 +268,7 @@ function processServerRequest(parameter) {
             if (cdberror) {
                 throw 'Failed to copy database';
             }
+            console.log('./ygopro/databases/' + localStorage.dbtext);
             if (localStorage.roompass[0] === '4' && letter === 'j') {
                 localStorage.lastdeck = 'battlepack';
                 fs.writeFile('./ygopro/deck/battlepack.ydk', localStorage.battleback, function () {
