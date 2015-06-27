@@ -126,7 +126,7 @@ var translationDB = [{
     "fr": "Simulateur Yu-Gi-Oh en-ligne",
     "pt": "Simulador de Yu-Gi-Oh Online",
     "nl": "Online Yu-Gi-Oh! Simulator",
-    "it": "Simulatore online di yugioh",
+    "it": "Simulatore online di Yu-Gi-Oh",
     "tr": ""
 }, {
     "item": "data-translation-playnow",
