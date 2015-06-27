@@ -27,6 +27,15 @@
             maxxed = !maxxed;
             return;
         }
+		function openConsole() {
+			if (mode !== 'production') {
+				try {
+					require('nw.gui').Window.get().showDevTools();
+				} catch (error) {
+					window.alert('Error opening console: ' + error);
+				}
+			}
+		}
         setTimeout(function(){
             win.on('new-win-policy', function (frame, url, policy) {
                 policy.ignore();
@@ -34,6 +43,11 @@
             });
         }, 3000);
         
+		$(function(){
+			if ("production" !== mode) {
+				$('#control').prepend('<div onclick="openConsole();"></dvi>');
+			}
+		});
     </script>
     <div id="control">
         <div onclick="win.close(true);"></div>
