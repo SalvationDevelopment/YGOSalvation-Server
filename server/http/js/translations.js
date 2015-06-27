@@ -55,7 +55,7 @@ var translationDB = [{
     "de": "Beitreten",
     "fr": "Rejoingnez",
     "pt": "Entrar",
-    "nl": "",
+    "nl": "Meedoen",
     "it": "",
     "tr": ""
 }, {
@@ -65,7 +65,7 @@ var translationDB = [{
     "de": "Betrachten",
     "fr": "Observer",
     "pt": "Observar",
-    "nl": "",
+    "nl": "Toeschouwen",
     "it": "",
     "tr": ""
 }, {
@@ -115,7 +115,7 @@ var translationDB = [{
     "de": "Zusätzliche Optionen",
     "fr": "Options Additionelles",
     "pt": "Opções Adicionais",
-    "nl": "",
+    "nl": "Overige Opties",
     "it": "",
     "tr": ""
 }, {
