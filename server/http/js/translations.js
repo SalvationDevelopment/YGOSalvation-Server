@@ -15,7 +15,7 @@ var translationDB = [{
     "de": "Deck bearbeiten",
     "fr": "Deck Éditeur",
     "pt": "Editar Deck",
-    "nl": "Deck bouwen",
+    "nl": "Deck Bewerken",
     "it": "Modifica decklist",
     "tr": ""
 }, {
@@ -25,7 +25,7 @@ var translationDB = [{
     "de": "Wiedergabe",
     "fr": "Rejouement",
     "pt": "Repetições",
-    "nl": "Herhaling",
+    "nl": "Herhalingen",
     "it": "Replay",
     "tr": ""
 }, {
@@ -45,7 +45,7 @@ var translationDB = [{
     "de": "Duell erstellen",
     "fr": "Créer",
     "pt": "Duelar",
-    "nl": "Duel maken",
+    "nl": "Duel creëren",
     "it": "",
     "tr": ""
 }, {
@@ -135,7 +135,7 @@ var translationDB = [{
     "de": "Vollständiger Windows-Client",
     "fr": "Tous les clients Windows",
     "pt": "Cliente para Windows",
-    "nl": "Volle Windows Cliënt",
+    "nl": "Volledige Windows Cliënt",
     "it": "",
     "tr": ""
 }, {
@@ -175,7 +175,7 @@ var translationDB = [{
     "de": "Anmeldedaten speichern",
     "fr": "Se souvenir de moi",
     "pt": "Lembre-se de mim",
-    "nl": "Onthoud mij",
+    "nl": "Inloggegevens onthouden",
     "it": "",
     "tr": ""
 }, {
@@ -195,7 +195,7 @@ var translationDB = [{
     "de": "Passwort vergessen?",
     "fr": "Mot de passe oublié?",
     "pt": "Esqueceu a senha?",
-    "nl": "Wachtwoord vergeten",
+    "nl": "Wachtwoord vergeten?",
     "it": "",
     "tr": ""
 }, {
@@ -245,7 +245,7 @@ var translationDB = [{
     "de": "Duell-Modus",
     "fr": "Mode de Duel",
     "pt": "Modo de Duelo",
-    "nl": "Duel mode",
+    "nl": "Duel Modus",
     "it": "",
     "tr": ""
 }, {
@@ -255,7 +255,7 @@ var translationDB = [{
     "de": "Zeitlimit",
     "fr": "Temps limité",
     "pt": "Limite de Tempo",
-    "nl": "Tijd limiet",
+    "nl": "Tijdslimiet",
     "it": "",
     "tr": ""
 }, {
@@ -275,7 +275,7 @@ var translationDB = [{
     "de": "Decküberprüfung ausschalten",
     "fr": "Désactiver vérification Deck",
     "pt": "Não checar Deck",
-    "nl": "Deck nakijken uitzetten",
+    "nl": "Deck controleren uitzetten",
     "it": "",
     "tr": ""
 }, {
@@ -315,7 +315,7 @@ var translationDB = [{
     "de": "Duelleinstellungen",
     "fr": "Ajustements",
     "pt": "Configurações de Jogo",
-    "nl": "Spel Instellingen",
+    "nl": "Spel Configuraties",
     "it": "",
     "tr": ""
 }, {
@@ -325,7 +325,7 @@ var translationDB = [{
     "de": "Wenn Automatisches Kartenplatzieren ausgewählt ist, wird das Spiel von alleine Karten auf das Spielfeld legen.",
     "fr": "Placement auto va permettre au jeu de choisir les cartes placées automatiquements",
     "pt": "Posição automática fará o jogo escolher onde colocar as cartas.",
-    "nl": "Automatisch plaatsing zal de kaarten automatisch kiezen waar de kaarten geplaatst worden.",
+    "nl": "Bij Automatisch plaatsing zal het spel zelf de plaatsing van de kaarten automatisch kiezen.",
     "it": "",
     "tr": ""
 }, {
@@ -335,7 +335,7 @@ var translationDB = [{
     "de": "Wenn Automatisches Kartenplatzieren ausgewählt ist, kann es zusätzlich zufällig auswählen, wo die Karten hingelegt werden.",
     "fr": "Si Auto Placement est activer vous pouvez l'aléser",
     "pt": "Se Posição Automática estiver ligada ela será aleatória.",
-    "nl": "Als automatische plaatsing actief is, kan je het op willekeurig zetten.",
+    "nl": "Als automatische plaatsing actief is, kan je het op willekeurig plaatsing zetten.",
     "it": "",
     "tr": ""
 }, {
@@ -345,7 +345,7 @@ var translationDB = [{
     "de": "Wenn mehrere Karten als Reaktion auf eine Kette zu Aktivieren angeboten werden, kann das Spiel automatisch entscheiden, in welcher Reihenfolge die Effekte ausgelöst werden. Wenn Automatisches Kartenplatzieren ausgewählt ist, kann dieser Vorgang zusätzlich zufällig ausgewählt werden.",
     "fr": "Si vous selectionnés de cartes multiples en réponse de votre Chaîne. Vous pourez alors choisir l'ordre de vos résolution de Chaînes. Si vous avez Auto Placement activer,elle sera aléser",
     "pt": "Se você selecionou várias cartas em resposta a uma corrente. Você pode deixar o jogo escolher a ordem automaticamente. Se Posição Automática estiver ligada a ordem será aleatória.",
-    "nl": "Als je meerder kaarte in reactie tot een chain suggestie selecteert, kan je het spel automatisch de resolve orde laten kiezen. Als automatische plaatsing actief is, kan je het willekeurig laten gebeuren.",
+    "nl": "Als meerdere kaarten tegelijk activeren in reactie op een chain, kan je het spel automatisch de volgorde van de chain laten kiezen. Als automatische plaatsing actief is, kan je het willekeurig laten gebeuren.",
     "it": "",
     "tr": ""
 }, {
@@ -355,7 +355,7 @@ var translationDB = [{
     "de": "Keine (offensichtliche) Verzögerung für Kettenglieder. Tipp: durch absichtliches Pausieren zwischen Aktionen kann ein strategischer Vorteil gewonnen werden.",
     "fr": "Pas de délai (évident) pour les Chaînes,Ajoutement additionel pour le jeux pour effrayer votre adversaire.",
     "pt": "Sem atrasos (óbvios) em Correntes. Adiciona pausas incrementais ao jogo para confundir o oponente.",
-    "nl": "Geen (duidelijke) vertraging voor chains. Voeg pauses toe aan het duel om je tegenstander op te jagen.",
+    "nl": "Geen (duidelijke) vertraging voor chains. Voeg pauzes toe aan je spel om je tegenstander om de tuin te leiden.",
     "it": "",
     "tr": ""
 }, {
@@ -385,7 +385,7 @@ var translationDB = [{
     "de": "Automatische Kettengliedreihung",
     "fr": "Chainer Auto",
     "pt": "Corrente Automática",
-    "nl": "Automatische chain orde",
+    "nl": "Automatische chain volgorde",
     "it": "",
     "tr": ""
 }, {
@@ -495,7 +495,7 @@ var translationDB = [{
     "de": "Musiklautstärke",
     "fr": "Volume de musique",
     "pt": "Volume de Música",
-    "nl": "Muzieksterkte",
+    "nl": "Volume van Muziek",
     "it": "",
     "tr": ""
 }, {
