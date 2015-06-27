@@ -247,8 +247,11 @@ function processServerRequest(parameter) {
         return;
     }
 
-
+    console.log('./ygopro/databases/' + localStorage.dbtext);
     if (localStorage.dbtext.length > 0) {
+        if ((localStorage.roompass[0] === '0' || localStorage.roompass[0] === '1' || localStorage.roompass[0] === '2') && letter === 'j') {
+            localStorage.dbtext = '0-en-OCGTCG.cdb';
+        }
         if ((localStorage.roompass[0] === '4' || localStorage.roompass[0] === '5') && letter === 'j') {
             localStorage.dbtext = '2-MonsterLeague.cdb';
         }
@@ -261,14 +264,11 @@ function processServerRequest(parameter) {
         if (localStorage.roompass[0] === '3' && letter === 'j') {
             localStorage.dbtext = 'Z-CWA.cdb';
         }
-        if ((localStorage.roompass[0] === '0' || localStorage.roompass[0] === '1' || localStorage.roompass[0] === '2') && letter === 'j') {
-            localStorage.dbtext = '0-en-OCGTCG.cdb';
-        }
+
         copyFile('./ygopro/databases/' + localStorage.dbtext, './ygopro/cards.cdb', function (cdberror) {
             if (cdberror) {
                 throw 'Failed to copy database';
             }
-            console.log('./ygopro/databases/' + localStorage.dbtext);
             if (localStorage.roompass[0] === '4' && letter === 'j') {
                 localStorage.lastdeck = 'battlepack';
                 fs.writeFile('./ygopro/deck/battlepack.ydk', localStorage.battleback, function () {
