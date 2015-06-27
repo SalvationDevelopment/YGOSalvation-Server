@@ -28,12 +28,10 @@
             return;
         }
 		function openConsole() {
-			if (mode !== 'production') {
-				try {
-					require('nw.gui').Window.get().showDevTools();
-				} catch (error) {
-					window.alert('Error opening console: ' + error);
-				}
+			try {
+				require('nw.gui').Window.get().showDevTools();
+			} catch (error) {
+				window.alert('Error opening console: ' + error);
 			}
 		}
         setTimeout(function(){
@@ -45,7 +43,7 @@
         
 		$(function(){
 			if ("production" !== mode) {
-				$('#control').append('<div onclick="openConsole();"></dvi>');
+				$('#control div:last').css('display', 'block');
 			}
 		});
     </script>
@@ -53,6 +51,7 @@
         <div onclick="win.close(true);"></div>
         <div onclick="maxrestore();"></div>
         <div onclick="win.minimize();"></div>
+		<div onclick="openConsole();"></div>
     </div>
     <main style='height: 100%; background:black'>
         <div style="text-align: center;">
