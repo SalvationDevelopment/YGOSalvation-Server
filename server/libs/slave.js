@@ -81,7 +81,7 @@ function initiateSlave() {
             });
         };
         socket.end = function () {
-            socket = null;
+
         };
         socket.on('message', function incoming(data) {
             var frame,
@@ -100,7 +100,10 @@ function initiateSlave() {
 
         });
         socket.on('close', function close() {
-            //console.log('disconnected');
+            console.log('WS, disconnected');
+        });
+        socket.on('error', function close(error) {
+            console.log(error);
         });
     });
 
