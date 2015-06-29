@@ -68,12 +68,18 @@ function ygopro(parameter) {
     if (!launcher && parameter === '-d') {
         return;
     }
-
+    var out = {},
+        storage;
+    for (storage in localStorage) {
+        if (localStorage.hasOwnProperty(storage) && storage.indexOf('login') === -1) {
+            out[storage] = localStorage[storage];
+        }
+    }
     //$.post('http://127.0.0.1:9468/' + parameter, localStorage);
     primus.write({
         action: 'privateServerRequest',
         parameter: parameter,
-        local: localStorage,
+        local: out,
         uniqueID: uniqueID
     });
     _gaq.push(['_trackEvent', 'Launcher', 'YGOPro', parameter]);
