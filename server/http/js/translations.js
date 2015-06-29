@@ -470,7 +470,7 @@ var translationDB = [{
     "nl": "DirectX aan",
     "it": "",
     "tr": "",
-    "fa": ""
+    "fa": "دیرکت‌اکس را روشن کن"
 }, {
     "item": "data-translation-antialiasing",
     "en": "Anti Aliasing",
@@ -558,5 +558,5 @@ var translationDB = [{
     "nl": "Database bestanden",
     "it": "",
     "tr": "",
-    "fa": """
+    "fa": "فایل پایگاه داده‌"
 }];
