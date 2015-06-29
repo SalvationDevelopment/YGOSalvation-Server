@@ -7,7 +7,8 @@ var translationDB = [{
     "pt": "Servidor Salvation",
     "nl": "Salvation Server",
     "it": "",
-    "tr": ""
+    "tr": "",
+    "fa": "سرور سلوایشن"
 }, {
     "item": "data-translation-deckedit",
     "en": "Deck Edit",
@@ -17,7 +18,8 @@ var translationDB = [{
     "pt": "Editar Deck",
     "nl": "Deck Bewerken",
     "it": "Modifica decklist",
-    "tr": ""
+    "tr": "",
+    "fa": "ویراستار دست"
 }, {
     "item": "data-translation-replays",
     "en": "Replays",
@@ -27,7 +29,8 @@ var translationDB = [{
     "pt": "Repetições",
     "nl": "Herhalingen",
     "it": "Replay",
-    "tr": ""
+    "tr": "",
+    "fa": "بازپخش ها"
 }, {
     "item": "data-translation-gamelist",
     "en": "Game List",
@@ -37,7 +40,8 @@ var translationDB = [{
     "pt": "Duelos",
     "nl": "Actieve Duels",
     "it": "",
-    "tr": ""
+    "tr": "",
+    "fa": "لیست بازی ها"
 }, {
     "item": "data-translation-host",
     "en": "Host",
@@ -47,7 +51,8 @@ var translationDB = [{
     "pt": "Duelar",
     "nl": "Duel creëren",
     "it": "",
-    "tr": ""
+    "tr": "",
+    "fa": "بازی ساختن"
 }, {
     "item": "data-translation-join",
     "en": "Join",
@@ -55,9 +60,10 @@ var translationDB = [{
     "de": "Beitreten",
     "fr": "Rejoingnez",
     "pt": "Entrar",
-    "nl": "Meedoen",
+    "nl": "Deelnemen",
     "it": "",
-    "tr": ""
+    "tr": "",
+    "fa": "وارد شو"
 }, {
     "item": "data-translation-spectate",
     "en": "Spectate",
@@ -67,7 +73,8 @@ var translationDB = [{
     "pt": "Observar",
     "nl": "Toeschouwen",
     "it": "",
-    "tr": ""
+    "tr": "",
+    "fa": "تماشا کن"
 }, {
     "item": "data-translation-forum",
     "en": "Forum",
@@ -77,7 +84,8 @@ var translationDB = [{
     "pt": "Fórum",
     "nl": "Forum",
     "it": "",
-    "tr": ""
+    "tr": "",
+    "fa": "تالار گفتگو"
 }, {
     "item": "data-translation-chat",
     "en": "Chat",
@@ -87,7 +95,8 @@ var translationDB = [{
     "pt": "Chat",
     "nl": "Chat",
     "it": "",
-    "tr": ""
+    "tr": "",
+    "fa": "چت"
 }, {
     "item": "data-translation-faq",
     "en": "News",
@@ -97,7 +106,8 @@ var translationDB = [{
     "pt": "Notícias",
     "nl": "Nieuws",
     "it": "",
-    "tr": ""
+    "tr": "",
+    "fa": "خبر ها"
 }, {
     "item": "data-translation-settings",
     "en": "Settings",
@@ -107,7 +117,8 @@ var translationDB = [{
     "pt": "Configurações",
     "nl": "Instellingen",
     "it": "",
-    "tr": ""
+    "tr": "",
+    "fa": "تنظیمات"
 }, {
     "item": "data-translation-additionaloptions",
     "en": "Additional Options",
@@ -117,7 +128,8 @@ var translationDB = [{
     "pt": "Opções Adicionais",
     "nl": "Overige Opties",
     "it": "",
-    "tr": ""
+    "tr": "",
+    "fa": "بیشتر اختیارها"
 }, {
     "item": "data-translation-onlineyugiohsimulator",
     "en": "Online Yu-Gi-Oh! Simulator",
@@ -127,7 +139,8 @@ var translationDB = [{
     "pt": "Simulador de Yu-Gi-Oh Online",
     "nl": "Online Yu-Gi-Oh! Simulator",
     "it": "Simulatore online di Yu-Gi-Oh",
-    "tr": ""
+    "tr": "",
+    "fa": "بازی یوگیوه آنلاین"
 }, {
     "item": "data-translation-playnow",
     "en": "Full Windows Client",
@@ -137,7 +150,8 @@ var translationDB = [{
     "pt": "Cliente para Windows",
     "nl": "Volledige Windows Cliënt",
     "it": "",
-    "tr": ""
+    "tr": "",
+    "fa": "کارخواه برای ویندوز"
 }, {
     "item": "data-translation-login",
     "en": "Login",
@@ -147,7 +161,8 @@ var translationDB = [{
     "pt": "Entrar",
     "nl": "Inloggen",
     "it": "",
-    "tr": ""
+    "tr": "",
+    "fa": "ورود شو"
 }, {
     "note": "data-translation-forumusername",
     "en": "Username",
@@ -157,7 +172,8 @@ var translationDB = [{
     "pt": "Nome no Fórum",
     "nl": "Gebruikersnaam",
     "it": "",
-    "tr": ""
+    "tr": "",
+    "fa": "نام کاربری"
 }, {
     "note": "data-translation-forumpassword",
     "en": "Password",
@@ -167,7 +183,8 @@ var translationDB = [{
     "pt": "Senha",
     "nl": "Wachtwoord",
     "it": "",
-    "tr": ""
+    "tr": "",
+    "fa": "گذرواژه"
 }, {
     "item": "data-translation-rememberusernamepassword",
     "en": "Remember Username & Password?",
@@ -177,7 +194,8 @@ var translationDB = [{
     "pt": "Lembre-se de mim",
     "nl": "Inloggegevens onthouden",
     "it": "",
-    "tr": ""
+    "tr": "",
+    "fa": "من را فراموش نکن"
 }, {
     "item": "data-translation-registerviaforum",
     "en": "Register via Forum",
@@ -187,7 +205,8 @@ var translationDB = [{
     "pt": "Registrar-se no Fórum",
     "nl": "Via forum registreren",
     "it": "Registrazione tramite forum",
-    "tr": ""
+    "tr": "",
+    "fa": "سیاق با تالار گفتگو بکن"
 }, {
     "item": "data-translation-forgotpassword",
     "en": "Forgot Password",
@@ -197,7 +216,8 @@ var translationDB = [{
     "pt": "Esqueceu a senha?",
     "nl": "Wachtwoord vergeten?",
     "it": "",
-    "tr": ""
+    "tr": "",
+    "fa": "گذرواژهت را فراموش کردی؟"
 }, {
     "item": "data-translation-ranked",
     "en": "Ranked",
@@ -207,7 +227,8 @@ var translationDB = [{
     "pt": "Ranked",
     "nl": "Gerangschikt",
     "it": "Rango",
-    "tr": ""
+    "tr": "",
+    "fa": "رتبه ای"
 }, {
     "item": "data-translation-currentdeck",
     "en": "Current deck",
@@ -217,7 +238,8 @@ var translationDB = [{
     "pt": "Deck Atual",
     "nl": "Huidig deck",
     "it": "Deck utilizzato correntemente",
-    "tr": ""
+    "tr": "",
+    "fa": "دست اکنون"
 }, {
     "item": "data-translation-cardpool",
     "en": "Card Pool",
@@ -225,9 +247,10 @@ var translationDB = [{
     "de": "Verfügbare Karten",
     "fr": "Listes des Cartes",
     "pt": "Lista de Cartas",
-    "nl": "Kaartenlijst",
+    "nl": "Beschikbare Kaarten",
     "it": "Raccolta della carta",
-    "tr": ""
+    "tr": "",
+    "fa": "لیست کارت ها"
 }, {
     "item": "data-translation-banlist",
     "en": "Ban List",
@@ -235,9 +258,10 @@ var translationDB = [{
     "de": "Verbotenenliste",
     "fr": "Liste Banni",
     "pt": "Lista de Proibidos",
-    "nl": "Verboden lijst",
+    "nl": "Banlijst",
     "it": "",
-    "tr": ""
+    "tr": "",
+    "fa": "لیست کارت های بی مجاز"
 }, {
     "item": "data-translation-duelmode",
     "en": "Duel Mode",
@@ -247,7 +271,8 @@ var translationDB = [{
     "pt": "Modo de Duelo",
     "nl": "Duel Modus",
     "it": "",
-    "tr": ""
+    "tr": "",
+    "fa": "جور بازی"
 }, {
     "item": "data-translation-timelimit",
     "en": "Time Limit",
@@ -257,7 +282,8 @@ var translationDB = [{
     "pt": "Limite de Tempo",
     "nl": "Tijdslimiet",
     "it": "",
-    "tr": ""
+    "tr": "",
+    "fa": "حودود وقت"
 }, {
     "item": "data-translation-enablepriority",
     "en": "Enable Priority",
@@ -267,7 +293,8 @@ var translationDB = [{
     "pt": "Ativar Prioridade",
     "nl": "Prioriteit aanzetten",
     "it": "",
-    "tr": ""
+    "tr": "",
+    "fa": "اولویت را بزار"
 }, {
     "item": "data-translation-disablecheckdeck",
     "en": "Disable Check Deck",
@@ -277,7 +304,8 @@ var translationDB = [{
     "pt": "Não checar Deck",
     "nl": "Deck controleren uitzetten",
     "it": "",
-    "tr": ""
+    "tr": "",
+    "fa": "دست را چک نکن"
 }, {
     "item": "data-translation-disableshuffledeck",
     "en": "Disable Shuffle Deck",
@@ -287,7 +315,8 @@ var translationDB = [{
     "pt": "Não embaralhar Deck",
     "nl": "Deck schudden uitzetten",
     "it": "",
-    "tr": ""
+    "tr": "",
+    "fa": "دست را مخلوط نکن"
 }, {
     "item": "data-translation-usepassword",
     "en": "Use Password",
@@ -297,7 +326,8 @@ var translationDB = [{
     "pt": "Usar senha",
     "nl": "Wachtwoord gebruiken",
     "it": "",
-    "tr": ""
+    "tr": "",
+    "fa": "گذرواژه استفاده کن"
 }, {
     "item": "data-translation-lifepoints",
     "en": "Lifepoints",
@@ -307,7 +337,8 @@ var translationDB = [{
     "pt": "Pontos de Vida",
     "nl": "Levenspunten",
     "it": "",
-    "tr": ""
+    "tr": "",
+    "fa": "امتیاز زندگی"
 }, {
     "item": "data-translation-gamesettings",
     "en": "Game Settings",
@@ -317,7 +348,8 @@ var translationDB = [{
     "pt": "Configurações de Jogo",
     "nl": "Spel Configuraties",
     "it": "",
-    "tr": ""
+    "tr": "",
+    "fa": "تنظیمات بازی"
 }, {
     "item": "data-translation-autoplacementwillhavethegameautomaticllypickwherecardsareplaced",
     "en": "Auto Placement will have the game automatically pick where cards are placed.",
@@ -325,9 +357,10 @@ var translationDB = [{
     "de": "Wenn Automatisches Kartenplatzieren ausgewählt ist, wird das Spiel von alleine Karten auf das Spielfeld legen.",
     "fr": "Placement auto va permettre au jeu de choisir les cartes placées automatiquements",
     "pt": "Posição automática fará o jogo escolher onde colocar as cartas.",
-    "nl": "Bij Automatisch plaatsing zal het spel zelf de plaatsing van de kaarten automatisch kiezen.",
+    "nl": "Bij Automatisch Plaatsing zal het spel zelf de plaatsing van de kaarten kiezen.",
     "it": "",
-    "tr": ""
+    "tr": "",
+    "fa": ".کارت گذاشتن اتوماتیک تصمیم میگیره کجا کارت ها میرن"
 }, {
     "item": "data-translation-ifautoplacementisonyoucanrandomizeit",
     "en": "If Auto Placement is on, you can randomize it.",
@@ -337,7 +370,8 @@ var translationDB = [{
     "pt": "Se Posição Automática estiver ligada ela será aleatória.",
     "nl": "Als automatische plaatsing actief is, kan je het op willekeurig plaatsing zetten.",
     "it": "",
-    "tr": ""
+    "tr": "",
+    "fa": ".اگر کارت گذاشتن اتوماتیک است، میتوانی تصادفی بکنی ش"
 }, {
     "item": "data-translation-ifyouselectedmultiplecardsinresponsetoachainsuggestionyoumayhavethegameautomaticallypicktheresolutionorderifautoplacementisonyoucanrandomizeit",
     "en": "If you selected multiple cards in response to a chain suggestion. You may have the game automatically pick the resolution order. If Auto Placement is on, you can randomize it.",
@@ -347,7 +381,8 @@ var translationDB = [{
     "pt": "Se você selecionou várias cartas em resposta a uma corrente. Você pode deixar o jogo escolher a ordem automaticamente. Se Posição Automática estiver ligada a ordem será aleatória.",
     "nl": "Als meerdere kaarten tegelijk activeren in reactie op een chain, kan je het spel automatisch de volgorde van de chain laten kiezen. Als automatische plaatsing actief is, kan je het willekeurig laten gebeuren.",
     "it": "",
-    "tr": ""
+    "tr": "",
+    "fa": ".اگر چند تا کارت تصمیم کردی در یک زنجیر، میتوانی بزاری بازی منظم ش را تصمیم بکن. اگر گذاشتن کارت ها اتوماتیک هست، میتوانی تصادفی بکنی ش"
 }, {
     "item": "data-translation-noobviousdelayforchainsaddadditionalpausestogameplaytospookyouropponent",
     "en": "No (obvious) delay for Chains. Add additional pauses to game play to spook your opponent.",
@@ -357,7 +392,8 @@ var translationDB = [{
     "pt": "Sem atrasos (óbvios) em Correntes. Adiciona pausas incrementais ao jogo para confundir o oponente.",
     "nl": "Geen (duidelijke) vertraging voor chains. Voeg pauzes toe aan je spel om je tegenstander om de tuin te leiden.",
     "it": "",
-    "tr": ""
+    "tr": "",
+    "fa": ".هیچ تاخیر (شدید) برای لینک ها ی زنجیر ها. تاخیر بزار برای این که دشمنت را بترسی"
 }, {
     "item": "data-translation-autocardplacement",
     "en": "Auto Card Placement",
@@ -367,7 +403,8 @@ var translationDB = [{
     "pt": "Posição Automática",
     "nl": "Automatische kaartplaatsing",
     "it": "",
-    "tr": ""
+    "tr": "",
+    "fa": "جاهای اتوماتیک برای کارت ها"
 }, {
     "item": "data-translation-randomcardplacement",
     "en": "Random Card Placement",
@@ -377,7 +414,8 @@ var translationDB = [{
     "pt": "Posição Aleatoria",
     "nl": "Willekeurige kaartplaatsing",
     "it": "",
-    "tr": ""
+    "tr": "",
+    "fa": "جاهای تصادفی برای کارت ها"
 }, {
     "item": "data-translation-autochainorder",
     "en": "Auto Chain Order",
@@ -387,7 +425,8 @@ var translationDB = [{
     "pt": "Corrente Automática",
     "nl": "Automatische chain volgorde",
     "it": "",
-    "tr": ""
+    "tr": "",
+    "fa": "منظم لینک زنجیر اتوماتیک"
 }, {
     "item": "data-translation-nodelayforchains",
     "en": "No delay for Chains",
@@ -397,7 +436,8 @@ var translationDB = [{
     "pt": "Sem atraso para Correntes",
     "nl": "Geen vertraging voor chains",
     "it": "",
-    "tr": ""
+    "tr": "",
+    "fa": "هیچ تاخیر برای لینک های زنجیر"
 }, {
     "item": "data-translation-enablesound",
     "en": "Enable Sound",
@@ -407,7 +447,8 @@ var translationDB = [{
     "pt": "Ativar Som",
     "nl": "Geluid aan",
     "it": "",
-    "tr": ""
+    "tr": "",
+    "fa": "صدا را روشن کن"
 }, {
     "item": "data-translation-enablemusic",
     "en": "Enable Music",
@@ -417,7 +458,8 @@ var translationDB = [{
     "pt": "Ativar Música",
     "nl": "Muziek aan",
     "it": "",
-    "tr": ""
+    "tr": "",
+    "fa": "موزیک را روشن کن"
 }, {
     "item": "data-translation-enabledirectx",
     "en": "Enable DirectX",
@@ -427,7 +469,8 @@ var translationDB = [{
     "pt": "Ativar DirectX",
     "nl": "DirectX aan",
     "it": "",
-    "tr": ""
+    "tr": "",
+    "fa": "دیرکت‌اکس را روشن کن"
 }, {
     "item": "data-translation-antialiasing",
     "en": "Anti Aliasing",
@@ -437,7 +480,8 @@ var translationDB = [{
     "pt": "Anti Aliasing",
     "nl": "Anti Aliasing",
     "it": "",
-    "tr": ""
+    "tr": "",
+    "fa": "ضد پلگی"
 }, {
     "item": "data-translation-fontsize",
     "en": "Font Size",
@@ -447,7 +491,8 @@ var translationDB = [{
     "pt": "Tamanho da Fonte",
     "nl": "Lettergrootte",
     "it": "",
-    "tr": ""
+    "tr": "",
+    "fa": "اندازه ی فونت"
 }, {
     "item": "data-translation-font",
     "en": "Font",
@@ -457,7 +502,8 @@ var translationDB = [{
     "pt": "Fonte",
     "nl": "Lettertype",
     "it": "",
-    "tr": ""
+    "tr": "",
+    "fa": "فونت"
 }, {
     "item": "data-translation-skin",
     "en": "Skin",
@@ -467,7 +513,8 @@ var translationDB = [{
     "pt": "Tema",
     "nl": "Thema",
     "it": "",
-    "tr": ""
+    "tr": "",
+    "fa": "مدل"
 }, {
     "item": "data-translation-default",
     "en": "Default",
@@ -477,7 +524,8 @@ var translationDB = [{
     "pt": "Padrão",
     "nl": "Standaardinstellingen",
     "it": "",
-    "tr": ""
+    "tr": "",
+    "fa": "استاندارد"
 }, {
     "item": "data-translation-soundvolume",
     "en": "Sound Volume",
@@ -487,7 +535,8 @@ var translationDB = [{
     "pt": "Volume de Som",
     "nl": "Geluidsterkte",
     "it": "",
-    "tr": ""
+    "tr": "",
+    "fa": "بلندی صدا"
 }, {
     "item": "data-translation-musicvolume",
     "en": "Music Volume",
@@ -497,7 +546,8 @@ var translationDB = [{
     "pt": "Volume de Música",
     "nl": "Volume van Muziek",
     "it": "",
-    "tr": ""
+    "tr": "",
+    "fa": "بلندی موزیک"
 }, {
     "item": "data-translation-databasefile",
     "en": "Database File",
@@ -507,5 +557,6 @@ var translationDB = [{
     "pt": "Arquivo de Dados",
     "nl": "Database bestanden",
     "it": "",
-    "tr": ""
+    "tr": "",
+    "fa": "فایل پایگاه داده‌"
 }];
