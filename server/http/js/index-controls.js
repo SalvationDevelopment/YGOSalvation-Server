@@ -140,12 +140,14 @@ function translateLang(lang) {
             jsLang.join = translationDB[i][lang];
         }
         if (translationDB[i].item === 'data-translation-spectate') {
-            jsLang.spectate = translationDB[i][lang]
+            jsLang.spectate = translationDB[i][lang];
         }
     }
     params.language = lang;
 }
+
 params.showJoinPartMessages = false;
+params.autoReconnect = false;
 $(document).ready(function () {
     'use strict';
     var useLang = localStorage.language || 'en';
@@ -159,7 +161,7 @@ $(document).ready(function () {
     }
     $("#dolog").click(function (ev) {
         _gaq.push(['_trackEvent', 'Launcher', 'Attempt Login', $('#ips_username').val()]);
-        var url = "https://forum.ygopro.us/log.php";
+        var url = "http://forum.ygopro.us/log.php";
         $.ajax({
             type: "POST",
             url: url,

@@ -10,9 +10,3 @@ var sitelocationdir = {
     "development": "http://127.0.0.1/"
 };
 var mode = "stage";
-
-if (mode !== 'production') {
-    try {
-        require('nw.gui').Window.get().showDevTools();
-    } catch (error) {}
-}
