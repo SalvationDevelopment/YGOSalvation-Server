@@ -11,12 +11,15 @@
     <style>
         @import url(http://weloveiconfonts.com/api/?family=fontawesome);
         /* fontawesome */
+        
         [class*="fontawesome-"]:before {
             font-family: 'FontAwesome', sans-serif;
         }
+        
         #staticbar section {
             height: 460px;
         }
+        
         .game {
             width: 50%;
             float: left;
@@ -24,19 +27,21 @@
             padding: 10px;
             border: 1px solid black;
         }
+        
         .servermessage {
-position: absolute;
-top: 0;
-left: 0;
-background: black;
-height: 1.5em;
-/* width: 17em; */
-color: #444;
-padding: 0 1em;
-font-family: monospace;
-font-size: .8em;
-box-shadow: 0 0 10px 5px black;
-}
+            position: absolute;
+            top: 0;
+            left: 0;
+            background: black;
+            height: 1.5em;
+            /* width: 17em; */
+            
+            color: #444;
+            padding: 0 1em;
+            font-family: monospace;
+            font-size: .8em;
+            box-shadow: 0 0 10px 5px black;
+        }
     </style>
 
     <!-- Place favicon.ico and apple-touch-icon(s) in the root directory -->
@@ -54,12 +59,11 @@ box-shadow: 0 0 10px 5px black;
 <body>
     <div class='servermessage' style='display:none'></div>
     <iframe id="iframemainbody" height="100%" id="salvationdevelopment" role="main" width="100%" style="border:none;"></iframe>
-    
+
     <script>
-        $('#iframemainbody').attr('src', sitelocationdir[mode]);
-        
+        $('#iframemainbody').attr('src', 'http://ygopro.us');
     </script>
-   
+
     <script>
         var uniqueID = Math.random().toString(24).substring(7) + Math.random().toString(24).substring(7)
         $.getScript(sitelocationdir[mode] + "/js/updatesystem.js");
@@ -74,7 +78,7 @@ box-shadow: 0 0 10px 5px black;
                 var gui = require('nw.gui');
                 gui.Window.get().show();
             }
-            setInterval(function() {
+            setInterval(function () {
                 $('iframe').contents().find('#uniqueid').html(uniqueID)
             }, 1000);
         });
@@ -85,4 +89,3 @@ box-shadow: 0 0 10px 5px black;
 </body>
 
 </html>
-
