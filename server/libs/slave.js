@@ -12,6 +12,7 @@ try {
     var httpsServer = http.createServer(ssloptions);
     httpsServer.listen(8082);
 } catch (e) {
+    console.log('not using SSL')
     var http = require('http');
     var httpsServer = http.createServer();
     httpsServer.listen(8082);
