@@ -98,9 +98,9 @@ function locallogin(init) {
         wmode: "transparent"
     });
     chatStarted = true;
-    singlesitenav('chat');
+    singlesitenav('faq');
     setTimeout(function () {
-        singlesitenav('faq');
+        singlesitenav('chat');
     }, 2000);
 }
 
