@@ -178,7 +178,7 @@ var translationDB = [{
     "tr": "",
     "zh": "",
     "ko": "",
-    "jp": "オンライン遊戯王シミュレータ,
+    "jp": "オンライン遊戯王シミュレータ",
     "fa": "بازی یوگیوه آنلاین"
 }, {
     "item": "data-translation-playnow",
