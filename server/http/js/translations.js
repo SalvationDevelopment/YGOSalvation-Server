@@ -712,4 +712,32 @@ var translationDB = [{
     "ko": "",
     "jp": "データベースのファイル",
     "fa": "فایل پایگاه داده‌"
+}, {
+	"item": "data-translation-viewygoprofolder",
+    "en": "View YGOPro Folder",
+    "es": "",
+    "de": "",
+    "fr": "",
+    "pt": "",
+    "nl": "",
+    "it": "",
+    "tr": "",
+    "zh": "",
+    "ko": "",
+    "jp": "",
+    "fa": "پوشهی وگوپرو را نگاه کن"
+}, {
+	"item": "data-translation-refuseduelrequests",
+    "en": "Refuse Duel Requests",
+    "es": "",
+    "de": "",
+    "fr": "",
+    "pt": "",
+    "nl": "",
+    "it": "",
+    "tr": "",
+    "zh": "",
+    "ko": "",
+    "jp": "",
+    "fa": "طلب دول را نبینی"
 }];
