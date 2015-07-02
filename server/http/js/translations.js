@@ -10,6 +10,7 @@ var translationDB = [{
     "tr": "",
     "zh": "",
     "ko": "",
+    "jp": "",
     "fa": "سرور سلوایشن"
 }, {
     "item": "data-translation-deckedit",
@@ -23,6 +24,7 @@ var translationDB = [{
     "tr": "",
     "zh": "",
     "ko": "",
+    "jp": "",
     "fa": "ویراستار دست"
 }, {
     "item": "data-translation-replays",
@@ -36,6 +38,7 @@ var translationDB = [{
     "tr": "",
     "zh": "",
     "ko": "",
+    "jp": "",
     "fa": "بازپخش ها"
 }, {
     "item": "data-translation-gamelist",
@@ -49,6 +52,7 @@ var translationDB = [{
     "tr": "",
     "zh": "",
     "ko": "",
+    "jp": "",
     "fa": "لیست بازی ها"
 }, {
     "item": "data-translation-host",
@@ -62,6 +66,7 @@ var translationDB = [{
     "tr": "",
     "zh": "",
     "ko": "",
+    "jp": "",
     "fa": "بازی ساختن"
 }, {
     "item": "data-translation-join",
@@ -75,6 +80,7 @@ var translationDB = [{
     "tr": "",
     "zh": "",
     "ko": "",
+    "jp": "",
     "fa": "وارد شو"
 }, {
     "item": "data-translation-spectate",
@@ -88,6 +94,7 @@ var translationDB = [{
     "tr": "",
     "zh": "",
     "ko": "",
+    "jp": "",
     "fa": "تماشا کن"
 }, {
     "item": "data-translation-forum",
@@ -101,6 +108,7 @@ var translationDB = [{
     "tr": "",
     "zh": "",
     "ko": "",
+    "jp": "",
     "fa": "تالار گفتگو"
 }, {
     "item": "data-translation-chat",
@@ -114,6 +122,7 @@ var translationDB = [{
     "tr": "",
     "zh": "",
     "ko": "",
+    "jp": "",
     "fa": "چت"
 }, {
     "item": "data-translation-faq",
@@ -127,6 +136,7 @@ var translationDB = [{
     "tr": "",
     "zh": "",
     "ko": "",
+    "jp": "",
     "fa": "خبر ها"
 }, {
     "item": "data-translation-settings",
@@ -140,6 +150,7 @@ var translationDB = [{
     "tr": "",
     "zh": "",
     "ko": "",
+    "jp": "",
     "fa": "تنظیمات"
 }, {
     "item": "data-translation-additionaloptions",
@@ -153,6 +164,7 @@ var translationDB = [{
     "tr": "",
     "zh": "",
     "ko": "",
+    "jp": "",
     "fa": "بیشتر اختیارها"
 }, {
     "item": "data-translation-onlineyugiohsimulator",
@@ -166,6 +178,7 @@ var translationDB = [{
     "tr": "",
     "zh": "",
     "ko": "",
+    "jp": "",
     "fa": "بازی یوگیوه آنلاین"
 }, {
     "item": "data-translation-playnow",
@@ -179,6 +192,7 @@ var translationDB = [{
     "tr": "",
     "zh": "",
     "ko": "",
+    "jp": "",
     "fa": "کارخواه برای ویندوز"
 }, {
     "item": "data-translation-login",
@@ -192,6 +206,7 @@ var translationDB = [{
     "tr": "",
     "zh": "",
     "ko": "",
+    "jp": "",
     "fa": "ورود شو"
 }, {
     "note": "data-translation-forumusername",
@@ -205,6 +220,7 @@ var translationDB = [{
     "tr": "",
     "zh": "",
     "ko": "",
+    "jp": "",
     "fa": "نام کاربری"
 }, {
     "note": "data-translation-forumpassword",
@@ -218,6 +234,7 @@ var translationDB = [{
     "tr": "",
     "zh": "",
     "ko": "",
+    "jp": "",
     "fa": "گذرواژه"
 }, {
     "item": "data-translation-rememberusernamepassword",
@@ -231,6 +248,7 @@ var translationDB = [{
     "tr": "",
     "zh": "",
     "ko": "",
+    "jp": "",
     "fa": "من را فراموش نکن"
 }, {
     "item": "data-translation-registerviaforum",
@@ -244,6 +262,7 @@ var translationDB = [{
     "tr": "",
     "zh": "",
     "ko": "",
+    "jp": "",
     "fa": "سیاق با تالار گفتگو بکن"
 }, {
     "item": "data-translation-forgotpassword",
@@ -257,6 +276,7 @@ var translationDB = [{
     "tr": "",
     "zh": "",
     "ko": "",
+    "jp": "",
     "fa": "گذرواژهت را فراموش کردی؟"
 }, {
     "item": "data-translation-ranked",
@@ -270,6 +290,7 @@ var translationDB = [{
     "tr": "",
     "zh": "",
     "ko": "",
+    "jp": "",
     "fa": "رتبه ای"
 }, {
     "item": "data-translation-currentdeck",
@@ -283,6 +304,7 @@ var translationDB = [{
     "tr": "",
     "zh": "",
     "ko": "",
+    "jp": "",
     "fa": "دست اکنون"
 }, {
     "item": "data-translation-cardpool",
@@ -296,6 +318,7 @@ var translationDB = [{
     "tr": "",
     "zh": "",
     "ko": "",
+    "jp": "",
     "fa": "لیست کارت ها"
 }, {
     "item": "data-translation-banlist",
@@ -309,6 +332,7 @@ var translationDB = [{
     "tr": "",
     "zh": "",
     "ko": "",
+    "jp": "",
     "fa": "لیست کارت های بی مجاز"
 }, {
     "item": "data-translation-duelmode",
@@ -322,6 +346,7 @@ var translationDB = [{
     "tr": "",
     "zh": "",
     "ko": "",
+    "jp": "",
     "fa": "جور بازی"
 }, {
     "item": "data-translation-timelimit",
@@ -335,6 +360,7 @@ var translationDB = [{
     "tr": "",
     "zh": "",
     "ko": "",
+    "jp": "",
     "fa": "حودود وقت"
 }, {
     "item": "data-translation-enablepriority",
@@ -348,6 +374,7 @@ var translationDB = [{
     "tr": "",
     "zh": "",
     "ko": "",
+    "jp": "",
     "fa": "اولویت را بزار"
 }, {
     "item": "data-translation-disablecheckdeck",
@@ -361,6 +388,7 @@ var translationDB = [{
     "tr": "",
     "zh": "",
     "ko": "",
+    "jp": "",
     "fa": "دست را چک نکن"
 }, {
     "item": "data-translation-disableshuffledeck",
@@ -374,6 +402,7 @@ var translationDB = [{
     "tr": "",
     "zh": "",
     "ko": "",
+    "jp": "",
     "fa": "دست را مخلوط نکن"
 }, {
     "item": "data-translation-usepassword",
@@ -387,6 +416,7 @@ var translationDB = [{
     "tr": "",
     "zh": "",
     "ko": "",
+    "jp": "",
     "fa": "گذرواژه استفاده کن"
 }, {
     "item": "data-translation-lifepoints",
@@ -400,6 +430,7 @@ var translationDB = [{
     "tr": "",
     "zh": "",
     "ko": "",
+    "jp": "",
     "fa": "امتیاز زندگی"
 }, {
     "item": "data-translation-gamesettings",
@@ -413,6 +444,7 @@ var translationDB = [{
     "tr": "",
     "zh": "",
     "ko": "",
+    "jp": "",
     "fa": "تنظیمات بازی"
 }, {
     "item": "data-translation-autoplacementwillhavethegameautomaticllypickwherecardsareplaced",
@@ -426,6 +458,7 @@ var translationDB = [{
     "tr": "",
     "zh": "",
     "ko": "",
+    "jp": "",
     "fa": ".کارت گذاشتن اتوماتیک تصمیم میگیره کجا کارت ها میرن"
 }, {
     "item": "data-translation-ifautoplacementisonyoucanrandomizeit",
@@ -439,6 +472,7 @@ var translationDB = [{
     "tr": "",
     "zh": "",
     "ko": "",
+    "jp": "",
     "fa": ".اگر کارت گذاشتن اتوماتیک است، میتوانی تصادفی بکنی ش"
 }, {
     "item": "data-translation-ifyouselectedmultiplecardsinresponsetoachainsuggestionyoumayhavethegameautomaticallypicktheresolutionorderifautoplacementisonyoucanrandomizeit",
@@ -452,6 +486,7 @@ var translationDB = [{
     "tr": "",
     "zh": "",
     "ko": "",
+    "jp": "",
     "fa": ".اگر چند تا کارت تصمیم کردی در یک زنجیر، میتوانی بزاری بازی منظم ش را تصمیم بکن. اگر گذاشتن کارت ها اتوماتیک هست، میتوانی تصادفی بکنی ش"
 }, {
     "item": "data-translation-noobviousdelayforchainsaddadditionalpausestogameplaytospookyouropponent",
@@ -465,6 +500,7 @@ var translationDB = [{
     "tr": "",
     "zh": "",
     "ko": "",
+    "jp": "",
     "fa": ".هیچ تاخیر (شدید) برای لینک ها ی زنجیر ها. تاخیر بزار برای این که دشمنت را بترسی"
 }, {
     "item": "data-translation-autocardplacement",
@@ -478,6 +514,7 @@ var translationDB = [{
     "tr": "",
     "zh": "",
     "ko": "",
+    "jp": "",
     "fa": "جاهای اتوماتیک برای کارت ها"
 }, {
     "item": "data-translation-randomcardplacement",
@@ -491,6 +528,7 @@ var translationDB = [{
     "tr": "",
     "zh": "",
     "ko": "",
+    "jp": "",
     "fa": "جاهای تصادفی برای کارت ها"
 }, {
     "item": "data-translation-autochainorder",
@@ -504,6 +542,7 @@ var translationDB = [{
     "tr": "",
     "zh": "",
     "ko": "",
+    "jp": "",
     "fa": "منظم لینک زنجیر اتوماتیک"
 }, {
     "item": "data-translation-nodelayforchains",
@@ -517,6 +556,7 @@ var translationDB = [{
     "tr": "",
     "zh": "",
     "ko": "",
+    "jp": "",
     "fa": "هیچ تاخیر برای لینک های زنجیر"
 }, {
     "item": "data-translation-enablesound",
@@ -530,6 +570,7 @@ var translationDB = [{
     "tr": "",
     "zh": "",
     "ko": "",
+    "jp": "",
     "fa": "صدا را روشن کن"
 }, {
     "item": "data-translation-enablemusic",
@@ -543,6 +584,7 @@ var translationDB = [{
     "tr": "",
     "zh": "",
     "ko": "",
+    "jp": "",
     "fa": "موزیک را روشن کن"
 }, {
     "item": "data-translation-enabledirectx",
@@ -556,6 +598,7 @@ var translationDB = [{
     "tr": "",
     "zh": "",
     "ko": "",
+    "jp": "",
     "fa": "دیرکت‌اکس را روشن کن"
 }, {
     "item": "data-translation-antialiasing",
@@ -569,6 +612,7 @@ var translationDB = [{
     "tr": "",
     "zh": "",
     "ko": "",
+    "jp": "",
     "fa": "ضد پلگی"
 }, {
     "item": "data-translation-fontsize",
@@ -582,6 +626,7 @@ var translationDB = [{
     "tr": "",
     "zh": "",
     "ko": "",
+    "jp": "",
     "fa": "اندازه ی فونت"
 }, {
     "item": "data-translation-font",
@@ -595,6 +640,7 @@ var translationDB = [{
     "tr": "",
     "zh": "",
     "ko": "",
+    "jp": "",
     "fa": "فونت"
 }, {
     "item": "data-translation-skin",
@@ -608,6 +654,7 @@ var translationDB = [{
     "tr": "",
     "zh": "",
     "ko": "",
+    "jp": "",
     "fa": "مدل"
 }, {
     "item": "data-translation-default",
@@ -621,6 +668,7 @@ var translationDB = [{
     "tr": "",
     "zh": "",
     "ko": "",
+    "jp": "",
     "fa": "استاندارد"
 }, {
     "item": "data-translation-soundvolume",
@@ -634,6 +682,7 @@ var translationDB = [{
     "tr": "",
     "zh": "",
     "ko": "",
+    "jp": "",
     "fa": "بلندی صدا"
 }, {
     "item": "data-translation-musicvolume",
@@ -647,6 +696,7 @@ var translationDB = [{
     "tr": "",
     "zh": "",
     "ko": "",
+    "jp": "",
     "fa": "بلندی موزیک"
 }, {
     "item": "data-translation-databasefile",
@@ -660,5 +710,6 @@ var translationDB = [{
     "tr": "",
     "zh": "",
     "ko": "",
+    "jp": "",
     "fa": "فایل پایگاه داده‌"
 }];
