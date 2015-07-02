@@ -647,7 +647,7 @@ var translationDB = [{
     "en": "Skin",
     "es": "Skin",
     "de": "Benutzeroberfläche",
-    "fr": "Modéle",
+    "fr": "Modèle",
     "pt": "Tema",
     "nl": "Thema",
     "it": "",
