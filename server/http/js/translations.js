@@ -479,7 +479,7 @@ var translationDB = [{
     "en": "If you selected multiple cards in response to a chain suggestion. You may have the game automatically pick the resolution order. If Auto Placement is on, you can randomize it.",
     "es": "Si seleccionaste múltiples cartas en respuesta a una sugerencia de cadena. Puedes dejar que el juego automáticamente elija el orden de resolución. Si Posición Automática esta habilitado, puedes hacerlo aleatorio.",
     "de": "Wenn mehrere Karten als Reaktion auf eine Kette zu Aktivieren angeboten werden, kann das Spiel automatisch entscheiden, in welcher Reihenfolge die Effekte ausgelöst werden. Wenn Automatisches Kartenplatzieren ausgewählt ist, kann dieser Vorgang zusätzlich zufällig ausgewählt werden.",
-    "fr": "Si vous selectionnés des cartes multiples en réponse de votre Chaîne. Vous pourrez alors choisir l'ordre de vos résolutions de Chaînes. Si vous avez Auto Placement actif, elle sera aléser",
+    "fr": "Si vous selectionner des cartes multiples en réponse de votre Chaîne. Vous pourrez alors choisir l'ordre de vos résolutions de Chaînes. Si vous avez Auto Placement actif, elle sera aléser",
     "pt": "Se você selecionou várias cartas em resposta a uma corrente. Você pode deixar o jogo escolher a ordem automaticamente. Se Posição Automática estiver ligada a ordem será aleatória.",
     "nl": "Als meerdere kaarten tegelijk activeren in reactie op een chain, kan je het spel automatisch de volgorde van de chain laten kiezen. Als automatische plaatsing actief is, kan je het willekeurig laten gebeuren.",
     "it": "",
