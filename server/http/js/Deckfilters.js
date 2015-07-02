@@ -141,56 +141,68 @@ function fNameDesc(obj, txt, nd) {
 
 // Filters cards that have 'txt' in their name.
 function filterName(txt) {
+  if( txt!=null){
     'use strict';
-    var output = cards.filter(function (item) {
+    var output = cardsf.filter(function (item) {
         return fNameDesc(item, txt, 1);
     });
     return output;
+  }
 }
 
 //Filters effect or flavor texts for the txt string
 function filterDesc(txt) {
+  if( txt!=null){
     'use strict';
-    var output = cards.filter(function (item) {
+    var output = cardsf.filter(function (item) {
         return fNameDesc(item, txt, 0);
     });
     return output;
+  }
 }
 
 // Returns all cards that have all the types input.
 function filterType(type) {
+  if(type!=null){
     'use strict';
-    var output = cards.filter(function (item) {
+    var output = cardsf.filter(function (item) {
         return fType(item, type);
     });
     return output;
+  }
 }
 
 //Attribute must matcht he arg.
 function filterAttribute(attribute) {
+  if( attribute!=null){
     'use strict';
-    var output = cards.filter(function (item) {
+    var output = cardsf.filter(function (item) {
         return fAttrRace(item, attribute, 1);
     });
     return output;
+  }
 }
 
 //Returns Cards whose race matches the arg.
 function filterRace(race) {
+  if( race!=null){
     'use strict';
-    var output = cards.filter(function (item) {
+    var output = cardsf.filter(function (item) {
         return fAttrRace(item, race, 0);
     });
     return output;
+  }
 }
 
 //All cards that share at least 1 setcode with the arg.
 function filteSetcode(setcode) {
+  if( setcode!=null){
     'use strict';
-    var output = cards.filter(function (item) {
+    var output = cardsf.filter(function (item) {
         return fSetCode(item, setcode);
     });
     return output;
+  }
 }
 
 //OP here functions just as in the previous function.
@@ -198,35 +210,59 @@ function filteSetcode(setcode) {
 //OP=1 is EQUALS to 
 //Else it's HIGHER THAN OR EQUAL
 function filterAtk(atk, op) {
+  if( atk !=null){
     'use strict';
-    var output = cards.filter(function (item) {
+    var output = cardsf.filter(function (item) {
         return fAtkDef(item, atk, 1, op);
     });
     return output;
+  }
 }
 
 //As above, but DEF
 function filterDef(def, op) {
+  if( def !=null){
     'use strict';
-    var output = cards.filter(function (item) {
+    var output = cardsf.filter(function (item) {
         return fAtkDef(item, def, 0, op);
     });
     return output;
+  }
 }
 //Just Level.. Zzz as Atk/Def
 function filterLevel(level, op) {
+  if( level !=null){
     'use strict';
-    var output = cards.filter(function (item) {
+    var output = cardsf.filter(function (item) {
         return fLevel(item, level, op);
     });
     return output;
+  }
 }
 
 //Same, but for L/R Scale, doesn't matter
 function filterScale(scale, op) {
+  if( scale!=null){
     'use strict';
-    var output = cards.filter(function (item) {
+    var output = cardsf.filter(function (item) {
         return fScale(item, scale, op);
     });
     return output;
+  }
 }
+
+function filterAll(){
+var cardsf=cards;
+cardsf=filterName(filter_cardname);
+cardsf=filterDesc(PLACEHOLDER);
+cardsf=filterType(filter_monster_dropdown);
+cardsf=filterAttribute(filter_attribute[]);
+cardsf=filterRace(filter_race);
+cardsf=filterSetcode(PLACEHOLDER);
+cardsf=filterAtk(filter_atk,1);
+cardsf=filterDef(filter_def,1);
+cardsf=filterLevel(filter_level,1);
+cardsf=filterScale(PLACEHOLDER,1);
+return cardsf;
+}
+
