@@ -724,7 +724,7 @@ var translationDB = [{
     "tr": "",
     "zh": "",
     "ko": "",
-    "jp": "",
+    "jp": "ＹＧＯＰｒｏフォルダーを開く",
     "fa": "پوشهی وگوپرو را نگاه کن"
 }, {
 	"item": "data-translation-refuseduelrequests",
@@ -738,6 +738,6 @@ var translationDB = [{
     "tr": "",
     "zh": "",
     "ko": "",
-    "jp": "",
+    "jp": "デュエル要求を拒否",
     "fa": "طلب دول را نبینی"
 }];
