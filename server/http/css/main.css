@@ -1453,6 +1453,12 @@ div[data-game^="0"]:not(.started) {
     background-size: 100% 100%;
     color: white;
 }
+.started[data-game^="0"] {
+  background-image: url(https://ygopro.us/img/faded-ocg.png);
+  background-color: rgba(0, 0, 0, .5) !important;
+  border: 1px solid grey;
+  color: grey;
+}
 
 div[data-game^="1"] {
     /* TCG */
@@ -1465,6 +1471,12 @@ div[data-game^="1"]:not(.started) {
     background-image: url(https://ygopro.us/img/tcg.png);
     background-size: 100% 100%;
     color: white;
+}
+.started[data-game^="1"] {
+  background-image: url(https://ygopro.us/img/faded-tcg.png);
+  background-color: rgba(0, 0, 0, .5) !important;
+  border: 1px solid grey;
+  color: grey;
 }
 
 div[data-game^="2"] {
@@ -1479,6 +1491,12 @@ div[data-game^="2"]:not(.started) {
     background-size: 100% 100%;
     color: white;
 }
+.started[data-game^="2"] {
+  background-image: url(https://ygopro.us/img/faded-tcgocg.png);
+  background-color: rgba(0, 0, 0, .5) !important;
+  border: 1px solid grey;
+  color: grey;
+}
 
 div[data-game^="3"]:not(.started) {
     /* Anime */
@@ -1486,6 +1504,12 @@ div[data-game^="3"]:not(.started) {
     background-image: url(https://ygopro.us/img/anime.png);
     background-size: 100% 100%;
     color: white;
+}
+.started[data-game^="3"] {
+  background-image: url(https://ygopro.us/img/faded-anime.png);
+  background-color: rgba(0, 0, 0, .5) !important;
+  border: 1px solid grey;
+  color: grey;
 }
 
 div[data-game^="00"],
