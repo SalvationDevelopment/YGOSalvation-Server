@@ -1452,12 +1452,14 @@ div[data-game^="0"]:not(.started) {
     background-image: url(https://ygopro.us/img/ocg.png);
     background-size: 100% 100%;
     color: white;
+	background-size: auto 100% !important;
 }
 .started[data-game^="0"] {
   background-image: url(https://ygopro.us/img/faded-ocg.png);
   background-color: rgba(0, 0, 0, .5) !important;
   border: 1px solid grey;
   color: grey;
+  background-size: auto 100% !important;
 }
 
 div[data-game^="1"] {
@@ -1469,14 +1471,16 @@ div[data-game^="1"] {
 
 div[data-game^="1"]:not(.started) {
     background-image: url(https://ygopro.us/img/tcg.png);
-    background-size: 100% 100%;
+    background-size: auto 100% !important;
     color: white;
+	background-size: cover;
 }
 .started[data-game^="1"] {
   background-image: url(https://ygopro.us/img/faded-tcg.png);
   background-color: rgba(0, 0, 0, .5) !important;
   border: 1px solid grey;
   color: grey;
+  background-size: auto 100% !important;
 }
 
 div[data-game^="2"] {
@@ -1488,7 +1492,7 @@ div[data-game^="2"] {
 
 div[data-game^="2"]:not(.started) {
     background-image: url(https://ygopro.us/img/tcgocg.png);
-    background-size: 100% 100%;
+    background-size: auto 100% !important;
     color: white;
 }
 .started[data-game^="2"] {
@@ -1496,20 +1500,23 @@ div[data-game^="2"]:not(.started) {
   background-color: rgba(0, 0, 0, .5) !important;
   border: 1px solid grey;
   color: grey;
+  background-size: auto 100% !important;
 }
 
 div[data-game^="3"]:not(.started) {
     /* Anime */
     
     background-image: url(https://ygopro.us/img/anime.png);
-    background-size: 100% 100%;
+    background-size: auto 100% !important;
     color: white;
+	background-size: auto 100% !important;
 }
 .started[data-game^="3"] {
   background-image: url(https://ygopro.us/img/faded-anime.png);
   background-color: rgba(0, 0, 0, .5) !important;
   border: 1px solid grey;
   color: grey;
+  background-size: auto 100% !important;
 }
 
 div[data-game^="00"],
@@ -1547,6 +1554,7 @@ div[data-game^="32"] {
     
     background: red;
     font-weight: bold;
+	background-size: auto 100% !important;
     color: white;
     border: 2px;
 }
@@ -1558,6 +1566,7 @@ div[data-game^="32"] {
 .started[data-bad] {
     background: rgba(0, 0, 0, .5) !important;
     border: 1px solid grey;
+	background-size: auto 100% !important;
     color: grey;
 }
 
@@ -1567,11 +1576,13 @@ div[data-game^="32"] {
     background-size: auto 100% !important;
     text-shadow: 0px 0px 19px black;
     background-repeat: no-repeat !important;
+	background-size: cover;
 }
 
 .started[data-newgioh] {
     background-image: url('../img/outnewgiohtoken.png') !important;
     background-color: rgba(0, 0, 0, .5) !important;
+	background-size: auto 100% !important;
     border: 1px solid grey;
     color: grey;
 }
@@ -1588,6 +1599,7 @@ div[data-game^="32"] {
 .started[data-nostalgia] {
     background-image: url('../img/outnewgiohtoken.png') !important;
     background-color: rgba(0, 0, 0, .5) !important;
+	background-size: auto 100% !important;
     border: 1px solid grey;
     color: grey;
 }
