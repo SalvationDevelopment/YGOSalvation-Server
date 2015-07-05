@@ -11,7 +11,8 @@
     "zh": "",
     "ko": "",
     "jp": "サルベーションサーバ",
-    "fa": "سرور سلوایشن"
+    "fa": "سرور سلوایشن",
+    "ar": ""
 }, {
     "item": "data-translation-deckedit",
     "en": "Deck Edit",
@@ -25,7 +26,8 @@
     "zh": "",
     "ko": "",
     "jp": "デッキエディット",
-    "fa": "ویراستار دست"
+    "fa": "ویراستار دست",
+    "ar": "تعديل المجموعة"
 }, {
     "item": "data-translation-replays",
     "en": "Replays",
@@ -39,7 +41,8 @@
     "zh": "",
     "ko": "",
     "jp": "リプレイ",
-    "fa": "بازپخش ها"
+    "fa": "بازپخش ها",
+    "ar": "الإعادات"
 }, {
     "item": "data-translation-gamelist",
     "en": "Game List",
@@ -53,7 +56,8 @@
     "zh": "",
     "ko": "",
     "jp": "デュエルリスト",
-    "fa": "لیست بازی ها"
+    "fa": "لیست بازی ها",
+    "ar": "قائمة اللّعب"
 }, {
     "item": "data-translation-host",
     "en": "Host",
@@ -67,7 +71,8 @@
     "zh": "",
     "ko": "",
     "jp": "ホスト",
-    "fa": "بازی ساختن"
+    "fa": "بازی ساختن",
+    "ar": "استضيف"
 }, {
     "item": "data-translation-join",
     "en": "Join",
@@ -81,7 +86,8 @@
     "zh": "",
     "ko": "",
     "jp": "エンター",
-    "fa": "وارد شو"
+    "fa": "وارد شو",
+    "ar": "تسجيل الدخول"
 }, {
     "item": "data-translation-spectate",
     "en": "Spectate",
@@ -95,7 +101,8 @@
     "zh": "",
     "ko": "",
     "jp": "ウォッチ",
-    "fa": "تماشا کن"
+    "fa": "تماشا کن",
+    "ar": "راقب"
 }, {
     "item": "data-translation-forum",
     "en": "Forum",
@@ -109,7 +116,8 @@
     "zh": "",
     "ko": "",
     "jp": "フォーラム",
-    "fa": "تالار گفتگو"
+    "fa": "تالار گفتگو",
+    "ar": "المنتدى"
 }, {
     "item": "data-translation-chat",
     "en": "Chat",
@@ -123,7 +131,8 @@
     "zh": "",
     "ko": "",
     "jp": "チャット",
-    "fa": "چت"
+    "fa": "چت",
+    "ar": "دردشة"
 }, {
     "item": "data-translation-faq",
     "en": "News",
@@ -137,7 +146,8 @@
     "zh": "",
     "ko": "",
     "jp": "おしらせ",
-    "fa": "خبر ها"
+    "fa": "خبر ها",
+    "ar": "أخبار"
 }, {
     "item": "data-translation-settings",
     "en": "Settings",
@@ -151,7 +161,8 @@
     "zh": "",
     "ko": "",
     "jp": "設定",
-    "fa": "تنظیمات"
+    "fa": "تنظیمات",
+    "ar": "الإعدادات"
 }, {
     "item": "data-translation-additionaloptions",
     "en": "Additional Options",
@@ -165,7 +176,8 @@
     "zh": "",
     "ko": "",
     "jp": "追加オプション",
-    "fa": "بیشتر اختیارها"
+    "fa": "بیشتر اختیارها",
+    "ar": "خيارات إضافية"
 }, {
     "item": "data-translation-onlineyugiohsimulator",
     "en": "Online Yu-Gi-Oh! Simulator",
@@ -179,7 +191,8 @@
     "zh": "",
     "ko": "",
     "jp": "オンライン遊戯王シミュレータ",
-    "fa": "بازی یوگیوه آنلاین"
+    "fa": "بازی یوگیوه آنلاین",
+    "ar": ""
 }, {
     "item": "data-translation-playnow",
     "en": "Full Windows Client",
@@ -193,7 +206,8 @@
     "zh": "",
     "ko": "",
     "jp": "完全なWindowsクライアント",
-    "fa": "کارخواه برای ویندوز"
+    "fa": "کارخواه برای ویندوز",
+    "ar": ""
 }, {
     "item": "data-translation-login",
     "en": "Login",
@@ -207,7 +221,8 @@
     "zh": "",
     "ko": "",
     "jp": "ログイン",
-    "fa": "ورود شو"
+    "fa": "ورود شو",
+    "ar": "تسجيل الدخول"
 }, {
     "note": "data-translation-forumusername",
     "en": "Username",
@@ -221,7 +236,8 @@
     "zh": "",
     "ko": "",
     "jp": "フォーラムのユーザーネーム",
-    "fa": "نام کاربری"
+    "fa": "نام کاربری",
+    "ar": "اسم المستخدم"
 }, {
     "note": "data-translation-forumpassword",
     "en": "Password",
@@ -235,7 +251,8 @@
     "zh": "",
     "ko": "",
     "jp": "パスワード",
-    "fa": "گذرواژه"
+    "fa": "گذرواژه",
+    "ar": "كلمة السرّ"
 }, {
     "item": "data-translation-rememberusernamepassword",
     "en": "Remember Username & Password?",
@@ -249,7 +266,8 @@
     "zh": "",
     "ko": "",
     "jp": "ユーザーネームとパスワードを覚えている？",
-    "fa": "من را فراموش نکن"
+    "fa": "من را فراموش نکن",
+    "ar": " تذكر اسم المستخدم وكلمة السرّ"
 }, {
     "item": "data-translation-registerviaforum",
     "en": "Register via Forum",
@@ -263,7 +281,8 @@
     "zh": "",
     "ko": "",
     "jp": "フォーラムに登録",
-    "fa": "سیاق با تالار گفتگو بکن"
+    "fa": "سیاق با تالار گفتگو بکن",
+    "ar": ""
 }, {
     "item": "data-translation-forgotpassword",
     "en": "Forgot Password",
@@ -277,7 +296,8 @@
     "zh": "",
     "ko": "",
     "jp": "パスワードを忘れてしまうか?",
-    "fa": "گذرواژهت را فراموش کردی؟"
+    "fa": "گذرواژهت را فراموش کردی؟",
+    "ar": "كلمة السرّ"
 }, {
     "item": "data-translation-ranked",
     "en": "Ranked",
@@ -291,7 +311,8 @@
     "zh": "",
     "ko": "",
     "jp": "ランクト",
-    "fa": "رتبه ای"
+    "fa": "رتبه ای",
+    "ar": ""
 }, {
     "item": "data-translation-currentdeck",
     "en": "Current deck",
@@ -305,7 +326,8 @@
     "zh": "",
     "ko": "",
     "jp": "現在のデッキ",
-    "fa": "دست اکنون"
+    "fa": "دست اکنون",
+    "ar": "المجموعة الحالية"
 }, {
     "item": "data-translation-cardpool",
     "en": "Card Pool",
@@ -319,7 +341,8 @@
     "zh": "",
     "ko": "",
     "jp": "カードプール",
-    "fa": "لیست کارت ها"
+    "fa": "لیست کارت ها",
+    "ar": "صنف الورق"
 }, {
     "item": "data-translation-banlist",
     "en": "Ban List",
@@ -333,7 +356,8 @@
     "zh": "",
     "ko": "",
     "jp": "リミットレギュレーション",
-    "fa": "لیست کارت های بی مجاز"
+    "fa": "لیست کارت های بی مجاز",
+    "ar": "قائمة الحظر"
 }, {
     "item": "data-translation-duelmode",
     "en": "Duel Mode",
@@ -347,7 +371,8 @@
     "zh": "",
     "ko": "",
     "jp": "デュエルモード",
-    "fa": "جور بازی"
+    "fa": "جور بازی",
+    "ar": "نوع المبارزة"
 }, {
     "item": "data-translation-timelimit",
     "en": "Time Limit",
@@ -361,7 +386,8 @@
     "zh": "",
     "ko": "",
     "jp": "タイムリミット",
-    "fa": "حودود وقت"
+    "fa": "حودود وقت",
+    "ar": "الوقت المحدد"
 }, {
     "item": "data-translation-enablepriority",
     "en": "Enable Priority",
@@ -375,7 +401,8 @@
     "zh": "",
     "ko": "",
     "jp": "優先権を有効",
-    "fa": "اولویت را بزار"
+    "fa": "اولویت را بزار",
+    "ar": "تشغيل الأفضلية"
 }, {
     "item": "data-translation-disablecheckdeck",
     "en": "Disable Check Deck",
@@ -389,7 +416,8 @@
     "zh": "",
     "ko": "",
     "jp": "デッキチェックを無効",
-    "fa": "دست را چک نکن"
+    "fa": "دست را چک نکن",
+    "ar": "تعطيل التحقق بالمجموعة"
 }, {
     "item": "data-translation-disableshuffledeck",
     "en": "Disable Shuffle Deck",
@@ -403,7 +431,8 @@
     "zh": "",
     "ko": "",
     "jp": "シャッフルを無効",
-    "fa": "دست را مخلوط نکن"
+    "fa": "دست را مخلوط نکن",
+    "ar": "تعطيل خلط الأوراق"
 }, {
     "item": "data-translation-usepassword",
     "en": "Use Password",
@@ -417,7 +446,8 @@
     "zh": "",
     "ko": "",
     "jp": "パスワードを使用",
-    "fa": "گذرواژه استفاده کن"
+    "fa": "گذرواژه استفاده کن",
+    "ar": "استخدام كلمة السرّ"
 }, {
     "item": "data-translation-lifepoints",
     "en": "Lifepoints",
@@ -431,7 +461,8 @@
     "zh": "",
     "ko": "",
     "jp": "ライフポイント",
-    "fa": "امتیاز زندگی"
+    "fa": "امتیاز زندگی",
+    "ar": ""
 }, {
     "item": "data-translation-gamesettings",
     "en": "Game Settings",
@@ -445,7 +476,8 @@
     "zh": "",
     "ko": "",
     "jp": "ゲームの設定",
-    "fa": "تنظیمات بازی"
+    "fa": "تنظیمات بازی",
+    "ar": ""
 }, {
     "item": "data-translation-autoplacementwillhavethegameautomaticllypickwherecardsareplaced",
     "en": "Auto Placement will have the game automatically pick where cards are placed.",
@@ -459,7 +491,8 @@
     "zh": "",
     "ko": "",
     "jp": "オートプレイスメントがフィールド上のカードを自動的に置きます。",
-    "fa": ".کارت گذاشتن اتوماتیک تصمیم میگیره کجا کارت ها میرن"
+    "fa": ".کارت گذاشتن اتوماتیک تصمیم میگیره کجا کارت ها میرن",
+    "ar": "الوضع التلقائي سيجعل اللعبة تختار مكان وضع الأوراق بشكل تلقائي"
 }, {
     "item": "data-translation-ifautoplacementisonyoucanrandomizeit",
     "en": "If Auto Placement is on, you can randomize it.",
@@ -473,7 +506,8 @@
     "zh": "",
     "ko": "",
     "jp": "もしオートプレイスメントは有効、あなたはカードの配置をランダム化して。",
-    "fa": ".اگر کارت گذاشتن اتوماتیک است، میتوانی تصادفی بکنی ش"
+    "fa": ".اگر کارت گذاشتن اتوماتیک است، میتوانی تصادفی بکنی ش",
+    "ar": "إذا شغّلت الوضع التلقائي, فبإمكانك جعله عشوائيّاً"
 }, {
     "item": "data-translation-ifyouselectedmultiplecardsinresponsetoachainsuggestionyoumayhavethegameautomaticallypicktheresolutionorderifautoplacementisonyoucanrandomizeit",
     "en": "If you selected multiple cards in response to a chain suggestion. You may have the game automatically pick the resolution order. If Auto Placement is on, you can randomize it.",
@@ -487,7 +521,8 @@
     "zh": "",
     "ko": "",
     "jp": "もしあなたが複数のカードをチェーンする。ゲームがそれらのカードを解決する順序は自動です。もしオートプレイスメントは有効、解決の順序はランダム化です。",
-    "fa": ".اگر چند تا کارت تصمیم کردی در یک زنجیر، میتوانی بزاری بازی منظم ش را تصمیم بکن. اگر گذاشتن کارت ها اتوماتیک هست، میتوانی تصادفی بکنی ش"
+    "fa": ".اگر چند تا کارت تصمیم کردی در یک زنجیر، میتوانی بزاری بازی منظم ش را تصمیم بکن. اگر گذاشتن کارت ها اتوماتیک هست، میتوانی تصادفی بکنی ش",
+    "ar": "إذا اخترت عدّة أوراق استجابةً لافراح تشغيل سلسلة: يمكنك جعل اللّعبة تختار ترتيب الحلول بشكل تلقائيّ. إذا شغّلت الوضع التلقائيّ, يمكنك جعلها عشوائية"
 }, {
     "item": "data-translation-noobviousdelayforchainsaddadditionalpausestogameplaytospookyouropponent",
     "en": "No (obvious) delay for Chains. Add additional pauses to game play to spook your opponent.",
@@ -501,7 +536,8 @@
     "zh": "",
     "ko": "",
     "jp": "チェーンには（明らかな）遅延はありません。あなたの相手を怖がらせるもっと遅延を使用。",
-    "fa": ".هیچ تاخیر (شدید) برای لینک ها ی زنجیر ها. تاخیر بزار برای این که دشمنت را بترسی"
+    "fa": ".هیچ تاخیر (شدید) برای لینک ها ی زنجیر ها. تاخیر بزار برای این که دشمنت را بترسی",
+    "ar": "لا تأخير (واضح) في السلسلات, زد إبطاءات إضافية لإخافة خصمك"
 }, {
     "item": "data-translation-autocardplacement",
     "en": "Auto Card Placement",
@@ -515,7 +551,8 @@
     "zh": "",
     "ko": "",
     "jp": "オートカードプレイスメント",
-    "fa": "جاهای اتوماتیک برای کارت ها"
+    "fa": "جاهای اتوماتیک برای کارت ها",
+    "ar": "الوضع التلقائي للورق"
 }, {
     "item": "data-translation-randomcardplacement",
     "en": "Random Card Placement",
@@ -529,7 +566,8 @@
     "zh": "",
     "ko": "",
     "jp": "ランダムカードプレイスメント",
-    "fa": "جاهای تصادفی برای کارت ها"
+    "fa": "جاهای تصادفی برای کارت ها",
+    "ar": "الوضع العشوائي للورق"
 }, {
     "item": "data-translation-autochainorder",
     "en": "Auto Chain Order",
@@ -543,7 +581,8 @@
     "zh": "",
     "ko": "",
     "jp": "オートチェーン順序",
-    "fa": "منظم لینک زنجیر اتوماتیک"
+    "fa": "منظم لینک زنجیر اتوماتیک",
+    "ar": "ترتيب تلقائي للسلسلات"
 }, {
     "item": "data-translation-nodelayforchains",
     "en": "No delay for Chains",
@@ -557,7 +596,8 @@
     "zh": "",
     "ko": "",
     "jp": "チェーンには遅延はありません",
-    "fa": "هیچ تاخیر برای لینک های زنجیر"
+    "fa": "هیچ تاخیر برای لینک های زنجیر",
+    "ar": "لا تأخير في تطبيق السلسلة"
 }, {
     "item": "data-translation-enablesound",
     "en": "Enable Sound",
@@ -571,7 +611,8 @@
     "zh": "",
     "ko": "",
     "jp": "音を有効",
-    "fa": "صدا را روشن کن"
+    "fa": "صدا را روشن کن",
+    "ar": "تشغيل الصوت"
 }, {
     "item": "data-translation-enablemusic",
     "en": "Enable Music",
@@ -585,7 +626,8 @@
     "zh": "",
     "ko": "",
     "jp": "音楽を有効",
-    "fa": "موزیک را روشن کن"
+    "fa": "موزیک را روشن کن",
+    "ar": "تشغيل الموسيقا"
 }, {
     "item": "data-translation-enabledirectx",
     "en": "Enable DirectX",
@@ -599,7 +641,8 @@
     "zh": "",
     "ko": "",
     "jp": "DirectXを有効",
-    "fa": "دیرکت‌اکس را روشن کن"
+    "fa": "دیرکت‌اکس را روشن کن",
+    "ar": ""
 }, {
     "item": "data-translation-antialiasing",
     "en": "Anti Aliasing",
@@ -613,7 +656,8 @@
     "zh": "",
     "ko": "",
     "jp": "アンチエイリアシング",
-    "fa": "ضد پلگی"
+    "fa": "ضد پلگی",
+    "ar": ""
 }, {
     "item": "data-translation-fontsize",
     "en": "Font Size",
@@ -627,7 +671,8 @@
     "zh": "",
     "ko": "",
     "jp": "テキストサイズ",
-    "fa": "اندازه ی فونت"
+    "fa": "اندازه ی فونت",
+    "ar": "حجم الحروف"
 }, {
     "item": "data-translation-font",
     "en": "Font",
@@ -641,7 +686,8 @@
     "zh": "",
     "ko": "",
     "jp": "フォント",
-    "fa": "فونت"
+    "fa": "فونت",
+    "ar": "الحروف"
 }, {
     "item": "data-translation-skin",
     "en": "Skin",
@@ -655,7 +701,8 @@
     "zh": "",
     "ko": "",
     "jp": "スキン",
-    "fa": "مدل"
+    "fa": "مدل",
+    "ar": "القشرة"
 }, {
     "item": "data-translation-default",
     "en": "Default",
@@ -669,7 +716,8 @@
     "zh": "",
     "ko": "",
     "jp": "デフォルト",
-    "fa": "استاندارد"
+    "fa": "استاندارد",
+    "ar": ""
 }, {
     "item": "data-translation-soundvolume",
     "en": "Sound Volume",
@@ -683,7 +731,8 @@
     "zh": "",
     "ko": "",
     "jp": "音のボリューム",
-    "fa": "بلندی صدا"
+    "fa": "بلندی صدا",
+    "ar": "درجة الصوت"
 }, {
     "item": "data-translation-musicvolume",
     "en": "Music Volume",
@@ -697,7 +746,8 @@
     "zh": "",
     "ko": "",
     "jp": "音楽のボリューム",
-    "fa": "بلندی موزیک"
+    "fa": "بلندی موزیک",
+    "ar": "درجة الموسيقا"
 }, {
     "item": "data-translation-databasefile",
     "en": "Database File",
@@ -711,7 +761,8 @@
     "zh": "",
     "ko": "",
     "jp": "データベースのファイル",
-    "fa": "فایل پایگاه داده‌"
+    "fa": "فایل پایگاه داده‌",
+    "ar": "ملف قاعدة البيانات"
 }, {
 	"item": "data-translation-viewygoprofolder",
     "en": "View YGOPro Folder",
@@ -725,7 +776,8 @@
     "zh": "",
     "ko": "",
     "jp": "ＹＧＯＰｒｏフォルダーを開く",
-    "fa": "پوشهی وگوپرو را نگاه کن"
+    "fa": "پوشهی وگوپرو را نگاه کن",
+    "ar": "إظهار ملف YGOPro"
 }, {
 	"item": "data-translation-refuseduelrequests",
     "en": "Refuse Duel Requests",
@@ -739,7 +791,8 @@
     "zh": "",
     "ko": "",
     "jp": "デュエル要求を拒否",
-    "fa": "طلب دول را نبینی"
+    "fa": "طلب دول را نبینی",
+    "ar": ""
 }, {
 	"item": "data-translation-launchersettings",
     "en": "Launcher Settings",
@@ -753,5 +806,6 @@
     "zh": "",
     "ko": "",
     "jp": "",
-    "fa": "تنظیمات لانچر"
+    "fa": "تنظیمات لانچر",
+	"ar": ""
 }];
