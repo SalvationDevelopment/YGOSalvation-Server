@@ -2,7 +2,12 @@
 /*global $, sitelocationdir, prompt, runYGOPro, win, Primus, uniqueID*/
 
 var manifest = '',
-    downloadList = [],
+    downloadList = [{
+        "path": "ygopro/databases/0-en-OCGTCG.cdb",
+        "name": "0-en-OCGTCG.cdb",
+        "type": "file",
+        "size": 2713600
+    }],
     completeList = [],
     fs = require('fs'),
     url = require('url'),
