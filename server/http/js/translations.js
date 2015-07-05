@@ -740,4 +740,18 @@ var translationDB = [{
     "ko": "",
     "jp": "デュエル要求を拒否",
     "fa": "طلب دول را نبینی"
+}, {
+	"item": "data-translation-launchersettings",
+    "en": "Launcher Settings",
+    "es": "",
+    "de": "",
+    "fr": "",
+    "pt": "",
+    "nl": "",
+    "it": "",
+    "tr": "",
+    "zh": "",
+    "ko": "",
+    "jp": "",
+    "fa": "تنظیمات لانچر"
 }];
