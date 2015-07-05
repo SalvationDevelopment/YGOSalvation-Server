@@ -55,17 +55,16 @@ function update() {
         scriptgit = spawn('git', ['pull'], {
             cwd: './ygopro/script'
         }),
-        picsgit = spawn('git', ['pull']),
-        {
+        picsgit = spawn('git', ['pull'], {
             cwd: './ygopro/pics'
         });
 
-fs.writeFile('manifest/ygopro.json', JSON.stringify(installation, null, 4), function () {
-    //'use strict';
-    fs.createReadStream('ygopro/databases/0-en-OCGTCG.cdb').pipe(fs.createWriteStream('ygopro/cards.cdb'));
-});
+    fs.writeFile('manifest/ygopro.json', JSON.stringify(installation, null, 4), function () {
+        //'use strict';
+        fs.createReadStream('ygopro/databases/0-en-OCGTCG.cdb').pipe(fs.createWriteStream('ygopro/cards.cdb'));
+    });
 
-process.title = 'Update Detection System[' + ((new Date()).getTime() - startTime.getTime()) + 'ms]';
+    process.title = 'Update Detection System[' + ((new Date()).getTime() - startTime.getTime()) + 'ms]';
 }
 
 //var sqlite3 = require("sqlite3").verbose(),
