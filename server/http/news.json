@@ -1,358 +1,365 @@
-{    "Articles": [
-      
-       { 
-           "Title": "Anime Wave 3 is here!",
-           "Subtitle": "Over a dozen new anime cards",
-           "Content": "<p>Lots and lots of new animes got added! What's special about this update is that it was the first time we had to errata cards in order for the card to be a fair and balanced addition to the game. We'll be doing this in the future, so there's no limit on what you can request! Keep in mind a lot of the content is currently not very-well tested, so let us know if something is wrong.</p><p> The new cards are as follows: <br /><br />Active Guard<br />Psychic Armor Head<br />Over Boost<br />Jet Gauntlet<br />Black Hole Shield<br />Buster Knuckle<br />Big Bang Blow<br />Burning Knuckle<br />Advanced Shield<br />Buster Pyle<br />Double Cloth Armor<br />Trap Buster<br />Phoenix Gravitation<br />Full Armor Gravitation<br />Magnet Armor<br />Armored Gravitation<br />Orichalcos Kyutora<br />Orichalcos Malevolence<br />Pheromone Wasp<br />Ancient Dragon (Animé)<br />Stone Giant<br />Ancient Giant<br />Ancient Gate<br />Ancient Key<br />Ancient Tome<br />Ancient City<br /><br />Check out the Anime section in the forum for requesting new animes and checking the complete list of all the animes we have. Remember you have to select the '1-Anime' Database in the settings to use these.</p> <p>Credit goes to Storm Wolf.</p>",
-           "Author": "Chibi",
-           "Date": "June 27th, 2015"
-       },{ 
-           "Title": "Updates, Updates, Updates!",
-           "Subtitle": "Info on what's been added recently",
-           "Content": "<p>Hi everyone. This isn't actually an update on new cards, but instead of what's been going into Salvation itself. We've got several things to cover! First off, you may have noticed we finally integrated everybody's chat account with their duelserver/forum account. This provides a greater degree of security, as well as allowing for easier access. Coming along with this is some unfortunate news, in that accounts with spaces in them are not valid in chat, due a bug we cannot fix. Your name will be cut off at the space. Next up, Reach has created a new background and skin to use in preparation for his upcoming tournament, which you can find more information about on the forums. Next up, we have pushed patches to both Newgioh and Goat Format, so both of those should now be working properly! Lastly, you may have notice something AccessDenied and I have been working on and implemented yesterday. Salvation's interface is now offered in Spanish, Portuguese, German, Dutch and French! Italian and Turkish support will be following soon. We will soon make a forum post about how YOU can get invovled with translation, and make Salvation Development's development avalible in your own language as well. You can select your language of choice by clicking the name of your language in violet on the home screen. Credit for the current translations is as follows:<br /><br />Spanish: Chibi<br /><br />Portuguese: Adriano<br /><br />German: Irate<br /><br />Dutch: Sylveraine<br /><br />French: Tsundere<br /><br />So big thanks to all of them, and make sure to enjoy all the new things Salvation has to offer!</p>",
-           "Author": "WestcoastKiwi",
-           "Date": "June 26th, 2015"
-       },{
-	   "Title": "Water World!",
-		"Subtitle": "New Greydoll cards added",
-		"Content": "<p>Hey guys, we've just added the following cards:<br /><br />Greydoll Slime<br />Greydoll Eagle<br /><br /> Credit goes to YGOHack137.",
-		"Author": "WestcoastKiwi",
-		"Date": "June 25th, 2015"
-	   },{
+{
+    "Articles": [
+
+        {
+            "Title": "Plans",
+            "Subtitle": "Humor",
+            "Content": "<p>Ryder : What you doing here?<br />Mele : Oh you know just flying around<br />OmniMage : Flying around?<br />Tragodia : Flying around.<br />AccessDenied : Twarthing my plans?<br />Chibi : Twarthing your plans?<br />WestCoastKiwi : Are you?<br /> AliceTheSeaQueen : No<br />Irate : Good cause that would be bad<br />Trinity : How Bad? <br />OneShot : I'd have to kill you.<br />Goddess : Thats bad.<br />A2 : Indeed</p>",
+            "Author": "Chibi",
+            "Date": "June 27th, 2015"
+       }, {
+            "Title": "Anime Wave 3 is here!",
+            "Subtitle": "Over a dozen new anime cards",
+            "Content": "<p>Lots and lots of new animes got added! What's special about this update is that it was the first time we had to errata cards in order for the card to be a fair and balanced addition to the game. We'll be doing this in the future, so there's no limit on what you can request! Keep in mind a lot of the content is currently not very-well tested, so let us know if something is wrong.</p><p> The new cards are as follows: <br /><br />Active Guard<br />Psychic Armor Head<br />Over Boost<br />Jet Gauntlet<br />Black Hole Shield<br />Buster Knuckle<br />Big Bang Blow<br />Burning Knuckle<br />Advanced Shield<br />Buster Pyle<br />Double Cloth Armor<br />Trap Buster<br />Phoenix Gravitation<br />Full Armor Gravitation<br />Magnet Armor<br />Armored Gravitation<br />Orichalcos Kyutora<br />Orichalcos Malevolence<br />Pheromone Wasp<br />Ancient Dragon (Animé)<br />Stone Giant<br />Ancient Giant<br />Ancient Gate<br />Ancient Key<br />Ancient Tome<br />Ancient City<br /><br />Check out the Anime section in the forum for requesting new animes and checking the complete list of all the animes we have. Remember you have to select the '1-Anime' Database in the settings to use these.</p> <p>Credit goes to Storm Wolf.</p>",
+            "Author": "Chibi",
+            "Date": "June 27th, 2015"
+       }, {
+            "Title": "Updates, Updates, Updates!",
+            "Subtitle": "Info on what's been added recently",
+            "Content": "<p>Hi everyone. This isn't actually an update on new cards, but instead of what's been going into Salvation itself. We've got several things to cover! First off, you may have noticed we finally integrated everybody's chat account with their duelserver/forum account. This provides a greater degree of security, as well as allowing for easier access. Coming along with this is some unfortunate news, in that accounts with spaces in them are not valid in chat, due a bug we cannot fix. Your name will be cut off at the space. Next up, Reach has created a new background and skin to use in preparation for his upcoming tournament, which you can find more information about on the forums. Next up, we have pushed patches to both Newgioh and Goat Format, so both of those should now be working properly! Lastly, you may have notice something AccessDenied and I have been working on and implemented yesterday. Salvation's interface is now offered in Spanish, Portuguese, German, Dutch and French! Italian and Turkish support will be following soon. We will soon make a forum post about how YOU can get invovled with translation, and make Salvation Development's development avalible in your own language as well. You can select your language of choice by clicking the name of your language in violet on the home screen. Credit for the current translations is as follows:<br /><br />Spanish: Chibi<br /><br />Portuguese: Adriano<br /><br />German: Irate<br /><br />Dutch: Sylveraine<br /><br />French: Tsundere<br /><br />So big thanks to all of them, and make sure to enjoy all the new things Salvation has to offer!</p>",
+            "Author": "WestcoastKiwi",
+            "Date": "June 26th, 2015"
+       }, {
+            "Title": "Water World!",
+            "Subtitle": "New Greydoll cards added",
+            "Content": "<p>Hey guys, we've just added the following cards:<br /><br />Greydoll Slime<br />Greydoll Eagle<br /><br /> Credit goes to YGOHack137.",
+            "Author": "WestcoastKiwi",
+            "Date": "June 25th, 2015"
+    }, {
             "Title": "Need for speed",
             "Subtitle": "More new cards added",
             "Content": "<p>The following new cards have been added:<br /><br />Speedroid Red-Eyed Dice<br />Speedroid Ohajikid<br />Hot RDA Abyss<br />Anti-Hope God of Despair<br /> Credit goes to YGOHACK137. Also, as usual, please report any bugs on the forum.</p>",
             "Author": "WestcoastKiwi",
             "Date": "June 22nd, 2015"
-	   },{
+    }, {
             "Title": "I spotted a Unicorn!",
             "Subtitle": "New cards and anime expansion!",
             "Content": "<p>Recently a few new cards were added:<br /><br />Majespecter Unicorn<br />Frightfur Sabre Tiger<br />[GUREIDORU] Graydoll? Dragon<br />Performapal Secondonkey<br /><br /> Credit goes to YGOHack137, check out his channel. Remember to file bug reports on our forum, and to read the stickied thread before posting.</p><br /><p>Also new is the New Anime expansion, run by Chibi on the forums. Go <a href='http://forum.ygopro.us/index.php?/topic/694-new-animes-discussion-is-now-open/#entry3477'>here</a> to suggest your favorite cards from the anime and manga that haven't been implemented into our Anime database! You can check out what's already there by changing to the '1-Anime' database in the Settings tab in the Launcher, then looking through it in Deck Edit.</p>",
             "Author": "OmniMage",
-            "Date" : "June 20th, 2015"
-       },{
+            "Date": "June 20th, 2015"
+       }, {
             "Title": "Chaos and Speed",
             "Subtitle": "The new BLS cards and HighSpeed Riders are here!",
             "Content": "<p>Lots of new cards! The following have been added to the server <br /><br />Assault BW Kunai the Drizzle<br />Red Dragon Archfiend Scarright<br />Galloping Gaia the Fierce Knight<br />Power Zone<br />Supreme Black Luster Soldier<br />Assault BW Raikiri the Sudden Shower<br />Supreme Warrior Ritual<br />Knight of the Beginning<br />Knight of the Evening Twilight<br />Speedroid Red-Eyed Dice<br />Speedroid Double Yoyo<br />Speedroid Begomax<br /> Speedroid Taketonborg<br /> Hyperspeedroid Chanbarider<br /> Speed Rebirth<br /> <br /> Credit, as usual, goes to YGOHack137, be sure to check out his channel! Also be sure to report any bugs or issues with these and any other cards on the forum.</p>",
             "Author": "Chibi",
-            "Date" : "June 17th, 2015"
-       },{
+            "Date": "June 17th, 2015"
+       }, {
             "Title": "Are you ready?",
             "Subtitle": "We're here.",
             "Content": "<img src='https://i.imgur.com/HUyfrqF.jpg' style='margin: 0 auto; display:block; width:100%'>",
             "Author": "Reach",
-            "Date" : "June 13th, 2015"
+            "Date": "June 13th, 2015"
        },
-       {
+        {
             "Title": "Anime returns!",
             "Subtitle": "Added new anime cards and fixed ltos of bugs~",
             "Content": "<p>11 new anime cards added to the database! They are as follows: <br /><br />Dark Magic Twin Burst<br />Scrum Force<br />Cursed Synchro<br />Power Zone<br />Volcanic Wall<br />Contaminated Earth<br />Gathering Wishes<br />Declaration of Rebirth<br />Card of Distrain<br />Synchro Spirits<br />Discord Counter<br /><br /> Credit for the missing Tag Force cards goes to Storm Wolf. Remember to report any bugs or issues with these!</p>",
             "Author": "Chibi",
-            "Date" : "June 14th, 2015"
+            "Date": "June 14th, 2015"
        },
-       {
+        {
             "Title": "Salvation Tag Tournament Finals",
             "Subtitle": "Start Friday night GMT +2",
             "Content": "<p>The finals of the tag tournament will be taking place Friday night, June 12th, at midnight, GMT+2 time zone (4 PM CST on Friday). It will take place in the same channel, #SalvationTagTournamentGetHyped. The matches, as listed on Challonge are as follows: Emerald Requiem (Aquaclaw11 and LunarShadow) vs Socho no Kuni (SamuraiNoKuni and 966socho), Team hhhhhh (Taekwondo and Tsundere) vs Team Mastery (LunarSlushie and Mantyz107), Team TCG (TCGGaming64 vs Bob57) vs Jewels of the Valiant (DoctorNarwhalz and Reluxtrue), and finally Boondocks (EdgyMemes vs zjrozz) vs WEBETUQUIT (IBETUQUIT and Future).<br /><br />If you cannot make it at the time listed for you to be here, it is your responsibility to contact your opponents and teammate on the forums or by private message on challonge. Those who have not played by Monday midnight GMT +2, or demonstrated actual attempts to contact your opponents if you cannot show up, will be disqualified. </p>",
             "Author": "Akipuff & GuybrushT",
-            "Date" : "June 6th, 2015"
+            "Date": "June 6th, 2015"
        },
-       {
+        {
             "Title": "All we do is win, win, win no matter what!",
             "Subtitle": "Second Salvation Showdown tournament results.",
             "Content": "<p>Just a quick shout-out to everyone who participated this Friday, June 5th. Despite the small error I encountered in hosting the tournament (s h u f f l e b o y z), we managed to pull through and make it a success! <br>Taking home the crown is GuybrushT, with a slightly different Qliphort variant than others. Comin' in second place is, ChaoticVice777, also, with his Qliphort-control deck. Last but not least, is CleanWater. Reppin' the Odd-Eyes Magicians to their fullest. All prizes have been distributed and I hope to see a lot of you at the next Showdown. 'Til next time! <3</p>",
             "Author": "Reach",
-            "Date" : "June 5th, 2015"
+            "Date": "June 5th, 2015"
        },
-       {
+        {
             "Title": "Features Get!",
             "Subtitle": "New-Gi-Oh compatibility, server outages, and Remember Me functionality",
             "Content": "Hello everyone, first and foremost: apologies for the recent downtimes. While we try to provide the most uptime we possibly can, outages do happen, mainly because of rapid development and life stresses. However, you will have noticed a few new features made available to you: the Remember Me feature and the advent of the Newgioh format. Already added a small while ago, the Remember Me feature is now fully functional and ready to use. Check the box and violà, you're good to go. The Newgioh format is best explained is best explained on their <a href='http://newgioh.com'>website</a>. We have enabled it on our server, and it has its own IRC channel found at <strong>#newgioh</strong>.As usual, please do report bugs on our <a href='http://forum.ygopro.us'>Bug Report forum</a>.",
             "Author": "Irate",
-            "Date" : "June 4nd, 2015"
+            "Date": "June 4nd, 2015"
        },
-       {
+        {
             "Title": "It's that (tournament) time again!",
             "Subtitle": "Come one, come all! The second Salvation Showdown is happening!",
             "Content": "This Friday, June 5th, we're runnin' it back. 24-man single-elimination style brawl. Do you think you have what it takes to be the best? Only one way to find out. Registration will begin June 5th @ 6:00 PM MST (5 PST, 7 CST, 8 EST) in the #tournament channel on our chat. If you haven't been on it, now's a good time to familiarize yourself with your host and all of the other friendly and fun staff. You can find the rules listed here: http://challonge.com/salvationshowdown2 - We'll see you Friday! :) ",
             "Author": "Reach",
-            "Date" : "June 2nd, 2015"
+            "Date": "June 2nd, 2015"
        },
-       {
+        {
             "Title": "Two Guest News Anchors",
             "Subtitle": "Change Log",
             "Content": "<p><iframe width=\"560\" height=\"315\" src=\"https://www.youtube.com/embed/S_xU2sF6R20\" frameborder=\"0\" allowfullscreen></iframe><br /><br /><iframe width=\"560\" height=\"315\" src=\"https://www.youtube.com/embed/4vpud4UgLYo\" frameborder=\"0\" allowfullscreen></iframe><br /><br />Anouncement system has been added to the server, keep an eye on the black bar at the bottom of the screen for text updates from the staff for infomation about things that are going on on the server. Staff can now kill your launcher and ban you from the system if they deem the need to. Please behave while using our server and software.",
             "Author": "YGOHack137, TCGGaming64 & AccessDenied",
-            "Date" : "June 1st, 2015"
+            "Date": "June 1st, 2015"
        },
-       {
+        {
             "Title": " New stuff! Sorry for the delay",
             "Subtitle": "Change Log, 4 new cards",
             "Content": "<p>4 new cards added, they are as follows: <br /><br />Dark Magic Twin Burst<br />Scrum Force<br />Cursed Synchro<br />Power Zone<br />Volcanic Wall<br />Contaminated Earth<br />Gathering Wishes<br />Declaration of Rebirth<br />Card of Distrain<br />Synchro Spirits<br />Discord Counter<br /><br /> Credit for the missing Tag Force cards goes to Storm Wolf. Remember to report any bugs or issues with these!</p>",
             "Author": "ChibiChan",
-            "Date" : "May 29th, 2015"
-        },{
+            "Date": "May 29th, 2015"
+        }, {
             "Title": " Confiscation Giant, Trunade and Pot of Greed,  Raigeki, and a Blender. Pot of Taboo now on The Salvation Server",
             "Subtitle": "Change Log",
             "Content": "<p>Pot of Taboo was added to the Server by YGOHack137. I don't think anyone has even made a Youtube video about it yet.</p>",
             "Author": "AccessDenied",
-            "Date" : "May 28th, 2015"
-        },{
+            "Date": "May 28th, 2015"
+        }, {
             "Title": "KNOCK KNOCK, Im a Dirty Dog, Im a Darklaw",
             "Subtitle": "Change Log",
             "Content": "<p>Someone gave AccessDenied a lapdance, he needed to 'get a room' now there is a locked duel/password system. Enjoy. Sorry we mean 'Behave'.</p>",
             "Author": "AccessDenied",
-            "Date" : "May 27th, 2015"
-        },{
+            "Date": "May 27th, 2015"
+        }, {
             "Title": "Pleadin' with Your Eyes Gonna Make You Some Peace Someday,",
             "Subtitle": " You got mud on your face. Big disgrace. Somebody better put you back into your place.",
             "Content": "<p>We now have a request user ban protocol. This is our version of a ban system. Our reasonings stem from AccessDenied's lazy and methodical approch to the matter, American laws, and watching DevPro DuelingNetwork and Dawn screw up simple concepts. The server now records to file <a href='http://ygopro.us/logs/' target='_blank' style='color:hotpink'> all messages posted in game while using our server</a> if you feel harassed or that another player is in violations of our terms of service please file a report/request for ban on our <a href='http://forum.ygopro.us/index.php?/forum/23-user-ban-request/' target='_blank' style='color:hotpink'>new subforum.</a> The forum is accessiable to banned users, and the threads are viewable publically. This is purposefully counter to DuelingNetworks policies, and in line with DevPro's, except logs can not be forged because they are publically accessiable to all users unlike at DevPro. US rights do not apply to the internet but we are to the best of our ablity trying to implement something similar to the 6th ammendment in practice. We feel this will solve issues of coruption, public perception of administrative actions, and prevent certain types of misbehavior. We understand that our community borders on the adult side but we ask you to be civil with each other, like adults.<br /><br />Additionally we have added BOPM to our chat server, if you are connecting to our servers via a proxy network it will ban you. This was implemented for community safety.</p>",
             "Author": "AccessDenied",
-            "Date" : "May 27th, 2015"
-        },{
+            "Date": "May 27th, 2015"
+        }, {
             "Title": "How to Login!",
             "Subtitle": "Use your Username and Password from the Forum",
             "Content": "<p>One of our most requested features has been a login system, looking back at our design papers we opted last year for a single-sign on system similar to DuelingNetwork, we are now using a similar mechnism. For users that are already regisitered with our FORUMS, you may now log in with your FORUM USERNAME and FORUM PASSWORD. For new users please press the register button and register for our system, via the forum. In the future chat will also be intergrated. We are sorry if this inconviences anyone but it was done for the sake of community safety. You may change your password and other settings via the forum.<br /><br /> Additionally a watcher system has been added to the server. The administration can see everything you say while in a duel and are likely to take action depending on if they are alert at the moment and what you say. Please be on your best behavior while using our system, best regards.</p>",
             "Author": "AccessDenied",
-            "Date" : "May 25th, 2015"
-        },{
+            "Date": "May 25th, 2015"
+        }, {
             "Title": "Salvation Tag Tournament is Here!",
             "Subtitle": "A Tournament of Fun~",
             "Content": "<p>Akipuff will be holding a tag tournament~<br /><br />The tournament is going ot be similar to a match, 3 rounds.<br />Participants will require to register with a team of 2, on Challonge.<br />More information is found <a href='http://forum.ygopro.us/index.php?/topic/415-salvation-tag-tournament/' target='_blank' style='color:hotpink'>on the forum<a/>. <br /><br />Everyone is welcome to join!</p>",
             "Author": "Akipuff & AccessDenied",
-            "Date" : "May 24th, 2015"
-        },{
+            "Date": "May 24th, 2015"
+        }, {
             "Title": "Enter... A Dimension of Chaos!",
             "Subtitle": "Several new cards from this set and more~",
             "Content": "<p>Another quick update, now by YGOHACK137. There's been a few bugfixes but also a bunch of new cards have been added, they are as follows:<br /><br />Covenant with the Seal Mistake<br />Magispecter Cat<br />Magispecter Raccoon<br />Magispecter Storm<br />Magispecter Tornado<br />Odd-Eyes Fusion<br />Performapal Mammoth Splash<br />Superheavy Samurai Hikyaku<br />Superheavy Samurai Nusutou<br />Performapal Skullcrobat Joker<br />Sky Arc<br /Pendulum Call<br /><br /> Remember to check Hack's Youtube Channel and thank him for the update. </p><p> Shoutouts to ParryDox for always updating card artworks, enjoy his work! If you find a bug, report it on our forum at forum.ygopro.us</p>",
             "Author": "ChibiChanNya",
-            "Date" : "May 19th, 2015"
-        },{
+            "Date": "May 19th, 2015"
+        }, {
             "Title": "Prow-Tagonist! I challenge you to a Card Game!",
             "Subtitle": "Round 1 of VJump spoilers updated, Utopic, Odd-Eyes, and Stardust ",
             "Content": "<p>We welcome our first batch of new cards from OneShot:<br /><br />Odd-Eyes Meteorburst Dragon<br />Odd-Eyes Vortex Dragon<br />Stardust Chronicle Spark Dragon<br />Number S0: Utopic Z<br /><br />Number S39: Utopia the Lightning has also been returned to the database with its known id.<br />Keep tabs on YGOHack137's youtube channel for new card updates. Remember that if you cannot open deck edit, lan mode, or replays you must first join a game, wait for it to start, and leave. Feel free to stop by the irc lobby and talk about the sim and yugioh in general...or whatever randomness ends up being discussed there. If you find a bug, report it on our forum at forum.ygopro.us</p>",
             "Author": "OmniMage",
-            "Date" : "May 18th, 2015"
-        },{
+            "Date": "May 18th, 2015"
+        }, {
             "Title": "Welcome to Dreamland!",
             "Subtitle": "CROS-KR Exclusives are in!",
             "Content": "<p>New Cards added to the system from YGOHack137:<br /><br />Elder God N'Tss<br />Kentaurus<br />Dinosewing<br />Parent Seahorse<br />Dreamland<br /><br />Remember to check out his youtube channel to keep up with future updates. If you find a bug, remember to report it on our forum at forum.ygopro.us</p>",
             "Author": "OmniMage",
-            "Date" : "May 15th, 2015"
-        },{
+            "Date": "May 15th, 2015"
+        }, {
             "Title": "Duelist of Destiny, Dimension of Chaos and more V-Jump exclusives arrive!",
             "Subtitle": "Have a taste of the new set.",
             "Content": "<p>New Cards added to the system from YGOHack137:<br /><br />D/D/D Caesar Ragnarok the Wave Complete Oblivion Overlord<br />D/D/D Kali Yuga the Twin Dawn Overlord<br />Divine Spark Dragon Stardust Sifr<br />Oversight Magician<br />Masked HERO Blast<br />Red-Eyes Tracer Dragon<br />Knight of Dark Dragon<br />Dark Dragon Ritual<br />Red-Eyes Burn<br />Toon Rollback<br />Shadow Toon<br />Toon Briefcase<br />Sibyl Petalelf<br />Sibyl Ouijamorrigan<br />Reverse Reuse<br />Aqua Actress Tetra<br />Aquarium Set<br /><br /> Remember to thank him for all the hard work he has done for Salvation Development and suscribe to his Youtube channel.</p>",
             "Author": "Chibi",
-            "Date" : "May 14th, 2015"
-        },{
+            "Date": "May 14th, 2015"
+        }, {
             "Title": "Secrets of Eternity TCG Legal, ALL OF THE BUGS",
             "Subtitle": "Change Log",
             "Content": "<p>We've repaired Secrets of Eternity, fixed almost all of the bugs repoted on the forums and the folder bug is fixed. We are starting work on the from browser spectator mode.</p>",
             "Author": "AccessDenied & Chibi",
-            "Date" : "May 12th, 2015"
-        },{
+            "Date": "May 12th, 2015"
+        }, {
             "Title": "Phantom Gryphon",
             "Subtitle": "Change Log",
             "Content": "<p>Added Phantom Gryphon<br /><br />Normal monsters do not require scripts so it was overlooked, we apologize.</p>",
             "Author": "AccessDenied",
-            "Date" : "May 9th, 2015"
-        },{
+            "Date": "May 9th, 2015"
+        }, {
             "Title": "Hermos Attacks",
             "Subtitle": "Change Log",
             "Content": "<p>New Cards added to the system from YGOHack137:<br /><br />Time Magic Hammer<br />Rocket Hermos Cannon<br />Goddess Bow<br />Roulette Spider<br /><br />We turned the server off for 4 hours to do operating system level updates. If you find a fundemental system is missing or something to that effect let us know. Additionally in a unrelated matter, the server has been tanking a number of DDOS attacks. We are unsure why we are being attacked or if it is specifically our system that is being attacked and not our server neighbors but if you are attacking please contact AccessDenied so we can have talks about the issue that is so conserning you feel the need to attack our servers. Nothing is being accomplished by the terrosim, it is not interupting gameplay only sending the staff annoying emails every few hours.<br /><br /> During the server update I understood that most duelist would be huttled over at DevPro, I kept an eye on matters and communicated the server status to them. On completion of the update I added the above cards and notified the users there. Unfortunately this was right in the middle of DevPro staff explaining why it had not updated its system with the above cards. I was banned for 'promoting another ygo sim'. This seems to be common law within us YGOSims now. I am unsure how things will develop. Salvation is now clearly a threat to the other simulators and I thank the users here for our success in becoming relavant. I do not see peaceful times ahead being business-like to gain users staff and fund our servers each YGOSim must behave in a self protecting way that makes co-operation difficult. <br /><br />Each sim is formed out a selfish need of each founder, and due to that we can not see eye to eye. We each have needs and we each respect each others needs and rights to satify those needs.I simply ask that users not get involved in the fighting.</p>",
             "Author": "AccessDenied",
-            "Date" : "May 9th, 2015"
-        },{
+            "Date": "May 9th, 2015"
+        }, {
             "Title": "LETS GET READY TO RUMBLE!",
             "Subtitle": "Change Log",
             "Content": "<p>New Cards added to the system from YGOHack137:<br /><br />Moon Mirror Shield<br />U.A. Signing Deal<br />U.A. Penalty Box<br />U.A. Dreadnought Dunker<br />U.A. Rival Rebounder<br /><br />This update is rather massive; It is us remerging code with FH, the creator of YGOPro, which is the main line of code changes for the client, which is based out of China. ADS, Salvation, DevPro, Percival18, MyCard, TDOANE, and other YGOPro variants not mentioned, cannot maintain their own codebases on our own, and some collaboration is needed to ensure the survival of each other. Flurohydride maintains a DN-like policy for card creation, his team waits till there is a 8-digit card pin to create the FILENAME of the card and then program against. Percival18, DevPro, and Salvation circumvient this by using groupings of unused closely cluster or 9-digit card pins. They eventually have to be removed and/or recycled as the actual filename of the card in the system is added. I am unsure why the policy is this way but the 'edge' sims disagree with it per our userbases urging.<br /><br />The majority of YGOHacks' programming over the past 3 months has been removed from the system to be inline with the merge. We do not do this lightly and it is of no fault of YGOHack. We have no choice. FH owns the development and if we are to have overall updates, card fixes new features, and standard development we have to have a shared code base. If we did not do this the system would overall degrade to be unusuable over the course of about 1yr. With updates like this expect to see the same behavior from the other YGOPro variants. The edge code will be removed in favor of the mainline.<br /><br />So what can we do about this? Communicate with FH, VanillaSalt, DailyShana, Salix5, and others. DevPro occationally lands patches into mainline but it all has to do with communication and planning. I urge the community to rally around YGOHack137, ChibiChanNyan, and Oneshot as they try to land patches into the mainline and get the credit they deserve for thier efforts. This is an intimidating order, there are language barriers and ideological barriers. <br /><br />If you have filed a card bug recently please check to see if it still exists and let us know if it was solved or a new issue created. Please support and be patient with us as we blaze forth on the edge!</p>",
             "Author": "AccessDenied",
-            "Date" : "May 5th, 2015"
+            "Date": "May 5th, 2015"
         }, {
             "Title": "The Freeze in Hell, the Burning Abyss, New YuGiTubers",
             "Subtitle": "Change Log",
             "Content": "<p>[DDG]: Hey Access got your email, Im sending you guys new....<br />[Access]Hey!<br />[DDG]: ... do you smell smoke?<br />[Access]: No, sending new art? Sweet!<br />[Reach]:Access!<br/>[Access]:Cram it talking to a cute girl<br />[DDG]: ... <br />[Reach]:Access the server!<br />[Access]:Busy. We finished up the scaper for that feature MechaJ wanted.<br />[DDG]: Cool! Exodius should be right along, umn... Your server is on fire brah.<br />[Reach runs around on fire screaming]<br>[Access]: Fuck my life.<br>[Access checks the specification for the server]<br>[Access]: Sweet adorable girls check, Spicy Latina girls check, all of the nice things check, gumdrops check, icecream, check.<br />[Reach]: OMG everyones games are dying!<br />[DDG]: You forgot the main ingredient Chemical X!<br /><br />The staff (Specifically AccessDenied for being a moron) apologize about the recent outages, we are revising our servers to handle 100 odd duelists counnecting all at once. We're sorry. (South Park)</p>",
             "Author": "AccessDenied",
-            "Date" : "May 3rd, 2015"
-        },{
+            "Date": "May 3rd, 2015"
+        }, {
             "Title": "The Freeze in Hell, the Burning Abyss, New YuGiTubers",
             "Subtitle": "Change Log",
             "Content": "<p>New cards on the server:<br /><br>Barbar, Malebranche of the Burning Abyss<br />Draghig, Malebranche of the Burning Abyss<br />The Terminus of the Burning Abyss<br />Dante, Pilgrim of the Burning Abyss<br /><br />Be sure to check out <a href='https://www.youtube.com/watch?v=zO_E76x9LAM' target='_blank' style='color:hotpink'>Arcanite MagicianGirl's channel for a video on the history and backstory of the archetype<a/>. AMG is a creative duelist and YuGiTuber focused on archetype decks specilizing in the pleasure of the theme like most of the cutting edge duelist on our sim. We hope to see more of her around our social engineering forums. Another YuGiTuber is <a href='https://www.youtube.com/watch?v=O9dC7lg-A20' style='color:hotpink' target='_blank'>AuraStorm presenting us with another review of our system</a> noting Goat format. Besure to check their channel as we welcome more YuGiTubers to the server. <br /><br /> In other news YES WE ARE AWARE OF THE INFLUX of bugs! It's finals month guys give us a moment to sort ourselves out with our IRL issues. We are aware of indiviual card bugs, image problems, and database information being inaccurate. We are freezing database issues unless they are game breaking because we are building an online database by hand because the YGOrganization and Wikia refuse to help us, it will take a long time.</p>",
             "Author": "AccessDenied",
-            "Date" : "May 3rd, 2015"
+            "Date": "May 3rd, 2015"
         },
-         {
+        {
             "Title": "Tournament time! Our first official one, ever!",
             "Subtitle": "That's right!",
             "Content": "<p>Sup guys! This new post is to inform everyone of our first official Salvation Pro tournament! That's right our first EVER! Beginning at 7 PM MST, Friday, May 1st, 2015 will be a single-elimination style tournament played on the 4.1.15 banlist with a TCG/OCG pool. Standard bans will be: No burn, stall, or any variant of Exodia. Come one, come all! Be on your best A-game as we do have Humble Bundle prizes in-store for our top 3 finishers! Registration will open at 6:00 PM EST and close at 6:45 PM EST with the games beginning at 7 PM EST. Don't forget to swing by the #lobby in chat for more information! :) </p>",
             "Author": "Reach",
-            "Date" : "April 30th, 2015"
-        },{
+            "Date": "April 30th, 2015"
+        }, {
             "Title": "Clean-Up done!",
             "Subtitle": "Card clones have been removed.",
             "Content": "<p>All card clones that appeared as a result of the previous upate have now been removed. With it has come the end of many decks and replays. Make sure to check the list linked in the previous News post to check out what has changed so that you may rebuild your decks. Again, sorry for the inconvenience. Let us know in the forums if we overlooked anything!</p>",
             "Author": "ChibiChanNya",
-            "Date" : "April 29st, 2015th"
-        },{
+            "Date": "April 29st, 2015th"
+        }, {
             "Title": "Big Update-Emergency Changes",
             "Subtitle": "IMPORTANT NEWS",
             "Content": "<p>A big update has been pushed into the server. Many of the latest cards, All of them added since Clash of Rebellion was announced, have had their ID's changed and will be removed from decks and make replays unwatchable. Right now there are two copies of each of those cards on the server, it is your last chance to screenshot your decks before they are likely emptied. We apologize for any inconveniences, but it's an important update regarding ID number standards. Targets will be those with an ID which starts with 13790, adding the new version of the card will be safe. Be quick!</p><p> Here is a link to the list of cards that will receive an ID change, so back them up. <a style='color:hotpink !important' target='_blank' href='http://pastebin.com/cTSpNxhn'> Click here for the list</a></p>",
             "Author": "ChibiChanNya",
-            "Date" : "April 27st, 2015th"
-        },{
+            "Date": "April 27st, 2015th"
+        }, {
             "Title": "Clash of Rebellion Full Release Part 2, VJUMP, minor changes",
             "Subtitle": "Change Log",
             "Content": "<p> The following cards have had edits and their replays may not render as of now. Please remember if you feel especially fond of a replay please screencapture it. Our staff is working on AI and Browser support currently which ultimately will end this issue for those that use our system. We will not 'not' update, modify, or change cards in ways that break replays at the current time because this is required for fixing and intergrating cards. The list is as follows:<br /><br />Aqua Lighting<br />Red-Eyes Flare Metal Dragon<br />Black Dragon Archfiend<br />Timeaus the Knight of Destiny<br /> Aroma Garden<br />Toon Kingdom<br />Red-Eys Black Dragon Sword<br />The Winged Dragon of Ra - Sphere Mode.</p>",
             "Author": "AccessDenied",
-            "Date" : "April 23st, 2015th"
-        },{
+            "Date": "April 23st, 2015th"
+        }, {
             "Title": "Clash of Rebellion Full Release Part 1, VJUMP",
             "Subtitle": "Change Log",
             "Content": "<p>The following are new cards added to the system, enjoy:<br /><br />Dwarf Star Dragon Planetter<br />Lone Reinforcement<br /> Performapal Drumming Kong<br /> Chicken Race<br /> Superheavy Samurai Timer-2<br /> Tamtam the Melodious Diva<br /> Pianissmo<br /> Moist Wind<br /> Geargianchor<br /> Dragonox, the Empowered Warrior<br /> Extra Buck<br /> Air Force<br /> Side Effect<br /> Magical Abductor<br /> Aroma Jar<br /> Swaying Gaze<br /> Geargia Change<br /> Preformagician Hat Trick<br /> Minerva, Lightsworn Saint<br /> Brilliant Spark<br /> Raidraptor - Singing Lanius<br />Mystic Shell Dragon<br /> Deskbot 005<br /> Giant Weaseal Explosion<br /> Wrongful Aresst<br /> Risebell the Summoner<br /> Counter Attacking the 'C'<br /> Preformagician Stilts Shooter<br /> Empowering Armory<br /> Dry Wind<br /> Judgment of the Lightsworn<br /> Aether the Wicket Empowering Dragon<br /><br />Special thanks to YGOHack137 for getting the cards to us. Note to users visiting the chat and speaking with staff: Asking 'when cards will be in the system', before 1 week after spoiling is considered rude. Our current break neck pacing is due stictly to the efforts of YGOHack primarily, Chibi, and OneShot. The community thanks you for your decdication.</p>",
             "Author": "AccessDenied",
-            "Date" : "April 23st, 2015th"
-        },{
+            "Date": "April 23st, 2015th"
+        }, {
             "Title": "The Database is named what?",
             "Subtitle": "Recent Server Outage Cause",
             "Content": "<p>While getting ready for the server move and updating the documenting a number of new server side only features and configurations. AccessDenied fubar'd the server. The server was down from doay 9am-9pm est. We apologize for the inconvience. If this downtime was troublesome for you please be sure to chew AccessDenied out with COUPONCODE #8999. This coupon is non-transferable to other staff and is limited to one redeem per user currently registered with the forum.</p>",
             "Author": "AccessDenied",
-            "Date" : "April 21st, 2015th"
-        },{
+            "Date": "April 21st, 2015th"
+        }, {
             "Title": "Magnadramon, Angewomon, and Tailmon walked into a Server",
             "Subtitle": "Service interruption notice",
             "Content": "<p>The server will be offline as we upgrade the operating system and reinstall our server software and reconfigure it the morning of April 25th. We apologize for the inconvience. The upgrades should be completed by noon eastern time. After the server will be more resiliant to attacks, and the administration will have an easier time applying updates.</p>",
             "Author": "AccessDenied & Mele",
-            "Date" : "April 21st, 2015th"
-        },{
+            "Date": "April 21st, 2015th"
+        }, {
             "Title": "Cards Fix and Corrected Errata.",
             "Subtitle": "Change Log",
             "Content": "<p>Cards Fix and Corrected Errata:<br /><br />Black Stone of Legend now only can return and SS Red-Eyes MONSTERS!<br />Juragedo now Has a NEW Errata, now the SS effect can be only activated once per turn.<br />Anti-Magic Arrows the JAP text says that can only be activated at the START of the Battle Phase.</p>",
             "Author": "YGOHack137",
-            "Date" : "April 21st, 2015th"
-        },{
+            "Date": "April 21st, 2015th"
+        }, {
             "Title": "YGOPro Loves DN but *Bleep the wikia, and *Bleep the YGOrganization",
             "Subtitle": "A History Lesson",
             "Content": "<p>Last spring/summer I called a summit and invited all the owners of simulators and talked about how to better the community, around the time Pendulum monsters where announced. DuelingNetwork(DN), MyCard[YGOPro China], DevPro[YGOProGermany], Salvation[YGOPro America], Percival, The Dawn of a New Era(TDOANE tah-doun-[eh with a canadian accent])[YGOPro Canada], MackPro, Xerocreative, Checkmate[YGOPro Italy] and the newly formed YGOrganization where all invited. DN, Dev, Salv, Mack, XC, Checkmate and the wikia representing YGOrg attended. MyCard phoned it in due to China's firewall blocking Skype. After meeting we came away with this.<br /><br />DN and the YGOPros would work out a common DB for updating both systems quickly<br />DN opensouced its GUI Protocols.<br />The Major Pros would build an opensource sever side system.<br />Implementation for Pendulum summoning on all the systems<br />Salvation would distribute YVD<br />We would have common bans for specific problem users, people that do things like DDoS.<br /><br />So a lot of good stuff. BlackLusterSolider(Owner/Creator of DN) for the most part is a cool guy. Most people are scared of him or don't like him based on his staff but he himself I promise you is a very cool dude. I don't for the life of me understand why he employs such scummy guys as his higher staff. DevPro created a way to edit its db's but you had to be a dev on its systems which really made no sense. DN defense system banned Checkmates statistics bot. Salvation-DevPro built the server side system called YGOCore via Buttys. Pendulum summoning is obviously out, we shared ideas on how to handle it. I never got that copy of YVD to distribute but MykeZero was cool to talk with and always has been, he is sort of my hero. All the YGOPro have technology specific forknukes (Google forkbomb) pointed at each other so they are all behaving. If I had to guess DN's recent attacks are due to a salty guy getting rejected in this hiring round. Salvation and DevPro are sharing staff but then this happened.<br /><br />One of the owners and a shared staff got mad at each other because the DevPro owner would CONSTANTLY overwrite his code with bugged code from the FH-YGOPro github (orginial YGOPro) then call him useless then the staff member said some racist hardheaded stuff. DN and the YGOPros agreed to create a common DB system so YGOPro DevPro and Salvation could update and the INFORMATION be controlled by the YGOrganization.<br /><br />The YGorg seemed to be ok with this until they found out that the YGOPros each have propriety servers for the game. They DEMANDED that the source code for the ygopro's be made 100% opensouce before they would help in anyway. The representative from the YGOrganization was the owner of the wikia. I had suggested scrapping the wikia like some phone apps do to get a data load that the COMMUNITY would maintain for the sims via the wikia. The scrap isnt even necessary the admin at just has to create a backup which he should be doing anyway, on a monthly or bi-weekly basis. Checkmate(Owner of Checkmate) made the code to create the database dumps for the YGOPros and was awaiting the DB definitions from DN. Never got them. The SQL would allow all the sims, DN included to be translated accurately into a multitude of languages including Spanish, French and German!<br /><br />SO.... I've tried to unite the community into DevPro and DN under the YGOrganization as an information source and failed multiple times due to cockblocking by the YGOrganization if it wasnt debunking the idiotic lies they tell each other, dealing with GPL vs MIT ideologies, or anarchism it's just salt about the fact automation replaces the rule of the DN Judge reign.<br /><br />So Salvations source code is 100% available for view on Github, you are not allowed to make a spin-off version of it but there are provisions that provide you with everything you could possibly want to create your own YGOPro. All of it documented. Now after the recent incident on DevPro and its later and later updates version control issues people getting sick and Salvation's dedication to creating nostalgic formats we have released two new repos :<br /><br />https://github.com/SalvationDevelopment/YGOPro-Database screw the wikia, we are building out our own database the public can update, unaffliated updaters and contributers can edit our database if they find errors or ADD NEW CARDS. Same with the scripts https://github.com/SalvationDevelopment/Salvation-Scripts If you want to be an admin with us just start adding code.<br /><br />And I DARE YGOrganization members to contribute because I bet they won't because they are salt and sucking on DN's jugular vein like cancer cells. No one cares about LightPulsar, or renames, people just want the cards. The database is open to DevPro Checkmate Percy and TDOANE also.<br /><br />My goal is for the community to heal from the insane elitism and meglomania over the last decade that have crushed this game. I'm giving people that know how things are suppose to work access to a way to change rulings and card text. Those scripts and text get compiled down to our server nightly or on demand.<br />I challenge the community that thinks itself appropriate to judge this game to do more than to study a handbook, and take an online test get a call and say your word is law over the masses. I challenge them to prove they have the merit to the position the same way the coders of Unix, Linux, Mozilla, Chrome, OpenOffice, and the whole of the basis for the internet, and science community have. With public peer review and dedication. I want the community to see who just wants power to kick and ban and who really wants to help. I want to post a list of names for all to see in this update feed.<br /><br />YGOrg had 2 jobs, 2 jobs to help the community in 'ending misinformation' report the news and press,... an save button,... once,... a month.<br /><br />That github also houses a lot of other sims stuff including 2 versions of DN's possibly new interface that if you want to contribute to making DN PLAYABLE ON MOBILE you can contribute to too. After the American team left DevPro I was thinking we could do the most good by helping DN and giving it developers. The process of just getting an understanding of what the community wanted and needed from DN was painful. The administration went so far as to delete a whole subforum so we would not have access to the information we needed to make the changes. Even after we got BLS's seal of approval. He would not remove his staff or force them to work with us so we just gave up. DN if you want mobile start acting like it and publically writing code and getting members to start posting bounties on features and fixes. DN is being choked, and sucked on by its own administration and its users are so tramatized from being abused and ignored if someone rises up to help the WHOLE community attacks that person for being so bold. This community has so few developers and it needs many more. DN has 3 Developers. BLS, a close frined of his to make tiny refindments, and NeoArk who can only edit the database. And then 50-80 judges, forum admins, and moderators. DevPro has 10 devs and about 10 mods, TDOANE 2 and 10 mods, Salvation 10 devs and 10 Mods, Percy 4 devs 2 mods, MyCard, 25 devs 10 mods.</p>",
             "Author": "AccessDenied",
-            "Date" : "April 19th, 2015th"
-        },{
+            "Date": "April 19th, 2015th"
+        }, {
             "Title": "Got Raid? Bug Smashing Time, 24 Script Updates.",
             "Subtitle": "Change Log",
             "Content": "<p>Updates to.... well everything, here is the<a style='font-weight:bold;color:hotpink !important' href='https://github.com/SalvationDevelopment/Salvation-Scripts/commit/39d77479ad6a856bfb5816ded8e75158b8612080'>Diff file</a>. Fixes:<br /><br />Doom Virus Dragon<br />Peasant Dragon Magician<br />Anti-Magic Arrows<br />Explosive Dragoknight Ignister Prominence<br />Dragoknight Luster Pendulum<br />Noble Dragon Magician- self destruct corrected<br />Aquarium Lightning- DEF gain corrected<br /><br /> All from YGOHack137<br /></p>",
             "Author": "AccessDenied",
-            "Date" : "April 18th, 2015th"
-        },{
+            "Date": "April 18th, 2015th"
+        }, {
             "Title": "How Did We Get This Far?",
             "Subtitle": "Youtube Channels, and community watch",
             "Content": "<p>As a special thanks to Chibichanyan, be sure to check out her forum <a style='font-weight:bold;color:hotpink !important' href='http://s1.zetaboards.com/Crimson_Wind_Academy/index/'>Crimsom Wind Academy</a> a Created-Card-Game and Role Play website. They feature a lively and welcoming community the angel of denial herself. Follow the history of the development of Salvation on <a style='font-weight:bold;color:hotpink !important' href='https://www.youtube.com/channel/UCppCc4Ucq1qtj4o7MhBNetg'>AccessDenied's development diary and vlog.</a>. Be sure to check out <a shref='https://www.youtube.com/user/YGOhack137/videos'>YGOHack137</a>'s channel. New posts to his channel are the advent of updates here. Finally if all our software can be found at <a href='https://github.com/SalvationDevelopment'>https://github.com/SalvationDevelopment</a> please watch and star our projects to learn how we are developing and if you are a developer join in on improving our system! There is a culture section to learn more about upcoming features and our current goals! Remember guys our staff is always watching the major forums and news sources for ways to improve our system. We really love the community and want to help out by creating a better simulator.</p>",
             "Author": "AccessDenied",
-            "Date" : "April 18th, 2015th"
-        },{
+            "Date": "April 18th, 2015th"
+        }, {
             "Title": "Need News? Need News Now!",
             "Subtitle": "Change Log",
             "Content": "<p>News feed will now update every 120 seconds. You no longer need to close your launcher and restart or go to the site to see the latest news.</p>",
             "Author": "AccessDenied",
-            "Date" : "April 18th, 2015th"
-        },{
+            "Date": "April 18th, 2015th"
+        }, {
             "Title": "What's the difference between YGOPro Devpro and The YGOPro Salvation Server?",
             "Subtitle": "A History Lesson",
             "Content": "<p>DevPro had internal management issues that ultimately I could not resolve. Basically discrimination and insubordination, it suffered a staff coup like its original birth from TDOANE. It happened in stages and left Benblub singularly in charge. Instead of the majority of the staff having access to the server its been cut down to I would guess max 3 people. Updates seem to be done via FTP and then Ben or Sid manually switches the new updates on. However he has that server configured its security is incompatible (and always has been) with the way DevPro is built. That is why it crashes and stays off for so long.<br /><br />This is different from Checkmate, Percy and DN where they go offline due to network load or attacks.<br /><br />DevPro has 3 programs that run on the server they are proprietary. A central chat-gamelist-login server, and a core generator and game manager. Finally a ygocore or ygopro game instance with no GUI.<br /><br />The first two programs are points of failure. The ygocores can error out and confuse the game manager. This causes it to stop producing cores because it spins up 200-500 at a time and manages them recycling them as needed. If the core errors out due to the security settings on the server the core does not return to the pool until reviewed. This is fine and great for finding card bugs but doesnt work when no one is watching the server. They update it and go to bed, Salvation updates if cards cause bugs they dont lock the server and everyone working on the project has a decent degree of server access to prevent issues.<br /><br />When it locks up you get the [server is full] bug. When the server restarts or the central program errors it cause the server to reject login. The system isn't configured to restart the process. If a manager goes offline same issue no hosting. Some one has to manually go into the server and restart it. (of few have access)<br /><br /><strong>To push an update out on Devpro all the files have to be gathered and the version of DevPro upticked. This setup encourages waiting and waiting to update.</strong> Salvation uses a non-versioning system and individually checks all 20,000 files in an installation and verifies that you have them and they are within a certain error range, updated. The update runs every 120 seconds. So all we ever do is upload changes via git or Dropbox.<br /><br />On Salvation there are 3 programs. A IRC server, a central server, and an opensourced customized version of YGOCore. The central server will file a error report if it crashes and restart itself. It also starts up 4 instances of itself that act as core managers and from there starts ygocore with variable configurations. DevPro is locked to 1 (OCG-with tcg rulings on specific cards) Salvation can make more accurate rulings. The IRC is separate incredibly stable unlike DevPro's custom option and highly documented. We are able to leverage everything that touches IRC due to that included more bots than just [Dev]DevBot, we where able to recreate all of DevPro's customizations also.<br /><br />IRC solves the social issues DN has and some of the ones on DevPro. I intended for DevPro to use IRC but Buttys just built a new chat server it's now the main cause of DevPros lag. Each user can create their own rooms/teams/clans ad-hoc and at no cost. They set the political climate of those rooms. People that don't want to be near each other don't have to be. You dont even need to install the launcher to access these room. You can have your team on Salvation and play on DN/YGOPro/DevPro.<br /><br />DevPro uses IIS, Salvation uses nginx-apache, DN uses Apache-TomCat, draw your own conclusions if you know what that stuff is.<br /><br /. DevPro is written in C# and PHP, Salvation is written in HTML CSS JavaScript, and now GO. So I can leverage more programmers. Salvation <strong>is</strong>a website. Its launcher is just a stripped-down browser with a few special features. It just pulls down http://ygopro.us and responses to http request you make to yourself with the launcher acting as a server that maintains and launches YGOPro. You will notice that increasingly more features will be web accessible. DevPro has this but it's not translated well to the interface. Also interface. Look boobies!<br /><br />No devpoint system or anything like it will ever be implemented because it causes people to get upset and abuse the staff. The only pay system we implementing is one that will put bounties on bugs and features the developers here can not fix or implement with thier own skill sets. The system has a refund system also. Someone could file a bug/feature request lobby american congress style and have a rogue coder show up and implement it.<br /><br />DevPro has a policy that stems from god knows where that is basically anarchism. Abusive users may complain on the staff and this usually results in the staff member being removed. So they have increasing dwindling staff like DN. The staff there is scared to act, and to make matters worst all the security I wrote to track user issues was removed. A user pretty much can't be banned and if they are they can very successfully seek revenge. Not that it matters; you have to be VERY highly ranked to even ban, and even then it's a ban that can't be enforced because of mismanagement how to remove it got out. Topped with a 'no more than 1 hour' policy making it pointless. I'm pretty sure all the admin actions are logged and will result in review if used. At just a handful it's less than or equal to DN's high ranked staff that can even ban for that sad 1 hour. The devpoint system doesnt help much giving the primarily American audience the mentality the volunteers are staff and can complain on them like retail workers. So like DN did to YVD DevPro is slowly turning it once peaceful community into hateful-cancer plaguespreaders.<br /><br />The basic premise is I had a vision for how I wanted YGOPro to work and I took that vision to TDOANE found that I couldnt implement it and left with the people that could help me do that. As they took my engineering ideas because engineering is not programming it's a seperate skill they started ignoring my design plans and doing as they pleased and slowly locking me out of engineering and programming via language choice and security access.<br /><br />Salvation is a bit of a revenge project in I am proving that I was right in my designs and how people should be treated. Of the DevPro devs I'm pretty low on programmer skill, but you can see by the way Salvation is built I have the broadest outlook. The system is VERY far behind the other simulators, TDOANE has far more features, and DevPro vastly more.<br /><br />Revenge for the way my staff was treated. I mean no harm to DevPro but I know how it is ran how it is built and I know it will rot. As far as the management and assiting of keeping YGOPro/DN as a whole up to date we will help DN DevPro Percy and MyCard, but I have my goals. And they are pretty devious. They require going all out for the salvation of the YuGiOh community. I grew up on XC-YVD and DN basically killed the place not from abandonment but by taking the worst elements of YVD and institutionalizing them then killing YVD's culture. I want to get back at basically everyone that has abused the community by turning a blind eye while in administrative power by automating their jobs.<br /><br />If you want a reason for using Salvation over DevPro, Salvation is going somewhere, updates faster, has a nicer community and is more stable. Our staff is kind and open-hearted if not harsh at times. As great as DevPro is I was very stifled in the way I drew up some of the designs so Salvation is my opporitunity to prove I was right and so far it seems I have been.<p/>",
             "Author": "AccessDenied",
-            "Date" : "April 18th, 2015th"
-        },{
+            "Date": "April 18th, 2015th"
+        }, {
             "Title": "Grace our Duel oh Great Lord of the Sky! I summon thee Winged Dragon of Ra! ",
             "Subtitle": "Change Log",
             "Content": "<p>Newly uploaded cards from YGOHack137, bug fixes by ChibiChanyan and Oneshot.<br /><br />Dragoknight Luster Pendulum<br/>Explosive Dragoknight Ignister Prominence<br/>Mimicat<br />Odd-Eyes Absolute Dragon<br/>The Winged Dragon of Ra – Sphere Mode<br/>Juragedo<br/>Legion the Fiend Jester<br />Anti-Magic Arrows<br/>Multiple Destruction<br/>Sibylla Tarotray<br />Sibylla Ritual<br />Sibyl Arrowsylph<br />Black Cat’s Glare<br />Aqua Actress – Guppi<br />Aqua Actress – Arowana<br />Aquarium Stage<br />Aquarium Lighting<br />Noble Dragon Magician<br />Peasant Dragon Magician<br/>Dragonvein Magician<br/>Dragontrove Magician<br/></p><br /><a style='color:hotpink !important' target='_blank' href='https://www.youtube.com/watch?v=GhaR7bNkT48'> Special thanks to TCGGaming for doing this video about our system.</a> Be sure to link his video <strong>EVERYWHERE</strong>. Thank you TCGGaming for bringing to our attention we need to post patch notes more often. They just take a while to code. Bug in the video is also patched for new installations.<br /><br /> Remember our script files and database text are open to the public to edit, so if you want to help out just let the staff know. Also please do not duel the AI that spontaneously appears. *wink wink* It will banish you.",
             "Author": "AccessDenied",
-            "Date" : "April 18th, 2015th"
-        },{
+            "Date": "April 18th, 2015th"
+        }, {
             "Title": "New Cards and Login",
             "Subtitle": "Keeping up with new releases with style!",
             "Content": "<p>Added Opera the Melodious Diva, Insight Magician and Performapal Cameloose. Expect more in a few days. Repairs to Aromages, Igknights, Hermos, Jewel of Red Stone, Protector of the Shrine, Dark Magician of Chaos, and Odd-Eyes Rebellion Dragon. Credit to <a href='https://www.youtube.com/user/YGOhack137/videos'>YGOHack137</a> DailyShana, and Chibi.<br /> We have a new radio system in development so the developers can push audio to users and you can hear more detailed patch notes. Our card database is being exported to Github so you can edit it yourself if you find a miswording or targeting bug. Our scripts for our server have been made public you can lad fixes on our Github now and they be pushed directly to the server within minutes.</p>",
             "Author": "AccessDenied",
-            "Date" : "April 17th, 2015th"
-        },{
+            "Date": "April 17th, 2015th"
+        }, {
             "Title": "A Few New Cards",
             "Subtitle": "Keeping up with new releases and Critias!",
             "Content": "<p>Brilliant Fusion, Gem-Knight Lady Brilliant Diamond and Performagician Trick Clown have been added to the server. All Critias cards are now also fully functional.</p><p><a href='https://www.youtube.com/user/YGOhack137/videos'>Credit goes to YGOHack137 for the new cards</a>, Chibi for the fixes.</p>",
             "Author": "ChibiChanNya",
-            "Date" : "April 6th, 2015th"
-        },{
+            "Date": "April 6th, 2015th"
+        }, {
             "Title": "Goat Format Anniversary",
             "Subtitle": "Revive this famous period of history!",
             "Content": "<p>Today, 10 years ago began one of the most acclaimed formats in the history of Yu-Gi-Oh! From today on, you can revisit this highly skill-based moment of our history. Switch database to 3-Goats to build a deck using the cards of the time. Afterwards, host duels by selecting the Goats banlist and you'll be set! (Rainbow color on gamelist). Some new cards have been added as well, including Fuzzy Lanius and Fluffal Mouse.</p><p>Credit goes to Storm Wolf for the Goats idea and<a href='https://www.youtube.com/user/YGOhack137/videos'> YGOHack137 for the cards</a></p>",
             "Author": "ChibiChanNya",
-            "Date" : "April 1st, 2015th"
-        },{
+            "Date": "April 1st, 2015th"
+        }, {
             "Title": "Three New Cards",
             "Subtitle": "Seems We Missed a Few",
             "Content": "<p>Junk Breaker, Kaiser Sea Snake, and Bird of Paradise Lost have been added to the system</p><p><a href='https://www.youtube.com/user/YGOhack137/videos'>Credit goes to YGOHack137</a></p>",
             "Author": "AccessDenied",
-            "Date" : "March 22th, 2015th"
-        },{
+            "Date": "March 22th, 2015th"
+        }, {
             "Title": "Its Banlist Season!",
             "Subtitle": "Both Banlist are out applying to the server",
             "Content": "<p>The April 1st OCG and TCG lists have been applied to the server</p>TCG<br/>Newly Forbidden:<br/>Blaster, Dragon Ruler of Infernos<br/>Redox, Dragon Ruler of Boulders<br/>Tempest, Dragon Ruler of Storms<br/>Tidal, Dragon Ruler of Waterfalls<br/>Snatch Steal<br/>Newly Limited:<br/>Sinister Serpent<br/>Tour Guide From the Underworld<br/>Dragon Ravine<br/>Preparation of Rites<br/>Saqlifice<br/>Symbol of Heritage<br/>Temple of Kings<br/>Crush Card Virus<br/>Exchange of the Spirit<br/>Ring of Destruction<br/>Skill Drain<br/>Vanity's Emptiness<br/> <br/>Newly Semi-Limited:<br/>Qliphort Scout<br/>Nekroz of Brionac<br/>Legendary Six Samurai - Shi En<br/>Charge of the Light Brigade<br/>Sacred Sword of Seven Stars<br/><br/>Newly Unlimited<br/>Brotherhood of the Fire Fist-Spirit<br/>Burner, Dragon Ruler of Sparks<br/>Gladiator Beast Bestiari<br/>Gorz the Emissary of Darkness<br/>Lightning, Dragon Ruler of Drafts<br/>Lonefire Blossom<br/>Reactan, Dragon Ruler of Pebbles<br/>Stream, Dragon Ruler of Droplets<br/>Goyo Guardian<br/>Hieratic Seal of Convocation<br/><br/>OCG<br/>Forbidden:<br/>El-Shaddoll Construct<br/>Blaster, Dragon Ruler of Infernos<br/>Redox, Dragon Ruler of Boulders<br/>Tempest, Dragon Ruler of Storms<br/>Tidal, Dragon Ruler of Waterfalls<br/><br/>Limited:<br/>Vanity's Emptiness<br/>Saqlifice<br/>Nekroz Cycle<br/>Mathematician<br/>Nekroz of Brionac<br/>Kuribandit<br/>El-Shaddoll Fusion<br/>Dark Magician of Chaos<br/><br/>Semi-Limited:<br/>Qliphort Scout<br/>Wind-Up Carrier Zenmaity<br/>Formula Synchron<br/>Manju of the Ten Thousand Hands<br/><br/>Unlimited:<br/>El-Shaddoll Winda<br/>Inzektor Hornet<br/>Sinister Serpent<br/>Legendary Six Samurai - Shi En<br/>Senju of the Thousand Hands<br/>Archlord Kristya<br/>Number 11: Big Eye<br/>Brotherhood of the Fire Fist-Rooster<br/>Temple of the Kings<br/>Monster Gate<br/>Exchange of the Spirit<br/>Stream, Dragon Ruler of Droplets<br/>Burner, Dragon Ruler of Sparks<br/>Reactan, Dragon Ruler of Pebbles<br/>Lightning, Dragon Ruler of Drafts ",
             "Author": "AccessDenied",
-            "Date" : "March 20th, 2015th"
-        },{
+            "Date": "March 20th, 2015th"
+        }, {
             "Title": "Toon, Red-eyes, Aromages, and More!",
             "Subtitle": "Update to CORE",
             "Content": "<p>Updates to YGOPro Salvation Server.<br/>Wicked Priest Chilam Sabak</br>Infernity Bishop</br>Gogogo Aristera & Dexia</br>Galaxy Worm</br>Timaeus the Knight of Destiny</br>The Fang of Critias</br>The Claw of Hermos</br>Legendary Knight Critias</br>Legendary Knight Hermos</br>Lord of the Red</br>Red-Eyes Transmigration</br>Toon Ancient Gear Golem</br>Toon Kingdom</br>Aromage - Rosemary</br>Aromage - Bergamot</br>Aromage - Kananga</br>Aromage - Jasmine</br>Aroma Garden</br>D/D Pandora</br>D/D/D Tell the Sniper Overlord</br>D/D/D D''Arc the Oracle Overlord</br>Destruction Magician</br>Creation Magician</br>Odd-Eyes Rebellion Dragon</br>Igknight Burst</br>Ignition Phoenix</br>Igknight Stinger</br>Black Metal Dragon</br>Toon Cyber Dragon</br>Red-Eyes Flare Metal Dragon</br>Return of Red-Eyes</br></p><p><a href='https://www.youtube.com/user/YGOhack137/videos'>Credit goes to YGOHack137</a></p>",
             "Author": "AccessDenied",
-            "Date" : "March 17th, 2015th"
-        },{
+            "Date": "March 17th, 2015th"
+        }, {
             "Title": "The Monster League has been unleashed!",
             "Subtitle": "Time for some sealed play! BATTLE PACK 3!",
             "Content": "<p>Another update, but this time it's not new cards. It's our new game mode, BATTLE PACK 3: MONSTER LEAGUE! Now Salvation is the only simulator where you can experience the thrills of this unique game format! It is sealed play, so players are restricte to 237 cards total, however, they are all affected by the powerful Monster League Rule: All Monsters are treated as all Types O_O!!</p><p> In order to play, simply make sure Monster League is selected in the 'Card Pool' option when hosting. Deck will be randomized to simulate the opening of packs for sealed.</p>",
             "Author": "ChibiChanNya",
-            "Date" : "March 7th, 2015th"
-        },{
+            "Date": "March 7th, 2015th"
+        }, {
             "Title": "Igknight and Red-Eye Support",
             "Subtitle": "Set fire to your soul and battle",
             "Content": "<p>New Cards! Watch out for bugs, and if you do see some report them to the forums in the bug section. New cards include:<ul><li>Crystal Rose</li><li>Protector of the Shrine</li><li>Card of Red Jewel</li><li>Igknight Caliber</li><li>Igknight Riot</li><li>Igknight Dragnov</li><li>Igknight Musket</li><li>Igknight Magnum</li><li>Igknight Eagle</li><li>Igknight Advenger</li></ul> Special thanks to YGOHax137 and Chibi Chan Nyan. Server stablity improvements special thanks to A2. New forum improments special thanks to CheytheMage and Trinity. Remember to check out our new CasinoBot from Reach!</p><p><a href='https://www.youtube.com/user/YGOhack137/videos'>Credit goes to YGOHack137</a></p>",
             "Author": "AccessDenied",
-            "Date" : "March 6th, 2015th"
+            "Date": "March 6th, 2015th"
         },
         {
             "Title": "CasinoBot is live bitches! Join the chat today!",
             "Subtitle": "How brave are you?",
             "Content": "<p>Reach has recently implemented a CasinoBot live to our chat servers! You can check it out by typing '/join #casino' to enter the channel with the Bot. Using the '.help' command will bring up its list of games you play and how much cash you currently have. If you run into any problems with CasinoBot or it's not live in its channel, let Reach know to look into it.</p>",
             "Author": "Reach",
-            "Date" : "March 2nd, 2015th"
+            "Date": "March 2nd, 2015th"
         },
         {
             "Title": "Korean SECE cards are here!",
             "Subtitle": "Some strange new cards are in",
             "Content": "<p>The 5 unique and...Unique Korea-OCG cards from SECE have been added to the server. They are as follows:<br></p><ul><li>Great Old One Hastur</li><li>Fiendish Rhino Warrior</li><li>Cuben</li><li>Carrot Human</li><li>Rocket Hand</li></ul></p>",
             "Author": "Chibi Chan Nya",
-            "Date" : "February 22th 2015"
-        },{
+            "Date": "February 22th 2015"
+        }, {
             "Title": "Clash of Rebellion has arrived!",
             "Subtitle": "Shiny new cards, report bugs, be mindful of ID changes",
             "Content": "<p>Some new cards have been added to the server! All of the recently revealed Clash of Rebellion cards are in. Most of CROS cards had their ID's changed, so If you've been using Zefras, Raidraptors or Performapal, make sure you check your decks!</p> <p><a href='http://ygorganization.com/buymoreraidraptors/'>Newest Cards/a></p><p><a href='https://www.youtube.com/user/YGOhack137/videos'>Credit goes to YGOHack137</a></p>",
             "Author": "Chibi Chan Nya",
-            "Date" : "February 17th 2015"
-        },{
+            "Date": "February 17th 2015"
+        }, {
             "Title": "Most of CROS added",
             "Subtitle": "New cards! But watch out for bugs",
             "Content": "<p>The following cards have been added to the server and can be used after updating. Remember to report bugs in the forum.<br></p><ul><li>Performapal Springoose</li><li>Performapal Hammer Mammoth</li><li>Mithra the Thunder Vassal</li><li>Neptabyss the Atlantean Prince</li><li>An Unexpected Guy</li><li>Fluffal Crane</li><li>Cyber Dragon Infinity</li><li>Chimeratech Rampage Dragon</li><li>Edge Imp Tomahawk</li><li>Frightfur Custom</li><li>Planetellarknight Ptolemaios</li><li>El-Shaddoll Anomalilith</li><li>Deskbot 004</li><li>Garm the Storm Vassal</li><li>Infernoid Lilith</li><li>Mud Statue of the Kumonyou</li><li>Yosenju Kodama</li><li>Edge Imp DT Modoki</li><li>Superheavy Samurai Soul Buster Gauntlet</li><li>Performapal Pinch Helper</li><li>Performapal Bowhopper</li><li>Fiendish Hound Octoros</li><li>Madolche Puddingcess Choco A La Mode</li><li>Raid Raptors - Blaze Falcon</li><li>Superheavy Samurai Big Wara-G</li><li>Fire King's Island</li><li>Lucius the Shadow Vassal</li><li>Berlines the Firestorm Vassal</li><li>Grieving Fiend</li><li>Superheavy Samurai Gro-V</li><li>Dizzying Wind of the Yosen Realm</li><li>Yosenju Oyamabiko</li><li>Stitching Reborn</li><li>Performapal Lizardraw</li><li>Pendulum Arise</li><li>Frozen Void</li><li>The True Monarch Dominion</li><li>Pudding Force</li><li>Magma Dragon</li><li>Landrobe the Rock Vassal</li><li>Abyssal Stungray</li><li>Re-Dice</li><li>Jar of Avarice</li></ul><p> Additionally, some ID's may have changed, check your decks. We will be adding the remaining CROS cards as soon as possible!</p> <p><a href='https://www.youtube.com/user/YGOhack137/videos'>Credit goes to YGOHack137</a></p>",
             "Author": "Chibi Chan Nya",
-            "Date" : "February 12th 2015"
-        },{
+            "Date": "February 12th 2015"
+        }, {
             "Title": "Some ID changes today",
             "Subtitle": "Decks and Replays might be damaged!",
             "Content": "<p>Some cleaning up was done to the databases today and a few cards have changed their ID's, which means that they will be removed from all Decks and Replays that contain them. The affected cards are the following.<br></p><ul><li>Madolche Puddingcess Choco A La Mode</li><li>Dark Burning Attack</li><li>Dark Burning Magic</li><li>Dragoons of Draconia</li><li>Eternal Soul</li><li>Ring of Peace</li></ul><p>We apologize for any inconvenience this might have caused, but maintaining accurate IDs is an important task. More ID changes should be coming in the following weeks, mostly concernin the 'Zefra' cards. We will be posting the announcement as soon as it happens, so stay alert!<br></p>",
             "Author": "Chibi Chan Nya",
-            "Date" : "February 5th 2015"
-        },{
+            "Date": "February 5th 2015"
+        }, {
             "Title": "Anime Cards Released",
             "Subtitle": "Salvation releases new series of anime-based cards",
             "Content": "<p>As we post this, a large bulk of over 240 anime cards are reaching our servers and will soon be available to users of the Salvation YGOPro Server by updating their client! It is every single card from the Tag Force games and ONLY those. It will set the foundation for SD's anime set!</p><p>To access these cards, open your SD Launcher, wait for full updates, go to settings, database, and pick <strong>1-Anime</strong>. You'll immediately see the effect in your deck editor. Keep in mind many of these cards were made in a hurry and are likely to contain <strong>many</strong> bugs! We depend on you lovely users testing to be able to find them all. We will be opening a bug report thread right after this so let us know if anything isn't functioning correctly.</p><p> Above all, have fun and enjoy this new feature of the Salvation YGOPro Server! Many of our staff have been pushing for it for over one year now and we are very proud to announce that <strong>anime is here at Salvation.</strong></p><a href='http://forum.ygopro.us/index.php?/topic/17-first-batch-of-anime-cards-is-here/'>",
             "Author": "Chibi Chan Nya",
-            "Date" : "January 30th 2015"
-        },{
+            "Date": "January 30th 2015"
+        }, {
             "Title": "Welcome to Salvation",
             "Subtitle": "A new Yu-Gi-Oh! Simulator",
             "Content": "Welcome to the newest YGOPro Server! This server and its unique launcher are geared at helping the community to heal from years of arguments and power struggles. Help us help the community by spreading the word.",
