@@ -1,4 +1,4 @@
-var translationDB = [{
+﻿var translationDB = [{
     "item": "data-translation-salvationserver",
     "en": "Salvation Server",
     "es": "Servidor Salvation",
@@ -749,7 +749,7 @@ var translationDB = [{
     "pt": "",
     "nl": "",
     "it": "",
-    "tr": "",
+    "tr": "Program Ayarları",
     "zh": "",
     "ko": "",
     "jp": "",
