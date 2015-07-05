@@ -521,16 +521,16 @@
                         <label data-translation-refuseduelrequests>Refuse Duel Requests</label>
                         <input type="checkbox" data-localhost="refuse_duel_requests">
                         <label data-translation-launcherlanguage="">Launcher Language</label>
-                        <select id="language">
-                            <option onclick="translateLang('en')" value="0">English</option>
-                            <option onclick="translateLang('es')" value="1">Español</option>
-                            <option onclick="translateLang('de')" value="2">Deutsch</option>
-                            <option onclick="translateLang('fr')" value="3">Français</option>
-                            <option onclick="translateLang('pt')" value="4">Português</option>
-                            <option onclick="translateLang('nl')" value="5">Nederlands</option>
-                            <option onclick="translateLang('tr')" value="6">Türkçe</option>
-                            <option onclick="translateLang('jp')" value="7">日本語</option>
-                            <option onclick="translateLang('fa')" value="8">فارسی</option>
+                        <select id="language" onChange="translateLang(this.value)">
+                            <option value="en">English</option>
+                            <option value="es">Español</option>
+                            <option value="de">Deutsch</option>
+                            <option value="fr">Français</option>
+                            <option value="pt">Português</option>
+                            <option value="nl">Nederlands</option>
+                            <option value="tr">Türkçe</option>
+                            <option value="jp">日本語</option>
+                            <option value="fa">فارسی</option>
                         </select>
                     </div>
                 </div>
