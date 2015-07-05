@@ -4,7 +4,7 @@ process.title = 'Update Detection System';
 var fs = require('fs'),
     path = require('path'),
     spawn = require('child_process').spawn;
-    
+
 function dirTree(filename) {
     'use strict';
     var stats = fs.lstatSync(filename),
@@ -51,14 +51,21 @@ function update() {
             "type": "folder",
             "subfolder": [ygopro, plugins, license, packagejson, interfacefolder]
         },
-        git = spawn('git', ['pull']);
+        servergit = spawn('git', ['pull']),
+        scriptgit = spawn('git', ['pull'], {
+            cwd: './ygopro/script'
+        }),
+        picsgit = spawn('git', ['pull']),
+        {
+            cwd: './ygopro/pics'
+        });
 
-    fs.writeFile('manifest/ygopro.json', JSON.stringify(installation, null, 4), function () {
-        //'use strict';
-        fs.createReadStream('ygopro/databases/0-en-OCGTCG.cdb').pipe(fs.createWriteStream('ygopro/cards.cdb'));
-    });
+fs.writeFile('manifest/ygopro.json', JSON.stringify(installation, null, 4), function () {
+    //'use strict';
+    fs.createReadStream('ygopro/databases/0-en-OCGTCG.cdb').pipe(fs.createWriteStream('ygopro/cards.cdb'));
+});
 
-    process.title = 'Update Detection System[' + ((new Date()).getTime() - startTime.getTime()) + 'ms]';
+process.title = 'Update Detection System[' + ((new Date()).getTime() - startTime.getTime()) + 'ms]';
 }
 
 //var sqlite3 = require("sqlite3").verbose(),
@@ -107,5 +114,3 @@ function update() {
 
 update();
 setInterval(update, 60000);
-
-
