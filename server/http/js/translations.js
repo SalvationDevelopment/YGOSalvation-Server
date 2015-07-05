@@ -12,7 +12,7 @@ var translationDB = [{
     "ko": "",
     "jp": "サルベーションサーバ",
     "fa": "سرور سلوایشن",
-    "ar": ""
+    "ar": "سالفيشن سرفر"
 }, {
     "item": "data-translation-deckedit",
     "en": "Deck Edit",
@@ -192,7 +192,7 @@ var translationDB = [{
     "ko": "",
     "jp": "オンライン遊戯王シミュレータ",
     "fa": "بازی یوگیوه آنلاین",
-    "ar": ""
+    "ar": "مقلّد يوغيو الشّبكي"
 }, {
     "item": "data-translation-playnow",
     "en": "Full Windows Client",
@@ -207,7 +207,7 @@ var translationDB = [{
     "ko": "",
     "jp": "完全なWindowsクライアント",
     "fa": "کارخواه برای ویندوز",
-    "ar": ""
+    "ar": "عميل ويندوز الكامل"
 }, {
     "item": "data-translation-login",
     "en": "Login",
@@ -282,7 +282,7 @@ var translationDB = [{
     "ko": "",
     "jp": "フォーラムに登録",
     "fa": "سیاق با تالار گفتگو بکن",
-    "ar": ""
+    "ar": "فتح حساب عن طريق المنتدى"
 }, {
     "item": "data-translation-forgotpassword",
     "en": "Forgot Password",
@@ -297,7 +297,7 @@ var translationDB = [{
     "ko": "",
     "jp": "パスワードを忘れてしまうか?",
     "fa": "گذرواژهت را فراموش کردی؟",
-    "ar": "كلمة السرّ"
+    "ar": "نسيت كلمة السرّ"
 }, {
     "item": "data-translation-ranked",
     "en": "Ranked",
@@ -312,7 +312,7 @@ var translationDB = [{
     "ko": "",
     "jp": "ランクト",
     "fa": "رتبه ای",
-    "ar": ""
+    "ar": "رانك"
 }, {
     "item": "data-translation-currentdeck",
     "en": "Current deck",
@@ -462,7 +462,7 @@ var translationDB = [{
     "ko": "",
     "jp": "ライフポイント",
     "fa": "امتیاز زندگی",
-    "ar": ""
+    "ar": "الحياة"
 }, {
     "item": "data-translation-gamesettings",
     "en": "Game Settings",
@@ -477,7 +477,7 @@ var translationDB = [{
     "ko": "",
     "jp": "ゲームの設定",
     "fa": "تنظیمات بازی",
-    "ar": ""
+    "ar": "إعدادات اللّعبة"
 }, {
     "item": "data-translation-autoplacementwillhavethegameautomaticllypickwherecardsareplaced",
     "en": "Auto Placement will have the game automatically pick where cards are placed.",
@@ -642,7 +642,7 @@ var translationDB = [{
     "ko": "",
     "jp": "DirectXを有効",
     "fa": "دیرکت‌اکس را روشن کن",
-    "ar": ""
+    "ar": "تشغيل DirectX"
 }, {
     "item": "data-translation-antialiasing",
     "en": "Anti Aliasing",
@@ -657,7 +657,7 @@ var translationDB = [{
     "ko": "",
     "jp": "アンチエイリアシング",
     "fa": "ضد پلگی",
-    "ar": ""
+    "ar": "ضدّ اسم المستعار"
 }, {
     "item": "data-translation-fontsize",
     "en": "Font Size",
@@ -717,7 +717,7 @@ var translationDB = [{
     "ko": "",
     "jp": "デフォルト",
     "fa": "استاندارد",
-    "ar": ""
+    "ar": "الأصل"
 }, {
     "item": "data-translation-soundvolume",
     "en": "Sound Volume",
@@ -766,7 +766,7 @@ var translationDB = [{
 }, {
     "item": "data-translation-viewygoprofolder",
     "en": "View YGOPro Folder",
-    "es": "",
+    "es": "Ver FOlder de YGOPro",
     "de": "",
     "fr": "Regarde Fichier YGOPro",
     "pt": "",
@@ -781,46 +781,46 @@ var translationDB = [{
 }, {
     "item": "data-translation-refuseduelrequests",
     "en": "Refuse Duel Requests",
-    "es": "",
+    "es": "Ignorar Peticiones de Duelo",
     "de": "",
     "fr": "Refuser la Demande de Duel",
     "pt": "",
-    "nl": "",
+    "nl": "Verzoek tot Duel Afwijzen",
     "it": "",
     "tr": "Düello İsteklerini Reddet",
     "zh": "",
     "ko": "",
     "jp": "デュエル要求を拒否",
     "fa": "طلب دول را نبینی",
-    "ar": ""
+    "ar": "رفض طلب المبارزة"
 }, {
     "item": "data-translation-launchersettings",
     "en": "Launcher Settings",
-    "es": "",
+    "es": "Ajustes del Programa",
     "de": "",
     "fr": "Paramètres de Launcher",
     "pt": "",
-    "nl": "",
+    "nl": "Instellingen van de Launcher",
     "it": "",
     "tr": "Program Ayarları",
     "zh": "",
     "ko": "",
     "jp": "",
     "fa": "تنظیمات لانچر",
-    "ar": ""
+    "ar": "إعدادات المشغّل"
 }, {
     "item": "data-translation-launcherlanguage",
     "en": "Launcher Language",
-    "es": "",
+    "es": "Idioma del Programa",
     "de": "",
     "fr": "Langage à Launcher",
     "pt": "",
-    "nl": "",
+    "nl": "Taal van de Launcher",
     "it": "",
     "tr": "Program Dili",
     "zh": "",
     "ko": "",
     "jp": "",
     "fa": "زبان لانچر",
-    "ar": ""
+    "ar": "لغة المشغّل"
 }];
