@@ -766,7 +766,7 @@ var translationDB = [{
 }, {
     "item": "data-translation-viewygoprofolder",
     "en": "View YGOPro Folder",
-    "es": "",
+    "es": "Ver FOlder de YGOPro",
     "de": "",
     "fr": "Regarde Fichier YGOPro",
     "pt": "",
@@ -781,7 +781,7 @@ var translationDB = [{
 }, {
     "item": "data-translation-refuseduelrequests",
     "en": "Refuse Duel Requests",
-    "es": "",
+    "es": "Ignorar Peticiones de Duelo",
     "de": "",
     "fr": "Refuser la Demande de Duel",
     "pt": "",
@@ -796,7 +796,7 @@ var translationDB = [{
 }, {
     "item": "data-translation-launchersettings",
     "en": "Launcher Settings",
-    "es": "",
+    "es": "Ajustes del Programa",
     "de": "",
     "fr": "Paramètres de Launcher",
     "pt": "",
@@ -811,7 +811,7 @@ var translationDB = [{
 }, {
     "item": "data-translation-launcherlanguage",
     "en": "Launcher Language",
-    "es": "",
+    "es": "Idioma del Programa",
     "de": "",
     "fr": "Langage à Launcher",
     "pt": "",
