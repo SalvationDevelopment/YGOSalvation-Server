@@ -130,7 +130,7 @@ function translateLang(lang) {
     var i = 0;
     localStorage.language = lang;
     for (i; translationDB.length > i; i++) {
-        if (translationDB[i].item) {
+        if (translationDB[i].item && translationDB[i][lang]) {
             $('[' + translationDB[i].item + ']').text(translationDB[i][lang]);
         }
         if (translationDB[i].note) {
