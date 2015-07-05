@@ -764,7 +764,7 @@
     "fa": "فایل پایگاه داده‌",
     "ar": "ملف قاعدة البيانات"
 }, {
-	"item": "data-translation-viewygoprofolder",
+    "item": "data-translation-viewygoprofolder",
     "en": "View YGOPro Folder",
     "es": "",
     "de": "",
@@ -779,7 +779,7 @@
     "fa": "پوشهی وگوپرو را نگاه کن",
     "ar": "إظهار ملف YGOPro"
 }, {
-	"item": "data-translation-refuseduelrequests",
+    "item": "data-translation-refuseduelrequests",
     "en": "Refuse Duel Requests",
     "es": "",
     "de": "",
@@ -794,7 +794,7 @@
     "fa": "طلب دول را نبینی",
     "ar": ""
 }, {
-	"item": "data-translation-launchersettings",
+    "item": "data-translation-launchersettings",
     "en": "Launcher Settings",
     "es": "",
     "de": "",
