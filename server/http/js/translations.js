@@ -297,7 +297,7 @@ var translationDB = [{
     "ko": "",
     "jp": "パスワードを忘れてしまうか?",
     "fa": "گذرواژهت را فراموش کردی؟",
-    "ar": "كلمة السرّ"
+    "ar": ""
 }, {
     "item": "data-translation-ranked",
     "en": "Ranked",
