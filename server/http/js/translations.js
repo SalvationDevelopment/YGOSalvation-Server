@@ -807,20 +807,20 @@
     "ko": "",
     "jp": "",
     "fa": "تنظیمات لانچر",
-	"ar": ""
+    "ar": ""
 }, {
-	"item": "data-translation-launcherlanguage",
-	"en": "Launcher Language",
-	"es": "",
-	"de": "",
-	"fr": "",
-	"pt": "",
-	"nl": "",
-	"it": "",
-	"tr": "",
-	"zh": "",
-	"ko": "",
-	"jp": "",
-	"fa": "زبان لانچر",
-	"ar": ""
+    "item": "data-translation-launcherlanguage",
+    "en": "Launcher Language",
+    "es": "",
+    "de": "",
+    "fr": "",
+    "pt": "",
+    "nl": "",
+    "it": "",
+    "tr": "",
+    "zh": "",
+    "ko": "",
+    "jp": "",
+    "fa": "زبان لانچر",
+    "ar": ""
 }];
