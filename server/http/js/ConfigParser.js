@@ -12,6 +12,7 @@ function ConfigParser(content, options) {
         blockRegexp = /^\s?\[\s?(.*?)\s?\]\s?$/,
         keyValueDelim = "=",
         newLineDelim = "\r\n",
+		joinKeyValue = false,
         configObject = {},
         currentBlock,
         currentLine;
@@ -20,6 +21,7 @@ function ConfigParser(content, options) {
         blockRegexp = options.blockRegexp || blockRegexp;
         keyValueDelim = options.keyValueDelim || keyValueDelim;
         newLineDelim = options.newLineDelim || newLineDelim;
+		joinKeyValue = options.joinKeyValue || joinKeyValue;
     }
     content = content.split(newLineDelim);
     content.forEach(function(line) {
@@ -41,9 +43,9 @@ function ConfigParser(content, options) {
         }
         currentLine = line.split(keyValueDelim);
         if (currentBlock === undefined) {
-            configObject[currentLine[0]] = currentLine[1];
+            configObject[currentLine[joinKeySlice || 0]] = joinKeyValue ? currentLine.slice(joinKeySlice).join(keyValueDelim) : currentLine[1];
         } else {
-            configObject[currentBlock][currentLine[0]] = currentLine[1];
+            configObject[currentBlock][currentLine[joinKeySlice || 0]] = joinKeyValue ? currentLine.slice(joinKeySlice).join(keyValueDelim) : currentLine[1];
         }
     });
     return configObject;

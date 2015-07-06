@@ -1,12 +1,31 @@
 var cards = [],
     lflist = {};
-$.getJSON('http://ygopro.us/manifest/database.json', function(data) {
-    cards = data;
-});
-$.get('http://ygopro.us/ygopro/lflist.conf', function(data) {
-    lflist = ConfigParser(data, {
-        keyValueDelim: " ",
-        blockRegexp: /^\s?\!(.*?)\s?$/
+$(function() {
+    $.getJSON('http://ygopro.us/manifest/database.json', function(data) {
+        cards = data;
+        $.get('http://ygopro.us/ygopro/lflist.conf', function(data) {
+            var list;
+            lflist = ConfigParser(data, {
+                keyValueDelim: " ",
+                blockRegexp: /^\s?\!(.*?)\s?$/
+            });
+            for (list in lflist) {
+                $('#banlistSelect').append('<option value="' + list + '">' + list + '</option>');
+            }
+            $.get('http://ygopro.us/ygopro/Strings.conf', function(data) {
+                var setcodes = ConfigParser(data, {
+                        keyValueDelim: " ",
+                        commentDelims: [],
+                        blockRegexp: /^\s?\#(.*?)\s?$/,
+                        joinKeyValue: true,
+                        joinKeySlice: 1
+                    }).setcodes,
+                    setcode;
+                for (setcode in setcodes) {
+                    $('#setcodeSelect').append('<option value="' + setcode + '">' + setcodes[setcode] + '</option>');
+                }
+            });
+        });
     });
 });
 
