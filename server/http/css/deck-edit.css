@@ -8,6 +8,7 @@ html * {
 #left {
     height: 100%;
 	float: left;
+	width: 24%;
 }
 #cardimage {
     position: static;
@@ -29,12 +30,55 @@ html * {
 	height: 25%;
 }
 #searchLeft {
+    float: left;
+	height: 100%;
+	width: 33%;
+}
+#banlistSelect {
+    float: left;
+	height: 15%;
+	margin-top: 5%;
+}
+#shuffleDeck {
+    float: right;
+	height: 15%;
+	bottom: 0%;
+}
+#sortDeck {
+    float: right;
+	height: 15%;
+	bottom: 0%;
+}
+#clearDeck {
+    float: right;
+	height: 15%;
+	bottom: 0%;
+}
+#searchRight {
+    float: right;
+	height: 100%;
+	width: 66%;
+}
+#searchLeft {
     position: static;
 	top: 0%;
 	left: 0%;
 	width: 33%;
 	height: 100%;
 }
-	
+#center {
+    width: 50%;
+    left: 25%;
+    right: 25%;
+}
+#right {
+    float: right;
+	height: 74.5%;
+	width: 25%;
+}
+#searchResults {
+	height: 100%;
+	width: 100%;
+}
 	
 	
