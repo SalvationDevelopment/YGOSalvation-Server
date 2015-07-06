@@ -188,7 +188,7 @@ function filterRace(result, race) {
 function filterSetcode(result, setcode) {
     'use strict';
     return result.filter(function(item) {
-        return fSetCode(item, setcode);
+        return fSetcode(item, setcode);
     });
 
 }
