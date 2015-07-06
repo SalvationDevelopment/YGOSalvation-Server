@@ -80,7 +80,7 @@
 						</select>
 						<br />
 						<label for="attributeSelect">Attribute</label>
-						<select id="attributeSelect">
+						<select id="attributeSelect" data-input-attribute>
 							<option value="1">EARTH</option>
 							<option value="2">WATER</option>
 							<option value="4">FIRE</option>
@@ -91,7 +91,7 @@
 						</select>
 						<br />
 						<label for="raceSelect">Type</label>
-						<select id="raceSelect">
+						<select id="raceSelect" data-input-race>
 							<option value="1">Warrior</option>
 							<option value="2">Spellcaster</option>
 							<option value="4">Fairy</option>
@@ -119,18 +119,18 @@
 						</select>
 						<br />
 						<label for="setcodeSelect">Archetype</label>
-						<select id="setcodeSelect">
+						<select id="setcodeSelect" data-input-setcode>
 						</select>
 						<br />
 						<label for="levelInput">Level/Rank</label>
-						<input id="levelInput" type="number" min="1" max="12">
+						<input id="levelInput" type="number" min="1" max="12" data-input-level>
 						<br />
 						<label for="scaleInput">Scale</label>
-						<input id="scaleInput" type="number" min="1" max="12">
+						<input id="scaleInput" type="number" min="1" max="12" data-input-scale>
 					</div>
 					<div class="searchBlock">
 						<label for="forbiddenLimitedSelect">Limit: </label>
-						<select id="forbiddenLimitedSelect">
+						<select id="forbiddenLimitedSelect" data-input-forbiddenlimited>
 							<option value="3">All</option>
 							<option value="0">Forbidden</option>
 							<option value="1">Limited</option>
@@ -138,33 +138,23 @@
 						</select>
 						<br />
 						<label for="atkInput">ATK</label>
-						<input id="atkInput" type="number" min="0">
+						<input id="atkInput" type="number" min="0" data-input-atk>
 						<br />
 						<label for="defInput">DEF</label>
-						<input id="defInput" type="number" min="0">
+						<input id="defInput" type="number" min="0" data-input-def>
 						<br />
 						<label for="nameInput">Name</label>
-						<input id="nameInput" type="text">
+						<input id="nameInput" type="text" data-input-name>
 						<br />
 						<label for="descInput">Description</label>
-						<input id="descInput" type="text">
+						<input id="descInput" type="text" data-input-desc>
 						<br />
 						<button id="clearForm">Reset Filter</button>
 						<button id="searchButton">Search</button>
 					</div>
 				</div>
 				<span id="hiddenInputContainer">
-					<input type="hidden" data-input-name>
-					<input type="hidden" data-input-desc>
 					<input type="hidden" data-input-type>
-					<input type="hidden" data-input-attribute>
-					<input type="hidden" data-input-setcode>
-					<input type="hidden" data-input-race>
-					<input type="hidden" data-input-atk>
-					<input type="hidden" data-input-def>
-					<input type="hidden" data-input-level>
-					<input type="hidden" data-input-scale>
-					<input type="hidden" data-input-forbiddenlimited>
 				</span>
 			</div>
 			<div id="center">
