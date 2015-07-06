@@ -11,14 +11,12 @@ html * {
 	width: 24%;
 }
 #cardimage {
-    position: static;
 	top: 0%;
 	left: 0%;
-	width: 177px;
-	height: 254px;
+	width: 60%;
+	height: 38%;
 }
 #cardDescription {
-    position: static;
 	top: 0%;
 	left: 0%;
 	width: 100%;
