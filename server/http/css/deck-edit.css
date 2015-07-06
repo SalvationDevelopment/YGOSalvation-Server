@@ -7,7 +7,7 @@ html * {
 }
 #left {
     height: 100%;
-	width: 25%;
+	float: left;
 }
 #cardimage {
     position: static;
@@ -24,9 +24,7 @@ html * {
 	height: 60.2%;
 }
 #searchBar {
-    position: static;
-	top: 20%;
-	left: 100%;
+	float: right;
 	width: 75%;
 	height: 25%;
 }
