@@ -1,0 +1,42 @@
+html * {
+    border: 1px solid black;
+}
+#mainContainer {
+    width: 100%;
+    height: 100%;
+}
+#left {
+    height: 100%;
+	width: 25%;
+}
+#cardimage {
+    position: static;
+	top: 0%;
+	left: 0%;
+	width: 177px;
+	height: 254px;
+}
+#cardDescription {
+    position: static;
+	top: 0%;
+	left: 0%;
+	width: 100%;
+	height: 60.2%;
+}
+#searchBar {
+    position: static;
+	top: 20%;
+	left: 100%;
+	width: 75%;
+	height: 25%;
+}
+#searchLeft {
+    position: static;
+	top: 0%;
+	left: 0%;
+	width: 33%;
+	height: 100%;
+}
+	
+	
+	
