@@ -23,6 +23,7 @@ html * {
 	left: 0%;
 	width: 100%;
 	height: 60.2%;
+    margin-bottom: 0px;
 }
 #searchBar {
 	float: right;
