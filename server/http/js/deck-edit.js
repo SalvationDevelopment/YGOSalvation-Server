@@ -9,6 +9,7 @@ $(function() {
                 keyValueDelim: " ",
                 blockRegexp: /^\s?\!(.*?)\s?$/
             });
+			console.log(lflist);
             for (list in lflist) {
                 $('#banlistSelect').append('<option value="' + list + '">' + list + '</option>');
             }
@@ -21,6 +22,7 @@ $(function() {
                         joinKeySlice: 1
                     }).setcodes,
                     setcode;
+				console.log(setcodes);
                 for (setcode in setcodes) {
                     $('#setcodeSelect').append('<option value="' + setcode + '">' + setcodes[setcode] + '</option>');
                 }
