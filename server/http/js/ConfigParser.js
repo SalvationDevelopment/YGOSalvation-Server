@@ -45,9 +45,9 @@ function ConfigParser(content, options) {
         }
         currentLine = line.split(keyValueDelim);
         if (currentBlock === undefined) {
-            configObject[currentLine[joinKeySlice]] = joinKeyValue ? currentLine.slice(joinKeySlice).join(keyValueDelim) : currentLine[1];
+            configObject[currentLine[joinKeySlice]] = joinKeyValue ? currentLine.slice(joinKeySlice + 1).join(keyValueDelim) : currentLine[1];
         } else {
-            configObject[currentBlock][currentLine[joinKeySlice]] = joinKeyValue ? currentLine.slice(joinKeySlice).join(keyValueDelim) : currentLine[1];
+            configObject[currentBlock][currentLine[joinKeySlice]] = joinKeyValue ? currentLine.slice(joinKeySlice + 1).join(keyValueDelim) : currentLine[1];
         }
     });
     return configObject;
