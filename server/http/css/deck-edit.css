@@ -30,7 +30,7 @@ html * {
 #searchLeft {
     float: left;
 	height: 100%;
-	width: 33.6%;
+	width: 33%;
 }
 #banlistSelect {
     float: left;
@@ -40,21 +40,17 @@ html * {
 #shuffleDeck {
     float: right;
 	height: 15%;
-	margin-top: 21%;
-	margin-right: 2%;
+	bottom: 0%;
 }
 #sortDeck {
     float: right;
 	height: 15%;
-	margin-top: 21%;
-	margin-right: 2%;
+	bottom: 0%;
 }
 #clearDeck {
     float: right;
 	height: 15%;
-	margin-top: 21%;
-	margin-right: 2%;
-}
+	bottom: 0%;
 }
 #searchRight {
     float: right;
