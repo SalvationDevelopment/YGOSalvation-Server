@@ -1,168 +1,171 @@
 <html>
-	<head>
-		<title>Salvation Pro | Deck Editor</title>
-		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-		<link rel="stylesheet" type="text/css" href="css/deck-edit.css">
-		<script src="js/ConfigParser.js"></script>
-		<script src="js/jquery-1.11.0.min.js"></script>
-		<script src="js/deck-edit.js"></script>
-	</head>
-	<body>
-		<div id="mainContainer">
-			<div id="left">
-				<div id="cardImage">
-					<img src="" />
-				</div>
-				<div id="cardDescription">
-				</div>
-			</div>
-			<div id="searchBar">
-				<div id="searchLeft">
-					<label for="banlistSelect">Ban List: </label>
-					<select id="banlistSelect">
-					</select>
-					<br />
-					<label for="deckSelect">Deck: </label>
-					<select id="deckSelect">
-					</select>
-					<button id="saveDeck">Save</button>
-					<br />
-					<button id="deleteDeck">Delete</button>
-					<input type="text" id="decknameInput">
-					<button id="saveDeckAs">Save as</button>
-					<br />
-					<button id="shuffleDeck">Shuffle</button>
-					<button id="sortDeck">Sort</button>
-					<button id="clearDeck">Clear</button>
-				</div>
-				<div id="searchRight">
-					<div class="searchBlock">
-						<label for="typeSelect">Category</label>
-						<select id="typeSelect">
-							<option value="5">All</option>
-							<option value="1">Monster</option>
-							<option value="2">Spells</option>
-							<option value="4">Traps</option>
-						</select>
-						<select id="monsterSelect">
-							<option value="17">Normal</option>
-							<option value="33">Effect</option>
-							<option value="97">Fusion</option>
-							<option value="161">Ritual</option>
-							<option value="8225">Synchro</option>
-							<option value="8388641">Xyz</option>
-							<option value="4129">Tuner</option>
-							<option value="94944637">Gemini</option>
-							<option value="1057">Union</option>
-							<option value="545">Spirit</option>
-							<option value="2097185">Flip</option>
-							<option value="4194337">Toon</option>
-							<option value="16777249">Pendulum</option>
-						</select>
-						<select id="spellSelect">
-							<option value="2">Normal</option>
-							<option value="65538">Quick-Play</option>
-							<option value="131074">Continuous</option>
-							<option value="130">Ritual</option>
-							<option value="262146">Equip</option>
-							<option value="524290">Field</option>
-						</select>
-						<select id="trapSelect">
-							<option value="4">Normal</option>
-							<option value="131076">Continuous</option>
-							<option value="1048580">Counter</option>
-						</select>
-						<br />
-						<label for="attributeSelect">Attribute</label>
-						<select id="attributeSelect" data-input-attribute>
-							<option value="1">EARTH</option>
-							<option value="2">WATER</option>
-							<option value="4">FIRE</option>
-							<option value="8">WIND</option>
-							<option value="16">LIGHT</option>
-							<option value="32">DARK</option>
-							<option value="64">DIVINE</option>
-						</select>
-						<br />
-						<label for="raceSelect">Type</label>
-						<select id="raceSelect" data-input-race>
-							<option value="1">Warrior</option>
-							<option value="2">Spellcaster</option>
-							<option value="4">Fairy</option>
-							<option value="8">Fiend</option>
-							<option value="16">Zombie</option>
-							<option value="32">Machine</option>
-							<option value="64">Aqua</option>
-							<option value="128">Pyro</option>
-							<option value="256">Rock</option>
-							<option value="512">Winged-Beast</option>
-							<option value="1024">Plant</option>
-							<option value="2048">Insect</option>
-							<option value="4096">Thunder</option>
-							<option value="8192">Dragon</option>
-							<option value="16384">Beast</option>
-							<option value="32768">Beast-Warrior</option>
-							<option value="65536">Dinosaur</option>
-							<option value="131072">Fish</option>
-							<option value="262144">Sea Serpent</option>
-							<option value="524288">Reptile</option>
-							<option value="1048576">Psychic</option>
-							<option value="2097152">Divine-Beast</option>
-							<option value="4194304">Creator God</option>
-							<option value="8388608">Wyrm</option>
-						</select>
-						<br />
-						<label for="setcodeSelect">Archetype</label>
-						<select id="setcodeSelect" data-input-setcode>
-						</select>
-						<br />
-						<label for="levelInput">Level/Rank</label>
-						<input id="levelInput" type="number" min="1" max="12" data-input-level>
-						<br />
-						<label for="scaleInput">Scale</label>
-						<input id="scaleInput" type="number" min="1" max="12" data-input-scale>
-					</div>
-					<div class="searchBlock">
-						<label for="forbiddenLimitedSelect">Limit: </label>
-						<select id="forbiddenLimitedSelect" data-input-forbiddenlimited>
-							<option value="3">All</option>
-							<option value="0">Forbidden</option>
-							<option value="1">Limited</option>
-							<option value="2">Semi-Limited</option>
-						</select>
-						<br />
-						<label for="atkInput">ATK</label>
-						<input id="atkInput" type="number" min="0" data-input-atk>
-						<br />
-						<label for="defInput">DEF</label>
-						<input id="defInput" type="number" min="0" data-input-def>
-						<br />
-						<label for="nameInput">Name</label>
-						<input id="nameInput" type="text" data-input-name>
-						<br />
-						<label for="descInput">Description</label>
-						<input id="descInput" type="text" data-input-desc>
-						<br />
-						<button id="clearForm">Reset Filter</button>
-						<button id="searchButton">Search</button>
-					</div>
-				</div>
-				<span id="hiddenInputContainer">
+
+<head>
+    <title>Salvation Pro | Deck Editor</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <link rel="stylesheet" type="text/css" href="css/deck-edit.css">
+    <script src="js/ConfigParser.js"></script>
+    <script src="js/jquery-1.11.0.min.js"></script>
+    <script src="js/deck-edit.js"></script>
+</head>
+
+<body>
+    <div id="mainContainer">
+        <div id="left">
+            <div id="cardImage">
+                <img src="" />
+            </div>
+            <div id="cardDescription">
+            </div>
+        </div>
+        <div id="searchBar">
+            <div id="searchLeft">
+                <label for="banlistSelect">Ban List: </label>
+                <select id="banlistSelect">
+                </select>
+                <br />
+                <label for="deckSelect">Deck: </label>
+                <select id="deckSelect">
+                </select>
+                <button id="saveDeck">Save</button>
+                <br />
+                <button id="deleteDeck">Delete</button>
+                <input type="text" id="decknameInput">
+                <button id="saveDeckAs">Save as</button>
+                <br />
+                <button id="shuffleDeck">Shuffle</button>
+                <button id="sortDeck">Sort</button>
+                <button id="clearDeck">Clear</button>
+            </div>
+            <div id="searchRight">
+                <div class="searchBlock">
+                    <label for="typeSelect">Category</label>
+                    <select id="typeSelect">
+                        <option value="5">All</option>
+                        <option value="1">Monster</option>
+                        <option value="2">Spells</option>
+                        <option value="4">Traps</option>
+                    </select>
+                    <select id="monsterSelect">
+                        <option value="17">Normal</option>
+                        <option value="33">Effect</option>
+                        <option value="97">Fusion</option>
+                        <option value="161">Ritual</option>
+                        <option value="8225">Synchro</option>
+                        <option value="8388641">Xyz</option>
+                        <option value="4129">Tuner</option>
+                        <option value="94944637">Gemini</option>
+                        <option value="1057">Union</option>
+                        <option value="545">Spirit</option>
+                        <option value="2097185">Flip</option>
+                        <option value="4194337">Toon</option>
+                        <option value="16777249">Pendulum</option>
+                    </select>
+                    <select id="spellSelect">
+                        <option value="2">Normal</option>
+                        <option value="65538">Quick-Play</option>
+                        <option value="131074">Continuous</option>
+                        <option value="130">Ritual</option>
+                        <option value="262146">Equip</option>
+                        <option value="524290">Field</option>
+                    </select>
+                    <select id="trapSelect">
+                        <option value="4">Normal</option>
+                        <option value="131076">Continuous</option>
+                        <option value="1048580">Counter</option>
+                    </select>
+                    <br />
+                    <label for="attributeSelect">Attribute</label>
+                    <select id="attributeSelect" data-input-attribute>
+                        <option value="1">EARTH</option>
+                        <option value="2">WATER</option>
+                        <option value="4">FIRE</option>
+                        <option value="8">WIND</option>
+                        <option value="16">LIGHT</option>
+                        <option value="32">DARK</option>
+                        <option value="64">DIVINE</option>
+                    </select>
+                    <br />
+                    <label for="raceSelect">Type</label>
+                    <select id="raceSelect" data-input-race>
+                        <option value="1">Warrior</option>
+                        <option value="2">Spellcaster</option>
+                        <option value="4">Fairy</option>
+                        <option value="8">Fiend</option>
+                        <option value="16">Zombie</option>
+                        <option value="32">Machine</option>
+                        <option value="64">Aqua</option>
+                        <option value="128">Pyro</option>
+                        <option value="256">Rock</option>
+                        <option value="512">Winged-Beast</option>
+                        <option value="1024">Plant</option>
+                        <option value="2048">Insect</option>
+                        <option value="4096">Thunder</option>
+                        <option value="8192">Dragon</option>
+                        <option value="16384">Beast</option>
+                        <option value="32768">Beast-Warrior</option>
+                        <option value="65536">Dinosaur</option>
+                        <option value="131072">Fish</option>
+                        <option value="262144">Sea Serpent</option>
+                        <option value="524288">Reptile</option>
+                        <option value="1048576">Psychic</option>
+                        <option value="2097152">Divine-Beast</option>
+                        <option value="4194304">Creator God</option>
+                        <option value="8388608">Wyrm</option>
+                    </select>
+                    <br />
+                    <label for="setcodeSelect">Archetype</label>
+                    <select id="setcodeSelect" data-input-setcode>
+                    </select>
+                    <br />
+                    <label for="levelInput">Level/Rank</label>
+                    <input id="levelInput" type="number" min="1" max="12" data-input-level>
+                    <br />
+                    <label for="scaleInput">Scale</label>
+                    <input id="scaleInput" type="number" min="1" max="12" data-input-scale>
+                </div>
+                <div class="searchBlock">
+                    <label for="forbiddenLimitedSelect">Limit: </label>
+                    <select id="forbiddenLimitedSelect" data-input-forbiddenlimited>
+                        <option value="3">All</option>
+                        <option value="0">Forbidden</option>
+                        <option value="1">Limited</option>
+                        <option value="2">Semi-Limited</option>
+                    </select>
+                    <br />
+                    <label for="atkInput">ATK</label>
+                    <input id="atkInput" type="number" min="0" data-input-atk>
+                    <br />
+                    <label for="defInput">DEF</label>
+                    <input id="defInput" type="number" min="0" data-input-def>
+                    <br />
+                    <label for="nameInput">Name</label>
+                    <input id="nameInput" type="text" data-input-name>
+                    <br />
+                    <label for="descInput">Description</label>
+                    <input id="descInput" type="text" data-input-desc>
+                    <br />
+                    <button id="clearForm">Reset Filter</button>
+                    <button id="searchButton">Search</button>
+                </div>
+            </div>
+            <span id="hiddenInputContainer">
 					<input type="hidden" data-input-type>
 				</span>
-			</div>
-			<div id="center">
-				<div id="mainDeck">
-				</div>
-				<div id="extraDeck">
-				</div>
-				<div id="sideDeck">
-				</div>
-			</div>
-			<div id="right">
-				<div id="searchResults">
-				</div>
-			</div>
-		</div>
-	</body>
+        </div>
+        <div id="center">
+            <div id="mainDeck">
+            </div>
+            <div id="extraDeck">
+            </div>
+            <div id="sideDeck">
+            </div>
+        </div>
+        <div id="right">
+            <div id="searchResults">
+            </div>
+        </div>
+    </div>
+</body>
+
 </html>

@@ -1,95 +1,121 @@
 html * {
     border: 1px solid black;
 }
+
 #mainContainer {
     width: 100%;
     height: 100%;
 }
+
 #left {
     height: 100%;
-	float: left;
-	width: 24%;
+    float: left;
+    width: 24%;
 }
+
 #cardimage {
-	top: 0%;
-	left: 0%;
-	width: 60%;
-	height: 38%;
+    top: 0%;
+    left: 0%;
+    width: 60%;
+    height: 38%;
 }
+
 #cardDescription {
-	top: 0%;
-	left: 0%;
-	width: 100%;
-	height: 61.2%;
+    top: 0%;
+    left: 0%;
+    width: 100%;
+    height: 61.2%;
 }
+
 #searchBar {
-	float: right;
-	width: 75.7%;
-	height: 25%;
+    float: right;
+    width: 75.7%;
+    height: 25%;
 }
+
 #searchLeft {
     float: left;
-	height: 100%;
-	width: 33%;
+    height: 100%;
+    width: 33%;
 }
+
 #banlistSelect {
     float: left;
-	height: 15%;
-	margin-top: 5%;
+    height: 15%;
 }
+
 #shuffleDeck {
     float: right;
-	height: 15%;
-	bottom: 0%;
+    height: 15%;
+    bottom: 0%;
 }
+
 #sortDeck {
     float: right;
-	height: 15%;
-	bottom: 0%;
+    height: 15%;
+    bottom: 0%;
 }
+
 #clearDeck {
     float: right;
-	height: 15%;
-	bottom: 0%;
+    height: 15%;
+    bottom: 0%;
 }
+
 #searchRight {
     float: right;
-	height: 100%;
-	width: 66%;
+    height: 100%;
+    width: 66%;
 }
+
 #center {
     height: 74.5%;
-	width: 50.5%;
-	border: 1px solid red;
-	float: left;
+    width: 50.5%;
+    border: 1px solid red;
+    float: left;
 }
+
 #mainDeck {
     float: left;
-	height: 66%;
-	width: 100%;
-	border: 1px solid blue;
+    height: 66%;
+    width: 100%;
+    border: 1px solid blue;
 }
+
 #extraDeck {
-	float: left;
-	height: 17.5%;
-	width: 100%;
-	border: 1px solid green;
+    float: left;
+    height: 17.5%;
+    width: 100%;
+    border: 1px solid green;
 }
+
 #sideDeck {
-	float: left;
-	height: 15.5%;
-	width: 100%;
-	border: 1px solid yellow;
+    float: left;
+    height: 15.5%;
+    width: 100%;
+    border: 1px solid yellow;
 }
+
 #right {
     float: right;
-	height: 74.5%;
-	width: 25%;
-	border: 1px solid green;
+    height: 74.5%;
+    width: 25%;
+    border: 1px solid green;
 }
+
 #searchResults {
-	height: 100%;
-	width: 100%;
+    height: 100%;
+    width: 100%;
 }
-	
-	
+
+#maincontainer label {
+    width: 45%;
+    display: block;
+    float: left;
+}
+
+#maincontainer select {
+    width: 45%;
+    display: block;
+    float: left;
+}
