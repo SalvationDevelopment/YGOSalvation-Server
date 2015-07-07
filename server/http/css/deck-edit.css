@@ -1,4 +1,8 @@
-html * {
+* {
+    box-sizing: border-box;
+}
+
+html div {
     border: 1px solid black;
 }
 
@@ -37,11 +41,6 @@ html * {
     float: left;
     height: 100%;
     width: 33%;
-}
-
-#banlistSelect {
-    float: left;
-    height: 15%;
 }
 
 #shuffleDeck {
@@ -109,7 +108,7 @@ html * {
 }
 
 #maincontainer label {
-    width: 45%;
+    width: 33%;
     display: block;
     float: left;
 }
@@ -118,4 +117,8 @@ html * {
     width: 45%;
     display: block;
     float: left;
+}
+
+body {
+    background: rbga(0, 0, 0, .25);
 }
