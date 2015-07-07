@@ -151,3 +151,7 @@ div#clearsortshufflewrapper {
     width: 50%;
     margin: 0 auto;
 }
+
+#monsterSelect, #spellSelect, #trapSelect {
+	display: none;
+}
