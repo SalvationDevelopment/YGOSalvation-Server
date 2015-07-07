@@ -24,7 +24,7 @@ html * {
 }
 #searchBar {
 	float: right;
-	width: 75%;
+	width: 75.7%;
 	height: 25%;
 }
 #searchLeft {
@@ -57,22 +57,35 @@ html * {
 	height: 100%;
 	width: 66%;
 }
-#searchLeft {
-    position: static;
-	top: 0%;
-	left: 0%;
-	width: 33%;
-	height: 100%;
-}
 #center {
-    width: 50%;
-    left: 25%;
-    right: 25%;
+    height: 74.5%;
+	width: 50.5%;
+	border: 1px solid red;
+	float: left;
+}
+#mainDeck {
+    float: left;
+	height: 66%;
+	width: 100%;
+	border: 1px solid blue;
+}
+#extraDeck {
+	float: left;
+	height: 17.5%;
+	width: 100%;
+	border: 1px solid green;
+}
+#sideDeck {
+	float: left;
+	height: 15.5%;
+	width: 100%;
+	border: 1px solid yellow;
 }
 #right {
     float: right;
 	height: 74.5%;
 	width: 25%;
+	border: 1px solid green;
 }
 #searchResults {
 	height: 100%;
