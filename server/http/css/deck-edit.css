@@ -153,5 +153,5 @@ div#clearsortshufflewrapper {
 }
 
 #monsterSelect, #spellSelect, #trapSelect {
-	display: none;
+	display: none !important;
 }
