@@ -20,10 +20,54 @@ $(function() {
                         joinKeyValue: true,
                         joinKeySlice: 1
                     }).setcodes,
-                    setcode;
+                    setcode,
+                    monsterSelect = $('#monsterSelect'),
+                    spellSelect = $('#spellSelect'),
+                    trapSelect = $('#trapSelect'),
+                    raceSelect = $('#raceSelect'),
+                    attributeSelect = $('#attributeSelect');
                 for (setcode in setcodes) {
                     $('#setcodeSelect').append('<option value="' + parseInt(setcode, 16) + '">' + setcodes[setcode] + '</option>');
                 }
+                $('#typeSelect').on('change', function() {
+                    switch ($(this).val()) {
+                        case "5":
+                            { // all
+                                monsterSelect.fadeOut();
+                                spellSelect.fadeOut();
+                                trapSelect.fadeOut();
+                                $('[data-input-type]').removeAttr('data-input-type');
+                                break;
+                            }
+                        case "1":
+                            { // monster
+                                monsterSelect.fadeIn().attr('data-input-type', '');
+                                spellSelect.fadeOut().removeAttr('data-input-type');
+                                trapSelect.fadeOut().removeAttr('data-input-type');
+                                raceSelect.fadeOut();
+                                attributeSelect.fadeOut();
+                                break;
+                            }
+                        case "2":
+                            { // spell
+                                spellSelect.fadeIn().attr('data-input-type', '');
+                                monsterSelect.fadeOut().removeAttr('data-input-type');
+                                trapSelect.fadeOut().removeAttr('data-input-type');
+                                raceSelect.fadeOut();
+                                attributeSelect.fadeOut();
+                                break;
+                            }
+                        case "4":
+                            { // traps
+                                trapSelect.fadeIn().attr('data-input-type', '');
+                                monsterSelect.fadeOut().removeAttr('data-input-type');
+                                spellSelect.fadeOut().removeAttr('data-input-type');
+                                raceSelect.fadeOut();
+                                attributeSelect.fadeOut();
+                                break;
+                            }
+                    }
+                });
             });
         });
     });
