@@ -766,7 +766,7 @@ var translationDB = [{
 }, {
     "item": "data-translation-viewygoprofolder",
     "en": "View YGOPro Folder",
-    "es": "Ver FOlder de YGOPro",
+    "es": "Ver Folder de YGOPro",
     "de": "",
     "fr": "Regarde Fichier YGOPro",
     "pt": "Ver a pasta de YGOPro",
