@@ -1,4 +1,24 @@
 /*jslint  node: true, plusplus: true*/
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
+var httpsServer;
+try {
+    var fs = require('fs'),
+        ssloptions = {
+            ca: fs.readFileSync(process.env.SSL + 'sub.class1.server.ca.pem'),
+            key: fs.readFileSync(process.env.SSL + 'ssl.key.unsecure'),
+            cert: fs.readFileSync(process.env.SSL + 'ssl.crt')
+        },
+        http = require('https');
+    var httpsServer = http.createServer(ssloptions);
+    httpsServer.listen(8082);
+} catch (e) {
+    console.log('not using SSL')
+    var http = require('http');
+    var httpsServer = http.createServer();
+    httpsServer.listen(8082);
+}
+
+
 var ygoserver, //port 8911 ygopro Server
     net = require('net'), //tcp connections
     WebSocket = require('ws').Server,
@@ -49,7 +69,7 @@ function initiateSlave() {
     ygoserver.listen(8911);
 
     ws = new WebSocket({
-        port: 8082
+        server: httpsServer
     });
     ws.on('connection', function connection(socket) {
         var framer = new Framemaker();
@@ -62,7 +82,7 @@ function initiateSlave() {
             });
         };
         socket.end = function () {
-            socket = null;
+
         };
         socket.on('message', function incoming(data) {
             var frame,
@@ -81,7 +101,10 @@ function initiateSlave() {
 
         });
         socket.on('close', function close() {
-            //console.log('disconnected');
+            console.log('WS, disconnected');
+        });
+        socket.on('error', function close(error) {
+            console.log(error);
         });
     });
 
