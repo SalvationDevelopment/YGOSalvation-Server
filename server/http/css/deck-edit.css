@@ -72,6 +72,22 @@ html div {
 	border: 1px solid orange;
 }
 
+#monsterSelect {
+    float: right;
+	height: 15%;
+	display: none !important;
+}
+
+#spellSelect {
+    float: right;
+	height: 15%;
+	display: none !important;
+}
+#trapSelect{
+	float: right;
+	height: 15%;
+	display: none !important;
+}
 #center {
     height: 74.5%;
     width: 50.5%;
