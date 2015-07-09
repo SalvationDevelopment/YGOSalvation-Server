@@ -59,7 +59,7 @@ html div {
     bottom: 0%;
 }
 
-#clearDeck {
+button#clearDeck {
     float: right;
     height: 15%;
     bottom: 0%;
@@ -73,21 +73,143 @@ html div {
 }
 
 #monsterSelect {
+    display: block;
     float: right;
 	height: 15%;
 	display: none !important;
 }
 
 #spellSelect {
+    display: block;
     float: right;
 	height: 15%;
 	display: none !important;
 }
+
 #trapSelect{
+    display: block;
 	float: right;
 	height: 15%;
 	display: none !important;
 }
+
+select#typeSelect {
+    display: block;
+    float: left;
+    height: 15%;
+    width: 20%;
+    margin-left: 1%;
+    margin-top: 1.5%;
+}
+
+select#attributeSelect {
+    display: block;
+    float: left;
+    height: 15%;
+    width: 20%;
+    margin-left: 1%;
+    margin-top: 1.5%;
+}
+
+select#raceSelect {
+    display: block;
+    float: left;
+    height: 15%;
+    width: 20%;
+    margin-left: 1%;
+    margin-top: 1.5%;
+}
+
+select#setcodeSelect {
+    display: block;
+    float: left;
+    height: 15%;
+    width: 20%;
+    margin-left: 1%;
+    margin-top: 1.5%;
+}
+
+input#levelInput {
+    display: block;
+    float: left;
+    height: 15%;
+    width: 20%;
+    margin-left: 1%;
+    margin-top: 1.5%;
+}
+
+#raceSelect {
+    display: block;
+    float: left;
+    height: 15%;
+    width: 20%;
+    margin-left: 1%;
+    margin-top: 1.5%;
+}
+
+select#forbiddenLimitedSelect {
+    display: block;
+    float: left;
+	height: 15%;
+    width: 20%;
+	margin-left: 1%;
+	margin-top: 1.5%;
+}
+
+input#atkInput {
+    display: block;
+    float: left;
+	height: 15%;
+    width: 20%;
+	margin-left: 1%;
+	margin-top: 1.5%;
+}
+
+input#defInput {
+    display: block;
+    float: left;
+	height: 15%;
+    width: 20%;
+	margin-left: 1%;
+	margin-top: 1.5%;
+}
+
+input#nameInput {
+    display: block;
+    float: left;
+	height: 15%;
+    width: 20%;
+	margin-left: 1%;
+	margin-top: 1.5%;
+}
+
+#descInput {
+    display: block;
+    float: left;
+	height: 15%;
+    width: 20%;
+	margin-left: 1%;
+	margin-top: 1.5%;
+}
+
+button#clearForm {
+    display: block;
+    float: left;
+	height: 15%;
+    width: 20%;
+	margin-left: 1%;
+	margin-top: 1.5%;
+}
+
+input#scaleInput {
+    display: block;
+    float: left;
+    height: 15%;
+    width: 20%;
+    margin-left: 1%;
+    margin-top: 1.5%;
+}
+
 #center {
     height: 74.5%;
     width: 50.5%;
