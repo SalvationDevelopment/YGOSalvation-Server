@@ -22,7 +22,7 @@ html div {
     left: 0%;
     width: 60%;
     height: 38%;
-	border: 1px solid blue;
+    border: 1px solid blue;
 }
 
 #cardDescription {
@@ -30,7 +30,7 @@ html div {
     left: 0%;
     width: 100%;
     height: 62%;
-	border: 1px solid red;
+    border: 1px solid red;
 }
 
 #searchBar {
@@ -44,7 +44,7 @@ html div {
     height: 100%;
     width: 33%;
     padding: 1%;
-	border: 1px solid yellow;
+    border: 1px solid yellow;
 }
 
 #shuffleDeck {
@@ -69,28 +69,28 @@ button#clearDeck {
     float: right;
     height: 100%;
     width: 66%;
-	border: 1px solid orange;
+    border: 1px solid orange;
 }
 
 #monsterSelect {
     display: block;
     float: right;
-	height: 15%;
-	display: none !important;
+    height: 15%;
+    display: none !important;
 }
 
 #spellSelect {
     display: block;
     float: right;
-	height: 15%;
-	display: none !important;
+    height: 15%;
+    display: none !important;
 }
 
 #trapSelect{
     display: block;
-	float: right;
-	height: 15%;
-	display: none !important;
+    float: right;
+    height: 15%;
+    display: none !important;
 }
 
 select#typeSelect {
@@ -150,55 +150,55 @@ input#levelInput {
 select#forbiddenLimitedSelect {
     display: block;
     float: left;
-	height: 15%;
+    height: 15%;
     width: 20%;
-	margin-left: 1%;
-	margin-top: 1.5%;
+    margin-left: 1%;
+    margin-top: 1.5%;
 }
 
 input#atkInput {
     display: block;
     float: left;
-	height: 15%;
+    height: 15%;
     width: 20%;
-	margin-left: 1%;
-	margin-top: 1.5%;
+    margin-left: 1%;
+    margin-top: 1.5%;
 }
 
 input#defInput {
     display: block;
     float: left;
-	height: 15%;
+    height: 15%;
     width: 20%;
-	margin-left: 1%;
-	margin-top: 1.5%;
+    margin-left: 1%;
+    margin-top: 1.5%;
 }
 
 input#nameInput {
     display: block;
     float: left;
-	height: 15%;
+    height: 15%;
     width: 20%;
-	margin-left: 1%;
-	margin-top: 1.5%;
+    margin-left: 1%;
+    margin-top: 1.5%;
 }
 
 #descInput {
     display: block;
     float: left;
-	height: 15%;
+    height: 15%;
     width: 20%;
-	margin-left: 1%;
-	margin-top: 1.5%;
+    margin-left: 1%;
+    margin-top: 1.5%;
 }
 
 button#clearForm {
     display: block;
     float: left;
-	height: 15%;
+    height: 15%;
     width: 20%;
-	margin-left: 1%;
-	margin-top: 1.5%;
+    margin-left: 1%;
+    margin-top: 1.5%;
 }
 
 input#scaleInput {
