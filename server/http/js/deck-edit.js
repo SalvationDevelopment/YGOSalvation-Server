@@ -10,7 +10,7 @@ $(function() {
                 blockRegexp: /^\s?\!(.*?)\s?$/
             });
             for (list in lflist) {
-                $('#banlistSelect').append('<option value="' + list + '">' + list + '</option>');
+                $('.banlistSelect').append('<option value="' + list + '">' + list + '</option>');
             }
             $.get('http://ygopro.us/ygopro/Strings.conf', function(data) {
                 var setcodes = ConfigParser(data, {
@@ -21,15 +21,15 @@ $(function() {
                         joinKeySlice: 1
                     }).setcodes,
                     setcode,
-                    monsterSelect = $('#monsterSelect'),
-                    spellSelect = $('#spellSelect'),
-                    trapSelect = $('#trapSelect'),
-                    raceSelect = $('#raceSelect'),
-                    attributeSelect = $('#attributeSelect');
+                    monsterSelect = $('.monsterSelect'),
+                    spellSelect = $('.spellSelect'),
+                    trapSelect = $('.trapSelect'),
+                    raceSelect = $('.raceSelect'),
+                    attributeSelect = $('.attributeSelect');
                 for (setcode in setcodes) {
-                    $('#setcodeSelect').append('<option value="' + parseInt(setcode, 16) + '">' + setcodes[setcode] + '</option>');
+                    $('.setcodeSelect').append('<option value="' + parseInt(setcode, 16) + '">' + setcodes[setcode] + '</option>');
                 }
-                $('#typeSelect').on('change', function() {
+                $('.typeSelect').on('change', function() {
                     switch ($(this).val()) {
                         case "5":
                             { // all
