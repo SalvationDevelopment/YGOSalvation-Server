@@ -76,21 +76,21 @@ button#clearDeck {
     display: block;
     float: right;
     height: 15%;
-    display: none !important;
+    display: none;
 }
 
 #spellSelect {
     display: block;
     float: right;
     height: 15%;
-    display: none !important;
+    display: none;
 }
 
 #trapSelect{
     display: block;
     float: right;
     height: 15%;
-    display: none !important;
+    display: none;
 }
 
 select#typeSelect {
