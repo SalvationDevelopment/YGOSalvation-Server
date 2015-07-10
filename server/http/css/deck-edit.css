@@ -72,22 +72,7 @@ button.clearDeck {
     border: 1px solid orange;
 }
 
-.monsterSelect {
-    display: block;
-    float: right;
-    height: 15%;
-    display: none;
-}
-
-.spellSelect {
-    display: block;
-    float: right;
-    height: 15%;
-    display: none;
-}
-
-.trapSelect{
-    display: block;
+div.searchBlock select[class$="Select"] {
     float: right;
     height: 15%;
     display: none;
@@ -102,17 +87,8 @@ select.typeSelect {
     margin-top: 1.5%;
 }
 
-select.attributeSelect {
-    display: block;
-    float: left;
-    height: 15%;
-    width: 20%;
-    margin-left: 1%;
-    margin-top: 1.5%;
-}
-
-select.raceSelect {
-    display: block;
+select.attributeSelect, select.raceSelect {
+    display: none;
     float: left;
     height: 15%;
     width: 20%;
