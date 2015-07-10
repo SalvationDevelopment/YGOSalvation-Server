@@ -10,45 +10,45 @@
 </head>
 
 <body>
-    <div id="mainContainer">
-        <div id="left">
-            <div id="cardImage">
+    <div class="mainContainer">
+        <div class="left">
+            <div class="cardImage">
                 <img src="" />
             </div>
-            <div id="cardDescription">
+            <div class="cardDescription">
             </div>
         </div>
-        <div id="searchBar">
-            <div id="searchLeft">
+        <div class="searchBar">
+            <div class="searchLeft">
                 <label for="banlistSelect">Ban List: </label>
-                <select id="banlistSelect">
+                <select class="banlistSelect">
                 </select>
                 <br />
                 <label for="deckSelect">Deck: </label>
-                <select id="deckSelect">
+                <select class="deckSelect">
                 </select>
-                <button id="saveDeck">Save</button>
+                <button class="saveDeck">Save</button>
                 <br />
-                <button id="deleteDeck">Delete</button>
-                <input type="text" id="decknameInput">
-                <button id="saveDeckAs">Save as</button>
+                <button class="deleteDeck">Delete</button>
+                <input type="text" class="decknameInput">
+                <button class="saveDeckAs">Save as</button>
                 <br />
-                <div id="clearsortshufflewrapper">
-                    <button id="shuffleDeck">Shuffle</button>
-                    <button id="sortDeck">Sort</button>
-                    <button id="clearDeck">Clear</button>
+                <div class="clearsortshufflewrapper">
+                    <button class="shuffleDeck">Shuffle</button>
+                    <button class="sortDeck">Sort</button>
+                    <button class="clearDeck">Clear</button>
                 </div>
             </div>
-            <div id="searchRight">
+            <div class="searchRight">
                 <div class="searchBlock">
                     <label for="typeSelect">Category</label>
-                    <select id="typeSelect">
+                    <select class="typeSelect">
                         <option value="5">All</option>
                         <option value="1">Monster</option>
                         <option value="2">Spells</option>
                         <option value="4">Traps</option>
                     </select>
-                    <select id="monsterSelect">
+                    <select class="monsterSelect">
 						<option value="17">Specify a card type</option>
                         <option value="17">Normal</option>
                         <option value="33">Effect</option>
@@ -64,7 +64,7 @@
                         <option value="4194337">Toon</option>
                         <option value="16777249">Pendulum</option>
                     </select>
-                    <select id="spellSelect">
+                    <select class="spellSelect">
 						<option value="2">Specify a card type</option>
                         <option value="2">Normal</option>
                         <option value="65538">Quick-Play</option>
@@ -73,7 +73,7 @@
                         <option value="262146">Equip</option>
                         <option value="524290">Field</option>
                     </select>
-                    <select id="trapSelect">
+                    <select class="trapSelect">
 						<option value="4">Specify a card type</option>
                         <option value="4">Normal</option>
                         <option value="131076">Continuous</option>
@@ -81,7 +81,7 @@
                     </select>
                     <br />
                     <label for="attributeSelect">Attribute</label>
-                    <select id="attributeSelect" data-input-attribute>
+                    <select class="attributeSelect" data-input-attribute>
 						<option>Specify an attribute</option>
                         <option value="1">EARTH</option>
                         <option value="2">WATER</option>
@@ -93,7 +93,7 @@
                     </select>
                     <br />
                     <label for="raceSelect">Type</label>
-                    <select id="raceSelect" data-input-race>
+                    <select class="raceSelect" data-input-race>
 						<option>Specify a Monster type</option>
                         <option value="1">Warrior</option>
                         <option value="2">Spellcaster</option>
@@ -122,19 +122,19 @@
                     </select>
                     <br />
                     <label for="setcodeSelect">Archetype</label>
-                    <select id="setcodeSelect" data-input-setcode>
+                    <select class="setcodeSelect" data-input-setcode>
 						<option>Specify a card archetype</option>
                     </select>
                     <br />
                     <label for="levelInput">Level/Rank</label>
-                    <input id="levelInput" type="number" min="1" max="12" data-input-level>
+                    <input class="levelInput" type="number" min="1" max="12" data-input-level>
                     <br />
                     <label for="scaleInput">Scale</label>
-                    <input id="scaleInput" type="number" min="1" max="12" data-input-scale>
+                    <input class="scaleInput" type="number" min="1" max="12" data-input-scale>
                 </div>
                 <div class="searchBlock">
                     <label for="forbiddenLimitedSelect">Limit: </label>
-                    <select id="forbiddenLimitedSelect" data-input-forbiddenlimited>
+                    <select class="forbiddenLimitedSelect" data-input-forbiddenlimited>
                         <option value="3">All</option>
                         <option value="0">Forbidden</option>
                         <option value="1">Limited</option>
@@ -142,32 +142,32 @@
                     </select>
                     <br />
                     <label for="atkInput">ATK</label>
-                    <input id="atkInput" type="number" min="0" data-input-atk>
+                    <input class="atkInput" type="number" min="0" data-input-atk>
                     <br />
                     <label for="defInput">DEF</label>
-                    <input id="defInput" type="number" min="0" data-input-def>
+                    <input class="defInput" type="number" min="0" data-input-def>
                     <br />
                     <label for="nameInput">Name</label>
-                    <input id="nameInput" type="text" data-input-name>
+                    <input class="nameInput" type="text" data-input-name>
                     <br />
                     <label for="descInput">Description</label>
-                    <input id="descInput" type="text" data-input-desc>
+                    <input class="descInput" type="text" data-input-desc>
                     <br />
-                    <button id="clearForm">Reset Filter</button>
-                    <button id="searchButton">Search</button>
+                    <button class="clearForm">Reset Filter</button>
+                    <button class="searchButton">Search</button>
                 </div>
             </div>
         </div>
-        <div id="center">
-            <div id="mainDeck">
+        <div class="center">
+            <div class="mainDeck">
             </div>
-            <div id="extraDeck">
+            <div class="extraDeck">
             </div>
-            <div id="sideDeck">
+            <div class="sideDeck">
             </div>
         </div>
-        <div id="right">
-            <div id="searchResults">
+        <div class="right">
+            <div class="searchResults">
             </div>
         </div>
     </div>
