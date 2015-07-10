@@ -93,7 +93,7 @@ button.clearDeck {
     display: none;
 }
 
-.typeSelect {
+select.typeSelect {
     display: block;
     float: left;
     height: 15%;
@@ -102,7 +102,34 @@ button.clearDeck {
     margin-top: 1.5%;
 }
 
-.attributeSelect {
+select.attributeSelect {
+    display: block;
+    float: left;
+    height: 15%;
+    width: 20%;
+    margin-left: 1%;
+    margin-top: 1.5%;
+}
+
+select.raceSelect {
+    display: block;
+    float: left;
+    height: 15%;
+    width: 20%;
+    margin-left: 1%;
+    margin-top: 1.5%;
+}
+
+select.setcodeSelect {
+    display: block;
+    float: left;
+    height: 15%;
+    width: 20%;
+    margin-left: 1%;
+    margin-top: 1.5%;
+}
+
+input.levelInput {
     display: block;
     float: left;
     height: 15%;
@@ -120,7 +147,7 @@ button.clearDeck {
     margin-top: 1.5%;
 }
 
-.setcodeSelect {
+select.forbiddenLimitedSelect {
     display: block;
     float: left;
     height: 15%;
@@ -129,7 +156,7 @@ button.clearDeck {
     margin-top: 1.5%;
 }
 
-.levelInput {
+input.atkInput {
     display: block;
     float: left;
     height: 15%;
@@ -138,7 +165,7 @@ button.clearDeck {
     margin-top: 1.5%;
 }
 
-.raceSelect {
+input.defInput {
     display: block;
     float: left;
     height: 15%;
@@ -147,34 +174,7 @@ button.clearDeck {
     margin-top: 1.5%;
 }
 
-.forbiddenLimitedSelect {
-    display: block;
-    float: left;
-    height: 15%;
-    width: 20%;
-    margin-left: 1%;
-    margin-top: 1.5%;
-}
-
-.atkInput {
-    display: block;
-    float: left;
-    height: 15%;
-    width: 20%;
-    margin-left: 1%;
-    margin-top: 1.5%;
-}
-
-.defInput {
-    display: block;
-    float: left;
-    height: 15%;
-    width: 20%;
-    margin-left: 1%;
-    margin-top: 1.5%;
-}
-
-.nameInput {
+input.nameInput {
     display: block;
     float: left;
     height: 15%;
@@ -192,7 +192,7 @@ button.clearDeck {
     margin-top: 1.5%;
 }
 
-.clearForm {
+button.clearForm {
     display: block;
     float: left;
     height: 15%;
@@ -201,7 +201,7 @@ button.clearDeck {
     margin-top: 1.5%;
 }
 
-.scaleInput {
+input.scaleInput {
     display: block;
     float: left;
     height: 15%;
