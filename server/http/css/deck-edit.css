@@ -93,7 +93,7 @@ button.clearDeck {
     display: none;
 }
 
-select.typeSelect {
+.typeSelect {
     display: block;
     float: left;
     height: 15%;
@@ -102,34 +102,7 @@ select.typeSelect {
     margin-top: 1.5%;
 }
 
-select.attributeSelect {
-    display: block;
-    float: left;
-    height: 15%;
-    width: 20%;
-    margin-left: 1%;
-    margin-top: 1.5%;
-}
-
-select.raceSelect {
-    display: block;
-    float: left;
-    height: 15%;
-    width: 20%;
-    margin-left: 1%;
-    margin-top: 1.5%;
-}
-
-select.setcodeSelect {
-    display: block;
-    float: left;
-    height: 15%;
-    width: 20%;
-    margin-left: 1%;
-    margin-top: 1.5%;
-}
-
-input.levelInput {
+.attributeSelect {
     display: block;
     float: left;
     height: 15%;
@@ -147,7 +120,7 @@ input.levelInput {
     margin-top: 1.5%;
 }
 
-select.forbiddenLimitedSelect {
+.setcodeSelect {
     display: block;
     float: left;
     height: 15%;
@@ -156,7 +129,7 @@ select.forbiddenLimitedSelect {
     margin-top: 1.5%;
 }
 
-input.atkInput {
+.levelInput {
     display: block;
     float: left;
     height: 15%;
@@ -165,7 +138,7 @@ input.atkInput {
     margin-top: 1.5%;
 }
 
-input.defInput {
+.raceSelect {
     display: block;
     float: left;
     height: 15%;
@@ -174,7 +147,34 @@ input.defInput {
     margin-top: 1.5%;
 }
 
-input.nameInput {
+.forbiddenLimitedSelect {
+    display: block;
+    float: left;
+    height: 15%;
+    width: 20%;
+    margin-left: 1%;
+    margin-top: 1.5%;
+}
+
+.atkInput {
+    display: block;
+    float: left;
+    height: 15%;
+    width: 20%;
+    margin-left: 1%;
+    margin-top: 1.5%;
+}
+
+.defInput {
+    display: block;
+    float: left;
+    height: 15%;
+    width: 20%;
+    margin-left: 1%;
+    margin-top: 1.5%;
+}
+
+.nameInput {
     display: block;
     float: left;
     height: 15%;
@@ -192,7 +192,7 @@ input.nameInput {
     margin-top: 1.5%;
 }
 
-button.clearForm {
+.clearForm {
     display: block;
     float: left;
     height: 15%;
@@ -201,7 +201,7 @@ button.clearForm {
     margin-top: 1.5%;
 }
 
-input.scaleInput {
+.scaleInput {
     display: block;
     float: left;
     height: 15%;
