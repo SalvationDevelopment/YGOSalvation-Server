@@ -78,7 +78,7 @@ div.searchBlock select.trapSelect, div.searchBlock select.spellSelect, div.searc
     display: none;
 }
 
-label[for^="attribute"], label[for^="race"] {
+div.searchBlock label[for^="attribute"], div.searchBlock label[for^="race"] {
 	display: none;
 }
 
