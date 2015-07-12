@@ -1,0 +1,33 @@
+<html>
+	<head>
+		<title>YDK to List Converter | Salvation Development</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<script src="js/jquery-1.11.0.min.js"></script>
+		<script src="js/parseYDK.js"></script>
+		<script>
+			$(function(){
+				$.getJSON('manifest/database.json', function(data) {
+					document.getElementById("ydkUploader").addEventListener("change", function(evt) {
+						var file = evt.target.files[0],
+							reader = new FileReader();
+						reader.readAsText(file);
+						reader.onload = function(e) {
+							var list = parseYDK(e.target.result);
+							console.log(ydkToList(list, {
+								multipleEntries: true,
+								formatString: "x%i",
+								cards: data
+							}));
+						};
+					});
+				});
+			});
+		</script>
+	</head>
+	<body>
+		<div class="fileLoader">
+			<label for="ydkUploader">Select YDK file: </label>
+			<input type="file" id="ydkUploader">
+		</div>
+	</body>
+</html>
