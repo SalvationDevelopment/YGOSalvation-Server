@@ -5,7 +5,8 @@
 		<script src="js/jquery-1.11.0.min.js"></script>
 		<script src="js/parseYDK.js"></script>
 		<script>
-			var cards = [];
+			var cards = [],
+				list;
 			$(function(){
 				$.getJSON('manifest/database.json', function(data) {
 					cards = data;
@@ -14,12 +15,13 @@
 							reader = new FileReader();
 						reader.readAsText(file);
 						reader.onload = function(e) {
-							var list = parseYDK(e.target.result);
+							/*var list = parseYDK(e.target.result);
 							console.log(ydkToList(list, {
 								multipleEntries: true,
 								formatString: "x%i",
 								cards: cards
-							}));
+							}));*/
+							list = e.target.result;
 						};
 					});
 				});
