@@ -11,7 +11,7 @@ function parseYDK(ydkFileContents) {
         current = "";
     lineSplit.forEach(function(value) {
         if (value[0] === "#" || value[0] === "!") {
-            if (originalValues.hasOwnProperties(value.substr(1))) {
+            if (originalValues.hasOwnProperty(value.substr(1))) {
                 current = value.substr(1);
             } else {
                 return;
