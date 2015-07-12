@@ -16,7 +16,7 @@
 						reader.readAsText(file);
 						reader.onload = function(e) {
 							list = parseYDK(e.target.result);
-							console.log(ydkToList(list, {
+							$('#output').html(ydkToList(list, {
 								multipleEntries: true,
 								formatString: "x%i",
 								cards: cards
@@ -31,6 +31,9 @@
 		<div class="fileLoader">
 			<label for="ydkUploader">Select YDK file: </label>
 			<input type="file" id="ydkUploader">
+		</div>
+		<div class="outputContainer">
+			<div id="output"></div>
 		</div>
 	</body>
 </html>
