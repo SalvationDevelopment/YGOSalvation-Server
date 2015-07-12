@@ -10,6 +10,9 @@ function parseYDK(ydkFileContents) {
         },
         current = "";
     lineSplit.forEach(function(value) {
+        if (value === "") {
+            return;
+        }
         if (value[0] === "#" || value[0] === "!") {
             if (originalValues.hasOwnProperty(value.substr(1))) {
                 current = value.substr(1);
@@ -37,9 +40,9 @@ function ydkToList(deckObject, options) {
         temp;
     decks.forEach(function(deck) {
         output += deck + " Deck (" + deckObject[deck.toLowerCase() + "Length"] + "):\r\n";
-        for (temp in deckObject[deck]) {
+        for (temp in deckObject[deck.toLowerCase()]) {
             if (multipleEntries) {
-                output += formatString.replace("%i", deckObject[deck][temp]) + " ";
+                output += formatString.replace("%i", deckObject[deck.toLowerCase()][temp]) + " ";
                 cards.forEach(function(card) {
                     if (parseInt(temp, 10) === card.id) {
                         output += card.name;
@@ -47,7 +50,7 @@ function ydkToList(deckObject, options) {
                 });
                 output += "\r\n";
             } else {
-                while (deckObject[deck][temp]--) {
+                while (deckObject[deck.toLowerCase()][temp]--) {
                     cards.forEach(function(card) {
                         if (parseInt(temp, 10) === card.id) {
                             output += card.name + "\r\n";
