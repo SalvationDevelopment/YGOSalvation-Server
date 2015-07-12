@@ -41,7 +41,7 @@ function ydkToList(deckObject, options) {
             if (multipleEntries) {
                 output += formatString.replace("%i", deckObject[deck][temp]) + " ";
                 cards.forEach(function(card) {
-                    if (temp === card.id) {
+                    if (parseInt(temp, 10) === card.id) {
                         output += card.name;
                     }
                 });
@@ -49,7 +49,7 @@ function ydkToList(deckObject, options) {
             } else {
                 while (deckObject[deck][temp]--) {
                     cards.forEach(function(card) {
-                        if (temp === card.id) {
+                        if (parseInt(temp, 10) === card.id) {
                             output += card.name + "\r\n";
                         }
                     });
