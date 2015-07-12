@@ -72,6 +72,7 @@ function initiateSlave() {
         server: httpsServer
     });
     ws.on('connection', function connection(socket) {
+        console.log('!!! --- connection to Websocket')
         var framer = new Framemaker();
         socket.active_ygocore = false;
         socket.active = false;
