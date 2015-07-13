@@ -73,7 +73,7 @@ var cHistory = new(winston.Logger)({
 var coreErrors = new(winston.Logger)({
     transports: [
         new(winston.transports.DailyRotateFile)({
-            filename: ".\\logs\\conection_history.log"
+            filename: ".\\logs\\conection_history_coreErrors.log"
         })
     ]
 });
