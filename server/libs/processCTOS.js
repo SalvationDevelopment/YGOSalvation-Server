@@ -29,6 +29,7 @@ var portmin = 30000 + process.env.PORTRANGE * 100, //Port Ranges
 if (cluster.isWorker) {
     process.on('message', function (message) {
         'use strict';
+        console.log(message);
         if (message.gamelist) {
             gamelist = message.gamelist;
         }
