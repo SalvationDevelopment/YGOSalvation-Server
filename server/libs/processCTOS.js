@@ -20,19 +20,11 @@ var portmin = 30000 + process.env.PORTRANGE * 100, //Port Ranges
     events = require('events'),
     bouncer = new events.EventEmitter(),
     gamelist = {},
+    registry = {},
     winston = require('winston'),
     path = require('path'),
     coreIsInPlace = false,
-    request = require('request'),
-    cluster = require('cluster'),
-    http = require('http'), // SQCG Primus requires http parsing/tcp-handling
-    server = http.createServer(), //throne of the God
-    Socket = require('primus').createSocket({
-        iknowclusterwillbreakconnections: true
-    }),
-    client = new Socket('http://localhost:24555'); //Connect the God to the tree;
-
-
+    cluster = require('cluster');
 
 if (cluster.isWorker) {
     process.on('message', function (message) {
@@ -40,28 +32,18 @@ if (cluster.isWorker) {
         if (message.gamelist) {
             gamelist = message.gamelist;
         }
+        if (message.registry) {
+            registry = message.registry;
+        }
     });
 }
 
 //client.on('connected', function () {});
 //client.on('close', function () {}); // start shutting down server.
 
-function joinGamelist() {
-    'use strict';
-    client.write({
-        action: 'accessSecurityChannel',
-        adminChannelPassword: process.env.OPERPASS,
-        uniqueID: '-----'
-    });
-    client.write({
-        action: 'join',
-        uniqueID: '-----',
-        password: process.env.OPERPASS
-    });
-}
 
-setInterval(joinGamelist, 5000);
-joinGamelist();
+
+
 var cHistory = new(winston.Logger)({
     transports: [
         new(winston.transports.Console)(),
@@ -70,6 +52,7 @@ var cHistory = new(winston.Logger)({
         })
     ]
 });
+
 var coreErrors = new(winston.Logger)({
     transports: [
         new(winston.transports.DailyRotateFile)({
@@ -312,24 +295,14 @@ based on connection speeds. */
 
 function authenticate(socket) {
     'use strict';
-    request('http://forum.ygopro.us/rights.php?username=' + socket.username, function (error, response, body) {
-        if (!error && response.statusCode === 200) {
-            if (body.length !== 0) {
-                try {
-                    socket.end();
-                } catch (killerror) {
-                    console.log('Something wierd happened with auth', killerror);
-                }
-
-            }
+    console.log(socket.username, registry[socket.username], socket.remoteAddress.ip);
+    if (registry[socket.username] !== socket.remoteAddress.ip) {
+        try {
+            socket.end();
+        } catch (killerror) {
+            console.log('Something wierd happened with auth', killerror);
         }
-
-    });
-    //    bouncer.on('kill', function (ip) {
-    //        if (ip === socket.remoteAddress) {
-    //            socket.end();
-    //        }
-    //    });
+    }
 }
 
 /* ..and VOLIA! Game Request Routing */
