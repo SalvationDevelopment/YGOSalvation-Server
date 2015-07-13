@@ -154,20 +154,24 @@ function sendRegistry() {
             registry: registry
         });
     });
+    console.log(registry);
 }
 
 primus = new Primus(primusServer, {
     parser: 'JSON'
 });
 primus.use('rooms', Rooms);
+
+primus.on('disconnection', function (socket) {
+    'use strict';
+    socket.leaveAll();
+    delete registry[socket.ussername];
+    //nothing required
+});
+
 primus.on('connection', function (socket) {
     'use strict';
-    primus.on('disconnection', function (socket) {
-        socket.leaveAll();
-        console.log(socket.username + ' disconnected via launher, deregistering');
-        delete registry[socket.ussername];
-        //nothing required
-    });
+
     socket.on('data', function (data) {
 
         data = data || {};
