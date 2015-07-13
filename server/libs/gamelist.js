@@ -13,8 +13,8 @@ try {
 }
 var primus,
     gamelist = {},
+    registry = {},
     userdata = {},
-    hunter = {},
     Primus = require('primus'),
     Rooms = require('primus-rooms'),
     primusServer = http.createServer(ssloptions).listen(24555),
@@ -126,15 +126,6 @@ function handleCoreMessage(core_message_raw, port, pid) {
 
 function messageListener(message) {
     'use strict';
-    if (message.core_message_raw === 'passwordQuery') {
-        announce({
-            clientEvent: 'passwordQuery',
-            target: message.username
-        });
-        hunter[message.username] = setTimeout(function () {
-            //send kill command for that username
-        }, 10000);
-    }
     var brokenup = message.core_message_raw.toString().split('\r\n'),
         game,
         i = 0;
@@ -200,9 +191,23 @@ primus.on('connection', function (socket) {
             break;
 
         case ('register'):
-            socket.nickname = data.nickname;
+            url = 'http://forum.ygopro.us/log.php';
+            post = {
+                ips_username: data.username,
+                ips_password: data.password
+            };
+            request.post(url, {
+                form: post
+            }, function (error, response, body) {
+                if (!error && response.statusCode === 200) {
+                    var info = JSON.parse(body);
+                    if (info.success) {
+                        registry[data.username] = socket.address.ip;
+                        socket.username = data.username;
+                    }
+                }
+            });
             break;
-
         case ('privateServerRequest'):
             primus.room(socket.address.ip + data.uniqueID).write({
                 clientEvent: 'privateServerRequest',
@@ -217,23 +222,6 @@ primus.on('connection', function (socket) {
         case ('joinTournament'):
             socket.join('tournament', function () {
                 socket.write(JSON.stringify(gamelist));
-            });
-            break;
-        case ('passwordQuery'):
-            url = 'http://forum.ygopro.us/log.php';
-            post = {
-                ips_username: data.username,
-                ips_password: data.password
-            };
-            request.post(url, {
-                form: post
-            }, function (error, response, body) {
-                if (!error && response.statusCode === 200) {
-                    var info = JSON.parse(body);
-                    if (info.success) {
-                        clearTimeout(hunter[data.username]);
-                    }
-                }
             });
             break;
         case ('privateUpdate'):
@@ -252,6 +240,8 @@ primus.on('connection', function (socket) {
 primus.on('disconnection', function (socket) {
     'use strict';
     socket.leaveAll();
+    console.log(socket.ussername + ' disconnected via launher, deregistering');
+    delete registry[socket.ussername];
     //nothing required
 });
 
@@ -284,8 +274,14 @@ duelserv.on('del', function (pid) {
     }
 });
 
+function getRegistry() {
+    'use strict';
+    return registry;
+}
+
 module.exports = {
     messageListener: messageListener,
     primusListener: primusListener,
-    announce: announce
+    announce: announce,
+    getRegistry: getRegistry
 };
