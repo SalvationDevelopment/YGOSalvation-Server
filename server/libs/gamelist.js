@@ -161,16 +161,17 @@ primus = new Primus(primusServer, {
 });
 primus.use('rooms', Rooms);
 
-primus.on('disconnection', function (socket) {
-    'use strict';
-    socket.leaveAll();
-    delete registry[socket.ussername];
-    //nothing required
-});
+
 
 primus.on('connection', function (socket) {
     'use strict';
 
+    socket.on('disconnection', function (socket) {
+        socket.leaveAll();
+        console.log('deleting:', socket.username);
+        delete registry[socket.username];
+        //nothing required
+    });
     socket.on('data', function (data) {
 
         data = data || {};
