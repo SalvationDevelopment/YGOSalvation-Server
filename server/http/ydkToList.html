@@ -16,11 +16,11 @@
 						reader.readAsText(file);
 						reader.onload = function(e) {
 							list = parseYDK(e.target.result);
-							$('#output').html(ydkToList(list, {
+							$('#output').html('<pre>' + ydkToList(list, {
 								multipleEntries: true,
 								formatString: "x%i",
 								cards: cards
-							}));
+							}) + '</pre>');
 						};
 					});
 				});
