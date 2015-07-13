@@ -167,6 +167,11 @@ $(document).ready(function () {
             url: url,
             data: $("#ipblogin").serialize(), // serializes the form's elements.
             success: function (data) {
+                primus.write({
+                    action: 'register',
+                    username: $('#ips_username').val(),
+                    password: $('#ips_password').val()
+                });
                 var info = JSON.parse(data);
                 if (info.success) {
                     localStorage.nickname = info.displayname;
