@@ -34,7 +34,6 @@ if (cluster.isWorker) {
         }
         if (message.registry) {
             registry = message.registry;
-            console.log('updating registry');
         }
     });
 }
