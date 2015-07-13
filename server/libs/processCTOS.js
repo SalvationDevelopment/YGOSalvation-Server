@@ -232,6 +232,19 @@ function legalPassword(passIn) {
     return re.test(passIn);
 }
 
+
+function authenticate(socket) {
+    'use strict';
+    console.log(socket.username, registry[socket.username], socket.remoteAddress);
+    if (registry[socket.username] !== socket.remoteAddress.ip) {
+        try {
+            socket.end();
+        } catch (killerror) {
+            console.log('Something wierd happened with auth', killerror);
+        }
+    }
+}
+
 /* Unlike DevPro, Salvation does not preload its 
 YGOCores. It calls them on demand. This posses a 
 few issues but provides routing flexiblity. When a
@@ -242,6 +255,7 @@ server resources on. */
 
 function startCore(port, socket, data, callback) {
     'use strict';
+    authenticate(socket);
     if (!coreIsInPlace) {
         return;
     }
@@ -294,32 +308,18 @@ user can connect to a game
 possibly before being DC'd
 based on connection speeds. */
 
-function authenticate(socket) {
-    'use strict';
-    console.log(socket.username, registry[socket.username], socket.remoteAddress.ip);
-    if (registry[socket.username] !== socket.remoteAddress.ip) {
-        try {
-            socket.end();
-        } catch (killerror) {
-            console.log('Something wierd happened with auth', killerror);
-        }
-    }
-}
-
 /* ..and VOLIA! Game Request Routing */
 function processIncomingTrasmission(data, socket, task) {
     'use strict';
     processTask(task, socket);
-
+    authenticate(socket);
     if (!socket.active_ygocore && socket.hostString) {
         if (gamelist[socket.hostString]) {
             socket.alpha = false;
             cHistory.info('[' + socket.remoteAddress + ':' + socket.username + '] Connecting to ' + gamelist[socket.hostString].players[0]);
             connectToCore(gamelist[socket.hostString].port, data, socket);
-            authenticate(socket);
         } else {
             cHistory.info('[' + socket.remoteAddress + ':' + socket.username + '] Connecting to new CORE');
-            authenticate(socket);
             portfinder(++portmin, portmax, function (error, port) {
                 socket.alpha = true;
                 startCore(port, socket, data);
