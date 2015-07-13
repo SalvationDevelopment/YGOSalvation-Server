@@ -210,7 +210,6 @@ primus.on('connection', function (socket) {
             break;
 
         case ('register'):
-            console.log(data);
             url = 'http://forum.ygopro.us/log.php';
             post = {
                 ips_username: data.username,
