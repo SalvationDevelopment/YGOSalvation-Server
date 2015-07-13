@@ -202,6 +202,7 @@ primus.on('connection', function (socket) {
                 if (!error && response.statusCode === 200) {
                     var info = JSON.parse(body);
                     if (info.success) {
+                        console.log(socket.username + ' disconnected via launher, deregistering');
                         registry[data.username] = socket.address.ip;
                         socket.username = data.username;
                     }
@@ -240,7 +241,7 @@ primus.on('connection', function (socket) {
 primus.on('disconnection', function (socket) {
     'use strict';
     socket.leaveAll();
-    console.log(socket.ussername + ' disconnected via launher, deregistering');
+    console.log(socket.username + ' disconnected via launher, deregistering');
     delete registry[socket.ussername];
     //nothing required
 });
@@ -274,14 +275,19 @@ duelserv.on('del', function (pid) {
     }
 });
 
-function getRegistry() {
+function sendRegistry() {
     'use strict';
-    return registry;
+    Object.keys(cluster.workers).forEach(function (id) {
+        cluster.workers[id].send({
+            messagetype: 'registry',
+            registry: registry
+        });
+    });
 }
 
 module.exports = {
     messageListener: messageListener,
     primusListener: primusListener,
     announce: announce,
-    getRegistry: getRegistry
+    getRegistry: sendRegistry
 };
