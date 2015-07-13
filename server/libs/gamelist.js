@@ -154,7 +154,6 @@ function sendRegistry() {
             registry: registry
         });
     });
-    console.log(registry);
 }
 
 primus = new Primus(primusServer, {
@@ -223,7 +222,6 @@ primus.on('connection', function (socket) {
                 if (!error && response.statusCode === 200) {
                     var info = JSON.parse(body);
                     if (info.success) {
-                        console.log(data.username + ' Connecting via launher, registering');
                         registry[data.username] = socket.address.ip;
                         socket.username = data.username;
                         sendRegistry();
