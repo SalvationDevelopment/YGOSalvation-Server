@@ -35,7 +35,6 @@ if (cluster.isWorker) {
         }
         if (message.registry) {
             registry = message.registry;
-            console.log(registry);
         }
     });
 }
@@ -317,9 +316,10 @@ function processIncomingTrasmission(data, socket, task) {
             socket.alpha = false;
             cHistory.info('[' + socket.remoteAddress + ':' + socket.username + '] Connecting to ' + gamelist[socket.hostString].players[0]);
             connectToCore(gamelist[socket.hostString].port, data, socket);
+            authenticate(socket);
         } else {
             cHistory.info('[' + socket.remoteAddress + ':' + socket.username + '] Connecting to new CORE');
-
+            authenticate(socket);
             portfinder(++portmin, portmax, function (error, port) {
                 socket.alpha = true;
                 startCore(port, socket, data);
@@ -331,7 +331,7 @@ function processIncomingTrasmission(data, socket, task) {
         }
         return;
     }
-    authenticate(socket);
+
     return data;
 }
 
