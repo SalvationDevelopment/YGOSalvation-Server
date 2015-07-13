@@ -29,12 +29,13 @@ var portmin = 30000 + process.env.PORTRANGE * 100, //Port Ranges
 if (cluster.isWorker) {
     process.on('message', function (message) {
         'use strict';
-        console.log(message);
+
         if (message.gamelist) {
             gamelist = message.gamelist;
         }
         if (message.registry) {
             registry = message.registry;
+            console.log(registry);
         }
     });
 }
@@ -310,7 +311,7 @@ function authenticate(socket) {
 function processIncomingTrasmission(data, socket, task) {
     'use strict';
     processTask(task, socket);
-    authenticate(socket);
+
     if (!socket.active_ygocore && socket.hostString) {
         if (gamelist[socket.hostString]) {
             socket.alpha = false;
@@ -330,6 +331,7 @@ function processIncomingTrasmission(data, socket, task) {
         }
         return;
     }
+    authenticate(socket);
     return data;
 }
 
