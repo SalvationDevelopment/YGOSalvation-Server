@@ -146,12 +146,28 @@ function messageListener(message) {
     return gamelist;
 }
 
+function sendRegistry() {
+    'use strict';
+    Object.keys(cluster.workers).forEach(function (id) {
+        cluster.workers[id].send({
+            messagetype: 'registry',
+            registry: registry
+        });
+    });
+}
+
 primus = new Primus(primusServer, {
     parser: 'JSON'
 });
 primus.use('rooms', Rooms);
 primus.on('connection', function (socket) {
     'use strict';
+    primus.on('disconnection', function (socket) {
+        socket.leaveAll();
+        console.log(socket.username + ' disconnected via launher, deregistering');
+        delete registry[socket.ussername];
+        //nothing required
+    });
     socket.on('data', function (data) {
 
         data = data || {};
@@ -205,6 +221,7 @@ primus.on('connection', function (socket) {
                         console.log(socket.username + ' disconnected via launher, deregistering');
                         registry[data.username] = socket.address.ip;
                         socket.username = data.username;
+                        sendRegistry();
                     }
                 }
             });
@@ -238,13 +255,7 @@ primus.on('connection', function (socket) {
         }
     });
 });
-primus.on('disconnection', function (socket) {
-    'use strict';
-    socket.leaveAll();
-    console.log(socket.username + ' disconnected via launher, deregistering');
-    delete registry[socket.ussername];
-    //nothing required
-});
+
 
 primus.on('error', function () {
     'use strict';
@@ -275,15 +286,7 @@ duelserv.on('del', function (pid) {
     }
 });
 
-function sendRegistry() {
-    'use strict';
-    Object.keys(cluster.workers).forEach(function (id) {
-        cluster.workers[id].send({
-            messagetype: 'registry',
-            registry: registry
-        });
-    });
-}
+
 
 module.exports = {
     messageListener: messageListener,
