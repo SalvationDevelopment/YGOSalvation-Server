@@ -235,7 +235,7 @@ function legalPassword(passIn) {
 
 function authenticate(socket) {
     'use strict';
-    console.log(socket.username, registry[socket.username], socket.remoteAddress);
+    //console.log(socket.username, registry[socket.username], socket.remoteAddress);
     if (registry[socket.username] !== socket.remoteAddress) {
         try {
             socket.end();
