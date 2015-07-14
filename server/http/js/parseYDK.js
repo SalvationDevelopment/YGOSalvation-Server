@@ -62,3 +62,26 @@ function ydkToList(deckObject, options) {
     });
     return output;
 }
+
+function getDecklists(callback) {
+	try {
+		var fs = fs || require("fs");
+	} catch(e) {
+		throw e;
+	}
+	fs.readdir('./ygopro/deck', function(err, files) {
+		var ret = "";
+		files.forEach(function(file) {
+			if(!/\.ydk$/.test(file)) {
+				return;
+			}
+			file = file.replace(/\.ydk$/, '');
+			ret += '<option value="' + file + '">' + file + '</option>';
+		});
+		callback(ret);
+	});
+}
+
+function fillSelect(str) {
+	$('#ydkListSelect').html(str);
+}
