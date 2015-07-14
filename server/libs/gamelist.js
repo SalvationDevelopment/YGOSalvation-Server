@@ -220,16 +220,17 @@ primus.on('connection', function (socket) {
                 form: post
             }, function (error, response, body) {
                 if (!error && response.statusCode === 200) {
-                    var info;
+                    var info = {};
                     try {
                         info = JSON.parse(body);
-                        if (info.success) {
-                            registry[data.username] = socket.address.ip;
-                            socket.username = data.username;
-                            sendRegistry();
-                        }
+
                     } catch (msgError) {
-                        console.log('Error during validation', body);
+                        console.log('Error during validation', body, msgError);
+                    }
+                    if (info.success) {
+                        registry[data.username] = socket.address.ip;
+                        socket.username = data.username;
+                        sendRegistry();
                     }
                 }
             });
