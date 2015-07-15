@@ -85,7 +85,7 @@ $(function() {
                         monsterCardValue = monsterCardSelect.val() || 0,
                         monsterTypeValue = monsterTypeSelect.val() || 0;
                     if (!inputTypeCheck || monsterCardCheck || monsterTypeCheck) {
-                        hiddenType = $('<input type="hidden" data-input-type>').appendTo($('.searchBlock:eq(0)')).val(monsterCardValue + monsterTypeValue + 1);
+                        hiddenType = $('<input type="hidden" data-input-type>').appendTo($('.searchBlock:eq(0)')).val(1 + parseInt(monsterCardValue, 10) + parseInt(monsterTypeValue, 10));
                     }
                     console.log(applyFilters(generateQueryObject(), $('.banlistSelect').val(), lflist));
                 });
