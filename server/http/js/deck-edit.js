@@ -150,7 +150,13 @@ function fScale(obj, sc, op) {
 function fType(obj, ty) {
     'use strict';
     var val = obj.type;
-    if ((val & ty) == ty) {
+    if(val === 2 && ty === 2) {
+    return true;
+}
+    else if(obj.ty === 4 && ty === 4) {
+    return true;
+    }
+    else if ((val & ty) == ty) {
         return true;
     } else {
         return false;
