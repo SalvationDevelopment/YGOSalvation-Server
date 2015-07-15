@@ -36,8 +36,8 @@ $(function() {
                                 monsterSelect.fadeOut();
                                 spellSelect.fadeOut();
                                 trapSelect.fadeOut();
-                                raceSelect.fadeOut();
-                                attributeSelect.fadeOut();
+                                raceSelect.fadeOut().removeAtr('data-input-race');
+                                attributeSelect.fadeOut().removeAttr('data-input-attribute');
                                 $('[data-input-type]').removeAttr('data-input-type');
                                 break;
                             }
@@ -46,8 +46,8 @@ $(function() {
                                 monsterSelect.fadeIn().attr('data-input-type', '');
                                 spellSelect.fadeOut().removeAttr('data-input-type');
                                 trapSelect.fadeOut().removeAttr('data-input-type');
-                                raceSelect.fadeIn();
-                                attributeSelect.fadeIn();
+                                raceSelect.fadeIn().attr('data-input-race', '');
+                                attributeSelect.fadeIn().attr('data-input-attribute', '');
                                 break;
                             }
                         case "2":
@@ -55,8 +55,8 @@ $(function() {
                                 spellSelect.fadeIn().attr('data-input-type', '');
                                 monsterSelect.fadeOut().removeAttr('data-input-type');
                                 trapSelect.fadeOut().removeAttr('data-input-type');
-                                raceSelect.fadeOut();
-                                attributeSelect.fadeOut();
+                                raceSelect.fadeOut().removeAttr('data-input-race');
+                                attributeSelect.fadeOut().removeAttr('data-input-attribute');
                                 break;
                             }
                         case "4":
@@ -64,8 +64,8 @@ $(function() {
                                 trapSelect.fadeIn().attr('data-input-type', '');
                                 monsterSelect.fadeOut().removeAttr('data-input-type');
                                 spellSelect.fadeOut().removeAttr('data-input-type');
-                                raceSelect.fadeOut();
-                                attributeSelect.fadeOut();
+                                raceSelect.fadeOut().removeAttr('data-input-race');
+                                attributeSelect.fadeOut().removeAttr('data-input-attribute');
                                 break;
                             }
                     }
