@@ -36,6 +36,8 @@ $(function() {
                                 monsterSelect.fadeOut();
                                 spellSelect.fadeOut();
                                 trapSelect.fadeOut();
+                                raceSelect.fadeOut();
+                                attributeSelect.fadeOut();
                                 $('[data-input-type]').removeAttr('data-input-type');
                                 break;
                             }
@@ -44,8 +46,8 @@ $(function() {
                                 monsterSelect.fadeIn().attr('data-input-type', '');
                                 spellSelect.fadeOut().removeAttr('data-input-type');
                                 trapSelect.fadeOut().removeAttr('data-input-type');
-                                raceSelect.fadeOut();
-                                attributeSelect.fadeOut();
+                                raceSelect.fadeIn();
+                                attributeSelect.fadeIn();
                                 break;
                             }
                         case "2":
