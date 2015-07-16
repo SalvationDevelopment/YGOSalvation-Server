@@ -75,24 +75,110 @@ $(function() {
                             }
                     }
                 });
-                $('.searchButton').on('click', function() {
-                    var monsterCardSelect = $('.monsterCardSelect'),
-                        monsterTypeSelect = $('.monsterTypeSelect'),
-                        monsterCardCheck = $('[data-input-monster-card]'),
-                        monsterTypeCheck = $('[data-input-monster-type]'),
-                        inputTypeCheck = $('[data-input-type]').val(),
-                        hiddenType,
-                        monsterCardValue = monsterCardSelect.val() || 0,
-                        monsterTypeValue = monsterTypeSelect.val() || 0;
-                    if (!inputTypeCheck || monsterCardCheck || monsterTypeCheck) {
-                        hiddenType = $('<input type="hidden" data-input-type>').appendTo($('.searchBlock:eq(0)')).val(1 + parseInt(monsterCardValue, 10) + parseInt(monsterTypeValue, 10));
+                $('.searchButton').on('click', handleResults);
+                $('.nameInput, .descInput').on('keyup', function() {
+                    if ($(this).val().length >= 5) {
+                        handleResults();
                     }
-                    console.log(applyFilters(generateQueryObject(), $('.banlistSelect').val(), lflist));
                 });
             });
         });
     });
 });
+
+var imgDir = "http://ygopro.us/ygopro/pics/",
+    thumbDir = imgDir + "thumbnail/",
+    attributeMap = {
+        1: "EARTH",
+        2: "WATER",
+        4: "FIRE",
+        8: "WIND",
+        16: "LIGHT",
+        32: "DARK",
+        64: "DIVINE"
+    },
+    typeMap = {
+        130: " / Ritual",
+        65538: " / Quick-Play",
+        131074: " / Continuous",
+        131076: " / Continuous",
+        262146: " / Equip",
+        524290: " / Field",
+        1048580: " / Counter"
+    },
+    raceMap = {
+        1: "Warrior",
+        2: "Spellcaster",
+        4: "Fairy",
+        8: "Fiend",
+        16: "Zombie",
+        32: "Machine",
+        64: "Aqua",
+        128: "Pyro",
+        256: "Rock",
+        512: "Winged-Beast",
+        1024: "Plant",
+        2048: "Insect",
+        4096: "Thunder",
+        8192: "Dragon",
+        16384: "Beast",
+        32768: "Beast-Warrior",
+        65536: "Dinosaur",
+        131072: "Fish",
+        262144: "Sea-Serpent",
+        524288: "Reptile",
+        1048576: "Psychic",
+        2097152: "Divine-Beast",
+        4194304: "Creator God",
+        8388608: "Wyrm"
+    };
+
+function handleResults() {
+    var monsterCardSelect = $('.monsterCardSelect'),
+        monsterTypeSelect = $('.monsterTypeSelect'),
+        monsterCardCheck = $('[data-input-monster-card]'),
+        monsterTypeCheck = $('[data-input-monster-type]'),
+        searchResults = $('.searchResults'),
+        inputTypeCheck = $('[data-input-type]').val(),
+        monsterCardValue = monsterCardSelect.val() || 0,
+        monsterTypeValue = monsterTypeSelect.val() || 0,
+        hiddenType,
+        results,
+        output = "";
+    if (!inputTypeCheck || monsterCardCheck || monsterTypeCheck) {
+        hiddenType = $('<input type="hidden" data-input-type>').appendTo($('.searchBlock:eq(0)')).val(1 + parseInt(monsterCardValue, 10) + parseInt(monsterTypeValue, 10));
+    }
+    results = applyFilters(generateQueryObject(), $('.banlistSelect').val(), lflist);
+    results.forEach(function(result, index) {
+        output += '<div class="resultDiv row_' + index + '" data-card-id="' + result.id + '"' + (result.alias !== 0 ? ' data-card-alias="' + result.alias + '"' : '') + '><div class="thumbContainer"><img src="' + thumbDir + result.id + '.jpg" /></div><div class="descriptionContainer"><span class="name">' + result.name + '</span><br />';
+        if (cardIs("monster", result)) {
+            // render monster display
+            output += '<span class="monsterDetails">' + attributeMap[result.attribute] + ' / ' + raceMap[result.race] + ' / ' + result.level;
+            output += '<br />';
+            output += '<span class="monsterAtkDef">' + result.atk + ' / ' + result.def;
+        } else if (cardIs("spell", result)) {
+            // render spell display
+            output += '<span class="spellDetails">Spell' + typeMap[result.type] + '</span>';
+        } else if (cardIs("trap", result)) {
+            // render trap display
+            output += '<span class="trapDetails">Trap' + typeMap[result.type] + '</span>';
+        }
+        output += '</div></div>';
+    });
+    searchResults.html(output);
+}
+
+function cardIs(cat, obj) {
+    if (cat === "monster" && (obj.race !== 0 || obj.level !== 0 || obj.attribute !== 0)) {
+        return true;
+    }
+    if (cat === "spell") {
+        return (obj.type & 2) == 2;
+    }
+    if (cat === "trap") {
+        return (obj.type & 4) == 4;
+    }
+}
 
 function fAttrRace(obj, num, at) {
     'use strict';
