@@ -169,7 +169,7 @@ primus.on('connection', function (socket) {
     socket.on('disconnection', function (socket) {
         socket.leaveAll();
         console.log('deleting:', socket.username);
-        delete registry[socket.username];
+        
         //nothing required
     });
     socket.on('data', function (data) {
@@ -220,17 +220,16 @@ primus.on('connection', function (socket) {
                 form: post
             }, function (error, response, body) {
                 if (!error && response.statusCode === 200) {
-                    var info = {};
+                    var info;
                     try {
                         info = JSON.parse(body.trim());
-
+                        if (info.success) {
+                            registry[data.username] = socket.address.ip;
+                            socket.username = data.username;
+                            sendRegistry();
+                        }
                     } catch (msgError) {
-                        console.log('Error during validation', body, msgError);
-                    }
-                    if (info.success) {
-                        registry[data.username] = socket.address.ip;
-                        socket.username = data.username;
-                        sendRegistry();
+                        console.log('Error during validation', body, msgError, socket.address.ip);
                     }
                 }
             });
