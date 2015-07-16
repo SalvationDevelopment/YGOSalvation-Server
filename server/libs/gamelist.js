@@ -222,7 +222,7 @@ primus.on('connection', function (socket) {
                 if (!error && response.statusCode === 200) {
                     var info = {};
                     try {
-                        info = JSON.parse(body);
+                        info = JSON.parse(body.trim());
 
                     } catch (msgError) {
                         console.log('Error during validation', body, msgError);
