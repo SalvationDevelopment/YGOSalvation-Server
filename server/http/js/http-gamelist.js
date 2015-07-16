@@ -142,11 +142,7 @@ function joinGamelist() {
             username: localStorage.nickname,
             uniqueID: uniqueID
         });
-        primus.write({
-            action: 'register',
-            username: $('#ips_username').val(),
-            password: $('#ips_password').val()
-        });
+        
 
     }
 }
