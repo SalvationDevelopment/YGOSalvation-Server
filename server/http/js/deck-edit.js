@@ -21,7 +21,8 @@ $(function() {
                         joinKeySlice: 1
                     }).setcodes,
                     setcode,
-                    monsterSelect = $('.monsterSelect'),
+                    monsterCardSelect = $('.monsterCardSelect'),
+                    monsterTypeSelect = $('.monsterTypeSelect'),
                     spellSelect = $('.spellSelect'),
                     trapSelect = $('.trapSelect'),
                     raceSelect = $('.raceSelect'),
@@ -33,40 +34,60 @@ $(function() {
                     switch ($(this).val()) {
                         case "5":
                             { // all
-                                monsterSelect.fadeOut();
+                                monsterCardSelect.fadeOut().removeAttr('data-input-monster-card');
+                                monsterTypeSelect.fadeOut().removeAttr('data-input-monster-type');
                                 spellSelect.fadeOut();
                                 trapSelect.fadeOut();
+                                raceSelect.fadeOut().removeAttr('data-input-race');
+                                attributeSelect.fadeOut().removeAttr('data-input-attribute');
                                 $('[data-input-type]').removeAttr('data-input-type');
                                 break;
                             }
                         case "1":
                             { // monster
-                                monsterSelect.fadeIn().attr('data-input-type', '');
+                                monsterCardSelect.fadeIn().attr('data-input-monster-card', '');
+                                monsterTypeSelect.fadeIn().attr('data-input-monster-type', '');
                                 spellSelect.fadeOut().removeAttr('data-input-type');
                                 trapSelect.fadeOut().removeAttr('data-input-type');
-                                raceSelect.fadeOut();
-                                attributeSelect.fadeOut();
+                                raceSelect.fadeIn().attr('data-input-race', '');
+                                attributeSelect.fadeIn().attr('data-input-attribute', '');
                                 break;
                             }
                         case "2":
                             { // spell
                                 spellSelect.fadeIn().attr('data-input-type', '');
-                                monsterSelect.fadeOut().removeAttr('data-input-type');
+                                monsterCardSelect.fadeOut().removeAttr('data-input-monster-card');
+                                monsterTypeSelect.fadeOut().removeAttr('data-input-monster-type');
                                 trapSelect.fadeOut().removeAttr('data-input-type');
-                                raceSelect.fadeOut();
-                                attributeSelect.fadeOut();
+                                raceSelect.fadeOut().removeAttr('data-input-race');
+                                attributeSelect.fadeOut().removeAttr('data-input-attribute');
                                 break;
                             }
                         case "4":
                             { // traps
                                 trapSelect.fadeIn().attr('data-input-type', '');
-                                monsterSelect.fadeOut().removeAttr('data-input-type');
+                                monsterCardSelect.fadeOut().removeAttr('data-input-monster-card');
+                                monsterTypeSelect.fadeOut().removeAttr('data-input-monster-type');
                                 spellSelect.fadeOut().removeAttr('data-input-type');
-                                raceSelect.fadeOut();
-                                attributeSelect.fadeOut();
+                                raceSelect.fadeOut().removeAttr('data-input-race');
+                                attributeSelect.fadeOut().removeAttr('data-input-attribute');
                                 break;
                             }
                     }
+                });
+                $('.searchButton').on('click', function() {
+                    var monsterCardSelect = $('.monsterCardSelect'),
+                        monsterTypeSelect = $('.monsterTypeSelect'),
+                        monsterCardCheck = $('[data-input-monster-card]'),
+                        monsterTypeCheck = $('[data-input-monster-type]'),
+                        inputTypeCheck = $('[data-input-type]').val(),
+                        hiddenType,
+                        monsterCardValue = monsterCardSelect.val() || 0,
+                        monsterTypeValue = monsterTypeSelect.val() || 0;
+                    if (!inputTypeCheck || monsterCardCheck || monsterTypeCheck) {
+                        hiddenType = $('<input type="hidden" data-input-type>').appendTo($('.searchBlock:eq(0)')).val(1 + parseInt(monsterCardValue, 10) + parseInt(monsterTypeValue, 10));
+                    }
+                    console.log(applyFilters(generateQueryObject(), $('.banlistSelect').val(), lflist));
                 });
             });
         });
@@ -148,7 +169,11 @@ function fScale(obj, sc, op) {
 function fType(obj, ty) {
     'use strict';
     var val = obj.type;
-    if ((val & ty) > 0) {
+    if (val === 2 && ty === 2) {
+        return true;
+    } else if (obj.ty === 4 && ty === 4) {
+        return true;
+    } else if ((val & ty) == ty) {
         return true;
     } else {
         return false;

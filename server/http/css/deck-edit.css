@@ -72,7 +72,7 @@ button.clearDeck {
     border: 1px solid orange;
 }
 
-div.searchBlock select.trapSelect, div.searchBlock select.spellSelect, div.searchBlock select.monsterSelect, div.searchBlock select.attributeSelect, div.searchBlock select.raceSelect {
+div.searchBlock select.trapSelect, div.searchBlock select.spellSelect, div.searchBlock select.monsterCardSelect, div.searchBlock select.monsterTypeSelect, div.searchBlock select.attributeSelect, div.searchBlock select.raceSelect {
     float: right;
     height: 15%;
     display: none;
