@@ -169,7 +169,7 @@ primus.on('connection', function (socket) {
     socket.on('disconnection', function (socket) {
         socket.leaveAll();
         console.log('deleting:', socket.username);
-        
+
         //nothing required
     });
     socket.on('data', function (data) {
@@ -224,7 +224,7 @@ primus.on('connection', function (socket) {
                     try {
                         info = JSON.parse(body.trim());
                         if (info.success) {
-                            registry[data.username] = socket.address.ip;
+                            registry[info.displayname] = socket.address.ip;
                             socket.username = data.username;
                             sendRegistry();
                         }
