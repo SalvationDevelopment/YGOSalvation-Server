@@ -35,7 +35,7 @@ params.identifyMessage = "";
 params.showJoinPartMessages = false;
 
 /* Whether the server window (and button) should be shown */
-params.showServerWindow = false;
+params.showServerWindow = true;
 
 /* Show a popup to enter a nickname */
 params.showNickSelection = false;
@@ -45,10 +45,10 @@ params.showIdentifySelection = false;
 /* Show button to register a nickname */
 params.showRegisterNicknameButton = false;
 /* Show button to register a channel */
-params.showRegisterChannelButton = false;
+params.showRegisterChannelButton = true;
 
 /* Opens new queries in background when set to true */
-params.showNewQueriesInBackground = false;
+params.showNewQueriesInBackground = true;
 
 /* Position of the navigation container (where channel and query buttons appear). Valid values: left, right, top, bottom */
 params.navigationPosition = "bottom";
@@ -57,10 +57,10 @@ params.navigationPosition = "bottom";
 /* See more parameters at http://redmine.lightirc.com/projects/lightirc/wiki/Customization_parameters */
 
 params.fontSize = 10;
-params.showInfoMessages = false;
+params.showInfoMessages = true;
 params.emoticonPath = 'https://ygopro.us/lightIRC/emoticons/';
-params.loopServerCommands = true;
-params.loopClientCommands = true;
+params.loopServerCommands = false;
+params.loopClientCommands = false;
 params.contextMenuInternalEvent = "Duel Request:/msg DuelServ !duel %nick%";
 
 
