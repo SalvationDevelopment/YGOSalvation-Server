@@ -97,10 +97,10 @@ function locallogin(init) {
     swfobject.embedSWF("lightIRC/lightIRC.swf", "lightIRC", "100%", "92%", "10.0.0", "expressInstall.swf", params, {
         wmode: "transparent"
     });
-    chatStarted = true;
+    //chatStarted = true;
     singlesitenav('faq');
     setTimeout(function () {
-        singlesitenav('chat');
+        //singlesitenav('chat');
     }, 2000);
 }
 
@@ -167,11 +167,7 @@ $(document).ready(function () {
             url: url,
             data: $("#ipblogin").serialize(), // serializes the form's elements.
             success: function (data) {
-                primus.write({
-                    action: 'register',
-                    username: $('#ips_username').val(),
-                    password: $('#ips_password').val()
-                });
+
                 var info = JSON.parse(data);
                 if (info.success) {
                     localStorage.nickname = info.displayname;
@@ -187,6 +183,11 @@ $(document).ready(function () {
 
 
                     locallogin();
+                    primus.write({
+                        action: 'register',
+                        username: $('#ips_username').val(),
+                        password: $('#ips_password').val()
+                    });
                 } else {
                     alert(info.message);
                 }
