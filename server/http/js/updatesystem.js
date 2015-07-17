@@ -255,10 +255,10 @@ function processServerRequest(parameter) {
         if ((localStorage.roompass[0] === '4' || localStorage.roompass[0] === '5') && letter === 'j') {
             localStorage.dbtext = '2-MonsterLeague.cdb';
         }
-        if ((localStorage.roompass.substring(11, 13) === '21') && letter === 'j') {
+        if ((localStorage.roompass.substring(11, 13) === '22') && letter === 'j') {
             localStorage.dbtext = '3-Goats.cdb';
         }
-        if ((localStorage.roompass.substring(11, 13) === '22') && letter === 'j') {
+        if ((localStorage.roompass.substring(11, 13) === '23') && letter === 'j') {
             localStorage.dbtext = '4-Newgioh.cdb';
         }
         if (localStorage.roompass[0] === '3' && letter === 'j') {
