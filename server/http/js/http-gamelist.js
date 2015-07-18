@@ -390,8 +390,8 @@ function preformfilter(translated, players, rooms, started, pid, watchers) {
         duelist = '',
         filterm = parseFilters(),
         game = (translated.poolFormat !== 'Goat Format') ? 'game' : 'nostalgia',
-        pass = '';
-    spectators = (watchers) ? ' +' + watchers : '';
+        pass = '',
+        spectators = (watchers) ? ' +' + watchers : '';
     game = (translated.poolFormat !== 'Newgioh') ? game : 'newgioh';
     game = (translated.poolFormat !== 'Unlimited') ? game : 'bad';
     game = (translated.poolFormat !== 'Traditional') ? game : 'bad';
