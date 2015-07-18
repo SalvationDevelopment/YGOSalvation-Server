@@ -142,7 +142,7 @@ function joinGamelist() {
             username: localStorage.nickname,
             uniqueID: uniqueID
         });
-        
+
 
     }
 }
@@ -383,7 +383,7 @@ function sortMe(a, b) {
     return a.className < b.className;
 }
 
-function preformfilter(translated, players, rooms, started, pid) {
+function preformfilter(translated, players, rooms, started, pid, watchers) {
     'use strict';
     var OK = true,
         content = '',
@@ -391,6 +391,7 @@ function preformfilter(translated, players, rooms, started, pid) {
         filterm = parseFilters(),
         game = (translated.poolFormat !== 'Goat Format') ? 'game' : 'nostalgia',
         pass = '';
+    spectators = (watchers) ? ' +' + watchers : '';
     game = (translated.poolFormat !== 'Newgioh') ? game : 'newgioh';
     game = (translated.poolFormat !== 'Unlimited') ? game : 'bad';
     game = (translated.poolFormat !== 'Traditional') ? game : 'bad';
@@ -410,7 +411,7 @@ function preformfilter(translated, players, rooms, started, pid) {
     if (OK) {
         duelist = (translated.gameMode === 'Single' || translated.gameMode === 'Match') ? players[0] + ' vs ' + players[1] : players[0] + ' &amp ' + players[1] + ' vs ' + players[2] + ' &amp ' + players[3];
         //console.log(translated);
-        content = '<div class="game ' + rooms + ' ' + started + ' ' + translated.isLocked + '" onclick=enterGame("' + rooms + '",' + translated.isLocked + ') data-' + game + '="' + rooms + '">' + duelist + '<span class="subtext" style="font-size:.5em"><br>' + translated.gameMode +
+        content = '<div class="game ' + rooms + ' ' + started + ' ' + translated.isLocked + '" onclick=enterGame("' + rooms + '",' + translated.isLocked + ') data-' + game + '="' + rooms + '">' + duelist + spectators + '"<span class="subtext" style="font-size:.5em"><br>' + translated.gameMode +
             ' ' + $('#creategamebanlist option[value=' + translated.banlist + ']').text() + ' ' + translated.poolFormat + ' ' + pid + '</span> </div>';
     }
     return content;
@@ -439,7 +440,7 @@ function renderList(JSONdata) {
             started = (JSONdata[rooms].started) ? 'started' : 'avaliable';
             translated = parseDuelOptions(rooms);
             players = [player1, player2, player3, player4];
-            content = preformfilter(translated, players, rooms, started, JSONdata[rooms].pid);
+            content = preformfilter(translated, players, rooms, started, JSONdata[rooms].pid, JSONdata[rooms].spectators);
             $('#gamelistitems').prepend(content);
 
 
