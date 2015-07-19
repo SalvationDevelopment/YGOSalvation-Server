@@ -81,9 +81,11 @@ $(function() {
                         handleResults();
                     }
                 });
-				$('.searchResults').on('mouseenter', '.resultDiv', function() {
-					$('.imgContainer').attr('src', imgDir + $(this).attr('data-card-id') + '.jpg');
-				});
+                $('.searchResults').on('mouseenter', '.resultDiv', function() {
+                    var id = $(this).attr('data-card-id');
+                    $('.imgContainer').attr('src', imgDir + id + '.jpg');
+                    $('.cardDescription').html(makeDescription(id));
+                });
             });
         });
     });
@@ -108,6 +110,26 @@ var imgDir = "http://ygopro.us/ygopro/pics/",
         262146: " / Equip",
         524290: " / Field",
         1048580: " / Counter"
+    },
+    monsterMap = {
+        17: "Normal",
+        65: "Fusion",
+        97: "Fusion / Effect",
+        129: "Ritual",
+        161: "Ritual / Effect",
+        545: "Spirit",
+        1057: "Union",
+        2081: "Gemini / Effect",
+        4113: "Tuner",
+        4129: "Tuner / Effect",
+        12321: "Synchro / Tuner / Effect",
+        2097185: "Flip / Effect",
+        4194337: "Toon / Effect",
+        8388609: "Xyz",
+        8388641: "Xyz / Effect",
+        16777233: "Pendulum",
+        16777249: "Pendulum / Effect",
+        25165857: "Xyz / Pendulum / Effect"
     },
     raceMap = {
         1: "Warrior",
@@ -156,19 +178,70 @@ function handleResults() {
         output += '<div class="resultDiv row_' + index + '" data-card-id="' + result.id + '"' + (result.alias !== 0 ? ' data-card-alias="' + result.alias + '"' : '') + '><div class="thumbContainer"><img src="' + thumbDir + result.id + '.jpg" /></div><div class="descriptionContainer"><span class="name">' + result.name + '</span><br />';
         if (cardIs("monster", result)) {
             // render monster display
-            output += '<span class="monsterDetails">' + attributeMap[result.attribute] + ' / ' + raceMap[result.race] + ' / ' + result.level;
+            output += '<span class="monsterDetails">' + attributeMap[result.attribute] + ' / ' + raceMap[result.race] + ' / ' + parseLevelScales(result.level);
             output += '<br />';
-            output += '<span class="monsterAtkDef">' + result.atk + ' / ' + result.def;
+            output += '<span class="monsterAtkDef">' + parseAtkDef(result.atk, result.def);
         } else if (cardIs("spell", result)) {
             // render spell display
-            output += '<span class="spellDetails">Spell' + typeMap[result.type] + '</span>';
+            output += '<span class="spellDetails">Spell' + (typeMap[result.type] || "") + '</span>';
         } else if (cardIs("trap", result)) {
             // render trap display
-            output += '<span class="trapDetails">Trap' + typeMap[result.type] + '</span>';
+            output += '<span class="trapDetails">Trap' + (typeMap[result.type] || "") + '</span>';
         }
         output += '</div></div>';
     });
     searchResults.html(output);
+}
+
+function makeDescription(id) {
+    var targetCard,
+        output = "";
+    cards.forEach(function(card) {
+        if (parseInt(id, 10) === card.id) {
+            targetCard = card;
+        }
+    });
+    if (!targetCard) {
+        return '<span class="searchError">An error occurred while looking up the card in our database.<br />Please report this issue <a href="' + forumLink + '" target="_blank">at our forums</a> and be sure to include following details:<br /><br />Subject: Deck Editor Error<br />Function Call: makeDescription(' + id + ')<br />User Agent: ' + navigator.userAgent + '</span>';
+    }
+    output += '<div class="descContainer"><span class="cardName">' + targetCard.name + ' [' + id + ']</span><br />';
+    if (cardIs("monster", targetCard)) {
+        output += "<span class='monsterDesc'>[ Monster / " + monsterMap[targetCard.type] + " ] " + raceMap[targetCard.race] + " / " + attributeMap[targetCard.attribute] + "<br />";
+        output += "[ " + parseLevelScales(targetCard.level) + " ]" + parseAtkDef(targetCard.atk, targetCard.def) + "</span>";
+    } else if (cardIs("spell", targetCard)) {
+        output += "<span class='spellDesc'>[ Spell" + (typeMap[targetCard.type] || "") + " ]</span>";
+    } else if (cardIs("trap", targetCard)) {
+        output += "<span class='trapDesc'>[ Trap" + (typeMap[targetCard.type] || "") + " ]</span>";
+    }
+    return output + "<br /><span class='description'>" + targetCard.desc + "</span>";
+}
+
+function parseAtkDef(atk, def) {
+    return ((atk < 0) ? "?" : atk) + " / " + ((def < 0) ? "?" : def);
+}
+
+function parseLevelScales(level) {
+    var output = "",
+        leftScale,
+        rightScale,
+        pendulumLevel;
+    if (level > 0 && level <= 12) {
+        output += '<span class="levels">'
+        while (level--) {
+            output += "*";
+        }
+    } else {
+        level = level.toString(16); // format: [0-9A-F]0[0-9A-F][0-9A-F]{4}
+        leftScale = parseInt(level.charAt(0), 16); // first digit: left scale in hex (0-16)
+        rightScale = parseInt(level.charAt(2), 16); // third digit: right scale in hex (0-16)
+        pendulumLevel = parseInt(level.charAt(6), 16); // seventh digit: level of the monster in hex (technically, all 4 digits are levels, but here we only need the last char
+        output += '<span class="scales"><< ' + leftScale + ' | ' + rightScale + ' >><span class="levels">';
+        while (pendulumLevel--) {
+            output += '*';
+        }
+        output += '</span>';
+    }
+    return output + '</span>';
 }
 
 function cardIs(cat, obj) {
