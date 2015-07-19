@@ -82,7 +82,7 @@ $(function() {
                     }
                 });
 				$('.searchResults').on('mouseenter', '.resultDiv', function() {
-					$('.imgContainer').attr('src', imgDir + $(this).attr('data-card-id'));
+					$('.imgContainer').attr('src', imgDir + $(this).attr('data-card-id') + '.jpg');
 				});
             });
         });
