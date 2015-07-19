@@ -213,7 +213,7 @@ function makeDescription(id) {
     } else if (cardIs("trap", targetCard)) {
         output += "<span class='trapDesc'>[ Trap" + (typeMap[targetCard.type] || "") + " ]</span>";
     }
-    return output + "<br /><span class='description'>" + targetCard.desc + "</span>";
+    return output + "<br /><span class='description'><pre>" + targetCard.desc + "</pre></span>";
 }
 
 function parseAtkDef(atk, def) {
