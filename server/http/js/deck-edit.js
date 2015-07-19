@@ -81,6 +81,9 @@ $(function() {
                         handleResults();
                     }
                 });
+				$('.searchResults').on('mouseenter', '.resultDiv', function() {
+					console.log($(this).attr('data-card-id'));
+				});
             });
         });
     });
