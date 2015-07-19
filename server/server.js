@@ -21,7 +21,8 @@ var notification = '', // its a string, make memory.
     activegames = 0,
     cluster = require('cluster'), // multithreading
     colors = require('colors'), // oo pretty colors!
-    domain = require('domain'); // yay error handling
+    domain = require('domain'), // yay error handling
+    processManager = require('child_process');
 
 
 function gamelistMessage(message) {
@@ -51,6 +52,9 @@ function initiateMaster(numCPUs) {
     gamelistManager = require('./libs/gamelist.js');
     require('./libs/policyserver.js');
     //require('./libs/ldapserver.js'); //LDAP endpoint; //Flash policy server for LightIRC;
+    processManager.fork('../libs/update.js', [], {
+        cwd: 'http'
+    });
 
     function setupWorker(x) {
         //'use strict';
