@@ -232,11 +232,15 @@ input.scaleInput {
 }
 
 .descriptionContainer {
-    width: 70%;
+    width: 69%;
+    float: right;
+    height: 20%;
 }
 
 .thumbContainer {
     width: 30%;
+    float: left;
+    height: 20%;
 }
 
 .maincontainer label {
