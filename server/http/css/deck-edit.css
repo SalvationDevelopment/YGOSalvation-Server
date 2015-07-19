@@ -231,6 +231,14 @@ input.scaleInput {
 	overflow-y: auto;
 }
 
+.descriptionContainer {
+    width: 70%;
+}
+
+.thumbContainer {
+    width: 30%;
+}
+
 .maincontainer label {
     width: 33%;
     display: block;
