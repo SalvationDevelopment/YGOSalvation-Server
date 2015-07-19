@@ -178,7 +178,7 @@ function handleResults() {
         output += '<div class="resultDiv row_' + index + '" data-card-id="' + result.id + '"' + (result.alias !== 0 ? ' data-card-alias="' + result.alias + '"' : '') + '><div class="thumbContainer"><img src="' + thumbDir + result.id + '.jpg" /></div><div class="descriptionContainer"><span class="name">' + result.name + '</span><br />';
         if (cardIs("monster", result)) {
             // render monster display
-            output += '<span class="monsterDetails">' + attributeMap[result.attribute] + ' / ' + raceMap[result.race] + ' / ' + parseLevelScales(result.level);
+            output += '<span class="monsterDetails">' + attributeMap[result.attribute] + ' / ' + raceMap[result.race] + '<br />' + parseLevelScales(result.level);
             output += '<br />';
             output += '<span class="monsterAtkDef">' + parseAtkDef(result.atk, result.def);
         } else if (cardIs("spell", result)) {
@@ -206,8 +206,8 @@ function makeDescription(id) {
     }
     output += '<div class="descContainer"><span class="cardName">' + targetCard.name + ' [' + id + ']</span><br />';
     if (cardIs("monster", targetCard)) {
-        output += "<span class='monsterDesc'>[ Monster / " + monsterMap[targetCard.type] + " ] " + raceMap[targetCard.race] + " / " + attributeMap[targetCard.attribute] + "<br />";
-        output += "[ " + parseLevelScales(targetCard.level) + " ]" + parseAtkDef(targetCard.atk, targetCard.def) + "</span>";
+        output += "<span class='monsterDesc'>[ Monster / " + monsterMap[targetCard.type] + " ]<br />" + raceMap[targetCard.race] + " / " + attributeMap[targetCard.attribute] + "<br />";
+        output += "[ " + parseLevelScales(targetCard.level) + " ]<br />" + parseAtkDef(targetCard.atk, targetCard.def) + "</span>";
     } else if (cardIs("spell", targetCard)) {
         output += "<span class='spellDesc'>[ Spell" + (typeMap[targetCard.type] || "") + " ]</span>";
     } else if (cardIs("trap", targetCard)) {
@@ -235,7 +235,7 @@ function parseLevelScales(level) {
         leftScale = parseInt(level.charAt(0), 16); // first digit: left scale in hex (0-16)
         rightScale = parseInt(level.charAt(2), 16); // third digit: right scale in hex (0-16)
         pendulumLevel = parseInt(level.charAt(6), 16); // seventh digit: level of the monster in hex (technically, all 4 digits are levels, but here we only need the last char
-        output += '<span class="scales"><< ' + leftScale + ' | ' + rightScale + ' >><span class="levels">';
+        output += '<span class="scales"><< ' + leftScale + ' | ' + rightScale + ' >> <span class="levels">';
         while (pendulumLevel--) {
             output += '*';
         }
