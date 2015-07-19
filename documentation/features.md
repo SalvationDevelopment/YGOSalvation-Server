@@ -10,15 +10,15 @@ Features
 - [x] Real Time Game List
 - [ ] Real Time Game List Search and Filter
 - [x] Checkmate Server
-  * [x] Access
-  * [x] Reporting
-- [ ] Intergrated Forum
+  * [ ] Access
+  * [ ] Reporting
+- [x] Intergrated Forum
 - [x] Powerful Chat system (IRC)
   * [x] /me
   * [ ] Honors
   * [x] Private Messaging
-  * [ ] Logging (via launcher)
-  * [ ] Logging (Public)
+  * [x] Logging (via launcher)
+  * [x] Logging (Public)
   * [x] Private Rooms/Groups
   * [x] Powerful Security
 - [ ] Automatic editing and saving of YGOPro's `system.conf` file
@@ -49,8 +49,8 @@ Features
   * [ ] Automatic Art rendering
   * [ ] Automatic recompiling `OCGCORE`
 - [ ] Accurate Formats Rulings and Card pools with era sensitivities.  
-  * [x] OCG Format & Rulings
-  * [ ] TCG Format & Rulings
+  * [ ] OCG Format & Rulings
+  * [x] TCG Format & Rulings
   * [ ] Korean Format & Rulings
   * [ ] European Format & Rulings
   * [x] Sealed/Cube Format with random deck generation and rulings.
