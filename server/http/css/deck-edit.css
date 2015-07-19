@@ -231,13 +231,13 @@ input.scaleInput {
 	overflow-y: auto;
 }
 
-.descriptionContainer {
+div.descriptionContainer span {
     width: 69%;
     float: right;
     height: 20%;
 }
 
-.thumbContainer {
+div.thumbContainer img {
     width: 30%;
     float: left;
     height: 20%;
