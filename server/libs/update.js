@@ -57,6 +57,9 @@ function update() {
         }),
         picsgit = spawn('git', ['pull'], {
             cwd: './ygopro/pics'
+        }),
+        ocggit = spawn('git', ['pull'], {
+            cwd: '../../../ygopro'
         });
 
     fs.writeFile('manifest/ygopro.json', JSON.stringify(installation, null, 4), function () {
