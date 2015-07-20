@@ -201,7 +201,7 @@ function handleResults() {
         output += '</div></div>';
     });
 	if (exceededSearchCap) {
-		output += '<div class="exceededSearchNotif">Display more results...</div>';
+		output += '<div class="resultDiv exceededSearchNotif">Display more results...</div>';
 	}
     searchResults.html(output);
 }
