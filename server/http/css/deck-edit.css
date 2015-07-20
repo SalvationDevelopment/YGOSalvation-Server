@@ -232,15 +232,15 @@ input.scaleInput {
 }
 
 div.descriptionContainer span {
-    width: 69%;
+    width: 74%;
     float: right;
-    height: 20%;
+    height: 10%;
 }
 
 div.thumbContainer img {
-    width: 30%;
+    width: 25%;
     float: left;
-    height: 20%;
+    height: 10%;
 }
 
 .maincontainer label {
