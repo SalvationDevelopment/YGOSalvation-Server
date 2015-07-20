@@ -161,6 +161,7 @@ var imgDir = "http://ygopro.us/ygopro/pics/",
     };
 
 function handleResults() {
+	const SEARCH_HARD_CAP = 100;
     var monsterCardSelect = $('.monsterCardSelect'),
         monsterTypeSelect = $('.monsterTypeSelect'),
         monsterCardCheck = $('[data-input-monster-card]'),
@@ -176,6 +177,9 @@ function handleResults() {
         hiddenType = $('<input type="hidden" data-input-type>').appendTo($('.searchBlock:eq(0)')).val(1 + parseInt(monsterCardValue, 10) + parseInt(monsterTypeValue, 10));
     }
     results = applyFilters(generateQueryObject(), $('.banlistSelect').val(), lflist);
+	if (results.length > SEARCH_HARD_CAP) {
+		results = results.slice(0, SEARCH_HARD_CAP);
+	}
     results.forEach(function(result, index) {
         output += '<div class="resultDiv row_' + index + '" data-card-id="' + result.id + '"' + (result.alias !== 0 ? ' data-card-alias="' + result.alias + '"' : '') + '><div class="thumbContainer"><img src="' + thumbDir + result.id + '.jpg" /></div><div class="descriptionContainer"><span class="name">' + result.name + '</span><br />';
         if (cardIs("monster", result)) {
