@@ -269,6 +269,11 @@ button.deleteDeck {
     float: left;
 }
 
+button.searchButton {
+  position: relative;
+  z-index: 9001;
+}
+
 input.decknameInput {
     float: left;
     display: block;
