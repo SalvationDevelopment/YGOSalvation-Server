@@ -170,6 +170,8 @@ function handleResults() {
         inputTypeCheck = $('[data-input-type]').val(),
         monsterCardValue = monsterCardSelect.val() || 0,
         monsterTypeValue = monsterTypeSelect.val() || 0,
+		exceededSearchCap = false,
+		exceededSearchArray = [],
         hiddenType,
         results,
         output = "";
@@ -178,6 +180,8 @@ function handleResults() {
     }
     results = applyFilters(generateQueryObject(), $('.banlistSelect').val(), lflist);
 	if (results.length > SEARCH_HARD_CAP) {
+		exceededSearchArray = results;
+		exceededSearchCap = true;
 		results = results.slice(0, SEARCH_HARD_CAP);
 	}
     results.forEach(function(result, index) {
@@ -196,6 +200,9 @@ function handleResults() {
         }
         output += '</div></div>';
     });
+	if (exceededSearchCap) {
+		output += '<div class="exceededSearchNotif">Display more results...</div>';
+	}
     searchResults.html(output);
 }
 
