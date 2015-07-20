@@ -93,6 +93,7 @@ $(function() {
 
 var imgDir = "http://ygopro.us/ygopro/pics/",
     thumbDir = imgDir + "thumbnail/",
+	forumLink = "http://forum.ygopro.us/index.php/?ref=_deckEditor",
     attributeMap = {
         1: "EARTH",
         2: "WATER",
@@ -113,6 +114,7 @@ var imgDir = "http://ygopro.us/ygopro/pics/",
     },
     monsterMap = {
         17: "Normal",
+		33: "Effect",
         65: "Fusion",
         97: "Fusion / Effect",
         129: "Ritual",
