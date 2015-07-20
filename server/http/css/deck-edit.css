@@ -1,3 +1,7 @@
+* {
+    box-sizing: border-box;
+}
+
 html div {
     border: 1px solid black;
 }
@@ -225,10 +229,6 @@ input.scaleInput {
     height: 100%;
     width: 100%;
 	overflow-y: auto;
-}
-
-div.resultDiv {
-    border: 1px solid yellow;
 }
 
 div.descriptionContainer span {
