@@ -38,7 +38,7 @@ html div {
 .searchLeft {
     float: left;
     height: 100%;
-    width: 33%;
+    width: 30%;
     padding: 1%;
     border: 1px solid yellow;
 }
@@ -64,7 +64,7 @@ button.clearDeck {
 .searchRight {
     float: right;
     height: 100%;
-    width: 66%;
+    width: 60%;
     border: 1px solid orange;
 }
 
