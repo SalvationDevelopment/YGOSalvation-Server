@@ -13,10 +13,11 @@
     width: 24%;
 }
 
-.cardimage {
+.cardImage {
     top: 0%;
     left: 0%;
-    width: 60%;
+    width: 179px;
+	margin: 0 auto;
     height: 38%;
     border: 1px solid blue;
 }
