@@ -2,6 +2,11 @@
     box-sizing: border-box;
 }
 
+body {
+    font-family: monospace;
+    font-size: 12px;
+}
+
 .mainContainer {
     width: 100%;
     height: 100%;
@@ -17,7 +22,7 @@
     top: 0%;
     left: 0%;
     width: 179px;
-	margin: 0 auto;
+    margin: 0 auto;
     height: 38%;
     border: 1px solid blue;
 }
@@ -278,8 +283,8 @@ button.deleteDeck {
 }
 
 button.searchButton {
-  position: relative;
-  z-index: 9001;
+    position: relative;
+    z-index: 9001;
 }
 
 input.decknameInput {
@@ -293,4 +298,9 @@ div.clearsortshufflewrapper {
     overflow: auto;
     width: 50%;
     margin: 0 auto;
+}
+
+.resultDiv {
+    overflow: auto;
+    border: 1px solid black;
 }
