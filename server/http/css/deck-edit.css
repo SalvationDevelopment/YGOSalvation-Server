@@ -67,16 +67,23 @@ button.clearDeck {
     height: 100%;
     width: 66%;
     border: 1px solid orange;
+    overflow: auto;
 }
 
-div.searchBlock select.trapSelect, div.searchBlock select.spellSelect, div.searchBlock select.monsterCardSelect, div.searchBlock select.monsterTypeSelect, div.searchBlock select.attributeSelect, div.searchBlock select.raceSelect {
+div.searchBlock select.trapSelect,
+div.searchBlock select.spellSelect,
+div.searchBlock select.monsterCardSelect,
+div.searchBlock select.monsterTypeSelect,
+div.searchBlock select.attributeSelect,
+div.searchBlock select.raceSelect {
     float: right;
     height: 15%;
     display: none;
 }
 
-div.searchBlock label[for^="attribute"], div.searchBlock label[for^="race"] {
-	display: none;
+div.searchBlock label[for^="attribute"],
+div.searchBlock label[for^="race"] {
+    display: none;
 }
 
 select.typeSelect {
@@ -88,7 +95,8 @@ select.typeSelect {
     margin-top: 1.5%;
 }
 
-select.attributeSelect, select.raceSelect {
+select.attributeSelect,
+select.raceSelect {
     display: none;
     float: left;
     height: 15%;
@@ -225,7 +233,7 @@ input.scaleInput {
 .searchResults {
     height: 100%;
     width: 100%;
-	overflow-y: auto;
+    overflow-y: auto;
 }
 
 div.descriptionContainer span {
