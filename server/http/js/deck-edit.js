@@ -81,7 +81,7 @@ $(function() {
                         handleResults();
                     }
                 });
-                $('.searchResults').on('mouseenter', '.resultDiv:not(.searchError)', function() {
+                $('.searchResults').on('mouseenter', '.resultDiv:not(".exceededSearchNotif")', function() {
                     var id = $(this).attr('data-card-id');
                     $('.imgContainer').attr('src', imgDir + id + '.jpg');
                     $('.cardDescription').html(makeDescription(id));
