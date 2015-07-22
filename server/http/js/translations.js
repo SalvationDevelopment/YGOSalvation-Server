@@ -265,7 +265,7 @@ var translationDB = [{
     "nl": "Wachtwoord",
     "it": "",
     "tr": "Forum Şifr-caesi",
-    "zh": "密码"",
+    "zh": "密码",
     "ko": "",
     "jp": "パスワード",
     "fa": "گذرواژه",
