@@ -36,6 +36,20 @@ body {
     padding: 12px;
 }
 
+.f40 .card {
+    float: left;
+}
+
+.f50 .card {
+    float: left;
+    margin-right: -10px;
+}
+
+.f60 .card {
+    float: left;
+    margin-right: -20px;
+}
+
 .searchBar {
     float: right;
     width: 75.7%;
