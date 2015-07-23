@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
 <!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
 <!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
@@ -180,8 +180,8 @@
         </h1>
         </span>
         <ul class="featurelist" style="font-size:small">
-            <!--<li class="launcheronly"><span class="psudolinksingle " onclick='ygopro("-l")'>LAN Mode</span>
-            </li>-->
+            <li class="launcheronly"><span class="psudolinksingle " onclick='ygopro("-l")'>LAN Mode</span>
+            </li>
             <li><span data-translation-deckedit class="psudolinksingle" onclick='ygopro("-d");singlesitenav("deckedit");'>Deck Edit</span>
             </li>
             <li class="launcheronly"><span data-translation-replays class="psudolinksingle" onclick='ygopro("-r")'>Replays</span>
@@ -196,6 +196,8 @@
             </li>
             <li><span data-translation-faq class="psudolinksingle" onclick="singlesitenav('faq')">News</span>
             </li>
+            <li><span data-translation-ranking class="psudolinksingle" onclick="singlesitenav('ranking');">Ranking</span>
+            </li>
             <li class="launcheronly"><span class="psudolinksingle" onclick="singlesitenav('settings')" data-translation-settings>Settings</span>
             </li>
         </ul>
@@ -203,7 +205,7 @@
     <header style="top:0vh;" id='home'>
         <div id="homecontainer">
             <span class="psudolinksingle" onclick="singlesitenav('home')">
-                <h1 style="padding-top:80px;"   class="shine">
+                <h1 class="shine">
                     <span  style="color:#e4a;">YGOPro</span> <span data-translation-salvationserver>Salvation Server</span>
             </h1>
             </span>
@@ -246,12 +248,10 @@
             <form id="ipblogin" style="text-align:center; color: white !important; display:block; margin:0 auto" class="launcheronly loginsystem">
                 <input data-translation-forumusername id="ips_username" type="text" class="launcheronly loginsystem" name="ips_username" tabindex="1" placeholder="Forum Username">
                 <input data-translation-forumpassword id="ips_password" type="password" class="launcheronly loginsystem" name="ips_password" tabindex="2" placeholder="Forum Password">
-                <br><span style="font-size:.9em; display:block; margin-top:-0.5em;"><input type="checkbox" id="ips_remember" ><span data-translation-rememberusernamepassword> Remember Username &amp; Password?</span></span>
+                <br><span style="font-size:.9em; display:block; margin-top:-0.5em;"><input type="checkbox" id="ips_remember" ><span data-translation-rememberusernamepassword> Remember Username &amp; Password?</span> | <a data-translation-registerviaforum class="launcheronly loginsystem" href="http://forum.ygopro.us/index.php?app=core&module=global&section=register" target="_blank">Register via Forum</a> | <a data-translation-forgotpassword class="launcheronly loginsystem" href="http://forum.ygopro.us/index.php?app=core&module=global&section=lostpass">Forgot Password</a>
+                </span>
                 <br />
                 <button data-translation-login id="dolog" class="launcheronly loginsystem">Login</button>
-                <br />
-                <br />
-                <a data-translation-registerviaforum class="launcheronly loginsystem" href="http://forum.ygopro.us/index.php?app=core&module=global&section=register" target="_blank">Register via Forum</a> | <a data-translation-forgotpassword class="launcheronly loginsystem" href="http://forum.ygopro.us/index.php?app=core&module=global&section=lostpass">Forgot Password</a>
             </form>
             <div style="font-size:.5em; text-align:center; color:#747" id="versioninfo">Version 4 : Production 4 : Revision 1</div>
             <div style="font-size:1.5em; text-align:center; color:pink" class='webonly'></div>
@@ -372,13 +372,13 @@
         </section>
     </header>
     <header style="padding-top:50px" id="deckedit">
-		<!--<script src="js/parseYDK.js"></script>
+        <!--<script src="js/parseYDK.js"></script>
 		<script>
 			$(function(){
 				getDecklists(fillSelect);
 			});
 		</script>-->
-		<select id="ydkListSelect" style="display: none;"></select>
+        <select id="ydkListSelect" style="display: none;"></select>
         <div id="deckwrapper">
             <div id="de_column1">
                 <div id="cardpic"></div>
@@ -541,7 +541,7 @@
                             <option value="nl">Nederlands</option>
                             <option value="tr">Türkçe</option>
                             <option value="jp">日本語</option>
-							<option value="zh">中文(简体)</option>
+                            <option value="zh">中文(简体)</option>
                             <option value="fa">فارسی</option>
                             <option value="ar">لغة عربي</option>
                         </select>
