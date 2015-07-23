@@ -3,6 +3,8 @@ $(function () {
     var generateRows = $('.generateRow'),
         output = "",
 		temp,
+		tempX,
+		tempY,
         amountY,
         amountX,
         dataWidth,
@@ -15,17 +17,19 @@ $(function () {
         };
     for (var i = 0, len = generateRows.length; i < len; i++) {
 		temp = $(generateRows[i]);
-        amountY = parseInt(temp.attr('data-amount-y'), 10) || defaults.amountY;
-        amountX = parseInt(temp.attr('data-amount-x'), 10) || defaults.amountX;
+        amountY = tempY = parseInt(temp.attr('data-amount-y'), 10) || defaults.amountY;
+        amountX = tempX = parseInt(temp.attr('data-amount-x'), 10) || defaults.amountX;
         dataWidth = temp.attr('data-width') || defaults.dataWidth;
         dataHeight = temp.attr('data-height') || defaults.dataHeight;
-		while(--amountY >= 0) {
-			output += '<span class="generateOutput_Y cardRow_' + amountY + '" style="height: ' + dataHeight + ';">';
-			while (--amountX >= 0) {
-                output += '<span class="generatedRow cardCol_' + amountX + '" style="width: ' + dataWidth + '; height: ' + dataHeight + '; margin: 2px 2px 2px 2px; padding: 1px 1px 1px 1px;"></span>';
+		while(--tempY >= 0) {
+			output += '<span class="generateOutput_Y cardRow_' + tempY + '" style="height: ' + dataHeight + ';">';
+			while (--tempX >= 0) {
+                output += '<span class="generatedRow cardCol_' + tempX + '" style="width: ' + dataWidth + '; height: ' + dataHeight + '; margin: 2px 2px 2px 2px; padding: 1px 1px 1px 1px;"></span>';
             }
+			tempX = amountX;
 			output += '</span>';
 		}
+		tempY = amountY;
 		temp.replaceWith(output);
     }
 });
