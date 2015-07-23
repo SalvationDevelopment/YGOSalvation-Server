@@ -75,7 +75,7 @@
     <header style="top:0vh;" id='home'>
         <div id="homecontainer">
             <span class="psudolinksingle" onclick="singlesitenav('home')">
-                <h1 class="shine" style="padding-top:20px">
+                <h1 class="shine" style="padding-top:5px">
                     <span  style="color:#e4a;">YGOPro</span> <span data-translation-salvationserver>Salvation Server</span>
             </h1>
             </span>
@@ -119,13 +119,11 @@
                 <input data-translation-forumusername id="ips_username" type="text" class="launcheronly loginsystem" name="ips_username" tabindex="1" placeholder="Forum Username">
                 <input data-translation-forumpassword id="ips_password" type="password" class="launcheronly loginsystem" name="ips_password" tabindex="2" placeholder="Forum Password">
                 <br><span style="font-size:.9em; display:block; margin-top:-0.5em;"><input type="checkbox" id="ips_remember" ><span data-translation-rememberusernamepassword> Remember Username &amp; Password?</span>
-                <br />
-                <br /> <a data-translation-registerviaforum class="launcheronly loginsystem" href="http://forum.ygopro.us/index.php?app=core&module=global&section=register" target="_blank">Register via Forum</a> | <a data-translation-forgotpassword class="launcheronly loginsystem" href="http://forum.ygopro.us/index.php?app=core&module=global&section=lostpass">Forgot Password</a>
+                <span style="display:inline-block; width:40px"></span><a data-translation-registerviaforum class="launcheronly loginsystem" href="http://forum.ygopro.us/index.php?app=core&module=global&section=register" target="_blank">Register via Forum</a> | <a data-translation-forgotpassword class="launcheronly loginsystem" href="http://forum.ygopro.us/index.php?app=core&module=global&section=lostpass">Forgot Password</a>
                 </span>
                 <br />
-                <button data-translation-login id="dolog" style="display:none;" class="launcheronly loginsystem">Login</button>
+                <button data-translation-login id="dolog" class="launcheronly loginsystem">Login</button>
             </form>
-            <div style="font-size:.5em; text-align:center; color:#747" id="versioninfo">Version 4 : Production 4 : Revision 1</div>
             <div style="font-size:1.5em; text-align:center; color:pink" class='webonly'></div>
             <div id="languagesetter">
                 <span onclick="translateLang('en')">English</span>
@@ -169,7 +167,7 @@
     </header>
     <header style="padding-top:50px" id="host">
 
-        <section id="hostSettings">
+        <section id="hostSettings" style="height:77%">
             <div>
 
                 <h2 data-translation-settings>Settings</h2>
@@ -241,6 +239,11 @@
                 <div data-translation-host class="button" id="creategameok" onclick='setHostSettings();'>Host</div>
 
             </div>
+            <SCRIPT language="Javascript">
+                var cpmstar_rnd = Math.round(Math.random() * 999999);
+                var cpmstar_pid = 44429;
+                document.writeln("<SCR" + "IPT language='Javascript' src='//server.cpmstar.com/view.aspx?poolid=" + cpmstar_pid + "&script=1&rnd=" + cpmstar_rnd + "'></SCR" + "IPT>");
+            </SCRIPT>
         </section>
     </header>
     <header style="padding-top:50px" id="deckedit">
