@@ -17,8 +17,8 @@ $(function () {
         };
     for (var i = 0, len = generateRows.length; i < len; i++) {
 		temp = $(generateRows[i]);
-        amountY = tempY = parseInt(temp.attr('data-amount-y'), 10) || defaults.amountY;
-        amountX = tempX = parseInt(temp.attr('data-amount-x'), 10) || defaults.amountX;
+        amountY = tempY = parseInt((temp.attr('data-amount-y') || defaults.amountY), 10);
+        amountX = tempX = parseInt((temp.attr('data-amount-x')  || defaults.amountX), 10);
         dataWidth = temp.attr('data-width') || defaults.dataWidth;
         dataHeight = temp.attr('data-height') || defaults.dataHeight;
 		while(--tempY >= 0) {
