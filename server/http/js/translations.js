@@ -13,7 +13,8 @@ var translationDB = [{
     "ko": "",
     "jp": "Salvationサーバー",
     "fa": "سرور سلوایشن",
-    "ar": "سالفيشن سرفر"
+    "ar": "سالفيشن سرفر",
+    "he": "שרת ישועה"
 }, {
     "item": "data-translation-deckedit",
     "en": "Deck Edit",
@@ -29,7 +30,8 @@ var translationDB = [{
     "ko": "",
     "jp": "デッキ編集",
     "fa": "ویراستار دست",
-    "ar": "تعديل المجموعة"
+    "ar": "تعديل المجموعة",
+    "he": "בחר את הקלפים"
 }, {
     "item": "data-translation-replays",
     "en": "Replays",
@@ -45,7 +47,8 @@ var translationDB = [{
     "ko": "",
     "jp": "リプレイ",
     "fa": "بازپخش ها",
-    "ar": "الإعادات"
+    "ar": "الإعادات",
+    "he": "מִשְׂחָק חוֹזֵר"
 }, {
     "item": "data-translation-gamelist",
     "en": "Game List",
@@ -61,7 +64,8 @@ var translationDB = [{
     "ko": "",
     "jp": "対戦部屋リスト",
     "fa": "لیست بازی ها",
-    "ar": "قائمة اللّعب"
+    "ar": "قائمة اللّعب",
+    "he": "רשימת משחקים"
 }, {
     "item": "data-translation-host",
     "en": "Host",
@@ -77,7 +81,8 @@ var translationDB = [{
     "ko": "",
     "jp": "部屋を建てる",
     "fa": "بازی ساختن",
-    "ar": "استضيف"
+    "ar": "استضيف",
+    "he": "לְאַרֵחַ"
 }, {
     "item": "data-translation-join",
     "en": "Join",
@@ -93,7 +98,8 @@ var translationDB = [{
     "ko": "",
     "jp": "部屋に入る",
     "fa": "وارد شو",
-    "ar": "تسجيل الدخول"
+    "ar": "تسجيل الدخول",
+    "he": "להצטרף"
 }, {
     "item": "data-translation-spectate",
     "en": "Spectate",
@@ -109,7 +115,8 @@ var translationDB = [{
     "ko": "",
     "jp": "観戦する",
     "fa": "تماشا کن",
-    "ar": "راقب"
+    "ar": "راقب",
+    "he": "לראות"
 }, {
     "item": "data-translation-forum",
     "en": "Forum",
@@ -125,7 +132,8 @@ var translationDB = [{
     "ko": "",
     "jp": "フォーラム",
     "fa": "تالار گفتگو",
-    "ar": "المنتدى"
+    "ar": "المنتدى",
+    "he": "פוֹרוּם"
 }, {
     "item": "data-translation-chat",
     "en": "Chat",
@@ -141,7 +149,8 @@ var translationDB = [{
     "ko": "",
     "jp": "チャット",
     "fa": "چت",
-    "ar": "دردشة"
+    "ar": "دردشة",
+    "he": "IRC חדר"
 }, {
     "item": "data-translation-faq",
     "en": "News",
@@ -157,7 +166,8 @@ var translationDB = [{
     "ko": "",
     "jp": "おしらせ",
     "fa": "خبر ها",
-    "ar": "أخبار"
+    "ar": "أخبار",
+    "he": "חדשות"
 }, {
     "item": "data-translation-settings",
     "en": "Settings",
@@ -173,7 +183,8 @@ var translationDB = [{
     "ko": "",
     "jp": "ゲームの設定",
     "fa": "تنظیمات",
-    "ar": "الإعدادات"
+    "ar": "الإعدادات",
+    "he": "הגדרות"
 }, {
     "item": "data-translation-additionaloptions",
     "en": "Additional Options",
@@ -189,7 +200,8 @@ var translationDB = [{
     "ko": "",
     "jp": "追加オプション",
     "fa": "بیشتر اختیارها",
-    "ar": "خيارات إضافية"
+    "ar": "خيارات إضافية",
+    "he": "אפשרויות"
 }, {
     "item": "data-translation-onlineyugiohsimulator",
     "en": "Online Yu-Gi-Oh! Simulator",
@@ -205,7 +217,8 @@ var translationDB = [{
     "ko": "",
     "jp": "オンライン遊戯王シミュレーター",
     "fa": "بازی یوگیوه آنلاین",
-    "ar": "مقلّد يوغيو الشّبكي"
+    "ar": "مقلّد يوغيو الشّبكي",
+    "he": "סימולטור יוגיהו באינטרנט"
 }, {
     "item": "data-translation-playnow",
     "en": "Full Windows Client",
@@ -221,7 +234,8 @@ var translationDB = [{
     "ko": "",
     "jp": "完全なWindowsクライアント",
     "fa": "کارخواه برای ویندوز",
-    "ar": "عميل ويندوز الكامل"
+    "ar": "عميل ويندوز الكامل",
+    "he": "מלא Windows לקוח "
 }, {
     "item": "data-translation-login",
     "en": "Login",
@@ -237,7 +251,8 @@ var translationDB = [{
     "ko": "",
     "jp": "ログイン",
     "fa": "ورود شو",
-    "ar": "تسجيل الدخول"
+    "ar": "تسجيل الدخول",
+    "he": "התחברתי "
 }, {
     "note": "data-translation-forumusername",
     "en": "Username",
@@ -253,7 +268,8 @@ var translationDB = [{
     "ko": "",
     "jp": "フォーラムのユーザーネーム",
     "fa": "نام کاربری",
-    "ar": "اسم المستخدم"
+    "ar": "اسم المستخدم",
+    "he": "שם משתמש "
 }, {
     "note": "data-translation-forumpassword",
     "en": "Password",
@@ -269,7 +285,8 @@ var translationDB = [{
     "ko": "",
     "jp": "パスワード",
     "fa": "گذرواژه",
-    "ar": "كلمة السرّ"
+    "ar": "كلمة السرّ",
+    "he": "סיסמא "
 }, {
     "item": "data-translation-rememberusernamepassword",
     "en": "Remember Username & Password?",
@@ -285,7 +302,8 @@ var translationDB = [{
     "ko": "",
     "jp": "ユーザーネームとパスワードを保存しますか？",
     "fa": "من را فراموش نکن",
-    "ar": " تذكر اسم المستخدم وكلمة السرّ"
+    "ar": " تذكر اسم المستخدم وكلمة السرّ",
+    "he": "לזכור שם משתמש וסיסמא "
 }, {
     "item": "data-translation-registerviaforum",
     "en": "Register via Forum",
@@ -301,7 +319,8 @@ var translationDB = [{
     "ko": "",
     "jp": "フォーラムで登録",
     "fa": "سیاق با تالار گفتگو بکن",
-    "ar": "فتح حساب عن طريق المنتدى"
+    "ar": "فتح حساب عن طريق المنتدى",
+    "he": "הרשם באמצעות פורום"
 }, {
     "item": "data-translation-forgotpassword",
     "en": "Forgot Password",
@@ -317,7 +336,8 @@ var translationDB = [{
     "ko": "",
     "jp": "パスワードを忘れてしまいました",
     "fa": "گذرواژهت را فراموش کردی؟",
-    "ar": "نسيت كلمة السرّ"
+    "ar": "نسيت كلمة السرّ",
+    "he": "?שכחת את הסיסמה"
 }, {
     "item": "data-translation-ranked",
     "en": "Ranked",
@@ -333,7 +353,8 @@ var translationDB = [{
     "ko": "",
     "jp": "ランキング",
     "fa": "رتبه ای",
-    "ar": "رانك"
+    "ar": "رانك",
+    "he": "מדורג"
 }, {
     "item": "data-translation-currentdeck",
     "en": "Current deck",
@@ -349,7 +370,8 @@ var translationDB = [{
     "ko": "",
     "jp": "現在のデッキ",
     "fa": "دست اکنون",
-    "ar": "المجموعة الحالية"
+    "ar": "المجموعة الحالية",
+    "he": "חפיסות נבחרים"
 }, {
     "item": "data-translation-cardpool",
     "en": "Card Pool",
@@ -365,7 +387,8 @@ var translationDB = [{
     "ko": "",
     "jp": "カードプール",
     "fa": "لیست کارت ها",
-    "ar": "صنف الورق"
+    "ar": "صنف الورق",
+    "he": "רשימה של חפיסות"
 }, {
     "item": "data-translation-banlist",
     "en": "Ban List",
@@ -381,7 +404,8 @@ var translationDB = [{
     "ko": "",
     "jp": "リミットレギュレーション",
     "fa": "لیست کارت های بی مجاز",
-    "ar": "قائمة الحظر"
+    "ar": "قائمة الحظر",
+    "he": "רשימת ההגבלות"
 }, {
     "item": "data-translation-duelmode",
     "en": "Duel Mode",
@@ -397,7 +421,8 @@ var translationDB = [{
     "ko": "",
     "jp": "デュエルモード",
     "fa": "جور بازی",
-    "ar": "نوع المبارزة"
+    "ar": "نوع المبارزة",
+    "he": "מצב דו קרב"
 }, {
     "item": "data-translation-timelimit",
     "en": "Time Limit",
@@ -413,7 +438,8 @@ var translationDB = [{
     "ko": "",
     "jp": "タイムリミット",
     "fa": "حودود وقت",
-    "ar": "الوقت المحدد"
+    "ar": "الوقت المحدد",
+    "he": "מגבלת זמן"
 }, {
     "item": "data-translation-enablepriority",
     "en": "Enable Priority",
@@ -429,7 +455,8 @@ var translationDB = [{
     "ko": "",
     "jp": "優先権を有効",
     "fa": "اولویت را بزار",
-    "ar": "تشغيل الأفضلية"
+    "ar": "تشغيل الأفضلية",
+    "he": "אפשר עדיפות"
 }, {
     "item": "data-translation-disablecheckdeck",
     "en": "Disable Check Deck",
@@ -445,7 +472,8 @@ var translationDB = [{
     "ko": "",
     "jp": "デッキのチェックなし",
     "fa": "دست را چک نکن",
-    "ar": "تعطيل التحقق بالمجموعة"
+    "ar": "تعطيل التحقق بالمجموعة",
+    "he": "לא בדוק חפיסות"
 }, {
     "item": "data-translation-disableshuffledeck",
     "en": "Disable Shuffle Deck",
@@ -461,7 +489,8 @@ var translationDB = [{
     "ko": "",
     "jp": "シャッフルなし",
     "fa": "دست را مخلوط نکن",
-    "ar": "تعطيل خلط الأوراق"
+    "ar": "تعطيل خلط الأوراق",
+    "he": "לא ערבב חפיסות"
 }, {
     "item": "data-translation-usepassword",
     "en": "Use Password",
@@ -477,7 +506,8 @@ var translationDB = [{
     "ko": "",
     "jp": "パスワードを使用する",
     "fa": "گذرواژه استفاده کن",
-    "ar": "استخدام كلمة السرّ"
+    "ar": "استخدام كلمة السرّ",
+    "he": "השתמש סיסמא"
 }, {
     "item": "data-translation-lifepoints",
     "en": "Lifepoints",
@@ -493,7 +523,8 @@ var translationDB = [{
     "ko": "",
     "jp": "ライフポイント",
     "fa": "امتیاز زندگی",
-    "ar": "الحياة"
+    "ar": "الحياة",
+    "he": "נקודות חיים"
 }, {
     "item": "data-translation-gamesettings",
     "en": "Game Settings",
@@ -509,7 +540,8 @@ var translationDB = [{
     "ko": "",
     "jp": "ゲームの設定",
     "fa": "تنظیمات بازی",
-    "ar": "إعدادات اللّعبة"
+    "ar": "إعدادات اللّعبة",
+    "he": "הגדרות משחק"
 }, {
     "item": "data-translation-autoplacementwillhavethegameautomaticllypickwherecardsareplaced",
     "en": "Auto Placement will have the game automatically pick where cards are placed.",
@@ -525,7 +557,8 @@ var translationDB = [{
     "ko": "",
     "jp": "配置を自動に行う以上、位置をランダムにすることができます。",
     "fa": ".کارت گذاشتن اتوماتیک تصمیم میگیره کجا کارت ها میرن",
-    "ar": "الوضع التلقائي سيجعل اللعبة تختار مكان وضع الأوراق بشكل تلقائي"
+    "ar": "الوضع التلقائي سيجعل اللعبة تختار مكان وضع الأوراق بشكل تلقائي",
+    "he": "מיקום כרטיס אוטומטי: המשחק באופן אוטומטי בוחר בי כרטיסים ממוקמים"
 }, {
     "item": "data-translation-ifautoplacementisonyoucanrandomizeit",
     "en": "If Auto Placement is on, you can randomize it.",
@@ -541,7 +574,8 @@ var translationDB = [{
     "ko": "",
     "jp": "配置を自動に行う以上、位置をランダムにすることができます。",
     "fa": "اگر کارت گذاشتن اتوماتیک است، میتوانی تصادفی بکنیش",
-    "ar": "إذا شغّلت الوضع التلقائي, فبإمكانك جعله عشوائيّاً"
+    "ar": "إذا شغّلت الوضع التلقائي, فبإمكانك جعله عشوائيّاً",
+    "he": "מיקום כרטיס אקראי באקראי המיקום האוטומטי"
 }, {
     "item": "data-translation-ifyouselectedmultiplecardsinresponsetoachainsuggestionyoumayhavethegameautomaticallypicktheresolutionorderifautoplacementisonyoucanrandomizeit",
     "en": "If you selected multiple cards in response to a chain suggestion. You may have the game automatically pick the resolution order. If Auto Placement is on, you can randomize it.",
@@ -557,7 +591,8 @@ var translationDB = [{
     "ko": "",
     "jp": "複数のカードがチェーンを組む場合、ゲームがチェーンを組む順番の指定を自動で行うことができます。カードの配置を自動に行う以上で順番の指定をランダムにすることができます。",
     "fa": ".اگر چند تا کارت تصمیم کردی در یک زنجیر، میتوانی بزاری بازی منظم ش را تصمیم بکن. اگر گذاشتن کارت ها اتوماتیک هست، میتوانی تصادفی بکنیش",
-    "ar": "إذا اخترت عدّة أوراق استجابةً لافراح تشغيل سلسلة: يمكنك جعل اللّعبة تختار ترتيب الحلول بشكل تلقائيّ. إذا شغّلت الوضع التلقائيّ, يمكنك جعلها عشوائية"
+    "ar": "إذا اخترت عدّة أوراق استجابةً لافراح تشغيل سلسلة: يمكنك جعل اللّعبة تختار ترتيب الحلول بشكل تلقائيّ. إذا شغّلت الوضع التلقائيّ, يمكنك جعلها عشوائية",
+    "he": "אם כמה כרטיסים להפעיל בפעם אחת בשרשרת (בתוך SEGOC), המשחק באופן אוטומטי בוחר את סדר הרזולוציה. אם להזמין שרשרת האוטומטית כבוי, אתה בוחר את הסדר"
 }, {
     "item": "data-translation-noobviousdelayforchainsaddadditionalpausestogameplaytospookyouropponent",
     "en": "No (obvious) delay for Chains. Add additional pauses to game play to spook your opponent.",
@@ -573,7 +608,8 @@ var translationDB = [{
     "ko": "",
     "jp": "チェーンできない場合に思考中を見せかけないことができます。相手を怖がらせる為に思考中を見せかけることもできます。",
     "fa": ".هیچ تاخیر (شدید) برای لینک ها ی زنجیر ها. تاخیر بزار برای این که دشمنت را بترسی",
-    "ar": "لا تأخير (واضح) في السلسلات, زد إبطاءات إضافية لإخافة خصمك"
+    "ar": "لا تأخير (واضح) في السلسلات, زد إبطاءات إضافية لإخافة خصمك",
+    "he": ".עיכוב מזויף שרשרות. זה עוצר לרגע כדי להסוות כאשר יש לך אפקטים לשרשרת או לא"
 }, {
     "item": "data-translation-autocardplacement",
     "en": "Auto Card Placement",
@@ -589,7 +625,8 @@ var translationDB = [{
     "ko": "",
     "jp": "カードの配置を自動に行う",
     "fa": "جاهای اتوماتیک برای کارتها",
-    "ar": "الوضع التلقائي للورق"
+    "ar": "الوضع التلقائي للورق",
+    "he": "מיקום כרטיס אוטומטי"
 }, {
     "item": "data-translation-randomcardplacement",
     "en": "Random Card Placement",
@@ -605,7 +642,8 @@ var translationDB = [{
     "ko": "",
     "jp": "ランダムな位置にする",
     "fa": "جاهای تصادفی برای کارتها",
-    "ar": "الوضع العشوائي للورق"
+    "ar": "الوضع العشوائي للورق",
+    "he": "מיקום כרטיס אקראי"
 }, {
     "item": "data-translation-autochainorder",
     "en": "Auto Chain Order",
@@ -621,7 +659,8 @@ var translationDB = [{
     "ko": "",
     "jp": "チェーンを組む順番の指定を自動で行う",
     "fa": "منظم لینک زنجیر اتوماتیک",
-    "ar": "ترتيب تلقائي للسلسلات"
+    "ar": "ترتيب تلقائي للسلسلات",
+    "he": "להזמין שרשרת אוטומטית"
 }, {
     "item": "data-translation-nodelayforchains",
     "en": "No delay for Chains",
@@ -637,7 +676,8 @@ var translationDB = [{
     "ko": "",
     "jp": "チェーンできない場合に思考中を見せかけない",
     "fa": "هیچ تاخیر برای لینک های زنجیر",
-    "ar": "لا تأخير في تطبيق السلسلة"
+    "ar": "لا تأخير في تطبيق السلسلة",
+    "he": "עיכוב מזויף שרשרות"
 }, {
     "item": "data-translation-enablesound",
     "en": "Enable Sound",
@@ -653,7 +693,8 @@ var translationDB = [{
     "ko": "",
     "jp": "SEを有効化にする",
     "fa": "صدا را روشن کن",
-    "ar": "تشغيل الصوت"
+    "ar": "تشغيل الصوت",
+    "he": "אפשר של האפקטים הקוליים"
 }, {
     "item": "data-translation-enablemusic",
     "en": "Enable Music",
@@ -669,7 +710,8 @@ var translationDB = [{
     "ko": "",
     "jp": "BGMを有効化にする",
     "fa": "موزیک را روشن کن",
-    "ar": "تشغيل الموسيقا"
+    "ar": "تشغيل الموسيقا",
+    "he": "אפשר מוסיקה"
 }, {
     "item": "data-translation-enabledirectx",
     "en": "Enable DirectX",
@@ -685,7 +727,8 @@ var translationDB = [{
     "ko": "",
     "jp": "DirectXを有効化にする",
     "fa": "دیرکت‌اکس را روشن کن",
-    "ar": "تشغيل DirectX"
+    "ar": "تشغيل DirectX",
+    "he": "אפשר DirectX"
 }, {
     "item": "data-translation-antialiasing",
     "en": "Anti Aliasing",
@@ -701,7 +744,8 @@ var translationDB = [{
     "ko": "",
     "jp": "アンチエイリアシング",
     "fa": "ضد پلگی",
-    "ar": "ضدّ اسم المستعار"
+    "ar": "ضدّ اسم المستعار",
+    "he": "החלקת עקומות"
 }, {
     "item": "data-translation-fontsize",
     "en": "Font Size",
@@ -717,7 +761,8 @@ var translationDB = [{
     "ko": "",
     "jp": "テキストサイズ",
     "fa": "اندازه ی فونت",
-    "ar": "حجم الحروف"
+    "ar": "حجم الحروف",
+    "he": "גודל גופן"
 }, {
     "item": "data-translation-font",
     "en": "Font",
@@ -733,7 +778,8 @@ var translationDB = [{
     "ko": "",
     "jp": "フォント",
     "fa": "فونت",
-    "ar": "الحروف"
+    "ar": "الحروف",
+    "he": "גופן"
 }, {
     "item": "data-translation-skin",
     "en": "Skin",
@@ -749,7 +795,8 @@ var translationDB = [{
     "ko": "",
     "jp": "スキン",
     "fa": "مدل",
-    "ar": "القشرة"
+    "ar": "القشرة",
+    "he": "עור"
 }, {
     "item": "data-translation-default",
     "en": "Default",
@@ -765,7 +812,8 @@ var translationDB = [{
     "ko": "",
     "jp": "デフォルト",
     "fa": "استاندارد",
-    "ar": "الأصل"
+    "ar": "الأصل",
+    "he": "ברירת מחדל"
 }, {
     "item": "data-translation-soundvolume",
     "en": "Sound Volume",
@@ -781,7 +829,8 @@ var translationDB = [{
     "ko": "",
     "jp": "SEボリューム",
     "fa": "بلندی صدا",
-    "ar": "درجة الصوت"
+    "ar": "درجة الصوت",
+    "he": "עוצמת הקול של האפקטים הקוליים"
 }, {
     "item": "data-translation-musicvolume",
     "en": "Music Volume",
@@ -797,7 +846,8 @@ var translationDB = [{
     "ko": "",
     "jp": "BGMボリューム",
     "fa": "بلندی موزیک",
-    "ar": "درجة الموسيقا"
+    "ar": "درجة الموسيقا",
+    "he": "עוצמת הקול של המוסיקה"
 }, {
     "item": "data-translation-databasefile",
     "en": "Database File",
@@ -813,7 +863,8 @@ var translationDB = [{
     "ko": "",
     "jp": "データベースのファイル",
     "fa": "فایل پایگاه داده‌",
-    "ar": "ملف قاعدة البيانات"
+    "ar": "ملف قاعدة البيانات",
+    "he": "קובץ מסד נתונים"
 }, {
     "item": "data-translation-viewygoprofolder",
     "en": "View YGOPro Folder",
@@ -829,7 +880,8 @@ var translationDB = [{
     "ko": "",
     "jp": "ＹＧＯＰｒｏフォルダーを開く",
     "fa": "پوشهی وگوپرو را نگاه کن",
-    "ar": "إظهار ملف YGOPro"
+    "ar": "إظهار ملف YGOPro",
+    "he": "תיקייה YGOProצפה ב"
 }, {
     "item": "data-translation-refuseduelrequests",
     "en": "Refuse Duel Requests",
@@ -845,7 +897,8 @@ var translationDB = [{
     "ko": "",
     "jp": "デュエル要求を拒否する",
     "fa": "طلب دول را نبینی",
-    "ar": "رفض طلب المبارزة"
+    "ar": "رفض طلب المبارزة",
+    "he": "לסרב לבקשות דו קרב"
 }, {
     "item": "data-translation-launchersettings",
     "en": "Launcher Settings",
@@ -861,7 +914,8 @@ var translationDB = [{
     "ko": "",
     "jp": "ランチャーの設定",
     "fa": "تنظیمات لانچر",
-    "ar": "إعدادات المشغّل"
+    "ar": "إعدادات المشغّل",
+    "he": "הגדרות משגר"
 }, {
     "item": "data-translation-launcherlanguage",
     "en": "Launcher Language",
@@ -877,5 +931,6 @@ var translationDB = [{
     "ko": "",
     "jp": "ランチャーの言語",
     "fa": "زبان لانچر",
-    "ar": "لغة المشغّل"
+    "ar": "لغة المشغّل",
+    "he": "משגר שפה"
 }];
