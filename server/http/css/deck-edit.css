@@ -302,7 +302,8 @@ input.decknameInput {
     float: left;
     display: block;
     width: 45%;
-    margin-left: 15%;
+    margin-left: 32%;
+    margin-top: -5%;
 }
 
 div.clearsortshufflewrapper {
