@@ -191,7 +191,7 @@
                     <option value="5">Constructed BP3</option>
                 </select>
                 <br />
-                <label data-translation-banlsit>Ban List</label>
+                <label data-translation-banlist>Ban List</label>
                 <select id="creategamebanlist">
                     <option value="0" selected>2015.7.16(TCG)</option>
                     <option value="1">2015.4.1(TCG)</option>
@@ -244,21 +244,14 @@
                 <SCRIPT language="Javascript">
                     var cpmstar_rnd = Math.round(Math.random() * 999999);
                     var cpmstar_pid = 44429;
-                    document.writeln(" < SCR " + "
-                            IPT language = 'Javascript'
-                            src = '//server.cpmstar.com/view.aspx?poolid=" + cpmstar_pid + "&script=1&rnd=" + cpmstar_rnd + "' > < /SCR " + "IPT>");
+                    document.writeln(" <SCR" + "IPT language='Javascript' src='//server.cpmstar.com/view.aspx?poolid=" + cpmstar_pid + "&script=1&rnd=" + cpmstar_rnd + "'></SCR" + "IPT>");
                 </SCRIPT>
             </div>
         </section>
     </header>
     <header style="padding-top:50px" id="deckedit">
-        <!--<script src="js/parseYDK.js"></script>
-		<script>
-			$(function(){
-				getDecklists(fillSelect);
-			});
-		</script>-->
-        <select id="ydkListSelect" style="display: none;"></select>
+        <script src="js/parseYDK.js"></script>
+        <select id="ydkListSelect" class="currentdeck" style="display: none;"></select>
         <div id="deckwrapper">
             <div id="de_column1">
                 <div id="cardpic"></div>
