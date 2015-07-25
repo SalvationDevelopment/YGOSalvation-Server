@@ -187,9 +187,13 @@ function getDecks() {
         i = 0;
 
     fs.readdir('../client/ygopro/deck', function (errors, folder) {
-        for (i; folder.length > i; i++) {
-            getDeck(folder[i]);
-        }
+		if (!folder) {
+			console.log(errors);
+		} else {
+			for (i; folder.length > i; i++) {
+				getDeck(folder[i]);
+			}
+		}
     });
 }
 
