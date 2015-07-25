@@ -183,8 +183,7 @@ function getDeck(file) {
 //Load all decks
 function getDecks() {
     'use strict';
-    var decks = {},
-        i = 0;
+    var i = 0;
 
     fs.readdir('../client/ygopro/deck', function (errors, folder) {
         if (!folder) {
