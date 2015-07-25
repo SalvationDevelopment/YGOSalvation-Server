@@ -103,6 +103,7 @@ function locallogin(init) {
         //singlesitenav('chat');
     }, 2000);
 }
+var deckfiles;
 
 function processServerCall(data) {
     'use strict';
@@ -121,6 +122,7 @@ function processServerCall(data) {
     $('#skinlist option[value="' + selectedskin + '"]').attr('selected', 'selected');
     $('#fontlist option[value="' + selectedfont + '"]').attr('selected', 'selected');
     $('#dblist option[value="' + selecteddb + '"]').attr('selected', 'selected');
+    deckfiles = data.files;
     //console.log(data);
 }
 var jsLang = {};
