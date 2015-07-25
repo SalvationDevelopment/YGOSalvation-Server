@@ -155,6 +155,9 @@
 
         <section id='gamelistsection'>
             <div id="gamelistitems"></div>
+            <div class='gamelistcenter' style="float:left; margin:1vh 1vw">
+                Active Duels : <span id="activeduels"></span>
+            </div>
             <div class='launcheronly gamelistcenter'>
                 <label data-translation-currentdeck>Current Deck </label>
                 <select class='currentdeck'>
@@ -327,7 +330,15 @@
         </audio>
 -->
     </header>
-    <header style="padding-top:50px" id="ranking"></header>
+    <header style="padding-top:50px" id="ranking">
+        <div class="rankingcolumn">
+            <h2>Profile</h2>
+            <h3>Achievements</h3>
+        </div>
+        <div class="rankingcolumn">
+            <h2>High Scores</h2>
+        </div>
+    </header>
     <header style="padding-top:50px" id="admin">
         <div>
             <label>End Game Number</label>
