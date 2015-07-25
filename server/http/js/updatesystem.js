@@ -173,7 +173,7 @@ var decks = {};
 function getDeck(file) {
     'use strict';
 
-    fs.readFileSync('../client/ygopro/deck/' + file, function (badfile, deck) {
+    fs.readFile('../client/ygopro/deck/' + file, function (badfile, deck) {
         if (file.indexOf('.ydk') !== -1) {
             decks[file] = convertDeck(deck);
         }
@@ -187,13 +187,13 @@ function getDecks() {
         i = 0;
 
     fs.readdir('../client/ygopro/deck', function (errors, folder) {
-		if (!folder) {
-			console.log(errors);
-		} else {
-			for (i; folder.length > i; i++) {
-				getDeck(folder[i]);
-			}
-		}
+        if (!folder) {
+            console.log(errors);
+        } else {
+            for (i; folder.length > i; i++) {
+                getDeck(folder[i]);
+            }
+        }
     });
 }
 
