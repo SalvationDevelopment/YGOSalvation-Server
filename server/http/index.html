@@ -244,21 +244,14 @@
                 <SCRIPT language="Javascript">
                     var cpmstar_rnd = Math.round(Math.random() * 999999);
                     var cpmstar_pid = 44429;
-                    document.writeln(" < SCR " + "
-                            IPT language = 'Javascript'
-                            src = '//server.cpmstar.com/view.aspx?poolid=" + cpmstar_pid + "&script=1&rnd=" + cpmstar_rnd + "' > < /SCR " + "IPT>");
+                    document.writeln("<SCR" + "IPT language='Javascript' src='//server.cpmstar.com/view.aspx?poolid=" + cpmstar_pid + "&script=1&rnd=" + cpmstar_rnd + "'></SCR" + "IPT>");
                 </SCRIPT>
             </div>
         </section>
     </header>
     <header style="padding-top:50px" id="deckedit">
-        <!--<script src="js/parseYDK.js"></script>
-		<script>
-			$(function(){
-				getDecklists(fillSelect);
-			});
-		</script>-->
-        <select id="ydkListSelect" style="display: none;"></select>
+        <script src="js/parseYDK.js"></script>
+        <select id="ydkListSelect" class="currentdeck" style="display: none;"></select>
         <div id="deckwrapper">
             <div id="de_column1">
                 <div id="cardpic"></div>
