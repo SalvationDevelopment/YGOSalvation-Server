@@ -428,22 +428,22 @@ function renderList(JSONdata) {
         rooms,
         content,
         started,
-        elem;
+        elem,
+        spectators = 0;;
 
     $('#gamelistitems').html('');
     for (rooms in JSONdata) {
         if (JSONdata.hasOwnProperty(rooms)) {
-            player1 = JSONdata[rooms].players[0] || '___';
-            player2 = JSONdata[rooms].players[1] || '___';
-            player3 = JSONdata[rooms].players[2] || '___';
-            player4 = JSONdata[rooms].players[3] || '___';
+            player1 = (JSONdata[rooms].players[0]) ? '<label class="playername">' + JSONdata[rooms].players[0] + '</label>' : '___';
+            player2 = (JSONdata[rooms].players[1]) ? '<label class="playername">' + JSONdata[rooms].players[1] + '</label>' : '___';
+            player3 = (JSONdata[rooms].players[2]) ? '<label class="playername">' + JSONdata[rooms].players[2] + '</label>' : '___';
+            player4 = (JSONdata[rooms].players[3]) ? '<label class="playername">' + JSONdata[rooms].players[3] + '</label>' : '___';
             started = (JSONdata[rooms].started) ? 'started' : 'avaliable';
             translated = parseDuelOptions(rooms);
             players = [player1, player2, player3, player4];
             content = preformfilter(translated, players, rooms, started, JSONdata[rooms].pid, JSONdata[rooms].spectators);
+            spectators = spectators + JSONdata[rooms].spectators;
             $('#gamelistitems').prepend(content);
-
-
         }
     }
     elem = $('#gamelistitems').find('div:not(.avaliable)').sort(sortMe);
@@ -453,6 +453,7 @@ function renderList(JSONdata) {
     $('.started')
         .first().before('<br style="clear:both"><span class="gamelabel">' + jsLang.spectate + '<span><br style="clear:both">');
     $('#activeduels').html($('.game').length);
+    $('#activeduelist').html($('.playername').length + spectators);
 }
 
 function setfilter() {
