@@ -168,7 +168,7 @@ var imgDir = "http://ygopro.us/ygopro/pics/",
         4194304: "Creator God",
         8388608: "Wyrm"
     },
-    deckStorage: {
+    deckStorage = {
         not: function(deck) {
             var keys = deckStorage.decks.keys(),
                 arr = [];
