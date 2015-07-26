@@ -304,7 +304,7 @@ function dropHandler(target) {
         } else {
             return false;
         } */
-		console.log("UI Helper: ", ui.helper);
+		console.log("UI Helper: ", typeof ui.helper);
 		console.log("Target drop zone: ", $('.' + target + 'Deck').append(ui.helper));
 		return true;
     };
