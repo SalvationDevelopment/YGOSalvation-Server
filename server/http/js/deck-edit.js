@@ -87,12 +87,15 @@ $(function() {
                     $('.cardDescription').html(makeDescription(id));
                 });
                 $('.mainDeck').droppable({
+					addClasses: false,
                     drop: dropHandler("main")
                 });
                 $('.sideDeck').droppable({
+					addClasses: false,
                     drop: dropHandler("side")
                 });
                 $('.extraDeck').droppable({
+					addClasses: false,
                     drop: dropHandler("extra")
                 });
             });
@@ -293,20 +296,18 @@ function attachDnDEvent(targetCollection) {
 
 function dropHandler(target) {
     return function(event, ui) {
-        /* var id = ui.helper.attr('data-card-alias') ? [ui.helper.attr('data-card-id'), ui.helper.attr('data-card-alias')] : ui.helper.attr('data-card-id'),
+        var clone = ui.draggable.clone(),
+			id = clone.attr('data-card-alias') ? [clone.attr('data-card-id'), clone.attr('data-card-alias')] : clone.attr('data-card-id'),
             targetDeck = deckStorage.getDeck(target),
             remainingDecks = deckStorage.not(target),
 			maximumSize = deckStorage.maximumSize(target);
         if (addDeckLegal(id, targetDeck, maximumSize, lflist, $('.banlistSelect').val(), remainingDecks[0], remainingDecks[1])) {
-            $('.' + target + 'Deck').append(ui.helper);
+            $('.' + target + 'Deck').append(clone);
             deckStorage.addCard(target, id);
             return true;
         } else {
             return false;
-        } */
-		console.log("UI Helper: ", typeof ui.helper);
-		console.log("Target drop zone: ", $('.' + target + 'Deck').append(ui.helper));
-		return true;
+        }
     };
 }
 
