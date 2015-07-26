@@ -204,6 +204,7 @@ function handleResults() {
 		output += '<div class="resultDiv exceededSearchNotif">Display more results...</div>';
 	}
     searchResults.html(output);
+	attachDnDEvent($('.resultDiv img', searchResults), $('.mainDeck, .sideDeck, .extraDeck'));
 }
 
 function makeDescription(id) {
@@ -227,6 +228,20 @@ function makeDescription(id) {
         output += "<span class='trapDesc'>[ Trap" + (typeMap[targetCard.type] || "") + " ]</span>";
     }
     return output + "<br /><span class='description'>" + targetCard.desc.replace(/\r\n/g, '<br />') + "</span>";
+}
+
+function attachDnDEvent(targetCollection, dropTarget) {
+	targetCollection.draggable({
+		addClasses: false,
+		cursor: "move",
+		helper: function() {
+			var helperElem = document.createElement("img"),
+				self = this;
+			console.log($(self).attr('src'));
+			helpElem.src = "http://ygopro.us/ygopro/pics/cover.jpg";
+			return helperElem;
+		}
+	});
 }
 
 function parseAtkDef(atk, def) {
