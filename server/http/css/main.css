@@ -1888,3 +1888,9 @@ audio#podcast {
     float: left;
     padding: 0 21px;
 }
+
+.playername {
+    display: inline !important;
+    padding: 0 !important;
+    margin: 0;
+}
