@@ -167,6 +167,30 @@ var imgDir = "http://ygopro.us/ygopro/pics/",
         2097152: "Divine-Beast",
         4194304: "Creator God",
         8388608: "Wyrm"
+    },
+    deckStorage: {
+        not: function(deck) {
+            var keys = deckStorage.decks.keys(),
+                arr = [];
+            keys.forEach(function(key) {
+                if (key !== deck) {
+                    arr.push(deckStorage.decks[key]);
+                }
+            });
+            return arr;
+        },
+        getDeck: function(deck) {
+            return deckStorage.decks[deck];
+        },
+        addCard: function(deck, id) {
+            deckStorage.decks[deck].push(id);
+            return deckStorage.decks;
+        },
+        decks: {
+            main: [],
+            side: [],
+            extra: []
+        }
     };
 
 function handleResults() {
@@ -194,7 +218,7 @@ function handleResults() {
         results = results.slice(0, SEARCH_HARD_CAP);
     }
     results.forEach(function(result, index) {
-        output += '<div class="resultDiv row_' + index + '" data-card-id="' + result.id + '"' + (result.alias !== 0 ? ' data-card-alias="' + result.alias + '"' : '') + '><div class="thumbContainer"><img src="' + thumbDir + result.id + '.jpg" /></div><div class="descriptionContainer"><span class="name">' + result.name + '</span><br />';
+        output += '<div class="resultDiv row_' + index + '"><div class="thumbContainer"><img src="' + thumbDir + result.id + '.jpg"  data-card-id="' + result.id + '"' + (result.alias !== 0 ? ' data-card-alias="' + result.alias + '"' : '') + ' /></div><div class="descriptionContainer"><span class="name">' + result.name + '</span><br />';
         if (cardIs("monster", result)) {
             // render monster display
             output += '<span class="monsterDetails">' + attributeMap[result.attribute] + ' / ' + raceMap[result.race] + '<br />' + parseLevelScales(result.level);
@@ -246,6 +270,10 @@ function attachDnDEvent(targetCollection) {
         helper: function() {
             var helperElem = document.createElement("img");
             helperElem.src = $(this).attr('src');
+			$(helperElem).attr('data-card-id', $(this).attr('data-card-id'));
+			if ($(this).attr('data-card-alias')) {
+				$(helperElem).attr('data-card-alias', $(this).attr('data-card-alias'));
+			}
             $(helperElem).css({
                 height: $(this).css('height'),
                 width: $(this).css('width')
@@ -258,10 +286,11 @@ function attachDnDEvent(targetCollection) {
 function dropHandler(target) {
     return function(event, ui) {
         var id = ui.helper.attr('data-card-alias') ? [ui.helper.attr('data-card-id'), ui.helper.attr('data-card-alias')] : ui.helper.attr('data-card-id'),
-            targetDeck = deckStorage.shallowCopy(target),
+            targetDeck = deckStorage.getDeck(target),
             remainingDecks = deckStorage.not(target);
         if (addDeckLegal(id, targetDeck, targetDeck.maximumSize, lflist, $('.banlistSelect').val(), remainingDecks[0], remainingDecks[1])) {
             $('.' + target + 'Deck').append(ui.helper);
+            deckStorage.addCard(target, id);
             return true;
         } else {
             return false;
