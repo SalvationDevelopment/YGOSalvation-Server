@@ -186,6 +186,14 @@ var imgDir = "http://ygopro.us/ygopro/pics/",
             deckStorage.decks[deck].push(id);
             return deckStorage.decks;
         },
+		maximumSize: function(deck) {
+			return deckStorage.sizeMap[deck];
+		},
+		sizeMap: {
+			main: 60,
+			side: 15,
+			extra: 15
+		},
         decks: {
             main: [],
             side: [],
@@ -287,8 +295,9 @@ function dropHandler(target) {
     return function(event, ui) {
         var id = ui.helper.attr('data-card-alias') ? [ui.helper.attr('data-card-id'), ui.helper.attr('data-card-alias')] : ui.helper.attr('data-card-id'),
             targetDeck = deckStorage.getDeck(target),
-            remainingDecks = deckStorage.not(target);
-        if (addDeckLegal(id, targetDeck, targetDeck.maximumSize, lflist, $('.banlistSelect').val(), remainingDecks[0], remainingDecks[1])) {
+            remainingDecks = deckStorage.not(target),
+			maximumSize = deckStorage.maximumSize(target);
+        if (addDeckLegal(id, targetDeck, maximumSize, lflist, $('.banlistSelect').val(), remainingDecks[0], remainingDecks[1])) {
             $('.' + target + 'Deck').append(ui.helper);
             deckStorage.addCard(target, id);
             return true;
