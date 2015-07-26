@@ -170,13 +170,13 @@ var imgDir = "http://ygopro.us/ygopro/pics/",
     },
     deckStorage = {
         not: function(deck) {
-            var keys = deckStorage.decks.keys(),
+            var key,
                 arr = [];
-            keys.forEach(function(key) {
+            for (key in deckStorage.decks) {
                 if (key !== deck) {
                     arr.push(deckStorage.decks[key]);
                 }
-            });
+            }
             return arr;
         },
         getDeck: function(deck) {
