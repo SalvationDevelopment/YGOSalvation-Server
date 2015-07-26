@@ -293,17 +293,17 @@ function attachDnDEvent(targetCollection) {
 
 function dropHandler(target) {
     return function(event, ui) {
-        var id = ui.helper.attr('data-card-alias') ? [ui.helper.attr('data-card-id'), ui.helper.attr('data-card-alias')] : ui.helper.attr('data-card-id'),
+        /* var id = ui.helper.attr('data-card-alias') ? [ui.helper.attr('data-card-id'), ui.helper.attr('data-card-alias')] : ui.helper.attr('data-card-id'),
             targetDeck = deckStorage.getDeck(target),
             remainingDecks = deckStorage.not(target),
 			maximumSize = deckStorage.maximumSize(target);
-        if (addDeckLegal(id, targetDeck, maximumSize, lflist, $('.banlistSelect').val(), remainingDecks[0], remainingDecks[1])) {
+        if (addDeckLegal(id, targetDeck, maximumSize, lflist, $('.banlistSelect').val(), remainingDecks[0], remainingDecks[1])) { */
             $('.' + target + 'Deck').append(ui.helper);
-            deckStorage.addCard(target, id);
+            /* deckStorage.addCard(target, id); */
             return true;
-        } else {
+        /*} else {
             return false;
-        }
+        } */
     };
 }
 
