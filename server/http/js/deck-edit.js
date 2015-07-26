@@ -235,10 +235,12 @@ function attachDnDEvent(targetCollection, dropTarget) {
 		addClasses: false,
 		cursor: "move",
 		helper: function() {
-			var helperElem = document.createElement("img"),
-				self = this;
-			console.log($(self).attr('src'));
-			helpElem.src = "http://ygopro.us/ygopro/pics/cover.jpg";
+			var helperElem = document.createElement("img");
+			helperElem.src = $(this).attr('src');
+			$(helperElem).css({
+				height: "64px",
+				width: "44px"
+			});
 			return helperElem;
 		}
 	});
