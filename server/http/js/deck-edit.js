@@ -86,6 +86,15 @@ $(function() {
                     $('.imgContainer').attr('src', imgDir + id + '.jpg');
                     $('.cardDescription').html(makeDescription(id));
                 });
+                $('.mainDeck').droppable({
+                    drop: dropHandler("main")
+                });
+                $('.sideDeck').droppable({
+                    drop: dropHandler("side")
+                });
+                $('.extraDeck').droppable({
+                    drop: dropHandler("extra")
+                });
             });
         });
     });
@@ -93,7 +102,7 @@ $(function() {
 
 var imgDir = "http://ygopro.us/ygopro/pics/",
     thumbDir = imgDir + "thumbnail/",
-	forumLink = "http://forum.ygopro.us/index.php/?ref=_deckEditor",
+    forumLink = "http://forum.ygopro.us/index.php/?ref=_deckEditor",
     attributeMap = {
         1: "EARTH",
         2: "WATER",
@@ -114,7 +123,7 @@ var imgDir = "http://ygopro.us/ygopro/pics/",
     },
     monsterMap = {
         17: "Normal",
-		33: "Effect",
+        33: "Effect",
         65: "Fusion",
         97: "Fusion / Effect",
         129: "Ritual",
@@ -161,7 +170,7 @@ var imgDir = "http://ygopro.us/ygopro/pics/",
     };
 
 function handleResults() {
-	const SEARCH_HARD_CAP = 100;
+    const SEARCH_HARD_CAP = 100;
     var monsterCardSelect = $('.monsterCardSelect'),
         monsterTypeSelect = $('.monsterTypeSelect'),
         monsterCardCheck = $('[data-input-monster-card]'),
@@ -170,8 +179,8 @@ function handleResults() {
         inputTypeCheck = $('[data-input-type]').val(),
         monsterCardValue = monsterCardSelect.val() || 0,
         monsterTypeValue = monsterTypeSelect.val() || 0,
-		exceededSearchCap = false,
-		exceededSearchArray = [],
+        exceededSearchCap = false,
+        exceededSearchArray = [],
         hiddenType,
         results,
         output = "";
@@ -179,11 +188,11 @@ function handleResults() {
         hiddenType = $('<input type="hidden" data-input-type>').appendTo($('.searchBlock:eq(0)')).val(1 + parseInt(monsterCardValue, 10) + parseInt(monsterTypeValue, 10));
     }
     results = applyFilters(generateQueryObject(), $('.banlistSelect').val(), lflist);
-	if (results.length > SEARCH_HARD_CAP) {
-		exceededSearchArray = results;
-		exceededSearchCap = true;
-		results = results.slice(0, SEARCH_HARD_CAP);
-	}
+    if (results.length > SEARCH_HARD_CAP) {
+        exceededSearchArray = results;
+        exceededSearchCap = true;
+        results = results.slice(0, SEARCH_HARD_CAP);
+    }
     results.forEach(function(result, index) {
         output += '<div class="resultDiv row_' + index + '" data-card-id="' + result.id + '"' + (result.alias !== 0 ? ' data-card-alias="' + result.alias + '"' : '') + '><div class="thumbContainer"><img src="' + thumbDir + result.id + '.jpg" /></div><div class="descriptionContainer"><span class="name">' + result.name + '</span><br />';
         if (cardIs("monster", result)) {
@@ -200,11 +209,11 @@ function handleResults() {
         }
         output += '</div></div>';
     });
-	if (exceededSearchCap) {
-		output += '<div class="resultDiv exceededSearchNotif">Display more results...</div>';
-	}
+    if (exceededSearchCap) {
+        output += '<div class="resultDiv exceededSearchNotif">Display more results...</div>';
+    }
     searchResults.html(output);
-	attachDnDEvent($('.resultDiv img', searchResults), $('.mainDeck, .sideDeck, .extraDeck'));
+    attachDnDEvent($('.resultDiv img', searchResults));
 }
 
 function makeDescription(id) {
@@ -230,20 +239,34 @@ function makeDescription(id) {
     return output + "<br /><span class='description'>" + targetCard.desc.replace(/\r\n/g, '<br />') + "</span>";
 }
 
-function attachDnDEvent(targetCollection, dropTarget) {
-	targetCollection.draggable({
-		addClasses: false,
-		cursor: "move",
-		helper: function() {
-			var helperElem = document.createElement("img");
-			helperElem.src = $(this).attr('src');
-			$(helperElem).css({
-				height: "64px",
-				width: "44px"
-			});
-			return helperElem;
-		}
-	});
+function attachDnDEvent(targetCollection) {
+    targetCollection.draggable({
+        addClasses: false,
+        cursor: "move",
+        helper: function() {
+            var helperElem = document.createElement("img");
+            helperElem.src = $(this).attr('src');
+            $(helperElem).css({
+                height: $(this).css('height'),
+                width: $(this).css('width')
+            });
+            return helperElem;
+        }
+    });
+}
+
+function dropHandler(target) {
+    return function(event, ui) {
+        var id = ui.helper.attr('data-card-alias') ? [ui.helper.attr('data-card-id'), ui.helper.attr('data-card-alias')] : ui.helper.attr('data-card-id'),
+            targetDeck = deckStorage.shallowCopy(target),
+            remainingDecks = deckStorage.not(target);
+        if (addDeckLegal(id, targetDeck, targetDeck.maximumSize, lflist, $('.banlistSelect').val(), remainingDecks[0], remainingDecks[1])) {
+            $('.' + target + 'Deck').append(ui.helper);
+            return true;
+        } else {
+            return false;
+        }
+    };
 }
 
 function parseAtkDef(atk, def) {
