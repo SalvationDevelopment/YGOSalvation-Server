@@ -624,6 +624,6 @@ function addDeckLegal(id, targetDeck, targetDeckSize, flList, currentList, deck2
     //}
     //if (maxCopies === undefined) {
         maxCopies = 3;
-    }
+    //}
     return (matchingCopies < maxCopies);
 }
