@@ -452,6 +452,7 @@ function renderList(JSONdata) {
         .before('<br style="clear:both"><span class="gamelabel">' + jsLang.join + '<span><br style="clear:both">');
     $('.started')
         .first().before('<br style="clear:both"><span class="gamelabel">' + jsLang.spectate + '<span><br style="clear:both">');
+    $('#activeduels').html($('.game').length);
 }
 
 function setfilter() {
