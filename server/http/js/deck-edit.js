@@ -617,12 +617,12 @@ function addDeckLegal(id, targetDeck, targetDeckSize, flList, currentList, deck2
     }
     var matchingCopies = targetDeck.filter(idMatches).length + deck2.filter(idMatches).length + deck3.filter(idMatches).length;
     var maxCopies;
-    if (id[1] === undefined) {
-        maxCopies = flList[currentList][id];
-    } else {
-        maxCopies = flList[currentList][id[1]];
-    }
-    if (maxCopies === undefined) {
+    //if (id[1] === undefined) {
+      //  maxCopies = flList[currentList][id];
+    //} else {
+      //  maxCopies = flList[currentList][id[1]];
+    //}
+    //if (maxCopies === undefined) {
         maxCopies = 3;
     }
     return (matchingCopies < maxCopies);
