@@ -297,13 +297,16 @@ function dropHandler(target) {
             targetDeck = deckStorage.getDeck(target),
             remainingDecks = deckStorage.not(target),
 			maximumSize = deckStorage.maximumSize(target);
-        if (addDeckLegal(id, targetDeck, maximumSize, lflist, $('.banlistSelect').val(), remainingDecks[0], remainingDecks[1])) { */
+        if (addDeckLegal(id, targetDeck, maximumSize, lflist, $('.banlistSelect').val(), remainingDecks[0], remainingDecks[1])) {
             $('.' + target + 'Deck').append(ui.helper);
-            /* deckStorage.addCard(target, id); */
+            deckStorage.addCard(target, id);
             return true;
-        /*} else {
+        } else {
             return false;
         } */
+		console.log("UI Helper: ", ui.helper);
+		console.log("Target drop zone: ", $('.' + target + 'Deck'));
+		return true;
     };
 }
 
