@@ -552,10 +552,16 @@ function filterScale(result, scale, op) {
 
 function filterForbiddenLimited(result, selectedLimitation, placeholder, selectedBanlist, config) {
     return result.filter(function(card) {
-        if (!(card.id in config[selectedBanlist]) && selectedLimitation === 3) {
-            return true;
-        }
-        return (card.id in config[selectedBanlist] && config[selectedBanlist][card.id] === selectedLimitation);
+		if (selectedLimitation === 4) {
+			return true;
+		}
+		if (!(card.id in config[selectedBanlist]) && selectedLimitation === 3) {
+			return true;
+		}
+		if (!(card.id in config[selectedBanlist]) && selectedLimitation !== 3) {
+			return false;
+		}
+		return parseInt(config[selectedBanlist][card.id], 10) === selectedLimitation;
     });
 }
 
@@ -600,18 +606,6 @@ function generateQueryObject() {
         retVal[filter] = $('[data-input-' + filter + ']').val() || null;
     });
     return retVal;
-}
-
-function addMainDeckLegal(id, md, sd, ed, flList, currentList) {
-    return addDeckLegal(id, md, 60, flList, currentList, sd, ed);
-}
-
-function addSideDeckLegal(id, md, sd, ed, flList, currentList) {
-    return addDeckLegal(id, sd, 15, flList, currentList, md, ed);
-}
-
-function addExtraDeckLegal(id, md, sd, ed, flList, currentList) {
-    return addDeckLegal(id, ed, 15, flList, currentList, md, sd);
 }
 
 function addDeckLegal(id, targetDeck, targetDeckSize, flList, currentList, deck2, deck3) {
