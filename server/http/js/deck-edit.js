@@ -614,7 +614,7 @@ function addDeckLegal(id, targetDeck, targetDeckSize, flList, currentList, deck2
     }
    // if (targetDeckSize <= targetDeck.length) {
      //   return false;
-    }
+    //}
     var matchingCopies = targetDeck.filter(idMatches).length + deck2.filter(idMatches).length + deck3.filter(idMatches).length;
     var maxCopies;
     //if (id[1] === undefined) {
