@@ -108,7 +108,7 @@ div.searchBlock label[for^="race"] {
 }
 
 div.searchBlock label[for^="typeSelect"] {
-    margin-top: 2%;
+    margin-top: 1%;
     margin-left: 4%;
 }
 
@@ -118,7 +118,7 @@ div.searchBlock select.typeSelect {
     height: 14%;
     width: 20%;
     margin-left: -23%;
-    margin-top: 1.5%;
+    margin-top: 0.5%;
 }
 
 select.attributeSelect,
@@ -146,7 +146,7 @@ div.searchBlock select.setcodeSelect {
 
 div.searchBlock label[for^="levelInput"] {
     display: block;
-    margin-top: 2%;
+    margin-top: 3%;
     margin-left: -33%;
 }
 
@@ -156,7 +156,7 @@ input.levelInput {
     height: 14%;
     width: 15%;
     margin-left: -21%;
-    margin-top: 1.5%;
+    margin-top: 2.5%;
 }
 
 .raceSelect {
@@ -212,7 +212,7 @@ div.searchBlock input.defInput {
 }
 
 div.searchBlock label[for^="nameInput"] {
-    margin-top: 2%;
+    margin-top: 4%;
     margin-left: -33%;
 }
 
@@ -221,7 +221,7 @@ div.searchBlock input.nameInput {
     float: left;
     width: 15%;
     margin-left: -28%;
-    margin-top: 1.5%;
+    margin-top: 3%;
 }
 
 div.searchBlock label[for^="descInput"] {
@@ -248,7 +248,7 @@ button.clearForm {
 
 div.searchBlock label[for^="scaleInput"] {
     display: block;
-    margin-top: 4%;
+    margin-top: 5.5%;
     margin-left: -33%;
 }
 
@@ -258,7 +258,7 @@ div.searchBlock input.scaleInput {
     width: 15%;
     height: 14%;
     margin-left: -26%;
-    margin-top: 3.5%;
+    margin-top: 5%;
 }
 
 .center {
