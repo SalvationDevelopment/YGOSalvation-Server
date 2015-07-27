@@ -290,7 +290,8 @@ function attachDnDEvent(targetCollection) {
                 width: $(this).css('width')
             });
             return helperElem;
-        }
+        },
+		scroll: false
     });
 }
 
