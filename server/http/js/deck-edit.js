@@ -619,12 +619,7 @@ function generateQueryObject() {
          return false;
      }
      var matchingCopies = targetDeck.filter(idMatches).length + deck2.filter(idMatches).length + deck3.filter(idMatches).length;
-     var maxCopies;
-     if (id[1] === undefined) {
-         maxCopies = flList[currentList][id];
-     } else {
-         maxCopies = flList[currentList][id[1]];
-     }
+     var maxCopies= flList[currentList][id];
      if (maxCopies === undefined) {
           maxCopies = 3;
       }
