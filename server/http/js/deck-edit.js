@@ -303,7 +303,7 @@ function dropHandler(target) {
             remainingDecks = deckStorage.not(target),
 			maximumSize = deckStorage.maximumSize(target);
         if (addDeckLegal(id, targetDeck, maximumSize, lflist, $('.banlistSelect').val(), remainingDecks[0], remainingDecks[1])) {
-			clone.addClass('card_' + targetDeck.length);
+			clone.addClass(target + '_card_' + targetDeck.length);
             $('.' + target + 'Deck').append(clone);
             deckStorage.addCard(target, id);
             return true;
