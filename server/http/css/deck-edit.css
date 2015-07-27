@@ -104,59 +104,76 @@ div.searchBlock select.raceSelect {
 
 div.searchBlock label[for^="attribute"],
 div.searchBlock label[for^="race"] {
-    display: none;
+    float: left;
+    clear: both;
+    margin-left: 6%;
 }
 
 div.searchBlock label[for^="typeSelect"] {
-    margin-top: 2%;
-    margin-left: 4%;
+    float: left;
+    clear: both;
+    margin-top: 1.5%;
+    margin-left: 6%;
 }
 
 div.searchBlock select.typeSelect {
     display: block;
-    float: left;
+    float: right;
     height: 14%;
     width: 20%;
-    margin-left: -23%;
-    margin-top: 1.5%;
+    clear: both;
 }
 
-select.attributeSelect,
-select.raceSelect {
-    display: none;
-    float: left;
+div.searchBlock select.attributeSelect,
+div.searchBlock select.raceSelect {
+    float: right;
+    clear: both;
     height: 15%;
     width: 20%;
-    margin-left: 1%;
-    margin-top: 1.5%;
 }
 
 div.searchBlock label[for^="setcodeSelect"] {
-    margin-left: 4%;
+    float: left;
+    clear: both;
+    margin-left: 6%;
 }
 
 div.searchBlock select.setcodeSelect {
     display: block;
-    float: left;
+    float: right;
     height: 14%;
     width: 20%;
-    margin-left: -22%;
-    margin-top: -0.5%;
+    clear: both;
 }
 
 div.searchBlock label[for^="levelInput"] {
-    display: block;
-    margin-top: 2%;
-    margin-left: -33%;
+    float: left;
+    clear: both;
+    margin-left: 6%;
 }
 
 input.levelInput {
     display: block;
-    float: left;
+    float: right;
     height: 14%;
     width: 15%;
-    margin-left: -21%;
-    margin-top: 1.5%;
+    margin-right: 45%;
+    clear: both;
+}
+
+div.searchBlock label[for^="scaleInput"] {
+    float: left;
+    clear: both;
+    margin-left: 30%;
+    margin-top: -4%;
+}
+
+div.searchBlock input.scaleInput {
+    display: block;
+    float: right;
+    width: 15%;
+    height: 14%;
+    margin-right: 60%;
 }
 
 .raceSelect {
@@ -170,58 +187,61 @@ input.levelInput {
 }
 
 div.searchBlock label[for^="forbiddenLimitedSelect"] {
-    margin-top: -8%;
-    margin-left: 5%;
+    float: right;
+    clear: both;
+    margin-right: 10%;
+    margin-top: -18%;
 }
 
 div.searchBlock select.forbiddenLimitedSelect {
     display: block;
-    float: left;
+    float: right;
     height: 14%;
     width: 20%;
-    margin-left: 12%;
-    margin-top: -8.5%;
+    clear: both;
 }
 
 div.searchBlock label[for^="atkInput"] {
-    margin-top: -6%;
-    margin-left: 5%;
+    float: right;
+    clear: both;
+    margin-right: 10%;
+    margin-top: -14%;
 }
 
 div.searchBlock input.atkInput {
     display: block;
-    float: left;
+    float: right;
     width: 15%;
     height: 14%;
-    margin-top: -6.5%;
-    margin-left: 10%;
+    clear: both;
 }
 
 div.searchBlock label[for^="defInput"] {
-    margin-top: -4%;
-    margin-left: 5%;
+    float: right;
+    clear: both;
+    margin-right: 10%;
+    margin-top: -10%;
 }
 
 div.searchBlock input.defInput {
     display: block;
-    float: left;
+    float: right;
     width: 15%;
     height: 14%;
-    margin-top: -4.5%;
-    margin-left: 10%;
+    clear: both;
 }
 
 div.searchBlock label[for^="nameInput"] {
-    margin-top: 2%;
-    margin-left: -33%;
+    float: left;
+    clear: both;
+    margin-left: 6%;
 }
 
 div.searchBlock input.nameInput {
     display: block;
-    float: left;
+    float: right;
     width: 15%;
-    margin-left: -28%;
-    margin-top: 1.5%;
+    clear: both;
 }
 
 div.searchBlock label[for^="descInput"] {
@@ -239,26 +259,12 @@ div.searchBlock input.descInput {
 
 button.clearForm {
     display: block;
-    float: left;
+    float: right;
     height: 14%;
     width: 15%;
-    margin-left: 5%;
+    margin-right: 28%;
     margin-top: -7%;
-}
-
-div.searchBlock label[for^="scaleInput"] {
-    display: block;
-    margin-top: 4%;
-    margin-left: -33%;
-}
-
-div.searchBlock input.scaleInput {
-    display: block;
-    float: left;
-    width: 15%;
-    height: 14%;
-    margin-left: -26%;
-    margin-top: 3.5%;
+    clear: both;
 }
 
 .center {
@@ -349,8 +355,10 @@ button.searchButton {
     z-index: 9001;
     width: 12%;
     height: 14%;
+    float: right;
+    clear: both;
+    margin-right: 31%;
     margin-top: -3%;
-    margin-left: 5%;
 }
 
 input.decknameInput {
