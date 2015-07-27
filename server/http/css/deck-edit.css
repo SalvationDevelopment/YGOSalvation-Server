@@ -62,7 +62,7 @@ body {
     width: 33%;
     padding: 1%;
     border: 1px solid yellow;
-    overflow-y: auto;
+	overflow-y: auto;
 }
 
 .shuffleDeck {
@@ -117,9 +117,8 @@ div.searchBlock select.typeSelect {
     float: left;
     height: 15%;
     width: 20%;
-    margin-left: -25%;
+    margin-left: -23%;
     margin-top: 1.5%;
-    display: none;
 }
 
 select.attributeSelect,
@@ -141,9 +140,8 @@ div.searchBlock select.setcodeSelect {
     float: left;
     height: 15%;
     width: 20%;
-    margin-left: -25%%;
-    margin-top: 1.5%;
-    display: none;
+    margin-left: -22%;
+    margin-top: -0.5%;
 }
 
 div.searchBlock label[for^="levelInput"] {
@@ -156,10 +154,9 @@ input.levelInput {
     display: block;
     float: left;
     height: 15%;
-    width: 20%;
-    margin-left: -20%;
+    width: 15%;
+    margin-left: -21%;
     margin-top: 1.5%;
-    display: none;
 }
 
 .raceSelect {
@@ -182,9 +179,8 @@ div.searchBlock select.forbiddenLimitedSelect {
     float: left;
     height: 15%;
     width: 20%;
-    margin-left: -25%;
-    margin-top: 1.5%;
-    display: none;
+    margin-left: 12%;
+    margin-top: -8.5%;
 }
 
 div.searchBlock label[for^="atkInput"] {
@@ -196,9 +192,8 @@ div.searchBlock input.atkInput {
     display: block;
     float: left;
     width: 10%;
-    margin-left: -35%;
-    margin-top: 1.5%;
-    display: none;
+    margin-top: -6.5%;
+    margin-left: 10%;
 }
 
 div.searchBlock label[for^="defInput"] {
@@ -210,9 +205,8 @@ div.searchBlock input.defInput {
     display: block;
     float: left;
     width: 10%;
-    margin-left: -35%;
-    margin-top: 1.5%;
-    display: none;
+    margin-top: -4.5%;
+    margin-left: 10%;
 }
 
 div.searchBlock label[for^="nameInput"] {
@@ -223,10 +217,9 @@ div.searchBlock label[for^="nameInput"] {
 div.searchBlock input.nameInput {
     display: block;
     float: left;
-    width: 10%;
-    margin-left: 1%;
+    width: 15%;
+    margin-left: -28%;
     margin-top: 1.5%;
-    display: none;
 }
 
 div.searchBlock label[for^="descInput"] {
@@ -260,10 +253,10 @@ div.searchBlock label[for^="scaleInput"] {
 div.searchBlock input.scaleInput {
     display: block;
     float: left;
-    width: 10%;
-    margin-left: 1%;
-    margin-top: 1.5%;
-    display: none;
+    width: 15%;
+    height: 15%;
+    margin-left: -26%;
+    margin-top: 3.5%;
 }
 
 .center {
