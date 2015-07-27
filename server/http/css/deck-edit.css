@@ -22,9 +22,9 @@ body {
     top: 0%;
     left: 0%;
     width: 179px;
-    margin: 0 auto;
     height: 38%;
     border: 1px solid blue;
+    min-height: 256px;
 }
 
 .cardDescription {
@@ -223,6 +223,7 @@ div.searchBlock input.scaleInput {
     height: 66%;
     width: 100%;
     border: 1px solid blue;
+    min-width: 390px;
 }
 
 .extraDeck {
