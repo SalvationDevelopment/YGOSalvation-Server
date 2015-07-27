@@ -34,43 +34,43 @@ $(function() {
                     switch ($(this).val()) {
                         case "5":
                             { // all
-                                monsterCardSelect.fadeOut().removeAttr('data-input-monster-card');
-                                monsterTypeSelect.fadeOut().removeAttr('data-input-monster-type');
-                                spellSelect.fadeOut();
-                                trapSelect.fadeOut();
-                                raceSelect.fadeOut().removeAttr('data-input-race');
-                                attributeSelect.fadeOut().removeAttr('data-input-attribute');
+                                monsterCardSelect.attr('disabled', '').removeAttr('data-input-monster-card');
+                                monsterTypeSelect.attr('disabled', '').removeAttr('data-input-monster-type');
+                                spellSelect.attr('disabled', '');
+                                trapSelect.attr('disabled', '');
+                                raceSelect.attr('disabled', '').removeAttr('data-input-race');
+                                attributeSelect.attr('disabled', '').removeAttr('data-input-attribute');
                                 $('[data-input-type]').removeAttr('data-input-type');
                                 break;
                             }
                         case "1":
                             { // monster
-                                monsterCardSelect.fadeIn().attr('data-input-monster-card', '');
-                                monsterTypeSelect.fadeIn().attr('data-input-monster-type', '');
-                                spellSelect.fadeOut().removeAttr('data-input-type');
-                                trapSelect.fadeOut().removeAttr('data-input-type');
-                                raceSelect.fadeIn().attr('data-input-race', '');
-                                attributeSelect.fadeIn().attr('data-input-attribute', '');
+                                monsterCardSelect.removeAttr('disabled').attr('data-input-monster-card', '');
+                                monsterTypeSelect.removeAttr('disabled').attr('data-input-monster-type', '');
+                                spellSelect.attr('disabled', '').removeAttr('data-input-type');
+                                trapSelect.attr('disabled', '').removeAttr('data-input-type');
+                                raceSelect.removeAttr('disabled').attr('data-input-race', '');
+                                attributeSelect.removeAttr('disabled').attr('data-input-attribute', '');
                                 break;
                             }
                         case "2":
                             { // spell
-                                spellSelect.fadeIn().attr('data-input-type', '');
-                                monsterCardSelect.fadeOut().removeAttr('data-input-monster-card');
-                                monsterTypeSelect.fadeOut().removeAttr('data-input-monster-type');
-                                trapSelect.fadeOut().removeAttr('data-input-type');
-                                raceSelect.fadeOut().removeAttr('data-input-race');
-                                attributeSelect.fadeOut().removeAttr('data-input-attribute');
+                                spellSelect.removeAttr('disabled').attr('data-input-type', '');
+                                monsterCardSelect.attr('disabled', '').removeAttr('data-input-monster-card');
+                                monsterTypeSelect.attr('disabled', '').removeAttr('data-input-monster-type');
+                                trapSelect.attr('disabled', '').removeAttr('data-input-type');
+                                raceSelect.attr('disabled', '').removeAttr('data-input-race');
+                                attributeSelect.attr('disabled', '').removeAttr('data-input-attribute');
                                 break;
                             }
                         case "4":
                             { // traps
-                                trapSelect.fadeIn().attr('data-input-type', '');
-                                monsterCardSelect.fadeOut().removeAttr('data-input-monster-card');
-                                monsterTypeSelect.fadeOut().removeAttr('data-input-monster-type');
-                                spellSelect.fadeOut().removeAttr('data-input-type');
-                                raceSelect.fadeOut().removeAttr('data-input-race');
-                                attributeSelect.fadeOut().removeAttr('data-input-attribute');
+                                trapSelect.removeAttr('disabled').attr('data-input-type', '');
+                                monsterCardSelect.attr('disabled', '').removeAttr('data-input-monster-card');
+                                monsterTypeSelect.attr('disabled', '').removeAttr('data-input-monster-type');
+                                spellSelect.attr('disabled', '').removeAttr('data-input-type');
+                                raceSelect.attr('disabled', '').removeAttr('data-input-race');
+                                attributeSelect.attr('disabled', '').removeAttr('data-input-attribute');
                                 break;
                             }
                     }
