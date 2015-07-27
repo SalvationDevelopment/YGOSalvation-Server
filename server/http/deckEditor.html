@@ -21,13 +21,13 @@
         </div>
         <div class="searchBar">
             <div class="searchLeft">
-                <label for="banlistSelect">Ban List: </label>
-                <select class="banlistSelect">
-                </select>
+                <label for="banlistSelect">Ban List:
+                   <select class="banlistSelect" />
+                </label>
                 <br />
-                <label for="deckSelect">Deck: </label>
-                <select class="deckSelect">
-                </select>
+                <label for="deckSelect">Deck:
+                   <select class="deckSelect" />
+                </label>
                 <button class="saveDeck">Save</button>
                 <br />
                 <button class="deleteDeck">Delete</button>
@@ -42,119 +42,130 @@
             </div>
             <div class="searchRight">
                 <div class="searchBlock">
-                    <label for="typeSelect">Category</label>
-                    <select class="typeSelect">
-                        <option value="5">All</option>
-                        <option value="1">Monster</option>
-                        <option value="2">Spells</option>
-                        <option value="4">Traps</option>
-                    </select>
-                    <select class="monsterCardSelect">
-                        <option value>Specify a monster type</option>
-                        <option value="16">Normal</option>
-                        <option value="32">Effect</option>
-                        <option value="544">Spirit</option>
-                        <option value="1056">Union</option>
-                        <option value="4096">Tuner</option>
-                        <option value="4194336">Toon</option>
-                    </select>
-                    <select class="monsterTypeSelect">
-                        <option value>Specify a monster type</option>
-                        <option value="64">Fusion</option>
-                        <option value="128">Ritual</option>
-                        <option value="8192">Synchro</option>
-                        <option value="8388608">Xyz</option>
-                        <option value="16777216">Pendulum</option>
-                    </select>
-                    <select class="spellSelect">
-                        <option value="2">Specify a card type</option>
-                        <option value="2">Normal</option>
-                        <option value="65538">Quick-Play</option>
-                        <option value="131074">Continuous</option>
-                        <option value="130">Ritual</option>
-                        <option value="262146">Equip</option>
-                        <option value="524290">Field</option>
-                    </select>
-                    <select class="trapSelect">
-                        <option value="4">Specify a card type</option>
-                        <option value="4">Normal</option>
-                        <option value="131076">Continuous</option>
-                        <option value="1048580">Counter</option>
-                    </select>
+                    <label for="typeSelect">Category:
+                        <select class="typeSelect">
+                            <option value="5">All</option>
+                            <option value="1">Monster</option>
+                            <option value="2">Spells</option>
+                            <option value="4">Traps</option>
+                        </select>
+                        <select class="monsterCardSelect">
+                            <option value>Specify a monster type</option>
+                            <option value="16">Normal</option>
+                            <option value="32">Effect</option>
+                            <option value="544">Spirit</option>
+                            <option value="1056">Union</option>
+                            <option value="4096">Tuner</option>
+                            <option value="4194336">Toon</option>
+                        </select>
+                        <select class="monsterTypeSelect">
+                            <option value>Specify a monster type</option>
+                            <option value="64">Fusion</option>
+                            <option value="128">Ritual</option>
+                            <option value="8192">Synchro</option>
+                            <option value="8388608">Xyz</option>
+                            <option value="16777216">Pendulum</option>
+                        </select>
+                        <select class="spellSelect">
+                            <option value="2">Specify a card type</option>
+                            <option value="2">Normal</option>
+                            <option value="65538">Quick-Play</option>
+                            <option value="131074">Continuous</option>
+                            <option value="130">Ritual</option>
+                            <option value="262146">Equip</option>
+                            <option value="524290">Field</option>
+                        </select>
+                        <select class="trapSelect">
+                            <option value="4">Specify a card type</option>
+                            <option value="4">Normal</option>
+                            <option value="131076">Continuous</option>
+                            <option value="1048580">Counter</option>
+                        </select>
+                    </label>
                     <br />
-                    <label for="attributeSelect">Attribute</label>
-                    <select class="attributeSelect" data-input-attribute>
-                        <option value="">Specify an attribute</option>
-                        <option value="1">EARTH</option>
-                        <option value="2">WATER</option>
-                        <option value="4">FIRE</option>
-                        <option value="8">WIND</option>
-                        <option value="16">LIGHT</option>
-                        <option value="32">DARK</option>
-                        <option value="64">DIVINE</option>
-                    </select>
+                    <label for="attributeSelect">Attribute:
+                        <select class="attributeSelect" data-input-attribute>
+                            <option value="">Specify an attribute</option>
+                            <option value="1">EARTH</option>
+                            <option value="2">WATER</option>
+                            <option value="4">FIRE</option>
+                            <option value="8">WIND</option>
+                            <option value="16">LIGHT</option>
+                            <option value="32">DARK</option>
+                            <option value="64">DIVINE</option>
+                        </select>
+                    </label>
                     <br />
-                    <label for="raceSelect">Type</label>
-                    <select class="raceSelect" data-input-race>
-                        <option value="">Specify a Monster type</option>
-                        <option value="1">Warrior</option>
-                        <option value="2">Spellcaster</option>
-                        <option value="4">Fairy</option>
-                        <option value="8">Fiend</option>
-                        <option value="16">Zombie</option>
-                        <option value="32">Machine</option>
-                        <option value="64">Aqua</option>
-                        <option value="128">Pyro</option>
-                        <option value="256">Rock</option>
-                        <option value="512">Winged-Beast</option>
-                        <option value="1024">Plant</option>
-                        <option value="2048">Insect</option>
-                        <option value="4096">Thunder</option>
-                        <option value="8192">Dragon</option>
-                        <option value="16384">Beast</option>
-                        <option value="32768">Beast-Warrior</option>
-                        <option value="65536">Dinosaur</option>
-                        <option value="131072">Fish</option>
-                        <option value="262144">Sea Serpent</option>
-                        <option value="524288">Reptile</option>
-                        <option value="1048576">Psychic</option>
-                        <option value="2097152">Divine-Beast</option>
-                        <option value="4194304">Creator God</option>
-                        <option value="8388608">Wyrm</option>
-                    </select>
+                    <label for="raceSelect">Type
+                        <select class="raceSelect" data-input-race>
+                            <option value="">Specify a Monster type</option>
+                            <option value="1">Warrior</option>
+                            <option value="2">Spellcaster</option>
+                            <option value="4">Fairy</option>
+                            <option value="8">Fiend</option>
+                            <option value="16">Zombie</option>
+                            <option value="32">Machine</option>
+                            <option value="64">Aqua</option>
+                            <option value="128">Pyro</option>
+                            <option value="256">Rock</option>
+                            <option value="512">Winged-Beast</option>
+                            <option value="1024">Plant</option>
+                            <option value="2048">Insect</option>
+                            <option value="4096">Thunder</option>
+                            <option value="8192">Dragon</option>
+                            <option value="16384">Beast</option>
+                            <option value="32768">Beast-Warrior</option>
+                            <option value="65536">Dinosaur</option>
+                            <option value="131072">Fish</option>
+                            <option value="262144">Sea Serpent</option>
+                            <option value="524288">Reptile</option>
+                            <option value="1048576">Psychic</option>
+                            <option value="2097152">Divine-Beast</option>
+                            <option value="4194304">Creator God</option>
+                            <option value="8388608">Wyrm</option>
+                        </select>
+                    </label>
                     <br />
-                    <label for="setcodeSelect">Archetype</label>
-                    <select class="setcodeSelect" data-input-setcode>
-                        <option value="">Specify a card archetype</option>
-                    </select>
+                    <label for="setcodeSelect">Archetype:
+                        <select class="setcodeSelect" data-input-setcode>
+                            <option value="">Specify a card archetype</option>
+                        </select>
+                    </label>
                     <br />
-                    <label for="levelInput">Level/Rank</label>
-                    <input class="levelInput" type="number" min="1" max="12" data-input-level>
+                    <label for="levelInput">Level/Rank:
+                        <input class="levelInput" type="number" min="1" max="12" data-input-level>
+                    </label>
                     <br />
-                    <label for="scaleInput">Scale</label>
-                    <input class="scaleInput" type="number" min="1" max="12" data-input-scale>
+                    <label for="scaleInput">Scale:
+                        <input class="scaleInput" type="number" min="1" max="12" data-input-scale>
+                    </label>
                 </div>
                 <div class="searchBlock">
-                    <label for="forbiddenLimitedSelect">Limit: </label>
-                    <select class="forbiddenLimitedSelect" data-input-forbiddenlimited>
-                        <option value="4">All</option>
-                        <option value="0">Forbidden</option>
-                        <option value="1">Limited</option>
-                        <option value="2">Semi-Limited</option>
-                        <option value="3">Not on the list</option>
-                    </select>
+                    <label for="forbiddenLimitedSelect">Limit:
+                        <select class="forbiddenLimitedSelect" data-input-forbiddenlimited>
+                            <option value="4">All</option>
+                            <option value="0">Forbidden</option>
+                            <option value="1">Limited</option>
+                            <option value="2">Semi-Limited</option>
+						    <option value="3">Not on the list</option>
+                        </select>
+                    </label>
                     <br />
-                    <label for="atkInput">ATK</label>
-                    <input class="atkInput" type="number" min="0" data-input-atk>
+                    <label for="atkInput">ATK:
+                        <input class="atkInput" type="number" min="0" data-input-atk>
+                    </label>
                     <br />
-                    <label for="defInput">DEF</label>
-                    <input class="defInput" type="number" min="0" data-input-def>
+                    <label for="defInput">DEF:
+                        <input class="defInput" type="number" min="0" data-input-def>
+                    </label>
                     <br />
-                    <label for="nameInput">Name</label>
-                    <input class="nameInput" type="text" data-input-name>
+                    <label for="nameInput">Name:
+                        <input class="nameInput" type="text" data-input-name>
+                    </label>
                     <br />
-                    <label for="descInput">Description</label>
-                    <input class="descInput" type="text" data-input-desc>
+                    <label for="descInput">Description
+                        <input class="descInput" type="text" data-input-desc>
+                    </label>
                     <br />
                     <button class="clearForm">Reset Filter</button>
                     <button class="searchButton">Search</button>
@@ -162,19 +173,15 @@
             </div>
         </div>
         <div class="center">
-            <div class="mainDeck">
-            </div>
-            <div class="extraDeck">
-            </div>
-            <div class="sideDeck">
-            </div>
+            <div class="mainDeck"></div>
+            <div class="extraDeck"></div>
+            <div class="sideDeck"></div>
         </div>
         <div class="right">
             <div class="searchResults">
             </div>
         </div>
     </div>
-
 </body>
 
 </html>
