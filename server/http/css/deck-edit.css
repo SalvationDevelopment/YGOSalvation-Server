@@ -115,7 +115,7 @@ div.searchBlock label[for^="typeSelect"] {
 div.searchBlock select.typeSelect {
     display: block;
     float: left;
-    height: 15%;
+    height: 14%;
     width: 20%;
     margin-left: -23%;
     margin-top: 1.5%;
@@ -138,7 +138,7 @@ div.searchBlock label[for^="setcodeSelect"] {
 div.searchBlock select.setcodeSelect {
     display: block;
     float: left;
-    height: 15%;
+    height: 14%;
     width: 20%;
     margin-left: -22%;
     margin-top: -0.5%;
@@ -153,7 +153,7 @@ div.searchBlock label[for^="levelInput"] {
 input.levelInput {
     display: block;
     float: left;
-    height: 15%;
+    height: 14%;
     width: 15%;
     margin-left: -21%;
     margin-top: 1.5%;
@@ -177,7 +177,7 @@ div.searchBlock label[for^="forbiddenLimitedSelect"] {
 div.searchBlock select.forbiddenLimitedSelect {
     display: block;
     float: left;
-    height: 15%;
+    height: 14%;
     width: 20%;
     margin-left: 12%;
     margin-top: -8.5%;
@@ -191,7 +191,8 @@ div.searchBlock label[for^="atkInput"] {
 div.searchBlock input.atkInput {
     display: block;
     float: left;
-    width: 10%;
+    width: 15%;
+    height: 14%;
     margin-top: -6.5%;
     margin-left: 10%;
 }
@@ -204,7 +205,8 @@ div.searchBlock label[for^="defInput"] {
 div.searchBlock input.defInput {
     display: block;
     float: left;
-    width: 10%;
+    width: 15%;
+    height: 14%;
     margin-top: -4.5%;
     margin-left: 10%;
 }
@@ -254,7 +256,7 @@ div.searchBlock input.scaleInput {
     display: block;
     float: left;
     width: 15%;
-    height: 15%;
+    height: 14%;
     margin-left: -26%;
     margin-top: 3.5%;
 }
