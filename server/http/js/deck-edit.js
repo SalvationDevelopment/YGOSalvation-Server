@@ -608,22 +608,25 @@ function generateQueryObject() {
     return retVal;
 }
 
-function addDeckLegal(id, targetDeck, targetDeckSize, flList, currentList, deck2, deck3) {
-    function idMatches(value) {
-        return ((id === value) || (id[1] !== undefined && id[1] === value) || (value[1] !== undefined && id === value[1]) || (id[1] !== undefined && id[1] === value[1]));
-    }
-   // if (targetDeckSize <= targetDeck.length) {
-     //   return false;
-    //}
-    var matchingCopies = targetDeck.filter(idMatches).length + deck2.filter(idMatches).length + deck3.filter(idMatches).length;
-    var maxCopies;
-    //if (id[1] === undefined) {
-      //  maxCopies = flList[currentList][id];
-    //} else {
-      //  maxCopies = flList[currentList][id[1]];
-    //}
-    //if (maxCopies === undefined) {
-        maxCopies = 3;
-    //}
-    return (matchingCopies < maxCopies);
-}
+ function addDeckLegal(id, targetDeck, targetDeckSize, flList, currentList, deck2, deck3) {
+	if (typeof id !== 'string'){
+		id=id[1];
+		}
+     function idMatches(value) {
+         return ((typeof id === 'string') && id=== value || value[1]===id);
+     }
+     if (targetDeckSize <= targetDeck.length) {
+         return false;
+     }
+     var matchingCopies = targetDeck.filter(idMatches).length + deck2.filter(idMatches).length + deck3.filter(idMatches).length;
+     var maxCopies;
+     if (id[1] === undefined) {
+         maxCopies = flList[currentList][id];
+     } else {
+         maxCopies = flList[currentList][id[1]];
+     }
+     if (maxCopies === undefined) {
+          maxCopies = 3;
+      }
+     return (matchingCopies < maxCopies);
+ }
