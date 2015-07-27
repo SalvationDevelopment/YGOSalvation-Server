@@ -36,16 +36,16 @@ body {
     padding: 12px;
 }
 
-.f40 .card {
+.f40 img {
     float: left;
 }
 
-.f50 .card {
+.f50 img {
     float: left;
     margin-right: -10px;
 }
 
-.f60 .card {
+.f60 img {
     float: left;
     margin-right: -20px;
 }
@@ -62,7 +62,7 @@ body {
     width: 33%;
     padding: 1%;
     border: 1px solid yellow;
-	overflow-y: auto;
+    overflow-y: auto;
 }
 
 .shuffleDeck {
@@ -315,4 +315,8 @@ div.clearsortshufflewrapper {
 .resultDiv {
     overflow: auto;
     border: 1px solid black;
+}
+
+.mainDeck img {
+    width: 66px;
 }
