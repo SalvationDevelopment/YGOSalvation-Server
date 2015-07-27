@@ -107,6 +107,11 @@ div.searchBlock label[for^="race"] {
     display: none;
 }
 
+div.searchBlock label[for^="typeSelect"] {
+    margin-top: 2%;
+    margin-left: 4%;
+}
+
 div.searchBlock select.typeSelect {
     display: block;
     float: left;
@@ -114,6 +119,7 @@ div.searchBlock select.typeSelect {
     width: 20%;
     margin-left: -25%;
     margin-top: 1.5%;
+    display: none;
 }
 
 select.attributeSelect,
@@ -126,6 +132,10 @@ select.raceSelect {
     margin-top: 1.5%;
 }
 
+div.searchBlock label[for^="setcodeSelect"] {
+    margin-left: 4%;
+}
+
 div.searchBlock select.setcodeSelect {
     display: block;
     float: left;
@@ -133,6 +143,13 @@ div.searchBlock select.setcodeSelect {
     width: 20%;
     margin-left: -25%%;
     margin-top: 1.5%;
+    display: none;
+}
+
+div.searchBlock label[for^="levelInput"] {
+    display: block;
+    margin-top: 2%;
+    margin-left: -33%;
 }
 
 input.levelInput {
@@ -142,6 +159,7 @@ input.levelInput {
     width: 20%;
     margin-left: -20%;
     margin-top: 1.5%;
+    display: none;
 }
 
 .raceSelect {
@@ -151,6 +169,12 @@ input.levelInput {
     width: 20%;
     margin-left: 1%;
     margin-top: 1.5%;
+    display: none;
+}
+
+div.searchBlock label[for^="forbiddenLimitedSelect"] {
+    margin-top: -8%;
+    margin-left: 5%;
 }
 
 div.searchBlock select.forbiddenLimitedSelect {
@@ -160,6 +184,12 @@ div.searchBlock select.forbiddenLimitedSelect {
     width: 20%;
     margin-left: -25%;
     margin-top: 1.5%;
+    display: none;
+}
+
+div.searchBlock label[for^="atkInput"] {
+    margin-top: -6%;
+    margin-left: 5%;
 }
 
 div.searchBlock input.atkInput {
@@ -168,6 +198,12 @@ div.searchBlock input.atkInput {
     width: 10%;
     margin-left: -35%;
     margin-top: 1.5%;
+    display: none;
+}
+
+div.searchBlock label[for^="defInput"] {
+    margin-top: -4%;
+    margin-left: 5%;
 }
 
 div.searchBlock input.defInput {
@@ -176,6 +212,12 @@ div.searchBlock input.defInput {
     width: 10%;
     margin-left: -35%;
     margin-top: 1.5%;
+    display: none;
+}
+
+div.searchBlock label[for^="nameInput"] {
+    margin-top: 2%;
+    margin-left: -33%;
 }
 
 div.searchBlock input.nameInput {
@@ -184,6 +226,11 @@ div.searchBlock input.nameInput {
     width: 10%;
     margin-left: 1%;
     margin-top: 1.5%;
+    display: none;
+}
+
+div.searchBlock label[for^="descInput"] {
+    display: none;
 }
 
 div.searchBlock input.descInput {
@@ -192,15 +239,22 @@ div.searchBlock input.descInput {
     width: 10%;
     margin-left: 1%;
     margin-top: 1.5%;
+    display: none;
 }
 
 button.clearForm {
     display: block;
     float: left;
-    height: 15%;
-    width: 20%;
-    margin-left: 1%;
-    margin-top: 1.5%;
+    height: 14%;
+    width: 15%;
+    margin-left: 5%;
+    margin-top: -7%;
+}
+
+div.searchBlock label[for^="scaleInput"] {
+    display: block;
+    margin-top: 4%;
+    margin-left: -33%;
 }
 
 div.searchBlock input.scaleInput {
@@ -209,6 +263,7 @@ div.searchBlock input.scaleInput {
     width: 10%;
     margin-left: 1%;
     margin-top: 1.5%;
+    display: none;
 }
 
 .center {
@@ -297,6 +352,10 @@ button.deleteDeck {
 button.searchButton {
     position: relative;
     z-index: 9001;
+    width: 12%;
+    height: 14%;
+    margin-top: -3%;
+    margin-left: 5%;
 }
 
 input.decknameInput {
