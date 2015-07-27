@@ -91,15 +91,40 @@ button.clearDeck {
     overflow-y: auto;
 }
 
-div.searchBlock select.trapSelect,
-div.searchBlock select.spellSelect,
-div.searchBlock select.monsterCardSelect,
-div.searchBlock select.monsterTypeSelect,
-div.searchBlock select.attributeSelect,
 div.searchBlock select.raceSelect {
     float: right;
-    height: 15%;
-    display: none;
+    position: relative;
+    z-index: -1;
+}
+
+div.searchBlock select.attributeSelect {
+    float: right;
+    position: relative;
+    z-index: 0;
+}
+
+div.searchBlock select.monsterTypeSelect {
+    float: right;
+    position: relative;
+    z-index: 1;
+}
+
+div.searchBlock select.monsterCardSelect {
+    float: right;
+    position: relative;
+    z-index: 2;
+}
+
+div.searchBlock select.spellSelect {
+    float: right;
+    position: relative;
+    z-index: 3;
+}
+
+div.searchBlock select.trapSelect {
+    float: right;
+    position: relative;
+    z-index: 4;
 }
 
 div.searchBlock label[for^="attribute"],
@@ -118,7 +143,7 @@ div.searchBlock label[for^="typeSelect"] {
 
 div.searchBlock select.typeSelect {
     display: block;
-    float: right;
+    float: left;
     height: 14%;
     width: 20%;
     clear: both;
@@ -164,8 +189,6 @@ input.levelInput {
 div.searchBlock label[for^="scaleInput"] {
     float: left;
     clear: both;
-    margin-left: 30%;
-    margin-top: -4%;
 }
 
 div.searchBlock input.scaleInput {
@@ -183,7 +206,6 @@ div.searchBlock input.scaleInput {
     width: 20%;
     margin-left: 1%;
     margin-top: 1.5%;
-    display: none;
 }
 
 div.searchBlock label[for^="forbiddenLimitedSelect"] {
