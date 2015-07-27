@@ -352,6 +352,15 @@ function cardIs(cat, obj) {
     if (cat === "trap") {
         return (obj.type & 4) == 4;
     }
+    if (cat === "fusion") {
+        return (obj.type & 64) == 64;
+    }
+    if (cat === "synchro") {
+        return (obj.type & 8192) == 8192;
+    }
+    if (cat === "synchro") {
+        return (obj.type & 8388608) == 8388608;
+    }
 }
 
 function fAttrRace(obj, num, at) {
