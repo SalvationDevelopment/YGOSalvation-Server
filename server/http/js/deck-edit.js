@@ -356,7 +356,7 @@ function dropOutHandler(target) {
             }
         });
         ui.draggable.remove();
-        drawDeck(deckStorage.getDeck(target));
+        drawDeck(target);
         return true;
     };
 }
