@@ -93,14 +93,17 @@ $(function() {
 				});
                 $('.mainDeck').droppable({
 					addClasses: false,
+					accept: "img[data-card-id]",
                     drop: dropHandler("main")
                 });
                 $('.sideDeck').droppable({
 					addClasses: false,
+					accept: "img[data-card-id]",
                     drop: dropHandler("side")
                 });
                 $('.extraDeck').droppable({
 					addClasses: false,
+					accept: "img[data-card-id]",
                     drop: dropHandler("extra")
                 });
             });
