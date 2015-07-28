@@ -313,7 +313,7 @@ function dropHandler(target) {
             targetDeck = deckStorage.getDeck(target),
             remainingDecks = deckStorage.not(target),
 			maximumSize = deckStorage.maximumSize(target),
-			targetContainer = $('.' + target + 'Deck);
+			targetContainer = $('.' + target + 'Deck');
         if (addDeckLegal(id, targetDeck, maximumSize, lflist, $('.banlistSelect').val(), remainingDecks[0], remainingDecks[1])) {
 			clone.addClass(target + '_card_' + targetDeck.length);
 			attachDnDEvent(clone);
