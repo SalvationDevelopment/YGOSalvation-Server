@@ -254,6 +254,16 @@
     </header>
     <header style="padding-top:50px" id="deckedit">
         <script src="js/parseYDK.js"></script>
+		<script>
+			var checkDeckFiles = function () {
+				return (typeof deckfiles === "object");
+			}, inter = setInterval(function(){
+				if (checkDeckFiles) {
+					clearInterval(inter);
+					console.log("Logging deck files: " + deckfiles);
+				}
+			}, 200);
+		</script>
         <select id="ydkListSelect" class="currentdeck" style="display: none;"></select>
         <div id="deckwrapper">
             <div id="de_column1">
