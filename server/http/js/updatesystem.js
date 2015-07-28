@@ -142,7 +142,7 @@ var decks = {};
 function getDeck(file) {
     'use strict';
 
-    fs.readFile('../client/ygopro/deck/' + file, function (badfile, deck) {
+    fs.readFile('./ygopro/deck/' + file, function (badfile, deck) {
         if (file.indexOf('.ydk') !== -1) {
             decks[file] = deck;
         }
@@ -154,7 +154,7 @@ function getDecks() {
     'use strict';
     var i = 0;
 
-    fs.readdir('../client/ygopro/deck', function (errors, folder) {
+    fs.readdir('./ygopro/deck', function (errors, folder) {
         if (!folder) {
             console.log(errors);
         } else {
