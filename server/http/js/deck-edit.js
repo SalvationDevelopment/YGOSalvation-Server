@@ -86,6 +86,9 @@ $(function() {
                     $('.imgContainer').attr('src', imgDir + id + '.jpg');
                     $('.cardDescription').html(makeDescription(id));
                 });
+				$('.mainDeck, .sideDeck, .extraDeck').on('mouseenter', 'img', function() {
+					$('.cardDescription').html(makeDescription($(this).attr('data-card-id')));
+				});
                 $('.mainDeck').droppable({
 					addClasses: false,
                     drop: dropHandler("main")
