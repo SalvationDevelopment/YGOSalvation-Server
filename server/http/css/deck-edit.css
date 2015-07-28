@@ -279,7 +279,7 @@ div.searchBlock input.descInput {
 button.clearForm {
     display: block;
     float: right;
-    height: 34.5%;
+    height: 34%;
     width: 9%;
     margin-right: 10%;
     margin-top: -26.5%;
@@ -377,7 +377,7 @@ button.searchButton {
     float: right;
     clear: both;
     margin-right: 10%;
-    margin-top: -13%;
+    margin-top: -13.5%;
 }
 
 input.decknameInput {
