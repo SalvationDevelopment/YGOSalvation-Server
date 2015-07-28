@@ -142,7 +142,7 @@ var decks = {};
 function getDeck(file) {
     'use strict';
 
-    fs.readFile('./ygopro/deck/' + file, function (badfile, deck) {
+    fs.readFile('./ygopro/deck/' + file, { encoding: "utf-8" }, function (badfile, deck) {
         if (file.indexOf('.ydk') !== -1) {
             decks[file] = deck;
         }
