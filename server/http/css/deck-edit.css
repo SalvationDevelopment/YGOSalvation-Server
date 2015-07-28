@@ -400,8 +400,8 @@ div.clearsortshufflewrapper {
 }
 
 .mainDeck img {
-    width: 37%;
+    width: 66px;
 }
 .sideDeck img, .extraDeck img {
-	width: 33%;
+	width: 58px;
 }
