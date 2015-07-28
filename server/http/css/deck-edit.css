@@ -399,6 +399,6 @@ div.clearsortshufflewrapper {
     border: 1px solid black;
 }
 
-.mainDeck img {
+.mainDeck img, .sideDeck img, .extraDeck img {
     width: 66px;
 }
