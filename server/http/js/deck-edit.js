@@ -390,7 +390,7 @@ function cardIs(cat, obj) {
     if (cat === "synchro") {
         return (obj.type & 8192) == 8192;
     }
-    if (cat === "synchro") {
+    if (cat === "xyz") {
         return (obj.type & 8388608) == 8388608;
     }
 }
