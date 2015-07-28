@@ -37,7 +37,7 @@ function ydkToList(deckObject, options) {
         formatString = options.formatString || "%ix",
         cards = options.cards,
         decks = ["Main", "Extra", "Side"],
-		cardFound = false,
+        cardFound = false,
         temp;
     decks.forEach(function(deck) {
         output += deck + " Deck (" + deckObject[deck.toLowerCase() + "Length"] + "):\r\n";
@@ -47,27 +47,27 @@ function ydkToList(deckObject, options) {
                 cards.forEach(function(card) {
                     if (parseInt(temp, 10) === card.id) {
                         output += card.name;
-						cardFound = true;
+                        cardFound = true;
                     }
                 });
-				if (!cardFound) {
-					output += temp + " (card not yet registered in database)";
-				}
+                if (!cardFound) {
+                    output += temp + " (card not yet registered in database)";
+                }
                 output += "\r\n";
             } else {
                 while (deckObject[deck.toLowerCase()][temp]--) {
                     cards.forEach(function(card) {
                         if (parseInt(temp, 10) === card.id) {
                             output += card.name + "\r\n";
-							cardFound = true;
+                            cardFound = true;
                         }
                     });
-					if (!cardFound) {
-						output += temp + " (card not yet registered in database)\r\n";
-					}
+                    if (!cardFound) {
+                        output += temp + " (card not yet registered in database)\r\n";
+                    }
                 }
             }
-			cardFound = false;
+            cardFound = false;
         }
     });
     return output;

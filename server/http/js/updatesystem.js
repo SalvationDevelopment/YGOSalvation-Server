@@ -136,46 +136,15 @@ var list = {
 };
 
 
-function convertDeck(file) {
-    'use strict';
-    var tempdeck = file.toString().split('!side'),
-        side = tempdeck[1],
-        main = tempdeck[0].split('#extra')[0],
-        extra = tempdeck[0].split('#extra')[1];
-    main = main.split('\r\n').map(function (item) {
-        return parseInt(item, 10);
-    });
-    main = main.filter(function (i) {
-        return (i);
-    });
-    extra = extra.split('\r\n').map(function (item) {
-        return parseInt(item, 10);
-    });
-    extra = extra.filter(function (i) {
-        return (i);
-    });
-    side = side.split('\r\n').map(function (item) {
-        return parseInt(item, 10);
-    });
-    side = side.filter(function (i) {
-        return (i > 0);
-    });
-    return {
-        main: main,
-        side: side,
-        extra: extra
-    };
-}
-
 var decks = {};
 
 
 function getDeck(file) {
     'use strict';
 
-    fs.readFile('../client/ygopro/deck/' + file, function (badfile, deck) {
+    fs.readFile('./ygopro/deck/' + file, { encoding: "utf-8" }, function (badfile, deck) {
         if (file.indexOf('.ydk') !== -1) {
-            decks[file] = convertDeck(deck);
+            decks[file] = deck;
         }
     });
 }
@@ -185,7 +154,7 @@ function getDecks() {
     'use strict';
     var i = 0;
 
-    fs.readdir('../client/ygopro/deck', function (errors, folder) {
+    fs.readdir('./ygopro/deck', function (errors, folder) {
         if (!folder) {
             console.log(errors);
         } else {
