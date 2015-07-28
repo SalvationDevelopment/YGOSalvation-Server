@@ -94,17 +94,20 @@ $(function() {
                 $('.mainDeck').droppable({
 					addClasses: false,
 					accept: "img[data-card-id]",
-                    drop: dropHandler("main")
+                    drop: dropHandler("main"),
+					out: dropOutHandler("main")
                 });
                 $('.sideDeck').droppable({
 					addClasses: false,
 					accept: "img[data-card-id]",
-                    drop: dropHandler("side")
+                    drop: dropHandler("side"),
+					out: dropOutHandler("side")
                 });
                 $('.extraDeck').droppable({
 					addClasses: false,
 					accept: "img[data-card-id]",
-                    drop: dropHandler("extra")
+                    drop: dropHandler("extra"),
+					out: dropOutHandler("extra")
                 });
             });
         });
@@ -309,17 +312,31 @@ function dropHandler(target) {
 			id = clone.attr('data-card-alias') ? [clone.attr('data-card-id'), clone.attr('data-card-alias')] : clone.attr('data-card-id'),
             targetDeck = deckStorage.getDeck(target),
             remainingDecks = deckStorage.not(target),
-			maximumSize = deckStorage.maximumSize(target);
+			maximumSize = deckStorage.maximumSize(target),
+			targetContainer = $('.' + target + 'Deck);
         if (addDeckLegal(id, targetDeck, maximumSize, lflist, $('.banlistSelect').val(), remainingDecks[0], remainingDecks[1])) {
 			clone.addClass(target + '_card_' + targetDeck.length);
 			attachDnDEvent(clone);
-            $('.' + target + 'Deck').append(clone);
+            targetContainer.append(clone);
             deckStorage.addCard(target, id);
+			if (targetDeck.length <= 40) {
+				targetContainer.addClass('f40').removeClass('f50 f60');
+			} else if (targetDeck.length > 40 && targetDeck.length <= 50) {
+				targetCollection.addClass('f50').removeClass('f40 f60');
+			} else if (targetDeck.length > 50) {
+				targetContainer.addClass('f60').removeClass('f40 f50');
+			}
             return true;
         } else {
             return false;
         }
     };
+}
+
+function dropOutHandler(target) {
+	return function(event, ui) {
+		// TODO
+	};
 }
 
 function parseAtkDef(atk, def) {
