@@ -1,4 +1,4 @@
-function drawDeckBuilder(ydk) {
+function drawDeckEditor(ydk) {
 	var card,
 		container,
 		decks = [
@@ -18,8 +18,8 @@ function drawDeckBuilder(ydk) {
 				}
 			}
 		}
-		[].forEach.call($('img', container).get(), function(img, index) {
-			$(img).addClass(deck + '_card_' + index);
+		$('img', container).each(function(index) {
+			$(this).addClass(deck + '_card_' + index);
 		});
 	});
 }
