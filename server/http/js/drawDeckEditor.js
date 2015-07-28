@@ -15,6 +15,7 @@ function drawDeckEditor(ydk) {
 			if(ydk[deck].hasOwnProperty(card) && ydk[deck].propertyIsEnumerable(card)) {
 				while(--ydk[deck][card] >= 0) {
 					container.append('<img src="' + imgDir + card + '.jpg" data-card-id="' + card + '" />');
+					deckStorage.addCard(deck, card);
 				}
 			}
 		}
