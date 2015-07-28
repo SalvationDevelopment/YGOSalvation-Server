@@ -200,6 +200,9 @@ var imgDir = "http://ygopro.us/ygopro/pics/",
             deckStorage.decks[deck].push(id);
             return deckStorage.decks;
         },
+		reset: function(deck) {
+			deckStorage.decks[deck] = [];
+		},
 		maximumSize: function(deck) {
 			return deckStorage.sizeMap[deck];
 		},

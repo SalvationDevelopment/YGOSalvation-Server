@@ -10,6 +10,7 @@ function drawDeckEditor(ydk) {
 		container = $('.' + deck + 'Deck');
 		if (container.find('img').length > 0) {
 			$('img', container).remove();
+			deckStorage.reset(deck);
 		}
 		for(card in ydk[deck]) {
 			if(ydk[deck].hasOwnProperty(card) && ydk[deck].propertyIsEnumerable(card)) {
