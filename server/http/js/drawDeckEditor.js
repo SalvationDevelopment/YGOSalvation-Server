@@ -21,5 +21,6 @@ function drawDeckEditor(ydk) {
 		$('img', container).each(function(index) {
 			$(this).addClass(deck + '_card_' + index);
 		});
+		attachDnDEvent($('img', container));
 	});
 }
