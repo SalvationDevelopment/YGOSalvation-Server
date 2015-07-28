@@ -23,5 +23,6 @@ function drawDeckEditor(ydk) {
 			$(this).addClass(deck + '_card_' + index);
 		});
 		attachDnDEvent($('img', container));
+		adjustDeckClass(deckStorage.getDeck(deck), container);
 	});
 }

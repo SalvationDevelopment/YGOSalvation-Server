@@ -319,18 +319,22 @@ function dropHandler(target) {
 			attachDnDEvent(clone);
             targetContainer.append(clone);
             deckStorage.addCard(target, id);
-			if (targetDeck.length <= 40) {
-				targetContainer.addClass('f40').removeClass('f50 f60');
-			} else if (targetDeck.length > 40 && targetDeck.length <= 50) {
-				targetCollection.addClass('f50').removeClass('f40 f60');
-			} else if (targetDeck.length > 50) {
-				targetContainer.addClass('f60').removeClass('f40 f50');
-			}
+			adjustDeckClass(targetDeck, targetContainer);
             return true;
         } else {
             return false;
         }
     };
+}
+
+function adjustDeckClass(targetDeck, targetContainer) {
+	if (targetDeck.length <= 40) {
+		targetContainer.addClass('f40').removeClass('f50 f60');
+	} else if (targetDeck.length > 40 && targetDeck.length <= 50) {
+		targetCollection.addClass('f50').removeClass('f40 f60');
+	} else if (targetDeck.length > 50) {
+		targetContainer.addClass('f60').removeClass('f40 f50');
+	}
 }
 
 function dropOutHandler(target) {
