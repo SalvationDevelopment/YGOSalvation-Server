@@ -28,7 +28,8 @@ var Primus = require('primus'), //Primus, our Sepiroth-Qliphopth Creator God. We
     }, // initate the bot
     bot = new irc.Client(config.server, config.botName, {
         channels: config.channels
-    });
+    }),
+    childProcess = require('child_process');
 
 
 
@@ -55,11 +56,14 @@ function gamelistUpdate(data) {
         if (data.clientEvent === 'duelrequest' && data.target === '[AI]SnarkyChild') {
             console.log(data);
             console.log('duel Request Recieved');
-            internalGames.push(new Duel(data.roompass));
+            childProcess.spawn('windbot.exe', ['AI', 'Hours', '127.0.0.1', '8911', data.roompass], {
+                cwd: '.. / server / http / ygopro'
+            }, function () {});
         }
         return;
     }
 }
+
 function onConnectGamelist() {
     'use strict';
     console.log('Connected to Gamelist');
@@ -78,8 +82,8 @@ client.write({
 });
 
 module.exports = {
-    ircInterface : ircInterface,
-    gamelistUpdate : gamelistUpdate,
-    onConnectGamelist : onConnectGamelist,
-    onCloseGamelist : onCloseGamelist
+    ircInterface: ircInterface,
+    gamelistUpdate: gamelistUpdate,
+    onConnectGamelist: onConnectGamelist,
+    onCloseGamelist: onCloseGamelist
 };
