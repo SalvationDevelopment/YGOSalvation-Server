@@ -136,37 +136,6 @@ var list = {
 };
 
 
-function convertDeck(file) {
-    'use strict';
-    var tempdeck = file.toString().split('!side'),
-        side = tempdeck[1],
-        main = tempdeck[0].split('#extra')[0],
-        extra = tempdeck[0].split('#extra')[1];
-    main = main.split('\r\n').map(function (item) {
-        return parseInt(item, 10);
-    });
-    main = main.filter(function (i) {
-        return (i);
-    });
-    extra = extra.split('\r\n').map(function (item) {
-        return parseInt(item, 10);
-    });
-    extra = extra.filter(function (i) {
-        return (i);
-    });
-    side = side.split('\r\n').map(function (item) {
-        return parseInt(item, 10);
-    });
-    side = side.filter(function (i) {
-        return (i > 0);
-    });
-    return {
-        main: main,
-        side: side,
-        extra: extra
-    };
-}
-
 var decks = {};
 
 
@@ -175,7 +144,7 @@ function getDeck(file) {
 
     fs.readFile('../client/ygopro/deck/' + file, function (badfile, deck) {
         if (file.indexOf('.ydk') !== -1) {
-            decks[file] = convertDeck(deck);
+            decks[file] = deck;
         }
     });
 }
