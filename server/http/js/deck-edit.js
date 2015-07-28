@@ -198,7 +198,12 @@ var imgDir = "http://ygopro.us/ygopro/pics/",
         },
         addCard: function(deck, id) {
             deckStorage.decks[deck].push(id);
-            return deckStorage.decks;
+        },
+		removeCard: function(deck, index) {
+		    deckStorage.decks[deck][index] = undefined;
+            deckStorage.decks[deck] = deckStorage.decks[deck].filter(function(card) {
+                return !!card;
+            });
         },
         reset: function(deck) {
             deckStorage.decks[deck] = [];
@@ -342,7 +347,17 @@ function adjustDeckClass(targetDeck, targetContainer) {
 
 function dropOutHandler(target) {
     return function(event, ui) {
-        // TODO
+        var cardClasses = ui.draggable.attr('class').split(' '),
+            indexRegexp = new RegExp(target + '_card_(\d+)');
+        cardClasses.forEach(function(cardClass) {
+            var matches;
+            if ((matches = cardClass.match(indexRegexp)) !== null) {
+                deckStorage.removeCard(target, matches[1])
+            }
+        });
+        ui.draggable.remove();
+        drawDeck(deckStorage.getDeck(target));
+        return true;
     };
 }
 
