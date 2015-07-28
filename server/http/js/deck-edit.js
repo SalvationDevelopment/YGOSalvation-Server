@@ -674,7 +674,7 @@ function addDeckLegal(id, targetDeck, targetDeckSize, flList, currentList, deck2
     if (typeof cardObject !== "object") {
         return false;
     }
-    if ((cardIs("fusion", cardObject) || cardIs("synchro", cardObject) || cardIs("xyz", cardObject)) && targetDeck !== deckStorage.getDeck("extra")) {
+    if ((cardIs("fusion", cardObject) || cardIs("synchro", cardObject) || cardIs("xyz", cardObject)) && targetDeck === deckStorage.getDeck("main")) {
         return false;
     }
     if ((!cardIs("fusion", cardObject) || !cardIs("synchro", cardObject) || !cardIs("xyz", cardObject)) && targetDeck === deckStorage.getDeck("extra")) {
