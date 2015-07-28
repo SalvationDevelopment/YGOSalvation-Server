@@ -86,28 +86,28 @@ $(function() {
                     $('.imgContainer').attr('src', imgDir + id + '.jpg');
                     $('.cardDescription').html(makeDescription(id));
                 });
-				$('.mainDeck, .sideDeck, .extraDeck').on('mouseenter', 'img', function() {
-					var id = $(this).attr('data-card-id');
-					$('.imgContainer').attr('src', imgDir + id + '.jpg');
-					$('.cardDescription').html(makeDescription(id));
-				});
+                $('.mainDeck, .sideDeck, .extraDeck').on('mouseenter', 'img', function() {
+                    var id = $(this).attr('data-card-id');
+                    $('.imgContainer').attr('src', imgDir + id + '.jpg');
+                    $('.cardDescription').html(makeDescription(id));
+                });
                 $('.mainDeck').droppable({
-					addClasses: false,
-					accept: "img[data-card-id]",
+                    addClasses: false,
+                    accept: "img[data-card-id]",
                     drop: dropHandler("main"),
-					out: dropOutHandler("main")
+                    out: dropOutHandler("main")
                 });
                 $('.sideDeck').droppable({
-					addClasses: false,
-					accept: "img[data-card-id]",
+                    addClasses: false,
+                    accept: "img[data-card-id]",
                     drop: dropHandler("side"),
-					out: dropOutHandler("side")
+                    out: dropOutHandler("side")
                 });
                 $('.extraDeck').droppable({
-					addClasses: false,
-					accept: "img[data-card-id]",
+                    addClasses: false,
+                    accept: "img[data-card-id]",
                     drop: dropHandler("extra"),
-					out: dropOutHandler("extra")
+                    out: dropOutHandler("extra")
                 });
             });
         });
@@ -200,17 +200,17 @@ var imgDir = "http://ygopro.us/ygopro/pics/",
             deckStorage.decks[deck].push(id);
             return deckStorage.decks;
         },
-		reset: function(deck) {
-			deckStorage.decks[deck] = [];
-		},
-		maximumSize: function(deck) {
-			return deckStorage.sizeMap[deck];
-		},
-		sizeMap: {
-			main: 60,
-			side: 15,
-			extra: 15
-		},
+        reset: function(deck) {
+            deckStorage.decks[deck] = [];
+        },
+        maximumSize: function(deck) {
+            return deckStorage.sizeMap[deck];
+        },
+        sizeMap: {
+            main: 60,
+            side: 15,
+            extra: 15
+        },
         decks: {
             main: [],
             side: [],
@@ -295,34 +295,34 @@ function attachDnDEvent(targetCollection) {
         helper: function() {
             var helperElem = document.createElement("img");
             helperElem.src = $(this).attr('src');
-			$(helperElem).attr('data-card-id', $(this).attr('data-card-id'));
-			if ($(this).attr('data-card-alias')) {
-				$(helperElem).attr('data-card-alias', $(this).attr('data-card-alias'));
-			}
+            $(helperElem).attr('data-card-id', $(this).attr('data-card-id'));
+            if ($(this).attr('data-card-alias')) {
+                $(helperElem).attr('data-card-alias', $(this).attr('data-card-alias'));
+            }
             $(helperElem).css({
                 height: $(this).css('height'),
                 width: $(this).css('width')
             });
             return helperElem;
         },
-		scroll: false
+        scroll: false
     });
 }
 
 function dropHandler(target) {
     return function(event, ui) {
         var clone = ui.draggable.clone(),
-			id = clone.attr('data-card-alias') ? [clone.attr('data-card-id'), clone.attr('data-card-alias')] : clone.attr('data-card-id'),
+            id = clone.attr('data-card-alias') ? [clone.attr('data-card-id'), clone.attr('data-card-alias')] : clone.attr('data-card-id'),
             targetDeck = deckStorage.getDeck(target),
             remainingDecks = deckStorage.not(target),
-			maximumSize = deckStorage.maximumSize(target),
-			targetContainer = $('.' + target + 'Deck');
+            maximumSize = deckStorage.maximumSize(target),
+            targetContainer = $('.' + target + 'Deck');
         if (addDeckLegal(id, targetDeck, maximumSize, lflist, $('.banlistSelect').val(), remainingDecks[0], remainingDecks[1])) {
-			clone.addClass(target + '_card_' + targetDeck.length);
-			attachDnDEvent(clone);
+            clone.addClass(target + '_card_' + targetDeck.length);
+            attachDnDEvent(clone);
             targetContainer.append(clone);
             deckStorage.addCard(target, id);
-			adjustDeckClass(targetDeck, targetContainer);
+            adjustDeckClass(targetDeck, targetContainer);
             return true;
         } else {
             return false;
@@ -331,19 +331,19 @@ function dropHandler(target) {
 }
 
 function adjustDeckClass(targetDeck, targetContainer) {
-	if (targetDeck.length <= 40) {
-		targetContainer.addClass('f40').removeClass('f50 f60');
-	} else if (targetDeck.length > 40 && targetDeck.length <= 50) {
-		targetContainer.addClass('f50').removeClass('f40 f60');
-	} else if (targetDeck.length > 50) {
-		targetContainer.addClass('f60').removeClass('f40 f50');
-	}
+    if (targetDeck.length <= 40) {
+        targetContainer.addClass('f40').removeClass('f50 f60');
+    } else if (targetDeck.length > 40 && targetDeck.length <= 50) {
+        targetContainer.addClass('f50').removeClass('f40 f60');
+    } else if (targetDeck.length > 50) {
+        targetContainer.addClass('f60').removeClass('f40 f50');
+    }
 }
 
 function dropOutHandler(target) {
-	return function(event, ui) {
-		// TODO
-	};
+    return function(event, ui) {
+        // TODO
+    };
 }
 
 function parseAtkDef(atk, def) {
@@ -596,16 +596,16 @@ function filterScale(result, scale, op) {
 
 function filterForbiddenLimited(result, selectedLimitation, placeholder, selectedBanlist, config) {
     return result.filter(function(card) {
-		if (selectedLimitation === 4) {
-			return true;
-		}
-		if (!(card.id in config[selectedBanlist]) && selectedLimitation === 3) {
-			return true;
-		}
-		if (!(card.id in config[selectedBanlist]) && selectedLimitation !== 3) {
-			return false;
-		}
-		return parseInt(config[selectedBanlist][card.id], 10) === selectedLimitation;
+        if (selectedLimitation === 4) {
+            return true;
+        }
+        if (!(card.id in config[selectedBanlist]) && selectedLimitation === 3) {
+            return true;
+        }
+        if (!(card.id in config[selectedBanlist]) && selectedLimitation !== 3) {
+            return false;
+        }
+        return parseInt(config[selectedBanlist][card.id], 10) === selectedLimitation;
     });
 }
 
@@ -652,20 +652,36 @@ function generateQueryObject() {
     return retVal;
 }
 
- function addDeckLegal(id, targetDeck, targetDeckSize, flList, currentList, deck2, deck3) {
-	if (typeof id !== 'string'){
-		id=id[1];
-		}
-     function idMatches(value) {
-         return ((typeof id === 'string') && id=== value || value[1]===id);
-     }
-     if (targetDeckSize <= targetDeck.length) {
-         return false;
-     }
-     var matchingCopies = targetDeck.filter(idMatches).length + deck2.filter(idMatches).length + deck3.filter(idMatches).length;
-     var maxCopies= flList[currentList][id];
-     if (maxCopies === undefined) {
-          maxCopies = 3;
-      }
-     return (matchingCopies < maxCopies);
- }
+function addDeckLegal(id, targetDeck, targetDeckSize, flList, currentList, deck2, deck3) {
+    if (typeof id !== 'string') {
+        id = id[1];
+    }
+
+    function idMatches(value) {
+        return ((typeof id === 'string') && id === value || value[1] === id);
+    }
+    if (targetDeckSize <= targetDeck.length) {
+        return false;
+    }
+    var matchingCopies = targetDeck.filter(idMatches).length + deck2.filter(idMatches).length + deck3.filter(idMatches).length,
+        maxCopies = flList[currentList][id],
+        cardObject;
+    cards.forEach(function(card) {
+        if (parseInt(id, 10) === card.id) {
+            cardObject = card;
+        }
+    });
+    if (typeof cardObject !== "object") {
+        return false;
+    }
+    if ((cardIs("fusion", cardObject) || cardIs("synchro", cardObject) || cardIs("xyz", cardObject)) && targetDeck !== deckStorage.getDeck("extra")) {
+        return false;
+    }
+    if ((!cardIs("fusion", cardObject) || !cardIs("synchro", cardObject) || !cardIs("xyz", cardObject)) && targetDeck === deckStorage.getDeck("extra")) {
+        return false;
+    }
+    if (maxCopies === undefined) {
+        maxCopies = 3;
+    }
+    return (matchingCopies < maxCopies);
+}
