@@ -266,6 +266,9 @@ function handleResults() {
         output += '<div class="resultDiv exceededSearchNotif">Display more results...</div>';
     }
     searchResults.html(output);
+    $('.resultDiv img', searchResults).each(function () {
+        $(this).data('cardData', 'searchedCard');
+    });
     attachDnDEvent($('.resultDiv img', searchResults));
 }
 
@@ -321,15 +324,20 @@ function dropHandler(target) {
             remainingDecks = deckStorage.not(target),
             maximumSize = deckStorage.maximumSize(target),
             targetContainer = $('.' + target + 'Deck');
-        if (addDeckLegal(id, targetDeck, maximumSize, lflist, $('.banlistSelect').val(), remainingDecks[0], remainingDecks[1])) {
+        if (addDeckLegal(id, targetDeck, maximumSize, lflist, $('.banlistSelect').val(), remainingDecks[0], remainingDecks[1]) && clone.data('cardData') === 'searchedCard') {
             clone.addClass(target + '_card_' + targetDeck.length);
+            clone.data('cardData', 'deckCard');
             attachDnDEvent(clone);
             targetContainer.append(clone);
             deckStorage.addCard(target, id);
             adjustDeckClass(targetDeck, targetContainer);
             return true;
         } else {
-            return false;
+            if (clone.data('cardData') === 'searchedCard') {
+                // empty
+            } else {
+                return false;
+            }
         }
     };
 }
