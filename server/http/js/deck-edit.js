@@ -326,7 +326,7 @@ function dropHandler(target) {
             targetContainer = $('.' + target + 'Deck');
         if (addDeckLegal(id, targetDeck, maximumSize, lflist, $('.banlistSelect').val(), remainingDecks[0], remainingDecks[1]) && ui.draggable.data('cardData') === 'searchedCard') {
             clone.addClass(target + '_card_' + targetDeck.length);
-            ui.draggable.data('cardData', 'deckCard');
+            clone.data('cardData', 'deckCard');
             attachDnDEvent(clone);
             targetContainer.append(clone);
             deckStorage.addCard(target, id);
