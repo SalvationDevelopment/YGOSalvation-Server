@@ -60,7 +60,7 @@ body {
 .searchLeft {
     float: left;
     height: 100%;
-    width: 33%;
+    width: 33.33%;
     padding: 1%;
     border: 1px solid yellow;
 	overflow-y: auto;
@@ -153,9 +153,8 @@ button.deleteDeck {
 .searchRight {
     float: right;
     height: 100%;
-    width: 66%;
+    width: 66.66%;
     border: 1px solid orange;
-    overflow-y: auto;
 }
 
 div.searchBlock label[for^="race"] {
@@ -177,7 +176,7 @@ div.searchBlock label[for^="attribute"] {
     float: left;
     clear: both;
     margin-left: 6%;
-    margin-top: -1%;
+    margin-top: -0.5%;
 }
 
 div.searchBlock select.attributeSelect {
@@ -212,7 +211,7 @@ div.searchBlock label[for^="typeSelect"] {
     float: left;
     clear: both;
     position: relative;
-    margin-top: 1.5%;
+    margin-top: 1.25%;
     margin-left: 6%;
 }
 
@@ -220,8 +219,8 @@ div.searchBlock select.typeSelect {
     display: block;
     float: right;
     height: 14%;
-    width: 20%;
-    clear: both;
+    width: 28%;
+    margin-right: 32%;
 }
 
 div.searchBlock label[for^="setcodeSelect"] {
@@ -283,7 +282,7 @@ div.searchBlock label[for^="forbiddenLimitedSelect"] {
     float: right;
     clear: both;
     margin-right: 10%;
-    margin-top: -25%;
+    margin-top: -18.75%;
 }
 
 div.searchBlock select.forbiddenLimitedSelect {
@@ -297,7 +296,7 @@ div.searchBlock label[for^="atkInput"] {
     float: right;
     clear: both;
     margin-right: 10%;
-    margin-top: -21.5%;
+    margin-top: -15%;
 }
 
 div.searchBlock input.atkInput {
@@ -312,7 +311,7 @@ div.searchBlock label[for^="defInput"] {
     float: right;
     clear: both;
     margin-right: 10%;
-    margin-top: -18%;
+    margin-top: -11.25%;
 }
 
 div.searchBlock input.defInput {
@@ -327,7 +326,7 @@ div.searchBlock input.defInput {
 div.searchBlock label[for^="nameInput"] {
     float: right;
     clear: both;
-    margin-top: -14.5%;
+    margin-top: -7.5%;
     margin-right: 10%;
 }
 
@@ -346,16 +345,16 @@ button.searchButton {
     float: right;
     clear: both;
     margin-right: 10%;
-    margin-top: -10.75%;
+    margin-top: -3.75%;
 }
 
 button.clearForm {
     display: block;
     float: right;
-    height: 30.5%;
+    height: 32%;
     width: 9%;
     margin-right: 10%;
-    margin-top: -21.5%;
+    margin-top: -15%;
     clear: both;
 }
 
