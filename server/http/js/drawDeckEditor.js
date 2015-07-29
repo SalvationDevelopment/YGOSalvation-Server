@@ -22,6 +22,7 @@ function drawDeckEditor(ydk) {
         }
         $('img', container).each(function(index) {
             $(this).addClass(deck + '_card_' + index);
+            $(this).data('cardData', 'deckCard');
         });
         attachDnDEvent($('img', container));
         adjustDeckClass(deckStorage.getDeck(deck), container);
@@ -41,6 +42,7 @@ function drawDeck(target) {
     });
     $('img', container).each(function(index) {
         $(this).addClass(target + '_card_' + index);
+        $(this).data('cardData', 'deckCard');
     });
     attachDnDEvent($('img', container));
     adjustDeckClass(deckStorage.getDeck(target), container);
