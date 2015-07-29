@@ -31,9 +31,10 @@ body {
     top: 0%;
     left: 0%;
     width: 100%;
-    height: 62%;
+    height: 59.25%;
     border: 1px solid red;
     padding: 12px;
+    overflow: auto;
 }
 
 .f40 img {
@@ -53,7 +54,7 @@ body {
 .searchBar {
     float: right;
     width: 75.7%;
-    height: 25%;
+    height: 22%;
 }
 
 .searchLeft {
@@ -65,22 +66,88 @@ body {
 	overflow-y: auto;
 }
 
-.shuffleDeck {
-    float: right;
+div.searchLeft label[for^="banlistSelect"] {
+    width: 80%;
     height: 15%;
-    bottom: 0%;
+    margin-top: 2%;
+    float: left;
+    clear: both;
 }
 
-.sortDeck {
+div.searchLeft select.banlistSelect {
     float: right;
+    clear: both;
+    width: 65%;
+    margin-right: 5%;
+}
+
+div.searchLeft label[for^="deckSelect"] {
+    width: 80%;
     height: 15%;
-    bottom: 0%;
+    margin-top: 1%;
+    float: left;
+    clear: both;
+}
+
+div.searchLeft select.deckSelect {
+    float: right;
+    clear: both;
+    width: 65%;
+    margin-right: 5%;
+}
+
+div.searchLeft label[for^="decknameInput"] {
+    width: 80%;
+    clear: both;
+    float: left;
+    height: 15%;
+    margin-top: -1%;
+}
+
+input.decknameInput {
+    float: right;
+    display: block;
+    width: 65%;
+    margin-right: 5%;
+}
+
+button.shuffleDeck {
+    float: right;
+    width: 20%;
+    margin-top: 3%;
+    margin-right: -19.9%;
+}
+
+button.sortDeck {
+    float: right;
+    width: 20%;
+    margin-top: 3%;
+    margin-right: 2%;
 }
 
 button.clearDeck {
     float: right;
-    height: 15%;
-    bottom: 0%;
+    width: 20%;
+    margin-top: 3%;
+    margin-right: 2%;
+}
+
+button.saveDeck {
+    width: 20%;
+    float: right;
+    margin-top: -4.5%;
+}
+
+button.saveDeckAs {
+    width: 20%;
+    float: right;
+    white-space: nowrap;
+}
+
+button.deleteDeck {
+    display: block;
+    width: 20%;
+    float: right;
 }
 
 .searchRight {
@@ -91,14 +158,34 @@ button.clearDeck {
     overflow-y: auto;
 }
 
+div.searchBlock label[for^="race"] {
+    float: left;
+    clear: both;
+    margin-left: 6%;
+    margin-top: -1%;
+}
+
 div.searchBlock select.raceSelect {
     float: right;
-    z-index: -1;
+    clear: both;
+    height: 15%;
+    width: 75%;
+    margin-right: -15%;
+}
+
+div.searchBlock label[for^="attribute"] {
+    float: left;
+    clear: both;
+    margin-left: 6%;
+    margin-top: -1%;
 }
 
 div.searchBlock select.attributeSelect {
     float: right;
-    z-index: 0;
+    clear: both;
+    height: 15%;
+    width: 75%;
+    margin-right: -15%;
 }
 
 div.searchBlock select.monsterTypeSelect {
@@ -121,13 +208,6 @@ div.searchBlock select.trapSelect {
     z-index: 4;
 }
 
-div.searchBlock label[for^="attribute"],
-div.searchBlock label[for^="race"] {
-    float: left;
-    clear: both;
-    margin-left: 6%;
-}
-
 div.searchBlock label[for^="typeSelect"] {
     float: left;
     clear: both;
@@ -144,25 +224,19 @@ div.searchBlock select.typeSelect {
     clear: both;
 }
 
-div.searchBlock select.attributeSelect,
-div.searchBlock select.raceSelect {
-    float: right;
-    clear: both;
-    height: 15%;
-    width: 20%;
-}
-
 div.searchBlock label[for^="setcodeSelect"] {
     float: left;
     clear: both;
     margin-left: 6%;
+    margin-top: -0.5%;
 }
 
 div.searchBlock select.setcodeSelect {
     display: block;
     float: right;
     height: 14%;
-    width: 20%;
+    width: 75%;
+    margin-right: -15%;
     clear: both;
 }
 
@@ -170,27 +244,30 @@ div.searchBlock label[for^="levelInput"] {
     float: left;
     clear: both;
     margin-left: 6%;
+    margin-top: -0.5%;
 }
 
 input.levelInput {
     display: block;
     float: right;
     height: 14%;
-    width: 15%;
-    margin-right: 45%;
+    width: 23%;
+    margin-right: 36.5%;
     clear: both;
 }
 
 div.searchBlock label[for^="scaleInput"] {
     float: left;
+    margin-left: -10.5%;
+    margin-top: -0.5%;
 }
 
 div.searchBlock input.scaleInput {
     display: block;
     float: right;
-    width: 15%;
+    width: 23%;
     height: 14%;
-    margin-right: 60%;
+    margin-right: 54%;
 }
 
 .raceSelect {
@@ -206,13 +283,12 @@ div.searchBlock label[for^="forbiddenLimitedSelect"] {
     float: right;
     clear: both;
     margin-right: 10%;
-    margin-top: -31%;
+    margin-top: -25%;
 }
 
 div.searchBlock select.forbiddenLimitedSelect {
     display: block;
     float: right;
-    height: 14%;
     width: 75%;
     clear: both;
 }
@@ -221,38 +297,37 @@ div.searchBlock label[for^="atkInput"] {
     float: right;
     clear: both;
     margin-right: 10%;
-    margin-top: -26.5%;
+    margin-top: -21.5%;
 }
 
 div.searchBlock input.atkInput {
     display: block;
     float: right;
-    width: 45%;
-    height: 14%;
+    width: 46%;
     clear: both;
-    margin-right: 30%;
+    margin-right: 29%;
 }
 
 div.searchBlock label[for^="defInput"] {
     float: right;
     clear: both;
     margin-right: 10%;
-    margin-top: -22%;
+    margin-top: -18%;
 }
 
 div.searchBlock input.defInput {
     display: block;
     float: right;
-    width: 45%;
+    width: 46%;
     height: 14%;
     clear: both;
-    margin-right: 30%;
+    margin-right: 29%;
 }
 
 div.searchBlock label[for^="nameInput"] {
     float: right;
     clear: both;
-    margin-top: -17.5%;
+    margin-top: -14.5%;
     margin-right: 10%;
 }
 
@@ -260,6 +335,27 @@ div.searchBlock input.nameInput {
     display: block;
     float: right;
     width: 75%;
+    clear: both;
+}
+
+button.searchButton {
+    position: relative;
+    z-index: 9001;
+    width: 33%;
+    height: 15%;
+    float: right;
+    clear: both;
+    margin-right: 10%;
+    margin-top: -10.75%;
+}
+
+button.clearForm {
+    display: block;
+    float: right;
+    height: 30.5%;
+    width: 9%;
+    margin-right: 10%;
+    margin-top: -21.5%;
     clear: both;
 }
 
@@ -276,19 +372,9 @@ div.searchBlock input.descInput {
     display: none;
 }
 
-button.clearForm {
-    display: block;
-    float: right;
-    height: 34%;
-    width: 9%;
-    margin-right: 10%;
-    margin-top: -26.5%;
-    clear: both;
-}
-
 .center {
-    height: 74.5%;
-    width: 50.5%;
+    height: 78%;
+    width: 51%;
     border: 1px solid red;
     float: left;
 }
@@ -303,21 +389,21 @@ button.clearForm {
 
 .extraDeck {
     float: left;
-    height: 17.5%;
+    height: 17.25%;
     width: 100%;
     border: 1px solid green;
 }
 
 .sideDeck {
     float: left;
-    height: 15.5%;
+    height: 17.25%;
     width: 100%;
     border: 1px solid yellow;
 }
 
 .right {
     float: right;
-    height: 74.5%;
+    height: 78%;
     width: 25%;
     border: 1px solid green;
 }
@@ -350,48 +436,11 @@ div.thumbContainer img {
     float: left;
 }
 
-button.saveDeck,
-.saveDeckAs {
-    margin-left: 1%;
-    margin-top: 1.5%;
-}
-
 label,
 select,
 button {
     margin-bottom: 1%;
     line-height: 1em;
-}
-
-button.deleteDeck {
-    display: block;
-    margin-top: 2%;
-    float: left;
-}
-
-button.searchButton {
-    position: relative;
-    z-index: 9001;
-    width: 33%;
-    height: 15%;
-    float: right;
-    clear: both;
-    margin-right: 10%;
-    margin-top: -13.5%;
-}
-
-input.decknameInput {
-    float: left;
-    display: block;
-    width: 45%;
-    margin-left: 32%;
-    margin-top: -55%;
-}
-
-div.clearsortshufflewrapper {
-    overflow: auto;
-    width: 50%;
-    margin: 0 auto;
 }
 
 .resultDiv {

@@ -348,7 +348,7 @@ function adjustDeckClass(targetDeck, targetContainer) {
 function dropOutHandler(target) {
     return function (event, ui) {
         var cardClasses = ui.draggable.attr('class').split(' '),
-            indexRegexp = new RegExp(target + '_card_(\d+)');
+            indexRegexp = new RegExp(target + '\\_card\\_(\\d+)');
         cardClasses.forEach(function (cardClass) {
             var matches;
             if ((matches = cardClass.match(indexRegexp)) !== null) {
