@@ -434,7 +434,7 @@ function renderList(JSONdata) {
     $('#gamelistitems').html('');
     for (rooms in JSONdata) {
         if (JSONdata.hasOwnProperty(rooms)) {
-            player1 = (JSONdata[rooms].players[0]) ? '<label class="playername">' + JSONdata[rooms].players[0].trim + '</label>' : '___';
+            player1 = (JSONdata[rooms].players[0]) ? '<label class="playername">' + JSONdata[rooms].players[0] + '</label>' : '___';
             player2 = (JSONdata[rooms].players[1]) ? '<label class="playername">' + JSONdata[rooms].players[1] + '</label>' : '___';
             player3 = (JSONdata[rooms].players[2]) ? '<label class="playername">' + JSONdata[rooms].players[2] + '</label>' : '___';
             player4 = (JSONdata[rooms].players[3]) ? '<label class="playername">' + JSONdata[rooms].players[3] + '</label>' : '___';
