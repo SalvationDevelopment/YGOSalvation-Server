@@ -218,7 +218,7 @@ div.searchBlock label[for^="typeSelect"] {
 
 div.searchBlock select.typeSelect {
     display: block;
-    float: left;
+    float: right;
     height: 14%;
     width: 20%;
     clear: both;
