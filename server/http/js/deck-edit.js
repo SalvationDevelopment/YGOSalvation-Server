@@ -95,19 +95,22 @@ $(function () {
                     addClasses: false,
                     accept: "img[data-card-id]",
                     drop: dropHandler("main"),
-                    out: dropOutHandler("main")
+                    out: dropOutHandler("main"),
+                    tolerance: "fit"
                 });
                 $('.sideDeck').droppable({
                     addClasses: false,
                     accept: "img[data-card-id]",
                     drop: dropHandler("side"),
-                    out: dropOutHandler("side")
+                    out: dropOutHandler("side"),
+                    tolerance: "fit"
                 });
                 $('.extraDeck').droppable({
                     addClasses: false,
                     accept: "img[data-card-id]",
                     drop: dropHandler("extra"),
-                    out: dropOutHandler("extra")
+                    out: dropOutHandler("extra"),
+                    tolerance: "fit"
                 });
             });
         });
