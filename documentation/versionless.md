@@ -1,3 +1,0 @@
-The way some sims update it takes its time getting "all the cards" much like you are waiting on everything in the launcher to be ok before compuling it up because it takes alot of time to remake the installer, even with a great process like you have setup.
-
-So due to bugs cards go into the field in increasing amounts of time. Our system lets us push out updates faster than all other systems because it is versionless.
