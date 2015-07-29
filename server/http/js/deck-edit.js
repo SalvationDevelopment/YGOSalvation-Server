@@ -324,16 +324,16 @@ function dropHandler(target) {
             remainingDecks = deckStorage.not(target),
             maximumSize = deckStorage.maximumSize(target),
             targetContainer = $('.' + target + 'Deck');
-        if (addDeckLegal(id, targetDeck, maximumSize, lflist, $('.banlistSelect').val(), remainingDecks[0], remainingDecks[1]) && clone.data('cardData') === 'searchedCard') {
+        if (addDeckLegal(id, targetDeck, maximumSize, lflist, $('.banlistSelect').val(), remainingDecks[0], remainingDecks[1]) && ui.draggable.data('cardData') === 'searchedCard') {
             clone.addClass(target + '_card_' + targetDeck.length);
-            clone.data('cardData', 'deckCard');
+            ui.draggable.data('cardData', 'deckCard');
             attachDnDEvent(clone);
             targetContainer.append(clone);
             deckStorage.addCard(target, id);
             adjustDeckClass(targetDeck, targetContainer);
             return true;
         } else {
-            if (clone.data('cardData') === 'searchedCard') {
+            if (ui.draggable.data('cardData') === 'searchedCard') {
                 // empty
             } else {
                 return false;
