@@ -45,8 +45,8 @@ $(function () {
                         }
                     case "1":
                         { // monster
--                           monsterCardSelect.css.('display', 'block').attr('data-input-monster-card', '');
-+                           monsterTypeSelect.css.('display', 'block').attr('data-input-monster-type', '');
+-                           monsterCardSelect.css('display', 'block').attr('data-input-monster-card', '');
++                           monsterTypeSelect.css('display', 'block').attr('data-input-monster-type', '');
 +                           spellSelect.css('display', 'none').removeAttr('data-input-type');
 +                           trapSelect.css('display', 'none').removeAttr('data-input-type');
 -                           raceSelect.removeAttr('disabled').attr('data-input-race', '');
@@ -55,7 +55,7 @@ $(function () {
                         }
                     case "2":
                         { // spell
--                           spellSelect.css.('display', 'block').attr('data-input-type', '');
+-                           spellSelect.css('display', 'block').attr('data-input-type', '');
 +                           monsterCardSelect.css('display', 'none').removeAttr('data-input-monster-card');
 +                           monsterTypeSelect.css('display', 'none').removeAttr('data-input-monster-type');
 +                           trapSelect.css('display', 'none').removeAttr('data-input-type');
@@ -65,7 +65,7 @@ $(function () {
                         }
                     case "4":
                         { // traps
--                           trapSelect.css.('display', 'block').attr('data-input-type', '');
+-                           trapSelect.css('display', 'block').attr('data-input-type', '');
 +                           monsterCardSelect.css('display', 'none').removeAttr('data-input-monster-card');
 +                           monsterTypeSelect.css('display', 'none').removeAttr('data-input-monster-type');
 +                           spellSelect.css('display', 'none').removeAttr('data-input-type');
