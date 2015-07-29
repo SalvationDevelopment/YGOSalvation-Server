@@ -57,7 +57,7 @@ function gamelistUpdate(data) {
             console.log(data);
             console.log('duel Request Recieved');
             childProcess.spawn('windbot.exe', ['AI', 'Hours', '127.0.0.1', '8911', data.roompass], {
-                cwd: '.. / server / http / ygopro'
+                cwd: '../server/http/ygopro'
             }, function () {});
         }
         return;
