@@ -115,7 +115,6 @@ $(function () {
 });
 
 var imgDir = "http://ygopro.us/ygopro/pics/",
-    thumbDir = imgDir + "thumbnail/",
     forumLink = "http://forum.ygopro.us/index.php/?ref=_deckEditor",
     attributeMap = {
         1: "EARTH",
@@ -248,7 +247,7 @@ function handleResults() {
         results = results.slice(0, SEARCH_HARD_CAP);
     }
     results.forEach(function (result, index) {
-        output += '<div class="resultDiv row_' + index + '"><div class="thumbContainer"><img src="' + thumbDir + result.id + '.jpg"  data-card-id="' + result.id + '"' + (result.alias !== 0 ? ' data-card-alias="' + result.alias + '"' : '') + ' /></div><div class="descriptionContainer"><span class="name">' + result.name + '</span><br />';
+        output += '<div class="resultDiv row_' + index + '"><div class="thumbContainer"><img src="' + imgDir + result.id + '.jpg"  data-card-id="' + result.id + '"' + (result.alias !== 0 ? ' data-card-alias="' + result.alias + '"' : '') + ' /></div><div class="descriptionContainer"><span class="name">' + result.name + '</span><br />';
         if (cardIs("monster", result)) {
             // render monster display
             output += '<span class="monsterDetails">' + attributeMap[result.attribute] + ' / ' + raceMap[result.race] + '<br />' + parseLevelScales(result.level);
