@@ -1,10 +1,10 @@
 {    "Articles": [
 	 {
-    	"Title": "Some good news",
-    	"Subtitle": "New cards and stuff, the updates you like!",
-    	"Content": "<p>Apologies for the server being so unstable as of late, the big ID update has caused a lot of unforseen problems and it's been complicated to find and remove every issue. If you have a sudden bug, make sure to update or wait a bit before immediately reporting it (We're getting some no longer valid reports), attaching a replay is preferred. If your problem happened while in LAN mode, please specify it. We ask you to please be patient, remember that your enjoyment is our priority! We're doing the best we can.</p><p> Anyways, onto the new cards:<br /><br />Scheduled Extinction<br />Kumongous the Sticky Thread Kaiju<br />Kyoutou Seafront<br />Doragon, the Mad Flame Kaiju<br /><br /> Credit, as usual, goes to <a href='https://www.youtube.com/user/YGOhack137'><u>YGOHack137</u></a></p><p>NEWGIOH format also received an update, a few new cards were added to the format, including another Xyz Monster! Check out the news at <a href='http://newgioh.com/'><u>The NEWGIOH Website</u></a>",
-	 "Author": "Chibi",
-    	"Date": "July 28th, 2015"
+    	   "Title": "Some good news",
+    	   "Subtitle": "New cards and stuff, the updates you like!",
+    	   "Content": "<p>Apologies for the server being so unstable as of late, the big ID update has caused a lot of unforseen problems and it's been complicated to find and remove every issue. If you have a sudden bug, make sure to update or wait a bit before immediately reporting it (We're getting some no longer valid reports), attaching a replay is preferred. If your problem happened while in LAN mode, please specify it. We ask you to please be patient, remember that your enjoyment is our priority! We're doing the best we can.</p><p> Anyways, onto the new cards:<br /><br />Scheduled Extinction<br />Kumongous the Sticky Thread Kaiju<br />Kyoutou Seafront<br />Doragon, the Mad Flame Kaiju<br /><br /> Credit, as usual, goes to <a href='https://www.youtube.com/user/YGOhack137'><u>YGOHack137</u></a></p><p>NEWGIOH format also received an update, a few new cards were added to the format, including another Xyz Monster! Check out the news at <a href='http://newgioh.com/'><u>The NEWGIOH Website</u></a>",
+	   "Author": "Chibi",
+           "Date": "July 28th, 2015"
 	},{
            "Title": "Kaboooom!",
            "Subtitle": "You'll probably have some questions...",
@@ -18,11 +18,11 @@
            "Author": "Chibi",
            "Date": "July 22th, 2015"
        },{
-    	"Title": "MAGICAL~",
-    	"Subtitle": "Surprisingly, it hasn't gotten dark yet",
-    	"Content": "<p>New cards have been added recently:<br /><br />Bujin Hiroko<br />Traptrix Rafflesia<br />Sylvan Princessprite<br />Artifact Vajra<br />Symphonic Warriors Mics<br />Dice Roll Battle<br />Red Sprinter<br />Kozmotown<br />Kozmo Farmgirl<br />Kozmo Goodwitch<br />Kozmo Forerunner<br /> All cards in this update were made by YGOHack137, be sure to check out his channel at <a href='https://www.youtube.com/user/YGOhack137'>https://www.youtube.com/user/YGOhack137</a>. If you find a bug, be sure to report it on the forum.</p>",
-	 "Author": "Academia",
-    	"Date": "July 19th, 2015"
+    	  "Title": "MAGICAL~",
+    	  "Subtitle": "Surprisingly, it hasn't gotten dark yet",
+    	  "Content": "<p>New cards have been added recently:<br /><br />Bujin Hiroko<br />Traptrix Rafflesia<br />Sylvan Princessprite<br />Artifact Vajra<br />Symphonic Warriors Mics<br />Dice Roll Battle<br />Red Sprinter<br />Kozmotown<br />Kozmo Farmgirl<br />Kozmo Goodwitch<br />Kozmo Forerunner<br /> All cards in this update were made by YGOHack137, be sure to check out his channel at <a href='https://www.youtube.com/user/YGOhack137'>https://www.youtube.com/user/YGOhack137</a>. If you find a bug, be sure to report it on the forum.</p>",
+	  "Author": "Academia",
+    	  "Date": "July 19th, 2015"
 	},{
           "Title": "UUUUULTRA UUUUUUUPDATE!",
     	  "Subtitle": "Many new cards, OCG and Anime",
