@@ -354,17 +354,25 @@ function adjustDeckClass(targetDeck, targetContainer) {
 
 function dropOutHandler(target) {
     return function (event, ui) {
-        var cardClasses = ui.draggable.attr('class').split(' '),
+        var clone = ui.draggable.clone(),
+            cardClasses = clone.attr('class').split(' '),
+            cardData = ui.draggable.data('cardData'),
             indexRegexp = new RegExp(target + '\\_card\\_(\\d+)');
-        cardClasses.forEach(function (cardClass) {
-            var matches;
-            if ((matches = cardClass.match(indexRegexp)) !== null) {
-                deckStorage.removeCard(target, matches[1])
-            }
-        });
-        ui.draggable.remove();
-        drawDeck(target);
-        return true;
+        if (cardData === 'searchedCard') {
+            return false;
+        } else if (cardData === 'deckCard') {
+            cardClasses.forEach(function (cardClass) {
+                var matches;
+                if ((matches = cardClass.match(indexRegexp)) !== null) {
+                    deckStorage.removeCard(target, matches[1]);
+                }
+            });
+            ui.draggable.remove();
+            drawDeck(target);
+            return true;
+        } else {
+            return false;
+        }
     };
 }
 
