@@ -45,17 +45,17 @@ $(function () {
                         }
                     case "1":
                         { // monster
-                            monsterCardSelect.css.('display', 'block').attr('data-input-monster-card', '');
-                            monsterTypeSelect.css.('display', 'block').attr('data-input-monster-type', '');
+                            monsterCardSelect.css('display', 'block').attr('data-input-monster-card', '');
+                            monsterTypeSelect.css('display', 'block').attr('data-input-monster-type', '');
                             spellSelect.css('display', 'none').removeAttr('data-input-type');
                             trapSelect.css('display', 'none').removeAttr('data-input-type');
-                            raceSelect.css.('display', 'block').attr('data-input-race', '');
-                            attributeSelect.css.('display', 'block').attr('data-input-attribute', '');
+                            raceSelect.css('display', 'block').attr('data-input-race', '');
+                            attributeSelect.css('display', 'block').attr('data-input-attribute', '');
                             break;
                         }
                     case "2":
                         { // spell
-                            spellSelect.css.('display', 'block').attr('data-input-type', '');
+                            spellSelect.css('display', 'block').attr('data-input-type', '');
                             monsterCardSelect.css('display', 'none').removeAttr('data-input-monster-card');
                             monsterTypeSelect.css('display', 'none').removeAttr('data-input-monster-type');
                             trapSelect.css('display', 'none').removeAttr('data-input-type');
@@ -65,7 +65,7 @@ $(function () {
                         }
                     case "4":
                         { // traps
-                            trapSelect.css.('display', 'block').attr('data-input-type', '');
+                            trapSelect.css('display', 'block').attr('data-input-type', '');
                             monsterCardSelect.css('display', 'none').removeAttr('data-input-monster-card');
                             monsterTypeSelect.css('display', 'none').removeAttr('data-input-monster-type');
                             spellSelect.css('display', 'none').removeAttr('data-input-type');
