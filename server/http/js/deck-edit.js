@@ -141,9 +141,13 @@ $(function () {
                     deckStorage.setDeck("main", shuffleArray(deck));
                     drawDeck("main");
                 });
-                $('.sortDeck').on('click', function () {
-                    sortAllDecks();
-                });
+                /**
+                 * Disabled for performance reasons.
+                 * I recommend not calling sortAllDecks.
+                 * $('.sortDeck').on('click', function () {
+                 *   sortAllDecks();
+                 * });
+                 **/
             });
         });
     });
