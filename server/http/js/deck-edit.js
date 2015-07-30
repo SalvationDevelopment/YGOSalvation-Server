@@ -330,17 +330,17 @@ function sortDeck (target) {
             });
         }
         if (cardIs("monster", cardObject)) {
-            monsterArray.push(cardObject);
+            arrays.monsterArray.push(cardObject);
         } else if (cardIs("spell", cardObject)) {
-            spellArray.push(cardObject);
+            arrays.spellArray.push(cardObject);
         } else if (cardIs("trap", cardObject)) {
-            trapArray.push(cardObject);
+            arrays.trapArray.push(cardObject);
         } else if (cardIs("fusion", cardObject)) {
-            fusionArray.push(cardObject);
+            arrays.fusionArray.push(cardObject);
         } else if (cardIs("synchro", cardObject)) {
-            synchroArray.push(cardObject);
+            arrays.synchroArray.push(cardObject);
         } else if (cardIs("xyz", cardObject)) {
-            xyzArray.push(cardObject);
+            arrays.xyzArray.push(cardObject);
         } else {
             return;
         }
