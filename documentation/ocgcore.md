@@ -1,20 +1,41 @@
-1.) download Fh / ygopro
-2.) download premake4.exe, put it in c:\windows
-3.) download soarquin/ygopro or sub (like our own salv)
-4.) copy dependency folders into fh /ygopro
-5.) at command prompt do :
+#OCGCore
+The core logic and lua script processor of YGOPro is called `ocgcore` this library can be made external of the project and used to power server technologies.
+
+##1.) Download Fluorohydride/ygopro
+Start by downloading the most parent of the source code. The team developing this project are the defacto edge and experts in our community. The most upto date `ocgcore` is a compiled dll version of the `Fluorohydride/ygopro/ocgcore` folders project.
+
+##2.) Install Premake4 and Visual Studio 2010 (or later).
+Download premake4.exe, put it in `c:\windows` or a similar folder that is globally accessiable via `cmd` or PowerShell. Install Visual Studio 2010, it is the system used for the guide because other parts of the project use C# and most the development team are Windows users.
+
+##3.) Download dependencies
+Dependencies are absent from the main project. There is information on how to build them but the easist thing to do is to download the following folders from a `soarquin/ygopro` fork and simply copy them into the `Fluorohydride/ygopro` folder.
+
+    - event
+    - freetype
+    - irrklang
+    - irrlict
+    - lua
+    - sqlite3
+    
+##4.) Create the project files
+Run the following commands from the command line in the `Fluorohydride/ygopro` folder.
+
 ` premake4 /help `
-` premake4 vs2013 `
-6.) in explore open fh/ ygopro/build open vs project
-7.) build lua
-8.) build SQLite
-9.) build ocgcore
+` premake4 vs2010 `
 
-proves system can compile.
+If you are not using Visual Studio 2010 or higher, make the needed adjustments. In the file system open `Fluorohydride/ygopro/build` folder open the `ygo` project.
 
-10.) in properities for ocgcore set to be a dll.
-11.) it wont build now.
-12.) in settigns for properities have to "include libraries" that lua and SQLite built in the bin folder
-13.) build ocgcore.dll should output fine.
+## Build the system
+Make sure the code actually compiles. Compile them in the following order one by one:
+
+    - lua
+    - sqlite3
+    - ocgcore
+
+This should provide you with `ocgcore.lib` in the build output folder. `YGOCore` requires a `*.dll`; in `ocgcore` project properities change it to a dynamically linked library. Recompile, it should fail with an error indicating missing dependencies. In properities point the library folder to include the build folder. Rebuild it should provide you with `ocgcore.dll` now.
 
 ----
+
+#Links
+https://github.com/Fluorohydride/ygopro
+https://github.com/Fluorohydride/ygopro/wiki/build
