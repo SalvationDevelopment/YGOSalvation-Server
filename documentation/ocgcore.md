@@ -10,12 +10,12 @@ Download premake4.exe, put it in `c:\windows` or a similar folder that is global
 ##3.) Download dependencies
 Dependencies are absent from the main project. There is information on how to build them but the easist thing to do is to download the following folders from a `soarquin/ygopro` fork and simply copy them into the `Fluorohydride/ygopro` folder.
 
-    - event
-    - freetype
-    - irrklang
-    - irrlict
-    - lua
-    - sqlite3
+* event
+* freetype
+* irrklang
+* irrlict
+* lua
+* sqlite3
     
 ##4.) Create the project files
 Run the following commands from the command line in the `Fluorohydride/ygopro` folder.
@@ -28,14 +28,14 @@ If you are not using Visual Studio 2010 or higher, make the needed adjustments. 
 ## Build the system
 Make sure the code actually compiles. Compile them in the following order one by one:
 
-    - lua
-    - sqlite3
-    - ocgcore
+* lua
+* sqlite3
+* ocgcore
 
-This should provide you with `ocgcore.lib` in the build output folder. `YGOCore` requires a `*.dll`; in `ocgcore` project properities change it to a dynamically linked library. Recompile, it should fail with an error indicating missing dependencies. In properities point the library folder to include the build folder. Rebuild it should provide you with `ocgcore.dll` now.
+This should provide you with `ocgcore.lib` in the build output folder. `YGOCore` requires a `*.dll`; in `ocgcore` project properities change it to a dynamically linked library. Recompile, it should fail with an error indicating missing dependencies. Right click the project, add a existing file. Add `lua.lib` from the build folder to the project. It should now compile.
 
 ----
 
 #Links
-https://github.com/Fluorohydride/ygopro
-https://github.com/Fluorohydride/ygopro/wiki/build
+* https://github.com/Fluorohydride/ygopro
+* https://github.com/Fluorohydride/ygopro/wiki/build
