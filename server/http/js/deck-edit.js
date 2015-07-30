@@ -278,7 +278,7 @@ function sortAllDecks () {
     var deck,
         sortedDeck;
     for (deck in deckStorage.decks) {
-        sortedDeck = sortDeck(deckStorage.getDeck(deck));
+        sortedDeck = sortDeck(deck);
         deckStorage.setDeck(deck, sortedDeck);
         drawDeck(deck);
     }
