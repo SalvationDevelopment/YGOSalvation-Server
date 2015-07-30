@@ -143,6 +143,7 @@ $(function () {
                 });
                 $('.sortDeck').on('click', function () {
                     sortAllDecks();
+                });
             });
         });
     });
@@ -295,7 +296,7 @@ function sortDeck (target) {
             synchroArray: [],
             xyzArray: []
         },
-        array;
+        array,
         typeObject = {},
         cardObject,
         targetDeck = deckStorage.getDeck(target),
@@ -517,7 +518,7 @@ function parseLevelScales(level) {
         rightScale,
         pendulumLevel;
     if (level > 0 && level <= 12) {
-        output += '<span class="levels">'
+        output += '<span class="levels">';
         while (level--) {
             output += "*";
         }
