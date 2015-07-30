@@ -109,6 +109,40 @@ $(function () {
                     drop: dropHandler("extra"),
                     out: dropOutHandler("extra")
                 });
+                $('.saveDeck').on('click', function () {
+                    primus.write({
+                        action: "saveDeckRequest",
+                        data: [deckStorage.decks, $('.deckSelect').val()]
+                    });
+                });
+                $('.saveDeckAs').on('click', function () {
+                    var deckName = $('.decknameInput').val();
+                    if (!deckName) {
+                        primus.write({
+                            action: "saveDeckRequest",
+                            data: [deckStorage.decks, $('.deckSelect').val()]
+                        });
+                    } else {
+                        primus.write({
+                            action: "saveDeckRequest",
+                            data: [deckStorage.decks, deckName + ".ydk"]
+                        });
+                    }
+                });
+                $('.clearDeck').on('click', function () {
+                    drawDeckEditor({
+                        main: {},
+                        side: {},
+                        extra: {}
+                    });
+                });
+                $('.shuffleDeck').on('click', function () {
+                    var deck = deckStorage.getDeck("main");
+                    deckStorage.setDeck("main", shuffleArray(deck));
+                    drawDeck("main");
+                });
+                $('.sortDeck').on('click', function () {
+                    sortAllDecks();
             });
         });
     });
@@ -195,6 +229,9 @@ var imgDir = "http://ygopro.us/ygopro/pics/",
         getDeck: function (deck) {
             return deckStorage.decks[deck];
         },
+        setDeck: function (deck, newDeck) {
+            deckStorage.decks[deck] = newDeck;
+        },
         addCard: function (deck, id) {
             deckStorage.decks[deck].push(id);
         },
@@ -222,6 +259,100 @@ var imgDir = "http://ygopro.us/ygopro/pics/",
         }
     };
 
+function shuffleArray (array) {
+    var currentIndex = array.length,
+        temporaryValue,
+        randomIndex;
+    while (0 !== currentIndex) {
+        randomIndex = Math.floor(Math.random() * currentIndex);
+        currentIndex -= 1;
+        temporaryValue = array[currentIndex];
+        array[currentIndex] = array[randomIndex];
+        array[randomIndex] = temporaryValue;
+    }
+    return array;
+}
+
+function sortAllDecks () {
+    var deck,
+        sortedDeck;
+    for (deck in deckStorage.decks) {
+        sortedDeck = sortDeck(deckStorage.getDeck(deck));
+        deckStorage.setDeck(deck, sortedDeck);
+        drawDeck(deck);
+    }
+}
+
+function sortDeck (target) {
+    // sortDeck logic, we sort by frame (Monster, Spell, Trap)
+    // higher type means lower position in resulting list
+    // have to first get all frames into their separate arrays and operate on them
+    var arrays = {
+            monsterArray: [],
+            spellArray: [],
+            trapArray: [],
+            fusionArray: [],
+            synchroArray: [],
+            xyzArray: []
+        },
+        array;
+        typeObject = {},
+        cardObject,
+        targetDeck = deckStorage.getDeck(target),
+        typeSort = function (prev, next) {
+            return prev.type - next.type;
+        },
+        determineEqualTypes = function (card, index, array) {
+            if (index === 0) {
+                return;
+            }
+            if (!typeObject.hasOwnProperty(card.type)) {
+                typeObject[card.type] = {};
+            }
+            if (card.type === array[index - 1].type) {
+                if (!typeObject[card.type].hasOwnProperty(index - 1)) {
+                    typeObject[card.type][index - 1] = array[index - 1];
+                }
+                typeObject[card.type][index] = card;
+            }
+        };
+    targetDeck.forEach(function (deckCard) {
+        var cardFound = false,
+            maxTries = cards.length,
+            tries = 0;
+        while (!cardFound || tries++ < maxTries) {
+            cards.forEach(function (card) {
+                if (parseInt(deckCard, 10) === card.id) {
+                    cardObject = card;
+                    cardFound = true;
+                }
+            });
+        }
+        if (cardIs("monster", cardObject)) {
+            monsterArray.push(cardObject);
+        } else if (cardIs("spell", cardObject)) {
+            spellArray.push(cardObject);
+        } else if (cardIs("trap", cardObject)) {
+            trapArray.push(cardObject);
+        } else if (cardIs("fusion", cardObject)) {
+            fusionArray.push(cardObject);
+        } else if (cardIs("synchro", cardObject)) {
+            synchroArray.push(cardObject);
+        } else if (cardIs("xyz", cardObject)) {
+            xyzArray.push(cardObject);
+        } else {
+            return;
+        }
+        for (array in arrays) {
+            arrays[array] = arrays[array].sort(typeSort);
+            arrays[array].forEach(determineEqualTypes);
+            console.log(typeObject, arrays[array]);
+            typeObject = {};
+        }
+    });
+    return [].concat(arrays.monsterArray, arrays.spellArray, arrays.trapArray, arrays.fusionArray, arrays.synchroArray, arrays.xyzArray);
+}
+        
 function handleResults() {
     const SEARCH_HARD_CAP = 100;
     var monsterCardSelect = $('.monsterCardSelect'),
