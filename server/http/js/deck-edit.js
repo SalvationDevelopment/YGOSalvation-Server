@@ -552,13 +552,11 @@ function getCardObject(id) {
     return cardObject;
 }
 
-function createCardImage(card, id) {
-    if (!card && id) {
-        return '<img src="' + imgDir + id + '.jpg" data-card-id="' + id + '" data-card-name="???" data-card-type="0" />';
-    } else if (card && !id) {
-        return '<img src="' + imgDir + card.id + '.jpg" data-card-id="' + card.id + '" data-card-name="' + card.name.replace(/\"/g, '{{quote}}') + '" ' + (card.alias !== 0 ? 'data-card-alias="' + card.alias + '"' : '') + 'data-card-type="' + card.type + '" />';
+function createCardImage(card) {
+    if (!card) {
+        return '<img src="' + imgDir + 'cover.jpg" data-card-id="cover" data-card-name="???" data-card-type="0" />';
     } else {
-        return '<img src="' + imgDir + 'cover.jpg" data-card-id="0" data-card-name="???" data-card-type="0" />';
+        return '<img src="' + imgDir + card.id + '.jpg" data-card-id="' + card.id + '" data-card-name="' + card.name.replace(/\"/g, '{{quote}}') + '" ' + (card.alias !== 0 ? 'data-card-alias="' + card.alias + '"' : '') + 'data-card-type="' + card.type + '" />';
     }
 }
 
