@@ -306,7 +306,9 @@ function sortDeck(target) {
         domData = $('[data-card-id="' + card + '"]').data();
         if (!domData || !domData.cardType) {
             return;
-        } else if ((domData.cardType & 2) === 2) {
+        }
+        domData.cardName = domData.cardName.replace(/\{\{quote\}\}/g, '"');
+        if ((domData.cardType & 2) === 2) {
             spell.push(domData);
         } else if ((domData.cardType & 4) === 4) {
             trap.push(domData);
