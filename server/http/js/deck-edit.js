@@ -839,7 +839,7 @@ function addDeckLegal(id, targetDeck, targetDeckSize, flList, currentList, deck2
     }
     var matchingCopies = targetDeck.filter(idMatches).length + deck2.filter(idMatches).length + deck3.filter(idMatches).length,
         maxCopies = flList[currentList][id],
-        cardObject getCardObject(parseInt(id, 10));
+        cardObject = getCardObject(parseInt(id, 10));
     if (typeof cardObject !== "object") {
         return false;
     }
