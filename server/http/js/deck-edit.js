@@ -276,8 +276,10 @@ function shuffleArray (array) {
     return array;
 }
 
-function storeCard (data) {
-    outputArray.push(data.cardId);
+function storeCard (outputArray) {
+    return function (data) {
+        outputArray.push(data.cardId);
+    };
 }
 
 function cardSort (prev, next) {
@@ -322,10 +324,10 @@ function sortDeck(target) {
         }
         return (prev.cardName.toLowerCase() < next.cardName.toLowerCase()) ? -1 : 1;
     }).forEach(storeCard);
-    effectMonster.sort(cardSort).forEach(storeCard);
-    spell.sort(cardSort).forEach(storeCard);
-    trap.sort(cardSort).forEach(storeCard);
-    extra.sort(cardSort).forEach(storeCard);
+    effectMonster.sort(cardSort).forEach(storeCard(outputArray));
+    spell.sort(cardSort).forEach(storeCard(outputArray));
+    trap.sort(cardSort).forEach(storeCard(outputArray));
+    extra.sort(cardSort).forEach(storeCard(outputArray));
     return outputArray;
 }
 
