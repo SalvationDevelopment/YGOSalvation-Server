@@ -141,13 +141,9 @@ $(function () {
                     deckStorage.setDeck("main", shuffleArray(deck));
                     drawDeck("main");
                 });
-                /**
-                 * Disabled for performance reasons.
-                 * I recommend not calling sortAllDecks.
-                 * $('.sortDeck').on('click', function () {
-                 *   sortAllDecks();
-                 * });
-                 **/
+                $('.sortDeck').on('click', function () {
+                    sortAllDecks();
+                });
             });
         });
     });
@@ -185,6 +181,8 @@ var imgDir = "http://ygopro.us/ygopro/pics/",
         2081: "Gemini / Effect",
         4113: "Tuner",
         4129: "Tuner / Effect",
+        8193: "Synchro",
+        8225: "Synchro / Effect",
         12321: "Synchro / Tuner / Effect",
         2097185: "Flip / Effect",
         4194337: "Toon / Effect",
@@ -278,6 +276,59 @@ function shuffleArray (array) {
     return array;
 }
 
+function storeCard (data) {
+    outputArray.push(data.cardId);
+}
+
+function cardSort (prev, next) {
+    if (prev.cardType === next.cardType) {
+        if (prev.cardName === next.cardName) {
+            return 0;
+        }
+        return (prev.cardName.toLowerCase() < next.cardName.toLowerCase()) ? -1 : 1;
+    }
+    return prev.cardType - next.cardType;
+}
+
+function sortDeck(target) {
+    var sortTarget = deckStorage.getDeck(target),
+        normalMonster = [],
+        effectMonster = [],
+        spell = [],
+        trap = [],
+        extra = [],
+        outputArray = [],
+        domData,
+        extraRegexp = /^(Fusion|Synchro|Xyz)/;
+    sortTarget.forEach(function (card) {
+        domData = $('[data-card-id="' + card + '"]').data();
+        if (!domData || !domData.cardType) {
+            return;
+        } else if ((domData.cardType & 2) === 2) {
+            spell.push(domData);
+        } else if ((domData.cardType & 4) === 4) {
+            trap.push(domData);
+        } else if (domData.cardType === 17) {
+            normalMonster.push(domData);
+        } else if (extraRegexp.test(monsterMap[domData.cardType])) {
+            extra.push(domData);
+        } else {
+            effectMonster.push(domData);
+        }
+    });
+    normalMonster = normalMonster.sort(function (prev, next) {
+        if (prev.cardName === next.cardName) {
+            return 0;
+        }
+        return (prev.cardName.toLowerCase() < next.cardName.toLowerCase()) ? -1 : 1;
+    }).forEach(storeCard);
+    effectMonster.sort(cardSort).forEach(storeCard);
+    spell.sort(cardSort).forEach(storeCard);
+    trap.sort(cardSort).forEach(storeCard);
+    extra.sort(cardSort).forEach(storeCard);
+    return outputArray;
+}
+
 function sortAllDecks () {
     var deck,
         sortedDeck;
@@ -286,76 +337,6 @@ function sortAllDecks () {
         deckStorage.setDeck(deck, sortedDeck);
         drawDeck(deck);
     }
-}
-
-function sortDeck (target) {
-    // sortDeck logic, we sort by frame (Monster, Spell, Trap)
-    // higher type means lower position in resulting list
-    // have to first get all frames into their separate arrays and operate on them
-    var arrays = {
-            monsterArray: [],
-            spellArray: [],
-            trapArray: [],
-            fusionArray: [],
-            synchroArray: [],
-            xyzArray: []
-        },
-        array,
-        typeObject = {},
-        cardObject,
-        targetDeck = deckStorage.getDeck(target),
-        typeSort = function (prev, next) {
-            return prev.type - next.type;
-        },
-        determineEqualTypes = function (card, index, array) {
-            if (index === 0) {
-                return;
-            }
-            if (!typeObject.hasOwnProperty(card.type)) {
-                typeObject[card.type] = {};
-            }
-            if (card.type === array[index - 1].type) {
-                if (!typeObject[card.type].hasOwnProperty(index - 1)) {
-                    typeObject[card.type][index - 1] = array[index - 1];
-                }
-                typeObject[card.type][index] = card;
-            }
-        };
-    targetDeck.forEach(function (deckCard) {
-        var cardFound = false,
-            maxTries = cards.length,
-            tries = 0;
-        while (!cardFound || tries++ < maxTries) {
-            cards.forEach(function (card) {
-                if (parseInt(deckCard, 10) === card.id) {
-                    cardObject = card;
-                    cardFound = true;
-                }
-            });
-        }
-        if (cardIs("monster", cardObject)) {
-            arrays.monsterArray.push(cardObject);
-        } else if (cardIs("spell", cardObject)) {
-            arrays.spellArray.push(cardObject);
-        } else if (cardIs("trap", cardObject)) {
-            arrays.trapArray.push(cardObject);
-        } else if (cardIs("fusion", cardObject)) {
-            arrays.fusionArray.push(cardObject);
-        } else if (cardIs("synchro", cardObject)) {
-            arrays.synchroArray.push(cardObject);
-        } else if (cardIs("xyz", cardObject)) {
-            arrays.xyzArray.push(cardObject);
-        } else {
-            return;
-        }
-        for (array in arrays) {
-            arrays[array] = arrays[array].sort(typeSort);
-            arrays[array].forEach(determineEqualTypes);
-            console.log(typeObject, arrays[array]);
-            typeObject = {};
-        }
-    });
-    return [].concat(arrays.monsterArray, arrays.spellArray, arrays.trapArray, arrays.fusionArray, arrays.synchroArray, arrays.xyzArray);
 }
         
 function handleResults() {
@@ -383,7 +364,7 @@ function handleResults() {
         results = results.slice(0, SEARCH_HARD_CAP);
     }
     results.forEach(function (result, index) {
-        output += '<div class="resultDiv row_' + index + '"><div class="thumbContainer"><img src="' + imgDir + result.id + '.jpg"  data-card-id="' + result.id + '"' + (result.alias !== 0 ? ' data-card-alias="' + result.alias + '"' : '') + ' data-card-name="' + result.name.replace('"', '{{quote}}') + '" data-card-type="' + result.type + '" /></div><div class="descriptionContainer"><span class="name">' + result.name + '</span><br />';
+        output += '<div class="resultDiv row_' + index + '"><div class="thumbContainer">' + createCardImage(result) + '</div><div class="descriptionContainer"><span class="name">' + result.name + '</span><br />';
         if (cardIs("monster", result)) {
             // render monster display
             output += '<span class="monsterDetails">' + attributeMap[result.attribute] + ' / ' + raceMap[result.race] + '<br />' + parseLevelScales(result.level);
@@ -567,6 +548,16 @@ function getCardObject(id) {
         }
     }
     return cardObject;
+}
+
+function createCardImage(card, id) {
+    if (!card && id) {
+        return '<img src="' + imgDir + id + '.jpg" data-card-id="' + id + '" data-card-name="???" data-card-type="0" />';
+    } else if (card && !id) {
+        return '<img src="' + imgDir + card.id + '.jpg" data-card-id="' + card.id + '" data-card-name="' + card.name.replace(/\"/g, '{{quote}}') + '" ' + (card.alias !== 0 ? 'data-card-alias="' + card.alias + '"' : '') + 'data-card-type="' + card.type + '" />';
+    } else {
+        return '<img src="' + imgDir + 'cover.jpg" data-card-id="0" data-card-name="???" data-card-type="0" />';
+    }
 }
 
 function fAttrRace(obj, num, at) {
