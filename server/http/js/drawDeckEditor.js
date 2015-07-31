@@ -1,5 +1,6 @@
 function drawDeckEditor(ydk) {
-    var card,
+    var ydkCopy = JSON.parse(JSON.stringify(ydk)),
+        card,
         cardObject,
         container,
         decks = [
@@ -13,9 +14,9 @@ function drawDeckEditor(ydk) {
             $('img', container).remove();
             deckStorage.reset(deck);
         }
-        for (card in ydk[deck]) {
-            if (ydk[deck].hasOwnProperty(card) && ydk[deck].propertyIsEnumerable(card)) {
-                while (--ydk[deck][card] >= 0) {
+        for (card in ydkCopy[deck]) {
+            if (ydkCopy[deck].hasOwnProperty(card) && ydkCopy[deck].propertyIsEnumerable(card)) {
+                while (--ydkCopy[deck][card] >= 0) {
                     cardObject = getCardObject(parseInt(card, 10));
                     container.append(createCardImage(cardObject));
                     deckStorage.addCard(deck, card);
