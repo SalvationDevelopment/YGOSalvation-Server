@@ -383,7 +383,7 @@ function handleResults() {
         results = results.slice(0, SEARCH_HARD_CAP);
     }
     results.forEach(function (result, index) {
-        output += '<div class="resultDiv row_' + index + '"><div class="thumbContainer"><img src="' + imgDir + result.id + '.jpg"  data-card-id="' + result.id + '"' + (result.alias !== 0 ? ' data-card-alias="' + result.alias + '"' : '') + ' /></div><div class="descriptionContainer"><span class="name">' + result.name + '</span><br />';
+        output += '<div class="resultDiv row_' + index + '"><div class="thumbContainer"><img src="' + imgDir + result.id + '.jpg"  data-card-id="' + result.id + '"' + (result.alias !== 0 ? ' data-card-alias="' + result.alias + '"' : '') + ' data-card-name="' + result.name.replace('"', '{{quote}}') + '" data-card-type="' + result.type + '" /></div><div class="descriptionContainer"><span class="name">' + result.name + '</span><br />';
         if (cardIs("monster", result)) {
             // render monster display
             output += '<span class="monsterDetails">' + attributeMap[result.attribute] + ' / ' + raceMap[result.race] + '<br />' + parseLevelScales(result.level);
@@ -409,13 +409,8 @@ function handleResults() {
 }
 
 function makeDescription(id) {
-    var targetCard,
+    var targetCard = getCardObject(parseInt(id, 10)),
         output = "";
-    cards.forEach(function (card) {
-        if (parseInt(id, 10) === card.id) {
-            targetCard = card;
-        }
-    });
     if (!targetCard) {
         return '<span class="searchError">An error occurred while looking up the card in our database.<br />Please report this issue <a href="' + forumLink + '" target="_blank">at our forums</a> and be sure to include following details:<br /><br />Subject: Deck Editor Error<br />Function Call: makeDescription(' + id + ')<br />User Agent: ' + navigator.userAgent + '</span>';
     }
@@ -559,6 +554,19 @@ function cardIs(cat, obj) {
     if (cat === "xyz") {
         return (obj.type & 8388608) == 8388608;
     }
+}
+
+function getCardObject(id) {
+    var cardObject,
+        i = 0,
+        len = cards.length;
+    for (i, len; i < len; i++) {
+        if (id === cards[i].id) {
+            cardObject = cards[i];
+            break;
+        }
+    }
+    return cardObject;
 }
 
 function fAttrRace(obj, num, at) {
@@ -831,12 +839,7 @@ function addDeckLegal(id, targetDeck, targetDeckSize, flList, currentList, deck2
     }
     var matchingCopies = targetDeck.filter(idMatches).length + deck2.filter(idMatches).length + deck3.filter(idMatches).length,
         maxCopies = flList[currentList][id],
-        cardObject;
-    cards.forEach(function (card) {
-        if (parseInt(id, 10) === card.id) {
-            cardObject = card;
-        }
-    });
+        cardObject getCardObject(parseInt(id, 10));
     if (typeof cardObject !== "object") {
         return false;
     }

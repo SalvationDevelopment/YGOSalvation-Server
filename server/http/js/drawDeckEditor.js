@@ -1,5 +1,6 @@
 function drawDeckEditor(ydk) {
     var card,
+        cardObject,
         container,
         decks = [
             "main",
@@ -15,7 +16,8 @@ function drawDeckEditor(ydk) {
         for (card in ydk[deck]) {
             if (ydk[deck].hasOwnProperty(card) && ydk[deck].propertyIsEnumerable(card)) {
                 while (--ydk[deck][card] >= 0) {
-                    container.append('<img src="' + imgDir + card + '.jpg" data-card-id="' + card + '" />');
+                    cardObject = getCardObject(card);
+                    container.append('<img src="' + imgDir + card + '.jpg" data-card-id="' + card + '" data-card-name="' + cardObject.name.replace('"', '{{quote}}') + '" data-card-type="' + cardObject.type + '" />');
                     deckStorage.addCard(deck, card);
                 }
             }
@@ -31,13 +33,15 @@ function drawDeckEditor(ydk) {
 
 function drawDeck(target) {
     var targetDeck = deckStorage.getDeck(target),
-        container = $('.' + target + 'Deck');
+        container = $('.' + target + 'Deck'),
+        cardObject;
     if (container.find('img').length > 0) {
         $('img', container).remove();
         deckStorage.reset(target);
     }
     targetDeck.forEach(function(card) {
-        container.append('<img src="' + imgDir + card + '.jpg" data-card-id="' + card + '" />');
+        cardObject = getCardObject(card);
+        container.append('<img src="' + imgDir + card + '.jpg" data-card-id="' + card + '" data-card-name="' + cardObject.name.replace('"', '{{quote}}') + '" data-card-type="' + cardObject.type + '" />');
         deckStorage.addCard(target, card);
     });
     $('img', container).each(function(index) {
