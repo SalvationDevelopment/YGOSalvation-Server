@@ -120,12 +120,36 @@ $(function () {
                     if (!deckName) {
                         primus.write({
                             action: "saveDeckRequest",
-                            data: [deckStorage.decks, $('.deckSelect').val()]
+                            data: {
+                                decks: deckStorage.decks,
+                                name: $('.deckSelect').val(),
+                                uniqueID: uniqueID
+                            }
                         });
                     } else {
                         primus.write({
                             action: "saveDeckRequest",
-                            data: [deckStorage.decks, deckName + ".ydk"]
+                            data: {
+                                decks: deckStorage.decks,
+                                name: deckName + ".ydk",
+                                uniqueID: uniqueID
+                            }
+                        });
+                    }
+                });
+                $('.deleteDeck').on('click', function () {
+                    if (confirm("Are you sure you want to permanently delete this deck?")) {
+                        primus.write({
+                            action: "unlinkDeckRequest",
+                            data: {
+                                name: $('.deckSelect').val(),
+                                uniqueID: uniqueID
+                            }
+                        });
+                        drawDeckEditor({
+                            main: {},
+                            side: {},
+                            extra: {}
                         });
                     }
                 });
