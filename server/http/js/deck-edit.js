@@ -112,7 +112,7 @@ $(function () {
                 $('.saveDeck').on('click', function () {
                     primus.write({
                         action: "saveDeckRequest",
-                        deckList: createDeckList(deckStorage.decks)
+                        deckList: createDeckList(deckStorage.decks),
                         uniqueID: uniqueID
                     });
                 });
