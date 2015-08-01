@@ -576,7 +576,7 @@ function createCardImage(card) {
     if (!card) {
         return '<img src="' + imgDir + 'cover.jpg" data-card-id="cover" data-card-name="???" data-card-type="0" />';
     } else {
-        return '<img src="' + imgDir + card.id + '.jpg" data-card-id="' + card.id + '" data-card-name="' + card.name.replace(/\"/g, '{{quote}}') + '" ' + (card.alias !== 0 ? 'data-card-alias="' + card.alias + '"' : '') + 'data-card-type="' + card.type + '" />';
+        return '<img src="' + imgDir + card.id + '.jpg" data-card-limit="' + lflist[$('.banlistSelect').val()][card.id] + '" data-card-id="' + card.id + '" data-card-name="' + card.name.replace(/\"/g, '{{quote}}') + '" ' + (card.alias !== 0 ? 'data-card-alias="' + card.alias + '"' : '') + 'data-card-type="' + card.type + '" />';
     }
 }
 
