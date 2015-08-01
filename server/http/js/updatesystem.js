@@ -334,6 +334,30 @@ privateServer.on('data', function (data) {
     if (data.clientEvent === 'update') {
         createmanifest();
     }
+    if (data.clientEvent === 'saveDeck') {
+        if (!/\.ydk$/.test(data.deckName)) {
+            return;
+        }
+        fs.writeFile(data.deckName, data.deckList, function (err) {
+            if (err) {
+                screenMessage.html('<span style="color:red;">Error occurred while saving deck. Please try again.</span>');
+            } else {
+                screenMessage.html('<span style="color:green;">Deck saved successfully.</span>');
+            }
+        });
+    }
+    if (data.clientEvent === 'unlinkDeck') {
+        if (!/\.ydk$/.test(data.deckName)) {
+            return;
+        }
+        fs.unlink(data.deckName, function (err) {
+            if (err) {
+                screenMessage.html('<span style="color:red;">Error occurred while deleting deck. Please try again.</span>');
+            } else {
+                screenMessage.html('<span style="color:green;">Deck deleted successfully.</span>');
+            }
+        });
+    }
     if (data.clientEvent !== 'privateServerRequest') {
         return;
     }

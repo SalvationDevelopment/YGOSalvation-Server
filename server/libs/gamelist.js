@@ -257,6 +257,19 @@ primus.on('connection', function (socket) {
             });
             userdata[socket.address.ip + data.uniqueID] = data.serverUpdate;
             break;
+        case ('saveDeckRequest'):
+            primus.room(socket.address.ip + data.uniqueID).write({
+                clientEvent: 'saveDeck',
+                deckList: data.deckList
+                deckName: data.deckName
+            });
+            break;
+        case ('unlinkDeckRequest'):
+            primus.room(socket.address.ip + data.uniqueID).write({
+                clientEvent: 'unlinkDeck',
+                name: data.deckName
+            });
+            break;
         default:
             console.log(data);
 
