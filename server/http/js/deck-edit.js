@@ -112,7 +112,8 @@ $(function () {
                 $('.saveDeck').on('click', function () {
                     primus.write({
                         action: "saveDeckRequest",
-                        data: [deckStorage.decks, $('.deckSelect').val()]
+                        deckList: createDeckList(deckStorage.decks)
+                        uniqueID: uniqueID
                     });
                 });
                 $('.saveDeckAs').on('click', function () {
@@ -120,15 +121,15 @@ $(function () {
                     if (!deckName) {
                         primus.write({
                             action: "saveDeckRequest",
-                            decks: deckStorage.decks,
-                            name: $('.deckSelect').val(),
+                            deckList: createDeckList(deckStorage.decks),
+                            deckName: $('.deckSelect').val(),
                             uniqueID: uniqueID
                         });
                     } else {
                         primus.write({
                             action: "saveDeckRequest",
-                            decks: deckStorage.decks,
-                            name: deckName + ".ydk",
+                            deckList: createDeckList(deckStorage.decks),
+                            deckName: deckName + ".ydk",
                             uniqueID: uniqueID
                         });
                     }
@@ -137,7 +138,7 @@ $(function () {
                     if (confirm("Are you sure you want to permanently delete this deck?")) {
                         primus.write({
                             action: "unlinkDeckRequest",
-                            name: $('.deckSelect').val(),
+                            deckName: $('.deckSelect').val(),
                             uniqueID: uniqueID
                         });
                         drawDeckEditor({
@@ -574,10 +575,25 @@ function getCardObject(id) {
 
 function createCardImage(card) {
     if (!card) {
-        return '<img src="' + imgDir + 'cover.jpg" data-card-id="cover" data-card-name="???" data-card-type="0" />';
+        return '<div class="cardImage"><img src="' + imgDir + 'cover.jpg" data-card-id="cover" data-card-name="???" data-card-type="0" /></div>';
     } else {
-        return '<img src="' + imgDir + card.id + '.jpg" data-card-limit="' + (lflist[$('.banlistSelect').val()][card.id] || 3) + '" data-card-id="' + card.id + '" data-card-name="' + card.name.replace(/\"/g, '{{quote}}') + '" ' + (card.alias !== 0 ? 'data-card-alias="' + card.alias + '"' : '') + 'data-card-type="' + card.type + '" />';
+        return '<div class="cardImage"><img src="' + imgDir + card.id + '.jpg" data-card-limit="' + (lflist[$('.banlistSelect').val()][card.id] || 3) + '" data-card-id="' + card.id + '" data-card-name="' + card.name.replace(/\"/g, '{{quote}}') + '" ' + (card.alias !== 0 ? 'data-card-alias="' + card.alias + '"' : '') + 'data-card-type="' + card.type + '" /></div>';
     }
+}
+
+function createDeckList(decks) {
+    var generatedYDK = "#Created by YGOPro.us' deck editor\r\n",
+        order = ["main", "extra", "side"],
+        deck,
+        i = 0;
+    for (i; i < order.length; i++) {
+        deck = order[i];
+        generatedYDK += (deck === "side" ? "!" : "#") + deck + "\r\n";
+        generatedYDK += decks[deck].join("\r\n") + "\r\n";
+    }
+    return generatedYDK.split("\r\n").filter(function (line) {
+        return !!line;
+    }).join("\r\n");
 }
 
 function fAttrRace(obj, num, at) {
