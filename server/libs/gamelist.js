@@ -260,7 +260,7 @@ primus.on('connection', function (socket) {
         case ('saveDeckRequest'):
             primus.room(socket.address.ip + data.uniqueID).write({
                 clientEvent: 'saveDeck',
-                deckList: data.deckList
+                deckList: data.deckList,
                 deckName: data.deckName
             });
             break;
