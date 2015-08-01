@@ -369,16 +369,15 @@ function handleResults() {
         monsterTypeCheck = $('[data-input-monster-type]'),
         searchResults = $('.searchResults'),
         inputTypeCheck = $('[data-input-type]').val(),
-        monsterCardValue = monsterCardSelect.val() || 0,
-        monsterTypeValue = monsterTypeSelect.val() || 0,
+        monsterCardValue = parseInt(monsterCardSelect.val() || 0,10),
+        monsterTypeValue = parseInt(monsterTypeSelect.val() || 0,10),
         exceededSearchCap = false,
         exceededSearchArray = [],
         hiddenType,
         results,
         output = "";
-    if (!inputTypeCheck || monsterCardCheck || monsterTypeCheck) {
-        hiddenType = $('<input type="hidden" data-input-type>').appendTo($('.searchBlock:eq(0)')).val(1 + parseInt(monsterCardValue, 10) + parseInt(monsterTypeValue, 10));
-    }
+    if ((!inputTypeCheck && $('.typeSelect').val() !== "5") || monsterCardCheck.length || monsterTypeCheck.length) {
+hiddenType = $('<input type="hidden" data-input-type>').appendTo($('.searchBlock:eq(0)')).val(1 + ((monsterCardValue === 16 && monsterTypeValue) ? 0 : monsterCardValue) + monsterTypeValue));    }
     results = applyFilters(generateQueryObject(), $('.banlistSelect').val(), lflist);
     if (results.length > SEARCH_HARD_CAP) {
         exceededSearchArray = results;
