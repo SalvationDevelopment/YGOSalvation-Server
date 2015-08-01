@@ -25,6 +25,7 @@ body {
     height: 38%;
     border: 1px solid blue;
     min-height: 256px;
+    display: block;
 }
 
 .cardDescription {
@@ -423,8 +424,8 @@ div.descriptionContainer span {
 }
 
 div.thumbContainer img {
-    width: 15%;
     float: left;
+    width: 100%;
 }
 
 .maincontainer label {
