@@ -18,6 +18,7 @@ body {
     width: 24%;
 }
 
+/*
 .cardImage {
     top: 0%;
     left: 0%;
@@ -26,7 +27,7 @@ body {
     border: 1px solid blue;
     min-height: 256px;
     display: block;
-}
+}*/
 
 .cardDescription {
     top: 0%;
