@@ -575,9 +575,9 @@ function getCardObject(id) {
 
 function createCardImage(card) {
     if (!card) {
-        return '<div class="cardImage"><img src="' + imgDir + 'cover.jpg" data-card-id="cover" data-card-name="???" data-card-type="0" /></div>';
+        return '<span class="cardImage"><img src="' + imgDir + 'cover.jpg" data-card-id="cover" data-card-name="???" data-card-type="0" /></span>';
     } else {
-        return '<div class="cardImage"><img src="' + imgDir + card.id + '.jpg" data-card-limit="' + (lflist[$('.banlistSelect').val()][card.id] || 3) + '" data-card-id="' + card.id + '" data-card-name="' + card.name.replace(/\"/g, '{{quote}}') + '" ' + (card.alias !== 0 ? 'data-card-alias="' + card.alias + '"' : '') + 'data-card-type="' + card.type + '" /></div>';
+        return '<span class="cardImage" data-card-limit="' + (lflist[$('.banlistSelect').val()][card.id] || 3) + '"><img src="' + imgDir + card.id + '.jpg" data-card-id="' + card.id + '" data-card-name="' + card.name.replace(/\"/g, '{{quote}}') + '" ' + (card.alias !== 0 ? 'data-card-alias="' + card.alias + '"' : '') + 'data-card-type="' + card.type + '" /></div>';
     }
 }
 
