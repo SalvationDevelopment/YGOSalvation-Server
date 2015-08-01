@@ -377,7 +377,7 @@ function handleResults() {
         results,
         output = "";
     if ((!inputTypeCheck && $('.typeSelect').val() !== "5") || monsterCardCheck.length || monsterTypeCheck.length) {
-hiddenType = $('<input type="hidden" data-input-type>').appendTo($('.searchBlock:eq(0)')).val(1 + ((monsterCardValue === 16 && monsterTypeValue) ? 0 : monsterCardValue) + monsterTypeValue));    }
+    hiddenType = $('<input type="hidden" data-input-type>').appendTo($('.searchBlock:eq(0)')).val(1 + ((monsterCardValue === 16 && monsterTypeValue) ? 0 : monsterCardValue) + monsterTypeValue);    }
     results = applyFilters(generateQueryObject(), $('.banlistSelect').val(), lflist);
     if (results.length > SEARCH_HARD_CAP) {
         exceededSearchArray = results;
