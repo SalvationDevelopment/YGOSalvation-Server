@@ -63,7 +63,7 @@ body {
     width: 33.33%;
     padding: 1%;
     border: 1px solid yellow;
-	overflow-y: auto;
+    overflow-y: auto;
 }
 
 div.searchLeft label[for^="banlistSelect"] {
@@ -454,6 +454,16 @@ button {
 .mainDeck img {
     width: 66px;
 }
-.sideDeck img, .extraDeck img {
-	width: 52px;
+
+.sideDeck img,
+.extraDeck img {
+    width: 52px;
+}
+
+[data-card-limit]:before {
+    content: '';
+    background-color: red;
+    height: 20px;
+    width: 20px;
+    position: relative;
 }
