@@ -17,7 +17,6 @@ body {
     float: left;
     width: 24%;
 }
-
 /*
 .cardImage {
     top: 0%;
@@ -462,10 +461,38 @@ button {
     width: 52px;
 }
 
-[data-card-limit]:before {
+[data-card-limit="0"]:before {
     content: '';
     background-color: red;
     height: 20px;
     width: 20px;
-    position: relative;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+[data-card-limit="1"]:before {
+    content: '';
+    background-color: yellow;
+    height: 20px;
+    width: 20px;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+[data-card-limit="2"]:before {
+    content: '';
+    background-color: blue;
+    height: 20px;
+    width: 20px;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+span.cardImage {
+    float: left;
+    width: 15%;
+    postion: relative;
 }
