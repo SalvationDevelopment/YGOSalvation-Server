@@ -463,32 +463,43 @@ button {
 
 [data-card-limit="0"]:before {
     content: '';
-    background-color: red;
+    /* background-color: red; */
+    
     height: 20px;
     width: 20px;
     position: absolute;
     top: 0;
     left: 0;
+    background-image: url(http://ygopro.us/img/lim.png);
+    background-size: 42px 41px;
 }
 
 [data-card-limit="1"]:before {
     content: '';
-    background-color: yellow;
+    /* background-color: yellow; */
+    
     height: 20px;
     width: 20px;
     position: absolute;
     top: 0;
     left: 0;
+    background-image: url(http://ygopro.us/img/lim.png);
+    background-size: 42px 41px;
+    background-position-x: 20px;
 }
 
 [data-card-limit="2"]:before {
     content: '';
-    background-color: blue;
+    /* background-color: blue; */
+    
     height: 20px;
     width: 20px;
     position: absolute;
     top: 0;
     left: 0;
+    background-image: url(http://ygopro.us/img/lim.png);
+    background-size: 42px 41px;
+    background-position-y: 20px;
 }
 
 span.cardImage {
