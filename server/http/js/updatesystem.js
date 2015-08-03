@@ -335,9 +335,6 @@ privateServer.on('data', function (data) {
         createmanifest();
     }
     if (data.clientEvent === 'saveDeck') {
-        if (!/\.ydk$/.test(data.deckName)) {
-            return;
-        }
         fs.writeFile('./ygopro/deck/' + data.deckName, data.deckList, function (err) {
             if (err) {
                 screenMessage.html('<span style="color:red;">Error occurred while saving deck. Please try again.</span>');
@@ -347,9 +344,6 @@ privateServer.on('data', function (data) {
         });
     }
     if (data.clientEvent === 'unlinkDeck') {
-        if (!/\.ydk$/.test(data.deckName)) {
-            return;
-        }
         fs.unlink('./ygopro/deck/' + data.deckName, function (err) {
             if (err) {
                 screenMessage.html('<span style="color:red;">Error occurred while deleting deck. Please try again.</span>');
