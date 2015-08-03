@@ -139,7 +139,7 @@ button.clearDeck {
 button.saveDeck {
     width: 20%;
     float: right;
-    margin-top: -13.25;
+    margin-top: -13.25%;
     margin-right: 4%;
 }
 
@@ -176,22 +176,22 @@ div.searchBlock label[for^="race"] {
 div.searchBlock select.raceSelect {
     float: right;
     clear: both;
-    width: 88%;
-    margin-right: -32%;
+    width: 88.5%;
+    margin-right: -32.5%;
 }
 
 div.searchBlock label[for^="attribute"] {
     float: left;
     clear: both;
-    margin-left: 6%;
-    margin-top: -0.5%;
+    margin-left: 10%;
+    margin-top: 0.5%;
 }
 
 div.searchBlock select.attributeSelect {
     float: right;
     clear: both;
-    width: 85%;
-    margin-right: -25%;
+    width: 81.5%;
+    margin-right: -22%;
 }
 
 div.searchBlock select.monsterTypeSelect {
