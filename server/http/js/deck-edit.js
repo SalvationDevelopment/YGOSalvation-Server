@@ -168,7 +168,7 @@ $(function () {
                     $('.attributeSelect, .raceSelect, .setcodeSelect, .forbiddenLimitedSelect').each(function () {
                         $(this)[0].options[0].selected = true;
                     });
-                    $('.searchBlock input[$="Input"]').val('');
+                    $('.searchBlock input[class$="Input"]').val('');
                 });
             });
         });
