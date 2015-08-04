@@ -1,0 +1,509 @@
+* {
+    box-sizing: border-box;
+}
+
+#deckedit {
+    font-family: monospace;
+    font-size: 12px;
+}
+
+.mainContainer {
+    width: 100%;
+    height: 100%;
+}
+
+.left {
+    height: 100%;
+    float: left;
+    width: 24%;
+}
+/*
+.cardImage {
+    top: 0%;
+    left: 0%;
+    width: 179px;
+    height: 38%;
+    border: 1px solid blue;
+    min-height: 256px;
+    display: block;
+}*/
+
+.cardDescription {
+    top: 0%;
+    left: 0%;
+    width: 100%;
+    height: 59.25%;
+    border: 1px solid red;
+    padding: 12px;
+    overflow: auto;
+}
+
+.f40 img {
+    float: left;
+}
+
+.f50 img {
+    float: left;
+    margin-right: -10px;
+}
+
+.f60 img {
+    float: left;
+    margin-right: -20px;
+}
+
+.searchBar {
+    float: right;
+    width: 75.7%;
+    height: 22%;
+}
+
+.searchLeft {
+    float: left;
+    height: 100%;
+    width: 33.33%;
+    padding: 1%;
+    border: 1px solid yellow;
+    overflow-y: auto;
+}
+
+div.searchLeft label[for^="banlistSelect"] {
+    width: 80%;
+    height: 15%;
+    margin-top: 2%;
+    float: left;
+    clear: both;
+}
+
+div.searchLeft select.banlistSelect {
+    float: right;
+    clear: both;
+    width: 65%;
+    margin-right: 5%;
+}
+
+div.searchLeft label[for^="deckSelect"] {
+    width: 80%;
+    height: 15%;
+    margin-top: 1%;
+    float: left;
+    clear: both;
+}
+
+div.searchLeft select.deckSelect {
+    float: right;
+    clear: both;
+    width: 65%;
+    margin-right: 5%;
+}
+
+div.searchLeft label[for^="decknameInput"] {
+    width: 80%;
+    clear: both;
+    float: left;
+    height: 15%;
+    margin-top: -1%;
+}
+
+input.decknameInput {
+    float: right;
+    display: block;
+    width: 65%;
+    margin-right: 5%;
+}
+
+button.shuffleDeck {
+    float: right;
+    width: 20%;
+    margin-top: 3%;
+    margin-right: -19.9%;
+}
+
+button.sortDeck {
+    float: right;
+    width: 20%;
+    margin-top: 3%;
+    margin-right: 2%;
+}
+
+button.clearDeck {
+    float: right;
+    width: 20%;
+    margin-top: 3%;
+    margin-right: 2%;
+}
+
+button.saveDeck {
+    width: 20%;
+    float: right;
+    margin-top: -4.5%;
+}
+
+button.saveDeckAs {
+    width: 20%;
+    float: right;
+    white-space: nowrap;
+}
+
+button.deleteDeck {
+    display: block;
+    width: 20%;
+    float: right;
+}
+
+.searchRight {
+    float: right;
+    height: 100%;
+    width: 66.66%;
+    border: 1px solid orange;
+}
+
+div.searchBlock label[for^="race"] {
+    float: left;
+    clear: both;
+    margin-left: 6%;
+    margin-top: -1%;
+}
+
+div.searchBlock select.raceSelect {
+    float: right;
+    clear: both;
+    width: 85%;
+    margin-right: -25%;
+}
+
+div.searchBlock label[for^="attribute"] {
+    float: left;
+    clear: both;
+    margin-left: 6%;
+    margin-top: -0.5%;
+}
+
+div.searchBlock select.attributeSelect {
+    float: right;
+    clear: both;
+    width: 85%;
+    margin-right: -25%;
+}
+
+div.searchBlock select.monsterTypeSelect {
+    float: right;
+    width: 27%;
+    margin-right: -85%;
+    margin-bottom: -2%;
+}
+
+div.searchBlock select.monsterCardSelect {
+    float: right;
+    width: 27%;
+    margin-right: -56%;
+    margin-bottom: -2%;
+}
+
+div.searchBlock select.spellSelect {
+    float: right;
+    width: 55%;
+    margin-right: -85%;
+}
+
+div.searchBlock select.trapSelect {
+    float: right;
+    width: 55%;
+    margin-right: -85%;
+}
+
+div.searchBlock label[for^="typeSelect"] {
+    float: left;
+    clear: both;
+    position: relative;
+    margin-top: 1.25%;
+    margin-left: 6%;
+}
+
+div.searchBlock select.typeSelect {
+    display: block;
+    float: right;
+    width: 27%;
+    margin-right: 33%;
+}
+
+div.searchBlock label[for^="setcodeSelect"] {
+    float: left;
+    clear: both;
+    margin-left: 6%;
+    margin-top: -0.5%;
+}
+
+div.searchBlock select.setcodeSelect {
+    display: block;
+    float: right;
+    width: 85%;
+    margin-right: -25%;
+    clear: both;
+}
+
+div.searchBlock label[for^="levelInput"] {
+    float: left;
+    clear: both;
+    margin-left: 6%;
+    margin-top: -0.5%;
+}
+
+input.levelInput {
+    display: block;
+    float: right;
+    height: 14%;
+    width: 27%;
+    margin-right: 33%;
+    clear: both;
+}
+
+div.searchBlock label[for^="scaleInput"] {
+    float: left;
+    margin-left: -8%;
+    margin-top: -0.5%;
+}
+
+div.searchBlock input.scaleInput {
+    display: block;
+    float: right;
+    width: 27%;
+    height: 14%;
+    margin-right: 51%;
+}
+
+.raceSelect {
+    display: block;
+    float: left;
+    height: 15%;
+    width: 20%;
+    margin-left: 1%;
+    margin-top: 1.5%;
+}
+
+div.searchBlock label[for^="forbiddenLimitedSelect"] {
+    float: right;
+    clear: both;
+    margin-right: 10%;
+    margin-top: -18.75%;
+}
+
+div.searchBlock select.forbiddenLimitedSelect {
+    display: block;
+    float: right;
+    width: 85%;
+    clear: both;
+    margin-right: -10%;
+}
+
+div.searchBlock label[for^="atkInput"] {
+    float: right;
+    clear: both;
+    margin-right: 10%;
+    margin-top: -15.25%;
+}
+
+div.searchBlock input.atkInput {
+    display: block;
+    float: right;
+    width: 56%;
+    clear: both;
+    margin-right: 19%;
+}
+
+div.searchBlock label[for^="defInput"] {
+    float: right;
+    clear: both;
+    margin-right: 10%;
+    margin-top: -11.5%;
+}
+
+div.searchBlock input.defInput {
+    display: block;
+    float: right;
+    width: 56%;
+    height: 14%;
+    clear: both;
+    margin-right: 19%;
+}
+
+div.searchBlock label[for^="nameInput"] {
+    float: right;
+    clear: both;
+    margin-top: -7.75%;
+    margin-right: 10%;
+}
+
+div.searchBlock input.nameInput {
+    display: block;
+    float: right;
+    width: 85%;
+    clear: both;
+    margin-right: -10%;
+}
+
+button.searchButton {
+    position: relative;
+    z-index: 9001;
+    width: 36.5%;
+    height: 15%;
+    float: right;
+    clear: both;
+    margin-right: 6.75%;
+    margin-top: -4%;
+}
+
+button.clearForm {
+    display: block;
+    float: right;
+    height: 33%;
+    width: 8.5%;
+    margin-right: 6.75%;
+    margin-top: -15.25%;
+    clear: both;
+}
+
+div.searchBlock label[for^="descInput"] {
+    display: none;
+}
+
+div.searchBlock input.descInput {
+    display: block;
+    float: left;
+    width: 10%;
+    margin-left: 1%;
+    margin-top: 1.5%;
+    display: none;
+}
+
+.center {
+    height: 78%;
+    width: 51%;
+    border: 1px solid red;
+    float: left;
+}
+
+.mainDeck {
+    float: left;
+    height: 66%;
+    width: 100%;
+    border: 1px solid blue;
+    min-width: 390px;
+}
+
+.extraDeck {
+    float: left;
+    height: 17.25%;
+    width: 100%;
+    border: 1px solid green;
+}
+
+.sideDeck {
+    float: left;
+    height: 17.25%;
+    width: 100%;
+    border: 1px solid yellow;
+}
+
+.right {
+    float: right;
+    height: 78%;
+    width: 25%;
+    border: 1px solid green;
+}
+
+.searchResults {
+    height: 100%;
+    width: 100%;
+    overflow-y: auto;
+}
+
+div.descriptionContainer span {
+    width: 84%;
+    float: right;
+}
+
+div.thumbContainer img {
+    float: left;
+    width: 100%;
+}
+
+.maincontainer label {
+    width: 33%;
+    display: block;
+    float: left;
+}
+
+.maincontainer select {
+    width: 45%;
+    display: block;
+    float: left;
+}
+
+label,
+select,
+button {
+    margin-bottom: 1%;
+    line-height: 1em;
+}
+
+.resultDiv {
+    overflow: auto;
+    border: 1px solid black;
+}
+
+.mainDeck img {
+    width: 66px;
+}
+
+.sideDeck img,
+.extraDeck img {
+    width: 52px;
+}
+
+[data-card-limit="0"]:before {
+    content: '';
+    /* background-color: red; */
+    
+    height: 20px;
+    width: 20px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-image: url(http://ygopro.us/img/lim.png);
+    background-size: 42px 41px;
+}
+
+[data-card-limit="1"]:before {
+    content: '';
+    /* background-color: yellow; */
+    
+    height: 20px;
+    width: 20px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-image: url(http://ygopro.us/img/lim.png);
+    background-size: 42px 41px;
+    background-position-x: 20px;
+}
+
+[data-card-limit="2"]:before {
+    content: '';
+    /* background-color: blue; */
+    
+    height: 20px;
+    width: 20px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-image: url(http://ygopro.us/img/lim.png);
+    background-size: 42px 41px;
+    background-position-y: 20px;
+}
+
+span.cardImage {
+    float: left;
+    width: 15%;
+    position: relative;
+}
