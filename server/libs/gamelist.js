@@ -267,7 +267,7 @@ primus.on('connection', function (socket) {
         case ('unlinkDeckRequest'):
             primus.room(socket.address.ip + data.uniqueID).write({
                 clientEvent: 'unlinkDeck',
-                name: data.deckName
+                deckName: data.deckName
             });
             break;
         default:
