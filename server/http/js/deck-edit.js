@@ -216,6 +216,7 @@ var imgDir = "http://ygopro.us/ygopro/pics/",
         8388641: "Xyz / Effect",
         16777233: "Pendulum",
         16777249: "Pendulum / Effect",
+        16781345: "Pendulum / Tuner / Effect",
         25165857: "Xyz / Pendulum / Effect"
     },
     raceMap = {
