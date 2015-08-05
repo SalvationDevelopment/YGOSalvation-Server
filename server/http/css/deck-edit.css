@@ -251,3 +251,18 @@ span.cardImage {
     width: 15%;
     position: relative;
 }
+
+#deckedit label select {
+    width: 12vw;
+    float: right;
+}
+
+#deckedit label {
+    width: 373px;
+    /* border: 2px solid white; */
+    /* overflow: auto; */
+    
+    display: block;
+    margin: 0;
+    padding: 0;
+}
