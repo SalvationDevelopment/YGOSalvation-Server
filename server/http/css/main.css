@@ -1627,9 +1627,7 @@ select {
 }
 
 header#deckedit div {
-    float: left;
     color: white;
-    background: rgba(0, 0, 0, .50);
 }
 
 @-webkit-keyframes outpulse {
