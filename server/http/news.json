@@ -2,7 +2,7 @@
          {
            "Title": "Pending server maintenance",
            "Subtitle": "Our server will be restarted at a later time today",
-           "Content": "Hello everyone, I unfortunately have to announce that due to a server maintenance, you will not be able to duel for the duration of it.<br /><br />This will take place at <strong>6 PM EST, on the 6th of August</strong>.<br />We expect the server to be down for no longer than <strong>2 hours</strong>. Keep up with the most recent updates in our <span class='psudolinksingle' onclick='singlesitenav(\'chat\')'>chat</span>.",
+           "Content": "Hello everyone, I unfortunately have to announce that due to a server maintenance, you will not be able to duel for the duration of it.<br /><br />This will take place at <strong>6 PM EST, on the 6th of August</strong>.<br />We expect the server to be down for no longer than <strong>2 hours</strong>. Keep up with the most recent updates in our <span class='psudolinksingle' onclick='singlesitenav(\\'chat\\')'>chat</span>.",
            "Author": "Irate",
            "Date": "August 6th, 2015"
          },
