@@ -117,7 +117,8 @@ button.deleteDeck {
     float: right;
     height: 100%;
     width: 66.66%;
-    border: 1px solid orange;
+    /*    border: 1px solid orange;*/
+    
     overflow: auto;
 }
 
@@ -254,7 +255,7 @@ span.cardImage {
 }
 
 #deckedit label select {
-    width: 12vw;
+    width: 6vw;
     float: left;
 }
 
@@ -284,4 +285,15 @@ label[for="typeSelect"] {
 .searchBlock {
     width: 50%;
     float: left;
+}
+
+#deckedit br {
+    display: block;
+    height: 1em;
+    width: 100%;
+    clear: both;
+}
+
+#deckedit select.attributeSelect {
+    width: 20em;
 }
