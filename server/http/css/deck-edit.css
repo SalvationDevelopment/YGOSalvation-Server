@@ -132,8 +132,7 @@ button.deleteDeck {
 .mainDeck {
     float: left;
     height: 66%;
-    width: 100%;
-    border: 1px solid blue;
+    width: 100% !important;
     min-width: 390px;
 }
 
