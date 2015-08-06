@@ -118,6 +118,7 @@ button.deleteDeck {
     height: 100%;
     width: 66.66%;
     border: 1px solid orange;
+    overflow: auto;
 }
 
 .center {
