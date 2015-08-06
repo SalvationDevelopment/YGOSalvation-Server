@@ -63,7 +63,8 @@
     height: 100%;
     width: 33.33%;
     padding: 1%;
-    border: 1px solid yellow;
+    /*    border: 1px solid yellow;*/
+    
     overflow-y: auto;
 }
 
@@ -107,8 +108,8 @@ input.decknameInput {
 .sideDeck {
     float: left;
     height: 17.25%;
-    width: 100%;
-    border: 1px solid yellow;
+    width: 100% !important;
+    border: 1px solid hotpink;
 }
 
 .right {
@@ -257,6 +258,14 @@ label[for="typeSelect"] {
 #deckedit select.raceSelect,
 #deckedit select.setcodeSelect {
     width: 15em;
+}
+
+label[for="decknameInput"] > * {
+    float: left;
+}
+
+input.decknameInput {
+    width: 14em;
 }
 
 .searchBar label {
