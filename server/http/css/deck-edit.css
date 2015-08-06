@@ -74,45 +74,6 @@ input.decknameInput {
     margin-right: 5%;
 }
 
-button.shuffleDeck {
-    float: right;
-    width: 20%;
-    margin-top: 3%;
-    margin-right: -19.9%;
-}
-
-button.sortDeck {
-    float: right;
-    width: 20%;
-    margin-top: 3%;
-    margin-right: 2%;
-}
-
-button.clearDeck {
-    float: right;
-    width: 20%;
-    margin-top: 3%;
-    margin-right: 2%;
-}
-
-button.saveDeck {
-    width: 20%;
-    float: right;
-    margin-top: -4.5%;
-}
-
-button.saveDeckAs {
-    width: 20%;
-    float: right;
-    white-space: nowrap;
-}
-
-button.deleteDeck {
-    display: block;
-    width: 20%;
-    float: right;
-}
-
 .searchRight {
     float: right;
     height: 100%;
@@ -296,4 +257,8 @@ label[for="typeSelect"] {
 #deckedit select.raceSelect,
 #deckedit select.setcodeSelect {
     width: 15em;
+}
+
+.searchBar label {
+    width: 100%;
 }
