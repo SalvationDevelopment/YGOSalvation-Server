@@ -260,7 +260,6 @@ span.cardImage {
 }
 
 #deckedit label {
-    width: 14vw;
     /* border: 2px solid white; */
     /* overflow: auto; */
     
@@ -294,6 +293,8 @@ label[for="typeSelect"] {
     clear: both;
 }
 
-#deckedit select.attributeSelect {
-    width: 20em;
+#deckedit select.attributeSelect,
+#deckedit select.raceSelect,
+#deckedit select.setcodeSelect {
+    width: 10em;
 }
