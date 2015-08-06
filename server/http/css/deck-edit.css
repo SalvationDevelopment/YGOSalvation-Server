@@ -255,7 +255,7 @@ span.cardImage {
 
 #deckedit label select {
     width: 12vw;
-    float: right;
+    float: left;
 }
 
 #deckedit label {
@@ -272,4 +272,16 @@ span.cardImage {
 
 label[for="typeSelect"] {
     width: 32vw !important;
+}
+
+#deckedit label span {
+    display: inline-block;
+    float: left;
+    padding-right: 25px;
+    width: 7vw;
+}
+
+.searchBlock {
+    width: 50%;
+    float: left;
 }
