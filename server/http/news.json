@@ -1,4 +1,11 @@
 {    "Articles": [
+         {
+           "Title": "Pending server maintenance",
+           "Subtitle": "Our server will be restarted at a later time today",
+           "Content": "Hello everyone, I unfortunately have to announce that due to a server maintenance, you will not be able to duel for the duration of it.<br /><br />This will take place at <strong>6 PM EST, on the 6th of August</strong>.<br />We expect the server to be down for nt longer than <strong>2 hours</strong>. Keep up with the most recent updates in our <span class="psudolinksingle" onclick="singlesitenav('chat')">chat</span>.",
+           "Author": "Irate",
+           "Date": "August 6th, 2015"
+         },
 	 {
     	   "Title": "Some good news",
     	   "Subtitle": "New cards and stuff, the updates you like!",
@@ -346,71 +353,4 @@
         },{
             "Title": "Its Banlist Season!",
             "Subtitle": "Both Banlist are out applying to the server",
-            "Content": "<p>The April 1st OCG and TCG lists have been applied to the server</p>TCG<br/>Newly Forbidden:<br/>Blaster, Dragon Ruler of Infernos<br/>Redox, Dragon Ruler of Boulders<br/>Tempest, Dragon Ruler of Storms<br/>Tidal, Dragon Ruler of Waterfalls<br/>Snatch Steal<br/>Newly Limited:<br/>Sinister Serpent<br/>Tour Guide From the Underworld<br/>Dragon Ravine<br/>Preparation of Rites<br/>Saqlifice<br/>Symbol of Heritage<br/>Temple of Kings<br/>Crush Card Virus<br/>Exchange of the Spirit<br/>Ring of Destruction<br/>Skill Drain<br/>Vanity's Emptiness<br/> <br/>Newly Semi-Limited:<br/>Qliphort Scout<br/>Nekroz of Brionac<br/>Legendary Six Samurai - Shi En<br/>Charge of the Light Brigade<br/>Sacred Sword of Seven Stars<br/><br/>Newly Unlimited<br/>Brotherhood of the Fire Fist-Spirit<br/>Burner, Dragon Ruler of Sparks<br/>Gladiator Beast Bestiari<br/>Gorz the Emissary of Darkness<br/>Lightning, Dragon Ruler of Drafts<br/>Lonefire Blossom<br/>Reactan, Dragon Ruler of Pebbles<br/>Stream, Dragon Ruler of Droplets<br/>Goyo Guardian<br/>Hieratic Seal of Convocation<br/><br/>OCG<br/>Forbidden:<br/>El-Shaddoll Construct<br/>Blaster, Dragon Ruler of Infernos<br/>Redox, Dragon Ruler of Boulders<br/>Tempest, Dragon Ruler of Storms<br/>Tidal, Dragon Ruler of Waterfalls<br/><br/>Limited:<br/>Vanity's Emptiness<br/>Saqlifice<br/>Nekroz Cycle<br/>Mathematician<br/>Nekroz of Brionac<br/>Kuribandit<br/>El-Shaddoll Fusion<br/>Dark Magician of Chaos<br/><br/>Semi-Limited:<br/>Qliphort Scout<br/>Wind-Up Carrier Zenmaity<br/>Formula Synchron<br/>Manju of the Ten Thousand Hands<br/><br/>Unlimited:<br/>El-Shaddoll Winda<br/>Inzektor Hornet<br/>Sinister Serpent<br/>Legendary Six Samurai - Shi En<br/>Senju of the Thousand Hands<br/>Archlord Kristya<br/>Number 11: Big Eye<br/>Brotherhood of the Fire Fist-Rooster<br/>Temple of the Kings<br/>Monster Gate<br/>Exchange of the Spirit<br/>Stream, Dragon Ruler of Droplets<br/>Burner, Dragon Ruler of Sparks<br/>Reactan, Dragon Ruler of Pebbles<br/>Lightning, Dragon Ruler of Drafts ",
-            "Author": "AccessDenied",
-            "Date" : "March 20th, 2015th"
-        },{
-            "Title": "Toon, Red-eyes, Aromages, and More!",
-            "Subtitle": "Update to CORE",
-            "Content": "<p>Updates to YGOPro Salvation Server.<br/>Wicked Priest Chilam Sabak</br>Infernity Bishop</br>Gogogo Aristera & Dexia</br>Galaxy Worm</br>Timaeus the Knight of Destiny</br>The Fang of Critias</br>The Claw of Hermos</br>Legendary Knight Critias</br>Legendary Knight Hermos</br>Lord of the Red</br>Red-Eyes Transmigration</br>Toon Ancient Gear Golem</br>Toon Kingdom</br>Aromage - Rosemary</br>Aromage - Bergamot</br>Aromage - Kananga</br>Aromage - Jasmine</br>Aroma Garden</br>D/D Pandora</br>D/D/D Tell the Sniper Overlord</br>D/D/D D''Arc the Oracle Overlord</br>Destruction Magician</br>Creation Magician</br>Odd-Eyes Rebellion Dragon</br>Igknight Burst</br>Ignition Phoenix</br>Igknight Stinger</br>Black Metal Dragon</br>Toon Cyber Dragon</br>Red-Eyes Flare Metal Dragon</br>Return of Red-Eyes</br></p><p><a href='https://www.youtube.com/user/YGOhack137/videos'>Credit goes to YGOHack137</a></p>",
-            "Author": "AccessDenied",
-            "Date" : "March 17th, 2015th"
-        },{
-            "Title": "The Monster League has been unleashed!",
-            "Subtitle": "Time for some sealed play! BATTLE PACK 3!",
-            "Content": "<p>Another update, but this time it's not new cards. It's our new game mode, BATTLE PACK 3: MONSTER LEAGUE! Now Salvation is the only simulator where you can experience the thrills of this unique game format! It is sealed play, so players are restricte to 237 cards total, however, they are all affected by the powerful Monster League Rule: All Monsters are treated as all Types O_O!!</p><p> In order to play, simply make sure Monster League is selected in the 'Card Pool' option when hosting. Deck will be randomized to simulate the opening of packs for sealed.</p>",
-            "Author": "ChibiChanNya",
-            "Date" : "March 7th, 2015th"
-        },{
-            "Title": "Igknight and Red-Eye Support",
-            "Subtitle": "Set fire to your soul and battle",
-            "Content": "<p>New Cards! Watch out for bugs, and if you do see some report them to the forums in the bug section. New cards include:<ul><li>Crystal Rose</li><li>Protector of the Shrine</li><li>Card of Red Jewel</li><li>Igknight Caliber</li><li>Igknight Riot</li><li>Igknight Dragnov</li><li>Igknight Musket</li><li>Igknight Magnum</li><li>Igknight Eagle</li><li>Igknight Advenger</li></ul> Special thanks to YGOHax137 and Chibi Chan Nyan. Server stablity improvements special thanks to A2. New forum improments special thanks to CheytheMage and Trinity. Remember to check out our new CasinoBot from Reach!</p><p><a href='https://www.youtube.com/user/YGOhack137/videos'>Credit goes to YGOHack137</a></p>",
-            "Author": "AccessDenied",
-            "Date" : "March 6th, 2015th"
-        },
-        {
-            "Title": "CasinoBot is live bitches! Join the chat today!",
-            "Subtitle": "How brave are you?",
-            "Content": "<p>Reach has recently implemented a CasinoBot live to our chat servers! You can check it out by typing '/join #casino' to enter the channel with the Bot. Using the '.help' command will bring up its list of games you play and how much cash you currently have. If you run into any problems with CasinoBot or it's not live in its channel, let Reach know to look into it.</p>",
-            "Author": "Reach",
-            "Date" : "March 2nd, 2015th"
-        },
-        {
-            "Title": "Korean SECE cards are here!",
-            "Subtitle": "Some strange new cards are in",
-            "Content": "<p>The 5 unique and...Unique Korea-OCG cards from SECE have been added to the server. They are as follows:<br></p><ul><li>Great Old One Hastur</li><li>Fiendish Rhino Warrior</li><li>Cuben</li><li>Carrot Human</li><li>Rocket Hand</li></ul></p>",
-            "Author": "Chibi Chan Nya",
-            "Date" : "February 22th 2015"
-        },{
-            "Title": "Clash of Rebellion has arrived!",
-            "Subtitle": "Shiny new cards, report bugs, be mindful of ID changes",
-            "Content": "<p>Some new cards have been added to the server! All of the recently revealed Clash of Rebellion cards are in. Most of CROS cards had their ID's changed, so If you've been using Zefras, Raidraptors or Performapal, make sure you check your decks!</p> <p><a href='http://ygorganization.com/buymoreraidraptors/'>Newest Cards/a></p><p><a href='https://www.youtube.com/user/YGOhack137/videos'>Credit goes to YGOHack137</a></p>",
-            "Author": "Chibi Chan Nya",
-            "Date" : "February 17th 2015"
-        },{
-            "Title": "Most of CROS added",
-            "Subtitle": "New cards! But watch out for bugs",
-            "Content": "<p>The following cards have been added to the server and can be used after updating. Remember to report bugs in the forum.<br></p><ul><li>Performapal Springoose</li><li>Performapal Hammer Mammoth</li><li>Mithra the Thunder Vassal</li><li>Neptabyss the Atlantean Prince</li><li>An Unexpected Guy</li><li>Fluffal Crane</li><li>Cyber Dragon Infinity</li><li>Chimeratech Rampage Dragon</li><li>Edge Imp Tomahawk</li><li>Frightfur Custom</li><li>Planetellarknight Ptolemaios</li><li>El-Shaddoll Anomalilith</li><li>Deskbot 004</li><li>Garm the Storm Vassal</li><li>Infernoid Lilith</li><li>Mud Statue of the Kumonyou</li><li>Yosenju Kodama</li><li>Edge Imp DT Modoki</li><li>Superheavy Samurai Soul Buster Gauntlet</li><li>Performapal Pinch Helper</li><li>Performapal Bowhopper</li><li>Fiendish Hound Octoros</li><li>Madolche Puddingcess Choco A La Mode</li><li>Raid Raptors - Blaze Falcon</li><li>Superheavy Samurai Big Wara-G</li><li>Fire King's Island</li><li>Lucius the Shadow Vassal</li><li>Berlines the Firestorm Vassal</li><li>Grieving Fiend</li><li>Superheavy Samurai Gro-V</li><li>Dizzying Wind of the Yosen Realm</li><li>Yosenju Oyamabiko</li><li>Stitching Reborn</li><li>Performapal Lizardraw</li><li>Pendulum Arise</li><li>Frozen Void</li><li>The True Monarch Dominion</li><li>Pudding Force</li><li>Magma Dragon</li><li>Landrobe the Rock Vassal</li><li>Abyssal Stungray</li><li>Re-Dice</li><li>Jar of Avarice</li></ul><p> Additionally, some ID's may have changed, check your decks. We will be adding the remaining CROS cards as soon as possible!</p> <p><a href='https://www.youtube.com/user/YGOhack137/videos'>Credit goes to YGOHack137</a></p>",
-            "Author": "Chibi Chan Nya",
-            "Date" : "February 12th 2015"
-        },{
-            "Title": "Some ID changes today",
-            "Subtitle": "Decks and Replays might be damaged!",
-            "Content": "<p>Some cleaning up was done to the databases today and a few cards have changed their ID's, which means that they will be removed from all Decks and Replays that contain them. The affected cards are the following.<br></p><ul><li>Madolche Puddingcess Choco A La Mode</li><li>Dark Burning Attack</li><li>Dark Burning Magic</li><li>Dragoons of Draconia</li><li>Eternal Soul</li><li>Ring of Peace</li></ul><p>We apologize for any inconvenience this might have caused, but maintaining accurate IDs is an important task. More ID changes should be coming in the following weeks, mostly concernin the 'Zefra' cards. We will be posting the announcement as soon as it happens, so stay alert!<br></p>",
-            "Author": "Chibi Chan Nya",
-            "Date" : "February 5th 2015"
-        },{
-            "Title": "Anime Cards Released",
-            "Subtitle": "Salvation releases new series of anime-based cards",
-            "Content": "<p>As we post this, a large bulk of over 240 anime cards are reaching our servers and will soon be available to users of the Salvation YGOPro Server by updating their client! It is every single card from the Tag Force games and ONLY those. It will set the foundation for SD's anime set!</p><p>To access these cards, open your SD Launcher, wait for full updates, go to settings, database, and pick <strong>1-Anime</strong>. You'll immediately see the effect in your deck editor. Keep in mind many of these cards were made in a hurry and are likely to contain <strong>many</strong> bugs! We depend on you lovely users testing to be able to find them all. We will be opening a bug report thread right after this so let us know if anything isn't functioning correctly.</p><p> Above all, have fun and enjoy this new feature of the Salvation YGOPro Server! Many of our staff have been pushing for it for over one year now and we are very proud to announce that <strong>anime is here at Salvation.</strong></p><a href='http://forum.ygopro.us/index.php?/topic/17-first-batch-of-anime-cards-is-here/'>",
-            "Author": "Chibi Chan Nya",
-            "Date" : "January 30th 2015"
-        },{
-            "Title": "Welcome to Salvation",
-            "Subtitle": "A new Yu-Gi-Oh! Simulator",
-            "Content": "Welcome to the newest YGOPro Server! This server and its unique launcher are geared at helping the community to heal from years of arguments and power struggles. Help us help the community by spreading the word.",
-            "Author": "AccessDenied",
-            "Date": "December 1st 2014"
-        }
-    ]
-}
+            "Content": "<p>The April 1st OCG and TCG lists have been applied to the server</p>TCG<br/>Newly Forbidden:<br/>Blaster, Dragon Ruler of Infernos<br/>Redox, Dragon Ruler of Boulders<br/>Tempest, Dragon Ruler of Storms<br/>Tidal, Dragon Ruler of Waterfalls<br/>Snatch Steal<br/>Newly Limited:<br/>Sinister Serpent<br/>Tour Guide From the Underworld<br/>Dragon Ravine<br/>Preparation of Rites<br/>Saqlifice<br/>Symbol of Heritage<br/>Temple of Kings<br/>Crush Card Virus
