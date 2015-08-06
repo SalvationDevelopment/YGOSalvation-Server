@@ -259,11 +259,17 @@ span.cardImage {
 }
 
 #deckedit label {
-    width: 373px;
+    width: 14vw;
     /* border: 2px solid white; */
     /* overflow: auto; */
     
     display: block;
     margin: 0;
     padding: 0;
+    float: left;
+    clear: left;
+}
+
+label[for="typeSelect"] {
+    width: 32vw !important;
 }
