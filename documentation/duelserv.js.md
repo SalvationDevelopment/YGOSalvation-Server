@@ -73,7 +73,7 @@ It requires following npm modules:
   2. close
 2. display global messages
 
-All of the above actions are performed by entering commands in the #public channel on the IRC server (available under `config.server`) — for example: `!kill <duelID>`, where '<duelID>' is replaced with any duel's unique ID —, and will enforce forum bans to take effect. However, due to the security risks which this poses, the channel is (naturally) invite-only and hidden.
+All of the above actions are performed by entering commands in the #public channel on the IRC server (available under `config.server`) — for example: `!kill <duelID>`, where `<duelID>` is replaced with any duel's unique ID —, and will enforce forum bans to take effect. However, due to the security risks which this poses, the channel is (naturally) invite-only and hidden.
 
 Action #2 can also render any arbitrary HTML. This feature is one of the reasons why Salvation might be detected as virus: the client method for displaying the message will evaluate any `<script>` tags, which could be used for various malcontent. I'll leave those to your imagination.
 
