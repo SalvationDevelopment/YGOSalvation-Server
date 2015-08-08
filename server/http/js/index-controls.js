@@ -171,6 +171,7 @@ $(document).ready(function () {
             success: function (data) {
 
                 var info = JSON.parse(data);
+                console.log(info);
                 if (info.success) {
                     localStorage.nickname = info.displayname;
                     if (isChecked('#ips_remember')) {
