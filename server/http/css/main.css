@@ -1785,7 +1785,25 @@ audio#podcast {
     margin: 0;
 }
 
+div#achievements {
+    float: left;
+    width: 27vw;
+}
+
 .rankingcolumn label {
     font-size: .8em;
+    display: block;
+}
+
+#achievements span {
     display: inline-block;
+    padding-right: 1vw;
+    color: hotpink;
+}
+
+img#avatar {
+    /* height: 15vh; */
+    
+    float: left;
+    padding: 1vh 1vw;
 }
