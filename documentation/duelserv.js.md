@@ -29,7 +29,8 @@ It requires following npm modules:
 
 ### Globals
 
-#### Functions-
+#### Functions
+
 - `randomString()`
   - Generates a pseudo-random alphanumeric string used for duels without a specified password
 - `duelrequest(challenger, challengedParty, roompass)`
@@ -43,7 +44,9 @@ It requires following npm modules:
 - `globalMsg(message)`
   - emits event like `duelrequest`
   - sends global message to all clients as well as to the IRC channel 'global' (although it appears that this is not the case at the moment)
+
 #### Variables
+
 - `bot`
   - used as reference for new IRC client
 - `irc`
