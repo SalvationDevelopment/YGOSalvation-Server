@@ -191,7 +191,8 @@ $(document).ready(function () {
                         username: $('#ips_username').val(),
                         password: $('#ips_password').val()
                     });
-                    $('#avatar').attr('src', 'http://forum.ygopro.us/uploads/profile/' + info.avatar);
+                    $('#avatar').attr('src', 'http://forum.ygopro.us/uploads/' + info.avatar);
+                    $('#profileusername').text(info.displayname);
                 } else {
                     alert(info.message);
                 }
