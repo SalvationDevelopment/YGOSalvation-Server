@@ -1,23 +1,13 @@
 /*jslint  node: true, plusplus: true, white: false*/
 // Gamelist object acts similar to a Redis server, could be replaced with on but its the gamelist state.
-try {
-    var fs = require('fs'),
-        ssloptions = {
-            ca: fs.readFileSync(process.env.SSL + 'sub.class1.server.ca.pem'),
-            key: fs.readFileSync(process.env.SSL + 'ssl.key.unsecure'),
-            cert: fs.readFileSync(process.env.SSL + 'ssl.crt')
-        },
-        http = require('https');
-} catch (e) {
-    var http = require('http');
-}
+var http = require('http');
 var primus,
     gamelist = {},
     registry = {},
     userdata = {},
     Primus = require('primus'),
     Rooms = require('primus-rooms'),
-    primusServer = http.createServer(ssloptions).listen(24555),
+    primusServer = http.createServer().listen(24555),
     duelserv = require('./duelserv.js'),
     cluster = require('cluster'),
     previousAnnouncement = "",
