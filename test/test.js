@@ -37,9 +37,7 @@ describe('Boot Test', function () {
     it('Should test parseframes.js', function () {
         require('../server/libs/slave.js');
     });
-    it('Should test  CDBUpdate', function () {
-        require('../server/libs/carddb-update.js');
-    });
+
     it('Should test  datetimestamp.js', function () {
         var datestamp = require('../server/libs/datetimestamp.js');
         datestamp();
