@@ -126,7 +126,7 @@ function isChecked(id) {
 }
 
 
-var primus = Primus.connect('wss://ygopro.us:24555');
+var primus = Primus.connect('ws://ygopro.us:24555');
 
 $('#servermessages').text('Loading interface from server...');
 
