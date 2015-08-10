@@ -1814,3 +1814,7 @@ img#avatar {
     float: left;
     padding: 1vh 1vw;
 }
+
+#profilepoints span {
+    font-size: 60px;
+}
