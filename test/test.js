@@ -59,9 +59,7 @@ describe('Boot Test', function () {
     it('Should test ircbot.js', function () {
         require('../server/libs/ircbot.js');
     });
-    // it('Should test ldapclient.js', function () {
-    //     require('../server/libs/ldapclient.js');
-    // });
+
     it('Should test parseframes.js', function () {
         require('../server/libs/parseframes.js');
     });
@@ -113,15 +111,7 @@ describe('Boot Test', function () {
         //        }
 
     });
-    it('Should test servercontrol.json', function () {
-        require('../server/libs/servercontrol.json');
-    });
-    it('Should test ldapserver.js', function () {
-        require('../server/libs/ldapserver.js');
-    });
-    // it('Should test ygocore-network-interface.js', function () {
-    //     require('../server/libs/ygocore-network-interface.js');
-    // });
+
 });
 
 describe('Client Boot', function () {
