@@ -142,7 +142,9 @@ var decks = {};
 function getDeck(file) {
     'use strict';
 
-    fs.readFile('./ygopro/deck/' + file, { encoding: "utf-8" }, function (badfile, deck) {
+    fs.readFile('./ygopro/deck/' + file, {
+        encoding: "utf-8"
+    }, function (badfile, deck) {
         if (file.indexOf('.ydk') !== -1) {
             decks[file] = deck;
         }
@@ -325,7 +327,7 @@ function processServerRequest(parameter) {
 
 
 
-var privateServer = Primus.connect('wss://ygopro.us:24555');
+var privateServer = Primus.connect('ws://ygopro.us:24555');
 privateServer.on('data', function (data) {
     'use strict';
     var join = false,
