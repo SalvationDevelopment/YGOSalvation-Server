@@ -193,6 +193,7 @@ $(document).ready(function () {
                     });
                     $('#avatar').attr('src', 'http://forum.ygopro.us/uploads/' + info.avatar);
                     $('#profileusername').text(info.displayname);
+                    $('#profilepoints span').text(info.data.field_12);
                 } else {
                     alert(info.message);
                 }
