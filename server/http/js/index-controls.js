@@ -1,5 +1,5 @@
 /*jslint browser:true, plusplus:true, nomen: true*/
-/*global $, saveSettings, Handlebars, prompt, _gaq, isChecked, alert, primus, ygopro, translationDB, params, swfobject*/
+/*global $, saveSettings, Handlebars, prompt, _gaq, isChecked, alert, primus, ygopro, translationDB, params, swfobject, console*/
 
 var chatStarted = false;
 
@@ -146,6 +146,13 @@ function translateLang(lang) {
         }
     }
     params.language = lang;
+}
+
+function achievementConstructor(data) {
+    'use strict';
+    return {
+        "shadow": (data.field_13 === 'u') ? 'Unlocked' : 'Locked'
+    };
 }
 
 params.showJoinPartMessages = false;

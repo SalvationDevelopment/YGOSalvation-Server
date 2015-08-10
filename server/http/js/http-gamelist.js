@@ -474,7 +474,10 @@ primus.on('data', function (data) {
         if (data.clientEvent === 'global') {
             $('footer').html(data.message).addClass('loud');
         }
-        if (data.clientEvent === 'kill' && (data.target === localStorage.nickname || data.target === 'ALL')) {
+        if (data.clientEvent === 'kill' && data.target === localStorage.nickname) {
+            ygopro('kk');
+        }
+        if (data.clientEvent === 'genocide') {
             ygopro('kk');
         }
         if (data.clientEvent === 'duelrequest' && data.target === localStorage.nickname && confirm('Accept Duel Request from ' + data.from + '?')) {
