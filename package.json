@@ -1,51 +1,46 @@
 {
-  "name": "ygopro-js-server",
-  "description": "YGOPro US Server (Salvation) - Saving Yu-Gi-Oh!",
-  "main": "server/server.js",
-  "version": "4.4.0",
-  "keywords": [
+    "name": "ygopro-salvation-server",
+    "description": "YGOPro US Server (Salvation) - Saving Yu-Gi-Oh!",
+    "main": "server/server.js",
+    "version": "4.4.0",
+    "keywords": [
     "ygopro",
-    "my-card",
-    "devpro",
     "Salvation Development",
     "yugioh",
     "irc"
   ],
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/salvationdevelopment/YGOPro-Support-System.git"
-  },
-  "dependencies": {
-    "colors": "*",
-    "electron-prebuilt": "^0.28.1",
-    "fs-walk": "*",
-    "geoip-lite": "*",
-    "ipboard": "0.0.2-2",
-    "irc": "*",
-    "istanbul": "*",
-    "jsdom": "*",
-    "knuth-shuffle": "*",
-    "ldapjs": "*",
-    "lodash": "*",
-    "node-static": "*",
-    "policyfile": "*",
-    "primus": "*",
-    "primus-rooms": "*",
-    "ps-node": "*",
-    "request": "^2.58.0",
-    "sqlite3": "*",
-    "winston": "^1.0.0",
-    "ws": "*"
-  },
-  "optionalDependencies": {
-    "httpsys": "*",
-    "mocha": "*"
-  },
-  "bugs": "https://github.com/salvationdevelopment/YGOPro-Support-System/issues",
-  "author": "panthrowzay@gmail.com",
-  "homepage": "http://ygopro.us",
-  "scripts": {
-    "start": "node server/server.js",
-    "test": "istanbul cover _mocha -- -u exports -R spec"
-  }
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/salvationdevelopment/YGOPro-Support-System.git"
+    },
+    "dependencies": {
+        "colors": "*",
+        "fs-walk": "*",
+        "irc": "*",
+        "istanbul": "*",
+        "jsdom": "*",
+        "lodash": "*",
+        "policyfile": "*",
+        "primus": "*",
+        "primus-rooms": "*",
+        "ps-node": "*",
+        "request": "^2.58.0",
+        "sqlite-to-json": "*",
+        "winston": "^1.0.0",
+        "ws": "*"
+    },
+    "optionalDependencies": {
+        "httpsys": "*"
+    },
+    "devDependencies": {
+        "istanbul": "*",
+        "mocha": "*"
+    },
+    "bugs": "https://github.com/salvationdevelopment/YGOPro-Support-System/issues",
+    "author": "panthrowzay@gmail.com",
+    "homepage": "http://ygopro.us",
+    "scripts": {
+        "start": "node server/server.js",
+        "test": "istanbul cover _mocha -- -u exports -R spec"
+    }
 }
