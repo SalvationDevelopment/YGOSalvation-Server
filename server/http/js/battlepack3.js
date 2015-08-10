@@ -124,7 +124,6 @@ function writeDeckList(deck) {
     for (sideIter; deck.side.length > sideIter; sideIter++) {
         ydkfile = ydkfile + deck.side[sideIter] + '\r\n';
     }
-    _gaq.push(['_trackEvent', 'Launcher', 'YGOPro', 'Make BP3']);
     return ydkfile;
 }
 

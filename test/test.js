@@ -31,20 +31,6 @@ describe('System', function () {
         }
 
     });
-    it('Should start the AI', function () {
-        require('../server/server.js');
-        var ai = require('../server/ai.js');
-        ai.ircInterface('', '', '');
-        ai.gamelistUpdate({
-            clientEvent: 'duelrequest',
-            target: '[AI]SnarkyChild',
-            from: 'TravisCI',
-            roompass: '2008000,1,5,1,U,xxxxx'
-        });
-        ai.onConnectGamelist();
-        ai.onCloseGamelist();
-    });
-
 });
 describe('Boot Test', function () {
     'use strict';
@@ -113,11 +99,11 @@ describe('Boot Test', function () {
             enums = require('../server/libs/enums.js'),
             loop = Object.create(enums.STOC),
             i;
-//        for (i in loop) {
-//            recieveSTOC({
-//                STOC: i,
-//                message: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-//            });
+        //        for (i in loop) {
+        //            recieveSTOC({
+        //                STOC: i,
+        //                message: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        //            });
         //}
         //        for (i in loop.STOC_GAME_MSG) {
         //            recieveSTOC({
