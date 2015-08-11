@@ -609,12 +609,11 @@ function parseLevelScales(level) {
         level = level.toString(16); // format: [0-9A-F]0[0-9A-F][0-9A-F]{4}
         leftScale = parseInt(level.charAt(0), 16); // first digit: left scale in hex (0-16)
         rightScale = parseInt(level.charAt(2), 16); // third digit: right scale in hex (0-16)
-        pendulumLevel = parseInt(level.charAt(6), 16); // seventh digit: level of the monster in hex (technically, all 4 digits are levels, but here we only need the last char
-        output += '<span class="scales"><< ' + leftScale + ' | ' + rightScale + ' >> <span class="levels">';
+        pendulumLevel = parseInt(level.charAt(6), 16); // seventh digit: level of the monster in hex (technically, all 4 digits are levels, but here we only need the last char)
         while (pendulumLevel--) {
             output += '*';
         }
-        output += '</span>';
+        output += '<span class="scales"><< ' + leftScale + ' | ' + rightScale + ' >> <span class="levels"></span>';
     }
     return output + '</span>';
 }
