@@ -614,7 +614,7 @@ function parseLevelScales(level) {
         while (pendulumLevel--) {
             output += '*';
         }
-        output += '</span><span class="scales"><< ' + leftScale + ' | ' + rightScale + ' >>';
+        output += '</span> <span class="scales"><< ' + leftScale + ' | ' + rightScale + ' >>';
     }
     return output + '</span>';
 }

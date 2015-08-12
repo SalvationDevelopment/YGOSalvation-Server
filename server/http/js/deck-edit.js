@@ -3,6 +3,17 @@ var cards = [],
 $(function () {
     $.getJSON('http://ygopro.us/manifest/database.json', function (data) {
         cards = data;
+        cards = cards.filter(function (card) {
+            var keys = Object.keys(card),
+                i = 0,
+                len = keys.length;
+            for (i, len; i < len; i++) {
+                if (card[keys[i]] === null) {
+                    return false;
+                }
+            }
+            return true;
+        });
         $.get('http://ygopro.us/ygopro/lflist.conf', function (data) {
             var list;
             lflist = ConfigParser(data, {
@@ -542,7 +553,7 @@ function parseLevelScales(level) {
         while (pendulumLevel--) {
             output += '*';
         }
-        output += '</span><span class="scales"><< ' + leftScale + ' | ' + rightScale + ' >>';
+        output += '</span> <span class="scales"><< ' + leftScale + ' | ' + rightScale + ' >>';
     }
     return output + '</span>';
 }
