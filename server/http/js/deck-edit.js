@@ -1,25 +1,9 @@
 var cards = [],
     lflist = {};
 $(function () {
-    $.getJSON('http://ygopro.us/manifest/database.json', function (data) {
+    $.getJSON('http://ygopro.us/manifest/database_0-en-OCGTCG.json', function (data) {
         cards = data;
-        cards = cards.filter(function (card) {
-            var keys = Object.keys(card),
-                i = 0,
-                len = keys.length;
-            for (i, len; i < len; i++) {
-                if (card[keys[i]] === null) {
-                    return false;
-                }
-            }
-            return true;
-        }).filter(function (card) {
-            // filter out Tokens
-            if (card.type === 16401 || card.type === 16417) {
-                return false;
-            }
-            return true;
-        });
+        cards = cards.filter(validCards).filter(excludeTokens);
         $.get('http://ygopro.us/ygopro/lflist.conf', function (data) {
             var list;
             lflist = ConfigParser(data, {
@@ -46,6 +30,9 @@ $(function () {
                     attributeSelect = $('.attributeSelect');
                 for (setcode in setcodes) {
                     $('.setcodeSelect').append('<option value="' + parseInt(setcode, 16) + '">' + setcodes[setcode] + '</option>');
+                }
+                if (localStorage.getItem('selectedDatabase')) {
+                    $('.databaseSelect').val(localStorage.getItem('selectedDatabase'));
                 }
                 $('.typeSelect').on('change', function () {
                     switch ($(this).val()) {
@@ -187,6 +174,20 @@ $(function () {
                     });
                     $('.searchBlock input[class$="Input"]').val('');
                 });
+                $('.databaseSelect').on('change', function () {
+                    localStorage.setItem('selectedDatabase', $(this).val());
+                    $.getJSON('manifest/database_' + $(this).val() + '.json', function (data) {
+                        cards = data;
+                        cards = cards.filter(validCards).filter(excludeTokens);
+                        drawDeckEditor({
+                            main: {},
+                            side: {},
+                            extra: {}
+                        });
+                        $('.searchResults').html('');
+                        $('.clearForm').click();
+                    });
+                });
             });
         });
     });
@@ -305,7 +306,27 @@ var imgDir = "http://ygopro.us/ygopro/pics/",
             extra: []
         }
     };
+    
+function excludeTokens (card) {
+            // filter out Tokens
+            if (card.type === 16401 || card.type === 16417) {
+                return false;
+            }
+            return true;
+        }
 
+function validCards (card) {
+            var keys = Object.keys(card),
+                i = 0,
+                len = keys.length;
+            for (i, len; i < len; i++) {
+                if (card[keys[i]] === null) {
+                    return false;
+                }
+            }
+            return true;
+        }
+    
 function shuffleArray (array) {
     var currentIndex = array.length,
         temporaryValue,
