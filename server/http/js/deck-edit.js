@@ -13,6 +13,12 @@ $(function () {
                 }
             }
             return true;
+        }).filter(function (card) {
+            // filter out Tokens
+            if (card.type === 16401) {
+                return false;
+            }
+            return true;
         });
         $.get('http://ygopro.us/ygopro/lflist.conf', function (data) {
             var list;
