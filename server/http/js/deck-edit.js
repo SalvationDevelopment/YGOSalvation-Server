@@ -15,7 +15,7 @@ $(function () {
             return true;
         }).filter(function (card) {
             // filter out Tokens
-            if (card.type === 16401) {
+            if (card.type === 16401 || card.type === 16417) {
                 return false;
             }
             return true;
