@@ -70,12 +70,26 @@
 div.searchLeft label[for^="banlistSelect"] {
     width: 80%;
     height: 15%;
-    margin-top: 2%;
     float: left;
     clear: both;
 }
 
 div.searchLeft select.banlistSelect {
+    float: right;
+    clear: both;
+    width: 65%;
+    margin-right: 5%;
+}
+
+div.searchLeft label[for^="databaseSelect"] {
+    width: 80%;
+    height: 15%;
+    margin-top: 1%;
+    float: left;
+    clear: both;
+}
+
+div.searchLeft select.databaseSelect {
     float: right;
     clear: both;
     width: 65%;
@@ -102,7 +116,7 @@ div.searchLeft label[for^="decknameInput"] {
     clear: both;
     float: left;
     height: 15%;
-    margin-top: -1%;
+    margin-top: 1%;
 }
 
 input.decknameInput {
@@ -115,33 +129,34 @@ input.decknameInput {
 button.shuffleDeck {
     float: right;
     width: 20%;
-    margin-top: 3%;
+    margin-top: 2%;
     margin-right: -19.9%;
 }
 
 button.sortDeck {
     float: right;
     width: 20%;
-    margin-top: 3%;
+    margin-top: 2%;
     margin-right: 2%;
 }
 
 button.clearDeck {
     float: right;
     width: 20%;
-    margin-top: 3%;
+    margin-top: 2%;
     margin-right: 2%;
 }
 
 button.saveDeck {
     width: 20%;
     float: right;
-    margin-top: -4.5%;
+    margin-top: -8%;
 }
 
 button.saveDeckAs {
     width: 20%;
     float: right;
+    margin-top: -5.5%;
     white-space: nowrap;
 }
 
@@ -330,7 +345,7 @@ div.searchBlock input.defInput {
 div.searchBlock label[for^="nameInput"] {
     float: right;
     clear: both;
-    margin-top: -7.75%;
+    margin-top: -8%;
     margin-right: 10%;
 }
 
@@ -350,7 +365,7 @@ button.searchButton {
     float: right;
     clear: both;
     margin-right: 6.75%;
-    margin-top: -4%;
+    margin-top: -8.25%;
 }
 
 button.clearForm {
@@ -359,7 +374,7 @@ button.clearForm {
     height: 33%;
     width: 8.5%;
     margin-right: 6.75%;
-    margin-top: -15.25%;
+    margin-top: -19.25%;
     clear: both;
 }
 
