@@ -1,9 +1,9 @@
 {
     "Articles": [
         {
-            "Title": "Pending Server Outage",
-            "Subtitle": "Server will be down for 1 week",
-            "Content": "<p>The server will be offline August 25th though September 1st while we reconstruct parts of the login system and handling of some pretty nasty errors that have to do with Match Mode, the game list, Offline mode, YGOPro itself, various visual bugs, and the addition of whole new features for everyone that require edits to the core engine of the software. Forums, Chat, and game play will be offline, sorry for the inconvenience.</p>",
+            "Title": "PSYFrame Lands on Salvation Once again",
+            "Subtitle": "And a Goyo",
+            "Content": "<p>New Cards on the server yet again.<br /><br />PSYFrame Beta<br />PSYFrame Delta<br />PSYFrame Epsilon<br />PSYFrame Overload<br />Goyo Predator<br /><br />Special thanks to Oneshot Stormwolf Vyro and YGOHack137 for getting the Scripts, Database, Bug Reports and images respectfully. Finally a special thanks to the fundraisers at CWA. For funding the server this month.</p>",
             "Author": "AccessDenied, the Owner",
             "Date": "August 15, 2015"
     }, {
