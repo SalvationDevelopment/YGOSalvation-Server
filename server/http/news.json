@@ -1,6 +1,12 @@
 {
     "Articles": [
-        {
+		{
+			"Title": "The debut of BOSH!",
+			"Subtitle": "Big card update!",
+			"Content": "<p>New Cards:<br /><br />Odd-Eyes Gravity Dragon<br />Odd-Eyes Advent<br />Performapal Bigbiturtle<br />Performapal Monkeyboard<br />Solo the Melodious Songstress<br />Shingetsu, the Twilight Ninja<br />Getsuga, the Twilight Ninja Shogun<br />Superheavy Great General Sango<br />Superheavy Great General Hisu-E<br />Youtou – Shiranui<br />Katanagami – Shiranui<br /><br/>All credit for these cards goes to YGOHack137. Make sure to report all bugs on the forum if found. Stay tuned later today for the new cards from Structure Deck: Advent of the Legendary Monarch!</p>",
+			"Author": "StormWolf",
+			"Date": "August 17, 2015"
+    }, {
             "Title": "PSYFrame Lands on Salvation Once again",
             "Subtitle": "And a Goyo",
             "Content": "<p>New Cards on the server yet again.<br /><br />PSYFrame Beta<br />PSYFrame Delta<br />PSYFrame Epsilon<br />PSYFrame Overload<br />Goyo Predator<br /><br />Special thanks to Oneshot Stormwolf and YGOHack137 for getting the Scripts, database info and images respectfully. Finally a special thanks to the fundraisers at Crimson Wind Academy, for funding the server this month. Yugituber featured this time is Omega BlankPage check out his page to get news on not only Salvation but DevPro's updates as well in your Youtube feed.<br /><br />In other good news, the plan to shut down the server from August 25 to September 1 for maintenance has been cancelled.</p>",
