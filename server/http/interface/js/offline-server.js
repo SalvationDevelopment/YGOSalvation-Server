@@ -5,7 +5,7 @@
 var template =
     "use_d3d = {use_d3d}\r\n\
 antialias = {antialias}\r\n\
-errorlog = {errorlog}\r\n\
+errorlog = 1\r\n\
 nickname = {nickname}\r\n\
 roompass = {roompass}\r\n\
 lastdeck = {lastdeck}\r\n\
