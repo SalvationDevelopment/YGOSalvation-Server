@@ -189,7 +189,8 @@ primus.on('connection', function (socket) {
                 socket.write({
                     clientEvent: 'privateServer',
                     serverUpdate: userdata[socket.address.ip + data.uniqueID],
-                    ip: socket.address.ip + data.uniqueID
+                    ip: socket.address.ip + data.uniqueID,
+                    stats: stats
                 });
             });
             socket.join('activegames', function () {
@@ -245,8 +246,7 @@ primus.on('connection', function (socket) {
         case ('privateUpdate'):
             primus.room(socket.address.ip + data.uniqueID).write({
                 clientEvent: 'privateServer',
-                serverUpdate: data.serverUpdate,
-                stats: stats
+                serverUpdate: data.serverUpdate
             });
             userdata[socket.address.ip + data.uniqueID] = data.serverUpdate;
             break;
