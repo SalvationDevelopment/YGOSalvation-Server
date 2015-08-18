@@ -5,6 +5,7 @@ var primus,
     gamelist = {},
     registry = {},
     userdata = {},
+    stats = {},
     Primus = require('primus'),
     Rooms = require('primus-rooms'),
     primusServer = http.createServer().listen(24555),
@@ -215,6 +216,7 @@ primus.on('connection', function (socket) {
                         info = JSON.parse(body.trim());
                         if (info.success) {
                             registry[info.displayname] = socket.address.ip;
+                            stats[info.displayname] = new Date().getTime();
                             socket.username = data.username;
                             sendRegistry();
                         }
@@ -243,7 +245,8 @@ primus.on('connection', function (socket) {
         case ('privateUpdate'):
             primus.room(socket.address.ip + data.uniqueID).write({
                 clientEvent: 'privateServer',
-                serverUpdate: data.serverUpdate
+                serverUpdate: data.serverUpdate,
+                stats: stats
             });
             userdata[socket.address.ip + data.uniqueID] = data.serverUpdate;
             break;
