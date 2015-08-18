@@ -461,10 +461,12 @@ function setfilter() {
     renderList(gamelistcache);
 
 }
-
+var stats = 0;
 primus.on('data', function (data) {
     'use strict';
-    var join = false;
+    var join = false,
+        time,
+        player;
     //console.log(data);
     if (!data.clientEvent) {
         gamelistcache = JSON.parse(data);
@@ -488,6 +490,15 @@ primus.on('data', function (data) {
         }
         if (data.clientEvent === 'privateServer') {
             processServerCall(data.serverUpdate);
+        }
+        if (data.stats) {
+            stats = 0;
+            time = new Date().getTime();
+            for (player in data.stats) {
+                if (time - data.stats[player] < 86400000) { //within the last 24hrs
+                    stats++;
+                }
+            }
         }
     }
 });
