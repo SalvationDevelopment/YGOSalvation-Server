@@ -456,6 +456,7 @@ function renderList(JSONdata) {
         .first().before('<br style="clear:both"><span class="gamelabel">' + jsLang.spectate + '<span><br style="clear:both">');
     $('#activeduels').html($('.game').length);
     $('#activeduelist').html($('.playername').length + spectators);
+    $('#loginsinlast24').html(stats)
 }
 
 function setfilter() {
@@ -463,7 +464,9 @@ function setfilter() {
     renderList(gamelistcache);
 
 }
-var stats = 0;
+var stats24 = 0,
+    statsShut = 0,
+    connected = 0
 primus.on('data', function (data) {
     'use strict';
     var join = false,
@@ -474,7 +477,7 @@ primus.on('data', function (data) {
         gamelistcache = JSON.parse(data);
         renderList(gamelistcache);
     } else {
-        console.log(data);
+
         if (data.clientEvent === 'global') {
             $('footer').html(data.message).addClass('loud');
         }
@@ -494,13 +497,18 @@ primus.on('data', function (data) {
             processServerCall(data.serverUpdate);
         }
         if (data.stats) {
-            stats = 0;
+            stats24 = 0;
+            statsShut = 0
             time = new Date().getTime();
-            for (player in data.stats) {
+            for (player in data.stats.logged) {
+                statsShut++;
+                flog
                 if (time - data.stats[player] < 86400000) { //within the last 24hrs
                     stats++;
                 }
             }
+        } else {
+            console.log(data);
         }
     }
 });
@@ -525,7 +533,7 @@ function killgame(target) {
     });
 }
 
-$('body').on('click', '.game', function (ev) {
+$('body').on('mousedown', '.game', function (ev) {
     'use strict';
     if (admin === "1" && launcher && ev.which === 3) {
         var killpoint = $(ev.target).attr('data-killpoint');
