@@ -14,7 +14,8 @@ var primus,
     previousAnnouncement = "",
     winston = require('winston'),
     path = require('path'),
-    request = require('request');
+    request = require('request'),
+    ps = require('ps-node');
 
 var logger = new(winston.Logger)({
     transports: [
@@ -220,6 +221,32 @@ primus.on('connection', function (socket) {
                             stats[info.displayname] = new Date().getTime();
                             socket.username = data.username;
                             sendRegistry();
+                        }
+                    } catch (msgError) {
+                        console.log('Error during validation', body, msgError, socket.address.ip);
+                    }
+                }
+            });
+            break;
+        case ('killgame'):
+            url = 'http://forum.ygopro.us/log.php';
+            post = {
+                ips_username: data.username,
+                ips_password: data.password
+            };
+            request.post(url, {
+                form: post
+            }, function (error, response, body) {
+                if (!error && response.statusCode === 200) {
+                    var info;
+                    try {
+                        info = JSON.parse(body.trim());
+                        if (info.success && info.data.g_access_cp === "1") {
+                            ps.kill(data.killTarget, function (err) {
+                                if (err) {
+                                    duelserv.emit('del', data.killTarget);
+                                }
+                            });
                         }
                     } catch (msgError) {
                         console.log('Error during validation', body, msgError, socket.address.ip);

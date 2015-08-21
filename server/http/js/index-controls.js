@@ -1,7 +1,8 @@
 /*jslint browser:true, plusplus:true, nomen: true*/
 /*global $, saveSettings, Handlebars, prompt, _gaq, isChecked, alert, primus, ygopro, translationDB, params, swfobject, console*/
 
-var chatStarted = false;
+var admin = false,
+    chatStarted = false;
 
 function isChecked(id) {
     'use strict';
@@ -181,6 +182,7 @@ $(document).ready(function () {
                 console.log(info);
                 if (info.success) {
                     localStorage.nickname = info.displayname;
+                    admin = info.data.g_access_cp;
                     if (isChecked('#ips_remember')) {
                         localStorage.loginnick = $('#ips_username').val();
                         localStorage.loginpass = $('#ips_password').val();
