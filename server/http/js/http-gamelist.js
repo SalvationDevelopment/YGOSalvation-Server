@@ -1,7 +1,7 @@
 /*jslint plusplus: true, browser:true, node:true*/
 /*jslint nomen: true*/
-/*global localStorage, $, Primus, prompt, console, writeDeckList, makeDeck, confirm, launcher, alert, singlesitenav, startgame, _gaq, internalLocal, loggedIn, processServerCall*/
-/*exported connectToCheckmateServer, leaveGamelist, hostGame, connectgamelist, setHostSettings, setfilter, */
+/*global localStorage, $, Primus, prompt, console, writeDeckList, makeDeck, confirm, launcher, alert, singlesitenav, startgame, _gaq, internalLocal, loggedIn, processServerCall, admin*/
+/*exported connectToCheckmateServer, leaveGamelist, hostGame, connectgamelist, setHostSettings, setfilter*/
 
 
 var localstorageIter = 0;
@@ -46,6 +46,8 @@ var mode = "production",
     gamelistcache,
     screenMessage = $('#servermessages'),
     uniqueID = $('#uniqueid').html();
+
+var primus = Primus.connect('ws://ygopro.us:24555');
 
 function ygopro(parameter) {
     'use strict';
@@ -126,7 +128,7 @@ function isChecked(id) {
 }
 
 
-var primus = Primus.connect('ws://ygopro.us:24555');
+
 
 $('#servermessages').text('Loading interface from server...');
 
@@ -411,7 +413,7 @@ function preformfilter(translated, players, rooms, started, pid, watchers) {
     if (OK) {
         duelist = (translated.gameMode === 'Single' || translated.gameMode === 'Match') ? players[0] + ' vs ' + players[1] : players[0] + ' &amp ' + players[1] + ' vs ' + players[2] + ' &amp ' + players[3];
         //console.log(translated);
-        content = '<div class="game ' + rooms + ' ' + started + ' ' + translated.isLocked + '" onclick=enterGame("' + rooms + '",' + translated.isLocked + ') data-' + game + '="' + rooms + '">' + duelist + spectators + '<span class="subtext" style="font-size:.5em"><br>' + translated.gameMode +
+        content = '<div class="game ' + rooms + ' ' + started + ' ' + translated.isLocked + '" onclick=enterGame("' + rooms + '",' + translated.isLocked + ') data-' + game + '="' + rooms + '"data-killpoint="' + pid + '">' + duelist + spectators + '<span class="subtext" style="font-size:.5em"><br>' + translated.gameMode +
             ' ' + $('#creategamebanlist option[value=' + translated.banlist + ']').text() + ' ' + translated.poolFormat + ' ' + pid + '</span> </div>';
     }
     return content;
@@ -429,7 +431,7 @@ function renderList(JSONdata) {
         content,
         started,
         elem,
-        spectators = 0;;
+        spectators = 0;
 
     $('#gamelistitems').html('');
     for (rooms in JSONdata) {
@@ -512,13 +514,23 @@ primus.on('close', function () {
     console.log('!!!!!! close');
     _gaq.push(['_trackEvent', 'Launcher', 'Primus', 'Failure']);
 });
-//Array.prototype.searchFor = function (candid) {
-//    'use strict';
-//    var i = 0;
-//    for (i; i < this.length; i++) {
-//        if (this[i].toLowerCase().indexOf(candid.toLowerCase()) === '0') {
-//            return i;
-//        }
-//        return -1;
-//    }
-//};
+
+function killgame(target) {
+    'use strict';
+    primus.write({
+        action: 'killgame',
+        username: $('#ips_username').val(),
+        password: $('#ips_password').val(),
+        killTarget: target
+    });
+}
+
+$('body').on('click', '.game', function (ev) {
+    'use strict';
+    if (admin === "1" && launcher && ev.which === 3) {
+        var killpoint = $(ev.target).attr('data-killpoint');
+        if (confirm('Kill game ' + killpoint)) {
+            killgame(killpoint);
+        }
+    }
+});
