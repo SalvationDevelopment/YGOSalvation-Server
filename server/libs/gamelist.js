@@ -15,7 +15,8 @@ var primus,
     winston = require('winston'),
     path = require('path'),
     request = require('request'),
-    ps = require('ps-node');
+    ps = require('ps-node'),
+    online = 0;
 
 var logger = new(winston.Logger)({
     transports: [
@@ -146,6 +147,9 @@ function sendRegistry() {
             registry: registry
         });
     });
+    primus.room('room').clients(function (error, rooms) {
+        online = rooms.length;
+    });
 }
 
 primus = new Primus(primusServer, {
@@ -191,7 +195,8 @@ primus.on('connection', function (socket) {
                     clientEvent: 'privateServer',
                     serverUpdate: userdata[socket.address.ip + data.uniqueID],
                     ip: socket.address.ip + data.uniqueID,
-                    stats: stats
+                    stats: stats,
+                    online: online
                 });
             });
             socket.join('activegames', function () {
