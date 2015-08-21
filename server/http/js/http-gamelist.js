@@ -456,7 +456,7 @@ function renderList(JSONdata) {
         .first().before('<br style="clear:both"><span class="gamelabel">' + jsLang.spectate + '<span><br style="clear:both">');
     $('#activeduels').html($('.game').length);
     $('#activeduelist').html($('.playername').length + spectators);
-    $('#loginsinlast24').html(stats)
+    $('#loginsinlast24').html(stats24);
 }
 
 function setfilter() {
@@ -466,7 +466,8 @@ function setfilter() {
 }
 var stats24 = 0,
     statsShut = 0,
-    connected = 0
+    connected = 0;
+
 primus.on('data', function (data) {
     'use strict';
     var join = false,
@@ -498,13 +499,14 @@ primus.on('data', function (data) {
         }
         if (data.stats) {
             stats24 = 0;
-            statsShut = 0
+            statsShut = 0;
+            connected = data.online;
+
             time = new Date().getTime();
             for (player in data.stats.logged) {
                 statsShut++;
-                flog
                 if (time - data.stats[player] < 86400000) { //within the last 24hrs
-                    stats++;
+                    stats24++;
                 }
             }
         } else {
@@ -533,12 +535,31 @@ function killgame(target) {
     });
 }
 
+function global(message) {
+    'use strict';
+    primus.write({
+        action: 'killgame',
+        username: $('#ips_username').val(),
+        password: $('#ips_password').val(),
+        message: message
+    });
+}
+
 $('body').on('mousedown', '.game', function (ev) {
     'use strict';
     if (admin === "1" && launcher && ev.which === 3) {
         var killpoint = $(ev.target).attr('data-killpoint');
         if (confirm('Kill game ' + killpoint)) {
             killgame(killpoint);
+        }
+    }
+});
+
+$('body').on('mousedown', 'footer', function (ev) {
+    'use strict';
+    if (admin === "1" && launcher && ev.which === 3) {
+        if (confirm('Send Global?')) {
+            global(prompt('Global Message', 'Be nice, or else...'));
         }
     }
 });
