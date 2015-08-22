@@ -16,21 +16,19 @@ var wss_config = {
         host: 'ws://ygopro.us/',
         port: 24555,
         verifyClient: function (info) {
-            console.log("WebSocket origin: " + info.origin);
-            console.log("WebSocket headers: ", info.req);
-            console.log("WebSocket connection is " + (info.secure ? "secure" : "not secure"));
-            return true; // return true anyway because we're testing out the protocols
+            var ACCEPT_HANDSHAKE = (info.origin.indexOf(ACCEPT_ORIGIN) > -1 && info.req.headers.host.indexOf(ACCEPT_ORIGIN) > -1);
+            console.log("Handshake requested by " + info.req.socket.server._connectionKey + " (" + info.req.headers['sec-websocket-key'] + "); handshake " + (ACCEPT_HANDSHAKE ? "accepted" : "rejected due to false origin"));
+            return ACCEPT_HANDSHAKE;
         }
-    };
+    },
+    ACCEPT_ORIGIN = "ygopro.us";
     
 var ws = require("ws"),
     WebSocketServer = new ws.Server(wss_config);
     
 WebSocketServer.on('connection', function (WebSocket) {
-    console.log("Headers set: ", WebSocket.headers);
-    WebSocket.on('message', function (data) {
-        handleServerMessage(data);
-    });
+    console.log('New WebSocket connected: ', WebSocket);
+    console.log('Clients connected: ', WebSocketServer.clients);
 });
 
 WebSocketServer.on('error', function (error) {
