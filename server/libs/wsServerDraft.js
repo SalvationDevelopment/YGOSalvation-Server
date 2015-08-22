@@ -29,6 +29,12 @@ var ws = require("ws"),
 WebSocketServer.on('connection', function (WebSocket) {
     console.log('New WebSocket connected: ', WebSocket);
     console.log('Clients connected: ', WebSocketServer.clients);
+    WebSocket.on('message', function (message) {
+        var splitMessage = message.split('[[SPLIT]]'),
+            auth = splitMessage[0],
+            clientMessage = splitMessage[1];
+        console.log('Received message from client: ', clientMessage || message);
+    });
 });
 
 WebSocketServer.on('error', function (error) {
