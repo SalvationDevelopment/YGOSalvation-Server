@@ -1,36 +1,18 @@
-/* globals: sendCTOS, parseSTOC, getClientData */
+var SALVATION_WSS = 'ws://ygopro.us:55542',
+    ws = new WebSocket(SALVATION_WSS);
 
-var SALVATION_WSS = 'wss://ygopro.us:24555',
-    sockLoaded = false,
-    abort = false,
-    sock = new WebSocket(SALVATION_WSS),
-    maxTries = 100, // wait maxTries * 200 ms before aborting
-    whenSockLoad = function (callback, sockInstance) {
-        var interval = setInterval(function () {
-                if (sockInstance.readyState === 1) {
-                    callback();
-                    maxTries = 100;
-                    clearInterval(interval);
-                } else {
-                    if (maxTries-- < 0) {
-                        abort = true;
-                        clearInterval(interval);
-                        sockInstance.close(4000, 'No connection established');
-                    }
-                }
-            }, 200);
-    };
-sock.onopen = function (event) {
-    sock.send(sendCTOS(instanceData));
+ws.onopen = function (event) {
+    // ONOPEN: Auth again with uniqueID to the server
+    ws.send(uniqueID + '[[SPLIT]]clientAuth');
 };
-sock.onmessage = function (event) {
-    whenSockLoad(function () {
-        var stocResponse = parseSTOC(event.data);
-        if (stocResponse.hasSideEffects) {
-            return;
-        }
-        if (stocResponse.requiresData) {
-            getClientData(stocResponse);
-        }
-    }, sock);
+
+ws.onmessage = function (event) {
+    var message = event.data;
+    console.log('Received server message: ', message);
+};
+
+ws.onerror = function (event) {
+    console.log('WebSocket encountered an error');
+    console.log('Event data', event);
+    ws.close();
 };
