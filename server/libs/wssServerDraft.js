@@ -13,8 +13,8 @@
 });
  
 var wss_config = {
-        host: 'ws://ygopro.us/',
-        port: 24555,
+        host: 'ygopro.us',
+        port: 55542,
         verifyClient: function (info) {
             var ACCEPT_HANDSHAKE = (info.origin.indexOf(ACCEPT_ORIGIN) > -1 && info.req.headers.host.indexOf(ACCEPT_ORIGIN) > -1);
             console.log("Handshake requested by " + info.req.socket.server._connectionKey + " (" + info.req.headers['sec-websocket-key'] + "); handshake " + (ACCEPT_HANDSHAKE ? "accepted" : "rejected due to false origin"));
