@@ -33,7 +33,7 @@ WebSocketServer.on('connection', function (WebSocket) {
         var splitMessage = message.split('[[SPLIT]]'),
             auth = splitMessage[0],
             clientMessage = splitMessage[1];
-        console.log('Received message from client: ', clientMessage || message);
+        WebSocket.send('Received message from client: ' + clientMessage || message);
     });
 });
 
