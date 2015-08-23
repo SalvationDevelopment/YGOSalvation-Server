@@ -535,7 +535,7 @@ function killgame(target) {
     });
 }
 
-function global(message) {
+function sendglobal(message) {
     'use strict';
     primus.write({
         action: 'killgame',
@@ -559,7 +559,7 @@ $('body').on('mousedown', 'footer', function (ev) {
     'use strict';
     if (admin === "1" && launcher && ev.which === 3) {
         if (confirm('Send Global?')) {
-            global(prompt('Global Message', 'Be nice, or else...'));
+            sendglobal(prompt('Global Message', 'Be nice, or else...'));
         }
     }
 });
