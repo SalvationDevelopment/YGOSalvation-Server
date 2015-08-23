@@ -129,22 +129,6 @@ bot.addListener("message#public", function (from, to, message) {
 bot.addListener("message#public", function (from, to, message) {
     'use strict';
     var command = message.args[1].split(' ');
-    if (command[0] !== '!kill') {
-        return;
-    }
-    ps.kill(command[1], function (err) {
-        if (err) {
-            bot.say('#public', 'Failed to kill ' + command[1] + '! Deleting it.');
-            eventEmitter.emit('del', command[1]);
-        } else {
-            bot.say('#public', 'Process ' + command[1] + ' has been killed!');
-        }
-    });
-});
-
-bot.addListener("message#public", function (from, to, message) {
-    'use strict';
-    var command = message.args[1].split(' ');
     if (command[0] !== '!murder') {
         return;
     }
