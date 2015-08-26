@@ -129,8 +129,22 @@ function messageListener(message) {
         if (gamelist.hasOwnProperty(game)) {
             if (gamelist[game].players.length === 0 && gamelist[game].spectators === 0) {
                 delete gamelist[game];
+                //duelserv.emit('del', gamelist[game].pid);
             }
+        }
+    }
+    for (game in gamelist) {
+        if (gamelist.hasOwnProperty(game)) {
             if (gamelist[game] && game.length !== 24) {
+                //delete if some wierd game makes it into the list somehow. Unlikely.
+                delete gamelist[game];
+            }
+        }
+    }
+    for (game in gamelist) {
+        if (gamelist.hasOwnProperty(game)) {
+            if (new Date().getTime() - gamelist[game].time.getTime() > 2700000) {
+                //delete if the game is older than 45mins.
                 delete gamelist[game];
             }
         }
