@@ -112,20 +112,47 @@ function updateCheckFile(file, initial) {
     }
 }
 
+//function createmanifest() {
+//    'use strict';
+//    screenMessage.toggle();
+//    download();
+//    screenMessage.html('<span style="color:white; font-weight:bold">Downloading Manifest</span');
+//    $.getJSON('https://ygopro.us/manifest/ygopro.json', function (data) {
+//        manifest = data;
+//        //console.log(manifest);
+//        updateCheckFile(manifest, true);
+//    }).fail(function () {
+//        screenMessage.html('<span style="color:white; font-weight:bold">Failed to get mainfest, .... re-trying</span>');
+//        setTimeout(function () {
+//            createmanifest();
+//        }, 10000);
+//    });
+//}
 function createmanifest() {
     'use strict';
     screenMessage.toggle();
     download();
     screenMessage.html('<span style="color:white; font-weight:bold">Downloading Manifest</span');
-    $.getJSON('https://ygopro.us/manifest/ygopro.json', function (data) {
-        manifest = data;
-        //console.log(manifest);
-        updateCheckFile(manifest, true);
-    }).fail(function () {
-        screenMessage.html('<span style="color:white; font-weight:bold">Failed to get mainfest, .... re-trying</span>');
-        setTimeout(function () {
-            createmanifest();
-        }, 10000);
+
+    var target = downloadList[0],
+        file = '',
+        options = {
+            host: url.parse('https://ygopro.us/manifest/ygopro.json').host,
+            path: url.parse('https://ygopro.us/manifest/ygopro.json').pathname
+        };
+
+    http.get(options, function (res) {
+        res.on('data', function (data) {
+            file += data;
+        }).on('end', function () {
+            try {
+                manifest = JSON.parse(file);
+            } catch (e) {
+                screenMessage.html('<span style="color:red; font-weight:bold">ERROR, unable to download the manifest!');
+                return;
+            }
+            updateCheckFile(manifest, true);
+        });
     });
 }
 var list = {
@@ -328,6 +355,18 @@ function processServerRequest(parameter) {
 
 
 var privateServer = Primus.connect('ws://ygopro.us:24555');
+privateServer.on('open', function open() {
+    'use strict';
+    screenMessage.html('<span style="color:green;">Launcher Connected</span>');
+});
+privateServer.on('error', function open() {
+    'use strict';
+    screenMessage.html('<span style="color:red;">Disconnected from the Server</span>');
+});
+privateServer.on('close', function open() {
+    'use strict';
+    screenMessage.html('<span style="color:red;">Disconnected from the Server</span>');
+});
 privateServer.on('data', function (data) {
     'use strict';
     var join = false,
