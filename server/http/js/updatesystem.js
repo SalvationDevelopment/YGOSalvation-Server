@@ -357,15 +357,15 @@ function processServerRequest(parameter) {
 var privateServer = Primus.connect('ws://ygopro.us:24555');
 privateServer.on('open', function open() {
     'use strict';
-    screenMessage.html('<span style="color:green;">Launcher Connected</span>');
+    screenMessage.html('<span style="color:white;">Launcher Connected</span>');
 });
 privateServer.on('error', function open() {
     'use strict';
-    screenMessage.html('<span style="color:red;">Disconnected from the Server</span>');
+    screenMessage.html('<span style="color:red;">ERROR! Disconnected from the Server</span>');
 });
 privateServer.on('close', function open() {
     'use strict';
-    screenMessage.html('<span style="color:red;">Disconnected from the Server</span>');
+    screenMessage.html('<span style="color:red;">ERROR! Disconnected from the Server</span>');
 });
 privateServer.on('data', function (data) {
     'use strict';
