@@ -27,31 +27,32 @@
             maxxed = !maxxed;
             return;
         }
-		function openConsole() {
-			try {
-				require('nw.gui').Window.get().showDevTools();
-			} catch (error) {
-				window.alert('Error opening console: ' + error);
-			}
-		}
-        setTimeout(function(){
+
+        function openConsole() {
+            try {
+                require('nw.gui').Window.get().showDevTools();
+            } catch (error) {
+                window.alert('Error opening console: ' + error);
+            }
+        }
+        setTimeout(function () {
             win.on('new-win-policy', function (frame, url, policy) {
                 policy.ignore();
                 gui.Shell.openItem(url);
             });
         }, 3000);
-        
-		$(function(){
-			if ("production" !== mode) {
-				$('#control div:last').css('display', 'block');
-			}
-		});
+
+        $(function () {
+            if ("production" !== mode) {
+                $('#control div:last').css('display', 'block');
+            }
+        });
     </script>
     <div id="control">
         <div onclick="win.close(true);"></div>
         <div onclick="maxrestore();"></div>
         <div onclick="win.minimize();"></div>
-		<div onclick="openConsole();" style="display: none;"></div>
+        <div onclick="openConsole();" style="display: none;"></div>
     </div>
     <main style='height: 100%; background:black'>
         <div style="text-align: center;">
@@ -282,7 +283,9 @@
             </div>
 
     </main>
-
+    <script>
+        maxrestore();
+    </script>
 </body>
 
 </html>
