@@ -538,7 +538,7 @@ function killgame(target) {
 function sendglobal(message) {
     'use strict';
     primus.write({
-        action: 'killgame',
+        action: 'global',
         username: $('#ips_username').val(),
         password: $('#ips_password').val(),
         message: message
