@@ -3,7 +3,7 @@
 /* global localStorage, require, confirm, alert */
 //development, stage, production
 var template =
-    "use_d3d = {use_d3d}\r\n\
+    "use_d3d = 0\r\n\
 antialias = {antialias}\r\n\
 errorlog = 1\r\n\
 nickname = {nickname}\r\n\
