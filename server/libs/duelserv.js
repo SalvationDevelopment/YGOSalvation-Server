@@ -62,22 +62,6 @@ function kill(challenger, challengedParty) {
     });
 }
 
-function update() {
-    'use strict';
-    eventEmitter.emit('announce', {
-        clientEvent: 'update'
-    });
-}
-
-function globalMsg(message) {
-    'use strict';
-    eventEmitter.emit('announce', {
-        clientEvent: 'global',
-        message: message
-    });
-    bot.say('global', 'global ' + message);
-}
-
 bot.addListener("message", function (from, to, message) {
     'use strict';
     var command = message.split(' '),
@@ -117,14 +101,6 @@ bot.addListener("message", function (from, to, message) {
     //start tournament
 });
 
-bot.addListener("message#public", function (from, to, message) {
-    'use strict';
-    var command = message.args[1].split(' ');
-    if (command[0] !== '!update') {
-        return;
-    }
-    update();
-});
 
 bot.addListener("message#public", function (from, to, message) {
     'use strict';
@@ -134,15 +110,7 @@ bot.addListener("message#public", function (from, to, message) {
     }
     kill(' ', command[1]);
 });
-bot.addListener("message#public", function (from, to, message) {
-    'use strict';
-    var command = message.args[1].split(' ');
-    if (command[0] !== '!global') {
-        return;
-    }
-    command.shift();
-    globalMsg(command.join(' '));
-});
+
 
 eventEmitter.bot = bot;
 module.exports = eventEmitter;
