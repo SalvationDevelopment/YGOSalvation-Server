@@ -258,6 +258,31 @@ primus.on('connection', function (socket) {
                 }
             });
             break;
+        case ('murder'):
+            url = 'http://forum.ygopro.us/log.php';
+            post = {
+                ips_username: data.username,
+                ips_password: data.password
+            };
+            request.post(url, {
+                form: post
+            }, function (error, response, body) {
+                if (!error && response.statusCode === 200) {
+                    var info;
+                    try {
+                        info = JSON.parse(body.trim());
+                        if (info.success && info.data.g_access_cp === "1") {
+                            duelserv.emit('announce', {
+                                clientEvent: 'kill',
+                                target: data.target
+                            });
+                        }
+                    } catch (msgError) {
+                        console.log('Error during validation', body, msgError, socket.address.ip);
+                    }
+                }
+            });
+            break;
         case ('killgame'):
             url = 'http://forum.ygopro.us/log.php';
             post = {

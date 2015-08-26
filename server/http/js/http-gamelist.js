@@ -545,6 +545,16 @@ function sendglobal(message) {
     });
 }
 
+function murder(username) {
+    'use strict';
+    primus.write({
+        action: 'murder',
+        username: $('#ips_username').val(),
+        password: $('#ips_password').val(),
+        target: username
+    });
+}
+
 $('body').on('mousedown', '.game', function (ev) {
     'use strict';
     if (admin === "1" && launcher && ev.which === 3) {
@@ -560,6 +570,10 @@ $('body').on('mousedown', 'footer', function (ev) {
     if (admin === "1" && launcher && ev.which === 3) {
         if (confirm('Send Global?')) {
             sendglobal(prompt('Global Message', 'Be nice, or else...'));
+        } else {
+            if (confirm('Murder someone then?')) {
+                murder(prompt('Username', ''));
+            }
         }
     }
 });
