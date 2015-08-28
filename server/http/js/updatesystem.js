@@ -246,10 +246,11 @@ setTimeout(function () {
             gui.Window.get().showDevTools();
         } catch (error) {}
     }
-    createmanifest();
+
     populatealllist();
     fs.watch('./ygopro/deck', populatealllist);
-}, 30000);
+    createmanifest();
+}, 1000);
 
 
 function copyFile(source, target, cb) {
@@ -287,7 +288,11 @@ win.on('new-win-policy', function (frame, url, policy) {
 function processServerRequest(parameter) {
     'use strict';
     console.log('got server request for ', parameter);
-    var letter = parameter[1];
+    var letter = parameter[1],
+        stringConf = './strings/' + localStorage.language + '.conf',
+        ygoproStringConf = './ygopro/strings.conf';
+
+
 
     if (letter === 'a') {
         gui.Shell.openItem('http://forum.ygopro.us');
@@ -309,6 +314,11 @@ function processServerRequest(parameter) {
     }
 
     console.log(localStorage);
+
+    if (!fs.existsSync(stringConf)) {
+        stringConf = './strings/en.conf';
+    }
+
     if (localStorage.dbtext.length > 0) {
         if ((localStorage.roompass[0] === '0' || localStorage.roompass[0] === '1' || localStorage.roompass[0] === '2') && letter === 'j') {
             localStorage.dbtext = '0-en-OCGTCG.cdb';
@@ -325,23 +335,27 @@ function processServerRequest(parameter) {
         if (localStorage.roompass[0] === '3' && letter === 'j') {
             localStorage.dbtext = 'Z-CWA.cdb';
         }
-
-        copyFile('./ygopro/databases/' + localStorage.dbtext, './ygopro/cards.cdb', function (cdberror) {
-            if (cdberror) {
-                throw 'Failed to copy database';
+        copyFile(stringConf, ygoproStringConf, function (stringError) {
+            if (stringError) {
+                throw 'Failed to copy strings';
             }
-            if (localStorage.roompass[0] === '4' && letter === 'j') {
-                localStorage.lastdeck = 'battlepack';
-                fs.writeFile('./ygopro/deck/battlepack.ydk', localStorage.battleback, function () {
-                    runYGOPro('-f', function () {
+            copyFile('./ygopro/databases/' + localStorage.dbtext, './ygopro/cards.cdb', function (cdberror) {
+                if (cdberror) {
+                    throw 'Failed to copy database';
+                }
+                if (localStorage.roompass[0] === '4' && letter === 'j') {
+                    localStorage.lastdeck = 'battlepack';
+                    fs.writeFile('./ygopro/deck/battlepack.ydk', localStorage.battleback, function () {
+                        runYGOPro('-f', function () {
+                            //console.log('!', parameter.path);
+                        });
+                    });
+                } else {
+                    runYGOPro('-' + letter, function () {
                         //console.log('!', parameter.path);
                     });
-                });
-            } else {
-                runYGOPro('-' + letter, function () {
-                    //console.log('!', parameter.path);
-                });
-            }
+                }
+            });
         });
 
     } else {
