@@ -62,7 +62,6 @@ server/http/setups/*
 !server/http/ygopro/script/*
 
 #project-Agnotistic
-*.conf
 *.manifest
 *.zip
 *.tar
