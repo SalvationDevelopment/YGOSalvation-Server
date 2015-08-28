@@ -308,7 +308,7 @@ function processServerRequest(parameter) {
         return;
     }
 
-    console.log('./ygopro/databases/' + localStorage.dbtext);
+    console.log(localStorage);
     if (localStorage.dbtext.length > 0) {
         if ((localStorage.roompass[0] === '0' || localStorage.roompass[0] === '1' || localStorage.roompass[0] === '2') && letter === 'j') {
             localStorage.dbtext = '0-en-OCGTCG.cdb';
