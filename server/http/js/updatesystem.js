@@ -112,22 +112,7 @@ function updateCheckFile(file, initial) {
     }
 }
 
-//function createmanifest() {
-//    'use strict';
-//    screenMessage.toggle();
-//    download();
-//    screenMessage.html('<span style="color:white; font-weight:bold">Downloading Manifest</span');
-//    $.getJSON('https://ygopro.us/manifest/ygopro.json', function (data) {
-//        manifest = data;
-//        //console.log(manifest);
-//        updateCheckFile(manifest, true);
-//    }).fail(function () {
-//        screenMessage.html('<span style="color:white; font-weight:bold">Failed to get mainfest, .... re-trying</span>');
-//        setTimeout(function () {
-//            createmanifest();
-//        }, 10000);
-//    });
-//}
+
 function createmanifest() {
     'use strict';
     screenMessage.toggle();
@@ -249,7 +234,9 @@ setTimeout(function () {
 
     populatealllist();
     fs.watch('./ygopro/deck', populatealllist);
-    createmanifest();
+    setTimeout(function () {
+        createmanifest();
+    }, 5000);
 }, 1000);
 
 
