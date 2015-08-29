@@ -189,7 +189,9 @@ $(function () {
                             extra: {}
                         });
                         $('.searchResults').html('');
-                        handleResults();
+                        if (applyFilters(generateQueryObject(), $('.banlistSelect').val(), lflist).length !== cards.length) {
+                            handleResults();
+                        }
                     });
                 });
                 $('.deckSelect').on('change', function () {
