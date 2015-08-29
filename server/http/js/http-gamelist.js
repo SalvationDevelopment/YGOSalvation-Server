@@ -84,9 +84,12 @@ function ygopro(parameter) {
         local: out,
         uniqueID: uniqueID
     });
-    _gaq.push(['_trackEvent', 'Launcher', 'YGOPro', parameter]);
-    _gaq.push(['_trackEvent', 'Site', 'Navigation Movement', internalLocal + ' - ' + 'YGOPro']);
     internalLocal = 'YGOPro';
+    try {
+        _gaq.push(['_trackEvent', 'Launcher', 'YGOPro', parameter]);
+        _gaq.push(['_trackEvent', 'Site', 'Navigation Movement', internalLocal + ' - ' + 'YGOPro']);
+    } catch (e) {}
+
 
 }
 
@@ -119,7 +122,9 @@ function connectToCheckmateServer() {
     localStorage.lastip = '173.224.211.158';
     localStorage.lastport = '21001';
     ygopro('-j');
-    _gaq.push(['_trackEvent', 'Launcher', 'YGOPro', 'Checkmate']);
+    try {
+        _gaq.push(['_trackEvent', 'Launcher', 'YGOPro', 'Checkmate']);
+    } catch (e) {}
 }
 
 function isChecked(id) {
@@ -195,7 +200,9 @@ function enterGame(string, pass) {
     localStorage.roompass = string;
     localStorage.lastip = "192.99.11.19";
     ygopro('-j');
-    _gaq.push(['_trackEvent', 'Launcher', 'YGOPro', 'Join Duel']);
+    try {
+        _gaq.push(['_trackEvent', 'Launcher', 'YGOPro', 'Join Duel']);
+    } catch (e) {}
 }
 
 function joinTournament() {
@@ -286,10 +293,12 @@ function setHostSettings() {
     }
     localStorage.lastdeck = $('#hostSettings .currentdeck').val();
     ygopro('-j');
-    _gaq.push(['_trackEvent', 'Launcher', 'YGOPro', 'Host']);
-    _gaq.push(['_trackEvent', 'Launcher', 'YGOPro Host', duelRequest.string + duelRequest.prio +
+    try {
+        _gaq.push(['_trackEvent', 'Launcher', 'YGOPro', 'Host']);
+        _gaq.push(['_trackEvent', 'Launcher', 'YGOPro Host', duelRequest.string + duelRequest.prio +
             duelRequest.checkd + duelRequest.shuf +
             $('#creategamelp').val() + duelRequest.stnds]);
+    } catch (e) {}
 }
 
 
@@ -517,12 +526,16 @@ primus.on('data', function (data) {
 primus.on('connect', function () {
     'use strict';
     console.log('!!!!!! connect');
-    _gaq.push(['_trackEvent', 'Launcher', 'Primus', 'Init']);
+    try {
+        _gaq.push(['_trackEvent', 'Launcher', 'Primus', 'Init']);
+    } catch (e) {}
 });
 primus.on('close', function () {
     'use strict';
     console.log('!!!!!! close');
-    _gaq.push(['_trackEvent', 'Launcher', 'Primus', 'Failure']);
+    try {
+        _gaq.push(['_trackEvent', 'Launcher', 'Primus', 'Failure']);
+    } catch (e) {}
 });
 
 function killgame(target) {
