@@ -112,13 +112,14 @@ var deckfiles;
 
 function processServerCall(data) {
     'use strict';
-    if (!data || !data.currentdeck) { // secure property lookup if data is undefined
+    if (!data) {
         return;
     }
     var selected = $(".currentdeck option:selected").val(),
         selectedskin = $("#skinlist option:selected").val(),
         selectedfont = $("#fontlist option:selected").val(),
-        selecteddb = $("#dblist option:selected").val();
+        selecteddb = $("#dblist option:selected").val(),
+        deckfile;
     $('.currentdeck').html(data.currentdeck);
     $('#skinlist').html(data.skinlist);
     $('#fontlist').html(data.fonts);
@@ -128,6 +129,9 @@ function processServerCall(data) {
     $('#fontlist option[value="' + selectedfont + '"]').attr('selected', 'selected');
     $('#dblist option[value="' + selecteddb + '"]').attr('selected', 'selected');
     deckfiles = data.files;
+    for(deckfile in deckfiles) {
+        $('.deckSelect').append('<option value="' + deckfile + '">' + deckfile.replace('.ydk', '') + '</option>');
+    }
     //console.log(data);
 }
 var jsLang = {};
