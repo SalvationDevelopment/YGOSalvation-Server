@@ -129,6 +129,7 @@ function processServerCall(data) {
     $('#fontlist option[value="' + selectedfont + '"]').attr('selected', 'selected');
     $('#dblist option[value="' + selecteddb + '"]').attr('selected', 'selected');
     deckfiles = data.files;
+    $('.deckSelect').html('');
     for(deckfile in deckfiles) {
         $('.deckSelect').append('<option value="' + deckfile + '">' + deckfile.replace('.ydk', '') + '</option>');
     }
