@@ -1,8 +1,9 @@
 var cards = [],
     lflist = {};
 $(function () {
-    $.getJSON('http://ygopro.us/manifest/database.json', function (data) {
+    $.getJSON('http://ygopro.us/manifest/database_0-en-OCGTCG.json', function (data) {
         cards = data;
+        cards = cards.filter(validCards).filter(excludeTokens);
         $.get('http://ygopro.us/ygopro/lflist.conf', function (data) {
             var list;
             lflist = ConfigParser(data, {
@@ -26,26 +27,16 @@ $(function () {
                     spellSelect = $('.spellSelect'),
                     trapSelect = $('.trapSelect'),
                     raceSelect = $('.raceSelect'),
-                    attributeSelect = $('.attributeSelect'),
-                    deckSelect = $('.deckSelect'),
-                    deckFiles = {},
-                    deck,
-                    deckFilesInterval = setInterval(function () {
-                        if (deckfiles) {
-                            for(deck in deckfiles) {
-                                if (deckfiles.hasOwnProperty(deck) && deckfiles.propertyIsEnumerable(deck)) {
-                                    deckFiles[deck] = parseYDK(deckfiles[deck]);
-                                    deckSelect.append('<option value="' + deck + '">' + deck.replace(/\.ydk$/, '') + '</option>');
-                                }
-                            }
-                            deckSelect.on('change', function() {
-                                drawDeckEditor(deckfiles[$(this).val()]);
-                            });
-                            clearInterval(deckFilesInterval);
-                        }
-                    }, 200);
+                    attributeSelect = $('.attributeSelect');
                 for (setcode in setcodes) {
                     $('.setcodeSelect').append('<option value="' + parseInt(setcode, 16) + '">' + setcodes[setcode] + '</option>');
+                }
+                if (localStorage.getItem('selectedDatabase')) {
+                    $('.databaseSelect').val(localStorage.getItem('selectedDatabase'));
+                    $.getJSON('manifest/database_' + $('.databaseSelect').val() + '.json', function (data) {
+                        cards = data;
+                        cards = cards.filter(validCards).filter(excludeTokens);
+                    });
                 }
                 $('.typeSelect').on('change', function () {
                     switch ($(this).val()) {
@@ -94,7 +85,7 @@ $(function () {
                 });
                 $('.searchButton').on('click', handleResults);
                 $('.nameInput, .descInput').on('keyup', function () {
-                    if ($(this).val().length >= 5) {
+                    if ($(this).val().length >= 4) {
                         handleResults();
                     }
                 });
@@ -186,6 +177,20 @@ $(function () {
                         $(this)[0].options[0].selected = true;
                     });
                     $('.searchBlock input[class$="Input"]').val('');
+                });
+                $('.databaseSelect').on('change', function () {
+                    localStorage.setItem('selectedDatabase', $(this).val());
+                    $.getJSON('manifest/database_' + $(this).val() + '.json', function (data) {
+                        cards = data;
+                        cards = cards.filter(validCards).filter(excludeTokens);
+                        drawDeckEditor({
+                            main: {},
+                            side: {},
+                            extra: {}
+                        });
+                        $('.searchResults').html('');
+                        handleResults();
+                    });
                 });
             });
         });
@@ -305,6 +310,26 @@ var imgDir = "http://ygopro.us/ygopro/pics/",
             extra: []
         }
     };
+    
+function excludeTokens(card) {
+    // filter out Tokens
+    if (card.type === 16401 || card.type === 16417) {
+        return false;
+    }
+    return true;
+}
+
+function validCards(card) {
+    var keys = Object.keys(card),
+        i = 0,
+        len = keys.length;
+    for (i, len; i < len; i++) {
+        if (card[keys[i]] === null) {
+            return false;
+        }
+    }
+    return true;
+}
 
 function drawDeckEditor(ydk) {
     var ydkCopy = JSON.parse(JSON.stringify(ydk)),
