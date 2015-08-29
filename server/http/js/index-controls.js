@@ -27,8 +27,10 @@ var launcher = false,
 function singlesitenav(target) {
     'use strict';
     console.log('navigating to:', target);
-    _gaq.push(['_trackEvent', 'Site', 'Navigation', target]);
-    _gaq.push(['_trackEvent', 'Site', 'Navigation Movement', internalLocal + ' - ' + target]);
+    try {
+        _gaq.push(['_trackEvent', 'Site', 'Navigation', target]);
+        _gaq.push(['_trackEvent', 'Site', 'Navigation Movement', internalLocal + ' - ' + target]);
+    } catch (e) {}
     internalLocal = target;
     //console.log(target);
     if (launcher && target === 'forum') {
@@ -60,7 +62,9 @@ $(function () {
     if (window.self !== window.top) {
         $(document.body).addClass("in-iframe");
         launcher = true;
-        _gaq.push(['_trackEvent', 'Launcher', 'Load', 'Boot Launcher']);
+        try {
+            _gaq.push(['_trackEvent', 'Launcher', 'Load', 'Boot Launcher']);
+        } catch (e) {}
     } else {
         $(document.body).addClass("web");
     }
@@ -83,9 +87,9 @@ function locallogin(init) {
 
     $(document.body).addClass("launcher").removeClass('unlogged').removeClass('web');
     $('#ipblogin').css('display', 'none');
-
-    _gaq.push(['_trackEvent', 'Launcher', 'Login', localStorage.nickname]);
-
+    try {
+        _gaq.push(['_trackEvent', 'Launcher', 'Login', localStorage.nickname]);
+    } catch (e) {}
 
 
     primus.write({
@@ -170,7 +174,9 @@ $(document).ready(function () {
         $('#ips_remember').prop('checked', true);
     }
     $("#dolog").click(function (ev) {
-        _gaq.push(['_trackEvent', 'Launcher', 'Attempt Login', $('#ips_username').val()]);
+        try {
+            _gaq.push(['_trackEvent', 'Launcher', 'Attempt Login', $('#ips_username').val()]);
+        } catch (e) {}
         var url = "http://forum.ygopro.us/log.php";
         $.ajax({
             type: "POST",
