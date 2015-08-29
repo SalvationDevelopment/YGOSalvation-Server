@@ -346,8 +346,8 @@ function drawDeckEditor(ydk) {
         ];
     decks.forEach(function(deck) {
         container = $('.' + deck + 'Deck');
-        if (container.find('img').length > 0) {
-            $('img', container).remove();
+        if (container.find('span').length > 0) {
+            $('span', container).remove();
             deckStorage.reset(deck);
         }
         for (card in ydkCopy[deck]) {
@@ -372,8 +372,8 @@ function drawDeck(target) {
     var targetDeck = deckStorage.getDeck(target),
         container = $('.' + target + 'Deck'),
         cardObject;
-    if (container.find('img').length > 0) {
-        $('img', container).remove();
+    if (container.find('span').length > 0) {
+        $('span', container).remove();
         deckStorage.reset(target);
     }
     targetDeck.forEach(function(card) {
