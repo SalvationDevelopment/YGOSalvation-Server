@@ -193,7 +193,7 @@ $(function () {
                     });
                 });
                 $('.deckSelect').on('change', function () {
-                    drawDeckEditor(deckfiles[$(this).val()]);
+                    drawDeckEditor(parseYDK(deckfiles[$(this).val()]));
                 });
             });
         });
