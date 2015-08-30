@@ -5,7 +5,8 @@
 });
  
 var wss_config = {
-        host: 'ygopro.us/manualMode',
+        host: 'ygopro.us',
+        path: 'manualMode',
         port: 55542,
         verifyClient: function (info) {
             return (info.origin.indexOf(ACCEPT_ORIGIN) > -1 && info.req.headers.host.indexOf(ACCEPT_ORIGIN) > -1);
