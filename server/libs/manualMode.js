@@ -23,7 +23,10 @@ var ACCEPT_ORIGIN = "ygopro.us",
     ROLE_HOST = 1,
     ROLE_PLAYER_TWO = 2,
     ROLE_PLAYER_THREE = 3,
-    ROLE_PLAYER_FOUR = 4;
+    ROLE_PLAYER_FOUR = 4,
+    QUERY_GET_OPTIONS = "getOptions",
+    QUERY_GET_STATE = "getState",
+    QUERY_START_DUEL = "startDuel";
     
 WebSocketServer.on('connection', function (WebSocket) {
     WebSocket.on('message', function (message) {
