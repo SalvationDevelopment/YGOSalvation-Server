@@ -30,6 +30,8 @@ var ACCEPT_ORIGIN = "ygopro.us",
     
 WebSocketServer.on('connection', function (WebSocket) {
     WebSocket.on('message', function (message) {
+        console.log("Active duels: ", activeDuels);
+        console.log("Registry: ", registry);
         WebSocket.send(generateServerResponse(message, WebSocket));
     });
 });
@@ -71,7 +73,8 @@ function generateServerResponse(message, WebSocket) {
                 break;
             }
             registry[uniqueID] = identifier;
-            return response + 'registeredUID';
+            console.log(response = response + 'registeredUID');
+            break;
         }
         case "hostDuel": {
             activeDuels[identifier] = {
@@ -80,7 +83,8 @@ function generateServerResponse(message, WebSocket) {
             activeDuels[identifier][uniqueID] = {
                 ROLE: ROLE_HOST
             };
-            return response + ',hostedDuel,' + identifier;
+            console.log(response = response + ',hostedDuel,' + identifier);
+            break;
         }
         case "joinDuel": {
             if (activeDuels.hasOwnProperty(identifier)) {
@@ -107,9 +111,11 @@ function generateServerResponse(message, WebSocket) {
                         break;
                     }
                 }
-                return response + "joinedDuel," + identifier;
+                console.log(response = response + "joinedDuel," + identifier);
+                break;
             } else {
-                return response + "invalidDuelID," + identifier;
+                console.log(response = response + "invalidDuelID," + identifier);
+                break;
             }
         }
         case "spectateDuel": {
@@ -117,9 +123,11 @@ function generateServerResponse(message, WebSocket) {
                 activeDuels[identifier][uniqueID] = {
                     ROLE: ROLE_SPECTATOR
                 };
-                return response + 'spectatingDuel,' + identifier;
+                console.log(response = response + 'spectatingDuel,' + identifier);
+                break;
             } else {
-                return response + "invalidSpectatorDuelID," + identifier;
+                console.log(response = response + "invalidSpectatorDuelID," + identifier);
+                break;
             }
         }
         case "duelQuery": {
@@ -129,27 +137,33 @@ function generateServerResponse(message, WebSocket) {
                     params = params.substr(5);
                     if (activeDuels[identifier].hasOwnProperty(params)) {
                         delete activeDuels[identifier][params];
-                        return response + 'kickedUser,' + params;
+                        console.log(response = response + 'kickedUser,' + params);
+                        break;
                     }
                 }
                 if (params === QUERY_GET_STATE) {
-                    return response + ((activeDuels[identifier].state && JSON.stringify(activeDuels[identifier].state)) || "emptyState");
+                    console.log(response = response + ((activeDuels[identifier].state && JSON.stringify(activeDuels[identifier].state)) || "emptyState"));
+                    break;
                 }
                 if (params === QUERY_GET_OPTIONS) {
-                    return response + JSON.stringify(activeDuels[identifier].options);
+                    console.log(response = response + JSON.stringify(activeDuels[identifier].options));
+                    break;
                 }
                 if (params === QUERY_START_DUEL && activeDuels[identifier][uniqueID].ROLE === ROLE_HOST) {
                     activeDuels[identifier].state = {}; // replace with: new GameState();
-                    return response + "startedDuel" + identifier;
+                    console.log(response = response + "startedDuel" + identifier);
+                    break;
                 }
             } else {
-                return response + "invalidDuelQueryID," + identifier;
+                console.log(response = response + "invalidDuelQueryID," + identifier);
+                break;
             }
         }
         case "duelCommand": {
             if (activeDuels.hasOwnProperty(identifier) && activeDuels[identifier].state && activeDuels[identifier][uniqueID].ROLE > ROLE_SPECTATOR) {
                 // TODO: evaluate the command and change state
-                return response + "commandEvaluated," + identifier + "," + JSON.stringify(activeDuels[identifier].state);
+                console.log(response = response + "commandEvaluated," + identifier + "," + JSON.stringify(activeDuels[identifier].state));
+                break;
             } else {
                 WebSocket.close();
                 return;
@@ -160,4 +174,5 @@ function generateServerResponse(message, WebSocket) {
             return;
         }
     }
+    return response;
 }
