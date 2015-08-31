@@ -324,11 +324,11 @@ function processServerRequest(parameter) {
         }
         copyFile(stringConf, ygoproStringConf, function (stringError) {
             if (stringError) {
-                alert('Failed to copy strings');
+                $('#servermessages').text('Failed to copy strings');
             }
             copyFile('./ygopro/databases/' + localStorage.dbtext, './ygopro/cards.cdb', function (cdberror) {
                 if (cdberror) {
-                    alert('Failed to copy database');
+                    $('#servermessages').text('Failed to copy database');
                 }
                 if (localStorage.roompass[0] === '4' && letter === 'j') {
                     localStorage.lastdeck = 'battlepack';
