@@ -442,7 +442,7 @@ var translationDB = [{
     "he": "מגבלת זמן"
 }, {
     "item": "data-translation-enablepriority",
-    "en": "Enable Priority",
+    "en": "Use Original(old) Rules",
     "es": "Usar Prioridad",
     "de": "Priorität benutzen",
     "fr": "Activer la Priorité",
