@@ -109,7 +109,7 @@ function handlePrimusEvent(data, spark) {
                             ROLE: ROLE_PLAYER_FOUR
                         };
                         writeResponse(spark, [200, 'joinedDuel', duelID]);
-                    }
+                    });
                     return;
                 }
                 default: {
@@ -168,7 +168,7 @@ function handlePrimusEvent(data, spark) {
                         writeResponse(spark, [403, 'invalidRequest']);
                         return;
                     }
-                    writeResponse(spark, [200, 'getStateResponse', activeDuels[duelID].state);
+                    writeResponse(spark, [200, 'getStateResponse', activeDuels[duelID].state]);
                     return;
                 }
                 case QUERY_START_DUEL: {
@@ -190,6 +190,10 @@ function handlePrimusEvent(data, spark) {
                     return;
                 }
             }
+        }
+        case "heartBeat": {
+            writeResponse(spark, [200, 'heartBeat']);
+            return;
         }
         default: {
             writeResponse(spark, [403, 'invalidRequest']);
