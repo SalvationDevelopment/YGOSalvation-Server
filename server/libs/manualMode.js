@@ -168,7 +168,7 @@ function handlePrimusEvent(data, spark) {
                         writeResponse(spark, [403, 'invalidRequest']);
                         return;
                     }
-                    writeResponse(spark, [200, 'getStateResponse', activeDuels[duelID].state);
+                    writeResponse(spark, [200, 'getStateResponse', activeDuels[duelID].state]);
                     return;
                 }
                 case QUERY_START_DUEL: {
