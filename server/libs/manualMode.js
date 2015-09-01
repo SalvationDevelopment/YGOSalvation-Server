@@ -191,6 +191,10 @@ function handlePrimusEvent(data, spark) {
                 }
             }
         }
+        case "heartBeat": {
+            writeResponse(spark, [200, 'heartBeat']);
+            return;
+        }
         default: {
             writeResponse(spark, [403, 'invalidRequest']);
             return;
