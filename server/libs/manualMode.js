@@ -109,7 +109,7 @@ function handlePrimusEvent(data, spark) {
                             ROLE: ROLE_PLAYER_FOUR
                         };
                         writeResponse(spark, [200, 'joinedDuel', duelID]);
-                    }
+                    });
                     return;
                 }
                 default: {
