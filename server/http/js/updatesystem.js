@@ -220,24 +220,7 @@ function populatealllist() {
 
 }
 
-setTimeout(function () {
-    'use strict';
-    screenMessage.html('Interface loaded, querying user for critical information,...');
-    localStorage.lastip = '192.99.11.19';
-    localStorage.serverport = '8911';
-    localStorage.lastport = '8911';
-    if (mode === 'development') {
-        try {
-            gui.Window.get().showDevTools();
-        } catch (error) {}
-    }
 
-    populatealllist();
-    fs.watch('./ygopro/deck', populatealllist);
-    setTimeout(function () {
-        createmanifest();
-    }, 5000);
-}, 1000);
 
 
 function copyFile(source, target, cb) {
@@ -354,75 +337,97 @@ function processServerRequest(parameter) {
 }
 
 
+function initPrimus() {
+    'use strict';
+    var privateServer = Primus.connect('ws://ygopro.us:24555');
+    privateServer.on('open', function open() {
 
-var privateServer = Primus.connect('ws://ygopro.us:24555');
-privateServer.on('open', function open() {
-    'use strict';
-    screenMessage.html('<span style="color:white;">Launcher Connected</span>');
-});
-privateServer.on('error', function open() {
-    'use strict';
-    screenMessage.html('<span style="color:red;">ERROR! Disconnected from the Server</span>');
-});
-privateServer.on('close', function open() {
-    'use strict';
-    screenMessage.html('<span style="color:red;">ERROR! Disconnected from the Server</span>');
-});
-privateServer.on('data', function (data) {
-    'use strict';
-    var join = false,
-        storage;
-    //console.log(data);
-    if (data.clientEvent === 'update') {
-        createmanifest();
-    }
-    if (data.clientEvent === 'saveDeck') {
-        fs.writeFile('./ygopro/deck/' + data.deckName, data.deckList, function (err) {
-            if (err) {
-                screenMessage.html('<span style="color:red;">Error occurred while saving deck. Please try again.</span>');
-            } else {
-                screenMessage.html('<span style="color:green;">Deck saved successfully.</span>');
-            }
-        });
-    }
-    if (data.clientEvent === 'unlinkDeck') {
-        fs.unlink('./ygopro/deck/' + data.deckName, function (err) {
-            if (err) {
-                screenMessage.html('<span style="color:red;">Error occurred while deleting deck. Please try again.</span>');
-            } else {
-                screenMessage.html('<span style="color:green;">Deck deleted successfully.</span>');
-            }
-        });
-    }
-    if (data.clientEvent !== 'privateServerRequest') {
-        return;
-    }
-    console.log('Internal Server', data);
-    for (storage in data.local) {
-        if (data.local.hasOwnProperty(storage) && data.local[storage]) {
-            localStorage[storage] = data.local[storage];
+        screenMessage.html('<span style="color:white;">Launcher Connected</span>');
+    });
+    privateServer.on('error', function open() {
+
+        screenMessage.html('<span style="color:red;">ERROR! Disconnected from the Server</span>');
+    });
+    privateServer.on('close', function open() {
+
+        screenMessage.html('<span style="color:red;">ERROR! Disconnected from the Server</span>');
+    });
+    privateServer.on('data', function (data) {
+
+        var join = false,
+            storage;
+        //console.log(data);
+        if (data.clientEvent === 'update') {
+            createmanifest();
         }
-    }
+        if (data.clientEvent === 'saveDeck') {
+            fs.writeFile('./ygopro/deck/' + data.deckName, data.deckList, function (err) {
+                if (err) {
+                    screenMessage.html('<span style="color:red;">Error occurred while saving deck. Please try again.</span>');
+                } else {
+                    screenMessage.html('<span style="color:green;">Deck saved successfully.</span>');
+                }
+            });
+        }
+        if (data.clientEvent === 'unlinkDeck') {
+            fs.unlink('./ygopro/deck/' + data.deckName, function (err) {
+                if (err) {
+                    screenMessage.html('<span style="color:red;">Error occurred while deleting deck. Please try again.</span>');
+                } else {
+                    screenMessage.html('<span style="color:green;">Deck deleted successfully.</span>');
+                }
+            });
+        }
+        if (data.clientEvent !== 'privateServerRequest') {
+            return;
+        }
+        console.log('Internal Server', data);
+        for (storage in data.local) {
+            if (data.local.hasOwnProperty(storage) && data.local[storage]) {
+                localStorage[storage] = data.local[storage];
+            }
+        }
 
 
-    processServerRequest(data.parameter);
-});
-privateServer.write({
-    action: 'privateServer',
-    username: localStorage.nickname,
-    uniqueID: uniqueID
-});
-
-setInterval(function () {
-    'use strict';
+        processServerRequest(data.parameter);
+    });
     privateServer.write({
-        action: 'privateUpdate',
-        serverUpdate: list,
-        room: localStorage.nickname,
-        clientEvent: 'privateServer',
+        action: 'privateServer',
+        username: localStorage.nickname,
         uniqueID: uniqueID
     });
-    updateNeeded = false;
-}, 15000);
 
-getDecks();
+    setInterval(function () {
+
+        privateServer.write({
+            action: 'privateUpdate',
+            serverUpdate: list,
+            room: localStorage.nickname,
+            clientEvent: 'privateServer',
+            uniqueID: uniqueID
+        });
+        updateNeeded = false;
+    }, 15000);
+
+    getDecks();
+}
+
+setTimeout(function () {
+    'use strict';
+    screenMessage.html('Interface loaded, querying user for critical information,...');
+    localStorage.lastip = '192.99.11.19';
+    localStorage.serverport = '8911';
+    localStorage.lastport = '8911';
+    if (mode === 'development') {
+        try {
+            gui.Window.get().showDevTools();
+        } catch (error) {}
+    }
+
+    populatealllist();
+    fs.watch('./ygopro/deck', populatealllist);
+    setTimeout(function () {
+        createmanifest();
+    }, 5000);
+    initPrimus();
+}, 1000);
