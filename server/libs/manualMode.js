@@ -195,6 +195,13 @@ function handlePrimusEvent(data, spark) {
             writeResponse(spark, [200, 'heartBeat']);
             return;
         }
+        case "regDuelLog": {
+            writeResponse(spark, [200, {
+                registry: registry,
+                activeDuels: activeDuels
+            }]);
+            return;
+        }
         default: {
             writeResponse(spark, [403, 'invalidRequest']);
             return;
