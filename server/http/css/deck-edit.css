@@ -216,7 +216,7 @@ span.cardImage {
 }
 
 #deckedit label select {
-    width: 11vw;
+    width: 12.5vw;
 }
 
 #deckedit select.deckSelect {
@@ -268,9 +268,27 @@ label[for="decknameInput"] > * {
 }
 
 input.decknameInput {
-    width: 14em;
+    width: 12.5vw;
+    float: right;
+    margin-right: 5.95vw;
+    margin-top: -0.1vw;
 }
 
+button.saveDeck {
+    float: right;
+    margin-top: -3vw;
+}
+
+button.saveDeckAs {
+    float: right;
+    margin-top: -1.5vw;
+}
+
+button.deleteDeck {
+    float: right;
+    margin-top: -1.4vw;
+}
+    
 .searchBar label {
     width: 100%;
 }
