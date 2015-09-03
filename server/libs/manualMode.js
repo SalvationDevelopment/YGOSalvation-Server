@@ -178,7 +178,7 @@ function handlePrimusEvent(data, spark) {
                     }
                     primus.room(duelID).write({
                         event: 'duelStart',
-                        data: activeDuels[duelID]
+                        data: secureClientState(activeDuels[duelID])
                     });
                     activeDuels[duelID].state = GameState(Object.keys(activeDuels[duelID]).length - 1);
                     activeDuels[duelID].duelStarted = true;
@@ -234,4 +234,108 @@ function writeResponse(spark, dataArray) {
         event: dataArray[1],
         data: dataArray[2] || {}
     });
+}
+
+function GameState (nPlayers) {
+    var state = {
+        Turn_Counter: 1
+    };
+    if (typeof nPlayers !== "number" || isNaN(nPlayers.valueOf())) {
+        nPlayers = 2;
+    }
+    nPlayers = (nPlayers < 2) ? 2 : (nPlayers > 4) ? 4 : nPlayers;
+    while (nPlayers > 0) {
+        state["Player_" + nPlayers] = {
+            Hand: [
+                [ /* index 0: card ID */, /* index 1: position, face-down = 0, face-up = 1 */ ],
+                [ , ],
+                [ , ],
+                [ , ],
+                [ , ]
+            ],
+            Monster_Zone: [
+                [ /* as with hand, index 0: card ID */, /* index 1: position, face-down ATK = -1, face-down DEF = 0, face-up DEF = 1, face-up ATK = 2 */ ],
+                [ , ],
+                [ , ],
+                [ , ],
+                [ , ]
+            ],
+            Spell_Trap_Zone: [
+                [ /* index 0: card ID */, /* index 1: position, face-down = 0, face-up = 1 */ ],
+                [ , ],
+                [ , ],
+                [ , ],
+                [ , ],
+                [ , ], // index 5: Field Spell Zone
+                [ , ], // index 6: Left Pendulum Scale
+                [ , ], // index 7: Right Pendulum Scale
+            ],
+            Graveyard: [ /* array of IDs */ ],
+            Banished_Zone: [
+                [ /* index 0: card ID */, /* index 1: position, face-down = 0, face-up = 1 */ ],
+                [ , ],
+                [ , ],
+                [ , ] //, etc...
+            ],
+            Extra_Deck: [
+                [ /* index 0: card ID */, /* index 1: position, face-down = 0, face-up = 1 */ ],
+                [ , ],
+                [ , ],
+                [ , ],
+                [ , ] //, etc...
+            ],
+            Deck: [
+                [ /* index 0: card ID */, /* index 1: position, face-down = 0, face-up = 1 */ ],
+                [ , ],
+                [ , ],
+                [ , ],
+                [ , ] //, etc...
+            ],
+            LP: 8000
+        };
+        nPlayers--;
+    }
+    return state;
+}
+
+function secureClientState (activeDuel) {
+    var clientState = {
+            options: activeDuel.options
+        },
+        uid;
+    for (uid in activeDuel) {
+        if (activeDuel.hasOwnProperty(uid) && registry.hasOwnProperty(uid)) {
+            clientState[registry[uid].username] = {
+                ROLE: activeDuel[uid].ROLE
+            };
+        }
+    }
+    return clientState;
+}
+
+function loadClientState (clientState, activeDuel, playerN) {
+    // clientState is an object returned by client-side GameState
+    // will add more extensive verification later, for now just insert player state
+    var templateState = GameState(1), // generate game state to compare
+        clientProperty;
+    for (clientProperty in clientState) {
+        if (templateState.Player_1.hasOwnProperty(clientProperty)) {
+            templateState.Player_1[clientProperty] = clientState[clientProperty];
+        }
+    }
+    activeDuel[playerN] = templateState.Player_1;
+    return activeDuel;
+}
+
+function changeLP (queryLP, activeDuel, playerN) {
+    switch (typeof queryLP) {
+        case "string": {
+            activeDuel[playerN].LP = (queryLP.trim().charAt(0) === "+" ? (activeDuel[playerN].LP + queryLP.trim().substr(1)) : (activeDuel[playerN].LP - queryLP.trim().substr(1)));
+            return activeDuel[playerN];
+        }
+        case "number": {
+            activeDuel[playerN].LP = queryLP;
+            return activeDuel[playerN];
+        }
+    }
 }
