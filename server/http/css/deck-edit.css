@@ -216,8 +216,11 @@ span.cardImage {
 }
 
 #deckedit label select {
-    width: 6vw;
-    float: left;
+    width: 11vw;
+}
+
+#deckedit select.decklist {
+    margin-left: 2.1vw;
 }
 
 #deckedit label {
