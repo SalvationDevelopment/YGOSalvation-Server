@@ -410,6 +410,9 @@ function initPrimus() {
     }, 15000);
 
     getDecks();
+    setTimeout(function () {
+        createmanifest();
+    }, 10000);
 }
 
 setTimeout(function () {
@@ -426,8 +429,5 @@ setTimeout(function () {
 
     populatealllist();
     fs.watch('./ygopro/deck', populatealllist);
-    setTimeout(function () {
-        createmanifest();
-    }, 5000);
     initPrimus();
 }, 1000);
