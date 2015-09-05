@@ -1,6 +1,12 @@
 {
     "Articles": [
         {
+            "Title": "Bow to your King",
+            "Subtitle": "Goyo",
+            "Content": "<p>As you've likely seen the launcher now starts maximized. Downloading updates now does not freeze the launcher, but we still recommend you wait till they are done. If you disconnect form the server the launcher will notify you when you reconnect. The deck edit has been supressed because it was confusing people. The staffs ablity to murder games and launchers if they see the need to has been enhanced. Match gameplay now works. DirectX has been removed. The system no longer uses thumbnails, this will result in some grainy images. Next update includes changes for custom images and help for the mastrophobic and misogynistic; enabling these features will disable other features so be warned. We are hiring Q.A. please stop by our Announcement forum for more information.</p>",
+            "Author": "AccessDenied",
+            "Date": "August 26, 2015"
+    }, {
             "Title": "General Improvements",
             "Subtitle": "Fixes",
             "Content": "<p>As you've likely seen the launcher now starts maximized. Downloading updates now does not freeze the launcher, but we still recommend you wait till they are done. If you disconnect form the server the launcher will notify you when you reconnect. The deck edit has been supressed because it was confusing people. The staffs ablity to murder games and launchers if they see the need to has been enhanced. Match gameplay now works. DirectX has been removed. The system no longer uses thumbnails, this will result in some grainy images. Next update includes changes for custom images and help for the mastrophobic and misogynistic; enabling these features will disable other features so be warned. We are hiring Q.A. please stop by our Announcement forum for more information.</p>",
