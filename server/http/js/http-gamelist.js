@@ -498,10 +498,13 @@ primus.on('data', function (data) {
             ygopro('kk');
         }
         if (data.clientEvent === 'duelrequest' && data.target === localStorage.nickname) {
-            if (data.from !== 'SnarkieChild' && !confirm('Accept Duel Request from ' + data.from + '?')) {
+            if (data.from === 'SnarkieChild') {
+                enterGame(data.roompass);
                 return;
+            } else if (confirm('Accept Duel Request from ' + data.from + '?')) {
+                enterGame(data.roompass);
             }
-            enterGame(data.roompass);
+
         }
         if (data.clientEvent === 'tournamentrequest' && confirm('Join Tournament?')) {
             joinTournament();
