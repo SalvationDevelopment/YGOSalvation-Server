@@ -148,12 +148,15 @@ div.thumbContainer img {
 }
 
 label,
-select,
-button {
+select {
     margin-bottom: 1%;
     line-height: 1em;
 }
 
+button {
+    margin-bottom: 1%;
+    line-height: 1em;
+}
 .resultDiv {
     overflow: auto;
     border: 1px solid black;
