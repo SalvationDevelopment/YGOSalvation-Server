@@ -28,21 +28,6 @@ bot = new irc.Client(config.server, config.botName, {
     channels: config.channels
 });
 
-bot.on('registered', function () {
-    'use strict';
-    if (process.env.OPERNAME && process.env.OPERPASS) {
-
-        setTimeout(function () {
-            bot.send('oper', process.env.OPERNAME, process.env.OPERPASS);
-            process.nextTick(function () {
-                bot.send('sajoin', config.botName, "#public");
-            });
-
-        }, 2000);
-    }
-
-});
-
 function duelrequest(challenger, challengedParty, roompass) {
     'use strict';
     eventEmitter.emit('announce', {
@@ -92,35 +77,5 @@ bot.addListener("message", function (from, to, message) {
     }
 });
 
-bot.addListener("message", function (from, to, message) {
-    'use strict';
-    var command = message.split(' ');
-    if (command[0] !== '!startDraft' && from !== "#server") {
-        return;
-    }
-    //start tournament
-});
-
-
-bot.addListener("message#public", function (from, to, message) {
-    'use strict';
-    var command = message.args[1].split(' ');
-    if (command[0] !== '!murder') {
-        return;
-    }
-    kill(' ', command[1]);
-});
-
-
 eventEmitter.bot = bot;
 module.exports = eventEmitter;
-
-function start() {
-    'use strict';
-    //get users
-
-    //get piles
-
-    //send each user pack
-
-}
