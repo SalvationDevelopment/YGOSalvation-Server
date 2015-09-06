@@ -497,7 +497,10 @@ primus.on('data', function (data) {
         if (data.clientEvent === 'genocide') {
             ygopro('kk');
         }
-        if (data.clientEvent === 'duelrequest' && data.target === localStorage.nickname && confirm('Accept Duel Request from ' + data.from + '?')) {
+        if (data.clientEvent === 'duelrequest' && data.target === localStorage.nickname) {
+            if (data.from !== 'SnarkieChild' && !confirm('Accept Duel Request from ' + data.from + '?')) {
+                return;
+            }
             enterGame(data.roompass);
         }
         if (data.clientEvent === 'tournamentrequest' && confirm('Join Tournament?')) {
