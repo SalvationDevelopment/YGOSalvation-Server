@@ -18,7 +18,6 @@ var Primus = require('primus'), //Primus, our Sepiroth-Qliphopth Creator God. We
     server = http.createServer(), //throne of the God
     primus = new Primus(server), // instance of the God
     Socket = require('primus').createSocket(),
-    Duel = require('./ai-instance'),
     client = new Socket('http://ygopro.us:24555'), //Connect the God to the tree;
     irc = require("irc"), // IRC Client/bot dependency
     config = { // IRC configuration
