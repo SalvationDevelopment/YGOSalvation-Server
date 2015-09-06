@@ -56,7 +56,7 @@ function gamelistUpdate(data) {
         if (data.clientEvent === 'duelrequest' && data.target === '[AI]SnarkyChild') {
             console.log(data);
             console.log('duel Request Recieved');
-            childProcess.spawn('windbot.exe', ['AI', 'Hours', '127.0.0.1', '8911', data.roompass], {
+            childProcess.spawn('ai/windbot.exe', ['SnarkieChild', 'Hours', '127.0.0.1', '8911', data.roompass], {
                 cwd: '../server/http/ygopro'
             }, function () {});
         }
@@ -66,12 +66,10 @@ function gamelistUpdate(data) {
 
 function onConnectGamelist() {
     'use strict';
-    console.log('Connected to Gamelist');
 }
 
 function onCloseGamelist() {
     'use strict';
-    console.log('Lost Connection to Gamelist');
 }
 
 client.on('data', gamelistUpdate);

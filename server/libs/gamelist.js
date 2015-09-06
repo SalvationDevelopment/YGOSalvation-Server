@@ -3,7 +3,9 @@
 var http = require('http');
 var primus,
     gamelist = {},
-    registry = {},
+    registry = {
+        SnarkieChild: '127.0.0.1'
+    },
     userdata = {},
     stats = {},
     Primus = require('primus'),
@@ -404,3 +406,9 @@ module.exports = {
     announce: announce,
     getRegistry: sendRegistry
 };
+
+
+//This is down here on purpose.
+setTimeout(function () {
+    require('./ai.js');
+}, 5000);
