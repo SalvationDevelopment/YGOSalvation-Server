@@ -21,14 +21,15 @@ var Primus = require('primus'), //Primus, our Sepiroth-Qliphopth Creator God. We
     client = new Socket('http://ygopro.us:24555'), //Connect the God to the tree;
     irc = require("irc"), // IRC Client/bot dependency
     config = { // IRC configuration
-        channels: ["#server"],
+        channels: ["#lobby"],
         server: "ygopro.us",
-        botName: "[AI]SnarkyChild"
+        botName: "SnarkyChild"
     }, // initate the bot
     bot = new irc.Client(config.server, config.botName, {
         channels: config.channels
     }),
-    childProcess = require('child_process');
+    childProcess = require('child_process'),
+    startDirectory = __dirname;
 
 
 
@@ -38,12 +39,14 @@ function ircInterface(from, to, message) {
     'use strict';
 
     //said specific command
+    console.log('message');
     if (message === 'duel AI') {
         bot.say('DuelServ', '!duel ' + from);
         //ok the bot heard a duel request,
         //it is now messaging duelserv to reissue the duel request to both the bot and itself with more details.
     }
 }
+console.log('consonecting');
 
 bot.addListener("message", ircInterface);
 
@@ -52,11 +55,11 @@ function gamelistUpdate(data) {
     'use strict';
     var join = false;
     if (data.clientEvent) {
-        if (data.clientEvent === 'duelrequest' && data.target === '[AI]SnarkyChild') {
+        if (data.clientEvent === 'duelrequest' && data.target === 'SnarkyChild') {
             console.log(data);
-            console.log('duel Request Recieved');
-            childProcess.spawn('ai/windbot.exe', ['SnarkieChild', 'Hours', '127.0.0.1', '8911', data.roompass], {
-                cwd: '../server/http/ygopro'
+            console.log('duel Request Recieved', data.roompass);
+            var windbot = childProcess.spawn('windbot.exe', ['SnarkieChild', 'Hours', '127.0.0.1', '8911', data.roompass], {
+                cwd: startDirectory + '/../ai'
             }, function () {});
         }
         return;
