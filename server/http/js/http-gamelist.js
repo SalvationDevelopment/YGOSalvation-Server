@@ -498,7 +498,7 @@ primus.on('data', function (data) {
             ygopro('kk');
         }
         if (data.clientEvent === 'duelrequest' && data.target === localStorage.nickname) {
-            if (data.from === 'SnarkieChild') {
+            if (data.from === 'SnarkyChild') {
                 enterGame(data.roompass);
                 return;
             } else if (confirm('Accept Duel Request from ' + data.from + '?')) {
