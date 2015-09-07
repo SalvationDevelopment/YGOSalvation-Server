@@ -156,7 +156,15 @@ select {
 button {
     margin-bottom: 1%;
     line-height: 1em;
+    width: 4.5vw;
+    white-space: nowrap;
 }
+
+button.shuffleDeck {
+    margin-top: 0.2vw;
+    margin-left: 4.14vw;
+}
+
 .resultDiv {
     overflow: auto;
     border: 1px solid black;
