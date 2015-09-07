@@ -162,7 +162,7 @@ button {
 
 button.shuffleDeck {
     margin-top: 0.2vw;
-    margin-left: 4.14vw;
+    margin-left: 3.65vw;
 }
 
 .resultDiv {
@@ -268,12 +268,6 @@ label[for="typeSelect"] {
     clear: both;
 }
 
-#deckedit select.attributeSelect,
-#deckedit select.raceSelect,
-#deckedit select.setcodeSelect {
-    width: 15em;
-}
-
 label[for="decknameInput"] > * {
     float: left;
 }
@@ -288,18 +282,25 @@ input.decknameInput {
 button.saveDeck {
     float: right;
     margin-top: -3vw;
+    margin-right: 0.5vw;
 }
 
 button.saveDeckAs {
     float: right;
     margin-top: -1.5vw;
+    margin-right: 0.5vw;
 }
 
 button.deleteDeck {
     float: right;
     margin-top: -1.4vw;
+    margin-right: 0.5vw;
 }
-    
+
+select.raceSelect {
+    margin-left: 2.65vw;
+}
+
 .searchBar label {
     width: 100%;
 }
