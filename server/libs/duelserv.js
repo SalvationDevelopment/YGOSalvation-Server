@@ -70,7 +70,7 @@ bot.addListener("message", function (from, to, message) {
         codes = {
             '!tcg': '200OOO8000,0,5,1,U,',
             '!ocg': '100OOO8000,1,5,1,U',
-            '!duel': '210OOO8000,1,5,1,U,',
+            '!duel': '200OOO8000,1,5,1,U,',
             '!tag': '220OOO16000,0,5,1,U,',
             '!shadowDuel': '301OOO8000,0,5,1,U,',
             '!bp3': '410OOO8000,0,5,1,U,'
