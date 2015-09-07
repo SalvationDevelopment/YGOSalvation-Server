@@ -2,9 +2,45 @@
 
 var Primus = require('primus'),
     Rooms = require('primus-rooms'),
+    fs = require('fs'),
     server = require('http').createServer().listen(55542),
     registry = {},
     activeDuels = {},
+    ConfigParser = require('./ConfigParser.js'),
+    databases = {
+        "0-en-OCGTCG": [],
+        "1-Anime": [],
+        "2-MonsterLeague": [],
+        "3-Goats": [],
+        "4-Newgioh": [],
+        "Z-CWA": []
+    },
+    banLists = {},
+    cdbUpdater = function () {
+        for (var database in databases) {
+            if (databases.hasOwnProperty(database)) {
+                fs.readFile('../http/manifest/database_' + database + '.json', { encoding: "UTF-8" }, function (error, data) {
+                    if (error) {
+                        throw error;
+                    }
+                    if (JSON.stringify(databases[database]) !== JSON.stringify(data)) {
+                        databases[database] = JSON.parse(data);
+                    }
+                });
+            }
+        }
+    },
+    banListUpdater = function () {
+        fs.readFile('../http/ygopro/lflist.conf', { encoding: "UTF-8" }, function (error, data) {
+            if (error) {
+                throw error;
+            }
+            banLists = ConfigParser(data, {
+                keyValueDelim: " ",
+                blockRegexp: /^\s?\!(.*?)\s?$/
+            });
+        });
+    },
     ROLE_SPECTATOR = 0,
     ROLE_HOST = 1,
     ROLE_PLAYER_TWO = 2,
@@ -20,124 +56,149 @@ var Primus = require('primus'),
         cors: ["http://forum.ygopro.us", "http://ygopro.us"]
     });
 
+cdbUpdater();
+banListUpdater();
+    
+setInterval(banListUpdater, 120000);
+    
+setInterval(cdbUpdater, 120000);
+    
 primus.use('rooms', Rooms);
 
-primus.on('connection', function (spark) {
-    spark.on('data', function (data) {
-        handlePrimusEvent(data, spark);
+primus.on('connection', function (client) {
+    client.on('data', function (data) {
+        handlePrimusEvent(data, client);
     });
-    spark.on('end', function () {
-        handleClientDisconnect(spark);
+    client.on('end', function () {
+        handleClientDisconnect(client);
     });
 });
 
-function handlePrimusEvent(data, spark) {
+function handlePrimusEvent(data, client) {
     var data = data || {},
         action = data.action,
         uid = data.uid,
         username = data.username,
-        duelOptions = data.duelOptions,
-        duelID = duelOptions.duelID,
-        duelQuery = duelOptions.duelQuery,
-        duelCommand = duelOptions.duelCommand,
-        id = spark.id;
+        options = data.options || {},
+        hostOptions = data.hostOptions || {},
+        duelID = options.duelID,
+        duelQuery = options.duelQuery,
+        duelCommand = options.duelCommand,
+        deckList = hostOptions.deckList,
+        id = client.id;
     if (!action || !uid) {
-        writeResponse(spark, [403, 'invalidRequest']);
+        writeResponse(client, [403, 'invalidRequest']);
         return;
     }
     switch (action) {
         case "registerUID": {
-            if (registry.hasOwnProperty(id)) {
-                writeResponse(spark, [403, 'invalidRequest']);
+            if (registry.hasOwnProperty(id) || !username || typeof username !== "string" || !username.length)) {
+                writeResponse(client, [403, 'invalidRequest']);
                 return;
             }
             registry[id] = {
                 uid: uid,
                 username: username
             };
-            writeResponse(spark, [200, 'registeredUID']);
+            writeResponse(client, [200, 'registeredUID']);
             return;
         }
         case "hostDuel": {
             if (!duelID) {
-                writeResponse(spark, [403, 'invalidRequest']);
+                writeResponse(client, [403, 'invalidRequest']);
                 return;
             }
-            if (!activeDuels.hasOwnProperty(duelID)) {
-                spark.join(duelID, function () {
+            if (!activeDuels.hasOwnProperty(duelID) && validDeck(deckList, banLists[hostOptions.banList], databases[hostOptions.database])) {
+                client.join(duelID, function () {
                     activeDuels[duelID] = {
-                        options: duelOptions
+                        options: hostOptions
                     };
                     activeDuels[duelID][uid] = {
-                        ROLE: ROLE_HOST
+                        ROLE: ROLE_HOST,
+                        deckList: deckList
                     };
-                    writeResponse(spark, [200, 'hostedDuel', duelID]);
+                    writeResponse(client, [200, 'hostedDuel', duelID]);
                 });
                 return;
             } else {
-                writeResponse(spark, [403, 'invalidRequest']);
+                writeResponse(client, [403, 'invalidRequest']);
                 return;
             }
         }
         case "joinDuel": {
             if (!duelID || !activeDuels.hasOwnProperty(duelID)) {
-                writeResponse(spark, [403, 'invalidRequest']);
+                writeResponse(client, [403, 'invalidRequest']);
                 return;
             }
             switch (Object.keys(activeDuels[duelID]).length) {
                 case 2: {
-                    spark.join(duelID, function () {
-                        activeDuels[duelID][uid] = {
-                            ROLE: ROLE_PLAYER_TWO
-                        };
-                        writeResponse(spark, [200, 'joinedDuel', duelID]);
-                    });
+                    if (validDeck(deckList, banLists[activeDuels[duelID].options.banList], databases[activeDuels[duelID].options.database])) {
+                        client.join(duelID, function () {
+                            activeDuels[duelID][uid] = {
+                                ROLE: ROLE_PLAYER_TWO,
+                                deckList: deckList
+                            };
+                            writeResponse(client, [200, 'joinedDuel', duelID]);
+                        });
+                    } else {
+                        writeResponse(client, [403, 'invalidRequest']);
+                    }
                     return;
                 }
                 case 3: {
-                    spark.join(duelID, function () {
-                        activeDuels[duelID][uid] = {
-                            ROLE: ROLE_PLAYER_THREE
-                        };
-                        writeResponse(spark, [200, 'joinedDuel', duelID]);
-                    });
+                    if (validDeck(deckList, banLists[activeDuels[duelID].options.banList], databases[activeDuels[duelID].options.database])) {
+                        client.join(duelID, function () {
+                            activeDuels[duelID][uid] = {
+                                ROLE: ROLE_PLAYER_THREE,
+                                deckList: deckList
+                            };
+                            writeResponse(client, [200, 'joinedDuel', duelID]);
+                        });
+                    } else {
+                        writeResponse(client, [403, 'invalidRequest']);
+                    }
                     return;
                 }
                 case 4: {
-                    spark.join(duelID, function () {
-                        activeDuels[duelID][uid] = {
-                            ROLE: ROLE_PLAYER_FOUR
-                        };
-                        writeResponse(spark, [200, 'joinedDuel', duelID]);
-                    });
+                    if (validDeck(deckList, banLists[activeDuels[duelID].options.banList], databases[activeDuels[duelID].options.database])) {
+                        client.join(duelID, function () {
+                            activeDuels[duelID][uid] = {
+                                ROLE: ROLE_PLAYER_FOUR,
+                                deckList: deckList
+                            };
+                            writeResponse(client, [200, 'joinedDuel', duelID]);
+                        });
+                    } else {
+                        writeResponse(client, [403, 'invalidRequest']);
+                    }
                     return;
                 }
                 default: {
-                    writeResponse(spark, [412, 'duelRoomFull', duelID]);
+                    writeResponse(client, [412, 'duelRoomFull', duelID]);
                     return;
                 }
             }
         }
         case "spectateDuel": {
             if (!duelID || !activeDuels.hasOwnProperty(duelID)) {
-                writeResponse(spark, [403, 'invalidRequest']);
+                writeResponse(client, [403, 'invalidRequest']);
                 return;
             }
-            spark.join(duelID, function () {
+            client.join(duelID, function () {
                 activeDuels[duelID][uid] = {
                     ROLE: ROLE_SPECTATOR
                 };
-                writeResponse(spark, [200, 'spectatingDuel', duelID]);
+                writeResponse(client, [200, 'spectatingDuel', duelID]);
             });
             return;
         }
         case "duelQuery": {
             if (!duelID || !activeDuels.hasOwnProperty(duelID)) {
-                writeResponse(spark, [403, 'invalidRequest']);
+                writeResponse(client, [403, 'invalidRequest']);
                 return;
             }
             if (duelQuery.indexOf("kick ") === 0 && activeDuels[duelID][uid].ROLE === ROLE_HOST) {
-                duelQuery = duelQuery.split(' ')[1];
+                duelQuery = duelQuery.split('kick ')[1];
                 primus.room(duelID).write({
                     event: 'kick',
                     data: duelQuery
@@ -148,32 +209,32 @@ function handlePrimusEvent(data, spark) {
                         break;
                     }
                 }
-                writeResponse(spark, [200, 'kickedUser', duelQuery]);
+                writeResponse(client, [200, 'kickedUser', duelQuery]);
                 return;
             }
             switch (duelQuery) {
                 case QUERY_DUEL_COMMAND: {
-                    processDuelCommand(duelCommand, duelID, spark);
+                    processDuelCommand(duelCommand, duelID, client);
                     return;
                 }
                 case QUERY_GET_OPTIONS: {
                     if (!duelID || !activeDuels.hasOwnProperty(duelID)) {
-                        writeResponse(spark, [403, 'invalidRequest']);
+                        writeResponse(client, [403, 'invalidRequest']);
                     }
-                    writeResponse(spark, [200, 'getOptionsResponse', activeDuels[duelID].options]);
+                    writeResponse(client, [200, 'getOptionsResponse', activeDuels[duelID].options]);
                     return;
                 }
                 case QUERY_GET_STATE: {
                     if (!duelID || !activeDuels.hasOwnProperty(duelID) || !activeDuels.hasOwnProperty("state")) {
-                        writeResponse(spark, [403, 'invalidRequest']);
+                        writeResponse(client, [403, 'invalidRequest']);
                         return;
                     }
-                    writeResponse(spark, [200, 'getStateResponse', activeDuels[duelID].state]);
+                    writeResponse(client, [200, 'getStateResponse', activeDuels[duelID].state]);
                     return;
                 }
                 case QUERY_START_DUEL: {
                     if (!duelID || !activeDuels.hasOwnProperty(duelID) || activeDuels[duelID][uid].ROLE !== ROLE_HOST) {
-                        writeResponse(spark, [403, 'invalidRequest']);
+                        writeResponse(client, [403, 'invalidRequest']);
                         return;
                     }
                     primus.room(duelID).write({
@@ -182,35 +243,39 @@ function handlePrimusEvent(data, spark) {
                     });
                     activeDuels[duelID].state = GameState(Object.keys(activeDuels[duelID]).length - 1);
                     activeDuels[duelID].duelStarted = true;
-                    writeResponse(spark, [200, 'duelStarted', duelID]);
+                    writeResponse(client, [200, 'duelStarted', duelID]);
                     return;
                 }
                 default: {
-                    writeResponse(spark, [403, 'invalidRequest']);
+                    writeResponse(client, [403, 'invalidRequest']);
                     return;
                 }
             }
         }
         case "heartBeat": {
-            writeResponse(spark, [200, 'heartBeat']);
+            writeResponse(client, [200, 'heartBeat']);
             return;
         }
         case "regDuelLog": {
-            writeResponse(spark, [200, {
+            if (data.devKey !== process.ENV.DEVKEY) {
+                writeResponse(client, [403, 'invalidRequest']);
+                return;
+            }
+            writeResponse(client, [200, 'regDuelLog', {
                 registry: registry,
                 activeDuels: activeDuels
             }]);
             return;
         }
         default: {
-            writeResponse(spark, [403, 'invalidRequest']);
+            writeResponse(client, [403, 'invalidRequest']);
             return;
         }
     }
 }
 
-function handleClientDisconnect(spark) {
-    var id = spark.id,
+function handleClientDisconnect (client) {
+    var id = client.id,
         duel;
     if (registry.hasOwnProperty(id)) {
         for(duel in activeDuels) {
@@ -227,75 +292,13 @@ function handleClientDisconnect(spark) {
     }
 }
 
-function writeResponse(spark, dataArray) {
+function writeResponse (client, dataArray) {
     // dataArray format: [responseCode, event, data]
-    spark.write({
+    client.write({
         responseCode: dataArray[0],
         event: dataArray[1],
         data: dataArray[2] || {}
     });
-}
-
-function GameState (nPlayers) {
-    var state = {
-        Turn_Counter: 1
-    };
-    if (typeof nPlayers !== "number" || isNaN(nPlayers.valueOf())) {
-        nPlayers = 2;
-    }
-    nPlayers = (nPlayers < 2) ? 2 : (nPlayers > 4) ? 4 : nPlayers;
-    while (nPlayers > 0) {
-        state["Player_" + nPlayers] = {
-            Hand: [
-                [ /* index 0: card ID */, /* index 1: position, face-down = 0, face-up = 1 */ ],
-                [ , ],
-                [ , ],
-                [ , ],
-                [ , ]
-            ],
-            Monster_Zone: [
-                [ /* as with hand, index 0: card ID */, /* index 1: position, face-down ATK = -1, face-down DEF = 0, face-up DEF = 1, face-up ATK = 2 */ ],
-                [ , ],
-                [ , ],
-                [ , ],
-                [ , ]
-            ],
-            Spell_Trap_Zone: [
-                [ /* index 0: card ID */, /* index 1: position, face-down = 0, face-up = 1 */ ],
-                [ , ],
-                [ , ],
-                [ , ],
-                [ , ],
-                [ , ], // index 5: Field Spell Zone
-                [ , ], // index 6: Left Pendulum Scale
-                [ , ], // index 7: Right Pendulum Scale
-            ],
-            Graveyard: [ /* array of IDs */ ],
-            Banished_Zone: [
-                [ /* index 0: card ID */, /* index 1: position, face-down = 0, face-up = 1 */ ],
-                [ , ],
-                [ , ],
-                [ , ] //, etc...
-            ],
-            Extra_Deck: [
-                [ /* index 0: card ID */, /* index 1: position, face-down = 0, face-up = 1 */ ],
-                [ , ],
-                [ , ],
-                [ , ],
-                [ , ] //, etc...
-            ],
-            Deck: [
-                [ /* index 0: card ID */, /* index 1: position, face-down = 0, face-up = 1 */ ],
-                [ , ],
-                [ , ],
-                [ , ],
-                [ , ] //, etc...
-            ],
-            LP: 8000
-        };
-        nPlayers--;
-    }
-    return state;
 }
 
 function secureClientState (activeDuel) {
@@ -313,29 +316,83 @@ function secureClientState (activeDuel) {
     return clientState;
 }
 
-function loadClientState (clientState, activeDuel, playerN) {
-    // clientState is an object returned by client-side GameState
-    // will add more extensive verification later, for now just insert player state
-    var templateState = GameState(1), // generate game state to compare
-        clientProperty;
-    for (clientProperty in clientState) {
-        if (templateState.Player_1.hasOwnProperty(clientProperty)) {
-            templateState.Player_1[clientProperty] = clientState[clientProperty];
+function validDeck(deckList, banList, database) {
+    // deckList is a parsed YDK object
+    // banList is parsed config object
+    var decks = ["main", "side", "extra"],
+        card,
+        mainMin = 40,
+        mainMax = 60,
+        isValid = true,
+        cardObject,
+        getCardObject = function (id) {
+            var cardObject,
+                i = 0,
+                len = database.length;
+            for (i, len; i < len; i++) {
+                if (id === database[i].id) {
+                    cardObject = database[i];
+                    break;
+                }
+            }
+            return cardObject;
+        };
+    decks.forEach(function (deck) {
+        if (!isValid) {
+            return;
         }
-    }
-    activeDuel[playerN] = templateState.Player_1;
-    return activeDuel;
+        if (deck === "main") {
+            if (deckList[deck + "Length"] < mainMin || deckList[deck + "Length"] > mainMax) {
+                isValid = false;
+                return;
+            }
+        } else {
+            if (deckList[deck + "Length"] < 0 || deckList[deck + "Length"] > 15) {
+                isValid = false;
+                return;
+            }
+        }
+        deck = deckList[deck];
+        for (card in deck) {
+            if (!isValid) {
+                break;
+            }
+            if (!banList.hasOwnProperty(card) && deck[card] > 0 && deck[card] <= 3) {
+                break;
+            }
+            if (banList.hasOwnProperty(card) && banList[card] == "0" && deck[card]) {
+                isValid = false;
+                break;
+            }
+            if (banList.hasOwnProperty(card) && deck[card] <= banList[card]) {
+                break;
+            }
+            if (banList.hasOwnProperty(card) && deck[card] > banList[card]) {
+                isValid = false;
+                break;
+            }
+            if (deck[card] < 0 || deck[card] > 3) {
+                isValid = false;
+                break;
+            }
+            cardObject = getCardObject(parseInt(card, 10));
+            if (cardObject.alias !== 0) {
+                if (deck[card] + deck[cardObject.alias] > 3) {
+                    isValid = false;
+                    return;
+                }
+            }
+        }
+    });
+    return isValid;
 }
-
-function changeLP (queryLP, activeDuel, playerN) {
-    switch (typeof queryLP) {
-        case "string": {
-            activeDuel[playerN].LP = (queryLP.trim().charAt(0) === "+" ? (activeDuel[playerN].LP + queryLP.trim().substr(1)) : (activeDuel[playerN].LP - queryLP.trim().substr(1)));
-            return activeDuel[playerN];
-        }
-        case "number": {
-            activeDuel[playerN].LP = queryLP;
-            return activeDuel[playerN];
-        }
-    }
+                
+function verifyClientState (activeDuel, uid, clientState) {
+    // verifies the state sent by the client after following criteria
+    //  - amount of total cards must not change
+    //  - card IDs may not change
+    //  - cards cannot be used interchangeably
+    //  - control over cards must be labelled as such
+    var deckList = activeDuel[uid].deckList;
+    // TBD
 }
