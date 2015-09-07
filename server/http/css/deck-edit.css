@@ -101,7 +101,7 @@ input.decknameInput {
 .extraDeck {
     float: left;
     height: 17.25%;
-    width: 100%;
+    width: 100% !important;
     border: 1px solid green;
 }
 
