@@ -1,6 +1,12 @@
 {
     "Articles": [
-        {
+		{
+			"Title": "More new cards!",
+			"Subtitle": "Now you know how to spend your Labor Day",
+			"Content": "<p>Three new cards have been added!<br /><br />New cards:<br />Beatrice, the Eternal Lady<br />Dragon's Bind<br />Regret Reborn<br /><br />Credit goes to YGOHack137 and OneShot for scripting the cards, and to our newest Q.A. members, Ragna_Edge and dragunlegend, for helping me bug test the cards before release.</p>",
+			"Author": "StormWolf",
+			"Date": "September 7, 2015",
+        }, {
             "Title": "SnarkieChild Joins Us",
             "Subtitle": "AI by Tenkei Joins Salvation",
             "Content": "<p>Salvation now has rudimentary AI. To access her do the following:<br /><br>1.) Click Chat<br />2.) Wait for Lobby to load<br />3.) Find SnarkieChild in the user list.</br />4.) Right click her and send a duel request.<br /> 5.) Accept the duel request. <br /><br />This is the same bot that our sister systems The Dawn of a New Era and DevPro use, so do not expect a powerful AI. Its just something to beat up and test hands against. Enjoy, and post any feedback on the forums.</p>",
