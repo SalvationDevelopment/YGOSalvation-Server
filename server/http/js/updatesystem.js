@@ -23,7 +23,7 @@ var manifest = '',
 process.on('uncaughtException', function (err) {
     'use strict';
     console.log(err);
-    screenMessage.html(randomErrors[Math.floor(Math.random() * (7))], err);
+    screenMessage.html('<span style="color:orange">Warning : System attempted to close, but was recovered.</span>');
     /* http://nodejsreactions.tumblr.com/post/52064099868/process-on-uncaughtexception-function */
 });
 
@@ -115,7 +115,6 @@ function updateCheckFile(file, initial) {
 
 function createmanifest() {
     'use strict';
-    screenMessage.toggle();
     download();
     screenMessage.html('<span style="color:white; font-weight:bold">Downloading Manifest</span');
 
@@ -134,6 +133,7 @@ function createmanifest() {
                 manifest = JSON.parse(file);
             } catch (e) {
                 screenMessage.html('<span style="color:red; font-weight:bold">ERROR, unable to download the manifest!');
+                setTimeout(createmanifest, 5000);
                 return;
             }
             updateCheckFile(manifest, true);
@@ -410,6 +410,7 @@ function initPrimus() {
     }, 15000);
 
     getDecks();
+
     setTimeout(function () {
         createmanifest();
     }, 10000);
@@ -431,3 +432,5 @@ setTimeout(function () {
     fs.watch('./ygopro/deck', populatealllist);
     initPrimus();
 }, 1000);
+
+screenMessage.toggle();
