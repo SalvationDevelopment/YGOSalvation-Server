@@ -58,7 +58,7 @@ function gamelistUpdate(data) {
         if (data.clientEvent === 'duelrequest' && data.target === 'SnarkyChild') {
             console.log(data);
             console.log('duel Request Recieved', data.roompass);
-            var windbot = childProcess.spawn('windbot.exe', ['SnarkieChild', 'Hours', '127.0.0.1', '8911', data.roompass], {
+            var windbot = childProcess.spawn('windbot.exe', ['SnarkyChild', 'Hours', '127.0.0.1', '8911', data.roompass], {
                 cwd: startDirectory + '/../ai'
             }, function () {});
         }
