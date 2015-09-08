@@ -4,7 +4,7 @@ var http = require('http');
 var primus,
     gamelist = {},
     registry = {
-        SnarkieChild: '::ffff:127.0.0.1'
+        SnarkyChild: '::ffff:127.0.0.1'
     },
     userdata = {},
     stats = {},
