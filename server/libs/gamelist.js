@@ -205,6 +205,16 @@ primus.on('connection', function (socket) {
                 messageListener(data.coreMessage);
             }
             break;
+        case ('ai'):
+            if (socket.username) {
+                duelserv.emit('announce', {
+                    clientEvent: 'duelrequest',
+                    target: socket.username,
+                    from: 'SnarkyChild',
+                    roompass: data.roompass
+                });
+            }
+            break;
         case ('join'):
             socket.join(socket.address.ip + data.uniqueID, function () {
                 socket.write({
