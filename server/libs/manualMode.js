@@ -214,7 +214,18 @@ function handlePrimusEvent(data, client) {
             }
             switch (duelQuery) {
                 case QUERY_DUEL_COMMAND: {
-                    processDuelCommand(duelCommand, duelID, client);
+                    if (verifyClientState(activeDuels[duelID], uid, options.clientState)) {
+                        primus.room(duelID).write({
+                            event: 'duelCommand',
+                            data: {
+                                player: registry[uid].username,
+                                state: clientState
+                            }
+                        });
+                        writeResponse(client, [200, 'commandVerified']);
+                    } else {
+                        writeResponse(client, [403, 'invalidRequest']);
+                    }
                     return;
                 }
                 case QUERY_GET_OPTIONS: {
@@ -385,6 +396,68 @@ function validDeck(deckList, banList, database) {
         }
     });
     return isValid;
+}
+
+function GameState (nPlayers) {
+    var state = {
+        Turn_Counter: 1
+    };
+    if (typeof nPlayers !== "number" || isNaN(nPlayers.valueOf())) {
+        nPlayers = 2;
+    }
+    nPlayers = (nPlayers < 2) ? 2 : (nPlayers > 4) ? 4 : nPlayers;
+    while (nPlayers > 0) {
+        state["Player_" + nPlayers] = {
+            Hand: [
+                [ /* index 0: card ID */, /* index 1: position, face-down = 0, face-up = 1 */ ],
+                [ , ],
+                [ , ],
+                [ , ],
+                [ , ]
+            ],
+            Monster_Zone: [
+                [ /* as with hand, index 0: card ID */, /* index 1: position, face-down ATK = -1, face-down DEF = 0, face-up DEF = 1, face-up ATK = 2 */ ],
+                [ , ],
+                [ , ],
+                [ , ],
+                [ , ]
+            ],
+            Spell_Trap_Zone: [
+                [ /* index 0: card ID */, /* index 1: position, face-down = 0, face-up = 1 */ ],
+                [ , ],
+                [ , ],
+                [ , ],
+                [ , ],
+                [ , ], // index 5: Field Spell Zone
+                [ , ], // index 6: Left Pendulum Scale
+                [ , ], // index 7: Right Pendulum Scale
+            ],
+            Graveyard: [ /* array of IDs */ ],
+            Banished_Zone: [
+                [ /* index 0: card ID */, /* index 1: position, face-down = 0, face-up = 1 */ ],
+                [ , ],
+                [ , ],
+                [ , ] //, etc...
+            ],
+            Extra_Deck: [
+                [ /* index 0: card ID */, /* index 1: position, face-down = 0, face-up = 1 */ ],
+                [ , ],
+                [ , ],
+                [ , ],
+                [ , ] //, etc...
+            ],
+            Deck: [
+                [ /* index 0: card ID */, /* index 1: position, face-down = 0, face-up = 1 */ ],
+                [ , ],
+                [ , ],
+                [ , ],
+                [ , ] //, etc...
+            ],
+            LP: 8000
+        };
+        nPlayers--;
+    }
+    return state;
 }
                 
 function verifyClientState (activeDuel, uid, clientState) {
