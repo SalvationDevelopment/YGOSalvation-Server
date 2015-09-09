@@ -272,7 +272,7 @@ label[for="decknameInput"] > * {
     float: left;
 }
 
-input {
+#deckedit input {
     height: 0.8vw;
 }
 
