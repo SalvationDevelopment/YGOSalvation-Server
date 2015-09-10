@@ -116,7 +116,7 @@ function updateCheckFile(file, initial) {
 function createmanifest() {
     'use strict';
     download();
-    screenMessage.html('<span style="color:white; font-weight:bold">Downloading Manifest</span');
+    screenMessage.html('<span style="color:white; font-weight:bold">Downloading Manifest, DONT CLICK THINGS.</span');
 
     var target = downloadList[0],
         file = '',
@@ -418,19 +418,16 @@ function initPrimus() {
 
 setTimeout(function () {
     'use strict';
-    screenMessage.html('Interface loaded, querying user for critical information,...');
+
     localStorage.lastip = '192.99.11.19';
     localStorage.serverport = '8911';
     localStorage.lastport = '8911';
-    if (mode === 'development') {
-        try {
-            gui.Window.get().showDevTools();
-        } catch (error) {}
-    }
-
-    populatealllist();
-    fs.watch('./ygopro/deck', populatealllist);
     initPrimus();
 }, 1000);
 
 screenMessage.toggle();
+
+screenMessage.html('Interface loaded, querying user for critical information,...');
+
+populatealllist();
+fs.watch('./ygopro/deck', populatealllist);
