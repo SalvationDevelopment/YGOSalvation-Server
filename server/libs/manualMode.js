@@ -46,6 +46,21 @@ var Primus = require('primus'),
     ROLE_PLAYER_TWO = 2,
     ROLE_PLAYER_THREE = 3,
     ROLE_PLAYER_FOUR = 4,
+    DRAW_PHASE = "Draw Phase",
+    STANDBY_PHASE = "Standby Phase",
+    MAIN_PHASE_ONE = "Main Phase 1",
+    BATTLE_PHASE = "Battle Phase",
+    MAIN_PHASE_TWO = "Main Phase 2",
+    END_PHASE = "End Phase",
+    HAND = "Hand",
+    MONSTER_ZONE = "Monster Zone",
+    SPELL_ZONE = "Spell Zone",
+    PENDULUM_ZONE = "Pendulum Zone",
+    FIELD_ZONE = "Field Zone",
+    GRAVEYARD = "Graveyard",
+    BANISHED_ZONE = "Banished Zone",
+    EXTRA_DECK = "Extra Deck",
+    DECK = "Deck",
     QUERY_DUEL_COMMAND = "duelCommand",
     QUERY_GET_OPTIONS = "getOptions",
     QUERY_GET_STATE = "getState",
@@ -79,11 +94,11 @@ function handlePrimusEvent(data, client) {
         action = data.action,
         uid = data.uid,
         username = data.username,
-        options = data.options || {},
+        duelID = data.duelID,
+        duelQuery = data.duelQuery,
+        target = data.target,
+        moveTo = data.moveTo,
         hostOptions = data.hostOptions || {},
-        duelID = options.duelID,
-        duelQuery = options.duelQuery,
-        duelCommand = options.duelCommand,
         deckList = hostOptions.deckList,
         id = client.id;
     if (!action || !uid) {
@@ -198,7 +213,7 @@ function handlePrimusEvent(data, client) {
                 return;
             }
             if (duelQuery.indexOf("kick ") === 0 && activeDuels[duelID][uid].ROLE === ROLE_HOST) {
-                duelQuery = duelQuery.split('kick ')[1];
+                duelQuery = duelQuery.split(/^kick\s/)[1];
                 primus.room(duelID).write({
                     event: 'kick',
                     data: duelQuery
@@ -214,15 +229,15 @@ function handlePrimusEvent(data, client) {
             }
             switch (duelQuery) {
                 case QUERY_DUEL_COMMAND: {
-                    if (verifyClientState(activeDuels[duelID], uid, options.clientState)) {
+                    if (activeDuels[duelID].hasOwnProperty(uid) && commandIsValid(activeDuels[duelID], uid, target, moveTo)) {
                         primus.room(duelID).write({
                             event: 'duelCommand',
                             data: {
-                                player: registry[uid].username,
-                                state: clientState
+                                target: target,
+                                moveTo: moveTo
                             }
                         });
-                        writeResponse(client, [200, 'commandVerified']);
+                        writeResponse(client, [200, 'commandIsValid']);
                     } else {
                         writeResponse(client, [403, 'invalidRequest']);
                     }
@@ -250,7 +265,7 @@ function handlePrimusEvent(data, client) {
                     }
                     primus.room(duelID).write({
                         event: 'duelStart',
-                        data: secureClientState(activeDuels[duelID])
+                        data: secureClientDuel(activeDuels[duelID])
                     });
                     activeDuels[duelID].state = GameState(Object.keys(activeDuels[duelID]).length - 1);
                     activeDuels[duelID].duelStarted = true;
@@ -312,19 +327,19 @@ function writeResponse (client, dataArray) {
     });
 }
 
-function secureClientState (activeDuel) {
-    var clientState = {
+function secureClientDuel (activeDuel) {
+    var clientDuel = {
             options: activeDuel.options
         },
         uid;
     for (uid in activeDuel) {
         if (activeDuel.hasOwnProperty(uid) && registry.hasOwnProperty(uid)) {
-            clientState[registry[uid].username] = {
+            clientDuel[registry[uid].username] = {
                 ROLE: activeDuel[uid].ROLE
             };
         }
     }
-    return clientState;
+    return clientDuel;
 }
 
 function validDeck(deckList, banList, database) {
@@ -398,74 +413,30 @@ function validDeck(deckList, banList, database) {
     return isValid;
 }
 
+function commandIsValid (activeDuel, uid, target, moveTo) {
+    return activeDuel[uid].ROLE === target.player && activeDuel.state["Player " + player][target.location][target.slot] && !activeDuel.state[moveTo.player][moveTo.location][moveTo.slot];
+}
+
 function GameState (nPlayers) {
     var state = {
-        Turn_Counter: 1
+        "Turn Counter": 1,
+        "Turn Player": ROLE_HOST,
+        "Current Phase": DRAW_PHASE
     };
-    if (typeof nPlayers !== "number" || isNaN(nPlayers.valueOf())) {
-        nPlayers = 2;
-    }
-    nPlayers = (nPlayers < 2) ? 2 : (nPlayers > 4) ? 4 : nPlayers;
     while (nPlayers > 0) {
-        state["Player_" + nPlayers] = {
-            Hand: [
-                [ /* index 0: card ID */, /* index 1: position, face-down = 0, face-up = 1 */ ],
-                [ , ],
-                [ , ],
-                [ , ],
-                [ , ]
-            ],
-            Monster_Zone: [
-                [ /* as with hand, index 0: card ID */, /* index 1: position, face-down ATK = -1, face-down DEF = 0, face-up DEF = 1, face-up ATK = 2 */ ],
-                [ , ],
-                [ , ],
-                [ , ],
-                [ , ]
-            ],
-            Spell_Trap_Zone: [
-                [ /* index 0: card ID */, /* index 1: position, face-down = 0, face-up = 1 */ ],
-                [ , ],
-                [ , ],
-                [ , ],
-                [ , ],
-                [ , ], // index 5: Field Spell Zone
-                [ , ], // index 6: Left Pendulum Scale
-                [ , ], // index 7: Right Pendulum Scale
-            ],
-            Graveyard: [ /* array of IDs */ ],
-            Banished_Zone: [
-                [ /* index 0: card ID */, /* index 1: position, face-down = 0, face-up = 1 */ ],
-                [ , ],
-                [ , ],
-                [ , ] //, etc...
-            ],
-            Extra_Deck: [
-                [ /* index 0: card ID */, /* index 1: position, face-down = 0, face-up = 1 */ ],
-                [ , ],
-                [ , ],
-                [ , ],
-                [ , ] //, etc...
-            ],
-            Deck: [
-                [ /* index 0: card ID */, /* index 1: position, face-down = 0, face-up = 1 */ ],
-                [ , ],
-                [ , ],
-                [ , ],
-                [ , ] //, etc...
-            ],
-            LP: 8000
+        state["Player " + nPlayers] = {
+            "Hand": [],
+            "Monster Zone": [],
+            "Spell Zone": [],
+            "Pendulum Zone": [],
+            "Field Zone": [],
+            "Graveyard": [],
+            "Banished Zone": [],
+            "Extra Deck": [],
+            "Deck": [],
+            "LP": 8000
         };
         nPlayers--;
     }
     return state;
-}
-                
-function verifyClientState (activeDuel, uid, clientState) {
-    // verifies the state sent by the client after following criteria
-    //  - amount of total cards must not change
-    //  - card IDs may not change
-    //  - cards cannot be used interchangeably
-    //  - control over cards must be labelled as such
-    var deckList = activeDuel[uid].deckList;
-    // TBD
 }
