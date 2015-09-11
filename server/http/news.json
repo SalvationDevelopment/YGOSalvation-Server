@@ -1,6 +1,12 @@
 {
     "Articles": [
-		{
+        {
+            "Title": "Anyone up for ARG?",
+            "Subtitle": "ARG's banlist joins the fray",
+            "Content": "<p>Salvation recently decided to implement the <a href='https://docs.google.com/spreadsheets/d/1yFMKu2omTIky-3aPWT39GBIxrx7feWAyNQ21euorHOM/htmlview' target='_blank'>ARG banlist</a>.<br />Check it out and feel free to create your own duels to test your own deck creations.<br /><br />Also, on a similar note, the Host tab now has re-ordered its banlist selections so you can find the most popular options with less effort.<br />Enjoy!</p>",
+            "Author": "Irate",
+            "Date": "September 11, 2015"
+        }, {
 			"Title": "More new cards!",
 			"Subtitle": "Now you know how to spend your Labor Day",
 			"Content": "<p>Three new cards have been added!<br /><br />--New cards:<br />Beatrice, the Eternal Lady<br />Dragon's Bind<br />Reject Reborn<br /><br />Credit goes to YGOHack137 and OneShot for scripting the cards, and to our newest Q.A. members, Ragna_Edge and dragunlegend, for helping me bug test the cards before release.</p>",
