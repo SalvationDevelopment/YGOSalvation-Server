@@ -143,19 +143,19 @@ function updateCheckFile(file, initial) {
 
 function createmanifest() {
     'use strict';
-    screenMessage.toggle();
-    download();
-    screenMessage.html('<span style="color:white; font-weight:bold">Downloading Manifest,...</span');
-    $.get('http://ygopro.us/manifest/ygopro.json', function (data) {
-        manifest = {};
-        console.log(manifest, data);
-        updateCheckFile(manifest, true);
-    }).fail(function () {
-        screenMessage.html('<span style="color:white; font-weight:bold">Failed to get mainfest, .... re-trying</span>');
-        setTimeout(function () {
-            createmanifest();
-        }, 10000);
-    });
+//    screenMessage.toggle();
+//    download();
+//    screenMessage.html('<span style="color:white; font-weight:bold">Downloading Manifest,...</span');
+//    $.get('http://ygopro.us/manifest/ygopro.json', function (data) {
+//        manifest = {};
+//        console.log(manifest, data);
+//        updateCheckFile(manifest, true);
+//    }).fail(function () {
+//        screenMessage.html('<span style="color:white; font-weight:bold">Failed to get mainfest, .... re-trying</span>');
+//        setTimeout(function () {
+//            createmanifest();
+//        }, 10000);
+//    });
 }
 var list = {
     databases: '',
