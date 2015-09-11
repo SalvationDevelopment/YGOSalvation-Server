@@ -290,21 +290,21 @@ function processServerRequest(parameter) {
     }
 
     if (localStorage.dbtext.length > 0) {
-        if ((localStorage.roompass[0] === '0' || localStorage.roompass[0] === '1' || localStorage.roompass[0] === '2' || localStorage.roompass[0] === '3') && letter === 'j') {
+        if ((localStorage.roompass[0] === '0' || localStorage.roompass[0] === '1' || localStorage.roompass[0] === '2') && letter === 'j') {
             localStorage.dbtext = '0-en-OCGTCG.cdb';
         }
-        /*if ((localStorage.roompass[0] === '4' || localStorage.roompass[0] === '5') && letter === 'j') {
+        if ((localStorage.roompass[0] === '4' || localStorage.roompass[0] === '5') && letter === 'j') {
             localStorage.dbtext = '2-MonsterLeague.cdb';
-        }*/
+        }
         if ((localStorage.roompass.substring(11, 13) === '5') && letter === 'j') {
             localStorage.dbtext = '3-Goats.cdb';
         }
         if ((localStorage.roompass.substring(11, 13) === '4') && letter === 'j') {
             localStorage.dbtext = '4-Newgioh.cdb';
         }
-        /*if (localStorage.roompass[0] === '3' && letter === 'j') {
+        if (localStorage.roompass[0] === '3' && letter === 'j') {
             localStorage.dbtext = 'Z-CWA.cdb';
-        }*/
+        }
         copyFile(stringConf, ygoproStringConf, function (stringError) {
             if (stringError) {
                 $('#servermessages').text('Failed to copy strings');
