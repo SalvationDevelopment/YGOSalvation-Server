@@ -113,31 +113,48 @@ function updateCheckFile(file, initial) {
 }
 
 
+//function createmanifest() {
+//    'use strict';
+//    download();
+//    screenMessage.html('<span style="color:white; font-weight:bold">Downloading Manifest, DONT CLICK THINGS.</span');
+//
+//    var target = downloadList[0],
+//        file = '',
+//        options = {
+//            host: url.parse('https://ygopro.us/manifest/ygopro.json').host,
+//            path: url.parse('https://ygopro.us/manifest/ygopro.json').pathname
+//        };
+//
+//    http.get(options, function (res) {
+//        res.on('data', function (data) {
+//            file += data;
+//        }).on('end', function () {
+//            try {
+//                manifest = JSON.parse(file);
+//            } catch (e) {
+//                screenMessage.html('<span style="color:red; font-weight:bold">ERROR, unable to download the manifest!');
+//                setTimeout(createmanifest, 5000);
+//                return;
+//            }
+//            updateCheckFile(manifest, true);
+//        });
+//    });
+//}
+
 function createmanifest() {
     'use strict';
+    screenMessage.toggle();
     download();
-    screenMessage.html('<span style="color:white; font-weight:bold">Downloading Manifest, DONT CLICK THINGS.</span');
-
-    var target = downloadList[0],
-        file = '',
-        options = {
-            host: url.parse('https://ygopro.us/manifest/ygopro.json').host,
-            path: url.parse('https://ygopro.us/manifest/ygopro.json').pathname
-        };
-
-    http.get(options, function (res) {
-        res.on('data', function (data) {
-            file += data;
-        }).on('end', function () {
-            try {
-                manifest = JSON.parse(file);
-            } catch (e) {
-                screenMessage.html('<span style="color:red; font-weight:bold">ERROR, unable to download the manifest!');
-                setTimeout(createmanifest, 5000);
-                return;
-            }
-            updateCheckFile(manifest, true);
-        });
+    screenMessage.html('<span style="color:white; font-weight:bold">Downloading Manifest,...</span');
+    $.get('http://ygopro.us/manifest/ygopro.json', function (data) {
+        manifest = JSON.parse(data);
+        //console.log(manifest);
+        updateCheckFile(manifest, true);
+    }).fail(function () {
+        screenMessage.html('<span style="color:white; font-weight:bold">Failed to get mainfest, .... re-trying</span>');
+        setTimeout(function () {
+            createmanifest();
+        }, 10000);
     });
 }
 var list = {
