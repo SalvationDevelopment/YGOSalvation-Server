@@ -147,8 +147,8 @@ function createmanifest() {
     download();
     screenMessage.html('<span style="color:white; font-weight:bold">Downloading Manifest,...</span');
     $.get('http://ygopro.us/manifest/ygopro.json', function (data) {
-        manifest = JSON.parse(data);
-        //console.log(manifest);
+        manifest = {};
+        console.log(manifest, data);
         updateCheckFile(manifest, true);
     }).fail(function () {
         screenMessage.html('<span style="color:white; font-weight:bold">Failed to get mainfest, .... re-trying</span>');
