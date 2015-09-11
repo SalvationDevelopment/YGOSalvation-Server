@@ -404,6 +404,7 @@ function preformfilter(translated, players, rooms, started, pid, watchers) {
         pass = '',
         spectators = (watchers) ? ' +' + watchers : '';
     game = (translated.poolFormat !== 'Newgioh') ? game : 'newgioh';
+    game = (translated.poolFormat !== 'ARG') ? game : 'arg';
     game = (translated.poolFormat !== 'Unlimited') ? game : 'bad';
     game = (translated.poolFormat !== 'Traditional') ? game : 'bad';
     game = (translated.poolFormat !== 'Mega-Banned') ? game : 'bad';
