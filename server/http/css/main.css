@@ -1575,7 +1575,7 @@ div[data-game^="32"] {
 
 [data-arg] {
     background-image: url('../img/arg.png') !important;
-    background-color: rgba(255, 255, 0, .5) !important;
+    background-color: rgba(0, 0, 0, .5) !important;
     background-size: auto 100% !important;
     text-shadow: 0px 0px 19px black;
     background-repeat: no-repeat !important;
