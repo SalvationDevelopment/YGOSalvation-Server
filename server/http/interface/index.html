@@ -41,18 +41,13 @@
                 gui.Shell.openItem(url);
             });
         }, 3000);
-
-        $(function () {
-            if ("production" !== mode) {
-                $('#control div:last').css('display', 'block');
-            }
-        });
     </script>
     <div id="control">
         <div onclick="win.close(true);"></div>
         <div onclick="maxrestore();"></div>
         <div onclick="win.minimize();"></div>
-        <div onclick="openConsole();" style="display: none;"></div>
+        <div onclick="openConsole();" style="display: none;" id="ccc"></div>
+        <div onclick="" style="margin-right: 20px !important; background: transparent url(http://www.flash-mark.com/assets/img/icon-facebook.png) center center !important" id="ccc"></div>
     </div>
     <main style='height: 100%; background:black'>
         <div style="text-align: center;">
@@ -285,6 +280,11 @@
     </main>
     <script>
         maxrestore();
+        $(function () {
+            if ("production" !== mode) {
+                $('#ccc').css('display', 'block');
+            }
+        });
     </script>
 </body>
 
