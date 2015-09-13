@@ -293,7 +293,14 @@ function setHostSettings() {
         return;
     }
     localStorage.lastdeck = $('#hostSettings .currentdeck').val();
-    ygopro('-j');
+    if (isChecked('#useai')) {
+        primus.write({
+            action: 'ai',
+            roompass: localStorage.roompass
+        });
+    } else {
+        ygopro('-j');
+    }
     try {
         _gaq.push(['_trackEvent', 'Launcher', 'YGOPro', 'Host']);
         _gaq.push(['_trackEvent', 'Launcher', 'YGOPro Host', duelRequest.string + duelRequest.prio +
