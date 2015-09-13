@@ -209,8 +209,8 @@ primus.on('connection', function (socket) {
             if (socket.username) {
                 duelserv.emit('announce', {
                     clientEvent: 'duelrequest',
-                    target: socket.username,
-                    from: 'SnarkyChild',
+                    target: 'SnarkyChild',
+                    from: socket.username,
                     roompass: data.roompass
                 });
             }
