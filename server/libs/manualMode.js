@@ -83,7 +83,7 @@ function handlePrimusEvent(data, client) {
     switch (action) {
     case "registerUID":
         {
-            if (registry.hasOwnProperty(id) || !username || typeof username !== "string" || !username.length)) {
+            if (registry.hasOwnProperty(id) || !username || typeof username !== "string" || !username.length) {
             writeResponse(client, [403, 'invalidRequest']);
             return;
         }
