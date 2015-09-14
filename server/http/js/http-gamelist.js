@@ -293,7 +293,7 @@ function setHostSettings() {
         return;
     }
     localStorage.lastdeck = $('#hostSettings .currentdeck').val();
-    console.log('use AI', isChecked('#useai'), jQuery('#useai'));
+
     if (isChecked('#useai')) {
         primus.write({
             action: 'ai',
