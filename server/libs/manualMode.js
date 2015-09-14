@@ -290,10 +290,10 @@ case "heartBeat":
     }
 case "regDuelLog":
     {
-        if (data.devKey !== process.ENV.DEVKEY) {
+        /*if (data.devKey !== process.ENV.DEVKEY) {
             writeResponse(client, [403, 'invalidRequest']);
             return;
-        }
+        }*/
         writeResponse(client, [200, 'regDuelLog', {
             registry: registry,
             activeDuels: activeDuels
