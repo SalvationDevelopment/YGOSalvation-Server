@@ -98,9 +98,11 @@ function handlePrimusEvent(data, client) {
             if (!activeDuels.hasOwnProperty(duelID) && validDeck(deckList, banLists[hostOptions.banList], databases[hostOptions.database])) {
                 client.join(duelID, function () {
                     activeDuels[duelID] = {
-                        options: hostOptions
+                        options: hostOptions,
+                        players: {},
+                        spectators: {}
                     };
-                    activeDuels[duelID][uid] = {
+                    activeDuels[duelID].players[uid] = {
                         ROLE: ROLE_HOST,
                         deckList: deckList
                     };
@@ -118,13 +120,28 @@ function handlePrimusEvent(data, client) {
                 writeResponse(client, [403, 'invalidRequest']);
                 return;
             }
-            switch (Object.keys(activeDuels[duelID]).length) {
+            switch (Object.keys(activeDuels[duelID].players).length) {
+            case 1:
+                {
+                    if (validDeck(deckList, banLists[activeDuels[duelID].options.banList], databases[activeDuels[duelID].options.database])) {
+                        client.join(duelID, function () {
+                            activeDuels[duelID].player[uid] = {
+                                ROLE: ROLE_PLAYER_TWO,
+                                deckList: deckList
+                            };
+                            writeResponse(client, [200, 'joinedDuel', duelID]);
+                        });
+                    } else {
+                        writeResponse(client, [403, 'invalidRequest']);
+                    }
+                    return;
+                }
             case 2:
                 {
                     if (validDeck(deckList, banLists[activeDuels[duelID].options.banList], databases[activeDuels[duelID].options.database])) {
                         client.join(duelID, function () {
-                            activeDuels[duelID][uid] = {
-                                ROLE: ROLE_PLAYER_TWO,
+                            activeDuels[duelID].players[uid] = {
+                                ROLE: ROLE_PLAYER_THREE,
                                 deckList: deckList
                             };
                             writeResponse(client, [200, 'joinedDuel', duelID]);
@@ -138,22 +155,7 @@ function handlePrimusEvent(data, client) {
                 {
                     if (validDeck(deckList, banLists[activeDuels[duelID].options.banList], databases[activeDuels[duelID].options.database])) {
                         client.join(duelID, function () {
-                            activeDuels[duelID][uid] = {
-                                ROLE: ROLE_PLAYER_THREE,
-                                deckList: deckList
-                            };
-                            writeResponse(client, [200, 'joinedDuel', duelID]);
-                        });
-                    } else {
-                        writeResponse(client, [403, 'invalidRequest']);
-                    }
-                    return;
-                }
-            case 4:
-                {
-                    if (validDeck(deckList, banLists[activeDuels[duelID].options.banList], databases[activeDuels[duelID].options.database])) {
-                        client.join(duelID, function () {
-                            activeDuels[duelID][uid] = {
+                            activeDuels[duelID].players[uid] = {
                                 ROLE: ROLE_PLAYER_FOUR,
                                 deckList: deckList
                             };
@@ -178,7 +180,7 @@ function handlePrimusEvent(data, client) {
                 return;
             }
             client.join(duelID, function () {
-                activeDuels[duelID][uid] = {
+                activeDuels[duelID].spectators[uid] = {
                     ROLE: ROLE_SPECTATOR
                 };
                 writeResponse(client, [200, 'spectatingDuel', duelID]);
@@ -191,7 +193,7 @@ function handlePrimusEvent(data, client) {
                 writeResponse(client, [403, 'invalidRequest']);
                 return;
             }
-            if (duelQuery.indexOf("kick ") === 0 && activeDuels[duelID][uid].ROLE === ROLE_HOST) {
+            if (duelQuery.indexOf("kick ") === 0 && activeDuels[duelID].players[uid].ROLE === ROLE_HOST) {
                 duelQuery = duelQuery.split(/^kick\s/)[1];
                 primus.room(duelID).write({
                     event: 'kick',
@@ -199,7 +201,7 @@ function handlePrimusEvent(data, client) {
                 });
                 for (var user in registry) {
                     if (registry[user].username === duelQuery) {
-                        delete activeDuels[duelID][registry[user].uid];
+                        delete activeDuels[duelID].players[registry[user].uid];
                         break;
                     }
                 }
@@ -209,7 +211,7 @@ function handlePrimusEvent(data, client) {
             switch (duelQuery) {
             case QUERY_DUEL_COMMAND:
                 {
-                    if (activeDuels[duelID].hasOwnProperty(uid) && commandIsValid(activeDuels[duelID], uid, target, moveTo)) {
+                    if (activeDuels[duelID].players.hasOwnProperty(uid) && commandIsValid(activeDuels[duelID], uid, target, moveTo)) {
                         primus.room(duelID).write({
                             event: QUERY_DUEL_COMMAND,
                             data: {
@@ -225,7 +227,7 @@ function handlePrimusEvent(data, client) {
                 }
             case QUERY_XYZ_SUMMON:
                 {
-                    if (activeDuels[duelID].hasOwnProperty(uid) && xyzSummonIsValid(activeDuel[duelID], uid, target, moveTo)) {
+                    if (activeDuels[duelID].players.hasOwnProperty(uid) && xyzSummonIsValid(activeDuel[duelID], uid, target, moveTo)) {
                         primus.room(duelID).write({
                             event: QUERY_XYZ_SUMMON,
                             data: {
@@ -249,7 +251,7 @@ function handlePrimusEvent(data, client) {
                 }
             case QUERY_GET_STATE:
                 {
-                    if (!duelID || !activeDuels.hasOwnProperty(duelID) || !activeDuels.hasOwnProperty("state")) {
+                    if (!duelID || !activeDuels.hasOwnProperty(duelID) || !activeDuels[duelID].hasOwnProperty("state")) {
                         writeResponse(client, [403, 'invalidRequest']);
                         return;
                     }
@@ -258,7 +260,7 @@ function handlePrimusEvent(data, client) {
                 }
             case QUERY_START_DUEL:
                 {
-                    if (!duelID || !activeDuels.hasOwnProperty(duelID) || activeDuels[duelID][uid].ROLE !== ROLE_HOST) {
+                    if (!duelID || !activeDuels.hasOwnProperty(duelID) || activeDuels[duelID].players[uid].ROLE !== ROLE_HOST) {
                         writeResponse(client, [403, 'invalidRequest']);
                         return;
                     }
@@ -268,10 +270,10 @@ function handlePrimusEvent(data, client) {
                     });
                     activeDuels[duelID].state = GameState(Object.keys(activeDuels[duelID]).length - 1);
                     activeDuels[duelID].duelStarted = true;
-                    for (var user in activeDuels[duelID]) {
-                        if (activeDuels[duelID].hasOwnProperty(user) && activeDuels[duelID][user].hasOwnProperty("ROLE")) {
-                            var playerState = activeDuels[duelID].state["Player " + activeDuels[duelID][user].ROLE];
-                            playerState = startDuelState(playerState, JSON.parse(JSON.stringify(activeDuels[duelID][user].deckList)));
+                    for (var player in activeDuels[duelID].players) {
+                        if (activeDuels[duelID].players.hasOwnProperty(player)) {
+                            var playerState = activeDuels[duelID].state["Player " + activeDuels[duelID].players[player].ROLE];
+                            playerState = startDuelState(playerState, JSON.parse(JSON.stringify(activeDuels[duelID].players[player].deckList)));
                         }
                     }
                     writeResponse(client, [200, 'duelStarted', duelID]);
@@ -314,7 +316,7 @@ function handleClientDisconnect(client) {
         duel;
     if (registry.hasOwnProperty(id)) {
         for (duel in activeDuels) {
-            if (activeDuels.hasOwnProperty(duel) && activeDuels[duel].hasOwnProperty(registry[id].uid)) {
+            if (activeDuels.hasOwnProperty(duel) && activeDuels[duel].players.hasOwnProperty(registry[id].uid)) {
                 primus.room(duel).write({
                     event: 'playerDisconnect',
                     data: registry[id].username
@@ -338,14 +340,24 @@ function writeResponse(client, dataArray) {
 
 function secureClientDuel(activeDuel) {
     var clientDuel = {
-            options: activeDuel.options
+            options: activeDuel.options,
+            players: {},
+            spectators: {}
         },
-        uid;
-    for (uid in activeDuel) {
-        if (activeDuel.hasOwnProperty(uid) && registry.hasOwnProperty(uid)) {
-            clientDuel[registry[uid].username] = {
-                ROLE: activeDuel[uid].ROLE
+        uid,
+        spectator;
+    for (uid in activeDuel.players) {
+        if (activeDuel.players.hasOwnProperty(uid) && registry.hasOwnProperty(uid)) {
+            clientDuel.players[registry[uid].username] = {
+                ROLE: activeDuel.players[uid].ROLE
             };
+        }
+    }
+    for (spectator in activeDuel.spectators) {
+        if (activeDuel.spectators.hasOwnProperty(spectator) && registry.hasOwnProperty(spectator)) {
+            clientDuel.spectators[registry[spectator].username] = {
+                ROLE: ROLE_SPECTATOR
+            }
         }
     }
     return clientDuel;
@@ -421,7 +433,7 @@ function validDeck(deckList, banList, database) {
 }
 
 function commandIsValid(activeDuel, uid, target, moveTo) {
-    return activeDuel[uid].ROLE === target.player && activeDuel.state["Player " + target.player][target.location][target.slot] && !activeDuel.state[moveTo.player][moveTo.location][moveTo.slot];
+    return activeDuel.players[uid].ROLE === target.player && activeDuel.state["Player " + target.player][target.location][target.slot] && !activeDuel.state[moveTo.player][moveTo.location][moveTo.slot];
 }
 
 function xyzSummonIsValid(activeDuel, uid, target, moveTo) {
@@ -431,7 +443,7 @@ function xyzSummonIsValid(activeDuel, uid, target, moveTo) {
         moveToSlot = activeDuel.state["Player " + moveTo.player][moveTo.location][moveTo.slot],
         xyzMonster = playerState[target.locations[0]][target.slots[0]],
         isValid = true;
-    if (activeDuel[uid].ROLE !== target.player || !moveToSlot || !xyzMonster) {
+    if (activeDuel.players[uid].ROLE !== target.player || !moveToSlot || !xyzMonster) {
         isValid = false;
         return;
     }
