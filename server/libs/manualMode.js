@@ -125,7 +125,7 @@ function handlePrimusEvent(data, client) {
                 {
                     if (validDeck(deckList, banLists[activeDuels[duelID].options.banList], databases[activeDuels[duelID].options.database])) {
                         client.join(duelID, function () {
-                            activeDuels[duelID].player[uid] = {
+                            activeDuels[duelID].players[uid] = {
                                 ROLE: ROLE_PLAYER_TWO,
                                 deckList: deckList
                             };
