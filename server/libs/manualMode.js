@@ -272,12 +272,11 @@ function handlePrimusEvent(data, client) {
                     activeDuels[duelID].duelStarted = true;
                     for (var player in activeDuels[duelID].players) {
                         if (activeDuels[duelID].players.hasOwnProperty(player)) {
-                            console.log('Duel ID: ', duelID);
-                            console.log('activeDuels[duelID]: ', activeDuels[duelID]);
-                            console.log('player: ', activeDuels[duelID].players);
-                            console.log('role: ', activeDuels[duelID].players[player]);
-                            // var playerState = activeDuels[duelID].state["Player " + activeDuels[duelID].players[player].ROLE];
-                            // playerState = startDuelState(playerState, JSON.parse(JSON.stringify(activeDuels[duelID].players[player].deckList)));
+                            var playerState = activeDuels[duelID].state["Player " + activeDuels[duelID].players[player].ROLE];
+                            if (!playerState) {
+                                writeResponse(client, [500, 'unexpectedServerError']);
+                            }
+                            playerState = startDuelState(playerState, JSON.parse(JSON.stringify(activeDuels[duelID].players[player].deckList)));
                         }
                     }
                     writeResponse(client, [200, 'duelStarted', duelID]);
