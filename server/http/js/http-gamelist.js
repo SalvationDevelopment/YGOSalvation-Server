@@ -301,6 +301,7 @@ function setHostSettings() {
             action: 'ai',
             roompass: localStorage.roompass
         });
+        ygopro('-j');
     } else {
         ygopro('-j');
     }
