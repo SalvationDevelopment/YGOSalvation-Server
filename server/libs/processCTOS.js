@@ -175,10 +175,10 @@ connection request */
 function pickCoreConfig(socket) {
     'use strict';
     var output = 'ini/';
-    if (socket.hostString.indexOf(",22,") > -1) {
+    if (socket.hostString.indexOf(",5,5,1") > -1) {
         return "ini/goat.ini";
     }
-    if (socket.hostString.indexOf(",23,") > -1) {
+    if (socket.hostString.indexOf(",4,5,1") > -1) {
         return "ini/newgioh.ini";
     }
     if (socket.hostString[0] > '2') {
