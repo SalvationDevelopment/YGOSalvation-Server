@@ -55,6 +55,8 @@ function ygopro(parameter) {
     localStorage.serverport = '8911';
     localStorage.lastport = '8911';
     saveSettings();
+    localStorage.pics = (isChecked('[data-localhost=altpics]')) ? './altpics/' : 'pics';
+    console.log(isChecked('[data-localhost=altpics]'));
     if (localStorage.roompass) {
         if (localStorage.roompass[0] === '4') {
             //if battleback
