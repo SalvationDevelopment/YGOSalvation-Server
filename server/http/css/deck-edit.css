@@ -44,12 +44,12 @@
 
 .f50 img {
     float: left;
-    margin-right: -10px;
+    margin-right: -.8px;
 }
 
 .f60 img {
     float: left;
-    margin-right: -20px;
+    margin-right: -1.6vw;
 }
 
 .searchBar {
@@ -86,7 +86,7 @@ input.decknameInput {
 
 .center {
     height: 78%;
-    width: 51%;
+    width: 47.3vw !important;
     border: 1px solid red;
     float: left;
 }
@@ -94,21 +94,21 @@ input.decknameInput {
 .mainDeck {
     float: left;
     height: 66%;
-    width: 100% !important;
+    width: 47.3vw !important;
     min-width: 390px;
 }
 
 .extraDeck {
     float: left;
     height: 17.25%;
-    width: 100% !important;
+    width: 47.3vw !important;
     border: 1px solid green;
 }
 
 .sideDeck {
     float: left;
     height: 17.25%;
-    width: 100% !important;
+    width: 47.3vw !important;
     border: 1px solid hotpink;
 }
 
@@ -171,12 +171,14 @@ button.shuffleDeck {
 }
 
 .mainDeck img {
-    width: 66px;
+    width: 4.73vw;
+    height: 11vh;
 }
 
 .sideDeck img,
 .extraDeck img {
-    width: 52px;
+    width: 3.13vw;
+    margin-top: 1.5vh;
 }
 
 [data-card-limit="0"]:before {
