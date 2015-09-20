@@ -26,7 +26,7 @@ var Primus = require('primus'), //Primus, our Sepiroth-Qliphopth Creator God. We
 
 function gamelistUpdate(data) {
     'use strict';
-    var join = false,
+    var needsKill = true,
         windbot;
     if (data.clientEvent) {
         if (data.clientEvent === 'duelrequest' && data.target === 'SnarkyChild') {
@@ -34,7 +34,16 @@ function gamelistUpdate(data) {
             console.log('duel Request Recieved', data.roompass);
             var windbot = childProcess.spawn('windbot.exe', ['SnarkyChild', 'Hours', '127.0.0.1', '8911', data.roompass], {
                 cwd: startDirectory + '/../ai'
-            }, function () {});
+            }, function () {
+                needsKill = false;
+            });
+            setTimeout(function () {
+                if (needsKill) {
+                    try {
+                        windbot.kill();
+                    } catch (e) {}
+                }
+            }, 1800000)
         }
         return;
     }
