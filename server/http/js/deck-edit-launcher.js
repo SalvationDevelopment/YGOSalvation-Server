@@ -994,9 +994,10 @@ function addDeckLegal(id, targetDeck, targetDeckSize, flList, currentList, deck2
 }
 
 
-$('mainDeck').on('mousedown', 'img', function (ev, a, b, c, d) {
+$('.mainDeck').on('mousedown', 'img', function (ev, a, b, c, d) {
     'use strict';
     if (ev.which === 3) {
-        console.log(ev, a, b, c, d);
+        console.log(ev, $(ev));
     }
+    ev.preventDefault();
 });
