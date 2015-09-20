@@ -477,7 +477,7 @@ function renderList(JSONdata) {
     $('.started')
         .first().before('<br style="clear:both"><span class="gamelabel">' + jsLang.spectate + '<span><br style="clear:both">');
     $('#activeduels').html($('.game').length);
-    $('#activeduelist').html($('.playername').length + spectators);
+    $('#activeduelist').html($('.playername').length + spectators - $('.playername:contains(SnarkyChild)').length);
     $('#loginsinlast24').html(stats24);
 }
 
