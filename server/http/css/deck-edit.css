@@ -44,7 +44,7 @@
 
 .f50 img {
     float: left;
-    margin-right: -.8px;
+    margin-right: -.8vw;
 }
 
 .f60 img {
@@ -327,4 +327,9 @@ input.atkInput {
 
 .extraDeck span.cardImage {
     width: auto;
+}
+
+.descriptionContainer {
+    float: left;
+    font-size: 1.2vh;
 }
