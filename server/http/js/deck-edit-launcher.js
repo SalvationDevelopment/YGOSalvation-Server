@@ -998,7 +998,7 @@ $('.mainDeck').on('mousedown', 'img', function (ev, a, b, c, d) {
     'use strict';
     ev.preventDefault();
     if (ev.which === 3) {
-        console.log(ev, $(ev).index(););
+        console.log(ev, $(ev).index());
     }
 
     return false;
