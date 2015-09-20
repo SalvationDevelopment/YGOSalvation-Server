@@ -332,4 +332,5 @@ input.atkInput {
 .descriptionContainer {
     float: left;
     font-size: 1.2vh;
+    width: 18vw;
 }

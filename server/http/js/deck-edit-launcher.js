@@ -315,7 +315,7 @@ var imgDir = "http://ygopro.us/ygopro/pics/",
             extra: []
         }
     };
-    
+
 function excludeTokens(card) {
     // filter out Tokens
     if (card.type === 16401 || card.type === 16417) {
@@ -346,7 +346,7 @@ function drawDeckEditor(ydk) {
             "extra",
             "side"
         ];
-    decks.forEach(function(deck) {
+    decks.forEach(function (deck) {
         container = $('.' + deck + 'Deck');
         if (container.find('span').length > 0) {
             $('span', container).remove();
@@ -361,7 +361,7 @@ function drawDeckEditor(ydk) {
                 }
             }
         }
-        $('img', container).each(function(index) {
+        $('img', container).each(function (index) {
             $(this).addClass(deck + '_card_' + index);
             $(this).data('cardData', 'deckCard');
         });
@@ -378,20 +378,20 @@ function drawDeck(target) {
         $('span', container).remove();
         deckStorage.reset(target);
     }
-    targetDeck.forEach(function(card) {
+    targetDeck.forEach(function (card) {
         cardObject = getCardObject(parseInt(card, 10));
         container.append(createCardImage(cardObject));
         deckStorage.addCard(target, card);
     });
-    $('img', container).each(function(index) {
+    $('img', container).each(function (index) {
         $(this).addClass(target + '_card_' + index);
         $(this).data('cardData', 'deckCard');
     });
     attachDnDEvent($('img', container));
     adjustDeckClass(deckStorage.getDeck(target), container);
 }
-    
-function shuffleArray (array) {
+
+function shuffleArray(array) {
     var currentIndex = array.length,
         temporaryValue,
         randomIndex;
@@ -405,13 +405,13 @@ function shuffleArray (array) {
     return array;
 }
 
-function storeCard (outputArray) {
+function storeCard(outputArray) {
     return function (data) {
         outputArray.push(data.cardId);
     };
 }
 
-function cardSort (prev, next) {
+function cardSort(prev, next) {
     if (prev.cardType === next.cardType) {
         if (prev.cardName === next.cardName) {
             return 0;
@@ -462,7 +462,7 @@ function sortDeck(target) {
     return outputArray;
 }
 
-function sortAllDecks () {
+function sortAllDecks() {
     var deck,
         sortedDeck;
     for (deck in deckStorage.decks) {
@@ -471,7 +471,7 @@ function sortAllDecks () {
         drawDeck(deck);
     }
 }
-        
+
 function handleResults() {
     const SEARCH_HARD_CAP = 100;
     var monsterCardSelect = $('.monsterCardSelect'),
@@ -480,15 +480,16 @@ function handleResults() {
         monsterTypeCheck = $('[data-input-monster-type]'),
         searchResults = $('.searchResults'),
         inputTypeCheck = $('[data-input-type]').val(),
-        monsterCardValue = parseInt(monsterCardSelect.val() || 0,10),
-        monsterTypeValue = parseInt(monsterTypeSelect.val() || 0,10),
+        monsterCardValue = parseInt(monsterCardSelect.val() || 0, 10),
+        monsterTypeValue = parseInt(monsterTypeSelect.val() || 0, 10),
         exceededSearchCap = false,
         exceededSearchArray = [],
         hiddenType,
         results,
         output = "";
     if ((!inputTypeCheck && $('.typeSelect').val() !== "5") || monsterCardCheck.length || monsterTypeCheck.length) {
-    hiddenType = $('<input type="hidden" data-input-type>').appendTo($('.searchBlock:eq(0)')).val(1 + ((monsterCardValue === 16 && monsterTypeValue) ? 0 : monsterCardValue) + monsterTypeValue);    }
+        hiddenType = $('<input type="hidden" data-input-type>').appendTo($('.searchBlock:eq(0)')).val(1 + ((monsterCardValue === 16 && monsterTypeValue) ? 0 : monsterCardValue) + monsterTypeValue);
+    }
     results = applyFilters(generateQueryObject(), $('.banlistSelect').val(), lflist);
     $('[data-input-type]:hidden').remove();
     if (results.length > SEARCH_HARD_CAP) {
@@ -991,3 +992,11 @@ function addDeckLegal(id, targetDeck, targetDeckSize, flList, currentList, deck2
     }
     return (matchingCopies < maxCopies);
 }
+
+
+$('mainDeck').on('mousedown', 'img', function (ev, a, b, c, d) {
+    'use strict';
+    if (ev.which === 3) {
+        console.log(ev, a, b, c, d);
+    }
+});
