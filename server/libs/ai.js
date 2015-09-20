@@ -19,41 +19,15 @@ var Primus = require('primus'), //Primus, our Sepiroth-Qliphopth Creator God. We
     primus = new Primus(server), // instance of the God
     Socket = require('primus').createSocket(),
     client = new Socket('http://ygopro.us:24555'), //Connect the God to the tree;
-    irc = require("irc"), // IRC Client/bot dependency
-    config = { // IRC configuration
-        channels: ["#lobby"],
-        server: "ygopro.us",
-        botName: "SnarkyChild"
-    }, // initate the bot
-    bot = new irc.Client(config.server, config.botName, {
-        channels: config.channels
-    }),
     childProcess = require('child_process'),
     startDirectory = __dirname;
 
 
 
-
-// have bot listen for a specific command, then do stuff
-function ircInterface(from, to, message) {
-    'use strict';
-
-    //said specific command
-    console.log('message');
-    if (message === 'duel AI') {
-        bot.say('DuelServ', '!duel ' + from);
-        //ok the bot heard a duel request,
-        //it is now messaging duelserv to reissue the duel request to both the bot and itself with more details.
-    }
-}
-console.log('consonecting');
-
-bot.addListener("message", ircInterface);
-
-
 function gamelistUpdate(data) {
     'use strict';
-    var join = false;
+    var join = false,
+        windbot;
     if (data.clientEvent) {
         if (data.clientEvent === 'duelrequest' && data.target === 'SnarkyChild') {
             console.log(data);
