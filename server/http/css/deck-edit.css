@@ -272,7 +272,6 @@ label[for="decknameInput"] > * {
     float: left;
 }
 
-
 input.decknameInput {
     width: 12.5vw;
     float: right;
@@ -314,4 +313,16 @@ input.atkInput {
 
 .searchBar label {
     width: 100%;
+}
+
+.mainDeck span.cardImage {
+    width: auto;
+}
+
+.sideDeck span.cardImage {
+    width: auto;
+}
+
+.extraDeck span.cardImage {
+    width: auto;
 }
