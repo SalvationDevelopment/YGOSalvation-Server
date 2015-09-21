@@ -1000,9 +1000,9 @@ $('.mainDeck').on('mousedown', 'img', function (ev, a, b, c, d) {
     'use strict';
     ev.preventDefault();
     if (ev.which === 3) {
-        console.log($(ev).attr('data-index'), $(this).attr('data-index');
-        }
-
-        return false;
+        console.log($(ev).attr('data-index'), $(this).attr('data-index'));
     }
+
+    return false;
+}
 });
