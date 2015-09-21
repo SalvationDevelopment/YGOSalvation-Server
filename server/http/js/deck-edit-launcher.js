@@ -997,7 +997,7 @@ $('.mainDeck').on('mousedown', 'img', function (ev, a, b, c, d) {
     ev.preventDefault();
     if (ev.which === 3) {
         var index = Number($(this).attr('class').split('_')[2]);
-        deckStorage.removeCard('mainDeck', index);
+        deckStorage.removeCard('main', index);
     }
 
     return false;
@@ -1008,7 +1008,7 @@ $('.extraDeck').on('mousedown', 'img', function (ev, a, b, c, d) {
     ev.preventDefault();
     if (ev.which === 3) {
         var index = Number($(this).attr('class').split('_')[2]);
-        deckStorage.removeCard('extraDeck', index);
+        deckStorage.removeCard('extra', index);
     }
 
     return false;
@@ -1018,7 +1018,7 @@ $('.sideDeck').on('mousedown', 'img', function (ev, a, b, c, d) {
     ev.preventDefault();
     if (ev.which === 3) {
         var index = Number($(this).attr('class').split('_')[2]);
-        deckStorage.removeCard('sideDeck', index);
+        deckStorage.removeCard('side', index);
     }
 
     return false;
