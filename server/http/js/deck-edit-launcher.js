@@ -374,8 +374,8 @@ function drawDeck(target) {
     var targetDeck = deckStorage.getDeck(target),
         container = $('.' + target + 'Deck'),
         cardObject;
-    if (container.find('span').length > 0) {
-        $('span', container).remove();
+    if (container.find('img').length > 0) {
+        $('img', container).remove();
         deckStorage.reset(target);
     }
     targetDeck.forEach(function (card) {
@@ -998,7 +998,9 @@ $('.mainDeck').on('mousedown', 'img', function (ev, a, b, c, d) {
     if (ev.which === 3) {
         var index = Number($(this).attr('class').split('_')[2]);
         deckStorage.removeCard('main', index);
+        drawDeck('main');
     }
+
 
     return false;
 });
@@ -1009,6 +1011,7 @@ $('.extraDeck').on('mousedown', 'img', function (ev, a, b, c, d) {
     if (ev.which === 3) {
         var index = Number($(this).attr('class').split('_')[2]);
         deckStorage.removeCard('extra', index);
+        drawDeck('extra');
     }
 
     return false;
@@ -1019,10 +1022,32 @@ $('.sideDeck').on('mousedown', 'img', function (ev, a, b, c, d) {
     if (ev.which === 3) {
         var index = Number($(this).attr('class').split('_')[2]);
         deckStorage.removeCard('side', index);
+        drawDeck('side');
     }
 
     return false;
 });
-$('img').on("contextmenu", function (evt) {
+
+
+$('.searchResults').on('mousedown', 'img', function (ev, a, b, c, d) {
+    'use strict';
+
+    if (ev.which === 3) {
+
+        var id = Number($(this).attr('data-card-id')),
+            remainingDecks = deckStorage.not('main')
+
+        good = addDeckLegal(id, 'main', 60, lflist, $('.banlistSelect').val(), remainingDecks[0], remainingDecks[1]);
+        if (good) {
+            deckStorage.removeCard('main', index);
+            drawDeck('main');
+        }
+
+    }
+
+    return false;
+});
+
+$('.mainDeck, .sideDeck, .extraDeck, .searchResults').on("contextmenu", function (evt) {
     evt.preventDefault();
 });
