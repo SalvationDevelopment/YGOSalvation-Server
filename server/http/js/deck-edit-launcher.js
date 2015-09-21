@@ -374,10 +374,7 @@ function drawDeck(target) {
     var targetDeck = deckStorage.getDeck(target),
         container = $('.' + target + 'Deck'),
         cardObject;
-    if (container.find('img').length > 0) {
-        $('img', container).remove();
-        deckStorage.reset(target);
-    }
+    $(container).html('');
     targetDeck.forEach(function (card) {
         cardObject = getCardObject(parseInt(card, 10));
         container.append(createCardImage(cardObject));
@@ -996,7 +993,9 @@ $('.mainDeck').on('mousedown', 'img', function (ev, a, b, c, d) {
     'use strict';
     ev.preventDefault();
     if (ev.which === 3) {
+
         var index = Number($(this).attr('class').split('_')[2]);
+        console.log(index);
         deckStorage.removeCard('main', index);
         drawDeck('main');
     }
@@ -1028,7 +1027,7 @@ $('.sideDeck').on('mousedown', 'img', function (ev, a, b, c, d) {
     return false;
 });
 
-
+/*
 $('.searchResults').on('mousedown', 'img', function (ev, a, b, c, d) {
     'use strict';
 
@@ -1047,6 +1046,8 @@ $('.searchResults').on('mousedown', 'img', function (ev, a, b, c, d) {
 
     return false;
 });
+
+*/
 
 $('.mainDeck, .sideDeck, .extraDeck, .searchResults').on("contextmenu", function (evt) {
     evt.preventDefault();
