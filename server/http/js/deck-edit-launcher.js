@@ -1,7 +1,7 @@
-/*globals $*/
 var cards = [],
     lflist = {};
 $(function () {
+    'use strict';
     $.getJSON('http://ygopro.us/manifest/database_0-en-OCGTCG.json', function (data) {
         cards = data;
         cards = cards.filter(validCards).filter(excludeTokens);
@@ -42,46 +42,46 @@ $(function () {
                 $('.typeSelect').on('change', function () {
                     switch ($(this).val()) {
                     case "5":
-                        // all
-                        monsterCardSelect.css('display', 'none').removeAttr('data-input-monster-card');
-                        monsterTypeSelect.css('display', 'none').removeAttr('data-input-monster-type');
-                        spellSelect.css('display', 'none');
-                        trapSelect.css('display', 'none');
-                        raceSelect.attr('disabled', '').removeAttr('data-input-race');
-                        attributeSelect.attr('disabled', '').removeAttr('data-input-attribute');
-                        $('[data-input-type]').removeAttr('data-input-type');
-                        break;
-
+                        { // all
+                            monsterCardSelect.css('display', 'none').removeAttr('data-input-monster-card');
+                            monsterTypeSelect.css('display', 'none').removeAttr('data-input-monster-type');
+                            spellSelect.css('display', 'none');
+                            trapSelect.css('display', 'none');
+                            raceSelect.attr('disabled', '').removeAttr('data-input-race');
+                            attributeSelect.attr('disabled', '').removeAttr('data-input-attribute');
+                            $('[data-input-type]').removeAttr('data-input-type');
+                            break;
+                        }
                     case "1":
-                        // monster
-                        monsterCardSelect.css('display', 'block').attr('data-input-monster-card', '');
-                        monsterTypeSelect.css('display', 'block').attr('data-input-monster-type', '');
-                        spellSelect.css('display', 'none').removeAttr('data-input-type');
-                        trapSelect.css('display', 'none').removeAttr('data-input-type');
-                        raceSelect.removeAttr('disabled').attr('data-input-race', '');
-                        attributeSelect.removeAttr('disabled').attr('data-input-attribute', '');
-                        break;
-
+                        { // monster
+                            monsterCardSelect.css('display', 'block').attr('data-input-monster-card', '');
+                            monsterTypeSelect.css('display', 'block').attr('data-input-monster-type', '');
+                            spellSelect.css('display', 'none').removeAttr('data-input-type');
+                            trapSelect.css('display', 'none').removeAttr('data-input-type');
+                            raceSelect.removeAttr('disabled').attr('data-input-race', '');
+                            attributeSelect.removeAttr('disabled').attr('data-input-attribute', '');
+                            break;
+                        }
                     case "2":
-                        // spell
-                        spellSelect.css('display', 'block').attr('data-input-type', '');
-                        monsterCardSelect.css('display', 'none').removeAttr('data-input-monster-card');
-                        monsterTypeSelect.css('display', 'none').removeAttr('data-input-monster-type');
-                        trapSelect.css('display', 'none').removeAttr('data-input-type');
-                        raceSelect.attr('disabled', '').removeAttr('data-input-race');
-                        attributeSelect.attr('disabled', '').removeAttr('data-input-attribute');
-                        break;
-
+                        { // spell
+                            spellSelect.css('display', 'block').attr('data-input-type', '');
+                            monsterCardSelect.css('display', 'none').removeAttr('data-input-monster-card');
+                            monsterTypeSelect.css('display', 'none').removeAttr('data-input-monster-type');
+                            trapSelect.css('display', 'none').removeAttr('data-input-type');
+                            raceSelect.attr('disabled', '').removeAttr('data-input-race');
+                            attributeSelect.attr('disabled', '').removeAttr('data-input-attribute');
+                            break;
+                        }
                     case "4":
-                        // traps
-                        trapSelect.css('display', 'block').attr('data-input-type', '');
-                        monsterCardSelect.css('display', 'none').removeAttr('data-input-monster-card');
-                        monsterTypeSelect.css('display', 'none').removeAttr('data-input-monster-type');
-                        spellSelect.css('display', 'none').removeAttr('data-input-type');
-                        raceSelect.attr('disabled', '').removeAttr('data-input-race');
-                        attributeSelect.attr('disabled', '').removeAttr('data-input-attribute');
-                        break;
-
+                        { // traps
+                            trapSelect.css('display', 'block').attr('data-input-type', '');
+                            monsterCardSelect.css('display', 'none').removeAttr('data-input-monster-card');
+                            monsterTypeSelect.css('display', 'none').removeAttr('data-input-monster-type');
+                            spellSelect.css('display', 'none').removeAttr('data-input-type');
+                            raceSelect.attr('disabled', '').removeAttr('data-input-race');
+                            attributeSelect.attr('disabled', '').removeAttr('data-input-attribute');
+                            break;
+                        }
                     }
                 });
                 $('.searchButton').on('click', handleResults);
@@ -387,7 +387,6 @@ function drawDeck(target) {
     });
     $('img', container).each(function (index) {
         $(this).addClass(target + '_card_' + index);
-        $(this).attr('data-index', index);
         $(this).data('cardData', 'deckCard');
     });
     attachDnDEvent($('img', container));
@@ -575,7 +574,6 @@ function dropHandler(target) {
             targetContainer = $('.' + target + 'Deck');
         if (addDeckLegal(id, targetDeck, maximumSize, lflist, $('.banlistSelect').val(), remainingDecks[0], remainingDecks[1]) && ui.draggable.data('cardData') === 'searchedCard') {
             clone.addClass(target + '_card_' + targetDeck.length);
-            clone.attr('data-index', index);
             clone.data('cardData', 'deckCard');
             attachDnDEvent(clone);
             targetContainer.append(clone);
@@ -1002,7 +1000,7 @@ $('.mainDeck').on('mousedown', 'img', function (ev, a, b, c, d) {
     'use strict';
     ev.preventDefault();
     if (ev.which === 3) {
-        console.log($(ev).attr('data-index'), $(this).attr('data-index'));
+        console.log($(ev).attr('class'), $(this).attr('class'));
     }
 
     return false;
