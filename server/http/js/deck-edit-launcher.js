@@ -1004,5 +1004,4 @@ $('.mainDeck').on('mousedown', 'img', function (ev, a, b, c, d) {
     }
 
     return false;
-}
 });
