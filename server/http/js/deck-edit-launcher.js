@@ -994,7 +994,7 @@ $('.mainDeck').on('mousedown', 'img', function (ev, a, b, c, d) {
     ev.preventDefault();
     if (ev.which === 3) {
 
-        var index = Number($(this).attr('class').split('_')[2]);
+        var index = deckStorage.decks.main.indexOf(Number($(this).attr('data-card-id')))
         console.log(index);
         deckStorage.removeCard('main', index);
         drawDeck('main');
@@ -1008,7 +1008,7 @@ $('.extraDeck').on('mousedown', 'img', function (ev, a, b, c, d) {
     'use strict';
     ev.preventDefault();
     if (ev.which === 3) {
-        var index = Number($(this).attr('class').split('_')[2]);
+        var index = deckStorage.decks.extra.indexOf(Number($(this).attr('data-card-id')))
         deckStorage.removeCard('extra', index);
         drawDeck('extra');
     }
@@ -1019,7 +1019,7 @@ $('.sideDeck').on('mousedown', 'img', function (ev, a, b, c, d) {
     'use strict';
     ev.preventDefault();
     if (ev.which === 3) {
-        var index = Number($(this).attr('class').split('_')[2]);
+        var index = deckStorage.decks.side.indexOf(Number($(this).attr('data-card-id')))
         deckStorage.removeCard('side', index);
         drawDeck('side');
     }
