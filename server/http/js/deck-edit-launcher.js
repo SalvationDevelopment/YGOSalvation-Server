@@ -996,7 +996,29 @@ $('.mainDeck').on('mousedown', 'img', function (ev, a, b, c, d) {
     'use strict';
     ev.preventDefault();
     if (ev.which === 3) {
-        console.log($(ev).attr('class'), $(this).attr('class'));
+        var index = Number($(this).attr('class').split('_')[2]);
+        deckStorage.removeCard('mainDeck', index);
+    }
+
+    return false;
+});
+
+$('.extraDeck').on('mousedown', 'img', function (ev, a, b, c, d) {
+    'use strict';
+    ev.preventDefault();
+    if (ev.which === 3) {
+        var index = Number($(this).attr('class').split('_')[2]);
+        deckStorage.removeCard('extraDeck', index);
+    }
+
+    return false;
+});
+$('.sideDeck').on('mousedown', 'img', function (ev, a, b, c, d) {
+    'use strict';
+    ev.preventDefault();
+    if (ev.which === 3) {
+        var index = Number($(this).attr('class').split('_')[2]);
+        deckStorage.removeCard('sideDeck', index);
     }
 
     return false;
