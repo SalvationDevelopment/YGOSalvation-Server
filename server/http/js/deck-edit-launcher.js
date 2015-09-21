@@ -1,7 +1,6 @@
 var cards = [],
     lflist = {};
 $(function () {
-    'use strict';
     $.getJSON('http://ygopro.us/manifest/database_0-en-OCGTCG.json', function (data) {
         cards = data;
         cards = cards.filter(validCards).filter(excludeTokens);
@@ -364,7 +363,6 @@ function drawDeckEditor(ydk) {
         }
         $('img', container).each(function (index) {
             $(this).addClass(deck + '_card_' + index);
-            $(this).attr('data-index', index);
             $(this).data('cardData', 'deckCard');
         });
         attachDnDEvent($('img', container));
@@ -994,8 +992,6 @@ function addDeckLegal(id, targetDeck, targetDeckSize, flList, currentList, deck2
     }
     return (matchingCopies < maxCopies);
 }
-
-
 $('.mainDeck').on('mousedown', 'img', function (ev, a, b, c, d) {
     'use strict';
     ev.preventDefault();
