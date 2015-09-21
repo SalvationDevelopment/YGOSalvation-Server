@@ -387,6 +387,7 @@ function drawDeck(target) {
     });
     $('img', container).each(function (index) {
         $(this).addClass(target + '_card_' + index);
+        $(this).attr('data-index', index);
         $(this).data('cardData', 'deckCard');
     });
     attachDnDEvent($('img', container));
@@ -574,6 +575,7 @@ function dropHandler(target) {
             targetContainer = $('.' + target + 'Deck');
         if (addDeckLegal(id, targetDeck, maximumSize, lflist, $('.banlistSelect').val(), remainingDecks[0], remainingDecks[1]) && ui.draggable.data('cardData') === 'searchedCard') {
             clone.addClass(target + '_card_' + targetDeck.length);
+            clone.attr('data-index', index);
             clone.data('cardData', 'deckCard');
             attachDnDEvent(clone);
             targetContainer.append(clone);
