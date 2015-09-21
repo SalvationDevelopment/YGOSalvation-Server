@@ -363,6 +363,7 @@ function drawDeckEditor(ydk) {
         }
         $('img', container).each(function (index) {
             $(this).addClass(deck + '_card_' + index);
+            $(this).attr('data-index', index);
             $(this).data('cardData', 'deckCard');
         });
         attachDnDEvent($('img', container));
@@ -998,8 +999,9 @@ $('.mainDeck').on('mousedown', 'img', function (ev, a, b, c, d) {
     'use strict';
     ev.preventDefault();
     if (ev.which === 3) {
-        console.log(ev, $('.mainDeck').index(ev));
-    }
+        console.log($(ev).attr('data-index'), $(this).attr('data-index');
+        }
 
-    return false;
+        return false;
+    });
 });
