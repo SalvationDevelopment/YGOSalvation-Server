@@ -1,6 +1,12 @@
 {
     "Articles": [
 		{
+			"Title": "Another one",
+			"Subtitle": "Not much else to report",
+			"Content": "<p>For those who didn't know, we added Swordsmith of Shiranui to the system earlier this afternoon. At the rate the card reveals are going, you could probably expect a new card added every day.<br />Don't forget to check us out on Facebook! Just click the Facebook icon on the top-right of the program to access it.</p>",
+			"Author": "StormWolf",
+			"Date": "September 22, 2015"
+		},{
 			"Title": "More new cards",
 			"Subtitle": "Sorry for the wait!",
 			"Content": "<p>We have added some new cards today and yesterday (for those who didn't notice).<br /><br />Ikusagami - Shiranui<br />Companion of the Destruction Swordmaster<br />Chasing Wings<br />Dinomist Rex<br />Goyo King<br /><br />King was revealed earlier today, but the rest took longer for bug fixing. The credit for writing the initial scripts goes to YGOHack137, OneShot and Ragna_Edge for bug fixing, and the rest of the QA team (Dragunlegend and Laughing Luna) for testing the cards.</p>",
