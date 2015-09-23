@@ -18,7 +18,8 @@ var primus,
     path = require('path'),
     request = require('request'),
     ps = require('ps-node'),
-    online = 0;
+    online = 0,
+    currentGlobalMessage = '';
 
 var logger = new(winston.Logger)({
     transports: [
@@ -224,6 +225,7 @@ primus.on('connection', function (socket) {
                     stats: stats,
                     online: online
                 });
+
             });
             socket.join('activegames', function () {
                 socket.write(JSON.stringify(gamelist));
@@ -252,6 +254,10 @@ primus.on('connection', function (socket) {
                             stats[info.displayname] = new Date().getTime();
                             socket.username = data.username;
                             sendRegistry();
+                            socket.write({
+                                clientEvent: 'global',
+                                message: currentGlobalMessage
+                            });
                         }
                     } catch (msgError) {
                         console.log('Error during validation', body, msgError, socket.address.ip);
@@ -277,6 +283,7 @@ primus.on('connection', function (socket) {
                                 clientEvent: 'global',
                                 message: data.message
                             });
+                            currentGlobalMessage = data.message;
                         }
                     } catch (msgError) {
                         console.log('Error during validation', body, msgError, socket.address.ip);
