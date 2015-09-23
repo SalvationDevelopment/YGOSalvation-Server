@@ -275,7 +275,7 @@ label[for="decknameInput"] > * {
 }
 
 .searchBar input {
-    height: 1.35vw;
+    height: 2.5vh;
 }
 
 input.decknameInput {
