@@ -591,6 +591,9 @@ $('body').on('mousedown', '.game', function (ev) {
     'use strict';
     if (admin === "1" && launcher && ev.which === 3) {
         var killpoint = $(ev.target).attr('data-killpoint');
+        if (killpoint === undefined) {
+            return;
+        }
         if (confirm('Kill game ' + killpoint)) {
             killgame(killpoint);
         }
