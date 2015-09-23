@@ -274,6 +274,10 @@ label[for="decknameInput"] > * {
     float: left;
 }
 
+.searchBar input {
+    height: 1.35vw;
+}
+
 input.decknameInput {
     width: 12.5vw;
     float: right;
