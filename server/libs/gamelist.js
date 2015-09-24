@@ -429,9 +429,6 @@ duelserv.on('announce', function (message) {
 
 duelserv.on('del', function (pid) {
     'use strict';
-    ps.kill(data.killTarget, function (err) {
-        console.log('--', pid);
-    });
     var game;
     for (game in gamelist) {
         if (gamelist.hasOwnProperty(game)) {
@@ -442,6 +439,9 @@ duelserv.on('del', function (pid) {
             }
         }
     }
+    ps.kill(pid, function (err) {
+        console.log('--', pid);
+    });
 });
 
 module.exports = {
