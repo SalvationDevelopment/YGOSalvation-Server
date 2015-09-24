@@ -97,7 +97,8 @@ function handleCoreMessage(core_message_raw, port, pid) {
             break;
 
         case ('::::endduel'):
-            duelserv.emit('del', gamelist[core_message[1]].pid);
+            ps.kill(gamelist[core_message[1]].pid, function (error) {});
+            delete gamelist[core_message[1]];
             //process.kill(pid);
             break;
 
@@ -435,17 +436,13 @@ duelserv.on('del', function (pid) {
             if (String() + gamelist[game].pid === pid) {
                 delete gamelist[game];
                 announce(JSON.stringify(gamelist));
-                ps.kill(pid);
-
             }
         }
-
     }
-
-
-
-
+    ps.kill(pid, function (error) {});
 });
+
+
 
 module.exports = {
     messageListener: messageListener,
