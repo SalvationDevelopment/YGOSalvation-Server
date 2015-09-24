@@ -435,13 +435,16 @@ duelserv.on('del', function (pid) {
             if (String() + gamelist[game].pid === pid) {
                 delete gamelist[game];
                 announce(JSON.stringify(gamelist));
+                ps.kill(pid);
 
             }
         }
+
     }
-    ps.kill(pid, function (err) {
-        console.log('--', pid);
-    });
+
+
+
+
 });
 
 module.exports = {
