@@ -97,7 +97,7 @@ function handleCoreMessage(core_message_raw, port, pid) {
             break;
 
         case ('::::endduel'):
-            delete gamelist[core_message[1]];
+            duelserv.emit('del', gamelist[core_message[1]].pid);
             //process.kill(pid);
             break;
 
@@ -429,18 +429,20 @@ duelserv.on('announce', function (message) {
 
 duelserv.on('del', function (pid) {
     'use strict';
+    ps.kill(data.killTarget, function (err) {
+        console.log('--', pid);
+    });
     var game;
     for (game in gamelist) {
         if (gamelist.hasOwnProperty(game)) {
             if (String() + gamelist[game].pid === pid) {
                 delete gamelist[game];
                 announce(JSON.stringify(gamelist));
+
             }
         }
     }
 });
-
-
 
 module.exports = {
     messageListener: messageListener,
