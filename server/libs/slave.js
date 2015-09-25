@@ -1,22 +1,11 @@
 /*jslint  node: true, plusplus: true*/
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 var httpsServer;
-try {
-    var fs = require('fs'),
-        ssloptions = {
-            ca: fs.readFileSync(process.env.SSL + 'sub.class1.server.ca.pem'),
-            key: fs.readFileSync(process.env.SSL + 'ssl.key.unsecure'),
-            cert: fs.readFileSync(process.env.SSL + 'ssl.crt')
-        },
-        http = require('https');
-    var httpsServer = http.createServer(ssloptions);
-    httpsServer.listen(8082);
-} catch (e) {
-    console.log('not using SSL')
-    var http = require('http');
-    var httpsServer = http.createServer();
-    httpsServer.listen(8082);
-}
+
+console.log('not using SSL');
+var http = require('http');
+var httpsServer = http.createServer();
+httpsServer.listen(8082);
 
 
 var ygoserver, //port 8911 ygopro Server

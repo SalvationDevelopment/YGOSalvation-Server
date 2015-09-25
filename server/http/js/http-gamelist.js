@@ -504,6 +504,15 @@ primus.on('data', function (data) {
         if (data.clientEvent === 'global') {
             $('footer').html(data.message).addClass('loud');
         }
+        if (data.clientEvent === 'registrationRequest') {
+            if ($('#ips_username').val(localStorage.loginnick) && $('#ips_password').val(localStorage.loginpass)) {
+                primus.write({
+                    action: 'register',
+                    username: $('#ips_username').val(),
+                    password: $('#ips_password').val()
+                });
+            }
+        }
         if (data.clientEvent === 'kill' && data.target === localStorage.nickname) {
             ygopro('kk');
         }
