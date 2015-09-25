@@ -226,6 +226,9 @@ primus.on('connection', function (socket) {
                     stats: stats,
                     online: online
                 });
+                socket.write({
+                    clientEvent: 'registrationRequest'
+                });
 
             });
             socket.join('activegames', function () {
