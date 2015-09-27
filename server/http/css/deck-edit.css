@@ -366,5 +366,9 @@ input.scaleInput {
 
 #deckedit .searchBlock input {
     float: right;
-    margin-right: 4vw;
+    margin-right: 7vw;
+}
+
+select.forbiddenLimitedSelect {
+    margin-right: 7vw !important;
 }
