@@ -263,7 +263,7 @@ function startCore(port, socket, data, callback) {
     var configfile = pickCoreConfig(socket),
         params = port + ' ' + configfile;
 
-
+    console.log(configfile);
     if (!legalPassword(socket.hostString)) {
         //deal with bad game request
         cHistory.info('[' + socket.remoteAddress + ':' + socket.username + '] requested bad game: ' + socket.hostString);
