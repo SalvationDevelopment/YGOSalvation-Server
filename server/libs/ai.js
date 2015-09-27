@@ -30,9 +30,7 @@ function gamelistUpdate(data) {
         windbot;
     if (data.clientEvent) {
         if (data.clientEvent === 'duelrequest' && data.target === 'SnarkyChild') {
-            console.log(data);
-            console.log('duel Request Recieved', data.roompass);
-            var windbot = childProcess.spawn('windbot.exe', ['SnarkyChild', 'Hours', '127.0.0.1', '8911', data.roompass], {
+            windbot = childProcess.spawn('windbot.exe', ['SnarkyChild', 'Hours', '127.0.0.1', '8911', data.roompass], {
                 cwd: startDirectory + '/../ai'
             }, function () {
                 needsKill = false;
@@ -43,7 +41,7 @@ function gamelistUpdate(data) {
                         windbot.kill();
                     } catch (e) {}
                 }
-            }, 1800000)
+            }, 1800000);
         }
         return;
     }
@@ -65,7 +63,6 @@ client.write({
 });
 
 module.exports = {
-    ircInterface: ircInterface,
     gamelistUpdate: gamelistUpdate,
     onConnectGamelist: onConnectGamelist,
     onCloseGamelist: onCloseGamelist
