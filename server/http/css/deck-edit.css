@@ -1,8 +1,8 @@
-* {
-    box-sizing: border-box;
+#deckedit * {
+    box-sizing: border-box !important;
 }
 
-#deckedit {
+he #deckedit {
     font-family: monospace;
     font-size: 12px;
 }
@@ -65,6 +65,7 @@
     padding: 1%;
     /*    border: 1px solid yellow;*/
     
+    padding-bottom: 0;
     overflow-y: auto;
 }
 
@@ -156,8 +157,9 @@ select {
 button {
     margin-bottom: 1%;
     line-height: 1em;
-    width: 4.5vw;
+    width: 3.5vw;
     white-space: nowrap;
+    padding: 0;
 }
 
 button.shuffleDeck {
@@ -229,7 +231,10 @@ span.cardImage {
 }
 
 #deckedit label select {
-    width: 12.5vw;
+    width: 11.5vw;
+    float: right;
+    margin-right: 7vw;
+    font-size: 1.7vh;
 }
 
 #deckedit select.deckSelect {
@@ -337,4 +342,13 @@ input.atkInput {
     float: left;
     font-size: 1.2vh;
     width: 18vw;
+}
+
+select.typeSelect,
+select.trapSelect {
+    margin-right: 14.5vw !important;
+}
+
+select.forbiddenLimitedSelect {
+    margin-right: 10vw !important;
 }
