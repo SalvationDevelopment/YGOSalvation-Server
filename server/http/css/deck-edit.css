@@ -346,9 +346,20 @@ input.atkInput {
 
 select.typeSelect,
 select.trapSelect {
-    margin-right: 14.5vw !important;
+    margin-right: 14vw !important;
 }
 
 select.forbiddenLimitedSelect {
     margin-right: 10vw !important;
+}
+
+.mainContainer {
+    font-size: 1.8vh;
+    line-height: 3.1vh !important;
+}
+
+input.levelInput,
+input.scaleInput {
+    float: right;
+    margin-right: 7vw;
 }
