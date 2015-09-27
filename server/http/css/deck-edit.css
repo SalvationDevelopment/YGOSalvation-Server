@@ -363,3 +363,8 @@ input.scaleInput {
     float: right;
     margin-right: 7vw;
 }
+
+#deckedit .searchBlock input {
+    float: right;
+    margin-right: 4vw;
+}
