@@ -1,6 +1,7 @@
 /*jslint bitwise: true*/
 
 var enums = enums || require('../../libs/enums.js');
+
 function makeCard(buffer, start, controller) {
     'use strict';
     if (buffer.length < 4) {
@@ -150,5 +151,6 @@ function makeCard(buffer, start, controller) {
 
 
 }
-
-module.exports = makeCard;
+if (require !== undefined) {
+    module.exports = makeCard;
+}
