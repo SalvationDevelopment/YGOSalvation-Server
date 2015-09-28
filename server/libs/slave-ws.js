@@ -2,12 +2,9 @@
 
 
 var ygoserver, //port 8911 ygopro Server
-    net = require('net'), //tcp connections
-    WebSocket = require('ws').Server,
+    WebSocketServer = require('ws').Server,
     Framemaker = require('./parseframes.js'), //understand YGOPro API.
-    processIncomingTrasmission = require('./processCTOS.js'), // gamelist and start games
-    http = require('http'),
-    httpsServer = http.createServer();
+    processIncomingTrasmission = require('./processCTOS.js'); // gamelist and start games
 
 function initiateSlave() {
     'use strict';
@@ -15,8 +12,8 @@ function initiateSlave() {
     var parsePackets = require('./parsepackets.js'),
         ws;
 
-    ws = new WebSocket({
-        server: httpsServer
+    ws = new WebSocketServer({
+        port: 8082
     });
     ws.on('connection', function connection(socket) {
         console.log('!!! --- connection to Websocket');
@@ -58,5 +55,4 @@ function initiateSlave() {
 
     return ygoserver;
 }
-httpsServer.listen(8082);
 initiateSlave();

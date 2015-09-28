@@ -1,12 +1,17 @@
 /*jslint node:true */
-/*jslint browser : true */
+
 'use strict';
 
-var sqlite3 = require('sqlite3').verbose(), /* access databse file */
-    fs = require('fs'), /* access file system */
-    ffi = require('ffi'), /* allows dynamic linking of the ocgapi.dll, critical; */
-    ref = require('ref'), /* allows use of C++ pointers for C++ JS interactions, critical */
-    struct = require('ref-struct'), /* allows use of C++ structures for C++ JS interactions, critical */
+var sqlite3 = require('sqlite3').verbose(),
+    /* access databse file */
+    fs = require('fs'),
+    /* access file system */
+    ffi = require('ffi'),
+    /* allows dynamic linking of the ocgapi.dll, critical; */
+    ref = require('ref'),
+    /* allows use of C++ pointers for C++ JS interactions, critical */
+    struct = require('ref-struct'),
+    /* allows use of C++ structures for C++ JS interactions, critical */
     queryfor = require('./sql-queries');
 
 
