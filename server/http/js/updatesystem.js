@@ -305,6 +305,7 @@ function processServerRequest(parameter) {
         if (localStorage.roompass[0] === '3' && letter === 'j') {
             localStorage.dbtext = 'Z-CWA.cdb';
         }
+        console.log(localStorage.dbtext);
         copyFile(stringConf, ygoproStringConf, function (stringError) {
             if (stringError) {
                 $('#servermessages').text('Failed to copy strings');
