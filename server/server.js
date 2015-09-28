@@ -76,8 +76,7 @@ function initiateMaster(numCPUs) {
             clusterIterator = 0;
         }
     });
-    var fork = require('child_process').fork;
-    fork('./libs/slave.js');
+
 
 }
 
@@ -87,6 +86,7 @@ function initiateMaster(numCPUs) {
     'use strict';
     if (process.env.SLAVE) {
         require('./libs/slave.js');
+        require('./libs/slave-ws.js');
         return;
     } else if (process.env.SERVICE) {
         return;
