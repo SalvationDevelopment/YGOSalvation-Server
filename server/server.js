@@ -56,21 +56,19 @@ function initiateMaster(numCPUs) {
         cwd: 'http'
     });
 
-    function setupWorker(x, ws) {
+    function setupWorker(x) {
         //'use strict';
         console.log(('        Starting Slave ' + x).grey);
         var worker = cluster.fork({
             PORTRANGE: x,
-            SLAVE: true,
-            WEBSOCKET: ws
+            SLAVE: true
         });
 
         worker.on('message', gamelistMessage);
     }
     for (clusterIterator; clusterIterator < numCPUs; clusterIterator++) {
-        setupWorker(clusterIterator, false);
+        setupWorker(clusterIterator);
     }
-    setupWorker(clusterIterator++, true);
     cluster.on('exit', function (worker, code, signal) {
         notification = 'worker ' + clusterIterator + ' died ' + code + ' ' + signal;
         setupWorker(clusterIterator++);
@@ -84,10 +82,7 @@ function initiateMaster(numCPUs) {
 
 (function main() {
     'use strict';
-    if (process.env.SLAVE && process.env.WEBSOCKET) {
-        require('./libs/slave-ws.js');
-        return;
-    } else if (process.env.SLAVE && !process.env.WEBSOCKET) {
+    if (process.env.SLAVE) {
         require('./libs/slave.js');
         return;
     } else if (process.env.SERVICE) {
