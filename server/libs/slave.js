@@ -1,16 +1,7 @@
 /*jslint  node: true, plusplus: true*/
-process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
-var httpsServer;
-
-console.log('not using SSL');
-var http = require('http');
-var httpsServer = http.createServer();
-httpsServer.listen(8082);
-
 
 var ygoserver, //port 8911 ygopro Server
     net = require('net'), //tcp connections
-    WebSocket = require('ws').Server,
     Framemaker = require('./parseframes.js'), //understand YGOPro API.
     processIncomingTrasmission = require('./processCTOS.js'); // gamelist and start games
 
