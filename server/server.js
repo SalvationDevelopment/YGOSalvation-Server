@@ -76,7 +76,9 @@ function initiateMaster(numCPUs) {
             clusterIterator = 0;
         }
     });
-    require('./libs/slave.js');
+    var fork = require('child_process').fork;
+    fork('./libs/slave.js');
+
 }
 
 
