@@ -76,6 +76,7 @@ function initiateMaster(numCPUs) {
             clusterIterator = 0;
         }
     });
+    require('./libs/slave.js');
 }
 
 
