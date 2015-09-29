@@ -51,8 +51,9 @@ function singlesitenav(target) {
         });
         chatStarted = true;
     }
+    $('.activescreen').removeClass('activescreen')
     $('header').css('top', '100vh');
-    $('#' + target).css('top', '0');
+    $('#' + target).css('top', '0').addClass('activescreen');
     saveSettings();
     return false;
 }
@@ -120,7 +121,7 @@ function processServerCall(data) {
         selectedfont = $("#fontlist option:selected").val(),
         selecteddb = $("#dblist option:selected").val(),
         deckfile;
-    $('.currentdeck').html(data.currentdeck);
+    $('.currentdeck').not('.activescreen .crrentdeck').html(data.currentdeck);
     $('#skinlist').html(data.skinlist);
     $('#fontlist').html(data.fonts);
     $('#dblist').html(data.databases);
@@ -130,7 +131,7 @@ function processServerCall(data) {
     $('#dblist option[value="' + selecteddb + '"]').attr('selected', 'selected');
     deckfiles = data.files;
     $('.deckSelect').html('');
-    for(deckfile in deckfiles) {
+    for (deckfile in deckfiles) {
         $('.deckSelect').append('<option value="' + deckfile + '">' + deckfile.replace('.ydk', '') + '</option>');
     }
     //console.log(data);
