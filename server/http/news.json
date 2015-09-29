@@ -1,6 +1,12 @@
 {
     "Articles": [
 		{
+			"Title": "An update regarding the server",
+			"Subtitle": "Some more cards as well",
+			"Content": "<p>Some new cards added recently<br /><br />Smile World (it really puts a smile on your monsters!)<br />Rank-Up-Magic Soul Shave Force<br />Timesword Magician<br />Buster Dragon, the Perceptrampler Dragon<br /><br />Special credit goes to Ragna_Edge, for scripting new cards and testing the cards written by YGOHack137. Recently, we updated the ygocore to help address our issue with replays and other miscellaneous card errors. While this did fix some cards as well as implement the feature to cancel a Synchro or Xyz Summon by right-clicking during the selection phase, it has caused a known issue that disconnects players right as a duel is about to end as well as prematurely ending Match Duels after the first game. Unfortunately, replays are also still a problem. I would like to assure everyone that we're trying our best to fix these problems.</p>",
+			"Author": "StormWolf",
+			"Date": "September 29, 2015"
+		},{
 			"Title": "Another one",
 			"Subtitle": "Not much else to report",
 			"Content": "<p>For those who didn't know, we added Swordsmith of Shiranui to the system earlier this afternoon. At the rate the card reveals are going, you could probably expect a new card added every day.<br />Don't forget to check us out on Facebook! Just click the Facebook icon on the top-right of the program to access it.</p>",
