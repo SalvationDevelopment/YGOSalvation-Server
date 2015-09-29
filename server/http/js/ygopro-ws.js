@@ -1,6 +1,7 @@
 /*jslint browser:true, plusplus : true, bitwise : true*/
 /*globals WebSocket, Buffer, Uint8Array, enums, makeCard*/
-
+// buffer.js
+// card.js
 
 function Framemaker() {
     "use strict";
@@ -618,7 +619,7 @@ function recieveSTOC(packet) {
             break;
 
         default:
-            console.log('bad', command, packet, task);
+            //console.log('bad', command, packet, task);
             break;
         }
         return task;
@@ -727,7 +728,7 @@ function recieveSTOC(packet) {
     }
     //console.log(task.command);
     return task;
-};
+}
 
 function processTask(task, socket) {
     'use strict';
@@ -742,19 +743,30 @@ function processTask(task, socket) {
     return output;
 }
 
+/*globals console*/
 function startgame(roompass) {
     'use strict';
-    window.ws = new WebSocket("ws://192.99.11.19:8082", "duel");
-    window.ws.binaryType = 'arraybuffer';
-    var framer = new Framemaker();
-    window.ws.onconnect = function () {
+    try {
+        window.ws.close();
+    } catch (noWS) {
+        //no previous websocket dont worry about it.
+    }
+    var framer = new Framemaker(),
+        ws = new WebSocket("ws://192.99.11.19:8082", "duel");
+    ws.binaryType = 'arraybuffer';
+
+    ws.onconnect = function () {
 
 
     };
-    window.ws.onclose = function () {
+    ws.onerror = function () {
+        console.log('There was an error with the websocket');
+        ws.close();
+    };
+    ws.onclose = function () {
         console.log('Websocket died');
     };
-    window.ws.onmessage = function (data) {
+    ws.onmessage = function (data) {
         var q = new Buffer(new Uint8Array(data.data)),
             frame,
             task,
@@ -780,12 +792,13 @@ function startgame(roompass) {
         }
         frame = [];
     };
-    window.ws.onopen = function () {
+    ws.onopen = function () {
         console.log('Send Game request for', roompass);
         var name = makeCTOS('CTOS_PlayerInfo', 'Spectator'),
             join = makeCTOS('CTOS_JoinGame', roompass),
             tosend = Buffer.concat([name, join]);
         window.ws.send(tosend);
     };
+    window.ws = ws;
 
 }
