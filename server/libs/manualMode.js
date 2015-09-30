@@ -227,7 +227,7 @@ function handlePrimusEvent(data, client) {
                 }
             case QUERY_XYZ_SUMMON:
                 {
-                    if (activeDuels[duelID].players.hasOwnProperty(uid) && xyzSummonIsValid(activeDuel[duelID], uid, target, moveTo)) {
+                    if (activeDuels[duelID].players.hasOwnProperty(uid) && xyzSummonIsValid(activeDuels[duelID], uid, target, moveTo)) {
                         primus.room(duelID).write({
                             event: QUERY_XYZ_SUMMON,
                             data: {
