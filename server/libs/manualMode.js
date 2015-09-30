@@ -526,6 +526,7 @@ function moveCard(move) {
     var from = move.from,
         to = move.to;
     to.location[to.slot] = from.location[from.slot];
+    from.location[from.slot] = 0;
     from.location = from.location.filter(function(card) {
         return !!card;
     });
