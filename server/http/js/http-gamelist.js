@@ -505,7 +505,7 @@ primus.on('data', function (data) {
             $('footer').html(data.message).addClass('loud');
         }
         if (data.clientEvent === 'registrationRequest') {
-            if ($('#ips_username').val(localStorage.loginnick) && $('#ips_password').val(localStorage.loginpass)) {
+            if ($('#ips_username').val() && $('#ips_password').val()) {
                 primus.write({
                     action: 'register',
                     username: $('#ips_username').val(),
