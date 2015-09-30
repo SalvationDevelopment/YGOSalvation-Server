@@ -220,7 +220,8 @@ function handlePrimusEvent(data, client) {
                             to: {
                                 location: activeDuels[duelID].state["Player " + moveTo.player][moveTo.location],
                                 slot: moveTo.slot
-                            });
+                            }
+                        });
                         primus.room(duelID).write({
                             event: QUERY_DUEL_COMMAND,
                             data: {
