@@ -212,6 +212,15 @@ function handlePrimusEvent(data, client) {
             case QUERY_DUEL_COMMAND:
                 {
                     if (activeDuels[duelID].players.hasOwnProperty(uid) && commandIsValid(activeDuels[duelID], uid, target, moveTo)) {
+                        moveCard({
+                            from: {
+                                location: activeDuels[duelID].state["Player " + target.player][target.location],
+                                slot: target.slot
+                            },
+                            to: {
+                                location: activeDuels[duelID].state["Player " + moveTo.player][moveTo.location],
+                                slot: moveTo.slot
+                            });
                         primus.room(duelID).write({
                             event: QUERY_DUEL_COMMAND,
                             data: {
@@ -511,6 +520,16 @@ function startDuelState(gameState, deckList) {
     });
     return gameState;
 }
+
+function moveCard(move) {
+    var from = move.from,
+        to = move.to;
+    to.location[slot] = from.location[slot];
+    from.location = from.location.filter(function(card) {
+        return !!card;
+    });
+}
+        
 
 function moveCards(amount, move) {
     var from = move.from,
