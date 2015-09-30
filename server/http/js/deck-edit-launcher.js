@@ -375,6 +375,7 @@ function drawDeck(target) {
         container = $('.' + target + 'Deck'),
         cardObject;
     $(container).html('');
+    deckStorage.reset(target);
     targetDeck.forEach(function (card) {
         cardObject = getCardObject(parseInt(card, 10));
         container.append(createCardImage(cardObject));
