@@ -121,7 +121,7 @@ function processServerCall(data) {
         selectedfont = $("#fontlist option:selected").val(),
         selecteddb = $("#dblist option:selected").val(),
         deckfile;
-    $('.currentdeck').not('.activescreen .crrentdeck').html(data.currentdeck);
+    $('.currentdeck').not('.activescreen .currentdeck').html(data.currentdeck);
     $('#skinlist').html(data.skinlist);
     $('#fontlist').html(data.fonts);
     $('#dblist').html(data.databases);
