@@ -97,7 +97,7 @@ function handleCoreMessage(core_message_raw, port, pid) {
             break;
 
         case ('::::endduel'):
-            ps.kill(gamelist[core_message[1]].pid, function (error) {});
+            //ps.kill(gamelist[core_message[1]].pid, function (error) {});
             delete gamelist[core_message[1]];
             //process.kill(pid);
             break;
