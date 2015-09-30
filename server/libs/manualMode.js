@@ -525,7 +525,7 @@ function startDuelState(gameState, deckList) {
 function moveCard(move) {
     var from = move.from,
         to = move.to;
-    to.location[slot] = from.location[slot];
+    to.location[to.slot] = from.location[from.slot];
     from.location = from.location.filter(function(card) {
         return !!card;
     });
