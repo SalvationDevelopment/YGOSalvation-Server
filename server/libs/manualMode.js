@@ -445,7 +445,7 @@ function validDeck(deckList, banList, database) {
 }
 
 function commandIsValid(activeDuel, uid, target, moveTo) {
-    return activeDuel.players[uid].ROLE === target.player && activeDuel.state["Player " + target.player][target.location][target.slot] && !activeDuel.state[moveTo.player][moveTo.location][moveTo.slot];
+    return activeDuel.players[uid].ROLE === target.player && activeDuel.state["Player " + target.player][target.location][target.slot] && !activeDuel.state["Player " + moveTo.player][moveTo.location][moveTo.slot];
 }
 
 function xyzSummonIsValid(activeDuel, uid, target, moveTo) {
