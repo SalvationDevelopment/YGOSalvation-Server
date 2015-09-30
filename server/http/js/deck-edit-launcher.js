@@ -996,19 +996,19 @@ $('.mainDeck').on('mousedown', 'img', function (ev, a, b, c, d) {
 
         var index = deckStorage.decks.main.indexOf($(this).attr('data-card-id'));
         console.log(index);
-        /*deckStorage.removeCard('main', index);
-        drawDeck('main');*/
+        deckStorage.removeCard('main', index);
+        drawDeck('main');
     }
 
 
     return false;
 });
 
-/*$('.extraDeck').on('mousedown', 'img', function (ev, a, b, c, d) {
+$('.extraDeck').on('mousedown', 'img', function (ev, a, b, c, d) {
     'use strict';
     ev.preventDefault();
     if (ev.which === 3) {
-        var index = deckStorage.decks.extra.indexOf(Number($(this).attr('data-card-id')))
+        var index = deckStorage.decks.extra.indexOf($(this).attr('data-card-id'));
         deckStorage.removeCard('extra', index);
         drawDeck('extra');
     }
@@ -1019,13 +1019,13 @@ $('.sideDeck').on('mousedown', 'img', function (ev, a, b, c, d) {
     'use strict';
     ev.preventDefault();
     if (ev.which === 3) {
-        var index = deckStorage.decks.side.indexOf(Number($(this).attr('data-card-id')))
+        var index = deckStorage.decks.side.indexOf($(this).attr('data-card-id'));
         deckStorage.removeCard('side', index);
         drawDeck('side');
     }
 
     return false;
-});*/
+});
 
 /*
 $('.searchResults').on('mousedown', 'img', function (ev, a, b, c, d) {
