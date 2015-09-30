@@ -989,20 +989,20 @@ function addDeckLegal(id, targetDeck, targetDeckSize, flList, currentList, deck2
     }
     return (matchingCopies < maxCopies);
 }
-/*$('.mainDeck').on('mousedown', 'img', function (ev, a, b, c, d) {
+$('.mainDeck').on('mousedown', 'img', function (ev, a, b, c, d) {
     'use strict';
     ev.preventDefault();
     if (ev.which === 3) {
 
-        var index = deckStorage.decks.main.indexOf(Number($(this).attr('data-card-id')))
+        var index = deckStorage.decks.main.indexOf($(this).attr('data-card-id'));
         console.log(index);
-        deckStorage.removeCard('main', index);
-        drawDeck('main');
+        /*deckStorage.removeCard('main', index);
+        drawDeck('main');*/
     }
 
 
     return false;
-});*/
+});
 
 /*$('.extraDeck').on('mousedown', 'img', function (ev, a, b, c, d) {
     'use strict';
