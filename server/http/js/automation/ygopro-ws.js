@@ -1,7 +1,8 @@
 /*jslint browser:true, plusplus : true, bitwise : true*/
-/*globals WebSocket, Buffer, Uint8Array, enums, makeCard, recieveSTOC*/
+/*globals WebSocket, Buffer, Uint8Array, enums, makeCard, recieveSTOC, gui*/
 // buffer.js
 // card.js
+// gui.js
 
 function Framemaker() {
     "use strict";
@@ -327,7 +328,7 @@ function startgame(roompass) {
             //console.log(task);
             l = 0;
             for (l; commands.length > l; l++) {
-                processTask(commands[l]);
+                gui(commands[l]);
             }
 
 

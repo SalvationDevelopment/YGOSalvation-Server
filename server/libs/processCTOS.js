@@ -24,7 +24,8 @@ var portmin = 30000 + process.env.PORTRANGE * 100, //Port Ranges
     winston = require('winston'),
     path = require('path'),
     coreIsInPlace = false,
-    cluster = require('cluster');
+    cluster = require('cluster'),
+    ps = require('ps-node');
 
 if (cluster.isWorker) {
     process.on('message', function (message) {
@@ -314,10 +315,25 @@ function processIncomingTrasmission(data, socket, task) {
     processTask(task, socket);
     authenticate(socket);
     if (!socket.active_ygocore && socket.hostString) {
+
         if (gamelist[socket.hostString]) {
-            socket.alpha = false;
-            cHistory.info('[' + socket.remoteAddress + ':' + socket.username + '] Connecting to ' + gamelist[socket.hostString].players[0]);
-            connectToCore(gamelist[socket.hostString].port, data, socket);
+            ps.lookup({
+                pid: gamelist[socket.hostString].pid
+            }, function (err, resultList) {
+                var process = resultList[0];
+                if (process) {
+                    socket.alpha = false;
+                    cHistory.info('[' + socket.remoteAddress + ':' + socket.username + '] Connecting to ' + gamelist[socket.hostString].players[0]);
+                    connectToCore(gamelist[socket.hostString].port, data, socket);
+                } else {
+                    cHistory.info('[' + socket.remoteAddress + ':' + socket.username + '] Connecting to new CORE');
+                    portfinder(++portmin, portmax, function (error, port) {
+                        socket.alpha = true;
+                        startCore(port, socket, data);
+                    });
+                }
+            });
+
         } else {
             cHistory.info('[' + socket.remoteAddress + ':' + socket.username + '] Connecting to new CORE');
             portfinder(++portmin, portmax, function (error, port) {
