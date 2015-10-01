@@ -121,6 +121,7 @@ $(function () {
                     primus.write({
                         action: "saveDeckRequest",
                         deckList: createDeckList(deckStorage.decks),
+                        deckName: $('.deckSelect').val(),
                         uniqueID: uniqueID
                     });
                 });
