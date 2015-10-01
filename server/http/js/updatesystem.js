@@ -28,11 +28,53 @@ process.on('uncaughtException', function (err) {
 });
 
 var updateNeeded = true;
+var internalDecklist;
+
+function internalDeckRead() {
+    'use strict';
+    if (internalDecklist.length === 0) {
+        screenMessage.html('<span style="color:white; font-weight:bold">Update Complete! System Messages will appear here.</span>');
+        return;
+    }
+    if (internalDecklist[0].indexOf('.ydk') !== -1) {
+        internalDecklist.shift();
+        internalDeckRead();
+        return;
+    }
+
+    fs.readFile('./ygopro/deck/' + internalDecklist[0], {
+        encoding: "utf-8"
+    }, function (badfile, deck) {
+        //got deck, do something with it.
+        console.log(deck);
+        internalDecklist.shift();
+        internalDeckRead();
+        return;
+    });
+    return;
+
+}
+
+function doDeckScan() {
+    'use strict';
+    screenMessage.html('<span style="color:white; font-weight:bold">Scanning Decks</span>');
+    fs.readdir('./ygopro/deck', function (errors, folder) {
+
+        if (!folder) {
+            screenMessage.html('<span style="color:red; font-weight:bold">Error Reading Deck Folder</span>');
+            console.log(errors);
+        } else {
+            internalDecklist = folder;
+
+        }
+
+    });
+}
 
 function download() {
     'use strict';
     if (downloadList.length === 0) {
-        screenMessage.html('<span style="color:white; font-weight:bold">Update Complete! System Messages will appear here.</span>');
+        doDeckScan();
         return;
     }
     var target = downloadList[0],
