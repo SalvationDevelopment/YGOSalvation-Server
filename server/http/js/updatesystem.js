@@ -70,7 +70,7 @@ function doDeckScan() {
             console.log(errors);
         } else {
             internalDecklist = folder;
-
+            screenMessage.html('<span style="color:white; font-weight:bold">Update Complete! System Messages will appear here.</span>');
         }
 
     });
