@@ -30,6 +30,12 @@ process.on('uncaughtException', function (err) {
 var updateNeeded = true;
 var internalDecklist;
 
+
+function updateCardId(deck, oldcard, newcard) {
+    'use strict';
+    return deck.replace(oldcard, newcard);
+}
+
 function internalDeckRead() {
     'use strict';
     if (internalDecklist.length === 0) {
@@ -52,7 +58,6 @@ function internalDeckRead() {
         return;
     });
     return;
-
 }
 
 function doDeckScan() {
