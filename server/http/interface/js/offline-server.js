@@ -102,18 +102,6 @@ for (var i = 0; settings.length > i; i++) {
     }
 }
 
-http.createServer(function (request, response) {
-    var parameter = url.parse(request.url);
-    var letter = parameter.path.slice(-1);
-    runYGOPro('-' + letter, function () {
-        console.log('!', parameter.path);
-    });
-    response.writeHead(200, {
-        'Content-Type': 'text/plain'
-    });
-    response.end('');
-}).listen(9467, '127.0.0.1');
-
 function runYGOPro(mode, callback) {
     //console.log(template);
     var systemConf = template;
@@ -168,7 +156,7 @@ function fileError(mainError) {
     fs.writeFile(filename, mainError, function () {});
 }
 try {
-module.exports = runYGOPro;
-}catch(e){
-    
-    }
+    module.exports = runYGOPro;
+} catch (e) {
+
+}
