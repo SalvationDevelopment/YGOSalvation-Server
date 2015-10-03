@@ -9,7 +9,8 @@ function recieveSTOC(packet) {
         //makeCard = require('../http/js/card.js'),
         command,
         bitreader = 0,
-        iter = 0;
+        iter = 0,
+        errorCode;
 
     task[packet.STOC] = true;
     task.command = '';
@@ -363,13 +364,21 @@ function recieveSTOC(packet) {
 
         case ('ERRMSG_JOINERROR'):
             break;
+        case ('ERRMSG_DECKERROR'):
+            task.errorCode = packet.message[1];
+            // complain about deck error. Invalid Deck.
+            task.error = (task.errorCode === 1) ? 'Invalid Deck' : 'Invalid Card, ' + packet.message.readUInt32LE(1); // 
+            break;
+
         case ('ERRMSG_SIDEERROR'):
+            // complain about side deck error.
             break;
         case ('ERRMSG_VERERROR'):
+            //wierd math to get the version number, displays and complains about it then resets.
             break;
         default:
-
         }
+
         break;
 
     case ("STOC_SELECT_HAND"):
