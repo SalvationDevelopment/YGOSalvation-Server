@@ -297,6 +297,19 @@ function recieveSTOC(packet) {
                 // if it can do the can activate animations.
                 task.readposition++;
             }
+            task.cardsThatAreAttackable = [];
+            task.count = packet.message[task.readposition];
+            task.readposition++;
+            for (i = 0; i < task.count; ++i) {
+                task.cardsThatAreAttackable.push({
+                    code: packet.message.readUInt16LE([task.readposition]),
+                    con: packet.message[task.readposition + 2],
+                    loc: packet.message[task.readposition + 3],
+                    seq: packet.message[task.readposition + 4],
+                    desc: packet.message.readUInt16LE([task.readposition + 5])
+                });
+                task.readposition++;
+            }
             break;
         case ('MSG_SELECT_EFFECTYN'):
 
