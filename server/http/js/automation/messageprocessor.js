@@ -1,5 +1,5 @@
 /*jslint browser:true, plusplus : true, bitwise : true*/
-/*globals WebSocket, Buffer, enums, makeCard*/
+/*globals WebSocket, Buffer, enums, makeCard, BufferStreamReader*/
 // buffer.js
 // card.js
 
@@ -11,7 +11,8 @@ function recieveSTOC(packet) {
         bitreader = 0,
         iter = 0,
         errorCode,
-        i = 0;
+        i = 0,
+        BufferIO = new BufferStreamReader(packet.message);
 
     task[packet.STOC] = true;
     task.command = '';
@@ -22,6 +23,7 @@ function recieveSTOC(packet) {
 
     case ("STOC_GAME_MSG"):
         command = enums.STOC.STOC_GAME_MSG[packet.message[0]];
+        command = BufferIO.ReadInt8();
         task.command = command;
         bitreader++;
         switch (command) {
@@ -295,7 +297,7 @@ function recieveSTOC(packet) {
                 });
                 // client looks at the field, gets a cmdflag, does bytemath on it to see if it can activate.
                 // if it can do the can activate animations.
-                task.readposition++;
+                task.readposition = task.readposition + 5;
             }
             task.cardsThatAreAttackable = [];
             task.count = packet.message[task.readposition];
@@ -306,9 +308,9 @@ function recieveSTOC(packet) {
                     con: packet.message[task.readposition + 2],
                     loc: packet.message[task.readposition + 3],
                     seq: packet.message[task.readposition + 4],
-                    desc: packet.message.readUInt16LE([task.readposition + 5])
+                    diratt: packet.message.readUInt16LE([task.readposition + 5]) // defuct in code
                 });
-                task.readposition++;
+                task.readposition = task.readposition + 5;
             }
             break;
         case ('MSG_SELECT_EFFECTYN'):
