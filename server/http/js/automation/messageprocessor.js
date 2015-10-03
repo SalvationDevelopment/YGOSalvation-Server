@@ -358,8 +358,14 @@ function recieveSTOC(packet) {
 
     case ("STOC_ERROR_MSG"):
         command = enums.STOC.STOC_ERROR_MSG[packet.message[0]];
+        // set the screen back to the join screen.
         switch (command) {
-        case (null):
+
+        case ('ERRMSG_JOINERROR'):
+            break;
+        case ('ERRMSG_SIDEERROR'):
+            break;
+        case ('ERRMSG_VERERROR'):
             break;
         default:
 
@@ -385,11 +391,14 @@ function recieveSTOC(packet) {
 
     case ("STOC_TP_RESULT"):
         break;
+        //Literally exact code in duelist.cpp for STOC_TP_RESULT
 
     case ("STOC_CHANGE_SIDE"):
+        //display the deck builder
         break;
 
     case ("STOC_WAITING_SIDE"):
+        // graphical reset
         break;
 
     case ("STOC_CREATE_GAME"):
