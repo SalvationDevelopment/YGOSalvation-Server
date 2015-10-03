@@ -10,7 +10,8 @@ function recieveSTOC(packet) {
         command,
         bitreader = 0,
         iter = 0,
-        errorCode;
+        errorCode,
+        i = 0;
 
     task[packet.STOC] = true;
     task.command = '';
@@ -281,7 +282,21 @@ function recieveSTOC(packet) {
 
             break;
         case ('MSG_SELECT_BATTLECMD'):
-
+            task.selecting_player = packet.message[1]; // defunct in the code, just reading ahead.
+            task.count = packet.message[2];
+            task.cardsThatCanBattle = [];
+            task.readposition = 3;
+            for (i = 0; i < task.count; ++i) {
+                task.cardsThatCanBattle.push({
+                    con: packet.message[task.readposition],
+                    loc: packet.message[task.readposition + 1],
+                    seq: packet.message[task.readposition + 2],
+                    desc: packet.message.readUInt16LE([task.readposition])
+                });
+                // client looks at the field, gets a cmdflag, does bytemath on it to see if it can activate.
+                // if it can do the can activate animations.
+                task.readposition++;
+            }
             break;
         case ('MSG_SELECT_EFFECTYN'):
 
