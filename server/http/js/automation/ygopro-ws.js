@@ -40,6 +40,30 @@ function Framemaker() {
     return this;
 }
 
+function BufferStreamReader(packet) {
+    'use strict';
+    /* FH, Buttys, and Tenkei have very annoying code to replicate
+    in JavaScript of and around the reading of streammed network
+    buffers, this should make it easier. */
+    var readposition = 0;
+    this.packet = packet;
+    this.readposition = function () {
+        return readposition;
+    };
+    this.ReadInt8 = function () {
+        var output = packet[readposition];
+        readposition++;
+        return output;
+    };
+    this.ReadInt32 = function () {
+        var output = packet.readUInt32LE(readposition);
+        readposition += 2;
+        return output;
+    };
+    return this;
+    // I should later comeback and make this completely array based.
+}
+
 function parsePackets(command, message) {
     "use strict";
 
