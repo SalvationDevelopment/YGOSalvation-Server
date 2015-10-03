@@ -46,18 +46,29 @@ function BufferStreamReader(packet) {
     in JavaScript of and around the reading of streammed network
     buffers, this should make it easier. */
     var readposition = 0;
-    this.packet = packet;
+    this.packet = packet; // maybe this should be read only.
     this.readposition = function () {
         return readposition;
     };
+    this.setReadposition = function (value) {
+        readposition = Number(value);
+        return readposition;
+    };
     this.ReadInt8 = function () {
+        // read 1 byte
         var output = packet[readposition];
         readposition++;
         return output;
     };
-    this.ReadInt32 = function () {
-        var output = packet.readUInt32LE(readposition);
+    this.ReadUInt8 = this.ReadInt8;
+    this.ReadInt16 = function () {
+        var output = packet.readUInt16LE(readposition);
         readposition += 2;
+        return output;
+    };
+    this.ReadInt32 = function () {
+        var output = packet.readUInt32LELE(readposition);
+        readposition += 4;
         return output;
     };
     return this;
