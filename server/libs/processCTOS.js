@@ -227,15 +227,26 @@ function handleCoreMessage(core_message_raw, port, socket, data, pid) {
 function legalPassword(passIn) {
     'use strict';
     if (passIn.length !== 24) {
+        console.log('Invalid password length', passIn);
         return false;
     }
-    var re = new RegExp("\\d\\d\\d(O|T)(O|T)(O|T)(\\d)+,(\\d)|(\\d\\d),\\d,\\d,(\\w)+,(\\w)+");
-    return re.test(passIn);
+    console.log(passIn);
+    var re = new RegExp("\\d\\d\\d(O|T)(O|T)(O|T)(\\d)+,(\\d)|(\\d\\d),\\d,\\d,(\\w)+,(\\w)+"),
+        output = re.test(passIn);
+    if (output) {
+        return true;
+    } else {
+        console.log('Invalid password construction');
+        return false;
+    }
 }
 
 
 function authenticate(socket) {
     'use strict';
+    if (!process.env.YGOPROLOGINENABLED) {
+        return;
+    }
     //console.log(socket.username, registry[socket.username], socket.remoteAddress);
     if (registry[socket.username] !== socket.remoteAddress) {
         try {
@@ -280,7 +291,7 @@ function startCore(port, socket, data, callback) {
         //            }
         //        });
     }
-
+    console.log(startDirectory + '/../ygocore/YGOServer.exe');
     socket.core = childProcess.spawn(startDirectory + '/../ygocore/YGOServer.exe', [port, configfile], {
         cwd: startDirectory + '/../ygocore'
     }, function (error, stdout, stderr) {
