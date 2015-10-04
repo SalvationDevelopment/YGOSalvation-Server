@@ -4,16 +4,18 @@
 // card.js
 // gui.js
 
-
+function gui(input) {
+    console.log(input);
+}
 
 
 function Framemaker() {
     "use strict";
-    var memory = [];
+    var memory = new Buffer([]);
 
     this.input = function (buffer) {
         var x = true,
-            output = new Buffer(),
+            output = [],
             recordOfBuffer,
             frame_length;
         //console.log('before', memory.length, 'bytes in memory');
@@ -126,7 +128,7 @@ function makeCTOS(command, message) {
     say.CTOS_JoinGame = function (roompass) {
         var ctos = new Buffer([0x12]),
             name = Array.apply(null, new Array(60)).map(Number.prototype.valueOf, 0),
-            version = new Buffer([0x32, 0x13]),
+            version = new Buffer([0x34, 0x13]),
             gameid = new Buffer([75, 144, 0, 0, 0, 0]),
             pass = new Buffer(roompass, 'utf16le'),
             rpass = new Buffer(name),
@@ -383,7 +385,8 @@ function startgame(roompass) {
         console.log('Send Game request for', roompass);
         var name = makeCTOS('CTOS_PlayerInfo', localStorage.nickname),
             join = makeCTOS('CTOS_JoinGame', roompass),
-            tosend = Buffer.concat([name, join]);
+            toduelist = makeCTOS('CTOS_HS_TODUELIST'),
+            tosend = Buffer.concat([name, join, toduelist]);
         window.ws.send(tosend);
     };
     window.ws = ws;
