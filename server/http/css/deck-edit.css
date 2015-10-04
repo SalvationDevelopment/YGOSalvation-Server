@@ -154,10 +154,10 @@ select {
     line-height: 1em;
 }
 
-button {
+#deckedit button {
     margin-bottom: 1%;
-    line-height: 1em;
-    width: 3.5vw;
+    line-height: 1.2em;
+    width: 4vw;
     white-space: nowrap;
     padding: 0;
 }
