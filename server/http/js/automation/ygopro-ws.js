@@ -334,6 +334,10 @@ function startgame(roompass) {
     } catch (noWS) {
         //no previous websocket dont worry about it.
     }
+    if (localStorage.nickname === undefined) {
+        console.log('localStorage.nickname is undefined, required!');
+        return;
+    }
     var framer = new Framemaker(),
         ws = new WebSocket("ws://127.0.0.1:8082", "duel");
     ws.binaryType = 'arraybuffer';
