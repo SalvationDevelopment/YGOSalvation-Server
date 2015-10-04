@@ -331,7 +331,7 @@ function startgame(roompass) {
     'use strict';
     try {
         window.ws.close();
-    } catch (noWS) {
+    } catch (noWebSocket) {
         //no previous websocket dont worry about it.
     }
     if (localStorage.nickname === undefined) {
