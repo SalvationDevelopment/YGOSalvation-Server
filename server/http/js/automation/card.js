@@ -151,6 +151,5 @@ function makeCard(buffer, start, controller) {
 
 
 }
-if (require !== undefined) {
-    module.exports = makeCard;
-}
+var module = module || {};
+module.exports = makeCard;

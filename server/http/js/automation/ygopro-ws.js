@@ -4,13 +4,16 @@
 // card.js
 // gui.js
 
+
+
+
 function Framemaker() {
     "use strict";
-    var memory = new Buffer([]);
+    var memory = [];
 
     this.input = function (buffer) {
         var x = true,
-            output = [],
+            output = new Buffer(),
             recordOfBuffer,
             frame_length;
         //console.log('before', memory.length, 'bytes in memory');
@@ -107,6 +110,7 @@ function makeCTOS(command, message) {
     };
 
     say.CTOS_PlayerInfo = function (message) {
+        console.log(message);
         var ctos = new Buffer([0x10]),
             name = Array.apply(null, new Array(40)).map(Number.prototype.valueOf, 0),
             username = new Buffer(message, 'utf16le'),
@@ -322,6 +326,7 @@ function processTask(task, socket) {
 
 
 /*globals console*/
+//"ws://192.99.11.19:8082"
 function startgame(roompass) {
     'use strict';
     try {
@@ -330,7 +335,7 @@ function startgame(roompass) {
         //no previous websocket dont worry about it.
     }
     var framer = new Framemaker(),
-        ws = new WebSocket("ws://192.99.11.19:8082", "duel");
+        ws = new WebSocket("ws://127.0.0.1:8082", "duel");
     ws.binaryType = 'arraybuffer';
 
     ws.onconnect = function () {

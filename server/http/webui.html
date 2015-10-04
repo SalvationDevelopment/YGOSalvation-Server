@@ -1,0 +1,18 @@
+<!doctype html>
+
+<head>
+    <script src="js/automation/require.js"></script>
+    <!--<script src="js/automation/buffer.js"></script>-->
+    <script src="js/automation/enums.js"></script>
+    <script src="js/automation/card.js"></script>
+    <script src="js/automation/messageprocessor.js"></script>
+    <script src="js/automation/ygopro-ws.js"></script>
+    <script>
+        requirejs(['js/automation/buffer'],
+            function (Buffer) {
+                window.Buffer = Buffer.Buffer;
+            });
+    </script>
+</head>
+
+<body></body>

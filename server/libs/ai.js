@@ -30,18 +30,9 @@ function gamelistUpdate(data) {
         windbot;
     if (data.clientEvent) {
         if (data.clientEvent === 'duelrequest' && data.target === 'SnarkyChild') {
-            windbot = childProcess.spawn('windbot.exe', ['SnarkyChild', 'Hours', '127.0.0.1', '8911', data.roompass], {
+            windbot = childProcess.spawn('start', ['windbot.exe', 'SnarkyChild', 'Hours', '127.0.0.1', '8911', data.roompass], {
                 cwd: startDirectory + '/../ai'
-            }, function () {
-                needsKill = false;
             });
-            setTimeout(function () {
-                if (needsKill) {
-                    try {
-                        windbot.kill();
-                    } catch (e) {}
-                }
-            }, 1800000);
         }
         return;
     }
