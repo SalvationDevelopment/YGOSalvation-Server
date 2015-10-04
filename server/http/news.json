@@ -1,6 +1,12 @@
 {
     "Articles": [
 		{
+			"Title": "Catching up on updates",
+			"Subtitle": "New cards, too",
+			"Content": "<p>I would like to apologize about our newsfeed not updating as fast as it should. The staff here, especially me, feels that posting an update about adding just one card to feel like a boring post. Here's what's new since the previous news update:<br /><br />Destruction Swordmaster - Dragon Buster Blade (added two days ago)<br />Dinomist Ceratops (added two days ago)<br />Dinomist Brachion (added two days ago)<br />Dinomist Charge (added two days ago)<br />Repaired match duels (two days ago)<br />Toon Buster Blader (added today)<br />Majespecter Supercell (added today)<br /><br />All credit for coding and bug fixing goes to YGOHack137, OneShot, and Ragna_Edge. We are close to finding a solution for Replays, but still investigating Tag Duels.<p>",
+			"Author": "StormWolf",
+			"Date": "October 3, 2015"
+		},{
 			"Title": "An update regarding the server",
 			"Subtitle": "Some more cards as well",
 			"Content": "<p>Some new cards added recently<br /><br />Smile World (it really puts a smile on your monsters!)<br />Rank-Up-Magic Soul Shave Force<br />Timesword Magician<br />Buster Dragon, the Perceptrampler Dragon<br /><br />Special credit goes to Ragna_Edge, for scripting new cards and testing the cards written by YGOHack137. Recently, we updated the ygocore to help address our issue with replays and other miscellaneous card errors. While this did fix some cards as well as implement the feature to cancel a Synchro or Xyz Summon by right-clicking during the selection phase, it has caused a known issue that disconnects players right as a duel is about to end as well as prematurely ending Match Duels after the first game. Unfortunately, replays are also still a problem. I would like to assure everyone that we're trying our best to fix these problems.</p>",
