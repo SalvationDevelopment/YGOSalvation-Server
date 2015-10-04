@@ -1,6 +1,12 @@
 {
     "Articles": [
 		{
+			"Title": "Card updates",
+			"Subtitle": "More love for Buster Blader and the Shiranui",
+			"Content": "<p>New cards added today:<br /><br />Destruction Swordmaster Flash<br />Shiranui Style: Sword of Swallow<br />High Speed Relevel<br /><br />The credit goes to YGOHack137 for scripting the cards, Dragunlegend for bug testing, and toOneShot and Chibi for bug fixing. We'll announce updates regarding new features and/or bug fixes regarding the server soon.</p>",
+			"Author": "StormWolf",
+			"Date": "October 4, 2015"
+		},{
 			"Title": "Catching up on updates",
 			"Subtitle": "New cards, too",
 			"Content": "<p>I would like to apologize about our newsfeed not updating as fast as it should. The staff here, especially me, feels that posting an update about adding just one card to feel like a boring post. Here's what's new since the previous news update:<br /><br />Destruction Swordmaster - Dragon Buster Blade (added two days ago)<br />Dinomist Ceratops (added two days ago)<br />Dinomist Brachion (added two days ago)<br />Dinomist Charge (added two days ago)<br />Repaired match duels (two days ago)<br />Toon Buster Blader (added today)<br />Majespecter Supercell (added today)<br /><br />All credit for coding and bug fixing goes to YGOHack137, OneShot, and Ragna_Edge. We are close to finding a solution for Replays, but still investigating Tag Duels.<p>",
