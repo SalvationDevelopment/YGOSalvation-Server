@@ -1,79 +1,8 @@
 /*jslint browser:true, plusplus : true, bitwise : true*/
-/*globals WebSocket, Buffer, Uint8Array, enums, makeCard, recieveSTOC, CommandParser*/
+/*globals WebSocket, Buffer, Uint8Array, enums, makeCard, recieveSTOC, CommandParser, Framemaker*/
 // buffer.js
 // card.js
 // gui.js
-
-function Framemaker() {
-    "use strict";
-    var memory = new Buffer([]);
-
-    this.input = function (buffer) {
-        var x = true,
-            output = [],
-            recordOfBuffer,
-            frame_length;
-        //console.log('before', memory.length, 'bytes in memory');
-        memory = Buffer.concat([memory, buffer]);
-        //console.log('concated', memory.length);
-        while (x === true && memory.length > 2) {
-            frame_length = memory[0] + memory[1];
-            //console.log('read', frame_length, '(+2) of', memory.length, 'bytes');
-            if ((memory.length - 2) < frame_length) {
-                //console.log('not enough');
-                x = false;
-            } else {
-                recordOfBuffer = memory.slice(2).toJSON();
-                output.push(recordOfBuffer);
-                if (memory.length === (frame_length + 2)) {
-                    memory = new Buffer([]);
-                    x = false;
-                } else {
-                    memory = memory.slice((frame_length + 2));
-                }
-                //console.log('after', memory.length);
-            }
-        }
-        //console.log('----',output);
-        return output;
-    };
-    return this;
-}
-
-function BufferStreamReader(packet) {
-    'use strict';
-    /* FH, Buttys, and Tenkei have very annoying code to replicate
-    in JavaScript of and around the reading of streammed network
-    buffers, this should make it easier. */
-    var readposition = 0;
-    this.packet = packet; // maybe this should be read only.
-    this.readposition = function () {
-        return readposition;
-    };
-    this.setReadposition = function (value) {
-        readposition = Number(value);
-        return readposition;
-    };
-    this.ReadInt8 = function () {
-        // read 1 byte
-        var output = packet[readposition];
-        readposition++;
-        return output;
-    };
-    this.ReadUInt8 = this.ReadInt8;
-    this.ReadInt16 = function () {
-        var output = packet.readUInt16LE(readposition);
-        readposition += 2;
-        return output;
-    };
-    this.ReadInt32 = function () {
-        var output = packet.readUInt32LELE(readposition);
-        readposition += 4;
-        return output;
-    };
-    return this;
-    // I should later comeback and make this completely array based.
-}
 
 function parsePackets(command, message) {
     "use strict";
