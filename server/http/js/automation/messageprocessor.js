@@ -1,5 +1,5 @@
 /*jslint browser:true, plusplus : true, bitwise : true*/
-/*globals WebSocket, Buffer, enums, makeCard, BufferStreamReader*/
+/*globals WebSocket, Buffer, enums, makeCard, BufferStreamReader, EventEmitter*/
 // buffer.js
 // card.js
 
@@ -507,4 +507,89 @@ function recieveSTOC(packet) {
     }
     //console.log(task.command);
     return task;
+}
+
+
+function CommandParser() {
+    'use strict';
+
+    // OK!!!! HARD PART!!!!
+    // recieveSTOC.js should have created obejects with all the parameters as properites, fire the functions.
+    // Dont try to pull data out of a packet here, should have been done already.
+    // its done here because we might need to pass in STATE to the functions also.
+    // again if you are fiddling with a packet you are doing it wrong!!!
+    // data decode and command execution are different conserns.
+    // if a COMMAND results in a response, save it as RESPONSE, else return the function false.
+
+    var protoResponse = [],
+        responseRequired = false,
+        output = {};
+
+    output = new EventEmitter();
+
+    output.input = function (input) {
+        console.log(input);
+        if (input.STOC_GAME_MSG) {
+            output.emit(input.command, input);
+        }
+        if (input.STOC_UNKNOWN) {
+            output.emit('STOC_UNKNOWN', input);
+        }
+        if (input.STOC_SELECT_HAND) {
+            output.emit('STOC_SELECT_HAND', input);
+        }
+        if (input.STOC_JOIN_GAME) {
+            output.emit('STOC_JOIN_GAME', input);
+        }
+        if (input.STOC_SELECT_TP) {
+            output.emit('STOC_SELECT_TP', input);
+        }
+        if (input.STOC_HAND_RESULT) {
+            output.emit('STOC_HAND_RESULT', input);
+        }
+        if (input.STOC_TP_RESULT) {
+            output.emit('STOC_TP_RESULT', input);
+        }
+        if (input.STOC_CHANGE_SIDE) {
+            output.emit('STOC_CHANGE_SIDE', input);
+        }
+        if (input.STOC_WAITING_SIDE) {
+            output.emit('STOC_WAITING_SIDE', input);
+        }
+        if (input.STOC_CREATE_GAME) {
+            output.emit('STOC_CREATE_GAME', input);
+        }
+        if (input.STOC_TYPE_CHANGE) {
+            output.emit('STOC_TYPE_CHANGE', input);
+        }
+        if (input.STOC_LEAVE_GAME) {
+            output.emit('STOC_LEAVE_GAME', input);
+        }
+        if (input.STOC_DUEL_START) {
+            output.emit('STOC_DUEL_START', input);
+        }
+        if (input.STOC_DUEL_END) {
+            output.emit('STOC_DUEL_END', input);
+        }
+        if (input.STOC_REPLAY) {
+            output.emit('STOC_REPLAY', input);
+        }
+        if (input.STOC_TIME_LIMIT) {
+            output.emit('STOC_TIME_LIMIT', input);
+        }
+        if (input.STOC_CHAT) {
+            output.emit('STOC_CHAT', input);
+        }
+        if (input.STOC_HS_PLAYER_ENTER) {
+            output.emit('STOC_HS_PLAYER_ENTER', input);
+        }
+
+        if (input.STOC_HS_PLAYER_CHANGE) {
+            output.emit('STOC_HS_PLAYER_CHANGE', input);
+        }
+        if (input.STOC_HS_WATCH_CHANGE) {
+            output.emit('STOC_HS_WATCH_CHANGE', input);
+        }
+    };
+    return output;
 }
