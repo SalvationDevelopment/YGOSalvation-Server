@@ -297,6 +297,8 @@ function setHostSettings() {
     localStorage.lastdeck = $('#hostSettings .currentdeck').val();
 
     if (isChecked('#useai')) {
+        alert('Snarkie was a bad girl, shes in timeout!');
+        return;
         primus.write({
             action: 'ai',
             roompass: localStorage.roompass
