@@ -2,17 +2,17 @@
 
 <head>
     <script src="js/automation/require.js"></script>
-    <!--<script src="js/automation/buffer.js"></script>-->
-    <script src="js/automation/enums.js"></script>
-    <script src="js/automation/card.js"></script>
-    <script src="js/automation/messageprocessor.js"></script>
-    <script src="js/automation/ygopro-ws.js"></script>
     <script>
-        requirejs(['js/automation/buffer'],
+        requirejs(['js/automation/buffer', 'js/automation/events'],
             function (Buffer) {
                 window.Buffer = Buffer.Buffer;
             });
     </script>
+    <script src="js/automation/enums.js"></script>
+    <script src="js/automation/card.js"></script>
+    <script src="js/automation/messageprocessor.js"></script>
+    <script src="js/automation/ygopro-ws.js"></script>
+
 </head>
 
 <body></body>
