@@ -38,8 +38,9 @@ function startgame(roompass) {
     'use strict';
     try {
         window.ws.close();
+        window.ws = undefined;
     } catch (noWebSocket) {
-        //no previous websocket dont worry about it.
+        //no previous websocket so dont worry about it.
     }
     if (localStorage.nickname === undefined) {
         console.log('localStorage.nickname is undefined, required!');
@@ -97,5 +98,5 @@ function startgame(roompass) {
         window.ws.send(tosend);
     };
     window.ws = ws;
-
+    window.onunload = window.ws.close();
 }
