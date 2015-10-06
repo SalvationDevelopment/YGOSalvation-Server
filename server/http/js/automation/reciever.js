@@ -102,61 +102,61 @@ function recieveSTOC(packet) {
             break;
 
         case ('MSG_START'):
-            task.playertype = packet.message[1];
-            task.lifepoints1 = packet.message.readUInt16LE(2);
-            task.lifepoints2 = packet.message.readUInt16LE(6);
-            task.player1decksize = packet.message.readUInt8(10);
-            task.player1extrasize = packet.message.readUInt8(12);
-            task.player2decksize = packet.message.readUInt8(14);
-            task.player2extrasize = packet.message.readUInt8(16);
+            task.playertype = BufferIO.ReadInt8();
+            task.lifepoints1 = BufferIO.ReadInt32();
+            task.lifepoints2 = BufferIO.ReadInt32();
+            task.player1decksize = BufferIO.ReadInt16();
+            task.player1extrasize = BufferIO.ReadInt16();
+            task.player2decksize = BufferIO.ReadInt16();
+            task.player2extrasize = BufferIO.ReadInt16();
             break;
 
         case ('MSG_HINT'):
             //console.log('MSG_HINT', packet);
-            task.hintplayer = packet.message[1];
-            task.hintcont = packet.message[2];
-            task.hintspeccount = packet.message[3];
-            task.hintforce = packet.message[4];
+            task.hintplayer = BufferIO.ReadInt8();
+            task.hintcont = BufferIO.ReadInt8();
+            task.hintspeccount = BufferIO.ReadInt8();
+            task.hintforce = BufferIO.ReadInt8();
             //whole case system that goes here....
             //todo...
             break;
 
         case ('MSG_NEW_TURN'):
-            task.player = packet.message[1];
+            task.player = BufferIO.ReadInt8();
             break;
 
         case ('MSG_WIN'):
-            task.win = packet.message[1];
+            task.win = BufferIO.ReadInt8();
             //need to double check for more variables
             break;
 
         case ('MSG_NEW_PHASE'):
-            task.phase = packet.message[1];
+            task.phase = BufferIO.ReadInt8();
             break;
 
         case ('MSG_DRAW'):
-            task.player = packet.message[1];
-            task.draw = packet.message[2];
+            task.player = BufferIO.ReadInt8();
+            task.draw = BufferIO.ReadInt8();
             task.cardslist = [];
             task.drawReadposition = 3;
             break;
 
         case ('MSG_SHUFFLE_DECK'):
-            task.shuffle = packet.message[1];
+            task.shuffle = BufferIO.ReadInt8();
             break;
 
         case ('MSG_SHUFFLE_HAND'):
-            task.layout = packet.message[1];
+            task.layout = BufferIO.ReadInt8();
             break;
 
         case ('MSG_CHAINING'):
             break; //
         case ('MSG_CHAINED'):
-            task.ct = packet.message[1];
+            task.ct = BufferIO.ReadInt8();
             break;
 
         case ('MSG_CHAIN_SOLVING'):
-            task.ct = packet.message[1];
+            task.ct = BufferIO.ReadInt8();
             break;
 
         case ('MSG_CHAIN_SOLVED'):
@@ -172,18 +172,18 @@ function recieveSTOC(packet) {
             break; //graphical and trigger only for replay
 
         case ('MSG_CARD_SELECTED'):
-            /*  player = packet.message[1];*/
-            task.count = packet.message[2];
+            task.player = BufferIO.ReadInt8();
+            task.count = BufferIO.ReadInt8();
             break;
 
         case ('MSG_PAY_LPCOST'):
-            task.player = packet.message[1];
+            task.player = BufferIO.ReadInt8();
             task.lp = packet.message.readUInt16LE(2);
             task.multiplier = -1;
             break;
 
         case ('MSG_DAMAGE'):
-            task.player = packet.message[1];
+            task.player = BufferIO.ReadInt8();
             task.lp = packet.message.readUInt16LE(2);
             task.multiplier = -1;
             break;
@@ -201,28 +201,30 @@ function recieveSTOC(packet) {
         case ('MSG_SELECT_IDLECMD'):
             task.command = 'MSG_SELECT_IDLECMD';
             //https://github.com/Fluorohydride/ygopro/blob/d9450dbb35676db3d5b7c2a5241a54d7f2c21e98/ocgcore/playerop.cpp#L69
-            task.idleplayer = packet.message[1];
+            task.idleplayer = BufferIO.ReadInt8();
             iter = 0;
             bitreader++;
             task.summonable_cards = [];
-            for (iter; packet.message[bitreader] > iter; iter++) {
+            task.count = BufferIO.ReadInt8();
+            for (iter; task.count > iter; iter++) {
                 task.summonable_cards.push({
-                    code: packet.message.readUInt16LE(bitreader + 1),
-                    controller: packet.message[bitreader + 5],
-                    location: packet.message[bitreader + 6],
-                    sequence: packet.message[bitreader + 7]
+                    code: BufferIO.ReadInt32(),
+                    controller: BufferIO.ReadInt8(),
+                    location: BufferIO.ReadInt8(),
+                    sequence: BufferIO.ReadInt8()
                 });
                 bitreader = bitreader + 7;
             }
             iter = 0;
             bitreader++;
             task.spsummonable_cards = [];
-            for (iter; packet.message[bitreader] > iter; iter++) {
+            task.count = BufferIO.ReadInt8();
+            for (iter; task.count > iter; iter++) {
                 task.spsummonable_cards.push({
-                    code: packet.message.readUInt16LE(bitreader + 1),
-                    controller: packet.message[bitreader + 5],
-                    location: packet.message[bitreader + 6],
-                    sequence: packet.message[bitreader + 7]
+                    code: BufferIO.ReadInt32(),
+                    controller: BufferIO.ReadInt8(),
+                    location: BufferIO.ReadInt8(),
+                    sequence: BufferIO.ReadInt8()
                 });
                 bitreader = bitreader + 7;
             }
@@ -294,25 +296,25 @@ function recieveSTOC(packet) {
             break;
 
         case ('MSG_MOVE'):
-            task.code = packet.message.readUInt16LE(1);
-            task.pc = packet.message[5]; // original controller
-            task.pl = packet.message[6]; // original cLocation
-            task.ps = packet.message[7]; // original sequence (index)
-            task.pp = packet.message[8]; // padding??
-            task.cc = packet.message[9]; // current controller
-            task.cl = packet.message[10]; // current cLocation
-            task.cs = packet.message[11]; // current sequence (index)
-            task.cp = packet.message[12]; // current position
-            task.reason = packet.message.readUInt16LE[12]; //debug data??
+            task.code = BufferIO.ReadInt32();
+            task.pc = BufferIO.ReadInt8(); // original controller
+            task.pl = BufferIO.ReadInt8(); // original cLocation
+            task.ps = BufferIO.ReadInt8(); // original sequence (index)
+            task.pp = BufferIO.ReadInt8(); // padding??
+            task.cc = BufferIO.ReadInt8(); // current controller
+            task.cl = BufferIO.ReadInt8(); // current cLocation
+            task.cs = BufferIO.ReadInt8(); // current sequence (index)
+            task.cp = BufferIO.ReadInt8(); // current position
+            task.reason = BufferIO.ReadInt32(); //debug data??
             break;
 
         case ('MSG_POS_CHANGE'):
-            task.code = packet.message.readUInt16LE(1);
-            task.cc = packet.message[5]; // current controller
-            task.cl = packet.message[6]; // current cLocation
-            task.cs = packet.message[7]; // current sequence (index)
-            task.pp = packet.message[8]; // padding??
-            task.cp = packet.message[9]; // current position
+            task.code = BufferIO.ReadInt32();
+            task.cc = BufferIO.ReadInt8(); // current controller
+            task.cl = BufferIO.ReadInt8(); // current cLocation
+            task.cs = BufferIO.ReadInt8(); // current sequence (index)
+            task.pp = BufferIO.ReadInt8(); // padding??
+            task.cp = BufferIO.ReadInt8(); // current position
             break;
 
         case ('MSG_SET'):
@@ -325,12 +327,12 @@ function recieveSTOC(packet) {
 
 
         case ('MSG_SUMMONING'):
-            task.code = packet.message.readUInt16LE(1);
+            task.code = BufferIO.ReadInt32();
             //check for variables
             break;
 
         case ('MSG_SPSUMMONING'):
-            task.code = packet.message.readUInt16LE(1);
+            task.code = BufferIO.ReadInt32();
             break;
 
         case ('MSG_SUMMONED'):

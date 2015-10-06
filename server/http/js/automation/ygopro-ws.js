@@ -75,17 +75,12 @@ function startgame(roompass) {
         frame = framer.input(q);
         for (newframes; frame.length > newframes; newframes++) {
             task = parsePackets('STOC', new Buffer(frame[newframes]));
-            //console.log('!', task);
             commands = processTask(task);
-            // process AI
-            //console.log(task);
             l = 0;
             for (l; commands.length > l; l++) {
+                /*binary code goes in and comes out as events*/
                 network.input(commands[l]);
-
             }
-
-
         }
         frame = [];
     };
