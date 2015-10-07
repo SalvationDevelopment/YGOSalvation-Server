@@ -328,6 +328,19 @@ function recieveSTOC(packet) {
             task.datk = BufferIO.ReadInt32();
             task.ddef = BufferIO.ReadInt32();
             task.dd = BufferIO.ReadInt8(); //defunct
+            break;
+                
+        case ('MSG_ATTACK_DISABLED'):
+            //myswprintf(event_string, dataManager.GetSysString(1621), dataManager.GetName(mainGame->dField.attacker->code));
+            break;
+
+        case ('MSG_DAMAGE_STEP_START'):
+            //no code, just a trigger
+            break;
+
+        case ('MSG_DAMAGE_STEP_END'):
+            //no code just a trigger
+            break;
 
         case ('MSG_SELECT_IDLECMD'):
             task.command = 'MSG_SELECT_IDLECMD';
