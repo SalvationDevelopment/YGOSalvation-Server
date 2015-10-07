@@ -192,13 +192,18 @@ function recieveSTOC(packet) {
             break;
 
         case ('MSG_RECOVER'):
-            task.player = packet.message[1];
+            task.player = BufferIO.ReadInt8();
             task.lp = packet.message.readUInt16LE(2);
             task.multiplier = 1;
             break;
 
         case ('MSG_SUMMONING '):
-            //ignoring
+            task.player = BufferIO.ReadInt8();
+            task.code = BufferIO.ReadInt32();
+            task.cc = BufferIO.ReadInt8(); //defunct in code
+            task.cl = BufferIO.ReadInt8(); //defunct in code
+            task.cs = BufferIO.ReadInt8(); //defunct in code
+            task.cp = BufferIO.ReadInt8(); //defunct in code
             break;
 
         case ('MSG_SELECT_IDLECMD'):
@@ -325,10 +330,22 @@ function recieveSTOC(packet) {
             break;
 
         case ('MSG_SWAP'):
-            //check for variables
+            task.code1 = BufferIO.ReadInt8(); // defunct in the code
+            task.c1 = BufferIO.ReadInt8();
+            task.l1 = BufferIO.ReadInt8();
+            task.s1 = BufferIO.ReadInt8();
+            task.p1 = BufferIO.ReadInt8(); //defunct in the code
+            task.code2 = BufferIO.ReadInt8(); //defunct in the code
+            task.c2 = BufferIO.ReadInt8();
+            task.l2 = BufferIO.ReadInt8();
+            task.s2 = BufferIO.ReadInt8();
+            task.p2 = BufferIO.ReadInt8(); //defunct in the code
             break;
 
-
+        case ('MSG_FIELD_DISABLED'):
+            task.disabled = BufferIO.ReadInt8();
+            task.ifisfirst_disabled = (task.disabled >> 16) | (task.disabled << 16);
+            break;
         case ('MSG_SUMMONING'):
             task.code = BufferIO.ReadInt32();
             //check for variables
@@ -339,7 +356,9 @@ function recieveSTOC(packet) {
             break;
 
         case ('MSG_SUMMONED'):
-            break; //graphical only
+            //myswprintf(event_string, dataManager.GetSysString(1604));
+            //graphical only
+            break;
 
         case ('MSG_SPSUMMONED'):
             break; //graphical only
@@ -472,6 +491,8 @@ function recieveSTOC(packet) {
         case ('MSG_DECK_TOP'):
             task.player = BufferIO.ReadInt8();
             task.seq = BufferIO.ReadInt8();
+            task.code = BufferIO.ReadInt32();
+            task.rev = ((task.code & 0x80000000) !== 0);
             break;
 
         default:
