@@ -224,19 +224,24 @@ function recieveSTOC(packet) {
 
         case ('MSG_PAY_LPCOST'):
             task.player = BufferIO.ReadInt8();
-            task.lp = packet.message.readUInt16LE(2);
+            task.lp = BufferIO.ReadInt32();
             task.multiplier = -1;
             break;
 
         case ('MSG_DAMAGE'):
             task.player = BufferIO.ReadInt8();
-            task.lp = packet.message.readUInt16LE(2);
+            task.lp = BufferIO.ReadInt32();
             task.multiplier = -1;
             break;
 
         case ('MSG_RECOVER'):
             task.player = BufferIO.ReadInt8();
-            task.lp = packet.message.readUInt16LE(2);
+            task.lp = BufferIO.ReadInt32();
+            task.multiplier = 1;
+            break;
+        case ('MSG_LPUPDATE'):
+            task.player = BufferIO.ReadInt8();
+            task.lp = BufferIO.ReadInt32();
             task.multiplier = 1;
             break;
 
@@ -257,6 +262,17 @@ function recieveSTOC(packet) {
             task.c2 = BufferIO.ReadInt8();
             task.l2 = BufferIO.ReadInt8();
             task.s2 = BufferIO.ReadInt8();
+            BufferIO.ReadInt8(); //padding wtf
+            break;
+
+        case ('MSG_UNEQUIP'):
+            task.c1 = BufferIO.ReadInt8();
+            task.l1 = BufferIO.ReadInt8();
+            task.s1 = BufferIO.ReadInt8();
+            BufferIO.ReadInt8(); //padding wtf
+            task.c1 = BufferIO.ReadInt8();
+            task.l1 = BufferIO.ReadInt8();
+            task.s1 = BufferIO.ReadInt8();
             BufferIO.ReadInt8(); //padding wtf
             break;
 
