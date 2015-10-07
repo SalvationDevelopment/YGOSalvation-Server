@@ -287,6 +287,14 @@ function recieveSTOC(packet) {
             BufferIO.ReadInt8(); //padding wtf
             break;
 
+        case ('MSG_ADD_COUNTER'):
+            task.type = BufferIO.ReadInt16();
+            task.c = BufferIO.ReadInt8();
+            task.l = BufferIO.ReadInt8();
+            task.s = BufferIO.ReadInt8();
+            task.count = BufferIO.ReadInt8();
+            break;
+
         case ('MSG_SELECT_IDLECMD'):
             task.command = 'MSG_SELECT_IDLECMD';
             //https://github.com/Fluorohydride/ygopro/blob/d9450dbb35676db3d5b7c2a5241a54d7f2c21e98/ocgcore/playerop.cpp#L69
