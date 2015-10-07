@@ -173,20 +173,37 @@ function recieveSTOC(packet) {
             break;
 
         case ('MSG_CHAIN_SOLVED'):
+            task.ct = BufferIO.ReadInt8(); // defunct in the code
             break;
 
         case ('MSG_CHAIN_END'):
-            break; // remove any liggering chain parts
+            // remove any liggering chain parts with a graphical command
+            break;
 
         case ('MSG_CHAIN_NEGATED'):
+            task.ct = BufferIO.ReadInt8();
             break; //graphical and trigger only for replay
 
         case ('MSG_CHAIN_DISABLED'):
+            task.ct = BufferIO.ReadInt8();
             break; //graphical and trigger only for replay
 
         case ('MSG_CARD_SELECTED'):
             task.player = BufferIO.ReadInt8();
             task.count = BufferIO.ReadInt8();
+            break;
+        case ('MSG_RANDOM_SELECTED'):
+            task.player = BufferIO.ReadInt8();
+            task.count = BufferIO.ReadInt8();
+            task.selections = [];
+            for (i = 0; i < task.count; ++i) {
+                task.selections.push({
+                    c: BufferIO.ReadInt8(),
+                    l: BufferIO.ReadInt8(),
+                    s: BufferIO.ReadInt8(),
+                    ss: BufferIO.ReadInt8()
+                });
+            }
             break;
 
         case ('MSG_PAY_LPCOST'):
