@@ -329,7 +329,7 @@ function recieveSTOC(packet) {
             task.ddef = BufferIO.ReadInt32();
             task.dd = BufferIO.ReadInt8(); //defunct
             break;
-                
+
         case ('MSG_ATTACK_DISABLED'):
             //myswprintf(event_string, dataManager.GetSysString(1621), dataManager.GetName(mainGame->dField.attacker->code));
             break;
@@ -341,7 +341,13 @@ function recieveSTOC(packet) {
         case ('MSG_DAMAGE_STEP_END'):
             //no code just a trigger
             break;
-
+        case ('MSG_MISSED_EFFECT'):
+            BufferIO.ReadInt8(); //padding
+            task.code = BufferIO.ReadInt32();
+            break;
+        case ('MSG_TOSS_COIN'):
+            //ugh....new BufferIO stuff.
+            break;
         case ('MSG_SELECT_IDLECMD'):
             task.command = 'MSG_SELECT_IDLECMD';
             //https://github.com/Fluorohydride/ygopro/blob/d9450dbb35676db3d5b7c2a5241a54d7f2c21e98/ocgcore/playerop.cpp#L69
