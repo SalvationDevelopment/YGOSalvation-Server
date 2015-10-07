@@ -346,11 +346,11 @@ function recieveSTOC(packet) {
 
         case ('MSG_FLIPSUMMONING'):
             // notice pp is missing, and everything is upshifted; not repeating code.
-            task.code = packet.message.readUInt16LE(1);
-            task.cc = packet.message[5]; // current controller
-            task.cl = packet.message[6]; // current cLocation
-            task.cs = packet.message[7]; // current sequence (index)
-            task.cp = packet.message[8]; // current position
+            task.code = BufferIO.ReadInt32();
+            task.cc = BufferIO.ReadInt8(); // current controller
+            task.cl = BufferIO.ReadInt8(); // current cLocation
+            task.cs = BufferIO.ReadInt8(); // current sequence (index)
+            task.cp = BufferIO.ReadInt8(); // current position
             break;
 
         case ('MSG_REQUEST_DECK'):
@@ -431,22 +431,27 @@ function recieveSTOC(packet) {
 
             break;
         case ('MSG_CONFIRM_CARDS'):
-
+            task.player = BufferIO.ReadInt8(); /* defunct in code */
+            task.count = BufferIO.ReadInt8();
+            task.c = undefined;
+            task.l = undefined;
+            task.s = undefined;
+            for (i = 0; i < task.count; ++i) {}
             break;
 
 
         case ('MSG_UPDATE_DATA'):
 
-            task.player = packet.message[1];
-            task.fieldlocation = packet.message[2];
+            task.player = BufferIO.ReadInt8();
+            task.fieldlocation = BufferIO.ReadInt8();
             task.fieldmodel = enums.locations[task.fieldlocation];
             task.message = packet.message;
             break;
 
         case ('MSG_UPDATE_CARD'):
-            task.udplayer = packet.message[1];
-            task.udfieldlocation = packet.message[2];
-            task.udindex = packet.message[3];
+            task.udplayer = BufferIO.ReadInt8();
+            task.udfieldlocation = BufferIO.ReadInt8();
+            task.udindex = BufferIO.ReadInt8();
             task.udcard = makeCard(packet.message, 8, task.udplayer).card;
             break;
 
