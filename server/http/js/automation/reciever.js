@@ -436,7 +436,9 @@ function recieveSTOC(packet) {
             task.c = undefined;
             task.l = undefined;
             task.s = undefined;
-            for (i = 0; i < task.count; ++i) {}
+            for (i = 0; i < task.count; ++i) {
+                /*sigh this goes into something extremely complex and that overwrites itself*/
+            }
             break;
 
 
