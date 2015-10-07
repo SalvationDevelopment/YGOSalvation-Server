@@ -1,4 +1,4 @@
-/*jslint browser:true, plusplus : true, bitwise : true*/
+/*jslint browser:true, plusplus:true, bitwise : true*/
 /*globals WebSocket, Buffer, enums, makeCard, BufferStreamReader, EventEmitter*/
 // buffer.js
 // card.js
@@ -294,6 +294,40 @@ function recieveSTOC(packet) {
             task.s = BufferIO.ReadInt8();
             task.count = BufferIO.ReadInt8();
             break;
+
+        case ('MSG_REMOVE_COUNTER'):
+            task.type = BufferIO.ReadInt16();
+            task.c = BufferIO.ReadInt8();
+            task.l = BufferIO.ReadInt8();
+            task.s = BufferIO.ReadInt8();
+            task.count = BufferIO.ReadInt8();
+            break;
+
+        case ('MSG_ATTACK'):
+            task.ca = BufferIO.ReadInt8();
+            task.la = BufferIO.ReadInt8();
+            task.sa = BufferIO.ReadInt8();
+            BufferIO.ReadInt8();
+            task.cd = BufferIO.ReadInt8();
+            task.ld = BufferIO.ReadInt8();
+            task.sd = BufferIO.ReadInt8();
+            BufferIO.ReadInt8();
+            break;
+        case ('MSG_BATTLE'):
+            task.ca = BufferIO.ReadInt8();
+            task.la = BufferIO.ReadInt8();
+            task.sa = BufferIO.ReadInt8();
+            BufferIO.ReadInt8(); // padding
+            task.aatk = BufferIO.ReadInt32();
+            task.adef = BufferIO.ReadInt32();
+            task.da = BufferIO.ReadInt8(); //defunct
+            task.cd = BufferIO.ReadInt8();
+            task.ld = BufferIO.ReadInt8();
+            task.sd = BufferIO.ReadInt8();
+            BufferIO.ReadInt8(); //padding
+            task.datk = BufferIO.ReadInt32();
+            task.ddef = BufferIO.ReadInt32();
+            task.dd = BufferIO.ReadInt8(); //defunct
 
         case ('MSG_SELECT_IDLECMD'):
             task.command = 'MSG_SELECT_IDLECMD';
