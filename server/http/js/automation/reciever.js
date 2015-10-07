@@ -276,6 +276,17 @@ function recieveSTOC(packet) {
             BufferIO.ReadInt8(); //padding wtf
             break;
 
+        case ('MSG_CANCEL_TARGET'):
+            task.c1 = BufferIO.ReadInt8();
+            task.l1 = BufferIO.ReadInt8();
+            task.s1 = BufferIO.ReadInt8();
+            BufferIO.ReadInt8(); //padding wtf
+            task.c2 = BufferIO.ReadInt8();
+            task.l2 = BufferIO.ReadInt8();
+            task.s2 = BufferIO.ReadInt8();
+            BufferIO.ReadInt8(); //padding wtf
+            break;
+
         case ('MSG_SELECT_IDLECMD'):
             task.command = 'MSG_SELECT_IDLECMD';
             //https://github.com/Fluorohydride/ygopro/blob/d9450dbb35676db3d5b7c2a5241a54d7f2c21e98/ocgcore/playerop.cpp#L69
