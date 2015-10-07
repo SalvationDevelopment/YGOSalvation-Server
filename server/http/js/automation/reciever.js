@@ -146,7 +146,10 @@ function recieveSTOC(packet) {
             break;
 
         case ('MSG_SHUFFLE_HAND'):
-            task.layout = BufferIO.ReadInt8();
+            task.player = BufferIO.ReadInt8();
+            task.count = BufferIO.ReadInt8();
+            //for some number that cant be determined here because the count was not sent (getting it from the state like an idiot)
+            // readint32 off.
             break;
 
         case ('MSG_CHAINING'):
@@ -459,12 +462,16 @@ function recieveSTOC(packet) {
 
         case ('MSG_WAITING'):
             break;
+        case ('MSG_SWAP_GRAVE_DECK'):
+            task.player = BufferIO.ReadInt8();
+            break;
 
         default:
             //console.log('bad', command, packet, task);
             break;
         }
         return task;
+
 
 
     case ("STOC_ERROR_MSG"):
