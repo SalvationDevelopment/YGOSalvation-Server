@@ -466,6 +466,14 @@ function recieveSTOC(packet) {
             task.player = BufferIO.ReadInt8();
             break;
 
+        case ('MSG_REVERSE_DECK'):
+            //all graphical from what I can tell.
+            break;
+        case ('MSG_DECK_TOP'):
+            task.player = BufferIO.ReadInt8();
+            task.seq = BufferIO.ReadInt8();
+            break;
+
         default:
             //console.log('bad', command, packet, task);
             break;
