@@ -365,11 +365,14 @@ function recieveSTOC(packet) {
             break;
 
         case ('MSG_SPSUMMONED'):
-            break; //graphical only
+            //myswprintf(event_string, dataManager.GetSysString(1606));
+            //graphical only
+            break;
 
         case ('MSG_FLIPSUMMONED'):
-            break; //graphical only
-
+            //myswprintf(event_string, dataManager.GetSysString(1608));
+            //graphical only
+            break;
         case ('MSG_FLIPSUMMONING'):
             // notice pp is missing, and everything is upshifted; not repeating code.
             task.code = BufferIO.ReadInt32();
