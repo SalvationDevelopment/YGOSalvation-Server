@@ -49,6 +49,7 @@ function startgame(roompass) {
     var framer = new Framemaker(),
         ws = new WebSocket("ws://127.0.0.1:8082", "duel"),
         network = new CommandParser();
+    window.activeReplayRecorde = [];
     ws.binaryType = 'arraybuffer';
 
     ws.onconnect = function () {
@@ -79,6 +80,10 @@ function startgame(roompass) {
             l = 0;
             for (l; commands.length > l; l++) {
                 /*binary code goes in and comes out as events*/
+                window.activeReplayRecorde.push({
+                    type: 'input',
+                    action: commands[l]
+                });
                 network.input(commands[l]);
             }
         }
@@ -90,6 +95,10 @@ function startgame(roompass) {
             join = makeCTOS('CTOS_JoinGame', roompass),
             toduelist = makeCTOS('CTOS_HS_TODUELIST'),
             tosend = Buffer.concat([name, join, toduelist]);
+        window.activeReplayRecorde.push({
+            type: 'output',
+            action: tosend
+        });
         window.ws.send(tosend);
     };
     window.ws = ws;
