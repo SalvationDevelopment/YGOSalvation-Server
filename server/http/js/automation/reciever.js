@@ -136,9 +136,13 @@ function recieveSTOC(packet) {
 
         case ('MSG_DRAW'):
             task.player = BufferIO.ReadInt8();
-            task.draw = BufferIO.ReadInt8();
+            task.count = BufferIO.ReadInt8();
             task.cardslist = [];
-            task.drawReadposition = 3;
+            for (i = 0; i < task.count; ++i) {
+                task.cardslist.push({
+                    code: BufferIO.ReadInt32()
+                });
+            }
             break;
 
         case ('MSG_SHUFFLE_DECK'):
@@ -205,6 +209,18 @@ function recieveSTOC(packet) {
                 });
             }
             break;
+        case ('MSG_BECOME_TARGET'):
+            task.count = BufferIO.ReadInt8();
+            task.selections = [];
+            for (i = 0; i < task.count; ++i) {
+                task.selections.push({
+                    c: BufferIO.ReadInt8(),
+                    l: BufferIO.ReadInt8(),
+                    s: BufferIO.ReadInt8(),
+                    ss: BufferIO.ReadInt8() // defunct in code
+                });
+            }
+            break;
 
         case ('MSG_PAY_LPCOST'):
             task.player = BufferIO.ReadInt8();
@@ -231,6 +247,17 @@ function recieveSTOC(packet) {
             task.cl = BufferIO.ReadInt8(); //defunct in code
             task.cs = BufferIO.ReadInt8(); //defunct in code
             task.cp = BufferIO.ReadInt8(); //defunct in code
+            break;
+
+        case ('MSG_EQUIP'):
+            task.c1 = BufferIO.ReadInt8();
+            task.l1 = BufferIO.ReadInt8();
+            task.s1 = BufferIO.ReadInt8();
+            BufferIO.ReadInt8(); //padding wtf
+            task.c2 = BufferIO.ReadInt8();
+            task.l2 = BufferIO.ReadInt8();
+            task.s2 = BufferIO.ReadInt8();
+            BufferIO.ReadInt8(); //padding wtf
             break;
 
         case ('MSG_SELECT_IDLECMD'):
