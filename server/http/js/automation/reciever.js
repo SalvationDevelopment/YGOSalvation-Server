@@ -353,6 +353,10 @@ function recieveSTOC(packet) {
 
         case ('MSG_SPSUMMONING'):
             task.code = BufferIO.ReadInt32();
+            task.cc = BufferIO.ReadInt8();
+            task.cl = BufferIO.ReadInt8();
+            task.cs = BufferIO.ReadInt8();
+            task.cp = BufferIO.ReadInt8();
             break;
 
         case ('MSG_SUMMONED'):
