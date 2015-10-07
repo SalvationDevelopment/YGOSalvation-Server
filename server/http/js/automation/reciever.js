@@ -153,7 +153,17 @@ function recieveSTOC(packet) {
             break;
 
         case ('MSG_CHAINING'):
-            break; //
+            task.code = BufferIO.ReadInt32();
+            task.pcc = BufferIO.ReadInt8();
+            task.pcl = BufferIO.ReadInt8();
+            task.pcs = BufferIO.ReadInt8();
+            task.subs = BufferIO.ReadInt8();
+            task.cc = BufferIO.ReadInt8();
+            task.cl = BufferIO.ReadInt8();
+            task.cs = BufferIO.ReadInt8();
+            task.desc = BufferIO.ReadInt32();
+            task.ct = BufferIO.ReadInt8(); // defunct in code
+            break;
         case ('MSG_CHAINED'):
             task.ct = BufferIO.ReadInt8();
             break;
