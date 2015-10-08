@@ -20,6 +20,9 @@ var Primus = require('primus'),
     ROLE_PLAYER_TWO = 2,
     ROLE_PLAYER_THREE = 3,
     ROLE_PLAYER_FOUR = 4,
+    CARD_TOKEN = "Token",
+    POSITION_FACEUP = 0,
+    POSITION_FACEDOWN = 1,
     DRAW_PHASE = "Draw Phase",
     STANDBY_PHASE = "Standby Phase",
     MAIN_PHASE_ONE = "Main Phase 1",
@@ -215,11 +218,13 @@ function handlePrimusEvent(data, client) {
                         moveCard({
                             from: {
                                 location: activeDuels[duelID].state["Player " + target.player][target.location],
-                                slot: target.slot
+                                slot: target.slot,
+                                locationString: target.location
                             },
                             to: {
                                 location: activeDuels[duelID].state["Player " + moveTo.player][moveTo.location],
-                                slot: moveTo.slot
+                                slot: moveTo.slot,
+                                locationString: moveTo.location
                             }
                         });
                         primus.room(duelID).write({
@@ -462,11 +467,13 @@ function xyzSummonIsValid(activeDuel, uid, target, moveTo) {
     }
     xyzMonster = [xyzMonster]; // to Array
     locations.forEach(function (location, i) {
-        if (!playerState[location][slots[i]]) {
+        if (!playerState[location][slots[i]] || playerState[location][slots[i]].cardType === CARD_TOKEN || location !== MONSTER_ZONE) {
             isValid = false;
             return;
         }
         xyzMonster = xyzMonster.concat(playerState[location][slots[i]]);
+        playerState[location][slots[i]] = undefined;
+        playerState[location] = buildLocationArray(playerState[location], location);
     });
     moveToSlot = xyzMonster;
     return isValid;
@@ -504,12 +511,18 @@ function startDuelState(gameState, deckList) {
         extraCard;
     for (mainCard in deckCopy.main) {
         while (deckCopy.main[mainCard]--) {
-            mainArray.push(mainCard);
+            mainArray.push({
+                cardID: mainCard,
+                position: POSITION_FACEDOWN
+            });
         }
     }
     for (extraCard in deckCopy.extra) {
         while (deckCopy.extra[extraCard]--) {
-            extraArray.push(extraCard);
+            extraArray.push({
+                cardID: extraCard,
+                position: POSITION_FACEDOWN,
+            });
         }
     }
     gameState[DECK] = shuffleArray(mainArray);
@@ -526,10 +539,8 @@ function moveCard(move) {
     var from = move.from,
         to = move.to;
     to.location[to.slot] = from.location[from.slot];
-    from.location[from.slot] = 0;
-    from.location = from.location.filter(function(card) {
-        return !!card;
-    });
+    from.location[from.slot] = undefined;
+    from.location = buildLocationArray(from.location, from.locationString);
 }
         
 
@@ -548,6 +559,15 @@ function moveCards(amount, move) {
         spliced.forEach(function (card) {
             to.push(card);
         });
+    }
+}
+
+function buildLocationArray(sourceArray, location) {
+        sourceArray = sourceArray.filter(function(elem){
+            return !!elem;
+        });
+    if (location === DECK) {
+        shuffleArray(sourceArray);
     }
 }
 
