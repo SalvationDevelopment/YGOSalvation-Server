@@ -243,6 +243,13 @@ function handlePrimusEvent(data, client) {
             case QUERY_XYZ_SUMMON:
                 {
                     if (activeDuels[duelID].players.hasOwnProperty(uid) && xyzSummonIsValid(activeDuels[duelID], uid, target, moveTo)) {
+                        var xyzMonster = [];
+                        target.locations.forEach(function(location, i) {
+                            xyzMonster.push(activeDuels[duelID].state["Player " + target.player][location][target.slots[i]]);
+                            activeDuels[duelID].state["Player " + target.player][location][target.slots[i]] = undefined;
+                            buildLocationArray(activeDuels[duelID].state["Player " + target.player][location], location);
+                        });
+                        activeDuels[duelID].state["Player " + moveTo.player][moveTo.location][moveTo.slot] = xyzMonster;
                         primus.room(duelID).write({
                             event: QUERY_XYZ_SUMMON,
                             data: {
@@ -459,24 +466,23 @@ function xyzSummonIsValid(activeDuel, uid, target, moveTo) {
         slots = target.slots.slice(1),
         playerState = activeDuel.state["Player " + target.player],
         moveToSlot = activeDuel.state["Player " + moveTo.player][moveTo.location][moveTo.slot],
-        xyzMonster = playerState[target.locations[0]][target.slots[0]],
+        moveToInLocations = false,
         isValid = true;
-    if (activeDuel.players[uid].ROLE !== target.player || !moveToSlot || !xyzMonster) {
+    if (activeDuel.players[uid].ROLE !== target.player || !moveToSlot || target.locations[0] !== EXTRA_DECK || !playerState[target.locations[0]][target.slots[0]]) {
         isValid = false;
         return;
     }
-    xyzMonster = [xyzMonster]; // to Array
+    
     locations.forEach(function (location, i) {
         if (!playerState[location][slots[i]] || playerState[location][slots[i]].cardType === CARD_TOKEN || location !== MONSTER_ZONE) {
             isValid = false;
             return;
         }
-        xyzMonster = xyzMonster.concat(playerState[location][slots[i]]);
-        playerState[location][slots[i]] = undefined;
-        playerState[location] = buildLocationArray(playerState[location], location);
+        if (playerState[location][slots[i]] === moveToSlot) {
+            moveToInLocations = true;
+        }
     });
-    moveToSlot = xyzMonster;
-    return isValid;
+    return isValid && moveToInLocations;
 }
 
 function GameState(nPlayers) {
@@ -540,7 +546,7 @@ function moveCard(move) {
         to = move.to;
     to.location[to.slot] = from.location[from.slot];
     from.location[from.slot] = undefined;
-    from.location = buildLocationArray(from.location, from.locationString);
+    buildLocationArray(from.location, from.locationString);
 }
         
 
@@ -563,9 +569,9 @@ function moveCards(amount, move) {
 }
 
 function buildLocationArray(sourceArray, location) {
-        sourceArray = sourceArray.filter(function(elem){
-            return !!elem;
-        });
+    sourceArray = sourceArray.filter(function(elem){
+        return !!elem;
+    });
     if (location === DECK) {
         shuffleArray(sourceArray);
     }
