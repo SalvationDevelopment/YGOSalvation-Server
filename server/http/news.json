@@ -1,6 +1,12 @@
 {
     "Articles": [
 		{
+			"Title": "Replays are back",
+			"Subtitle": "More new cards as well",
+			"Content": "<p>New cards added:<br /><br />Yokoshimauma<br />Dinomist Rush<br />Superheavy Samurai Swordmaster Musha-C<br /><br />Credit goes to YGOHack137 and OneShot for scripting the cards and to StormWolf for bug fixing. For those of you who haven't heard, we now have a temporary solution for the replay issue until we reach the browser phase. Instructions for how to use this method can be found <a herf="URL">in this thread</a></p>",
+			"Author": "StormWolf",
+			"Date": "October 7, 2015"
+		},{
 			"Title": "Card updates",
 			"Subtitle": "More love for Buster Blader and the Shiranui",
 			"Content": "<p>New cards added today:<br /><br />Destruction Swordmaster Flash<br />Shiranui Style: Sword of Swallow<br />High Speed Relevel<br /><br />The credit goes to YGOHack137 for scripting the cards, Dragunlegend for bug testing, and to OneShot and Chibi for bug fixing. We'll announce updates regarding new features and/or bug fixes regarding the server soon.</p>",
