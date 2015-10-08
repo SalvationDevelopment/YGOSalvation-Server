@@ -218,13 +218,11 @@ function handlePrimusEvent(data, client) {
                         moveCard({
                             from: {
                                 location: activeDuels[duelID].state["Player " + target.player][target.location],
-                                slot: target.slot,
-                                locationString: target.location
+                                slot: target.slot
                             },
                             to: {
                                 location: activeDuels[duelID].state["Player " + moveTo.player][moveTo.location],
-                                slot: moveTo.slot,
-                                locationString: moveTo.location
+                                slot: moveTo.slot
                             }
                         });
                         primus.room(duelID).write({
@@ -246,8 +244,7 @@ function handlePrimusEvent(data, client) {
                         var xyzMonster = [];
                         target.locations.forEach(function(location, i) {
                             xyzMonster.push(activeDuels[duelID].state["Player " + target.player][location][target.slots[i]]);
-                            activeDuels[duelID].state["Player " + target.player][location][target.slots[i]] = undefined;
-                            buildLocationArray(activeDuels[duelID].state["Player " + target.player][location], location);
+                            activeDuels[duelID].state["Player " + target.player][location].splice(target.slots[i], 1);
                         });
                         activeDuels[duelID].state["Player " + moveTo.player][moveTo.location][moveTo.slot] = xyzMonster;
                         primus.room(duelID).write({
@@ -545,8 +542,7 @@ function moveCard(move) {
     var from = move.from,
         to = move.to;
     to.location[to.slot] = from.location[from.slot];
-    from.location[from.slot] = undefined;
-    buildLocationArray(from.location, from.locationString);
+    from.location.splice(from.slot, 1);
 }
         
 
@@ -565,15 +561,6 @@ function moveCards(amount, move) {
         spliced.forEach(function (card) {
             to.push(card);
         });
-    }
-}
-
-function buildLocationArray(sourceArray, location) {
-    sourceArray = sourceArray.filter(function(elem){
-        return !!elem;
-    });
-    if (location === DECK) {
-        shuffleArray(sourceArray);
     }
 }
 
