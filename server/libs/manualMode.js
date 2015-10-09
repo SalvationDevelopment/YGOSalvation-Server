@@ -241,10 +241,14 @@ function handlePrimusEvent(data, client) {
             case QUERY_XYZ_SUMMON:
                 {
                     if (activeDuels[duelID].players.hasOwnProperty(uid) && xyzSummonIsValid(activeDuels[duelID], uid, target, moveTo)) {
-                        var xyzMonster = [];
-                        target.locations.forEach(function(location, i) {
-                            xyzMonster.push(activeDuels[duelID].state["Player " + target.player][location][target.slots[i]]);
+                        var xyzMonster = [],
+                            i = 0,
+                            location;
+                        for (i; i < target.locations.length; ) {
+                            location = target.locations[i];
+                            xyzMonster.push(activeDuels[duelID].state["Player " + target.player][location][target.slots[i]-i]);
                             activeDuels[duelID].state["Player " + target.player][location].splice(target.slots[i]-i, 1);
+                            i = i + 1;
                         });
                         activeDuels[duelID].state["Player " + moveTo.player][moveTo.location][moveTo.slot] = xyzMonster;
                         primus.room(duelID).write({
