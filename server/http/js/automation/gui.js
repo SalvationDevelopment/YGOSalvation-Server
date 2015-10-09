@@ -1,4 +1,5 @@
 
+var game = {};
 
 game.UpdateTime = function (player, time) {
     $('.p' + player + 'time').val(time);
