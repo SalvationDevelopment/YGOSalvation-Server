@@ -244,7 +244,7 @@ function handlePrimusEvent(data, client) {
                         var xyzMonster = [];
                         target.locations.forEach(function(location, i) {
                             xyzMonster.push(activeDuels[duelID].state["Player " + target.player][location][target.slots[i]]);
-                            activeDuels[duelID].state["Player " + target.player][location].splice(target.slots[i], 1);
+                            activeDuels[duelID].state["Player " + target.player][location].splice(target.slots[i]-i, 1);
                         });
                         activeDuels[duelID].state["Player " + moveTo.player][moveTo.location][moveTo.slot] = xyzMonster;
                         primus.room(duelID).write({
