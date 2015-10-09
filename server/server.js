@@ -52,9 +52,9 @@ function initiateMaster(numCPUs) {
     gamelistManager = require('./libs/gamelist.js');
     require('./libs/policyserver.js');
     //require('./libs/ldapserver.js'); //LDAP endpoint; //Flash policy server for LightIRC;
-    processManager.fork('../libs/update.js', [], {
-        cwd: 'http'
-    });
+//    processManager.fork('../libs/update.js', [], {
+            //        cwd: 'http'
+            //    });
 
     function setupWorker(x) {
         //'use strict';

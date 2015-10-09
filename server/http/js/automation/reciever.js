@@ -90,6 +90,9 @@ function recieveSTOC(packet) {
     //console.log(packet);
     switch (packet.STOC) {
     case ("STOC_UNKNOWN"):
+        task = {
+            command: "STOC_UNKNOWN"
+        };
         break;
 
     case ("STOC_GAME_MSG"):
