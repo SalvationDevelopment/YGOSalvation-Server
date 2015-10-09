@@ -1,6 +1,12 @@
 {
     "Articles": [
 		{
+			"Title": "The Buster Blader squad has gathered",
+			"Subtitle": "Dragons beware!",
+			"Content": "<p>New cards added last night<br /><br />Destruction Swordmaster - Arms Buster Blade<br />Destruction Swordmaster - Wizard Buster Blade<br />Fate of the Destruction Swordmaster<br /><br />As many of you have noticed since up to almost two weeks ago, Tag Duels are currently malfunctioned, and unfortunately, our staff isn't capable of repairing the problem at this moment. The earliest that we can possibly expect a fix is on October 17, when we expect the next YGOCore update from Fhlorohydride to release which will guarantee to have the syntax to support Clash of the Dracorivals properly without taking improper shortcuts. However, there's also the chance that this issue may remain unresolved until we reach the browser platform, which may take as long as two months to accomplish. The staff here on Salvation Server will keep you all posted about any updates regarding Tag Duels as well as SnarkieChild (which is also currently disabled due to causing server instability).</p>",
+			"Author": "StormWolf",
+			"Date": "October 9, 2015"
+		},{
 			"Title": "Replays are back",
 			"Subtitle": "More new cards as well",
 			"Content": "<p>New cards added:<br /><br />Yokoshimauma<br />Dinomist Rush<br />Superheavy Samurai Swordmaster Musha-C<br /><br />Credit goes to YGOHack137 and OneShot for scripting the cards and to StormWolf for bug fixing. For those of you who haven't heard, we now have a temporary solution for the replay issue until we reach the browser phase. Instructions for how to use this method can be found <u><a href='http://forum.ygopro.us/index.php?/topic/1614-a-temporary-solution-for-playing-replays/'>in this thread</a></u></p>",
