@@ -134,13 +134,13 @@ function recieveSTOC(packet) {
                 //display task.data after processing it against the DB.
                 break;
             case 'HINT_SELECTMSG':
-                task.select_hint = data;
+                task.select_hint = task.data;
                 break;
 
             case 'HINT_OPSELECTED':
                 break;
             case 'HINT_EFFECT':
-                task.showcardcode = data;
+                task.showcardcode = task.data;
                 task.showcarddif = 0;
                 task.showcard = 1;
                 break;
@@ -373,42 +373,39 @@ function recieveSTOC(packet) {
             task.code = BufferIO.ReadInt32();
             break;
         case ('MSG_TOSS_COIN'):
-            //ugh....new BufferIO stuff.
+            //ugh....new BufferIO stuff. Does it take all this to flip a coin?
             break;
         case ('MSG_SELECT_IDLECMD'):
             task.command = 'MSG_SELECT_IDLECMD';
             //https://github.com/Fluorohydride/ygopro/blob/d9450dbb35676db3d5b7c2a5241a54d7f2c21e98/ocgcore/playerop.cpp#L69
             task.idleplayer = BufferIO.ReadInt8();
-            iter = 0;
-            bitreader++;
+            i = 0;
             task.summonable_cards = [];
             task.count = BufferIO.ReadInt8();
-            for (iter; task.count > iter; iter++) {
+            for (i = 0; i < task.count; ++i) {
                 task.summonable_cards.push({
                     code: BufferIO.ReadInt32(),
                     controller: BufferIO.ReadInt8(),
                     location: BufferIO.ReadInt8(),
                     sequence: BufferIO.ReadInt8()
                 });
-                bitreader = bitreader + 7;
             }
             iter = 0;
-            bitreader++;
+
             task.spsummonable_cards = [];
             task.count = BufferIO.ReadInt8();
-            for (iter; task.count > iter; iter++) {
+            for (i = 0; i < task.count; ++i) {
                 task.spsummonable_cards.push({
                     code: BufferIO.ReadInt32(),
                     controller: BufferIO.ReadInt8(),
                     location: BufferIO.ReadInt8(),
                     sequence: BufferIO.ReadInt8()
                 });
-                bitreader = bitreader + 7;
             }
             iter = 0;
             bitreader++;
             task.repositionable_cards = [];
-            for (iter; packet.message[bitreader] > iter; iter++) {
+            for (i = 0; i < task.count; ++i) {
                 task.repositionable_cards.push({
                     code: packet.message.readUInt16LE(bitreader + 1),
                     controller: packet.message[bitreader + 5],
@@ -555,33 +552,30 @@ function recieveSTOC(packet) {
 
             break;
         case ('MSG_SELECT_BATTLECMD'):
-            task.selecting_player = packet.message[1]; // defunct in the code, just reading ahead.
-            task.count = packet.message[2];
+            task.selecting_player = BufferIO.ReadInt8(); // defunct in the code, just reading ahead.
+            task.count = BufferIO.ReadInt8();
             task.cardsThatCanBattle = [];
-            task.readposition = 3;
             for (i = 0; i < task.count; ++i) {
                 task.cardsThatCanBattle.push({
-                    con: packet.message[task.readposition],
-                    loc: packet.message[task.readposition + 1],
-                    seq: packet.message[task.readposition + 2],
-                    desc: packet.message.readUInt16LE([task.readposition])
+                    con: BufferIO.ReadInt8(),
+                    loc: BufferIO.ReadInt8(),
+                    seq: BufferIO.ReadInt8(),
+                    desc: BufferIO.ReadInt32()
                 });
                 // client looks at the field, gets a cmdflag, does bytemath on it to see if it can activate.
                 // if it can do the can activate animations.
-                task.readposition = task.readposition + 5;
+
             }
             task.cardsThatAreAttackable = [];
-            task.count = packet.message[task.readposition];
-            task.readposition++;
+            task.count = BufferIO.ReadInt8();
             for (i = 0; i < task.count; ++i) {
                 task.cardsThatAreAttackable.push({
-                    code: packet.message.readUInt16LE([task.readposition]),
-                    con: packet.message[task.readposition + 2],
-                    loc: packet.message[task.readposition + 3],
-                    seq: packet.message[task.readposition + 4],
-                    diratt: packet.message.readUInt16LE([task.readposition + 5]) // defuct in code
+                    code: BufferIO.ReadInt32(),
+                    con: BufferIO.ReadInt8(),
+                    loc: BufferIO.ReadInt8(),
+                    seq: BufferIO.ReadInt8(),
+                    diratt: BufferIO.ReadInt32() // defuct in code
                 });
-                task.readposition = task.readposition + 5;
             }
             break;
         case ('MSG_SELECT_EFFECTYN'):
@@ -641,11 +635,12 @@ function recieveSTOC(packet) {
 
 
         case ('MSG_UPDATE_DATA'):
-
             task.player = BufferIO.ReadInt8();
             task.fieldlocation = BufferIO.ReadInt8();
             task.fieldmodel = enums.locations[task.fieldlocation];
             task.message = packet.message;
+            //mainGame->dField.UpdateFieldCard(player, location, pbuf);
+            // ^ problem.
             break;
 
         case ('MSG_UPDATE_CARD'):
@@ -656,6 +651,7 @@ function recieveSTOC(packet) {
             break;
 
         case ('MSG_WAITING'):
+            //mainGame->stHintMsg->setText(dataManager.GetSysString(1390));
             break;
         case ('MSG_SWAP_GRAVE_DECK'):
             task.player = BufferIO.ReadInt8();
@@ -798,7 +794,6 @@ function recieveSTOC(packet) {
         break;
 
     }
-    //console.log(task.command);
     return task;
 }
 
@@ -808,7 +803,6 @@ function CommandParser() {
     var output = {};
     output = new EventEmitter();
     output.input = function (input) {
-        console.log(input);
         output.emit(input.command, input);
     };
     return output;
