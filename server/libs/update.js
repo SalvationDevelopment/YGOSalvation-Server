@@ -39,7 +39,8 @@ function dirTree(filename) {
 
 function update() {
     'use strict';
-    var startTime = new Date(),
+    var fileContent,
+        startTime = new Date(),
         ygopro = dirTree('ygopro'),
         plugins = dirTree('plugins'),
         license = dirTree('license'),
@@ -62,8 +63,8 @@ function update() {
     //        ocggit = spawn('git', ['pull'], {
     //            cwd: '../../../ygopro'
     //        });
-
-    fs.writeFile('manifest/ygopro.json', JSON.stringify(installation, null, 4), function () {
+    fileContent = 'var manifest = ' + JSON.stringify(installation, null, 4);
+    fs.writeFile('manifest/manifest-ygopro.js', fileContent, function () {
         //'use strict';
         fs.createReadStream('ygopro/databases/0-en-OCGTCG.cdb').pipe(fs.createWriteStream('ygopro/cards.cdb'));
     });
