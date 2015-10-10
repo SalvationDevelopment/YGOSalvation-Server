@@ -84,6 +84,7 @@ function startgame(roompass) {
                     type: 'input',
                     action: commands[l]
                 });
+                console.log(commands[l]);
                 network.input(commands[l]);
             }
         }
