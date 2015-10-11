@@ -470,6 +470,5 @@ setTimeout(function () {
 
 }, 2500);
 
-screenMessage.toggle();
-screenMessage.html('Interface loaded, querying user for critical information,...');
+screenMessage.html('Manifest Loaded');
 populatealllist();
