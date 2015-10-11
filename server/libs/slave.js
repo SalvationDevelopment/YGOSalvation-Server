@@ -7,6 +7,7 @@ var ygoserver, //port 8911 ygopro Server
 
 function initiateSlave() {
     'use strict';
+
     // When a user connects, create an instance and allow the to duel, clean up after.
     var parsePackets = require('./parsepackets.js'),
         ws;

@@ -91,6 +91,7 @@ function recieveSTOC(packet) {
         BufferIO = new BufferStreamReader(packet.message);
 
     task.command = packet.STOC;
+    task.packet = packet;
 
     switch (task.command) {
     case ("STOC_UNKNOWN"):

@@ -8,7 +8,6 @@ var ygoserver, //port 8911 ygopro Server
 
 function initiateSlave() {
     'use strict';
-    console.log('Websocket initializing');
     // When a user connects, create an instance and allow the to duel, clean up after.
     var parsePackets = require('./parsepackets.js'),
         ws;
@@ -17,7 +16,6 @@ function initiateSlave() {
         port: 8082
     });
     ws.on('connection', function connection(socket) {
-        console.log('!!! --- connection to Websocket');
         var framer = new Framemaker();
         socket.active_ygocore = false;
         socket.active = false;
@@ -34,10 +32,10 @@ function initiateSlave() {
             var frame,
                 task,
                 newframes = 0;
-
             if (socket.active_ygocore) {
                 socket.active_ygocore.write(data);
             }
+            console.log('..../');
             frame = framer.input(data);
             for (newframes; frame.length > newframes; newframes++) {
                 task = parsePackets('CTOS', new Buffer(frame[newframes]));
@@ -47,7 +45,7 @@ function initiateSlave() {
 
         });
         socket.on('close', function close() {
-            console.log('WS, disconnected');
+            console.log('socket, disconnected');
         });
         socket.on('error', function close(error) {
             console.log(error);
