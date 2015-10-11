@@ -65,13 +65,17 @@
     </script>
 
     <script>
+        screenMessage.toggle();
+
         var uniqueID = Math.random().toString(24).substring(7) + Math.random().toString(24).substring(7);
         $.ajaxSetup({
             async: false
         });
+        screenMessage.html('Downloading Manifest');
         $.getScript(sitelocationdir[mode] + "/manifest/manifest-ygopro.js");
-        $.getScript(sitelocationdir[mode] + "/js/updatesystem.js");
+        screenMessage.html('Downloading Update System');
         $.getScript(sitelocationdir[mode] + "/js/vendor/primus.js");
+        $.getScript(sitelocationdir[mode] + "/js/updatesystem.js");
     </script>
     <script src="http://ygopro.us/js/jquery-1.11.0.min.js"></script>
     <script>
