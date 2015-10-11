@@ -75,8 +75,13 @@ function BufferStreamReader(packet) {
 }
 
 function recieveSTOC(packet) {
+    // OK!!!! HARD PART!!!!
+    // recieve.js should have create obejects with all the parameters as properites, then emit them.
+    // its done here because we might need to pass in STATE to the functions also.
+    // again if you are fiddling with a state/gui you are doing it wrong!!!
+    // data decode and command execution are different conserns.
     'use strict';
-    var task = Object.create(enums.STOCCheck),
+    var task = {},
         //makeCard = require('../http/js/card.js'),
         command,
         bitreader = 0,
@@ -85,10 +90,9 @@ function recieveSTOC(packet) {
         i = 0,
         BufferIO = new BufferStreamReader(packet.message);
 
-    task[packet.STOC] = true;
-    task.command = '';
-    //console.log(packet);
-    switch (packet.STOC) {
+    task.command = packet.STOC;
+
+    switch (task.command) {
     case ("STOC_UNKNOWN"):
         task = {
             command: "STOC_UNKNOWN"
@@ -96,8 +100,7 @@ function recieveSTOC(packet) {
         break;
 
     case ("STOC_GAME_MSG"):
-        command = enums.STOC.STOC_GAME_MSG[packet.message[0]];
-        command = BufferIO.ReadInt8();
+        command = enums.STOC.STOC_GAME_MSG[BufferIO.ReadInt8()];
         task.command = command;
         bitreader++;
         switch (command) {
@@ -115,13 +118,34 @@ function recieveSTOC(packet) {
             break;
 
         case ('MSG_HINT'):
-            //console.log('MSG_HINT', packet);
-            task.hintplayer = BufferIO.ReadInt8();
-            task.hintcont = BufferIO.ReadInt8();
-            task.hintspeccount = BufferIO.ReadInt8();
+            task.command = enums.STOC.STOC_GAME_MSG.MSG_HINT[BufferIO.ReadInt8()];
+            task.player = BufferIO.ReadInt8(); /* defunct in the code */
+            task.data = BufferIO.ReadInt32();
             task.hintforce = BufferIO.ReadInt8();
-            //whole case system that goes here....
-            //todo...
+
+            switch (task.command) {
+            case 'HINT_EVENT':
+                //myswprintf(event_string, L"%ls", dataManager.GetDesc(data));
+                //this is a rabbit hole, the hint system takes bytes and uses that to 
+                //calculate (hurr, god why) the string that should be used from strings.conf
+                // like a direct reference would be hard....
+                break;
+            case 'HINT_MESSAGE':
+                //display task.data after processing it against the DB.
+                break;
+            case 'HINT_SELECTMSG':
+                task.select_hint = task.data;
+                break;
+
+            case 'HINT_OPSELECTED':
+                break;
+            case 'HINT_EFFECT':
+                task.showcardcode = task.data;
+                task.showcarddif = 0;
+                task.showcard = 1;
+                break;
+            }
+
             break;
 
         case ('MSG_NEW_TURN'):
@@ -349,42 +373,39 @@ function recieveSTOC(packet) {
             task.code = BufferIO.ReadInt32();
             break;
         case ('MSG_TOSS_COIN'):
-            //ugh....new BufferIO stuff.
+            //ugh....new BufferIO stuff. Does it take all this to flip a coin?
             break;
         case ('MSG_SELECT_IDLECMD'):
             task.command = 'MSG_SELECT_IDLECMD';
             //https://github.com/Fluorohydride/ygopro/blob/d9450dbb35676db3d5b7c2a5241a54d7f2c21e98/ocgcore/playerop.cpp#L69
             task.idleplayer = BufferIO.ReadInt8();
-            iter = 0;
-            bitreader++;
+            i = 0;
             task.summonable_cards = [];
             task.count = BufferIO.ReadInt8();
-            for (iter; task.count > iter; iter++) {
+            for (i = 0; i < task.count; ++i) {
                 task.summonable_cards.push({
                     code: BufferIO.ReadInt32(),
                     controller: BufferIO.ReadInt8(),
                     location: BufferIO.ReadInt8(),
                     sequence: BufferIO.ReadInt8()
                 });
-                bitreader = bitreader + 7;
             }
             iter = 0;
-            bitreader++;
+
             task.spsummonable_cards = [];
             task.count = BufferIO.ReadInt8();
-            for (iter; task.count > iter; iter++) {
+            for (i = 0; i < task.count; ++i) {
                 task.spsummonable_cards.push({
                     code: BufferIO.ReadInt32(),
                     controller: BufferIO.ReadInt8(),
                     location: BufferIO.ReadInt8(),
                     sequence: BufferIO.ReadInt8()
                 });
-                bitreader = bitreader + 7;
             }
             iter = 0;
             bitreader++;
             task.repositionable_cards = [];
-            for (iter; packet.message[bitreader] > iter; iter++) {
+            for (i = 0; i < task.count; ++i) {
                 task.repositionable_cards.push({
                     code: packet.message.readUInt16LE(bitreader + 1),
                     controller: packet.message[bitreader + 5],
@@ -531,33 +552,30 @@ function recieveSTOC(packet) {
 
             break;
         case ('MSG_SELECT_BATTLECMD'):
-            task.selecting_player = packet.message[1]; // defunct in the code, just reading ahead.
-            task.count = packet.message[2];
+            task.selecting_player = BufferIO.ReadInt8(); // defunct in the code, just reading ahead.
+            task.count = BufferIO.ReadInt8();
             task.cardsThatCanBattle = [];
-            task.readposition = 3;
             for (i = 0; i < task.count; ++i) {
                 task.cardsThatCanBattle.push({
-                    con: packet.message[task.readposition],
-                    loc: packet.message[task.readposition + 1],
-                    seq: packet.message[task.readposition + 2],
-                    desc: packet.message.readUInt16LE([task.readposition])
+                    con: BufferIO.ReadInt8(),
+                    loc: BufferIO.ReadInt8(),
+                    seq: BufferIO.ReadInt8(),
+                    desc: BufferIO.ReadInt32()
                 });
                 // client looks at the field, gets a cmdflag, does bytemath on it to see if it can activate.
                 // if it can do the can activate animations.
-                task.readposition = task.readposition + 5;
+
             }
             task.cardsThatAreAttackable = [];
-            task.count = packet.message[task.readposition];
-            task.readposition++;
+            task.count = BufferIO.ReadInt8();
             for (i = 0; i < task.count; ++i) {
                 task.cardsThatAreAttackable.push({
-                    code: packet.message.readUInt16LE([task.readposition]),
-                    con: packet.message[task.readposition + 2],
-                    loc: packet.message[task.readposition + 3],
-                    seq: packet.message[task.readposition + 4],
-                    diratt: packet.message.readUInt16LE([task.readposition + 5]) // defuct in code
+                    code: BufferIO.ReadInt32(),
+                    con: BufferIO.ReadInt8(),
+                    loc: BufferIO.ReadInt8(),
+                    seq: BufferIO.ReadInt8(),
+                    diratt: BufferIO.ReadInt32() // defuct in code
                 });
-                task.readposition = task.readposition + 5;
             }
             break;
         case ('MSG_SELECT_EFFECTYN'):
@@ -617,11 +635,12 @@ function recieveSTOC(packet) {
 
 
         case ('MSG_UPDATE_DATA'):
-
             task.player = BufferIO.ReadInt8();
             task.fieldlocation = BufferIO.ReadInt8();
             task.fieldmodel = enums.locations[task.fieldlocation];
             task.message = packet.message;
+            //mainGame->dField.UpdateFieldCard(player, location, pbuf);
+            // ^ problem.
             break;
 
         case ('MSG_UPDATE_CARD'):
@@ -632,6 +651,7 @@ function recieveSTOC(packet) {
             break;
 
         case ('MSG_WAITING'):
+            //mainGame->stHintMsg->setText(dataManager.GetSysString(1390));
             break;
         case ('MSG_SWAP_GRAVE_DECK'):
             task.player = BufferIO.ReadInt8();
@@ -656,7 +676,8 @@ function recieveSTOC(packet) {
 
 
     case ("STOC_ERROR_MSG"):
-        command = enums.STOC.STOC_ERROR_MSG[packet.message[0]];
+        command = enums.STOC.STOC_ERROR_MSG[BufferIO.ReadInt8()];
+        task.command = command;
         // set the screen back to the join screen.
         switch (command) {
 
@@ -773,91 +794,16 @@ function recieveSTOC(packet) {
         break;
 
     }
-    //console.log(task.command);
     return task;
 }
 
 
 function CommandParser() {
     'use strict';
-
-    // OK!!!! HARD PART!!!!
-    // recieveSTOC.js should have created obejects with all the parameters as properites, fire the functions.
-    // Dont try to pull data out of a packet here, should have been done already.
-    // its done here because we might need to pass in STATE to the functions also.
-    // again if you are fiddling with a packet you are doing it wrong!!!
-    // data decode and command execution are different conserns.
-    // if a COMMAND results in a response, save it as RESPONSE, else return the function false.
-
-    var protoResponse = [],
-        responseRequired = false,
-        output = {};
-
+    var output = {};
     output = new EventEmitter();
-
     output.input = function (input) {
-        console.log(input);
-        if (input.STOC_GAME_MSG) {
-            output.emit(input.command, input);
-        }
-        if (input.STOC_UNKNOWN) {
-            output.emit('STOC_UNKNOWN', input);
-        }
-        if (input.STOC_SELECT_HAND) {
-            output.emit('STOC_SELECT_HAND', input);
-        }
-        if (input.STOC_JOIN_GAME) {
-            output.emit('STOC_JOIN_GAME', input);
-        }
-        if (input.STOC_SELECT_TP) {
-            output.emit('STOC_SELECT_TP', input);
-        }
-        if (input.STOC_HAND_RESULT) {
-            output.emit('STOC_HAND_RESULT', input);
-        }
-        if (input.STOC_TP_RESULT) {
-            output.emit('STOC_TP_RESULT', input);
-        }
-        if (input.STOC_CHANGE_SIDE) {
-            output.emit('STOC_CHANGE_SIDE', input);
-        }
-        if (input.STOC_WAITING_SIDE) {
-            output.emit('STOC_WAITING_SIDE', input);
-        }
-        if (input.STOC_CREATE_GAME) {
-            output.emit('STOC_CREATE_GAME', input);
-        }
-        if (input.STOC_TYPE_CHANGE) {
-            output.emit('STOC_TYPE_CHANGE', input);
-        }
-        if (input.STOC_LEAVE_GAME) {
-            output.emit('STOC_LEAVE_GAME', input);
-        }
-        if (input.STOC_DUEL_START) {
-            output.emit('STOC_DUEL_START', input);
-        }
-        if (input.STOC_DUEL_END) {
-            output.emit('STOC_DUEL_END', input);
-        }
-        if (input.STOC_REPLAY) {
-            output.emit('STOC_REPLAY', input);
-        }
-        if (input.STOC_TIME_LIMIT) {
-            output.emit('STOC_TIME_LIMIT', input);
-        }
-        if (input.STOC_CHAT) {
-            output.emit('STOC_CHAT', input);
-        }
-        if (input.STOC_HS_PLAYER_ENTER) {
-            output.emit('STOC_HS_PLAYER_ENTER', input);
-        }
-
-        if (input.STOC_HS_PLAYER_CHANGE) {
-            output.emit('STOC_HS_PLAYER_CHANGE', input);
-        }
-        if (input.STOC_HS_WATCH_CHANGE) {
-            output.emit('STOC_HS_WATCH_CHANGE', input);
-        }
+        output.emit(input.command, input);
     };
     return output;
 }
