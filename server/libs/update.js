@@ -1,6 +1,5 @@
 /*jslint node: true, plusplus: true, unparam: false, nomen: true*/
 var time = 0;
-process.title = 'Update Detection System';
 var fs = require('fs'),
     path = require('path'),
     spawn = require('child_process').spawn;
@@ -38,7 +37,11 @@ function dirTree(filename) {
 }
 
 function update() {
+
     'use strict';
+    if (!process.env.YGOPROLOGINENABLED) {
+        return true;
+    }
     var fileContent,
         startTime = new Date(),
         ygopro = dirTree('ygopro'),
