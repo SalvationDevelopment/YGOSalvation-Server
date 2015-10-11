@@ -51,7 +51,7 @@
 
     <link rel="stylesheet" href="css/viewanimations.css">
     <link rel="stylesheet" href="css/z-index.css">
-    <script src="http://ygopro.us/manifest/manifest-ygopro.js"></script>
+
     <script src="http://ygopro.us/js/primus.js"></script>
     <script src="js/vendor/jquery-1.11.0.min.js"></script>
 </head>
@@ -65,7 +65,11 @@
     </script>
 
     <script>
-        var uniqueID = Math.random().toString(24).substring(7) + Math.random().toString(24).substring(7)
+        var uniqueID = Math.random().toString(24).substring(7) + Math.random().toString(24).substring(7);
+        $.ajaxSetup({
+            async: false
+        });
+        $.getScript(sitelocationdir[mode] + "/manifest/manifest-ygopro.js");
         $.getScript(sitelocationdir[mode] + "/js/updatesystem.js");
         $.getScript(sitelocationdir[mode] + "/js/vendor/primus.js");
     </script>
