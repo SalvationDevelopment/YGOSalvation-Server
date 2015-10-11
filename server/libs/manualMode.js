@@ -249,7 +249,7 @@ function handlePrimusEvent(data, client) {
                             xyzMonster.push(activeDuels[duelID].state["Player " + target.player][location][target.slots[i]-i]);
                             activeDuels[duelID].state["Player " + target.player][location].splice(target.slots[i]-i, 1);
                             i = i + 1;
-                        });
+                        }
                         activeDuels[duelID].state["Player " + moveTo.player][moveTo.location][moveTo.slot] = xyzMonster;
                         primus.room(duelID).write({
                             event: QUERY_XYZ_SUMMON,
