@@ -241,15 +241,13 @@ function handlePrimusEvent(data, client) {
             case QUERY_XYZ_SUMMON:
                 {
                     if (activeDuels[duelID].players.hasOwnProperty(uid) && xyzSummonIsValid(activeDuels[duelID], uid, target, moveTo)) {
-                        var xyzMonster = [],
-                            i = 0,
-                            location;
-                        for (i; i < target.locations.length; ) {
-                            location = target.locations[i];
-                            xyzMonster.push(activeDuels[duelID].state["Player " + target.player][location][target.slots[i]-i]);
-                            activeDuels[duelID].state["Player " + target.player][location].splice(target.slots[i]-i, 1);
-                            i = i + 1;
-                        }
+                        var xyzMonster = activeDuels[duelID].state["Player " + target.player][target.locations.splice(0, 1)[0]][target.slots.splice(0, 1)];
+                        target.slots = target.slots.sort(function(prev, next) {
+                            return next - prev;
+                        });
+                        target.slots.forEach(function(slot) {
+                            xyzMonster.push(activeDuels[duelID].state["Player " + target.player][target.locations[0]].splice(slot, 1)[0]);
+                        });
                         activeDuels[duelID].state["Player " + moveTo.player][moveTo.location][moveTo.slot] = xyzMonster;
                         primus.room(duelID).write({
                             event: QUERY_XYZ_SUMMON,
@@ -465,6 +463,7 @@ function commandIsValid(activeDuel, uid, target, moveTo) {
 function xyzSummonIsValid(activeDuel, uid, target, moveTo) {
     var locations = target.locations.slice(1),
         slots = target.slots.slice(1),
+        previousSlots = [],
         playerState = activeDuel.state["Player " + target.player],
         moveToSlot = activeDuel.state["Player " + moveTo.player][moveTo.location][moveTo.slot],
         moveToInLocations = false,
@@ -473,11 +472,15 @@ function xyzSummonIsValid(activeDuel, uid, target, moveTo) {
         isValid = false;
         return;
     }
-    
     locations.forEach(function (location, i) {
         if (!playerState[location][slots[i]] || playerState[location][slots[i]].cardType === CARD_TOKEN || location !== MONSTER_ZONE) {
             isValid = false;
             return;
+        }
+        if (previousSlots.indexOf(slots[i]) > -1) {
+            isValid = false;
+        } else {
+            previousSlots.push(slots[i]);
         }
         if (playerState[location][slots[i]] === moveToSlot) {
             moveToInLocations = true;
