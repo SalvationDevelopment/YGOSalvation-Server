@@ -168,6 +168,7 @@ function updateCheckFile(file, initial) {
 function createmanifest() {
     'use strict';
     updateCheckFile(manifest, true);
+    download();
 }
 var list = {
     databases: '',
