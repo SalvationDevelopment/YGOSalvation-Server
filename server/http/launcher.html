@@ -71,6 +71,7 @@
         $.ajaxSetup({
             async: false
         });
+        var screenMessage = $('.servermessage');
         screenMessage.html('Downloading Manifest');
         $.getScript(sitelocationdir[mode] + "/manifest/manifest-ygopro.js");
         screenMessage.html('Downloading Update System');
