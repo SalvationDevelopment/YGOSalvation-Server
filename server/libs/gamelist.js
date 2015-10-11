@@ -253,19 +253,27 @@ primus.on('connection', function (socket) {
                     var info;
                     try {
                         info = JSON.parse(body.trim());
-                        if (info.success) {
-                            registry[info.displayname] = socket.address.ip;
-                            stats[info.displayname] = new Date().getTime();
-                            socket.username = data.username;
-                            sendRegistry();
-                            socket.write({
-                                clientEvent: 'global',
-                                message: currentGlobalMessage
-                            });
-                        }
                     } catch (msgError) {
                         console.log('Error during validation', body, msgError, socket.address.ip);
+
                     }
+                    if (info.success) {
+                        registry[info.displayname] = socket.address.ip;
+                        stats[info.displayname] = new Date().getTime();
+                        socket.username = data.username;
+                        sendRegistry();
+                        socket.write({
+                            clientEvent: 'global',
+                            message: currentGlobalMessage
+                        });
+                    } else {
+                        socket.write({
+                            clientEvent: 'servererror',
+                            message: currentGlobalMessage
+                        });
+                    }
+
+
                 }
             });
             break;

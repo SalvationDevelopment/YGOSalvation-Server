@@ -39,7 +39,8 @@ function dirTree(filename) {
 
 function update() {
     'use strict';
-    var startTime = new Date(),
+    var fileContent,
+        startTime = new Date(),
         ygopro = dirTree('ygopro'),
         plugins = dirTree('plugins'),
         license = dirTree('license'),
@@ -62,13 +63,13 @@ function update() {
     //        ocggit = spawn('git', ['pull'], {
     //            cwd: '../../../ygopro'
     //        });
-
-    fs.writeFile('manifest/ygopro.json', JSON.stringify(installation, null, 4), function () {
+    fileContent = 'var manifest = ' + JSON.stringify(installation, null, 4);
+    fs.writeFile('manifest/manifest-ygopro.js', fileContent, function () {
         //'use strict';
         fs.createReadStream('ygopro/databases/0-en-OCGTCG.cdb').pipe(fs.createWriteStream('ygopro/cards.cdb'));
     });
 
-    process.title = 'Update Detection System[' + ((new Date()).getTime() - startTime.getTime()) + 'ms]';
+    return 'Update Detection System[' + ((new Date()).getTime() - startTime.getTime()) + 'ms]';
 }
 
 //var sqlite3 = require("sqlite3").verbose(),
@@ -116,4 +117,18 @@ function update() {
 //setInterval(saveDBOut, 600000);
 
 update();
-setInterval(update, 360000);
+// Load the http module to create an http server.
+var http = require('http');
+
+var server = http.createServer(function (request, response) {
+    'use strict';
+    response.writeHead(200, {
+        "Content-Type": "text/plain"
+    });
+    var rate = update();
+    response.end(rate);
+    console.log('Update processed:', rate);
+});
+
+// Listen on port 12000, IP defaults to 127.0.0.1
+server.listen(12000);

@@ -51,7 +51,7 @@ function singlesitenav(target) {
         });
         chatStarted = true;
     }
-    $('.activescreen').removeClass('activescreen')
+    $('.activescreen').removeClass('activescreen');
     $('header').css('top', '100vh');
     $('#' + target).css('top', '0').addClass('activescreen');
     saveSettings();

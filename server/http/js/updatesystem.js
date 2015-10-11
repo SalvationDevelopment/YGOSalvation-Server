@@ -1,14 +1,14 @@
 /*jslint node: true, plusplus: true, unparam: false, nomen: true*/
-/*global $, sitelocationdir, prompt, runYGOPro, win, Primus, uniqueID*/
+/*global $, sitelocationdir, prompt, runYGOPro, win, Primus, uniqueID, manifest*/
 
-var manifest = '',
-    downloadList = [],
+var downloadList = [],
     completeList = [],
     fs = require('fs'),
     url = require('url'),
     http = require('https'),
     gui = require('nw.gui') || {},
     mode = "production",
+    privateServer,
     currentNick = localStorage.nickname,
     screenMessage = $('.servermessage'),
     siteLocation = 'https://ygopro.us',
@@ -140,6 +140,10 @@ function hashcheck() {
 function updateCheckFile(file, initial) {
     'use strict';
     var i = 0;
+
+    function updateCheckFileIterate() {
+        updateCheckFile(file.subfolder[i], false);
+    }
     screenMessage.html('<span style="color:white; font-weight:bold">Processing manifest. DONT TOUCH STUFF!</span>');
     if (file.type !== 'folder') {
 
@@ -149,7 +153,8 @@ function updateCheckFile(file, initial) {
             try {
                 fs.mkdirSync(file.path);
             } catch (e) {}
-            updateCheckFile(file.subfolder[i], false);
+            setTimeout(updateCheckFileIterate, 50);
+
         }
 
     }
@@ -159,33 +164,9 @@ function updateCheckFile(file, initial) {
     }
 }
 
-
 function createmanifest() {
     'use strict';
-    download();
-    screenMessage.html('<span style="color:white; font-weight:bold">Downloading Manifest</span');
-
-    var target = downloadList[0],
-        file = '',
-        options = {
-            host: url.parse('https://ygopro.us/manifest/ygopro.json').host,
-            path: url.parse('https://ygopro.us/manifest/ygopro.json').pathname
-        };
-
-    http.get(options, function (res) {
-        res.on('data', function (data) {
-            file += data;
-        }).on('end', function () {
-            try {
-                manifest = JSON.parse(file);
-            } catch (e) {
-                screenMessage.html('<span style="color:red; font-weight:bold">ERROR, unable to download the manifest!');
-                setTimeout(createmanifest, 5000);
-                return;
-            }
-            updateCheckFile(manifest, true);
-        });
-    });
+    updateCheckFile(manifest, true);
 }
 var list = {
     databases: '',
@@ -387,14 +368,27 @@ function processServerRequest(parameter) {
 
 function initPrimus() {
     'use strict';
-    var privateServer = Primus.connect('ws://ygopro.us:24555');
+    privateServer = Primus.connect('ws://ygopro.us:24555');
     privateServer.on('open', function open() {
 
         screenMessage.html('<span style="color:white;">Launcher Connected</span>');
+        privateServer.write({
+            action: 'privateUpdate',
+            serverUpdate: list,
+            room: localStorage.nickname,
+            clientEvent: 'privateServer',
+            uniqueID: uniqueID
+        });
+        privateServer.write({
+            action: 'privateServer',
+            username: localStorage.nickname,
+            uniqueID: uniqueID
+        });
+
     });
     privateServer.on('error', function open() {
 
-        screenMessage.html('<span style="color:red;">ERROR! Disconnected from the Server</span>');
+        screenMessage.html('<span style="color:gold;">ERROR! Disconnected from the Server</span>');
     });
     privateServer.on('close', function open() {
 
@@ -439,11 +433,6 @@ function initPrimus() {
 
         processServerRequest(data.parameter);
     });
-    privateServer.write({
-        action: 'privateServer',
-        username: localStorage.nickname,
-        uniqueID: uniqueID
-    });
 
     setInterval(function () {
 
@@ -466,7 +455,7 @@ function initPrimus() {
 
 setTimeout(function () {
     'use strict';
-    screenMessage.html('Interface loaded, querying user for critical information,...');
+    initPrimus();
     localStorage.lastip = '192.99.11.19';
     localStorage.serverport = '8911';
     localStorage.lastport = '8911';
@@ -478,7 +467,9 @@ setTimeout(function () {
 
     populatealllist();
     fs.watch('./ygopro/deck', populatealllist);
-    initPrimus();
-}, 1000);
+
+}, 2500);
 
 screenMessage.toggle();
+screenMessage.html('Interface loaded, querying user for critical information,...');
+populatealllist();

@@ -50,11 +50,11 @@ function initiateMaster(numCPUs) {
     console.log('    Starting Master');
     process.title = 'YGOPro Salvation Server [' + activegames + '] ' + new Date();
     gamelistManager = require('./libs/gamelist.js');
-    require('./libs/policyserver.js');
-    //require('./libs/ldapserver.js'); //LDAP endpoint; //Flash policy server for LightIRC;
-//    processManager.fork('../libs/update.js', [], {
-            //        cwd: 'http'
-            //    });
+    require('./libs/policyserver.js'); //Flash policy server for LightIRC;
+    processManager.fork('../libs/update.js', [], { // update system
+        cwd: 'http'
+    });
+    console.log('    Update System Running on port 12000'.bold.yellow);
 
     function setupWorker(x) {
         //'use strict';
