@@ -263,7 +263,7 @@
             <br /> If after updating your launcher a new window does not open, please consult our Bug Reports Forum for help.
         </div>
         <script>
-            $(function(){
+            $(function () {
                 var keyArray = [];
                 $(document).on('keypress', function (ev) {
                     if (keyArray.length >= 100) {
@@ -275,6 +275,7 @@
                         $('.deckEditNotice').css('display', 'none');
                     }
                 });
+
                 function charCodeStringMatch(str, charArray) {
                     return (new RegExp('' + str, 'i')).test(String.fromCharCode.apply(this, charArray));
                 }
@@ -481,6 +482,11 @@
             <source src="http://ygopro.us/yugioh-ft-dj-harmony-your-move.ogg" type="audio/ogg">
         </audio>
 -->
+    </header>
+    <header style="padding-top:50px" id="popup">
+        <div id="popupbody">
+
+        </div>
     </header>
     <header style="padding-top:50px; color:white" id="ranking">
         <div class="rankingcolumn">
