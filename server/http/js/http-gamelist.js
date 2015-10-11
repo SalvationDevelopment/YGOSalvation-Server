@@ -504,7 +504,11 @@ primus.on('data', function (data) {
     } else {
 
         if (data.clientEvent === 'global') {
-            $('footer').html(data.message).addClass('loud');
+            $('footer, #popupbody').html(data.message).addClass('loud');
+            if (data.message.length) {
+                singlesitenav('popup');
+            }
+
         }
         if (data.clientEvent === 'registrationRequest') {
             if ($('#ips_username').val() && $('#ips_password').val()) {
