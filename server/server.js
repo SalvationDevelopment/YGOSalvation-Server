@@ -47,14 +47,15 @@ function gamelistMessage(message) {
 function initiateMaster(numCPUs) {
     'use strict';
     console.log('YGOPro Salvation Server - Saving Yu-Gi-Oh!'.bold.yellow);
+    processManager.fork('../libs/update.js', [], { // update system
+        cwd: 'http'
+    });
+    console.log('    Update System Trigger open @ port 12000'.bold.yellow);
     console.log('    Starting Master');
     process.title = 'YGOPro Salvation Server [' + activegames + '] ' + new Date();
     gamelistManager = require('./libs/gamelist.js');
     require('./libs/policyserver.js'); //Flash policy server for LightIRC;
-    processManager.fork('../libs/update.js', [], { // update system
-        cwd: 'http'
-    });
-    console.log('    Update System Running on port 12000'.bold.yellow);
+
 
     function setupWorker(x) {
         //'use strict';
@@ -66,9 +67,12 @@ function initiateMaster(numCPUs) {
 
         worker.on('message', gamelistMessage);
     }
-    for (clusterIterator; clusterIterator < numCPUs; clusterIterator++) {
-        setupWorker(clusterIterator);
-    }
+    setTimeout(function () {
+        for (clusterIterator; clusterIterator < numCPUs; clusterIterator++) {
+            setupWorker(clusterIterator);
+        }
+    }, 300);
+
     cluster.on('exit', function (worker, code, signal) {
         notification = 'worker ' + clusterIterator + ' died ' + code + ' ' + signal;
         setupWorker(clusterIterator++);

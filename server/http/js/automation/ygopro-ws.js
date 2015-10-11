@@ -48,16 +48,17 @@ function startgame(roompass) {
     }
     var framer = new Framemaker(),
         ws = new WebSocket("ws://127.0.0.1:8082", "duel"),
-        network = new CommandParser();
+        network = new CommandParser(),
+        dInfo = {};
     window.activeReplayRecorde = [];
     ws.binaryType = 'arraybuffer';
 
     ws.onconnect = function () {
-
+        console.log('connected');
 
     };
-    ws.onerror = function () {
-        console.log('There was an error with the websocket');
+    ws.onerror = function (errormessage) {
+        console.log('There was an error with the websocket', errormessage);
         ws.close();
     };
     ws.onclose = function () {
@@ -92,10 +93,10 @@ function startgame(roompass) {
     };
     ws.onopen = function () {
         console.log('Send Game request for', roompass);
-        var name = makeCTOS('CTOS_PlayerInfo', localStorage.nickname),
-            join = makeCTOS('CTOS_JoinGame', roompass),
+        var CTOS_PlayerInfo = makeCTOS('CTOS_PlayerInfo', localStorage.nickname),
+            CTOS_JoinGame = makeCTOS('CTOS_JoinGame', roompass),
             toduelist = makeCTOS('CTOS_HS_TODUELIST'),
-            tosend = Buffer.concat([name, join, toduelist]);
+            tosend = Buffer.concat([CTOS_PlayerInfo, CTOS_JoinGame]);
         window.activeReplayRecorde.push({
             type: 'output',
             action: tosend
@@ -103,5 +104,12 @@ function startgame(roompass) {
         window.ws.send(tosend);
     };
     window.ws = ws;
-    window.onunload = window.ws.close();
+    window.onunload = window.ws.close;
+
+    network.on('STOC_TYPE_CHANGE', function (STOC_TYPE_CHANGE) {
+
+        if (dInfo.isTag) {
+
+        }
+    });
 }
