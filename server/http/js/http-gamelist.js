@@ -505,7 +505,7 @@ primus.on('data', function (data) {
 
         if (data.clientEvent === 'global') {
             $('footer, #popupbody').html(data.message).addClass('loud');
-            if (data.message.length) {
+            if (data.message && data.message.length) {
                 singlesitenav('popup');
             }
 
