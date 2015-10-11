@@ -141,10 +141,11 @@ function updateCheckFile(file, initial) {
     'use strict';
     var i = 0;
 
-    function updateCheckFileIterate() {
-        updateCheckFile(file.subfolder[i], false);
+    function updateCheckFileIterate(c) {
+
     }
     screenMessage.html('<span style="color:white; font-weight:bold">Processing manifest. DONT TOUCH STUFF!</span>');
+    console.log(file);
     if (file.type !== 'folder') {
 
         completeList.push(file);
@@ -153,7 +154,7 @@ function updateCheckFile(file, initial) {
             try {
                 fs.mkdirSync(file.path);
             } catch (e) {}
-            setTimeout(updateCheckFileIterate, 50);
+            updateCheckFile(file.subfolder[i], false);
 
         }
 
@@ -167,6 +168,7 @@ function updateCheckFile(file, initial) {
 function createmanifest() {
     'use strict';
     updateCheckFile(manifest, true);
+    download();
 }
 var list = {
     databases: '',
