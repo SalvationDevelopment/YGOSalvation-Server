@@ -241,7 +241,7 @@ function handlePrimusEvent(data, client) {
             case QUERY_XYZ_SUMMON:
                 {
                     if (activeDuels[duelID].players.hasOwnProperty(uid) && xyzSummonIsValid(activeDuels[duelID], uid, target, moveTo)) {
-                        var xyzMonster = activeDuels[duelID].state["Player " + target.player][target.locations.splice(0, 1)[0]][target.slots.splice(0, 1)];
+                        var xyzMonster = activeDuels[duelID].state["Player " + target.player][target.locations.splice(0, 1)[0]].splice(target.slots.splice(0, 1)[0], 1);
                         target.slots = target.slots.sort(function(prev, next) {
                             return next - prev;
                         });
