@@ -368,7 +368,7 @@ function handlePrimusEvent(data, client) {
         }
     case "regDuelLog":
         {
-            if (data.devKey !== process.ENV.DEVKEY) {
+            if (data.devKey !== process.env.DEVKEY) {
                 writeResponse(client, [403, 'invalidRequest']);
                 return;
             }
