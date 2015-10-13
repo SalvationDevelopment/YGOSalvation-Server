@@ -38,11 +38,16 @@ var Primus = require('primus'),
     BANISHED_ZONE = "Banished Zone",
     EXTRA_DECK = "Extra Deck",
     DECK = "Deck",
+    QUERY_CHANGE_POSITION = "changePosition",
+    QUERY_VIEW_DECK = "viewDeck",
+    QUERY_VIEW_EXTRA = "viewExtra",
     QUERY_DUEL_COMMAND = "duelCommand",
     QUERY_GET_OPTIONS = "getOptions",
     QUERY_GET_STATE = "getState",
     QUERY_START_DUEL = "startDuel",
     QUERY_XYZ_SUMMON = "xyzSummon",
+    VIEWING_DECK = "viewingDeck",
+    VIEWING_EXTRA = "viewingExtra",
     primus = new Primus(server, {
         transformer: 'websockets',
         timeout: 60000,
@@ -242,10 +247,10 @@ function handlePrimusEvent(data, client) {
                 {
                     if (activeDuels[duelID].players.hasOwnProperty(uid) && xyzSummonIsValid(activeDuels[duelID], uid, target, moveTo)) {
                         var xyzMonster = activeDuels[duelID].state["Player " + target.player][target.locations.splice(0, 1)[0]].splice(target.slots.splice(0, 1)[0], 1);
-                        target.slots = target.slots.sort(function(prev, next) {
+                        target.slots = target.slots.sort(function (prev, next) {
                             return next - prev;
                         });
-                        target.slots.forEach(function(slot) {
+                        target.slots.forEach(function (slot) {
                             xyzMonster.push(activeDuels[duelID].state["Player " + target.player][target.locations[0]].splice(slot, 1)[0]);
                         });
                         activeDuels[duelID].state["Player " + moveTo.player][moveTo.location][moveTo.slot] = xyzMonster;
@@ -257,6 +262,51 @@ function handlePrimusEvent(data, client) {
                             }
                         });
                         writeResponse(client, [200, 'xyzSummonIsValid']);
+                    } else {
+                        writeResponse(client, [403, 'invalidRequest']);
+                    }
+                    return;
+                }
+            case QUERY_VIEW_DECK:
+                {
+                    if (activeDuels[duelID].players.hasOwnProperty(uid)) {
+                        activeDuels[duelID].players[uid].viewingDeck = true;
+                        primus.room(duelID).write({
+                            event: VIEWING_DECK,
+                            data: {
+                                player: registry[uid].username
+                            }
+                        });
+                        writeResponse(client, [200, VIEWING_DECK, activeDuels[duelID].state["Player " + activeDuels[duelID].players[uid].ROLE][DECK]]);
+                    } else {
+                        writeResponse(client, [403, 'invalidRequest']);
+                    }
+                    return;
+                }
+            case QUERY_VIEW_EXTRA:
+                {
+                    if (activeDuels[duelID].players.hasOwnProperty(uid)) {
+                        primus.room(duelID).write({
+                            event: VIEWING_EXTRA,
+                            data: {
+                                player: registry[uid].username
+                            }
+                        });
+                        writeResponse(client, [200, VIEWING_EXTRA, activeDuels[duelID].state["Player " + activeDuels[duelID].players[uid].ROLE][EXTRA_DECK]]);
+                    } else {
+                        writeResponse(client, [403, 'invalidRequest']);
+                    }
+                    return;
+                }
+            case QUERY_CHANGE_POSITION:
+                {
+                    if (activeDuels[duelID].players.hasOwnProperty(uid) && changePositionIsValid(activeDuels[duelID], uid, target)) {
+                        primus.room(duelID).write({
+                            event: QUERY_CHANGE_POSITION,
+                            data: target
+                        });
+                        activeDuels[duelID].state["Player " + activeDuels[duelID].players[uid].ROLE][target.location][target.slot].position = target.position;
+                        writeResponse(client, [200, 'positionChanged']);
                     } else {
                         writeResponse(client, [403, 'invalidRequest']);
                     }
@@ -297,6 +347,7 @@ function handlePrimusEvent(data, client) {
                             if (!playerState) {
                                 writeResponse(client, [500, 'unexpectedServerError']);
                             }
+                            activeDuels[duelID].players[player].viewingDeck = false;
                             playerState = startDuelState(playerState, JSON.parse(JSON.stringify(activeDuels[duelID].players[player].deckList)));
                         }
                     }
@@ -317,10 +368,10 @@ function handlePrimusEvent(data, client) {
         }
     case "regDuelLog":
         {
-            /*if (data.devKey !== process.ENV.DEVKEY) {
+            if (data.devKey !== process.ENV.DEVKEY) {
                 writeResponse(client, [403, 'invalidRequest']);
                 return;
-            }*/
+            }
             writeResponse(client, [200, 'regDuelLog', {
                 registry: registry,
                 activeDuels: activeDuels
@@ -457,7 +508,7 @@ function validDeck(deckList, banList, database) {
 }
 
 function commandIsValid(activeDuel, uid, target, moveTo) {
-    return activeDuel.players[uid].ROLE === target.player && activeDuel.state["Player " + target.player][target.location][target.slot] && !activeDuel.state["Player " + moveTo.player][moveTo.location][moveTo.slot];
+    return activeDuel.players[uid].ROLE === target.player && activeDuel.state["Player " + target.player][target.location] && activeDuel.state["Player " + target.player][target.location][target.slot] && activeDuel.state["Player " + moveTo.player][moveTo.location] && !activeDuel.state["Player " + moveTo.player][moveTo.location][moveTo.slot];
 }
 
 function xyzSummonIsValid(activeDuel, uid, target, moveTo) {
@@ -487,6 +538,10 @@ function xyzSummonIsValid(activeDuel, uid, target, moveTo) {
         }
     });
     return isValid && moveToInLocations;
+}
+
+function changePositionIsValid(activeDuel, uid, target) {
+    return activeDuel.players[uid].ROLE === target.player && activeDuel.state["Player " + target.player][target.location] && activeDuel.state["Player " + target.player][target.location][target.slot] && activeDuel.state["Player " + target.player][target.location][target.slot].position !== target.position;
 }
 
 function GameState(nPlayers) {
@@ -551,7 +606,6 @@ function moveCard(move) {
     to.location[to.slot] = from.location[from.slot];
     from.location.splice(from.slot, 1);
 }
-        
 
 function moveCards(amount, move) {
     var from = move.from,
