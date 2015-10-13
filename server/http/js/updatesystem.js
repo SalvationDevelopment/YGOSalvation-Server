@@ -23,7 +23,7 @@ var downloadList = [],
 process.on('uncaughtException', function (err) {
     'use strict';
     console.log(err);
-    screenMessage.html('<span style="color:orange">Warning : System attempted to close, but was recovered.</span>');
+    screenMessage.html('<span style="color:orange">Warning : Launcher wants to Restart! </span>');
     /* http://nodejsreactions.tumblr.com/post/52064099868/process-on-uncaughtexception-function */
 });
 
