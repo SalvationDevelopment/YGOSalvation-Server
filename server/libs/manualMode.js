@@ -274,7 +274,7 @@ function handlePrimusEvent(data, client) {
                         primus.room(duelID).write({
                             event: VIEWING_DECK,
                             data: {
-                                player: registry[uid].username
+                                player: registry[id].username
                             }
                         });
                         writeResponse(client, [200, VIEWING_DECK, activeDuels[duelID].state["Player " + activeDuels[duelID].players[uid].ROLE][DECK]]);
@@ -289,7 +289,7 @@ function handlePrimusEvent(data, client) {
                         primus.room(duelID).write({
                             event: VIEWING_EXTRA,
                             data: {
-                                player: registry[uid].username
+                                player: registry[id].username
                             }
                         });
                         writeResponse(client, [200, VIEWING_EXTRA, activeDuels[duelID].state["Player " + activeDuels[duelID].players[uid].ROLE][EXTRA_DECK]]);
