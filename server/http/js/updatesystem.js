@@ -169,7 +169,8 @@ function updateCheckFile(file, initial) {
 function createmanifest() {
     'use strict';
     updateCheckFile(manifest, true);
-    download();
+    //download();
+    //shouldnt be here is called after hashcheck.
 }
 var list = {
     databases: '',
