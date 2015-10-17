@@ -39,7 +39,7 @@ function updateCardId(deck, oldcard, newcard) {
 function internalDeckRead() {
     'use strict';
     if (internalDecklist.length === 0) {
-        screenMessage.html('<span style="color:white; font-weight:bold">Update Complete! System Messages will appear here.</span>');
+        
         return;
     }
     if (internalDecklist[0].indexOf('.ydk') !== -1) {
@@ -70,7 +70,7 @@ function doDeckScan() {
             console.log(errors);
         } else {
             internalDecklist = folder;
-            screenMessage.html('<span style="color:white; font-weight:bold">Update Complete! System Messages will appear here.</span>');
+            
         }
 
     });
@@ -79,6 +79,7 @@ function doDeckScan() {
 function download() {
     'use strict';
     if (downloadList.length === 0) {
+        screenMessage.html('<span style="color:white; font-weight:bold">Update Complete! System Messages will appear here.</span>');
         doDeckScan();
         return;
     }
