@@ -39,9 +39,9 @@ function dirTree(filename) {
 function update() {
 
     'use strict';
-    if (!process.env.YGOPROLOGINENABLED) {
-        return true;
-    }
+//    if (!process.env.YGOPROLOGINENABLED) {
+//        return true;
+//    }
     var fileContent,
         startTime = new Date(),
         ygopro = dirTree('ygopro'),
