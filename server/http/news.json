@@ -1,54 +1,6 @@
 {
     "Articles": [
 		{
-			"Title": "Huge updates!",
-			"Subtitle": "THIS IS VERY IMPORTANT, READ THIS ENTIRE UPDATE",
-			"Content": "<p>First of all, it's time for the long-awaited BOSH cards!<br /><br />Super Quantum Pilot Red Layer
-			<br />Raidraptor - Satellite Cannon Falcon
-			<br />Super Quantum Beastmech Magnaliger
-			<br />Super Quantum Megamech Great Magnas
-			<br />Super Quantum Megasword - Magnaslayer
-			<br />Raidraptor - Necro Vulture
-			<br />Raidraptor - Satellite Cannon Falcon
-			<br />Deskbot 008
-			<br />Deskbot 007
-			<br />Performapal Guiturtle
-			<br />Performapal Raingoat
-			<br />Performapal Trump Girl
-			<br />Twilight Stealth Commander - Nichirin
-			<br />Superheavy Samurai Jisha-Q
-			<br />Dinomist Plesios
-			<br />Dinomist Stegosaurus
-			<br />Dinomist Pteran
-			<br />Majespecter Frog
-			<br />Majespecter Sonic
-			<br />Shiranui no Mononofu
-			<br />Dark Doriado
-			<br />Illumirage
-			<br />Dinoster Powerful, the Strong Dracoslayer
-			<br />Superheavy Samurai Maju Kyu-B
-			<br />Goyo Defender
-			<br />Magic Sea Castle Aigaion
-			<br />Pendulum Storm
-			<br />Shiranui Style: Reincarnation Formation
-			<br />Twin Twister
-			<br />Performance Band Hurricane
-			<br />Sandstorm Mirror Force
-			<br />Pendulum Reborn
-			<br />Forbidden Tome
-			<br />Unlucky Blast
-			<br />False Accusation<br />
-			<br />We're however still missing some cards, but we'll update this post when said cards are finished:<br />
-			<br />Liberating Ariadne
-			<br />Seal Arbiter
-			<br />Dynamic Powerload
-			<br />Clash of the Dracorivals<br />
-			I'm sure you all will notice how slow our updater is, so you may want to visit the Bug Reports section of the forum to find my link that contains a WinRAR file that supplies the latest update. Be sure to check it out so that you can save yourselves some time!<br /><br />
-		    We've also updated some overdue card IDs, so you may notice some of your decks suddenly missing cards. To remedy this, click the Settings tab and click Open YGOPro folder. Next, right click the file called "deckfix.bat" AND RUN IT AS ADMINISTRATOR. I REPEAT, IF YOU DON'T RUN IT AS ADMINISTRATOR, YOUR DECKS MAY BE DELETED. After the program finishes, your decks should all be working fine afterward. Feel free to report any problems regarding this on the forums or with any admins in the Chat.<br /><br />
-			We're still behind on other new card updates, but we'll announce another news update about those when those cards are ready. We're looking for more LUA programmers, so contact one of the admins if interested with working for Salvation Server.</p>",
-			"Author": "StormWolf",
-			"Date": "October 17, 2015"
-		},{
 			"Title": "More new cards",
 			"Subtitle": "That new Solemn card looks dank",
 			"Content": "<p>New cards added recently since the last news update:<br /><br />Kozmoll Wickedwitch<br />Kozmo Dark Destroyer<br />Score the Melodious Diva<br />Solemn Notice<br />Hi-Speedroid Hagoita<br /><br />All credit for scripting the cards goes to OneShot. Just a heads-up that the updates might take as long as two minutes, so just wait a bit if you don't immediately see the cards in the Deck Edit.</p>",
