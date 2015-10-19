@@ -62,18 +62,18 @@ function internalDeckRead() {
 
 function doDeckScan() {
     'use strict';
-    screenMessage.html('<span style="color:white; font-weight:bold">Scanning Decks</span>');
-    fs.readdir('./ygopro/deck', function (errors, folder) {
-
-        if (!folder) {
-            screenMessage.html('<span style="color:red; font-weight:bold">Error Reading Deck Folder</span>');
-            console.log(errors);
-        } else {
-            internalDecklist = folder;
-            
-        }
-
-    });
+//    screenMessage.html('<span style="color:white; font-weight:bold">Scanning Decks</span>');
+//    fs.readdir('./ygopro/deck', function (errors, folder) {
+//
+//        if (!folder) {
+//            screenMessage.html('<span style="color:red; font-weight:bold">Error Reading Deck Folder</span>');
+//            console.log(errors);
+//        } else {
+//            internalDecklist = folder;
+//            
+//        }
+//
+//    });
 }
 
 function download() {
@@ -103,7 +103,7 @@ function download() {
             downloadList.shift();
             setTimeout(function () {
                 download();
-            }, 200);
+            }, 40);
 
         });
     });
