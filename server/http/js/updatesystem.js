@@ -171,10 +171,6 @@ so that the system does not error out.*/
 function updateCheckFile(file, initial) {
     'use strict';
     var i = 0;
-
-    function updateCheckFileIterate(c) {
-
-    }
     tellUserThat('<span style="color:white; font-weight:bold">Processing manifest. DONT TOUCH STUFF!</span>');
     console.log(file);
     if (file.type !== 'folder') {
@@ -184,11 +180,11 @@ function updateCheckFile(file, initial) {
         for (i = 0; file.subfolder.length > i; i++) {
             try {
                 fs.mkdirSync(file.path);
-            } catch (e) {}
+            } catch (e) {
+                //unsure how to handle this error, but its a serious error....
+            }
             updateCheckFile(file.subfolder[i], false);
-
         }
-
     }
     if (initial) {
         //console.log(completeList);
@@ -196,19 +192,36 @@ function updateCheckFile(file, initial) {
     }
 }
 
-/* Trigger function for the update system*/
+/* Trigger function for the update system
+Checks to see if the system has the manifest first,
+if it doesnt have the file yet, wait 5 seconds and 
+then try again. Next start the update system if it 
+bugs out at anypoint try again.*/
 function createmanifest() {
     'use strict';
+    if (!manifest) {
+        tellUserThat('<span style="color:gold;">Manifest is taking a while to download,...</span>');
+        setTimeout(function () {
+            createmanifest();
+        }, 2000);
+        return;
+    }
+    
     var updateWatcher = domain.create();
     updateWatcher.on('error', function (err) {
         console.log(err);
         tellUserThat('<span style="color:Red;">Update Failed, retying...</span>');
+        
+        //clean the state up.
+        downloadList = [];
+        completeList = [];
+        
+        //then try again.
         setTimeout(createmanifest, 5000);
     });
     updateWatcher.run(function () {
-    // If an un-handled error originates from here, process.domain will handle it!
-        
-        updateCheckFile(manifest, true);
+        // If an un-handled error originates from here, updateWatcher will handle it!
+        updateCheckFile(new Object.create(manifest), true);// sending in a copy of the manifest, not the manifest itself.
     });
 }
    
@@ -496,5 +509,5 @@ setTimeout(function () {
     initPrimus();
 }, 2500);
 
-tellUserThat('Manifest Loaded');
+tellUserThat('Update System Loaded');
 populatealllist();
