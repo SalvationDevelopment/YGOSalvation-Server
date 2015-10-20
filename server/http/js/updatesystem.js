@@ -8,9 +8,10 @@ var downloadList = [], // Download list during recursive processing, when its em
     url = require('url'), // internal URL parser
     http = require('http'), // HTTP Server
     gui = require('nw.gui') || {}, // nwjs controls. Things like controlling the launcher itself.
+    EventEmitter = require('events').EventEmitter, //event emitter system (helps with domains);
     mode = "production", // This code is pulled down from the server, so this is production code.
     privateServer, // (to be defined) Server-client connection pipeline.
-    screenMessage = $('.servermessage'), // Cache where to output user output about 'stuff', its that black box in the top corner.
+    tellUserThat = $('.servermessage').html, // Cache where to output user output about 'stuff', its that black box in the top corner.
     siteLocation = 'https://ygopro.us', // where you got the code from so you can download updates
     updateNeeded = true, //prevents the client from being to noisy to the server, a mutex.
     internalDecklist, // structure for decklist.
@@ -34,6 +35,7 @@ process.on('uncaughtException', function (err) {
     $('.servermessage').html('<span style="color:blue">Fatal Error : Launcher wants to Restart! </span>');
 
     /* http://nodejsreactions.tumblr.com/post/52064099868/process-on-uncaughtexception-function */
+    /* https://engineering.gosquared.com/error-handling-using-domains-node-js */
     //Do catches in reverse order.
     //if downloadList, finish downloading
     //if hashcheck, finish hash checking (then download)
@@ -80,11 +82,11 @@ function internalDeckRead() {
 
 function doDeckScan() {
     'use strict';
-//    screenMessage.html('<span style="color:white; font-weight:bold">Scanning Decks</span>');
+//    tellUserThat('<span style="color:white; font-weight:bold">Scanning Decks</span>');
 //    fs.readdir('./ygopro/deck', function (errors, folder) {
 //
 //        if (!folder) {
-//            screenMessage.html('<span style="color:red; font-weight:bold">Error Reading Deck Folder</span>');
+//            tellUserThat('<span style="color:red; font-weight:bold">Error Reading Deck Folder</span>');
 //            console.log(errors);
 //        } else {
 //            internalDecklist = folder;
@@ -100,7 +102,7 @@ the browser one because its faster and more stable.'*/
 function download() {
     'use strict';
     if (downloadList.length === 0) {
-        screenMessage.html('<span style="color:white; font-weight:bold">Update Complete! System Messages will appear here.</span>');
+        tellUserThat('<span style="color:white; font-weight:bold">Update Complete! System Messages will appear here.</span>');
         //doDeckScan();
         return;
     }
@@ -115,7 +117,7 @@ function download() {
         download();
         return;
     }
-    screenMessage.html('<span style="color:white; font-weight:bold">Updating...' + target.path + ' and ' + downloadList.length + ' other files</span>');
+    tellUserThat('<span style="color:white; font-weight:bold">Updating...' + target.path + ' and ' + downloadList.length + ' other files</span>');
     http.get(options, function (res) {
         res.on('data', function (data) {
             file.write(data);
@@ -173,7 +175,7 @@ function updateCheckFile(file, initial) {
     function updateCheckFileIterate(c) {
 
     }
-    screenMessage.html('<span style="color:white; font-weight:bold">Processing manifest. DONT TOUCH STUFF!</span>');
+    tellUserThat('<span style="color:white; font-weight:bold">Processing manifest. DONT TOUCH STUFF!</span>');
     console.log(file);
     if (file.type !== 'folder') {
 
@@ -197,13 +199,19 @@ function updateCheckFile(file, initial) {
 /* Trigger function for the update system*/
 function createmanifest() {
     'use strict';
-    updateCheckFile(manifest, true);
+    var updateWatcher = domain.create();
+    updateWatcher.on('error', function (err) {
+        console.log(err);
+        tellUserThat('<span style="color:Red;">Update Failed, retying...</span>');
+        setTimeout(createmanifest, 5000);
+    });
+    updateWatcher.run(function () {
+    // If an un-handled error originates from here, process.domain will handle it!
+        
+        updateCheckFile(manifest, true);
+    });
 }
-
-
-
-
-
+   
 
 function getDeck(file) {
     'use strict';
@@ -397,7 +405,7 @@ function initPrimus() {
     privateServer = Primus.connect('ws://ygopro.us:24555');
     privateServer.on('open', function open() {
 
-        screenMessage.html('<span style="color:white;">Launcher Connected</span>');
+        tellUserThat('<span style="color:white;">Launcher Connected</span>');
         privateServer.write({
             action: 'privateUpdate',
             serverUpdate: list,
@@ -414,11 +422,11 @@ function initPrimus() {
     });
     privateServer.on('error', function open() {
 
-        screenMessage.html('<span style="color:gold;">ERROR! Disconnected from the Server</span>');
+        tellUserThat('<span style="color:gold;">ERROR! Disconnected from the Server</span>');
     });
     privateServer.on('close', function open() {
 
-        screenMessage.html('<span style="color:red;">ERROR! Disconnected from the Server</span>');
+        tellUserThat('<span style="color:red;">ERROR! Disconnected from the Server</span>');
     });
     privateServer.on('data', function (data) {
 
@@ -431,18 +439,18 @@ function initPrimus() {
         if (data.clientEvent === 'saveDeck') {
             fs.writeFile('./ygopro/deck/' + data.deckName, data.deckList, function (err) {
                 if (err) {
-                    screenMessage.html('<span style="color:red;">Error occurred while saving deck. Please try again.</span>');
+                    tellUserThat('<span style="color:red;">Error occurred while saving deck. Please try again.</span>');
                 } else {
-                    screenMessage.html('<span style="color:green;">Deck saved successfully.</span>');
+                    tellUserThat('<span style="color:green;">Deck saved successfully.</span>');
                 }
             });
         }
         if (data.clientEvent === 'unlinkDeck') {
             fs.unlink('./ygopro/deck/' + data.deckName, function (err) {
                 if (err) {
-                    screenMessage.html('<span style="color:red;">Error occurred while deleting deck. Please try again.</span>');
+                    tellUserThat('<span style="color:red;">Error occurred while deleting deck. Please try again.</span>');
                 } else {
-                    screenMessage.html('<span style="color:green;">Deck deleted successfully.</span>');
+                    tellUserThat('<span style="color:green;">Deck deleted successfully.</span>');
                 }
             });
         }
@@ -488,5 +496,5 @@ setTimeout(function () {
     initPrimus();
 }, 2500);
 
-screenMessage.html('Manifest Loaded');
+tellUserThat('Manifest Loaded');
 populatealllist();
