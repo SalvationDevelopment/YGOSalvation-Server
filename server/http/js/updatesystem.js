@@ -1,35 +1,42 @@
 /*jslint node: true, plusplus: true, unparam: false, nomen: true*/
 /*global $, sitelocationdir, prompt, runYGOPro, win, Primus, uniqueID, manifest*/
 
-var downloadList = [],
-    completeList = [],
-    fs = require('fs'),
-    url = require('url'),
-    http = require('https'),
-    gui = require('nw.gui') || {},
-    mode = "production",
-    privateServer,
-    currentNick = localStorage.nickname,
-    screenMessage = $('.servermessage'),
-    siteLocation = 'https://ygopro.us',
-    randomErrors = ['<span style="color:red">Warning : Stay calm while dueling!</span>',
-                   '<span style="color:red">Warning : Do not insult people or else!</span>',
-                   '<span style="color:red">Warning : Be careful what tone you use. Use emoticons to be clear!</span>',
-                   '<span style="color:red">Warning : Respect others or else!</span>',
-                   '<span style="color:green">Hint : Ask questions.</span>',
-                   '<span style="color:red">Warning : Negative attitudes will not be tolerated!</span>',
-                   '<span style="color:red">Warning : Everything you say here is being recorded!</span>'];
 
 process.on('uncaughtException', function (err) {
     'use strict';
     console.log(err);
-    screenMessage.html('<span style="color:orange">Warning : Launcher wants to Restart! </span>');
+    $('.servermessage').html('<span style="color:blue">Fatal Error : Launcher wants to Restart! </span>');
     /* http://nodejsreactions.tumblr.com/post/52064099868/process-on-uncaughtexception-function */
 });
 
-var updateNeeded = true;
-var internalDecklist;
-
+var downloadList = [],
+    completeList = [], // Download list during processing, when its empty stop processing
+    fs = require('fs'), //Usage of file system, take us out of sandbox, can read/write to file
+    url = require('url'), // internal URL parser
+    http = require('http'), // HTTP Server
+    gui = require('nw.gui') || {}, // nwjs controls. Things like controlling the launcher itself.
+    mode = "production", // This code is pulled down from the server, so this is production code.
+    privateServer, // (to be defined) Server-client connection pipeline.
+    screenMessage = $('.servermessage'), // Cache where to output user output about 'stuff', its that black box in the top corner.
+    siteLocation = 'https://ygopro.us', // where you got the code from so you can download updates
+    updateNeeded = true, //prevents the client from being to noisy to the server, a mutex.
+    internalDecklist, // structure for decklist.
+    decks = {}, //used with the deck scanner.
+    domain = require('domain'), // yay error handling!
+    list = {
+        databases: '',
+        currentdeck: '',
+        skinlist: '',
+        fonts: ''
+    };// structure filled out and sent to the server then back down to the other half of the interface. Provides access to the filesystem.
+    
+/*When the user tries to click a link, open that link in
+a new browser window*/
+win.on('new-win-policy', function (frame, url, policy) {
+    'use strict';
+    policy.ignore();
+    gui.Shell.openItem(url);
+});
 
 function updateCardId(deck, oldcard, newcard) {
     'use strict';
@@ -76,11 +83,14 @@ function doDeckScan() {
 //    });
 }
 
+/* after getting a list of everything to download `downloadList`, download them one at a time.
+notice this isnt a normal for'Loop but a recursive function. It uses nodejs's downloader over
+the browser one because its faster and more stable.'*/
 function download() {
     'use strict';
     if (downloadList.length === 0) {
         screenMessage.html('<span style="color:white; font-weight:bold">Update Complete! System Messages will appear here.</span>');
-        doDeckScan();
+        //doDeckScan();
         return;
     }
     var target = downloadList[0],
@@ -103,12 +113,16 @@ function download() {
             downloadList.shift();
             setTimeout(function () {
                 download();
-            }, 40);
-
+            }, 40); //There needs to be a pause here so the launcher doesnt lock up, the longer it is the slower the updater.
+            //The faster it is the more unresponsive the updater.
         });
     });
 }
 
+/* once we have a one by one complete list of all the files that the server
+is trying to manage `completeList`, read each file in that list on the users
+file system and compare its 'size' to the recorded size on the launcher. 
+Comparison by size isnt ideal but that was the only way of doing this quickly!*/
 function hashcheck() {
     'use strict';
     if (completeList.length === 0) {
@@ -138,6 +152,9 @@ function hashcheck() {
     }
 }
 
+/*Unbundle the JSON object representing the server structure,
+while additionally creating any folders, that will be needed
+so that the system does not error out.*/
 function updateCheckFile(file, initial) {
     'use strict';
     var i = 0;
@@ -166,21 +183,15 @@ function updateCheckFile(file, initial) {
     }
 }
 
+/* Trigger function for the update system*/
 function createmanifest() {
     'use strict';
     updateCheckFile(manifest, true);
-    //download();
-    //shouldnt be here is called after hashcheck.
 }
-var list = {
-    databases: '',
-    currentdeck: '',
-    skinlist: '',
-    fonts: ''
-};
 
 
-var decks = {};
+
+
 
 
 function getDeck(file) {
@@ -211,6 +222,9 @@ function getDecks() {
     });
 }
 
+/* Asynchronously goes and gets the files the 
+browser side part of the UI needs to inform the user
+of the decks, skins, and databases they have access to.*/
 function populatealllist() {
     'use strict';
     updateNeeded = true;
@@ -252,9 +266,9 @@ function populatealllist() {
 
 }
 
-
-
-
+/* Apply language and DB changes by overwriting key files
+this covers up a failure in the way YGOPro is written.
+(its not configurable enough)*/
 function copyFile(source, target, cb) {
     'use strict';
     var cbCalled = false,
@@ -281,12 +295,9 @@ function copyFile(source, target, cb) {
     read.pipe(wr);
 }
 
-win.on('new-win-policy', function (frame, url, policy) {
-    'use strict';
-    policy.ignore();
-    gui.Shell.openItem(url);
-});
 
+/*Process the server telling the client to do something
+YGOPro or Launcher related.*/
 function processServerRequest(parameter) {
     'use strict';
     console.log('got server request for ', parameter);
@@ -369,7 +380,7 @@ function processServerRequest(parameter) {
 
 }
 
-
+/* Set up the pipeline to the server*/
 function initPrimus() {
     'use strict';
     privateServer = Primus.connect('ws://ygopro.us:24555');
@@ -459,19 +470,13 @@ function initPrimus() {
 
 setTimeout(function () {
     'use strict';
-    initPrimus();
+
     localStorage.lastip = '192.99.11.19';
     localStorage.serverport = '8911';
     localStorage.lastport = '8911';
-    if (mode === 'development') {
-        try {
-            gui.Window.get().showDevTools();
-        } catch (error) {}
-    }
 
-    populatealllist();
     fs.watch('./ygopro/deck', populatealllist);
-
+    initPrimus();
 }, 2500);
 
 screenMessage.html('Manifest Loaded');

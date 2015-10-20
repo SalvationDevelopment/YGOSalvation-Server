@@ -1,12 +1,14 @@
 /*
 Start various sub-servers.
 --------------------------
-- Gamelist on port 24555
+- Game List on port 24555
 - YGOPro listener on port 8911, YGOPro applications connect to this port
 - YGOPro Web listener on port 8913, browser version connects to this port, 
   and is stripped and routed to the same place as the application. *disabled
 - HTTP server running static files out of port 80
 - IRC bot connects to #lobby, is named DuelServ
+- Update Server is running on port 12000
+- Ports 8911, 8913, *80, 12000 need to be free for the server to run.
 
 Installation
 ------------
@@ -18,8 +20,8 @@ Run `npm install` in the directory above.
 var notification = '', // its a string, make memory.
     gamelistManager, // primus and gamelist
     clusterIterator = 0, // its a number make memory,
-    activegames = 0,
-    cluster = require('cluster'), // multithreading
+    activegames = 0,// its a number make memory,
+    cluster = require('cluster'), // multithreading!
     colors = require('colors'), // oo pretty colors!
     domain = require('domain'), // yay error handling
     processManager = require('child_process');
