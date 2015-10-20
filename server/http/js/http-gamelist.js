@@ -506,7 +506,7 @@ primus.on('data', function (data) {
         if (data.clientEvent === 'global') {
             $('footer, #popupbody').html(data.message).addClass('loud');
             if (data.message && data.message.length) {
-                singlesitenav('popup');
+                //singlesitenav('popup'); /* turned off per Stormwolf;*/
             }
 
         }
