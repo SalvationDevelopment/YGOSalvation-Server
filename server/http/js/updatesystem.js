@@ -30,7 +30,9 @@ localStorage.lastport = '8911';
 process.on('uncaughtException', function (err) {
     'use strict';
     console.log(err);
+
     $('.servermessage').html('<span style="color:blue">Fatal Error : Launcher wants to Restart! </span>');
+
     /* http://nodejsreactions.tumblr.com/post/52064099868/process-on-uncaughtexception-function */
     //Do catches in reverse order.
     //if downloadList, finish downloading
