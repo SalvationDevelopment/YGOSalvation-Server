@@ -1,16 +1,9 @@
-/*jslint node: true, plusplus: true, unparam: false, nomen: true*/
-/*global $, sitelocationdir, prompt, runYGOPro, win, Primus, uniqueID, manifest*/
+/*jslint node: true, plusplus : true*/
+/*global $, runYGOPro, win, Primus, uniqueID, manifest*/
 
 
-process.on('uncaughtException', function (err) {
-    'use strict';
-    console.log(err);
-    $('.servermessage').html('<span style="color:blue">Fatal Error : Launcher wants to Restart! </span>');
-    /* http://nodejsreactions.tumblr.com/post/52064099868/process-on-uncaughtexception-function */
-});
-
-var downloadList = [],
-    completeList = [], // Download list during processing, when its empty stop processing
+var downloadList = [], // Download list during recursive processing, when its empty stop downloading things. "update complete".
+    completeList = [], //Hash processing list during recursive processesin, when its empty stop processing
     fs = require('fs'), //Usage of file system, take us out of sandbox, can read/write to file
     url = require('url'), // internal URL parser
     http = require('http'), // HTTP Server
@@ -29,7 +22,23 @@ var downloadList = [],
         skinlist: '',
         fonts: ''
     };// structure filled out and sent to the server then back down to the other half of the interface. Provides access to the filesystem.
-    
+
+localStorage.lastip = '192.99.11.19';
+localStorage.serverport = '8911';
+localStorage.lastport = '8911';
+
+process.on('uncaughtException', function (err) {
+    'use strict';
+    console.log(err);
+    $('.servermessage').html('<span style="color:blue">Fatal Error : Launcher wants to Restart! </span>');
+    /* http://nodejsreactions.tumblr.com/post/52064099868/process-on-uncaughtexception-function */
+    //Do catches in reverse order.
+    //if downloadList, finish downloading
+    //if hashcheck, finish hash checking (then download)
+    //if 
+});
+
+
 /*When the user tries to click a link, open that link in
 a new browser window*/
 win.on('new-win-policy', function (frame, url, policy) {
@@ -351,7 +360,7 @@ function processServerRequest(parameter) {
         console.log(localStorage.dbtext);
         copyFile(stringConf, ygoproStringConf, function (stringError) {
             if (stringError) {
-                $('#servermessages').text('Failed to copy strings');
+                $('#servermessages').text('Failed to copy strings.conf');
             }
             copyFile('./ygopro/databases/' + localStorage.dbtext, './ygopro/cards.cdb', function (cdberror) {
                 if (cdberror) {
@@ -444,8 +453,6 @@ function initPrimus() {
                 localStorage[storage] = data.local[storage];
             }
         }
-
-
         processServerRequest(data.parameter);
     });
 
@@ -468,12 +475,12 @@ function initPrimus() {
     }, 10000);
 }
 
+
+/*Boot command*/
 setTimeout(function () {
     'use strict';
 
-    localStorage.lastip = '192.99.11.19';
-    localStorage.serverport = '8911';
-    localStorage.lastport = '8911';
+    
 
     fs.watch('./ygopro/deck', populatealllist);
     initPrimus();
