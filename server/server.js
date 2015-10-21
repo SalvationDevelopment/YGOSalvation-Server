@@ -38,12 +38,6 @@ function gamelistMessage(message) {
             gamelist: gamelist
         });
     });
-    for (rooms in gamelist) {
-        if (gamelist.hasOwnProperty(rooms)) {
-            activegames++;
-        }
-    }
-    process.title = 'YGOPro Salvation Server [' + activegames + ']';
 }
 
 function initiateMaster(numCPUs) {
