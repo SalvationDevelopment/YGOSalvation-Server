@@ -75,49 +75,6 @@ function update() {
     return 'Update Detection System[' + ((new Date()).getTime() - startTime.getTime()) + 'ms]';
 }
 
-//var sqlite3 = require("sqlite3").verbose(),
-//    filepath = "./ygopro/databases/0-en-OCGTCG.cdb";
-//
-//function getDatabaseCards(callback) {
-//    'use strict';
-//    var database = new sqlite3.Database(filepath, sqlite3.OPEN_READONLY),
-//        query = ["select datas.*, texts.* from datas, texts where texts.id=datas.id and type<> 16401;"].join(""),
-//        cards = [],
-//        queryError = null;
-//
-//    // we get all the cards, except for tokens
-//    database.each(query, function (error, row) {
-//        var ids = null;
-//
-//        if (error) {
-//            queryError = error;
-//            return;
-//        }
-//
-//        cards.push(row);
-//    });
-//
-//    database.close();
-//
-//    database.on("close", function () {
-//        // throw error after db connection was closed
-//        if (queryError) {
-//            throw queryError;
-//        }
-//
-//        callback(cards);
-//    });
-//}
-//function saveDBOut() {
-//    'use strict';
-//    getDatabaseCards(function (cards) {
-//        fs.writeFile('manifest/database.json', JSON.stringify(cards, null, 4), function () {
-//            //'use strict';
-//        });
-//    });
-//}
-//saveDBOut();
-//setInterval(saveDBOut, 600000);
 
 update();
 // Load the http module to create an http server.
