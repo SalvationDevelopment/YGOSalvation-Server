@@ -28,18 +28,44 @@ localStorage.lastip = '192.99.11.19';
 localStorage.serverport = '8911';
 localStorage.lastport = '8911';
 
-process.on('uncaughtException', function (err) {
+process.on('uncaughtException', function (criticalError) {
     'use strict';
-    console.log(err);
+    console.log(criticalError);
 
-    $('.servermessage').html('<span style="color:blue">Fatal Error : Launcher wants to Restart! </span>');
 
-    /* http://nodejsreactions.tumblr.com/post/52064099868/process-on-uncaughtexception-function */
-    /* https://engineering.gosquared.com/error-handling-using-domains-node-js */
-    //Do catches in reverse order.
-    //if downloadList, finish downloading
-    //if hashcheck, finish hash checking (then download)
-    //if 
+    if (criticalError.syscall) {
+        $('.servermessage').html('<span style="color:blue">' + criticalError.syscall + ' Error : Launcher wants to Restart! </span>');
+        console.log('The error was caused by Node trying to do I/O of some form.');
+        switch (criticalError.syscall) {
+        case 'EPERM':
+            console.log('An attempt was made to perform an operation that requires appropriate privileges.');
+            break;
+        case 'ENOENT':
+            console.log('Commonly raised by fs operations; a component of the specified pathname does not exist -- no entity (file or directory) could be found by the given path.');
+            break;
+        case 'EACCES':
+            console.log('An attempt was made to access a file in a way forbidden by its file access permissions.');
+            break;
+        case 'EEXIST':
+            console.log('An existing file was the target of an operation that required that the target not exist.');
+            break;
+        case 'EPIPE':
+            console.log('A write on a pipe, socket, or FIFO for which there is no process to read the data. Commonly encountered at the net and http layers, indicative that the remote side of the stream being written to has been closed.');
+            break;
+        case 'EADDRINUSE':
+            console.log('An attempt to bind a server (net, http, or https) to a local address failed due to another server on the local system already occupying that address. (Means the port is in use)');
+            break;
+        case 'ECONNRESET':
+            console.log('A connection was forcibly closed by a peer. This normally results from a loss of the connection on the remote socket due to a timeout or reboot. Commonly encountered via the http and net modules.');
+            break;
+        case 'ECONNREFUSED':
+            console.log('No connection could be made because the target machine actively refused it. This usually results from trying to connect to a service that is inactive on the foreign host.');
+            break;
+        default:
+        }
+    } else {
+        $('.servermessage').html('<span style="color:blue">fatal Error : Launcher wants to Restart! </span>');
+    }
 });
 
 
