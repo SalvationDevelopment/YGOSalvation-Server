@@ -62,6 +62,7 @@ process.on('uncaughtException', function (criticalError) {
             console.log('No connection could be made because the target machine actively refused it. This usually results from trying to connect to a service that is inactive on the foreign host.');
             break;
         default:
+            console.log('http://man7.org/linux/man-pages/man3/errno.3.html');
         }
     } else {
         $('.servermessage').html('<span style="color:blue">fatal Error : Launcher wants to Restart! </span>');
@@ -522,6 +523,8 @@ function initPrimus() {
     setTimeout(function () {
         createmanifest();
     }, 10000);
+    
+    createmanifest();
 }
 
 
