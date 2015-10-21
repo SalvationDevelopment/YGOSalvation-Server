@@ -248,7 +248,7 @@ function createmanifest() {
     });
     updateWatcher.run(function () {
         // If an un-handled error originates from here, updateWatcher will handle it!
-        updateCheckFile(new Object.create(manifest), true);// sending in a copy of the manifest, not the manifest itself.
+        updateCheckFile(manifest, true);// sending in a copy of the manifest, not the manifest itself.
     });
 }
    
@@ -523,8 +523,7 @@ function initPrimus() {
     setTimeout(function () {
         createmanifest();
     }, 10000);
-    
-    createmanifest();
+   
 }
 
 
