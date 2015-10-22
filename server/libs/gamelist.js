@@ -50,7 +50,6 @@ function announce(announcement) {
 
 function internalMessage(announcement) {
     primus.room('internalservers').write(announcement);
-
 }
 
 function handleCoreMessage(core_message_raw, port, pid) {
@@ -195,6 +194,10 @@ function sendRegistry() {
     });
     primus.room('room').clients(function (error, rooms) {
         online = rooms.length;
+    });
+    internalMessage({
+        messagetype: 'registry',
+        registry: registry
     });
 }
 
