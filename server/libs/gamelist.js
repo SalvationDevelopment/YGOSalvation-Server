@@ -6,6 +6,7 @@ var primus,
     gamelist = {},
     userdata = {},
     stats = {},
+    validationCache = {},
     registry = {
         //People that have read this source code.
         SnarkyChild: '::ffff:127.0.0.1',
@@ -187,25 +188,35 @@ function sendRegistry() {
 }
 
 function forumValidate(data, socket, callback) {
-    var url = 'http://forum.ygopro.us/log.php',
-        post = {
-            ips_username: data.username,
-            ips_password: data.password
-        };
-    request.post(url, {
-        form: post
-    }, function (error, response, body) {
-        if (!error && response.statusCode === 200) {
-            var info;
-            try {
-                info = JSON.parse(body.trim());
-            } catch (msgError) {
-                console.log('Error during validation', body, msgError, socket.address.ip);
-                callback('Error during validation', info);
-                return;
+    if (validationCache[data.username]) {
+        callback(validationCache[data.username]);
+        return;
+    }
+    process.nextTick(function () {
+        var url = 'http://forum.ygopro.us/log.php',
+            post = {
+                ips_username: data.username,
+                ips_password: data.password
+            };
+        request.post(url, {
+            form: post
+        }, function (error, response, body) {
+            if (!error && response.statusCode === 200) {
+                var info;
+                try {
+                    info = JSON.parse(body.trim());
+                } catch (msgError) {
+                    console.log('Error during validation', body, msgError, socket.address.ip);
+                    callback('Error during validation', info);
+                    return;
+                }
+                validationCache[data.username] = info;
+                setTimeout(function () {
+                    delete validationCache[data.username];
+                }, 10000);
+                callback(null, info);
             }
-            callback(null, info);
-        }
+        });
     });
 }
 
@@ -283,8 +294,6 @@ primus.use('rooms', Rooms);
 
 
 primus.on('connection', function (socket) {
-
-
     socket.on('disconnection', function (socket) {
         socket.leaveAll();
         console.log('deleting:', socket.username);
@@ -366,10 +375,8 @@ primus.on('connection', function (socket) {
                     local: data.local
                 });
                 break;
-
             case ('privateServer'):
                 break;
-
             case ('joinTournament'):
                 socket.join('tournament', function () {
                     socket.write(JSON.stringify(gamelist));
@@ -397,7 +404,6 @@ primus.on('connection', function (socket) {
                 break;
             default:
                 console.log(data);
-
             }
         });
     });
