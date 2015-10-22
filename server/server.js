@@ -24,7 +24,8 @@ var notification = '', // its a string, make memory.
     cluster = require('cluster'), // multithreading!
     colors = require('colors'), // oo pretty colors!
     domain = require('domain'), // yay error handling
-    processManager = require('child_process');
+    processManager = require('child_process'),
+    gamelistserver;
 
 
 function gamelistMessage(message) {
@@ -46,12 +47,25 @@ function initiateMaster(numCPUs) {
     processManager.fork('../libs/update.js', [], { // update system
         cwd: 'http'
     });
+    processManager.fork('../libs/gamelist.js', [], { //gamelist system
+    });
     console.log('    Update System Trigger open @ port 12000'.bold.yellow);
     console.log('    Starting Master');
     process.title = 'YGOPro Salvation Server [' + activegames + '] ' + new Date();
     gamelistManager = require('./libs/gamelist.js');
     require('./libs/policyserver.js'); //Flash policy server for LightIRC;
+    // Load the http module to create an http server.
+    var http = require('http');
 
+    gamelistserver = http.createServer(function (request, response) {
+        response.writeHead(200, {
+            "Content-Type": "text/plain"
+        });
+        response.end();
+    });
+
+    // Listen on port 12001, IP defaults to 127.0.0.1
+    gamelistserver.listen(12000);
 
     function setupWorker(x) {
         //'use strict';

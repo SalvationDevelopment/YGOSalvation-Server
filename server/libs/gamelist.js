@@ -54,70 +54,68 @@ function handleCoreMessage(core_message_raw, port, pid) {
     if (core_message[1] === undefined) {
         return gamelist;
     }
-    try {
+    if (gamelist[core_message[1]] === undefined) {
+        gamelist[core_message[1]] = {
+            players: [],
+            locked: [false, false, false, false],
+            spectators: 0,
+            started: false,
+            time: new Date(),
+            pid: pid || null
+        };
 
-        if (gamelist[core_message[1]] === undefined) {
-            gamelist[core_message[1]] = {
-                players: [],
-                locked: [false, false, false, false],
-                spectators: 0,
-                started: false,
-                time: new Date(),
-                pid: pid || null
-            };
+    }
+    switch (core_message[0]) {
 
+    case ('::::join-slot'):
+        join_slot = parseInt(core_message[2], 10);
+        if (join_slot === -1) {
+            return;
         }
-        switch (core_message[0]) {
+        gamelist[core_message[1]].players[join_slot] = core_message[3].trim();
+        gamelist[core_message[1]].time = new Date();
+        gamelist[core_message[1]].port = port;
+        break;
 
-        case ('::::join-slot'):
-            join_slot = parseInt(core_message[2], 10);
-            if (join_slot === -1) {
-                return;
-            }
-            gamelist[core_message[1]].players[join_slot] = core_message[3].trim();
-            gamelist[core_message[1]].time = new Date();
-            gamelist[core_message[1]].port = port;
-            break;
+    case ('::::left-slot'):
+        leave_slot = parseInt(core_message[2], 10);
+        if (leave_slot === -1) {
+            return;
+        }
+        gamelist[core_message[1]].players[leave_slot] = null;
+        break;
 
-        case ('::::left-slot'):
-            leave_slot = parseInt(core_message[2], 10);
-            if (leave_slot === -1) {
-                return;
-            }
-            gamelist[core_message[1]].players[leave_slot] = null;
-            break;
+    case ('::::spectator'):
+        gamelist[core_message[1]].spectators = parseInt(core_message[2], 10);
+        break;
 
-        case ('::::spectator'):
-            gamelist[core_message[1]].spectators = parseInt(core_message[2], 10);
-            break;
+    case ('::::lock-slot'):
+        lock_slot = parseInt(core_message[2], 10);
+        gamelist[core_message[1]].locked[lock_slot] = Boolean(core_message[2]);
+        break;
 
-        case ('::::lock-slot'):
-            lock_slot = parseInt(core_message[2], 10);
-            gamelist[core_message[1]].locked[lock_slot] = Boolean(core_message[2]);
-            break;
+    case ('::::endduel'):
+        //ps.kill(gamelist[core_message[1]].pid, function (error) {});
+        delete gamelist[core_message[1]];
+        //process.kill(pid);
+        break;
 
-        case ('::::endduel'):
-            //ps.kill(gamelist[core_message[1]].pid, function (error) {});
-            delete gamelist[core_message[1]];
-            //process.kill(pid);
-            break;
+    case ('::::startduel'):
+        gamelist[core_message[1]].started = true;
+        gamelist[core_message[1]].time = new Date();
+        duelserv.bot.say('#public', gamelist[core_message[1]].pid + '|Duel starting|' + JSON.stringify(gamelist[core_message[1]].players));
+        break;
 
-        case ('::::startduel'):
-            gamelist[core_message[1]].started = true;
-            gamelist[core_message[1]].time = new Date();
-            duelserv.bot.say('#public', gamelist[core_message[1]].pid + '|Duel starting|' + JSON.stringify(gamelist[core_message[1]].players));
-            break;
-
-        case ('::::chat'):
-            chat = core_message.join(' ');
-            duelserv.bot.say('#public', gamelist[core_message[1]].pid + '|' + core_message[2] + ': ' + core_message[3]);
+    case ('::::chat'):
+        chat = core_message.join(' ');
+        
+        process.nextTick(function () {
             logger.info(gamelist[core_message[1]].pid + '|' + core_message[2] + ': ' + core_message[3]);
-            break;
-
-        }
-    } catch (error_message) {
-        console.log(error_message, core_message_raw, port);
-        console.log('ISSUE!');
+        });
+        process.nextTick(function () {
+            duelserv.bot.say('#public', gamelist[core_message[1]].pid + '|' + core_message[2] + ': ' + core_message[3]);
+        });
+        break;
     }
 }
 
