@@ -17,6 +17,7 @@ var primus,
     },
     online = 0,
     activeDuels = 0,
+    booting = true,
     Primus = require('primus'),
     Rooms = require('primus-rooms'),
     primusServer = http.createServer().listen(24555),
@@ -32,6 +33,11 @@ var primus,
 
 var logger = require('./logger.js');
 
+setTimeout(function () {
+    //give the system ten seconds to figure itself out.
+    booting = false;
+}, 10000);
+
 function announce(announcement) {
 
     if (previousAnnouncement === announcement) {
@@ -40,6 +46,11 @@ function announce(announcement) {
         primus.room('activegames').write(announcement);
         previousAnnouncement = announcement;
     }
+}
+
+function internalMessage(announcement) {
+    primus.room('internalservers').write(announcement);
+
 }
 
 function handleCoreMessage(core_message_raw, port, pid) {
@@ -213,8 +224,9 @@ function forumValidate(data, socket, callback) {
                 validationCache[data.username] = info;
                 setTimeout(function () {
                     delete validationCache[data.username];
-                }, 10000);
+                }, 600000); // cache the forum request for 10 mins.
                 callback(null, info);
+                return;
             }
         });
     });
@@ -309,11 +321,11 @@ primus.on('connection', function (socket) {
 
             socket.join(socket.address.ip + data.uniqueID, function () {});
             switch (action) {
-            case ('securityServer'):
+            case ('internalServerLogin'):
                 if (data.password !== process.env.OPERPASS) {
                     return;
                 }
-                socket.join('securityServer', function () {
+                socket.join('internalservers', function () {
 
                 });
                 break;
