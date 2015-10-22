@@ -1,5 +1,6 @@
 /*jslint  node: true, plusplus: true, white: false*/
 // Gamelist object acts similar to a Redis server, could be replaced with on but its the gamelist state.
+'use strict';
 var http = require('http');
 var primus,
     gamelist = {},
@@ -31,7 +32,7 @@ var primus,
 var logger = require('./logger.js');
 
 function announce(announcement) {
-    'use strict';
+
     if (previousAnnouncement === announcement) {
         return;
     } else {
@@ -41,13 +42,13 @@ function announce(announcement) {
 }
 
 function handleCoreMessage(core_message_raw, port, pid) {
-    'use strict';
+
     var handleCoreMessageWatcher = domain.create();
     handleCoreMessageWatcher.on('error', function (err) {});
     handleCoreMessageWatcher.run(function () {
 
         if (core_message_raw.toString().indexOf("::::") < 0) {
-            return gamelist;
+            return gamelist; //means its not a message pertaining to the gamelist API.
         }
 
         var chat,
@@ -66,9 +67,9 @@ function handleCoreMessage(core_message_raw, port, pid) {
                 spectators: 0,
                 started: false,
                 time: new Date(),
-                pid: pid || null
+                pid: pid || undefined
             };
-
+            //if the room its talking about isnt on the gamelist, put it on the gamelist.
         }
         switch (core_message[0]) {
 
@@ -126,7 +127,7 @@ function handleCoreMessage(core_message_raw, port, pid) {
 }
 
 function messageListener(message) {
-    'use strict';
+
     var messageListenerWatcher = domain.create();
     messageListenerWatcher.on('error', function (err) {});
     messageListenerWatcher.run(function () {
@@ -171,8 +172,9 @@ function messageListener(message) {
     return gamelist;
 }
 
+
 function sendRegistry() {
-    'use strict';
+
     Object.keys(cluster.workers).forEach(function (id) {
         cluster.workers[id].send({
             messagetype: 'registry',
@@ -184,6 +186,95 @@ function sendRegistry() {
     });
 }
 
+function forumValidate(data, socket, callback) {
+    var url = 'http://forum.ygopro.us/log.php',
+        post = {
+            ips_username: data.username,
+            ips_password: data.password
+        };
+    request.post(url, {
+        form: post
+    }, function (error, response, body) {
+        if (!error && response.statusCode === 200) {
+            var info;
+            try {
+                info = JSON.parse(body.trim());
+            } catch (msgError) {
+                console.log('Error during validation', body, msgError, socket.address.ip);
+                callback('Error during validation', info);
+                return;
+            }
+            callback(null, info);
+        }
+    });
+}
+
+function registrationCall(data, socket) {
+    forumValidate(data, socket, function (error, info) {
+        if (info.success) {
+            registry[info.displayname] = socket.address.ip;
+            stats[info.displayname] = new Date().getTime();
+            socket.username = data.username;
+            sendRegistry();
+            socket.write({
+                clientEvent: 'global',
+                message: currentGlobalMessage
+            });
+        } else {
+            socket.write({
+                clientEvent: 'servererror',
+                message: currentGlobalMessage
+            });
+        }
+    });
+}
+
+function globalCall(data, socket) {
+    forumValidate(data, socket, function (error, info) {
+        if (info.success && info.data.g_access_cp === "1") {
+            duelserv.emit('announce', {
+                clientEvent: 'global',
+                message: data.message
+            });
+            currentGlobalMessage = data.message;
+        }
+    });
+}
+
+function genocideCall(data, socket) {
+    forumValidate(data, socket, function (error, info) {
+        if (info.success && info.data.g_access_cp === "1") {
+            duelserv.emit('announce', {
+                clientEvent: 'genocide',
+                message: data.message
+            });
+        }
+    });
+}
+
+function murderCall(data, socket) {
+    forumValidate(data, socket, function (error, info) {
+        if (info.success && info.data.g_access_cp === "1") {
+            duelserv.emit('announce', {
+                clientEvent: 'kill',
+                target: data.target
+            });
+        }
+    });
+}
+
+function killgameCall(data, socket) {
+    forumValidate(data, socket, function (error, info) {
+        if (info.success && info.data.g_access_cp === "1") {
+            ps.kill(data.killTarget, function (err) {
+                if (err) {
+                    duelserv.emit('del', data.killTarget);
+                }
+            });
+        }
+    });
+}
+
 primus = new Primus(primusServer, {
     parser: 'JSON'
 });
@@ -192,7 +283,7 @@ primus.use('rooms', Rooms);
 
 
 primus.on('connection', function (socket) {
-    'use strict';
+
 
     socket.on('disconnection', function (socket) {
         socket.leaveAll();
@@ -205,9 +296,8 @@ primus.on('connection', function (socket) {
         socketWatcher.on('error', function (err) {});
         socketWatcher.run(function () {
             data = data || {};
-            var action = data.action,
-                url,
-                post;
+            var action = data.action;
+
             socket.join(socket.address.ip + data.uniqueID, function () {});
             switch (action) {
             case ('securityServer'):
@@ -251,149 +341,23 @@ primus.on('connection', function (socket) {
                     socket.write(JSON.stringify(gamelist));
                 });
                 break;
-
             case ('leave'):
                 socket.leave('activegames');
                 break;
-
             case ('register'):
-                url = 'http://forum.ygopro.us/log.php';
-                post = {
-                    ips_username: data.username,
-                    ips_password: data.password
-                };
-                request.post(url, {
-                    form: post
-                }, function (error, response, body) {
-                    if (!error && response.statusCode === 200) {
-                        var info;
-                        try {
-                            info = JSON.parse(body.trim());
-                        } catch (msgError) {
-                            console.log('Error during validation', body, msgError, socket.address.ip);
-
-                        }
-                        if (info.success) {
-                            registry[info.displayname] = socket.address.ip;
-                            stats[info.displayname] = new Date().getTime();
-                            socket.username = data.username;
-                            sendRegistry();
-                            socket.write({
-                                clientEvent: 'global',
-                                message: currentGlobalMessage
-                            });
-                        } else {
-                            socket.write({
-                                clientEvent: 'servererror',
-                                message: currentGlobalMessage
-                            });
-                        }
-
-
-                    }
-                });
+                registrationCall(data, socket);
                 break;
             case ('global'):
-                url = 'http://forum.ygopro.us/log.php';
-                post = {
-                    ips_username: data.username,
-                    ips_password: data.password
-                };
-                request.post(url, {
-                    form: post
-                }, function (error, response, body) {
-                    if (!error && response.statusCode === 200) {
-                        var info;
-                        try {
-                            info = JSON.parse(body.trim());
-                            if (info.success && info.data.g_access_cp === "1") {
-                                duelserv.emit('announce', {
-                                    clientEvent: 'global',
-                                    message: data.message
-                                });
-                                currentGlobalMessage = data.message;
-                            }
-                        } catch (msgError) {
-                            console.log('Error during validation', body, msgError, socket.address.ip);
-                        }
-                    }
-                });
+                globalCall(data, socket);
                 break;
             case ('genocide'):
-                url = 'http://forum.ygopro.us/log.php';
-                post = {
-                    ips_username: data.username,
-                    ips_password: data.password
-                };
-                request.post(url, {
-                    form: post
-                }, function (error, response, body) {
-                    if (!error && response.statusCode === 200) {
-                        var info;
-                        try {
-                            info = JSON.parse(body.trim());
-                            if (info.success && info.data.g_access_cp === "1") {
-                                duelserv.emit('announce', {
-                                    clientEvent: 'genocide',
-                                    message: data.message
-                                });
-                            }
-                        } catch (msgError) {
-                            console.log('Error during validation', body, msgError, socket.address.ip);
-                        }
-                    }
-                });
+                genocideCall(data, socket);
                 break;
             case ('murder'):
-                url = 'http://forum.ygopro.us/log.php';
-                post = {
-                    ips_username: data.username,
-                    ips_password: data.password
-                };
-                request.post(url, {
-                    form: post
-                }, function (error, response, body) {
-                    if (!error && response.statusCode === 200) {
-                        var info;
-                        try {
-                            info = JSON.parse(body.trim());
-                            if (info.success && info.data.g_access_cp === "1") {
-                                duelserv.emit('announce', {
-                                    clientEvent: 'kill',
-                                    target: data.target
-                                });
-                            }
-                        } catch (msgError) {
-                            console.log('Error during validation', body, msgError, socket.address.ip);
-                        }
-                    }
-                });
+                murderCall(data, socket);
                 break;
             case ('killgame'):
-                url = 'http://forum.ygopro.us/log.php';
-                post = {
-                    ips_username: data.username,
-                    ips_password: data.password
-                };
-                request.post(url, {
-                    form: post
-                }, function (error, response, body) {
-                    if (!error && response.statusCode === 200) {
-                        var info;
-                        try {
-                            info = JSON.parse(body.trim());
-                            if (info.success && info.data.g_access_cp === "1") {
-                                ps.kill(data.killTarget, function (err) {
-                                    if (err) {
-                                        duelserv.emit('del', data.killTarget);
-                                    }
-                                });
-                            }
-                        } catch (msgError) {
-                            console.log('Error during validation', body, msgError, socket.address.ip);
-                        }
-                    }
-                });
+                killgameCall(data, socket);
                 break;
             case ('privateServerRequest'):
                 primus.room(socket.address.ip + data.uniqueID).write({
@@ -441,23 +405,23 @@ primus.on('connection', function (socket) {
 
 
 primus.on('error', function () {
-    'use strict';
+
     //nothing required
 });
 
 function primusListener(message) {
-    'use strict';
+
     //other stuff here maybe?
     announce(message);
 }
 
 duelserv.on('announce', function (message) {
-    'use strict';
+
     announce(message);
 });
 
 duelserv.on('del', function (pid) {
-    'use strict';
+
     var game;
     for (game in gamelist) {
         if (gamelist.hasOwnProperty(game)) {
@@ -482,6 +446,6 @@ module.exports = {
 
 //This is down here on purpose.
 setTimeout(function () {
-    'use strict';
+
     require('./ai.js');
 }, 5000);
