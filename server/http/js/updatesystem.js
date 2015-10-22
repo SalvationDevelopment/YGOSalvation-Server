@@ -1,5 +1,5 @@
 /*jslint node: true, plusplus : true*/
-/*global $, runYGOPro, win, Primus, uniqueID, manifest*/
+/*global $, runYGOPro, win, Primus, uniqueID, manifest, screenMessage*/
 
 
 var downloadList = [], // Download list during recursive processing, when its empty stop downloading things. "update complete".
@@ -11,7 +11,7 @@ var downloadList = [], // Download list during recursive processing, when its em
     EventEmitter = require('events').EventEmitter, //event emitter system (helps with domains);
     mode = "production", // This code is pulled down from the server, so this is production code.
     privateServer, // (to be defined) Server-client connection pipeline.
-    tellUserThat = $('.servermessage').html, // Cache where to output user output about 'stuff', its that black box in the top corner.
+
     siteLocation = 'https://ygopro.us', // where you got the code from so you can download updates
     updateNeeded = true, //prevents the client from being to noisy to the server, a mutex.
     internalDecklist, // structure for decklist.
@@ -109,11 +109,11 @@ function internalDeckRead() {
 
 function doDeckScan() {
     'use strict';
-//    tellUserThat('<span style="color:white; font-weight:bold">Scanning Decks</span>');
+//    screenMessage.html('<span style="color:white; font-weight:bold">Scanning Decks</span>');
 //    fs.readdir('./ygopro/deck', function (errors, folder) {
 //
 //        if (!folder) {
-//            tellUserThat('<span style="color:red; font-weight:bold">Error Reading Deck Folder</span>');
+//            screenMessage.html('<span style="color:red; font-weight:bold">Error Reading Deck Folder</span>');
 //            console.log(errors);
 //        } else {
 //            internalDecklist = folder;
@@ -129,7 +129,7 @@ the browser one because its faster and more stable.'*/
 function download() {
     'use strict';
     if (downloadList.length === 0) {
-        tellUserThat('<span style="color:white; font-weight:bold">Update Complete! System Messages will appear here.</span>');
+        screenMessage.html('<span style="color:white; font-weight:bold">Update Complete! System Messages will appear here.</span>');
         //doDeckScan();
         return;
     }
@@ -144,7 +144,7 @@ function download() {
         download();
         return;
     }
-    tellUserThat('<span style="color:white; font-weight:bold">Updating...' + target.path + ' and ' + downloadList.length + ' other files</span>');
+    screenMessage.html('<span style="color:white; font-weight:bold">Updating...' + target.path + ' and ' + downloadList.length + ' other files</span>');
     http.get(options, function (res) {
         res.on('data', function (data) {
             file.write(data);
@@ -198,7 +198,7 @@ so that the system does not error out.*/
 function updateCheckFile(file, initial) {
     'use strict';
     var i = 0;
-    tellUserThat('<span style="color:white; font-weight:bold">Processing manifest. DONT TOUCH STUFF!</span>');
+    screenMessage.html('<span style="color:white; font-weight:bold">Processing manifest. DONT TOUCH STUFF!</span>');
     console.log(file);
     if (file.type !== 'folder') {
 
@@ -227,7 +227,7 @@ bugs out at anypoint try again.*/
 function createmanifest() {
     'use strict';
     if (!manifest) {
-        tellUserThat('<span style="color:gold;">Manifest is taking a while to download,...</span>');
+        screenMessage.html('<span style="color:gold;">Manifest is taking a while to download,...</span>');
         setTimeout(function () {
             createmanifest();
         }, 2000);
@@ -237,7 +237,7 @@ function createmanifest() {
     var updateWatcher = domain.create();
     updateWatcher.on('error', function (err) {
         console.log(err);
-        tellUserThat('<span style="color:Red;">Update Failed, retying...</span>');
+        screenMessage.html('<span style="color:Red;">Update Failed, retying...</span>');
         
         //clean the state up.
         downloadList = [];
@@ -445,7 +445,7 @@ function initPrimus() {
     privateServer = Primus.connect('ws://ygopro.us:24555');
     privateServer.on('open', function open() {
 
-        tellUserThat('<span style="color:white;">Launcher Connected</span>');
+        screenMessage.html('<span style="color:white;">Launcher Connected</span>');
         privateServer.write({
             action: 'privateUpdate',
             serverUpdate: list,
@@ -462,11 +462,11 @@ function initPrimus() {
     });
     privateServer.on('error', function open() {
 
-        tellUserThat('<span style="color:gold;">ERROR! Disconnected from the Server</span>');
+        screenMessage.html('<span style="color:gold;">ERROR! Disconnected from the Server</span>');
     });
     privateServer.on('close', function open() {
 
-        tellUserThat('<span style="color:red;">ERROR! Disconnected from the Server</span>');
+        screenMessage.html('<span style="color:red;">ERROR! Disconnected from the Server</span>');
     });
     privateServer.on('data', function (data) {
 
@@ -479,18 +479,18 @@ function initPrimus() {
         if (data.clientEvent === 'saveDeck') {
             fs.writeFile('./ygopro/deck/' + data.deckName, data.deckList, function (err) {
                 if (err) {
-                    tellUserThat('<span style="color:red;">Error occurred while saving deck. Please try again.</span>');
+                    screenMessage.html('<span style="color:red;">Error occurred while saving deck. Please try again.</span>');
                 } else {
-                    tellUserThat('<span style="color:green;">Deck saved successfully.</span>');
+                    screenMessage.html('<span style="color:green;">Deck saved successfully.</span>');
                 }
             });
         }
         if (data.clientEvent === 'unlinkDeck') {
             fs.unlink('./ygopro/deck/' + data.deckName, function (err) {
                 if (err) {
-                    tellUserThat('<span style="color:red;">Error occurred while deleting deck. Please try again.</span>');
+                    screenMessage.html('<span style="color:red;">Error occurred while deleting deck. Please try again.</span>');
                 } else {
-                    tellUserThat('<span style="color:green;">Deck deleted successfully.</span>');
+                    screenMessage.html('<span style="color:green;">Deck deleted successfully.</span>');
                 }
             });
         }
@@ -538,5 +538,5 @@ setTimeout(function () {
     initPrimus();
 }, 2500);
 
-tellUserThat('Update System Loaded');
+screenMessage.html('Update System Loaded');
 populatealllist();
