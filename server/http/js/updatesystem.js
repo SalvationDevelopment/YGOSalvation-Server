@@ -15,6 +15,7 @@ var downloadList = [], // Download list during recursive processing, when its em
     n = 0,
     siteLocation = 'https://ygopro.us', // where you got the code from so you can download updates
     updateNeeded = true, //prevents the client from being to noisy to the server, a mutex.
+    updaterstarted = false,
     internalDecklist, // structure for decklist.
     decks = {}, //used with the deck scanner.
     domain = require('domain'), // yay error handling!
@@ -231,18 +232,18 @@ then try again. Next start the update system if it
 bugs out at anypoint try again.*/
 function createmanifest() {
     'use strict';
-    if (!manifest) {
-        screenMessage.html('<span style="color:gold;">Manifest is taking a while to download,...</span>');
-        setTimeout(function () {
-            createmanifest();
-        }, 2000);
-        return;
-    }
 
     var updateWatcher = domain.create();
     updateWatcher.on('error', function (err) {
+        var failed = '<span style="color:red;">Update Failed, retying...</span>',
+            didntStart = '<span style="color:gold;">Manifest is taking a while to download, retying...</span>';
+
         console.log(err);
-        screenMessage.html('<span style="color:Red;">Update Failed, retying...</span>');
+        if (updaterstarted) {
+            screenMessage.html(failed);
+        } else {
+            screenMessage.html(didntStart);
+        }
 
         //clean the state up.
         downloadList = [];
@@ -252,6 +253,8 @@ function createmanifest() {
         setTimeout(createmanifest, 5000);
     });
     updateWatcher.run(function () {
+        var quickfail = (!manifest);
+        updaterstarted = true;
         // If an un-handled error originates from here, updateWatcher will handle it!
         updateCheckFile(manifest, true); // sending in a copy of the manifest, not the manifest itself.
     });
