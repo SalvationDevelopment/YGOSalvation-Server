@@ -332,6 +332,7 @@ primus.on('connection', function (socket) {
 
                 });
                 break;
+
             case ('gamelistEvent'):
                 if (data.password === process.env.OPERPASS) {
                     messageListener(data.coreMessage);

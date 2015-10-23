@@ -20,7 +20,7 @@ Run `npm install` in the directory above.
 var notification = '', // its a string, make memory.
     gamelistManager, // primus and gamelist
     clusterIterator = 0, // its a number make memory,
-    activegames = 0,// its a number make memory,
+    activegames = 0, // its a number make memory,
     cluster = require('cluster'), // multithreading!
     colors = require('colors'), // oo pretty colors!
     domain = require('domain'), // yay error handling
@@ -81,7 +81,7 @@ function initiateMaster(numCPUs) {
         for (clusterIterator; clusterIterator < numCPUs; clusterIterator++) {
             setupWorker(clusterIterator);
         }
-    }, 300);
+    }, 5000);
 
     cluster.on('exit', function (worker, code, signal) {
         notification = 'worker ' + clusterIterator + ' died ' + code + ' ' + signal;
