@@ -210,12 +210,6 @@ function sendGamelist() {
     });
 }
 
-function sendlockStatus() {
-    internalMessage({
-        messagetype: 'lockStatus',
-        lockStatus: lockStatus
-    });
-}
 
 
 function forumValidate(data, socket, callback) {
@@ -431,6 +425,12 @@ primus.on('connection', function (socket) {
                 break;
             case ('murder'):
                 murderCall(data, socket);
+                break;
+            case ('internalRestart'):
+                if (data.password !== process.env.OPERPASS) {
+                    return;
+                }
+                restartAnnouncement();
                 break;
             case ('restart'):
                 restartCall(data, socket);
