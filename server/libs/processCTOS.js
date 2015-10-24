@@ -34,8 +34,7 @@ var portmin = 30000 + process.env.PORTRANGE * 100, //Port Ranges
     Primus = require('primus'), //Primus, our Sepiroth-Qliphopth Creator God. Websocket connections.
     internalGames = [], // internal list of all games the bot is playing
     //enums = require('./libs/enums.js'),
-    http = require('http'), // SQCG Primus requires http parsing/tcp-handling
-    server = http.createServer(), //throne of the God
+
 
     Socket = require('primus').createSocket({
         iknowclusterwillbreakconnections: true
@@ -346,7 +345,6 @@ function processIncomingTrasmission(data, socket, task) {
 
 
 function gamelistUpdate(message) {
-
     if (message.gamelist) {
         gamelist = message.gamelist;
     }
@@ -358,7 +356,6 @@ function gamelistUpdate(message) {
 
         });
     }
-    console.log(registry);
 }
 
 function onConnectGamelist() {

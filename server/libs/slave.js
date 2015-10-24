@@ -1,13 +1,15 @@
 /*jslint  node: true, plusplus: true*/
-
+'use strict';
 var ygoserver, //port 8911 ygopro Server
     net = require('net'), //tcp connections
     Framemaker = require('./parseframes.js'), //understand YGOPro API.
-    processIncomingTrasmission = require('./processCTOS.js'); // gamelist and start games
+    processIncomingTrasmission = require('./processCTOS.js'), // gamelist and start games
+    Socket = require('primus').createSocket({
+        iknowclusterwillbreakconnections: true
+    }),
+    client = new Socket('127.0.0.1:24555'); //Internal server communications.
 
 function initiateSlave() {
-    'use strict';
-
     // When a user connects, create an instance and allow the to duel, clean up after.
     var parsePackets = require('./parsepackets.js'),
         ws;
@@ -52,3 +54,32 @@ function initiateSlave() {
 }
 
 initiateSlave();
+
+function internalUpdate(data) {
+    if (data.action === 'internalRestart') {
+        if (data.password !== process.env.OPERPASS) {
+            return;
+        }
+        ygoserver.close();
+        setTimeout(function () {
+            process.exit(0);
+        }, 600000);
+    }
+}
+
+function onConnectGamelist() {
+    client.write({
+        action: 'internalServerLogin',
+        password: process.env.OPERPASS,
+        gamelist: false,
+        registry: false
+    });
+}
+
+function onCloseGamelist() {
+
+}
+
+client.on('data', internalUpdate);
+client.on('open', onConnectGamelist);
+client.on('close', onCloseGamelist);
