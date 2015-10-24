@@ -118,7 +118,10 @@ function handlePrimusEvent(data, client) {
             if (!activeDuels.hasOwnProperty(duelID) && validDeck(deckList, banLists[hostOptions.banList], databases[hostOptions.database])) {
                 client.join(duelID, function () {
                     activeDuels[duelID] = {
-                        options: hostOptions,
+                        options: {
+                            banList: banLists[hostOptions.banlist],
+                            database: databases[hostOptions.database]
+                        },
                         players: {},
                         spectators: {}
                     };
@@ -151,6 +154,13 @@ function handlePrimusEvent(data, client) {
                             };
                             writeResponse(client, [200, 'joinedDuel', duelID]);
                         });
+                        primus.room(duelID).write({
+                            event: 'playerJoin',
+                            data: {
+                                player: registry[id].username,
+                                role: ROLE_PLAYER_TWO
+                            }
+                        });
                     } else {
                         writeResponse(client, [403, 'invalidRequest']);
                     }
@@ -166,6 +176,13 @@ function handlePrimusEvent(data, client) {
                             };
                             writeResponse(client, [200, 'joinedDuel', duelID]);
                         });
+                        primus.room(duelID).write({
+                            event: 'playerJoin',
+                            data: {
+                                player: registry[id].username,
+                                role: ROLE_PLAYER_THREE
+                            }
+                        });
                     } else {
                         writeResponse(client, [403, 'invalidRequest']);
                     }
@@ -180,6 +197,13 @@ function handlePrimusEvent(data, client) {
                                 deckList: deckList
                             };
                             writeResponse(client, [200, 'joinedDuel', duelID]);
+                        });
+                        primus.room(duelID).write({
+                            event: 'playerJoin',
+                            data: {
+                                player: registry[id].username,
+                                role: ROLE_PLAYER_FOUR
+                            }
                         });
                     } else {
                         writeResponse(client, [403, 'invalidRequest']);
@@ -204,6 +228,10 @@ function handlePrimusEvent(data, client) {
                     ROLE: ROLE_SPECTATOR
                 };
                 writeResponse(client, [200, 'spectatingDuel', duelID]);
+            });
+            primus.room(duelID).write({
+                event: 'spectatorJoin',
+                data: registry[id].username
             });
             return;
         }
@@ -736,18 +764,17 @@ function GameState(nPlayers) {
         "Current Phase": DRAW_PHASE
     };
     while (nPlayers > 0) {
-        state["Player " + nPlayers] = {
-            "Hand": [],
-            "Monster Zone": [],
-            "Spell Zone": [],
-            "Pendulum Zone": [],
-            "Field Zone": [],
-            "Graveyard": [],
-            "Banished Zone": [],
-            "Extra Deck": [],
-            "Deck": [],
-            "LP": 8000
-        };
+        var currentState = state["Player " + nPlayers] = {};
+        currentState[HAND] = [];
+        currentState[MONSTER_ZONE] = [];
+        currentState[SPELL_ZONE] = [];
+        currentState[PENDULUM_ZONE] = [];
+        currentState[FIELD_ZONE] = [];
+        currentState[GRAVEYARD] = [];
+        currentState[BANISHED_ZONE] = [];
+        currentState[EXTRA_DECK] = [];
+        currentState[DECK] = [];
+        currentState[LP] = 8000;
         nPlayers--;
     }
     return state;
