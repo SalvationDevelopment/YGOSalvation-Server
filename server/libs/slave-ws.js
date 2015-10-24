@@ -81,3 +81,12 @@ function onConnectGamelist() {
         registry: false
     });
 }
+
+
+function onCloseGamelist() {
+
+}
+
+client.on('data', internalUpdate);
+client.on('open', onConnectGamelist);
+client.on('close', onCloseGamelist);

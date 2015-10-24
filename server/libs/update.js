@@ -1,11 +1,17 @@
 /*jslint node: true, plusplus: true, unparam: false, nomen: true*/
+'use strict';
 var time = 0;
 var fs = require('fs'),
     path = require('path'),
-    spawn = require('child_process').spawn;
+    spawn = require('child_process').spawn,
+    Socket = require('primus').createSocket({
+        iknowclusterwillbreakconnections: true
+    }),
+    client = new Socket('127.0.0.1:24555'), //Internal server communications.
+    oktorestart = false;
 
 function dirTree(filename) {
-    'use strict';
+
     var stats = fs.lstatSync(filename),
         info = {
             path: filename,
@@ -38,10 +44,9 @@ function dirTree(filename) {
 
 function update() {
 
-    'use strict';
-//    if (!process.env.YGOPROLOGINENABLED) {
-//        return true;
-//    }
+    //    if (!process.env.YGOPROLOGINENABLED) {
+    //        return true;
+    //    }
     var fileContent,
         startTime = new Date(),
         ygopro = dirTree('ygopro'),
@@ -71,8 +76,12 @@ function update() {
         //'use strict';
         fs.createReadStream('ygopro/databases/0-en-OCGTCG.cdb').pipe(fs.createWriteStream('ygopro/cards.cdb'));
     });
+    if (oktorestart) {
+        return 'Update Detection System[' + ((new Date()).getTime() - startTime.getTime()) + 'ms] Restarting Server in 10 mins.';
+    } else {
+        return 'Update Detection System[' + ((new Date()).getTime() - startTime.getTime()) + 'ms]';
+    }
 
-    return 'Update Detection System[' + ((new Date()).getTime() - startTime.getTime()) + 'ms]';
 }
 
 
@@ -81,14 +90,53 @@ update();
 var http = require('http');
 
 var server = http.createServer(function (request, response) {
-    'use strict';
     response.writeHead(200, {
         "Content-Type": "text/plain"
     });
     var rate = update();
     response.end(rate);
     console.log('Update processed:', rate);
+    if (oktorestart) {
+        setTimeout(function () {
+            client.write({
+                action: 'internalRestart',
+                password: process.env.OPERPASS
+
+            });
+            oktorestart = true;
+        }, 600000);
+    }
+
 });
 
 // Listen on port 12000, IP defaults to 127.0.0.1
 server.listen(12000);
+
+function internalUpdate(data) {
+
+}
+
+function onConnectGamelist() {
+    client.write({
+        action: 'internalServerLogin',
+        password: process.env.OPERPASS,
+        gamelist: false,
+        registry: false
+    });
+}
+
+
+function onCloseGamelist() {
+
+}
+
+setTimeout(function () {
+
+    client.on('data', internalUpdate);
+    client.on('open', onConnectGamelist);
+    client.on('close', onCloseGamelist);
+}, 600000);
+
+setInterval(function () {
+    oktorestart = true;
+}, 1200000);
