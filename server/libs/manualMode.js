@@ -40,12 +40,17 @@ var Primus = require('primus'),
     BANISHED_ZONE = "Banished Zone",
     EXTRA_DECK = "Extra Deck",
     DECK = "Deck",
+    LP = "LP",
     QUERY_CHANGE_POSITION = "changePosition",
     QUERY_CHANGE_FLIPSTATUS = "changeFlipStatus",
+    QUERY_ADD_LP = "addLP",
+    QUERY_SUB_LP = "subLP",
     QUERY_CLOSE_DECK = "closeDeck",
     QUERY_VIEW_DECK = "viewDeck",
     QUERY_VIEW_EXTRA = "viewExtra",
     QUERY_DUEL_COMMAND = "duelCommand",
+    QUERY_DICE_ROLL = "diceRoll",
+    QUERY_COIN_FLIP = "coinFlip",
     QUERY_GET_OPTIONS = "getOptions",
     QUERY_GET_STATE = "getState",
     QUERY_START_DUEL = "startDuel",
@@ -80,6 +85,7 @@ function handlePrimusEvent(data, client) {
         username = data.username,
         duelID = data.duelID,
         duelQuery = data.duelQuery,
+        amount = data.amount,
         target = data.target,
         moveTo = data.moveTo,
         hostOptions = data.hostOptions || {},
@@ -112,7 +118,10 @@ function handlePrimusEvent(data, client) {
             if (!activeDuels.hasOwnProperty(duelID) && validDeck(deckList, banLists[hostOptions.banList], databases[hostOptions.database])) {
                 client.join(duelID, function () {
                     activeDuels[duelID] = {
-                        options: hostOptions,
+                        options: {
+                            banList: banLists[hostOptions.banlist],
+                            database: databases[hostOptions.database]
+                        },
                         players: {},
                         spectators: {}
                     };
@@ -145,6 +154,13 @@ function handlePrimusEvent(data, client) {
                             };
                             writeResponse(client, [200, 'joinedDuel', duelID]);
                         });
+                        primus.room(duelID).write({
+                            event: 'playerJoin',
+                            data: {
+                                player: registry[id].username,
+                                role: ROLE_PLAYER_TWO
+                            }
+                        });
                     } else {
                         writeResponse(client, [403, 'invalidRequest']);
                     }
@@ -160,6 +176,13 @@ function handlePrimusEvent(data, client) {
                             };
                             writeResponse(client, [200, 'joinedDuel', duelID]);
                         });
+                        primus.room(duelID).write({
+                            event: 'playerJoin',
+                            data: {
+                                player: registry[id].username,
+                                role: ROLE_PLAYER_THREE
+                            }
+                        });
                     } else {
                         writeResponse(client, [403, 'invalidRequest']);
                     }
@@ -174,6 +197,13 @@ function handlePrimusEvent(data, client) {
                                 deckList: deckList
                             };
                             writeResponse(client, [200, 'joinedDuel', duelID]);
+                        });
+                        primus.room(duelID).write({
+                            event: 'playerJoin',
+                            data: {
+                                player: registry[id].username,
+                                role: ROLE_PLAYER_FOUR
+                            }
                         });
                     } else {
                         writeResponse(client, [403, 'invalidRequest']);
@@ -198,6 +228,10 @@ function handlePrimusEvent(data, client) {
                     ROLE: ROLE_SPECTATOR
                 };
                 writeResponse(client, [200, 'spectatingDuel', duelID]);
+            });
+            primus.room(duelID).write({
+                event: 'spectatorJoin',
+                data: registry[id].username
             });
             return;
         }
@@ -255,7 +289,8 @@ function handlePrimusEvent(data, client) {
                             },
                             to: {
                                 location: activeDuels[duelID].state["Player " + moveTo.player][moveTo.location],
-                                slot: moveTo.slot
+                                slot: moveTo.slot,
+                                position: moveTo.position
                             }
                         });
                         primus.room(duelID).write({
@@ -375,6 +410,55 @@ function handlePrimusEvent(data, client) {
                     }
                     return;
                 }
+            case QUERY_ADD_LP:
+                {
+                    if (activeDuels[duelID].players.hasOwnProperty(uid) && !isNaN(amount) && isFinite(amount)) {
+                        amount = Math.floor(amount);
+                        if (amount < 0) {
+                            amount = amount * -1;
+                        }
+                        if (amount > Number.MAX_VALUE) {
+                            amount = Number.MAX_VALUE - activeDuels[duelID].state["Player " + activeDuels[duelID].players[uid].ROLE][LP];
+                        }
+                        primus.room(duelID).write({
+                            event: QUERY_ADD_LP,
+                            data: {
+                                player: registry[id].username,
+                                amount: amount
+                            }
+                        });
+                        writeResponse(client, [200, 'addedLP']);
+                    } else {
+                        writeResponse(client, [403, 'invalidRequest']);
+                    }
+                    break;
+                }
+            case QUERY_SUB_LP:
+                {
+                    if (activeDuels[duelID].players.hasOwnProperty(uid) && !isNaN(amount) && isFinite(amount)) {
+                        amount = Math.floor(amount);
+                        if (amount < 0) {
+                            amount = amount * -1;
+                        }
+                        if (amount > Number.MAX_VALUE) {
+                            amount = Number.MAX_VALUE - activeDuels[duelID].state["Player " + activeDuels[duelID].players[uid].ROLE][LP];
+                        }
+                        if (amount > activeDuels[duelID].state["Player " + activeDuels[duelID].players[uid].ROLE][LP]) {
+                            amount = activeDuels[duelID].state["Player " + activeDuels[duelID].players[uid].ROLE][LP];
+                        }
+                        primus.room(duelID).write({
+                            event: QUERY_SUB_LP,
+                            data: {
+                                player: registry[id].username,
+                                amount: amount
+                            }
+                        });
+                        writeResponse(client, [200, 'subtractedLP']);
+                    } else {
+                        writeResponse(client, [403, 'invalidRequest']);
+                    }
+                    break;
+                }
             case QUERY_VIEW_EXTRA:
                 {
                     if (activeDuels[duelID].players.hasOwnProperty(uid)) {
@@ -399,6 +483,38 @@ function handlePrimusEvent(data, client) {
                         });
                         activeDuels[duelID].state["Player " + activeDuels[duelID].players[uid].ROLE][target.location][target.slot].position = target.position;
                         writeResponse(client, [200, 'positionChanged']);
+                    } else {
+                        writeResponse(client, [403, 'invalidRequest']);
+                    }
+                    break;
+                }
+            case QUERY_COIN_FLIP:
+                {
+                    if (activeDuels[duelID].players.hasOwnProperty(uid)) {
+                        primus.room(duelID).write({
+                            event: QUERY_COIN_FLIP,
+                            data: {
+                                flip: (Math.random() > 0.5) ? 1 : 0,
+                                player: registry[id].username
+                            }
+                        });
+                        writeResponse(client, [200, 'coinFlipped']);
+                    } else {
+                        writeResponse(client, [403, 'invalidRequest']);
+                    }
+                    break;
+                }
+            case QUERY_DICE_ROLL:
+                {
+                    if (activeDuels[duelID].players.hasOwnProperty(uid)) {
+                        primus.room(duelID).write({
+                            event: QUERY_DICE_ROLL,
+                            data: {
+                                roll: Math.floor(Math.random() * 6),
+                                player: registry[id].username
+                            }
+                        });
+                        writeResponse(client, [200, 'diceRolled']);
                     } else {
                         writeResponse(client, [403, 'invalidRequest']);
                     }
@@ -648,18 +764,17 @@ function GameState(nPlayers) {
         "Current Phase": DRAW_PHASE
     };
     while (nPlayers > 0) {
-        state["Player " + nPlayers] = {
-            "Hand": [],
-            "Monster Zone": [],
-            "Spell Zone": [],
-            "Pendulum Zone": [],
-            "Field Zone": [],
-            "Graveyard": [],
-            "Banished Zone": [],
-            "Extra Deck": [],
-            "Deck": [],
-            "LP": 8000
-        };
+        var currentState = state["Player " + nPlayers] = {};
+        currentState[HAND] = [];
+        currentState[MONSTER_ZONE] = [];
+        currentState[SPELL_ZONE] = [];
+        currentState[PENDULUM_ZONE] = [];
+        currentState[FIELD_ZONE] = [];
+        currentState[GRAVEYARD] = [];
+        currentState[BANISHED_ZONE] = [];
+        currentState[EXTRA_DECK] = [];
+        currentState[DECK] = [];
+        currentState[LP] = 8000;
         nPlayers--;
     }
     return state;
@@ -701,6 +816,7 @@ function moveCard(move) {
     var from = move.from,
         to = move.to;
     to.location[to.slot] = from.location[from.slot];
+    to.location[to.slot].position = to.position;
     from.location.splice(from.slot, 1);
 }
 
