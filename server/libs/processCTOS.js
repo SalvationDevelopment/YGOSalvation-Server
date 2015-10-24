@@ -17,14 +17,11 @@ var portmin = 30000 + process.env.PORTRANGE * 100, //Port Ranges
     net = require('net'),
     parsePackets = require('./parsepackets.js'), //Get data sets out of the YGOPro Network API.
     recieveCTOS = require('./recieveCTOS'), // Translate data sets into messages of the API
-    events = require('events'),
-    bouncer = new events.EventEmitter(),
     gamelist = {},
     registry = {},
-    winston = require('winston'),
-    path = require('path'),
+    //winston = require('winston'),
+
     coreIsInPlace = false,
-    cluster = require('cluster'),
     ps = require('ps-node'),
 
     Primus = require('primus'), //Primus, our Sepiroth-Qliphopth Creator God. Websocket connections.
@@ -32,9 +29,11 @@ var portmin = 30000 + process.env.PORTRANGE * 100, //Port Ranges
     //enums = require('./libs/enums.js'),
     http = require('http'), // SQCG Primus requires http parsing/tcp-handling
     server = http.createServer(), //throne of the God
-    primus = new Primus(server), // instance of the God
-    Socket = require('primus').createSocket(),
-    client = new Socket('http://ygopro.us:24555'), //Connect the God to the tree;
+
+    Socket = require('primus').createSocket({
+        iknowclusterwillbreakconnections: true
+    }),
+    client = new Socket('127.0.0.1:24555'), //Connect the God to the tree;
     childProcess = require('child_process'),
     startDirectory = __dirname;
 
@@ -218,6 +217,7 @@ function handleCoreMessage(core_message_raw, port, socket, data, pid) {
         //cHistory.info('--GAME: ' + pid);
     }
     //process.send(gamelistmessage);
+
     client.write(gamelistmessage);
 
 }
@@ -339,16 +339,21 @@ function processIncomingTrasmission(data, socket, task) {
 
 
 function gamelistUpdate(message) {
+
     if (message.gamelist) {
         gamelist = message.gamelist;
     }
     if (message.registry) {
         registry = message.registry;
     }
+    console.log(registry);
 }
 
 function onConnectGamelist() {
-
+    client.write({
+        action: 'internalServerLogin',
+        password: process.env.OPERPASS
+    });
 }
 
 function onCloseGamelist() {
@@ -356,12 +361,9 @@ function onCloseGamelist() {
 }
 
 client.on('data', gamelistUpdate);
-client.on('connected', onConnectGamelist);
+client.on('open', onConnectGamelist);
 client.on('close', onCloseGamelist);
-client.write({
-    action: 'join',
-    password: process.env.OPERPASS
-});
+
 
 
 module.exports = processIncomingTrasmission;

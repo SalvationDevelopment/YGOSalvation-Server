@@ -17,6 +17,7 @@ Run `npm install` in the directory above.
 
 /*jslint  node: true, plusplus: true*/
 
+'use strict';
 var notification = '', // its a string, make memory.
     gamelistManager, // primus and gamelist
     clusterIterator = 0, // its a number make memory,
@@ -27,35 +28,33 @@ var notification = '', // its a string, make memory.
     processManager = require('child_process');
 
 
-function gamelistMessage(message) {
-    'use strict';
-    var rooms,
-        gamelist = gamelistManager.messageListener(message.coreMessage);
-    activegames = 0;
-    Object.keys(cluster.workers).forEach(function (id) {
-        cluster.workers[id].send({
-            messagetype: 'gamelist',
-            gamelist: gamelist
-        });
-    });
-    for (rooms in gamelist) {
-        if (gamelist.hasOwnProperty(rooms)) {
-            activegames++;
-        }
-    }
-    process.title = 'YGOPro Salvation Server [' + activegames + ']';
+
+function bootGameList() {
+    processManager.fork('../libs/gamelist.js', [], {
+        cwd: 'http'
+    }, bootGameList);
+}
+
+function bootUpdateSystem() {
+    processManager.fork('../libs/update.js', [], {
+        cwd: 'http'
+    }, bootUpdateSystem);
+}
+
+function bootAISystem() {
+    processManager.fork('../libs/ai.js', [], {
+        cwd: 'http'
+    }, bootAISystem);
 }
 
 function initiateMaster(numCPUs) {
-    'use strict';
     console.log('YGOPro Salvation Server - Saving Yu-Gi-Oh!'.bold.yellow);
-    processManager.fork('../libs/update.js', [], { // update system
-        cwd: 'http'
-    });
+    bootGameList();
+    bootUpdateSystem();
+    //bootAISystem();
     console.log('    Update System Trigger open @ port 12000'.bold.yellow);
     console.log('    Starting Master');
     process.title = 'YGOPro Salvation Server [' + activegames + '] ' + new Date();
-    gamelistManager = require('./libs/gamelist.js');
     require('./libs/policyserver.js'); //Flash policy server for LightIRC;
 
 
@@ -67,7 +66,6 @@ function initiateMaster(numCPUs) {
             SLAVE: true
         });
 
-        worker.on('message', gamelistMessage);
     }
     setTimeout(function () {
         for (clusterIterator; clusterIterator < numCPUs; clusterIterator++) {
@@ -89,7 +87,6 @@ function initiateMaster(numCPUs) {
 
 
 (function main() {
-    'use strict';
     if (process.env.SLAVE) {
         require('./libs/slave.js');
         require('./libs/slave-ws.js');
@@ -106,14 +103,9 @@ function initiateMaster(numCPUs) {
     }
 }()); // end main
 
-module.exports = {
-    initiateMaster: initiateMaster,
-    gamelistMessage: gamelistMessage
-};
 
 /* This is bad code */
 process.on('uncaughtException', function (err) {
-    'use strict';
     console.error((new Date()).toUTCString() + ' uncaughtException:', err.message);
     console.error(err.stack);
 });
