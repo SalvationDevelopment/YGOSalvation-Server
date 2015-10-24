@@ -69,7 +69,7 @@ function update() {
         });
     //    ,
     //        ocggit = spawn('git', ['pull'], {
-    //            cwd: '../../../ygopro'
+    //            cwd: '../../../ygopro-script'
     //        });
     fileContent = 'var manifest = ' + JSON.stringify(installation, null, 4);
     fs.writeFile('manifest/manifest-ygopro.js', fileContent, function () {
