@@ -3,6 +3,7 @@
     "description": "YGOPro US Server (Salvation) - Saving Yu-Gi-Oh!",
     "main": "server/server.js",
     "version": "4.4.0",
+    "private": true,
     "keywords": [
     "ygopro",
     "Salvation Development",
@@ -35,7 +36,7 @@
     "bugs": "https://github.com/salvationdevelopment/YGOPro-Support-System/issues",
     "author": "panthrowzay@gmail.com",
     "homepage": "http://ygopro.us",
-    "license": "LicenseRef-LICENSE"
+    "license": "LicenseRef-LICENSE",
     "scripts": {
         "start": "node server/server.js",
         "test": "istanbul cover _mocha -- -u exports -R spec"
