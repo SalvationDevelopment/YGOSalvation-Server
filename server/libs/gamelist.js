@@ -49,7 +49,9 @@ function announce(announcement) {
 }
 
 function internalMessage(announcement) {
-    primus.room('internalservers').write(announcement);
+    process.nextTick(function () {
+        primus.room('internalservers').write(announcement);
+    });
 }
 
 function handleCoreMessage(core_message_raw, port, pid) {
@@ -309,6 +311,7 @@ primus.use('rooms', Rooms);
 
 
 primus.on('connection', function (socket) {
+    console.log('new client');
     socket.on('disconnection', function (socket) {
         socket.leaveAll();
         console.log('deleting:', socket.username);
@@ -325,17 +328,22 @@ primus.on('connection', function (socket) {
             socket.join(socket.address.ip + data.uniqueID, function () {});
             switch (action) {
             case ('internalServerLogin'):
+                console.log('new internal client request');
                 if (data.password !== process.env.OPERPASS) {
                     return;
                 }
                 socket.join('internalservers', function () {
-
+                    console.log('new internal server');
                 });
                 break;
 
             case ('gamelistEvent'):
                 if (data.password === process.env.OPERPASS) {
                     messageListener(data.coreMessage);
+                    internalMessage({
+                        messagetype: 'gamelist',
+                        gamelist: gamelist
+                    });
                 }
                 break;
             case ('ai'):
@@ -443,7 +451,6 @@ duelserv.on('announce', function (message) {
 });
 
 duelserv.on('del', function (pid) {
-
     var game;
     for (game in gamelist) {
         if (gamelist.hasOwnProperty(game)) {
@@ -455,19 +462,3 @@ duelserv.on('del', function (pid) {
     }
     ps.kill(pid, function (error) {});
 });
-
-
-
-module.exports = {
-    messageListener: messageListener,
-    primusListener: primusListener,
-    announce: announce,
-    getRegistry: sendRegistry
-};
-
-
-//This is down here on purpose.
-setTimeout(function () {
-
-    require('./ai.js');
-}, 5000);
