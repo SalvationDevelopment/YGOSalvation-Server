@@ -18,7 +18,14 @@ var portmin = 30000 + process.env.PORTRANGE * 100, //Port Ranges
     parsePackets = require('./parsepackets.js'), //Get data sets out of the YGOPro Network API.
     recieveCTOS = require('./recieveCTOS'), // Translate data sets into messages of the API
     gamelist = {},
-    registry = {},
+    registry = {
+        //People that have read this source code.
+        SnarkyChild: '::ffff:127.0.0.1',
+        AccessDenied: '::ffff:127.0.0.1',
+        Irate: '::ffff:127.0.0.1',
+        Chibi: '::ffff:127.0.0.1',
+        OmniMage: '::ffff:127.0.0.1'
+    },
     //winston = require('winston'),
 
     coreIsInPlace = false,
@@ -346,13 +353,20 @@ function gamelistUpdate(message) {
     if (message.registry) {
         registry = message.registry;
     }
+    if (message.recoverServer) {
+        client.write({
+
+        });
+    }
     console.log(registry);
 }
 
 function onConnectGamelist() {
     client.write({
         action: 'internalServerLogin',
-        password: process.env.OPERPASS
+        password: process.env.OPERPASS,
+        gamelist: gamelist,
+        registry: registry
     });
 }
 
