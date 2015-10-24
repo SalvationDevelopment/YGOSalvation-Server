@@ -11,9 +11,11 @@ var downloadList = [], // Download list during recursive processing, when its em
     EventEmitter = require('events').EventEmitter, //event emitter system (helps with domains);
     mode = "production", // This code is pulled down from the server, so this is production code.
     privateServer, // (to be defined) Server-client connection pipeline.
-
+    reconnectioncount = -1,
+    n = 0,
     siteLocation = 'https://ygopro.us', // where you got the code from so you can download updates
     updateNeeded = true, //prevents the client from being to noisy to the server, a mutex.
+    updaterstarted = false,
     internalDecklist, // structure for decklist.
     decks = {}, //used with the deck scanner.
     domain = require('domain'), // yay error handling!
@@ -22,11 +24,12 @@ var downloadList = [], // Download list during recursive processing, when its em
         currentdeck: '',
         skinlist: '',
         fonts: ''
-    };// structure filled out and sent to the server then back down to the other half of the interface. Provides access to the filesystem.
+    }; // structure filled out and sent to the server then back down to the other half of the interface. Provides access to the filesystem.
 
 localStorage.lastip = '192.99.11.19';
 localStorage.serverport = '8911';
 localStorage.lastport = '8911';
+
 
 process.on('uncaughtException', function (criticalError) {
     'use strict';
@@ -65,7 +68,7 @@ process.on('uncaughtException', function (criticalError) {
             console.log('http://man7.org/linux/man-pages/man3/errno.3.html');
         }
     } else {
-        $('.servermessage').html('<span style="color:blue">fatal Error : Launcher wants to Restart! </span>');
+        $('.servermessage').html('<span style="color:blue">You should restart your launcher,.... no pressure...</span>');
     }
 });
 
@@ -86,7 +89,7 @@ function updateCardId(deck, oldcard, newcard) {
 function internalDeckRead() {
     'use strict';
     if (internalDecklist.length === 0) {
-        
+
         return;
     }
     if (internalDecklist[0].indexOf('.ydk') !== -1) {
@@ -109,18 +112,18 @@ function internalDeckRead() {
 
 function doDeckScan() {
     'use strict';
-//    screenMessage.html('<span style="color:white; font-weight:bold">Scanning Decks</span>');
-//    fs.readdir('./ygopro/deck', function (errors, folder) {
-//
-//        if (!folder) {
-//            screenMessage.html('<span style="color:red; font-weight:bold">Error Reading Deck Folder</span>');
-//            console.log(errors);
-//        } else {
-//            internalDecklist = folder;
-//            
-//        }
-//
-//    });
+    //    screenMessage.html('<span style="color:white; font-weight:bold">Scanning Decks</span>');
+    //    fs.readdir('./ygopro/deck', function (errors, folder) {
+    //
+    //        if (!folder) {
+    //            screenMessage.html('<span style="color:red; font-weight:bold">Error Reading Deck Folder</span>');
+    //            console.log(errors);
+    //        } else {
+    //            internalDecklist = folder;
+    //            
+    //        }
+    //
+    //    });
 }
 
 /* after getting a list of everything to download `downloadList`, download them one at a time.
@@ -168,6 +171,8 @@ function hashcheck() {
     if (completeList.length === 0) {
         download();
     }
+    screenMessage.html('<span style="color:white; font-weight:bold">Processing manifest(' +
+        completeList.length + '//' + n + '). DONT TOUCH STUFF!</span>');
     var target = completeList[0];
     if (target) {
         if (target.path) {
@@ -215,6 +220,7 @@ function updateCheckFile(file, initial) {
     }
     if (initial) {
         //console.log(completeList);
+        n = completeList.length;
         hashcheck();
     }
 }
@@ -226,32 +232,34 @@ then try again. Next start the update system if it
 bugs out at anypoint try again.*/
 function createmanifest() {
     'use strict';
-    if (!manifest) {
-        screenMessage.html('<span style="color:gold;">Manifest is taking a while to download,...</span>');
-        setTimeout(function () {
-            createmanifest();
-        }, 2000);
-        return;
-    }
-    
+
     var updateWatcher = domain.create();
     updateWatcher.on('error', function (err) {
+        var failed = '<span style="color:red;">Update Failed, retying...</span>',
+            didntStart = '<span style="color:gold;">Manifest is taking a while to download, retying...</span>';
+
         console.log(err);
-        screenMessage.html('<span style="color:Red;">Update Failed, retying...</span>');
-        
+        if (updaterstarted) {
+            screenMessage.html(failed);
+        } else {
+            screenMessage.html(didntStart);
+        }
+
         //clean the state up.
         downloadList = [];
         completeList = [];
-        
+
         //then try again.
         setTimeout(createmanifest, 5000);
     });
     updateWatcher.run(function () {
+        var quickfail = (!manifest);
+        updaterstarted = true;
         // If an un-handled error originates from here, updateWatcher will handle it!
-        updateCheckFile(manifest, true);// sending in a copy of the manifest, not the manifest itself.
+        updateCheckFile(manifest, true); // sending in a copy of the manifest, not the manifest itself.
     });
 }
-   
+
 
 function getDeck(file) {
     'use strict';
@@ -444,7 +452,7 @@ function initPrimus() {
     'use strict';
     privateServer = Primus.connect('ws://ygopro.us:24555');
     privateServer.on('open', function open() {
-
+        reconnectioncount++;
         screenMessage.html('<span style="color:white;">Launcher Connected</span>');
         privateServer.write({
             action: 'privateUpdate',
@@ -465,45 +473,54 @@ function initPrimus() {
         screenMessage.html('<span style="color:gold;">ERROR! Disconnected from the Server</span>');
     });
     privateServer.on('close', function open() {
+        if (reconnectioncount > 15) {
+            screenMessage.html('<span style="color:red;">Check your intenet connection, its you not us.</span>');
+        } else {
+            screenMessage.html('<span style="color:red;">ERROR! Disconnected from the Server</span>');
+        }
 
-        screenMessage.html('<span style="color:red;">ERROR! Disconnected from the Server</span>');
     });
     privateServer.on('data', function (data) {
-
-        var join = false,
-            storage;
-        //console.log(data);
-        if (data.clientEvent === 'update') {
-            createmanifest();
-        }
-        if (data.clientEvent === 'saveDeck') {
-            fs.writeFile('./ygopro/deck/' + data.deckName, data.deckList, function (err) {
-                if (err) {
-                    screenMessage.html('<span style="color:red;">Error occurred while saving deck. Please try again.</span>');
-                } else {
-                    screenMessage.html('<span style="color:green;">Deck saved successfully.</span>');
-                }
-            });
-        }
-        if (data.clientEvent === 'unlinkDeck') {
-            fs.unlink('./ygopro/deck/' + data.deckName, function (err) {
-                if (err) {
-                    screenMessage.html('<span style="color:red;">Error occurred while deleting deck. Please try again.</span>');
-                } else {
-                    screenMessage.html('<span style="color:green;">Deck deleted successfully.</span>');
-                }
-            });
-        }
-        if (data.clientEvent !== 'privateServerRequest') {
-            return;
-        }
-        console.log('Internal Server', data);
-        for (storage in data.local) {
-            if (data.local.hasOwnProperty(storage) && data.local[storage]) {
-                localStorage[storage] = data.local[storage];
+        var commandWatcher = domain.create();
+        commandWatcher.on('error', function (error) {
+            console.log('commandWatcher', error);
+        });
+        commandWatcher.run(function () {
+            var join = false,
+                storage;
+            //console.log(data);
+            if (data.clientEvent === 'update') {
+                createmanifest();
             }
-        }
-        processServerRequest(data.parameter);
+            if (data.clientEvent === 'saveDeck') {
+                fs.writeFile('./ygopro/deck/' + data.deckName, data.deckList, function (err) {
+                    if (err) {
+                        screenMessage.html('<span style="color:red;">Error occurred while saving deck. Please try again.</span>');
+                    } else {
+                        screenMessage.html('<span style="color:green;">Deck saved successfully.</span>');
+                    }
+                });
+            }
+            if (data.clientEvent === 'unlinkDeck') {
+                fs.unlink('./ygopro/deck/' + data.deckName, function (err) {
+                    if (err) {
+                        screenMessage.html('<span style="color:red;">Error occurred while deleting deck. Please try again.</span>');
+                    } else {
+                        screenMessage.html('<span style="color:green;">Deck deleted successfully.</span>');
+                    }
+                });
+            }
+            if (data.clientEvent !== 'privateServerRequest') {
+                return;
+            }
+            console.log('Internal Server', data);
+            for (storage in data.local) {
+                if (data.local.hasOwnProperty(storage) && data.local[storage]) {
+                    localStorage[storage] = data.local[storage];
+                }
+            }
+            processServerRequest(data.parameter);
+        });
     });
 
     setInterval(function () {
@@ -523,7 +540,7 @@ function initPrimus() {
     setTimeout(function () {
         createmanifest();
     }, 10000);
-   
+
 }
 
 
@@ -531,7 +548,7 @@ function initPrimus() {
 setTimeout(function () {
     'use strict';
 
-    
+
 
     fs.watch('./ygopro/deck', populatealllist);
     initPrimus();
