@@ -119,8 +119,8 @@ function handlePrimusEvent(data, client) {
                 client.join(duelID, function () {
                     activeDuels[duelID] = {
                         options: {
-                            banList: banLists[hostOptions.banlist],
-                            database: databases[hostOptions.database]
+                            banList: hostOptions.banList,
+                            database: hostOptions.database
                         },
                         players: {},
                         spectators: {}
