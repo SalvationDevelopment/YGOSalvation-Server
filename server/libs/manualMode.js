@@ -70,6 +70,7 @@ setInterval(banListUpdater, 120000);
 setInterval(cdbUpdater, 120000);
 primus.use('rooms', Rooms);
 primus.on('connection', function (client) {
+    writeResponse(client, [200, ['clientConnected', banLists, databases]]);
     client.on('data', function (data) {
         handlePrimusEvent(data, client);
     });
