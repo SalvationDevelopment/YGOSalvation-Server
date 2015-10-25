@@ -395,6 +395,7 @@ primus.on('connection', function (socket) {
                     return;
                 }
                 restartAnnouncement();
+                internalMessage(data);
                 break;
             case ('restart'):
                 restartCall(data, socket);
