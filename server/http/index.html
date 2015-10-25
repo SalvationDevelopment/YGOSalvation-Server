@@ -13,11 +13,11 @@
     <link rel="shortcut icon" href="/favicon.png" />
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width">
-    <script src="http://ygopro.us/js/jquery-1.11.0.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/2.0.0/handlebars.min.js"></script>
-    <link href="http://ygopro.us/css/roboto.css" rel="stylesheet" type="text/css">
-    <link href="http://ygopro.us/css/PoiretOne.css" rel="stylesheet" type="text/css">
-    <link href='http://ygopro.us/css/AlegreyaSans.css' rel='stylesheet' type='text/css'>
+    <script src="./js/jquery-1.11.0.min.js"></script>
+    <script src="./js/vendor/handlebars.min.js"></script>
+    <link href="./css/roboto.css" rel="stylesheet" type="text/css">
+    <link href="./css/PoiretOne.css" rel="stylesheet" type="text/css">
+    <link href='./css/AlegreyaSans.css' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="css/animation.css">
     <link rel="stylesheet" type="text/css" href="css/deck-edit.css">
@@ -467,10 +467,16 @@
     <header style="padding-top:50px" id="chat">
 
 
+<!--
         <script type="text/javascript" src="http://ygopro.us/js/swfobject.js"></script>
         <script type="text/javascript" src="lightIRC/config.js"></script>
+
         <div id="lightIRC" style="height:92%; text-align:center;">
+        </div>-->
+        <div id="wsirc" style="height:92%; text-align:center;">
         </div>
+        <script src="js/irc-style-parser.js"></script>
+        <script src="js/irc-ws.js"></script>
     </header>
     <header style="padding-top:50px" id="faq">
         <div id="news"></div>

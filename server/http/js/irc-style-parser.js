@@ -3,6 +3,7 @@
  * Unfortuanately this is a non trivial operation
  * See https://github.com/megawac/irc-style-parser
  */
+var irc = {};
 var styleCheck_Re = /[\x00-\x1F]/,
     back_re = /^(\d{1,2})(,(\d{1,2}))?/,
     colourKey = "\x03", colour_re = /\x03/g,

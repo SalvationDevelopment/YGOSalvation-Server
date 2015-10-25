@@ -282,7 +282,7 @@ function WebSocketClose(event) {
 }
 
 
-var webSocket = new WebSocket('ws://ygopro.us:3000/');
+var webSocket = new WebSocket('ws://127.0.0.1:8080/');
 webSocket.onopen = WebSocketOpen;
 webSocket.onmessage = WebSocketMessage;
 webSocket.onerror = WebSocketError;
