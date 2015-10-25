@@ -51,7 +51,9 @@ function singlesitenav(target) {
                 wmode: "transparent"
             });
             chatStarted = true;
-        } catch (errorm) {}
+        } catch (errorm) {
+            serverInit();
+        }
     }
     $('.activescreen').removeClass('activescreen');
     $('header').css('top', '100vh');
@@ -161,7 +163,7 @@ function translateLang(lang) {
     try {
         params.language = lang;
     } catch (error) {}
-    
+
 }
 
 function achievementConstructor(data) {

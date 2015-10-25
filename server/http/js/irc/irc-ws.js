@@ -1,5 +1,5 @@
 /*jslint browser: true, devel: true, plusplus: true, sub: false*/
-/*global WebSocket, $, state, command*/
+/*global WebSocket, $, state, command, checkroom*/
 
 var ircws,
     replies = {
@@ -284,12 +284,6 @@ function serverInit() {
 
 }
 
-
-
-
-
-
-var checkroom;
 
 function JOIN(channel) {
     'use strict';
