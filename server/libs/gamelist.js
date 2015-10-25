@@ -312,7 +312,6 @@ primus.use('rooms', Rooms);
 
 
 primus.on('connection', function (socket) {
-    console.log('new client');
     socket.on('disconnection', function (socket) {
         socket.leaveAll();
         console.log('deleting:', socket.username);
@@ -329,7 +328,6 @@ primus.on('connection', function (socket) {
             socket.join(socket.address.ip + data.uniqueID, function () {});
             switch (action) {
             case ('internalServerLogin'):
-                console.log('new internal client request');
                 if (data.password !== process.env.OPERPASS) {
                     return;
                 }
@@ -472,7 +470,9 @@ duelserv.on('del', function (pid) {
             }
         }
     }
-    ps.kill(pid, function (error) {});
+    setTimeout(function () {
+        ps.kill(pid, function (error) {});
+    }, 5000);
 });
 
 //Recover Protocol
