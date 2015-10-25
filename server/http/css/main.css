@@ -1172,7 +1172,7 @@ header a:hover {
     padding: 2px;
     float: left;
     width: 100%;
-    min-height: 2vh;
+    min-height: 3em;
     overflow: auto;
 }
 
@@ -1193,11 +1193,12 @@ header a:hover {
     border: 1px solid white;
     height: 70%;
     margin-top: 5px;
-    margin-left: 10px;
-    width: 17%;
-    overflow: scroll;
+    /* margin-left: 10px; */
+    width: 20%;
+    overflow-x: auto;
     padding-left: .5em;
     text-align: left;
+    overflow-y: scroll;
 }
 
 .chatcontrolls {
@@ -1217,6 +1218,7 @@ input#chatinput {
     margin-left: .5%;
     width: 69.5%;
     float: left;
+    color: white;
 }
 
 .chatsubmit {
