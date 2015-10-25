@@ -1,7 +1,7 @@
 # YGOPro Salvation Server Game Manager Microservice API 0.1.0
 
 ##Preface
-The main feature of an second generation and beyond YGOPro servers is a gamelist, it is the key desirable feature. This is a collection of active and avaliable duels that the end-user can join to duel or spectate in. It gives an overview of the server activity level and possibly health. To achieve this the server side instance of YGOPro needs to be able to communicate what is happening within the process, and route the end-user to the requested game because only one port is exposed to all end users to connect to, and YGOPro/YGOServers need unique ports to operate on. Salvation takes this a step farther beyond Percy Checkmate DevPro and MyCard in providing unique routing for alternative script, database, and banlist configurations.
+The main feature of second generation and beyond YGOPro servers is a gamelist, it is the key desirable feature. This is a collection of active and avaliable duels that the end-user can join to duel or spectate in. It gives an overview of the server activity level and possibly health. To achieve this the server side instance of YGOPro needs to be able to communicate what is happening within the process, and route the end-user to the requested game because only one port is exposed to all end users to connect to, and YGOPro/YGOServers need unique ports to operate on. Salvation takes this a step farther beyond Percy Checkmate DevPro and MyCard in providing unique routing for alternative script, database, and banlist configurations.
 
 ##TCP and Websocket Connection
 The game-manager-microservice provides a standard port for both standard YGOPro communications and websocket wrapped browser communications. 

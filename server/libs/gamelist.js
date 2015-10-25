@@ -6,7 +6,6 @@ var primus,
     gamelist = {},
     userdata = {},
     stats = {},
-    validationCache = {},
     registry = {
         //People that have read this source code.
         SnarkyChild: '::ffff:127.0.0.1',
@@ -28,9 +27,9 @@ var primus,
     previousAnnouncement = "",
     domain = require('domain'),
     path = require('path'),
-    request = require('request'),
-    ps = require('ps-node'),
 
+    ps = require('ps-node'),
+    forumValidate = ('./forum-validator.js'),
     currentGlobalMessage = '';
 
 var logger = require('./logger.js');
@@ -212,42 +211,9 @@ function sendGamelist() {
 
 
 
-function forumValidate(data, socket, callback) {
-    if (validationCache[data.username]) {
-        callback(validationCache[data.username]);
-        return;
-    }
-    process.nextTick(function () {
-        var url = 'http://forum.ygopro.us/log.php',
-            post = {
-                ips_username: data.username,
-                ips_password: data.password
-            };
-        request.post(url, {
-            form: post
-        }, function (error, response, body) {
-            if (!error && response.statusCode === 200) {
-                var info;
-                try {
-                    info = JSON.parse(body.trim());
-                } catch (msgError) {
-                    console.log('Error during validation', body, msgError, socket.address.ip);
-                    callback('Error during validation', info);
-                    return;
-                }
-                validationCache[data.username] = info;
-                setTimeout(function () {
-                    delete validationCache[data.username];
-                }, 600000); // cache the forum request for 10 mins.
-                callback(null, info);
-                return;
-            }
-        });
-    });
-}
 
 function registrationCall(data, socket) {
-    forumValidate(data, socket, function (error, info) {
+    forumValidate(data, function (error, info) {
         if (info.success) {
             registry[info.displayname] = socket.address.ip;
             stats[info.displayname] = new Date().getTime();
@@ -267,7 +233,7 @@ function registrationCall(data, socket) {
 }
 
 function globalCall(data, socket) {
-    forumValidate(data, socket, function (error, info) {
+    forumValidate(data, function (error, info) {
         if (info.success && info.data.g_access_cp === "1") {
             duelserv.emit('announce', {
                 clientEvent: 'global',
@@ -297,7 +263,7 @@ function restartAnnouncement() {
 }
 
 function restartCall(data, socket) {
-    forumValidate(data, socket, function (error, info) {
+    forumValidate(data, function (error, info) {
         if (info.success && info.data.g_access_cp === "1") {
             restartAnnouncement();
         }
@@ -305,7 +271,7 @@ function restartCall(data, socket) {
 }
 
 function genocideCall(data, socket) {
-    forumValidate(data, socket, function (error, info) {
+    forumValidate(data, function (error, info) {
         if (info.success && info.data.g_access_cp === "1") {
             duelserv.emit('announce', {
                 clientEvent: 'genocide',
@@ -316,7 +282,7 @@ function genocideCall(data, socket) {
 }
 
 function murderCall(data, socket) {
-    forumValidate(data, socket, function (error, info) {
+    forumValidate(data, function (error, info) {
         if (info.success && info.data.g_access_cp === "1") {
             duelserv.emit('announce', {
                 clientEvent: 'kill',
@@ -327,7 +293,7 @@ function murderCall(data, socket) {
 }
 
 function killgameCall(data, socket) {
-    forumValidate(data, socket, function (error, info) {
+    forumValidate(data, function (error, info) {
         if (info.success && info.data.g_access_cp === "1") {
             ps.kill(data.killTarget, function (err) {
                 if (err) {
