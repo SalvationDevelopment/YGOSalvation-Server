@@ -10,4 +10,4 @@ The production server is registered to GitHub and recieves notifications via HTT
 On boot the client-server will process the server manifest and compare it to its own files compiling a list of files within a 1KB error range. It then downloads each file one by one and self updates.
 
 ##Server Internal Update
-Each microservice will listen for a manifest update then shut down and restart in a way that will not interrupt end-user gameplay (with the currect execption of browser mode players).
+Each microservice will listen for a manifest update then shut down and restart in a way that will not interrupt end-user gameplay  signifigantly. (with the currect execption of browser mode players).
