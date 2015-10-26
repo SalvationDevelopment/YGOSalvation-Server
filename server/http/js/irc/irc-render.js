@@ -24,9 +24,29 @@ function renderRoom() {
     if (!state.currentChannel) {
         return;
     }
-    var chatIter = 0;
+    var chatIter = 0,
+        rooms,
+        doscroll = false,
+        maxedheight = 0;
+    $('.chatbody').each(function (i) {
+        //this is how you do conditional autoscroll.....baka!
+        var r = document.getElementsByClassName('chatbody')[i],
+            calculation = (r.clientHeight - r.scrollHeight + r.scrollTop);
+        if (calculation === 0) {
+            doscroll = true;
+            maxedheight = (r.scrollHeight > maxedheight) ? r.scrollHeight : maxedheight;
+        }
+    });
     $('.chattitle').text(state.rooms[state.currentChannel].title);
     $('.chatbody').html('');
+    for (rooms in state.rooms) {
+        if (state.rooms.hasOwnProperty(rooms)) {
+            $('.chatbody').append('<div class="room_' + rooms + '"></div>');
+        }
+    }
+    for (chatIter; state.rooms[state.currentChannel].history.length > chatIter; chatIter++) {
+        $('.chatbody').append('<li>' + state.rooms[state.currentChannel].history[chatIter] + '</li>');
+    }
     for (chatIter; state.rooms[state.currentChannel].history.length > chatIter; chatIter++) {
         $('.chatbody').append('<li>' + state.rooms[state.currentChannel].history[chatIter] + '</li>');
     }
@@ -34,6 +54,9 @@ function renderRoom() {
     $('.chatroomlist').html('');
     for (chatIter; state.rooms[state.currentChannel].users.length > chatIter; chatIter++) {
         $('.chatroomlist').prepend('<div>' + state.rooms[state.currentChannel].users[chatIter] + '</div>');
+    }
+    if (doscroll) {
+        $('.chatbody').scrollTop(maxedheight);
     }
 
 }
@@ -89,6 +112,7 @@ function command(message) {
         nameList,
         privmsg,
         timestamp;
+    console.log(message);
     switch (message.command) {
     case ('NOTICE'):
         console.log('%c' + message.params[1], 'color:#00f');
@@ -183,25 +207,36 @@ function command(message) {
     case ('JOIN'):
         break;
 
+    case ('MODE'):
+        timestamp = '[' + new Date().toTimeString().substring(0, 8) + '] ';
+        state.rooms[state.currentChannel].history.push(timestamp + message.params[0] + ' MODE: ' +
+            message.params[1]);
+        break;
+
     case ('PART'):
         delete state.rooms[message.params[0]];
         break;
     case ('RPL_LISTSTART'):
         state.roomList = new Array(state.roomList.length);
-        $('#listdisplay').css('display', 'block');
-        $('listdisplay table').html('');
+
+
         break;
     case ('RPL_LIST'):
         state.roomList.push({
-            name: message.params[1],
+            roomname: message.params[1],
             usercount: message.params[2],
             modetitle: message.params[3]
         });
-        $('listdisplay table').append('<tr><td onclick="JOIN(\'' + message.params[1] + '\')">' + message.params[1] + '</td><td>' + message.params[2] + '</td><td>' + message.params[3] + '</td></tr>');
+
         break;
     case ('RPL_LISTEND'):
         //render the list
+        $('#listdisplay table').html('<tr><td>User Count</td><td>Room Name</td><td>Title [Modes]</td></tr>');
+        $('#listdisplay').css('display', 'block');
         console.log(state.roomList);
+        for (i = 0; state.roomList.length; i++) {
+            $('#listdisplay table').append('<tr onclick="JOIN(\'' + state.roomList[i].roomname + '\');closeListDisplay();"><td>' + state.roomList[i].usercount + '</td><td >' + state.roomList[i].roomname + '</td><td>' + state.roomList[i].modetitle + '</td></tr>');
+        }
         break;
     case ('RPL_TOPIC'):
         checkroom(message.params[1]);
