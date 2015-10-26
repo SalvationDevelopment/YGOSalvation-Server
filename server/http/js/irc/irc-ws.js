@@ -321,11 +321,16 @@ function LIST(nickname) {
     ircws.send('LIST \n');
 }
 
+function closeListDisplay() {
+    'use strict';
+    $('#listdisplay').css('display', 'none');
+}
+
 function MODE(parameters) {
     'use strict';
     parameters = parameters || '';
     var appendment = (parameters[0] === '#') ? ':' : '';
-    ircws(appendment + 'MODE ' + parameters + '\n');
+    ircws.send(appendment + 'MODE ' + parameters + '\n');
 }
 
 function PRIVMSG(roomOrPerson, statement) {
@@ -339,20 +344,32 @@ function PRIVMSG(roomOrPerson, statement) {
 
 function speak() {
     'use strict';
-    var inputmessage = $('#chatinput').val();
+    var inputmessage = $('#chatinput').val(),
+        cut = inputmessage.split(' ')[0].toLowerCase();
+
+    console.log(cut);
     if (inputmessage === '') {
         return;
     }
-    if (inputmessage.split(' ') === '/me') {
-        PRIVMSG(state.currentChannel, '\u0001ACTION' + inputmessage.substring(4) + '\u0001');
-    } else if (inputmessage.split(' ')[0].toLowerCase() === '/list') {
-        LIST();
-    } else if (inputmessage.split(' ')[0].toLowerCase() === '/mode') {
-        MODE(inputmessage.substring(5));
-    } else if (inputmessage.split(' ')[0].toLowerCase() === '/nick') {
-        NICK(inputmessage.split(' ')[1]);
+    if (inputmessage[0] === '/') {
+        switch (cut) {
+        case '/me':
+            PRIVMSG(state.currentChannel, '\u0001ACTION' + inputmessage.substring(4) + '\u0001');
+            break;
+        default:
+            ircws.send((inputmessage.substr(1)) + '\n');
+            break;
+        }
     } else {
         PRIVMSG(state.currentChannel, inputmessage);
     }
     $('#chatinput').val('');
+    return false;
 }
+
+$("#chatinputform").submit(function (e) {
+    'use strict';
+    speak();
+    e.preventDefault();
+
+});

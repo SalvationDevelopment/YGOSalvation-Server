@@ -1182,9 +1182,14 @@ header a:hover {
     margin-top: 5px;
     height: 70%;
     float: left;
-    padding: 2px;
     overflow: scroll;
     font-size: 10px;
+    text-align: left;
+    padding: 1vh;
+}
+
+.chatbody li {
+    list-style: none;
 }
 
 .chatroomlist {
@@ -1209,7 +1214,7 @@ header a:hover {
     border: 1px solid white;
 }
 
-input#chatinput {
+#chatinput {
     background: transparent;
     border: 1px solid white;
     margin-top: 5px;
@@ -1221,6 +1226,16 @@ input#chatinput {
     color: white;
 }
 
+#listdisplay {
+    position: absolute;
+    background: white;
+    width: 96vw;
+    height: 85vh;
+    top: 9vh;
+    left: 2vw;
+    display: none;
+}
+
 .chatsubmit {
     border: 1px solid white;
     width: 5%;
@@ -1228,6 +1243,7 @@ input#chatinput {
     float: left;
     margin-top: 5px;
     margin-left: .5%;
+    background: hotpink;
 }
 
 #gamefilter {

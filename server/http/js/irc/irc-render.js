@@ -1,13 +1,19 @@
 /*jslint plusplus:true*/
-/*global $, console, ircStylize, Handlebars*/
+/*global $, console, ircStylize, Handlebars, JOIN, ircws*/
 
 ircStylize.template = Handlebars.compile("<span class='{{style}}'>{{{text}}}</span>");
 
 var command,
     state = {
         nick: 'Duelist_Bot',
-        currentChannel: '',
-        rooms: {},
+        currentChannel: 'system',
+        rooms: {
+            'system': {
+                users: [],
+                title: '',
+                history: []
+            }
+        },
         roomList: []
     },
     i = 0;
@@ -44,7 +50,40 @@ function checkroom(roomname) {
     }
 }
 
-function command(message, socket) {
+function showmessage(message) {
+    'use strict';
+    console.log(message);
+    var privmsg = '',
+        timestamp = '[' + new Date().toTimeString().substring(0, 8) + '] ';
+    if (message.prefix) {
+
+        if (message.params[1].substring(0, 7) === '\u0001ACTION') {
+            privmsg = message.prefix.split('!')[0] + ' ' + message.params[1].substring(7);
+        } else {
+            privmsg = '&lt' + message.prefix.split('!')[0] + '&gt:' + message.params[1];
+        }
+
+    } else {
+        if (message.params[1].substring(0, 7) === '\u0001ACTION') {
+            privmsg = state.nickname + ' ' + message.params[1].substring(7);
+        } else {
+            privmsg = state.nickname + ': ' + message.params[1];
+        }
+    }
+    state.rooms[message.params[0]].history.push(timestamp + privmsg);
+}
+
+function showsystemmessage(message) {
+    'use strict';
+    if (message.params) {
+        var timestamp = '[' + new Date().toTimeString().substring(0, 8) + '] ';
+        state.rooms[state.currentChannel].history.push(timestamp + message.params[1]);
+    }
+
+
+}
+
+function command(message) {
     'use strict';
     var nameListIter = 0,
         nameList,
@@ -53,6 +92,11 @@ function command(message, socket) {
     switch (message.command) {
     case ('NOTICE'):
         console.log('%c' + message.params[1], 'color:#00f');
+        showsystemmessage(message);
+        break;
+    case ('292'):
+        console.log('%c' + message.params[1], 'color:#00f');
+        showsystemmessage(message);
         break;
 
     case ('RPL_WELCOME'):
@@ -103,7 +147,7 @@ function command(message, socket) {
         break;
 
     case ('PING'):
-        socket.send('PONG ' + message.params[1] + '\n');
+        ircws.send('PONG ' + message.params[1] + '\n');
         break;
 
     case ('RPL_YOURHOST'):
@@ -113,25 +157,10 @@ function command(message, socket) {
         break;
 
     case ('PRIVMSG'):
-        console.log(message);
-        privmsg = '';
-        timestamp = '[' + new Date().toTimeString().substring(0, 8) + '] ';
-        if (message.prefix) {
-
-            if (message.params[1].substring(0, 7) === '\u0001ACTION') {
-                privmsg = message.prefix.split('!')[0] + ' ' + message.params[1].substring(7);
-            } else {
-                privmsg = '&lt' + message.prefix.split('!')[0] + '&gt:' + message.params[1];
-            }
-
-        } else {
-            if (message.params[1].substring(0, 7) === '\u0001ACTION') {
-                privmsg = state.nickname + ' ' + message.params[1].substring(7);
-            } else {
-                privmsg = state.nickname + ':' + message.params[1];
-            }
-        }
-        state.rooms[message.params[0]].history.push(timestamp + privmsg);
+        showmessage(message);
+        break;
+    case ('ERROR'):
+        showsystemmessage(message);
         break;
 
     case ('396'):
@@ -144,6 +173,7 @@ function command(message, socket) {
         for (nameListIter; nameList.length > nameListIter; nameListIter++) {
             state.rooms[message.params[2]].users.push(nameList[nameListIter]);
         }
+
         break;
 
     case ('RPL_ENDOFNAMES'):
@@ -158,6 +188,8 @@ function command(message, socket) {
         break;
     case ('RPL_LISTSTART'):
         state.roomList = new Array(state.roomList.length);
+        $('#listdisplay').css('display', 'block');
+        $('listdisplay table').html('');
         break;
     case ('RPL_LIST'):
         state.roomList.push({
@@ -165,6 +197,7 @@ function command(message, socket) {
             usercount: message.params[2],
             modetitle: message.params[3]
         });
+        $('listdisplay table').append('<tr><td onclick="JOIN(\'' + message.params[1] + '\')">' + message.params[1] + '</td><td>' + message.params[2] + '</td><td>' + message.params[3] + '</td></tr>');
         break;
     case ('RPL_LISTEND'):
         //render the list
@@ -183,7 +216,7 @@ function command(message, socket) {
         //do nothing
         break;
     default:
-        console.log('%c' + message.command, 'color:#555', message.params);
+        showsystemmessage(message);
     }
     renderRoom();
 }
