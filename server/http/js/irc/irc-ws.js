@@ -303,10 +303,11 @@ function OPER(login) {
     ircws.send('OPER ' + login + '\n');
 }
 
-function QUIT(quitmessage) {
+function QUIT(quitmessage, reason) {
     'use strict';
-    quitmessage = quitmessage || '';
-    ircws.send('QUIT ' + quitmessage + '\n');
+    console.log(quitmessage);
+    reason = reason || 'User unloaded page.';
+    ircws.send('QUIT ' + reason + '\n');
 }
 
 window.onunload = QUIT;

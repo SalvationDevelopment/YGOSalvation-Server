@@ -54,8 +54,10 @@ function renderRoom() {
     }
     chatIter = 0;
     $('.chatroomlist').html('');
-    for (chatIter; state.rooms[state.currentChannel].users.length > chatIter; chatIter++) {
-        $('.chatroomlist').prepend('<div>' + state.rooms[state.currentChannel].users[chatIter] + '</div>');
+    for (chatIter = 0; state.rooms[state.currentChannel].users.length > chatIter; chatIter++) {
+        if (state.rooms[state.currentChannel].users[chatIter]) {
+            $('.chatroomlist').append('<div>' + state.rooms[state.currentChannel].users[chatIter] + '</div>');
+        }
     }
     if (doscroll) {
         $('.chatbody').scrollTop(maxedheight);
@@ -205,7 +207,7 @@ function command(message) {
         for (nameListIter; nameList.length > nameListIter; nameListIter++) {
             state.rooms[message.params[2]].users.push(nameList[nameListIter]);
         }
-
+        state.rooms[message.params[2]].users.sort();
         break;
 
     case ('RPL_ENDOFNAMES'):
@@ -242,7 +244,7 @@ function command(message) {
         $('#listdisplay table').html('<tr><td>User Count</td><td>Room Name</td><td>Title [Modes]</td></tr>');
         $('#listdisplay').css('display', 'block');
         console.log(state.roomList);
-        for (i = 0; state.roomList.length; i++) {
+        for (i = 0; state.roomList.length > i; i++) {
             $('#listdisplay table').append('<tr onclick="JOIN(\'' + state.roomList[i].roomname + '\');closeListDisplay();"><td>' + state.roomList[i].usercount + '</td><td >' + state.roomList[i].roomname + '</td><td>' + state.roomList[i].modetitle + '</td></tr>');
         }
         break;
