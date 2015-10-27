@@ -1,3 +1,4 @@
+debugger;
 /*
 Start various sub-servers.
 --------------------------
@@ -48,6 +49,7 @@ function bootAISystem() {
 }
 
 function initiateMaster(numCPUs) {
+    debugger
     console.log('YGOPro Salvation Server - Saving Yu-Gi-Oh!'.bold.yellow);
     bootGameList();
     bootUpdateSystem();
@@ -87,6 +89,7 @@ function initiateMaster(numCPUs) {
 
 
 (function main() {
+    debugger
     if (process.env.SLAVE) {
         require('./libs/slave.js');
         require('./libs/slave-ws.js');

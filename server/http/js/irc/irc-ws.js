@@ -217,7 +217,7 @@ var ircparse = function (text) {
         if (i === -1) {
             i = text.length;
         }
-        params.push(text.slice(0, i));
+        params.push(text.slice(0, i).trim());
         text = text.slice(i + 1);
     }
 
@@ -247,11 +247,12 @@ function serverInit() {
 
     function WebSocketMessage(event) {
         //console.log(event.data);
+        $('#wsirc').css('opacity', '1');
         var raw_message = event.data.split('\n'),
             server_message,
             i = 0;
         for (i; raw_message.length > i; i++) {
-            server_message = ircparse(raw_message[i]);
+            server_message = ircparse(raw_message[i].trim());
             if (server_message.command.length) {
                 server_message.command = replies[server_message.command] || server_message.command;
                 //server_message.prefix = replies[server_message.prefix]// || state.nickname + '!' + state.displayHostre;
@@ -288,7 +289,6 @@ function serverInit() {
 function JOIN(channel) {
     'use strict';
     ircws.send('JOIN ' + channel + '\n');
-    state.currentChannel = channel;
     checkroom(channel);
 }
 
@@ -356,6 +356,14 @@ function speak() {
         switch (cut) {
         case '/me':
             PRIVMSG(state.currentChannel, '\u0001ACTION' + inputmessage.substring(4) + '\u0001');
+            break;
+        case '/part':
+            PART(state.currentChannel);
+            break;
+        case '/hop':
+            cut = state.currentChannel;
+            PART(state.currentChannel);
+            JOIN(cut);
             break;
         default:
             ircws.send((inputmessage.substr(1)) + '\n');
