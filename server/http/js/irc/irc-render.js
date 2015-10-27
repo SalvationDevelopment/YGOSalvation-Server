@@ -4,6 +4,8 @@
 ircStylize.template = Handlebars.compile("<span class='{{style}}'>{{{text}}}</span>");
 
 var command,
+    needTimeStamp = true,
+    lastCommand = '',
     state = {
         nick: 'Duelist_Bot',
         currentChannel: 'system',
@@ -98,8 +100,12 @@ function showmessage(message) {
 
 function showsystemmessage(message) {
     'use strict';
+    if (message.params[1] === undefined) {
+        console.log('odd case', message);
+        return;
+    }
     if (message.params) {
-        var timestamp = '[' + new Date().toTimeString().substring(0, 8) + '] ';
+        var timestamp = (needTimeStamp) ? '[' + new Date().toTimeString().substring(0, 8) + '] ' : '<span class="tab"></span>';
         state.rooms[state.currentChannel].history.push(timestamp + message.params[1]);
     }
 
@@ -113,6 +119,8 @@ function command(message) {
         privmsg,
         timestamp;
     console.log(message);
+    needTimeStamp = (message.command === lastCommand) ? false : true;
+    lastCommand = message.command;
     switch (message.command) {
     case ('NOTICE'):
         console.log('%c' + message.params[1], 'color:#00f');

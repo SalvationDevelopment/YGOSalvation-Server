@@ -1193,6 +1193,11 @@ header a:hover {
     font-size: 16px;
 }
 
+.chatbody li .tab {
+    display: inline-block;
+    width: 5em;
+}
+
 .chatroomlist {
     float: left;
     width: 10px;
