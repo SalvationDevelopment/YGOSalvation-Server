@@ -122,6 +122,7 @@ function command(message) {
         timestamp;
     console.log(message);
     needTimeStamp = (message.command === lastCommand) ? false : true;
+    timestamp = '[' + new Date().toTimeString().substring(0, 8) + '] ';
     lastCommand = message.command;
     switch (message.command) {
     case ('NOTICE'):
@@ -215,17 +216,37 @@ function command(message) {
         break;
 
     case ('JOIN'):
+        checkroom(message.params[0].trim());
+        if (state.nickname === message.prefix.split('!')[0]) {
+            state.currentChannel = message.params[0].trim();
+
+            state.rooms[message.params[0].trim()].history.push(timestamp + 'Now talking in ' + state.currentChannel);
+        } else {
+            console.log(message.params[0].trim(), message.params[0].trim().length, state.rooms[message.params[0].trim()]);
+            state.rooms[message.params[0].trim()].history.push(timestamp + message.prefix.split('!')[0] + ' joined ' + message.params[0].trim());
+        }
+
         break;
 
     case ('MODE'):
-        timestamp = '[' + new Date().toTimeString().substring(0, 8) + '] ';
+
         state.rooms[state.currentChannel].history.push(timestamp + message.params[0] + ' MODE: ' +
             message.params[1]);
         break;
 
     case ('PART'):
-        delete state.rooms[message.params[0]];
+        checkroom(message.params[0].trim());
+        if (state.nickname === message.prefix.split('!')[0]) {
+            state.currentChannel = message.params[0].trim();
+
+            state.rooms[message.params[0].trim()].history.push(timestamp + 'You left ' + state.currentChannel);
+        } else {
+            console.log(message.params[0].trim(), message.params[0].trim().length, state.rooms[message.params[0].trim()]);
+            state.rooms[message.params[0].trim()].history.push(timestamp + message.prefix.split('!')[0] + ' left ' + message.params[0].trim());
+        }
+
         break;
+
     case ('RPL_LISTSTART'):
         state.roomList = new Array(state.roomList.length);
 
@@ -259,6 +280,21 @@ function command(message) {
         break;
     case (''):
         //do nothing
+        break;
+    case ('RPL_WHOISUSER'):
+        state.rooms[state.currentChannel].history.push(timestamp + 'USER: ' + message.params.join());
+        break;
+    case ('RPL_WHOISCHANNELS'):
+        state.rooms[state.currentChannel].history.push(timestamp + 'ROOMS: ' + message.raw.split(':')[2]);
+        break;
+    case ('RPL_WHOISSERVER'):
+        state.rooms[state.currentChannel].history.push(timestamp + 'SERVER: ' + message.raw.split(':')[2]);
+        break;
+    case ('RPL_WHOISIDLE'):
+        //time math ugh skipping.
+        break;
+    case ('RPL_ENDOFWHOIS'):
+        state.rooms[state.currentChannel].history.push(timestamp + message.raw.split(':')[2]);
         break;
     default:
         showsystemmessage(message);
