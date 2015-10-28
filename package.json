@@ -25,7 +25,8 @@
         "request": "^2.58.0",
         "winston": "^1.0.0",
         "ws": "*",
-        "mysql": "*"
+        "mysql": "*",
+        "node-static": "*"
     },
     "optionalDependencies": {
         "httpsys": "*"
