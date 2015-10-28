@@ -44,13 +44,10 @@ function renderRoom() {
     for (rooms in state.rooms) {
         if (state.rooms.hasOwnProperty(rooms)) {
             $('.chatbody').append('<div class="room_' + rooms + '"></div>');
+            for (chatIter; state.rooms[state.currentChannel].history.length > chatIter; chatIter++) {
+                $('.room_' + rooms).append('<li>' + state.rooms[state.currentChannel].history[chatIter] + '</li>');
+            }
         }
-    }
-    for (chatIter; state.rooms[state.currentChannel].history.length > chatIter; chatIter++) {
-        $('.chatbody').append('<li>' + state.rooms[state.currentChannel].history[chatIter] + '</li>');
-    }
-    for (chatIter; state.rooms[state.currentChannel].history.length > chatIter; chatIter++) {
-        $('.chatbody').append('<li>' + state.rooms[state.currentChannel].history[chatIter] + '</li>');
     }
     chatIter = 0;
     $('.chatroomlist').html('');
@@ -59,6 +56,8 @@ function renderRoom() {
             $('.chatroomlist').append('<div>' + state.rooms[state.currentChannel].users[chatIter] + '</div>');
         }
     }
+    $('.chatbody > div').css('display', 'none');
+    $('.room_' + state.currentChannel).css('display', 'block');
     if (doscroll) {
         $('.chatbody').scrollTop(maxedheight);
     }
@@ -268,6 +267,8 @@ function command(message) {
         for (i = 0; state.roomList.length > i; i++) {
             $('#listdisplay table').append('<tr onclick="JOIN(\'' + state.roomList[i].roomname + '\');closeListDisplay();"><td>' + state.roomList[i].usercount + '</td><td >' + state.roomList[i].roomname + '</td><td>' + state.roomList[i].modetitle + '</td></tr>');
         }
+        break;
+    case ('ERR_UNKNOWNCOMMAND'):
         break;
     case ('RPL_TOPIC'):
         checkroom(message.params[1]);

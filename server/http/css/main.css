@@ -1218,6 +1218,7 @@ header a:hover {
     height: 5%;
     margin-top: 5px;
     border: 1px solid white;
+    cursor: pointer;
 }
 
 #chatinput {
