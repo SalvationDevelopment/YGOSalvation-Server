@@ -47,7 +47,7 @@ var mode = "production",
     screenMessage = $('#servermessages'),
     uniqueID = $('#uniqueid').html();
 
-var primus = Primus.connect('ws://ygopro.us:24555');
+var primus = Primus.connect('ws://' + location.host + ':24555');
 
 function ygopro(parameter) {
     'use strict';
