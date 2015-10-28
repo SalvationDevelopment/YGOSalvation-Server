@@ -204,7 +204,7 @@ function updateCheckFile(file, initial) {
     'use strict';
     var i = 0;
     screenMessage.html('<span style="color:white; font-weight:bold">Processing manifest. DONT TOUCH STUFF!</span>');
-    console.log(file);
+
     if (file.type !== 'folder') {
 
         completeList.push(file);
