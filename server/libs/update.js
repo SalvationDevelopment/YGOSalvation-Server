@@ -1,7 +1,8 @@
 /*jslint node: true, plusplus: true, unparam: false, nomen: true*/
 'use strict';
 var time = 0;
-var fs = require('fs'),
+var zlib = require('zlib'),
+    fs = require('fs'),
     path = require('path'),
     spawn = require('child_process').spawn,
     Socket = require('primus').createSocket({
@@ -42,7 +43,11 @@ function dirTree(filename) {
     return info;
 }
 
-function update() {
+function gitError(error) {
+    console.log('issue with git', error);
+}
+
+function fileupdate() {
 
     //    if (!process.env.YGOPROLOGINENABLED) {
     //        return true;
@@ -59,21 +64,22 @@ function update() {
             "name": "/",
             "type": "folder",
             "subfolder": [ygopro, plugins, license, interfacefolder, stringsfolder]
-        },
-        servergit = spawn('git', ['pull']),
-        scriptgit = spawn('git', ['pull'], {
-            cwd: './ygopro/script'
-        }),
-        picsgit = spawn('git', ['pull'], {
-            cwd: './ygopro/pics'
-        });
+        };
     //    ,
     //        ocggit = spawn('git', ['pull'], {
     //            cwd: '../../../ygopro-script'
     //        });
     fileContent = 'var manifest = ' + JSON.stringify(installation, null, 4);
-    fs.writeFile('manifest/manifest-ygopro.js', fileContent, function () {
+    fs.writeFile('manifest/manifest-ygopro.js', fileContent, function (error) {
         //'use strict';
+        if (error) {
+            return;
+        }
+
+        var gzip = zlib.createGzip(),
+            input = fs.createReadStream('manifest/manifest-ygopro.js'),
+            out = fs.createWriteStream('manifest/manifest-ygopro.js.gz');
+        input.pipe(gzip).pipe(out);
         fs.createReadStream('ygopro/databases/0-en-OCGTCG.cdb').pipe(fs.createWriteStream('ygopro/cards.cdb'));
     });
     if (oktorestart) {
@@ -81,7 +87,23 @@ function update() {
     } else {
         return 'Update Detection System[' + ((new Date()).getTime() - startTime.getTime()) + 'ms]';
     }
+}
 
+function update() {
+    var servergit = spawn('git', ['pull']),
+        scriptgit = spawn('git', ['pull'], {
+            cwd: './ygopro/script'
+        }),
+        picsgit = spawn('git', ['pull'], {
+            cwd: './ygopro/pics'
+        });
+    servergit.on('error', gitError);
+    servergit.stdout.on('data', function (data) {
+        console.log(data);
+    });
+    scriptgit.on('error', gitError);
+    picsgit.on('error', gitError);
+    setTimeout(fileupdate, 120000);
 }
 
 
@@ -93,7 +115,8 @@ var server = http.createServer(function (request, response) {
     response.writeHead(200, {
         "Content-Type": "text/plain"
     });
-    var rate = update();
+    update();
+    var rate = fileupdate();
     response.end(rate);
     console.log('Update processed:', rate);
     if (oktorestart) {

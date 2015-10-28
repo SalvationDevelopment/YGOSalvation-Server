@@ -69,11 +69,17 @@ function bootFlashPolicyServer() {
         console.log('YGOPro Salvation Server - Saving Yu-Gi-Oh!'.bold.yellow);
 
         //boot the microservices
+
+        //boot IRC
+        //boot anope
+        //boot http
         bootGameList();
         bootManager();
         bootUpdateSystem();
         bootAISystem();
         bootFlashPolicyServer();
+
+
     });
 
 }());
