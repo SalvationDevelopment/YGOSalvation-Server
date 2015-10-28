@@ -16,96 +16,71 @@ Run `npm install` in the directory above.
 */
 
 /*jslint  node: true, plusplus: true*/
-
 'use strict';
-var notification = '', // its a string, make memory.
-    gamelistManager, // primus and gamelist
-    clusterIterator = 0, // its a number make memory,
-    activegames = 0, // its a number make memory,
-    cluster = require('cluster'), // multithreading!
-    colors = require('colors'), // oo pretty colors!
+var colors = require('colors'), // oo pretty colors!
     domain = require('domain'), // yay error handling
-    processManager = require('child_process');
-
+    processManager = require('child_process'),
+    request = require('request'),
+    needHTTPMicroService = false;
 
 
 function bootGameList() {
-    processManager.fork('../libs/gamelist.js', [], {
-        cwd: 'http'
-    }, bootGameList);
+    console.log('    Primus Server Game Manager @ port 24555'.bold.yellow);
+    processManager.fork('./gamelist.js', [], {
+        cwd: 'libs'
+    }).on('exit', bootGameList);
+}
+
+function bootManager() {
+    console.log('    YGOSharp Service @ port 8911'.bold.yellow);
+    processManager.fork('./game-manager.js', [], {
+        cwd: 'libs'
+    }).on('exit', bootManager);
 }
 
 function bootUpdateSystem() {
+    console.log('    Update System @ port 12000'.bold.yellow);
     processManager.fork('../libs/update.js', [], {
         cwd: 'http'
-    }, bootUpdateSystem);
+    }).on('exit', bootUpdateSystem);
 }
 
 function bootAISystem() {
-    processManager.fork('../libs/ai.js', [], {
-        cwd: 'http'
-    }, bootAISystem);
+    console.log('    AI[SnarkyChild] connecting to port 127.0.0.1:24555 '.bold.yellow);
+    processManager.fork('./ai.js', [], {
+        cwd: 'libs'
+    }).on('exit', bootAISystem);
 }
 
-function initiateMaster(numCPUs) {
-    console.log('YGOPro Salvation Server - Saving Yu-Gi-Oh!'.bold.yellow);
-    bootGameList();
-    bootUpdateSystem();
-    //bootAISystem();
-    console.log('    Update System Trigger open @ port 12000'.bold.yellow);
-    console.log('    Starting Master');
-    process.title = 'YGOPro Salvation Server [' + activegames + '] ' + new Date();
-    require('./libs/policyserver.js'); //Flash policy server for LightIRC;
-
-
-    function setupWorker(x) {
-        //'use strict';
-        console.log(('        Starting Slave ' + x).grey);
-        var worker = cluster.fork({
-            PORTRANGE: x,
-            SLAVE: true
-        });
-
-    }
-    setTimeout(function () {
-        for (clusterIterator; clusterIterator < numCPUs; clusterIterator++) {
-            setupWorker(clusterIterator);
-        }
-    }, 5000);
-
-    cluster.on('exit', function (worker, code, signal) {
-        notification = 'worker ' + clusterIterator + ' died ' + code + ' ' + signal;
-        setupWorker(clusterIterator++);
-        if (clusterIterator > 20) {
-            clusterIterator = 0;
-        }
-    });
-
-
+function bootFlashPolicyServer() {
+    console.log('    Flash Policy @ Port 843'.bold.yellow);
+    processManager.fork('./policyserver.js', [], {
+        cwd: 'libs'
+    }).on('exit', bootFlashPolicyServer);
 }
-
-
 
 (function main() {
-    if (process.env.SLAVE) {
-        require('./libs/slave.js');
-        require('./libs/slave-ws.js');
-        return;
-    } else if (process.env.SERVICE) {
-        return;
-    } else {
-        var numCPUs = 1; // atleast 1 slave and 1 master.
-        if (require('os').cpus().length > 1) {
-            numCPUs = require('os').cpus().length;
-            numCPUs = (numCPUs > 8) ? 8 : numCPUs;
-        }
-        initiateMaster(numCPUs);
-    }
-}()); // end main
+    var mainStack = domain.create();
+    mainStack.on('error', function (err) {
+        console.error((new Date()).toUTCString() + ' mainStackException:', err.message);
+    });
+    mainStack.run(function () {
+        process.title = 'YGOPro Salvation Server ' + new Date();
+        console.log('YGOPro Salvation Server - Saving Yu-Gi-Oh!'.bold.yellow);
 
+        //boot the microservices
+        bootGameList();
+        bootManager();
+        bootUpdateSystem();
+        bootAISystem();
+        bootFlashPolicyServer();
+    });
 
-/* This is bad code */
-process.on('uncaughtException', function (err) {
-    console.error((new Date()).toUTCString() + ' uncaughtException:', err.message);
-    console.error(err.stack);
-});
+}());
+//
+//
+///* This is bad code */
+//process.on('uncaughtException', function (err) {
+//    console.error((new Date()).toUTCString() + ' uncaughtException:', err.message);
+//    console.error(err.stack);
+//});
