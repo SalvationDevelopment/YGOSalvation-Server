@@ -5,7 +5,6 @@ var http = require('http');
 var primus,
     gamelist = {},
     userdata = {},
-    stats = {},
     registry = {
         //People that have read this source code.
         SnarkyChild: '::ffff:127.0.0.1',
@@ -216,7 +215,6 @@ function registrationCall(data, socket) {
     forumValidate(data, function (error, info) {
         if (info.success) {
             registry[info.displayname] = socket.address.ip;
-            stats[info.displayname] = new Date().getTime();
             socket.username = data.username;
             sendRegistry();
             socket.write({
@@ -232,7 +230,7 @@ function registrationCall(data, socket) {
     });
 }
 
-function globalCall(data, socket) {
+function globalCall(data) {
     forumValidate(data, function (error, info) {
         if (info.success && info.data.g_access_cp === "1") {
             duelserv.emit('announce', {
@@ -262,7 +260,7 @@ function restartAnnouncement() {
 
 }
 
-function restartCall(data, socket) {
+function restartCall(data) {
     forumValidate(data, function (error, info) {
         if (info.success && info.data.g_access_cp === "1") {
             restartAnnouncement();
@@ -270,7 +268,7 @@ function restartCall(data, socket) {
     });
 }
 
-function genocideCall(data, socket) {
+function genocideCall(data) {
     forumValidate(data, function (error, info) {
         if (info.success && info.data.g_access_cp === "1") {
             duelserv.emit('announce', {
@@ -281,7 +279,7 @@ function genocideCall(data, socket) {
     });
 }
 
-function murderCall(data, socket) {
+function murderCall(data) {
     forumValidate(data, function (error, info) {
         if (info.success && info.data.g_access_cp === "1") {
             duelserv.emit('announce', {
@@ -292,7 +290,7 @@ function murderCall(data, socket) {
     });
 }
 
-function killgameCall(data, socket) {
+function killgameCall(data) {
     forumValidate(data, function (error, info) {
         if (info.success && info.data.g_access_cp === "1") {
             ps.kill(data.killTarget, function (err) {
@@ -312,20 +310,17 @@ primus.use('rooms', Rooms);
 
 
 primus.on('connection', function (socket) {
-    socket.on('disconnection', function (socket) {
-        socket.leaveAll();
-        console.log('deleting:', socket.username);
-
-        //nothing required
-    });
     socket.on('data', function (data) {
         var socketWatcher = domain.create();
         socketWatcher.on('error', function (err) {});
         socketWatcher.run(function () {
             data = data || {};
             var action = data.action;
-
-            socket.join(socket.address.ip + data.uniqueID, function () {});
+            if (socket.link !== true) {
+                socket.join(socket.address.ip + data.uniqueID, function () {
+                    socket.link = true;
+                });
+            }
             switch (action) {
             case ('internalServerLogin'):
                 if (data.password !== process.env.OPERPASS) {
@@ -335,8 +330,8 @@ primus.on('connection', function (socket) {
 
                 });
                 if (booting && data.gamelist && data.registry) {
-                    data.gamelist = gamelist;
-                    data.registry = registry;
+                    gamelist = data.gamelist;
+                    registry = data.registry;
                     booting = false;
                 }
                 break;
@@ -362,18 +357,19 @@ primus.on('connection', function (socket) {
                     socket.write({
                         clientEvent: 'privateServer',
                         serverUpdate: userdata[socket.address.ip + data.uniqueID],
-                        ip: socket.address.ip + data.uniqueID,
-                        stats: stats,
-                        online: online
+                        ip: socket.address.ip + data.uniqueID
                     });
+
                     socket.write({
                         clientEvent: 'registrationRequest'
                     });
 
                 });
-                socket.join('activegames', function () {
-                    socket.write(JSON.stringify(gamelist));
-                });
+                if (!data.client_server) {
+                    socket.join('activegames', function () {
+                        socket.write(JSON.stringify(gamelist));
+                    });
+                }
                 break;
             case ('leave'):
                 socket.leave('activegames');
@@ -382,13 +378,13 @@ primus.on('connection', function (socket) {
                 registrationCall(data, socket);
                 break;
             case ('global'):
-                globalCall(data, socket);
+                globalCall(data);
                 break;
             case ('genocide'):
-                genocideCall(data, socket);
+                genocideCall(data);
                 break;
             case ('murder'):
-                murderCall(data, socket);
+                murderCall(data);
                 break;
             case ('internalRestart'):
                 if (data.password !== process.env.OPERPASS) {
@@ -397,10 +393,10 @@ primus.on('connection', function (socket) {
                 restartAnnouncement();
                 break;
             case ('restart'):
-                restartCall(data, socket);
+                restartCall(data);
                 break;
             case ('killgame'):
-                killgameCall(data, socket);
+                killgameCall(data);
                 break;
             case ('privateServerRequest'):
                 primus.room(socket.address.ip + data.uniqueID).write({
