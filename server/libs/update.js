@@ -8,8 +8,9 @@ var zlib = require('zlib'),
     Socket = require('primus').createSocket({
         iknowclusterwillbreakconnections: true
     }),
-    client = new Socket('127.0.0.1:24555'), //Internal server communications.
-    oktorestart = false;
+    client,
+    oktorestart = true,
+    domain = require('domain');
 
 function dirTree(filename) {
 
@@ -44,14 +45,10 @@ function dirTree(filename) {
 }
 
 function gitError(error) {
-    console.log('issue with git', error);
+    console.log('Issue with git', error);
 }
 
 function fileupdate() {
-
-    //    if (!process.env.YGOPROLOGINENABLED) {
-    //        return true;
-    //    }
     var fileContent,
         startTime = new Date(),
         ygopro = dirTree('ygopro'),
@@ -65,10 +62,7 @@ function fileupdate() {
             "type": "folder",
             "subfolder": [ygopro, plugins, license, interfacefolder, stringsfolder]
         };
-    //    ,
-    //        ocggit = spawn('git', ['pull'], {
-    //            cwd: '../../../ygopro-script'
-    //        });
+
     fileContent = 'var manifest = ' + JSON.stringify(installation, null, 4);
     fs.writeFile('manifest/manifest-ygopro.js', fileContent, function (error) {
         //'use strict';
@@ -76,11 +70,18 @@ function fileupdate() {
             return;
         }
 
-        var gzip = zlib.createGzip(),
-            input = fs.createReadStream('manifest/manifest-ygopro.js'),
-            out = fs.createWriteStream('manifest/manifest-ygopro.js.gz');
-        input.pipe(gzip).pipe(out);
-        fs.createReadStream('ygopro/databases/0-en-OCGTCG.cdb').pipe(fs.createWriteStream('ygopro/cards.cdb'));
+
+        var filestreamers = domain.create();
+        filestreamers.on('error', function (err) {
+            console.log('[Update System]', 'Unable to stream manifest or DB');
+        });
+        filestreamers.run(function () {
+            var gzip = zlib.createGzip(),
+                input = fs.createReadStream('manifest/manifest-ygopro.js'),
+                out = fs.createWriteStream('manifest/manifest-ygopro.js.gz');
+            input.pipe(gzip).pipe(out);
+            fs.createReadStream('ygopro/databases/0-en-OCGTCG.cdb').pipe(fs.createWriteStream('ygopro/cards.cdb'));
+        });
     });
     if (oktorestart) {
         return 'Update Detection System[' + ((new Date()).getTime() - startTime.getTime()) + 'ms] Restarting Server in 10 mins.';
@@ -90,20 +91,20 @@ function fileupdate() {
 }
 
 function update() {
-    var servergit = spawn('git', ['pull']),
-        scriptgit = spawn('git', ['pull'], {
-            cwd: './ygopro/script'
-        }),
-        picsgit = spawn('git', ['pull'], {
-            cwd: './ygopro/pics'
-        });
-    servergit.on('error', gitError);
-    servergit.stdout.on('data', function (data) {
-        console.log(data);
+    var gitUpdater = domain.create();
+    gitUpdater.on('error', function (err) {
+        setTimeout(fileupdate, 120000);
     });
-    scriptgit.on('error', gitError);
-    picsgit.on('error', gitError);
-    setTimeout(fileupdate, 120000);
+    gitUpdater.run(function () {
+        var servergit = spawn('git', ['pull']),
+            scriptgit = spawn('git', ['pull'], {
+                cwd: './ygopro/script'
+            }),
+            picsgit = spawn('git', ['pull'], {
+                cwd: './ygopro/pics'
+            });
+        setTimeout(fileupdate, 120000);
+    });
 }
 
 
@@ -118,7 +119,7 @@ var server = http.createServer(function (request, response) {
     update();
     var rate = fileupdate();
     response.end(rate);
-    console.log('Update processed:', rate);
+    console.log('[Update System]', 'Update processed:', rate);
     if (oktorestart) {
         setTimeout(function () {
             client.write({
@@ -127,7 +128,7 @@ var server = http.createServer(function (request, response) {
 
             });
             oktorestart = true;
-        }, 600000);
+        }, 10000);
     }
 
 });
@@ -140,6 +141,7 @@ function internalUpdate(data) {
 }
 
 function onConnectGamelist() {
+    console.log('    Updater connected to internals');
     client.write({
         action: 'internalServerLogin',
         password: process.env.OPERPASS,
@@ -154,12 +156,12 @@ function onCloseGamelist() {
 }
 
 setTimeout(function () {
-
+    client = new Socket('127.0.0.1:24555'); //Internal server communications.
     client.on('data', internalUpdate);
     client.on('open', onConnectGamelist);
     client.on('close', onCloseGamelist);
-}, 600000);
+}, 5000);
 
 setInterval(function () {
     oktorestart = true;
-}, 1200000);
+}, 5000);

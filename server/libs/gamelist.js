@@ -38,21 +38,7 @@ setTimeout(function () {
     booting = false;
 }, 10000);
 
-function announce(announcement) {
 
-    if (previousAnnouncement === announcement) {
-        return;
-    } else {
-        primus.room('activegames').write(announcement);
-        previousAnnouncement = announcement;
-    }
-}
-
-function internalMessage(announcement) {
-    process.nextTick(function () {
-        primus.room('internalservers').write(announcement);
-    });
-}
 
 function handleCoreMessage(core_message_raw, port, pid) {
 
@@ -139,6 +125,22 @@ function handleCoreMessage(core_message_raw, port, pid) {
     });
 }
 
+function announce(announcement) {
+
+    if (previousAnnouncement === announcement) {
+        return;
+    } else {
+        primus.room('activegames').write(announcement);
+        previousAnnouncement = announcement;
+    }
+}
+
+function internalMessage(announcement) {
+    process.nextTick(function () {
+        primus.room('internalservers').write(announcement);
+    });
+}
+
 function del(pid) {
     var game;
     for (game in gamelist) {
@@ -208,7 +210,6 @@ function messageListener(message) {
     return gamelist;
 }
 
-
 function sendRegistry() {
     internalMessage({
         messagetype: 'registry',
@@ -222,7 +223,6 @@ function sendGamelist() {
         gamelist: gamelist
     });
 }
-
 
 function registrationCall(data, socket) {
     forumValidate(data, function (error, info) {
@@ -256,6 +256,7 @@ function globalCall(data) {
 }
 
 function restartAnnouncement() {
+    console.log('RESTART INITIATED');
     announce({
         clientEvent: 'global',
         message: 'Please finish your current game in the next 10 mins, server is auto updating.'
@@ -320,7 +321,9 @@ primus = new Primus(primusServer, {
 });
 primus.use('rooms', Rooms);
 
-
+primus.on('error', function (error) {
+    console.log(error);
+});
 
 primus.on('connection', function (socket) {
     socket.on('data', function (data) {
@@ -451,13 +454,3 @@ primus.on('connection', function (socket) {
         });
     });
 });
-
-primus.on('error', function (error) {
-    console.log(error);
-});
-
-function primusListener(message) {
-
-    //other stuff here maybe?
-    announce(message);
-}

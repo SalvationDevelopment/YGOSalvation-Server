@@ -27,7 +27,8 @@
         "ws": "*",
         "mysql": "*",
         "node-static": "*",
-        "node-php": "*"
+        "node-php": "*",
+        "express": ""
     },
     "optionalDependencies": {
         "httpsys": "*"
