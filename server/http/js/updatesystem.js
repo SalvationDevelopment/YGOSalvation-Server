@@ -459,12 +459,14 @@ function initPrimus() {
             serverUpdate: list,
             room: localStorage.nickname,
             clientEvent: 'privateServer',
-            uniqueID: uniqueID
+            uniqueID: uniqueID,
+            client_server: true
         });
         privateServer.write({
             action: 'privateServer',
             username: localStorage.nickname,
-            uniqueID: uniqueID
+            uniqueID: uniqueID,
+            client_server: true
         });
 
     });
@@ -530,7 +532,8 @@ function initPrimus() {
             serverUpdate: list,
             room: localStorage.nickname,
             clientEvent: 'privateServer',
-            uniqueID: uniqueID
+            uniqueID: uniqueID,
+            client_server: true
         });
         updateNeeded = false;
     }, 15000);

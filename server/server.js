@@ -21,8 +21,16 @@ var colors = require('colors'), // oo pretty colors!
     domain = require('domain'), // yay error handling
     processManager = require('child_process'),
     request = require('request'),
-    needHTTPMicroService = false;
+    needHTTPMicroService = false,
+    net = require('net');
 
+
+function bootHTTPServer() {
+    console.log('    HTTP Server @ port 80'.bold.red);
+    processManager.fork('./httpserver.js', [], {
+        cwd: 'libs'
+    }).on('exit', bootHTTPServer);
+}
 
 function bootGameList() {
     console.log('    Primus Server Game Manager @ port 24555'.bold.yellow);
@@ -79,6 +87,20 @@ function bootFlashPolicyServer() {
         bootAISystem();
         bootFlashPolicyServer();
 
+
+        var httpcheck = net.createServer();
+        httpcheck.once('error', function (err) {
+            httpcheck.close();
+            return;
+        });
+
+        httpcheck.once('listening', function () {
+            // close the server if listening doesn't fail
+            httpcheck.close();
+            process.title = 'YGOPro Salvation Server ' + new Date() + ' HTTP SERVER ACTIVE';
+            bootHTTPServer();
+        });
+        httpcheck.listen(80);
 
     });
 
