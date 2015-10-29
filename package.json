@@ -26,7 +26,8 @@
         "winston": "^1.0.0",
         "ws": "*",
         "mysql": "*",
-        "node-static": "*"
+        "node-static": "*",
+        "node-php": "*"
     },
     "optionalDependencies": {
         "httpsys": "*"

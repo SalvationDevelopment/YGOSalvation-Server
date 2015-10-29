@@ -139,6 +139,21 @@ function handleCoreMessage(core_message_raw, port, pid) {
     });
 }
 
+function del(pid) {
+    var game;
+    for (game in gamelist) {
+        if (gamelist.hasOwnProperty(game)) {
+            if (String() + gamelist[game].pid === pid) {
+                delete gamelist[game];
+                announce(JSON.stringify(gamelist));
+            }
+        }
+    }
+    setTimeout(function () {
+        ps.kill(pid, function (error) {});
+    }, 5000);
+}
+
 function messageListener(message) {
 
     var messageListenerWatcher = domain.create();
@@ -156,7 +171,7 @@ function messageListener(message) {
             if (gamelist.hasOwnProperty(game)) {
                 if (gamelist[game].players.length === 0 && gamelist[game].spectators === 0) {
                     //delete if no one is using the game.
-                    duelserv.emit('del', gamelist[game].pid);
+                    del(gamelist[game].pid);
                 }
             }
         }
@@ -164,7 +179,7 @@ function messageListener(message) {
             if (gamelist.hasOwnProperty(game)) {
                 if (gamelist[game] && game.length !== 24) {
                     //delete if some wierd game makes it into the list somehow. Unlikely.
-                    duelserv.emit('del', gamelist[game].pid);
+                    del(gamelist[game].pid);
                 }
             }
         }
@@ -172,7 +187,7 @@ function messageListener(message) {
             if (gamelist.hasOwnProperty(game)) {
                 if (new Date().getTime() - gamelist[game].time.getTime() > 2700000) {
                     //delete if the game is older than 45mins.
-                    duelserv.emit('del', gamelist[game].pid);
+                    del(gamelist[game].pid);
                 }
             }
         }
@@ -209,8 +224,6 @@ function sendGamelist() {
 }
 
 
-
-
 function registrationCall(data, socket) {
     forumValidate(data, function (error, info) {
         if (info.success) {
@@ -233,7 +246,7 @@ function registrationCall(data, socket) {
 function globalCall(data) {
     forumValidate(data, function (error, info) {
         if (info.success && info.data.g_access_cp === "1") {
-            duelserv.emit('announce', {
+            announce({
                 clientEvent: 'global',
                 message: data.message
             });
@@ -243,13 +256,13 @@ function globalCall(data) {
 }
 
 function restartAnnouncement() {
-    duelserv.emit('announce', {
+    announce({
         clientEvent: 'global',
         message: 'Please finish your current game in the next 10 mins, server is auto updating.'
     });
     // no need to cache this, only effects people actively dueling.
     setTimeout(function () {
-        duelserv.emit('announce', {
+        announce({
             clientEvent: 'global',
             message: 'Recent Server Auto Update Complete, Rebooting Server in 10 seconds.'
         });
@@ -271,7 +284,7 @@ function restartCall(data) {
 function genocideCall(data) {
     forumValidate(data, function (error, info) {
         if (info.success && info.data.g_access_cp === "1") {
-            duelserv.emit('announce', {
+            announce({
                 clientEvent: 'genocide',
                 message: data.message
             });
@@ -282,7 +295,7 @@ function genocideCall(data) {
 function murderCall(data) {
     forumValidate(data, function (error, info) {
         if (info.success && info.data.g_access_cp === "1") {
-            duelserv.emit('announce', {
+            announce({
                 clientEvent: 'kill',
                 target: data.target
             });
@@ -295,7 +308,7 @@ function killgameCall(data) {
         if (info.success && info.data.g_access_cp === "1") {
             ps.kill(data.killTarget, function (err) {
                 if (err) {
-                    duelserv.emit('del', data.killTarget);
+                    del(data.killTarget);
                 }
             });
         }
@@ -344,7 +357,7 @@ primus.on('connection', function (socket) {
                 break;
             case ('ai'):
                 if (socket.username) {
-                    duelserv.emit('announce', {
+                    announce({
                         clientEvent: 'duelrequest',
                         target: 'SnarkyChild',
                         from: socket.username,
@@ -439,10 +452,8 @@ primus.on('connection', function (socket) {
     });
 });
 
-
-primus.on('error', function () {
-
-    //nothing required
+primus.on('error', function (error) {
+    console.log(error);
 });
 
 function primusListener(message) {
@@ -450,25 +461,3 @@ function primusListener(message) {
     //other stuff here maybe?
     announce(message);
 }
-
-duelserv.on('announce', function (message) {
-
-    announce(message);
-});
-
-duelserv.on('del', function (pid) {
-    var game;
-    for (game in gamelist) {
-        if (gamelist.hasOwnProperty(game)) {
-            if (String() + gamelist[game].pid === pid) {
-                delete gamelist[game];
-                announce(JSON.stringify(gamelist));
-            }
-        }
-    }
-    setTimeout(function () {
-        ps.kill(pid, function (error) {});
-    }, 5000);
-});
-
-//Recover Protocol

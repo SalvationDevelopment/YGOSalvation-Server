@@ -88,7 +88,9 @@ function bootFlashPolicyServer() {
         bootFlashPolicyServer();
 
 
-        var httpcheck = net.createServer();
+        var httpcheck = net.createServer(),
+            localhost = process.env.MAINSITE || '127.0.0.1';
+
         httpcheck.once('error', function (err) {
             httpcheck.close();
             return;
@@ -100,7 +102,7 @@ function bootFlashPolicyServer() {
             process.title = 'YGOPro Salvation Server ' + new Date() + ' HTTP SERVER ACTIVE';
             bootHTTPServer();
         });
-        httpcheck.listen(80);
+        httpcheck.listen(80, localhost);
 
     });
 
