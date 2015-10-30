@@ -26,7 +26,7 @@ var colors = require('colors'), // oo pretty colors!
 
 
 function bootHTTPServer() {
-    console.log('    HTTP Server @ port 80'.bold.red);
+    console.log('    HTTP Server @ port 80'.bold.gold);
     processManager.fork('./httpserver.js', [], {
         cwd: 'libs'
     }).on('exit', bootHTTPServer);
@@ -66,6 +66,7 @@ function bootFlashPolicyServer() {
         cwd: 'libs'
     }).on('exit', bootFlashPolicyServer);
 }
+
 
 (function main() {
     var mainStack = domain.create();

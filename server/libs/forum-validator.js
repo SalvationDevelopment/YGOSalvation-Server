@@ -3,7 +3,8 @@
 'use strict';
 var validationCache = {},
     request = require('request'),
-    mysql = require('mysql');
+    mysql = require('mysql'),
+    crypto = require('crypto');
 
 function forumValidate(data, callback) {
     if (validationCache[data.username]) {
@@ -41,6 +42,16 @@ function forumValidate(data, callback) {
 
 module.exports = forumValidate;
 
+var crypto = require('crypto');
+
+
+function md5(input) {
+    return crypto.createHash('md5').update(input).digest("hex");
+}
+
+function encode(pass, salt) {
+    return md5(md5(process.env.SALT) + md5(pass));
+}
 
 function initDB(query) {
 
