@@ -1,5 +1,5 @@
 /*jslint node: true, plusplus : true*/
-/*global $, runYGOPro, win, Primus, uniqueID, manifest, screenMessage*/
+/*global $, runYGOPro, win, Primus, uniqueID, manifest, screenMessage, sitelocationdir*/
 
 
 var downloadList = [], // Download list during recursive processing, when its empty stop downloading things. "update complete".
@@ -204,7 +204,7 @@ function updateCheckFile(file, initial) {
     'use strict';
     var i = 0;
     screenMessage.html('<span style="color:white; font-weight:bold">Processing manifest. DONT TOUCH STUFF!</span>');
-    console.log(file);
+
     if (file.type !== 'folder') {
 
         completeList.push(file);
@@ -450,7 +450,7 @@ function processServerRequest(parameter) {
 /* Set up the pipeline to the server*/
 function initPrimus() {
     'use strict';
-    privateServer = Primus.connect('ws://ygopro.us:24555');
+    privateServer = Primus.connect('ws://' + sitelocationdir[mode].split('//')[1].split(':')[0] + ':24555');
     privateServer.on('open', function open() {
         reconnectioncount++;
         screenMessage.html('<span style="color:white;">Launcher Connected</span>');
@@ -459,12 +459,14 @@ function initPrimus() {
             serverUpdate: list,
             room: localStorage.nickname,
             clientEvent: 'privateServer',
-            uniqueID: uniqueID
+            uniqueID: uniqueID,
+            client_server: true
         });
         privateServer.write({
             action: 'privateServer',
             username: localStorage.nickname,
-            uniqueID: uniqueID
+            uniqueID: uniqueID,
+            client_server: true
         });
 
     });
@@ -530,7 +532,8 @@ function initPrimus() {
             serverUpdate: list,
             room: localStorage.nickname,
             clientEvent: 'privateServer',
-            uniqueID: uniqueID
+            uniqueID: uniqueID,
+            client_server: true
         });
         updateNeeded = false;
     }, 15000);

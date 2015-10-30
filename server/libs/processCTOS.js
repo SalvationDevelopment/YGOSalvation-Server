@@ -7,7 +7,7 @@ If a new YGOCore is needed it works out what config file is needed
 for that instance of dueling based on the `roompass` in the
 connection string of the `CTOS_JOIN` command */
 
-
+'use strict';
 var portmin = 30000 + process.env.PORTRANGE * 100, //Port Ranges
     portmax = (30000 + process.env.PORTRANGE * 100) + 100,
     handleCoreMessage, // Send messages BACK to the MASTER PROCESS
@@ -17,28 +17,44 @@ var portmin = 30000 + process.env.PORTRANGE * 100, //Port Ranges
     net = require('net'),
     parsePackets = require('./parsepackets.js'), //Get data sets out of the YGOPro Network API.
     recieveCTOS = require('./recieveCTOS'), // Translate data sets into messages of the API
-    events = require('events'),
-    bouncer = new events.EventEmitter(),
     gamelist = {},
-    registry = {},
-    winston = require('winston'),
-    path = require('path'),
+    registry = {
+        //People that have read this source code.
+        SnarkyChild: '::ffff:127.0.0.1',
+        AccessDenied: '::ffff:127.0.0.1',
+        Irate: '::ffff:127.0.0.1',
+        Chibi: '::ffff:127.0.0.1',
+        OmniMage: '::ffff:127.0.0.1'
+    },
+    //winston = require('winston'),
+
     coreIsInPlace = false,
-    cluster = require('cluster'),
-    ps = require('ps-node');
+    ps = require('ps-node'),
 
-if (cluster.isWorker) {
-    process.on('message', function (message) {
-        'use strict';
+    Primus = require('primus'), //Primus, our Sepiroth-Qliphopth Creator God. Websocket connections.
+    internalGames = [], // internal list of all games the bot is playing
+    //enums = require('./libs/enums.js'),
 
-        if (message.gamelist) {
-            gamelist = message.gamelist;
-        }
-        if (message.registry) {
-            registry = message.registry;
-        }
-    });
-}
+
+    Socket = require('primus').createSocket({
+        iknowclusterwillbreakconnections: true
+    }),
+    client = new Socket('127.0.0.1:24555'), //Connect the God to the tree;
+    childProcess = require('child_process'),
+    startDirectory = __dirname;
+
+//if (cluster.isWorker) {
+//    process.on('message', function (message) {
+//
+//
+//        if (message.gamelist) {
+//            gamelist = message.gamelist;
+//        }
+//        if (message.registry) {
+//            registry = message.registry;
+//        }
+//    });
+//}
 
 //client.on('connected', function () {});
 //client.on('close', function () {}); // start shutting down server.
@@ -46,30 +62,17 @@ if (cluster.isWorker) {
 
 
 
-var cHistory = new(winston.Logger)({
-    transports: [
-        new(winston.transports.Console)(),
-        new(winston.transports.DailyRotateFile)({
-            filename: ".\\logs\\conection_history.log"
-        })
-    ]
-});
 
-var coreErrors = new(winston.Logger)({
-    transports: [
-        new(winston.transports.DailyRotateFile)({
-            filename: ".\\logs\\conection_history_coreErrors.log"
-        })
-    ]
-});
+
+
 
 fs.exists(startDirectory + '../../ygocore/YGOServer.exe', function (exist) {
-    'use strict';
+
     if (!exist) {
-        coreErrors.info('YGOCore not found at ' + startDirectory + '../../ygocore/YGOServer.exe');
+
         return;
     } else {
-        coreErrors.info('YGOCore is in place, allowing connections.');
+        //coreErrors.info('YGOCore is in place, allowing connections.');
         coreIsInPlace = true;
     }
 });
@@ -80,7 +83,7 @@ processes. That message will be an update to the internal
 gamelist of each SLAVE process */
 
 function processTask(task, socket) {
-    'use strict';
+
     var i = 0,
         l = 0,
         output = [];
@@ -104,7 +107,7 @@ function processTask(task, socket) {
 the proper YGOCore and monitor the connection */
 
 function connectToCore(port, data, socket) {
-    'use strict';
+
 
     socket.active_ygocore = net.connect(port, '127.0.0.1', function () {
 
@@ -152,7 +155,7 @@ is actually a very poor way of doing this and
 frequently fails; rewrite is needed*/
 
 function portfinder(min, max, callback) {
-    'use strict';
+
     var rooms,
         activerooms = [],
         i = min;
@@ -174,7 +177,7 @@ game string or rather `roompass` in
 connection request */
 
 function pickCoreConfig(socket) {
-    'use strict';
+
     var output = 'ini/';
     if (socket.hostString.indexOf(",5,5,1") > -1) {
         return "ini/goat.ini";
@@ -196,7 +199,7 @@ later after they have misbehaved or providing administrative ablities
 to kill or act on games */
 
 function handleCoreMessage(core_message_raw, port, socket, data, pid) {
-    'use strict';
+
     if (core_message_raw.toString().indexOf("::::") < 0) {
         return;
     }
@@ -219,13 +222,15 @@ function handleCoreMessage(core_message_raw, port, socket, data, pid) {
         socket.core.kill();
         //cHistory.info('--GAME: ' + pid);
     }
-    process.send(gamelistmessage);
+    //process.send(gamelistmessage);
+
+    client.write(gamelistmessage);
 
 }
 
 /* Checks if a given password is valid, returns true or false */
 function legalPassword(passIn) {
-    'use strict';
+
     if (passIn.length !== 24) {
         console.log('Invalid password length', passIn);
         return false;
@@ -243,7 +248,7 @@ function legalPassword(passIn) {
 
 
 function authenticate(socket) {
-    'use strict';
+
     if (!process.env.YGOPROLOGINENABLED) {
         return;
     }
@@ -266,7 +271,7 @@ number to use and 3.) if it is a valid duel to use
 server resources on. */
 
 function startCore(port, socket, data, callback) {
-    'use strict';
+
     authenticate(socket);
     if (!coreIsInPlace) {
         return;
@@ -275,32 +280,21 @@ function startCore(port, socket, data, callback) {
     var configfile = pickCoreConfig(socket),
         params = port + ' ' + configfile;
 
-    console.log(configfile);
+    //console.log(configfile);
     if (!legalPassword(socket.hostString)) {
         //deal with bad game request
-        cHistory.info('[' + socket.remoteAddress + ':' + socket.username + '] requested bad game: ' + socket.hostString);
         return;
-    } else {
-        //contact main process.
-        //        process.send({
-        //            messagetype: 'coreMessage',
-        //            coreMessage: {
-        //                core_message_raw: 'passwordQuery',
-        //                ip: socket.remoteAddress,
-        //                username: socket.username
-        //            }
-        //        });
     }
-    console.log(startDirectory + '/../ygocore/YGOServer.exe');
+    //console.log((startDirectory + '/../ygocore/YGOServer.exe'), [port, configfile]);
     socket.core = childProcess.spawn(startDirectory + '/../ygocore/YGOServer.exe', [port, configfile], {
         cwd: startDirectory + '/../ygocore'
     }, function (error, stdout, stderr) {
-        coreErrors.info(error, stdout, stderr);
+        //coreErrors.info(error, stdout, stderr);
         handleCoreMessage('::::endduel|' + socket.hostString, port, socket, data, socket.core.pid);
     });
 
     socket.core.stdout.on('error', function (error) {
-        coreErrors.info(error);
+        //coreErrors.info(error);
         handleCoreMessage('::::endduel|' + socket.hostString, port, socket, data, socket.core.pid);
         socket.core.kill();
     });
@@ -322,20 +316,19 @@ based on connection speeds. */
 
 /* ..and VOLIA! Game Request Routing */
 function processIncomingTrasmission(data, socket, task) {
-    'use strict';
+
     processTask(task, socket);
     authenticate(socket);
     if (!socket.active_ygocore && socket.hostString) {
 
         if (gamelist[socket.hostString]) {
             socket.alpha = false;
-            cHistory.info('[' + socket.remoteAddress + ':' + socket.username + '] Connecting to ' + gamelist[socket.hostString].players[0]);
+
             connectToCore(gamelist[socket.hostString].port, data, socket);
 
 
 
         } else {
-            cHistory.info('[' + socket.remoteAddress + ':' + socket.username + '] Connecting to new CORE');
             portfinder(++portmin, portmax, function (error, port) {
                 socket.alpha = true;
                 startCore(port, socket, data);
@@ -350,5 +343,40 @@ function processIncomingTrasmission(data, socket, task) {
 
     return data;
 }
+
+
+function gamelistUpdate(message) {
+    if (message.gamelist) {
+        gamelist = message.gamelist;
+    }
+    if (message.registry) {
+        registry = message.registry;
+    }
+    if (message.recoverServer) {
+        client.write({
+
+        });
+    }
+}
+
+function onConnectGamelist() {
+    client.write({
+        action: 'internalServerLogin',
+        password: process.env.OPERPASS,
+        gamelist: gamelist,
+        registry: registry
+    });
+    console.log('        [Slave ' + process.env.PORTRANGE + ']Connected'.grey);
+}
+
+function onCloseGamelist() {
+
+}
+
+client.on('data', gamelistUpdate);
+client.on('open', onConnectGamelist);
+client.on('close', onCloseGamelist);
+
+
 
 module.exports = processIncomingTrasmission;
