@@ -285,6 +285,7 @@ function startCore(port, socket, data, callback) {
         //deal with bad game request
         return;
     }
+    console.log((startDirectory + '/../ygocore/YGOServer.exe'), [port, configfile]);
     socket.core = childProcess.spawn(startDirectory + '/../ygocore/YGOServer.exe', [port, configfile], {
         cwd: startDirectory + '/../ygocore'
     }, function (error, stdout, stderr) {
@@ -365,6 +366,7 @@ function onConnectGamelist() {
         gamelist: gamelist,
         registry: registry
     });
+    console.log('        [Slave ' + process.env.PORTRANGE + ']Connected'.grey);
 }
 
 function onCloseGamelist() {

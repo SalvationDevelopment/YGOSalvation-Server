@@ -270,7 +270,7 @@ function restartAnnouncement() {
         setTimeout(function () {
             process.exit(0);
         }, 10000);
-    }, 600000);
+    }, 10000);
 
 }
 
@@ -349,6 +349,7 @@ primus.on('connection', function (socket) {
                     gamelist = data.gamelist;
                     registry = data.registry;
                     booting = false;
+                    console.log(data.gamelist, data.registry);
                 }
                 break;
 

@@ -10,6 +10,7 @@ var zlib = require('zlib'),
     }),
     client,
     oktorestart = true,
+    colors = require('colors'),
     domain = require('domain');
 
 function dirTree(filename) {
@@ -48,8 +49,31 @@ function gitError(error) {
     console.log('Issue with git', error);
 }
 
+function filestreamer() {
+    var filestreamers = domain.create(),
+        dbreplacer;
+    filestreamers.on('error', function (err) {
+        console.log('[Update System]', 'Unable to stream manifest');
+    });
+    filestreamers.run(function () {
+        var gzip = zlib.createGzip(),
+            input = fs.createReadStream('manifest/manifest-ygopro.js'),
+            out = fs.createWriteStream('manifest/manifest-ygopro.js.gz');
+        input.pipe(gzip).pipe(out);
+
+    });
+    dbreplacer = domain.create();
+    dbreplacer.on('error', function (err) {
+        console.log('[Update System]', 'Unable to stream default DB.');
+    });
+    dbreplacer.run(function () {
+        fs.createReadStream('ygopro/databases/0-en-OCGTCG.cdb').pipe(fs.createWriteStream('ygopro/cards.cdb'));
+    });
+}
+
 function fileupdate() {
     var fileContent,
+        dbreplacer,
         startTime = new Date(),
         ygopro = dirTree('ygopro'),
         plugins = dirTree('plugins'),
@@ -69,46 +93,47 @@ function fileupdate() {
         if (error) {
             return;
         }
-
-
-        var filestreamers = domain.create();
-        filestreamers.on('error', function (err) {
-            console.log('[Update System]', 'Unable to stream manifest or DB');
-        });
-        filestreamers.run(function () {
-            var gzip = zlib.createGzip(),
-                input = fs.createReadStream('manifest/manifest-ygopro.js'),
-                out = fs.createWriteStream('manifest/manifest-ygopro.js.gz');
-            input.pipe(gzip).pipe(out);
-            fs.createReadStream('ygopro/databases/0-en-OCGTCG.cdb').pipe(fs.createWriteStream('ygopro/cards.cdb'));
-        });
     });
+
     if (oktorestart) {
-        return 'Update Detection System[' + ((new Date()).getTime() - startTime.getTime()) + 'ms] Restarting Server in 10 mins.';
+        return 'Update Detection System[' + ((new Date()).getTime() - startTime.getTime()) + 'ms] Restarting Server in 10 mins. ';
     } else {
         return 'Update Detection System[' + ((new Date()).getTime() - startTime.getTime()) + 'ms]';
     }
 }
 
-function update() {
+function update(cb) {
     var gitUpdater = domain.create();
     gitUpdater.on('error', function (err) {
-        setTimeout(fileupdate, 120000);
+        console.log('[Update System]', 'Git Failed');
     });
     gitUpdater.run(function () {
-        var servergit = spawn('git', ['pull']),
-            scriptgit = spawn('git', ['pull'], {
-                cwd: './ygopro/script'
-            }),
-            picsgit = spawn('git', ['pull'], {
-                cwd: './ygopro/pics'
-            });
-        setTimeout(fileupdate, 120000);
+        var n = 0;
+        setTimeout(function () {
+            if (cb) {
+                cb();
+            }
+        });
+        spawn('git', ['pull'], {}, function () {
+            n++;
+            console.log();
+        });
+        spawn('git', ['pull'], {
+            cwd: './ygopro/script'
+        }, function () {
+            n++;
+        });
+        spawn('git', ['pull'], {
+            cwd: './ygopro/pics'
+        }, function () {
+            n++;
+        });
     });
 }
 
 
-update();
+
+update(function () {});
 // Load the http module to create an http server.
 var http = require('http');
 
@@ -116,20 +141,24 @@ var server = http.createServer(function (request, response) {
     response.writeHead(200, {
         "Content-Type": "text/plain"
     });
-    update();
-    var rate = fileupdate();
-    response.end(rate);
-    console.log('[Update System]', 'Update processed:', rate);
-    if (oktorestart) {
-        setTimeout(function () {
-            client.write({
-                action: 'internalRestart',
-                password: process.env.OPERPASS
+    update(function (error) {
+        var rate = fileupdate();
+        if (error) {
+            rate = rate + error;
+        }
+        response.end(rate);
+        console.log('[Update System]', 'Update processed:', rate, error);
+        if (oktorestart) {
+            setTimeout(function () {
+//                client.write({
+             //                    action: 'internalRestart',
+             //                    password: process.env.OPERPASS
+             //                });
+                oktorestart = true;
+            }, 10000);
+        }
+    });
 
-            });
-            oktorestart = true;
-        }, 10000);
-    }
 
 });
 
