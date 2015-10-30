@@ -17,6 +17,15 @@ Run `npm install` in the directory above.
 
 /*jslint  node: true, plusplus: true*/
 'use strict';
+var CONFIGURATION = {
+    FORUM: 'localforum',
+    SITE: 'localhost'
+};
+
+
+
+
+
 var colors = require('colors'), // oo pretty colors!
     domain = require('domain'), // yay error handling
     processManager = require('child_process'),
@@ -28,7 +37,8 @@ var colors = require('colors'), // oo pretty colors!
 function bootHTTPServer() {
     console.log('    HTTP Server @ port 80'.bold.gold);
     processManager.fork('./httpserver.js', [], {
-        cwd: 'libs'
+        cwd: 'libs',
+        env: CONFIGURATION
     }).on('exit', bootHTTPServer);
 }
 
