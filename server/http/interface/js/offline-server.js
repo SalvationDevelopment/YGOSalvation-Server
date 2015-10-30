@@ -3,7 +3,7 @@
 /* global localStorage, require, confirm, alert */
 //development, stage, production
 var template =
-    "use_d3d = 1\r\n\
+    "use_d3d = {use_d3d}\r\n\
 antialias = {antialias}\r\n\
 errorlog = 1\r\n\
 nickname = {nickname}\r\n\
@@ -76,7 +76,7 @@ try {
 }
 for (var i = 0; settings.length > i; i++) {
     if (!localStorageExist || !localStorage[settings[i]]) {
-        localStorage.use_d3d = '0';
+        localStorage.use_d3d = '1';
         localStorage.antialias = '0';
         localStorage.errorlog = '0';
         localStorage.nickname = 'Player';
