@@ -379,11 +379,11 @@ primus.on('connection', function (socket) {
                     });
 
                 });
-                if (!data.client_server) {
-                    socket.join('activegames', function () {
-                        socket.write(JSON.stringify(gamelist));
-                    });
-                }
+
+                socket.join('activegames', function () {
+                    socket.write(JSON.stringify(gamelist));
+                });
+
                 break;
             case ('leave'):
                 socket.leave('activegames');
