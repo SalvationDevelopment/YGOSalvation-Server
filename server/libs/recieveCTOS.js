@@ -11,7 +11,7 @@ module.exports = function RecieveCTOS(packet) {
     //    if (packet.CTOS !== 'CTOS_TIME_COMFIRM' && packet.CTOS !== 'CTOS_RESPONSE') {
     //        console.log(packet.CTOS, JSON.stringify(packet.message));
     //    }
-    console.log(packet.CTOS);
+    //console.log(packet.CTOS);
     switch (packet.CTOS) {
     case ('CTOS_PLAYER_INFO'):
         username = packet.message.toString('utf16le');
