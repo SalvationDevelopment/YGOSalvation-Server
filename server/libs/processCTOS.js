@@ -280,12 +280,12 @@ function startCore(port, socket, data, callback) {
     var configfile = pickCoreConfig(socket),
         params = port + ' ' + configfile;
 
-    console.log(configfile);
+    //console.log(configfile);
     if (!legalPassword(socket.hostString)) {
         //deal with bad game request
         return;
     }
-    console.log((startDirectory + '/../ygocore/YGOServer.exe'), [port, configfile]);
+    //console.log((startDirectory + '/../ygocore/YGOServer.exe'), [port, configfile]);
     socket.core = childProcess.spawn(startDirectory + '/../ygocore/YGOServer.exe', [port, configfile], {
         cwd: startDirectory + '/../ygocore'
     }, function (error, stdout, stderr) {
