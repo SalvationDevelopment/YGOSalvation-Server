@@ -163,7 +163,8 @@ setInterval(joinGamelist, 5000);
 function leaveGamelist() {
     'use strict';
     primus.write({
-        action: 'leave'
+        action: 'leave',
+        uniqueID: uniqueID
     });
 }
 
@@ -171,18 +172,21 @@ function hostGame(parameters) {
     'use strict';
     primus.write({
         serverEvent: 'hostgame',
-        format: parameters
+        format: parameters,
+        uniqueID: uniqueID
     });
 }
 
 function connectgamelist() {
     'use strict';
     primus.write({
-        action: 'join'
+        action: 'join',
+        uniqueID: uniqueID
     });
     primus.write({
         action: 'register',
-        nickname: localStorage.nickname
+        nickname: localStorage.nickname,
+        uniqueID: uniqueID
     });
 }
 
@@ -210,7 +214,8 @@ function enterGame(string, pass) {
 function joinTournament() {
     'use strict';
     primus.write({
-        action: 'joinTournament'
+        action: 'joinTournament',
+        uniqueID: uniqueID
     });
 }
 
@@ -301,7 +306,8 @@ function setHostSettings() {
         return;
         primus.write({
             action: 'ai',
-            roompass: localStorage.roompass
+            roompass: localStorage.roompass,
+            uniqueID: uniqueID
         });
         ygopro('-j');
     } else {
@@ -515,7 +521,8 @@ primus.on('data', function (data) {
                 primus.write({
                     action: 'register',
                     username: $('#ips_username').val(),
-                    password: $('#ips_password').val()
+                    password: $('#ips_password').val(),
+                    uniqueID: uniqueID
                 });
             }
         }
@@ -578,7 +585,8 @@ function killgame(target) {
         action: 'killgame',
         username: $('#ips_username').val(),
         password: $('#ips_password').val(),
-        killTarget: target
+        killTarget: target,
+        uniqueID: uniqueID
     });
 }
 
@@ -588,7 +596,8 @@ function sendglobal(message) {
         action: 'global',
         username: $('#ips_username').val(),
         password: $('#ips_password').val(),
-        message: message
+        message: message,
+        uniqueID: uniqueID
     });
 }
 
@@ -598,7 +607,8 @@ function murder(username) {
         action: 'murder',
         username: $('#ips_username').val(),
         password: $('#ips_password').val(),
-        target: username
+        target: username,
+        uniqueID: uniqueID
     });
 }
 

@@ -332,11 +332,8 @@ primus.on('connection', function (socket) {
         socketWatcher.run(function () {
             data = data || {};
             var action = data.action;
-            if (socket.link !== true) {
-                socket.join(socket.address.ip + data.uniqueID, function () {
-                    socket.link = true;
-                });
-            }
+
+            socket.join(socket.address.ip + data.uniqueID);
             switch (action) {
             case ('internalServerLogin'):
                 if (data.password !== process.env.OPERPASS) {
