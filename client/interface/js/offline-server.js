@@ -3,7 +3,7 @@
 /* global localStorage, require, confirm, alert */
 //development, stage, production
 var template =
-    "use_d3d = 0\r\n\
+    "use_d3d = {use_d3d}\r\n\
 antialias = {antialias}\r\n\
 errorlog = 1\r\n\
 nickname = {nickname}\r\n\
@@ -76,7 +76,7 @@ try {
 }
 for (var i = 0; settings.length > i; i++) {
     if (!localStorageExist || !localStorage[settings[i]]) {
-        localStorage.use_d3d = '0';
+        localStorage.use_d3d = '1';
         localStorage.antialias = '0';
         localStorage.errorlog = '0';
         localStorage.nickname = 'Player';
@@ -128,7 +128,7 @@ function runYGOPro(mode, callback) {
                 if (error !== null) {
                     //write crash report;
                     console.log('YGOPro Crashed');
-                    var filelocation = 'crash_report_YGOPro_' + (new Date().toDateString) + '.log';
+                    var filelocation = 'crash_report_YGOPro_' + (new Date().toDateString()) + '.log';
                     fs.writeFile(filelocation, error, function () {});
                 }
                 //            fs.readFile(__dirname + '/../../ygopro/system.conf', function (error, file) {
@@ -141,11 +141,12 @@ function runYGOPro(mode, callback) {
                 //                console.log(options);
                 //            });
             });
+            instance.stdout.on('data', function (core_message_raw) {
+                console.log('ygopro:', core_message_raw);
+            });
         } catch (error) {
-            var inform = confirm(executable + ' is not executable, it likely doesnt exist; Would you like more information?');
-            if (inform) {
-                alert('If on Windows let the launcher keep downloading till it gets to application_ygopro.exe, the program is not on your computer. The automatic update system will figure this out and correct this error so just wait till this file is downloaded along with its dependencies.');
-            }
+            alert('Look at the top left-hand corner, LET THE UPDATE FINISH!');
+
         }
 
     });
