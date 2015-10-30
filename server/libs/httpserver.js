@@ -1,7 +1,6 @@
 /*jslint node : true*/
 'use strict';
-var forum = process.env.FORUM || '127.0.0.1',
-    sitefiles = './wordpress',
+var
     express = require('express'),
     php = require("node-php"),
     path = require("path"),
@@ -19,8 +18,8 @@ function createVirtualPHPHost(domainName, dirPath) {
 }
 
 
-app.use(createVirtualStaticHost("ygopro.us", __dirname + '/../http'));
-app.use(createVirtualPHPHost("forum.ygopro.us", __dirname + '/../wordpress'));
+app.use(createVirtualStaticHost(process.env.SITE, __dirname + '/../http'));
+app.use(createVirtualPHPHost(process.env.FORUM, __dirname + '/../wordpress'));
 app.use(compression());
 app.use(function (req, res, next) {
     if (toobusy()) {

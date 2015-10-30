@@ -26,9 +26,10 @@
         "winston": "^1.0.0",
         "ws": "*",
         "mysql": "*",
-        "node-static": "*",
         "node-php": "*",
-        "express": ""
+        "express": "*",
+        "compression": "*",
+        "toobusy-js": "*"
     },
     "optionalDependencies": {
         "httpsys": "*"
