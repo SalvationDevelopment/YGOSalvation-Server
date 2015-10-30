@@ -295,24 +295,10 @@ function setHostSettings() {
     localStorage.serverport = '8911';
     localStorage.lastport = '8911';
     //PER CHIBI
-    console.log(localStorage.roompas, 'affter calculation');
-    if (!secure(duelRequest.prio, duelRequest.checkd, duelRequest.shuf)) {
-        return;
-    }
+    console.log(localStorage.roompass, 'affter calculation');
     localStorage.lastdeck = $('#hostSettings .currentdeck').val();
+    ygopro('-j');
 
-    if (isChecked('#useai')) {
-        alert('Snarkie was a bad girl, shes in timeout!');
-        return;
-        primus.write({
-            action: 'ai',
-            roompass: localStorage.roompass,
-            uniqueID: uniqueID
-        });
-        ygopro('-j');
-    } else {
-        ygopro('-j');
-    }
     try {
         _gaq.push(['_trackEvent', 'Launcher', 'YGOPro', 'Host']);
         _gaq.push(['_trackEvent', 'Launcher', 'YGOPro Host', duelRequest.string + duelRequest.prio +
