@@ -28,7 +28,7 @@ var primus,
     path = require('path'),
 
     ps = require('ps-node'),
-    forumValidate = ('./forum-validator.js'),
+    forumValidate = require('./forum-validator.js'),
     currentGlobalMessage = '';
 
 var logger = require('./logger.js');
@@ -448,5 +448,4 @@ primus.on('connection', function (socket) {
             console.log(data);
         }
     });
-
 });
