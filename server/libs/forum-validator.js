@@ -9,7 +9,6 @@ var validationCache = {},
 function forumValidate(data, callback) {
     if (validationCache[data.username]) {
         callback(validationCache[data.username]);
-        console.log('Verified via Cache', data.username);
         return;
     }
     process.nextTick(function () {
@@ -34,7 +33,6 @@ function forumValidate(data, callback) {
                 setTimeout(function () {
                     delete validationCache[data.username];
                 }, 600000); // cache the forum request for 10 mins.
-                console.log('Validated', data.username);
                 callback(null, info);
                 return;
             } else {
