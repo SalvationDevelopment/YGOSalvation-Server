@@ -378,7 +378,7 @@ function onCloseGamelist() {
     setTimeout(process.exit, 15000);
 }
 setTimeout(function () {
-    client = new Socket('127.0.0.1:24555'); //Connect the God to the tree;
+    client = new Socket('ws://127.0.0.1:24555'); //Connect the God to the tree;
 
     client.on('data', gamelistUpdate);
     client.on('open', onConnectGamelist);
