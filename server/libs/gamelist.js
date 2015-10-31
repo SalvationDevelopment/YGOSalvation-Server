@@ -159,7 +159,9 @@ function del(pid) {
 function messageListener(message) {
 
     var messageListenerWatcher = domain.create();
-    messageListenerWatcher.on('error', function (err) {});
+    messageListenerWatcher.on('error', function (err) {
+        console.log(err);
+    });
     messageListenerWatcher.run(function () {
         activeDuels = 0;
         var brokenup = message.core_message_raw.toString().split('\r\n'),
@@ -354,7 +356,10 @@ primus.on('connection', function (socket) {
         case ('gamelistEvent'):
             if (data.password === process.env.OPERPASS) {
                 messageListener(data.coreMessage);
+                console.log(data.coreMessage.raw);
                 sendGamelist();
+            } else {
+                console.log('bad insternal request');
             }
             break;
         case ('ai'):
