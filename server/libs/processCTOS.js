@@ -39,7 +39,12 @@ var portmin = 30000 + process.env.PORTRANGE * 100, //Port Ranges
     Socket = require('primus').createSocket({
         iknowclusterwillbreakconnections: true
     }),
-    client = new Socket('127.0.0.1:24555'), //Connect the God to the tree;
+    client = {
+        write: function () {
+            console.log('system not ready yet');
+        }
+    },
+
     childProcess = require('child_process'),
     startDirectory = __dirname;
 
@@ -372,11 +377,14 @@ function onConnectGamelist() {
 function onCloseGamelist() {
     setTimeout(process.exit, 15000);
 }
+setTimeout(function () {
+    client = new Socket('127.0.0.1:24555'); //Connect the God to the tree;
 
-client.on('data', gamelistUpdate);
-client.on('open', onConnectGamelist);
-client.on('close', onCloseGamelist);
+    client.on('data', gamelistUpdate);
+    client.on('open', onConnectGamelist);
+    client.on('close', onCloseGamelist);
 
+}, 5000);
 
 
 module.exports = processIncomingTrasmission;
