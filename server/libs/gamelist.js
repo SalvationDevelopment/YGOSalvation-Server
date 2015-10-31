@@ -31,8 +31,8 @@ var primus,
     forumValidate = require('./forum-validator.js'),
     currentGlobalMessage = '';
 
-var logger = require('./logger.js');
-
+//var logger = require('./logger.js');
+var logger = function () {};
 setTimeout(function () {
     //give the system ten seconds to figure itself out.
     booting = false;
@@ -65,7 +65,7 @@ function handleCoreMessage(core_message_raw, port, pid) {
                 locked: [false, false, false, false],
                 spectators: 0,
                 started: false,
-                time: new Date(),
+                time: new Date().getTime(),
                 pid: pid || undefined
             };
             //if the room its talking about isnt on the gamelist, put it on the gamelist.
@@ -78,7 +78,7 @@ function handleCoreMessage(core_message_raw, port, pid) {
                 return;
             }
             gamelist[core_message[1]].players[join_slot] = core_message[3].trim();
-            gamelist[core_message[1]].time = new Date();
+            gamelist[core_message[1]].time = new Date().getTime();
             gamelist[core_message[1]].port = port;
             break;
 
@@ -107,7 +107,7 @@ function handleCoreMessage(core_message_raw, port, pid) {
 
         case ('::::startduel'):
             gamelist[core_message[1]].started = true;
-            gamelist[core_message[1]].time = new Date();
+            gamelist[core_message[1]].time = new Date().getTime();
             duelserv.bot.say('#public', gamelist[core_message[1]].pid + '|Duel starting|' + JSON.stringify(gamelist[core_message[1]].players));
             break;
 
@@ -189,7 +189,7 @@ function messageListener(message) {
         }
         for (game in gamelist) {
             if (gamelist.hasOwnProperty(game)) {
-                if (new Date().getTime() - gamelist[game].time.getTime() > 2700000) {
+                if (new Date().getTime() - gamelist[game].time > 2700000) {
                     //delete if the game is older than 45mins.
                     del(gamelist[game].pid);
                 }
