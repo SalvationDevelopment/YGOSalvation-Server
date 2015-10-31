@@ -9,6 +9,7 @@ var validationCache = {},
 function forumValidate(data, callback) {
     if (validationCache[data.username]) {
         callback(validationCache[data.username]);
+        console.log('Verified via Cache', data.username);
         return;
     }
     process.nextTick(function () {

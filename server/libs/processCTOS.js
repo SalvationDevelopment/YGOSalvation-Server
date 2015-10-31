@@ -203,17 +203,8 @@ function handleCoreMessage(core_message_raw, port, socket, data, pid) {
     if (core_message_raw.toString().indexOf("::::") < 0) {
         return;
     }
-    var core_message = core_message_raw.toString().split('|'),
-        gamelistmessage = {
-            password: process.env.OPERPASS,
-            action: 'gamelistEvent',
-            messagetype: 'coreMessage',
-            coreMessage: {
-                core_message_raw: core_message_raw.toString(),
-                port: port,
-                pid: pid
-            }
-        };
+    var core_message = core_message_raw.toString().split('|');
+
     if (core_message[0].trim() === '::::network-ready') {
         connectToCore(port, data, socket);
         //cHistory.info('++GAME: ' + pid);
@@ -223,8 +214,17 @@ function handleCoreMessage(core_message_raw, port, socket, data, pid) {
         //cHistory.info('--GAME: ' + pid);
     }
     //process.send(gamelistmessage);
-
-    client.write(gamelistmessage);
+    console.log('Writing to gamelist');
+    client.write({
+        password: process.env.OPERPASS,
+        action: 'gamelistEvent',
+        messagetype: 'coreMessage',
+        coreMessage: {
+            core_message_raw: core_message_raw.toString(),
+            port: port,
+            pid: pid
+        }
+    });
 
 }
 
@@ -366,11 +366,11 @@ function onConnectGamelist() {
         gamelist: gamelist,
         registry: registry
     });
-    console.log('        [Slave ' + process.env.PORTRANGE + ']Connected'.grey);
+    console.log('        [Slave ' + process.env.PORTRANGE + '] ' + 'Connected'.grey);
 }
 
 function onCloseGamelist() {
-
+    setTimeout(process.exit, 15000);
 }
 
 client.on('data', gamelistUpdate);
