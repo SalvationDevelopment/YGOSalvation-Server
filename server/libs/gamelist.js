@@ -327,128 +327,126 @@ primus.on('error', function (error) {
 
 primus.on('connection', function (socket) {
     socket.on('data', function (data) {
-        var socketWatcher = domain.create();
-        socketWatcher.on('error', function (err) {});
-        socketWatcher.run(function () {
-            data = data || {};
-            var action = data.action;
 
-            socket.join(socket.address.ip + data.uniqueID);
-            switch (action) {
-            case ('internalServerLogin'):
-                if (data.password !== process.env.OPERPASS) {
-                    return;
-                }
-                socket.join('internalservers', function () {
+        data = data || {};
+        var action = data.action;
 
-                });
-                if (booting && data.gamelist && data.registry) {
-                    gamelist = data.gamelist;
-                    registry = data.registry;
-                    booting = false;
-                    console.log(data.gamelist, data.registry);
-                }
-                break;
-
-            case ('gamelistEvent'):
-                if (data.password === process.env.OPERPASS) {
-                    messageListener(data.coreMessage);
-                    sendGamelist();
-                }
-                break;
-            case ('ai'):
-                if (socket.username) {
-                    announce({
-                        clientEvent: 'duelrequest',
-                        target: 'SnarkyChild',
-                        from: socket.username,
-                        roompass: data.roompass
-                    });
-                }
-                break;
-            case ('join'):
-                socket.join(socket.address.ip + data.uniqueID, function () {
-                    socket.write({
-                        clientEvent: 'privateServer',
-                        serverUpdate: userdata[socket.address.ip + data.uniqueID],
-                        ip: socket.address.ip + data.uniqueID
-                    });
-
-                    socket.write({
-                        clientEvent: 'registrationRequest'
-                    });
-
-                });
-
-                socket.join('activegames', function () {
-                    socket.write(JSON.stringify(gamelist));
-                });
-
-                break;
-            case ('leave'):
-                socket.leave('activegames');
-                break;
-            case ('register'):
-                registrationCall(data, socket);
-                break;
-            case ('global'):
-                globalCall(data);
-                break;
-            case ('genocide'):
-                genocideCall(data);
-                break;
-            case ('murder'):
-                murderCall(data);
-                break;
-            case ('internalRestart'):
-                if (data.password !== process.env.OPERPASS) {
-                    return;
-                }
-                restartAnnouncement();
-                break;
-            case ('restart'):
-                restartCall(data);
-                break;
-            case ('killgame'):
-                killgameCall(data);
-                break;
-            case ('privateServerRequest'):
-                primus.room(socket.address.ip + data.uniqueID).write({
-                    clientEvent: 'privateServerRequest',
-                    parameter: data.parameter,
-                    local: data.local
-                });
-                break;
-            case ('privateServer'):
-                break;
-            case ('joinTournament'):
-                socket.join('tournament', function () {
-                    socket.write(JSON.stringify(gamelist));
-                });
-                break;
-            case ('privateUpdate'):
-                primus.room(socket.address.ip + data.uniqueID).write({
-                    clientEvent: 'privateServer',
-                    serverUpdate: data.serverUpdate
-                });
-                userdata[socket.address.ip + data.uniqueID] = data.serverUpdate;
-                break;
-            case ('saveDeckRequest'):
-                primus.room(socket.address.ip + data.uniqueID).write({
-                    clientEvent: 'saveDeck',
-                    deckList: data.deckList,
-                    deckName: data.deckName
-                });
-                break;
-            case ('unlinkDeckRequest'):
-                primus.room(socket.address.ip + data.uniqueID).write({
-                    clientEvent: 'unlinkDeck',
-                    deckName: data.deckName
-                });
-                break;
-            default:
-                console.log(data);
+        socket.join(socket.address.ip + data.uniqueID);
+        switch (action) {
+        case ('internalServerLogin'):
+            if (data.password !== process.env.OPERPASS) {
+                return;
             }
-        });
+            socket.join('internalservers', function () {
+
+            });
+            if (booting && data.gamelist && data.registry) {
+                gamelist = data.gamelist;
+                registry = data.registry;
+                booting = false;
+                console.log(data.gamelist, data.registry);
+            }
+            break;
+
+        case ('gamelistEvent'):
+            if (data.password === process.env.OPERPASS) {
+                messageListener(data.coreMessage);
+                sendGamelist();
+            }
+            break;
+        case ('ai'):
+            if (socket.username) {
+                announce({
+                    clientEvent: 'duelrequest',
+                    target: 'SnarkyChild',
+                    from: socket.username,
+                    roompass: data.roompass
+                });
+            }
+            break;
+        case ('join'):
+            socket.join(socket.address.ip + data.uniqueID, function () {
+                socket.write({
+                    clientEvent: 'privateServer',
+                    serverUpdate: userdata[socket.address.ip + data.uniqueID],
+                    ip: socket.address.ip + data.uniqueID
+                });
+
+                socket.write({
+                    clientEvent: 'registrationRequest'
+                });
+
+            });
+
+            socket.join('activegames', function () {
+                socket.write(JSON.stringify(gamelist));
+            });
+
+            break;
+        case ('leave'):
+            socket.leave('activegames');
+            break;
+        case ('register'):
+            registrationCall(data, socket);
+            break;
+        case ('global'):
+            globalCall(data);
+            break;
+        case ('genocide'):
+            genocideCall(data);
+            break;
+        case ('murder'):
+            murderCall(data);
+            break;
+        case ('internalRestart'):
+            if (data.password !== process.env.OPERPASS) {
+                return;
+            }
+            restartAnnouncement();
+            break;
+        case ('restart'):
+            restartCall(data);
+            break;
+        case ('killgame'):
+            killgameCall(data);
+            break;
+        case ('privateServerRequest'):
+            primus.room(socket.address.ip + data.uniqueID).write({
+                clientEvent: 'privateServerRequest',
+                parameter: data.parameter,
+                local: data.local
+            });
+            break;
+        case ('privateServer'):
+            break;
+        case ('joinTournament'):
+            socket.join('tournament', function () {
+                socket.write(JSON.stringify(gamelist));
+            });
+            break;
+        case ('privateUpdate'):
+            primus.room(socket.address.ip + data.uniqueID).write({
+                clientEvent: 'privateServer',
+                serverUpdate: data.serverUpdate
+            });
+            userdata[socket.address.ip + data.uniqueID] = data.serverUpdate;
+            break;
+        case ('saveDeckRequest'):
+            primus.room(socket.address.ip + data.uniqueID).write({
+                clientEvent: 'saveDeck',
+                deckList: data.deckList,
+                deckName: data.deckName
+            });
+            break;
+        case ('unlinkDeckRequest'):
+            primus.room(socket.address.ip + data.uniqueID).write({
+                clientEvent: 'unlinkDeck',
+                deckName: data.deckName
+            });
+            break;
+        default:
+            console.log(data);
+        }
     });
+
 });
