@@ -219,7 +219,6 @@ function handleCoreMessage(core_message_raw, port, socket, data, pid) {
         //cHistory.info('--GAME: ' + pid);
     }
     //process.send(gamelistmessage);
-    console.log('Writing to gamelist');
     client.write({
         password: process.env.OPERPASS,
         action: 'gamelistEvent',
