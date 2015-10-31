@@ -229,7 +229,7 @@ function sendGamelist() {
 function registrationCall(data, socket) {
     forumValidate(data, function (error, info) {
         if (error) {
-            console.log(error);
+            //console.log(error);
             return;
         }
         if (info.success) {
