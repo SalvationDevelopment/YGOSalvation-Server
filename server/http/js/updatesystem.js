@@ -172,7 +172,7 @@ function hashcheck() {
         download();
     }
     screenMessage.html('<span style="color:white; font-weight:bold">Processing manifest(' +
-        completeList.length + '//' + n + '). DONT TOUCH STUFF!</span>');
+        (n - completeList.length) + '/' + n + '). DONT TOUCH STUFF!</span>');
     var target = completeList[0];
     if (target) {
         if (target.path) {
