@@ -250,6 +250,9 @@ function registrationCall(data, socket) {
 
 function globalCall(data) {
     forumValidate(data, function (error, info) {
+        if (error) {
+            return;
+        }
         if (info.success && info.data.g_access_cp === "1") {
             announce({
                 clientEvent: 'global',
@@ -281,6 +284,9 @@ function restartAnnouncement() {
 
 function restartCall(data) {
     forumValidate(data, function (error, info) {
+        if (error) {
+            return;
+        }
         if (info.success && info.data.g_access_cp === "1") {
             restartAnnouncement();
         }
@@ -289,6 +295,9 @@ function restartCall(data) {
 
 function genocideCall(data) {
     forumValidate(data, function (error, info) {
+        if (error) {
+            return;
+        }
         if (info.success && info.data.g_access_cp === "1") {
             announce({
                 clientEvent: 'genocide',
@@ -300,6 +309,9 @@ function genocideCall(data) {
 
 function murderCall(data) {
     forumValidate(data, function (error, info) {
+        if (error) {
+            return;
+        }
         if (info.success && info.data.g_access_cp === "1") {
             announce({
                 clientEvent: 'kill',
@@ -311,6 +323,9 @@ function murderCall(data) {
 
 function killgameCall(data) {
     forumValidate(data, function (error, info) {
+        if (error) {
+            return;
+        }
         if (info.success && info.data.g_access_cp === "1") {
             ps.kill(data.killTarget, function (err) {
                 if (err) {
@@ -354,10 +369,9 @@ primus.on('connection', function (socket) {
             break;
 
         case ('gamelistEvent'):
-            console.log('recieved gamelist update');
+
             if (data.password === process.env.OPERPASS) {
                 messageListener(data.coreMessage);
-                console.log(data.coreMessage.raw);
                 sendGamelist();
             } else {
                 console.log('bad insternal request');
