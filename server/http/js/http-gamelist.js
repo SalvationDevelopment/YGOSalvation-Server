@@ -64,14 +64,6 @@ function ygopro(parameter) {
 
         }
     }
-    if (!launcher && parameter === '-j') {
-        singlesitenav('duelscreen');
-        startgame(localStorage.roompass);
-        return;
-    }
-    if (!launcher && parameter === '-d') {
-        return;
-    }
     var out = {},
         storage;
     for (storage in localStorage) {
@@ -80,6 +72,7 @@ function ygopro(parameter) {
         }
     }
     //$.post('http://127.0.0.1:9468/' + parameter, localStorage);
+    console.log('sending details');
     primus.write({
         action: 'privateServerRequest',
         parameter: parameter,
