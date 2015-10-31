@@ -26,7 +26,7 @@ function forumValidate(data, callback) {
                     info = JSON.parse(body.trim());
                 } catch (msgError) {
                     console.log('Error during validation', body, msgError);
-                    callback('Error during validation', info);
+                    callback('Error during validation', {}, info, body, msgError);
                     return;
                 }
                 validationCache[data.username] = info;
