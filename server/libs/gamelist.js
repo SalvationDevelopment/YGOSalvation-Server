@@ -226,6 +226,9 @@ function sendGamelist() {
 
 function registrationCall(data, socket) {
     forumValidate(data, function (error, info) {
+        if (error) {
+            return;
+        }
         if (info.success) {
             registry[info.displayname] = socket.address.ip;
             socket.username = data.username;
