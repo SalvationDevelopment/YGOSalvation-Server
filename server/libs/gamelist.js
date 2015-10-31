@@ -354,6 +354,7 @@ primus.on('connection', function (socket) {
             break;
 
         case ('gamelistEvent'):
+            console.log('recieved gamelist update');
             if (data.password === process.env.OPERPASS) {
                 messageListener(data.coreMessage);
                 console.log(data.coreMessage.raw);
