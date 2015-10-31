@@ -348,8 +348,16 @@ primus.on('error', function (error) {
 primus.on('connection', function (socket) {
     socket.on('data', function (data) {
 
+
         data = data || {};
-        var action = data.action;
+        var action = data.action,
+            save = false;
+        if (socket.readyState !== primus.Spark.CLOSED) {
+            save = true;
+        }
+        if (save === false) {
+            return;
+        }
 
         socket.join(socket.address.ip + data.uniqueID);
         switch (action) {
