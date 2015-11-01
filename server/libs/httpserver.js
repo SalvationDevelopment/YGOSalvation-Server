@@ -30,3 +30,5 @@ app.use(function (req, res, next) {
 });
 
 app.listen(80);
+
+require('fs').watch(__filename, process.exit);

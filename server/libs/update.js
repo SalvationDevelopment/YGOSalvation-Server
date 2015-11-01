@@ -150,10 +150,10 @@ var server = http.createServer(function (request, response) {
         console.log('[Update System]', 'Update processed:', rate, error);
         if (oktorestart) {
             setTimeout(function () {
-//                client.write({
-             //                    action: 'internalRestart',
-             //                    password: process.env.OPERPASS
-             //                });
+                //                client.write({
+                //                    action: 'internalRestart',
+                //                    password: process.env.OPERPASS
+                //                });
                 oktorestart = true;
             }, 10000);
         }
@@ -194,3 +194,5 @@ setTimeout(function () {
 setInterval(function () {
     oktorestart = true;
 }, 5000);
+
+require('fs').watch(__filename, process.exit);

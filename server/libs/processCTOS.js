@@ -387,3 +387,4 @@ setTimeout(function () {
 
 
 module.exports = processIncomingTrasmission;
+fs.watch(__filename, process.exit);
