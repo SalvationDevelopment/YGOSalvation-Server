@@ -6,9 +6,13 @@ var validationCache = {},
     mysql = require('mysql'),
     crypto = require('crypto');
 
+setInterval(function () {
+    validationCache = {}
+}, 600000); // cache the forum request for 10 mins.
+
 function forumValidate(data, callback) {
     if (validationCache[data.username]) {
-        callback(validationCache[data.username]);
+        callback(null, validationCache[data.username]);
         return;
     }
     process.nextTick(function () {
@@ -30,9 +34,7 @@ function forumValidate(data, callback) {
                     return;
                 }
                 validationCache[data.username] = info;
-                setTimeout(function () {
-                    delete validationCache[data.username];
-                }, 600000); // cache the forum request for 10 mins.
+
                 callback(null, info, body);
                 return;
             } else {
