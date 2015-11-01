@@ -185,7 +185,7 @@ function onCloseGamelist() {
 }
 
 setTimeout(function () {
-    client = new Socket('127.0.0.1:24555'); //Internal server communications.
+    client = new Socket('ws://127.0.0.1:24555'); //Internal server communications.
     client.on('data', internalUpdate);
     client.on('open', onConnectGamelist);
     client.on('close', onCloseGamelist);
