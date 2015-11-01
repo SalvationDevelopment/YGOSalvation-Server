@@ -125,10 +125,3 @@ function bootFlashPolicyServer() {
     });
 
 }());
-//
-//
-///* This is bad code */
-//process.on('uncaughtException', function (err) {
-//    console.error((new Date()).toUTCString() + ' uncaughtException:', err.message);
-//    console.error(err.stack);
-//});

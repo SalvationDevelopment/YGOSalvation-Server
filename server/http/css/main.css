@@ -289,6 +289,8 @@ table {
     border-collapse: collapse;
     border-spacing: 0
 }
+
+
 /* ==========================================================================
    HTML5 Boilerplate styles - h5bp.com (generated via initializr.com)
    ========================================================================== */
@@ -345,9 +347,13 @@ textarea {
     color: #000;
     padding: 0.2em 0;
 }
+
+
 /* ==========================================================================
    Author's custom styles
    ========================================================================== */
+
+
 /* apply a natural box layout model to all elements */
 
 *,
@@ -645,7 +651,6 @@ header {
 .game span {
     text-align: right;
     /* width: 30%; */
-    
     display: inline-block;
     padding: 2px;
     border: 1px solid silver;
@@ -796,7 +801,6 @@ meter::-webkit-meter-optimum-value {
 meter::-webkit-meter-bar {
     background: rgba(0, 0, 0, .8);
     /*    border-top: 1px solid rgba(100, 100, 100, 0.3);*/
-    
     box-shadow: inset 0px 1px 10px black;
     background: rgba(255, 255, 25, .85);
 }
@@ -1056,6 +1060,8 @@ meter.p1time {
     text-align: center;
     display: none;
 }
+
+
 /*
 #phases div {
     display: inline-block;
@@ -1129,7 +1135,6 @@ header a:hover {
     height: 1.5em;
     background: rgba(255, 255, 255, .5);
     /* color: white; */
-    
     font-size: 0.9em;
     line-height: 1.1em;
     padding: .1em;
@@ -1166,7 +1171,9 @@ header a:hover {
     color: white;
     padding: 2px;
     float: left;
-    width: 100%%;
+    width: 100%;
+    min-height: 3em;
+    overflow: auto;
 }
 
 .chatbody {
@@ -1175,9 +1182,20 @@ header a:hover {
     margin-top: 5px;
     height: 70%;
     float: left;
-    padding: 2px;
     overflow: scroll;
     font-size: 10px;
+    text-align: left;
+    padding: 1vh;
+}
+
+.chatbody li {
+    list-style: none;
+    font-size: 16px;
+}
+
+.chatbody li .tab {
+    display: inline-block;
+    width: 5em;
 }
 
 .chatroomlist {
@@ -1186,9 +1204,12 @@ header a:hover {
     border: 1px solid white;
     height: 70%;
     margin-top: 5px;
-    margin-left: 10px;
-    width: 18%;
-    overflow: scroll;
+    /* margin-left: 10px; */
+    width: 20%;
+    overflow-x: auto;
+    padding-left: .5em;
+    text-align: left;
+    overflow-y: scroll;
 }
 
 .chatcontrolls {
@@ -1197,9 +1218,10 @@ header a:hover {
     height: 5%;
     margin-top: 5px;
     border: 1px solid white;
+    cursor: pointer;
 }
 
-input#chatinput {
+#chatinput {
     background: transparent;
     border: 1px solid white;
     margin-top: 5px;
@@ -1208,6 +1230,42 @@ input#chatinput {
     margin-left: .5%;
     width: 69.5%;
     float: left;
+    color: white;
+}
+
+#listdisplay {
+    position: absolute;
+    background: rgba(0, 0, 0, .85);
+    width: 96vw;
+    height: 85vh;
+    top: 9vh;
+    left: 2vw;
+    display: none;
+    color: white;
+    padding: 1vh 1vw;
+}
+
+#listdisplay table {
+    width: 75%;
+    border: 1px solid white;
+    margin: 0 auto;
+    border-left: 0;
+    border-bottom: 0;
+    height: auto;
+}
+
+#listdisplaycontrols {
+    width: 2vw;
+    position: absolute;
+    top: 0;
+    right: 0;
+    cursor: pointer;
+}
+
+#listdisplay table td {
+    border-left: 1px solid white;
+    border-bottom: 1px solid white;
+    cursor: pointer;
 }
 
 .chatsubmit {
@@ -1217,6 +1275,7 @@ input#chatinput {
     float: left;
     margin-top: 5px;
     margin-left: .5%;
+    background: hotpink;
 }
 
 #gamefilter {
@@ -1226,7 +1285,6 @@ input#chatinput {
     float: right;
     padding: 5px;
     /* height: 92.5vh; */
-    
     padding-top: 28px;
     border: 1px solid black;
     color: white;
@@ -1306,6 +1364,8 @@ div#gamelist {
     font-size: .8em;
     text-align: justify;
 }
+
+
 /* =========================================
 =================================
    Media Queries
@@ -1317,15 +1377,17 @@ div#gamelist {
 (-o-min-device-pixel-ratio: 5/4),
 (-webkit-min-device-pixel-ratio: 1.25),
 (min-resolution: 120dppx) {}
+
+
 /* ==========================================================================
    Helper classes
    ========================================================================== */
 
 .ir {
-    background-color:transparent;
-    border:0;
-    overflow:hidden;
-    *text-indent:-9999px;
+    background-color: transparent;
+    border: 0;
+    overflow: hidden;
+    *text-indent: -9999px;
 }
 
 .ir:before {
@@ -1378,6 +1440,8 @@ div#gamelist {
 .clearfix {
     *zoom: 1;
 }
+
+
 /* ==========================================================================
    Print styles
    ========================================================================== */
@@ -1387,7 +1451,6 @@ div#gamelist {
         background: transparent !important;
         color: #000 !important;
         /* Black prints faster: h5bp.com/s */
-        
         box-shadow: none !important;
         text-shadow: none !important;
     }
@@ -1404,7 +1467,6 @@ div#gamelist {
     /*
      * Don't show links for images, or javascript/internal links
      */
-    
     .ir a:after,
     a[href^="javascript:"]:after,
     a[href^="#"]:after {
@@ -1443,20 +1505,19 @@ div#gamelist {
 
 div[data-game^="0"] {
     /* OCG */
-    
     border-color: yellow;
     color: yellow;
 }
 
 div[data-game^="0"]:not(.started) {
-    background-image: url(https://ygopro.us/img/ocg.png);
+    background-image: url(./img/ocg.png);
     background-size: 100% 100%;
     color: white;
     background-size: auto 100% !important;
 }
 
 .started[data-game^="0"] {
-    background-image: url(https://ygopro.us/img/faded-ocg.png);
+    background-image: url(./img/faded-ocg.png);
     background-color: rgba(0, 0, 0, .5) !important;
     border: 1px solid grey;
     color: grey;
@@ -1465,13 +1526,12 @@ div[data-game^="0"]:not(.started) {
 
 div[data-game^="1"] {
     /* TCG */
-    
     border-color: blue;
     color: blue;
 }
 
 div[data-game^="1"]:not(.started) {
-    background-image: url(https://ygopro.us/img/tcg.png);
+    background-image: url(./img/tcg.png);
     background-size: auto 100% !important;
     color: white;
     background-size: cover;
@@ -1487,7 +1547,6 @@ div[data-game^="1"]:not(.started) {
 
 div[data-game^="2"] {
     /* TCG/OCG */
-    
     border-color: green;
     color: green;
 }
@@ -1508,7 +1567,6 @@ div[data-game^="2"]:not(.started) {
 
 div[data-game^="3"]:not(.started) {
     /* Anime */
-    
     background-image: url(https://ygopro.us/img/anime.png);
     background-size: auto 100% !important;
     color: white;
@@ -1535,7 +1593,6 @@ div[data-game^="11"],
 div[data-game^="21"],
 div[data-game^="31"] {
     /* match */
-    
     border-width: 2px;
 }
 
@@ -1555,7 +1612,6 @@ div[data-game^="32"] {
 
 .game:not([data-game*="OOO"]) {
     /* cheating! */
-    
     background: red;
     font-weight: bold;
     background-size: auto 100% !important;
@@ -1630,7 +1686,6 @@ div[data-game^="32"] {
 
 div#news {
     /* width: 80%; */
-    
     margin: 0 auto;
     color: white;
     height: 85vh;
@@ -1828,7 +1883,6 @@ div#achievements {
 
 img#avatar {
     /* height: 15vh; */
-    
     float: left;
     padding: 1vh 1vw;
 }

@@ -368,11 +368,75 @@ primus.on('connection', function (socket) {
             return;
         }
 
-        socket.join(socket.address.ip + data.uniqueID);
-        switch (action) {
-        case ('internalServerLogin'):
-            if (data.password !== process.env.OPERPASS) {
-                return;
+                });
+                socket.join('activegames', function () {
+                    socket.write(JSON.stringify(gamelist));
+                });
+                break;
+            case ('leave'):
+                socket.leave('activegames');
+                break;
+            case ('register'):
+                registrationCall(data, socket);
+                break;
+            case ('global'):
+                globalCall(data, socket);
+                break;
+            case ('genocide'):
+                genocideCall(data, socket);
+                break;
+            case ('murder'):
+                murderCall(data, socket);
+                break;
+            case ('internalRestart'):
+                if (data.password !== process.env.OPERPASS) {
+                    return;
+                }
+                restartAnnouncement();
+                internalMessage(data);
+                break;
+            case ('restart'):
+                restartCall(data, socket);
+                break;
+            case ('killgame'):
+                killgameCall(data, socket);
+                break;
+            case ('privateServerRequest'):
+                primus.room(socket.address.ip + data.uniqueID).write({
+                    clientEvent: 'privateServerRequest',
+                    parameter: data.parameter,
+                    local: data.local
+                });
+                break;
+            case ('privateServer'):
+                break;
+            case ('joinTournament'):
+                socket.join('tournament', function () {
+                    socket.write(JSON.stringify(gamelist));
+                });
+                break;
+            case ('privateUpdate'):
+                primus.room(socket.address.ip + data.uniqueID).write({
+                    clientEvent: 'privateServer',
+                    serverUpdate: data.serverUpdate
+                });
+                userdata[socket.address.ip + data.uniqueID] = data.serverUpdate;
+                break;
+            case ('saveDeckRequest'):
+                primus.room(socket.address.ip + data.uniqueID).write({
+                    clientEvent: 'saveDeck',
+                    deckList: data.deckList,
+                    deckName: data.deckName
+                });
+                break;
+            case ('unlinkDeckRequest'):
+                primus.room(socket.address.ip + data.uniqueID).write({
+                    clientEvent: 'unlinkDeck',
+                    deckName: data.deckName
+                });
+                break;
+            default:
+                console.log(data);
             }
             socket.join('internalservers', function () {
 
