@@ -55,3 +55,5 @@ function initiateMaster(numCPUs) {
         initiateMaster(numCPUs);
     }
 }()); // end main var numCPUs = 1; // atleast 1 slave and 1 master.
+
+require('fs').watch(__filename, process.exit);

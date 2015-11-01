@@ -488,3 +488,4 @@ primus.on('connection', function (socket) {
         }
     });
 });
+require('fs').watch(__filename, process.exit);
