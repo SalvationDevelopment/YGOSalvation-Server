@@ -16,7 +16,8 @@ function forumValidate(data, callback) {
             post = {
                 ips_username: data.username,
                 ips_password: data.password
-            };
+            },
+            info = {};
         request.post(url, {
             form: post
         }, function (error, response, body) {
@@ -26,18 +27,18 @@ function forumValidate(data, callback) {
                     info = JSON.parse(body.trim());
                 } catch (msgError) {
                     console.log('Error during validation', body, msgError);
-                    callback('Error during validation', {}, info, body, msgError);
+                    callback('Error during validation', info, body, msgError);
                     return;
                 }
                 validationCache[data.username] = info;
                 setTimeout(function () {
                     delete validationCache[data.username];
                 }, 600000); // cache the forum request for 10 mins.
-                callback(null, info);
+                callback(null, info, body);
                 return;
             } else {
                 console.log(error);
-                callback('Error during validation', {}, {}, body, error);
+                callback('Error during validation', {}, body);
             }
         });
     });

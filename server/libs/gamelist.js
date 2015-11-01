@@ -234,7 +234,7 @@ function sendGamelist() {
 }
 
 function registrationCall(data, socket) {
-    forumValidate(data, function (error, info) {
+    forumValidate(data, function (error, info, body) {
         if (error) {
             //console.log(error);
             return;
@@ -257,8 +257,9 @@ function registrationCall(data, socket) {
 }
 
 function globalCall(data) {
-    forumValidate(data, function (error, info) {
+    forumValidate(data, function (error, info, body) {
         if (error) {
+            console.log('[Gamelist]', error, info, body);
             return;
         }
         if (info.success && info.data.g_access_cp === "1") {
@@ -291,7 +292,7 @@ function restartAnnouncement() {
 }
 
 function restartCall(data) {
-    forumValidate(data, function (error, info) {
+    forumValidate(data, function (error, info, body) {
         if (error) {
             return;
         }
@@ -302,7 +303,7 @@ function restartCall(data) {
 }
 
 function genocideCall(data) {
-    forumValidate(data, function (error, info) {
+    forumValidate(data, function (error, info, body) {
         if (error) {
             return;
         }
@@ -316,7 +317,7 @@ function genocideCall(data) {
 }
 
 function murderCall(data) {
-    forumValidate(data, function (error, info) {
+    forumValidate(data, function (error, info, body) {
         if (error) {
             return;
         }
@@ -330,7 +331,7 @@ function murderCall(data) {
 }
 
 function killgameCall(data) {
-    forumValidate(data, function (error, info) {
+    forumValidate(data, function (error, info, body) {
         if (error) {
             return;
         }
