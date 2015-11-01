@@ -34,6 +34,13 @@ var colors = require('colors'), // oo pretty colors!
     net = require('net');
 
 
+function bootlogger() {
+    console.log('    Logging Enabled @ ../logs'.bold.gold);
+    processManager.fork('./logger.js', [], {
+        cwd: 'libs'
+    }).on('exit', bootlogger);
+}
+
 function bootHTTPServer() {
     console.log('    HTTP Server @ port 80'.bold.gold);
     processManager.fork('./httpserver.js', [], {

@@ -31,14 +31,24 @@ var primus,
     forumValidate = require('./forum-validator.js'),
     currentGlobalMessage = '';
 
-//var logger = require('./logger.js');
-var logger = function () {};
 setTimeout(function () {
     //give the system ten seconds to figure itself out.
     booting = false;
 }, 10000);
 
 
+function internalMessage(announcement) {
+    process.nextTick(function () {
+        primus.room('internalservers').write(announcement);
+    });
+}
+
+function logger(announcement) {
+    internalMessage({
+        messagetype: 'log',
+        log: announcement
+    });
+}
 
 function handleCoreMessage(core_message_raw, port, pid) {
 
@@ -115,7 +125,7 @@ function handleCoreMessage(core_message_raw, port, pid) {
             chat = core_message.join(' ');
 
             process.nextTick(function () {
-                logger.info(gamelist[core_message[1]].pid + '|' + core_message[2] + ': ' + core_message[3]);
+                logger(gamelist[core_message[1]].pid + '|' + core_message[2] + ': ' + core_message[3]);
             });
             process.nextTick(function () {
                 duelserv.bot.say('#public', gamelist[core_message[1]].pid + '|' + core_message[2] + ': ' + core_message[3]);
@@ -135,11 +145,6 @@ function announce(announcement) {
     }
 }
 
-function internalMessage(announcement) {
-    process.nextTick(function () {
-        primus.room('internalservers').write(announcement);
-    });
-}
 
 function del(pid) {
     var game;
@@ -211,6 +216,8 @@ function messageListener(message) {
     });
     return gamelist;
 }
+
+
 
 function sendRegistry() {
     internalMessage({
