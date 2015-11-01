@@ -46,14 +46,10 @@ function singlesitenav(target) {
         updatenews();
     }
     if (target === 'chat' && !chatStarted) {
-        try {
-            swfobject.embedSWF("lightIRC/lightIRC.swf", "lightIRC", "100%", "92%", "10.0.0", "expressInstall.swf", params, {
-                wmode: "transparent"
-            });
-            chatStarted = true;
-        } catch (errorm) {
-            serverInit();
-        }
+        swfobject.embedSWF("lightIRC/lightIRC.swf", "lightIRC", "100%", "92%", "10.0.0", "expressInstall.swf", params, {
+            wmode: "transparent"
+        });
+        chatStarted = true;
     }
     $('.activescreen').removeClass('activescreen');
     $('header').css('top', '100vh');
@@ -160,10 +156,7 @@ function translateLang(lang) {
             jsLang.spectate = translationDB[i][lang];
         }
     }
-    try {
-        params.language = lang;
-    } catch (error) {}
-
+    params.language = lang;
 }
 
 function achievementConstructor(data) {
@@ -172,11 +165,9 @@ function achievementConstructor(data) {
         "shadow": (data.field_13 === 'u') ? 'Unlocked' : 'Locked'
     };
 }
-try {
-    params.showJoinPartMessages = false;
-    params.autoReconnect = false;
-} catch (error) {}
 
+params.showJoinPartMessages = false;
+params.autoReconnect = false;
 $(document).ready(function () {
     'use strict';
     var useLang = localStorage.language || 'en';
