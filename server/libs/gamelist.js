@@ -259,7 +259,7 @@ function registrationCall(data, socket) {
 function globalCall(data) {
     forumValidate(data, function (error, info, body) {
         if (error) {
-            console.log('[Gamelist]', error, info, body);
+            console.log('[Gamelist]', error);
             return;
         }
         if (info.success && info.data.g_access_cp === "1") {

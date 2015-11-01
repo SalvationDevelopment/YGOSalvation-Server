@@ -22,11 +22,10 @@ function forumValidate(data, callback) {
             form: post
         }, function (error, response, body) {
             if (!error && response.statusCode === 200) {
-                var info;
                 try {
                     info = JSON.parse(body.trim());
                 } catch (msgError) {
-                    console.log('Error during validation', body, msgError);
+                    console.log('Error during validation', {}, body, msgError);
                     callback('Error during validation', info, body, msgError);
                     return;
                 }
