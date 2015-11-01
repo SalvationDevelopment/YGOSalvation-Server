@@ -13,11 +13,14 @@
     <link rel="shortcut icon" href="/favicon.png" />
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width">
-    <script src="http://ygopro.us/js/jquery-1.11.0.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/2.0.0/handlebars.min.js"></script>
-    <link href="http://ygopro.us/css/roboto.css" rel="stylesheet" type="text/css">
-    <link href="http://ygopro.us/css/PoiretOne.css" rel="stylesheet" type="text/css">
-    <link href='http://ygopro.us/css/AlegreyaSans.css' rel='stylesheet' type='text/css'>
+    <script src="./js/jquery-1.11.0.min.js"></script>
+    <script src="./js/vendor/handlebars.min.js"></script>
+    <script src="./js/translations.js"></script>
+    <script src="./js/primus.js"></script>
+    <script src="js/index-controls.js"></script>
+    <link href="./css/roboto.css" rel="stylesheet" type="text/css">
+    <link href="./css/PoiretOne.css" rel="stylesheet" type="text/css">
+    <link href='./css/AlegreyaSans.css' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="css/animation.css">
     <link rel="stylesheet" type="text/css" href="css/deck-edit.css">
@@ -261,25 +264,7 @@
             We are currently developing an online deck editor which will be available in the near future.
             <br /> If after updating your launcher a new window does not open, please consult our Bug Reports Forum for help.
         </div>
-        <script>
-            $(function () {
-                var keyArray = [];
-                $(document).on('keypress', function (ev) {
-                    if (keyArray.length >= 100) {
-                        keyArray = [];
-                    }
-                    keyArray.push(ev.which);
-                    if (charCodeStringMatch("deckedit", keyArray)) {
-                        $('.mainContainer').css('display', 'block');
-                        $('.deckEditNotice').css('display', 'none');
-                    }
-                });
 
-                function charCodeStringMatch(str, charArray) {
-                    return (new RegExp('' + str, 'i')).test(String.fromCharCode.apply(this, charArray));
-                }
-            });
-        </script>
         <div class="mainContainer" style="display: none;">
             <div class="left">
                 <div class="cardImage">
@@ -466,10 +451,41 @@
     <header style="padding-top:50px" id="chat">
 
 
+        <!--
         <script type="text/javascript" src="http://ygopro.us/js/swfobject.js"></script>
         <script type="text/javascript" src="lightIRC/config.js"></script>
+
         <div id="lightIRC" style="height:92%; text-align:center;">
+        </div>-->
+        <div id="wsirc" style="height:92%; opacity:0.05;text-align:center;">
+            <div class="chatcontainer">
+                <div class="chattitle">
+
+                </div>
+                <div class="chatbody">
+
+                </div>
+                <div class="chatroomlist">
+
+                </div>
+                <div class='chatcontrolls' onclick="LIST()">
+                    Explore the Server
+                </div>
+                <form id="chatinputform">
+                    <input id="chatinput" autocomplete="off" /></input>
+                </form>
+                <div class='chatsubmit' onclick='speak()'>
+                    Submit
+                </div>
+            </div>
+            <div id="listdisplay">
+                <div id="listdisplaycontrols" onclick="closeListDisplay()">X</div>
+                <table>
+
+                </table>
+            </div>
         </div>
+
     </header>
     <header style="padding-top:50px" id="faq">
         <div id="news"></div>
@@ -698,13 +714,17 @@
         <div style='max-width:1000px; margin:0 auto'>
             <span itemscope itemtype="http://schema.org/SoftwareApplication">YGOPro</span> &amp
             <span itemscope itemtype="http://schema.org/SoftwareApplication">Salvation Server</span> is not affliated with
-            <span itemscope itemtype="http://schema.org/Organization" itemprop="name">Konami</span>or
+            <span itemscope itemtype="http://schema.org/Organization" itemprop="name">Konami </span>or
             <span itemscope itemtype="http://schema.org/Person" itemprop="name">Kazuki Takahashi</span>. Salvation Server &copy; 2013-2015, all rights reserved by respective parties. Powered by Yu-Jo Friendship and fans of Yu-Gi-Oh! worldwide.</div>
     </footer>
-    <script src="js/translations.js"></script>
-    <script src="js/primus.js"></script>
-    <script src="js/index-controls.js"></script>
-    <script src="js/battlepack3.js" async></script>
+
+
+
+    <script src="./js/battlepack3.js" async></script>
+
+    <script src="./js/irc/irc-style-parser.js"></script>
+    <script src="./js/irc/irc-render.js"></script>
+    <script src="./js/irc/irc-ws.js"></script>
     <script type="text/javascript">
         var _gaq = _gaq || [];
         _gaq.push(['_setAccount', 'UA-56840301-1']);
@@ -739,12 +759,31 @@
 
 
 
-    <script src="js/http-gamelist.js"></script>
-    <script src="js/jquery-ui.min.js"></script>
-    <script src="js/ConfigParser.js"></script>
-    <script src="js/parseYDK.js"></script>
-    <script src="js/deck-edit-launcher.js"></script>
+    <script src="./js/http-gamelist.js"></script>
+    <script src="./js/jquery-ui.min.js"></script>
+    <script src="./js/ConfigParser.js"></script>
+    <script src="./js/parseYDK.js"></script>
+    <script src="./js/deck-edit-launcher.js"></script>
+    <script>
+        $(function () {
+            var keyArray = [];
+            $(document).on('keypress', function (ev) {
+                if (keyArray.length >= 100) {
+                    keyArray = [];
+                }
+                keyArray.push(ev.which);
+                if (charCodeStringMatch("deckedit", keyArray)) {
+                    $('.mainContainer').css('display', 'block');
+                    $('.deckEditNotice').css('display', 'none');
+                }
+            });
+
+            function charCodeStringMatch(str, charArray) {
+                return (new RegExp('' + str, 'i')).test(String.fromCharCode.apply(this, charArray));
+            }
+        });
     </script>
+
 
 </body>
 
