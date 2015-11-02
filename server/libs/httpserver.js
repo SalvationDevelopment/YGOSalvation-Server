@@ -6,8 +6,7 @@ var
     path = require("path"),
     toobusy = require('toobusy-js'),
     app = express(),
-    vhost = require('vhost'),
-    compression = require('compression');
+    vhost = require('vhost');
 
 function createVirtualStaticHost(domainName, dirPath) {
     return vhost(domainName, express['static'](dirPath));
