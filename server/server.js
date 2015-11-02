@@ -41,6 +41,13 @@ function bootlogger() {
     }).on('exit', bootlogger);
 }
 
+function manualModeBoot() {
+    console.log('    Logging Enabled @ ../logs'.bold.gold);
+    processManager.fork('./manualMode.js', [], {
+        cwd: 'libs'
+    }).on('exit', manualModeBoot);
+}
+
 function bootHTTPServer() {
     console.log('    HTTP Server @ port 80'.bold.gold);
     processManager.fork('./httpserver.js', [], {
@@ -104,6 +111,8 @@ function bootFlashPolicyServer() {
         bootUpdateSystem();
         bootAISystem();
         bootFlashPolicyServer();
+        manualModeBoot();
+        bootlogger();
 
 
         var httpcheck = net.createServer(),

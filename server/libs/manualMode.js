@@ -370,7 +370,7 @@ function handlePrimusEvent(data, client) {
                         if (activeDuels[duelID].players[uid].viewingDeck) {
                             shuffleDeck(activeDuels[duelID], activeDuels[duelID].players[uid].ROLE);
                         }
-                        activeDuels[duelID].state["Player " + activeDuels[duelID].players[uid].ROLE][DECK].forEach(function(card, index, arr) {
+                        activeDuels[duelID].state["Player " + activeDuels[duelID].players[uid].ROLE][DECK].forEach(function (card, index, arr) {
                             switch (card.position) {
                             case POSITION_FACEDOWN:
                                 {
@@ -886,3 +886,4 @@ function banListUpdater() {
         });
     });
 }
+fs.watch(__filename, process.exit);
