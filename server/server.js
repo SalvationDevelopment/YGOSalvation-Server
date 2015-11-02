@@ -91,6 +91,13 @@ function bootFlashPolicyServer() {
     }).on('exit', bootFlashPolicyServer);
 }
 
+function bootIRC() {
+    console.log('    IRCServer Started'.bold.yellow);
+    processManager.exec('./inspircd.exe', [], {
+        cwd: '../../inspircd-ws-binary'
+    }, bootIRC);
+}
+
 
 (function main() {
     var mainStack = domain.create();
@@ -105,15 +112,16 @@ function bootFlashPolicyServer() {
 
         //boot IRC
         //boot anope
-        //boot http
-        bootGameList();
-        bootManager();
-        bootUpdateSystem();
-        bootAISystem();
-        bootFlashPolicyServer();
-        manualModeBoot();
-        bootlogger();
-
+        //boot 
+        setTimeout(function () {
+            bootGameList();
+            bootManager();
+            bootUpdateSystem();
+            bootAISystem();
+            bootFlashPolicyServer();
+            manualModeBoot();
+            bootlogger();
+        }, 5000);
 
         var httpcheck = net.createServer(),
             localhost = process.env.MAINSITE || '127.0.0.1';
