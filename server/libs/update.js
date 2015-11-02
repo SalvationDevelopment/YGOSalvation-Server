@@ -116,7 +116,6 @@ function update(cb) {
         });
         spawn('git', ['pull'], {}, function () {
             n++;
-            console.log();
         });
         spawn('git', ['pull'], {
             cwd: './ygopro/script'
