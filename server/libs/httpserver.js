@@ -22,9 +22,8 @@ app.use(createVirtualStaticHost(process.env.SITE, require('path').resolve(proces
 app.use(createVirtualPHPHost(process.env.FORUM, require('path').resolve(process.cwd() + '\\..\\..\\..\\invision')));
 app.use(createVirtualStaticHost(process.env.ProductionSITE, require('path').resolve(process.cwd() + '\\..\\http')));
 app.use(createVirtualPHPHost(process.env.ProductionFORUM, require('path').resolve(process.cwd() + '\\..\\..\\..\\invision')));
-app.use(compression({
-    level: 1
-}));
+
+
 app.use(function (req, res, next) {
     if (toobusy()) {
         res.send(503, "I'm busy right now, sorry.");
