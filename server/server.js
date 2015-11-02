@@ -102,7 +102,7 @@ function bootIRC() {
 (function main() {
     var mainStack = domain.create();
     mainStack.on('error', function (err) {
-        console.error((new Date()).toUTCString() + ' mainStackException:', err.message);
+        console.error((new Date()).toUTCString(), ' mainStackException:', err.message);
     });
     mainStack.run(function () {
         process.title = 'YGOPro Salvation Server ' + new Date();
