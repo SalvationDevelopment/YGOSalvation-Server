@@ -19,7 +19,9 @@ Run `npm install` in the directory above.
 'use strict';
 var CONFIGURATION = {
     FORUM: 'localforum',
-    SITE: 'localhost'
+    SITE: 'localhost',
+    ProductionFORUM: 'forum.ygopro.us',
+    ProductionSITE: 'ygopro.us'
 };
 
 
@@ -119,7 +121,7 @@ function bootIRC() {
             bootUpdateSystem();
             bootAISystem();
             bootFlashPolicyServer();
-            manualModeBoot();
+            //manualModeBoot();
             bootlogger();
         }, 5000);
 
