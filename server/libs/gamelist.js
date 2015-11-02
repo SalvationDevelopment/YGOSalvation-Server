@@ -165,7 +165,9 @@ function messageListener(message) {
 
     var messageListenerWatcher = domain.create();
     messageListenerWatcher.on('error', function (err) {
-        console.log(err);
+        if (err) {
+            console.log(err);
+        }
     });
     messageListenerWatcher.run(function () {
         activeDuels = 0;
@@ -351,7 +353,7 @@ primus = new Primus(primusServer, {
 primus.use('rooms', Rooms);
 
 primus.on('error', function (error) {
-    console.log(error);
+    console.log('[Gamelist]:', error);
 });
 
 primus.on('connection', function (socket) {
@@ -381,7 +383,7 @@ primus.on('connection', function (socket) {
                 gamelist = data.gamelist;
                 registry = data.registry;
                 booting = false;
-                console.log(data.gamelist, data.registry);
+                console.log('[Gamelist]:', data.gamelist, data.registry);
             }
             break;
 

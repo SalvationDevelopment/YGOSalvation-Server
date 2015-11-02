@@ -38,7 +38,6 @@ function forumValidate(data, callback) {
                 callback(null, info, body);
                 return;
             } else {
-                console.log(error);
                 callback('Error during validation', {}, body);
             }
         });
