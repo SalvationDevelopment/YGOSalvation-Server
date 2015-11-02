@@ -18,8 +18,8 @@ function createVirtualPHPHost(domainName, dirPath) {
 }
 
 
-app.use(createVirtualStaticHost(process.env.SITE, '../http'));
-app.use(createVirtualPHPHost(process.env.FORUM, 'C:/Users/root/Documents/GitHub/invision'));
+app.use(createVirtualStaticHost(process.env.SITE, require('path').resolve(process.cwd() + '\\..\\http')));
+app.use(createVirtualPHPHost(process.env.FORUM, require('path').resolve(process.cwd() + '\\..\\..\\..\\invision')));
 app.use(compression());
 app.use(function (req, res, next) {
     if (toobusy()) {
