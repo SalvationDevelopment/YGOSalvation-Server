@@ -1,7 +1,7 @@
 var translationDB = [{
     "item": "data-translation-salvationserver",
-    "en": "ChibiPro",
-    "es": "ChibiPro",
+    "en": "Salvation Server",
+    "es": "Servidor Salvation",
     "de": "Salvation Server",
     "fr": "Serveur Salvation",
     "fr-ca": "Serveur Salvation",
