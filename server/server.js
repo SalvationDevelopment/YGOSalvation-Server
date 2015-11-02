@@ -94,7 +94,7 @@ function bootFlashPolicyServer() {
 function bootIRC() {
     console.log('    IRCServer Started'.bold.yellow);
     processManager.exec('./inspircd.exe', [], {
-        cwd: '../../inspircd-ws-binary'
+        cwd: '../../Salvation-inspire-ws-binary'
     }, bootIRC);
 }
 
