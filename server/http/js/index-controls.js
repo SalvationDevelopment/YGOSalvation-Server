@@ -42,8 +42,10 @@ function singlesitenav(target) {
     } else if ($('.unlogged.in-iframe').length > 0 && target === 'gamelist') {
         return;
     }
+    $('body').css('background-image', 'url(../img/bg.jpg)');
     if (target === 'faq') {
         updatenews();
+        $('body').css('background-image', 'url(http://i1.kym-cdn.com/photos/images/facebook/000/846/154/903.jpg)');
     }
     if (target === 'chat' && !chatStarted) {
         swfobject.embedSWF("lightIRC/lightIRC.swf", "lightIRC", "100%", "92%", "10.0.0", "expressInstall.swf", params, {
