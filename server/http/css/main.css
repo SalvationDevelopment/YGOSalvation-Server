@@ -423,7 +423,7 @@ header {
     padding-bottom: 40px;
     color: white;
     background: rgba(0, 0, 0, .65);
-/*    background: -webkit-gradient(linear, left top, right bottom, color-stop(0%, rgba(0, 0, 0, 1)), color-stop(7%, rgba(1, 1, 1, 1)), color-stop(33%, rgba(6, 6, 6, 0)), color-stop(49%, rgba(9, 9, 9, 0)), color-stop(89%, rgba(17, 17, 17, 1)), color-stop(100%, rgba(19, 19, 19, 1)));*/
+    /*    background: -webkit-gradient(linear, left top, right bottom, color-stop(0%, rgba(0, 0, 0, 1)), color-stop(7%, rgba(1, 1, 1, 1)), color-stop(33%, rgba(6, 6, 6, 0)), color-stop(49%, rgba(9, 9, 9, 0)), color-stop(89%, rgba(17, 17, 17, 1)), color-stop(100%, rgba(19, 19, 19, 1)));*/
     overflow: auto;
 }
 
@@ -434,10 +434,11 @@ header {
     max-height: 60px;
     float: left;
     border: 1px solid;
-    margin: 2px 1%;
+    margin: .5% 1%;
     padding: 5px;
     color: white;
     cursor: pointer;
+    position: relative;
 }
 
 div#gamelistitems {
@@ -660,6 +661,9 @@ header {
     margin-top: 4px;
     padding-top: 0px;
     padding-bottom: 6px;
+    position: absolute;
+    right: 5px;
+    bottom: 5px;
 }
 
 .game span.major {
@@ -1629,6 +1633,14 @@ div[data-game^="32"] {
     background-size: auto 100% !important;
     border: 1px solid grey;
     color: grey;
+}
+
+.Single {
+    width: 23%;
+}
+
+.Tag {
+    width: 98%;
 }
 
 div#news {
