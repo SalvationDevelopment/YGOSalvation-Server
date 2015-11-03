@@ -239,7 +239,6 @@ function legalPassword(passIn) {
         console.log('Invalid password length', passIn);
         return false;
     }
-    console.log(passIn);
     var re = new RegExp("\\d\\d\\d(O|T)(O|T)(O|T)(\\d)+,(\\d)|(\\d\\d),\\d,\\d,(\\w)+,(\\w)+"),
         output = re.test(passIn);
     if (output) {

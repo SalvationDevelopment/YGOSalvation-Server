@@ -121,7 +121,7 @@ function bootIRC() {
             bootUpdateSystem();
             bootAISystem();
             bootFlashPolicyServer();
-            //manualModeBoot();
+            manualModeBoot();
             bootlogger();
         }, 5000);
 

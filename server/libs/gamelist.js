@@ -357,6 +357,9 @@ primus.on('error', function (error) {
 });
 
 primus.on('connection', function (socket) {
+    socket.on('error', function (error) {
+        console.log('[Gamelist]:Error:', error);
+    });
     socket.on('data', function (data) {
 
 
