@@ -439,7 +439,8 @@ header {
     color: white;
     cursor: pointer;
     position: relative;
-/*    background-repeat: no-repeat;*/
+    background-position: center center;
+    background-repeat: no-repeat;
 }
 
 div#gamelistitems {
