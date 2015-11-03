@@ -1637,12 +1637,9 @@ div[data-game^="32"] {
     color: grey;
 }
 
-.Single {
-    width: 23%;
-}
-
+.Single,
 .Tag {
-    width: 73%;
+    width: 23%;
 }
 
 div#news {
