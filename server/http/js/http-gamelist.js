@@ -422,7 +422,7 @@ function preformfilter(translated, players, rooms, started, pid, watchers) {
     if (OK) {
         duelist = (translated.gameMode === 'Single' || translated.gameMode === 'Match') ? players[0] + ' vs ' + players[1] : players[0] + ' &amp ' + players[1] + ' vs ' + players[2] + ' &amp ' + players[3];
         //console.log(translated);
-        content = '<div class="game ' + rooms + ' ' + started + ' ' + translated.isLocked + ' ' + translated.gameMode ';
+        content = '<div class="game ' + rooms + ' ' + started + ' ' + translated.isLocked + ' ' + translated.gameMode;
         content += '"onclick=enterGame("' + rooms + '",' + translated.isLocked + ')'
         content += 'data-' + game + '="' + rooms + '"data-killpoint="' + pid + '">' + duelist + spectators;
         content += '<span class="subtext" style="font-size:.5em"><br>' + translated.gameMode;
