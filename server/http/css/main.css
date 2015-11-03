@@ -381,6 +381,7 @@ body {
     font-weight: 400;
     overflow: hidden;
     width: 100vw;
+    transition: background-image 6000ms ease-in 2s;
 }
 
 #logo {
