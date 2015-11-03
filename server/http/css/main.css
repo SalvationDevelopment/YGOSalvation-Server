@@ -427,6 +427,22 @@ header {
     overflow: auto;
 }
 
+#gamelistswitch {
+    text-align: center;
+    color: white;
+    font-weight: bold;
+}
+
+#gamelistswitch span {
+    display: block;
+    width: 50%
+}
+
+#gamelistswitchmanual {
+    color: black;
+    text-shadow: 0 0 5px white;
+}
+
 .game {
     background: rgba(0, 0, 0, .65);
     width: 48%;
