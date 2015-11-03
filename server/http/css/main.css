@@ -1466,7 +1466,7 @@ div[data-game^="0"]:not(.started) {
     background-image: url(http://ygopro.us/img/ocg.png);
     background-size: 100% 100%;
     color: white;
-    background-size: auto 100% !important;
+    background-size: cover;
 }
 
 .started[data-game^="0"] {
@@ -1474,7 +1474,7 @@ div[data-game^="0"]:not(.started) {
     background-color: rgba(0, 0, 0, .5) !important;
     border: 1px solid grey;
     color: grey;
-    background-size: auto 100% !important;
+    background-size: cover;
 }
 
 div[data-game^="1"] {
@@ -1485,7 +1485,7 @@ div[data-game^="1"] {
 
 div[data-game^="1"]:not(.started) {
     background-image: url(http://ygopro.us/img/tcg.png);
-    background-size: auto 100% !important;
+    background-size: cover;
     color: white;
     background-size: cover;
 }
@@ -1495,7 +1495,7 @@ div[data-game^="1"]:not(.started) {
     background-color: rgba(0, 0, 0, .5) !important;
     border: 1px solid grey;
     color: grey;
-    background-size: auto 100% !important;
+    background-size: cover;
 }
 
 div[data-game^="2"] {
@@ -1506,7 +1506,7 @@ div[data-game^="2"] {
 
 div[data-game^="2"]:not(.started) {
     background-image: url(http://ygopro.us/img/tcgocg.png);
-    background-size: auto 100% !important;
+    background-size: cover;
     color: white;
 }
 
@@ -1515,15 +1515,15 @@ div[data-game^="2"]:not(.started) {
     background-color: rgba(0, 0, 0, .5) !important;
     border: 1px solid grey;
     color: grey;
-    background-size: auto 100% !important;
+    background-size: cover;
 }
 
 div[data-game^="3"]:not(.started) {
     /* Anime */
     background-image: url(http://ygopro.us/img/anime.png);
-    background-size: auto 100% !important;
+    background-size: cover;
     color: white;
-    background-size: auto 100% !important;
+    background-size: cover;
 }
 
 .started[data-game^="3"] {
@@ -1531,7 +1531,7 @@ div[data-game^="3"]:not(.started) {
     background-color: rgba(0, 0, 0, .5) !important;
     border: 1px solid grey;
     color: grey;
-    background-size: auto 100% !important;
+    background-size: cover;
 }
 
 div[data-game^="00"],
@@ -1567,7 +1567,7 @@ div[data-game^="32"] {
     /* cheating! */
     background: red;
     font-weight: bold;
-    background-size: auto 100% !important;
+    background-size: cover;
     color: white;
     border: 2px;
 }
@@ -1580,7 +1580,7 @@ div[data-game^="32"] {
 .started[data-bad] {
     background: rgba(0, 0, 0, .5) !important;
     border: 1px solid grey;
-    background-size: auto 100% !important;
+    background-size: cover;
     color: grey;
     border: 1px solid grey;
 }
@@ -1588,7 +1588,7 @@ div[data-game^="32"] {
 [data-arg] {
     background-image: url('../img/arg.png') !important;
     background-color: rgba(0, 0, 0, .5) !important;
-    background-size: auto 100% !important;
+    background-size: cover;
     text-shadow: 0px 0px 19px black;
     border: 1px solid grey;
     background-repeat: no-repeat !important;
@@ -1598,7 +1598,7 @@ div[data-game^="32"] {
 .started[data-arg] {
     background-image: url('../img/faded-arg.png') !important;
     background-color: rgba(0, 0, 0, .5) !important;
-    background-size: auto 100% !important;
+    background-size: cover;
     border: 1px solid grey;
     color: grey;
 }
@@ -1606,7 +1606,7 @@ div[data-game^="32"] {
 [data-newgioh] {
     background-image: url('../img/newgiohtoken.png') !important;
     background-color: rgba(255, 255, 0, .5) !important;
-    background-size: auto 100% !important;
+    background-size: cover;
     text-shadow: 0px 0px 19px black;
     background-repeat: no-repeat !important;
     background-size: cover;
@@ -1615,7 +1615,7 @@ div[data-game^="32"] {
 .started[data-newgioh] {
     background-image: url('../img/outnewgiohtoken.png') !important;
     background-color: rgba(0, 0, 0, .5) !important;
-    background-size: auto 100% !important;
+    background-size: cover;
     border: 1px solid grey;
     color: grey;
 }
@@ -1623,7 +1623,7 @@ div[data-game^="32"] {
 [data-nostalgia] {
     background-image: url('../img/goat.png') !important;
     background-color: rgba(0, 0, 0, .5) !important;
-    background-size: auto 100% !important;
+    background-size: cover;
     text-shadow: 0px 0px 19px black;
     background-repeat: no-repeat !important;
     border: 1px solid pink;
@@ -1632,7 +1632,7 @@ div[data-game^="32"] {
 .started[data-nostalgia] {
     background-image: url('../img/outnewgiohtoken.png') !important;
     background-color: rgba(0, 0, 0, .5) !important;
-    background-size: auto 100% !important;
+    background-size: cover;
     border: 1px solid grey;
     color: grey;
 }
