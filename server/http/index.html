@@ -157,6 +157,10 @@
 
 
         <section id='gamelistsection'>
+            <div id="gamelistswitch">
+                <span id="gamelistswitchautomatic">Automatic</span>
+                <span id="gamelistswitchmanual">Manual</span>
+            </div>
             <div id="gamelistitems"></div>
             <div class='gamelistcenter' style="float:left; margin:1vh 1vw">
                 Active Duels : <span id="activeduels"></span> | Players : <span id="activeduelist"></span>
@@ -199,9 +203,9 @@
                 <br />
                 <label data-translation-banlist>Ban List</label>
                 <select id="creategamebanlist">
-					<option value="1">2015.11.9 (TCG)</option>
+                    <option value="1">2015.11.9 (TCG)</option>
                     <option value="2">2015.10.1(OCG)</option>
-					<option value="0" selected>2015.7.16(TCG)</option>
+                    <option value="0" selected>2015.7.16(TCG)</option>
                     <option value="3">ARG</option>
                     <option value="4">Newgioh</option>
                     <option value="5">Goat Format</option>
@@ -576,7 +580,7 @@
                         <label data-translation-nodelayforchains>No Delay for Chains</label>
                         <input type="checkbox" data-localhost="no_delay_for_chain" />
                         <br />
-						<label data-translation-enabledirectx>Enable DirectX</label>
+                        <label data-translation-enabledirectx>Enable DirectX</label>
                         <input type="checkbox" data-localhost="use_d3d" />
                         <br />
                         <label data-translation-enablesound>Enable Sound</label>
