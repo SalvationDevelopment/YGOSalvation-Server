@@ -381,7 +381,7 @@ body {
     font-weight: 400;
     overflow: hidden;
     width: 100vw;
-    transition: background-image 600ms ease-in;
+    transition: background-image 900ms ease-in;
 }
 
 #logo {
@@ -441,6 +441,15 @@ header {
     position: relative;
     background-position: center center;
     background-repeat: no-repeat;
+}
+
+.game.true:before {
+    postion: absolute;
+    top: 5px;
+    left: 5px;
+    background: yellow;
+    width: 10px;
+    height: 10px;
 }
 
 div#gamelistitems {
