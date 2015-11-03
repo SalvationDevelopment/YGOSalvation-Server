@@ -362,7 +362,6 @@ textarea {
     -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
-    transition-duration: 300ms;
 }
 
 @font-face {
@@ -425,6 +424,7 @@ header {
     background: rgba(0, 0, 0, .65);
     /*    background: -webkit-gradient(linear, left top, right bottom, color-stop(0%, rgba(0, 0, 0, 1)), color-stop(7%, rgba(1, 1, 1, 1)), color-stop(33%, rgba(6, 6, 6, 0)), color-stop(49%, rgba(9, 9, 9, 0)), color-stop(89%, rgba(17, 17, 17, 1)), color-stop(100%, rgba(19, 19, 19, 1)));*/
     overflow: auto;
+    transition-duration: 100ms;
 }
 
 #gamelistswitch {
@@ -463,9 +463,11 @@ header {
     postion: absolute;
     top: 5px;
     left: 5px;
-    background: yellow;
     width: 10px;
     height: 10px;
+    content: "";
+    background-image: url(http://assistly-production.s3.amazonaws.com/talentbin/portal_attachments/484630/padlock-lock-icon_original.png?AWSAccessKeyId=AKIAJNSFWOZ6ZS23BMKQ&Expires=1446557294&Signature=jGbTtq0A2ahSW5q8HuK0E2gTzhk%3D&response-content-disposition=filename%3D%22padlock-lock-icon.png%22&response-content-type=image%2Fpng);
+    z-index: -1;
 }
 
 div#gamelistitems {
