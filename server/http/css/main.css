@@ -1836,3 +1836,13 @@ img#avatar {
 #profilepoints span {
     font-size: 60px;
 }
+
+#languagesetter span {
+    cursor: pointer;
+    background: rgba(0, 0, 0, .5);
+    padding: 5px;
+    border-radius: 6px;
+    box-shadow: 0 0 17px black;
+    margin-top: 5px;
+    display: inline-block;
+}
