@@ -33,7 +33,6 @@ function gamelistUpdate(data) {
         console.log('[AI]:Event: Client Event');
         if (data.clientEvent === 'duelrequest' && data.target === 'SnarkyChild') {
             console.log('[AI]:Event: Duel Request for SnarkyChild');
-            console.log(path.resolve(__dirname + '/..ai/'));
             windbot = childProcess.spawn('windbot.exe', ['SnarkyChild', 'Hours', '127.0.0.1', '8911', data.roompass], {
                 cwd: path
             });
