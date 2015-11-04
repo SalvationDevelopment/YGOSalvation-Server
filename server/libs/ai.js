@@ -48,7 +48,7 @@ function gamelistUpdate(data) {
             });
 
             windbot.stdout.on('data', function (rawmessage) {
-                console.log(rawmessage)
+                console.log(rawmessage.toString());
             });
         }
         return;
