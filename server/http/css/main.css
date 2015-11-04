@@ -460,15 +460,14 @@ header {
 }
 
 .game.true:before {
-    postion: absolute;
+    position: absolute;
     top: 5px;
     left: 5px;
-    width: 10px;
-    height: 10px;
+    width: 40px;
+    height: 40px;
     content: "";
-    background-image: url(http://assistly-production.s3.amazonaws.com/talentbin/portal_attachments/484630/padlock-lock-icon_original.png?AWSAccessKeyId=AKIAJNSFWOZ6ZS23BMKQ&Expires=1446557294&Signature=jGbTtq0A2ahSW5q8HuK0E2gTzhk%3D&response-content-disposition=filename%3D%22padlock-lock-icon.png%22&response-content-type=image%2Fpng);
-    z-index: -1;
-    background-size: cover;
+    background-image: url(http://cdn.flaticon.com/png/256/45467.png);
+    background-size: fill;
 }
 
 div#gamelistitems {
