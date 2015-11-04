@@ -42,6 +42,14 @@ function gamelistUpdate(data) {
             windbot.on('exit', function (extra) {
                 console.log('[AI]:Exit:', extra);
             });
+            windbot.stdout.on('error', function (error) {
+                //coreErrors.info(error);
+                console.log(error);
+            });
+
+            windbot.stdout.on('data', function (rawmessage) {
+                console.log(rawmessage)
+            });
         }
         return;
     }
