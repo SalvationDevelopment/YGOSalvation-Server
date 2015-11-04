@@ -290,8 +290,16 @@ function setHostSettings() {
     //PER CHIBI
     console.log(localStorage.roompass, 'affter calculation');
     localStorage.lastdeck = $('#hostSettings .currentdeck').val();
-    ygopro('-j');
 
+    if (isChecked('#useai')) {
+        primus.write({
+            action: 'ai',
+            roompass: localStorage.roompass
+        });
+        ygopro('-j');
+    } else {
+        ygopro('-j');
+    }
     try {
         _gaq.push(['_trackEvent', 'Launcher', 'YGOPro', 'Host']);
         _gaq.push(['_trackEvent', 'Launcher', 'YGOPro Host', duelRequest.string + duelRequest.prio +
