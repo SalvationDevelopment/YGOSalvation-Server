@@ -35,6 +35,9 @@ function gamelistUpdate(data) {
             windbot = childProcess.spawn('start', ['windbot.exe', 'SnarkyChild', 'Hours', '127.0.0.1', '8911', data.roompass], {
                 cwd: startDirectory + '/../ai'
             });
+            windbot.on('error', function (error) {
+                console.log('[AI]:Error:', error);
+            });
         }
         return;
     }
