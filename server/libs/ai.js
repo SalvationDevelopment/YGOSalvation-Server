@@ -29,7 +29,9 @@ function gamelistUpdate(data) {
     var needsKill = true,
         windbot;
     if (data.clientEvent) {
+        console.log('[AI]:Event: Client Event');
         if (data.clientEvent === 'duelrequest' && data.target === 'SnarkyChild') {
+            console.log('[AI]:Event: Duel Request for SnarkyChild');
             windbot = childProcess.spawn('start', ['windbot.exe', 'SnarkyChild', 'Hours', '127.0.0.1', '8911', data.roompass], {
                 cwd: startDirectory + '/../ai'
             });
@@ -58,3 +60,6 @@ module.exports = {
     onConnectGamelist: onConnectGamelist,
     onCloseGamelist: onCloseGamelist
 };
+
+
+require('fs').watch(__filename, process.exit);
