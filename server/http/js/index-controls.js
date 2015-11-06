@@ -127,10 +127,10 @@ function processServerCall(data) {
     $('#skinlist').html(data.skinlist);
     $('#fontlist').html(data.fonts);
     $('#dblist').html(data.databases);
-    $('.currentdeck option[value="' + selected + '"]').attr('selected', 'selected');
-    $('#skinlist option[value="' + selectedskin + '"]').attr('selected', 'selected');
-    $('#fontlist option[value="' + selectedfont + '"]').attr('selected', 'selected');
-    $('#dblist option[value="' + selecteddb + '"]').attr('selected', 'selected');
+    $('.currentdeck option[value="' + selected + '"]').not('.activescreen option').attr('selected', 'selected');
+    $('#skinlist option[value="' + selectedskin + '"]').not('.activescreen option').attr('selected', 'selected');
+    $('#fontlist option[value="' + selectedfont + '"]').not('.activescreen option').attr('selected', 'selected');
+    $('#dblist option[value="' + selecteddb + '"]').not('.activescreen option').attr('selected', 'selected');
     deckfiles = data.files;
     $('.deckSelect').not('.activescreen .deckSelect').html('');
     for (deckfile in deckfiles) {
