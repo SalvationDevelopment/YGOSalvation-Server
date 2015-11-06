@@ -23,9 +23,9 @@ app.use(createVirtualPHPHost(process.env.FORUM, require('path').resolve(process.
 app.use(createVirtualStaticHost(process.env.ProductionSITE, require('path').resolve(process.cwd() + '\\..\\http')));
 app.use(createVirtualPHPHost(process.env.ProductionFORUM, require('path').resolve(process.cwd() + '\\..\\..\\..\\invision')));
 
-app.use('/ygopro', serveIndex(require('path').resolve(process.cwd() + '\\..\\http\\ygopro', {
-    'icons': true
-})));
+//app.use('/ygopro', serveIndex(require('path').resolve(process.cwd() + '\\..\\http\\ygopro', {
+//    'icons': true
+//})));
 
 app.use(function (req, res, next) {
     if (toobusy()) {
