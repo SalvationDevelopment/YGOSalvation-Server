@@ -29,7 +29,11 @@
         "node-php": "*",
         "express": "*",
         "compression": "*",
-        "toobusy-js": "*"
+        "toobusy-js": "*",
+        "instaqueue": "*",
+        "vhost": "*",
+        "serve-index": "*",
+        "electron-prebuilt": "*"
     },
     "optionalDependencies": {
         "httpsys": "*"
