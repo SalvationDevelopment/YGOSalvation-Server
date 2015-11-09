@@ -86,6 +86,7 @@ function handlePrimusEvent(data, client) {
         duelID = data.duelID,
         duelQuery = data.duelQuery,
         amount = data.amount,
+        phase = data.phase,
         target = data.target,
         moveTo = data.moveTo,
         hostOptions = data.hostOptions || {},
@@ -111,7 +112,7 @@ function handlePrimusEvent(data, client) {
         }
     case "hostDuel":
         {
-            if (!duelID) {
+            if (!duelID || !registry[id]) {
                 writeResponse(client, [403, 'invalidRequest']);
                 return;
             }
@@ -139,7 +140,7 @@ function handlePrimusEvent(data, client) {
         }
     case "joinDuel":
         {
-            if (!duelID || !activeDuels.hasOwnProperty(duelID)) {
+            if (!duelID || !activeDuels.hasOwnProperty(duelID) || !registry[id]) {
                 writeResponse(client, [403, 'invalidRequest']);
                 return;
             }
@@ -219,7 +220,7 @@ function handlePrimusEvent(data, client) {
         }
     case "spectateDuel":
         {
-            if (!duelID || !activeDuels.hasOwnProperty(duelID)) {
+            if (!duelID || !activeDuels.hasOwnProperty(duelID) || !registry[id]) {
                 writeResponse(client, [403, 'invalidRequest']);
                 return;
             }
@@ -237,7 +238,7 @@ function handlePrimusEvent(data, client) {
         }
     case "duelQuery":
         {
-            if (!duelID || !activeDuels.hasOwnProperty(duelID)) {
+            if (!duelID || !activeDuels.hasOwnProperty(duelID) || !registry[id]) {
                 writeResponse(client, [403, 'invalidRequest']);
                 return;
             }
@@ -420,6 +421,7 @@ function handlePrimusEvent(data, client) {
                         if (amount > Number.MAX_VALUE) {
                             amount = Number.MAX_VALUE - activeDuels[duelID].state["Player " + activeDuels[duelID].players[uid].ROLE][LP];
                         }
+                        activeDuels[duelID].state["Player " + activeDuels[duelID].players[uid].ROLE][LP] += amount;
                         primus.room(duelID).write({
                             event: QUERY_ADD_LP,
                             data: {
@@ -446,6 +448,7 @@ function handlePrimusEvent(data, client) {
                         if (amount > activeDuels[duelID].state["Player " + activeDuels[duelID].players[uid].ROLE][LP]) {
                             amount = activeDuels[duelID].state["Player " + activeDuels[duelID].players[uid].ROLE][LP];
                         }
+                        activeDuels[duelID].state["Player " + activeDuels[duelID].players[uid].ROLE][LP] -= amount;
                         primus.room(duelID).write({
                             event: QUERY_SUB_LP,
                             data: {
@@ -488,13 +491,92 @@ function handlePrimusEvent(data, client) {
                     }
                     break;
                 }
+            case QUERY_SHOW_HAND:
+                {
+                    if (activeDuels[duelID].players.hasOwnProperty(uid)) {
+                        primus.room(duelID).write({
+                            event: QUERY_SHOW_HAND,
+                            data: {
+                                hand: activeDuels[duelID].state["Player " + activeDuels[duelID].players[uid].ROLE][HAND],
+                                player: registry[id].username
+                            }
+                        });
+                        writeResponse(client, [200, 'handShown']);
+                    } else {
+                        writeResponse(client, [403, 'invalidRequest']);
+                    }
+                    break;
+                }
+            case QUERY_SHOW_DECK:
+                {
+                    if (activeDuels[duelID].players.hasOwnProperty(uid)) {
+                        if (activeDuels[duelID].players[uid].viewingDeck) {
+                            shuffleDeck(activeDuels[duelID], activeDuels[duelID].players[uid].ROLE);
+                        }
+                        primus.room(duelID).write({
+                            event: QUERY_SHOW_DECK,
+                            data: {
+                                deck: activeDuels[duelID].state["Player " + activeDuels[duelID].players[uid].ROLE][DECK],
+                                player: registry[id].username
+                            }
+                        });
+                        writeResponse(client, [200, 'deckShown']);
+                    } else {
+                        writeResponse(client, [403, 'invalidRequest']);
+                    }
+                    break;
+                }
+            case QUERY_SHOW_EXTRA:
+                {
+                    if (activeDuels[duelID].players.hasOwnProperty(uid)) {
+                        primus.room(duelID).write({
+                            event: QUERY_SHOW_EXTRA,
+                            data: {
+                                extra: activeDuels[duelID].state["Player " + activeDuels[duelID].players[uid].ROLE][EXTRA_DECK],
+                                player: registry[id].username
+                            }
+                        });
+                        writeResponse(client, [200, 'handShown']);
+                    } else {
+                        writeResponse(client, [403, 'invalidRequest']);
+                    }
+                    break;
+                }
+            case QUERY_CHANGE_PHASE:
+                {
+                    if (activeDuels[duelID].players.hasOwnProperty(uid)) {
+                        activeDuels[duelID].state[CURRENT_PHASE] = phase;
+                        primus.room(duelID).write({
+                            event: QUERY_CHANGE_PHASE,
+                            data: phase
+                        });
+                        writeResponse(client, [200, 'phaseChanged']);
+                    } else {
+                        writeResponse(client, [403, 'invalidRequest']);
+                    }
+                    break;
+                }
+            case QUERY_END_TURN:
+                {
+                    if (activeDuels[duelID].players.hasOwnProperty(uid)) {
+                        activeDuels[duelID].state[TURN_PLAYER] = (activeDuels[duelID].state[TURN_PLAYER] > 2) ? activeDuels[duelID].state[TURN_PLAYER] - 2 : activeDuels[duelID].state[TURN_PLAYER] + 2;
+                        primus.room(duelID).write({
+                            event: QUERY_END_TURN,
+                            data: activeDuels[duelID].state[TURN_PLAYER]
+                        });
+                        writeResponse(client, [200, 'turnEnded']);
+                    } else {
+                        writeResponse(client, [403, 'invalidRequest']);
+                    }
+                    break;
+                }
             case QUERY_COIN_FLIP:
                 {
                     if (activeDuels[duelID].players.hasOwnProperty(uid)) {
                         primus.room(duelID).write({
                             event: QUERY_COIN_FLIP,
                             data: {
-                                flip: (Math.random() > 0.5) ? 1 : 0,
+                                flip: (Math.random() >= 0.5) ? 1 : 0,
                                 player: registry[id].username
                             }
                         });
@@ -539,7 +621,7 @@ function handlePrimusEvent(data, client) {
                 }
             case QUERY_START_DUEL:
                 {
-                    if (!duelID || !activeDuels.hasOwnProperty(duelID) || activeDuels[duelID].players[uid].ROLE !== ROLE_HOST) {
+                    if (!duelID || !activeDuels.hasOwnProperty(duelID) || !activeDuels[duelID].players.hasOwnProperty(uid) || activeDuels[duelID].players[uid].ROLE !== ROLE_HOST) {
                         writeResponse(client, [403, 'invalidRequest']);
                         break;
                     }
@@ -652,6 +734,8 @@ function secureClientDuel(activeDuel) {
 }
 
 function validDeck(deckList, banList, database) {
+    banList = banList || {};
+    database = database || databases["0-en-OCGTCG"];
     var decks = ["main", "side", "extra"],
         card,
         mainMin = 40,
