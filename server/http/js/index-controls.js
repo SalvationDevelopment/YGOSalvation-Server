@@ -124,9 +124,9 @@ function processServerCall(data) {
         selecteddb = $("#dblist option:selected").val(),
         deckfile;
     $('.currentdeck').not('.activescreen .currentdeck').html(data.currentdeck);
-    $('#skinlist').html(data.skinlist);
-    $('#fontlist').html(data.fonts);
-    $('#dblist').html(data.databases);
+    $('#skinlist').not('.activescreen #skinlist').html(data.skinlist);
+    $('#fontlist').not('.activescreen #fontlist').html(data.fonts);
+    $('#dblist').not('.activescreen #dblist').html(data.databases);
     $('.currentdeck option[value="' + selected + '"]').not('.activescreen option').attr('selected', 'selected');
     $('#skinlist option[value="' + selectedskin + '"]').not('.activescreen option').attr('selected', 'selected');
     $('#fontlist option[value="' + selectedfont + '"]').not('.activescreen option').attr('selected', 'selected');
@@ -134,11 +134,12 @@ function processServerCall(data) {
     deckfiles = data.files;
     $('.deckSelect').not('.activescreen .deckSelect').html('');
     for (deckfile in deckfiles) {
-        $('.deckSelect').append('<option value="' + deckfile + '">' + deckfile.replace('.ydk', '') + '</option>');
+        $('.deckSelect').not('.activescreen .deckSelect').append('<option value="' + deckfile + '">' + deckfile.replace('.ydk', '') + '</option>');
     }
     //console.log(data);
 }
 var jsLang = {};
+
 
 function translateLang(lang) {
     "use strict";
