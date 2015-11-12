@@ -1,6 +1,12 @@
 {
     "Articles": [
 		{
+			"Title": "The rest of SPWR has been added!",
+			"Subtitle": "Rangers, assemble!",
+			"Content": "<p>Here are cards added recently since the last news update (we apologize for not reporting some of these sooner)<br /><br />Burgesstoma Leanchoilia<br />Burgesstoma Eldonia<br />Burgesstoma Opabinia<br />Burgesstoma Dinomischus<br />Burgesstoma Dinomischus<br />Burgesstoma Marella<br />Priestess with Eyes of Blue<br />Super Quantum Mecha Beast Granpulse<br />The Phantom Knights of Fragile Armor<br />Super Quantum Mecha Pilot Green Layer (NEW!)<br />Super Quantum Mecha Beast Aeroboros (NEW!)<br />Booby Trap E (NEW!)<br />The Phantom Spear (NEW!)<br />The Phantom Sword (NEW!)<br />The Phantom Wing (NEW!)<br />The Phantom Knights of Crack Helm (NEW!)<br />Ties of Brethren (NEW!)<br /><br />Credit for coding these cards goes to YGOHack137, HelixReactor, and OneShot.</p>",
+			"Author": "StormWolf",
+			"Date": "November 12, 2015"
+		},{
 			"Title": "The beginning of a new era",
 			"Subtitle": "Enjoy your early Chibiween treats!",
 			"Content": "<p>New cards added since the last news post:<br /><br />Gameciel, the Sea Turtle Kaiju<br />Radian, the Multidimensional Kaiju<br />Kaiju Capture Mission<br />Painful Escape<br />Super Quantum Mecha Pilot Blue Layer<br />Super Quantum Fairy Alphan<br />Super Quantum Mecha Ship Magnacarrier<br /><br /r>All credit to programming the cards goes to OneShot, HelixReactor, and Ragna_Edge. As some of you may have noticed, Salvation has added the new TCG Forbidden & Limited List today! However, the previous format will remain the default until November 9 to respect the format's official date. Expect various bug fixes for the launcher to come within a few days.</p>",
