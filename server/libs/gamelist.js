@@ -52,87 +52,91 @@ function logger(announcement) {
 
 function handleCoreMessage(core_message_raw, port, pid) {
 
-    var handleCoreMessageWatcher = domain.create();
-    handleCoreMessageWatcher.on('error', function (err) {});
-    handleCoreMessageWatcher.run(function () {
-
-        if (core_message_raw.toString().indexOf("::::") < 0) {
-            return gamelist; //means its not a message pertaining to the gamelist API.
-        }
-
-        var chat,
-            join_slot,
-            leave_slot,
-            lock_slot,
-            core_message = core_message_raw.toString().split('|');
-        core_message[0] = core_message[0].trim();
-        if (core_message[1] === undefined) {
-            return gamelist;
-        }
-        if (gamelist[core_message[1]] === undefined) {
-            gamelist[core_message[1]] = {
-                players: [],
-                locked: [false, false, false, false],
-                spectators: 0,
-                started: false,
-                time: new Date().getTime(),
-                pid: pid || undefined
-            };
-            //if the room its talking about isnt on the gamelist, put it on the gamelist.
-        }
-        switch (core_message[0]) {
-
-        case ('::::join-slot'):
-            join_slot = parseInt(core_message[2], 10);
-            if (join_slot === -1) {
-                return;
-            }
-            gamelist[core_message[1]].players[join_slot] = core_message[3].trim();
-            gamelist[core_message[1]].time = new Date().getTime();
-            gamelist[core_message[1]].port = port;
-            break;
-
-        case ('::::left-slot'):
-            leave_slot = parseInt(core_message[2], 10);
-            if (leave_slot === -1) {
-                return;
-            }
-            gamelist[core_message[1]].players[leave_slot] = null;
-            break;
-
-        case ('::::spectator'):
-            gamelist[core_message[1]].spectators = parseInt(core_message[2], 10);
-            break;
-
-        case ('::::lock-slot'):
-            lock_slot = parseInt(core_message[2], 10);
-            gamelist[core_message[1]].locked[lock_slot] = Boolean(core_message[2]);
-            break;
-
-        case ('::::endduel'):
-            //ps.kill(gamelist[core_message[1]].pid, function (error) {});
-            delete gamelist[core_message[1]];
-            //process.kill(pid);
-            break;
-
-        case ('::::startduel'):
-            gamelist[core_message[1]].started = true;
-            gamelist[core_message[1]].time = new Date().getTime();
-            duelserv.bot.say('#public', gamelist[core_message[1]].pid + '|Duel starting|' + JSON.stringify(gamelist[core_message[1]].players));
-            break;
-
-        case ('::::chat'):
-            chat = core_message.join(' ');
-
-            process.nextTick(function () {
-                logger(gamelist[core_message[1]].pid + '|' + core_message[2] + ': ' + core_message[3]);
-            });
-            process.nextTick(function () {
-                duelserv.bot.say('#public', gamelist[core_message[1]].pid + '|' + core_message[2] + ': ' + core_message[3]);
-            });
-            break;
-        }
+    var chat,
+        join_slot,
+        leave_slot,
+        lock_slot,
+        core_message,
+        handleCoreMessageWatcher = domain.create();
+    handleCoreMessageWatcher.on('error', function (error) {
+        console.log('[Gamelist]:Error-CoreMessage', core_message_raw, error);
     });
+    handleCoreMessageWatcher.enter();
+
+    if (core_message_raw.toString().indexOf("::::") < 0) {
+        return gamelist; //means its not a message pertaining to the gamelist API.
+    }
+
+
+    core_message = core_message_raw.toString().split('|');
+    core_message[0] = core_message[0].trim();
+    if (core_message[1] === undefined) {
+        return gamelist;
+    }
+    if (gamelist[core_message[1]] === undefined) {
+        gamelist[core_message[1]] = {
+            players: [],
+            locked: [false, false, false, false],
+            spectators: 0,
+            started: false,
+            time: new Date().getTime(),
+            pid: pid || undefined
+        };
+        //if the room its talking about isnt on the gamelist, put it on the gamelist.
+    }
+    switch (core_message[0]) {
+
+    case ('::::join-slot'):
+        join_slot = parseInt(core_message[2], 10);
+        if (join_slot === -1) {
+            return;
+        }
+        gamelist[core_message[1]].players[join_slot] = core_message[3].trim();
+        gamelist[core_message[1]].time = new Date().getTime();
+        gamelist[core_message[1]].port = port;
+        break;
+
+    case ('::::left-slot'):
+        leave_slot = parseInt(core_message[2], 10);
+        if (leave_slot === -1) {
+            return;
+        }
+        gamelist[core_message[1]].players[leave_slot] = null;
+        break;
+
+    case ('::::spectator'):
+        gamelist[core_message[1]].spectators = parseInt(core_message[2], 10);
+        break;
+
+    case ('::::lock-slot'):
+        lock_slot = parseInt(core_message[2], 10);
+        gamelist[core_message[1]].locked[lock_slot] = Boolean(core_message[2]);
+        break;
+
+    case ('::::endduel'):
+        //ps.kill(gamelist[core_message[1]].pid, function (error) {});
+        delete gamelist[core_message[1]];
+        //process.kill(pid);
+        break;
+
+    case ('::::startduel'):
+        gamelist[core_message[1]].started = true;
+        gamelist[core_message[1]].time = new Date().getTime();
+        duelserv.bot.say('#public', gamelist[core_message[1]].pid + '|Duel starting|' + JSON.stringify(gamelist[core_message[1]].players));
+        break;
+
+    case ('::::chat'):
+        chat = core_message.join(' ');
+
+        process.nextTick(function () {
+            logger(gamelist[core_message[1]].pid + '|' + core_message[2] + ': ' + core_message[3]);
+        });
+        process.nextTick(function () {
+            duelserv.bot.say('#public', gamelist[core_message[1]].pid + '|' + core_message[2] + ': ' + core_message[3]);
+        });
+        break;
+    }
+    handleCoreMessageWatcher.exit();
 }
 
 function announce(announcement) {
@@ -356,147 +360,153 @@ primus.on('error', function (error) {
     console.log('[Gamelist]:', error);
 });
 
+function onData(data, socket) {
+    var socketwatcher = domain.create(),
+        action,
+        save;
+    socketwatcher.on('error', function (err) {
+        console.log('[Gamelist]Error-Critical:', err);
+    });
+    socketwatcher.enter();
+
+    data = data || {};
+    action = data.action;
+    save = false;
+    if (socket.readyState !== primus.Spark.CLOSED) {
+        save = true;
+    }
+    if (save === false) {
+        return;
+    }
+
+    socket.join(socket.address.ip + data.uniqueID);
+    switch (action) {
+    case ('internalServerLogin'):
+        if (data.password !== process.env.OPERPASS) {
+            return;
+        }
+        socket.join('internalservers');
+        if (booting && data.gamelist && data.registry) {
+            gamelist = data.gamelist;
+            registry = data.registry;
+            booting = false;
+            console.log('[Gamelist]:', data.gamelist, data.registry);
+        }
+        break;
+
+    case ('gamelistEvent'):
+
+        if (data.password === process.env.OPERPASS) {
+            messageListener(data.coreMessage);
+            sendGamelist();
+        } else {
+            console.log('bad insternal request');
+        }
+        break;
+    case ('ai'):
+        if (socket.username) {
+            announce({
+                clientEvent: 'duelrequest',
+                target: 'SnarkyChild',
+                from: socket.username,
+                roompass: data.roompass
+            });
+        }
+        break;
+    case ('join'):
+        socket.join(socket.address.ip + data.uniqueID);
+        socket.write({
+            clientEvent: 'privateServer',
+            serverUpdate: userdata[socket.address.ip + data.uniqueID],
+            ip: socket.address.ip + data.uniqueID
+        });
+
+        socket.write({
+            clientEvent: 'registrationRequest'
+        });
+
+        socket.join('activegames');
+        socket.write(JSON.stringify(gamelist));
+
+        break;
+    case ('leave'):
+        socket.leave('activegames');
+        break;
+    case ('register'):
+        registrationCall(data, socket);
+        break;
+    case ('global'):
+        globalCall(data);
+        break;
+    case ('genocide'):
+        genocideCall(data);
+        break;
+    case ('murder'):
+        murderCall(data);
+        break;
+    case ('internalRestart'):
+        if (data.password !== process.env.OPERPASS) {
+            return;
+        }
+        restartAnnouncement();
+        break;
+    case ('restart'):
+        restartCall(data);
+        break;
+    case ('killgame'):
+        killgameCall(data);
+        break;
+    case ('privateServerRequest'):
+        primus.room(socket.address.ip + data.uniqueID).write({
+            clientEvent: 'privateServerRequest',
+            parameter: data.parameter,
+            local: data.local
+        });
+        break;
+    case ('privateServer'):
+        break;
+    case ('joinTournament'):
+        socket.join('tournament');
+        socket.write(JSON.stringify(gamelist));
+        break;
+    case ('privateUpdate'):
+        primus.room(socket.address.ip + data.uniqueID).write({
+            clientEvent: 'privateServer',
+            serverUpdate: data.serverUpdate
+        });
+        userdata[socket.address.ip + data.uniqueID] = data.serverUpdate;
+        break;
+    case ('saveDeckRequest'):
+        primus.room(socket.address.ip + data.uniqueID).write({
+            clientEvent: 'saveDeck',
+            deckList: data.deckList,
+            deckName: data.deckName
+        });
+        break;
+    case ('unlinkDeckRequest'):
+        primus.room(socket.address.ip + data.uniqueID).write({
+            clientEvent: 'unlinkDeck',
+            deckName: data.deckName
+        });
+        break;
+    default:
+        console.log(data);
+    }
+    socketwatcher.exit();
+}
+
 primus.on('connection', function (socket) {
+    var connectionwatcher = domain.create();
+    connectionwatcher.on('error', function (err) {
+        console.log('[Gamelist]Error Critical User-Connection:', err);
+    });
+    connectionwatcher.enter();
     socket.on('error', function (error) {
-        console.log('[Gamelist]:Error:', error);
+        console.log('[Gamelist]:Generic Socket Error:', error);
     });
     socket.on('data', function (data) {
-        var socketwatcher = domain.create();
-        socketwatcher.on('error', function (err) {
-            console.log('[Gamelist]Error-Critical:', err);
-        });
-        socketwatcher.run(function () {
-
-            data = data || {};
-            var action = data.action,
-                save = false;
-            if (socket.readyState !== primus.Spark.CLOSED) {
-                save = true;
-            }
-            if (save === false) {
-                return;
-            }
-
-            socket.join(socket.address.ip + data.uniqueID);
-            switch (action) {
-            case ('internalServerLogin'):
-                if (data.password !== process.env.OPERPASS) {
-                    return;
-                }
-                socket.join('internalservers', function () {
-
-                });
-                if (booting && data.gamelist && data.registry) {
-                    gamelist = data.gamelist;
-                    registry = data.registry;
-                    booting = false;
-                    console.log('[Gamelist]:', data.gamelist, data.registry);
-                }
-                break;
-
-            case ('gamelistEvent'):
-
-                if (data.password === process.env.OPERPASS) {
-                    messageListener(data.coreMessage);
-                    sendGamelist();
-                } else {
-                    console.log('bad insternal request');
-                }
-                break;
-            case ('ai'):
-                if (socket.username) {
-                    announce({
-                        clientEvent: 'duelrequest',
-                        target: 'SnarkyChild',
-                        from: socket.username,
-                        roompass: data.roompass
-                    });
-                }
-                break;
-            case ('join'):
-                socket.join(socket.address.ip + data.uniqueID, function () {
-                    socket.write({
-                        clientEvent: 'privateServer',
-                        serverUpdate: userdata[socket.address.ip + data.uniqueID],
-                        ip: socket.address.ip + data.uniqueID
-                    });
-
-                    socket.write({
-                        clientEvent: 'registrationRequest'
-                    });
-
-                });
-
-                socket.join('activegames', function () {
-                    socket.write(JSON.stringify(gamelist));
-                });
-
-                break;
-            case ('leave'):
-                socket.leave('activegames');
-                break;
-            case ('register'):
-                registrationCall(data, socket);
-                break;
-            case ('global'):
-                globalCall(data);
-                break;
-            case ('genocide'):
-                genocideCall(data);
-                break;
-            case ('murder'):
-                murderCall(data);
-                break;
-            case ('internalRestart'):
-                if (data.password !== process.env.OPERPASS) {
-                    return;
-                }
-                restartAnnouncement();
-                break;
-            case ('restart'):
-                restartCall(data);
-                break;
-            case ('killgame'):
-                killgameCall(data);
-                break;
-            case ('privateServerRequest'):
-                primus.room(socket.address.ip + data.uniqueID).write({
-                    clientEvent: 'privateServerRequest',
-                    parameter: data.parameter,
-                    local: data.local
-                });
-                break;
-            case ('privateServer'):
-                break;
-            case ('joinTournament'):
-                socket.join('tournament', function () {
-                    socket.write(JSON.stringify(gamelist));
-                });
-                break;
-            case ('privateUpdate'):
-                primus.room(socket.address.ip + data.uniqueID).write({
-                    clientEvent: 'privateServer',
-                    serverUpdate: data.serverUpdate
-                });
-                userdata[socket.address.ip + data.uniqueID] = data.serverUpdate;
-                break;
-            case ('saveDeckRequest'):
-                primus.room(socket.address.ip + data.uniqueID).write({
-                    clientEvent: 'saveDeck',
-                    deckList: data.deckList,
-                    deckName: data.deckName
-                });
-                break;
-            case ('unlinkDeckRequest'):
-                primus.room(socket.address.ip + data.uniqueID).write({
-                    clientEvent: 'unlinkDeck',
-                    deckName: data.deckName
-                });
-                break;
-            default:
-                console.log(data);
-            }
-        });
+        onData(data, socket);
     });
+    connectionwatcher.exit();
 });
 require('fs').watch(__filename, process.exit);
