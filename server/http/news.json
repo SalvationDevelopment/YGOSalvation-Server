@@ -1,84 +1,90 @@
 {
     "Articles": [
-		{
-			"Title": "The rest of SPWR has been added!",
-			"Subtitle": "Rangers, assemble!",
-			"Content": "<p>Here are cards added recently since the last news update (we apologize for not reporting some of these sooner)<br /><br />Burgesstoma Leanchoilia<br />Burgesstoma Eldonia<br />Burgesstoma Opabinia<br />Burgesstoma Dinomischus<br />Burgesstoma Dinomischus<br />Burgesstoma Marella<br />Priestess with Eyes of Blue<br />Super Quantum Mecha Beast Granpulse<br />The Phantom Knights of Fragile Armor<br />Super Quantum Mecha Pilot Green Layer (NEW!)<br />Super Quantum Mecha Beast Aeroboros (NEW!)<br />Booby Trap E (NEW!)<br />The Phantom Spear (NEW!)<br />The Phantom Sword (NEW!)<br />The Phantom Wing (NEW!)<br />The Phantom Knights of Crack Helm (NEW!)<br />Ties of Brethren (NEW!)<br /><br />Credit for coding these cards goes to YGOHack137, HelixReactor, and OneShot.</p>",
-			"Author": "StormWolf",
-			"Date": "November 12, 2015"
-		},{
-			"Title": "The beginning of a new era",
-			"Subtitle": "Enjoy your early Chibiween treats!",
-			"Content": "<p>New cards added since the last news post:<br /><br />Gameciel, the Sea Turtle Kaiju<br />Radian, the Multidimensional Kaiju<br />Kaiju Capture Mission<br />Painful Escape<br />Super Quantum Mecha Pilot Blue Layer<br />Super Quantum Fairy Alphan<br />Super Quantum Mecha Ship Magnacarrier<br /><br /r>All credit to programming the cards goes to OneShot, HelixReactor, and Ragna_Edge. As some of you may have noticed, Salvation has added the new TCG Forbidden & Limited List today! However, the previous format will remain the default until November 9 to respect the format's official date. Expect various bug fixes for the launcher to come within a few days.</p>",
-			"Author": "StormWolf",
-			"Date": "October 29, 2015"
-		},{
-			"Title": "Catching up some card updates",
-			"Subtitle": "Sorry that this took longer",
-			"Content": "<p>As many of you noticed, we've had many new cards but haven't yet posted in the news. I wanted to wait to report more good news regarding important fixes, but they seem to be taking longer than the staff have expected.<br /><br />Cards added since the last news update<br /><br />Dynamic Powerload<br />The Phantom Knight of Silent Boots<br />Kozmo Strawman<br />Kozmo DOG Fighter<br />Kozmo Lightsword<br />Arbiter of the Seal<br />Samurai Cavalry Reptier<br /><br />As I said, this news update was postponed so that I could also report results on some occurring issues like with Tag Duel and the rest of the missing BOSH cards, but updating the ygocore is difficult. Seriously, we need more C++/C# programmers on our staff! I hope to report good news regarding this by tonight or tomorrow. However, we did finally fix Replays without needing to use the Replay_Viewer.exe file from the folder! DirectX was also brought back, which should help improve FPS performance for some users. There however may be some people with certain graphic drivers (particularly old AMD ones) that will have issues related to crashes during the Side Deck procedure. I've also experienced this issue but found a solution, so please contact me if you also need a fix for this.<br /><br />10/25 Update: Both Clash of the Dracorivals and Ariadne the Absolver have been added!</p>",
-			"Author": "StormWolf",
-			"Date": "October 24, 2015"
-		},{
-			"Title": "The new card updates won't stop just yet!",
-			"Subtitle": "Consider this an apology gift for last night's bugs",
-			"Content": "<p>Now that we got the overwhelming BOSH cards out of the way, here are some more new cards for you all!<br /><br />Raidraptor - Last Strix<br />Rank-Up-Magic Death Double Force<br />Raidraptor - Call<br />D/D/D Great Wise King Chaos Apocalypse<br />D/D Magical Astronomer Copernicus<br />D/D Magical Astronomer Newton<br />D/D/D Cruel Dragon King Beowulf<br />Card of Demise<br />Exod Flame<br />Exodia the Summoned Lord<br />Gaia the Soaring Dragon Champion<br /><br />Unfortunately, as you can see, the new Kozmo cards nor the cards missing from our BOSH release are done yet. The credit for all of these cards releases so far goes to YGOHack137 as well as to Chibi and our QA team for bug checking. These two days have been very busy and it only gets more difficult when many of our staff members are busy with their IRL issues. We're looking to hire more staff proficient with either Javascript, LUA, C++, foreign languages, or other technical skills that may be helpful to Salvation Server. If interested, feel free to contact any of the admins on the forums or the chat.</p>",
-			"Author": "StormWolf",
-			"Date": "October 18, 2015"
-		},{
-			"Title": "LOTS OF UPDATES",
-			"Subtitle": "PLEASE READ THIS ENTIRE NEWS UPDATE",
-			"Content": "<p>First of all, it's time for the long-awaited BOSH cards!<br /><br />Super Quantum Pilot Red Layer<br />Raidraptor - Satellite Cannon Falcon<br />Super Quantum Beastmech Magnaliger<br />Super Quantum Megamech Great Magnas<br />Super Quantum Megasword - Magnaslayer<br />Raidraptor - Necro Vulture<br />Raidraptor - Satellite Cannon Falcon<br />Deskbot 008<br />Deskbot 007<br />Performapal Guiturtle<br />Performapal Raingoat<br />Performapal Trump Girl<br />Twilight Stealth Commander - Nichirin<br />Superheavy Samurai Jisha-Q<br />Dinomist Plesios<br />Dinomist Stegosaurus<br />Dinomist Pteran<br />Majespecter Frog<br />Majespecter Sonic<br />Shiranui no Mononofu<br />Dark Doriado<br />Illumirage<br />Dinoster Powerful, the Strong Dracoslayer<br />Superheavy Samurai Maju Kyu-B<br />Goyo Defender<br />Magic Sea Castle Aigaion<br />Pendulum Storm<br />Shiranui Style: Reincarnation Formation<br />Twin Twister<br />Performance Band Hurricane<br />Sandstorm Mirror Force<br />Pendulum Reborn<br />Forbidden Tome<br />Unlucky Blast<br />False Accusation<br /><br />We're however still missing some cards, but we'll update this post when said cards are finished:<br /><br />Liberating Ariadne (it's difficult to make it ignore discard costs)<br />Seal Arbiter<br />Dynamic Powerload<br />Clash of the Dracorivals (we still cannot make it send cards directly from the deck to the Extra Deck)<br /><br />I'm sure you all will notice how slow our updater is, so you may want to visit the Bug Reports section of the forum to find my link that contains a WinRAR file that supplies the latest update. Be sure to check it out so that you can save yourselves some time!<br /><br />We've also updated some overdue card IDs, so you may notice some of your decks suddenly missing cards. To remedy this, click the Settings tab and click Open YGOPro folder. Next, right click the file called 'deckfix.bat' AND RUN IT AS ADMINISTRATOR. I REPEAT, IF YOU DON'T RUN IT AS ADMINISTRATOR, YOUR DECKS MAY BE DELETED. After the program finishes, your decks should all be working fine afterward. Feel free to report any problems regarding this on the forums or with any admins in the Chat.<br /><br />We're still behind on other new card updates, but we'll announce another news update about those when those cards are ready. We're looking for more LUA programmers, so contact one of the admins if interested with working for Salvation Server.</p>",
-			"Author": "StormWolf",
-			"Date": "October 17, 2015"
-		},{
-			"Title": "More new cards",
-			"Subtitle": "That new Solemn card looks dank",
-			"Content": "<p>New cards added recently since the last news update:<br /><br />Kozmoll Wickedwitch<br />Kozmo Dark Destroyer<br />Score the Melodious Diva<br />Solemn Notice<br />Hi-Speedroid Hagoita<br /><br />All credit for scripting the cards goes to OneShot. Just a heads-up that the updates might take as long as two minutes, so just wait a bit if you don't immediately see the cards in the Deck Edit.</p>",
-			"Author": "StormWolf",
-			"Date": "October 11, 2015"
-		},{
-			"Title": "The Buster Blader squad has gathered",
-			"Subtitle": "Dragons beware!",
-			"Content": "<p>New cards added last night<br /><br />Destruction Swordmaster - Arms Buster Blade<br />Destruction Swordmaster - Wizard Buster Blade<br />Fate of the Destruction Swordmaster<br /><br />As many of you have noticed since up to almost two weeks ago, Tag Duels are currently malfunctioned, and unfortunately, our staff isn't capable of repairing the problem at this moment. The earliest that we can possibly expect a fix is on October 17, when we expect the next YGOCore update from Fhlorohydride to release which will guarantee to have the syntax to support Clash of the Dracorivals properly without taking improper shortcuts. However, there's also the chance that this issue may remain unresolved until we reach the browser platform, which may take as long as two months to accomplish. The staff here on Salvation Server will keep you all posted about any updates regarding Tag Duels as well as SnarkieChild (which is also currently disabled due to causing server instability).</p>",
-			"Author": "StormWolf",
-			"Date": "October 9, 2015"
-		},{
-			"Title": "Replays are back",
-			"Subtitle": "More new cards as well",
-			"Content": "<p>New cards added:<br /><br />Yokoshimauma<br />Dinomist Rush<br />Superheavy Samurai Swordmaster Musha-C<br /><br />Credit goes to YGOHack137 and OneShot for scripting the cards and to StormWolf for bug fixing. For those of you who haven't heard, we now have a temporary solution for the replay issue until we reach the browser phase. Instructions for how to use this method can be found <u><a href='http://forum.ygopro.us/index.php?/topic/1614-a-temporary-solution-for-playing-replays/'>in this thread</a></u></p>",
-			"Author": "StormWolf",
-			"Date": "October 7, 2015"
-		},{
-			"Title": "Card updates",
-			"Subtitle": "More love for Buster Blader and the Shiranui",
-			"Content": "<p>New cards added today:<br /><br />Destruction Swordmaster Flash<br />Shiranui Style: Sword of Swallow<br />High Speed Relevel<br /><br />The credit goes to YGOHack137 for scripting the cards, Dragunlegend for bug testing, and to OneShot and Chibi for bug fixing. We'll announce updates regarding new features and/or bug fixes regarding the server soon.</p>",
-			"Author": "StormWolf",
-			"Date": "October 4, 2015"
-		},{
-			"Title": "Catching up on updates",
-			"Subtitle": "New cards, too",
-			"Content": "<p>I would like to apologize about our newsfeed not updating as fast as it should. The staff here, especially me, feels that posting an update about adding just one card to feel like a boring post. Here's what's new since the previous news update:<br /><br />Destruction Swordmaster - Dragon Buster Blade (added two days ago)<br />Dinomist Ceratops (added two days ago)<br />Dinomist Brachion (added two days ago)<br />Dinomist Charge (added two days ago)<br />Repaired match duels (two days ago)<br />Toon Buster Blader (added today)<br />Majespecter Supercell (added today)<br /><br />All credit for coding and bug fixing goes to YGOHack137, OneShot, and Ragna_Edge. We are close to finding a solution for Replays, but still investigating Tag Duels.<p>",
-			"Author": "StormWolf",
-			"Date": "October 3, 2015"
-		},{
-			"Title": "An update regarding the server",
-			"Subtitle": "Some more cards as well",
-			"Content": "<p>Some new cards added recently<br /><br />Smile World (it really puts a smile on your monsters!)<br />Rank-Up-Magic Soul Shave Force<br />Timesword Magician<br />Buster Dragon, the Perceptrampler Dragon<br /><br />Special credit goes to Ragna_Edge, for scripting new cards and testing the cards written by YGOHack137. Recently, we updated the ygocore to help address our issue with replays and other miscellaneous card errors. While this did fix some cards as well as implement the feature to cancel a Synchro or Xyz Summon by right-clicking during the selection phase, it has caused a known issue that disconnects players right as a duel is about to end as well as prematurely ending Match Duels after the first game. Unfortunately, replays are also still a problem. I would like to assure everyone that we're trying our best to fix these problems.</p>",
-			"Author": "StormWolf",
-			"Date": "September 29, 2015"
-		},{
-			"Title": "Another one",
-			"Subtitle": "Not much else to report",
-			"Content": "<p>For those who didn't know, we added Swordsmith of Shiranui to the system earlier this afternoon. At the rate the card reveals are going, you could probably expect a new card added every day.<br />Don't forget to check us out on Facebook! Just click the Facebook icon on the top-right of the program to access it.</p>",
-			"Author": "StormWolf",
-			"Date": "September 22, 2015"
-		},{
-			"Title": "More new cards",
-			"Subtitle": "Sorry for the wait!",
-			"Content": "<p>We have added some new cards today and yesterday (for those who didn't notice).<br /><br />Ikusagami - Shiranui<br />Companion of the Destruction Swordmaster<br />Chasing Wings<br />Dinomist Rex<br />Goyo King<br /><br />King was revealed earlier today, but the rest took longer for bug fixing. The credit for writing the initial scripts goes to YGOHack137, OneShot and Ragna_Edge for bug fixing, and the rest of the QA team (Dragunlegend and Laughing Luna) for testing the cards.</p>",
-			"Author": "StormWolf",
-			"Date": "September 20, 2015"
-        },{
+        {
+            "Title": "Overload Fusion - Access is Denied",
+            "Subtitle": "Rebuilding the server",
+            "Content": "<p>The Staff wanted me to post an update.  I have a life, this is really hard. Watch this and you 'might' understand what is going on. </p><iframe width='560' height='315' src='https://www.youtube.com/embed/PlagRkD4e8s' frameborder='0' allowfullscreen></iframe>'<p>So my IRL job is a that of a programmer and I really enjoy my job so much its a 'hobby' at home and I've built up Salvation to serve the public. But the overlay of 'what ygopro is' and what everyone else needs it to be is pretty big. YGOPro was not intented to be a working program. All variants are technically 3 years of alpha from the beta. So I've started to rewrite all but the Lua scripts and ygopro-core processor here are Salvation so the square peg might fit in the round hole. I love the community I always have but I want you all to know the staff here is very overworked and working ever harder each day. Special thanks to the staff and assistants here:<br /><br />-Vyro [Database Admin]<br>The SecretShadow [QA]<br>Adriano Soares[Software Engineer]<br>HelixReactor[Scriptor]<br>DragunLegend[QA]<br>WestCoastKiwi [Web Developer, QA Lead]<br>OneShot [Scriptor, Lead]<br>YGOHack137 [Scriptor, External]<br>ChibiChanNyan[Software Engineer, Database Admin Lead, Scriptor]<br>Irate[Software Engineer]<br>Freezy[Graphic Designer]<br>Tsudere[QA]<br>Tragedy[UI, Web Designer],<br>Stormwolf[Public Relations, QA, Database Admin]<br>Reach[Public Relations, Graphic Designer, Eng-Ops]<br>OmniMage[Software Engineer, QA]<br>GuyBrush[Software Engineer, Public Relations]<br>ParryDox[Graphic Design]<br>Laughing Luna[QA]<br>XtremeEnigma[Eng-Ops, Security]<br>Ragna[Scriptor]<br>Mele(DarkMagicianGirl)[Product Owner, Eng-Ops]<br><br><br>Special Thanks and considerations to the DevPro team, The OCGSoft Team, and FH Teams for helping Salvation setup initially and providing contiuned support to the systems core. CrimsomWindAcadamy for providing public relations support, staff recruiting, emergency financing, and imagination. And finally all the staff have joined and left Salvation for what ever reasons and your contributions. This work is hard, we are doing our best, expect evolution in the future. < /p>,
+            "Author": "AccessDenied",
+            "Date": "November 12, 2015"
+		}, {
+            "Title": "The rest of SPWR has been added!",
+            "Subtitle": "Rangers, assemble!",
+            "Content": "<p>Here are cards added recently since the last news update (we apologize for not reporting some of these sooner)<br /><br />Burgesstoma Leanchoilia<br />Burgesstoma Eldonia<br />Burgesstoma Opabinia<br />Burgesstoma Dinomischus<br />Burgesstoma Dinomischus<br />Burgesstoma Marella<br />Priestess with Eyes of Blue<br />Super Quantum Mecha Beast Granpulse<br />The Phantom Knights of Fragile Armor<br />Super Quantum Mecha Pilot Green Layer (NEW!)<br />Super Quantum Mecha Beast Aeroboros (NEW!)<br />Booby Trap E (NEW!)<br />The Phantom Spear (NEW!)<br />The Phantom Sword (NEW!)<br />The Phantom Wing (NEW!)<br />The Phantom Knights of Crack Helm (NEW!)<br />Ties of Brethren (NEW!)<br /><br />Credit for coding these cards goes to YGOHack137, HelixReactor, and OneShot.</p>",
+            "Author": "StormWolf",
+            "Date": "November 12, 2015"
+		}, {
+            "Title": "The beginning of a new era",
+            "Subtitle": "Enjoy your early Chibiween treats!",
+            "Content": "<p>New cards added since the last news post:<br /><br />Gameciel, the Sea Turtle Kaiju<br />Radian, the Multidimensional Kaiju<br />Kaiju Capture Mission<br />Painful Escape<br />Super Quantum Mecha Pilot Blue Layer<br />Super Quantum Fairy Alphan<br />Super Quantum Mecha Ship Magnacarrier<br /><br /r>All credit to programming the cards goes to OneShot, HelixReactor, and Ragna_Edge. As some of you may have noticed, Salvation has added the new TCG Forbidden & Limited List today! However, the previous format will remain the default until November 9 to respect the format's official date. Expect various bug fixes for the launcher to come within a few days.</p>",
+            "Author": "StormWolf",
+            "Date": "October 29, 2015"
+		}, {
+            "Title": "Catching up some card updates",
+            "Subtitle": "Sorry that this took longer",
+            "Content": "<p>As many of you noticed, we've had many new cards but haven't yet posted in the news. I wanted to wait to report more good news regarding important fixes, but they seem to be taking longer than the staff have expected.<br /><br />Cards added since the last news update<br /><br />Dynamic Powerload<br />The Phantom Knight of Silent Boots<br />Kozmo Strawman<br />Kozmo DOG Fighter<br />Kozmo Lightsword<br />Arbiter of the Seal<br />Samurai Cavalry Reptier<br /><br />As I said, this news update was postponed so that I could also report results on some occurring issues like with Tag Duel and the rest of the missing BOSH cards, but updating the ygocore is difficult. Seriously, we need more C++/C# programmers on our staff! I hope to report good news regarding this by tonight or tomorrow. However, we did finally fix Replays without needing to use the Replay_Viewer.exe file from the folder! DirectX was also brought back, which should help improve FPS performance for some users. There however may be some people with certain graphic drivers (particularly old AMD ones) that will have issues related to crashes during the Side Deck procedure. I've also experienced this issue but found a solution, so please contact me if you also need a fix for this.<br /><br />10/25 Update: Both Clash of the Dracorivals and Ariadne the Absolver have been added!</p>",
+            "Author": "StormWolf",
+            "Date": "October 24, 2015"
+		}, {
+            "Title": "The new card updates won't stop just yet!",
+            "Subtitle": "Consider this an apology gift for last night's bugs",
+            "Content": "<p>Now that we got the overwhelming BOSH cards out of the way, here are some more new cards for you all!<br /><br />Raidraptor - Last Strix<br />Rank-Up-Magic Death Double Force<br />Raidraptor - Call<br />D/D/D Great Wise King Chaos Apocalypse<br />D/D Magical Astronomer Copernicus<br />D/D Magical Astronomer Newton<br />D/D/D Cruel Dragon King Beowulf<br />Card of Demise<br />Exod Flame<br />Exodia the Summoned Lord<br />Gaia the Soaring Dragon Champion<br /><br />Unfortunately, as you can see, the new Kozmo cards nor the cards missing from our BOSH release are done yet. The credit for all of these cards releases so far goes to YGOHack137 as well as to Chibi and our QA team for bug checking. These two days have been very busy and it only gets more difficult when many of our staff members are busy with their IRL issues. We're looking to hire more staff proficient with either Javascript, LUA, C++, foreign languages, or other technical skills that may be helpful to Salvation Server. If interested, feel free to contact any of the admins on the forums or the chat.</p>",
+            "Author": "StormWolf",
+            "Date": "October 18, 2015"
+		}, {
+            "Title": "LOTS OF UPDATES",
+            "Subtitle": "PLEASE READ THIS ENTIRE NEWS UPDATE",
+            "Content": "<p>First of all, it's time for the long-awaited BOSH cards!<br /><br />Super Quantum Pilot Red Layer<br />Raidraptor - Satellite Cannon Falcon<br />Super Quantum Beastmech Magnaliger<br />Super Quantum Megamech Great Magnas<br />Super Quantum Megasword - Magnaslayer<br />Raidraptor - Necro Vulture<br />Raidraptor - Satellite Cannon Falcon<br />Deskbot 008<br />Deskbot 007<br />Performapal Guiturtle<br />Performapal Raingoat<br />Performapal Trump Girl<br />Twilight Stealth Commander - Nichirin<br />Superheavy Samurai Jisha-Q<br />Dinomist Plesios<br />Dinomist Stegosaurus<br />Dinomist Pteran<br />Majespecter Frog<br />Majespecter Sonic<br />Shiranui no Mononofu<br />Dark Doriado<br />Illumirage<br />Dinoster Powerful, the Strong Dracoslayer<br />Superheavy Samurai Maju Kyu-B<br />Goyo Defender<br />Magic Sea Castle Aigaion<br />Pendulum Storm<br />Shiranui Style: Reincarnation Formation<br />Twin Twister<br />Performance Band Hurricane<br />Sandstorm Mirror Force<br />Pendulum Reborn<br />Forbidden Tome<br />Unlucky Blast<br />False Accusation<br /><br />We're however still missing some cards, but we'll update this post when said cards are finished:<br /><br />Liberating Ariadne (it's difficult to make it ignore discard costs)<br />Seal Arbiter<br />Dynamic Powerload<br />Clash of the Dracorivals (we still cannot make it send cards directly from the deck to the Extra Deck)<br /><br />I'm sure you all will notice how slow our updater is, so you may want to visit the Bug Reports section of the forum to find my link that contains a WinRAR file that supplies the latest update. Be sure to check it out so that you can save yourselves some time!<br /><br />We've also updated some overdue card IDs, so you may notice some of your decks suddenly missing cards. To remedy this, click the Settings tab and click Open YGOPro folder. Next, right click the file called 'deckfix.bat' AND RUN IT AS ADMINISTRATOR. I REPEAT, IF YOU DON'T RUN IT AS ADMINISTRATOR, YOUR DECKS MAY BE DELETED. After the program finishes, your decks should all be working fine afterward. Feel free to report any problems regarding this on the forums or with any admins in the Chat.<br /><br />We're still behind on other new card updates, but we'll announce another news update about those when those cards are ready. We're looking for more LUA programmers, so contact one of the admins if interested with working for Salvation Server.</p>",
+            "Author": "StormWolf",
+            "Date": "October 17, 2015"
+		}, {
+            "Title": "More new cards",
+            "Subtitle": "That new Solemn card looks dank",
+            "Content": "<p>New cards added recently since the last news update:<br /><br />Kozmoll Wickedwitch<br />Kozmo Dark Destroyer<br />Score the Melodious Diva<br />Solemn Notice<br />Hi-Speedroid Hagoita<br /><br />All credit for scripting the cards goes to OneShot. Just a heads-up that the updates might take as long as two minutes, so just wait a bit if you don't immediately see the cards in the Deck Edit.</p>",
+            "Author": "StormWolf",
+            "Date": "October 11, 2015"
+		}, {
+            "Title": "The Buster Blader squad has gathered",
+            "Subtitle": "Dragons beware!",
+            "Content": "<p>New cards added last night<br /><br />Destruction Swordmaster - Arms Buster Blade<br />Destruction Swordmaster - Wizard Buster Blade<br />Fate of the Destruction Swordmaster<br /><br />As many of you have noticed since up to almost two weeks ago, Tag Duels are currently malfunctioned, and unfortunately, our staff isn't capable of repairing the problem at this moment. The earliest that we can possibly expect a fix is on October 17, when we expect the next YGOCore update from Fhlorohydride to release which will guarantee to have the syntax to support Clash of the Dracorivals properly without taking improper shortcuts. However, there's also the chance that this issue may remain unresolved until we reach the browser platform, which may take as long as two months to accomplish. The staff here on Salvation Server will keep you all posted about any updates regarding Tag Duels as well as SnarkieChild (which is also currently disabled due to causing server instability).</p>",
+            "Author": "StormWolf",
+            "Date": "October 9, 2015"
+		}, {
+            "Title": "Replays are back",
+            "Subtitle": "More new cards as well",
+            "Content": "<p>New cards added:<br /><br />Yokoshimauma<br />Dinomist Rush<br />Superheavy Samurai Swordmaster Musha-C<br /><br />Credit goes to YGOHack137 and OneShot for scripting the cards and to StormWolf for bug fixing. For those of you who haven't heard, we now have a temporary solution for the replay issue until we reach the browser phase. Instructions for how to use this method can be found <u><a href='http://forum.ygopro.us/index.php?/topic/1614-a-temporary-solution-for-playing-replays/'>in this thread</a></u></p>",
+            "Author": "StormWolf",
+            "Date": "October 7, 2015"
+		}, {
+            "Title": "Card updates",
+            "Subtitle": "More love for Buster Blader and the Shiranui",
+            "Content": "<p>New cards added today:<br /><br />Destruction Swordmaster Flash<br />Shiranui Style: Sword of Swallow<br />High Speed Relevel<br /><br />The credit goes to YGOHack137 for scripting the cards, Dragunlegend for bug testing, and to OneShot and Chibi for bug fixing. We'll announce updates regarding new features and/or bug fixes regarding the server soon.</p>",
+            "Author": "StormWolf",
+            "Date": "October 4, 2015"
+		}, {
+            "Title": "Catching up on updates",
+            "Subtitle": "New cards, too",
+            "Content": "<p>I would like to apologize about our newsfeed not updating as fast as it should. The staff here, especially me, feels that posting an update about adding just one card to feel like a boring post. Here's what's new since the previous news update:<br /><br />Destruction Swordmaster - Dragon Buster Blade (added two days ago)<br />Dinomist Ceratops (added two days ago)<br />Dinomist Brachion (added two days ago)<br />Dinomist Charge (added two days ago)<br />Repaired match duels (two days ago)<br />Toon Buster Blader (added today)<br />Majespecter Supercell (added today)<br /><br />All credit for coding and bug fixing goes to YGOHack137, OneShot, and Ragna_Edge. We are close to finding a solution for Replays, but still investigating Tag Duels.<p>",
+            "Author": "StormWolf",
+            "Date": "October 3, 2015"
+		}, {
+            "Title": "An update regarding the server",
+            "Subtitle": "Some more cards as well",
+            "Content": "<p>Some new cards added recently<br /><br />Smile World (it really puts a smile on your monsters!)<br />Rank-Up-Magic Soul Shave Force<br />Timesword Magician<br />Buster Dragon, the Perceptrampler Dragon<br /><br />Special credit goes to Ragna_Edge, for scripting new cards and testing the cards written by YGOHack137. Recently, we updated the ygocore to help address our issue with replays and other miscellaneous card errors. While this did fix some cards as well as implement the feature to cancel a Synchro or Xyz Summon by right-clicking during the selection phase, it has caused a known issue that disconnects players right as a duel is about to end as well as prematurely ending Match Duels after the first game. Unfortunately, replays are also still a problem. I would like to assure everyone that we're trying our best to fix these problems.</p>",
+            "Author": "StormWolf",
+            "Date": "September 29, 2015"
+		}, {
+            "Title": "Another one",
+            "Subtitle": "Not much else to report",
+            "Content": "<p>For those who didn't know, we added Swordsmith of Shiranui to the system earlier this afternoon. At the rate the card reveals are going, you could probably expect a new card added every day.<br />Don't forget to check us out on Facebook! Just click the Facebook icon on the top-right of the program to access it.</p>",
+            "Author": "StormWolf",
+            "Date": "September 22, 2015"
+		}, {
+            "Title": "More new cards",
+            "Subtitle": "Sorry for the wait!",
+            "Content": "<p>We have added some new cards today and yesterday (for those who didn't notice).<br /><br />Ikusagami - Shiranui<br />Companion of the Destruction Swordmaster<br />Chasing Wings<br />Dinomist Rex<br />Goyo King<br /><br />King was revealed earlier today, but the rest took longer for bug fixing. The credit for writing the initial scripts goes to YGOHack137, OneShot and Ragna_Edge for bug fixing, and the rest of the QA team (Dragunlegend and Laughing Luna) for testing the cards.</p>",
+            "Author": "StormWolf",
+            "Date": "September 20, 2015"
+        }, {
             "Title": "SnarkyChild AI moves to Host Settings",
             "Subtitle": "I dont always duel with AI but when I do I set the rules.",
             "Content": "<p>SnarkyChild has moved over to the host settings. You can summon her to a duel including tags by checking 'use AI' in the host settings. She is no longer in the chat room. Happy Dueling.</p>",
