@@ -45,7 +45,7 @@ function singlesitenav(target) {
     $('body').css('background-image', 'url(../img/bg.jpg)');
     if (target === 'faq') {
         updatenews();
-        $('body').css('background-image', 'url(http://i1.kym-cdn.com/photos/images/facebook/000/846/154/903.jpg)');
+        $('body').css('background-image', 'url(https://scontent-atl3-1.xx.fbcdn.net/hphotos-xfp1/v/t1.0-9/12227645_1095519900487978_1035848132568205149_n.jpg?oh=ba9d78641d8ea8db23aa49b35d16181f&oe=56ECFB26)');
     }
     if (target === 'chat' && !chatStarted) {
         swfobject.embedSWF("lightIRC/lightIRC.swf", "lightIRC", "100%", "92%", "10.0.0", "expressInstall.swf", params, {
