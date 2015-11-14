@@ -260,6 +260,26 @@ function createmanifest() {
     });
 }
 
+var deleteFolderRecursive = function (path, init) {
+    'use strict';
+    if (fs.existsSync(path) && init) {
+        if (!confirm('Your system has an expansion pack allow Salvation to remove it?')) {
+            return;
+        }
+    }
+    if (fs.existsSync(path)) {
+        fs.readdirSync(path).forEach(function (file, index) {
+            var curPath = path + "/" + file;
+            if (fs.lstatSync(curPath).isDirectory()) { // recurse
+                deleteFolderRecursive(curPath);
+            } else { // delete file
+                fs.unlinkSync(curPath);
+            }
+        });
+        fs.rmdirSync(path);
+    }
+};
+
 
 function getDeck(file) {
     'use strict';
@@ -365,6 +385,8 @@ function copyFile(source, target, cb) {
 
 /*Process the server telling the client to do something
 YGOPro or Launcher related.*/
+
+
 function processServerRequest(parameter) {
     'use strict';
     console.log('got server request for ', parameter);
@@ -550,7 +572,7 @@ function initPrimus() {
 /*Boot command*/
 setTimeout(function () {
     'use strict';
-
+    deleteFolderRecursive('./expansions', true);
 
 
     fs.watch('./ygopro/deck', populatealllist);
