@@ -67,7 +67,6 @@ function handleCoreMessage(core_message_raw, port, pid) {
         return gamelist; //means its not a message pertaining to the gamelist API.
     }
 
-
     core_message = core_message_raw.toString().split('|');
     core_message[0] = core_message[0].trim();
     if (core_message[1] === undefined) {
