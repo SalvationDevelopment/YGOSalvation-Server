@@ -572,7 +572,7 @@ function initPrimus() {
 /*Boot command*/
 setTimeout(function () {
     'use strict';
-    deleteFolderRecursive('./expansions', true);
+    deleteFolderRecursive('./ygopro/expansions', true);
 
 
     fs.watch('./ygopro/deck', populatealllist);
