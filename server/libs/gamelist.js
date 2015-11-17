@@ -23,7 +23,6 @@ var primus,
     primusServer = http.createServer().listen(24555),
     duelserv = require('./duelserv.js'),
     cluster = require('cluster'),
-    previousAnnouncement = "",
     domain = require('domain'),
     path = require('path'),
 
@@ -139,13 +138,7 @@ function handleCoreMessage(core_message_raw, port, pid) {
 }
 
 function announce(announcement) {
-
-    if (previousAnnouncement === announcement) {
-        return;
-    } else {
-        primus.room('activegames').write(announcement);
-        previousAnnouncement = announcement;
-    }
+    primus.room('activegames').write(announcement);
 }
 
 

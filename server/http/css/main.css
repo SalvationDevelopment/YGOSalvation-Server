@@ -1885,3 +1885,7 @@ img#avatar {
     margin-top: 5px;
     display: inline-block;
 }
+
+.game.true {
+    border-style: dashed !important;
+}
