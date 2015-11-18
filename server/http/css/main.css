@@ -1888,4 +1888,17 @@ img#avatar {
 
 .game.true {
     border-style: dashed !important;
+    padding-left: 2vw;
+}
+
+.game.true:before {
+    /* background: yellow; */
+    content: "";
+    height: 2vh;
+    width: 2vh;
+    z-index: 10;
+    float: left;
+    top: 1vh;
+    background-image: url(https://cdn3.iconfinder.com/data/icons/linecons-free-vector-icons-pack/32/lock-512.png);
+    background-size: cover;
 }
