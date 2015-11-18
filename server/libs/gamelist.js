@@ -22,10 +22,8 @@ var primus,
     Rooms = require('primus-rooms'),
     primusServer = http.createServer().listen(24555),
     duelserv = require('./duelserv.js'),
-    cluster = require('cluster'),
     domain = require('domain'),
     path = require('path'),
-
     ps = require('ps-node'),
     forumValidate = require('./forum-validator.js'),
     currentGlobalMessage = '';
@@ -35,6 +33,9 @@ setTimeout(function () {
     booting = false;
 }, 10000);
 
+setInterval(function () {
+    userdata = {};
+}, 60000);
 
 function internalMessage(announcement) {
     process.nextTick(function () {
@@ -412,7 +413,7 @@ function onData(data, socket) {
             serverUpdate: userdata[socket.address.ip + data.uniqueID],
             ip: socket.address.ip + data.uniqueID
         });
-
+        delete userdata[socket.address.ip + data.uniqueID];
         socket.write({
             clientEvent: 'registrationRequest'
         });
