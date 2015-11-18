@@ -413,10 +413,16 @@ function onData(data, socket) {
             serverUpdate: userdata[socket.address.ip + data.uniqueID],
             ip: socket.address.ip + data.uniqueID
         });
-        delete userdata[socket.address.ip + data.uniqueID];
+        try {
+            delete userdata[socket.address.ip + data.uniqueID];
+            primus.room(socket.address.ip + data.uniqueID).write({
+                clientEvent: 'mated'
+            });
+        } catch (e) {}
         socket.write({
             clientEvent: 'registrationRequest'
         });
+
 
         socket.join('activegames');
         socket.write(JSON.stringify(gamelist));
@@ -467,7 +473,9 @@ function onData(data, socket) {
             clientEvent: 'privateServer',
             serverUpdate: data.serverUpdate
         });
-        userdata[socket.address.ip + data.uniqueID] = data.serverUpdate;
+        if (!data.queue) {
+            userdata[socket.address.ip + data.uniqueID] = data.serverUpdate;
+        }
         break;
     case ('saveDeckRequest'):
         primus.room(socket.address.ip + data.uniqueID).write({
