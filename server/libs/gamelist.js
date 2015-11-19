@@ -4,7 +4,6 @@
 var http = require('http');
 var primus,
     gamelist = {},
-    userdata = {},
     registry = {
         //People that have read this source code.
         SnarkyChild: '::ffff:127.0.0.1',
@@ -33,14 +32,6 @@ setTimeout(function () {
     booting = false;
 }, 10000);
 
-setInterval(function () {
-    var person;
-    for (person in userdata) {
-        if (userdata.hasOwnProperty(person)) {
-            delete userdata[person];
-        }
-    }
-}, 60000);
 
 function internalMessage(announcement) {
     process.nextTick(function () {
@@ -414,17 +405,6 @@ function onData(data, socket) {
     case ('join'):
         socket.join(socket.address.ip + data.uniqueID);
         socket.write({
-            clientEvent: 'privateServer',
-            serverUpdate: userdata[socket.address.ip + data.uniqueID],
-            ip: socket.address.ip + data.uniqueID
-        });
-        try {
-            delete userdata[socket.address.ip + data.uniqueID];
-            primus.room(socket.address.ip + data.uniqueID).write({
-                clientEvent: 'mated'
-            });
-        } catch (e) {}
-        socket.write({
             clientEvent: 'registrationRequest'
         });
 
@@ -478,9 +458,7 @@ function onData(data, socket) {
             clientEvent: 'privateServer',
             serverUpdate: data.serverUpdate
         });
-        if (!data.queue) {
-            userdata[socket.address.ip + data.uniqueID] = data.serverUpdate;
-        }
+
         break;
     case ('saveDeckRequest'):
         primus.room(socket.address.ip + data.uniqueID).write({
