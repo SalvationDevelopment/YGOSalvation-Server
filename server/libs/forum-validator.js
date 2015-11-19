@@ -21,7 +21,8 @@ function forumValidate(data, callback) {
                 ips_username: data.username,
                 ips_password: data.password
             },
-            info = {};
+            info = {},
+            forumdata;
         request.post(url, {
             form: post
         }, function (error, response, body) {
