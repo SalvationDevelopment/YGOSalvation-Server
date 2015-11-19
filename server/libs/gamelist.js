@@ -34,7 +34,12 @@ setTimeout(function () {
 }, 10000);
 
 setInterval(function () {
-    userdata = {};
+    var person;
+    for (person in userdata) {
+        if (userdata.hasOwnProperty(person)) {
+            delete userdata[person];
+        }
+    }
 }, 60000);
 
 function internalMessage(announcement) {
