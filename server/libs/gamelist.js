@@ -492,6 +492,7 @@ primus.on('connection', function (socket) {
         console.log('[Gamelist]:Generic Socket Error:', error);
     });
     socket.on('data', function (data) {
+        var save = false;
         if (socket.readyState !== primus.Spark.CLOSED) {
             save = true;
         }
