@@ -124,7 +124,7 @@ function handleCoreMessage(core_message_raw, port, pid) {
         chat = core_message.join(' ');
 
         process.nextTick(function () {
-            logger(gamelist[core_message[1]].pid + '|' + core_message[2] + ': ' + core_message[3]);
+            logger(pid + '|' + core_message[2] + ': ' + core_message[3]);
         });
         process.nextTick(function () {
             duelserv.bot.say('#public', gamelist[core_message[1]].pid + '|' + core_message[2] + ': ' + core_message[3]);
@@ -354,10 +354,13 @@ function onData(data, socket) {
         action,
         save;
     socketwatcher.on('error', function (err) {
+        if (err.message = "TypeError: Cannot read property 'forwarded' of undefined") {
+            // not sure how to handle this yet.
+            return;
+        }
         console.log('[Gamelist]Error-Critical:', err);
     });
     socketwatcher.enter();
-
     data = data || {};
     action = data.action;
     save = false;
@@ -489,6 +492,12 @@ primus.on('connection', function (socket) {
         console.log('[Gamelist]:Generic Socket Error:', error);
     });
     socket.on('data', function (data) {
+        if (socket.readyState !== primus.Spark.CLOSED) {
+            save = true;
+        }
+        if (save === false) {
+            return;
+        }
         onData(data, socket);
     });
     connectionwatcher.exit();
