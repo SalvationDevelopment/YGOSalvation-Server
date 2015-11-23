@@ -33,7 +33,8 @@
         "instaqueue": "*",
         "vhost": "*",
         "serve-index": "*",
-        "electron-prebuilt": "*"
+        "electron-prebuilt": "*",
+        "debug": "*"
     },
     "optionalDependencies": {
         "httpsys": "*"
