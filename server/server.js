@@ -30,10 +30,12 @@ var CONFIGURATION = {
 
 var colors = require('colors'), // oo pretty colors!
     domain = require('domain'), // yay error handling
-    processManager = require('child_process'),
-    request = require('request'),
-    needHTTPMicroService = false,
-    net = require('net');
+    processManager = require('child_process'), // making babies
+    request = require('request'), //talking HTTP here
+    needHTTPMicroService = false, //if there is an HTTPD then dont do anything.
+    net = require('net'), // ping!
+    segfaultHandler = require('segfault-handler'); //http://imgs.xkcd.com/comics/compiler_complaint.png
+//https://www.npmjs.com/package/segfault-handler
 
 
 function bootlogger() {
@@ -144,7 +146,7 @@ function bootIRC() {
         httpcheck.listen(80, localhost);
 
     });
-
+    delete process.send; // in case we're a child process
 }());
 //
 //
@@ -153,3 +155,6 @@ function bootIRC() {
 //    console.error((new Date()).toUTCString() + ' uncaughtException:', err.message);
 //    console.error(err.stack);
 //});
+
+segfaultHandler.registerHandler("crash.log"); // With no argument, SegfaultHandler will generate a generic log file name 
+segfaultHandler.causeSegfault(); // simulates a buggy native module that dereferences NULL

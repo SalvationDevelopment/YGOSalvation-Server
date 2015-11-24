@@ -34,7 +34,8 @@
         "vhost": "*",
         "serve-index": "*",
         "electron-prebuilt": "*",
-        "debug": "*"
+        "debug": "*",
+        "msi-packager": "*"
     },
     "optionalDependencies": {
         "httpsys": "*"
