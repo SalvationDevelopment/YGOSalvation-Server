@@ -1,9 +1,9 @@
 /*jslint node : true */
 'use strict';
 
-var createMsi = require('msi-packager'),
-    version = require('./version.json');
-
+//var createMsi = require('msi-packager'),
+var version = require('./version.json'),
+    extend_fs = require('extended-fs');
 var options = {
 
     // required 
@@ -23,17 +23,29 @@ var options = {
 
 };
 
+
 //do the following synchronously
 // copy client over
-// copy decks over
 // copy ygopro over
+// copy license
+// copy decks over
 // copy default templates over
 // copy default sounds and music over
 
-createMsi(options, function (err) {
-    if (err) {
-        throw err;
-    }
-    console.log('Outputed to ' + options.output);
+//extended_fs.copyDir(src, dest, callback);
 
-});
+extended_fs.copyDirSync('../client', './input');
+extended_fs.copyDirSync('../server/http/ygopro', './input/ygopro');
+extended_fs.copyDirSync('../server/http/license', './input/license');
+extended_fs.copyDirSync('../server/http/plugins', './input/plugins');
+extended_fs.copyDirSync('./starterDecks', './input/ygopro/deck');
+extended_fs.copyDirSync('./textures', './input/ygopro/textures');
+extended_fs.copyDirSync('./sound', './input/ygopro/sound');
+
+//createMsi(options, function (err) {
+//    if (err) {
+//        throw err;
+//    }
+//    console.log('Outputed to ' + options.output);
+//
+//});
