@@ -33,8 +33,8 @@ var colors = require('colors'), // oo pretty colors!
     processManager = require('child_process'), // making babies
     request = require('request'), //talking HTTP here
     needHTTPMicroService = false, //if there is an HTTPD then dont do anything.
-    net = require('net'), // ping!
-    segfaultHandler = require('segfault-handler'); //http://imgs.xkcd.com/comics/compiler_complaint.png
+    net = require('net'); // ping!
+// segfaultHandler = require('segfault-handler'); //http://imgs.xkcd.com/comics/compiler_complaint.png
 //https://www.npmjs.com/package/segfault-handler
 
 
@@ -112,7 +112,7 @@ function bootIRC() {
     });
     mainStack.run(function () {
 
-        segfaultHandler.registerHandler("crash.log"); // With no argument, SegfaultHandler will generate a generic log file name
+        //segfaultHandler.registerHandler("crash.log"); // With no argument, SegfaultHandler will generate a generic log file name
         process.title = 'YGOPro Salvation Server ' + new Date();
         console.log('YGOPro Salvation Server - Saving Yu-Gi-Oh!'.bold.yellow);
 
