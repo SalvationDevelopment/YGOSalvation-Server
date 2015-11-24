@@ -35,7 +35,10 @@
         "serve-index": "*",
         "electron-prebuilt": "*",
         "debug": "*",
-        "msi-packager": "*"
+        "fs-extended": "*",
+        "zip-folder": "*",
+        "targz": "*"
+
     },
     "optionalDependencies": {
         "httpsys": "*"

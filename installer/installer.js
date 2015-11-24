@@ -4,7 +4,8 @@
 //var createMsi = require('msi-packager'),
 var version = require('./version.json'),
     extended_fs = require('extended-fs'),
-    zipFolder = require('zip-folder');
+    zipFolder = require('zip-folder'),
+    targz = require('targz');
 var options = {
 
     // required 
@@ -49,8 +50,6 @@ zipFolder('./input', 'output/installer.zip', function (err) {
     if (err) {
         console.log('oh no!', err);
     } else {
-        var targz = require('targz');
-
         // compress files into tar.gz archive 
         targz.compress({
             src: './input',
