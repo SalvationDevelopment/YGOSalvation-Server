@@ -111,6 +111,8 @@ function bootIRC() {
         console.error((new Date()).toUTCString(), ' mainStackException:', err.message);
     });
     mainStack.run(function () {
+
+        segfaultHandler.registerHandler("crash.log"); // With no argument, SegfaultHandler will generate a generic log file name
         process.title = 'YGOPro Salvation Server ' + new Date();
         console.log('YGOPro Salvation Server - Saving Yu-Gi-Oh!'.bold.yellow);
 
@@ -125,7 +127,7 @@ function bootIRC() {
             bootUpdateSystem();
             bootAISystem();
             bootFlashPolicyServer();
-            manualModeBoot();
+            //manualModeBoot();
             bootlogger();
         }, 5000);
 
@@ -155,6 +157,3 @@ function bootIRC() {
 //    console.error((new Date()).toUTCString() + ' uncaughtException:', err.message);
 //    console.error(err.stack);
 //});
-
-segfaultHandler.registerHandler("crash.log"); // With no argument, SegfaultHandler will generate a generic log file name 
-segfaultHandler.causeSegfault(); // simulates a buggy native module that dereferences NULL
