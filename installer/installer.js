@@ -3,7 +3,8 @@
 
 //var createMsi = require('msi-packager'),
 var version = require('./version.json'),
-    extend_fs = require('extended-fs');
+    extended_fs = require('extended-fs'),
+    zipFolder = require('zip-folder');
 var options = {
 
     // required 
@@ -41,6 +42,29 @@ extended_fs.copyDirSync('../server/http/plugins', './input/plugins');
 extended_fs.copyDirSync('./starterDecks', './input/ygopro/deck');
 extended_fs.copyDirSync('./textures', './input/ygopro/textures');
 extended_fs.copyDirSync('./sound', './input/ygopro/sound');
+
+
+
+zipFolder('./input', 'output/installer.zip', function (err) {
+    if (err) {
+        console.log('oh no!', err);
+    } else {
+        var targz = require('targz');
+
+        // compress files into tar.gz archive 
+        targz.compress({
+            src: './input',
+            dest: 'output/installer.tar.gz'
+        }, function (err) {
+            if (err) {
+                console.log(err);
+            } else {
+                console.log("Done!");
+            }
+        });
+    }
+});
+
 
 //createMsi(options, function (err) {
 //    if (err) {
