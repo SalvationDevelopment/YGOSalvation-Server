@@ -73,3 +73,5 @@ zipFolder('./input', 'output/installer.zip', function (err) {
 //    console.log('Outputed to ' + options.output);
 //
 //});
+
+//https://vathsalas.wordpress.com/2013/05/27/creating-installer-with-nsis/
