@@ -1339,7 +1339,7 @@ div#gamelist {
 }
 
 #news h2 {
-    background: black;
+    background: rgba(0, 0, 0, .8);
     border: 1px solid #444;
     border-bottom: 0;
     margin-top: 3%;
@@ -1366,7 +1366,7 @@ div#gamelist {
     border: 1px solid #444;
     border-top: 0;
     padding: 1%;
-    background: black;
+    background: rgba(0, 0, 0, .8);
     line-height: .5em;
     margin-top: -1%;
 }
