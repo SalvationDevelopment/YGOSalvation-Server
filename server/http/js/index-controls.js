@@ -29,7 +29,7 @@ function updatenews() {
         });
     });
 }
-
+updatenews();
 var launcher = false,
     internalLocal = 'home',
     loggedIn = false,

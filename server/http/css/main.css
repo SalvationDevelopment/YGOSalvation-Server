@@ -1338,6 +1338,13 @@ div#gamelist {
     font-weight: 100;
 }
 
+#news h2 {
+    background: black;
+    border: 1px solid #444;
+    border-bottom: 0;
+    margin-top: 3%;
+}
+
 .newscontent {
     font-size: 11pt;
     text-align: justify;
@@ -1918,6 +1925,6 @@ img#avatar {
     z-index: 10;
     float: left;
     top: 1vh;
-    background-image: url(https://cdn3.iconfinder.com/data/icons/linecons-free-vector-icons-pack/32/lock-512.png);
+    background-image: url(http://static.zerochan.net/The.Winged.Dragon.of.Ra.full.1780488.jpg);
     background-size: cover;
 }
