@@ -53,16 +53,22 @@ function singlesitenav(target) {
     } else if ($('.unlogged.in-iframe').length > 0 && target === 'gamelist') {
         return;
     }
-    $('body').css('background-image', 'url(../img/bg.jpg)');
+    $('body').css('background-image', 'url(../img/sample-81965950ba4163718e946a186b9181fe.jpg)');
     if (target === 'faq') {
         updatenews();
-        $('body').css('background-image', 'url(http://i.cbc.ca/1.3318975.1447469377!/fileImage/httpImage/image.jpg_gen/derivatives/16x9_620/paris-peace.jpg)');
+        $('body').css('background-image', 'url(http://ygopro.us/img/sample-bae94d9f4450819ed4b832ccbc0975f6.jpg)');
     }
     if (target === 'chat' && !chatStarted) {
         swfobject.embedSWF("lightIRC/lightIRC.swf", "lightIRC", "100%", "92%", "10.0.0", "expressInstall.swf", params, {
             wmode: "transparent"
         });
         chatStarted = true;
+    }
+    if (target === 'chat') {
+        $('body').css('background-image', 'url(http://ygopro.us/img/sample-593f4fe4cac4338e7253501fd06b409f.jpg)');
+    }
+    if (target === 'settings') {
+        $('body').css('background-image', 'url(http://ygopro.us/img/sample-4ff042b9a810fc685e0e090aac8fc3a7.jpg)');
     }
     $('.activescreen').removeClass('activescreen');
     $('header').css('top', '100vh');
