@@ -1883,7 +1883,7 @@ img#avatar {
     border-radius: 6px;
     box-shadow: 0 0 17px black;
     margin-top: 5px;
-    display: inline-block;
+/*    display: inline-block;*/
 }
 
 .game.true {
