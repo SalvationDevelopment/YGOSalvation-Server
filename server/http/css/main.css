@@ -1338,11 +1338,30 @@ div#gamelist {
     font-weight: 100;
 }
 
-#news h2 {}
+#news h2 h2 {
+    /* margin-top: -0px; */
+    text-align: center;
+    /* margin: 0 auto; */
+    /* padding-top: 0; */
+    font-family: 'Poiret One', cursive;
+    text-shadow: 0 0 1px #777;
+    font-weight: 200;
+    /* color: #aaa; */
+    border: 1px solid #444;
+    margin-top: 16%;
+    background-color: black;
+    margin-bottom: 0;
+    border-bottom: 0;
+}
 
 .newscontent {
     font-size: .8em;
     text-align: justify;
+    border: 1px solid #444;
+    padding: 2%;
+    margin-bottom: 1%;
+    background: rgba(0, 0, 0, .5);
+    box-shadow: 0 0 10px black;
 }
 
 
@@ -1883,7 +1902,7 @@ img#avatar {
     border-radius: 6px;
     box-shadow: 0 0 17px black;
     margin-top: 5px;
-/*    display: inline-block;*/
+    /*    display: inline-block;*/
 }
 
 .game.true {

@@ -1,11 +1,11 @@
 {{#each articles}}
 <article>
-    <a href="{{topics}}"><h2>{{title}}</h2></a>
+    <a href="{{topics}}"><h2>{{{title}}}</h2></a>
     <h3>{{Subtitle}}</h3>
     <div class='newscontent'>
         {{{post}}}
     </div>
-    <div>
+    <div class="newsfooter">
         by {{author}} - on {{date}}
     </div>
 </article>
