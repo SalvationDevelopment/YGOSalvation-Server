@@ -18,7 +18,7 @@ function updatenews() {
             news.articles = [];
             topics.forEach(function (topic) {
                 news.articles.push({
-                    date: new Date(topic.date),
+                    date: new Date(topic.date).toString().substr(0, 15),
                     author: topic.author,
                     post: topic.post,
                     title: topic.title,

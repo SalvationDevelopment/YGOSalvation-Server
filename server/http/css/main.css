@@ -1338,30 +1338,30 @@ div#gamelist {
     font-weight: 100;
 }
 
-#news h2 {
-    /* margin-top: -0px; */
-    text-align: center;
-    /* margin: 0 auto; */
-    /* padding-top: 0; */
-    font-family: 'Poiret One', cursive;
-    text-shadow: 0 0 1px #777;
-    font-weight: 200;
-    /* color: #aaa; */
-    border: 1px solid #444;
-    margin-top: 2%;
-    background-color: black;
-    margin-bottom: 0;
-    border-bottom: 0;
-}
-
 .newscontent {
-    font-size: .8em;
+    font-size: 11pt;
     text-align: justify;
     border: 1px solid #444;
     padding: 2%;
     margin-bottom: 1%;
     background: rgba(0, 0, 0, .5);
     box-shadow: 0 0 10px black;
+    font-family: 'Open Sans', sans-serif;
+    /* font-weight: 100; */
+    /* color: #fff; */
+    /* text-shadow: 0 1px #444, 1px 0 #222; */
+}
+
+.newsfooter {
+    font-size: 0.8em;
+    color: #888;
+    text-shadow: 0 0 5px;
+    border: 1px solid #444;
+    border-top: 0;
+    padding: 1%;
+    background: black;
+    line-height: .5em;
+    margin-top: -1%;
 }
 
 
