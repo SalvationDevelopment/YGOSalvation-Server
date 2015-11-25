@@ -41,10 +41,14 @@ var Primus = require('primus'),
     EXTRA_DECK = "Extra Deck",
     DECK = "Deck",
     LP = "LP",
+    TURN_PLAYER = "Turn Player",
+    CURRENT_PHASE = "Current Phase",
     QUERY_CHANGE_POSITION = "changePosition",
     QUERY_CHANGE_FLIPSTATUS = "changeFlipStatus",
+    QUERY_CHANGE_PHASE = "changePhase",
     QUERY_ADD_LP = "addLP",
     QUERY_SUB_LP = "subLP",
+    QUERY_END_TURN = "endTurn",
     QUERY_CLOSE_DECK = "closeDeck",
     QUERY_VIEW_DECK = "viewDeck",
     QUERY_VIEW_EXTRA = "viewExtra",
@@ -54,6 +58,9 @@ var Primus = require('primus'),
     QUERY_GET_OPTIONS = "getOptions",
     QUERY_GET_STATE = "getState",
     QUERY_START_DUEL = "startDuel",
+    QUERY_SHOW_HAND = "showHand",
+    QUERY_SHOW_DECK = "showDeck",
+    QUERY_SHOW_EXTRA = "showExtra",
     QUERY_XYZ_SUMMON = "xyzSummon",
     CHANGING_FLIPSTATUS = "changingFlipStatus",
     CLOSING_DECK = "closingDeck",
@@ -559,7 +566,11 @@ function handlePrimusEvent(data, client) {
             case QUERY_END_TURN:
                 {
                     if (activeDuels[duelID].players.hasOwnProperty(uid)) {
-                        activeDuels[duelID].state[TURN_PLAYER] = (activeDuels[duelID].state[TURN_PLAYER] > 2) ? activeDuels[duelID].state[TURN_PLAYER] - 2 : activeDuels[duelID].state[TURN_PLAYER] + 2;
+                        if (Object.keys(activeDuels[duelID].players).length === 2) {
+                            activeDuels[duelID].state[TURN_PLAYER] = (activeDuels[duelID].state[TURN_PLAYER] % 2) + 1; // would return: 0 if turn player is 2, else 1, so increment by 1
+                        } else {
+                            activeDuels[duelID].state[TURN_PLAYER] = (activeDuels[duelID].state[TURN_PLAYER] % 4) + 1; // as above, except with 4
+                        }
                         primus.room(duelID).write({
                             event: QUERY_END_TURN,
                             data: activeDuels[duelID].state[TURN_PLAYER]
