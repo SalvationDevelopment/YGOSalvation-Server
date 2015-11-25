@@ -373,7 +373,7 @@ body {
     background-attachment: fixed;
     background-repeat: no-repeat;
     background-color: black;
-    background-image: url(http://i1.kym-cdn.com/photos/images/facebook/000/846/154/903.jpg);
+    background-image: url(http://static.zerochan.net/The.Winged.Dragon.of.Ra.full.1780488.jpg);
     background-size: 100%;
     font-family: 'Roboto', sans-serif;
     font-size: 15px;
@@ -1925,6 +1925,6 @@ img#avatar {
     z-index: 10;
     float: left;
     top: 1vh;
-    background-image: url(http://static.zerochan.net/The.Winged.Dragon.of.Ra.full.1780488.jpg);
+    background-image: url(https: //cdn3.iconfinder.com/data/icons/linecons-free-vector-icons-pack/32/lock-512.png);
     background-size: cover;
 }
