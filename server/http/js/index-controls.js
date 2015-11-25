@@ -11,7 +11,7 @@ function isChecked(id) {
 
 function updatenews() {
     'use strict';
-    $.getJSON('http://forum.ygopro.us/fetchTopics.php', function (news) {
+    $.getJSON('http://ygopro.us/manifest/forumNews.json', function (news) {
         $.get('handlebars/forumnews.handlebars', function (template) {
             var parser = Handlebars.compile(template);
             var topics = news.topics;
