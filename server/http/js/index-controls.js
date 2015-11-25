@@ -25,7 +25,7 @@ function updatenews() {
                     link: topic.link
                 });
             });
-            $('#news').append(parser(news));
+            $('#news').html(parser(news));
         });
     });
 }
