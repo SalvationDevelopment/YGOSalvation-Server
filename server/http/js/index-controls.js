@@ -11,9 +11,20 @@ function isChecked(id) {
 
 function updatenews() {
     'use strict';
-    $.getJSON('news.json', function (news) {
-        $.get('handlebars/news.handlebars', function (template) {
+    $.getJSON('http://forum.ygopro.us/fetchTopics.php', function (news) {
+        $.get('handlebars/forumnews.handlebars', function (template) {
             var parser = Handlebars.compile(template);
+            var topics = news.topics;
+            news.articles = [];
+            topics.forEach(function (topic) {
+                news.articles.push({
+                    date: new Date(topic.date),
+                    author: topic.author,
+                    post: topic.post,
+                    title: topic.title,
+                    link: topic.link
+                });
+            });
             $('#news').append(parser(news));
         });
     });
