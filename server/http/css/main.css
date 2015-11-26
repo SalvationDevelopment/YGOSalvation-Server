@@ -1353,15 +1353,12 @@ div#gamelist {
     background: rgba(0, 0, 0, .5);
     box-shadow: 0 0 10px black;
     color: rgb(203, 203, 203);
-    display: block;
     font-family: tahoma, helvetica, arial, sans-serif;
     font-size: 12px;
     font-style: normal;
     font-variant: normal;
     font-weight: normal;
-    height: 711px;
     line-height: 19.2px;
-    width: 930px;
     word-wrap: break-word;
 }
 
