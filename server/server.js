@@ -10,27 +10,48 @@ Start various sub-servers.
 - Update Server is running on port 12000
 - Ports 8911, 8913, *80, 12000 need to be free for the server to run.
 
-Installation
-------------
-Run `npm install` in the directory above.
 */
 
 /*jslint  node: true, plusplus: true*/
 'use strict';
-var CONFIGURATION = {
-    FORUM: 'localforum',
-    SITE: 'localhost',
-    ProductionFORUM: 'forum.ygopro.us',
-    ProductionSITE: 'ygopro.us'
-};
+var fs = require('fs'),
+    processManager = require('child_process'),
+    CONFIGURATION = {
+        FORUM: 'localforum',
+        SITE: 'localhost',
+        ProductionFORUM: 'forum.ygopro.us',
+        ProductionSITE: 'ygopro.us'
+    };
 
 
-
-
+function checkDependencies() {
+    var dependencies = require('../package.json').dependencies,
+        modules,
+        safe = true,
+        avaliable = true;
+    for (modules in dependencies) {
+        if (dependencies.hasOwnProperty(modules)) {
+            avaliable = fs.existsSync('../node_modules/' + modules);
+            if (!avaliable) {
+                safe = false;
+                console.log('Missing module', modules);
+            }
+        }
+    }
+    if (safe) {
+        return;
+    } else {
+        console.log('Installing missing modules...');
+        processManager.execSync('npm install', {
+            cwd: '../'
+        });
+        return;
+    }
+}
+checkDependencies();
 
 var colors = require('colors'), // oo pretty colors!
     domain = require('domain'), // yay error handling
-    processManager = require('child_process'), // making babies
     request = require('request'), //talking HTTP here
     needHTTPMicroService = false, //if there is an HTTPD then dont do anything.
     net = require('net'); // ping!
@@ -39,21 +60,21 @@ var colors = require('colors'), // oo pretty colors!
 
 
 function bootlogger() {
-    console.log('    Logging Enabled @ ../logs'.bold.gold);
+    console.log('    Logging Enabled @ ../logs'.bold.yellow);
     processManager.fork('./logger.js', [], {
         cwd: 'libs'
     }).on('exit', bootlogger);
 }
 
 function manualModeBoot() {
-    console.log('    Logging Enabled @ ../logs'.bold.gold);
+    //console.log('    Logging Enabled @ ../logs'.bold.gold);
     processManager.fork('./manualMode.js', [], {
         cwd: 'libs'
     }).on('exit', manualModeBoot);
 }
 
 function bootHTTPServer() {
-    console.log('    HTTP Server @ port 80'.bold.gold);
+    console.log('    HTTP Server @ port 80'.bold.yellow);
     processManager.fork('./httpserver.js', [], {
         cwd: 'libs',
         env: CONFIGURATION
@@ -121,15 +142,20 @@ function bootIRC() {
         //boot IRC
         //boot anope
         //boot 
+        bootGameList();
+        bootFlashPolicyServer();
         setTimeout(function () {
-            bootGameList();
-            bootManager();
             bootUpdateSystem();
-            bootAISystem();
-            bootFlashPolicyServer();
-            //manualModeBoot();
             bootlogger();
-        }, 5000);
+            //manualModeBoot();
+        }, 1000);
+        setTimeout(function () {
+            bootManager();
+            bootAISystem();
+            //manualModeBoot();
+
+        }, 2000);
+
 
         var httpcheck = net.createServer(),
             localhost = process.env.MAINSITE || '127.0.0.1';
@@ -142,7 +168,6 @@ function bootIRC() {
         httpcheck.once('listening', function () {
             // close the server if listening doesn't fail
             httpcheck.close();
-            process.title = 'YGOPro Salvation Server ' + new Date() + ' HTTP SERVER ACTIVE';
             bootHTTPServer();
         });
         httpcheck.listen(80, localhost);
