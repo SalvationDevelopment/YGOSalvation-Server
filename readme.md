@@ -4,12 +4,14 @@
 [![Support via Gittip](http://img.shields.io/gittip/Zayelion.svg)](https://www.gittip.com/Zayelion/)
 [![Stories in Backlog](https://badge.waffle.io/salvationdevelopment/ygopro-support-system.png?label=ready&title=Planned )](https://waffle.io/salvationdevelopment/ygopro-support-system)
 [![Stories in Progress](https://badge.waffle.io/salvationdevelopment/ygopro-support-system.png?label=In%20Progress&title=In%20Progress )](https://waffle.io/salvationdevelopment/ygopro-support-system)
-#YGOPro Support System
+#YGOPro Salvation Server
 **by Salvation Development**
 
-Salvation Development is a large scale social engineering non-profit project set out to tackle the 'wicked problem' of Yu-Gi-Oh! Online Simulators via enterprise level software design. To do so it employs a merit of interconnected support software based around the core support software of YGOPro, Invision Power Boards, and IRC written in JavaScript and SQL housed in this repository. The project addresses administrator megalomania, social stablity, competitive player group think, extremely high lack of public project oversight, developer negligence,  funding, and automation. 
+Salvation Development is a large scale social engineering non-profit project set out to tackle the 'wicked problem' of Yu-Gi-Oh! Online Simulators via enterprise level software design. To do so it employs a merit of interconnected support software based around the core support software of YGOPro, Invision Power Boards, and IRC written in JavaScript and SQL housed in this repository. The project addresses issues of negligence by automating deployment and updating.
 
-(https://github.com/SalvationDevelopment/YGOPro-Support-System/blob/master/documentation/features.md)
+(![Screenshot of Launcher featuring Magi Magi * Gal](/documentation/screenshot.jpg?raw=true))
+
+[Feature List](https://github.com/SalvationDevelopment/YGOPro-Support-System/blob/master/documentation/features.md)
 
 
 
