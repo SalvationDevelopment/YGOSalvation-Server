@@ -15,7 +15,10 @@ Start various sub-servers.
 /*jslint  node: true, plusplus: true*/
 'use strict';
 var fs = require('fs'),
+    os = require('os'),
+    path = require('path'),
     processManager = require('child_process'),
+    domain = require('domain'), // yay error handling,
     CONFIGURATION = {
         FORUM: 'localforum',
         SITE: 'localhost',
@@ -24,39 +27,56 @@ var fs = require('fs'),
     };
 
 
-function checkDependencies() {
-    var dependencies = require('../package.json').dependencies,
-        modules,
-        safe = true,
-        avaliable = true;
-    for (modules in dependencies) {
-        if (dependencies.hasOwnProperty(modules)) {
-            avaliable = fs.existsSync('../node_modules/' + modules);
-            if (!avaliable) {
-                safe = false;
-                console.log('Missing module', modules);
-            }
-        }
+function vgetMSBuildPath(framework) {
+    framework = framework || '4.0';
+    if (os.platform() === 'linux') {
+        return "xbuild";
     }
-    if (safe) {
-        return;
-    } else {
-        console.log('Installing missing modules...');
-        processManager.execSync('npm install', {
-            cwd: '../'
-        });
-        return;
-    }
-}
-checkDependencies();
 
-var colors = require('colors'), // oo pretty colors!
-    domain = require('domain'), // yay error handling
-    request = require('request'), //talking HTTP here
-    needHTTPMicroService = false, //if there is an HTTPD then dont do anything.
-    net = require('net'); // ping!
-// segfaultHandler = require('segfault-handler'); //http://imgs.xkcd.com/comics/compiler_complaint.png
-//https://www.npmjs.com/package/segfault-handler
+    var toolsVersion = {
+            '2.0': '2.0.50727', // can only target 2.0
+            '3.0': '3.0',
+            '3.5': '3.5',
+            '4.0': '4.0.30319', // can target 2.0, 3.0, 3.5 and 4
+            '4.5': '4.0.30319'
+        },
+        windir = process.env.WINDIR,
+        frameworkprocessorDirectory = process.arch ? 'framework64' : 'framework',
+        frameworkDirectory = 'v' + toolsVersion[framework];
+    return (windir + '\\Microsoft.NET\\' + frameworkprocessorDirectory + '\\' + frameworkDirectory + '\\msbuild.exe').toLowerCase();
+}
+
+
+function makeYGOCore() {
+
+    var extended_fs = require('extended-fs'),
+        buildpath = vgetMSBuildPath(),
+        solution = ' "' + path.resolve('./ygocore/source/YGOCore.sln') + '" ',
+        parameters = '/p:Configuration=Release /p:Platform="x86" /t:Clean,Build',
+        buildString = buildpath + solution + parameters,
+        ygocoreBuilder = processManager.exec(buildString, {
+            cwd: path.resolve('../../YGOcore')
+        }, function () {
+            if (os.platform() === 'win32') {
+                try {
+                    extended_fs.copyFileSync('./ygocore/source/YGOcore/bin/Release/YGOServer.exe', './ygocore/YGOServer.exe');
+                    extended_fs.copyFileSync('./ygocore/source/OcgWrapper/bin/Release/OcgWrapper.dll', './ygocore/OcgWrapper.dll');
+                    extended_fs.copyFileSync('./ygocore/source/OcgWrapper/bin/Release/System.Data.SQLite.dll', './ygocore/System.Data.SQLite.dll');
+                } catch (error) {
+                    console.log('Could not put the files in place!');
+                }
+
+            }
+        });
+
+    ygocoreBuilder.stdout.on('data', function (data) {
+        console.log(data);
+    });
+    ygocoreBuilder.stdout.on('error', function (error) {
+        console.log(error);
+    });
+}
+
 
 
 function bootlogger() {
@@ -125,9 +145,13 @@ function bootIRC() {
     }, bootIRC);
 }
 
+function main() {
+    var mainStack = domain.create(),
+        colors = require('colors'), // oo pretty colors!
+        request = require('request'), //talking HTTP here
+        needHTTPMicroService = false, //if there is an HTTPD then dont do anything.
+        net = require('net'); // ping!;
 
-(function main() {
-    var mainStack = domain.create();
     mainStack.on('error', function (err) {
         console.error((new Date()).toUTCString(), ' mainStackException:', err.message);
     });
@@ -174,11 +198,59 @@ function bootIRC() {
 
     });
     delete process.send; // in case we're a child process
-}());
-//
-//
-///* This is bad code */
-//process.on('uncaughtException', function (err) {
-//    console.error((new Date()).toUTCString() + ' uncaughtException:', err.message);
-//    console.error(err.stack);
-//});
+}
+
+
+function checkDependencies() {
+    var dependencies = require('../package.json').dependencies,
+        modules,
+        extended_fs,
+        safe = true,
+        moduleIsAvaliable = true,
+        servercoreIsInPlace = true,
+        ocgcoreIsInPlace = false;
+    for (modules in dependencies) {
+        if (dependencies.hasOwnProperty(modules)) {
+            moduleIsAvaliable = fs.existsSync('../node_modules/' + modules);
+            if (!moduleIsAvaliable) {
+                safe = false;
+                console.log('Missing module', modules);
+            }
+        }
+    }
+    if (!safe) {
+        console.log('Installing missing modules...');
+        processManager.execSync('npm install', {
+            cwd: '../'
+        });
+    }
+    extended_fs = require('extended-fs');
+    if (os.platform() === 'win32') {
+        if (!fs.existsSync('./ygocore/YGOServer.exe')) {
+            console.log('/ygocore/YGOServer.exe is missing!');
+            servercoreIsInPlace = false;
+        }
+        if (!fs.existsSync('./ygocore/OcgWrapper.dll')) {
+            console.log('/ygocore/OcgWrapper.dll is missing!');
+            servercoreIsInPlace = false;
+        }
+        if (!fs.existsSync('./ygocore/System.Data.Sqlite.dll')) {
+            console.log('/ygocore/System.Data.Sqlite.dll!');
+            servercoreIsInPlace = false;
+        }
+        if (!fs.existsSync('./ygocore/OcgCore.dll')) {
+            console.log('/ygocore/OcgCore.dll is missing please install it!');
+            ocgcoreIsInPlace = false;
+        }
+        if (!servercoreIsInPlace) {
+            makeYGOCore();
+        }
+        main();
+    }
+}
+
+
+
+// segfaultHandler = require('segfault-handler'); //http://imgs.xkcd.com/comics/compiler_complaint.png
+//https://www.npmjs.com/package/segfault-handler
+checkDependencies();
