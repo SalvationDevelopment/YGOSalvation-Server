@@ -4,3 +4,6 @@
 [submodule "server/ygocore/source"]
 	path = server/ygocore/source
 	url = https://github.com/SalvationDevelopment/YGOCore
+[submodule "server/source"]
+	path = server/source
+	url = https://github.com/iceygo/ygosharp
