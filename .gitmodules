@@ -1,3 +1,6 @@
 [submodule "YGOScripts"]
 	path = server/http/ygopro
 	url = https://github.com/SalvationDevelopment/YGOScripts
+[submodule "server/ygocore/source"]
+	path = server/ygocore/source
+	url = https://github.com/SalvationDevelopment/YGOCore
