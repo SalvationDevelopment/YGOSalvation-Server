@@ -13,8 +13,6 @@ var notification = '', // its a string, make memory.
     numCPUs = 1;
 
 function initiateMaster(numCPUs) {
-    console.log('    Starting Master');
-
     function setupWorker(x) {
         //'use strict';
         console.log(('        Starting Slave ' + x).grey);
