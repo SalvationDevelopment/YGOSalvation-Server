@@ -1,0 +1,12 @@
+Copy mp3 files to this directory (sound)
+
+menu music: 
+	replace the file called 'menu.mp3'
+
+duel music: 
+	add a file called 'song.mp3'
+	add a file called 'song-advantage.mp3'
+	add a file called 'song-disadvantage.mp3'
+
+deck edit music: 
+	replace the file called 'deck.mp3'

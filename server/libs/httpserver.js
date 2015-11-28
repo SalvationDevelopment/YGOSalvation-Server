@@ -1,7 +1,6 @@
 /*jslint node : true*/
 'use strict';
-var
-    express = require('express'),
+var express = require('express'),
     php = require("node-php"),
     path = require("path"),
     toobusy = require('toobusy-js'),
