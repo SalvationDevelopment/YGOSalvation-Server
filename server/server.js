@@ -107,11 +107,11 @@ function makeYGOProCore() {
     });
 }
 
-var ygopro_core = processManager.exec('./premake4 vs2012', {
-    cwd: path.resolve('../../ygopro-core')
-}, function () {
-    makeYGOProCore();
-});
+//var ygopro_core = processManager.exec('./premake4 vs2012', {
+//    cwd: path.resolve('../../ygopro-core')
+//}, function () {
+//    makeYGOProCore();
+//});
 
 function bootlogger() {
     console.log('    Logging Enabled @ ../logs'.bold.yellow);
