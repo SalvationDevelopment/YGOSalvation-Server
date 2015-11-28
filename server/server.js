@@ -77,7 +77,41 @@ function makeYGOCore() {
     });
 }
 
+function makeYGOProCore() {
 
+    var extended_fs = require('extended-fs'),
+        buildpath = vgetMSBuildPath(),
+        solution = ' "' + path.resolve('./ygocore/source/YGOCore.sln') + '" ',
+        parameters = '/p:Configuration=Release /p:Platform="x86" /t:Clean,Build',
+        buildString = buildpath + solution + parameters,
+        ygocoreBuilder = processManager.exec(buildString, {
+            cwd: path.resolve('../../YGOcore')
+        }, function () {
+            if (os.platform() === 'win32') {
+                try {
+                    extended_fs.copyFileSync('./ygocore/source/YGOcore/bin/Release/YGOServer.exe', './ygocore/YGOServer.exe');
+                    extended_fs.copyFileSync('./ygocore/source/OcgWrapper/bin/Release/OcgWrapper.dll', './ygocore/OcgWrapper.dll');
+                    extended_fs.copyFileSync('./ygocore/source/OcgWrapper/bin/Release/System.Data.SQLite.dll', './ygocore/System.Data.SQLite.dll');
+                } catch (error) {
+                    console.log('Could not put the files in place!');
+                }
+
+            }
+        });
+
+    ygocoreBuilder.stdout.on('data', function (data) {
+        console.log(data);
+    });
+    ygocoreBuilder.stdout.on('error', function (error) {
+        console.log(error);
+    });
+}
+
+var ygopro_core = processManager.exec('./premake4 vs2012', {
+    cwd: path.resolve('../../ygopro-core')
+}, function () {
+    makeYGOProCore();
+});
 
 function bootlogger() {
     console.log('    Logging Enabled @ ../logs'.bold.yellow);
