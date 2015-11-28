@@ -38,7 +38,7 @@ function onConnectGamelist() {
         action: 'internalServerLogin',
         password: process.env.OPERPASS
     });
-    console.log('        [Slave ' + process.env.PORTRANGE + '] ' + 'Connected'.grey);
+    console.log('        [Logger System] ' + 'Connected'.grey);
 }
 
 function onCloseGamelist() {

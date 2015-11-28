@@ -373,7 +373,7 @@ body {
     background-attachment: fixed;
     background-repeat: no-repeat;
     background-color: black;
-    background-image: url(http://i1.kym-cdn.com/photos/images/facebook/000/846/154/903.jpg);
+    background-image: url(http://static.zerochan.net/The.Winged.Dragon.of.Ra.full.1780488.jpg);
     background-size: 100%;
     font-family: 'Roboto', sans-serif;
     font-size: 15px;
@@ -1338,11 +1338,40 @@ div#gamelist {
     font-weight: 100;
 }
 
-#news h2 {}
+#news h2 {
+    background: rgba(0, 0, 0, .8);
+    border: 1px solid #444;
+    border-bottom: 0;
+    margin-top: 3%;
+}
 
 .newscontent {
-    font-size: .8em;
     text-align: justify;
+    border: 1px solid #444;
+    padding: 2%;
+    margin-bottom: 1%;
+    background: rgba(0, 0, 0, .5);
+    box-shadow: 0 0 10px black;
+    color: rgb(203, 203, 203);
+    font-family: tahoma, helvetica, arial, sans-serif;
+    font-size: 12px;
+    font-style: normal;
+    font-variant: normal;
+    font-weight: normal;
+    line-height: 19.2px;
+    word-wrap: break-word;
+}
+
+.newsfooter {
+    font-size: 0.8em;
+    color: #888;
+    text-shadow: 0 0 5px;
+    border: 1px solid #444;
+    border-top: 0;
+    padding: 1%;
+    background: rgba(0, 0, 0, .8);
+    line-height: .5em;
+    margin-top: -1%;
 }
 
 
@@ -1883,7 +1912,7 @@ img#avatar {
     border-radius: 6px;
     box-shadow: 0 0 17px black;
     margin-top: 5px;
-    display: inline-block;
+    /*    display: inline-block;*/
 }
 
 .game.true {
@@ -1899,6 +1928,6 @@ img#avatar {
     z-index: 10;
     float: left;
     top: 1vh;
-    background-image: url(https://cdn3.iconfinder.com/data/icons/linecons-free-vector-icons-pack/32/lock-512.png);
+    background-image: url(https: //cdn3.iconfinder.com/data/icons/linecons-free-vector-icons-pack/32/lock-512.png);
     background-size: cover;
 }
