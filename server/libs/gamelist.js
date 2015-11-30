@@ -137,11 +137,7 @@ function handleCoreMessage(core_message_raw, port, pid, game) {
         break;
 
     default:
-        gamelist[game].started = true;
-        gamelist[game].time = new Date().getTime();
-        duelserv.bot.say('#public', gamelist[game].pid + '|Duel starting|' + JSON.stringify(gamelist[game].players));
-        console.log('fake start-game', game);
-        break;
+        console.log('unknown command', game, core_message, core_message[1].length);
     }
     handleCoreMessageWatcher.exit();
 }
