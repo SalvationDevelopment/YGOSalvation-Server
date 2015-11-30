@@ -115,14 +115,6 @@ function handleCoreMessage(core_message_raw, port, pid, game) {
         console.log('[Results]', core_message, game);
         //process.kill(pid);
         break;
-
-    case ('::::start-game'):
-        gamelist[game].started = true;
-        gamelist[game].time = new Date().getTime();
-        duelserv.bot.say('#public', gamelist[game].pid + '|Duel starting|' + JSON.stringify(gamelist[game].players));
-        console.log('start-game', game);
-        break;
-
     case ('::::chat'):
         chat = core_message.join(' ');
 
@@ -132,6 +124,21 @@ function handleCoreMessage(core_message_raw, port, pid, game) {
         process.nextTick(function () {
             duelserv.bot.say('#public', gamelist[game].pid + '|' + core_message[2] + ': ' + core_message[3]);
         });
+        break;
+    case ('::::start-game'):
+        gamelist[game].started = true;
+        gamelist[game].time = new Date().getTime();
+        duelserv.bot.say('#public', gamelist[game].pid + '|Duel starting|' + JSON.stringify(gamelist[game].players));
+        console.log('real start-game', game);
+        break;
+    case ('::::network-ready'):
+        break;
+
+    default:
+        gamelist[game].started = true;
+        gamelist[game].time = new Date().getTime();
+        duelserv.bot.say('#public', gamelist[game].pid + '|Duel starting|' + JSON.stringify(gamelist[game].players));
+        console.log('fake start-game', game);
         break;
     }
     handleCoreMessageWatcher.exit();
