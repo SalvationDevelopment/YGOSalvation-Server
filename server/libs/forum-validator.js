@@ -22,7 +22,7 @@ function forumValidate(data, callback) {
                 ips_password: data.password
             },
             info = {},
-            forumdata;
+            forumdata = {};
         request.post(url, {
             form: post
         }, function (error, response, body) {
