@@ -124,13 +124,13 @@ function handleCoreMessage(core_message_raw, port, pid, game) {
             logger(pid + '|' + core_message[1] + ': ' + core_message[2]);
         });
         process.nextTick(function () {
-            duelserv.bot.say('#public', gamelist[game].pid + '|' + core_message[2] + ': ' + core_message[3]);
+            //duelserv.bot.say('#public', gamelist[game].pid + '|' + core_message[2] + ': ' + core_message[3]);
         });
         break;
     case ('::::start-game'):
         gamelist[game].started = true;
         gamelist[game].time = new Date().getTime();
-        duelserv.bot.say('#public', gamelist[game].pid + '|Duel starting|' + JSON.stringify(gamelist[game].players));
+        //duelserv.bot.say('#public', gamelist[game].pid + '|Duel starting|' + JSON.stringify(gamelist[game].players));
         console.log('real start-game', game);
         break;
     case ('::::network-ready'):

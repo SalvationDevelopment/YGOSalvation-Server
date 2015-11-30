@@ -95,11 +95,8 @@ function fileupdate() {
         }
     });
 
-    if (oktorestart) {
-        return 'Update Detection System[' + ((new Date()).getTime() - startTime.getTime()) + 'ms] Restarting Server in 10 mins. ';
-    } else {
-        return 'Update Detection System[' + ((new Date()).getTime() - startTime.getTime()) + 'ms]';
-    }
+    return 'Update Detection System[' + ((new Date()).getTime() - startTime.getTime()) + 'ms]';
+
 }
 
 function update(cb) {
