@@ -22,10 +22,15 @@ function forumValidate(data, callback) {
                 ips_password: data.password
             },
             info = {},
-            forumdata = {};
+            forumdata = {
+                data: {}
+            };
         request.post(url, {
             form: post
         }, function (error, response, body) {
+            forumdata = {
+                data: {}
+            };
             if (!error && response.statusCode === 200) {
                 try {
                     forumdata = JSON.parse(body.trim());
