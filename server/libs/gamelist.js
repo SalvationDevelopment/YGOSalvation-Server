@@ -46,7 +46,7 @@ function logger(announcement) {
     });
 }
 
-function handleCoreMessage(core_message_raw, port, pid) {
+function handleCoreMessage(core_message_raw, port, pid, game) {
 
     var chat,
         join_slot,
@@ -68,8 +68,8 @@ function handleCoreMessage(core_message_raw, port, pid) {
     if (core_message[1] === undefined) {
         return gamelist;
     }
-    if (gamelist[core_message[1]] === undefined) {
-        gamelist[core_message[1]] = {
+    if (gamelist[game] === undefined) {
+        gamelist[game] = {
             players: [],
             locked: [false, false, false, false],
             spectators: 0,
@@ -82,53 +82,53 @@ function handleCoreMessage(core_message_raw, port, pid) {
     switch (core_message[0]) {
 
     case ('::::join-slot'):
-        join_slot = parseInt(core_message[2], 10);
+        join_slot = parseInt(core_message[1], 10);
         if (join_slot === -1) {
             return;
         }
-        gamelist[core_message[1]].players[join_slot] = core_message[3].trim();
-        gamelist[core_message[1]].time = new Date().getTime();
-        gamelist[core_message[1]].port = port;
+        gamelist[game].players[join_slot] = core_message[2].trim();
+        gamelist[game].time = new Date().getTime();
+        gamelist[game].port = port;
         break;
 
     case ('::::left-slot'):
-        leave_slot = parseInt(core_message[2], 10);
+        leave_slot = parseInt(core_message[1], 10);
         if (leave_slot === -1) {
             return;
         }
-        gamelist[core_message[1]].players[leave_slot] = null;
+        gamelist[game].players[leave_slot] = null;
         break;
 
     case ('::::spectator'):
-        gamelist[core_message[1]].spectators = parseInt(core_message[2], 10);
+        gamelist[game].spectators = parseInt(core_message[1], 10);
         break;
 
     case ('::::lock-slot'):
-        lock_slot = parseInt(core_message[2], 10);
-        gamelist[core_message[1]].locked[lock_slot] = Boolean(core_message[2]);
+        lock_slot = parseInt(core_message[1], 10);
+        gamelist[game].locked[lock_slot] = Boolean(core_message[1]);
         break;
 
     case ('::::end-duel'):
-        //ps.kill(gamelist[core_message[1]].pid, function (error) {});
-        delete gamelist[core_message[1]];
+        //ps.kill(gamelist[game].pid, function (error) {});
+        delete gamelist[game];
         console.log('[Results]', core_message);
         //process.kill(pid);
         break;
 
     case ('::::start-duel'):
-        gamelist[core_message[1]].started = true;
-        gamelist[core_message[1]].time = new Date().getTime();
-        duelserv.bot.say('#public', gamelist[core_message[1]].pid + '|Duel starting|' + JSON.stringify(gamelist[core_message[1]].players));
+        gamelist[game].started = true;
+        gamelist[game].time = new Date().getTime();
+        duelserv.bot.say('#public', gamelist[game].pid + '|Duel starting|' + JSON.stringify(gamelist[game].players));
         break;
 
     case ('::::chat'):
         chat = core_message.join(' ');
 
         process.nextTick(function () {
-            logger(pid + '|' + core_message[2] + ': ' + core_message[3]);
+            logger(pid + '|' + core_message[1] + ': ' + core_message[2]);
         });
         process.nextTick(function () {
-            duelserv.bot.say('#public', gamelist[core_message[1]].pid + '|' + core_message[2] + ': ' + core_message[3]);
+            duelserv.bot.say('#public', gamelist[game].pid + '|' + core_message[2] + ': ' + core_message[3]);
         });
         break;
     }
@@ -170,7 +170,7 @@ function messageListener(message) {
             users,
             i = 0;
         for (i; brokenup.length > i; i++) {
-            handleCoreMessage(brokenup[i], message.port, message.pid);
+            handleCoreMessage(brokenup[i], message.port, message.pid, message.game);
         }
         for (game in gamelist) {
             if (gamelist.hasOwnProperty(game)) {
