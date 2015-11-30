@@ -64,6 +64,7 @@ function handleCoreMessage(core_message_raw, port, pid, game) {
     }
 
     core_message = core_message_raw.toString().split('|');
+    console.log(core_message, core_message_raw);
     core_message[0] = core_message[0].trim();
 
     if (core_message[1] === undefined) {
@@ -80,7 +81,7 @@ function handleCoreMessage(core_message_raw, port, pid, game) {
         };
         //if the room its talking about isnt on the gamelist, put it on the gamelist.
     }
-    console.log(core_message, core_message[0]);
+
     switch (core_message[0]) {
 
     case ('::::join-slot'):
@@ -117,9 +118,13 @@ function handleCoreMessage(core_message_raw, port, pid, game) {
         delete gamelist[game];
         //process.kill(pid);
         break;
+    case ('::::end-game'):
+        //ps.kill(gamelist[game].pid, function (error) {});
+        delete gamelist[game];
+        //process.kill(pid);
+        break;
     case ('::::chat'):
         chat = core_message.join(' ');
-
         process.nextTick(function () {
             logger(pid + '|' + core_message[1] + ': ' + core_message[2]);
         });
@@ -363,7 +368,7 @@ function onData(data, socket) {
         action,
         save;
     socketwatcher.on('error', function (err) {
-        if (err.message = "TypeError: Cannot read property 'forwarded' of undefined") {
+        if (err.message === "TypeError: Cannot read property 'forwarded' of undefined") {
             // not sure how to handle this yet.
             return;
         }
