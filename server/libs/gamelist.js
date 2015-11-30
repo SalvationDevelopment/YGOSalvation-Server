@@ -79,7 +79,13 @@ function handleCoreMessage(core_message_raw, port, pid, game) {
     }
 
     switch (core_message[0]) {
+    case ('::::network-ready'):
+        console.log('++');
+        return;
+    case ('::::network-end'):
+        console.log('++');
 
+        break;
     case ('::::join-slot'):
         join_slot = parseInt(core_message[1], 10);
         if (join_slot === -1) {
@@ -134,12 +140,10 @@ function handleCoreMessage(core_message_raw, port, pid, game) {
         //duelserv.bot.say('#public', gamelist[game].pid + '|Duel starting|' + JSON.stringify(gamelist[game].players));
         console.log('real start-game', game);
         break;
-    case ('::::network-ready'):
-        console.log('++');
-        break;
+
 
     default:
-        console.log('unknown command', game, core_message);
+        console.log('unknown command', game, core_message, core_message[1].length);
     }
     handleCoreMessageWatcher.exit();
 }
