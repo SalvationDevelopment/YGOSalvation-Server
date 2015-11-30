@@ -139,7 +139,7 @@ function handleCoreMessage(core_message_raw, port, pid, game) {
         break;
 
     default:
-        console.log('unknown command', game, core_message, core_message[1].length);
+        console.log('unknown command', game, core_message);
     }
     handleCoreMessageWatcher.exit();
 }
