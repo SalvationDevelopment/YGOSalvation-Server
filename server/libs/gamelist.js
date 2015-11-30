@@ -132,6 +132,7 @@ function handleCoreMessage(core_message_raw, port, pid, game) {
         console.log('real start-game', game);
         break;
     case ('::::network-ready'):
+        console.log('++');
         break;
 
     default:
