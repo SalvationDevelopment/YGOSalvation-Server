@@ -109,10 +109,10 @@ function handleCoreMessage(core_message_raw, port, pid, game) {
         gamelist[game].locked[lock_slot] = Boolean(core_message[1]);
         break;
 
-    case ('::::end-duel'):
+    case ('::::endduel'):
         //ps.kill(gamelist[game].pid, function (error) {});
         delete gamelist[game];
-        console.log('[Results]', core_message);
+        console.log('[Results]', core_message, game);
         //process.kill(pid);
         break;
 
