@@ -67,12 +67,12 @@ var portmin = 30000 + process.env.PORTRANGE * 100, //Port Ranges
 
 
 var scripts = {
-    0: '../http/ygopro/scripts',
-    1: '../http/ygopro/scripts',
-    2: '../http/ygopro/scripts',
-    3: '../http/ygopro/scripts',
-    4: '../http/ygopro/scripts',
-    5: '../http/ygopro/scripts'
+    0: '../http/ygopro/script',
+    1: '../http/ygopro/script',
+    2: '../http/ygopro/script',
+    3: '../http/ygopro/script',
+    4: '../http/ygopro/script',
+    5: '../http/ygopro/script'
 };
 var dbs = {
     'ini/config.ini': '../http/ygopro/databases/0-en-OCGTCG.cdb',
