@@ -65,7 +65,7 @@ function handleCoreMessage(core_message_raw, port, pid, game) {
 
     core_message = core_message_raw.toString().split('|');
     core_message[0] = core_message[0].trim();
-    console.log(core_message);
+
     if (core_message[1] === undefined) {
         return gamelist;
     }
@@ -80,6 +80,7 @@ function handleCoreMessage(core_message_raw, port, pid, game) {
         };
         //if the room its talking about isnt on the gamelist, put it on the gamelist.
     }
+    console.log(core_message, core_message[0]);
     switch (core_message[0]) {
 
     case ('::::join-slot'):
