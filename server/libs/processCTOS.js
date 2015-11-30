@@ -13,6 +13,7 @@ var portmin = 30000 + process.env.PORTRANGE * 100, //Port Ranges
     handleCoreMessage, // Send messages BACK to the MASTER PROCESS
     startDirectory = __dirname,
     fs = require('fs'),
+    path = require('path'),
     childProcess = require('child_process'),
     net = require('net'),
     parsePackets = require('./parsepackets.js'), //Get data sets out of the YGOPro Network API.
@@ -41,7 +42,7 @@ var portmin = 30000 + process.env.PORTRANGE * 100, //Port Ranges
     }),
     client = {
         write: function () {
-            console.log('system not ready yet');
+            console.log('    [ProcessCTOS]system not ready yet');
         }
     },
 
@@ -65,16 +66,68 @@ var portmin = 30000 + process.env.PORTRANGE * 100, //Port Ranges
 //client.on('close', function () {}); // start shutting down server.
 
 
+var scripts = {
+    0: '../../http/ygopro/scripts',
+    1: '../../http/ygopro/scripts',
+    2: '../../http/ygopro/scripts',
+    3: '../../http/ygopro/scripts',
+    4: '../../http/ygopro/scripts',
+    5: '../../http/ygopro/scripts'
+};
+var dbs = {
+    'ini/config.ini': '../http/ygopro/databases/0-en-OCGTCG.cdb',
+    'ini/newgioh.ini': '../http/ygopro/databases/4-Newgioh.cdb',
+    'ini/goat.ini': '../http/ygopro/databases/3-Goats.cdb',
+    'ini/3-config.ini': '../http/ygopro/databases/Z-CWA.cdb',
+    'ini/4-config.ini': '../http/ygopro/databases',
+    'ini/5-config.ini': '../http/ygopro/databases'
+};
+
+function parseDuelOptions(duelOptions) {
+    //{"200OOO8000,0,5,1,U,PaS5w":{"port":8000,"players":[],"started":false}}
+    var duelOptionsParts = duelOptions.split(','),
+        settings = { //Determine time limit
+            timeLimit: (duelOptionsParts[0][2] === '0') ? '180' : '240', //this should be done differently...
+            //Use classic TCG rules?
+            isTCGRuled: (duelOptionsParts[0][3] === 'O') ? 'OCG rules' : 'TCG Rules',
+
+            //Check Deck for Illegal cards?
+            isDeckChecked: (duelOptionsParts[0][4] === 'O') ? 'false' : 'true',
+
+            //Shuffle deck at start?
+            isShuffled: (duelOptionsParts[0][5] === 'O') ? 'false' : 'true',
+
+            //Choose Starting Life Points
+            lifePoints: duelOptionsParts[0].substring(6),
+
+            //Determine Banlist
+            banList: parseInt(duelOptionsParts[1], 10),
+
+            //Select how many cards to draw on first hand
+            openDraws: duelOptionsParts[2],
+
+            //Select how many cards to draw each turn
+            turnDraws: duelOptionsParts[3],
+
+            //Choose whether duel is locked
+            isLocked: (duelOptionsParts[4] === 'U') ? false : true,
+
+            //Copy password
+            password: duelOptionsParts[5]
+        };
+    settings.allowedCards = duelOptionsParts[0][0];
+    settings.gameMode = duelOptionsParts[0][1];
+    return settings;
+
+}
 
 
 
 
-
-
-fs.exists(startDirectory + '../../ygocore/YGOServer.exe', function (exist) {
+fs.exists(startDirectory + '../../ygosharp/YGOSharp.exe', function (exist) {
 
     if (!exist) {
-
+        console.log('    [ProcessCTOS]', path.resolve(startDirectory + '../../ygosharp/YGOSharp.exe') + ' is missing!');
         return;
     } else {
         //coreErrors.info('YGOCore is in place, allowing connections.');
@@ -203,6 +256,8 @@ is needed before sending the message. Basic logging for finding idiots
 later after they have misbehaved or providing administrative ablities
 to kill or act on games */
 
+
+
 function handleCoreMessage(core_message_raw, port, socket, data, pid) {
 
     if (core_message_raw.toString().indexOf("::::") < 0) {
@@ -219,6 +274,7 @@ function handleCoreMessage(core_message_raw, port, socket, data, pid) {
         //cHistory.info('--GAME: ' + pid);
     }
     //process.send(gamelistmessage);
+    //console.log(core_message_raw.toString());
     client.write({
         password: process.env.OPERPASS,
         action: 'gamelistEvent',
@@ -234,9 +290,8 @@ function handleCoreMessage(core_message_raw, port, socket, data, pid) {
 
 /* Checks if a given password is valid, returns true or false */
 function legalPassword(passIn) {
-
     if (passIn.length !== 24) {
-        console.log('Invalid password length', passIn);
+        console.log('    [ProcessCTOS]', 'Invalid password length', passIn);
         return false;
     }
     var re = new RegExp("\\d\\d\\d(O|T)(O|T)(O|T)(\\d)+,(\\d)|(\\d\\d),\\d,\\d,(\\w)+,(\\w)+"),
@@ -244,7 +299,7 @@ function legalPassword(passIn) {
     if (output) {
         return true;
     } else {
-        console.log('Invalid password construction');
+        console.log('    [ProcessCTOS]', 'Invalid password construction');
         return false;
     }
 }
@@ -255,13 +310,15 @@ function authenticate(socket) {
     if (!process.env.YGOPROLOGINENABLED) {
         return;
     }
-    //console.log(socket.username, registry[socket.username], socket.remoteAddress);
+
     if (registry[socket.username] !== socket.remoteAddress) {
         try {
             socket.end();
         } catch (killerror) {
-            console.log('Something wierd happened with auth', killerror);
+            console.log('    [AccessDenied]', 'Something wierd happened with auth', killerror);
         }
+    } else {
+        console.log('    [Authenticated]', socket.username, registry[socket.username], socket.remoteAddress);
     }
 }
 
@@ -274,23 +331,38 @@ number to use and 3.) if it is a valid duel to use
 server resources on. */
 
 function startCore(port, socket, data, callback) {
-
     authenticate(socket);
-    if (!coreIsInPlace) {
-        return;
-    }
 
     var configfile = pickCoreConfig(socket),
-        params = port + ' ' + configfile;
+        params = port + ' ' + configfile,
+        translated,
+        paramlist;
 
     //console.log(configfile);
     if (!legalPassword(socket.hostString)) {
         //deal with bad game request
         return;
     }
-    //console.log((startDirectory + '/../ygocore/YGOServer.exe'), [port, configfile]);
-    socket.core = childProcess.spawn(startDirectory + '/../ygocore/YGOServer.exe', [port, configfile], {
-        cwd: startDirectory + '/../ygocore'
+
+    translated = parseDuelOptions(socket.hostString);
+    paramlist = ['StandardStreamProtocol=true',
+                 'Port=' + port,
+                 'ClientVersion=0x1337',
+                 'BanlistFile=../http/ygopro/lflist.conf',
+                 'ScriptDirectory=' + scripts[translated.allowedCards],
+                 'DatabaseFile=' + dbs[configfile],
+                 'Rule=' + translated.allowedCards,
+                 'Mode=' + translated.gameMode,
+                 'Banlist=' + translated.banList,
+                 'StartLp=' + translated.lifePoints,
+                 'GameTimer=' + translated.timeLimit,
+                 'NoCheckDeck=' + translated.isDeckChecked,
+                 'NoShuffleDeck=' + translated.isShuffled,
+                 'EnablePriority=false'
+                ];
+
+    socket.core = childProcess.spawn(startDirectory + '/../ygosharp/YGOSharp.exe', paramlist, {
+        cwd: startDirectory + '/../YGOSharp'
     }, function (error, stdout, stderr) {
         //coreErrors.info(error, stdout, stderr);
         handleCoreMessage('::::endduel|' + socket.hostString, port, socket, data, socket.core.pid);
@@ -306,7 +378,6 @@ function startCore(port, socket, data, callback) {
     socket.core.stdout.on('data', function (core_message_raw) {
         handleCoreMessage(core_message_raw, port, socket, data, socket.core.pid);
     });
-
 }
 
 /* Call the server and make
@@ -319,18 +390,12 @@ based on connection speeds. */
 
 /* ..and VOLIA! Game Request Routing */
 function processIncomingTrasmission(data, socket, task) {
-
     processTask(task, socket);
     authenticate(socket);
     if (!socket.active_ygocore && socket.hostString) {
-
         if (gamelist[socket.hostString]) {
             socket.alpha = false;
-
             connectToCore(gamelist[socket.hostString].port, data, socket);
-
-
-
         } else {
             portfinder(++portmin, portmax, function (error, port) {
                 socket.alpha = true;
