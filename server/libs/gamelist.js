@@ -108,13 +108,14 @@ function handleCoreMessage(core_message_raw, port, pid) {
         gamelist[core_message[1]].locked[lock_slot] = Boolean(core_message[2]);
         break;
 
-    case ('::::endduel'):
+    case ('::::end-duel'):
         //ps.kill(gamelist[core_message[1]].pid, function (error) {});
         delete gamelist[core_message[1]];
+        console.log('[Results]', core_message);
         //process.kill(pid);
         break;
 
-    case ('::::startduel'):
+    case ('::::start-duel'):
         gamelist[core_message[1]].started = true;
         gamelist[core_message[1]].time = new Date().getTime();
         duelserv.bot.say('#public', gamelist[core_message[1]].pid + '|Duel starting|' + JSON.stringify(gamelist[core_message[1]].players));
