@@ -241,8 +241,20 @@ function checkDependencies() {
             console.log('/ygosharp/OcgWrapper.dll is missing!');
             servercoreIsInPlace = false;
         }
-        if (!fs.existsSync('./ygosharp/System.Data.Sqlite.dll')) {
-            console.log('/ygosharp/System.Data.Sqlite.dll!');
+        if (!fs.existsSync('./ygosharp/Mono.Data.Sqlite.dll')) {
+            console.log('/ygosharp/Mono.Data.Sqlite.dll!');
+            servercoreIsInPlace = false;
+        }
+        if (!fs.existsSync('./ygosharp/sqlite3.dll')) {
+            console.log('/ygosharp/sqlite3.dll!');
+            servercoreIsInPlace = false;
+        }
+        if (!fs.existsSync('./ygosharp/SevenZip.dll')) {
+            console.log('/ygosharp/SevenZip.dll!');
+            servercoreIsInPlace = false;
+        }
+        if (!fs.existsSync('./ygosharp/YGOSharp.Network.dll')) {
+            console.log('/ygosharp/YGOSharp.Network.dll!');
             servercoreIsInPlace = false;
         }
         if (!fs.existsSync('./ygocore/OcgCore.dll')) {
