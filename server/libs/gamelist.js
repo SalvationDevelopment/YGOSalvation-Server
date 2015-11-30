@@ -65,6 +65,7 @@ function handleCoreMessage(core_message_raw, port, pid, game) {
 
     core_message = core_message_raw.toString().split('|');
     core_message[0] = core_message[0].trim();
+    console.log(core_message);
     if (core_message[1] === undefined) {
         return gamelist;
     }
