@@ -282,7 +282,8 @@ function handleCoreMessage(core_message_raw, port, socket, data, pid) {
         coreMessage: {
             core_message_raw: core_message_raw.toString(),
             port: port,
-            pid: pid
+            pid: pid,
+            game: socket.hostString
         }
     });
 
