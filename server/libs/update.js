@@ -9,9 +9,9 @@ var zlib = require('zlib'),
         iknowclusterwillbreakconnections: true
     }),
     client,
-    oktorestart = true,
     colors = require('colors'),
-    domain = require('domain');
+    domain = require('domain'),
+    request = require('request');
 
 function dirTree(filename) {
 
@@ -144,18 +144,7 @@ var server = http.createServer(function (request, response) {
         }
         response.end(rate);
         console.log('[Update System]', 'Update processed:', rate, error);
-        if (oktorestart) {
-            setTimeout(function () {
-                //                client.write({
-                //                    action: 'internalRestart',
-                //                    password: process.env.OPERPASS
-                //                });
-                oktorestart = true;
-            }, 10000);
-        }
     });
-
-
 });
 
 // Listen on port 12000, IP defaults to 127.0.0.1
@@ -188,7 +177,7 @@ setTimeout(function () {
 }, 5000);
 
 setInterval(function () {
-    oktorestart = true;
-}, 5000);
+    request('http://forum.ygopro.us/fetchTopics.php', function (error, response, body) {});
+}, 600000);
 
 require('fs').watch(__filename, process.exit);
