@@ -184,30 +184,30 @@ function messageListener(message) {
             i = 0;
         for (i; brokenup.length > i; i++) {
             handleCoreMessage(brokenup[i], message.port, message.pid, message.game);
-//        }//        for (game in gamelist) {
-//            if (gamelist.hasOwnProperty(game)) {
-//                if (gamelist[game].players.length === 0 && gamelist[game].spectators === 0) {
-//                    //delete if no one is using the game.
-//                    del(gamelist[game].pid);
-//                }
-//            }
-//        }
-//        for (game in gamelist) {
-//            if (gamelist.hasOwnProperty(game)) {
-//                if (gamelist[game] && game.length !== 24) {
-//                    //delete if some wierd game makes it into the list somehow. Unlikely.
-//                    del(gamelist[game].pid);
-//                }
-//            }
-//        }
-//        for (game in gamelist) {
-//            if (gamelist.hasOwnProperty(game)) {
-//                if (new Date().getTime() - gamelist[game].time > 2700000) {
-//                    //delete if the game is older than 45mins.
-//                    del(gamelist[game].pid);
-//                }
-//            }
-//        }
+            //        }//        for (game in gamelist) {
+            //            if (gamelist.hasOwnProperty(game)) {
+            //                if (gamelist[game].players.length === 0 && gamelist[game].spectators === 0) {
+            //                    //delete if no one is using the game.
+            //                    del(gamelist[game].pid);
+            //                }
+            //            }
+            //        }
+            //        for (game in gamelist) {
+            //            if (gamelist.hasOwnProperty(game)) {
+            //                if (gamelist[game] && game.length !== 24) {
+            //                    //delete if some wierd game makes it into the list somehow. Unlikely.
+            //                    del(gamelist[game].pid);
+            //                }
+            //            }
+            //        }
+            //        for (game in gamelist) {
+            //            if (gamelist.hasOwnProperty(game)) {
+            //                if (new Date().getTime() - gamelist[game].time > 2700000) {
+            //                    //delete if the game is older than 45mins.
+            //                    del(gamelist[game].pid);
+            //                }
+            //            }
+        }
         activeDuels = 0;
         for (game in gamelist) {
             if (gamelist.hasOwnProperty(game)) {
@@ -346,7 +346,7 @@ function killgameCall(data) {
         if (info.success && info.data.g_access_cp === "1") {
             ps.kill(data.killTarget, function (err) {
                 if (err) {
-                    del(data.killTarget);
+                    //del(data.killTarget);
                 }
             });
         }
