@@ -116,7 +116,7 @@ function handleCoreMessage(core_message_raw, port, pid, game) {
         //process.kill(pid);
         break;
 
-    case ('::::start-duel'):
+    case ('::::start-game'):
         gamelist[game].started = true;
         gamelist[game].time = new Date().getTime();
         duelserv.bot.say('#public', gamelist[game].pid + '|Duel starting|' + JSON.stringify(gamelist[game].players));
