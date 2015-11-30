@@ -367,12 +367,14 @@ function startCore(port, socket, data, callback) {
     }, function (error, stdout, stderr) {
         //coreErrors.info(error, stdout, stderr);
         handleCoreMessage('::::endduel|' + socket.hostString, port, socket, data, socket.core.pid);
+        console.log('game ended naturally');
     });
 
     socket.core.stdout.on('error', function (error) {
         //coreErrors.info(error);
         handleCoreMessage('::::endduel|' + socket.hostString, port, socket, data, socket.core.pid);
         socket.core.kill();
+        console.log('game ended with issues', error);
     });
 
     /* This is important, handle YGOCore API calls for managing the gamelist */
