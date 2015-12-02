@@ -87,7 +87,7 @@ function parseDuelOptions(duelOptions) {
     //{"200OOO8000,0,5,1,U,PaS5w":{"port":8000,"players":[],"started":false}}
     var duelOptionsParts = duelOptions.split(','),
         settings = { //Determine time limit
-            timeLimit: (duelOptionsParts[0][2] === '0') ? '180' : '240', //this should be done differently...
+            timeLimit: (duelOptionsParts[0][2] === '0') ? '180' : '300', //this should be done differently...
             //Use classic TCG rules?
             isTCGRuled: (duelOptionsParts[0][3] === 'O') ? 'OCG rules' : 'TCG Rules',
 
