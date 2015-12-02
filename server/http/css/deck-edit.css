@@ -284,9 +284,9 @@ label[for="decknameInput"] > * {
 }
 
 input.decknameInput {
-    width: 12.5vw;
+    width: 11.5vw;
     float: right;
-    margin-right: 5.95vw;
+    margin-right: 7vw;
     margin-top: -0.1vw;
 }
 

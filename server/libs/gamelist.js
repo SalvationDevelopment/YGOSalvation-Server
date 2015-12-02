@@ -46,7 +46,7 @@ function logger(announcement) {
     });
 }
 
-function handleCoreMessage(core_message_raw, port, pid) {
+function handleCoreMessage(core_message_raw, port, pid, game) {
 
     var chat,
         join_slot,
@@ -64,12 +64,10 @@ function handleCoreMessage(core_message_raw, port, pid) {
     }
 
     core_message = core_message_raw.toString().split('|');
+    console.log(core_message, core_message_raw);
     core_message[0] = core_message[0].trim();
-    if (core_message[1] === undefined) {
-        return gamelist;
-    }
-    if (gamelist[core_message[1]] === undefined) {
-        gamelist[core_message[1]] = {
+    if (gamelist[game] === undefined) {
+        gamelist[game] = {
             players: [],
             locked: [false, false, false, false],
             spectators: 0,
@@ -79,57 +77,73 @@ function handleCoreMessage(core_message_raw, port, pid) {
         };
         //if the room its talking about isnt on the gamelist, put it on the gamelist.
     }
-    switch (core_message[0]) {
 
+    switch (core_message[0]) {
+    case ('::::network-ready'):
+        console.log('++');
+        return;
+    case ('::::network-end'):
+        console.log('++');
+
+        break;
     case ('::::join-slot'):
-        join_slot = parseInt(core_message[2], 10);
+        join_slot = parseInt(core_message[1], 10);
         if (join_slot === -1) {
             return;
         }
-        gamelist[core_message[1]].players[join_slot] = core_message[3].trim();
-        gamelist[core_message[1]].time = new Date().getTime();
-        gamelist[core_message[1]].port = port;
+        gamelist[game].players[join_slot] = core_message[2].trim();
+        gamelist[game].time = new Date().getTime();
+        gamelist[game].port = port;
         break;
 
     case ('::::left-slot'):
-        leave_slot = parseInt(core_message[2], 10);
+        leave_slot = parseInt(core_message[1], 10);
         if (leave_slot === -1) {
             return;
         }
-        gamelist[core_message[1]].players[leave_slot] = null;
+        gamelist[game].players[leave_slot] = null;
         break;
 
     case ('::::spectator'):
-        gamelist[core_message[1]].spectators = parseInt(core_message[2], 10);
+        gamelist[game].spectators = parseInt(core_message[1], 10);
         break;
 
     case ('::::lock-slot'):
-        lock_slot = parseInt(core_message[2], 10);
-        gamelist[core_message[1]].locked[lock_slot] = Boolean(core_message[2]);
+        lock_slot = parseInt(core_message[1], 10);
+        gamelist[game].locked[lock_slot] = Boolean(core_message[1]);
         break;
-
+    case ('::::end-duel'):
+        console.log('[Results]', core_message, game);
+        break;
     case ('::::endduel'):
-        //ps.kill(gamelist[core_message[1]].pid, function (error) {});
-        delete gamelist[core_message[1]];
+        //ps.kill(gamelist[game].pid, function (error) {});
+        delete gamelist[game];
         //process.kill(pid);
         break;
-
-    case ('::::startduel'):
-        gamelist[core_message[1]].started = true;
-        gamelist[core_message[1]].time = new Date().getTime();
-        duelserv.bot.say('#public', gamelist[core_message[1]].pid + '|Duel starting|' + JSON.stringify(gamelist[core_message[1]].players));
+    case ('::::end-game'):
+        //ps.kill(gamelist[game].pid, function (error) {});
+        delete gamelist[game];
+        //process.kill(pid);
         break;
-
     case ('::::chat'):
         chat = core_message.join(' ');
-
         process.nextTick(function () {
-            logger(pid + '|' + core_message[2] + ': ' + core_message[3]);
+            logger(pid + '|' + core_message[1] + ': ' + core_message[2]);
         });
         process.nextTick(function () {
-            duelserv.bot.say('#public', gamelist[core_message[1]].pid + '|' + core_message[2] + ': ' + core_message[3]);
+            //duelserv.bot.say('#public', gamelist[game].pid + '|' + core_message[2] + ': ' + core_message[3]);
         });
         break;
+    case ('::::start-game'):
+        gamelist[game].started = true;
+        gamelist[game].time = new Date().getTime();
+        //duelserv.bot.say('#public', gamelist[game].pid + '|Duel starting|' + JSON.stringify(gamelist[game].players));
+        console.log('real start-game', game);
+        break;
+
+
+    default:
+        console.log('unknown command', game, core_message, core_message[1].length);
     }
     handleCoreMessageWatcher.exit();
 }
@@ -139,20 +153,20 @@ function announce(announcement) {
 }
 
 
-function del(pid) {
-    var game;
-    for (game in gamelist) {
-        if (gamelist.hasOwnProperty(game)) {
-            if (String() + gamelist[game].pid === pid) {
-                delete gamelist[game];
-                announce(JSON.stringify(gamelist));
-            }
-        }
-    }
-    setTimeout(function () {
-        ps.kill(pid, function (error) {});
-    }, 5000);
-}
+//function del(pid) {
+//    var game;
+//    for (game in gamelist) {
+//        if (gamelist.hasOwnProperty(game)) {
+//            if (String() + gamelist[game].pid === pid) {
+//                delete gamelist[game];
+//                announce(JSON.stringify(gamelist));
+//            }
+//        }
+//    }
+//    setTimeout(function () {
+//        ps.kill(pid, function (error) {});
+//    }, 5000);
+//}
 
 function messageListener(message) {
 
@@ -169,31 +183,30 @@ function messageListener(message) {
             users,
             i = 0;
         for (i; brokenup.length > i; i++) {
-            handleCoreMessage(brokenup[i], message.port, message.pid);
-        }
-        for (game in gamelist) {
-            if (gamelist.hasOwnProperty(game)) {
-                if (gamelist[game].players.length === 0 && gamelist[game].spectators === 0) {
-                    //delete if no one is using the game.
-                    del(gamelist[game].pid);
-                }
-            }
-        }
-        for (game in gamelist) {
-            if (gamelist.hasOwnProperty(game)) {
-                if (gamelist[game] && game.length !== 24) {
-                    //delete if some wierd game makes it into the list somehow. Unlikely.
-                    del(gamelist[game].pid);
-                }
-            }
-        }
-        for (game in gamelist) {
-            if (gamelist.hasOwnProperty(game)) {
-                if (new Date().getTime() - gamelist[game].time > 2700000) {
-                    //delete if the game is older than 45mins.
-                    del(gamelist[game].pid);
-                }
-            }
+            handleCoreMessage(brokenup[i], message.port, message.pid, message.game);
+            //        }//        for (game in gamelist) {
+            //            if (gamelist.hasOwnProperty(game)) {
+            //                if (gamelist[game].players.length === 0 && gamelist[game].spectators === 0) {
+            //                    //delete if no one is using the game.
+            //                    del(gamelist[game].pid);
+            //                }
+            //            }
+            //        }
+            //        for (game in gamelist) {
+            //            if (gamelist.hasOwnProperty(game)) {
+            //                if (gamelist[game] && game.length !== 24) {
+            //                    //delete if some wierd game makes it into the list somehow. Unlikely.
+            //                    del(gamelist[game].pid);
+            //                }
+            //            }
+            //        }
+            //        for (game in gamelist) {
+            //            if (gamelist.hasOwnProperty(game)) {
+            //                if (new Date().getTime() - gamelist[game].time > 2700000) {
+            //                    //delete if the game is older than 45mins.
+            //                    del(gamelist[game].pid);
+            //                }
+            //            }
         }
         activeDuels = 0;
         for (game in gamelist) {
@@ -333,7 +346,7 @@ function killgameCall(data) {
         if (info.success && info.data.g_access_cp === "1") {
             ps.kill(data.killTarget, function (err) {
                 if (err) {
-                    del(data.killTarget);
+                    //del(data.killTarget);
                 }
             });
         }
@@ -354,7 +367,7 @@ function onData(data, socket) {
         action,
         save;
     socketwatcher.on('error', function (err) {
-        if (err.message = "TypeError: Cannot read property 'forwarded' of undefined") {
+        if (err.message === "TypeError: Cannot read property 'forwarded' of undefined") {
             // not sure how to handle this yet.
             return;
         }
