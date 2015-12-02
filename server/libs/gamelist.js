@@ -153,20 +153,20 @@ function announce(announcement) {
 }
 
 
-//function del(pid) {
-//    var game;
-//    for (game in gamelist) {
-//        if (gamelist.hasOwnProperty(game)) {
-//            if (String() + gamelist[game].pid === pid) {
-//                delete gamelist[game];
-//                announce(JSON.stringify(gamelist));
-//            }
-//        }
-//    }
-//    setTimeout(function () {
-//        ps.kill(pid, function (error) {});
-//    }, 5000);
-//}
+function del(pid) {
+    var game;
+    for (game in gamelist) {
+        if (gamelist.hasOwnProperty(game)) {
+            if (String() + gamelist[game].pid === pid) {
+                delete gamelist[game];
+                announce(JSON.stringify(gamelist));
+            }
+        }
+    }
+    setTimeout(function () {
+        ps.kill(pid, function (error) {});
+    }, 5000);
+}
 
 function messageListener(message) {
 
@@ -184,29 +184,6 @@ function messageListener(message) {
             i = 0;
         for (i; brokenup.length > i; i++) {
             handleCoreMessage(brokenup[i], message.port, message.pid, message.game);
-            //        }//        for (game in gamelist) {
-            //            if (gamelist.hasOwnProperty(game)) {
-            //                if (gamelist[game].players.length === 0 && gamelist[game].spectators === 0) {
-            //                    //delete if no one is using the game.
-            //                    del(gamelist[game].pid);
-            //                }
-            //            }
-            //        }
-            //        for (game in gamelist) {
-            //            if (gamelist.hasOwnProperty(game)) {
-            //                if (gamelist[game] && game.length !== 24) {
-            //                    //delete if some wierd game makes it into the list somehow. Unlikely.
-            //                    del(gamelist[game].pid);
-            //                }
-            //            }
-            //        }
-            //        for (game in gamelist) {
-            //            if (gamelist.hasOwnProperty(game)) {
-            //                if (new Date().getTime() - gamelist[game].time > 2700000) {
-            //                    //delete if the game is older than 45mins.
-            //                    del(gamelist[game].pid);
-            //                }
-            //            }
         }
         activeDuels = 0;
         for (game in gamelist) {
@@ -225,7 +202,36 @@ function messageListener(message) {
     return gamelist;
 }
 
+function cleanGamelist() {
+    var game;
+    for (game in gamelist) {
+        if (gamelist.hasOwnProperty(game)) {
+            if (gamelist[game].players.length === 0 && gamelist[game].spectators === 0) {
+                //delete if no one is using the game.
+                //del(gamelist[game].pid);
+                delete gamelist[game];
+            }
+        }
+    }
+    for (game in gamelist) {
+        if (gamelist.hasOwnProperty(game)) {
+            if (gamelist[game] && game.length !== 24) {
+                //delete if some wierd game makes it into the list somehow. Unlikely.
+                del(gamelist[game].pid);
+            }
+        }
+    }
+    for (game in gamelist) {
+        if (gamelist.hasOwnProperty(game)) {
+            if (new Date().getTime() - gamelist[game].time > 2700000) {
+                //delete if the game is older than 45mins.
+                del(gamelist[game].pid);
+            }
+        }
+    }
+}
 
+setInterval(cleanGamelist, 60000);
 
 function sendRegistry() {
     internalMessage({
