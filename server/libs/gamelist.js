@@ -280,35 +280,6 @@ function globalCall(data) {
     });
 }
 
-function restartAnnouncement() {
-    console.log('RESTART INITIATED');
-    announce({
-        clientEvent: 'global',
-        message: 'Please finish your current game in the next 10 mins, server is auto updating.'
-    });
-    // no need to cache this, only effects people actively dueling.
-    setTimeout(function () {
-        announce({
-            clientEvent: 'global',
-            message: 'Recent Server Auto Update Complete, Rebooting Server in 10 seconds.'
-        });
-        setTimeout(function () {
-            process.exit(0);
-        }, 10000);
-    }, 10000);
-
-}
-
-function restartCall(data) {
-    forumValidate(data, function (error, info, body) {
-        if (error) {
-            return;
-        }
-        if (info.success && info.data.g_access_cp === "1") {
-            restartAnnouncement();
-        }
-    });
-}
 
 function genocideCall(data) {
     forumValidate(data, function (error, info, body) {
@@ -346,7 +317,7 @@ function killgameCall(data) {
         if (info.success && info.data.g_access_cp === "1") {
             ps.kill(data.killTarget, function (err) {
                 if (err) {
-                    //del(data.killTarget);
+                    del(data.killTarget);
                 }
             });
         }
@@ -448,10 +419,10 @@ function onData(data, socket) {
         if (data.password !== process.env.OPERPASS) {
             return;
         }
-        restartAnnouncement();
+        //restartAnnouncement();
         break;
     case ('restart'):
-        restartCall(data);
+        //restartCall(data);
         break;
     case ('killgame'):
         killgameCall(data);

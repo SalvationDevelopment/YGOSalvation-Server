@@ -270,7 +270,7 @@ function handleCoreMessage(core_message_raw, port, socket, data, pid) {
         //cHistory.info('++GAME: ' + pid);
     }
     if (core_message[0].trim() === '::::end-duel') {
-        socket.core.kill();
+        //socket.core.kill();
         //cHistory.info('--GAME: ' + pid);
     }
     //process.send(gamelistmessage);
@@ -373,7 +373,7 @@ function startCore(port, socket, data, callback) {
     socket.core.stdout.on('error', function (error) {
         //coreErrors.info(error);
         handleCoreMessage('::::endduel|' + socket.hostString, port, socket, data, socket.core.pid);
-        socket.core.kill();
+        //socket.core.kill();
         console.log('game ended with issues', error);
     });
 
