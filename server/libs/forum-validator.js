@@ -7,7 +7,7 @@ var validationCache = {},
     crypto = require('crypto');
 
 setInterval(function () {
-    validationCache = {}
+    validationCache = {};
 }, 600000); // cache the forum request for 10 mins.
 
 function forumValidate(data, callback) {
@@ -22,10 +22,15 @@ function forumValidate(data, callback) {
                 ips_password: data.password
             },
             info = {},
-            forumdata;
+            forumdata = {
+                data: {}
+            };
         request.post(url, {
             form: post
         }, function (error, response, body) {
+            forumdata = {
+                data: {}
+            };
             if (!error && response.statusCode === 200) {
                 try {
                     forumdata = JSON.parse(body.trim());
@@ -35,7 +40,7 @@ function forumValidate(data, callback) {
                     return;
                 }
                 info.success = forumdata.success;
-                forumdata.data = {};
+                info.data = {};
                 info.data.g_access_cp = forumdata.data.g_access_cp;
                 info.displayname = forumdata.displayname
                 validationCache[data.username] = forumdata;

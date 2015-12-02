@@ -47,25 +47,28 @@ function vgetMSBuildPath(framework) {
 }
 
 
-function makeYGOCore() {
+function makeygosharp(callback) {
 
     var extended_fs = require('extended-fs'),
         buildpath = vgetMSBuildPath(),
-        solution = ' "' + path.resolve('./ygocore/source/YGOCore.sln') + '" ',
-        parameters = '/p:Configuration=Release /p:Platform="x86" /t:Clean,Build',
+        solution = ' "' + path.resolve('./ygosharp/source/YGOSharp.sln') + '" ',
+        parameters = '/p:Configuration=Release /p:Platform="Any CPU" /t:Clean,Build',
         buildString = buildpath + solution + parameters,
-        ygocoreBuilder = processManager.exec(buildString, {
-            cwd: path.resolve('../../YGOcore')
-        }, function () {
+        ygocoreBuilder = processManager.exec(buildString, function () {
             if (os.platform() === 'win32') {
+                var binaries = fs.readdirSync('./ygosharp/source/YGOSharp/bin/Release/'),
+                    i;
                 try {
-                    extended_fs.copyFileSync('./ygocore/source/YGOcore/bin/Release/YGOServer.exe', './ygocore/YGOServer.exe');
-                    extended_fs.copyFileSync('./ygocore/source/OcgWrapper/bin/Release/OcgWrapper.dll', './ygocore/OcgWrapper.dll');
-                    extended_fs.copyFileSync('./ygocore/source/OcgWrapper/bin/Release/System.Data.SQLite.dll', './ygocore/System.Data.SQLite.dll');
+                    for (i = 0; binaries.length > i; i++) {
+                        extended_fs.copyFileSync('./ygosharp/source/YGOSharp/bin/Release/' + binaries[i], './ygosharp/' + binaries[i]);
+                    }
+                    callback();
                 } catch (error) {
                     console.log('Could not put the files in place!');
                 }
 
+            } else {
+                callback();
             }
         });
 
@@ -77,7 +80,11 @@ function makeYGOCore() {
     });
 }
 
-
+//var ygopro_core = processManager.exec('./premake4 vs2012', {
+//    cwd: path.resolve('../../ygopro-core')
+//}, function () {
+//    makeYGOProCore();
+//});
 
 function bootlogger() {
     console.log('    Logging Enabled @ ../logs'.bold.yellow);
@@ -226,26 +233,40 @@ function checkDependencies() {
     }
     extended_fs = require('extended-fs');
     if (os.platform() === 'win32') {
-        if (!fs.existsSync('./ygocore/YGOServer.exe')) {
-            console.log('/ygocore/YGOServer.exe is missing!');
+        if (!fs.existsSync('./ygosharp/YGOSharp.exe')) {
+            console.log('/ygosharp/YGOServer.exe is missing!');
             servercoreIsInPlace = false;
         }
-        if (!fs.existsSync('./ygocore/OcgWrapper.dll')) {
-            console.log('/ygocore/OcgWrapper.dll is missing!');
+        if (!fs.existsSync('./ygosharp/OcgWrapper.dll')) {
+            console.log('/ygosharp/OcgWrapper.dll is missing!');
             servercoreIsInPlace = false;
         }
-        if (!fs.existsSync('./ygocore/System.Data.Sqlite.dll')) {
-            console.log('/ygocore/System.Data.Sqlite.dll!');
+        if (!fs.existsSync('./ygosharp/Mono.Data.Sqlite.dll')) {
+            console.log('/ygosharp/Mono.Data.Sqlite.dll!');
+            servercoreIsInPlace = false;
+        }
+        if (!fs.existsSync('./ygosharp/sqlite3.dll')) {
+            console.log('/ygosharp/sqlite3.dll!');
+            servercoreIsInPlace = false;
+        }
+        if (!fs.existsSync('./ygosharp/SevenZip.dll')) {
+            console.log('/ygosharp/SevenZip.dll!');
+            servercoreIsInPlace = false;
+        }
+        if (!fs.existsSync('./ygosharp/YGOSharp.Network.dll')) {
+            console.log('/ygosharp/YGOSharp.Network.dll!');
             servercoreIsInPlace = false;
         }
         if (!fs.existsSync('./ygocore/OcgCore.dll')) {
-            console.log('/ygocore/OcgCore.dll is missing please install it!');
+            console.log('/ygosharp/OcgCore.dll is missing please install it!');
             ocgcoreIsInPlace = false;
         }
         if (!servercoreIsInPlace) {
-            makeYGOCore();
+            makeygosharp(main);
+        } else {
+            main();
         }
-        main();
+
     }
 }
 
