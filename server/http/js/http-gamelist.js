@@ -432,7 +432,7 @@ function preformfilter(translated, players, rooms, started, pid, watchers) {
         //console.log(translated);
         content = '<div class="game ' + rooms + ' ' + started + ' ' + translated.isLocked + ' ' + translated.gameMode;
         content += '"onclick=enterGame("' + rooms + '",' + translated.isLocked + ')'
-        content += ' data-roomid="' + game + '" data-' + game + '="' + rooms + '"data-killpoint="' + pid + '">' + duelist + spectators;
+        content += ' data-roomid="' + rooms + '" data-' + game + '="' + rooms + '"data-killpoint="' + pid + '">' + duelist + spectators;
         content += '<span class="subtext" style="font-size:.5em"><br>' + translated.gameMode;
         content += ' ' + $('#creategamebanlist option[value=' + translated.banlist + ']').text() + ' ' + translated.poolFormat + '</div>';
     }
