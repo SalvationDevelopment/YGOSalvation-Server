@@ -66,6 +66,9 @@ function handleCoreMessage(core_message_raw, port, pid, game) {
     core_message = core_message_raw.toString().split('|');
     console.log(core_message, core_message_raw);
     core_message[0] = core_message[0].trim();
+    if (core_message[0] === '::::network-ready') {
+        return;
+    }
     if (gamelist[game] === undefined) {
         gamelist[game] = {
             players: [],
@@ -79,12 +82,8 @@ function handleCoreMessage(core_message_raw, port, pid, game) {
     }
 
     switch (core_message[0]) {
-    case ('::::network-ready'):
-        console.log('++');
-        return;
     case ('::::network-end'):
-        console.log('++');
-
+        console.log('--');
         break;
     case ('::::join-slot'):
         join_slot = parseInt(core_message[1], 10);
