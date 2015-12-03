@@ -1693,8 +1693,7 @@ div[data-game^="32"] {
     color: grey;
 }
 
-.Single,
-.Tag {
+.Single {
     width: 23%;
 }
 
