@@ -269,10 +269,10 @@ function handleCoreMessage(core_message_raw, port, socket, data, pid) {
         connectToCore(port, data, socket);
         //cHistory.info('++GAME: ' + pid);
     }
-    if (core_message[0].trim() === '::::end-duel') {
-        //socket.core.kill();
-        //cHistory.info('--GAME: ' + pid);
-    }
+    //if (core_message[0].trim() === '::::end-duel') {
+    //socket.core.kill();
+    //cHistory.info('--GAME: ' + pid);
+    //}
     //process.send(gamelistmessage);
     //console.log(core_message_raw.toString());
     client.write({
@@ -398,7 +398,21 @@ function processIncomingTrasmission(data, socket, task) {
     if (!socket.active_ygocore && socket.hostString) {
         if (gamelist[socket.hostString]) {
             socket.alpha = false;
-            connectToCore(gamelist[socket.hostString].port, data, socket);
+            ps.lookup(gamelist[socket.hostString].pid, function (lookupError, processFound) {
+                if (lookupError) {
+                    console.log('[ProcessCTOS]:LookupError', lookupError);
+                    return;
+                }
+                if (processFound.length === 0) {
+                    portfinder(++portmin, portmax, function (error, port) {
+                        socket.alpha = true;
+                        startCore(port, socket, data);
+                    });
+                } else {
+                    connectToCore(gamelist[socket.hostString].port, data, socket);
+                }
+
+            });
         } else {
             portfinder(++portmin, portmax, function (error, port) {
                 socket.alpha = true;

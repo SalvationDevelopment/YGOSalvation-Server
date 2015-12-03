@@ -432,7 +432,7 @@ function preformfilter(translated, players, rooms, started, pid, watchers) {
         //console.log(translated);
         content = '<div class="game ' + rooms + ' ' + started + ' ' + translated.isLocked + ' ' + translated.gameMode;
         content += '"onclick=enterGame("' + rooms + '",' + translated.isLocked + ')'
-        content += ' data-' + game + '="' + rooms + '"data-killpoint="' + pid + '">' + duelist + spectators;
+        content += ' data-roomid="' + game + '" data-' + game + '="' + rooms + '"data-killpoint="' + pid + '">' + duelist + spectators;
         content += '<span class="subtext" style="font-size:.5em"><br>' + translated.gameMode;
         content += ' ' + $('#creategamebanlist option[value=' + translated.banlist + ']').text() + ' ' + translated.poolFormat + '</div>';
     }
@@ -605,11 +605,12 @@ function murder(username) {
 $('body').on('mousedown', '.game', function (ev) {
     'use strict';
     if (admin === "1" && launcher && ev.which === 3) {
-        var killpoint = $(ev.target).attr('data-killpoint');
+        var killpoint = $(ev.target).attr('data-killpoint'),
+            gameID = $(ev.target).attr('data-roomid');
         if (killpoint === undefined) {
             return;
         }
-        if (confirm('Kill game ' + killpoint)) {
+        if (confirm('Kill game ' + killpoint + ' : ' + gameID)) {
             killgame(killpoint);
         }
     }
