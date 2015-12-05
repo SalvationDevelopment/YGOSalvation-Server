@@ -52,14 +52,14 @@ server/ygocore/*.exe
 server/ygocore/ErrorLog.txt
 server/ygocore/error_log/*
 server/http/manifest/*
-server/http/ygopro/*
+
 server/http/setups/*
 *.bat
 *.mp3
 *.ogg
 *.log
 *.ini
-!server/http/ygopro/script/*
+
 
 #project-Agnotistic
 *.manifest

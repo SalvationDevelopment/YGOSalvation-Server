@@ -7,3 +7,6 @@
 [submodule "server/ygosharp/source"]
 	path = server/ygosharp/source
 	url = https://github.com/IceYGO/ygosharp
+[submodule "server/http/ygopro/scripts"]
+	path = server/http/ygopro/scripts
+	url = https://github.com/SalvationDevelopment/Salvation-Scripts-TCG
