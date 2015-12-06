@@ -13,3 +13,6 @@
 [submodule "server/http/ygopro/pics"]
 	path = server/http/ygopro/pics
 	url = https://github.com/SalvationDevelopment/YGOPro-Images
+[submodule "server/ocgcore"]
+	path = server/ocgcore
+	url = https://github.com/SalvationDevelopment/YGOPro-Library-Builder
