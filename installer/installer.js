@@ -1,14 +1,12 @@
 /*jslint node : true */
 'use strict';
 
-//var createMsi = require('msi-packager'),
-var 
-//version = require('./version.json'),
-    extended_fs = require('extended-fs'),
+
+var extended_fs = require('extended-fs'),
     zipFolder = require('zip-folder'),
     targz = require('targz');
-	var exec = require('child_process').execSync;
-	var cmd = '"C://Program Files (x86)//NSIS//makensis.exe" /v0 SalvInstall.nsi';
+var exec = require('child_process').execSync;
+var cmd = '"C://Program Files (x86)//NSIS//makensis.exe" /v0 SalvInstall.nsi';
 
 
 
@@ -53,38 +51,28 @@ extended_fs.copyDirSync('./textures', './input/ygopro/textures');
 extended_fs.copyDirSync('./sound', './input/ygopro/sound');
 
 // compile Installer
-exec(cmd, function(error, stdout, stderr) {
-  console.log('stdout: ' + stdout);
+exec(cmd, function (error, stdout, stderr) {
+    console.log('stdout: ' + stdout);
     console.log('stderr: ' + stderr);
     if (error !== null) {
-      console.log('exec error: ' + error);;
-});
-
-zipFolder('./input', 'output/installer.zip', function (err) {
-    if (err) {
-        console.log('oh no!', err);
-    } else {
-        // compress files into tar.gz archive 
-        targz.compress({
-            src: './input',
-            dest: 'output/installer.tar.gz'
-        }, function (err) {
-            if (err) {
-                console.log(err);
-            } else {
-                console.log("Done!");
-            }
-        });
+        console.log('exec error: ' + error);
     }
+    zipFolder('./input', 'output/installer.zip', function (err) {
+        if (err) {
+            console.log('oh no!', err);
+        } else {
+            // compress files into tar.gz archive 
+            targz.compress({
+                src: './input',
+                dest: 'output/installer.tar.gz'
+            }, function (err) {
+                if (err) {
+                    console.log(err);
+                } else {
+                    console.log("Done!");
+                }
+            });
+        }
+    });
+
 });
-
-
-//createMsi(options, function (err) {
-//    if (err) {
-//        throw err;
-//    }
-//    console.log('Outputed to ' + options.output);
-//
-//});
-
-//https://vathsalas.wordpress.com/2013/05/27/creating-installer-with-nsis/
