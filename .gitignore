@@ -51,6 +51,7 @@ server/ygocore/*.dll
 server/ygocore/*.exe
 server/ygocore/ErrorLog.txt
 server/ygocore/error_log/*
+server/ygosharp/*.txt
 server/http/manifest/*
 
 server/http/setups/*
