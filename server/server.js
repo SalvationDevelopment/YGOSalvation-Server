@@ -26,6 +26,32 @@ var fs = require('fs'),
         ProductionSITE: 'ygopro.us'
     };
 
+var dependencies = require('../package.json').dependencies,
+    modules,
+    safe = true,
+    moduleIsAvaliable = true;
+
+for (modules in dependencies) {
+    if (dependencies.hasOwnProperty(modules)) {
+        moduleIsAvaliable = fs.existsSync('../node_modules/' + modules);
+        if (!moduleIsAvaliable) {
+            safe = false;
+            console.log('Missing module', modules);
+        }
+    }
+}
+if (!safe) {
+    console.log('Installing missing modules...');
+    processManager.execSync('npm install', {
+        cwd: '../'
+    });
+}
+
+var extended_fs = require('extended-fs'),
+    colors = require('colors'), // oo pretty colors!
+    request = require('request'), //talking HTTP here
+    needHTTPMicroService = false, //if there is an HTTPD then dont do anything.
+    net = require('net'); // ping!;;
 
 function vgetMSBuildPath(framework) {
     framework = framework || '4.0';
@@ -49,8 +75,7 @@ function vgetMSBuildPath(framework) {
 
 function makeygosharp(callback) {
 
-    var extended_fs = require('extended-fs'),
-        buildpath = vgetMSBuildPath(),
+    var buildpath = vgetMSBuildPath(),
         solution = ' "' + path.resolve('./ygosharp/source/YGOSharp.sln') + '" ',
         parameters = '/p:Configuration=Release /p:Platform="Any CPU" /t:Clean,Build',
         buildString = buildpath + solution + parameters,
@@ -153,11 +178,7 @@ function bootIRC() {
 }
 
 function main() {
-    var mainStack = domain.create(),
-        colors = require('colors'), // oo pretty colors!
-        request = require('request'), //talking HTTP here
-        needHTTPMicroService = false, //if there is an HTTPD then dont do anything.
-        net = require('net'); // ping!;
+    var mainStack = domain.create();
 
     mainStack.on('error', function (err) {
         console.error((new Date()).toUTCString(), ' mainStackException:', err.message);
@@ -209,29 +230,10 @@ function main() {
 
 
 function checkDependencies() {
-    var dependencies = require('../package.json').dependencies,
-        modules,
-        extended_fs,
-        safe = true,
-        moduleIsAvaliable = true,
-        servercoreIsInPlace = true,
+    var servercoreIsInPlace = true,
         ocgcoreIsInPlace = false;
-    for (modules in dependencies) {
-        if (dependencies.hasOwnProperty(modules)) {
-            moduleIsAvaliable = fs.existsSync('../node_modules/' + modules);
-            if (!moduleIsAvaliable) {
-                safe = false;
-                console.log('Missing module', modules);
-            }
-        }
-    }
-    if (!safe) {
-        console.log('Installing missing modules...');
-        processManager.execSync('npm install', {
-            cwd: '../'
-        });
-    }
-    extended_fs = require('extended-fs');
+
+
     if (os.platform() === 'win32') {
         if (!fs.existsSync('./ygosharp/YGOSharp.exe')) {
             console.log('/ygosharp/YGOServer.exe is missing!');
@@ -258,8 +260,11 @@ function checkDependencies() {
             servercoreIsInPlace = false;
         }
         if (!fs.existsSync('./ygosharp/ocgcore.dll')) {
-            console.log('/ygosharp/ocgcore.dll is missing please install it!');
-            ocgcoreIsInPlace = false;
+            try {
+                extended_fs.copyFileSync('./ocgcore/bin/release/ocgcore.dll', './ygosharp/ocgcore.dll');
+            } catch (error) {
+                console.log('/ygosharp/ocgcore.dll is missing please compile it!');
+            }
         }
         if (!servercoreIsInPlace) {
             console.log('Attempting to compile missing binaries');
