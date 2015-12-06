@@ -257,11 +257,12 @@ function checkDependencies() {
             console.log('/ygosharp/YGOSharp.Network.dll!');
             servercoreIsInPlace = false;
         }
-        if (!fs.existsSync('./ygocore/OcgCore.dll')) {
-            console.log('/ygosharp/OcgCore.dll is missing please install it!');
+        if (!fs.existsSync('./ygosharp/ocgcore.dll')) {
+            console.log('/ygosharp/ocgcore.dll is missing please install it!');
             ocgcoreIsInPlace = false;
         }
         if (!servercoreIsInPlace) {
+            console.log('Attempting to compile missing binaries');
             makeygosharp(main);
         } else {
             main();
