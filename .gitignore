@@ -53,6 +53,15 @@ server/ygocore/ErrorLog.txt
 server/ygocore/error_log/*
 server/ygosharp/*.txt
 server/http/manifest/*
+server/ygosharp/Mono.Data.Sqlite.dll
+server/ygosharp/OCGWrapper.dll
+server/ygosharp/SevenZip.dll
+server/ygosharp/YGOSharp.Network.dll
+server/ygosharp/YGOSharp.exe
+server/ygosharp/YGOSharp.exe.config
+server/ygosharp/YGOSharp.vshost.exe
+server/ygosharp/YGOSharp.vshost.exe.config
+server/ygosharp/sqlite3.dll
 
 server/http/setups/*
 *.bat
