@@ -13,7 +13,8 @@ $(function () {
                 dataString = "";
             if (dataKeys.length > 0 && typeof data.data === "object") {
                 dataKeys.forEach(function (key) {
-                    dataString += key + " = " + data.data[key];
+                    var currentKeys = Object.keys(data.data[key]);
+                    dataString += key + " = " + ((currentKeys.length && "{ " + currentKeys.join(", ") + " }") || data.data[key]) + ", ";
                 });
             } else if (typeof data.data === "string") {
                 dataString = data.data;
