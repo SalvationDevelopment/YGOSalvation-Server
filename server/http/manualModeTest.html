@@ -62,35 +62,49 @@
         <br>
         To Position: <input class="queryOption" type="text" data-rel="duelQuery" data-prop="moveTo.position">
         <br>
-        <button class="queryChanger" id="viewDeck">View Deck</button>
+        <button class="queryChanger" data-super="duelQuery" id="viewDeck">View Deck</button>
         <br>
-        <button class="queryChanger" id="closeDeck">Close Deck</button>
+        Duel ID: <input class="queryOption" data-rel="viewDeck" data-prop="duelID">
         <br>
-        <button class="queryChanger" id="changeFlipStatus">Change Flip Status</button>
+        <button class="queryChanger" data-super="duelQuery" id="closeDeck">Close Deck</button>
         <br>
-        <button class="queryChanger" id="addLP">Add LP</button>
+        Duel ID: <input class="queryOption" data-rel="closeDeck" data-prop="duelID">
+        <br>
+        <button class="queryChanger" data-super="duelQuery" id="changeFlipStatus">Change Flip Status (Convulsion of Nature)</button>
+        <br>
+        Duel ID: <input class="queryOption" data-rel="changeFlipStatus" data-prop="duelID">
+        <br>
+        <button class="queryChanger" data-super="duelQuery" id="addLP">Add LP</button>
+        <br>
+        Duel ID: <input class="queryOption" data-rel="addLP" data-prop="duelID">
         <br>
         Amount: <input class="queryOption" type="number" data-rel="addLP" data-prop="amount">
         <br>
-        <button class="queryChanger" id="subLP">Sub LP</button>
+        <button class="queryChanger" data-super="duelQuery" id="subLP">Sub LP</button>
+        <br>
+        Duel ID: <input class="queryOption" data-rel="subLP" data-prop="duelID">
         <br>
         Amount: <input class="queryOption" type="number" data-rel="subLP" data-prop="amount">
         <br>
-        <button class="queryChanger" id="viewExtra">View Extra</button>
+        <button class="queryChanger" data-super="duelQuery" id="viewExtra">View Extra</button>
         <br>
-        <button class="queryChanger" id="changePosition">Change Position</button>
+        Duel ID: <input class="queryOption" data-rel="startDuel" data-prop="duelID">
+        <br>
+        <button class="queryChanger" data-super="duelQuery" id="changePosition">Change Position</button>
+        <br>
+        Duel ID: <input class="queryOption" data-rel="changePosition" data-prop="duelID">
         <br>
         Slot: <input class="queryOption" type="text" data-rel="changePosition" data-prop="target.slot">
         <br>
         Location: <input class="queryOption" type="text" data-rel="changePosition" data-prop="target.location">
         <br>
-        <button class="queryChanger" id="showHand">Show Hand</button>
+        <button class="queryChanger" data-super="duelQuery" id="showHand">Show Hand</button>
         <br>
-        <button class="queryChanger" id="showDeck">Show Deck</button>
+        <button class="queryChanger" data-super="duelQuery" id="showDeck">Show Deck</button>
         <br>
-        <button class="queryChanger" id="showExtra">Show Extra</button>
+        <button class="queryChanger" data-super="duelQuery" id="showExtra">Show Extra</button>
         <br>
-        <button class="queryChanger" id="changePhase">Change Phase</button>
+        <button class="queryChanger" data-super="duelQuery" id="changePhase">Change Phase</button>
         <br>
         <select class="queryOption" data-rel="changePhase" data-prop="phase">
             <option value="Draw Phase">Draw Phase</option>
@@ -101,17 +115,27 @@
             <option value="End Phase">End Phase</option>
         </select>
         <br>
-        <button class="queryChanger" id="endTurn">End Turn</button>
+        <button class="queryChanger" data-super="duelQuery" id="endTurn">End Turn</button>
         <br>
-        <button class="queryChanger" id="coinFlip">Coin Flip</button>
+        Duel ID: <input class="queryOption" data-rel="endTurn" data-prop="duelID">
         <br>
-        <button class="queryChanger" id="diceRoll">Dice Roll</button>
+        <button class="queryChanger" data-super="duelQuery" id="coinFlip">Coin Flip</button>
         <br>
-        <button class="queryChanger" id="getOptions">Get Options</button>
+        Duel ID: <input class="queryOption" data-rel="coinFlip" data-prop="duelID">
         <br>
-        <button class="queryChanger" id="getState">Get State</button>
+        <button class="queryChanger" data-super="duelQuery" id="diceRoll">Dice Roll</button>
         <br>
-        <button class="queryChanger" id="startDuel">Start Duel</button>
+        Duel ID: <input class="queryOption" data-rel="diceRoll" data-prop="duelID">
+        <br>
+        <button class="queryChanger" data-super="duelQuery" id="getOptions">Get Options</button>
+        <br>
+        Duel ID: <input class="queryOption" data-rel="getOptions" data-prop="duelID">
+        <br>
+        <button class="queryChanger" data-super="duelQuery" id="getState">Get State</button>
+        <br>
+        Duel ID: <input class="queryOption" data-rel="getState" data-prop="duelID">
+        <br>
+        <button class="queryChanger" data-super="duelQuery" id="startDuel">Start Duel</button>
         <br>
         Duel ID: <input class="queryOption" data-rel="startDuel" data-prop="duelID">
         <br>
