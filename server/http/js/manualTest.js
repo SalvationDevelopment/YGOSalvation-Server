@@ -6,9 +6,12 @@ $(function () {
         $('.statusField').html('<span class="statusConnected">Manual mode is connected!</span>');
         logData.push('Connected');
         manual.on('data', function (data) {
+            if (data.event === "heartBeat") {
+                return;
+            }
             var dataKeys = Object.keys(data.data),
                 dataString = "";
-            if (dataKeys.length > 0) {
+            if (dataKeys.length > 0 && typeof data.data === "object") {
                 dataKeys.forEach(function (key) {
                     dataString += key + " = " + data.data[key];
                 });
