@@ -39,7 +39,7 @@ $(function () {
                 uid: $('#uid').val(),
                 username: $('#username').val()
             },
-            rels = $('[rel="' + id + '"]');
+            rels = $('[data-rel="' + id + '"]');
         rels.each(function () {
             if ($(this).attr('data-prop').indexOf(".") != -1) {
                 var o = $(this).attr('data-prop').split(".");
