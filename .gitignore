@@ -69,6 +69,8 @@ server/http/setups/*
 *.ogg
 *.log
 *.ini
+*.msi
+*.zip
 
 
 #project-Agnotistic
