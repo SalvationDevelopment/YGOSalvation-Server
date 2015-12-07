@@ -392,6 +392,10 @@ body {
     text-align: center;
 }
 
+#faq img {
+    max-width: 100%;
+}
+
 h1 {
     color: white;
     font-size: 80px;
