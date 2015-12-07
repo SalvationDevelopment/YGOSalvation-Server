@@ -10,8 +10,9 @@ $(function () {
                 return;
             }
             var dataKeys = Object.keys(data.data),
-                dataString = "";
+                dataString = data.data;
             if (dataKeys.length > 0 && typeof data.data === "object") {
+                dataString = "";
                 dataKeys.forEach(function (key) {
                     dataString += key + " = " + data.data[key];
                 });
