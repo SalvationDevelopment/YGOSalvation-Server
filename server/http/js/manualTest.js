@@ -26,6 +26,10 @@ $(function () {
         $('.statusField').html('<span class="statusFailed">Manual mode errored out!</span>');
         logData.push('Disconnect occurred.');
     });
+    manual.on('error', function () {
+        $('.statusField').html('<span class="statusFailed">An error occurred, check the server if the script is still running!</span>');
+        logData.push('Error occurred.');
+    });
     $('.queryChanger').on('click', function (e) {
         if (blockCalls) {
             alert('Currently executing another call, please wait!');
@@ -59,5 +63,8 @@ $(function () {
         console.log(data);
         blockCalls = true;
         logData.push('Called event: ' + data.action);
+    });
+    $('#printLog').on('click', function (e) {
+        $('#logOutput').html('<span class="logData">' + logData.join("<br>") + '</span>');
     });
 });
