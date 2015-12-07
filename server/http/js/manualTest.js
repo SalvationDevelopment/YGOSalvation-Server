@@ -47,6 +47,9 @@ $(function () {
                 username: $('#username').val()
             },
             rels = $('[data-rel="' + id + '"]');
+        if (superProperty) {
+            data[superProperty] = id;
+        }
         rels.each(function () {
             if ($(this).data('prop').indexOf(".") != -1) {
                 var o = $(this).data('prop').split(".");
