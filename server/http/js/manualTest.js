@@ -40,21 +40,22 @@ $(function () {
             alert('Currently executing another call, please wait!');
         }
         var id = $(this).attr('id'),
+            superProperty = $(this).data('super'),
             data = {
-                action: id,
+                action: superProperty || id,
                 uid: $('#uid').val(),
                 username: $('#username').val()
             },
             rels = $('[data-rel="' + id + '"]');
         rels.each(function () {
-            if ($(this).attr('data-prop').indexOf(".") != -1) {
-                var o = $(this).attr('data-prop').split(".");
+            if ($(this).data('prop').indexOf(".") != -1) {
+                var o = $(this).data('prop').split(".");
                 if (!data.hasOwnProperty(o[0])) {
                     data[o[0]] = {};
                 }
                 data[o[0]][o[1]] = $(this).val();
             } else {
-                data[$(this).attr('data-prop')] = $(this).val();
+                data[$(this).data('prop')] = $(this).val();
             }
         });
         if (data.hasOwnProperty('hostOptions')) {
