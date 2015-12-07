@@ -12,7 +12,7 @@ $(function () {
             var dataString = (typeof data.data === "string") ? data.data : JSON.stringify(data.data);
             blockCalls = false;
             console.log(data);
-            logData.push(data);
+            logData.push('Event received: ' + data.event + '; ' + (data.responseCode && ('Response Code: ' + data.responseCode + '; ') || '') + 'Data: ' + (dataString || "{}"));
             $('#output').html('Event: ' + data.event + '; ' + (data.responseCode && ('Response Code: ' + data.responseCode + '; ') || '') + 'Data: ' + (dataString || "{}"));
         });
         setInterval(function () {
@@ -62,7 +62,7 @@ $(function () {
         manual.write(data);
         console.log(data);
         blockCalls = true;
-        logData.push('Called event: ' + data.action);
+        logData.push('Event logged: ' + data.action + '; data sent: ' + JSON.stringify(data));
     });
     $('#printLog').on('click', function (e) {
         $('#logOutput').html('<span class="logData">' + logData.join("<br>") + '</span>');
