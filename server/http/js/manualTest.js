@@ -9,20 +9,11 @@ $(function () {
             if (data.event === "heartBeat") {
                 return;
             }
-            var dataKeys = Object.keys(data.data),
-                dataString = "";
-            if (dataKeys.length > 0 && typeof data.data === "object") {
-                dataKeys.forEach(function (key) {
-                    var currentKeys = Object.keys(data.data[key]);
-                    dataString += key + " = " + ((currentKeys.length && "{ " + currentKeys.join(", ") + " }") || data.data[key]) + ", ";
-                });
-            } else if (typeof data.data === "string") {
-                dataString = data.data;
-            }
+            var dataString = (typeof data.data === "string") ? data.data : JSON.stringify(data.data);
             blockCalls = false;
             console.log(data);
             logData.push(data);
-            $('#output').html('Event: ' + data.event + '; Response Code: ' + data.responseCode + '; Data: ' + (dataString || "{}"));
+            $('#output').html('Event: ' + data.event + '; ' + (data.responseCode && ('Response Code: ' + data.responseCode + '; ') || '') + 'Data: ' + (dataString || "{}"));
         });
         setInterval(function () {
             manual.write({
