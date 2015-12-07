@@ -10,12 +10,13 @@ $(function () {
                 return;
             }
             var dataKeys = Object.keys(data.data),
-                dataString = data.data;
-            if (dataKeys.length > 0 && typeof data.data === "object") {
                 dataString = "";
+            if (dataKeys.length > 0 && typeof data.data === "object") {
                 dataKeys.forEach(function (key) {
                     dataString += key + " = " + data.data[key];
                 });
+            } else if (typeof data.data === "string") {
+                dataString = data.data;
             }
             blockCalls = false;
             console.log(data);
