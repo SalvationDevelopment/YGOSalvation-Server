@@ -49,7 +49,9 @@ $(function () {
         rels.each(function () {
             if ($(this).attr('data-prop').indexOf(".") != -1) {
                 var o = $(this).attr('data-prop').split(".");
-                data[o[0]] = {};
+                if (!data.hasOwnProperty(o[0])) {
+                    data[o[0]] = {};
+                }
                 data[o[0]][o[1]] = $(this).val();
             } else {
                 data[$(this).attr('data-prop')] = $(this).val();
