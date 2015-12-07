@@ -8,49 +8,87 @@
         <span class="statusField">
             <span>Initializing Manual Mode...</span>
         </span>
+        <br>
         UID: <input type="text" id="uid">
+        <br>
         Username: <input type="text" id="username">
+        <br>
         <button class="queryChanger" id="registerUID">Register UID</button>
+        <br>
         <button class="queryChanger" id="hostDuel">Host Duel</button>
+        <br>
         Duel ID: <input class="queryOption" type="text" data-rel="hostDuel" data-prop="duelID">
+        <br>
         <option class="queryOption" data-rel="hostDuel" data-prop="hostOptions.database">
             <select value="0-en-OCGTCG">0-en-OCGTCG</select>
             <select value="1-Anime">1-Anime</select>
             <select value="2-MonsterLeague">2-MonsterLeague</select>
         </option>
+        <br>
         <option class="queryOption" data-rel="hostDuel" data-prop="hostOptions.banList">
             <select value="2015.11.9 (TCG)">2015.11.9 (TCG)</select>
         </option>
+        <br>
         <button class="queryChanger" id="joinDuel">Join Duel</button>
+        <br>
         Duel ID: <input class="queryOption" type="text" data-rel="joinDuel" data-prop="duelID">
+        <br>
         <button class="queryChanger" id="spectateDuel">Spectate Duel</button>
+        <br>
         Duel ID: <input class="queryOption" type="text" data-rel="spectateDuel" data-prop="duelID">
+        <br>
         <button class="queryChanger" id="duelQuery">Duel Query</button>
+        <br>
         Duel ID: <input class="queryOption" type="text" data-rel="duelQuery" data-prop="duelID">
+        <br>
         Query: <input class="queryOption" type="text" data-rel="duelQuery" data-prop="duelQuery">
+        <br>
         Xyz Summon? <input class="queryOption" type="checkbox" data-rel="duelQuery">
+        <br>
         From Location: <input class="queryOption" type="text" data-rel="duelQuery" data-prop="target.location">
+        <br>
         From Locations (Xyz Summons): <input class="queryOption" type="text" data-rel="duelQuery" data-prop="target.locations">
+        <br>
         From Slot: <input class="queryOption" type="text" data-rel="duelQuery" data-prop="target.slot">
+        <br>
         From Slots (Xyz Summons): <input class="queryOption" type="text" data-rel="duelQuery" data-prop="target.slots">
+        <br>
         To Location: <input class="queryOption" type="text" data-rel="duelQuery" data-prop="moveTo.location">
+        <br>
         To Slot: <input class="queryOption" type="text" data-rel="duelQuery" data-prop="moveTo.slot">
+        <br>
         To Position: <input class="queryOption" type="text" data-rel="duelQuery" data-prop="moveTo.position">
+        <br>
         <button class="queryChanger" id="viewDeck">View Deck</button>
+        <br>
         <button class="queryChanger" id="closeDeck">Close Deck</button>
+        <br>
         <button class="queryChanger" id="changeFlipStatus">Change Flip Status</button>
+        <br>
         <button class="queryChanger" id="addLP">Add LP</button>
+        <br>
         Amount: <input class="queryOption" type="number" data-rel="addLP" data-prop="amount">
+        <br>
         <button class="queryChanger" id="subLP">Sub LP</button>
+        <br>
         Amount: <input class="queryOption" type="number" data-rel="subLP" data-prop="amount">
+        <br>
         <button class="queryChanger" id="viewExtra">View Extra</button>
+        <br>
         <button class="queryChanger" id="changePosition">Change Position</button>
+        <br>
         Slot: <input class="queryOption" type="text" data-rel="changePosition" data-prop="target.slot">
+        <br>
         Location: <input class="queryOption" type="text" data-rel="changePosition" data-prop="target.location">
+        <br>
         <button class="queryChanger" id="showHand">Show Hand</button>
+        <br>
         <button class="queryChanger" id="showDeck">Show Deck</button>
+        <br>
         <button class="queryChanger" id="showExtra">Show Extra</button>
+        <br>
         <button class="queryChanger" id="changePhase">Change Phase</button>
+        <br>
         <option class="queryOption" data-rel="changePhase" data-prop="phase">
             <select value="Draw Phase">Draw Phase</select>
             <select value="Standby Phase">Standby Phase</select>
@@ -59,14 +97,23 @@
             <select value="Main Phase 2">Main Phase 2</select>
             <select value="End Phase">End Phase</select>
         </option>
+        <br>
         <button class="queryChanger" id="endTurn">End Turn</button>
+        <br>
         <button class="queryChanger" id="coinFlip">Coin Flip</button>
+        <br>
         <button class="queryChanger" id="diceRoll">Dice Roll</button>
+        <br>
         <button class="queryChanger" id="getOptions">Get Options</button>
+        <br>
         <button class="queryChanger" id="getState">Get State</button>
+        <br>
         <button class="queryChanger" id="startDuel">Start Duel</button>
+        <br>
         Duel ID: <input class="queryOption" data-rel="startDuel" data-prop="duelID">
+        <br>
         <button class="queryChanger" id="regDuelLog">Server Output</button>
+        <br>
         <input type="hidden" class="queryOption" data-rel="regDuelLog" data-prop="devKey" value="rz1$0tDb0verfq">
         <textarea id="output">Server Messages will be displayed here.</textarea>
     </body>
