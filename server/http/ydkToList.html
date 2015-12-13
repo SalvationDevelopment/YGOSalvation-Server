@@ -8,7 +8,7 @@
 			var cards = [],
 				list;
 			$(function(){
-				$.getJSON('manifest/database.json', function(data) {
+				$.getJSON('manifest/database_0-en-OCGTCG.json', function(data) {
 					cards = data;
 					document.getElementById("ydkUploader").addEventListener("change", function(evt) {
 						var file = evt.target.files[0],
