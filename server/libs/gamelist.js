@@ -112,7 +112,7 @@ function handleCoreMessage(core_message_raw, port, pid, game) {
         gamelist[game].locked[lock_slot] = Boolean(core_message[1]);
         break;
     case ('::::end-duel'):
-        console.log('[Results]', core_message, game);
+        //console.log('[Results]', core_message, game);
         break;
     case ('::::endduel'):
         //ps.kill(gamelist[game].pid, function (error) {});
@@ -137,7 +137,7 @@ function handleCoreMessage(core_message_raw, port, pid, game) {
         gamelist[game].started = true;
         gamelist[game].time = new Date().getTime();
         //duelserv.bot.say('#public', gamelist[game].pid + '|Duel starting|' + JSON.stringify(gamelist[game].players));
-        console.log('real start-game', game);
+        //console.log('real start-game', game);
         break;
 
 
@@ -304,12 +304,18 @@ function globalCall(data) {
             console.log('[Gamelist]', error);
             return;
         }
-        if (info.success && info.data.g_access_cp === "1") {
-            announce({
-                clientEvent: 'global',
-                message: data.message
-            });
-            currentGlobalMessage = data.message;
+        if (info) {
+            if (info.success && info.data.g_access_cp === "1") {
+                announce({
+                    clientEvent: 'global',
+                    message: data.message
+                });
+                currentGlobalMessage = data.message;
+            } else {
+                console.log(data, 'asked for global', data.message);
+            }
+        } else {
+            console.log(data, 'asked for global');
         }
     });
 }
@@ -320,11 +326,17 @@ function genocideCall(data) {
         if (error) {
             return;
         }
-        if (info.success && info.data.g_access_cp === "1") {
-            announce({
-                clientEvent: 'genocide',
-                message: data.message
-            });
+        if (info) {
+            if (info.success && info.data.g_access_cp === "1") {
+                announce({
+                    clientEvent: 'genocide',
+                    message: data.message
+                });
+            } else {
+                console.log(data, 'asked for genocide');
+            }
+        } else {
+            console.log(data, 'asked for genocide');
         }
     });
 }
@@ -334,12 +346,19 @@ function murderCall(data) {
         if (error) {
             return;
         }
-        if (info.success && info.data.g_access_cp === "1") {
-            announce({
-                clientEvent: 'kill',
-                target: data.target
-            });
+        if (info) {
+            if (info.success && info.data.g_access_cp === "1") {
+                announce({
+                    clientEvent: 'kill',
+                    target: data.target
+                });
+            } else {
+                console.log(data, 'asked for murder');
+            }
+        } else {
+            console.log(data, 'asked for murder');
         }
+
     });
 }
 
@@ -348,12 +367,18 @@ function killgameCall(data) {
         if (error) {
             return;
         }
-        if (info.success && info.data.g_access_cp === "1") {
-            ps.kill(data.killTarget, function (err) {
-                if (err) {
-                    del(data.killTarget);
-                }
-            });
+        if (info) {
+            if (info.success && info.data.g_access_cp === "1") {
+                ps.kill(data.killTarget, function (err) {
+                    if (err) {
+                        del(data.killTarget);
+                    }
+                });
+            } else {
+                console.log(data, 'tried to kill');
+            }
+        } else {
+            console.log(data, 'tried to kill');
         }
     });
 }
