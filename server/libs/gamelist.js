@@ -304,7 +304,7 @@ function globalCall(data) {
             console.log('[Gamelist]', error);
             return;
         }
-        if (info) {
+        if (info.data) {
             if (info.success && info.data.g_access_cp === "1") {
                 announce({
                     clientEvent: 'global',
@@ -326,7 +326,7 @@ function genocideCall(data) {
         if (error) {
             return;
         }
-        if (info) {
+        if (info.data) {
             if (info.success && info.data.g_access_cp === "1") {
                 announce({
                     clientEvent: 'genocide',
@@ -346,7 +346,7 @@ function murderCall(data) {
         if (error) {
             return;
         }
-        if (info) {
+        if (info.data) {
             if (info.success && info.data.g_access_cp === "1") {
                 announce({
                     clientEvent: 'kill',
@@ -367,7 +367,7 @@ function killgameCall(data) {
         if (error) {
             return;
         }
-        if (info) {
+        if (info.data) {
             if (info.success && info.data.g_access_cp === "1") {
                 ps.kill(data.killTarget, function (err) {
                     if (err) {

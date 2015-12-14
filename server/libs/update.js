@@ -143,7 +143,7 @@ var server = http.createServer(function (request, response) {
             rate = rate + error;
         }
         response.end(rate);
-        console.log('[Update System]', 'Update processed:', rate, new Date(), ((error) || ''));
+        console.log('[Update System]', rate, new Date(), ((error) || ''));
     });
 });
 
