@@ -241,20 +241,24 @@ function cleanGamelist() {
                 //delete if no one is using the game.
                 //del(gamelist[game].pid);
                 delete gamelist[game];
+                cleanGamelist();
                 return;
             }
             if (gamelist[game] && game.length !== 24) {
                 //delete if some wierd game makes it into the list somehow. Unlikely.
                 del(gamelist[game].pid);
+                cleanGamelist();
                 return;
             }
             if (new Date().getTime() - gamelist[game].time > 2700000) {
                 //delete if the game is older than 45mins.
                 del(gamelist[game].pid);
+                cleanGamelist();
                 return;
             }
         }
     }
+    fullManualPIDCheck();
 }
 
 
