@@ -64,7 +64,7 @@ function handleCoreMessage(core_message_raw, port, pid, game) {
     }
 
     core_message = core_message_raw.toString().split('|');
-    console.log(core_message, core_message_raw);
+    //console.log(core_message, core_message_raw);
     core_message[0] = core_message[0].trim();
     if (core_message[0] === '::::network-ready') {
         return;
@@ -83,7 +83,7 @@ function handleCoreMessage(core_message_raw, port, pid, game) {
 
     switch (core_message[0]) {
     case ('::::network-end'):
-        console.log('--');
+        //console.log('--');
         break;
     case ('::::join-slot'):
         join_slot = parseInt(core_message[1], 10);
@@ -137,7 +137,7 @@ function handleCoreMessage(core_message_raw, port, pid, game) {
         gamelist[game].started = true;
         gamelist[game].time = new Date().getTime();
         //duelserv.bot.say('#public', gamelist[game].pid + '|Duel starting|' + JSON.stringify(gamelist[game].players));
-        console.log('real start-game', game);
+        //console.log('real start-game', game);
         break;
 
 
@@ -404,7 +404,8 @@ function onData(data, socket) {
             gamelist = data.gamelist;
             registry = data.registry;
             booting = false;
-            console.log('[Gamelist]:', data.gamelist, data.registry);
+            //console.log('[Gamelist]:', data.gamelist, data.registry);
+            console.log('[Gamelist]:------------------------------------------');
         }
         break;
 
