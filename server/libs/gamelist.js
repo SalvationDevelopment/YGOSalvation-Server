@@ -223,7 +223,6 @@ function fullManualPIDCheck() {
         } else {
             console.log('No such process found!');
             delete gamelist[id.name];
-            ps.kill(id.pid);
             setTimeout(fullManualPIDCheck, 100);
         }
     });
