@@ -137,7 +137,7 @@ function handleCoreMessage(core_message_raw, port, pid, game) {
         gamelist[game].started = true;
         gamelist[game].time = new Date().getTime();
         //duelserv.bot.say('#public', gamelist[game].pid + '|Duel starting|' + JSON.stringify(gamelist[game].players));
-        //console.log('real start-game', game);
+        console.log('real start-game', game);
         break;
 
 
@@ -223,6 +223,7 @@ function fullManualPIDCheck() {
         } else {
             console.log('No such process found!');
             delete gamelist[id.name];
+            ps.kill(id.pid);
             setTimeout(fullManualPIDCheck, 100);
         }
     });
@@ -240,24 +241,20 @@ function cleanGamelist() {
                 //delete if no one is using the game.
                 //del(gamelist[game].pid);
                 delete gamelist[game];
-                cleanGamelist();
                 return;
             }
             if (gamelist[game] && game.length !== 24) {
                 //delete if some wierd game makes it into the list somehow. Unlikely.
                 del(gamelist[game].pid);
-                cleanGamelist();
                 return;
             }
             if (new Date().getTime() - gamelist[game].time > 2700000) {
                 //delete if the game is older than 45mins.
                 del(gamelist[game].pid);
-                cleanGamelist();
                 return;
             }
         }
     }
-    fullManualPIDCheck();
 }
 
 
@@ -404,7 +401,6 @@ function onData(data, socket) {
             registry = data.registry;
             booting = false;
             //console.log('[Gamelist]:', data.gamelist, data.registry);
-            console.log('[Gamelist]:------------------------------------------');
         }
         break;
 
