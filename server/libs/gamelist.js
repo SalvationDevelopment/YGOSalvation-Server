@@ -244,7 +244,7 @@ function cleanGamelist() {
         if (gamelist.hasOwnProperty(game)) {
             if (gamelist[game] && game.length !== 24) {
                 //delete if some wierd game makes it into the list somehow. Unlikely.
-                del(gamelist[game].pid);
+                delete gamelist[game];
             }
         }
     }
@@ -252,7 +252,7 @@ function cleanGamelist() {
         if (gamelist.hasOwnProperty(game)) {
             if (new Date().getTime() - gamelist[game].time > 2700000) {
                 //delete if the game is older than 45mins.
-                del(gamelist[game].pid);
+                delete gamelist[game];
             }
         }
     }
