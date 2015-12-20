@@ -14,8 +14,7 @@ function updatenews() {
     $.getJSON('http://ygopro.us/manifest/forumNews.json', function (news) {
         $.get('handlebars/forumnews.handlebars', function (template) {
             var parser = Handlebars.compile(template);
-            var topics = news.topics.reverse(),
-                pass = {};
+            var topics = news.topics.reverse();
             news.articles = [];
             topics.forEach(function (topic) {
                 news.articles.push({
@@ -26,8 +25,7 @@ function updatenews() {
                     link: topic.link
                 });
             });
-            pass.articles = [news.articles[0], news.articles[1], news.articles[2], news.articles[3], news.articles[4]]
-            $('#news').html(parser(pass));
+            $('#news').html(parser(news));
         });
     });
 }

@@ -54,9 +54,9 @@ describe('Boot Test', function () {
     it('Should test gamelist.js', function () {
         require('../server/libs/gamelist.js');
     });
-//    it('Should test ircbot.js', function () {
-            //        require('../server/libs/ircbot.js');
-            //    });
+    it('Should test ircbot.js', function () {
+        require('../server/libs/ircbot.js');
+    });
 
     it('Should test parseframes.js', function () {
         require('../server/libs/parseframes.js');
@@ -114,20 +114,20 @@ describe('Boot Test', function () {
 
 describe('Client Boot', function () {
     'use strict';
-//    it('Should start the client', function () {
-            //        require('../client/interface/js/configuration.js');
-            //        var runYGOPro = require('../client/interface/js/offline-server.js');
-            //        // require('../client/interface/js/offline.js');
-            //        //requires refactor before testable.
-            //        runYGOPro('-j');
-            //
-            //    });
+    it('Should start the client', function () {
+        require('../client/interface/js/configuration.js');
+        var runYGOPro = require('../client/interface/js/offline-server.js');
+        // require('../client/interface/js/offline.js');
+        //requires refactor before testable.
+        runYGOPro('-j');
+
+    });
     it('Test battlepack3.js', function () {
         require('../server/http/js/battlepack3.js');
     });
-//    it('Test cardmake.js', function () {
-//        require('../server/http/js/card.js');
-//    });
+    it('Test cardmake.js', function () {
+        require('../server/http/js/card.js');
+    });
     // it('Test http-gamelist.js', function () {
     //     require('../server/http/js/http-gamelist.js');    
     // });
