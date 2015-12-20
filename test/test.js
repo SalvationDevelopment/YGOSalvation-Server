@@ -65,9 +65,9 @@ describe('Boot Test', function () {
         var pack = require('../server/libs/parsepackets.js');
         pack('CTOS', join);
     });
-    it('Should test policyserver.js', function () {
-        require('../server/libs/policyserver.js');
-    });
+//    it('Should test policyserver.js', function () {
+            //        require('../server/libs/policyserver.js');
+            //    });
     it('Should test processCTOS.js', function () {
         var processCTOS = require('../server/libs/processCTOS.js'),
             parsePackets = require('../server/libs/parseframes.js');
