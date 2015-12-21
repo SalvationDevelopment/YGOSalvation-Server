@@ -81,3 +81,4 @@ server/http/setups/*
 *crash*
 *.log.*
 *.yrp
+server/http/ygopro/deck.exe
