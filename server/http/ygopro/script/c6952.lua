@@ -57,7 +57,7 @@ function c6952.negop(e,tp,eg,ep,ev,re,r,rp)
 end
 
 function c6952.cost(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return e:GetHandler():IsReleasable() end
+	if chk==0 then return e:GetHandler():IsReleasable() and bit.band(e:GetHandler():GetSummonType(),SUMMON_TYPE_SYNCHRO)==SUMMON_TYPE_SYNCHRO end
 	Duel.Release(e:GetHandler(),REASON_COST)
 end
 function c6952.filter(c,e,tp)

@@ -10,6 +10,7 @@ function c13701600.initial_effect(c)
 	e1:SetTarget(c13701600.thtg)
 	e1:SetOperation(c13701600.thop)
 	c:RegisterEffect(e1)
+	--Special Summon + change battle target
 	local e2=Effect.CreateEffect(c)
 	e2:SetCategory(CATEGORY_SPECIAL_SUMMON)
 	e2:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O)
@@ -82,6 +83,6 @@ function c13701600.spop(e,tp,eg,ep,ev,re,r,rp)
 		e2:SetCode(EFFECT_DISABLE_EFFECT)
 		e2:SetReset(RESET_EVENT+0x1fe0000)
 		tc:RegisterEffect(e2)
-		Duel.CalculateDamage(a,tc)
+		Duel.ChangeAttackTarget(tc)
 	end
 end

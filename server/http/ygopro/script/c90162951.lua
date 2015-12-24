@@ -51,8 +51,8 @@ function c90162951.damop(e,tp,eg,ep,ev,re,r,rp)
 	Duel.Damage(1-tp,600,REASON_EFFECT)
 end
 function c90162951.descost(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return e:GetHandler():CheckRemoveOverlayCard(tp,2,REASON_COST) end
-	e:GetHandler():RemoveOverlayCard(tp,2,2,REASON_COST)
+	if chk==0 then return e:GetHandler():CheckRemoveOverlayCard(tp,1,REASON_COST) end
+	e:GetHandler():RemoveOverlayCard(tp,1,1,REASON_COST)
 end
 function c90162951.desfilter(c,atk)
 	return c:IsFaceup() and c:IsAttackBelow(atk) and c:IsDestructable()
