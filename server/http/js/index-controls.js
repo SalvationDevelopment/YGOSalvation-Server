@@ -60,7 +60,7 @@ function singlesitenav(target) {
     $('body').css('background-image', 'url(../img/sample-81965950ba4163718e946a186b9181fe.jpg)');
     if (target === 'faq') {
         updatenews();
-        $('body').css('background-image', 'url(http://ygopro.us/img/sample-bae94d9f4450819ed4b832ccbc0975f6.jpg)');
+        $('body').css('background-image', 'url(http://ygopro.us/img/EromageFinal.jpg)');
     }
     if (target === 'chat' && !chatStarted) {
         swfobject.embedSWF("lightIRC/lightIRC.swf", "lightIRC", "100%", "92%", "10.0.0", "expressInstall.swf", params, {
