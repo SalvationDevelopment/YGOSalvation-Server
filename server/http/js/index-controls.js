@@ -16,7 +16,11 @@ function updatenews() {
             var parser = Handlebars.compile(template);
             var topics = news.topics.reverse();
             news.articles = [];
-            topics.forEach(function (topic) {
+            topics.forEach(function (topic, index) {
+                if (index > 5) {
+                    //limit the number of post in the news feed.
+                    return;
+                }
                 news.articles.push({
                     date: new Date(topic.date).toString().substr(0, 15),
                     author: topic.author,
@@ -235,6 +239,9 @@ $(document).ready(function () {
                     $('#avatar').attr('src', 'http://forum.ygopro.us/uploads/' + info.avatar);
                     $('#profileusername').text(info.displayname);
                     $('#profilepoints span').text(info.data.field_12);
+                    if (parseInt(info.data.post, 10) < 1) {
+                        alert('Please visit our forums and introduce yourself!');
+                    }
                 } else {
                     alert(info.message);
                 }
