@@ -57,7 +57,7 @@ function singlesitenav(target) {
     } else if ($('.unlogged.in-iframe').length > 0 && target === 'gamelist') {
         return;
     }
-    $('body').css('background-image', 'url(../img/sample-81965950ba4163718e946a186b9181fe.jpg)');
+    $('body').css('background-image', 'url(http://ygopro.us/img/bright.jpg)');
     if (target === 'faq') {
         updatenews();
         $('body').css('background-image', 'url(http://ygopro.us/img/EromageFinal.jpg)');
@@ -69,10 +69,10 @@ function singlesitenav(target) {
         chatStarted = true;
     }
     if (target === 'chat') {
-        $('body').css('background-image', 'url(http://ygopro.us/img/sample-593f4fe4cac4338e7253501fd06b409f.jpg)');
+        $('body').css('background-image', 'url(http://ygopro.us/img/bg.jpg)');
     }
     if (target === 'settings') {
-        $('body').css('background-image', 'url(http://ygopro.us/img/sample-4ff042b9a810fc685e0e090aac8fc3a7.jpg)');
+        $('body').css('background-image', 'url(http://ygopro.us/img/bg.jpg)');
     }
     $('.activescreen').removeClass('activescreen');
     $('header').css('top', '100vh');
