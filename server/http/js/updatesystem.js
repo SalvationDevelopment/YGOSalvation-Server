@@ -294,7 +294,7 @@ function getDeck(file) {
 }
 
 //Load all decks
-function getDecks() {
+function getDecks(callback) {
     'use strict';
     var i = 0;
 
@@ -305,6 +305,9 @@ function getDecks() {
             for (i; folder.length > i; i++) {
                 getDeck(folder[i]);
             }
+            if (callback) {
+                callback();
+            }
         }
     });
 }
@@ -312,7 +315,7 @@ function getDecks() {
 /* Asynchronously goes and gets the files the 
 browser side part of the UI needs to inform the user
 of the decks, skins, and databases they have access to.*/
-function populatealllist() {
+function populatealllist(callback) {
     'use strict';
     updateNeeded = true;
     var dfiles = 0,
@@ -348,8 +351,18 @@ function populatealllist() {
         }
         process.list = list;
     });
-    getDecks();
+    getDecks(callback);
     list.files = decks;
+    try {
+        privateServer.write({
+            action: 'privateUpdate',
+            serverUpdate: list,
+            room: localStorage.nickname,
+            clientEvent: 'privateServer',
+            uniqueID: uniqueID,
+            client_server: true
+        });
+    } catch (error) {}
 
 }
 
@@ -563,7 +576,16 @@ function initPrimus() {
     getDecks();
 
     setTimeout(function () {
+        privateServer.write({
+            action: 'privateUpdate',
+            serverUpdate: list,
+            room: localStorage.nickname,
+            clientEvent: 'privateServer',
+            uniqueID: uniqueID,
+            client_server: true
+        });
         createmanifest();
+
     }, 10000);
 
 }
