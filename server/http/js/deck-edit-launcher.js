@@ -454,6 +454,7 @@ function sortDeck(target) {
         }
         return (prev.cardName.toLowerCase() < next.cardName.toLowerCase()) ? -1 : 1;
     }).forEach(storeCard);
+    normalMonster.sort(cardSort).forEach(storeCard(outputArray));
     effectMonster.sort(cardSort).forEach(storeCard(outputArray));
     spell.sort(cardSort).forEach(storeCard(outputArray));
     trap.sort(cardSort).forEach(storeCard(outputArray));
