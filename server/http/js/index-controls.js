@@ -57,7 +57,7 @@ function singlesitenav(target) {
     } else if ($('.unlogged.in-iframe').length > 0 && target === 'gamelist') {
         return;
     }
-    $('body').css('background-image', 'url(http://ygopro.us/img/bright.jpg)');
+    $('body').css('background-image', 'url(http://ygopro.us/img/bright_bg.jpg)');
     if (target === 'faq') {
         updatenews();
         $('body').css('background-image', 'url(http://ygopro.us/img/EromageFinal.jpg)');
