@@ -329,41 +329,45 @@ function populatealllist(callback) {
             list.currentdeck = list.currentdeck + '<option value="' + deck + '">' + deck + '</option>';
         }
         process.list = list;
-    });
-    fs.readdir('./ygopro/skins', function (error, skinfilenames) {
-        list.skinlist = '';
-        for (sfiles; skinfilenames.length > sfiles; sfiles++) {
-            list.skinlist = list.skinlist + '<option value="' + sfiles + '">' + skinfilenames[sfiles] + '</option>';
-        }
-        process.list = list;
-    });
-    fs.readdir('./ygopro/databases', function (error, database) {
-        list.databases = '';
-        for (dbfiles; database.length > dbfiles; dbfiles++) {
-            list.databases = list.databases + '<option value="' + dbfiles + '">' + database[dbfiles] + '</option>';
-        }
-        process.list = list;
-    });
-    fs.readdir('./ygopro/fonts', function (error, fonts) {
-        list.fonts = '';
-        for (fontfiles; fonts.length > fontfiles; fontfiles++) {
-            list.fonts = list.fonts + '<option value="' + fonts[fontfiles] + '">' + fonts[fontfiles] + '</option>';
-        }
-        process.list = list;
-    });
-    getDecks(callback);
-    list.files = decks;
-    try {
-        privateServer.write({
-            action: 'privateUpdate',
-            serverUpdate: list,
-            room: localStorage.nickname,
-            clientEvent: 'privateServer',
-            uniqueID: uniqueID,
-            client_server: true
-        });
-    } catch (error) {}
+        fs.readdir('./ygopro/skins', function (error, skinfilenames) {
+            list.skinlist = '';
+            for (sfiles; skinfilenames.length > sfiles; sfiles++) {
+                list.skinlist = list.skinlist + '<option value="' + sfiles + '">' + skinfilenames[sfiles] + '</option>';
+            }
+            process.list = list;
+            fs.readdir('./ygopro/databases', function (error, database) {
+                list.databases = '';
+                for (dbfiles; database.length > dbfiles; dbfiles++) {
+                    list.databases = list.databases + '<option value="' + dbfiles + '">' + database[dbfiles] + '</option>';
+                }
+                process.list = list;
+                fs.readdir('./ygopro/fonts', function (error, fonts) {
+                    list.fonts = '';
+                    for (fontfiles; fonts.length > fontfiles; fontfiles++) {
+                        list.fonts = list.fonts + '<option value="' + fonts[fontfiles] + '">' + fonts[fontfiles] + '</option>';
+                    }
+                    process.list = list;
+                    getDecks(callback);
+                    list.files = decks;
 
+                    try {
+                        if (callback) {
+                            callback();
+                        } else {
+                            privateServer.write({
+                                action: 'privateUpdate',
+                                serverUpdate: list,
+                                room: localStorage.nickname,
+                                clientEvent: 'privateServer',
+                                uniqueID: uniqueID,
+                                client_server: true
+                            });
+                        }
+                    } catch (merror) {}
+                });
+            });
+        });
+    });
 }
 
 /* Apply language and DB changes by overwriting key files
@@ -595,11 +599,8 @@ function initPrimus() {
 setTimeout(function () {
     'use strict';
     deleteFolderRecursive('./ygopro/expansions', true);
-
-
     fs.watch('./ygopro/deck', populatealllist);
-    initPrimus();
+    populatealllist(initPrimus);
 }, 2500);
 
 screenMessage.html('Update System Loaded');
-populatealllist();
