@@ -74,6 +74,9 @@ function singlesitenav(target) {
     if (target === 'chat') {
         $('body').css('background-image', 'url(http://ygopro.us/img/brightx_bg.jpg)');
     }
+    if (target === 'host') {
+        $('body').css('background-image', 'url(http://ygopro.us/img/brightx_bg.jpg)');
+    }
     if (target === 'settings') {
         $('body').css('background-image', 'url(http://ygopro.us/img/brightx_bg.jpg)');
     }
