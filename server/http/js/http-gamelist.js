@@ -195,6 +195,7 @@ function enterGame(string, pass) {
         }
     }
     console.log('entering duel');
+    $('body').css('background-image', 'url(http://ygopro.us/img/bg.jpg)');
     localStorage.lastdeck = $('.currentdeck').val();
     localStorage.roompass = string;
     localStorage.lastip = "192.99.11.19";
@@ -202,6 +203,9 @@ function enterGame(string, pass) {
     try {
         _gaq.push(['_trackEvent', 'Launcher', 'YGOPro', 'Join Duel']);
     } catch (e) {}
+    setTimeout(function () {
+        $('body').css('background-image', 'url(http://ygopro.us/img/brightx_bg.jpg)');
+    }, 6000);
 }
 
 function joinTournament() {
