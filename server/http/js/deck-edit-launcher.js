@@ -197,6 +197,7 @@ $(function () {
                 });
                 $('.deckSelect').on('change', function () {
                     drawDeckEditor(parseYDK(deckfiles[$(this).val()]));
+                    sortAllDecks();
                 });
             });
         });
@@ -448,12 +449,12 @@ function sortDeck(target) {
             effectMonster.push(domData);
         }
     });
-//    normalMonster = normalMonster.sort(function (prev, next) {
-            //        if (prev.cardName === next.cardName) {
-            //            return 0;
-            //        }
-            //        return (prev.cardName.toLowerCase() < next.cardName.toLowerCase()) ? -1 : 1;
-            //    }).forEach(storeCard);
+    //    normalMonster = normalMonster.sort(function (prev, next) {
+    //        if (prev.cardName === next.cardName) {
+    //            return 0;
+    //        }
+    //        return (prev.cardName.toLowerCase() < next.cardName.toLowerCase()) ? -1 : 1;
+    //    }).forEach(storeCard);
     normalMonster.sort(cardSort).forEach(storeCard(outputArray));
     effectMonster.sort(cardSort).forEach(storeCard(outputArray));
     spell.sort(cardSort).forEach(storeCard(outputArray));
