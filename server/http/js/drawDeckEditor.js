@@ -8,11 +8,15 @@ function drawDeckEditor(ydk) {
             "extra",
             "side"
         ];
-    decks.forEach(function(deck) {
+    decks.forEach(function (deck) {
         container = $('.' + deck + 'Deck');
         if (container.find('img').length > 0) {
             $('img', container).remove();
+            $('.' + deck + 'Deck').html();
+            //the above doesnt work correctly
+            $('.' + deck + 'Deck').html('');
             deckStorage.reset(deck);
+
         }
         for (card in ydkCopy[deck]) {
             if (ydkCopy[deck].hasOwnProperty(card) && ydkCopy[deck].propertyIsEnumerable(card)) {
@@ -23,7 +27,7 @@ function drawDeckEditor(ydk) {
                 }
             }
         }
-        $('img', container).each(function(index) {
+        $('img', container).each(function (index) {
             $(this).addClass(deck + '_card_' + index);
             $(this).data('cardData', 'deckCard');
         });
@@ -40,12 +44,12 @@ function drawDeck(target) {
         $('img', container).remove();
         deckStorage.reset(target);
     }
-    targetDeck.forEach(function(card) {
+    targetDeck.forEach(function (card) {
         cardObject = getCardObject(parseInt(card, 10));
         container.append(createCardImage(cardObject));
         deckStorage.addCard(target, card);
     });
-    $('img', container).each(function(index) {
+    $('img', container).each(function (index) {
         $(this).addClass(target + '_card_' + index);
         $(this).data('cardData', 'deckCard');
     });
