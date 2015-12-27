@@ -1,4 +1,4 @@
-/*jslint plusplus: true, bitwise :true*/
+/*jslint */
 /*global $*/
 var cards = [],
     lflist = {};
@@ -75,7 +75,6 @@ var imgDir = "http://ygopro.us/ygopro/pics/",
     },
     deckStorage = {
         not: function (deck) {
-            'use strict';
             var key,
                 arr = [];
             for (key in deckStorage.decks) {
@@ -86,30 +85,24 @@ var imgDir = "http://ygopro.us/ygopro/pics/",
             return arr;
         },
         getDeck: function (deck) {
-            'use strict';
             return deckStorage.decks[deck];
         },
         setDeck: function (deck, newDeck) {
-            'use strict';
             deckStorage.decks[deck] = newDeck;
         },
         addCard: function (deck, id) {
-            'use strict';
             deckStorage.decks[deck].push(id);
         },
         removeCard: function (deck, index) {
-            'use strict';
             deckStorage.decks[deck][index] = undefined;
             deckStorage.decks[deck] = deckStorage.decks[deck].filter(function (card) {
                 return !!card;
             });
         },
         reset: function (deck) {
-            'use strict';
             deckStorage.decks[deck] = [];
         },
         maximumSize: function (deck) {
-            'use strict';
             return deckStorage.sizeMap[deck];
         },
         sizeMap: {
@@ -124,10 +117,8 @@ var imgDir = "http://ygopro.us/ygopro/pics/",
         }
     };
 
-
 function excludeTokens(card) {
     // filter out Tokens
-    'use strict';
     if (card.type === 16401 || card.type === 16417) {
         return false;
     }
@@ -135,7 +126,6 @@ function excludeTokens(card) {
 }
 
 function validCards(card) {
-    'use strict';
     var keys = Object.keys(card),
         i = 0,
         len = keys.length;
@@ -147,68 +137,41 @@ function validCards(card) {
     return true;
 }
 
-
-
-function getCardObject(id) {
-    'use strict';
-    var cardObject,
-        i = 0,
-        len = cards.length;
-    for (i, len; i < len; i++) {
-        if (id === cards[i].id) {
-            cardObject = cards[i];
-            break;
+function drawDeckEditor(ydk) {
+    var ydkCopy = JSON.parse(JSON.stringify(ydk)),
+        card,
+        cardObject,
+        container,
+        decks = [
+            "main",
+            "extra",
+            "side"
+        ];
+    decks.forEach(function (deck) {
+        container = $('.' + deck + 'Deck');
+        if (container.find('span').length > 0) {
+            $('span', container).remove();
+            deckStorage.reset(deck);
         }
-    }
-    return cardObject;
-}
-
-function createCardImage(card) {
-    'use strict';
-    if (!card) {
-        return '<span class="cardImage"><img src="' + imgDir + 'cover.jpg" data-card-id="cover" data-card-name="???" data-card-type="0" /></span>';
-    } else {
-        return '<span class="cardImage" data-card-limit="' + (lflist[$('.banlistSelect').val()][card.id] || 3) + '"><img src="' + imgDir + card.id + '.jpg" data-card-id="' + card.id + '" data-card-name="' + card.name.replace(/\"/g, '{{quote}}') + '" ' + (card.alias !== 0 ? 'data-card-alias="' + card.alias + '"' : '') + 'data-card-type="' + card.type + '" /></span>';
-    }
-}
-
-
-
-function attachDnDEvent(targetCollection) {
-    'use strict';
-    targetCollection.draggable({
-        addClasses: false,
-        cursor: "move",
-        helper: function () {
-            var helperElem = document.createElement("img");
-            helperElem.src = $(this).attr('src');
-            $(helperElem).attr('data-card-id', $(this).attr('data-card-id'));
-            if ($(this).attr('data-card-alias')) {
-                $(helperElem).attr('data-card-alias', $(this).attr('data-card-alias'));
+        for (card in ydkCopy[deck]) {
+            if (ydkCopy[deck].hasOwnProperty(card) && ydkCopy[deck].propertyIsEnumerable(card)) {
+                while (--ydkCopy[deck][card] >= 0) {
+                    cardObject = getCardObject(parseInt(card, 10));
+                    container.append(createCardImage(cardObject));
+                    deckStorage.addCard(deck, card);
+                }
             }
-            $(helperElem).css({
-                height: $(this).css('height'),
-                width: $(this).css('width')
-            });
-            return helperElem;
-        },
-        scroll: false
+        }
+        $('img', container).each(function (index) {
+            $(this).addClass(deck + '_card_' + index);
+            $(this).data('cardData', 'deckCard');
+        });
+        attachDnDEvent($('img', container));
+        adjustDeckClass(deckStorage.getDeck(deck), container);
     });
 }
 
-function adjustDeckClass(targetDeck, targetContainer) {
-    'use strict';
-    if (targetDeck.length <= 40) {
-        targetContainer.addClass('f40').removeClass('f50 f60');
-    } else if (targetDeck.length > 40 && targetDeck.length <= 50) {
-        targetContainer.addClass('f50').removeClass('f40 f60');
-    } else if (targetDeck.length > 50) {
-        targetContainer.addClass('f60').removeClass('f40 f50');
-    }
-}
-
 function drawDeck(target) {
-    'use strict';
     var targetDeck = deckStorage.getDeck(target),
         container = $('.' + target + 'Deck'),
         cardObject;
@@ -228,7 +191,6 @@ function drawDeck(target) {
 }
 
 function shuffleArray(array) {
-    'use strict';
     var currentIndex = array.length,
         temporaryValue,
         randomIndex;
@@ -243,14 +205,12 @@ function shuffleArray(array) {
 }
 
 function storeCard(outputArray) {
-    'use strict';
     return function (data) {
         outputArray.push(data.cardId);
     };
 }
 
 function cardSort(prev, next) {
-    'use strict';
     if (prev.cardType === next.cardType) {
         if (prev.cardName === next.cardName) {
             return 0;
@@ -261,7 +221,6 @@ function cardSort(prev, next) {
 }
 
 function sortDeck(target) {
-    'use strict';
     var sortTarget = deckStorage.getDeck(target),
         normalMonster = [],
         effectMonster = [],
@@ -304,7 +263,6 @@ function sortDeck(target) {
 }
 
 function sortAllDecks() {
-    'use strict';
     var deck,
         sortedDeck;
     for (deck in deckStorage.decks) {
@@ -314,106 +272,9 @@ function sortAllDecks() {
     }
 }
 
-
-function applyFilters(filterObject, banlist, lflist) {
-    'use strict';
-    var queriedCards = cards,
-        o = filterObject,
-        prop,
-        args = {
-            'Atk': 1,
-            'Def': 1,
-            'Level': 1,
-            'Scale': 1,
-            'Name': "",
-            "Desc": ""
-        };
-    for (prop in o) {
-        if (o.hasOwnProperty(prop) && o.propertyIsEnumerable(prop)) {
-            if (o[prop] !== null) {
-                queriedCards = window['filter' + prop](queriedCards, (typeof args[prop] === "string") ? "" + o[prop] : parseInt(o[prop], 10), args[prop] || 0, banlist, lflist);
-            }
-        }
-    }
-    return queriedCards;
-}
-
-function generateQueryObject() {
-    'use strict';
-    var retVal = {},
-        filters = [
-            "Name",
-            "Desc",
-            "Type",
-            "Attribute",
-            "Race",
-            "Setcode",
-            "Atk",
-            "Def",
-            "Level",
-            "Scale",
-            "ForbiddenLimited"
-        ];
-    filters.forEach(function (filter) {
-        retVal[filter] = $('[data-input-' + filter + ']').val() || null;
-    });
-    return retVal;
-}
-
-
-function cardIs(cat, obj) {
-    if (cat === "monster" && (obj.race !== 0 || obj.level !== 0 || obj.attribute !== 0)) {
-        return true;
-    }
-    if (cat === "spell") {
-        return (obj.type & 2) === 2;
-    }
-    if (cat === "trap") {
-        return (obj.type & 4) === 4;
-    }
-    if (cat === "fusion") {
-        return (obj.type & 64) === 64;
-    }
-    if (cat === "synchro") {
-        return (obj.type & 8192) === 8192;
-    }
-    if (cat === "xyz") {
-        return (obj.type & 8388608) === 8388608;
-    }
-}
-
-function parseLevelScales(level) {
-    var output = "",
-        leftScale,
-        rightScale,
-        pendulumLevel;
-    if (level > 0 && level <= 12) {
-        output += '<span class="levels">';
-        while (level--) {
-            output += "*";
-        }
-    } else {
-        level = level.toString(16); // format: [0-9A-F]0[0-9A-F][0-9A-F]{4}
-        leftScale = parseInt(level.charAt(0), 16); // first digit: left scale in hex (0-16)
-        rightScale = parseInt(level.charAt(2), 16); // third digit: right scale in hex (0-16)
-        pendulumLevel = parseInt(level.charAt(6), 16); // seventh digit: level of the monster in hex (technically, all 4 digits are levels, but here we only need the last char)
-        output += '<span class="levels">';
-        while (pendulumLevel--) {
-            output += '*';
-        }
-        output += '</span> <span class="scales"><< ' + leftScale + ' | ' + rightScale + ' >>';
-    }
-    return output + '</span>';
-}
-
-function parseAtkDef(atk, def) {
-    return ((atk < 0) ? "?" : atk) + " / " + ((def < 0) ? "?" : def);
-}
-
 function handleResults() {
-    'use strict';
-    var SEARCH_HARD_CAP = 100, //constant
-        monsterCardSelect = $('.monsterCardSelect'),
+    const SEARCH_HARD_CAP = 100;
+    var monsterCardSelect = $('.monsterCardSelect'),
         monsterTypeSelect = $('.monsterTypeSelect'),
         monsterCardCheck = $('[data-input-monster-card]'),
         monsterTypeCheck = $('[data-input-monster-type]'),
@@ -480,6 +341,27 @@ function makeDescription(id) {
     return output + "<br /><span class='description'>" + targetCard.desc.replace(/\r\n/g, '<br />') + "</span>";
 }
 
+function attachDnDEvent(targetCollection) {
+    targetCollection.draggable({
+        addClasses: false,
+        cursor: "move",
+        helper: function () {
+            var helperElem = document.createElement("img");
+            helperElem.src = $(this).attr('src');
+            $(helperElem).attr('data-card-id', $(this).attr('data-card-id'));
+            if ($(this).attr('data-card-alias')) {
+                $(helperElem).attr('data-card-alias', $(this).attr('data-card-alias'));
+            }
+            $(helperElem).css({
+                height: $(this).css('height'),
+                width: $(this).css('width')
+            });
+            return helperElem;
+        },
+        scroll: false
+    });
+}
+
 function dropHandler(target) {
     return function (event, ui) {
         var clone = ui.draggable.clone(),
@@ -506,41 +388,14 @@ function dropHandler(target) {
     };
 }
 
-
-
-function drawDeckEditor(ydk) {
-    'use strict';
-    var ydkCopy = JSON.parse(JSON.stringify(ydk)),
-        card,
-        cardObject,
-        container,
-        decks = [
-            "main",
-            "extra",
-            "side"
-        ];
-    decks.forEach(function (deck) {
-        container = $('.' + deck + 'Deck');
-        if (container.find('span').length > 0) {
-            $('span', container).remove();
-            deckStorage.reset(deck);
-        }
-        for (card in ydkCopy[deck]) {
-            if (ydkCopy[deck].hasOwnProperty(card) && ydkCopy[deck].propertyIsEnumerable(card)) {
-                while (--ydkCopy[deck][card] >= 0) {
-                    cardObject = getCardObject(parseInt(card, 10));
-                    container.append(createCardImage(cardObject));
-                    deckStorage.addCard(deck, card);
-                }
-            }
-        }
-        $('img', container).each(function (index) {
-            $(this).addClass(deck + '_card_' + index);
-            $(this).data('cardData', 'deckCard');
-        });
-        attachDnDEvent($('img', container));
-        adjustDeckClass(deckStorage.getDeck(deck), container);
-    });
+function adjustDeckClass(targetDeck, targetContainer) {
+    if (targetDeck.length <= 40) {
+        targetContainer.addClass('f40').removeClass('f50 f60');
+    } else if (targetDeck.length > 40 && targetDeck.length <= 50) {
+        targetContainer.addClass('f50').removeClass('f40 f60');
+    } else if (targetDeck.length > 50) {
+        targetContainer.addClass('f60').removeClass('f40 f50');
+    }
 }
 
 function dropOutHandler(target) {
@@ -567,11 +422,75 @@ function dropOutHandler(target) {
     };
 }
 
+function parseAtkDef(atk, def) {
+    return ((atk < 0) ? "?" : atk) + " / " + ((def < 0) ? "?" : def);
+}
 
+function parseLevelScales(level) {
+    var output = "",
+        leftScale,
+        rightScale,
+        pendulumLevel;
+    if (level > 0 && level <= 12) {
+        output += '<span class="levels">';
+        while (level--) {
+            output += "*";
+        }
+    } else {
+        level = level.toString(16); // format: [0-9A-F]0[0-9A-F][0-9A-F]{4}
+        leftScale = parseInt(level.charAt(0), 16); // first digit: left scale in hex (0-16)
+        rightScale = parseInt(level.charAt(2), 16); // third digit: right scale in hex (0-16)
+        pendulumLevel = parseInt(level.charAt(6), 16); // seventh digit: level of the monster in hex (technically, all 4 digits are levels, but here we only need the last char)
+        output += '<span class="levels">'
+        while (pendulumLevel--) {
+            output += '*';
+        }
+        output += '</span> <span class="scales"><< ' + leftScale + ' | ' + rightScale + ' >>';
+    }
+    return output + '</span>';
+}
 
+function cardIs(cat, obj) {
+    if (cat === "monster" && (obj.race !== 0 || obj.level !== 0 || obj.attribute !== 0)) {
+        return true;
+    }
+    if (cat === "spell") {
+        return (obj.type & 2) == 2;
+    }
+    if (cat === "trap") {
+        return (obj.type & 4) == 4;
+    }
+    if (cat === "fusion") {
+        return (obj.type & 64) == 64;
+    }
+    if (cat === "synchro") {
+        return (obj.type & 8192) == 8192;
+    }
+    if (cat === "xyz") {
+        return (obj.type & 8388608) == 8388608;
+    }
+}
 
+function getCardObject(id) {
+    var cardObject,
+        i = 0,
+        len = cards.length;
+    for (i, len; i < len; i++) {
+        if (id === cards[i].id) {
+            cardObject = cards[i];
+            break;
+        }
+    }
+    return cardObject;
+}
 
-
+function createCardImage(card) {
+    if (!card) {
+        return '<span class="cardImage"><img src="' + imgDir + 'cover.jpg" data-card-id="cover" data-card-name="???" data-card-type="0" /></span>';
+    } else {
+        return '<span class="cardImage" data-card-limit="' + (lflist[$('.banlistSelect').val()][card.id] || 3) + '"><img src="' + imgDir + card.id + '.jpg" data-card-id="' + card.id + '" data-card-name="' + card.name.replace(/\"/g, '{{quote}}') + '" ' + (card.alias !== 0 ? 'data-card-alias="' + card.alias + '"' : '') + 'data-card-type="' + card.type + '" /></span>';
+    }
+}
 
 function createDeckList(decks) {
     var generatedYDK = "#Created by YGOPro.us' deck editor\r\n",
@@ -788,7 +707,6 @@ function filterScale(result, scale, op) {
 }
 
 function filterForbiddenLimited(result, selectedLimitation, placeholder, selectedBanlist, config) {
-    'use strict';
     return result.filter(function (card) {
         if (selectedLimitation === 4) {
             return true;
@@ -803,7 +721,48 @@ function filterForbiddenLimited(result, selectedLimitation, placeholder, selecte
     });
 }
 
+function applyFilters(filterObject, banlist, lflist) {
+    var queriedCards = cards,
+        o = filterObject,
+        prop,
+        args = {
+            'Atk': 1,
+            'Def': 1,
+            'Level': 1,
+            'Scale': 1,
+            'Name': "",
+            "Desc": ""
+        };
+    for (prop in o) {
+        if (o.hasOwnProperty(prop) && o.propertyIsEnumerable(prop)) {
+            if (o[prop] !== null) {
+                queriedCards = window['filter' + prop](queriedCards, (typeof args[prop] === "string") ? "" + o[prop] : parseInt(o[prop], 10), args[prop] || 0, banlist, lflist);
+            }
+        }
+    }
+    return queriedCards;
+}
 
+function generateQueryObject() {
+    var retVal = {},
+        filters = [
+            "Name",
+            "Desc",
+            "Type",
+            "Attribute",
+            "Race",
+            "Setcode",
+            "Atk",
+            "Def",
+            "Level",
+            "Scale",
+            "ForbiddenLimited"
+        ];
+    filters.forEach(function (filter) {
+        retVal[filter] = $('[data-input-' + filter + ']').val() || null;
+    });
+    return retVal;
+}
 
 function addDeckLegal(id, targetDeck, targetDeckSize, flList, currentList, deck2, deck3) {
     if (typeof id !== 'string') {
@@ -899,188 +858,204 @@ $('.mainDeck, .sideDeck, .extraDeck, .searchResults').on("contextmenu", function
 
 
 (function () {
-        $.getJSON('http://ygopro.us/manifest/database_0-en-OCGTCG.json', function (data) {
-                cards = data;
-                cards = cards.filter(validCards).filter(excludeTokens);
-                $.get('http://ygopro.us/ygopro/lflist.conf', function (data) {
-                        var list;
-                        lflist = ConfigParser(data, {
-                            keyValueDelim: " ",
-                            blockRegexp: /^\s?\!(.*?)\s?$/
-                        });
-                        for (list in lflist) {
-                            $('.banlistSelect').append('<option value="' + list + '">' + list + '</option>');
+    $.getJSON('http://ygopro.us/manifest/database_0-en-OCGTCG.json', function (data) {
+        cards = data;
+        cards = cards.filter(validCards).filter(excludeTokens);
+        $.get('http://ygopro.us/ygopro/lflist.conf', function (data) {
+            var list;
+            lflist = ConfigParser(data, {
+                keyValueDelim: " ",
+                blockRegexp: /^\s?\!(.*?)\s?$/
+            });
+            for (list in lflist) {
+                $('.banlistSelect').append('<option value="' + list + '">' + list + '</option>');
+            }
+            $.get('http://ygopro.us/ygopro/Strings.conf', function (data) {
+                var setcodes = ConfigParser(data, {
+                        keyValueDelim: " ",
+                        commentDelims: [],
+                        blockRegexp: /^\s?\#(.*?)\s?$/,
+                        joinKeyValue: true,
+                        joinKeySlice: 1
+                    }).setcodes,
+                    setcode,
+                    monsterCardSelect = $('.monsterCardSelect'),
+                    monsterTypeSelect = $('.monsterTypeSelect'),
+                    spellSelect = $('.spellSelect'),
+                    trapSelect = $('.trapSelect'),
+                    raceSelect = $('.raceSelect'),
+                    attributeSelect = $('.attributeSelect');
+                for (setcode in setcodes) {
+                    $('.setcodeSelect').append('<option value="' + parseInt(setcode, 16) + '">' + setcodes[setcode] + '</option>');
+                }
+                if (localStorage.getItem('selectedDatabase')) {
+                    $('.databaseSelect').val(localStorage.getItem('selectedDatabase'));
+                    $.getJSON('manifest/database_' + $('.databaseSelect').val() + '.json', function (data) {
+                        cards = data;
+                        cards = cards.filter(validCards).filter(excludeTokens);
+                    });
+                }
+                $('.typeSelect').on('change', function () {
+                    switch ($(this).val()) {
+                    case "5":
+                        { // all
+                            monsterCardSelect.css('display', 'none').removeAttr('data-input-monster-card');
+                            monsterTypeSelect.css('display', 'none').removeAttr('data-input-monster-type');
+                            spellSelect.css('display', 'none');
+                            trapSelect.css('display', 'none');
+                            raceSelect.attr('disabled', '').removeAttr('data-input-race');
+                            attributeSelect.attr('disabled', '').removeAttr('data-input-attribute');
+                            $('[data-input-type]').removeAttr('data-input-type');
+                            break;
                         }
-                        $.get('http://ygopro.us/ygopro/Strings.conf', function processStringsConf(data) {
-                                var setcodes = ConfigParser(data, {
-                                        keyValueDelim: " ",
-                                        commentDelims: [],
-                                        blockRegexp: /^\s?\#(.*?)\s?$/,
-                                        joinKeyValue: true,
-                                        joinKeySlice: 1
-                                    }).setcodes,
-                                    setcode,
-                                    monsterCardSelect = $('.monsterCardSelect'),
-                                    monsterTypeSelect = $('.monsterTypeSelect'),
-                                    spellSelect = $('.spellSelect'),
-                                    trapSelect = $('.trapSelect'),
-                                    raceSelect = $('.raceSelect'),
-                                    attributeSelect = $('.attributeSelect');
-                                for (setcode in setcodes) {
-                                    $('.setcodeSelect').append('<option value="' + parseInt(setcode, 16) + '">' + setcodes[setcode] + '</option>');
-                                }
-                                if (localStorage.getItem('selectedDatabase')) {
-                                    $('.databaseSelect').val(localStorage.getItem('selectedDatabase'));
-                                    $.getJSON('manifest/database_' + $('.databaseSelect').val() + '.json', function (data) {
-                                        cards = data;
-                                        cards = cards.filter(validCards).filter(excludeTokens);
-                                    });
-                                }
-                                $('.typeSelect').on('change', function () {
-                                        switch ($(this).val()) {
-                                        case "5":
-                                            // all
-                                            monsterCardSelect.css('display', 'none').removeAttr('data-input-monster-card');
-                                            monsterTypeSelect.css('display', 'none').removeAttr('data-input-monster-type');
-                                            spellSelect.css('display', 'none');
-                                            trapSelect.css('display', 'none');
-                                            raceSelect.attr('disabled', '').removeAttr('data-input-race');
-                                            attributeSelect.attr('disabled', '').removeAttr('data-input-attribute');
-                                            $('[data-input-type]').removeAttr('data-input-type');
-                                            break;
-
-                                        case "1":
-                                            // monster
-                                            monsterCardSelect.css('display', 'block').attr('data-input-monster-card', '');
-                                            monsterTypeSelect.css('display', 'block').attr('data-input-monster-type', '');
-                                            spellSelect.css('display', 'none').removeAttr('data-input-type');
-                                            trapSelect.css('display', 'none').removeAttr('data-input-type');
-                                            raceSelect.removeAttr('disabled').attr('data-input-race', '');
-                                            attributeSelect.removeAttr('disabled').attr('data-input-attribute', '');
-                                            break;
-
-                                        case "2":
-                                            // spell
-                                            spellSelect.css('display', 'block').attr('data-input-type', '');
-                                            monsterCardSelect.css('display', 'none').removeAttr('data-input-monster-card');
-                                            monsterTypeSelect.css('display', 'none').removeAttr('data-input-monster-type');
-                                            trapSelect.css('display', 'none').removeAttr('data-input-type');
-                                            raceSelect.attr('disabled', '').removeAttr('data-input-race');
-                                            attributeSelect.attr('disabled', '').removeAttr('data-input-attribute');
-                                            break;
-                                        }
-                                    case "4":
-                                        // traps
-                                        trapSelect.css('display', 'block').attr('data-input-type', '');
-                                        monsterCardSelect.css('display', 'none').removeAttr('data-input-monster-card');
-                                        monsterTypeSelect.css('display', 'none').removeAttr('data-input-monster-type');
-                                        spellSelect.css('display', 'none').removeAttr('data-input-type');
-                                        raceSelect.attr('disabled', '').removeAttr('data-input-race');
-                                        attributeSelect.attr('disabled', '').removeAttr('data-input-attribute');
-                                        break;
-
-                                    }
-                                }); $('.searchButton').on('click', handleResults); $('.nameInput, .descInput').on('keyup', function () {
-                                if ($(this).val().length >= 4) {
-                                    handleResults();
-                                }
-                            }); $('.searchResults').on('mouseenter', '.resultDiv:not(".exceededSearchNotif")', function () {
-                                var id = $('img', this).attr('data-card-id');
-                                $('.imgContainer').attr('src', imgDir + id + '.jpg');
-                                $('.cardDescription').html(makeDescription(id));
-                            }); $('.mainDeck, .sideDeck, .extraDeck').on('mouseenter', 'img', function () {
-                                var id = $(this).attr('data-card-id');
-                                $('.imgContainer').attr('src', imgDir + id + '.jpg');
-                                $('.cardDescription').html(makeDescription(id));
-                            }); $('.mainDeck').droppable({
-                                addClasses: false,
-                                accept: "img[data-card-id]",
-                                drop: dropHandler("main"),
-                                out: dropOutHandler("main")
-                            }); $('.sideDeck').droppable({
-                                addClasses: false,
-                                accept: "img[data-card-id]",
-                                drop: dropHandler("side"),
-                                out: dropOutHandler("side")
-                            }); $('.extraDeck').droppable({
-                                addClasses: false,
-                                accept: "img[data-card-id]",
-                                drop: dropHandler("extra"),
-                                out: dropOutHandler("extra")
-                            }); $('.saveDeck').on('click', function () {
-                                primus.write({
-                                    action: "saveDeckRequest",
-                                    deckList: createDeckList(deckStorage.decks),
-                                    deckName: $('.deckSelect').val(),
-                                    uniqueID: uniqueID
-                                });
-                            }); $('.saveDeckAs').on('click', function () {
-                                var deckName = $('.decknameInput').val();
-                                if (!deckName) {
-                                    primus.write({
-                                        action: "saveDeckRequest",
-                                        deckList: createDeckList(deckStorage.decks),
-                                        deckName: $('.deckSelect').val(),
-                                        uniqueID: uniqueID
-                                    });
-                                } else {
-                                    primus.write({
-                                        action: "saveDeckRequest",
-                                        deckList: createDeckList(deckStorage.decks),
-                                        deckName: deckName + ".ydk",
-                                        uniqueID: uniqueID
-                                    });
-                                }
-                            }); $('.deleteDeck').on('click', function () {
-                                if (confirm("Are you sure you want to permanently delete this deck?")) {
-                                    primus.write({
-                                        action: "unlinkDeckRequest",
-                                        deckName: $('.deckSelect').val(),
-                                        uniqueID: uniqueID
-                                    });
-                                    drawDeckEditor({
-                                        main: {},
-                                        side: {},
-                                        extra: {}
-                                    });
-                                }
-                            }); $('.clearDeck').on('click', function () {
-                                drawDeckEditor({
-                                    main: {},
-                                    side: {},
-                                    extra: {}
-                                });
-                            }); $('.shuffleDeck').on('click', function () {
-                                var deck = deckStorage.getDeck("main");
-                                deckStorage.setDeck("main", shuffleArray(deck));
-                                drawDeck("main");
-                            }); $('.sortDeck').on('click', function () {
-                                sortAllDecks();
-                            }); $('.clearForm').on('click', function () {
-                                $('.typeSelect').val('5').change();
-                                $('.attributeSelect, .raceSelect, .setcodeSelect, .forbiddenLimitedSelect').each(function () {
-                                    $(this)[0].options[0].selected = true;
-                                });
-                                $('.searchBlock input[class$="Input"]').val('');
-                            }); $('.databaseSelect').on('change', function () {
-                                localStorage.setItem('selectedDatabase', $(this).val());
-                                $.getJSON('manifest/database_' + $(this).val() + '.json', function (data) {
-                                    cards = data;
-                                    cards = cards.filter(validCards).filter(excludeTokens);
-                                    drawDeckEditor({
-                                        main: {},
-                                        side: {},
-                                        extra: {}
-                                    });
-                                    $('.searchResults').html('');
-                                    if (applyFilters(generateQueryObject(), $('.banlistSelect').val(), lflist).length !== cards.length) {
-                                        handleResults();
-                                    }
-                                });
-                            }); $('.deckSelect').on('change', function () {
-                                drawDeckEditor(parseYDK(deckfiles[$(this).val()]));
-                            });
-                        });
+                    case "1":
+                        { // monster
+                            monsterCardSelect.css('display', 'block').attr('data-input-monster-card', '');
+                            monsterTypeSelect.css('display', 'block').attr('data-input-monster-type', '');
+                            spellSelect.css('display', 'none').removeAttr('data-input-type');
+                            trapSelect.css('display', 'none').removeAttr('data-input-type');
+                            raceSelect.removeAttr('disabled').attr('data-input-race', '');
+                            attributeSelect.removeAttr('disabled').attr('data-input-attribute', '');
+                            break;
+                        }
+                    case "2":
+                        { // spell
+                            spellSelect.css('display', 'block').attr('data-input-type', '');
+                            monsterCardSelect.css('display', 'none').removeAttr('data-input-monster-card');
+                            monsterTypeSelect.css('display', 'none').removeAttr('data-input-monster-type');
+                            trapSelect.css('display', 'none').removeAttr('data-input-type');
+                            raceSelect.attr('disabled', '').removeAttr('data-input-race');
+                            attributeSelect.attr('disabled', '').removeAttr('data-input-attribute');
+                            break;
+                        }
+                    case "4":
+                        { // traps
+                            trapSelect.css('display', 'block').attr('data-input-type', '');
+                            monsterCardSelect.css('display', 'none').removeAttr('data-input-monster-card');
+                            monsterTypeSelect.css('display', 'none').removeAttr('data-input-monster-type');
+                            spellSelect.css('display', 'none').removeAttr('data-input-type');
+                            raceSelect.attr('disabled', '').removeAttr('data-input-race');
+                            attributeSelect.attr('disabled', '').removeAttr('data-input-attribute');
+                            break;
+                        }
+                    }
                 });
+                $('.searchButton').on('click', handleResults);
+                $('.nameInput, .descInput').on('keyup', function () {
+                    if ($(this).val().length >= 4) {
+                        handleResults();
+                    }
+                });
+                $('.searchResults').on('mouseenter', '.resultDiv:not(".exceededSearchNotif")', function () {
+                    var id = $('img', this).attr('data-card-id');
+                    $('.imgContainer').attr('src', imgDir + id + '.jpg');
+                    $('.cardDescription').html(makeDescription(id));
+                });
+                $('.mainDeck, .sideDeck, .extraDeck').on('mouseenter', 'img', function () {
+                    var id = $(this).attr('data-card-id');
+                    $('.imgContainer').attr('src', imgDir + id + '.jpg');
+                    $('.cardDescription').html(makeDescription(id));
+                });
+                $('.mainDeck').droppable({
+                    addClasses: false,
+                    accept: "img[data-card-id]",
+                    drop: dropHandler("main"),
+                    out: dropOutHandler("main")
+                });
+                $('.sideDeck').droppable({
+                    addClasses: false,
+                    accept: "img[data-card-id]",
+                    drop: dropHandler("side"),
+                    out: dropOutHandler("side")
+                });
+                $('.extraDeck').droppable({
+                    addClasses: false,
+                    accept: "img[data-card-id]",
+                    drop: dropHandler("extra"),
+                    out: dropOutHandler("extra")
+                });
+                $('.saveDeck').on('click', function () {
+                    primus.write({
+                        action: "saveDeckRequest",
+                        deckList: createDeckList(deckStorage.decks),
+                        deckName: $('.deckSelect').val(),
+                        uniqueID: uniqueID
+                    });
+                });
+                $('.saveDeckAs').on('click', function () {
+                    var deckName = $('.decknameInput').val();
+                    if (!deckName) {
+                        primus.write({
+                            action: "saveDeckRequest",
+                            deckList: createDeckList(deckStorage.decks),
+                            deckName: $('.deckSelect').val(),
+                            uniqueID: uniqueID
+                        });
+                    } else {
+                        primus.write({
+                            action: "saveDeckRequest",
+                            deckList: createDeckList(deckStorage.decks),
+                            deckName: deckName + ".ydk",
+                            uniqueID: uniqueID
+                        });
+                    }
+                });
+                $('.deleteDeck').on('click', function () {
+                    if (confirm("Are you sure you want to permanently delete this deck?")) {
+                        primus.write({
+                            action: "unlinkDeckRequest",
+                            deckName: $('.deckSelect').val(),
+                            uniqueID: uniqueID
+                        });
+                        drawDeckEditor({
+                            main: {},
+                            side: {},
+                            extra: {}
+                        });
+                    }
+                });
+                $('.clearDeck').on('click', function () {
+                    drawDeckEditor({
+                        main: {},
+                        side: {},
+                        extra: {}
+                    });
+                });
+                $('.shuffleDeck').on('click', function () {
+                    var deck = deckStorage.getDeck("main");
+                    deckStorage.setDeck("main", shuffleArray(deck));
+                    drawDeck("main");
+                });
+                $('.sortDeck').on('click', function () {
+                    sortAllDecks();
+                });
+                $('.clearForm').on('click', function () {
+                    $('.typeSelect').val('5').change();
+                    $('.attributeSelect, .raceSelect, .setcodeSelect, .forbiddenLimitedSelect').each(function () {
+                        $(this)[0].options[0].selected = true;
+                    });
+                    $('.searchBlock input[class$="Input"]').val('');
+                });
+                $('.databaseSelect').on('change', function () {
+                    localStorage.setItem('selectedDatabase', $(this).val());
+                    $.getJSON('manifest/database_' + $(this).val() + '.json', function (data) {
+                        cards = data;
+                        cards = cards.filter(validCards).filter(excludeTokens);
+                        drawDeckEditor({
+                            main: {},
+                            side: {},
+                            extra: {}
+                        });
+                        $('.searchResults').html('');
+                        if (applyFilters(generateQueryObject(), $('.banlistSelect').val(), lflist).length !== cards.length) {
+                            handleResults();
+                        }
+                    });
+                });
+                $('.deckSelect').on('change', function () {
+                    drawDeckEditor(parseYDK(deckfiles[$(this).val()]));
+                });
+            });
         });
+    });
 });
