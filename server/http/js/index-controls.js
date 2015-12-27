@@ -68,11 +68,14 @@ function singlesitenav(target) {
         });
         chatStarted = true;
     }
+    if (target === 'gamelist') {
+        $('body').css('background-image', 'url(http://ygopro.us/img/brightx_bg.jpg)');
+    }
     if (target === 'chat') {
-        $('body').css('background-image', 'url(http://ygopro.us/img/bright_bg.jpg)');
+        $('body').css('background-image', 'url(http://ygopro.us/img/brightx_bg.jpg)');
     }
     if (target === 'settings') {
-        $('body').css('background-image', 'url(http://ygopro.us/img/bright_bg.jpg)');
+        $('body').css('background-image', 'url(http://ygopro.us/img/brightx_bg.jpg)');
     }
     $('.activescreen').removeClass('activescreen');
     $('header').css('top', '100vh');
