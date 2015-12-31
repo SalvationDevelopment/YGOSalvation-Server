@@ -113,7 +113,7 @@ function runYGOPro(mode, callback) {
         return form;
     }
     for (var i = 0; settings.length > i; i++) {
-        systemConf = fillInData(systemConf, '/{' + settings[i] + '}/g', localStorage[settings[i]]);
+        systemConf = fillInData(systemConf, '{' + settings[i] + '}', localStorage[settings[i]]);
     }
     var path = './ygopro/system.conf';
     fs.writeFile(path, systemConf, function (err) {
