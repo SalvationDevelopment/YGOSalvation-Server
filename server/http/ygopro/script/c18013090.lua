@@ -30,6 +30,7 @@ function c18013090.initial_effect(c)
 	e3:SetOperation(c18013090.caop)
 	c:RegisterEffect(e3)
 end
+c18013090.material_setcode=0x17
 function c18013090.tfilter(c)
 	return c:IsCode(96182448) or c:IsHasEffect(20932152)
 end
@@ -47,7 +48,7 @@ function c18013090.atop2(e,tp,eg,ep,ev,re,r,rp)
 	local e1=Effect.CreateEffect(c)
 	e1:SetType(EFFECT_TYPE_SINGLE)
 	e1:SetCode(EFFECT_UPDATE_ATTACK)
-	e1:SetReset(RESET_PHASE+RESET_DAMAGE_CAL)
+	e1:SetReset(RESET_PHASE+PHASE_DAMAGE_CAL)
 	e1:SetValue(1000)
 	c:RegisterEffect(e1)
 end

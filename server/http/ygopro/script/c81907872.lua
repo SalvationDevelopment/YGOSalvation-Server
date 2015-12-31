@@ -47,11 +47,12 @@ function c81907872.posop(e,tp,eg,ep,ev,re,r,rp)
 	end
 end
 function c81907872.cfilter(c,tp)
-	return c:IsControler(tp) and c:GetPreviousControler()==tp and c:IsSetCard(0x8d) and c:IsReason(REASON_DESTROY) and c:IsType(TYPE_MONSTER)
-		and (not c:IsReason(REASON_BATTLE) or c==Duel.GetAttackTarget())
+	return c:IsControler(tp) and c:GetPreviousControler()==tp and c:IsReason(REASON_DESTROY) and c:GetReasonPlayer()~=tp
+		and c:IsSetCard(0x8d) and c:IsType(TYPE_MONSTER) and c:IsPreviousLocation(LOCATION_MZONE)
+		and (c:IsReason(REASON_EFFECT) or (c:IsReason(REASON_BATTLE) and c==Duel.GetAttackTarget()))
 end
 function c81907872.spcon(e,tp,eg,ep,ev,re,r,rp)
-	return rp~=tp and eg:IsExists(c81907872.cfilter,1,nil,tp)
+	return eg:IsExists(c81907872.cfilter,1,nil,tp)
 end
 function c81907872.sptg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.GetLocationCount(tp,LOCATION_MZONE)>0

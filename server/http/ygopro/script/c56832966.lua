@@ -34,7 +34,7 @@ function c56832966.initial_effect(c)
 end
 c56832966.xyz_number=39
 function c56832966.ovfilter(c)
-	return c:IsFaceup() and c:IsSetCard(0x7f) and c:IsType(TYPE_XYZ) and c:GetRank()==4
+	return c:IsFaceup() and c:IsSetCard(0x107f) and c:IsType(TYPE_XYZ) and c:GetRank()==4
 end
 function c56832966.aclimit(e,re,tp)
 	return not re:GetHandler():IsImmuneToEffect(e)
@@ -43,7 +43,7 @@ function c56832966.actcon(e)
 	return Duel.GetAttacker()==e:GetHandler() or Duel.GetAttackTarget()==e:GetHandler()
 end
 function c56832966.atkcon(e,tp,eg,ep,ev,re,r,rp)
-	return e:GetHandler():GetBattleTarget()~=nil and e:GetHandler():GetOverlayGroup():IsExists(Card.IsSetCard,1,nil,0x7f)
+	return e:GetHandler():GetBattleTarget()~=nil and e:GetHandler():GetOverlayGroup():IsExists(Card.IsSetCard,1,nil,0x107f)
 end
 function c56832966.atkcost(e,tp,eg,ep,ev,re,r,rp,chk)
 	local c=e:GetHandler()
@@ -57,7 +57,7 @@ function c56832966.atkop(e,tp,eg,ep,ev,re,r,rp)
 		local e1=Effect.CreateEffect(c)
 		e1:SetType(EFFECT_TYPE_SINGLE)
 		e1:SetCode(EFFECT_SET_ATTACK_FINAL)
-		e1:SetReset(RESET_PHASE+RESET_DAMAGE_CAL)
+		e1:SetReset(RESET_PHASE+PHASE_DAMAGE_CAL)
 		e1:SetValue(5000)
 		c:RegisterEffect(e1)
 	end

@@ -1,10 +1,12 @@
---켄타우르스
+--犬タウルス
 function c91754175.initial_effect(c)
 	--atk up
 	local e1=Effect.CreateEffect(c)
 	e1:SetDescription(aux.Stringid(91754175,0))
-	e1:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O)
+	e1:SetCategory(CATEGORY_TOGRAVE+CATEGORY_ATKCHANGE)
+	e1:SetType(EFFECT_TYPE_QUICK_O)
 	e1:SetCode(EVENT_PRE_DAMAGE_CALCULATE)
+	e1:SetRange(LOCATION_MZONE)
 	e1:SetCountLimit(1)
 	e1:SetCondition(c91754175.condition)
 	e1:SetTarget(c91754175.target)
@@ -12,7 +14,7 @@ function c91754175.initial_effect(c)
 	c:RegisterEffect(e1)
 end
 function c91754175.condition(e,tp,eg,ep,ev,re,r,rp)
-	return Duel.GetAttackTarget()~=nil
+	return e:GetHandler():GetBattleTarget()
 end
 function c91754175.tgfilter(c)
 	return c:IsRace(RACE_BEAST+RACE_BEASTWARRIOR+RACE_WINDBEAST) and c:IsAbleToGrave()

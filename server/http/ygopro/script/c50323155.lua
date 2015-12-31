@@ -1,5 +1,4 @@
---Black Horn of Heaven
---Errata'd by Ragna_Edge
+--昇天の黒角笛
 function c50323155.initial_effect(c)
 	--Activate
 	local e1=Effect.CreateEffect(c)

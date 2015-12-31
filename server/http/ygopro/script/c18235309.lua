@@ -16,6 +16,7 @@ function c18235309.initial_effect(c)
 	e3:SetType(EFFECT_TYPE_QUICK_O)
 	e3:SetRange(LOCATION_SZONE)
 	e3:SetCode(EVENT_FREE_CHAIN)
+	e3:SetHintTiming(0,0x1c0+TIMING_MAIN_END+TIMING_BATTLE_START+TIMING_BATTLE_END)
 	e3:SetCountLimit(1)
 	e3:SetCondition(c18235309.condition2)
 	e3:SetTarget(c18235309.target2)
@@ -31,9 +32,9 @@ function c18235309.cost1(e,tp,eg,ep,ev,re,r,rp,chk)
 	e:SetLabel(0)
 	local tn=Duel.GetTurnPlayer()
 	local ph=Duel.GetCurrentPhase()
-	if (tn~=tp and (ph==PHASE_MAIN1 or ph==PHASE_MAIN2 or ph==PHASE_BATTLE))
+	if (tn~=tp and (ph==PHASE_MAIN1 or ph==PHASE_MAIN2 or (ph>=PHASE_BATTLE_START and ph<=PHASE_BATTLE)))
 		and Duel.IsExistingMatchingCard(c18235309.filter,tp,LOCATION_HAND,0,1,nil)
-		and Duel.SelectYesNo(tp,aux.Stringid(18235309,1)) then
+		and Duel.SelectYesNo(tp,94) then
 		e:SetLabel(1)
 	end
 end
@@ -41,7 +42,7 @@ function c18235309.target1(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return true end
 	if e:GetLabel()~=1 then return end
 	e:GetHandler():RegisterFlagEffect(18235309,RESET_EVENT+0x1fe0000+RESET_PHASE+PHASE_END,0,1)
-	e:GetHandler():RegisterFlagEffect(0,RESET_CHAIN,EFFECT_FLAG_CLIENT_HINT,1,0,aux.Stringid(18235309,2))
+	e:GetHandler():RegisterFlagEffect(0,RESET_CHAIN,EFFECT_FLAG_CLIENT_HINT,1,0,65)
 	Duel.SetOperationInfo(0,CATEGORY_SUMMON,nil,1,0,0)
 end
 function c18235309.activate(e,tp,eg,ep,ev,re,r,rp)
@@ -63,7 +64,7 @@ end
 function c18235309.condition2(e,tp,eg,ep,ev,re,r,rp)
 	local tn=Duel.GetTurnPlayer()
 	local ph=Duel.GetCurrentPhase()
-	return tn~=tp and (ph==PHASE_MAIN1 or ph==PHASE_MAIN2 or ph==PHASE_BATTLE)
+	return tn~=tp and (ph==PHASE_MAIN1 or ph==PHASE_MAIN2 or (ph>=PHASE_BATTLE_START and ph<=PHASE_BATTLE))
 end
 function c18235309.target2(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return e:GetHandler():GetFlagEffect(18235309)==0

@@ -14,7 +14,7 @@ function c97567736.initial_effect(c)
 	c:RegisterEffect(e1)
 	--change name
 	local e2=Effect.CreateEffect(c)
-	e2:SetDescription(aux.Stringid(97567737,1))
+	e2:SetDescription(aux.Stringid(97567736,1))
 	e2:SetType(EFFECT_TYPE_IGNITION)
 	e2:SetRange(LOCATION_MZONE)
 	e2:SetCountLimit(1,97567737)

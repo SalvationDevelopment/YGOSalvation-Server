@@ -1,58 +1,51 @@
---Scripted by Eerie Code
---Hyperspeedroid Chanbarider
+--HSRチャンバライダー
 function c42110604.initial_effect(c)
 	c:SetSPSummonOnce(42110604)
 	--synchro summon
 	aux.AddSynchroProcedure(c,nil,aux.NonTuner(nil),1)
 	c:EnableReviveLimit()
-	--Double attack
-	local e2=Effect.CreateEffect(c)
-	e2:SetType(EFFECT_TYPE_SINGLE)
-	e2:SetCode(EFFECT_EXTRA_ATTACK)
-	e2:SetValue(1)
-	c:RegisterEffect(e2)
-	--ATK Up
+	--extra attack
 	local e1=Effect.CreateEffect(c)
-	e1:SetDescription(aux.Stringid(42110604,0))
-	e1:SetCategory(CATEGORY_ATKCHANGE)
-	e1:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_F)
-	e1:SetCode(EVENT_BATTLE_START)
-	e1:SetCondition(c42110604.atkcon)
-	e1:SetOperation(c42110604.atkop)
+	e1:SetType(EFFECT_TYPE_SINGLE)
+	e1:SetCode(EFFECT_EXTRA_ATTACK)
+	e1:SetValue(1)
 	c:RegisterEffect(e1)
-	--Salvage
+	--attack up
+	local e2=Effect.CreateEffect(c)
+	e2:SetDescription(aux.Stringid(42110604,0))
+	e2:SetCategory(CATEGORY_ATKCHANGE)
+	e2:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_F)
+	e2:SetCode(EVENT_BATTLE_START)
+	e2:SetCondition(c42110604.condition)
+	e2:SetOperation(c42110604.operation)
+	c:RegisterEffect(e2)
+	--tohand
 	local e3=Effect.CreateEffect(c)
-	e3:SetCategory(CATEGORY_TOHAND+CATEGORY_SEARCH)
+	e3:SetDescription(aux.Stringid(42110604,1))
+	e3:SetCategory(CATEGORY_TOHAND)
 	e3:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O)
 	e3:SetCode(EVENT_TO_GRAVE)
-	e3:SetProperty(EFFECT_FLAG_DAMAGE_STEP+EFFECT_FLAG_CARD_TARGET+EFFECT_FLAG_DELAY)
-	e3:SetCondition(c42110604.thcon)
+	e3:SetProperty(EFFECT_FLAG_CARD_TARGET+EFFECT_FLAG_DELAY)
 	e3:SetTarget(c42110604.thtg)
 	e3:SetOperation(c42110604.thop)
 	c:RegisterEffect(e3)
 end
-
-function c42110604.atkcon(e)
-	local ph=Duel.GetCurrentPhase()
-	return (ph==PHASE_DAMAGE or ph==PHASE_DAMAGE_CAL) and (Duel.GetAttacker()==e:GetHandler() or Duel.GetAttackTarget()==e:GetHandler())
+function c42110604.condition(e,tp,eg,ep,ev,re,r,rp)
+	return e:GetHandler():IsRelateToBattle()
 end
-function c42110604.atkop(e,tp,eg,ep,ev,re,r,rp)
+function c42110604.operation(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
-	local e1=Effect.CreateEffect(c)
-	e1:SetType(EFFECT_TYPE_SINGLE)
-	e1:SetProperty(EFFECT_FLAG_SINGLE_RANGE)
-	e1:SetRange(LOCATION_MZONE)
-	e1:SetCode(EFFECT_UPDATE_ATTACK)
-	e1:SetReset(RESET_EVENT+0x1fe0000)
-	e1:SetValue(200)
-	c:RegisterEffect(e1)
-end
-
-function c42110604.thcon(e,tp,eg,ep,ev,re,r,rp)
-	return not e:GetHandler():IsReason(REASON_RETURN)
+	if c:IsFaceup() and c:IsRelateToEffect(e) then
+		local e1=Effect.CreateEffect(c)
+		e1:SetType(EFFECT_TYPE_SINGLE)
+		e1:SetCode(EFFECT_UPDATE_ATTACK)
+		e1:SetValue(200)
+		e1:SetReset(RESET_EVENT+0x1ff0000)
+		c:RegisterEffect(e1)
+	end
 end
 function c42110604.thfilter(c)
-	return c:IsFaceup() and c:IsSetCard(0x2016) and c:IsType(TYPE_MONSTER) and c:IsAbleToHand()
+	return c:IsSetCard(0x2016) and c:IsAbleToHand()
 end
 function c42110604.thtg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then return chkc:IsLocation(LOCATION_REMOVED) and chkc:IsControler(tp) and c42110604.thfilter(chkc) end

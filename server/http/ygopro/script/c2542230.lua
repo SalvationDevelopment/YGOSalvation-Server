@@ -1,117 +1,91 @@
---Scripted by Eerie Code
---Red Cocoon
+--スカーレッド・コクーン
 function c2542230.initial_effect(c)
+	--Activate
 	local e1=Effect.CreateEffect(c)
 	e1:SetCategory(CATEGORY_EQUIP)
 	e1:SetType(EFFECT_TYPE_ACTIVATE)
 	e1:SetCode(EVENT_FREE_CHAIN)
-	e1:SetHintTiming(TIMING_DAMAGE_STEP)
-	e1:SetProperty(EFFECT_FLAG_CARD_TARGET+EFFECT_FLAG_DAMAGE_STEP)
-	e1:SetCondition(c2542230.condition)
+	e1:SetProperty(EFFECT_FLAG_CARD_TARGET)
 	e1:SetTarget(c2542230.target)
-	e1:SetOperation(c2542230.operation)
+	e1:SetOperation(c2542230.activate)
 	c:RegisterEffect(e1)
 	--to grave
-	local e3=Effect.CreateEffect(c)
-	e3:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_CONTINUOUS)
-	e3:SetCode(EVENT_TO_GRAVE)
-	e3:SetOperation(c2542230.regop)
-	c:RegisterEffect(e3)
-	local e4=Effect.CreateEffect(c)
-	e4:SetDescription(aux.Stringid(2542230,1))
-	e4:SetCategory(CATEGORY_TOHAND+CATEGORY_SEARCH)
-	e4:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_TRIGGER_O)
-	e4:SetCode(EVENT_PHASE+PHASE_END)
-	e4:SetRange(LOCATION_GRAVE)
-	e4:SetCountLimit(1)
-	e4:SetCondition(c2542230.spcon)
-	e4:SetTarget(c2542230.sptg)
-	e4:SetOperation(c2542230.spop)
-	c:RegisterEffect(e4)
-end
-
-function c2542230.condition(e,tp,eg,ep,ev,re,r,rp)
-	return Duel.GetCurrentPhase()~=PHASE_DAMAGE or not Duel.IsDamageCalculated()
+	local e2=Effect.CreateEffect(c)
+	e2:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_CONTINUOUS)
+	e2:SetCode(EVENT_TO_GRAVE)
+	e2:SetOperation(c2542230.regop)
+	c:RegisterEffect(e2)
 end
 function c2542230.filter(c)
-	return c:IsFaceup() and c:IsType(TYPE_SYNCHRO) and c:IsRace(RACE_DRAGON)
+	return c:IsFaceup() and c:IsRace(RACE_DRAGON) and c:IsType(TYPE_SYNCHRO)
 end
 function c2542230.target(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
-	if chkc then return chkc:IsControler(tp) and chkc:IsLocation(LOCATION_MZONE) and c2542230.filter(chkc) end
+	if chkc then return chkc:IsLocation(LOCATION_MZONE) and chkc:IsControler(tp) and c2542230.filter(chkc) end
 	if chk==0 then return Duel.IsExistingTarget(c2542230.filter,tp,LOCATION_MZONE,0,1,nil) end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_EQUIP)
-	local g=Duel.SelectTarget(tp,c2542230.filter,tp,LOCATION_MZONE,0,1,1,nil)
+	Duel.SelectTarget(tp,c2542230.filter,tp,LOCATION_MZONE,0,1,1,nil)
 	Duel.SetOperationInfo(0,CATEGORY_EQUIP,e:GetHandler(),1,0,0)
 end
-function c2542230.operation(e,tp,eg,ep,ev,re,r,rp)
+function c2542230.activate(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	if not c:IsLocation(LOCATION_SZONE) then return end
 	local tc=Duel.GetFirstTarget()
 	if c:IsRelateToEffect(e) and tc:IsRelateToEffect(e) and tc:IsFaceup() then
 		Duel.Equip(tp,c,tc)
 		c:CancelToGrave()
-		--Equip limit
+		local e1=Effect.CreateEffect(c)
+		e1:SetType(EFFECT_TYPE_SINGLE)
+		e1:SetCode(EFFECT_EQUIP_LIMIT)
+		e1:SetProperty(EFFECT_FLAG_CANNOT_DISABLE)
+		e1:SetValue(c2542230.eqlimit)
+		e1:SetReset(RESET_EVENT+0x1fe0000)
+		c:RegisterEffect(e1)
 		local e2=Effect.CreateEffect(c)
-		e2:SetType(EFFECT_TYPE_SINGLE)
-		e2:SetCode(EFFECT_EQUIP_LIMIT)
-		e2:SetProperty(EFFECT_FLAG_CANNOT_DISABLE)
-		e2:SetValue(c2542230.eqlimit)
+		e2:SetType(EFFECT_TYPE_FIELD)
+		e2:SetCode(EFFECT_DISABLE)
+		e2:SetRange(LOCATION_SZONE)
+		e2:SetTargetRange(0,LOCATION_MZONE)
+		e2:SetCondition(c2542230.discon)
 		e2:SetReset(RESET_EVENT+0x1fe0000)
 		c:RegisterEffect(e2)
-		--Disable effects
-		local e1=Effect.CreateEffect(c)
-		e1:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
-		e1:SetCode(EVENT_BE_BATTLE_TARGET)
-		e1:SetRange(LOCATION_SZONE)
-		e1:SetCondition(c2542230.discon)
-		e1:SetOperation(c2542230.disop)
-		c:RegisterEffect(e1)
 	end
 end
 function c2542230.eqlimit(e,c)
-	return c:IsFaceup()
+	return c:GetControler()==e:GetHandlerPlayer() or e:GetHandler():GetEquipTarget()==c
 end
-function c2542230.discon(e,tp,eg,ep,ev,re,r,rp)
+function c2542230.discon(e)
 	local ec=e:GetHandler():GetEquipTarget()
-	return ec and ec:GetControler()==tp and (ec==Duel.GetAttacker() or ec==Duel.GetAttackTarget()) and ec:GetBattleTarget()
+	return Duel.GetAttacker()==ec or Duel.GetAttackTarget()==ec
 end
-function c2542230.disop(e,tp,eg,ep,ev,re,r,rp)
-	--local tc=e:GetHandler():GetEquipTarget():GetBattleTarget()
-	local g=Duel.GetMatchingGroup(Card.IsFaceup,tp,0,LOCATION_MZONE,nil)
-	local tc=g:GetFirst()
-	while tc do
-		local e1=Effect.CreateEffect(e:GetHandler())
-		e1:SetType(EFFECT_TYPE_SINGLE)
-		e1:SetCode(EFFECT_DISABLE)
-		e1:SetReset(RESET_EVENT+0x1fe0000+RESET_PHASE+RESET_DAMAGE)
-		tc:RegisterEffect(e1)
-		local e2=Effect.CreateEffect(e:GetHandler())
-		e2:SetType(EFFECT_TYPE_SINGLE)
-		e2:SetCode(EFFECT_DISABLE_EFFECT)
-		e2:SetReset(RESET_EVENT+0x1fe0000+RESET_PHASE+RESET_DAMAGE)
-		tc:RegisterEffect(e2)
-		tc=g:GetNext()
-	end
-end
-
 function c2542230.regop(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
-	if not c:IsReason(REASON_RETURN) then
-		c:RegisterFlagEffect(2542230,RESET_EVENT+0x1fe0000+RESET_PHASE+PHASE_END,0,1)
-	end
+	local e1=Effect.CreateEffect(c)
+	e1:SetDescription(aux.Stringid(2542230,0))
+	e1:SetCategory(CATEGORY_SPECIAL_SUMMON)
+	e1:SetType(EFFECT_TYPE_QUICK_O)
+	e1:SetProperty(EFFECT_FLAG_CARD_TARGET)
+	e1:SetCode(EVENT_FREE_CHAIN)
+	e1:SetRange(LOCATION_GRAVE)
+	e1:SetHintTiming(TIMING_END_PHASE)
+	e1:SetCountLimit(1)
+	e1:SetCondition(c2542230.spcon)
+	e1:SetTarget(c2542230.sptg)
+	e1:SetOperation(c2542230.spop)
+	e1:SetReset(RESET_EVENT+0x1fe0000+RESET_PHASE+PHASE_END)
+	c:RegisterEffect(e1)
 end
 function c2542230.spcon(e,tp,eg,ep,ev,re,r,rp)
-	return e:GetHandler():GetFlagEffect(2542230)>0
+	return Duel.GetCurrentPhase()==PHASE_END
 end
-function c2542230.spfilter1(c,e,tp)
-	return c:IsSetCard(0x1045) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
+function c2542230.spfilter(c,e,tp)
+	return c:IsCode(70902743) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
 end
 function c2542230.sptg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
-	if chkc then return chkc:IsLocation(LOCATION_GRAVE) and chkc:IsControler(tp) and c2542230.spfilter1(chkc,e,tp) end
-	if chk==0 then return Duel.GetLocationCount(tp,LOCATION_MZONE)>0 and
-		Duel.IsExistingTarget(c2542230.spfilter1,tp,LOCATION_GRAVE,0,1,nil,e,tp) end
+	if chkc then return chkc:IsControler(tp) and chkc:IsLocation(LOCATION_GRAVE) and c2542230.spfilter(chkc,e,tp) end
+	if chk==0 then return Duel.GetLocationCount(tp,LOCATION_MZONE)>0
+		and Duel.IsExistingTarget(c2542230.spfilter,tp,LOCATION_GRAVE,0,1,nil,e,tp) end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
-	local g=Duel.SelectTarget(tp,c2542230.spfilter1,tp,LOCATION_GRAVE,0,1,1,nil,e,tp)
+	local g=Duel.SelectTarget(tp,c2542230.spfilter,tp,LOCATION_GRAVE,0,1,1,nil,e,tp)
 	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,g,1,0,0)
 end
 function c2542230.spop(e,tp,eg,ep,ev,re,r,rp)

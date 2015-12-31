@@ -62,7 +62,7 @@ function c35818851.rmop(e,tp,eg,ep,ev,re,r,rp)
 	end
 end
 function c35818851.filter(c)
-	return c:IsSetCard(0xd7) and c:IsType(TYPE_MONSTER) and not c:IsCode(35818851) and c:IsAbleToHand()
+	return c:IsSetCard(0xd9) and c:IsType(TYPE_MONSTER) and not c:IsCode(35818851) and c:IsAbleToHand()
 end
 function c35818851.thtg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then return chkc:IsControler(tp) and chkc:IsLocation(LOCATION_GRAVE) and c35818851.filter(chkc) end

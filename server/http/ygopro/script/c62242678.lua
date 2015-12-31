@@ -1,5 +1,4 @@
---Scripted by Eerie Code
---Hot Red Dragon Archfiend King Calamity
+--琰魔竜王 レッド・デーモン・カラミティ
 function c62242678.initial_effect(c)
 	--synchro summon
 	c:EnableReviveLimit()
@@ -12,14 +11,14 @@ function c62242678.initial_effect(c)
 	e1:SetOperation(c62242678.synop)
 	e1:SetValue(SUMMON_TYPE_SYNCHRO)
 	c:RegisterEffect(e1)
-	--Cannot activate
+	--act limit
 	local e2=Effect.CreateEffect(c)
 	e2:SetDescription(aux.Stringid(62242678,0))
 	e2:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O)
 	e2:SetCode(EVENT_SPSUMMON_SUCCESS)
-	e2:SetCondition(c62242678.negcon)
-	e2:SetTarget(c62242678.negtg)
-	e2:SetOperation(c62242678.negop)
+	e2:SetCondition(c62242678.limcon)
+	e2:SetTarget(c62242678.limtg)
+	e2:SetOperation(c62242678.limop)
 	c:RegisterEffect(e2)
 	--damage
 	local e3=Effect.CreateEffect(c)
@@ -28,33 +27,33 @@ function c62242678.initial_effect(c)
 	e3:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_F)
 	e3:SetProperty(EFFECT_FLAG_PLAYER_TARGET)
 	e3:SetCode(EVENT_BATTLE_DESTROYING)
-	e3:SetCondition(c62242678.damcon)
+	e3:SetCondition(aux.bdcon)
 	e3:SetTarget(c62242678.damtg)
 	e3:SetOperation(c62242678.damop)
 	c:RegisterEffect(e3)
-	--Special Summon
+	--spsummon
 	local e4=Effect.CreateEffect(c)
-	e4:SetDescription(aux.Stringid(62242678,0))
+	e4:SetDescription(aux.Stringid(62242678,2))
+	e4:SetCategory(CATEGORY_SPECIAL_SUMMON)
 	e4:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O)
-	e4:SetProperty(EFFECT_FLAG_DELAY+EFFECT_FLAG_DAMAGE_STEP)
 	e4:SetCode(EVENT_DESTROYED)
+	e4:SetProperty(EFFECT_FLAG_CARD_TARGET+EFFECT_FLAG_DAMAGE_STEP+EFFECT_FLAG_DELAY)
 	e4:SetCondition(c62242678.spcon)
 	e4:SetTarget(c62242678.sptg)
 	e4:SetOperation(c62242678.spop)
 	c:RegisterEffect(e4)
 end
-
 function c62242678.matfilter1(c,syncard)
 	return c:IsType(TYPE_TUNER) and (c:IsLocation(LOCATION_HAND) or c:IsFaceup()) and c:IsCanBeSynchroMaterial(syncard)
 end
 function c62242678.matfilter2(c,syncard)
-	return c:IsFaceup() and not c:IsType(TYPE_TUNER) and c:IsAttribute(ATTRIBUTE_DARK) and c:IsRace(RACE_DRAGON) and c:IsType(TYPE_SYNCHRO) and c:IsCanBeSynchroMaterial(syncard)
+	return c:IsFaceup() and c:IsRace(RACE_DRAGON) and c:IsAttribute(ATTRIBUTE_DARK) and c:IsType(TYPE_SYNCHRO) and c:IsCanBeSynchroMaterial(syncard)
 end
 function c62242678.synfilter1(c,syncard,lv,g1,g2,g3)
 	local tlv=c:GetSynchroLevel(syncard)
 	if lv-tlv<=0 then return false end
 	local f1=c.tuner_filter
-	if c:IsHasEffect(55863245) then
+	if c:IsHasEffect(EFFECT_HAND_SYNCHRO) then
 		return g3:IsExists(c62242678.synfilter2,1,c,syncard,lv-tlv,g2,f1,c)
 	else
 		return g1:IsExists(c62242678.synfilter2,1,c,syncard,lv-tlv,g2,f1,c)
@@ -158,7 +157,7 @@ function c62242678.synop(e,tp,eg,ep,ev,re,r,rp,c,tuner,mg)
 		local f1=tuner1.tuner_filter
 		local t2=nil
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SMATERIAL)
-		if tuner1:IsHasEffect(55863245) then
+		if tuner1:IsHasEffect(EFFECT_HAND_SYNCHRO) then
 			t2=g3:FilterSelect(tp,c62242678.synfilter2,1,1,tuner1,c,lv-lv1,g2,f1,tuner1)
 		else
 			t2=g1:FilterSelect(tp,c62242678.synfilter2,1,1,tuner1,c,lv-lv1,g2,f1,tuner1)
@@ -174,20 +173,18 @@ function c62242678.synop(e,tp,eg,ep,ev,re,r,rp,c,tuner,mg)
 	c:SetMaterial(g)
 	Duel.SendtoGrave(g,REASON_MATERIAL+REASON_SYNCHRO)
 end
-
-function c62242678.negcon(e,tp,eg,ep,ev,re,r,rp)
+function c62242678.limcon(e,tp,eg,ep,ev,re,r,rp)
 	return e:GetHandler():GetSummonType()==SUMMON_TYPE_SYNCHRO
 end
-function c62242678.negtg(e,tp,eg,ep,ev,re,r,rp,chk)
+function c62242678.limtg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return true end
-	Duel.SetChainLimit(c62242678.chlimit)
+	Duel.SetChainLimit(c62242678.chainlm)
 end
-function c62242678.chlimit(e,ep,tp)
-	return tp==ep
+function c62242678.chainlm(e,rp,tp)
+	return tp==rp
 end
-function c62242678.negop(e,tp,eg,ep,ev,re,r,rp)
-	local c=e:GetHandler()
-	local e1=Effect.CreateEffect(c)
+function c62242678.limop(e,tp,eg,ep,ev,re,r,rp)
+	local e1=Effect.CreateEffect(e:GetHandler())
 	e1:SetType(EFFECT_TYPE_FIELD)
 	e1:SetCode(EFFECT_CANNOT_ACTIVATE)
 	e1:SetProperty(EFFECT_FLAG_PLAYER_TARGET)
@@ -197,19 +194,11 @@ function c62242678.negop(e,tp,eg,ep,ev,re,r,rp)
 	Duel.RegisterEffect(e1,tp)
 end
 function c62242678.aclimit(e,re,tp)
-	return re:GetHandler():IsOnField()
-end
-
-function c62242678.damcon(e,tp,eg,ep,ev,re,r,rp)
-	local c=e:GetHandler()
-	local bc=c:GetBattleTarget()
-	return c:IsRelateToBattle() and bc:IsType(TYPE_MONSTER)
+	return re:GetHandler():IsOnField() or re:IsHasType(EFFECT_TYPE_ACTIVATE)
 end
 function c62242678.damtg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return true end
-	local c=e:GetHandler()
-	local bc=c:GetBattleTarget()
-	local dam=bc:GetTextAttack()
+	local dam=e:GetHandler():GetBattleTarget():GetBaseAttack()
 	if dam<0 then dam=0 end
 	Duel.SetTargetPlayer(1-tp)
 	Duel.SetTargetParam(dam)
@@ -219,19 +208,19 @@ function c62242678.damop(e,tp,eg,ep,ev,re,r,rp)
 	local p,d=Duel.GetChainInfo(0,CHAININFO_TARGET_PLAYER,CHAININFO_TARGET_PARAM)
 	Duel.Damage(p,d,REASON_EFFECT)
 end
-
 function c62242678.spcon(e,tp,eg,ep,ev,re,r,rp)
 	return rp~=tp and e:GetHandler():GetPreviousControler()==tp
 end
-function c62242678.spfil(c,e,tp)
-	return c:IsLevelBelow(8) and c:IsAttribute(ATTRIBUTE_DARK) and c:IsRace(RACE_DRAGON) and c:IsType(TYPE_SYNCHRO) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
+function c62242678.spfilter(c,e,tp)
+	return c:IsLevelBelow(8) and c:IsRace(RACE_DRAGON) and c:IsAttribute(ATTRIBUTE_DARK)
+		and c:IsType(TYPE_SYNCHRO) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
 end
 function c62242678.sptg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
-	if chkc then return chkc:IsLocation(LOCATION_GRAVE) and chkc:IsControler(tp) and c62242678.spfil(chkc,e,tp) end
-	if chk==0 then return Duel.GetLocationCount(tp,LOCATION_MZONE)>0 and
-		Duel.IsExistingTarget(c62242678.spfil,tp,LOCATION_GRAVE,0,1,nil,e,tp) end
+	if chkc then return chkc:IsLocation(LOCATION_GRAVE) and chkc:IsControler(tp) and c62242678.spfilter(chkc,e,tp) end
+	if chk==0 then return Duel.GetLocationCount(tp,LOCATION_MZONE)>0
+		and Duel.IsExistingTarget(c62242678.spfilter,tp,LOCATION_GRAVE,0,1,nil,e,tp) end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
-	local g=Duel.SelectTarget(tp,c62242678.spfil,tp,LOCATION_GRAVE,0,1,1,nil,e,tp)
+	local g=Duel.SelectTarget(tp,c62242678.spfilter,tp,LOCATION_GRAVE,0,1,1,nil,e,tp)
 	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,g,1,0,0)
 end
 function c62242678.spop(e,tp,eg,ep,ev,re,r,rp)

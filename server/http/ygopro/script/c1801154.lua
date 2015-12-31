@@ -11,24 +11,20 @@ function c1801154.initial_effect(c)
 	e2:SetCategory(CATEGORY_SPECIAL_SUMMON)
 	e2:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_TRIGGER_F)
 	e2:SetProperty(EFFECT_FLAG_CARD_TARGET)
-	e2:SetRange(LOCATION_SZONE)
+	e2:SetRange(LOCATION_FZONE)
 	e2:SetCode(EVENT_TO_GRAVE)
 	e2:SetTarget(c1801154.sptg)
 	e2:SetOperation(c1801154.spop)
 	c:RegisterEffect(e2)
 end
-function c1801154.filter2(c,code)
-	if not c.material_count or not c:IsReason(REASON_DESTROY) or not c:IsReason(REASON_EFFECT) then return false end
-	for i=1,c.material_count do
-		if code==c.material[i] then return true end
-	end
-	return false
-end
 function c1801154.filter1(c,e,tp,eg)
-	if not c:IsCanBeSpecialSummoned(e,0,tp,false,false) then return false end
-	return eg:IsExists(c1801154.filter2,1,nil,c:GetCode())
+	return eg:IsExists(c1801154.filter2,1,nil,c:GetCode()) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
 end
-function c1801154.sptg(e,tp,eg,ep,ev,re,r,rp,chk)
+function c1801154.filter2(c,code)
+	return c:IsReason(REASON_DESTROY) and c:IsReason(REASON_EFFECT) and aux.IsMaterialListCode(c,code)
+end
+function c1801154.sptg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
+	if chkc then return chkc:IsLocation(LOCATION_GRAVE) and chkc:IsControler(tp) and c1801154.filter1(chkc,e,tp,eg) end
 	if chk==0 then return e:GetHandler():IsRelateToEffect(e) and Duel.GetLocationCount(tp,LOCATION_MZONE)>0
 		and Duel.IsExistingTarget(c1801154.filter1,tp,LOCATION_GRAVE,0,1,nil,e,tp,eg) end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)

@@ -1,12 +1,7 @@
 --クリフォート・ゲノム
 function c37991342.initial_effect(c)
 	--pendulum summon
-	aux.AddPendulumProcedure(c)
-	--Activate
-	local e1=Effect.CreateEffect(c)
-	e1:SetType(EFFECT_TYPE_ACTIVATE)
-	e1:SetCode(EVENT_FREE_CHAIN)
-	c:RegisterEffect(e1)
+	aux.EnablePendulumAttribute(c)
 	--splimit
 	local e2=Effect.CreateEffect(c)
 	e2:SetType(EFFECT_TYPE_FIELD)
@@ -14,7 +9,7 @@ function c37991342.initial_effect(c)
 	e2:SetProperty(EFFECT_FLAG_PLAYER_TARGET+EFFECT_FLAG_CANNOT_DISABLE)
 	e2:SetRange(LOCATION_PZONE)
 	e2:SetTargetRange(1,0)
-	e2:SetCondition(c37991342.splimcon)
+	e2:SetCondition(aux.nfbdncon)
 	e2:SetTarget(c37991342.splimit)
 	c:RegisterEffect(e2)
 	--atk down
@@ -63,9 +58,6 @@ function c37991342.initial_effect(c)
 	e8:SetTarget(c37991342.destg)
 	e8:SetOperation(c37991342.desop)
 	c:RegisterEffect(e8)
-end
-function c37991342.splimcon(e)
-	return not e:GetHandler():IsForbidden()
 end
 function c37991342.splimit(e,c)
 	return not c:IsSetCard(0xaa)

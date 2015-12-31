@@ -13,10 +13,12 @@ function c10000090.initial_effect(c)
 	e2:SetCategory(CATEGORY_SPECIAL_SUMMON)
 	e2:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_TRIGGER_F)
 	e2:SetCode(EVENT_TO_GRAVE)
+	e2:SetProperty(EFFECT_FLAG_CVAL_CHECK)
 	e2:SetRange(LOCATION_GRAVE)
 	e2:SetCondition(c10000090.spcon1)
 	e2:SetTarget(c10000090.sptg1)
 	e2:SetOperation(c10000090.spop1)
+	e2:SetValue(c10000090.valcheck)
 	c:RegisterEffect(e2)
 	--immune
 	local e3=Effect.CreateEffect(c)
@@ -49,21 +51,23 @@ function c10000090.initial_effect(c)
 	c:RegisterEffect(e5)
 end
 function c10000090.cfilter(c,tp)
-	return c:IsCode(10000010) and c:IsControler(tp) and c:IsPreviousLocation(LOCATION_ONFIELD) and c:IsPreviousPosition(POS_FACEUP)
+	return c:IsCode(10000010) and c:IsControler(tp) and c:IsPreviousLocation(LOCATION_ONFIELD)
 end
-function c10000090.spcon1(e,tp,eg,ep,ev,re,r,rp,chk)
+function c10000090.spcon1(e,tp,eg,ep,ev,re,r,rp)
 	return not eg:IsContains(e:GetHandler()) and eg:IsExists(c10000090.cfilter,1,nil,tp)
 end
 function c10000090.sptg1(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return true end
 	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,e:GetHandler(),1,0,0)
-	Duel.SetChainLimit(aux.FALSE)
 end
 function c10000090.spop1(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	if c:IsRelateToEffect(e) and Duel.SpecialSummon(c,0,tp,tp,true,true,POS_FACEUP)~=0 then
 		c:CompleteProcedure()
 	end
+end
+function c10000090.valcheck(e)
+	Duel.SetChainLimit(aux.FALSE)
 end
 function c10000090.efilter(e,te)
 	return te:GetOwner()~=e:GetOwner()
@@ -74,7 +78,7 @@ function c10000090.tgcost(e,tp,eg,ep,ev,re,r,rp,chk)
 end
 function c10000090.tgtg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsExistingMatchingCard(Card.IsAbleToGrave,tp,LOCATION_MZONE,LOCATION_MZONE,1,nil) end
-	Duel.SetOperationInfo(0,CATEGORY_TOGRAVE,nil,1,1-tp,LOCATION_MZONE)
+	Duel.SetOperationInfo(0,CATEGORY_TOGRAVE,nil,1,PLAYER_ALL,LOCATION_MZONE)
 end
 function c10000090.tgop(e,tp,eg,ep,ev,re,r,rp)
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TOGRAVE)

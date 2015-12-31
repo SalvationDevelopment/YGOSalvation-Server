@@ -28,9 +28,7 @@ function c5183693.initial_effect(c)
 	e4:SetDescription(aux.Stringid(5183693,0))
 	e4:SetCategory(CATEGORY_TODECK)
 	e4:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O)
-	e4:SetProperty(EFFECT_FLAG_DAMAGE_STEP)
 	e4:SetCode(EVENT_TO_GRAVE)
-	e4:SetCondition(c5183693.tdcon)
 	e4:SetTarget(c5183693.tdtg)
 	e4:SetOperation(c5183693.tdop)
 	c:RegisterEffect(e4)
@@ -65,7 +63,7 @@ function c5183693.atkup(e,tp,eg,ep,ev,re,r,rp)
 	local e1=Effect.CreateEffect(e:GetHandler())
 	e1:SetType(EFFECT_TYPE_SINGLE)
 	e1:SetCode(EFFECT_UPDATE_ATTACK)
-	e1:SetReset(RESET_PHASE+RESET_DAMAGE_CAL)
+	e1:SetReset(RESET_PHASE+PHASE_DAMAGE_CAL)
 	if a==eqc then
 		e1:SetValue((ld-la)*500)
 		a:RegisterEffect(e1)
@@ -73,9 +71,6 @@ function c5183693.atkup(e,tp,eg,ep,ev,re,r,rp)
 		e1:SetValue((la-ld)*500)
 		d:RegisterEffect(e1)
 	end
-end
-function c5183693.tdcon(e,tp,eg,ep,ev,re,r,rp)
-	return not e:GetHandler():IsReason(REASON_RETURN)
 end
 function c5183693.tdtg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return e:GetHandler():IsAbleToDeck() end

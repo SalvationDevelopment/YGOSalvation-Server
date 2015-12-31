@@ -14,7 +14,7 @@ function c16708652.initial_effect(c)
 end
 function c16708652.condition(e,tp,eg,ep,ev,re,r,rp)
 	local ph=Duel.GetCurrentPhase()
-	return ph==PHASE_BATTLE or (ph==PHASE_DAMAGE and not Duel.IsDamageCalculated())
+	return ph>=PHASE_BATTLE_START and ph<=PHASE_BATTLE and (ph~=PHASE_DAMAGE or Duel.IsDamageCalculated())
 end
 function c16708652.filter(c)
 	return c:IsPosition(POS_FACEUP_ATTACK) and c:IsSetCard(0x11)
@@ -38,7 +38,7 @@ function c16708652.activate(e,tp,eg,ep,ev,re,r,rp)
 		local e1=Effect.CreateEffect(e:GetHandler())
 		e1:SetType(EFFECT_TYPE_SINGLE)
 		e1:SetCode(EFFECT_UPDATE_ATTACK)
-		e1:SetReset(RESET_EVENT+0x1fe0000+RESET_PHASE+RESET_END)
+		e1:SetReset(RESET_EVENT+0x1fe0000+RESET_PHASE+PHASE_END)
 		e1:SetValue(tc1:GetAttack())
 		tc2:RegisterEffect(e1)
 	end

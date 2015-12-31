@@ -28,10 +28,12 @@ function c37926346.cost(e,tp,eg,ep,ev,re,r,rp,chk)
 end
 function c37926346.target(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return true end
-	Duel.SetOperationInfo(0,CATEGORY_DISABLE_SUMMON,eg,eg:GetCount(),0,0)
-	Duel.SetOperationInfo(0,CATEGORY_DESTROY,eg,eg:GetCount(),0,0)
+	local g=eg:Filter(c37926346.filter,nil)
+	Duel.SetOperationInfo(0,CATEGORY_DISABLE_SUMMON,g,g:GetCount(),0,0)
+	Duel.SetOperationInfo(0,CATEGORY_DESTROY,g,g:GetCount(),0,0)
 end
 function c37926346.operation(e,tp,eg,ep,ev,re,r,rp,chk)
-	Duel.NegateSummon(eg)
-	Duel.Destroy(eg,REASON_EFFECT)
+	local g=eg:Filter(c37926346.filter,nil)
+	Duel.NegateSummon(g)
+	Duel.Destroy(g,REASON_EFFECT)
 end

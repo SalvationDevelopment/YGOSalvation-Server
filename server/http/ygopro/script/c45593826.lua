@@ -1,4 +1,4 @@
---Draghig, Malebranche of the Burning Abyss
+--彼岸の悪鬼 ドラゴネル
 function c45593826.initial_effect(c)
 	--self destroy
 	local e1=Effect.CreateEffect(c)
@@ -26,7 +26,6 @@ function c45593826.initial_effect(c)
 	e3:SetProperty(EFFECT_FLAG_DAMAGE_STEP+EFFECT_FLAG_DELAY)
 	e3:SetCode(EVENT_TO_GRAVE)
 	e3:SetCountLimit(1,45593826)
-	e3:SetCondition(c45593826.dtcon)
 	e3:SetTarget(c45593826.dttg)
 	e3:SetOperation(c45593826.dtop)
 	c:RegisterEffect(e3)
@@ -49,13 +48,9 @@ function c45593826.sstg(e,tp,eg,ep,ev,re,r,rp,chk)
 	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,e:GetHandler(),1,0,0)
 end
 function c45593826.ssop(e,tp,eg,ep,ev,re,r,rp)
-	if Duel.IsExistingMatchingCard(c45593826.filter,tp,LOCATION_ONFIELD,0,1,nil) then return end
 	if e:GetHandler():IsRelateToEffect(e) then
 		Duel.SpecialSummon(e:GetHandler(),0,tp,tp,false,false,POS_FACEUP)
 	end
-end
-function c45593826.dtcon(e,tp,eg,ep,ev,re,r,rp)
-	return not e:GetHandler():IsReason(REASON_RETURN)
 end
 function c45593826.dttg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsExistingMatchingCard(Card.IsSetCard,tp,LOCATION_DECK,0,1,nil,0xb1) end
