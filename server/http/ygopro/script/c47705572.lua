@@ -2,7 +2,7 @@
 --Moon-Light Wolf
 function c47705572.initial_effect(c)
 	--pendulum summon
-	aux.AddPendulumProcedure(c)
+	aux.EnablePendulumAttribute(c)
 	--Activate
 	local e1=Effect.CreateEffect(c)
 	e1:SetType(EFFECT_TYPE_ACTIVATE)
