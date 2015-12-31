@@ -6,7 +6,7 @@ function c38491199.initial_effect(c)
 	e1:SetCategory(CATEGORY_DESTROY+CATEGORY_NEGATE)
 	e1:SetType(EFFECT_TYPE_QUICK_O)
 	e1:SetCode(EVENT_CHAINING)
-	e1:SetRange(LOCATION_HAND+LOCATION_MZONE)
+	e1:SetRange(LOCATION_HAND)
 	e1:SetProperty(EFFECT_FLAG_DAMAGE_STEP+EFFECT_FLAG_DAMAGE_CAL)
 	e1:SetCondition(c38491199.negcon)
 	e1:SetCost(c38491199.negcost)
@@ -15,8 +15,8 @@ function c38491199.initial_effect(c)
 	c:RegisterEffect(e1)
 end
 function c38491199.negcost(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return e:GetHandler():IsDiscardable() end
-	Duel.SendtoGrave(e:GetHandler(),REASON_COST+REASON_DISCARD)
+	if chk==0 then return e:GetHandler():IsAbleToGraveAsCost() end
+	Duel.SendtoGrave(e:GetHandler(),REASON_COST)
 end
 function c38491199.negcon(e,tp,eg,ep,ev,re,r,rp)
 	return Duel.IsChainNegatable(ev) and aux.damcon1(e,tp,eg,ep,ev,re,r,rp)

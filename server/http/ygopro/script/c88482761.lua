@@ -1,95 +1,95 @@
---Scripted by Eerie Code
---Dice Roll Battle
+--ダイスロール・バトル
 function c88482761.initial_effect(c)
-	--Special Summon
+	--Activate
 	local e1=Effect.CreateEffect(c)
-	e1:SetDescription(aux.Stringid(88482761,0))
-	e1:SetCategory(CATEGORY_SPECIAL_SUMMON+CATEGORY_REMOVE)
+	e1:SetCategory(CATEGORY_SPECIAL_SUMMON)
+	e1:SetProperty(EFFECT_FLAG_CARD_TARGET)
 	e1:SetType(EFFECT_TYPE_ACTIVATE)
 	e1:SetCode(EVENT_ATTACK_ANNOUNCE)
-	e1:SetProperty(EFFECT_FLAG_CARD_TARGET)
-	e1:SetCondition(c88482761.spcon)
-	e1:SetTarget(c88482761.sptg)
-	e1:SetOperation(c88482761.spop)
+	e1:SetCondition(c88482761.condition)
+	e1:SetTarget(c88482761.target)
+	e1:SetOperation(c88482761.operation)
 	c:RegisterEffect(e1)
-	--Battle
+	--
 	local e2=Effect.CreateEffect(c)
-	e2:SetDescription(aux.Stringid(88482761,1))
+	e2:SetDescription(aux.Stringid(88482761,0))
 	e2:SetType(EFFECT_TYPE_QUICK_O)
-	e2:SetCode(EVENT_FREE_CHAIN)
-	e2:SetProperty(EFFECT_FLAG_CARD_TARGET)
-	e2:SetHintTiming(TIMING_BATTLE_PHASE)
 	e2:SetRange(LOCATION_GRAVE)
-	e2:SetCondition(c88482761.condition)
-	e2:SetCost(c88482761.cost)
-	e2:SetTarget(c88482761.target)
-	e2:SetOperation(c88482761.operation)
+	e2:SetProperty(EFFECT_FLAG_CARD_TARGET)
+	e2:SetCode(EVENT_FREE_CHAIN)
+	e2:SetCondition(c88482761.atkcon)
+	e2:SetCost(c88482761.atkcost)
+	e2:SetTarget(c88482761.atktg)
+	e2:SetOperation(c88482761.atkop)
 	c:RegisterEffect(e2)
 end
-
-function c88482761.spcon(e,tp,eg,ep,ev,re,r,rp)
+function c88482761.condition(e,tp,eg,ep,ev,re,r,rp)
 	return Duel.GetTurnPlayer()~=tp
 end
-function c88482761.spfil1(c,e,tp)
-	return c:IsSetCard(0x2016) and c:IsAbleToRemove() and Duel.IsExistingMatchingCard(c88482761.spfil2,tp,LOCATION_HAND,0,1,nil,e,tp,c:GetOriginalLevel())
+function c88482761.rmfilter1(c,e,tp)
+	return c:IsSetCard(0x2016) and c:IsAbleToRemove()
+		and Duel.IsExistingMatchingCard(c88482761.spfilter,tp,LOCATION_EXTRA,0,1,nil,e,tp,c:GetOriginalLevel())
 end
-function c88482761.spfil2(c,e,tp,lv)
-	return c:IsSetCard(0x2016) and c:IsType(TYPE_TUNER) and c:IsAbleToRemove() and Duel.IsExistingMatchingCard(c88482761.spfil3,tp,LOCATION_EXTRA,0,1,nil,e,tp,c:GetOriginalLevel()+lv)
+function c88482761.rmfilter2(c,lv)
+	return c:IsSetCard(0x2016) and c:IsType(TYPE_TUNER) and c:IsAbleToRemove() and c:GetOriginalLevel()==lv
 end
-function c88482761.spfil3(c,e,tp,lv)
-	return c:IsType(TYPE_SYNCHRO) and c:GetLevel()==lv and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
+function c88482761.spfilter(c,e,tp,lv)
+	return c:IsType(TYPE_SYNCHRO) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
+		and Duel.IsExistingMatchingCard(c88482761.rmfilter2,tp,LOCATION_HAND,0,1,nil,c:GetLevel()-lv)
 end
-function c88482761.sptg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
-	if chkc then return chkc:IsLocation(LOCATION_GRAVE) and chkc:IsControler(tp) and c88482761.spfil1(chkc,e,tp) end
-	if chk==0 then return Duel.GetLocationCount(tp,LOCATION_MZONE)>0 and
-		Duel.IsExistingTarget(c88482761.spfil1,tp,LOCATION_GRAVE,0,1,nil,e,tp) end
-	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
-	local g=Duel.SelectTarget(tp,c88482761.spfil1,tp,LOCATION_GRAVE,0,1,1,nil,e,tp)
-	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,g,1,0,0)
+function c88482761.target(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
+	if chkc then return chkc:IsLocation(LOCATION_GRAVE) and chkc:IsControler(tp) and c88482761.rmfilter1(chkc,e,tp) end
+	if chk==0 then return Duel.GetLocationCount(tp,LOCATION_MZONE)>0
+		and Duel.IsExistingTarget(c88482761.rmfilter1,tp,LOCATION_GRAVE,0,1,nil,e,tp) end
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_REMOVE)
+	local g=Duel.SelectTarget(tp,c88482761.rmfilter1,tp,LOCATION_GRAVE,0,1,1,nil,e,tp)
+	Duel.SetOperationInfo(0,CATEGORY_REMOVE,g,1,0,0)
+	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,tp,LOCATION_EXTRA)
 end
-function c88482761.spop(e,tp,eg,ep,ev,re,r,rp)
+function c88482761.operation(e,tp,eg,ep,ev,re,r,rp)
 	local tc=Duel.GetFirstTarget()
-	if tc:IsRelateToEffect(e) then
-		local lv1=tc:GetOriginalLevel()
+	if not tc:IsRelateToEffect(e) then return end
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
+	local g=Duel.SelectMatchingCard(tp,c88482761.spfilter,tp,LOCATION_EXTRA,0,1,1,nil,e,tp,tc:GetOriginalLevel())
+	if g:GetCount()>0 then
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_REMOVE)
-		local g=Duel.SelectMatchingCard(tp,c88482761.spfil2,tp,LOCATION_HAND,0,1,1,nil,e,tp,lv1)
-		if g:GetCount()>0 then
-			local tc2=g:GetFirst()
-			local lv2=tc2:GetOriginalLevel()
-			local rg=Group.FromCards(tc,tc2)
-			if Duel.Remove(rg,POS_FACEUP,REASON_EFFECT)>0 then
-				local g2=Duel.SelectMatchingCard(tp,c88482761.spfil3,tp,LOCATION_EXTRA,0,1,1,nil,e,tp,lv1+lv2)
-				if g2:GetCount()>0 then
-					Duel.SpecialSummon(g2,0,tp,tp,false,false,POS_FACEUP)
-				end
-			end
+		local rg=Duel.SelectMatchingCard(tp,c88482761.rmfilter2,tp,LOCATION_HAND,0,1,1,nil,g:GetFirst():GetLevel()-tc:GetOriginalLevel())
+		rg:AddCard(tc)
+		if Duel.Remove(rg,POS_FACEUP,REASON_EFFECT)==2 then
+			Duel.SpecialSummon(g,0,tp,tp,false,false,POS_FACEUP)
 		end
 	end
 end
-
-function c88482761.condition(e,tp,eg,ep,ev,re,r,rp)
-	return Duel.GetTurnPlayer()~=tp and Duel.GetCurrentPhase()==PHASE_BATTLE and Duel.GetCurrentChain()==0
+function c88482761.atkcon(e,tp,eg,ep,ev,re,r,rp)
+	return Duel.GetTurnPlayer()~=tp and (Duel.GetCurrentPhase()>=PHASE_BATTLE_START and Duel.GetCurrentPhase()<=PHASE_BATTLE)
+		and not Duel.CheckTiming(TIMING_BATTLE_START+TIMING_BATTLE_END)
 end
-function c88482761.cost(e,tp,eg,ep,ev,re,r,rp,chk)
+function c88482761.atkcost(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return e:GetHandler():IsAbleToRemoveAsCost() end
 	Duel.Remove(e:GetHandler(),POS_FACEUP,REASON_COST)
 end
-function c88482761.filter(c)
-	return c:IsFaceup() and c:IsPosition(POS_FACEUP_ATTACK) and c:IsType(TYPE_SYNCHRO)
+function c88482761.atkfilter(c)
+	return c:IsType(TYPE_SYNCHRO) and c:IsPosition(POS_FACEUP_ATTACK)
 end
-function c88482761.target(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
+function c88482761.atktg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then return false end
-	if chk==0 then return Duel.IsExistingTarget(c88482761.filter,tp,LOCATION_MZONE,0,1,nil) and Duel.IsExistingTarget(c88482761.filter,tp,0,LOCATION_MZONE,1,nil) end
-	local g1=Duel.SelectTarget(tp,c88482761.filter,tp,LOCATION_MZONE,0,1,1,nil)
-	e:SetLabelObject(g1:GetFirst())
-	local g2=Duel.SelectTarget(tp,c88482761.filter,tp,0,LOCATION_MZONE,1,1,nil)
+	if chk==0 then return Duel.IsExistingTarget(c88482761.atkfilter,tp,LOCATION_MZONE,0,1,nil)
+		and Duel.IsExistingTarget(c88482761.atkfilter,tp,0,LOCATION_MZONE,1,nil) end
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TARGET)
+	Duel.SelectTarget(tp,c88482761.atkfilter,tp,LOCATION_MZONE,0,1,1,nil)
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TARGET)
+	local g2=Duel.SelectTarget(tp,c88482761.atkfilter,tp,0,LOCATION_MZONE,1,1,nil)
+	e:SetLabelObject(g2:GetFirst())
 end
-function c88482761.operation(e,tp,eg,ep,ev,re,r,rp)
-	local tc1=e:GetLabelObject()
-	local g=Duel.GetChainInfo(0,CHAININFO_TARGET_CARDS)
-	local tc2=g:GetFirst()
-	if tc1==tc2 then tc2=g:GetNext() end
-	if tc1:IsRelateToEffect(e) and tc2:IsRelateToEffect(e) then
-		Duel.CalculateDamage(tc2,tc1)
+function c88482761.atkop(e,tp,eg,ep,ev,re,r,rp)
+	local g=Duel.GetChainInfo(0,CHAININFO_TARGET_CARDS):Filter(Card.IsRelateToEffect,nil,e)
+	if g:GetCount()==2 then
+		local c1=g:GetFirst()
+		local c2=g:GetNext()
+		if c1~=e:GetLabelObject() then c1,c2=c2,c1 end
+		if c1:IsControler(1-tp) and c1:IsPosition(POS_FACEUP_ATTACK) and not c1:IsImmuneToEffect(e)
+			and c2:IsControler(tp) then
+			Duel.CalculateDamage(c1,c2)
+		end
 	end
 end

@@ -9,7 +9,7 @@ function c712559.initial_effect(c)
 	local e2=Effect.CreateEffect(c)
 	e2:SetType(EFFECT_TYPE_FIELD)
 	e2:SetCode(EFFECT_UPDATE_ATTACK)
-	e2:SetRange(LOCATION_SZONE)
+	e2:SetRange(LOCATION_FZONE)
 	e2:SetTargetRange(LOCATION_MZONE,LOCATION_MZONE)
 	e2:SetTarget(aux.TargetBoolFunction(Card.IsSetCard,0x4))
 	e2:SetValue(200)
@@ -20,7 +20,7 @@ function c712559.initial_effect(c)
 	e3:SetCategory(CATEGORY_SPECIAL_SUMMON)
 	e3:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_TRIGGER_O)
 	e3:SetProperty(EFFECT_FLAG_DAMAGE_STEP)
-	e3:SetRange(LOCATION_SZONE)
+	e3:SetRange(LOCATION_FZONE)
 	e3:SetCode(EVENT_TO_GRAVE)
 	e3:SetCountLimit(1)
 	e3:SetCondition(c712559.condition)
@@ -28,14 +28,11 @@ function c712559.initial_effect(c)
 	e3:SetOperation(c712559.operation)
 	c:RegisterEffect(e3)
 end
-function c712559.cfilter(c)
-	return c:IsReason(REASON_DESTROY) and c:IsLevelAbove(1) and c:IsSetCard(0x4)
-end
 function c712559.condition(e,tp,eg,ep,ev,re,r,rp)
 	local lv=0
 	local tc=eg:GetFirst()
 	while tc do
-		if tc:IsReason(REASON_DESTROY) and tc:IsSetCard(0x4) then
+		if tc:IsReason(REASON_DESTROY) and tc:IsSetCard(0x4) and not tc:IsPreviousLocation(LOCATION_SZONE) then
 			local tlv=tc:GetLevel()
 			if tlv>lv then lv=tlv end
 		end

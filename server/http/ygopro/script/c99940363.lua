@@ -23,15 +23,11 @@ function c99940363.initial_effect(c)
 	e2:SetOperation(c99940363.operation)
 	c:RegisterEffect(e2)
 end
-
-function c99940363.cfilter(c)
+function c99940363.mfilter(c)
 	return c:IsFaceup() and c:IsAttackAbove(2400) and c:GetDefence()==1000
 end
-function c99940363.condition(e,c)
-	if c==nil then return true end
-	local tp=c:GetControler()
-	return Duel.GetLocationCount(tp,LOCATION_MZONE)>0
-		and Duel.IsExistingMatchingCard(c99940363.cfilter,tp,LOCATION_MZONE,0,1,nil)
+function c99940363.condition(e,tp,eg,ep,ev,re,r,rp)
+	return Duel.IsExistingMatchingCard(c99940363.mfilter,tp,LOCATION_MZONE,0,1,nil)
 end
 function c99940363.filter(c)
 	return c:IsFacedown() and c:IsDestructable()

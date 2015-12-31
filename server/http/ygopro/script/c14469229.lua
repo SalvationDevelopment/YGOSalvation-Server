@@ -1,12 +1,7 @@
 --宝玉の守護者
 function c14469229.initial_effect(c)
 	--pendulum summon
-	aux.AddPendulumProcedure(c)
-	--Activate
-	local e1=Effect.CreateEffect(c)
-	e1:SetType(EFFECT_TYPE_ACTIVATE)
-	e1:SetCode(EVENT_FREE_CHAIN)
-	c:RegisterEffect(e1)
+	aux.EnablePendulumAttribute(c)
 	--replace
 	local e2=Effect.CreateEffect(c)
 	e2:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
@@ -29,7 +24,7 @@ function c14469229.initial_effect(c)
 end
 function c14469229.indfilter(c,tp)
 	return c:IsFaceup() and c:IsControler(tp) and c:IsOnField() and c:IsReason(REASON_EFFECT)
-		and (c:IsSetCard(0x1034) or (c:IsLocation(LOCATION_MZONE) and (c:IsCode(79407975) or c:IsCode(79856792))))
+		and (c:IsSetCard(0x1034) or (c:IsLocation(LOCATION_MZONE) and c:IsSetCard(0x2034)))
 end
 function c14469229.indtg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return eg:IsExists(c14469229.indfilter,1,nil,tp) end
@@ -58,7 +53,7 @@ function c14469229.operation(e,tp,eg,ep,ev,re,r,rp)
 		e1:SetType(EFFECT_TYPE_SINGLE)
 		e1:SetCode(EFFECT_SET_ATTACK_FINAL)
 		e1:SetValue(atk*2)
-		e1:SetReset(RESET_EVENT+0x1fe0000+RESET_PHASE+RESET_DAMAGE_CAL)
+		e1:SetReset(RESET_EVENT+0x1fe0000+RESET_PHASE+PHASE_DAMAGE_CAL)
 		tc:RegisterEffect(e1)
 		local e2=e1:Clone()
 		e2:SetCode(EFFECT_SET_DEFENCE_FINAL)
@@ -68,7 +63,7 @@ function c14469229.operation(e,tp,eg,ep,ev,re,r,rp)
 		e3:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_CONTINUOUS)
 		e3:SetCode(EVENT_DAMAGE_STEP_END)
 		e3:SetOperation(c14469229.desop)
-		e3:SetReset(RESET_EVENT+0x1fe0000+RESET_PHASE+RESET_DAMAGE)
+		e3:SetReset(RESET_EVENT+0x1fe0000+RESET_PHASE+PHASE_DAMAGE)
 		tc:RegisterEffect(e3)
 	end
 end

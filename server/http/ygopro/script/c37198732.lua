@@ -14,7 +14,14 @@ function c37198732.cfilter(c)
 	return c:GetLevel()>0 and c:IsAbleToGraveAsCost()
 end
 function c37198732.cost(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.IsExistingMatchingCard(c37198732.cfilter,tp,LOCATION_HAND,0,1,nil) end
+	if chk==0 then 
+		if Duel.IsExistingMatchingCard(c37198732.cfilter,tp,LOCATION_HAND,0,1,nil) then
+			e:SetLabel(1)
+			return true
+		else
+			return false
+		end
+	end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TOGRAVE)
 	local g=Duel.SelectMatchingCard(tp,c37198732.cfilter,tp,LOCATION_HAND,0,1,1,nil)
 	Duel.SendtoGrave(g,REASON_COST)
@@ -26,7 +33,11 @@ function c37198732.filter(c)
 end
 function c37198732.target(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then return chkc:IsLocation(LOCATION_MZONE) and chkc:IsControler(tp) and c37198732.filter(chkc) end
-	if chk==0 then return Duel.IsExistingTarget(c37198732.filter,tp,LOCATION_MZONE,0,1,nil) end
+	if chk==0 then
+		if e:GetLabel()~=1 then return false end
+		e:SetLabel(0)
+		return Duel.IsExistingTarget(c37198732.filter,tp,LOCATION_MZONE,0,1,nil)
+	end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_FACEUP)
 	Duel.SelectTarget(tp,c37198732.filter,tp,LOCATION_MZONE,0,1,2,nil)
 end
@@ -42,7 +53,7 @@ function c37198732.activate(e,tp,eg,ep,ev,re,r,rp)
 			e1:SetType(EFFECT_TYPE_SINGLE)
 			e1:SetCode(EFFECT_CHANGE_LEVEL)
 			e1:SetValue(lv)
-			e1:SetReset(RESET_EVENT+0x1fe0000+RESET_PHASE+RESET_END)
+			e1:SetReset(RESET_EVENT+0x1fe0000+RESET_PHASE+PHASE_END)
 			tc:RegisterEffect(e1)
 		end
 		tc=g:GetNext()

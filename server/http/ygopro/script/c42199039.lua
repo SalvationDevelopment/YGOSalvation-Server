@@ -34,7 +34,6 @@ function c42199039.initial_effect(c)
 	e4:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O)
 	e4:SetProperty(EFFECT_FLAG_DAMAGE_STEP+EFFECT_FLAG_DELAY)
 	e4:SetCode(EVENT_TO_GRAVE)
-	e4:SetCondition(c42199039.thcon)
 	e4:SetTarget(c42199039.thtg)
 	e4:SetOperation(c42199039.thop)
 	c:RegisterEffect(e4)
@@ -66,17 +65,15 @@ function c42199039.dtop(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	if not c:IsRelateToEffect(e) then return end
 	local tc=Duel.GetFirstTarget()
-	if tc:IsRelateToEffect(e) and Duel.SendtoHand(tc,nil,REASON_EFFECT)~=0 then
+	if tc:IsRelateToEffect(e) and Duel.SendtoHand(tc,nil,REASON_EFFECT)~=0 and tc:IsLocation(LOCATION_HAND) then
 		Duel.ConfirmCards(1-tp,tc)
+		local ec=c:GetEquipTarget()
 		local e1=Effect.CreateEffect(c)
-		e1:SetType(EFFECT_TYPE_EQUIP)
+		e1:SetType(EFFECT_TYPE_SINGLE)
 		e1:SetCode(EFFECT_DIRECT_ATTACK)
 		e1:SetReset(RESET_EVENT+0x1fe0000+RESET_PHASE+PHASE_END)
-		c:RegisterEffect(e1)
+		ec:RegisterEffect(e1)
 	end
-end
-function c42199039.thcon(e,tp,eg,ep,ev,re,r,rp)
-	return not e:GetHandler():IsReason(REASON_RETURN)
 end
 function c42199039.thfilter(c)
 	return c:IsSetCard(0x60) and not c:IsCode(42199039) and c:IsAbleToHand()

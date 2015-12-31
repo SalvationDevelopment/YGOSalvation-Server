@@ -4,7 +4,6 @@ function c58921041.initial_effect(c)
 	local e1=Effect.CreateEffect(c)
 	e1:SetType(EFFECT_TYPE_ACTIVATE)
 	e1:SetCode(EVENT_FREE_CHAIN)
-	e1:SetHintTiming(0,TIMING_DRAW_PHASE)
 	c:RegisterEffect(e1)
 	--cannot activate
 	local e2=Effect.CreateEffect(c)
@@ -30,7 +29,7 @@ end
 function c58921041.aclimset(e,tp,eg,ep,ev,re,r,rp)
 	local tc=eg:GetFirst()
 	while tc do
-		tc:RegisterFlagEffect(58921041,RESET_EVENT+0x1fe0000+RESET_PHASE+RESET_END+RESET_OPPO_TURN,0,1)
+		tc:RegisterFlagEffect(58921041,RESET_EVENT+0x1fe0000+RESET_PHASE+PHASE_END+RESET_OPPO_TURN,0,1)
 		tc=eg:GetNext()
 	end
 end

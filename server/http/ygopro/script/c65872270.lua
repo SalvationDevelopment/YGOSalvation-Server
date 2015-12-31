@@ -22,8 +22,7 @@ function c65872270.initial_effect(c)
 	e3:SetCategory(CATEGORY_TOHAND)
 	e3:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O)
 	e3:SetCode(EVENT_TO_GRAVE)
-	e3:SetProperty(EFFECT_FLAG_DAMAGE_STEP+EFFECT_FLAG_DELAY)
-	e3:SetCondition(c65872270.thcon)
+	e3:SetProperty(EFFECT_FLAG_DELAY)
 	e3:SetTarget(c65872270.thtg)
 	e3:SetOperation(c65872270.thop)
 	c:RegisterEffect(e3)
@@ -50,7 +49,7 @@ function c65872270.destg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsExistingMatchingCard(c65872270.desfilter,tp,LOCATION_ONFIELD,0,1,e:GetHandler())
 		and Duel.IsExistingMatchingCard(Card.IsAbleToHand,tp,0,LOCATION_ONFIELD,1,nil)
 		and e:GetHandler():GetFlagEffect(65872270)==0 end
-	e:GetHandler():RegisterFlagEffect(65872270,RESET_PHASE+RESET_END,0,1)
+	e:GetHandler():RegisterFlagEffect(65872270,RESET_PHASE+PHASE_END,0,1)
 	Duel.SetOperationInfo(0,CATEGORY_DESTROY,nil,1,tp,LOCATION_ONFIELD)
 end
 function c65872270.desop(e,tp,eg,ep,ev,re,r,rp)
@@ -68,9 +67,6 @@ function c65872270.desop(e,tp,eg,ep,ev,re,r,rp)
 		local rg=g:Select(tp,ct2,ct2,nil)
 		Duel.SendtoHand(rg,nil,REASON_EFFECT)
 	end
-end
-function c65872270.thcon(e,tp,eg,ep,ev,re,r,rp)
-	return not e:GetHandler():IsReason(REASON_RETURN)
 end
 function c65872270.thfilter(c)
 	return c:IsFaceup() and c:IsSetCard(0xc8) and c:IsAbleToHand()

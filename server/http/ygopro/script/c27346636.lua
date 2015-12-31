@@ -2,7 +2,7 @@
 function c27346636.initial_effect(c)
 	--fusion material
 	c:EnableReviveLimit()
-	aux.AddFusionProcCodeFun(c,78868776,aux.FilterBoolFunction(Card.IsSetCard,0x19),2,true,true)
+	aux.AddFusionProcCodeFun(c,78868776,aux.FilterBoolFunction(Card.IsFusionSetCard,0x19),2,true,true)
 	--spsummon condition
 	local e1=Effect.CreateEffect(c)
 	e1:SetType(EFFECT_TYPE_SINGLE)
@@ -38,7 +38,7 @@ function c27346636.splimit(e,se,sp,st)
 	return e:GetHandler():GetLocation()~=LOCATION_EXTRA
 end
 function c27346636.spfilter1(c,tp)
-	return c:IsCode(78868776) and c:IsAbleToDeckOrExtraAsCost() and c:IsCanBeFusionMaterial(true)
+	return c:IsCode(78868776) and c:IsAbleToDeckOrExtraAsCost() and c:IsCanBeFusionMaterial(nil,true)
 		and Duel.IsExistingMatchingCard(c27346636.spfilter2,tp,LOCATION_MZONE,0,2,c)
 end
 function c27346636.spfilter2(c)

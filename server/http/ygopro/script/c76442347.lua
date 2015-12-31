@@ -4,6 +4,7 @@ function c76442347.initial_effect(c)
 	local e1=Effect.CreateEffect(c)
 	e1:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_CONTINUOUS)
 	e1:SetCode(EVENT_FLIP)
+	e1:SetProperty(EFFECT_FLAG_CANNOT_DISABLE)
 	e1:SetOperation(c76442347.flipop)
 	c:RegisterEffect(e1)
 	--special summon
@@ -34,7 +35,7 @@ function c76442347.sptg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chk==0 then return true end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
 	local g=Duel.SelectTarget(tp,c76442347.filter,tp,LOCATION_GRAVE,0,1,1,e:GetHandler(),e,tp)
-	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,g,g:GetCount(),0,0)
+	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,g,1,0,0)
 end
 function c76442347.spop(e,tp,eg,ep,ev,re,r,rp)
 	local tc=Duel.GetFirstTarget()

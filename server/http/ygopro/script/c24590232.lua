@@ -15,70 +15,34 @@ end
 function c24590232.filter1(c,e,tp)
 	local lv=c:GetLevel()
 	return c:IsType(TYPE_SYNCHRO) and lv<9 and c:IsCanBeSpecialSummoned(e,SUMMON_TYPE_SYNCHRO,tp,false,false)
-		and Duel.IsExistingMatchingCard(c24590232.filter2,tp,LOCATION_GRAVE,0,1,nil,c,tp)
+		and Duel.IsExistingMatchingCard(c24590232.filter2,tp,LOCATION_GRAVE,0,1,nil,tp,lv)
 end
-function c24590232.filter2(c,cs,tp)
-	if c:IsType(TYPE_TUNER) and c:GetLevel()<cs:GetLevel() and c:IsCanBeSynchroMaterial() and c:IsAbleToRemove() then
-		local lv=cs:GetLevel()-c:GetLevel()
-		local g=Group.CreateGroup()
-		g:AddCard(c)
-		return Duel.IsExistingMatchingCard(c24590232.filter3,tp,LOCATION_GRAVE,0,1,nil,cs,c,tp,lv,g)
-	else
-		return false
-	end
+function c24590232.filter2(c,tp,lv)
+	local rlv=lv-c:GetLevel()
+	local rg=Duel.GetMatchingGroup(c24590232.filter3,tp,LOCATION_GRAVE,0,c)
+	return rlv>0 and c:IsType(TYPE_TUNER) and c:IsAbleToRemove()
+		and rg:CheckWithSumEqual(Card.GetLevel,rlv,1,63)
 end
-function c24590232.filter3(c,cs,ct,tp,lv,g)
-	if c:IsType(TYPE_TUNER) or c:GetLevel()>lv or not c:IsCanBeSynchroMaterial() or not c:IsAbleToRemove() then return false end
-	local gr=Group.CreateGroup()
-	local tg=g:GetFirst()
-	while tg do
-		if c==tg then
-			return false
-		else
-			gr:AddCard(tg)
-			tg=g:GetNext()
-		end
-	end
-	gr:AddCard(c)
-	if c:GetLevel()==lv then
-		return c24590232.areValidMats(cs,ct,tp,gr)
-	else
-		local lvr=lv-c:GetLevel()
-		return Duel.IsExistingMatchingCard(c24590232.filter3,tp,LOCATION_GRAVE,0,1,nil,cs,ct,tp,lvr,gr)
-	end
-end
-function c24590232.areValidMats(cs,ct,tp,mg)
-	local gs=Duel.GetMatchingGroup(Card.IsSynchroSummonable,tp,LOCATION_EXTRA,0,nil,ct,mg)
-	if gs:GetCount()>0 then
-		local ts=gs:GetFirst()
-		while ts do
-			if cs==ts then return true end
-			ts=gs:GetNext()
-		end
-	end
-	return false
+function c24590232.filter3(c)
+	return c:GetLevel()>0 and not c:IsType(TYPE_TUNER) and c:IsAbleToRemove()
 end
 function c24590232.activate(e,tp,eg,ep,ev,re,r,rp)
-	local c=e:GetHandler()
-	if Duel.NegateAttack() and Duel.GetLocationCount(tp,LOCATION_MZONE)>1
+	if Duel.NegateAttack() and Duel.GetLocationCount(tp,LOCATION_MZONE)>0
 		and Duel.IsExistingMatchingCard(c24590232.filter1,tp,LOCATION_EXTRA,0,1,nil,e,tp)
 		and Duel.SelectYesNo(tp,aux.Stringid(24590232,0)) then
 		Duel.BreakEffect()
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
 		local g1=Duel.SelectMatchingCard(tp,c24590232.filter1,tp,LOCATION_EXTRA,0,1,1,nil,e,tp)
-		local tg1=g1:GetFirst()
+		local lv=g1:GetFirst():GetLevel()
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_REMOVE)
-		local g2=Duel.SelectMatchingCard(tp,c24590232.filter2,tp,LOCATION_GRAVE,0,1,1,nil,tg1,tp)
-		local tg2=g2:GetFirst()
-		local lv=tg1:GetLevel()-tg2:GetLevel()
+		local g2=Duel.SelectMatchingCard(tp,c24590232.filter2,tp,LOCATION_GRAVE,0,1,1,nil,tp,lv)
+		local rlv=lv-g2:GetFirst():GetLevel()
+		local rg=Duel.GetMatchingGroup(c24590232.filter3,tp,LOCATION_GRAVE,0,g2:GetFirst())
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_REMOVE)
-		while lv>0 do
-			local g3=Duel.SelectMatchingCard(tp,c24590232.filter3,tp,LOCATION_GRAVE,0,1,1,nil,tg1,tg2,tp,lv,g2)
-			local tg3=g3:GetFirst()
-			g2:AddCard(tg3)
-			lv=lv-tg3:GetLevel()
-		end
-		Duel.Remove(g2,POS_FACEUP,REASON_EFFECT+REASON_SYNCHRO+REASON_MATERIAL)
+		local g3=rg:SelectWithSumEqual(tp,Card.GetLevel,rlv,1,63)
+		g2:Merge(g3)
+		Duel.Remove(g2,POS_FACEUP,REASON_EFFECT)
 		Duel.SpecialSummon(g1,SUMMON_TYPE_SYNCHRO,tp,tp,false,false,POS_FACEUP)
+		g1:GetFirst():CompleteProcedure()
 	end
 end

@@ -27,7 +27,7 @@ function c85374678.initial_effect(c)
 	c:RegisterEffect(e3)
 end
 function c85374678.filter(c,e,tp)
-	return c:IsSetCard(0xd5) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
+	return c:IsSetCard(0xdc) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
 end
 function c85374678.sptg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.GetLocationCount(tp,LOCATION_MZONE)>0
@@ -43,7 +43,7 @@ function c85374678.spop(e,tp,eg,ep,ev,re,r,rp)
 	end
 end
 function c85374678.drcfilter(c)
-	return c:IsSetCard(0xd5) and c:IsDiscardable()
+	return c:IsSetCard(0xdc) and c:IsDiscardable()
 end
 function c85374678.drcost(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsExistingMatchingCard(c85374678.drcfilter,tp,LOCATION_HAND,0,1,nil) end

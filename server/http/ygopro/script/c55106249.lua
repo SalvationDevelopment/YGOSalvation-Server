@@ -1,12 +1,7 @@
 --ブンボーグ006
 function c55106249.initial_effect(c)
 	--pendulum summon
-	aux.AddPendulumProcedure(c)
-	--Activate
-	local e1=Effect.CreateEffect(c)
-	e1:SetType(EFFECT_TYPE_ACTIVATE)
-	e1:SetCode(EVENT_FREE_CHAIN)
-	c:RegisterEffect(e1)
+	aux.EnablePendulumAttribute(c)
 	--splimit
 	local e2=Effect.CreateEffect(c)
 	e2:SetType(EFFECT_TYPE_FIELD)
@@ -14,7 +9,7 @@ function c55106249.initial_effect(c)
 	e2:SetCode(EFFECT_CANNOT_SPECIAL_SUMMON)
 	e2:SetProperty(EFFECT_FLAG_PLAYER_TARGET+EFFECT_FLAG_CANNOT_DISABLE)
 	e2:SetTargetRange(1,0)
-	e2:SetCondition(c55106249.splimcon)
+	e2:SetCondition(aux.nfbdncon)
 	e2:SetTarget(c55106249.splimit)
 	c:RegisterEffect(e2)
 	--pos
@@ -48,9 +43,6 @@ function c55106249.initial_effect(c)
 	e6:SetTarget(c55106249.thtg)
 	e6:SetOperation(c55106249.thop)
 	c:RegisterEffect(e6)
-end
-function c55106249.splimcon(e)
-	return not e:GetHandler():IsForbidden()
 end
 function c55106249.splimit(e,c,tp,sumtp,sumpos)
 	return not c:IsSetCard(0xab) and bit.band(sumtp,SUMMON_TYPE_PENDULUM)==SUMMON_TYPE_PENDULUM

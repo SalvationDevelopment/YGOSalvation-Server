@@ -13,7 +13,6 @@ function c30338466.initial_effect(c)
 	--
 	local e2=Effect.CreateEffect(c)
 	e2:SetDescription(aux.Stringid(30338466,1))
-	e2:SetCategory(CATEGORY_TOGRAVE)
 	e2:SetProperty(EFFECT_FLAG_CARD_TARGET)
 	e2:SetType(EFFECT_TYPE_ACTIVATE)
 	e2:SetCode(EVENT_FREE_CHAIN)
@@ -50,6 +49,6 @@ end
 function c30338466.activate2(e,tp,eg,ep,ev,re,r,rp)
 	local tc=Duel.GetFirstTarget()
 	if tc:IsRelateToEffect(e) then
-		Duel.SendtoGrave(tc,REASON_EFFECT)
+		Duel.SendtoGrave(tc,REASON_EFFECT+REASON_RETURN)
 	end
 end

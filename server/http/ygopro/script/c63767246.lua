@@ -1,108 +1,108 @@
---Scripted by Eerie Code
---Number 38: Hope Harbinger Dragon Titanic Galaxy
+--No.38 希望魁竜タイタニック・ギャラクシー
 function c63767246.initial_effect(c)
 	--xyz summon
 	aux.AddXyzProcedure(c,nil,8,2)
 	c:EnableReviveLimit()
-	--Negate
+	--negate
 	local e1=Effect.CreateEffect(c)
 	e1:SetDescription(aux.Stringid(63767246,0))
 	e1:SetCategory(CATEGORY_DISABLE)
 	e1:SetType(EFFECT_TYPE_QUICK_O)
 	e1:SetCode(EVENT_CHAINING)
-	e1:SetRange(LOCATION_MZONE)
 	e1:SetCountLimit(1)
-	e1:SetCondition(c63767246.negcon)
-	e1:SetTarget(c63767246.negtg)
-	e1:SetOperation(c63767246.negop)
+	e1:SetRange(LOCATION_MZONE)
+	e1:SetCondition(c63767246.discon)
+	e1:SetTarget(c63767246.distg)
+	e1:SetOperation(c63767246.disop)
 	c:RegisterEffect(e1)
-	--Change attack target
+	--change battle target
 	local e2=Effect.CreateEffect(c)
 	e2:SetDescription(aux.Stringid(63767246,1))
 	e2:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_TRIGGER_O)
-	e2:SetRange(LOCATION_MZONE)
 	e2:SetCode(EVENT_ATTACK_ANNOUNCE)
-	e2:SetCondition(c63767246.atkcon)
-	e2:SetCost(c63767246.atkcost)
-	e2:SetOperation(c63767246.atkop)
+	e2:SetRange(LOCATION_MZONE)
+	e2:SetCondition(c63767246.cbcon)
+	e2:SetCost(c63767246.cbcost)
+	e2:SetOperation(c63767246.cbop)
 	c:RegisterEffect(e2)
-	--ATK Up
+	--atk up
 	local e3=Effect.CreateEffect(c)
 	e3:SetDescription(aux.Stringid(63767246,2))
 	e3:SetCategory(CATEGORY_ATKCHANGE)
 	e3:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_TRIGGER_O)
-	e3:SetProperty(EFFECT_FLAG_DAMAGE_STEP+EFFECT_FLAG_DELAY+EFFECT_FLAG_CARD_TARGET)
-	e3:SetRange(LOCATION_MZONE)
+	e3:SetProperty(EFFECT_FLAG_CARD_TARGET+EFFECT_FLAG_DAMAGE_STEP+EFFECT_FLAG_DELAY)
 	e3:SetCode(EVENT_DESTROYED)
-	e3:SetCondition(c63767246.descon)
-	e3:SetTarget(c63767246.destg)
-	e3:SetOperation(c63767246.desop)
+	e3:SetRange(LOCATION_MZONE)
+	e3:SetCondition(c63767246.atkcon)
+	e3:SetTarget(c63767246.atktg)
+	e3:SetOperation(c63767246.atkop)
 	c:RegisterEffect(e3)
 end
 c63767246.xyz_number=38
-
-function c63767246.negcon(e,tp,eg,ep,ev,re,r,rp)
-	return re:IsActiveType(TYPE_SPELL) and re:IsHasType(EFFECT_TYPE_ACTIVATE) and Duel.IsChainDisablable(ev)
+function c63767246.discon(e,tp,eg,ep,ev,re,r,rp)
+	return Duel.GetChainInfo(ev,CHAININFO_TRIGGERING_LOCATION)==LOCATION_SZONE
+		and re:IsActiveType(TYPE_SPELL) and Duel.IsChainDisablable(ev) and not e:GetHandler():IsStatus(STATUS_BATTLE_DESTROYED)
 end
-function c63767246.negtg(e,tp,eg,ep,ev,re,r,rp,chk)
+function c63767246.distg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return true end
 	Duel.SetOperationInfo(0,CATEGORY_DISABLE,eg,1,0,0)
 end
-function c63767246.negop(e,tp,eg,ep,ev,re,r,rp)
-	local tc=re:GetHandler()
-	if not tc:IsDisabled() then
-		Duel.NegateEffect(ev)
-		tc:CancelToGrave()
-		Duel.Overlay(e:GetHandler(),tc)
+function c63767246.disop(e,tp,eg,ep,ev,re,r,rp)
+	Duel.NegateEffect(ev)
+	local c=e:GetHandler()
+	local rc=re:GetHandler()
+	if c:IsRelateToEffect(e) and rc:IsRelateToEffect(re) then
+		rc:CancelToGrave()
+		Duel.Overlay(c,Group.FromCards(rc))
 	end
 end
-
-function c63767246.atkcon(e,tp,eg,ep,ev,re,r,rp)
-	return Duel.GetTurnPlayer()~=tp
+function c63767246.cbcon(e,tp,eg,ep,ev,re,r,rp)
+	return Duel.GetTurnPlayer()~=tp and Duel.GetAttackTarget()~=e:GetHandler()
 end
-function c63767246.atkcost(e,tp,eg,ep,ev,re,r,rp,chk)
+function c63767246.cbcost(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return e:GetHandler():CheckRemoveOverlayCard(tp,1,REASON_COST) end
 	e:GetHandler():RemoveOverlayCard(tp,1,1,REASON_COST)
 end
-function c63767246.atkop(e,tp,eg,ep,ev,re,r,rp)
-	local a=Duel.GetAttacker()
+function c63767246.cbop(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
-	if not c:IsRelateToEffect(e) then return end
-	if a:IsAttackable() and not a:IsImmuneToEffect(e) then
-		Duel.CalculateDamage(a,c)
+	if c:IsRelateToEffect(e) then
+		local at=Duel.GetAttacker()
+		if at:IsAttackable() and not at:IsImmuneToEffect(e) then
+			Duel.CalculateDamage(at,c)
+		end
 	end
 end
-
-function c63767246.cfilter(c,tp)
-	return c:IsReason(REASON_BATTLE+REASON_EFFECT) and c:IsPreviousLocation(LOCATION_MZONE) and c:GetPreviousControler()==tp and c:IsType(TYPE_XYZ)
+function c63767246.atkfilter1(c,tp)
+	return c:IsReason(REASON_BATTLE+REASON_EFFECT) and c:IsType(TYPE_XYZ)
+		and c:IsPreviousLocation(LOCATION_MZONE) and c:GetPreviousControler()==tp
 end
-function c63767246.cfilter2(c,tp)
-	return c:IsReason(REASON_BATTLE+REASON_EFFECT) and c:IsPreviousLocation(LOCATION_MZONE) and c:GetPreviousControler()==tp and c:IsType(TYPE_XYZ) and c:GetBaseAttack()>0
+function c63767246.atkcon(e,tp,eg,ep,ev,re,r,rp)
+	return eg:IsExists(c63767246.atkfilter1,1,nil,tp)
 end
-function c63767246.descon(e,tp,eg,ep,ev,re,r,rp)
-	return eg:IsExists(c63767246.cfilter,1,nil,tp)
+function c63767246.atkfilter2(c)
+	return c:IsFaceup() and c:IsType(TYPE_XYZ)
 end
-function c63767246.desfil(c)
-	return c:IsType(TYPE_XYZ) and c:IsFaceup()
+function c63767246.atktg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
+	if chkc then return chkc:IsLocation(LOCATION_MZONE) and chkc:IsControler(tp) and c63767246.atkfilter2(chkc) end
+	if chk==0 then return Duel.IsExistingTarget(c63767246.atkfilter2,tp,LOCATION_MZONE,0,1,nil) end
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_FACEUP)
+	Duel.SelectTarget(tp,c63767246.atkfilter2,tp,LOCATION_MZONE,0,1,1,nil)
 end
-function c63767246.destg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
-	if chkc then return chkc:IsLocation(LOCATION_MZONE) and chkc:IsControler(tp) and c63767246.desfil(chkc) end
-	if chk==0 then return Duel.IsExistingTarget(c63767246.desfil,tp,LOCATION_MZONE,0,1,nil) end
-	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TARGET)
-	Duel.SelectTarget(tp,c63767246.desfil,tp,LOCATION_MZONE,0,1,1,nil)
-end
-function c63767246.desop(e,tp,eg,ep,ev,re,r,rp)
+function c63767246.atkop(e,tp,eg,ep,ev,re,r,rp)
+	local c=e:GetHandler()
 	local tc=Duel.GetFirstTarget()
-	if tc:IsRelateToEffect(e) then
-		local g=eg:FilterSelect(tp,c63767246.cfilter2,1,1,nil,tp)
-		if g:GetCount()==0 then return end
-		local atk=g:GetFirst():GetBaseAttack()
-		local e1=Effect.CreateEffect(e:GetHandler())
+	local g=eg:Filter(c63767246.atkfilter1,nil,tp)
+	if tc:IsFaceup() and tc:IsRelateToEffect(e) then
+		if g:GetCount()>=2 then
+			Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_FACEUP)
+			g=g:Select(tp,1,1,nil)
+		end
+		local e1=Effect.CreateEffect(c)
 		e1:SetType(EFFECT_TYPE_SINGLE)
+		e1:SetProperty(EFFECT_FLAG_CANNOT_DISABLE)
 		e1:SetCode(EFFECT_UPDATE_ATTACK)
-		e1:SetValue(atk)
+		e1:SetValue(g:GetFirst():GetBaseAttack())
 		e1:SetReset(RESET_EVENT+0x1fe0000)
 		tc:RegisterEffect(e1)
-		tc=g:GetNext()
 	end
 end

@@ -8,7 +8,7 @@ function c94243005.initial_effect(c)
 	--add counter
 	local e2=Effect.CreateEffect(c)
 	e2:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
-	e2:SetRange(LOCATION_SZONE)
+	e2:SetRange(LOCATION_FZONE)
 	e2:SetCode(EVENT_REMOVE)
 	e2:SetOperation(c94243005.ctop)
 	c:RegisterEffect(e2)
@@ -19,7 +19,7 @@ function c94243005.initial_effect(c)
 	e3:SetDescription(aux.Stringid(94243005,0))
 	e3:SetType(EFFECT_TYPE_IGNITION)
 	e3:SetCountLimit(1)
-	e3:SetRange(LOCATION_SZONE)
+	e3:SetRange(LOCATION_FZONE)
 	e3:SetTarget(c94243005.sptg)
 	e3:SetOperation(c94243005.spop)
 	c:RegisterEffect(e3)
@@ -41,7 +41,7 @@ end
 function c94243005.ctop(e,tp,eg,ep,ev,re,r,rp)
 	local ct=eg:FilterCount(c94243005.ctfilter,nil)
 	if ct>0 then
-		e:GetHandler():AddCounter(0x13,ct)
+		e:GetHandler():AddCounter(0x13+COUNTER_NEED_ENABLE,ct)
 	end
 end
 function c94243005.spfilter(c,e,tp)

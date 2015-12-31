@@ -26,7 +26,7 @@ function c12369277.initial_effect(c)
 	c:RegisterEffect(e3)
 end
 function c12369277.thfilter(c)
-	return c:IsSetCard(0xd5) and not c:IsCode(12369277) and c:IsAbleToHand()
+	return c:IsSetCard(0xdc) and not c:IsCode(12369277) and c:IsAbleToHand()
 end
 function c12369277.thtg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsExistingMatchingCard(c12369277.thfilter,tp,LOCATION_DECK,0,1,nil) end
@@ -41,7 +41,7 @@ function c12369277.thop(e,tp,eg,ep,ev,re,r,rp)
 	end
 end
 function c12369277.tdfilter(c)
-	return c:IsSetCard(0xd5) and c:IsAbleToDeck()
+	return c:IsSetCard(0xdc) and c:IsAbleToDeck()
 end
 function c12369277.tdtg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then return chkc:IsLocation(LOCATION_GRAVE) and chkc:IsControler(tp) and c12369277.tdfilter(chkc) end

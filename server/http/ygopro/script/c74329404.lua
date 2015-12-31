@@ -8,9 +8,8 @@ function c74329404.initial_effect(c)
 	--counter
 	local e2=Effect.CreateEffect(c)
 	e2:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
-	e2:SetProperty(EFFECT_FLAG_DELAY)
 	e2:SetRange(LOCATION_SZONE)
-	e2:SetCode(EVENT_DESTROY)
+	e2:SetCode(EVENT_DESTROYED)
 	e2:SetCondition(c74329404.ctcon)
 	e2:SetOperation(c74329404.ctop)
 	c:RegisterEffect(e2)
@@ -31,13 +30,13 @@ function c74329404.initial_effect(c)
 	c:RegisterEffect(e4)
 end
 function c74329404.ctfilter(c,tp)
-	return c:IsFaceup() and c:IsSetCard(0xc008) and c:IsControler(tp) and c:IsLocation(LOCATION_MZONE)
+	return c:GetPreviousControler()==tp and c:IsPreviousLocation(LOCATION_MZONE) and c:IsPreviousPosition(POS_FACEUP) and c:IsPreviousSetCard(0xc008)
 end
 function c74329404.ctcon(e,tp,eg,ep,ev,re,r,rp)
 	return eg:IsExists(c74329404.ctfilter,1,nil,tp)
 end
 function c74329404.ctop(e,tp,eg,ep,ev,re,r,rp)
-	e:GetHandler():AddCounter(0x1c,1)
+	e:GetHandler():AddCounter(0x1c+COUNTER_NEED_ENABLE,1)
 end
 function c74329404.thcon(e,tp,eg,ep,ev,re,r,rp)
 	local ph=Duel.GetCurrentPhase()

@@ -26,7 +26,7 @@ function c58753372.filter1(c)
 	return c:IsFaceup() and c:GetLevel()>0
 end
 function c58753372.filter2(c,tp)
-	return c58753372.filter1(c) and c:IsSetCard(0xd5)
+	return c58753372.filter1(c) and c:IsSetCard(0xdc)
 		and Duel.IsExistingMatchingCard(c58753372.filter1,tp,LOCATION_MZONE,0,1,c)
 end
 function c58753372.target(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
@@ -59,10 +59,10 @@ function c58753372.spcost(e,tp,eg,ep,ev,re,r,rp,chk)
 	Duel.Release(e:GetHandler(),REASON_COST)
 end
 function c58753372.spfilter1(c,e,tp)
-	return c:IsSetCard(0xd5) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
+	return c:IsSetCard(0xdc) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
 end
 function c58753372.spfilter2(c)
-	return c:IsSetCard(0xd5) and c:IsType(TYPE_MONSTER)
+	return c:IsSetCard(0xdc) and c:IsType(TYPE_MONSTER)
 end
 function c58753372.sptg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then

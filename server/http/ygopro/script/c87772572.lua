@@ -1,10 +1,11 @@
---Quantum Cat
+--量子猫
 function c87772572.initial_effect(c)
 	--Activate
 	local e1=Effect.CreateEffect(c)
 	e1:SetCategory(CATEGORY_SPECIAL_SUMMON)
 	e1:SetType(EFFECT_TYPE_ACTIVATE)
 	e1:SetCode(EVENT_FREE_CHAIN)
+	e1:SetHintTiming(0,TIMING_END_PHASE)
 	e1:SetTarget(c87772572.target)
 	e1:SetOperation(c87772572.activate)
 	c:RegisterEffect(e1)

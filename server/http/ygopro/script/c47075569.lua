@@ -1,12 +1,7 @@
 --EMペンデュラム・マジシャン
 function c47075569.initial_effect(c)
 	--pendulum summon
-	aux.AddPendulumProcedure(c)
-	--Activate
-	local e1=Effect.CreateEffect(c)
-	e1:SetType(EFFECT_TYPE_ACTIVATE)
-	e1:SetCode(EVENT_FREE_CHAIN)
-	c:RegisterEffect(e1)
+	aux.EnablePendulumAttribute(c)
 	--atk
 	local e2=Effect.CreateEffect(c)
 	e2:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_TRIGGER_F)
@@ -44,7 +39,7 @@ function c47075569.atkop(e,tp,eg,ep,ev,re,r,rp)
 		e1:SetType(EFFECT_TYPE_SINGLE)
 		e1:SetCode(EFFECT_UPDATE_ATTACK)
 		e1:SetValue(1000)
-		e1:SetReset(RESET_EVENT+0x1fe0000+RESET_PHASE+RESET_END)
+		e1:SetReset(RESET_EVENT+0x1fe0000+RESET_PHASE+PHASE_END)
 		tc:RegisterEffect(e1)
 		tc=g:GetNext()
 	end
