@@ -108,11 +108,12 @@ function runYGOPro(mode, callback) {
     var systemConf = template;
 
     function fillInData(form, placeholder, value) {
-        form = form.replace(placeholder, value);
+        var re = new RegExp(placeholder, 'g');
+        form = form.replace(re, value);
         return form;
     }
     for (var i = 0; settings.length > i; i++) {
-        systemConf = fillInData(systemConf, '{' + settings[i] + '}', localStorage[settings[i]]);
+        systemConf = fillInData(systemConf, '/{' + settings[i] + '}/g', localStorage[settings[i]]);
     }
     var path = './ygopro/system.conf';
     fs.writeFile(path, systemConf, function (err) {
