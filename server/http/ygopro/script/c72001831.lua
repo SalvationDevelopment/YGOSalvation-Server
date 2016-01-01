@@ -11,7 +11,7 @@ function c72001831.initial_effect(c)
 	e2:SetType(EFFECT_TYPE_FIELD)
 	e2:SetCode(EFFECT_UPDATE_ATTACK)
 	e2:SetRange(LOCATION_SZONE)
-	e2:SetTargetRange(LOCATION_MZONE,LOCATION_MZONE)
+	e2:SetTargetRange(LOCATION_MZONE,0)
 	e2:SetTarget(c72001831.stg)
 	e2:SetValue(c72001831.value)
 	c:RegisterEffect(e2)
@@ -41,7 +41,7 @@ function c72001831.stfilter(c)
 	return c:IsFaceup() and c:IsSetCard(0x1d1) 
 end
 function c72001831.value(e,c)
-	return Duel.GetMatchingGroupCount(c72001831.stfilter,c:GetControler(),LOCATION_ONFIELD,LOCATION_ONFIELD,nil)*100
+	return Duel.GetMatchingGroupCount(c72001831.stfilter,c:GetControler(),LOCATION_ONFIELD,0,nil)*100
 end
 function c72001831.confilter(c,tp)
 	return c:IsType(TYPE_MONSTER) and c:IsReason(REASON_BATTLE+REASON_EFFECT+REASON_RELEASE)

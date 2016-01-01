@@ -46,7 +46,7 @@ function c13701823.initial_effect(c)
 end
 function c13701823.sprfilter1(c,tp)
 	local lv=c:GetLevel()
-	return lv>8 and c:IsFaceup() and c:IsType(TYPE_TUNER) and c:IsAbleToGraveAsCost()
+	return lv>5 and c:IsFaceup() and c:IsType(TYPE_TUNER) and c:IsAbleToGraveAsCost()
 		and Duel.IsExistingMatchingCard(c13701823.sprfilter2,tp,LOCATION_MZONE,0,1,nil,lv)
 end
 function c13701823.sprfilter2(c,lv)

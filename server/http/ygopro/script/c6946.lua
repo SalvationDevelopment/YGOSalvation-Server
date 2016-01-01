@@ -3,7 +3,7 @@
 --Moonlight Cat Dancer
 function c6946.initial_effect(c)
 	--fusion material
-	aux.AddFusionProcFunRep(c,c6946.matfil,2,true)
+	aux.AddFusionProcFunRep(c,aux.FilterBoolFunction(Card.IsSetCard,0x209),2,true)
 	c:EnableReviveLimit()
 	--battle indestructable
 	local e1=Effect.CreateEffect(c)
@@ -30,10 +30,6 @@ function c6946.initial_effect(c)
 	e3:SetTarget(c6946.damtg)
 	e3:SetOperation(c6946.damop)
 	c:RegisterEffect(e3)
-end
-
-function c6946.matfil(c)
- return c:IsSetCard(0xe1) or c:IsSetCard(0x209)
 end
 
 function c6946.condition(e,tp,eg,ep,ev,re,r,rp)
