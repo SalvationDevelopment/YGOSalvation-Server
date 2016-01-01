@@ -1,4 +1,4 @@
---破壊剣－ドラゴンバスターブレード
+--Destruction Sword - Dragon Buster Blade
 function c76218313.initial_effect(c)
 	--equip
 	local e1=Effect.CreateEffect(c)
@@ -9,7 +9,6 @@ function c76218313.initial_effect(c)
 	e1:SetTarget(c76218313.eqtg)
 	e1:SetOperation(c76218313.eqop)
 	c:RegisterEffect(e1)
-	--
 	local e2=Effect.CreateEffect(c)
 	e2:SetType(EFFECT_TYPE_EQUIP+EFFECT_TYPE_FIELD)
 	e2:SetCode(EFFECT_CANNOT_SPECIAL_SUMMON)
@@ -29,7 +28,7 @@ function c76218313.initial_effect(c)
 	c:RegisterEffect(e3)
 end
 function c76218313.filter(c)
-	return c:IsFaceup() and c:IsCode(78193831)
+	return c:IsFaceup() and c:GetCode()==78193831
 end
 function c76218313.eqtg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then return chkc:IsLocation(LOCATION_MZONE) and chkc:IsControler(tp) and c76218313.filter(chkc) end
@@ -43,7 +42,7 @@ function c76218313.eqop(e,tp,eg,ep,ev,re,r,rp)
 	if not c:IsRelateToEffect(e) then return end
 	if c:IsLocation(LOCATION_MZONE) and c:IsFacedown() then return end
 	local tc=Duel.GetFirstTarget()
-	if Duel.GetLocationCount(tp,LOCATION_SZONE)<=0 or tc:GetControler()~=tp or tc:IsFacedown() or not tc:IsRelateToEffect(e) then
+	if Duel.GetLocationCount(tp,LOCATION_SZONE)<=0 or tc:GetControler()~=tp or tc:IsFacedown() or not tc:IsRelateToEffect(e) or not c:CheckUniqueOnField(tp) then
 		Duel.SendtoGrave(c,REASON_EFFECT)
 		return
 	end
@@ -59,6 +58,7 @@ end
 function c76218313.eqlimit(e,c)
 	return c==e:GetLabelObject()
 end
+
 function c76218313.sptg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.GetLocationCount(tp,LOCATION_MZONE)>0
 		and e:GetHandler():IsCanBeSpecialSummoned(e,0,tp,false,false) end
@@ -70,6 +70,7 @@ function c76218313.spop(e,tp,eg,ep,ev,re,r,rp)
 		Duel.SpecialSummon(c,0,tp,tp,false,false,POS_FACEUP)
 	end
 end
+
 function c76218313.splimit(e,c)
 	return c:IsLocation(LOCATION_EXTRA)
 end

@@ -1,4 +1,4 @@
---彼岸の巡礼者 ダンテ
+--Dante, Pilgrim of the Burning Abyss
 function c18386170.initial_effect(c)
 	c:EnableReviveLimit()
 	--fusion material
@@ -69,33 +69,31 @@ function c18386170.drop(e,tp,eg,ep,ev,re,r,rp)
 end
 function c18386170.hdcon(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
-	return (rp~=tp and c:IsReason(REASON_EFFECT) and c:GetPreviousControler()==tp and c:IsPreviousLocation(LOCATION_ONFIELD)) or c:IsReason(REASON_BATTLE)
+	return rp~=tp and (c:IsReason(REASON_BATTLE) or (c:IsReason(REASON_EFFECT) and c:GetPreviousControler()==tp))
 end
 function c18386170.hdtg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.GetFieldGroupCount(tp,0,LOCATION_HAND)>0 end
 	Duel.SetOperationInfo(0,CATEGORY_HANDES,nil,0,1-tp,1)
 end
 function c18386170.hdop(e,tp,eg,ep,ev,re,r,rp)
-	local g=Duel.GetFieldGroup(tp,0,LOCATION_HAND)
-	if g:GetCount()==0 then return end
-	local sg=g:RandomSelect(tp,1)
-	Duel.SendtoGrave(sg,REASON_EFFECT)
+	local g=Duel.GetFieldGroup(tp,0,LOCATION_HAND):RandomSelect(tp,1)
+	Duel.SendtoGrave(g,REASON_EFFECT)
 end
 function c18386170.fscon(e,g,gc,chkf)
 	if g==nil then return true end
 	if gc then
-		local mg=g:Filter(Card.IsFusionSetCard,nil,0xb1)
+		local mg=g:Filter(Card.IsSetCard,nil,0xb1)
 		mg:AddCard(gc)
-		return gc:IsFusionSetCard(0xb1) and mg:GetClassCount(Card.GetCode)>=3
+		return gc:IsSetCard(0xb1) and mg:GetClassCount(Card.GetCode)>=3
 	end
 	local fs=false
-	local mg=g:Filter(Card.IsFusionSetCard,nil,0xb1)
+	local mg=g:Filter(Card.IsSetCard,nil,0xb1)
 	if mg:IsExists(aux.FConditionCheckF,1,nil,chkf) then fs=true end
 	return mg:GetClassCount(Card.GetCode)>=3 and (fs or chkf==PLAYER_NONE)
 end
 function c18386170.fsop(e,tp,eg,ep,ev,re,r,rp,gc,chkf)
 	if gc then
-		local sg=eg:Filter(Card.IsFusionSetCard,gc,0xb1)
+		local sg=eg:Filter(Card.IsSetCard,gc,0xb1)
 		sg:Remove(Card.IsCode,nil,gc:GetCode())
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_FMATERIAL)
 		local g1=sg:Select(tp,1,1,nil)
@@ -106,7 +104,7 @@ function c18386170.fsop(e,tp,eg,ep,ev,re,r,rp,gc,chkf)
 		Duel.SetFusionMaterial(g1)
 		return
 	end
-	local sg=eg:Filter(Card.IsFusionSetCard,nil,0xb1)
+	local sg=eg:Filter(Card.IsSetCard,nil,0xb1)
 	local g1=nil
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_FMATERIAL)
 	if chkf~=PLAYER_NONE then g1=sg:FilterSelect(tp,aux.FConditionCheckF,1,1,nil,chkf)

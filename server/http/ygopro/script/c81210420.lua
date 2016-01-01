@@ -1,4 +1,5 @@
 --マジカルシルクハット
+--destroy is not fully implemented
 function c81210420.initial_effect(c)
 	--Activate
 	local e1=Effect.CreateEffect(c)
@@ -12,7 +13,7 @@ function c81210420.initial_effect(c)
 	c:RegisterEffect(e1)
 end
 function c81210420.condition(e,tp,eg,ep,ev,re,r,rp)
-	return Duel.GetTurnPlayer()~=tp and (Duel.GetCurrentPhase()>=PHASE_BATTLE_START and Duel.GetCurrentPhase()<=PHASE_BATTLE)
+	return Duel.GetTurnPlayer()~=tp and Duel.GetCurrentPhase()==PHASE_BATTLE
 end
 function c81210420.filter(c)
 	return not c:IsType(TYPE_TOKEN)
@@ -99,6 +100,4 @@ function c81210420.desop(e,tp,eg,ep,ev,re,r,rp)
 	local tg=g:Filter(c81210420.desfilter,nil,fid)
 	g:DeleteGroup()
 	Duel.Destroy(tg,REASON_EFFECT)
-	local tg2=tg:Filter(c81210420.desfilter,nil,fid)
-	Duel.SendtoGrave(tg2,REASON_EFFECT)
 end

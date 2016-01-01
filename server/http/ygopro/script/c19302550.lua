@@ -1,62 +1,101 @@
---DD魔導賢者ニュートン
+--D/D Magical Astronomer Copernicus
 function c19302550.initial_effect(c)
 	--pendulum summon
-	aux.EnablePendulumAttribute(c)
-	--splimit
+	aux.AddPendulumProcedure(c)
+	--Activate
 	local e1=Effect.CreateEffect(c)
-	e1:SetType(EFFECT_TYPE_FIELD)
-	e1:SetRange(LOCATION_PZONE)
-	e1:SetCode(EFFECT_CANNOT_SPECIAL_SUMMON)
-	e1:SetProperty(EFFECT_FLAG_PLAYER_TARGET+EFFECT_FLAG_CANNOT_DISABLE)
-	e1:SetTargetRange(1,0)
-	e1:SetCondition(aux.nfbdncon)
-	e1:SetTarget(c19302550.splimit)
+	e1:SetDescription(aux.Stringid(74605254,1))
+	e1:SetType(EFFECT_TYPE_ACTIVATE)
+	e1:SetCode(EVENT_FREE_CHAIN)
 	c:RegisterEffect(e1)
-	--disable
+	--splimit
 	local e2=Effect.CreateEffect(c)
-	e2:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
+	e2:SetType(EFFECT_TYPE_FIELD)
 	e2:SetRange(LOCATION_PZONE)
-	e2:SetCode(EVENT_CHAIN_SOLVING)
-	e2:SetCondition(c19302550.discon)
-	e2:SetOperation(c19302550.disop)
+	e2:SetCode(EFFECT_CANNOT_SPECIAL_SUMMON)
+	e2:SetProperty(EFFECT_FLAG_PLAYER_TARGET+EFFECT_FLAG_CANNOT_DISABLE)
+	e2:SetTargetRange(1,0)
+	e2:SetCondition(c19302550.splimcon)
+	e2:SetTarget(c19302550.splimit)
 	c:RegisterEffect(e2)
-	--tohand
 	local e3=Effect.CreateEffect(c)
-	e3:SetDescription(aux.Stringid(19302550,0))
-	e3:SetCategory(CATEGORY_TOHAND)
-	e3:SetType(EFFECT_TYPE_IGNITION)
-	e3:SetProperty(EFFECT_FLAG_CARD_TARGET)
-	e3:SetRange(LOCATION_HAND)
-	e3:SetCountLimit(1,19302550)
-	e3:SetCost(c19302550.thcost)
-	e3:SetTarget(c19302550.thtg)
-	e3:SetOperation(c19302550.thop)
+	e3:SetCategory(CATEGORY_COUNTER)
+	e3:SetProperty(EFFECT_FLAG_NO_TURN_RESET+EFFECT_FLAG_CARD_TARGET)
+	e3:SetType(EFFECT_TYPE_QUICK_O)
+	e3:SetCode(EVENT_CHAINING)
+	e3:SetRange(LOCATION_PZONE)
+	e3:SetCountLimit(1)
+	e3:SetCondition(c19302550.damcon1)
+	e3:SetOperation(c19302550.ctop)
 	c:RegisterEffect(e3)
+	--tohand
+	local e4=Effect.CreateEffect(c)
+	e4:SetDescription(aux.Stringid(74605254,0))
+	e4:SetCategory(CATEGORY_TOHAND)
+	e4:SetType(EFFECT_TYPE_IGNITION)
+	e4:SetRange(LOCATION_HAND)
+	e4:SetProperty(EFFECT_FLAG_CARD_TARGET)
+	e4:SetCountLimit(1,19302550)
+	e4:SetCost(c19302550.thcost)
+	e4:SetTarget(c19302550.thtg)
+	e4:SetOperation(c19302550.thop)
+	c:RegisterEffect(e4)
+
+end
+function c19302550.splimcon(e)
+	return not e:GetHandler():IsForbidden()
 end
 function c19302550.splimit(e,c,sump,sumtype,sumpos,targetp)
 	return not c:IsSetCard(0xaf) and bit.band(sumtype,SUMMON_TYPE_PENDULUM)==SUMMON_TYPE_PENDULUM
 end
-function c19302550.discon(e,tp,eg,ep,ev,re,r,rp)
-	return Duel.IsChainNegatable(ev) and re:IsActiveType(TYPE_TRAP) and aux.damcon1(e,tp,eg,ep,ev,re,r,rp) and e:GetHandler():GetFlagEffect(19302550)==0
+
+function c19302550.damcon1(e,tp,eg,ep,ev,re,r,rp)
+	if not re:GetHandler():IsType(TYPE_TRAP) then return false end
+	local e1=Duel.IsPlayerAffectedByEffect(tp,EFFECT_REVERSE_DAMAGE)
+	local e2=Duel.IsPlayerAffectedByEffect(tp,EFFECT_REVERSE_RECOVER)
+	local rd=e1 and not e2
+	local rr=not e1 and e2
+	local ex,cg,ct,cp,cv=Duel.GetOperationInfo(ev,CATEGORY_DAMAGE)
+	if ex and (cp==tp or cp==PLAYER_ALL) and not rd and not Duel.IsPlayerAffectedByEffect(tp,EFFECT_NO_EFFECT_DAMAGE) then 
+		return true 
+	end
+	ex,cg,ct,cp,cv=Duel.GetOperationInfo(ev,CATEGORY_RECOVER)
+	return ex and (cp==tp or cp==PLAYER_ALL) and rr and not Duel.IsPlayerAffectedByEffect(tp,EFFECT_NO_EFFECT_DAMAGE)
 end
-function c19302550.disop(e,tp,eg,ep,ev,re,r,rp)
-	if not Duel.SelectYesNo(tp,aux.Stringid(19302550,1)) then return end
-	e:GetHandler():RegisterFlagEffect(19302550,RESET_EVENT+0x1fe0000,0,1)
-	Duel.NegateEffect(ev)
-	Duel.BreakEffect()
-	Duel.Destroy(e:GetHandler(),REASON_EFFECT)
+function c19302550.ctop(e,tp,eg,ep,ev,re,r,rp)
+	if not e:GetHandler():IsRelateToEffect(e) then return end
+	local c=e:GetHandler()
+		local cid=Duel.GetChainInfo(ev,CHAININFO_CHAIN_ID)
+		local e1=Effect.CreateEffect(c)
+		e1:SetType(EFFECT_TYPE_FIELD)
+		e1:SetCode(EFFECT_CHANGE_DAMAGE)
+		e1:SetProperty(EFFECT_FLAG_PLAYER_TARGET)
+		e1:SetTargetRange(1,0)
+		e1:SetLabel(cid)
+		e1:SetValue(c19302550.damval)
+		e1:SetReset(RESET_CHAIN)
+		Duel.RegisterEffect(e1,tp)
+	Duel.Destroy(c,REASON_EFFECT)
 end
+function c19302550.damval(e,re,val,r,rp,rc)
+	local cc=Duel.GetCurrentChain()
+	if cc==0 or bit.band(r,REASON_EFFECT)==0 then return val end
+	local cid=Duel.GetChainInfo(0,CHAININFO_CHAIN_ID)
+	if cid~=e:GetLabel() then return val end
+	return 0
+end
+
 function c19302550.thcost(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return e:GetHandler():IsDiscardable() end
 	Duel.SendtoGrave(e:GetHandler(),REASON_COST+REASON_DISCARD)
 end
 function c19302550.thfilter(c)
-	return (c:IsSetCard(0xaf) or c:IsSetCard(0xae)) and not c:IsCode(19302550) and c:IsAbleToHand()
+	return c:IsFaceup() and (c:IsSetCard(0xae) or c:IsSetCard(0xaf)) and c:IsAbleToHand() and not c:IsCode(19302550)
 end
 function c19302550.thtg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
-	if chkc then return chkc:IsLocation(LOCATION_GRAVE) and chkc:IsControler(tp) and c19302550.thfilter(chkc) end
+	if chkc then return chkc:IsOnField() and chkc:IsControler(tp) and c19302550.thfilter(chkc) end
 	if chk==0 then return Duel.IsExistingTarget(c19302550.thfilter,tp,LOCATION_GRAVE,0,1,nil) end
-	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_RTOHAND)
 	local g=Duel.SelectTarget(tp,c19302550.thfilter,tp,LOCATION_GRAVE,0,1,1,nil)
 	Duel.SetOperationInfo(0,CATEGORY_TOHAND,g,1,0,0)
 end

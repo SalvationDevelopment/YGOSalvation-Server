@@ -43,13 +43,14 @@ function c20366274.initial_effect(c)
 	e5:SetCategory(CATEGORY_TOHAND)
 	e5:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O)
 	e5:SetCode(EVENT_TO_GRAVE)
-	e5:SetProperty(EFFECT_FLAG_CARD_TARGET+EFFECT_FLAG_DELAY)
+	e5:SetProperty(EFFECT_FLAG_CARD_TARGET+EFFECT_FLAG_DAMAGE_STEP+EFFECT_FLAG_DELAY)
+	e5:SetCondition(c20366274.thcon)
 	e5:SetTarget(c20366274.thtg)
 	e5:SetOperation(c20366274.thop)
 	c:RegisterEffect(e5)
 end
 function c20366274.ffilter1(c)
-	return c:IsFusionSetCard(0x9d)
+	return c:IsSetCard(0x9d)
 end
 function c20366274.ffilter2(c)
 	return c:IsAttribute(ATTRIBUTE_LIGHT) or c:IsHasEffect(4904633)
@@ -187,6 +188,9 @@ function c20366274.desop(e,tp,eg,ep,ev,re,r,rp)
 	if bc:IsRelateToBattle() then
 		Duel.Destroy(bc,REASON_EFFECT)
 	end
+end
+function c20366274.thcon(e,tp,eg,ep,ev,re,r,rp)
+	return not e:GetHandler():IsReason(REASON_RETURN)
 end
 function c20366274.thfilter(c)
 	return c:IsSetCard(0x9d) and c:IsType(TYPE_SPELL+TYPE_TRAP) and c:IsAbleToHand()

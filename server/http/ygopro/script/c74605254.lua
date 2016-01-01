@@ -1,7 +1,13 @@
 --DD魔導賢者ガリレイ
 function c74605254.initial_effect(c)
 	--pendulum summon
-	aux.EnablePendulumAttribute(c)
+	aux.AddPendulumProcedure(c)
+	--Activate
+	local e1=Effect.CreateEffect(c)
+	e1:SetDescription(aux.Stringid(74605254,1))
+	e1:SetType(EFFECT_TYPE_ACTIVATE)
+	e1:SetCode(EVENT_FREE_CHAIN)
+	c:RegisterEffect(e1)
 	--splimit
 	local e2=Effect.CreateEffect(c)
 	e2:SetType(EFFECT_TYPE_FIELD)
@@ -9,7 +15,7 @@ function c74605254.initial_effect(c)
 	e2:SetCode(EFFECT_CANNOT_SPECIAL_SUMMON)
 	e2:SetProperty(EFFECT_FLAG_PLAYER_TARGET+EFFECT_FLAG_CANNOT_DISABLE)
 	e2:SetTargetRange(1,0)
-	e2:SetCondition(aux.nfbdncon)
+	e2:SetCondition(c74605254.splimcon)
 	e2:SetTarget(c74605254.splimit)
 	c:RegisterEffect(e2)
 	--scale change
@@ -36,6 +42,9 @@ function c74605254.initial_effect(c)
 	e4:SetTarget(c74605254.thtg)
 	e4:SetOperation(c74605254.thop)
 	c:RegisterEffect(e4)
+end
+function c74605254.splimcon(e)
+	return not e:GetHandler():IsForbidden()
 end
 function c74605254.splimit(e,c,sump,sumtype,sumpos,targetp)
 	return not c:IsSetCard(0xaf) and bit.band(sumtype,SUMMON_TYPE_PENDULUM)==SUMMON_TYPE_PENDULUM

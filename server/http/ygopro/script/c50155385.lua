@@ -1,4 +1,4 @@
---スピリチューアル・ウィスパー
+--스피리츄얼 위스퍼
 function c50155385.initial_effect(c)
 	--battle indes
 	local e1=Effect.CreateEffect(c)

@@ -2,7 +2,12 @@
 function c57777714.initial_effect(c)
 	c:SetSPSummonOnce(57777714)
 	--pendulum summon
-	aux.EnablePendulumAttribute(c)
+	aux.AddPendulumProcedure(c)
+	--Activate
+	local e1=Effect.CreateEffect(c)
+	e1:SetType(EFFECT_TYPE_ACTIVATE)
+	e1:SetCode(EVENT_FREE_CHAIN)
+	c:RegisterEffect(e1)
 	--splimit
 	local e2=Effect.CreateEffect(c)
 	e2:SetType(EFFECT_TYPE_FIELD)
@@ -11,7 +16,7 @@ function c57777714.initial_effect(c)
 	e2:SetProperty(EFFECT_FLAG_PLAYER_TARGET+EFFECT_FLAG_CANNOT_DISABLE)
 	e2:SetTargetRange(1,0)
 	e2:SetTarget(c57777714.splimit)
-	e2:SetCondition(aux.nfbdncon)
+	e2:SetCondition(c57777714.splimcon)
 	c:RegisterEffect(e2)
 	--spsummon
 	local e3=Effect.CreateEffect(c)
@@ -30,6 +35,9 @@ end
 function c57777714.splimit(e,c,sump,sumtype,sumpos,targetp)
 	if c:IsSetCard(0xb5) or c:IsSetCard(0xc4) then return false end
 	return bit.band(sumtype,SUMMON_TYPE_PENDULUM)==SUMMON_TYPE_PENDULUM
+end
+function c57777714.splimcon(e)
+	return not e:GetHandler():IsForbidden()
 end
 function c57777714.condition(e,tp,eg,ep,ev,re,r,rp)
 	return e:GetHandler():GetSummonType()==SUMMON_TYPE_PENDULUM

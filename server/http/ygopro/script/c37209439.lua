@@ -35,7 +35,7 @@ function c37209439.target(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return true end
 	local b1=c37209439.negcon(e,tp,eg,ep,ev,re,r,rp)
 	local b2=c37209439.damcon(e,tp,eg,ep,ev,re,r,rp) and Duel.GetCurrentPhase()==PHASE_STANDBY
-	if (b1 or b2) and Duel.SelectYesNo(tp,94) then
+	if (b1 or b2) and Duel.SelectYesNo(tp,aux.Stringid(37209439,2)) then
 		local c=e:GetHandler()
 		local op=0
 		if b1 and b2 then
@@ -79,7 +79,7 @@ function c37209439.negop(e,tp,eg,ep,ev,re,r,rp)
 	e1:SetTargetRange(LOCATION_SZONE,LOCATION_SZONE)
 	e1:SetTarget(c37209439.distg)
 	e1:SetLabel(fid)
-	e1:SetReset(RESET_PHASE+PHASE_END)
+	e1:SetReset(RESET_PHASE+RESET_END)
 	Duel.RegisterEffect(e1,tp)
 	local e2=Effect.CreateEffect(c)
 	e2:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
@@ -87,7 +87,7 @@ function c37209439.negop(e,tp,eg,ep,ev,re,r,rp)
 	e2:SetRange(LOCATION_SZONE)
 	e2:SetOperation(c37209439.disop)
 	e2:SetLabel(fid)
-	e2:SetReset(RESET_PHASE+PHASE_END)
+	e2:SetReset(RESET_PHASE+RESET_END)
 	Duel.RegisterEffect(e2,tp)
 	local e3=Effect.CreateEffect(c)
 	e3:SetType(EFFECT_TYPE_FIELD)
@@ -96,7 +96,7 @@ function c37209439.negop(e,tp,eg,ep,ev,re,r,rp)
 	e3:SetTargetRange(LOCATION_MZONE,LOCATION_MZONE)
 	e3:SetTarget(c37209439.distg)
 	e3:SetLabel(fid)
-	e3:SetReset(RESET_PHASE+PHASE_END)
+	e3:SetReset(RESET_PHASE+RESET_END)
 	Duel.RegisterEffect(e3,tp)
 end
 function c37209439.distg(e,c)

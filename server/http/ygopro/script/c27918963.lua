@@ -34,7 +34,7 @@ function c27918963.ctcon(e,tp,eg,ep,ev,re,r,rp)
 	return eg:IsExists(c27918963.cfilter,1,nil)
 end
 function c27918963.ctop(e,tp,eg,ep,ev,re,r,rp)
-	e:GetHandler():AddCounter(0x33+COUNTER_NEED_ENABLE,1)
+	e:GetHandler():AddCounter(0x33,1)
 end
 function c27918963.filter1(c)
 	return c:IsFaceup() and c:IsSetCard(0xb3)
@@ -77,7 +77,7 @@ function c27918963.operation(e,tp,eg,ep,ev,re,r,rp)
 			e1:SetType(EFFECT_TYPE_SINGLE)
 			e1:SetCode(EFFECT_UPDATE_ATTACK)
 			e1:SetValue(300)
-			e1:SetReset(RESET_EVENT+0x1fe0000+RESET_PHASE+PHASE_END)
+			e1:SetReset(RESET_EVENT+0x1fe0000+RESET_PHASE+RESET_END)
 			tc:RegisterEffect(e1)
 			tc=g:GetNext()
 		end

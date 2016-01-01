@@ -1,4 +1,4 @@
---彼岸の沈溺
+--Fire Lake of the Burning Abyss
 function c36006208.initial_effect(c)
 	--Activate
 	local e1=Effect.CreateEffect(c)

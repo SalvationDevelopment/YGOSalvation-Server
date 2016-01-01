@@ -4,7 +4,7 @@ function c45627618.initial_effect(c)
 	aux.AddXyzProcedure(c,aux.FilterBoolFunction(Card.IsRace,RACE_DRAGON),7,2)
 	c:EnableReviveLimit()
 	--pendulum summon
-	aux.EnablePendulumAttribute(c,false)
+	aux.AddPendulumProcedure(c)
 	--pendulum set
 	local e1=Effect.CreateEffect(c)
 	e1:SetType(EFFECT_TYPE_IGNITION)
@@ -79,7 +79,7 @@ function c45627618.desop(e,tp,eg,ep,ev,re,r,rp)
 		e1:SetType(EFFECT_TYPE_SINGLE)
 		e1:SetCode(EFFECT_EXTRA_ATTACK)
 		e1:SetValue(2)
-		e1:SetReset(RESET_EVENT+0x1fe0000+RESET_PHASE+PHASE_END)
+		e1:SetReset(RESET_EVENT+0x1fe0000+RESET_PHASE+RESET_END)
 		c:RegisterEffect(e1)
 	end
 end

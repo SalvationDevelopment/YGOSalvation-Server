@@ -42,7 +42,7 @@ function c82044279.condition2(e,tp,eg,ep,ev,re,r,rp)
 	if not g or g:GetCount()~=1 then return false end
 	local tc=g:GetFirst()
 	local c=e:GetHandler()
-	return re:IsActiveType(TYPE_MONSTER) and tc:IsFaceup() and tc:IsLevelAbove(5) and tc:IsLocation(LOCATION_MZONE)
+	return re:IsActiveType(TYPE_MONSTER) and tc:IsLevelAbove(5) and tc:IsLocation(LOCATION_MZONE)
 		and not c:IsStatus(STATUS_BATTLE_DESTROYED) and Duel.IsChainNegatable(ev)
 end
 function c82044279.target(e,tp,eg,ep,ev,re,r,rp,chk)
@@ -61,7 +61,7 @@ function c82044279.operation(e,tp,eg,ep,ev,re,r,rp)
 	end
 end
 function c82044279.atkcon(e,tp,eg,ep,ev,re,r,rp)
-	return bit.band(r,REASON_EFFECT)~=0 and re and re:GetOwner()==e:GetHandler()
+	return bit.band(r,REASON_EFFECT)~=0 and re and re:GetHandler()==e:GetHandler()
 		and eg:IsExists(Card.IsType,1,nil,TYPE_MONSTER)
 end
 function c82044279.atkop(e,tp,eg,ep,ev,re,r,rp)
@@ -80,7 +80,7 @@ function c82044279.atkop(e,tp,eg,ep,ev,re,r,rp)
 		e1:SetType(EFFECT_TYPE_SINGLE)
 		e1:SetCode(EFFECT_UPDATE_ATTACK)
 		e1:SetValue(atk)
-		e1:SetReset(RESET_EVENT+0x1ff0000+RESET_PHASE+PHASE_END)
+		e1:SetReset(RESET_EVENT+0x1ff0000+RESET_PHASE+RESET_END)
 		c:RegisterEffect(e1)
 	end
 end

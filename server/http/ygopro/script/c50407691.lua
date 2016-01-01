@@ -1,7 +1,12 @@
 --イグナイト・ライオット
 function c50407691.initial_effect(c)
 	--pendulum summon
-	aux.EnablePendulumAttribute(c)
+	aux.AddPendulumProcedure(c)
+	--Activate
+	local e1=Effect.CreateEffect(c)
+	e1:SetType(EFFECT_TYPE_ACTIVATE)
+	e1:SetCode(EVENT_FREE_CHAIN)
+	c:RegisterEffect(e1)
 	--tohand
 	local e2=Effect.CreateEffect(c)
 	e2:SetCategory(CATEGORY_DESTROY+CATEGORY_TOHAND+CATEGORY_SEARCH)

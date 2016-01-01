@@ -1,11 +1,15 @@
---竜剣士マスターP
+--Supreme Warrior Ritual
 function c75195825.initial_effect(c)
 	--pendulum summon
-	aux.EnablePendulumAttribute(c)
-	--destroy
+	aux.AddPendulumProcedure(c)
+	--Activate
+	local e1=Effect.CreateEffect(c)
+	e1:SetType(EFFECT_TYPE_ACTIVATE)
+	e1:SetCode(EVENT_FREE_CHAIN)
+	c:RegisterEffect(e1)
+	--change scale
 	local e2=Effect.CreateEffect(c)
-	e2:SetDescription(aux.Stringid(75195825,0))
-	e2:SetCategory(CATEGORY_DESTROY)
+	e2:SetDescription(aux.Stringid(88757791,0))
 	e2:SetType(EFFECT_TYPE_IGNITION)
 	e2:SetRange(LOCATION_PZONE)
 	e2:SetProperty(EFFECT_FLAG_NO_TURN_RESET+EFFECT_FLAG_CARD_TARGET)
@@ -25,7 +29,6 @@ function c75195825.sctg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	Duel.SetOperationInfo(0,CATEGORY_DESTROY,g,1,0,0)
 end
 function c75195825.scop(e,tp,eg,ep,ev,re,r,rp)
-	if not e:GetHandler():IsRelateToEffect(e) then return end
 	local tc=Duel.GetFirstTarget()
 	if tc:IsRelateToEffect(e) then
 		Duel.Destroy(tc,REASON_EFFECT)

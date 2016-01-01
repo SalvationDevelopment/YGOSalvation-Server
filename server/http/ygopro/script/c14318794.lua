@@ -13,6 +13,7 @@ function c14318794.initial_effect(c)
 	e2:SetProperty(EFFECT_FLAG_PLAYER_TARGET)
 	e2:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_TRIGGER_F)
 	e2:SetRange(LOCATION_SZONE)
+	e2:SetCountLimit(1)
 	e2:SetCode(EVENT_PHASE+PHASE_STANDBY)
 	e2:SetCondition(c14318794.reccon)
 	e2:SetTarget(c14318794.rectg)
@@ -20,8 +21,8 @@ function c14318794.initial_effect(c)
 	c:RegisterEffect(e2)
 	if not c14318794.global_check then
 		c14318794.global_check=true
-		c14318794[0]={}
-		c14318794[1]={}
+		c14318794[0]=0
+		c14318794[1]=0
 		local ge1=Effect.CreateEffect(c)
 		ge1:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
 		ge1:SetCode(EVENT_PAY_LPCOST)
@@ -36,23 +37,21 @@ function c14318794.initial_effect(c)
 end
 function c14318794.checkop(e,tp,eg,ep,ev,re,r,rp)
 	if ep==Duel.GetTurnPlayer() then
-		local val=math.ceil(ev/2)
-		table.insert(c14318794[ep],val)
+		c14318794[ep]=c14318794[ep]+ev
 	end
 end
 function c14318794.clear(e,tp,eg,ep,ev,re,r,rp)
-	c14318794[2]={table.unpack(c14318794[Duel.GetTurnPlayer()])}
-	c14318794[Duel.GetTurnPlayer()]={}
+	c14318794[2]=c14318794[Duel.GetTurnPlayer()]
+	c14318794[Duel.GetTurnPlayer()]=0
 end
 function c14318794.reccon(e,tp,eg,ep,ev,re,r,rp)
 	return tp==Duel.GetTurnPlayer()
 end
 function c14318794.rectg(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return c14318794[2][1] end
+	if chk==0 then return true end
 	Duel.SetTargetPlayer(tp)
-	Duel.SetTargetParam(c14318794[2][1])
-	Duel.SetOperationInfo(0,CATEGORY_RECOVER,nil,0,tp,c14318794[2][1])
-	table.remove(c14318794[2],1)
+	Duel.SetTargetParam(c14318794[2]/2)
+	Duel.SetOperationInfo(0,CATEGORY_RECOVER,nil,0,tp,c14318794[2]/2)
 end
 function c14318794.recop(e,tp,eg,ep,ev,re,r,rp)
 	if not e:GetHandler():IsRelateToEffect(e) then return end

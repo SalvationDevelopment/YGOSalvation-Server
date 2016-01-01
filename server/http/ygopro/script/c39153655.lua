@@ -1,7 +1,12 @@
 --DDケルベロス
 function c39153655.initial_effect(c)
 	--pendulum summon
-	aux.EnablePendulumAttribute(c)
+	aux.AddPendulumProcedure(c)
+	--Activate
+	local e1=Effect.CreateEffect(c)
+	e1:SetType(EFFECT_TYPE_ACTIVATE)
+	e1:SetCode(EVENT_FREE_CHAIN)
+	c:RegisterEffect(e1)
 	--atk/def
 	local e2=Effect.CreateEffect(c)
 	e2:SetDescription(aux.Stringid(39153655,0))

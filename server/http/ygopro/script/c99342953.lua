@@ -7,8 +7,9 @@ function c99342953.initial_effect(c)
 	--counter
 	local e2=Effect.CreateEffect(c)
 	e2:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
+	e2:SetProperty(EFFECT_FLAG_DELAY)
 	e2:SetRange(LOCATION_SZONE)
-	e2:SetCode(EVENT_DESTROYED)
+	e2:SetCode(EVENT_DESTROY)
 	e2:SetCondition(c99342953.ctcon)
 	e2:SetOperation(c99342953.ctop)
 	c:RegisterEffect(e2)
@@ -26,13 +27,13 @@ function c99342953.initial_effect(c)
 	c:RegisterEffect(e3)
 end
 function c99342953.ctfilter(c)
-	return c:IsPreviousLocation(LOCATION_MZONE) and c:IsPreviousPosition(POS_FACEUP) and c:IsPreviousSetCard(0xc)
+	return c:IsFaceup() and c:IsSetCard(0xc) and c:IsLocation(LOCATION_MZONE)
 end
 function c99342953.ctcon(e,tp,eg,ep,ev,re,r,rp)
 	return eg:IsExists(c99342953.ctfilter,1,nil)
 end
 function c99342953.ctop(e,tp,eg,ep,ev,re,r,rp)
-	e:GetHandler():AddCounter(COUNTER_NEED_ENABLE+0xe,1)
+	e:GetHandler():AddCounter(0xe,1)
 end
 function c99342953.spcost(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsCanRemoveCounter(tp,1,1,0xe,2,REASON_COST) end

@@ -55,6 +55,7 @@ function c33622465.spop(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	if c:IsRelateToEffect(e)
 		and Duel.IsPlayerCanSpecialSummonMonster(tp,33622465,0,0x11,3,1200,400,RACE_WARRIOR,ATTRIBUTE_EARTH) then
+		c:AddTrapMonsterAttribute(TYPE_NORMAL,ATTRIBUTE_EARTH,RACE_WARRIOR,3,1200,400)
 		c:SetStatus(STATUS_NO_LEVEL,false)
 		local e1=Effect.CreateEffect(c)
 		e1:SetType(EFFECT_TYPE_SINGLE)

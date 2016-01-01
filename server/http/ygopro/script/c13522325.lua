@@ -23,7 +23,7 @@ end
 function c13522325.atkcon(e)
 	local ph=Duel.GetCurrentPhase()
 	local tp=Duel.GetTurnPlayer()
-	return tp==e:GetHandler():GetControler() and ph>=PHASE_BATTLE_START and ph<=PHASE_BATTLE
+	return tp==e:GetHandler():GetControler() and (ph==PHASE_BATTLE or ph==PHASE_DAMAGE or ph==PHASE_DAMAGE_CAL)
 end
 function c13522325.spfilter(c)
 	return c:IsAttribute(ATTRIBUTE_FIRE) and c:IsAbleToRemoveAsCost()

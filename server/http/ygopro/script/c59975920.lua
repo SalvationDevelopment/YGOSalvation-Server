@@ -41,7 +41,7 @@ function c59975920.spcon(e,c)
 		and Duel.GetLocationCount(c:GetControler(),LOCATION_MZONE)>0
 end
 function c59975920.thfilter(c)
-	return c:IsSetCard(0xdc) and c:IsAbleToHand()
+	return c:IsSetCard(0xd5) and c:IsAbleToHand()
 end
 function c59975920.thtg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then return chkc:IsLocation(LOCATION_GRAVE) and chkc:IsControler(tp) and c59975920.thfilter(chkc) end
@@ -58,7 +58,7 @@ function c59975920.thop(e,tp,eg,ep,ev,re,r,rp)
 	end
 end
 function c59975920.filter(c,e,tp)
-	return c:IsSetCard(0xdc) and not c:IsCode(59975920) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
+	return c:IsSetCard(0xd5) and not c:IsCode(59975920) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
 end
 function c59975920.sptg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then return chkc:IsLocation(LOCATION_GRAVE) and chkc:IsControler(tp) and c59975920.filter(chkc,e,tp) end

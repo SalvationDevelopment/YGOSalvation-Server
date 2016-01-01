@@ -4,7 +4,7 @@ function c90846359.initial_effect(c)
 	local e1=Effect.CreateEffect(c)
 	e1:SetType(EFFECT_TYPE_ACTIVATE)
 	e1:SetCode(EVENT_FREE_CHAIN)
-	e1:SetHintTiming(0,0x1c0)
+	e1:SetHintTiming(0,TIMING_DRAW_PHASE+0x1c0)
 	e1:SetTarget(c90846359.acttg)
 	c:RegisterEffect(e1)
 	--adjust
@@ -99,7 +99,7 @@ function c90846359.adjustop(e,tp,eg,ep,ev,re,r,rp)
 	end
 	g1:Merge(g2)
 	if g1:GetCount()>0 then
-		Duel.SendtoGrave(g1,REASON_RULE)
+		Duel.SendtoGrave(g1,REASON_EFFECT)
 		Duel.Readjust()
 	end
 end

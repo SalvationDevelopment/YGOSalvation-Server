@@ -46,7 +46,7 @@ function c40089744.activate(e,tp,eg,ep,ev,re,r,rp)
 	end
 end
 function c40089744.cfilter(c)
-	return c:IsType(TYPE_MONSTER) and c:IsPreviousLocation(LOCATION_HAND+LOCATION_ONFIELD)
+	return c:IsType(TYPE_MONSTER) and c:IsPreviousLocation(LOCATION_HAND+LOCATION_MZONE)
 end
 function c40089744.acop(e,tp,eg,ep,ev,re,r,rp)
 	local ct=eg:FilterCount(c40089744.cfilter,nil)

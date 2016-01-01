@@ -1,43 +1,42 @@
---PSYフレームロード・Ζ
+--Scripted by Eerie Code
+--PSYFrame Lord Zeta
 function c37192109.initial_effect(c)
 	--synchro summon
 	aux.AddSynchroProcedure(c,nil,aux.NonTuner(nil),1)
 	c:EnableReviveLimit()
-	--remove
+	--Banish
 	local e1=Effect.CreateEffect(c)
 	e1:SetDescription(aux.Stringid(37192109,0))
 	e1:SetCategory(CATEGORY_REMOVE)
 	e1:SetType(EFFECT_TYPE_QUICK_O)
-	e1:SetProperty(EFFECT_FLAG_CARD_TARGET)
-	e1:SetRange(LOCATION_MZONE)
 	e1:SetCode(EVENT_FREE_CHAIN)
+	e1:SetProperty(EFFECT_FLAG_CARD_TARGET+EFFECT_FLAG_DAMAGE_STEP+EFFECT_FLAG_DAMAGE_CAL)
+	e1:SetRange(LOCATION_MZONE)
 	e1:SetCountLimit(1)
 	e1:SetTarget(c37192109.rmtg)
 	e1:SetOperation(c37192109.rmop)
 	c:RegisterEffect(e1)
-	--to hand
+	--To Hand
 	local e2=Effect.CreateEffect(c)
 	e2:SetDescription(aux.Stringid(37192109,1))
-	e2:SetCategory(CATEGORY_TODECK+CATEGORY_TOHAND)
+	e2:SetCategory(CATEGORY_TOHAND)
 	e2:SetType(EFFECT_TYPE_IGNITION)
 	e2:SetRange(LOCATION_GRAVE)
 	e2:SetProperty(EFFECT_FLAG_CARD_TARGET)
+	e2:SetCost(c37192109.thcost)
 	e2:SetTarget(c37192109.thtg)
 	e2:SetOperation(c37192109.thop)
 	c:RegisterEffect(e2)
 end
-function c37192109.rmfilter(c)
-	return c:IsPosition(POS_FACEUP_ATTACK) and c:IsAbleToRemove()
-		and bit.band(c:GetSummonType(),SUMMON_TYPE_SPECIAL)==SUMMON_TYPE_SPECIAL
+
+function c37192109.rmfil(c)
+	return bit.band(c:GetSummonType(),SUMMON_TYPE_SPECIAL)==SUMMON_TYPE_SPECIAL and c:IsFaceup() and c:IsPosition(POS_FACEUP_ATTACK) and c:IsAbleToRemove()
 end
 function c37192109.rmtg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
-	if chkc then return chkc:IsLocation(LOCATION_MZONE) and chkc:IsControler(1-tp) and c37192109.rmfilter(chkc) end
-	if chk==0 then return e:GetHandler():IsAbleToRemove()
-		and Duel.IsExistingTarget(c37192109.rmfilter,tp,0,LOCATION_MZONE,1,nil) end
-	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_REMOVE)
-	local g=Duel.SelectTarget(tp,c37192109.rmfilter,tp,0,LOCATION_MZONE,1,1,nil)
-	g:AddCard(e:GetHandler())
-	Duel.SetOperationInfo(0,CATEGORY_REMOVE,g,2,0,0)
+	if chkc then return chkc:IsLocation(LOCATION_MZONE) and chkc:IsControler(1-tp) and c37192109.rmfil(chkc) end
+	if chk==0 then return Duel.IsExistingTarget(c37192109.rmfil,tp,0,LOCATION_MZONE,1,nil) and e:GetHandler():IsAbleToRemove() end
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TARGET)
+	Duel.SelectTarget(tp,c37192109.rmfil,tp,0,LOCATION_MZONE,1,1,nil)
 end
 function c37192109.rmop(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
@@ -45,78 +44,57 @@ function c37192109.rmop(e,tp,eg,ep,ev,re,r,rp)
 	if not c:IsRelateToEffect(e) or not tc:IsRelateToEffect(e) then return end
 	local g=Group.FromCards(c,tc)
 	if Duel.Remove(g,0,REASON_EFFECT+REASON_TEMPORARY)~=0 then
-		local fid=c:GetFieldID()
-		local rct=1
-		if Duel.GetTurnPlayer()==tp and Duel.GetCurrentPhase()==PHASE_STANDBY then rct=2 end
 		local og=Duel.GetOperatedGroup()
 		local oc=og:GetFirst()
 		while oc do
-			if oc:IsControler(tp) then
-				oc:RegisterFlagEffect(37192109,RESET_EVENT+0x1fe0000+RESET_PHASE+PHASE_STANDBY+RESET_SELF_TURN,0,rct,fid)
-			else
-				oc:RegisterFlagEffect(37192109,RESET_EVENT+0x1fe0000+RESET_PHASE+PHASE_STANDBY+RESET_OPPO_TURN,0,1,fid)
-			end
+			oc:RegisterFlagEffect(37192109,RESET_EVENT+0x1fe0000+RESET_PHASE+PHASE_END,0,1)
 			oc=og:GetNext()
 		end
 		og:KeepAlive()
 		local e1=Effect.CreateEffect(c)
 		e1:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
-		e1:SetProperty(EFFECT_FLAG_IGNORE_IMMUNE)
 		e1:SetCode(EVENT_PHASE+PHASE_STANDBY)
+		e1:SetReset(RESET_PHASE+PHASE_STANDBY+RESET_SELF_TURN)
 		e1:SetCountLimit(1)
-		e1:SetLabel(fid)
-		e1:SetLabelObject(og)
 		e1:SetCondition(c37192109.retcon)
+		e1:SetLabelObject(og)
 		e1:SetOperation(c37192109.retop)
-		if Duel.GetTurnPlayer()==tp and Duel.GetCurrentPhase()==PHASE_STANDBY then
-			e1:SetReset(RESET_PHASE+PHASE_STANDBY+RESET_SELF_TURN,2)
-			e1:SetValue(Duel.GetTurnCount())
-		else
-			e1:SetReset(RESET_PHASE+PHASE_STANDBY+RESET_SELF_TURN)
-			e1:SetValue(0)
-		end
 		Duel.RegisterEffect(e1,tp)
 	end
 end
-function c37192109.retfilter(c,fid)
-	return c:GetFlagEffectLabel(37192109)==fid
+function c37192109.retfilter(c)
+	return c:GetFlagEffect(37192109)~=0
 end
 function c37192109.retcon(e,tp,eg,ep,ev,re,r,rp)
-	if Duel.GetTurnPlayer()~=tp or Duel.GetTurnCount()==e:GetValue() then return false end
-	local g=e:GetLabelObject()
-	if not g:IsExists(c37192109.retfilter,1,nil,e:GetLabel()) then
-		g:DeleteGroup()
-		e:Reset()
-		return false
-	else return true end
+	return Duel.GetTurnPlayer()==tp
 end
 function c37192109.retop(e,tp,eg,ep,ev,re,r,rp)
-	local g=e:GetLabelObject()
-	local sg=g:Filter(c37192109.retfilter,nil,e:GetLabel())
-	g:DeleteGroup()
+	local sg=e:GetLabelObject()
 	local tc=sg:GetFirst()
 	while tc do
 		Duel.ReturnToField(tc)
 		tc=sg:GetNext()
 	end
 end
-function c37192109.thfilter(c)
-	return c:IsSetCard(0xc1) and c:IsAbleToHand()
+
+function c37192109.thcost(e,tp,eg,ep,ev,re,r,rp,chk)
+	if chk==0 then return e:GetHandler():IsAbleToExtraAsCost() end
+	Duel.SendtoDeck(e:GetHandler(),nil,0,REASON_COST)
+end
+function c37192109.thfil(c)
+	return c:IsSetCard(0xd3) and c:IsAbleToHand()
 end
 function c37192109.thtg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
-	if chkc then return chkc:IsLocation(LOCATION_GRAVE) and chkc:IsControler(tp) and c37192109.thfilter(chkc) and chkc~=e:GetHandler() end
-	if chk==0 then return e:GetHandler():IsAbleToExtra()
-		and Duel.IsExistingTarget(c37192109.thfilter,tp,LOCATION_GRAVE,0,1,e:GetHandler()) end
+	if chkc then return chkc:IsLocation(LOCATION_GRAVE) and chkc:IsControler(tp) and c37192109.thfil(chkc) end
+	if chk==0 then return Duel.IsExistingTarget(c37192109.thfil,tp,LOCATION_GRAVE,0,1,e:GetHandler()) end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
-	local g=Duel.SelectTarget(tp,c37192109.thfilter,tp,LOCATION_GRAVE,0,1,1,e:GetHandler())
+	local g=Duel.SelectTarget(tp,c37192109.thfil,tp,LOCATION_GRAVE,0,1,1,e:GetHandler())
 	Duel.SetOperationInfo(0,CATEGORY_TOHAND,g,1,0,0)
-	Duel.SetOperationInfo(0,CATEGORY_TODECK,e:GetHandler(),1,0,0)
 end
 function c37192109.thop(e,tp,eg,ep,ev,re,r,rp)
 	local tc=Duel.GetFirstTarget()
-	local c=e:GetHandler()
-	if c:IsRelateToEffect(e) and Duel.SendtoDeck(c,nil,2,REASON_EFFECT)~=0
-		and c:IsLocation(LOCATION_EXTRA) and tc:IsRelateToEffect(e) then
+	if tc:IsRelateToEffect(e) then
 		Duel.SendtoHand(tc,nil,REASON_EFFECT)
+		Duel.ConfirmCards(1-tp,tc)
 	end
 end

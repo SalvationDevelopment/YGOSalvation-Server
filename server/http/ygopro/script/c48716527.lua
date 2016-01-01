@@ -1,6 +1,5 @@
 --帝王の溶撃
 function c48716527.initial_effect(c)
-	Duel.EnableGlobalFlag(GLOBALFLAG_SELF_TOGRAVE)
 	--activate
 	local e1=Effect.CreateEffect(c)
 	e1:SetType(EFFECT_TYPE_ACTIVATE)
@@ -17,11 +16,12 @@ function c48716527.initial_effect(c)
 	c:RegisterEffect(e2)
 	--
 	local e3=Effect.CreateEffect(c)
-	e3:SetType(EFFECT_TYPE_SINGLE)
-	e3:SetProperty(EFFECT_FLAG_SINGLE_RANGE)
-	e3:SetCode(EFFECT_SELF_TOGRAVE)
+	e3:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
+	e3:SetCode(EVENT_PHASE+PHASE_END)
+	e3:SetCountLimit(1)
 	e3:SetRange(LOCATION_SZONE)
 	e3:SetCondition(c48716527.tgcon)
+	e3:SetOperation(c48716527.tgop)
 	c:RegisterEffect(e3)
 end
 function c48716527.cfilter(c)
@@ -34,8 +34,10 @@ end
 function c48716527.distg(e,c)
 	return bit.band(c:GetSummonType(),SUMMON_TYPE_ADVANCE)~=SUMMON_TYPE_ADVANCE
 end
-function c48716527.tgcon(e)
-	local tp=e:GetHandlerPlayer()
-	return Duel.GetTurnPlayer()==tp and Duel.GetCurrentPhase()==PHASE_END
+function c48716527.tgcon(e,tp,eg,ep,ev,re,r,rp)
+	return Duel.GetTurnPlayer()==tp
 		and not Duel.IsExistingMatchingCard(c48716527.cfilter,tp,LOCATION_MZONE,0,1,nil)
+end
+function c48716527.tgop(e,tp,eg,ep,ev,re,r,rp)
+	Duel.SendtoGrave(e:GetHandler(),REASON_EFFECT)
 end

@@ -1,7 +1,12 @@
 --Emミラー・コンダクター
 function c71578874.initial_effect(c)
 	--pendulum summon
-	aux.EnablePendulumAttribute(c)
+	aux.AddPendulumProcedure(c)
+	--Activate
+	local e1=Effect.CreateEffect(c)
+	e1:SetType(EFFECT_TYPE_ACTIVATE)
+	e1:SetCode(EVENT_FREE_CHAIN)
+	c:RegisterEffect(e1)
 	--atk/def
 	local e2=Effect.CreateEffect(c)
 	e2:SetType(EFFECT_TYPE_IGNITION)
@@ -18,9 +23,7 @@ function c71578874.initial_effect(c)
 	e3:SetCode(EVENT_FREE_CHAIN)
 	e3:SetRange(LOCATION_MZONE)
 	e3:SetProperty(EFFECT_FLAG_CARD_TARGET+EFFECT_FLAG_DAMAGE_STEP)
-	e3:SetHintTiming(TIMING_DAMAGE_STEP)
 	e3:SetCountLimit(1)
-	e3:SetCondition(c71578874.swcon)
 	e3:SetTarget(c71578874.swtg)
 	e3:SetOperation(c71578874.swop)
 	c:RegisterEffect(e3)
@@ -50,9 +53,6 @@ function c71578874.adop(e,tp,eg,ep,ev,re,r,rp)
 		e2:SetCode(EFFECT_SET_DEFENCE_FINAL)
 		tc:RegisterEffect(e2)
 	end
-end
-function c71578874.swcon(e,tp,eg,ep,ev,re,r,rp)
-	return Duel.GetCurrentPhase()~=PHASE_DAMAGE or not Duel.IsDamageCalculated()
 end
 function c71578874.swtg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then return chkc:IsLocation(LOCATION_MZONE) and chkc:IsFaceup() end

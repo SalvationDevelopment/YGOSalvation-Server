@@ -1,4 +1,4 @@
---トゥーン・バスター・ブレイダー
+--Toon Buster Blader
 function c61190918.initial_effect(c)
 	--cannot attack
 	local e1=Effect.CreateEffect(c)
@@ -50,3 +50,4 @@ end
 function c61190918.filter(c)
 	return c:IsRace(RACE_DRAGON) and (c:IsLocation(LOCATION_GRAVE) or c:IsFaceup())
 end
+

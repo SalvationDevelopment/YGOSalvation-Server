@@ -59,10 +59,12 @@ end
 function c87602890.operation(e,tp,eg,ep,ev,re,r,rp)
 	local tc=Duel.GetFirstTarget()
 	if tc and tc:IsRelateToEffect(e) then
-		if Duel.Destroy(tc,REASON_EFFECT)==0 or bit.band(tc:GetPreviousAttributeOnField(),ATTRIBUTE_LIGHT)==0 then return end
-		local lv=tc:GetOriginalLevel()
+		local att=0
+		if tc:IsFaceup() then att=tc:GetAttribute() end
+		if Duel.Destroy(tc,REASON_EFFECT)==0 or bit.band(att,ATTRIBUTE_LIGHT)==0 then return end
+		local lv=tc:GetLevel()
 		if tc:IsType(TYPE_XYZ) then
-			lv=tc:GetOriginalRank()
+			lv=tc:GetRank()
 		end
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TOGRAVE)
 		local g1=Duel.SelectMatchingCard(tp,nil,tp,LOCATION_EXTRA,0,lv,lv,nil)

@@ -1,7 +1,13 @@
---ダイナミスト・ケラトプス
+--Dinomist Ceratops
+--FH version
 function c37752990.initial_effect(c)
 	--pendulum summon
-	aux.EnablePendulumAttribute(c)
+	aux.AddPendulumProcedure(c)
+	--Activate
+	local e1=Effect.CreateEffect(c)
+	e1:SetType(EFFECT_TYPE_ACTIVATE)
+	e1:SetCode(EVENT_FREE_CHAIN)
+	c:RegisterEffect(e1)
 	--destroy replace
 	local e2=Effect.CreateEffect(c)
 	e2:SetType(EFFECT_TYPE_CONTINUOUS+EFFECT_TYPE_FIELD)
@@ -21,7 +27,7 @@ function c37752990.initial_effect(c)
 	c:RegisterEffect(e3)
 end
 function c37752990.filter(c,tp)
-	return c:IsFaceup() and c:IsControler(tp) and c:IsLocation(LOCATION_ONFIELD) and c:IsSetCard(0xd8)
+	return c:IsFaceup() and c:IsControler(tp) and c:IsLocation(LOCATION_ONFIELD) and c:IsSetCard(0x1e71)
 		and (c:IsReason(REASON_BATTLE) or (c:IsReason(REASON_EFFECT) and c:GetReasonPlayer()~=tp))
 end
 function c37752990.reptg(e,tp,eg,ep,ev,re,r,rp,chk)
@@ -35,7 +41,7 @@ function c37752990.repop(e,tp,eg,ep,ev,re,r,rp)
 	Duel.Destroy(e:GetHandler(),REASON_EFFECT+REASON_REPLACE)
 end
 function c37752990.cfilter(c)
-	return c:IsFacedown() or c:IsCode(37752990) or not c:IsSetCard(0xd8)
+	return c:IsFacedown() or c:IsCode(37752990) or not c:IsSetCard(0x1e71)
 end
 function c37752990.spcon(e,c)
 	if c==nil then return true end
