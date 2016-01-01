@@ -23,7 +23,7 @@ function c99315583.initial_effect(c)
 	c:RegisterEffect(e2)
 end
 function c99315583.atkfilter(c,tp)
-	return (c:IsSetCard(0x1373) or (c:IsSetCard(0x1374) and c:IsType(TYPE_SPELL+TYPE_TRAP))) and c:IsLocation(LOCATION_GRAVE) and c:IsControler(tp)
+	return (c:IsSetCard(0x1373) or (c:IsSetCard(0x1374) and c:IsType(TYPE_SPELL+TYPE_TRAP))) and c:IsLocation(LOCATION_GRAVE)
 end
 function c99315583.atkcon(e,tp,eg,ep,ev,re,r,rp)
 	return eg:IsExists(c99315583.atkfilter,1,nil,tp) and e:GetHandler():IsFaceup()

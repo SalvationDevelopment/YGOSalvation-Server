@@ -2,7 +2,7 @@
 --By: HelixReactor
 function c72001828.initial_effect(c)
 	--pendulum summon
-	aux.EnablePendulumAttribute(c)
+	aux.AddPendulumProcedure(c)
 	--Activate
 	local e1=Effect.CreateEffect(c)
 	e1:SetType(EFFECT_TYPE_ACTIVATE)
@@ -21,7 +21,7 @@ function c72001828.initial_effect(c)
 	--Remove
 	local e3=Effect.CreateEffect(c)
 	e3:SetType(EFFECT_TYPE_FIELD)
-	e3:SetProperty(EFFECT_FLAG_IGNORE_RANGE)
+	e3:SetProperty(EFFECT_FLAG_SET_AVAILABLE+EFFECT_FLAG_IGNORE_RANGE)
 	e3:SetCode(EFFECT_TO_GRAVE_REDIRECT)
 	e3:SetRange(LOCATION_PZONE)
 	e3:SetCondition(c72001828.rmcon)
@@ -58,7 +58,6 @@ function c72001828.cfilter(c)
 	return c:IsFaceup() and c:IsSetCard(0x1d1)
 end
 function c72001828.rmcon(e,tp,eg,ep,ev,re,r,rp)
-	tp=e:GetHandlerPlayer()
 	return Duel.GetMatchingGroupCount(c72001828.cfilter,tp,LOCATION_MZONE,0,nil)>0
 end
 function c72001828.rmtarget(e,c)
