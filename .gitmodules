@@ -16,3 +16,6 @@
 [submodule "server/ocgcore"]
 	path = server/ocgcore
 	url = https://github.com/SalvationDevelopment/YGOPro-Library-Builder
+[submodule "server/http/ygopro/script"]
+	path = server/http/ygopro/script
+	url = https://github.com/SalvationDevelopment/Salvation-Scripts-TCG
