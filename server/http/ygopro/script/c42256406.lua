@@ -48,10 +48,7 @@ function c42256406.cbcon(e,tp,eg,ep,ev,re,r,rp)
 	return r~=REASON_REPLACE and c~=bt and bt:IsFaceup() and bt:GetControler()==c:GetControler()
 end
 function c42256406.cbop(e,tp,eg,ep,ev,re,r,rp)
-	local c=e:GetHandler()
-	if c:IsRelateToEffect(e) and not Duel.GetAttacker():IsImmuneToEffect(e) then
-		Duel.ChangeAttackTarget(c)
-	end
+	Duel.ChangeAttackTarget(e:GetHandler())
 end
 function c42256406.defcost(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsPlayerCanDiscardDeckAsCost(tp,1) end

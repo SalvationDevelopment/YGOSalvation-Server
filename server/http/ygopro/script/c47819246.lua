@@ -37,7 +37,7 @@ function c47819246.condition(e,tp,eg,ep,ev,re,r,rp)
 	return Duel.GetCurrentPhase()~=PHASE_DAMAGE or not Duel.IsDamageCalculated()
 end
 function c47819246.filter(c)
-	return c:IsFaceup() and c:IsSetCard(0xdc) and c:IsType(TYPE_XYZ)
+	return c:IsFaceup() and c:IsSetCard(0xd5) and c:IsType(TYPE_XYZ)
 end
 function c47819246.target(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then return chkc:IsControler(tp) and chkc:IsLocation(LOCATION_MZONE) and c47819246.filter(chkc) end
@@ -64,13 +64,13 @@ function c47819246.operation(e,tp,eg,ep,ev,re,r,rp)
 	end
 end
 function c47819246.eqlimit(e,c)
-	return c:GetControler()==e:GetOwnerPlayer() and c:IsSetCard(0xdc) and c:IsType(TYPE_XYZ)
+	return c:GetControler()==e:GetOwnerPlayer() and c:IsSetCard(0xd5) and c:IsType(TYPE_XYZ)
 end
 function c47819246.atkval(e,c)
 	return c:GetRank()*100
 end
 function c47819246.mtcon(e,tp,eg,ep,ev,re,r,rp)
-	return e:GetHandler():IsType(TYPE_EQUIP) and Duel.GetTurnPlayer()==tp and (Duel.GetCurrentPhase()>=PHASE_BATTLE_START and Duel.GetCurrentPhase()<=PHASE_BATTLE)
+	return e:GetHandler():IsType(TYPE_EQUIP) and Duel.GetTurnPlayer()==tp and Duel.GetCurrentPhase()==PHASE_BATTLE
 end
 function c47819246.mtcost(e,tp,eg,ep,ev,re,r,rp,chk)
 	local c=e:GetHandler()

@@ -1,4 +1,4 @@
---ペンデュラム・モラトリアム
+--펜듈럼 모라토리엄
 function c60434189.initial_effect(c)
 	--Activate
 	local e1=Effect.CreateEffect(c)

@@ -1,4 +1,4 @@
---キューブン
+--큐분
 function c17530001.initial_effect(c)
 	--
 	local e1=Effect.CreateEffect(c)
@@ -23,15 +23,18 @@ function c17530001.operation(e,tp,eg,ep,ev,re,r,rp)
 	e1:SetType(EFFECT_TYPE_FIELD)
 	e1:SetRange(LOCATION_MZONE)
 	e1:SetCode(EFFECT_CANNOT_SUMMON)
-	e1:SetProperty(EFFECT_FLAG_PLAYER_TARGET+EFFECT_FLAG_CANNOT_DISABLE)
+	e1:SetProperty(EFFECT_FLAG_PLAYER_TARGET)
 	e1:SetTargetRange(1,1)
 	e1:SetTarget(c17530001.tglimit)
 	e1:SetLabel(dc)
 	e1:SetReset(RESET_EVENT+0x1fe0000)
 	c:RegisterEffect(e1)
 	local e2=e1:Clone()
-	e2:SetCode(EFFECT_CANNOT_SPECIAL_SUMMON)
+	e2:SetCode(EFFECT_CANNOT_MSET)
 	c:RegisterEffect(e2)
+	local e3=e1:Clone()
+	e3:SetCode(EFFECT_CANNOT_SPECIAL_SUMMON)
+	c:RegisterEffect(e3)
 end
 function c17530001.tglimit(e,c)
 	return c:GetLevel()==e:GetLabel()

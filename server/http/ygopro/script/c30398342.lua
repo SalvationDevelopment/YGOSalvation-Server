@@ -6,7 +6,6 @@ function c30398342.initial_effect(c)
 	e1:SetCode(EVENT_FREE_CHAIN)
 	e1:SetProperty(EFFECT_FLAG_DAMAGE_STEP)
 	e1:SetHintTiming(TIMING_DESTROY)
-	e1:SetCondition(c30398342.spcon1)
 	e1:SetTarget(c30398342.sptg1)
 	e1:SetOperation(c30398342.spop)
 	c:RegisterEffect(e1)
@@ -33,13 +32,6 @@ function c30398342.initial_effect(c)
 	e3:SetTargetRange(1,0)
 	e3:SetTarget(c30398342.sumlimit)
 	c:RegisterEffect(e3)
-end
-function c30398342.spcon1(e,tp,eg,ep,ev,re,r,rp)
-	if Duel.GetCurrentPhase()~=PHASE_DAMAGE then return true end
-	local res,teg,tep,tev,tre,tr,trp=Duel.CheckEvent(EVENT_DESTROYED,true)
-	return res and teg:IsExists(c30398342.cfilter,1,nil,tp)
-		and Duel.GetLocationCount(tp,LOCATION_MZONE)>0
-		and Duel.IsExistingMatchingCard(c30398342.filter,tp,LOCATION_DECK,0,1,nil,e,tp)
 end
 function c30398342.sptg1(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return true end

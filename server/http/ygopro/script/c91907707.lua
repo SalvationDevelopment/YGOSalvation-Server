@@ -1,7 +1,12 @@
 --クリフォート・アーカイブ
 function c91907707.initial_effect(c)
 	--pendulum summon
-	aux.EnablePendulumAttribute(c)
+	aux.AddPendulumProcedure(c)
+	--Activate
+	local e1=Effect.CreateEffect(c)
+	e1:SetType(EFFECT_TYPE_ACTIVATE)
+	e1:SetCode(EVENT_FREE_CHAIN)
+	c:RegisterEffect(e1)
 	--splimit
 	local e2=Effect.CreateEffect(c)
 	e2:SetType(EFFECT_TYPE_FIELD)
@@ -9,7 +14,7 @@ function c91907707.initial_effect(c)
 	e2:SetProperty(EFFECT_FLAG_PLAYER_TARGET+EFFECT_FLAG_CANNOT_DISABLE)
 	e2:SetRange(LOCATION_PZONE)
 	e2:SetTargetRange(1,0)
-	e2:SetCondition(aux.nfbdncon)
+	e2:SetCondition(c91907707.splimcon)
 	e2:SetTarget(c91907707.splimit)
 	c:RegisterEffect(e2)
 	--atk up
@@ -59,6 +64,9 @@ function c91907707.initial_effect(c)
 	e8:SetTarget(c91907707.thtg)
 	e8:SetOperation(c91907707.thop)
 	c:RegisterEffect(e8)
+end
+function c91907707.splimcon(e)
+	return not e:GetHandler():IsForbidden()
 end
 function c91907707.splimit(e,c)
 	return not c:IsSetCard(0xaa)

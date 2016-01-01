@@ -1,4 +1,4 @@
---旅人の結彼岸
+--The Terminus of the Burning Abyss
 function c44771289.initial_effect(c)
 	--Activate
 	local e1=Effect.CreateEffect(c)
@@ -16,7 +16,7 @@ function c44771289.initial_effect(c)
 	e2:SetType(EFFECT_TYPE_IGNITION)
 	e2:SetRange(LOCATION_GRAVE)
 	e2:SetProperty(EFFECT_FLAG_CARD_TARGET)
-	e2:SetCondition(aux.exccon)
+	e2:SetCondition(c44771289.atkcon)
 	e2:SetCost(c44771289.atkcost)
 	e2:SetTarget(c44771289.atktg)
 	e2:SetOperation(c44771289.atkop)
@@ -89,6 +89,9 @@ function c44771289.activate(e,tp,eg,ep,ev,re,r,rp)
 		end
 	end
 end
+function c44771289.atkcon(e,tp,eg,ep,ev,re,r,rp)
+	return e:GetHandler():GetTurnID()~=Duel.GetTurnCount()
+end
 function c44771289.atkcost(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return e:GetHandler():IsAbleToRemoveAsCost() end
 	Duel.Remove(e:GetHandler(),POS_FACEUP,REASON_EFFECT)
@@ -109,7 +112,7 @@ function c44771289.atkop(e,tp,eg,ep,ev,re,r,rp)
 		e1:SetType(EFFECT_TYPE_SINGLE)
 		e1:SetCode(EFFECT_UPDATE_ATTACK)
 		e1:SetValue(800)
-		e1:SetReset(RESET_EVENT+0x1fe0000+RESET_PHASE+PHASE_END+RESET_OPPO_TURN)
+		e1:SetReset(RESET_EVENT+0x1fe0000+RESET_PHASE+RESET_END+RESET_OPPO_TURN)
 		tc:RegisterEffect(e1)
 		local e2=e1:Clone()
 		e2:SetCode(EFFECT_UPDATE_DEFENCE)

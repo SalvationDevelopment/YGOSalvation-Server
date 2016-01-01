@@ -38,20 +38,13 @@ function c77783947.becon(e)
 end
 function c77783947.sccon(e,tp,eg,ep,ev,re,r,rp)
 	local ph=Duel.GetCurrentPhase()
-	return ph==PHASE_MAIN1 or (ph>=PHASE_BATTLE_START and ph<=PHASE_BATTLE) or ph==PHASE_MAIN2
+	return ph==PHASE_MAIN1 or ph==PHASE_BATTLE or ph==PHASE_MAIN2
 end
 function c77783947.mfilter(c)
-	return c:IsSetCard(0x9e) and c:IsType(TYPE_MONSTER)
-end
-function c77783947.mfilter2(c)
-	return c:IsHasEffect(EFFECT_HAND_SYNCHRO) and c:IsType(TYPE_MONSTER)
+	return c:IsSetCard(0x9e)
 end
 function c77783947.cfilter(c,syn)
-	local b1=true
-	if c:IsHasEffect(EFFECT_HAND_SYNCHRO) then
-		b1=Duel.CheckTunerMaterial(syn,c,nil,c77783947.mfilter,1,99)
-	end
-	return b1 and syn:IsSynchroSummonable(c)
+	return syn:IsSynchroSummonable(c)
 end
 function c77783947.spfilter(c,mg)
 	return mg:IsExists(c77783947.cfilter,1,nil,c)
@@ -63,16 +56,12 @@ end
 function c77783947.sctg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then
 		local mg=Duel.GetMatchingGroup(c77783947.mfilter,tp,LOCATION_MZONE,0,nil)
-		local exg=Duel.GetMatchingGroup(c77783947.mfilter2,tp,LOCATION_MZONE,0,nil)
-		mg:Merge(exg)
 		return Duel.IsExistingMatchingCard(c77783947.spfilter,tp,LOCATION_EXTRA,0,1,nil,mg)
 	end
 	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,tp,LOCATION_EXTRA)
 end
 function c77783947.scop(e,tp,eg,ep,ev,re,r,rp)
 	local mg=Duel.GetMatchingGroup(c77783947.mfilter,tp,LOCATION_MZONE,0,nil)
-	local exg=Duel.GetMatchingGroup(c77783947.mfilter2,tp,LOCATION_MZONE,0,nil)
-	mg:Merge(exg)
 	local g=Duel.GetMatchingGroup(c77783947.spfilter,tp,LOCATION_EXTRA,0,nil,mg)
 	if g:GetCount()>0 then
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)

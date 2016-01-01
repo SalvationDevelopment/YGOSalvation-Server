@@ -1,4 +1,4 @@
---U.A.フィールドゼネラル
+--U.A. Playmaker
 function c98229575.initial_effect(c)
 	--special summon
 	local e1=Effect.CreateEffect(c)
@@ -35,23 +35,20 @@ function c98229575.spop(e,tp,eg,ep,ev,re,r,rp,c)
 end
 function c98229575.atkcon(e,tp,eg,ep,ev,re,r,rp)
 	local at=Duel.GetAttacker()
-	return at:IsSetCard(0xb2) and at:IsControler(tp) and at~=e:GetHandler() and e:GetHandler():IsAttackAbove(800)
+	return at:IsSetCard(0xb2) and at:IsControler(tp) and at~=e:GetHandler()
 end
 function c98229575.atkop(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	local at=Duel.GetAttacker()
-	if c:IsFaceup() and c:IsRelateToEffect(e) and c:IsAttackAbove(800) then
+	if c:IsFaceup() and c:IsRelateToEffect(e) and at:IsFaceup() and at:IsRelateToBattle() then
 		local e1=Effect.CreateEffect(c)
 		e1:SetType(EFFECT_TYPE_SINGLE)
 		e1:SetCode(EFFECT_UPDATE_ATTACK)
-		e1:SetProperty(EFFECT_FLAG_CANNOT_DISABLE)
 		e1:SetValue(-800)
 		e1:SetReset(RESET_EVENT+0x1fe0000)
 		c:RegisterEffect(e1)
-		if at:IsFaceup() and at:IsRelateToBattle() then
-			local e2=e1:Clone()
-			e2:SetValue(800)
-			at:RegisterEffect(e2)
-		end
+		local e2=e1:Clone()
+		e2:SetValue(800)
+		at:RegisterEffect(e2)
 	end
 end

@@ -1,8 +1,8 @@
---SR三つ目のダイス
+--Speedroid Three-Eyed Dice
 function c27660735.initial_effect(c)
-	--disable attack
+--disable attack
 	local e1=Effect.CreateEffect(c)
-	e1:SetDescription(aux.Stringid(27660735,0))
+	e1:SetDescription(aux.Stringid(4906301,0))
 	e1:SetType(EFFECT_TYPE_QUICK_O)
 	e1:SetCode(EVENT_FREE_CHAIN)
 	e1:SetHintTiming(0,TIMING_ATTACK)
@@ -13,7 +13,7 @@ function c27660735.initial_effect(c)
 	c:RegisterEffect(e1)
 end
 function c27660735.condition(e,tp,eg,ep,ev,re,r,rp)
-	return Duel.GetTurnPlayer()~=tp and (Duel.IsAbleToEnterBP() or (Duel.GetCurrentPhase()>=PHASE_BATTLE_START and Duel.GetCurrentPhase()<=PHASE_BATTLE))
+	return Duel.GetTurnPlayer()~=tp and (Duel.IsAbleToEnterBP() or Duel.GetCurrentPhase()==PHASE_BATTLE)
 end
 function c27660735.cost(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return e:GetHandler():IsAbleToRemoveAsCost() end
@@ -32,6 +32,6 @@ function c27660735.operation(e,tp,eg,ep,ev,re,r,rp)
 	end
 end
 function c27660735.disop(e,tp,eg,ep,ev,re,r,rp)
-	Duel.Hint(HINT_CARD,0,27660735)
+	Duel.Hint(HINT_CARD,0,81275020)
 	Duel.NegateAttack()
 end

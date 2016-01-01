@@ -53,22 +53,22 @@ function c20426907.distg1(e,tp,eg,ep,ev,re,r,rp,chk)
 	if res then
 		local tc=teg:GetFirst()
 		if tc:IsLevelBelow(4) and not tc:IsType(TYPE_NORMAL)
-			and Duel.SelectYesNo(tp,94) then
+			and Duel.SelectYesNo(tp,aux.Stringid(20426907,0)) then
 			e:SetLabel(1)
 			Duel.SetTargetCard(teg)
 			Duel.SetOperationInfo(0,CATEGORY_DISABLE,teg,1,0,0)
-			e:GetHandler():RegisterFlagEffect(0,RESET_CHAIN,EFFECT_FLAG_CLIENT_HINT,1,0,65)
+			e:GetHandler():RegisterFlagEffect(0,RESET_CHAIN,EFFECT_FLAG_CLIENT_HINT,1,0,aux.Stringid(20426907,1))
 		end
 		return
 	end
 	res,teg,tep,tev,tre,tr,trp=Duel.CheckEvent(EVENT_SPSUMMON_SUCCESS,true)
 	if res then
 		local g=teg:Filter(c20426907.filter,nil)
-		if g:GetCount()>0 and Duel.SelectYesNo(tp,94) then
+		if g:GetCount()>0 and Duel.SelectYesNo(tp,aux.Stringid(20426907,0)) then
 			e:SetLabel(2)
 			Duel.SetTargetCard(g)
 			Duel.SetOperationInfo(0,CATEGORY_DISABLE,g,g:GetCount(),0,0)
-			e:GetHandler():RegisterFlagEffect(0,RESET_CHAIN,EFFECT_FLAG_CLIENT_HINT,1,0,65)
+			e:GetHandler():RegisterFlagEffect(0,RESET_CHAIN,EFFECT_FLAG_CLIENT_HINT,1,0,aux.Stringid(20426907,1))
 		end
 	end
 end
@@ -98,13 +98,13 @@ function c20426907.disop(e,tp,eg,ep,ev,re,r,rp)
 		local e1=Effect.CreateEffect(e:GetHandler())
 		e1:SetType(EFFECT_TYPE_SINGLE)
 		e1:SetCode(EFFECT_DISABLE)
-		e1:SetReset(RESET_EVENT+0x1fe0000+RESET_PHASE+PHASE_END)
+		e1:SetReset(RESET_EVENT+0x1fe0000+RESET_PHASE+RESET_END)
 		tc:RegisterEffect(e1)
 		local e2=Effect.CreateEffect(e:GetHandler())
 		e2:SetType(EFFECT_TYPE_SINGLE)
 		e2:SetCode(EFFECT_DISABLE_EFFECT)
 		e2:SetValue(RESET_TURN_SET)
-		e2:SetReset(RESET_EVENT+0x1fe0000+RESET_PHASE+PHASE_END)
+		e2:SetReset(RESET_EVENT+0x1fe0000+RESET_PHASE+RESET_END)
 		tc:RegisterEffect(e2)
 		if e:GetLabel()==2 then
 			local e3=Effect.CreateEffect(e:GetHandler())

@@ -1,4 +1,5 @@
---破戒蛮竜－バスター・ドラゴン
+--Buster Dragon, the Preceptrampler Dragon
+--Scripted by Ragna_Edge
 function c11790356.initial_effect(c)
 	--synchro summon
 	aux.AddSynchroProcedure(c,nil,aux.NonTuner(nil),1)
@@ -16,7 +17,6 @@ function c11790356.initial_effect(c)
 	e2:SetCategory(CATEGORY_SPECIAL_SUMMON)
 	e2:SetType(EFFECT_TYPE_IGNITION)
 	e2:SetRange(LOCATION_MZONE)
-	e2:SetProperty(EFFECT_FLAG_CARD_TARGET)
 	e2:SetCountLimit(1)
 	e2:SetCondition(c11790356.spcon)
 	e2:SetTarget(c11790356.sptg)
@@ -27,7 +27,6 @@ function c11790356.initial_effect(c)
 	e3:SetType(EFFECT_TYPE_QUICK_O)
 	e3:SetCategory(CATEGORY_EQUIP)
 	e3:SetCode(EVENT_FREE_CHAIN)
-	e3:SetProperty(EFFECT_FLAG_CARD_TARGET)
 	e3:SetCountLimit(1)
 	e3:SetRange(LOCATION_MZONE)
 	e3:SetCondition(c11790356.condition)
@@ -36,7 +35,7 @@ function c11790356.initial_effect(c)
 	c:RegisterEffect(e3)
 end
 function c11790356.cfilter(c)
-	return c:IsFaceup() and c:IsSetCard(0xd7)
+	return c:IsFaceup() and c:IsSetCard(0x1e8)
 end
 function c11790356.spcon(e,tp,eg,ep,ev,re,r,rp)
 	return not Duel.IsExistingMatchingCard(c11790356.cfilter,tp,LOCATION_MZONE,0,1,nil)
@@ -45,7 +44,7 @@ function c11790356.filter(c,e,tp)
 	return c:IsCode(78193831) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
 end
 function c11790356.sptg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
-	if chkc then return chkc:IsLocation(LOCATION_GRAVE) and chkc:IsControler(tp) and c11790356.filter(chkc,e,tp) end
+	if chkc then return chkc:IsLocation(LOCATION_GRAVE) and c11790356.filter(chkc,e,tp) end
 	if chk==0 then return Duel.GetLocationCount(tp,LOCATION_MZONE)>0
 		and Duel.IsExistingTarget(c11790356.filter,tp,LOCATION_GRAVE,0,1,nil,e,tp) end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
@@ -62,10 +61,10 @@ function c11790356.condition(e,tp,eg,ep,ev,re,r,rp)
 	return Duel.GetTurnPlayer()~=tp
 end
 function c11790356.filter2(c)
-	return c:IsSetCard(0xd6) and c:IsType(TYPE_MONSTER)
+	return c:IsSetCard(0x1e7) and c:IsType(TYPE_MONSTER)
 end
 function c11790356.target(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
-	if chkc then return chkc:IsControler(tp) and chkc:IsLocation(LOCATION_MZONE) and c11790356.cfilter(chkc) end
+	if chkc then return chkc:IsControler(tp) and chkc:IsLocation(LOCATION_MZONE) end
 	if chk==0 then return Duel.GetLocationCount(tp,LOCATION_SZONE)>0
 		and Duel.IsExistingTarget(c11790356.cfilter,tp,LOCATION_MZONE,0,1,nil)
 		and Duel.IsExistingMatchingCard(c11790356.filter2,tp,LOCATION_GRAVE,0,1,nil) end
@@ -78,17 +77,17 @@ function c11790356.operation(e,tp,eg,ep,ev,re,r,rp)
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_EQUIP)
 	local sg=Duel.SelectMatchingCard(tp,c11790356.filter2,tp,LOCATION_GRAVE,0,1,1,nil)
 	local sc=sg:GetFirst()
-	if sc and tc:IsFaceup() and tc:IsRelateToEffect(e) then
+	if tc:IsFaceup() and tc:IsRelateToEffect(e) then
 		if not Duel.Equip(tp,sc,tc,true) then return end
-		local e1=Effect.CreateEffect(e:GetHandler())
+		local e1=Effect.CreateEffect(tc)
+		e1:SetProperty(EFFECT_FLAG_COPY_INHERIT+EFFECT_FLAG_OWNER_RELATE)
 		e1:SetType(EFFECT_TYPE_SINGLE)
 		e1:SetCode(EFFECT_EQUIP_LIMIT)
 		e1:SetReset(RESET_EVENT+0x1fe0000)
 		e1:SetValue(c11790356.eqlimit)
-		e1:SetLabelObject(tc)
 		sc:RegisterEffect(e1)
 	end
 end
 function c11790356.eqlimit(e,c)
-	return e:GetLabelObject()==c
+	return e:GetOwner()==c
 end

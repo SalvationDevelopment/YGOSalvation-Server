@@ -1,4 +1,4 @@
---旧神ヌトス
+--구신 누토스
 function c80532587.initial_effect(c)
 	c:SetSPSummonOnce(80532587)
 	--fusion material
@@ -35,29 +35,30 @@ function c80532587.initial_effect(c)
 	e4:SetCategory(CATEGORY_DESTROY)
 	e4:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O)
 	e4:SetCode(EVENT_TO_GRAVE)
-	e4:SetProperty(EFFECT_FLAG_CARD_TARGET+EFFECT_FLAG_DELAY)
+	e4:SetProperty(EFFECT_FLAG_CARD_TARGET+EFFECT_FLAG_DAMAGE_STEP+EFFECT_FLAG_DELAY)
+	e4:SetCondition(c80532587.descon)
 	e4:SetTarget(c80532587.destg)
 	e4:SetOperation(c80532587.desop)
 	c:RegisterEffect(e4)
 end
-function c80532587.sprfilter1(c,tp,fc)
-	return c:IsType(TYPE_SYNCHRO) and c:IsAbleToGraveAsCost() and c:IsCanBeFusionMaterial(fc)
-		and Duel.IsExistingMatchingCard(c80532587.sprfilter2,tp,LOCATION_MZONE,0,1,c,fc)
+function c80532587.sprfilter1(c,tp)
+	return c:IsType(TYPE_SYNCHRO) and c:IsAbleToGraveAsCost() and c:IsCanBeFusionMaterial()
+		and Duel.IsExistingMatchingCard(c80532587.sprfilter2,tp,LOCATION_MZONE,0,1,c)
 end
-function c80532587.sprfilter2(c,fc)
-	return c:IsType(TYPE_XYZ) and c:IsAbleToGraveAsCost() and c:IsCanBeFusionMaterial(fc)
+function c80532587.sprfilter2(c)
+	return c:IsType(TYPE_XYZ) and c:IsAbleToGraveAsCost() and c:IsCanBeFusionMaterial()
 end
 function c80532587.sprcon(e,c)
 	if c==nil then return true end
 	local tp=c:GetControler()
 	return Duel.GetLocationCount(tp,LOCATION_MZONE)>-2
-		and Duel.IsExistingMatchingCard(c80532587.sprfilter1,tp,LOCATION_MZONE,0,1,nil,tp,c)
+		and Duel.IsExistingMatchingCard(c80532587.sprfilter1,tp,LOCATION_MZONE,0,1,nil,tp)
 end
 function c80532587.sprop(e,tp,eg,ep,ev,re,r,rp,c)
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TOGRAVE)
-	local g1=Duel.SelectMatchingCard(tp,c80532587.sprfilter1,tp,LOCATION_MZONE,0,1,1,nil,tp,c)
+	local g1=Duel.SelectMatchingCard(tp,c80532587.sprfilter1,tp,LOCATION_MZONE,0,1,1,nil,tp)
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TOGRAVE)
-	local g2=Duel.SelectMatchingCard(tp,c80532587.sprfilter2,tp,LOCATION_MZONE,0,1,1,g1:GetFirst(),c)
+	local g2=Duel.SelectMatchingCard(tp,c80532587.sprfilter2,tp,LOCATION_MZONE,0,1,1,g1:GetFirst())
 	g1:Merge(g2)
 	c:SetMaterial(g1)
 	Duel.SendtoGrave(g1,REASON_COST)
@@ -77,6 +78,9 @@ function c80532587.spop(e,tp,eg,ep,ev,re,r,rp)
 	if g:GetCount()>0 then
 		Duel.SpecialSummon(g,0,tp,tp,false,false,POS_FACEUP)
 	end
+end
+function c80532587.descon(e,tp,eg,ep,ev,re,r,rp)
+	return not e:GetHandler():IsReason(REASON_RETURN)
 end
 function c80532587.destg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then return chkc:IsOnField() and chkc:IsDestructable() end

@@ -1,11 +1,11 @@
---BOXサー
+--BOX복서
 function c61156777.initial_effect(c)
 	--Add counter
 	local e1=Effect.CreateEffect(c)
 	e1:SetDescription(aux.Stringid(61156777,0))
 	e1:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O)
 	e1:SetCode(EVENT_BATTLE_DESTROYING)
-	e1:SetCondition(aux.bdogcon)
+	e1:SetCondition(c61156777.ctcon)
 	e1:SetOperation(c61156777.ctop)
 	c:RegisterEffect(e1)
 	--spsummon
@@ -28,10 +28,15 @@ function c61156777.initial_effect(c)
 	e3:SetOperation(c61156777.repop)
 	c:RegisterEffect(e3)
 end
+function c61156777.ctcon(e,tp,eg,ep,ev,re,r,rp)
+	local c=e:GetHandler()
+	local bc=c:GetBattleTarget()
+	return c:IsRelateToBattle() and bc:IsType(TYPE_MONSTER) and bc:IsLocation(LOCATION_GRAVE)
+end
 function c61156777.ctop(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	if c:IsFaceup() and c:IsRelateToEffect(e) then
-		c:AddCounter(0x34+COUNTER_NEED_ENABLE,1)
+		c:AddCounter(0x34,1)
 	end
 end
 function c61156777.spcost(e,tp,eg,ep,ev,re,r,rp,chk)

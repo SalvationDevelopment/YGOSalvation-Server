@@ -8,8 +8,9 @@ function c5973663.initial_effect(c)
 	--add counter
 	local e2=Effect.CreateEffect(c)
 	e2:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
+	e2:SetProperty(EFFECT_FLAG_DELAY)
 	e2:SetRange(LOCATION_SZONE)
-	e2:SetCode(EVENT_DESTROYED)
+	e2:SetCode(EVENT_DESTROY)
 	e2:SetCondition(c5973663.ctcon)
 	e2:SetOperation(c5973663.ctop)
 	c:RegisterEffect(e2)
@@ -48,13 +49,13 @@ function c5973663.initial_effect(c)
 	c:RegisterEffect(e5)
 end
 function c5973663.ctfilter(c)
-	return c:IsPreviousLocation(LOCATION_MZONE) and c:IsPreviousPosition(POS_FACEUP) and bit.band(c:GetPreviousRaceOnField(),RACE_PLANT)~=0
+	return c:IsFaceup() and c:IsLocation(LOCATION_MZONE) and c:IsRace(RACE_PLANT)
 end
 function c5973663.ctcon(e,tp,eg,ep,ev,re,r,rp)
 	return eg:IsExists(c5973663.ctfilter,1,nil)
 end
 function c5973663.ctop(e,tp,eg,ep,ev,re,r,rp)
-	e:GetHandler():AddCounter(0x18+COUNTER_NEED_ENABLE,1)
+	e:GetHandler():AddCounter(0x18,1)
 end
 function c5973663.cost1(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return e:GetHandler():IsCanRemoveCounter(tp,0x18,1,REASON_COST) end

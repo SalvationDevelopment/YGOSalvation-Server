@@ -1,4 +1,4 @@
---RUM－デス・ダブル・フォース
+--Rank-Up-Magic Death Double Force
 function c86196216.initial_effect(c)
 	--Activate
 	local e1=Effect.CreateEffect(c)
@@ -6,7 +6,8 @@ function c86196216.initial_effect(c)
 	e1:SetType(EFFECT_TYPE_ACTIVATE)
 	e1:SetCode(EVENT_FREE_CHAIN)
 	e1:SetProperty(EFFECT_FLAG_CARD_TARGET)
-	e1:SetHintTiming(0,TIMING_DESTROY+TIMING_END_PHASE)
+	e1:SetHintTiming(TIMING_DESTROY)
+	e1:SetCondition(c86196216.condition)
 	e1:SetTarget(c86196216.target)
 	e1:SetOperation(c86196216.activate)
 	c:RegisterEffect(e1)
@@ -14,22 +15,29 @@ function c86196216.initial_effect(c)
 		c86196216.globle_check=true
 		local ge1=Effect.CreateEffect(c)
 		ge1:SetType(EFFECT_TYPE_CONTINUOUS+EFFECT_TYPE_FIELD)
-		ge1:SetCode(EVENT_TO_GRAVE)
+		ge1:SetCode(EVENT_BATTLE_DESTROYED)
 		ge1:SetOperation(c86196216.checkop)
 		Duel.RegisterEffect(ge1,0)
 	end
 end
 function c86196216.checkop(e,tp,eg,ep,ev,re,r,rp)
 	local tc=eg:GetFirst()
+	local p1=false
+	local p2=false
 	while tc do
-		if tc:IsSetCard(0xba) and tc:IsType(TYPE_XYZ) and tc:IsReason(REASON_DESTROY) and tc:IsReason(REASON_BATTLE) then
-			tc:RegisterFlagEffect(86196216,RESET_EVENT+0x1fe0000+RESET_PHASE+PHASE_END,0,1)
+		if tc:IsSetCard(0xba) and tc:IsType(TYPE_XYZ) and tc:IsReason(REASON_DESTROY) then
+			if tc:GetPreviousControler()==0 then p1=true else p2=true end
 		end
 		tc=eg:GetNext()
 	end
+	if p1 then Duel.RegisterFlagEffect(0,86196216,RESET_PHASE+PHASE_END,0,1) end
+	if p2 then Duel.RegisterFlagEffect(1,86196216,RESET_PHASE+PHASE_END,0,1) end
+end
+function c86196216.condition(e,tp,eg,ep,ev,re,r,rp)
+	return Duel.GetFlagEffect(tp,86196216)~=0
 end
 function c86196216.filter1(c,e,tp)
-	return c:IsSetCard(0xba) and c:IsType(TYPE_XYZ) and c:IsCanBeSpecialSummoned(e,0,tp,false,false) and c:GetFlagEffect(86196216)~=0
+	return c:IsSetCard(0xba) and c:IsType(TYPE_XYZ) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
 		and Duel.IsExistingMatchingCard(c86196216.filter2,tp,LOCATION_EXTRA,0,1,nil,e,tp,c,c:GetRank()*2)
 end
 function c86196216.filter2(c,e,tp,mc,rk)

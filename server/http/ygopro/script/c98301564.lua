@@ -1,7 +1,12 @@
---解放のアリアドネ
+--Liberating Ariadne
 function c98301564.initial_effect(c)
 	--pendulum summon
-	aux.EnablePendulumAttribute(c)
+	aux.AddPendulumProcedure(c)
+	--Activate
+	local e1=Effect.CreateEffect(c)
+	e1:SetType(EFFECT_TYPE_ACTIVATE)
+	e1:SetCode(EVENT_FREE_CHAIN)
+	c:RegisterEffect(e1)
 	--Cost Change
 	local e2=Effect.CreateEffect(c)
 	e2:SetType(EFFECT_TYPE_FIELD)
@@ -35,15 +40,15 @@ function c98301564.costchange(e,re,rp,val)
 		return val
 	end
 end
+
 function c98301564.regcon(e,tp,eg,ep,ev,re,r,rp)
-	return bit.band(r,REASON_EFFECT+REASON_BATTLE)~=0
+	return bit.band(r,REASON_EFFECT+REASON_BATTLE)
 end
 function c98301564.cfilter(c)
 	return c:IsType(TYPE_TRAP) and c:IsType(TYPE_COUNTER) and c:IsAbleToHand()
 end
 function c98301564.regtg(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return not e:GetHandler():IsLocation(LOCATION_DECK)
-		and Duel.IsExistingMatchingCard(c98301564.cfilter,tp,LOCATION_DECK,0,3,nil) end
+	if chk==0 then return Duel.IsExistingMatchingCard(c98301564.cfilter,tp,LOCATION_DECK,0,3,nil) end
 	Duel.SetOperationInfo(0,CATEGORY_TOHAND,nil,1,0,LOCATION_DECK)
 end
 function c98301564.regop(e,tp,eg,ep,ev,re,r,rp)

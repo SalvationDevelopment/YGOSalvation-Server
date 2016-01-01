@@ -1,7 +1,12 @@
 --EMリザードロー
 function c73130445.initial_effect(c)
 	--pendulum summon
-	aux.EnablePendulumAttribute(c)
+	aux.AddPendulumProcedure(c)
+	--Activate
+	local e1=Effect.CreateEffect(c)
+	e1:SetType(EFFECT_TYPE_ACTIVATE)
+	e1:SetCode(EVENT_FREE_CHAIN)
+	c:RegisterEffect(e1)
 	--destroy
 	local e2=Effect.CreateEffect(c)
 	e2:SetCategory(CATEGORY_DESTROY+CATEGORY_DRAW)
@@ -39,10 +44,10 @@ function c73130445.desop(e,tp,eg,ep,ev,re,r,rp)
 end
 function c73130445.cfilter(c,tp)
 	return c:IsPreviousPosition(POS_FACEUP) and c:GetPreviousControler()==tp and c:IsPreviousLocation(LOCATION_MZONE)
-		and c:GetReasonPlayer()~=tp and (c:IsReason(REASON_EFFECT) or (c:IsReason(REASON_BATTLE) and c==Duel.GetAttackTarget()))
+		and (c:IsReason(REASON_EFFECT) or (c:IsReason(REASON_BATTLE) and Duel.GetAttacker():IsControler(1-tp)))
 end
 function c73130445.drcon(e,tp,eg,ep,ev,re,r,rp)
-	return eg:IsExists(c73130445.cfilter,1,nil,tp)
+	return rp~=tp and eg:IsExists(c73130445.cfilter,1,nil,tp)
 end
 function c73130445.filter(c)
 	return c:IsFaceup() and c:IsSetCard(0x9f)

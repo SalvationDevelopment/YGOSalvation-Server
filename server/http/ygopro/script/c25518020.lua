@@ -19,7 +19,7 @@ function c25518020.initial_effect(c)
 	e3:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
 	e3:SetProperty(EFFECT_FLAG_DELAY)
 	e3:SetRange(LOCATION_SZONE)
-	e3:SetCode(EVENT_DESTROYED)
+	e3:SetCode(EVENT_DESTROY)
 	e3:SetCondition(c25518020.ctcon)
 	e3:SetOperation(c25518020.ctop)
 	c:RegisterEffect(e3)
@@ -36,13 +36,13 @@ function c25518020.initial_effect(c)
 	c:RegisterEffect(e4)
 end
 function c25518020.ctfilter(c)
-	return c:IsPreviousLocation(LOCATION_MZONE) and c:IsPreviousPosition(POS_FACEUP) and bit.band(c:GetPreviousRaceOnField(),RACE_MACHINE)~=0
+	return c:IsLocation(LOCATION_MZONE) and c:IsFaceup() and c:IsRace(RACE_MACHINE)
 end
 function c25518020.ctcon(e,tp,eg,ep,ev,re,r,rp)
 	return eg:IsExists(c25518020.ctfilter,1,nil)
 end
 function c25518020.ctop(e,tp,eg,ep,ev,re,r,rp)
-	e:GetHandler():AddCounter(0x1d+COUNTER_NEED_ENABLE,2)
+	e:GetHandler():AddCounter(0x1d,2)
 end
 function c25518020.spcost(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return e:GetHandler():IsAbleToGraveAsCost() end

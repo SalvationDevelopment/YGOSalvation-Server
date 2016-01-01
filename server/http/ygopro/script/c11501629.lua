@@ -35,15 +35,11 @@ function c11501629.ctfilter(c,tp)
 end
 function c11501629.ctcon(e,tp,eg,ep,ev,re,r,rp)
 	local ct=eg:FilterCount(c11501629.ctfilter,nil,tp)
-	if ct>0 and e:GetHandler():IsCanAddCounter(0x2d+COUNTER_NEED_ENABLE,ct) then
-		e:SetLabel(ct)
-		return true
-	else
-		return false
-	end
+	e:SetLabel(ct)
+	return ct>0
 end
 function c11501629.ctop(e,tp,eg,ep,ev,re,r,rp)
-	e:GetHandler():AddCounter(0x2d+COUNTER_NEED_ENABLE,e:GetLabel())
+	e:GetHandler():AddCounter(0x2d,e:GetLabel())
 end
 function c11501629.damcon(e,tp,eg,ep,ev,re,r,rp)
 	return Duel.GetCurrentPhase()==PHASE_STANDBY

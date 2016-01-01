@@ -1,4 +1,4 @@
---破壊剣－アームズバスターブレード
+--Destruction Sword – Arms Buster Blade
 function c38601126.initial_effect(c)
 	--equip
 	local e1=Effect.CreateEffect(c)
@@ -9,7 +9,6 @@ function c38601126.initial_effect(c)
 	e1:SetTarget(c38601126.eqtg)
 	e1:SetOperation(c38601126.eqop)
 	c:RegisterEffect(e1)
-	--
 	local e2=Effect.CreateEffect(c)
 	e2:SetType(EFFECT_TYPE_FIELD)
 	e2:SetProperty(EFFECT_FLAG_PLAYER_TARGET)
@@ -27,7 +26,7 @@ function c38601126.initial_effect(c)
 	c:RegisterEffect(e3)
 end
 function c38601126.filter(c)
-	return c:IsFaceup() and c:IsCode(78193831)
+	return c:IsFaceup() and (c:GetCode()==86240887 or c:GetCode()==3428069 or c:GetCode()==78193831)
 end
 function c38601126.eqtg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then return chkc:IsLocation(LOCATION_MZONE) and chkc:IsControler(tp) and c38601126.filter(chkc) end
@@ -41,7 +40,7 @@ function c38601126.eqop(e,tp,eg,ep,ev,re,r,rp)
 	if not c:IsRelateToEffect(e) then return end
 	if c:IsLocation(LOCATION_MZONE) and c:IsFacedown() then return end
 	local tc=Duel.GetFirstTarget()
-	if Duel.GetLocationCount(tp,LOCATION_SZONE)<=0 or tc:GetControler()~=tp or tc:IsFacedown() or not tc:IsRelateToEffect(e) then
+	if Duel.GetLocationCount(tp,LOCATION_SZONE)<=0 or tc:GetControler()~=tp or tc:IsFacedown() or not tc:IsRelateToEffect(e) or not c:CheckUniqueOnField(tp) then
 		Duel.SendtoGrave(c,REASON_EFFECT)
 		return
 	end
@@ -61,6 +60,8 @@ function c38601126.aclimit(e,re,tp)
 	local loc=re:GetActivateLocation()
 	return loc==LOCATION_SZONE and not re:IsHasType(EFFECT_TYPE_ACTIVATE) and not re:GetHandler():IsImmuneToEffect(e)
 end
+
+
 function c38601126.dacost(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return e:GetHandler():IsAbleToGraveAsCost() end
 	local tc=e:GetHandler():GetEquipTarget()
@@ -78,3 +79,4 @@ function c38601126.daop(e,tp,eg,ep,ev,re,r,rp)
 		tc:RegisterEffect(e1)
 	end
 end
+
