@@ -82,3 +82,4 @@ server/http/setups/*
 *.log.*
 *.yrp
 server/http/ygopro/deck.exe
+*.lua
