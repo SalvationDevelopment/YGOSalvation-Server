@@ -4,6 +4,7 @@
 //development, stage, production
 var template =
     "use_d3d = {use_d3d}\r\n\
+allow_resize =  {use_d3d}\r\n\
 antialias = {antialias}\r\n\
 errorlog = 1\r\n\
 nickname = {nickname}\r\n\
@@ -107,7 +108,8 @@ function runYGOPro(mode, callback) {
     var systemConf = template;
 
     function fillInData(form, placeholder, value) {
-        form = form.replace(placeholder, value);
+        var re = new RegExp(placeholder, 'g');
+        form = form.replace(re, value);
         return form;
     }
     for (var i = 0; settings.length > i; i++) {
