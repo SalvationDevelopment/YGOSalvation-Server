@@ -52,7 +52,6 @@ server/ygocore/*.exe
 server/ygocore/ErrorLog.txt
 server/ygocore/error_log/*
 server/ygosharp/*.txt
-server/http/manifest/*
 server/ygosharp/Mono.Data.Sqlite.dll
 server/ygosharp/OCGWrapper.dll
 server/ygosharp/SevenZip.dll
