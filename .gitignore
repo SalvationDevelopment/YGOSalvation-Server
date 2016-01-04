@@ -56,6 +56,7 @@ server/ygosharp/YGOSharp.exe.config
 server/ygosharp/YGOSharp.vshost.exe
 server/ygosharp/YGOSharp.vshost.exe.config
 server/ygosharp/sqlite3.dll
+server/ygosharp/*.txt
 
 server/http/setups/*
 *.bat
