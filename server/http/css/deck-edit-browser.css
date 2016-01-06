@@ -17,6 +17,8 @@
     float: left;
     width: 24%;
 }
+
+
 /*
 .cardImage {
     top: 0%;
@@ -479,7 +481,6 @@ button {
 [data-card-limit="0"]:before {
     content: '';
     /* background-color: red; */
-    
     height: 20px;
     width: 20px;
     position: absolute;
@@ -492,7 +493,6 @@ button {
 [data-card-limit="1"]:before {
     content: '';
     /* background-color: yellow; */
-    
     height: 20px;
     width: 20px;
     position: absolute;
@@ -506,7 +506,6 @@ button {
 [data-card-limit="2"]:before {
     content: '';
     /* background-color: blue; */
-    
     height: 20px;
     width: 20px;
     position: absolute;
@@ -521,4 +520,8 @@ span.cardImage {
     float: left;
     width: 15%;
     position: relative;
+}
+
+.resultDiv span.cardImage {
+    width: 14vh;
 }
