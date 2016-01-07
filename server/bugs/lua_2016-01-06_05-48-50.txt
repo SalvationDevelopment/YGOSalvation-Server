@@ -1,0 +1,1 @@
+[string "./script/c13701601.lua"]:42: attempt to perform arithmetic on global 'RESET_END' (a nil value)
