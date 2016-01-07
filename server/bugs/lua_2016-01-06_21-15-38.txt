@@ -1,0 +1,1 @@
+[string "./script/c48427163.lua"]:43: attempt to index local 'tc' (a nil value)
