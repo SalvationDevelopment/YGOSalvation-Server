@@ -1,1 +1,0 @@
-[string "./script/c6945.lua"]:52: attempt to index global 'ag' (a nil value)
