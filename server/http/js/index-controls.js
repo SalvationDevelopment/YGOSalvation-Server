@@ -13,8 +13,8 @@ function updatenews() {
     'use strict';
     $.getJSON('http://ygopro.us/manifest/forumNews.json', function (news) {
         $.get('handlebars/forumnews.handlebars', function (template) {
-            var parser = Handlebars.compile(template);
-            var topics = news.topics.reverse();
+            var parser = Handlebars.compile(template),
+                topics = news.topics.reverse();
             news.articles = [];
             topics.forEach(function (topic, index) {
                 if (index > 5) {
@@ -60,7 +60,7 @@ function singlesitenav(target) {
     $('body').css('background-image', 'url(http://ygopro.us/img/bg.jpg)');
     if (target === 'faq') {
         updatenews();
-        $('body').css('background-image', 'url(https://s-media-cache-ak0.pinimg.com/originals/f2/14/aa/f214aa639fc677a813348a0fc63614b1.jpg)');
+        $('body').css('background-image', 'url(http://ygopro.us/img/brightx_bg.jpg)');
     }
     if (target === 'chat' && !chatStarted) {
         swfobject.embedSWF("lightIRC/lightIRC.swf", "lightIRC", "100%", "92%", "10.0.0", "expressInstall.swf", params, {
