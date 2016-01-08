@@ -116,7 +116,7 @@ function locallogin(init) {
     }
 
     $(document.body).addClass("launcher").removeClass('unlogged').removeClass('web');
-//    $('#ipblogin').css('display', 'none');
+    //    $('#ipblogin').css('display', 'none');
     try {
         _gaq.push(['_trackEvent', 'Launcher', 'Login', localStorage.nickname]);
     } catch (e) {}
@@ -262,10 +262,10 @@ $(document).ready(function () {
 
     if (launcher) {
         $('webonly').css('display', 'none');
-        $('#ipblogin').css('display', 'block');
+
     }
 
 
-
+    $('#ipblogin').css('display', 'block');
 
 });
