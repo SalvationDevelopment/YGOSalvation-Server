@@ -1,0 +1,1 @@
+[string "./script/c13790811.lua"]:65: attempt to perform arithmetic on global 'RESET_DAMAGE_CAL' (a nil value)

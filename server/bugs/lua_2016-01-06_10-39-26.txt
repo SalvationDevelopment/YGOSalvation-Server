@@ -1,0 +1,1 @@
+"CallCardFunction"(c80316586.initial_effect): attempt to call an error function
