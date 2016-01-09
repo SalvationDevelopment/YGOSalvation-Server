@@ -770,7 +770,7 @@ header {
 
 .field {
     width: 100%;
-    background: rgba(0, 0, 0, .65);
+/*    background: rgba(0, 0, 0, .65);*/
     -webkit-perspective: 1000px;
     position: relative;
     -webkit-transform-style: preserve-3d;
