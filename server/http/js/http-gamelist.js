@@ -49,6 +49,12 @@ var mode = "production",
 
 var primus = Primus.connect('ws://' + location.host + ':24555');
 
+
+function isChecked(id) {
+    'use strict';
+    return ($(id).is(':checked'));
+}
+
 function ygopro(parameter) {
     'use strict';
     uniqueID = $('#uniqueid').html();
@@ -88,44 +94,8 @@ function ygopro(parameter) {
 
 }
 
-function clearCacheRequest() {
-    'use strict';
-    $.ajax({
-        url: 'http://127.0.0.1:9468/',
-        type: 'DELETE',
-        success: function (result) {
-            // Do something with the result
-        }
-    });
-}
 
-function connectToCheckmateServer() {
-    'use strict';
-    var pass,
-        nickname,
-        chkusername = prompt("Please enter your name Checkmate Server Username", localStorage.chknickname);
-    while (!chkusername) {
-        chkusername = prompt("Please enter your name Checkmate Server Username", localStorage.chknickname);
-    }
-    pass = prompt("Please enter your name Checkmate Server Password", '');
-    nickname = chkusername + '$' + pass;
-    if (nickname.length > 19 && chkusername.length > 0) {
-        $('#servermessages').text('Username and Password combined must be less than 19 charaters');
-        return;
-    }
-    localStorage.chknickname = chkusername;
-    localStorage.lastip = '173.224.211.158';
-    localStorage.lastport = '21001';
-    ygopro('-j');
-    try {
-        _gaq.push(['_trackEvent', 'Launcher', 'YGOPro', 'Checkmate']);
-    } catch (e) {}
-}
 
-function isChecked(id) {
-    'use strict';
-    return ($(id).is(':checked'));
-}
 
 
 
@@ -206,6 +176,7 @@ function enterGame(string, pass) {
     setTimeout(function () {
         $('body').css('background-image', 'url(http://ygopro.us/img/brightx_bg.jpg)');
     }, 6000);
+    singlesitenav('duelscreen');
 }
 
 function joinTournament() {
@@ -435,7 +406,7 @@ function preformfilter(translated, players, rooms, started, pid, watchers) {
         duelist = (translated.gameMode === 'Single' || translated.gameMode === 'Match') ? players[0] + ' vs ' + players[1] : players[0] + ' &amp ' + players[1] + ' vs ' + players[2] + ' &amp ' + players[3];
         //console.log(translated);
         content = '<div class="game ' + rooms + ' ' + started + ' ' + translated.isLocked + ' ' + translated.gameMode;
-        content += '"onclick=enterGame("' + rooms + '",' + translated.isLocked + ')'
+        content += '"onclick=enterGame("' + rooms + '",' + translated.isLocked + ')';
         content += ' data-roomid="' + rooms + '" data-' + game + '="' + rooms + '"data-killpoint="' + pid + '">' + duelist + spectators;
         content += '<span class="subtext" style="font-size:.5em"><br>' + translated.gameMode;
         content += ' ' + $('#creategamebanlist option[value=' + translated.banlist + ']').text() + ' ' + translated.poolFormat + '</div>';
