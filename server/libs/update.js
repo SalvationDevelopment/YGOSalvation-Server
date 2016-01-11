@@ -112,11 +112,17 @@ function update(cb) {
             }
         });
         spawn('git', ['pull'], {}, function () {
-            console.log('Updating submodules');
-            spawn('git', ['submodule', 'foreach', 'git', 'pull', 'origin', 'master'], {}, function () {
-                console.log('Updated submodules');
-                n++;
-            });
+            n++;
+        });
+        spawn('git', ['pull'], {
+            cwd: './ygopro/script'
+        }, function () {
+            n++;
+        });
+        spawn('git', ['pull'], {
+            cwd: './ygopro/pics'
+        }, function () {
+            n++;
         });
     });
 }
