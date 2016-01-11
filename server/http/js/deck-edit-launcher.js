@@ -304,6 +304,7 @@ $(function () {
                 extra: []
             }
         };
+    window.deckStorage = deckStorage;
 
     function excludeTokens(card) {
         // filter out Tokens
@@ -795,7 +796,8 @@ $(function () {
                     spellSelect = $('.spellSelect'),
                     trapSelect = $('.trapSelect'),
                     raceSelect = $('.raceSelect'),
-                    attributeSelect = $('.attributeSelect');
+                    attributeSelect = $('.attributeSelect'),
+                    deckStorage = window.deckStorage;
                 for (setcode in setcodes) {
                     if (setcodes.hasOwnProperty(setcode)) {
                         $('.setcodeSelect').append('<option value="' + parseInt(setcode, 16) + '">' + setcodes[setcode] + '</option>');
