@@ -34,7 +34,7 @@ function makeCTOS(command, message) {
     say.CTOS_JoinGame = function (roompass) {
         var ctos = new Buffer([0x12]),
             name = Array.apply(null, new Array(60)).map(Number.prototype.valueOf, 0),
-            version = new Buffer([0x34, 0x13]),
+            version = new Buffer([0x38, 0x13]),
             gameid = new Buffer([75, 144, 0, 0, 0, 0]),
             pass = new Buffer(roompass, 'utf16le'),
             rpass = new Buffer(name),
