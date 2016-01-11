@@ -53,7 +53,7 @@ function startgame(roompass) {
     window.activeReplayRecorde = [];
     ws.binaryType = 'arraybuffer';
 
-    ws.onconnect = function () {
+    ws.onopen = function () {
         console.log('connected');
 
     };
@@ -73,7 +73,7 @@ function startgame(roompass) {
             l = 0,
             reply;
 
-
+        console.log('.');
         frame = framer.input(q);
         for (newframes; frame.length > newframes; newframes++) {
             task = parsePackets('STOC', new Buffer(frame[newframes]));
@@ -112,4 +112,10 @@ function startgame(roompass) {
 
         }
     });
+}
+
+function sendDeckListToServer(deck) {
+    'use strict';
+    var serverMessage = makeCTOS('CTOS_UPDATE_DECK');
+    window.ws.send(serverMessage);
 }
