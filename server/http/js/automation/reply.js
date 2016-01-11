@@ -50,7 +50,12 @@ function makeCTOS(command, message) {
         return proto;
 
     };
-    say.CTOS_UPDATE_DECK = function (message) {
+    say.CTOS_UPDATE_DECK = function (suggestedDeck) {
+        suggestedDeck = suggestedDeck || {
+            main: [],
+            extra: [],
+            side: []
+        };
         //total len (excluding this)
         //ctos
         //extradeck count
@@ -65,7 +70,7 @@ function makeCTOS(command, message) {
         var ctos = new Buffer([0x2]),
             emptydeck,
             deck = new Buffer(0),
-            decklist = [].concat(message.main).concat(message.extra).concat(message.side),
+            decklist = [].concat(suggestedDeck.main).concat(suggestedDeck.extra).concat(suggestedDeck.side),
             decksize = new Buffer(8),
             len,
             proto = new Buffer(2),
