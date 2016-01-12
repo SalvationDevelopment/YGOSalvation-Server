@@ -788,6 +788,7 @@ function recieveSTOC(packet) {
         task.change = packet.message[0];
         task.changepos = (task.change >> 4) & 0xF;
         task.state = task.change & 0xF;
+        task.stateText = enums.lobbyStates[state];
 
         break;
 

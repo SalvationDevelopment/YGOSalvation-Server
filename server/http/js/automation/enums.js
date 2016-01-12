@@ -118,10 +118,10 @@ module.exports = {
         0x800000: 'Xyz'
     },
     lobbyStates: {
-        0x8: 'Observe',
-        0x9: 'Ready',
-        0xA: 'NotReady',
-        0xB: 'Leave'
+        0x8: 'PLAYERCHANGE_OBSERVE',
+        0x9: 'PLAYERCHANGE_READY',
+        0xA: 'PLAYERCHANGE_NOTREADY',
+        0xB: 'PLAYERCHANGE_LEAVE'
 
     }
 };

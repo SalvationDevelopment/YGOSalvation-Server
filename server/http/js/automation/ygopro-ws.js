@@ -87,6 +87,33 @@ function initiateNetwork(network) {
             }
         }
     });
+    network.on('STOC_HS_PLAYER_CHANGE', function (STOC_HS_PLAYER_CHANGE) {
+        var state = STOC_HS_PLAYER_CHANGE.state,
+            stateText = STOC_HS_PLAYER_CHANGE.stateText,
+            pos = STOC_HS_PLAYER_CHANGE.pos,
+            previousName;
+        if (STOC_HS_PLAYER_CHANGE.pos > 3) {
+            return;
+        }
+        if (STOC_HS_PLAYER_CHANGE.state < 8) {
+            previousName = String(lobby.player[pos]); //copy then delete...
+            lobby.player[state].name = previousName;
+            lobby.player[pos].name = '';
+            lobby.player[pos].ready = false;
+            console.log('???');
+        } else if (stateText === 'PLAYERCHANGE_READY') {
+            lobby.player[pos].ready = true;
+        } else if (stateText === 'PLAYERCHANGE_NOTREADY') {
+            lobby.player[pos].ready = false;
+        } else if (stateText === 'PLAYERCHANGE_LEAVE') {
+            lobby.player[pos].name = '';
+            lobby.player[pos].ready = false;
+        } else if (stateText === 'PLAYERCHANGE_OBSERVE') {
+            lobby.player[pos].name = '';
+            lobby.player[pos].ready = false;
+            lobby.spectators++;
+        }
+    });
 }
 
 //"ws://192.99.11.19:8082"
