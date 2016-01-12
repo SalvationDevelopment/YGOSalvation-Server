@@ -88,8 +88,8 @@ function makeCTOS(command, message) {
             decklist.shift();
         }
 
-        decksize.writeUInt16LE((message.main.length + message.extra.length), 0);
-        decksize.writeUInt16LE(message.side.length, 4);
+        decksize.writeUInt16LE((suggestedDeck.main.length + suggestedDeck.extra.length), 0);
+        decksize.writeUInt16LE(suggestedDeck.side.length, 4);
         q = new Array(1024 - 8 - deck.length);
         emptydeck = Array.apply(null, q.map(Number.prototype.valueOf, 0));
         x = new Buffer(emptydeck);

@@ -4,6 +4,34 @@
 // card.js
 // gui.js
 
+var lobby = {
+    deckcheck: 0,
+    draw_count: 0,
+    lflist: 0,
+    mode: 0,
+    noshuffle: 0,
+    prio: 0,
+    rule: 0,
+    startlp: 0,
+    starthand: 0,
+    timelimit: 0,
+    player: {
+        0: {
+            name: ''
+        },
+        1: {
+            name: ''
+        },
+        2: {
+            name: ''
+        },
+        3: {
+            name: ''
+        }
+    },
+    spectators: 0
+};
+
 function parsePackets(command, message) {
     "use strict";
 
@@ -16,8 +44,6 @@ function parsePackets(command, message) {
     task.push(packet);
     return task;
 }
-
-
 
 function processTask(task, socket) {
     'use strict';
@@ -32,7 +58,28 @@ function processTask(task, socket) {
     return output;
 }
 
+
 /*globals console*/
+
+function initiateNetwork(network) {
+    'use strict';
+    network.on('STOC_JOIN_GAME', function (STOC_JOIN_GAME) {
+        //copy the object over into the model
+        lobby.deckcheck = STOC_JOIN_GAME.deckcheck;
+        lobby.draw_count = STOC_JOIN_GAME.draw_count;
+        lobby.banlistHashCode = STOC_JOIN_GAME.banlistHashCode;
+        lobby.mode = STOC_JOIN_GAME.mode;
+        lobby.noshuffle = STOC_JOIN_GAME.noshuffle;
+        lobby.prio = STOC_JOIN_GAME.prio;
+        lobby.startlp = STOC_JOIN_GAME.startlp;
+        lobby.starthand = STOC_JOIN_GAME.startlp;
+        //fire handbars to render the view.
+    });
+    network.on('STOC_TYPE_CHANGE', function (STOC_TYPE_CHANGE) {
+
+    });
+}
+
 //"ws://192.99.11.19:8082"
 function startgame(roompass) {
     'use strict';
@@ -105,13 +152,7 @@ function startgame(roompass) {
     };
     window.ws = ws;
     window.onunload = window.ws.close;
-
-    network.on('STOC_TYPE_CHANGE', function (STOC_TYPE_CHANGE) {
-
-        if (dInfo.isTag) {
-
-        }
-    });
+    initiateNetwork(network);
 }
 
 function sendDeckListToServer(deck) {

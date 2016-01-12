@@ -734,16 +734,17 @@ function recieveSTOC(packet) {
         break;
 
     case ("STOC_JOIN_GAME"):
-        task.lflist = packet.message.readUInt16LE(0);
-        task.rule = packet.message[2];
-        task.mode = packet.message[3];
-        task.prio = packet.message[4];
-        task.deckcheck = packet.message[5];
-        task.noshuffle = packet.message[6];
+        console.log(packet.message);
+        task.banlistHashCode = packet.message.readUInt16LE(0);
+        task.rule = packet.message[4];
+        task.mode = packet.message[5];
+        task.prio = packet.message[8];
+        task.deckcheck = packet.message[7];
+        task.noshuffle = packet.message[8];
         task.startLP = packet.message.readUInt16LE(12);
-        task.start_hand = packet.message.readUInt16LE(9);
-        task.draw_count = packet.message[11];
-        task.time_limit = packet.message.readUInt16LE(7);
+        task.start_hand = packet.message[16];
+        task.draw_count = packet.message[17];
+        task.time_limit = packet.message.readUInt16LE(18);
         task.message = packet.message;
         break;
     case ("STOC_TYPE_CHANGE"):
