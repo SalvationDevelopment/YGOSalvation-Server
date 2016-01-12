@@ -76,7 +76,16 @@ function initiateNetwork(network) {
         //fire handbars to render the view.
     });
     network.on('STOC_TYPE_CHANGE', function (STOC_TYPE_CHANGE) {
-
+        lobby.ishost = STOC_TYPE_CHANGE.ishost;
+    });
+    network.on('STOC_HS_PLAYER_ENTER', function (STOC_HS_PLAYER_ENTER) {
+        var i;
+        for (i = 0; 3 > i; i++) {
+            if (!lobby.player[i].name) {
+                lobby.player[i].name = STOC_HS_PLAYER_ENTER.person;
+                return;
+            }
+        }
     });
 }
 
