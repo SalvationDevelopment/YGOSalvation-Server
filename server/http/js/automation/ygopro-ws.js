@@ -90,7 +90,7 @@ function initiateNetwork(network) {
     network.on('STOC_HS_PLAYER_CHANGE', function (STOC_HS_PLAYER_CHANGE) {
         var state = STOC_HS_PLAYER_CHANGE.state,
             stateText = STOC_HS_PLAYER_CHANGE.stateText,
-            pos = STOC_HS_PLAYER_CHANGE.pos,
+            pos = STOC_HS_PLAYER_CHANGE.changepos,
             previousName;
         if (STOC_HS_PLAYER_CHANGE.pos > 3) {
             return;
@@ -113,6 +113,9 @@ function initiateNetwork(network) {
             lobby.player[pos].ready = false;
             lobby.spectators++;
         }
+    });
+    network.on('STOC_HS_WATCH_CHANGE', function (STOC_HS_WATCH_CHANGE) {
+        STOC_HS_WATCH_CHANGE.spectators = lobby.spectators;
     });
 }
 
