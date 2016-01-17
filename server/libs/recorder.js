@@ -10,6 +10,9 @@ to check
 - error handling
 - routing for recalling the file
 - failing properly when the file doesnt exist
+- commas in room names might be dangerous
+- pull names of duelist off data
+- change recording and playback to use streams, flawed otherwise
 */
 
 var net = require('net'),
