@@ -1,6 +1,16 @@
 /*jslint node:true, plusplus:true*/
 'use strict';
+/* todo
+- start ygopro with known game id
+- add game id to file
+- start server when ready to start recording
+- see if it works
 
+to check
+- error handling
+- routing for recalling the file
+- failing properly when the file doesnt exist
+*/
 
 var net = require('net'),
     fs = require('fs'),
@@ -151,3 +161,5 @@ setTimeout(function () {
 
 
 require('fs').watch(__filename, process.exit);
+
+//record('known game id')
