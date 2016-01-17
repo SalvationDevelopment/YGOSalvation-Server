@@ -5,7 +5,11 @@
 var net = require('net'),
     fs = require('fs'),
     recieveCTOS = require('./recieveCTOS'),
-    Framemaker = require('./parseframes.js');
+    Framemaker = require('./parseframes.js'),
+    Socket = require('primus').createSocket({
+        iknowclusterwillbreakconnections: true
+    }),
+    client;
 
 function ctos_PlayerInfo(message) {
     var ctos = new Buffer([0x10]),
@@ -41,8 +45,10 @@ function ctos_JoinGame(roompass) {
 
 }
 
-function record(port, roompass) {
-    var toSend = Buffer.concat([ctos_PlayerInfo('Recorder'), ctos_JoinGame(roompass)]),
+function record(subject) {
+    var port = subject.port,
+        roompass = subject.roompass,
+        toSend = Buffer.concat([ctos_PlayerInfo('Recorder'), ctos_JoinGame(roompass)]),
         duel = new Buffer(),
         socket = net.createConnection(port, '127.0.0.1');
 
@@ -119,3 +125,29 @@ net.createServer(function (socket) {
 
     });
 }).listen(1198, '127.0.0.1');
+
+
+function onConnectGamelist() {
+    console.log('    Updater connected to internals');
+    client.write({
+        action: 'internalServerLogin',
+        password: process.env.OPERPASS,
+        gamelist: false,
+        registry: false
+    });
+}
+
+
+function onCloseGamelist() {
+
+}
+
+setTimeout(function () {
+    client = new Socket('ws://127.0.0.1:24555'); //Internal server communications.
+    client.on('data', record);
+    client.on('open', onConnectGamelist);
+    client.on('close', onCloseGamelist);
+}, 5000);
+
+
+require('fs').watch(__filename, process.exit);
