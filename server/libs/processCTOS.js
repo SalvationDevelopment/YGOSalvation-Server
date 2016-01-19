@@ -21,7 +21,7 @@ var portmin = 30000 + process.env.PORTRANGE * 100, //Port Ranges
     gamelist = {},
     registry = {
         //People that have read this source code.
-        SnarkyChild: '::ffff:127.0.0.1',
+        SnarkyChild: '::ffff: 127.0.0.1',
         AccessDenied: '::ffff:127.0.0.1',
         Irate: '::ffff:127.0.0.1',
         Chibi: '::ffff:127.0.0.1',
@@ -306,8 +306,9 @@ function authenticate(socket) {
         return;
     }
 
-    if (registry[socket.username] !== socket.remoteAddress) {
+    if (registry[socket.username] !== socket.remoteAddress && socket.remoteAddress !== '::ffff:127.0.0.1') {
         try {
+            console.log('Terminating:', socket.username, socket.remoteAddress);
             socket.end();
         } catch (killerror) {
             console.log('    [AccessDenied]', 'Something wierd happened with auth', killerror);
