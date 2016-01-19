@@ -269,7 +269,8 @@ function setHostSettings() {
     if (isChecked('#useai')) {
         primus.write({
             action: 'ai',
-            roompass: localStorage.roompass
+            roompass: localStorage.roompass,
+            deck: $("#aidecks option:selected").text()
         });
         ygopro('-j');
     } else {

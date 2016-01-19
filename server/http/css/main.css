@@ -770,7 +770,7 @@ header {
 
 .field {
     width: 100%;
-/*    background: rgba(0, 0, 0, .65);*/
+    /*    background: rgba(0, 0, 0, .65);*/
     -webkit-perspective: 1000px;
     position: relative;
     -webkit-transform-style: preserve-3d;
@@ -1933,4 +1933,9 @@ img#avatar {
     top: 1vh;
     background-image: url(https: //cdn3.iconfinder.com/data/icons/linecons-free-vector-icons-pack/32/lock-512.png);
     background-size: cover;
+}
+
+select#aidecks {
+    width: 29%;
+    margin-left: 1%;
 }
