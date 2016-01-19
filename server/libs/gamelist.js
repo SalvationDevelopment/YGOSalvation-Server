@@ -1,4 +1,4 @@
-/*jslint  node: true, plusplus: true, white: false*/
+/*jslint  node: true, plusplus: true, white: false, nomen  : true*/
 // Gamelist object acts similar to a Redis server, could be replaced with on but its the gamelist state.
 'use strict';
 var http = require('http');
@@ -28,9 +28,9 @@ var primus,
     currentGlobalMessage = '';
 
 setTimeout(function () {
-    //give the system ten seconds to figure itself out.
+    //give the system five seconds to figure itself out.
     booting = false;
-}, 10000);
+}, 5000);
 
 
 function internalMessage(announcement) {
@@ -138,6 +138,11 @@ function handleCoreMessage(core_message_raw, port, pid, game) {
         gamelist[game].time = new Date().getTime();
         //duelserv.bot.say('#public', gamelist[game].pid + '|Duel starting|' + JSON.stringify(gamelist[game].players));
         //console.log('real start-game', game);
+        internalMessage({
+            record: true,
+            port: port,
+            roompass: game
+        });
         break;
 
 
@@ -444,7 +449,8 @@ function onData(data, socket) {
                 clientEvent: 'duelrequest',
                 target: 'SnarkyChild',
                 from: socket.username,
-                roompass: data.roompass
+                roompass: data.roompass,
+                deck: data.deck
             });
         }
         break;

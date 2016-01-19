@@ -59,6 +59,9 @@ function ctos_JoinGame(roompass) {
 }
 
 function record(subject) {
+    if (!subject.record) {
+        return;
+    }
     var port = subject.port,
         roompass = subject.roompass,
         toSend = Buffer.concat([ctos_PlayerInfo('Recorder'), ctos_JoinGame(roompass)]),

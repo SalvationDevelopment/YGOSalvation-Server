@@ -199,7 +199,7 @@ function makeCTOS(command, message) {
     };
 
     say.CTOS_HS_TOOBSERVER = function () {
-        var ctos = new Buffer([0x25]),
+        var ctos = new Buffer([0x21]),
             len = ctos.length,
             proto = new Buffer(2);
 
@@ -210,13 +210,15 @@ function makeCTOS(command, message) {
 
     say.CTOS_CHAT = function (message) {
         // be sure to add \0 at the end.
+        message = message + '\u0000';
         var ctos = new Buffer([0x16]),
             chat = new Buffer(message, 'utf16le'),
-            len = ctos.length,
+            len = chat.length + 1,
             proto = new Buffer(2);
 
         proto.writeUInt16LE(len, 0);
         proto = Buffer.concat([proto, ctos, chat]);
+        console.log(proto);
         return proto;
     };
 
