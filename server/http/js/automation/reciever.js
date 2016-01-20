@@ -66,7 +66,7 @@ function BufferStreamReader(packet) {
         return output;
     };
     this.ReadInt32 = function () {
-        var output = packet.readUInt32LELE(readposition);
+        var output = packet.readUInt32LE(readposition);
         readposition += 4;
         return output;
     };
