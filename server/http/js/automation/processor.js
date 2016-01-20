@@ -176,7 +176,11 @@ function initiateNetwork(network) {
     network.on('MSG_SPSUMMONED', function (data) {
         //???
     });
-
-
-
+    network.on('ERRMSG_DECKERROR', function (data) {
+        //something is wrong with the deck you asked the server to validate!
+        alert(data.error);
+    });
+    network.on('STOC_SELECT_HAND', function (data) {
+        //Trigger RPS Prompt
+    });
 }
