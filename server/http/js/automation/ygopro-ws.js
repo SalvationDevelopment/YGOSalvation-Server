@@ -5,34 +5,38 @@
 // gui.js
 
 var duel = {
-    deckcheck: 0,
-    draw_count: 0,
-    lflist: 0,
-    mode: 0,
-    noshuffle: 0,
-    prio: 0,
-    rule: 0,
-    startlp: 0,
-    starthand: 0,
-    timelimit: 0,
-    player: {
-        0: {
-            name: ''
+        deckcheck: 0,
+        draw_count: 0,
+        lflist: 0,
+        mode: 0,
+        noshuffle: 0,
+        prio: 0,
+        rule: 0,
+        startlp: 0,
+        starthand: 0,
+        timelimit: 0,
+        player: {
+            0: {
+                name: ''
+            },
+            1: {
+                name: ''
+            },
+            2: {
+                name: ''
+            },
+            3: {
+                name: ''
+            }
         },
-        1: {
-            name: ''
-        },
-        2: {
-            name: ''
-        },
-        3: {
-            name: ''
-        }
+        spectators: 0,
+        turn: 0,
+        turnOfPlayer: 0
     },
-    spectators: 0,
-    turn: 0,
-    turnOfPlayer: 0
-};
+    field = {
+        0: {},
+        1: {}
+    };
 
 function parsePackets(command, message) {
     "use strict";
@@ -128,12 +132,24 @@ function initiateNetwork(network) {
         duel.player[1].lifepoints = data.lifepoints2;
         //set the size of each deck
     });
-    network.on('MSG_START', function (data) {
-        //set the LP.
-        duel.player[0].lifepoints = data.lifepoints1;
-        duel.player[1].lifepoints = data.lifepoints2;
-        //set the size of each deck
+    network.on('MSG_NEW_TURN', function (data) {
+        duel.turn++;
+        duel.turnOfPlayer = data.player;
     });
+    network.on('MSG_RELOAD_FIELD', function (data) {
+        duel.turn++;
+        duel.turnOfPlayer = data.player;
+    });
+    network.on('MSG_UPDATE_DATA', function (data) {
+        //field[data.player][data.fieldmodel] = ???;
+        //reimage field;
+    });
+    network.on('MSG_MOVE', function (data) {
+        //use animation system in gui.js
+    });
+
+
+
 }
 
 //"ws://192.99.11.19:8082"
