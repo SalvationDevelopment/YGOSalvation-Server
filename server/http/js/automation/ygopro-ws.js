@@ -4,7 +4,7 @@
 // card.js
 // gui.js
 
-var lobby = {
+var duel = {
     deckcheck: 0,
     draw_count: 0,
     lflist: 0,
@@ -29,7 +29,9 @@ var lobby = {
             name: ''
         }
     },
-    spectators: 0
+    spectators: 0,
+    turn: 0,
+    turnOfPlayer: 0
 };
 
 function parsePackets(command, message) {
@@ -63,59 +65,74 @@ function processTask(task, socket) {
 
 function initiateNetwork(network) {
     'use strict';
-    network.on('STOC_JOIN_GAME', function (STOC_JOIN_GAME) {
+    network.on('STOC_JOIN_GAME', function (data) {
         //copy the object over into the model
-        lobby.deckcheck = STOC_JOIN_GAME.deckcheck;
-        lobby.draw_count = STOC_JOIN_GAME.draw_count;
-        lobby.banlistHashCode = STOC_JOIN_GAME.banlistHashCode;
-        lobby.mode = STOC_JOIN_GAME.mode;
-        lobby.noshuffle = STOC_JOIN_GAME.noshuffle;
-        lobby.prio = STOC_JOIN_GAME.prio;
-        lobby.startlp = STOC_JOIN_GAME.startlp;
-        lobby.starthand = STOC_JOIN_GAME.startlp;
+        duel.deckcheck = data.deckcheck;
+        duel.draw_count = data.draw_count;
+        duel.banlistHashCode = data.banlistHashCode;
+        duel.mode = data.mode;
+        duel.noshuffle = data.noshuffle;
+        duel.prio = data.prio;
+        duel.startlp = data.startlp;
+        duel.starthand = data.startlp;
         //fire handbars to render the view.
     });
-    network.on('STOC_TYPE_CHANGE', function (STOC_TYPE_CHANGE) {
-        lobby.ishost = STOC_TYPE_CHANGE.ishost;
+    network.on('STOC_TYPE_CHANGE', function (data) {
+        duel.ishost = data.ishost;
     });
-    network.on('STOC_HS_PLAYER_ENTER', function (STOC_HS_PLAYER_ENTER) {
+    network.on('STOC_HS_PLAYER_ENTER', function (data) {
         var i;
         for (i = 0; 3 > i; i++) {
-            if (!lobby.player[i].name) {
-                lobby.player[i].name = STOC_HS_PLAYER_ENTER.person;
+            if (!duel.player[i].name) {
+                duel.player[i].name = data.person;
                 return;
             }
         }
     });
-    network.on('STOC_HS_PLAYER_CHANGE', function (STOC_HS_PLAYER_CHANGE) {
-        var state = STOC_HS_PLAYER_CHANGE.state,
-            stateText = STOC_HS_PLAYER_CHANGE.stateText,
-            pos = STOC_HS_PLAYER_CHANGE.changepos,
+    network.on('STOC_HS_PLAYER_CHANGE', function (data) {
+        var state = data.state,
+            stateText = data.stateText,
+            pos = data.changepos,
             previousName;
-        if (STOC_HS_PLAYER_CHANGE.pos > 3) {
+        if (data.pos > 3) {
             return;
         }
-        if (STOC_HS_PLAYER_CHANGE.state < 8) {
-            previousName = String(lobby.player[pos]); //copy then delete...
-            lobby.player[state].name = previousName;
-            lobby.player[pos].name = '';
-            lobby.player[pos].ready = false;
+        if (data.state < 8) {
+            previousName = String(duel.player[pos]); //copy then delete...
+            duel.player[state].name = previousName;
+            duel.player[pos].name = '';
+            duel.player[pos].ready = false;
             console.log('???');
         } else if (stateText === 'PLAYERCHANGE_READY') {
-            lobby.player[pos].ready = true;
+            duel.player[pos].ready = true;
         } else if (stateText === 'PLAYERCHANGE_NOTREADY') {
-            lobby.player[pos].ready = false;
+            duel.player[pos].ready = false;
         } else if (stateText === 'PLAYERCHANGE_LEAVE') {
-            lobby.player[pos].name = '';
-            lobby.player[pos].ready = false;
+            duel.player[pos].name = '';
+            duel.player[pos].ready = false;
         } else if (stateText === 'PLAYERCHANGE_OBSERVE') {
-            lobby.player[pos].name = '';
-            lobby.player[pos].ready = false;
-            lobby.spectators++;
+            duel.player[pos].name = '';
+            duel.player[pos].ready = false;
+            duel.spectators++;
         }
     });
-    network.on('STOC_HS_WATCH_CHANGE', function (STOC_HS_WATCH_CHANGE) {
-        STOC_HS_WATCH_CHANGE.spectators = lobby.spectators;
+    network.on('STOC_HS_WATCH_CHANGE', function (data) {
+        data.spectators = duel.spectators;
+    });
+    network.on('STOC_DUEL_START', function (STOC_DUEL_START) {
+        //switch view from duel to duel field.
+    });
+    network.on('MSG_START', function (data) {
+        //set the LP.
+        duel.player[0].lifepoints = data.lifepoints1;
+        duel.player[1].lifepoints = data.lifepoints2;
+        //set the size of each deck
+    });
+    network.on('MSG_START', function (data) {
+        //set the LP.
+        duel.player[0].lifepoints = data.lifepoints1;
+        duel.player[1].lifepoints = data.lifepoints2;
+        //set the size of each deck
     });
 }
 
@@ -197,7 +214,7 @@ function startgame(roompass) {
 function sendDeckListToServer(deck) {
     'use strict';
     window.ws.send(makeCTOS('CTOS_UPDATE_DECK', deck));
-    window.ws.send(makeCTOS('CTOS_HS_READY'))
+    //window.ws.send(makeCTOS('CTOS_HS_READY'));
 }
 
 function movetoSpectator() {
