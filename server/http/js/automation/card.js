@@ -1,4 +1,5 @@
-/*jslint bitwise: true*/
+/*jslint bitwise: true, node:true, plusplus:true*/
+/*global field*/
 
 var enums = enums || require('../../libs/enums.js');
 
@@ -12,7 +13,12 @@ function makeCard(buffer, start, controller) {
             readposition: start
         };
     }
-    var flag = buffer.readUInt32LE(start);
+    var flag = buffer.readUInt32LE(start),
+        card,
+        readposition,
+        i,
+        ii,
+        iii;
 
     if (!flag) {
         return {
@@ -23,13 +29,13 @@ function makeCard(buffer, start, controller) {
             readposition: start + 9
         };
     }
-    var card = {
+    card = {
         Code: 'cover',
         Position: 'FaceDownAttack'
     };
 
     //console.log('flag:', flag);
-    var readposition = start + 4;
+    readposition = start + 4;
 
     if (flag & enums.query.Code) {
         card.Code = buffer.readUInt32LE(readposition);
@@ -98,9 +104,9 @@ function makeCard(buffer, start, controller) {
     }
     if (flag & enums.query.TargetCard) {
         card.TargetCard = [];
-        for (var i = 0; i < buffer.readUInt32LE(readposition); ++i) {
+        for (i = 0; i < buffer.readUInt32LE(readposition); ++i) {
             card.TargetCard.push({
-                c: buffer[readposition + 0],
+                c: buffer[readposition],
                 l: buffer[readposition + 1],
                 s: buffer[readposition + 2]
             });
@@ -109,14 +115,14 @@ function makeCard(buffer, start, controller) {
     }
     if (flag & enums.query.OverlayCard) {
         card.OverlayCard = [];
-        for (var ii = 0; ii < buffer.readUInt32LE(readposition); ++ii) {
+        for (ii = 0; ii < buffer.readUInt32LE(readposition); ++ii) {
             card.OverlayCard.push(buffer.readUInt32LE(readposition));
             readposition = readposition + 4;
         }
     }
     if (flag & enums.query.Counters) {
         card.Counters = [];
-        for (var iii = 0; iii < buffer.readUInt32LE(readposition); ++iii) {
+        for (iii = 0; iii < buffer.readUInt32LE(readposition); ++iii) {
             card.Counters.push({
                 counterType: buffer.readUInt16LE(readposition),
                 amount: buffer.readUInt16LE(readposition + 2)
@@ -150,6 +156,17 @@ function makeCard(buffer, start, controller) {
     };
 
 
+}
+
+
+function updateFieldCard(controller, location, data) {
+    'use strict';
+    var i,
+        cards = [],
+        requiredIterations = field[controller][location].length;
+    for (i = 0; requiredIterations > i; i++) {
+
+    }
 }
 var module = module || {};
 module.exports = makeCard;
