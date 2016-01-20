@@ -687,8 +687,9 @@ function recieveSTOC(packet) {
             break;
         case ('ERRMSG_DECKERROR'):
             task.errorCode = packet.message[1];
+            task.cardID = packet.message.readUInt32LE(1);
             // complain about deck error. Invalid Deck.
-            task.error = (task.errorCode === 1) ? 'Invalid Deck' : 'Invalid Card, ' + packet.message.readUInt32LE(1); // 
+            task.error = (task.errorCode === 1) ? 'Invalid Deck' : 'Invalid Card, ' + task.cardID; // 
             break;
 
         case ('ERRMSG_SIDEERROR'):

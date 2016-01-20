@@ -121,3 +121,9 @@ function movetoSpectator() {
     console.log(servermessage);
     window.ws.send(servermessage);
 }
+
+function startDuel() {
+    'use strict';
+    var servermessage = makeCTOS('CTOS_START');
+    window.ws.send(servermessage);
+}
