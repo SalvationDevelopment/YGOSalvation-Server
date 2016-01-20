@@ -174,7 +174,7 @@ function recieveSTOC(packet) {
             break;
 
         case ('MSG_SHUFFLE_DECK'):
-            task.shuffle = BufferIO.ReadInt8();
+            task.player = BufferIO.ReadInt8();
             break;
 
         case ('MSG_SHUFFLE_HAND'):
@@ -645,10 +645,11 @@ function recieveSTOC(packet) {
             break;
 
         case ('MSG_UPDATE_CARD'):
-            task.udplayer = BufferIO.ReadInt8();
-            task.udfieldlocation = BufferIO.ReadInt8();
-            task.udindex = BufferIO.ReadInt8();
-            task.udcard = makeCard(packet.message, 8, task.udplayer).card;
+            task.player = BufferIO.ReadInt8();
+            task.fieldlocation = BufferIO.ReadInt8();
+            task.index = BufferIO.ReadInt8();
+            task.card = makeCard(packet.message, 8, task.udplayer).card;
+            task.fieldmodel = enums.locations[task.fieldlocation];
             break;
 
         case ('MSG_WAITING'):
