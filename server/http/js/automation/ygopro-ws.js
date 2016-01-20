@@ -112,7 +112,7 @@ function startgame(roompass) {
 function sendDeckListToServer(deck) {
     'use strict';
     window.ws.send(makeCTOS('CTOS_UPDATE_DECK', deck));
-    //window.ws.send(makeCTOS('CTOS_HS_READY'));
+    window.ws.send(makeCTOS('CTOS_HS_READY'));
 }
 
 function movetoSpectator() {
