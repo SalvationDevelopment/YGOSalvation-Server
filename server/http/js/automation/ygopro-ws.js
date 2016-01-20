@@ -31,7 +31,8 @@ var duel = {
         },
         spectators: 0,
         turn: 0,
-        turnOfPlayer: 0
+        turnOfPlayer: 0,
+        phase: 0
     },
     field = {
         0: {},
@@ -146,6 +147,58 @@ function initiateNetwork(network) {
     });
     network.on('MSG_MOVE', function (data) {
         //use animation system in gui.js
+
+    });
+    network.on('MSG_UPDATE_CARD', function (data) {
+        field[data.player][data.fieldmodel][data.index] = data.card;
+        //redraw field;
+    });
+    network.on('MSG_CHAIN_END', function (data) {
+        //???
+    });
+    network.on('MSG_WAITING', function (data) {
+        //waiting animation/flag set to true.
+    });
+    network.on('MSG_SUMMONING', function (data) {
+        //attempting to summon animation
+        //data.code give the id of the card
+    });
+    network.on('MSG_SUMMONED', function (data) {
+        //???
+    });
+    network.on('MSG_CHAINING', function (data) {
+        //gives a card location and card
+    });
+    network.on('MSG_CHAINED', function (data) {
+        //???
+    });
+    network.on('MSG_EQUIP', function (data) {
+        //???
+    });
+    network.on('MSG_POS_CHANGE', function (data) {
+        //??? might be extention of move command?
+    });
+    network.on('MSG_SHUFFLE_DECK', function (data) {
+        //use gui to shuffle deck of data.player
+    });
+    network.on('MSG_CHAIN_SOLVED', function (data) {
+        //???
+    });
+    network.on('MSG_NEW_PHASE', function (data) {
+        duel.phase = data.phase;
+    });
+    network.on('MSG_DRAW', function (data) {
+        var i = 0;
+        for (i; data.count > i; i++) {
+            field[data.player].DECK[(field.DECK.length - i)] = data.cardslist[i];
+        }
+        //due draw animation/update
+    });
+    network.on('MSG_SPSUMMONING', function (data) {
+        //special summoning animation with data
+    });
+    network.on('MSG_SPSUMMONED', function (data) {
+        //???
     });
 
 
