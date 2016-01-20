@@ -56,51 +56,36 @@ function makeCTOS(command, message) {
             extra: [],
             side: []
         };
-        //total len (excluding this)
-        //ctos
-        //extradeck count
-        //side count
-        //deck cards
-        //edtra cards
-        //side cards
+        //         GamePacketWriter deck = new GamePacketWriter(CtosMessage.UpdateDeck);
+        //            deck.Write(Deck.Cards.Count + Deck.ExtraCards.Count);
+        //            deck.Write(Deck.SideCards.Count);
+        //            foreach (NamedCard card in Deck.Cards)
+        //                deck.Write(card.Id);
+        //            foreach (NamedCard card in Deck.ExtraCards)
+        //                deck.Write(card.Id);
+        //            foreach (NamedCard card in Deck.SideCards)
+        //                deck.Write(card.Id);
+        //            Connection.Send(deck);
+        var deck = new Buffer([0x2]),
+            proto = new Buffer(2);
 
-        // (toduelist)
-        // this message
-        // ready message
-        var ctos = new Buffer([0x2]),
-            emptydeck,
-            deck = new Buffer(0),
-            decklist = [].concat(suggestedDeck.main).concat(suggestedDeck.extra).concat(suggestedDeck.side),
-            decksize = new Buffer(8),
-            len,
-            proto = new Buffer(2),
-            readposition = 0,
-            card,
-            x,
-            q;
+        deck = Buffer.concat([deck, new Buffer([suggestedDeck.main.length + suggestedDeck.extra.length])]);
+        deck = Buffer.concat([deck, new Buffer([suggestedDeck.extra.length])]);
+        suggestedDeck.main.forEach(function (item) {
+            deck = Buffer.concat([deck, new Buffer([item])]);
+        });
+        suggestedDeck.extra.forEach(function (item) {
+            deck = Buffer.concat([deck, new Buffer([item])]);
+        });
+        suggestedDeck.side.forEach(function (item) {
+            deck = Buffer.concat([deck, new Buffer([item])]);
+        });
 
-
-        for (readposition; decklist.length > 1; readposition = readposition + 2) {
-            card = new Buffer(4);
-            card.writeUInt32LE(decklist[0], 0);
-            //console.log(decklist[0], (JSON.stringify(card)));
-            deck = Buffer.concat([deck, card]);
-            decklist.shift();
-        }
-
-        decksize.writeUInt16LE((suggestedDeck.main.length + suggestedDeck.extra.length), 0);
-        decksize.writeUInt16LE(suggestedDeck.side.length, 4);
-        q = new Array(1024 - 8 - deck.length);
-        emptydeck = Array.apply(null, q.map(Number.prototype.valueOf, 0));
-        x = new Buffer(emptydeck);
-        len = ctos.length + decksize.length + deck.length;
-        proto.writeUInt16LE(len, 0);
-        proto = Buffer.concat([proto, ctos, decksize, deck]);
-
-
-        //console.log(proto.length, len);
-        //console.log(proto, JSON.stringify(proto));
+        proto.writeUInt16LE(deck.length, 0);
+        proto = Buffer.concat([proto, deck]);
+        console.log(proto, deck.length);
         return proto;
+
     };
 
     say.CTOS_HS_READY = function () {
