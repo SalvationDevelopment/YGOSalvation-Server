@@ -149,8 +149,8 @@ function makeCTOS(command, message) {
     };
 
     say.CTOS_HS_KICK = function (id) {
-        var ctos = new Buffer([0x21]),
-            csk = new Buffer(id),
+        var ctos = new Buffer([0x24]),
+            csk = new Buffer([id]),
             len = ctos.length + csk.length,
             proto = new Buffer(2);
 
