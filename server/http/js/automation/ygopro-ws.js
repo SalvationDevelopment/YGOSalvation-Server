@@ -127,3 +127,15 @@ function startDuel() {
     var servermessage = makeCTOS('CTOS_START');
     window.ws.send(servermessage);
 }
+
+function leaveDuel() {
+    'use strict';
+    var servermessage = makeCTOS('CTOS_LEAVE_GAME');
+    window.ws.send(servermessage);
+}
+
+function kickDuelist(playerIndex) {
+    'use strict';
+    var servermessage = makeCTOS('CTOS_HS_KICK', playerIndex);
+    window.ws.send(servermessage);
+}
