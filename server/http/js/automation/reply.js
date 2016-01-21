@@ -1,4 +1,15 @@
 /*globals Buffer*/
+function rpsCalc(ishost, button) {
+    'use strict';
+    ishost = (ishost) ? 1 : 0;
+    var buttons = {
+        rock: 0,
+        paper: 0,
+        scissors: 0
+
+    };
+    return (ishost + buttons[button] + 1);
+}
 
 function makeCTOS(command, message) {
     'use strict';
@@ -216,6 +227,12 @@ function makeCTOS(command, message) {
         console.log(proto);
         return proto;
     };
+    say.scissors = new Buffer([0x2, 0x0, 0x3, 0x1]);
+    say.rock = new Buffer([0x2, 0x0, 0x3, 0x2]);
+    say.paper = new Buffer([0x2, 0x0, 0x3, 0x3]);
+    say.gofirst = new Buffer([0x1, 0x0, 0x15]);
+    say.gosecond = new Buffer([0x2, 0x0, 0x4, 0x0]);
+
 
     return say[command](message);
 }
