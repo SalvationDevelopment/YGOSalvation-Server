@@ -9,6 +9,23 @@ function isChecked(id) {
     return ($(id).is(':checked'));
 }
 
+Handlebars.getTemplate = function (name) {
+    'use strict';
+    if (Handlebars.templates === undefined || Handlebars.templates[name] === undefined) {
+        $.ajax({
+            url: 'templatesfolder/' + name + '.handlebars',
+            success: function (data) {
+                if (Handlebars.templates === undefined) {
+                    Handlebars.templates = {};
+                }
+                Handlebars.templates[name] = Handlebars.compile(data);
+            },
+            async: false
+        });
+    }
+    return Handlebars.templates[name];
+};
+
 function updatenews() {
     'use strict';
     $.getJSON('http://ygopro.us/manifest/forumNews.json', function (news) {
