@@ -5,7 +5,9 @@ var gui = {};
 
 (function () {
     'use strict';
-
+    gui.gotoLobby = function () {
+        singlesitenav('lobby');
+    }
     gui.UpdateTime = function (player, time) {
         $('.p' + player + 'time').val(time);
     };

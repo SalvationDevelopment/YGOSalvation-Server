@@ -668,6 +668,7 @@
             </section>
         </div>
     </header>
+    <header style="padding-top:50px" id="duelscreen"></header>
     <header style="padding-top:50px" id="duelscreen">
         <div id="ingamechat"></div>
         <div id="lifepoints">
@@ -765,6 +766,24 @@
     <script src="js/ConfigParser.js"></script>
     <script src="js/parseYDK.js"></script>
     <script src="js/deck-edit-launcher.js"></script>
+
+
+    <script src="js/automation/require.js"></script>
+    <script>
+        requirejs(['js/automation/buffer', 'js/automation/EventEmitter.min'],
+            function (Buffer, EventEmitter) {
+                window.Buffer = Buffer.Buffer;
+                window.EventEmitter = EventEmitter;
+                console.log(Buffer, EventEmitter);
+            });
+    </script>
+    <script src="js/automation/enums.js"></script>
+    <script src="js/automation/card.js"></script>
+    <script src="js/automation/reciever.js"></script>
+    <script src="js/automation/reply.js"></script>
+    <script src="js/automation/gui.js"></script>
+    <script src="js/automation/processor.js"></script>
+    <script src="js/automation/ygopro-ws.js"></script>
     </script>
 
 </body>
