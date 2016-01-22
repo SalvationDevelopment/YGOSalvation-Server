@@ -1378,6 +1378,26 @@ div#gamelist {
     margin-top: -1%;
 }
 
+#lobbygotoduel,
+#lobbygotospectate {
+    display: inline-block;
+    border: 1px solid white;
+    padding: 0.5vh 2vw;
+    width: 9vw;
+    text-align: center;
+    color: orange;
+}
+
+#lobbymenu {
+    width: 75vw;
+    margin: 0 auto;
+    padding: 3vh 3vw;
+    margin-top: 10vh;
+    box-shadow: 0 0 10px black;
+    border: 1px solid#444;
+    background-color: rgba(0, 0, 0, .5);
+}
+
 
 /* =========================================
 =================================
