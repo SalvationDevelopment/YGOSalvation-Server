@@ -1383,9 +1383,10 @@ div#gamelist {
     display: inline-block;
     border: 1px solid white;
     padding: 0.5vh 2vw;
-    width: 9vw;
+    width: 9em;
     text-align: center;
     color: orange;
+    margin-bottom: 1em;
 }
 
 #lobbymenu {
@@ -1396,6 +1397,24 @@ div#gamelist {
     box-shadow: 0 0 10px black;
     border: 1px solid#444;
     background-color: rgba(0, 0, 0, .5);
+}
+
+.kickbutton {
+    width: 1em;
+    height: 1em;
+    display: inline-block;
+    border: 1px solid white;
+    position: relative;
+    top: .1em;
+}
+
+input#player1lobbyslot,
+input#player2lobbyslot,
+input#player3lobbyslot,
+input#player4lobbyslot {
+    background: rgba(0, 0, 0, .5);
+    border: 1px solid #444;
+    margin-bottom: 0.5em;
 }
 
 
