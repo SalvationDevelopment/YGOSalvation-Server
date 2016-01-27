@@ -1,6 +1,3 @@
-addons:
-    code_climate:
-        repo_token: b4dce188163e0eac20b5b617a158755dcf27812e303c722fe050d09b44ae740b
 engines:
   csslint:
     enabled: true
