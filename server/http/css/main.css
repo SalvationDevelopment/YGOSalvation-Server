@@ -1415,6 +1415,8 @@ input#player4lobbyslot {
     background: rgba(0, 0, 0, .5);
     border: 1px solid #444;
     margin-bottom: 0.5em;
+    padding: .25em;
+    font-size: .9em;
 }
 
 
