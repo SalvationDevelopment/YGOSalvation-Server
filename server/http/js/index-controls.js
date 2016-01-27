@@ -28,7 +28,7 @@ Handlebars.getTemplate = function (name) {
 
 function updatenews() {
     'use strict';
-    $.getJSON('http://ygopro.us/manifest/forumNews.json', function (news) {
+    $.getJSON('manifest/forumNews.json', function (news) {
         $.get('handlebars/forumnews.handlebars', function (template) {
             var parser = Handlebars.compile(template),
                 topics = news.topics.reverse();
@@ -74,10 +74,10 @@ function singlesitenav(target) {
     } else if ($('.unlogged.in-iframe').length > 0 && target === 'gamelist') {
         return;
     }
-    $('body').css('background-image', 'url(http://ygopro.us/img/bg.jpg)');
+    $('body').css('background-image', 'url(img/bg.jpg)');
     if (target === 'faq') {
         updatenews();
-        $('body').css('background-image', 'url(http://ygopro.us/img/brightx_bg.jpg)');
+        $('body').css('background-image', 'url(img/brightx_bg.jpg)');
     }
     if (target === 'chat' && !chatStarted) {
         swfobject.embedSWF("lightIRC/lightIRC.swf", "lightIRC", "100%", "92%", "10.0.0", "expressInstall.swf", params, {
@@ -86,16 +86,16 @@ function singlesitenav(target) {
         chatStarted = true;
     }
     if (target === 'gamelist') {
-        $('body').css('background-image', 'url(http://ygopro.us/img/brightx_bg.jpg)');
+        $('body').css('background-image', 'url(img/brightx_bg.jpg)');
     }
     if (target === 'chat') {
-        $('body').css('background-image', 'url(http://ygopro.us/img/brightx_bg.jpg)');
+        $('body').css('background-image', 'url(img/brightx_bg.jpg)');
     }
     if (target === 'host') {
-        $('body').css('background-image', 'url(http://ygopro.us/img/brightx_bg.jpg)');
+        $('body').css('background-image', 'url(img/brightx_bg.jpg)');
     }
     if (target === 'settings') {
-        $('body').css('background-image', 'url(http://ygopro.us/img/brightx_bg.jpg)');
+        $('body').css('background-image', 'url(img/brightx_bg.jpg)');
     }
     $('.activescreen').removeClass('activescreen');
     $('header').css('top', '100vh');
