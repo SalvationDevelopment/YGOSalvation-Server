@@ -32,6 +32,5 @@ exclude_paths:
 - server/http/js/translations.js
 - server/http/js/vendor/primus.js
 - server/http/css/roboto.css
--	server/http/js/jquery-ui.min.js
 - server/http/js/automation/EventEmitter.min.js
 - server/http/js/jquery-1.11.0.min.js
