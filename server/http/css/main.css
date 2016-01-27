@@ -373,7 +373,7 @@ body {
     background-attachment: fixed;
     background-repeat: no-repeat;
     background-color: black;
-    background-image: url(http://ygopro.us/img/bg.jpg);
+    background-image: url(../img/bg.jpg);
     background-size: 100%;
     font-family: 'Roboto', sans-serif;
     font-size: 15px;
@@ -757,6 +757,30 @@ header {
     text-align: center;
     color: #fff;
     top: 30%;
+}
+
+input#ips_remember {
+    position: relative;
+    top: .2em;
+    left: -.5em;
+}
+
+#logintext {
+    font-size: .8em;
+    display: block;
+    margin-top: -0.5em;
+    text-transform: uppercase
+}
+
+button#dolog {
+    border-radius: 20px;
+    border: 1px solid hotpink;
+    background: rgba(0, 0, 0, .85);
+    padding: 6px 40px;
+    color: hotpink;
+    margin-bottom: 40px;
+    text-transform: uppercase;
+    box-shadow: 0 0 10px 5px black;
 }
 
 .psudolinksingle {
@@ -1564,14 +1588,14 @@ div[data-game^="0"] {
 }
 
 div[data-game^="0"]:not(.started) {
-    background-image: url(http://ygopro.us/img/ocg.png);
+    background-image: url(../img/ocg.png);
     background-size: 100% 100%;
     color: white;
     background-size: cover;
 }
 
 .started[data-game^="0"] {
-    background-image: url(http://ygopro.us/img/faded-ocg.png);
+    background-image: url(../img/faded-ocg.png);
     background-color: rgba(0, 0, 0, .5) !important;
     border: 1px solid grey;
     color: grey;
@@ -1585,14 +1609,14 @@ div[data-game^="1"] {
 }
 
 div[data-game^="1"]:not(.started) {
-    background-image: url(http://ygopro.us/img/tcg.png);
+    background-image: url(../img/tcg.png);
     background-size: cover;
     color: white;
     background-size: cover;
 }
 
 .started[data-game^="1"] {
-    background-image: url(http://ygopro.us/img/faded-tcg.png);
+    background-image: url(../img/faded-tcg.png);
     background-color: rgba(0, 0, 0, .5) !important;
     border: 1px solid grey;
     color: grey;
@@ -1606,13 +1630,13 @@ div[data-game^="2"] {
 }
 
 div[data-game^="2"]:not(.started) {
-    background-image: url(http://ygopro.us/img/tcgocg.png);
+    background-image: url(../img/tcgocg.png);
     background-size: cover;
     color: white;
 }
 
 .started[data-game^="2"] {
-    background-image: url(http://ygopro.us/img/faded-tcgocg.png);
+    background-image: url(../img/faded-tcgocg.png);
     background-color: rgba(0, 0, 0, .5) !important;
     border: 1px solid grey;
     color: grey;
@@ -1621,14 +1645,14 @@ div[data-game^="2"]:not(.started) {
 
 div[data-game^="3"]:not(.started) {
     /* Anime */
-    background-image: url(http://ygopro.us/img/anime.png);
+    background-image: url(../img/anime.png);
     background-size: cover;
     color: white;
     background-size: cover;
 }
 
 .started[data-game^="3"] {
-    background-image: url(http://ygopro.us/img/faded-anime.png);
+    background-image: url(../img/faded-anime.png);
     background-color: rgba(0, 0, 0, .5) !important;
     border: 1px solid grey;
     color: grey;
@@ -1809,16 +1833,18 @@ a.launcheronly.loginsystem {
 #ips_username,
 #ips_password {
     margin: 20px auto;
-    background: rgba(255, 255, 255, .5);
+    background: rgba(0, 0, 0, .5);
     border: none;
     width: 20em;
     padding: .4em;
     text-align: center;
-    color: black !important;
+    color: white!important;
     font-weight: bold;
     -webkit-animation-name: pulse;
     -webkit-animation-duration: 1s;
     -webkit-animation-iteration-count: 10;
+    border: 1px solid #444;
+    box-shadow: 0 0 10px black;
 }
 
 #ips_username {
@@ -1837,16 +1863,17 @@ a.launcheronly.loginsystem {
 
 @-webkit-keyframes pulse {
     from {
-        background-color: #ccc;
-        -webkit-box-shadow: 0 0 3px #333;
+        background-color: rgba(0, 0, 0, .85);
+        -webkit-box-shadow: 0 0 5px #000;
     }
     50% {
-        background-color: white;
-        -webkit-box-shadow: 0 0 50px white;
+        background-color: rgba(0, 0, 0, .5);
+        -webkit-box-shadow: 0 0 50px rgba(255, 100, 200, .5);
+        border-color: rgba(255, 100, 200, .5);
     }
     to {
-        background-color: #ccc;
-        -webkit-box-shadow: 0 0 3px #333;
+        background-color: rgba(0, 0, 0, .85);
+        -webkit-box-shadow: 0 0 5px #000;
     }
 }
 

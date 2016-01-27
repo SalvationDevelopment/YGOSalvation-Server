@@ -13,11 +13,11 @@
     <link rel="shortcut icon" href="/favicon.png" />
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width">
-    <script src="http://ygopro.us/js/jquery-1.11.0.min.js"></script>
+    <script src="js/jquery-1.11.0.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/2.0.0/handlebars.min.js"></script>
-    <link href="http://ygopro.us/css/roboto.css" rel="stylesheet" type="text/css">
-    <link href="http://ygopro.us/css/PoiretOne.css" rel="stylesheet" type="text/css">
-    <link href='http://ygopro.us/css/AlegreyaSans.css' rel='stylesheet' type='text/css'>
+    <link href="css/roboto.css" rel="stylesheet" type="text/css">
+    <link href="css/PoiretOne.css" rel="stylesheet" type="text/css">
+    <link href='css/AlegreyaSans.css' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="css/animation.css">
     <link rel="stylesheet" type="text/css" href="css/deck-edit.css">
@@ -51,26 +51,19 @@
         </h1>
         </span>
         <ul class="featurelist" style="font-size:small">
-            <li class="launcheronly"><span class="psudolinksingle " onclick='ygopro("-l")'>LAN Mode</span>
-            </li>
-            <li><span data-translation-deckedit class="psudolinksingle" onclick='ygopro("-d");singlesitenav("deckedit");'>Deck Edit</span>
-            </li>
-            <li class="launcheronly"><span data-translation-replays class="psudolinksingle" onclick='ygopro("-r");singlesitenav("replay ");'>Replays</span>
-            </li class="loophole">
-            <li><span data-translation-gamelist class="psudolinksingle" onclick="joinGamelist();singlesitenav('gamelist');">Game List</span>
-            </li>
-            <li class="launcheronly"><span data-translation-host class="psudolinksingle" onclick="singlesitenav('host')">Host</span>
-            </li>
-            <li><a data-translation-forum class="psudolinksingle " style='text-decoration:none' onclick="singlesitenav('forum')" target="_blank" href="http://forum.ygopro.us">Forum</a>
-            </li>
-            <li><span data-translation-chat class="psudolinksingle" onclick="singlesitenav('chat')">Chat</span>
-            </li>
-            <li><span data-translation-faq class="psudolinksingle" onclick="singlesitenav('faq')">News</span>
-            </li>
-            <li><span data-translation-ranking class="psudolinksingle" onclick="singlesitenav('ranking');">Ranking</span>
-            </li>
-            <li class="launcheronly"><span class="psudolinksingle" onclick="singlesitenav('settings')" data-translation-settings>Settings</span>
-            </li>
+            <li><span data-translation-deckedit class="psudolinksingle" onclick='singlesitenav("deckedit");'>Deck Edit</span>
+                <li><span data-translation-gamelist class="psudolinksingle" onclick="joinGamelist();singlesitenav('gamelist');">Game List</span>
+                </li>
+                <li class="launcheronly"><span data-translation-host class="psudolinksingle" onclick="singlesitenav('host')">Host</span>
+                </li>
+                <li><a data-translation-forum class="psudolinksingle " style='text-decoration:none' onclick="singlesitenav('forum')" target="_blank" href="http://forum.ygopro.us">Forum</a>
+                </li>
+                <li><span data-translation-chat class="psudolinksingle" onclick="singlesitenav('chat')">Chat</span>
+                </li>
+                <li><span data-translation-faq class="psudolinksingle" onclick="singlesitenav('faq')">News</span>
+                </li>
+                <li><span data-translation-ranking class="psudolinksingle" onclick="singlesitenav('ranking');">Profile</span>
+                </li>
         </ul>
     </div>
     <header style="top:0vh;" id='home'>
@@ -81,45 +74,11 @@
             </h1>
             </span>
             <h2 data-translation-onlineyugiohsimulator class="shine">Online Yu-Gi-Oh! Simulator</h2>
-            <nav class="lander-main">
 
-                <div data-translation-playnow class="downloadbutton" style="display:none">Play Now</div>
-
-                <ul class="webonly" style="text-align:center; padding:0;" id="mirrors" itemscope itemtype="http://schema.org/SoftwareApplication">
-                    <!--<li>Login</li>
-                <li>Sign Up</li>-->
-                    <li><a data-translation-playnow href="https://drive.google.com/file/d/0B20SNNA74_RsdTh3bko0QlVjem8/view" onclick="_gaq.push(['_trackEvent', 'Site', 'Download', 'Full Windows']);">Full Windows Client </a>
-
-                    </li>
-                    <!--
-                    <li><a href="http://ygopro.us/setup.msi">Windows Mirror 1 </a>
-                        
-                    </li>
--->
-                    <!--
-                    <li><a href=" http://ygopro.us/setups/client.tar.gz" onclick="_gaq.push(['_trackEvent', 'Site', 'Download', 'Portable']);">Linux32 TarGz/ Windows Portable</a>
-
-                    </li>
-                    <li><a href="http://ygopro.us/setups/salvationmac.zip" onclick="_gaq.push(['_trackEvent', 'Site', 'Download', 'Mac']);">Mac OSX 10.7+ App Zip</a> (Not fully supported!)
-
-                    </li>
-
-                    <li><a href="https://mega.co.nz/#!utBRyTzB!EcezmcFqFN10rO2fRT4PYpTxCHy0GkumA8YvYdrwGTM" onclick="_gaq.push(['_trackEvent', 'Site', 'Download', 'Torrent']);"> Mirror 1</a>
-                    </li>
--->
-                    <li><a href="http://ygopro.us/setups/setup.msi.torrent">Torrent</a>
-                    </li>
-                    <!--
-                <li><a href="http://d-h.st/5PC6">Mirror 3</a></li>
-                <li><a href="https://www.mediafire.com/?xrm3rko4ln3e64z">Mirror 4</a></li>-->
-
-                </ul>
-
-            </nav>
             <form id="ipblogin" style="text-align:center; color: white !important; display:block; margin:0 auto" class="loginsystem">
                 <input data-translation-forumusername id="ips_username" type="text" class="loginsystem" name="ips_username" tabindex="1" placeholder="Forum Username">
                 <input data-translation-forumpassword id="ips_password" type="password" class="loginsystem" name="ips_password" tabindex="2" placeholder="Forum Password">
-                <br><span style="font-size:.9em; display:block; margin-top:-0.5em;"><input type="checkbox" id="ips_remember" ><span data-translation-rememberusernamepassword> Remember Username &amp; Password?</span>
+                <br><span id="logintext"><input type="checkbox" id="ips_remember" ><span data-translation-rememberusernamepassword> Remember Username &amp; Password?</span>
                 <span style="display:inline-block; width:40px"></span><a data-translation-registerviaforum class=" loginsystem" href="http://forum.ygopro.us/index.php?app=core&module=global&section=register" target="_blank">Register via Forum</a> | <a data-translation-forgotpassword class=" loginsystem" href="http://forum.ygopro.us/index.php?app=core&module=global&section=lostpass">Forgot Password</a>
                 </span>
                 <br />
