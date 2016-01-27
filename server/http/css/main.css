@@ -425,10 +425,20 @@ header {
     margin: 0 auto;
     padding-bottom: 40px;
     color: white;
+    overflow: auto;
+    transition-duration: 100ms;
+}
+
+#backdrop {
     background: rgba(0, 0, 0, .65);
     /*    background: -webkit-gradient(linear, left top, right bottom, color-stop(0%, rgba(0, 0, 0, 1)), color-stop(7%, rgba(1, 1, 1, 1)), color-stop(33%, rgba(6, 6, 6, 0)), color-stop(49%, rgba(9, 9, 9, 0)), color-stop(89%, rgba(17, 17, 17, 1)), color-stop(100%, rgba(19, 19, 19, 1)));*/
     overflow: auto;
     transition-duration: 100ms;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
 }
 
 #gamelistswitch {
@@ -606,7 +616,8 @@ header {
     height: 98vh;
     overflow: hidden;
     position: absolute;
-    top: 100vh;
+    left: 100vw;
+    top: 0;
     width: 100vw;
     background-size: 500% 100%;
 }
@@ -774,10 +785,10 @@ input#ips_remember {
 
 button#dolog {
     border-radius: 20px;
-    border: 1px solid hotpink;
-    background: rgba(0, 0, 0, .85);
+    border: 1px solid white;
+    background: rgba(255, 0, 100, .5);
     padding: 6px 40px;
-    color: hotpink;
+    color: white;
     margin-bottom: 40px;
     text-transform: uppercase;
     box-shadow: 0 0 10px 5px black;

@@ -23,7 +23,9 @@
     <link rel="stylesheet" type="text/css" href="css/deck-edit.css">
 
 
-
+    <script src="js/translations.js"></script>
+    <script src="js/primus.js"></script>
+    <script src="js/index-controls.js"></script>
 
     <style>
         #languagesetter {
@@ -43,6 +45,14 @@
 </head>
 
 <body class="unlogged">
+    <footer class="superfooter">
+        <div style='max-width:1000px; margin:0 auto'>
+            <span itemscope itemtype="http://schema.org/SoftwareApplication">YGOPro</span> &amp
+            <span itemscope itemtype="http://schema.org/SoftwareApplication">Salvation Server</span> is not affliated with
+            <span itemscope itemtype="http://schema.org/Organization" itemprop="name">Konami</span>or
+            <span itemscope itemtype="http://schema.org/Person" itemprop="name">Kazuki Takahashi</span>. Salvation Server &copy; 2013-2015, all rights reserved by respective parties. Powered by Yu-Jo Friendship and fans of Yu-Gi-Oh! worldwide.</div>
+    </footer>
+    <div id="backdrop"></div>
     <div id="uniqueid" style="display:none"></div>
     <div style="z-index:40; position:relative;">
         <span class="psudolinksingle" onclick="singlesitenav('home')" id='psudologo'>
@@ -66,7 +76,7 @@
                 </li>
         </ul>
     </div>
-    <header style="top:0vh;" id='home'>
+    <header style="left:0vh;" id='home'>
         <div id="homecontainer">
             <span class="psudolinksingle" onclick="singlesitenav('home')">
                 <h1 class="shine" style="padding-top:5px">
@@ -259,7 +269,7 @@
         <div class="mainContainer" style="display: block;">
             <div class="left">
                 <div class="cardImage">
-                    <img class="imgContainer" src="http://ygopro.us/ygopro/pics/cover.jpg" />
+                    <img class="imgContainer" src="ygopro/pics/cover.jpg" />
                 </div>
                 <div class="cardDescription">
                 </div>
@@ -441,11 +451,6 @@
     </header>
     <header style="padding-top:50px" id="chat">
 
-
-        <script type="text/javascript" src="http://ygopro.us/js/swfobject.js"></script>
-        <script type="text/javascript" src="lightIRC/config.js"></script>
-        <div id="lightIRC" style="height:92%; text-align:center;">
-        </div>
     </header>
     <header style="padding-top:50px" id="faq">
         <div id="news"></div>
@@ -705,16 +710,8 @@
             </div>
         </div>
     </header>
-    <footer class="superfooter">
-        <div style='max-width:1000px; margin:0 auto'>
-            <span itemscope itemtype="http://schema.org/SoftwareApplication">YGOPro</span> &amp
-            <span itemscope itemtype="http://schema.org/SoftwareApplication">Salvation Server</span> is not affliated with
-            <span itemscope itemtype="http://schema.org/Organization" itemprop="name">Konami</span>or
-            <span itemscope itemtype="http://schema.org/Person" itemprop="name">Kazuki Takahashi</span>. Salvation Server &copy; 2013-2015, all rights reserved by respective parties. Powered by Yu-Jo Friendship and fans of Yu-Gi-Oh! worldwide.</div>
-    </footer>
-    <script src="js/translations.js"></script>
-    <script src="js/primus.js"></script>
-    <script src="js/index-controls.js"></script>
+
+
     <script src="js/battlepack3.js" async></script>
     <script type="text/javascript">
         var _gaq = _gaq || [];
