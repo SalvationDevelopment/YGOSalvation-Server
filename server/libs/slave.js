@@ -20,6 +20,7 @@ function initiateSlave() {
         socket.active_ygocore = false;
         socket.active = false;
         socket.on('data', function listener(data) {
+            console.log(data);
             var frame,
                 task,
                 newframes = 0;

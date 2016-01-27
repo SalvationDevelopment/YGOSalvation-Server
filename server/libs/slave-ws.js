@@ -36,13 +36,13 @@ function initiateSlave() {
             socket.terminate();
         };
         socket.on('message', function incoming(data) {
+            console.log('ws:', data);
             var frame,
                 task,
                 newframes = 0;
             if (socket.active_ygocore) {
                 socket.active_ygocore.write(data);
             }
-            console.log('..../');
             frame = framer.input(data);
             for (newframes; frame.length > newframes; newframes++) {
                 task = parsePackets('CTOS', new Buffer(frame[newframes]));
