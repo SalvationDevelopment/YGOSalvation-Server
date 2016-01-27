@@ -1,5 +1,5 @@
 /*jslint browser:true, plusplus:true, nomen: true*/
-/*global $, saveSettings, Handlebars, prompt, _gaq, isChecked, alert, primus, ygopro, translationDB, params, swfobject, console*/
+/*global $, saveSettings, Handlebars, prompt, _gaq, isChecked, alert, primus, ygopro, translationDB, swfobject, console*/
 
 var admin = false,
     chatStarted = false;
@@ -80,9 +80,6 @@ function singlesitenav(target) {
         $('body').css('background-image', 'url(img/brightx_bg.jpg)');
     }
     if (target === 'chat' && !chatStarted) {
-        swfobject.embedSWF("lightIRC/lightIRC.swf", "lightIRC", "100%", "92%", "10.0.0", "expressInstall.swf", params, {
-            wmode: "transparent"
-        });
         chatStarted = true;
     }
     if (target === 'gamelist') {
@@ -98,24 +95,12 @@ function singlesitenav(target) {
         $('body').css('background-image', 'url(img/brightx_bg.jpg)');
     }
     $('.activescreen').removeClass('activescreen');
-    $('header').css('top', '100vh');
-    $('#' + target).css('top', '0').addClass('activescreen');
+    $('header').css('left', '100vw');
+    $('#' + target).css('left', '0').addClass('activescreen');
     saveSettings();
     return false;
 }
 
-$(function () {
-    'use strict';
-    if (window.self !== window.top) {
-        $(document.body).addClass("in-iframe");
-        launcher = true;
-        try {
-            _gaq.push(['_trackEvent', 'Launcher', 'Load', 'Boot Launcher']);
-        } catch (e) {}
-    } else {
-        $(document.body).addClass("web");
-    }
-});
 
 
 
@@ -144,11 +129,7 @@ function locallogin(init) {
         username: localStorage.nickname
     });
     loggedIn = true;
-    params.nick = $('#ips_username').val();
-    params.identifyPassword = $('#ips_password').val();
-    swfobject.embedSWF("lightIRC/lightIRC.swf", "lightIRC", "100%", "92%", "10.0.0", "expressInstall.swf", params, {
-        wmode: "transparent"
-    });
+
     //chatStarted = true;
     singlesitenav('faq');
     setTimeout(function () {
@@ -203,7 +184,6 @@ function translateLang(lang) {
             jsLang.spectate = translationDB[i][lang];
         }
     }
-    params.language = lang;
 }
 
 function achievementConstructor(data) {
@@ -213,8 +193,6 @@ function achievementConstructor(data) {
     };
 }
 
-params.showJoinPartMessages = false;
-params.autoReconnect = false;
 $(document).ready(function () {
     'use strict';
     var useLang = localStorage.language || 'en';
