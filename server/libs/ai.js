@@ -1,4 +1,4 @@
-/*jslint node:true, plusplus: true*/
+/*jslint node:true, plusplus: true, nomen:true*/
 // blah blah load dependencies
 
 /* Ths is the network shell of the AI, provides UX interface similar to DevBot.
@@ -62,6 +62,7 @@ function onConnectGamelist() {
 
 function onCloseGamelist() {
     'use strict';
+    require('fs').watch(__filename, process.exit);
 }
 
 client.on('data', gamelistUpdate);
