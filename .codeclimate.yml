@@ -3,6 +3,10 @@ languages:
 exclude_paths:
 - "client/interface/js/vendor/primus.js"
 - "server/http/js/primus.js"
+- "server/http/js/vendor/primus.js"
+- "server/http/js/automation/buffer.js"
+- "server/http/js/automation/require.js"
 - "server/libs/carddb-update.js"
 - "server/http/js/buffer.js"
 - "server/http/js/bundle.js"
+- "server/http/js/translations.js"
