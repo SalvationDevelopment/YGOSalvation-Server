@@ -289,6 +289,7 @@ function registrationCall(data, socket) {
         if (info.success) {
             registry[info.displayname] = socket.address.ip;
             socket.username = data.username;
+            socket.validated = true;
             sendRegistry();
             socket.write({
                 clientEvent: 'global',
@@ -492,38 +493,15 @@ function onData(data, socket) {
     case ('killgame'):
         killgameCall(data);
         break;
-    case ('privateServerRequest'):
-        primus.room(socket.address.ip + data.uniqueID).write({
-            clientEvent: 'privateServerRequest',
-            parameter: data.parameter,
-            local: data.local
+    case ('deck'):
+        internalMessage({
+            deck: data.deck,
+            command: data.command,
+            room: (socket.address.ip + data.uniqueID)
         });
         break;
-    case ('privateServer'):
-        break;
-    case ('joinTournament'):
-        socket.join('tournament');
-        socket.write(JSON.stringify(gamelist));
-        break;
-    case ('privateUpdate'):
-        primus.room(socket.address.ip + data.uniqueID).write({
-            clientEvent: 'privateServer',
-            serverUpdate: data.serverUpdate
-        });
-
-        break;
-    case ('saveDeckRequest'):
-        primus.room(socket.address.ip + data.uniqueID).write({
-            clientEvent: 'saveDeck',
-            deckList: data.deckList,
-            deckName: data.deckName
-        });
-        break;
-    case ('unlinkDeckRequest'):
-        primus.room(socket.address.ip + data.uniqueID).write({
-            clientEvent: 'unlinkDeck',
-            deckName: data.deckName
-        });
+    case ('deckreply'):
+        primus.room(data.room).write(data.reply);
         break;
     default:
         console.log(data);

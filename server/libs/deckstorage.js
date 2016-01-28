@@ -43,7 +43,7 @@ function verifyUser(username) {
 function onDB(data) {
     switch (data.command) {
     case 'new':
-        deckStorage.insert(data.deck);
+        deckStorage.insert(data.deck, function (err) {});
         break;
     case 'save':
         deckStorage.update({
