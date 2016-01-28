@@ -290,6 +290,11 @@ function registrationCall(data, socket) {
             registry[info.displayname] = socket.address.ip;
             socket.username = data.username;
             socket.validated = true;
+            internalMessage({
+                deck: true,
+                command: 'list',
+                room: (data.uniqueID)
+            });
             sendRegistry();
             socket.write({
                 clientEvent: 'global',
@@ -456,12 +461,7 @@ function onData(data, socket) {
         }
         break;
     case ('join'):
-        socket.join(socket.address.ip + data.uniqueID);
-        socket.write({
-            clientEvent: 'registrationRequest'
-        });
-
-
+        socket.join(data.uniqueID);
         socket.join('activegames');
         socket.write(JSON.stringify(gamelist));
 
@@ -497,7 +497,7 @@ function onData(data, socket) {
         internalMessage({
             deck: data.deck,
             command: data.command,
-            room: (socket.address.ip + data.uniqueID)
+            room: (data.uniqueID)
         });
         break;
     case ('deckreply'):

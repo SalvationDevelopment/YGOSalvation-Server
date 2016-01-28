@@ -191,7 +191,7 @@ $(function () {
                 });
             }
         },
-        imgDir = "http://ygopro.us/ygopro/pics/",
+        imgDir = "ygopro/pics/",
         forumLink = "http://forum.ygopro.us/index.php/?ref=_deckEditor",
         attributeMap = {
             1: "EARTH",
@@ -768,10 +768,10 @@ $(function () {
         attachDnDEvent($('.resultDiv img', searchResults));
     }
 
-    $.getJSON('http://ygopro.us/manifest/database_0-en-OCGTCG.json', function (data) {
+    $.getJSON('manifest/database_0-en-OCGTCG.json', function (data) {
         cards = data;
         cards = cards.filter(validCards).filter(excludeTokens);
-        $.get('http://ygopro.us/ygopro/lflist.conf', function (data) {
+        $.get('ygopro/lflist.conf', function (data) {
             var list;
             lflist = new ConfigParser(data, {
                 keyValueDelim: " ",
@@ -782,7 +782,7 @@ $(function () {
                     $('.banlistSelect').append('<option value="' + list + '">' + list + '</option>');
                 }
             }
-            $.get('http://ygopro.us/ygopro/Strings.conf', function (data) {
+            $.get('ygopro/strings.conf', function (data) {
                 var setcodes = new ConfigParser(data, {
                         keyValueDelim: " ",
                         commentDelims: [],

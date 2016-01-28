@@ -124,10 +124,7 @@ function locallogin(init) {
     } catch (e) {}
 
 
-    primus.write({
-        action: 'privateServer',
-        username: localStorage.nickname
-    });
+
     loggedIn = true;
 
     //chatStarted = true;

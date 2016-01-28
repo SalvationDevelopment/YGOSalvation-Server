@@ -40,7 +40,14 @@ function verifyUser(username) {
     });
 }
 
+function reply(username, replaymessage) {
+
+}
+
 function onDB(data) {
+    if (!data.deck) {
+        return;
+    }
     switch (data.command) {
     case 'new':
         deckStorage.insert(data.deck, function (err) {});

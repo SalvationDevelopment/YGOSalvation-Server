@@ -30,16 +30,16 @@ var dependencies = require('../package.json').dependencies,
     modules,
     safe = true,
     moduleIsAvaliable = true;
- if (os.platform() === 'win32') {
-  for (modules in dependencies) {
-      if (dependencies.hasOwnProperty(modules)) {
-          moduleIsAvaliable = fs.existsSync('../node_modules/' + modules);
-          if (!moduleIsAvaliable) {
-              safe = false;
-              console.log('Missing module', modules);
-          }
-      }
-  }
+if (os.platform() === 'win32') {
+    for (modules in dependencies) {
+        if (dependencies.hasOwnProperty(modules)) {
+            moduleIsAvaliable = fs.existsSync('../node_modules/' + modules);
+            if (!moduleIsAvaliable) {
+                safe = false;
+                console.log('Missing module', modules);
+            }
+        }
+    }
 }
 if (!safe) {
     console.log('Installing missing modules...');
@@ -126,6 +126,13 @@ function manualModeBoot() {
     }).on('exit', manualModeBoot);
 }
 
+function deckstorageBoot() {
+    console.log('    DeckStorage Online'.bold.gold);
+    processManager.fork('./deckstorage.js', [], {
+        cwd: 'libs'
+    }).on('exit', deckstorageBoot);
+}
+
 function bootHTTPServer() {
     console.log('    HTTP Server @ port 80'.bold.yellow);
     processManager.fork('./httpserver.js', [], {
@@ -196,7 +203,7 @@ function main() {
         //boot anope
         //boot 
         bootGameList();
-        bootFlashPolicyServer();
+        //bootFlashPolicyServer();
         setTimeout(function () {
             bootUpdateSystem();
             bootlogger();
@@ -205,6 +212,7 @@ function main() {
         setTimeout(function () {
             bootManager();
             bootAISystem();
+            deckstorageBoot();
             //manualModeBoot();
 
         }, 2000);
