@@ -79,12 +79,7 @@ function ygopro(parameter) {
     }
     //$.post('http://127.0.0.1:9468/' + parameter, localStorage);
     console.log('sending details');
-    primus.write({
-        action: 'privateServerRequest',
-        parameter: parameter,
-        local: out,
-        uniqueID: uniqueID
-    });
+
     internalLocal = 'YGOPro';
     try {
         _gaq.push(['_trackEvent', 'Launcher', 'YGOPro', parameter]);
@@ -109,11 +104,7 @@ function joinGamelist() {
         uniqueID: uniqueID
     });
     if (loggedIn) {
-        primus.write({
-            action: 'privateServer',
-            username: localStorage.nickname,
-            uniqueID: uniqueID
-        });
+
 
 
     }
@@ -510,9 +501,7 @@ primus.on('data', function (data) {
         if (data.clientEvent === 'tournamentrequest' && confirm('Join Tournament?')) {
             joinTournament();
         }
-        if (data.clientEvent === 'privateServer') {
-            processServerCall(data.serverUpdate);
-        }
+
         if (data.stats) {
             stats24 = 0;
             statsShut = 0;
