@@ -48,6 +48,7 @@ function initiateNetwork(network) {
         duel.startlp = data.startlp;
         duel.starthand = data.startlp;
         //fire handbars to render the view.
+        gui.gotoLobby();
     });
     network.on('STOC_TYPE_CHANGE', function (data) {
         //remember who is the host, use this data to rotate the field properly.
