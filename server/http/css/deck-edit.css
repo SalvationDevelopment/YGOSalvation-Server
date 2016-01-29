@@ -34,8 +34,8 @@ he #deckedit {
     top: 0%;
     left: 0%;
     width: 100%;
-    height: 59.25%;
-    border: 1px solid red;
+    height: 58.25%;
+    border: 1px solid #444;
     padding: 12px;
     overflow: auto;
 }
@@ -97,7 +97,7 @@ input.decknameInput {
 .center {
     height: 100%;
     width: 47.3vw !important;
-    border: 1px solid red;
+    border: 1px solid #444;
     float: left;
 }
 
@@ -126,7 +126,7 @@ input.decknameInput {
     /* float: right; */
     height: 63%;
     width: 25%;
-    border: 1px solid green;
+    border: 1px solid #444;
     position: absolute;
     bottom: 5vh;
     right: 0vh;
@@ -172,6 +172,9 @@ select {
     width: 4vw;
     white-space: nowrap;
     padding: 0;
+    background: rgba(0, 0, 0, .85);
+    border: 1px solid silver;
+    color: white;
 }
 
 button.shuffleDeck {
@@ -380,4 +383,18 @@ input.scaleInput {
 
 select.forbiddenLimitedSelect {
     margin-right: 7vw !important;
+}
+
+button.searchtoggle {
+    position: absolute;
+    top: 0;
+    right: 1%;
+    height: 98%;
+    width: 5% !important;
+    background: black;
+    border: 5px solid silver;
+/*
+    transform: rotate(90deg);
+    transform-origin: left top 0;
+*/
 }
