@@ -58,7 +58,14 @@ he #deckedit {
     float: right;
     width: 75.7%;
     height: 22%;
+    position: absolute;
+    top: 8vh;
+    right: 0;
+    background: rgba(0, 0, 0, .85);
+    border: 1px solid #444;
 }
+
+.searchBar.closed {}
 
 .searchLeft {
     float: left;
@@ -86,7 +93,7 @@ input.decknameInput {
 }
 
 .center {
-    height: 78%;
+    height: 100%;
     width: 47.3vw !important;
     border: 1px solid red;
     float: left;
@@ -114,10 +121,13 @@ input.decknameInput {
 }
 
 .right {
-    float: right;
-    height: 78%;
+    /* float: right; */
+    height: 63%;
     width: 25%;
     border: 1px solid green;
+    position: absolute;
+    bottom: 5vh;
+    right: 0vh;
 }
 
 .searchResults {
@@ -174,7 +184,7 @@ button.shuffleDeck {
 
 .mainDeck img {
     width: 4.73vw;
-    height: 11vh;
+    height: 14vh;
 }
 
 .sideDeck img,

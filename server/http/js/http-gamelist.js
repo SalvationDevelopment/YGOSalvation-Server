@@ -55,7 +55,7 @@ function isChecked(id) {
     return ($(id).is(':checked'));
 }
 
-function ygopro(parameter) {
+function ygopro() {
     'use strict';
     uniqueID = $('#uniqueid').html();
     localStorage.serverport = '8911';
@@ -78,7 +78,9 @@ function ygopro(parameter) {
         }
     }
     //$.post('http://127.0.0.1:9468/' + parameter, localStorage);
+    startgame(localStorage.roompass + '\u0000');
     console.log('sending details');
+
 
     internalLocal = 'YGOPro';
     try {
