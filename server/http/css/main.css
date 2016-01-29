@@ -770,6 +770,10 @@ header {
     top: 30%;
 }
 
+.searchLeft {
+    position: relative;
+}
+
 input#ips_remember {
     position: relative;
     top: .2em;
