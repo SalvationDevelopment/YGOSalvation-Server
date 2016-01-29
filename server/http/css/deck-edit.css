@@ -65,7 +65,9 @@ he #deckedit {
     border: 1px solid #444;
 }
 
-.searchBar.closed {}
+.searchBar.closed {
+    right: -50.5vw;
+}
 
 .searchLeft {
     float: left;
