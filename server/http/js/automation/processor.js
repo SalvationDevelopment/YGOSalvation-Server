@@ -1,5 +1,5 @@
 /*jslint plusplus : true*/
-/*global console*/
+/*global console, gui*/
 var duel = {
         deckcheck: 0,
         draw_count: 0,
@@ -185,3 +185,8 @@ function initiateNetwork(network) {
         //Trigger RPS Prompt
     });
 }
+
+var gametick = setInterval(function () {
+
+    gui.updateloby();
+}, 1000);

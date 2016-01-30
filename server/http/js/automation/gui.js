@@ -5,9 +5,16 @@ var gui = {};
 
 (function () {
     'use strict';
+    gui.updateloby = function () {
+        $('#player1lobbyslot').val(duel.player[0].name);
+        $('#player2lobbyslot').val(duel.player[1].name);
+        $('#player3lobbyslot').val(duel.player[2].name);
+        $('#player4lobbyslot').val(duel.player[3].name);
+
+    };
     gui.gotoLobby = function () {
         singlesitenav('lobby');
-    }
+    };
     gui.UpdateTime = function (player, time) {
         $('.p' + player + 'time').val(time);
     };
