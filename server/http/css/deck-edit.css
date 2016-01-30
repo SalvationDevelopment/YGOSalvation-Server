@@ -34,10 +34,11 @@ he #deckedit {
     top: 0%;
     left: 0%;
     width: 100%;
-    height: 58.25%;
+    height: 55.25%;
     border: 1px solid #444;
     padding: 12px;
     overflow: auto;
+    background: rgba(0, 0, 0, .5);
 }
 
 .f40 img {
@@ -99,6 +100,7 @@ input.decknameInput {
     width: 47.3vw !important;
     border: 1px solid #444;
     float: left;
+    background: rgba(0, 0, 0, .5)
 }
 
 .mainDeck {
@@ -130,6 +132,7 @@ input.decknameInput {
     position: absolute;
     bottom: 5vh;
     right: 0vh;
+    background: rgba(0, 0, 0, .5);
 }
 
 .searchResults {
@@ -387,14 +390,11 @@ select.forbiddenLimitedSelect {
 
 button.searchtoggle {
     position: absolute;
-    top: 0;
-    right: 1%;
-    height: 98%;
-    width: 5% !important;
+    top: 9vh;
+    right: 0%;
+    height: 20%;
+    width: 1% !important;
     background: black;
     border: 5px solid silver;
-/*
-    transform: rotate(90deg);
-    transform-origin: left top 0;
-*/
+    z-index: 50;
 }

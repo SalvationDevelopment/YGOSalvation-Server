@@ -225,7 +225,7 @@ function getDuelRequest() {
 
     out.prio = ($('#creategamebanlist').val() === "4") ? "T" : out.prio;
     out.prio = ($('#creategamebanlist').val() === "5") ? "T" : out.prio;
-    out.string[0] = ($('#creategamebanlist').val() === "3") ? "1" : out.string[0];
+    //out.string[0] = ($('#creategamebanlist').val() === "3") ? "1" : out.string[0];
 
     return out;
 }
