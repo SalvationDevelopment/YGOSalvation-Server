@@ -172,6 +172,13 @@ function leaveDuel() {
     'use strict';
     var servermessage = makeCTOS('CTOS_LEAVE_GAME');
     window.ws.send(servermessage);
+    singlesitenav('gamelist');
+}
+
+function challengeDuel() {
+    var servermessage = makeCTOS('CTOS_HS_TODUELIST');
+    window.ws.send(servermessage);
+
 }
 
 function kickDuelist(playerIndex) {

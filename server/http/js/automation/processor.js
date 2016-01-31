@@ -38,15 +38,16 @@ var duel = {
 function initiateNetwork(network) {
     'use strict';
     network.on('STOC_JOIN_GAME', function (data) {
-        //copy the object over into the model
-        duel.deckcheck = data.deckcheck;
-        duel.draw_count = data.draw_count;
         duel.banlistHashCode = data.banlistHashCode;
+        duel.rule = data.rule;
         duel.mode = data.mode;
-        duel.noshuffle = data.noshuffle;
         duel.prio = data.prio;
-        duel.startlp = data.startlp;
-        duel.starthand = data.startlp;
+        duel.deckcheck = data.deckcheck;
+        duel.noshuffle = data.noshuffle;
+        duel.startLP = data.startLP;
+        duel.starthand = data.starthand;
+        duel.drawcount = data.drawcount;
+        duel.timelimit = data.timelimit;
         //fire handbars to render the view.
         gui.gotoLobby();
     });
@@ -76,7 +77,7 @@ function initiateNetwork(network) {
             return;
         }
         if (data.state < 8) {
-            previousName = String(duel.player[pos]); //copy then delete...
+            previousName = String(duel.player[pos].name); //copy then delete...
             duel.player[state].name = previousName;
             duel.player[pos].name = '';
             duel.player[pos].ready = false;

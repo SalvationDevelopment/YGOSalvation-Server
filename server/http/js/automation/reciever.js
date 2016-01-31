@@ -744,9 +744,9 @@ function recieveSTOC(packet) {
         task.deckcheck = packet.message[7];
         task.noshuffle = packet.message[8];
         task.startLP = packet.message.readUInt16LE(12);
-        task.start_hand = packet.message[16];
-        task.draw_count = packet.message[17];
-        task.time_limit = packet.message.readUInt16LE(18);
+        task.starthand = packet.message[16];
+        task.drawcount = packet.message[17];
+        task.timelimit = packet.message.readUInt16LE(18);
         task.message = packet.message;
         break;
     case ("STOC_TYPE_CHANGE"):
