@@ -10,6 +10,23 @@ var gui = {};
         $('#player2lobbyslot').val(duel.player[1].name);
         $('#player3lobbyslot').val(duel.player[2].name);
         $('#player4lobbyslot').val(duel.player[3].name);
+        $('#lobbytimelimit').text(duel.timelimit + ' seconds');
+        $('#lobbylp').text(duel.startLP);
+        $('#lobbycdpt').text(duel.drawcount);
+        $('#lobbyallowed').text($('#creategamecardpool option').eq(duel.rule).text());
+        $('#lobbygamemode').text($('#creategameduelmode option').eq(duel.mode).text());
+        if (duel.ishost) {
+            $('#lobbystart').css('display', 'inline-block');
+        } else {
+            $('#lobbystart').css('display', 'none');
+        }
+        if ($('#creategameduelmode option').eq(duel.mode).text() === 'Tag') {
+            $('.slot').eq(2).css('display', 'block');
+            $('.slot').eq(3).css('display', 'block');
+        } else {
+            $('.slot').eq(2).css('display', 'none');
+            $('.slot').eq(3).css('display', 'none');
+        }
 
     };
     gui.gotoLobby = function () {

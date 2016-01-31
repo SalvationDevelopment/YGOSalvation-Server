@@ -1418,14 +1418,18 @@ div#gamelist {
 }
 
 #lobbygotoduel,
-#lobbygotospectate {
+#lobbygotospectate,
+#lobbystart,
+#lobbycancel {
     display: inline-block;
-    border: 1px solid white;
+    border: 1px solid #444;
     padding: 0.5vh 2vw;
     width: 9em;
     text-align: center;
-    color: orange;
+    color: #aaa;
     margin-bottom: 1em;
+    background: rgba(0, 0, 0, .5);
+    box-shadow: 0 0 10px black;
 }
 
 div#duelspectate {
@@ -1433,14 +1437,45 @@ div#duelspectate {
     float: left;
 }
 
+#lobbycdpt,
+#lobbylp,
+#lobbytimelimit,
+#lobbygamemode,
+#lobbyallowed,
+#lobbyflist {
+    display: inline-block;
+    float: right;
+    color: orange;
+}
+
+#lobbycurrentdeck {
+    clear: both;
+    color: white;
+    margin: 7vh 0;
+}
+
 #lobbymenu {
-    width: 75vw;
+    width: 50vw;
     margin: 0 auto;
     padding: 3vh 3vw;
     margin-top: 10vh;
     box-shadow: 0 0 10px black;
     border: 1px solid#444;
     background-color: rgba(0, 0, 0, .5);
+    overflow: auto;
+}
+
+div#lobbygameinfo {
+    background: white;
+    height: 28vh;
+    width: 43%;
+    display: block;
+    float: right;
+    background: rgba(0, 0, 0, .8);
+    padding: 1vh 1vw;
+    color: white;
+    border: 1px solid #222;
+    box-shadow: 0 0 10px black;
 }
 
 .kickbutton {
@@ -1461,6 +1496,14 @@ input#player4lobbyslot {
     margin-bottom: 0.5em;
     padding: .25em;
     font-size: .9em;
+    color: white;
+    font-weight: bold;
+    width: 15vw;
+}
+
+#lobby input:placeholder-shown {
+    font-weight: normal;
+    opacity: .5;
 }
 
 

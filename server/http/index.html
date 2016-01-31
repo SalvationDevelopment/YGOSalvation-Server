@@ -637,9 +637,9 @@
     <header style="padding-top:50px" id="lobby">
         <div id="lobbymenu">
             <div id="duelspectate">
-                <span id="lobbygotoduel">Duel</span>
-                <span id="lobbygotospectate" onclick=" movetoSpectator();">Spectate</span>
-                <button onclick="startDuel()">Start Duel</button>
+                <span id="lobbygotoduel" onclick="challengeDuel();">Duel</span>
+                <span id="lobbygotospectate" onclick="movetoSpectator();">Spectate</span>
+
                 <div class="slot">
                     <div id="player1lobbykick" class="kickbutton" onlick="kickDuelist(0);"></div>
                     <input id="player1lobbyslot" placeholder="empty slot">
@@ -662,11 +662,27 @@
                 </div>
             </div>
             <div id="lobbygameinfo">
-
+                <span id=translatefl "">Forbidden List</span><span id="lobbyflist"></span>
+                <br/>
+                <span id="translateacp">Allowed Card Pool</span><span id="lobbyallowed"></span>
+                <br/>
+                <span id="translategamemode">Game Mode </span><span id="lobbygamemode"></span>
+                <br/>
+                <span id="translatetimelimit">Time Lmit </span><span id="lobbytimelimit"></span>
+                <br/>
+                <span id="translatestartinglifepoints">Starting Lifepoints</span><span id="lobbylp"></span>
+                <br/>
+                <span id="translatecdpt">Cards Drawn per Turn: </span><span id="lobbycdpt"></span>
             </div>
-            <div <select class='currentdeck'>
-                <option selected value=""></option>
+            <div id="lobbycurrentdeck">
+                Select Deck :
+                <select class='currentdeck'>
+                    <option selected value=""></option>
                 </select>
+            </div>
+            <div id="lobbystartcancel">
+                <button onclick="startDuel()" id="lobbystart">Start Duel</button>
+                <button id="lobbycancel" onclick="leaveDuel()">Cancel</button>
             </div>
     </header>
     <header style="padding-top:50px" id="duelscreen">
