@@ -1,9 +1,46 @@
 /*jslint browser:true, plusplus : true, bitwise : true*/
-/*globals WebSocket, Buffer, Uint8Array, enums, makeCard, recieveSTOC, CommandParser, Framemaker, makeCTOS, initiateNetwork*/
+/*globals WebSocket, Buffer, Uint8Array,  makeCard, recieveSTOC, CommandParser, Framemaker, makeCTOS, initiateNetwor*/
 // buffer.js
 // card.js
 // gui.js
 
+function cleanstate() {
+    'use strict';
+    window.duel = {
+        deckcheck: 0,
+        draw_count: 0,
+        lflist: 0,
+        mode: 0,
+        noshuffle: 0,
+        prio: 0,
+        rule: 0,
+        startlp: 0,
+        starthand: 0,
+        timelimit: 0,
+        player: {
+            0: {
+                name: ''
+            },
+            1: {
+                name: ''
+            },
+            2: {
+                name: ''
+            },
+            3: {
+                name: ''
+            }
+        },
+        spectators: 0,
+        turn: 0,
+        turnOfPlayer: 0,
+        phase: 0
+    };
+    window.field = {
+        0: {},
+        1: {}
+    };
+}
 
 function parsePackets(command, message) {
     "use strict";
@@ -13,7 +50,7 @@ function parsePackets(command, message) {
             message: message.slice(1),
             readposition: 0
         };
-    packet[command] = enums[command][message[0]];
+    packet[command] = window.enums[command][message[0]];
     task.push(packet);
     return task;
 }
@@ -64,6 +101,7 @@ function startgame(roompass) {
     };
     ws.onclose = function () {
         console.log('Websocket died');
+
     };
     ws.onmessage = function (data) {
         var q = new Buffer(new Uint8Array(data.data)),
@@ -106,7 +144,9 @@ function startgame(roompass) {
     };
     window.ws = ws;
     window.onunload = window.ws.close;
+    cleanstate();
     initiateNetwork(network);
+
 }
 
 function sendDeckListToServer(deck) {
