@@ -470,19 +470,16 @@
     </header>
     <header style="padding-top:50px" id="soundboard">
         <audio controls preload="auto" id="soundlogin">
-            <source src="ygopro/sounds/x.wav" type="audio/wav">
-        </audio>
-        <audio controls preload="auto" id="soundlogin">
-            <source src="ygopro/sounds/x.wav" type="audio/wav">
+            <source src="ygopro/sounds/shuffle.wav" type="audio/wav">
         </audio>
         <audio controls preload="auto" id="sounderror">
-            <source src="ygopro/sounds/x.wav" type="audio/wav">
+            <source src="ygopro/sounds/damage.wav" type="audio/wav">
         </audio>
         <audio controls preload="auto" id="soundstartygopro">
-            <source src="ygopro/sounds/x.wav" type="audio/wav">
+            <source src="ygopro/sounds/enter.wav" type="audio/wav">
         </audio>
         <audio controls preload="auto" id="soundenterroom">
-            <source src="ygopro/sounds/x.wav" type="audio/wav">
+            <source src="ygopro/sounds/enter.wav" type="audio/wav">
         </audio>
         <audio controls preload="auto" id="soundleaveroom">
             <source src="ygopro/sounds/x.wav" type="audio/wav">
@@ -494,13 +491,13 @@
             <source src="ygopro/sounds/x.wav" type="audio/wav">
         </audio>
         <audio controls preload="auto" id="soundloserps">
-            <source src="ygopro/sounds/x.wav" type="audio/wav">
+            <source src="ygopro/sounds/damage.wav" type="audio/wav">
         </audio>
         <audio controls preload="auto" id="soundnewturn">
-            <source src="ygopro/sounds/x.wav" type="audio/wav">
+            <source src="ygopro/sounds/nextturn.wav" type="audio/wav">
         </audio>
         <audio controls preload="auto" id="soundnewphase">
-            <source src="ygopro/sounds/x.wav" type="audio/wav">
+            <source src="ygopro/sounds/phase.wav" type="audio/wav">
         </audio>
         <audio controls preload="auto" id="soundplacefd">
             <source src="ygopro/sounds/x.wav" type="audio/wav">
@@ -518,10 +515,13 @@
             <source src="ygopro/sounds/x.wav" type="audio/wav">
         </audio>
         <audio controls preload="auto" id="sounddice">
-            <source src="ygopro/sounds/x.wav" type="audio/wav">
+            <source src="ygopro/sounds/diceroll.wav" type="audio/wav">
         </audio>
         <audio controls preload="auto" id="soundcoin">
-            <source src="ygopro/sounds/x.wav" type="audio/wav">
+            <source src="ygopro/sounds/coinflip.wav" type="audio/wav">
+        </audio>
+        <audio controls preload="auto" id="soundgainlp">
+            <source src="ygopro/sounds/gainlp.wav" type="audio/wav">
         </audio>
 
     </header>
@@ -842,6 +842,7 @@
                 console.log(Buffer, EventEmitter);
             });
     </script>
+    <script src="js/automation/sound.js"></script>
     <script src="js/automation/enums.js"></script>
     <script src="js/automation/card.js"></script>
     <script src="js/automation/reciever.js"></script>
