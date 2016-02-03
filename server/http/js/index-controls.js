@@ -97,7 +97,7 @@ function singlesitenav(target) {
     $('.activescreen').removeClass('activescreen');
     $('header').css('left', '100vw');
     $('#' + target).css('left', '0').addClass('activescreen');
-    saveSettings();
+    sound.play('soundlogin');
     return false;
 }
 
