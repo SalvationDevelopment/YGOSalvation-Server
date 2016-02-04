@@ -67,7 +67,7 @@ function singlesitenav(target) {
     //console.log(target);
     if (launcher && target === 'forum') {
         event.preventDefault();
-        ygopro('-a');
+        sound.play('soundactivate');
         return false;
     } else if (!launcher && target === 'forum') {
         return true;
@@ -97,7 +97,7 @@ function singlesitenav(target) {
     $('.activescreen').removeClass('activescreen');
     $('header').css('left', '100vw');
     $('#' + target).css('left', '0').addClass('activescreen');
-    sound.play('soundlogin');
+    sound.play('soundnewphase');
     return false;
 }
 

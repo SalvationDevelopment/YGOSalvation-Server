@@ -100,6 +100,7 @@ function initiateNetwork(network) {
         data.spectators = duel.spectators;
     });
     network.on('STOC_DUEL_START', function (STOC_DUEL_START) {
+        singlesitenav('duelscreen');
         //switch view from duel to duel field.
     });
     network.on('MSG_START', function (data) {
@@ -184,6 +185,12 @@ function initiateNetwork(network) {
     });
     network.on('STOC_SELECT_HAND', function (data) {
         //Trigger RPS Prompt
+    });
+    network.on('STOC_HAND_RESULT', function (data) {
+        //Sissors = 1
+        //Rock = 2
+        //Paper = 3
+        gui.displayRPS(data.res1, data.res2);
     });
 }
 
