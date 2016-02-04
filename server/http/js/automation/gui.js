@@ -5,6 +5,22 @@ var gui = {};
 
 (function () {
     'use strict';
+    gui.doingAnimation = false;
+    gui.displayRPS = function (p1Response, p2Response) {
+        if (gui.doingAnimation) {
+            setTimeout(function () {
+                gui.displayRPS(p1Response, p2Response);
+            }, 2000); //needs tuning
+        }
+        gui.doingAnimation = true;
+        $('#rpsp1card' + p1Response).addClass('active');
+        $('#rpsp2card' + p2Response).addClass('active');
+        setTimeout(function () {
+            $('#rpsp1card' + p1Response).removeClass('active');
+            $('#rpsp2card' + p2Response).removeClass('active');
+            gui.doingAnimation = false;
+        }, 2000); //needs tuning
+    };
     gui.updateloby = function () {
         $('#player1lobbyslot').val(duel.player[0].name);
         $('#player2lobbyslot').val(duel.player[1].name);
