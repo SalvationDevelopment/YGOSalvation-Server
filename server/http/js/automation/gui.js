@@ -7,17 +7,11 @@ var gui = {};
     'use strict';
     gui.doingAnimation = false;
     gui.displayRPS = function (p1Response, p2Response) {
-        if (gui.doingAnimation) {
-            setTimeout(function () {
-                gui.displayRPS(p1Response, p2Response);
-            }, 2000); //needs tuning
-        }
-        gui.doingAnimation = true;
-        $('#rpsp1card' + p1Response).addClass('active');
-        $('#rpsp2card' + p2Response).addClass('active');
+        $('#rpsunit1').css('background-image', 'url(../ygopro/textures/f' + p1Response + '.jpg)').addClass('active');
+        $('#rpsunit2').css('background-image', 'url(../ygopro/textures/f' + p2Response + '.jpg)').addClass('active');;
         setTimeout(function () {
-            $('#rpsp1card' + p1Response).removeClass('active');
-            $('#rpsp2card' + p2Response).removeClass('active');
+            $('#rpsunit1').removeClass('active');
+            $('#rpsunit2').removeClass('active');
             gui.doingAnimation = false;
         }, 2000); //needs tuning
     };

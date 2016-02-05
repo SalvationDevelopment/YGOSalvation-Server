@@ -1506,6 +1506,36 @@ input#player4lobbyslot {
     opacity: .5;
 }
 
+#rpsunit1 {
+    position: absolute;
+    height: 49%;
+    width: 100%;
+    z-index: 20;
+    top: -50%;
+    background-repeat: no-repeat;
+    background-position: center bottom;
+    transition: top 800ms;
+}
+
+#rpsunit2 {
+    position: absolute;
+    height: 49%;
+    width: 100%;
+    z-index: 20;
+    bottom: -50%;
+    background-repeat: no-repeat;
+    background-position: center top;
+    transition: bottom 1s;
+}
+
+#rpsunit1.active {
+    top: 0;
+}
+
+#rpsunit2.active {
+    bottom: 0;
+}
+
 
 /* =========================================
 =================================
