@@ -182,6 +182,7 @@ function initiateNetwork(network) {
     network.on('ERRMSG_DECKERROR', function (data) {
         //something is wrong with the deck you asked the server to validate!
         alert(data.error);
+        gui.displayRPSSelector();
     });
     network.on('STOC_SELECT_HAND', function (data) {
         //Trigger RPS Prompt
@@ -190,7 +191,7 @@ function initiateNetwork(network) {
         //Sissors = 1
         //Rock = 2
         //Paper = 3
-        gui.displayRPS(data.res1, data.res2);
+        gui.displayRPSResult(data.res1, data.res2);
     });
 }
 
