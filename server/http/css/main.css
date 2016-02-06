@@ -1528,6 +1528,24 @@ input#player4lobbyslot {
     transition: bottom 1s;
 }
 
+#rpschoice {
+    width: 100%;
+    position: absolute;
+    bottom: 0;
+    height: 25%;
+    z-index: 20;
+    text-align: center;
+    display: none;
+}
+
+.rpschooser {
+    background-repeat: no-repeat;
+    background-position: center bottom;
+    display: inline-block;
+    height: 141px;
+    width: 107px;
+}
+
 #rpsunit1.active {
     top: 0;
 }

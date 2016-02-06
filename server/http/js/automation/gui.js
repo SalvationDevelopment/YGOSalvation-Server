@@ -3,12 +3,23 @@
 
 var gui = {};
 
+(function wireUpUI() {
+    'use strict';
+    $('body').on('click');
+}());
+
 (function () {
     'use strict';
     gui.doingAnimation = false;
-    gui.displayRPS = function (p1Response, p2Response) {
+    gui.displayRPSSelector = function () {
+        $('#rpschoice').css('display', 'block');
+    };
+    gui.hideyRPSSelector = function () {
+        $('#rpschoice').css('display', 'hidden');
+    };
+    gui.displayRPSResult = function (p1Response, p2Response) {
         $('#rpsunit1').css('background-image', 'url(../ygopro/textures/f' + p1Response + '.jpg)').addClass('active');
-        $('#rpsunit2').css('background-image', 'url(../ygopro/textures/f' + p2Response + '.jpg)').addClass('active');;
+        $('#rpsunit2').css('background-image', 'url(../ygopro/textures/f' + p2Response + '.jpg)').addClass('active');
         setTimeout(function () {
             $('#rpsunit1').removeClass('active');
             $('#rpsunit2').removeClass('active');
@@ -49,7 +60,7 @@ var gui = {};
     gui.LoadField = function () {
         console.log('GAME INITIATE!');
         $('#duelzone').css('display', 'block').get(0).scrollIntoView();
-        $('img.card').attr('class', 'card none undefined i0').attr('src', gui.images + 'cover.jpg');
+        $('img.card').attr('class', 'card none undefined i0').attr('src', 'img/textures/cover.jpg');
 
         $('#phases').css('display', 'block');
         console.log('Starting Duel!');
@@ -76,7 +87,7 @@ var gui = {};
             i;
         $(field).detach();
         for (i = 0; i < size; i++) {
-            $(field).append('<img class="card p' + player + ' ' + movelocation + ' i' + i + ' o" src="' + gui.images + 'cover.jpg" data-position="FaceDown" />');
+            $(field).append('<img class="card p' + player + ' ' + movelocation + ' i' + i + ' o" src="' + 'img/textures/cover.jpg" data-position="FaceDown" />');
         }
         $(field).appendTo('.fieldcontainer');
     };
@@ -278,4 +289,145 @@ var gui = {};
         shuffle(player, 'DECK');
     };
 
+    function cardmargin(player, deck) {
+        var size = $('.card.' + player + '.' + deck).length;
+        $('.card.p' + player + '.' + deck).each(function (i) {
+
+            $(this).css('z-index', i).attr('style', '')
+                .css('-webkit-transform', 'translate3d(0,0,' + i + 'px)');
+
+
+        });
+    }
+
+
+    function shuffle(player, deck) {
+        player = 'p' + player;
+        var orientation = (player === 'p0') ? ({
+            x: 'left',
+            y: 'bottom',
+            direction: 1
+        }) : ({
+            x: 'right',
+            y: 'top',
+            direction: -1
+        });
+        cardmargin(player, deck);
+        $($('.card.' + player + '.' + deck).get().reverse()).each(function (i) {
+            var cache = $(this).css(orientation.x);
+            var spatical = Math.floor((Math.random() * 150) - 75);
+            $(this).css(orientation.x, '-=' + spatical + 'px');
+        });
+        fix = setTimeout(function () {
+            cardmargin(player, deck);
+        }, 50);
+    }
+
+    function complete(player, deck) {
+        var started = Date.now();
+
+        // make it loop every 100 milliseconds
+
+        var interval = setInterval(function () {
+
+            // for 1.5 seconds
+            if (Date.now() - started > 500) {
+
+                // and then pause it
+                clearInterval(interval);
+
+            } else {
+
+                // the thing to do every 100ms
+                shuffle(player, deck);
+                cardmargin(player, deck);
+
+            }
+        }, 100); // every 100 milliseconds
+    }
+
+
+
+
+    function animateState(player, clocation, index, moveplayer, movelocation, movezone, moveposition, overlayindex, isBecomingCard) {
+        var isCard = (overlayindex === undefined) ? '.card' : '.card.overlayunit';
+        isBecomingCard = (isBecomingCard) ? 'card overlayunit' : 'card';
+        overlayindex = (overlayindex === undefined) ? '' : 0;
+        var searchindex = (index === 'ignore') ? '' : ".i" + index;
+        var searchplayer = (player === 'ignore') ? '' : ".p" + player;
+        var origin = isCard + searchplayer + "." + enums.locations[clocation] + searchindex;
+        var destination = isBecomingCard + " p" + moveplayer + " " + enums.locations[movelocation] + " i" + movezone;
+
+        var card = $(origin)
+            //.each(function(i){
+            /*$(this)*/
+            .attr({
+                'style': '',
+                'data-position': moveposition,
+                'data-overlayunit': overlayindex,
+                'class': destination
+            });
+        //   });
+
+
+        console.log(origin, 'changed to', destination);
+        if (enums.locations[clocation] === 'DECK' ||
+            enums.locations[clocation] === 'EXTRA' ||
+            enums.locations[clocation] === 'GRAVE' ||
+            enums.locations[clocation] === 'REMOVED') {
+            cardmargin(player, enums.locations[clocation]);
+        }
+        if (enums.locations[movelocation] === 'DECK' ||
+            enums.locations[movelocation] === 'EXTRA' ||
+            enums.locations[movelocation] === 'GRAVE' ||
+            enums.locations[movelocation] === 'REMOVED') {
+            cardmargin(moveplayer, enums.locations[movelocation]);
+        }
+
+        $('.card.p0.HAND').each(function (sequence) {
+            $(this).attr('class', 'card p0 HAND i' + sequence);
+        });
+        $('.card.p1.HAND').each(function (sequence) {
+            $(this).attr('class', 'card p1 HAND i' + sequence);
+        });
+
+        layouthand(0);
+        layouthand(1);
+        return card;
+    }
+
+    function animateChaining(player, clocation, index) {
+        $(player + '.' + clocation + '.i' + index).addClass('chainable');
+    }
+
+    function animateRemoveChaining() {
+        $('.chainable').removeClass('chainable');
+    }
+
+    function layouthand(player) {
+        var count = $('.p' + player + '.HAND').length;
+        var f = 75 / 0.8;
+        var xCoord;
+        //    console.log(count,f,xCoord);
+        for (var sequence = 0; sequence < count; sequence++) {
+            if (count < 6) {
+                xCoord = (5.5 * f - 0.8 * f * count) / 2 + 1.55 * f + sequence * 0.8 * f;
+            } else {
+                xCoord = 1.9 * f + sequence * 4.0 * f / (count - 1);
+            }
+            // console.log('.'+player+'.Hand.i'+sequence);
+            //console.log(xCoord);
+            if (player === 0) {
+                $('.p' + player + '.HAND.i' + sequence).css('left', '' + xCoord + 'px');
+            } else {
+                $('.p' + player + '.HAND.i' + sequence).css('left', '' + xCoord + 'px');
+            }
+        }
+    }
+
+    //    
+    //    if (count <= 6)
+    //    t->X = (5.5f - 0.8f * count) / 2 + 1.55f + sequence * 0.8f;
+    //   else
+    //    t->X = 1.9f + sequence * 4.0f / (count - 1);
 }());
