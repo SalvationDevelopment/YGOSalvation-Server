@@ -107,7 +107,8 @@ function initiateNetwork(network) {
         //set the LP.
         duel.player[0].lifepoints = data.lifepoints1;
         duel.player[1].lifepoints = data.lifepoints2;
-        //set the size of each deck
+        gui.StartDuel(data.lifepoints1, data.lifepoints2, data.player1decksize, data.player2decksize, data.player1extrasize, data.player2extrasize)
+            //set the size of each deck
     });
     network.on('MSG_NEW_TURN', function (data) {
         //new turn, 
@@ -125,6 +126,7 @@ function initiateNetwork(network) {
     });
     network.on('MSG_MOVE', function (data) {
         //use animation system in gui.js
+        gui.MoveCard(data.code, data.pc, data.pl, data.ps, data.pp, data.cc, data.cl, data.cs, data.cp);
 
     });
     network.on('MSG_UPDATE_CARD', function (data) {
@@ -168,9 +170,8 @@ function initiateNetwork(network) {
     });
     network.on('MSG_DRAW', function (data) {
         var i = 0;
-        for (i; data.count > i; i++) {
-            field[data.player].DECK[(field.DECK.length - i)] = data.cardslist[i];
-        }
+        gui.DrawCard(data.player, data.count, data.cardslist);
+
         //due draw animation/update
     });
     network.on('MSG_SPSUMMONING', function (data) {
