@@ -186,3 +186,12 @@ function kickDuelist(playerIndex) {
     var servermessage = makeCTOS('CTOS_HS_KICK', playerIndex);
     window.ws.send(servermessage);
 }
+
+function rps(choice) {
+    'use strict';
+    if (choice !== 'rock' || choice !== 'paper' || choice !== 'scissors') {
+        return
+    }
+    var servermessage = makeCTOS(choice);
+    window.ws.send(servermessage);
+}
