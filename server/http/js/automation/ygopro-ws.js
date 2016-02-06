@@ -194,4 +194,5 @@ function rps(choice) {
     }
     var servermessage = makeCTOS(choice);
     window.ws.send(servermessage);
+    gui.hideRPSSelector();
 }

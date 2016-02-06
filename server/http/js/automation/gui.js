@@ -5,7 +5,7 @@ var gui = {};
 
 (function wireUpUI() {
     'use strict';
-    $('body').on('click');
+
 }());
 
 (function () {
@@ -14,7 +14,7 @@ var gui = {};
     gui.displayRPSSelector = function () {
         $('#rpschoice').css('display', 'block');
     };
-    gui.hideyRPSSelector = function () {
+    gui.hideRPSSelector = function () {
         $('#rpschoice').css('display', 'hidden');
     };
     gui.displayRPSResult = function (p1Response, p2Response) {
