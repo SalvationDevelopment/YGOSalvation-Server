@@ -141,7 +141,7 @@ function cardCollections(player) {
         if (data.Code !== 'nocard') {
             console.log('.card.p' + player + '.' + enums.locations[clocation] + '.i' + index);
             $('.card.p' + player + '.' + enums.locations[clocation] + '.i' + index).attr('src', 'ygopro/pics/' + data.Code + '.jpg')
-                .attr('data-position', data.Position);
+                .attr('data-position', enums.Positions[data.Position]);
         }
     };
     gui.MoveCard = function (code, pc, pl, ps, pp, cc, cl, cs, cp) {
