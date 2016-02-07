@@ -640,6 +640,7 @@ function recieveSTOC(packet) {
             task.fieldlocation = BufferIO.ReadInt8();
             task.fieldmodel = enums.locations[task.fieldlocation];
             task.message = packet.message;
+            task.cards = updateMassCards(task.player, task.fieldlocation, packet.message);
             //mainGame->dField.UpdateFieldCard(player, location, pbuf);
             // ^ problem.
             break;
