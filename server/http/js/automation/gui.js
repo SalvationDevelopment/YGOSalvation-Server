@@ -121,7 +121,7 @@ function cardCollections(player) {
                 console.log('.card.p' + player + '.' + enums.locations[clocation] + '.i' + i, data[i].Code);
                 $('.card.p' + player + '.' + enums.locations[clocation] + '.i' + i).not('.overlayunit')
                     .attr('src', gui.images + data[i].Code + '.jpg')
-                    .attr('data-position', data[i].Position);
+                    .attr('data-position', enums.Position[data[i].Position]);
                 return;
             } else {
                 deadcard = $('.card.p' + player + '.' + enums.locations[clocation] + '.i' + i).length;
@@ -130,7 +130,7 @@ function cardCollections(player) {
                 ) ? 'EXTRA' : 'GRAVE';
                 if (deadcard) {
                     index = $('.p' + player + '.' + deadzone).length - 1;
-                    animateState(player, clocation, i, player, 0x10, index, 'AttackFaceUp');
+                    animateState(player, clocation, i, player, 0x10, index, 0x01);
                     //animateState(player, clocation, index, moveplayer, movelocation, movezone, moveposition)
                 }
             }
@@ -366,6 +366,7 @@ function cardCollections(player) {
 
 
     function animateState(player, clocation, index, moveplayer, movelocation, movezone, moveposition, overlayindex, isBecomingCard) {
+
         var isCard = (overlayindex === undefined) ? '.card' : '.card.overlayunit';
         isBecomingCard = (isBecomingCard) ? 'card overlayunit' : 'card';
         overlayindex = (overlayindex === undefined) ? '' : 0;
@@ -379,7 +380,7 @@ function cardCollections(player) {
             /*$(this)*/
             .attr({
                 'style': '',
-                'data-position': moveposition,
+                'data-position': enums.Positions[moveposition],
                 'data-overlayunit': overlayindex,
                 'class': destination
             });

@@ -132,7 +132,7 @@ function initiateNetwork(network) {
     network.on('MSG_UPDATE_CARD', function (data) {
         //ygopro-core sent information about the state of one specific card.
         gui.UpdateCard(data.player, data.fieldlocation, data.index, data.card);
-        field[data.player][data.fieldmodel][data.index] = data.card;
+        //field[data.player][data.fieldmodel][data.index] = data.card;
         //redraw field;
     });
     network.on('MSG_CHAIN_END', function (data) {
