@@ -120,21 +120,21 @@ function cardCollections(player) {
             if (data[i].Code !== 'nocard') {
                 console.log('.card.p' + player + '.' + enums.locations[clocation] + '.i' + i, data[i].Code);
                 $('.card.p' + player + '.' + enums.locations[clocation] + '.i' + i).not('.overlayunit')
-                    .attr('src', gui.images + data[i].Code + '.jpg')
-                    .attr('data-position', enums.Position[data[i].Position]);
+                    .attr('src', 'ygopro/pics/' + data[i].Code + '.jpg')
+                    .attr('data-position', data[i].Position);
                 return;
-            } 
-//            else {
-    //                deadcard = $('.card.p' + player + '.' + enums.locations[clocation] + '.i' + i).length;
-    //                deadzone = (enums.locations[clocation] + '.i' + i === 'SPELLZONE.i6' ||
-    //                    enums.locations[clocation] + '.i' + i === 'SPELLZONE.i7'
-    //                ) ? 'EXTRA' : 'GRAVE';
-    //                if (deadcard) {
-    //                    index = $('.p' + player + '.' + deadzone).length - 1;
-    //                    animateState(player, clocation, i, player, 0x10, index, 0x01);
-    //                    //animateState(player, clocation, index, moveplayer, movelocation, movezone, moveposition)
-    //                }
-    //            }
+            }
+            //            else {
+            //                deadcard = $('.card.p' + player + '.' + enums.locations[clocation] + '.i' + i).length;
+            //                deadzone = (enums.locations[clocation] + '.i' + i === 'SPELLZONE.i6' ||
+            //                    enums.locations[clocation] + '.i' + i === 'SPELLZONE.i7'
+            //                ) ? 'EXTRA' : 'GRAVE';
+            //                if (deadcard) {
+            //                    index = $('.p' + player + '.' + deadzone).length - 1;
+            //                    animateState(player, clocation, i, player, 0x10, index, 0x01);
+            //                    //animateState(player, clocation, index, moveplayer, movelocation, movezone, moveposition)
+            //                }
+            //            }
         }
     };
     gui.UpdateCard = function (player, clocation, index, data) {
