@@ -107,8 +107,8 @@ function initiateNetwork(network) {
         //set the LP.
         duel.player[0].lifepoints = data.lifepoints1;
         duel.player[1].lifepoints = data.lifepoints2;
-        gui.StartDuel(data.lifepoints1, data.lifepoints2, data.player1decksize, data.player2decksize, data.player1extrasize, data.player2extrasize)
-            //set the size of each deck
+        gui.StartDuel(data.lifepoints1, data.lifepoints2, data.player1decksize, data.player2decksize, data.player1extrasize, data.player2extrasize);
+        //set the size of each deck
     });
     network.on('MSG_NEW_TURN', function (data) {
         //new turn, 
@@ -120,6 +120,7 @@ function initiateNetwork(network) {
         //???
     });
     network.on('MSG_UPDATE_DATA', function (data) {
+        gui.UpdateCards(data.player, data.fieldlocation, data.cards);
         //ygopro-core sent information about the state of a collection of related cards.
         //field[data.player][data.fieldmodel] = ???;
         //reimage field;
@@ -183,8 +184,8 @@ function initiateNetwork(network) {
     });
     network.on('ERRMSG_DECKERROR', function (data) {
         //something is wrong with the deck you asked the server to validate!
-        alert(data.error);
-        gui.displayRPSSelector();
+        window.alert(data.error);
+        //gui.displayRPSSelector();
     });
     network.on('STOC_SELECT_HAND', function (data) {
         //Trigger RPS Prompt
@@ -197,7 +198,4 @@ function initiateNetwork(network) {
     });
 }
 
-var gametick = setInterval(function () {
-
-    gui.updateloby();
-}, 1000);
+var gametick = setInterval(gui.updateloby, 1000);

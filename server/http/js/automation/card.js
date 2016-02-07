@@ -168,5 +168,44 @@ function updateFieldCard(controller, location, data) {
 
     }
 }
+
+function updateMassCards(player, clocation, buffer) {
+    //console.log("Location:", enums.locations[clocation], clocation, player);
+    //if (enums.locations[clocation] === 'EXTRA')return;
+    'use strict';
+    var field = cardCollections(player),
+        output = [],
+        readposition = 3,
+        failed = false,
+        count,
+        i;
+    //console.log(field);
+    if (field[enums.locations[clocation]] !== undefined) {
+        for (i = 0, count = field[enums.locations[clocation]]; count > i; i++) {
+            try {
+                var len = buffer.readUInt8(readposition);
+                readposition = readposition + 4;
+                if (len > 8) {
+                    output.push(makeCard(buffer, readposition, player).card);
+                    readposition = readposition + len - 4;
+
+                } else {
+                    output.push({
+                        Code: 'nocard'
+                    });
+                }
+            } catch (e) {
+                console.log('overshot', e);
+                failed = true;
+
+            }
+        }
+
+        //console.log(output);
+
+
+    }
+    return output;
+}
 var module = module || {};
 module.exports = makeCard;
