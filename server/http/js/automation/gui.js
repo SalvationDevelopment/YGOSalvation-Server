@@ -3,6 +3,18 @@
 
 var gui = {};
 
+function cardCollections(player) {
+    return {
+        DECK: $('.p' + player + '.DECK').length,
+        HAND: $('.p' + player + '.HAND').length,
+        EXTRA: $('.p' + player + '.EXTRA').not('.overlayunit').length,
+        GRAVE: $('.p' + player + '.GRAVE').length,
+        REMOVED: $('.p' + player + '.REMOVED').length,
+        SPELLZONE: 8,
+        MONSTERZONE: 5
+    };
+}
+
 (function wireUpUI() {
     'use strict';
 
@@ -125,9 +137,10 @@ var gui = {};
         }
     };
     gui.UpdateCard = function (player, clocation, index, data) {
+        console.log(data);
         if (data.Code !== 'nocard') {
             console.log('.card.p' + player + '.' + enums.locations[clocation] + '.i' + index);
-            $('.card.p' + player + '.' + enums.locations[clocation] + '.i' + index).attr('src', gui.images + data.Code + '.jpg')
+            $('.card.p' + player + '.' + enums.locations[clocation] + '.i' + index).attr('src', 'ygopro/pics/' + data.Code + '.jpg')
                 .attr('data-position', data.Position);
         }
     };
@@ -189,15 +202,18 @@ var gui = {};
         var currenthand = $('.p' + player + '.HAND').length,
             topcard,
             query,
-            i;
+            i,
+            pic;
 
         for (i = 0; i < numberOfCards; i++) {
+            pic = (cards[i].code === 0) ? 'img/textures/cover' : cards[i].code;
             topcard = $('.p' + player + '.DECK').length - 1;
             animateState(player, 1, topcard, player, 2, currenthand + i, 'FaceUp');
             //animateState(player, clocation, index, moveplayer, movelocation, movezone, moveposition){
             query = '.p' + player + '.HAND' + '.i' + (currenthand + i);
             console.log(query + ' changed to ' + gui.images + cards[i] + '.jpg');
-            $(query).attr('src', gui.images + cards[i] + '.jpg');
+            $(query).attr('src', pic + '.jpg');
+            console.log(cards[i]);
 
         }
 
