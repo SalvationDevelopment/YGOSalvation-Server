@@ -236,10 +236,10 @@ function makeCTOS(command, message) {
     say.paper = function () {
         return new Buffer([0x2, 0x0, 0x3, 0x3]);
     };
-    say.gofirst = function () {
-        return new Buffer([0x1, 0x0, 0x15]);
+    say.GO_FIRST = function () {
+        return new Buffer([0x2, 0x0, 0x4, 0x0]);
     };
-    say.gosecond = function () {
+    say.GO_SECOND = function () {
         return new Buffer([0x2, 0x0, 0x4, 0x0]);
     };
 

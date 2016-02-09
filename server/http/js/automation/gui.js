@@ -29,6 +29,12 @@ function cardCollections(player) {
     gui.hideRPSSelector = function () {
         $('#rpschoice').css('display', 'none');
     };
+    gui.displaySelectWhoGoesFirst = function () {
+        $('#selectwhogoesfirst').css('display', 'block');
+    };
+    gui.hideSelectWhoGoesFirst = function () {
+        $('#selectwhogoesfirst').css('display', 'none');
+    };
     gui.displayRPSResult = function (p1Response, p2Response) {
         $('#rpsunit1').css('background-image', 'url(../ygopro/textures/f' + p1Response + '.jpg)').addClass('active');
         $('#rpsunit2').css('background-image', 'url(../ygopro/textures/f' + p2Response + '.jpg)').addClass('active');
@@ -123,7 +129,7 @@ function cardCollections(player) {
                 $('.card.p' + player + '.' + enums.locations[clocation] + '.i' + i).not('.overlayunit')
                     .attr('src', 'ygopro/pics/' + data[i].Code + '.jpg')
                     .attr('data-position', data[i].Position);
-                return;
+
             }
             //            else {
             //                deadcard = $('.card.p' + player + '.' + enums.locations[clocation] + '.i' + i).length;
@@ -208,12 +214,12 @@ function cardCollections(player) {
             pic;
 
         for (i = 0; i < numberOfCards; i++) {
-            pic = (cards[i].code === 0) ? 'img/textures/cover' : cards[i].code;
+            pic = (cards[i].code === 0) ? 'img/textures/cover' : 'ygopro/' + cards[i].code;
             topcard = $('.p' + player + '.DECK').length - 1;
             animateState(player, 1, topcard, player, 2, currenthand + i, 'FaceUp');
             //animateState(player, clocation, index, moveplayer, movelocation, movezone, moveposition){
             query = '.p' + player + '.HAND' + '.i' + (currenthand + i);
-            console.log(query + ' changed to ' + gui.images + cards[i] + '.jpg');
+            console.log(query + ' changed to ' + pic + '.jpg');
             $(query).attr('src', pic + '.jpg');
             console.log(cards[i]);
 
