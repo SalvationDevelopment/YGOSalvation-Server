@@ -193,10 +193,18 @@ function rps(choice) {
     try {
         var servermessage = makeCTOS(choice);
     } catch (error) {
+        console.log(error);
         return;
     }
     window.ws.send(servermessage);
     gui.hideRPSSelector();
+}
+
+function gofirst(player) {
+    'use strict';
+    var servermessage = (player) ? makeCTOS('GO_FIRST') : makeCTOS('GO_SECOND');
+    window.ws.send(servermessage);
+    gui.hideSelectWhoGoesFirst();
 }
 
 function injectDeck() {

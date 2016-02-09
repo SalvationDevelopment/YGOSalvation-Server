@@ -198,6 +198,9 @@ function initiateNetwork(network) {
         gui.hideRPSSelector();
         gui.displayRPSResult(data.res1, data.res2);
     });
+    network.on('STOC_SELECT_TP', function (data) {
+        gui.displaySelectWhoGoesFirst();
+    });
 }
 
 var gametick = setInterval(gui.updateloby, 1000);
