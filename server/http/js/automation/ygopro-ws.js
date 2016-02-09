@@ -225,3 +225,9 @@ function evaluateDeckSelection() {
     var selection = parseInt($('.currentdeck option:selected').val(), 10);
     sendDeckListToServer(deckfiles[selection]);
 }
+
+function demo() {
+    'use strict';
+    injectDeck();
+    evaluateDeckSelection();
+}

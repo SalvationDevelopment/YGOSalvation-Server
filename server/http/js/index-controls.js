@@ -60,8 +60,12 @@ function singlesitenav(target) {
     'use strict';
     if (internalLocal === 'duelscreen' || internalLocal === 'lobby') {
         if (target === 'duelscreen' || target === 'lobby') {} else {
-            if (!confirm('You are in a duel, are you sure? Not recommened')) {
+            if (!window.confirm('You are in a duel, are you sure? Not recommened')) {
                 return;
+            } else {
+                try {
+                    window.ws.close();
+                } catch (errorws) {}
             }
         }
     }
