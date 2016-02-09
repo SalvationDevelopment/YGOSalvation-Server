@@ -110,7 +110,7 @@ function cardCollections(player) {
         }
         $('.p' + player + 'lp').val(lifepoints);
     };
-    gui.UpdateCards = function (player, clocation, data) { //YGOPro is constantly sending data about game state, this function stores and records that information to allow access to a properly understood gamestate for reference. 
+    gui.UpdateData = function (player, clocation, data) { //YGOPro is constantly sending data about game state, this function stores and records that information to allow access to a properly understood gamestate for reference. 
 
         var i,
             deadcard,
