@@ -500,8 +500,16 @@ primus.on('data', function (data) {
             }
 
         }
-        if (data.clientEvent === 'tournamentrequest' && confirm('Join Tournament?')) {
-            joinTournament();
+        if (data.clientEvent === 'deck') {
+            if (data.command === 'decklist') {
+                deckfiles = data.deckfiles;
+            }
+            if (data.command === 'save') {
+                window.alert('Deck Saved');
+            }
+            if (data.command === 'deleted') {
+                window.alert('Deck Deleted');
+            }
         }
 
         if (data.stats) {
