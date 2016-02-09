@@ -27,7 +27,7 @@ function cardCollections(player) {
         $('#rpschoice').css('display', 'block');
     };
     gui.hideRPSSelector = function () {
-        $('#rpschoice').css('display', 'hidden');
+        $('#rpschoice').css('display', 'none');
     };
     gui.displayRPSResult = function (p1Response, p2Response) {
         $('#rpsunit1').css('background-image', 'url(../ygopro/textures/f' + p1Response + '.jpg)').addClass('active');

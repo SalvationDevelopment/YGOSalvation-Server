@@ -1,5 +1,5 @@
 /*jslint browser:true, plusplus : true, bitwise : true*/
-/*globals WebSocket, Buffer, Uint8Array,  makeCard, recieveSTOC, CommandParser, Framemaker, makeCTOS, initiateNetwor*/
+/*globals WebSocket, Buffer, Uint8Array,  makeCard, recieveSTOC, CommandParser, Framemaker, makeCTOS, initiateNetwork, deckfiles, gui*/
 // buffer.js
 // card.js
 // gui.js
@@ -190,19 +190,38 @@ function kickDuelist(playerIndex) {
 
 function rps(choice) {
     'use strict';
-    if (choice !== 'rock' || choice !== 'paper' || choice !== 'scissors') {
+    try {
+        var servermessage = makeCTOS(choice);
+    } catch (error) {
         return;
     }
-    var servermessage = makeCTOS(choice);
     window.ws.send(servermessage);
     gui.hideRPSSelector();
 }
 
 function injectDeck() {
     'use strict';
-    decklist = [{
+    deckfiles = [{
+        name: 'Clustering Wishes',
+        owner: 'AccessDenied',
+        description: 'Synchron-Stardust Deck',
         main: [63977008, 63977008, 63977008, 9365703, 36736723, 36736723, 36736723, 62125438, 62125438, 62125438, 36643046, 36643046, 36643046, 9742784, 67270095, 67270095, 68543408, 68543408, 68543408, 15310033, 32807846, 96363153, 96363153, 96363153, 5318639, 5318639, 5318639, 8529136, 8529136, 8529136, 43898403, 43898403, 79068663, 79068663, 20590784, 27196937, 27196937, 27196937, 47264717, 58120309],
         extra: [26268488, 35952884, 24696097, 74892653, 89474727, 44508094, 44508094, 60800381, 60800381, 60800381, 37675907, 37675907, 37675907, 50091196, 50091196],
         side: []
     }];
+
+    var i,
+        data = {
+            currentdecks: ''
+        };
+    for (i = 0; deckfiles.length > i; i++) {
+        data.currentdecks = data.currentdecks + '<option value="' + i + '">' + deckfiles[i].name + '</option>';
+    }
+    $('.currentdeck').html(data.currentdecks);
+}
+
+function evaluateDeckSelection() {
+    'use strict';
+    var selection = parseInt($('.currentdeck option:selected').val(), 10);
+    sendDeckListToServer(deckfiles[selection]);
 }

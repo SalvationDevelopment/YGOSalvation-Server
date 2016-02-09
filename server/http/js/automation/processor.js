@@ -189,11 +189,13 @@ function initiateNetwork(network) {
     });
     network.on('STOC_SELECT_HAND', function (data) {
         //Trigger RPS Prompt
+        gui.displayRPSSelector();
     });
     network.on('STOC_HAND_RESULT', function (data) {
         //Sissors = 1
         //Rock = 2
         //Paper = 3
+        gui.hideRPSSelector();
         gui.displayRPSResult(data.res1, data.res2);
     });
 }
