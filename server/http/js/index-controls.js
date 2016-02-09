@@ -58,6 +58,11 @@ var launcher = false,
 
 function singlesitenav(target) {
     'use strict';
+    if (internalLocal === 'duelscreen' || internalLocal === 'lobby') {
+        if (!confirm('You are in a duel, are you sure? Not recommened')) {
+            return;
+        }
+    }
     console.log('navigating to:', target);
     try {
         _gaq.push(['_trackEvent', 'Site', 'Navigation', target]);
@@ -251,13 +256,4 @@ $(document).ready(function () {
         ev.preventDefault();
         return false; // avoid to execute the actual submit of the form.
     });
-
-    if (launcher) {
-        $('webonly').css('display', 'none');
-
-    }
-
-
-    $('#ipblogin').css('display', 'block');
-
 });

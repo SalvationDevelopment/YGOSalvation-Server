@@ -1,3 +1,5 @@
+var r;
+
 function parseYDK(ydkFileContents) {
     var lineSplit = ydkFileContents.split("\r\n"),
         originalValues = {
@@ -9,7 +11,7 @@ function parseYDK(ydkFileContents) {
             "extraLength": 0
         },
         current = "";
-    lineSplit.forEach(function(value) {
+    lineSplit.forEach(function (value) {
         if (value === "") {
             return;
         }
@@ -28,6 +30,7 @@ function parseYDK(ydkFileContents) {
             }
         }
     });
+    r = originalValues;
     return originalValues;
 }
 
@@ -39,12 +42,12 @@ function ydkToList(deckObject, options) {
         decks = ["Main", "Extra", "Side"],
         cardFound = false,
         temp;
-    decks.forEach(function(deck) {
+    decks.forEach(function (deck) {
         output += deck + " Deck (" + deckObject[deck.toLowerCase() + "Length"] + "):\r\n";
         for (temp in deckObject[deck.toLowerCase()]) {
             if (multipleEntries) {
                 output += formatString.replace("%i", deckObject[deck.toLowerCase()][temp]) + " ";
-                cards.forEach(function(card) {
+                cards.forEach(function (card) {
                     if (parseInt(temp, 10) === card.id) {
                         output += card.name;
                         cardFound = true;
@@ -56,7 +59,7 @@ function ydkToList(deckObject, options) {
                 output += "\r\n";
             } else {
                 while (deckObject[deck.toLowerCase()][temp]--) {
-                    cards.forEach(function(card) {
+                    cards.forEach(function (card) {
                         if (parseInt(temp, 10) === card.id) {
                             output += card.name + "\r\n";
                             cardFound = true;

@@ -117,10 +117,10 @@ function initiateNetwork(network) {
         //refresh field
     });
     network.on('MSG_RELOAD_FIELD', function (data) {
-        //???
+        gui.ClearField();
     });
     network.on('MSG_UPDATE_DATA', function (data) {
-        gui.UpdateCards(data.player, data.fieldlocation, data.cards);
+        gui.UpdateData(data.player, data.fieldlocation, data.cards);
         //ygopro-core sent information about the state of a collection of related cards.
         //field[data.player][data.fieldmodel] = ???;
         //reimage field;
