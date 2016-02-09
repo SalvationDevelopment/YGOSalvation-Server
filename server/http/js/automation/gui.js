@@ -117,8 +117,9 @@ function cardCollections(player) {
             deadzone,
             index;
         for (i = 0; data.length > i; i++) {
+            console.log('.card.p' + player + '.' + enums.locations[clocation] + '.i' + i, data[i].Code);
             if (data[i].Code !== 'nocard') {
-                console.log('.card.p' + player + '.' + enums.locations[clocation] + '.i' + i, data[i].Code);
+
                 $('.card.p' + player + '.' + enums.locations[clocation] + '.i' + i).not('.overlayunit')
                     .attr('src', 'ygopro/pics/' + data[i].Code + '.jpg')
                     .attr('data-position', data[i].Position);
