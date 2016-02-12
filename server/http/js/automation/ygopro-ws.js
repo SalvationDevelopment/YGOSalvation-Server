@@ -241,3 +241,5 @@ function demo() {
     injectDeck();
     evaluateDeckSelection();
 }
+
+injectDeck();
