@@ -22,7 +22,13 @@ function cardCollections(player) {
 
 (function () {
     'use strict';
-    gui.doingAnimation = false;
+
+    gui.displayWaiting = function () {
+        $('#waiting').css('display', 'block');
+    };
+    gui.hideWaiting = function () {
+        $('#waiting').css('display', 'none');
+    };
     gui.displayRPSSelector = function () {
         $('#rpschoice').css('display', 'block');
     };

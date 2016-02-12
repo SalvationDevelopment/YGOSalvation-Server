@@ -1498,6 +1498,16 @@ div#lobbygameinfo {
     box-shadow: 0 0 10px black;
 }
 
+div#waiting {
+    position: absolute;
+    top: 20vh;
+    color: white;
+    width: 100%;
+    text-align: center;
+    text-shadow: 0 0 20px white, 0 0 4px black;
+    text-decoration: blink !important;
+}
+
 .kickbutton {
     width: 1em;
     height: 1em;
