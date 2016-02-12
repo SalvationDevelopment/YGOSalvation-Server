@@ -1,5 +1,5 @@
 /*jslint browser:true, plusplus : true, bitwise : true*/
-/*globals WebSocket, Buffer, Uint8Array,  makeCard, recieveSTOC, CommandParser, Framemaker, makeCTOS, initiateNetwork, deckfiles, gui*/
+/*globals WebSocket, Buffer, Uint8Array,  makeCard, recieveSTOC, CommandParser, Framemaker, makeCTOS, initiateNetwork, deckfiles, gui, $*/
 // buffer.js
 // card.js
 // gui.js
@@ -85,7 +85,7 @@ function startgame(roompass) {
         return;
     }
     var framer = new Framemaker(),
-        ws = new WebSocket("ws://127.0.0.1:8082", "duel"),
+        ws = new WebSocket("ws://" + location.host + ":8082", "duel"),
         network = new CommandParser(),
         dInfo = {};
     window.activeReplayRecorde = [];
@@ -172,7 +172,7 @@ function leaveDuel() {
     'use strict';
     var servermessage = makeCTOS('CTOS_LEAVE_GAME');
     window.ws.send(servermessage);
-    singlesitenav('gamelist');
+    window.singlesitenav('gamelist');
 }
 
 function challengeDuel() {
@@ -190,8 +190,9 @@ function kickDuelist(playerIndex) {
 
 function rps(choice) {
     'use strict';
+    var servermessage;
     try {
-        var servermessage = makeCTOS(choice);
+        servermessage = makeCTOS(choice);
     } catch (error) {
         console.log(error);
         return;
