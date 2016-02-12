@@ -100,16 +100,26 @@ function initiateNetwork(network) {
         data.spectators = duel.spectators;
     });
     network.on('STOC_DUEL_START', function (STOC_DUEL_START) {
-        singlesitenav('duelscreen');
+        window.singlesitenav('duelscreen');
         //switch view from duel to duel field.
     });
     network.on('MSG_START', function (data) {
         //set the LP.
         duel.player[0].lifepoints = data.lifepoints1;
         duel.player[1].lifepoints = data.lifepoints2;
-        gui.StartDuel(data.lifepoints1, data.lifepoints2, data.player1decksize, data.player2decksize, data.player1extrasize, data.player2extrasize);
+
         //set the size of each deck
+        gui.StartDuel(data.lifepoints1, data.lifepoints2, data.player1decksize, data.player2decksize, data.player1extrasize, data.player2extrasize);
+
+        //double check that the screen is cleared.
+        gui.hideSelectWhoGoesFirst();
+        gui.hideRPSSelector();
+
     });
+    network.on('MSG_WAITING', function (data) {
+        gui.displayWaiting();
+    });
+
     network.on('MSG_NEW_TURN', function (data) {
         //new turn, 
         duel.turn++;

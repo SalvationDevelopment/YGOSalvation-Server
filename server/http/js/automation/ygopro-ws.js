@@ -125,6 +125,7 @@ function startgame(roompass) {
                     action: commands[l]
                 });
                 console.log(commands[l]);
+                gui.hideWaiting();
                 network.input(commands[l]);
             }
         }
