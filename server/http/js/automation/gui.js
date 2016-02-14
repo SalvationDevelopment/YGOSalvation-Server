@@ -197,7 +197,7 @@ function cardCollections(player) {
         //remove the prompt
 
     });
-    $('body').on('click', '.manualShuffle', function manualShuffle(id) {
+    $('body').on('click', '.manualShuffle', function manualShuffle(player, deck) {
         //remove the prompt
 
     });
@@ -566,7 +566,7 @@ function cardCollections(player) {
 
 
 
-    gui.animateState = function (player, clocation, index, moveplayer, movelocation, movezone, moveposition, overlayindex, isBecomingCard) {
+    gui.animateState = function animateState(player, clocation, index, moveplayer, movelocation, movezone, moveposition, overlayindex, isBecomingCard) {
 
         var isCard = (overlayindex === undefined) ? '.card' : '.card.overlayunit';
         isBecomingCard = (isBecomingCard) ? 'card overlayunit' : 'card';
