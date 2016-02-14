@@ -1,4 +1,4 @@
-/*global $, console, cardmargin, layouthand, cardCollections, enums, animateState, animateRemoveChaining, shuffle, animateChaining*/
+/*global $, console, cardmargin, layouthand, cardCollections, enums, gui.animateState, animateRemoveChaining, shuffle, animateChaining*/
 /*jslint plusplus:true, bitwise:true */
 
 var gui = {};
@@ -17,8 +17,43 @@ function cardCollections(player) {
 
 (function wireUpUI() {
     'use strict';
+    $('body').on('click', '.okButton', function fireOKCallbackTrue() {
+        window[gui.OKCallback](true);
+        $('#alertUI').css('display', 'none');
+    });
 
+    $('body').on('click', '.cancelButton', function fireOKCallbackFalse() {
+        window[gui.OKCallback](false);
+        $('#alertUI').css('display', 'none');
+    });
+
+    $('body').on('click', '.card', function displayCardOptions(cardElement) {
+        // a card was click, you need to display a prompt system over top of it.
+        // see if the card was allowed to be clicked in the first place. if not just return out.
+        // get the x/y  coordinates of the card.
+        // move the ui element near the card
+        // populate it with options based on the information in it, you are gonna need the card ID for this.
+        // display the card
+    });
+
+    $('body').on('click', '.setViaAutomation', function setViaAutomation(id) {
+        //remove the prompt
+        //reply via socket you want to set card id.
+    });
+    $('body').on('click', '.activateViaAutomation', function activateViaAutomation(id) {
+        //remove the prompt
+        //reply via socket you want to activate card id.
+    });
+    $('body').on('click', '.summonViaAutomation', function summonViaAutomation(id) {
+        //remove the prompt
+        //reply via socket you want to summon card id.
+    });
+    $('body').on('click', '.specialSummonViaAutomation', function specialSummonViaAutomation(id) {
+        //remove the prompt
+        //reply via socket you want to special summon card id.
+    });
 }());
+
 
 (function () {
     'use strict';
@@ -111,7 +146,7 @@ function cardCollections(player) {
             i;
         $(field).detach();
         for (i = 0; i < size; i++) {
-            $(field).append('<img class="card p' + player + ' ' + movelocation + ' i' + i + ' o" src="' + 'img/textures/cover.jpg" data-position="FaceDown" />');
+            $(field).append('<img class="card p' + player + ' ' + movelocation + ' i' + i + ' o" src="img/textures/cover.jpg" data-position="FaceDown" />');
         }
         $(field).appendTo('.fieldcontainer');
     };
@@ -144,8 +179,8 @@ function cardCollections(player) {
             //                ) ? 'EXTRA' : 'GRAVE';
             //                if (deadcard) {
             //                    index = $('.p' + player + '.' + deadzone).length - 1;
-            //                    animateState(player, clocation, i, player, 0x10, index, 0x01);
-            //                    //animateState(player, clocation, index, moveplayer, movelocation, movezone, moveposition)
+            //                    gui.animateState(player, clocation, i, player, 0x10, index, 0x01);
+            //                    //gui.animateState(player, clocation, index, moveplayer, movelocation, movezone, moveposition)
             //                }
             //            }
         }
@@ -175,19 +210,19 @@ function cardCollections(player) {
 
             if (!(pl & 0x80) && !(cl & 0x80)) { //duelclient line 1885
                 console.log(pl);
-                animateState(pc, pl, ps, cc, cl, cs, cp);
-                //animateState(player, clocation, index, moveplayer, movelocation, movezone, moveposition)
+                gui.animateState(pc, pl, ps, cc, cl, cs, cp);
+                //gui.animateState(player, clocation, index, moveplayer, movelocation, movezone, moveposition)
             } else if (!(pl & 0x80)) {
                 console.log('targeting a card to become a xyz unit....');
                 $('.overlayunit.p' + cc + '.i' + cs).each(function (i) {
                     $(this).attr('data-overlayunit', (i));
                 });
-                animateState(pc, pl, ps, cc, (cl & 0x7f), cs, cp, undefined, true);
+                gui.animateState(pc, pl, ps, cc, (cl & 0x7f), cs, cp, undefined, true);
 
 
             } else if (!(cl & 0x80)) {
                 console.log('turning an xyz unit into a normal card....');
-                animateState(pc, (pl & 0x7f), ps, cc, cl, cs, cp, pp);
+                gui.animateState(pc, (pl & 0x7f), ps, cc, cl, cs, cp, pp);
                 $('.overlayunit.p' + pc + '.i' + ps).each(function (i) {
                     $(this).attr('data-overlayunit', (i));
                 });
@@ -197,7 +232,7 @@ function cardCollections(player) {
                 $('.overlayunit.p' + cc + '.i' + cs).each(function (i) {
                     $(this).attr('data-overlayunit', (i));
                 });
-                animateState(pc, (pl & 0x7f), ps, cc, (cl & 0x7f), cs, cp, pp, true);
+                gui.animateState(pc, (pl & 0x7f), ps, cc, (cl & 0x7f), cs, cp, pp, true);
                 $('.overlayunit.p' + pc + '.OVERLAY.i' + ps).each(function (i) {
                     $(this).attr('data-overlayunit', (i));
                 });
@@ -207,9 +242,9 @@ function cardCollections(player) {
         }
     };
     gui.ChangeCardPosition = function (code, cc, cl, cs, cp) {
-        animateState(cc, cl, cs, cc, cl, cs, cp);
+        gui.animateState(cc, cl, cs, cc, cl, cs, cp);
         //var query = '.card.p' + cc + '.' + enums.locations[cl] + '.i' + cs;
-        //animateState(player, clocation, index, moveplayer, movelocation, movezone, moveposition)
+        //gui.animateState(player, clocation, index, moveplayer, movelocation, movezone, moveposition)
     };
 
     gui.DrawCard = function (player, numberOfCards, cards) {
@@ -222,9 +257,9 @@ function cardCollections(player) {
         for (i = 0; i < numberOfCards; i++) {
             pic = (cards[i].code === 0) ? 'img/textures/cover' : 'ygopro/' + cards[i].code;
             topcard = $('.p' + player + '.DECK').length - 1;
-            animateState(player, 1, topcard, player, 2, currenthand + i, 'FaceUp');
-            //animateState(player, clocation, index, moveplayer, movelocation, movezone, moveposition){
-            query = '.p' + player + '.HAND' + '.i' + (currenthand + i);
+            gui.animateState(player, 1, topcard, player, 2, currenthand + i, 'FaceUp');
+            //gui.animateState(player, clocation, index, moveplayer, movelocation, movezone, moveposition){
+            query = '.p' + player + '.HAND.i' + (currenthand + i);
             console.log(query + ' changed to ' + pic + '.jpg');
             $(query).attr('src', pic + '.jpg');
             console.log(cards[i]);
@@ -379,7 +414,7 @@ function cardCollections(player) {
 
 
 
-    function animateState(player, clocation, index, moveplayer, movelocation, movezone, moveposition, overlayindex, isBecomingCard) {
+    gui.animateState = function (player, clocation, index, moveplayer, movelocation, movezone, moveposition, overlayindex, isBecomingCard) {
 
         var isCard = (overlayindex === undefined) ? '.card' : '.card.overlayunit';
         isBecomingCard = (isBecomingCard) ? 'card overlayunit' : 'card';
@@ -425,7 +460,7 @@ function cardCollections(player) {
         layouthand(0);
         layouthand(1);
         return card;
-    }
+    };
 
     function animateChaining(player, clocation, index) {
         $(player + '.' + clocation + '.i' + index).addClass('chainable');
