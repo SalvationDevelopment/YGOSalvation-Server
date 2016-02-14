@@ -1,8 +1,8 @@
-/*jslint plusplus: true, browser:true, node:true*/
+/*jslint plusplus: true*/
 /*jslint nomen: true*/
-/*global localStorage, $, Primus, prompt, console, writeDeckList, makeDeck, confirm, launcher, alert, singlesitenav, startgame, _gaq, internalLocal, loggedIn, processServerCall, admin*/
+/*global localStorage, $, Primus, console, writeDeckList, makeDeck, confirm, launcher, singlesitenav, startgame, _gaq, internalLocal, loggedIn, processServerCall, admin*/
 /*exported connectToCheckmateServer, leaveGamelist, hostGame, connectgamelist, setHostSettings, setfilter*/
-
+/*eslint no-alert: 2*/
 
 var localstorageIter = 0;
 
@@ -57,12 +57,7 @@ function isChecked(id) {
 
 function ygopro() {
     'use strict';
-    uniqueID = $('#uniqueid').html();
-    localStorage.serverport = '8911';
-    localStorage.lastport = '8911';
-    saveSettings();
-    localStorage.pics = (isChecked('[data-localhost=altpics]')) ? './altpics/' : 'pics';
-    console.log(isChecked('[data-localhost=altpics]'));
+
     if (localStorage.roompass) {
         if (localStorage.roompass[0] === '4') {
             //if battleback
@@ -70,23 +65,18 @@ function ygopro() {
 
         }
     }
-    var out = {},
-        storage;
-    for (storage in localStorage) {
-        if (localStorage.hasOwnProperty(storage) && storage.indexOf('login') === -1) {
-            out[storage] = localStorage[storage];
-        }
-    }
-    //$.post('http://127.0.0.1:9468/' + parameter, localStorage);
+
     startgame(localStorage.roompass + '\u0000');
     console.log('sending details');
 
 
-    internalLocal = 'YGOPro';
+    window.internalLocal = 'YGOPro';
     try {
         _gaq.push(['_trackEvent', 'Launcher', 'YGOPro', parameter]);
-        _gaq.push(['_trackEvent', 'Site', 'Navigation Movement', internalLocal + ' - ' + 'YGOPro']);
-    } catch (e) {}
+        _gaq.push(['_trackEvent', 'Site', 'Navigation Movement', internalLocal + ' - YGOPro']);
+    } catch (e) {
+        window.console.log('Error with Google Analytics');
+    }
 
 
 }
@@ -105,11 +95,6 @@ function joinGamelist() {
         action: 'join',
         uniqueID: uniqueID
     });
-    if (loggedIn) {
-
-
-
-    }
 }
 joinGamelist();
 
@@ -151,9 +136,9 @@ function enterGame(string, pass) {
     var guess = '';
     console.log('checking for pass');
     if (pass) {
-        guess = prompt('Password?', guess);
+        guess = window.prompt('Password?', guess);
         if (string.substring(26, 19) !== guess) {
-            alert('Wrong Password!');
+            window.alert('Wrong Password!');
             return;
         }
     }
@@ -165,7 +150,9 @@ function enterGame(string, pass) {
     ygopro('-j');
     try {
         _gaq.push(['_trackEvent', 'Launcher', 'YGOPro', 'Join Duel']);
-    } catch (e) {}
+    } catch (e) {
+        window.console.log('Error with Google Analytics');
+    }
     setTimeout(function () {
         $('body').css('background-image', 'url(http://ygopro.us/img/brightx_bg.jpg)');
     }, 6000);
@@ -200,10 +187,10 @@ function setpass() {
         if (pass.length !== 5) {
             pass = randomString(5);
         }
-        pass = prompt('Password (5 char):', pass);
+        pass = window.prompt('Password (5 char):', pass);
         pass.replace(/[^a-zA-Z0-9]/g, "");
     } while (pass.length !== 5);
-    prompt('Give this Password to your Opponent(s)!', pass);
+    window.prompt('Give this Password to your Opponent(s)!', pass);
     return pass;
 }
 
@@ -440,12 +427,12 @@ function renderList(JSONdata) {
     elem = $('#gamelistitems').find('div:not(.avaliable)').sort(sortMe);
     $('#gamelistitems').append(elem);
     $('.avaliable').first()
-        .before('<br style="clear:both"><span class="gamelabel">' + jsLang.join + '<span><br style="clear:both">');
+        .before('<br style="clear:both"><span class="gamelabel">' + window.jsLang.join + '<span><br style="clear:both">');
     $('.started')
-        .first().before('<br style="clear:both"><span class="gamelabel">' + jsLang.spectate + '<span><br style="clear:both">');
+        .first().before('<br style="clear:both"><span class="gamelabel">' + window.jsLang.spectate + '<span><br style="clear:both">');
     $('#activeduels').html($('.game').length);
     $('#activeduelist').html($('.playername').length + spectators - $('.playername:contains(SnarkyChild)').length);
-    $('#loginsinlast24').html(stats24);
+    //$('#loginsinlast24').html(stats24);
 }
 
 function setfilter() {
@@ -457,7 +444,35 @@ var stats24 = 0,
     statsShut = 0,
     connected = 0;
 
-primus.on('data', function (data) {
+
+function processDeckMessage(data) {
+    if (data.clientEvent === 'deck') {
+        if (data.command === 'decklist') {
+            window.deckfiles = data.deckfiles;
+        }
+        if (data.command === 'save') {
+            window.alert('Deck Saved');
+        }
+        if (data.command === 'deleted') {
+            window.alert('Deck Deleted');
+        }
+    }
+}
+
+function processStats(data) {
+    stats24 = 0;
+    statsShut = 0;
+    connected = data.online;
+
+    time = new Date().getTime();
+    for (player in data.stats.logged) {
+        statsShut++;
+        if (time - data.stats[player] < 86400000) { //within the last 24hrs
+            stats24++;
+        }
+    }
+}
+primus.on('data', function processIncomingPrimusMessage(data) {
     'use strict';
     var join = false,
         time,
@@ -495,35 +510,15 @@ primus.on('data', function (data) {
             if (data.from === 'SnarkyChild') {
                 enterGame(data.roompass);
                 return;
-            } else if (confirm('Accept Duel Request from ' + data.from + '?')) {
+            } else if (window.confirm('Accept Duel Request from ' + data.from + '?')) {
                 enterGame(data.roompass);
             }
 
         }
-        if (data.clientEvent === 'deck') {
-            if (data.command === 'decklist') {
-                deckfiles = data.deckfiles;
-            }
-            if (data.command === 'save') {
-                window.alert('Deck Saved');
-            }
-            if (data.command === 'deleted') {
-                window.alert('Deck Deleted');
-            }
-        }
+        processDeckMessage(data);
 
         if (data.stats) {
-            stats24 = 0;
-            statsShut = 0;
-            connected = data.online;
-
-            time = new Date().getTime();
-            for (player in data.stats.logged) {
-                statsShut++;
-                if (time - data.stats[player] < 86400000) { //within the last 24hrs
-                    stats24++;
-                }
-            }
+            processStats(data);
         } else {
             console.log(data);
         }
@@ -534,14 +529,18 @@ primus.on('connect', function () {
     console.log('!!!!!! connect');
     try {
         _gaq.push(['_trackEvent', 'Launcher', 'Primus', 'Init']);
-    } catch (e) {}
+    } catch (e) {
+        window.console.log('Error with Google Analytics');
+    }
 });
 primus.on('close', function () {
     'use strict';
     console.log('!!!!!! close');
     try {
         _gaq.push(['_trackEvent', 'Launcher', 'Primus', 'Failure']);
-    } catch (e) {}
+    } catch (e) {
+        window.console.log('Error with Google Analytics');
+    }
 });
 
 function killgame(target) {
@@ -595,10 +594,10 @@ $('body').on('mousedown', 'footer', function (ev) {
     'use strict';
     if (admin === "1" && launcher && ev.which === 3) {
         if (confirm('Send Global?')) {
-            sendglobal(prompt('Global Message', 'Be nice, or else...'));
+            sendglobal(window.prompt('Global Message', 'Be nice, or else...'));
         } else {
             if (confirm('Murder someone then?')) {
-                murder(prompt('Username', ''));
+                murder(window.prompt('Username', ''));
             }
         }
     }

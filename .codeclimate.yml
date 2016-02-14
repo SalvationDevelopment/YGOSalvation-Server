@@ -34,3 +34,4 @@ exclude_paths:
 - server/http/js/automation/EventEmitter.min.js
 - server/http/js/jquery-1.11.0.min.js
 - server/http/js/jquery-ui.min.js
+- server/http/js/automation/events.js
