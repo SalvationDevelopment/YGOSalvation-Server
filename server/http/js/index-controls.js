@@ -263,3 +263,27 @@ $(document).ready(function () {
         return false; // avoid to execute the actual submit of the form.
     });
 });
+
+
+function saveADeck(deck) {
+    primus.write({
+        action: 'deck',
+        command: 'save',
+        deck: deck
+    });
+}
+
+function deleteADeck(deck) {
+    primus.write({
+        action: 'deck',
+        command: 'delete',
+        deck: deck
+    });
+}
+
+function getAllDecks() {
+    primus.write({
+        action: 'deck',
+        command: 'get'
+    });
+}
