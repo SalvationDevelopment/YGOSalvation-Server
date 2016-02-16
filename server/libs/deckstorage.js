@@ -70,7 +70,7 @@ function onDB(data) {
             name: data.deck.name
         }, data.deck, function (err, numReplaced) {});
         break;
-    case 'list':
+    case 'gget':
         deckStorage.find({
             username: data.deck.username
         }, function (err, docs) {
