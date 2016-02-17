@@ -292,8 +292,9 @@ function registrationCall(data, socket) {
             socket.validated = true;
             internalMessage({
                 deck: true,
-                command: 'list',
-                room: (data.uniqueID)
+                command: 'get',
+                username: socket.username,
+                room: (socket.address.ip + data.uniqueID)
             });
             sendRegistry();
             socket.write({
@@ -494,14 +495,17 @@ function onData(data, socket) {
         killgameCall(data);
         break;
     case ('deck'):
+        console.log('deck server request')
         internalMessage({
             deck: data.deck,
             command: data.command,
-            room: (data.uniqueID)
+            room: (socket.address.ip + data.uniqueID),
+            username: socket.username
         });
         break;
     case ('deckreply'):
-        primus.room(data.room).write(data.reply);
+        console.log('----replying')
+        primus.room(data.room).write(data);
         break;
     default:
         console.log(data);

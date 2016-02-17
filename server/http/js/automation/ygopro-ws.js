@@ -230,16 +230,8 @@ function injectDeck() {
     $('.currentdeck').html(data.currentdecks);
 }
 
-function evaluateDeckSelection() {
+function lockInDeck() {
     'use strict';
     var selection = parseInt($('.currentdeck option:selected').val(), 10);
     sendDeckListToServer(deckfiles[selection]);
 }
-
-function demo() {
-    'use strict';
-    injectDeck();
-    evaluateDeckSelection();
-}
-
-injectDeck();
