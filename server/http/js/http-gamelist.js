@@ -447,7 +447,7 @@ var stats24 = 0,
 
 function processDeckMessage(data) {
     if (data.clientEvent === 'deck') {
-        if (data.command === 'decklist') {
+        if (data.command === 'get') {
             window.deckfiles = data.deckfiles;
         }
         if (data.command === 'save') {
@@ -477,7 +477,7 @@ primus.on('data', function processIncomingPrimusMessage(data) {
     var join = false,
         time,
         player;
-    //console.log(data);
+    console.log(data);
     if (!data.clientEvent) {
         gamelistcache = JSON.parse(data);
         renderList(gamelistcache);

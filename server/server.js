@@ -127,7 +127,7 @@ function manualModeBoot() {
 }
 
 function deckstorageBoot() {
-    console.log('    DeckStorage Online'.bold.gold);
+    console.log('    DeckStorage Online');
     processManager.fork('./deckstorage.js', [], {
         cwd: 'libs'
     }).on('exit', deckstorageBoot);

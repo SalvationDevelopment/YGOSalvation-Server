@@ -1,6 +1,6 @@
 /*jslint node: true*/
 'use strict';
-
+console.log('?starting deckstorage');
 var deck = {
     owner: '',
     name: '',
@@ -45,36 +45,71 @@ function reply(username, replaymessage) {
 }
 
 function onDB(data) {
+
     if (!data.deck) {
         return;
     }
+    if (!data.room) {
+        return;
+    }
+    console.log('processing', data.command);
     switch (data.command) {
     case 'new':
-        deckStorage.insert(data.deck, function (err) {});
+
         break;
     case 'save':
-        deckStorage.update({
-            username: data.deck.username,
-            name: data.deck.name
-        }, data.deck, function (err, numReplaced) {});
+        if (data.deck['_.id'] === undefined) {
+            console.log('no ID!');
+            deckStorage.insert(data.deck, function (err) {
+                console.log('attempting reply')
+                client.write({
+                    action: 'deckreply',
+                    clientEvent: 'deck',
+                    command: 'save',
+                    note: 'newdeck!',
+                    room: data.room
+                });
+            });
+        } else {
+            deckStorage.update({
+                username: data.deck.username,
+                name: data.deck.name
+            }, data.deck, function (err, numReplaced) {
+                client.write({
+                    action: 'deckreply',
+                    clientEvent: 'deck',
+                    command: 'save',
+                    room: data.room
+                });
+            });
+        }
+
         break;
     case 'delete':
         deckStorage.remove({
             username: data.deck.username,
             name: data.deck.name
-        }, {}, function (err, numRemoved) {});
+        }, {}, function (err, numRemoved) {
+            client.write({
+                action: 'deckreply',
+                clientEvent: 'delete',
+                command: 'delete',
+                room: data.room
+            });
+        });
         break;
-    case 'update':
-        deckStorage.update({
-            username: data.deck.username,
-            name: data.deck.name
-        }, data.deck, function (err, numReplaced) {});
-        break;
-    case 'gget':
+
+    case 'get':
         deckStorage.find({
-            username: data.deck.username
+            owner: data.username
         }, function (err, docs) {
-            //docs is a list of decks
+            client.write({
+                action: 'deckreply',
+                clientEvent: 'deck',
+                command: 'get',
+                decklist: docs,
+                room: data.room
+            });
         });
         break;
 
@@ -82,7 +117,13 @@ function onDB(data) {
 }
 
 function onConnectGamelist() {
-
+    console.log('ds, connected to gamelist')
+    client.write({
+        action: 'internalServerLogin',
+        password: process.env.OPERPASS,
+        gamelist: false,
+        registry: false
+    });
 }
 
 function onCloseGamelist() {
@@ -96,3 +137,5 @@ setTimeout(function () {
     client.on('close', onCloseGamelist);
 
 }, 5000);
+
+require('fs').watch(__filename, process.exit);

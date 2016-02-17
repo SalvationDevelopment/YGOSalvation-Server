@@ -2,7 +2,8 @@
 /*global $, saveSettings, Handlebars, prompt, _gaq, isChecked, alert, primus, ygopro, translationDB, swfobject, console*/
 
 var admin = false,
-    chatStarted = false;
+    chatStarted = false,
+    uniqueID = Math.floor(Math.random() * 10000000);
 
 function isChecked(id) {
     'use strict';
@@ -269,7 +270,14 @@ function saveADeck(deck) {
     primus.write({
         action: 'deck',
         command: 'save',
-        deck: deck
+        deck: deck,
+        uniqueID: uniqueID
+    });
+    console.log({
+        action: 'deck',
+        command: 'save',
+        deck: deck,
+        uniqueID: uniqueID
     });
 }
 
@@ -277,13 +285,16 @@ function deleteADeck(deck) {
     primus.write({
         action: 'deck',
         command: 'delete',
-        deck: deck
+        deck: deck,
+        uniqueID: uniqueID
     });
 }
 
 function getAllDecks() {
     primus.write({
         action: 'deck',
-        command: 'get'
+        command: 'get',
+        deck: true,
+        uniqueID: uniqueID
     });
 }
