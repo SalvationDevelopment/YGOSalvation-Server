@@ -448,7 +448,8 @@ var stats24 = 0,
 function processDeckMessage(data) {
     if (data.clientEvent === 'deck') {
         if (data.command === 'get') {
-            window.deckfiles = data.deckfiles;
+            window.deckfiles = data.decklist;
+            injectDeck(window.deckfiles);
         }
         if (data.command === 'save') {
             window.alert('Deck Saved');
