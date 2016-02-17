@@ -1,8 +1,8 @@
 var r;
 
 function parseYDK(ydkFileContents) {
-    console.log(ydkFileContents)
-    originalValues = {
+    var lineSplit = ydkFileContents.split("\r\n"),
+        originalValues = {
             "main": {},
             "side": {},
             "extra": {},
