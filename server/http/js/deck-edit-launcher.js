@@ -479,6 +479,7 @@ $(function () {
                 "extra",
                 "side"
             ];
+
         decks.forEach(function (deck) {
             var card;
             container = $('.' + deck + 'Deck');
@@ -486,13 +487,16 @@ $(function () {
                 $('span', container).remove();
                 deckStorage.reset(deck);
             }
+            console.log(ydkCopy[deck]);
             for (card in ydkCopy[deck]) {
-                if (ydkCopy[deck].hasOwnProperty(card) && ydkCopy[deck].propertyIsEnumerable(card)) {
-                    while ((ydkCopy[deck][card] -= 1) >= 0) { // TODO: check prefix decrement
-                        cardObject = getCardObject(parseInt(card, 10));
-                        container.append(createCardImage(cardObject));
-                        deckStorage.addCard(deck, card);
-                    }
+                if (ydkCopy[deck].hasOwnProperty(card)) {
+
+
+                    cardObject = getCardObject(ydkCopy[deck][card]);
+                    container.append(createCardImage(cardObject));
+                    deckStorage.addCard(deck, ydkCopy[deck][card]);
+
+
                 }
             }
             $('img', container).each(function (index) {
@@ -956,7 +960,7 @@ $(function () {
                     });
                 });
                 $('.deckSelect').on('change', function () {
-                    drawDeckEditor(parseYDK(deckfiles[$(this).val()]));
+                    drawDeckEditor(deckfiles[$(this).val()]);
                     sortAllDecks();
                 });
                 $('.mainDeck').on('mousedown', 'img', function (ev, a, b, c, d) {
