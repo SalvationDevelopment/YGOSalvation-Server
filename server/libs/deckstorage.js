@@ -58,10 +58,10 @@ function onDB(data) {
 
         break;
     case 'save':
-        if (data.deck['_.id'] === undefined) {
+        if (data.deck._id === undefined) {
             console.log('no ID!');
             deckStorage.insert(data.deck, function (err) {
-                console.log('attempting reply')
+
                 client.write({
                     action: 'deckreply',
                     clientEvent: 'deck',
@@ -72,8 +72,8 @@ function onDB(data) {
             });
         } else {
             deckStorage.update({
-                username: data.deck.username,
-                name: data.deck.name
+                _id: data.deck._id
+
             }, data.deck, function (err, numReplaced) {
                 client.write({
                     action: 'deckreply',
@@ -87,8 +87,7 @@ function onDB(data) {
         break;
     case 'delete':
         deckStorage.remove({
-            username: data.deck.username,
-            name: data.deck.name
+            _id: data.deck._id
         }, {}, function (err, numRemoved) {
             client.write({
                 action: 'deckreply',
@@ -117,7 +116,6 @@ function onDB(data) {
 }
 
 function onConnectGamelist() {
-    console.log('ds, connected to gamelist')
     client.write({
         action: 'internalServerLogin',
         password: process.env.OPERPASS,

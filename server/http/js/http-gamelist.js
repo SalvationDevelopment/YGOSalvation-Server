@@ -450,11 +450,14 @@ function processDeckMessage(data) {
         if (data.command === 'get') {
             window.deckfiles = data.decklist;
             injectDeck(window.deckfiles);
+
         }
         if (data.command === 'save') {
+            getAllDecks();
             window.alert('Deck Saved');
         }
-        if (data.command === 'deleted') {
+        if (data.command === 'delete') {
+            getAllDecks();
             window.alert('Deck Deleted');
         }
     }

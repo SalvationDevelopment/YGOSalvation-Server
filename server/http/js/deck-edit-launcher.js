@@ -499,6 +499,11 @@ $(function () {
 
                 }
             }
+            console.log(deckStorage);
+            deckStorage.decks['_id'] = ydkCopy['_id'];
+            deckStorage.decks.desciption = ydkCopy.desciption;
+            deckStorage.decks.owner = ydkCopy.owner;
+            deckStorage.decks.name = ydkCopy.name;
             $('img', container).each(function (index) {
                 $(this).addClass(deck + '_card_' + index);
                 $(this).data('cardData', 'deckCard');
@@ -882,38 +887,23 @@ $(function () {
                     out: dropOutHandler("extra")
                 });
                 $('.saveDeck').on('click', function () {
-                    primus.write({
-                        action: "saveDeckRequest",
-                        deckList: createDeckList(deckStorage.decks),
-                        deckName: $('.deckSelect').val(),
-                        uniqueID: uniqueID
-                    });
+                    saveADeck(deckStorage.decks)
+                    console.log(deckStorage.decks);
                 });
                 $('.saveDeckAs').on('click', function () {
                     var deckName = $('.decknameInput').val();
+                    deckStorage.decks.name = deckName;
                     if (!deckName) {
-                        primus.write({
-                            action: "saveDeckRequest",
-                            deckList: createDeckList(deckStorage.decks),
-                            deckName: $('.deckSelect').val(),
-                            uniqueID: uniqueID
-                        });
+                        saveADeck(deckStorage.decks);
+
                     } else {
-                        primus.write({
-                            action: "saveDeckRequest",
-                            deckList: createDeckList(deckStorage.decks),
-                            deckName: deckName + ".ydk",
-                            uniqueID: uniqueID
-                        });
+                        deckStorage.decks.name = deckName;
+                        saveADeck(deckStorage.decks);
                     }
                 });
                 $('.deleteDeck').on('click', function () {
                     if (confirm("Are you sure you want to permanently delete this deck?")) {
-                        primus.write({
-                            action: "unlinkDeckRequest",
-                            deckName: $('.deckSelect').val(),
-                            uniqueID: uniqueID
-                        });
+                        deleteADeck(deckStorage.decks);
                         drawDeckEditor({
                             main: {},
                             side: {},
