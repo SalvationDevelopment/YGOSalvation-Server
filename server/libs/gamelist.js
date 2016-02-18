@@ -495,7 +495,8 @@ function onData(data, socket) {
         killgameCall(data);
         break;
     case ('deck'):
-        console.log('deck server request')
+        console.log('deck server request');
+
         internalMessage({
             deck: data.deck,
             command: data.command,

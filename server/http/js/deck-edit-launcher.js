@@ -500,10 +500,15 @@ $(function () {
                 }
             }
             console.log(deckStorage);
-            deckStorage.decks['_id'] = ydkCopy['_id'];
-            deckStorage.decks.desciption = ydkCopy.desciption;
-            deckStorage.decks.owner = ydkCopy.owner;
-            deckStorage.decks.name = ydkCopy.name;
+            if (deckStorage.decks._id) {
+                deckStorage.decks._id = ydkCopy._id;
+                deckStorage.decks.name = ydkCopy.name;
+                deckStorage.decks.desciption = ydkCopy.desciption;
+                deckStorage.decks.owner = ydkCopy.owner;
+            }
+
+
+
             $('img', container).each(function (index) {
                 $(this).addClass(deck + '_card_' + index);
                 $(this).data('cardData', 'deckCard');
@@ -892,31 +897,39 @@ $(function () {
                 });
                 $('.saveDeckAs').on('click', function () {
                     var deckName = $('.decknameInput').val();
-                    deckStorage.decks.name = deckName;
                     if (!deckName) {
                         saveADeck(deckStorage.decks);
-
+                        console.log(deckStorage.decks);
                     } else {
                         deckStorage.decks.name = deckName;
                         saveADeck(deckStorage.decks);
+                        console.log(deckStorage.decks);
                     }
                 });
                 $('.deleteDeck').on('click', function () {
                     if (confirm("Are you sure you want to permanently delete this deck?")) {
                         deleteADeck(deckStorage.decks);
                         drawDeckEditor({
-                            main: {},
-                            side: {},
-                            extra: {}
+                            main: [],
+                            side: [],
+                            extra: []
                         });
                     }
                 });
                 $('.clearDeck').on('click', function () {
                     drawDeckEditor({
-                        main: {},
-                        side: {},
-                        extra: {}
+                        main: [],
+                        side: [],
+                        extra: [],
+                        desciption: ''
                     });
+                    deckfiles[parseInt($('.deckSelect').val())] = {
+                        main: [],
+                        side: [],
+                        extra: [],
+                        name: '',
+                        desciption: ''
+                    }
                 });
                 $('.shuffleDeck').on('click', function () {
                     var deck = deckStorage.getDeck("main");
