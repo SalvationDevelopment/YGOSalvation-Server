@@ -60,8 +60,9 @@ function onDB(data) {
     case 'save':
         if (data.deck._id === undefined) {
             console.log('no ID!');
+            data.deck.owner = data.username;
             deckStorage.insert(data.deck, function (err) {
-
+                console.log(data.deck);
                 client.write({
                     action: 'deckreply',
                     clientEvent: 'deck',
@@ -71,6 +72,7 @@ function onDB(data) {
                 });
             });
         } else {
+            data.deck.owner = data.username;
             deckStorage.update({
                 _id: data.deck._id
 
@@ -83,7 +85,6 @@ function onDB(data) {
                 });
             });
         }
-
         break;
     case 'delete':
         deckStorage.remove({

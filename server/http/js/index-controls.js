@@ -267,6 +267,14 @@ $(document).ready(function () {
 
 
 function saveADeck(deck) {
+    if (deck.name !== undefined || deck.name == false) {
+        var suggested = $('.decknameInput').val();
+        if (confirm('Deck needs a name! is ' + $('.decknameInput').val() + ' ok?')) {
+            deck.name = suggested;
+        } else {
+            return;
+        }
+    }
     primus.write({
         action: 'deck',
         command: 'save',
