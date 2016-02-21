@@ -1517,6 +1517,15 @@ div#waiting {
     top: .1em;
 }
 
+.lockindicator {
+    background: white;
+    width: 1em;
+    height: 1em;
+    display: inline-block;
+    position: relative;
+    top: .25em;
+}
+
 input#player1lobbyslot,
 input#player2lobbyslot,
 input#player3lobbyslot,
