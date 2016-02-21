@@ -1,9 +1,10 @@
-/*global $, console, cardmargin, layouthand, cardCollections, enums, gui.animateState, animateRemoveChaining, shuffle, animateChaining*/
+/*global $, console, cardmargin, layouthand, cardCollections, enums, animateState, animateRemoveChaining, shuffle, animateChaining*/
 /*jslint plusplus:true, bitwise:true */
 
 var gui = {};
 
 function cardCollections(player) {
+    'use strict';
     return {
         DECK: $('.p' + player + '.DECK').length,
         HAND: $('.p' + player + '.HAND').length,
@@ -242,6 +243,10 @@ function cardCollections(player) {
         $('#player2lobbyslot').val(duel.player[1].name);
         $('#player3lobbyslot').val(duel.player[2].name);
         $('#player4lobbyslot').val(duel.player[3].name);
+        $('#slot1 .lockindicator').attr('data-state', duel.player[0].ready);
+        $('#slot2 .lockindicator').attr('data-state', duel.player[1].ready);
+        $('#slot3 .lockindicator').attr('data-state', duel.player[2].ready);
+        $('#slot4 .lockindicator').attr('data-state', duel.player[3].ready);
         $('#lobbytimelimit').text(duel.timelimit + ' seconds');
         $('#lobbylp').text(duel.startLP);
         $('#lobbycdpt').text(duel.drawcount);
@@ -252,6 +257,7 @@ function cardCollections(player) {
         } else {
             $('#lobbystart').css('display', 'none');
         }
+
         if ($('#creategameduelmode option').eq(duel.mode).text() === 'Tag') {
             $('.slot').eq(2).css('display', 'block');
             $('.slot').eq(3).css('display', 'block');

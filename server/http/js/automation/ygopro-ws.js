@@ -19,16 +19,20 @@ function cleanstate() {
         timelimit: 0,
         player: {
             0: {
-                name: ''
+                name: '',
+                ready: false
             },
             1: {
-                name: ''
+                name: '',
+                ready: false
             },
             2: {
-                name: ''
+                name: '',
+                ready: false
             },
             3: {
-                name: ''
+                name: '',
+                ready: false
             }
         },
         spectators: 0,
