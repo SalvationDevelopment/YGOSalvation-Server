@@ -1,6 +1,11 @@
 /*jslint plusplus : true*/
 /*global console, gui*/
-var duel = {
+
+var duel = {};
+
+function cleanstate() {
+    'use strict';
+    window.duel = {
         deckcheck: 0,
         draw_count: 0,
         lflist: 0,
@@ -13,27 +18,33 @@ var duel = {
         timelimit: 0,
         player: {
             0: {
-                name: ''
+                name: '',
+                ready: false
             },
             1: {
-                name: ''
+                name: '',
+                ready: false
             },
             2: {
-                name: ''
+                name: '',
+                ready: false
             },
             3: {
-                name: ''
+                name: '',
+                ready: false
             }
         },
         spectators: 0,
         turn: 0,
         turnOfPlayer: 0,
         phase: 0
-    },
-    field = {
+    };
+    window.field = {
         0: {},
         1: {}
     };
+}
+
 
 function initiateNetwork(network) {
     'use strict';
