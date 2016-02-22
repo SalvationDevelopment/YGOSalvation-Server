@@ -1510,20 +1510,33 @@ div#waiting {
 
 .kickbutton {
     width: 1em;
-    height: 1em;
+    height: .4em;
     display: inline-block;
-    border: 1px solid white;
+    /* border: 1px solid white; */
     position: relative;
-    top: .1em;
+    bottom: .2em;
+    background-color: red;
+    /* background-size: cover; */
 }
 
 .lockindicator {
-    background: white;
+    background: transparent;
+    border: 1px solid black;
     width: 1em;
     height: 1em;
     display: inline-block;
     position: relative;
     top: .25em;
+}
+
+.lockindicator[data-state=true] {
+    width: 3em;
+    border: 1px solid black;
+    background: green;
+}
+
+.lockindicator[data-state=false] {
+    background: orange;
 }
 
 input#player1lobbyslot,

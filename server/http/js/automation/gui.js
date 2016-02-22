@@ -239,6 +239,9 @@ function cardCollections(player) {
         }, 2000); //needs tuning
     };
     gui.updateloby = function () {
+        if (duel.player === undefined) {
+            return;
+        }
         $('#player1lobbyslot').val(duel.player[0].name);
         $('#player2lobbyslot').val(duel.player[1].name);
         $('#player3lobbyslot').val(duel.player[2].name);
