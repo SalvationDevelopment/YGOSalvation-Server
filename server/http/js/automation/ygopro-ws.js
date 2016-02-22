@@ -4,48 +4,6 @@
 // card.js
 // gui.js
 
-function cleanstate() {
-    'use strict';
-    window.duel = {
-        deckcheck: 0,
-        draw_count: 0,
-        lflist: 0,
-        mode: 0,
-        noshuffle: 0,
-        prio: 0,
-        rule: 0,
-        startlp: 0,
-        starthand: 0,
-        timelimit: 0,
-        player: {
-            0: {
-                name: '',
-                ready: false
-            },
-            1: {
-                name: '',
-                ready: false
-            },
-            2: {
-                name: '',
-                ready: false
-            },
-            3: {
-                name: '',
-                ready: false
-            }
-        },
-        spectators: 0,
-        turn: 0,
-        turnOfPlayer: 0,
-        phase: 0
-    };
-    window.field = {
-        0: {},
-        1: {}
-    };
-}
-
 function parsePackets(command, message) {
     "use strict";
 
@@ -149,7 +107,7 @@ function startgame(roompass) {
     };
     window.ws = ws;
     window.onunload = window.ws.close;
-    cleanstate();
+    window.cleanstate();
     initiateNetwork(network);
 
 }
@@ -215,7 +173,10 @@ function gofirst(player) {
 
 function injectDeck(decks) {
     'use strict';
-    decks || [];
+    if (decks.length === 0) {
+        return;
+    }
+
     var i,
         data = {
             currentdecks: ''
@@ -227,8 +188,24 @@ function injectDeck(decks) {
 
 }
 
-function lockInDeck() {
+function lockInDeck(user) {
     'use strict';
-    var selection = parseInt($('.currentdeck option:selected').val(), 10);
+    var selection,
+        servermessage;
+    if (window.duel.player[user].ready) {
+        servermessage = makeCTOS('CTOS_HS_NOTREADY');
+        window.ws.send(servermessage);
+        return;
+    }
+    selection = parseInt($('.currentdeck option:selected').val(), 10);
     sendDeckListToServer(deckfiles[selection]);
 }
+
+var wish = {
+    name: 'Clustering Wishes',
+    owner: 'AccessDenied',
+    description: 'Synchron-Stardust Deck',
+    main: [63977008, 63977008, 63977008, 9365703, 36736723, 36736723, 36736723, 62125438, 62125438, 62125438, 36643046, 36643046, 36643046, 9742784, 67270095, 67270095, 68543408, 68543408, 68543408, 15310033, 32807846, 96363153, 96363153, 96363153, 5318639, 5318639, 5318639, 8529136, 8529136, 8529136, 43898403, 43898403, 79068663, 79068663, 20590784, 27196937, 27196937, 27196937, 47264717, 58120309],
+    extra: [26268488, 35952884, 24696097, 74892653, 89474727, 44508094, 44508094, 60800381, 60800381, 60800381, 37675907, 37675907, 37675907, 50091196, 50091196],
+    side: []
+};
