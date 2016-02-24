@@ -43,8 +43,9 @@ function cardCollections(player) {
         // populate it with options based on the information in it, you are gonna need the card ID for this.
         // display the card
         // window.actionables =  {00000000 : ['summon', 'set']};
-        var id = $(this).attr('card-id'),
+        var id = $(this).attr('src').split('/')[2].slice(0, -4),
             actions;
+        console.log(id);
         if (window.actionables[id].length) {
             window.actionsOpen = true;
             for (actions = 0; window.actionables[id].length > actions; actions++) {

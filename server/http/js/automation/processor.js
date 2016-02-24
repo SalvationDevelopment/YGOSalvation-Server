@@ -225,14 +225,17 @@ function initiateNetwork(network) {
     network.on('MSG_SELECT_IDLECMD', function (data) {
         var list,
             i;
-        window.actions = {};
+        window.actionables = {};
         for (list in data) {
-            if (data.hasOwnProperty(list) && data[list].isArray) {
-                for (i = 0; data[list].length < i; i++) {
-                    if (window.actions[data[list][i]] === undefined) {
-                        window.actions[data[list][i]] = [];
+            console.log(list);
+            if (data.hasOwnProperty(list) && typeof data[list].push === 'function') {
+                console.log('ok', data[list].length);
+                for (i = 0; data[list].length > i; i++) {
+                    console.log(data[list][i].code, list);
+                    if (!window.actionables[data[list][i].code]) {
+                        window.actionables[data[list][i].code] = [];
                     }
-                    window.actions[data[list][i]].push(list);
+                    window.actionables[data[list][i].code].push(list);
                 }
             }
         }
