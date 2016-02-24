@@ -222,6 +222,21 @@ function initiateNetwork(network) {
     network.on('STOC_SELECT_TP', function (data) {
         gui.displaySelectWhoGoesFirst();
     });
+    network.on('MSG_SELECT_IDLECMD', function (data) {
+        var list,
+            i;
+        window.actions = {};
+        for (list in data) {
+            if (data.hasOwnProperty(list) && data[list].isArray) {
+                for (i = 0; data[list].length < i; i++) {
+                    if (window.actions[data[list][i]] === undefined) {
+                        window.actions[data[list][i]] = [];
+                    }
+                    window.actions[data[list][i]].push(list);
+                }
+            }
+        }
+    });
 }
 
 var gametick = setInterval(gui.updateloby, 1000);
