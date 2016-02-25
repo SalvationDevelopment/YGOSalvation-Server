@@ -57,7 +57,9 @@ function isChecked(id) {
 
 function ygopro() {
     'use strict';
-
+    if (!loggedIn) {
+        return;
+    }
     if (localStorage.roompass) {
         if (localStorage.roompass[0] === '4') {
             //if battleback
