@@ -774,6 +774,10 @@ header {
     position: relative;
 }
 
+.unlogged .searchLeft {
+    display: none;
+}
+
 input#ips_remember {
     position: relative;
     top: .2em;
