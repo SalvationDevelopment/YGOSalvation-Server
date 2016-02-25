@@ -267,7 +267,28 @@ $(document).ready(function () {
 
 
 function saveADeck(deck) {
-    if (deck.name !== undefined || deck.name == false) {
+    try {
+        if (deck.name.length < 1) {
+            var suggested = $('.decknameInput').val();
+            if (suggested.trim().length === 0) {
+                alert('Name the Deck!');
+                return;
+            }
+            if (confirm('Deck needs a name! is ' + $('.decknameInput').val() + ' ok?')) {
+                deck.name = suggested;
+            } else {
+                return;
+            }
+        }
+    } catch (errorCode) {
+        var suggested = $('.decknameInput').val();
+        if (confirm('Deck needs a name! is ' + $('.decknameInput').val() + ' ok?')) {
+            deck.name = suggested;
+        } else {
+            return;
+        }
+    }
+    if (deck.name.length < 1) {
         var suggested = $('.decknameInput').val();
         if (confirm('Deck needs a name! is ' + $('.decknameInput').val() + ' ok?')) {
             deck.name = suggested;

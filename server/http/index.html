@@ -482,13 +482,13 @@
             <source src="ygopro/sounds/enter.wav" type="audio/wav">
         </audio>
         <audio controls preload="auto" id="soundleaveroom">
-            <source src="ygopro/sounds/x.wav" type="audio/wav">
+            <source src="" type="audio/wav">
         </audio>
         <audio controls preload="auto" id="soundstartduel">
-            <source src="ygopro/sounds/x.wav" type="audio/wav">
+            <source src="" type="audio/wav">
         </audio>
         <audio controls preload="auto" id="soundwinrps">
-            <source src="ygopro/sounds/x.wav" type="audio/wav">
+            <source src="" type="audio/wav">
         </audio>
         <audio controls preload="auto" id="soundloserps">
             <source src="ygopro/sounds/damage.wav" type="audio/wav">
@@ -500,10 +500,10 @@
             <source src="ygopro/sounds/phase.wav" type="audio/wav">
         </audio>
         <audio controls preload="auto" id="soundplacefd">
-            <source src="ygopro/sounds/x.wav" type="audio/wav">
+            <source src="" type="audio/wav">
         </audio>
         <audio controls preload="auto" id="soundplacefd">
-            <source src="ygopro/sounds/x.wav" type="audio/wav">
+            <source src="" type="audio/wav">
         </audio>
         <audio controls preload="auto" id="soundsummon">
             <source src="ygopro/sounds/summon.wav" type="audio/wav">
@@ -697,25 +697,25 @@
                 <span id="lobbygotoduel" onclick="challengeDuel();">Duel</span>
                 <span id="lobbygotospectate" onclick="movetoSpectator();">Spectate</span>
 
-                <div class="slot">
+                <div class="slot" id="slot1">
                     <div id="player1lobbykick" class="kickbutton" onlick="kickDuelist(0);"></div>
                     <input id="player1lobbyslot" placeholder="empty slot">
-                    <input type="checkbox" id="player1lobbycheck">
+                    <div class="lockindicator" onclick="lockInDeck(0)"></div>
                 </div>
-                <div class="slot">
+                <div class="slot" id="slot2">
                     <div id="player2lobbykick" class="kickbutton" onlick="kickDuelist(1);"></div>
                     <input id="player2lobbyslot" placeholder="empty slot">
-                    <input type="checkbox" id="player2lobbycheck">
+                    <div class="lockindicator" onclick="lockInDeck(1)"></div>
                 </div>
-                <div class="slot">
+                <div class="slot" id="slot3">
                     <div id="player3lobbykick" class="kickbutton" onlick="kickDuelist(2);"></div>
                     <input id="player3lobbyslot" placeholder="empty slot">
-                    <input type="checkbox" id="player3lobbycheck">
+                    <div class="lockindicator" onclick="lockInDeck(2)"></div>
                 </div>
-                <div class="slot">
+                <div class="slot" id="slot4">
                     <div id="player4lobbykick" class="kickbutton" onlick="kickDuelist(3);"></div>
                     <input id="player4lobbyslot" placeholder="empty slot">
-                    <input type="checkbox" id="player4lobbycheck">
+                    <div class="lockindicator" onclick="lockInDeck(3)"></div>
                 </div>
             </div>
             <div id="lobbygameinfo">
