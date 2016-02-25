@@ -228,7 +228,7 @@ function initiateNetwork(network) {
         window.actionables = {};
         for (list in data) {
             console.log(list);
-            if (data.hasOwnProperty(list) && typeof data[list].push === 'function') {
+            if (data.hasOwnProperty(list) && data[list].isArray()) {
                 console.log('ok', data[list].length);
                 for (i = 0; data[list].length > i; i++) {
                     console.log(data[list][i].code, list);

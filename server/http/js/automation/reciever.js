@@ -377,8 +377,13 @@ function recieveSTOC(packet) {
             task.command = 'MSG_SELECT_IDLECMD';
             //https://github.com/Fluorohydride/ygopro/blob/d9450dbb35676db3d5b7c2a5241a54d7f2c21e98/ocgcore/playerop.cpp#L69
             task.idleplayer = BufferIO.ReadInt8();
-            i = 0;
             task.summonable_cards = [];
+            task.spsummonable_cards = [];
+            task.repositionable_cards = [];
+            task.msetable_cards = [];
+            task.ssetable_cards = [];
+            task.select_chains = [];
+            task.select_chains = [];
             task.count = BufferIO.ReadInt8();
             for (i = 0; i < task.count; ++i) {
                 task.summonable_cards.push({
@@ -388,9 +393,6 @@ function recieveSTOC(packet) {
                     sequence: BufferIO.ReadInt8()
                 });
             }
-            iter = 0;
-
-            task.spsummonable_cards = [];
             task.count = BufferIO.ReadInt8();
             for (i = 0; i < task.count; ++i) {
                 task.spsummonable_cards.push({
@@ -400,71 +402,65 @@ function recieveSTOC(packet) {
                     sequence: BufferIO.ReadInt8()
                 });
             }
-            iter = 0;
-            bitreader++;
-            task.repositionable_cards = [];
+
+            task.count = BufferIO.ReadInt8();
+
             for (i = 0; i < task.count; ++i) {
                 task.repositionable_cards.push({
-                    code: packet.message.readUInt16LE(bitreader + 1),
-                    controller: packet.message[bitreader + 5],
-                    location: packet.message[bitreader + 6],
-                    sequence: packet.message[bitreader + 7]
+                    code: BufferIO.ReadInt32(),
+                    controller: BufferIO.ReadInt8(),
+                    location: BufferIO.ReadInt8(),
+                    sequence: BufferIO.ReadInt8()
                 });
-                bitreader = bitreader + 7;
+
             }
-            iter = 0;
-            bitreader++;
-            task.msetable_cards = [];
-            for (iter; packet.message[bitreader] > iter; iter++) {
+            task.count = BufferIO.ReadInt8();
+
+            for (i = 0; i < task.count; ++i) {
                 task.msetable_cards.push({
-                    code: packet.message.readUInt16LE(bitreader + 1),
-                    controller: packet.message[bitreader + 5],
-                    location: packet.message[bitreader + 6],
-                    sequence: packet.message[bitreader + 7]
+                    code: BufferIO.ReadInt32(),
+                    controller: BufferIO.ReadInt8(),
+                    location: BufferIO.ReadInt8(),
+                    sequence: BufferIO.ReadInt8()
                 });
-                bitreader = bitreader + 7;
+
             }
-            iter = 0;
-            bitreader++;
-            task.select_chains = [];
-            for (iter; packet.message[bitreader] > iter; iter++) {
+            task.count = BufferIO.ReadInt8();
+
+            for (i = 0; i < task.count; ++i) {
                 task.select_chains.push({
-                    code: packet.message.readUInt16LE(bitreader + 1),
-                    controller: packet.message[bitreader + 5],
-                    location: packet.message[bitreader + 6],
-                    sequence: packet.message[bitreader + 7]
+                    code: BufferIO.ReadInt32(),
+                    controller: BufferIO.ReadInt8(),
+                    location: BufferIO.ReadInt8(),
+                    sequence: BufferIO.ReadInt8()
                 });
-                bitreader = bitreader + 7;
+
             }
-            iter = 0;
-            bitreader++;
-            task.ssetable_cards = [];
-            for (iter; packet.message[bitreader] > iter; iter++) {
+            task.count = BufferIO.ReadInt8();
+
+            for (i = 0; i < task.count; ++i) {
                 task.ssetable_cards.push({
-                    code: packet.message.readUInt16LE(bitreader + 1),
-                    controller: packet.message[bitreader + 5],
-                    location: packet.message[bitreader + 6],
-                    sequence: packet.message[bitreader + 7]
+                    code: BufferIO.ReadInt32(),
+                    controller: BufferIO.ReadInt8(),
+                    location: BufferIO.ReadInt8(),
+                    sequence: BufferIO.ReadInt8()
                 });
-                bitreader = bitreader + 7;
+
             }
-            iter = 0;
-            bitreader++;
-            task.select_chains = [];
-            for (iter; packet.message[bitreader] > iter; iter++) {
+
+            task.count = BufferIO.ReadInt8();
+            for (i = 0; i < task.count; ++i) {
                 task.select_chains.push({
-                    code: packet.message.readUInt16LE(bitreader + 1),
-                    controller: packet.message[bitreader + 5],
-                    location: packet.message[bitreader + 6],
-                    sequence: packet.message[bitreader + 7]
+                    code: BufferIO.ReadInt32(),
+                    controller: BufferIO.ReadInt8(),
+                    location: BufferIO.ReadInt8(),
+                    sequence: BufferIO.ReadInt8()
                 });
-                bitreader = bitreader + 7;
+
             }
-            task.bp = packet.message[bitreader];
-            task.ep = packet.message[bitreader + 1];
-            task.shufflecount = packet.message[bitreader + 2];
-            //https://github.com/Fluorohydride/ygopro/blob/d9450dbb35676db3d5b7c2a5241a54d7f2c21e98/ocgcore/playerop.cpp#L147
-            //something is gonna go wrong;
+            task.bp = BufferIO.ReadInt8();
+            task.ep = BufferIO.ReadInt8();
+            task.shufflecount = BufferIO.ReadInt8();
             break;
 
         case ('MSG_MOVE'):
