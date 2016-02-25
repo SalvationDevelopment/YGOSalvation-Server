@@ -50,7 +50,7 @@ function cardCollections(player) {
         $('#actions').css({
             'top': y,
             'left': x,
-            'display': block
+            'display': 'block'
         });
         console.log(id);
         if (window.actionables[id].length) {
