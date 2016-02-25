@@ -1,6 +1,11 @@
 /*jslint plusplus : true*/
 /*global console, gui*/
-var duel = {
+
+var duel = {};
+
+function cleanstate() {
+    'use strict';
+    window.duel = {
         deckcheck: 0,
         draw_count: 0,
         lflist: 0,
@@ -13,27 +18,33 @@ var duel = {
         timelimit: 0,
         player: {
             0: {
-                name: ''
+                name: '',
+                ready: false
             },
             1: {
-                name: ''
+                name: '',
+                ready: false
             },
             2: {
-                name: ''
+                name: '',
+                ready: false
             },
             3: {
-                name: ''
+                name: '',
+                ready: false
             }
         },
         spectators: 0,
         turn: 0,
         turnOfPlayer: 0,
         phase: 0
-    },
-    field = {
+    };
+    window.field = {
         0: {},
         1: {}
     };
+}
+
 
 function initiateNetwork(network) {
     'use strict';
@@ -210,6 +221,24 @@ function initiateNetwork(network) {
     });
     network.on('STOC_SELECT_TP', function (data) {
         gui.displaySelectWhoGoesFirst();
+    });
+    network.on('MSG_SELECT_IDLECMD', function (data) {
+        var list,
+            i;
+        window.actionables = {};
+        for (list in data) {
+            console.log(list);
+            if (data.hasOwnProperty(list) && typeof data[list].push === 'function') {
+                console.log('ok', data[list].length);
+                for (i = 0; data[list].length > i; i++) {
+                    console.log(data[list][i].code, list);
+                    if (!window.actionables[data[list][i].code]) {
+                        window.actionables[data[list][i].code] = [];
+                    }
+                    window.actionables[data[list][i].code].push(list);
+                }
+            }
+        }
     });
 }
 

@@ -58,6 +58,9 @@ function onDB(data) {
 
         break;
     case 'save':
+        if (data.deck.owner === undefined) {
+            data.deck.owner = data.username;
+        }
         if (data.deck._id === undefined) {
             console.log('no ID!');
             data.deck.owner = data.username;

@@ -16,7 +16,7 @@ function Framemaker() {
         memory = Buffer.concat([memory, buffer]);
         //console.log('concated', memory.length);
         while (x === true && memory.length > 2) {
-            frame_length = memory[0] + memory[1];
+            frame_length = memory.readUInt16LE(0);
             //console.log('read', frame_length, '(+2) of', memory.length, 'bytes');
             if ((memory.length - 2) < frame_length) {
                 //console.log('not enough');
@@ -95,9 +95,6 @@ function recieveSTOC(packet) {
 
     switch (task.command) {
     case ("STOC_UNKNOWN"):
-        task = {
-            command: "STOC_UNKNOWN"
-        };
         break;
 
     case ("STOC_GAME_MSG"):
