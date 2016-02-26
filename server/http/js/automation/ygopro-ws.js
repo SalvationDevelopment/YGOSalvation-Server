@@ -171,6 +171,16 @@ function gofirst(player) {
     gui.hideSelectWhoGoesFirst();
 }
 
+function idleReply(element) {
+    'use strict';
+    var index = $(element).attr('data-index'),
+        action = $(element).attr('data-action'),
+        response = (parseInt(index, 10) << 16) + parseInt(action, 10),
+        buf = new Buffer([response]),
+        servermessage = makeCTOS('CTOS_RESPONSE', buf);
+    window.ws.send(servermessage);
+}
+
 function injectDeck(decks) {
     'use strict';
     if (decks.length === 0) {

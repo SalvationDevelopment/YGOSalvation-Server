@@ -16,6 +16,34 @@ function cardCollections(player) {
     };
 }
 
+function getLocation(item) {
+    'use strict';
+    if ($(item).hasClass('DECK')) {
+        return 0x01; //Number for deck
+    }
+    if ($(item).hasClass('HAND')) {
+        return 0x02; //Number for hand
+    }
+    if ($(item).hasClass('MONSTERZONE')) {
+        return 0x04; //Number for extra
+    }
+    if ($(item).hasClass('SPELLZONE')) {
+        return 0x08; //Number for extra
+    }
+    if ($(item).hasClass('EXTRA')) {
+        return 0x10; //Number for extra
+    }
+    if ($(item).hasClass('GRAVE')) {
+        return 0x20; //Number for grave
+    }
+    if ($(item).hasClass('REMOVED')) {
+        return 0x40; //Number for removed
+    }
+    if ($(item).hasClass('OVERLAY')) {
+        return 0x80; //Number for grave
+    }
+}
+
 (function wireUpUI() {
     'use strict';
     // these are wiring functions or rather controllers for the UI.
@@ -46,19 +74,24 @@ function cardCollections(player) {
         var x = cardElement.pageX,
             y = cardElement.pageY,
             id = $(this).attr('src').split('/')[2].slice(0, -4),
+            location = getLocation(cardElement),
             actions;
-        console.log(y, x);
+
         $('#actions').css({
             'top': (y - 33),
             'left': (x - 33),
             'display': 'block'
         });
+
         $('#actions button').css('display', 'none');
         console.log(id);
-        if (window.actionables[id].length) {
+        if (window.actionables[id]) {
             window.actionsOpen = true;
             for (actions = 0; window.actionables[id].length > actions; actions++) {
-                $('#actions #' + window.actionables[id][actions]).attr('card-id', id).css('display', 'block');
+                $('#actions #' + window.actionables[id][actions].list).attr({
+                    'data-cardid': id,
+                    'data-index': window.actionables[id][actions].index
+                }).css('display', 'block');
             }
         }
     });
@@ -258,29 +291,29 @@ function cardCollections(player) {
         }, 2000); //needs tuning
     };
     gui.updateloby = function () {
-        if (duel.player === undefined) {
+        if (window.duel.player === undefined) {
             return;
         }
-        $('#player1lobbyslot').val(duel.player[0].name);
-        $('#player2lobbyslot').val(duel.player[1].name);
-        $('#player3lobbyslot').val(duel.player[2].name);
-        $('#player4lobbyslot').val(duel.player[3].name);
-        $('#slot1 .lockindicator').attr('data-state', duel.player[0].ready);
-        $('#slot2 .lockindicator').attr('data-state', duel.player[1].ready);
-        $('#slot3 .lockindicator').attr('data-state', duel.player[2].ready);
-        $('#slot4 .lockindicator').attr('data-state', duel.player[3].ready);
-        $('#lobbytimelimit').text(duel.timelimit + ' seconds');
-        $('#lobbylp').text(duel.startLP);
-        $('#lobbycdpt').text(duel.drawcount);
-        $('#lobbyallowed').text($('#creategamecardpool option').eq(duel.rule).text());
-        $('#lobbygamemode').text($('#creategameduelmode option').eq(duel.mode).text());
-        if (duel.ishost) {
+        $('#player1lobbyslot').val(window.duel.player[0].name);
+        $('#player2lobbyslot').val(window.duel.player[1].name);
+        $('#player3lobbyslot').val(window.duel.player[2].name);
+        $('#player4lobbyslot').val(window.duel.player[3].name);
+        $('#slot1 .lockindicator').attr('data-state', window.duel.player[0].ready);
+        $('#slot2 .lockindicator').attr('data-state', window.duel.player[1].ready);
+        $('#slot3 .lockindicator').attr('data-state', window.duel.player[2].ready);
+        $('#slot4 .lockindicator').attr('data-state', window.duel.player[3].ready);
+        $('#lobbytimelimit').text(window.duel.timelimit + ' seconds');
+        $('#lobbylp').text(window.duel.startLP);
+        $('#lobbycdpt').text(window.duel.drawcount);
+        $('#lobbyallowed').text($('#creategamecardpool option').eq(window.duel.rule).text());
+        $('#lobbygamemode').text($('#creategameduelmode option').eq(window.duel.mode).text());
+        if (window.duel.ishost) {
             $('#lobbystart').css('display', 'inline-block');
         } else {
             $('#lobbystart').css('display', 'none');
         }
 
-        if ($('#creategameduelmode option').eq(duel.mode).text() === 'Tag') {
+        if ($('#creategameduelmode option').eq(window.duel.mode).text() === 'Tag') {
             $('.slot').eq(2).css('display', 'block');
             $('.slot').eq(3).css('display', 'block');
         } else {
@@ -290,7 +323,7 @@ function cardCollections(player) {
 
     };
     gui.gotoLobby = function () {
-        singlesitenav('lobby');
+        window.singlesitenav('lobby');
     };
     gui.UpdateTime = function (player, time) {
         $('.p' + player + 'time').val(time);
@@ -549,18 +582,19 @@ function cardCollections(player) {
     function shuffle(player, deck) {
         player = 'p' + player;
         var orientation = (player === 'p0') ? ({
-            x: 'left',
-            y: 'bottom',
-            direction: 1
-        }) : ({
-            x: 'right',
-            y: 'top',
-            direction: -1
-        });
+                x: 'left',
+                y: 'bottom',
+                direction: 1
+            }) : ({
+                x: 'right',
+                y: 'top',
+                direction: -1
+            }),
+            fix;
         cardmargin(player, deck);
         $($('.card.' + player + '.' + deck).get().reverse()).each(function (i) {
-            var cache = $(this).css(orientation.x);
-            var spatical = Math.floor((Math.random() * 150) - 75);
+            var cache = $(this).css(orientation.x),
+                spatical = Math.floor((Math.random() * 150) - 75);
             $(this).css(orientation.x, '-=' + spatical + 'px');
         });
         fix = setTimeout(function () {
@@ -569,26 +603,26 @@ function cardCollections(player) {
     }
 
     function complete(player, deck) {
-        var started = Date.now();
+        var started = Date.now(),
 
-        // make it loop every 100 milliseconds
+            // make it loop every 100 milliseconds
 
-        var interval = setInterval(function () {
+            interval = setInterval(function () {
 
-            // for 1.5 seconds
-            if (Date.now() - started > 500) {
+                // for 1.5 seconds
+                if (Date.now() - started > 500) {
 
-                // and then pause it
-                clearInterval(interval);
+                    // and then pause it
+                    clearInterval(interval);
 
-            } else {
+                } else {
 
-                // the thing to do every 100ms
-                shuffle(player, deck);
-                cardmargin(player, deck);
+                    // the thing to do every 100ms
+                    shuffle(player, deck);
+                    cardmargin(player, deck);
 
-            }
-        }, 100); // every 100 milliseconds
+                }
+            }, 100); // every 100 milliseconds
     }
 
 
