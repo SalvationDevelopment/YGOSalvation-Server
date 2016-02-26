@@ -57,16 +57,18 @@ var launcher = false,
     loggedIn = false,
     list = {};
 
-function singlesitenav(target) {
+function singlesitenav(target, skip) {
     'use strict';
-    if (internalLocal === 'duelscreen' || internalLocal === 'lobby') {
-        if (target === 'duelscreen' || target === 'lobby') {} else {
-            if (!window.confirm('You are in a duel, are you sure? Not recommened')) {
-                return;
-            } else {
-                try {
-                    window.ws.close();
-                } catch (errorws) {}
+    if (!skip) {
+        if (internalLocal === 'duelscreen' || internalLocal === 'lobby') {
+            if (target === 'duelscreen' || target === 'lobby') {} else {
+                if (!window.confirm('You are in a duel, are you sure? Not recommened')) {
+                    return;
+                } else {
+                    try {
+                        window.ws.close();
+                    } catch (errorws) {}
+                }
             }
         }
     }
