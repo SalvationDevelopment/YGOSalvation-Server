@@ -63,8 +63,7 @@ function startgame(roompass) {
     };
     ws.onclose = function () {
         console.log('Websocket died');
-        internalLocal === 'gamelist';
-        singlesitenav('gamelist');
+        singlesitenav('gamelist', true);
     };
     ws.onmessage = function (data) {
         var q = new Buffer(new Uint8Array(data.data)),
