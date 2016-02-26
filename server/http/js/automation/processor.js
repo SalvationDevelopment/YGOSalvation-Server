@@ -226,6 +226,8 @@ function initiateNetwork(network) {
         var list,
             i;
         window.actionables = {};
+        window.idlecmd = data;
+        window.idlelookup = [];
         for (list in data) {
             console.log(list);
             if (data.hasOwnProperty(list) && data[list] instanceof Array) {
@@ -235,7 +237,11 @@ function initiateNetwork(network) {
                     if (!window.actionables[data[list][i].code]) {
                         window.actionables[data[list][i].code] = [];
                     }
-                    window.actionables[data[list][i].code].push(list);
+                    window.idlecmd[list][i].index = i;
+                    window.actionables[data[list][i].code].push({
+                        list: list,
+                        index: i
+                    });
                 }
             }
         }
