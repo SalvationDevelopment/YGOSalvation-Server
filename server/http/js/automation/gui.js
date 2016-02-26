@@ -47,11 +47,13 @@ function cardCollections(player) {
             y = cardElement.pageY,
             id = $(this).attr('src').split('/')[2].slice(0, -4),
             actions;
+        console.log(y, x);
         $('#actions').css({
-            'top': y,
-            'left': x,
+            'top': (y - 33),
+            'left': (x - 33),
             'display': 'block'
         });
+        $('#actions button').css('display', 'none');
         console.log(id);
         if (window.actionables[id].length) {
             window.actionsOpen = true;
