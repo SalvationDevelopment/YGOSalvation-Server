@@ -450,7 +450,7 @@ function recieveSTOC(packet) {
 
             task.count = BufferIO.ReadInt8();
             for (i = 0; i < task.count; ++i) {
-                task.select_chains.push({
+                task.activatable.push({
                     code: BufferIO.ReadInt32(),
                     controller: BufferIO.ReadInt8(),
                     location: BufferIO.ReadInt8(),
