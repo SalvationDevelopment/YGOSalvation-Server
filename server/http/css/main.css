@@ -811,6 +811,18 @@ button#dolog {
     color: hotpink;
 }
 
+div#actions {
+    position: absolute;
+    width: 66px;
+    font-size: .7em;
+    display: none;
+}
+
+div#actions button {
+    width: 100%;
+    display: none;
+}
+
 .field {
     width: 100%;
     /*    background: rgba(0, 0, 0, .65);*/
