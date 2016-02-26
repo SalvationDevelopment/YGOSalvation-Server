@@ -816,6 +816,7 @@ div#actions {
     width: 66px;
     font-size: .7em;
     display: none;
+    z-index: 7
 }
 
 div#actions button {

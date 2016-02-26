@@ -768,12 +768,13 @@
 
         </div>
         <div id="actions">
-            <button id="summonable_cards">Normal Summon</button>
-            <button id="spsummonable_cards">Special Summon</button>
-            <button id="repositionable_cards">Change Position</button>
-            <button id="msetable_cards">Activate</button>
-            <button id="ssetable_cards">Set</button>
-            <button id="select_chains">Set</button>
+            <button id="summonable_cards" data-action="0" onclick="idleReply(this)">Normal Summon</button>
+            <button id="spsummonable_cards" data-action="1" onclick="idleReply(this)">Special Summon</button>
+            <button id="repositionable_cards" data-action="2" onclick="idleReply(this)">Change Position</button>
+            <button id="msetable_cards" data-action="3" onclick="idleReply(this)">Set</button>
+            <button id="ssetable_cards" data-action="4" onclick="idleReply(this)">Set</button>
+            <button id="activatable" data-action="5" onclick="idleReply(this)">Activate</button>
+            <button id="select_chains" data-action="5" onclick="idleReply(this)">Activate</button>
         </div>
         <div class="field" id="duelzone">
             <div class="fieldcontainer">
