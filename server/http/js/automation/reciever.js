@@ -383,7 +383,7 @@ function recieveSTOC(packet) {
             task.msetable_cards = [];
             task.ssetable_cards = [];
             task.select_chains = [];
-            task.select_chains = [];
+            task.activatable = [];
             task.count = BufferIO.ReadInt8();
             for (i = 0; i < task.count; ++i) {
                 task.summonable_cards.push({

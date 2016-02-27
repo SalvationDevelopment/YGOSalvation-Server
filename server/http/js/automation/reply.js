@@ -197,13 +197,11 @@ function makeCTOS(command, message) {
     say.CTOS_RESPONSE = function (response) {
         // response should already be a buffer.
         var ctos = new Buffer([0x01]),
-            responselen = new Buffer([response.length]),
-            len = ctos.length + response.length + responselen.length,
-
+            len = ctos.length + response.length,
             proto = new Buffer(2);
 
         proto.writeUInt16LE(len, 0);
-        proto = Buffer.concat([proto, ctos, response, responselen]);
+        proto = Buffer.concat([proto, ctos, response]);
         return proto;
     };
 
@@ -280,3 +278,4 @@ function manualMove(target, moveTo) {
         moveTo: moveTo
     });
 }
+

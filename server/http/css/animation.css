@@ -1,5 +1,5 @@
 div#selectionsystem {
-    z-index: 90;
+    z-index: -2;
 }
 
 .card,.overlayunit, .cardselectionzone { -webkit-transform-style: preserve-3d; width:63px; height:86px; background:rgba(200,100,200,.2);
