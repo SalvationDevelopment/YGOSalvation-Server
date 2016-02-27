@@ -204,6 +204,8 @@ function initiateNetwork(network) {
     });
     network.on('MSG_NEW_PHASE', function (data) {
         duel.phase = data.phase;
+        $('[data-currentphase]').attr('data-currentphase', data.phase);
+        $('#phaseindicator button').removeClass('avaliable');
         window.actionables = {};
     });
     network.on('MSG_DRAW', function (data) {
@@ -259,6 +261,12 @@ function initiateNetwork(network) {
                     });
                 }
             }
+        }
+        if (!data.ep) {
+            $('#endphi').addClass('avaliable');
+        }
+        if (data.bp) {
+            $('#battlephi').addClass('avaliable');
         }
     });
     network.on('MSG_SELECT_PLACE', function (data) {
