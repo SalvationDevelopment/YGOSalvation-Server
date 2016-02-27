@@ -355,7 +355,7 @@ function getLocation(item) {
     };
 
     gui.DOMWriter = function (size, movelocation, player) {
-        var field = $('.fieldimage'),
+        var field = $('#duelzone .fieldimage'),
             i;
         $(field).detach();
         for (i = 0; i < size; i++) {
@@ -413,7 +413,7 @@ function getLocation(item) {
             newcard;
         if (pl === 0) {
             newcard = '<img class="card p' + cc + ' ' + enums.locations[cl] + ' i' + cs + '" data-position="">';
-            $('.fieldimage').append(newcard);
+            $('#duelzone .fieldimage').append(newcard);
             return;
         } else if (cl === 0) {
             query = '.card.p' + pc + '.' + enums.locations[pl] + '.i' + ps;
@@ -469,10 +469,10 @@ function getLocation(item) {
 
         for (i = 0; i < numberOfCards; i++) {
             pic = (cards[i].code === 0) ? 'img/textures/cover' : 'ygopro/' + cards[i].code;
-            topcard = $('.p' + player + '.DECK').length - 1;
+            topcard = $('.card.p' + player + '.DECK').length - 1;
             gui.animateState(player, 1, topcard, player, 2, currenthand + i, 'FaceUp');
             //gui.animateState(player, clocation, index, moveplayer, movelocation, movezone, moveposition){
-            query = '.p' + player + '.HAND.i' + (currenthand + i);
+            query = '.card.p' + player + '.HAND.i' + (currenthand + i);
             console.log(query + ' changed to ' + pic + '.jpg');
             $(query).attr('src', pic + '.jpg');
             console.log(cards[i]);
@@ -637,8 +637,8 @@ function getLocation(item) {
         var searchplayer = (player === 'ignore') ? '' : ".p" + player;
         var origin = isCard + searchplayer + "." + enums.locations[clocation] + searchindex;
         var destination = isBecomingCard + " p" + moveplayer + " " + enums.locations[movelocation] + " i" + movezone;
-
-        var card = $(origin)
+    
+        var card = $(origin).not('.cardselectionzone')
             //.each(function(i){
             /*$(this)*/
             .attr({
