@@ -176,8 +176,10 @@ function idleReply(element) {
     var index = $(element).attr('data-index'),
         action = $(element).attr('data-action'),
         response = (parseInt(index, 10) << 16) + parseInt(action, 10),
-        buf = new Buffer([response]),
-        servermessage = makeCTOS('CTOS_RESPONSE', buf);
+        buf = new Buffer(4),
+        servermessage;
+    buf[0] = response;
+    servermessage   = makeCTOS('CTOS_RESPONSE', buf);
     window.ws.send(servermessage);
 }
 
