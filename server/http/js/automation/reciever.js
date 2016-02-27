@@ -1,5 +1,5 @@
 /*jslint browser:true, plusplus:true, bitwise : true*/
-/*globals WebSocket, Buffer, enums, makeCard, BufferStreamReader, EventEmitter*/
+/*globals WebSocket, Buffer, enums, makeCard, BufferStreamReader, EventEmitter, duel*/
 // buffer.js
 // card.js
 
@@ -38,6 +38,7 @@ function Framemaker() {
     };
     return this;
 }
+
 
 function BufferStreamReader(packet) {
     'use strict';
@@ -113,6 +114,7 @@ function recieveSTOC(packet) {
             data.player1extrasize = BufferIO.ReadInt16();
             data.player2decksize = BufferIO.ReadInt16();
             data.player2extrasize = BufferIO.ReadInt16();
+            data.isFirst = (data.playertype & 0xf) ? false : true;
             break;
 
         case ('MSG_HINT'):
@@ -593,7 +595,62 @@ function recieveSTOC(packet) {
             data.select_min = BufferIO.ReadInt8();
             data.selectable_field = BufferIO.ReadInt32();
             data.selected_field = 0;
-            data.respbuf = new Buffer(4);
+            data.respbuf = new Buffer([0, 0, 0]);
+            data.pzone = 0;
+            data.filter = 0;
+            if (data.selectable_field & 0x1f) {
+                data.respbuf[0] = duel.isFirst ? 0 : 1;
+                data.respbuf[1] = 0x4;
+                data.filter = data.selectable_field & 0x1f;
+            } else if (data.selectable_field & 0x1f00) {
+                data.respbuf[0] = duel.isFirst ? 0 : 1;
+                data.respbuf[1] = 0x8;
+                data.filter = (data.selectable_field >> 8) & 0x1f;
+            } else if (data.selectable_field & 0xc000) {
+                data.respbuf[0] = duel.isFirst ? 0 : 1;
+                data.respbuf[1] = 0x8;
+                data.filter = (data.selectable_field >> 14) & 0x3;
+                data.pzone = 1;
+            } else if (data.selectable_field & 0x1f0000) {
+                data.respbuf[0] = duel.isFirst ? 1 : 0;
+                data.respbuf[1] = 0x4;
+                data.filter = (data.selectable_field >> 16) & 0x1f;
+            } else if (data.selectable_field & 0x1f000000) {
+                data.respbuf[0] = duel.isFirst ? 1 : 0;
+                data.respbuf[1] = 0x8;
+                data.filter = (data.selectable_field >> 24) & 0x1f;
+            } else {
+                data.respbuf[0] = duel.isFirst ? 1 : 0;
+                data.respbuf[1] = 0x8;
+                data.filter = (data.selectable_field >> 30) & 0x3;
+                data.pzone = 1;
+            }
+            if (!data.pzone) {
+                if (Boolean(localStorage.random_placement)) {
+                    data.respbuf[2] = Math.floor(Math.random() * 5);
+                    while (!(data.filter & (1 << data.respbuf[2]))) {
+                        data.respbuf[2] = Math.floor(Math.random() * 5);
+                    }
+                } else {
+                    if (data.filter & 0x4) {
+                        data.respbuf[2] = 2;
+                    } else if (data.filter & 0x2) {
+                        data.respbuf[2] = 1;
+                    } else if (data.filter & 0x8) {
+                        data.respbuf[2] = 3;
+                    } else if (data.filter & 0x1) {
+                        data.respbuf[2] = 0;
+                    } else if (data.filter & 0x10) {
+                        data.respbuf[2] = 4;
+                    }
+                }
+            } else {
+                if (data.filter & 0x1) {
+                    data.respbuf[2] = 6;
+                } else if (data.filter & 0x2) {
+                    data.respbuf[2] = 7;
+                }
+            }
 
             break;
         case ('MSG_SELECT_POSITION'):
