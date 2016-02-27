@@ -831,14 +831,16 @@ div#actions button {
     position: relative;
     -webkit-transform-style: preserve-3d;
     clear: both;
-    padding-top: 100px;
+    position:fixed;
 }
 
 .fieldcontainer {
+/*
     width: 1000px;
     margin: 0 auto;
     height: 1000px;
     margin-top: -160px;
+*/
 }
 
 .info-controls {
@@ -997,6 +999,7 @@ meter.p1time {
     -webkit-perspective: 1000px;
     -webkit-perspective-origin-x: 500px;
     -webkit-perspective-origin-y: 1000px;
+    transform: rotateX(60deg);
 }
 
 .button.ready0 {
