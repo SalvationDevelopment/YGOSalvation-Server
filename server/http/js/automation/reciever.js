@@ -588,6 +588,35 @@ function recieveSTOC(packet) {
 
             break;
         case ('MSG_SELECT_CHAIN'):
+            data.selecting_player = BufferIO.ReadInt8(); //defunct in the code
+            data.count = BufferIO.ReadInt8();
+            data.specount = BufferIO.ReadInt8();
+            data.forced = BufferIO.ReadInt8();
+            data.hint0 = BufferIO.ReadInt8(); //defunct in the code
+            data.hint1 = BufferIO.ReadInt8(); //defunct in the code
+            data.collectionOfCards = [];
+            for (i = 0; i < data.count; ++i) {
+                data.collectionOfCards[i] = {
+                    code: BufferIO.ReadInt32(),
+                    c: BufferIO.ReadInt8(),
+                    l: BufferIO.ReadInt8(),
+                    s: BufferIO.ReadInt8(),
+                    ss: BufferIO.ReadInt8(),
+                    desc: BufferIO.ReadInt32()
+                };
+                if (data.collectionOfCards[i].code >= 1000000000) {
+                    data.collectionOfCards[i].is_conti = true;
+                    data.collectionOfCards[i].chain_code = data.collectionOfCards[i].code % 1000000000;
+                    data.collectionOfCards[i].remove_act = true;
+                } else {
+                    data.collectionOfCards[i].chain_code = data.collectionOfCards[i].code
+                    data.collectionOfCards[i].is_selectable = true;
+
+                    data.collectionOfCards[i].cmdFlag |= COMMAND_ACTIVATE;
+
+                }
+            }
+
 
             break;
         case ('MSG_SELECT_PLACE' || 'MSG_SELECT_DISFIELD'):
