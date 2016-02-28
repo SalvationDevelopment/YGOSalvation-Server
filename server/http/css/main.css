@@ -1508,12 +1508,13 @@ div#phaseindicator {
 }
 
 #phaseindicator button {
-    width: 16.65%;
+    width: 16.6%;
     margin: 0;
     display: block;
     float: left;
     overflow: hidden;
     visibility: hidden;
+    z-index: 30;
 }
 
 #phaseindicator button.avaliable {

@@ -593,7 +593,7 @@ function recieveSTOC(packet) {
         case ('MSG_SELECT_PLACE' || 'MSG_SELECT_DISFIELD'):
             data.player = BufferIO.ReadInt8(); // defunct in the code.
             data.select_min = BufferIO.ReadInt8();
-            data.selectable_field = BufferIO.ReadInt32();
+            data.selectable_field = ~BufferIO.ReadInt32();
             data.selected_field = 0;
             data.respbuf = new Buffer([0, 0, 0]);
             data.pzone = 0;
