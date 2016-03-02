@@ -327,7 +327,7 @@ function getLocation(item) {
         console.log('Starting Duel!');
     };
     gui.StartDuel = function (player1StartLP, player2StartLP, OneDeck, TwoDeck, OneExtra, TwoExtra) { // Interface signalled the game has started
-
+        $('#automationduelfield').html('');
         gui.DOMWriter(OneDeck, 'DECK', 0);
         gui.DOMWriter(TwoDeck, 'DECK', 1);
         gui.DOMWriter(OneExtra, 'EXTRA', 0);
@@ -343,7 +343,7 @@ function getLocation(item) {
     };
 
     gui.DOMWriter = function (size, movelocation, player) {
-        var field = $('#duelzone .fieldimage'),
+        var field = $('#automationduelfield'),
             i;
         $(field).detach();
         for (i = 0; i < size; i++) {

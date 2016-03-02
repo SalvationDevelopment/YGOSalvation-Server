@@ -427,7 +427,7 @@ function renderList(JSONdata) {
     }
     elem = $('#gamelistitems').find('div:not(.avaliable)').sort(sortMe);
     $('#gamelistitems').append(elem);
-    $('.avaliable').first()
+    $('.game.avaliable').first()
         .before('<br style="clear:both"><span class="gamelabel">' + window.jsLang.join + '<span><br style="clear:both">');
     $('.started')
         .first().before('<br style="clear:both"><span class="gamelabel">' + window.jsLang.spectate + '<span><br style="clear:both">');
