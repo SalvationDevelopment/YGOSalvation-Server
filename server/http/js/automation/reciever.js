@@ -75,6 +75,12 @@ function BufferStreamReader(packet) {
     // I should later comeback and make this completely array based.
 }
 
+
+function localPlayer(player) {
+    'use strict';
+    return duel.isFirst ? player : 1 - player;
+}
+
 function recieveSTOC(packet) {
     // OK!!!! HARD PART!!!!
     // recieve.js should have create obejects with all the parameters as properites, then emit them.
@@ -108,13 +114,18 @@ function recieveSTOC(packet) {
 
         case ('MSG_START'):
             data.playertype = BufferIO.ReadInt8();
-            data.lifepoints1 = BufferIO.ReadInt32();
-            data.lifepoints2 = BufferIO.ReadInt32();
-            data.player1decksize = BufferIO.ReadInt16();
-            data.player1extrasize = BufferIO.ReadInt16();
-            data.player2decksize = BufferIO.ReadInt16();
-            data.player2extrasize = BufferIO.ReadInt16();
             data.isFirst = (data.playertype & 0xf) ? false : true;
+            duel.isFirst = data.isFirst;
+            data.lifepoints = {};
+            data.lifepoints[localPlayer(0)] = BufferIO.ReadInt32();
+            data.lifepoints[localPlayer(1)] = BufferIO.ReadInt32();
+            data.deck = {};
+            data.deck[localPlayer(0)] = BufferIO.ReadInt16();
+            data.deck[localPlayer(1)] = BufferIO.ReadInt16();
+            data.extra = {};
+            data.exta[localPlayer(0, data.isFirst)] = BufferIO.ReadInt16();
+            data.exta[localPlayer(1)] = BufferIO.ReadInt16();
+
             break;
 
         case ('MSG_HINT'):
@@ -149,7 +160,7 @@ function recieveSTOC(packet) {
             break;
 
         case ('MSG_NEW_TURN'):
-            data.player = BufferIO.ReadInt8();
+            data.player = localPlayer(BufferIO.ReadInt8());
             break;
 
         case ('MSG_WIN'):
@@ -162,7 +173,7 @@ function recieveSTOC(packet) {
             break;
 
         case ('MSG_DRAW'):
-            data.player = BufferIO.ReadInt8();
+            data.player = localPlayer(BufferIO.ReadInt8());
             data.count = BufferIO.ReadInt8();
             data.cardslist = [];
             for (i = 0; i < data.count; ++i) {
@@ -185,11 +196,11 @@ function recieveSTOC(packet) {
 
         case ('MSG_CHAINING'):
             data.code = BufferIO.ReadInt32();
-            data.pcc = BufferIO.ReadInt8();
+            data.pcc = localPlayer(BufferIO.ReadInt8());
             data.pcl = BufferIO.ReadInt8();
             data.pcs = BufferIO.ReadInt8();
             data.subs = BufferIO.ReadInt8();
-            data.cc = BufferIO.ReadInt8();
+            data.cc = localPlayer(BufferIO.ReadInt8());
             data.cl = BufferIO.ReadInt8();
             data.cs = BufferIO.ReadInt8();
             data.desc = BufferIO.ReadInt32();
@@ -229,7 +240,7 @@ function recieveSTOC(packet) {
             data.selections = [];
             for (i = 0; i < data.count; ++i) {
                 data.selections.push({
-                    c: BufferIO.ReadInt8(),
+                    c: localPlayer(BufferIO.ReadInt8()),
                     l: BufferIO.ReadInt8(),
                     s: BufferIO.ReadInt8(),
                     ss: BufferIO.ReadInt8()
@@ -241,7 +252,7 @@ function recieveSTOC(packet) {
             data.selections = [];
             for (i = 0; i < data.count; ++i) {
                 data.selections.push({
-                    c: BufferIO.ReadInt8(),
+                    c: localPlayer(BufferIO.ReadInt8()),
                     l: BufferIO.ReadInt8(),
                     s: BufferIO.ReadInt8(),
                     ss: BufferIO.ReadInt8() // defunct in code
@@ -250,24 +261,24 @@ function recieveSTOC(packet) {
             break;
 
         case ('MSG_PAY_LPCOST'):
-            data.player = BufferIO.ReadInt8();
+            data.player = localPlayer(BufferIO.ReadInt8());
             data.lp = BufferIO.ReadInt32();
             data.multiplier = -1;
             break;
 
         case ('MSG_DAMAGE'):
-            data.player = BufferIO.ReadInt8();
+            data.player = localPlayer(BufferIO.ReadInt8());
             data.lp = BufferIO.ReadInt32();
             data.multiplier = -1;
             break;
 
         case ('MSG_RECOVER'):
-            data.player = BufferIO.ReadInt8();
+            data.player = localPlayer(BufferIO.ReadInt8());
             data.lp = BufferIO.ReadInt32();
             data.multiplier = 1;
             break;
         case ('MSG_LPUPDATE'):
-            data.player = BufferIO.ReadInt8();
+            data.player = localPlayer(BufferIO.ReadInt8());
             data.lp = BufferIO.ReadInt32();
             data.multiplier = 1;
             break;
@@ -282,22 +293,22 @@ function recieveSTOC(packet) {
             break;
 
         case ('MSG_EQUIP'):
-            data.c1 = BufferIO.ReadInt8();
+            data.c1 = localPlayer(BufferIO.ReadInt8());
             data.l1 = BufferIO.ReadInt8();
             data.s1 = BufferIO.ReadInt8();
             BufferIO.ReadInt8(); //padding wtf
-            data.c2 = BufferIO.ReadInt8();
+            data.c2 = localPlayer(BufferIO.ReadInt8());
             data.l2 = BufferIO.ReadInt8();
             data.s2 = BufferIO.ReadInt8();
             BufferIO.ReadInt8(); //padding wtf
             break;
 
         case ('MSG_UNEQUIP'):
-            data.c1 = BufferIO.ReadInt8();
+            data.c1 = localPlayer(BufferIO.ReadInt8());
             data.l1 = BufferIO.ReadInt8();
             data.s1 = BufferIO.ReadInt8();
             BufferIO.ReadInt8(); //padding wtf
-            data.c1 = BufferIO.ReadInt8();
+            data.c1 = localPlayer(BufferIO.ReadInt8());
             data.l1 = BufferIO.ReadInt8();
             data.s1 = BufferIO.ReadInt8();
             BufferIO.ReadInt8(); //padding wtf
@@ -316,7 +327,7 @@ function recieveSTOC(packet) {
 
         case ('MSG_ADD_COUNTER'):
             data.type = BufferIO.ReadInt16();
-            data.c = BufferIO.ReadInt8();
+            data.c = localPlayer(BufferIO.ReadInt8());
             data.l = BufferIO.ReadInt8();
             data.s = BufferIO.ReadInt8();
             data.count = BufferIO.ReadInt8();
@@ -324,31 +335,31 @@ function recieveSTOC(packet) {
 
         case ('MSG_REMOVE_COUNTER'):
             data.type = BufferIO.ReadInt16();
-            data.c = BufferIO.ReadInt8();
+            data.c = localPlayer(BufferIO.ReadInt8());
             data.l = BufferIO.ReadInt8();
             data.s = BufferIO.ReadInt8();
             data.count = BufferIO.ReadInt8();
             break;
 
         case ('MSG_ATTACK'):
-            data.ca = BufferIO.ReadInt8();
+            data.ca = localPlayer(BufferIO.ReadInt8());
             data.la = BufferIO.ReadInt8();
             data.sa = BufferIO.ReadInt8();
             BufferIO.ReadInt8();
-            data.cd = BufferIO.ReadInt8();
+            data.cd = localPlayer(BufferIO.ReadInt8());
             data.ld = BufferIO.ReadInt8();
             data.sd = BufferIO.ReadInt8();
             BufferIO.ReadInt8();
             break;
         case ('MSG_BATTLE'):
-            data.ca = BufferIO.ReadInt8();
+            data.ca = localPlayer(BufferIO.ReadInt8());
             data.la = BufferIO.ReadInt8();
             data.sa = BufferIO.ReadInt8();
             BufferIO.ReadInt8(); // padding
             data.aatk = BufferIO.ReadInt32();
             data.adef = BufferIO.ReadInt32();
             data.da = BufferIO.ReadInt8(); //defunct
-            data.cd = BufferIO.ReadInt8();
+            data.cd = localPlayer(BufferIO.ReadInt8());
             data.ld = BufferIO.ReadInt8();
             data.sd = BufferIO.ReadInt8();
             BufferIO.ReadInt8(); //padding
@@ -378,7 +389,7 @@ function recieveSTOC(packet) {
         case ('MSG_SELECT_IDLECMD'):
             data.command = 'MSG_SELECT_IDLECMD';
             //https://github.com/Fluorohydride/ygopro/blob/d9450dbb35676db3d5b7c2a5241a54d7f2c21e98/ocgcore/playerop.cpp#L69
-            data.idleplayer = BufferIO.ReadInt8();
+            data.idleplayer = BufferIO.ReadInt8(); //defucnt in the code
             data.summonable_cards = [];
             data.spsummonable_cards = [];
             data.repositionable_cards = [];
@@ -390,7 +401,7 @@ function recieveSTOC(packet) {
             for (i = 0; i < data.count; ++i) {
                 data.summonable_cards.push({
                     code: BufferIO.ReadInt32(),
-                    controller: BufferIO.ReadInt8(),
+                    controller: localPlayer(BufferIO.ReadInt8()),
                     location: BufferIO.ReadInt8(),
                     sequence: BufferIO.ReadInt8()
                 });
@@ -399,7 +410,7 @@ function recieveSTOC(packet) {
             for (i = 0; i < data.count; ++i) {
                 data.spsummonable_cards.push({
                     code: BufferIO.ReadInt32(),
-                    controller: BufferIO.ReadInt8(),
+                    controller: localPlayer(BufferIO.ReadInt8()),
                     location: BufferIO.ReadInt8(),
                     sequence: BufferIO.ReadInt8()
                 });
@@ -410,7 +421,7 @@ function recieveSTOC(packet) {
             for (i = 0; i < data.count; ++i) {
                 data.repositionable_cards.push({
                     code: BufferIO.ReadInt32(),
-                    controller: BufferIO.ReadInt8(),
+                    controller: localPlayer(BufferIO.ReadInt8()),
                     location: BufferIO.ReadInt8(),
                     sequence: BufferIO.ReadInt8()
                 });
@@ -421,7 +432,7 @@ function recieveSTOC(packet) {
             for (i = 0; i < data.count; ++i) {
                 data.msetable_cards.push({
                     code: BufferIO.ReadInt32(),
-                    controller: BufferIO.ReadInt8(),
+                    controller: localPlayer(BufferIO.ReadInt8()),
                     location: BufferIO.ReadInt8(),
                     sequence: BufferIO.ReadInt8()
                 });
@@ -432,7 +443,7 @@ function recieveSTOC(packet) {
             for (i = 0; i < data.count; ++i) {
                 data.select_chains.push({
                     code: BufferIO.ReadInt32(),
-                    controller: BufferIO.ReadInt8(),
+                    controller: localPlayer(BufferIO.ReadInt8()),
                     location: BufferIO.ReadInt8(),
                     sequence: BufferIO.ReadInt8()
                 });
@@ -443,7 +454,7 @@ function recieveSTOC(packet) {
             for (i = 0; i < data.count; ++i) {
                 data.ssetable_cards.push({
                     code: BufferIO.ReadInt32(),
-                    controller: BufferIO.ReadInt8(),
+                    controller: localPlayer(BufferIO.ReadInt8()),
                     location: BufferIO.ReadInt8(),
                     sequence: BufferIO.ReadInt8()
                 });
@@ -454,7 +465,7 @@ function recieveSTOC(packet) {
             for (i = 0; i < data.count; ++i) {
                 data.activatable.push({
                     code: BufferIO.ReadInt32(),
-                    controller: BufferIO.ReadInt8(),
+                    controller: localPlayer(BufferIO.ReadInt8()),
                     location: BufferIO.ReadInt8(),
                     sequence: BufferIO.ReadInt8()
                 });
@@ -467,11 +478,11 @@ function recieveSTOC(packet) {
 
         case ('MSG_MOVE'):
             data.code = BufferIO.ReadInt32();
-            data.pc = BufferIO.ReadInt8(); // original controller
+            data.pc = localPlayer(BufferIO.ReadInt8()); // original controller
             data.pl = BufferIO.ReadInt8(); // original cLocation
             data.ps = BufferIO.ReadInt8(); // original sequence (index)
             data.pp = BufferIO.ReadInt8(); // padding??
-            data.cc = BufferIO.ReadInt8(); // current controller
+            data.cc = localPlayer(BufferIO.ReadInt8()); // current controller
             data.cl = BufferIO.ReadInt8(); // current cLocation
             data.cs = BufferIO.ReadInt8(); // current sequence (index)
             data.cp = BufferIO.ReadInt8(); // current position
@@ -480,7 +491,7 @@ function recieveSTOC(packet) {
 
         case ('MSG_POS_CHANGE'):
             data.code = BufferIO.ReadInt32();
-            data.cc = BufferIO.ReadInt8(); // current controller
+            data.cc = localPlayer(BufferIO.ReadInt8()); // current controller
             data.cl = BufferIO.ReadInt8(); // current cLocation
             data.cs = BufferIO.ReadInt8(); // current sequence (index)
             data.pp = BufferIO.ReadInt8(); // padding??
@@ -493,11 +504,11 @@ function recieveSTOC(packet) {
 
         case ('MSG_SWAP'):
             data.code1 = BufferIO.ReadInt8(); // defunct in the code
-            data.c1 = BufferIO.ReadInt8();
+            data.c1 = localPlayer(BufferIO.ReadInt8());
             data.l1 = BufferIO.ReadInt8();
             data.s1 = BufferIO.ReadInt8();
             data.p1 = BufferIO.ReadInt8(); //defunct in the code
-            data.code2 = BufferIO.ReadInt8(); //defunct in the code
+            data.code2 = localPlayer(BufferIO.ReadInt8()); //defunct in the code
             data.c2 = BufferIO.ReadInt8();
             data.l2 = BufferIO.ReadInt8();
             data.s2 = BufferIO.ReadInt8();
@@ -515,7 +526,7 @@ function recieveSTOC(packet) {
 
         case ('MSG_SPSUMMONING'):
             data.code = BufferIO.ReadInt32();
-            data.cc = BufferIO.ReadInt8();
+            data.cc = localPlayer(BufferIO.ReadInt8());
             data.cl = BufferIO.ReadInt8();
             data.cs = BufferIO.ReadInt8();
             data.cp = BufferIO.ReadInt8();
@@ -538,7 +549,7 @@ function recieveSTOC(packet) {
         case ('MSG_FLIPSUMMONING'):
             // notice pp is missing, and everything is upshifted; not repeating code.
             data.code = BufferIO.ReadInt32();
-            data.cc = BufferIO.ReadInt8(); // current controller
+            data.cc = localPlayer(BufferIO.ReadInt8()); // current controller
             data.cl = BufferIO.ReadInt8(); // current cLocation
             data.cs = BufferIO.ReadInt8(); // current sequence (index)
             data.cp = BufferIO.ReadInt8(); // current position
@@ -609,7 +620,7 @@ function recieveSTOC(packet) {
                     data.collectionOfCards[i].chain_code = data.collectionOfCards[i].code % 1000000000;
                     data.collectionOfCards[i].remove_act = true;
                 } else {
-                    data.collectionOfCards[i].chain_code = data.collectionOfCards[i].code
+                    data.collectionOfCards[i].chain_code = data.collectionOfCards[i].code;
                     data.collectionOfCards[i].is_selectable = true;
 
                     data.collectionOfCards[i].cmdFlag |= COMMAND_ACTIVATE;
@@ -720,7 +731,7 @@ function recieveSTOC(packet) {
 
 
         case ('MSG_UPDATE_DATA'):
-            data.player = BufferIO.ReadInt8();
+            data.player = localPlayer(BufferIO.ReadInt8());
             data.fieldlocation = BufferIO.ReadInt8();
             data.fieldmodel = enums.locations[data.fieldlocation];
             data.message = packet.message;
@@ -730,7 +741,7 @@ function recieveSTOC(packet) {
             break;
 
         case ('MSG_UPDATE_CARD'):
-            data.player = BufferIO.ReadInt8();
+            data.player = localPlayer(BufferIO.ReadInt8());
             data.fieldlocation = BufferIO.ReadInt8();
             data.index = BufferIO.ReadInt8();
             data.card = makeCard(packet.message, 8, data.udplayer).card;
@@ -855,7 +866,7 @@ function recieveSTOC(packet) {
         break;
 
     case ("STOC_TIME_LIMIT"):
-        data.player = packet.message[0];
+        data.player = localPlayer(packet.message[0]);
         data.time = packet.message[1] + packet.message[2];
         break;
 
