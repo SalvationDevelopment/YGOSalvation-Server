@@ -123,8 +123,8 @@ function recieveSTOC(packet) {
             data.deck[localPlayer(0)] = BufferIO.ReadInt16();
             data.deck[localPlayer(1)] = BufferIO.ReadInt16();
             data.extra = {};
-            data.exta[localPlayer(0, data.isFirst)] = BufferIO.ReadInt16();
-            data.exta[localPlayer(1)] = BufferIO.ReadInt16();
+            data.extra[localPlayer(0, data.isFirst)] = BufferIO.ReadInt16();
+            data.extra[localPlayer(1)] = BufferIO.ReadInt16();
 
             break;
 
