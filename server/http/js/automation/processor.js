@@ -46,6 +46,19 @@ function cleanstate() {
 }
 
 
+function cardCollections(player) {
+    'use strict';
+    return {
+        DECK: $('.p' + player + '.DECK').length,
+        HAND: $('.p' + player + '.HAND').length,
+        EXTRA: $('.p' + player + '.EXTRA').not('.overlayunit').length,
+        GRAVE: $('.p' + player + '.GRAVE').length,
+        REMOVED: $('.p' + player + '.REMOVED').length,
+        SPELLZONE: 8,
+        MONSTERZONE: 5
+    };
+}
+
 function initiateNetwork(network) {
     'use strict';
     network.on('STOC_JOIN_GAME', function (data) {
@@ -116,6 +129,7 @@ function initiateNetwork(network) {
     });
     network.on('MSG_START', function (data) {
         //set the LP.
+        duel.isFirst = data.isFirst;
         duel.player[0].lifepoints = data.lifepoints1;
         duel.player[1].lifepoints = data.lifepoints2;
 
@@ -190,6 +204,9 @@ function initiateNetwork(network) {
     });
     network.on('MSG_NEW_PHASE', function (data) {
         duel.phase = data.phase;
+        $('[data-currentphase]').attr('data-currentphase', data.phase);
+        $('#phaseindicator button').removeClass('avaliable');
+        window.actionables = {};
     });
     network.on('MSG_DRAW', function (data) {
         var i = 0;
@@ -245,6 +262,20 @@ function initiateNetwork(network) {
                 }
             }
         }
+        if (!data.ep) {
+            $('#endphi').addClass('avaliable');
+        }
+        if (data.bp) {
+            $('#battlephi').addClass('avaliable');
+        }
+    });
+    network.on('MSG_SELECT_PLACE', function (data) {
+        var servermessage;
+        if (data.respbuf) { //replace with if auto_placement = on;
+            servermessage = makeCTOS('CTOS_RESPONSE', data.respbuf);
+        } // else show field selector;
+
+        window.ws.send(servermessage);
     });
 }
 

@@ -176,8 +176,10 @@ function idleReply(element) {
     var index = $(element).attr('data-index'),
         action = $(element).attr('data-action'),
         response = (parseInt(index, 10) << 16) + parseInt(action, 10),
-        buf = new Buffer([response]),
-        servermessage = makeCTOS('CTOS_RESPONSE', buf);
+        buf = new Buffer(4),
+        servermessage;
+    buf[0] = response;
+    servermessage = makeCTOS('CTOS_RESPONSE', buf);
     window.ws.send(servermessage);
 }
 
@@ -219,3 +221,9 @@ var wish = {
     extra: [26268488, 35952884, 24696097, 74892653, 89474727, 44508094, 44508094, 60800381, 60800381, 60800381, 37675907, 37675907, 37675907, 50091196, 50091196],
     side: []
 };
+
+
+function sayNo() {
+    'use strict';
+    window.ws.send(makeCTOS('CTOS_RESPONSE', new Buffer([-1, 0, 0, 0])));
+}

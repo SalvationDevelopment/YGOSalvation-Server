@@ -831,11 +831,11 @@ div#actions button {
     position: relative;
     -webkit-transform-style: preserve-3d;
     clear: both;
-    position:fixed;
+    position: fixed;
 }
 
 .fieldcontainer {
-/*
+    /*
     width: 1000px;
     margin: 0 auto;
     height: 1000px;
@@ -1492,6 +1492,42 @@ div#duelspectate {
     clear: both;
     color: white;
     margin: 7vh 0;
+}
+
+div#phaseindicator {
+    position: fixed;
+    top: 52%;
+    width: 100%;
+}
+
+#phaseindicator div {
+    width: 460px;
+    margin: 0 auto;
+    /* padding-left: 10px; */
+    overflow: auto;
+}
+
+#phaseindicator button {
+    width: 16.6%;
+    margin: 0;
+    display: block;
+    float: left;
+    overflow: hidden;
+    visibility: hidden;
+    z-index: 30;
+}
+
+#phaseindicator button.avaliable {
+    visibility: visible;
+}
+
+#phaseindicator[data-currentphase="1"] #drawphi,
+#phaseindicator[data-currentphase="2"] #standbyphi,
+#phaseindicator[data-currentphase="4"] #main1phi,
+#phaseindicator[data-currentphase="16"] #battlephi,
+#phaseindicator[data-currentphase="32"] #main2phi,
+#phaseindicator[data-currentphase="64"] #endphi {
+    visibility: visible;
 }
 
 #lobbymenu {
