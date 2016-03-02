@@ -1,20 +1,9 @@
-/*global $, console, cardmargin, layouthand, cardCollections, enums, animateState, animateRemoveChaining, shuffle, animateChaining*/
+/*global $, console, cardmargin, layouthand, enums, animateState, animateRemoveChaining, shuffle, animateChaining*/
 /*jslint plusplus:true, bitwise:true */
 
 var gui = {};
 
-function cardCollections(player) {
-    'use strict';
-    return {
-        DECK: $('.p' + player + '.DECK').length,
-        HAND: $('.p' + player + '.HAND').length,
-        EXTRA: $('.p' + player + '.EXTRA').not('.overlayunit').length,
-        GRAVE: $('.p' + player + '.GRAVE').length,
-        REMOVED: $('.p' + player + '.REMOVED').length,
-        SPELLZONE: 8,
-        MONSTERZONE: 5
-    };
-}
+
 
 function getLocation(item) {
     'use strict';
@@ -351,7 +340,6 @@ function getLocation(item) {
         layouthand(1);
         $('.p0lp').val(player1StartLP);
         $('.p1lp').val(player2StartLP);
-        return [cardCollections(0), cardCollections(1)];
     };
 
     gui.DOMWriter = function (size, movelocation, player) {
@@ -377,7 +365,7 @@ function getLocation(item) {
             deadzone,
             index;
         for (i = 0; data.length > i; i++) {
-            console.log('.card.p' + player + '.' + enums.locations[clocation] + '.i' + i, data[i].Code);
+            //console.log('.card.p' + player + '.' + enums.locations[clocation] + '.i' + i, data[i].Code);
             if (data[i].Code !== 'nocard') {
 
                 $('.card.p' + player + '.' + enums.locations[clocation] + '.i' + i).not('.overlayunit')
@@ -637,7 +625,7 @@ function getLocation(item) {
         var searchplayer = (player === 'ignore') ? '' : ".p" + player;
         var origin = isCard + searchplayer + "." + enums.locations[clocation] + searchindex;
         var destination = isBecomingCard + " p" + moveplayer + " " + enums.locations[movelocation] + " i" + movezone;
-    
+
         var card = $(origin).not('.cardselectionzone')
             //.each(function(i){
             /*$(this)*/
