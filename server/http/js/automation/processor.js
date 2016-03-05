@@ -1,5 +1,5 @@
 /*jslint plusplus : true*/
-/*global console, gui*/
+/*global console, gui, $*/
 
 var duel = {};
 

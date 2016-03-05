@@ -586,10 +586,16 @@ function recieveSTOC(packet) {
             }
             break;
         case ('MSG_SELECT_EFFECTYN'):
-
-            break;
+            data.selecting_player = BufferIO.ReadInt8(); //defuct in code
+            data.code = BufferIO.ReadInt32
+            data.c = localPlayer(BufferIO.ReadInt8());
+            data.l = BufferIO.ReadInt8();
+            data.s = BufferIO.ReadInt8();
+            BufferIO.ReadInt8() //blank read ahead; ??
 
         case ('MSG_SELECT_YESNO'):
+            data.selecting_player = BufferIO.ReadInt8(); //defuct in code
+            data.desc = BufferIO.ReadInt32
 
             break;
         case ('MSG_SELECT_OPTION'):
