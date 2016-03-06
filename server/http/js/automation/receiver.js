@@ -767,7 +767,21 @@ function recieveSTOC(packet) {
             }
             break;
         case ('MSG_SELECT_TRIBUTE'):
-
+            data.selecting_player = BufferIO.ReadInt8(); //defunct in the code
+            data.select_cancelable = BufferIO.ReadInt8() ? true : false;
+            data.select_min = BufferIO.ReadInt8();
+            data.select_max = BufferIO.ReadInt8();
+            data.count = BufferIO.ReadInt8();
+            data.cards = [];
+            for (i = 0; i < data.count; ++i) {
+                data.cards[i] = {
+                    code: BufferIO.ReadInt32(),
+                    c: localPlayer(BufferIO.ReadInt8()),
+                    l: BufferIO.ReadInt8(),
+                    s: BufferIO.ReadInt8(),
+                    t: BufferIO.ReadInt8()
+                };
+            }
             break;
 
         case ('MSG_SORT_CHAIN'):
