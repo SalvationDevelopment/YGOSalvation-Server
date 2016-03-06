@@ -859,11 +859,13 @@ function recieveSTOC(packet) {
         case ('MSG_CONFIRM_CARDS'):
             data.player = BufferIO.ReadInt8(); /* defunct in code */
             data.count = BufferIO.ReadInt8();
-            data.c = undefined;
-            data.l = undefined;
-            data.s = undefined;
             for (i = 0; i < data.count; ++i) {
-                /*sigh this goes into something extremely complex and that overwrites itself*/
+                data.cards[i] = {
+                    code: BufferIO.ReadInt32(),
+                    c: localPlayer(BufferIO.ReadInt8()),
+                    l: BufferIO.ReadInt8(),
+                    s: BufferIO.ReadInt8()
+                };
             }
             break;
 
