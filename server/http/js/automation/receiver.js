@@ -682,7 +682,8 @@ function recieveSTOC(packet) {
 
 
             break;
-        case ('MSG_SELECT_PLACE' || 'MSG_SELECT_DISFIELD'):
+        case ('MSG_SELECT_PLACE'):
+        case ('MSG_SELECT_DISFIELD'):
             data.player = BufferIO.ReadInt8(); // defunct in the code.
             data.select_min = BufferIO.ReadInt8();
             data.selectable_field = ~BufferIO.ReadInt32();
@@ -784,9 +785,6 @@ function recieveSTOC(packet) {
             }
             break;
 
-        case ('MSG_SORT_CHAIN'):
-
-            break;
         case ('MSG_SELECT_COUNTER'):
             data.selecting_player = BufferIO.ReadInt8(); //defunct in the code
             data.select_counter_type = BufferIO.ReadInt16();
@@ -806,7 +804,7 @@ function recieveSTOC(packet) {
             break;
         case ('MSG_SELECT_SUM'):
             data.select_mode = BufferIO.ReadInt8();
-            int selecting_player = BufferIO.ReadInt8();
+            data.selecting_player = BufferIO.ReadInt8();
             data.select_sumval = BufferIO.ReadInt32();
             data.select_min = BufferIO.ReadInt8();
             data.select_max = BufferIO.ReadInt8();
@@ -834,11 +832,20 @@ function recieveSTOC(packet) {
             }
 
             break;
-        case ('MSG_SELECT_DISFIELD'):
 
-            break;
         case ('MSG_SORT_CARD'):
-
+        case ('MSG_SORT_CHAIN'):
+            data.player = BufferIO.ReadInt8(); /* defunct in code */
+            data.count = BufferIO.ReadInt8();
+            for (i = 0; i < data.count; ++i) {
+                data.cards[i] = {
+                    code: BufferIO.ReadInt32(), //defunct in the code
+                    c: localPlayer(BufferIO.ReadInt8()),
+                    l: BufferIO.ReadInt8(),
+                    s: BufferIO.ReadInt8(),
+                    t: BufferIO.ReadInt8()
+                };
+            }
             break;
         case ('MSG_CONFIRM_DECKTOP'):
 
