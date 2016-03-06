@@ -292,6 +292,7 @@ function getLocation(item) {
         $('#slot3 .lockindicator').attr('data-state', window.duel.player[2].ready);
         $('#slot4 .lockindicator').attr('data-state', window.duel.player[3].ready);
         $('#lobbytimelimit').text(window.duel.timelimit + ' seconds');
+        $('#lobbyflist').text(window.duel.banlist);
         $('#lobbylp').text(window.duel.startLP);
         $('#lobbycdpt').text(window.duel.drawcount);
         $('#lobbyallowed').text($('#creategamecardpool option').eq(window.duel.rule).text());

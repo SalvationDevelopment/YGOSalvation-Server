@@ -94,7 +94,7 @@ function initiateNetwork_STOC(network) {
 
     });
     network.on('STOC_JOIN_GAME', function (data) {
-        duel.banlistHashCode = data.banlistHashCode;
+        duel.banlist = data.banlist;
         duel.rule = data.rule;
         duel.mode = data.mode;
         duel.prio = data.prio;
