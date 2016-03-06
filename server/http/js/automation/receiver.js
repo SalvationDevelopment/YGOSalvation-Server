@@ -98,7 +98,13 @@ function recieveSTOC(packet) {
         errorCode,
         i = 0, //iterator
         filter = 0, //special iterator for bitwise math
-        BufferIO = new BufferStreamReader(packet.message);
+        BufferIO = new BufferStreamReader(packet.message),
+        val = 0, //  used in MSG_RELOAD_FIELD
+        p = 0, // used in MSG_RELOAD_FIELD
+        seq = 0, // used in MSG_RELOAD_FIELD
+        xyz = 0, // used in MSG_RELOAD_FIELD
+        chainObj = {}; // used in MSG_RELOAD_FIELD
+
 
     data.command = packet.STOC;
     data.packet = packet;
@@ -972,6 +978,95 @@ function recieveSTOC(packet) {
             data.topcode = BufferIO.ReadInt32();
             break;
         case ('MSG_RELOAD_FIELD'):
+            val = 0;
+            data.lp = {};
+            data.cards = [];
+            data.overlays = [];
+            for (i = 0; i < 2; ++i) {
+                p = localPlayer(i);
+                data.lp[p] = BufferIO.ReadInt32();
+                for (seq = 0; seq < 5; ++seq) {
+                    val = BufferIO.ReadInt8();
+                    if (val) {
+                        data.cards[seq] = {
+                            player: p,
+                            position: BufferIO.ReadInt8(),
+                            location: 0x04,
+                            index: seq
+                        };
+                        val = BufferIO.ReadInt8();
+                        if (val) {
+                            for (xyz = 0; xyz < val; ++xyz) {
+                                data.overlays.push({
+                                    reference: seq,
+                                    location: 0x80
+                                });
+                            }
+                        }
+
+                    }
+                }
+                for (seq = 0; seq < 8; ++seq) {
+                    val = BufferIO.ReadInt8();
+                    if (val) {
+                        data.cards.push({
+                            player: p,
+                            position: BufferIO.ReadInt8(),
+                            location: 0x08,
+                            index: seq
+                        });
+                    }
+                }
+                val = BufferIO.ReadInt8();
+                for (seq = 0; seq < val; ++seq) {
+                    data.cards.push({
+                        player: p,
+                        location: 0x02,
+                        index: seq
+                    });
+                }
+                val = BufferIO.ReadInt8();
+                for (seq = 0; seq < val; ++seq) {
+                    data.cards.push({
+                        player: p,
+                        location: 0x10,
+                        index: seq
+                    });
+                }
+                val = BufferIO.ReadInt8();
+                for (seq = 0; seq < val; ++seq) {
+                    data.cards.push({
+                        player: p,
+                        location: 0x20,
+                        index: seq
+                    });
+                }
+                val = BufferIO.ReadInt8();
+                for (seq = 0; seq < val; ++seq) {
+                    data.cards.push({
+                        player: p,
+                        location: 0x40,
+                        index: seq
+                    });
+                }
+                data.extra_p_count = BufferIO.ReadInt8();
+                val = BufferIO.ReadInt8(); // chains
+                data.chains = [];
+                for (i = 0; i < val; ++i) {
+                    data.chains.push({
+                        code: BufferIO.ReadInt32(),
+                        pcc: localPlayer(BufferIO.ReadInt8()),
+                        pcl: BufferIO.ReadInt8(),
+                        pcs: BufferIO.ReadInt8(),
+                        subs: BufferIO.ReadInt8(),
+                        cc: localPlayer(BufferIO.ReadInt8()),
+                        cl: BufferIO.ReadInt8(),
+                        cs: BufferIO.ReadInt8(),
+                        desc: BufferIO.ReadInt32()
+
+                    });
+                }
+            }
             break;
         default:
             //console.log('bad', command, packet, data);
