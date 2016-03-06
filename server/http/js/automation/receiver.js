@@ -220,6 +220,10 @@ function recieveSTOC(packet) {
             data.ct = BufferIO.ReadInt8(); // defunct in the code
             break;
 
+        case ('MSG_REFRESH_DECK'):
+            data.player = BufferIO.ReadInt8(); // defunct in the code
+            break;
+
         case ('MSG_CHAIN_END'):
             // remove any liggering chain parts with a graphical command
             break;
@@ -315,7 +319,16 @@ function recieveSTOC(packet) {
             data.s1 = BufferIO.ReadInt8();
             BufferIO.ReadInt8(); //padding wtf
             break;
-
+        case ('MSG_CARD_TARGET'):
+            data.c1 = BufferIO.ReadInt8();
+            data.l1 = BufferIO.ReadInt8();
+            data.s1 = BufferIO.ReadInt8();
+            BufferIO.ReadInt8(); //padding wtf
+            data.c2 = BufferIO.ReadInt8();
+            data.l2 = BufferIO.ReadInt8();
+            data.s2 = BufferIO.ReadInt8();
+            BufferIO.ReadInt8(); //padding wtf
+            break;
         case ('MSG_CANCEL_TARGET'):
             data.c1 = BufferIO.ReadInt8();
             data.l1 = BufferIO.ReadInt8();
