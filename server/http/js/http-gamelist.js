@@ -58,6 +58,10 @@ function isChecked(id) {
 function ygopro() {
     'use strict';
     if (!loggedIn) {
+        singlesitenav('home');
+        setTimeout(function () {
+            alert('You must login first!');
+        }, 1000)
         return;
     }
     if (localStorage.roompass) {
