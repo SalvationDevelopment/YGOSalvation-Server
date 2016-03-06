@@ -839,16 +839,22 @@ function recieveSTOC(packet) {
             data.count = BufferIO.ReadInt8();
             for (i = 0; i < data.count; ++i) {
                 data.cards[i] = {
-                    code: BufferIO.ReadInt32(), //defunct in the code
+                    code: BufferIO.ReadInt32(),
                     c: localPlayer(BufferIO.ReadInt8()),
                     l: BufferIO.ReadInt8(),
-                    s: BufferIO.ReadInt8(),
-                    t: BufferIO.ReadInt8()
+                    s: BufferIO.ReadInt8()
                 };
             }
             break;
         case ('MSG_CONFIRM_DECKTOP'):
-
+            data.player = localPlayer(BufferIO.ReadInt8());
+            data.count = BufferIO.ReadInt8();
+            for (i = 0; i < data.count; ++i) {
+                data.cards[i] = {
+                    code: BufferIO.ReadInt32()
+                };
+                BufferIO.readposition += 3;
+            }
             break;
         case ('MSG_CONFIRM_CARDS'):
             data.player = BufferIO.ReadInt8(); /* defunct in code */
