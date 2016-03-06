@@ -942,6 +942,14 @@ function recieveSTOC(packet) {
 
             break;
         case ('MSG_ANNOUNCE_NUMBER'):
+            data.player = localPlayer(BufferIO.ReadInt8()); //defunt
+            data.count = BufferIO.ReadInt8();
+            data.values = [];
+            for (i = 0; i < data.count; ++i) {
+                data.values.push({
+                    code: BufferIO.ReadInt32()
+                });
+            }
             break;
         case ('MSG_CARD_HINT'):
             break;
