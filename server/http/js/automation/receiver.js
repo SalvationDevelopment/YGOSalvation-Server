@@ -83,6 +83,33 @@ function localPlayer(player) {
     return duel.isFirst ? player : 1 - player;
 }
 
+
+function BanlistHashMap() {
+    'use strict';
+    var map = {},
+        banlist,
+        hash,
+        count,
+        code,
+        item;
+    for (banlist in window.lflist) {
+        if (window.lflist.hasOwnProperty(banlist)) {
+            hash = 0x7dfcee6a;
+            console.log(banlist);
+            for (item in window.lflist[banlist]) {
+                if (window.lflist[banlist].hasOwnProperty(item) && item.length) {
+                    count = parseInt(window.lflist[banlist][item], 10);
+                    code = parseInt(item, 10);
+                    console.log(code, window.lflist[banlist][item], count, hash);
+                    hash = parseInt(hash ^ ((code << 18) | (code >> 14)) ^ ((code << (27 + count)) | (code >> (5 - count))), 10);
+                }
+            }
+            map[hash] = banlist;
+        }
+    }
+    return map;
+}
+
 function recieveSTOC(packet) {
     // OK!!!! HARD PART!!!!
     // recieve.js should have create obejects with all the parameters as properites, then emit them.
@@ -1135,9 +1162,9 @@ function recieveSTOC(packet) {
         break;
 
     case ("STOC_JOIN_GAME"):
-        data.banlistHashTable = BanlistHashMap();
+        data.banlistHashTable = new BanlistHashMap();
         console.log(packet.message);
-        data.banlistHashCode = packet.message.readUInt16LE(0);
+        data.banlistHashCode = packet.message.readInt32LE(0);
         data.rule = packet.message[4];
         data.mode = packet.message[5];
         data.prio = packet.message[8];
@@ -1212,26 +1239,4 @@ function CommandParser() {
         output.emit(input.command, input);
     };
     return output;
-}
-
-function BanlistHashMap() {
-    'use strict';
-    var map = {},
-        banlist,
-        hash,
-        count,
-        code;
-    for (banlist in window.lflist) {
-        if (window.lflist.hasOwnProperty(banlist)) {
-            hash = 0x7dfcee6a;
-            for (code in window.lflist[banlist]) {
-                if (window.lflist[banlist].hasOwnProperty(code)) {
-                    count = window.lflist[banlist][code];
-                    hash = hash ^ ((code << 18) | (code >> 14)) ^ ((code << (27 + count)) | (code >> (5 - count)));
-                }
-            }
-            map[hash] = banlist;
-        }
-    }
-    return map;
 }
