@@ -108,7 +108,8 @@ function startgame(roompass) {
     window.ws = ws;
     window.onunload = window.ws.close;
     window.cleanstate();
-    initiateNetwork(network);
+    initiateNetwork.STOC(network);
+    initiateNetwork.MSG(network);
 
 }
 
