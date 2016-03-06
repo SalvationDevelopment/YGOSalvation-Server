@@ -96,7 +96,8 @@ function recieveSTOC(packet) {
         bitreader = 0,
         iter = 0,
         errorCode,
-        i = 0,
+        i = 0, //iterator
+        filter = 0, //special iterator for bitwise math
         BufferIO = new BufferStreamReader(packet.message);
 
     data.command = packet.STOC;
@@ -912,13 +913,20 @@ function recieveSTOC(packet) {
             //all graphical from what I can tell.
             break;
         case ('MSG_DECK_TOP'):
-            data.player = BufferIO.ReadInt8();
+            data.player = localPlayer(BufferIO.ReadInt8());
             data.seq = BufferIO.ReadInt8();
             data.code = BufferIO.ReadInt32();
             data.rev = ((data.code & 0x80000000) !== 0);
             break;
 
         case ('MSG_ANNOUNCE_ATTRIB'):
+            data.player = localPlayer(BufferIO.ReadInt8()); //defunt
+            data.announce_count = BufferIO.ReadInt8();
+            data.available = BufferIO.ReadInt32();
+            data.chkAttribute = [];
+            for (i = 0, filter = 0x1; i < 7; ++i, filter <<= 1) {
+                data.chkAttribute[i] = (filter & data.available) ? true : false
+            }
             break;
         case ('MSG_ANNOUNCE_CARD'):
             break;
