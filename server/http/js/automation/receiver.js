@@ -622,14 +622,33 @@ function recieveSTOC(packet) {
 
         case ('MSG_SELECT_YESNO'):
             data.selecting_player = BufferIO.ReadInt8(); //defuct in code
-            data.desc = BufferIO.ReadInt32
-
+            data.desc = BufferIO.ReadInt32();
             break;
         case ('MSG_SELECT_OPTION'):
-
+            data.selecting_player = BufferIO.ReadInt8(); //defuct in code
+            data.count = BufferIO.ReadInt8();
+            data.select_options = [];
+            for (i = 0; i < data.count; ++i) {
+                data.select_options.push(BufferIO.ReadInt32());
+            }
             break;
         case ('MSG_SELECT_CARD'):
-
+            data.selecting_player = BufferIO.ReadInt8(); //defunct in the code
+            data.select_cancelable = BufferIO.ReadInt8();
+            data.select_min = BufferIO.ReadInt8();
+            data.select_max = BufferIO.ReadInt8();
+            data.count = BufferIO.ReadInt8();
+            data.cards = []
+            for (i = 0; i < data.count; ++i) {
+                data.cards[i] = {
+                    code: BufferIO.ReadInt32(),
+                    c: BufferIO.ReadInt8(),
+                    l: BufferIO.ReadInt8(),
+                    s: BufferIO.ReadInt8(),
+                    ss: BufferIO.ReadInt8(),
+                    desc: BufferIO.ReadInt32()
+                };
+            }
             break;
         case ('MSG_SELECT_CHAIN'):
             data.selecting_player = BufferIO.ReadInt8(); //defunct in the code
