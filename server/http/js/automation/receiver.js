@@ -614,12 +614,12 @@ function recieveSTOC(packet) {
             break;
         case ('MSG_SELECT_EFFECTYN'):
             data.selecting_player = BufferIO.ReadInt8(); //defuct in code
-            data.code = BufferIO.ReadInt32
+            data.code = BufferIO.ReadInt32;
             data.c = localPlayer(BufferIO.ReadInt8());
             data.l = BufferIO.ReadInt8();
             data.s = BufferIO.ReadInt8();
-            BufferIO.ReadInt8() //blank read ahead; ??
-
+            BufferIO.ReadInt8(); //blank read ahead; ??
+            break;
         case ('MSG_SELECT_YESNO'):
             data.selecting_player = BufferIO.ReadInt8(); //defuct in code
             data.desc = BufferIO.ReadInt32();
@@ -638,7 +638,7 @@ function recieveSTOC(packet) {
             data.select_min = BufferIO.ReadInt8();
             data.select_max = BufferIO.ReadInt8();
             data.count = BufferIO.ReadInt8();
-            data.cards = []
+            data.cards = [];
             for (i = 0; i < data.count; ++i) {
                 data.cards[i] = {
                     code: BufferIO.ReadInt32(),
@@ -675,7 +675,7 @@ function recieveSTOC(packet) {
                     data.collectionOfCards[i].chain_code = data.collectionOfCards[i].code;
                     data.collectionOfCards[i].is_selectable = true;
 
-                    data.collectionOfCards[i].cmdFlag |= COMMAND_ACTIVATE;
+                    data.collectionOfCards[i].cmdFlag |= 0x0001; //COMMAND_ACTIVATE = 0x0001;
 
                 }
             }
@@ -746,7 +746,25 @@ function recieveSTOC(packet) {
 
             break;
         case ('MSG_SELECT_POSITION'):
-
+            data.player = BufferIO.ReadInt8(); // defunct in the code.
+            data.code = BufferIO.ReadInt32();
+            data.position = BufferIO.ReadInt8();
+            data.count = 0;
+            data.filter = 0x1;
+            data.startpos = 0;
+            while (data.filter !== 0x10) {
+                if (data.positions & data.filter) {
+                    data.count++;
+                }
+                data.filter <<= 1;
+            }
+            if (data.count === 4) {
+                data.startpos = 10;
+            } else if (data.count === 30) {
+                data.startpos = 82;
+            } else {
+                data.startpos = 155;
+            }
             break;
         case ('MSG_SELECT_TRIBUTE'):
 
