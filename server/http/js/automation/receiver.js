@@ -402,7 +402,7 @@ function recieveSTOC(packet) {
             data.player = BufferIO.ReadInt8(); //defunt in the code
             data.count = BufferIO.ReadInt8();
             data.res = [];
-            for (int i = 0; i < count; ++i) {
+            for (i = 0; i < data.count; ++i) {
                 data.res.push(BufferIO.ReadInt8());
             }
             break;
@@ -410,7 +410,7 @@ function recieveSTOC(packet) {
             data.player = BufferIO.ReadInt8(); //defunt in the code
             data.count = BufferIO.ReadInt8();
             data.res = [];
-            for (int i = 0; i < count; ++i) {
+            for (i = 0; i < data.count; ++i) {
                 data.res.push(BufferIO.ReadInt8());
             }
             break;
@@ -918,6 +918,20 @@ function recieveSTOC(packet) {
             data.rev = ((data.code & 0x80000000) !== 0);
             break;
 
+        case ('MSG_ANNOUNCE_ATTRIB'):
+            break;
+        case ('MSG_ANNOUNCE_CARD'):
+            break;
+        case ('MSG_ANNOUNCE_NUMBER'):
+            break;
+        case ('MSG_CARD_HINT'):
+            break;
+        case ('MSG_MATCH_KILL'):
+            break;
+        case ('MSG_TAG_SWAP'):
+            break;
+        case ('MSG_RELOAD_FIELD'):
+            break;
         default:
             //console.log('bad', command, packet, data);
             break;
