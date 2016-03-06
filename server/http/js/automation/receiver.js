@@ -965,6 +965,11 @@ function recieveSTOC(packet) {
             break;
         case ('MSG_TAG_SWAP'):
             data.player = localPlayer(BufferIO.ReadInt8());
+            data.mcount = BufferIO.ReadInt8();
+            data.ecount = BufferIO.ReadInt8();
+            data.pcount = BufferIO.ReadInt8();
+            data.hcount = BufferIO.ReadInt8();
+            data.topcode = BufferIO.ReadInt32();
             break;
         case ('MSG_RELOAD_FIELD'):
             break;
