@@ -3,6 +3,8 @@
 // buffer.js
 // card.js
 
+
+/* READ THE FOLLOWING : https://github.com/SalvationDevelopment/YGOPro-Salvation-Server/issues/274 */
 function Framemaker() {
     "use strict";
     var memory = new Buffer([]);
@@ -385,6 +387,18 @@ function recieveSTOC(packet) {
             break;
         case ('MSG_TOSS_COIN'):
             //ugh....new BufferIO stuff. Does it take all this to flip a coin?
+            break;
+        case ('MSG_SHUFFLE_SET_CARD'):
+            data.mc = [];
+            data.count = BufferIO.ReadInt8();
+            for (i = 0; i < data.count; ++i) {
+                data.summonable_cards.push({
+                    c: localPlayer(BufferIO.ReadInt8()),
+                    l: BufferIO.ReadInt8(),
+                    s: BufferIO.ReadInt8()
+                });
+                BufferIO.ReadInt8();
+            }
             break;
         case ('MSG_SELECT_IDLECMD'):
             data.command = 'MSG_SELECT_IDLECMD';
