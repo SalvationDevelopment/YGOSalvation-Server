@@ -952,10 +952,19 @@ function recieveSTOC(packet) {
             }
             break;
         case ('MSG_CARD_HINT'):
+            data.c = localPlayer(BufferIO.ReadInt8());
+            data.l = BufferIO.ReadInt8();
+            data.s = BufferIO.ReadInt8();
+            BufferIO.ReadInt8(); //padding
+            data.chtype = BufferIO.ReadInt8();
+            data.value = localPlayer(BufferIO.ReadInt32());
+
             break;
         case ('MSG_MATCH_KILL'):
+            data.match_kill = BufferIO.ReadInt32();
             break;
         case ('MSG_TAG_SWAP'):
+            data.player = localPlayer(BufferIO.ReadInt8());
             break;
         case ('MSG_RELOAD_FIELD'):
             break;
