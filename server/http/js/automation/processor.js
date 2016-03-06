@@ -427,6 +427,6 @@ function initiateNetwork_MSG(network) {
 var gametick = setInterval(gui.updateloby, 1000);
 
 var initiateNetwork = {
-    initiateNetwork_STOC: initiateNetwork_STOC,
-    initiateNetwork_MSG: initiateNetwork_MSG
+    STOC: initiateNetwork_STOC,
+    MSG: initiateNetwork_MSG
 }
