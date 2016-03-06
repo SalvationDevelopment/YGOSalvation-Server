@@ -1,5 +1,5 @@
 /*jslint plusplus : true*/
-/*global console, gui, $*/
+/*global console, gui, sound, makeCTOS ,$*/
 
 var duel = {};
 
@@ -106,6 +106,7 @@ function initiateNetwork_STOC(network) {
         duel.timelimit = data.timelimit;
         //fire handbars to render the view.
         gui.gotoLobby();
+
     });
     network.on('STOC_TYPE_CHANGE', function (data) {
         //remember who is the host, use this data to rotate the field properly.
@@ -135,6 +136,7 @@ function initiateNetwork_STOC(network) {
         for (i = 0; 3 > i; i++) {
             if (!duel.player[i].name) {
                 duel.player[i].name = data.person;
+                sound.play('soundenterroom');
                 return;
             }
         }
@@ -161,6 +163,7 @@ function initiateNetwork_STOC(network) {
             console.log('???');
         } else if (stateText === 'PLAYERCHANGE_READY') {
             duel.player[pos].ready = true;
+            sound.play('soundshuffle');
         } else if (stateText === 'PLAYERCHANGE_NOTREADY') {
             duel.player[pos].ready = false;
         } else if (stateText === 'PLAYERCHANGE_LEAVE') {

@@ -257,6 +257,7 @@ function getLocation(item) {
     };
     gui.hideWaiting = function () {
         $('#waiting').css('display', 'none');
+        $('#actions button').css('display', 'none');
     };
     gui.displayRPSSelector = function () {
         $('#rpschoice').css('display', 'block');
