@@ -918,17 +918,28 @@ function recieveSTOC(packet) {
             data.code = BufferIO.ReadInt32();
             data.rev = ((data.code & 0x80000000) !== 0);
             break;
-
+        case ('MSG_ANNOUNCE_RACE'):
+            data.player = localPlayer(BufferIO.ReadInt8()); //defunt
+            data.announce_count = BufferIO.ReadInt8();
+            data.available = BufferIO.ReadInt32();
+            data.chkAttribute = [];
+            for (i = 0, filter = 0x1; i < 24; ++i, filter <<= 1) {
+                data.chkAttribute[i] = (filter & data.available) ? true : false;
+            }
+            break;
         case ('MSG_ANNOUNCE_ATTRIB'):
             data.player = localPlayer(BufferIO.ReadInt8()); //defunt
             data.announce_count = BufferIO.ReadInt8();
             data.available = BufferIO.ReadInt32();
             data.chkAttribute = [];
             for (i = 0, filter = 0x1; i < 7; ++i, filter <<= 1) {
-                data.chkAttribute[i] = (filter & data.available) ? true : false
+                data.chkAttribute[i] = (filter & data.available) ? true : false;
             }
             break;
         case ('MSG_ANNOUNCE_CARD'):
+            data.player = localPlayer(BufferIO.ReadInt8()); //defunt
+            data.declarable_type = BufferIO.ReadInt32();
+
             break;
         case ('MSG_ANNOUNCE_NUMBER'):
             break;
