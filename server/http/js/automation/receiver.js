@@ -788,9 +788,50 @@ function recieveSTOC(packet) {
 
             break;
         case ('MSG_SELECT_COUNTER'):
+            data.selecting_player = BufferIO.ReadInt8(); //defunct in the code
+            data.select_counter_type = BufferIO.ReadInt16();
+            data.select_counter_count = BufferIO.ReadInt8();
+            data.count = BufferIO.ReadInt8();
+            data.selectable_cards = [];
+            for (i = 0; i < data.count; ++i) {
+                data.selectable_cards[i] = {
+                    code: BufferIO.ReadInt32(), //defunct in the code
+                    c: localPlayer(BufferIO.ReadInt8()),
+                    l: BufferIO.ReadInt8(),
+                    s: BufferIO.ReadInt8(),
+                    t: BufferIO.ReadInt8()
+                };
+            }
 
             break;
         case ('MSG_SELECT_SUM'):
+            data.select_mode = BufferIO.ReadInt8();
+            int selecting_player = BufferIO.ReadInt8();
+            data.select_sumval = BufferIO.ReadInt32();
+            data.select_min = BufferIO.ReadInt8();
+            data.select_max = BufferIO.ReadInt8();
+            data.must_select_count = BufferIO.ReadInt8();
+            data.panelmode = false;
+            data.cards = [];
+            for (i = 0; i < data.must_select_count; ++i) {
+                data.cards[i] = {
+                    code: BufferIO.ReadInt32(), //defunct in the code
+                    c: localPlayer(BufferIO.ReadInt8()),
+                    l: BufferIO.ReadInt8(),
+                    s: BufferIO.ReadInt8(),
+                    t: BufferIO.ReadInt8()
+                };
+            }
+            data.count = BufferIO.ReadInt8();
+            for (i = 0; i < data.count; ++i) {
+                data.cards[i] = {
+                    code: BufferIO.ReadInt32(), //defunct in the code
+                    c: localPlayer(BufferIO.ReadInt8()),
+                    l: BufferIO.ReadInt8(),
+                    s: BufferIO.ReadInt8(),
+                    t: BufferIO.ReadInt8()
+                };
+            }
 
             break;
         case ('MSG_SELECT_DISFIELD'):
