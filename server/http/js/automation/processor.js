@@ -180,7 +180,16 @@ function initiateNetwork_STOC(network) {
 
 function initiateNetwork_MSG(network) {
     'use strict';
+    network.on('MSG_RETRY', function (data) {
+        //???
+    });
+    network.on('MSG_HINT', function (data) {
+        //???
+    });
 
+    network.on('MSG_WIN', function (data) {
+        //???
+    });
     network.on('MSG_START', function (data) {
         //set the LP.
         duel.isFirst = data.isFirst;
@@ -195,8 +204,21 @@ function initiateNetwork_MSG(network) {
         gui.hideRPSSelector();
 
     });
-    network.on('MSG_WIN', function (data) {
-        //???
+    network.on('MSG_WAITING', function (data) {
+        gui.displayWaiting();
+    });
+    network.on('MSG_UPDATE_DATA', function (data) {
+        gui.UpdateData(data.player, data.fieldlocation, data.cards);
+        //ygopro-core sent information about the state of a collection of related cards.
+        //field[data.player][data.fieldmodel] = ???;
+        //reimage field;
+    });
+
+    network.on('MSG_UPDATE_CARD', function (data) {
+        //ygopro-core sent information about the state of one specific card.
+        gui.UpdateCard(data.player, data.fieldlocation, data.index, data.card);
+        //field[data.player][data.fieldmodel][data.index] = data.card;
+        //redraw field;
     });
     network.on('MSG_SELECT_BATTLECMD', function (data) {
         //???
@@ -222,8 +244,10 @@ function initiateNetwork_MSG(network) {
     network.on('MSG_SELECT_TRIBUTE', function (data) {
         //???
     });
-    network.on('', function (data) {
-        //???
+    network.on('MSG_MOVE', function (data) {
+        //use animation system in gui.js
+        gui.MoveCard(data.code, data.pc, data.pl, data.ps, data.pp, data.cc, data.cl, data.cs, data.cp);
+
     });
     network.on('', function (data) {
         //???
@@ -303,9 +327,10 @@ function initiateNetwork_MSG(network) {
     network.on('', function (data) {
         //???
     });
-    network.on('MSG_WAITING', function (data) {
-        gui.displayWaiting();
+    network.on('', function (data) {
+        //???
     });
+
 
     network.on('MSG_NEW_TURN', function (data) {
         //new turn, 
@@ -316,23 +341,7 @@ function initiateNetwork_MSG(network) {
     network.on('MSG_RELOAD_FIELD', function (data) {
         gui.ClearField();
     });
-    network.on('MSG_UPDATE_DATA', function (data) {
-        gui.UpdateData(data.player, data.fieldlocation, data.cards);
-        //ygopro-core sent information about the state of a collection of related cards.
-        //field[data.player][data.fieldmodel] = ???;
-        //reimage field;
-    });
-    network.on('MSG_MOVE', function (data) {
-        //use animation system in gui.js
-        gui.MoveCard(data.code, data.pc, data.pl, data.ps, data.pp, data.cc, data.cl, data.cs, data.cp);
 
-    });
-    network.on('MSG_UPDATE_CARD', function (data) {
-        //ygopro-core sent information about the state of one specific card.
-        gui.UpdateCard(data.player, data.fieldlocation, data.index, data.card);
-        //field[data.player][data.fieldmodel][data.index] = data.card;
-        //redraw field;
-    });
     network.on('MSG_CHAIN_END', function (data) {
         //???
     });
@@ -394,7 +403,6 @@ function initiateNetwork_MSG(network) {
         window.idlecmd = data;
         window.idlelookup = [];
         for (list in data) {
-            console.log(list);
             if (data.hasOwnProperty(list) && data[list] instanceof Array) {
                 console.log('ok', data[list].length);
                 for (i = 0; data[list].length > i; i++) {
@@ -432,4 +440,4 @@ var gametick = setInterval(gui.updateloby, 1000);
 var initiateNetwork = {
     STOC: initiateNetwork_STOC,
     MSG: initiateNetwork_MSG
-}
+};
