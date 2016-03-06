@@ -1135,6 +1135,7 @@ function recieveSTOC(packet) {
         break;
 
     case ("STOC_JOIN_GAME"):
+        data.banlistHashTable = BanlistHashMap();
         console.log(packet.message);
         data.banlistHashCode = packet.message.readUInt16LE(0);
         data.rule = packet.message[4];
@@ -1147,6 +1148,7 @@ function recieveSTOC(packet) {
         data.drawcount = packet.message[17];
         data.timelimit = packet.message.readUInt16LE(18);
         data.message = packet.message;
+        data.banlist = data.banlistHashTable[data.banlistHashCode];
         break;
     case ("STOC_TYPE_CHANGE"):
         data.typec = packet.message[0];
@@ -1210,4 +1212,26 @@ function CommandParser() {
         output.emit(input.command, input);
     };
     return output;
+}
+
+function BanlistHashMap() {
+    'use strict';
+    var map = {},
+        banlist,
+        hash,
+        count,
+        code;
+    for (banlist in window.lflist) {
+        if (window.lflist.hasOwnProperty(banlist)) {
+            hash = 0x7dfcee6a;
+            for (code in window.lflist[banlist]) {
+                if (window.lflist[banlist].hasOwnProperty(code)) {
+                    count = window.lflist[banlist][code];
+                    hash = hash ^ ((code << 18) | (code >> 14)) ^ ((code << (27 + count)) | (code >> (5 - count)));
+                }
+            }
+            map[hash] = banlist;
+        }
+    }
+    return map;
 }
