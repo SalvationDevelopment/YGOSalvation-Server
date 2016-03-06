@@ -399,7 +399,20 @@ function recieveSTOC(packet) {
             data.code = BufferIO.ReadInt32();
             break;
         case ('MSG_TOSS_COIN'):
-            //ugh....new BufferIO stuff. Does it take all this to flip a coin?
+            data.player = BufferIO.ReadInt8(); //defunt in the code
+            data.count = BufferIO.ReadInt8();
+            data.res = [];
+            for (int i = 0; i < count; ++i) {
+                data.res.push(BufferIO.ReadInt8());
+            }
+            break;
+        case ('MSG_TOSS_DICE'):
+            data.player = BufferIO.ReadInt8(); //defunt in the code
+            data.count = BufferIO.ReadInt8();
+            data.res = [];
+            for (int i = 0; i < count; ++i) {
+                data.res.push(BufferIO.ReadInt8());
+            }
             break;
         case ('MSG_SHUFFLE_SET_CARD'):
             data.mc = [];
