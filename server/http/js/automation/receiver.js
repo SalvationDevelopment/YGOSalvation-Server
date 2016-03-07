@@ -200,7 +200,9 @@ function recieveSTOC(packet) {
             break;
 
         case ('MSG_WIN'):
-            data.win = BufferIO.ReadInt8();
+            data.player = BufferIO.ReadInt8();
+            data.type = BufferIO.ReadInt8();
+            data.won = (localPlayer(data.player) === 0) ? true : false;
             //need to double check for more variables
             break;
 

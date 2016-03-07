@@ -191,6 +191,11 @@ function initiateNetwork_MSG(network) {
 
     network.on('MSG_WIN', function (data) {
         //???
+        if (data.won) {
+            alert('You won!')
+        } else {
+            alert('You lost');
+        }
     });
     network.on('MSG_START', function (data) {
         //set the LP.
@@ -223,7 +228,33 @@ function initiateNetwork_MSG(network) {
         //redraw field;
     });
     network.on('MSG_SELECT_BATTLECMD', function (data) {
-        //???
+        var list,
+            i;
+        window.actionables = {};
+        window.idlecmd = data;
+        window.idlelookup = [];
+        for (list in data) {
+            if (data.hasOwnProperty(list) && data[list] instanceof Array) {
+                console.log('ok', data[list].length);
+                for (i = 0; data[list].length > i; i++) {
+                    console.log(data[list][i].code, list);
+                    if (!window.actionables[data[list][i].code]) {
+                        window.actionables[data[list][i].code] = [];
+                    }
+                    window.idlecmd[list][i].index = i;
+                    window.actionables[data[list][i].code].push({
+                        list: list,
+                        index: i
+                    });
+                }
+            }
+        }
+        if (!data.ep) {
+            $('#endphi').addClass('avaliable');
+        }
+        if (data.bp) {
+            $('#battlephi').addClass('avaliable');
+        }
     });
     network.on('MSG_SELECT_IDLECMD', function (data) {
         var list,
@@ -311,7 +342,7 @@ function initiateNetwork_MSG(network) {
         //???
     });
     network.on('MSG_SHUFFLE_DECK', function (data) {
-        //???
+        gui.ShuffleDeck(data.player);
     });
     network.on('MSG_SHUFFLE_HAND', function (data) {
         //???
@@ -320,7 +351,7 @@ function initiateNetwork_MSG(network) {
         //???
     });
     network.on('MSG_SWAP_GRAVE_DECK', function (data) {
-        //???
+        gui.SwapGraveDeck();
     });
     network.on('MSG_REVERSE_DECK', function (data) {
         //???
