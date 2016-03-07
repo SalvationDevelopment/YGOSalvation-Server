@@ -2226,3 +2226,18 @@ select#aidecks {
     width: 29%;
     margin-left: 1%;
 }
+
+div#modal {
+    height: 32vh;
+    width: 50vw;
+    background: black;
+    position: fixed;
+    top: 30vh;
+    left: 25vw;
+    z-index: 90;
+    box-shadow: 0 0 17px 7px #000;
+    color: white;
+    text-align: center;
+    padding: 2vh 5vw;
+    display: none;
+}

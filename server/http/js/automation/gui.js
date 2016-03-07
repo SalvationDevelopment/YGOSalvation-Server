@@ -531,7 +531,12 @@ function getLocation(item) {
         //Select a card from all known cards.
         console.log('AnnounceCard');
     };
-
+    gui.SwapGraveDeck = function () {
+        $('.DECK').addClass('alpha').removeClass('DECK');
+        $('.GRAVE').addClass('beta').removeClass('GRAVE');
+        $('.alpha').addClass('GRAVE').removeClass('alpha');
+        $('.beta').addClass('DECK').removeClass('beta');
+    }
     gui.OnChaining = function (cards, desc, forced) {
         var cardIDs = JSON.parse(cards),
             i;
@@ -591,6 +596,7 @@ function getLocation(item) {
             cardmargin(player, deck);
         }, 50);
     }
+    gui.shuffle = shuffle;
 
     function complete(player, deck) {
         var started = Date.now(),
