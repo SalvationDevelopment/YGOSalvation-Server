@@ -223,179 +223,6 @@ function initiateNetwork_MSG(network) {
     network.on('MSG_SELECT_BATTLECMD', function (data) {
         //???
     });
-    network.on('MSG_SELECT_EFFECTYN', function (data) {
-        //???
-    });
-    network.on('MSG_SELECT_YESNO', function (data) {
-        //???
-    });
-    network.on('MSG_SELECT_OPTION', function (data) {
-        //???
-    });
-    network.on('MSG_SELECT_CARD', function (data) {
-        //???
-    });
-    network.on('MSG_SELECT_CHAIN', function (data) {
-        //???
-    });
-    network.on('MSG_SELECT_POSITION', function (data) {
-        //???
-    });
-    network.on('MSG_SELECT_TRIBUTE', function (data) {
-        //???
-    });
-    network.on('MSG_MOVE', function (data) {
-        //use animation system in gui.js
-        gui.MoveCard(data.code, data.pc, data.pl, data.ps, data.pp, data.cc, data.cl, data.cs, data.cp);
-
-    });
-    network.on('', function (data) {
-        //???
-    });
-    network.on('', function (data) {
-        //???
-    });
-    network.on('', function (data) {
-        //???
-    });
-    network.on('', function (data) {
-        //???
-    });
-    network.on('', function (data) {
-        //???
-    });
-    network.on('', function (data) {
-        //???
-    });
-    network.on('', function (data) {
-        //???
-    });
-    network.on('', function (data) {
-        //???
-    });
-    network.on('', function (data) {
-        //???
-    });
-    network.on('', function (data) {
-        //???
-    });
-    network.on('', function (data) {
-        //???
-    });
-    network.on('', function (data) {
-        //???
-    });
-    network.on('', function (data) {
-        //???
-    });
-    network.on('', function (data) {
-        //???
-    });
-    network.on('', function (data) {
-        //???
-    });
-    network.on('', function (data) {
-        //???
-    });
-    network.on('', function (data) {
-        //???
-    });
-    network.on('', function (data) {
-        //???
-    });
-    network.on('', function (data) {
-        //???
-    });
-    network.on('', function (data) {
-        //???
-    });
-    network.on('', function (data) {
-        //???
-    });
-    network.on('', function (data) {
-        //???
-    });
-    network.on('', function (data) {
-        //???
-    });
-    network.on('', function (data) {
-        //???
-    });
-    network.on('', function (data) {
-        //???
-    });
-    network.on('', function (data) {
-        //???
-    });
-    network.on('', function (data) {
-        //???
-    });
-
-
-    network.on('MSG_NEW_TURN', function (data) {
-        //new turn, 
-        duel.turn++;
-        duel.turnOfPlayer = data.player;
-        //refresh field
-    });
-    network.on('MSG_RELOAD_FIELD', function (data) {
-        gui.ClearField();
-    });
-
-    network.on('MSG_CHAIN_END', function (data) {
-        //???
-    });
-    network.on('MSG_SUMMONING', function (data) {
-        //attempting to summon animation
-        //data.code give the id of the card
-    });
-    network.on('MSG_SUMMONED', function (data) {
-        //???
-    });
-    network.on('MSG_CHAINING', function (data) {
-        //gives a card location and card
-    });
-    network.on('MSG_CHAINED', function (data) {
-        //???
-    });
-    network.on('', function (data) {
-        //???
-    });
-    network.on('MSG_POS_CHANGE', function (data) {
-        //??? might be extention of move command?
-    });
-    network.on('MSG_SHUFFLE_DECK', function (data) {
-        //use gui to shuffle deck of data.player
-    });
-    network.on('MSG_CHAIN_SOLVED', function (data) {
-        //???
-    });
-    network.on('MSG_NEW_PHASE', function (data) {
-        duel.phase = data.phase;
-        $('[data-currentphase]').attr('data-currentphase', data.phase);
-        $('#phaseindicator button').removeClass('avaliable');
-        window.actionables = {};
-    });
-    network.on('MSG_DRAW', function (data) {
-        var i = 0;
-        gui.DrawCard(data.player, data.count, data.cardslist);
-
-        //due draw animation/update
-    });
-    network.on('MSG_SPSUMMONING', function (data) {
-        //special summoning animation with data
-    });
-    network.on('MSG_SPSUMMONED', function (data) {
-        //???
-    });
-    network.on('ERRMSG_DECKERROR', function (data) {
-        //something is wrong with the deck you asked the server to validate!
-        window.alert(data.error);
-        //gui.displayRPSSelector();
-    });
-
-
-
     network.on('MSG_SELECT_IDLECMD', function (data) {
         var list,
             i;
@@ -425,6 +252,21 @@ function initiateNetwork_MSG(network) {
             $('#battlephi').addClass('avaliable');
         }
     });
+    network.on('MSG_SELECT_EFFECTYN', function (data) {
+        //???
+    });
+    network.on('MSG_SELECT_YESNO', function (data) {
+        //???
+    });
+    network.on('MSG_SELECT_OPTION', function (data) {
+        //???
+    });
+    network.on('MSG_SELECT_CARD', function (data) {
+        //???
+    });
+    network.on('MSG_SELECT_CHAIN', function (data) {
+        //???
+    });
     network.on('MSG_SELECT_PLACE', function (data) {
         var servermessage;
         if (data.respbuf) { //replace with if auto_placement = on;
@@ -433,6 +275,242 @@ function initiateNetwork_MSG(network) {
 
         window.ws.send(servermessage);
     });
+    network.on('MSG_SELECT_DISFIELD', function (data) {
+        var servermessage;
+        if (data.respbuf) { //replace with if auto_placement = on;
+            servermessage = makeCTOS('CTOS_RESPONSE', data.respbuf);
+        } // else show field selector;
+
+        window.ws.send(servermessage);
+    });
+    network.on('MSG_SELECT_POSITION', function (data) {
+        //???
+    });
+    network.on('MSG_SELECT_TRIBUTE', function (data) {
+        //???
+    });
+
+    network.on('MSG_SELECT_COUNTER', function (data) {
+        //???
+    });
+    network.on('MSG_SELECT_SUM', function (data) {
+        //???
+    });
+    network.on('MSG_SORT_CARD', function (data) {
+        //???
+    });
+    network.on('MSG_SORT_CHAIN', function (data) {
+        //???
+    });
+    network.on('MSG_CONFIRM_DECKTOP', function (data) {
+        //???
+    });
+    network.on('MSG_CONFIRM_CARDS', function (data) {
+        //???
+    });
+    network.on('MSG_SHUFFLE_DECK', function (data) {
+        //???
+    });
+    network.on('MSG_SHUFFLE_HAND', function (data) {
+        //???
+    });
+    network.on('MSG_REFRESH_DECK', function (data) {
+        //???
+    });
+    network.on('MSG_SWAP_GRAVE_DECK', function (data) {
+        //???
+    });
+    network.on('MSG_REVERSE_DECK', function (data) {
+        //???
+    });
+    network.on('MSG_DECK_TOP', function (data) {
+        //???
+    });
+    network.on('MSG_SHUFFLE_SET_CARD', function (data) {
+        //???
+    });
+    network.on('MSG_NEW_TURN', function (data) {
+        //new turn, 
+        duel.turn++;
+        duel.turnOfPlayer = data.player;
+        //refresh field
+    });
+    network.on('MSG_NEW_PHASE', function (data) {
+        duel.phase = data.phase;
+        $('[data-currentphase]').attr('data-currentphase', data.phase);
+        $('#phaseindicator button').removeClass('avaliable');
+        window.actionables = {};
+    });
+    network.on('MSG_MOVE', function (data) {
+        //use animation system in gui.js
+        gui.MoveCard(data.code, data.pc, data.pl, data.ps, data.pp, data.cc, data.cl, data.cs, data.cp);
+
+    });
+    network.on('MSG_POS_CHANGE', function (data) {
+        //??? might be extention of move command?
+    });
+    network.on('MSG_SET', function (data) {
+        //???
+    });
+    network.on('MSG_SWAP', function (data) {
+        //???
+    });
+    network.on('MSG_FIELD_DISABLED', function (data) {
+        //???
+    });
+    network.on('MSG_SUMMONING', function (data) {
+        //attempting to summon animation
+        //data.code give the id of the card
+    });
+    network.on('MSG_SUMMONED', function (data) {
+        //???
+    });
+    network.on('MSG_SPSUMMONING', function (data) {
+        //special summoning animation with data
+    });
+    network.on('MSG_SPSUMMONED', function (data) {
+        //???
+    });
+    network.on('MSG_FLIPSUMMONING', function (data) {
+        //???
+    });
+    network.on('MSG_FLIPSUMMONED', function (data) {
+        //???
+    });
+    network.on('MSG_CHAINING', function (data) {
+        //gives a card location and card
+    });
+    network.on('MSG_CHAINED', function (data) {
+        //???
+    });
+    network.on('MSG_CHAIN_SOLVING', function (data) {
+        //???
+    });
+    network.on('MSG_CHAIN_SOLVED', function (data) {
+        //???
+    });
+
+    network.on('MSG_CHAIN_END', function (data) {
+        //???
+    });
+    network.on('MSG_CHAIN_NEGATED', function (data) {
+        //???
+    });
+    network.on('MSG_CHAIN_DISABLED', function (data) {
+        //???
+    });
+    network.on('MSG_CARD_SELECTED', function (data) {
+        //???
+    });
+    network.on('MSG_RANDOM_SELECTED', function (data) {
+        //???
+    });
+    network.on('MSG_BECOME_TARGET', function (data) {
+        //???
+    });
+    network.on('MSG_DRAW', function (data) {
+        var i = 0;
+        gui.DrawCard(data.player, data.count, data.cardslist);
+
+        //due draw animation/update
+    });
+    network.on('MSG_DAMAGE', function (data) {
+        //???
+    });
+    network.on('MSG_RECOVER', function (data) {
+        //???
+    });
+    network.on('MSG_EQUIP', function (data) {
+        //???
+    });
+    network.on('MSG_LPUPDATE', function (data) {
+        //???
+    });
+    network.on('MSG_UNEQUIP', function (data) {
+        //???
+    });
+    network.on('MSG_CARD_TARGET', function (data) {
+        //???
+    });
+    network.on('MSG_CANCEL_TARGET', function (data) {
+        //???
+    });
+    network.on('MSG_PAY_LPCOST', function (data) {
+        //???
+    });
+    network.on('MSG_ADD_COUNTER', function (data) {
+        //???
+    });
+    network.on('MSG_REMOVE_COUNTER', function (data) {
+        //???
+    });
+    network.on('MSG_ATTACK', function (data) {
+        //???
+    });
+    network.on('MSG_BATTLE', function (data) {
+        //???
+    });
+    network.on('MSG_ATTACK_DISABLED', function (data) {
+        //???
+    });
+    network.on('MSG_DAMAGE_STEP_START', function (data) {
+        //???
+    });
+    network.on('MSG_DAMAGE_STEP_END', function (data) {
+        //???
+    });
+    network.on('MSG_MISSED_EFFECT', function (data) {
+        //???
+    });
+    network.on('', function (data) {
+        //???
+    });
+    network.on('', function (data) {
+        //???
+    });
+    network.on('', function (data) {
+        //???
+    });
+    network.on('', function (data) {
+        //???
+    });
+    network.on('', function (data) {
+        //???
+    });
+    network.on('', function (data) {
+        //???
+    });
+    network.on('', function (data) {
+        //???
+    });
+    network.on('', function (data) {
+        //???
+    });
+    network.on('', function (data) {
+        //???
+    });
+    network.on('MSG_RELOAD_FIELD', function (data) {
+        gui.ClearField();
+    });
+
+
+
+
+
+
+
+
+    network.on('ERRMSG_DECKERROR', function (data) {
+        //something is wrong with the deck you asked the server to validate!
+        window.alert(data.error);
+        //gui.displayRPSSelector();
+    });
+
+
+
+
+
+
 }
 
 var gametick = setInterval(gui.updateloby, 1000);
