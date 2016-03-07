@@ -182,6 +182,8 @@ function initiateNetwork_MSG(network) {
     'use strict';
     network.on('MSG_RETRY', function (data) {
         //???
+        window.alert('An Error Occured');
+        console.log('An error occured, no shit...');
     });
     network.on('MSG_HINT', function (data) {
         //???
@@ -462,31 +464,31 @@ function initiateNetwork_MSG(network) {
     network.on('MSG_MISSED_EFFECT', function (data) {
         //???
     });
-    network.on('', function (data) {
+    network.on('MSG_TOSS_COIN', function (data) {
         //???
     });
-    network.on('', function (data) {
+    network.on('MSG_TOSS_DICE', function (data) {
         //???
     });
-    network.on('', function (data) {
+    network.on('MSG_ANNOUNCE_RACE', function (data) {
         //???
     });
-    network.on('', function (data) {
+    network.on('MSG_ANNOUNCE_ATTRIB', function (data) {
         //???
     });
-    network.on('', function (data) {
+    network.on('MSG_ANNOUNCE_CARD', function (data) {
         //???
     });
-    network.on('', function (data) {
+    network.on('MSG_ANNOUNCE_NUMBER', function (data) {
         //???
     });
-    network.on('', function (data) {
+    network.on('MSG_CARD_HINT', function (data) {
         //???
     });
-    network.on('', function (data) {
+    network.on('MSG_MATCH_KILL', function (data) {
         //???
     });
-    network.on('', function (data) {
+    network.on('MSG_TAG_SWAP', function (data) {
         //???
     });
     network.on('MSG_RELOAD_FIELD', function (data) {
