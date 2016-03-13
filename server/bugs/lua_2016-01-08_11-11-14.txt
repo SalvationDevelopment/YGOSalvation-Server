@@ -1,1 +1,0 @@
-[string "./script/c21454943.lua"]:28: attempt to index local 'd' (a nil value)
