@@ -22,11 +22,12 @@ If you are looking for a system to use just for dueling with custom cards server
 Install [Node JS](https://nodejs.org/en/) this will also install `node` and `npm` to your commandline, download or clone the program from this repository. Navigate to that folder in `cmd` or `terminal`. Run the following commands:
 
 * `npm install -g istanbul` installs the code coverage check system.
-* `npm install -g mocha`  installs the test harnss.
-
+* `npm install -g mocha`  installs the test harness.
 * A local private IRC server is also recommended.
 
-This will setup a run enviroment  you a test harnesses. Next download and install [YGOCore](https://github.com/SalvationDevelopment/YGOCore) follow its readme instuctions carefully to compile. Place the executable and its dependencies in `server/ygocore`. Place a copy of `ygopro` in `server/http/ygopro`. Make sure the config files in the `ygocore` directory are pointing to the correct locations. Refer to the YGOCore documentation. Congrats you know have a fully functional server you are not allowed to use except for development reasons, please refer to the license. Open `client\interface\js\configuration.js` set `mode` to `development`, the launcher will now connect to this new server.
+This will setup a run enviroment  you a test harnesses.
+
+To run the system use `node server`. This will create a version of the system on your desktop at http://localhost.
 
 ## Licensing
 **Do not use our software without our permission.** It is ment for use at http://ygopro.us if you want to use this software for something please leave open an issue explaining your intended use and we will write you a custom licence.
