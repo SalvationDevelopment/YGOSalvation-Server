@@ -26,14 +26,14 @@ var fs = require('fs'),
         ProductionSITE: 'ygopro.us'
     };
 
-var dependencies = require('../package.json').dependencies,
+var dependencies = require('./package.json').dependencies,
     modules,
     safe = true,
     moduleIsAvaliable = true;
 if (os.platform() === 'win32') {
     for (modules in dependencies) {
         if (dependencies.hasOwnProperty(modules)) {
-            moduleIsAvaliable = fs.existsSync('../node_modules/' + modules);
+            moduleIsAvaliable = fs.existsSync('./node_modules/' + modules);
             if (!moduleIsAvaliable) {
                 safe = false;
                 console.log('Missing module', modules);
