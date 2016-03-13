@@ -1,15 +1,15 @@
-[submodule "server/ygocore/source"]
-	path = server/ygocore/source
+[submodule "ygocore/source"]
+	path = ygocore/source
 	url = https://github.com/SalvationDevelopment/YGOCore
-[submodule "server/ygosharp/source"]
-	path = server/ygosharp/source
+[submodule "ygosharp/source"]
+	path = ygosharp/source
 	url = https://github.com/IceYGO/ygosharp
-[submodule "server/http/ygopro/pics"]
-	path = server/http/ygopro/pics
+[submodule "http/ygopro/pics"]
+	path = http/ygopro/pics
 	url = https://github.com/SalvationDevelopment/YGOPro-Images
-[submodule "server/ocgcore"]
-	path = server/ocgcore
+[submodule "ocgcore"]
+	path = ocgcore
 	url = https://github.com/SalvationDevelopment/YGOPro-Library-Builder
-[submodule "server/http/ygopro/script"]
-	path = server/http/ygopro/script
+[submodule "http/ygopro/script"]
+	path = http/ygopro/script
 	url = https://github.com/SalvationDevelopment/Salvation-Scripts-TCG
