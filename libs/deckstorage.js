@@ -11,8 +11,7 @@ var deck = {
 };
 
 
-var
-    Primus = require('primus'),
+var Primus = require('primus'),
 
     Socket = require('primus').createSocket({
         iknowclusterwillbreakconnections: true
@@ -61,7 +60,7 @@ function onDB(data) {
         if (data.deck.owner === undefined) {
             data.deck.owner = data.username;
         }
-        if (data.deck._id === undefined) {
+        if (data.deck['_id'] === undefined) {
             console.log('no ID!');
             data.deck.owner = data.username;
             deckStorage.insert(data.deck, function (err) {
@@ -77,7 +76,7 @@ function onDB(data) {
         } else {
             data.deck.owner = data.username;
             deckStorage.update({
-                _id: data.deck._id
+                _id: data.deck['_id']
 
             }, data.deck, function (err, numReplaced) {
                 client.write({
@@ -90,8 +89,9 @@ function onDB(data) {
         }
         break;
     case 'delete':
+        console.log('Deleting:', data.deck);
         deckStorage.remove({
-            _id: data.deck._id
+            _id: data.deck['_id']
         }, {}, function (err, numRemoved) {
             client.write({
                 action: 'deckreply',
