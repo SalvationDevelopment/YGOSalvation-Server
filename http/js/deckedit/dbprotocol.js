@@ -2,6 +2,15 @@
 /*global $, confirm, primus, uniqueID, console, alert*/
 
 
+function getAllDecks() {
+    'use strict';
+    primus.write({
+        action: 'deck',
+        command: 'get',
+        deck: true,
+        uniqueID: uniqueID
+    });
+}
 
 function saveDeckAs(deck) {
     'use strict';
@@ -26,6 +35,7 @@ function saveDeckAs(deck) {
             return;
         }
     }
+    setTimeout(getAllDecks, 500);
 }
 
 function saveDeck(deck) {
@@ -46,6 +56,7 @@ function saveDeck(deck) {
         deck: deck,
         uniqueID: uniqueID
     });
+    setTimeout(getAllDecks, 500);
 }
 
 function deleteADeck(deck) {
@@ -56,14 +67,5 @@ function deleteADeck(deck) {
         deck: deck,
         uniqueID: uniqueID
     });
-}
-
-function getAllDecks() {
-    'use strict';
-    primus.write({
-        action: 'deck',
-        command: 'get',
-        deck: true,
-        uniqueID: uniqueID
-    });
+    setTimeout(getAllDecks, 500);
 }
