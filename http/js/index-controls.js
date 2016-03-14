@@ -1,5 +1,5 @@
 /*jslint browser:true, plusplus:true, nomen: true*/
-/*global $, saveSettings, Handlebars, prompt, _gaq, isChecked, alert, primus, ygopro, translationDB, swfobject, console*/
+/*global $,  Handlebars, prompt, _gaq, isChecked, alert, primus, ygopro, translationDB*/
 
 var admin = false,
     chatStarted = false,
