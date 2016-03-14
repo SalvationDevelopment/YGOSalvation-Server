@@ -507,7 +507,7 @@ $(function () {
             } else {
                 deckStorage.index = undefined;
             }
-            console.log('id is ', deckStorage.decks['_id']);
+
 
 
 
@@ -570,33 +570,35 @@ $(function () {
     }
 
     function sortDeck(target) {
-        var sortTarget = deckStorage.getDeck(target),
-            normalMonster = [],
-            effectMonster = [],
-            spell = [],
-            trap = [],
-            extra = [],
-            outputArray = [],
-            domData,
-            extraRegexp = /^(Fusion|Synchro|Xyz)/;
-        sortTarget.forEach(function (card) {
-            domData = $('[data-card-id="' + card + '"]').data();
-            if (!domData || !domData.cardType) {
-                return;
-            }
-            domData.cardName = domData.cardName.replace(/\{\{quote\}\}/g, '"');
-            if ((domData.cardType & 2) === 2) {
-                spell.push(domData);
-            } else if ((domData.cardType & 4) === 4) {
-                trap.push(domData);
-            } else if (domData.cardType === 17) {
-                normalMonster.push(domData);
-            } else if (extraRegexp.test(monsterMap[domData.cardType])) {
-                extra.push(domData);
-            } else {
-                effectMonster.push(domData);
-            }
-        });
+        try {
+            var sortTarget = deckStorage.getDeck(target),
+                normalMonster = [],
+                effectMonster = [],
+                spell = [],
+                trap = [],
+                extra = [],
+                outputArray = [],
+                domData,
+                extraRegexp = /^(Fusion|Synchro|Xyz)/;
+            sortTarget.forEach(function (card) {
+                domData = $('[data-card-id="' + card + '"]').data();
+                if (!domData || !domData.cardType) {
+                    return;
+                }
+                domData.cardName = domData.cardName.replace(/\{\{quote\}\}/g, '"');
+                if ((domData.cardType & 2) === 2) {
+                    spell.push(domData);
+                } else if ((domData.cardType & 4) === 4) {
+                    trap.push(domData);
+                } else if (domData.cardType === 17) {
+                    normalMonster.push(domData);
+                } else if (extraRegexp.test(monsterMap[domData.cardType])) {
+                    extra.push(domData);
+                } else {
+                    effectMonster.push(domData);
+                }
+            });
+        } catch (e) {}
         //    normalMonster = normalMonster.sort(function (prev, next) {
         //        if (prev.cardName === next.cardName) {
         //            return 0;
@@ -640,6 +642,25 @@ $(function () {
         }
         return output + "<br /><span class='description'>" + targetCard.desc.replace(/\r\n/g, '<br />') + "</span>";
     }
+
+    $('.searchResults').on('dblclick', 'img', function (ev, a, b, c, d) {
+        'use strict';
+
+
+
+        var id = Number($(this).attr('data-card-id')),
+            remainingDecks = deckStorage.not('main')
+
+        good = addDeckLegal(id, 'main', 60, lflist, $('.banlistSelect').val(), remainingDecks[0], remainingDecks[1]);
+        if (good) {
+            deckStorage.removeCard('main', index);
+            drawDeck('main');
+        }
+
+
+
+        return false;
+    });
 
     function addDeckLegal(id, targetDeck, targetDeckSize, flList, currentList, deck2, deck3) {
         if (typeof id !== 'string') {
@@ -901,7 +922,7 @@ $(function () {
                 });
                 $('.deleteDeck').on('click', function () {
                     if (confirm("Are you sure you want to permanently delete this deck?")) {
-                        deleteADeck(deckStorage.decks);
+                        deleteADeck(deckStorage.decks, deckStorage.index);
                         drawDeckEditor({
                             main: [],
                             side: [],
@@ -1000,25 +1021,3 @@ $(function () {
         });
     });
 });
-
-/*
-$('.searchResults').on('mousedown', 'img', function (ev, a, b, c, d) {
-    'use strict';
-
-    if (ev.which === 3) {
-
-        var id = Number($(this).attr('data-card-id')),
-            remainingDecks = deckStorage.not('main')
-
-        good = addDeckLegal(id, 'main', 60, lflist, $('.banlistSelect').val(), remainingDecks[0], remainingDecks[1]);
-        if (good) {
-            deckStorage.removeCard('main', index);
-            drawDeck('main');
-        }
-
-    }
-
-    return false;
-});
-
-*/
