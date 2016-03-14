@@ -75,6 +75,7 @@ function onDB(data) {
             });
         } else {
             data.deck.owner = data.username;
+            console.log('updating:', data.deck['_id']);
             deckStorage.update({
                 _id: data.deck['_id']
 

@@ -197,7 +197,8 @@ function injectDeck(decks) {
     for (i = 0; decks.length > i; i++) {
         data.currentdecks = data.currentdecks + '<option value="' + i + '">' + decks[i].name + '</option>';
     }
-    $('.currentdeck, .deckSelect').html(data.currentdecks).trigger('change');
+
+    $('.currentdeck, .deckSelect').html(data.currentdecks).val(window.activeDeckSelect).trigger('change');
 
 }
 

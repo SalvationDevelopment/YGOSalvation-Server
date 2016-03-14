@@ -15,7 +15,7 @@ function getAllDecks() {
 function saveDeckAs(deck) {
     'use strict';
     var suggested = $('.decknameInput').val();
-    if (suggested.trim().length < 1) {
+    if (suggested.trim().length > 1) {
         if (confirm('Deck needs a name! is ' + $('.decknameInput').val() + ' ok?')) {
             deck.name = suggested;
             primus.write({
@@ -38,9 +38,14 @@ function saveDeckAs(deck) {
     setTimeout(getAllDecks, 500);
 }
 
-function saveDeck(deck) {
+function saveDeck(deck, index) {
     'use strict';
+    deck._id = deckfiles[index]._id;
+    deck.name = deckfiles[index].name;
+    console.log('I UNDERSTAND THE ID AS:', deck._id);
     if (!deck._id || !deck.name) {
+
+        console.log('looks like its not a good deck, doing save as..');
         saveDeckAs(deck);
         return;
     }
@@ -50,13 +55,9 @@ function saveDeck(deck) {
         deck: deck,
         uniqueID: uniqueID
     });
-    console.log({
-        action: 'deck',
-        command: 'save',
-        deck: deck,
-        uniqueID: uniqueID
-    });
+    console.log('attempting to save', deck, index);
     setTimeout(getAllDecks, 500);
+    window.activeDeckSelect = index;
 }
 
 function deleteADeck(deck) {
