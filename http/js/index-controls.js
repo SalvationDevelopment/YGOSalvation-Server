@@ -111,7 +111,8 @@ function singlesitenav(target, skip) {
     $('.activescreen').removeClass('activescreen');
     $('header').css('left', '100vw');
     $('#' + target).css('left', '0').addClass('activescreen');
-    sound.play('soundnewphase');
+    //annoys Mele
+    //sound.play('soundnewphase');
     return false;
 }
 
