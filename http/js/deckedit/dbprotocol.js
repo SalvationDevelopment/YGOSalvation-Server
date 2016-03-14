@@ -60,8 +60,10 @@ function saveDeck(deck, index) {
     window.activeDeckSelect = index;
 }
 
-function deleteADeck(deck) {
+function deleteADeck(deck, index) {
     'use strict';
+    deck._id = deckfiles[index]._id;
+    deck.name = deckfiles[index].name;
     primus.write({
         action: 'deck',
         command: 'delete',
