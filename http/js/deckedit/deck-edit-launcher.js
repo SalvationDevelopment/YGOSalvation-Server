@@ -892,19 +892,10 @@ $(function () {
                     out: dropOutHandler("extra")
                 });
                 $('.saveDeck').on('click', function () {
-                    saveADeck(deckStorage.decks)
-                    console.log(deckStorage.decks);
+                    saveDeck(deckStorage.decks)
                 });
                 $('.saveDeckAs').on('click', function () {
-                    var deckName = $('.decknameInput').val();
-                    if (!deckName) {
-                        saveADeck(deckStorage.decks);
-                        console.log(deckStorage.decks);
-                    } else {
-                        deckStorage.decks.name = deckName;
-                        saveADeck(deckStorage.decks);
-                        console.log(deckStorage.decks);
-                    }
+                    saveDeckAs(deckStorage.decks);
                 });
                 $('.deleteDeck').on('click', function () {
                     if (confirm("Are you sure you want to permanently delete this deck?")) {
