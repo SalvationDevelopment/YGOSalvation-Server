@@ -6,6 +6,19 @@
 */
 var cards = [],
     lflist = {};
+
+function getCardObject(id) {
+    var cardObject,
+        i = 0,
+        len = cards.length;
+    for (i, len; i < len; i += 1) {
+        if (id === cards[i].id) {
+            cardObject = cards[i];
+            break;
+        }
+    }
+    return cardObject;
+}
 $(function () {
     'use strict';
     var filterFunctions = {
@@ -377,18 +390,7 @@ $(function () {
         }
     }
 
-    function getCardObject(id) {
-        var cardObject,
-            i = 0,
-            len = cards.length;
-        for (i, len; i < len; i += 1) {
-            if (id === cards[i].id) {
-                cardObject = cards[i];
-                break;
-            }
-        }
-        return cardObject;
-    }
+
 
     function cardIs(cat, obj) {
         if (cat === "monster" && (obj.race !== 0 || obj.level !== 0 || obj.attribute !== 0)) {
@@ -470,8 +472,8 @@ $(function () {
         }
     }
 
-    function drawDeckEditor(ydk) {
-        var ydkCopy = JSON.parse(JSON.stringify(ydk)),
+    function drawDeckEditor(ydk, index) {
+        var ydkCopy = ydk,
             cardObject,
             container,
             decks = [
@@ -487,7 +489,7 @@ $(function () {
                 $('span', container).remove();
                 deckStorage.reset(deck);
             }
-            console.log(ydkCopy[deck]);
+            console.log(ydkCopy);
             for (card in ydkCopy[deck]) {
                 if (ydkCopy[deck].hasOwnProperty(card)) {
 
@@ -500,12 +502,12 @@ $(function () {
                 }
             }
             console.log(deckStorage);
-            if (deckStorage.decks._id) {
-                deckStorage.decks._id = ydkCopy._id;
-                deckStorage.decks.name = ydkCopy.name;
-                deckStorage.decks.desciption = ydkCopy.desciption;
-                deckStorage.decks.owner = ydkCopy.owner;
+            if (index !== undefined) {
+                deckStorage.index = index;
+            } else {
+                deckStorage.index = undefined;
             }
+            console.log('id is ', deckStorage.decks['_id']);
 
 
 
@@ -892,7 +894,7 @@ $(function () {
                     out: dropOutHandler("extra")
                 });
                 $('.saveDeck').on('click', function () {
-                    saveDeck(deckStorage.decks)
+                    saveDeck(deckStorage.decks, deckStorage.index)
                 });
                 $('.saveDeckAs').on('click', function () {
                     saveDeckAs(deckStorage.decks);
@@ -954,7 +956,7 @@ $(function () {
                     });
                 });
                 $('.deckSelect').on('change', function () {
-                    drawDeckEditor(deckfiles[$(this).val()]);
+                    drawDeckEditor(deckfiles[$(this).val()], $(this).val());
                     sortAllDecks();
                 });
                 $('.mainDeck').on('mousedown', 'img', function (ev, a, b, c, d) {
