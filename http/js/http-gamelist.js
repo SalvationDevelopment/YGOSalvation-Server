@@ -599,9 +599,9 @@ $('body').on('mousedown', '.game', function (ev) {
     }
 });
 
-$('body').on('mousedown', 'footer', function (ev) {
+$('body').on('click', 'footer', function (ev) {
     'use strict';
-    if (admin === "1" && launcher && ev.which === 3) {
+    if (admin === "1") {
         if (confirm('Send Global?')) {
             sendglobal(window.prompt('Global Message', 'Be nice, or else...'));
         } else {
