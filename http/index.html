@@ -774,12 +774,12 @@
         </div>
         <div id="phaseindicator" data-currentphase="">
             <div>
-                <button disabled id="drawphi">Draw</button>
-                <button disabled id="standbyphi">Standby</button>
-                <button disabled id="main1phi">Main 1</button>
-                <button disabled id="battlephi" onclick="ws.send(makeCTOS('CTOS_RESPONSE', new Buffer([6,0,0,0])));">Battle</button>
-                <button disabled id="main2phi">Main 2</button>
-                <button disabled id="endphi" onclick="ws.send(makeCTOS('CTOS_RESPONSE', new Buffer([7,0,0,0])));">End</button>
+                <button id="drawphi">Draw</button>
+                <button id="standbyphi">Standby</button>
+                <button id="main1phi">Main 1</button>
+                <button id="battlephi" onclick="ws.send(makeCTOS('CTOS_RESPONSE', new Buffer([6,0,0,0])));">Battle</button>
+                <button id="main2phi">Main 2</button>
+                <button id="endphi" onclick="ws.send(makeCTOS('CTOS_RESPONSE', new Buffer([7,0,0,0])));">End</button>
             </div>
         </div>
         <div id="actions">
