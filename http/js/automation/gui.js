@@ -342,6 +342,11 @@ function getLocation(item) {
         layouthand(1);
         $('.p0lp').val(player1StartLP);
         $('.p1lp').val(player2StartLP);
+        $('.card').on('mouseenter', function () {
+            var id = $(this).attr('src').split('/')[2].slice(0, -4);
+            $('.imgContainer').attr('src', $(this).attr('src'));
+            $('.cardDescription').html(makeDescription(id));
+        });
     };
 
     gui.DOMWriter = function (size, movelocation, player) {
