@@ -1,17 +1,5 @@
 /*globals Buffer, duel, enums, localPlayer*/
 
-function rpsCalc(ishost, button) {
-    'use strict';
-    ishost = (ishost) ? 1 : 0;
-    var buttons = {
-        rock: 0,
-        paper: 0,
-        scissors: 0
-
-    };
-    return (ishost + buttons[button] + 1);
-}
-
 function makeCTOS(command, message) {
     'use strict';
     //https://github.com/Fluorohydride/ygopro/blob/25bdab4c6d0000f841aee80c11cbf2e95ee54047/gframe/network.h
