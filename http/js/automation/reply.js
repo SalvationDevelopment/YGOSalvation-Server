@@ -1,4 +1,4 @@
-/*globals Buffer, duel, enums*/
+/*globals Buffer, duel, enums, localPlayer*/
 
 function rpsCalc(ishost, button) {
     'use strict';
@@ -105,7 +105,6 @@ function makeCTOS(command, message) {
 
         proto.writeUInt16LE(deck.length, 0);
         proto = Buffer.concat([proto, deck]);
-        console.log(proto, deck.length);
         return proto;
 
     };
@@ -226,7 +225,6 @@ function makeCTOS(command, message) {
 
         proto.writeUInt16LE(len, 0);
         proto = Buffer.concat([proto, ctos, chat]);
-        console.log(proto);
         return proto;
     };
     say.scissors = function () {
@@ -239,10 +237,12 @@ function makeCTOS(command, message) {
         return new Buffer([0x2, 0x0, 0x3, 0x3]);
     };
     say.GO_FIRST = function () {
-        return new Buffer([0x2, 0x0, 0x4, 0x0]);
+        var n = localPlayer(0x0);
+        return new Buffer([0x2, 0x0, 0x4, n]);
     };
     say.GO_SECOND = function () {
-        return new Buffer([0x2, 0x0, 0x4, 0x0]);
+        var n = localPlayer(0x1);
+        return new Buffer([0x2, 0x0, 0x4, n]);
     };
 
 
@@ -268,14 +268,14 @@ function makeManualMoveTo(locationConst, arrayIndex, positionConst) {
     };
 }
 
-function manualMove(target, moveTo) {
-    'use strict';
-    manual.write({
-        action: "duelQuery",
-        uid: duel.uid,
-        duelID: duel.duelID,
-        duelQuery: enums.manual.QUERY_DUEL_COMMAND,
-        target: target,
-        moveTo: moveTo
-    });
-}
+//function manualMove(target, moveTo) {
+//    'use strict';
+//    manual.write({
+//        action: "duelQuery",
+//        uid: duel.uid,
+//        duelID: duel.duelID,
+//        duelQuery: enums.manual.QUERY_DUEL_COMMAND,
+//        target: target,
+//        moveTo: moveTo
+//    });
+//}

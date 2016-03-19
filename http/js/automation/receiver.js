@@ -95,12 +95,10 @@ function BanlistHashMap() {
     for (banlist in window.lflist) {
         if (window.lflist.hasOwnProperty(banlist)) {
             hash = 0x7dfcee6a;
-            console.log(banlist);
             for (item in window.lflist[banlist]) {
                 if (window.lflist[banlist].hasOwnProperty(item) && item.length) {
                     count = parseInt(window.lflist[banlist][item], 10);
                     code = parseInt(item, 10);
-                    console.log(code, window.lflist[banlist][item], count, hash);
                     hash = parseInt(hash ^ ((code << 18) | (code >> 14)) ^ ((code << (27 + count)) | (code >> (5 - count))), 10);
                 }
             }
@@ -1165,7 +1163,6 @@ function recieveSTOC(packet) {
 
     case ("STOC_JOIN_GAME"):
         data.banlistHashTable = new BanlistHashMap();
-        console.log(packet.message);
         data.banlistHashCode = packet.message.readInt32LE(0);
         data.rule = packet.message[4];
         data.mode = packet.message[5];
