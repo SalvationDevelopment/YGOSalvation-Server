@@ -124,7 +124,7 @@ function initiateNetwork_STOC(network) {
 
     });
     network.on('STOC_TIME_LIMIT', function (data) {
-
+        $('p' + data.player + 'time').attr('value', data.time)
     });
     network.on('STOC_CHAT', function (data) {
 
