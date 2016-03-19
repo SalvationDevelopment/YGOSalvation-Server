@@ -5,9 +5,82 @@
     $, ConfigParser, primus, uniqueID, parseYDK, deckfiles
 */
 var cards = [],
-    lflist = {};
+    lflist = {},
+    forumLink = "http://forum.ygopro.us/index.php/?ref=_deckEditor";
+
+var imgDir = "ygopro/pics/",
+
+    attributeMap = {
+        1: "EARTH",
+        2: "WATER",
+        4: "FIRE",
+        8: "WIND",
+        16: "LIGHT",
+        32: "DARK",
+        64: "DIVINE"
+    },
+    typeMap = {
+        130: " / Ritual",
+        65538: " / Quick-Play",
+        131074: " / Continuous",
+        131076: " / Continuous",
+        262146: " / Equip",
+        524290: " / Field",
+        1048580: " / Counter"
+    },
+    monsterMap = {
+        17: "Normal",
+        33: "Effect",
+        65: "Fusion",
+        97: "Fusion / Effect",
+        129: "Ritual",
+        161: "Ritual / Effect",
+        545: "Spirit",
+        1057: "Union",
+        2081: "Gemini / Effect",
+        4113: "Tuner",
+        4129: "Tuner / Effect",
+        8193: "Synchro",
+        8225: "Synchro / Effect",
+        12321: "Synchro / Tuner / Effect",
+        2097185: "Flip / Effect",
+        4194337: "Toon / Effect",
+        8388609: "Xyz",
+        8388641: "Xyz / Effect",
+        16777233: "Pendulum",
+        16777249: "Pendulum / Effect",
+        16781345: "Pendulum / Tuner / Effect",
+        25165857: "Xyz / Pendulum / Effect"
+    },
+    raceMap = {
+        1: "Warrior",
+        2: "Spellcaster",
+        4: "Fairy",
+        8: "Fiend",
+        16: "Zombie",
+        32: "Machine",
+        64: "Aqua",
+        128: "Pyro",
+        256: "Rock",
+        512: "Winged-Beast",
+        1024: "Plant",
+        2048: "Insect",
+        4096: "Thunder",
+        8192: "Dragon",
+        16384: "Beast",
+        32768: "Beast-Warrior",
+        65536: "Dinosaur",
+        131072: "Fish",
+        262144: "Sea-Serpent",
+        524288: "Reptile",
+        1048576: "Psychic",
+        2097152: "Divine-Beast",
+        4194304: "Creator God",
+        8388608: "Wyrm"
+    };
 
 function getCardObject(id) {
+    'use strict';
     var cardObject,
         i = 0,
         len = cards.length;
@@ -18,6 +91,75 @@ function getCardObject(id) {
         }
     }
     return cardObject;
+}
+
+function parseAtkDef(atk, def) {
+    return ((atk < 0) ? "?" : atk) + " / " + ((def < 0) ? "?" : def);
+}
+
+function parseLevelScales(level) {
+    var output = "",
+        leftScale,
+        rightScale,
+        pendulumLevel;
+    if (level > 0 && level <= 12) {
+        output += '<span class="levels">';
+        while ((level -= 1) >= 0) {
+            output += "*";
+        }
+    } else {
+        level = level.toString(16); // format: [0-9A-F]0[0-9A-F][0-9A-F]{4}
+        leftScale = parseInt(level.charAt(0), 16); // first digit: left scale in hex (0-16)
+        rightScale = parseInt(level.charAt(2), 16); // third digit: right scale in hex (0-16)
+        pendulumLevel = parseInt(level.charAt(6), 16); // seventh digit: level of the monster in hex (technically, all 4 digits are levels, but here we only need the last char)
+        output += '<span class="levels">';
+        while ((pendulumLevel -= 1) >= 0) {
+            output += '*';
+        }
+        output += '</span> <span class="scales"><< ' + leftScale + ' | ' + rightScale + ' >>';
+    }
+    return output + '</span>';
+}
+
+function cardIs(cat, obj) {
+    'use strict';
+    if (cat === "monster" && (obj.race !== 0 || obj.level !== 0 || obj.attribute !== 0)) {
+        return true;
+    }
+    if (cat === "spell") {
+        return (obj.type & 2) === 2;
+    }
+    if (cat === "trap") {
+        return (obj.type & 4) === 4;
+    }
+    if (cat === "fusion") {
+        return (obj.type & 64) === 64;
+    }
+    if (cat === "synchro") {
+        return (obj.type & 8192) === 8192;
+    }
+    if (cat === "xyz") {
+        return (obj.type & 8388608) === 8388608;
+    }
+}
+
+function makeDescription(id) {
+    'use strict';
+    var targetCard = getCardObject(parseInt(id, 10)),
+        output = "";
+    if (!targetCard) {
+        return '<span class="searchError">An error occurred while looking up the card in our database.<br />Please report this issue <a href="' + forumLink + '" target="_blank">at our forums</a> and be sure to include following details:<br /><br />Subject: Deck Editor Error<br />Function Call: makeDescription(' + id + ')<br />User Agent: ' + navigator.userAgent + '</span>';
+    }
+    output += '<div class="descContainer"><span class="cardName">' + targetCard.name + ' [' + id + ']</span><br />';
+    if (cardIs("monster", targetCard)) {
+        output += "<span class='monsterDesc'>[ Monster / " + monsterMap[targetCard.type] + " ]<br />" + raceMap[targetCard.race] + " / " + attributeMap[targetCard.attribute] + "<br />";
+        output += "[ " + parseLevelScales(targetCard.level) + " ]<br />" + parseAtkDef(targetCard.atk, targetCard.def) + "</span>";
+    } else if (cardIs("spell", targetCard)) {
+        output += "<span class='spellDesc'>[ Spell" + (typeMap[targetCard.type] || "") + " ]</span>";
+    } else if (cardIs("trap", targetCard)) {
+        output += "<span class='trapDesc'>[ Trap" + (typeMap[targetCard.type] || "") + " ]</span>";
+    }
+    return output + "<br /><span class='description'>" + targetCard.desc.replace(/\r\n/g, '<br />') + "</span>";
 }
 $(function () {
     'use strict';
@@ -204,76 +346,7 @@ $(function () {
                 });
             }
         },
-        imgDir = "ygopro/pics/",
-        forumLink = "http://forum.ygopro.us/index.php/?ref=_deckEditor",
-        attributeMap = {
-            1: "EARTH",
-            2: "WATER",
-            4: "FIRE",
-            8: "WIND",
-            16: "LIGHT",
-            32: "DARK",
-            64: "DIVINE"
-        },
-        typeMap = {
-            130: " / Ritual",
-            65538: " / Quick-Play",
-            131074: " / Continuous",
-            131076: " / Continuous",
-            262146: " / Equip",
-            524290: " / Field",
-            1048580: " / Counter"
-        },
-        monsterMap = {
-            17: "Normal",
-            33: "Effect",
-            65: "Fusion",
-            97: "Fusion / Effect",
-            129: "Ritual",
-            161: "Ritual / Effect",
-            545: "Spirit",
-            1057: "Union",
-            2081: "Gemini / Effect",
-            4113: "Tuner",
-            4129: "Tuner / Effect",
-            8193: "Synchro",
-            8225: "Synchro / Effect",
-            12321: "Synchro / Tuner / Effect",
-            2097185: "Flip / Effect",
-            4194337: "Toon / Effect",
-            8388609: "Xyz",
-            8388641: "Xyz / Effect",
-            16777233: "Pendulum",
-            16777249: "Pendulum / Effect",
-            16781345: "Pendulum / Tuner / Effect",
-            25165857: "Xyz / Pendulum / Effect"
-        },
-        raceMap = {
-            1: "Warrior",
-            2: "Spellcaster",
-            4: "Fairy",
-            8: "Fiend",
-            16: "Zombie",
-            32: "Machine",
-            64: "Aqua",
-            128: "Pyro",
-            256: "Rock",
-            512: "Winged-Beast",
-            1024: "Plant",
-            2048: "Insect",
-            4096: "Thunder",
-            8192: "Dragon",
-            16384: "Beast",
-            32768: "Beast-Warrior",
-            65536: "Dinosaur",
-            131072: "Fish",
-            262144: "Sea-Serpent",
-            524288: "Reptile",
-            1048576: "Psychic",
-            2097152: "Divine-Beast",
-            4194304: "Creator God",
-            8388608: "Wyrm"
-        },
+
         deckStorage = {
             not: function (deck) {
                 var key,
@@ -392,54 +465,9 @@ $(function () {
 
 
 
-    function cardIs(cat, obj) {
-        if (cat === "monster" && (obj.race !== 0 || obj.level !== 0 || obj.attribute !== 0)) {
-            return true;
-        }
-        if (cat === "spell") {
-            return (obj.type & 2) === 2;
-        }
-        if (cat === "trap") {
-            return (obj.type & 4) === 4;
-        }
-        if (cat === "fusion") {
-            return (obj.type & 64) === 64;
-        }
-        if (cat === "synchro") {
-            return (obj.type & 8192) === 8192;
-        }
-        if (cat === "xyz") {
-            return (obj.type & 8388608) === 8388608;
-        }
-    }
 
-    function parseAtkDef(atk, def) {
-        return ((atk < 0) ? "?" : atk) + " / " + ((def < 0) ? "?" : def);
-    }
 
-    function parseLevelScales(level) {
-        var output = "",
-            leftScale,
-            rightScale,
-            pendulumLevel;
-        if (level > 0 && level <= 12) {
-            output += '<span class="levels">';
-            while ((level -= 1) >= 0) {
-                output += "*";
-            }
-        } else {
-            level = level.toString(16); // format: [0-9A-F]0[0-9A-F][0-9A-F]{4}
-            leftScale = parseInt(level.charAt(0), 16); // first digit: left scale in hex (0-16)
-            rightScale = parseInt(level.charAt(2), 16); // third digit: right scale in hex (0-16)
-            pendulumLevel = parseInt(level.charAt(6), 16); // seventh digit: level of the monster in hex (technically, all 4 digits are levels, but here we only need the last char)
-            output += '<span class="levels">';
-            while ((pendulumLevel -= 1) >= 0) {
-                output += '*';
-            }
-            output += '</span> <span class="scales"><< ' + leftScale + ' | ' + rightScale + ' >>';
-        }
-        return output + '</span>';
-    }
+
 
     function attachDnDEvent(targetCollection) {
         targetCollection.draggable({
@@ -625,23 +653,7 @@ $(function () {
         }
     }
 
-    function makeDescription(id) {
-        var targetCard = getCardObject(parseInt(id, 10)),
-            output = "";
-        if (!targetCard) {
-            return '<span class="searchError">An error occurred while looking up the card in our database.<br />Please report this issue <a href="' + forumLink + '" target="_blank">at our forums</a> and be sure to include following details:<br /><br />Subject: Deck Editor Error<br />Function Call: makeDescription(' + id + ')<br />User Agent: ' + navigator.userAgent + '</span>';
-        }
-        output += '<div class="descContainer"><span class="cardName">' + targetCard.name + ' [' + id + ']</span><br />';
-        if (cardIs("monster", targetCard)) {
-            output += "<span class='monsterDesc'>[ Monster / " + monsterMap[targetCard.type] + " ]<br />" + raceMap[targetCard.race] + " / " + attributeMap[targetCard.attribute] + "<br />";
-            output += "[ " + parseLevelScales(targetCard.level) + " ]<br />" + parseAtkDef(targetCard.atk, targetCard.def) + "</span>";
-        } else if (cardIs("spell", targetCard)) {
-            output += "<span class='spellDesc'>[ Spell" + (typeMap[targetCard.type] || "") + " ]</span>";
-        } else if (cardIs("trap", targetCard)) {
-            output += "<span class='trapDesc'>[ Trap" + (typeMap[targetCard.type] || "") + " ]</span>";
-        }
-        return output + "<br /><span class='description'>" + targetCard.desc.replace(/\r\n/g, '<br />') + "</span>";
-    }
+
 
     $('.searchResults').on('dblclick', 'img', function (ev, a, b, c, d) {
         'use strict';
