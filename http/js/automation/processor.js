@@ -146,6 +146,7 @@ function initiateNetwork_STOC(network) {
             },
             n = (idmap[data.from] !== undefined) ? idmap[data.from] : '---';
         $('.ingamechatbox').append('<li>[' + n + ']: ' + data.chat + '</li>');
+        sound.play('soundchatmessage');
     });
     network.on('STOC_HS_PLAYER_ENTER', function (data) {
         //someone entered the duel lobby as a challenger.

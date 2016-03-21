@@ -930,6 +930,7 @@ div#lobbychat {
     width: 100%;
     background: rgba(0, 0, 0, .8);
     border: 1px solid #ddd;
+    color: white;
 }
 
 ul#lobbychattext {
@@ -938,7 +939,7 @@ ul#lobbychattext {
     overflow-y: scroll;
     height: 88%;
     width: 100%;
-    padding: 0;
+    padding: 5px;
 }
 
 meter.p1time {
