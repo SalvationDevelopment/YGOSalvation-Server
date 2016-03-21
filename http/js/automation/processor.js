@@ -132,8 +132,8 @@ function initiateNetwork_STOC(network) {
                 1: window.duel.player[1].name,
                 2: window.duel.player[2].name,
                 3: window.duel.player[3].name,
-                4: window.duel.player[4].name,
-                5: window.duel.player[5].name,
+                //4: window.duel.player[4].name,
+                //5: window.duel.player[5].name,
                 7: 'Spectator',
                 11: 'SYSTEM',
                 12: 'SYSTEM',
@@ -145,7 +145,7 @@ function initiateNetwork_STOC(network) {
                 18: 'SYSTEM'
             },
             n = (idmap[data.from] !== undefined) ? idmap[data.from] : '---';
-        $('.ingamechatbox').append('<li>[' + n + ']' + data.chat + '</li>');
+        $('.ingamechatbox').append('<li>[' + n + ']: ' + data.chat + '</li>');
     });
     network.on('STOC_HS_PLAYER_ENTER', function (data) {
         //someone entered the duel lobby as a challenger.

@@ -229,3 +229,10 @@ function sayNo() {
     'use strict';
     window.ws.send(makeCTOS('CTOS_RESPONSE', new Buffer([-1, 0, 0, 0])));
 }
+
+function chat(message) {
+    'use strict';
+    var servermessage = makeCTOS('CTOS_CHAT', message);
+    window.ws.send(servermessage);
+    $('.ingamechatbox').append('<li>[' + localStorage.nickname + ']: ' + message + '</li>');
+}
