@@ -610,6 +610,7 @@ ul#mirrors {
     width: 100%;
     z-index: 10;
     font-size: .7em;
+    max-height: 5%;
 }
 
 header {
@@ -883,7 +884,7 @@ div#sidechat {
     background: rgba(0, 0, 0, .5);
     position: absolute;
     height: 80%;
-    bottom: 4%;
+    bottom: 5%;
     right: 0;
     border: 1px solid #444;
     z-index: 90;
@@ -896,7 +897,7 @@ div#sidechat {
     margin: 0;
 }
 
-#sidechattext li {
+.ingamechatbox li {
     color: white;
     list-style: none;
 }
@@ -910,8 +911,29 @@ div#sidechat {
 }
 
 #sidechattext {
-    height: 95%;
+    height: 90%;
     width: 100%;
+}
+
+div#lobbychat {
+    width: 100%;
+    position: absolute;
+    bottom: 6%;
+    height: 20vh;
+    background: rgba(0, 0, 0, .5);
+    border: 1px solid #444;
+}
+
+#lobbychat input {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    background: rgba(0, 0, 0, .8);
+    border: 1px solid #ddd;
+}
+
+meter.p1time {
+    transform: rotateY(180deg);
 }
 
 meter::-webkit-meter-optimum-value {
@@ -1562,7 +1584,7 @@ div#phaseindicator {
     width: 50vw;
     margin: 0 auto;
     padding: 3vh 3vw;
-    margin-top: 10vh;
+    margin-top: 2vh;
     box-shadow: 0 0 10px black;
     border: 1px solid#444;
     background-color: rgba(0, 0, 0, .5);
