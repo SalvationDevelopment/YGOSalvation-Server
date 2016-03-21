@@ -96,6 +96,49 @@ function getCardObject(id) {
 function parseAtkDef(atk, def) {
     return ((atk < 0) ? "?" : atk) + " / " + ((def < 0) ? "?" : def);
 }
+deckStorage = {
+    not: function (deck) {
+        var key,
+            arr = [];
+        for (key in deckStorage.decks) {
+            if (deckStorage.decks.hasOwnProperty(key) && key !== deck) {
+                arr.push(deckStorage.decks[key]);
+            }
+        }
+        return arr;
+    },
+    getDeck: function (deck) {
+        return deckStorage.decks[deck];
+    },
+    setDeck: function (deck, newDeck) {
+        deckStorage.decks[deck] = newDeck;
+    },
+    addCard: function (deck, id) {
+        deckStorage.decks[deck].push(id);
+    },
+    removeCard: function (deck, index) {
+        deckStorage.decks[deck][index] = undefined;
+        deckStorage.decks[deck] = deckStorage.decks[deck].filter(function (card) {
+            return !!card;
+        });
+    },
+    reset: function (deck) {
+        deckStorage.decks[deck] = [];
+    },
+    maximumSize: function (deck) {
+        return deckStorage.sizeMap[deck];
+    },
+    sizeMap: {
+        main: 60,
+        side: 15,
+        extra: 15
+    },
+    decks: {
+        main: [],
+        side: [],
+        extra: []
+    }
+};
 
 function parseLevelScales(level) {
     var output = "",
@@ -165,233 +208,190 @@ function makeDescription(id) {
 $(function () {
     'use strict';
     var filterFunctions = {
-            fAttrRace: function (obj, num, at) {
-                var val = (at === 1) ? obj.attribute : obj.race;
+        fAttrRace: function (obj, num, at) {
+            var val = (at === 1) ? obj.attribute : obj.race;
+            if (val === num) {
+                return true;
+            } else {
+                return false;
+            }
+        },
+        fSetcode: function (obj, sc) {
+            var val = obj.setcode,
+                hexA = val.toString(16),
+                hexB = sc.toString(16);
+            if (val === sc || parseInt(hexA.substr(hexA.length - 4), 16) === parseInt(hexB, 16) || parseInt(hexA.substr(hexA.length - 2), 16) === parseInt(hexB, 16) || (val >> 16).toString(16) === hexB) {
+                return true;
+            } else {
+                return false;
+            }
+        },
+        fLevel: function (obj, lv, op) {
+            var val = obj.level.toString(16);
+            lv = parseInt(lv.toString(16), 10);
+            if (op === 0) {
+                if (parseInt(val.substr(val.length - 2), 10) <= lv) {
+                    return true;
+                } else {
+                    return false;
+                }
+            } else if (op === 1) {
+                if (parseInt(val.substr(val.length - 2), 10) === lv) {
+                    return true;
+                } else {
+                    return false;
+                }
+            } else {
+                if (parseInt(val.substr(val.length - 2), 10) >= lv) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        },
+        fScale: function (obj, sc, op) {
+            var val = obj.level,
+                sra = (val >> 24),
+                sraVal = sra.toString(16);
+            sc = parseInt(sc.toString(16), 10); // TODO: check with Chibi if this is the proper radix
+            if (op === 0) {
+                if (parseInt(sraVal, 10) <= sc) {
+                    return true;
+                } else {
+                    return false;
+                }
+            } else if (op === 1) {
+                if (parseInt(sraVal, 10) === sc) {
+                    return true;
+                } else {
+                    return false;
+                }
+            } else {
+                if (parseInt(sraVal, 10) >= sc) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        },
+        fType: function (obj, ty) {
+            var val = obj.type;
+            if (val === 2 && ty === 2) {
+                return true;
+            } else if (obj.ty === 4 && ty === 4) {
+                return true;
+            } else if ((val & ty) === ty) {
+                return true;
+            } else {
+                return false;
+            }
+        },
+        fAtkDef: function (obj, num, ad, op) {
+            var val = (ad === 1) ? obj.atk : obj.def;
+            if (op === 0) {
+                if (val <= num) {
+                    return true;
+                } else {
+                    return false;
+                }
+            } else if (op === 1) {
                 if (val === num) {
                     return true;
                 } else {
                     return false;
                 }
-            },
-            fSetcode: function (obj, sc) {
-                var val = obj.setcode,
-                    hexA = val.toString(16),
-                    hexB = sc.toString(16);
-                if (val === sc || parseInt(hexA.substr(hexA.length - 4), 16) === parseInt(hexB, 16) || parseInt(hexA.substr(hexA.length - 2), 16) === parseInt(hexB, 16) || (val >> 16).toString(16) === hexB) {
+            } else {
+                if (val >= num) {
                     return true;
                 } else {
                     return false;
                 }
-            },
-            fLevel: function (obj, lv, op) {
-                var val = obj.level.toString(16);
-                lv = parseInt(lv.toString(16), 10);
-                if (op === 0) {
-                    if (parseInt(val.substr(val.length - 2), 10) <= lv) {
-                        return true;
-                    } else {
-                        return false;
-                    }
-                } else if (op === 1) {
-                    if (parseInt(val.substr(val.length - 2), 10) === lv) {
-                        return true;
-                    } else {
-                        return false;
-                    }
-                } else {
-                    if (parseInt(val.substr(val.length - 2), 10) >= lv) {
-                        return true;
-                    } else {
-                        return false;
-                    }
-                }
-            },
-            fScale: function (obj, sc, op) {
-                var val = obj.level,
-                    sra = (val >> 24),
-                    sraVal = sra.toString(16);
-                sc = parseInt(sc.toString(16), 10); // TODO: check with Chibi if this is the proper radix
-                if (op === 0) {
-                    if (parseInt(sraVal, 10) <= sc) {
-                        return true;
-                    } else {
-                        return false;
-                    }
-                } else if (op === 1) {
-                    if (parseInt(sraVal, 10) === sc) {
-                        return true;
-                    } else {
-                        return false;
-                    }
-                } else {
-                    if (parseInt(sraVal, 10) >= sc) {
-                        return true;
-                    } else {
-                        return false;
-                    }
-                }
-            },
-            fType: function (obj, ty) {
-                var val = obj.type;
-                if (val === 2 && ty === 2) {
-                    return true;
-                } else if (obj.ty === 4 && ty === 4) {
-                    return true;
-                } else if ((val & ty) === ty) {
-                    return true;
-                } else {
-                    return false;
-                }
-            },
-            fAtkDef: function (obj, num, ad, op) {
-                var val = (ad === 1) ? obj.atk : obj.def;
-                if (op === 0) {
-                    if (val <= num) {
-                        return true;
-                    } else {
-                        return false;
-                    }
-                } else if (op === 1) {
-                    if (val === num) {
-                        return true;
-                    } else {
-                        return false;
-                    }
-                } else {
-                    if (val >= num) {
-                        return true;
-                    } else {
-                        return false;
-                    }
-                }
-            },
-            fNameDesc: function (obj, txt, nd) {
-                var val = (nd === 1) ? obj.name.toLowerCase() : obj.desc.toLowerCase();
-                if (val.indexOf(txt.toLowerCase()) >= 0) {
-                    return true;
-                } else {
-                    return false;
-                }
-            },
-            filterName: function (result, txt) {
-                return result.filter(function (item) {
-                    return filterFunctions.fNameDesc(item, txt, 1);
-                });
-
-            },
-            filterDesc: function (result, txt) {
-                return result.filter(function (item) {
-                    return filterFunctions.fNameDesc(item, txt, 0);
-                });
-
-            },
-            filterType: function (result, type) {
-                return result.filter(function (item) {
-                    return filterFunctions.fType(item, type);
-                });
-
-            },
-            filterAttribute: function (result, attribute) {
-                return result.filter(function (item) {
-                    return filterFunctions.fAttrRace(item, attribute, 1);
-                });
-
-            },
-            filterRace: function (result, race) {
-                return result.filter(function (item) {
-                    return filterFunctions.fAttrRace(item, race, 0);
-                });
-
-            },
-            filterSetcode: function (result, setcode) {
-                return result.filter(function (item) {
-                    return filterFunctions.fSetcode(item, setcode);
-                });
-
-            },
-            filterAtk: function (result, atk, op) {
-                return result.filter(function (item) {
-                    return filterFunctions.fAtkDef(item, atk, 1, op);
-                });
-
-            },
-            filterDef: function (result, def, op) {
-                return result.filter(function (item) {
-                    return filterFunctions.fAtkDef(item, def, 0, op);
-                });
-
-            },
-            filterLevel: function (result, level, op) {
-                return result.filter(function (item) {
-                    return filterFunctions.fLevel(item, level, op);
-                });
-
-            },
-            filterScale: function (result, scale, op) {
-                return result.filter(function (item) {
-                    return filterFunctions.fScale(item, scale, op);
-                });
-            },
-            filterForbiddenLimited: function (result, selectedLimitation, placeholder, selectedBanlist, config) {
-                return result.filter(function (card) {
-                    if (selectedLimitation === 4) {
-                        return true;
-                    }
-                    if (!config[selectedBanlist].hasOwnProperty(card.id) && selectedLimitation === 3) {
-                        return true;
-                    }
-                    if (!config[selectedBanlist].hasOwnProperty(card.id) && selectedLimitation !== 3) {
-                        return false;
-                    }
-                    return parseInt(config[selectedBanlist][card.id], 10) === selectedLimitation;
-                });
             }
         },
-
-        deckStorage = {
-            not: function (deck) {
-                var key,
-                    arr = [];
-                for (key in deckStorage.decks) {
-                    if (deckStorage.decks.hasOwnProperty(key) && key !== deck) {
-                        arr.push(deckStorage.decks[key]);
-                    }
-                }
-                return arr;
-            },
-            getDeck: function (deck) {
-                return deckStorage.decks[deck];
-            },
-            setDeck: function (deck, newDeck) {
-                deckStorage.decks[deck] = newDeck;
-            },
-            addCard: function (deck, id) {
-                deckStorage.decks[deck].push(id);
-            },
-            removeCard: function (deck, index) {
-                deckStorage.decks[deck][index] = undefined;
-                deckStorage.decks[deck] = deckStorage.decks[deck].filter(function (card) {
-                    return !!card;
-                });
-            },
-            reset: function (deck) {
-                deckStorage.decks[deck] = [];
-            },
-            maximumSize: function (deck) {
-                return deckStorage.sizeMap[deck];
-            },
-            sizeMap: {
-                main: 60,
-                side: 15,
-                extra: 15
-            },
-            decks: {
-                main: [],
-                side: [],
-                extra: []
+        fNameDesc: function (obj, txt, nd) {
+            var val = (nd === 1) ? obj.name.toLowerCase() : obj.desc.toLowerCase();
+            if (val.indexOf(txt.toLowerCase()) >= 0) {
+                return true;
+            } else {
+                return false;
             }
-        };
-    window.deckStorage = deckStorage;
+        },
+        filterName: function (result, txt) {
+            return result.filter(function (item) {
+                return filterFunctions.fNameDesc(item, txt, 1);
+            });
+
+        },
+        filterDesc: function (result, txt) {
+            return result.filter(function (item) {
+                return filterFunctions.fNameDesc(item, txt, 0);
+            });
+
+        },
+        filterType: function (result, type) {
+            return result.filter(function (item) {
+                return filterFunctions.fType(item, type);
+            });
+
+        },
+        filterAttribute: function (result, attribute) {
+            return result.filter(function (item) {
+                return filterFunctions.fAttrRace(item, attribute, 1);
+            });
+
+        },
+        filterRace: function (result, race) {
+            return result.filter(function (item) {
+                return filterFunctions.fAttrRace(item, race, 0);
+            });
+
+        },
+        filterSetcode: function (result, setcode) {
+            return result.filter(function (item) {
+                return filterFunctions.fSetcode(item, setcode);
+            });
+
+        },
+        filterAtk: function (result, atk, op) {
+            return result.filter(function (item) {
+                return filterFunctions.fAtkDef(item, atk, 1, op);
+            });
+
+        },
+        filterDef: function (result, def, op) {
+            return result.filter(function (item) {
+                return filterFunctions.fAtkDef(item, def, 0, op);
+            });
+
+        },
+        filterLevel: function (result, level, op) {
+            return result.filter(function (item) {
+                return filterFunctions.fLevel(item, level, op);
+            });
+
+        },
+        filterScale: function (result, scale, op) {
+            return result.filter(function (item) {
+                return filterFunctions.fScale(item, scale, op);
+            });
+        },
+        filterForbiddenLimited: function (result, selectedLimitation, placeholder, selectedBanlist, config) {
+            return result.filter(function (card) {
+                if (selectedLimitation === 4) {
+                    return true;
+                }
+                if (!config[selectedBanlist].hasOwnProperty(card.id) && selectedLimitation === 3) {
+                    return true;
+                }
+                if (!config[selectedBanlist].hasOwnProperty(card.id) && selectedLimitation !== 3) {
+                    return false;
+                }
+                return parseInt(config[selectedBanlist][card.id], 10) === selectedLimitation;
+            });
+        }
+    }
+
+
 
     function excludeTokens(card) {
         // filter out Tokens
@@ -846,8 +846,8 @@ $(function () {
                     spellSelect = $('.spellSelect'),
                     trapSelect = $('.trapSelect'),
                     raceSelect = $('.raceSelect'),
-                    attributeSelect = $('.attributeSelect'),
-                    deckStorage = window.deckStorage;
+                    attributeSelect = $('.attributeSelect');
+
                 for (setcode in setcodes) {
                     if (setcodes.hasOwnProperty(setcode)) {
                         $('.setcodeSelect').append('<option value="' + parseInt(setcode, 16) + '">' + setcodes[setcode] + '</option>');

@@ -39,6 +39,14 @@ function getLocation(item) {
     // they are bounded to a higher level than the objects they 
     // interact with because the objects get dynamically created.
 
+    $('#lobbychatinput, #sidechatinput').keypress(function (e) {
+        if (e.which == 13) {
+            chat($(e.currentTarget).val());
+            $(e.currentTarget).val().val('');
+            return false; //<---- Add this line
+        }
+    });
+
     $('body').on('click', '.okButton', function fireOKCallbackTrue() {
         window[gui.OKCallback](true);
         $('#alertUI').css('display', 'none');
