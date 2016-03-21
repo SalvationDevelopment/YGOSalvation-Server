@@ -140,7 +140,7 @@ function initiateNetwork_STOC(network) {
                 13: 'SYSTEM',
                 14: 'SYSTEM',
                 15: 'SYSTEM',
-                16: 'Host',
+                16: '', //named spectator
                 17: 'SYSTEM',
                 18: 'SYSTEM'
             },

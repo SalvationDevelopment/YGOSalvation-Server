@@ -42,7 +42,7 @@ function getLocation(item) {
     $('#lobbychatinput, #sidechatinput').keypress(function (e) {
         if (e.which == 13) {
             chat($(e.currentTarget).val());
-            $(e.currentTarget).val().val('');
+            $(e.currentTarget).val('');
             return false; //<---- Add this line
         }
     });

@@ -926,10 +926,19 @@ div#lobbychat {
 
 #lobbychat input {
     position: absolute;
-    bottom: 0;
+    bottom: -20px;
     width: 100%;
     background: rgba(0, 0, 0, .8);
     border: 1px solid #ddd;
+}
+
+ul#lobbychattext {
+    position: absolute;
+    bottom: 0;
+    overflow-y: scroll;
+    height: 88%;
+    width: 100%;
+    padding: 0;
 }
 
 meter.p1time {
