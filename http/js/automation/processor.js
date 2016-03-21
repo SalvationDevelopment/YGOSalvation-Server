@@ -124,10 +124,28 @@ function initiateNetwork_STOC(network) {
 
     });
     network.on('STOC_TIME_LIMIT', function (data) {
-        $('p' + data.player + 'time').attr('value', data.time)
+        $('p' + data.player + 'time').attr('value', data.time);
     });
     network.on('STOC_CHAT', function (data) {
-        $('.ingamechatbox').append('<li>[' + data.from + ']' + data.chat + '</li>')
+        var idmap = {
+                0: window.duel.player[0].name,
+                1: window.duel.player[1].name,
+                2: window.duel.player[2].name,
+                3: window.duel.player[3].name,
+                4: window.duel.player[4].name,
+                5: window.duel.player[5].name,
+                7: 'Spectator',
+                11: 'SYSTEM',
+                12: 'SYSTEM',
+                13: 'SYSTEM',
+                14: 'SYSTEM',
+                15: 'SYSTEM',
+                16: 'Host',
+                17: 'SYSTEM',
+                18: 'SYSTEM'
+            },
+            n = (idmap[data.from] !== undefined) ? idmap[data.from] : '---';
+        $('.ingamechatbox').append('<li>[' + n + ']' + data.chat + '</li>');
     });
     network.on('STOC_HS_PLAYER_ENTER', function (data) {
         //someone entered the duel lobby as a challenger.
@@ -192,7 +210,7 @@ function initiateNetwork_MSG(network) {
     network.on('MSG_WIN', function (data) {
         //???
         if (data.won) {
-            alert('You won!')
+            alert('You won!');
         } else {
             alert('You lost');
         }

@@ -29,7 +29,7 @@ Handlebars.getTemplate = function (name) {
 
 function updatenews() {
     'use strict';
-    $.getJSON('manifest/forumNews.json', function (news) {
+    $.getJSON('http://ygopro.us/manifest/forumNews.json', function (news) {
         $.get('handlebars/forumnews.handlebars', function (template) {
             var parser = Handlebars.compile(template),
                 topics = news.topics.reverse();
