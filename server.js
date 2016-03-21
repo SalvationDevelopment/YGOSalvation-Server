@@ -205,7 +205,7 @@ function main() {
         bootGameList();
         //bootFlashPolicyServer();
         setTimeout(function () {
-            //bootUpdateSystem();
+            bootUpdateSystem();
             bootlogger();
             //manualModeBoot();
         }, 1000);
