@@ -43,7 +43,7 @@ function getLocation(item) {
         if (e.which == 13) {
             chat($(e.currentTarget).val());
             $(e.currentTarget).val('');
-            $('.ingamechatbox').scrollTop($('.ingamechatbox').prop("scrollHeight"))
+            $('.ingamechatbox, #sidechat').scrollTop($('.ingamechatbox').prop("scrollHeight"))
             return false;
         }
     });
