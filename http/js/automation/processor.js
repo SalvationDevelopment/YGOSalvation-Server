@@ -127,7 +127,7 @@ function initiateNetwork_STOC(network) {
         $('p' + data.player + 'time').attr('value', data.time)
     });
     network.on('STOC_CHAT', function (data) {
-
+        $('.ingamechatbox').append('<li>[' + data.from + ']' + data.chat + '</li>')
     });
     network.on('STOC_HS_PLAYER_ENTER', function (data) {
         //someone entered the duel lobby as a challenger.

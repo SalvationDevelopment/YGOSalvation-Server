@@ -878,12 +878,40 @@ meter {
     float: right;
 }
 
-#ingamechat {
+div#sidechat {
+    width: 18%;
+    background: rgba(0, 0, 0, .5);
+    position: absolute;
+    height: 80%;
+    bottom: 4%;
+    right: 0;
+    border: 1px solid #444;
+    z-index: 90;
+    resize: both;
+    overflow: auto;
+}
+
+#sidechattext {
+    padding: 5%;
+    margin: 0;
+}
+
+#sidechattext li {
+    color: white;
+    list-style: none;
+}
+
+#sidechatinput {
     width: 100%;
     position: absolute;
     bottom: 0;
-    min-height: 10%;
-    color: white;
+    height: 5%;
+    background: white
+}
+
+#sidechattext {
+    height: 95%;
+    width: 100%;
 }
 
 meter::-webkit-meter-optimum-value {
