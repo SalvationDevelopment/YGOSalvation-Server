@@ -541,7 +541,7 @@ function getLocation(item) {
         $('.GRAVE').addClass('beta').removeClass('GRAVE');
         $('.alpha').addClass('GRAVE').removeClass('alpha');
         $('.beta').addClass('DECK').removeClass('beta');
-    }
+    };
     gui.OnChaining = function (cards, desc, forced) {
         var cardIDs = JSON.parse(cards),
             i;
@@ -712,3 +712,37 @@ function getLocation(item) {
     //   else
     //    t->X = 1.9f + sequence * 4.0f / (count - 1);
 }());
+
+function resizeSystem(p) {
+    // p = element to make resizable
+
+    p.addEventListener('click', function init() {
+        p.removeEventListener('click', init, false);
+        p.className = p.className + ' resizable';
+        var resizer = document.createElement('div');
+        resizer.className = 'resizer';
+        p.appendChild(resizer);
+        resizer.addEventListener('mousedown', initDrag, false);
+    }, false);
+
+    var startX, startY, startWidth, startHeight;
+
+    function initDrag(e) {
+        startX = e.clientX;
+        startY = e.clientY;
+        startWidth = parseInt(document.defaultView.getComputedStyle(p).width, 10);
+        startHeight = parseInt(document.defaultView.getComputedStyle(p).height, 10);
+        document.documentElement.addEventListener('mousemove', doDrag, false);
+        document.documentElement.addEventListener('mouseup', stopDrag, false);
+    }
+
+    function doDrag(e) {
+        p.style.width = (startWidth + e.clientX - startX) + 'px';
+        p.style.height = (startHeight + e.clientY - startY) + 'px';
+    }
+
+    function stopDrag(e) {
+        document.documentElement.removeEventListener('mousemove', doDrag, false);
+        document.documentElement.removeEventListener('mouseup', stopDrag, false);
+    }
+}

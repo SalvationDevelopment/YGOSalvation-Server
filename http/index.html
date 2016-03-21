@@ -723,6 +723,11 @@
                     <div class="lockindicator" onclick="lockInDeck(3)"></div>
                 </div>
             </div>
+            <div id="lobbychat">
+                <ul id="lobbychattext" class="ingamechatbox">
+                </ul>
+                <input id="lobbychatinput">
+            </div>
             <div id="lobbygameinfo">
                 <span id=translatefl>Forbidden List</span><span id="lobbyflist"></span>
                 <br/>
@@ -760,7 +765,7 @@
             <div class="rpschooser" style="background-image:url(img/textures/f2.jpg)" onclick="rps('rock')"></div>
             <div class="rpschooser" style="background-image:url(img/textures/f3.jpg)" onclick="rps('paper')"></div>
         </div>
-        <div id="ingamechat"></div>
+
         <div id="lifepoints">
             <meter class="p0lp" type="meter" value="8000" max="8000" min="0"></meter>
             <meter class="p1lp" type="meter" value="8000" max="8000" min="0"></meter>
@@ -791,16 +796,17 @@
             <button id="activatable" data-action="5" onclick="idleReply(this)">Activate</button>
             <button id="select_chains" data-action="5" onclick="idleReply(this)">Activate</button>
         </div>
-        <div class="left" style="position:fixed;color:white: font-size:.9em; z-index:30;">
+        <div class="left" style="position:fixed;color:white; font-size:.9em; z-index:30;">
             <div class="cardImage">
                 <img class="imgContainer" src="ygopro/pics/cover.jpg" />
             </div>
             <div class="cardDescription" style="width:80%;    height: calc(85vh - 254px);">
             </div>
-        </div <div id="sidechat">
-        <ul id="sidechattext">
-        </ul>
-        <input id="sidechatinput">
+        </div>
+        <div id="sidechat" draggable="true">
+            <ul id="sidechattext" class="ingamechatbox">
+            </ul>
+            <input id="sidechatinput">
         </div>
         <div class="field" id="selectionsystem">
             <div class="fieldimage">
