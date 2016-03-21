@@ -129,7 +129,7 @@ function update(cb) {
 
 
 
-update(function () {});
+//update(function () {});
 // Load the http module to create an http server.
 var http = require('http');
 
@@ -137,14 +137,14 @@ var server = http.createServer(function (request, response) {
     response.writeHead(200, {
         "Content-Type": "text/plain"
     });
-    update(function (error) {
-        var rate = fileupdate();
-        if (error) {
-            rate = rate + error;
-        }
-        response.end(rate);
-        console.log('[Update System]', rate, new Date(), ((error) || ''));
-    });
+//    update(function (error) {
+//        var rate = fileupdate();
+//        if (error) {
+//            rate = rate + error;
+//        }
+//        response.end(rate);
+//        console.log('[Update System]', rate, new Date(), ((error) || ''));
+//    });
 });
 
 // Listen on port 12000, IP defaults to 127.0.0.1
