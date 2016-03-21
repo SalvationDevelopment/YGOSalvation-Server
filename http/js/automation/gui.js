@@ -324,7 +324,7 @@ function getLocation(item) {
     };
     gui.gotoLobby = function () {
         window.singlesitenav('lobby');
-        $('.ingamechatbox').html();
+        $('.ingamechatbox').html('');
     };
     gui.UpdateTime = function (player, time) {
         $('.p' + player + 'time').val(time);
