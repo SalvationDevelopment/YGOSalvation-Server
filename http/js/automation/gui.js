@@ -43,7 +43,8 @@ function getLocation(item) {
         if (e.which == 13) {
             chat($(e.currentTarget).val());
             $(e.currentTarget).val('');
-            return false; //<---- Add this line
+            $(e.currentTarget).scrollTop($(e.currentTarget).prop("scrollHeight"))
+            return false;
         }
     });
 
@@ -323,6 +324,7 @@ function getLocation(item) {
     };
     gui.gotoLobby = function () {
         window.singlesitenav('lobby');
+        $('.ingamechatbox').html();
     };
     gui.UpdateTime = function (player, time) {
         $('.p' + player + 'time').val(time);
