@@ -828,9 +828,9 @@ div#actions button {
 .field {
     width: 100%;
     /*    background: rgba(0, 0, 0, .65);*/
-    -webkit-perspective: 1000px;
+    perspective: 1000px;
     position: relative;
-    -webkit-transform-style: preserve-3d;
+    transform-style: preserve-3d;
     clear: both;
     position: fixed;
 }
@@ -880,7 +880,7 @@ meter {
 }
 
 div#sidechat {
-    width: 18%;
+    width: 17%;
     background: rgba(0, 0, 0, .5);
     position: absolute;
     height: 80%;
@@ -890,6 +890,7 @@ div#sidechat {
     z-index: 90;
     resize: both;
     overflow: auto;
+    font-size: .8em;
 }
 
 #sidechattext {
@@ -946,15 +947,15 @@ meter.p1time {
     transform: rotateY(180deg);
 }
 
-meter::-webkit-meter-optimum-value {
+meter::meter-optimum-value {
     background: none;
     background-color: purple;
-    -webkit-transition: width .5s;
+    transition: width .5s;
     /*    border-right: 1px solid hotpink;*/
     /*    box-shadow: 0 0 12px rgba(255, 0, 255, .3);*/
 }
 
-meter::-webkit-meter-bar {
+meter::meter-bar {
     background: rgba(0, 0, 0, .8);
     /*    border-top: 1px solid rgba(100, 100, 100, 0.3);*/
     box-shadow: inset 0px 1px 10px black;
@@ -1048,17 +1049,17 @@ meter.p1time {
 .fieldimage {
     width: 800px;
     height: 600px;
-    -webkit-transform: rotate3d(1, 0, 0, 50deg);
-    -webkit-perspective-origin: 0;
+    transform: rotate3d(1, 0, 0, 50deg);
+    perspective-origin: 0;
     margin: 0 auto;
     background-image: url(../img/field.png);
     background-size: 100% 100%;
     background-repeat: no-repeat;
     background-position: center;
-    -webkit-transform-style: flat;
-    -webkit-perspective: 1000px;
-    -webkit-perspective-origin-x: 500px;
-    -webkit-perspective-origin-y: 1000px;
+    transform-style: flat;
+    perspective: 1000px;
+    perspective-origin-x: 500px;
+    perspective-origin-y: 1000px;
     transform: rotateX(60deg);
 }
 
@@ -1720,6 +1721,24 @@ input#player4lobbyslot {
 
 #rpsunit2.active {
     bottom: 0;
+}
+
+#p0avatar,
+#p1avatar {
+    z-index: 500;
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    top: 15vh;
+    background: black;
+}
+
+#p0avatar {
+    left: 17%;
+}
+
+#p1avatar {
+    right: 17%;
 }
 
 

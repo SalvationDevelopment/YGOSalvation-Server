@@ -346,6 +346,9 @@ function getLocation(item) {
         $('#p0time, #p1time').attr('value', window.duel.timelimit);
         $('#p0name').html(window.duel.player[0].name);
         $('#p1name').html(window.duel.player[1].name);
+        $('#p0avatar').attr('src', avatarMap[window.duel.player[0].name]);
+        $('#p1avatar').attr('src', avatarMap[window.duel.player[1].name]);
+
         gui.DOMWriter(OneDeck, 'DECK', 0);
         gui.DOMWriter(TwoDeck, 'DECK', 1);
         gui.DOMWriter(OneExtra, 'EXTRA', 0);

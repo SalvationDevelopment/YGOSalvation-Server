@@ -664,7 +664,7 @@ $(function () {
         var id = Number($(this).attr('data-card-id')),
             remainingDecks = deckStorage.not('main')
 
-        good = addDeckLegal(id, 'main', 60, lflist, $('.banlistSelect').val(), remainingDecks[0], remainingDecks[1]);
+        good = addDeckLegal(id, deckStorage.getDeck('main'), 60, lflist, $('.banlistSelect').val(), remainingDecks[0], remainingDecks[1]);
         if (good) {
             deckStorage.removeCard('main', index);
             drawDeck('main');

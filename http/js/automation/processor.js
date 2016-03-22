@@ -3,6 +3,7 @@
 
 var duel = {};
 
+
 function cleanstate() {
     'use strict';
     window.duel = {
@@ -45,6 +46,16 @@ function cleanstate() {
     };
 }
 
+var avatarMap = {};
+
+function getAvatar(name) {
+    if (avatarMap[name]) {
+        return;
+    }
+    $.getJSON('http://forum.ygopro.us/avatar.php?username=' + name, function processAvatar(avatarUnit) {
+        avatarMap[name] = avatarUnit.url;
+    });
+}
 
 function cardCollections(player) {
     'use strict';
@@ -156,6 +167,7 @@ function initiateNetwork_STOC(network) {
             if (!duel.player[i].name) {
                 duel.player[i].name = data.person;
                 sound.play('soundenterroom');
+                getAvatar(duel.player[i].name);
                 return;
             }
         }
