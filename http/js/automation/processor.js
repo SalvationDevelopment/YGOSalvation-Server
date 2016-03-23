@@ -213,7 +213,7 @@ function initiateNetwork_MSG(network) {
     'use strict';
     network.on('MSG_RETRY', function (data) {
         //???
-        window.alert('An Error Occured');
+        modalMsg('An Error Occured');
         console.log('An error occured, no shit...');
     });
     network.on('MSG_HINT', function (data) {
@@ -223,9 +223,9 @@ function initiateNetwork_MSG(network) {
     network.on('MSG_WIN', function (data) {
         //???
         if (data.won) {
-            alert('You won!');
+            modalMsg('You won!');
         } else {
-            alert('You lost');
+            modalMsg('You lost');
         }
     });
     network.on('MSG_START', function (data) {
@@ -566,7 +566,7 @@ function initiateNetwork_MSG(network) {
 
     network.on('ERRMSG_DECKERROR', function (data) {
         //something is wrong with the deck you asked the server to validate!
-        window.alert(data.error);
+        modalMsg(data.error);
         //gui.displayRPSSelector();
     });
 
