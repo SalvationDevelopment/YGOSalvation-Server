@@ -4,6 +4,26 @@
 var gui = {};
 
 
+function modalMsg(message, x) {
+    'use strict';
+    clearTimeout(window.modalTimeout);
+    $('#modal').css({
+        'display': 'flex',
+        'opacity': '1'
+    }).html(message);
+    window.modalTimeout = setTimeout(function () {
+        $('#modal').css({
+
+            'opacity': '0'
+        });
+        window.modalTimeout = setTimeout(function () {
+            $('#modal').css({
+                'display': 'none',
+
+            });
+        }, 3000)
+    }, 3000)
+}
 
 function getLocation(item) {
     'use strict';

@@ -2319,4 +2319,7 @@ div#modal {
     text-align: center;
     padding: 2vh 5vw;
     display: none;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 500ms;
 }
