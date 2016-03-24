@@ -873,6 +873,17 @@ meter {
     float: left;
     margin: 10px 5%;
     color: #aaa;
+    position: absolute;
+    display: block;
+    text-align: right;
+}
+
+.p0name {
+    left: 36vw;
+}
+
+.p1name {
+    right: 36vw;
 }
 
 .p1name {
