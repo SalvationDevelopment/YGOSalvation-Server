@@ -13,19 +13,17 @@
     <link rel="shortcut icon" href="/favicon.png" />
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width">
-    <script src="js/vendor/jquery-1.11.0.min.js"></script>
+    <script src="http://ygopro.us/js/jquery-1.11.0.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/2.0.0/handlebars.min.js"></script>
-    <link href="css/roboto.css" rel="stylesheet" type="text/css">
-    <link href="css/PoiretOne.css" rel="stylesheet" type="text/css">
-    <link href='css/AlegreyaSans.css' rel='stylesheet' type='text/css'>
+    <link href="http://ygopro.us/css/roboto.css" rel="stylesheet" type="text/css">
+    <link href="http://ygopro.us/css/PoiretOne.css" rel="stylesheet" type="text/css">
+    <link href='http://ygopro.us/css/AlegreyaSans.css' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="css/animation.css">
     <link rel="stylesheet" type="text/css" href="css/deck-edit.css">
 
 
-    <script src="js/translations.js"></script>
-    <script src="js/primus.js"></script>
-    <script src="js/index-controls.js"></script>
+
 
     <style>
         #languagesetter {
@@ -45,19 +43,6 @@
 </head>
 
 <body class="unlogged">
-
-    <div id="modal"></div>
-    <div id="modalyesno"></div>
-    <div id="modaleffectyn"></div>
-    <div id="modalsummon"><img src="" /></div>
-    <footer class="superfooter">
-        <div style='max-width:1000px; margin:0 auto'>
-            <span itemscope itemtype="http://schema.org/SoftwareApplication">YGOPro</span> &amp
-            <span itemscope itemtype="http://schema.org/SoftwareApplication">Salvation Server</span> is not affliated with
-            <span itemscope itemtype="http://schema.org/Organization" itemprop="name">Konami</span>or
-            <span itemscope itemtype="http://schema.org/Person" itemprop="name">Kazuki Takahashi</span>. Salvation Server &copy; 2013-2015, all rights reserved by respective parties. Powered by Yu-Jo Friendship and fans of Yu-Gi-Oh! worldwide.</div>
-    </footer>
-    <div id="backdrop"></div>
     <div id="uniqueid" style="display:none"></div>
     <div style="z-index:40; position:relative;">
         <span class="psudolinksingle" onclick="singlesitenav('home')" id='psudologo'>
@@ -66,22 +51,29 @@
         </h1>
         </span>
         <ul class="featurelist" style="font-size:small">
-            <li><span data-translation-deckedit class="psudolinksingle" onclick='singlesitenav("deckedit");'>Deck Edit</span>
-                <li><span data-translation-gamelist class="psudolinksingle" onclick="joinGamelist();singlesitenav('gamelist');">Game List</span>
-                </li>
-                <li class="launcheronly"><span data-translation-host class="psudolinksingle" onclick="singlesitenav('host')">Host</span>
-                </li>
-                <li><a data-translation-forum class="psudolinksingle " style='text-decoration:none' onclick="singlesitenav('forum')" target="_blank" href="http://forum.ygopro.us">Forum</a>
-                </li>
-                <li><span data-translation-chat class="psudolinksingle" onclick="singlesitenav('chat')">Chat</span>
-                </li>
-                <li><span data-translation-faq class="psudolinksingle" onclick="singlesitenav('faq')">News</span>
-                </li>
-                <li><span data-translation-ranking class="psudolinksingle" onclick="singlesitenav('ranking');">Profile</span>
-                </li>
+            <li class="launcheronly"><span class="psudolinksingle " onclick='ygopro("-l")'>LAN Mode</span>
+            </li>
+            <li><span data-translation-deckedit class="psudolinksingle" onclick='ygopro("-d");singlesitenav("deckedit");'>Deck Edit</span>
+            </li>
+            <li class="launcheronly"><span data-translation-replays class="psudolinksingle" onclick='ygopro("-r");singlesitenav("replay ");'>Replays</span>
+            </li class="loophole">
+            <li><span data-translation-gamelist class="psudolinksingle" onclick="joinGamelist();singlesitenav('gamelist');">Game List</span>
+            </li>
+            <li class="launcheronly"><span data-translation-host class="psudolinksingle" onclick="singlesitenav('host')">Host</span>
+            </li>
+            <li><a data-translation-forum class="psudolinksingle " style='text-decoration:none' onclick="singlesitenav('forum')" target="_blank" href="http://forum.ygopro.us">Forum</a>
+            </li>
+            <li><span data-translation-chat class="psudolinksingle" onclick="singlesitenav('chat')">Chat</span>
+            </li>
+            <li><span data-translation-faq class="psudolinksingle" onclick="singlesitenav('faq')">News</span>
+            </li>
+            <li><span data-translation-ranking class="psudolinksingle" onclick="singlesitenav('ranking');">Ranking</span>
+            </li>
+            <li class="launcheronly"><span class="psudolinksingle" onclick="singlesitenav('settings')" data-translation-settings>Settings</span>
+            </li>
         </ul>
     </div>
-    <header style="left:0vh;" id='home'>
+    <header style="top:0vh;" id='home'>
         <div id="homecontainer">
             <span class="psudolinksingle" onclick="singlesitenav('home')">
                 <h1 class="shine" style="padding-top:5px">
@@ -89,11 +81,45 @@
             </h1>
             </span>
             <h2 data-translation-onlineyugiohsimulator class="shine">Online Yu-Gi-Oh! Simulator</h2>
+            <nav class="lander-main">
 
+                <div data-translation-playnow class="downloadbutton" style="display:none">Play Now</div>
+
+                <ul class="webonly" style="text-align:center; padding:0;" id="mirrors" itemscope itemtype="http://schema.org/SoftwareApplication">
+                    <!--<li>Login</li>
+                <li>Sign Up</li>-->
+                    <li><a data-translation-playnow href="https://drive.google.com/file/d/0B20SNNA74_RsdTh3bko0QlVjem8/view" onclick="_gaq.push(['_trackEvent', 'Site', 'Download', 'Full Windows']);">Full Windows Client </a>
+
+                    </li>
+                    <!--
+                    <li><a href="http://ygopro.us/setup.msi">Windows Mirror 1 </a>
+                        
+                    </li>
+-->
+                    <!--
+                    <li><a href=" http://ygopro.us/setups/client.tar.gz" onclick="_gaq.push(['_trackEvent', 'Site', 'Download', 'Portable']);">Linux32 TarGz/ Windows Portable</a>
+
+                    </li>
+                    <li><a href="http://ygopro.us/setups/salvationmac.zip" onclick="_gaq.push(['_trackEvent', 'Site', 'Download', 'Mac']);">Mac OSX 10.7+ App Zip</a> (Not fully supported!)
+
+                    </li>
+
+                    <li><a href="https://mega.co.nz/#!utBRyTzB!EcezmcFqFN10rO2fRT4PYpTxCHy0GkumA8YvYdrwGTM" onclick="_gaq.push(['_trackEvent', 'Site', 'Download', 'Torrent']);"> Mirror 1</a>
+                    </li>
+-->
+                    <li><a href="http://ygopro.us/setups/setup.msi.torrent">Torrent</a>
+                    </li>
+                    <!--
+                <li><a href="http://d-h.st/5PC6">Mirror 3</a></li>
+                <li><a href="https://www.mediafire.com/?xrm3rko4ln3e64z">Mirror 4</a></li>-->
+
+                </ul>
+
+            </nav>
             <form id="ipblogin" style="text-align:center; color: white !important; display:block; margin:0 auto" class="loginsystem">
                 <input data-translation-forumusername id="ips_username" type="text" class="loginsystem" name="ips_username" tabindex="1" placeholder="Forum Username">
                 <input data-translation-forumpassword id="ips_password" type="password" class="loginsystem" name="ips_password" tabindex="2" placeholder="Forum Password">
-                <br><span id="logintext"><input type="checkbox" id="ips_remember" ><span data-translation-rememberusernamepassword> Remember Username &amp; Password?</span>
+                <br><span style="font-size:.9em; display:block; margin-top:-0.5em;"><input type="checkbox" id="ips_remember" ><span data-translation-rememberusernamepassword> Remember Username &amp; Password?</span>
                 <span style="display:inline-block; width:40px"></span><a data-translation-registerviaforum class=" loginsystem" href="http://forum.ygopro.us/index.php?app=core&module=global&section=register" target="_blank">Register via Forum</a> | <a data-translation-forgotpassword class=" loginsystem" href="http://forum.ygopro.us/index.php?app=core&module=global&section=lostpass">Forgot Password</a>
                 </span>
                 <br />
@@ -120,6 +146,11 @@
                 <span onclick="translateLang('he')">עברית</span>
             </div>
             <div style="width:728px;margin:0 auto">
+                <SCRIPT language="Javascript">
+                    var cpmstar_rnd = Math.round(Math.random() * 999999);
+                    var cpmstar_pid = 44429;
+                    document.writeln("<SCR" + "IPT language='Javascript' src='//server.cpmstar.com/view.aspx?poolid=" + cpmstar_pid + "&script=1&rnd=" + cpmstar_rnd + "'></SCR" + "IPT>");
+                </SCRIPT>
             </div>
         </div>
     </header>
@@ -234,7 +265,11 @@
 
             </div>
             <div style="width:728px; height:90px; margin:0 -140px;">
-
+                <SCRIPT language="Javascript">
+                    var cpmstar_rnd = Math.round(Math.random() * 999999);
+                    var cpmstar_pid = 44429;
+                    document.writeln("<SCR" + "IPT language='Javascript' src='//server.cpmstar.com/view.aspx?poolid=" + cpmstar_pid + "&script=1&rnd=" + cpmstar_rnd + "'></SCR" + "IPT>");
+                </SCRIPT>
             </div>
         </section>
     </header>
@@ -263,15 +298,14 @@
             });
         </script>
         <div class="mainContainer" style="display: block;">
-            <button class="searchtoggle" onclick="$('.searchBar').toggleClass('closed');"></button>
             <div class="left">
                 <div class="cardImage">
-                    <img class="imgContainer" src="ygopro/pics/cover.jpg" />
+                    <img class="imgContainer" src="http://ygopro.us/ygopro/pics/cover.jpg" />
                 </div>
                 <div class="cardDescription">
                 </div>
             </div>
-            <div class="searchBar closed">
+            <div class="searchBar">
                 <div class="searchLeft">
                     <label for="banlistSelect">Ban List:
                         <select class="banlistSelect"></select>
@@ -303,7 +337,6 @@
                     <button class="sortDeck">Sort</button>
                     <button class="clearDeck">Clear</button>
                     <button class="newDeck">New</button>
-
                 </div>
                 <div class="searchRight">
                     <div class="searchBlock">
@@ -467,66 +500,6 @@
 -->
     </header>
     <header style="padding-top:50px" id="replay">
-
-    </header>
-    <header style="padding-top:50px" id="soundboard">
-        <audio controls preload="auto" id="soundshuffle">
-            <source src="ygopro/sounds/shuffle.wav" type="audio/wav">
-        </audio>
-        <audio controls preload="auto" id="sounderror">
-            <source src="ygopro/sounds/damage.wav" type="audio/wav">
-        </audio>
-        <audio controls preload="auto" id="soundstartygopro">
-            <source src="ygopro/sounds/enter.wav" type="audio/wav">
-        </audio>
-        <audio controls preload="auto" id="soundenterroom">
-            <source src="ygopro/sounds/playerenter.wav" type="audio/wav">
-        </audio>
-        <audio controls preload="auto" id="soundleaveroom">
-            <source src="" type="audio/wav">
-        </audio>
-        <audio controls preload="auto" id="soundstartduel">
-            <source src="" type="audio/wav">
-        </audio>
-        <audio controls preload="auto" id="soundchatmessage">
-            <source src="ygopro/sounds/chatmessage.wav" type="audio/wav">
-        </audio>
-        <audio controls preload="auto" id="soundwinrps">
-            <source src="" type="audio/wav">
-        </audio>
-        <audio controls preload="auto" id="soundloserps">
-            <source src="ygopro/sounds/damage.wav" type="audio/wav">
-        </audio>
-        <audio controls preload="auto" id="soundnewturn">
-            <source src="ygopro/sounds/nextturn.wav" type="audio/wav">
-        </audio>
-        <audio controls preload="auto" id="soundnewphase">
-            <source src="ygopro/sounds/phase.wav" type="audio/wav">
-        </audio>
-        <audio controls preload="auto" id="soundplacefd">
-            <source src="" type="audio/wav">
-        </audio>
-        <audio controls preload="auto" id="soundplacefd">
-            <source src="" type="audio/wav">
-        </audio>
-        <audio controls preload="auto" id="soundsummon">
-            <source src="ygopro/sounds/summon.wav" type="audio/wav">
-        </audio>
-        <audio controls preload="auto" id="soundspsummon">
-            <source src="ygopro/sounds/specialsummon.wav" type="audio/wav">
-        </audio>
-        <audio controls preload="auto" id="soundactivate">
-            <source src="ygopro/sounds/activate.wav" type="audio/wav">
-        </audio>
-        <audio controls preload="auto" id="sounddice">
-            <source src="ygopro/sounds/diceroll.wav" type="audio/wav">
-        </audio>
-        <audio controls preload="auto" id="soundcoin">
-            <source src="ygopro/sounds/coinflip.wav" type="audio/wav">
-        </audio>
-        <audio controls preload="auto" id="soundgainlp">
-            <source src="ygopro/sounds/gainlp.wav" type="audio/wav">
-        </audio>
 
     </header>
     <header style="padding-top:50px" id="popup">
@@ -698,160 +671,50 @@
     <header style="padding-top:50px" id="lobby">
         <div id="lobbymenu">
             <div id="duelspectate">
-                <span id="lobbygotoduel" onclick="challengeDuel();">Duel</span>
-                <span id="lobbygotospectate" onclick="movetoSpectator();">Spectate</span>
-
-                <div class="slot" id="slot1">
-                    <div id="player1lobbykick" class="kickbutton" onlick="kickDuelist(0);"></div>
+                <span id="lobbygotoduel">Duel</span>
+                <span id="lobbygotospectate">Spectate</span>
+                <div class="slot">
+                    <div id="player1lobbykick" class="kickbutton"></div>
                     <input id="player1lobbyslot" placeholder="empty slot">
-                    <div class="lockindicator" onclick="lockInDeck(0)"></div>
+                    <input type="checkbox" id="player1lobbycheck">
                 </div>
-                <div class="slot" id="slot2">
-                    <div id="player2lobbykick" class="kickbutton" onlick="kickDuelist(1);"></div>
+                <div class="slot">
+                    <div id="player2lobbykick" class="kickbutton"></div>
                     <input id="player2lobbyslot" placeholder="empty slot">
-                    <div class="lockindicator" onclick="lockInDeck(1)"></div>
+                    <input type="checkbox" id="player2lobbycheck">
                 </div>
-                <div class="slot" id="slot3">
-                    <div id="player3lobbykick" class="kickbutton" onlick="kickDuelist(2);"></div>
+                <div class="slot">
+                    <div id="player3lobbykick" class="kickbutton"></div>
                     <input id="player3lobbyslot" placeholder="empty slot">
-                    <div class="lockindicator" onclick="lockInDeck(2)"></div>
+                    <input type="checkbox" id="player3lobbycheck">
                 </div>
-                <div class="slot" id="slot4">
-                    <div id="player4lobbykick" class="kickbutton" onlick="kickDuelist(3);"></div>
+                <div class="slot">
+                    <div id="player4lobbykick" class="kickbutton"></div>
                     <input id="player4lobbyslot" placeholder="empty slot">
-                    <div class="lockindicator" onclick="lockInDeck(3)"></div>
+                    <input type="checkbox" id="player4lobbycheck">
                 </div>
             </div>
-
-            <div id="lobbygameinfo">
-                <span id=translatefl>Forbidden List</span><span id="lobbyflist"></span>
-                <br/>
-                <span id="translateacp">Allowed Card Pool</span><span id="lobbyallowed"></span>
-                <br/>
-                <span id="translategamemode">Game Mode </span><span id="lobbygamemode"></span>
-                <br/>
-                <span id="translatetimelimit">Time Lmit </span><span id="lobbytimelimit"></span>
-                <br/>
-                <span id="translatestartinglifepoints">Starting Lifepoints</span><span id="lobbylp"></span>
-                <br/>
-                <span id="translatecdpt">Cards Drawn per Turn: </span><span id="lobbycdpt"></span>
-            </div>
-            <div id="lobbycurrentdeck">
-                Select Deck :
-                <select class='currentdeck'>
-                    <option selected value=""></option>
+            <div <select class='currentdeck'>
+                <option selected value=""></option>
                 </select>
             </div>
-            <div id="lobbystartcancel">
-                <button onclick="startDuel()" id="lobbystart">Start Duel</button>
-                <button id="lobbycancel" onclick="leaveDuel()">Cancel</button>
-            </div>
-        </div>
-        <div id="lobbychat">
-            <ul id="lobbychattext" class="ingamechatbox">
-            </ul>
-            <input id="lobbychatinput">
-        </div>
     </header>
     <header style="padding-top:50px" id="duelscreen">
-        <div id="waiting">Waiting...</div>
-        <div id="rpsunit1"></div>
-        <div id="rpsunit2"></div>
-        <div id="selectwhogoesfirst">
-            <div id="gofirst" onclick="gofirst(true)">Go First</div>
-            <div id="gosecond" onclick="gofirst(false)">Go Second</div>
-        </div>
-        <div id="rpschoice">
-            <div class="rpschooser" style="background-image:url(img/textures/f1.jpg)" onclick="rps('scissors')"></div>
-            <div class="rpschooser" style="background-image:url(img/textures/f2.jpg)" onclick="rps('rock')"></div>
-            <div class="rpschooser" style="background-image:url(img/textures/f3.jpg)" onclick="rps('paper')"></div>
-        </div>
-
+        <div id="ingamechat"></div>
         <div id="lifepoints">
             <meter class="p0lp" type="meter" value="8000" max="8000" min="0"></meter>
             <meter class="p1lp" type="meter" value="8000" max="8000" min="0"></meter>
             <input disabled class="p0lp" value="8000">
             <input disabled class="p1lp" value="8000">
-            <meter class="p0time" type="meter" value="180" max="360" min="0"></meter>
-            <meter class="p1time" type="meter" value="180" max="360" min="0"></meter>
+            <meter class="p0time" type="meter" value="8000" max="360" min="0"></meter>
+            <meter class="p1time" type="meter" value="8000" max="360" min="0"></meter>
             <span class="p0name"></span>
             <span class="p1name"></span>
-            <img id="p0avatar" src="" />
-            <img id="p1avatar" src="" />
 
-        </div>
-        <div id="phaseindicator" data-currentphase="">
-            <div>
-                <button id="drawphi">Draw</button>
-                <button id="standbyphi">Standby</button>
-                <button id="main1phi">Main 1</button>
-                <button id="battlephi" onclick="ws.send(makeCTOS('CTOS_RESPONSE', new Buffer([6,0,0,0])));">Battle</button>
-                <button id="main2phi">Main 2</button>
-                <button id="endphi" onclick="ws.send(makeCTOS('CTOS_RESPONSE', new Buffer([7,0,0,0])));">End</button>
-            </div>
-        </div>
-        <div id="actions">
-            <button id="summonable_cards" data-action="0" onclick="idleReply(this)">Normal Summon</button>
-            <button id="spsummonable_cards" data-action="1" onclick="idleReply(this)">Special Summon</button>
-            <button id="repositionable_cards" data-action="2" onclick="idleReply(this)">Change Position</button>
-            <button id="msetable_cards" data-action="3" onclick="idleReply(this)">Set</button>
-            <button id="ssetable_cards" data-action="4" onclick="idleReply(this)">Set</button>
-            <button id="activatable" data-action="5" onclick="idleReply(this)">Activate</button>
-            <button id="select_chains" data-action="5" onclick="idleReply(this)">Activate</button>
-        </div>
-        <div class="left" style="position:fixed;color:white; font-size:.9em; z-index:30;">
-            <div class="cardImage">
-                <img class="imgContainer" src="ygopro/pics/cover.jpg" />
-            </div>
-            <div class="cardDescription" style="width:80%;    height: calc(85vh - 254px);">
-            </div>
-        </div>
-        <div id="sidechat" draggable="true">
-            <ul id="sidechattext" class="ingamechatbox">
-            </ul>
-            <input id="sidechatinput">
-        </div>
-        <div class="field" id="selectionsystem">
-            <div class="fieldimage">
-                <div class="cardselectionzone p0 DECK"></div>
-                <div class="cardselectionzone p0 EXTRA"></div>
-                <div class="cardselectionzone p0 GRAVE"></div>
-                <div class="cardselectionzone p0 REMOVED"></div>
-                <div class="cardselectionzone p0 SPELLZONE i0"></div>
-                <div class="cardselectionzone p0 SPELLZONE i1"></div>
-                <div class="cardselectionzone p0 SPELLZONE i2"></div>
-                <div class="cardselectionzone p0 SPELLZONE i3"></div>
-                <div class="cardselectionzone p0 SPELLZONE i4"></div>
-                <div class="cardselectionzone p0 SPELLZONE i5"></div>
-                <div class="cardselectionzone p0 SPELLZONE i6"></div>
-                <div class="cardselectionzone p0 SPELLZONE i7"></div>
-                <div class="cardselectionzone p0 MONSTERZONE i0"></div>
-                <div class="cardselectionzone p0 MONSTERZONE i1"></div>
-                <div class="cardselectionzone p0 MONSTERZONE i2"></div>
-                <div class="cardselectionzone p0 MONSTERZONE i3"></div>
-                <div class="cardselectionzone p0 MONSTERZONE i4"></div>
-                <div class="cardselectionzone p1 DECK"></div>
-                <div class="cardselectionzone p1 EXTRA"></div>
-                <div class="cardselectionzone p1 GRAVE"></div>
-                <div class="cardselectionzone p1 REMOVED"></div>
-                <div class="cardselectionzone p1 SPELLZONE i0"></div>
-                <div class="cardselectionzone p1 SPELLZONE i1"></div>
-                <div class="cardselectionzone p1 SPELLZONE i2"></div>
-                <div class="cardselectionzone p1 SPELLZONE i3"></div>
-                <div class="cardselectionzone p1 SPELLZONE i4"></div>
-                <div class="cardselectionzone p1 SPELLZONE i5"></div>
-                <div class="cardselectionzone p1 SPELLZONE i6"></div>
-                <div class="cardselectionzone p1 SPELLZONE i7"></div>
-                <div class="cardselectionzone p1 MONSTERZONE i0"></div>
-                <div class="cardselectionzone p1 MONSTERZONE i1"></div>
-                <div class="cardselectionzone p1 MONSTERZONE i2"></div>
-                <div class="cardselectionzone p1 MONSTERZONE i3"></div>
-                <div class="cardselectionzone p1 MONSTERZONE i4"></div>
-            </div>
         </div>
         <div class="field" id="duelzone">
             <div class="fieldcontainer">
-                <div class="fieldimage" id="automationduelfield">
+                <div class="fieldimage">
 
 
                 </div>
@@ -883,8 +746,16 @@
             </div>
         </div>
     </header>
-
-
+    <footer class="superfooter">
+        <div style='max-width:1000px; margin:0 auto'>
+            <span itemscope itemtype="http://schema.org/SoftwareApplication">YGOPro</span> &amp
+            <span itemscope itemtype="http://schema.org/SoftwareApplication">Salvation Server</span> is not affliated with
+            <span itemscope itemtype="http://schema.org/Organization" itemprop="name">Konami</span>or
+            <span itemscope itemtype="http://schema.org/Person" itemprop="name">Kazuki Takahashi</span>. Salvation Server &copy; 2013-2015, all rights reserved by respective parties. Powered by Yu-Jo Friendship and fans of Yu-Gi-Oh! worldwide.</div>
+    </footer>
+    <script src="js/translations.js"></script>
+    <script src="js/vendor/primus.js"></script>
+    <script src="js/index-controls.js"></script>
     <script src="js/battlepack3.js" async></script>
     <script type="text/javascript">
         var _gaq = _gaq || [];
@@ -922,28 +793,27 @@
 
     <script src="js/http-gamelist.js"></script>
     <script src="js/vendor/jquery-ui.min.js"></script>
-    <script src="js/deckedit/configparser.js"></script>
+    <script src="js/deckedit/ConfigParser.js"></script>
     <script src="js/deckedit/parseYDK.js"></script>
-    <script src="js/deckedit/dbprotocol.js"></script>
     <script src="js/deckedit/deck-edit-launcher.js"></script>
+
+
     <script src="js/automation/require.js"></script>
     <script>
         requirejs(['js/automation/buffer', 'js/automation/EventEmitter.min'],
             function (Buffer, EventEmitter) {
                 window.Buffer = Buffer.Buffer;
                 window.EventEmitter = EventEmitter;
+                console.log(Buffer, EventEmitter);
             });
     </script>
-    <script src="js/automation/sound.js"></script>
     <script src="js/automation/enums.js"></script>
     <script src="js/automation/card.js"></script>
-    <script src="js/automation/receiver.js"></script>
+    <script src="js/automation/reciever.js"></script>
     <script src="js/automation/reply.js"></script>
     <script src="js/automation/gui.js"></script>
     <script src="js/automation/processor.js"></script>
     <script src="js/automation/ygopro-ws.js"></script>
-    <script src="js/irc/irc-style-parser.js"></script>
-    <script src="js/irc/irc-ws.js"></script>
     </script>
 
 </body>
