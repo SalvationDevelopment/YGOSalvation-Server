@@ -213,10 +213,11 @@ function achievementConstructor(data) {
     };
 }
 
-params.showJoinPartMessages = false;
-params.autoReconnect = false;
+
 $(document).ready(function () {
     'use strict';
+    params.showJoinPartMessages = false;
+    params.autoReconnect = false;
     var useLang = localStorage.language || 'en';
     translateLang(useLang);
     if (localStorage.loginnick && localStorage.loginpass) {
