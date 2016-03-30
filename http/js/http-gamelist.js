@@ -1,8 +1,8 @@
-/*jslint plusplus: true*/
+/*jslint plusplus: true, browser:true, node:true*/
 /*jslint nomen: true*/
-/*global localStorage, $, Primus, console, writeDeckList, makeDeck, confirm, launcher, singlesitenav, startgame, _gaq, internalLocal, loggedIn, processServerCall, admin*/
+/*global localStorage, $, Primus, prompt, console, writeDeckList, makeDeck, confirm, launcher, alert, singlesitenav, startgame, _gaq, internalLocal, loggedIn, processServerCall, admin*/
 /*exported connectToCheckmateServer, leaveGamelist, hostGame, connectgamelist, setHostSettings, setfilter*/
-/*eslint no-alert: 2*/
+
 
 var localstorageIter = 0;
 
@@ -55,15 +55,14 @@ function isChecked(id) {
     return ($(id).is(':checked'));
 }
 
-function ygopro() {
+function ygopro(parameter) {
     'use strict';
-    if (!loggedIn) {
-        singlesitenav('home');
-        setTimeout(function () {
-            alert('You must login first!');
-        }, 1000)
-        return;
-    }
+    uniqueID = $('#uniqueid').html();
+    localStorage.serverport = '8911';
+    localStorage.lastport = '8911';
+    saveSettings();
+    localStorage.pics = (isChecked('[data-localhost=altpics]')) ? './altpics/' : 'pics';
+    console.log(isChecked('[data-localhost=altpics]'));
     if (localStorage.roompass) {
         if (localStorage.roompass[0] === '4') {
             //if battleback
@@ -71,18 +70,26 @@ function ygopro() {
 
         }
     }
-
-    startgame(localStorage.roompass + '\u0000');
+    var out = {},
+        storage;
+    for (storage in localStorage) {
+        if (localStorage.hasOwnProperty(storage) && storage.indexOf('login') === -1) {
+            out[storage] = localStorage[storage];
+        }
+    }
+    //$.post('http://127.0.0.1:9468/' + parameter, localStorage);
     console.log('sending details');
-
-
-    window.internalLocal = 'YGOPro';
+    primus.write({
+        action: 'privateServerRequest',
+        parameter: parameter,
+        local: out,
+        uniqueID: uniqueID
+    });
+    internalLocal = 'YGOPro';
     try {
         _gaq.push(['_trackEvent', 'Launcher', 'YGOPro', parameter]);
-        _gaq.push(['_trackEvent', 'Site', 'Navigation Movement', internalLocal + ' - YGOPro']);
-    } catch (e) {
-        window.console.log('Error with Google Analytics');
-    }
+        _gaq.push(['_trackEvent', 'Site', 'Navigation Movement', internalLocal + ' - ' + 'YGOPro']);
+    } catch (e) {}
 
 
 }
@@ -101,6 +108,15 @@ function joinGamelist() {
         action: 'join',
         uniqueID: uniqueID
     });
+    if (loggedIn) {
+        primus.write({
+            action: 'privateServer',
+            username: localStorage.nickname,
+            uniqueID: uniqueID
+        });
+
+
+    }
 }
 joinGamelist();
 
@@ -142,9 +158,9 @@ function enterGame(string, pass) {
     var guess = '';
     console.log('checking for pass');
     if (pass) {
-        guess = window.prompt('Password?', guess);
+        guess = prompt('Password?', guess);
         if (string.substring(26, 19) !== guess) {
-            window.alert('Wrong Password!');
+            alert('Wrong Password!');
             return;
         }
     }
@@ -156,12 +172,11 @@ function enterGame(string, pass) {
     ygopro('-j');
     try {
         _gaq.push(['_trackEvent', 'Launcher', 'YGOPro', 'Join Duel']);
-    } catch (e) {
-        window.console.log('Error with Google Analytics');
-    }
+    } catch (e) {}
     setTimeout(function () {
         $('body').css('background-image', 'url(http://ygopro.us/img/brightx_bg.jpg)');
     }, 6000);
+    singlesitenav('duelscreen');
 }
 
 function joinTournament() {
@@ -192,10 +207,10 @@ function setpass() {
         if (pass.length !== 5) {
             pass = randomString(5);
         }
-        pass = window.prompt('Password (5 char):', pass);
+        pass = prompt('Password (5 char):', pass);
         pass.replace(/[^a-zA-Z0-9]/g, "");
     } while (pass.length !== 5);
-    window.prompt('Give this Password to your Opponent(s)!', pass);
+    prompt('Give this Password to your Opponent(s)!', pass);
     return pass;
 }
 
@@ -217,7 +232,7 @@ function getDuelRequest() {
 
     out.prio = ($('#creategamebanlist').val() === "4") ? "T" : out.prio;
     out.prio = ($('#creategamebanlist').val() === "5") ? "T" : out.prio;
-    //out.string[0] = ($('#creategamebanlist').val() === "3") ? "1" : out.string[0];
+    out.string[0] = ($('#creategamebanlist').val() === "3") ? "1" : out.string[0];
 
     return out;
 }
@@ -431,13 +446,13 @@ function renderList(JSONdata) {
     }
     elem = $('#gamelistitems').find('div:not(.avaliable)').sort(sortMe);
     $('#gamelistitems').append(elem);
-    $('.game.avaliable').first()
-        .before('<br style="clear:both"><span class="gamelabel">' + window.jsLang.join + '<span><br style="clear:both">');
+    $('.avaliable').first()
+        .before('<br style="clear:both"><span class="gamelabel">' + jsLang.join + '<span><br style="clear:both">');
     $('.started')
-        .first().before('<br style="clear:both"><span class="gamelabel">' + window.jsLang.spectate + '<span><br style="clear:both">');
+        .first().before('<br style="clear:both"><span class="gamelabel">' + jsLang.spectate + '<span><br style="clear:both">');
     $('#activeduels').html($('.game').length);
     $('#activeduelist').html($('.playername').length + spectators - $('.playername:contains(SnarkyChild)').length);
-    //$('#loginsinlast24').html(stats24);
+    $('#loginsinlast24').html(stats24);
 }
 
 function setfilter() {
@@ -449,50 +464,18 @@ var stats24 = 0,
     statsShut = 0,
     connected = 0;
 
-
-function processDeckMessage(data) {
-    if (data.clientEvent === 'deck') {
-        if (data.command === 'get') {
-            window.deckfiles = data.decklist;
-            injectDeck(window.deckfiles);
-
-        }
-        if (data.command === 'save') {
-            getAllDecks();
-            window.alert('Deck Saved');
-        }
-        if (data.command === 'delete') {
-            getAllDecks();
-            window.alert('Deck Deleted');
-        }
-    }
-}
-
-function processStats(data) {
-    stats24 = 0;
-    statsShut = 0;
-    connected = data.online;
-
-    time = new Date().getTime();
-    for (player in data.stats.logged) {
-        statsShut++;
-        if (time - data.stats[player] < 86400000) { //within the last 24hrs
-            stats24++;
-        }
-    }
-}
-primus.on('data', function processIncomingPrimusMessage(data) {
+primus.on('data', function (data) {
     'use strict';
     var join = false,
         time,
         player;
-    console.log(data);
+    //console.log(data);
     if (!data.clientEvent) {
         gamelistcache = JSON.parse(data);
         renderList(gamelistcache);
     } else {
 
-        if (data.clientEvent === 'global' && loggedIn) {
+        if (data.clientEvent === 'global') {
             $('footer, #popupbody').html(data.message).addClass('loud');
             if (data.message && data.message.length) {
                 //singlesitenav('popup'); /* turned off per Stormwolf;*/
@@ -519,15 +502,29 @@ primus.on('data', function processIncomingPrimusMessage(data) {
             if (data.from === 'SnarkyChild') {
                 enterGame(data.roompass);
                 return;
-            } else if (window.confirm('Accept Duel Request from ' + data.from + '?')) {
+            } else if (confirm('Accept Duel Request from ' + data.from + '?')) {
                 enterGame(data.roompass);
             }
 
         }
-        processDeckMessage(data);
-
+        if (data.clientEvent === 'tournamentrequest' && confirm('Join Tournament?')) {
+            joinTournament();
+        }
+        if (data.clientEvent === 'privateServer') {
+            processServerCall(data.serverUpdate);
+        }
         if (data.stats) {
-            processStats(data);
+            stats24 = 0;
+            statsShut = 0;
+            connected = data.online;
+
+            time = new Date().getTime();
+            for (player in data.stats.logged) {
+                statsShut++;
+                if (time - data.stats[player] < 86400000) { //within the last 24hrs
+                    stats24++;
+                }
+            }
         } else {
             console.log(data);
         }
@@ -538,18 +535,14 @@ primus.on('connect', function () {
     console.log('!!!!!! connect');
     try {
         _gaq.push(['_trackEvent', 'Launcher', 'Primus', 'Init']);
-    } catch (e) {
-        window.console.log('Error with Google Analytics');
-    }
+    } catch (e) {}
 });
 primus.on('close', function () {
     'use strict';
     console.log('!!!!!! close');
     try {
         _gaq.push(['_trackEvent', 'Launcher', 'Primus', 'Failure']);
-    } catch (e) {
-        window.console.log('Error with Google Analytics');
-    }
+    } catch (e) {}
 });
 
 function killgame(target) {
@@ -599,14 +592,14 @@ $('body').on('mousedown', '.game', function (ev) {
     }
 });
 
-$('body').on('click', 'footer', function (ev) {
+$('body').on('mousedown', 'footer', function (ev) {
     'use strict';
-    if (admin === "1") {
+    if (admin === "1" && launcher && ev.which === 3) {
         if (confirm('Send Global?')) {
-            sendglobal(window.prompt('Global Message', 'Be nice, or else...'));
+            sendglobal(prompt('Global Message', 'Be nice, or else...'));
         } else {
             if (confirm('Murder someone then?')) {
-                murder(window.prompt('Username', ''));
+                murder(prompt('Username', ''));
             }
         }
     }
