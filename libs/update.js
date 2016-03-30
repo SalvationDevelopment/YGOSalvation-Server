@@ -84,7 +84,7 @@ function fileupdate() {
             "path": "/",
             "name": "/",
             "type": "folder",
-            "subfolder": [ygopro, plugins, license, interfacefolder, stringsfolder]
+            "subfolder": [stringsfolder, ygopro, plugins, license, interfacefolder]
         };
 
     fileContent = 'var manifest = ' + JSON.stringify(installation, null, 4);
