@@ -98,8 +98,8 @@ function singlesitenav(target) {
         $('body').css('background-image', 'url(http://ygopro.us/img/brightx_bg.jpg)');
     }
     $('.activescreen').removeClass('activescreen');
-    $('header').css('top', '100vh');
-    $('#' + target).css('top', '0').addClass('activescreen');
+    $('header').css('left', '100vw');
+    $('#' + target).css('left', '0').addClass('activescreen');
     saveSettings();
     return false;
 }
@@ -115,6 +115,7 @@ $(function () {
     } else {
         $(document.body).addClass("web");
     }
+    singlesitenav('home');
 });
 
 
