@@ -1,9 +1,8 @@
 /*jslint browser:true, plusplus:true, nomen: true*/
-/*global $,  Handlebars, prompt, _gaq, isChecked, alert, primus, ygopro, translationDB*/
+/*global $, saveSettings, Handlebars, prompt, _gaq, isChecked, alert, primus, ygopro, translationDB, params, swfobject, console*/
 
 var admin = false,
-    chatStarted = false,
-    uniqueID = Math.floor(Math.random() * 10000000);
+    chatStarted = false;
 
 function isChecked(id) {
     'use strict';
@@ -57,21 +56,8 @@ var launcher = false,
     loggedIn = false,
     list = {};
 
-function singlesitenav(target, skip) {
+function singlesitenav(target) {
     'use strict';
-    if (!skip) {
-        if (internalLocal === 'duelscreen' || internalLocal === 'lobby') {
-            if (target === 'duelscreen' || target === 'lobby') {} else {
-                if (!window.confirm('You are in a duel, are you sure? Not recommened')) {
-                    return;
-                } else {
-                    try {
-                        window.ws.close();
-                    } catch (errorws) {}
-                }
-            }
-        }
-    }
     console.log('navigating to:', target);
     try {
         _gaq.push(['_trackEvent', 'Site', 'Navigation', target]);
@@ -81,41 +67,55 @@ function singlesitenav(target, skip) {
     //console.log(target);
     if (launcher && target === 'forum') {
         event.preventDefault();
-        sound.play('soundactivate');
+        ygopro('-a');
         return false;
     } else if (!launcher && target === 'forum') {
         return true;
     } else if ($('.unlogged.in-iframe').length > 0 && target === 'gamelist') {
         return;
     }
-    $('body').css('background-image', 'url(img/bg.jpg)');
+    $('body').css('background-image', 'url(http://ygopro.us/img/bg.jpg)');
     if (target === 'faq') {
         updatenews();
-        $('body').css('background-image', 'url(img/brightx_bg.jpg)');
+        $('body').css('background-image', 'url(http://ygopro.us/img/brightx_bg.jpg)');
     }
     if (target === 'chat' && !chatStarted) {
+        swfobject.embedSWF("lightIRC/lightIRC.swf", "lightIRC", "100%", "92%", "10.0.0", "expressInstall.swf", params, {
+            wmode: "transparent"
+        });
         chatStarted = true;
     }
     if (target === 'gamelist') {
-        $('body').css('background-image', 'url(img/brightx_bg.jpg)');
+        $('body').css('background-image', 'url(http://ygopro.us/img/brightx_bg.jpg)');
     }
     if (target === 'chat') {
-        $('body').css('background-image', 'url(img/brightx_bg.jpg)');
+        $('body').css('background-image', 'url(http://ygopro.us/img/brightx_bg.jpg)');
     }
     if (target === 'host') {
-        $('body').css('background-image', 'url(img/brightx_bg.jpg)');
+        $('body').css('background-image', 'url(http://ygopro.us/img/brightx_bg.jpg)');
     }
     if (target === 'settings') {
-        $('body').css('background-image', 'url(img/brightx_bg.jpg)');
+        $('body').css('background-image', 'url(http://ygopro.us/img/brightx_bg.jpg)');
     }
     $('.activescreen').removeClass('activescreen');
-    $('header').css('left', '100vw');
-    $('#' + target).css('left', '0').addClass('activescreen');
-    //annoys Mele
-    //sound.play('soundnewphase');
+    $('header').css('top', '100vh');
+    $('#' + target).css('top', '0').addClass('activescreen');
+    saveSettings();
     return false;
 }
 
+$(function () {
+    'use strict';
+    if (window.self !== window.top) {
+        $(document.body).addClass("in-iframe");
+        launcher = true;
+        try {
+            _gaq.push(['_trackEvent', 'Launcher', 'Load', 'Boot Launcher']);
+        } catch (e) {}
+    } else {
+        $(document.body).addClass("web");
+    }
+});
 
 
 
@@ -139,9 +139,16 @@ function locallogin(init) {
     } catch (e) {}
 
 
-
+    primus.write({
+        action: 'privateServer',
+        username: localStorage.nickname
+    });
     loggedIn = true;
-
+    params.nick = $('#ips_username').val();
+    params.identifyPassword = $('#ips_password').val();
+    swfobject.embedSWF("lightIRC/lightIRC.swf", "lightIRC", "100%", "92%", "10.0.0", "expressInstall.swf", params, {
+        wmode: "transparent"
+    });
     //chatStarted = true;
     singlesitenav('faq');
     setTimeout(function () {
@@ -196,6 +203,7 @@ function translateLang(lang) {
             jsLang.spectate = translationDB[i][lang];
         }
     }
+    params.language = lang;
 }
 
 function achievementConstructor(data) {
@@ -205,6 +213,8 @@ function achievementConstructor(data) {
     };
 }
 
+params.showJoinPartMessages = false;
+params.autoReconnect = false;
 $(document).ready(function () {
     'use strict';
     var useLang = localStorage.language || 'en';
@@ -266,4 +276,13 @@ $(document).ready(function () {
         ev.preventDefault();
         return false; // avoid to execute the actual submit of the form.
     });
+
+    if (launcher) {
+        $('webonly').css('display', 'none');
+
+    }
+
+
+    $('#ipblogin').css('display', 'block');
+
 });
