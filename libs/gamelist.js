@@ -289,13 +289,6 @@ function registrationCall(data, socket) {
         if (info.success) {
             registry[info.displayname] = socket.address.ip;
             socket.username = data.username;
-            socket.validated = true;
-            internalMessage({
-                deck: true,
-                command: 'get',
-                username: socket.username,
-                room: (socket.address.ip + data.uniqueID)
-            });
             sendRegistry();
             socket.write({
                 clientEvent: 'global',
@@ -462,7 +455,12 @@ function onData(data, socket) {
         }
         break;
     case ('join'):
-        socket.join(data.uniqueID);
+        socket.join(socket.address.ip + data.uniqueID);
+        socket.write({
+            clientEvent: 'registrationRequest'
+        });
+
+
         socket.join('activegames');
         socket.write(JSON.stringify(gamelist));
 
@@ -494,19 +492,38 @@ function onData(data, socket) {
     case ('killgame'):
         killgameCall(data);
         break;
-    case ('deck'):
-        console.log('deck server request');
-
-        internalMessage({
-            deck: data.deck,
-            command: data.command,
-            room: (socket.address.ip + data.uniqueID),
-            username: socket.username
+    case ('privateServerRequest'):
+        primus.room(socket.address.ip + data.uniqueID).write({
+            clientEvent: 'privateServerRequest',
+            parameter: data.parameter,
+            local: data.local
         });
         break;
-    case ('deckreply'):
-        console.log('----replying')
-        primus.room(data.room).write(data);
+    case ('privateServer'):
+        break;
+    case ('joinTournament'):
+        socket.join('tournament');
+        socket.write(JSON.stringify(gamelist));
+        break;
+    case ('privateUpdate'):
+        primus.room(socket.address.ip + data.uniqueID).write({
+            clientEvent: 'privateServer',
+            serverUpdate: data.serverUpdate
+        });
+
+        break;
+    case ('saveDeckRequest'):
+        primus.room(socket.address.ip + data.uniqueID).write({
+            clientEvent: 'saveDeck',
+            deckList: data.deckList,
+            deckName: data.deckName
+        });
+        break;
+    case ('unlinkDeckRequest'):
+        primus.room(socket.address.ip + data.uniqueID).write({
+            clientEvent: 'unlinkDeck',
+            deckName: data.deckName
+        });
         break;
     default:
         console.log(data);
