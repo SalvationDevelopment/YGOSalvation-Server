@@ -102,7 +102,7 @@ function fileupdate() {
 function update(cb) {
     var gitUpdater = domain.create();
     gitUpdater.on('error', function (err) {
-        console.log('        [Update System] ' + 'Git Failed'.grey);
+        console.log('        [Update System] ' + 'Git Failed'.grey, err);
     });
     gitUpdater.run(function () {
         var n = 0;
