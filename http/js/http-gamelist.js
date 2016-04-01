@@ -176,7 +176,7 @@ function enterGame(string, pass) {
     setTimeout(function () {
         $('body').css('background-image', 'url(http://ygopro.us/img/brightx_bg.jpg)');
     }, 6000);
-    singlesitenav('duelscreen');
+    //singlesitenav('duelscreen');
 }
 
 function joinTournament() {
