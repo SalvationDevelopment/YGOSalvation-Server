@@ -46,7 +46,7 @@ extended_fs.copyDirSync('../client', './input');
 extended_fs.copyDirSync('../http/ygopro', './input/ygopro');
 extended_fs.copyDirSync('../http/license', './input/license');
 extended_fs.copyDirSync('../http/plugins', './input/plugins');
-extended_fs.copyDirSync('./starterDecks', './input/ygopro/deck');
+extended_fs.copyDirSync('./decks', './input/ygopro/deck');
 extended_fs.copyDirSync('./textures', './input/ygopro/textures');
 extended_fs.copyDirSync('./sound', './input/ygopro/sound');
 
