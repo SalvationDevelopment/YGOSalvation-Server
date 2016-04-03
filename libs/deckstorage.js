@@ -1,6 +1,6 @@
 /*jslint node: true*/
 'use strict';
-console.log('?starting deckstorage');
+
 var deck = {
     owner: '',
     name: '',
