@@ -24,14 +24,14 @@ ratings:
   - "**.rb"
 exclude_paths:
 - test/**/*
-- server/http/js/automation/buffer.js
-- server/http/js/automation/require.js
-- server/http/js/primus.js
-- server/http/js/swfobject.js
-- server/http/js/translations.js
-- server/http/js/vendor/primus.js
-- server/http/css/roboto.css
-- server/http/js/automation/EventEmitter.min.js
-- server/http/js/jquery-1.11.0.min.js
-- server/http/js/jquery-ui.min.js
-- server/http/js/automation/events.js
+- http/js/automation/buffer.js
+- http/js/automation/require.js
+- http/js/primus.js
+- http/js/swfobject.js
+- http/js/translations.js
+- http/js/vendor/primus.js
+- http/css/roboto.css
+- http/js/automation/EventEmitter.min.js
+- http/js/jquery-1.11.0.min.js
+- http/js/jquery-ui.min.js
+- http/js/automation/events.js
