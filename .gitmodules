@@ -15,4 +15,4 @@
 	url = https://github.com/SalvationDevelopment/Salvation-Scripts-TCG
 [submodule "ygopro-core"]
 	path = ygopro-core
-	url = git@github.com:Fluorohydride/ygopro-core.git
+	url = https://github.com/Fluorohydride/ygopro-core
