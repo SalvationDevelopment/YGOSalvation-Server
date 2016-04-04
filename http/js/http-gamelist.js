@@ -368,6 +368,7 @@ function parseDuelOptions(duelOptions) {
     //
     //    }
     settings.poolFormat = $('#creategamebanlist [value="' + duelOptionsParts[1] + '"]').html();
+    console.log(settings);
     return settings;
 
 }
