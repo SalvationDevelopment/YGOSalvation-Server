@@ -237,7 +237,7 @@ connection request */
 function pickCoreConfig(socket) {
 
     var output = 'ini/';
-    if (socket.hostString.indexOf(",5,5,1") > -1) {
+    if (socket.hostString.indexOf(",2,5,1") > -1) {
         return "ini/goat.ini";
     }
     if (socket.hostString.indexOf(",4,5,1") > -1) {
