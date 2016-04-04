@@ -35,3 +35,4 @@ exclude_paths:
 - http/js/jquery-1.11.0.min.js
 - http/js/jquery-ui.min.js
 - http/js/automation/events.js
+- client/interface/js/vendor/primus.js
