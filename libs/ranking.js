@@ -1,5 +1,9 @@
 /*jslint node: true*/
 'use strict';
+// read
+//http://forum.duelingnetwork.com/index.php?/topic/23820-error-with-elo-rating-system/?p=357313
+var elo = require('elo-rank')(15);
+
 
 
 var Primus = require('primus'),
@@ -18,16 +22,27 @@ var Primus = require('primus'),
         autoload: true
     });
 
-function verifyUser(username) {
-    rankingDB.find({
-        '_id': username
-    }, function (err, docs) {
-        if (docs.length === 0) {
-            rankingDB.insert({
-                '_id': username
-            });
-        }
-    });
+
+function newUser(username) {
+    return {
+        _id: username,
+        experience: 0,
+        elo: 1200,
+        wins: 0,
+        loses: 0
+    }
+}
+
+function calcElo(playerA, playerB) {
+
+    //Gets expected score for first parameter 
+    var expectedScoreA = elo.getExpected(playerA, playerB);
+    var expectedScoreB = elo.getExpected(playerB, playerA);
+
+    //update score, 1 if won 0 if lost 
+    playerA = elo.updateRating(expectedScoreA, 1, playerA);
+    playerB = elo.updateRating(expectedScoreB, 0, playerB);
+    return [playerA, playerB];
 }
 
 function onDB(data) {
