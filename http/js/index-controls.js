@@ -98,7 +98,7 @@ function singlesitenav(target) {
         $('body').css('background-image', 'url(http://ygopro.us/img/brightx_bg.jpg)');
     }
     $('.activescreen').removeClass('activescreen');
-    $('header').not('#anti') css('left', '100vw');
+    $('header').not('#anti').css('left', '100vw');
     $('#anti').css('left', '0');
     $('#' + target).css('left', '0').addClass('activescreen');
     saveSettings();
