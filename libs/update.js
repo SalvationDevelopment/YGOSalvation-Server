@@ -111,7 +111,6 @@ function update(cb) {
                 cb();
             }
         });
-        return;
         spawn('git', ['pull'], {}, function () {
             n++;
         });
