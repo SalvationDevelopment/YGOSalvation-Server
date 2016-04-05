@@ -621,6 +621,9 @@ header {
     top: 0;
     width: 100vw;
     background-size: 500% 100%;
+}
+
+#anti {
     background-color: rgba(0, 0, 0, .5);
 }
 
