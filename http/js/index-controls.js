@@ -89,7 +89,7 @@ function singlesitenav(target) {
         $('body').css('background-image', 'url(http://ygopro.us/img/brightx_bg.jpg)');
     }
     if (target === 'chat') {
-        $('body').css('background-image', 'url(http://ygopro.us/img/brightx_bg.jpg)');
+        $('body').css('background-image', 'url(http://ygopro.us/img/bgpink.jpg)');
     }
     if (target === 'host') {
         $('body').css('background-image', 'url(http://ygopro.us/img/brightx_bg.jpg)');
