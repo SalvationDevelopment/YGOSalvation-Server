@@ -19,6 +19,7 @@ var downloadList = [], // Download list during recursive processing, when its em
     internalDecklist, // structure for decklist.
     decks = {}, //used with the deck scanner.
     domain = require('domain'), // yay error handling!
+    nodecrypto = require('crypto'),
     list = {
         databases: '',
         currentdeck: '',
@@ -192,7 +193,7 @@ function hashcheck() {
                     downloadList.push(target);
                 }
                 if (target.md5) {
-                    hashLocal = crypto.createHash('md5').update(fs.readFileSync(target.path)).digest("hex");
+                    hashLocal = nodecrypto.createHash('md5').update(fs.readFileSync(target.path)).digest("hex");
                     if (hashLocal !== target.md5) {
                         //console.log(stats.size, target.checksum, target.path);
                         downloadList.push(target);
