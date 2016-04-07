@@ -11,7 +11,8 @@ var zlib = require('zlib'),
     client,
     colors = require('colors'),
     domain = require('domain'),
-    request = require('request');
+    request = require('request'),
+    crypto = require('crypto');
 
 function dirTree(filename) {
 
@@ -39,6 +40,9 @@ function dirTree(filename) {
         info.size = stats.size;
         if (info.path.indexOf('Thumbs.db') > -1) {
             info.path = 'ygopro/pics/marker.badfile';
+        }
+        if (info.path.endsWith('.cdb')) {
+            info.md5 = crypto.createHash('md5').update(fs.readFileSync(info.path)).digest("hex");
         }
     }
 

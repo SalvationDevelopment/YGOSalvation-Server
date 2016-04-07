@@ -173,7 +173,8 @@ function hashcheck() {
     }
     screenMessage.html('<span style="color:white; font-weight:bold">Processing manifest(' +
         (n - completeList.length) + '/' + n + '). DONT TOUCH STUFF!</span>');
-    var target = completeList[0];
+    var target = completeList[0],
+        hashLocal;
     if (target) {
         if (target.path) {
             fs.stat(target.path, function (err, stats) {
@@ -189,6 +190,13 @@ function hashcheck() {
                 if (stats.size !== target.size) {
                     //console.log(stats.size, target.checksum, target.path);
                     downloadList.push(target);
+                }
+                if (target.md5) {
+                    hashLocal = crypto.createHash('md5').update(fs.readFileSync(target.path)).digest("hex");
+                    if (hashLocal !== target.md5) {
+                        //console.log(stats.size, target.checksum, target.path);
+                        downloadList.push(target);
+                    }
                 }
                 completeList.shift();
                 hashcheck();
