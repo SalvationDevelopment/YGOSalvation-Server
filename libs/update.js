@@ -44,6 +44,9 @@ function dirTree(filename) {
         if (info.path.endsWith('.cdb')) {
             info.md5 = crypto.createHash('md5').update(fs.readFileSync(info.path)).digest("hex");
         }
+        if (info.path.endsWith('lflist.conf')) {
+            info.md5 = crypto.createHash('md5').update(fs.readFileSync(info.path)).digest("hex");
+        }
     }
 
     return info;
