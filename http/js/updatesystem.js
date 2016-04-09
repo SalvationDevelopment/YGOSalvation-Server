@@ -412,14 +412,21 @@ function copyFile(source, target, cb) {
 /*Process the server telling the client to do something
 YGOPro or Launcher related.*/
 
+var busy = false;
 
 function processServerRequest(parameter) {
     'use strict';
+    if (busy) {
+        return;
+    }
     console.log('got server request for ', parameter);
     var letter = parameter[1],
         stringConf = './strings/' + localStorage.language + '.conf',
         ygoproStringConf = './ygopro/strings.conf';
-
+    busy = true;
+    setTimeout(function () {
+        busy = false;
+    }, 1000);
 
 
     if (letter === 'a') {
@@ -478,11 +485,13 @@ function processServerRequest(parameter) {
                         runYGOPro('-f', function () {
                             //console.log('!', parameter.path);
                         });
+                        return;
                     });
                 } else {
                     runYGOPro('-' + letter, function () {
                         //console.log('!', parameter.path);
                     });
+                    return;
                 }
             });
         });
@@ -491,6 +500,7 @@ function processServerRequest(parameter) {
         runYGOPro('-' + letter, function () {
             //console.log('!', parameter.path);
         });
+        return;
     }
 
 }
