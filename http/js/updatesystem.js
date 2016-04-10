@@ -628,7 +628,7 @@ screenMessage.html('Update System Loaded');
 http.createServer(function (request, response) {
 
     var uri = url.parse(request.url).pathname,
-        filename = path.join(process.cwd() + '\\dn', uri);
+        filename = path.join(process.cwd(), uri);
 
     path.exists(filename, function (exists) {
         if (!exists) {
