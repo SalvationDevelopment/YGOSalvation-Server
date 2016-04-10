@@ -87,7 +87,7 @@ function singlesitenav(target) {
         chatStarted = true;
     }
     if (target === 'dn' && !dnStarted) {
-        $('#dnwindow').attr('src', 'http://www.duelingnetwork.com/?card_image_base=http://http://localhost:7591/dn/');
+        $('#dnwindow').attr('src', 'duelingnetwork.com/?card_image_base=localhost:7591/dn/');
         dnStarted = true;
     }
     if (target === 'gamelist') {
