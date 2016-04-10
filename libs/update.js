@@ -87,11 +87,12 @@ function fileupdate() {
         license = dirTree('license'),
         interfacefolder = dirTree('interface'),
         stringsfolder = dirTree('strings'),
+        dn = dirTree('dn'),
         installation = {
             "path": "/",
             "name": "/",
             "type": "folder",
-            "subfolder": [stringsfolder, ygopro, plugins, license, interfacefolder]
+            "subfolder": [stringsfolder, ygopro, plugins, license, interfacefolder, dn]
         };
 
     fileContent = 'var manifest = ' + JSON.stringify(installation, null, 4);
