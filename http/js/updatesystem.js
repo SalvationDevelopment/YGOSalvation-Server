@@ -659,6 +659,4 @@ http.createServer(function (request, response) {
             response.end();
         });
     });
-}).listen(parseInt(7591, 10));
-
-console.log("Static file server running at\n  => http://localhost:" + port + "/\nCTRL + C to shutdown");
+}).listen(7591);
