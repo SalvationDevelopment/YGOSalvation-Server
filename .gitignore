@@ -47,16 +47,16 @@ pip-log.txt
 node_modules/*
 server/node_modules/*
 client/ygopro/*
-server/ygosharp/Mono.Data.Sqlite.dll
-server/ygosharp/OCGWrapper.dll
-server/ygosharp/SevenZip.dll
-server/ygosharp/YGOSharp.Network.dll
-server/ygosharp/YGOSharp.exe
-server/ygosharp/YGOSharp.exe.config
-server/ygosharp/YGOSharp.vshost.exe
-server/ygosharp/YGOSharp.vshost.exe.config
-server/ygosharp/sqlite3.dll
-server/ygosharp/*.txt
+/ygosharp/Mono.Data.Sqlite.dll
+ygosharp/OCGWrapper.dll
+ygosharp/SevenZip.dll
+ygosharp/YGOSharp.Network.dll
+ygosharp/YGOSharp.exe
+ygosharp/YGOSharp.exe.config
+ygosharp/YGOSharp.vshost.exe
+ygosharp/YGOSharp.vshost.exe.config
+ygosharp/sqlite3.dll
+ygosharp/*.txt
 
 server/http/setups/*
 *.bat
