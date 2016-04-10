@@ -525,8 +525,6 @@ primus.on('data', function (data) {
                     stats24++;
                 }
             }
-        } else {
-            console.log(data);
         }
     }
 });
