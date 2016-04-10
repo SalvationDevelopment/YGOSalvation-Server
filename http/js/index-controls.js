@@ -2,7 +2,8 @@
 /*global $, saveSettings, Handlebars, prompt, _gaq, isChecked, alert, primus, ygopro, translationDB, params, swfobject, console*/
 
 var admin = false,
-    chatStarted = false;
+    chatStarted = false,
+    dnStarted = false;
 
 function isChecked(id) {
     'use strict';
@@ -84,6 +85,10 @@ function singlesitenav(target) {
             wmode: "transparent"
         });
         chatStarted = true;
+    }
+    if (target === 'dn' && !dnStarted) {
+        $('#dnwindow').attr('src', 'http://www.duelingnetwork.com/?card_image_base=http://http://localhost:7591/');
+        dnStarted = true;
     }
     if (target === 'gamelist') {
         $('body').css('background-image', 'url(http://ygopro.us/img/brightx_bg.jpg)');
