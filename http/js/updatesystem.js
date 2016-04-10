@@ -628,8 +628,8 @@ screenMessage.html('Update System Loaded');
 http.createServer(function (request, response) {
 
     var uri = url.parse(request.url).pathname,
-        filename = path.join(process.cwd(), uri);
-    console.log(uri);
+        filename = path.join(process.cwd(), uri) + '.jpg';
+
     path.exists(filename, function (exists) {
         if (!exists) {
             response.writeHead(404, {
