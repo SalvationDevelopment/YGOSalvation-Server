@@ -630,10 +630,32 @@ setTimeout(function () {
 
 screenMessage.html('Update System Loaded');
 
+
+var combinedmap = {},
+    dnmap = require('../dn/map.json'),
+    ygopromap = require('../dn/ygopromap.json'),
+    internalmap = {};
+
+function doMapping() {
+    var
+        i,
+        entries;
+    for (i = 0; ygopromap.length > i; i++) {
+        internalmap[ygopromap[i].name] = ygopromap[i].id;
+    }
+    for (entries in dnmap) {
+        if (dnmap.hasOwnProperty(dnmap)) {
+            combinedmap[entries] = internalmap[dnmap[entries]];
+        }
+    }
+}
+
+
 http.createServer(function (request, response) {
 
     var uri = url.parse(request.url).pathname,
-        filename = path.join(process.cwd(), uri) + '.jpg';
+        remap = combinedmap[uri.split('dn/')[1]] + '.jpg',
+        filename = path.join(process.cwd(), remap);
 
     path.exists(filename, function (exists) {
         if (!exists) {
