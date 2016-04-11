@@ -89,7 +89,7 @@ function parseDuelOptions(duelOptions) {
         settings = { //Determine time limit
             timeLimit: (duelOptionsParts[0][2] === '0') ? '180' : '300', //this should be done differently...
             //Use classic TCG rules?
-            isTCGRuled: (duelOptionsParts[0][3] === 'O') ? 'OCG rules' : 'TCG Rules',
+            isTCGRuled: (duelOptionsParts[0][3] === 'O') ? 'false' : 'true',
 
             //Check Deck for Illegal cards?
             isDeckChecked: (duelOptionsParts[0][4] === 'O') ? 'false' : 'true',
