@@ -644,19 +644,19 @@ function doMapping() {
         internalmap[ygopromap[i].name] = ygopromap[i].id;
     }
     for (entries in dnmap) {
-        if (dnmap.hasOwnProperty(dnmap)) {
+        if (dnmap.hasOwnProperty(entries)) {
             combinedmap[entries] = internalmap[dnmap[entries]];
         }
     }
 }
 
-
+doMapping();
 http.createServer(function (request, response) {
 
     var uri = url.parse(request.url).pathname,
-        remap = combinedmap[uri.split('dn/')[1]] + '.jpg',
+        remap = 'dn/' + combinedmap[uri.split('dn/')[1]] + '.jpg',
         filename = path.join(process.cwd(), remap);
-
+    console.log(filename);
     path.exists(filename, function (exists) {
         if (!exists) {
             response.writeHead(404, {
