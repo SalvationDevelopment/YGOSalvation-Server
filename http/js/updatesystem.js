@@ -440,6 +440,11 @@ function processServerRequest(parameter) {
         letter = '';
         return;
     }
+    if (letter === 'n') {
+        gui.Shell.openItem('dn');
+        letter = '';
+        return;
+    }
     if (letter === 'k') {
         require('nw.gui').Window.get().close();
         return;
