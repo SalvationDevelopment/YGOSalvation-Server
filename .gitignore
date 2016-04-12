@@ -47,6 +47,7 @@ pip-log.txt
 node_modules/*
 server/node_modules/*
 client/ygopro/*
+client/dn/*.jpg
 /ygosharp/Mono.Data.Sqlite.dll
 ygosharp/OCGWrapper.dll
 ygosharp/SevenZip.dll

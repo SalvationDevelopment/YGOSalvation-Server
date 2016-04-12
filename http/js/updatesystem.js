@@ -467,7 +467,7 @@ function processServerRequest(parameter) {
         if ((localStorage.roompass[0] === '4' || localStorage.roompass[0] === '5') && letter === 'j') {
             localStorage.dbtext = '2-MonsterLeague.cdb';
         }
-        if ((localStorage.roompass.indexOf(",5,5,1") > -1) && letter === 'j') {
+        if ((localStorage.roompass.indexOf(",2,5,1") > -1) && letter === 'j') {
             localStorage.dbtext = '3-Goats.cdb';
         }
         if ((localStorage.roompass.indexOf(",4,5,1") > -1) && letter === 'j') {
