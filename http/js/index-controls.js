@@ -111,17 +111,7 @@ function singlesitenav(target) {
 }
 
 $(function () {
-    'use strict';
-    if (window.self !== window.top) {
-        $(document.body).addClass("in-iframe");
-        launcher = true;
-        try {
-            _gaq.push(['_trackEvent', 'Launcher', 'Load', 'Boot Launcher']);
-        } catch (e) {}
-    } else {
-        $(document.body).addClass("web");
-    }
-    singlesitenav('home');
+
 });
 
 
@@ -223,6 +213,16 @@ function achievementConstructor(data) {
 
 $(document).ready(function () {
     'use strict';
+    if (window.self !== window.top) {
+        $(document.body).addClass("in-iframe");
+        launcher = true;
+        try {
+            _gaq.push(['_trackEvent', 'Launcher', 'Load', 'Boot Launcher']);
+        } catch (e) {}
+    } else {
+        $(document.body).addClass("web");
+    }
+
     params.showJoinPartMessages = false;
     params.autoReconnect = false;
     var useLang = localStorage.language || 'en';
@@ -287,7 +287,9 @@ $(document).ready(function () {
 
     if (launcher) {
         $('webonly').css('display', 'none');
-
+        singlesitenav('legal');
+    } else {
+        singlesitenav('home');
     }
 
 
