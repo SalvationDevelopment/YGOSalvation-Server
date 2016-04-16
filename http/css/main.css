@@ -1266,7 +1266,7 @@ div#gofirst,
 header a,
 header a:visited,
 header {
-    color: inherit;
+    color: #bbb;
     text-decoration: none;
 }
 
@@ -1754,6 +1754,20 @@ input#player4lobbyslot {
 
 #p1avatar {
     right: 17%;
+}
+
+div#legaldisclaimer {
+    padding: 0vh 4vw;
+    text-align: justify;
+    height: 90%;
+    overflow-y: scroll;
+}
+
+#legaldiscaimeragree {
+    position: absolute;
+    bottom: 7vh;
+    width: 100%;
+    text-align: center;
 }
 
 
