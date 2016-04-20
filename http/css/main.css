@@ -1770,6 +1770,12 @@ div#legaldisclaimer {
     text-align: center;
 }
 
+.legalbold {
+    font-weight: bold;
+    text-shadow: 0 0 5px white;
+    color: white;
+}
+
 
 /* =========================================
 =================================
