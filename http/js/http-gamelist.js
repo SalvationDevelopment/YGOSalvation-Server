@@ -62,7 +62,7 @@ function ygopro(parameter) {
     localStorage.lastport = '8911';
     saveSettings();
     localStorage.pics = (isChecked('[data-localhost=altpics]')) ? './altpics/' : 'pics';
-    console.log(isChecked('[data-localhost=altpics]'));
+
     if (localStorage.roompass) {
         if (localStorage.roompass[0] === '4') {
             //if battleback
@@ -78,7 +78,7 @@ function ygopro(parameter) {
         }
     }
     //$.post('http://127.0.0.1:9468/' + parameter, localStorage);
-    console.log('sending details');
+
     primus.write({
         action: 'privateServerRequest',
         parameter: parameter,
@@ -156,15 +156,14 @@ function connectgamelist() {
 function enterGame(string, pass) {
     'use strict';
     var guess = '';
-    console.log('checking for pass');
-    if (pass) {
+
+    if (pass && admin !== "1") {
         guess = prompt('Password?', guess);
         if (string.substring(26, 19) !== guess) {
             alert('Wrong Password!');
             return;
         }
     }
-    console.log('entering duel');
     $('body').css('background-image', 'url(http://ygopro.us/img/bg.jpg)');
     localStorage.lastdeck = $('.currentdeck').val();
     localStorage.roompass = string;
@@ -263,7 +262,7 @@ function setHostSettings() {
     localStorage.serverport = '8911';
     localStorage.lastport = '8911';
     //PER CHIBI
-    console.log(localStorage.roompass, 'affter calculation');
+
     localStorage.lastdeck = $('#hostSettings .currentdeck').val();
 
     if (isChecked('#useai')) {
