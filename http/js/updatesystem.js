@@ -357,7 +357,7 @@ function populatealllist(callback) {
                         list.fonts = list.fonts + '<option value="' + fonts[fontfiles] + '">' + fonts[fontfiles] + '</option>';
                     }
                     process.list = list;
-                    getDecks(callback);
+                    getDecks();
                     list.files = decks;
 
                     try {
