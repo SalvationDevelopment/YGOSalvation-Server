@@ -358,6 +358,7 @@ function populatealllist(callback) {
                     }
                     process.list = list;
                     getDecks();
+                    console.log('getdecks callback?', callback);
                     list.files = decks;
 
                     try {
