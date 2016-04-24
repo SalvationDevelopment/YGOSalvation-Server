@@ -625,7 +625,9 @@ function initPrimus() {
 setTimeout(function () {
     'use strict';
     deleteFolderRecursive('./ygopro/expansions', true);
-    fs.watch('./ygopro/deck', populatealllist);
+    fs.watch('./ygopro/deck', function (occurance) {
+        populatealllist()
+    });
     populatealllist(initPrimus);
 }, 2500);
 
