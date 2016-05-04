@@ -365,14 +365,15 @@ function populatealllist(callback) {
                         if (callback) {
                             callback();
                         } else {
-                            privateServer.write({
-                                action: 'privateUpdate',
-                                serverUpdate: list,
-                                room: localStorage.nickname,
-                                clientEvent: 'privateServer',
-                                uniqueID: uniqueID,
-                                client_server: true
-                            });
+                            //                            privateServer.write({
+                            //                                action: 'privateUpdate',
+                            //                                serverUpdate: list,
+                            //                                room: localStorage.nickname,
+                            //                                clientEvent: 'privateServer',
+                            //                                uniqueID: uniqueID,
+                            //                                client_server: true
+                            //                            });
+                            frames[0].processServerCall(list);
                         }
                     } catch (merror) {}
                 });
