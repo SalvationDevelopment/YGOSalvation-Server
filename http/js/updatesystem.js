@@ -702,9 +702,9 @@ var ru = 0;
 
 setInterval(function () {
     if (frames[0].quedready) {
-        window[frames[0].quedfunc].apply({}, frames[0].quedparams);
+        frames[0].quedready = false;
+        window[frames[0].quedfunc].call({}, frames[0].quedparams);
         frames[0].quedfunc = function () {};
         frames[0].quedparams = [];
-        frames[0].quedready = false;
     }
 }, 300);
