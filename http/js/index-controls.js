@@ -296,3 +296,5 @@ $(document).ready(function () {
     $('#ipblogin').css('display', 'block');
 
 });
+
+window.parent.ru = 1;
