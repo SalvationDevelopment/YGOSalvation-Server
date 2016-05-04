@@ -520,14 +520,15 @@ function initPrimus() {
     privateServer.on('open', function open() {
         reconnectioncount++;
         screenMessage.html('<span style="color:white;">Launcher Connected</span>');
-        privateServer.write({
-            action: 'privateUpdate',
-            serverUpdate: list,
-            room: localStorage.nickname,
-            clientEvent: 'privateServer',
-            uniqueID: uniqueID,
-            client_server: true
-        });
+        populatealllist();
+        //        privateServer.write({
+        //            action: 'privateUpdate',
+        //            serverUpdate: list,
+        //            room: localStorage.nickname,
+        //            clientEvent: 'privateServer',
+        //            uniqueID: uniqueID,
+        //            client_server: true
+        //        });
         privateServer.write({
             action: 'privateServer',
             username: localStorage.nickname,
