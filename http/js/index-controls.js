@@ -297,4 +297,4 @@ $(document).ready(function () {
 
 });
 
-window.parent.ru = 1;
+parent.ru = 1;
