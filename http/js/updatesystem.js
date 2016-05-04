@@ -594,15 +594,15 @@ function initPrimus() {
 
     setInterval(function () {
 
-//        privateServer.write({
-//            action: 'privateUpdate',
-//            serverUpdate: list,
-//            room: localStorage.nickname,
-//            clientEvent: 'privateServer',
-//            uniqueID: uniqueID,
-//            client_server: true
-//        });
-//        updateNeeded = false;
+        //        privateServer.write({
+        //            action: 'privateUpdate',
+        //            serverUpdate: list,
+        //            room: localStorage.nickname,
+        //            clientEvent: 'privateServer',
+        //            uniqueID: uniqueID,
+        //            client_server: true
+        //        });
+        //        updateNeeded = false;
         populatealllist();
     }, 15000);
 
@@ -695,3 +695,4 @@ http.createServer(function (request, response) {
 }).listen(7591);
 
 setTimeout(populatealllist, 3000);
+var ru = 0;
