@@ -4,7 +4,10 @@
 /*exported connectToCheckmateServer, leaveGamelist, hostGame, connectgamelist, setHostSettings, setfilter*/
 
 
-var localstorageIter = 0;
+var localstorageIter = 0,
+    quedready,
+    quedfunc,
+    quedparams;
 
 function applySettings() {
     'use strict';
@@ -79,12 +82,20 @@ function ygopro(parameter) {
     }
     //$.post('http://127.0.0.1:9468/' + parameter, localStorage);
 
-    primus.write({
+    //    primus.write({
+    //        action: 'privateServerRequest',
+    //        parameter: parameter,
+    //        local: out,
+    //        uniqueID: uniqueID
+    //    });
+    quedparams = {
         action: 'privateServerRequest',
         parameter: parameter,
         local: out,
         uniqueID: uniqueID
-    });
+    }
+    quedfunc = 'processServerRequest';
+    quedready = true;
     internalLocal = 'YGOPro';
     try {
         _gaq.push(['_trackEvent', 'Launcher', 'YGOPro', parameter]);

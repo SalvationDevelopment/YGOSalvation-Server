@@ -417,10 +417,17 @@ YGOPro or Launcher related.*/
 
 var busy = false;
 
-function processServerRequest(parameter) {
+function processServerRequest(data) {
     'use strict';
+    var parameter = data.parameter,
+        storage;
     if (busy) {
         return;
+    }
+    for (storage in data.local) {
+        if (data.local.hasOwnProperty(storage) && data.local[storage]) {
+            localStorage[storage] = data.local[storage];
+        }
     }
     console.log('got server request for ', parameter);
     var letter = parameter[1],
@@ -583,12 +590,8 @@ function initPrimus() {
                 return;
             }
             console.log('Internal Server', data);
-            for (storage in data.local) {
-                if (data.local.hasOwnProperty(storage) && data.local[storage]) {
-                    localStorage[storage] = data.local[storage];
-                }
-            }
-            processServerRequest(data.parameter);
+
+            processServerRequest(data);
         });
     });
 
@@ -696,3 +699,12 @@ http.createServer(function (request, response) {
 
 setTimeout(populatealllist, 3000);
 var ru = 0;
+
+setInterval(function () {
+    if (frames[0].quedready) {
+        window[frames[0].quedfunc].apply({}, frames[0].quedparams);
+        frames[0].quedfunc = function () {};
+        frames[0].quedparams = [];
+        frames[0].quedready = false;
+    }
+}, 300);
