@@ -317,6 +317,7 @@ function getDecks(callback) {
             }
             if (callback) {
                 callback();
+                return;
             }
         }
     });
@@ -364,6 +365,7 @@ function populatealllist(callback) {
                     try {
                         if (callback) {
                             callback();
+                            return;
                         } else {
                             //                            privateServer.write({
                             //                                action: 'privateUpdate',
@@ -395,6 +397,7 @@ function copyFile(source, target, cb) {
         if (!cbCalled) {
             cb(err);
             cbCalled = true;
+            return;
         }
     }
     read.on("error", function (err) {
@@ -420,6 +423,9 @@ var busy = false;
 function processServerRequest(data) {
     'use strict';
     var parameter = data.parameter,
+        letter = parameter[1],
+        stringConf = './strings/' + localStorage.language + '.conf',
+        ygoproStringConf = './ygopro/strings.conf',
         storage;
     if (busy) {
         return;
@@ -429,10 +435,7 @@ function processServerRequest(data) {
             localStorage[storage] = data.local[storage];
         }
     }
-    console.log('got server request for ', parameter);
-    var letter = parameter[1],
-        stringConf = './strings/' + localStorage.language + '.conf',
-        ygoproStringConf = './ygopro/strings.conf';
+    stringConf = './strings/' + localStorage.language + '.conf';
     busy = true;
     setTimeout(function () {
         busy = false;
@@ -455,7 +458,7 @@ function processServerRequest(data) {
         return;
     }
     if (letter === 'k') {
-        require('nw.gui').Window.get().close();
+        gui.Window.get().close();
         return;
     }
     if (letter === 'b') {
@@ -520,111 +523,6 @@ function processServerRequest(data) {
 
 }
 
-/* Set up the pipeline to the server*/
-function initPrimus() {
-    'use strict';
-    privateServer = Primus.connect('ws://' + sitelocationdir[mode].split('//')[1].split(':')[0] + ':24555');
-    privateServer.on('open', function open() {
-        reconnectioncount++;
-        screenMessage.html('<span style="color:white;">Launcher Connected</span>');
-        populatealllist();
-        //        privateServer.write({
-        //            action: 'privateUpdate',
-        //            serverUpdate: list,
-        //            room: localStorage.nickname,
-        //            clientEvent: 'privateServer',
-        //            uniqueID: uniqueID,
-        //            client_server: true
-        //        });
-        privateServer.write({
-            action: 'privateServer',
-            username: localStorage.nickname,
-            uniqueID: uniqueID,
-            client_server: true
-        });
-
-    });
-    privateServer.on('error', function open() {
-
-        screenMessage.html('<span style="color:gold;">ERROR! Disconnected from the Server</span>');
-    });
-    privateServer.on('close', function open() {
-        if (reconnectioncount > 15) {
-            screenMessage.html('<span style="color:red;">Check your intenet connection, its you not us.</span>');
-        } else {
-            screenMessage.html('<span style="color:red;">ERROR! Disconnected from the Server</span>');
-        }
-
-    });
-    privateServer.on('data', function (data) {
-        var commandWatcher = domain.create();
-        commandWatcher.on('error', function (error) {
-            console.log('commandWatcher', error);
-        });
-        commandWatcher.run(function () {
-            var join = false,
-                storage;
-            //console.log(data);
-            if (data.clientEvent === 'update') {
-                createmanifest();
-            }
-            if (data.clientEvent === 'saveDeck') {
-                fs.writeFile('./ygopro/deck/' + data.deckName, data.deckList, function (err) {
-                    if (err) {
-                        screenMessage.html('<span style="color:red;">Error occurred while saving deck. Please try again.</span>');
-                    } else {
-                        screenMessage.html('<span style="color:green;">Deck saved successfully.</span>');
-                    }
-                });
-            }
-            if (data.clientEvent === 'unlinkDeck') {
-                fs.unlink('./ygopro/deck/' + data.deckName, function (err) {
-                    if (err) {
-                        screenMessage.html('<span style="color:red;">Error occurred while deleting deck. Please try again.</span>');
-                    } else {
-                        screenMessage.html('<span style="color:green;">Deck deleted successfully.</span>');
-                    }
-                });
-            }
-            if (data.clientEvent !== 'privateServerRequest') {
-                return;
-            }
-            console.log('Internal Server', data);
-
-            processServerRequest(data);
-        });
-    });
-
-    setInterval(function () {
-
-        //        privateServer.write({
-        //            action: 'privateUpdate',
-        //            serverUpdate: list,
-        //            room: localStorage.nickname,
-        //            clientEvent: 'privateServer',
-        //            uniqueID: uniqueID,
-        //            client_server: true
-        //        });
-        //        updateNeeded = false;
-        populatealllist();
-    }, 15000);
-
-    getDecks();
-
-    setTimeout(function () {
-        privateServer.write({
-            action: 'privateUpdate',
-            serverUpdate: list,
-            room: localStorage.nickname,
-            clientEvent: 'privateServer',
-            uniqueID: uniqueID,
-            client_server: true
-        });
-        createmanifest();
-
-    }, 10000);
-
-}
 
 
 /*Boot command*/
@@ -632,9 +530,9 @@ setTimeout(function () {
     'use strict';
     deleteFolderRecursive('./ygopro/expansions', true);
     fs.watch('./ygopro/deck', function (occurance) {
-        populatealllist()
+        populatealllist();
     });
-    populatealllist(initPrimus);
+    populatealllist();
 }, 2500);
 
 screenMessage.html('Update System Loaded');
@@ -646,8 +544,8 @@ var combinedmap = {},
     internalmap = {};
 
 function doMapping() {
-    var
-        i,
+    'use strict';
+    var i,
         entries;
     for (i = 0; ygopromap.length > i; i++) {
         internalmap[ygopromap[i].name] = ygopromap[i].id;
@@ -661,7 +559,7 @@ function doMapping() {
 
 doMapping();
 http.createServer(function (request, response) {
-
+    'use strict';
     var uri = url.parse(request.url).pathname,
         remap = 'dn/' + combinedmap[uri.split('dn/')[1]] + '.jpg',
         filename = path.join(process.cwd(), remap);
@@ -701,6 +599,7 @@ setTimeout(populatealllist, 3000);
 var ru = 0;
 
 setInterval(function () {
+    'use strict';
     if (frames[0].quedready) {
         frames[0].quedready = false;
         window[frames[0].quedfunc].call({}, frames[0].quedparams);

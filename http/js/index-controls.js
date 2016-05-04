@@ -107,7 +107,6 @@ function singlesitenav(target) {
     $('#anti').css('left', '0');
     $('#' + target).css('left', '0').addClass('activescreen');
     saveSettings();
-    window.top.ru = 1;
     return false;
 }
 
