@@ -1,8 +1,9 @@
 /*jslint plusplus : true*/
-/*global console, gui, sound, makeCTOS ,$*/
+/*global console*/
 
 var duel = {};
 
+var actionables;
 
 function cleanstate() {
     'use strict';
@@ -48,14 +49,7 @@ function cleanstate() {
 
 var avatarMap = {};
 
-function getAvatar(name) {
-    if (avatarMap[name]) {
-        return;
-    }
-    $.getJSON('http://forum.ygopro.us/avatar.php?username=' + name, function processAvatar(avatarUnit) {
-        avatarMap[name] = avatarUnit.url;
-    });
-}
+
 
 function cardCollections(player) {
     'use strict';
@@ -77,10 +71,10 @@ function initiateNetwork_STOC(network) {
     });
     network.on('STOC_SELECT_HAND', function (data) {
         //Trigger RPS Prompt
-        gui.displayRPSSelector();
+
     });
     network.on('STOC_SELECT_TP', function (data) {
-        gui.displaySelectWhoGoesFirst();
+
     });
     network.on('STOC_SELECT_RESULT', function (data) {
 
@@ -89,8 +83,7 @@ function initiateNetwork_STOC(network) {
         //Sissors = 1
         //Rock = 2
         //Paper = 3
-        gui.hideRPSSelector();
-        gui.displayRPSResult(data.res1, data.res2);
+
     });
     network.on('STOC_HS_WATCH_SIDE', function (data) {
 
@@ -116,7 +109,7 @@ function initiateNetwork_STOC(network) {
         duel.drawcount = data.drawcount;
         duel.timelimit = data.timelimit;
         //fire handbars to render the view.
-        gui.gotoLobby();
+
 
     });
     network.on('STOC_TYPE_CHANGE', function (data) {
@@ -135,7 +128,7 @@ function initiateNetwork_STOC(network) {
 
     });
     network.on('STOC_TIME_LIMIT', function (data) {
-        $('p' + data.player + 'time').attr('value', data.time);
+
     });
     network.on('STOC_CHAT', function (data) {
         var idmap = {
@@ -156,8 +149,8 @@ function initiateNetwork_STOC(network) {
                 18: 'SYSTEM'
             },
             n = (idmap[data.from] !== undefined) ? idmap[data.from] : '---';
-        $('.ingamechatbox').append('<li>[' + n + ']: ' + data.chat + '</li>');
-        sound.play('soundchatmessage');
+
+
     });
     network.on('STOC_HS_PLAYER_ENTER', function (data) {
         //someone entered the duel lobby as a challenger.
@@ -166,8 +159,7 @@ function initiateNetwork_STOC(network) {
         for (i = 0; 3 > i; i++) {
             if (!duel.player[i].name) {
                 duel.player[i].name = data.person;
-                sound.play('soundenterroom');
-                getAvatar(duel.player[i].name);
+
                 return;
             }
         }
@@ -194,7 +186,7 @@ function initiateNetwork_STOC(network) {
             console.log('???');
         } else if (stateText === 'PLAYERCHANGE_READY') {
             duel.player[pos].ready = true;
-            sound.play('soundshuffle');
+
         } else if (stateText === 'PLAYERCHANGE_NOTREADY') {
             duel.player[pos].ready = false;
         } else if (stateText === 'PLAYERCHANGE_LEAVE') {
@@ -213,7 +205,7 @@ function initiateNetwork_MSG(network) {
     'use strict';
     network.on('MSG_RETRY', function (data) {
         //???
-        modalMsg('An Error Occured');
+        console.log('An Error Occured');
         console.log('An error occured, no shit...');
     });
     network.on('MSG_HINT', function (data) {
@@ -223,9 +215,9 @@ function initiateNetwork_MSG(network) {
     network.on('MSG_WIN', function (data) {
         //???
         if (data.won) {
-            modalMsg('You won!');
+            console.log('You won!');
         } else {
-            modalMsg('You lost');
+            console.log('You lost');
         }
     });
     network.on('MSG_START', function (data) {
@@ -235,18 +227,17 @@ function initiateNetwork_MSG(network) {
         duel.player[1].lifepoints = data.lifepoints2;
 
         //set the size of each deck
-        gui.StartDuel(data.lifepoints[0], data.lifepoints[1], data.deck[0], data.deck[1], data.extra[0], data.extra[0]);
+        //gui.StartDuel(data.lifepoints[0], data.lifepoints[1], data.deck[0], data.deck[1], data.extra[0], data.extra[0]);
 
         //double check that the screen is cleared.
-        gui.hideSelectWhoGoesFirst();
-        gui.hideRPSSelector();
+
 
     });
     network.on('MSG_WAITING', function (data) {
-        gui.displayWaiting();
+
     });
     network.on('MSG_UPDATE_DATA', function (data) {
-        gui.UpdateData(data.player, data.fieldlocation, data.cards);
+        //gui.UpdateData(data.player, data.fieldlocation, data.cards);
         //ygopro-core sent information about the state of a collection of related cards.
         //field[data.player][data.fieldmodel] = ???;
         //reimage field;
@@ -254,7 +245,7 @@ function initiateNetwork_MSG(network) {
 
     network.on('MSG_UPDATE_CARD', function (data) {
         //ygopro-core sent information about the state of one specific card.
-        gui.UpdateCard(data.player, data.fieldlocation, data.index, data.card);
+        //gui.UpdateCard(data.player, data.fieldlocation, data.index, data.card);
         //field[data.player][data.fieldmodel][data.index] = data.card;
         //redraw field;
     });
@@ -281,10 +272,10 @@ function initiateNetwork_MSG(network) {
             }
         }
         if (!data.ep) {
-            $('#endphi').addClass('avaliable');
+            i++;
         }
         if (data.bp) {
-            $('#battlephi').addClass('avaliable');
+            i++;
         }
     });
     network.on('MSG_SELECT_IDLECMD', function (data) {
@@ -373,7 +364,7 @@ function initiateNetwork_MSG(network) {
         //???
     });
     network.on('MSG_SHUFFLE_DECK', function (data) {
-        gui.ShuffleDeck(data.player);
+
     });
     network.on('MSG_SHUFFLE_HAND', function (data) {
         //???
@@ -382,7 +373,7 @@ function initiateNetwork_MSG(network) {
         //???
     });
     network.on('MSG_SWAP_GRAVE_DECK', function (data) {
-        gui.SwapGraveDeck();
+        //gui.SwapGraveDeck();
     });
     network.on('MSG_REVERSE_DECK', function (data) {
         //???
@@ -401,13 +392,12 @@ function initiateNetwork_MSG(network) {
     });
     network.on('MSG_NEW_PHASE', function (data) {
         duel.phase = data.phase;
-        $('[data-currentphase]').attr('data-currentphase', data.phase);
-        $('#phaseindicator button').removeClass('avaliable');
-        window.actionables = {};
+
+        actionables = {};
     });
     network.on('MSG_MOVE', function (data) {
         //use animation system in gui.js
-        gui.MoveCard(data.code, data.pc, data.pl, data.ps, data.pp, data.cc, data.cl, data.cs, data.cp);
+        //gui.MoveCard(data.code, data.pc, data.pl, data.ps, data.pp, data.cc, data.cl, data.cs, data.cp);
 
     });
     network.on('MSG_POS_CHANGE', function (data) {
@@ -474,7 +464,7 @@ function initiateNetwork_MSG(network) {
     });
     network.on('MSG_DRAW', function (data) {
         var i = 0;
-        gui.DrawCard(data.player, data.count, data.cardslist);
+        //gui.DrawCard(data.player, data.count, data.cardslist);
 
         //due draw animation/update
     });
@@ -554,7 +544,7 @@ function initiateNetwork_MSG(network) {
         //???
     });
     network.on('MSG_RELOAD_FIELD', function (data) {
-        gui.ClearField();
+
     });
 
 
@@ -566,7 +556,7 @@ function initiateNetwork_MSG(network) {
 
     network.on('ERRMSG_DECKERROR', function (data) {
         //something is wrong with the deck you asked the server to validate!
-        modalMsg(data.error);
+        console.log(data.error);
         //gui.displayRPSSelector();
     });
 
@@ -577,7 +567,7 @@ function initiateNetwork_MSG(network) {
 
 }
 
-var gametick = setInterval(gui.updateloby, 1000);
+
 
 var initiateNetwork = {
     STOC: initiateNetwork_STOC,
