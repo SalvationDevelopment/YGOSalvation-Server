@@ -273,7 +273,7 @@ function createmanifest() {
 var deleteFolderRecursive = function (path, init) {
     'use strict';
     if (fs.existsSync(path) && init) {
-        if (!confirm('Your system has an expansion pack allow Salvation to remove it?')) {
+        if (!window.confirm('Your system has an expansion pack allow Salvation to remove it?')) {
             return;
         }
     }
@@ -361,23 +361,8 @@ function populatealllist(callback) {
                     getDecks();
                     console.log('getdecks callback?', callback);
                     list.files = decks;
+                    frames[0].processServerCall(list);
 
-                    try {
-                        if (callback) {
-                            callback();
-                            return;
-                        } else {
-                            //                            privateServer.write({
-                            //                                action: 'privateUpdate',
-                            //                                serverUpdate: list,
-                            //                                room: localStorage.nickname,
-                            //                                clientEvent: 'privateServer',
-                            //                                uniqueID: uniqueID,
-                            //                                client_server: true
-                            //                            });
-                            frames[0].processServerCall(list);
-                        }
-                    } catch (merror) {}
                 });
             });
         });
