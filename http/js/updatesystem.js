@@ -1,6 +1,7 @@
 /*jslint node: true, plusplus : true*/
 /*global $, runYGOPro, win, Primus, uniqueID, manifest, screenMessage, sitelocationdir*/
 
+localStorage.dbtext = "0-en-OCGTCG.cdb";
 
 var downloadList = [], // Download list during recursive processing, when its empty stop downloading things. "update complete".
     completeList = [], //Hash processing list during recursive processesin, when its empty stop processing
