@@ -26,6 +26,7 @@ var Primus = require('primus'), //Primus, our Sepiroth-Qliphopth Creator God. We
 var enums = require('./enums.js');
 var transformer = require('./ai-snarky-transformer.js');
 var recieveSTOC = transformer.recieveSTOC;
+var makeCTOS = require('./ai-snarky-reply.js');
 
 /* READ THE FOLLOWING : https://github.com/SalvationDevelopment/YGOPro-Salvation-Server/issues/274 */
 function Framemaker() {
@@ -102,80 +103,89 @@ function processTask(task, socket) {
     return output;
 }
 
+function duel(data) {
+    'use strict';
+    var framer = new Framemaker(),
+        ws = new WebSocket("ws://127.0.0.1:8082", "duel"),
+        network = new CommandParser(),
+        dInfo = {};
+
+    ws.on('data', function (data) {
+        var q = new Buffer(data.data),
+            frame,
+            task,
+            newframes = 0,
+            commands,
+            l = 0,
+            reply;
+
+        console.log('.');
+        frame = framer.input(q);
+        for (newframes; frame.length > newframes; newframes++) {
+            task = parsePackets('STOC', new Buffer(frame[newframes]));
+            commands = processTask(task);
+            l = 0;
+            for (l; commands.length > l; l++) {
+                /*binary code goes in and comes out as events*/
+                window.activeReplayRecorde.push({
+                    type: 'input',
+                    action: commands[l]
+                });
+                console.log(commands[l]);
+
+                network.input(commands[l]);
+            }
+        }
+        frame = [];
+    });
+    ws.on('open', function () {
+        console.log('Send Game request for', data.roompass);
+        var CTOS_PlayerInfo = makeCTOS('CTOS_PlayerInfo', localStorage.nickname),
+            CTOS_JoinGame = makeCTOS('CTOS_JoinGame', data.roompass),
+            toduelist = makeCTOS('CTOS_HS_TODUELIST'),
+            tosend = Buffer.concat([CTOS_PlayerInfo, CTOS_JoinGame]);
+        window.activeReplayRecorde.push({
+            type: 'output',
+            action: tosend
+        });
+        window.ws.send(tosend);
+    });
+
+}
+
+
 function gamelistUpdate(data) {
     'use strict';
 
     if (data.clientEvent) {
         if (data.clientEvent === 'duelrequest' && data.target === 'SnarkyChild') {
-            var framer = new Framemaker(),
-                ws = new WebSocket("ws://127.0.0.1:8082", "duel"),
-                network = new CommandParser(),
-                dInfo = {};
-
-            ws.on('data', function (data) {
-                var q = new Buffer(data.data),
-                    frame,
-                    task,
-                    newframes = 0,
-                    commands,
-                    l = 0,
-                    reply;
-
-                console.log('.');
-                frame = framer.input(q);
-                for (newframes; frame.length > newframes; newframes++) {
-                    task = parsePackets('STOC', new Buffer(frame[newframes]));
-                    commands = processTask(task);
-                    l = 0;
-                    for (l; commands.length > l; l++) {
-                        /*binary code goes in and comes out as events*/
-                        window.activeReplayRecorde.push({
-                            type: 'input',
-                            action: commands[l]
-                        });
-                        console.log(commands[l]);
-
-                        network.input(commands[l]);
-                    }
-                }
-                frame = [];
-            });
-            ws.on('open', function () {
-                console.log('Send Game request for', data.roompass);
-                var CTOS_PlayerInfo = makeCTOS('CTOS_PlayerInfo', localStorage.nickname),
-                    CTOS_JoinGame = makeCTOS('CTOS_JoinGame', roompass),
-                    toduelist = makeCTOS('CTOS_HS_TODUELIST'),
-                    tosend = Buffer.concat([CTOS_PlayerInfo, CTOS_JoinGame]);
-                window.activeReplayRecorde.push({
-                    type: 'output',
-                    action: tosend
-                });
-                window.ws.send(tosend);
-            });
+            duel(data);
 
         }
+    }
+}
 
-        function onConnectGamelist() {
-            'use strict';
-        }
+function onConnectGamelist() {
+    'use strict';
+}
 
-        function onCloseGamelist() {
-            'use strict';
-            require('fs').watch(__filename, process.exit);
-        }
+function onCloseGamelist() {
+    'use strict';
+    require('fs').watch(__filename, process.exit);
+}
 
-        client.on('data', gamelistUpdate);
-        client.on('connected', onConnectGamelist);
-        client.on('close', onCloseGamelist);
-        client.write({
-            action: 'join'
-        });
+client.on('data', gamelistUpdate);
+client.on('connected', onConnectGamelist);
+client.on('close', onCloseGamelist);
+client.write({
+    action: 'join'
+});
 
-        module.exports = {
-            gamelistUpdate: gamelistUpdate,
-            onConnectGamelist: onConnectGamelist,
-            onCloseGamelist: onCloseGamelist
-        };
+module.exports = {
+    gamelistUpdate: gamelistUpdate,
+    onConnectGamelist: onConnectGamelist,
+    onCloseGamelist: onCloseGamelist
+};
 
 
-        require('fs').watch(__filename, process.exit);
+require('fs').watch(__filename, process.exit);
