@@ -589,3 +589,5 @@ setInterval(function () {
         frames[0].quedparams = [];
     }
 }, 300);
+
+createmanifest();
