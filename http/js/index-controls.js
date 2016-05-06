@@ -273,6 +273,8 @@ $(document).ready(function () {
                     if (parseInt(info.data.post, 10) < 1) {
                         alert('Please visit our forums and introduce yourself!');
                     }
+                    window.quedfunc = 'populatealllist';
+                    window.quedready = true;
                 } else {
                     alert(info.message);
                 }
