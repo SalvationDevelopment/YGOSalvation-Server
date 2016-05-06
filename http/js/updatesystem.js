@@ -326,7 +326,7 @@ function getDecks(callback) {
 /* Asynchronously goes and gets the files the 
 browser side part of the UI needs to inform the user
 of the decks, skins, and databases they have access to.*/
-function populatealllist(callback) {
+function populatealllist() {
     'use strict';
     updateNeeded = true;
     var dfiles = 0,
@@ -359,7 +359,6 @@ function populatealllist(callback) {
                     }
                     process.list = list;
                     getDecks();
-                    console.log('getdecks callback?', callback);
                     list.files = decks;
                     frames[0].processServerCall(list);
 
@@ -517,7 +516,6 @@ setTimeout(function () {
     fs.watch('./ygopro/deck', function (occurance) {
         populatealllist();
     });
-    populatealllist();
 }, 2500);
 
 screenMessage.html('Update System Loaded');
@@ -580,8 +578,6 @@ http.createServer(function (request, response) {
     });
 }).listen(7591);
 
-setTimeout(populatealllist, 3000);
-var ru = 0;
 
 setInterval(function () {
     'use strict';
