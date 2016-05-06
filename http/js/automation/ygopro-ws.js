@@ -63,7 +63,6 @@ function startgame(roompass) {
     };
     ws.onclose = function () {
         console.log('Websocket died');
-        singlesitenav('gamelist', true);
     };
     ws.onmessage = function (data) {
         var q = new Buffer(new Uint8Array(data.data)),
@@ -82,12 +81,8 @@ function startgame(roompass) {
             l = 0;
             for (l; commands.length > l; l++) {
                 /*binary code goes in and comes out as events*/
-                window.activeReplayRecorde.push({
-                    type: 'input',
-                    action: commands[l]
-                });
+
                 console.log(commands[l]);
-                gui.hideWaiting();
                 network.input(commands[l]);
             }
         }
@@ -99,15 +94,10 @@ function startgame(roompass) {
             CTOS_JoinGame = makeCTOS('CTOS_JoinGame', roompass),
             toduelist = makeCTOS('CTOS_HS_TODUELIST'),
             tosend = Buffer.concat([CTOS_PlayerInfo, CTOS_JoinGame]);
-        window.activeReplayRecorde.push({
-            type: 'output',
-            action: tosend
-        });
-        window.ws.send(tosend);
+
+        ws.send(tosend);
     };
-    window.ws = ws;
-    window.onunload = window.ws.close;
-    window.cleanstate();
+
     initiateNetwork.STOC(network);
     initiateNetwork.MSG(network);
 
@@ -115,8 +105,8 @@ function startgame(roompass) {
 
 function sendDeckListToServer(deck) {
     'use strict';
-    window.ws.send(makeCTOS('CTOS_UPDATE_DECK', deck));
-    window.ws.send(makeCTOS('CTOS_HS_READY'));
+    ws.send(makeCTOS('CTOS_UPDATE_DECK', deck));
+    ws.send(makeCTOS('CTOS_HS_READY'));
 }
 
 function movetoSpectator() {
