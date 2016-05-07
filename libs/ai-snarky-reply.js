@@ -237,33 +237,4 @@ function makeCTOS(command, message) {
     return say[command](message);
 }
 
-
-function makeManualTarget(locationConst, arrayIndex) {
-    'use strict';
-    return {
-        location: locationConst,
-        slot: arrayIndex
-    };
-}
-
-
-function makeManualMoveTo(locationConst, arrayIndex, positionConst) {
-    'use strict';
-    return {
-        location: locationConst,
-        slot: arrayIndex,
-        position: positionConst
-    };
-}
-
-//function manualMove(target, moveTo) {
-//    'use strict';
-//    manual.write({
-//        action: "duelQuery",
-//        uid: duel.uid,
-//        duelID: duel.duelID,
-//        duelQuery: enums.manual.QUERY_DUEL_COMMAND,
-//        target: target,
-//        moveTo: moveTo
-//    });
-//}
+module.exports = makeCTOS;

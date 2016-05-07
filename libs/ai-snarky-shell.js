@@ -1,16 +1,82 @@
 /*jslint node:true, plusplus:true*/
+'use strict';
 
 var WebSocket = require('ws'),
-    events = require('events');
+    events = require('events'),
+    fs = require('fs');
 
 var enums = require('./enums.js');
 var transformer = require('./ai-snarky-transformer.js');
 var recieveSTOC = transformer.recieveSTOC;
-var makeCTOS = require('./ai-snarky-reply.js');
+var makeCTOS = require('./ai-snarky-reply.js'),
+    initiateNetwork = require('./ai-snarky-processor.js');
 
 /* READ THE FOLLOWING : https://github.com/SalvationDevelopment/YGOPro-Salvation-Server/issues/274 */
+
+function parseYDK(ydkFileContents) {
+    var lineSplit = ydkFileContents.split("\r\n"),
+        originalValues = {
+            "main": {},
+            "side": {},
+            "extra": {},
+            "mainLength": 0,
+            "sideLength": 0,
+            "extraLength": 0
+        },
+        current = "";
+    lineSplit.forEach(function (value) {
+        if (value === "") {
+            return;
+        }
+        if (value[0] === "#" || value[0] === "!") {
+            if (originalValues.hasOwnProperty(value.substr(1))) {
+                current = value.substr(1);
+            } else {
+                return;
+            }
+        } else {
+            originalValues[current + "Length"]++;
+            if (originalValues[current].hasOwnProperty(value)) {
+                originalValues[current][value] = originalValues[current][value] + 1;
+            } else {
+                originalValues[current][value] = 1;
+            }
+        }
+    });
+    return originalValues;
+}
+
+function readFiles(dirname, onFileContent, onError) {
+
+    fs.readdir(dirname, function (err, filenames) {
+        if (err) {
+            onError(err);
+            return;
+        }
+        filenames.forEach(function (filename) {
+            fs.readFile(dirname + filename, 'utf-8', function (err, content) {
+                if (err) {
+                    onError(err);
+                    return;
+                }
+                onFileContent(filename, content);
+            });
+        });
+    });
+}
+
+var decks = {};
+
+(function getDecks(callback) {
+    readFiles('../client/ygopro/deck/', function (filename, content) {
+        decks[filename] = parseYDK(content);
+    }, function (error) {
+        console.log(error);
+    });
+}());
+
+
 function Framemaker() {
-    "use strict";
     var memory = new Buffer([]);
 
     this.input = function (buffer) {
@@ -47,9 +113,8 @@ function Framemaker() {
 
 
 function CommandParser() {
-    'use strict';
-    var output = {};
-    output = new events.EventEmitter();
+
+    var output = new events.EventEmitter();
     output.input = function (input) {
         output.emit(input.command, input);
     };
@@ -57,8 +122,6 @@ function CommandParser() {
 }
 
 function parsePackets(command, message) {
-    "use strict";
-
     var task = [],
         packet = {
             message: message.slice(1),
@@ -71,7 +134,7 @@ function parsePackets(command, message) {
 
 
 function processTask(task, socket) {
-    'use strict';
+
     var i = 0,
         l = 0,
         output = [],
@@ -84,22 +147,21 @@ function processTask(task, socket) {
 }
 
 function duel(data) {
-    'use strict';
+
     var framer = new Framemaker(),
         network = new CommandParser(),
         dInfo = {};
 
+
     network.ws = new WebSocket("ws://127.0.0.1:8082", "duel");
-    network.ws.on('data', function (data) {
-        var q = new Buffer(data.data),
+    network.ws.on('message', function (data) {
+        var q = data,
             frame,
             task,
             newframes = 0,
             commands,
             l = 0,
             reply;
-
-        console.log('.');
         frame = framer.input(q);
         for (newframes; frame.length > newframes; newframes++) {
             task = parsePackets('STOC', new Buffer(frame[newframes]));
@@ -108,7 +170,7 @@ function duel(data) {
             for (l; commands.length > l; l++) {
                 /*binary code goes in and comes out as events*/
 
-                console.log(commands[l]);
+                console.log('YGOPro:', commands[l]);
 
                 network.input(commands[l]);
             }
@@ -117,11 +179,12 @@ function duel(data) {
     });
     network.ws.on('open', function () {
         console.log('Send Game request for', data.roompass);
-        var CTOS_PlayerInfo = makeCTOS('CTOS_PlayerInfo', localStorage.nickname),
+        var CTOS_PlayerInfo = makeCTOS('CTOS_PlayerInfo', 'SnarkyChild'),
             CTOS_JoinGame = makeCTOS('CTOS_JoinGame', data.roompass),
             toduelist = makeCTOS('CTOS_HS_TODUELIST'),
             tosend = Buffer.concat([CTOS_PlayerInfo, CTOS_JoinGame]);
         network.ws.send(tosend);
+        network.activeDeck = decks['Volcanics.ydk'];
     });
 
 }
