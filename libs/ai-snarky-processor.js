@@ -2,12 +2,16 @@
 /*global console*/
 
 var duel = {};
-
+console.log('loaded');
 var actionables;
 
-function cleanstate() {
+function getRandomInt(min, max) {
+    return Math.floor(Math.random() * (max - min + 1) + min);
+}
+
+function cleanstate(ygopro) {
     'use strict';
-    window.duel = {
+    ygopro.duel = {
         deckcheck: 0,
         draw_count: 0,
         lflist: 0,
@@ -41,15 +45,11 @@ function cleanstate() {
         turnOfPlayer: 0,
         phase: 0
     };
-    window.field = {
+    ygopro.field = {
         0: {},
         1: {}
     };
 }
-
-var avatarMap = {};
-
-
 
 function cardCollections(player) {
     'use strict';
@@ -64,40 +64,40 @@ function cardCollections(player) {
     };
 }
 
-function initiateNetwork_STOC(network) {
+function initiateNetwork_STOC(ygopro) {
     'use strict';
-    network.on('STOC_ERROR_MSG', function (data) {
+    ygopro.on('STOC_ERROR_MSG', function (data) {
 
     });
-    network.on('STOC_SELECT_HAND', function (data) {
+    ygopro.on('STOC_SELECT_HAND', function (data) {
         //Trigger RPS Prompt
 
     });
-    network.on('STOC_SELECT_TP', function (data) {
+    ygopro.on('STOC_SELECT_TP', function (data) {
 
     });
-    network.on('STOC_SELECT_RESULT', function (data) {
+    ygopro.on('STOC_SELECT_RESULT', function (data) {
 
     });
-    network.on('STOC_HAND_RESULT', function (data) {
+    ygopro.on('STOC_HAND_RESULT', function (data) {
         //Sissors = 1
         //Rock = 2
         //Paper = 3
 
     });
-    network.on('STOC_HS_WATCH_SIDE', function (data) {
+    ygopro.on('STOC_HS_WATCH_SIDE', function (data) {
 
     });
-    network.on('STOC_TP_RESULT', function (data) {
+    ygopro.on('STOC_TP_RESULT', function (data) {
 
     });
-    network.on('STOC_CHANGE_SIDE', function (data) {
+    ygopro.on('STOC_CHANGE_SIDE', function (data) {
 
     });
-    network.on('STOC_WAITING_SIDE', function (data) {
+    ygopro.on('STOC_WAITING_SIDE', function (data) {
 
     });
-    network.on('STOC_JOIN_GAME', function (data) {
+    ygopro.on('STOC_JOIN_GAME', function (data) {
         duel.banlist = data.banlist;
         duel.rule = data.rule;
         duel.mode = data.mode;
@@ -108,29 +108,30 @@ function initiateNetwork_STOC(network) {
         duel.starthand = data.starthand;
         duel.drawcount = data.drawcount;
         duel.timelimit = data.timelimit;
+        console.log(duel);
         //fire handbars to render the view.
 
 
     });
-    network.on('STOC_TYPE_CHANGE', function (data) {
+    ygopro.on('STOC_TYPE_CHANGE', function (data) {
         //remember who is the host, use this data to rotate the field properly.
         duel.ishost = data.ishost;
     });
-    network.on('STOC_DUEL_START', function (STOC_DUEL_START) {
+    ygopro.on('STOC_DUEL_START', function (STOC_DUEL_START) {
         window.singlesitenav('duelscreen');
         //switch view from duel to duel field.
     });
-    network.on('STOC_DUEL_END', function (STOC_DUEL_START) {
+    ygopro.on('STOC_DUEL_END', function (STOC_DUEL_START) {
         window.ws.close();
     });
 
-    network.on('STOC_REPLAY', function (data) {
+    ygopro.on('STOC_REPLAY', function (data) {
 
     });
-    network.on('STOC_TIME_LIMIT', function (data) {
+    ygopro.on('STOC_TIME_LIMIT', function (data) {
 
     });
-    network.on('STOC_CHAT', function (data) {
+    ygopro.on('STOC_CHAT', function (data) {
         var idmap = {
                 0: window.duel.player[0].name,
                 1: window.duel.player[1].name,
@@ -152,7 +153,7 @@ function initiateNetwork_STOC(network) {
 
 
     });
-    network.on('STOC_HS_PLAYER_ENTER', function (data) {
+    ygopro.on('STOC_HS_PLAYER_ENTER', function (data) {
         //someone entered the duel lobby as a challenger.
         //slot them into the avaliable open duel slots.
         var i;
@@ -164,11 +165,11 @@ function initiateNetwork_STOC(network) {
             }
         }
     });
-    network.on('STOC_HS_WATCH_CHANGE', function (data) {
+    ygopro.on('STOC_HS_WATCH_CHANGE', function (data) {
         //update the number of spectators.
         data.spectators = duel.spectators;
     });
-    network.on('STOC_HS_PLAYER_CHANGE', function (data) {
+    ygopro.on('STOC_HS_PLAYER_CHANGE', function (data) {
         //update to the names in the slots,
         //signals leaving also.
         var state = data.state,
@@ -201,18 +202,18 @@ function initiateNetwork_STOC(network) {
 
 }
 
-function initiateNetwork_MSG(network) {
+function initiateNetwork_MSG(ygopro) {
     'use strict';
-    network.on('MSG_RETRY', function (data) {
+    ygopro.on('MSG_RETRY', function (data) {
         //???
         console.log('An Error Occured');
         console.log('An error occured, no shit...');
     });
-    network.on('MSG_HINT', function (data) {
+    ygopro.on('MSG_HINT', function (data) {
         //???
     });
 
-    network.on('MSG_WIN', function (data) {
+    ygopro.on('MSG_WIN', function (data) {
         //???
         if (data.won) {
             console.log('You won!');
@@ -220,7 +221,7 @@ function initiateNetwork_MSG(network) {
             console.log('You lost');
         }
     });
-    network.on('MSG_START', function (data) {
+    ygopro.on('MSG_START', function (data) {
         //set the LP.
         duel.isFirst = data.isFirst;
         duel.player[0].lifepoints = data.lifepoints1;
@@ -233,23 +234,23 @@ function initiateNetwork_MSG(network) {
 
 
     });
-    network.on('MSG_WAITING', function (data) {
+    ygopro.on('MSG_WAITING', function (data) {
 
     });
-    network.on('MSG_UPDATE_DATA', function (data) {
+    ygopro.on('MSG_UPDATE_DATA', function (data) {
         //gui.UpdateData(data.player, data.fieldlocation, data.cards);
         //ygopro-core sent information about the state of a collection of related cards.
         //field[data.player][data.fieldmodel] = ???;
         //reimage field;
     });
 
-    network.on('MSG_UPDATE_CARD', function (data) {
+    ygopro.on('MSG_UPDATE_CARD', function (data) {
         //ygopro-core sent information about the state of one specific card.
         //gui.UpdateCard(data.player, data.fieldlocation, data.index, data.card);
         //field[data.player][data.fieldmodel][data.index] = data.card;
         //redraw field;
     });
-    network.on('MSG_SELECT_BATTLECMD', function (data) {
+    ygopro.on('MSG_SELECT_BATTLECMD', function (data) {
         var list,
             i;
         window.actionables = {};
@@ -278,7 +279,7 @@ function initiateNetwork_MSG(network) {
             i++;
         }
     });
-    network.on('MSG_SELECT_IDLECMD', function (data) {
+    ygopro.on('MSG_SELECT_IDLECMD', function (data) {
         var list,
             i;
         window.actionables = {};
@@ -307,22 +308,22 @@ function initiateNetwork_MSG(network) {
             $('#battlephi').addClass('avaliable');
         }
     });
-    network.on('MSG_SELECT_EFFECTYN', function (data) {
+    ygopro.on('MSG_SELECT_EFFECTYN', function (data) {
         //???
     });
-    network.on('MSG_SELECT_YESNO', function (data) {
+    ygopro.on('MSG_SELECT_YESNO', function (data) {
         //???
     });
-    network.on('MSG_SELECT_OPTION', function (data) {
+    ygopro.on('MSG_SELECT_OPTION', function (data) {
         //???
     });
-    network.on('MSG_SELECT_CARD', function (data) {
+    ygopro.on('MSG_SELECT_CARD', function (data) {
         //???
     });
-    network.on('MSG_SELECT_CHAIN', function (data) {
+    ygopro.on('MSG_SELECT_CHAIN', function (data) {
         //???
     });
-    network.on('MSG_SELECT_PLACE', function (data) {
+    ygopro.on('MSG_SELECT_PLACE', function (data) {
         var servermessage;
         if (data.respbuf) { //replace with if auto_placement = on;
             servermessage = makeCTOS('CTOS_RESPONSE', data.respbuf);
@@ -330,7 +331,7 @@ function initiateNetwork_MSG(network) {
 
         window.ws.send(servermessage);
     });
-    network.on('MSG_SELECT_DISFIELD', function (data) {
+    ygopro.on('MSG_SELECT_DISFIELD', function (data) {
         var servermessage;
         if (data.respbuf) { //replace with if auto_placement = on;
             servermessage = makeCTOS('CTOS_RESPONSE', data.respbuf);
@@ -338,212 +339,212 @@ function initiateNetwork_MSG(network) {
 
         window.ws.send(servermessage);
     });
-    network.on('MSG_SELECT_POSITION', function (data) {
+    ygopro.on('MSG_SELECT_POSITION', function (data) {
         //???
     });
-    network.on('MSG_SELECT_TRIBUTE', function (data) {
+    ygopro.on('MSG_SELECT_TRIBUTE', function (data) {
         //???
     });
 
-    network.on('MSG_SELECT_COUNTER', function (data) {
+    ygopro.on('MSG_SELECT_COUNTER', function (data) {
         //???
     });
-    network.on('MSG_SELECT_SUM', function (data) {
+    ygopro.on('MSG_SELECT_SUM', function (data) {
         //???
     });
-    network.on('MSG_SORT_CARD', function (data) {
+    ygopro.on('MSG_SORT_CARD', function (data) {
         //???
     });
-    network.on('MSG_SORT_CHAIN', function (data) {
+    ygopro.on('MSG_SORT_CHAIN', function (data) {
         //???
     });
-    network.on('MSG_CONFIRM_DECKTOP', function (data) {
+    ygopro.on('MSG_CONFIRM_DECKTOP', function (data) {
         //???
     });
-    network.on('MSG_CONFIRM_CARDS', function (data) {
+    ygopro.on('MSG_CONFIRM_CARDS', function (data) {
         //???
     });
-    network.on('MSG_SHUFFLE_DECK', function (data) {
+    ygopro.on('MSG_SHUFFLE_DECK', function (data) {
 
     });
-    network.on('MSG_SHUFFLE_HAND', function (data) {
+    ygopro.on('MSG_SHUFFLE_HAND', function (data) {
         //???
     });
-    network.on('MSG_REFRESH_DECK', function (data) {
+    ygopro.on('MSG_REFRESH_DECK', function (data) {
         //???
     });
-    network.on('MSG_SWAP_GRAVE_DECK', function (data) {
+    ygopro.on('MSG_SWAP_GRAVE_DECK', function (data) {
         //gui.SwapGraveDeck();
     });
-    network.on('MSG_REVERSE_DECK', function (data) {
+    ygopro.on('MSG_REVERSE_DECK', function (data) {
         //???
     });
-    network.on('MSG_DECK_TOP', function (data) {
+    ygopro.on('MSG_DECK_TOP', function (data) {
         //???
     });
-    network.on('MSG_SHUFFLE_SET_CARD', function (data) {
+    ygopro.on('MSG_SHUFFLE_SET_CARD', function (data) {
         //???
     });
-    network.on('MSG_NEW_TURN', function (data) {
+    ygopro.on('MSG_NEW_TURN', function (data) {
         //new turn, 
         duel.turn++;
         duel.turnOfPlayer = data.player;
         //refresh field
     });
-    network.on('MSG_NEW_PHASE', function (data) {
+    ygopro.on('MSG_NEW_PHASE', function (data) {
         duel.phase = data.phase;
 
         actionables = {};
     });
-    network.on('MSG_MOVE', function (data) {
+    ygopro.on('MSG_MOVE', function (data) {
         //use animation system in gui.js
         //gui.MoveCard(data.code, data.pc, data.pl, data.ps, data.pp, data.cc, data.cl, data.cs, data.cp);
 
     });
-    network.on('MSG_POS_CHANGE', function (data) {
+    ygopro.on('MSG_POS_CHANGE', function (data) {
         //??? might be extention of move command?
     });
-    network.on('MSG_SET', function (data) {
+    ygopro.on('MSG_SET', function (data) {
         //???
     });
-    network.on('MSG_SWAP', function (data) {
+    ygopro.on('MSG_SWAP', function (data) {
         //???
     });
-    network.on('MSG_FIELD_DISABLED', function (data) {
+    ygopro.on('MSG_FIELD_DISABLED', function (data) {
         //???
     });
-    network.on('MSG_SUMMONING', function (data) {
+    ygopro.on('MSG_SUMMONING', function (data) {
         //attempting to summon animation
         //data.code give the id of the card
     });
-    network.on('MSG_SUMMONED', function (data) {
+    ygopro.on('MSG_SUMMONED', function (data) {
         //???
     });
-    network.on('MSG_SPSUMMONING', function (data) {
+    ygopro.on('MSG_SPSUMMONING', function (data) {
         //special summoning animation with data
     });
-    network.on('MSG_SPSUMMONED', function (data) {
+    ygopro.on('MSG_SPSUMMONED', function (data) {
         //???
     });
-    network.on('MSG_FLIPSUMMONING', function (data) {
+    ygopro.on('MSG_FLIPSUMMONING', function (data) {
         //???
     });
-    network.on('MSG_FLIPSUMMONED', function (data) {
+    ygopro.on('MSG_FLIPSUMMONED', function (data) {
         //???
     });
-    network.on('MSG_CHAINING', function (data) {
+    ygopro.on('MSG_CHAINING', function (data) {
         //gives a card location and card
     });
-    network.on('MSG_CHAINED', function (data) {
+    ygopro.on('MSG_CHAINED', function (data) {
         //???
     });
-    network.on('MSG_CHAIN_SOLVING', function (data) {
+    ygopro.on('MSG_CHAIN_SOLVING', function (data) {
         //???
     });
-    network.on('MSG_CHAIN_SOLVED', function (data) {
+    ygopro.on('MSG_CHAIN_SOLVED', function (data) {
         //???
     });
 
-    network.on('MSG_CHAIN_END', function (data) {
+    ygopro.on('MSG_CHAIN_END', function (data) {
         //???
     });
-    network.on('MSG_CHAIN_NEGATED', function (data) {
+    ygopro.on('MSG_CHAIN_NEGATED', function (data) {
         //???
     });
-    network.on('MSG_CHAIN_DISABLED', function (data) {
+    ygopro.on('MSG_CHAIN_DISABLED', function (data) {
         //???
     });
-    network.on('MSG_CARD_SELECTED', function (data) {
+    ygopro.on('MSG_CARD_SELECTED', function (data) {
         //???
     });
-    network.on('MSG_RANDOM_SELECTED', function (data) {
+    ygopro.on('MSG_RANDOM_SELECTED', function (data) {
         //???
     });
-    network.on('MSG_BECOME_TARGET', function (data) {
+    ygopro.on('MSG_BECOME_TARGET', function (data) {
         //???
     });
-    network.on('MSG_DRAW', function (data) {
+    ygopro.on('MSG_DRAW', function (data) {
         var i = 0;
         //gui.DrawCard(data.player, data.count, data.cardslist);
 
         //due draw animation/update
     });
-    network.on('MSG_DAMAGE', function (data) {
+    ygopro.on('MSG_DAMAGE', function (data) {
         //???
     });
-    network.on('MSG_RECOVER', function (data) {
+    ygopro.on('MSG_RECOVER', function (data) {
         //???
     });
-    network.on('MSG_EQUIP', function (data) {
+    ygopro.on('MSG_EQUIP', function (data) {
         //???
     });
-    network.on('MSG_LPUPDATE', function (data) {
+    ygopro.on('MSG_LPUPDATE', function (data) {
         //???
     });
-    network.on('MSG_UNEQUIP', function (data) {
+    ygopro.on('MSG_UNEQUIP', function (data) {
         //???
     });
-    network.on('MSG_CARD_TARGET', function (data) {
+    ygopro.on('MSG_CARD_TARGET', function (data) {
         //???
     });
-    network.on('MSG_CANCEL_TARGET', function (data) {
+    ygopro.on('MSG_CANCEL_TARGET', function (data) {
         //???
     });
-    network.on('MSG_PAY_LPCOST', function (data) {
+    ygopro.on('MSG_PAY_LPCOST', function (data) {
         //???
     });
-    network.on('MSG_ADD_COUNTER', function (data) {
+    ygopro.on('MSG_ADD_COUNTER', function (data) {
         //???
     });
-    network.on('MSG_REMOVE_COUNTER', function (data) {
+    ygopro.on('MSG_REMOVE_COUNTER', function (data) {
         //???
     });
-    network.on('MSG_ATTACK', function (data) {
+    ygopro.on('MSG_ATTACK', function (data) {
         //???
     });
-    network.on('MSG_BATTLE', function (data) {
+    ygopro.on('MSG_BATTLE', function (data) {
         //???
     });
-    network.on('MSG_ATTACK_DISABLED', function (data) {
+    ygopro.on('MSG_ATTACK_DISABLED', function (data) {
         //???
     });
-    network.on('MSG_DAMAGE_STEP_START', function (data) {
+    ygopro.on('MSG_DAMAGE_STEP_START', function (data) {
         //???
     });
-    network.on('MSG_DAMAGE_STEP_END', function (data) {
+    ygopro.on('MSG_DAMAGE_STEP_END', function (data) {
         //???
     });
-    network.on('MSG_MISSED_EFFECT', function (data) {
+    ygopro.on('MSG_MISSED_EFFECT', function (data) {
         //???
     });
-    network.on('MSG_TOSS_COIN', function (data) {
+    ygopro.on('MSG_TOSS_COIN', function (data) {
         //???
     });
-    network.on('MSG_TOSS_DICE', function (data) {
+    ygopro.on('MSG_TOSS_DICE', function (data) {
         //???
     });
-    network.on('MSG_ANNOUNCE_RACE', function (data) {
+    ygopro.on('MSG_ANNOUNCE_RACE', function (data) {
         //???
     });
-    network.on('MSG_ANNOUNCE_ATTRIB', function (data) {
+    ygopro.on('MSG_ANNOUNCE_ATTRIB', function (data) {
         //???
     });
-    network.on('MSG_ANNOUNCE_CARD', function (data) {
+    ygopro.on('MSG_ANNOUNCE_CARD', function (data) {
         //???
     });
-    network.on('MSG_ANNOUNCE_NUMBER', function (data) {
+    ygopro.on('MSG_ANNOUNCE_NUMBER', function (data) {
         //???
     });
-    network.on('MSG_CARD_HINT', function (data) {
+    ygopro.on('MSG_CARD_HINT', function (data) {
         //???
     });
-    network.on('MSG_MATCH_KILL', function (data) {
+    ygopro.on('MSG_MATCH_KILL', function (data) {
         //???
     });
-    network.on('MSG_TAG_SWAP', function (data) {
+    ygopro.on('MSG_TAG_SWAP', function (data) {
         //???
     });
-    network.on('MSG_RELOAD_FIELD', function (data) {
+    ygopro.on('MSG_RELOAD_FIELD', function (data) {
 
     });
 
@@ -554,22 +555,16 @@ function initiateNetwork_MSG(network) {
 
 
 
-    network.on('ERRMSG_DECKERROR', function (data) {
+    ygopro.on('ERRMSG_DECKERROR', function (data) {
         //something is wrong with the deck you asked the server to validate!
         console.log(data.error);
         //gui.displayRPSSelector();
     });
 
-
-
-
-
-
 }
 
-
-
-var initiateNetwork = {
-    STOC: initiateNetwork_STOC,
-    MSG: initiateNetwork_MSG
+module.exports = function (emmiter) {
+    cleanstate(emmiter);
+    initiateNetwork_STOC(emmiter)
+    initiateNetwork_MSG(emmiter);
 };

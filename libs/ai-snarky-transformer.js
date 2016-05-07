@@ -270,30 +270,30 @@ function localPlayer(player) {
     return duel.isFirst ? player : 1 - player;
 }
 
-
-function BanlistHashMap() {
-    'use strict';
-    var map = {},
-        banlist,
-        hash,
-        count,
-        code,
-        item;
-    for (banlist in lflist) {
-        if (lflist.hasOwnProperty(banlist)) {
-            hash = 0x7dfcee6a;
-            for (item in lflist[banlist]) {
-                if (lflist[banlist].hasOwnProperty(item) && item.length) {
-                    count = parseInt(lflist[banlist][item], 10);
-                    code = parseInt(item, 10);
-                    hash = parseInt(hash ^ ((code << 18) | (code >> 14)) ^ ((code << (27 + count)) | (code >> (5 - count))), 10);
-                }
-            }
-            map[hash] = banlist;
-        }
-    }
-    return map;
-}
+//
+//function BanlistHashMap() {
+//    'use strict';
+//    var map = {},
+//        banlist,
+//        hash,
+//        count,
+//        code,
+//        item;
+//    for (banlist in lflist) {
+//        if (lflist.hasOwnProperty(banlist)) {
+//            hash = 0x7dfcee6a;
+//            for (item in lflist[banlist]) {
+//                if (lflist[banlist].hasOwnProperty(item) && item.length) {
+//                    count = parseInt(lflist[banlist][item], 10);
+//                    code = parseInt(item, 10);
+//                    hash = parseInt(hash ^ ((code << 18) | (code >> 14)) ^ ((code << (27 + count)) | (code >> (5 - count))), 10);
+//                }
+//            }
+//            map[hash] = banlist;
+//        }
+//    }
+//    return map;
+//}
 
 
 
@@ -1351,7 +1351,7 @@ function recieveSTOC(packet) {
         break;
 
     case ("STOC_JOIN_GAME"):
-        data.banlistHashTable = new BanlistHashMap();
+        data.banlistHashTable = '' //new BanlistHashMap();
         data.banlistHashCode = packet.message.readInt32LE(0);
         data.rule = packet.message[4];
         data.mode = packet.message[5];
@@ -1415,6 +1415,8 @@ function recieveSTOC(packet) {
         break;
 
     }
+    delete data.message;
+    delete data.packet;
     return data;
 }
 
