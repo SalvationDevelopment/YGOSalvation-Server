@@ -1,7 +1,13 @@
-/*globals Buffer, duel, enums, localPlayer*/
+/*jslint node:true*/
+/*globals */
+'use strict';
+
+function getRandomInt(min, max) {
+    return Math.floor(Math.random() * (max - min + 1) + min);
+}
 
 function makeCTOS(command, message) {
-    'use strict';
+
     //https://github.com/Fluorohydride/ygopro/blob/25bdab4c6d0000f841aee80c11cbf2e95ee54047/gframe/network.h
     // [len, len, CTOS_PLAYER_INFO, U, S ,E, R, N, A, M, E]
     // [len, len] is two bytes... read backwards totaled. 
@@ -224,13 +230,49 @@ function makeCTOS(command, message) {
     say.paper = function () {
         return new Buffer([0x2, 0x0, 0x3, 0x3]);
     };
-    say.GO_FIRST = function () {
+    say.randomHand = function () {
+        var rand = getRandomInt(0, 2),
+            o = {
+                0: say.scissors(),
+                1: say.rock(),
+                2: say.paper()
+            };
+        return o[rand];
+    };
+    say.GO_FIRST = function (isFirst) {
+        function localPlayer(player) {
+            return isFirst ? player : 1 - player;
+        }
         var n = localPlayer(0x0);
         return new Buffer([0x2, 0x0, 0x4, n]);
     };
-    say.GO_SECOND = function () {
+    say.GO_SECOND = function (isFirst) {
+        function localPlayer(player) {
+            return isFirst ? player : 1 - player;
+        }
         var n = localPlayer(0x1);
         return new Buffer([0x2, 0x0, 0x4, n]);
+    };
+    say.randomTP = function (isFirst) {
+        function localPlayer(player) {
+            return isFirst ? player : 1 - player;
+        }
+
+        function GO_FIRST() {
+            var n = localPlayer(0x0);
+            return new Buffer([0x2, 0x0, 0x4, n]);
+        }
+
+        function GO_SECOND() {
+            var n = localPlayer(0x1);
+            return new Buffer([0x2, 0x0, 0x4, n]);
+        }
+        var rand = getRandomInt(0, 1),
+            o = {
+                0: GO_SECOND(),
+                1: GO_SECOND()
+            };
+        return o[rand];
     };
 
 
