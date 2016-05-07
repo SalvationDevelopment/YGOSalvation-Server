@@ -16,12 +16,9 @@ var makeCTOS = require('./ai-snarky-reply.js'),
 function parseYDK(ydkFileContents) {
     var lineSplit = ydkFileContents.split("\r\n"),
         originalValues = {
-            "main": {},
-            "side": {},
-            "extra": {},
-            "mainLength": 0,
-            "sideLength": 0,
-            "extraLength": 0
+            "main": [],
+            "side": [],
+            "extra": []
         },
         current = "";
     lineSplit.forEach(function (value) {
@@ -35,13 +32,10 @@ function parseYDK(ydkFileContents) {
                 return;
             }
         } else {
-            originalValues[current + "Length"]++;
-            if (originalValues[current].hasOwnProperty(value)) {
-                originalValues[current][value] = originalValues[current][value] + 1;
-            } else {
-                originalValues[current][value] = 1;
-            }
+            originalValues[current].push(value);
         }
+
+
     });
     return originalValues;
 }
@@ -152,7 +146,7 @@ function duel(data) {
         network = new CommandParser(),
         dInfo = {};
 
-
+    initiateNetwork(network);
     network.ws = new WebSocket("ws://127.0.0.1:8082", "duel");
     network.ws.on('message', function (data) {
         var q = data,
@@ -183,8 +177,11 @@ function duel(data) {
             CTOS_JoinGame = makeCTOS('CTOS_JoinGame', data.roompass),
             toduelist = makeCTOS('CTOS_HS_TODUELIST'),
             tosend = Buffer.concat([CTOS_PlayerInfo, CTOS_JoinGame]);
+
         network.ws.send(tosend);
-        network.activeDeck = decks['Volcanics.ydk'];
+        network.decks = decks;
+
+
     });
 
 }
@@ -198,4 +195,6 @@ if (args.length > 0) {
         roompass: args[0]
     };
     duel(data);
+
+
 }

@@ -1,16 +1,15 @@
-/*jslint plusplus : true*/
+/*jslint plusplus : true, node:true*/
 /*global console*/
+'use strict';
 
 var duel = {};
 console.log('loaded');
 var actionables;
+var makeCTOS = require('./ai-snarky-reply.js');
 
-function getRandomInt(min, max) {
-    return Math.floor(Math.random() * (max - min + 1) + min);
-}
+
 
 function cleanstate(ygopro) {
-    'use strict';
     ygopro.duel = {
         deckcheck: 0,
         draw_count: 0,
@@ -52,7 +51,6 @@ function cleanstate(ygopro) {
 }
 
 function cardCollections(player) {
-    'use strict';
     return {
         DECK: $('.p' + player + '.DECK').length,
         HAND: $('.p' + player + '.HAND').length,
@@ -65,16 +63,17 @@ function cardCollections(player) {
 }
 
 function initiateNetwork_STOC(ygopro) {
-    'use strict';
     ygopro.on('STOC_ERROR_MSG', function (data) {
 
     });
     ygopro.on('STOC_SELECT_HAND', function (data) {
         //Trigger RPS Prompt
 
+        ygopro.ws.send(makeCTOS('randomHand'));
+
     });
     ygopro.on('STOC_SELECT_TP', function (data) {
-
+        ygopro.ws.send(makeCTOS('randomTP', ygopro.duel.isHost));
     });
     ygopro.on('STOC_SELECT_RESULT', function (data) {
 
@@ -98,31 +97,31 @@ function initiateNetwork_STOC(ygopro) {
 
     });
     ygopro.on('STOC_JOIN_GAME', function (data) {
-        duel.banlist = data.banlist;
-        duel.rule = data.rule;
-        duel.mode = data.mode;
-        duel.prio = data.prio;
-        duel.deckcheck = data.deckcheck;
-        duel.noshuffle = data.noshuffle;
-        duel.startLP = data.startLP;
-        duel.starthand = data.starthand;
-        duel.drawcount = data.drawcount;
-        duel.timelimit = data.timelimit;
-        console.log(duel);
+        ygopro.duel.banlist = data.banlist;
+        ygopro.duel.rule = data.rule;
+        ygopro.duel.mode = data.mode;
+        ygopro.duel.prio = data.prio;
+        ygopro.duel.deckcheck = data.deckcheck;
+        ygopro.duel.noshuffle = data.noshuffle;
+        ygopro.duel.startLP = data.startLP;
+        ygopro.duel.starthand = data.starthand;
+        ygopro.duel.drawcount = data.drawcount;
+        ygopro.duel.timelimit = data.timelimit;
+        ygopro.ws.send(makeCTOS('CTOS_UPDATE_DECK', ygopro.decks['Volcanics.ydk']));
+        ygopro.ws.send(makeCTOS('CTOS_HS_READY'));
         //fire handbars to render the view.
 
 
     });
     ygopro.on('STOC_TYPE_CHANGE', function (data) {
         //remember who is the host, use this data to rotate the field properly.
-        duel.ishost = data.ishost;
+        ygopro.duel.ishost = data.ishost;
     });
     ygopro.on('STOC_DUEL_START', function (STOC_DUEL_START) {
-        window.singlesitenav('duelscreen');
         //switch view from duel to duel field.
     });
     ygopro.on('STOC_DUEL_END', function (STOC_DUEL_START) {
-        window.ws.close();
+        ygopro.ws.close();
     });
 
     ygopro.on('STOC_REPLAY', function (data) {
@@ -132,25 +131,6 @@ function initiateNetwork_STOC(ygopro) {
 
     });
     ygopro.on('STOC_CHAT', function (data) {
-        var idmap = {
-                0: window.duel.player[0].name,
-                1: window.duel.player[1].name,
-                2: window.duel.player[2].name,
-                3: window.duel.player[3].name,
-                //4: window.duel.player[4].name,
-                //5: window.duel.player[5].name,
-                7: 'Spectator',
-                11: 'SYSTEM',
-                12: 'SYSTEM',
-                13: 'SYSTEM',
-                14: 'SYSTEM',
-                15: 'SYSTEM',
-                16: '', //named spectator
-                17: 'SYSTEM',
-                18: 'SYSTEM'
-            },
-            n = (idmap[data.from] !== undefined) ? idmap[data.from] : '---';
-
 
     });
     ygopro.on('STOC_HS_PLAYER_ENTER', function (data) {
@@ -158,8 +138,8 @@ function initiateNetwork_STOC(ygopro) {
         //slot them into the avaliable open duel slots.
         var i;
         for (i = 0; 3 > i; i++) {
-            if (!duel.player[i].name) {
-                duel.player[i].name = data.person;
+            if (!ygopro.duel.player[i].name) {
+                ygopro.duel.player[i].name = data.person;
 
                 return;
             }
@@ -198,6 +178,7 @@ function initiateNetwork_STOC(ygopro) {
             duel.player[pos].ready = false;
             duel.spectators++;
         }
+        ygopro.ws.send(makeCTOS('CTOS_START'));
     });
 
 }
@@ -223,9 +204,9 @@ function initiateNetwork_MSG(ygopro) {
     });
     ygopro.on('MSG_START', function (data) {
         //set the LP.
-        duel.isFirst = data.isFirst;
-        duel.player[0].lifepoints = data.lifepoints1;
-        duel.player[1].lifepoints = data.lifepoints2;
+        ygopro.duel.isFirst = data.isFirst;
+        ygopro.duel.player[0].lifepoints = data.lifepoints1;
+        ygopro.duel.player[1].lifepoints = data.lifepoints2;
 
         //set the size of each deck
         //gui.StartDuel(data.lifepoints[0], data.lifepoints[1], data.deck[0], data.deck[1], data.extra[0], data.extra[0]);
@@ -253,19 +234,19 @@ function initiateNetwork_MSG(ygopro) {
     ygopro.on('MSG_SELECT_BATTLECMD', function (data) {
         var list,
             i;
-        window.actionables = {};
-        window.idlecmd = data;
-        window.idlelookup = [];
+        ygopro.actionables = {};
+        ygopro.idlecmd = data;
+        ygopro.idlelookup = [];
         for (list in data) {
             if (data.hasOwnProperty(list) && data[list] instanceof Array) {
                 console.log('ok', data[list].length);
                 for (i = 0; data[list].length > i; i++) {
                     console.log(data[list][i].code, list);
-                    if (!window.actionables[data[list][i].code]) {
-                        window.actionables[data[list][i].code] = [];
+                    if (!ygopro.actionables[data[list][i].code]) {
+                        ygopro.actionables[data[list][i].code] = [];
                     }
-                    window.idlecmd[list][i].index = i;
-                    window.actionables[data[list][i].code].push({
+                    ygopro.idlecmd[list][i].index = i;
+                    ygopro.actionables[data[list][i].code].push({
                         list: list,
                         index: i
                     });
@@ -282,19 +263,19 @@ function initiateNetwork_MSG(ygopro) {
     ygopro.on('MSG_SELECT_IDLECMD', function (data) {
         var list,
             i;
-        window.actionables = {};
-        window.idlecmd = data;
-        window.idlelookup = [];
+        ygopro.actionables = {};
+        ygopro.idlecmd = data;
+        ygopro.idlelookup = [];
         for (list in data) {
             if (data.hasOwnProperty(list) && data[list] instanceof Array) {
                 console.log('ok', data[list].length);
                 for (i = 0; data[list].length > i; i++) {
                     console.log(data[list][i].code, list);
-                    if (!window.actionables[data[list][i].code]) {
-                        window.actionables[data[list][i].code] = [];
+                    if (!ygopro.actionables[data[list][i].code]) {
+                        ygopro.actionables[data[list][i].code] = [];
                     }
-                    window.idlecmd[list][i].index = i;
-                    window.actionables[data[list][i].code].push({
+                    ygopro.idlecmd[list][i].index = i;
+                    ygopro.actionables[data[list][i].code].push({
                         list: list,
                         index: i
                     });
@@ -302,10 +283,10 @@ function initiateNetwork_MSG(ygopro) {
             }
         }
         if (!data.ep) {
-            $('#endphi').addClass('avaliable');
+            //$('#endphi').addClass('avaliable');
         }
         if (data.bp) {
-            $('#battlephi').addClass('avaliable');
+            //$('#battlephi').addClass('avaliable');
         }
     });
     ygopro.on('MSG_SELECT_EFFECTYN', function (data) {
@@ -329,7 +310,7 @@ function initiateNetwork_MSG(ygopro) {
             servermessage = makeCTOS('CTOS_RESPONSE', data.respbuf);
         } // else show field selector;
 
-        window.ws.send(servermessage);
+        ygopro.ws.send(servermessage);
     });
     ygopro.on('MSG_SELECT_DISFIELD', function (data) {
         var servermessage;
@@ -337,7 +318,7 @@ function initiateNetwork_MSG(ygopro) {
             servermessage = makeCTOS('CTOS_RESPONSE', data.respbuf);
         } // else show field selector;
 
-        window.ws.send(servermessage);
+        ygopro.ws.send(servermessage);
     });
     ygopro.on('MSG_SELECT_POSITION', function (data) {
         //???
@@ -547,13 +528,6 @@ function initiateNetwork_MSG(ygopro) {
     ygopro.on('MSG_RELOAD_FIELD', function (data) {
 
     });
-
-
-
-
-
-
-
 
     ygopro.on('ERRMSG_DECKERROR', function (data) {
         //something is wrong with the deck you asked the server to validate!
