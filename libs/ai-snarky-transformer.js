@@ -3,7 +3,7 @@
 
 var duel = {};
 var enums = require('./enums.js');
-var EventEmitter = require('EventEmitter');
+var EventEmitter = require('events').EventEmitter;
 var field = {
     0: {},
     1: {}
@@ -1421,6 +1421,6 @@ function recieveSTOC(packet) {
 
 
 
-modules.exports = {
+module.exports = {
     recieveSTOC: recieveSTOC
 }
