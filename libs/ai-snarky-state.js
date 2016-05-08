@@ -62,6 +62,7 @@ function filterOverlyIndex(array, overlayindex) {
 //initiation of a single independent state intance... I guess this is a class of sorts.
 function init() {
     //the field is represented as a bunch of cards with metadata in an array, <div>card/card/card/card</div>
+    //numberOfCards is used like a memory address. It must be increased by 1 when creating a new card.
     var stack = [],
         numberOfCards = 0;
 
@@ -130,30 +131,30 @@ function init() {
     }
 
     //update state of A GROUP OF CARDS based on info from YGOPro
-    function updateData(player, clocation, data) {
+    function updateData(player, clocation, arrayOfCards) {
         var target,
             pointer,
             i;
 
-        for (i = 0; data.length > i; i++) {
-            if (data[i].Code !== 'nocard') {
+        for (i = 0; arrayOfCards.length > i; i++) {
+            if (arrayOfCards[i].Code !== 'nocard') {
                 target = queryCard(player, enums.locations[clocation], i, 0);
                 pointer = uidLookup(target[0].uid);
-                stack[pointer].position = data[i].Position;
-                stack[pointer].id = data[i].Code;
+                stack[pointer].position = arrayOfCards[i].Position;
+                stack[pointer].id = arrayOfCards[i].Code;
             }
         }
     }
 
     //update state of A SINGLE CARD based on info from YGOPro
-    function updateCard(player, clocation, index, data) {
+    function updateCard(player, clocation, index, card) {
         var target,
             pointer;
 
         target = queryCard(player, enums.locations[clocation], index, 0);
         pointer = uidLookup(target[0].uid);
-        stack[pointer].position = data.Position;
-        stack[pointer].id = data.Code;
+        stack[pointer].position = card.Position;
+        stack[pointer].id = card.Code;
 
     }
 
