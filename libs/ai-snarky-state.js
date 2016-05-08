@@ -4,8 +4,11 @@
 //I know this looks kinda odd but the code is based off of HTML/DOM manipulations that allow for animations.
 //I wanted to make the logic easy to write by just copying and refactoring.
 
+// Need to refactor this out. In the mean time need to know what some numbers mean in YGOPro land.
 var enums = require('./enums.js');
 
+
+//Constructor for card objects.
 function Card(movelocation, player, index, unique) {
     return {
         type: 'card',
@@ -20,6 +23,7 @@ function Card(movelocation, player, index, unique) {
 }
 
 
+//various query filters for doing various things.
 function filterIsCard(array) {
     return array.filter(function (item) {
         return item.type === 'card';
@@ -50,12 +54,13 @@ function filterOverlyIndex(array, overlayindex) {
     });
 }
 
-
-function field(size) {
+//initiation of a single independent state intance... I guess this is a class of sorts.
+function init() {
+    //the field is represented as a bunch of cards with metadata in an array, <div>card/card/card/card</div>
     var stack = [],
         numberOfCards = 0;
 
-
+    //exposed method to initialize the field;
     function startDuel(player1StartLP, player2StartLP, OneDeck, TwoDeck, OneExtra, TwoExtra) {
         var i;
         for (i = 0; OneDeck > i; i++) {
@@ -76,6 +81,7 @@ function field(size) {
         }
     }
 
+    //the way the stack of cards is setup it requires a pointer to edit it.
     function uidLookup(uid) {
         var i;
         for (i = 0; stack.length > i; i++) {
@@ -85,8 +91,14 @@ function field(size) {
         }
     }
 
+    //returns info on a card.
+    function queryCard(player, clocation, index, overlayindex) {
+        return filterOverlyIndex(filterIndex(filterlocation(filterPlayer(stack, player), clocation), index), overlayindex);
+    }
+
+    //finds a card, then moves it elsewhere.
     function setState(player, clocation, index, moveplayer, movelocation, moveindex, moveposition, overlayindex, isBecomingCard) {
-        var target = filterOverlyIndex(filterIndex(filterlocation(filterPlayer(stack, player), clocation), index), overlayindex),
+        var target = queryCard(player, clocation, index, overlayindex),
             pointer = uidLookup(target[0].uid);
 
         stack[pointer].player = moveplayer;
@@ -97,6 +109,7 @@ function field(size) {
 
     }
 
+    //update state of A GROUP OF CARDS based on info from YGOPro
     function updateData(player, clocation, data) {
         var target,
             pointer,
@@ -104,7 +117,7 @@ function field(size) {
 
         for (i = 0; data.length > i; i++) {
             if (data[i].Code !== 'nocard') {
-                target = filterOverlyIndex(filterIndex(filterlocation(filterPlayer(stack, player), enums.locations[clocation]), i), 0);
+                target = queryCard(player, enums.locations[clocation], i, 0);
                 pointer = uidLookup(target[0].uid);
                 stack[pointer].position = data[i].Position;
                 stack[pointer].id = data[i].Code;
@@ -112,11 +125,12 @@ function field(size) {
         }
     }
 
+    //update state of A SINGLE CARD based on info from YGOPro
     function updateCard(player, clocation, index, data) {
         var target,
             pointer;
 
-        target = filterOverlyIndex(filterIndex(filterlocation(filterPlayer(stack, player), enums.locations[clocation]), index), 0);
+        target = queryCard(player, enums.locations[clocation], index, 0);
         pointer = uidLookup(target[0].uid);
         stack[pointer].position = data.Position;
         stack[pointer].id = data.Code;
@@ -125,6 +139,7 @@ function field(size) {
 
     return {
         startDuel: startDuel,
-        updateData: updateData
+        updateData: updateData,
+        updateCard: updateCard
     };
 }
