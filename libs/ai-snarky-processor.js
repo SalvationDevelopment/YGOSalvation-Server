@@ -3,9 +3,9 @@
 'use strict';
 
 var duel = {};
-console.log('loaded');
 var actionables;
-var makeCTOS = require('./ai-snarky-reply.js');
+var makeCTOS = require('./ai-snarky-reply.js'),
+    Field = require('./ai-snarky-state.js');
 
 
 
@@ -50,17 +50,7 @@ function cleanstate(ygopro) {
     };
 }
 
-function cardCollections(player) {
-    return {
-        DECK: $('.p' + player + '.DECK').length,
-        HAND: $('.p' + player + '.HAND').length,
-        EXTRA: $('.p' + player + '.EXTRA').not('.overlayunit').length,
-        GRAVE: $('.p' + player + '.GRAVE').length,
-        REMOVED: $('.p' + player + '.REMOVED').length,
-        SPELLZONE: 8,
-        MONSTERZONE: 5
-    };
-}
+
 
 function initiateNetwork_STOC(ygopro) {
     ygopro.on('STOC_ERROR_MSG', function (data) {
@@ -184,7 +174,6 @@ function initiateNetwork_STOC(ygopro) {
 }
 
 function initiateNetwork_MSG(ygopro) {
-    'use strict';
     ygopro.on('MSG_RETRY', function (data) {
         //???
         console.log('An Error Occured');
@@ -209,7 +198,8 @@ function initiateNetwork_MSG(ygopro) {
         ygopro.duel.player[1].lifepoints = data.lifepoints2;
 
         //set the size of each deck
-        //gui.StartDuel(data.lifepoints[0], data.lifepoints[1], data.deck[0], data.deck[1], data.extra[0], data.extra[0]);
+        ygopro.fieldState = new Field();
+        ygopro.fieldState.startDuel(data.lifepoints[0], data.lifepoints[1], data.deck[0], data.deck[1], data.extra[0], data.extra[0]);
 
         //double check that the screen is cleared.
 
@@ -219,7 +209,7 @@ function initiateNetwork_MSG(ygopro) {
 
     });
     ygopro.on('MSG_UPDATE_DATA', function (data) {
-        //gui.UpdateData(data.player, data.fieldlocation, data.cards);
+        ygopro.fieldState.updateData(data.player, data.fieldlocation, data.cards);
         //ygopro-core sent information about the state of a collection of related cards.
         //field[data.player][data.fieldmodel] = ???;
         //reimage field;
@@ -227,7 +217,7 @@ function initiateNetwork_MSG(ygopro) {
 
     ygopro.on('MSG_UPDATE_CARD', function (data) {
         //ygopro-core sent information about the state of one specific card.
-        //gui.UpdateCard(data.player, data.fieldlocation, data.index, data.card);
+        ygopro.fieldState.updateCard(data.player, data.fieldlocation, data.index, data.card);
         //field[data.player][data.fieldmodel][data.index] = data.card;
         //redraw field;
     });
@@ -539,6 +529,6 @@ function initiateNetwork_MSG(ygopro) {
 
 module.exports = function (emmiter) {
     cleanstate(emmiter);
-    initiateNetwork_STOC(emmiter)
+    initiateNetwork_STOC(emmiter);
     initiateNetwork_MSG(emmiter);
 };
