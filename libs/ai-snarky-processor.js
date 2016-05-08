@@ -5,7 +5,8 @@
 var duel = {};
 var actionables;
 var makeCTOS = require('./ai-snarky-reply.js'),
-    Field = require('./ai-snarky-state.js');
+    Field = require('./ai-snarky-state.js'),
+    Lua = require('./ai-snarky-lua.js');
 
 
 
@@ -100,7 +101,8 @@ function initiateNetwork_STOC(ygopro) {
         ygopro.ws.send(makeCTOS('CTOS_UPDATE_DECK', ygopro.decks['Volcanics.ydk']));
         ygopro.ws.send(makeCTOS('CTOS_HS_READY'));
         //fire handbars to render the view.
-
+        ygopro.fieldState = new Field();
+        ygopro.lua = new Lua('state', ygopro.fieldState);
 
     });
     ygopro.on('STOC_TYPE_CHANGE', function (data) {
@@ -198,7 +200,7 @@ function initiateNetwork_MSG(ygopro) {
         ygopro.duel.player[1].lifepoints = data.lifepoints2;
 
         //set the size of each deck
-        ygopro.fieldState = new Field();
+
         ygopro.fieldState.startDuel(data.lifepoints[0], data.lifepoints[1], data.deck[0], data.deck[1], data.extra[0], data.extra[0]);
 
         //double check that the screen is cleared.
@@ -369,7 +371,7 @@ function initiateNetwork_MSG(ygopro) {
     });
     ygopro.on('MSG_MOVE', function (data) {
         //use animation system in gui.js
-        //gui.MoveCard(data.code, data.pc, data.pl, data.ps, data.pp, data.cc, data.cl, data.cs, data.cp);
+        ygopro.fieldState.moveCard(data.code, data.pc, data.pl, data.ps, data.pp, data.cc, data.cl, data.cs, data.cp);
 
     });
     ygopro.on('MSG_POS_CHANGE', function (data) {
@@ -436,7 +438,7 @@ function initiateNetwork_MSG(ygopro) {
     });
     ygopro.on('MSG_DRAW', function (data) {
         var i = 0;
-        //gui.DrawCard(data.player, data.count, data.cardslist);
+        ygopro.fieldState.drawCard(data.player, data.count, data.cardslist);
 
         //due draw animation/update
     });

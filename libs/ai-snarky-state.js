@@ -1,4 +1,4 @@
-/*jslint node:true, plusplus:true*/
+/*jslint node:true, plusplus:true, bitwise : true*/
 'use strict';
 
 
@@ -11,6 +11,7 @@ and maintains a repressentation of the game state*/
 
 // Need to refactor this out. In the mean time need to know what some numbers mean in YGOPro land.
 var enums = require('./enums.js');
+var fs = require('fs');
 
 
 //Constructor for card objects.
@@ -20,7 +21,7 @@ function Card(movelocation, player, index, unique) {
         player: player,
         location: movelocation,
         id: 0,
-        index: 0,
+        index: index,
         position: 'FaceDown',
         overlayindex: 0,
         uid: unique
@@ -49,7 +50,7 @@ function filterlocation(array, location) {
 
 function filterIndex(array, index) {
     return array.filter(function (item) {
-        return item.index === location;
+        return item.index === index;
     });
 }
 
@@ -74,7 +75,7 @@ function init() {
             numberOfCards++;
         }
         for (i = 0; TwoDeck > i; i++) {
-            stack.push(new Card('DECK', 0, i, numberOfCards));
+            stack.push(new Card('DECK', 1, i, numberOfCards));
             numberOfCards++;
         }
         for (i = 0; OneExtra > i; i++) {
@@ -82,7 +83,7 @@ function init() {
             numberOfCards++;
         }
         for (i = 0; TwoExtra > i; i++) {
-            stack.push(new Card('EXTRA', 0, i, numberOfCards));
+            stack.push(new Card('EXTRA', 1, i, numberOfCards));
             numberOfCards++;
         }
     }
@@ -117,16 +118,36 @@ function init() {
         };
     }
 
+    function reIndex(player, location) {
+        //again YGOPro doesnt manage data properly... and doesnt send the index update for the movement command.
+        //that or Im somehow missing it in moveCard().
+        var zone = filterlocation(filterPlayer(stack, player), location),
+            pointer,
+            i;
+        for (i = 0; zone.length > i; i++) {
+            pointer = uidLookup(zone[i].uid);
+            stack[pointer].index = i;
+        }
+    }
     //finds a card, then moves it elsewhere.
     function setState(player, clocation, index, moveplayer, movelocation, moveindex, moveposition, overlayindex, isBecomingCard) {
-        var target = queryCard(player, clocation, index, overlayindex),
-            pointer = uidLookup(target[0].uid);
+        console.log('set:', player, clocation, index, moveplayer, movelocation, moveindex, moveposition, overlayindex, isBecomingCard);
+        var target = queryCard(player, clocation, index, 0),
+            pointer = uidLookup(target[0].uid),
+            zone,
+            i;
 
         stack[pointer].player = moveplayer;
         stack[pointer].location = movelocation;
         stack[pointer].index = moveindex;
         stack[pointer].position = moveposition;
         stack[pointer].overlayindex = overlayindex;
+        reIndex(player, 'GRAVE');
+        reIndex(player, 'HAND');
+        reIndex(player, 'EXTRA');
+
+
+        fs.writeFileSync('output.json', JSON.stringify(stack, null, 4));
 
     }
 
@@ -144,6 +165,7 @@ function init() {
                 stack[pointer].id = arrayOfCards[i].Code;
             }
         }
+        fs.writeFileSync('output.json', JSON.stringify(stack, null, 4));
     }
 
     //update state of A SINGLE CARD based on info from YGOPro
@@ -155,15 +177,70 @@ function init() {
         pointer = uidLookup(target[0].uid);
         stack[pointer].position = card.Position;
         stack[pointer].id = card.Code;
+        fs.writeFileSync('output.json', JSON.stringify(stack, null, 4));
     }
 
+    //Flip summon, change to attack mode, change to defense mode, and similar movements.
     function changeCardPosition(code, cc, cl, cs, cp) {
-
         var target = queryCard(cc, cl, cs, 0),
             pointer = uidLookup(target[0].uid);
 
         stack[pointer].id = code;
         setState(cc, cl, cs, cc, cl, cs, cp, 0, false);
+        fs.writeFileSync('output.json', JSON.stringify(stack, null, 4));
+    }
+
+    function moveCard(code, pc, pl, ps, pp, cc, cl, cs, cp) {
+        //this is ugly, needs labling.
+        var target,
+            pointer;
+        if (pl === 0) {
+            stack.push(new Card(enums.locations[cl], cc, cs, numberOfCards));
+            numberOfCards++;
+            return;
+        } else if (cl === 0) {
+            target = queryCard(pc, enums.locations[pl], ps, 0);
+            pointer = uidLookup(target[0].uid);
+            delete stack[pointer];
+            numberOfCards--;
+            return;
+        } else {
+            if (!(pl & 0x80) && !(cl & 0x80)) { //duelclient line 1885
+                setState(pc, enums.locations[pl], ps, cc, enums.locations[cl], cs, cp, 0, false);
+            } else if (!(pl & 0x80)) {
+                //targeting a card to become a xyz unit....
+                setState(pc, enums.locations[pl], ps, cc, enums.locations[(cl & 0x7f)], cs, cp, 0, true);
+
+
+            } else if (!(cl & 0x80)) {
+                //turning an xyz unit into a normal card....
+                setState(pc, enums.locations[(pl & 0x7f)], ps, cc, enums.locations[cl], cs, cp, pp);
+            } else {
+                //move one xyz unit to become the xyz unit of something else....');
+                //                $('.overlayunit.p' + cc + '.i' + cs).each(function (i) {
+                //                    $(this).attr('data-overlayunit', (i));
+                //                });
+                setState(pc, enums.locations[(pl & 0x7f)], ps, cc, enums.locations[(cl & 0x7f)], cs, cp, pp, true);
+
+            }
+        }
+    }
+
+    function drawCard(player, numberOfCards, cards) {
+        var currenthand = filterlocation(filterPlayer(stack, player), 'HAND').length,
+            topcard,
+            target,
+            i,
+            pointer;
+
+        for (i = 0; i < numberOfCards; i++) {
+            topcard = filterlocation(filterPlayer(stack, player), 'DECK').length - 1;
+            setState(player, 'DECK', topcard, player, 'HAND', currenthand + i, 'FaceUp', 0, false);
+            target = queryCard(player, 'HAND', (currenthand + i), 0);
+            pointer = uidLookup(target[0].uid);
+            stack[pointer].id = cards[i].Code;
+        }
+        fs.writeFileSync('output.json', JSON.stringify(stack, null, 4));
     }
 
     //expose public functions.
@@ -172,6 +249,12 @@ function init() {
         updateData: updateData,
         updateCard: updateCard,
         cardCollections: cardCollections,
-        changeCardPosition: changeCardPosition
+        changeCardPosition: changeCardPosition,
+        moveCard: moveCard,
+        drawCard: drawCard
     };
+
+
 }
+
+module.exports = init;

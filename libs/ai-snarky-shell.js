@@ -127,14 +127,14 @@ function parsePackets(command, message) {
 }
 
 
-function processTask(task, socket) {
+function processTask(task, fieldState) {
 
     var i = 0,
         l = 0,
         output = [],
         RESPONSE = false;
     for (i; task.length > i; i++) {
-        output.push(recieveSTOC(task[i]));
+        output.push(recieveSTOC(task[i], fieldState));
     }
 
     return output;
@@ -159,7 +159,7 @@ function duel(data) {
         frame = framer.input(q);
         for (newframes; frame.length > newframes; newframes++) {
             task = parsePackets('STOC', new Buffer(frame[newframes]));
-            commands = processTask(task);
+            commands = processTask(task, network.fieldState);
             l = 0;
             for (l; commands.length > l; l++) {
                 /*binary code goes in and comes out as events*/
