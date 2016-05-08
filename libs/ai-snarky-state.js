@@ -155,7 +155,15 @@ function init() {
         pointer = uidLookup(target[0].uid);
         stack[pointer].position = card.Position;
         stack[pointer].id = card.Code;
+    }
 
+    function changeCardPosition(code, cc, cl, cs, cp) {
+
+        var target = queryCard(cc, cl, cs, 0),
+            pointer = uidLookup(target[0].uid);
+
+        stack[pointer].id = code;
+        setState(cc, cl, cs, cc, cl, cs, cp, 0, false);
     }
 
     //expose public functions.
@@ -163,6 +171,7 @@ function init() {
         startDuel: startDuel,
         updateData: updateData,
         updateCard: updateCard,
-        cardCollections: cardCollections
+        cardCollections: cardCollections,
+        changeCardPosition: changeCardPosition
     };
 }
