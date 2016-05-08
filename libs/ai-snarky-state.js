@@ -1,6 +1,11 @@
 /*jslint node:true, plusplus:true*/
 'use strict';
 
+
+
+/* This is the state engine for SnarkyChild, it keeps track of the update information from YGOPro
+and maintains a repressentation of the game state*/
+
 //I know this looks kinda odd but the code is based off of HTML/DOM manipulations that allow for animations.
 //I wanted to make the logic easy to write by just copying and refactoring.
 
@@ -96,6 +101,21 @@ function init() {
         return filterOverlyIndex(filterIndex(filterlocation(filterPlayer(stack, player), clocation), index), overlayindex);
     }
 
+    /*The YGOPro messages have a design flaw in them where they dont tell the number of cards
+    that you have to itterate over in order to get a proper message, this function resolves that problem,
+    this flaw has caused me all types of grief.*/
+    function cardCollections(player) {
+        return {
+            DECK: filterlocation(filterPlayer(stack, player), 'DECK').length,
+            HAND: filterlocation(filterPlayer(stack, player), 'HAND').length,
+            EXTRA: filterOverlyIndex(filterlocation(filterPlayer(stack, player), 'EXTA')).length,
+            GRAVE: filterlocation(filterPlayer(stack, player), 'GRAVE').length,
+            REMOVED: filterlocation(filterPlayer(stack, player), 'REMOVED').length,
+            SPELLZONE: 8,
+            MONSTERZONE: 5
+        };
+    }
+
     //finds a card, then moves it elsewhere.
     function setState(player, clocation, index, moveplayer, movelocation, moveindex, moveposition, overlayindex, isBecomingCard) {
         var target = queryCard(player, clocation, index, overlayindex),
@@ -137,9 +157,11 @@ function init() {
 
     }
 
+    //expose public functions.
     return {
         startDuel: startDuel,
         updateData: updateData,
-        updateCard: updateCard
+        updateCard: updateCard,
+        cardCollections: cardCollections
     };
 }
