@@ -4,23 +4,12 @@
 var duel = {};
 var enums = require('./enums.js');
 var EventEmitter = require('events').EventEmitter;
+var cardCollections;
 var field = {
     0: {},
     1: {}
 };
 
-function cardCollections(player) {
-    'use strict';
-    return {
-        DECK: field[player].DECK.length,
-        HAND: field[player].HAND.length,
-        EXTRA: field[player].EXTRA.length,
-        GRAVE: field[player].GRAVE.length,
-        REMOVED: field[player].REMOVED.length,
-        SPELLZONE: 8,
-        MONSTERZONE: 5
-    };
-}
 
 
 function makeCard(buffer, start, controller) {
@@ -297,7 +286,7 @@ function localPlayer(player) {
 
 
 
-function recieveSTOC(packet) {
+function recieveSTOC(packet, fieldState) {
     // OK!!!! HARD PART!!!!
     // recieve.js should have create obejects with all the parameters as properites, then emit them.
     // its done here because we might need to pass in STATE to the functions also.
@@ -319,6 +308,9 @@ function recieveSTOC(packet) {
         xyz = 0, // used in MSG_RELOAD_FIELD
         chainObj = {}; // used in MSG_RELOAD_FIELD
 
+    if (fieldState) {
+        cardCollections = fieldState.cardCollections;
+    }
 
     data.command = packet.STOC;
     data.packet = packet;
@@ -1095,6 +1087,7 @@ function recieveSTOC(packet) {
         case ('MSG_CONFIRM_CARDS'):
             data.player = BufferIO.ReadInt8(); /* defunct in code */
             data.count = BufferIO.ReadInt8();
+            data.cards = [];
             for (i = 0; i < data.count; ++i) {
                 data.cards[i] = {
                     code: BufferIO.ReadInt32(),
