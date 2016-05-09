@@ -70,14 +70,6 @@ function init() {
     //exposed method to initialize the field;
     function startDuel(player1StartLP, player2StartLP, OneDeck, TwoDeck, OneExtra, TwoExtra) {
         var i;
-        for (i = 0; OneDeck > i; i++) {
-            stack.push(new Card('DECK', 0, i, numberOfCards));
-            numberOfCards++;
-        }
-        for (i = 0; TwoDeck > i; i++) {
-            stack.push(new Card('DECK', 1, i, numberOfCards));
-            numberOfCards++;
-        }
         for (i = 0; OneExtra > i; i++) {
             stack.push(new Card('EXTRA', 0, i, numberOfCards));
             numberOfCards++;
@@ -86,6 +78,15 @@ function init() {
             stack.push(new Card('EXTRA', 1, i, numberOfCards));
             numberOfCards++;
         }
+        for (i = 0; OneDeck > i; i++) {
+            stack.push(new Card('DECK', 0, i, numberOfCards));
+            numberOfCards++;
+        }
+        for (i = 0; TwoDeck > i; i++) {
+            stack.push(new Card('DECK', 1, i, numberOfCards));
+            numberOfCards++;
+        }
+
     }
 
     //the way the stack of cards is setup it requires a pointer to edit it.
@@ -193,7 +194,9 @@ function init() {
     function moveCard(code, pc, pl, ps, pp, cc, cl, cs, cp) {
         //this is ugly, needs labling.
         var target,
-            pointer;
+            pointer,
+            zone,
+            i;
         if (pl === 0) {
             stack.push(new Card(enums.locations[cl], cc, cs, numberOfCards));
             numberOfCards++;
@@ -221,6 +224,11 @@ function init() {
                 //                    $(this).attr('data-overlayunit', (i));
                 //                });
                 setState(pc, enums.locations[(pl & 0x7f)], ps, cc, enums.locations[(cl & 0x7f)], cs, cp, pp, true);
+                zone = filterIndex(filterlocation(filterPlayer(stack, cc), enums.locations[(cl & 0x7f)]), cs);
+                for (i = 1; zone.length > i; i++) {
+                    pointer = uidLookup(zone[i].uid);
+                    stack[pointer].overlayindex = i;
+                }
 
             }
         }

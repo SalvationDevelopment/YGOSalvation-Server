@@ -4,8 +4,9 @@ var LuaVM = require('lua.vm.js');
 var fs = require('fs');
 var i = fs.readFileSync('../SnarkyLua/AI/ai-child.lua').toString();
 global.AI = {
-    Chat: function (input) {
-        console.log(input);
+    Chat: function (input, o, a) {
+        console.log(this.args, input, o, a);
+        return 'hi';
     }
 };
 var lua = new LuaVM.Lua.State();
