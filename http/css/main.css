@@ -1825,6 +1825,7 @@ select#cusomizationselection {
     float: left;
     padding: 5px;
     font-size: .8em;
+    cursor: pointer;
 }
 
 .musictitle {

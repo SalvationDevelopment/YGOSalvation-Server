@@ -351,7 +351,7 @@ function customizationadd() {
         window.quedfunc = 'addcustom';
         window.quedready = true;
         console.log(reader, window.quedparams);
-        setTimeout(setTimeout() {
+        setTimeout(function () {
             $('#cusomizationselection').change();
         }, 1300);
     }, false);
