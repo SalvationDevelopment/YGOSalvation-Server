@@ -315,6 +315,24 @@ $(document).ready(function () {
         console.log(window.quedparams);
 
     });
+    $('#displaybody').on('click', '.soundset span', function (item) {
+        if (!confirm('Install?')) {
+            return;
+        }
+        var target = $(this).attr('data-target'),
+            option = $('#cusomizationselection option:selected'),
+            source = option.parent().attr('data-filename');
+
+        window.quedparams = {
+            source: './ygopro/Assets/Music/' + imgfilename,
+            target: './ygopro/sound/' + target
+        };
+
+        window.quedfunc = 'applycustom';
+        window.quedready = true;
+        console.log(window.quedparams);
+
+    });
 });
 
 
