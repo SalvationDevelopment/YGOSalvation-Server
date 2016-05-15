@@ -644,7 +644,7 @@ function getCustoms(target) {
     var images = [],
         i,
         string = '';
-    if (target !== 'Music') {
+    if (target === 'Music') {
         readFiles(target, function (filename, content) {
             var type = filename.split('.')[1];
             images.push({
