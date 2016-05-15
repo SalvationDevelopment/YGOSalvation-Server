@@ -296,7 +296,15 @@ $(document).ready(function () {
 
 
     $('#ipblogin').css('display', 'block');
-
+    $('#imageupload').onchange(function () {
+        var source = source = option.attr('data-source');
+        quedparams = '/ygopro/assets/' + source
+        addcustom = 'getCustoms';
+        quedready = true;
+    });
+    $('#imageupload').on('click', 'img', function (item) {
+        console.log(item);
+    })
 });
 
 
@@ -304,11 +312,13 @@ function customizationadd() {
     var file = $('#imageupload')[0].files[0],
         reader = new FileReader(),
         option = $('#cusomizationselection option:selected'),
-        source = option.attr('data-source'),
-        code = reader.readAsDataURL(file);
+        source = option.attr('data-source');
 
-    return {
-        source: 'assets/' + source,
-        code: code
+    reader.readAsDataURL(file);
+    quedparams = {
+        target: '/ygopro/assets/' + source + '/' + file.name,
+        code: reader.result
     };
+    addcustom = 'addcustom';
+    quedready = true;
 }
