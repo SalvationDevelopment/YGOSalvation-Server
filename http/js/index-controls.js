@@ -296,7 +296,7 @@ $(document).ready(function () {
 
 
     $('#ipblogin').css('display', 'block');
-    $('#imageupload').onchange(function () {
+    $('#imageupload').change(function () {
         var option = $('#cusomizationselection option:selected'),
             source = option.attr('data-source');
         quedparams = '/ygopro/assets/' + source;
@@ -316,10 +316,15 @@ function customizationadd() {
         source = option.attr('data-source');
 
     reader.readAsDataURL(file);
-    quedparams = {
-        target: '/ygopro/assets/' + source + '/' + file.name,
-        code: reader.result
-    };
-    quedfunc = 'addcustom';
-    quedready = true;
+    reader.addEventListener("load", function () {
+        quedparams = {
+            target: '/ygopro/assets/' + source + '/' + file.name,
+            code: reader.result
+        };
+        quedfunc = 'addcustom';
+        quedready = true;
+        console.log(reader, quedparams);
+    }, false);
+
+
 }
