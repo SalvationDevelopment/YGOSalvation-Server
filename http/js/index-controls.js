@@ -324,7 +324,7 @@ $(document).ready(function () {
             source = option.parent().attr('data-filename');
 
         window.quedparams = {
-            source: './ygopro/Assets/Music/' + imgfilename,
+            source: './ygopro/Assets/Music/' + source,
             target: './ygopro/sound/' + target
         };
 
