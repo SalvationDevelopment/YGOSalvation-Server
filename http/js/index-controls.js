@@ -304,7 +304,7 @@ $(document).ready(function () {
         var imgfilename = $(this).attr('data-filename'),
             option = $('#cusomizationselection option:selected'),
             source = option.attr('data-source'),
-            target = option.attr('data-target');
+            target = option.attr('data-filename');
         window.quedparams = {
             source: './ygopro/Assets/' + source + '/' + imgfilename,
             target: './ygopro/textures/' + target
