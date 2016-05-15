@@ -644,16 +644,30 @@ function getCustoms(target) {
     var images = [],
         i,
         string = '';
-    readFiles(target, function (filename, content) {
-        var type = filename.split('.')[1];
-        images.push({
-            filename: filename,
-            url: 'data:image/' + type + ';base64,' + content
+    if (target !== 'Music') {
+        readFiles(target, function (filename, content) {
+            var type = filename.split('.')[1];
+            images.push({
+                filename: filename,
+                url: 'data:audio/' + type + ';base64,' + content
+            });
         });
-    });
-    for (i = 0; images.length > i; i++) {
-        string = string + '<div class="customize"><img data-filename="' + images[i].filename + '" src="' + images[i].url + '"><span>' + images[i].filename + '</span></div>';
+        for (i = 0; images.length > i; i++) {
+            string = string + '<div class="customize"><img data-filename="' + images[i].filename + '" src="' + images[i].url + '"><span>' + images[i].filename + '</span></div>';
+        }
+        frames[0].$('#displaybody').html(string);
+    } else {
+        readFiles(target, function (filename, content) {
+            var type = filename.split('.')[1];
+            images.push({
+                filename: filename,
+                url: 'data:image/' + type + ';base64,' + content
+            });
+        });
+        for (i = 0; images.length > i; i++) {
+            string = string + '<div class="customize"><img data-filename="' + images[i].filename + '" src="' + images[i].url + '"><span>' + images[i].filename + '</span></div>';
+        }
+        frames[0].$('#displaybody').html(string);
     }
-    frames[0].$('#displaybody').html(string);
 
 }
