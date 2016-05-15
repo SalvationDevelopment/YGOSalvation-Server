@@ -298,7 +298,7 @@ $(document).ready(function () {
         window.quedready = true;
     });
     $('#displaybody').on('click', 'img', function (item) {
-        if (!confirm('Install?')) {
+        if (!confirm('Install as ' + $('#cusomizationselection option:selected').text() + ' image?')) {
             return
         }
         var imgfilename = $(this).attr('data-filename'),
@@ -316,7 +316,7 @@ $(document).ready(function () {
 
     });
     $('#displaybody').on('click', '.soundsets span', function (item) {
-        if (!confirm('Install?')) {
+        if (!confirm('Install as ' + $(this).text() + ' music?')) {
             return;
         }
         var target = $(this).attr('data-target'),
