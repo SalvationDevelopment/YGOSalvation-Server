@@ -1819,11 +1819,20 @@ select#cusomizationselection {
 }
 
 .soundsets span {
-    width: 32%;
-    display: block;
+    width: 33%;
+    display: inline-block;
+    /* border: 1px solid black; */
     float: left;
     padding: 5px;
     font-size: .8em;
+}
+
+.customize > span {
+    width: 100%;
+    display: inline-block;
+    background: white;
+    height: 3em;
+    margin-bottom: 5px;
 }
 
 
