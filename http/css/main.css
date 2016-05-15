@@ -1821,7 +1821,6 @@ select#cusomizationselection {
 .soundsets span {
     width: 32%;
     display: block;
-    border: 1px solid black;
     float: left;
     padding: 5px;
     font-size: .8em;
