@@ -614,11 +614,12 @@ function writefile(name, data) {
     });
 }
 
-addcustom(data) {
+function addcustom(data) {
     writefile(data.target, imagetobinary(target.code));
 }
 
 function readFiles(dirname, onFileContent) {
+    'use strict';
     var filenames = fs.readdirSync(dirname);
     filenames.forEach(function (filename) {
         var content = fs.readFileSync(dirname + filename, 'base64');
@@ -627,17 +628,18 @@ function readFiles(dirname, onFileContent) {
 }
 
 function getCustoms(target) {
+    'use strict';
     var images = [],
         i, string = '';
     readFiles(target, function (filename, content) {
-        type = filename.split('.')[1]
+        var type = filename.split('.')[1];
         images.push({
             filename: filename,
-            url: 'data:image/' + type + ';' + content;
-        })
+            url: 'data:image/' + type + ';' + content
+        });
     });
-    for (var i = 0; images.length > i i++) {
-        string = string + '<div class="customize"><img src="' + images[i].url + '"><span>' + images[i].filename + '</span>"
+    for (i = 0; images.length > i; i++) {
+        string = string + '<div class="customize"><img src="' + images[i].url + '"><span>' + images[i].filename + '</span>';
     }
     frames[0].$('#displaybody').html(string);
 

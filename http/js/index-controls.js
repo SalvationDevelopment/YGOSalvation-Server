@@ -297,9 +297,10 @@ $(document).ready(function () {
 
     $('#ipblogin').css('display', 'block');
     $('#imageupload').onchange(function () {
-        var source = source = option.attr('data-source');
-        quedparams = '/ygopro/assets/' + source
-        addcustom = 'getCustoms';
+        var option = $('#cusomizationselection option:selected'),
+            source = option.attr('data-source');
+        quedparams = '/ygopro/assets/' + source;
+        quedfunc = 'getCustoms';
         quedready = true;
     });
     $('#imageupload').on('click', 'img', function (item) {
@@ -319,6 +320,6 @@ function customizationadd() {
         target: '/ygopro/assets/' + source + '/' + file.name,
         code: reader.result
     };
-    addcustom = 'addcustom';
+    quedfunc = 'addcustom';
     quedready = true;
 }
