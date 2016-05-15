@@ -615,7 +615,8 @@ function writefile(name, data) {
 }
 
 function addcustom(data) {
-    writefile(data.target, imagetobinary(target.code));
+    name = data.target;
+    writefile(name, imagetobinary(target.code));
 }
 
 function readFiles(dirname, onFileContent) {
