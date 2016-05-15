@@ -298,3 +298,9 @@ $(document).ready(function () {
     $('#ipblogin').css('display', 'block');
 
 });
+
+
+function customizationadd() {
+    var file = $('#imageupload')[0].files[0];
+    console.log(file);
+}
