@@ -9,7 +9,8 @@ var enums = require('./enums.js');
 var transformer = require('./ai-snarky-transformer.js');
 var recieveSTOC = transformer.recieveSTOC;
 var makeCTOS = require('./ai-snarky-reply.js'),
-    initiateNetwork = require('./ai-snarky-processor.js');
+    initiateNetwork = require('./ai-snarky-processor.js'),
+    Field = require('./ai-snarky-state.js');
 
 /* READ THE FOLLOWING : https://github.com/SalvationDevelopment/YGOPro-Salvation-Server/issues/274 */
 
@@ -147,6 +148,7 @@ function duel(data) {
         dInfo = {};
 
     initiateNetwork(network);
+    network.fieldState = new Field();
     network.ws = new WebSocket("ws://127.0.0.1:8082", "duel");
     network.ws.on('message', function (data) {
         var q = data,

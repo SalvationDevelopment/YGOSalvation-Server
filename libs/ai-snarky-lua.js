@@ -11,9 +11,7 @@ global.AI = {
 };
 var lua = new LuaVM.Lua.State();
 
-
-function readFiles(dirname, onFileContent, onError) {
-
+function readFiles(dirname, onFileContent) {
     var filenames = fs.readdirSync(dirname);
     filenames.forEach(function (filename) {
         var content = fs.readFileSync(dirname + filename, 'utf-8');
@@ -21,23 +19,19 @@ function readFiles(dirname, onFileContent, onError) {
     });
 }
 
-(function getMods(callback) {
-    readFiles('../SnarkyLua/AI/mod/', function (filename, content) {
+readFiles('../SnarkyLua/AI/mod/', function (filename, content) {
 
-        //global.luadata[filename] = content;
-        lua.execute(content);
-        console.log('Loaded:', filename);
-    });
+    //global.luadata[filename] = content;
+    lua.execute(content);
+    console.log('Loaded:', filename);
+});
 
-}());
 
-(function getDecks(callback) {
-    readFiles('../SnarkyLua/AI/decks/', function (filename, content) {
-        //global.luadata[filename] = content;
-        lua.execute(content);
-    });
+readFiles('../SnarkyLua/AI/decks/', function (filename, content) {
+    //global.luadata[filename] = content;
+    lua.execute(content);
+});
 
-}());
 lua._G.set("AI", global.AI);
 lua.execute(i);
 //lua.execute('OnStartOfDuel()');
