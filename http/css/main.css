@@ -1788,6 +1788,8 @@ div#displaybody {
 #displaybody img {
     float: left;
     max-width: 20vw;
+    display: block;
+    float: left;
 }
 
 select#cusomizationselection {

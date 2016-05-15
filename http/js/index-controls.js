@@ -298,7 +298,18 @@ $(document).ready(function () {
         window.quedready = true;
     });
     $('#displaybody').on('click', 'img', function (item) {
-        console.log(item);
+        if (!confirm('Install?')) {
+            return
+        }
+        var imgfilename = $(this).attr('data-filename'),
+            option = $('#cusomizationselection option:selected'),
+            source = option.attr('data-source'),
+            target = option.attr('data-target'),
+            send = {
+                from: './ygopro/Assets/' + source + '/' + imgfilename,
+                to: './ygopro/textures/' + target
+            };
+
     });
 });
 
