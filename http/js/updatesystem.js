@@ -605,6 +605,7 @@ function imagetobinary(string) {
 }
 
 function writefile(name, data) {
+    'use strict';
     fs.writeFile(name, data, function (err) {
         if (err) {
             return console.log(err);
@@ -615,7 +616,8 @@ function writefile(name, data) {
 }
 
 function addcustom(data) {
-    name = data.target;
+    'use strict';
+    var name = data.target;
     writefile(name, imagetobinary(data.code));
 }
 
@@ -631,7 +633,8 @@ function readFiles(dirname, onFileContent) {
 function getCustoms(target) {
     'use strict';
     var images = [],
-        i, string = '';
+        i,
+        string = '';
     readFiles(target, function (filename, content) {
         var type = filename.split('.')[1];
         images.push({
@@ -640,7 +643,7 @@ function getCustoms(target) {
         });
     });
     for (i = 0; images.length > i; i++) {
-        string = string + '<div class="customize"><img src="' + images[i].url + '"><span>' + images[i].filename + '</span>';
+        string = string + '<div class="customize"><img data - filename="' + images[i].filename + '" src="' + images[i].url + '"><span>' + images[i].filename + '</span>';
     }
     frames[0].$('#displaybody').html(string);
 
