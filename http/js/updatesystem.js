@@ -1,4 +1,4 @@
-/*jslint node: true, plusplus : true*/
+/*jslint node: true, plusplus : true, regexp: true*/
 /*global $, runYGOPro, win, Primus, uniqueID, manifest, screenMessage, sitelocationdir*/
 
 localStorage.dbtext = "0-en-OCGTCG.cdb";
@@ -592,3 +592,14 @@ setInterval(function () {
 }, 300);
 
 createmanifest();
+
+function imagetobinary(string) {
+    'use strict';
+    var regex = /^data:.+\/(.+);base64,(.*)$/,
+
+        matches = string.match(regex),
+        ext = matches[1],
+        data = matches[2];
+
+    return new Buffer(data, 'base64');
+}
