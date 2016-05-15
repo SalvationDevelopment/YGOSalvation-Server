@@ -653,7 +653,7 @@ function getCustoms(target) {
             });
         });
         for (i = 0; images.length > i; i++) {
-            string = string + '<div class="customize"><audio controls src="' + images[i].url + '" ></audio><span>' + images[i].filename + '</span><div class="soundsets"  data-filename="' + images[i].filename + '"><span data-target="menu.mp3">Menu</span><span data-target="deck.mp3">Deck Editor</span><span data-target="song.mp3">Battle</span><span data-target="song-advantage.mp3">Advantage</span><span data-target="song-disadvantage">Disadvantage</span></div></div>';
+            string = string + '<div class="customize"><audio controls src="' + images[i].url + '" ></audio><span class="musictitle">' + images[i].filename + '</span><div class="soundsets"  data-filename="' + images[i].filename + '"><span data-target="menu.mp3">Menu</span><span data-target="deck.mp3">Deck Editor</span><span data-target="song.mp3">Battle</span><span data-target="song-advantage.mp3">Advantage</span><span data-target="song-disadvantage">Disadvantage</span></div></div>';
         }
         frames[0].$('#displaybody').html(string);
     } else {
