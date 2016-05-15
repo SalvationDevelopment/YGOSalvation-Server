@@ -293,7 +293,7 @@ $(document).ready(function () {
     $('#cusomizationselection').change(function () {
         var option = $('#cusomizationselection option:selected'),
             source = option.attr('data-source');
-        window.quedparams = './ygopro/assets/' + source;
+        window.quedparams = './ygopro/assets/' + source + '/';
         window.quedfunc = 'getCustoms';
         window.quedready = true;
     });
