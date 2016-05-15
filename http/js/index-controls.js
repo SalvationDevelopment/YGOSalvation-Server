@@ -318,7 +318,7 @@ function customizationadd() {
     reader.readAsDataURL(file);
     reader.addEventListener("load", function () {
         quedparams = {
-            target: '/ygopro/assets/' + source + '/' + file.name,
+            target: './ygopro/assets/' + source + '/' + file.name,
             code: reader.result
         };
         quedfunc = 'addcustom';
