@@ -621,6 +621,15 @@ function addcustom(data) {
     writefile(name, imagetobinary(data.code));
 }
 
+function applycustom(data) {
+    'use strict';
+    var name = data.target;
+    copyFile(data.source, data.target, function () {
+
+    });
+
+}
+
 function readFiles(dirname, onFileContent) {
     'use strict';
     var filenames = fs.readdirSync(dirname);
@@ -643,7 +652,7 @@ function getCustoms(target) {
         });
     });
     for (i = 0; images.length > i; i++) {
-        string = string + '<div class="customize"><img data - filename="' + images[i].filename + '" src="' + images[i].url + '"><span>' + images[i].filename + '</span>';
+        string = string + '<div class="customize"><img data - filename="' + images[i].filename + '" src="' + images[i].url + '"><span>' + images[i].filename + '</span></div>';
     }
     frames[0].$('#displaybody').html(string);
 
