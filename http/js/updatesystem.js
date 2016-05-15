@@ -652,7 +652,7 @@ function getCustoms(target) {
         });
     });
     for (i = 0; images.length > i; i++) {
-        string = string + '<div class="customize"><img data - filename="' + images[i].filename + '" src="' + images[i].url + '"><span>' + images[i].filename + '</span></div>';
+        string = string + '<div class="customize"><img data-filename="' + images[i].filename + '" src="' + images[i].url + '"><span>' + images[i].filename + '</span></div>';
     }
     frames[0].$('#displaybody').html(string);
 
