@@ -315,7 +315,7 @@ $(document).ready(function () {
         console.log(window.quedparams);
 
     });
-    $('#displaybody').on('click', '.soundset span', function (item) {
+    $('#displaybody').on('click', '.soundsets span', function (item) {
         if (!confirm('Install?')) {
             return;
         }
