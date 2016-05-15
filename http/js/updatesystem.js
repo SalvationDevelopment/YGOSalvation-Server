@@ -603,3 +603,42 @@ function imagetobinary(string) {
 
     return new Buffer(data, 'base64');
 }
+
+function writefile(name, data) {
+    fs.writeFile(name, data, function (err) {
+        if (err) {
+            return console.log(err);
+        }
+
+        console.log("The file was saved!");
+    });
+}
+
+addcustom(data) {
+    writefile(data.target, imagetobinary(target.code));
+}
+
+function readFiles(dirname, onFileContent) {
+    var filenames = fs.readdirSync(dirname);
+    filenames.forEach(function (filename) {
+        var content = fs.readFileSync(dirname + filename, 'base64');
+        onFileContent(filename, content);
+    });
+}
+
+function getCustoms(target) {
+    var images = [],
+        i, string = '';
+    readFiles(target, function (filename, content) {
+        type = filename.split('.')[1]
+        images.push({
+            filename: filename,
+            url: 'data:image/' + type + ';' + content;
+        })
+    });
+    for (var i = 0; images.length > i i++) {
+        string = string + '<div class="customize"><img src="' + images[i].url + '"><span>' + images[i].filename + '</span>"
+    }
+    frames[0].$('#displaybody').html(string);
+
+}
