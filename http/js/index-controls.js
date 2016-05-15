@@ -320,8 +320,7 @@ $(document).ready(function () {
             return;
         }
         var target = $(this).attr('data-target'),
-            option = $('#cusomizationselection option:selected'),
-            source = option.parent().attr('data-filename');
+            source = $(this).parent().attr('data-filename');
 
         window.quedparams = {
             source: './ygopro/Assets/Music/' + source,
