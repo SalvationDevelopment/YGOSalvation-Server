@@ -1785,11 +1785,19 @@ div#displaybody {
     padding: 2vh 2vw;
 }
 
-#displaybody img {
+.customize {
     float: left;
+    width: 20vw;
+    text-align: center;
+    color: black;
+    height: 26vh;
+    display: inline-block;
+    clear: none;
+}
+
+#displaybody img {
     max-width: 20vw;
     display: block;
-    float: left;
 }
 
 select#cusomizationselection {

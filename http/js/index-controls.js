@@ -305,10 +305,14 @@ $(document).ready(function () {
             option = $('#cusomizationselection option:selected'),
             source = option.attr('data-source'),
             target = option.attr('data-target'),
-            send = {
-                from: './ygopro/Assets/' + source + '/' + imgfilename,
-                to: './ygopro/textures/' + target
+            window.quedparams = {
+                source: './ygopro/Assets/' + source + '/' + imgfilename,
+                target: './ygopro/textures/' + target
             };
+
+        window.quedfunc = 'applycustom';
+        window.quedready = true;
+        console.log(window.quedparams);
 
     });
 });
