@@ -1,4 +1,4 @@
-/*jslint browser:true, plusplus:true, nomen: true*/
+/*jslint browser:true, plusplus:true, nomen: true, regexp:true*/
 /*global $, saveSettings, Handlebars, prompt, _gaq, isChecked, alert, primus, ygopro, translationDB, params, swfobject, console*/
 
 var admin = false,
@@ -109,12 +109,6 @@ function singlesitenav(target) {
     saveSettings();
     return false;
 }
-
-$(function () {
-
-});
-
-
 
 function locallogin(init) {
     'use strict';
@@ -299,17 +293,18 @@ $(document).ready(function () {
     $('#imageupload').change(function () {
         var option = $('#cusomizationselection option:selected'),
             source = option.attr('data-source');
-        quedparams = '/ygopro/assets/' + source;
-        quedfunc = 'getCustoms';
-        quedready = true;
+        window.quedparams = './ygopro/assets/' + source;
+        window.quedfunc = 'getCustoms';
+        window.quedready = true;
     });
     $('#imageupload').on('click', 'img', function (item) {
         console.log(item);
-    })
+    });
 });
 
 
 function customizationadd() {
+    'use strict';
     var file = $('#imageupload')[0].files[0],
         reader = new FileReader(),
         option = $('#cusomizationselection option:selected'),
@@ -317,13 +312,13 @@ function customizationadd() {
 
     reader.readAsDataURL(file);
     reader.addEventListener("load", function () {
-        quedparams = {
+        window.quedparams = {
             target: './ygopro/assets/' + source + '/' + file.name,
             code: reader.result
         };
-        quedfunc = 'addcustom';
-        quedready = true;
-        console.log(reader, quedparams);
+        window.quedfunc = 'addcustom';
+        window.quedready = true;
+        console.log(reader, window.quedparams);
     }, false);
 
 
