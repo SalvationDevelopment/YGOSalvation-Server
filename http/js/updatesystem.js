@@ -636,7 +636,7 @@ function getCustoms(target) {
         var type = filename.split('.')[1];
         images.push({
             filename: filename,
-            url: 'data:image/' + type + ';' + content
+            url: 'data:image/' + type + ';base64,' + content
         });
     });
     for (i = 0; images.length > i; i++) {
