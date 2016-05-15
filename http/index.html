@@ -763,27 +763,30 @@ General Terms and Conditions applicable to Use of a Web Site.
     <header style="padding-top:50px" id="cusomize">
         <div id="customizationfooter">
             <div id="displaybody"></div>
-            <button id="addcontent" onclick='customizationadd'></button>
-            <select>
-                <option value="">Player 1 Cover</option>
-                <option value="">Player 2 Cover</option>
-                <option value="">Menu Background</option>
-                <option value="">Game Background</option>
-                <option value="">Attack</option>
-                <option value="">Activate</option>
-                <option value="">Chain</option>
-                <option value="">Equip</option>
-                <option value="">Rock</option>
-                <option value="">Paper</option>
-                <option value="">Scissors</option>
-                <option value="">Lifepoint Color</option>
-                <option value="">Lifepoint Bar</option>
-                <option value="">Target</option>
-                <option value="" value="">Negate</option>
-                <option value="">Field</option>
-                <option value="">Field Trasnparent</option>
-                <option value="">Activation Mask</option>
-                <option value="">Numbers</option>
+            <form>
+                <input type="file" name="pic" accept="image/*">
+                <input type="submit">
+            </form>
+            <select id="cusomizationselection">
+                <option value="" data-source="Cover" data-target="cover.jpg">Player 1 Cover</option>
+                <option value="" data-source="Cover" data-target="conver2.jpg">Player 2 Cover</option>
+                <option value="" data-source="Backgrounds" data-target="bg.jpg">Menu Background</option>
+                <option value="" data-source="Background" data-target="bg2.jpg">Game Background</option>
+                <option value="" data-source="AttackIcon" data-target="act.png">Attack</option>
+                <option value="" data-source="ActivateCircle" data-target="attack.png">Activate</option>
+                <option value="" data-source="ChainIcon" data-target="chain.png">Chain</option>
+                <option value="" data-source="EquipIcon" data-target="equip.png">Equip</option>
+                <option value="" data-source="Rock" data-target="f2.jpg">Rock</option>
+                <option value="" data-source="Paper" data-target="f3.jpg">Paper</option>
+                <option value="" data-source="Scissors" data-target="f1.jpg">Scissors</option>
+                <option value="" data-source="LPBar" data-target="lpbf.png">Lifepoint Color</option>
+                <option value="" data-source="LPColor" data-target="lp.png">Lifepoint Bar</option>
+                <option value="" data-source="TargetIcon" data-target="target.png">Target</option>
+                <option value="" data-source="Negated" data-target="negated.png">Negate</option>
+                <option value="" data-source="Field" data-target="field.png">Field</option>
+                <option value="" data-source="FieldTransparent" data-target="field-transparent.png">Field Trasnparent</option>
+                <option value="" data-source="Mask" data-target="mask.png">Activation Mask</option>
+                <option value="" data-source="Numbers" data-target="number.png">Numbers</option>
             </select>
         </div>
     </header>
