@@ -5,7 +5,6 @@
 var duel = {};
 var actionables;
 var makeCTOS = require('./ai-snarky-reply.js'),
-    Field = require('./ai-snarky-state.js'),
     Lua = require('./ai-snarky-lua.js');
 
 
@@ -101,7 +100,6 @@ function initiateNetwork_STOC(ygopro) {
         ygopro.ws.send(makeCTOS('CTOS_UPDATE_DECK', ygopro.decks['Volcanics.ydk']));
         ygopro.ws.send(makeCTOS('CTOS_HS_READY'));
         //fire handbars to render the view.
-        ygopro.fieldState = new Field();
         ygopro.lua = new Lua('state', ygopro.fieldState);
 
     });
