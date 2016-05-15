@@ -1787,17 +1787,18 @@ div#displaybody {
 
 .customize {
     float: left;
-    width: 20vw;
+    width: 21vw;
     text-align: center;
     color: black;
-    height: 26vh;
     display: inline-block;
     clear: none;
+    margin: 0 1vw;
 }
 
 #displaybody img {
     max-width: 20vw;
     display: block;
+    margin: 0 auto
 }
 
 select#cusomizationselection {
