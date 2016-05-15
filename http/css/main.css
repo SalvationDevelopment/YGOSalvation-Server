@@ -1814,6 +1814,7 @@ select#cusomizationselection {
 .soundsets {
     border: 1px solid blue;
     overflow: auto;
+    margin-bottom: 1vh;
 }
 
 .soundsets span {
