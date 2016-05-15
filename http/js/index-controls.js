@@ -301,6 +301,14 @@ $(document).ready(function () {
 
 
 function customizationadd() {
-    var file = $('#imageupload')[0].files[0];
-    console.log(file);
+    var file = $('#imageupload')[0].files[0],
+        reader = new FileReader(),
+        option = $('#cusomizationselection option:selected'),
+        source = option.attr('data-source'),
+        code = reader.readAsDataURL(file);
+
+    return {
+        source: 'assets/' + source,
+        code: code
+    };
 }
