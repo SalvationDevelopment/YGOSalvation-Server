@@ -290,14 +290,14 @@ $(document).ready(function () {
 
 
     $('#ipblogin').css('display', 'block');
-    $('#imageupload').change(function () {
+    $('#cusomizationselection').change(function () {
         var option = $('#cusomizationselection option:selected'),
             source = option.attr('data-source');
         window.quedparams = './ygopro/assets/' + source;
         window.quedfunc = 'getCustoms';
         window.quedready = true;
     });
-    $('#imageupload').on('click', 'img', function (item) {
+    $('#displaybody').on('click', 'img', function (item) {
         console.log(item);
     });
 });
