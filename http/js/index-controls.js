@@ -103,7 +103,7 @@ function singlesitenav(target) {
     if (target === 'settings') {
         $('body').css('background-image', 'url(http://ygopro.us/img/brightx_bg.jpg)');
         if (admin === "1") {
-            $('#sqleditorbutton').css('display', 'none');
+            $('#sqleditorbutton').css('display', 'block');
         }
     }
     $('.activescreen').removeClass('activescreen');
