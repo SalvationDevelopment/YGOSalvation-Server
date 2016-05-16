@@ -1862,6 +1862,18 @@ div#sqlright {
     padding: 5px;
 }
 
+.datarow {
+    height: 2em;
+}
+
+.datarow label {
+    float: left
+}
+
+.datarow input {
+    float: left
+}
+
 
 /* =========================================
 =================================
