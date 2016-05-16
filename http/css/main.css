@@ -1846,7 +1846,16 @@ div#sqlleft {
 }
 
 div#sqlcenter {
-    min-width: 40%;
+    width: 550px;
+    border: 1px solid white;
+    float: left;
+    height: 100%;
+    padding: 5px;
+    margin-right: 1vw;
+}
+
+div#sqlfarcenter {
+    width: 350px;
     border: 1px solid white;
     float: left;
     height: 100%;
