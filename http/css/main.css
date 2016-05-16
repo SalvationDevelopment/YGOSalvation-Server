@@ -1915,14 +1915,13 @@ input#sqlsearch {
     margin: 0 auto;
 }
 
+#sqlcardcategory,
 #sqlcardtypes {
-    width 50%;
     float: left;
-}
-
-#sqlcardcategory {
-    width 50%;
-    float: left;
+    width: 48%;
+    border: 1px solid #444;
+    margin: 1%;
+    padding: 1%;
 }
 
 
