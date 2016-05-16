@@ -802,6 +802,8 @@ General Terms and Conditions applicable to Use of a Web Site.
     <header style="padding-top:50px" id="sqleditor">
         <div id="sqlleft">
             <img id="sqlimage" />
+            <select id="sqlsearchresults"></select>
+            <input id="sqlsearch" />
         </div>
         <div id="sqlcenter">
             <div class="sqlcardinfo">
@@ -865,15 +867,37 @@ General Terms and Conditions applicable to Use of a Web Site.
                     <label></label>
                     <input/>
                 </div>
-
-
             </div>
+            <div id="sqlcardtypes">
+                <span>Card Types</span>
+                <div id="cardtypesbox"></div>
+            </div>
+            <div id="sqlcardcategory">
+                <span>Card Categories</span>
+                <div id="sqlcardcategorybox"></div>
+            </div>
+            <button onclick="">Open Card Script</button>
         </div>
         <div id="sqlright">
             <div class="sqlcardtext">
-                <div id="datarow"></div>
-                <div id="datarow"></div>
-                <div id="datarow"></div>
+                <div id="datarow">
+                    <label>Name</label>
+                    <input/>
+                </div>
+                <div id="datarow">
+                    <label>Description</label>
+                    <input/>
+                </div>
+
+            </div>
+            <div class="sqlcardeffecttext">
+                <div class="sqlcardeffecttextbuttons">
+
+                </div>
+                <div class="sqlcardeffecttextbox">
+                    <input />
+                    <input />
+                </div>
             </div>
         </div>
     </header>

@@ -16,3 +16,6 @@
 [submodule "ygopro-core"]
 	path = ygopro-core
 	url = https://github.com/Fluorohydride/ygopro-core
+[submodule "SnarkyLua"]
+	path = SnarkyLua
+	url = https://github.com/Snarkie/YGOProAIScript
