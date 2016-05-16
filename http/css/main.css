@@ -1917,10 +1917,12 @@ input#sqlsearch {
 
 .sqlcardeffecttextbuttons {
     width 50%;
+    float: left;
 }
 
 .sqlcardeffecttextbox {
     width 50%;
+    float: left;
 }
 
 
