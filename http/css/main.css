@@ -1915,12 +1915,12 @@ input#sqlsearch {
     margin: 0 auto;
 }
 
-.sqlcardeffecttextbuttons {
+#sqlcardtypes {
     width 50%;
     float: left;
 }
 
-.sqlcardeffecttextbox {
+#sqlcardcategory {
     width 50%;
     float: left;
 }
