@@ -1875,11 +1875,27 @@ img#sqlimage {
 }
 
 .datarow label {
-    float: left
+    float: left;
+    width: 45%;
+    display: block;
+    text-align: right;
 }
 
 .datarow input {
-    float: left
+    float: left;
+    display: block;
+    width: 55%;
+}
+
+select#sqlsearchresults {
+    height: 40%;
+    display: block;
+    margin: 10px auto;
+}
+
+input#sqlsearch {
+    display: block;
+    margin: 0 auto;
 }
 
 
