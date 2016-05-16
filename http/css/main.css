@@ -1879,9 +1879,11 @@ img#sqlimage {
     width: 45%;
     display: block;
     text-align: right;
+    padding-right: 5px;
 }
 
-.datarow input {
+.datarow input,
+.datarow select {
     float: left;
     display: block;
     width: 55%;
@@ -1891,6 +1893,12 @@ select#sqlsearchresults {
     height: 40%;
     display: block;
     margin: 10px auto;
+}
+
+textarea#sqldescriptionbox {
+    float: left;
+    width: 55%;
+    height: 300px;
 }
 
 input#sqlsearch {
