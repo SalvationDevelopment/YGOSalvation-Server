@@ -1846,7 +1846,7 @@ div#sqlleft {
 }
 
 div#sqlcenter {
-    width: 550px;
+    width: 300px;
     border: 1px solid white;
     float: left;
     height: 100%;
@@ -1855,7 +1855,7 @@ div#sqlcenter {
 }
 
 div#sqlfarcenter {
-    width: 350px;
+    width: 300px;
     border: 1px solid white;
     float: left;
     height: 100%;
@@ -1913,6 +1913,14 @@ textarea#sqldescriptionbox {
 input#sqlsearch {
     display: block;
     margin: 0 auto;
+}
+
+.sqlcardeffecttextbuttons {
+    width 50%;
+}
+
+.sqlcardeffecttextbox {
+    width 50%;
 }
 
 
