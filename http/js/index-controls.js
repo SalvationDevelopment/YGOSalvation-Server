@@ -66,6 +66,7 @@ function singlesitenav(target) {
     } catch (e) {}
     internalLocal = target;
     //console.log(target);
+
     if (launcher && target === 'forum') {
         event.preventDefault();
         ygopro('-a');
@@ -101,6 +102,9 @@ function singlesitenav(target) {
     }
     if (target === 'settings') {
         $('body').css('background-image', 'url(http://ygopro.us/img/brightx_bg.jpg)');
+        if (admin === "1") {
+            $('#sqleditorbutton').css('display', 'none');
+        }
     }
     $('.activescreen').removeClass('activescreen');
     $('header').not('#anti').css('left', '100vw');
