@@ -1862,6 +1862,14 @@ div#sqlright {
     padding: 5px;
 }
 
+img#sqlimage {
+    width: 177px;
+    background: white;
+    height: 254px;
+    margin: 13px auto;
+    display: block;
+}
+
 .datarow {
     height: 2em;
 }
