@@ -295,6 +295,7 @@ $(document).ready(function () {
 
     $('#ipblogin').css('display', 'block');
     $('#cusomizationselection').change(function () {
+        $('#displaybody').html('<div class="loading">Loading...</div>');
         var option = $('#cusomizationselection option:selected'),
             source = option.attr('data-source');
         window.quedparams = './ygopro/assets/' + source + '/';
