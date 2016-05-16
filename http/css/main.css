@@ -1907,7 +1907,7 @@ select#sqlsearchresults {
 textarea#sqldescriptionbox {
     float: left;
     width: 55%;
-    height: 300px;
+    height: 200px;
 }
 
 input#sqlsearch {
