@@ -801,4 +801,21 @@ function dbYGOProGetByID(dbName, ID) {
     return asObject;
 }
 
-//dbYGOProGet('cards.cdb', '89631139')
+function displayQuery(dbName, ID) {
+    'use strict';
+    var query = dbYGOProGetByID(dbName, ID),
+        q = frames[0].$,
+        i = 1;
+
+    q('#sqldescriptionbox').val(query.texts.desc);
+    q('#sqlnamebox').val(query.texts.name);
+    for (i; 16 > i; i++) { // there are str1 thru str16 fields.
+        q('#sqlstr' + i).val(query.texts['str' + 1]);
+    }
+    q('#sqlid').val(query.datas.id);
+    q('#sqlalias').val(query.datas.alias);
+    q('#sqlot').val(query.datas.ot);
+    q('#sqlatk').val(query.datas.atk);
+    q('#sqldef').val(query.datas.def);
+}
+//displayQuery('cards.cdb', '89631139')
