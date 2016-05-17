@@ -1929,6 +1929,11 @@ input#sqlsearch {
     width: 48%;
     margin: 1%;
     padding: 1%;
+    height: 555px;
+}
+
+#sqlcardcategory {
+    border: 1px solid #444;
 }
 
 .typebox {

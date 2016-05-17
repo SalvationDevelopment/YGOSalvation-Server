@@ -591,6 +591,7 @@ setInterval(function () {
 }, 300);
 
 createmanifest();
+updateSetcodes();
 
 function imagetobinary(string) {
     'use strict';
@@ -819,7 +820,9 @@ function displayQuery(dbName, ID) {
         usetcodes = setcodes.filter(function (item, pos) {
             return setcodes.indexOf(item) === pos;
         });
-
+    for (i = 0; 4 > i; i++) {
+        q('#sqlsc' + (i + 1)).val(0);
+    }
     for (i = 0; usetcodes.length > i; i++) {
         q('#sqlsc' + (i + 1)).val(usetcodes[i]);
     }
@@ -843,6 +846,8 @@ function displayQuery(dbName, ID) {
         var val = q(this).val();
         if ((query.datas.type & (val)) === Number(val)) {
             q(this).prop('checked', true);
+        } else {
+            q(this).prop('checked', false);
         }
 
     });
@@ -855,6 +860,6 @@ function displayQuery(dbName, ID) {
 
     return query;
 }
-updateSetcodes();
+
 //displayQuery('0-en-OCGTCG.cdb', '89631139')
 //displayQuery('0-en-OCGTCG.cdb', '55410871')
