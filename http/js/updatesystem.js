@@ -841,6 +841,9 @@ function displayQuery(dbName, ID) {
     q('#sqldef').val(query.datas.def);
     q('.typebox input').each(function () {
         var val = q(this).val();
+        if ((query.datas.type & (val)) === Number(val)) {
+            q(this).prop('checked', true);
+        }
 
     });
     try {

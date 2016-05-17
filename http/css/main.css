@@ -1837,6 +1837,7 @@ select#cusomizationselection {
 }
 
 div#sqlleft {
+    background-color: rgba(0, 0, 0, .5);
     border: 1px solid white;
     width: 208px;
     height: 100%;
@@ -1846,6 +1847,7 @@ div#sqlleft {
 }
 
 div#sqlcenter {
+    background-color: rgba(0, 0, 0, .5);
     width: 300px;
     border: 1px solid white;
     float: left;
@@ -1855,6 +1857,7 @@ div#sqlcenter {
 }
 
 div#sqlfarcenter {
+    background-color: rgba(0, 0, 0, .5);
     width: 300px;
     border: 1px solid white;
     float: left;
@@ -1864,6 +1867,7 @@ div#sqlfarcenter {
 }
 
 div#sqlright {
+    background-color: rgba(0, 0, 0, .5);
     border: 1px solid white;
     float: left;
     width: 32%;
@@ -1908,15 +1912,19 @@ textarea#sqldescriptionbox {
     float: left;
     width: 55%;
     height: 200px;
+    padding: .5em;
+    font-size: .8em;
 }
 
 input#sqlsearch {
     display: block;
     margin: 0 auto;
+    font-size: .8em;
 }
 
 #sqlcardcategory,
 #sqlcardtypes {
+    background-color: rgba(0, 0, 0, .5);
     float: left;
     width: 48%;
     margin: 1%;
@@ -1924,6 +1932,7 @@ input#sqlsearch {
 }
 
 .typebox {
+    background-color: rgba(0, 0, 0, .5);
     border: 1px solid #222;
     font-size: .8em;
     line-height: 1.5em;
