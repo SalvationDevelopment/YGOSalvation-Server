@@ -748,7 +748,7 @@ function updateSetcodes() {
             strings = '';
         console.log(setcodes);
         for (setcode in setcodes) {
-            if (setcodes.hasOwnProperty(setcode) && setcode[0] === '0' && setcode[1] === 'x') {
+            if (setcodes.hasOwnProperty(setcode) && setcode[0] === '0' && setcode[1] === 'x' && setcode !== '0x0') {
                 strings = strings + '<option value="' + parseInt(setcode, 16) + '">' + setcodes[setcode] + '</option>';
                 console.log(setcode, setcodes);
             }
@@ -809,21 +809,22 @@ function dbYGOProGetByID(dbName, ID) {
 function displayQuery(dbName, ID) {
     'use strict';
     var query = dbYGOProGetByID(dbName, ID),
+        image,
         q = frames[0].$,
         i = 1;
 
     q('#sqldescriptionbox').val(query.texts.desc);
     q('#sqlnamebox').val(query.texts.name);
     for (i; 16 > i; i++) { // there are str1 thru str16 fields.
-        q('#sqlstr' + i).val(query.texts['str' + 1]);
+        q('#sqlstr' + i).val(query.texts['str' + i]);
     }
     q('#sqlid').val(query.datas.id);
     q('#sqlalias').val(query.datas.alias);
     q('#sqlot').val(query.datas.ot);
     q('#sqlsc1').val(query.datas.setcode & 0xffff);
-    q('#sqlsc2').val((query.datas.setcode >> 0x10) & 0xffff);
-    q('#sqlsc3').val((query.datas.setcode >> 0x20) & 0xffff);
-    q('#sqlsc4').val((query.datas.setcode >> 0x30) & 0xffff);
+    q('#sqlsc2').val(query.datas.setcode >> 16 & 0xffff);
+    q('#sqlsc3').val(query.datas.setcode >> 32 & 0xffff);
+    q('#sqlsc4').val(query.datas.setcode >> 48 & 0xffff);
     q('#sqllevel').val(query.datas.level & 0xff);
     q('#sqlscalel').val((query.datas.level >> 0x18) & 0xff);
     q('#sqlscaler').val((query.datas.level >> 0x10) & 0xff);
@@ -831,6 +832,13 @@ function displayQuery(dbName, ID) {
     q('#sqlattribute').val(query.datas.attribute);
     q('#sqlatk').val(query.datas.atk);
     q('#sqldef').val(query.datas.def);
+    try {
+        image = 'data:image/jpg;base64,' + fs.readFileSync('../http/ygopro/pics/' + query.datas.id + '.jpg', 'base64');
+    } catch (e) {
+        image = 'http://ygopro.us/img/textures/unknown.jpg';
+    }
+    q('#sqlimage').attr('src', image);
+
     return query;
 }
 updateSetcodes();
