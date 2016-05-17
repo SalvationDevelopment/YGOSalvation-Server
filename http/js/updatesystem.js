@@ -684,6 +684,7 @@ function ConfigParser(content, options) {
         configObject = {},
         currentBlock,
         currentLine;
+    console.log(options);
     if (typeof options === "object") {
         commentDelims = options.commentDelims || commentDelims;
         blockRegexp = options.blockRegexp || blockRegexp;
@@ -692,7 +693,9 @@ function ConfigParser(content, options) {
         joinKeyValue = options.joinKeyValue || joinKeyValue;
         joinKeySlice = options.joinKeySlice || joinKeySlice;
     }
+
     content = content.split(newLineDelim);
+
     content.forEach(function (line) {
         var isComment = false;
         commentDelims.forEach(function (delim) {
@@ -717,35 +720,34 @@ function ConfigParser(content, options) {
             configObject[currentBlock][currentLine[joinKeySlice]] = joinKeyValue ? currentLine.slice(joinKeySlice + 1).join(keyValueDelim) : currentLine[1];
         }
     });
+    //console.log(configObject);
     return configObject;
 }
 
 function updateSetcodes() {
     'use strict';
-    fs.readfile('./ygopro/strings.conf', function (error, data) {
+    fs.readFile('./ygopro/strings.conf', 'utf-8', function (error, data) {
         if (error) {
-            return;
+            console.log(error);
         }
+
         var setcodes = new ConfigParser(data, {
                 keyValueDelim: " ",
                 commentDelims: [],
                 blockRegexp: new RegExp("^\\s?#(.*?)\\s?$/"),
                 joinKeyValue: true,
                 joinKeySlice: 1
-            }).setcodes,
+            }),
             setcode,
-            monsterCardSelect = $('.monsterCardSelect'),
-            monsterTypeSelect = $('.monsterTypeSelect'),
-            spellSelect = $('.spellSelect'),
-            trapSelect = $('.trapSelect'),
-            raceSelect = $('.raceSelect'),
-            attributeSelect = $('.attributeSelect');
-
+            strings = '';
+        console.log(setcodes);
         for (setcode in setcodes) {
-            if (setcodes.hasOwnProperty(setcode)) {
-                frames[0].$('.setcodeSelect').append('<option value="' + parseInt(setcode, 16) + '">' + setcodes[setcode] + '</option>');
+            if (setcodes.hasOwnProperty(setcode) && setcode[0] === '0' && setcode[1] === '') {
+                strings = strings + '<option value="' + parseInt(setcode, 16) + '">' + setcodes[setcode] + '</option>';
+                console.log(setcode, setcodes)
             }
         }
+        frames[0].$('.setcodeSelect').html(strings);
     });
 }
 
