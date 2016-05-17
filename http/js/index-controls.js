@@ -341,7 +341,7 @@ $(document).ready(function () {
         if (e.which == 13) {
             window.quedparams = {
                 db: $('#sqldblist').val(),
-                text: $('#sqlsearch').val();
+                text: $('#sqlsearch').val()
             };
 
             window.quedfunc = 'dbsearch';
