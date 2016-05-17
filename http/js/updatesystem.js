@@ -34,6 +34,11 @@ localStorage.lastip = '192.99.11.19';
 localStorage.serverport = '8911';
 localStorage.lastport = '8911';
 
+try {
+    var SQL = require('../interface/js/vendor/sql.js');
+} catch (e) {
+
+}
 
 process.on('uncaughtException', function (criticalError) {
     'use strict';
@@ -743,7 +748,7 @@ function updateSetcodes() {
             strings = '';
         console.log(setcodes);
         for (setcode in setcodes) {
-            if (setcodes.hasOwnProperty(setcode) && setcode[0] === '0' && setcode[1] === '') {
+            if (setcodes.hasOwnProperty(setcode) && setcode[0] === '0' && setcode[1] === 'x') {
                 strings = strings + '<option value="' + parseInt(setcode, 16) + '">' + setcodes[setcode] + '</option>';
                 console.log(setcode, setcodes);
             }
@@ -762,7 +767,7 @@ setTimeout(function () {
     });
 }, 2500);
 
-var SQL = require('../interface/js/vendor/sql.js');
+
 
 function dbAction(dbName, SQLSTRING) {
     'use strict';
