@@ -590,8 +590,7 @@ setInterval(function () {
     }
 }, 300);
 
-createmanifest();
-updateSetcodes();
+
 
 function imagetobinary(string) {
     'use strict';
@@ -861,5 +860,10 @@ function displayQuery(dbName, ID) {
     return query;
 }
 
+
+
 //displayQuery('0-en-OCGTCG.cdb', '89631139')
 //displayQuery('0-en-OCGTCG.cdb', '55410871')
+
+updateSetcodes();
+createmanifest();
