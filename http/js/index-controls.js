@@ -340,8 +340,8 @@ $(document).ready(function () {
     $('#sqlsearch').keypress(function (e) {
         if (e.which == 13) {
             window.quedparams = {
-                db: './ygopro/Assets/Music/' + source,
-                text: './ygopro/sound/' + target
+                db: $('#sqldblist').val(),
+                text: $('#sqlsearch').val();
             };
 
             window.quedfunc = 'dbsearch';
