@@ -824,7 +824,7 @@ function displayQuery(dbName, ID) {
     q('#sqlsc1').val(query.datas.setcode & 0xffff);
     q('#sqlsc2').val(query.datas.setcode >> 16 & 0xffff);
     q('#sqlsc3').val(query.datas.setcode >> 32 & 0xffff);
-    q('#sqlsc4').val(query.datas.setcode >> 48 & 0xffff);
+    q('#sqlsc4').val(query.datas.setcode >> 64 & 0xffff);
     q('#sqllevel').val(query.datas.level & 0xff);
     q('#sqlscalel').val((query.datas.level >> 0x18) & 0xff);
     q('#sqlscaler').val((query.datas.level >> 0x10) & 0xff);
@@ -843,3 +843,4 @@ function displayQuery(dbName, ID) {
 }
 updateSetcodes();
 //displayQuery('0-en-OCGTCG.cdb', '89631139')
+//displayQuery('0-en-OCGTCG.cdb', '55410871')
