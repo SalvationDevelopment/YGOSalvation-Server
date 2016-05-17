@@ -29,6 +29,7 @@ var downloadList = [], // Download list during recursive processing, when its em
         fonts: ''
     }; // structure filled out and sent to the server then back down to the other half of the interface. Provides access to the filesystem.
 
+
 localStorage.lastip = '192.99.11.19';
 localStorage.serverport = '8911';
 localStorage.lastport = '8911';
@@ -760,3 +761,5 @@ setTimeout(function () {
         populatealllist();
     });
 }, 2500);
+
+var SQL = require('./interface/js/vendor/sql.js');
