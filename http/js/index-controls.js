@@ -165,7 +165,7 @@ function processServerCall(data) {
     $('.currentdeck').not('.activescreen .currentdeck').html(data.currentdeck);
     $('#skinlist').not('.activescreen #skinlist').html(data.skinlist);
     $('#fontlist').not('.activescreen #fontlist').html(data.fonts);
-    $('#dblist').not('.activescreen #dblist').html(data.databases);
+    $('#dblist, #sqldblist').not('.activescreen #dblist, .activescreen #sqldblist').html(data.databases);
     $('.currentdeck option[value="' + selected + '"]').not('.activescreen option').attr('selected', 'selected');
     $('#skinlist option[value="' + selectedskin + '"]').not('.activescreen option').attr('selected', 'selected');
     $('#fontlist option[value="' + selectedfont + '"]').not('.activescreen option').attr('selected', 'selected');
@@ -336,6 +336,18 @@ $(document).ready(function () {
         window.quedready = true;
         console.log(window.quedparams);
 
+    });
+    $('#sqlsearch').keypress(function (e) {
+        if (e.which == 13) {
+            window.quedparams = {
+                db: './ygopro/Assets/Music/' + source,
+                text: './ygopro/sound/' + target
+            };
+
+            window.quedfunc = 'dbsearch';
+            window.quedready = true;
+            return false;
+        }
     });
 });
 

@@ -1920,6 +1920,7 @@ input#sqlsearch {
     display: block;
     margin: 0 auto;
     font-size: .8em;
+    text-align: center;
 }
 
 #sqlcardcategory,
@@ -1934,6 +1935,8 @@ input#sqlsearch {
 
 #sqlcardcategory {
     border: 1px solid #444;
+    font-size: .8em;
+    line-height: 1.5em;
 }
 
 .typebox {

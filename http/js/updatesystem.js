@@ -745,7 +745,7 @@ function updateSetcodes() {
                 joinKeySlice: 1
             }),
             setcode,
-            strings = '';
+            strings = '<option value="0">None</option>';
         console.log(setcodes);
         for (setcode in setcodes) {
             if (setcodes.hasOwnProperty(setcode) && setcode[0] === '0' && setcode[1] === 'x' && setcode !== '0x0') {
@@ -806,6 +806,21 @@ function dbYGOProGetByID(dbName, ID) {
     return asObject;
 }
 
+function dbYGOProByText(dbName, text) {
+    'use strict';
+    var filebuffer = fs.readFileSync('../http/ygopro/databases/' + dbName),
+        db = new SQL.Database(filebuffer),
+        texts = db.prepare("SELECT * FROM texts WHERE name LIKE '`*" + text + "*`';"),
+        asObject = {
+
+            texts: texts.getAsObject({
+                'name': 1
+            })
+        };
+    db.close();
+    return asObject;
+}
+
 function displayQuery(dbName, ID) {
     'use strict';
     var query = dbYGOProGetByID(dbName, ID),
@@ -858,6 +873,16 @@ function displayQuery(dbName, ID) {
     q('#sqlimage').attr('src', image);
 
     return query;
+}
+
+function dbsearch(input) {
+    console.log(input);
+    var regex = /^[a-zA-Z]+$/;
+    if (!regex.text.match(regex)) {
+        displayQuery(input.db, input.text)
+    } else {
+        //doing text
+    }
 }
 
 
