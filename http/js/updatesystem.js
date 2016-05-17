@@ -1,4 +1,4 @@
-/*jslint node: true, plusplus : true, regexp: true*/
+/*jslint node: true, plusplus : true, regexp: true, bitwise:true*/
 /*global $, runYGOPro, win, Primus, uniqueID, manifest, screenMessage, sitelocationdir*/
 
 localStorage.dbtext = "0-en-OCGTCG.cdb";
@@ -815,7 +815,18 @@ function displayQuery(dbName, ID) {
     q('#sqlid').val(query.datas.id);
     q('#sqlalias').val(query.datas.alias);
     q('#sqlot').val(query.datas.ot);
+    q('#sqlsc1').val(query.datas.setcode & 0xffff);
+    q('#sqlsc2').val((query.datas.setcode >> 0x10) & 0xffff);
+    q('#sqlsc3').val((query.datas.setcode >> 0x20) & 0xffff);
+    q('#sqlsc4').val((query.datas.setcode >> 0x30) & 0xffff);
+    q('#sqllevel').val(query.datas.level & 0xff);
+    q('#sqlscalel').val((query.datas.level >> 0x18) & 0xff);
+    q('#sqlscaler').val((query.datas.level >> 0x10) & 0xff);
+    q('#sqlrace').val(query.datas.race);
+    q('#sqlattribute').val(query.datas.attribute);
     q('#sqlatk').val(query.datas.atk);
     q('#sqldef').val(query.datas.def);
+    return query;
 }
-//displayQuery('cards.cdb', '89631139')
+updateSetcodes();
+//displayQuery('0-en-OCGTCG.cdb', '89631139')
