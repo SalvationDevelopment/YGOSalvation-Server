@@ -745,7 +745,7 @@ function updateSetcodes() {
         for (setcode in setcodes) {
             if (setcodes.hasOwnProperty(setcode) && setcode[0] === '0' && setcode[1] === '') {
                 strings = strings + '<option value="' + parseInt(setcode, 16) + '">' + setcodes[setcode] + '</option>';
-                console.log(setcode, setcodes)
+                console.log(setcode, setcodes);
             }
         }
         frames[0].$('.setcodeSelect').html(strings);
@@ -762,4 +762,43 @@ setTimeout(function () {
     });
 }, 2500);
 
-var SQL = require('./interface/js/vendor/sql.js');
+var SQL = require('../interface/js/vendor/sql.js');
+
+function dbAction(dbName, SQLSTRING) {
+    'use strict';
+    var filebuffer = fs.readFileSync('./ygopro/databases/' + dbName),
+        db = new SQL.Database(filebuffer),
+        data,
+        output;
+
+    //#magica....
+
+    db.run(SQLSTRING); // doesnt return anything;
+
+    data = db['export']();
+    output = new Buffer(data);
+    db.close();
+    fs.writeFileSync('./ygopro/databases/' + dbName, output);
+}
+
+function dbYGOProGetByID(dbName, ID) {
+    'use strict';
+    var filebuffer = fs.readFileSync('../http/ygopro/databases/' + dbName),
+        db = new SQL.Database(filebuffer),
+        query = {
+            datas: db.prepare("SELECT * FROM datas WHERE id=" + ID + ";"),
+            texts: db.prepare("SELECT * FROM texts WHERE id=" + ID + ";")
+        },
+        asObject = {
+            datas: query.datas.getAsObject({
+                'id': 1
+            }),
+            texts: query.texts.getAsObject({
+                'id': 1
+            })
+        };
+    db.close();
+    return asObject;
+}
+
+//dbYGOProGet('cards.cdb', '89631139')
