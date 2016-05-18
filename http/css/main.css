@@ -1911,7 +1911,7 @@ select#sqlsearchresults {
 textarea#sqldescriptionbox {
     float: left;
     width: 55%;
-    height: 200px;
+    height: 180px;
     padding: .5em;
     font-size: .8em;
 }
@@ -1930,7 +1930,8 @@ input#sqlsearch {
     width: 48%;
     margin: 1%;
     padding: 1%;
-    height: 555px;
+    height: 600px;
+    border: 1px solid #777;
 }
 
 #sqlcardcategory {
