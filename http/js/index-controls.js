@@ -349,8 +349,7 @@ $(document).ready(function () {
             return false;
         }
     });
-    $('#sqlsearchresults option').dblclick(function (e) {
-
+    $('#sqlsearchresults').change(function (e) {
         window.quedparams = {
             db: $('#sqldblist option:selected').text(),
             text: $(this).val()
