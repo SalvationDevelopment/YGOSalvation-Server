@@ -340,7 +340,7 @@ $(document).ready(function () {
     $('#sqlsearch').keypress(function (e) {
         if (e.which == 13) {
             window.quedparams = {
-                db: $('#sqldblist').val(),
+                db: $('#sqldblist option:selected').text(),
                 text: $('#sqlsearch').val()
             };
 
