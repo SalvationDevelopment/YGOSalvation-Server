@@ -1956,6 +1956,11 @@ input#sqlsearch {
     margin-bottom: 5px;
 }
 
+.checkrow input[type=checkbox]:checked + label {
+    color: yellow;
+    text-shadow: 0 0 1px white;
+}
+
 
 /* =========================================
 =================================
