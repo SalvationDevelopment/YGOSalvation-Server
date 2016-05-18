@@ -1906,6 +1906,8 @@ select#sqlsearchresults {
     height: 40%;
     display: block;
     margin: 10px auto;
+    font-size: .8em;
+    width: 100%;
 }
 
 textarea#sqldescriptionbox {

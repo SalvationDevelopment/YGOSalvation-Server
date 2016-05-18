@@ -349,6 +349,17 @@ $(document).ready(function () {
             return false;
         }
     });
+    $('#sqlsearchresults option').dblclick(function (e) {
+
+        window.quedparams = {
+            db: $('#sqldblist option:selected').text(),
+            text: $(this).val()
+        };
+
+        window.quedfunc = 'dbsearch';
+        window.quedready = true;
+        return false;
+    });
 });
 
 
