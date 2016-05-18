@@ -1940,6 +1940,11 @@ input#sqlsearch {
     line-height: 1.5em;
 }
 
+#sqldblist {
+    font-size: .8em;
+    padding: 2px;
+}
+
 .typebox {
     background-color: rgba(0, 0, 0, .5);
     border: 1px solid #222;

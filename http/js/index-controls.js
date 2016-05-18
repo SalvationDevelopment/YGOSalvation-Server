@@ -165,7 +165,7 @@ function processServerCall(data) {
     $('.currentdeck').not('.activescreen .currentdeck').html(data.currentdeck);
     $('#skinlist').not('.activescreen #skinlist').html(data.skinlist);
     $('#fontlist').not('.activescreen #fontlist').html(data.fonts);
-    $('#dblist, #sqldblist').not('.activescreen #dblist, .activescreen #sqldblist').html(data.databases);
+    $('#dblist').not('.activescreen #dblist').html(data.databases);
     $('.currentdeck option[value="' + selected + '"]').not('.activescreen option').attr('selected', 'selected');
     $('#skinlist option[value="' + selectedskin + '"]').not('.activescreen option').attr('selected', 'selected');
     $('#fontlist option[value="' + selectedfont + '"]').not('.activescreen option').attr('selected', 'selected');

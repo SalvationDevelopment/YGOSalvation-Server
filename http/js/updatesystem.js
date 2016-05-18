@@ -358,6 +358,7 @@ function populatealllist() {
                 for (dbfiles; database.length > dbfiles; dbfiles++) {
                     list.databases = list.databases + '<option value="' + dbfiles + '">' + database[dbfiles] + '</option>';
                 }
+
                 process.list = list;
                 fs.readdir('./ygopro/fonts', function (error, fonts) {
                     list.fonts = '';
@@ -368,6 +369,7 @@ function populatealllist() {
                     getDecks();
                     list.files = decks;
                     frames[0].processServerCall(list);
+                    frames[0].$('#sqldblist').html(list.databases);
 
                 });
             });
@@ -808,17 +810,28 @@ function dbYGOProGetByID(dbName, ID) {
 
 function dbYGOProByText(dbName, text) {
     'use strict';
-    var filebuffer = fs.readFileSync('../http/ygopro/databases/' + dbName),
+    var row,
+        filebuffer = fs.readFileSync('../http/ygopro/databases/' + dbName),
         db = new SQL.Database(filebuffer),
-        texts = db.prepare("SELECT * FROM texts WHERE name LIKE %" + text + "%;"),
+        texts = db.prepare("SELECT * FROM texts WHERE name LIKE '%" + text + "%';"),
         asObject = {
-
             texts: texts.getAsObject({
                 'name': 1
             })
-        };
+        },
+        output = '';
+    // Bind new values
+    texts.bind({
+        name: 1,
+        id: 2
+    });
+    while (texts.step()) { //
+        row = texts.getAsObject();
+        output = output + '<option value="' + row.id + '">' + row.name + '</option>';
+    }
+    frames[0].$('#sqlsearchresults').html(output);
     db.close();
-    return asObject;
+    return output;
 }
 
 function displayQuery(dbName, ID) {
@@ -876,12 +889,13 @@ function displayQuery(dbName, ID) {
 }
 
 function dbsearch(input) {
+    'use strict';
     console.log(input);
     var regex = /^[a-zA-Z]+$/;
     if (!input.text.match(regex)) {
-        displayQuery(input.db, input.text)
+        displayQuery('0-en-OCGTCG.cdb', input.text);
     } else {
-        //doing text
+        dbYGOProByText('0-en-OCGTCG.cdb', input.text);
     }
 }
 
@@ -889,6 +903,6 @@ function dbsearch(input) {
 
 //displayQuery('0-en-OCGTCG.cdb', '89631139')
 //displayQuery('0-en-OCGTCG.cdb', '55410871')
-
+//dbYGOProByText('0-en-OCGTCG.cdb', 'Eyes')
 updateSetcodes();
 createmanifest();
