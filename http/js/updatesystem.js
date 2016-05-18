@@ -810,28 +810,36 @@ function dbYGOProGetByID(dbName, ID) {
 
 function dbYGOProByText(dbName, text) {
     'use strict';
-    var row,
-        filebuffer = fs.readFileSync('../http/ygopro/databases/' + dbName),
-        db = new SQL.Database(filebuffer),
-        texts = db.prepare("SELECT * FROM texts WHERE name LIKE '%" + text + "%';"),
-        asObject = {
-            texts: texts.getAsObject({
-                'name': 1
-            })
-        },
-        output = '';
-    // Bind new values
-    texts.bind({
-        name: 1,
-        id: 2
-    });
-    while (texts.step()) { //
-        row = texts.getAsObject();
-        output = output + '<option value="' + row.id + '">' + row.name + '</option>';
+    var string;
+    try {
+        var row,
+            filebuffer = fs.readFileSync('../http/ygopro/databases/' + dbName),
+            db = new SQL.Database(filebuffer),
+            string = "SELECT * FROM texts WHERE name LIKE '%" + text + "%';",
+            texts = db.prepare(string),
+            asObject = {
+                texts: texts.getAsObject({
+                    'name': 1
+                })
+            },
+            output = '';
+
+        // Bind new values
+        texts.bind({
+            name: 1,
+            id: 2
+        });
+        while (texts.step()) { //
+            row = texts.getAsObject();
+            output = output + '<option value="' + row.id + '">' + row.name + '</option>';
+        }
+        frames[0].$('#sqlsearchresults').html(output);
+        db.close();
+
+        return output;
+    } catch (e) {
+        console.log(e, string);
     }
-    frames[0].$('#sqlsearchresults').html(output);
-    db.close();
-    return output;
 }
 
 function displayQuery(dbName, ID) {
