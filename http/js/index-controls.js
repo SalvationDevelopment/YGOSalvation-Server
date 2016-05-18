@@ -382,6 +382,29 @@ function customizationadd() {
             $('#cusomizationselection').change();
         }, 1300);
     }, false);
+}
 
+function maketextsSQL() {
+    var id = '"' + $('#sqlid').val() + '"',
+        name = '"' + $('#sqlnamebox').val() + '"',
+        description = '"' + $('#sqldescriptionbox').val() + '"',
+        str1 = '"' + $('#sqlstr1').val() + '"',
+        str2 = '"' + $('#sqlstr2').val() + '"',
+        str3 = '"' + $('#sqlstr3').val() + '"',
+        str4 = '"' + $('#sqlstr4').val() + '"',
+        str5 = '"' + $('#sqlstr5').val() + '"',
+        str6 = '"' + $('#sqlstr6').val() + '"',
+        str7 = '"' + $('#sqlstr7').val() + '"',
+        str8 = '"' + $('#sqlstr8').val() + '"',
+        str9 = '"' + $('#sqlstr9').val() + '"',
+        str10 = '"' + $('#sqlstr10').val() + '"',
+        str11 = '"' + '"' + $('#sqlstr11').val() + '"',
+        str12 = '"' + $('#sqlstr12').val() + '"',
+        str13 = '"' + $('#sqlstr13').val() + '"' + '"',
+        str14 = '"' + $('#sqlstr14').val() + '"',
+        str15 = '"' + $('#sqlstr15').val() + '"',
+        str16 = '"' + $('#sqlstr16').val() + '"',
+        datas = [id, name, description, str1, str2, str3, str4, str5, str5, str6, str7, str8, str9, str10, str11, str11, str12, str13, str14, str15, str16].join(',');
 
+    return 'INSERT INTO "texts" VALUES (' + datas + ');'
 }
