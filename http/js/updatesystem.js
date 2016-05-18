@@ -810,7 +810,7 @@ function dbYGOProByText(dbName, text) {
     'use strict';
     var filebuffer = fs.readFileSync('../http/ygopro/databases/' + dbName),
         db = new SQL.Database(filebuffer),
-        texts = db.prepare("SELECT * FROM texts WHERE name LIKE '`*" + text + "*`';"),
+        texts = db.prepare("SELECT * FROM texts WHERE name LIKE %" + text + "%;"),
         asObject = {
 
             texts: texts.getAsObject({
@@ -878,7 +878,7 @@ function displayQuery(dbName, ID) {
 function dbsearch(input) {
     console.log(input);
     var regex = /^[a-zA-Z]+$/;
-    if (!regex.text.match(regex)) {
+    if (!input.text.match(regex)) {
         displayQuery(input.db, input.text)
     } else {
         //doing text
