@@ -893,9 +893,9 @@ function dbsearch(input) {
     console.log(input);
     var regex = /^[a-zA-Z]+$/;
     if (!input.text.match(regex)) {
-        displayQuery('0-en-OCGTCG.cdb', input.text);
+        displayQuery(input.db, input.text);
     } else {
-        dbYGOProByText('0-en-OCGTCG.cdb', input.text);
+        dbYGOProByText(input.db, input.text);
     }
 }
 
