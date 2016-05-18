@@ -878,6 +878,14 @@ function displayQuery(dbName, ID) {
         }
 
     });
+    q('#sqlcardcategorybox input').each(function () {
+        var val = q(this).val();
+        if ((query.datas.category & (val)) === Number(val)) {
+            q(this).prop('checked', true);
+        } else {
+            q(this).prop('checked', false);
+        }
+    });
     try {
         image = 'data:image/jpg;base64,' + fs.readFileSync('../http/ygopro/pics/' + query.datas.id + '.jpg', 'base64');
     } catch (e) {
