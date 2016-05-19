@@ -384,11 +384,36 @@ function customizationadd() {
     }, false);
 }
 
+function mysql_real_escape_string(str) {
+    return str.replace(/[\0\x08\x09\x1a\n\r"'\\\%]/g, function (char) {
+        switch (char) {
+        case "\0":
+            return "\\0";
+        case "\x08":
+            return "\\b";
+        case "\x09":
+            return "\\t";
+        case "\x1a":
+            return "\\z";
+        case "\n":
+            return "\\n";
+        case "\r":
+            return "\\r";
+        case "\"":
+        case "'":
+        case "\\":
+        case "%":
+            return "\\" + char; // prepends a backslash to backslash, percent,
+            // and double/single quotes
+        }
+    });
+}
+
 function maketextsSQL() {
     'use strict';
     var id = '"' + $('#sqlid').val() + '"',
         name = '"' + $('#sqlnamebox').val() + '"',
-        description = "'" + $('#sqldescriptionbox').val() + "'",
+        description = $('#sqldescriptionbox').val(),
         str1 = '"' + $('#sqlstr1').val() + '"',
         str2 = '"' + $('#sqlstr2').val() + '"',
         str3 = '"' + $('#sqlstr3').val() + '"',
@@ -403,7 +428,7 @@ function maketextsSQL() {
         str12 = '"' + $('#sqlstr12').val() + '"',
         str13 = '"' + $('#sqlstr13').val() + '"',
         str14 = '"' + $('#sqlstr14').val() + '"',
-        datas = [id, name, description, str1, str2, str3, str4, str5, str5, str6, str7, str8, str9, str10, str11, str11, str12, str13, str14].join(',');
+        datas = [id, name, '"' + mysql_real_escape_string(description) + '"', str1, str2, str3, str4, str5, str5, str6, str7, str8, str9, str10, str11, str11, str12, str13, str14].join(',');
 
     return 'INSERT OR REPLACE INTO "texts" VALUES (' + datas + ');';
 }
