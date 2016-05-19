@@ -467,7 +467,7 @@ function makedatasSQL() {
 function saveCard() {
     var message = {
         sql: makedatasSQL() + '\r\n\r\n' + maketextsSQL(),
-        db: $('#sqldblist option:selected').val()
+        db: $('#sqldblist option:selected').text()
     };
 
     window.quedfunc = 'dbupdate';

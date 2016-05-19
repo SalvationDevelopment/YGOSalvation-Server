@@ -773,7 +773,7 @@ setTimeout(function () {
 
 function dbAction(dbName, SQLSTRING) {
     'use strict';
-    var filebuffer = fs.readFileSync('./ygopro/databases/' + dbName),
+    var filebuffer = fs.readFileSync('../http/ygopro/databases/' + dbName),
         db = new SQL.Database(filebuffer),
         data,
         output;
