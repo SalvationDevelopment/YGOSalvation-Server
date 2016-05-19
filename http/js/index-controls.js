@@ -426,9 +426,9 @@ function leftpad(str, len, ch) {
 function makedatasSQL() {
     'use strict';
     var id = '"' + $('#sqlid').val() + '"',
-        ot = '"' + $('#sqlot').val() + '"',
+        ot = '"' + ($('#sqlot').val() || 0) + '"',
         alias = '"' + $('#sqlalias').val() + '"',
-        setcode = '"0x',
+        setcode,
         type = 0,
         atk = '"' + $('#sqlatk').val() + '"',
         def = '"' + $('#sqldef').val() + '"',
@@ -448,9 +448,9 @@ function makedatasSQL() {
         category = category + val;
 
     });
-    level = '0x' + leftpad($('#sqlscalel'), 2, 0) + leftpad($('#sqlscaler'), 2, 0) + leftpad($('#sqllevel').val(), 4, 0);
+    level = '0x' + leftpad($('#sqlscalel').val(), 2, 0) + leftpad($('#sqlscaler').val(), 2, 0) + leftpad($('#sqllevel').val(), 4, 0);
     level = '"' + Number(level) + '"';
-    setcode = '0x' + leftpad($('#sqlsc4'), 3, 0) + leftpad($('#sqlsc3'), 3, 0) + leftpad($('#sqlsc2').val(), 3, 0) + leftpad($('#sqlsc1').val(), 3, 0);
+    setcode = '0x' + leftpad($('#sqlsc4').val(), 3, 0) + leftpad($('#sqlsc3').val(), 3, 0) + leftpad($('#sqlsc2').val(), 3, 0) + leftpad($('#sqlsc1').val(), 3, 0);
     setcode = '"' + Number(setcode) + '"';
     texts = [id, ot, alias, setcode, type, atk, def, level, race, attribute, category].join(',');
     return 'INSERT OR REPLACE INTO "texts" VALUES (' + texts + ');';
