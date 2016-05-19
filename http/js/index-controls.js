@@ -452,6 +452,8 @@ function makedatasSQL() {
 
         console.log(val);
     });
+    atk = (atk === '"?"') ? '"-2"' : atk;
+    def = (def === '"?"') ? '"-2"' : def;
     category = '"' + category + '"';
     console.log(category);
     level = '0x' + leftpad($('#sqlscalel').val(), 2, 0) + leftpad($('#sqlscaler').val(), 2, 0) + leftpad($('#sqllevel').val(), 4, 0);
