@@ -439,12 +439,12 @@ function makedatasSQL() {
         texts = [];
 
     $('.typebox input:checked').each(function () {
-        var val = Number($(this).val());
+        var val = parseInt($(this).val(), 16);
         type = type + val;
 
     });
     $('#sqlcardcategorybox input').each(function () {
-        var val = Number($(this).val());
+        var val = parseInt($(this).val(), 16);
         category = category + val;
 
     });
