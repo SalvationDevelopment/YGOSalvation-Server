@@ -455,10 +455,10 @@ function makedatasSQL() {
 function saveCard() {
     message = {
         sql: makedatasSQL() + maketextsSQL(),
-        $('#sqlsearch').val()
+        db: $('#sqlsearch').val()
     };
 
-    window.quedfunc = 'dbsearch';
+    window.quedfunc = 'dbupdate';
     window.quedready = true;
     return false;
 
