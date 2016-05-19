@@ -751,7 +751,7 @@ function updateSetcodes() {
         console.log(setcodes);
         for (setcode in setcodes) {
             if (setcodes.hasOwnProperty(setcode) && setcode[0] === '0' && setcode[1] === 'x' && setcode !== '0x0') {
-                strings = strings + '<option value="' + parseInt(setcode, 16) + '">' + setcodes[setcode] + '</option>';
+                strings = strings + '<option value="' + setcode.slice(2) + '">' + setcodes[setcode] + '</option>';
                 console.log(setcode, setcodes);
             }
         }
