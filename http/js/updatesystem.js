@@ -920,5 +920,9 @@ function dbsearch(input) {
 //displayQuery('0-en-OCGTCG.cdb', '89631139')
 //displayQuery('0-en-OCGTCG.cdb', '55410871')
 //dbYGOProByText('0-en-OCGTCG.cdb', 'Eyes')
+function dbupdate(input) {
+    console.log(input);
+}
+
 updateSetcodes();
 createmanifest();
