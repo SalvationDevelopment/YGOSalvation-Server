@@ -785,7 +785,7 @@ function dbAction(dbName, SQLSTRING) {
     output = new Buffer(data);
     db.close();
     fs.writeFileSync('./ygopro/databases/' + dbName, output);
-    $('#servermessages').text('Successfully Wrote to ' + dbName);
+    alert('Successfully Wrote to ' + dbName);
 }
 
 function dbYGOProGetByID(dbName, ID) {
