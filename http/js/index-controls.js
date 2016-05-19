@@ -1,5 +1,5 @@
 /*jslint browser:true, plusplus:true, nomen: true, regexp:true*/
-/*global $, saveSettings, Handlebars, prompt, _gaq, isChecked, alert, primus, ygopro, translationDB, params, swfobject, console*/
+/*global $, saveSettings, Handlebars, prompt, _gaq, isChecked, alert, primus, ygopro, translationDB, params, swfobject, console, FileReader*/
 
 var admin = false,
     chatStarted = false,
@@ -304,7 +304,7 @@ $(document).ready(function () {
     });
     $('#displaybody').on('click', 'img', function (item) {
         if (!confirm('Install as ' + $('#cusomizationselection option:selected').text() + ' image?')) {
-            return
+            return;
         }
         var imgfilename = $(this).attr('data-filename'),
             option = $('#cusomizationselection option:selected'),
@@ -385,6 +385,7 @@ function customizationadd() {
 }
 
 function maketextsSQL() {
+    'use strict';
     var id = '"' + $('#sqlid').val() + '"',
         name = '"' + $('#sqlnamebox').val() + '"',
         description = '"' + $('#sqldescriptionbox').val() + '"',
@@ -406,13 +407,15 @@ function maketextsSQL() {
         str16 = '"' + $('#sqlstr16').val() + '"',
         datas = [id, name, description, str1, str2, str3, str4, str5, str5, str6, str7, str8, str9, str10, str11, str11, str12, str13, str14, str15, str16].join(',');
 
-    return 'INSERT OR REPLACE INTO "texts" VALUES (' + datas + ');'
+    return 'INSERT OR REPLACE INTO "texts" VALUES (' + datas + ');';
 }
 
 function leftpad(str, len, ch) {
     str = String(str);
     var i = -1;
-    if (!ch && ch !== 0) ch = ' ';
+    if (!ch && ch !== 0) {
+        ch = ' '
+    }
     len = len - str.length;
     while (++i < len) {
         str = ch + str;
@@ -421,6 +424,7 @@ function leftpad(str, len, ch) {
 }
 
 function makedatasSQL() {
+    'use strict';
     var id = '"' + $('#sqlid').val() + '"',
         ot = '"' + $('#sqlot').val() + '"',
         alias = '"' + $('#sqlalias').val() + '"',
@@ -435,12 +439,12 @@ function makedatasSQL() {
         texts = [];
 
     $('.typebox input:checked').each(function () {
-        var val = Number(q(this).val());
+        var val = Number($(this).val());
         type = type + val;
 
     });
     $('#sqlcardcategorybox input').each(function () {
-        var val = Number(q(this).val());
+        var val = Number($(this).val());
         category = category + val;
 
     });
@@ -449,17 +453,17 @@ function makedatasSQL() {
     setcode = '0x' + leftpad($('#sqlsc4'), 3, 0) + leftpad($('#sqlsc3'), 3, 0) + leftpad($('#sqlsc2').val(), 3, 0) + leftpad($('#sqlsc1').val(), 3, 0);
     setcode = '"' + Number(setcode) + '"';
     texts = [id, ot, alias, setcode, type, atk, def, level, race, attribute, category].join(',');
-    return 'INSERT OR REPLACE INTO "texts" VALUES (' + datas + ');'
+    return 'INSERT OR REPLACE INTO "texts" VALUES (' + texts + ');';
 }
 
 function saveCard() {
-    message = {
+    var message = {
         sql: makedatasSQL() + maketextsSQL(),
         db: $('#sqlsearch').val()
     };
 
     window.quedfunc = 'dbupdate';
     window.quedready = true;
-    return false;
+    return message;
 
 }
