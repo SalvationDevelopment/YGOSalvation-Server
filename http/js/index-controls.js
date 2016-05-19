@@ -444,10 +444,9 @@ function makedatasSQL() {
 
     });
     type = '"' + type + '"';
-    $('#sqlcardcategorybox input').each(function () {
+    $('#sqlcardcategorybox input:checked').each(function () {
         var val = parseInt($(this).val(), 16);
         category = category + val;
-
     });
     category = '"' + category + '"';
     level = '0x' + leftpad($('#sqlscalel').val(), 2, 0) + leftpad($('#sqlscaler').val(), 2, 0) + leftpad($('#sqllevel').val(), 4, 0);
@@ -461,7 +460,7 @@ function makedatasSQL() {
 function saveCard() {
     var message = {
         sql: makedatasSQL() + '\r\n\r\n' + maketextsSQL(),
-        db: $('#sqlsearch').val()
+        db: $('#sqldblist option:selected').val()
     };
 
     window.quedfunc = 'dbupdate';
