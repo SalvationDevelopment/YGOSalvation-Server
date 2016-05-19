@@ -406,5 +406,60 @@ function maketextsSQL() {
         str16 = '"' + $('#sqlstr16').val() + '"',
         datas = [id, name, description, str1, str2, str3, str4, str5, str5, str6, str7, str8, str9, str10, str11, str11, str12, str13, str14, str15, str16].join(',');
 
-    return 'INSERT INTO "texts" VALUES (' + datas + ');'
+    return 'INSERT OR REPLACE INTO "texts" VALUES (' + datas + ');'
+}
+
+function leftpad(str, len, ch) {
+    str = String(str);
+    var i = -1;
+    if (!ch && ch !== 0) ch = ' ';
+    len = len - str.length;
+    while (++i < len) {
+        str = ch + str;
+    }
+    return str;
+}
+
+function makedatasSQL() {
+    var id = '"' + $('#sqlid').val() + '"',
+        ot = '"' + $('#sqlot').val() + '"',
+        alias = '"' + $('#sqlalias').val() + '"',
+        setcode = '"0x',
+        type = 0,
+        atk = '"' + $('#sqlatk').val() + '"',
+        def = '"' + $('#sqldef').val() + '"',
+        level,
+        race = '"' + $('#sqlrace').val() + '"',
+        attribute = '"' + $('#sqlattribute').val() + '"',
+        category = 0,
+        texts = [];
+
+    $('.typebox input:checked').each(function () {
+        var val = Number(q(this).val());
+        type = type + val;
+
+    });
+    $('#sqlcardcategorybox input').each(function () {
+        var val = Number(q(this).val());
+        category = category + val;
+
+    });
+    level = '0x' + leftpad($('#sqlscalel'), 2, 0) + leftpad($('#sqlscaler'), 2, 0) + leftpad($('#sqllevel').val(), 4, 0);
+    level = '"' + Number(level) + '"';
+    setcode = '0x' + leftpad($('#sqlsc4'), 3, 0) + leftpad($('#sqlsc3'), 3, 0) + leftpad($('#sqlsc2').val(), 3, 0) + leftpad($('#sqlsc1').val(), 3, 0);
+    setcode = '"' + Number(setcode) + '"';
+    texts = [id, ot, alias, setcode, type, atk, def, level, race, attribute, category].join(',');
+    return 'INSERT OR REPLACE INTO "texts" VALUES (' + datas + ');'
+}
+
+function saveCard() {
+    message = {
+        sql: makedatasSQL() + maketextsSQL(),
+        $('#sqlsearch').val()
+    };
+
+    window.quedfunc = 'dbsearch';
+    window.quedready = true;
+    return false;
+
 }
