@@ -388,7 +388,7 @@ function maketextsSQL() {
     'use strict';
     var id = '"' + $('#sqlid').val() + '"',
         name = '"' + $('#sqlnamebox').val() + '"',
-        description = '"' + $('#sqldescriptionbox').val() + '"',
+        description = '`' + $('#sqldescriptionbox').val() + '`',
         str1 = '"' + $('#sqlstr1').val() + '"',
         str2 = '"' + $('#sqlstr2').val() + '"',
         str3 = '"' + $('#sqlstr3').val() + '"',
