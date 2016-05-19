@@ -786,6 +786,7 @@ function dbAction(dbName, SQLSTRING) {
     output = new Buffer(data);
     db.close();
     fs.writeFileSync('./ygopro/databases/' + dbName, output);
+    $('#servermessages').text('Successfully Wrote to ' + dbName);
 }
 
 function dbYGOProGetByID(dbName, ID) {
@@ -921,7 +922,8 @@ function dbsearch(input) {
 //displayQuery('0-en-OCGTCG.cdb', '55410871')
 //dbYGOProByText('0-en-OCGTCG.cdb', 'Eyes')
 function dbupdate(input) {
-    console.log(input);
+    dbAction(input.db, input.sql);
+    console.log(input.sql);
 }
 
 updateSetcodes();
