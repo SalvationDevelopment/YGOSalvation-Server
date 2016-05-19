@@ -747,7 +747,7 @@ function updateSetcodes() {
                 joinKeySlice: 1
             }),
             setcode,
-            strings = '<option value="0">None</option>';
+            strings = '<option value="0" data-calc="0">None</option>';
         console.log(setcodes);
         for (setcode in setcodes) {
             if (setcodes.hasOwnProperty(setcode) && setcode[0] === '0' && setcode[1] === 'x' && setcode !== '0x0') {
