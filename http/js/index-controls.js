@@ -444,8 +444,8 @@ function makedatasSQL() {
 
     });
     type = '"' + type + '"';
-    $('#sqlcardcategorybox input:checked').each(function () {
-        var val = parseInt($(this).val(), 16);
+    $('#sqlcardcategorybox input:checked').each(function (i, n) {
+        var val = parseInt($(n).val(), 16);
         category = category + val;
     });
     category = '"' + category + '"';
