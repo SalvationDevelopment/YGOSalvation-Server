@@ -469,7 +469,7 @@ function saveCard() {
         sql: makedatasSQL() + '\r\n\r\n' + maketextsSQL(),
         db: $('#sqldblist option:selected').text()
     };
-
+    window.quedparams = message;
     window.quedfunc = 'dbupdate';
     window.quedready = true;
     return message;
