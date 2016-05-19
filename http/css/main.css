@@ -1961,6 +1961,16 @@ input#sqlsearch {
     text-shadow: 0 0 1px white;
 }
 
+.sqlcardeffecttext .datarow label {
+    width: 80%;
+}
+
+.sqlcardeffecttext .datarow input {
+    width: 80%;
+    margin: 2px 0px;
+    font-size: .8em;
+}
+
 
 /* =========================================
 =================================
