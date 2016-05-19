@@ -752,7 +752,6 @@ function updateSetcodes() {
         for (setcode in setcodes) {
             if (setcodes.hasOwnProperty(setcode) && setcode[0] === '0' && setcode[1] === 'x' && setcode !== '0x0') {
                 strings = strings + '<option data-calc="' + setcode.slice(2) + '" value="' + parseInt(setcode, 16) + '">' + setcodes[setcode] + '</option>';
-                console.log(setcode, setcodes);
             }
         }
         frames[0].$('.setcodeSelect').html(strings);
@@ -922,8 +921,8 @@ function dbsearch(input) {
 //displayQuery('0-en-OCGTCG.cdb', '55410871')
 //dbYGOProByText('0-en-OCGTCG.cdb', 'Eyes')
 function dbupdate(input) {
-    dbAction(input.db, input.sql);
     console.log(input.sql);
+    dbAction(input.db, input.sql);
 }
 
 updateSetcodes();
