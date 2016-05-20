@@ -784,7 +784,7 @@ function dbAction(dbName, SQLSTRING) {
     data = db['export']();
     output = new Buffer(data);
 
-    fs.writeFileSync('../http/ygopro/databases/' + dbName);
+    fs.writeFileSync('../http/ygopro/databases/' + dbName, data);
     db.close();
     alert('Successfully Wrote to ' + dbName);
 }
