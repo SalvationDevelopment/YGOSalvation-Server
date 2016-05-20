@@ -2052,6 +2052,14 @@ textarea#sqloutput {
     *zoom: 1;
 }
 
+.creditsperson {
+    margin: 9px auto;
+    /* height: 1.5em; */
+    font-size: 10px;
+    /* background: blue; */
+    overflow: auto;
+}
+
 .creditsperson span {
     display: block;
     float: left;
