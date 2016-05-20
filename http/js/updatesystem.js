@@ -909,7 +909,7 @@ function dbsearch(input) {
     'use strict';
     console.log(input);
     var regex = /^\d+$/;
-    if (!input.text.match(regex)) {
+    if (input.text.match(regex)) {
         displayQuery(input.db, input.text);
     } else {
         dbYGOProByText(input.db, input.text);
