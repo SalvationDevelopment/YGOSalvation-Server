@@ -2060,6 +2060,10 @@ textarea#sqloutput {
     overflow: auto;
 }
 
+header#credits {
+    overflow-y: scroll;
+}
+
 .creditsperson span {
     display: block;
     float: left;
