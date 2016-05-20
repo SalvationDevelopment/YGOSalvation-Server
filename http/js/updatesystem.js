@@ -908,7 +908,7 @@ function displayQuery(dbName, ID) {
 function dbsearch(input) {
     'use strict';
     console.log(input);
-    var regex = /^[a-zA-Z]+$/;
+    var regex = /^\d+$/;
     if (!input.text.match(regex)) {
         displayQuery(input.db, input.text);
     } else {
