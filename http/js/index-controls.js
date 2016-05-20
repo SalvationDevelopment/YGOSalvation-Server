@@ -494,6 +494,6 @@ function saveCard() {
     window.quedparams = message;
     window.quedfunc = 'dbupdate';
     window.quedready = true;
-    $('#sqloutput').val(message);
+    $('#sqloutput').val(message.sql);
     return message;
 }

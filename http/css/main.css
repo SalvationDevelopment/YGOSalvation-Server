@@ -1971,6 +1971,11 @@ input#sqlsearch {
     font-size: .8em;
 }
 
+textarea#sqloutput {
+    width: 100%;
+    height: 190px;
+}
+
 
 /* =========================================
 =================================
