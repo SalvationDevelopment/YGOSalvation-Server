@@ -768,25 +768,42 @@ setTimeout(function () {
     });
 }, 2500);
 
+
+// dbdirect('0-en-OCGTCG.cdb', 'SELECT d.id, name, desc, setcode FROM  DATAS d, TEXTS t WHERE t.id=d.id AND name like "%cat%"');
 function dbdirect(dbName, SQLSTRING) {
     'use strict';
     var filebuffer = fs.readFileSync('../http/ygopro/databases/' + dbName),
         db = new SQL.Database(filebuffer),
-        output;
-
-    //#magica....
-
-    db.run(SQLSTRING); // doesnt return anything;
+        output,
+        string = '<tr>',
+        result = db.exec(SQLSTRING),
+        ii,
+        i;
 
     output = new Buffer(db.export());
     fs.writeFile('../http/ygopro/databases/' + dbName, output, function (error) {
-        if (!error) {
-            alert('Successfully Wrote to ' + dbName);
-        } else {
+        if (error) {
             alert('Error writing to' + dbName);
+        } else {
+
         }
-        db.close();
     });
+    db.close();
+    for (i = 0; result[0].columns.length > i; i++) {
+        string = string + '<th>' + result[0].columns[i] + '</th>';
+    }
+    string = string + '</tr>';
+    for (i = 0; result[0].values.length > i; i++) {
+        string = string + '<tr>';
+        for (ii = 0; result[0].columns.length > ii; ii++) {
+            string = string + '<td>' + result[0].values[i][ii] + '</td>'
+
+        }
+        string = string + '</tr>';
+    }
+    frames[0].$('#sqleditorpowermodeoutput').html(string);
+
+    return result;
 }
 
 function dbAction(dbName, SQLSTRING) {
@@ -936,6 +953,12 @@ function dbsearch(input) {
     }
 }
 
+function powerdb(input) {
+    'use strict';
+
+    dbdirect(input.db, input.text);
+
+}
 
 
 //displayQuery('0-en-OCGTCG.cdb', '89631139')

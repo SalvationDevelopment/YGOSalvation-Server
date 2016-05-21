@@ -545,3 +545,18 @@ function convertID() {
         alert('Invalid ID, not a number');
     }
 }
+
+function runPowerDB() {
+    'use strict';
+    var sql = $('#sqleditorpowermodeinput').val(),
+        message = {
+            sql: mysql_real_escape_string(sql),
+            db: $('#sqldblist2 option:selected').text()
+        };
+
+    window.quedparams = message;
+    window.quedfunc = 'powerdb';
+    window.quedready = true;
+
+
+}

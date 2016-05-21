@@ -2532,12 +2532,21 @@ textarea#sqleditorpowermodeinput {
 #sqleditorpowermodeoutputcontainer {
     min-height: 50%;
     min-width: 90%;
-    background: rgba(0, 0, 0, .85);
-    border: 2px solid silver;
+    border: 2px solid black;
     margin: 1vh 5%;
-    color: white;
 }
 
 select#sqldblist2 {
     margin-left: 5%;
+}
+
+table#sqleditorpowermodeoutput {
+    width: 100%;
+    min-height: 100%;
+}
+
+#sqleditorpowermodeoutput td {
+    border: 1px solid #444;
+    text-align: left;
+    font-size: .7em;
 }
