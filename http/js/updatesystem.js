@@ -774,16 +774,13 @@ function dbAction(dbName, SQLSTRING) {
     'use strict';
     var filebuffer = fs.readFileSync('../http/ygopro/databases/' + dbName),
         db = new SQL.Database(filebuffer),
-        data,
         output;
 
     //#magica....
 
     db.run(SQLSTRING); // doesnt return anything;
 
-    data = db.export();
-    output = new Buffer(data);
-    console.log(output);
+    output = new Buffer(db.export());
     fs.writeFile('../http/ygopro/databases/' + dbName, output, function (error) {
         if (!error) {
             alert('Successfully Wrote to ' + dbName);
@@ -912,7 +909,6 @@ function displayQuery(dbName, ID) {
 
 function dbsearch(input) {
     'use strict';
-    console.log(input);
     var regex = /^\d+$/;
     if (input.text.match(regex)) {
         displayQuery(input.db, input.text);
