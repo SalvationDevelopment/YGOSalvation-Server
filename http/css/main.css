@@ -380,7 +380,7 @@ body {
     font-weight: 400;
     overflow: hidden;
     width: 100vw;
-    transition: background-image 1000ms ease-in;
+    transition: background-image 10000ms ease-in;
 }
 
 #logo {
@@ -2519,4 +2519,25 @@ div#modal {
     align-items: center;
     justify-content: center;
     transition: opacity 500ms;
+}
+
+textarea#sqleditorpowermodeinput {
+    width: 90%;
+    color: white;
+    background: rgba(0, 0, 0, .85);
+    margin: 0 5%;
+    height: 40%;
+}
+
+table#sqleditorpowermodeoutputcontainer {
+    min-height: 50%;
+    min-width: 90%;
+    background: rgba(0, 0, 0, .85);
+    border: 2px solid silver;
+    margin: 1vh 5%;
+    color: white;
+}
+
+select#sqldblist2 {
+    margin-left: 5%;
 }
