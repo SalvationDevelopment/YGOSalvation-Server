@@ -1,5 +1,5 @@
 /*jslint browser:true, plusplus:true, nomen: true, regexp:true*/
-/*global $, saveSettings, Handlebars, prompt, _gaq, isChecked, alert, primus, ygopro, translationDB, params, swfobject, console, FileReader*/
+/*global $, saveSettings, Handlebars, prompt, _gaq, isChecked, alert, primus, ygopro, translationDB, params, swfobject, console, FileReader, prompt, confirm*/
 
 var admin = false,
     chatStarted = false,
@@ -211,6 +211,32 @@ function achievementConstructor(data) {
     };
 }
 
+function mysql_real_escape_string(str) {
+    'use strict';
+    return str.replace(/[\0\x08\x09\x1a\n\r"'\\\%]/g, function (char) {
+        switch (char) {
+        case "\0":
+            return "\\0";
+        case "\x08":
+            return "\\b";
+        case "\x09":
+            return "\\t";
+        case "\x1a":
+            return "\\z";
+        case "\n":
+            return "\\n";
+        case "\r":
+            return "\\r";
+        case "\"":
+        case "'":
+        case "\\":
+        case "%":
+            return "\\" + char; // prepends a backslash to backslash, percent,
+            // and double/single quotes
+        }
+    });
+}
+
 
 $(document).ready(function () {
     'use strict';
@@ -387,30 +413,6 @@ function customizationadd() {
     }, false);
 }
 
-function mysql_real_escape_string(str) {
-    return str.replace(/[\0\x08\x09\x1a\n\r"'\\\%]/g, function (char) {
-        switch (char) {
-        case "\0":
-            return "\\0";
-        case "\x08":
-            return "\\b";
-        case "\x09":
-            return "\\t";
-        case "\x1a":
-            return "\\z";
-        case "\n":
-            return "\\n";
-        case "\r":
-            return "\\r";
-        case "\"":
-        case "'":
-        case "\\":
-        case "%":
-            return "\\" + char; // prepends a backslash to backslash, percent,
-            // and double/single quotes
-        }
-    });
-}
 
 function maketextsSQL() {
     'use strict';
@@ -437,10 +439,11 @@ function maketextsSQL() {
 }
 
 function leftpad(str, len, ch) {
+    'use strict';
     str = String(str);
     var i = -1;
     if (!ch && ch !== 0) {
-        ch = ' '
+        ch = ' ';
     }
     len = len - str.length;
     while (++i < len) {
@@ -490,6 +493,7 @@ function makedatasSQL() {
 }
 
 function saveCard() {
+    'use strict';
     var message = {
         sql: makedatasSQL() + '\r\n\r\n' + maketextsSQL(),
         db: $('#sqldblist option:selected').text()
@@ -499,4 +503,42 @@ function saveCard() {
     window.quedready = true;
     $('#sqloutput').val(message.sql);
     return message;
+}
+
+function deleteCard() {
+    'use strict';
+    var id = $('#sqlid').val(),
+        message = {
+            sql: 'DELETE FROM datas WHERE id="' + id + '";DELETE FROM texts WHERE id="' + id + '";',
+            db: $('#sqldblist option:selected').text()
+        };
+    if (confirm('Delete ' + id)) {
+        window.quedparams = message;
+        window.quedfunc = 'dbupdate';
+        window.quedready = true;
+        $('#sqloutput').val(message.sql);
+    }
+}
+
+function convertID() {
+    'use strict';
+    var regex = /^\d+$/,
+        id = $('#sqlid').val(),
+        convert = prompt("Please enter NEW ID", ""),
+        message;
+
+    if (convert && convert.text.match(regex)) {
+        message = {
+            sql: 'UPDATE datas SET id = ' + convert + ' WHERE id="' + id + '";UPDATE texts SET id = ' + convert + ' WHERE id="' + id + '";',
+            db: $('#sqldblist option:selected').text()
+        };
+        if (confirm('Convert ' + id + ' to ' + convert + '?')) {
+            window.quedparams = message;
+            window.quedfunc = 'dbupdate';
+            window.quedready = true;
+            $('#sqloutput').val(message.sql);
+        }
+    } else {
+        alert('Invalid ID, not a number');
+    }
 }
