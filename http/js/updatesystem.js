@@ -783,10 +783,14 @@ function dbAction(dbName, SQLSTRING) {
 
     data = db['export']();
     output = new Buffer(data);
-
-    fs.writeFileSync('../http/ygopro/databases/' + dbName, data);
+    if (output) {
+        fs.writeFileSync('../http/ygopro/databases/' + dbName, data);
+        alert('Successfully Wrote to ' + dbName);
+    } else {
+        alert('Error writing to' + dbName);
+    }
     db.close();
-    alert('Successfully Wrote to ' + dbName);
+
 }
 
 function dbYGOProGetByID(dbName, ID) {
