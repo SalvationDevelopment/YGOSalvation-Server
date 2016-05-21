@@ -768,7 +768,26 @@ setTimeout(function () {
     });
 }, 2500);
 
+function dbdirect(dbName, SQLSTRING) {
+    'use strict';
+    var filebuffer = fs.readFileSync('../http/ygopro/databases/' + dbName),
+        db = new SQL.Database(filebuffer),
+        output;
 
+    //#magica....
+
+    db.run(SQLSTRING); // doesnt return anything;
+
+    output = new Buffer(db.export());
+    fs.writeFile('../http/ygopro/databases/' + dbName, output, function (error) {
+        if (!error) {
+            alert('Successfully Wrote to ' + dbName);
+        } else {
+            alert('Error writing to' + dbName);
+        }
+        db.close();
+    });
+}
 
 function dbAction(dbName, SQLSTRING) {
     'use strict';
