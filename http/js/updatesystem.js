@@ -369,7 +369,7 @@ function populatealllist() {
                     getDecks();
                     list.files = decks;
                     frames[0].processServerCall(list);
-                    frames[0].$('#sqldblist').html(list.databases);
+                    frames[0].$('#sqldblist, #sqldblist2').html(list.databases);
 
                 });
             });
