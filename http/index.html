@@ -990,7 +990,12 @@ General Terms and Conditions applicable to Use of a Web Site.
             </div>
         </div>
     </header>
-
+    <header style="padding-top:50px" id="sqleditorpowermode">
+        <select id="sqldblist2" size="1">
+        </select>
+        <textarea id="sqleditorpowermodeinput"></textarea>
+        <table id=sqleditorpowermodeoutput></table>
+    </header>
     <header style="padding-top:50px" id="sqleditor">
         <div id="sqlleft">
             <img id="sqlimage" src="http://ygopro.us/img/textures/unknown.jpg" />
@@ -1465,12 +1470,13 @@ General Terms and Conditions applicable to Use of a Web Site.
                     <input id="sqlstr14" />
                 </div>
             </div>
-            <br />
-            <br />
+            <br style="display:block; height:1.5em;" />
+            <br style="display:block; height:1.5em;" />
             <button onclick="saveCard()">INSERT/REPLACE</button>
             <button onclick="deleteCard()">DELETE</button>
             <button onclick="convertID()">CHANGE ID TO</button>
-            <button onclick="singlesitenav('sqleditordirect')">DIRECT EDITS</button>
+            <br style="display:block; height:1.5em;" />
+            <button onclick="singlesitenav('sqleditorpowermode')">POWER MODE</button>
         </div>
     </header>
     <header style="padding-top:50px" id="dn">

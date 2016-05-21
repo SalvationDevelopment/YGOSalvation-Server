@@ -380,7 +380,7 @@ body {
     font-weight: 400;
     overflow: hidden;
     width: 100vw;
-    transition: background-image 300ms ease-in;
+    transition: background-image 1000ms ease-in;
 }
 
 #logo {
