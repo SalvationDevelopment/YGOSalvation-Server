@@ -550,7 +550,7 @@ function runPowerDB() {
     'use strict';
     var sql = $('#sqleditorpowermodeinput').val(),
         message = {
-            sql: mysql_real_escape_string(sql),
+            sql: sql,
             db: $('#sqldblist2 option:selected').text()
         };
 

@@ -779,7 +779,7 @@ function dbdirect(dbName, SQLSTRING) {
         result = db.exec(SQLSTRING),
         ii,
         i;
-
+    console.log(result)
     output = new Buffer(db.export());
     fs.writeFile('../http/ygopro/databases/' + dbName, output, function (error) {
         if (error) {
@@ -955,7 +955,7 @@ function dbsearch(input) {
 
 function powerdb(input) {
     'use strict';
-
+    console.log(input);
     dbdirect(input.db, input.text);
 
 }

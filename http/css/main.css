@@ -2530,8 +2530,8 @@ textarea#sqleditorpowermodeinput {
 }
 
 #sqleditorpowermodeoutputcontainer {
-    max-height: 50%;
-    min-width: 90%;
+    height: 50%;
+    width: 90%;
     background: rgba(0, 0, 0, .85);
     border: 2px solid silver;
     margin: 1vh 5%;
