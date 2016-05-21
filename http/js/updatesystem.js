@@ -781,16 +781,17 @@ function dbAction(dbName, SQLSTRING) {
 
     db.run(SQLSTRING); // doesnt return anything;
 
-    data = db['export']();
+    data = db.export();
     output = new Buffer(data);
-    if (output) {
-        fs.writeFileSync('../http/ygopro/databases/' + dbName, data);
-        alert('Successfully Wrote to ' + dbName);
-    } else {
-        alert('Error writing to' + dbName);
-    }
-    db.close();
-
+    console.log(output);
+    fs.writeFile('../http/ygopro/databases/' + dbName, output, function (error) {
+        if (!error) {
+            alert('Successfully Wrote to ' + dbName);
+        } else {
+            alert('Error writing to' + dbName);
+        }
+        db.close();
+    });
 }
 
 function dbYGOProGetByID(dbName, ID) {
