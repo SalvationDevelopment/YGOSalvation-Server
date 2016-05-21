@@ -79,7 +79,10 @@ function singlesitenav(target) {
     $('body').css('background-image', 'url(http://ygopro.us/img/bg.jpg)');
     if (target === 'faq') {
         updatenews();
-        $('body').css('background-image', 'url(http://ygopro.us/img/bg_edit.jpg)');
+        $('body').css('background-image', 'url(http://ygopro.us/img/sample-81965950ba4163718e946a186b9181fe.jpg)');
+    }
+    if (target === 'sqleditor') {
+        $('body').css('background-image', 'url(http://ygopro.us/img/Ghostrick.Nekomusume.full.1945016.jpg)');
     }
     if (target === 'chat' && !chatStarted) {
         swfobject.embedSWF("lightIRC/lightIRC.swf", "lightIRC", "100%", "92%", "10.0.0", "expressInstall.swf", params, {
