@@ -2529,7 +2529,7 @@ textarea#sqleditorpowermodeinput {
     height: 40%;
 }
 
-table#sqleditorpowermodeoutputcontainer {
+#sqleditorpowermodeoutputcontainer {
     min-height: 50%;
     min-width: 90%;
     background: rgba(0, 0, 0, .85);
