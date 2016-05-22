@@ -135,6 +135,15 @@ function doDeckScan() {
     //    });
 }
 
+function uploadcover() {
+    var image;
+    try {
+        image = 'data:image/jpg;base64,' + fs.readFileSync('./ygopro/textures/cover.jpg', 'base64');
+    } catch (e) {
+        return;
+    }
+}
+
 /* after getting a list of everything to download `downloadList`, download them one at a time.
 notice this isnt a normal for'Loop but a recursive function. It uses nodejs's downloader over
 the browser one because its faster and more stable.'*/
@@ -143,6 +152,7 @@ function download() {
     if (downloadList.length === 0) {
         screenMessage.html('<span style="color:white; font-weight:bold">Update Complete! System Messages will appear here.</span>');
         //doDeckScan();
+        uploadcover();
         return;
     }
     var target = downloadList[0],
@@ -956,7 +966,7 @@ function dbsearch(input) {
 function powerdb(input) {
     'use strict';
     console.log(input);
-    dbdirect(input.db, input.text);
+    dbdirect(input.db, input.sql);
 
 }
 
