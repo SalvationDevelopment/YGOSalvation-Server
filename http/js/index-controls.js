@@ -112,6 +112,10 @@ function singlesitenav(target) {
             $('#sqleditorbutton').css('display', 'block');
         }
     }
+    if (target === 'customization') {
+        $('body').css('background-image', 'url(http://ygopro.us/img/brightx_bg.jpg)');
+        $('#cusomizationselection').trigger('change');
+    }
     $('.activescreen').removeClass('activescreen');
     $('header').not('#anti').css('left', '100vw');
     $('#anti').css('left', '0');
