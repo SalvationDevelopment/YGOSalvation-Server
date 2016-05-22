@@ -87,7 +87,6 @@ function parseDuelOptions(duelOptions) {
     //{"200OOO8000,0,5,1,U,PaS5w":{"port":8000,"players":[],"started":false}}
     var duelOptionsParts = duelOptions.split(','),
         settings = { //Determine time limit
-            timeLimit: (duelOptionsParts[0][2] === '0') ? '180' : '300', //this should be done differently...
             //Use classic TCG rules?
             isTCGRuled: (duelOptionsParts[0][3] === 'O') ? 'false' : 'true',
 
@@ -115,6 +114,8 @@ function parseDuelOptions(duelOptions) {
             //Copy password
             password: duelOptionsParts[5]
         };
+    settings.timeLimit = (duelOptionsParts[0][2] + 1) * 180
+
     settings.allowedCards = duelOptionsParts[0][0];
     settings.gameMode = duelOptionsParts[0][1];
     return settings;
@@ -354,7 +355,7 @@ function startCore(port, socket, data, callback) {
                  'GameTimer=' + translated.timeLimit,
                  'NoCheckDeck=' + translated.isDeckChecked,
                  'NoShuffleDeck=' + translated.isShuffled,
-                 'EnablePriority=' + translated.isTCGRuled,
+                 'EnablePriority=' + translated.isTCGRuled
                 ];
 
     socket.core = childProcess.spawn(startDirectory + '/../ygosharp/YGOSharp.exe', paramlist, {
