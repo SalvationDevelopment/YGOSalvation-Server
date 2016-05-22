@@ -114,7 +114,7 @@ function parseDuelOptions(duelOptions) {
             //Copy password
             password: duelOptionsParts[5]
         };
-    settings.timeLimit = (duelOptionsParts[0][2] + 1) * 180
+    settings.timeLimit = (Number(duelOptionsParts[0][2]) + 1) * 180
 
     settings.allowedCards = duelOptionsParts[0][0];
     settings.gameMode = duelOptionsParts[0][1];
