@@ -12,7 +12,9 @@ var zlib = require('zlib'),
     colors = require('colors'),
     domain = require('domain'),
     request = require('request'),
-    crypto = require('crypto');
+    crypto = require('crypto'),
+    SQL = require('sql.js');
+
 
 function dirTree(filename) {
 
@@ -135,6 +137,11 @@ function update(cb) {
         }, function () {
             n++;
         });
+        spawn('git', ['pull'], {
+            cwd: '../ygopro-tcg-scripts'
+        }, function () {
+            n++;
+        });
     });
 }
 
@@ -190,5 +197,50 @@ setTimeout(function () {
 setInterval(function () {
     request('http://forum.ygopro.us/fetchTopics.php', function (error, response, body) {});
 }, 600000);
+
+var fs = require('fs');
+
+function getcards(file) {
+    var filebuffer = fs.readFileSync('../http/ygopro/databases/' + file),
+        db = new SQL.Database(filebuffer),
+        string = "SELECT * FROM datas, texts WHERE datas.id = texts.id;",
+        texts = db.prepare(string),
+        asObject = {
+            texts: texts.getAsObject({
+                'id': 1
+            })
+        },
+        output = [],
+        row;
+
+    // Bind new values
+    texts.bind({
+        name: 1,
+        id: 2
+    });
+    while (texts.step()) { //
+        row = texts.getAsObject();
+        output.push(row);
+    }
+    db.close();
+
+    return output;
+}
+
+function generate() {
+    fs.readdir('../http/ygopro/databases/', function (err, files) {
+        var i;
+        for (i = 0; files.length > i; i++) {
+            try {
+                fs.writeFileSync('../http/manifest/manifest_' + files[i].slice(0, -4) + '.json', JSON.stringify(getcards(files[i])));
+            } catch (e) {
+
+            }
+        }
+    });
+}
+
+fs.watch('../http/ygopro/databases/', generate);
+generate();
 
 require('fs').watch(__filename, process.exit);
