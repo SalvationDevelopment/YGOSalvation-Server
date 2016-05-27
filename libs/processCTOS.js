@@ -357,6 +357,7 @@ function startCore(port, socket, data, callback) {
                  'BanlistFile=../http/ygopro/lflist.conf',
                  'PrimaryScriptDirectory=' + primaryScripts[translated.allowedCards],
                  'SecondaryScriptDirectory=' + secondaryScripts[translated.allowedCards],
+                 'ScriptDirectory=' + primaryScripts[translated.allowedCards],
                  'DatabaseFile=' + dbs[configfile],
                  'Rule=' + translated.allowedCards,
                  'Mode=' + translated.gameMode,
