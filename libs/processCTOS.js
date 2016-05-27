@@ -66,7 +66,15 @@ var portmin = 30000 + process.env.PORTRANGE * 100, //Port Ranges
 //client.on('close', function () {}); // start shutting down server.
 
 
-var scripts = {
+var primaryScripts = {
+    0: '../http/ygopro/script',
+    1: '../ygopro-tcg-script',
+    2: '../http/ygopro/script',
+    3: '../http/ygopro/script',
+    4: '../http/ygopro/script',
+    5: '../http/ygopro/script'
+};
+var secondaryScripts = {
     0: '../http/ygopro/script',
     1: '../http/ygopro/script',
     2: '../http/ygopro/script',
@@ -74,6 +82,7 @@ var scripts = {
     4: '../http/ygopro/script',
     5: '../http/ygopro/script'
 };
+
 var dbs = {
     'ini/config.ini': '../http/ygopro/databases/0-en-OCGTCG.cdb',
     'ini/newgioh.ini': '../http/ygopro/databases/4-Newgioh.cdb',
@@ -346,7 +355,8 @@ function startCore(port, socket, data, callback) {
                  'Port=' + port,
                  'ClientVersion=0x1338',
                  'BanlistFile=../http/ygopro/lflist.conf',
-                 'ScriptDirectory=' + scripts[translated.allowedCards],
+                 'PrimaryScriptDirectory=' + primaryScripts[translated.allowedCards],
+                 'SecondaryScriptDirectory=' + secondaryScripts[translated.allowedCards],
                  'DatabaseFile=' + dbs[configfile],
                  'Rule=' + translated.allowedCards,
                  'Mode=' + translated.gameMode,
