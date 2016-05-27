@@ -34,13 +34,13 @@
         "ps-node": "*",
         "request": "^2.58.0",
         "serve-index": "*",
+        "sql.js": "^0.3.2",
         "targz": "*",
         "toobusy-js": "*",
         "vhost": "*",
         "winston": "^1.0.0",
         "ws": "*",
-        "zip-folder": "*",
-        "elo-rank": "*"
+        "zip-folder": "*"
     },
     "optionalDependencies": {
         "httpsys": "*"
