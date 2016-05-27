@@ -127,7 +127,6 @@ function parseDuelOptions(duelOptions) {
 
     settings.allowedCards = duelOptionsParts[0][0];
     settings.gameMode = duelOptionsParts[0][1];
-    console.log(settings);
     return settings;
 
 }
@@ -369,7 +368,7 @@ function startCore(port, socket, data, callback) {
                  'NoShuffleDeck=' + translated.isShuffled,
                  'EnablePriority=' + translated.isTCGRuled
                 ];
-
+    console.log(paramlist);
     socket.core = childProcess.spawn(startDirectory + '/../ygosharp/YGOSharp.exe', paramlist, {
         cwd: startDirectory + '/../YGOSharp'
     }, function (error, stdout, stderr) {
