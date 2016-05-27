@@ -19,3 +19,8 @@
 [submodule "SnarkyLua"]
 	path = SnarkyLua
 	url = https://github.com/Snarkie/YGOProAIScript
+[submodule "ygopro-tcg-scripts"]
+	path = ygopro-tcg-scripts
+	url = https://github.com/SalvationDevelopment/ygopro-tcg-scripts
+    
+
