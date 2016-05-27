@@ -68,7 +68,7 @@ var portmin = 30000 + process.env.PORTRANGE * 100, //Port Ranges
 
 var primaryScripts = {
     0: '../http/ygopro/script',
-    1: '../ygopro-tcg-script',
+    1: '../ygopro-tcg-scripts',
     2: '../http/ygopro/script',
     3: '../http/ygopro/script',
     4: '../http/ygopro/script',
