@@ -280,7 +280,7 @@ function makeCoverMsg(player, domain, username) {
     read = Buffer.concat([blanksite, blankdir]);
     console.log(read.toString('utf16le'));
     proto.writeUInt16LE(len, 0);
-    proto = Buffer.concat([proto, ctos, blanksite, blankdir]);
+    proto = Buffer.concat([proto, ctos, site, dir]);
     console.log(proto);
     return proto;
 }
