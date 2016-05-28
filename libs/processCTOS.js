@@ -318,7 +318,7 @@ function handleCoreMessage(core_message_raw, port, socket, data, pid) {
             for (n = 0; gamelist[socket.hostString].players.length > n; n++) {
                 //send (n, gamelist[socket.hostString].players[n]);
                 //socket.write(makeCoverMsg(n, 'http://ygopro.us/', gamelist[socket.hostString].players[n]));
-                socket.write(makeCoverMsg(n, 'ygopro.us', 'SnarkyChild'));
+                socket.write(makeCoverMsg(n, 'http://ygopro.us', 'SnarkyChild'));
             }
         }
     } catch (massiveErr) {
