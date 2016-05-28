@@ -311,7 +311,7 @@ function handleCoreMessage(core_message_raw, port, socket, data, pid) {
             game: socket.hostString
         }
     });
-    console.log('core_message[0]:', core_message[0], (core_message[0].trim() === '::::start-game'), );
+    console.log('core_message[0]:', core_message[0], (core_message[0].trim() === '::::start-game'));
     try {
         if (core_message[0].trim() === '::::start-game') {
             console.log('sending game data')
