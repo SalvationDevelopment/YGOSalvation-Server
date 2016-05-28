@@ -154,6 +154,7 @@ function processTask(task, socket) {
 
     var i = 0,
         l = 0,
+        players,
         output = [];
     for (i; task.length > i; i++) {
         output.push(recieveCTOS(task[i], socket.username, socket.hostString));
@@ -163,10 +164,12 @@ function processTask(task, socket) {
         if (output[l].CTOS_JOIN_GAME) {
             socket.active = true;
             socket.hostString = output[l].CTOS_JOIN_GAME;
+
         }
         if (output[l].CTOS_PLAYER_INFO) {
             socket.username = output[l].CTOS_PLAYER_INFO;
         }
+
     }
 }
 
@@ -261,24 +264,42 @@ function pickCoreConfig(socket) {
     }
 }
 
+
+function makeCoverMsg(player, domain, username) {
+    var ctos = new Buffer([0x30, player]),
+        blanksite = Buffer.allocUnsafe(512).fill('0'),
+        blankdir = Buffer.allocUnsafe(512).fill('0'),
+        site = new Buffer(domain + '\u0000', 'utf16le'),
+        dir = new Buffer('/covers/' + username + '.jpg\u0000', 'utf16le'),
+        len = 1026,
+        proto = new Buffer(2);
+
+    site.copy(blanksite);
+    dir.copy(blankdir);
+    proto.writeUInt16LE(len, 0);
+    proto = Buffer.concat([proto, ctos, blanksite, blankdir]);
+    //console.log(proto);
+    return proto;
+}
+
 /* send the YGOCore API commands back to the main process, some cleanup
 is needed before sending the message. Basic logging for finding idiots
 later after they have misbehaved or providing administrative ablities
 to kill or act on games */
-
-
 
 function handleCoreMessage(core_message_raw, port, socket, data, pid) {
 
     if (core_message_raw.toString().indexOf("::::") < 0) {
         return;
     }
-    var core_message = core_message_raw.toString().split('|');
+    var core_message = core_message_raw.toString().split('|'),
+        n;
 
     if (core_message[0].trim() === '::::network-ready') {
         connectToCore(port, data, socket);
         //cHistory.info('++GAME: ' + pid);
     }
+
     client.write({
         password: process.env.OPERPASS,
         action: 'gamelistEvent',
@@ -290,7 +311,17 @@ function handleCoreMessage(core_message_raw, port, socket, data, pid) {
             game: socket.hostString
         }
     });
-
+    try {
+        if (core_message[0].trim() === '::::start-game') {
+            for (n = 0; gamelist[socket.hostString].players > n; n++) {
+                //send (n, gamelist[socket.hostString].players[n]);
+                //socket.write(makeCoverMsg(n, 'http://ygopro.us/', gamelist[socket.hostString].players[n]));
+                socket.write(makeCoverMsg(n, 'http://ygopro.us/', 'SnarkyChild'));
+            }
+        }
+    } catch (massiveErr) {
+        console.log(massiveErr);
+    }
 }
 
 /* Checks if a given password is valid, returns true or false */
