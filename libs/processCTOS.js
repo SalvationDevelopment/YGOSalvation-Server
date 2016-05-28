@@ -267,8 +267,8 @@ function pickCoreConfig(socket) {
 
 function makeCoverMsg(player, domain, username) {
     var ctos = new Buffer([0x30, player]),
-        blanksite = new Buffer(new Array(512).fill('0', 0, 512)),
-        blankdir = new Buffer(new Array(512).fill('0', 0, 512)),
+        blanksite = new Buffer(new Array(512).fill('0', 0, 256)),
+        blankdir = new Buffer(new Array(512).fill('0', 0, 256)),
         site = new Buffer(domain + '\u0000', 'utf16le'),
         dir = new Buffer('covers/' + username + '.jpg\u0000', 'utf16le'),
         len = 1026,
@@ -311,14 +311,14 @@ function handleCoreMessage(core_message_raw, port, socket, data, pid) {
             game: socket.hostString
         }
     });
-    console.log('core_message[0]:', core_message[0], (core_message[0].trim() === '::::start-game'));
     try {
         if (core_message[0].trim() === '::::start-game') {
-            console.log('sending game data')
+
             for (n = 0; gamelist[socket.hostString].players.length > n; n++) {
                 //send (n, gamelist[socket.hostString].players[n]);
                 //socket.write(makeCoverMsg(n, 'http://ygopro.us/', gamelist[socket.hostString].players[n]));
-                socket.write(makeCoverMsg(n, 'http://ygopro.us', 'SnarkyChild'));
+                console.log('sending cover data');
+                socket.write(makeCoverMsg(n, 'ygopro.us', 'SnarkyChild'));
             }
         }
     } catch (massiveErr) {
