@@ -311,10 +311,11 @@ function handleCoreMessage(core_message_raw, port, socket, data, pid) {
             game: socket.hostString
         }
     });
-    console.log('core_message[0]:', core_message[0]);
+    console.log('core_message[0]:', core_message[0], (core_message[0].trim() === '::::start-game'), );
     try {
         if (core_message[0].trim() === '::::start-game') {
-            for (n = 0; gamelist[socket.hostString].players > n; n++) {
+            console.log('sending game data')
+            for (n = 0; gamelist[socket.hostString].players.length > n; n++) {
                 //send (n, gamelist[socket.hostString].players[n]);
                 //socket.write(makeCoverMsg(n, 'http://ygopro.us/', gamelist[socket.hostString].players[n]));
                 socket.write(makeCoverMsg(n, 'http://ygopro.us/', 'SnarkyChild'));
