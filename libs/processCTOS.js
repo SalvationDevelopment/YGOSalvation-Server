@@ -270,7 +270,7 @@ function makeCoverMsg(player, domain, username) {
         blanksite = new Buffer(new Array(512).fill('0', 0, 512)),
         blankdir = new Buffer(new Array(512).fill('0', 0, 512)),
         site = new Buffer(domain + '\u0000', 'utf16le'),
-        dir = new Buffer('/covers/' + username + '.jpg\u0000', 'utf16le'),
+        dir = new Buffer('covers/' + username + '.jpg\u0000', 'utf16le'),
         len = 1026,
         proto = new Buffer(2);
 
