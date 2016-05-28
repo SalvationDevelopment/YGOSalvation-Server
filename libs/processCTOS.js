@@ -267,8 +267,8 @@ function pickCoreConfig(socket) {
 
 function makeCoverMsg(player, domain, username) {
     var ctos = new Buffer([0x30, player]),
-        blanksite = Buffer.allocUnsafe(512).fill(0),
-        blankdir = Buffer.allocUnsafe(512).fill(0),
+        blanksite = new Buffer(new Array(512).fill('0', 0, 512)),
+        blankdir = new Buffer(new Array(512).fill('0', 0, 512)),
         site = new Buffer(domain + '\u0000', 'utf16le'),
         dir = new Buffer('/covers/' + username + '.jpg\u0000', 'utf16le'),
         len = 1026,
