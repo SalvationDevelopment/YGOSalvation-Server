@@ -271,16 +271,16 @@ function makeCoverMsg(player, domain, username) {
         blankdir = new Buffer(new Array(256).fill('0', 0, 256)),
         site = new Buffer(domain + '\u0000', 'utf16le'),
         dir = new Buffer('covers/' + username + '.jpg\u0000', 'utf16le'),
-        len = 2 + site.length + dir.length,
+        len = 514,
         proto = new Buffer(2),
         read;
 
     site.copy(blanksite);
     dir.copy(blankdir);
-    read = Buffer.concat([site, dir]);
+    read = Buffer.concat([blanksite, blankdir]);
     console.log(read.toString('utf16le'));
     proto.writeUInt16LE(len, 0);
-    proto = Buffer.concat([proto, ctos, site, dir]);
+    proto = Buffer.concat([proto, ctos, blanksite, blankdir]);
     console.log(proto);
     return proto;
 }
