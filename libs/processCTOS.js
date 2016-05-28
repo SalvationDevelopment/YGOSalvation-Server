@@ -267,8 +267,8 @@ function pickCoreConfig(socket) {
 
 function makeCoverMsg(player, domain, username) {
     var ctos = new Buffer([0x30, player]),
-        blanksite = Buffer.allocUnsafe(512).fill('0'),
-        blankdir = Buffer.allocUnsafe(512).fill('0'),
+        blanksite = Buffer.allocUnsafe(512).fill(0),
+        blankdir = Buffer.allocUnsafe(512).fill(0),
         site = new Buffer(domain + '\u0000', 'utf16le'),
         dir = new Buffer('/covers/' + username + '.jpg\u0000', 'utf16le'),
         len = 1026,
@@ -278,7 +278,7 @@ function makeCoverMsg(player, domain, username) {
     dir.copy(blankdir);
     proto.writeUInt16LE(len, 0);
     proto = Buffer.concat([proto, ctos, blanksite, blankdir]);
-    //console.log(proto);
+    console.log(proto);
     return proto;
 }
 
@@ -399,7 +399,7 @@ function startCore(port, socket, data, callback) {
                  'NoShuffleDeck=' + translated.isShuffled,
                  'EnablePriority=' + translated.isTCGRuled
                 ];
-    console.log(paramlist);
+    //console.log(paramlist);
     socket.core = childProcess.spawn(startDirectory + '/../ygosharp/YGOSharp.exe', paramlist, {
         cwd: startDirectory + '/../YGOSharp'
     }, function (error, stdout, stderr) {
