@@ -79,7 +79,7 @@ function singlesitenav(target) {
     $('body').css('background-image', 'url(http://ygopro.us/img/bg.jpg)');
     if (target === 'faq') {
         updatenews();
-        $('body').css('background-image', 'url(http://vignette3.wikia.nocookie.net/potcoplayers/images/d/de/656310_129936760550_full.jpg/revision/latest?cb=20110606122443)');
+        $('body').css('background-image', 'url(http://orig02.deviantart.net/79b5/f/2009/195/2/1/leviathan_by_tiapolonia.png)');
     }
     if (target === 'sqleditor') {
         $('body').css('background-image', 'url(http://ygopro.us/img/Ghostrick.Nekomusume.full.1945016.jpg)');
