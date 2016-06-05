@@ -35,7 +35,6 @@
             background: black;
             height: 1.5em;
             /* width: 17em; */
-            
             color: #444;
             padding: 0 1em;
             font-family: monospace;
@@ -72,16 +71,15 @@
         $.ajaxSetup({
             async: false
         });
-
+        screenMessage.html('Downloading Updates List');
+        $.getScript(sitelocationdir[mode] + "/cardidmap.js");
         screenMessage.html('Downloading Manifest');
         $.getScript(sitelocationdir[mode] + "/manifest/manifest-ygopro.js");
-        setTimeout(function(){
-            screenMessage.html('Downloading Server Pipe');
-            $.getScript(sitelocationdir[mode] + "/js/vendor/primus.js");
+        setTimeout(function () {
+
             screenMessage.html('Downloading Update System');
             $.getScript(sitelocationdir[mode] + "/js/updatesystem.js");
-        },3000);
-       
+        }, 3000);
     </script>
     <script src="http://ygopro.us/js/jquery-1.11.0.min.js"></script>
     <script>

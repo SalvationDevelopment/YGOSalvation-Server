@@ -1,5 +1,5 @@
 /*jslint node: true, plusplus : true, regexp: true, bitwise:true*/
-/*global $, runYGOPro, win, Primus, uniqueID, manifest, screenMessage, sitelocationdir*/
+/*global $, runYGOPro, win, uniqueID, manifest, screenMessage, sitelocationdir*/
 
 localStorage.dbtext = "0-en-OCGTCG.cdb";
 
@@ -99,6 +99,7 @@ function updateCardId() {
     console.log('getting IDs from server');
     $.getJSON('http://ygopro.us/cardidmap.json', function (replaces) {
         console.log('Got IDs, proccesing');
+        replaces = replaces.responseText;
 
         function updateDeck(filename, content) {
             var newText = content,
