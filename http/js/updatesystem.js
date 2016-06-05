@@ -109,15 +109,15 @@ function updateCardId() {
         if (newText) {
             fs.writeFileSync(filename, newText);
             if (newText !== content) {
-                console.log('updating', filename)
+                screenMessage.html('<span style="color:gold; font-weight:bold">Updating ' + filename + ' </span>');
             }
         }
     }
 
     console.log('found', filenames.length, 'decks');
     filenames.forEach(function (filename) {
-        var content = fs.readFileSync(dirname + '\\' + filename, 'utf-8');
-        updateDeck(dirname + '\\' + filename, content);
+        var content = fs.readFileSync(dirname + '/' + filename, 'utf-8');
+        updateDeck(dirname + '/' + filename, content);
     });
 }
 
@@ -179,6 +179,7 @@ function download() {
     if (downloadList.length === 0) {
         screenMessage.html('<span style="color:white; font-weight:bold">Update Complete! System Messages will appear here.</span>');
         //doDeckScan();
+        updateCardId();
         uploadcover();
         return;
     }
