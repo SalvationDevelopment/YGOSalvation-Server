@@ -96,26 +96,29 @@ win.on('new-win-policy', function (frame, url, policy) {
 function updateCardId() {
     'use strict';
     var dirname = './ygopro/deck'; // just a string dude; Require is for loading JS.
+    var filenames = fs.readdirSync(dirname);
 
     function updateDeck(filename, content) {
         var newText = content,
             key;
         for (key in replaces) {
             if (replaces.hasOwnProperty(key)) {
-                newText = newText.replace(new RegExp(key, 'ig'), replaces[key]);
+                newText = newText.replace(new RegExp(String(key), 'g'), String(replaces[key]));
             }
-
         }
-        fs.writeFileSync(filename, newText);
+        if (newText) {
+            fs.writeFileSync(filename, newText);
+            if (newText !== content) {
+                console.log('updating', filename)
+            }
+        }
     }
-    var filenames = fs.readdirSync(dirname);
+
     console.log('found', filenames.length, 'decks');
     filenames.forEach(function (filename) {
         var content = fs.readFileSync(dirname + '\\' + filename, 'utf-8');
-        console.log('updating', filename);
-        updateDeck(filename, content);
+        updateDeck(dirname + '\\' + filename, content);
     });
-
 }
 
 function internalDeckRead() {
