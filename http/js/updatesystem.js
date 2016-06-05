@@ -1,5 +1,5 @@
 /*jslint node: true, plusplus : true, regexp: true, bitwise:true*/
-/*global $, runYGOPro, win, uniqueID, manifest, screenMessage, sitelocationdir*/
+/*global $, runYGOPro, win, uniqueID, manifest, screenMessage, sitelocationdi, replaces*/
 
 localStorage.dbtext = "0-en-OCGTCG.cdb";
 
@@ -96,30 +96,26 @@ win.on('new-win-policy', function (frame, url, policy) {
 function updateCardId() {
     'use strict';
     var dirname = './ygopro/deck'; // just a string dude; Require is for loading JS.
-    console.log('getting IDs from server');
-    $.getJSON('http://ygopro.us/cardidmap.json', function (replaces) {
-        console.log('Got IDs, proccesing');
-        replaces = replaces.responseText;
 
-        function updateDeck(filename, content) {
-            var newText = content,
-                key;
-            for (key in replaces) {
-                if (replaces.hasOwnProperty(key)) {
-                    newText = newText.replace(new RegExp(key, 'ig'), replaces[key]);
-                }
-
+    function updateDeck(filename, content) {
+        var newText = content,
+            key;
+        for (key in replaces) {
+            if (replaces.hasOwnProperty(key)) {
+                newText = newText.replace(new RegExp(key, 'ig'), replaces[key]);
             }
-            fs.writeFileSync(filename, newText);
+
         }
-        var filenames = fs.readdirSync(dirname);
-        console.log('found', filenames.length, 'decks');
-        filenames.forEach(function (filename) {
-            var content = fs.readFileSync(dirname + filename, 'utf-8');
-            console.log('updating', filename);
-            updateDeck(filename, content);
-        });
+        fs.writeFileSync(filename, newText);
+    }
+    var filenames = fs.readdirSync(dirname);
+    console.log('found', filenames.length, 'decks');
+    filenames.forEach(function (filename) {
+        var content = fs.readFileSync(dirname + filename, 'utf-8');
+        console.log('updating', filename);
+        updateDeck(filename, content);
     });
+
 }
 
 function internalDeckRead() {
