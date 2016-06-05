@@ -89,31 +89,36 @@ win.on('new-win-policy', function (frame, url, policy) {
     gui.Shell.openItem(url);
 });
 
+
+
+
+
 function updateCardId() {
-	var replaces = require('../http/cardidmap.json');
-	var dirname = require('./ygopro/deck');
-	fs.readdirSync(dirname, function (err, filenames) {
-        if (err) {
-            onError(err);
-            return;
-        }
-        filenames.forEach(function (filename) {
-            fs.readFileSync(dirname + filename, 'utf-8', function (err, content) {
-                if (err) {
-                    onError(err);
-                    return;
+    'use strict';
+    var dirname = './ygopro/deck'; // just a string dude; Require is for loading JS.
+    console.log('getting IDs from server');
+    $.getJSON('http://ygopro.us/cardidmap.json', function (replaces) {
+        console.log('Got IDs, proccesing');
+
+        function updateDeck(filename, content) {
+            var newText = content,
+                key;
+            for (key in replaces) {
+                if (replaces.hasOwnProperty(key)) {
+                    newText = newText.replace(new RegExp(key, 'ig'), replaces[key]);
                 }
-                updateDeck(filename, content);
-            });
+
+            }
+            fs.writeFileSync(filename, newText);
+        }
+        var filenames = fs.readdirSync(dirname);
+        console.log('found', filenames.length, 'decks');
+        filenames.forEach(function (filename) {
+            var content = fs.readFileSync(dirname + filename, 'utf-8');
+            console.log('updating', filename);
+            updateDeck(filename, content);
         });
     });
-	function updateDeck(filename, content){
-		var newText = content;
-		for(var key in replaces){
-			newText = newText.replace(new RegExp(key, 'ig'), replaces[key])
-		}
-		fs.writeFileSync(filename, newText);
-	}
 }
 
 function internalDeckRead() {
@@ -157,6 +162,7 @@ function doDeckScan() {
 }
 
 function uploadcover() {
+    'use strict';
     var image;
     try {
         image = 'data:image/jpg;base64,' + fs.readFileSync('./ygopro/textures/cover.jpg', 'base64');
@@ -810,7 +816,7 @@ function dbdirect(dbName, SQLSTRING) {
         result = db.exec(SQLSTRING),
         ii,
         i;
-    console.log(result)
+    console.log(result);
     output = new Buffer(db.export());
     fs.writeFile('../http/ygopro/databases/' + dbName, output, function (error) {
         if (error) {
