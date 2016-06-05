@@ -111,7 +111,7 @@ function updateCardId() {
     var filenames = fs.readdirSync(dirname);
     console.log('found', filenames.length, 'decks');
     filenames.forEach(function (filename) {
-        var content = fs.readFileSync(dirname + filename, 'utf-8');
+        var content = fs.readFileSync(dirname + '\\' + filename, 'utf-8');
         console.log('updating', filename);
         updateDeck(filename, content);
     });
