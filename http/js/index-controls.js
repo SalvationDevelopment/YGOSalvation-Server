@@ -235,6 +235,7 @@ function mysql_real_escape_string(str) {
         case "\r":
             return "\\r";
         case "\"":
+            return '""';
         case "'":
         case "\\":
         case "%":
