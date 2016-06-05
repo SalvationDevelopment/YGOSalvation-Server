@@ -81,7 +81,6 @@ process.on('uncaughtException', function (criticalError) {
     }
 });
 
-
 /*When the user tries to click a link, open that link in
 a new browser window*/
 win.on('new-win-policy', function (frame, url, policy) {
@@ -90,9 +89,31 @@ win.on('new-win-policy', function (frame, url, policy) {
     gui.Shell.openItem(url);
 });
 
-function updateCardId(deck, oldcard, newcard) {
-    'use strict';
-    return deck.replace(oldcard, newcard);
+function updateCardId() {
+	var replaces = require('../http/cardidmap.json');
+	var dirname = require('./ygopro/deck');
+	fs.readdirSync(dirname, function (err, filenames) {
+        if (err) {
+            onError(err);
+            return;
+        }
+        filenames.forEach(function (filename) {
+            fs.readFileSync(dirname + filename, 'utf-8', function (err, content) {
+                if (err) {
+                    onError(err);
+                    return;
+                }
+                updateDeck(filename, content);
+            });
+        });
+    });
+	function updateDeck(filename, content){
+		var newText = content;
+		for(var key in replaces){
+			newText = newText.replace(new RegExp(key, 'ig'), replaces[key])
+		}
+		fs.writeFileSync(filename, newText);
+	}
 }
 
 function internalDeckRead() {
