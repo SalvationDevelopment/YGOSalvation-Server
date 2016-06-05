@@ -177,10 +177,11 @@ the browser one because its faster and more stable.'*/
 function download() {
     'use strict';
     if (downloadList.length === 0) {
-        screenMessage.html('<span style="color:white; font-weight:bold">Update Complete! System Messages will appear here.</span>');
         //doDeckScan();
         updateCardId();
         uploadcover();
+        screenMessage.html('<span style="color:white; font-weight:bold">Update Complete! System Messages will appear here.</span>');
+
         return;
     }
     var target = downloadList[0],
