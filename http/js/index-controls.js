@@ -538,7 +538,10 @@ function convertID() {
     if (convert && convert.text.match(regex)) {
         message = {
             sql: 'UPDATE datas SET id = ' + convert + ' WHERE id="' + id + '";UPDATE texts SET id = ' + convert + ' WHERE id="' + id + '";',
-            db: $('#sqldblist option:selected').text()
+            db: $('#sqldblist option:selected').text(),
+            rename: true,
+            from: convert,
+            to: id
         };
         if (confirm('Convert ' + id + ' to ' + convert + '?')) {
             window.quedparams = message;
