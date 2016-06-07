@@ -1006,6 +1006,16 @@ function powerdb(input) {
 function dbupdate(input) {
     console.log(input.sql);
     dbAction(input.db, input.sql);
+    if (input.rename) {
+        try {
+            fs.renameSync('../http/ygopro/pics/' + from + '.jpg', '../http/ygopro/pics/' + to + '.jpg');
+        } catch (e) {}
+        try {
+            fs.renameSync('../http/ygopro/scripts/c' + from + '.lua', '../http/ygopro/scripts/c' + to + '.lua');
+        } catch (e) {}
+
+
+    }
 }
 
 updateSetcodes();
