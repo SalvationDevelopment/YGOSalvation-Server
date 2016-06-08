@@ -1009,10 +1009,14 @@ function dbupdate(input) {
     if (input.rename) {
         try {
             fs.renameSync('../http/ygopro/pics/' + from + '.jpg', '../http/ygopro/pics/' + to + '.jpg');
-        } catch (e) {}
+        } catch (e) {
+            console.log('could not rename pic', from, to)
+        }
         try {
-            fs.renameSync('../http/ygopro/scripts/c' + from + '.lua', '../http/ygopro/scripts/c' + to + '.lua');
-        } catch (e) {}
+            fs.renameSync('../http/ygopro/script/c' + from + '.lua', '../http/ygopro/scripts/c' + to + '.lua');
+        } catch (e) {
+            console.log('could not rename script', from, to)
+        }
 
 
     }
