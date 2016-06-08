@@ -535,7 +535,7 @@ function convertID() {
         convert = prompt("Please enter NEW ID", ""),
         message;
 
-    if (convert && convert.text.match(regex)) {
+    if (convert && convert.match(regex)) {
         message = {
             sql: 'UPDATE datas SET id = ' + convert + ' WHERE id="' + id + '";UPDATE texts SET id = ' + convert + ' WHERE id="' + id + '";',
             db: $('#sqldblist option:selected').text(),
