@@ -383,7 +383,8 @@ function populatealllist() {
         list.currentdeck = '';
         for (dfiles; deckfilenames.length > dfiles; dfiles++) {
             var deck = deckfilenames[dfiles].replace('.ydk', ''),
-                content = fs.readFile('./ygopro/deck//' + deckfilenames, 'utf8');
+                content = fs.readFileSync('./ygopro/deck//' + deckfilenames[dfiles], 'utf8');
+
             list.currentdeck = list.currentdeck + '<option data-file="' + content + '" value="' + deck + '">' + deck + '</option>';
         }
         process.list = list;
