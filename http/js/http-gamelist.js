@@ -163,11 +163,12 @@ function connectgamelist() {
         uniqueID: uniqueID
     });
 }
+var browser = false
 
 function enterGame(string, pass) {
     'use strict';
     var guess = '';
-    if (browser === "2") {
+    if (browser) {
         startgame(string);
         return;
     }
