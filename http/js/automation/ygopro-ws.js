@@ -54,6 +54,7 @@ function startgame(roompass) {
     ws.binaryType = 'arraybuffer';
 
     ws.onopen = function () {
+        cleanstate();
         console.log('connected');
 
     };
