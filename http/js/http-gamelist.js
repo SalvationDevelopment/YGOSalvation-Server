@@ -1,6 +1,6 @@
 /*jslint plusplus: true, browser:true, node:true*/
 /*jslint nomen: true*/
-/*global localStorage, $, Primus, prompt, console, writeDeckList, makeDeck, confirm, launcher, alert, singlesitenav, startgame, _gaq, internalLocal, loggedIn, processServerCall, admin*/
+/*global localStorage, $, Primus, prompt, console, writeDeckList, makeDeck, confirm, launcher, alert, singlesitenav, startgame, _gaq, internalLocal, loggedIn, processServerCall, admin, jsLang*/
 /*exported connectToCheckmateServer, leaveGamelist, hostGame, connectgamelist, setHostSettings, setfilter*/
 
 
@@ -93,7 +93,7 @@ function ygopro(parameter) {
         parameter: parameter,
         local: out,
         uniqueID: uniqueID
-    }
+    };
     quedfunc = 'processServerRequest';
     quedready = true;
     internalLocal = 'YGOPro';
@@ -167,6 +167,10 @@ function connectgamelist() {
 function enterGame(string, pass) {
     'use strict';
     var guess = '';
+    if (browser === "2") {
+        startgame(string);
+        return;
+    }
 
     if (pass && admin !== "1") {
         guess = prompt('Password?', guess);
@@ -462,7 +466,7 @@ function renderList(JSONdata) {
         .first().before('<br style="clear:both"><span class="gamelabel">' + jsLang.spectate + '<span><br style="clear:both">');
     $('#activeduels').html($('.game').length);
     $('#activeduelist').html($('.playername').length + spectators - $('.playername:contains(SnarkyChild)').length);
-    $('#loginsinlast24').html(stats24);
+
 }
 
 function setfilter() {
