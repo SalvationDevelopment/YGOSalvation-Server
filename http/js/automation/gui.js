@@ -18,11 +18,11 @@ function modalMsg(message, x) {
         });
         window.modalTimeout = setTimeout(function () {
             $('#modal').css({
-                'display': 'none',
+                'display': 'none'
 
             });
-        }, 3000)
-    }, 3000)
+        }, 3000);
+    }, 3000);
 }
 
 function getLocation(item) {
@@ -311,7 +311,24 @@ function getLocation(item) {
     };
     gui.updateloby = function () {
         if (window.duel.player === undefined) {
-            return;
+            player: {
+                0: {
+                    name: '',
+                    ready: false
+                },
+                1: {
+                    name: '',
+                    ready: false
+                },
+                2: {
+                    name: '',
+                    ready: false
+                },
+                3: {
+                    name: '',
+                    ready: false
+                }
+            }
         }
         $('#player1lobbyslot').val(window.duel.player[0].name);
         $('#player2lobbyslot').val(window.duel.player[1].name);
