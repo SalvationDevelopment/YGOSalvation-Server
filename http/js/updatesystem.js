@@ -382,8 +382,9 @@ function populatealllist() {
     fs.readdir('./ygopro/deck', function (error, deckfilenames) {
         list.currentdeck = '';
         for (dfiles; deckfilenames.length > dfiles; dfiles++) {
-            var deck = deckfilenames[dfiles].replace('.ydk', '');
-            list.currentdeck = list.currentdeck + '<option value="' + deck + '">' + deck + '</option>';
+            var deck = deckfilenames[dfiles].replace('.ydk', ''),
+                content = fs.readFile('./ygopro/deck//' + deckfilenames, 'utf8');
+            list.currentdeck = list.currentdeck + '<option data-file="' + content + '" value="' + deck + '">' + deck + '</option>';
         }
         process.list = list;
         fs.readdir('./ygopro/skins', function (error, skinfilenames) {
