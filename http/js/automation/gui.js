@@ -311,7 +311,7 @@ function getLocation(item) {
     };
     gui.updateloby = function () {
         if (window.duel.player === undefined) {
-            player: {
+            duel.player = {
                 0: {
                     name: '',
                     ready: false
