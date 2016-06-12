@@ -1,5 +1,5 @@
 /*jslint plusplus : true*/
-/*global console, gui, sound, makeCTOS ,$*/
+/*global console, gui, sound, makeCTOS ,$, modalMsg*/
 
 var duel = {};
 
