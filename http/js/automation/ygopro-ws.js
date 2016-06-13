@@ -157,7 +157,7 @@ function leaveDuel() {
     window.singlesitenav('gamelist');
 }
 
-function challengeDuel() {
+function movetoeDuel() {
     'use strict';
     var servermessage = makeCTOS('CTOS_HS_TODUELIST');
     window.ws.send(servermessage);

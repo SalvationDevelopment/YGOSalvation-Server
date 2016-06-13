@@ -68,6 +68,13 @@ function getLocation(item) {
         }
     });
 
+    $('#lobbygotoduel').on('click', function () {
+        movetoeDuel();
+    });
+    $('#lobbygotospectate').on('click', function () {
+        movetoSpectator();
+    });
+
     $('body').on('click', '.okButton', function fireOKCallbackTrue() {
         window[gui.OKCallback](true);
         $('#alertUI').css('display', 'none');
