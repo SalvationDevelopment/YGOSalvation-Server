@@ -34,6 +34,9 @@ function processTask(task, socket) {
 /*globals console*/
 
 //"ws://192.99.11.19:8082"
+
+var ws;
+
 function startgame(roompass) {
     'use strict';
     try {
