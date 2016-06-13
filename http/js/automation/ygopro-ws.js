@@ -104,6 +104,33 @@ function startgame(roompass) {
 
 }
 
+function parseYDK(ydkFileContents) {
+    var lineSplit = ydkFileContents.split("\r\n"),
+        originalValues = {
+            "main": [],
+            "side": [],
+            "extra": []
+        },
+        current = "";
+    lineSplit.forEach(function (value) {
+        if (value === "") {
+            return;
+        }
+        if (value[0] === "#" || value[0] === "!") {
+            if (originalValues.hasOwnProperty(value.substr(1))) {
+                current = value.substr(1);
+            } else {
+                return;
+            }
+        } else {
+            originalValues[current].push(value);
+        }
+
+
+    });
+    return originalValues;
+}
+
 function sendDeckListToServer(deck) {
     'use strict';
     ws.send(makeCTOS('CTOS_UPDATE_DECK', deck));
@@ -196,14 +223,17 @@ function injectDeck(decks) {
 function lockInDeck(user) {
     'use strict';
     var selection,
-        servermessage;
+        servermessage,
+        processedDeck
     if (window.duel.player[user].ready) {
         servermessage = makeCTOS('CTOS_HS_NOTREADY');
         window.ws.send(servermessage);
         return;
     }
-    selection = parseInt($('.currentdeck option:selected').val(), 10);
-    sendDeckListToServer(deckfiles[selection]);
+    selection = $('.currentdeck option:selected').attr('data-file');
+    processedDeck = parseYDK(selection);
+    console.log(processedDeck);
+    sendDeckListToServer(processedDeck);
 }
 
 var wish = {
