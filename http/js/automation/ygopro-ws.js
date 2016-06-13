@@ -35,7 +35,7 @@ function processTask(task, socket) {
 
 //"ws://192.99.11.19:8082"
 
-var ws;
+window.ws = null;
 
 function startgame(roompass) {
     'use strict';
@@ -50,25 +50,26 @@ function startgame(roompass) {
         return;
     }
     var framer = new Framemaker(),
-        ws = new WebSocket("ws://" + location.host + ":8082", "duel"),
+
         network = new CommandParser(),
         dInfo = {};
+    window.ws = new WebSocket("ws://" + location.host + ":8082", "duel");
     window.activeReplayRecorde = [];
-    ws.binaryType = 'arraybuffer';
+    window.ws.binaryType = 'arraybuffer';
 
-    ws.onopen = function () {
+    window.ws.onopen = function () {
         cleanstate();
         console.log('connected');
 
     };
-    ws.onerror = function (errormessage) {
+    window.ws.onerror = function (errormessage) {
         console.log('There was an error with the websocket', errormessage);
         ws.close();
     };
-    ws.onclose = function () {
+    window.ws.onclose = function () {
         console.log('Websocket died');
     };
-    ws.onmessage = function (data) {
+    window.ws.onmessage = function (data) {
         var q = new Buffer(new Uint8Array(data.data)),
             frame,
             task,
@@ -92,14 +93,14 @@ function startgame(roompass) {
         }
         frame = [];
     };
-    ws.onopen = function () {
+    window.ws.onopen = function () {
         console.log('Send Game request for', roompass);
         var CTOS_PlayerInfo = makeCTOS('CTOS_PlayerInfo', localStorage.nickname),
             CTOS_JoinGame = makeCTOS('CTOS_JoinGame', roompass),
             toduelist = makeCTOS('CTOS_HS_TODUELIST'),
             tosend = Buffer.concat([CTOS_PlayerInfo, CTOS_JoinGame]);
 
-        ws.send(tosend);
+        window.ws.send(tosend);
     };
 
     initiateNetwork.STOC(network);
