@@ -109,7 +109,7 @@ function startgame(roompass) {
 }
 
 function parseYDK(ydkFileContents) {
-    var lineSplit = ydkFileContents.split("\r\n"),
+    var lineSplit = ydkFileContents.split("\n"),
         originalValues = {
             "main": [],
             "side": [],
