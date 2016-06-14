@@ -129,8 +129,6 @@ function parseYDK(ydkFileContents) {
         } else {
             originalValues[current].push(value);
         }
-
-
     });
     return originalValues;
 }
