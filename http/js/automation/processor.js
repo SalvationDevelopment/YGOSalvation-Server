@@ -193,7 +193,7 @@ function initiateNetwork_STOC(network) {
             duel.player[pos].ready = false;
             console.log('???');
         } else if (stateText === 'PLAYERCHANGE_READY') {
-            duel.player[pos].ready = true;
+            duel.player[pos].ready = !duel.player[pos].ready;
             sound.play('soundshuffle');
         } else if (stateText === 'PLAYERCHANGE_NOTREADY') {
             duel.player[pos].ready = false;
