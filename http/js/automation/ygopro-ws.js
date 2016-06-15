@@ -60,6 +60,7 @@ function startgame(roompass) {
     window.ws.onopen = function () {
         cleanstate();
         console.log('connected');
+        $('#automationduelfield').html('');
 
     };
     window.ws.onerror = function (errormessage) {
