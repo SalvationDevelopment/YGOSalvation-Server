@@ -382,6 +382,8 @@ body {
     width: 100vw;
     transition: background-image 2s ease-in;
     -webkit-transform: translate3d(0, 0, 0);
+    -webkit-backface-visibility: hidden;
+    -webkit-perspective: 1000;
 }
 
 #logo {

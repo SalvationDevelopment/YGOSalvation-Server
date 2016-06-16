@@ -113,7 +113,7 @@ function singlesitenav(target) {
         }
     }
     if (target === 'customization') {
-        $('body').css('background-image', 'url(http://ygopro.us/img/http://ygopro.us/img/magimagipinkshadow2.jpg)');
+        $('body').css('background-image', 'url(http://ygopro.us/img/magimagipinkshadow2.jpg)');
         $('#cusomizationselection').trigger('change');
     }
     $('.activescreen').removeClass('activescreen');
