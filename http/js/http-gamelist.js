@@ -180,7 +180,7 @@ function enterGame(string, pass) {
             return;
         }
     }
-    $('body').css('background-image', 'url(http://ygopro.us/img/bg.jpg)');
+    $('body').css('background-image', 'url(http://ygopro.us/img/magimagiblack.jpg)');
     localStorage.lastdeck = $('.currentdeck').val();
     localStorage.roompass = string;
     localStorage.lastip = "192.99.11.19";
@@ -189,8 +189,8 @@ function enterGame(string, pass) {
         _gaq.push(['_trackEvent', 'Launcher', 'YGOPro', 'Join Duel']);
     } catch (e) {}
     setTimeout(function () {
-        $('body').css('background-image', 'url(http://ygopro.us/img/brightx_bg.jpg)');
-    }, 6000);
+        $('body').css('background-image', 'url(http://ygopro.us/img/magimagipinkshadow2.jpg)');
+    }, 3000);
     //singlesitenav('duelscreen');
 }
 

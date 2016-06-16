@@ -98,16 +98,16 @@ function singlesitenav(target) {
         $('body').css('background-image', 'url(http://ygopro.us/img/magimagipinkshadow.jpg)');
     }
     if (target === 'chat') {
-        $('body').css('background-image', 'url(http://ygopro.us/img/magimagipinkshadow.jpg.jpg)');
+        $('body').css('background-image', 'url(http://ygopro.us/img/magimagipinkshadow.jpg)');
     }
     if (target === 'credits') {
-        $('body').css('background-image', 'none');
+        $('body').css('background-image', 'url(http://ygopro.us/img/magimagiblack.jpg)');
     }
     if (target === 'host') {
         $('body').css('background-image', 'url(http://ygopro.us/img/magimagipinkshadow2.jpg)');
     }
     if (target === 'settings') {
-        $('body').css('background-image', 'url(http://ygopro.us/img/magimagipinkblack.jpg)');
+        $('body').css('background-image', 'url(http://ygopro.us/img/magimagiblack.jpg)');
         if (admin === "1") {
             $('#sqleditorbutton').css('display', 'block');
         }
