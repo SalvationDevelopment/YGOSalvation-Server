@@ -76,13 +76,13 @@ function singlesitenav(target) {
     } else if ($('.unlogged.in-iframe').length > 0 && target === 'gamelist') {
         return;
     }
-    $('body').css('background-image', 'url(http://ygopro.us/img/bg.jpg)');
+    $('body').css('background-image', 'url(http://ygopro.us/img/magimagipinkshadow2.jpg)');
     if (target === 'faq') {
         updatenews();
-        $('body').css('background-image', 'url(http://orig02.deviantart.net/79b5/f/2009/195/2/1/leviathan_by_tiapolonia.png)');
+        $('body').css('background-image', 'url(http://ygopro.us/img/magimagipinkshadow.jpg)');
     }
     if (target === 'sqleditor') {
-        $('body').css('background-image', 'url(http://ygopro.us/img/Ghostrick.Nekomusume.full.1945016.jpg)');
+        $('body').css('background-image', 'url(http://ygopro.us/img/bg.jpg)');
     }
     if (target === 'chat' && !chatStarted) {
         swfobject.embedSWF("lightIRC/lightIRC.swf", "lightIRC", "100%", "92%", "10.0.0", "expressInstall.swf", params, {
@@ -95,25 +95,25 @@ function singlesitenav(target) {
         dnStarted = true;
     }
     if (target === 'gamelist') {
-        $('body').css('background-image', 'url(http://ygopro.us/img/brightx_bg.jpg)');
+        $('body').css('background-image', 'url(http://ygopro.us/img/magimagipinkshadow.jpg)');
     }
     if (target === 'chat') {
-        $('body').css('background-image', 'url(http://ygopro.us/img/bgpink.jpg)');
+        $('body').css('background-image', 'url(http://ygopro.us/img/magimagipinkshadow.jpg.jpg)');
     }
     if (target === 'credits') {
         $('body').css('background-image', 'none');
     }
     if (target === 'host') {
-        $('body').css('background-image', 'url(http://ygopro.us/img/brightx_bg.jpg)');
+        $('body').css('background-image', 'url(http://ygopro.us/img/magimagipinkshadow2.jpg)');
     }
     if (target === 'settings') {
-        $('body').css('background-image', 'url(http://ygopro.us/img/brightx_bg.jpg)');
+        $('body').css('background-image', 'url(http://ygopro.us/img/magimagipinkblack.jpg)');
         if (admin === "1") {
             $('#sqleditorbutton').css('display', 'block');
         }
     }
     if (target === 'customization') {
-        $('body').css('background-image', 'url(http://ygopro.us/img/brightx_bg.jpg)');
+        $('body').css('background-image', 'url(http://ygopro.us/img/http://ygopro.us/img/magimagipinkshadow2.jpg)');
         $('#cusomizationselection').trigger('change');
     }
     $('.activescreen').removeClass('activescreen');
