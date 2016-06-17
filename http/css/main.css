@@ -2071,7 +2071,7 @@ textarea#sqloutput {
 
 @keyframes marquee {
     0% {
-        transform: translate(0, 100vh);
+        transform: translate(0, 30%);
     }
     100% {
         transform: translate(0, -100%);
