@@ -2056,6 +2056,27 @@ textarea#sqloutput {
     *zoom: 1;
 }
 
+.marquee {
+    padding: 100vh 0;
+    animation: marquee 60s linear infinite;
+}
+
+.marquee:hover {
+    animation-play-state: paused
+}
+
+
+/* Make it move */
+
+@keyframes marquee {
+    0% {
+        transform: translate(0, 0);
+    }
+    100% {
+        transform: translate(0, 100%);
+    }
+}
+
 .creditsperson {
     margin: 9px auto;
     /* height: 1.5em; */
