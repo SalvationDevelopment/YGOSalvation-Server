@@ -490,7 +490,7 @@ primus.on('data', function (data) {
         renderList(gamelistcache);
     } else {
 
-        if (data.clientEvent === 'global') {
+        if (data.clientEvent === 'global' && data.message.length) {
             $('footer, #popupbody').html(data.message).addClass('loud');
             if (data.message && data.message.length) {
                 //singlesitenav('popup'); /* turned off per Stormwolf;*/
