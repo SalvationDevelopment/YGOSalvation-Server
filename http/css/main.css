@@ -2059,6 +2059,8 @@ textarea#sqloutput {
 .marquee {
     padding: 100vh 0;
     animation: marquee 60s linear infinite;
+    width: 50%;
+    margin: 0 auto;
 }
 
 .marquee:hover {
@@ -2073,7 +2075,7 @@ textarea#sqloutput {
         transform: translate(0, 0);
     }
     100% {
-        transform: translate(0, 100%);
+        transform: translate(0, -100%);
     }
 }
 
