@@ -2058,6 +2058,7 @@ textarea#sqloutput {
 
 .marquee {
     animation: marquee 210s linear infinite;
+    -webkit-animation: marquee 210s linear infinite;
     width: 50%;
     margin: 0 auto;
 }
@@ -2069,7 +2070,16 @@ textarea#sqloutput {
 
 /* Make it move */
 
-@keyframes marquee {
+@-webkit-keyframes marquee {
+    0% {
+        transform: translate(0, 30%);
+    }
+    100% {
+        transform: translate(0, -100%);
+    }
+}
+
+keyframes marquee {
     0% {
         transform: translate(0, 30%);
     }
