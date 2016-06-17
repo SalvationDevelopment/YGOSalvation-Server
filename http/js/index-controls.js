@@ -104,7 +104,7 @@ function singlesitenav(target) {
         $('body').css('background-image', 'url(http://ygopro.us/img/magimagiblack.jpg)');
     }
     if (target === 'host') {
-        $('body').css('background-image', 'url(http://ygopro.us/img/magimagipinkshadow2.jpg)');
+        $('body').css('background-image', 'url(http://ygopro.us/img/bg.jpg)');
     }
     if (target === 'settings') {
         $('body').css('background-image', 'url(http://ygopro.us/img/magimagiblack.jpg)');

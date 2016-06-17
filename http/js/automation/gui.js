@@ -3,6 +3,10 @@
 
 var gui = {};
 
+var internalDB = [];
+$.getJSON('http://ygopro.us/manifest/database_0-en-OCGTCG.json', function (data) {
+    internalDB = data;
+});
 
 function modalMsg(message, x) {
     'use strict';
