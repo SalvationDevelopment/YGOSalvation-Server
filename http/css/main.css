@@ -2058,7 +2058,7 @@ textarea#sqloutput {
 
 .marquee {
     padding-top: 100vh;
-    animation: marquee 300s linear infinite;
+    animation: marquee 150s linear infinite;
     width: 50%;
     margin: 0 auto;
 }
