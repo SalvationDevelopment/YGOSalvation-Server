@@ -2057,8 +2057,7 @@ textarea#sqloutput {
 }
 
 .marquee {
-    padding-top: 100vh;
-    animation: marquee 150s linear infinite;
+    animation: marquee 90s linear infinite;
     width: 50%;
     margin: 0 auto;
 }
@@ -2072,7 +2071,7 @@ textarea#sqloutput {
 
 @keyframes marquee {
     0% {
-        transform: translate(0, 0);
+        transform: translate(0, 100%);
     }
     100% {
         transform: translate(0, -100%);
