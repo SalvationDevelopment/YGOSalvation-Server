@@ -77,6 +77,7 @@ function singlesitenav(target) {
         return;
     }
     $('body').css('background-image', 'url(http://ygopro.us/img/magimagipinkshadow2.jpg)');
+    $('#marquee').removeClass('marquee');
     if (target === 'faq') {
         updatenews();
         $('body').css('background-image', 'url(http://ygopro.us/img/magimagipinkshadow.jpg)');
@@ -102,6 +103,7 @@ function singlesitenav(target) {
     }
     if (target === 'credits') {
         $('body').css('background-image', 'url(http://ygopro.us/img/magimagiblack.jpg)');
+        $('#marquee').addClass('marquee');
     }
     if (target === 'host') {
         $('body').css('background-image', 'url(http://ygopro.us/img/bg.jpg)');
