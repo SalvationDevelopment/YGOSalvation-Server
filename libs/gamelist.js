@@ -113,6 +113,7 @@ function handleCoreMessage(core_message_raw, port, pid, game) {
         break;
     case ('::::end-duel'):
         //console.log('[Results]', core_message, game);
+        cleanGamelist();
         break;
     case ('::::endduel'):
         //ps.kill(gamelist[game].pid, function (error) {});
