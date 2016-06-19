@@ -311,11 +311,15 @@ function initGameState() {
     //the field is represented as a bunch of cards with metadata in an array, <div>card/card/card/card</div>
     //numberOfCards is used like a memory address. It must be increased by 1 when creating a new card.
     var stack = [],
-        numberOfCards = 0;
+        numberOfCards = 0,
+        playerLP = [];
 
     //exposed method to initialize the field;
     function startDuel(player1StartLP, player2StartLP, OneDeck, TwoDeck, OneExtra, TwoExtra) {
         var i;
+        playerLP[0] = player1StartLP;
+        player1LP[1] = player2StartLP;
+
         for (i = 0; OneExtra > i; i++) {
             stack.push(new Card('EXTRA', 0, i, numberOfCards));
             numberOfCards++;
@@ -334,8 +338,8 @@ function initGameState() {
         }
         for (i = 0; stack.length > i; i++) {
             guiCard(stack[i]);
-            stack[i].parent = 0;
         }
+        console.log('stack', stack, player1StartLP, player2StartLP, OneDeck, TwoDeck, OneExtra, TwoExtra);
     }
 
     //the way the stack of cards is setup it requires a pointer to edit it.
