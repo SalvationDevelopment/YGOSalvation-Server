@@ -291,6 +291,7 @@ function guiCard(dataBinding) {
         //// [{name: 'ofproperitychaned', object: {complete new object}, type: 'of edit', oldValue: 'previousvalueofproperity'}]
         var ref = changes[0].object,
             fieldings;
+        console.log(ref);
         if (!ref.parent) {
             fieldings = 'card p' + ref.player + ' ' + ref.location + ' i' + ref.index + ' o';
             element.attr({
@@ -307,6 +308,7 @@ function guiCard(dataBinding) {
                 'src': (ref.id) ? 'ygopro/pics/' + ref.id + '.jpg' : 'img/textures/cover.jpg'
             });
         }
+        layouthand(ref.player);
 
 
     });
