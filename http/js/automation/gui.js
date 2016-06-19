@@ -287,7 +287,7 @@ function guiCard(dataBinding) {
     $(field).append('<img id="uid' + dataBinding.uid + '" class="card p' + dataBinding.player + ' ' + dataBinding.movelocation + ' i' + dataBinding.index + ' o" src="img/textures/cover.jpg" data-position="FaceDown" />');
     element = $('#uid' + dataBinding.uid);
 
-    dataBinding.observe(dataBinding, function (changes) {
+    Object.observe(dataBinding, function (changes) {
         //// [{name: 'ofproperitychaned', object: {complete new object}, type: 'of edit', oldValue: 'previousvalueofproperity'}]
         var ref = changes[0].object,
             fieldings;
