@@ -317,7 +317,6 @@ function initGameState() {
     function startDuel(player1StartLP, player2StartLP, OneDeck, TwoDeck, OneExtra, TwoExtra) {
         var i;
         for (i = 0; OneExtra > i; i++) {
-            card()
             stack.push(new Card('EXTRA', 0, i, numberOfCards));
             numberOfCards++;
         }
