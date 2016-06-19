@@ -225,7 +225,7 @@ function achievementConstructor(data) {
 
 function mysql_real_escape_string(str) {
     'use strict';
-    return str.replace(/[\0\x08\x09\x1a\n\r"\\\%]/g, function (char) {
+    return str.replace(/[\0\x08\x09\x1a"\\\%]/g, function (char) {
         switch (char) {
         case "\0":
             return "\\0";
@@ -471,8 +471,8 @@ function makedatasSQL() {
         alias = '"' + $('#sqlalias').val() + '"',
         setcode,
         type = 0,
-        atk = '"' + $('#sqlatk').val() + '"',
-        def = '"' + $('#sqldef').val() + '"',
+        atk = '"' + ($('#sqlatk').val() || 0) + '"',
+        def = '"' + ($('#sqldef').val() || 0) + '"',
         level,
         race = '"' + $('#sqlrace').val() + '"',
         attribute = '"' + $('#sqlattribute').val() + '"',

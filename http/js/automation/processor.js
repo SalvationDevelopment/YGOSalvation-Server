@@ -236,7 +236,7 @@ function initiateNetwork_MSG(network) {
         duel.player[1].lifepoints = data.lifepoints2;
 
         //set the size of each deck
-        network.game.startDuel(data.lifepoints[0], data.lifepoints[1], data.deck[0], data.deck[1], data.extra[0], data.extra[0]);
+        network.game.startDuel(data.lifepoints[0], data.lifepoints[1], data.deck[0], data.deck[1], data.extra[0], data.extra[1]);
 
         //double check that the screen is cleared.
         gui.hideSelectWhoGoesFirst();
