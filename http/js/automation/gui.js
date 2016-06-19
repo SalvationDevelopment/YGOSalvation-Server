@@ -1,4 +1,4 @@
-/*global $, console, cardmargin, layouthand, enums, chat*/
+/*global $, console, cardmargin, enums, chat*/
 /*jslint plusplus:true, bitwise:true */
 
 var gui = {};
@@ -200,58 +200,9 @@ function getLocation(item) {
         $('#phases').css('display', 'block');
         console.log('Starting Duel!');
     };
-    gui.StartDuel = function (player1StartLP, player2StartLP, OneDeck, TwoDeck, OneExtra, TwoExtra) { // Interface signalled the game has started
-        $('#automationduelfield').html('');
-        $('#p0time, #p1time').attr('max', window.duel.timelimit);
-        $('#p0time, #p1time').attr('max', window.duel.timelimit);
-        $('#p0time, #p1time').attr('value', window.duel.timelimit);
-        $('#p0time, #p1time').attr('value', window.duel.timelimit);
-        $('.p0name').html(window.duel.player[0].name);
-        $('.p1name').html(window.duel.player[1].name);
-        $('#p0avatar').attr('src', avatarMap[window.duel.player[0].name]);
-        $('#p1avatar').attr('src', avatarMap[window.duel.player[1].name]);
-
-        gui.DOMWriter(OneDeck, 'DECK', 0);
-        gui.DOMWriter(TwoDeck, 'DECK', 1);
-        gui.DOMWriter(OneExtra, 'EXTRA', 0);
-        gui.DOMWriter(TwoExtra, 'EXTRA', 1);
-        cardmargin(0, 'DECK');
-        cardmargin(1, 'DECK');
-        cardmargin(0, 'EXTRA');
-        cardmargin(1, 'EXTRA');
-        layouthand(0);
-        layouthand(1);
-        $('.p0lp').val(player1StartLP);
-        $('.p1lp').val(player2StartLP);
-        $('.card').on('mouseenter', function () {
-            var id = $(this).attr('src').split('/')[2].slice(0, -4);
-            $('.imgContainer').attr('src', $(this).attr('src'));
-            //$('.cardDescription').html(makeDescription(id));
-        });
-    };
 
 
-    function layouthand(player) {
-        var count = $('.p' + player + '.HAND').length,
-            f = 75 / 0.8,
-            xCoord,
-            sequence;
-        //    console.log(count,f,xCoord);
-        for (sequence = 0; sequence < count; sequence++) {
-            if (count < 6) {
-                xCoord = (5.5 * f - 0.8 * f * count) / 2 + 1.55 * f + sequence * 0.8 * f;
-            } else {
-                xCoord = 1.9 * f + sequence * 4.0 * f / (count - 1);
-            }
-            // console.log('.'+player+'.Hand.i'+sequence);
-            //console.log(xCoord);
-            if (player === 0) {
-                $('.p' + player + '.HAND.i' + sequence).css('left', String() + xCoord + 'px');
-            } else {
-                $('.p' + player + '.HAND.i' + sequence).css('left', String() + xCoord + 'px');
-            }
-        }
-    }
+
 
     //    
     //    if (count <= 6)
@@ -260,6 +211,27 @@ function getLocation(item) {
     //    t->X = 1.9f + sequence * 4.0f / (count - 1);
 }());
 
+function layouthand(player) {
+    var count = $('.p' + player + '.HAND').length,
+        f = 75 / 0.8,
+        xCoord,
+        sequence;
+    //    console.log(count,f,xCoord);
+    for (sequence = 0; sequence < count; sequence++) {
+        if (count < 6) {
+            xCoord = (5.5 * f - 0.8 * f * count) / 2 + 1.55 * f + sequence * 0.8 * f;
+        } else {
+            xCoord = 1.9 * f + sequence * 4.0 * f / (count - 1);
+        }
+        // console.log('.'+player+'.Hand.i'+sequence);
+        //console.log(xCoord);
+        if (player === 0) {
+            $('.p' + player + '.HAND.i' + sequence).css('left', String() + xCoord + 'px');
+        } else {
+            $('.p' + player + '.HAND.i' + sequence).css('left', String() + xCoord + 'px');
+        }
+    }
+}
 
 function Card(movelocation, player, index, unique) {
     'use strict';
