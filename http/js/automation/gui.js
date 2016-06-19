@@ -317,6 +317,7 @@ function initGameState() {
     function startDuel(player1StartLP, player2StartLP, OneDeck, TwoDeck, OneExtra, TwoExtra) {
         var i;
         for (i = 0; OneExtra > i; i++) {
+            card()
             stack.push(new Card('EXTRA', 0, i, numberOfCards));
             numberOfCards++;
         }
@@ -332,7 +333,10 @@ function initGameState() {
             stack.push(new Card('DECK', 1, i, numberOfCards));
             numberOfCards++;
         }
-
+        for (i = 0; stack.length > i; i++) {
+            guiCard(stack[i]);
+            stack[i].parent = 0;
+        }
     }
 
     //the way the stack of cards is setup it requires a pointer to edit it.
