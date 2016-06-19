@@ -262,6 +262,7 @@ function getLocation(item) {
 
 
 function Card(movelocation, player, index, unique) {
+    'use strict';
     return {
         type: 'card',
         player: player,
@@ -275,50 +276,88 @@ function Card(movelocation, player, index, unique) {
 }
 
 
-//various query filters for doing various things.
-function filterIsCard(array) {
-    return array.filter(function (item) {
-        return item.type === 'card';
+
+function guiCard(dataBinding) {
+    'use strict';
+
+    var field = $('#automationduelfield'),
+        element;
+
+
+    $(field).append('<img id="uid' + dataBinding.uid + '" class="card p' + dataBinding.player + ' ' + dataBinding.movelocation + ' i' + dataBinding.index + ' o" src="img/textures/cover.jpg" data-position="FaceDown" />');
+    element = $('#uid' + dataBinding.uid);
+
+    dataBinding.observe(dataBinding, function (changes) {
+        //// [{name: 'ofproperitychaned', object: {complete new object}, type: 'of edit', oldValue: 'previousvalueofproperity'}]
+        var ref = changes[0].object,
+            fieldings;
+        if (!ref.parent) {
+            fieldings = 'card p' + ref.player + ' ' + ref.movelocation + ' i' + ref.index + ' o';
+            element.attr({
+                'class': fieldings,
+                'data-position': ref.position,
+                'src': (ref.id) ? 'ygopro/pics/' + ref.id + '.jpg' : 'img/textures/cover.jpg'
+            });
+        } else {
+            ref = changes[0].object;
+            fieldings = 'card p' + ref.player + ' ' + ref.movelocation + ' i' + ref.index + ' o';
+            element.attr({
+                'class': fieldings,
+                'data-position': ref.position,
+                'src': (ref.id) ? 'ygopro/pics/' + ref.id + '.jpg' : 'img/textures/cover.jpg'
+            });
+        }
+
+
     });
 }
 
-function filterPlayer(array, player) {
-    return array.filter(function (item) {
-        return item.player === player;
-    });
-}
-
-function filterlocation(array, location) {
-    return array.filter(function (item) {
-        return item.location === location;
-    });
-}
-
-function filterIndex(array, index) {
-    return array.filter(function (item) {
-        return item.index === index;
-    });
-}
-
-function filterOverlyIndex(array, overlayindex) {
-    return array.filter(function (item) {
-        return item.overlayindex === overlayindex;
-    });
-}
 
 //initiation of a single independent state intance... I guess this is a class of sorts.
 function initGameState() {
     //the field is represented as a bunch of cards with metadata in an array, <div>card/card/card/card</div>
     //numberOfCards is used like a memory address. It must be increased by 1 when creating a new card.
+    'use strict';
     var stack = [],
         numberOfCards = 0,
         playerLP = [];
 
+
+    //various query filters for doing various things.
+    function filterIsCard(array) {
+        return array.filter(function (item) {
+            return item.type === 'card';
+        });
+    }
+
+    function filterPlayer(array, player) {
+        return array.filter(function (item) {
+            return item.player === player;
+        });
+    }
+
+    function filterlocation(array, location) {
+        return array.filter(function (item) {
+            return item.location === location;
+        });
+    }
+
+    function filterIndex(array, index) {
+        return array.filter(function (item) {
+            return item.index === index;
+        });
+    }
+
+    function filterOverlyIndex(array, overlayindex) {
+        return array.filter(function (item) {
+            return item.overlayindex === overlayindex;
+        });
+    }
     //exposed method to initialize the field;
     function startDuel(player1StartLP, player2StartLP, OneDeck, TwoDeck, OneExtra, TwoExtra) {
         var i;
         playerLP[0] = player1StartLP;
-        player1LP[1] = player2StartLP;
+        playerLP[1] = player2StartLP;
 
         for (i = 0; OneExtra > i; i++) {
             stack.push(new Card('EXTRA', 0, i, numberOfCards));
@@ -555,39 +594,4 @@ function resizeSystem(p) {
     }, false);
 
     var startX, startY, startWidth, startHeight;
-}
-
-function guiCard(dataBinding) {
-    'use strict';
-
-    var field = $('#automationduelfield'),
-        element;
-
-
-    $(field).append('<img id="uid' + dataBinding.uid + '" class="card p' + dataBinding.player + ' ' + dataBinding.movelocation + ' i' + dataBinding.index + ' o" src="img/textures/cover.jpg" data-position="FaceDown" />');
-    element = $('#uid' + dataBinding.uid);
-
-    dataBinding.observe(dataBinding, function (changes) {
-        //// [{name: 'ofproperitychaned', object: {complete new object}, type: 'of edit', oldValue: 'previousvalueofproperity'}]
-        var ref = changes[0].object,
-            fieldings;
-        if (!ref.parent) {
-            fieldings = 'card p' + ref.player + ' ' + ref.movelocation + ' i' + ref.index + ' o';
-            element.attr({
-                'class': fieldings,
-                'data-position': ref.position,
-                'src': (ref.id) ? 'ygopro/pics/' + ref.id + '.jpg' : 'img/textures/cover.jpg'
-            });
-        } else {
-            ref = changes[0].object;
-            fieldings = 'card p' + ref.player + ' ' + ref.movelocation + ' i' + ref.index + ' o';
-            element.attr({
-                'class': fieldings,
-                'data-position': ref.position,
-                'src': (ref.id) ? 'ygopro/pics/' + ref.id + '.jpg' : 'img/textures/cover.jpg'
-            });
-        }
-
-
-    });
 }
