@@ -813,3 +813,45 @@ function resizeSystem(p) {
         document.documentElement.removeEventListener('mouseup', stopDrag, false);
     }
 }
+
+function guiCard(dataBinding) {
+    //    {
+    //        type: 'card',
+    //        player: player,
+    //        location: movelocation,
+    //        id: 0,
+    //        index: index,
+    //        position: 'FaceDown',
+    //        overlayindex: 0,
+    //        uid: unique,
+    //        parent : 0
+    //    }
+    var field = $('#automationduelfield');
+
+
+    $(field).append('<img id="uid' + dataBinding.uid + '" class="card p' + dataBinding.player + ' ' + dataBinding.movelocation + ' i' + dataBinding.index + ' o" src="img/textures/cover.jpg" data-position="FaceDown" />');
+
+
+    dataBinding.observe(obj, function (changes) {
+        //// [{name: 'ofproperitychaned', object: {complete new object}, type: 'of edit', oldValue: 'previousvalueofproperity'}]
+        if (!ref.parent) {
+            ref = changes[0].object,
+                fieldings = 'card p' + ref.player + ' ' + ref.movelocation + ' i' + ref.index + ' o'
+            $('#uid' + dataBinding.uid).attr({
+                'class': fieldings,
+                'data-position': ref.position,
+                'src': (ref.id) ? 'ygopro/pics/' + ref.id + '.jpg' : 'img/textures/cover.jpg'
+            })
+        } else {
+            ref = changes[0].object,
+                fieldings = 'card p' + ref.player + ' ' + ref.movelocation + ' i' + ref.index + ' o'
+            $('#uid' + dataBinding.uid).attr({
+                'class': fieldings,
+                'data-position': ref.position,
+                'src': (ref.id) ? 'ygopro/pics/' + ref.id + '.jpg' : 'img/textures/cover.jpg'
+            })
+        }
+
+
+    });
+}
