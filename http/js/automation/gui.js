@@ -1,33 +1,13 @@
-/*global $, console, cardmargin, layouthand, enums, animateState, animateRemoveChaining, shuffle, animateChaining*/
+/*global $, console, cardmargin, enums, chat*/
 /*jslint plusplus:true, bitwise:true */
 
 var gui = {};
 
 var internalDB = [];
 $.getJSON('http://ygopro.us/manifest/database_0-en-OCGTCG.json', function (data) {
-    internalDB = data;
-});
-
-function modalMsg(message, x) {
     'use strict';
-    clearTimeout(window.modalTimeout);
-    $('#modal').css({
-        'display': 'flex',
-        'opacity': '1'
-    }).html(message);
-    window.modalTimeout = setTimeout(function () {
-        $('#modal').css({
-
-            'opacity': '0'
-        });
-        window.modalTimeout = setTimeout(function () {
-            $('#modal').css({
-                'display': 'none'
-
-            });
-        }, 3000);
-    }, 3000);
-}
+    var internalDB = data;
+});
 
 function getLocation(item) {
     'use strict';
@@ -57,6 +37,7 @@ function getLocation(item) {
     }
 }
 
+
 (function wireUpUI() {
     'use strict';
     // these are wiring functions or rather controllers for the UI.
@@ -64,20 +45,15 @@ function getLocation(item) {
     // interact with because the objects get dynamically created.
 
     $('#lobbychatinput, #sidechatinput').keypress(function (e) {
-        if (e.which == 13) {
+        if (e.which === 13) {
             chat($(e.currentTarget).val());
             $(e.currentTarget).val('');
-            $('.ingamechatbox, #sidechat').scrollTop($('.ingamechatbox').prop("scrollHeight"))
+            $('.ingamechatbox, #sidechat').scrollTop($('.ingamechatbox').prop("scrollHeight"));
             return false;
         }
     });
 
-    $('#lobbygotoduel').on('click', function () {
-        movetoeDuel();
-    });
-    $('#lobbygotospectate').on('click', function () {
-        movetoSpectator();
-    });
+
 
     $('body').on('click', '.okButton', function fireOKCallbackTrue() {
         window[gui.OKCallback](true);
@@ -124,168 +100,6 @@ function getLocation(item) {
             }
         }
     });
-
-    $('body').on('click', '.setViaAutomation', function setViaAutomation(id) {
-        //remove the prompt
-        //reply via the automation-ws you want to set card id.
-    });
-    $('body').on('click', '.activateViaAutomation', function activateViaAutomation(id) {
-        //remove the prompt
-        //reply via the automation-ws you want to activate card id.
-    });
-    $('body').on('click', '.summonViaAutomation', function summonViaAutomation(id) {
-        //remove the prompt
-        //reply via the automation-ws you want to summon card id.
-    });
-    $('body').on('click', '.specialSummonViaAutomation', function specialSummonViaAutomation(id) {
-        //remove the prompt
-        //reply via the automation-ws you want to special summon card id.
-    });
-    $('body').on('click', '.manualReveal', function manualReveal(id) {
-        //remove the prompt
-
-    });
-    $('body').on('click', '.manualToBottom', function manualToBottom(id) {
-        //remove the prompt
-
-    });
-    $('body').on('click', '.manualToTop', function manualToTop(id) {
-        //remove the prompt
-
-    });
-    $('body').on('click', '.manualToSetTrapSpell', function manualToSetTrapSpell(id) {
-        //remove the prompt
-
-    });
-    $('body').on('click', '.manualBanish', function manualBanish(id) {
-        //remove the prompt
-
-    });
-    $('body').on('click', '.manualBanishFaceDown', function manualBanishFaceDown(id) {
-        //remove the prompt
-
-    });
-    $('body').on('click', '.moveToHand', function moveToHand(id) {
-        //remove the prompt
-
-    });
-    $('body').on('click', '.manualToST', function manualToST(id) {
-        //remove the prompt
-
-    });
-    $('body').on('click', '.manualSpecialSummonDef', function manualSpecialSummonDef(id) {
-        //remove the prompt
-
-    });
-    $('body').on('click', '.manualSpecialSummonAtt', function manualSpecialSummonAtt(id) {
-        //remove the prompt
-
-    });
-    $('body').on('click', '.manualSetMonster', function manualSetMonster(id) {
-        //remove the prompt
-
-    });
-    $('body').on('click', '.manualNormalSummon', function manualNormalSummon(id) {
-        //remove the prompt
-
-    });
-    $('body').on('click', '.manualActivateFieldSpell', function manualActivateFieldSpell(id) {
-        //remove the prompt
-
-    });
-    $('body').on('click', '.manualViewExtra', function manualViewExtra(id) {
-        //remove the prompt
-
-    });
-    $('body').on('click', '.manualToExtaFaceDown', function manualToExtaFaceDown(id) {
-        //remove the prompt
-
-    });
-    $('body').on('click', '.manualRevealExta', function manualRevealExta(id) {
-        //remove the prompt
-
-    });
-    $('body').on('click', '.manualToExtraFaceUp', function manualToExtraFaceUp(id) {
-        //remove the prompt
-        // make sure its a token
-
-    });
-    $('body').on('click', '.moveChangeControl', function moveChangeControl(id) {
-        //remove the prompt
-
-    });
-    $('body').on('click', '.manualOverlay', function manualOverlay(id) {
-        //remove the prompt
-
-    });
-    $('body').on('click', '.manualDetach', function manualOverlay(id) {
-        //remove the prompt
-
-    });
-    $('body').on('click', '.manualFlipDown', function manualFlipDown(id) {
-        //remove the prompt
-
-    });
-    $('body').on('click', '.manualFlipUp', function manualFlipUp(id) {
-        //remove the prompt
-
-    });
-    $('body').on('click', '.manualToAtk', function manualToAtk(id) {
-        //remove the prompt
-
-    });
-    $('body').on('click', '.manualToDef', function manualToDef(id) {
-        //remove the prompt
-
-    });
-    $('body').on('click', '.manualRemove', function manualRemove(id) {
-        //remove the prompt
-        // make sure its a token
-
-    });
-    $('body').on('click', '.manualToPZoneR', function manualToPZoneR(id) {
-        //remove the prompt
-
-    });
-    $('body').on('click', '.manualToPZoneL', function manualToPZoneL(id) {
-        //remove the prompt
-
-    });
-    $('body').on('click', '.manualToGrave', function manualToGrave(id) {
-        //remove the prompt
-
-    });
-    $('body').on('click', '.manualToOpponentsHand', function manualToOpponentsHand(id) {
-        //remove the prompt
-
-    });
-    $('body').on('click', '.manualToOpponentsGrave', function manualToOpponentsGrave(id) {
-        //remove the prompt
-
-    });
-    $('body').on('click', '.manualToOpponentsExtra', function manualToOpponentsExtra(id) {
-        //remove the prompt
-
-    });
-    $('body').on('click', '.manualToDeck', function manualToDeck(id) {
-        //remove the prompt
-
-    });
-    $('body').on('click', '.manualToOpponentsDeck', function manualToOpponentsDeck(id) {
-        //remove the prompt
-
-    });
-    $('body').on('click', '.manualMill', function manualMill(id) {
-        //remove the prompt
-
-    });
-    $('body').on('click', '.manualShuffle', function manualShuffle(player, deck) {
-        //remove the prompt
-
-    });
-    $('body').on('click', '.manualDraw', function manualDraw(id) {
-        //remove the prompt
-    });
 }());
 
 
@@ -322,7 +136,7 @@ function getLocation(item) {
     };
     gui.updateloby = function () {
         if (window.duel.player === undefined) {
-            duel.player = {
+            window.duel.player = {
                 0: {
                     name: '',
                     ready: false
@@ -339,7 +153,7 @@ function getLocation(item) {
                     name: '',
                     ready: false
                 }
-            }
+            };
         }
         $('#player1lobbyslot').val(window.duel.player[0].name);
         $('#player2lobbyslot').val(window.duel.player[1].name);
@@ -386,392 +200,9 @@ function getLocation(item) {
         $('#phases').css('display', 'block');
         console.log('Starting Duel!');
     };
-    gui.StartDuel = function (player1StartLP, player2StartLP, OneDeck, TwoDeck, OneExtra, TwoExtra) { // Interface signalled the game has started
-        $('#automationduelfield').html('');
-        $('#p0time, #p1time').attr('max', window.duel.timelimit);
-        $('#p0time, #p1time').attr('max', window.duel.timelimit);
-        $('#p0time, #p1time').attr('value', window.duel.timelimit);
-        $('#p0time, #p1time').attr('value', window.duel.timelimit);
-        $('.p0name').html(window.duel.player[0].name);
-        $('.p1name').html(window.duel.player[1].name);
-        $('#p0avatar').attr('src', avatarMap[window.duel.player[0].name]);
-        $('#p1avatar').attr('src', avatarMap[window.duel.player[1].name]);
-
-        gui.DOMWriter(OneDeck, 'DECK', 0);
-        gui.DOMWriter(TwoDeck, 'DECK', 1);
-        gui.DOMWriter(OneExtra, 'EXTRA', 0);
-        gui.DOMWriter(TwoExtra, 'EXTRA', 1);
-        cardmargin(0, 'DECK');
-        cardmargin(1, 'DECK');
-        cardmargin(0, 'EXTRA');
-        cardmargin(1, 'EXTRA');
-        layouthand(0);
-        layouthand(1);
-        $('.p0lp').val(player1StartLP);
-        $('.p1lp').val(player2StartLP);
-        $('.card').on('mouseenter', function () {
-            var id = $(this).attr('src').split('/')[2].slice(0, -4);
-            $('.imgContainer').attr('src', $(this).attr('src'));
-            $('.cardDescription').html(makeDescription(id));
-        });
-    };
-
-    gui.DOMWriter = function (size, movelocation, player) {
-        var field = $('#automationduelfield'),
-            i;
-        $(field).detach();
-        for (i = 0; i < size; i++) {
-            $(field).append('<img class="card p' + player + ' ' + movelocation + ' i' + i + ' o" src="img/textures/cover.jpg" data-position="FaceDown" />');
-        }
-        $(field).appendTo('.fieldcontainer');
-    };
-    gui.updatelifepoints = function (player, multiplier, lp) {
-        var lifepoints = +$('.p' + player + 'lp').eq(0).val() + (lp * multiplier);
-        if (lifepoints < 0) {
-            lifepoints = 0;
-        }
-        $('.p' + player + 'lp').val(lifepoints);
-    };
-    gui.UpdateData = function (player, clocation, data) { //YGOPro is constantly sending data about game state, this function stores and records that information to allow access to a properly understood gamestate for reference. 
-
-        var i,
-            deadcard,
-            deadzone,
-            index;
-        for (i = 0; data.length > i; i++) {
-            //console.log('.card.p' + player + '.' + enums.locations[clocation] + '.i' + i, data[i].Code);
-            if (data[i].Code !== 'nocard') {
-
-                $('.card.p' + player + '.' + enums.locations[clocation] + '.i' + i).not('.overlayunit')
-                    .attr('src', 'ygopro/pics/' + data[i].Code + '.jpg')
-                    .attr('data-position', data[i].Position);
-
-            }
-            //            else {
-            //                deadcard = $('.card.p' + player + '.' + enums.locations[clocation] + '.i' + i).length;
-            //                deadzone = (enums.locations[clocation] + '.i' + i === 'SPELLZONE.i6' ||
-            //                    enums.locations[clocation] + '.i' + i === 'SPELLZONE.i7'
-            //                ) ? 'EXTRA' : 'GRAVE';
-            //                if (deadcard) {
-            //                    index = $('.p' + player + '.' + deadzone).length - 1;
-            //                    gui.animateState(player, clocation, i, player, 0x10, index, 0x01);
-            //                    //gui.animateState(player, clocation, index, moveplayer, movelocation, movezone, moveposition)
-            //                }
-            //            }
-        }
-    };
-    gui.UpdateCard = function (player, clocation, index, data) {
-        console.log(data);
-        if (data.Code !== 'nocard') {
-            console.log('.card.p' + player + '.' + enums.locations[clocation] + '.i' + index);
-            $('.card.p' + player + '.' + enums.locations[clocation] + '.i' + index).attr('src', 'ygopro/pics/' + data.Code + '.jpg')
-                .attr('data-position', enums.Positions[data.Position]);
-        }
-    };
-    gui.MoveCard = function (code, pc, pl, ps, pp, cc, cl, cs, cp) {
-
-        console.log(code, pc, pl, ps, pp, cc, cl, cs, cp);
-        var query,
-            newcard;
-        if (pl === 0) {
-            newcard = '<img class="card p' + cc + ' ' + enums.locations[cl] + ' i' + cs + '" data-position="">';
-            $('#duelzone .fieldimage').append(newcard);
-            return;
-        } else if (cl === 0) {
-            query = '.card.p' + pc + '.' + enums.locations[pl] + '.i' + ps;
-            $(query).detach();
-            return;
-        } else {
-
-            if (!(pl & 0x80) && !(cl & 0x80)) { //duelclient line 1885
-                console.log(pl);
-                gui.animateState(pc, pl, ps, cc, cl, cs, cp);
-                //gui.animateState(player, clocation, index, moveplayer, movelocation, movezone, moveposition)
-            } else if (!(pl & 0x80)) {
-                console.log('targeting a card to become a xyz unit....');
-                $('.overlayunit.p' + cc + '.i' + cs).each(function (i) {
-                    $(this).attr('data-overlayunit', (i));
-                });
-                gui.animateState(pc, pl, ps, cc, (cl & 0x7f), cs, cp, undefined, true);
-
-
-            } else if (!(cl & 0x80)) {
-                console.log('turning an xyz unit into a normal card....');
-                gui.animateState(pc, (pl & 0x7f), ps, cc, cl, cs, cp, pp);
-                $('.overlayunit.p' + pc + '.i' + ps).each(function (i) {
-                    $(this).attr('data-overlayunit', (i));
-                });
-                console.log('turning something into a xyz unit....');
-            } else {
-                console.log('move one xyz unit to become the xyz unit of something else....');
-                $('.overlayunit.p' + cc + '.i' + cs).each(function (i) {
-                    $(this).attr('data-overlayunit', (i));
-                });
-                gui.animateState(pc, (pl & 0x7f), ps, cc, (cl & 0x7f), cs, cp, pp, true);
-                $('.overlayunit.p' + pc + '.OVERLAY.i' + ps).each(function (i) {
-                    $(this).attr('data-overlayunit', (i));
-                });
-
-
-            }
-        }
-    };
-    gui.ChangeCardPosition = function (code, cc, cl, cs, cp) {
-        gui.animateState(cc, cl, cs, cc, cl, cs, cp);
-        //var query = '.card.p' + cc + '.' + enums.locations[cl] + '.i' + cs;
-        //gui.animateState(player, clocation, index, moveplayer, movelocation, movezone, moveposition)
-    };
-
-    gui.DrawCard = function (player, numberOfCards, cards) {
-        var currenthand = $('.p' + player + '.HAND').length,
-            topcard,
-            query,
-            i,
-            pic;
-
-        for (i = 0; i < numberOfCards; i++) {
-            pic = (cards[i].code === 0) ? 'img/textures/cover' : 'ygopro/' + cards[i].code;
-            topcard = $('.card.p' + player + '.DECK').length - 1;
-            gui.animateState(player, 1, topcard, player, 2, currenthand + i, 'FaceUp');
-            //gui.animateState(player, clocation, index, moveplayer, movelocation, movezone, moveposition){
-            query = '.card.p' + player + '.HAND.i' + (currenthand + i);
-            console.log(query + ' changed to ' + pic + '.jpg');
-            $(query).attr('src', pic + '.jpg');
-            console.log(cards[i]);
-
-        }
-
-        layouthand(player);
-        //console.log("p" + player + " drew " + numberOfCards + " card(s)");
-    };
-
-    gui.NewPhase = function (phase) {
-        console.log('it is now' + enums.phase[phase]);
-        $('#phases .phase').text(enums.phase[phase]);
-
-
-    };
-    var turn = 0,
-        turnplayer = 0;
-    gui.NewTurn = function (turnx) {
-        turnx = +turnx;
-        console.log("It is now p" + turnx + "'s turn.");
-        $('#phases .player').text('Player ' + (1 + turnx) + ':');
-        turnplayer = turnx;
-    };
 
 
 
-    gui.OnWin = function (result) {
-        console.log("Function OnWin: " + result);
-    };
-
-    gui.SelectCards = function (cards, min, max, cancelable) {
-        var debugObject = {
-            cards: cards,
-            min: min,
-            max: max,
-            cancelable: cancelable
-        };
-        console.log('Function SelectCards:' + JSON.stringify(debugObject));
-    };
-
-    gui.DuelEnd = function () {
-        console.log('Duel has ended.');
-    };
-
-    gui.SelectYn = function (description) {
-        console.log("Function SelectYn :" + description);
-    };
-
-    gui.IdleCommands = function (main) {
-        var update = JSON.parse(main);
-        console.log('IdleCommands', update);
-    };
-
-    gui.SelectPosition = function (positions) {
-        var debugObject = JSON.Strigify(positions);
-        console.log(debugObject);
-    };
-
-    gui.SelectOption = function (options) {
-        var debugObject = JSON.Strigify(options);
-        console.log(debugObject);
-    };
-
-    gui.AnnounceCard = function () {
-        //Select a card from all known cards.
-        console.log('AnnounceCard');
-    };
-    gui.SwapGraveDeck = function () {
-        $('.DECK').addClass('alpha').removeClass('DECK');
-        $('.GRAVE').addClass('beta').removeClass('GRAVE');
-        $('.alpha').addClass('GRAVE').removeClass('alpha');
-        $('.beta').addClass('DECK').removeClass('beta');
-    };
-    gui.OnChaining = function (cards, desc, forced) {
-        var cardIDs = JSON.parse(cards),
-            i;
-
-        for (i = 0; i < cardIDs.length; i++) {
-            animateChaining(('p' + cardIDs[i].Player), enums.locations[cardIDs[i].location], cardIDs[i].Index);
-        }
-
-        //auto say no
-        if (forced) {
-
-            animateRemoveChaining();
-        } else {
-
-            animateRemoveChaining();
-        }
-        console.log('chaining', cardIDs, desc);
-
-    };
-
-    gui.ShuffleDeck = function (player) {
-        console.log(player);
-        shuffle(player, 'DECK');
-    };
-
-    function cardmargin(player, deck) {
-        var size = $('.card.' + player + '.' + deck).length;
-        $('.card.p' + player + '.' + deck).each(function (i) {
-
-            $(this).css('z-index', i).attr('style', '')
-                .css('-webkit-transform', 'translate3d(0,0,' + i + 'px)');
-
-
-        });
-    }
-
-
-    function shuffle(player, deck) {
-        player = 'p' + player;
-        var orientation = (player === 'p0') ? ({
-                x: 'left',
-                y: 'bottom',
-                direction: 1
-            }) : ({
-                x: 'right',
-                y: 'top',
-                direction: -1
-            }),
-            fix;
-        cardmargin(player, deck);
-        $($('.card.' + player + '.' + deck).get().reverse()).each(function (i) {
-            var cache = $(this).css(orientation.x),
-                spatical = Math.floor((Math.random() * 150) - 75);
-            $(this).css(orientation.x, '-=' + spatical + 'px');
-        });
-        fix = setTimeout(function () {
-            cardmargin(player, deck);
-        }, 50);
-    }
-    gui.shuffle = shuffle;
-
-    function complete(player, deck) {
-        var started = Date.now(),
-
-            // make it loop every 100 milliseconds
-
-            interval = setInterval(function () {
-
-                // for 1.5 seconds
-                if (Date.now() - started > 500) {
-
-                    // and then pause it
-                    clearInterval(interval);
-
-                } else {
-
-                    // the thing to do every 100ms
-                    shuffle(player, deck);
-                    cardmargin(player, deck);
-
-                }
-            }, 100); // every 100 milliseconds
-    }
-
-
-
-
-    gui.animateState = function animateState(player, clocation, index, moveplayer, movelocation, movezone, moveposition, overlayindex, isBecomingCard) {
-
-        var isCard = (overlayindex === undefined) ? '.card' : '.card.overlayunit';
-        isBecomingCard = (isBecomingCard) ? 'card overlayunit' : 'card';
-        overlayindex = (overlayindex === undefined) ? '' : 0;
-        var searchindex = (index === 'ignore') ? '' : ".i" + index;
-        var searchplayer = (player === 'ignore') ? '' : ".p" + player;
-        var origin = isCard + searchplayer + "." + enums.locations[clocation] + searchindex;
-        var destination = isBecomingCard + " p" + moveplayer + " " + enums.locations[movelocation] + " i" + movezone;
-
-        var card = $(origin).not('.cardselectionzone')
-            //.each(function(i){
-            /*$(this)*/
-            .attr({
-                'style': '',
-                'data-position': enums.Positions[moveposition],
-                'data-overlayunit': overlayindex,
-                'class': destination
-            });
-        //   });
-
-
-        console.log(origin, 'changed to', destination);
-        if (enums.locations[clocation] === 'DECK' ||
-            enums.locations[clocation] === 'EXTRA' ||
-            enums.locations[clocation] === 'GRAVE' ||
-            enums.locations[clocation] === 'REMOVED') {
-            cardmargin(player, enums.locations[clocation]);
-        }
-        if (enums.locations[movelocation] === 'DECK' ||
-            enums.locations[movelocation] === 'EXTRA' ||
-            enums.locations[movelocation] === 'GRAVE' ||
-            enums.locations[movelocation] === 'REMOVED') {
-            cardmargin(moveplayer, enums.locations[movelocation]);
-        }
-
-        $('.card.p0.HAND').each(function (sequence) {
-            $(this).attr('class', 'card p0 HAND i' + sequence);
-        });
-        $('.card.p1.HAND').each(function (sequence) {
-            $(this).attr('class', 'card p1 HAND i' + sequence);
-        });
-
-        layouthand(0);
-        layouthand(1);
-        return card;
-    };
-
-    function animateChaining(player, clocation, index) {
-        $(player + '.' + clocation + '.i' + index).addClass('chainable');
-    }
-
-    function animateRemoveChaining() {
-        $('.chainable').removeClass('chainable');
-    }
-
-    function layouthand(player) {
-        var count = $('.p' + player + '.HAND').length;
-        var f = 75 / 0.8;
-        var xCoord;
-        //    console.log(count,f,xCoord);
-        for (var sequence = 0; sequence < count; sequence++) {
-            if (count < 6) {
-                xCoord = (5.5 * f - 0.8 * f * count) / 2 + 1.55 * f + sequence * 0.8 * f;
-            } else {
-                xCoord = 1.9 * f + sequence * 4.0 * f / (count - 1);
-            }
-            // console.log('.'+player+'.Hand.i'+sequence);
-            //console.log(xCoord);
-            if (player === 0) {
-                $('.p' + player + '.HAND.i' + sequence).css('left', '' + xCoord + 'px');
-            } else {
-                $('.p' + player + '.HAND.i' + sequence).css('left', '' + xCoord + 'px');
-            }
-        }
-    }
 
     //    
     //    if (count <= 6)
@@ -780,8 +211,353 @@ function getLocation(item) {
     //    t->X = 1.9f + sequence * 4.0f / (count - 1);
 }());
 
+function layouthand(player) {
+    var count = $('.p' + player + '.HAND').length,
+        f = 75 / 0.8,
+        xCoord,
+        sequence;
+    //    console.log(count,f,xCoord);
+    for (sequence = 0; sequence < count; sequence++) {
+        if (count < 6) {
+            xCoord = (5.5 * f - 0.8 * f * count) / 2 + 1.55 * f + sequence * 0.8 * f;
+        } else {
+            xCoord = 1.9 * f + sequence * 4.0 * f / (count - 1);
+        }
+        // console.log('.'+player+'.Hand.i'+sequence);
+        //console.log(xCoord);
+        if (player === 0) {
+            $('.p' + player + '.HAND.i' + sequence).css('left', String() + xCoord + 'px');
+        } else {
+            $('.p' + player + '.HAND.i' + sequence).css('left', String() + xCoord + 'px');
+        }
+    }
+}
+
+function Card(movelocation, player, index, unique) {
+    'use strict';
+    return {
+        type: 'card',
+        player: player,
+        location: movelocation,
+        id: 0,
+        index: index,
+        position: 'FaceDown',
+        overlayindex: 0,
+        uid: unique
+    };
+}
+
+
+
+function guiCard(dataBinding) {
+    'use strict';
+
+    var field = $('#automationduelfield'),
+        element;
+
+
+    $(field).append('<img id="uid' + dataBinding.uid + '" class="card p' + dataBinding.player + ' ' + dataBinding.location + ' i' + dataBinding.index + ' o" src="img/textures/cover.jpg" data-position="FaceDown" />');
+    element = $('#uid' + dataBinding.uid);
+
+    Object.observe(dataBinding, function (changes) {
+        //// [{name: 'ofproperitychaned', object: {complete new object}, type: 'of edit', oldValue: 'previousvalueofproperity'}]
+        var ref = changes[0].object,
+            fieldings;
+        console.log(ref);
+        if (!ref.parent) {
+            fieldings = 'card p' + ref.player + ' ' + ref.location + ' i' + ref.index + ' o';
+            element.attr({
+                'class': fieldings,
+                'data-position': ref.position,
+                'src': (ref.id) ? 'ygopro/pics/' + ref.id + '.jpg' : 'img/textures/cover.jpg'
+            });
+        } else {
+            ref = changes[0].object;
+            fieldings = 'card p' + ref.player + ' ' + ref.location + ' i' + ref.index + ' o';
+            element.attr({
+                'class': fieldings,
+                'data-position': ref.position,
+                'src': (ref.id) ? 'ygopro/pics/' + ref.id + '.jpg' : 'img/textures/cover.jpg'
+            });
+        }
+        element.attr('style', '');
+        layouthand(ref.player);
+
+
+    });
+}
+
+
+//initiation of a single independent state intance... I guess this is a class of sorts.
+function initGameState() {
+    //the field is represented as a bunch of cards with metadata in an array, <div>card/card/card/card</div>
+    //numberOfCards is used like a memory address. It must be increased by 1 when creating a new card.
+    'use strict';
+    var stack = [],
+        numberOfCards = 0,
+        playerLP = [];
+
+
+    //various query filters for doing various things.
+    function filterIsCard(array) {
+        return array.filter(function (item) {
+            return item.type === 'card';
+        });
+    }
+
+    function filterPlayer(array, player) {
+        return array.filter(function (item) {
+            return item.player === player;
+        });
+    }
+
+    function filterlocation(array, location) {
+        return array.filter(function (item) {
+            return item.location === location;
+        });
+    }
+
+    function filterIndex(array, index) {
+        return array.filter(function (item) {
+            return item.index === index;
+        });
+    }
+
+    function filterOverlyIndex(array, overlayindex) {
+        return array.filter(function (item) {
+            return item.overlayindex === overlayindex;
+        });
+    }
+    //exposed method to initialize the field;
+    function startDuel(player1StartLP, player2StartLP, OneDeck, TwoDeck, OneExtra, TwoExtra) {
+        var i;
+        playerLP[0] = player1StartLP;
+        playerLP[1] = player2StartLP;
+
+        for (i = 0; OneExtra > i; i++) {
+            stack.push(new Card('EXTRA', 0, i, numberOfCards));
+            numberOfCards++;
+        }
+        for (i = 0; TwoExtra > i; i++) {
+            stack.push(new Card('EXTRA', 1, i, numberOfCards));
+            numberOfCards++;
+        }
+        for (i = 0; OneDeck > i; i++) {
+            stack.push(new Card('DECK', 0, i, numberOfCards));
+            numberOfCards++;
+        }
+        for (i = 0; TwoDeck > i; i++) {
+            stack.push(new Card('DECK', 1, i, numberOfCards));
+            numberOfCards++;
+        }
+        for (i = 0; numberOfCards > i; i++) {
+            guiCard(stack[i]);
+        }
+        console.log('stack', stack, player1StartLP, player2StartLP, OneDeck, TwoDeck, OneExtra, TwoExtra);
+    }
+
+    //the way the stack of cards is setup it requires a pointer to edit it.
+    function uidLookup(uid) {
+        var i;
+        for (i = 0; stack.length > i; i++) {
+            if (stack[i].uid === uid) {
+                return i;
+            }
+        }
+    }
+
+    //returns info on a card.
+    function queryCard(player, clocation, index, overlayindex) {
+        return filterOverlyIndex(filterIndex(filterlocation(filterPlayer(stack, player), clocation), index), overlayindex);
+    }
+
+    /*The YGOPro messages have a design flaw in them where they dont tell the number of cards
+    that you have to itterate over in order to get a proper message, this function resolves that problem,
+    this flaw has caused me all types of grief.*/
+    function cardCollections(player) {
+        return {
+            DECK: filterlocation(filterPlayer(stack, player), 'DECK').length,
+            HAND: filterlocation(filterPlayer(stack, player), 'HAND').length,
+            EXTRA: filterOverlyIndex(filterlocation(filterPlayer(stack, player), 'EXTA')).length,
+            GRAVE: filterlocation(filterPlayer(stack, player), 'GRAVE').length,
+            REMOVED: filterlocation(filterPlayer(stack, player), 'REMOVED').length,
+            SPELLZONE: 8,
+            MONSTERZONE: 5
+        };
+    }
+
+    function reIndex(player, location) {
+        //again YGOPro doesnt manage data properly... and doesnt send the index update for the movement command.
+        //that or Im somehow missing it in moveCard().
+        var zone = filterlocation(filterPlayer(stack, player), location),
+            pointer,
+            i;
+        for (i = 0; zone.length > i; i++) {
+            pointer = uidLookup(zone[i].uid);
+            stack[pointer].index = i;
+        }
+    }
+    //finds a card, then moves it elsewhere.
+    function setState(player, clocation, index, moveplayer, movelocation, moveindex, moveposition, overlayindex, isBecomingCard) {
+        console.log('set:', player, clocation, index, moveplayer, movelocation, moveindex, moveposition, overlayindex, isBecomingCard);
+        var target = queryCard(player, clocation, index, 0),
+            pointer = uidLookup(target[0].uid),
+            zone,
+            i;
+
+        stack[pointer].player = moveplayer;
+        stack[pointer].location = movelocation;
+        stack[pointer].index = moveindex;
+        stack[pointer].position = moveposition;
+        stack[pointer].overlayindex = overlayindex;
+        reIndex(player, 'GRAVE');
+        reIndex(player, 'HAND');
+        reIndex(player, 'EXTRA');
+
+
+
+
+    }
+
+    //update state of A GROUP OF CARDS based on info from YGOPro
+    function updateData(player, clocation, arrayOfCards) {
+        var target,
+            pointer,
+            i;
+
+        for (i = 0; arrayOfCards.length > i; i++) {
+            if (arrayOfCards[i].Code !== 'nocard') {
+                target = queryCard(player, enums.locations[clocation], i, 0);
+                pointer = uidLookup(target[0].uid);
+                stack[pointer].position = arrayOfCards[i].Position;
+                stack[pointer].id = arrayOfCards[i].Code;
+            }
+        }
+        //fs.writeFileSync('output.json', JSON.stringify(stack, null, 4));
+    }
+
+    //update state of A SINGLE CARD based on info from YGOPro
+    function updateCard(player, clocation, index, card) {
+        var target,
+            pointer;
+
+        target = queryCard(player, enums.locations[clocation], index, 0);
+        pointer = uidLookup(target[0].uid);
+        stack[pointer].position = card.Position;
+        stack[pointer].id = card.Code;
+
+    }
+
+    //Flip summon, change to attack mode, change to defense mode, and similar movements.
+    function changeCardPosition(code, cc, cl, cs, cp) {
+        var target = queryCard(cc, cl, cs, 0),
+            pointer = uidLookup(target[0].uid);
+
+        stack[pointer].id = code;
+        setState(cc, cl, cs, cc, cl, cs, cp, 0, false);
+    }
+
+    function moveCard(code, pc, pl, ps, pp, cc, cl, cs, cp) {
+        //this is ugly, needs labling.
+        var target,
+            pointer,
+            zone,
+            i;
+        if (pl === 0) {
+            stack.push(new Card(enums.locations[cl], cc, cs, numberOfCards));
+            numberOfCards++;
+            return;
+        } else if (cl === 0) {
+            target = queryCard(pc, enums.locations[pl], ps, 0);
+            pointer = uidLookup(target[0].uid);
+            delete stack[pointer];
+            numberOfCards--;
+            return;
+        } else {
+            if (!(pl & 0x80) && !(cl & 0x80)) { //duelclient line 1885
+                setState(pc, enums.locations[pl], ps, cc, enums.locations[cl], cs, cp, 0, false);
+            } else if (!(pl & 0x80)) {
+                //targeting a card to become a xyz unit....
+                setState(pc, enums.locations[pl], ps, cc, enums.locations[(cl & 0x7f)], cs, cp, 0, true);
+
+
+            } else if (!(cl & 0x80)) {
+                //turning an xyz unit into a normal card....
+                setState(pc, enums.locations[(pl & 0x7f)], ps, cc, enums.locations[cl], cs, cp, pp);
+            } else {
+                //move one xyz unit to become the xyz unit of something else....');
+                //                $('.overlayunit.p' + cc + '.i' + cs).each(function (i) {
+                //                    $(this).attr('data-overlayunit', (i));
+                //                });
+                setState(pc, enums.locations[(pl & 0x7f)], ps, cc, enums.locations[(cl & 0x7f)], cs, cp, pp, true);
+                zone = filterIndex(filterlocation(filterPlayer(stack, cc), enums.locations[(cl & 0x7f)]), cs);
+                for (i = 1; zone.length > i; i++) {
+                    pointer = uidLookup(zone[i].uid);
+                    stack[pointer].overlayindex = i;
+                }
+
+            }
+        }
+    }
+
+    function drawCard(player, numberOfCards, cards) {
+        var currenthand = filterlocation(filterPlayer(stack, player), 'HAND').length,
+            topcard,
+            target,
+            i,
+            pointer;
+
+        for (i = 0; i < numberOfCards; i++) {
+            topcard = filterlocation(filterPlayer(stack, player), 'DECK').length - 1;
+            setState(player, 'DECK', topcard, player, 'HAND', currenthand + i, 'FaceUp', 0, false);
+            target = queryCard(player, 'HAND', (currenthand + i), 0);
+            pointer = uidLookup(target[0].uid);
+            stack[pointer].id = cards[i].Code;
+        }
+
+    }
+
+    return {
+        startDuel: startDuel,
+        updateData: updateData,
+        updateCard: updateCard,
+        cardCollections: cardCollections,
+        changeCardPosition: changeCardPosition,
+        moveCard: moveCard,
+        drawCard: drawCard
+    };
+}
+
 function resizeSystem(p) {
     // p = element to make resizable
+    'use strict';
+
+
+
+
+
+    function initDrag(e) {
+        var startX = e.clientX,
+            startY = e.clientY,
+            startWidth = parseInt(document.defaultView.getComputedStyle(p).width, 10),
+            startHeight = parseInt(document.defaultView.getComputedStyle(p).height, 10);
+
+        function doDrag(e) {
+            p.style.width = (startWidth + e.clientX - startX) + 'px';
+            p.style.height = (startHeight + e.clientY - startY) + 'px';
+        }
+
+        function stopDrag(e) {
+            document.documentElement.removeEventListener('mousemove', doDrag, false);
+            document.documentElement.removeEventListener('mouseup', stopDrag, false);
+        }
+
+
+
+
+        document.documentElement.addEventListener('mousemove', doDrag, false);
+        document.documentElement.addEventListener('mouseup', stopDrag, false);
+    }
 
     p.addEventListener('click', function init() {
         p.removeEventListener('click', init, false);
@@ -793,23 +569,4 @@ function resizeSystem(p) {
     }, false);
 
     var startX, startY, startWidth, startHeight;
-
-    function initDrag(e) {
-        startX = e.clientX;
-        startY = e.clientY;
-        startWidth = parseInt(document.defaultView.getComputedStyle(p).width, 10);
-        startHeight = parseInt(document.defaultView.getComputedStyle(p).height, 10);
-        document.documentElement.addEventListener('mousemove', doDrag, false);
-        document.documentElement.addEventListener('mouseup', stopDrag, false);
-    }
-
-    function doDrag(e) {
-        p.style.width = (startWidth + e.clientX - startX) + 'px';
-        p.style.height = (startHeight + e.clientY - startY) + 'px';
-    }
-
-    function stopDrag(e) {
-        document.documentElement.removeEventListener('mousemove', doDrag, false);
-        document.documentElement.removeEventListener('mouseup', stopDrag, false);
-    }
 }

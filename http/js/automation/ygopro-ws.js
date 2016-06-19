@@ -160,6 +160,7 @@ function leaveDuel() {
     window.singlesitenav('gamelist');
 }
 
+
 function movetoeDuel() {
     'use strict';
     var servermessage = makeCTOS('CTOS_HS_TODUELIST');
@@ -172,6 +173,13 @@ function kickDuelist(playerIndex) {
     var servermessage = makeCTOS('CTOS_HS_KICK', playerIndex);
     window.ws.send(servermessage);
 }
+
+$('#lobbygotoduel').on('click', function () {
+    movetoeDuel();
+});
+$('#lobbygotospectate').on('click', function () {
+    movetoSpectator();
+});
 
 function rps(choice) {
     'use strict';
