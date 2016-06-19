@@ -375,7 +375,7 @@ function initGameState() {
             stack.push(new Card('DECK', 1, i, numberOfCards));
             numberOfCards++;
         }
-        for (i = 0; stack.length > i; i++) {
+        for (i = 0; numberOfCards > i; i++) {
             guiCard(stack[i]);
         }
         console.log('stack', stack, player1StartLP, player2StartLP, OneDeck, TwoDeck, OneExtra, TwoExtra);
