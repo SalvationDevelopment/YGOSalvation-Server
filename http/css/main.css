@@ -1077,9 +1077,6 @@ meter.p1time {
     background-position: center;
     transform-style: flat;
     perspective: 1000px;
-    perspective-origin-x: 500px;
-    perspective-origin-y: 1000px;
-    transform: rotateX(60deg);
 }
 
 .button.ready0 {
