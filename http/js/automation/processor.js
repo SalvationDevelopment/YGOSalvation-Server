@@ -90,7 +90,7 @@ function initiateNetwork_STOC(network) {
         //Rock = 2
         //Paper = 3
         gui.hideRPSSelector();
-        gui.displayRPSResult(data.res1, data.res2);
+        network.game.displayRPSResult(data.res1, data.res2);
     });
     network.on('STOC_HS_WATCH_SIDE', function (data) {
 
@@ -211,6 +211,7 @@ function initiateNetwork_STOC(network) {
 
 function initiateNetwork_MSG(network) {
     'use strict';
+    network.game = initGameState();
     network.on('MSG_RETRY', function (data) {
         //???
         modalMsg('An Error Occured');
@@ -235,7 +236,7 @@ function initiateNetwork_MSG(network) {
         duel.player[1].lifepoints = data.lifepoints2;
 
         //set the size of each deck
-        gui.StartDuel(data.lifepoints[0], data.lifepoints[1], data.deck[0], data.deck[1], data.extra[0], data.extra[0]);
+        network.game.StartDuel(data.lifepoints[0], data.lifepoints[1], data.deck[0], data.deck[1], data.extra[0], data.extra[0]);
 
         //double check that the screen is cleared.
         gui.hideSelectWhoGoesFirst();
@@ -246,7 +247,7 @@ function initiateNetwork_MSG(network) {
         gui.displayWaiting();
     });
     network.on('MSG_UPDATE_DATA', function (data) {
-        gui.UpdateData(data.player, data.fieldlocation, data.cards);
+        network.game.UpdateData(data.player, data.fieldlocation, data.cards);
         //ygopro-core sent information about the state of a collection of related cards.
         //field[data.player][data.fieldmodel] = ???;
         //reimage field;
@@ -254,7 +255,7 @@ function initiateNetwork_MSG(network) {
 
     network.on('MSG_UPDATE_CARD', function (data) {
         //ygopro-core sent information about the state of one specific card.
-        gui.UpdateCard(data.player, data.fieldlocation, data.index, data.card);
+        network.game.UpdateCard(data.player, data.fieldlocation, data.index, data.card);
         //field[data.player][data.fieldmodel][data.index] = data.card;
         //redraw field;
     });
@@ -407,7 +408,7 @@ function initiateNetwork_MSG(network) {
     });
     network.on('MSG_MOVE', function (data) {
         //use animation system in gui.js
-        gui.MoveCard(data.code, data.pc, data.pl, data.ps, data.pp, data.cc, data.cl, data.cs, data.cp);
+        network.game.MoveCard(data.code, data.pc, data.pl, data.ps, data.pp, data.cc, data.cl, data.cs, data.cp);
 
     });
     network.on('MSG_POS_CHANGE', function (data) {
@@ -474,7 +475,7 @@ function initiateNetwork_MSG(network) {
     });
     network.on('MSG_DRAW', function (data) {
         var i = 0;
-        gui.DrawCard(data.player, data.count, data.cardslist);
+        network.game.DrawCard(data.player, data.count, data.cardslist);
 
         //due draw animation/update
     });
