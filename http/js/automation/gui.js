@@ -280,6 +280,7 @@ function guiCard(dataBinding) {
                 'src': (ref.id) ? 'ygopro/pics/' + ref.id + '.jpg' : 'img/textures/cover.jpg'
             });
         }
+        element.attr('style', '');
         layouthand(ref.player);
 
 
