@@ -284,7 +284,7 @@ function guiCard(dataBinding) {
         element;
 
 
-    $(field).append('<img id="uid' + dataBinding.uid + '" class="card p' + dataBinding.player + ' ' + dataBinding.movelocation + ' i' + dataBinding.index + ' o" src="img/textures/cover.jpg" data-position="FaceDown" />');
+    $(field).append('<img id="uid' + dataBinding.uid + '" class="card p' + dataBinding.player + ' ' + dataBinding.location + ' i' + dataBinding.index + ' o" src="img/textures/cover.jpg" data-position="FaceDown" />');
     element = $('#uid' + dataBinding.uid);
 
     Object.observe(dataBinding, function (changes) {
@@ -292,7 +292,7 @@ function guiCard(dataBinding) {
         var ref = changes[0].object,
             fieldings;
         if (!ref.parent) {
-            fieldings = 'card p' + ref.player + ' ' + ref.movelocation + ' i' + ref.index + ' o';
+            fieldings = 'card p' + ref.player + ' ' + ref.location + ' i' + ref.index + ' o';
             element.attr({
                 'class': fieldings,
                 'data-position': ref.position,
@@ -300,7 +300,7 @@ function guiCard(dataBinding) {
             });
         } else {
             ref = changes[0].object;
-            fieldings = 'card p' + ref.player + ' ' + ref.movelocation + ' i' + ref.index + ' o';
+            fieldings = 'card p' + ref.player + ' ' + ref.location + ' i' + ref.index + ' o';
             element.attr({
                 'class': fieldings,
                 'data-position': ref.position,
