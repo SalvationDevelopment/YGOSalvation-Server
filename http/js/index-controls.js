@@ -477,7 +477,8 @@ function makedatasSQL() {
         race = '"' + $('#sqlrace').val() + '"',
         attribute = '"' + $('#sqlattribute').val() + '"',
         category = 0,
-        texts = [];
+        texts = [],
+        montype;
 
     $('.typebox input:checked').each(function () {
         var val = parseInt($(this).val(), 10);
@@ -492,6 +493,11 @@ function makedatasSQL() {
         }
 
     });
+    montype = 0;
+    $('#monbox input:checked').each(function () {
+        montype = 1;
+    });
+    category = Number(category) + montype;
     atk = (atk === '"?"') ? '"-2"' : atk;
     def = (def === '"?"') ? '"-2"' : def;
     category = '"' + category + '"';
