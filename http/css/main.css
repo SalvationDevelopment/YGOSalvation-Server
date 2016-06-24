@@ -1962,6 +1962,11 @@ input#sqlsearch {
     text-shadow: 0 0 1px white;
 }
 
+.checkrow input[type=radio]:checked + label {
+    color: yellow;
+    text-shadow: 0 0 1px white;
+}
+
 .sqlcardeffecttext .datarow label {
     width: 19%;
 }
