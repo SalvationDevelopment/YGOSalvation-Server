@@ -62,7 +62,7 @@ function onConnectGamelist() {
 
 function onCloseGamelist() {
     'use strict';
-    require('fs').watch(__filename, process.exit);
+    process.exit();
 }
 
 client.on('data', gamelistUpdate);
