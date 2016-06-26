@@ -484,7 +484,7 @@ function makedatasSQL() {
         var val = parseInt($(this).val(), 10);
         type = type + val;
     });
-    type = '"' + type + '"';
+    
     $('#sqlcardcategorybox input:checked').each(function () {
         var val = parseInt($(this).val(), 16);
         if (val) {
@@ -495,6 +495,8 @@ function makedatasSQL() {
     $('#monbox input:checked').each(function () {
         montype = 1;
     });
+	type = '"' + (type + montype) + '"';
+	
     category = Number(category) + montype;
     atk = (atk === '"?"') ? '"-2"' : atk;
     def = (def === '"?"') ? '"-2"' : def;
