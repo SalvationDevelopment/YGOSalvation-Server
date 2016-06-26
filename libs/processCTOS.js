@@ -314,19 +314,19 @@ function handleCoreMessage(core_message_raw, port, socket, data, pid) {
             game: socket.hostString
         }
     });
-    try {
-        if (core_message[0].trim() === '::::start-game') {
-
-            for (n = 0; gamelist[socket.hostString].players.length > n; n++) {
-                //send (n, gamelist[socket.hostString].players[n]);
-                //socket.write(makeCoverMsg(n, 'http://ygopro.us/', gamelist[socket.hostString].players[n]));
-                console.log('sending cover data');
-                socket.write(makeCoverMsg(n, 'ygopro.us', 'SnarkyChild'));
-            }
-        }
-    } catch (massiveErr) {
-        console.log(massiveErr);
-    }
+//    try {
+     //        if (core_message[0].trim() === '::::start-game') {
+     //
+     //            for (n = 0; gamelist[socket.hostString].players.length > n; n++) {
+     //                //send (n, gamelist[socket.hostString].players[n]);
+     //                //socket.write(makeCoverMsg(n, 'http://ygopro.us/', gamelist[socket.hostString].players[n]));
+     //                //console.log('sending cover data');
+     //                //socket.write(makeCoverMsg(n, 'ygopro.us', 'SnarkyChild'));
+     //            }
+     //        }
+     //    } catch (massiveErr) {
+     //        console.log(massiveErr);
+     //    }
 }
 
 /* Checks if a given password is valid, returns true or false */
