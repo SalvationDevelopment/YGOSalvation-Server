@@ -12,7 +12,7 @@
 	url = https://github.com/SalvationDevelopment/YGOPro-Library-Builder
 [submodule "http/ygopro/script"]
 	path = http/ygopro/script
-	url = https://github.com/SalvationDevelopment/Salvation-Scripts-TCG
+	url = https://github.com/SalvationDevelopment/Salvation-Scripts-Production
 [submodule "ygopro-core"]
 	path = ygopro-core
 	url = https://github.com/Fluorohydride/ygopro-core
