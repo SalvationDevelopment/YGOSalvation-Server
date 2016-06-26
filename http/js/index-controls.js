@@ -379,7 +379,7 @@ $(document).ready(function () {
 
     });
     $('#sqlsearch').keypress(function (e) {
-        if (e.which == 13) {
+        if (e.which === 13) {
             window.quedparams = {
                 db: $('#sqldblist option:selected').text(),
                 text: mysql_real_escape_string($('#sqlsearch').val())
@@ -464,6 +464,22 @@ function leftpad(str, len, ch) {
     return str;
 }
 
+
+$("#sqlcardtypes input[type=radio]").change(function () {
+    'use strict';
+    var checked = $(this).is(':checked');
+    $("#sqlcardtypes input").prop('checked', false);
+    if (checked) {
+        $(this).prop('checked', true);
+    }
+});
+
+$("#sqlcardtypes input[type=checkbox]").change(function () {
+    'use strict';
+    var checked = $(this).is(':checked');
+    $("#sqlcardtypes input[type=radio]").prop('checked', false);
+});
+
 function makedatasSQL() {
     'use strict';
     var id = '"' + $('#sqlid').val() + '"',
@@ -484,7 +500,7 @@ function makedatasSQL() {
         var val = parseInt($(this).val(), 10);
         type = type + val;
     });
-    
+
     $('#sqlcardcategorybox input:checked').each(function () {
         var val = parseInt($(this).val(), 16);
         if (val) {
@@ -495,8 +511,8 @@ function makedatasSQL() {
     $('#monbox input:checked').each(function () {
         montype = 1;
     });
-	type = '"' + (type + montype) + '"';
-	
+    type = '"' + (type + montype) + '"';
+
     category = Number(category) + montype;
     atk = (atk === '"?"') ? '"-2"' : atk;
     def = (def === '"?"') ? '"-2"' : def;
