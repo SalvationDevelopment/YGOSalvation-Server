@@ -225,11 +225,35 @@ each SLAVE is given a range to loop through. This
 is actually a very poor way of doing this and
 frequently fails; rewrite is needed*/
 
-function portfinder(min, max, callback) {
 
+
+function portfinder(min, max, callback) {
     var rooms,
         activerooms = [],
         i = min;
+
+    function isPortTaken(port, fn) {
+        var tester = net.createServer().once('error', function (err) {
+            if (err.code !== 'EADDRINUSE') {
+                return fn(err);
+            }
+            fn(null, true);
+        }).once('listening', function () {
+            tester.once('close', function () {
+                fn(null, false);
+            }).close();
+        }).listen(port);
+    }
+
+    function portResolve(error) {
+        if (error) {
+            min = i + 1;
+            portfinder(min, max, callback);
+        } else {
+            callback(null, i);
+        }
+    }
+
     for (rooms in gamelist) {
         if (gamelist.hasOwnProperty(rooms)) {
             activerooms.push(gamelist[rooms].port);
@@ -237,7 +261,7 @@ function portfinder(min, max, callback) {
     }
     for (i; max > i; i++) {
         if (activerooms.indexOf(i) === -1) {
-            callback(null, i);
+            isPortTaken(i, portResolve);
             return;
         }
     }
@@ -314,19 +338,19 @@ function handleCoreMessage(core_message_raw, port, socket, data, pid) {
             game: socket.hostString
         }
     });
-//    try {
-     //        if (core_message[0].trim() === '::::start-game') {
-     //
-     //            for (n = 0; gamelist[socket.hostString].players.length > n; n++) {
-     //                //send (n, gamelist[socket.hostString].players[n]);
-     //                //socket.write(makeCoverMsg(n, 'http://ygopro.us/', gamelist[socket.hostString].players[n]));
-     //                //console.log('sending cover data');
-     //                //socket.write(makeCoverMsg(n, 'ygopro.us', 'SnarkyChild'));
-     //            }
-     //        }
-     //    } catch (massiveErr) {
-     //        console.log(massiveErr);
-     //    }
+    //    try {
+    //        if (core_message[0].trim() === '::::start-game') {
+    //
+    //            for (n = 0; gamelist[socket.hostString].players.length > n; n++) {
+    //                //send (n, gamelist[socket.hostString].players[n]);
+    //                //socket.write(makeCoverMsg(n, 'http://ygopro.us/', gamelist[socket.hostString].players[n]));
+    //                //console.log('sending cover data');
+    //                //socket.write(makeCoverMsg(n, 'ygopro.us', 'SnarkyChild'));
+    //            }
+    //        }
+    //    } catch (massiveErr) {
+    //        console.log(massiveErr);
+    //    }
 }
 
 /* Checks if a given password is valid, returns true or false */
@@ -425,6 +449,8 @@ function startCore(port, socket, data, callback) {
         handleCoreMessage(core_message_raw, port, socket, data, socket.core.pid);
     });
 }
+
+
 
 /* Call the server and make
 sure the user is registered and
