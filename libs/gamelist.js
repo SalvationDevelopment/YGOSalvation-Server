@@ -100,7 +100,8 @@ function handleCoreMessage(core_message_raw, port, pid, game) {
         if (leave_slot === -1) {
             return;
         }
-        gamelist[game].players[leave_slot] = null;
+        gamelist[game].players.splice(leave_slot, 1);
+        cleanGamelist();
         break;
 
     case ('::::spectator'):
@@ -118,11 +119,13 @@ function handleCoreMessage(core_message_raw, port, pid, game) {
     case ('::::endduel'):
         //ps.kill(gamelist[game].pid, function (error) {});
         delete gamelist[game];
+        cleanGamelist();
         //process.kill(pid);
         break;
     case ('::::end-game'):
         //ps.kill(gamelist[game].pid, function (error) {});
         delete gamelist[game];
+        cleanGamelist();
         //process.kill(pid);
         break;
     case ('::::chat'):
@@ -209,31 +212,6 @@ function messageListener(message) {
 
 var pidList = [];
 
-function fullManualPIDCheck() {
-    var id = pidList.pop();
-    if (id === undefined) {
-        return;
-    }
-    ps.lookup({
-        pid: id.pid
-    }, function (err, resultList) {
-        if (err) {
-            console.log('lookup failed');
-            throw new Error(err);
-        }
-
-        var process = resultList[0];
-
-        if (process) {
-            setTimeout(fullManualPIDCheck, 100);
-        } else {
-            console.log('No such process found!');
-            delete gamelist[id.name];
-            ps.kill(id.pid);
-            setTimeout(fullManualPIDCheck, 100);
-        }
-    });
-}
 
 function cleanGamelist() {
     var game;
