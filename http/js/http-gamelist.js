@@ -479,7 +479,7 @@ var stats24 = 0,
     statsShut = 0,
     connected = 0;
 
-primus.on('data', function (data) {
+function pondata(data) {
     'use strict';
     var join = false,
         time,
@@ -488,6 +488,7 @@ primus.on('data', function (data) {
     if (!data.clientEvent) {
         gamelistcache = JSON.parse(data);
         renderList(gamelistcache);
+        console.log(gamelistcache);
     } else {
 
         if (data.clientEvent === 'global' && data.message.length) {
@@ -542,7 +543,8 @@ primus.on('data', function (data) {
             }
         }
     }
-});
+}
+primus.on('data', pondata);
 primus.on('connect', function () {
     'use strict';
     console.log('!!!!!! connect');
