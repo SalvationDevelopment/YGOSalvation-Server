@@ -214,13 +214,15 @@ var pidList = [];
 
 
 function cleanGamelist() {
-    var game;
+    var game,
+        update = false;
     for (game in gamelist) {
         if (gamelist.hasOwnProperty(game)) {
             if (gamelist[game].players.length === 0 && gamelist[game].spectators === 0) {
                 //delete if no one is using the game.
                 //del(gamelist[game].pid);
                 delete gamelist[game];
+                update = true;
             }
         }
     }
@@ -229,6 +231,7 @@ function cleanGamelist() {
             if (gamelist[game] && game.length !== 24) {
                 //delete if some wierd game makes it into the list somehow. Unlikely.
                 delete gamelist[game];
+                update = true;
             }
         }
     }
@@ -237,9 +240,14 @@ function cleanGamelist() {
             if (new Date().getTime() - gamelist[game].time > 2700000) {
                 //delete if the game is older than 45mins.
                 delete gamelist[game];
+                update = true;
             }
         }
     }
+    if (update) {
+        announce(JSON.stringify(gamelist));
+    }
+
 }
 
 
