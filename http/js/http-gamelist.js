@@ -287,7 +287,7 @@ function setHostSettings() {
             roompass: localStorage.roompass,
             deck: $("#aidecks option:selected").text()
         });
-        ygopro('-j');
+        setTimeout(ygopro, 1500, '-j');
     } else {
         ygopro('-j');
     }
