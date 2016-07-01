@@ -230,7 +230,7 @@ frequently fails; rewrite is needed*/
 function portfinder(min, max, callback) {
     var rooms,
         activerooms = [],
-        i = min;
+        num = Math.floor(Math.random() * 10000);
 
     function isPortTaken(port, fn) {
         var tester = net.createServer().once('error', function (err) {
@@ -247,24 +247,14 @@ function portfinder(min, max, callback) {
 
     function portResolve(error) {
         if (error) {
-            min = i + 1;
             portfinder(min, max, callback);
         } else {
-            callback(null, i);
+            callback(null, num);
         }
     }
 
-    for (rooms in gamelist) {
-        if (gamelist.hasOwnProperty(rooms)) {
-            activerooms.push(gamelist[rooms].port);
-        }
-    }
-    for (i; max > i; i++) {
-        if (activerooms.indexOf(i) === -1) {
-            isPortTaken(i, portResolve);
-            return;
-        }
-    }
+    isPortTaken(num, portResolve);
+
 }
 
 /* The routing is done based on the
