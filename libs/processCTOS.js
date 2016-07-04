@@ -403,7 +403,7 @@ function startCore(port, socket, data, callback) {
     translated = parseDuelOptions(socket.hostString);
     paramlist = ['StandardStreamProtocol=true',
                  'Port=' + port,
-                 'ClientVersion=0x1338',
+                 'ClientVersion=0x1339',
                  'BanlistFile=../http/ygopro/lflist.conf',
                  'PrimaryScriptDirectory=' + primaryScripts[translated.allowedCards],
                  'SecondaryScriptDirectory=' + secondaryScripts[translated.allowedCards],
