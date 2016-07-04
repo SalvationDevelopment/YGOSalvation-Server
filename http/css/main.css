@@ -716,7 +716,7 @@ header {
     padding-bottom: 6px;
     position: absolute;
     right: 5px;
-    bottom: 5px;
+    top: 0px;
 }
 
 .game span.major {
@@ -2429,8 +2429,10 @@ a.launcheronly.loginsystem {
     width: 30%;
     margin: 0 auto;
     border: 1px solid#444;
-    color: silver;
+    color: white;
     padding: 10px;
+    background: rgba(0, 0, 0, .5);
+    box-shadow: 0 0 5px black;
 }
 
 .gamelistcenter select {
