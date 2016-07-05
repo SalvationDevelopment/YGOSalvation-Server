@@ -2512,9 +2512,14 @@ img#avatar {
 }
 
 div#intro {
-    width: 50%;
+    width: 75%;
     text-align: justify;
     margin: 0 auto;
+    color: #ccc;
+    text-shadow: 0 0 2px #444;
+    background: rgba(0, 0, 0, .5);
+    padding: 1%;
+    border: 1px solid #444;
 }
 
 #languagesetter span {
