@@ -2511,6 +2511,12 @@ img#avatar {
     font-size: 60px;
 }
 
+div#intro {
+    width: 50%;
+    text-align: justify;
+    margin: 0 auto;
+}
+
 #languagesetter span {
     cursor: pointer;
     background: rgba(0, 0, 0, .5);
