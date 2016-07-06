@@ -2529,7 +2529,7 @@ div#intro {
     width: 95%;
     text-align: justify;
     margin: 0 auto;
-    color: #ccc;
+    color: #777;
     box-shadow: 0 0 20px 5px #000;
     background: rgba(0, 0, 0, .5);
     padding: 1%;
@@ -2540,6 +2540,10 @@ div#intro {
 
 div#intro p {
     width: 60%;
+}
+
+div#intro strong {
+    color: white;
 }
 
 #intro img {
