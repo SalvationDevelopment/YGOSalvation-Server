@@ -211,7 +211,15 @@ function messageListener(message) {
 }
 
 var pidList = [];
+var acklevel = 0;
 
+function massAck() {
+    acklevel = 0;
+    announce({
+        clientEvent: 'ack'
+    });
+
+}
 
 function cleanGamelist() {
     var game,
@@ -251,7 +259,14 @@ function cleanGamelist() {
 }
 
 
-setInterval(cleanGamelist, 60000);
+setInterval(function () {
+    cleanGamelist();
+    announce({
+        clientEvent: 'ackresult',
+        ackresult: acklevel
+    });
+    massAck();
+}, 60000);
 
 function sendRegistry() {
     internalMessage({
@@ -454,6 +469,9 @@ function onData(data, socket) {
         break;
     case ('leave'):
         socket.leave('activegames');
+        break;
+    case ('ack'):
+        acklevel++;
         break;
     case ('register'):
         registrationCall(data, socket);
