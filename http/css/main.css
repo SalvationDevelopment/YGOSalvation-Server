@@ -596,7 +596,7 @@ ul#mirrors {
     margin: 0 auto;
     box-shadow: 0 0 10px 5px black;
     animation-duration: 2s;
-    animation-name: slidein;
+    animation-name: calltoaction;
     animation-iteration-count: infinite;
     animation-direction: alternate;
 }
@@ -2535,12 +2535,17 @@ div#intro {
     padding: 1%;
     border: 1px solid #111;
     margin-top: 1vh;
-    overflow-y: scroll;
     height: 52vh
 }
 
 div#intro p {
-    width: 50%;
+    width: 60%;
+}
+
+#intro img {
+    float: right;
+    max-width: 25%;
+    max-height: 80%;
 }
 
 div#creditslink {
