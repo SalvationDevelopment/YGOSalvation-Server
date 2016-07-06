@@ -266,7 +266,7 @@ setInterval(function () {
         ackresult: acklevel
     });
     massAck();
-}, 60000);
+}, 10000);
 
 function sendRegistry() {
     internalMessage({
