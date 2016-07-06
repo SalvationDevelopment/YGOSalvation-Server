@@ -585,15 +585,29 @@ ul#mirrors {
 }
 
 .lander-main li:first-child {
-    background-color: rgba(255, 100, 200, .8);
+    background-color: rgba(255, 100, 200, .1);
     color: white;
-    border: 1px solid white;
+    border: 3px solid white;
     padding: 10px 52px;
     border-radius: 40px;
     clear: both;
     display: block;
     width: 287px;
     margin: 0 auto;
+    box-shadow: 0 0 10px 5px black;
+    animation-duration: 3s;
+    animation-name: slidein;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+}
+
+@keyframes calltoaction {
+    0% {
+        background-color: rgba(255, 100, 200, .1);
+    }
+    100% {
+        background-color: rgba(255, 100, 200, .8);
+    }
 }
 
 .container footer {
@@ -1481,7 +1495,7 @@ div#gamelist {
     overflow: auto;
     width: 100%;
     margin-top: 50px;
-    height: 500px;
+    height: 77vh;
 }
 
 #home article {
@@ -2516,11 +2530,19 @@ div#intro {
     text-align: justify;
     margin: 0 auto;
     color: #ccc;
-    text-shadow: 0 0 2px #444;
+    box-shadow: 0 0 20px 5px #000;
     background: rgba(0, 0, 0, .5);
     padding: 1%;
-    border: 1px solid #222;
+    border: 1px solid #111;
     margin-top: 1vh;
+}
+
+div#creditslink {
+    color: #222;
+}
+
+div#creditslink:hover {
+    color: purple;
 }
 
 #languagesetter span {
