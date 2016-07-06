@@ -488,7 +488,7 @@ function pondata(data) {
     if (!data.clientEvent) {
         gamelistcache = JSON.parse(data);
         renderList(gamelistcache);
-        console.log(gamelistcache);
+        //console.log(gamelistcache);
     } else {
 
         if (data.clientEvent === 'global' && data.message.length) {
@@ -529,6 +529,13 @@ function pondata(data) {
         if (data.clientEvent === 'privateServer') {
             processServerCall(data.serverUpdate);
         }
+        if (data.clientEvent === 'ack') {
+            ackback();
+        }
+        if (data.clientEvent === 'ackresult') {
+            $('#onlineconnectted').html(data.ackresult);
+        }
+        ackback
         if (data.stats) {
             stats24 = 0;
             statsShut = 0;
@@ -579,6 +586,13 @@ function sendglobal(message) {
         password: $('#ips_password').val(),
         message: message,
         uniqueID: uniqueID
+    });
+}
+
+function ackback() {
+    'use strict';
+    primus.write({
+        action: 'ack';
     });
 }
 
