@@ -2512,7 +2512,7 @@ img#avatar {
 }
 
 div#intro {
-    width: 75%;
+    width: 45%;
     text-align: justify;
     margin: 0 auto;
     color: #ccc;
@@ -2520,6 +2520,7 @@ div#intro {
     background: rgba(0, 0, 0, .5);
     padding: 1%;
     border: 1px solid #444;
+    margin-top: 1vh;
 }
 
 #languagesetter span {
