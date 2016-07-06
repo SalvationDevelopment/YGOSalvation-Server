@@ -592,7 +592,7 @@ function sendglobal(message) {
 function ackback() {
     'use strict';
     primus.write({
-        action: 'ack';
+        action: 'ack'
     });
 }
 
