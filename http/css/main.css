@@ -2543,7 +2543,8 @@ div#intro p {
 }
 
 div#intro strong {
-    color: white;
+    color: #ccc;
+    font-weight: normal;
 }
 
 #intro img {
