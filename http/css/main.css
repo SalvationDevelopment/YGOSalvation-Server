@@ -595,7 +595,7 @@ ul#mirrors {
     width: 287px;
     margin: 0 auto;
     box-shadow: 0 0 10px 5px black;
-    animation-duration: 3s;
+    animation-duration: 2s;
     animation-name: slidein;
     animation-iteration-count: infinite;
     animation-direction: alternate;
@@ -603,10 +603,10 @@ ul#mirrors {
 
 @keyframes calltoaction {
     0% {
-        background-color: rgba(255, 100, 200, .1);
+        background-color: rgba(255, 100, 200, 0);
     }
     100% {
-        background-color: rgba(255, 100, 200, .8);
+        background-color: rgba(255, 100, 200, .75);
     }
 }
 
@@ -2535,6 +2535,12 @@ div#intro {
     padding: 1%;
     border: 1px solid #111;
     margin-top: 1vh;
+    overflow-y: scroll;
+    height: 52vh
+}
+
+div#intro p {
+    width: 50%;
 }
 
 div#creditslink {
