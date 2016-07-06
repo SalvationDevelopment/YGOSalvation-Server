@@ -2512,14 +2512,14 @@ img#avatar {
 }
 
 div#intro {
-    width: 45%;
+    width: 80%;
     text-align: justify;
     margin: 0 auto;
     color: #ccc;
     text-shadow: 0 0 2px #444;
     background: rgba(0, 0, 0, .5);
     padding: 1%;
-    border: 1px solid #444;
+    border: 1px solid #222;
     margin-top: 1vh;
 }
 
