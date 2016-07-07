@@ -389,7 +389,7 @@ body {
 
 body.unlogged {
     -webkit-animation-name: lightshow;
-    -webkit-animation-duration: 3s;
+    -webkit-animation-duration: 9s;
     -webkit-animation-iteration-count: infinite;
     -webkit-animation-direction: alternate;
 }
