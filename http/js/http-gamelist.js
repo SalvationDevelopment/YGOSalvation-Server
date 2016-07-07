@@ -491,7 +491,7 @@ function pondata(data) {
         //console.log(gamelistcache);
     } else {
 
-        if (data.clientEvent === 'global' && data.message.length) {
+        if (data.clientEvent === 'global' && data.message.length && loggedIn) {
             $('footer, #popupbody').html(data.message).addClass('loud');
             if (data.message && data.message.length) {
                 //singlesitenav('popup'); /* turned off per Stormwolf;*/
