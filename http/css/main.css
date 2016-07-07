@@ -387,6 +387,22 @@ body {
     height: 100vh;
 }
 
+body.unlogged {
+    -webkit-animation-name: lightshow;
+    -webkit-animation-duration: 3s;
+    -webkit-animation-iteration-count: infinite;
+    -webkit-animation-direction: alternate;
+}
+
+@keyframes lightshow {
+    0% {
+        background-image: url(../img/magimagipinkshadow2.jpg);
+    }
+    100% {
+        background-image: url(../img/magimagipinkshadow.jpg);
+    }
+}
+
 #logo {
     margin-top: -35px;
     margin-right: -20px;
