@@ -398,10 +398,10 @@ body.unlogged {
     0% {
         background-image: url(../img/magimagipinkshadow2.jpg);
     }
-    30% {
+    25% {
         background-image: url(../img/magimagipinkshadow2.jpg);
     }
-    50% {
+    75% {
         background-image: url(../img/magimagipinkshadow.jpg);
     }
     100% {
