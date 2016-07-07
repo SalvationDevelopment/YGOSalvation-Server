@@ -82,3 +82,4 @@ server/http/setups/*
 server/http/ygopro/deck.exe
 *.lua
 client/strings/en.conf
+client/strings/en.conf
