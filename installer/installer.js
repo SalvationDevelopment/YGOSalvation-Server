@@ -44,6 +44,7 @@ var options = {
 
 extended_fs.copyDirSync('../client', './input');
 extended_fs.copyDirSync('../http/ygopro', './input/ygopro');
+extended_fs.emptyDirSync('./input/ygopro/pics');
 extended_fs.copyDirSync('../http/license', './input/license');
 extended_fs.copyDirSync('../http/plugins', './input/plugins');
 extended_fs.copyDirSync('./decks', './input/ygopro/deck');
