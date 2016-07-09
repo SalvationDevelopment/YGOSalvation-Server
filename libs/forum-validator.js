@@ -41,8 +41,10 @@ function forumValidate(data, callback) {
                 }
                 info.success = forumdata.success;
                 info.data = {};
-                info.data.g_access_cp = forumdata.data.g_access_cp;
-                info.displayname = forumdata.displayname
+                if (forumdata.data) {
+                    info.data.g_access_cp = forumdata.data.g_access_cp;
+                }
+                info.displayname = forumdata.displayname;
                 validationCache[data.username] = forumdata;
 
                 callback(null, info, body);
