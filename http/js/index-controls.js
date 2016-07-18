@@ -48,7 +48,7 @@ function updatenews() {
 
             $.get('handlebars/forumnews.handlebars', function (template) {
                 var parser = Handlebars.compile(template),
-                    topics = feed.items.reverse(),
+                    topics = feed.items,
                     news = {
                         articles: []
                     };
