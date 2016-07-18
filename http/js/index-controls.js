@@ -26,29 +26,48 @@ Handlebars.getTemplate = function (name) {
     }
     return Handlebars.templates[name];
 };
+$.browser = {};
+(function () {
+
+    $.browser.msie = false;
+    $.browser.version = 0;
+
+    if (navigator.userAgent.match(/MSIE ([0-9]+)\./)) {
+        jQuery.browser.msie = true;
+        jQuery.browser.version = RegExp.$1;
+    }
+})();
 
 function updatenews() {
     'use strict';
-    $.getJSON('http://ygopro.us/manifest/forumNews.json', function (news) {
-        $.get('handlebars/forumnews.handlebars', function (template) {
-            var parser = Handlebars.compile(template),
-                topics = news.topics.reverse();
-            news.articles = [];
-            topics.forEach(function (topic, index) {
-                if (index > 5) {
-                    //limit the number of post in the news feed.
-                    return;
-                }
-                news.articles.push({
-                    date: new Date(topic.date).toString().substr(0, 15),
-                    author: topic.author,
-                    post: topic.post,
-                    title: topic.title,
-                    link: topic.link
+    $.getFeed({
+        url: 'http://forum.ygopro.us/index.php?/forum/21-ygopro-salvation-news.xml',
+        success: function (feed) {
+            console.log(feed);
+
+
+            $.get('handlebars/forumnews.handlebars', function (template) {
+                var parser = Handlebars.compile(template),
+                    topics = feed.items.reverse(),
+                    news = {
+                        articles: []
+                    };
+                topics.forEach(function (topic, index) {
+                    if (index > 5) {
+                        //limit the number of post in the news feed.
+                        return;
+                    }
+                    news.articles.push({
+                        date: new Date(topic.updated).toString().substr(0, 15),
+                        //author: topic.author,
+                        post: topic.description,
+                        title: topic.title,
+                        link: topic.link
+                    });
                 });
+                $('#news').html(parser(news));
             });
-            $('#news').html(parser(news));
-        });
+        }
     });
 }
 updatenews();
