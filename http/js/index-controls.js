@@ -70,6 +70,39 @@ function updatenews() {
         }
     });
 }
+
+function updateevent() {
+    'use strict';
+    $.getFeed({
+        url: 'http://forum.ygopro.us/index.php?/calendar/events.xml',
+        success: function (feed) {
+            console.log(feed);
+
+
+            $.get('handlebars/forumnews.handlebars', function (template) {
+                var parser = Handlebars.compile(template),
+                    topics = feed.items,
+                    news = {
+                        articles: []
+                    };
+                topics.forEach(function (topic, index) {
+                    if (index > 5) {
+                        //limit the number of post in the news feed.
+                        return;
+                    }
+                    news.articles.push({
+                        date: new Date(topic.updated).toString().substr(0, 15),
+                        //author: topic.author,
+                        post: topic.description,
+                        title: topic.title,
+                        link: topic.link
+                    });
+                });
+                $('#events').html(parser(news));
+            });
+        }
+    });
+}
 updatenews();
 var launcher = false,
     internalLocal = 'home',
@@ -99,6 +132,10 @@ function singlesitenav(target) {
     $('#marquee').removeClass('marquee');
     if (target === 'faq') {
         updatenews();
+        $('body').css('background-image', 'url(http://ygopro.us/img/magimagipinkshadow.jpg)');
+    }
+    if (target === 'events') {
+        updateevents();
         $('body').css('background-image', 'url(http://ygopro.us/img/magimagipinkshadow.jpg)');
     }
     if (target === 'sqleditor') {
