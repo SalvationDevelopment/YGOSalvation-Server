@@ -71,7 +71,7 @@ function updatenews() {
     });
 }
 
-function updateevent() {
+function updateevents() {
     'use strict';
     $.getFeed({
         url: 'http://forum.ygopro.us/index.php?/calendar/events.xml',
@@ -79,7 +79,7 @@ function updateevent() {
             console.log(feed);
 
 
-            $.get('handlebars/forumnews.handlebars', function (template) {
+            $.get('handlebars/events.handlebars', function (template) {
                 var parser = Handlebars.compile(template),
                     topics = feed.items,
                     news = {
