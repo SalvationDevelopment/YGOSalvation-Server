@@ -980,7 +980,7 @@ function displayQuery(dbName, ID) {
         image = 'http://ygopro.us/img/textures/unknown.jpg';
     }
     q('#sqlimage').attr('src', image);
-    frames[0].$('#sqlsearchresults').html('');
+    //frames[0].$('#sqlsearchresults').html('');
     return query;
 }
 
