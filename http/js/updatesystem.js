@@ -795,8 +795,12 @@ function updateSetcodes() {
                 strings = strings + '<option data-value="' + parseInt(setcode, 16) + '" value="' + setcodes[setcode] + '"> </option>';
             }
         }
+<<<<<<< HEAD
         frames[0].$('.setcodeSelect').html(strings);
     });
+=======
+			frames[0].$('#setcodes).html(strings);    });
+>>>>>>> f540d94f3d6c5eb16ef786000797e241b2360308
 }
 
 /*Boot command*/
