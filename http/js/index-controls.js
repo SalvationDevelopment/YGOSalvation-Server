@@ -581,9 +581,9 @@ function makedatasSQL() {
     level = '"' + parseInt(level, 16) + '"';
     setcode = '0x' 
 	+ ($('#sqlsc4 [value="' + value + '"]').data('value'))
-	+ leftpad($('#sqlsc3 [value="' + value + '"]').data('value')), 4, 0) 
-	+ leftpad($('#sqlsc2 [value="' + value + '"]').data('value')), 4, 0)
-	+ leftpad($('#sqlsc1 [value="' + value + '"]').data('value')), 4, 0);
+	+ leftpad($('#sqlsc3 [value="' + value + '"]').data('value'), 4, 0) 
+	+ leftpad($('#sqlsc2 [value="' + value + '"]').data('value'), 4, 0)
+	+ leftpad($('#sqlsc1 [value="' + value + '"]').data('value'), 4, 0);
     setcode = '"' + parseInt(setcode, 16) + '"';
     texts = [id, ot, alias, setcode, type, atk, def, level, race, attribute, category].join(',');
     return 'INSERT OR REPLACE INTO "datas" VALUES (' + texts + ');';
