@@ -795,7 +795,7 @@ function updateSetcodes() {
                 strings = strings + '<option data-value="' + parseInt(setcode, 16) + '" value="' + setcodes[setcode] + '"> </option>';
             }
         }
-        frames[0].$('#setcodes').html(strings);
+        frames[0].$('.setcodeSelect').html(strings);
     });
 }
 
