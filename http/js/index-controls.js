@@ -575,9 +575,9 @@ function makedatasSQL() {
     category = '"' + category + '"';
 
     level = '0x' 
-	+ parseInt($('#sqlscalel').val().toString(16) )
-	+ '0' + parseInt($('#sqlscaler').val().toString(16))
-	+ '000'+ parseInt($('#sqllevel').val().toString(16);)
+	+ parseInt($('#sqlscalel').val()).toString(16) 
+	+ '0' + parseInt($('#sqlscaler').val()).toString(16)
+	+ '000'+ parseInt($('#sqllevel').val()).toString(16);
     level = '"' + parseInt(level, 16) + '"';
     setcode = '0x' 
 	+ $('#sqlsc4 option:selected').attr('data-calc')
