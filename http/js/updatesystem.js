@@ -788,11 +788,11 @@ function updateSetcodes() {
                 joinKeySlice: 1
             }),
             setcode,
-            strings = '<option value="0" data-calc="0">None</option>';
+            strings = '<option value="None" data-value="0"></option>';
         console.log(setcodes);
         for (setcode in setcodes) {
             if (setcodes.hasOwnProperty(setcode) && setcode[0] === '0' && setcode[1] === 'x' && setcode !== '0x0') {
-                strings = strings + '<option data-calc="' + setcode.slice(2) + '" value="' + parseInt(setcode, 16) + '">' + setcodes[setcode] + '</option>';
+                strings = strings + '<option data-value="' + parseInt(setcode, 16) + '" value="' + setcodes[setcode] + '"> </option>';
             }
         }
         frames[0].$('.setcodeSelect').html(strings);
