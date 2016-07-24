@@ -581,7 +581,7 @@ function makedatasSQL() {
     level = '"' + parseInt(level, 16) + '"';
     setcode = '0x' 
 	+ ($('#sqlsc4 [value="' + value + '"]').data('value'))
-	+ leftpad($('#sqlsc3 [value="' + value + '"]').data('value'), 4, 0)  //boom?
+	+ leftpad($('#sqlsc3 [value="' + value + '"]').data('value'), 4, 0) 
 	+ leftpad($('#sqlsc2 [value="' + value + '"]').data('value'), 4, 0)
 	+ leftpad($('#sqlsc1 [value="' + value + '"]').data('value'), 4, 0);
     setcode = '"' + parseInt(setcode, 16) + '"';
