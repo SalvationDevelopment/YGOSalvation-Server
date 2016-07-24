@@ -788,14 +788,13 @@ function updateSetcodes() {
                 joinKeySlice: 1
             }),
             setcode,
-            strings = '<datalist id="setcodes" value="None" data-value="0"><option value="None" data-value="0"></option>';
+            strings = '<option value="None" data-value="0"></option>';
         console.log(setcodes);
         for (setcode in setcodes) {
             if (setcodes.hasOwnProperty(setcode) && setcode[0] === '0' && setcode[1] === 'x' && setcode !== '0x0') {
                 strings = strings + '<option data-value="' + parseInt(setcode, 16) + '" value="' + setcodes[setcode] + '"> </option>';
             }
         }
-		strings+= '</datalist>'
         frames[0].$('.setcodeSelect').html(strings);
     });
 }
