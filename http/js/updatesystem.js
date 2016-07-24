@@ -1,5 +1,5 @@
 /*jslint node: true, plusplus : true, regexp: true, bitwise:true*/
-/*global $, runYGOPro, win, uniqueID, manifest, screenMessage, sitelocationdi, replaces*/
+/*global $, runYGOPro, win, uniqueID, manifest, screenMessage, sitelocationdi, replaces, alert*/
 
 localStorage.dbtext = "0-en-OCGTCG.cdb";
 
@@ -95,8 +95,8 @@ win.on('new-win-policy', function (frame, url, policy) {
 
 function updateCardId() {
     'use strict';
-    var dirname = './ygopro/deck'; // just a string dude; Require is for loading JS.
-    var filenames = fs.readdirSync(dirname);
+    var dirname = './ygopro/deck', // just a string dude; Require is for loading JS.
+        filenames = fs.readdirSync(dirname);
 
     function updateDeck(filename, content) {
         var newText = content,
@@ -795,7 +795,8 @@ function updateSetcodes() {
                 strings = strings + '<option data-value="' + parseInt(setcode, 16) + '" value="' + setcodes[setcode] + '"> </option>';
             }
         }
-			frames[0].$('#setcodes).html(strings);    });
+        frames[0].$('#setcodes').html(strings);
+    });
 }
 
 /*Boot command*/
@@ -820,12 +821,10 @@ function dbdirect(dbName, SQLSTRING) {
         ii,
         i;
     console.log(result);
-    output = new Buffer(db.export());
+    output = new Buffer(db['export']());
     fs.writeFile('../http/ygopro/databases/' + dbName, output, function (error) {
         if (error) {
             alert('Error writing to' + dbName);
-        } else {
-
         }
     });
     db.close();
@@ -836,7 +835,7 @@ function dbdirect(dbName, SQLSTRING) {
     for (i = 0; result[0].values.length > i; i++) {
         string = string + '<tr>';
         for (ii = 0; result[0].columns.length > ii; ii++) {
-            string = string + '<td>' + result[0].values[i][ii] + '</td>'
+            string = string + '<td>' + result[0].values[i][ii] + '</td>';
 
         }
         string = string + '</tr>';
@@ -856,7 +855,7 @@ function dbAction(dbName, SQLSTRING) {
 
     db.run(SQLSTRING); // doesnt return anything;
 
-    output = new Buffer(db.export());
+    output = new Buffer(db['export']());
     fs.writeFile('../http/ygopro/databases/' + dbName, output, function (error) {
         if (!error) {
             alert('Successfully Wrote to ' + dbName);
@@ -889,19 +888,23 @@ function dbYGOProGetByID(dbName, ID) {
 
 function dbYGOProByText(dbName, text) {
     'use strict';
-    var string;
+    var string = "SELECT * FROM texts WHERE name LIKE '%" + text + "%';",
+        row,
+        texts,
+        db,
+        filebuffer,
+        asObject,
+        output;
     try {
-        var row,
-            filebuffer = fs.readFileSync('../http/ygopro/databases/' + dbName),
-            db = new SQL.Database(filebuffer),
-            string = "SELECT * FROM texts WHERE name LIKE '%" + text + "%';",
-            texts = db.prepare(string),
-            asObject = {
-                texts: texts.getAsObject({
-                    'name': 1
-                })
-            },
-            output = '';
+        filebuffer = fs.readFileSync('../http/ygopro/databases/' + dbName);
+        db = new SQL.Database(filebuffer);
+        texts = db.prepare(string);
+        asObject = {
+            texts: texts.getAsObject({
+                'name': 1
+            })
+        };
+        output = '';
 
         // Bind new values
         texts.bind({
@@ -1011,12 +1014,12 @@ function dbupdate(input) {
         try {
             fs.renameSync('../http/ygopro/pics/' + input.from + '.jpg', '../http/ygopro/pics/' + input.to + '.jpg');
         } catch (e) {
-            console.log('could not rename pic', input.from, input.to)
+            console.log('could not rename pic', input.from, input.to);
         }
         try {
             fs.renameSync('../http/ygopro/script/c' + input.from + '.lua', '../http/ygopro/scripts/c' + input.to + '.lua');
-        } catch (e) {
-            console.log('could not rename script', input.from, input.to)
+        } catch (e2) {
+            console.log('could not rename script', input.from, input.to);
         }
 
 
