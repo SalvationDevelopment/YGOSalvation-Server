@@ -24,3 +24,6 @@
 	url = https://github.com/SalvationDevelopment/ygopro-tcg-scripts
     
 
+[submodule "ygopro-goat-scripts"]
+	path = ygopro-goat-scripts
+	url = https://github.com/SalvationDevelopment/ygopro-goat-scripts
