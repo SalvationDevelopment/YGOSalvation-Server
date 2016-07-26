@@ -401,6 +401,9 @@ function startCore(port, socket, data, callback) {
     }
 
     translated = parseDuelOptions(socket.hostString);
+    if (configfile === 'ini/goat.ini') {
+        translated.allowedCards = '../ygopro-goat-scripts';
+    }
     paramlist = ['StandardStreamProtocol=true',
                  'Port=' + port,
                  'ClientVersion=0x1339',
