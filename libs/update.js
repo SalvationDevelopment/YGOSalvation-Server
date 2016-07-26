@@ -145,6 +145,11 @@ function update(cb) {
         }, function () {
             n++;
         });
+        spawn('git', ['pull'], {
+            cwd: '../ygopro-goat-scripts'
+        }, function () {
+            n++;
+        });
     });
 }
 
