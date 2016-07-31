@@ -441,6 +441,17 @@ function startCore(port, socket, data, callback) {
     socket.core.stdout.on('data', function (core_message_raw) {
         handleCoreMessage(core_message_raw, port, socket, data, socket.core.pid);
     });
+    setInterval(function () {
+        if (socket.heartbeat) {
+            socket.heartbeat = 0;
+            return;
+        }
+        try {
+            socket.core.kill();
+        } catch (e) {
+            console.log('DOA');
+        }
+    }, 60000);
 }
 
 

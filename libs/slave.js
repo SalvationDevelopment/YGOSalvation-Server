@@ -16,6 +16,7 @@ function initiateSlave() {
 
     function handleTCP(socket) {
         var framer = new Framemaker();
+        socket.heartbeat = 0;
         socket.setNoDelay(true);
         socket.active_ygocore = false;
         socket.active = false;
@@ -24,6 +25,7 @@ function initiateSlave() {
             var frame,
                 task,
                 newframes = 0;
+            socket.heartbeat++;
             if (socket.active_ygocore) {
                 socket.active_ygocore.write(data);
             }
@@ -34,9 +36,6 @@ function initiateSlave() {
             }
             frame = [];
 
-        });
-        socket.setTimeout(300000, function () {
-            socket.end(); //Security precaution
         });
         socket.on('error', function (error) {
             //console.log('::CLIENT', error);
