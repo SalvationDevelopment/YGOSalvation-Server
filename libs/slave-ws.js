@@ -24,6 +24,7 @@ function initiateSlave() {
             socket.terminate();
         }
         var framer = new Framemaker();
+        socket.heartbeat = 0;
         socket.active_ygocore = false;
         socket.active = false;
         socket.write = function (message) {
@@ -37,6 +38,7 @@ function initiateSlave() {
         };
         socket.on('message', function incoming(data) {
             console.log('ws:', data);
+            socket.heartbeat++;
             var frame,
                 task,
                 newframes = 0;
