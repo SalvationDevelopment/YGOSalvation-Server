@@ -279,25 +279,25 @@ function pickCoreConfig(socket) {
 }
 
 
-function makeCoverMsg(player, domain, username) {
-    var ctos = new Buffer([0x30, player]),
-        blanksite = new Buffer(new Array(256).fill('0', 0, 256)),
-        blankdir = new Buffer(new Array(256).fill('0', 0, 256)),
-        site = new Buffer(domain + '\u0000', 'utf16le'),
-        dir = new Buffer('covers/' + username + '.jpg\u0000', 'utf16le'),
-        len = 2 + site.length + dir.length,
-        proto = new Buffer(2),
-        read;
-
-    site.copy(blanksite);
-    dir.copy(blankdir);
-    read = Buffer.concat([site, dir]);
-    console.log(read.toString('utf16le'));
-    proto.writeUInt16LE(len, 0);
-    proto = Buffer.concat([proto, ctos, site, dir]);
-    console.log(proto);
-    return proto;
-}
+//function makeCoverMsg(player, domain, username) {
+//    var ctos = new Buffer([0x30, player]),
+//        blanksite = new Buffer(new Array(256).fill('0', 0, 256)),
+//        blankdir = new Buffer(new Array(256).fill('0', 0, 256)),
+//        site = new Buffer(domain + '\u0000', 'utf16le'),
+//        dir = new Buffer('covers/' + username + '.jpg\u0000', 'utf16le'),
+//        len = 2 + site.length + dir.length,
+//        proto = new Buffer(2),
+//        read;
+//
+//    site.copy(blanksite);
+//    dir.copy(blankdir);
+//    read = Buffer.concat([site, dir]);
+//    console.log(read.toString('utf16le'));
+//    proto.writeUInt16LE(len, 0);
+//    proto = Buffer.concat([proto, ctos, site, dir]);
+//    console.log(proto);
+//    return proto;
+//}
 
 /* send the YGOCore API commands back to the main process, some cleanup
 is needed before sending the message. Basic logging for finding idiots
@@ -421,7 +421,7 @@ function startCore(port, socket, data, callback) {
                  'NoShuffleDeck=' + translated.isShuffled,
                  'EnablePriority=' + translated.isTCGRuled
                 ];
-    //console.log(paramlist);
+    console.log(paramlist.join(' '));
     socket.core = childProcess.spawn(startDirectory + '/../ygosharp/YGOSharp.exe', paramlist, {
         cwd: startDirectory + '/../YGOSharp'
     }, function (error, stdout, stderr) {
@@ -451,7 +451,7 @@ function startCore(port, socket, data, callback) {
         } catch (e) {
             console.log('DOA');
         }
-    }, 60000);
+    }, 600000);
 }
 
 
