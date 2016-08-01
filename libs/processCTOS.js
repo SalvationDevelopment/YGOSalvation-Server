@@ -72,7 +72,8 @@ var primaryScripts = {
     2: '../http/ygopro/script',
     3: '../http/ygopro/script',
     4: '../http/ygopro/script',
-    5: '../http/ygopro/script'
+    5: '../http/ygopro/script',
+    99: '../ygopro-goat-scripts'
 };
 var secondaryScripts = {
     0: '../http/ygopro/script',
@@ -80,7 +81,8 @@ var secondaryScripts = {
     2: '../http/ygopro/script',
     3: '../http/ygopro/script',
     4: '../http/ygopro/script',
-    5: '../http/ygopro/script'
+    5: '../http/ygopro/script',
+    99: '../http/ygopro/script'
 };
 
 var dbs = {
@@ -402,7 +404,8 @@ function startCore(port, socket, data, callback) {
 
     translated = parseDuelOptions(socket.hostString);
     if (configfile === 'ini/goat.ini') {
-        translated.allowedCards = '../ygopro-goat-scripts';
+        translated.allowedCards = 99;
+        translated.isTCGRuled = true;
     }
     paramlist = ['StandardStreamProtocol=true',
                  'Port=' + port,
