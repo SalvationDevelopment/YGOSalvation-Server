@@ -55,9 +55,7 @@ function forumValidate(data, callback) {
                 }
                 info.success = forumdata.success;
                 info.data = {};
-                if (forumdata.data) {
-                    info.data.g_access_cp = isAdmin(data);
-                }
+                info.data.g_access_cp = isAdmin(data);
                 info.displayname = forumdata.displayname;
                 validationCache[data.username] = forumdata;
 
@@ -71,34 +69,39 @@ function forumValidate(data, callback) {
 }
 
 module.exports = forumValidate;
-//
-//var crypto = require('crypto');
-//
-//
-//function md5(input) {
-//    return crypto.createHash('md5').update(input).digest("hex");
-//}
-//
-//function encode(pass, salt) {
-//    return md5(md5(process.env.SALT) + md5(pass));
-//}
-//
-//function initDB(query) {
-//
-//    var connection = mysql.createConnection({
-//        host: 'localhost',
-//        user: process.env.MYSQLUSER,
-//        password: process.env.MYSQLPASSWORD,
-//        database: process.env.MYSQLFORUMDB
-//    });
-//
-//    connection.connect();
-//    connection.query(query, function (err, rows, fields) {
-//        if (err) {
-//            throw err;
-//        }
-//
-//        console.log('The solution is: ', rows[0].solution);
-//        connection.end();
-//    });
-//}
+
+var qs = require('querystring');
+var http = require('http');
+var server = http.createServer(function (request, response) {
+    response.writeHead(200, {
+        "Content-Type": "text/json"
+    });
+    if (request.method === 'POST') {
+        var body = '';
+
+        request.on('data', function (data) {
+            body += data;
+
+            // Too much POST data, kill the connection!
+            // 1e6 === 1 * Math.pow(10, 6) === 1 * 1000000 ~~~ 1MB
+            if (body.length > 1e6) {
+
+
+                request.connection.destroy();
+            }
+        });
+
+        request.on('end', function () {
+            var post = qs.parse(body),
+                data = {
+                    username: post.ips_username,
+                    password: post.ips_password
+                };
+            forumValidate(data, function (error, result) {
+                response.end(JSON.stringify(result));
+            });
+        });
+    }
+});
+
+server.listen(12001);
