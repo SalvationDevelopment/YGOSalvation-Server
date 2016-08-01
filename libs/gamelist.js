@@ -117,7 +117,7 @@ function handleCoreMessage(core_message_raw, port, pid, game) {
         gamelist[game].locked[lock_slot] = Boolean(core_message[1]);
         break;
     case ('::::end-duel'):
-        //console.log('[Results]', core_message, game);
+        console.log('[Results]', core_message, game);
         cleanGamelist();
         break;
     case ('::::endduel'):

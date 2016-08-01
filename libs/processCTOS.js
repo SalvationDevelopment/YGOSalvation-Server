@@ -424,7 +424,7 @@ function startCore(port, socket, data, callback) {
                  'NoShuffleDeck=' + translated.isShuffled,
                  'EnablePriority=' + translated.isTCGRuled
                 ];
-    console.log(paramlist.join(' '));
+    //console.log(paramlist.join(' '));
     socket.core = childProcess.spawn(startDirectory + '/../ygosharp/YGOSharp.exe', paramlist, {
         cwd: startDirectory + '/../YGOSharp'
     }, function (error, stdout, stderr) {
