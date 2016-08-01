@@ -56,5 +56,12 @@
     "scripts": {
         "start": "node server/server.js",
         "test": "istanbul cover _mocha -- -u exports -R spec"
+    },
+    "admins": {
+        "SnarkyChild": true,
+        "AccessDenied": true,
+        "Irate": true,
+        "Chibi": true,
+        "OmniMage": true
     }
 }
