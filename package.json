@@ -58,10 +58,24 @@
         "test": "istanbul cover _mocha -- -u exports -R spec"
     },
     "admins": {
-        "SnarkyChild": true,
         "AccessDenied": true,
+        "DarkMagicianGirl": true,
         "Irate": true,
-        "Chibi": true,
-        "OmniMage": true
+        "Mele": true,
+        "Morgan LeFlay": true,
+        "Omni~Mage": true,
+        "OneShot": true,
+        "ParryDox": true,
+        "Reach": true,
+        "StormWolf": true,
+        "Trinity": true,
+        "Vyro": true,
+        "WestCoastKiwiw": true,
+        "Academia": true,
+        "BlackBallista": true,
+        "HelixReactor": true,
+        "Laughing Luna": true,
+        "Lignes": true,
+        "Ragna_Edge": true
     }
 }
