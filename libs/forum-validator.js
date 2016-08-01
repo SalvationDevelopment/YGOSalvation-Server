@@ -3,12 +3,26 @@
 'use strict';
 var validationCache = {},
     request = require('request'),
+    fs = require('fs'),
     mysql = require('mysql'),
     crypto = require('crypto');
 
 setInterval(function () {
     validationCache = {};
 }, 600000); // cache the forum request for 10 mins.
+
+
+var admins = JSON.parse(fs.readFileSync('../package.json', 'utf8')).admins;
+
+function isAdmin(data) {
+    var result = '0';
+    Object.keys(admins).forEach(function (admin) {
+        if (admin === data.username && admins[admin]) {
+            result = '1';
+        }
+    });
+    return result;
+}
 
 function forumValidate(data, callback) {
     if (validationCache[data.username]) {
@@ -35,14 +49,14 @@ function forumValidate(data, callback) {
                 try {
                     forumdata = JSON.parse(body.trim());
                 } catch (msgError) {
-                    console.log('Error during validation', {}, body, msgError);
+                    console.log('Error during validation', {}, body, msgError, data);
                     callback('Error during validation', info, body, msgError);
                     return;
                 }
                 info.success = forumdata.success;
                 info.data = {};
                 if (forumdata.data) {
-                    info.data.g_access_cp = forumdata.data.g_access_cp;
+                    info.data.g_access_cp = isAdmin(data);
                 }
                 info.displayname = forumdata.displayname;
                 validationCache[data.username] = forumdata;

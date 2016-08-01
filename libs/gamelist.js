@@ -1,7 +1,9 @@
 /*jslint  node: true, plusplus: true, white: false, nomen  : true*/
 // Gamelist object acts similar to a Redis server, could be replaced with on but its the gamelist state.
 'use strict';
-var http = require('http');
+var http = require('http'),
+    fs = require('fs');
+
 var primus,
     gamelist = {},
     registry = {
@@ -26,6 +28,8 @@ var primus,
     ps = require('ps-node'),
     forumValidate = require('./forum-validator.js'),
     currentGlobalMessage = '';
+
+
 
 setTimeout(function () {
     //give the system five seconds to figure itself out.
