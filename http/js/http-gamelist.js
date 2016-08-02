@@ -401,7 +401,7 @@ function preformfilter(translated, players, rooms, started, pid, watchers) {
         game = (translated.poolFormat !== 'Goat Format') ? 'game' : 'nostalgia',
         pass = '',
         spectators = (watchers) ? ' +' + watchers : '';
-    game = (translated.poolFormat !== 'Newgioh') ? game : 'newgioh';
+    game = (translated.poolFormat !== 'World Championship') ? game : 'world-championship';
     game = (translated.poolFormat !== 'ARG') ? game : 'arg';
     game = (translated.poolFormat !== 'Unlimited') ? game : 'bad';
     game = (translated.poolFormat !== 'Traditional') ? game : 'bad';
