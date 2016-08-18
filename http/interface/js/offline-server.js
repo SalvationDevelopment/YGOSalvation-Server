@@ -25,7 +25,13 @@ auto_card_placing = {auto_card_placing}\r\n\
 random_card_placing = {random_card_placing}\r\n\
 auto_chain_order = {auto_chain_order}\r\n\
 no_delay_for_chain = {no_delay_for_chain}\r\n\
-enable_sleeve_loading = {enable_sleeve_loading}\r\n";
+enable_sleeve_loading = {enable_sleeve_loading}\r\n\
+forced = 0\r\n\
+save_last_replay = {save_last_replay}\r\n\
+control_mode = 0\r\n\
+hide_setname = {hide_setname}\r\n\
+hide_chain_button = {hide_chain_button}\r\n\
+";
 
 var os = require('os');
 var http = require('http');
@@ -55,7 +61,7 @@ if (operating_system === 'linux' && os.arch() === 'x64') {
 
 var settings = ['use_d3d', 'antialias', 'errorlog', 'nickname', 'roompass', 'lastdeck', 'textfont', 'numfont', 'fullscreen', 'enable_sound',
 'sound_volume', 'enable_music', 'music_volume', 'skin_index', 'auto_card_placing', 'random_card_placing', 'auto_chain_order', 'no_delay_for_chain',
-'enable_sleeve_loading', 'serverport', 'lastip', 'textfontsize', 'lastport'];
+'enable_sleeve_loading', 'serverport', 'lastip', 'textfontsize', 'lastport', 'forced', 'save_last_replay', 'control_mode', 'hide_setname', 'hide_chain_button'];
 
 try {
     var localStorageExist = localStorage;
@@ -99,7 +105,12 @@ for (var i = 0; settings.length > i; i++) {
         localStorage.random_card_placing = '0';
         localStorage.auto_chain_order = '1';
         localStorage.no_delay_for_chain = '0';
-        localStorage.enable_sleeve_loading = '0';
+        localStorage.enable_sleeve_loading = '0'
+		localStorage.forced = '0'
+		localStorage.save_last_replay = '0'
+		localStorage.control_mode = '0'
+		localStorage.hide_setname = '0'
+		localStorage.hide_chain_button = '0';
     }
 }
 

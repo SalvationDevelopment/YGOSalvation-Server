@@ -87,7 +87,7 @@ var secondaryScripts = {
 
 var dbs = {
     'ini/config.ini': '../http/ygopro/databases/0-en-OCGTCG.cdb',
-    'ini/newgioh.ini': '../http/ygopro/databases/4-Newgioh.cdb',
+    'ini/World-Championship.ini': '../http/ygopro/databases/4-World-Championship.cdb',
     'ini/goat.ini': '../http/ygopro/databases/3-Goats.cdb',
     'ini/3-config.ini': '../http/ygopro/databases/Z-CWA.cdb',
     'ini/4-config.ini': '../http/ygopro/databases',
@@ -270,7 +270,7 @@ function pickCoreConfig(socket) {
         return "ini/goat.ini";
     }
     if (socket.hostString.indexOf(",4,5,1") > -1) {
-        return "ini/newgioh.ini";
+        return "ini/World-Championship.ini";
     }
     if (socket.hostString[0] > '2') {
         return output + socket.hostString[0] + '-config.ini';
