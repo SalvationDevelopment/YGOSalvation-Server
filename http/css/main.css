@@ -2296,7 +2296,7 @@ div[data-game^="32"] {
     color: grey;
 }
 
-[data-newgioh] {
+[data-world-championship] {
     background-image: url('../img/newgiohtoken.png') !important;
     background-color: rgba(255, 255, 0, .5) !important;
     background-size: cover;
@@ -2305,7 +2305,7 @@ div[data-game^="32"] {
     background-size: cover;
 }
 
-.started[data-newgioh] {
+.started[data-world-championship] {
     background-image: url('../img/outnewgiohtoken.png') !important;
     background-color: rgba(0, 0, 0, .5) !important;
     background-size: cover;
