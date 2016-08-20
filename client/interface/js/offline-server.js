@@ -28,7 +28,7 @@ no_delay_for_chain = {no_delay_for_chain}\r\n\
 enable_sleeve_loading = {enable_sleeve_loading}\r\n\
 forced = 0\r\n\
 save_last_replay = {save_last_replay}\r\n\
-control_mode = 0\r\n\
+control_mode = 1\r\n\
 hide_setname = {hide_setname}\r\n\
 hide_chain_button = {hide_chain_button}\r\n\
 ";
@@ -108,7 +108,7 @@ for (var i = 0; settings.length > i; i++) {
         localStorage.enable_sleeve_loading = '0'
 		localStorage.forced = '0'
 		localStorage.save_last_replay = '0'
-		localStorage.control_mode = '0'
+		localStorage.control_mode = '1'
 		localStorage.hide_setname = '0'
 		localStorage.hide_chain_button = '0';
     }
