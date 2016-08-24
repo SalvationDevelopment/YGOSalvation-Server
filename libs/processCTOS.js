@@ -422,8 +422,7 @@ function startCore(port, socket, data, callback) {
                  'GameTimer=' + translated.timeLimit,
                  'NoCheckDeck=' + translated.isDeckChecked,
                  'NoShuffleDeck=' + translated.isShuffled,
-                 'EnablePriority=' + translated.isTCGRuled,
-                 'YRP2=True'
+                 'EnablePriority=' + translated.isTCGRuled
                 ];
     //console.log(paramlist.join(' '));
     socket.core = childProcess.spawn(startDirectory + '/../ygosharp/YGOSharp.exe', paramlist, {
