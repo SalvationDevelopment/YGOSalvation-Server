@@ -31,7 +31,7 @@ var primus,
     adminlist = require('../package.json').admins;
 
 
-console.log(adminlist);
+
 setTimeout(function () {
     //give the system five seconds to figure itself out.
     booting = false;
@@ -324,7 +324,7 @@ function globalCall(data) {
             });
             currentGlobalMessage = data.message;
         } else {
-            console.log(data, 'asked for global');
+            console.log(data, 'asked for global', 'Info Was', info.succes, 'Is Admin was', adminlist[data.username]);
         }
     });
 }
