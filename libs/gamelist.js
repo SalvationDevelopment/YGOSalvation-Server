@@ -27,7 +27,8 @@ var primus,
     path = require('path'),
     ps = require('ps-node'),
     forumValidate = require('./forum-validator.js'),
-    currentGlobalMessage = '';
+    currentGlobalMessage = '',
+    adminlist = require('./package.json').admins;
 
 
 
@@ -298,7 +299,8 @@ function registrationCall(data, socket) {
             sendRegistry();
             socket.write({
                 clientEvent: 'global',
-                message: currentGlobalMessage
+                message: currentGlobalMessage,
+                admin : adminlist[data.username]
             });
         } else {
             socket.write({
@@ -315,16 +317,12 @@ function globalCall(data) {
             console.log('[Gamelist]', error);
             return;
         }
-        if (info.data) {
-            if (info.success && info.data.g_access_cp === "1") {
-                announce({
-                    clientEvent: 'global',
-                    message: data.message
-                });
-                currentGlobalMessage = data.message;
-            } else {
-                console.log(data, 'asked for global', data.message);
-            }
+        if (info.succes && adminlist[data.username]) {
+            announce({
+                clientEvent: 'global',
+                message: data.message
+            });
+            currentGlobalMessage = data.message;
         } else {
             console.log(data, 'asked for global');
         }
@@ -357,15 +355,13 @@ function murderCall(data) {
         if (error) {
             return;
         }
-        if (info.data) {
-            if (info.success && info.data.g_access_cp === "1") {
-                announce({
-                    clientEvent: 'kill',
-                    target: data.target
-                });
-            } else {
-                console.log(data, 'asked for murder');
-            }
+
+        if (info.succes && adminlist[data.username]) {
+            announce({
+                clientEvent: 'kill',
+                target: data.target
+            });
+
         } else {
             console.log(data, 'asked for murder');
         }
@@ -378,16 +374,13 @@ function killgameCall(data) {
         if (error) {
             return;
         }
-        if (info.data) {
-            if (info.success && info.data.g_access_cp === "1") {
-                ps.kill(data.killTarget, function (err) {
-                    if (err) {
-                        del(data.killTarget);
-                    }
-                });
-            } else {
-                console.log(data, 'tried to kill');
-            }
+        if (info.succes && adminlist[data.username]) {
+            ps.kill(data.killTarget, function (err) {
+                if (err) {
+                    del(data.killTarget);
+                }
+            });
+
         } else {
             console.log(data, 'tried to kill');
         }
