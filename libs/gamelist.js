@@ -28,7 +28,7 @@ var primus,
     ps = require('ps-node'),
     forumValidate = require('./forum-validator.js'),
     currentGlobalMessage = '',
-    adminlist = require('../../package.json').admins;
+    adminlist = require('../package.json').admins;
 
 
 
