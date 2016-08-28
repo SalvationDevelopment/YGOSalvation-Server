@@ -496,6 +496,9 @@ function pondata(data) {
             if (data.message && data.message.length) {
                 //singlesitenav('popup'); /* turned off per Stormwolf;*/
             }
+            if (data.admin) {
+                window.admin = "1";
+            }
 
         }
         if (data.clientEvent === 'registrationRequest') {
