@@ -317,14 +317,14 @@ function globalCall(data) {
             console.log('[Gamelist]', error);
             return;
         }
-        if (info.succes && adminlist[data.username]) {
+        if (info.success && adminlist[data.username]) {
             announce({
                 clientEvent: 'global',
                 message: data.message
             });
             currentGlobalMessage = data.message;
         } else {
-            console.log(data, 'asked for global', 'Info Was', info.succes, 'Is Admin was', adminlist[data.username]);
+            console.log(data, 'asked for global', 'Info Was', info.success, 'Is Admin was', adminlist[data.username]);
         }
     });
 }
@@ -356,7 +356,7 @@ function murderCall(data) {
             return;
         }
 
-        if (info.succes && adminlist[data.username]) {
+        if (info.success && adminlist[data.username]) {
             announce({
                 clientEvent: 'kill',
                 target: data.target
@@ -374,7 +374,7 @@ function killgameCall(data) {
         if (error) {
             return;
         }
-        if (info.succes && adminlist[data.username]) {
+        if (info.success && adminlist[data.username]) {
             ps.kill(data.killTarget, function (err) {
                 if (err) {
                     del(data.killTarget);
