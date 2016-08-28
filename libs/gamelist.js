@@ -28,7 +28,7 @@ var primus,
     ps = require('ps-node'),
     forumValidate = require('./forum-validator.js'),
     currentGlobalMessage = '',
-    adminlist = require('./package.json').admins;
+    adminlist = require('../../package.json').admins;
 
 
 
@@ -300,7 +300,7 @@ function registrationCall(data, socket) {
             socket.write({
                 clientEvent: 'global',
                 message: currentGlobalMessage,
-                admin : adminlist[data.username]
+                admin: adminlist[data.username]
             });
         } else {
             socket.write({
