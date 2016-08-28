@@ -31,7 +31,7 @@ var primus,
     adminlist = require('../package.json').admins;
 
 
-
+console.log(adminlist);
 setTimeout(function () {
     //give the system five seconds to figure itself out.
     booting = false;
