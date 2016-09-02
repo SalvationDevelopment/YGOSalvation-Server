@@ -74,12 +74,12 @@ function updatenews() {
 function updateevents() {
     'use strict';
     $.getFeed({
-        url: 'http://forum.ygopro.us/index.php?/calendar/events.xml',
+        url: 'http://forum.ygopro.us/index.php?/forum/15-official-tournaments.xml',
         success: function (feed) {
             console.log(feed);
 
 
-            $.get('handlebars/events.handlebars', function (template) {
+            $.get('handlebars/forumnews.handlebars', function (template) {
                 var parser = Handlebars.compile(template),
                     topics = feed.items,
                     news = {
@@ -485,22 +485,22 @@ function customizationadd() {
 function maketextsSQL() {
     'use strict';
     var id = '"' + $('#sqlid').val() + '"',
-        name = '"' + $('#sqlnamebox').val().replace(/"/g,'""') + '"',
+        name = '"' + $('#sqlnamebox').val().replace(/"/g, '""') + '"',
         description = $('#sqldescriptionbox').val(),
-        str1 = '"' + $('#sqlstr1').val().replace(/"/g,'""') + '"',
-        str2 = '"' + $('#sqlstr2').val().replace(/"/g,'""') + '"',
-        str3 = '"' + $('#sqlstr3').val().replace(/"/g,'""') + '"',
-        str4 = '"' + $('#sqlstr4').val().replace(/"/g,'""') + '"',
-        str5 = '"' + $('#sqlstr5').val().replace(/"/g,'""') + '"',
-        str6 = '"' + $('#sqlstr6').val().replace(/"/g,'""') + '"',
-        str7 = '"' + $('#sqlstr7').val().replace(/"/g,'""') + '"',
-        str8 = '"' + $('#sqlstr8').val().replace(/"/g,'""') + '"',
-        str9 = '"' + $('#sqlstr9').val().replace(/"/g,'""') + '"',
-        str10 = '"' + $('#sqlstr10').val().replace(/"/g,'""') + '"',
-        str11 = '"' + $('#sqlstr11').val().replace(/"/g,'""') + '"',
-        str12 = '"' + $('#sqlstr12').val().replace(/"/g,'""') + '"',
-        str13 = '"' + $('#sqlstr13').val().replace(/"/g,'""') + '"',
-        str14 = '"' + $('#sqlstr14').val().replace(/"/g,'""') + '"',
+        str1 = '"' + $('#sqlstr1').val().replace(/"/g, '""') + '"',
+        str2 = '"' + $('#sqlstr2').val().replace(/"/g, '""') + '"',
+        str3 = '"' + $('#sqlstr3').val().replace(/"/g, '""') + '"',
+        str4 = '"' + $('#sqlstr4').val().replace(/"/g, '""') + '"',
+        str5 = '"' + $('#sqlstr5').val().replace(/"/g, '""') + '"',
+        str6 = '"' + $('#sqlstr6').val().replace(/"/g, '""') + '"',
+        str7 = '"' + $('#sqlstr7').val().replace(/"/g, '""') + '"',
+        str8 = '"' + $('#sqlstr8').val().replace(/"/g, '""') + '"',
+        str9 = '"' + $('#sqlstr9').val().replace(/"/g, '""') + '"',
+        str10 = '"' + $('#sqlstr10').val().replace(/"/g, '""') + '"',
+        str11 = '"' + $('#sqlstr11').val().replace(/"/g, '""') + '"',
+        str12 = '"' + $('#sqlstr12').val().replace(/"/g, '""') + '"',
+        str13 = '"' + $('#sqlstr13').val().replace(/"/g, '""') + '"',
+        str14 = '"' + $('#sqlstr14').val().replace(/"/g, '""') + '"',
         datas = [id, name, '"' + mysql_real_escape_string(description) + '"', str1, str2, str3, str4, str5, str5, str6, str7, str8, str9, str10, str11, str11, str12, str13, str14].join(',');
 
     return 'INSERT OR REPLACE INTO "texts" VALUES (' + datas + ');';
@@ -574,16 +574,9 @@ function makedatasSQL() {
     def = (def === '"?"') ? '"-2"' : def;
     category = '"' + category + '"';
 
-    level = '0x' 
-	+ parseInt($('#sqlscalel').val()).toString(16) 
-	+ '0' + parseInt($('#sqlscaler').val()).toString(16)
-	+ '000'+ parseInt($('#sqllevel').val()).toString(16);
+    level = '0x' + parseInt($('#sqlscalel').val()).toString(16) + '0' + parseInt($('#sqlscaler').val()).toString(16) + '000' + parseInt($('#sqllevel').val()).toString(16);
     level = '"' + parseInt(level, 16) + '"';
-    setcode = '0x' 
-	+ $('#sqlsc4 option:selected').attr('data-calc')
-	+ leftpad($('#sqlsc3 option:selected').attr('data-calc'), 4, 0) 
-	+ leftpad($('#sqlsc2 option:selected').attr('data-calc'), 4, 0)
-	+ leftpad($('#sqlsc1 option:selected').attr('data-calc'), 4, 0);
+    setcode = '0x' + $('#sqlsc4 option:selected').attr('data-calc') + leftpad($('#sqlsc3 option:selected').attr('data-calc'), 4, 0) + leftpad($('#sqlsc2 option:selected').attr('data-calc'), 4, 0) + leftpad($('#sqlsc1 option:selected').attr('data-calc'), 4, 0);
     setcode = '"' + parseInt(setcode, 16) + '"';
     texts = [id, ot, alias, setcode, type, atk, def, level, race, attribute, category].join(',');
     return 'INSERT OR REPLACE INTO "datas" VALUES (' + texts + ');';
