@@ -422,7 +422,7 @@ function startCore(port, socket, data, callback) {
                  'NoCheckDeck=' + translated.isDeckChecked,
                  'NoShuffleDeck=' + translated.isShuffled,
                  'EnablePriority=' + translated.isTCGRuled,
-                 'YRP2=true'
+                 //'YRP2=true'
                 ];
     //console.log(paramlist.join(' '));
     socket.core = childProcess.spawn(startDirectory + '/../ygosharp/YGOSharp.exe', paramlist, {
