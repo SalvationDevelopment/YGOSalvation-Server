@@ -415,7 +415,7 @@
                     <option value="1">2016.7.1 (OCG)</option>
                     <option value="2">Goat Format</option>
                     <option value="3">2016.4.11 (TCG)</option>
-					<option value="4" disabled>World Championship</option>
+                    <option value="4" disabled>World Championship</option>
                     <option value="5">Traditional</option>
                     <option value="6">Unlimited</option>
                 </select>
@@ -472,7 +472,11 @@
 
             </div>
             <div style="width:728px; height:90px; margin:0 -140px;">
-
+                <SCRIPT language="Javascript">
+                    var cpmstar_rnd = Math.round(Math.random() * 999999);
+                    var cpmstar_pid = 44429;
+                    document.writeln("<SCR" + "IPT language='Javascript' src='//server.cpmstar.com/view.aspx?poolid=" + cpmstar_pid + "&script=1&rnd=" + cpmstar_rnd + "'></SCR" + "IPT>");
+                </SCRIPT>
             </div>
         </section>
     </header>
@@ -815,13 +819,13 @@
                         <br />
                         <label data-translation-savelastreplay>Save Last Replay</label>
                         <input type="checkbox" data-localhost="save_last_replay" />
-                        <br />						
+                        <br />
                         <label data-translation-hidesetname>Hide Archetype Labels</label>
                         <input type="checkbox" data-localhost="hide_setname" />
-                        <br />												
+                        <br />
                         <label data-translation-hidechainbutton>Hide Chain Buttons</label>
                         <input type="checkbox" data-localhost="hide_chain_button" />
-                        <br />																		
+                        <br />
                         <label data-translation-alternative-pictures>Alternative Pictures</label>
                         <input type="checkbox" data-localhost="altpics" />
                         <br />
@@ -1172,10 +1176,10 @@
                             <input value="32" type=checkbox>
                             <label>Effect</label>
                         </div>
-						<div class="checkrow">
-							<input value="2097152" type=checkbox>
-							<label>Flip</label>
-						</div>
+                        <div class="checkrow">
+                            <input value="2097152" type=checkbox>
+                            <label>Flip</label>
+                        </div>
                         <div class="checkrow">
                             <input value="512" type=checkbox>
                             <label>Spirit</label>
