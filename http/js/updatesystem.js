@@ -219,8 +219,9 @@ function hashcheck() {
     if (completeList.length === 0) {
         download();
     }
+    var percent = Math.floor(((n - completeList.length) / n) * 100);
     screenMessage.html('<span style="color:white; font-weight:bold">Processing manifest(' +
-        (n - completeList.length) + '/' + n + '). DONT TOUCH STUFF!</span>');
+        percent + '% of ' + completeList.length + '). DONT TOUCH STUFF!</span>');
     var target = completeList[0],
         hashLocal;
     if (target) {
