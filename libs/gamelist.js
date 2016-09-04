@@ -28,14 +28,8 @@ var primus,
     ps = require('ps-node'),
     forumValidate = require('./forum-validator.js'),
     currentGlobalMessage = '',
-    adminlist = [];
-
-try {
     adminlist = require('../package.json').admins;
 
-} catch (error) {
-    console.log('testing bug');
-}
 
 setTimeout(function () {
     //give the system five seconds to figure itself out.
