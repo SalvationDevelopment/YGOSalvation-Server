@@ -2017,6 +2017,18 @@ textarea#sqloutput {
     height: 190px;
 }
 
+div#eventsandtournaments article {
+    display: block;
+    width: 80%;
+    height: auto;
+    margin: 0 auto;
+}
+
+div#eventsandtournaments {
+    overflow-y: scroll;
+    height: 100%;
+}
+
 
 /* =========================================
 =================================
