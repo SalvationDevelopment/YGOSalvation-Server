@@ -98,7 +98,7 @@ function updateevents() {
                         link: topic.link
                     });
                 });
-                $('#events').html(parser(news));
+                $('#eventsandtournaments').html(parser(news));
             });
         }
     });
