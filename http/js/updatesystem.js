@@ -293,7 +293,7 @@ function createmanifest() {
     var updateWatcher = domain.create();
     updateWatcher.on('error', function (err) {
         var failed = '<span style="color:red;">Update Failed, retying...</span>',
-            didntStart = '<span style="color:gold;">Manifest is taking a while to download, retying...</span>';
+            didntStart = '<span style="color:gold;">Manifest is taking a while to download, retrying...</span>';
 
         console.log(err);
         if (updaterstarted) {
