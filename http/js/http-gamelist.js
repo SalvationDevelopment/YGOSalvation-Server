@@ -490,16 +490,18 @@ function pondata(data) {
         renderList(gamelistcache);
         //console.log(gamelistcache);
     } else {
+        if (data.admin) {
+            window.admin = "1";
+        }
+        if (data.message) {
+            if (data.clientEvent === 'global' && data.message.length && loggedIn) {
+                $('footer, #popupbody').html(data.message).addClass('loud');
+                if (data.message && data.message.length) {
+                    //singlesitenav('popup'); /* turned off per Stormwolf;*/
+                }
 
-        if (data.clientEvent === 'global' && data.message.length && loggedIn) {
-            $('footer, #popupbody').html(data.message).addClass('loud');
-            if (data.message && data.message.length) {
-                //singlesitenav('popup'); /* turned off per Stormwolf;*/
-            }
-            if (data.admin) {
-                window.admin = "1";
-            }
 
+            }
         }
         if (data.clientEvent === 'registrationRequest') {
             if ($('#ips_username').val() && $('#ips_password').val()) {
