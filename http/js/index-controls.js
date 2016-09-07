@@ -308,6 +308,9 @@ function mysql_real_escape_string(str) {
 
 $(document).ready(function () {
     'use strict';
+    $('#creategameduelmode').on('change', function () {
+        $('#creategamelp').val($('#creategameduelmode option:selected').attr('data-lp'));
+    });
     if (window.self !== window.top) {
         $(document.body).addClass("in-iframe");
         launcher = true;
