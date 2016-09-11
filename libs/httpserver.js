@@ -60,6 +60,6 @@ try {
     // have it listen on 8080
     http.listen(80);
 } catch (nossl) {
-    console.log('FAILED TO APPLY SSL');
+    console.log('FAILED TO APPLY SSL', nossl);
     app.listen(80);
 }
