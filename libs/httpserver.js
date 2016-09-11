@@ -1,6 +1,8 @@
 /*jslint node : true*/
 'use strict';
 var express = require('express'),
+    fs = require('fs'),
+    https = require('https'),
     php = require("node-php"),
     path = require("path"),
     toobusy = require('toobusy-js'),
@@ -34,6 +36,29 @@ app.use(function (req, res, next) {
     }
 });
 
-app.listen(80);
+
 
 require('fs').watch(__filename, process.exit);
+
+
+try {
+    var privateKey = fs.readFileSync(process.env.SSL + 'ssl.key');
+    var certificate = fs.readFileSync(process.env.SSL + 'ssl.crt');
+
+
+    https.createServer({
+        key: privateKey,
+        cert: certificate
+    }, app).listen(443);
+    var http = express.createServer();
+
+    // set up a route to redirect http to https
+    http.get('*', function (req, res) {
+        res.redirect(process.env.ProductionSITE + req.url)
+    })
+
+    // have it listen on 8080
+    http.listen(80);
+} catch (nossl) {
+    app.listen(80);
+}
