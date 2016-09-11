@@ -299,7 +299,8 @@ function processLogin(data) {
     if (loggedIn || !allowLogin) {
         return;
     }
-    var info = data
+    var info = data;
+    console.log('Attempting to do login based on :', data);
     if (info.success) {
         localStorage.nickname = info.displayname;
         admin = info.data.g_access_cp;
