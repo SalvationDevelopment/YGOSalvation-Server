@@ -292,6 +292,10 @@ function registrationCall(data, socket) {
             //console.log(error);
             return;
         }
+        socket.write({
+            clientEvent: 'login',
+            info: info
+        });
         if (info.success) {
             registry[info.displayname] = socket.address.ip;
             socket.username = data.username;
@@ -307,10 +311,7 @@ function registrationCall(data, socket) {
                 message: currentGlobalMessage
             });
         }
-        socket.write({
-            clientEvent: 'login',
-            info: info
-        });
+
     });
 }
 
