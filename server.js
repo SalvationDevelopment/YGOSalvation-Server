@@ -22,6 +22,7 @@ var fs = require('fs'),
     CONFIGURATION = {
         FORUM: 'localforum',
         SITE: 'localhost',
+        SSL: process.env.SSL,
         ProductionFORUM: 'forum.ygopro.us',
         ProductionSITE: 'ygopro.us'
     };
