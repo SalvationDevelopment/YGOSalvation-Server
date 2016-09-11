@@ -307,6 +307,10 @@ function registrationCall(data, socket) {
                 message: currentGlobalMessage
             });
         }
+        socket.write({
+            clientEvent: 'login',
+            info: info
+        });
     });
 }
 

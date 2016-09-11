@@ -23,6 +23,7 @@ function initiateSlave() {
         if (lock) {
             socket.terminate();
         }
+        console.log('New connection on websocket');
         var framer = new Framemaker();
         socket.heartbeat = 0;
         socket.active_ygocore = false;
