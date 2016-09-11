@@ -107,6 +107,7 @@ updatenews();
 var launcher = false,
     internalLocal = 'home',
     loggedIn = false,
+    allowLogin = false,
     list = {};
 
 function singlesitenav(target) {
@@ -177,6 +178,10 @@ function singlesitenav(target) {
         }, 3000);
 
     }
+    if (target === 'home') {
+        allowLogin = false;
+    }
+
     $('.activescreen').removeClass('activescreen');
     $('header').not('#anti').css('left', '100vw');
     $('#anti').css('left', '0');
@@ -291,7 +296,7 @@ function mysql_real_escape_string(str) {
 }
 
 function processLogin(data) {
-    if (loggedIn) {
+    if (loggedIn || !allowLogin) {
         return;
     }
     var info = data
@@ -354,6 +359,7 @@ $(document).ready(function () {
         $('#ips_remember').prop('checked', true);
     }
     $("#dolog").click(function (ev) {
+        allowLogin = true;
         try {
             _gaq.push(['_trackEvent', 'Launcher', 'Attempt Login', $('#ips_username').val()]);
         } catch (e) {}
