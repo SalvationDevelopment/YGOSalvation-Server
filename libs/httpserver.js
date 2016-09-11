@@ -40,10 +40,9 @@ app.use(function (req, res, next) {
 
 require('fs').watch(__filename, process.exit);
 
-
 try {
-    var privateKey = fs.readFileSync(process.env.SSL + 'ssl.key');
-    var certificate = fs.readFileSync(process.env.SSL + 'ssl.crt');
+    var privateKey = fs.readFileSync(process.env.SSL + 'ssl.key').toString();
+    var certificate = fs.readFileSync(process.env.SSL + 'ssl.crt').toString();
 
 
     https.createServer({
