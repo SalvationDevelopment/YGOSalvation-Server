@@ -188,15 +188,7 @@ function singlesitenav(target) {
 function locallogin(init) {
     'use strict';
     localStorage.nickname = localStorage.nickname || '';
-    if (localStorage.nickname.length < 1 || init === true) {
-        var username = prompt('Username: ', localStorage.nickname);
-        while (!username) {
-            username = prompt('Username: ', localStorage.nickname);
-            username.replace(/[^a-zA-Z0-9_]/g, "");
-        }
-        localStorage.nickname = username;
-        $('.unlogged').removeClass("unlogged");
-    }
+
 
     $(document.body).addClass("launcher").removeClass('unlogged').removeClass('web');
     //    $('#ipblogin').css('display', 'none');
@@ -205,16 +197,9 @@ function locallogin(init) {
     } catch (e) {}
 
 
-    primus.write({
-        action: 'privateServer',
-        username: localStorage.nickname
-    });
-    loggedIn = true;
     params.nick = $('#ips_username').val();
     params.identifyPassword = $('#ips_password').val();
-    swfobject.embedSWF("lightIRC/lightIRC.swf", "lightIRC", "100%", "92%", "10.0.0", "expressInstall.swf", params, {
-        wmode: "transparent"
-    });
+
     //chatStarted = true;
     singlesitenav('faq');
     setTimeout(function () {
@@ -305,6 +290,42 @@ function mysql_real_escape_string(str) {
     });
 }
 
+function processLogin(data) {
+    if (loggedIn) {
+        return;
+    }
+    var info = data
+    if (info.success) {
+        localStorage.nickname = info.displayname;
+        admin = info.data.g_access_cp;
+        if (isChecked('#ips_remember')) {
+            localStorage.loginnick = $('#ips_username').val();
+            localStorage.loginpass = $('#ips_password').val();
+            localStorage.remember = true;
+        } else {
+            localStorage.loginnick = '';
+            localStorage.loginpass = '';
+            localStorage.remember = false;
+        }
+
+
+        locallogin();
+        loggedIn = true;
+
+
+        $('#profileusername').text(info.displayname);
+        $('#profilepoints span').text(info.data.field_12);
+        if (parseInt(info.data.post, 10) < 1) {
+            alert('Please visit our forums and introduce yourself!');
+        }
+        window.quedfunc = 'populatealllist';
+        window.quedready = true;
+    } else {
+        alert(info.message);
+    }
+
+}
+
 
 $(document).ready(function () {
     'use strict';
@@ -336,50 +357,11 @@ $(document).ready(function () {
         try {
             _gaq.push(['_trackEvent', 'Launcher', 'Attempt Login', $('#ips_username').val()]);
         } catch (e) {}
-        var url = "http://forum.ygopro.us/log.php";
-        $.ajax({
-            type: "POST",
-            url: url,
-            data: $("#ipblogin").serialize(), // serializes the form's elements.
-            success: function (data) {
-
-                var info = JSON.parse(data);
-                console.log(info);
-                if (info.success) {
-                    localStorage.nickname = info.displayname;
-                    admin = info.data.g_access_cp;
-                    if (isChecked('#ips_remember')) {
-                        localStorage.loginnick = $('#ips_username').val();
-                        localStorage.loginpass = $('#ips_password').val();
-                        localStorage.remember = true;
-                    } else {
-                        localStorage.loginnick = '';
-                        localStorage.loginpass = '';
-                        localStorage.remember = false;
-                    }
-
-
-                    locallogin();
-                    primus.write({
-                        action: 'register',
-                        username: $('#ips_username').val(),
-                        password: $('#ips_password').val()
-                    });
-                    $('#avatar').attr('src', 'http://forum.ygopro.us/uploads/' + info.avatar);
-                    $('#profileusername').text(info.displayname);
-                    $('#profilepoints span').text(info.data.field_12);
-                    if (parseInt(info.data.post, 10) < 1) {
-                        alert('Please visit our forums and introduce yourself!');
-                    }
-                    window.quedfunc = 'populatealllist';
-                    window.quedready = true;
-                } else {
-                    alert(info.message);
-                }
-            },
-            fail: function () {
-                alert('Remain calm, issue was experienced while contacting the login server.');
-            }
+        primus.write({
+            action: 'login',
+            username: $('#ips_username').val(),
+            password: $('#ips_password').val(),
+            uniqueID: uniqueID
         });
         ev.preventDefault();
         return false; // avoid to execute the actual submit of the form.
