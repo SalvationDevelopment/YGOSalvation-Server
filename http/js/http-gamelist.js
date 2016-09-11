@@ -119,15 +119,6 @@ function joinGamelist() {
         action: 'join',
         uniqueID: uniqueID
     });
-    if (loggedIn) {
-        primus.write({
-            action: 'privateServer',
-            username: localStorage.nickname,
-            uniqueID: uniqueID
-        });
-
-
-    }
 }
 joinGamelist();
 

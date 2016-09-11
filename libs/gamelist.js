@@ -458,9 +458,6 @@ function onData(data, socket) {
         break;
     case ('join'):
         socket.join(socket.address.ip + data.uniqueID);
-        socket.write({
-            clientEvent: 'registrationRequest'
-        });
 
 
         socket.join('activegames');
