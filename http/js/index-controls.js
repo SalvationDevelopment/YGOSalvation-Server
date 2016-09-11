@@ -365,7 +365,7 @@ $(document).ready(function () {
             _gaq.push(['_trackEvent', 'Launcher', 'Attempt Login', $('#ips_username').val()]);
         } catch (e) {}
         primus.write({
-            action: 'login',
+            action: 'register',
             username: $('#ips_username').val(),
             password: $('#ips_password').val(),
             uniqueID: uniqueID
