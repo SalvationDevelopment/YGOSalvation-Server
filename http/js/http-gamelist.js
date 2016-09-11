@@ -493,6 +493,7 @@ function pondata(data) {
         if (data.admin) {
             window.admin = "1";
         }
+        console.log(data);
         if (data.message) {
             if (data.clientEvent === 'global' && data.message.length && loggedIn) {
                 $('footer, #popupbody').html(data.message).addClass('loud');
