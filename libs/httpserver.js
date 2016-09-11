@@ -54,11 +54,12 @@ try {
 
     // set up a route to redirect http to https
     http.get('*', function (req, res) {
-        res.redirect(process.env.ProductionSITE + req.url)
-    })
+        res.redirect(process.env.ProductionSITE + req.url);
+    });
 
     // have it listen on 8080
     http.listen(80);
 } catch (nossl) {
+    console.log('FAILED TO APPLY SSL');
     app.listen(80);
 }
