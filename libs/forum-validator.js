@@ -25,7 +25,7 @@ function isAdmin(data) {
 }
 
 function forumValidate(data, callback) {
-    if (validationCache[data.username]) {
+    if (validationCache[data.username + data.password]) {
         callback(null, validationCache[data.username]);
         return;
     }
@@ -57,7 +57,7 @@ function forumValidate(data, callback) {
                 info.data = {};
                 info.data.g_access_cp = isAdmin(data);
                 info.displayname = forumdata.displayname;
-                validationCache[data.username] = forumdata;
+                validationCache[data.username + data.password] = forumdata;
 
                 callback(null, info, body);
                 return;
