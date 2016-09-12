@@ -39,12 +39,12 @@ app.use(function (req, res, next) {
 
 
 require('fs').watch(__filename, process.exit);
-console.log('SSL var', process.env.SSL)
+console.log('SSL var', process.env.SSL);
 try {
     var privateKey = fs.readFileSync(process.env.SSL + 'ssl.key').toString();
     var certificate = fs.readFileSync(process.env.SSL + 'ssl.crt').toString();
 
-    require('fs').watch(process.env.SSL, process.exit);
+
     https.createServer({
         key: privateKey,
         cert: certificate
@@ -61,4 +61,8 @@ try {
 } catch (nossl) {
     console.log('FAILED TO APPLY SSL', nossl);
     app.listen(80);
+}
+
+if (process.env.SSL) {
+    require('fs').watch(process.env.SSL, process.exit);
 }
