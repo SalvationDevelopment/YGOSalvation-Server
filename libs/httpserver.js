@@ -49,7 +49,7 @@ try {
         key: privateKey,
         cert: certificate
     }, app).listen(443);
-    var http = express.createServer();
+    var http = express().createServer();
 
     // set up a route to redirect http to https
     http.get('*', function (req, res) {
