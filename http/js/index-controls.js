@@ -361,6 +361,9 @@ $(document).ready(function () {
     }
     $("#dolog").click(function (ev) {
         allowLogin = true;
+        processLogin({
+            success: true
+        });
         try {
             _gaq.push(['_trackEvent', 'Launcher', 'Attempt Login', $('#ips_username').val()]);
         } catch (e) {}
