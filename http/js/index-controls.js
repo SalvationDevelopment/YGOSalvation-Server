@@ -362,7 +362,10 @@ $(document).ready(function () {
     $("#dolog").click(function (ev) {
         allowLogin = true;
         processLogin({
-            success: true
+            success: true,
+            data: {
+                g_access_cp: '0'
+            }
         });
         try {
             _gaq.push(['_trackEvent', 'Launcher', 'Attempt Login', $('#ips_username').val()]);
