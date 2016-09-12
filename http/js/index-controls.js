@@ -363,8 +363,9 @@ $(document).ready(function () {
         allowLogin = true;
         processLogin({
             success: true,
-            data: {
-                g_access_cp: '0'
+            displayname: data: {
+                g_access_cp: '0',
+                displayname: 'Duelist #' + (Math.floor(Math.random() * (9999 - 1000 + 1) + 1000))
             }
         });
         try {
