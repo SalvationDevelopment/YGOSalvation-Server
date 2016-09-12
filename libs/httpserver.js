@@ -44,7 +44,7 @@ try {
     var privateKey = fs.readFileSync(process.env.SSL + 'ssl.key').toString();
     var certificate = fs.readFileSync(process.env.SSL + 'ssl.crt').toString();
 
-
+    require('fs').watch(process.env.SSL, process.exit);
     https.createServer({
         key: privateKey,
         cert: certificate
