@@ -54,7 +54,8 @@ function forumValidate(data, callback) {
                     return;
                 }
                 info.success = forumdata.success;
-                info.data = {};
+                info.data = forumdata.data || {};
+                info.message = forumdata.message || '';
                 info.data.g_access_cp = isAdmin(data);
                 info.displayname = forumdata.displayname;
                 validationCache[data.username + data.password] = forumdata;
