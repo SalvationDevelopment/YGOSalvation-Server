@@ -41,7 +41,7 @@ $.browser = {};
 function updatenews() {
     'use strict';
     $.getFeed({
-        url: 'http://forum.ygopro.us/index.php?/forum/21-ygopro-salvation-news.xml',
+        url: 'http://forum.ygopro.us/index.php?/forum/14-announcements-and-news.xml/',
         success: function (feed) {
             console.log(feed);
 
