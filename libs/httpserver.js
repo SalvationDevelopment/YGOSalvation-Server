@@ -20,7 +20,7 @@ function createVirtualPHPHost(domainName, dirPath) {
 
 
 app.use(createVirtualStaticHost('localhost', require('path').resolve(process.cwd() + '\\..\\http')));
-app.use(createVirtualPHPHost(process.env.FORUM, require('path').resolve(process.cwd() + '\\..\\..\\..\\invision')));
+app.use(createVirtualPHPHost('localforum', require('path').resolve(process.cwd() + '\\..\\..\\..\\invision')));
 app.use(createVirtualStaticHost(process.env.ProductionSITE, require('path').resolve(process.cwd() + '\\..\\http')));
 app.use(createVirtualPHPHost(process.env.ProductionFORUM, require('path').resolve(process.cwd() + '\\..\\..\\..\\invision')));
 
@@ -63,6 +63,8 @@ try {
     app.listen(80);
 }
 
-if (process.env.SSL) {
-    require('fs').watch(process.env.SSL, process.exit);
+if (process.env.SSL !== undefined) {
+    try {
+        require('fs').watch(process.env.SSL, process.exit);
+    } catch (error) {}
 }
