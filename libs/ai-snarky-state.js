@@ -4,17 +4,23 @@
 
 
 /* This is the state engine for SnarkyChild, it keeps track of the update information from YGOPro
-and maintains a repressentation of the game state*/
-
-//I know this looks kinda odd but the code is based off of HTML/DOM manipulations that allow for animations.
-//I wanted to make the logic easy to write by just copying and refactoring.
-
-// Need to refactor this out. In the mean time need to know what some numbers mean in YGOPro land.
+ * and maintains a repressentation of the game state, I know this looks kinda odd but the code is
+ * based off of HTML/DOM manipulations  that allow for animations.I wanted to make the logic easy
+ * to write by just copying and refactoring.Need to refactor this out. In the mean time need to
+ * know what some numbers mean in YGOPro land.
+ */
 var enums = require('./enums.js');
 var fs = require('fs');
 
 
-//Constructor for card objects.
+/**
+ * Constructor for card objects.
+ * @param   {[[Type]]} movelocation [[Description]]
+ * @param   {[[Type]]} player       [[Description]]
+ * @param   {[[Type]]} index        [[Description]]
+ * @param   {[[Type]]} unique       [[Description]]
+ * @returns {object}   [[Description]]
+ */
 function Card(movelocation, player, index, unique) {
     return {
         type: 'card',
@@ -29,19 +35,33 @@ function Card(movelocation, player, index, unique) {
 }
 
 
-//various query filters for doing various things.
+/**
+ * various query filters for doing various things.
+ * @param   {[[Type]]} array [[Description]]
+ * @returns {[[Type]]} [[Description]]
+ */
 function filterIsCard(array) {
     return array.filter(function (item) {
         return item.type === 'card';
     });
 }
 
+/**
+ * various query filters for doing various things.
+ * @param   {[[Type]]} array [[Description]]
+ * @returns {[[Type]]} [[Description]]
+ */
 function filterPlayer(array, player) {
     return array.filter(function (item) {
         return item.player === player;
     });
 }
 
+/**
+ * various query filters for doing various things.
+ * @param   {[[Type]]} array [[Description]]
+ * @returns {[[Type]]} [[Description]]
+ */
 function filterlocation(array, location) {
     return array.filter(function (item) {
         return item.location === location;
@@ -60,7 +80,10 @@ function filterOverlyIndex(array, overlayindex) {
     });
 }
 
-//initiation of a single independent state intance... I guess this is a class of sorts.
+/**
+ * initiation of a single independent state intance... I guess this is a class of sorts.
+ * @returns {object} [[Description]]
+ */
 function init() {
     //the field is represented as a bunch of cards with metadata in an array, <div>card/card/card/card</div>
     //numberOfCards is used like a memory address. It must be increased by 1 when creating a new card.
