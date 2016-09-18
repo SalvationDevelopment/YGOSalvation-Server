@@ -71,16 +71,11 @@ input.entryname {
     border: none;
 }
 button.lose {
-    border-color: red;
-}
-button.lose:hover {
-    background: rgba(255, 0, 0, .5);
+    background: red;
 }
 button.win {
-    border-color: green;
-}
-button.win:hover {
-    background: rgba(100, 255, 255, .5);
+    background-color: green;
+    border: 3px solid white;
 }
 #ACP {
     width: 100%;
