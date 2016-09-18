@@ -1,7 +1,7 @@
 .tourney_col {
     width: 20%;
     float: left;
-    height: 100%;
+    height: 90%;
     display: flex;
     flex-direction: column;
 }
@@ -61,6 +61,10 @@ input.entryname {
 button.lose {
     background: red;
 }
-button.lose {
+button.win {
     background: green;
+}
+#ACP {
+    width: 100%;
+    border: 1px solid white;
 }
