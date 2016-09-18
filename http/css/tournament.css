@@ -14,6 +14,28 @@
     flex: 1;
 }
 
+.entry button {
+    width: 10%;
+    /* font-size: 0px; */
+    height: 2em;
+    color: transparent;
+    margin-left: 2.5%;
+}
+
+
+}
+.entry > * {
+    /* display: block; */
+    /* height: 1.5em; */
+    
+    align-self: center;
+}
 input.entryname {
-    width: 100%;
+    width: 75%;
+}
+.entry > * {
+    display: block;
+    /* height: 1.5em; */
+    
+    align-self: center;
 }
