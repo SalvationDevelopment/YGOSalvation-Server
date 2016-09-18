@@ -7,6 +7,7 @@
 }
 
 .entry {
+    border: 1px solid white;
     padding: 5px;
     margin: 1%;
     display: flex;
@@ -31,8 +32,16 @@ input.entryname {
 
 }
 .entry > * {
+    /* display: block; */
+    /* height: 1.5em; */
+    
     align-self: center;
-    position: relative;
+}
+.entry > * {
+    display: block;
+    /* height: 1.5em; */
+    
+    align-self: center;
 }
 .entry:before {
     content: "";
@@ -40,11 +49,10 @@ input.entryname {
     
     width: 5px;
     height: 50%;
-    /* margin-top: 45%; */
-    
+    margin-top: 45%;
     border: 1px solid white;
     border-left: none;
-    top: 25%;
-    position: absolute;
-    left: -5px;
+}
+tourney_rd1 .entry:before {
+    display: none;
 }
