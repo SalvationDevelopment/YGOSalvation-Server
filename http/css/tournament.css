@@ -20,6 +20,7 @@
     height: 2em;
     color: transparent;
     margin-left: 2.5%;
+    border: none;
 }
 
 input.entryname {
@@ -45,17 +46,21 @@ input.entryname {
 }
 .entry:before {
     content: "";
-    /* background: silver; */
-    
     width: 5px;
     height: 50%;
-    margin-top: 45%;
     border: 1px solid white;
     border-left: none;
     position: absolute;
     top: 25%;
-    left: -5%;
+    left: 0px;
 }
-tourney_rd1 .entry:before {
+#tourney_rd1 .entry:before {
     display: none;
+    border: none;
+}
+button.lose {
+    background: red;
+}
+button.lose {
+    background: green;
 }
