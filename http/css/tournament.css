@@ -12,7 +12,6 @@ div#brackets {
 }
 
 .entry {
-    padding: 5px;
     margin: 1%;
     display: flex;
     flex: 1;
@@ -33,6 +32,7 @@ input.entryname {
     border: 1px solid white;
     border-left: 0;
     width: 75%;
+    margin-left: 5px;
     color: white;
 }
 
