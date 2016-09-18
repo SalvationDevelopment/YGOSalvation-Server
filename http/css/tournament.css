@@ -22,6 +22,13 @@
     margin-left: 2.5%;
 }
 
+input.entryname {
+    background: transparent;
+    border: 1px solid white;
+    border-left: 0;
+    width: 75%;
+}
+
 
 }
 .entry > * {
@@ -30,12 +37,31 @@
     
     align-self: center;
 }
-input.entryname {
-    width: 75%;
-}
 .entry > * {
     display: block;
     /* height: 1.5em; */
     
     align-self: center;
+}
+.entry:before {
+    content: "";
+    /* background: silver; */
+    
+    width: 5px;
+    height: 50%;
+    margin-top: 45%;
+    border: 1px solid white;
+    border-left: none;
+}
+tourney_rd1 .entry:after {
+    display: none;
+}
+tourney_rd2 .entry:after {
+    margin-top: 10%;
+}
+tourney_rd3 .entry:after {
+    margin-top: 25%;
+}
+tourney_rd4 .entry:after {
+    margin-top: 45%;
 }
