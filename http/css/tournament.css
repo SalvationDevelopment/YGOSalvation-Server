@@ -24,6 +24,7 @@ div#brackets {
     color: transparent;
     margin-left: 2.5%;
     border: none;
+    border-radius: 50px;
 }
 
 input.entryname {
@@ -68,9 +69,15 @@ input.entryname {
     border: none;
 }
 button.lose {
+    border-color: red;
+}
+button.lose:hover {
     background: red;
 }
 button.win {
+    border-color: green;
+}
+button.win:hover {
     background: green;
 }
 #ACP {
