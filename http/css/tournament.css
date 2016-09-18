@@ -7,7 +7,6 @@
 }
 
 .entry {
-    border: 1px solid white;
     padding: 5px;
     margin: 1%;
     display: flex;
@@ -32,16 +31,8 @@ input.entryname {
 
 }
 .entry > * {
-    /* display: block; */
-    /* height: 1.5em; */
-    
     align-self: center;
-}
-.entry > * {
-    display: block;
-    /* height: 1.5em; */
-    
-    align-self: center;
+    position: relative;
 }
 .entry:before {
     content: "";
@@ -49,19 +40,11 @@ input.entryname {
     
     width: 5px;
     height: 50%;
-    margin-top: 45%;
+    /* margin-top: 45%; */
+    
     border: 1px solid white;
     border-left: none;
-}
-tourney_rd1 .entry:after {
-    display: none;
-}
-tourney_rd2 .entry:after {
-    margin-top: 10%;
-}
-tourney_rd3 .entry:after {
-    margin-top: 25%;
-}
-tourney_rd4 .entry:after {
-    margin-top: 45%;
+    top: 25%;
+    position: absolute;
+    left: -5px;
 }
