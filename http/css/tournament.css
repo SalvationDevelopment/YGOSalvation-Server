@@ -22,11 +22,10 @@ div#brackets {
     /* font-size: 0px; */
     height: 2em;
     color: transparent;
-    background: transparent;
+    background: white;
     margin-left: 2.5%;
     border: none;
     border-radius: 50px;
-    border: 1px solid white;
 }
 
 input.entryname {
@@ -72,6 +71,7 @@ input.entryname {
 }
 button.lose {
     background: red;
+    border: none;
 }
 button.win {
     background-color: green;
