@@ -7,11 +7,11 @@
 }
 
 .entry {
-    border: 1px solid white;
     padding: 5px;
     margin: 1%;
     display: flex;
     flex: 1;
+    position: relative;
 }
 
 .entry button {
@@ -52,6 +52,9 @@ input.entryname {
     margin-top: 45%;
     border: 1px solid white;
     border-left: none;
+    position: absolute;
+    top: 25%;
+    left: -5%;
 }
 tourney_rd1 .entry:before {
     display: none;
