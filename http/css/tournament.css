@@ -22,9 +22,11 @@ div#brackets {
     /* font-size: 0px; */
     height: 2em;
     color: transparent;
+    background: transparent;
     margin-left: 2.5%;
     border: none;
     border-radius: 50px;
+    border: 1px solid white;
 }
 
 input.entryname {
@@ -72,13 +74,13 @@ button.lose {
     border-color: red;
 }
 button.lose:hover {
-    background: red;
+    background: rgba(255, 0, 0, .5);
 }
 button.win {
     border-color: green;
 }
 button.win:hover {
-    background: green;
+    background: rgba(100, 255, 255, .5);
 }
 #ACP {
     width: 100%;
