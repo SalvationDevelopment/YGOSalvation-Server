@@ -483,6 +483,7 @@ function pondata(data) {
     } else {
         if (data.admin) {
             window.admin = "1";
+            $('#Tournamentacp').addClass('isadmin');
         }
         console.log(data);
         if (data.message) {

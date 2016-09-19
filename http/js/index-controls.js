@@ -5,6 +5,8 @@ var admin = false,
     chatStarted = false,
     dnStarted = false;
 
+var tournament = {};
+
 function isChecked(id) {
     'use strict';
     return ($(id).is(':checked'));
