@@ -113,7 +113,7 @@ function fileupdate() {
             return;
         }
     });
-
+    generate();
     return 'Update Detection System[' + ((new Date()).getTime() - startTime.getTime()) + 'ms]';
 
 }
