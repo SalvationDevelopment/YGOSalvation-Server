@@ -3,10 +3,10 @@
 
 
 
-/* This is the state engine for SnarkyChild, it keeps track of the update information from YGOPro
- * and maintains a repressentation of the game state, I know this looks kinda odd but the code is
+/* This is the state engine for a Yu-Gi-Oh game, it keeps track of the update information from YGOPro
+ * or manual mode and maintains a repressentation of the game state, I know this looks kinda odd but the code is
  * based off of HTML/DOM manipulations  that allow for animations.I wanted to make the logic easy
- * to write by just copying and refactoring.Need to refactor this out. In the mean time need to
+ * to write by just copying and refactoring. In the mean time need to
  * know what some numbers mean in YGOPro land.
  */
 var enums = require('./enums.js');
@@ -40,8 +40,8 @@ function makeCard(movelocation, player, index, unique) {
  * @param   {Array} a stack of cards which may have overlay units attached to them.
  * @returns {Array} a stack of cards, devoid of overlay units.
  */
-function filterIsCard(Array) {
-    return Array.filter(function (item) {
+function filterIsCard(stack) {
+    return stack.filter(function (item) {
         return item.type === 'card';
     });
 }
@@ -52,20 +52,20 @@ function filterIsCard(Array) {
  * @param {Number} player 0 or 1
  * @returns {Array} a stack of cards that belong to only one specified player. 
  */
-function filterPlayer(Array, player) {
-    return Array.filter(function (item) {
+function filterPlayer(stack, player) {
+    return stack.filter(function (item) {
         return item.player === player;
     });
 }
 
 /**
  * Filters out cards based on zone.
- * @param   {Array} Array a stack of cards.
+ * @param   {Array} stack a stack of cards.
  * @param {String} location
  * @returns {Array} a stack of cards that are in only one location/zone.
  */
-function filterlocation(Array, location) {
-    return Array.filter(function (item) {
+function filterlocation(stack, location) {
+    return stack.filter(function (item) {
         return item.location === location;
     });
 }
@@ -76,8 +76,8 @@ function filterlocation(Array, location) {
  * @param {Number} index
  * @returns {Array} a stack of cards that are in only one index
  */
-function filterIndex(Array, index) {
-    return Array.filter(function (item) {
+function filterIndex(stack, index) {
+    return stack.filter(function (item) {
         return item.index === index;
     });
 }
@@ -94,8 +94,8 @@ function filterOverlyIndex(Array, overlayindex) {
 }
 
 /**
- * initiation of a single independent state intance... I guess this is a class of sorts.
- * @param {function} function(view, internalState){}; called each time the stack is updated. 
+ * Initiation of a single independent state intance... I guess this is a class of sorts.
+ * @param {function} callback function(view, internalState){}; called each time the stack is updated. 
  * @returns {object} State instance
  */
 function init(callback) {
@@ -108,37 +108,7 @@ function init(callback) {
         callback = function (view, internalState) {};
     }
 
-    /**
-     * Exposed method to initialize the field; You only run this once.
-     * @param {Number} player1StartLP Player 1 starting Lifepoint count
-     * @param {Number} player2StartLP Player 2 starting Lifepoint count
-     * @param {Number} OneDeck        Number of cards in Player 1s main deck
-     * @param {Number} TwoDeck        Number of cards in Player 2s main deck
-     * @param {Number} OneExtra       Number of cards in Player 1s extra deck
-     * @param {Number} TwoExtra       Number of cards in Player 2s extra deck
-     */
-    function startDuel(player1StartLP, player2StartLP, OneDeck, TwoDeck, OneExtra, TwoExtra) {
-        var i;
 
-        // Rare instance you'll see me use a for loop.
-        for (i = 0; OneExtra > i; i++) {
-            stack.push(makeCard('EXTRA', 0, i, numberOfCards));
-            numberOfCards++;
-        }
-        for (i = 0; TwoExtra > i; i++) {
-            stack.push(makeCard('EXTRA', 1, i, numberOfCards));
-            numberOfCards++;
-        }
-        for (i = 0; OneDeck > i; i++) {
-            stack.push(makeCard('DECK', 0, i, numberOfCards));
-            numberOfCards++;
-        }
-        for (i = 0; TwoDeck > i; i++) {
-            stack.push(makeCard('DECK', 1, i, numberOfCards));
-            numberOfCards++;
-        }
-
-    }
 
     /**
      * The way the stack of cards is setup it requires a pointer to edit it.
@@ -181,7 +151,7 @@ function init(callback) {
         return {
             DECK: filterlocation(filterPlayer(stack, player), 'DECK').length,
             HAND: filterlocation(filterPlayer(stack, player), 'HAND').length,
-            EXTRA: filterOverlyIndex(filterlocation(filterPlayer(stack, player), 'EXTA')).length,
+            EXTRA: filterOverlyIndex(filterlocation(filterPlayer(stack, player), 'EXTRA')).length,
             GRAVE: filterlocation(filterPlayer(stack, player), 'GRAVE').length,
             REMOVED: filterlocation(filterPlayer(stack, player), 'REMOVED').length,
             SPELLZONE: 8,
@@ -199,7 +169,7 @@ function init(callback) {
             DECK: filterlocation(filterPlayer(stack, player), 'DECK'),
             HAND: filterlocation(filterPlayer(stack, player), 'HAND'),
             GRAVE: filterlocation(filterPlayer(stack, player, 'GRAVE')),
-            EXTRA: filterOverlyIndex(filterlocation(filterPlayer(stack, player), 'EXTA')),
+            EXTRA: filterOverlyIndex(filterlocation(filterPlayer(stack, player), 'EXTRA')),
             REMOVED: filterlocation(filterPlayer(stack, player), 'REMOVED'),
             SPELLZONE: filterlocation(filterPlayer(stack, player), 'SPELLZONE'),
             MONSTERZONE: filterlocation(filterPlayer(stack, player), 'MONSTERZONE')
@@ -216,7 +186,7 @@ function init(callback) {
             DECK: filterlocation(filterPlayer(stack, player), 'DECK').length,
             HAND: filterlocation(filterPlayer(stack, player), 'HAND').length,
             GRAVE: filterlocation(filterPlayer(stack, player, 'GRAVE')),
-            EXTRA: filterOverlyIndex(filterlocation(filterPlayer(stack, player), 'EXTA')).length,
+            EXTRA: filterOverlyIndex(filterlocation(filterPlayer(stack, player), 'EXTRA')).length,
             REMOVED: filterlocation(filterPlayer(stack, player), 'REMOVED'),
             SPELLZONE: filterlocation(filterPlayer(stack, player), 'SPELLZONE'),
             MONSTERZONE: filterlocation(filterPlayer(stack, player), 'MONSTERZONE')
@@ -289,23 +259,6 @@ function init(callback) {
 
     }
 
-    //update state of A GROUP OF CARDS based on info from YGOPro
-    function updateData(player, clocation, arrayOfCards) {
-        var target,
-            pointer;
-
-        arrayOfCards.forEach(function (card, index) {
-            if (card.Code !== 'nocard') {
-                target = queryCard(player, enums.locations[clocation], index, 0);
-                pointer = uidLookup(target[0].uid);
-                stack[pointer].position = card.Position;
-                stack[pointer].id = card.Code;
-            }
-        });
-
-        callback(generateView(), stack);
-    }
-
     //update state of A SINGLE CARD based on info from YGOPro
     function updateCard(player, clocation, index, card) {
         var target,
@@ -315,6 +268,18 @@ function init(callback) {
         pointer = uidLookup(target[0].uid);
         stack[pointer].position = card.Position;
         stack[pointer].id = card.Code;
+        callback(generateView(), stack);
+    }
+
+    //update state of A GROUP OF CARDS based on info from YGOPro
+    function updateData(player, clocation, arrayOfCards) {
+        var target,
+            pointer;
+
+        arrayOfCards.forEach(function (card, index) {
+            updateCard(player, clocation, index, card);
+        });
+
         callback(generateView(), stack);
     }
 
@@ -390,6 +355,47 @@ function init(callback) {
         callback(generateView(), stack);
     }
 
+    /**
+     * Exposed method to initialize the field; You only run this once.
+     */
+    function startDuel(player1, player2) {
+
+        // Rare instance you'll see me use a for loop.
+        player1.main.forEach(function (card, index) {
+            stack.push(makeCard('DECK', 0, index, numberOfCards));
+            updateCard(0, 'DECK', index, {
+                Code: card.Code,
+                Position: 'FaceDown'
+            });
+            numberOfCards++;
+        });
+        player2.main.forEach(function (card, index) {
+            stack.push(makeCard('DECK', 1, index, numberOfCards));
+            updateCard(1, 'DECK', index, {
+                Code: card.Code,
+                Position: 'FaceDown'
+            });
+            numberOfCards++;
+        });
+
+        player1.extra.forEach(function (card, index) {
+            stack.push(makeCard('EXTRA', 0, index, numberOfCards));
+            updateCard(0, 'EXTRA', index, {
+                Code: card.Code,
+                Position: 'FaceDown'
+            });
+            numberOfCards++;
+        });
+        player2.extra.forEach(function (card, index) {
+            stack.push(makeCard('EXTRA', 1, index, numberOfCards));
+            updateCard(1, 'EXTRA', index, {
+                Code: card.Code,
+                Position: 'FaceDown'
+            });
+            numberOfCards++;
+        });
+    }
+
     //expose public functions.
     return {
         startDuel: startDuel,
@@ -406,3 +412,21 @@ function init(callback) {
 }
 
 module.exports = init;
+
+
+/** Usage
+
+makegameState = require('./state.js');
+
+state = makegameState(function(view, stack){
+    updateplayer1(view.player1);
+    updateplayer2(view.player1);
+    updatespectators(view.specators);
+    savegameforlater(stack;)
+});
+
+shuffledecks();
+
+state.startDuel(player1, player2, );
+
+**/
