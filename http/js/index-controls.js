@@ -1,5 +1,5 @@
 /*jslint browser:true, plusplus:true, nomen: true, regexp:true*/
-/*global $, saveSettings, Handlebars, prompt, _gaq, isChecked, alert, primus, ygopro, translationDB, params, swfobject, console, FileReader, prompt, confirm*/
+/*global $, saveSettings, Handlebars, prompt, _gaq, isChecked, alert, primus, ygopro, translationDB, params, swfobject, console, FileReader, prompt, confirm, jQuery*/
 
 var admin = false,
     chatStarted = false,
@@ -30,7 +30,7 @@ Handlebars.getTemplate = function (name) {
 };
 $.browser = {};
 (function () {
-
+    'use strict';
     $.browser.msie = false;
     $.browser.version = 0;
 
@@ -38,7 +38,7 @@ $.browser = {};
         jQuery.browser.msie = true;
         jQuery.browser.version = RegExp.$1;
     }
-})();
+}());
 
 function updatenews() {
     'use strict';
@@ -298,6 +298,7 @@ function mysql_real_escape_string(str) {
 }
 
 function processLogin(data) {
+    'use strict';
     if (loggedIn || !allowLogin) {
         return;
     }
@@ -337,18 +338,18 @@ function processLogin(data) {
 function updateranking() {
     'use strict';
     $.getJSON('http://ygopro.us/ranking.json', function (feed) {
-            va rows = [];
-            Object.keys(feed).forEach(function (person) {
-                rows.push({
-                    name: person,
-                    points: feed[person]
-                });
+        var rows = [];
+        Object.keys(feed).forEach(function (person) {
+            rows.push({
+                name: person,
+                points: feed[person]
             });
-            $.get('handlebars/ranking.handlebars', function (template) {
-                var parser = Handlebars.compile(template);
-                $('#rankingtable').html(parser(rows));
-            });
-        }
+        });
+        $.get('handlebars/ranking.handlebars', function (template) {
+            var parser = Handlebars.compile(template);
+            $('#rankingtable').html(parser(rows));
+        });
+
     });
 }
 
