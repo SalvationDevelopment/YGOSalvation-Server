@@ -2029,6 +2029,18 @@ div#eventsandtournaments {
     height: 100%;
 }
 
+div#rankingtable table {
+    width: 50%;
+    margin: 0 auto;
+    text-align: center;
+}
+
+div#rankingtable table td {
+    background: rgba(0, 0, 0, .5);
+    padding: 5px;
+    border: 1px solid white;
+}
+
 
 /* =========================================
 =================================
