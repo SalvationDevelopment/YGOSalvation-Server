@@ -15,11 +15,11 @@ var fs = require('fs');
 
 /**
  * Constructor for card objects.
- * @param   {[[Type]]} movelocation [[Description]]
- * @param   {[[Type]]} player       [[Description]]
- * @param   {[[Type]]} index        [[Description]]
- * @param   {[[Type]]} unique       [[Description]]
- * @returns {object}   [[Description]]
+ * @param   {string} movelocation 'DECK'/'EXTRA' etc, in caps. 
+ * @param   {number} player       [[Description]]
+ * @param   {number} index        [[Description]]
+ * @param   {number} unique       [[Description]]
+ * @returns {object}   a card
  */
 function Card(movelocation, player, index, unique) {
     return {
@@ -37,8 +37,8 @@ function Card(movelocation, player, index, unique) {
 
 /**
  * various query filters for doing various things.
- * @param   {array} array [[Description]]
- * @returns {array} [[Description]]
+ * @param   {array} array a stack of cards which may have overlay units attached to them.
+ * @returns {array} a stack of cards, devoid of overlay units.
  */
 function filterIsCard(array) {
     return array.filter(function (item) {
