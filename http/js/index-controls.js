@@ -340,11 +340,14 @@ function updateranking() {
     $.getJSON('http://ygopro.us/ranking.json', function (feed) {
         var rows = [];
         console.log(feed);
-        Object.keys(JSON.parse(feed)).forEach(function (person) {
+        Object.keys(feed).forEach(function (person) {
             rows.push({
                 name: person,
                 points: feed[person]
             });
+        });
+        rows = rows.sort(function (a, b) {
+            return a.points - b.points
         });
         $.get('handlebars/ranking.handlebars', function (template) {
             var parser = Handlebars.compile(template);
