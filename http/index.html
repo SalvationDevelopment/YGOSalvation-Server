@@ -84,6 +84,8 @@
             </li>
             <li><span data-translation-events class="psudolinksingle" onclick="singlesitenav('TournamentACP')">Tournaments</span>
             </li>
+            <li><span data-translation-events class="psudolinksingle" onclick="singlesitenav('ranking')">Ranking</span>
+            </li>
             <!--
             <li><span data-translation-ranking class="psudolinksingle" onclick="singlesitenav('ranking');">Profile</span>
 </li>
@@ -1010,7 +1012,12 @@
             <button id="start">Start</button>
             <button id="finish">Finish</button>
             <button id="announce">Announce</button>
+            <button id="randomize">Randomize</button>
         </div>
+    </header>
+    <header style="padding-top:50px" id="ranking">
+        <h2>Ranking</h2>
+        <div id="rankingtable"></div>
     </header>
     <header style="padding-top:50px" id="settings">
 
@@ -1943,7 +1950,7 @@
 
     <header style="padding-top:50px" id="legal">
         <div id="legaldisclaimer">
-			<p><b>ATTENTION:</b> All accounts created before Friday, September 16 were deleted due to an issue involving the forums. If your account isn't working, that means that you must register a new account. Remember, all decks are saved on your computer, and not on our server.</p> 
+            <p><b>ATTENTION:</b> All accounts created before Friday, September 16 were deleted due to an issue involving the forums. If your account isn't working, that means that you must register a new account. Remember, all decks are saved on your computer, and not on our server.</p>
             <p>Welcome to YGOPro Salvation, it is better than all other YGOPro variants. </p>
             <p>Please wait for the updater in the top-left corner of the launcher to finish before accessing any of the features. The launcher will not behave properly until the updates are complete. First time users may notice that card pictures are missing from the client, which is because they are not included with the installation. Either wait for the updater to add the pictures (it will take a long time depending on your internet speed), or contact a staff member in our Discord server.</p>
             <p>Just like other YGOPro variants, not all cards may prompt when the user expects. Holding the <b>A</b> key, holding left-click, or clicking on the <b>Always chain</b> button will force cards to prompt, and holding the <b>S</b> key, holding right-click, or clicking the <b>Ignore chain</b> button will skip all prompts.</p>
