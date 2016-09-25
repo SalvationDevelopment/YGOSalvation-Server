@@ -334,6 +334,23 @@ function processLogin(data) {
 
 }
 
+function updateranking() {
+    'use strict';
+    $.getJSON('http://ygopro.us/ranking.json', function (feed) {
+            va rows = [];
+            Object.keys(feed).forEach(function (person) {
+                rows.push({
+                    name: person,
+                    points: feed[person]
+                });
+            });
+            $.get('handlebars/ranking.handlebars', function (template) {
+                var parser = Handlebars.compile(template);
+                $('#rankingtable').html(parser(rows));
+            });
+        }
+    });
+}
 
 $(document).ready(function () {
     'use strict';
