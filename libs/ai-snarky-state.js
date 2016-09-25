@@ -101,6 +101,8 @@ function init() {
      */
     function startDuel(player1StartLP, player2StartLP, OneDeck, TwoDeck, OneExtra, TwoExtra) {
         var i;
+
+        // Rare instance you'll see me use a for loop.
         for (i = 0; OneExtra > i; i++) {
             stack.push(new Card('EXTRA', 0, i, numberOfCards));
             numberOfCards++;
@@ -159,24 +161,67 @@ function init() {
         };
     }
 
+    function generateSinglePlayerView(player) {
+        return {
+            DECK: filterlocation(filterPlayer(stack, player), 'DECK'),
+            HAND: filterlocation(filterPlayer(stack, player), 'HAND'),
+            GRAVE: filterlocation(filterPlayer(stack, player, 'GRAVE')),
+            EXTRA: filterOverlyIndex(filterlocation(filterPlayer(stack, player), 'EXTA')),
+            REMOVED: filterlocation(filterPlayer(stack, player), 'REMOVED'),
+            SPELLZONE: filterlocation(filterPlayer(stack, player), 'SPELLZONE'),
+            MONSTERZONE: filterlocation(filterPlayer(stack, player), 'MONSTERZONE')
+        };
+    }
+
+    function generateSinglePlayerSpectatorView(player) {
+        return {
+            DECK: filterlocation(filterPlayer(stack, player), 'DECK').length,
+            HAND: filterlocation(filterPlayer(stack, player), 'HAND').length,
+            GRAVE: filterlocation(filterPlayer(stack, player, 'GRAVE')),
+            EXTRA: filterOverlyIndex(filterlocation(filterPlayer(stack, player), 'EXTA')).length,
+            REMOVED: filterlocation(filterPlayer(stack, player), 'REMOVED'),
+            SPELLZONE: filterlocation(filterPlayer(stack, player), 'SPELLZONE'),
+            MONSTERZONE: filterlocation(filterPlayer(stack, player), 'MONSTERZONE')
+        };
+    }
+
+    function generateSpectatorView() {
+        return [generateSinglePlayerSpectatorView(0), generateSinglePlayerSpectatorView(1)];
+    }
+
+    function generatePlayer1View() {
+        return [generateSinglePlayerView(0), generateSinglePlayerSpectatorView(1)];
+    }
+
+    function generatePlayer2View() {
+        return [generateSinglePlayerSpectatorView(0), generateSinglePlayerView(1)];
+    }
+
+    function generateView() {
+        return {
+            player1: generatePlayer1View(),
+            player2: generatePlayer2View(),
+            spectators: generateSpectatorView()
+        };
+    }
+
     function reIndex(player, location) {
         //again YGOPro doesnt manage data properly... and doesnt send the index update for the movement command.
         //that or Im somehow missing it in moveCard().
         var zone = filterlocation(filterPlayer(stack, player), location),
-            pointer,
-            i;
-        for (i = 0; zone.length > i; i++) {
-            pointer = uidLookup(zone[i].uid);
-            stack[pointer].index = i;
-        }
+            pointer;
+
+        zone.forEach(function (card, index) {
+            pointer = uidLookup(card.uid);
+            stack[pointer].index = index;
+        });
     }
     //finds a card, then moves it elsewhere.
     function setState(player, clocation, index, moveplayer, movelocation, moveindex, moveposition, overlayindex, isBecomingCard) {
         console.log('set:', player, clocation, index, moveplayer, movelocation, moveindex, moveposition, overlayindex, isBecomingCard);
         var target = queryCard(player, clocation, index, 0),
             pointer = uidLookup(target[0].uid),
-            zone,
-            i;
+            zone;
 
         stack[pointer].player = moveplayer;
         stack[pointer].location = movelocation;
@@ -195,17 +240,17 @@ function init() {
     //update state of A GROUP OF CARDS based on info from YGOPro
     function updateData(player, clocation, arrayOfCards) {
         var target,
-            pointer,
-            i;
+            pointer;
 
-        for (i = 0; arrayOfCards.length > i; i++) {
-            if (arrayOfCards[i].Code !== 'nocard') {
-                target = queryCard(player, enums.locations[clocation], i, 0);
+        arrayOfCards.forEach(function (card, index) {
+            if (card.Code !== 'nocard') {
+                target = queryCard(player, enums.locations[clocation], index, 0);
                 pointer = uidLookup(target[0].uid);
-                stack[pointer].position = arrayOfCards[i].Position;
-                stack[pointer].id = arrayOfCards[i].Code;
+                stack[pointer].position = card.Position;
+                stack[pointer].id = card.Code;
             }
-        }
+        });
+
         fs.writeFileSync('output.json', JSON.stringify(stack, null, 4));
     }
 
