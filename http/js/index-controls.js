@@ -351,7 +351,7 @@ function updateranking() {
             });
         });
         rows = rows.sort(function (a, b) {
-            return a.points - b.points
+            return b.points - a.points
         });
         $.get('handlebars/ranking.handlebars', function (template) {
             var parser = Handlebars.compile(template);
