@@ -337,7 +337,7 @@ function processLogin(data) {
 
 function updateranking() {
     'use strict';
-    $.get('http://ygopro.us/ranking.json', function (feed) {
+    $.getJSON('http://ygopro.us/ranking.json', function (feed) {
         var rows = [];
         console.log(feed);
         Object.keys(JSON.parse(feed)).forEach(function (person) {
