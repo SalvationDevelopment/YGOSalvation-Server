@@ -10,15 +10,15 @@
  * know what some numbers mean in YGOPro land.
  */
 var enums = require('./enums.js');
-var fs = require('fs');
+
 
 
 /**
  * Constructor for card objects.
- * @param   {string} movelocation 'DECK'/'EXTRA' etc, in caps. 
- * @param   {number} player       [[Description]]
- * @param   {number} index        [[Description]]
- * @param   {number} unique       [[Description]]
+ * @param    movelocation 'DECK'/'EXTRA' etc, in caps. 
+ * @param   {Number} player       [[Description]]
+ * @param   {Number} index        [[Description]]
+ * @param   {Number} unique       [[Description]]
  * @returns {object}   a card
  */
 function Card(movelocation, player, index, unique) {
@@ -36,46 +36,59 @@ function Card(movelocation, player, index, unique) {
 
 
 /**
- * various query filters for doing various things.
- * @param   {array} array a stack of cards which may have overlay units attached to them.
- * @returns {array} a stack of cards, devoid of overlay units.
+ * Filters non cards from a collection of possible cards.
+ * @param   {Array} a stack of cards which may have overlay units attached to them.
+ * @returns {Array} a stack of cards, devoid of overlay units.
  */
-function filterIsCard(array) {
-    return array.filter(function (item) {
+function filterIsCard(Array) {
+    return Array.filter(function (item) {
         return item.type === 'card';
     });
 }
 
 /**
- * various query filters for doing various things.
- * @param   {[[Type]]} array [[Description]]
- * @returns {[[Type]]} [[Description]]
+ * Filters out cards based on player.
+ * @param   {Array} Array a stack of cards.
+ * @param {Number} player 0 or 1
+ * @returns {Array} a stack of cards that belong to only one specified player. 
  */
-function filterPlayer(array, player) {
-    return array.filter(function (item) {
+function filterPlayer(Array, player) {
+    return Array.filter(function (item) {
         return item.player === player;
     });
 }
 
 /**
- * various query filters for doing various things.
- * @param   {[[Type]]} array [[Description]]
- * @returns {[[Type]]} [[Description]]
+ * Filters out cards based on zone.
+ * @param   {Array} Array a stack of cards.
+ * @param {String} location
+ * @returns {Array} a stack of cards that are in only one location/zone.
  */
-function filterlocation(array, location) {
-    return array.filter(function (item) {
+function filterlocation(Array, location) {
+    return Array.filter(function (item) {
         return item.location === location;
     });
 }
 
-function filterIndex(array, index) {
-    return array.filter(function (item) {
+/**
+ * Filters out cards based on index.
+ * @param   {Array}  a stack of cards.
+ * @param {Number} index
+ * @returns {Array} a stack of cards that are in only one index
+ */
+function filterIndex(Array, index) {
+    return Array.filter(function (item) {
         return item.index === index;
     });
 }
-
-function filterOverlyIndex(array, overlayindex) {
-    return array.filter(function (item) {
+/**
+ * Filters out cards based on if they are overlay units or not.
+ * @param {Array} Array a stack of cards attached to a single monster as overlay units.
+ * @param {Number} overlayindex
+ * @returns {Array} a single card
+ */
+function filterOverlyIndex(Array, overlayindex) {
+    return Array.filter(function (item) {
         return item.overlayindex === overlayindex;
     });
 }
@@ -84,20 +97,24 @@ function filterOverlyIndex(array, overlayindex) {
  * initiation of a single independent state intance... I guess this is a class of sorts.
  * @returns {object} State instance
  */
-function init() {
-    //the field is represented as a bunch of cards with metadata in an array, <div>card/card/card/card</div>
+function init(callback) {
+    //the field is represented as a bunch of cards with metadata in an Array, <div>card/card/card/card</div>
     //numberOfCards is used like a memory address. It must be increased by 1 when creating a new card.
     var stack = [],
         numberOfCards = 0;
 
+    if (typeof callback !== 'function') {
+        callback = function (view, internalState) {};
+    }
+
     /**
      * Exposed method to initialize the field; You only run this once.
-     * @param {number} player1StartLP Player 1 starting Lifepoint count
-     * @param {number} player2StartLP Player 2 starting Lifepoint count
-     * @param {number} OneDeck        Number of cards in Player 1s main deck
-     * @param {number} TwoDeck        Number of cards in Player 2s main deck
-     * @param {number} OneExtra       Number of cards in Player 1s extra deck
-     * @param {number} TwoExtra       Number of cards in Player 2s extra deck
+     * @param {Number} player1StartLP Player 1 starting Lifepoint count
+     * @param {Number} player2StartLP Player 2 starting Lifepoint count
+     * @param {Number} OneDeck        Number of cards in Player 1s main deck
+     * @param {Number} TwoDeck        Number of cards in Player 2s main deck
+     * @param {Number} OneExtra       Number of cards in Player 1s extra deck
+     * @param {Number} TwoExtra       Number of cards in Player 2s extra deck
      */
     function startDuel(player1StartLP, player2StartLP, OneDeck, TwoDeck, OneExtra, TwoExtra) {
         var i;
@@ -123,24 +140,28 @@ function init() {
     }
 
     /**
-     * the way the stack of cards is setup it requires a pointer to edit it.
+     * The way the stack of cards is setup it requires a pointer to edit it.
+     * @param {Number} provide a unique idenifier
+     * @returns {Number} index of that unique identifier in the stack.
      */
     function uidLookup(uid) {
-        var i;
-        for (i = 0; stack.length > i; i++) {
-            if (stack[i].uid === uid) {
-                return i;
+        var result;
+        stack.some(function (card, index) {
+            if (card.uid === uid) {
+                result = index;
+                return true;
             }
-        }
+        });
+        return result;
     }
 
     /**
-     * returns info on a card.
-     * @param   {number} player       Player Interger
-     * @param   {number} clocation    Location enumeral
-     * @param   {number} index        Index
-     * @param   {number} overlayindex Index of where a card is in an XYZ stack starting at 1
-     * @returns {array} [[Description]]
+     * Returns info on a card.
+     * @param   {Number} player       Player Interger
+     * @param   {Number} clocation    Location enumeral
+     * @param   {Number} index        Index
+     * @param   {Number} overlayindex Index of where a card is in an XYZ stack starting at 1
+     * @returns {Array} [[Description]]
      */
     function queryCard(player, clocation, index, overlayindex) {
         return filterOverlyIndex(filterIndex(filterlocation(filterPlayer(stack, player), clocation), index), overlayindex);
@@ -149,6 +170,12 @@ function init() {
     /*The YGOPro messages have a design flaw in them where they dont tell the number of cards
     that you have to itterate over in order to get a proper message, this function resolves that problem,
     this flaw has caused me all types of grief.*/
+
+    /**
+     * Returns the number of cards in each zone.
+     * @param   {Number} player index
+     * @returns {object}   information on number of slots on each zone.
+     */
     function cardCollections(player) {
         return {
             DECK: filterlocation(filterPlayer(stack, player), 'DECK').length,
@@ -161,6 +188,11 @@ function init() {
         };
     }
 
+    /**
+     * Generate the view for a specific given player
+     * @param   {Number} the given player
+     * @returns {object} all the cards the given player can see on thier side of the field.
+     */
     function generateSinglePlayerView(player) {
         return {
             DECK: filterlocation(filterPlayer(stack, player), 'DECK'),
@@ -173,6 +205,11 @@ function init() {
         };
     }
 
+    /**
+     * Generate the view for a spectator or opponent
+     * @param   {Number} the given player
+     * @returns {object} all the cards the given spectator/opponent can see on that side of the field.
+     */
     function generateSinglePlayerSpectatorView(player) {
         return {
             DECK: filterlocation(filterPlayer(stack, player), 'DECK').length,
@@ -185,18 +222,34 @@ function init() {
         };
     }
 
+    /**
+     * Generate a full view of the field for a spectator.
+     * @returns {Array} complete view of the current field based on the stack.
+     */
     function generateSpectatorView() {
         return [generateSinglePlayerSpectatorView(0), generateSinglePlayerSpectatorView(1)];
     }
 
+    /**
+     * Generate a full view of the field for a Player 1.
+     * @returns {Array} complete view of the current field based on the stack.
+     */
     function generatePlayer1View() {
         return [generateSinglePlayerView(0), generateSinglePlayerSpectatorView(1)];
     }
 
+    /**
+     * Generate a full view of the field for a Player 2.
+     * @returns {Array} complete view of the current field based on the stack.
+     */
     function generatePlayer2View() {
         return [generateSinglePlayerSpectatorView(0), generateSinglePlayerView(1)];
     }
 
+    /**
+     * Generate a full view of the field for all view types.
+     * @returns {Array} complete view of the current field based on the stack for every view type.
+     */
     function generateView() {
         return {
             player1: generatePlayer1View(),
@@ -231,9 +284,7 @@ function init() {
         reIndex(player, 'GRAVE');
         reIndex(player, 'HAND');
         reIndex(player, 'EXTRA');
-
-
-        fs.writeFileSync('output.json', JSON.stringify(stack, null, 4));
+        callback(generateView(), stack);
 
     }
 
@@ -251,7 +302,7 @@ function init() {
             }
         });
 
-        fs.writeFileSync('output.json', JSON.stringify(stack, null, 4));
+        callback(generateView(), stack);
     }
 
     //update state of A SINGLE CARD based on info from YGOPro
@@ -263,7 +314,7 @@ function init() {
         pointer = uidLookup(target[0].uid);
         stack[pointer].position = card.Position;
         stack[pointer].id = card.Code;
-        fs.writeFileSync('output.json', JSON.stringify(stack, null, 4));
+        callback(generateView(), stack);
     }
 
     //Flip summon, change to attack mode, change to defense mode, and similar movements.
@@ -273,7 +324,7 @@ function init() {
 
         stack[pointer].id = code;
         setState(cc, cl, cs, cc, cl, cs, cp, 0, false);
-        fs.writeFileSync('output.json', JSON.stringify(stack, null, 4));
+        callback(generateView(), stack);
     }
 
     function moveCard(code, pc, pl, ps, pp, cc, cl, cs, cp) {
@@ -321,9 +372,9 @@ function init() {
 
     /**
      * Draws a card, updates state.
-     * @param {number} player        [[Description]]
-     * @param {number} numberOfCards [[Description]]
-     * @param {array} cards         [[Description]]
+     * @param {Number} player        [[Description]]
+     * @param {Number} numberOfCards [[Description]]
+     * @param {Array} cards         [[Description]]
      */
     function drawCard(player, numberOfCards, cards) {
         var currenthand = filterlocation(filterPlayer(stack, player), 'HAND').length,
@@ -339,7 +390,7 @@ function init() {
             pointer = uidLookup(target[0].uid);
             stack[pointer].id = cards[i].Code;
         }
-        fs.writeFileSync('output.json', JSON.stringify(stack, null, 4));
+        callback(generateView(), stack);
     }
 
     //expose public functions.
@@ -350,7 +401,8 @@ function init() {
         cardCollections: cardCollections,
         changeCardPosition: changeCardPosition,
         moveCard: moveCard,
-        drawCard: drawCard
+        drawCard: drawCard,
+        callback: callback
     };
 
 
