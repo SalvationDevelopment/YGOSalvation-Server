@@ -37,8 +37,8 @@ function Card(movelocation, player, index, unique) {
 
 /**
  * various query filters for doing various things.
- * @param   {[[Type]]} array [[Description]]
- * @returns {[[Type]]} [[Description]]
+ * @param   {array} array [[Description]]
+ * @returns {array} [[Description]]
  */
 function filterIsCard(array) {
     return array.filter(function (item) {
@@ -82,7 +82,7 @@ function filterOverlyIndex(array, overlayindex) {
 
 /**
  * initiation of a single independent state intance... I guess this is a class of sorts.
- * @returns {object} [[Description]]
+ * @returns {object} State instance
  */
 function init() {
     //the field is represented as a bunch of cards with metadata in an array, <div>card/card/card/card</div>
@@ -90,7 +90,15 @@ function init() {
     var stack = [],
         numberOfCards = 0;
 
-    //exposed method to initialize the field;
+    /**
+     * Exposed method to initialize the field; You only run this once.
+     * @param {number} player1StartLP Player 1 starting Lifepoint count
+     * @param {number} player2StartLP Player 2 starting Lifepoint count
+     * @param {number} OneDeck        Number of cards in Player 1s main deck
+     * @param {number} TwoDeck        Number of cards in Player 2s main deck
+     * @param {number} OneExtra       Number of cards in Player 1s extra deck
+     * @param {number} TwoExtra       Number of cards in Player 2s extra deck
+     */
     function startDuel(player1StartLP, player2StartLP, OneDeck, TwoDeck, OneExtra, TwoExtra) {
         var i;
         for (i = 0; OneExtra > i; i++) {
@@ -112,7 +120,9 @@ function init() {
 
     }
 
-    //the way the stack of cards is setup it requires a pointer to edit it.
+    /**
+     * the way the stack of cards is setup it requires a pointer to edit it.
+     */
     function uidLookup(uid) {
         var i;
         for (i = 0; stack.length > i; i++) {
@@ -122,7 +132,14 @@ function init() {
         }
     }
 
-    //returns info on a card.
+    /**
+     * returns info on a card.
+     * @param   {number} player       Player Interger
+     * @param   {number} clocation    Location enumeral
+     * @param   {number} index        Index
+     * @param   {number} overlayindex Index of where a card is in an XYZ stack starting at 1
+     * @returns {array} [[Description]]
+     */
     function queryCard(player, clocation, index, overlayindex) {
         return filterOverlyIndex(filterIndex(filterlocation(filterPlayer(stack, player), clocation), index), overlayindex);
     }
@@ -257,6 +274,12 @@ function init() {
         }
     }
 
+    /**
+     * Draws a card, updates state.
+     * @param {number} player        [[Description]]
+     * @param {number} numberOfCards [[Description]]
+     * @param {array} cards         [[Description]]
+     */
     function drawCard(player, numberOfCards, cards) {
         var currenthand = filterlocation(filterPlayer(stack, player), 'HAND').length,
             topcard,
