@@ -95,6 +95,7 @@ function filterOverlyIndex(Array, overlayindex) {
 
 /**
  * initiation of a single independent state intance... I guess this is a class of sorts.
+ * @param {function} function(view, internalState){}; called each time the stack is updated. 
  * @returns {object} State instance
  */
 function init(callback) {
@@ -318,49 +319,49 @@ function init(callback) {
     }
 
     //Flip summon, change to attack mode, change to defense mode, and similar movements.
-    function changeCardPosition(code, cc, cl, cs, cp) {
-        var target = queryCard(cc, cl, cs, 0),
+    function changeCardPosition(code, currentController, cl, currentSequence, currentPosition) {
+        var target = queryCard(currentController, cl, currentSequence, 0),
             pointer = uidLookup(target[0].uid);
 
         stack[pointer].id = code;
-        setState(cc, cl, cs, cc, cl, cs, cp, 0, false);
+        setState(currentController, cl, currentSequence, currentController, cl, currentSequence, currentPosition, 0, false);
         callback(generateView(), stack);
     }
 
-    function moveCard(code, pc, pl, ps, pp, cc, cl, cs, cp) {
+    function moveCard(code, previousController, previousLocation, previousSequence, previousPosition, currentController, currentLocation, currentSequence, currentPosition) {
         //this is ugly, needs labling.
         var target,
             pointer,
             zone,
             i;
-        if (pl === 0) {
-            stack.push(new Card(enums.locations[cl], cc, cs, numberOfCards));
+        if (previousLocation === 0) {
+            stack.push(new Card(enums.locations[currentLocation], currentController, currentSequence, numberOfCards));
             numberOfCards++;
             return;
-        } else if (cl === 0) {
-            target = queryCard(pc, enums.locations[pl], ps, 0);
+        } else if (currentLocation === 0) {
+            target = queryCard(previousController, enums.locations[previousLocation], previousSequence, 0);
             pointer = uidLookup(target[0].uid);
             delete stack[pointer];
             numberOfCards--;
             return;
         } else {
-            if (!(pl & 0x80) && !(cl & 0x80)) { //duelclient line 1885
-                setState(pc, enums.locations[pl], ps, cc, enums.locations[cl], cs, cp, 0, false);
-            } else if (!(pl & 0x80)) {
+            if (!(previousLocation & 0x80) && !(currentLocation & 0x80)) { //duelclient line 1885
+                setState(previousController, enums.locations[previousLocation], previousSequence, currentController, enums.locations[currentLocation], currentSequence, currentPosition, 0, false);
+            } else if (!(previousLocation & 0x80)) {
                 //targeting a card to become a xyz unit....
-                setState(pc, enums.locations[pl], ps, cc, enums.locations[(cl & 0x7f)], cs, cp, 0, true);
+                setState(previousController, enums.locations[previousLocation], previousSequence, currentController, enums.locations[(currentLocation & 0x7f)], currentSequence, currentPosition, 0, true);
 
 
-            } else if (!(cl & 0x80)) {
+            } else if (!(currentLocation & 0x80)) {
                 //turning an xyz unit into a normal card....
-                setState(pc, enums.locations[(pl & 0x7f)], ps, cc, enums.locations[cl], cs, cp, pp);
+                setState(previousController, enums.locations[(previousLocation & 0x7f)], previousSequence, currentController, enums.locations[currentLocation], currentSequence, currentPosition, previousPosition);
             } else {
                 //move one xyz unit to become the xyz unit of something else....');
                 //                $('.overlayunit.p' + cc + '.i' + cs).each(function (i) {
                 //                    $(this).attr('data-overlayunit', (i));
                 //                });
-                setState(pc, enums.locations[(pl & 0x7f)], ps, cc, enums.locations[(cl & 0x7f)], cs, cp, pp, true);
-                zone = filterIndex(filterlocation(filterPlayer(stack, cc), enums.locations[(cl & 0x7f)]), cs);
+                setState(previousController, enums.locations[(previousLocation & 0x7f)], previousSequence, currentController, enums.locations[(currentLocation & 0x7f)], currentSequence, currentPosition, previousPosition, true);
+                zone = filterIndex(filterlocation(filterPlayer(stack, currentController), enums.locations[(currentLocation & 0x7f)]), currentSequence);
                 for (i = 1; zone.length > i; i++) {
                     pointer = uidLookup(zone[i].uid);
                     stack[pointer].overlayindex = i;
