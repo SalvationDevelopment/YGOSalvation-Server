@@ -21,7 +21,7 @@ var enums = require('./enums.js');
  * @param   {Number} unique       [[Description]]
  * @returns {object}   a card
  */
-function Card(movelocation, player, index, unique) {
+function makeCard(movelocation, player, index, unique) {
     return {
         type: 'card',
         player: player,
@@ -100,7 +100,7 @@ function filterOverlyIndex(Array, overlayindex) {
  */
 function init(callback) {
     //the field is represented as a bunch of cards with metadata in an Array, <div>card/card/card/card</div>
-    //numberOfCards is used like a memory address. It must be increased by 1 when creating a new card.
+    //numberOfCards is used like a memory address. It must be increased by 1 when creating a makeCard.
     var stack = [],
         numberOfCards = 0;
 
@@ -122,19 +122,19 @@ function init(callback) {
 
         // Rare instance you'll see me use a for loop.
         for (i = 0; OneExtra > i; i++) {
-            stack.push(new Card('EXTRA', 0, i, numberOfCards));
+            stack.push(makeCard('EXTRA', 0, i, numberOfCards));
             numberOfCards++;
         }
         for (i = 0; TwoExtra > i; i++) {
-            stack.push(new Card('EXTRA', 1, i, numberOfCards));
+            stack.push(makeCard('EXTRA', 1, i, numberOfCards));
             numberOfCards++;
         }
         for (i = 0; OneDeck > i; i++) {
-            stack.push(new Card('DECK', 0, i, numberOfCards));
+            stack.push(makeCard('DECK', 0, i, numberOfCards));
             numberOfCards++;
         }
         for (i = 0; TwoDeck > i; i++) {
-            stack.push(new Card('DECK', 1, i, numberOfCards));
+            stack.push(makeCard('DECK', 1, i, numberOfCards));
             numberOfCards++;
         }
 
@@ -329,13 +329,13 @@ function init(callback) {
     }
 
     function moveCard(code, previousController, previousLocation, previousSequence, previousPosition, currentController, currentLocation, currentSequence, currentPosition) {
-        //this is ugly, needs labling.
+
         var target,
             pointer,
-            zone,
-            i;
+            zone;
+
         if (previousLocation === 0) {
-            stack.push(new Card(enums.locations[currentLocation], currentController, currentSequence, numberOfCards));
+            stack.push(makeCard(enums.locations[currentLocation], currentController, currentSequence, numberOfCards));
             numberOfCards++;
             return;
         } else if (currentLocation === 0) {
@@ -345,7 +345,7 @@ function init(callback) {
             numberOfCards--;
             return;
         } else {
-            if (!(previousLocation & 0x80) && !(currentLocation & 0x80)) { //duelclient line 1885
+            if (!(previousLocation & 0x80) && !(currentLocation & 0x80)) { // see ygopro/gframe/duelclient.cpp line 1885
                 setState(previousController, enums.locations[previousLocation], previousSequence, currentController, enums.locations[currentLocation], currentSequence, currentPosition, 0, false);
             } else if (!(previousLocation & 0x80)) {
                 //targeting a card to become a xyz unit....
@@ -356,16 +356,12 @@ function init(callback) {
                 //turning an xyz unit into a normal card....
                 setState(previousController, enums.locations[(previousLocation & 0x7f)], previousSequence, currentController, enums.locations[currentLocation], currentSequence, currentPosition, previousPosition);
             } else {
-                //move one xyz unit to become the xyz unit of something else....');
-                //                $('.overlayunit.p' + cc + '.i' + cs).each(function (i) {
-                //                    $(this).attr('data-overlayunit', (i));
-                //                });
                 setState(previousController, enums.locations[(previousLocation & 0x7f)], previousSequence, currentController, enums.locations[(currentLocation & 0x7f)], currentSequence, currentPosition, previousPosition, true);
                 zone = filterIndex(filterlocation(filterPlayer(stack, currentController), enums.locations[(currentLocation & 0x7f)]), currentSequence);
-                for (i = 1; zone.length > i; i++) {
-                    pointer = uidLookup(zone[i].uid);
-                    stack[pointer].overlayindex = i;
-                }
+                zone.forEach(function (card, index) {
+                    pointer = uidLookup(card.uid);
+                    stack[pointer].overlayindex = index;
+                });
 
             }
         }
@@ -373,9 +369,9 @@ function init(callback) {
 
     /**
      * Draws a card, updates state.
-     * @param {Number} player        [[Description]]
-     * @param {Number} numberOfCards [[Description]]
-     * @param {Array} cards         [[Description]]
+     * @param {Number} player        Player drawing the cards
+     * @param {Number} numberOfCards number of cards drawn
+     * @param {Array} cards         array of objects representing each of those drawn cards.
      */
     function drawCard(player, numberOfCards, cards) {
         var currenthand = filterlocation(filterPlayer(stack, player), 'HAND').length,
