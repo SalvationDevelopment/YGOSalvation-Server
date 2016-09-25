@@ -337,9 +337,10 @@ function processLogin(data) {
 
 function updateranking() {
     'use strict';
-    $.getJSON('http://ygopro.us/ranking.json', function (feed) {
+    $.get('http://ygopro.us/ranking.json', function (feed) {
         var rows = [];
-        Object.keys(feed).forEach(function (person) {
+        console.log(feed);
+        Object.keys(JSON.parse(feed)).forEach(function (person) {
             rows.push({
                 name: person,
                 points: feed[person]
