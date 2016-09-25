@@ -335,6 +335,10 @@ function processLogin(data) {
 
 }
 
+Handlebars.registerHelper("counter", function (index) {
+    return index + 1;
+});
+
 function updateranking() {
     'use strict';
     $.getJSON('http://ygopro.us/ranking.json', function (feed) {

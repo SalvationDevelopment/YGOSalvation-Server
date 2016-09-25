@@ -1,7 +1,12 @@
 <table>
     {{#each this}}
     <tr>
-        <td>{{@index}}</td>
+        <th>Rank</th>
+        <th>Username</th>
+        <th>Cumulative Tournament Points</th>
+    </tr>
+    <tr>
+        <td>{{counter @index}}</td>
         <td>{{name}}</td>
         <td>{{points}}</td>
     </tr>
