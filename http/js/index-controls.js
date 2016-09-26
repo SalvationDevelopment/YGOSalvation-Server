@@ -342,9 +342,20 @@ Handlebars.registerHelper("counter", function (index) {
 function updateranking() {
     'use strict';
     $.getJSON('http://ygopro.us/ranking.json', function (feed) {
-        var rows = [];
-        console.log(feed);
-        Object.keys(feed).forEach(function (person) {
+        var rows = [],
+            merged = {};
+
+        feed.forEach(function (tournament) {
+            Object.keys(tournament).forEach(function (name) {
+                if (merged[name]) {
+                    merged[name] += tournament[name];
+                } else {
+                    merged[name] = tournament[name];
+                }
+            });
+        });
+
+        Object.keys(merged).forEach(function (person) {
             rows.push({
                 name: person,
                 points: feed[person]
