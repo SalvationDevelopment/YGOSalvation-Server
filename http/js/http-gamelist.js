@@ -474,7 +474,8 @@ function pondata(data) {
     'use strict';
     var join = false,
         time,
-        player;
+        player,
+        userlist = '';
     //console.log(data);
     if (!data.clientEvent) {
         gamelistcache = JSON.parse(data);
@@ -535,8 +536,12 @@ function pondata(data) {
         }
         if (data.clientEvent === 'ackresult') {
             $('#onlineconnectted').html(data.ackresult);
+            data.userlist = data.userlist.sort();
+            data.userlist.forEach(function (name) {
+                userlist = userlist + '<li>' + name + '</li>'
+            });
+
         }
-        ackback
         if (data.stats) {
             stats24 = 0;
             statsShut = 0;
