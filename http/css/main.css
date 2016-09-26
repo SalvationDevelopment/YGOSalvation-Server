@@ -2485,7 +2485,7 @@ a.launcheronly.loginsystem {
 }
 
 .gamelistcenter {
-    width: 30%;
+    width: 31.5%;
     margin: 0 auto;
     border: 1px solid#444;
     color: white;
@@ -2494,6 +2494,18 @@ a.launcheronly.loginsystem {
     box-shadow: 0 0 5px black;
 }
 
+div#onlinelistwrapper.onlineopen {
+    height: 78vh;
+    width: 30%;
+    background: black;
+    position: absolute;
+    bottom: 12vh;
+    right: 3%;
+    border: 1px solid silver;
+    padding: 5px;
+}
+
+*,
 .gamelistcenter select {
     background: rgba(0, 0, 0, .5);
     color: white;
