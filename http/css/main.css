@@ -2495,17 +2495,16 @@ a.launcheronly.loginsystem {
 }
 
 div#onlinelistwrapper.onlineopen {
-    height: 78vh;
+    height: 70vh;
     width: 30%;
     background: black;
     position: absolute;
-    bottom: 12vh;
+    bottom: 13vh;
     right: 3%;
     border: 1px solid silver;
     padding: 5px;
 }
 
-*,
 .gamelistcenter select {
     background: rgba(0, 0, 0, .5);
     color: white;
