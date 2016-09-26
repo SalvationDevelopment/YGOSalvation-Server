@@ -2495,6 +2495,10 @@ a.launcheronly.loginsystem {
     height: 3em;
 }
 
+#onlinelistwrapper ul {
+    display: none;
+}
+
 div#onlinelistwrapper.onlineopen {
     height: 70vh;
     width: 30%;
@@ -2506,9 +2510,29 @@ div#onlinelistwrapper.onlineopen {
     padding: 5px;
 }
 
+#onlinelistwrapper.onlineopen ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    overflow-y: scroll;
+    height: 95%;
+    display: block;
+}
+
 .gamelistcenter select {
     background: rgba(0, 0, 0, .5);
     color: white;
+}
+
+.onlineopen ul li {
+    padding: 2px;
+    border: 1px solid #222;
+    margin: 3px;
+    font-size: 0.8em;
+}
+
+.onlineopen ul li:hover {
+    border: 1px solid silver;
 }
 
 @-webkit-keyframes shine {
