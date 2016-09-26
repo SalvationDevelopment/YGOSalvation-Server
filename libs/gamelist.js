@@ -479,7 +479,9 @@ function onData(data, socket) {
         break;
     case ('ack'):
         acklevel++;
-        userlist.push(data.name);
+        if (data.name) {
+            userlist.push(data.name);
+        }
         break;
     case ('register'):
         registrationCall(data, socket);
