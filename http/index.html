@@ -378,20 +378,21 @@
             <div class='gamelistcenter' style="float:left; margin:1vh 1vw">
                 Active Duels : <span id="activeduels"></span> | Duelist : <span id="activeduelist"></span> | Connected : <span id="onlineconnectted"></span>
             </div>
-            <div class='launcheronly gamelistcenter'>
+            <div class='launcheronly gamelistcenter' style="float:left;">
                 <label data-translation-currentdeck>Current Deck </label>
                 <select class='currentdeck'>
                     <option selected value=""></option>
                 </select>
             </div>
             <div class='gamelistcenter' style="float:left; margin:1vh 1vw">
-                <div id="onlinelistwrapper">
-                    <button id="onlinelisttogger"></button>
+                <div id="onlinelistwrapper" class="">
+                    <button id="onlinelisttogger" onlick="$('#onlinelistwrapper).toggleClass('onlineopen');"></button>
+                    <ul id="onlinelist"></ul>
                 </div>
-                <ul id="onlinelist"></ul>
-            </div>
 
             </div>
+
+
 
         </section>
 
