@@ -358,7 +358,7 @@ function updateranking() {
         Object.keys(merged).forEach(function (person) {
             rows.push({
                 name: person,
-                points: feed[person]
+                points: merged[person]
             });
         });
         rows = rows.sort(function (a, b) {
