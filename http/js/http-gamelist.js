@@ -540,6 +540,7 @@ function pondata(data) {
             data.userlist.forEach(function (name) {
                 userlist = userlist + '<li>' + name + '</li>'
             });
+            $('#onlinelist').html(userlist);
 
         }
         if (data.stats) {
