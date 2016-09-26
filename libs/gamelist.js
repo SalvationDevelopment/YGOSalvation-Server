@@ -6,6 +6,7 @@ var http = require('http'),
 
 var primus,
     gamelist = {},
+    userlist = [],
     registry = {
         //People that have read this source code.
         SnarkyChild: '::ffff:127.0.0.1',
@@ -215,10 +216,12 @@ function messageListener(message) {
 }
 
 var pidList = [];
+
 var acklevel = 0;
 
 function massAck() {
     acklevel = 0;
+    userlist = [];
     announce({
         clientEvent: 'ack'
     });
@@ -267,7 +270,8 @@ setInterval(function () {
     cleanGamelist();
     announce({
         clientEvent: 'ackresult',
-        ackresult: acklevel
+        ackresult: acklevel,
+        userlist: userlist
     });
     massAck();
 }, 10000);
@@ -475,6 +479,7 @@ function onData(data, socket) {
         break;
     case ('ack'):
         acklevel++;
+        userlist.push(data.name);
         break;
     case ('register'):
         registrationCall(data, socket);
