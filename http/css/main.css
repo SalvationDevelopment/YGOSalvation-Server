@@ -2529,6 +2529,7 @@ div#onlinelistwrapper.onlineopen {
     border: 1px solid #222;
     margin: 3px;
     font-size: 0.8em;
+    transition: border 300ms;
 }
 
 .onlineopen ul li:hover {
