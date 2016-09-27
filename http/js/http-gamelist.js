@@ -9,6 +9,8 @@ var localstorageIter = 0,
     quedfunc,
     quedparams;
 
+var tournament = {};
+
 function applySettings() {
     'use strict';
     $('[data-localhost]').each(function () {
@@ -540,6 +542,9 @@ function pondata(data) {
         }
         if (data.clientEvent === 'tournamentrequest' && confirm('Join Tournament?')) {
             joinTournament();
+        }
+        if (data.clientEvent === 'updateTournament') {
+            tournament = data.tournament;
         }
         if (data.clientEvent === 'privateServer') {
             processServerCall(data.serverUpdate);
