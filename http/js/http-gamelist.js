@@ -475,7 +475,8 @@ function pondata(data) {
     var join = false,
         time,
         player,
-        userlist = '';
+        userlist = '',
+        jsco;
     //console.log(data);
     if (!data.clientEvent) {
         gamelistcache = JSON.parse(data);
@@ -542,7 +543,8 @@ function pondata(data) {
             $('#onlineconnectted').html(data.ackresult);
             data.userlist = data.userlist.sort();
             data.userlist.forEach(function (name) {
-                userlist = userlist + '<li onclick="duelrequestPerson(\"' + name.trim() + '\");">' + name.trim() + '</li>'
+                jsco = "duelrequestPerson('" + name.trim() + "');";
+                userlist = userlist + '<li onclick="' + jsco + '">' + name.trim() + '</li>';
             });
             $('#onlinelist').html(userlist);
 
