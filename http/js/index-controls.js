@@ -14,7 +14,7 @@ function isChecked(id) {
 
 
 $(function(){
-	$("input").bind("keydown", function(event) {
+	$("document").bind("keydown", function(event) {
 		if(event.which === 9) {
 			event.preventDefault();
 		}
