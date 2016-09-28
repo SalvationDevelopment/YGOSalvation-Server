@@ -517,10 +517,7 @@ function pondata(data) {
         if (data.clientEvent === 'genocide') {
             ygopro('kk');
         }
-        if (data.clientEvent === 'duelrequest' && data.from === localStorage.nickname) {
-            enterGame(data.roompass);
-            return;
-        }
+
         if (data.clientEvent === 'duelrequest' && data.target === localStorage.nickname) {
             if (data.from === 'SnarkyChild') {
                 enterGame(data.roompass);

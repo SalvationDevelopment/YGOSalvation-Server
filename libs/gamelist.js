@@ -458,14 +458,14 @@ function onData(data, socket) {
         }
         break;
     case ('duelrequest'):
-        if (socket.username) {
-            announce({
-                clientEvent: 'duelrequest',
-                target: data.target,
-                from: socket.username,
-                roompass: data.roompass
-            });
-        }
+
+        announce({
+            clientEvent: 'duelrequest',
+            target: data.target,
+            from: socket.username,
+            roompass: data.roompass
+        });
+
         break;
     case ('ai'):
         if (socket.username) {
