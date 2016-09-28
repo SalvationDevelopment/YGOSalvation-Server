@@ -25,10 +25,13 @@ function isAdmin(data) {
 }
 
 function forumValidate(data, callback) {
-    if (validationCache[data.username + data.password]) {
-        callback(null, validationCache[data.username]);
-        return;
-    }
+    //    if (validationCache[data.username + data.password]) {
+    //        if (validationCache[data.username + data.password].){
+    //            callback(null, validationCache[data.username]);
+    //        return;
+    //        }
+    //        
+    //    }
     process.nextTick(function () {
         var url = 'http://forum.ygopro.us/log.php',
             post = {
@@ -58,7 +61,7 @@ function forumValidate(data, callback) {
                 info.message = forumdata.message || '';
                 info.data.g_access_cp = isAdmin(data);
                 info.displayname = forumdata.displayname;
-                validationCache[data.username + data.password] = forumdata;
+                //validationCache[data.username + data.password] = forumdata;
 
                 callback(null, info, body);
                 return;
