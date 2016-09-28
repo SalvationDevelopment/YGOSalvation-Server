@@ -542,7 +542,7 @@ function pondata(data) {
             $('#onlineconnectted').html(data.ackresult);
             data.userlist = data.userlist.sort();
             data.userlist.forEach(function (name) {
-                userlist = userlist + '<li onclick="duelrequestPerson("' + name + '")">' + name + '</li>'
+                userlist = userlist + '<li onclick="duelrequestPerson(\"' + name.trim() + '\");">' + name.trim() + '</li>'
             });
             $('#onlinelist').html(userlist);
 
