@@ -10,7 +10,7 @@ var tournament = {};
 function isChecked(id) {
     'use strict';
     return ($(id).is(':checked'));
-}
+};
 
 
 $(function(){
