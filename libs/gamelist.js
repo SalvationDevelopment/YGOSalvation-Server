@@ -455,6 +455,16 @@ function onData(data, socket) {
             console.log('bad insternal request');
         }
         break;
+    case ('duelrequest'):
+        if (socket.username) {
+            announce({
+                clientEvent: 'duelrequest',
+                target: data.target,
+                from: socket.username,
+                roompass: data.roompass
+            });
+        }
+        break;
     case ('ai'):
         if (socket.username) {
             announce({

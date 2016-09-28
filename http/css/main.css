@@ -2529,11 +2529,13 @@ div#onlinelistwrapper.onlineopen {
     border: 1px solid #222;
     margin: 3px;
     font-size: 0.8em;
-    transition: border 300ms;
+    transition: border 100ms;
+    color: silver;
 }
 
 .onlineopen ul li:hover {
     border: 1px solid silver;
+    color: white;
 }
 
 @-webkit-keyframes shine {
