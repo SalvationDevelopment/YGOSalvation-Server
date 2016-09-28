@@ -12,10 +12,13 @@ function isChecked(id) {
     return ($(id).is(':checked'));
 }
 
-$("input").bind("keydown", function(event) {
-    if(event.which == 9) {
-        event.preventDefault();
-    }
+
+$(function(){
+	$("input").bind("keydown", function(event) {
+		if(event.which === 9) {
+			event.preventDefault();
+		}
+	}
 });
 
 Handlebars.getTemplate = function (name) {
