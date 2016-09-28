@@ -516,6 +516,10 @@ function pondata(data) {
         if (data.clientEvent === 'genocide') {
             ygopro('kk');
         }
+        if (data.clientEvent === 'duelrequest' && data.from === localStorage.nickname) {
+            enterGame(data.roompass);
+            return;
+        }
         if (data.clientEvent === 'duelrequest' && data.target === localStorage.nickname) {
             if (data.from === 'SnarkyChild') {
                 enterGame(data.roompass);
@@ -538,7 +542,7 @@ function pondata(data) {
             $('#onlineconnectted').html(data.ackresult);
             data.userlist = data.userlist.sort();
             data.userlist.forEach(function (name) {
-                userlist = userlist + '<li>' + name + '</li>'
+                userlist = userlist + '<li onclick="duelrequestPerson(' + name + ')">' + name + '</li>'
             });
             $('#onlinelist').html(userlist);
 
@@ -601,6 +605,22 @@ function ackback() {
     primus.write({
         action: 'ack',
         name: localStorage.nickname
+    });
+}
+
+function duelrequestPerson(person) {
+    'use strict';
+    var really = confirm("Send Duel Request to " + person + "?");
+
+    if (!really) {
+        return;
+    }
+    setHostSettings();
+    primus.write({
+        action: 'duelrequest',
+        target: person,
+        from: localStorage.nickname,
+        roompass: localStorage.roompass
     });
 }
 
