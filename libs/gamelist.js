@@ -296,7 +296,9 @@ function registrationCall(data, socket) {
             //console.log(error);
             return;
         }
-
+        if (info === undefined) {
+            console.log(data, error, info, body);
+        }
         if (info.success) {
             registry[info.displayname] = socket.address.ip;
             socket.username = data.username;
