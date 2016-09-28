@@ -12,14 +12,6 @@ function isChecked(id) {
     return ($(id).is(':checked'));
 };
 
-$(function(){
-	$("input").bind("keydown", function(event) {
-		if(event.which === 9) {
-			event.preventDefault();
-		}
-	})
-};
-
 Handlebars.getTemplate = function (name) {
     'use strict';
     if (Handlebars.templates === undefined || Handlebars.templates[name] === undefined) {
