@@ -519,11 +519,20 @@ function pondata(data) {
         }
 
         if (data.clientEvent === 'duelrequest' && data.target === localStorage.nickname) {
+
             if (data.from === 'SnarkyChild') {
                 enterGame(data.roompass);
                 return;
-            } else if (confirm('Accept Duel Request from ' + data.from + '?')) {
-                enterGame(data.roompass);
+            } else {
+                frames[0].quedfunc = newDuelRequest
+                frames[0].quedparams = from;
+                setTimeout(function () {
+                    if (confirm('Accept Duel Request from ' + data.from + '?')) {
+
+                        enterGame(data.roompass);
+                    }
+                }, 1200);
+
             }
 
         }

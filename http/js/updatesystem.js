@@ -9,6 +9,7 @@ var downloadList = [], // Download list during recursive processing, when its em
     url = require('url'), // internal URL parser
     http = require('http'), // HTTP Server
     gui = require('nw.gui') || {}, // nwjs controls. Things like controlling the launcher itself.
+    win = gui.Window.get(), // control aspects of the window of the launcher 
     EventEmitter = require('events').EventEmitter, //event emitter system (helps with domains);
     mode = "production", // This code is pulled down from the server, so this is production code.
     privateServer, // (to be defined) Server-client connection pipeline.
@@ -1024,6 +1025,29 @@ function dbupdate(input) {
         }
 
 
+    }
+}
+
+function newDuelRequest(from) {
+    var options = {
+        icon: "http://ygopro.us/img/bg.jpg",
+        body: "You have a new Duel Request from " + from
+    };
+    win.requestAttention(10);
+    var notification = new Notification("Duel Request", options);
+    notification.onclick = function () {
+        document.getElementById("output").innerHTML += "Notification clicked";
+    }
+
+    notification.onshow = function () {
+        // play sound on show
+        myAud = document.getElementById("audio1");
+        myAud.play();
+
+        // auto close after 1 second
+        setTimeout(function () {
+            notification.close();
+        }, 10000);
     }
 }
 
