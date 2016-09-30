@@ -9,12 +9,52 @@ function randomString(len){
         text += chars.charAt(Math.floor(Math.random() * chars.length));
     return text;
 }
+
+function newGame(){
+	return {
+	deckcheck: 0,
+	draw_count: 0,
+	lflist: 0,
+	mode: 0,
+	noshuffle: 0,
+	prio: 0,
+	rule: 0,
+	startlp: 0,
+	starthand: 0,
+	timelimit: 0,
+	player: {
+		0: {
+			name: '',
+			ready: false
+		},
+		1: {
+			name: '',
+			ready: false
+		},
+		2: {
+			name: '',
+			ready: false
+		},
+		3: {
+			name: '',
+			ready: false
+		}
+	},
+	spectators: 0,
+	turn: 0,
+	turnOfPlayer: 0,
+	phase: 0
+  }
+}
+
+	
 function responseHandler(socket, message){
 	if(!message.action){
 		return;
 	} 
 	switch(message){
 		case "host":
+		games[randomString(12)] = newGame();
 		
 	}
 }
