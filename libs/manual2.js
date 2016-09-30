@@ -58,8 +58,9 @@ function responseHandler(socket, message){
 		break;
 		
 		case "join":
-			Object.keys(games[socket.activeduel].players).forEach(function(player){
-				if(player.name = ''){
+			Object.keys(games[socket.activeduel].players).some(function(playerNo){
+				var player= games[socket.activeduel].players[playerNo];
+				if(player.name === ''){
 					return false;
 				}
 				player.name = message.name;
