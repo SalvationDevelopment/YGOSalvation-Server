@@ -54,8 +54,18 @@ function responseHandler(socket, message){
 	} 
 	switch(message){
 		case "host":
-		games[randomString(12)] = newGame();
+			games[randomString(12)] = newGame();
+		break;
 		
+		case "join":
+			Object.keys(games[socket.activeduel].players).forEach(function(player){
+				if(player.name = ''){
+					return false;
+				}
+				player.name = message.name;
+				//moar stuff
+				return true;
+			});
 	}
 }
 
