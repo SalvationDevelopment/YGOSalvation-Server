@@ -462,7 +462,7 @@ function onData(data, socket) {
         announce({
             clientEvent: 'duelrequest',
             target: data.target,
-            from: socket.username,
+            from: data.from,
             roompass: data.roompass
         });
 
