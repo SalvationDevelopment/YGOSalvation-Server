@@ -1,11 +1,6 @@
-var WebSocketServer = require('ws').Server
-  , wss = new WebSocketServer({port: 8080});
-wss.on('connection', function(ws) {
-    ws.on('message', function(message) {
-        console.log('received: %s', message);
-    });
-    ws.send('something');
-});
+var WebSocketServer = require('ws').Server,
+ wss = new WebSocketServer({port: 8080});
+  
 
 function randomString(len){
     var text = "";
@@ -14,3 +9,13 @@ function randomString(len){
         text += chars.charAt(Math.floor(Math.random() * chars.length));
     return text;
 }
+
+
+
+wss.on('connection', function(ws) {
+    ws.on('message', function(message) {
+        console.log('received: %s', message);
+    });
+    ws.send('something');
+});
+
