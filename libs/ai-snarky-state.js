@@ -127,15 +127,15 @@ function init(callback) {
     }
 
     /**
-     * Returns info on a card.
+     * Returns info on a card, or rather a single card.
      * @param   {Number} player       Player Interger
      * @param   {Number} clocation    Location enumeral
      * @param   {Number} index        Index
      * @param   {Number} overlayindex Index of where a card is in an XYZ stack starting at 1
-     * @returns {Array} [[Description]]
+     * @returns {object} The card you where looking for.
      */
     function queryCard(player, clocation, index, overlayindex) {
-        return filterOverlyIndex(filterIndex(filterlocation(filterPlayer(stack, player), clocation), index), overlayindex);
+        return filterOverlyIndex(filterIndex(filterlocation(filterPlayer(stack, player), clocation), index), overlayindex)[0];
     }
 
     /*The YGOPro messages have a design flaw in them where they dont tell the number of cards
@@ -244,7 +244,7 @@ function init(callback) {
     function setState(player, clocation, index, moveplayer, movelocation, moveindex, moveposition, overlayindex, isBecomingCard) {
         console.log('set:', player, clocation, index, moveplayer, movelocation, moveindex, moveposition, overlayindex, isBecomingCard);
         var target = queryCard(player, clocation, index, 0),
-            pointer = uidLookup(target[0].uid),
+            pointer = uidLookup(target.uid),
             zone;
 
         stack[pointer].player = moveplayer;
@@ -265,7 +265,7 @@ function init(callback) {
             pointer;
 
         target = queryCard(player, enums.locations[clocation], index, 0);
-        pointer = uidLookup(target[0].uid);
+        pointer = uidLookup(target.uid);
         stack[pointer].position = card.Position;
         stack[pointer].id = card.Code;
         callback(generateView(), stack);
@@ -286,7 +286,7 @@ function init(callback) {
     //Flip summon, change to attack mode, change to defense mode, and similar movements.
     function changeCardPosition(code, currentController, cl, currentSequence, currentPosition) {
         var target = queryCard(currentController, cl, currentSequence, 0),
-            pointer = uidLookup(target[0].uid);
+            pointer = uidLookup(target.uid);
 
         stack[pointer].id = code;
         setState(currentController, cl, currentSequence, currentController, cl, currentSequence, currentPosition, 0, false);
@@ -305,7 +305,7 @@ function init(callback) {
             return;
         } else if (currentLocation === 0) {
             target = queryCard(previousController, enums.locations[previousLocation], previousSequence, 0);
-            pointer = uidLookup(target[0].uid);
+            pointer = uidLookup(target.uid);
             delete stack[pointer];
             numberOfCards--;
             return;
@@ -349,7 +349,7 @@ function init(callback) {
             topcard = filterlocation(filterPlayer(stack, player), 'DECK').length - 1;
             setState(player, 'DECK', topcard, player, 'HAND', currenthand + i, 'FaceUp', 0, false);
             target = queryCard(player, 'HAND', (currenthand + i), 0);
-            pointer = uidLookup(target[0].uid);
+            pointer = uidLookup(target.uid);
             stack[pointer].id = cards[i].Code;
         }
         callback(generateView(), stack);
