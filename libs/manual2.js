@@ -1,5 +1,6 @@
 var WebSocketServer = require('ws').Server,
- wss = new WebSocketServer({port: 8080});
+ wss = new WebSocketServer({port: 8080}),
+ games= {};
   
 function randomString(len){
     var text = "";
@@ -8,16 +9,22 @@ function randomString(len){
         text += chars.charAt(Math.floor(Math.random() * chars.length));
     return text;
 }
+function responseHandler(socket, message){
+	if(!message.action){
+		return;
+	} 
+	switch(message){
+		case "host":
+		
+	}
+}
 
 wss.on('connection', function(ws) {
     ws.on('message', function(message) {
         console.log('received: %s', message);
+		responseHandler(ws,message);
     });
     //ws.send('something');
-	responseHandler(ws, message)
 });
 
-function responseHandler(ws, message){
-	
-}
 
