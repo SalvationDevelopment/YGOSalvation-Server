@@ -527,7 +527,7 @@ function pondata(data) {
                 return;
             } else {
                 quedfunc = 'newDuelRequest'
-                quedparams = from;
+                quedparams = data.from;
                 setTimeout(function () {
                     if (confirm('Accept Duel Request from ' + data.from + '?')) {
 
