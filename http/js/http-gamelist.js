@@ -493,6 +493,8 @@ function pondata(data) {
                 $('footer, #popupbody').html(data.message).addClass('loud');
                 if (data.message && data.message.length) {
                     //singlesitenav('popup'); /* turned off per Stormwolf;*/
+                    frames[0].quedfunc = 'launcherAlert'
+                    frames[0].quedparams = data.message;
                 }
 
 
@@ -524,7 +526,7 @@ function pondata(data) {
                 enterGame(data.roompass);
                 return;
             } else {
-                frames[0].quedfunc = newDuelRequest
+                frames[0].quedfunc = 'newDuelRequest'
                 frames[0].quedparams = from;
                 setTimeout(function () {
                     if (confirm('Accept Duel Request from ' + data.from + '?')) {

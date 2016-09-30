@@ -1035,14 +1035,29 @@ function newDuelRequest(from) {
     };
     win.requestAttention(10);
     var notification = new Notification("Duel Request", options);
-    notification.onclick = function () {
-        document.getElementById("output").innerHTML += "Notification clicked";
-    }
 
     notification.onshow = function () {
         // play sound on show
-        myAud = document.getElementById("audio1");
-        myAud.play();
+
+
+        // auto close after 1 second
+        setTimeout(function () {
+            notification.close();
+        }, 10000);
+    }
+}
+
+function launcherAlert(message) {
+    var options = {
+        icon: "http://ygopro.us/img/bg.jpg",
+        body: message
+    };
+    win.requestAttention(10);
+    var notification = new Notification("YGOPro Salvation", options);
+
+
+    notification.onshow = function () {
+
 
         // auto close after 1 second
         setTimeout(function () {
