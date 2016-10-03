@@ -2029,6 +2029,11 @@ div#eventsandtournaments {
     height: 100%;
 }
 
+div#rankingtable {
+    height: 65vh !important;
+    overflow-y: scroll;
+}
+
 div#rankingtable table {
     width: 50%;
     margin: 0 auto;
