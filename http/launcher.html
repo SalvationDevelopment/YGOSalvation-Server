@@ -57,6 +57,10 @@
 
 <body>
     <div class='servermessage' style='display:none'></div>
+    <div class='installationmessage' style='display:none'>
+        <span>Please wait for the updater in the top-left corner of the launcher to finish before accessing any of the features!</span>
+        <button onclick="$('.installationmessage').css({'display':'none'})">Ok</button>
+    </div>
     <iframe id="iframemainbody" height="100%" id="salvationdevelopment" role="main" width="100%" style="border:none;"></iframe>
 
     <script>
