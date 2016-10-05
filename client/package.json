@@ -11,7 +11,7 @@
         "height": 535,
         "min_height": 535,
         "icon": "interface/icon.png",
-        "transparent": true
+        "transparent":true
     },
     "webkit": {
         "plugin": true,

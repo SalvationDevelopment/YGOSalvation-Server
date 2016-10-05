@@ -22,12 +22,12 @@
     "SoraShiunin": 8,
     "Lelouch lamperouge": 8,
     "[ jojooo. ]": 64,
-    "Sora50599": 64,
+    "Sora Pallet": 64,
     "Son-Kun": 512,
     "DannyTheStreet": 4096
 }, {
 	"Son-Kun": 8,
-	"Sora50599": 8,
+	"Sora Pallet": 8,
 	"jon45324": 8,
 	"Vertigon": 8,
 	"Lord Raptor": 64,
@@ -47,7 +47,7 @@
 	"Lord Draco": 8,
 	"Lord Raptor": 8,
 	"Vertigon": 8,
-	"Sora50599": 8,
+	"Sora Pallet": 8,
 	"mustafa felafel": 64,
 	"jon45324": 64,
 	"Exitium": 512,
@@ -58,7 +58,7 @@
 	"GodMode": 16,
 	"rexking": 16,
 	"misunderstood": 16,
-	"Sora50599": 16,
+	"Sora Pallet": 16,
 	"Delta Escher": 16,
 	"Krycix": 16,
 	"Vertigon": 256,
@@ -70,13 +70,22 @@
 	"Black Ballista": 65536,
 	"ProgramIncomplete": 1048576
 }, {
-		"TreetopTito": 8,
-		"Lord Raptor": 8,
-		"Lelouch lamperouge": 8,
-		"GodMode": 8,
-		"akatsukilord": 64,
-		"Delta Escher": 64,
-		"Storm Wolf": 512,
-		"Exitium": 4096
+	"TreetopTito": 8,
+	"Lord Raptor": 8,
+	"Lelouch lamperouge": 8,
+	"GodMode": 8,
+	"akatsukilord": 64,
+	"Delta Escher": 64,
+	"Storm Wolf": 512,
+	"Exitium": 4096
+}, {
+	"mustafa felafel": 8,
+	"Sora Pallet": 8,
+	"Ace2024": 8,
+	"Dal920": 8,
+	"Exitium": 64,
+	"SoraShiunin": 64,
+	"jon45324": 512,
+	"Lord Raptor": 4096
 }]
    
