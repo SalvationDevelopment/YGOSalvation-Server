@@ -197,6 +197,7 @@ function download() {
         return;
     }
     screenMessage.html('<span style="color:white; font-weight:bold">Updating...' + target.path + ' and ' + downloadList.length + ' other files</span>');
+
     http.get(options, function (res) {
         res.on('data', function (data) {
             file.write(data);
@@ -218,6 +219,9 @@ Comparison by size isnt ideal but that was the only way of doing this quickly!*/
 function hashcheck() {
     'use strict';
     if (completeList.length === 0) {
+        if (downloadList.length > 1000) {
+            $('.installationmessage').css({'display':'block'})
+        }
         download();
     }
     var percent = Math.floor(((n - completeList.length) / n) * 100);
