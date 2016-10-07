@@ -604,6 +604,16 @@ function killgame(target) {
     });
 }
 
+///function joinTournament(target) {
+///    'use strict';
+///    primus.write({
+///        action: 'joinTournament',
+///        username: $('#ips_username').val(),
+///        password: $('#ips_password').val(),
+///        target: target
+///        uniqueID: uniqueID
+///    });
+///}
 
 function sendglobal(message) {
     'use strict';
