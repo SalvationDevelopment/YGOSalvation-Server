@@ -604,6 +604,7 @@ function killgame(target) {
     });
 }
 
+
 function sendglobal(message) {
     'use strict';
     primus.write({
