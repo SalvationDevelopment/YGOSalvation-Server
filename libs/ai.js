@@ -71,6 +71,7 @@ function onConnectGamelist() {
             action: 'join'
         });
     }, 10000);
+    console.log('connected');
 }
 
 function onCloseGamelist() {
