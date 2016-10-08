@@ -30,7 +30,7 @@ function gamelistUpdate(data) {
     var needsKill = true,
         windbot,
         deck = data.deck || 'Hours';
-
+    console.log(data);
     if (data.clientEvent) {
         console.log(data);
         if (data.clientEvent === 'airestart') {
@@ -63,11 +63,11 @@ function gamelistUpdate(data) {
 
 function onConnectGamelist() {
     'use strict';
-    primus.write({
+    client.write({
         action: 'join'
     });
     setInterval(function () {
-        primus.write({
+        client.write({
             action: 'join'
         });
     }, 10000);
