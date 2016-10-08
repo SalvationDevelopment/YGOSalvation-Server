@@ -463,6 +463,15 @@ function renderList(JSONdata) {
 
 }
 
+
+function ackback() {
+    'use strict';
+    primus.write({
+        action: 'ack',
+        name: localStorage.nickname
+    });
+}
+
 function setfilter() {
     'use strict';
     renderList(gamelistcache);
@@ -528,7 +537,7 @@ function pondata(data) {
                 enterGame(data.roompass);
                 return;
             } else {
-                quedfunc = 'newDuelRequest'
+                quedfunc = 'newDuelRequest';
                 quedparams = data.from;
                 setTimeout(function () {
                     if (confirm('Accept Duel Request from ' + data.from + '?')) {
@@ -626,13 +635,6 @@ function sendglobal(message) {
     });
 }
 
-function ackback() {
-    'use strict';
-    primus.write({
-        action: 'ack',
-        name: localStorage.nickname
-    });
-}
 
 function duelrequestPerson(person) {
     'use strict';
@@ -655,7 +657,7 @@ function murder(username) {
     primus.write({
         action: 'murder',
         username: $('#ips_username').val(),
-        password: $('#ips_password').val(),
+        password: $('#ips_password').val()
     });
 }
 
@@ -698,5 +700,4 @@ $('body').on('mousedown', 'footer', function (ev) {
             return;
         }
     }
-}
 });
