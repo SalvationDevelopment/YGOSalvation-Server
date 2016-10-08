@@ -9,6 +9,8 @@ var localstorageIter = 0,
     quedfunc,
     quedparams;
 
+var tournament = {};
+
 function applySettings() {
     'use strict';
     $('[data-localhost]').each(function () {
@@ -541,6 +543,9 @@ function pondata(data) {
         if (data.clientEvent === 'tournamentrequest' && confirm('Join Tournament?')) {
             joinTournament();
         }
+        if (data.clientEvent === 'updateTournament') {
+            tournament = data.tournament;
+        }
         if (data.clientEvent === 'privateServer') {
             processServerCall(data.serverUpdate);
         }
@@ -598,6 +603,17 @@ function killgame(target) {
         uniqueID: uniqueID
     });
 }
+
+///function joinTournament(target) {
+///    'use strict';
+///    primus.write({
+///        action: 'joinTournament',
+///        username: $('#ips_username').val(),
+///        password: $('#ips_password').val(),
+///        target: target
+///        uniqueID: uniqueID
+///    });
+///}
 
 function sendglobal(message) {
     'use strict';
