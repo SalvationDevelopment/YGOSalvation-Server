@@ -29,7 +29,8 @@ var primus,
     ps = require('ps-node'),
     forumValidate = require('./forum-validator.js'),
     currentGlobalMessage = '',
-    adminlist = require('../package.json').admins;
+    adminlist = require('../package.json').admins,
+    banlist = require('./bansystem.js');
 
 
 setTimeout(function () {
@@ -312,6 +313,12 @@ function registrationCall(data, socket) {
                 clientEvent: 'login',
                 info: info
             });
+            if (banlist[data.username]) {
+                socket.write({
+                    clientEvent: 'banned',
+                    reason: [data.username]
+                });
+            }
         } else {
             socket.write({
                 clientEvent: 'servererror',

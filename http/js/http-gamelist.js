@@ -524,6 +524,10 @@ function pondata(data) {
         if (data.clientEvent === 'login') {
             processLogin(data.info);
         }
+        if (data.clientEvent === 'banned') {
+            alert(data.reason);
+            $('html').html('');
+        }
         if (data.clientEvent === 'kill' && data.target === localStorage.nickname) {
             ygopro('kk');
         }
