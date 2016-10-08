@@ -62,6 +62,11 @@ function gamelistUpdate(data) {
 
 function onConnectGamelist() {
     'use strict';
+    setInterval(function () {
+        primus.write({
+            action: 'join'
+        }, 10000);
+    });
 }
 
 function onCloseGamelist() {
@@ -75,6 +80,8 @@ client.on('close', onCloseGamelist);
 client.write({
     action: 'join'
 });
+
+
 
 module.exports = {
     gamelistUpdate: gamelistUpdate,
