@@ -384,6 +384,24 @@ function murderCall(data) {
     });
 }
 
+function aiRestartCall(data) {
+    forumValidate(data, function (error, info, body) {
+        if (error) {
+            return;
+        }
+
+        if (info.success && adminlist[data.username]) {
+            announce({
+                clientEvent: 'airestart'
+            });
+
+        } else {
+            console.log(data, 'asked for murder');
+        }
+
+    });
+}
+
 function killgameCall(data) {
     forumValidate(data, function (error, info, body) {
         if (error) {
@@ -506,6 +524,9 @@ function onData(data, socket) {
         break;
     case ('murder'):
         murderCall(data);
+        break;
+    case ('airestart'):
+        aiRestartCall(data);
         break;
     case ('internalRestart'):
         if (data.password !== process.env.OPERPASS) {
