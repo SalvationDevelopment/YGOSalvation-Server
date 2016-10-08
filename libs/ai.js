@@ -30,7 +30,11 @@ function gamelistUpdate(data) {
     var needsKill = true,
         windbot,
         deck = data.deck || 'Hours';
+
     if (data.clientEvent) {
+        if (data.clientEvent === 'airestart') {
+            process.exit();
+        }
         if (data.clientEvent === 'duelrequest' && data.target === 'SnarkyChild') {
 
             console.log('[AI]:Event: Duel Request for SnarkyChild');
