@@ -115,33 +115,12 @@ function init(callback) {
             lifepoints: {
                 0: 8000,
                 1: 8000
-            }
+            },
+            duelistChat: [],
+            spectatorChat: []
         };
 
-    /**
-     * Mutation Fuction, moves game to next phase.
-     */
-    function nextPhase() {
-        state.phase++;
-    }
 
-    /**
-     * Mutation Function, shifts the game to the start of the next turn and shifts the active player.
-     */
-    function nextTurn() {
-        state.turn++;
-        state.phase = 0;
-        state.turnOfPlayer = (state.turnOfPlayer === 0) ? 1 : 0;
-    }
-
-    /**
-     * Change lifepoints of a player
-     * @param {Number} player player to edit
-     * @param {Number} amount amount of lifepoints to take or remove.
-     */
-    function changeLifepoints(player, amount) {
-        state.lifepoints[player] = state.lifepoints[player] + amount;
-    }
 
     /**
      * The way the stack of cards is setup it requires a pointer to edit it.
@@ -435,6 +414,54 @@ function init(callback) {
             });
             numberOfCards++;
         });
+    }
+
+    /**
+     * Mutation Fuction, moves game to next phase.
+     */
+    function nextPhase() {
+        state.phase++;
+        callback(generateView(), stack);
+    }
+
+    /**
+     * Mutation Function, shifts the game to the start of the next turn and shifts the active player.
+     */
+    function nextTurn() {
+        state.turn++;
+        state.phase = 0;
+        state.turnOfPlayer = (state.turnOfPlayer === 0) ? 1 : 0;
+        callback(generateView(), stack);
+    }
+
+    /**
+     * Change lifepoints of a player
+     * @param {Number} player player to edit
+     * @param {Number} amount amount of lifepoints to take or remove.
+     */
+    function changeLifepoints(player, amount) {
+        state.lifepoints[player] = state.lifepoints[player] + amount;
+        callback(generateView(), stack);
+    }
+
+    /**
+     * Mutation Function, record what a duelist said to another duelist.
+     * @param {Number} player  player saying the message.
+     * @param {String} message message to other spectators
+     */
+    function duelistChat(username, message) {
+        state.duelistChat.push(username + ': ' + message);
+        callback(generateView(), stack);
+    }
+
+    /**
+     * Mutation Function, record what a spectator said to another spectator.
+     * @param {Number} player  player saying the message.
+     * @param {String} message message to other spectators
+     */
+    function spectatorChat(username, message) {
+        state.spectatorChat.push(username + ': ' + message);
+        callback(generateView(), stack);
     }
 
     //expose public functions.
