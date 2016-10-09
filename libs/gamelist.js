@@ -275,7 +275,7 @@ setInterval(function () {
         userlist: userlist
     });
     massAck();
-}, 10000);
+}, 15000);
 
 function sendRegistry() {
     internalMessage({

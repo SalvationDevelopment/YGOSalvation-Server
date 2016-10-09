@@ -220,7 +220,9 @@ function hashcheck() {
     'use strict';
     if (completeList.length === 0) {
         if (downloadList.length > 1000) {
-            $('.installationmessage').css({'display':'block'})
+            $('.installationmessage').css({
+                'display': 'block'
+            })
         }
         download();
     }
@@ -994,6 +996,7 @@ function displayQuery(dbName, ID) {
 
 function dbsearch(input) {
     'use strict';
+    updateSetcodes();
     var regex = /^\d+$/;
     if (input.text.match(regex)) {
         displayQuery(input.db, input.text);
