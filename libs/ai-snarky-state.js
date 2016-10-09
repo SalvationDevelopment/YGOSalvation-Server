@@ -405,7 +405,9 @@ function init(callback) {
         changeCardPosition: changeCardPosition,
         moveCard: moveCard,
         drawCard: drawCard,
-        callback: callback
+        callback: callback,
+        players: {}, // holds socket references
+        spectators: {} // holds socket references
     };
 
 
