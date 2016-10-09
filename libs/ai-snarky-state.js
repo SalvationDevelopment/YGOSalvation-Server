@@ -101,14 +101,47 @@ function filterOverlyIndex(Array, overlayindex) {
 function init(callback) {
     //the field is represented as a bunch of cards with metadata in an Array, <div>card/card/card/card</div>
     //numberOfCards is used like a memory address. It must be increased by 1 when creating a makeCard.
-    var stack = [],
-        numberOfCards = 0;
 
     if (typeof callback !== 'function') {
         callback = function (view, internalState) {};
     }
 
+    var stack = [],
+        numberOfCards = 0,
+        state = {
+            turn: 0,
+            turnOfPlayer: 0,
+            phase: 0,
+            lifepoints: {
+                0: 8000,
+                1: 8000
+            }
+        };
 
+    /**
+     * Mutation Fuction, moves game to next phase.
+     */
+    function nextPhase() {
+        state.phase++;
+    }
+
+    /**
+     * Mutation Function, shifts the game to the start of the next turn and shifts the active player.
+     */
+    function nextTurn() {
+        state.turn++;
+        state.phase = 0;
+        state.turnOfPlayer = (state.turnOfPlayer === 0) ? 1 : 0;
+    }
+
+    /**
+     * Change lifepoints of a player
+     * @param {Number} player player to edit
+     * @param {Number} amount amount of lifepoints to take or remove.
+     */
+    function changeLifepoints(player, amount) {
+        state.lifepoints[player] = state.lifepoints[player] + amount;
+    }
 
     /**
      * The way the stack of cards is setup it requires a pointer to edit it.
@@ -223,9 +256,18 @@ function init(callback) {
      */
     function generateView() {
         return {
-            player1: generatePlayer1View(),
-            player2: generatePlayer2View(),
-            spectators: generateSpectatorView()
+            player1: {
+                info: state,
+                field: generatePlayer1View()
+            },
+            player2: {
+                info: state,
+                field: generatePlayer2View()
+            },
+            spectators: {
+                info: state,
+                field: generateSpectatorView()
+            }
         };
     }
 
@@ -266,8 +308,7 @@ function init(callback) {
 
         target = queryCard(player, enums.locations[clocation], index, 0);
         pointer = uidLookup(target.uid);
-        stack[pointer].position = card.Position;
-        stack[pointer].id = card.Code;
+        Object.assign(stack[pointer], card);
         callback(generateView(), stack);
     }
 
@@ -405,6 +446,9 @@ function init(callback) {
         changeCardPosition: changeCardPosition,
         moveCard: moveCard,
         drawCard: drawCard,
+        nextPhase: nextPhase,
+        nextTurn: nextTurn,
+        changeLifepoints: changeLifepoints,
         callback: callback,
         players: {}, // holds socket references
         spectators: {} // holds socket references
