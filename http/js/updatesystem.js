@@ -1088,10 +1088,13 @@ function reUpdate() {
         alert('Update System is currently running');
         return;
     }
-    $.getScript(sitelocationdir[mode] + "/manifest/manifest-ygopro.js");
-    setTimeout(function () {
-        createmanifest();
-    }, 3000);
+    $.get('ygopro.us:12000', function () {
+        $.getScript(sitelocationdir[mode] + "/manifest/manifest-ygopro.js");
+        setTimeout(function () {
+            createmanifest();
+        }, 3000);
+    });
+
 }
 updateSetcodes();
 createmanifest();
