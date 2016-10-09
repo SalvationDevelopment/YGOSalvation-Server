@@ -1,5 +1,6 @@
 /*jslint node: true, plusplus : true, regexp: true, bitwise:true*/
-/*global $, runYGOPro, win, uniqueID, manifest, screenMessage, sitelocationdi, replaces, alert*/
+/*global $, runYGOPro, win, uniqueID, manifest, screenMessage, sitelocationdi, replaces, alert, Notification,
+sitelocationdir*/
 
 localStorage.dbtext = "0-en-OCGTCG.cdb";
 
@@ -30,6 +31,7 @@ var downloadList = [], // Download list during recursive processing, when its em
         fonts: ''
     }; // structure filled out and sent to the server then back down to the other half of the interface. Provides access to the filesystem.
 
+var updateRunning = false;
 
 localStorage.lastip = '192.99.11.19';
 localStorage.serverport = '8911';
@@ -181,6 +183,7 @@ function download() {
         //doDeckScan();
         updateCardId();
         uploadcover();
+        updateRunning = false;
         screenMessage.html('<span style="color:white; font-weight:bold">Update Complete! System Messages will appear here.</span>');
 
         return;
@@ -218,11 +221,12 @@ file system and compare its 'size' to the recorded size on the launcher.
 Comparison by size isnt ideal but that was the only way of doing this quickly!*/
 function hashcheck() {
     'use strict';
+    updateRunning = true;
     if (completeList.length === 0) {
         if (downloadList.length > 1000) {
             $('.installationmessage').css({
                 'display': 'block'
-            })
+            });
         }
         download();
     }
@@ -1017,6 +1021,7 @@ function powerdb(input) {
 //displayQuery('0-en-OCGTCG.cdb', '55410871')
 //dbYGOProByText('0-en-OCGTCG.cdb', 'Eyes')
 function dbupdate(input) {
+    'use strict';
     console.log(input.sql);
     dbAction(input.db, input.sql);
     if (input.rename) {
@@ -1036,6 +1041,7 @@ function dbupdate(input) {
 }
 
 function newDuelRequest(from) {
+    'use strict';
     var options = {
         icon: "http://ygopro.us/img/bg.jpg",
         body: "You have a new Duel Request from " + from
@@ -1051,16 +1057,19 @@ function newDuelRequest(from) {
         setTimeout(function () {
             notification.close();
         }, 10000);
-    }
+    };
 }
 
 function launcherAlert(message) {
+    'use strict';
+
     var options = {
-        icon: "http://ygopro.us/img/bg.jpg",
-        body: message
-    };
+            icon: "http://ygopro.us/img/bg.jpg",
+            body: message
+        },
+        notification;
     win.requestAttention(10);
-    var notification = new Notification("YGOPro Salvation", options);
+    notification = new Notification("YGOPro Salvation", options);
 
 
     notification.onshow = function () {
@@ -1070,8 +1079,19 @@ function launcherAlert(message) {
         setTimeout(function () {
             notification.close();
         }, 10000);
-    }
+    };
 }
 
+function reUpdate() {
+    'use strict';
+    if (updateRunning) {
+        alert('Update System is currently running');
+        return;
+    }
+    $.getScript(sitelocationdir[mode] + "/manifest/manifest-ygopro.js");
+    setTimeout(function () {
+        createmanifest();
+    }, 3000);
+}
 updateSetcodes();
 createmanifest();

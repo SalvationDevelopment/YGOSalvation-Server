@@ -512,6 +512,12 @@ function customizationadd() {
     }, false);
 }
 
+function runreUpdate() {
+    'use strict';
+    window.quedfunc = 'reUpdate';
+    window.quedready = true;
+}
+
 
 function maketextsSQL() {
     'use strict';
