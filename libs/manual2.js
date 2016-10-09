@@ -1,6 +1,8 @@
 /*jslint node:true*/
 'use strict';
 
+
+
 var WebSocketServer = require('ws').Server,
     wss = new WebSocketServer({
         port: 8080
@@ -9,6 +11,17 @@ var WebSocketServer = require('ws').Server,
     deckvalidator = require('.deckvalidator'),
     games = {},
     states = {};
+
+function socketBinding(game) {
+    return function gameResponse(view, stack) {
+        stateSystem[game].players[0].write(view.player1);
+        stateSystem[game].players[1].write(view.player2);
+        Object.keys(stateSystem[game].spectators).forEach(function (username) {
+            var spectator = stateSystem[game].spectators[username];
+            spectator.write.write(view.spectators);
+        });
+    };
+}
 
 function randomString(len) {
     var i,
@@ -51,10 +64,7 @@ function newGame() {
             //                ready: false
             //            }
         },
-        spectators: [],
-        turn: 0,
-        turnOfPlayer: 0,
-        phase: 0
+        spectators: []
     };
 }
 
@@ -72,7 +82,7 @@ function responseHandler(socket, message) {
     case "host":
         generated = [randomString(12)];
         games[generated] = newGame();
-        stateSystem[generated] = stateSystem();
+        stateSystem[generated] = stateSystem(socketBinding(generated));
         games[generated].player[0].name = message.name;
         stateSystem[generated].players[0] = socket;
         socket.activeduel = generated;
@@ -109,7 +119,7 @@ function responseHandler(socket, message) {
     case "lock":
 
         if (socket.slot !== undefined) {
-            ready = deckvalidator(message.deck)
+            ready = deckvalidator(message.deck);
             games[socket.activeduel].player[socket.slot].ready = deckvalidator(message.deck);
             socket.deck = message.deck;
         }
@@ -117,7 +127,10 @@ function responseHandler(socket, message) {
     case "start":
         player1 = stateSystem[socket.activeduel].players[0].deck;
         player2 = stateSystem[socket.activeduel].players[1].deck;
-        stateSystem[socket.activeduel].startDuel()
+        stateSystem[socket.activeduel].startDuel();
+        break;
+    case "moveCard":
+        stateSystem[socket.activeduel].setState(message.player, message.clocation, message.index, message.moveplayer, message.movelocation, message.moveindex, message.moveposition, message.overlayindex, message.isBecomingCard);
         break;
     default:
         break;
