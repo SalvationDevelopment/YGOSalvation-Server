@@ -40,15 +40,16 @@ function newGame() {
             1: {
                 name: '',
                 ready: false
-            },
-            2: {
-                name: '',
-                ready: false
-            },
-            3: {
-                name: '',
-                ready: false
             }
+            //            ,
+            //            2: {
+            //                name: '',
+            //                ready: false
+            //            },
+            //            3: {
+            //                name: '',
+            //                ready: false
+            //            }
         },
         spectators: [],
         turn: 0,
@@ -60,7 +61,10 @@ function newGame() {
 
 function responseHandler(socket, message) {
     var generated,
-        joined = false;
+        joined = false,
+        player1,
+        player2,
+        ready;
     if (!message.action) {
         return;
     }
@@ -70,7 +74,7 @@ function responseHandler(socket, message) {
         games[generated] = newGame();
         stateSystem[generated] = stateSystem();
         games[generated].player[0].name = message.name;
-        stateSystem[generated].player[0] = socket;
+        stateSystem[generated].players[0] = socket;
         socket.activeduel = generated;
         break;
 
@@ -83,8 +87,9 @@ function responseHandler(socket, message) {
             }
             joined = true;
             player.name = message.name;
+            stateSystem[generated].players[index] = socket;
             socket.slot = index;
-            //moar stuff
+            socket.activeDuel = message.game;
             return true;
         });
         if (!joined) {
@@ -98,8 +103,21 @@ function responseHandler(socket, message) {
             games[socket.activeduel].player[socket.slot] = '';
         } else {
             message.game.spectators--;
-            delete stateSystem[generated].spectators[message.name];
+            delete stateSystem[socket.activeduel].spectators[message.name];
         }
+        break;
+    case "lock":
+
+        if (socket.slot !== undefined) {
+            ready = deckvalidator(message.deck)
+            games[socket.activeduel].player[socket.slot].ready = deckvalidator(message.deck);
+            socket.deck = message.deck;
+        }
+        break;
+    case "start":
+        player1 = stateSystem[socket.activeduel].players[0].deck;
+        player2 = stateSystem[socket.activeduel].players[1].deck;
+        stateSystem[socket.activeduel].startDuel()
         break;
     default:
         break;
