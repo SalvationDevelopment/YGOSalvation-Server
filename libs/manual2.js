@@ -68,6 +68,11 @@ function newGame() {
     };
 }
 
+wss.broadcast = function broadcast(data) {
+    wss.clients.forEach(function each(client) {
+        client.send(data);
+    });
+};
 
 function responseHandler(socket, message) {
     var generated,
@@ -86,6 +91,7 @@ function responseHandler(socket, message) {
         games[generated].player[0].name = message.name;
         stateSystem[generated].players[0] = socket;
         socket.activeduel = generated;
+        wss.broadcast(games);
         break;
 
     case "join":
@@ -105,8 +111,8 @@ function responseHandler(socket, message) {
         if (!joined) {
             message.game.spectators++;
             stateSystem[generated].spectators[message.name] = socket;
-
         }
+        wss.broadcast(games);
         break;
     case "leave":
         if (socket.slot !== undefined) {
@@ -115,6 +121,7 @@ function responseHandler(socket, message) {
             message.game.spectators--;
             delete stateSystem[socket.activeduel].spectators[message.name];
         }
+        wss.broadcast(games);
         break;
     case "lock":
 
@@ -128,9 +135,17 @@ function responseHandler(socket, message) {
         player1 = stateSystem[socket.activeduel].players[0].deck;
         player2 = stateSystem[socket.activeduel].players[1].deck;
         stateSystem[socket.activeduel].startDuel();
+        wss.broadcast(games);
         break;
     case "moveCard":
         stateSystem[socket.activeduel].setState(message.player, message.clocation, message.index, message.moveplayer, message.movelocation, message.moveindex, message.moveposition, message.overlayindex, message.isBecomingCard);
+        break;
+    case "chat":
+        if (socket.slot !== undefined) {
+            stateSystem[socket.activeduel].duelistChat(socket.slot);
+        } else {
+            stateSystem[socket.activeduel].spectatorChat(socket.slot);
+        }
         break;
     default:
         break;

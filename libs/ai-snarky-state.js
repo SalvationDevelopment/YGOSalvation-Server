@@ -414,7 +414,9 @@ function init(callback) {
             });
             numberOfCards++;
         });
+        callback(generateView(), stack);
     }
+
 
     /**
      * Mutation Fuction, moves game to next phase.
