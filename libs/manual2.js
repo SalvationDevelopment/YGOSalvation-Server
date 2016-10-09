@@ -177,3 +177,5 @@ wss.on('connection', function (ws) {
     });
     //ws.send('something');
 });
+
+require('fs').watch(__filename, process.exit);
