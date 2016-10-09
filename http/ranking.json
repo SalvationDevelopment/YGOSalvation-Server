@@ -1,57 +1,57 @@
 [{
     "Son-Kun": 8,
-    "SoraShiunin": 8,
-    "Vertigon": 512,
+    "SoraShiunin": 16,
+    "Vertigon": 24,
     "Max Beat": 8,
-    "jon45324": 64,
+    "jon45324": 16,
     "Domtom": 8,
     "Lord Raptor": 8,
-    "DannyTheStreet": 4096
+    "DannyTheStreet": 32
 }, {
     "[ jojooo. ]": 8,
     "GodMode": 8,
     "mustafa felafel": 8,
     "Lelouch lamperouge": 8,
-    "Lord Raptor": 64,
-    "SoraShiunin": 64,
-    "Vertigon": 512,
-    "Son-Kun": 4096
+    "Lord Raptor": 16,
+    "SoraShiunin": 16,
+    "Vertigon": 24,
+    "Son-Kun": 32
 }, {
     "Fource": 8,
     "Lord Raptor": 8,
     "SoraShiunin": 8,
     "Lelouch lamperouge": 8,
-    "[ jojooo. ]": 64,
-    "Sora Pallet": 64,
-    "Son-Kun": 512,
-    "DannyTheStreet": 4096
+    "[ jojooo. ]": 16,
+    "Sora Pallet": 16,
+    "Son-Kun": 24,
+    "DannyTheStreet": 32
 }, {
 	"Son-Kun": 8,
 	"Sora Pallet": 8,
 	"jon45324": 8,
 	"Vertigon": 8,
-	"Lord Raptor": 64,
-	"[ jojooo. ]": 64,
-	"Lelouch lamperouge": 512,
-	"DannyTheStreet": 4096
+	"Lord Raptor": 16,
+	"[ jojooo. ]": 16,
+	"Lelouch lamperouge": 24,
+	"DannyTheStreet": 32
 }, {
 	"Son-Kun": 8,
 	"tlg": 8,
 	"Lord Raptor": 8,
 	"Lelouch lamperouge": 8,
-	"DannyTheStreet": 64,
-	"Transient": 64,
-	"Vertigon": 512,
-	"Exitium": 4096
+	"DannyTheStreet": 16,
+	"Transient": 16,
+	"Vertigon": 24,
+	"Exitium": 32
 }, {
 	"Lord Draco": 8,
 	"Lord Raptor": 8,
 	"Vertigon": 8,
 	"Sora Pallet": 8,
-	"mustafa felafel": 64,
-	"jon45324": 64,
-	"Exitium": 512,
-	"Son-Kun": 4096
+	"mustafa felafel": 16,
+	"jon45324": 16,
+	"Exitium": 24,
+	"Son-Kun": 32
 }, {
 	"Fource": 16,
     "TreetopTito": 16,
@@ -61,66 +61,75 @@
 	"Sora Pallet": 16,
 	"Delta Escher": 16,
 	"Krycix": 16,
-	"Vertigon": 256,
-	"Lord Raptor": 256,
-	"GrayValentine": 256,
-	"SoraShiunin": 256,
-	"Son-Kun": 4096,
-	"Exitium": 4096,
-	"Black Ballista": 65536,
-	"ProgramIncomplete": 1048576
+	"Vertigon": 32,
+	"Lord Raptor": 32,
+	"GrayValentine": 32,
+	"SoraShiunin": 32,
+	"Son-Kun": 48,
+	"Exitium": 48,
+	"Black Ballista": 64,
+	"ProgramIncomplete": 80
 }, {
 	"TreetopTito": 8,
 	"Lord Raptor": 8,
 	"Lelouch lamperouge": 8,
 	"GodMode": 8,
-	"akatsukilord": 64,
-	"Delta Escher": 64,
-	"Storm Wolf": 512,
-	"Exitium": 4096
+	"akatsukilord": 16,
+	"Delta Escher": 16,
+	"Storm Wolf": 24,
+	"Exitium": 32
 }, {
 	"mustafa felafel": 8,
 	"Sora Pallet": 8,
 	"Ace2024": 8,
 	"Dal920": 8,
-	"Exitium": 64,
-	"SoraShiunin": 64,
-	"jon45324": 512,
-	"Lord Raptor": 4096
+	"Exitium": 16,
+	"SoraShiunin": 16,
+	"jon45324": 24,
+	"Lord Raptor": 32
 }, {
 	"SoraShiunin": 8,
 	"Danwolf": 8,
 	"Lord Raptor": 8,
 	"mustafa felafel": 8,
-	"Son-Kun": 64,
-	"Malice": 64,
-	"jon45324": 512,
-	"Exitium": 4096
+	"Son-Kun": 16,
+	"Malice": 16,
+	"jon45324": 24,
+	"Exitium": 32
 }, {
 	"Transient": 8,
 	"SoraShiunin": 8,
 	"Autonomous": 8,
 	"Sora Pallet": 8,
-	"Son-Kun": 64,
-	"Exitium": 64,
-	"GodMode": 512,
-	"Lord Raptor": 4096
+	"Son-Kun": 16,
+	"Exitium": 16,
+	"GodMode": 24,
+	"Lord Raptor": 32
 }, {
 	"Lord Raptor": 8,
 	"Exitium": 8,
 	"SoraShiunin": 8,
 	"krillin": 8,
-	"Danwolf": 64,
-	"Sora Pallet": 64,
-	"Son-Kun": 512,
-	"Buck the Duck": 4096
+	"Danwolf": 16,
+	"Sora Pallet": 16,
+	"Son-Kun": 24,
+	"Buck the Duck": 32
 }, {
 	"krillin": 8,
 	"Lord Raptor": 8,
 	"RimXster": 8,
 	"Buck the Duck": 8,
-	"Transient": 64,
-	"mustafa felafel": 64,
-	"Sorashiunin": 512,
-	"Son-Kun": 4096
+	"Transient": 16,
+	"mustafa felafel": 16,
+	"SoraShiunin": 24,
+	"Son-Kun": 32
+}, {
+	"<===CHAOS===>": 8,
+	"Wilson": 8,
+	"SoraShiunin": 8,
+	"zeminato": 8,
+	"MentalxSlap": 16,
+	"rexking": 16,
+	"Storm Wolf": 24,
+	"Son-Kun": 32
 }]
