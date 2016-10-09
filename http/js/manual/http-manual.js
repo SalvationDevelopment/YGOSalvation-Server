@@ -1,52 +1,82 @@
 /*jslint browser:true*/
+/*global WebSocket, $, parseYDK*/
 
 var manualServer;
+
+function getActive(user) {
+    'use strict';
+    var selection,
+        processedDeck
+
+    selection = $('.currentdeck option:selected').attr('data-file');
+    processedDeck = parseYDK(selection);
+    return processedDeck;
+}
 
 function serverconnect() {
     window.manualServer = new WebSocket("ws://" + location.hostname + ":8080", "duel");
 }
 
-manualHost() {
+function manualHost() {
     manualServer.send({
         action: 'host'
     });
 }
-manualJoin(game) {
+
+function manualJoin(game) {
     manualServer.send({
         action: 'join',
         game: game
     });
 }
-manualLeave(game) {
+
+function manualLeave(game) {
     manualServer.send({
         action: 'leave',
         game: game
-    }));
+    });
 }
 
-manualLock(deck) {
+function manualLock(deck) {
     manualServer.send({
         action: 'lock',
         deck: deck
     });
 }
 
-manualStart() {
+function manualStart() {
     manualServer.send({
         action: 'start'
     });
 }
-manualChat(message) {
+
+function manualChat(message) {
     manualServer.send();
 }
 
-manualNextPhase() {
-    manualServer.send();
+function manualNextPhase() {
+    manualServer.send({
+        action: 'nextPhase'
+    });
 }
-manualNextTurn() {
-    manualServer.send();
+
+function manualNextTurn() {
+    manualServer.send({
+        action: 'nextTurn'
+    });
 }
-manualChangeLifepoints() {
-    manualServer.send();
+
+function manualChangeLifepoints(amount) {
+    manualServer.send({
+        action: 'changeLifepoints',
+        amount: amount
+    });
+}
+
+function manualMoveCard(movement) {
+    Object.assign(movement, {
+        action: 'moveCard'
+    });
+    manualServer.send(movement);
 }
 serverconnect();
