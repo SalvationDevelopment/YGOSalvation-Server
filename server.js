@@ -122,7 +122,7 @@ function bootlogger() {
 
 function manualModeBoot() {
     //console.log('    Logging Enabled @ ../logs'.bold.gold);
-    processManager.fork('./manualMode.js', [], {
+    processManager.fork('./manual2.js', [], {
         cwd: 'libs'
     }).on('exit', manualModeBoot);
 }
@@ -214,7 +214,7 @@ function main() {
             bootManager();
             bootAISystem();
             deckstorageBoot();
-            //manualModeBoot();
+            manualModeBoot();
 
         }, 2000);
 

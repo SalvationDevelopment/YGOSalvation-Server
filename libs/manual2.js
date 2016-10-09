@@ -14,11 +14,11 @@ var WebSocketServer = require('ws').Server,
 
 function socketBinding(game) {
     return function gameResponse(view, stack) {
-        stateSystem[game].players[0].write(view.player1);
-        stateSystem[game].players[1].write(view.player2);
+        stateSystem[game].players[0].send(view.player1);
+        stateSystem[game].players[1].send(view.player2);
         Object.keys(stateSystem[game].spectators).forEach(function (username) {
             var spectator = stateSystem[game].spectators[username];
-            spectator.write.write(view.spectators);
+            spectator.send(view.spectators);
         });
     };
 }
@@ -83,7 +83,7 @@ function responseHandler(socket, message) {
     if (!message.action) {
         return;
     }
-    switch (message) {
+    switch (message.action) {
     case "host":
         generated = [randomString(12)];
         games[generated] = newGame();
@@ -170,12 +170,10 @@ function responseHandler(socket, message) {
 
 }
 
-wss.on('connection', function (ws) {
-    ws.on('message', function (message) {
-        console.log('received: %s', message);
-        responseHandler(ws, message);
+wss.on('connection', function (socket) {
+    socket.on('message', function (message) {
+        responseHandler(socket, message);
     });
-    //ws.send('something');
 });
 
 require('fs').watch(__filename, process.exit);
