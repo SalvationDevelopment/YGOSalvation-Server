@@ -7,33 +7,46 @@ function serverconnect() {
 }
 
 manualHost() {
-    manualServer.write();
+    manualServer.send({
+        action: 'host'
+    });
 }
-manualJoin() {
-    manualServer.write();
+manualJoin(game) {
+    manualServer.send({
+        action: 'join',
+        game: game
+    });
 }
-manualLeave() {
-    manualServer.write();
+manualLeave(game) {
+    manualServer.send({
+        action: 'leave',
+        game: game
+    }));
 }
 
-manualLock() {
-    manualServer.write();
+manualLock(deck) {
+    manualServer.send({
+        action: 'lock',
+        deck: deck
+    });
 }
 
 manualStart() {
-    manualServer.write();
+    manualServer.send({
+        action: 'start'
+    });
 }
-manualChat() {
-    manualServer.write();
+manualChat(message) {
+    manualServer.send();
 }
 
 manualNextPhase() {
-    manualServer.write();
+    manualServer.send();
 }
 manualNextTurn() {
-    manualServer.write();
+    manualServer.send();
 }
 manualChangeLifepoints() {
-    manualServer.write();
+    manualServer.send();
 }
 serverconnect();
