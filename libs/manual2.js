@@ -147,6 +147,22 @@ function responseHandler(socket, message) {
             stateSystem[socket.activeduel].spectatorChat(socket.slot);
         }
         break;
+    case "nextPhase":
+        if (socket.slot !== undefined) {
+            stateSystem[socket.activeduel].nextPhase();
+        }
+        break;
+    case "nextTurn":
+        if (socket.slot !== undefined) {
+            stateSystem[socket.activeduel].nextTurn();
+        }
+        break;
+    case "changeLifepoints":
+        if (socket.slot !== undefined) {
+            stateSystem[socket.activeduel].changeLifepoints(socket.slot, message.amount);
+        }
+        break;
+
     default:
         break;
     }
