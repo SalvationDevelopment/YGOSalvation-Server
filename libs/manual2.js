@@ -147,6 +147,7 @@ function responseHandler(socket, message) {
             games[socket.activeduel].player[socket.slot].ready = deckvalidator(message.deck);
             games[socket.activeduel].player[socket.slot].deck = message.deck;
         }
+        wss.broadcast(games);
         break;
     case "start":
         player1 = stateSystem[socket.activeduel].players[0].deck;
