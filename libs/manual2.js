@@ -191,6 +191,7 @@ wss.on('connection', function (socket) {
         try {
             responseHandler(socket, JSON.parse(message));
         } catch (error) {
+            console.log(error);
             socket.send(JSON.stringify({
                 error: error
             }));
