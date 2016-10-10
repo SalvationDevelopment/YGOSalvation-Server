@@ -37,6 +37,13 @@ function updateloby(state) {
 
 }
 
+function makeGames() {
+    Object.keys(broadcast).forEach(function (gameName) {
+        var game = broadcast[gameName],
+            string = '<div onclick="manualJoin(\'gameName\')"></div>'
+    });
+}
+
 function getdeck() {
     'use strict';
     var selection,
@@ -58,6 +65,7 @@ function manualReciver(message) {
         break;
     case "broadcast":
         broadcast = message.data;
+        makeGames();
         break;
     default:
         break;
