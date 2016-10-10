@@ -188,8 +188,13 @@ function responseHandler(socket, message) {
 
 wss.on('connection', function (socket) {
     socket.on('message', function (message) {
-
-        responseHandler(socket, JSON.parse(message));
+        try {
+            responseHandler(socket, JSON.parse(message));
+        } catch (error) {
+            socket.send(JSON.stringify({
+                error: error
+            }));
+        }
     });
 });
 
