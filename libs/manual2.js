@@ -92,27 +92,35 @@ function responseHandler(socket, message) {
         stateSystem[generated].players[0] = socket;
         socket.activeduel = generated;
         wss.broadcast(games);
+        socket.send({
+            action: 'lobby',
+            game: generated
+        });
         break;
 
     case "join":
 
-        Object.keys(message.game.player).some(function (playerNo, index) {
-            var player = games[socket.activeduel].player[playerNo];
+        Object.keys(games[message.game].player).some(function (playerNo, index) {
+            var player = games[message.game].player[playerNo];
             if (player.name === '') {
                 return false;
             }
             joined = true;
             player.name = message.name;
-            stateSystem[generated].players[index] = socket;
+            stateSystem[message.game].players[index] = socket;
             socket.slot = index;
             socket.activeDuel = message.game;
             return true;
         });
         if (!joined) {
             message.game.spectators++;
-            stateSystem[generated].spectators[message.name] = socket;
+            stateSystem[message.game].spectators[message.name] = socket;
         }
         wss.broadcast(games);
+        socket.send({
+            action: 'lobby',
+            game: message.game
+        });
         break;
     case "leave":
         if (socket.slot !== undefined) {
@@ -122,6 +130,9 @@ function responseHandler(socket, message) {
             delete stateSystem[socket.activeduel].spectators[message.name];
         }
         wss.broadcast(games);
+        socket.send({
+            action: 'leave'
+        });
         break;
     case "lock":
 
