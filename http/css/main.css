@@ -483,7 +483,8 @@ header {
     text-shadow: 0 0 5px white;
 }
 
-.game {
+.game,
+.manualgame {
     background: rgba(0, 0, 0, .65);
     width: 48%;
     min-height: 40px;

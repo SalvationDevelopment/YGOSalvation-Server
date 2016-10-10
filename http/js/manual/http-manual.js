@@ -41,7 +41,7 @@ function makeGames() {
     $('#manualgamelistitems').html('')
     Object.keys(broadcast).forEach(function (gameName) {
         var game = broadcast[gameName],
-            string = '<div onclick="manualJoin(\'gameName\')">' + gameName + '</div>'
+            string = '<div class="manualgame" onclick="manualJoin(\'gameName\')">' + gameName + '</div>'
         $('#manualgamelistitems').append(string);
     });
 }
