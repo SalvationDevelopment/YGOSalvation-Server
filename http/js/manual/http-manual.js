@@ -1,7 +1,41 @@
 /*jslint browser:true*/
 /*global WebSocket, $, parseYDK*/
 
-var manualServer;
+var manualServer,
+    broadcast,
+    activegame;
+
+function updateloby(state) {
+
+    $('#player1lobbyslot').val(state.player[0].name);
+    $('#player2lobbyslot').val(state.player[1].name);
+    //    $('#player3lobbyslot').val(state.player[2].name);
+    //    $('#player4lobbyslot').val(state.player[3].name);
+    $('#slot1 .lockindicator').attr('data-state', state.player[0].ready);
+    $('#slot2 .lockindicator').attr('data-state', state.player[1].ready);
+    //    $('#slot3 .lockindicator').attr('data-state', state.player[2].ready);
+    //    $('#slot4 .lockindicator').attr('data-state', state.player[3].ready);
+    $('#lobbytimelimit').text(state.timelimit + ' seconds');
+    $('#lobbyflist').text(state.banlist);
+    $('#lobbylp').text(state.startLP);
+    $('#lobbycdpt').text(state.drawcount);
+    $('#lobbyallowed').text($('#creategamecardpool option').eq(state.rule).text());
+    $('#lobbygamemode').text($('#creategameduelmode option').eq(state.mode).text());
+    if (state.ishost) {
+        $('#lobbystart').css('display', 'inline-block');
+    } else {
+        $('#lobbystart').css('display', 'none');
+    }
+
+    if ($('#creategameduelmode option').eq(state.mode).text() === 'Tag') {
+        $('.slot').eq(2).css('display', 'block');
+        $('.slot').eq(3).css('display', 'block');
+    } else {
+        $('.slot').eq(2).css('display', 'none');
+        $('.slot').eq(3).css('display', 'none');
+    }
+
+}
 
 function getActive(user) {
     'use strict';
@@ -16,6 +50,18 @@ function getActive(user) {
 function manualReciver(message) {
     'use strict';
     console.log(message);
+    switch (message.action) {
+    case "lobby":
+        singlesitenav('lobby');
+        activegame = message.game;
+        updateloby(broadcast[activegame]);
+        break;
+    case "broadcast":
+        broadcast = message.data;
+        break;
+    default:
+        break;
+    }
 }
 
 function serverconnect() {
@@ -32,7 +78,8 @@ function serverconnect() {
 function manualHost() {
     'use strict';
     manualServer.send(JSON.stringify({
-        action: 'host'
+        action: 'host',
+        name: localStorage.nickname
     }));
 }
 
@@ -40,7 +87,8 @@ function manualJoin(game) {
     'use strict';
     manualServer.send(JSON.stringify({
         action: 'join',
-        game: game
+        game: game,
+        name: localStorage.nickname
     }));
 }
 

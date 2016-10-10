@@ -14,11 +14,11 @@ var WebSocketServer = require('ws').Server,
 
 function socketBinding(game) {
     return function gameResponse(view, stack) {
-        stateSystem[game].players[0].send(view.player1);
-        stateSystem[game].players[1].send(view.player2);
+        stateSystem[game].players[0].send(JSON.stringify(view.player1));
+        stateSystem[game].players[1].send(JSON.stringify(view.player2));
         Object.keys(stateSystem[game].spectators).forEach(function (username) {
             var spectator = stateSystem[game].spectators[username];
-            spectator.send(view.spectators);
+            spectator.send(JSON.stringify(view.spectators));
         });
     };
 }
@@ -69,6 +69,7 @@ function newGame() {
 }
 
 wss.broadcast = function broadcast(data) {
+    console.log('broadcasting');
     wss.clients.forEach(function each(client) {
         client.send(JSON.stringify({
             action: 'broadcast',
@@ -89,17 +90,17 @@ function responseHandler(socket, message) {
     }
     switch (message.action) {
     case "host":
-        generated = [randomString(12)];
+        generated = randomString(12);
         games[generated] = newGame();
         stateSystem[generated] = stateSystem(socketBinding(generated));
         games[generated].player[0].name = message.name;
         stateSystem[generated].players[0] = socket;
         socket.activeduel = generated;
         wss.broadcast(games);
-        socket.send({
+        socket.send(JSON.stringify({
             action: 'lobby',
             game: generated
-        });
+        }));
         break;
 
     case "join":
@@ -121,10 +122,10 @@ function responseHandler(socket, message) {
             stateSystem[message.game].spectators[message.name] = socket;
         }
         wss.broadcast(games);
-        socket.send({
+        socket.send(JSON.stringify({
             action: 'lobby',
             game: message.game
-        });
+        }));
         break;
     case "leave":
         if (socket.slot !== undefined) {
@@ -134,9 +135,9 @@ function responseHandler(socket, message) {
             delete stateSystem[socket.activeduel].spectators[message.name];
         }
         wss.broadcast(games);
-        socket.send({
+        socket.send(JSON.stringify({
             action: 'leave'
-        });
+        }));
         break;
     case "lock":
 
