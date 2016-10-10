@@ -156,3 +156,13 @@ function manualModeGamelistSwitch() {
     $('#gamelistitems').toggle();
 }
 serverconnect();
+
+function debug() {
+    manualHost();
+    setTimeout(function () {
+        manualLock();
+        setTimeout(function () {
+
+        }, 2000);
+    }, 2000);
+}
