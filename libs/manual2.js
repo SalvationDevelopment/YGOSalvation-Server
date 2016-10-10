@@ -187,6 +187,10 @@ function responseHandler(socket, message) {
 }
 
 wss.on('connection', function (socket) {
+    socket.send(JSON.stringify({
+        action: 'broadcast',
+        data: data
+    }));
     socket.on('message', function (message) {
         try {
             responseHandler(socket, JSON.parse(message));
