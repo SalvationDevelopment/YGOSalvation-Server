@@ -126,10 +126,12 @@ function responseHandler(socket, message) {
             action: 'lobby',
             game: message.game
         }));
+        socket.activeduel = message.game;
         break;
     case "leave":
         if (socket.slot !== undefined) {
-            games[socket.activeduel].player[socket.slot] = '';
+            games[socket.activeduel].player[socket.slot].name = '';
+            games[socket.activeduel].player[socket.slot].ready = false;
         } else {
             message.game.spectators--;
             delete stateSystem[socket.activeduel].spectators[message.name];
@@ -140,17 +142,16 @@ function responseHandler(socket, message) {
         }));
         break;
     case "lock":
-
         if (socket.slot !== undefined) {
             ready = deckvalidator(message.deck);
             games[socket.activeduel].player[socket.slot].ready = deckvalidator(message.deck);
-            socket.deck = message.deck;
+            games[socket.activeduel].player[socket.slot].deck = message.deck;
         }
         break;
     case "start":
         player1 = stateSystem[socket.activeduel].players[0].deck;
         player2 = stateSystem[socket.activeduel].players[1].deck;
-        stateSystem[socket.activeduel].startDuel();
+        stateSystem[socket.activeduel].startDuel(player1, player2);
         wss.broadcast(games);
         break;
     case "moveCard":
@@ -182,8 +183,6 @@ function responseHandler(socket, message) {
     default:
         break;
     }
-
-
 }
 
 wss.on('connection', function (socket) {

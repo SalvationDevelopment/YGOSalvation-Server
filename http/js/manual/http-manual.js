@@ -162,7 +162,7 @@ function debug() {
     setTimeout(function () {
         manualLock();
         setTimeout(function () {
-
+            manualStart();
         }, 2000);
     }, 2000);
 }
