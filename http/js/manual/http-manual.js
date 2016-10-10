@@ -162,12 +162,8 @@ function manualMoveCard(movement) {
 
 function manualModeGamelistSwitch() {
     'use strict';
-    $('#manualgamelistitems').toggle({
-        'display': 'block'
-    });
-    $('#gamelistitems').css({
-        'display': 'none'
-    });
+    $('#manualgamelistitems').toggle();
+    $('#gamelistitems').toggle();
 }
 serverconnect();
 

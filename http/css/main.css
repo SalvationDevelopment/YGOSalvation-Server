@@ -511,12 +511,8 @@ header {
     background-size: fill;
 }
 
-div#gamelistitems {
-    overflow-y: scroll;
-    height: 70vh;
-}
-
-div#gamelistitems {
+div#gamelistitems,
+#manualgamelistitems {
     overflow-y: scroll;
     height: 70vh;
 }
