@@ -8,7 +8,7 @@ var WebSocketServer = require('ws').Server,
         port: 8080
     }),
     stateSystem = require('./ai-snarky-state.js'),
-    deckvalidator = require('.deckvalidator.js'),
+    deckvalidator = require('./deckvalidator.js'),
     games = {},
     states = {};
 
