@@ -260,6 +260,10 @@ function secure(prio, checkd, shuf) {
 
 function setHostSettings() {
     'use strict';
+    if (isChecked('#Manual')) {
+        manualHost();
+        return;
+    }
     var duelRequest = getDuelRequest();
     localStorage.roompass =
         (duelRequest.string + duelRequest.prio +
