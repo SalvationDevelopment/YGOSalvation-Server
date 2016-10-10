@@ -70,11 +70,15 @@ function newGame() {
 
 wss.broadcast = function broadcast(data) {
     wss.clients.forEach(function each(client) {
-        client.send(data);
+        client.send(JSON.stringify({
+            action: 'broadcast',
+            data: data
+        }));
     });
 };
 
 function responseHandler(socket, message) {
+    console.log(message, typeof message);
     var generated,
         joined = false,
         player1,
@@ -183,7 +187,8 @@ function responseHandler(socket, message) {
 
 wss.on('connection', function (socket) {
     socket.on('message', function (message) {
-        responseHandler(socket, message);
+
+        responseHandler(socket, JSON.parse(message));
     });
 });
 
