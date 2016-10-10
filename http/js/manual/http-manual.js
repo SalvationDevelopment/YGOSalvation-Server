@@ -37,7 +37,7 @@ function updateloby(state) {
 
 }
 
-function getActive(user) {
+function getdeck() {
     'use strict';
     var selection,
         processedDeck;
@@ -96,15 +96,15 @@ function manualLeave(game) {
     'use strict';
     manualServer.send(JSON.stringify({
         action: 'leave',
-        game: game
+        game: activegame
     }));
 }
 
-function manualLock(deck) {
+function manualLock() {
     'use strict';
     manualServer.send(JSON.stringify({
         action: 'lock',
-        deck: deck
+        deck: getdeck()
     }));
 }
 
