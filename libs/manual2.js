@@ -144,6 +144,7 @@ function responseHandler(socket, message) {
         }));
         break;
     case "lock":
+        console.log('lock at', socket.activeduel, socket.slot);
         if (socket.slot !== undefined) {
             ready = deckvalidator(message.deck);
             games[socket.activeduel].player[socket.slot].ready = ready;
