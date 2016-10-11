@@ -480,7 +480,19 @@ function init(callback) {
         changeLifepoints: changeLifepoints,
         callback: callback,
         players: {}, // holds socket references
-        spectators: {} // holds socket references
+        spectators: {}, // holds socket references
+        decks: {
+            0: {
+                main: [],
+                extra: [],
+                side: []
+            },
+            1: {
+                main: [],
+                extra: [],
+                side: []
+            }
+        } // holds decks
     };
 
 

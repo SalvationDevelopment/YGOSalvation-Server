@@ -145,8 +145,8 @@ function responseHandler(socket, message) {
     case "lock":
         if (socket.slot !== undefined) {
             ready = deckvalidator(message.deck);
-            games[socket.activeduel].player[socket.slot].ready = deckvalidator(message.deck);
-            games[socket.activeduel].player[socket.slot].deck = message.deck;
+            games[socket.activeduel].player[socket.slot].ready = ready
+            games[socket.activeduel].decks[socket.slot] = message.deck;
         }
         wss.broadcast(games);
         break;

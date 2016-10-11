@@ -71,6 +71,9 @@ function manualReciver(message) {
         break;
     case "broadcast":
         broadcast = message.data;
+        if (activegame) {
+            updateloby(broadcast[activegame])
+        }
         makeGames();
         break;
     default:
