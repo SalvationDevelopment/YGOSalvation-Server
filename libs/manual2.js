@@ -145,9 +145,22 @@ function responseHandler(socket, message) {
     case "lock":
         if (socket.slot !== undefined) {
             ready = deckvalidator(message.deck);
-            games[socket.activeduel].player[socket.slot].ready = ready
+            games[socket.activeduel].player[socket.slot].ready = ready;
             games[socket.activeduel].decks[socket.slot] = message.deck;
+            if (ready) {
+                socket.send(JSON.stringify({
+                    action: 'lock',
+                    result: 'success',
+                    deck: games[socket.activeduel].decks[socket.slot]
+                }));
+            } else {
+                socket.send(JSON.stringify({
+                    action: 'lock',
+                    result: 'failed to lock'
+                }));
+            }
         }
+
         wss.broadcast(games);
         break;
     case "start":
@@ -198,7 +211,9 @@ wss.on('connection', function (socket) {
         } catch (error) {
             console.log(error);
             socket.send(JSON.stringify({
-                error: error
+                error: error.message,
+                stack: error.stack,
+                input: JSON.parse(message)
             }));
         }
     });
