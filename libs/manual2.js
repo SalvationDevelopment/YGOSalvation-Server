@@ -108,7 +108,7 @@ function responseHandler(socket, message) {
 
         Object.keys(games[message.game].player).some(function (playerNo, index) {
             var player = games[message.game].player[playerNo];
-            if (player.name === '') {
+            if (player.name !== '') {
                 return false;
             }
             joined = true;
