@@ -102,6 +102,7 @@ function responseHandler(socket, message) {
             action: 'lobby',
             game: generated
         }));
+        socket.slot = 0;
         break;
 
     case "join":
