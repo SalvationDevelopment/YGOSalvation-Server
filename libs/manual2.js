@@ -43,6 +43,7 @@ var WebSocketServer = require('ws').Server,
     }),
     stateSystem = require('./ai-snarky-state.js'),
     deckvalidator = require('./deckvalidator.js'),
+    configParser = require('./configparser.js'),
     games = {},
     states = {};
 
@@ -148,7 +149,7 @@ function responseHandler(socket, message) {
         if (socket.slot !== undefined) {
             ready = deckvalidator(message.deck);
             games[socket.activeduel].player[socket.slot].ready = ready;
-            games[socket.activeduel].decks[socket.slot] = message.deck;
+            games[socket.activeduel].decks[socket.slot] = configParser(message.deck);
             if (ready) {
                 socket.send(JSON.stringify({
                     action: 'lock',
@@ -158,7 +159,8 @@ function responseHandler(socket, message) {
             } else {
                 socket.send(JSON.stringify({
                     action: 'lock',
-                    result: 'failed to lock'
+                    result: 'failed to lock',
+                    deck: {}
                 }));
             }
         }
