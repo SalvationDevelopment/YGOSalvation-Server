@@ -69,12 +69,12 @@ function randomString(len) {
 
 
 
-wss.broadcast = function broadcast(data) {
+wss.broadcast = function broadcast() {
     console.log('broadcasting');
     wss.clients.forEach(function each(client) {
         client.send(JSON.stringify({
             action: 'broadcast',
-            data: data
+            data: games
         }));
     });
 };
@@ -190,7 +190,7 @@ function responseHandler(socket, message) {
 wss.on('connection', function (socket) {
     socket.send(JSON.stringify({
         action: 'broadcast',
-        data: data
+        data: games
     }));
     socket.on('message', function (message) {
         try {
