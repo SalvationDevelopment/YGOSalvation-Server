@@ -56,8 +56,7 @@ function getdeck() {
         processedDeck;
 
     selection = $('#lobbycurrentdeck .currentdeck option:selected').attr('data-file');
-    processedDeck = parseYDK(selection);
-    return processedDeck;
+    return selection;
 }
 
 function manualReciver(message) {
