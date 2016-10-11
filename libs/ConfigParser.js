@@ -1,7 +1,4 @@
-module.exports = function ConfigParser(content, options) {
-    if (!(this instanceof ConfigParser)) {
-        return new ConfigParser(content, options);
-    }
+module.exports = function ConfigParser(content) {
     var commentDelims = [
             "#",
             ";",
@@ -15,7 +12,9 @@ module.exports = function ConfigParser(content, options) {
         joinKeySlice = 0,
         configObject = {},
         currentBlock,
-        currentLine;
+        currentLine,
+        options = {};
+
     if (typeof options === "object") {
         commentDelims = options.commentDelims || commentDelims;
         blockRegexp = options.blockRegexp || blockRegexp;
@@ -24,10 +23,11 @@ module.exports = function ConfigParser(content, options) {
         joinKeyValue = options.joinKeyValue || joinKeyValue;
         joinKeySlice = options.joinKeySlice || joinKeySlice;
     }
+    console.log(content);
     content = content.split(newLineDelim);
-    content.forEach(function(line) {
+    content.forEach(function (line) {
         var isComment = false;
-        commentDelims.forEach(function(delim) {
+        commentDelims.forEach(function (delim) {
             if (line.indexOf(delim) === 0) {
                 isComment = true;
             } else {
