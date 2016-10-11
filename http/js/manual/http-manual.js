@@ -1,12 +1,12 @@
 /*jslint browser:true*/
-/*global WebSocket, $, parseYDK*/
+/*global WebSocket, $, parseYDK, singlesitenav*/
 
 var manualServer,
     broadcast,
     activegame;
 
 function updateloby(state) {
-
+    'use strict';
     $('#player1lobbyslot').val(state.player[0].name);
     $('#player2lobbyslot').val(state.player[1].name);
     //    $('#player3lobbyslot').val(state.player[2].name);
@@ -38,13 +38,14 @@ function updateloby(state) {
 }
 
 function makeGames() {
-    $('#manualgamelistitems').html('')
+    'use strict';
+    $('#manualgamelistitems').html('');
     Object.keys(broadcast).forEach(function (gameName) {
         var game = broadcast[gameName],
             player1 = game.player[0].name || '___',
-            player2 = game.player[1].name || '___'
-        players = player1 + 'vs' + player2
-        string = '<div class="manualgame" onclick="manualJoin(\'gameName\')">' + players + '</div>'
+            player2 = game.player[1].name || '___',
+            players = player1 + 'vs' + player2,
+            string = '<div class="manualgame" onclick="manualJoin(\'gameName\')">' + players + '</div>';
         $('#manualgamelistitems').append(string);
     });
 }
@@ -81,10 +82,14 @@ function serverconnect() {
     'use strict';
     window.manualServer = new WebSocket("ws://" + location.hostname + ":8080");
     manualServer.onopen = function () {
-        console.log('connected to manual');
+        console.log('Connected to Manual');
     };
     manualServer.onmessage = function (message) {
         manualReciver(JSON.parse(message.data));
+    };
+    manualServer.onclose = function (message) {
+        console.log('Manual Connection Died, reconnecting,...');
+        setTimeout(serverconnect, 2000);
     };
 }
 
@@ -185,6 +190,7 @@ function mautomaticModeGamelistSwitch() {
 serverconnect();
 
 function debug() {
+    'use strict';
     manualHost();
     setTimeout(function () {
         manualLock();

@@ -1,38 +1,6 @@
 /*jslint node:true*/
 'use strict';
 
-
-
-var WebSocketServer = require('ws').Server,
-    wss = new WebSocketServer({
-        port: 8080
-    }),
-    stateSystem = require('./ai-snarky-state.js'),
-    deckvalidator = require('./deckvalidator.js'),
-    games = {},
-    states = {};
-
-function socketBinding(game) {
-    return function gameResponse(view, stack) {
-        stateSystem[game].players[0].send(JSON.stringify(view.player1));
-        stateSystem[game].players[1].send(JSON.stringify(view.player2));
-        Object.keys(stateSystem[game].spectators).forEach(function (username) {
-            var spectator = stateSystem[game].spectators[username];
-            spectator.send(JSON.stringify(view.spectators));
-        });
-    };
-}
-
-function randomString(len) {
-    var i,
-        text = "",
-        chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-    for (i = 0; i < len; i++) {
-        text += chars.charAt(Math.floor(Math.random() * chars.length));
-    }
-    return text;
-}
-
 function newGame() {
     return {
         deckcheck: 0,
@@ -67,6 +35,39 @@ function newGame() {
         spectators: []
     };
 }
+
+
+var WebSocketServer = require('ws').Server,
+    wss = new WebSocketServer({
+        port: 8080
+    }),
+    stateSystem = require('./ai-snarky-state.js'),
+    deckvalidator = require('./deckvalidator.js'),
+    games = {},
+    states = {};
+
+function socketBinding(game) {
+    return function gameResponse(view, stack) {
+        stateSystem[game].players[0].send(JSON.stringify(view.player1));
+        stateSystem[game].players[1].send(JSON.stringify(view.player2));
+        Object.keys(stateSystem[game].spectators).forEach(function (username) {
+            var spectator = stateSystem[game].spectators[username];
+            spectator.send(JSON.stringify(view.spectators));
+        });
+    };
+}
+
+function randomString(len) {
+    var i,
+        text = "",
+        chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    for (i = 0; i < len; i++) {
+        text += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    return text;
+}
+
+
 
 wss.broadcast = function broadcast(data) {
     console.log('broadcasting');
