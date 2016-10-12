@@ -89,7 +89,7 @@ function getdeck() {
 
 function LoadField() {
     console.log('GAME INITIATE!');
-    $('#duelzone').css('display', 'block').get(0).scrollIntoView();
+    $('#duelzone').css('display', 'block');
     $('img.card').attr('class', 'card none undefined i0').attr('src', 'img/textures/cover.jpg');
 
     $('#phases').css('display', 'block');
@@ -116,6 +116,7 @@ function manualReciver(message) {
         singlesitenav('duelscreen');
         if (!duelstarted) {
             LoadField();
+            duelstarted = true;
         }
         break;
     default:
