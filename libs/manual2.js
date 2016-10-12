@@ -217,4 +217,5 @@ wss.on('connection', function (socket) {
     });
 });
 
-require('fs').watch(__filename, process.exit);
+var fs = require('fs');
+fs.watch(__filename, process.exit);
