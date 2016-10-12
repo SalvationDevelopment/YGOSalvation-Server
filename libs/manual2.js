@@ -154,7 +154,7 @@ function responseHandler(socket, message) {
             socket.send(JSON.stringify({
                 action: 'lock',
                 result: 'success',
-                deck: games[socket.activeduel].decks[socket.slot]
+                deck: stateSystem[socket.activeduel].decks[socket.slot]
             }));
 
         }
