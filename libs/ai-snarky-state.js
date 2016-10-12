@@ -236,14 +236,17 @@ function init(callback) {
     function generateView() {
         return {
             player1: {
+                action: 'duel',
                 info: state,
                 field: generatePlayer1View()
             },
             player2: {
+                action: 'duel',
                 info: state,
                 field: generatePlayer2View()
             },
             spectators: {
+                action: 'duel',
                 info: state,
                 field: generateSpectatorView()
             }
