@@ -81,3 +81,17 @@ button.win {
     width: 100%;
     border: 1px solid white;
 }
+.entry:nth-child(odd):after {
+    content: "VS";
+    position: absolute;
+    /* background: blue; */
+    
+    width: 50%;
+    height: 1.5em;
+    bottom: -.8em;
+    left: 35%;
+}
+#tourney_rd5 .entry:nth-child(odd):after {
+    content: "";
+    display: none;
+}
