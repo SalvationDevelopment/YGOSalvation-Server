@@ -71,7 +71,6 @@ function randomString(len) {
 
 
 wss.broadcast = function broadcast() {
-    console.log('broadcasting');
     wss.clients.forEach(function each(client) {
         client.send(JSON.stringify({
             action: 'broadcast',
@@ -81,7 +80,7 @@ wss.broadcast = function broadcast() {
 };
 
 function responseHandler(socket, message) {
-    console.log(message, typeof message);
+    console.log(message);
     var generated,
         joined = false,
         player1,
@@ -145,7 +144,6 @@ function responseHandler(socket, message) {
         }));
         break;
     case "lock":
-        console.log('lock at', socket.activeduel, socket.slot);
         if (socket.slot !== undefined) {
             //ready = deckvalidator(message.deck);
             games[socket.activeduel].player[socket.slot].ready = true;
