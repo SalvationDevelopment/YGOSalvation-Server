@@ -55,9 +55,34 @@ function getdeck() {
     var selection,
         processedDeck;
 
+    function makeDeck(ydkFileContents) {
+        var lineSplit = ydkFileContents.split("\n"),
+            originalValues = {
+                "main": [],
+                "side": [],
+                "extra": []
+            },
+            current = "";
+        lineSplit.forEach(function (value) {
+            if (value === "") {
+                return;
+            }
+            if (value[0] === "#" || value[0] === "!") {
+                if (originalValues.hasOwnProperty(value.substr(1))) {
+                    current = value.substr(1);
+                } else {
+                    return;
+                }
+            } else {
+                originalValues[current].push(value);
+            }
+        });
+        return originalValues;
+    }
+
     selection = $('#lobbycurrentdeck .currentdeck option:selected').eq(0).attr('data-file');
     console.log(selection);
-    processedDeck = parseYDK(selection);
+    processedDeck = makeDeck(selection);
     return processedDeck;
 }
 
