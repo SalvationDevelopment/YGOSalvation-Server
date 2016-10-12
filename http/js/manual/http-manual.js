@@ -55,9 +55,10 @@ function getdeck() {
     var selection,
         processedDeck;
 
-    selection = $('#lobbycurrentdeck .currentdeck option:selected').attr('data-file');
+    selection = $('#lobbycurrentdeck .currentdeck option:selected').eq(0).attr('data-file');
+    console.log(selection);
     processedDeck = parseYDK(selection);
-    return JSON.stringify(processedDeck);
+    return processedDeck;
 }
 
 function manualReciver(message) {
