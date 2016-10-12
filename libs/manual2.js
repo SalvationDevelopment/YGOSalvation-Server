@@ -150,26 +150,20 @@ function responseHandler(socket, message) {
             //ready = deckvalidator(message.deck);
             games[socket.activeduel].player[socket.slot].ready = true;
             stateSystem[socket.activeduel].decks[socket.slot] = configParser(message.deck);
-            if (ready) {
-                socket.send(JSON.stringify({
-                    action: 'lock',
-                    result: 'success',
-                    deck: games[socket.activeduel].decks[socket.slot]
-                }));
-            } else {
-                socket.send(JSON.stringify({
-                    action: 'lock',
-                    result: 'failed to lock',
-                    deck: {}
-                }));
-            }
+
+            socket.send(JSON.stringify({
+                action: 'lock',
+                result: 'success',
+                deck: games[socket.activeduel].decks[socket.slot]
+            }));
+
         }
 
         wss.broadcast(games);
         break;
     case "start":
-        player1 = stateSystem[socket.activeduel].players[0].deck;
-        player2 = stateSystem[socket.activeduel].players[1].deck;
+        player1 = stateSystem[socket.activeduel].decks[0];
+        player2 = stateSystem[socket.activeduel].decks[1];
         stateSystem[socket.activeduel].startDuel(player1, player2);
         wss.broadcast(games);
         break;
