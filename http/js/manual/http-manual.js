@@ -157,9 +157,15 @@ function manualLock() {
 
 function manualStart() {
     'use strict';
-    manualServer.send(JSON.stringify({
-        action: 'start'
-    }));
+    if (activegame) {
+        if (broadcast[activegame].player[0].ready && broadcast[activegame].player[0].ready) {
+            manualServer.send(JSON.stringify({
+                action: 'start'
+            }));
+            return;
+        }
+    }
+    alert('Duelist not ready yet. Please Lock in decks');
 }
 
 function manualChat(message) {
