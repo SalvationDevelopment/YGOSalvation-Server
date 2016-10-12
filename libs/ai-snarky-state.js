@@ -21,7 +21,7 @@ var enums = require('./enums.js');
  * @param   {Number} unique       [[Description]]
  * @returns {object}   a card
  */
-function makeCard(movelocation, player, index, unique) {
+function makeCard(movelocation, player, index, unique, code) {
     return {
         type: 'card',
         player: player,
@@ -320,7 +320,7 @@ function init(callback) {
             zone;
 
         if (previousLocation === 0) {
-            stack.push(makeCard(enums.locations[currentLocation], currentController, currentSequence, numberOfCards));
+            stack.push(makeCard(enums.locations[currentLocation], currentController, currentSequence, numberOfCards, code));
             numberOfCards++;
             return;
         } else if (currentLocation === 0) {
@@ -380,38 +380,21 @@ function init(callback) {
      */
     function startDuel(player1, player2) {
 
-        // Rare instance you'll see me use a for loop.
         player1.main.forEach(function (card, index) {
-            stack.push(makeCard('DECK', 0, index, numberOfCards));
-            updateCard(0, 'DECK', index, {
-                Code: card.Code,
-                Position: 'FaceDown'
-            });
+            stack.push(makeCard('DECK', 0, index, numberOfCards, card.Code));
             numberOfCards++;
         });
         player2.main.forEach(function (card, index) {
-            stack.push(makeCard('DECK', 1, index, numberOfCards));
-            updateCard(1, 'DECK', index, {
-                Code: card.Code,
-                Position: 'FaceDown'
-            });
+            stack.push(makeCard('DECK', 1, index, numberOfCards, card.Code));
             numberOfCards++;
         });
 
         player1.extra.forEach(function (card, index) {
-            stack.push(makeCard('EXTRA', 0, index, numberOfCards));
-            updateCard(0, 'EXTRA', index, {
-                Code: card.Code,
-                Position: 'FaceDown'
-            });
+            stack.push(makeCard('EXTRA', 0, index, numberOfCards, card.Code));
             numberOfCards++;
         });
         player2.extra.forEach(function (card, index) {
-            stack.push(makeCard('EXTRA', 1, index, numberOfCards));
-            updateCard(1, 'EXTRA', index, {
-                Code: card.Code,
-                Position: 'FaceDown'
-            });
+            stack.push(makeCard('EXTRA', 1, index, numberOfCards, card.Code));
             numberOfCards++;
         });
         callback(generateView(), stack);
