@@ -3,7 +3,8 @@
 
 var manualServer,
     broadcast,
-    activegame;
+    activegame,
+    duelstarted = false;
 
 function updateloby(state) {
     'use strict';
@@ -86,6 +87,15 @@ function getdeck() {
     return processedDeck;
 }
 
+function LoadField() {
+    console.log('GAME INITIATE!');
+    $('#duelzone').css('display', 'block').get(0).scrollIntoView();
+    $('img.card').attr('class', 'card none undefined i0').attr('src', 'img/textures/cover.jpg');
+
+    $('#phases').css('display', 'block');
+    console.log('Starting Duel!');
+}
+
 function manualReciver(message) {
     'use strict';
     console.log(message);
@@ -104,6 +114,9 @@ function manualReciver(message) {
         break;
     case "duel":
         singlesitenav('duelscreen');
+        if (!duelstarted) {
+            LoadField();
+        }
         break;
     default:
         break;
@@ -233,14 +246,7 @@ $.getJSON('http://ygopro.us/manifest/database_0-en-OCGTCG.json', function (data)
     var internalDB = data;
 });
 
-function LoadField() {
-    console.log('GAME INITIATE!');
-    $('#duelzone').css('display', 'block').get(0).scrollIntoView();
-    $('img.card').attr('class', 'card none undefined i0').attr('src', 'img/textures/cover.jpg');
 
-    $('#phases').css('display', 'block');
-    console.log('Starting Duel!');
-}
 
 function Card(movelocation, player, index, unique) {
     'use strict';
@@ -257,6 +263,27 @@ function Card(movelocation, player, index, unique) {
 }
 
 
+function layouthand(player) {
+    var count = $('.p' + player + '.HAND').length,
+        f = 75 / 0.8,
+        xCoord,
+        sequence;
+    //    console.log(count,f,xCoord);
+    for (sequence = 0; sequence < count; sequence++) {
+        if (count < 6) {
+            xCoord = (5.5 * f - 0.8 * f * count) / 2 + 1.55 * f + sequence * 0.8 * f;
+        } else {
+            xCoord = 1.9 * f + sequence * 4.0 * f / (count - 1);
+        }
+        // console.log('.'+player+'.Hand.i'+sequence);
+        //console.log(xCoord);
+        if (player === 0) {
+            $('.p' + player + '.HAND.i' + sequence).css('left', String() + xCoord + 'px');
+        } else {
+            $('.p' + player + '.HAND.i' + sequence).css('left', String() + xCoord + 'px');
+        }
+    }
+}
 
 function guiCard(dataBinding) {
     'use strict';
