@@ -96,6 +96,8 @@ function LoadField() {
     console.log('Starting Duel!');
 }
 
+var manualDuel;
+
 function manualReciver(message) {
     'use strict';
     console.log(message);
@@ -112,12 +114,15 @@ function manualReciver(message) {
         }
         makeGames();
         break;
-    case "duel":
+    case "start":
         singlesitenav('duelscreen');
         if (!duelstarted) {
             LoadField();
             duelstarted = true;
         }
+        manualDuel = initGameState();
+        manualDuel.startDuel(8000, 8000, 40, 40, 15, 15);
+        //startDuel(player1StartLP, player2StartLP, OneDeck, TwoDeck, OneExtra, TwoExtra)
         break;
     default:
         break;
