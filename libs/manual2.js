@@ -1,4 +1,4 @@
-/*jslint node:true*/
+/*jslint node:true, plusplus:true, bitwise : true, nomen:true*/
 'use strict';
 
 function newGame() {
@@ -103,6 +103,11 @@ function responseHandler(socket, message) {
             game: generated
         }));
         socket.slot = 0;
+
+        setTimeout(function () {
+            delete games[generated];
+            delete stateSystem[generated];
+        }, 5400000); // 90 mins.
         break;
 
     case "join":

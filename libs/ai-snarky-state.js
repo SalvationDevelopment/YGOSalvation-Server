@@ -1,4 +1,4 @@
-/*jslint node:true, plusplus:true, bitwise : true*/
+/*jslint node:true, plusplus:true, bitwise : true, nomen:true*/
 'use strict';
 
 
@@ -9,7 +9,8 @@
  * to write by just copying and refactoring. In the mean time need to
  * know what some numbers mean in YGOPro land.
  */
-var enums = require('./enums.js');
+var enums = require('./enums.js'),
+    fs = require('fs');
 
 
 
@@ -233,20 +234,20 @@ function init(callback) {
      * Generate a full view of the field for all view types.
      * @returns {Array} complete view of the current field based on the stack for every view type.
      */
-    function generateView() {
+    function generateView(action) {
         return {
             player1: {
-                action: 'duel',
+                action: action || 'duel',
                 info: state,
                 field: generatePlayer1View()
             },
             player2: {
-                action: 'duel',
+                action: action || 'duel',
                 info: state,
                 field: generatePlayer2View()
             },
             spectators: {
-                action: 'duel',
+                action: action || 'duel',
                 info: state,
                 field: generateSpectatorView()
             }
@@ -400,7 +401,7 @@ function init(callback) {
             stack.push(makeCard('EXTRA', 1, index, numberOfCards, card.Code));
             numberOfCards++;
         });
-        callback(generateView(), stack);
+        callback(generateView('start'), stack);
     }
 
 
@@ -484,6 +485,7 @@ function init(callback) {
 
 }
 
+fs.watch(__filename, process.exit);
 module.exports = init;
 
 
