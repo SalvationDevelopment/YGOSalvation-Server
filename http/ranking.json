@@ -6,7 +6,7 @@
     "jon45324": 16,
     "Domtom": 8,
     "Lord Raptor": 8,
-    "DannyTheStreet": 32
+    "dannythestreet": 32
 }, {
     "[ jojooo. ]": 8,
     "GodMode": 8,
@@ -24,7 +24,7 @@
     "[ jojooo. ]": 16,
     "Sora Pallet": 16,
     "Son-Kun": 24,
-    "DannyTheStreet": 32
+    "dannythestreet": 32
 }, {
 	"Son-Kun": 8,
 	"Sora Pallet": 8,
@@ -33,13 +33,13 @@
 	"Lord Raptor": 16,
 	"[ jojooo. ]": 16,
 	"Lelouch lamperouge": 24,
-	"DannyTheStreet": 32
+	"dannythestreet": 32
 }, {
 	"Son-Kun": 8,
 	"tlg": 8,
 	"Lord Raptor": 8,
 	"Lelouch lamperouge": 8,
-	"DannyTheStreet": 16,
+	"dannythestreet": 16,
 	"Transient": 16,
 	"Vertigon": 24,
 	"Exitium": 32
@@ -117,7 +117,7 @@
 }, {
 	"krillin": 8,
 	"Lord Raptor": 8,
-	"RimXster": 8,
+	"RimXSter": 8,
 	"Buck the Duck": 8,
 	"Transient": 16,
 	"mustafa felafel": 16,
@@ -186,5 +186,26 @@
 	"Sora Pallet": 16,
 	"Buck the Duck": 24,
 	"Melody": 32
+}, {
+    "Blade": 8,
+    "dannythestreet": 8,
+    "ghandilson": 8,
+    "Melody": 8,
+    "RimXSter": 8,
+    "ProudKorean": 8, 
+    "Nicholas0723": 16,
+    "Fource": 16,
+    "Dal920": 16,
+    "MentalxSlap": 24,
+    "Sora Pallet": 24,  
+    "SoraShiunin": 24,
+    "Exitium": 24,
+    "Sirocco": 32,
+    "Son-Kun": 40,
+    "Storm Wolf": 48
 }]
+    
+    
+    
+    
 	
