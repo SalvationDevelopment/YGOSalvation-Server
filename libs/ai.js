@@ -18,7 +18,7 @@ var Primus = require('primus'), //Primus, our Sepiroth-Qliphopth Creator God. We
     server = http.createServer(), //throne of the God
     primus = new Primus(server), // instance of the God
     Socket = require('primus').createSocket(),
-    client = new Socket('http://127.0.0.1:24555'), //Connect the God to the tree;
+    client = new Socket('http://ygopro.us:24555'), //Connect the God to the tree;
     childProcess = require('child_process'),
     startDirectory = __dirname,
     path = process.cwd() + '/../ai';
@@ -30,12 +30,7 @@ function gamelistUpdate(data) {
     var needsKill = true,
         windbot,
         deck = data.deck || 'Hours';
-    console.log(data);
     if (data.clientEvent) {
-        console.log(data);
-        if (data.clientEvent === 'airestart') {
-            process.exit();
-        }
         if (data.clientEvent === 'duelrequest' && data.target === 'SnarkyChild') {
 
             console.log('[AI]:Event: Duel Request for SnarkyChild');
@@ -54,7 +49,7 @@ function gamelistUpdate(data) {
             });
 
             windbot.stdout.on('data', function (rawmessage) {
-                //console.log(rawmessage.toString());
+                console.log(rawmessage.toString());
             });
         }
         return;
@@ -63,15 +58,6 @@ function gamelistUpdate(data) {
 
 function onConnectGamelist() {
     'use strict';
-    client.write({
-        action: 'join'
-    });
-    setInterval(function () {
-        client.write({
-            action: 'join'
-        });
-    }, 10000);
-    console.log('connected');
 }
 
 function onCloseGamelist() {
@@ -82,9 +68,9 @@ function onCloseGamelist() {
 client.on('data', gamelistUpdate);
 client.on('connected', onConnectGamelist);
 client.on('close', onCloseGamelist);
-
-
-
+client.write({
+    action: 'join'
+});
 
 module.exports = {
     gamelistUpdate: gamelistUpdate,
