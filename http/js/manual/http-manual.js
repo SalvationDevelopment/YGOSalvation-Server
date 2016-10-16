@@ -88,6 +88,7 @@ function getdeck() {
 }
 
 function LoadField() {
+    'use strict';
     console.log('GAME INITIATE!');
     $('#duelzone').css('display', 'block');
     $('img.card').attr('class', 'card none undefined i0').attr('src', 'img/textures/cover.jpg');
@@ -270,6 +271,7 @@ function Card(movelocation, player, index, unique) {
 
 
 function layouthand(player) {
+    'use strict';
     var count = $('.p' + player + '.HAND').length,
         f = 75 / 0.8,
         xCoord,
@@ -289,6 +291,54 @@ function layouthand(player) {
             $('.p' + player + '.HAND.i' + sequence).css('left', String() + xCoord + 'px');
         }
     }
+}
+
+function cardmargin(player, deck) {
+    'use strict';
+    var orientation = (player === 'p0') ? ({
+        x: 'left',
+        y: 'bottom',
+        direction: 1,
+        multiple: 2
+    }) : ({
+        x: 'right',
+        y: 'top',
+        direction: -1,
+        multiple: 3
+    });
+    $('.card.' + player + '.' + deck).each(function (i) {
+        // console.log($('.card.'+player+'.'+deck), cardlocations[player],player,deck);
+        var decklocationx = (orientation.direction * i / orientation.multiple) + (cardlocations[player][deck].x_origin);
+        var decklocationy = (orientation.direction * i / orientation.multiple) + (cardlocations[player][deck].y_origin);
+        //console.log(decklocationx,decklocationy);
+
+        $(this).css(
+            orientation.y, decklocationy + 'px').css(
+            orientation.x, decklocationx + 'px'
+        );
+
+    });
+}
+
+function shuffle(player, deck) {
+    var orientation = (player === 'p0') ? ({
+        x: 'left',
+        y: 'bottom',
+        direction: 1
+    }) : ({
+        x: 'right',
+        y: 'top',
+        direction: -1
+    });
+    cardmargin(player, deck);
+    $($('.card.' + player + '.' + deck).get().reverse()).each(function (i) {
+        var cache = $(this).css(orientation.x);
+        var spatical = Math.floor((Math.random() * 150) - 75);
+        $(this).css(orientation.x, '-=' + spatical + 'px');
+    });
+    fix = setTimeout(function () {
+        cardmargin(player, deck);
+    }, 50);
 }
 
 function guiCard(dataBinding) {
@@ -568,3 +618,136 @@ function initGameState() {
     };
 }
 serverconnect();
+
+var cardlocations = {
+
+    'p0': {
+        Deck: {
+            x_origin: 735, // player 1
+            y_origin: 43
+        },
+        Hand: {
+            x_origin: 124,
+            y_origin: -10
+        },
+        Extra: {
+            x_origin: 22,
+            y_origin: 43
+        },
+        Field: {
+            x_origin: 22,
+            y_origin: 181
+        },
+        Spells: {
+            zone1: {
+                x_origin: 144,
+                y_origin: 188
+            },
+            zone2: {
+                x_origin: 261,
+                y_origin: 188
+            },
+            zone3: {
+                x_origin: 379,
+                y_oirgin: 188
+            },
+            zone4: {
+                x_origin: 497,
+                y_origin: 188
+            },
+            zone5: {
+                x_origin: 614,
+                y_origin: 188
+            }
+        },
+        MonsterZone: {
+            zone1: {
+                x_origin: 144,
+                y_origin: 250
+            },
+            zone2: {
+                x_origin: 261,
+                y_origin: 250
+            },
+            zone3: {
+                x_origin: 379,
+                y_oirgin: 250
+            },
+            zone4: {
+                x_origin: 497,
+                y_origin: 250
+            },
+            zone5: {
+                x_origin: 614,
+                y_origin: 250
+            }
+        }
+
+
+    },
+    'p1': {
+        Deck: {
+            x_origin: 744, // player 1
+            y_origin: 43
+        },
+        Hand: {
+            x_origin: 124,
+            y_origin: -10
+        },
+        Extra: {
+            x_origin: 32,
+            y_origin: 43
+        },
+        Field: {
+            x_origin: 22,
+            y_origin: 181
+        },
+        Spells: {
+            zone1: {
+                x_origin: 144,
+                y_origin: 188
+            },
+            zone2: {
+                x_origin: 261,
+                y_origin: 188
+            },
+            zone3: {
+                x_origin: 379,
+                y_oirgin: 188
+            },
+            zone4: {
+                x_origin: 497,
+                y_origin: 188
+            },
+            zone5: {
+                x_origin: 614,
+                y_origin: 188
+            }
+        },
+        MonsterZone: {
+            zone1: {
+                x_origin: 144,
+                y_origin: 250
+            },
+            zone2: {
+                x_origin: 261,
+                y_origin: 250
+            },
+            zone3: {
+                x_origin: 379,
+                y_oirgin: 250
+            },
+            zone4: {
+                x_origin: 497,
+                y_origin: 250
+            },
+            zone5: {
+                x_origin: 614,
+                y_origin: 250
+            }
+        }
+
+
+    }
+
+};
