@@ -327,7 +327,7 @@ function guiCard(dataBinding) {
         element;
 
 
-    $(field).append('<img onclick="guicardclick(#uid' + dataBinding.uid + ',' + dataBinding.uid + ' )" id="uid' + dataBinding.uid + '" class="card p' + dataBinding.player + ' ' + dataBinding.location + ' i' + dataBinding.index + ' o" src="img/textures/cover.jpg" data-position="FaceDown" />');
+    $(field).append('<img onclick="guicardclick(\'#uid' + dataBinding.uid + '\',' + dataBinding.uid + ')" id="uid' + dataBinding.uid + '" class="card p' + dataBinding.player + ' ' + dataBinding.location + ' i' + dataBinding.index + ' o" src="img/textures/cover.jpg" data-position="FaceDown" />');
     element = $('#uid' + dataBinding.uid);
 
     Object.observe(dataBinding, function (changes) {
