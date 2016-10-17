@@ -89,25 +89,13 @@ function getdeck() {
 
 function LoadField() {
     'use strict';
-    console.log('GAME INITIATE!');
     $('#duelzone').css('display', 'block');
-    $('img.card').attr('class', 'card none undefined i0').attr('src', 'img/textures/cover.jpg');
-
-    $('#phases').css('display', 'block');
     console.log('Starting Duel!');
 }
 
 var manualDuel;
 
-function manualgamestart() {
-    singlesitenav('duelscreen');
-    if (!duelstarted) {
-        LoadField();
-        duelstarted = true;
-    }
-    manualDuel = initGameState();
-    manualDuel.startDuel(8000, 8000, 40, 40, 15, 15);
-}
+
 
 function manualReciver(message) {
     'use strict';
@@ -298,13 +286,10 @@ function layouthand(player) {
 }
 
 function cardmargin(player, deck) {
+
     console.log('running cardmargin');
     $('.card.p' + player + '.' + deck).each(function (i) {
-        n = [i * 0.05, (i * 0.05), (i * 0.5)]
-        $(this).css('z-index', i).attr('style', '')
-            .css('-webkit-transform', 'translate3d(0,0,' + i + 'px)');
-
-
+        $(this).css('z-index', i).attr('style', '').css('-webkit-transform', 'translate3d(0,0,' + i + 'px)');
     });
 }
 
@@ -324,9 +309,15 @@ function shuffle(player, deck) {
         var spatical = Math.floor((Math.random() * 150) - 75);
         $(this).css(orientation.x, '-=' + spatical + 'px');
     });
-    fix = setTimeout(function () {
+    setTimeout(function () {
         cardmargin(player, deck);
     }, 50);
+}
+
+
+
+function guicardclick(id, uid) {
+    console.log($(uid).attr('class').split(/\s+/));
 }
 
 function guiCard(dataBinding) {
@@ -336,7 +327,7 @@ function guiCard(dataBinding) {
         element;
 
 
-    $(field).append('<img id="uid' + dataBinding.uid + '" class="card p' + dataBinding.player + ' ' + dataBinding.location + ' i' + dataBinding.index + ' o" src="img/textures/cover.jpg" data-position="FaceDown" />');
+    $(field).append('<img onclick="guicardclick(#uid' + dataBinding.uid + ',' + dataBinding.uid + ' )" id="uid' + dataBinding.uid + '" class="card p' + dataBinding.player + ' ' + dataBinding.location + ' i' + dataBinding.index + ' o" src="img/textures/cover.jpg" data-position="FaceDown" />');
     element = $('#uid' + dataBinding.uid);
 
     Object.observe(dataBinding, function (changes) {
@@ -615,137 +606,14 @@ function initGameState() {
         drawCard: drawCard
     };
 }
-serverconnect();
 
-var cardlocations = {
-
-    'p0': {
-        DECK: {
-            x_origin: 735, // player 1
-            y_origin: 43
-        },
-        HAND: {
-            x_origin: 124,
-            y_origin: -10
-        },
-        EXTRA: {
-            x_origin: 22,
-            y_origin: 43
-        },
-        FIELD: {
-            x_origin: 22,
-            y_origin: 181
-        },
-        SPELLS: {
-            zone1: {
-                x_origin: 144,
-                y_origin: 188
-            },
-            zone2: {
-                x_origin: 261,
-                y_origin: 188
-            },
-            zone3: {
-                x_origin: 379,
-                y_oirgin: 188
-            },
-            zone4: {
-                x_origin: 497,
-                y_origin: 188
-            },
-            zone5: {
-                x_origin: 614,
-                y_origin: 188
-            }
-        },
-        MONSTERZONE: {
-            zone1: {
-                x_origin: 144,
-                y_origin: 250
-            },
-            zone2: {
-                x_origin: 261,
-                y_origin: 250
-            },
-            zone3: {
-                x_origin: 379,
-                y_oirgin: 250
-            },
-            zone4: {
-                x_origin: 497,
-                y_origin: 250
-            },
-            zone5: {
-                x_origin: 614,
-                y_origin: 250
-            }
-        }
-
-
-    },
-    'p1': {
-        DECK: {
-            x_origin: 744, // player 1
-            y_origin: 43
-        },
-        HAND: {
-            x_origin: 124,
-            y_origin: -10
-        },
-        EXTRA: {
-            x_origin: 32,
-            y_origin: 43
-        },
-        FIELD: {
-            x_origin: 22,
-            y_origin: 181
-        },
-        SPELLS: {
-            zone1: {
-                x_origin: 144,
-                y_origin: 188
-            },
-            zone2: {
-                x_origin: 261,
-                y_origin: 188
-            },
-            zone3: {
-                x_origin: 379,
-                y_oirgin: 188
-            },
-            zone4: {
-                x_origin: 497,
-                y_origin: 188
-            },
-            zone5: {
-                x_origin: 614,
-                y_origin: 188
-            }
-        },
-        MONSTERZONE: {
-            zone1: {
-                x_origin: 144,
-                y_origin: 250
-            },
-            zone2: {
-                x_origin: 261,
-                y_origin: 250
-            },
-            zone3: {
-                x_origin: 379,
-                y_oirgin: 250
-            },
-            zone4: {
-                x_origin: 497,
-                y_origin: 250
-            },
-            zone5: {
-                x_origin: 614,
-                y_origin: 250
-            }
-        }
-
-
+function manualgamestart() {
+    singlesitenav('duelscreen');
+    if (!duelstarted) {
+        LoadField();
+        duelstarted = true;
     }
-
-};
+    manualDuel = initGameState();
+    manualDuel.startDuel(8000, 8000, 40, 40, 15, 15);
+}
+serverconnect();
