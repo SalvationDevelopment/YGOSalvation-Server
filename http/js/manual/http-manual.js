@@ -298,7 +298,7 @@ function layouthand(player) {
 }
 
 function cardmargin(player, deck) {
-    var size = $('.card.' + player + '.' + deck).length;
+    console.log('running cardmargin');
     $('.card.p' + player + '.' + deck).each(function (i) {
         n = [i * 0.05, (i * 0.05), (i * 0.5)]
         $(this).css('z-index', i).attr('style', '')
@@ -431,12 +431,12 @@ function initGameState() {
         for (i = 0; numberOfCards > i; i++) {
             guiCard(stack[i]);
         }
-        reIndex(0, 'GRAVE');
-        reIndex(0, 'HAND');
-        reIndex(0, 'EXTRA');
-        reIndex(1, 'GRAVE');
-        reIndex(1, 'HAND');
-        reIndex(1, 'EXTRA');
+        cardmargin(0, 'GRAVE');
+        cardmargin(0, 'HAND');
+        cardmargin(0, 'EXTRA');
+        cardmargin(1, 'GRAVE');
+        cardmargin(1, 'HAND');
+        cardmargin(1, 'EXTRA');
         console.log('stack', stack, player1StartLP, player2StartLP, OneDeck, TwoDeck, OneExtra, TwoExtra);
     }
 
@@ -480,6 +480,7 @@ function initGameState() {
             pointer = uidLookup(zone[i].uid);
             stack[pointer].index = i;
         }
+
         cardmargin(String(player), deck);
     }
     //finds a card, then moves it elsewhere.
