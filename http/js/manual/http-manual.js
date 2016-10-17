@@ -99,6 +99,16 @@ function LoadField() {
 
 var manualDuel;
 
+function manualgamestart() {
+    singlesitenav('duelscreen');
+    if (!duelstarted) {
+        LoadField();
+        duelstarted = true;
+    }
+    manualDuel = initGameState();
+    manualDuel.startDuel(8000, 8000, 40, 40, 15, 15);
+}
+
 function manualReciver(message) {
     'use strict';
     console.log(message);
@@ -116,13 +126,7 @@ function manualReciver(message) {
         makeGames();
         break;
     case "start":
-        singlesitenav('duelscreen');
-        if (!duelstarted) {
-            LoadField();
-            duelstarted = true;
-        }
-        manualDuel = initGameState();
-        manualDuel.startDuel(8000, 8000, 40, 40, 15, 15);
+        manualgamestart();
         //startDuel(player1StartLP, player2StartLP, OneDeck, TwoDeck, OneExtra, TwoExtra)
         break;
     default:
@@ -361,7 +365,7 @@ function guiCard(dataBinding) {
             element.attr({
                 'class': fieldings,
                 'data-position': ref.position,
-                'src': (ref.id) ? 'ygopro/pics/' + ref.id + '.jpg' : 'img/textures/cover.jpg'
+                'src': (ref.id) ? 'ygopro/pics/' + ref.id + '.jpg' : 'img/textures/cover.jpg',
             });
         } else {
             ref = changes[0].object;
@@ -372,7 +376,7 @@ function guiCard(dataBinding) {
                 'src': (ref.id) ? 'ygopro/pics/' + ref.id + '.jpg' : 'img/textures/cover.jpg'
             });
         }
-        element.attr('style', '');
+        element.attr('style', 'z-index:' + ref.index);
         layouthand(ref.player);
 
 
@@ -622,23 +626,23 @@ serverconnect();
 var cardlocations = {
 
     'p0': {
-        Deck: {
+        DECK: {
             x_origin: 735, // player 1
             y_origin: 43
         },
-        Hand: {
+        HAND: {
             x_origin: 124,
             y_origin: -10
         },
-        Extra: {
+        EXTRA: {
             x_origin: 22,
             y_origin: 43
         },
-        Field: {
+        FIELD: {
             x_origin: 22,
             y_origin: 181
         },
-        Spells: {
+        SPELLS: {
             zone1: {
                 x_origin: 144,
                 y_origin: 188
@@ -660,7 +664,7 @@ var cardlocations = {
                 y_origin: 188
             }
         },
-        MonsterZone: {
+        MONSTERZONE: {
             zone1: {
                 x_origin: 144,
                 y_origin: 250
@@ -686,23 +690,23 @@ var cardlocations = {
 
     },
     'p1': {
-        Deck: {
+        DECK: {
             x_origin: 744, // player 1
             y_origin: 43
         },
-        Hand: {
+        HAND: {
             x_origin: 124,
             y_origin: -10
         },
-        Extra: {
+        EXTRA: {
             x_origin: 32,
             y_origin: 43
         },
-        Field: {
+        FIELD: {
             x_origin: 22,
             y_origin: 181
         },
-        Spells: {
+        SPELLS: {
             zone1: {
                 x_origin: 144,
                 y_origin: 188
@@ -724,7 +728,7 @@ var cardlocations = {
                 y_origin: 188
             }
         },
-        MonsterZone: {
+        MONSTERZONE: {
             zone1: {
                 x_origin: 144,
                 y_origin: 250
