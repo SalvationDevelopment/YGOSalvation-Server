@@ -136,7 +136,7 @@
 	"<===CHAOS===>": 8,
 	"Dal920": 8,
 	"SoraShiunin": 8,
-	"Proud_Korean": 8,
+	"proud_korean": 8,
 	"Malice": 16,
 	"jon45324": 16,
 	"Son-Kun": 24,
@@ -170,7 +170,7 @@
 	"Son-Kun": 32
 }, {
 	"Blade": 8,
-	"Proud_Korean": 8,
+	"proud_korean": 8,
 	"Exitium": 8,
 	"Autonomous": 8,
 	"Son-Kun": 16,
@@ -212,6 +212,15 @@
 	"Lord Raptor": 16,
 	"Melody": 24,
 	"Exitium": 32
+}, {
+	"AccessDenied": 8,
+	"ghandilson": 8,
+	"TreetopTito": 8,
+	"proud_korean": 8,
+	"Melody": 16,
+	"Buck the Duck": 16,
+	"Dal920": 24,
+	"SoraShiunin": 32
 }]
 	
     
