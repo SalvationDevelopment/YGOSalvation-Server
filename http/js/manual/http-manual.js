@@ -1,5 +1,5 @@
-/*jslint browser:true, plusplus:true*/
-/*global WebSocket, $, parseYDK, singlesitenav, console, enums*/
+/*jslint browser:true, plusplus:true, bitwise:true*/
+/*global WebSocket, $, singlesitenav, console, enums, alert*/
 
 var manualServer,
     broadcast,
@@ -87,7 +87,7 @@ function getdeck() {
     return processedDeck;
 }
 
-function LoadField() {
+function loadField() {
     'use strict';
     $('#duelzone').css('display', 'block');
     console.log('Starting Duel!');
@@ -96,7 +96,10 @@ function LoadField() {
 var manualDuel;
 
 function linkStack(field) {
-    Object.keys(field).forEach(function (zone) {
+    'use strict';
+    console.log('field:', field);
+
+    function processHalf(zone) {
         if (Array.isArray(field[zone])) {
             field[zone].forEach(function (card) {
                 var idIndex = manualDuel.uidLookup(card.uid),
@@ -104,160 +107,10 @@ function linkStack(field) {
                 Object.assign(stackunit, card);
             });
         }
-    });
-}
-
-function manualReciver(message) {
-    'use strict';
-    console.log(message);
-    switch (message.action) {
-    case "lobby":
-        singlesitenav('lobby');
-        activegame = message.game;
-        updateloby(broadcast[activegame]);
-        break;
-    case "broadcast":
-        broadcast = message.data;
-        if (activegame) {
-            updateloby(broadcast[activegame]);
-        }
-        makeGames();
-        break;
-    case "start":
-        manualgamestart();
-        //startDuel(player1StartLP, player2StartLP, OneDeck, TwoDeck, OneExtra, TwoExtra)
-        break;
-    case "duel":
-        linkStack(message.field);
-    default:
-        break;
     }
+    Object.keys(field[0]).forEach(processHalf);
+    Object.keys(field[1]).forEach(processHalf);
 }
-
-function serverconnect() {
-    'use strict';
-    window.manualServer = new WebSocket("ws://" + location.hostname + ":8080");
-    manualServer.onopen = function () {
-        console.log('Connected to Manual');
-    };
-    manualServer.onmessage = function (message) {
-        manualReciver(JSON.parse(message.data));
-    };
-    manualServer.onclose = function (message) {
-        console.log('Manual Connection Died, reconnecting,...');
-        setTimeout(serverconnect, 2000);
-    };
-}
-
-function manualHost() {
-    'use strict';
-    manualServer.send(JSON.stringify({
-        action: 'host',
-        name: localStorage.nickname
-    }));
-}
-
-function manualJoin(game) {
-    'use strict';
-    manualServer.send(JSON.stringify({
-        action: 'join',
-        game: game,
-        name: localStorage.nickname
-    }));
-}
-
-function manualLeave(game) {
-    'use strict';
-    manualServer.send(JSON.stringify({
-        action: 'leave',
-        game: activegame
-    }));
-}
-
-function manualLock() {
-    'use strict';
-    manualServer.send(JSON.stringify({
-        action: 'lock',
-        deck: getdeck()
-    }));
-}
-
-function manualStart() {
-    'use strict';
-    if (activegame) {
-        if (broadcast[activegame].player[0].ready && broadcast[activegame].player[1].ready) {
-            manualServer.send(JSON.stringify({
-                action: 'start'
-            }));
-            return;
-        }
-    }
-    alert('Duelist not ready yet. Please Lock in decks');
-}
-
-function manualChat(message) {
-    'use strict';
-    manualServer.send(JSON.stringify({}));
-}
-
-function manualNextPhase() {
-    'use strict';
-    manualServer.send(JSON.stringify({
-        action: 'nextPhase'
-    }));
-}
-
-function manualNextTurn() {
-    'use strict';
-    manualServer.send({
-        action: 'nextTurn'
-    });
-}
-
-function manualChangeLifepoints(amount) {
-    'use strict';
-    manualServer.send({
-        action: 'changeLifepoints',
-        amount: amount
-    });
-}
-
-function manualMoveCard(movement) {
-    'use strict';
-    Object.assign(movement, {
-        action: 'moveCard'
-    });
-    manualServer.send(movement);
-}
-
-function manualModeGamelistSwitch() {
-    'use strict';
-    $('#manualgamelistitems').css({
-        'display': 'block'
-    });
-    $('#gamelistitems').css({
-        'display': 'none'
-    });
-}
-
-function mautomaticModeGamelistSwitch() {
-    'use strict';
-    $('#manualgamelistitems').css({
-        'display': 'none'
-    });
-    $('#gamelistitems').css({
-        'display': 'block'
-    });
-}
-var gui = {};
-
-var internalDB = [];
-$.getJSON('http://ygopro.us/manifest/database_0-en-OCGTCG.json', function (data) {
-    'use strict';
-    var internalDB = data;
-});
-
-
 
 function Card(movelocation, player, index, unique) {
     'use strict';
@@ -272,7 +125,6 @@ function Card(movelocation, player, index, unique) {
         uid: unique
     };
 }
-
 
 function layouthand(player) {
     'use strict';
@@ -297,43 +149,6 @@ function layouthand(player) {
     }
 }
 
-function cardmargin(player, deck) {
-
-    console.log('running cardmargin');
-    $('.card.p' + player + '.' + deck).each(function (i) {
-        $(this).css('z-index', i).attr('style', '').css('-webkit-transform', 'translate3d(0,0,' + i + 'px)');
-    });
-}
-
-function shuffle(player, deck) {
-    var orientation = (player === 'p0') ? ({
-        x: 'left',
-        y: 'bottom',
-        direction: 1
-    }) : ({
-        x: 'right',
-        y: 'top',
-        direction: -1
-    });
-    cardmargin(player, deck);
-    $($('.card.' + player + '.' + deck).get().reverse()).each(function (i) {
-        var cache = $(this).css(orientation.x);
-        var spatical = Math.floor((Math.random() * 150) - 75);
-        $(this).css(orientation.x, '-=' + spatical + 'px');
-    });
-    setTimeout(function () {
-        cardmargin(player, deck);
-    }, 50);
-}
-
-
-
-function guicardclick(id, uid) {
-    var idIndex = manualDuel.uidLookup(uid),
-        stackunit = manualDuel.stack[idIndex];
-    console.log(stackunit);
-}
-
 function guiCard(dataBinding) {
     'use strict';
 
@@ -354,7 +169,7 @@ function guiCard(dataBinding) {
             element.attr({
                 'class': fieldings,
                 'data-position': ref.position,
-                'src': (ref.id) ? 'ygopro/pics/' + ref.id + '.jpg' : 'img/textures/cover.jpg',
+                'src': (ref.id) ? 'ygopro/pics/' + ref.id + '.jpg' : 'img/textures/cover.jpg'
             });
         } else {
             ref = changes[0].object;
@@ -369,6 +184,14 @@ function guiCard(dataBinding) {
         layouthand(ref.player);
 
 
+    });
+}
+
+function cardmargin(player, deck) {
+    'use strict';
+    console.log('running cardmargin');
+    $('.card.p' + player + '.' + deck).each(function (i) {
+        $(this).css('z-index', i).attr('style', '').css('-webkit-transform', 'translate3d(0,0,' + i + 'px)');
     });
 }
 
@@ -488,7 +311,7 @@ function initGameState() {
             stack[pointer].index = i;
         }
 
-        cardmargin(String(player), deck);
+        cardmargin(String(player), location);
     }
     //finds a card, then moves it elsewhere.
     function setState(player, clocation, index, moveplayer, movelocation, moveindex, moveposition, overlayindex, isBecomingCard) {
@@ -624,14 +447,211 @@ function initGameState() {
 }
 
 function manualgamestart() {
+    'use strict';
+
     singlesitenav('duelscreen');
     if (!duelstarted) {
-        LoadField();
+        loadField();
         duelstarted = true;
     }
     manualDuel = initGameState();
     manualDuel.startDuel(8000, 8000, 40, 40, 15, 15);
 }
+
+function manualReciver(message) {
+    'use strict';
+    console.log(message);
+    switch (message.action) {
+    case "lobby":
+        singlesitenav('lobby');
+        activegame = message.game;
+        updateloby(broadcast[activegame]);
+        break;
+    case "broadcast":
+        broadcast = message.data;
+        if (activegame) {
+            updateloby(broadcast[activegame]);
+        }
+        makeGames();
+        break;
+    case "start":
+        manualgamestart();
+        //startDuel(player1StartLP, player2StartLP, OneDeck, TwoDeck, OneExtra, TwoExtra)
+        break;
+    case "duel":
+        linkStack(message.field);
+        break;
+    default:
+        break;
+    }
+}
+
+function serverconnect() {
+    'use strict';
+    window.manualServer = new WebSocket("ws://" + location.hostname + ":8080");
+    manualServer.onopen = function () {
+        console.log('Connected to Manual');
+    };
+    manualServer.onmessage = function (message) {
+        manualReciver(JSON.parse(message.data));
+    };
+    manualServer.onclose = function (message) {
+        console.log('Manual Connection Died, reconnecting,...');
+        setTimeout(serverconnect, 2000);
+    };
+}
+
+function manualHost() {
+    'use strict';
+    manualServer.send(JSON.stringify({
+        action: 'host',
+        name: localStorage.nickname
+    }));
+}
+
+function manualJoin(game) {
+    'use strict';
+    manualServer.send(JSON.stringify({
+        action: 'join',
+        game: game,
+        name: localStorage.nickname
+    }));
+}
+
+function manualLeave(game) {
+    'use strict';
+    manualServer.send(JSON.stringify({
+        action: 'leave',
+        game: activegame
+    }));
+}
+
+function manualLock() {
+    'use strict';
+    manualServer.send(JSON.stringify({
+        action: 'lock',
+        deck: getdeck()
+    }));
+}
+
+function manualStart() {
+    'use strict';
+    if (activegame) {
+        if (broadcast[activegame].player[0].ready && broadcast[activegame].player[1].ready) {
+            manualServer.send(JSON.stringify({
+                action: 'start'
+            }));
+            return;
+        }
+    }
+    alert('Duelist not ready yet. Please Lock in decks');
+}
+
+function manualChat(message) {
+    'use strict';
+    manualServer.send(JSON.stringify({}));
+}
+
+function manualNextPhase() {
+    'use strict';
+    manualServer.send(JSON.stringify({
+        action: 'nextPhase'
+    }));
+}
+
+function manualNextTurn() {
+    'use strict';
+    manualServer.send({
+        action: 'nextTurn'
+    });
+}
+
+function manualChangeLifepoints(amount) {
+    'use strict';
+    manualServer.send({
+        action: 'changeLifepoints',
+        amount: amount
+    });
+}
+
+function manualMoveCard(movement) {
+    'use strict';
+    Object.assign(movement, {
+        action: 'moveCard'
+    });
+    manualServer.send(movement);
+}
+
+function manualModeGamelistSwitch() {
+    'use strict';
+    $('#manualgamelistitems').css({
+        'display': 'block'
+    });
+    $('#gamelistitems').css({
+        'display': 'none'
+    });
+}
+
+function mautomaticModeGamelistSwitch() {
+    'use strict';
+    $('#manualgamelistitems').css({
+        'display': 'none'
+    });
+    $('#gamelistitems').css({
+        'display': 'block'
+    });
+}
+var gui = {};
+
+var internalDB = [];
+$.getJSON('http://ygopro.us/manifest/database_0-en-OCGTCG.json', function (data) {
+    'use strict';
+    var internalDB = data;
+});
+
+
+
+
+
+
+
+
+
+function shuffle(player, deck) {
+    'use strict';
+    var orientation = (player === 'p0') ? ({
+        x: 'left',
+        y: 'bottom',
+        direction: 1
+    }) : ({
+        x: 'right',
+        y: 'top',
+        direction: -1
+    });
+    cardmargin(player, deck);
+    $($('.card.' + player + '.' + deck).get().reverse()).each(function (i) {
+        var cache = $(this).css(orientation.x),
+            spatical = Math.floor((Math.random() * 150) - 75);
+        $(this).css(orientation.x, '-=' + spatical + 'px');
+    });
+    setTimeout(function () {
+        cardmargin(player, deck);
+    }, 50);
+}
+
+
+
+function guicardclick(id, uid) {
+    'use strict';
+    var idIndex = manualDuel.uidLookup(uid),
+        stackunit = manualDuel.stack[idIndex];
+    console.log(stackunit);
+}
+
+
+
+
+
 serverconnect();
 
 $(document).ready(function () {
