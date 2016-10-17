@@ -95,7 +95,17 @@ function LoadField() {
 
 var manualDuel;
 
-
+function linkStack(field) {
+    Object.keys(field).forEach(function (zone) {
+        if (Array.isArray(field[zone])) {
+            field[zone].forEach(function (card) {
+                var idIndex = manualDuel.uidLookup(card.uid),
+                    stackunit = manualDuel.stack[idIndex];
+                Object.assign(stackunit, card);
+            });
+        }
+    });
+}
 
 function manualReciver(message) {
     'use strict';
@@ -117,6 +127,8 @@ function manualReciver(message) {
         manualgamestart();
         //startDuel(player1StartLP, player2StartLP, OneDeck, TwoDeck, OneExtra, TwoExtra)
         break;
+    case "duel":
+        linkStack(message.field);
     default:
         break;
     }
