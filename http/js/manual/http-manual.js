@@ -298,28 +298,12 @@ function layouthand(player) {
 }
 
 function cardmargin(player, deck) {
-    'use strict';
-    var orientation = (player === 'p0') ? ({
-        x: 'left',
-        y: 'bottom',
-        direction: 1,
-        multiple: 2
-    }) : ({
-        x: 'right',
-        y: 'top',
-        direction: -1,
-        multiple: 3
-    });
-    $('.card.' + player + '.' + deck).each(function (i) {
-        // console.log($('.card.'+player+'.'+deck), cardlocations[player],player,deck);
-        var decklocationx = (orientation.direction * i / orientation.multiple) + (cardlocations[player][deck].x_origin);
-        var decklocationy = (orientation.direction * i / orientation.multiple) + (cardlocations[player][deck].y_origin);
-        //console.log(decklocationx,decklocationy);
+    var size = $('.card.' + player + '.' + deck).length;
+    $('.card.p' + player + '.' + deck).each(function (i) {
+        n = [i * 0.05, (i * 0.05), (i * 0.5)]
+        $(this).css('z-index', i).attr('style', '')
+            .css('-webkit-transform', 'translate3d(0,0,' + i + 'px)');
 
-        $(this).css(
-            orientation.y, decklocationy + 'px').css(
-            orientation.x, decklocationx + 'px'
-        );
 
     });
 }
@@ -447,6 +431,9 @@ function initGameState() {
         for (i = 0; numberOfCards > i; i++) {
             guiCard(stack[i]);
         }
+        reIndex(player, 'GRAVE');
+        reIndex(player, 'HAND');
+        reIndex(player, 'EXTRA');
         console.log('stack', stack, player1StartLP, player2StartLP, OneDeck, TwoDeck, OneExtra, TwoExtra);
     }
 
@@ -490,6 +477,7 @@ function initGameState() {
             pointer = uidLookup(zone[i].uid);
             stack[pointer].index = i;
         }
+        cardmargin(String(player), deck);
     }
     //finds a card, then moves it elsewhere.
     function setState(player, clocation, index, moveplayer, movelocation, moveindex, moveposition, overlayindex, isBecomingCard) {
