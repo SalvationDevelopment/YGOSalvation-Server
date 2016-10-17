@@ -431,9 +431,12 @@ function initGameState() {
         for (i = 0; numberOfCards > i; i++) {
             guiCard(stack[i]);
         }
-        reIndex(player, 'GRAVE');
-        reIndex(player, 'HAND');
-        reIndex(player, 'EXTRA');
+        reIndex(0, 'GRAVE');
+        reIndex(0, 'HAND');
+        reIndex(0, 'EXTRA');
+        reIndex(1, 'GRAVE');
+        reIndex(1, 'HAND');
+        reIndex(1, 'EXTRA');
         console.log('stack', stack, player1StartLP, player2StartLP, OneDeck, TwoDeck, OneExtra, TwoExtra);
     }
 
