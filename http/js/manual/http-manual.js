@@ -431,12 +431,14 @@ function initGameState() {
         for (i = 0; numberOfCards > i; i++) {
             guiCard(stack[i]);
         }
-        cardmargin(0, 'GRAVE');
-        cardmargin(0, 'HAND');
-        cardmargin(0, 'EXTRA');
-        cardmargin(1, 'GRAVE');
-        cardmargin(1, 'HAND');
-        cardmargin(1, 'EXTRA');
+        cardmargin('0', 'GRAVE');
+        cardmargin('0', 'HAND');
+        cardmargin('0', 'EXTRA');
+        cardmargin('0', 'DECK');
+        cardmargin('1', 'DECK');
+        cardmargin('1', 'GRAVE');
+        cardmargin('1', 'HAND');
+        cardmargin('1', 'EXTRA');
         console.log('stack', stack, player1StartLP, player2StartLP, OneDeck, TwoDeck, OneExtra, TwoExtra);
     }
 
