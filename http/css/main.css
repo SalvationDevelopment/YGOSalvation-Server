@@ -1110,6 +1110,7 @@ meter.p1time {
     background-position: center;
     transform-style: flat;
     perspective: 1000px;
+    perspective-origin: bottom;
 }
 
 .button.ready0 {
