@@ -317,7 +317,9 @@ function shuffle(player, deck) {
 
 
 function guicardclick(id, uid) {
-    console.log($(uid).attr('class').split(/\s+/));
+    var idIndex = manualDuel.uidLookup(id),
+        stackunit = manualDuel.stack[idIndex];
+    console.log(stackunit);
 }
 
 function guiCard(dataBinding) {
@@ -603,7 +605,9 @@ function initGameState() {
         cardCollections: cardCollections,
         changeCardPosition: changeCardPosition,
         moveCard: moveCard,
-        drawCard: drawCard
+        drawCard: drawCard,
+        uidLookup: uidLookup,
+        stack: stack
     };
 }
 
