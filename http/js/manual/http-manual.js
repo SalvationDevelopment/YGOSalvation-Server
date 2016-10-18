@@ -656,22 +656,9 @@ serverconnect();
 
 $(document).ready(function () {
     'use strict';
-    $('body').on('click', '.setViaAutomation', function setViaAutomation(id) {
-        //remove the prompt
-        //reply via the automation-ws you want to set card id.
-    });
-    $('body').on('click', '.activateViaAutomation', function activateViaAutomation(id) {
-        //remove the prompt
-        //reply via the automation-ws you want to activate card id.
-    });
-    $('body').on('click', '.summonViaAutomation', function summonViaAutomation(id) {
-        //remove the prompt
-        //reply via the automation-ws you want to summon card id.
-    });
-    $('body').on('click', '.specialSummonViaAutomation', function specialSummonViaAutomation(id) {
-        //remove the prompt
-        //reply via the automation-ws you want to special summon card id.
-    });
+});
+$(function () {
+    'use strict';
     $('body').on('click', '.manualReveal', function manualReveal(id) {
         //remove the prompt
 
