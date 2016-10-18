@@ -1136,6 +1136,15 @@ div#selectwhogoesfirst {
     display: none;
 }
 
+#manualcontrols {
+    position: fixed;
+    width: 25em;
+}
+
+#manualcontrols button {
+    display: none;
+}
+
 div#gofirst,
 #gosecond {
     margin: .25em auto;

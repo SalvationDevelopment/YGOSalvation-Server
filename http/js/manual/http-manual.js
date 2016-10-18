@@ -640,12 +640,21 @@ function shuffle(player, deck) {
 }
 
 
+var currentMousePos = {
+    x: -1,
+    y: -1
+};
 
 function guicardclick(id, uid) {
     'use strict';
     var idIndex = manualDuel.uidLookup(uid),
         stackunit = manualDuel.stack[idIndex];
     console.log(stackunit);
+    $('#manualcontrols').css({
+        'top': currentMousePos.y,
+        'left': currentMousePos.x,
+        'display': 'block'
+    });
 }
 
 
@@ -656,6 +665,12 @@ serverconnect();
 
 $(document).ready(function () {
     'use strict';
+});
+
+$(document).mousemove(function (event) {
+    'use strict';
+    currentMousePos.x = event.pageX;
+    currentMousePos.y = event.pageY;
 });
 $(function () {
     'use strict';
