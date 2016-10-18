@@ -655,6 +655,11 @@ function guicardclick(id, uid) {
         'left': currentMousePos.x,
         'display': 'block'
     });
+    console.log({
+        'top': currentMousePos.y,
+        'left': currentMousePos.x,
+        'display': 'block'
+    });
 }
 
 

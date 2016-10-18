@@ -874,6 +874,7 @@ div#actions button {
     transform-style: preserve-3d;
     clear: both;
     position: fixed;
+    transform: scale(0.75);
 }
 
 .fieldcontainer {
