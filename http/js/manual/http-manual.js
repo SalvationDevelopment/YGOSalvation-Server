@@ -647,11 +647,14 @@ var currentMousePos = {
 
 function guicardclick(id, uid) {
     'use strict';
+    $('#manualcontrols button').css({
+        'display': 'none'
+    });
     var idIndex = manualDuel.uidLookup(uid),
         stackunit = manualDuel.stack[idIndex];
     console.log(stackunit);
     $('#manualcontrols').css({
-        'top': currentMousePos.y,
+        'bottom': currentMousePos.y,
         'left': currentMousePos.x,
         'display': 'block'
     });

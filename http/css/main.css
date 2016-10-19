@@ -864,6 +864,7 @@ div#actions {
 div#actions button {
     width: 100%;
     display: none;
+    width: 50%;
 }
 
 .field {
