@@ -374,7 +374,7 @@ function init(callback) {
             setState(player, 'DECK', topcard, player, 'HAND', currenthand + i, 'FaceUp', 0, false);
             target = queryCard(player, 'HAND', (currenthand + i), 0);
             pointer = uidLookup(target.uid);
-            stack[pointer].id = cards[i].Code;
+            //stack[pointer].id = cards[i].Code;
         }
         callback(generateView(), stack);
     }
