@@ -571,10 +571,10 @@ function manualNextTurn() {
 
 function manualChangeLifepoints(amount) {
     'use strict';
-    manualServer.send({
+    manualServer.send(JSON.stringify({
         action: 'changeLifepoints',
         amount: amount
-    });
+    }));
 }
 
 function manualMoveCard(movement) {
@@ -582,14 +582,14 @@ function manualMoveCard(movement) {
     Object.assign(movement, {
         action: 'moveCard'
     });
-    manualServer.send(movement);
+    manualServer.send(JSON.stringify(movement));
 }
 
 function manualDraw() {
     'use strict';
-    manualServer.send({
+    manualServer.send(JSON.stringify({
         action: 'draw'
-    });
+    }));
 }
 
 function manualModeGamelistSwitch() {
