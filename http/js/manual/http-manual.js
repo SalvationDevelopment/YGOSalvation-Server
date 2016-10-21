@@ -446,16 +446,21 @@ function initGameState() {
     };
 }
 
-function manualgamestart() {
+function manualgamestart(message) {
     'use strict';
-
+    var l1 = message.info.lifepoints[0],
+        l2 = message.info.lifepoints[1],
+        main1 = (Array.isArray(message.field[0].DECK)) ? message.field[0].DECK.length : message.field[0].DECK,
+        main2 = (Array.isArray(message.field[1].DECK)) ? message.field[1].DECK.length : message.field[1].DECK,
+        extra1 = (Array.isArray(message.field[0].EXTRA)) ? message.field[0].EXTRA.length : message.field[0].EXTRA,
+        extra2 = (Array.isArray(message.field[1].EXTRA)) ? message.field[1].EXTRA.length : message.field[1].EXTRA;
     singlesitenav('duelscreen');
     if (!duelstarted) {
         loadField();
         duelstarted = true;
     }
     manualDuel = initGameState();
-    manualDuel.startDuel(8000, 8000, 40, 40, 15, 15);
+    manualDuel.startDuel(l1, l2, message.info.lifepoints[1], main1, main2, extra1, extra2);
 }
 
 function manualReciver(message) {
@@ -580,6 +585,14 @@ function manualMoveCard(movement) {
         action: 'moveCard'
     });
     manualServer.send(movement);
+}
+
+function manualMoveCard(movement) {
+    'use strict';
+
+    manualServer.send({
+        action: 'draw'
+    });
 }
 
 function manualModeGamelistSwitch() {

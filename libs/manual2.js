@@ -173,6 +173,9 @@ function responseHandler(socket, message) {
     case "moveCard":
         stateSystem[socket.activeduel].setState(message.player, message.clocation, message.index, message.moveplayer, message.movelocation, message.moveindex, message.moveposition, message.overlayindex, message.isBecomingCard);
         break;
+    case "draw":
+        stateSystem[socket.activeduel].drawCard(socket.slot, 1);
+        break;
     case "chat":
         if (socket.slot !== undefined) {
             stateSystem[socket.activeduel].duelistChat(socket.slot);
