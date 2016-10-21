@@ -587,9 +587,8 @@ function manualMoveCard(movement) {
     manualServer.send(movement);
 }
 
-function manualDraw(movement) {
+function manualDraw() {
     'use strict';
-
     manualServer.send({
         action: 'draw'
     });
