@@ -480,7 +480,7 @@ function manualReciver(message) {
         makeGames();
         break;
     case "start":
-        manualgamestart();
+        manualgamestart(message);
         //startDuel(player1StartLP, player2StartLP, OneDeck, TwoDeck, OneExtra, TwoExtra)
         break;
     case "duel":
