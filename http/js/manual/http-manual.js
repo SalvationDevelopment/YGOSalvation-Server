@@ -235,10 +235,8 @@ function initGameState() {
         });
     }
     //exposed method to initialize the field;
-    function startDuel(player1StartLP, player2StartLP, OneDeck, TwoDeck, OneExtra, TwoExtra) {
+    function startDuel(OneDeck, TwoDeck, OneExtra, TwoExtra) {
         var i;
-        playerLP[0] = player1StartLP;
-        playerLP[1] = player2StartLP;
 
         for (i = 0; OneExtra > i; i++) {
             stack.push(new Card('EXTRA', 0, i, numberOfCards));
@@ -267,7 +265,7 @@ function initGameState() {
         cardmargin('1', 'GRAVE');
         cardmargin('1', 'HAND');
         cardmargin('1', 'EXTRA');
-        console.log('stack', stack, player1StartLP, player2StartLP, OneDeck, TwoDeck, OneExtra, TwoExtra);
+        console.log('stack', stack, OneDeck, TwoDeck, OneExtra, TwoExtra);
     }
 
     //the way the stack of cards is setup it requires a pointer to edit it.
@@ -460,7 +458,7 @@ function manualgamestart(message) {
         duelstarted = true;
     }
     manualDuel = initGameState();
-    manualDuel.startDuel(l1, l2, message.info.lifepoints[1], main1, main2, extra1, extra2);
+    manualDuel.startDuel(main1, main2, extra1, extra2);
 }
 
 function manualReciver(message) {
