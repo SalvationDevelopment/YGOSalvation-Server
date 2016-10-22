@@ -99,17 +99,21 @@ function linkStack(field) {
     'use strict';
     console.log('field:', field);
 
-    function processHalf(zone) {
-        if (Array.isArray(field[zone])) {
-            field[zone].forEach(function (card) {
-                var idIndex = manualDuel.uidLookup(card.uid),
-                    stackunit = manualDuel.stack[idIndex];
-                Object.assign(stackunit, card);
-            });
-        }
+    function linkgui(zone) {
+        zone.forEach(function (card) {
+            var idIndex = manualDuel.uidLookup(card.uid),
+                stackunit = manualDuel.stack[idIndex];
+            Object.assign(stackunit, card);
+        });
+
     }
-    Object.keys(field[0]).forEach(processHalf);
-    Object.keys(field[1]).forEach(processHalf);
+
+    Object.keys(field[0]).forEach(function (zone) {
+        linkgui(field[0][zone]);
+    });
+    Object.keys(field[1]).forEach(function (zone) {
+        linkgui(field[1][zone]);
+    });
 }
 
 function Card(movelocation, player, index, unique) {
