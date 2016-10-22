@@ -169,7 +169,7 @@ function guiCard(dataBinding) {
             element.attr({
                 'class': fieldings,
                 'data-position': ref.position,
-                'src': (ref.id) ? 'ygopro/pics/' + ref.id + '.jpg' : 'img/textures/cover.jpg'
+                'src': (ref.Code) ? 'ygopro/pics/' + ref.Code + '.jpg' : 'img/textures/cover.jpg'
             });
         } else {
             ref = changes[0].object;
@@ -177,7 +177,7 @@ function guiCard(dataBinding) {
             element.attr({
                 'class': fieldings,
                 'data-position': ref.position,
-                'src': (ref.id) ? 'ygopro/pics/' + ref.id + '.jpg' : 'img/textures/cover.jpg'
+                'src': (ref.Code) ? 'ygopro/pics/' + ref.Code + '.jpg' : 'img/textures/cover.jpg'
             });
         }
         element.attr('style', 'z-index:' + ref.index);
