@@ -415,20 +415,20 @@ function init(callback) {
     function startDuel(player1, player2) {
 
         player1.main.forEach(function (card, index) {
-            stack.push(makeCard('DECK', 0, index, numberOfCards, card.Code));
+            stack.push(makeCard('DECK', 0, index, numberOfCards, card));
             numberOfCards++;
         });
         player2.main.forEach(function (card, index) {
-            stack.push(makeCard('DECK', 1, index, numberOfCards, card.Code));
+            stack.push(makeCard('DECK', 1, index, numberOfCards, card));
             numberOfCards++;
         });
 
         player1.extra.forEach(function (card, index) {
-            stack.push(makeCard('EXTRA', 0, index, numberOfCards, card.Code));
+            stack.push(makeCard('EXTRA', 0, index, numberOfCards, card));
             numberOfCards++;
         });
         player2.extra.forEach(function (card, index) {
-            stack.push(makeCard('EXTRA', 1, index, numberOfCards, card.Code));
+            stack.push(makeCard('EXTRA', 1, index, numberOfCards, card));
             numberOfCards++;
         });
         callback(generateView('start'), stack);
