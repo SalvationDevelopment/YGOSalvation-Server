@@ -23,6 +23,7 @@ var enums = require('./enums.js'),
  * @returns {object}   a card
  */
 function makeCard(movelocation, player, index, unique, code) {
+    console.log(code);
     return {
         type: 'card',
         player: player,
