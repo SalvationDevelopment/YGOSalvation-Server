@@ -160,13 +160,11 @@ function singlesitenav(target) {
     if (target === 'chat') {
         $('body').css('background-image', 'url(http://ygopro.us/img/magimagipinkshadow.jpg)');
     }
-    if (target === 'credits') {
-        $('body').css('background-image', 'url(http://ygopro.us/img/bg.jpg)');
-        $('#marquee').addClass('marquee');
-    }
+
     if (target === 'host') {
         $('body').css('background-image', 'url(http://ygopro.us/img/magimagipinkshadow2.jpg)');
     }
+
     if (target === 'settings') {
         $('body').css('background-image', 'url(http://ygopro.us/img/magimagipinkshadow2.jpg)');
         if (admin === "1") {
@@ -179,6 +177,11 @@ function singlesitenav(target) {
             $('#cusomizationselection').trigger('change');
         }, 3000);
 
+    }
+    $('body').css('background-image', 'url(http://static.zerochan.net/Ghostrick.Nekomusume.full.1945016.jpg)');
+    if (target === 'credits') {
+        $('body').css('background-image', 'url(http://ygopro.us/img/bg.jpg)');
+        $('#marquee').addClass('marquee');
     }
     if (target === 'home') {
         allowLogin = false;
