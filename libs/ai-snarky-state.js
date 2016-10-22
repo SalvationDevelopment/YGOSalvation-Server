@@ -266,12 +266,12 @@ function init(callback) {
      */
     function generateView(action) {
         return {
-            player1: {
+            0: {
                 action: action || 'duel',
                 info: state,
                 field: generatePlayer1View()
             },
-            player2: {
+            1: {
                 action: action || 'duel',
                 info: state,
                 field: generatePlayer2View()
