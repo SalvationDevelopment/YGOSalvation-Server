@@ -264,6 +264,20 @@ function setHostSettings() {
         manualHost();
         return;
     }
+    if (isChecked('#useai')) {
+        if (isChecked('#usepass')) {
+            alert('SnarkyChild: I dont want to be alone with you... please dont make me.')
+            return;
+        }
+        if ($('#creategameduelmode').val() !== "0") {
+            alert('SnarkyChild: I have commitment issues, lets stay single.')
+            return;
+        }
+        if ($('#creategamebanlist').val() === "5") {
+            alert('SnarkyChild: I think you are to old for me if you are playing Goats.')
+            return;
+        }
+    }
     var duelRequest = getDuelRequest();
     localStorage.roompass =
         (duelRequest.string + duelRequest.prio +
