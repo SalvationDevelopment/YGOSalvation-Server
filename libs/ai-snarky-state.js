@@ -225,10 +225,10 @@ function init(callback) {
             monsterzone = filterlocation(playersCards, 'MONSTERZONE');
 
         return {
-            DECK: hideView(deck),
-            HAND: hideView(hand),
+            DECK: deck,
+            HAND: hand,
             GRAVE: grave,
-            EXTRA: hideView(extra),
+            EXTRA: extra,
             REMOVED: removed,
             SPELLZONE: spellzone,
             MONSTERZONE: monsterzone
