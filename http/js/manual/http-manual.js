@@ -103,7 +103,11 @@ function linkStack(field) {
         zone.forEach(function (card) {
             var idIndex = manualDuel.uidLookup(card.uid),
                 stackunit = manualDuel.stack[idIndex];
-            Object.assign(stackunit, card);
+            Object.keys(stackunit).forEach(function (prop) {
+                if (card[prop] !== undefined) {
+                    stackunit[prop] = card[prop];
+                }
+            });
         });
 
     }
@@ -115,6 +119,7 @@ function linkStack(field) {
         linkgui(field[1][zone]);
     });
 }
+
 
 function Card(movelocation, player, index, unique) {
     'use strict';
