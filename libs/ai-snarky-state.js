@@ -31,7 +31,8 @@ function makeCard(movelocation, player, index, unique, code) {
         index: index,
         position: 'FaceDown',
         overlayindex: 0,
-        uid: unique
+        uid: unique,
+        Code: code
     };
 }
 
@@ -155,6 +156,16 @@ function init(callback) {
     that you have to itterate over in order to get a proper message, this function resolves that problem,
     this flaw has caused me all types of grief.*/
 
+    function hideView(view) {
+        var output = [];
+        view.forEach(function (card, index) {
+            output[index] = {};
+            Object.assign(output[index], card);
+            delete output[index].Code;
+        });
+
+        return output;
+    }
     /**
      * Returns the number of cards in each zone.
      * @param   {Number} player index
@@ -178,14 +189,23 @@ function init(callback) {
      * @returns {object} all the cards the given player can see on thier side of the field.
      */
     function generateSinglePlayerView(player) {
+        var playersCards = filterPlayer(stack, player),
+            deck = filterlocation(playersCards, 'DECK'),
+            hand = filterlocation(playersCards, 'HAND'),
+            grave = filterlocation(playersCards, 'GRAVE'),
+            extra = filterOverlyIndex(filterlocation(playersCards, 'EXTRA')),
+            removed = filterlocation(playersCards, 'REMOVED'),
+            spellzone = filterlocation(playersCards, 'SPELLZONE'),
+            monsterzone = filterlocation(playersCards, 'MONSTERZONE');
+
         return {
-            DECK: filterlocation(filterPlayer(stack, player), 'DECK'),
-            HAND: filterlocation(filterPlayer(stack, player), 'HAND'),
-            GRAVE: filterlocation(filterPlayer(stack, player, 'GRAVE')),
-            EXTRA: filterOverlyIndex(filterlocation(filterPlayer(stack, player), 'EXTRA')),
-            REMOVED: filterlocation(filterPlayer(stack, player), 'REMOVED'),
-            SPELLZONE: filterlocation(filterPlayer(stack, player), 'SPELLZONE'),
-            MONSTERZONE: filterlocation(filterPlayer(stack, player), 'MONSTERZONE')
+            DECK: deck,
+            HAND: hand,
+            GRAVE: grave,
+            EXTRA: extra,
+            REMOVED: removed,
+            SPELLZONE: spellzone,
+            MONSTERZONE: monsterzone
         };
     }
 
@@ -195,14 +215,23 @@ function init(callback) {
      * @returns {object} all the cards the given spectator/opponent can see on that side of the field.
      */
     function generateSinglePlayerSpectatorView(player) {
+        var playersCards = filterPlayer(stack, player),
+            deck = filterlocation(playersCards, 'DECK'),
+            hand = filterlocation(playersCards, 'HAND'),
+            grave = filterlocation(playersCards, 'GRAVE'),
+            extra = filterOverlyIndex(filterlocation(playersCards, 'EXTRA')),
+            removed = filterlocation(playersCards, 'REMOVED'),
+            spellzone = filterlocation(playersCards, 'SPELLZONE'),
+            monsterzone = filterlocation(playersCards, 'MONSTERZONE');
+
         return {
-            DECK: filterlocation(filterPlayer(stack, player), 'DECK').length,
-            HAND: filterlocation(filterPlayer(stack, player), 'HAND').length,
-            GRAVE: filterlocation(filterPlayer(stack, player, 'GRAVE')),
-            EXTRA: filterOverlyIndex(filterlocation(filterPlayer(stack, player), 'EXTRA')).length,
-            REMOVED: filterlocation(filterPlayer(stack, player), 'REMOVED'),
-            SPELLZONE: filterlocation(filterPlayer(stack, player), 'SPELLZONE'),
-            MONSTERZONE: filterlocation(filterPlayer(stack, player), 'MONSTERZONE')
+            DECK: hideView(deck),
+            HAND: hideView(hand),
+            GRAVE: grave,
+            EXTRA: hideView(extra),
+            REMOVED: removed,
+            SPELLZONE: spellzone,
+            MONSTERZONE: monsterzone
         };
     }
 
@@ -232,6 +261,7 @@ function init(callback) {
 
     /**
      * Generate a full view of the field for all view types.
+     * @param {string} action callback case statement this should trigger, defaults to 'duel'.
      * @returns {Array} complete view of the current field based on the stack for every view type.
      */
     function generateView(action) {
