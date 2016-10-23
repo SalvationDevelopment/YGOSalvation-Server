@@ -1096,5 +1096,5 @@ function reUpdate() {
     });
 
 }
-//updateSetcodes();
+updateSetcodes();
 createmanifest();
