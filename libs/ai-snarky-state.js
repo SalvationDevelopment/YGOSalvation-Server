@@ -109,6 +109,42 @@ function shuffle(deck) {
 }
 
 /**
+ * Changes a view of cards so the opponent can not see what they are.
+ * @param   {Array} view a collection of cards
+ * @returns {Array} a collection of cards
+ */
+function hideViewOfZone(view) {
+    var output = [];
+    view.forEach(function (card, index) {
+        output[index] = {};
+        Object.assign(output[index], card);
+        if (output[index].position !== 'FaceUp' || output[index].position !== 'FaceUpDefense') {
+            output[index].id = 0;
+        }
+
+    });
+
+    return output;
+}
+
+/**
+ * Changes a view of cards in the hand so the opponent can not see what they are.
+ * @param   {Array} view a collection of cards
+ * @returns {Array} a collection of cards
+ */
+function hideHand(view) {
+    var output = [];
+    view.forEach(function (card, index) {
+        output[index] = {};
+        Object.assign(output[index], card);
+        output[index].id = 0;
+        output[index].position = 'FaceDown';
+    });
+
+    return output;
+}
+
+/**
  * Initiation of a single independent state intance... I guess this is a class of sorts.
  * @param {function} callback function(view, internalState){}; called each time the stack is updated. 
  * @returns {object} State instance
@@ -165,22 +201,6 @@ function init(callback) {
         return filterOverlyIndex(filterIndex(filterlocation(filterPlayer(stack, player), clocation), index), overlayindex)[0];
     }
 
-
-    /**
-     * Changes a view of cards so the opponent can not see what they are.
-     * @param   {[[Type]]} view [[Description]]
-     * @returns {[[Type]]} [[Description]]
-     */
-    function hideView(view) {
-        var output = [];
-        view.forEach(function (card, index) {
-            output[index] = {};
-            Object.assign(output[index], card);
-            output[index].id = 0;
-        });
-
-        return output;
-    }
     /**
      * Returns the number of cards in each zone.
      * @param   {Number} player index
@@ -449,6 +469,44 @@ function init(callback) {
     }
 
     /**
+     * Mills a card to banished zone, updates state.
+     * @param {Number} player        Player milling the cards
+     * @param {Number} numberOfCards number of cards milled
+     */
+    function millRemovedCard(player, numberOfCards) {
+        var currentgrave = filterlocation(filterPlayer(stack, player), 'REMOVED').length,
+            topcard,
+            target,
+            i,
+            pointer;
+
+        for (i = 0; i < numberOfCards; i++) {
+            topcard = filterlocation(filterPlayer(stack, player), 'DECK').length - 1;
+            setState(player, 'DECK', topcard, player, 'REMOVED', currentgrave, 'FaceUp', 0, false);
+        }
+        callback(generateView(), stack);
+    }
+
+    /**
+     * Mills a card to banished zone face down, updates state.
+     * @param {Number} player        Player milling the cards
+     * @param {Number} numberOfCards number of cards milled
+     */
+    function millRemovedCardFaceDown(player, numberOfCards) {
+        var currentgrave = filterlocation(filterPlayer(stack, player), 'REMOVED').length,
+            topcard,
+            target,
+            i,
+            pointer;
+
+        for (i = 0; i < numberOfCards; i++) {
+            topcard = filterlocation(filterPlayer(stack, player), 'DECK').length - 1;
+            setState(player, 'DECK', topcard, player, 'REMOVED', currentgrave, 'FaceDown', 0, false);
+        }
+        callback(generateView(), stack);
+    }
+
+    /**
      * Exposed method to initialize the field; You only run this once.
      */
     function startDuel(player1, player2) {
@@ -586,6 +644,8 @@ function init(callback) {
         drawCard: drawCard,
         flipDeck: flipDeck,
         millCard: millCard,
+        millRemovedCard: millRemovedCard,
+        millRemovedCardFaceDown: millRemovedCardFaceDown,
         nextPhase: nextPhase,
         nextTurn: nextTurn,
         changeLifepoints: changeLifepoints,
