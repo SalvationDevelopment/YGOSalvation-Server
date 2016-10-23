@@ -198,11 +198,12 @@ function guiCard(dataBinding) {
 
 function cardmargin(player, deck) {
     'use strict';
+    var multi = (deck === 'GRAVE') ? -1 : 1;
     console.log('running cardmargin');
     $('.card.p' + player + '.' + deck).each(function (i) {
         $(this).attr('style', '').css({
             '-webkit-transform': 'translate3d(0,0,' + i + 'px)',
-            'z-index': i
+            'z-index': (i * multi)
         });
     });
 }
