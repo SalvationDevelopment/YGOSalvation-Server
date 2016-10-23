@@ -682,6 +682,12 @@ function guicardclick(id, uid) {
         'left': currentMousePos.x,
         'display': 'block'
     });
+    if (stackunit.location === 'DECK') {
+        $('.manualDraw, .manualShuffle, .manualMill').css({
+            'display': 'none'
+        });
+        return;
+    }
 }
 
 
