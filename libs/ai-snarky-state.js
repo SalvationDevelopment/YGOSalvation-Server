@@ -603,7 +603,29 @@ function init(callback) {
         deck.forEach(function (card, index) {
             card.id = idCollection[index]; // finalize the shuffle
         });
-        callback(generateView('shuffle'), stack); // alert UI of the shuffle.
+        callback(generateView('shuffleDeck'), stack); // alert UI of the shuffle.
+    }
+
+    /**
+     * Mutation Function, after game start, shuffle a players deck.
+     * @param {number} player 
+     */
+    function shuffleHand(player) {
+        // Ids are reassigned to new GUIs 
+
+        var playersCards = filterPlayer(stack, player),
+            hand = filterlocation(playersCards, 'HAND'),
+            idCollection = [];
+
+        hand.forEach(function (card) {
+            idCollection.push(card.id);
+        });
+
+        shuffle(idCollection); // shuffle the "deck".
+        hand.forEach(function (card, index) {
+            card.id = idCollection[index]; // finalize the shuffle
+        });
+        callback(generateView('shuffleHand'), stack); // alert UI of the shuffle.
     }
 
     /**
