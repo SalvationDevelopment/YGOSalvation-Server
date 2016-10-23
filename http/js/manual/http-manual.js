@@ -492,6 +492,12 @@ function manualReciver(message) {
         break;
     case "duel":
         linkStack(message.field);
+        cardmargin(0, 'GRAVE');
+        cardmargin(0, 'EXTRA');
+        cardmargin(0, 'DECK');
+        cardmargin(1, 'GRAVE');
+        cardmargin(1, 'EXTRA');
+        cardmargin(1, 'DECK');
         break;
     default:
         break;

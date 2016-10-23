@@ -443,7 +443,7 @@ function init(callback) {
 
         for (i = 0; i < numberOfCards; i++) {
             topcard = filterlocation(filterPlayer(stack, player), 'DECK').length - 1;
-            setState(player, 'DECK', topcard, player, 'GRAVE', currentgrave + i, 'FaceUp', 0, false);
+            setState(player, 'DECK', topcard, player, 'GRAVE', -1, 'FaceUp', 0, false);
         }
         callback(generateView(), stack);
     }
