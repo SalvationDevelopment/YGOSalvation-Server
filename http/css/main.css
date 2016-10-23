@@ -1138,6 +1138,20 @@ div#selectwhogoesfirst {
     display: none;
 }
 
+#revealed {
+    width: 62vw;
+    height: 50%;
+    background: black;
+    position: fixed;
+    left: 20vw;
+    top: 17vw;
+    z-index: 500;
+    background: rgba(0, 0, 0, .95);
+    border: 1px solid white;
+    box-shadow: inset 0px 0px 23px #444;
+    display: none;
+}
+
 #manualcontrols {
     position: fixed;
     width: 7em;
