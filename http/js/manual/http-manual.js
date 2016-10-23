@@ -706,6 +706,17 @@ var currentMousePos = {
 
 var manualActionReference;
 
+function reorientmenu() {
+    'use strict';
+    var height = $('#manualcontrols').height();
+    console.log(height);
+    $('#manualcontrols').css({
+        'top': currentMousePos.y - height,
+        'left': currentMousePos.x,
+        'display': 'block'
+    });
+}
+
 function guicardclick(id, uid) {
     'use strict';
 
@@ -714,8 +725,8 @@ function guicardclick(id, uid) {
         'display': 'none'
     });
     var idIndex = manualDuel.uidLookup(uid),
-        stackunit = manualDuel.stack[idIndex],
-        height = $('#manualcontrols').height();
+        stackunit = manualDuel.stack[idIndex];
+
     console.log(stackunit);
     manualActionReference = stackunit;
 
@@ -724,7 +735,7 @@ function guicardclick(id, uid) {
     }
     $('#manualcontrols').css({
         'top': currentMousePos.y,
-        'left': (currentMousePos.x - height),
+        'left': currentMousePos.x,
         'display': 'block'
     });
     console.log({
@@ -736,36 +747,42 @@ function guicardclick(id, uid) {
         $('.manualDraw, .manualShuffle, .manualMill, .manualRevealDeck, .manualDeckBanish, .manualDeckBanishFaceDown').css({
             'display': 'block'
         });
+        reorientmenu();
         return;
     }
     if (stackunit.location === 'HAND') {
         $('.manualRevealHand, .manualShuffle, .manualMill, .manualToBottom, .manualToTop, .manualToSetTrapSpell, .manualBanish, .manualBanishFaceDown, .manualSpecialSummonDef, .manualSpecialSummonAtt, .manualSetMonster, .manualNormalSummon, .manualActivateFieldSpell').css({
             'display': 'block'
         });
+        reorientmenu();
         return;
     }
     if (stackunit.location === 'GRAVE') {
         $('.manualDraw, .manualShuffle, .manualMill').css({
             'display': 'block'
         });
+        reorientmenu();
         return;
     }
     if (stackunit.location === 'EXTRA') {
         $('.manualViewExtra').css({
             'display': 'block'
         });
+        reorientmenu();
         return;
     }
     if (stackunit.location === 'MONSTERZONE') {
         $('.moveToHand, .manualToST, .manualToExtaFaceDown').css({
             'display': 'block'
         });
+        reorientmenu();
         return;
     }
     if (stackunit.location === 'SPELLZONE') {
         $('.moveToHand').css({
             'display': 'block'
         });
+        reorientmenu();
         return;
     }
 }
