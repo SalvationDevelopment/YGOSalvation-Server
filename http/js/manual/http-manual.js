@@ -708,17 +708,23 @@ var manualActionReference;
 
 function guicardclick(id, uid) {
     'use strict';
+
     manualActionReference = null;
     $('#manualcontrols button').css({
         'display': 'none'
     });
     var idIndex = manualDuel.uidLookup(uid),
-        stackunit = manualDuel.stack[idIndex];
+        stackunit = manualDuel.stack[idIndex],
+        height = $('#manualcontrols').height();
     console.log(stackunit);
     manualActionReference = stackunit;
+
+    if (stackunit.player !== orientSlot) {
+        return;
+    }
     $('#manualcontrols').css({
         'top': currentMousePos.y,
-        'left': currentMousePos.x,
+        'left': (currentMousePos.x - height),
         'display': 'block'
     });
     console.log({
