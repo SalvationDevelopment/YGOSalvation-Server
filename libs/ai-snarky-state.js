@@ -500,6 +500,21 @@ function init(callback) {
         callback(generateView(), stack);
     }
 
+    /**
+     * Mutation Function, after game start, shuffle a players deck.
+     * @param {[[Type]]} player [[Description]]
+     */
+    function shuffleDeck(player) {
+        var playersCards = filterPlayer(stack, player),
+            deck = filterlocation(playersCards, 'DECK');
+
+        shuffle(deck); // shuffle the deck
+        deck.forEach(function (card, index) {
+            card.index = index; // finalize the shuffle
+        });
+        callback(generateView('shuffle'), stack); // alert UI of the shuffle.
+    }
+
     //expose public functions.
     return {
         startDuel: startDuel,
@@ -513,6 +528,7 @@ function init(callback) {
         nextTurn: nextTurn,
         changeLifepoints: changeLifepoints,
         callback: callback,
+        shuffleDeck: shuffleDeck,
         players: {}, // holds socket references
         spectators: {}, // holds socket references
         decks: {
@@ -547,7 +563,6 @@ state = makegameState(function(view, stack){
     savegameforlater(stack;)
 });
 
-shuffledecks();
 
 state.startDuel(player1, player2, );
 
