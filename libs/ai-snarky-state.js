@@ -521,17 +521,43 @@ function init(callback) {
 
     /**
      * Mutation Function, after game start, shuffle a players deck.
-     * @param {[[Type]]} player [[Description]]
+     * @param {number} player 
      */
     function shuffleDeck(player) {
-        // this is done incorrectly, first take the id's out, then shuffle them, then reasign them.
+        // Ids are reassigned to new GUIs 
 
         var playersCards = filterPlayer(stack, player),
-            deck = filterlocation(playersCards, 'DECK');
+            deck = filterlocation(playersCards, 'DECK'),
+            idCollection = [];
 
-        shuffle(deck); // shuffle the deck
+        deck.forEach(function (card) {
+            idCollection.push(card.id);
+        });
+
+        shuffle(idCollection); // shuffle the "deck".
         deck.forEach(function (card, index) {
-            card.index = index; // finalize the shuffle
+            card.id = idCollection[index]; // finalize the shuffle
+        });
+        callback(generateView('shuffle'), stack); // alert UI of the shuffle.
+    }
+
+    /**
+     * Convulstion of Nature
+     * @param {[[Type]]} player [[Description]]
+     */
+    function flipDeck(player) {
+        var playersCards = filterPlayer(stack, player),
+            deck = filterlocation(playersCards, 'DECK'),
+            idCollection = [];
+
+        deck.forEach(function (card) {
+            idCollection.push(card.id);
+        });
+
+        idCollection.reverse();
+        deck.forEach(function (card, index) {
+            card.id = idCollection[index]; // finalize the shuffle
+            card.position = (card.position === 'FaceDown') ? 'FaceUp' : 'FaceDown';
         });
         callback(generateView('shuffle'), stack); // alert UI of the shuffle.
     }
@@ -545,6 +571,7 @@ function init(callback) {
         changeCardPosition: changeCardPosition,
         moveCard: moveCard,
         drawCard: drawCard,
+        flipDeck: flipDeck,
         millCard: millCard,
         nextPhase: nextPhase,
         nextTurn: nextTurn,
