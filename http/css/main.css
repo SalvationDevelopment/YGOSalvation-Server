@@ -1140,7 +1140,8 @@ div#selectwhogoesfirst {
 
 #manualcontrols {
     position: fixed;
-    width: 25em;
+    width: 4em;
+    z-index: 50;
 }
 
 #manualcontrols button {

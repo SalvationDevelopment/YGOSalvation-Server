@@ -684,7 +684,7 @@ function guicardclick(id, uid) {
     });
     if (stackunit.location === 'DECK') {
         $('.manualDraw, .manualShuffle, .manualMill').css({
-            'display': 'none'
+            'display': 'block'
         });
         return;
     }
