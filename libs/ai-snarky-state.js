@@ -95,6 +95,20 @@ function filterOverlyIndex(Array, overlayindex) {
 }
 
 /**
+ * Shuffles array in place.
+ * @param {Array} a items The array containing the items This function is in no way optimized.
+ */
+function shuffle(deck) {
+    var j, x, index;
+    for (index = deck.length; index; index--) {
+        j = Math.floor(Math.random() * index);
+        x = deck[index - 1];
+        deck[index - 1] = deck[j];
+        deck[j] = x;
+    }
+}
+
+/**
  * Initiation of a single independent state intance... I guess this is a class of sorts.
  * @param {function} callback function(view, internalState){}; called each time the stack is updated. 
  * @returns {object} State instance
@@ -412,6 +426,10 @@ function init(callback) {
      * Exposed method to initialize the field; You only run this once.
      */
     function startDuel(player1, player2) {
+
+
+        shuffle(player1.main);
+        shuffle(player2.main);
 
         player1.main.forEach(function (card, index) {
             stack.push(makeCard('DECK', 0, index, numberOfCards, card));

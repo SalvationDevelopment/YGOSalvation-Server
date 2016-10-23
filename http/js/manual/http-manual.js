@@ -673,7 +673,7 @@ function guicardclick(id, uid) {
         stackunit = manualDuel.stack[idIndex];
     console.log(stackunit);
     $('#manualcontrols').css({
-        'bottom': currentMousePos.y,
+        'top': currentMousePos.y,
         'left': currentMousePos.x,
         'display': 'block'
     });
