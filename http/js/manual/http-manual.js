@@ -513,6 +513,16 @@ function doGuiShuffle(player, deck) {
     guishuffle('p' + player, deck);
 }
 
+function reveal(cards) {
+    'use strict';
+    var html = '';
+    $('#revealed').css('display', 'block');
+    cards.forEach(function (card, index) {
+        html += '<img src="http://ygopro.us/ygopro/pics/' + card + '.jpg" />';
+    });
+    $('#revealed').html(html);
+}
+
 function manualReciver(message) {
     'use strict';
     console.log(message);
@@ -552,6 +562,9 @@ function manualReciver(message) {
         cardmargin(1, 'GRAVE');
         cardmargin(1, 'EXTRA');
         cardmargin(1, 'DECK');
+        break;
+    case "revealTopCard":
+        reveal(message.cards);
         break;
     default:
         break;
@@ -735,7 +748,7 @@ var manualActionReference;
 function reorientmenu() {
     'use strict';
     var height = $('#manualcontrols').height(),
-        width = $('#manualcontrols').width / 2;
+        width = $('#manualcontrols').width() / 2;
 
     $('#manualcontrols').css({
         'top': currentMousePos.y - height,
@@ -815,15 +828,10 @@ function guicardclick(id, uid) {
 }
 
 
-
-
-
-
-
 $(document).ready(function () {
     'use strict';
     serverconnect();
-    $('body').on('hover', '.card', function (event) {
+    $('body').on('mouseover', '.card', function (event) {
         console.log(event);
     });
 });
