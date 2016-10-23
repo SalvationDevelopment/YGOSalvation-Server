@@ -175,10 +175,7 @@ function guiCard(dataBinding) {
     element = $('#uid' + dataBinding.uid);
 
     Object.observe(dataBinding, function (changes) {
-        if (orientSlot) {
-
-        }
-        //// [{name: 'ofproperitychaned', object: {complete new object}, type: 'of edit', oldValue: 'previousvalueofproperity'}]
+        // [{name: 'ofproperitychaned', object: {complete new object}, type: 'of edit', oldValue: 'previousvalueofproperity'}]
         var ref = changes[0].object,
             fieldings;
         if (orientSlot) {
@@ -203,7 +200,7 @@ function guiCard(dataBinding) {
             });
         }
         element.attr('style', 'z-index:' + ref.index);
-        layouthand(ref.player);
+        layouthand(player);
 
 
     });
@@ -441,22 +438,7 @@ function initGameState() {
         }
     }
 
-    function drawCard(player, numberOfCards, cards) {
-        var currenthand = filterlocation(filterPlayer(stack, player), 'HAND').length,
-            topcard,
-            target,
-            i,
-            pointer;
 
-        for (i = 0; i < numberOfCards; i++) {
-            topcard = filterlocation(filterPlayer(stack, player), 'DECK').length - 1;
-            setState(player, 'DECK', topcard, player, 'HAND', currenthand + i, 'FaceUp', 0, false);
-            target = queryCard(player, 'HAND', (currenthand + i), 0);
-            pointer = uidLookup(target[0].uid);
-            stack[pointer].id = cards[i].Code;
-        }
-
-    }
 
     return {
         startDuel: startDuel,
@@ -464,8 +446,6 @@ function initGameState() {
         updateCard: updateCard,
         cardCollections: cardCollections,
         changeCardPosition: changeCardPosition,
-        moveCard: moveCard,
-        drawCard: drawCard,
         uidLookup: uidLookup,
         stack: stack
     };
@@ -747,13 +727,13 @@ function guicardclick(id, uid) {
         'display': 'block'
     });
     if (stackunit.location === 'DECK') {
-        $('.manualDraw, .manualShuffle, .manualMill').css({
+        $('.manualDraw, .manualShuffle, .manualMill, .manualRevealDeck, .manualDeckBanish, .manualDeckBanishFaceDown').css({
             'display': 'block'
         });
         return;
     }
     if (stackunit.location === 'HAND') {
-        $('.manualDraw, .manualShuffle, .manualMill').css({
+        $('.manualRevealHand, .manualShuffle, .manualMill, .manualToBottom, .manualToTop, .manualToSetTrapSpell, .manualBanish, .manualBanishFaceDown, .manualSpecialSummonDef, .manualSpecialSummonAtt, .manualSetMonster, .manualNormalSummon, .manualActivateFieldSpell').css({
             'display': 'block'
         });
         return;
@@ -765,19 +745,19 @@ function guicardclick(id, uid) {
         return;
     }
     if (stackunit.location === 'EXTRA') {
-        $('.manualDraw, .manualShuffle, .manualMill').css({
+        $('.manualViewExtra').css({
             'display': 'block'
         });
         return;
     }
     if (stackunit.location === 'MONSTERZONE') {
-        $('.manualDraw, .manualShuffle, .manualMill').css({
+        $('.moveToHand, .manualToST, .manualToExtaFaceDown').css({
             'display': 'block'
         });
         return;
     }
     if (stackunit.location === 'SPELLZONE') {
-        $('.manualDraw, .manualShuffle, .manualMill').css({
+        $('.moveToHand').css({
             'display': 'block'
         });
         return;
@@ -793,6 +773,9 @@ function guicardclick(id, uid) {
 $(document).ready(function () {
     'use strict';
     serverconnect();
+    $('body').on('hover', '.card', function (event) {
+        console.log(event);
+    });
 });
 
 $(document).mousemove(function (event) {
