@@ -163,12 +163,15 @@ function guiCard(dataBinding) {
     'use strict';
 
     var field = $('#automationduelfield'),
-        element;
+        element,
+        player;
 
     if (orientSlot) {
-        dataBinding.player = (dataBinding.player === 1) ? 0 : 1;
+        player = (dataBinding.player === 1) ? 0 : 1;
+    } else {
+        player = dataBinding.player;
     }
-    $(field).append('<img onclick="guicardclick(\'#uid' + dataBinding.uid + '\',' + dataBinding.uid + ')" id="uid' + dataBinding.uid + '" class="card p' + dataBinding.player + ' ' + dataBinding.location + ' i' + dataBinding.index + ' o" src="img/textures/cover.jpg" data-position="FaceDown" />');
+    $(field).append('<img onclick="guicardclick(\'#uid' + dataBinding.uid + '\',' + dataBinding.uid + ')" id="uid' + dataBinding.uid + '" class="card p' + player + ' ' + dataBinding.location + ' i' + dataBinding.index + ' o" src="img/textures/cover.jpg" data-position="FaceDown" />');
     element = $('#uid' + dataBinding.uid);
 
     Object.observe(dataBinding, function (changes) {
@@ -179,11 +182,12 @@ function guiCard(dataBinding) {
         var ref = changes[0].object,
             fieldings;
         if (orientSlot) {
-            ref.player = (ref.player === 1) ? 0 : 1;
+            player = (ref.player === 1) ? 0 : 1;
+        } else {
+            player = ref.player;
         }
-        console.log(ref);
         if (!ref.parent) {
-            fieldings = 'card p' + ref.player + ' ' + ref.location + ' i' + ref.index + ' o';
+            fieldings = 'card p' + player + ' ' + ref.location + ' i' + ref.index + ' o';
             element.attr({
                 'class': fieldings,
                 'data-position': ref.position,
@@ -191,7 +195,7 @@ function guiCard(dataBinding) {
             });
         } else {
             ref = changes[0].object;
-            fieldings = 'card p' + ref.player + ' ' + ref.location + ' i' + ref.index + ' o';
+            fieldings = 'card p' + player + ' ' + ref.location + ' i' + ref.index + ' o';
             element.attr({
                 'class': fieldings,
                 'data-position': ref.position,
