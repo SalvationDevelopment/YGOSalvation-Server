@@ -192,6 +192,9 @@ function singlesitenav(target) {
     $('#anti').css('left', '0');
     $('#' + target).css('left', '0').addClass('activescreen');
     saveSettings();
+    $('#manualcontrols button').css({
+        'display': 'none'
+    });
     return false;
 }
 
