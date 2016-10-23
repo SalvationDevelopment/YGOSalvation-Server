@@ -246,7 +246,7 @@ function initGameState() {
     //exposed method to initialize the field;
     function startDuel(OneDeck, TwoDeck, OneExtra, TwoExtra) {
         var i;
-
+        $('#automationduelfield').html();
         for (i = 0; OneExtra > i; i++) {
             stack.push(new Card('EXTRA', 0, i, numberOfCards));
             numberOfCards++;
