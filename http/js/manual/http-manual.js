@@ -465,9 +465,10 @@ function manualgamestart(message) {
     if (!duelstarted) {
         loadField();
         duelstarted = true;
+        manualDuel = initGameState();
+        manualDuel.startDuel(main1, main2, extra1, extra2);
     }
-    manualDuel = initGameState();
-    manualDuel.startDuel(main1, main2, extra1, extra2);
+
 }
 
 function manualReciver(message) {
