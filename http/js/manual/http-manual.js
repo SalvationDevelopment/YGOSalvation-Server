@@ -200,7 +200,10 @@ function cardmargin(player, deck) {
     'use strict';
     console.log('running cardmargin');
     $('.card.p' + player + '.' + deck).each(function (i) {
-        $(this).css('z-index', i).attr('style', '').css('-webkit-transform', 'translate3d(0,0,' + i + 'px)');
+        $(this).attr('style', '').css({
+            '-webkit-transform': 'translate3d(0,0,' + i + 'px)',
+            'z-index': i
+        });
     });
 }
 
