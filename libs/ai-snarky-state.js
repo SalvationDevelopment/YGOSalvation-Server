@@ -165,16 +165,18 @@ function init(callback) {
         return filterOverlyIndex(filterIndex(filterlocation(filterPlayer(stack, player), clocation), index), overlayindex)[0];
     }
 
-    /*The YGOPro messages have a design flaw in them where they dont tell the number of cards
-    that you have to itterate over in order to get a proper message, this function resolves that problem,
-    this flaw has caused me all types of grief.*/
 
+    /**
+     * Changes a view of cards so the opponent can not see what they are.
+     * @param   {[[Type]]} view [[Description]]
+     * @returns {[[Type]]} [[Description]]
+     */
     function hideView(view) {
         var output = [];
         view.forEach(function (card, index) {
             output[index] = {};
             Object.assign(output[index], card);
-            delete output[index].Code;
+            output[index].id = 0;
         });
 
         return output;
@@ -185,6 +187,11 @@ function init(callback) {
      * @returns {object}   information on number of slots on each zone.
      */
     function cardCollections(player) {
+        /*The YGOPro messages have a design flaw in them where they dont tell the number of cards
+          that you have to itterate over in order to get a proper message, this function resolves that problem,
+          this flaw has caused me all types of grief.
+        */
+
         return {
             DECK: filterlocation(filterPlayer(stack, player), 'DECK').length,
             HAND: filterlocation(filterPlayer(stack, player), 'HAND').length,
@@ -543,23 +550,29 @@ function init(callback) {
 
     /**
      * Convulstion of Nature
-     * @param {[[Type]]} player [[Description]]
+     * @param {number} player
      */
     function flipDeck(player) {
         var playersCards = filterPlayer(stack, player),
             deck = filterlocation(playersCards, 'DECK'),
             idCollection = [];
 
+        // copy the ids to a sperate place
         deck.forEach(function (card) {
             idCollection.push(card.id);
         });
 
+        // reverse the ids.
         idCollection.reverse();
+
+        // reassign them.
         deck.forEach(function (card, index) {
-            card.id = idCollection[index]; // finalize the shuffle
+            card.id = idCollection[index];
+
+            // flip the card over.
             card.position = (card.position === 'FaceDown') ? 'FaceUp' : 'FaceDown';
         });
-        callback(generateView('shuffle'), stack); // alert UI of the shuffle.
+        callback(generateView('flipDeckOver'), stack); // alert UI of the shuffle.
     }
 
     //expose public functions.

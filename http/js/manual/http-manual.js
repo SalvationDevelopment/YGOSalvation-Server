@@ -601,6 +601,13 @@ function manualDraw() {
     }));
 }
 
+function manualMill() {
+    'use strict';
+    manualServer.send(JSON.stringify({
+        action: 'mill'
+    }));
+}
+
 function manualModeGamelistSwitch() {
     'use strict';
     $('#manualgamelistitems').css({
