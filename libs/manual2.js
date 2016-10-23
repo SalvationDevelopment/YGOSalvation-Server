@@ -176,6 +176,9 @@ function responseHandler(socket, message) {
     case "draw":
         stateSystem[socket.activeduel].drawCard(socket.slot, 1);
         break;
+    case "mill":
+        stateSystem[socket.activeduel].millCard(socket.slot, 1);
+        break;
     case "chat":
         if (socket.slot !== undefined) {
             stateSystem[socket.activeduel].duelistChat(socket.slot);
