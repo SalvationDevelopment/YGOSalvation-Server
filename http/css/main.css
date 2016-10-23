@@ -1140,12 +1140,20 @@ div#selectwhogoesfirst {
 
 #manualcontrols {
     position: fixed;
-    width: 4em;
+    width: 7em;
     z-index: 50;
 }
 
 #manualcontrols button {
     display: none;
+    width: 100%;
+    font-size: .7em;
+    background: rgba(0, 0, 0, .85);
+    margin-top: .1em;
+    color: white;
+    padding: .5em;
+    border: 1px outset #444;
+    box-shadow: 0px 0px 31px black;
 }
 
 div#gofirst,

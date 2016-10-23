@@ -239,11 +239,11 @@ function init(callback) {
             monsterzone = filterlocation(playersCards, 'MONSTERZONE');
 
         return {
-            DECK: deck,
+            DECK: hideViewOfZone(deck),
             HAND: hand,
             GRAVE: grave,
-            EXTRA: extra,
-            REMOVED: removed,
+            EXTRA: hideViewOfZone(extra),
+            REMOVED: hideViewOfZone(removed),
             SPELLZONE: spellzone,
             MONSTERZONE: monsterzone
         };
@@ -265,13 +265,13 @@ function init(callback) {
             monsterzone = filterlocation(playersCards, 'MONSTERZONE');
 
         return {
-            DECK: deck,
-            HAND: hand,
+            DECK: hideViewOfZone(deck),
+            HAND: hideHand(hand),
             GRAVE: grave,
-            EXTRA: extra,
-            REMOVED: removed,
-            SPELLZONE: spellzone,
-            MONSTERZONE: monsterzone
+            EXTRA: hideViewOfZone(extra),
+            REMOVED: hideViewOfZone(removed),
+            SPELLZONE: hideViewOfZone(spellzone),
+            MONSTERZONE: hideViewOfZone(monsterzone)
         };
     }
 

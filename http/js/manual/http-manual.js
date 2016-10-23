@@ -175,10 +175,7 @@ function guiCard(dataBinding) {
     element = $('#uid' + dataBinding.uid);
 
     Object.observe(dataBinding, function (changes) {
-        if (orientSlot) {
-
-        }
-        //// [{name: 'ofproperitychaned', object: {complete new object}, type: 'of edit', oldValue: 'previousvalueofproperity'}]
+        // [{name: 'ofproperitychaned', object: {complete new object}, type: 'of edit', oldValue: 'previousvalueofproperity'}]
         var ref = changes[0].object,
             fieldings;
         if (orientSlot) {
@@ -203,7 +200,7 @@ function guiCard(dataBinding) {
             });
         }
         element.attr('style', 'z-index:' + ref.index);
-        layouthand(ref.player);
+        layouthand(player);
 
 
     });
@@ -441,22 +438,7 @@ function initGameState() {
         }
     }
 
-    function drawCard(player, numberOfCards, cards) {
-        var currenthand = filterlocation(filterPlayer(stack, player), 'HAND').length,
-            topcard,
-            target,
-            i,
-            pointer;
 
-        for (i = 0; i < numberOfCards; i++) {
-            topcard = filterlocation(filterPlayer(stack, player), 'DECK').length - 1;
-            setState(player, 'DECK', topcard, player, 'HAND', currenthand + i, 'FaceUp', 0, false);
-            target = queryCard(player, 'HAND', (currenthand + i), 0);
-            pointer = uidLookup(target[0].uid);
-            stack[pointer].id = cards[i].Code;
-        }
-
-    }
 
     return {
         startDuel: startDuel,
@@ -464,8 +446,6 @@ function initGameState() {
         updateCard: updateCard,
         cardCollections: cardCollections,
         changeCardPosition: changeCardPosition,
-        moveCard: moveCard,
-        drawCard: drawCard,
         uidLookup: uidLookup,
         stack: stack
     };
@@ -726,16 +706,34 @@ var currentMousePos = {
 
 var manualActionReference;
 
+function reorientmenu() {
+    'use strict';
+    var height = $('#manualcontrols').height(),
+        width = $('#manualcontrols').width / 2;
+
+    $('#manualcontrols').css({
+        'top': currentMousePos.y - height,
+        'left': currentMousePos.x - width,
+        'display': 'block'
+    });
+}
+
 function guicardclick(id, uid) {
     'use strict';
+
     manualActionReference = null;
     $('#manualcontrols button').css({
         'display': 'none'
     });
     var idIndex = manualDuel.uidLookup(uid),
         stackunit = manualDuel.stack[idIndex];
+
     console.log(stackunit);
     manualActionReference = stackunit;
+
+    if (stackunit.player !== orientSlot) {
+        return;
+    }
     $('#manualcontrols').css({
         'top': currentMousePos.y,
         'left': currentMousePos.x,
@@ -747,39 +745,45 @@ function guicardclick(id, uid) {
         'display': 'block'
     });
     if (stackunit.location === 'DECK') {
-        $('.manualDraw, .manualShuffle, .manualMill').css({
+        $('.manualDraw, .manualShuffle, .manualMill, .manualRevealDeck, .manualDeckBanish, .manualDeckBanishFaceDown').css({
             'display': 'block'
         });
+        reorientmenu();
         return;
     }
     if (stackunit.location === 'HAND') {
-        $('.manualDraw, .manualShuffle, .manualMill').css({
+        $('.manualRevealHand, .manualShuffle, .manualMill, .manualToBottom, .manualToTop, .manualToSetTrapSpell, .manualBanish, .manualBanishFaceDown, .manualSpecialSummonDef, .manualSpecialSummonAtt, .manualSetMonster, .manualNormalSummon, .manualActivateFieldSpell, .manualToExtraFaceUp, .manualRemove, .manualToPZoneR, .manualToPZoneL, .manualToGrave, .manualToOpponentsHand, .manualToOpponentsGrave').css({
             'display': 'block'
         });
+        reorientmenu();
         return;
     }
     if (stackunit.location === 'GRAVE') {
-        $('.manualDraw, .manualShuffle, .manualMill').css({
+        $('.manualViewGrave').css({
             'display': 'block'
         });
+        reorientmenu();
         return;
     }
     if (stackunit.location === 'EXTRA') {
-        $('.manualDraw, .manualShuffle, .manualMill').css({
+        $('.manualViewExtra, .manualRevealExta').css({
             'display': 'block'
         });
+        reorientmenu();
         return;
     }
     if (stackunit.location === 'MONSTERZONE') {
-        $('.manualDraw, .manualShuffle, .manualMill').css({
+        $('.moveToHand, .manualToST, .manualToExtaFaceDown, .manualToExtraFaceUp, .moveChangeControl, .manualOverlay, .manualDetach, .manualFlipDown, .manualFlipUp, .manualToAtk, .manualToDef, .manualRemove, .manualToGrave, .manualToOpponentsHand, .manualToOpponentsGrave, .manualToOpponentsExtra').css({
             'display': 'block'
         });
+        reorientmenu();
         return;
     }
     if (stackunit.location === 'SPELLZONE') {
-        $('.manualDraw, .manualShuffle, .manualMill').css({
+        $('.moveToHand,  .manualToExtraFaceUp, .manualFlipDown, .manualFlipUp, .manualRemove, .manualToGrave, .manualToOpponentsHand, .manualToOpponentsGrave').css({
             'display': 'block'
         });
+        reorientmenu();
         return;
     }
 }
@@ -793,6 +797,9 @@ function guicardclick(id, uid) {
 $(document).ready(function () {
     'use strict';
     serverconnect();
+    $('body').on('hover', '.card', function (event) {
+        console.log(event);
+    });
 });
 
 $(document).mousemove(function (event) {
