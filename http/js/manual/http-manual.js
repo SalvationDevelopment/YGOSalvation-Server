@@ -708,11 +708,12 @@ var manualActionReference;
 
 function reorientmenu() {
     'use strict';
-    var height = $('#manualcontrols').height();
-    console.log(height);
+    var height = $('#manualcontrols').height(),
+        width = $('#manualcontrols').width / 2;
+
     $('#manualcontrols').css({
         'top': currentMousePos.y - height,
-        'left': currentMousePos.x,
+        'left': currentMousePos.x - width,
         'display': 'block'
     });
 }
@@ -751,35 +752,35 @@ function guicardclick(id, uid) {
         return;
     }
     if (stackunit.location === 'HAND') {
-        $('.manualRevealHand, .manualShuffle, .manualMill, .manualToBottom, .manualToTop, .manualToSetTrapSpell, .manualBanish, .manualBanishFaceDown, .manualSpecialSummonDef, .manualSpecialSummonAtt, .manualSetMonster, .manualNormalSummon, .manualActivateFieldSpell').css({
+        $('.manualRevealHand, .manualShuffle, .manualMill, .manualToBottom, .manualToTop, .manualToSetTrapSpell, .manualBanish, .manualBanishFaceDown, .manualSpecialSummonDef, .manualSpecialSummonAtt, .manualSetMonster, .manualNormalSummon, .manualActivateFieldSpell, .manualToExtraFaceUp, .manualRemove, .manualToPZoneR, .manualToPZoneL, .manualToGrave, .manualToOpponentsHand, .manualToOpponentsGrave').css({
             'display': 'block'
         });
         reorientmenu();
         return;
     }
     if (stackunit.location === 'GRAVE') {
-        $('.manualDraw, .manualShuffle, .manualMill').css({
+        $('.manualViewGrave').css({
             'display': 'block'
         });
         reorientmenu();
         return;
     }
     if (stackunit.location === 'EXTRA') {
-        $('.manualViewExtra').css({
+        $('.manualViewExtra, .manualRevealExta').css({
             'display': 'block'
         });
         reorientmenu();
         return;
     }
     if (stackunit.location === 'MONSTERZONE') {
-        $('.moveToHand, .manualToST, .manualToExtaFaceDown').css({
+        $('.moveToHand, .manualToST, .manualToExtaFaceDown, .manualToExtraFaceUp, .moveChangeControl, .manualOverlay, .manualDetach, .manualFlipDown, .manualFlipUp, .manualToAtk, .manualToDef, .manualRemove, .manualToGrave, .manualToOpponentsHand, .manualToOpponentsGrave, .manualToOpponentsExtra').css({
             'display': 'block'
         });
         reorientmenu();
         return;
     }
     if (stackunit.location === 'SPELLZONE') {
-        $('.moveToHand').css({
+        $('.moveToHand,  .manualToExtraFaceUp, .manualFlipDown, .manualFlipUp, .manualRemove, .manualToGrave, .manualToOpponentsHand, .manualToOpponentsGrave').css({
             'display': 'block'
         });
         reorientmenu();
