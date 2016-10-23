@@ -654,7 +654,7 @@ $.getJSON('http://ygopro.us/manifest/database_0-en-OCGTCG.json', function (data)
 
 
 
-function shuffle(player, deck) {
+function guishuffle(player, deck) {
     'use strict';
     var orientation = (player === 'p0') ? ({
         x: 'left',
@@ -676,6 +676,13 @@ function shuffle(player, deck) {
     }, 50);
 }
 
+function doGuiShuffle() {
+    'use strict';
+    var action = setInterval(guishuffle, 600);
+    setTimeout(function () {
+        clearInterval(action);
+    }, 3000);
+}
 
 var currentMousePos = {
     x: -1,
