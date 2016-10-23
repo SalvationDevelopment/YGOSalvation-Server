@@ -686,7 +686,7 @@ function guishuffle(player, deck) {
     });
     setTimeout(function () {
         cardmargin(player, deck);
-    }, 50);
+    }, 300);
 }
 
 function doGuiShuffle(player, deck) {
@@ -752,7 +752,7 @@ function guicardclick(id, uid) {
         return;
     }
     if (stackunit.location === 'HAND') {
-        $('.manualRevealHand, .manualShuffle, .manualMill, .manualToBottom, .manualToTop, .manualToSetTrapSpell, .manualBanish, .manualBanishFaceDown, .manualSpecialSummonDef, .manualSpecialSummonAtt, .manualSetMonster, .manualNormalSummon, .manualActivateFieldSpell, .manualToExtraFaceUp, .manualRemove, .manualToPZoneR, .manualToPZoneL, .manualToGrave, .manualToOpponentsHand, .manualToOpponentsGrave').css({
+        $('.manualRevealHand, .manualShuffleHand, .manualToBottom, .manualToTop, .manualToSetTrapSpell, .manualBanish, .manualBanishFaceDown, .manualSpecialSummonDef, .manualSpecialSummonAtt, .manualSetMonster, .manualNormalSummon, .manualActivateFieldSpell, .manualToExtraFaceUp, .manualRemove, .manualToPZoneR, .manualToPZoneL, .manualToGrave, .manualToOpponentsHand, .manualToOpponentsGrave').css({
             'display': 'block'
         });
         reorientmenu();

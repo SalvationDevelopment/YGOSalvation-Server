@@ -118,10 +118,9 @@ function hideViewOfZone(view) {
     view.forEach(function (card, index) {
         output[index] = {};
         Object.assign(output[index], card);
-        if (output[index].position !== 'FaceUp' || output[index].position !== 'FaceUpDefense') {
+        if (output[index].position === 'FaceDown' || output[index].position === 'FaceUpDefense') {
             output[index].id = 0;
         }
-
     });
 
     return output;
@@ -474,7 +473,7 @@ function init(callback) {
      * @param {Number} numberOfCards number of cards milled
      */
     function millRemovedCard(player, numberOfCards) {
-        var currentgrave = filterlocation(filterPlayer(stack, player), 'REMOVED').length,
+        var currentbanished = filterlocation(filterPlayer(stack, player), 'REMOVED').length,
             topcard,
             target,
             i,
@@ -482,7 +481,7 @@ function init(callback) {
 
         for (i = 0; i < numberOfCards; i++) {
             topcard = filterlocation(filterPlayer(stack, player), 'DECK').length - 1;
-            setState(player, 'DECK', topcard, player, 'REMOVED', currentgrave, 'FaceUp', 0, false);
+            setState(player, 'DECK', topcard, player, 'REMOVED', currentbanished, 'FaceUp', 0, false);
         }
         callback(generateView(), stack);
     }
@@ -515,6 +514,7 @@ function init(callback) {
         shuffle(player1.main);
         shuffle(player2.main);
 
+        console.log(player1.extra);
         player1.main.forEach(function (card, index) {
             stack.push(makeCard('DECK', 0, index, numberOfCards, card));
             numberOfCards++;
