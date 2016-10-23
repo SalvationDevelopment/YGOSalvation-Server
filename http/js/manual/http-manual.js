@@ -497,14 +497,14 @@ function guishuffle(player, deck) {
     });
     setTimeout(function () {
         cardmargin(player, deck);
-    }, 50);
+    }, 150);
 }
 
 function doGuiShuffle(player, deck) {
     'use strict';
     var action = setInterval(function () {
         guishuffle(player, deck);
-    }, 150);
+    }, 300);
     setTimeout(function () {
         clearInterval(action);
         cardmargin(player, deck);
