@@ -423,6 +423,25 @@ function init(callback) {
     }
 
     /**
+     * Mills a card, updates state.
+     * @param {Number} player        Player milling the cards
+     * @param {Number} numberOfCards number of cards milled
+     */
+    function millCard(player, numberOfCards) {
+        var currentgrave = filterlocation(filterPlayer(stack, player), 'GRAVE').length,
+            topcard,
+            target,
+            i,
+            pointer;
+
+        for (i = 0; i < numberOfCards; i++) {
+            topcard = filterlocation(filterPlayer(stack, player), 'DECK').length - 1;
+            setState(player, 'DECK', topcard, player, 'GRAVE', currentgrave + i, 'FaceUp', 0, false);
+        }
+        callback(generateView(), stack);
+    }
+
+    /**
      * Exposed method to initialize the field; You only run this once.
      */
     function startDuel(player1, player2) {
@@ -505,6 +524,8 @@ function init(callback) {
      * @param {[[Type]]} player [[Description]]
      */
     function shuffleDeck(player) {
+        // this is done incorrectly, first take the id's out, then shuffle them, then reasign them.
+
         var playersCards = filterPlayer(stack, player),
             deck = filterlocation(playersCards, 'DECK');
 
@@ -524,6 +545,7 @@ function init(callback) {
         changeCardPosition: changeCardPosition,
         moveCard: moveCard,
         drawCard: drawCard,
+        millCard: millCard,
         nextPhase: nextPhase,
         nextTurn: nextTurn,
         changeLifepoints: changeLifepoints,
