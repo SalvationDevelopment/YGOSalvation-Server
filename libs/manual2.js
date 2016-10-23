@@ -161,7 +161,10 @@ function responseHandler(socket, message) {
             }));
 
         }
-
+        socket.send(JSON.stringify({
+            action: 'slot',
+            slot: socket.slot
+        }));
         wss.broadcast(games);
         break;
     case "start":

@@ -4,7 +4,8 @@
 var manualServer,
     broadcast,
     activegame,
-    duelstarted = false;
+    duelstarted = false,
+    orientSlot = 0;
 
 function updateloby(state) {
     'use strict';
@@ -164,14 +165,22 @@ function guiCard(dataBinding) {
     var field = $('#automationduelfield'),
         element;
 
-
+    if (orientSlot) {
+        dataBinding.player = (dataBinding.player === 1) ? 0 : 1;
+    }
     $(field).append('<img onclick="guicardclick(\'#uid' + dataBinding.uid + '\',' + dataBinding.uid + ')" id="uid' + dataBinding.uid + '" class="card p' + dataBinding.player + ' ' + dataBinding.location + ' i' + dataBinding.index + ' o" src="img/textures/cover.jpg" data-position="FaceDown" />');
     element = $('#uid' + dataBinding.uid);
 
     Object.observe(dataBinding, function (changes) {
+        if (orientSlot) {
+
+        }
         //// [{name: 'ofproperitychaned', object: {complete new object}, type: 'of edit', oldValue: 'previousvalueofproperity'}]
         var ref = changes[0].object,
             fieldings;
+        if (orientSlot) {
+            ref.player = (ref.player === 1) ? 0 : 1;
+        }
         console.log(ref);
         if (!ref.parent) {
             fieldings = 'card p' + ref.player + ' ' + ref.location + ' i' + ref.index + ' o';
@@ -250,6 +259,7 @@ function initGameState() {
     //exposed method to initialize the field;
     function startDuel(OneDeck, TwoDeck, OneExtra, TwoExtra) {
         var i;
+
         $('#automationduelfield').html();
         for (i = 0; OneExtra > i; i++) {
             stack.push(new Card('EXTRA', 0, i, numberOfCards));
@@ -491,6 +501,9 @@ function manualReciver(message) {
         }
         makeGames();
         break;
+    case "slot":
+        orientSlot = message.slot;
+        break;
     case "start":
         manualgamestart(message);
         //startDuel(player1StartLP, player2StartLP, OneDeck, TwoDeck, OneExtra, TwoExtra)
@@ -692,9 +705,11 @@ function guishuffle(player, deck) {
     }, 50);
 }
 
-function doGuiShuffle() {
+function doGuiShuffle(player, deck) {
     'use strict';
-    var action = setInterval(guishuffle, 600);
+    var action = setInterval(function () {
+        guishuffle(player, deck);
+    }, 600);
     setTimeout(function () {
         clearInterval(action);
     }, 3000);
@@ -705,14 +720,18 @@ var currentMousePos = {
     y: -1
 };
 
+var manualActionReference;
+
 function guicardclick(id, uid) {
     'use strict';
+    manualActionReference = null;
     $('#manualcontrols button').css({
         'display': 'none'
     });
     var idIndex = manualDuel.uidLookup(uid),
         stackunit = manualDuel.stack[idIndex];
     console.log(stackunit);
+    manualActionReference = stackunit;
     $('#manualcontrols').css({
         'top': currentMousePos.y,
         'left': currentMousePos.x,
