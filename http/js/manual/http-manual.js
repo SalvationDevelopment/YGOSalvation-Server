@@ -469,6 +469,48 @@ function manualgamestart(message) {
 
 }
 
+function orient(player) {
+    'use strict';
+    if (orientSlot) {
+        return (player === 1) ? 0 : 1;
+    }
+    return player;
+
+}
+
+function guishuffle(player, deck) {
+    'use strict';
+    var orientation = (player === 'p0') ? ({
+        x: 'left',
+        y: 'bottom',
+        direction: 1
+    }) : ({
+        x: 'right',
+        y: 'top',
+        direction: -1
+    });
+    cardmargin(player, deck);
+    $($('.card.p' + player + '.' + deck).get().reverse()).each(function (i) {
+        var cache = $(this).css(orientation.x),
+            spatical = Math.floor((Math.random() * 150) - 75);
+        $(this).css(orientation.x, '-=' + spatical + 'px');
+    });
+    setTimeout(function () {
+        cardmargin(player, deck);
+    }, 50);
+}
+
+function doGuiShuffle(player, deck) {
+    'use strict';
+    var action = setInterval(function () {
+        guishuffle(player, deck);
+    }, 150);
+    setTimeout(function () {
+        clearInterval(action);
+        cardmargin(player, deck);
+    }, 3000);
+}
+
 function manualReciver(message) {
     'use strict';
     console.log(message);
@@ -491,6 +533,14 @@ function manualReciver(message) {
     case "start":
         manualgamestart(message);
         //startDuel(player1StartLP, player2StartLP, OneDeck, TwoDeck, OneExtra, TwoExtra)
+        break;
+    case "shuffleDeck0":
+        doGuiShuffle(orient(0), 'DECK');
+        linkStack(message.field);
+        break;
+    case "shuffleDeck1":
+        doGuiShuffle(orient(1), 'DECK');
+        linkStack(message.field);
         break;
     case "duel":
         linkStack(message.field);
@@ -609,6 +659,12 @@ function manualDraw() {
     }));
 }
 
+function manualShuffleDeck() {
+    'use strict';
+    manualServer.send(JSON.stringify({
+        action: 'shuffleDeck'
+    }));
+}
 
 
 function manualMill() {
@@ -666,38 +722,6 @@ $.getJSON('http://ygopro.us/manifest/database_0-en-OCGTCG.json', function (data)
 
 
 
-
-function guishuffle(player, deck) {
-    'use strict';
-    var orientation = (player === 'p0') ? ({
-        x: 'left',
-        y: 'bottom',
-        direction: 1
-    }) : ({
-        x: 'right',
-        y: 'top',
-        direction: -1
-    });
-    cardmargin(player, deck);
-    $($('.card.' + player + '.' + deck).get().reverse()).each(function (i) {
-        var cache = $(this).css(orientation.x),
-            spatical = Math.floor((Math.random() * 150) - 75);
-        $(this).css(orientation.x, '-=' + spatical + 'px');
-    });
-    setTimeout(function () {
-        cardmargin(player, deck);
-    }, 300);
-}
-
-function doGuiShuffle(player, deck) {
-    'use strict';
-    var action = setInterval(function () {
-        guishuffle(player, deck);
-    }, 600);
-    setTimeout(function () {
-        clearInterval(action);
-    }, 3000);
-}
 
 var currentMousePos = {
     x: -1,
