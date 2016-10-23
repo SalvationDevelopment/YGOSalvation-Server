@@ -173,11 +173,23 @@ function responseHandler(socket, message) {
     case "moveCard":
         stateSystem[socket.activeduel].setState(message.player, message.clocation, message.index, message.moveplayer, message.movelocation, message.moveindex, message.moveposition, message.overlayindex, message.isBecomingCard);
         break;
+    case "shuffleDeck":
+        stateSystem[socket.activeduel].shuffleDeck(socket.slot);
+        break;
+    case "shuffleHand":
+        stateSystem[socket.activeduel].shuffleHand(socket.slot);
+        break;
     case "draw":
         stateSystem[socket.activeduel].drawCard(socket.slot, 1);
         break;
     case "mill":
         stateSystem[socket.activeduel].millCard(socket.slot, 1);
+        break;
+    case "millRemovedCard":
+        stateSystem[socket.activeduel].millRemovedCard(socket.slot, 1);
+        break;
+    case "millRemovedCardFaceDown":
+        stateSystem[socket.activeduel].millRemovedCardFaceDown(socket.slot, 1);
         break;
     case "chat":
         if (socket.slot !== undefined) {
