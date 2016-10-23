@@ -490,25 +490,27 @@ function guishuffle(player, deck) {
         direction: -1
     });
     cardmargin(player, deck);
-    $($('.card.p' + player + '.' + deck).get().reverse()).each(function (i) {
+    $($('.card.' + player + '.' + deck).get().reverse()).each(function (i) {
         var cache = $(this).css(orientation.x),
-            spatical = Math.floor((Math.random() * 150) - 75);
+            spatical = Math.floor((Math.random() * 100) - 50);
         $(this).css(orientation.x, '-=' + spatical + 'px');
     });
-    setTimeout(function () {
-        cardmargin(player, deck);
-    }, 150);
+
 }
 
 function doGuiShuffle(player, deck) {
     'use strict';
     var action = setInterval(function () {
-        guishuffle(player, deck);
-    }, 300);
+        guishuffle('p' + player, deck);
+        setTimeout(function () {
+            cardmargin(String() + player, deck);
+        }, 50);
+    }, 200);
     setTimeout(function () {
         clearInterval(action);
-        cardmargin(player, deck);
-    }, 3000);
+        cardmargin(String() + player, deck);
+    }, 1000);
+    guishuffle('p' + player, deck);
 }
 
 function manualReciver(message) {
