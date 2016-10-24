@@ -1152,6 +1152,11 @@ div#selectwhogoesfirst {
     display: none;
     justify-content: center;
     align-items: center;
+    overflow: auto;
+}
+
+#subreveal img {
+    margin: 10px
 }
 
 #manualcontrols {

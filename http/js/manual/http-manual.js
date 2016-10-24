@@ -519,6 +519,7 @@ function reveal(cards) {
     $('#revealed').css('display', 'flex');
     if (cards.length > 5) {
         html += "<div id='subreveal'>";
+        $('#revealed').css('display', 'block');
     }
     cards.forEach(function (card, index) {
         html += '<img src="http://ygopro.us/ygopro/pics/' + card.id + '.jpg" />';
@@ -527,6 +528,7 @@ function reveal(cards) {
         html += "</div>";
     }
     $('#revealed').html(html);
+    $('subreveal').width(cards.length * 197)
 }
 
 function manualReciver(message) {
