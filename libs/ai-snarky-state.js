@@ -512,17 +512,17 @@ function init(callback) {
     function revealCallback(reveal) {
         callback({
             0: {
-                action: 'revealTop',
+                action: 'reveal',
                 info: state,
                 reveal: [reveal]
             },
             1: {
-                action: 'revealTop',
+                action: 'reveal',
                 info: state,
                 reveal: [reveal]
             },
             sepectators: {
-                action: 'revealTop',
+                action: 'reveal',
                 info: state,
                 reveal: [reveal]
             }
@@ -566,6 +566,14 @@ function init(callback) {
      */
     function revealExtra(player) {
         revealCallback(filterlocation(filterPlayer(stack, player), 'EXTRA'));
+    }
+
+    /**
+     * Reveal the players hand.
+     * @param {number} player 
+     */
+    function revealHand(player) {
+        revealCallback(filterlocation(filterPlayer(stack, player), 'HAND'));
     }
 
     /**
@@ -667,28 +675,29 @@ function init(callback) {
         });
         callback(generateView('shuffleDeck' + player), stack); // alert UI of the shuffle.
     }
-
     /**
-     * Mutation Function, after game start, shuffle a players deck.
+     * Mutation Function,  shuffle a players hand.
      * @param {number} player 
      */
     function shuffleHand(player) {
         // Ids are reassigned to new GUIs 
 
         var playersCards = filterPlayer(stack, player),
-            hand = filterlocation(playersCards, 'HAND'),
+            deck = filterlocation(playersCards, 'DECK'),
             idCollection = [];
 
-        hand.forEach(function (card) {
+        deck.forEach(function (card) {
             idCollection.push(card.id);
         });
 
         shuffle(idCollection); // shuffle the "deck".
-        hand.forEach(function (card, index) {
+        deck.forEach(function (card, index) {
             card.id = idCollection[index]; // finalize the shuffle
         });
-        callback(generateView('shuffleHand'), stack); // alert UI of the shuffle.
+        callback(generateView('shuffleDeck' + player), stack); // alert UI of the shuffle.
     }
+
+
 
     /**
      * Convulstion of Nature
@@ -733,11 +742,13 @@ function init(callback) {
         revealTop: revealTop,
         revealBottom: revealBottom,
         revealDeck: revealDeck,
+        revealExtra: revealExtra,
         nextPhase: nextPhase,
         nextTurn: nextTurn,
         changeLifepoints: changeLifepoints,
         callback: callback,
         shuffleDeck: shuffleDeck,
+        shuffleHand: shuffleHand,
         players: {}, // holds socket references
         spectators: {}, // holds socket references
         decks: {

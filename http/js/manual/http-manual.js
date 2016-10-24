@@ -563,7 +563,7 @@ function manualReciver(message) {
         cardmargin(1, 'EXTRA');
         cardmargin(1, 'DECK');
         break;
-    case "revealTopCard":
+    case "reveal":
         reveal(message.cards);
         break;
     default:
@@ -685,6 +685,27 @@ function manualRevealTop() {
     'use strict';
     manualServer.send(JSON.stringify({
         action: 'revealTop'
+    }));
+}
+
+function manualRevealBottom() {
+    'use strict';
+    manualServer.send(JSON.stringify({
+        action: 'revealBottom'
+    }));
+}
+
+function manualRevealDeck() {
+    'use strict';
+    manualServer.send(JSON.stringify({
+        action: 'revealDeck'
+    }));
+}
+
+function manualRevealExtra() {
+    'use strict';
+    manualServer.send(JSON.stringify({
+        action: 'revealExtra'
     }));
 }
 
