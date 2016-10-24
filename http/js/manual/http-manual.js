@@ -564,7 +564,7 @@ function manualReciver(message) {
         cardmargin(1, 'DECK');
         break;
     case "reveal":
-        reveal(message.cards);
+        reveal(message.reveal);
         break;
     default:
         break;
@@ -864,7 +864,7 @@ $(document).ready(function () {
             idIndex = manualDuel.uidLookup(uid),
             stackunit = manualDuel.stack[idIndex],
             url = (stackunit.id) ? 'ygopro/pics/' + stackunit.id + '.jpg' : 'img/textures/cover.jpg';
-
+        console.log(uid, idIndex, stackunit, url);
         $('.imgContainer').attr('src', url);
     });
 });
