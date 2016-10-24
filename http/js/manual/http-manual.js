@@ -860,7 +860,12 @@ $(document).ready(function () {
     'use strict';
     serverconnect();
     $('body').on('mouseover', '.card', function (event) {
-        console.log(event);
+        var uid = event.currentTarget.id,
+            idIndex = manualDuel.uidLookup(uid),
+            stackunit = manualDuel.stack[idIndex],
+            url = (stackunit.id) ? 'ygopro/pics/' + stackunit.id + '.jpg' : 'img/textures/cover.jpg';
+
+        $('.imgContainer').attr('src', url);
     });
 });
 
