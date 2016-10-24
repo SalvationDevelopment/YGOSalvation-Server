@@ -820,7 +820,7 @@ function guicardclick(id, uid) {
         'display': 'block'
     });
     if (stackunit.location === 'DECK') {
-        $('.manualDraw, .manualShuffle, .manualMill, manualRevealTop, manualRevealBottom, .manualRevealDeck, .manualDeckBanish, .manualDeckBanishFaceDown, .manualViewDeck').css({
+        $('.manualDraw, .manualShuffle, .manualMill, .manualRevealTop, .manualRevealBottom, .manualRevealDeck, .manualDeckBanish, .manualDeckBanishFaceDown, .manualViewDeck').css({
             'display': 'block'
         });
         reorientmenu();
