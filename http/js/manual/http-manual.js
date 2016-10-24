@@ -859,16 +859,12 @@ function guicardclick(id, uid) {
 $(document).ready(function () {
     'use strict';
     serverconnect();
+    $('.imgContainer').attr('src', 'img/textures/cover.jpg');
     $('body').on('mouseover', '.card', function (event) {
         console.log(event.currentTarget, event.currentTarget.id);
-        var uid = event.currentTarget.id,
-            idIndex = manualDuel.uidLookup(uid),
-            stackunit = manualDuel.stack[idIndex],
-            url;
-        console.log(uid, idIndex, stackunit);
-        url = (stackunit.id) ? 'ygopro/pics/' + stackunit.id + '.jpg' : 'img/textures/cover.jpg';
+        var uid = event.currentTarget.id;
 
-        $('.imgContainer').attr('src', url);
+        $('.imgContainer').attr('src', $(uid).attr('src'));
     });
 });
 
