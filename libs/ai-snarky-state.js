@@ -509,22 +509,28 @@ function init(callback) {
      * Triggers a callback that reveals the given array of cards to end users.
      * @param {Array} reveal array of cards
      */
-    function revealCallback(reveal) {
+    function revealCallback(reveal, player, call) {
         callback({
             0: {
                 action: 'reveal',
                 info: state,
-                reveal: reveal
+                reveal: reveal,
+                call: call,
+                player: player
             },
             1: {
                 action: 'reveal',
                 info: state,
-                reveal: reveal
+                reveal: reveal,
+                call: call,
+                player: player
             },
             sepectators: {
                 action: 'reveal',
                 info: state,
-                reveal: reveal
+                reveal: reveal,
+                call: call,
+                player: player
             }
         }, stack);
     }
@@ -537,7 +543,7 @@ function init(callback) {
         var deck = filterlocation(filterPlayer(stack, player), 'DECK'),
             reveal = deck[deck.length - 1];
 
-        revealCallback([reveal]);
+        revealCallback([reveal], player, 'top');
 
     }
 
@@ -549,7 +555,7 @@ function init(callback) {
         var deck = filterlocation(filterPlayer(stack, player), 'DECK'),
             reveal = deck[0];
 
-        revealCallback([reveal]);
+        revealCallback([reveal], player, 'bottom');
     }
 
     /**
@@ -557,7 +563,7 @@ function init(callback) {
      * @param {number} player 
      */
     function revealDeck(player) {
-        revealCallback(filterlocation(filterPlayer(stack, player), 'DECK'));
+        revealCallback(filterlocation(filterPlayer(stack, player), 'DECK'), player, 'deck');
     }
 
     /**
@@ -565,7 +571,7 @@ function init(callback) {
      * @param {number} player 
      */
     function revealExtra(player) {
-        revealCallback(filterlocation(filterPlayer(stack, player), 'EXTRA'));
+        revealCallback(filterlocation(filterPlayer(stack, player), 'EXTRA'), player, 'extra');
     }
 
     /**
@@ -573,7 +579,7 @@ function init(callback) {
      * @param {number} player 
      */
     function revealHand(player) {
-        revealCallback(filterlocation(filterPlayer(stack, player), 'HAND'));
+        revealCallback(filterlocation(filterPlayer(stack, player), 'HAND'), player, 'hand');
     }
 
     /**

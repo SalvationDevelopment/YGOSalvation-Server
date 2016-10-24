@@ -516,9 +516,9 @@ function doGuiShuffle(player, deck) {
 function reveal(cards) {
     'use strict';
     var html = '';
-    $('#revealed').css('display', 'block');
+    $('#revealed').css('display', 'flex');
     cards.forEach(function (card, index) {
-        html += '<img src="http://ygopro.us/ygopro/pics/' + card + '.jpg" />';
+        html += '<img src="http://ygopro.us/ygopro/pics/' + card.id + '.jpg" />';
     });
     $('#revealed').html(html);
 }
@@ -812,7 +812,7 @@ function guicardclick(id, uid) {
         'display': 'block'
     });
     if (stackunit.location === 'DECK') {
-        $('.manualDraw, .manualShuffle, .manualMill, .manualRevealDeck, .manualDeckBanish, .manualDeckBanishFaceDown').css({
+        $('.manualDraw, .manualShuffle, .manualMill, manualRevealTop, manualRevealBottom, .manualRevealDeck, .manualDeckBanish, .manualDeckBanishFaceDown, .manualViewDeck').css({
             'display': 'block'
         });
         reorientmenu();
@@ -860,11 +860,14 @@ $(document).ready(function () {
     'use strict';
     serverconnect();
     $('body').on('mouseover', '.card', function (event) {
+        console.log(event.currentTarget, event.currentTarget.id);
         var uid = event.currentTarget.id,
             idIndex = manualDuel.uidLookup(uid),
             stackunit = manualDuel.stack[idIndex],
-            url = (stackunit.id) ? 'ygopro/pics/' + stackunit.id + '.jpg' : 'img/textures/cover.jpg';
-        console.log(uid, idIndex, stackunit, url);
+            url;
+        console.log(uid, idIndex, stackunit);
+        url = (stackunit.id) ? 'ygopro/pics/' + stackunit.id + '.jpg' : 'img/textures/cover.jpg';
+
         $('.imgContainer').attr('src', url);
     });
 });
