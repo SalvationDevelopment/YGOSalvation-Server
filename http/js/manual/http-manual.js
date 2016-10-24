@@ -516,6 +516,7 @@ function doGuiShuffle(player, deck) {
 function reveal(cards) {
     'use strict';
     var html = '';
+    $('#revealedclose').css('display', 'block');
     $('#revealed').css('display', 'flex');
     if (cards.length > 5) {
         html += "<div id='subreveal'>";

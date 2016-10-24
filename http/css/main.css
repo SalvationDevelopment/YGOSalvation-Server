@@ -1138,6 +1138,10 @@ div#selectwhogoesfirst {
     display: none;
 }
 
+#revealedclose {
+    display: none;
+}
+
 #revealed {
     width: 62vw;
     height: 50%;
