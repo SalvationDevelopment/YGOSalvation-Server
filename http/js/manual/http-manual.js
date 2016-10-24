@@ -517,9 +517,15 @@ function reveal(cards) {
     'use strict';
     var html = '';
     $('#revealed').css('display', 'flex');
+    if (cards.length > 5) {
+        html += "<div id='subreveal'>";
+    }
     cards.forEach(function (card, index) {
         html += '<img src="http://ygopro.us/ygopro/pics/' + card.id + '.jpg" />';
     });
+    if (cards.length > 5) {
+        html += "</div>";
+    }
     $('#revealed').html(html);
 }
 
@@ -864,7 +870,7 @@ $(document).ready(function () {
         console.log(event.currentTarget, event.currentTarget.id);
         var uid = event.currentTarget.id;
 
-        $('.imgContainer').attr('src', $(uid).attr('src'));
+        $('.imgContainer').attr('src', $('#' + uid).attr('src'));
     });
 });
 
