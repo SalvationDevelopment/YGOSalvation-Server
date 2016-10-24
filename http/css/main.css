@@ -1140,6 +1140,17 @@ div#selectwhogoesfirst {
 
 #revealedclose {
     display: none;
+    width: 40px;
+    height: 40px;
+    position: fixed;
+    top: 30vh;
+    background: black;
+    left: 80.5vw;
+    z-index: 800;
+    border-radius: 50px;
+    border-color: white;
+    box-shadow: inset 0px 0px 9px #aaa;
+    border: 2px solid;
 }
 
 #revealed {
