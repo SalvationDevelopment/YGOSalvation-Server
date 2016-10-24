@@ -184,6 +184,18 @@ function responseHandler(socket, message) {
     case "revealTop":
         stateSystem[socket.activeduel].revealTop(socket.slot);
         break;
+    case "revealBottom":
+        stateSystem[socket.activeduel].revealBottom(socket.slot);
+        break;
+    case "revealDeck":
+        stateSystem[socket.activeduel].revealDeck(socket.slot);
+        break;
+    case "revealExtra":
+        stateSystem[socket.activeduel].revealExtra(socket.slot);
+        break;
+    case "revealHand":
+        stateSystem[socket.activeduel].revealHand(socket.slot);
+        break;
     case "shuffleDeck":
         stateSystem[socket.activeduel].shuffleDeck(socket.slot);
         break;

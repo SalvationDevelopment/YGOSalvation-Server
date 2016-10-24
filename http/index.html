@@ -1812,8 +1812,11 @@
             <input id="sidechatinput">
         </div>
         <div id="manualcontrols">
-            <button class="manualRevealHand">Reveal</button>
-            <button class="manualRevealDeck">Reveal</button>
+            <button class="manualRevealHand" onlclick="manualRevealHand()">Reveal</button>
+            <button class="manualRevealDeck" onlclick="manualRevealHand()">Reveal Deck</button>
+            <button class="manualRevealExtra" onlclick="manualRevealHand()">Reveal Extra Deck</button>
+            <button class="manualRevealTop" onlclick="manualRevealHand()">Reveal Deck</button>
+            <button class="manualRevealBottom" onlclick="manualRevealHand()">Reveal Deck</button>
             <button class="manualToBottom">To Bottom of Deck</button>
             <button class="manualToTop">To Top of Deck</button>
             <button class="manualToSetTrapSpell">Set in S/T</button>
@@ -1830,7 +1833,7 @@
             <button class="manualActivateFieldSpell">Activate Field Spell</button>
             <button class="manualViewExtra">View Extra Deck</button>
             <button class="manualToExtaFaceDown">Send to Extra Deck</button>
-            <button class="manualRevealExta">Reveal Extra Deck</button>
+
             <button class="manualToExtraFaceUp">To Extra Deck Face Up</button>
             <button class="moveChangeControl">Change Owner</button>
             <button class="manualOverlay">Overlay</button>
