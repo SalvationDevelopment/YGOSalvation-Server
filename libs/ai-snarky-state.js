@@ -514,17 +514,17 @@ function init(callback) {
             0: {
                 action: 'reveal',
                 info: state,
-                reveal: [reveal]
+                reveal: reveal
             },
             1: {
                 action: 'reveal',
                 info: state,
-                reveal: [reveal]
+                reveal: reveal
             },
             sepectators: {
                 action: 'reveal',
                 info: state,
-                reveal: [reveal]
+                reveal: reveal
             }
         }, stack);
     }
