@@ -528,7 +528,7 @@ function reveal(cards) {
         html += "</div>";
     }
     $('#revealed').html(html);
-    $('subreveal').width(cards.length * 197)
+    $('#subreveal').width(cards.length * 197);
 }
 
 function manualReciver(message) {
@@ -873,6 +873,11 @@ $(document).ready(function () {
         var uid = event.currentTarget.id;
 
         $('.imgContainer').attr('src', $('#' + uid).attr('src'));
+    });
+    $('#manualcontrols button').click(function () {
+        $('#manualcontrols button').css({
+            'display': 'none'
+        });
     });
 });
 
