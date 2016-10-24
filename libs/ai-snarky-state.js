@@ -506,10 +506,72 @@ function init(callback) {
     }
 
     /**
+     * Triggers a callback that reveals the given array of cards to end users.
+     * @param {Array} reveal array of cards
+     */
+    function revealCallback(reveal) {
+        callback({
+            0: {
+                action: 'revealTop',
+                info: state,
+                reveal: [reveal]
+            },
+            1: {
+                action: 'revealTop',
+                info: state,
+                reveal: [reveal]
+            },
+            sepectators: {
+                action: 'revealTop',
+                info: state,
+                reveal: [reveal]
+            }
+        }, stack);
+    }
+
+    /**
+     * Reveal the top card of the players deck.
+     * @param {number} player 
+     */
+    function revealTop(player) {
+        var deck = filterlocation(filterPlayer(stack, player), 'DECK'),
+            reveal = deck[deck.length - 1];
+
+        revealCallback([reveal]);
+
+    }
+
+    /**
+     * Reveal the bottom card of the players deck.
+     * @param {number} player 
+     */
+    function revealBottom(player) {
+        var deck = filterlocation(filterPlayer(stack, player), 'DECK'),
+            reveal = deck[0];
+
+        revealCallback([reveal]);
+    }
+
+    /**
+     * Reveal the players deck.
+     * @param {number} player 
+     */
+    function revealDeck(player) {
+        revealCallback(filterlocation(filterPlayer(stack, player), 'DECK'));
+    }
+
+    /**
+     * Reveal the players extra deck.
+     * @param {number} player 
+     */
+    function revealExtra(player) {
+        revealCallback(filterlocation(filterPlayer(stack, player), 'EXTRA'));
+    }
+
+    /**
      * Exposed method to initialize the field; You only run this once.
      */
     function startDuel(player1, player2) {
-
 
         shuffle(player1.main);
         shuffle(player2.main);
@@ -668,6 +730,9 @@ function init(callback) {
         millCard: millCard,
         millRemovedCard: millRemovedCard,
         millRemovedCardFaceDown: millRemovedCardFaceDown,
+        revealTop: revealTop,
+        revealBottom: revealBottom,
+        revealDeck: revealDeck,
         nextPhase: nextPhase,
         nextTurn: nextTurn,
         changeLifepoints: changeLifepoints,

@@ -681,6 +681,12 @@ function manualShuffleDeck() {
     }));
 }
 
+function manualRevealTop() {
+    'use strict';
+    manualServer.send(JSON.stringify({
+        action: 'revealTop'
+    }));
+}
 
 function manualMill() {
     'use strict';
@@ -688,6 +694,7 @@ function manualMill() {
         action: 'mill'
     }));
 }
+
 
 function manualMillRemovedCard() {
     'use strict';

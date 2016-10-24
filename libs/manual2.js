@@ -181,6 +181,9 @@ function responseHandler(socket, message) {
     case "moveCard":
         stateSystem[socket.activeduel].setState(message.player, message.clocation, message.index, message.moveplayer, message.movelocation, message.moveindex, message.moveposition, message.overlayindex, message.isBecomingCard);
         break;
+    case "revealTop":
+        stateSystem[socket.activeduel].revealTop(socket.slot);
+        break;
     case "shuffleDeck":
         stateSystem[socket.activeduel].shuffleDeck(socket.slot);
         break;
