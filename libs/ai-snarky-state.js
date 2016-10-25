@@ -541,7 +541,7 @@ function init(callback) {
      */
     function revealTop(player) {
         var deck = filterlocation(filterPlayer(stack, player), 'DECK'),
-            reveal = deck[deck.length - 1];
+            reveal = deck[0];
 
         revealCallback([reveal], player, 'top');
 
@@ -552,8 +552,8 @@ function init(callback) {
      * @param {number} player 
      */
     function revealBottom(player) {
-        var deck = filterlocation(filterPlayer(stack, player), 'DECK'),
-            reveal = deck[0];
+        var deck = filterlocation(filterPlayer(stack, player), 'DECK').reverse(),
+            reveal = deck[deck.length - 1];
 
         revealCallback([reveal], player, 'bottom');
     }
@@ -609,7 +609,7 @@ function init(callback) {
         result[player] = {
             action: 'reveal',
             info: state,
-            reveal: deck,
+            reveal: deck.reverse(),
             call: 'view',
             player: player
         };
