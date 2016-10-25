@@ -587,26 +587,32 @@ function init(callback) {
         var deck = filterlocation(filterPlayer(stack, player), 'DECK'),
             result = {
                 0: {
-                    action: 'reveal',
+                    action: 'server',
                     info: state,
-                    reveal: deck,
-                    call: 'view',
+                    call: 'Viewing Deck',
                     player: player
                 },
                 1: {
-                    action: 'reveal',
+                    action: 'server',
                     info: state,
-                    call: 'view',
+                    call: 'Viewing Deck',
                     player: player
                 },
                 sepectators: {
-                    action: 'reveal',
+                    action: 'server',
                     info: state,
-                    call: 'view',
+                    call: 'Viewing Deck',
                     player: player
                 }
             };
 
+        result[player] = {
+            action: 'reveal',
+            info: state,
+            reveal: deck,
+            call: 'view',
+            player: player
+        };
 
         callback(result, stack);
 
