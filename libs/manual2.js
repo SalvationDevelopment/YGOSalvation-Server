@@ -196,6 +196,9 @@ function responseHandler(socket, message) {
     case "revealHand":
         stateSystem[socket.activeduel].revealHand(socket.slot);
         break;
+    case "viewDeck":
+        stateSystem[socket.activeduel].viewDeck(socket.slot);
+        break;
     case "shuffleDeck":
         stateSystem[socket.activeduel].shuffleDeck(socket.slot);
         break;

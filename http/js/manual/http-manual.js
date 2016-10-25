@@ -513,7 +513,7 @@ function doGuiShuffle(player, deck) {
     guishuffle('p' + player, deck);
 }
 
-function reveal(cards) {
+function reveal(cards, note) {
     'use strict';
     var html = '';
     $('#revealedclose').css('display', 'block');
@@ -573,7 +573,7 @@ function manualReciver(message) {
         cardmargin(1, 'DECK');
         break;
     case "reveal":
-        reveal(message.reveal);
+        reveal(message.reveal, message.call);
         break;
     default:
         break;
@@ -737,6 +737,13 @@ function manualMillRemovedCardFaceDown() {
     'use strict';
     manualServer.send(JSON.stringify({
         action: 'millRemovedCardFaceDown'
+    }));
+}
+
+function manualViewDeck() {
+    'use strict';
+    manualServer.send(JSON.stringify({
+        action: 'viewDeck'
     }));
 }
 

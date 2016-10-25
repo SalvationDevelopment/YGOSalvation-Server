@@ -582,6 +582,36 @@ function init(callback) {
         revealCallback(filterlocation(filterPlayer(stack, player), 'HAND'), player, 'hand');
     }
 
+
+    function viewDeck(player) {
+        var deck = filterlocation(filterPlayer(stack, player), 'DECK'),
+            result = {
+                0: {
+                    action: 'reveal',
+                    info: state,
+                    reveal: deck,
+                    call: 'view',
+                    player: player
+                },
+                1: {
+                    action: 'reveal',
+                    info: state,
+                    call: 'view',
+                    player: player
+                },
+                sepectators: {
+                    action: 'reveal',
+                    info: state,
+                    call: 'view',
+                    player: player
+                }
+            };
+
+
+        callback(result, stack);
+
+    }
+
     /**
      * Exposed method to initialize the field; You only run this once.
      */
@@ -749,6 +779,7 @@ function init(callback) {
         revealBottom: revealBottom,
         revealDeck: revealDeck,
         revealExtra: revealExtra,
+        viewDeck: viewDeck,
         nextPhase: nextPhase,
         nextTurn: nextTurn,
         changeLifepoints: changeLifepoints,
