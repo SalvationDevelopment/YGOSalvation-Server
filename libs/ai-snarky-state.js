@@ -563,7 +563,7 @@ function init(callback) {
      * @param {number} player 
      */
     function revealDeck(player) {
-        revealCallback(filterlocation(filterPlayer(stack, player), 'DECK'), player, 'deck').reveal();
+        revealCallback(filterlocation(filterPlayer(stack, player), 'DECK'), player, 'deck').reverse();
     }
 
     /**
