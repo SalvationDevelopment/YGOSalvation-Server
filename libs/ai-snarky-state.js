@@ -736,7 +736,7 @@ function init(callback) {
         deck.forEach(function (card, index) {
             card.id = idCollection[index]; // finalize the shuffle
         });
-        callback(generateView('shuffleDeck' + player), stack); // alert UI of the shuffle.
+        callback(generateView('shuffleHand' + player), stack); // alert UI of the shuffle.
     }
 
 

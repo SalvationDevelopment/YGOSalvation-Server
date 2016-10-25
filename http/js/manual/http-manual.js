@@ -676,6 +676,13 @@ function manualMoveCard(movement) {
     manualServer.send(JSON.stringify(movement));
 }
 
+function manualShuffleHand() {
+    'use strict';
+    manualServer.send(JSON.stringify({
+        action: 'shuffleHand'
+    }));
+}
+
 function manualDraw() {
     'use strict';
     manualServer.send(JSON.stringify({
