@@ -122,7 +122,6 @@ function linkStack(field) {
     });
 }
 
-
 function Card(movelocation, player, index, unique) {
     'use strict';
     return {
@@ -895,7 +894,7 @@ function makeRemoved(card, index) {
 function setMonster(card, index) {
     'use strict';
     var end = makeMonster(card, index);
-    end.position = 'FaceDownDefense';
+    end.position = 'FaceDownDefence';
     return end;
 }
 
@@ -1123,16 +1122,13 @@ $(document).ready(function () {
         $('.imgContainer').attr('src', $('#' + uid).attr('src'));
     });
     $('#manualcontrols button').click(function () {
-        $('#manualcontrols button').css({
-            'opacity': '.5'
-        });
+
         setTimeout(function () {
             $('#manualcontrols button').css({
-                'display': 'none',
-                'opacity': '1'
+                'display': 'none'
             });
-        });
-    }, 600);
+        }, 600);
+    });
 });
 
 $(document).mousemove(function (event) {
