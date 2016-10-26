@@ -899,6 +899,17 @@ function manualNormalSummon() {
     manualServer.send(JSON.stringify(message));
 }
 
+function manualActivate() {
+    'use strict';
+
+    var index = automaticZonePicker(manualActionReference.player, 'SPELLZONE'),
+        end = makeMonster(manualActionReference, index),
+        message = makeCardMovement(manualActionReference, end);
+
+    message.action = 'moveCard';
+    manualServer.send(JSON.stringify(message));
+}
+
 
 var currentMousePos = {
     x: -1,
