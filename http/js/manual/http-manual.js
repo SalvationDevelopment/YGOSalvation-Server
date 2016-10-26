@@ -516,22 +516,27 @@ function doGuiShuffle(player, deck) {
 
 function automaticZonePicker(player, zone) {
     'use strict';
+    console.log('.p' + player + '.' + zone + '.i2');
+    var result;
     if ($('.p' + player + '.' + zone + '.i2').length) {
-        return 2;
+        result = 2;
     }
     if ($('.p' + player + '.' + zone + '.i1').length) {
-        return 1;
+        result = 1;
     }
     if ($('.p' + player + '.' + zone + '.i3').length) {
-        return 3;
+        result = 3;
     }
     if ($('.p' + player + '.' + zone + '.i0').length) {
-        return 0;
+        result = 0;
     }
     if ($('.p' + player + '.' + zone + '.i4').length) {
-        return 4;
+        result = 4;
     }
-    throw new Error();
+    if (result === undefined) {
+        throw new Error();
+    }
+    return result;
 
 }
 
@@ -899,11 +904,33 @@ function manualNormalSummon() {
     manualServer.send(JSON.stringify(message));
 }
 
+function manualSetMonster() {
+    'use strict';
+
+    var index = automaticZonePicker(manualActionReference.player, 'MONSTERZONE'),
+        end = setMonster(manualActionReference, index),
+        message = makeCardMovement(manualActionReference, end);
+
+    message.action = 'moveCard';
+    manualServer.send(JSON.stringify(message));
+}
+
 function manualActivate() {
     'use strict';
 
     var index = automaticZonePicker(manualActionReference.player, 'SPELLZONE'),
-        end = makeMonster(manualActionReference, index),
+        end = makeSpell(manualActionReference, index),
+        message = makeCardMovement(manualActionReference, end);
+
+    message.action = 'moveCard';
+    manualServer.send(JSON.stringify(message));
+}
+
+function manualSetSpell() {
+    'use strict';
+
+    var index = automaticZonePicker(manualActionReference.player, 'SPELLZONE'),
+        end = setSpell(manualActionReference, index),
         message = makeCardMovement(manualActionReference, end);
 
     message.action = 'moveCard';
