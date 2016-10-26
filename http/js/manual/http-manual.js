@@ -519,19 +519,19 @@ function automaticZonePicker(realPlayer, zone) {
     var player = orient(realPlayer),
         result;
 
-    if ($('.p' + player + '.' + zone + '.i2').length) {
+    if ($('#automationduelfield .p' + player + '.' + zone + '.i2').length) {
         result = 2;
     }
-    if ($('.p' + player + '.' + zone + '.i1').length) {
+    if ($('#automationduelfield .p' + player + '.' + zone + '.i1').length) {
         result = 1;
     }
-    if ($('.p' + player + '.' + zone + '.i3').length) {
+    if ($('#automationduelfield .p' + player + '.' + zone + '.i3').length) {
         result = 3;
     }
-    if ($('.p' + player + '.' + zone + '.i0').length) {
+    if ($('#automationduelfield .p' + player + '.' + zone + '.i0').length) {
         result = 0;
     }
-    if ($('.p' + player + '.' + zone + '.i4').length) {
+    if ($('#automationduelfield .p' + player + '.' + zone + '.i4').length) {
         result = 4;
     }
     if (result === undefined) {
