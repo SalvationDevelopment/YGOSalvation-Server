@@ -999,8 +999,7 @@ function manualSetSpell() {
 function manualActivateField() {
     'use strict';
 
-    var index = automaticZonePicker(manualActionReference.player, 'SPELLZONE'),
-        end = setSpell(manualActionReference, index),
+    var end = setSpell(manualActionReference, 5),
         message = makeCardMovement(manualActionReference, end);
 
     message.action = 'moveCard';
@@ -1080,7 +1079,17 @@ function manualToRemovedFacedown() {
 function manualToPZoneL() {
     'use strict';
 
-    var end = makeCardMovement(manualActionReference),
+    var end = setSpell(manualActionReference, 6),
+        message = makeCardMovement(manualActionReference, end);
+
+    message.action = 'moveCard';
+    manualServer.send(JSON.stringify(message));
+}
+
+function manualToPZoneR() {
+    'use strict';
+
+    var end = setSpell(manualActionReference, 7),
         message = makeCardMovement(manualActionReference, end);
 
     message.action = 'moveCard';
