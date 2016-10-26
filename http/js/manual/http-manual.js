@@ -1057,6 +1057,25 @@ function manualToGrave() {
     manualServer.send(JSON.stringify(message));
 }
 
+function manualToRemoved() {
+    'use strict';
+    var index = $('#automationduelfield .p' + orient(manualActionReference.player) + '.REMOVED').length,
+        end = makeRemoved(manualActionReference, index),
+        message = makeCardMovement(manualActionReference, end);
+
+    message.action = 'moveCard';
+    manualServer.send(JSON.stringify(message));
+}
+function manualToRemovedFacedown() {
+    'use strict';
+    var index = $('#automationduelfield .p' + orient(manualActionReference.player) + '.REMOVED').length,
+        end = makeRemoved(manualActionReference, index),
+        message = makeCardMovement(manualActionReference, end);
+    message.moveposition = 'FaceDown';
+    message.action = 'moveCard';
+    manualServer.send(JSON.stringify(message));
+}
+
 
 function manualToPZoneL() {
     'use strict';
