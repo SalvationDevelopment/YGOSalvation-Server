@@ -514,10 +514,11 @@ function doGuiShuffle(player, deck) {
     guishuffle('p' + player, deck);
 }
 
-function automaticZonePicker(player, zone) {
+function automaticZonePicker(realPlayer, zone) {
     'use strict';
-    console.log('.p' + player + '.' + zone + '.i2');
-    var result;
+    var player = orient(realPlayer),
+        result;
+
     if ($('.p' + player + '.' + zone + '.i2').length) {
         result = 2;
     }
