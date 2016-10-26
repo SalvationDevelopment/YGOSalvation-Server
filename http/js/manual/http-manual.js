@@ -5,7 +5,8 @@ var manualServer,
     broadcast,
     activegame,
     duelstarted = false,
-    orientSlot = 0;
+    orientSlot = 0,
+    manualActionReference;
 
 function updateloby(state) {
     'use strict';
@@ -513,6 +514,27 @@ function doGuiShuffle(player, deck) {
     guishuffle('p' + player, deck);
 }
 
+function automaticZonePicker(player, zone) {
+    'use strict';
+    if ($('.p' + player + '.' + zone + '.i2').length) {
+        return 2;
+    }
+    if ($('.p' + player + '.' + zone + '.i1').length) {
+        return 1;
+    }
+    if ($('.p' + player + '.' + zone + '.i3').length) {
+        return 3;
+    }
+    if ($('.p' + player + '.' + zone + '.i0').length) {
+        return 0;
+    }
+    if ($('.p' + player + '.' + zone + '.i4').length) {
+        return 4;
+    }
+    throw new Error();
+
+}
+
 function reveal(cards, note) {
     'use strict';
     var html = '';
@@ -670,9 +692,6 @@ function manualChangeLifepoints(amount) {
 
 function manualMoveCard(movement) {
     'use strict';
-    Object.assign(movement, {
-        action: 'moveCard'
-    });
     manualServer.send(JSON.stringify(movement));
 }
 
@@ -682,6 +701,8 @@ function manualShuffleHand() {
         action: 'shuffleHand'
     }));
 }
+
+
 
 function manualDraw() {
     'use strict';
@@ -781,12 +802,102 @@ $.getJSON('http://ygopro.us/manifest/database_0-en-OCGTCG.json', function (data)
     var internalDB = data;
 });
 
+function makeMonster(card, index) {
+    'use strict';
+    return {
+        player: card.player,
+        location: 'MONSTERZONE',
+        index: index,
+        position: 'FaceUpAttack',
+        overlayindex: 0,
+        isBecomingCard: false
+    };
+}
+
+function makeSpell(card, index) {
+    'use strict';
+    return {
+        player: card.player,
+        location: 'SPELLZONE',
+        index: index,
+        position: 'FaceUp',
+        overlayindex: 0,
+        isBecomingCard: false
+    };
+}
 
 
+function setMonster(card, index) {
+    'use strict';
+    var end = makeMonster(card, index);
+    end.position = 'FaceDownDefense';
+    return end;
+}
+
+function setSpell(card, index) {
+    'use strict';
+    var end = makeSpell(card, index);
+    end.position = 'FaceDown';
+    return end;
+}
+
+function makeField(card) {
+    'use strict';
+    return makeSpell(card, 5);
+}
+
+function makeFieldFacedown(card) {
+    'use strict';
+    var end = setSpell(card, 5);
+    return end;
+}
+
+function makePendulumZoneL(card) {
+    'use strict';
+    return makeSpell(card, 6);
+}
+
+function makePendulumZoneR(card) {
+    'use strict';
+    return makeSpell(card, 7);
+}
+
+function makeCardMovement(start, end) {
+    'use strict';
+    if (end.position === undefined) {
+        end.position = start.position;
+    }
+    if (end.overlayindex === undefined) {
+        end.overlayindex = 0;
+    }
+    if (end.isBecomingCard === undefined) {
+        end.isBecomingCard = false;
+    }
+    return {
+        code: start.code,
+        player: start.player,
+        clocation: start.location,
+        index: start.index,
+        moveplayer: end.player,
+        movelocation: end.location,
+        moveindex: end.index,
+        moveposition: end.position,
+        overlayindex: end.overlayindex,
+        isBecomingCard: end.isBecomingCard
+    };
+}
 
 
+function manualNormalSummon() {
+    'use strict';
 
+    var index = automaticZonePicker(manualActionReference.player, 'MONSTERZONE'),
+        end = makeMonster(manualActionReference, index),
+        message = makeCardMovement(manualActionReference, end);
 
+    message.action = 'moveCard';
+    manualServer.send(JSON.stringify(message));
+}
 
 
 var currentMousePos = {
@@ -794,7 +905,7 @@ var currentMousePos = {
     y: -1
 };
 
-var manualActionReference;
+
 
 function reorientmenu() {
     'use strict';
