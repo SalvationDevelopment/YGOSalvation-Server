@@ -82,16 +82,16 @@ div#selectionsystem {
 .p1.MONSTERZONE.i4,.overlayunit.p1.i4     {top :154px; right:541px;}
 
 
-.p0[data-postition=FaceDown],  {transform: rotate3d(0,0,0,0deg );
+.p0[data-position=FaceDown],  {transform: rotate3d(0,1,0,180deg )
     content:url(http://ygopro.us/img/textures/cover.jpg) }
-.p0[data-postition=FaceDownAttack],  {transform: rotate3d(0,0,0,0deg );
+.p0[data-position=FaceDownAttack],  {transform: rotate3d(0,0,0,0deg );
     content:url(http://ygopro.us/img/textures/cover.jpg) }
 .p0[data-position=FaceDownDefence]{transform: rotate(90deg );
     content: url(http://ygopro.us/img/textures/cover.jpg) }
 .p0[data-position=FaceUpDefence] { transform: rotate(90deg ); }
 .p0[data-position=AttackFaceUp],.p0[data-position=FaceUp]  {transform: rotate3d(0,0,0,0deg ); }
 
-.p1[data-position=FaceDown], {transform: rotate3d(0,0,1,180deg );
+.p1[data-position=FaceDown], {rotate3d(0,1,0,180deg );
     content:url(http://ygopro.us/img/textures/cover.jpg) }
 .p1[data-position=FaceDownAttack], {transform: rotate3d(0,0,1,180deg );
     content:url(http://ygopro.us/img/textures/cover.jpg) }
