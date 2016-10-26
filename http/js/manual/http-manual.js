@@ -519,20 +519,20 @@ function automaticZonePicker(realPlayer, zone) {
     var player = orient(realPlayer),
         result;
 
-    if ($('#automationduelfield .p' + player + '.' + zone + '.i2').length < 1) {
-        result = 2;
+    if ($('#automationduelfield .p' + player + '.' + zone + '.i4').length < 1) {
+        result = 4;
     }
     if ($('#automationduelfield .p' + player + '.' + zone + '.i1').length < 1) {
         result = 1;
     }
-    if ($('#automationduelfield .p' + player + '.' + zone + '.i3').length < 1) {
-        result = 3;
+    if ($('#automationduelfield .p' + player + '.' + zone + '.i2').length < 1) {
+        result = 2;
     }
     if ($('#automationduelfield .p' + player + '.' + zone + '.i0').length < 1) {
         result = 0;
     }
-    if ($('#automationduelfield .p' + player + '.' + zone + '.i4').length < 1) {
-        result = 4;
+    if ($('#automationduelfield .p' + player + '.' + zone + '.i3').length < 1) {
+        result = 3;
     }
     if (result === undefined) {
         throw new Error();
@@ -832,6 +832,65 @@ function makeSpell(card, index) {
     };
 }
 
+function makeHand(card, index) {
+    'use strict';
+    return {
+        player: card.player,
+        location: 'HAND',
+        index: index,
+        position: 'FaceUp',
+        overlayindex: 0,
+        isBecomingCard: false
+    };
+}
+
+function makeDeck(card, index) {
+    'use strict';
+    return {
+        player: card.player,
+        location: 'DECK',
+        index: index,
+        position: 'FaceDown',
+        overlayindex: 0,
+        isBecomingCard: false
+    };
+}
+
+function makeExtra(card, index) {
+    'use strict';
+    return {
+        player: card.player,
+        location: 'EXTRA',
+        index: index,
+        position: 'FaceDown',
+        overlayindex: 0,
+        isBecomingCard: false
+    };
+}
+
+function makeGrave(card, index) {
+    'use strict';
+    return {
+        player: card.player,
+        location: 'GRAVE',
+        index: index,
+        position: 'FaceUp',
+        overlayindex: 0,
+        isBecomingCard: false
+    };
+}
+
+function makeRemoved(card, index) {
+    'use strict';
+    return {
+        player: card.player,
+        location: 'REMOVED',
+        index: index,
+        position: 'FaceUp',
+        overlayindex: 0,
+        isBecomingCard: false
+    };
+}
 
 function setMonster(card, index) {
     'use strict';
@@ -939,6 +998,28 @@ function manualSetSpell() {
 }
 
 
+function manualToHand() {
+    'use strict';
+    var index = $('#automationduelfield .p' + orient(manualActionReference.player) + '.HAND').length,
+        end = makeHand(manualActionReference, index),
+        message = makeCardMovement(manualActionReference, end);
+
+    message.action = 'moveCard';
+    manualServer.send(JSON.stringify(message));
+}
+
+function manualToTopOfDeck() {
+    'use strict';
+    var index = $('#automationduelfield .p' + orient(manualActionReference.player) + '.DECK').length,
+        end = makeDeck(manualActionReference, index),
+        message = makeCardMovement(manualActionReference, end);
+
+    message.action = 'moveCard';
+    manualServer.send(JSON.stringify(message));
+}
+
+
+
 var currentMousePos = {
     x: -1,
     y: -1
@@ -951,11 +1032,13 @@ function reorientmenu() {
     var height = $('#manualcontrols').height(),
         width = $('#manualcontrols').width() / 2;
 
+
     $('#manualcontrols').css({
         'top': currentMousePos.y - height,
         'left': currentMousePos.x - width,
         'display': 'block'
     });
+
 }
 
 function guicardclick(id, uid) {
@@ -1041,9 +1124,15 @@ $(document).ready(function () {
     });
     $('#manualcontrols button').click(function () {
         $('#manualcontrols button').css({
-            'display': 'none'
+            'opacity': '.5'
         });
-    });
+        setTimeout(function () {
+            $('#manualcontrols button').css({
+                'display': 'none',
+                'opacity': '1'
+            });
+        });
+    }, 600);
 });
 
 $(document).mousemove(function (event) {
