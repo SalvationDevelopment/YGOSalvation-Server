@@ -996,6 +996,17 @@ function manualSetSpell() {
     manualServer.send(JSON.stringify(message));
 }
 
+function manualActivateField() {
+    'use strict';
+
+    var index = automaticZonePicker(manualActionReference.player, 'SPELLZONE'),
+        end = setSpell(manualActionReference, index),
+        message = makeCardMovement(manualActionReference, end);
+
+    message.action = 'moveCard';
+    manualServer.send(JSON.stringify(message));
+}
+
 
 function manualToHand() {
     'use strict';
@@ -1017,7 +1028,45 @@ function manualToTopOfDeck() {
     manualServer.send(JSON.stringify(message));
 }
 
+function manualToBottomOfDeck() {
+    'use strict';
+    var index = -1,
+        end = makeDeck(manualActionReference, index),
+        message = makeCardMovement(manualActionReference, end);
 
+    message.action = 'moveCard';
+    manualServer.send(JSON.stringify(message));
+}
+
+function manualToTopOfExtra() {
+    'use strict';
+    var index = $('#automationduelfield .p' + orient(manualActionReference.player) + '.EXTRA').length,
+        end = makeExtra(manualActionReference, index),
+        message = makeCardMovement(manualActionReference, end);
+
+    message.action = 'moveCard';
+    manualServer.send(JSON.stringify(message));
+}
+function manualToGrave() {
+    'use strict';
+    var index = $('#automationduelfield .p' + orient(manualActionReference.player) + '.GRAVE').length,
+        end = makeGrave(manualActionReference, index),
+        message = makeCardMovement(manualActionReference, end);
+
+    message.action = 'moveCard';
+    manualServer.send(JSON.stringify(message));
+}
+
+
+function manualToPZoneL() {
+    'use strict';
+
+    var end = makeCardMovement(manualActionReference),
+        message = makeCardMovement(manualActionReference, end);
+
+    message.action = 'moveCard';
+    manualServer.send(JSON.stringify(message));
+}
 
 var currentMousePos = {
     x: -1,
