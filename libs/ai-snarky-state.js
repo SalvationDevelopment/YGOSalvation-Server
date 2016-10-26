@@ -771,6 +771,7 @@ function init(callback) {
     //expose public functions.
     return {
         startDuel: startDuel,
+        setState: setState,
         updateData: updateData,
         updateCard: updateCard,
         cardCollections: cardCollections,
