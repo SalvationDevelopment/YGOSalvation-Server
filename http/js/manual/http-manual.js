@@ -1204,6 +1204,7 @@ $(document).ready(function () {
             $('#manualcontrols button').css({
                 'display': 'none'
             });
+            $('#sidechatinput').focus();
         }, 600);
     });
 });
