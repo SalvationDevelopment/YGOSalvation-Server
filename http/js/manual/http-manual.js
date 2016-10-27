@@ -905,12 +905,12 @@ function setSpell(card, index) {
     return end;
 }
 
-function makeField(card) {
+function makeFieldSpell(card) {
     'use strict';
     return makeSpell(card, 5);
 }
 
-function makeFieldFacedown(card) {
+function makeFieldSpellFacedown(card) {
     'use strict';
     var end = setSpell(card, 5);
     return end;
@@ -985,6 +985,16 @@ function manualActivate() {
     manualServer.send(JSON.stringify(message));
 }
 
+function manualActivateFieldSpell() {
+    'use strict';
+
+    var end = makeFieldSpell(manualActionReference),
+        message = makeCardMovement(manualActionReference, end);
+
+    message.action = 'moveCard';
+    manualServer.send(JSON.stringify(message));
+}
+
 function manualSetSpell() {
     'use strict';
 
@@ -1029,7 +1039,7 @@ function manualToTopOfDeck() {
 
 function manualToBottomOfDeck() {
     'use strict';
-    var index = -1,
+    var index = 0,
         end = makeDeck(manualActionReference, index),
         message = makeCardMovement(manualActionReference, end);
 
@@ -1046,6 +1056,7 @@ function manualToTopOfExtra() {
     message.action = 'moveCard';
     manualServer.send(JSON.stringify(message));
 }
+
 function manualToGrave() {
     'use strict';
     var index = $('#automationduelfield .p' + orient(manualActionReference.player) + '.GRAVE').length,
@@ -1065,6 +1076,17 @@ function manualToRemoved() {
     message.action = 'moveCard';
     manualServer.send(JSON.stringify(message));
 }
+
+function manualToExtra() {
+    'use strict';
+    var index = $('#automationduelfield .p' + orient(manualActionReference.player) + '.EXTRA').length,
+        end = makeExtra(manualActionReference, index),
+        message = makeCardMovement(manualActionReference, end);
+
+    message.action = 'moveCard';
+    manualServer.send(JSON.stringify(message));
+}
+
 function manualToRemovedFacedown() {
     'use strict';
     var index = $('#automationduelfield .p' + orient(manualActionReference.player) + '.REMOVED').length,
