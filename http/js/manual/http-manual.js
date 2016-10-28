@@ -1333,7 +1333,7 @@ $(document).ready(function () {
 
         var uid = event.currentTarget.id,
             id = $('#' + uid).attr('data-id'),
-            html = getCardObject(id);
+            html = makeDescription(id);
         console.log(event.currentTarget, event.currentTarget.id);
         $('.imgContainer').attr('src', $('#' + uid).attr('src'));
         $('.cardDescription').html(html);
