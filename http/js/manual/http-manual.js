@@ -898,6 +898,13 @@ function setMonster(card, index) {
     return end;
 }
 
+function defenceMonster(card, index) {
+    'use strict';
+    var end = makeMonster(card, index);
+    end.position = 'FaceUpDefence';
+    return end;
+}
+
 function setSpell(card, index) {
     'use strict';
     var end = makeSpell(card, index);
@@ -910,7 +917,7 @@ function makeFieldSpell(card) {
     return makeSpell(card, 5);
 }
 
-function makeFieldSpellFacedown(card) {
+function makeFieldSpellFaceDown(card) {
     'use strict';
     var end = setSpell(card, 5);
     return end;
@@ -974,6 +981,17 @@ function manualSetMonster() {
     manualServer.send(JSON.stringify(message));
 }
 
+function manualSetMonsterFaceUp() {
+    'use strict';
+
+    var index = automaticZonePicker(manualActionReference.player, 'MONSTERZONE'),
+        end = defenceMonster(manualActionReference, index),
+        message = makeCardMovement(manualActionReference, end);
+
+    message.action = 'moveCard';
+    manualServer.send(JSON.stringify(message));
+}
+
 function manualActivate() {
     'use strict';
 
@@ -995,6 +1013,16 @@ function manualActivateFieldSpell() {
     manualServer.send(JSON.stringify(message));
 }
 
+function manualActivateFieldSpellFaceDown() {
+    'use strict';
+
+    var end = makeFieldSpellFaceDown(manualActionReference),
+        message = makeCardMovement(manualActionReference, end);
+
+    message.action = 'moveCard';
+    manualServer.send(JSON.stringify(message));
+}
+
 function manualSetSpell() {
     'use strict';
 
@@ -1006,15 +1034,7 @@ function manualSetSpell() {
     manualServer.send(JSON.stringify(message));
 }
 
-function manualActivateField() {
-    'use strict';
 
-    var end = setSpell(manualActionReference, 5),
-        message = makeCardMovement(manualActionReference, end);
-
-    message.action = 'moveCard';
-    manualServer.send(JSON.stringify(message));
-}
 
 
 function manualToHand() {
@@ -1097,10 +1117,24 @@ function manualToRemovedFacedown() {
     manualServer.send(JSON.stringify(message));
 }
 
+function manualActivateField() {
+    'use strict';
+    if ($('#automationduelfield .p' + orient(manualActionReference.player) + '.SPELLZONE.i5')) {
+        return;
+    }
+    var end = makeSpell(manualActionReference, 5),
+        message = makeCardMovement(manualActionReference, end);
+
+    message.action = 'moveCard';
+    manualServer.send(JSON.stringify(message));
+}
 
 function manualToPZoneL() {
     'use strict';
 
+    if ($('#automationduelfield .p' + orient(manualActionReference.player) + '.SPELLZONE.i6')) {
+        return;
+    }
     var end = setSpell(manualActionReference, 6),
         message = makeCardMovement(manualActionReference, end);
 
@@ -1110,7 +1144,9 @@ function manualToPZoneL() {
 
 function manualToPZoneR() {
     'use strict';
-
+    if ($('#automationduelfield .p' + orient(manualActionReference.player) + '.SPELLZONE.i7')) {
+        return;
+    }
     var end = setSpell(manualActionReference, 7),
         message = makeCardMovement(manualActionReference, end);
 
