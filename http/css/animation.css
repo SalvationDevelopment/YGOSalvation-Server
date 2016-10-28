@@ -82,7 +82,7 @@ div#selectionsystem {
 .p1.MONSTERZONE.i4,.overlayunit.p1.i4     {top :154px; right:541px;}
 
 
-.p0[data-position=FaceDown]  {transform: rotate3d(0,1,0,180deg )
+.p0[data-position=FaceDown]  {transform: rotate3d(0,1,0,180deg );
     content:url(http://ygopro.us/img/textures/cover.jpg) }
 .p0[data-position=FaceDownAttack]  {transform: rotate3d(0,0,0,0deg );
     content:url(http://ygopro.us/img/textures/cover.jpg) }
