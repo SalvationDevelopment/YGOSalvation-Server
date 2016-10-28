@@ -1060,6 +1060,18 @@ function manualToHand() {
     manualServer.send(JSON.stringify(message));
 }
 
+function manualToOpponentsHand() {
+    'use strict';
+    var moveplayer = (manualActionReference.player) ? 0 : 1,
+        index = $('#automationduelfield .p' + orient(manualActionReference.player) + '.HAND').length,
+        end = makeHand(manualActionReference, index),
+        message = makeCardMovement(manualActionReference, end);
+
+    message.action = 'moveCard';
+    message.moveplayer = moveplayer;
+    manualServer.send(JSON.stringify(message));
+}
+
 function manualToTopOfDeck() {
     'use strict';
     var index = $('#automationduelfield .p' + orient(manualActionReference.player) + '.DECK').length,
@@ -1097,6 +1109,17 @@ function manualToGrave() {
         message = makeCardMovement(manualActionReference, end);
 
     message.action = 'moveCard';
+    manualServer.send(JSON.stringify(message));
+}
+function manualToOpponentsGrave() {
+    'use strict';
+    var moveplayer = (manualActionReference.player) ? 0 : 1,
+        index = $('#automationduelfield .p' + orient(manualActionReference.player) + '.GRAVE').length,
+        end = makeGrave(manualActionReference, index),
+        message = makeCardMovement(manualActionReference, end);
+
+    message.action = 'moveCard';
+    message.moveplayer = moveplayer;
     manualServer.send(JSON.stringify(message));
 }
 
