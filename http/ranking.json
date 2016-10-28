@@ -235,7 +235,7 @@
 	"proud_korean": 8,
 	"Lord Draco": 8,
 	"Buck the Duck": 8,
-	"DannyTheStreet": 16,
+	"dannythestreet": 16,
 	"BestTerranKR": 16,
 	"Blade": 24,
 	"Transient": 32
@@ -256,7 +256,7 @@
 	"Son-Kun": 16,
 	"Fource": 16,
 	"BestTerranKR": 24,
-	"DannyTheStreet": 32
+	"dannythestreet": 32
 }, {
 	"Blade": 16,
 	"Mickey777": 16,
@@ -298,7 +298,7 @@
 	"Exitium": 24,
 	"Roxas": 16,
 	"BestTerranKR": 16,
-	"DannyTheStreet": 8,
+	"dannythestreet": 8,
 	"[ jojooo. ]": 8,
 	"strongiris": 8,
 	"Blade": 8
@@ -311,4 +311,13 @@
 	"aloadingscreen": 32,
 	"Exitium": 32,
 	"Melody": 40
+}, {
+	"Blade": 8,
+	"BestTerranKR": 8,
+	"GalaxiaxD": 16,
+	"Melody": 16,
+	"Nagate": 24,
+	"Son-Kun": 24
+	"dannythestreet": 32,
+	"Sinchantress": 32,
 }]
