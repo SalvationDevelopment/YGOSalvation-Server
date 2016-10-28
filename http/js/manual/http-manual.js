@@ -793,6 +793,20 @@ function manualViewDeck() {
     }));
 }
 
+function manualViewExtra() {
+    'use strict';
+    manualServer.send(JSON.stringify({
+        action: 'viewExtra'
+    }));
+}
+
+function manualViewGrave() {
+    'use strict';
+    manualServer.send(JSON.stringify({
+        action: 'viewGrave'
+    }));
+}
+
 function manualModeGamelistSwitch() {
     'use strict';
     $('#manualgamelistitems').css({
@@ -1092,15 +1106,6 @@ function manualToBottomOfDeck() {
     manualServer.send(JSON.stringify(message));
 }
 
-function manualToTopOfExtra() {
-    'use strict';
-    var index = $('#automationduelfield .p' + orient(manualActionReference.player) + '.EXTRA').length,
-        end = makeExtra(manualActionReference, index),
-        message = makeCardMovement(manualActionReference, end);
-
-    message.action = 'moveCard';
-    manualServer.send(JSON.stringify(message));
-}
 
 function manualToGrave() {
     'use strict';
@@ -1140,6 +1145,16 @@ function manualToExtra() {
         message = makeCardMovement(manualActionReference, end);
 
     message.action = 'moveCard';
+    manualServer.send(JSON.stringify(message));
+}
+function manualToExtraFaceUp() {
+    'use strict';
+    var index = $('#automationduelfield .p' + orient(manualActionReference.player) + '.EXTRA').length,
+        end = makeExtra(manualActionReference, index),
+        message = makeCardMovement(manualActionReference, end);
+
+    message.action = 'moveCard';
+    message.moveposition = 'FaceUp';
     manualServer.send(JSON.stringify(message));
 }
 
