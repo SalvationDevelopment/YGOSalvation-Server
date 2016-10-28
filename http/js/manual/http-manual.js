@@ -6,7 +6,97 @@ var manualServer,
     activegame,
     duelstarted = false,
     orientSlot = 0,
-    manualActionReference;
+    manualActionReference,
+    attributeMap = {
+        1: "EARTH",
+        2: "WATER",
+        4: "FIRE",
+        8: "WIND",
+        16: "LIGHT",
+        32: "DARK",
+        64: "DIVINE"
+    },
+    typeMap = {
+        130: " / Ritual",
+        65538: " / Quick-Play",
+        131074: " / Continuous",
+        131076: " / Continuous",
+        262146: " / Equip",
+        524290: " / Field",
+        1048580: " / Counter"
+    },
+    monsterMap = {
+        17: "Normal",
+        33: "Effect",
+        65: "Fusion",
+        97: "Fusion / Effect",
+        129: "Ritual",
+        161: "Ritual / Effect",
+        545: "Spirit",
+        1057: "Union",
+        2081: "Gemini / Effect",
+        4113: "Tuner",
+        4129: "Tuner / Effect",
+        8193: "Synchro",
+        8225: "Synchro / Effect",
+        12321: "Synchro / Tuner / Effect",
+        2097185: "Flip / Effect",
+        4194337: "Toon / Effect",
+        8388609: "Xyz",
+        8388641: "Xyz / Effect",
+        16777233: "Pendulum",
+        16777249: "Pendulum / Effect",
+        16781345: "Pendulum / Tuner / Effect",
+        25165857: "Xyz / Pendulum / Effect"
+    },
+    raceMap = {
+        1: "Warrior",
+        2: "Spellcaster",
+        4: "Fairy",
+        8: "Fiend",
+        16: "Zombie",
+        32: "Machine",
+        64: "Aqua",
+        128: "Pyro",
+        256: "Rock",
+        512: "Winged-Beast",
+        1024: "Plant",
+        2048: "Insect",
+        4096: "Thunder",
+        8192: "Dragon",
+        16384: "Beast",
+        32768: "Beast-Warrior",
+        65536: "Dinosaur",
+        131072: "Fish",
+        262144: "Sea-Serpent",
+        524288: "Reptile",
+        1048576: "Psychic",
+        2097152: "Divine-Beast",
+        4194304: "Creator God",
+        8388608: "Wyrm"
+    };
+
+function cardIs(cat, obj) {
+    'use strict';
+    if (cat === "monster" && (obj.race !== 0 || obj.level !== 0 || obj.attribute !== 0)) {
+        return true;
+    }
+    if (cat === "spell") {
+        return (obj.type & 2) === 2;
+    }
+    if (cat === "trap") {
+        return (obj.type & 4) === 4;
+    }
+    if (cat === "fusion") {
+        return (obj.type & 64) === 64;
+    }
+    if (cat === "synchro") {
+        return (obj.type & 8192) === 8192;
+    }
+    if (cat === "xyz") {
+        return (obj.type & 8388608) === 8388608;
+    }
+}
 
 function updateloby(state) {
     'use strict';
@@ -188,6 +278,7 @@ function guiCard(dataBinding) {
             element.attr({
                 'class': fieldings,
                 'data-position': ref.position,
+                'data-id': ref.id,
                 'src': (ref.id) ? 'ygopro/pics/' + ref.id + '.jpg' : 'img/textures/cover.jpg'
             });
         } else {
@@ -196,6 +287,7 @@ function guiCard(dataBinding) {
             element.attr({
                 'class': fieldings,
                 'data-position': ref.position,
+                'data-id': ref.id,
                 'src': (ref.id) ? 'ygopro/pics/' + ref.id + '.jpg' : 'img/textures/cover.jpg'
             });
         }
@@ -357,95 +449,16 @@ function initGameState() {
 
     }
 
-    //update state of A GROUP OF CARDS based on info from YGOPro
-    function updateData(player, clocation, arrayOfCards) {
-        var target,
-            pointer,
-            i;
-
-        for (i = 0; arrayOfCards.length > i; i++) {
-            if (arrayOfCards[i].Code !== 'nocard') {
-                target = queryCard(player, enums.locations[clocation], i, 0);
-                pointer = uidLookup(target[0].uid);
-                stack[pointer].position = arrayOfCards[i].Position;
-                stack[pointer].id = arrayOfCards[i].Code;
-            }
-        }
-        //fs.writeFileSync('output.json', JSON.stringify(stack, null, 4));
-    }
-
-    //update state of A SINGLE CARD based on info from YGOPro
-    function updateCard(player, clocation, index, card) {
-        var target,
-            pointer;
-
-        target = queryCard(player, enums.locations[clocation], index, 0);
-        pointer = uidLookup(target[0].uid);
-        stack[pointer].position = card.Position;
-        stack[pointer].id = card.Code;
-
-    }
-
-    //Flip summon, change to attack mode, change to defense mode, and similar movements.
-    function changeCardPosition(code, cc, cl, cs, cp) {
-        var target = queryCard(cc, cl, cs, 0),
-            pointer = uidLookup(target[0].uid);
-
-        stack[pointer].id = code;
-        setState(cc, cl, cs, cc, cl, cs, cp, 0, false);
-    }
-
-    function moveCard(code, pc, pl, ps, pp, cc, cl, cs, cp) {
-        //this is ugly, needs labling.
-        var target,
-            pointer,
-            zone,
-            i;
-        if (pl === 0) {
-            stack.push(new Card(enums.locations[cl], cc, cs, numberOfCards));
-            numberOfCards++;
-            return;
-        } else if (cl === 0) {
-            target = queryCard(pc, enums.locations[pl], ps, 0);
-            pointer = uidLookup(target[0].uid);
-            delete stack[pointer];
-            numberOfCards--;
-            return;
-        } else {
-            if (!(pl & 0x80) && !(cl & 0x80)) { //duelclient line 1885
-                setState(pc, enums.locations[pl], ps, cc, enums.locations[cl], cs, cp, 0, false);
-            } else if (!(pl & 0x80)) {
-                //targeting a card to become a xyz unit....
-                setState(pc, enums.locations[pl], ps, cc, enums.locations[(cl & 0x7f)], cs, cp, 0, true);
 
 
-            } else if (!(cl & 0x80)) {
-                //turning an xyz unit into a normal card....
-                setState(pc, enums.locations[(pl & 0x7f)], ps, cc, enums.locations[cl], cs, cp, pp);
-            } else {
-                //move one xyz unit to become the xyz unit of something else....');
-                //                $('.overlayunit.p' + cc + '.i' + cs).each(function (i) {
-                //                    $(this).attr('data-overlayunit', (i));
-                //                });
-                setState(pc, enums.locations[(pl & 0x7f)], ps, cc, enums.locations[(cl & 0x7f)], cs, cp, pp, true);
-                zone = filterIndex(filterlocation(filterPlayer(stack, cc), enums.locations[(cl & 0x7f)]), cs);
-                for (i = 1; zone.length > i; i++) {
-                    pointer = uidLookup(zone[i].uid);
-                    stack[pointer].overlayindex = i;
-                }
 
-            }
-        }
-    }
 
 
 
     return {
         startDuel: startDuel,
-        updateData: updateData,
-        updateCard: updateCard,
+
         cardCollections: cardCollections,
-        changeCardPosition: changeCardPosition,
         uidLookup: uidLookup,
         stack: stack
     };
@@ -1244,17 +1257,87 @@ function guicardclick(id, uid) {
         return;
     }
 }
+var internalDB = [];
 
+
+function getCardObject(id) {
+    'use strict';
+    var cardObject,
+        i = 0,
+        len = internalDB.length;
+    for (i, len; i < len; i += 1) {
+        if (id === internalDB[i].id) {
+            cardObject = internalDB[i];
+            cardObject = internalDB[i];
+            break;
+        }
+    }
+    return cardObject;
+}
+
+function parseLevelScales(level) {
+    'use strict';
+    var output = "",
+        leftScale,
+        rightScale,
+        pendulumLevel;
+    if (level > 0 && level <= 12) {
+        output += '<span class="levels">';
+        while ((level -= 1) >= 0) {
+            output += "*";
+        }
+    } else {
+        level = level.toString(16); // format: [0-9A-F]0[0-9A-F][0-9A-F]{4}
+        leftScale = parseInt(level.charAt(0), 16); // first digit: left scale in hex (0-16)
+        rightScale = parseInt(level.charAt(2), 16); // third digit: right scale in hex (0-16)
+        pendulumLevel = parseInt(level.charAt(6), 16); // seventh digit: level of the monster in hex (technically, all 4 digits are levels, but here we only need the last char)
+        output += '<span class="levels">';
+        while ((pendulumLevel -= 1) >= 0) {
+            output += '*';
+        }
+        output += '</span> <span class="scales"><< ' + leftScale + ' | ' + rightScale + ' >>';
+    }
+    return output + '</span>';
+}
+
+function parseAtkDef(atk, def) {
+    'use strict';
+    return ((atk < 0) ? "?" : atk) + " / " + ((def < 0) ? "?" : def);
+}
+
+function makeDescription(id) {
+    'use strict';
+    var targetCard = getCardObject(parseInt(id, 10)),
+        output = "";
+    if (!targetCard) {
+        //        return '<span class="searchError">An error occurred while looking up the card in our database.<br />Please report this issue <a href="' + forumLink + '" target="_blank">at our forums</a> and be sure to include following details:<br /><br />Subject: Deck Editor Error<br />Function Call: makeDescription(' + id + ')<br />User Agent: ' + navigator.userAgent + '</span>';
+        return '';
+    }
+    output += '<div class="descContainer"><span class="cardName">' + targetCard.name + ' [' + id + ']</span><br />';
+    if (cardIs("monster", targetCard)) {
+        output += "<span class='monsterDesc'>[ Monster / " + monsterMap[targetCard.type] + " ]<br />" + raceMap[targetCard.race] + " / " + attributeMap[targetCard.attribute] + "<br />";
+        output += "[ " + parseLevelScales(targetCard.level) + " ]<br />" + parseAtkDef(targetCard.atk, targetCard.def) + "</span>";
+    } else if (cardIs("spell", targetCard)) {
+        output += "<span class='spellDesc'>[ Spell" + (typeMap[targetCard.type] || "") + " ]</span>";
+    } else if (cardIs("trap", targetCard)) {
+        output += "<span class='trapDesc'>[ Trap" + (typeMap[targetCard.type] || "") + " ]</span>";
+    }
+    return output + "<br /><span class='description'>" + targetCard.desc.replace(/\r\n/g, '<br />') + "</span>";
+}
 
 $(document).ready(function () {
     'use strict';
     serverconnect();
     $('.imgContainer').attr('src', 'img/textures/cover.jpg');
     $('body').on('mouseover', '.card', function (event) {
-        console.log(event.currentTarget, event.currentTarget.id);
-        var uid = event.currentTarget.id;
 
+        var uid = event.currentTarget.id,
+            id = $('#' + uid).attr('data-id'),
+            html = getCardObject(id);
+        console.log(event.currentTarget, event.currentTarget.id);
         $('.imgContainer').attr('src', $('#' + uid).attr('src'));
+        $('.cardDescription').html(html);
+
     });
     $('#manualcontrols button').click(function () {
 
@@ -1271,4 +1354,10 @@ $(document).mousemove(function (event) {
     'use strict';
     currentMousePos.x = event.pageX;
     currentMousePos.y = event.pageY;
+});
+
+
+$.getJSON('http://ygopro.us/manifest/database_0-en-OCGTCG.json', function (data) {
+    'use strict';
+    var internalDB = data;
 });
