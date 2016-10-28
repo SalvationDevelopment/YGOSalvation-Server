@@ -1359,5 +1359,5 @@ $(document).mousemove(function (event) {
 
 $.getJSON('http://ygopro.us/manifest/database_0-en-OCGTCG.json', function (data) {
     'use strict';
-    var internalDB = data;
+    internalDB = data;
 });
