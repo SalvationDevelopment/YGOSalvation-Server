@@ -1211,7 +1211,7 @@ function guicardclick(id, uid) {
         return;
     }
     if (stackunit.location === 'EXTRA') {
-        $('.manualViewExtra, .manualRevealExta').css({
+        $('.manualViewExtra, .manualRevealExtra').css({
             'display': 'block'
         });
         reorientmenu();
