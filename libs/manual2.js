@@ -244,6 +244,15 @@ function responseHandler(socket, message) {
             stateSystem[socket.activeduel].changeLifepoints(socket.slot, message.amount);
         }
         break;
+    case "getLog":
+        if (stateSystem[socket.activeduel]) {
+            socket.send(JSON.stringify({
+                action: 'log',
+                log: log[socket.activeduel]
+            }));
+        }
+
+        break;
 
     default:
         break;
