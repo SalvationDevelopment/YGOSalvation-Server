@@ -174,7 +174,6 @@ function getdeck() {
     }
 
     selection = $('#lobbycurrentdeck .currentdeck option:selected').eq(0).attr('data-file');
-    console.log(selection);
     processedDeck = makeDeck(selection);
     return processedDeck;
 }
@@ -182,7 +181,6 @@ function getdeck() {
 function loadField() {
     'use strict';
     $('#duelzone').css('display', 'block');
-    console.log('Starting Duel!');
 }
 
 var manualDuel;
@@ -399,66 +397,9 @@ function initGameState() {
         return filterOverlyIndex(filterIndex(filterlocation(filterPlayer(stack, player), clocation), index), overlayindex);
     }
 
-    /*The YGOPro messages have a design flaw in them where they dont tell the number of cards
-    that you have to itterate over in order to get a proper message, this function resolves that problem,
-    this flaw has caused me all types of grief.*/
-    function cardCollections(player) {
-        return {
-            DECK: filterlocation(filterPlayer(stack, player), 'DECK').length,
-            HAND: filterlocation(filterPlayer(stack, player), 'HAND').length,
-            EXTRA: filterOverlyIndex(filterlocation(filterPlayer(stack, player), 'EXTA')).length,
-            GRAVE: filterlocation(filterPlayer(stack, player), 'GRAVE').length,
-            REMOVED: filterlocation(filterPlayer(stack, player), 'REMOVED').length,
-            SPELLZONE: 8,
-            MONSTERZONE: 5
-        };
-    }
-
-    function reIndex(player, location) {
-        //again YGOPro doesnt manage data properly... and doesnt send the index update for the movement command.
-        //that or Im somehow missing it in moveCard().
-        var zone = filterlocation(filterPlayer(stack, player), location),
-            pointer,
-            i;
-        for (i = 0; zone.length > i; i++) {
-            pointer = uidLookup(zone[i].uid);
-            stack[pointer].index = i;
-        }
-
-        cardmargin(String(player), location);
-    }
-    //finds a card, then moves it elsewhere.
-    function setState(player, clocation, index, moveplayer, movelocation, moveindex, moveposition, overlayindex, isBecomingCard) {
-        console.log('set:', player, clocation, index, moveplayer, movelocation, moveindex, moveposition, overlayindex, isBecomingCard);
-        var target = queryCard(player, clocation, index, 0),
-            pointer = uidLookup(target[0].uid),
-            zone,
-            i;
-
-        stack[pointer].player = moveplayer;
-        stack[pointer].location = movelocation;
-        stack[pointer].index = moveindex;
-        stack[pointer].position = moveposition;
-        stack[pointer].overlayindex = overlayindex;
-        reIndex(player, 'GRAVE');
-        reIndex(player, 'HAND');
-        reIndex(player, 'EXTRA');
-
-
-
-
-    }
-
-
-
-
-
-
 
     return {
         startDuel: startDuel,
-
-        cardCollections: cardCollections,
         uidLookup: uidLookup,
         stack: stack
     };
@@ -1244,11 +1185,6 @@ function guicardclick(id, uid) {
         return;
     }
     $('#manualcontrols').css({
-        'top': currentMousePos.y,
-        'left': currentMousePos.x,
-        'display': 'block'
-    });
-    console.log({
         'top': currentMousePos.y,
         'left': currentMousePos.x,
         'display': 'block'
