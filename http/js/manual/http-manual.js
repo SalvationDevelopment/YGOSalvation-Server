@@ -1260,7 +1260,7 @@ function guicardclick(id, uid) {
         return;
     }
     if (stackunit.location === 'HAND') {
-        $('.manualRevealHand, .manualShuffleHand, .manualToBottom, .manualToTop, .manualToSetTrapSpell, .manualBanish, .manualBanishFaceDown, .manualSpecialSummonDef, .manualSpecialSummonAtt, .manualSetMonster, .manualNormalSummon, .manualActivateFieldSpell, .manualToExtraFaceUp, .manualRemove, .manualToPZoneR, .manualToPZoneL, .manualToGrave, .manualToOpponentsHand, .manualToOpponentsGrave').css({
+        $('.manualRevealHand, .manualShuffleHand, .manualToBottom, .manualToTop, .manualToSetTrapSpell, .manualBanish, .manualBanishFaceDown, .manualSpecialSummonDef, .manualSpecialSummonAtt, .manualSetMonster, .manualNormalSummon, .manualActivateFieldSpell, .manualToExtraFaceUp, .manualRemove, .manualToPZoneR, .manualToPZoneL, .manualToGrave, .manualToOpponentsHand, .manualToOpponentsGrave, .manualToExtraFaceDown').css({
             'display': 'block'
         });
         reorientmenu();
