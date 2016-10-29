@@ -1145,6 +1145,7 @@ function manualToExtra() {
         message = makeCardMovement(manualActionReference, end);
 
     message.action = 'moveCard';
+    console.log('EXTRA', index, end, message, manualActionReference);
     manualServer.send(JSON.stringify(message));
 }
 function manualToExtraFaceUp() {
