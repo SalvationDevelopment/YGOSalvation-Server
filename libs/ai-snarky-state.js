@@ -214,7 +214,7 @@ function init(callback) {
         return {
             DECK: filterlocation(filterPlayer(stack, player), 'DECK').length,
             HAND: filterlocation(filterPlayer(stack, player), 'HAND').length,
-            EXTRA: filterOverlyIndex(filterlocation(filterPlayer(stack, player), 'EXTRA'),0).length,
+            EXTRA: filterOverlyIndex(filterlocation(filterPlayer(stack, player), 'EXTRA'), 0).length,
             GRAVE: filterlocation(filterPlayer(stack, player), 'GRAVE').length,
             REMOVED: filterlocation(filterPlayer(stack, player), 'REMOVED').length,
             SPELLZONE: 8,
@@ -258,7 +258,7 @@ function init(callback) {
             deck = filterlocation(playersCards, 'DECK'),
             hand = filterlocation(playersCards, 'HAND'),
             grave = filterlocation(playersCards, 'GRAVE'),
-            extra = filterOverlyIndex(filterlocation(playersCards, 'EXTRA'),0),
+            extra = filterOverlyIndex(filterlocation(playersCards, 'EXTRA'), 0),
             removed = filterlocation(playersCards, 'REMOVED'),
             spellzone = filterlocation(playersCards, 'SPELLZONE'),
             monsterzone = filterlocation(playersCards, 'MONSTERZONE');
@@ -618,6 +618,40 @@ function init(callback) {
 
     }
 
+    function viewExtra(player) {
+        var deck = filterlocation(filterPlayer(stack, player), 'Extra').reverse(),
+            result = {
+                0: {
+                    action: 'server',
+                    info: state,
+                    call: 'Viewing Extra',
+                    player: player
+                },
+                1: {
+                    action: 'server',
+                    info: state,
+                    call: 'Viewing Extra',
+                    player: player
+                },
+                sepectators: {
+                    action: 'server',
+                    info: state,
+                    call: 'Viewing Extra',
+                    player: player
+                }
+            };
+
+        result[player] = {
+            action: 'reveal',
+            info: state,
+            reveal: deck,
+            call: 'view',
+            player: player
+        };
+
+        callback(result, stack);
+
+    }
     /**
      * Exposed method to initialize the field; You only run this once.
      */
