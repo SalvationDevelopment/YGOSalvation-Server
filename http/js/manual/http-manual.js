@@ -1170,7 +1170,7 @@ function manualToRemovedFacedown() {
 
 function manualActivateField() {
     'use strict';
-    if ($('#automationduelfield .p' + orient(manualActionReference.player) + '.SPELLZONE.i5')) {
+    if ($('#automationduelfield .p' + orient(manualActionReference.player) + '.SPELLZONE.i5').length) {
         return;
     }
     var end = makeSpell(manualActionReference, 5),
@@ -1183,10 +1183,10 @@ function manualActivateField() {
 function manualToPZoneL() {
     'use strict';
 
-    if ($('#automationduelfield .p' + orient(manualActionReference.player) + '.SPELLZONE.i6')) {
+    if ($('#automationduelfield .p' + orient(manualActionReference.player) + '.SPELLZONE.i6').length) {
         return;
     }
-    var end = setSpell(manualActionReference, 6),
+    var end = makeSpell(manualActionReference, 6),
         message = makeCardMovement(manualActionReference, end);
 
     message.action = 'moveCard';
@@ -1195,10 +1195,10 @@ function manualToPZoneL() {
 
 function manualToPZoneR() {
     'use strict';
-    if ($('#automationduelfield .p' + orient(manualActionReference.player) + '.SPELLZONE.i7')) {
+    if ($('#automationduelfield .p' + orient(manualActionReference.player) + '.SPELLZONE.i7').length) {
         return;
     }
-    var end = setSpell(manualActionReference, 7),
+    var end = makeSpell(manualActionReference, 7),
         message = makeCardMovement(manualActionReference, end);
 
     message.action = 'moveCard';
