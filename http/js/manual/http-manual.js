@@ -811,7 +811,7 @@ function makeHand(card, index) {
     };
 }
 
-function makeDeck(card, index) {
+function makeDeckCard(card, index) {
     'use strict';
     return {
         player: card.player,
@@ -1030,7 +1030,7 @@ function manualToOpponentsHand() {
 function manualToTopOfDeck() {
     'use strict';
     var index = $('#automationduelfield .p' + orient(manualActionReference.player) + '.DECK').length,
-        end = makeDeck(manualActionReference, index),
+        end = makeDeckCard(manualActionReference, index),
         message = makeCardMovement(manualActionReference, end);
 
     message.action = 'moveCard';
@@ -1040,7 +1040,7 @@ function manualToTopOfDeck() {
 function manualToBottomOfDeck() {
     'use strict';
     var index = 0,
-        end = makeDeck(manualActionReference, index),
+        end = makeDeckCard(manualActionReference, index),
         message = makeCardMovement(manualActionReference, end);
 
     message.action = 'moveCard';
