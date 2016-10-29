@@ -45,7 +45,8 @@ var WebSocketServer = require('ws').Server,
     deckvalidator = require('./deckvalidator.js'),
     configParser = require('./configparser.js'),
     games = {},
-    states = {};
+    states = {},
+    log = {};
 
 function socketBinding(game) {
     return function gameResponse(view, stack) {
@@ -98,6 +99,7 @@ function responseHandler(socket, message) {
     case "host":
         generated = randomString(12);
         games[generated] = newGame();
+        log[generated] = [];
         stateSystem[generated] = stateSystem(socketBinding(generated));
         games[generated].player[0].name = message.name;
         stateSystem[generated].players[0] = socket;
@@ -245,6 +247,9 @@ function responseHandler(socket, message) {
 
     default:
         break;
+    }
+    if (stateSystem[socket.activeduel]) {
+        log[socket.activeduel].push(message);
     }
 }
 
