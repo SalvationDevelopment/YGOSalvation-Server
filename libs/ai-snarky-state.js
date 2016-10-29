@@ -571,7 +571,7 @@ function init(callback) {
      * @param {number} player 
      */
     function revealExtra(player) {
-        revealCallback(filterlocation(filterPlayer(stack, player), 'EXTRA').reverse(), player, 'extra');
+        revealCallback(filterlocation(filterPlayer(stack, player), 'EXTRA'), player, 'extra');
     }
 
     /**
@@ -619,7 +619,7 @@ function init(callback) {
     }
 
     function viewExtra(player) {
-        var deck = filterlocation(filterPlayer(stack, player), 'Extra').reverse(),
+        var deck = filterlocation(filterPlayer(stack, player), 'EXTRA'),
             result = {
                 0: {
                     action: 'server',
