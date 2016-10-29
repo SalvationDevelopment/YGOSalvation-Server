@@ -1,30 +1,30 @@
 [{
-    "Son-Kun": 8,
-    "SoraShiunin": 16,
-    "Vertigon": 24,
-    "Max Beat": 8,
-    "jon45324": 16,
-    "Domtom": 8,
-    "Lord Raptor": 8,
-    "dannythestreet": 32
+	"Son-Kun": 8,
+	"SoraShiunin": 16,
+	"Vertigon": 24,
+	"Max Beat": 8,
+	"jon45324": 16,
+	"Domtom": 8,
+	"Lord Raptor": 8,
+	"dannythestreet": 32
 }, {
-    "[ jojooo. ]": 8,
-    "GodMode": 8,
-    "mustafa felafel": 8,
-    "Lelouch lamperouge": 8,
-    "Lord Raptor": 16,
-    "SoraShiunin": 16,
-    "Vertigon": 24,
-    "Son-Kun": 32
+	"[ jojooo. ]": 8,
+	"GodMode": 8,
+	"mustafa felafel": 8,
+	"Lelouch lamperouge": 8,
+	"Lord Raptor": 16,
+	"SoraShiunin": 16,
+	"Vertigon": 24,
+	"Son-Kun": 32
 }, {
-    "Fource": 8,
-    "Lord Raptor": 8,
-    "SoraShiunin": 8,
-    "Lelouch lamperouge": 8,
-    "[ jojooo. ]": 16,
-    "Sora Pallet": 16,
-    "Son-Kun": 24,
-    "dannythestreet": 32
+	"Fource": 8,
+	"Lord Raptor": 8,
+	"SoraShiunin": 8,
+	"Lelouch lamperouge": 8,
+	"[ jojooo. ]": 16,
+	"Sora Pallet": 16,
+	"Son-Kun": 24,
+	"dannythestreet": 32
 }, {
 	"Son-Kun": 8,
 	"Sora Pallet": 8,
@@ -54,7 +54,7 @@
 	"Son-Kun": 32
 }, {
 	"Fource": 16,
-    "TreetopTito": 16,
+	"TreetopTito": 16,
 	"GodMode": 16,
 	"rexking": 16,
 	"misunderstood": 16,
@@ -187,22 +187,22 @@
 	"Buck the Duck": 24,
 	"Melody": 32
 }, {
-    "Blade": 16,
-    "dannythestreet": 16,
-    "ghandilson": 16,
-    "Melody": 16,
-    "RimXster": 16,
-    "ProudKorean": 16, 
-    "Nicholas0723": 32,
-    "Fource": 32,
-    "Dal920": 32,
-    "MentalxSlap": 48,
-    "Sora Pallet": 48,  
-    "SoraShiunin": 48,
-    "Exitium": 48,
-    "Sirocco": 48,
-    "Son-Kun": 80,
-    "Storm Wolf": 96
+	"Blade": 16,
+	"dannythestreet": 16,
+	"ghandilson": 16,
+	"Melody": 16,
+	"RimXster": 16,
+	"ProudKorean": 16,
+	"Nicholas0723": 32,
+	"Fource": 32,
+	"Dal920": 32,
+	"MentalxSlap": 48,
+	"Sora Pallet": 48,
+	"SoraShiunin": 48,
+	"Exitium": 48,
+	"Sirocco": 48,
+	"Son-Kun": 80,
+	"Storm Wolf": 96
 }, {
 	"jon45324": 8,
 	"Buck the Duck": 8,
@@ -222,14 +222,14 @@
 	"Dal920": 24,
 	"SoraShiunin": 32
 }, {
-    "proud_korean": 8,
-    "Dal920": 8,
-    "jon45324": 8,
-    "Melody": 8,
-    "Buck the Duck": 16,
-    "Blade": 16,
-    "Transient": 24,
-    "Exitium": 32
+	"proud_korean": 8,
+	"Dal920": 8,
+	"jon45324": 8,
+	"Melody": 8,
+	"Buck the Duck": 16,
+	"Blade": 16,
+	"Transient": 24,
+	"Exitium": 32
 }, {
 	"SoraShiunin": 8,
 	"proud_korean": 8,
@@ -302,7 +302,7 @@
 	"[ jojooo. ]": 8,
 	"strongiris": 8,
 	"Blade": 8
-},{
+}, {
 	"BestTerranKR": 8,
 	"Blade": 8,
 	"Rimxster": 16,
@@ -320,4 +320,13 @@
 	"Son-Kun": 24,
 	"dannythestreet": 32,
 	"Sinchantress": 32
+}, {
+	"raffytraffy": 24,
+	"jon45324": 40,
+	"BestTerranKR-1": 16,
+	"Morgan LeFlay": 16,
+	"strongiris": 8,
+	"Fource": 8,
+	"GalaxiaxD": 40,
+	"Melody": 24
 }]
