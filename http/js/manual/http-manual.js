@@ -938,10 +938,43 @@ function manualNormalSummon() {
     manualServer.send(JSON.stringify(message));
 }
 
+function manualToAttack() {
+    'use strict';
+
+    var index = manualActionReference.index,
+        end = makeMonster(manualActionReference, index),
+        message = makeCardMovement(manualActionReference, end);
+
+    message.action = 'moveCard';
+    manualServer.send(JSON.stringify(message));
+}
+
 function manualSetMonster() {
     'use strict';
 
     var index = automaticZonePicker(manualActionReference.player, 'MONSTERZONE'),
+        end = setMonster(manualActionReference, index),
+        message = makeCardMovement(manualActionReference, end);
+
+    message.action = 'moveCard';
+    manualServer.send(JSON.stringify(message));
+}
+
+function manualToDefence() {
+    'use strict';
+
+    var index = manualActionReference.index,
+        end = defenceMonster(manualActionReference, index),
+        message = makeCardMovement(manualActionReference, end);
+
+    message.action = 'moveCard';
+    manualServer.send(JSON.stringify(message));
+}
+
+function manualToFaceDownDefence() {
+    'use strict';
+
+    var index = manualActionReference.index,
         end = setMonster(manualActionReference, index),
         message = makeCardMovement(manualActionReference, end);
 
@@ -1057,6 +1090,7 @@ function manualToGrave() {
     message.action = 'moveCard';
     manualServer.send(JSON.stringify(message));
 }
+
 function manualToOpponentsGrave() {
     'use strict';
     var moveplayer = (manualActionReference.player) ? 0 : 1,
@@ -1089,6 +1123,7 @@ function manualToExtra() {
     console.log('EXTRA', index, end, message, manualActionReference);
     manualServer.send(JSON.stringify(message));
 }
+
 function manualToExtraFaceUp() {
     'use strict';
     var index = $('#automationduelfield .p' + orient(manualActionReference.player) + '.EXTRA').length,
@@ -1147,6 +1182,13 @@ function manualToPZoneR() {
     manualServer.send(JSON.stringify(message));
 }
 
+function manualRevealHandSingle() {
+    'use strict';
+    manualServer.send(JSON.stringify({
+        action: 'revealHandSingle',
+        card: manualActionReference
+    }));
+}
 var currentMousePos = {
     x: -1,
     y: -1
