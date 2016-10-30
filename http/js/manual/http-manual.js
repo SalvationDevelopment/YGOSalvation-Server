@@ -98,6 +98,19 @@ function cardIs(cat, obj) {
     }
 }
 
+
+var avatarMap = {};
+
+function getAvatar(name) {
+    'use strict';
+    if (avatarMap[name]) {
+        return;
+    }
+    $.getJSON('http://forum.ygopro.us/avatar.php?username=' + name, function processAvatar(avatarUnit) {
+        avatarMap[name] = 'http://forum.ygopro.us/uploads/' + avatarUnit.url;
+    });
+}
+
 function updateloby(state) {
     'use strict';
     $('#player1lobbyslot').val(state.player[0].name);
@@ -127,6 +140,13 @@ function updateloby(state) {
         $('.slot').eq(2).css('display', 'none');
         $('.slot').eq(3).css('display', 'none');
     }
+    getAvatar(state.player[0].name);
+    getAvatar(state.player[1].name);
+    setTimeout(function () {
+        $('#p0avatar').attr('src', avatarMap[state.player[0].name]);
+        $('#p1avatar').attr('src', avatarMap[state.player[1].name]);
+    }, 3000);
+
 
 }
 
