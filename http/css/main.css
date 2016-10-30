@@ -1662,15 +1662,16 @@ div#duelspectate {
 
 div#phaseindicator {
     position: fixed;
-    top: 52%;
+    top: 50%;
     width: 100%;
 }
 
 #phaseindicator div {
-    width: 460px;
+    width: 323px;
     margin: 0 auto;
-    /* padding-left: 10px; */
     overflow: auto;
+    display: flex;
+    font-size: .8em;
 }
 
 #phaseindicator button {
@@ -1679,7 +1680,6 @@ div#phaseindicator {
     display: block;
     float: left;
     overflow: hidden;
-    visibility: hidden;
     z-index: 30;
 }
 
