@@ -876,6 +876,7 @@ div#actions button {
     clear: both;
     position: fixed;
     transform: scale(0.75);
+    pointer-events: none;
 }
 
 .fieldcontainer {
@@ -1113,6 +1114,7 @@ meter.p1time {
     transform-style: flat;
     perspective: 1000px;
     perspective-origin: bottom;
+    pointer-events: none;
 }
 
 .button.ready0 {
