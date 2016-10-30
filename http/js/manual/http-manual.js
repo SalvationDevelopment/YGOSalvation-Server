@@ -1437,7 +1437,7 @@ function guicardclick(id, uid) {
         'display': 'block'
     });
     if (stackunit.location === 'DECK') {
-        $('.data-m-deck').css({
+        $('.m-deck').css({
             'display': 'block'
         });
         reorientmenu();
