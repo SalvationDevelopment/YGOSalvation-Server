@@ -530,9 +530,10 @@ function reveal(cards, note) {
         $('#revealed').css('display', 'block');
     }
     cards.forEach(function (card, index) {
-        var hardcard = JSON.stringify(card);
+        var hardcard = JSON.stringify(card),
+            src = (card.id) ? 'ygopro/pics/' + card.id + '.jpg' : 'img/textures/cover.jpg';
         revealcache.push(card);
-        html += '<img src="http://ygopro.us/ygopro/pics/' + card.id + '.jpg" onclick="revealonclick(' + index + ',\'' + note + '\')"/>';
+        html += '<img src="http://ygopro.us/' + src + '" onclick = "revealonclick(' + index + ',\'' + note + '\')" / > ';
     });
     if (cards.length > 5) {
         html += "</div>";
@@ -1310,14 +1311,14 @@ function revealonclick(card, note) {
     }
 
     if (manualActionReference.location === 'GRAVE') {
-        $('.moveToHand, .manualSpecialSummonDef, .manualSpecialSummonAtt, .manualSetMonster, .manualToExtraFaceUp, .manualRemove').css({
+        $('.moveToHand, .manualSpecialSummonDef, .manualSpecialSummonAtt, .manualSetMonster,.manualToExtra, .manualToExtraFaceUp, .manualToExtra, .manualRemove').css({
             'display': 'block'
         });
         reorientmenu();
         return;
     }
     if (manualActionReference.location === "REMOVED") {
-        $('.moveToHand, .manualSpecialSummonDef, .manualSpecialSummonAtt, .manualSetMonster,  .manualActivateFieldSpell, .manualToExtraFaceUp, .manualRemove,.manualToGrave').css({
+        $('.moveToHand, .manualSpecialSummonDef, .manualSpecialSummonAtt, .manualToExtraFaceUp,.manualToExtra, .manualToGrave').css({
             'display': 'block'
         });
         reorientmenu();
