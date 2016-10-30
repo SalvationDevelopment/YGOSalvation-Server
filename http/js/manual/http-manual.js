@@ -1516,6 +1516,22 @@ $('#lobbychatinput, #sidechatinput').keypress(function (e) {
         //chat($(e.currentTarget).val());
         var parts = $('#sidechatinput').val().split(' '),
             lp = 0;
+        if (parts[0] === '/roll') {
+            $(e.currentTarget).val('');
+            manualServer.send(JSON.stringify({
+                action: 'rollDie',
+                name: localStorage.nickname
+            }));
+            return;
+        }
+        if (parts[0] === '/flip') {
+            $(e.currentTarget).val('');
+            manualServer.send(JSON.stringify({
+                action: 'flipCoin',
+                name: localStorage.nickname
+            }));
+            return;
+        }
         if (parts.length === 2) {
             if (parts[0] === '/sub') {
                 lp = (-1) * parseInt(parts[1], 10);
