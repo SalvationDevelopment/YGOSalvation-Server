@@ -244,6 +244,9 @@ function responseHandler(socket, message) {
             stateSystem[socket.activeduel].changeLifepoints(socket.slot, message.amount);
         }
         break;
+    case "revealHandSingle":
+        stateSystem[socket.activeduel].revealCallback([message.card], socket.slot, 'revealHandSingle');
+        break;
     case "getLog":
         if (stateSystem[socket.activeduel]) {
             socket.send(JSON.stringify({
