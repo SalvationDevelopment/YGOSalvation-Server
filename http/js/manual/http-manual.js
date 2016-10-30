@@ -551,6 +551,7 @@ var chatplace = 0;
 function updateChat(chatlog) {
     'use strict';
     console.log(chatlog);
+    $('.ingamechatbox, #sidechat').html('');
     chatlog.forEach(function (chatMessage, index) {
         $('.ingamechatbox, #sidechat').append('<li>' + chatMessage + '</li>');
     });
