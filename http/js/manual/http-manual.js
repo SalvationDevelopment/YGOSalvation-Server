@@ -585,7 +585,6 @@ function manualReciver(message) {
     case "shuffleDeck0":
         doGuiShuffle(orient(0), 'DECK');
         linkStack(message.field);
-        updateChat(message.info.duelistChat);
         break;
     case "shuffleDeck1":
         doGuiShuffle(orient(1), 'DECK');
@@ -599,6 +598,7 @@ function manualReciver(message) {
         cardmargin(1, 'GRAVE');
         cardmargin(1, 'EXTRA');
         cardmargin(1, 'DECK');
+        updateChat(message.info.duelistChat);
         break;
     case "reveal":
         reveal(message.reveal, message.call);
