@@ -1420,7 +1420,7 @@ function guicardclick(id, uid) {
 
     console.log(stackunit);
     manualActionReference = stackunit;
-    dbEntry = getCardObject(stackunit.id);
+    dbEntry = getCardObject(parseInt(stackunit.id, 10));
 
     if (stackunit.location === 'GRAVE') {
         $('.m-grave').css({
