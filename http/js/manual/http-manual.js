@@ -519,12 +519,6 @@ function automaticZonePicker(realPlayer, zone) {
 
 var revealcache = [];
 
-
-function revealonclick(card, note) {
-    'use strict';
-    console.log(revealcache[card], note);
-}
-
 function reveal(cards, note) {
     'use strict';
     var html = '';
@@ -1263,6 +1257,26 @@ var currentMousePos = {
 };
 
 
+function revealonclick(card, note) {
+    'use strict';
+    console.log(revealcache[card], note);
+
+    manualActionReference = revealcache[card];
+    $('#manualcontrols button').css({
+        'display': 'none'
+    });
+
+
+    if (manualActionReference.player !== orientSlot) {
+        return;
+    }
+
+    $('#manualcontrols').css({
+        'top': currentMousePos.y,
+        'left': currentMousePos.x,
+        'display': 'block'
+    });
+}
 
 function reorientmenu() {
     'use strict';
@@ -1449,8 +1463,29 @@ $.getJSON('http://ygopro.us/manifest/database_0-en-OCGTCG.json', function (data)
 
 $('#lobbychatinput, #sidechatinput').keypress(function (e) {
     'use strict';
+
     if (e.which === 13) {
         //chat($(e.currentTarget).val());
+        var parts = $(e.currentTarget).val().split[' '],
+            lp = 0;
+        if (parts.length === 2) {
+            if (parts[0] === '/sub') {
+                lp = (-1) * parseInt(parts[1], 10);
+                if (isNaN(lp)) {
+                    return;
+                }
+                manualChangeLifepoints(lp);
+                return;
+            }
+            if (parts[0] === '/add') {
+                lp = parseInt(parts[1], 10);
+                if (isNaN(lp)) {
+                    return;
+                }
+                manualChangeLifepoints(lp);
+                return;
+            }
+        }
         manualServer.send(JSON.stringify({
             action: 'chat',
             name: localStorage.nickname,

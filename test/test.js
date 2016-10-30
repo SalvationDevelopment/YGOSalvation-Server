@@ -25,9 +25,9 @@ describe('Boot Test', function () {
     it('Should test enums.js', function () {
         require('../libs/enums.js');
     });
-    it('Should test gamelist.js', function () {
-        require('../libs/gamelist.js');
-    });
+    //    it('Should test gamelist.js', function () {
+    //        require('../libs/gamelist.js');
+    //    });
     // it('Should test ircbot.js', function () {
     //     require('../libs/ircbot.js');
     // });
