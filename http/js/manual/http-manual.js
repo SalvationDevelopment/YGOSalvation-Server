@@ -1295,7 +1295,7 @@ function revealonclick(card, note) {
         'display': 'block'
     });
     if (manualActionReference.location === 'DECK') {
-        $('.moveToHand, .manualSpecialSummonDef, .manualSpecialSummonAtt, .manualSetMonster,  .manualActivateFieldSpell, .manualToExtraFaceUp, .manualRemove,.manualToGrave').css({
+        $('.moveToHand, .manualSpecialSummonDef, .manualSpecialSummonAtt, .manualSetMonster,  .manualActivateFieldSpell, .manualToExtraFaceUp, .manualRemove,.manualToGrave, .manualToRemoved').css({
             'display': 'block'
         });
         reorientmenu();
@@ -1317,7 +1317,7 @@ function revealonclick(card, note) {
         return;
     }
     if (manualActionReference.location === 'EXTRA') {
-        $('.manualViewExtra, .manualRevealExtra').css({
+        $('.manualSpecialSummonDef, .manualSpecialSummonAtt, .manualSetMonster,.manualToGrave, .manualToRemoved').css({
             'display': 'block'
         });
         reorientmenu();
