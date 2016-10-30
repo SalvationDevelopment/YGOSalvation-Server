@@ -553,7 +553,7 @@ function updateChat(chatlog) {
     console.log(chatlog);
     $('.ingamechatbox').html('');
     chatlog.forEach(function (chatMessage, index) {
-        $('.ingamechatbox, #sidechat').append('<li>' + chatMessage + '</li>');
+        $('.ingamechatbox').append('<li>' + chatMessage + '</li>');
     });
     $('.ingamechatbox, #sidechat').scrollTop($('.ingamechatbox').prop("scrollHeight"));
 
