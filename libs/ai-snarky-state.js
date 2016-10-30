@@ -829,6 +829,8 @@ function init(callback) {
         shuffleDeck: shuffleDeck,
         shuffleHand: shuffleHand,
         revealCallback: revealCallback,
+        duelistChat: duelistChat,
+        spectatorChat: spectatorChat,
         players: {}, // holds socket references
         spectators: {}, // holds socket references
         decks: {
