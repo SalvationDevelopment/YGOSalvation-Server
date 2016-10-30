@@ -601,14 +601,17 @@ function manualReciver(message) {
         break;
     case "duel":
         linkStack(message.field);
-        cardmargin(0, 'GRAVE');
-        cardmargin(0, 'EXTRA');
-        cardmargin(0, 'DECK');
-        cardmargin(1, 'GRAVE');
-        cardmargin(1, 'EXTRA');
-        cardmargin(1, 'DECK');
-        layouthand(0);
-        layouthand(1);
+
+        setTimeout(function () {
+            cardmargin(0, 'GRAVE');
+            cardmargin(0, 'EXTRA');
+            cardmargin(0, 'DECK');
+            cardmargin(1, 'GRAVE');
+            cardmargin(1, 'EXTRA');
+            cardmargin(1, 'DECK');
+            layouthand(0);
+            layouthand(1);
+        }, 1000);
         updateChat(message.info.duelistChat);
         $('#phaseindicator').attr('data-currentphase', message.info.phase);
         $('.p0lp').val(message.info.lifepoints[0]);
@@ -1532,6 +1535,7 @@ $('#lobbychatinput, #sidechatinput').keypress(function (e) {
 });
 
 $('#manualcontrols button').on('click', function () {
+    'use strict';
     $('#revealed, #revealedclose').css('display', 'none');
 
-})
+});
