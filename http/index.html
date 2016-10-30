@@ -1813,50 +1813,62 @@
         </div>
         <div id="manualcontrols">
             <button onclick="manualRevealHandSingle()">Reveal</button>
-            <button onclick="manualRevealDeck()">Reveal Deck</button>
-            <button onclick="manualRevealTop()">Reveal Top Card</button>
-            <button onclick="manualRevealBottom()">Reveal Bottom Card</button>
-            <button onclick="manualRevealBottom()">Reveal Deck</button>
-            <button onclick="manualViewDeck()">View Deck</button>
-            <button onclick="manualViewGrave()">View Graveyard</button>
-            <button onclick="manualViewBanished()">View Banished</button>
-            <button onclick="manualToBottomOfDeck()">To Bottom of Deck</button>
-            <button onclick="manualToTopOfDeck()">To Top of Deck</button>
-            <button onclick="manualSetSpell()">Set in S/T</button>
-            <button onclick="manualToRemoved()">Banish</button>
-            <button onclick="manualToRemovedFacedown()">Banish Facedown</button>
-            <button onclick="manualMillRemovedCard()">Banish</button>
-            <button onclick="manualMillRemovedCardFaceDown()">Banish Facedown</button>
-            <button onclick="manualToHand()">To Hand</button>
-            <button onclick="manualActivate()">To S/T</button>
-            <button onclick="manualSetMonsterFaceUp()">Special Summon in Defense</button>
-            <button onclick="manualNormalSummon()">Special Summon in Attack</button>
-            <button onclick="manualSetMonster()">Set Monster</button>
-            <button onclick="manualNormalSummon()">Normal Summon</button>
-            <button onclick="manualActivateFieldSpell()">Activate Field Spell</button>
-            <button onclick="manualActivateFieldSpellFaceDown()">Set Field Spell</button>
-            <button onclick="manualViewExtra()">View Extra Deck</button>
-            <button onclick="manualRevealExtra()">Reveal Extra Deck</button>
-            <button onclick="manualToExtra()">Send to Extra Deck</button>
-            <button onclick="manualToExtraFaceUp()">To Extra Deck Face Up</button>
-            <button>Change Owner</button>
-            <button>Overlay</button>
-            <button>Detach</button>
-            <button onclick="manualSetMonster()">Flip Facedown</button>
-            <button onclick="manualNormalSummon()">Flip Faceup</button>
-            <button onclick="manualToAttack()">To Attack</button>
-            <button onclick="manualSetMonsterFaceUp()">To Defense</button>
-            <button onclick="manualToPZoneR()">To Left Pendulumn Zone</button>
-            <button onclick="manualToPZoneL()">To Right Pendulumn Zone</button>
-            <button onclick="manualToGrave()">To Graveyard</button>
-            <button onclick="manualToOpponentsHand()">To Opponents Hand</button>
-            <button onclick="manualToOpponentsGrave()">To Opponents Graveyard</button>
-            <button onclick="manualToOpponentsHand()">To Opponents Extra Deck</button>
-            <button onclick="manualMill()">Mill Card</button>
-            <button onclick="manualShuffleDeck()">Shuffle Deck</button>
-            <button onclick="manualDraw()">Draw</button>
+            <button class="m-deck" onclick="manualRevealDeck()">Reveal Deck</button>
+            <button class="m-deck" onclick="manualRevealTop()">Reveal Top Card</button>
+            <button class="m-deck" onclick="manualRevealBottom()">Reveal Bottom Card</button>
+            <button class="m-deck" onclick="manualRevealBottom()">Reveal Deck</button>
+            <button class="m-deck" onclick="manualViewDeck()">View Deck</button>
+            <button class="m-deck" onclick="manualToRemovedFacedown()">Banish Top Facedown</button>
+            <button class="m-deck" onclick="manualMillRemovedCard()">Banish Top Card</button>
+            <button class="m-deck" onclick="manualMillRemovedCardFaceDown()">Banish Facedown</button>
+            <button class="m-deck" onclick="manualShuffleDeck()">Shuffle Deck</button>
+            <button class="m-deck" onclick="manualViewDeck()">View Deck</button>
+            <button class="m-deck" onclick="manualMill()">Mill Card</button>
+            <button class="m-deck" onclick="manualDraw()">Draw</button>
+
+            <button class="m-grave" onclick="manualViewGrave()">View Graveyard</button>
+            <button class="m-banished" onclick="manualViewBanished()">View Banished</button>
+
+            <button class="m-extra" onclick="manualViewExtra()">View Extra Deck</button>
+            <button class="m-extra" onclick="manualRevealExtra()">Reveal Extra Deck</button>
+
+            <button class="m-hand m-field" onclick="manualToBottomOfDeck()">To Bottom of Deck</button>
+            <button class="m-hand m-field" onclick="manualToTopOfDeck()">To Top of Deck</button>
+            <button class="m-hand m-field" onclick="manualToExtraFaceUp()">To Extra Deck Face Up</button>
+            <button class="m-hand m-field" onclick="manualToGrave()">To Graveyard</button>
+            <button class="m-hand m-field" onclick="manualToOpponentsHand()">To Opponents Hand</button>
+            <button class="m-hand m-field" onclick="manualToOpponentsGrave()">To Opponents Graveyard</button>
+            <button class="m-hand m-field" onclick="manualToRemoved()">Banish</button>
+
+            <button class="m-hand-st m-monster-st v-st" onclick="manualSetSpell()">Set in S/T</button>
+            <button class="m-hand-st v-st" onclick="manualActivate()">To S/T</button>
+
+            <button class="m-field" onclick="manualToHand()">To Hand</button>
+
+            <button class="m-hand-p m-monster-extra v-monster" onclick="manualToExtra()">Send to Extra Deck</button>
+
+            <button class="m-hand-m" onclick="manualSetMonsterFaceUp()">Special Summon in Defense</button>
+            <button class="m-hand-m" onclick="manualNormalSummon()">Special Summon in Attack</button>
+            <button class="m-hand-m" onclick="manualSetMonster()">Set Monster</button>
+            <button class="m-hand-m" onclick="manualNormalSummon()">Normal Summon</button>
+
+            <button class="m-hand-f" onclick="manualActivateFieldSpell()">Activate Field Spell</button>
+            <button class="m-hand-f" onclick="manualActivateFieldSpellFaceDown()">Set Field Spell</button>
+
+
+            <button class="m-monster">Change Owner</button>
+            <button class="m-monster">Overlay</button>
+            <button class="m-monster-xyz">Detach</button>
+            <button class="m-monster" onclick="manualToDefence()">Flip Facedown</button>
+            <button class="m-monster" onclick="manualToAttack()">To Attack</button>
+            <button class="m-monster" onclick="manualSetMonsterFaceUp()">To Defense</button>
+            <button class="m-hand-p m-monster" onclick="manualToPZoneR()">To Left Pendulumn Zone</button>
+            <button class="m-hand-p m-monster" onclick="manualToPZoneL()">To Right Pendulumn Zone</button>
+
+
+
         </div>
-        <div id="revealedclose" onclick="$('#revealed').toggle();$('#revealedclose').toggle()"></div>
+        <div id="revealedclose" onclick="$('#revealed ').toggle();$('#revealedclose ').toggle()"></div>
         <div id="revealed"></div>
         <div class="field" id="duelzone">
             <div class="fieldimage" id="automationduelfield">
@@ -1930,7 +1942,7 @@
         </div>
     </header>
     <footer class="superfooter">
-        <div style='max-width:1000px; margin:0 auto'>
+        <div style='max-width:1000px; margin:0 auto '>
             YGOPro Salvation Server is not affliated with Konami, NAS, Shueisha or Kazuki Takahashi. Salvation Server &copy; 2013-2016. Powered by Yu-Jo Friendship and fans of Yu-Gi-Oh! worldwide. Please support the offical release. Work with us, don't sue us.</div>
     </footer>
     <script src="js/translations.js"></script>
