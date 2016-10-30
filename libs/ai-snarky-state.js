@@ -108,6 +108,7 @@ function shuffle(deck) {
     }
 }
 
+
 /**
  * Changes a view of cards so the opponent can not see what they are.
  * @param   {Array} view a collection of cards
@@ -590,6 +591,10 @@ function init(callback) {
         revealCallback(filterlocation(filterPlayer(stack, player), 'GRAVE'), player, 'view');
     }
 
+    function viewBanished(player) {
+        revealCallback(hideViewOfZone(filterlocation(filterPlayer(stack, player), 'REMOVED')), player, 'view');
+    }
+
 
     function viewDeck(player) {
         var deck = filterlocation(filterPlayer(stack, player), 'DECK').reverse(),
@@ -810,6 +815,21 @@ function init(callback) {
         callback(generateView('flipDeckOver'), stack); // alert UI of the shuffle.
     }
 
+    function rollDie(username) {
+        var result = Math.floor(Math.random() * ((6 - 1) + 1) + 1);
+        duelistChat('Server', username + ' rolled a ' + result);
+        return result;
+
+    }
+
+    function flipCoin(username) {
+
+        var result = (Math.random() < 0.5) ? 'Heads' : 'Tails';
+        duelistChat('Server', username + ' flipped ' + result);
+        return result;
+    }
+
+
     //expose public functions.
     return {
         startDuel: startDuel,
@@ -831,6 +851,7 @@ function init(callback) {
         viewGrave: viewGrave,
         viewDeck: viewDeck,
         viewExtra: viewExtra,
+        viewBanished: viewBanished,
         nextPhase: nextPhase,
         nextTurn: nextTurn,
         changeLifepoints: changeLifepoints,
@@ -840,6 +861,8 @@ function init(callback) {
         revealCallback: revealCallback,
         duelistChat: duelistChat,
         spectatorChat: spectatorChat,
+        rollDie: rollDie,
+        flipCoin: flipCoin,
         players: {}, // holds socket references
         spectators: {}, // holds socket references
         decks: {

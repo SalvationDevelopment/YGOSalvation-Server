@@ -207,6 +207,9 @@ function responseHandler(socket, message) {
     case "viewGrave":
         stateSystem[socket.activeduel].viewGrave(socket.slot);
         break;
+    case "viewBanished":
+        stateSystem[socket.activeduel].viewBanished(socket.slot);
+        break;
     case "shuffleDeck":
         stateSystem[socket.activeduel].shuffleDeck(socket.slot);
         break;
@@ -225,11 +228,25 @@ function responseHandler(socket, message) {
     case "millRemovedCardFaceDown":
         stateSystem[socket.activeduel].millRemovedCardFaceDown(socket.slot, 1);
         break;
+    case "rolldie":
+        if (socket.slot !== undefined) {
+            stateSystem[socket.activeduel].rollDie(games[socket.activeduel].player[socket.slot].name);
+        } else {
+            stateSystem[socket.activeduel].rollDie(message.name);
+        }
+        break;
+    case "flipCoin":
+        if (socket.slot !== undefined) {
+            stateSystem[socket.activeduel].flipCoin(games[socket.activeduel].player[socket.slot].name);
+        } else {
+            stateSystem[socket.activeduel].flipCoin(message.name);
+        }
+        break;
     case "chat":
         if (socket.slot !== undefined) {
-            stateSystem[socket.activeduel].duelistChat(games[socket.activeduel].player[socket.slot].name, message.chat);
+            stateSystem[socket.activeduel].duelistChat(games[socket.activeduel].player[socket.slot].name);
         } else {
-            stateSystem[socket.activeduel].spectatorChat(message.name, message.chat);
+            stateSystem[socket.activeduel].spectatorChat(message.name);
         }
         break;
     case "nextPhase":
