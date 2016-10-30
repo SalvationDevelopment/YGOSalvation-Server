@@ -1166,7 +1166,7 @@ div#selectwhogoesfirst {
     position: fixed;
     left: 20vw;
     top: 17vw;
-    z-index: 500;
+    z-index: 100;
     background: rgba(0, 0, 0, .95);
     border: 1px solid white;
     box-shadow: inset 0px 0px 23px #444;
@@ -1183,7 +1183,7 @@ div#selectwhogoesfirst {
 #manualcontrols {
     position: fixed;
     width: 7em;
-    z-index: 50;
+    z-index: 150;
 }
 
 #manualcontrols button {

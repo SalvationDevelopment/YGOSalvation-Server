@@ -1530,3 +1530,8 @@ $('#lobbychatinput, #sidechatinput').keypress(function (e) {
         return false;
     }
 });
+
+$('#manualcontrols button').on('click', function () {
+    $('#revealed, #revealedclose').css('display', 'none');
+
+})
