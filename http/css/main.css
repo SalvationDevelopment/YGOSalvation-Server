@@ -1681,6 +1681,16 @@ div#phaseindicator {
     float: left;
     overflow: hidden;
     z-index: 30;
+    opacity: .5;
+    background: black;
+    border: 1px solid white;
+    color: white;
+}
+
+[data-currentphase=0] #drawphi {
+    opacity: 1;
+    font-weight: bold;
+    box-shadow: 0 0 10px #ccc;
 }
 
 #phaseindicator button.avaliable {

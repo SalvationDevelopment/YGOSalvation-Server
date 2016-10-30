@@ -231,7 +231,7 @@ function responseHandler(socket, message) {
         break;
     case "nextPhase":
         if (socket.slot !== undefined) {
-            stateSystem[socket.activeduel].nextPhase();
+            stateSystem[socket.activeduel].nextPhase(message.phase);
         }
         break;
     case "nextTurn":
