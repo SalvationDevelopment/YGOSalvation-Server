@@ -145,6 +145,8 @@ function updateloby(state) {
     setTimeout(function () {
         $('#p0avatar').attr('src', avatarMap[state.player[0].name]);
         $('#p1avatar').attr('src', avatarMap[state.player[1].name]);
+        $('.p0name').html(state.player[0].name);
+        $('.p1name').html(state.player[1].name);
     }, 3000);
 
 
