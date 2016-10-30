@@ -1687,22 +1687,19 @@ div#phaseindicator {
     color: white;
 }
 
-[data-currentphase=0] #drawphi {
+#phaseindicator[data-currentphase="0"] #drawphi,
+#phaseindicator[data-currentphase="1"] #standbyphi,
+#phaseindicator[data-currentphase="2"] #main1phi,
+#phaseindicator[data-currentphase="3"] #battlephi,
+#phaseindicator[data-currentphase="4"] #main2phi,
+#phaseindicator[data-currentphase="5"] #endphi {
     opacity: 1;
     font-weight: bold;
-    box-shadow: 0 0 10px #ccc;
+    box-shadow: inset 0 0 7px #ccc, 0 0 7px #ccc;
+    border: 2px solid white;
 }
 
 #phaseindicator button.avaliable {
-    visibility: visible;
-}
-
-#phaseindicator[data-currentphase="1"] #drawphi,
-#phaseindicator[data-currentphase="2"] #standbyphi,
-#phaseindicator[data-currentphase="4"] #main1phi,
-#phaseindicator[data-currentphase="16"] #battlephi,
-#phaseindicator[data-currentphase="32"] #main2phi,
-#phaseindicator[data-currentphase="64"] #endphi {
     visibility: visible;
 }
 
