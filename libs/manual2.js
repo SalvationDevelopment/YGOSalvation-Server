@@ -204,6 +204,9 @@ function responseHandler(socket, message) {
     case "viewExtra":
         stateSystem[socket.activeduel].viewExtra(socket.slot);
         break;
+    case "viewGrave":
+        stateSystem[socket.activeduel].viewGrave(socket.slot);
+        break;
     case "shuffleDeck":
         stateSystem[socket.activeduel].shuffleDeck(socket.slot);
         break;
