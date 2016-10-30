@@ -1256,11 +1256,26 @@ var currentMousePos = {
     y: -1
 };
 
+function reorientmenu() {
+    'use strict';
+    var height = $('#manualcontrols').height(),
+        width = $('#manualcontrols').width() / 2;
+
+
+    $('#manualcontrols').css({
+        'top': currentMousePos.y - height,
+        'left': currentMousePos.x - width,
+        'display': 'block'
+    });
+
+}
 
 function revealonclick(card, note) {
     'use strict';
     console.log(revealcache[card], note);
-
+    if (note !== 'view') {
+        return;
+    }
     manualActionReference = revealcache[card];
     $('#manualcontrols button').css({
         'display': 'none'
@@ -1276,21 +1291,38 @@ function revealonclick(card, note) {
         'left': currentMousePos.x,
         'display': 'block'
     });
+    if (manualActionReference.location === 'DECK') {
+        $('.moveToHand, .manualSpecialSummonDef, .manualSpecialSummonAtt, .manualSetMonster,  .manualActivateFieldSpell, .manualToExtraFaceUp, .manualRemove,.manualToGrave').css({
+            'display': 'block'
+        });
+        reorientmenu();
+        return;
+    }
+
+    if (manualActionReference.location === 'GRAVE') {
+        $('.moveToHand, .manualSpecialSummonDef, .manualSpecialSummonAtt, .manualSetMonster, .manualToExtraFaceUp, .manualRemove').css({
+            'display': 'block'
+        });
+        reorientmenu();
+        return;
+    }
+    if (manualActionReference.location === 'REMOVED') {
+        $('.moveToHand, .manualSpecialSummonDef, .manualSpecialSummonAtt, .manualSetMonster,  .manualActivateFieldSpell, .manualToExtraFaceUp, .manualRemove,.manualToGrave').css({
+            'display': 'block'
+        });
+        reorientmenu();
+        return;
+    }
+    if (manualActionReference.location === 'EXTRA') {
+        $('.manualViewExtra, .manualRevealExtra').css({
+            'display': 'block'
+        });
+        reorientmenu();
+        return;
+    }
 }
 
-function reorientmenu() {
-    'use strict';
-    var height = $('#manualcontrols').height(),
-        width = $('#manualcontrols').width() / 2;
 
-
-    $('#manualcontrols').css({
-        'top': currentMousePos.y - height,
-        'left': currentMousePos.x - width,
-        'display': 'block'
-    });
-
-}
 
 function guicardclick(id, uid) {
     'use strict';
