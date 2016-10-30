@@ -583,6 +583,19 @@ function manualReciver(message) {
     case "start":
         manualgamestart(message);
         //startDuel(player1StartLP, player2StartLP, OneDeck, TwoDeck, OneExtra, TwoExtra)
+        linkStack(message.field);
+        cardmargin(0, 'GRAVE');
+        cardmargin(0, 'EXTRA');
+        cardmargin(0, 'DECK');
+        cardmargin(1, 'GRAVE');
+        cardmargin(1, 'EXTRA');
+        cardmargin(1, 'DECK');
+        layouthand(0);
+        layouthand(1);
+        updateChat(message.info.duelistChat);
+        $('#phaseindicator').attr('data-currentphase', message.info.phase);
+        $('.p0lp').val(message.info.lifepoints[0]);
+        $('.p1lp').val(message.info.lifepoints[1]);
         break;
     case "shuffleDeck0":
         doGuiShuffle(orient(0), 'DECK');

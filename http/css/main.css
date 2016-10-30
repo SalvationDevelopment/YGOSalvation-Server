@@ -1117,6 +1117,10 @@ meter.p1time {
     pointer-events: none;
 }
 
+.card {
+    pointer-events: all !important;
+}
+
 .button.ready0 {
     display: none;
 }
