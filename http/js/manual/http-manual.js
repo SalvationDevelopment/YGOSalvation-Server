@@ -799,6 +799,13 @@ function manualViewDeck() {
     }));
 }
 
+function manualViewBanished() {
+    'use strict';
+    manualServer.send(JSON.stringify({
+        action: 'viewBanished'
+    }));
+}
+
 function manualViewExtra() {
     'use strict';
     manualServer.send(JSON.stringify({
@@ -1309,7 +1316,7 @@ function revealonclick(card, note) {
         reorientmenu();
         return;
     }
-    if (manualActionReference.location === 'REMOVED') {
+    if (manualActionReference.location === "REMOVED") {
         $('.moveToHand, .manualSpecialSummonDef, .manualSpecialSummonAtt, .manualSetMonster,  .manualActivateFieldSpell, .manualToExtraFaceUp, .manualRemove,.manualToGrave').css({
             'display': 'block'
         });
@@ -1375,15 +1382,17 @@ function guicardclick(id, uid) {
         reorientmenu();
         return;
     }
-    if (stackunit.location === 'GRAVE') {
-        $('.manualViewGrave').css({
+
+    if (stackunit.location === 'EXTRA') {
+        $('.manualViewExtra, .manualRevealExtra').css({
             'display': 'block'
         });
         reorientmenu();
         return;
     }
-    if (stackunit.location === 'EXTRA') {
-        $('.manualViewExtra, .manualRevealExtra').css({
+
+    if (stackunit.location === 'REMOVED') {
+        $('.manualViewBanished').css({
             'display': 'block'
         });
         reorientmenu();
