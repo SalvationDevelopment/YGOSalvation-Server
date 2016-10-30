@@ -538,7 +538,7 @@ function reveal(cards, note) {
         html += "</div>";
     }
     $('#revealed').html(html);
-    $('#subreveal').width(cards.length * 197);
+    //$('#subreveal').width(cards.length * 197);
 }
 
 var chatplace = 0;
