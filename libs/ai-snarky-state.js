@@ -685,8 +685,8 @@ function init(callback) {
     /**
      * Mutation Fuction, moves game to next phase.
      */
-    function nextPhase() {
-        state.phase++;
+    function nextPhase(phase) {
+        state.phase = phase;
         callback(generateView(), stack);
     }
 
