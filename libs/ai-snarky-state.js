@@ -582,6 +582,14 @@ function init(callback) {
         revealCallback(filterlocation(filterPlayer(stack, player), 'HAND'), player, 'hand');
     }
 
+    /**
+     * Reveal the players hand.
+     * @param {number} player 
+     */
+    function viewGrave(player) {
+        revealCallback(filterlocation(filterPlayer(stack, player), 'GRAVE'), player, 'view');
+    }
+
 
     function viewDeck(player) {
         var deck = filterlocation(filterPlayer(stack, player), 'DECK').reverse(),
@@ -820,6 +828,7 @@ function init(callback) {
         revealBottom: revealBottom,
         revealDeck: revealDeck,
         revealExtra: revealExtra,
+        viewGrave: viewGrave,
         viewDeck: viewDeck,
         viewExtra: viewExtra,
         nextPhase: nextPhase,
