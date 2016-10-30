@@ -546,6 +546,21 @@ function reveal(cards, note) {
     $('#subreveal').width(cards.length * 197);
 }
 
+var chatplace = 0;
+
+function updateChat(chatlog) {
+    'use strict';
+    if (chatlog.length === chatplace) {
+        return;
+    }
+    chatlog.forEach(function (chatMessage, index) {
+        $('.ingamechatbox, #sidechat').append('<li>' + chatMessage + '</li>');
+    });
+    $('.ingamechatbox, #sidechat').scrollTop($('.ingamechatbox').prop("scrollHeight"));
+
+    chatplace = chatlog.length;
+}
+
 function manualReciver(message) {
     'use strict';
     console.log(message);
@@ -572,6 +587,7 @@ function manualReciver(message) {
     case "shuffleDeck0":
         doGuiShuffle(orient(0), 'DECK');
         linkStack(message.field);
+        updateChat(message.info.duelistChat);
         break;
     case "shuffleDeck1":
         doGuiShuffle(orient(1), 'DECK');
