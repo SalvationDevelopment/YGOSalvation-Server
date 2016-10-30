@@ -494,6 +494,11 @@ function automaticZonePicker(realPlayer, zone) {
 
 }
 
+function revealonclick(card, note) {
+    'use strict';
+    console.log(card, note);
+}
+
 function reveal(cards, note) {
     'use strict';
     var html = '';
@@ -504,7 +509,8 @@ function reveal(cards, note) {
         $('#revealed').css('display', 'block');
     }
     cards.forEach(function (card, index) {
-        html += '<img src="http://ygopro.us/ygopro/pics/' + card.id + '.jpg" />';
+        var hardcard = JSON.stringify(card);
+        html += '<img src="http://ygopro.us/ygopro/pics/' + card.id + '.jpg" onclick="revealonclick(\'' + hardcard + '\', ' + note + ')"/>';
     });
     if (cards.length > 5) {
         html += "</div>";
