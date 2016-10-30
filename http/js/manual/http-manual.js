@@ -678,10 +678,11 @@ function manualChat(message) {
     manualServer.send(JSON.stringify({}));
 }
 
-function manualNextPhase() {
+function manualNextPhase(phase) {
     'use strict';
     manualServer.send(JSON.stringify({
-        action: 'nextPhase'
+        action: 'nextPhase',
+        phase: phase
     }));
 }
 
