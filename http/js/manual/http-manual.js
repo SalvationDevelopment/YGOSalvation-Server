@@ -1416,10 +1416,11 @@ function guicardclick(id, uid) {
     });
     var idIndex = manualDuel.uidLookup(uid),
         stackunit = manualDuel.stack[idIndex],
-        dbEntry = getCardObject(stackunit.id);
+        dbEntry;
 
     console.log(stackunit);
     manualActionReference = stackunit;
+    dbEntry = getCardObject(stackunit.id);
 
     if (stackunit.location === 'GRAVE') {
         $('.m-grave').css({
