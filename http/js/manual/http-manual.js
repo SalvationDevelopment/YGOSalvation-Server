@@ -600,6 +600,9 @@ function manualReciver(message) {
         cardmargin(1, 'EXTRA');
         cardmargin(1, 'DECK');
         updateChat(message.info.duelistChat);
+        $('#phaseindicator').attr('data-currentphase', message.info.phase);
+        $('.p0lp').val(message.info.lifepoints[0]);
+        $('.p1lp').val(message.info.lifepoints[1]);
         break;
     case "reveal":
         reveal(message.reveal, message.call);
