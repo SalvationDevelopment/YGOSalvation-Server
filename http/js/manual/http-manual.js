@@ -1317,7 +1317,7 @@ function revealonclick(card, note) {
         return;
     }
     if (manualActionReference.location === 'EXTRA') {
-        $('.manualSpecialSummonDef, .manualSpecialSummonAtt, .manualSetMonster,.manualToGrave, .manualToRemoved').css({
+        $('.manualSpecialSummonDef, .manualSpecialSummonAtt,.manualToGrave, .manualToRemoved').css({
             'display': 'block'
         });
         reorientmenu();
@@ -1339,7 +1339,13 @@ function guicardclick(id, uid) {
 
     console.log(stackunit);
     manualActionReference = stackunit;
-
+    if (stackunit.location === 'GRAVE') {
+        $('.manualViewGrave').css({
+            'display': 'block'
+        });
+        reorientmenu();
+        return;
+    }
     if (stackunit.player !== orientSlot) {
         return;
     }
@@ -1357,6 +1363,13 @@ function guicardclick(id, uid) {
     }
     if (stackunit.location === 'HAND') {
         $('.manualRevealHand, .manualShuffleHand, .manualToBottom, .manualToTop, .manualToSetTrapSpell, .manualBanish, .manualBanishFaceDown, .manualSpecialSummonDef, .manualSpecialSummonAtt, .manualSetMonster, .manualNormalSummon, .manualActivateFieldSpell, .manualToExtraFaceUp, .manualRemove, .manualToPZoneR, .manualToPZoneL, .manualToGrave, .manualToOpponentsHand, .manualToOpponentsGrave, .manualToExtraFaceDown').css({
+            'display': 'block'
+        });
+        reorientmenu();
+        return;
+    }
+    if (stackunit.location === 'GRAVE') {
+        $('.manualViewGrave').css({
             'display': 'block'
         });
         reorientmenu();
