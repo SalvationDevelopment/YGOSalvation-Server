@@ -550,9 +550,7 @@ var chatplace = 0;
 
 function updateChat(chatlog) {
     'use strict';
-    if (chatlog.length === chatplace) {
-        return;
-    }
+    console.log(chatlog);
     chatlog.forEach(function (chatMessage, index) {
         $('.ingamechatbox, #sidechat').append('<li>' + chatMessage + '</li>');
     });
