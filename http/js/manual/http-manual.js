@@ -49,6 +49,11 @@ var manualServer,
         16781345: "Pendulum / Tuner / Effect",
         25165857: "Xyz / Pendulum / Effect"
     },
+    pendulumMap = {
+        16777233: "Pendulum",
+        16777249: "Pendulum / Effect",
+        16781345: "Pendulum / Tuner / Effect"
+    },
     raceMap = {
         1: "Warrior",
         2: "Spellcaster",
@@ -1335,86 +1340,6 @@ function revealonclick(card, note) {
 
 
 
-function guicardclick(id, uid) {
-    'use strict';
-
-    manualActionReference = null;
-    $('#manualcontrols button').css({
-        'display': 'none'
-    });
-    var idIndex = manualDuel.uidLookup(uid),
-        stackunit = manualDuel.stack[idIndex];
-
-    console.log(stackunit);
-    manualActionReference = stackunit;
-    if (stackunit.location === 'GRAVE') {
-        $('.manualViewGrave').css({
-            'display': 'block'
-        });
-        reorientmenu();
-        return;
-    }
-    if (stackunit.player !== orientSlot) {
-        return;
-    }
-    $('#manualcontrols').css({
-        'top': currentMousePos.y,
-        'left': currentMousePos.x,
-        'display': 'block'
-    });
-    if (stackunit.location === 'DECK') {
-        $('.manualDraw, .manualShuffle, .manualMill, .manualRevealTop, .manualRevealBottom, .manualRevealDeck, .manualDeckBanish, .manualDeckBanishFaceDown, .manualViewDeck').css({
-            'display': 'block'
-        });
-        reorientmenu();
-        return;
-    }
-    if (stackunit.location === 'HAND') {
-        $('.manualRevealHand, .manualShuffleHand, .manualToBottom, .manualToTop, .manualToSetTrapSpell, .manualBanish, .manualBanishFaceDown, .manualSpecialSummonDef, .manualSpecialSummonAtt, .manualSetMonster, .manualNormalSummon, .manualActivateFieldSpell, .manualToExtraFaceUp, .manualRemove, .manualToPZoneR, .manualToPZoneL, .manualToGrave, .manualToOpponentsHand, .manualToOpponentsGrave, .manualToExtraFaceDown').css({
-            'display': 'block'
-        });
-        reorientmenu();
-        return;
-    }
-    if (stackunit.location === 'GRAVE') {
-        $('.manualViewGrave').css({
-            'display': 'block'
-        });
-        reorientmenu();
-        return;
-    }
-
-    if (stackunit.location === 'EXTRA') {
-        $('.manualViewExtra, .manualRevealExtra').css({
-            'display': 'block'
-        });
-        reorientmenu();
-        return;
-    }
-
-    if (stackunit.location === 'REMOVED') {
-        $('.manualViewBanished').css({
-            'display': 'block'
-        });
-        reorientmenu();
-        return;
-    }
-    if (stackunit.location === 'MONSTERZONE') {
-        $('.moveToHand, .manualToST, .manualToExtaFaceDown, .manualToExtraFaceUp, .moveChangeControl, .manualOverlay, .manualDetach, .manualFlipDown, .manualFlipUp, .manualToAtk, .manualToDef, .manualRemove, .manualToGrave, .manualToOpponentsHand, .manualToOpponentsGrave, .manualToOpponentsExtra').css({
-            'display': 'block'
-        });
-        reorientmenu();
-        return;
-    }
-    if (stackunit.location === 'SPELLZONE') {
-        $('.moveToHand,  .manualToExtraFaceUp, .manualFlipDown, .manualFlipUp, .manualRemove, .manualToGrave, .manualToOpponentsHand, .manualToOpponentsGrave').css({
-            'display': 'block'
-        });
-        reorientmenu();
-        return;
-    }
-}
-var internalDB = [];
 
 
 function getCardObject(id) {
@@ -1481,6 +1406,105 @@ function makeDescription(id) {
     }
     return output + "<br /><span class='description'>" + targetCard.desc.replace(/\r\n/g, '<br />') + "</span>";
 }
+
+function guicardclick(id, uid) {
+    'use strict';
+
+    manualActionReference = null;
+    $('#manualcontrols button').css({
+        'display': 'none'
+    });
+    var idIndex = manualDuel.uidLookup(uid),
+        stackunit = manualDuel.stack[idIndex],
+        dbEntry = getCardObject(stackunit.id);
+
+    console.log(stackunit);
+    manualActionReference = stackunit;
+
+    if (stackunit.location === 'GRAVE') {
+        $('.manualViewGrave').css({
+            'display': 'block'
+        });
+        reorientmenu();
+        return;
+    }
+    if (stackunit.player !== orientSlot) {
+        return;
+    }
+    $('#manualcontrols').css({
+        'top': currentMousePos.y,
+        'left': currentMousePos.x,
+        'display': 'block'
+    });
+    if (stackunit.location === 'DECK') {
+        $('.data-m-deck').css({
+            'display': 'block'
+        });
+        reorientmenu();
+        return;
+    }
+    if (stackunit.location === 'HAND') {
+        $('.m-hand').css({
+            'display': 'block'
+        });
+        if (monsterMap[dbEntry.type]) {
+            $('[m-hand-m]').css({
+                'display': 'block'
+            });
+        }
+        if (typeMap[dbEntry.type]) {
+            $('[m-hand-st]').css({
+                'display': 'block'
+            });
+        }
+        if (pendulumMap[dbEntry.type]) {
+            $('[m-hand-p]').css({
+                'display': 'block'
+            });
+        }
+        reorientmenu();
+        return;
+    }
+    if (stackunit.location === 'GRAVE') {
+        $('[data-m-grave]').css({
+            'display': 'block'
+        });
+        reorientmenu();
+        return;
+    }
+
+    if (stackunit.location === 'EXTRA') {
+        $('[data-m-extra]').css({
+            'display': 'block'
+        });
+        reorientmenu();
+        return;
+    }
+
+    if (stackunit.location === 'REMOVED') {
+        $('[data-m-removed]').css({
+            'display': 'block'
+        });
+        reorientmenu();
+        return;
+    }
+    if (stackunit.location === 'MONSTERZONE') {
+        $('m-monster').css({
+            'display': 'block'
+        });
+        reorientmenu();
+        return;
+    }
+    if (stackunit.location === 'SPELLZONE') {
+        $('m-st').css({
+            'display': 'block'
+        });
+        reorientmenu();
+        return;
+    }
+}
+var internalDB = [];
+
 
 $(document).ready(function () {
     'use strict';
