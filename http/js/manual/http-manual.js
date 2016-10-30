@@ -17,13 +17,17 @@ var manualServer,
         64: "DIVINE"
     },
     typeMap = {
+        2: '',
+        4: '',
         130: " / Ritual",
         65538: " / Quick-Play",
         131074: " / Continuous",
         131076: " / Continuous",
         262146: " / Equip",
-        524290: " / Field",
         1048580: " / Counter"
+    },
+    fieldspell = {
+        524290: " / Field"
     },
     monsterMap = {
         17: "Normal",
@@ -1455,6 +1459,11 @@ function guicardclick(id, uid) {
         }
         if (typeMap[dbEntry.type]) {
             $('.m-hand-st').css({
+                'display': 'block'
+            });
+        }
+        if (fieldspell[dbEntry.type]) {
+            $('.m-hand-f').css({
                 'display': 'block'
             });
         }
