@@ -1422,7 +1422,7 @@ function guicardclick(id, uid) {
     manualActionReference = stackunit;
 
     if (stackunit.location === 'GRAVE') {
-        $('.manualViewGrave').css({
+        $('.m-grave').css({
             'display': 'block'
         });
         reorientmenu();
@@ -1448,17 +1448,17 @@ function guicardclick(id, uid) {
             'display': 'block'
         });
         if (monsterMap[dbEntry.type]) {
-            $('[m-hand-m]').css({
+            $('.m-hand-m').css({
                 'display': 'block'
             });
         }
         if (typeMap[dbEntry.type]) {
-            $('[m-hand-st]').css({
+            $('.m-hand-st').css({
                 'display': 'block'
             });
         }
         if (pendulumMap[dbEntry.type]) {
-            $('[m-hand-p]').css({
+            $('.m-hand-p').css({
                 'display': 'block'
             });
         }
@@ -1466,7 +1466,7 @@ function guicardclick(id, uid) {
         return;
     }
     if (stackunit.location === 'GRAVE') {
-        $('[data-m-grave]').css({
+        $('.data-m-grave').css({
             'display': 'block'
         });
         reorientmenu();
@@ -1474,7 +1474,7 @@ function guicardclick(id, uid) {
     }
 
     if (stackunit.location === 'EXTRA') {
-        $('[data-m-extra]').css({
+        $('.data-m-extra').css({
             'display': 'block'
         });
         reorientmenu();
@@ -1482,7 +1482,7 @@ function guicardclick(id, uid) {
     }
 
     if (stackunit.location === 'REMOVED') {
-        $('[data-m-removed]').css({
+        $('.m-removed').css({
             'display': 'block'
         });
         reorientmenu();
