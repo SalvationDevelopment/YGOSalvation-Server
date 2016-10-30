@@ -494,14 +494,18 @@ function automaticZonePicker(realPlayer, zone) {
 
 }
 
+var revealcache = [];
+
+
 function revealonclick(card, note) {
     'use strict';
-    console.log(card, note);
+    console.log(revealcache[card], note);
 }
 
 function reveal(cards, note) {
     'use strict';
     var html = '';
+    revealcache = [];
     $('#revealedclose').css('display', 'block');
     $('#revealed').css('display', 'flex');
     if (cards.length > 5) {
@@ -510,7 +514,8 @@ function reveal(cards, note) {
     }
     cards.forEach(function (card, index) {
         var hardcard = JSON.stringify(card);
-        html += '<img src="http://ygopro.us/ygopro/pics/' + card.id + '.jpg" onclick="revealonclick(\'' + hardcard + '\', ' + note + ')"/>';
+        revealcache.push(card);
+        html += '<img src="http://ygopro.us/ygopro/pics/' + card.id + '.jpg" onclick="revealonclick(' + index + ',\'' + note + '\')"/>';
     });
     if (cards.length > 5) {
         html += "</div>";
