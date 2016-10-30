@@ -1466,7 +1466,7 @@ $('#lobbychatinput, #sidechatinput').keypress(function (e) {
 
     if (e.which === 13) {
         //chat($(e.currentTarget).val());
-        var parts = $(e.currentTarget).val().split[' '],
+        var parts = $('#sidechatinput').val().split(' '),
             lp = 0;
         if (parts.length === 2) {
             if (parts[0] === '/sub') {
@@ -1475,6 +1475,7 @@ $('#lobbychatinput, #sidechatinput').keypress(function (e) {
                     return;
                 }
                 manualChangeLifepoints(lp);
+                $(e.currentTarget).val('');
                 return;
             }
             if (parts[0] === '/add') {
@@ -1483,6 +1484,7 @@ $('#lobbychatinput, #sidechatinput').keypress(function (e) {
                     return;
                 }
                 manualChangeLifepoints(lp);
+                $(e.currentTarget).val('');
                 return;
             }
         }
