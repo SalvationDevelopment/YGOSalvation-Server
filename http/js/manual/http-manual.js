@@ -1411,3 +1411,18 @@ $.getJSON('http://ygopro.us/manifest/database_0-en-OCGTCG.json', function (data)
     'use strict';
     internalDB = data;
 });
+
+$('#lobbychatinput, #sidechatinput').keypress(function (e) {
+    'use strict';
+    if (e.which === 13) {
+        //chat($(e.currentTarget).val());
+        manualServer.send(JSON.stringify({
+            action: 'chat',
+            name: localStorage.nickname,
+            chat: $(e.currentTarget).val()
+        }));
+        $(e.currentTarget).val('');
+        $('.ingamechatbox, #sidechat').scrollTop($('.ingamechatbox').prop("scrollHeight"));
+        return false;
+    }
+});

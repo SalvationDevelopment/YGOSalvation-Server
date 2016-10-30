@@ -224,9 +224,9 @@ function responseHandler(socket, message) {
         break;
     case "chat":
         if (socket.slot !== undefined) {
-            stateSystem[socket.activeduel].duelistChat(socket.slot);
+            stateSystem[socket.activeduel].duelistChat('W', message.chat);
         } else {
-            stateSystem[socket.activeduel].spectatorChat(socket.slot);
+            stateSystem[socket.activeduel].spectatorChat('P' + (socket.slot + 1), message.chat);
         }
         break;
     case "nextPhase":
