@@ -228,7 +228,7 @@ function responseHandler(socket, message) {
     case "millRemovedCardFaceDown":
         stateSystem[socket.activeduel].millRemovedCardFaceDown(socket.slot, 1);
         break;
-    case "rolldie":
+    case "rollDie":
         if (socket.slot !== undefined) {
             stateSystem[socket.activeduel].rollDie(games[socket.activeduel].player[socket.slot].name);
         } else {

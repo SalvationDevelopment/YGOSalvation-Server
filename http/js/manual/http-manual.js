@@ -1515,7 +1515,8 @@ $('#lobbychatinput, #sidechatinput').keypress(function (e) {
     if (e.which === 13) {
         //chat($(e.currentTarget).val());
         var parts = $('#sidechatinput').val().split(' '),
-            lp = 0;
+            amount = 0,
+            i;
         if (parts[0] === '/roll') {
             $(e.currentTarget).val('');
             manualServer.send(JSON.stringify({
@@ -1532,22 +1533,45 @@ $('#lobbychatinput, #sidechatinput').keypress(function (e) {
             }));
             return;
         }
+
         if (parts.length === 2) {
             if (parts[0] === '/sub') {
-                lp = (-1) * parseInt(parts[1], 10);
-                if (isNaN(lp)) {
+                amount = (-1) * parseInt(parts[1], 10);
+                if (isNaN(amount)) {
                     return;
                 }
-                manualChangeLifepoints(lp);
+                manualChangeLifepoints(amount);
                 $(e.currentTarget).val('');
                 return;
             }
             if (parts[0] === '/add') {
-                lp = parseInt(parts[1], 10);
-                if (isNaN(lp)) {
+                amount = parseInt(parts[1], 10);
+                if (isNaN(amount)) {
                     return;
                 }
-                manualChangeLifepoints(lp);
+                manualChangeLifepoints(amount);
+                $(e.currentTarget).val('');
+                return;
+            }
+            if (parts[0] === '/draw') {
+                amount = parseInt(parts[1], 10);
+                if (isNaN(amount)) {
+                    return;
+                }
+                for (i = 0; i < amount; i++) {
+                    manualDraw();
+                }
+                $(e.currentTarget).val('');
+                return;
+            }
+            if (parts[0] === '/mill') {
+                amount = parseInt(parts[1], 10);
+                if (isNaN(amount)) {
+                    return;
+                }
+                for (i = 0; i < amount; i++) {
+                    manualMill();
+                }
                 $(e.currentTarget).val('');
                 return;
             }
