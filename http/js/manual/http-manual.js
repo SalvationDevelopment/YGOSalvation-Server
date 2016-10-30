@@ -611,7 +611,7 @@ function manualReciver(message) {
             cardmargin(1, 'DECK');
             layouthand(0);
             layouthand(1);
-        }, 1000);
+        }, 100);
         updateChat(message.info.duelistChat);
         $('#phaseindicator').attr('data-currentphase', message.info.phase);
         $('.p0lp').val(message.info.lifepoints[0]);
