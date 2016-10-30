@@ -224,7 +224,7 @@ function responseHandler(socket, message) {
         break;
     case "chat":
         if (socket.slot !== undefined) {
-            stateSystem[socket.activeduel].duelistChat(games[socket.activeduel].player[socket.slot], message.chat);
+            stateSystem[socket.activeduel].duelistChat(games[socket.activeduel].player[socket.slot].name, message.chat);
         } else {
             stateSystem[socket.activeduel].spectatorChat(message.name, message.chat);
         }
