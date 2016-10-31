@@ -1123,6 +1123,27 @@ function manualSetSpell() {
     manualServer.send(JSON.stringify(message));
 }
 
+function manualSTFlipDown() {
+    'use strict';
+
+    var index = manualActionReference.index,
+        end = setSpell(manualActionReference, index),
+        message = makeCardMovement(manualActionReference, end);
+
+    message.action = 'moveCard';
+    manualServer.send(JSON.stringify(message));
+}
+
+function manualSTFlipUp() {
+    'use strict';
+
+    var index = manualActionReference.index,
+        end = setSpell(manualActionReference, index),
+        message = makeCardMovement(manualActionReference, end);
+
+    message.action = 'moveCard';
+    manualServer.send(JSON.stringify(message));
+}
 
 
 
@@ -1160,12 +1181,19 @@ function manualToTopOfDeck() {
 
 function manualToBottomOfDeck() {
     'use strict';
+
+    manualServer.send(JSON.stringify({
+        action: 'offsetDeck'
+    }));
     var index = 0,
         end = makeDeckCard(manualActionReference, index),
         message = makeCardMovement(manualActionReference, end);
 
     message.action = 'moveCard';
-    manualServer.send(JSON.stringify(message));
+    setTimeout(function () {
+        manualServer.send(JSON.stringify(message));
+    }, 300);
+
 }
 
 
