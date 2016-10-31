@@ -16,7 +16,7 @@ var manualServer,
         32: "DARK",
         64: "DIVINE"
     },
-    typeMap = {
+    stMap = {
         2: '',
         4: '',
         130: " / Ritual",
@@ -1397,9 +1397,9 @@ function makeDescription(id) {
         output += "<span class='monsterDesc'>[ Monster / " + monsterMap[targetCard.type] + " ]<br />" + raceMap[targetCard.race] + " / " + attributeMap[targetCard.attribute] + "<br />";
         output += "[ " + parseLevelScales(targetCard.level) + " ]<br />" + parseAtkDef(targetCard.atk, targetCard.def) + "</span>";
     } else if (cardIs("spell", targetCard)) {
-        output += "<span class='spellDesc'>[ Spell" + (typeMap[targetCard.type] || "") + " ]</span>";
+        output += "<span class='spellDesc'>[ Spell" + (stMap[targetCard.type] || "") + " ]</span>";
     } else if (cardIs("trap", targetCard)) {
-        output += "<span class='trapDesc'>[ Trap" + (typeMap[targetCard.type] || "") + " ]</span>";
+        output += "<span class='trapDesc'>[ Trap" + (stMap[targetCard.type] || "") + " ]</span>";
     }
     return output + "<br /><span class='description'>" + targetCard.desc.replace(/\r\n/g, '<br />') + "</span>";
 }
@@ -1450,7 +1450,7 @@ function guicardclick(id, uid) {
                 'display': 'block'
             });
         }
-        if (typeMap[dbEntry.type]) {
+        if (stMap[dbEntry.type]) {
             $('.m-hand-st').css({
                 'display': 'block'
             });
