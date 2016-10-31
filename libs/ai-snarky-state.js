@@ -387,6 +387,21 @@ function init(callback) {
         callback(generateView(), stack);
     }
 
+    function makeNewCard(currentLocation, currentController, currentSequence, code) {
+        stack.push(makeCard(currentLocation, currentController, currentSequence, numberOfCards, code));
+        numberOfCards++;
+        callback(generateView(), stack);
+    }
+
+    function removeCard(player, location, sequence) {
+        var target = queryCard(player, location, removeCard, 0),
+            pointer = uidLookup(target.uid);
+
+        delete stack[pointer];
+        numberOfCards--;
+        callback(generateView('removeCard'), stack);
+    }
+
     function moveCard(code, previousController, previousLocation, previousSequence, previousPosition, currentController, currentLocation, currentSequence, currentPosition) {
 
         var target,
@@ -868,6 +883,8 @@ function init(callback) {
         revealCallback: revealCallback,
         duelistChat: duelistChat,
         spectatorChat: spectatorChat,
+        makeNewCard: makeNewCard,
+        removeCard: removeCard,
         rollDie: rollDie,
         flipCoin: flipCoin,
         offsetZone: offsetZone,

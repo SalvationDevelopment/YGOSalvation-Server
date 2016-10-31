@@ -192,6 +192,12 @@ function responseHandler(socket, message) {
     case "offsetDeck":
         stateSystem[socket.activeduel].offsetZone(socket.slot, 'DECK');
         break;
+    case "makeToken":
+        stateSystem[socket.activeduel].makeNewCard(message.location, message.player, message.index, message.id);
+        break;
+    case "removeToken":
+        stateSystem[socket.activeduel].makeNewCard(message.location, message.player, message.index);
+        break;
     case "revealDeck":
         stateSystem[socket.activeduel].revealDeck(socket.slot);
         break;
