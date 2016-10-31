@@ -1828,12 +1828,12 @@
             <button class="m-grave" onclick="manualViewGrave()">View Graveyard</button>
             <button class="m-removed" onclick="manualViewBanished()">View Banished</button>
 
-            <button class="m-extra" onclick="manualViewExtra()">View Extra Deck</button>
+            <button class="m-extra" onclick="manualViewExtr()">View Extra Deck</button>
             <button class="m-extra" onclick="manualRevealExtra()">Reveal Extra Deck</button>
 
-            <button class="m-hand m-field v-grave m-removed" onclick="manualToBottomOfDeck()">To Bottom of Deck</button>
-            <button class="m-hand m-field v-grave m-removed" onclick="manualToTopOfDeck()">To Top of Deck</button>
-            <button class="m-hand m-field v-deck m-removed" onclick="manualToGrave()">To Graveyard</button>
+            <button class="m-hand m-field v-grave v-removed" onclick="manualToBottomOfDeck()">To Bottom of Deck</button>
+            <button class="m-hand m-field v-grave v-removed" onclick="manualToTopOfDeck()">To Top of Deck</button>
+            <button class="m-hand m-field v-deck v-removed" onclick="manualToGrave()">To Graveyard</button>
             <button class="m-hand m-field" onclick="manualToOpponentsHand()">To Opponents Hand</button>
             <button class="m-hand m-field" onclick="manualToOpponentsGrave()">To Opponents Graveyard</button>
             <button class="m-hand v-extra" onclick="manualRevealHandSingle()">Reveal</button>
@@ -1842,7 +1842,7 @@
             <button class="m-hand-st m-monster-st v-st" onclick="manualSetSpell()">Set in S/T</button>
             <button class="m-hand-st v-st" onclick="manualActivate()">To S/T</button>
 
-            <button class="m-field v-deck v-grave m-removed v-extra" onclick="manualToHand()">To Hand</button>
+            <button class="m-field v-deck v-grave v-removed v-extra" onclick="manualToHand()">To Hand</button>
 
             <button class="m-hand-p m-monster-p" onclick="manualToExtraFaceUp()">To Extra Deck Face Up</button>
             <button class="m-hand-p m-monster-extra v-monster-extra" onclick="manualToExtra()">To Extra Deck</button>
@@ -1859,14 +1859,14 @@
             <button class="m-monster">Change Owner</button>
             <button class="m-monster">Overlay</button>
             <button class="m-monster-xyz">Detach</button>
-            <button class="m-monster" onclick="manualToDefence()">Flip Facedown</button>
+            <button class="m-monster" onclick="manualToFaceDownDefence()">Flip Facedown</button>
             <button class="m-monster" onclick="manualToAttack()">To Attack</button>
-            <button class="m-monster" onclick="manualSetMonsterFaceUp()">To Defense</button>
-            <button class="m-hand-p m-monster" onclick="manualToPZoneR()">To Left Pendulumn Zone</button>
-            <button class="m-hand-p m-monster" onclick="manualToPZoneL()">To Right Pendulumn Zone</button>
+            <button class="m-monster" onclick="manualToDefence()">To Defense</button>
+            <button class="m-hand-p m-monster-p" onclick="manualToPZoneR()">To Left Pendulumn Zone</button>
+            <button class="m-hand-p m-monster-p" onclick="manualToPZoneL()">To Right Pendulumn Zone</button>
 
             <button class="m-st" onclick="manualSTFlipUp()">Flip Up</button>
-            <button class="m-st" onclick="manualSTFlipDown()">Flip Up</button>
+            <button class="m-st" onclick="manualSTFlipDown()">Flip Down</button>
 
 
 
