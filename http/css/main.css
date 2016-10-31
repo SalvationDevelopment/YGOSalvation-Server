@@ -951,6 +951,7 @@ div#sidechat {
 #sidechattext {
     padding: 5%;
     margin: 0;
+    overflow: auto;
 }
 
 .ingamechatbox li {

@@ -1057,6 +1057,8 @@ function manualToDefence() {
     manualServer.send(JSON.stringify(message));
 }
 
+
+
 function manualToFaceDownDefence() {
     'use strict';
 
@@ -1384,7 +1386,7 @@ function revealonclick(card, note) {
         return;
     }
     if (manualActionReference.location === "REMOVED") {
-        $('.v-grave').css({
+        $('.v-removed').css({
             'display': 'block'
         });
         if (monsterMap[dbEntry.type]) {
@@ -1696,6 +1698,12 @@ $('#lobbychatinput, #sidechatinput').keypress(function (e) {
                     manualMill();
                 }
                 $(e.currentTarget).val('');
+                return;
+            }
+            if (parts[0] === '/token') {
+                $(e.currentTarget).val('');
+                amount = automaticZonePicker();
+                makeMonster({}, amount);
                 return;
             }
         }
