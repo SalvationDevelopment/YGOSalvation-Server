@@ -565,6 +565,8 @@ function updateChat(chatlog) {
     chatplace = chatlog.length;
 }
 
+var duelstash = {};
+
 function manualReciver(message) {
     'use strict';
     console.log(message);
@@ -630,6 +632,7 @@ function manualReciver(message) {
         $('#phaseindicator').attr('data-currentphase', message.info.phase);
         $('.p0lp').val(message.info.lifepoints[0]);
         $('.p1lp').val(message.info.lifepoints[1]);
+        duelstash = message;
         break;
     case "reveal":
         reveal(message.reveal, message.call);
@@ -1666,9 +1669,12 @@ $('#lobbychatinput, #sidechatinput').keypress(function (e) {
         return;
     }
     if (e.which === 13) {
-        lastchat = $(e.currentTarget).val();
+        if ($(e.currentTarget).val()) {
+            lastchat = $(e.currentTarget).val();
+        }
         var parts = $('#sidechatinput').val().split(' '),
             amount = 0,
+            card = {},
             i;
         if (parts[0] === '/roll') {
             $(e.currentTarget).val('');
@@ -1730,8 +1736,12 @@ $('#lobbychatinput, #sidechatinput').keypress(function (e) {
             }
             if (parts[0] === '/token') {
                 $(e.currentTarget).val('');
-                amount = automaticZonePicker();
-                makeMonster({}, amount);
+                card.player = orientSlot;
+                card.location = 'DECK';
+                card.id = 73915052; // sheep token
+                card.index = automaticZonePicker();
+                card.action = 'makeToken';
+                manualServer.send(JSON.stringify(card));
                 return;
             }
         }
