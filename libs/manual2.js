@@ -189,6 +189,9 @@ function responseHandler(socket, message) {
     case "revealBottom":
         stateSystem[socket.activeduel].revealBottom(socket.slot);
         break;
+    case "offsetDeck":
+        stateSystem[socket.activeduel].offsetZone(socket.slot, 'DECK');
+        break;
     case "revealDeck":
         stateSystem[socket.activeduel].revealDeck(socket.slot);
         break;

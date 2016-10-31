@@ -1671,6 +1671,7 @@ div#phaseindicator {
     position: fixed;
     top: 50%;
     width: 100%;
+    padding: 5px;
 }
 
 #phaseindicator div {
@@ -1699,11 +1700,16 @@ div#phaseindicator {
 #phaseindicator[data-currentphase="2"] #main1phi,
 #phaseindicator[data-currentphase="3"] #battlephi,
 #phaseindicator[data-currentphase="4"] #main2phi,
-#phaseindicator[data-currentphase="5"] #endphi {
+#phaseindicator[data-currentphase="5"] #endphi,
+#phaseindicator[data-currentphase="5"] #nextturn {
     opacity: 1;
     font-weight: bold;
     box-shadow: inset 0 0 7px #ccc, 0 0 7px #ccc;
     border: 2px solid white;
+}
+
+#phaseindicator[data-currentphase="5"] #nextturn {
+    box-shadow: 0 0 10px white;
 }
 
 #phaseindicator button.avaliable {

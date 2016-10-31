@@ -536,6 +536,8 @@ function init(callback) {
         }, stack);
     }
 
+
+
     /**
      * Reveal the top card of the players deck.
      * @param {number} player 
@@ -815,6 +817,11 @@ function init(callback) {
         callback(generateView('flipDeckOver'), stack); // alert UI of the shuffle.
     }
 
+    function offsetZone(player, zone) {
+        var deck = filterlocation(filterPlayer(stack, player), 'DECK');
+        deck.index++;
+    }
+
     function rollDie(username) {
         var result = Math.floor(Math.random() * ((6 - 1) + 1) + 1);
         duelistChat('Server', username + ' rolled a ' + result);
@@ -863,6 +870,7 @@ function init(callback) {
         spectatorChat: spectatorChat,
         rollDie: rollDie,
         flipCoin: flipCoin,
+        offsetZone: offsetZone,
         players: {}, // holds socket references
         spectators: {}, // holds socket references
         decks: {
