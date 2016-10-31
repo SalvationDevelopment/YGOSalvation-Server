@@ -271,7 +271,7 @@ function layouthand(player) {
         // console.log('.'+player+'.Hand.i'+sequence);
         //console.log(xCoord);
         if (player === 0) {
-            $('.p' + player + '.HAND.i' + sequence).css('left', String() + xCoord + 'px');
+            $('.p' + player + '.HAND.i' + sequence).css('right', String() + xCoord + 'px');
         } else {
             $('.p' + player + '.HAND.i' + sequence).css('left', String() + xCoord + 'px');
         }
@@ -1348,17 +1348,14 @@ function revealonclick(card, note) {
 
 function getCardObject(id) {
     'use strict';
-    var cardObject,
-        i = 0,
-        len = internalDB.length;
-    for (i, len; i < len; i += 1) {
-        if (id === internalDB[i].id) {
-            cardObject = internalDB[i];
-            cardObject = internalDB[i];
-            break;
+
+    return internalDB.filter(function (card, index) {
+        if (id === card.id) {
+            return true;
+        } else {
+            return false;
         }
-    }
-    return cardObject;
+    })[0];
 }
 
 function parseLevelScales(level) {
