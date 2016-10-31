@@ -270,11 +270,7 @@ function layouthand(player) {
         }
         // console.log('.'+player+'.Hand.i'+sequence);
         //console.log(xCoord);
-        if (player === 0) {
-            $('.p' + player + '.HAND.i' + sequence).css('right', String() + xCoord + 'px');
-        } else {
-            $('.p' + player + '.HAND.i' + sequence).css('left', String() + xCoord + 'px');
-        }
+        $('.p' + player + '.HAND.i' + sequence).css('left', String() + xCoord + 'px');
     }
 }
 
@@ -1481,7 +1477,7 @@ function guicardclick(id, uid) {
     }
 
     if (stackunit.location === 'EXTRA') {
-        $('.data-m-extra').css({
+        $('.m-extra').css({
             'display': 'block'
         });
         reorientmenu();
@@ -1496,14 +1492,14 @@ function guicardclick(id, uid) {
         return;
     }
     if (stackunit.location === 'MONSTERZONE') {
-        $('m-monster').css({
+        $('.m-monster, .m-field').css({
             'display': 'block'
         });
         reorientmenu();
         return;
     }
     if (stackunit.location === 'SPELLZONE') {
-        $('m-st').css({
+        $('.m-st, .m-field').css({
             'display': 'block'
         });
         reorientmenu();
