@@ -31,7 +31,8 @@ function makeCard(movelocation, player, index, unique, code) {
         index: index,
         position: 'FaceDown',
         overlayindex: 0,
-        uid: unique
+        uid: unique,
+        originalcontroller: player
     };
 }
 
