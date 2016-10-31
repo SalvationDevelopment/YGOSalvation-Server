@@ -596,6 +596,7 @@ function manualReciver(message) {
         $('#phaseindicator').attr('data-currentphase', message.info.phase);
         $('.p0lp').val(message.info.lifepoints[0]);
         $('.p1lp').val(message.info.lifepoints[1]);
+        $('#sidechatinput').focus();
         break;
     case "shuffleDeck0":
         doGuiShuffle(orient(0), 'DECK');
@@ -1450,7 +1451,7 @@ function guicardclick(id, uid) {
                 'display': 'block'
             });
         }
-        if (stMap[dbEntry.type]) {
+        if (stMap[dbEntry.type] || dbEntry.type === 2 || dbEntry.type === 4) {
             $('.m-hand-st').css({
                 'display': 'block'
             });
@@ -1469,7 +1470,7 @@ function guicardclick(id, uid) {
         return;
     }
     if (stackunit.location === 'GRAVE') {
-        $('.data-m-grave').css({
+        $('.m-grave').css({
             'display': 'block'
         });
         reorientmenu();
@@ -1546,11 +1547,15 @@ $.getJSON('http://ygopro.us/manifest/manifest_0-en-OCGTCG.json', function (data)
     internalDB = data;
 });
 
+var lastchat;
 $('#lobbychatinput, #sidechatinput').keypress(function (e) {
     'use strict';
-
+    if (e.which === 40) {
+        $(e.currentTarget).val(lastchat);
+        return;
+    }
     if (e.which === 13) {
-        //chat($(e.currentTarget).val());
+        lastchat = $(e.currentTarget).val();
         var parts = $('#sidechatinput').val().split(' '),
             amount = 0,
             i;
