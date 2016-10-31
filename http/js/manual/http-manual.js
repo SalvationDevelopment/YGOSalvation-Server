@@ -1138,7 +1138,7 @@ function manualSTFlipUp() {
     'use strict';
 
     var index = manualActionReference.index,
-        end = setSpell(manualActionReference, index),
+        end = makeSpell(manualActionReference, index),
         message = makeCardMovement(manualActionReference, end);
 
     message.action = 'moveCard';
