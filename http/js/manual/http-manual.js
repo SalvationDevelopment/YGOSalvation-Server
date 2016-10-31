@@ -1290,6 +1290,18 @@ function reorientmenu() {
 
 }
 
+function getCardObject(id) {
+    'use strict';
+
+    return internalDB.filter(function (card, index) {
+        if (id === card.id) {
+            return true;
+        } else {
+            return false;
+        }
+    })[0];
+}
+
 function revealonclick(card, note) {
     'use strict';
     console.log(revealcache[card], note);
@@ -1311,32 +1323,94 @@ function revealonclick(card, note) {
         'left': currentMousePos.x,
         'display': 'block'
     });
+    var dbEntry = getCardObject(parseInt(manualActionReference.id, 10));
     if (manualActionReference.location === 'DECK') {
-        $('.moveToHand, .manualSpecialSummonDef, .manualSpecialSummonAtt, .manualSetMonster,  .manualActivateFieldSpell, .manualToExtraFaceUp, .manualRemove,.manualToGrave, .manualToRemoved').css({
+        $('.v-deck').css({
             'display': 'block'
         });
+        if (monsterMap[dbEntry.type]) {
+            $('.m-hand-m').css({
+                'display': 'block'
+            });
+        }
+        if (stMap[dbEntry.type] || dbEntry.type === 2 || dbEntry.type === 4) {
+            $('.m-hand-st').css({
+                'display': 'block'
+            });
+        }
+        if (fieldspell[dbEntry.type]) {
+            $('.m-hand-f').css({
+                'display': 'block'
+            });
+        }
+        if (pendulumMap[dbEntry.type]) {
+            $('.m-hand-p').css({
+                'display': 'block'
+            });
+        }
         reorientmenu();
         return;
     }
 
     if (manualActionReference.location === 'GRAVE') {
-        $('.moveToHand, .manualSpecialSummonDef, .manualSpecialSummonAtt, .manualSetMonster,.manualToExtra, .manualToExtraFaceUp, .manualToExtra, .manualRemove').css({
+        $('.v-grave').css({
             'display': 'block'
         });
+        if (monsterMap[dbEntry.type]) {
+            $('.m-hand-m').css({
+                'display': 'block'
+            });
+        }
+        if (stMap[dbEntry.type] || dbEntry.type === 2 || dbEntry.type === 4) {
+            $('.m-hand-st').css({
+                'display': 'block'
+            });
+        }
+        if (fieldspell[dbEntry.type]) {
+            $('.m-hand-f').css({
+                'display': 'block'
+            });
+        }
+        if (pendulumMap[dbEntry.type]) {
+            $('.m-hand-p').css({
+                'display': 'block'
+            });
+        }
         reorientmenu();
         return;
     }
     if (manualActionReference.location === "REMOVED") {
-        $('.moveToHand, .manualSpecialSummonDef, .manualSpecialSummonAtt, .manualToExtraFaceUp,.manualToExtra, .manualToGrave').css({
+        $('.v-grave').css({
             'display': 'block'
         });
+        if (monsterMap[dbEntry.type]) {
+            $('.m-hand-m').css({
+                'display': 'block'
+            });
+        }
+        if (stMap[dbEntry.type] || dbEntry.type === 2 || dbEntry.type === 4) {
+            $('.m-hand-st').css({
+                'display': 'block'
+            });
+        }
+        if (fieldspell[dbEntry.type]) {
+            $('.m-hand-f').css({
+                'display': 'block'
+            });
+        }
+        if (pendulumMap[dbEntry.type]) {
+            $('.m-hand-p').css({
+                'display': 'block'
+            });
+        }
         reorientmenu();
         return;
     }
     if (manualActionReference.location === 'EXTRA') {
-        $('.manualSpecialSummonDef, .manualSpecialSummonAtt,.manualToGrave, .manualToRemoved').css({
+        $('.v-extra').css({
             'display': 'block'
         });
+
         reorientmenu();
         return;
     }
@@ -1346,17 +1420,7 @@ function revealonclick(card, note) {
 
 
 
-function getCardObject(id) {
-    'use strict';
 
-    return internalDB.filter(function (card, index) {
-        if (id === card.id) {
-            return true;
-        } else {
-            return false;
-        }
-    })[0];
-}
 
 function parseLevelScales(level) {
     'use strict';
@@ -1499,6 +1563,16 @@ function guicardclick(id, uid) {
         $('.m-monster, .m-field').css({
             'display': 'block'
         });
+        if (pendulumMap[dbEntry.type] || cardIs('fusion', dbEntry) || cardIs('syncho', dbEntry) || cardIs('xyz', dbEntry)) {
+            $('.m-monster-extra').css({
+                'display': 'block'
+            });
+        }
+        if (pendulumMap[dbEntry.type]) {
+            $('.m-monster-p').css({
+                'display': 'block'
+            });
+        }
         reorientmenu();
         return;
     }
