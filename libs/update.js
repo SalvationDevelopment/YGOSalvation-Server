@@ -205,9 +205,6 @@ setTimeout(function () {
     client.on('close', onCloseGamelist);
 }, 5000);
 
-setInterval(function () {
-    request('http://forum.ygopro.us/fetchTopics.php', function (error, response, body) {});
-}, 600000);
 
 var fs = require('fs');
 
