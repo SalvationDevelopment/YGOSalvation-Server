@@ -1692,6 +1692,16 @@ $('#lobbychatinput, #sidechatinput').keypress(function (e) {
             }));
             return;
         }
+        if (parts[0] === '/token') {
+            $(e.currentTarget).val('');
+            card.player = orientSlot;
+            card.location = 'DECK';
+            card.id = 73915052; // sheep token
+            card.index = automaticZonePicker();
+            card.action = 'makeToken';
+            manualServer.send(JSON.stringify(card));
+            return;
+        }
 
         if (parts.length === 2) {
             if (parts[0] === '/sub') {
@@ -1734,16 +1744,7 @@ $('#lobbychatinput, #sidechatinput').keypress(function (e) {
                 $(e.currentTarget).val('');
                 return;
             }
-            if (parts[0] === '/token') {
-                $(e.currentTarget).val('');
-                card.player = orientSlot;
-                card.location = 'DECK';
-                card.id = 73915052; // sheep token
-                card.index = automaticZonePicker();
-                card.action = 'makeToken';
-                manualServer.send(JSON.stringify(card));
-                return;
-            }
+
         }
         manualServer.send(JSON.stringify({
             action: 'chat',
