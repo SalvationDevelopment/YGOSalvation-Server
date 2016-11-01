@@ -1695,7 +1695,7 @@ $('#lobbychatinput, #sidechatinput').keypress(function (e) {
         if (parts[0] === '/token') {
             $(e.currentTarget).val('');
             card.player = orientSlot;
-            card.location = 'DECK';
+            card.location = 'MONSTERZONE';
             card.id = 73915052; // sheep token
             card.index = automaticZonePicker();
             card.action = 'makeToken';
