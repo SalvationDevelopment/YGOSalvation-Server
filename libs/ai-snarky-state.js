@@ -32,7 +32,8 @@ function makeCard(movelocation, player, index, unique, code) {
         position: 'FaceDown',
         overlayindex: 0,
         uid: unique,
-        originalcontroller: player
+        originalcontroller: player,
+        counters: 0
     };
 }
 
@@ -132,12 +133,29 @@ function hideViewOfZone(view) {
     view.forEach(function (card, index) {
         output[index] = {};
         Object.assign(output[index], card);
-        if (output[index].position === 'FaceDown' || output[index].position === 'FaceUpDefense') {
+        if (output[index].position === 'FaceDown' || output[index].position === 'FaceDownDefense') {
             output[index].id = 0;
+            output[index].counters = 0;
+            delete output[index].originalcontroller;
         }
     });
 
     return output;
+}
+
+/**
+ * Clean counters from the stack.
+ * @param   {Array} stack a collection of cards
+ * @returns {Array} a collection of cards
+ */
+function cleanCounters(stack) {
+
+    stack.forEach(function (card, index) {
+        if (card[index].position === 'FaceDown' || card[index].position === 'FaceDownDefense') {
+            card.counters = 0;
+        }
+    });
+    return stack;
 }
 
 /**
@@ -368,6 +386,7 @@ function init(callback) {
         reIndex(player, 'GRAVE');
         reIndex(player, 'HAND');
         reIndex(player, 'EXTRA');
+        cleanCounters(stack);
         callback(generateView(), stack);
 
     }
@@ -408,17 +427,35 @@ function init(callback) {
     function makeNewCard(currentLocation, currentController, currentSequence, position, code) {
         stack.push(makeCard(currentLocation, currentController, currentSequence, numberOfCards, code));
         stack[numberOfCards].position = position;
+        state.added = stack[numberOfCards];
         numberOfCards++;
         callback(generateView('newCard'), stack);
     }
 
-    function removeCard(player, location, sequence) {
-        var target = queryCard(player, location, removeCard, 0),
+    function removeCard(uid) {
+        var target = queryCard(undefined, undefined, undefined, 0, queryCard),
             pointer = uidLookup(target.uid);
 
         delete stack[pointer];
         numberOfCards--;
+        state.removed = uid;
         callback(generateView('removeCard'), stack);
+    }
+
+    function addCounter(uid) {
+        var target = queryCard(undefined, undefined, undefined, 0, queryCard),
+            pointer = uidLookup(target.uid);
+
+        stack[pointer].counter++;
+        callback(generateView(), stack);
+    }
+
+    function removeCounter(uid) {
+        var target = queryCard(undefined, undefined, undefined, 0, queryCard),
+            pointer = uidLookup(target.uid);
+
+        stack[pointer].counter--;
+        callback(generateView(), stack);
     }
 
     function moveCard(code, previousController, previousLocation, previousSequence, previousPosition, currentController, currentLocation, currentSequence, currentPosition) {
@@ -937,6 +974,8 @@ function init(callback) {
         shuffleDeck: shuffleDeck,
         shuffleHand: shuffleHand,
         revealCallback: revealCallback,
+        addCounter: addCounter,
+        removeCounter: removeCounter,
         duelistChat: duelistChat,
         spectatorChat: spectatorChat,
         makeNewCard: makeNewCard,

@@ -537,8 +537,10 @@ function automaticZonePicker(realPlayer, zone) {
         safe;
     if (manualActionReference) {
         safe = false;
+    } else {
+        safe = cardIs('xyz', getCardObject(parseInt(manualActionReference.id, 10)));
     }
-    safe = cardIs('xyz', getCardObject(parseInt(manualActionReference.id, 10)));
+
     if ($('#automationduelfield .p' + player + '.' + zone + '.i0').length < 1) {
         result = 0;
     }
@@ -882,6 +884,22 @@ function manualViewBanished() {
     'use strict';
     manualServer.send(JSON.stringify({
         action: 'viewBanished'
+    }));
+}
+
+function manualAddCounter() {
+    'use strict';
+    manualServer.send(JSON.stringify({
+        action: 'addCounter',
+        uid: manualActionReference.uid
+    }));
+}
+
+function manualRemoveCounter() {
+    'use strict';
+    manualServer.send(JSON.stringify({
+        action: 'removeCounter',
+        uid: manualActionReference.uid
     }));
 }
 
