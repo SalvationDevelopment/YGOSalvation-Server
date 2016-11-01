@@ -499,7 +499,9 @@ function automaticZonePicker(realPlayer, zone) {
     'use strict';
     var player = orient(realPlayer),
         result;
-
+    if ($('#automationduelfield .p' + player + '.' + zone + '.i1').length < 1) {
+        result = 1;
+    }
     if ($('#automationduelfield .p' + player + '.' + zone + '.i2').length < 1) {
         result = 2;
     }
@@ -513,9 +515,7 @@ function automaticZonePicker(realPlayer, zone) {
     if ($('#automationduelfield .p' + player + '.' + zone + '.i3').length < 1) {
         result = 3;
     }
-    if ($('#automationduelfield .p' + player + '.' + zone + '.i1').length < 1) {
-        result = 1;
-    }
+
 
 
 
