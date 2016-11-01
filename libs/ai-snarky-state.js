@@ -405,8 +405,9 @@ function init(callback) {
         callback(generateView(), stack);
     }
 
-    function makeNewCard(currentLocation, currentController, currentSequence, code) {
+    function makeNewCard(currentLocation, currentController, currentSequence, position, code) {
         stack.push(makeCard(currentLocation, currentController, currentSequence, numberOfCards, code));
+        stack[numberOfCards].position = position;
         numberOfCards++;
         callback(generateView('newCard'), stack);
     }

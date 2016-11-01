@@ -1889,7 +1889,7 @@ $('#manualcontrols button').on('click', function () {
 
 });
 
-$('body').on('mousedown', '.game', function (ev) {
+$('body').on('mousedown', '#duelscreen', function (ev) {
     'use strict';
     if (ev.which === 3) {
         $('#manualcontrols button').css({
