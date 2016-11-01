@@ -196,7 +196,7 @@ function responseHandler(socket, message) {
         stateSystem[socket.activeduel].makeNewCard(message.location, message.player, message.index, message.position, message.id);
         break;
     case "removeToken":
-        stateSystem[socket.activeduel].makeNewCard(message.location, message.player, message.index);
+        stateSystem[socket.activeduel].removeCard(message.uid);
         break;
     case "revealDeck":
         stateSystem[socket.activeduel].revealDeck(socket.slot);
@@ -239,6 +239,12 @@ function responseHandler(socket, message) {
         break;
     case "millRemovedCardFaceDown":
         stateSystem[socket.activeduel].millRemovedCardFaceDown(socket.slot, 1);
+        break;
+    case "addCounter":
+        stateSystem[socket.activeduel].addCounter(message.uid);
+        break;
+    case "removeCounter":
+        stateSystem[socket.activeduel].removeCounter(message.uid);
         break;
     case "rollDie":
         if (socket.slot !== undefined) {
