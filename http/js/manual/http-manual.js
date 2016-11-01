@@ -253,7 +253,7 @@ function Card(movelocation, player, index, unique) {
         position: 'FaceDown',
         overlayindex: 0,
         uid: unique,
-        counter: 0
+        counters: 0
 
     };
 }
