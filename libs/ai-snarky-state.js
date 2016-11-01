@@ -708,19 +708,19 @@ function init(callback) {
                 0: {
                     action: 'server',
                     info: state,
-                    call: 'Viewing Extra',
+                    call: 'Viewing XYZ',
                     player: slot
                 },
                 1: {
                     action: 'server',
                     info: state,
-                    call: 'Viewing Extra',
+                    call: 'Viewing XYZ',
                     player: slot
                 },
                 sepectators: {
                     action: 'server',
                     info: state,
-                    call: 'Viewing Extra',
+                    call: 'Viewing XYZ',
                     player: slot
                 }
             };
