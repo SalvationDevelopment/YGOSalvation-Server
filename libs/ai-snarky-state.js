@@ -433,7 +433,7 @@ function init(callback) {
     }
 
     function removeCard(uid) {
-        var target = queryCard(undefined, undefined, undefined, 0, queryCard),
+        var target = queryCard(undefined, undefined, undefined, 0, uid),
             pointer = uidLookup(target.uid);
 
         delete stack[pointer];
@@ -443,7 +443,7 @@ function init(callback) {
     }
 
     function addCounter(uid) {
-        var target = queryCard(undefined, undefined, undefined, 0, queryCard),
+        var target = queryCard(undefined, undefined, undefined, 0, uid),
             pointer = uidLookup(target.uid);
 
         stack[pointer].counter++;
