@@ -386,6 +386,7 @@ function initGameState() {
     function newCard() {
         stack.push(new Card('TOKEN', 0, 0, numberOfCards));
         numberOfCards++;
+        console.log(numberOfCards, stack[numberOfCards]);
         guiCard(stack[numberOfCards]);
     }
 
@@ -1814,6 +1815,7 @@ $('#lobbychatinput, #sidechatinput').keypress(function (e) {
             $(e.currentTarget).val('');
             card.player = orientSlot;
             card.location = 'MONSTERZONE';
+            card.position = 'FaceUpDefence';
             card.id = 73915052; // sheep token
             card.index = automaticZonePicker();
             card.action = 'makeToken';
