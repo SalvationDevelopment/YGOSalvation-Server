@@ -272,7 +272,6 @@ function layouthand(player) {
         //console.log(xCoord);
         $('.p' + player + '.HAND.i' + sequence).css('left', String() + xCoord + 'px');
     }
-    $('.p' + player + '.MONSTERZONE').css('z-index', '0');
 }
 
 function guiCard(dataBinding) {
@@ -293,7 +292,9 @@ function guiCard(dataBinding) {
     Object.observe(dataBinding, function (changes) {
         // [{name: 'ofproperitychaned', object: {complete new object}, type: 'of edit', oldValue: 'previousvalueofproperity'}]
         var ref = changes[0].object,
-            fieldings;
+            fieldings,
+            offsetX,
+            offsetY;
         if (orientSlot) {
             player = (ref.player === 1) ? 0 : 1;
         } else {
@@ -317,7 +318,12 @@ function guiCard(dataBinding) {
                 'src': (ref.id) ? 'ygopro/pics/' + ref.id + '.jpg' : 'img/textures/cover.jpg'
             });
         }
-        element.attr('style', 'z-index:' + ref.index);
+        element.attr('style', 'z-index:' + ((-1) * ref.index));
+        if (ref.location === 'MONSTERZONE') {
+            offsetX = (ref.overlayindex % 2) ? (-1) * (ref.overlayindex + 1) * 4 : ref.overlayindex * 4;
+            offsetY = ref.overlayindex * 4;
+            element.attr('style', 'z-index:' + ref.overlayindex + '; transform: translate(' + offsetX + 'px, ' + offsetY + 'px)');
+        }
 
 
 
