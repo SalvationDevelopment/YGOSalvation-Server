@@ -548,7 +548,8 @@ function automaticZonePicker(realPlayer, zone) {
 
 }
 
-var revealcache = [];
+var revealcache = [],
+    revealcacheIndex = 0;
 
 function reveal(cards, note) {
     'use strict';
@@ -867,6 +868,8 @@ function manualViewXYZMaterials() {
         player: manualActionReference.player
     }));
 }
+
+
 
 function manualModeGamelistSwitch() {
     'use strict';
@@ -1257,6 +1260,21 @@ function manualSlideLeft() {
     manualServer.send(JSON.stringify(message));
 }
 
+function manualOverlay() {
+    'use strict';
+    var overlayindex = 0;
+    revealcache.forEach(function (card, index) {
+        if (index === revealcacheIndex) {
+            return;
+        }
+        overlayindex++;
+        var message = makeCardMovement(card, card);
+        message.overlayindex = overlayindex;
+        message.action = 'moveCard';
+        manualServer.send(JSON.stringify(message));
+    });
+}
+
 function manualToGrave() {
     'use strict';
     var index = $('#automationduelfield .p' + orient(manualActionReference.player) + '.GRAVE').length,
@@ -1392,6 +1410,7 @@ function revealonclick(card, note) {
     if (note !== 'view') {
         return;
     }
+    revealcacheIndex = card;
     manualActionReference = revealcache[card];
     $('#manualcontrols button').css({
         'display': 'none'
@@ -1503,7 +1522,7 @@ function revealonclick(card, note) {
             'display': 'block'
         });
         if (cardIs('xyz', dbEntry)) {
-            $('.m-monster-xyz').css({
+            $('.v-monster-xyz').css({
                 'display': 'block'
             });
         }

@@ -354,8 +354,8 @@ function init(callback) {
         });
     }
     //finds a card, then moves it elsewhere.
-    function setState(player, clocation, index, moveplayer, movelocation, moveindex, moveposition, overlayindex, isBecomingCard, uid) {
-        console.log('set:', player, clocation, index, moveplayer, movelocation, moveindex, moveposition, overlayindex, isBecomingCard, uid);
+    function setState(player, clocation, index, moveplayer, movelocation, moveindex, moveposition, overlayindex, uid) {
+        console.log('set:', player, clocation, index, moveplayer, movelocation, moveindex, moveposition, overlayindex, uid);
         var target = queryCard(player, clocation, index, 0, uid),
             pointer = uidLookup(target.uid),
             zone;
