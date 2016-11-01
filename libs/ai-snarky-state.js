@@ -911,6 +911,7 @@ function init(callback) {
         viewDeck: viewDeck,
         viewExtra: viewExtra,
         viewBanished: viewBanished,
+        viewXYZ: viewXYZ,
         nextPhase: nextPhase,
         nextTurn: nextTurn,
         changeLifepoints: changeLifepoints,
