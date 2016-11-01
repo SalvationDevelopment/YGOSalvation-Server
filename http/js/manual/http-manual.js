@@ -386,6 +386,7 @@ function initGameState() {
     function newCard() {
         stack.push(new Card('TOKEN', 0, 0, numberOfCards));
         numberOfCards++;
+        guiCard(stack[numberOfCards]);
     }
 
     //exposed method to initialize the field;
