@@ -151,7 +151,7 @@ function hideViewOfZone(view) {
 function cleanCounters(stack) {
 
     stack.forEach(function (card, index) {
-        if (card[index].position === 'FaceDown' || card[index].position === 'FaceDownDefense') {
+        if (card.position === 'FaceDown' || card.position === 'FaceDownDefense') {
             card.counters = 0;
         }
     });
