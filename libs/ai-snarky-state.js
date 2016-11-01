@@ -451,7 +451,7 @@ function init(callback) {
     }
 
     function removeCounter(uid) {
-        var target = queryCard(undefined, undefined, undefined, 0, queryCard),
+        var target = queryCard(undefined, undefined, undefined, 0, uid),
             pointer = uidLookup(target.uid);
 
         stack[pointer].counters--;
