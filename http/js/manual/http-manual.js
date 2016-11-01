@@ -1038,7 +1038,8 @@ function makeCardMovement(start, end) {
         moveindex: end.index,
         moveposition: end.position,
         overlayindex: end.overlayindex,
-        isBecomingCard: end.isBecomingCard
+        isBecomingCard: end.isBecomingCard,
+        uid: start.uid
     };
 }
 

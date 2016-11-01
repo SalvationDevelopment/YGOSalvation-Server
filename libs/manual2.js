@@ -181,7 +181,7 @@ function responseHandler(socket, message) {
         wss.broadcast(games);
         break;
     case "moveCard":
-        stateSystem[socket.activeduel].setState(message.player, message.clocation, message.index, message.moveplayer, message.movelocation, message.moveindex, message.moveposition, message.overlayindex, message.isBecomingCard);
+        stateSystem[socket.activeduel].setState(message.player, message.clocation, message.index, message.moveplayer, message.movelocation, message.moveindex, message.moveposition, message.overlayindex, message.isBecomingCard, message.uid);
         break;
     case "revealTop":
         stateSystem[socket.activeduel].revealTop(socket.slot);

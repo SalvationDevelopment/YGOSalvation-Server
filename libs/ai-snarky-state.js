@@ -198,8 +198,13 @@ function init(callback) {
      * @param   {Number} overlayindex Index of where a card is in an XYZ stack starting at 1
      * @returns {object} The card you where looking for.
      */
-    function queryCard(player, clocation, index, overlayindex) {
+    function queryCard(player, clocation, index, overlayindex, uid) {
+        if (uid) {
+            return uidLookup(uid);
+        }
         return filterOverlyIndex(filterIndex(filterlocation(filterPlayer(stack, player), clocation), index), overlayindex)[0];
+
+
     }
 
     /**
@@ -337,8 +342,8 @@ function init(callback) {
         });
     }
     //finds a card, then moves it elsewhere.
-    function setState(player, clocation, index, moveplayer, movelocation, moveindex, moveposition, overlayindex, isBecomingCard) {
-        console.log('set:', player, clocation, index, moveplayer, movelocation, moveindex, moveposition, overlayindex, isBecomingCard);
+    function setState(player, clocation, index, moveplayer, movelocation, moveindex, moveposition, overlayindex, isBecomingCard, uid) {
+        console.log('set:', player, clocation, index, moveplayer, movelocation, moveindex, moveposition, overlayindex, isBecomingCard, uid);
         var target = queryCard(player, clocation, index, 0),
             pointer = uidLookup(target.uid),
             zone;
