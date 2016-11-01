@@ -495,10 +495,29 @@ function doGuiShuffle(player, deck) {
     guishuffle('p' + player, deck);
 }
 
+var internalDB = [];
+$.getJSON('http://ygopro.us/manifest/database_0-en-OCGTCG.json', function (data) {
+    'use strict';
+    var internalDB = data;
+});
+
+function getCardObject(id) {
+    'use strict';
+
+    return internalDB.filter(function (card, index) {
+        if (id === card.id) {
+            return true;
+        } else {
+            return false;
+        }
+    })[0];
+}
+
 function automaticZonePicker(realPlayer, zone) {
     'use strict';
     var player = orient(realPlayer),
-        result;
+        result,
+        safe = cardIs('xyz', getCardObject(parseInt(manualActionReference.id, 10)));
     if ($('#automationduelfield .p' + player + '.' + zone + '.i1').length < 1) {
         result = 1;
     }
@@ -519,8 +538,10 @@ function automaticZonePicker(realPlayer, zone) {
 
 
 
-    if (result === undefined) {
+    if (result === undefined && !safe) {
         throw new Error();
+    } else if (result === undefined && safe) {
+        return 1;
     }
     return result;
 
@@ -858,11 +879,7 @@ function mautomaticModeGamelistSwitch() {
 }
 var gui = {};
 
-var internalDB = [];
-$.getJSON('http://ygopro.us/manifest/database_0-en-OCGTCG.json', function (data) {
-    'use strict';
-    var internalDB = data;
-});
+
 
 function makeMonster(card, index) {
     'use strict';
@@ -1341,17 +1358,7 @@ function reorientmenu() {
 
 }
 
-function getCardObject(id) {
-    'use strict';
 
-    return internalDB.filter(function (card, index) {
-        if (id === card.id) {
-            return true;
-        } else {
-            return false;
-        }
-    })[0];
-}
 
 function revealonclick(card, note) {
     'use strict';
