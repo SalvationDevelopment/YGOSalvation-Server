@@ -85,13 +85,25 @@ function filterIndex(stack, index) {
 }
 /**
  * Filters out cards based on if they are overlay units or not.
+ * @param {Array} stack a stack of cards attached to a single monster as overlay units.
+ * @param {Number} overlayindex
+ * @returns {Array} a single card
+ */
+function filterOverlyIndex(stack, overlayindex) {
+    return stack.filter(function (item) {
+        return item.overlayindex === overlayindex;
+    });
+}
+
+/**
+ * Filters out cards based on if they are overlay units or not.
  * @param {Array} Array a stack of cards attached to a single monster as overlay units.
  * @param {Number} overlayindex
  * @returns {Array} a single card
  */
-function filterOverlyIndex(Array, overlayindex) {
-    return Array.filter(function (item) {
-        return item.overlayindex === overlayindex;
+function filterUID(stack, uid) {
+    return stack.filter(function (item) {
+        return item.uid === uid;
     });
 }
 
@@ -200,7 +212,7 @@ function init(callback) {
      */
     function queryCard(player, clocation, index, overlayindex, uid) {
         if (uid) {
-            return uidLookup(uid);
+            return filterUID(stack, uid)[0];
         }
         return filterOverlyIndex(filterIndex(filterlocation(filterPlayer(stack, player), clocation), index), overlayindex)[0];
 
