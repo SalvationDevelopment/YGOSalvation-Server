@@ -708,7 +708,7 @@ function init(callback) {
                 }
             };
 
-        result[player] = {
+        result[slot] = {
             action: 'reveal',
             info: state,
             reveal: pile,

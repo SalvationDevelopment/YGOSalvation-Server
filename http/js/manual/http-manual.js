@@ -287,7 +287,7 @@ function guiCard(dataBinding) {
     } else {
         player = dataBinding.player;
     }
-    $(field).append('<img onclick="return guicardclick(\'#uid' + dataBinding.uid + '\',' + dataBinding.uid + ')" id="uid' + dataBinding.uid + '" class="card p' + player + ' ' + dataBinding.location + ' i' + dataBinding.index + ' o" src="img/textures/cover.jpg" data-position="FaceDown" />');
+    $(field).append('<img onclick="return guicardclick()" id="uid' + dataBinding.uid + '" class="card p' + player + ' ' + dataBinding.location + ' i' + dataBinding.index + ' o" src="img/textures/cover.jpg" data-position="FaceDown" />');
     element = $('#uid' + dataBinding.uid);
 
     Object.observe(dataBinding, function (changes) {
@@ -1555,14 +1555,16 @@ function makeDescription(id) {
     return output + "<br /><span class='description'>" + targetCard.desc.replace(/\r\n/g, '<br />') + "</span>";
 }
 
-function guicardclick(id, uid) {
+var record;
+
+function guicardclick() {
     'use strict';
 
     manualActionReference = null;
     $('#manualcontrols button').css({
         'display': 'none'
     });
-    var idIndex = manualDuel.uidLookup(uid),
+    var idIndex = manualDuel.uidLookup(record),
         stackunit = manualDuel.stack[idIndex],
         dbEntry;
 
@@ -1687,6 +1689,7 @@ $(document).ready(function () {
         console.log(event.currentTarget, event.currentTarget.id);
         $('.imgContainer').attr('src', $('#' + uid).attr('src'));
         $('.cardDescription').html(html);
+        record = uid;
 
     });
     $('#manualcontrols button').click(function () {
