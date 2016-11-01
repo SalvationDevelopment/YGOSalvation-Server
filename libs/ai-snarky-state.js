@@ -446,7 +446,7 @@ function init(callback) {
         var target = queryCard(undefined, undefined, undefined, 0, uid),
             pointer = uidLookup(target.uid);
 
-        stack[pointer].counter++;
+        stack[pointer].counters++;
         callback(generateView(), stack);
     }
 
@@ -454,7 +454,7 @@ function init(callback) {
         var target = queryCard(undefined, undefined, undefined, 0, queryCard),
             pointer = uidLookup(target.uid);
 
-        stack[pointer].counter--;
+        stack[pointer].counters--;
         callback(generateView(), stack);
     }
 
