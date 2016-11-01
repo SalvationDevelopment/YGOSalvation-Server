@@ -408,7 +408,7 @@ function init(callback) {
     function makeNewCard(currentLocation, currentController, currentSequence, code) {
         stack.push(makeCard(currentLocation, currentController, currentSequence, numberOfCards, code));
         numberOfCards++;
-        callback(generateView(), stack);
+        callback(generateView('newCard'), stack);
     }
 
     function removeCard(player, location, sequence) {

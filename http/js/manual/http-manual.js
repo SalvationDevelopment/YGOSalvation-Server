@@ -382,6 +382,12 @@ function initGameState() {
             return item.overlayindex === overlayindex;
         });
     }
+
+    function newCard() {
+        stack.push(new Card('TOKEN', 0, 0, numberOfCards));
+        numberOfCards++;
+    }
+
     //exposed method to initialize the field;
     function startDuel(OneDeck, TwoDeck, OneExtra, TwoExtra) {
         var i;
@@ -436,7 +442,8 @@ function initGameState() {
     return {
         startDuel: startDuel,
         uidLookup: uidLookup,
-        stack: stack
+        stack: stack,
+        newCard: newCard
     };
 }
 
@@ -635,6 +642,24 @@ function manualReciver(message) {
             layouthand(1);
             $('#sidechatinput').focus();
         }, 1000);
+        break;
+    case "newCard":
+        manualDuel.newCard();
+        setTimeout(function () {
+            cardmargin(0, 'GRAVE');
+            cardmargin(0, 'EXTRA');
+            cardmargin(0, 'DECK');
+            cardmargin(1, 'GRAVE');
+            cardmargin(1, 'EXTRA');
+            cardmargin(1, 'DECK');
+            layouthand(0);
+            layouthand(1);
+        }, 100);
+        updateChat(message.info.duelistChat);
+        $('#phaseindicator').attr('data-currentphase', message.info.phase);
+        $('.p0lp').val(message.info.lifepoints[0]);
+        $('.p1lp').val(message.info.lifepoints[1]);
+        duelstash = message;
         break;
     case "shuffleDeck0":
         doGuiShuffle(orient(0), 'DECK');
