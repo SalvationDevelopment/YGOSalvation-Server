@@ -301,7 +301,7 @@ function guiCard(dataBinding) {
             player = ref.player;
         }
         if (!ref.parent) {
-            fieldings = 'card p' + player + ' ' + ref.location + ' i' + ref.index + ' o';
+            fieldings = 'card p' + player + ' ' + ref.location + ' i' + ref.index;
             element.attr({
                 'class': fieldings,
                 'data-position': ref.position,
@@ -324,6 +324,12 @@ function guiCard(dataBinding) {
             offsetY = ref.overlayindex * 4;
             element.attr('style', 'z-index: -' + ref.overlayindex + '; transform: translate(' + offsetX + 'px, ' + offsetY + 'px)');
         }
+        if (ref.counters > 0) {
+            $('.cardselectionzone.p' + player + '.' + ref.location + '.i' + ref.index).attr('data-counters', ref.counters + ' Counters').attr('style', 'z-index:' + (ref.index + 1));
+        } else {
+            $('.cardselectionzone.p' + player + '.' + ref.location + '.i' + ref.index).removeAttr('data-counters').attr('style', 'z-index:0;');
+        }
+
 
 
 
@@ -899,6 +905,14 @@ function manualRemoveCounter() {
     'use strict';
     manualServer.send(JSON.stringify({
         action: 'removeCounter',
+        uid: manualActionReference.uid
+    }));
+}
+
+function manualRemoveToken() {
+    'use strict';
+    manualServer.send(JSON.stringify({
+        action: 'removeToken',
         uid: manualActionReference.uid
     }));
 }
