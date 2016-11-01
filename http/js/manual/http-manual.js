@@ -219,6 +219,7 @@ var manualDuel;
 function linkStack(field) {
     'use strict';
     console.log('field:', field);
+    $('.cardselectionzone').removeAttr('data-counters');
 
     function linkgui(zone) {
         zone.forEach(function (card) {
@@ -251,7 +252,9 @@ function Card(movelocation, player, index, unique) {
         index: index,
         position: 'FaceDown',
         overlayindex: 0,
-        uid: unique
+        uid: unique,
+        counter: 0
+
     };
 }
 
