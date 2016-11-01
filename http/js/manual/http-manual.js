@@ -272,6 +272,7 @@ function layouthand(player) {
         //console.log(xCoord);
         $('.p' + player + '.HAND.i' + sequence).css('left', String() + xCoord + 'px');
     }
+    $('.p' + player + '.MONSTERZONE').css('z-index', '0');
 }
 
 function guiCard(dataBinding) {
@@ -1225,7 +1226,7 @@ function manualToBottomOfDeck() {
 
 }
 
-function manualSlide() {
+function manualSlideRight() {
     'use strict';
 
     var index = manualActionReference.index + 1,
@@ -1234,6 +1235,21 @@ function manualSlide() {
 
     if (index === 5) {
         index = 0;
+    }
+    message.moveindex = index;
+    message.action = 'moveCard';
+    manualServer.send(JSON.stringify(message));
+}
+
+function manualSlideLeft() {
+    'use strict';
+
+    var index = manualActionReference.index - 1,
+        end = JSON.parse(JSON.stringify(manualActionReference)),
+        message = makeCardMovement(manualActionReference, end);
+
+    if (index === -1) {
+        index = 4;
     }
     message.moveindex = index;
     message.action = 'moveCard';
@@ -1550,10 +1566,10 @@ function guicardclick(id, uid) {
         stackunit = manualDuel.stack[idIndex],
         dbEntry;
 
-    console.log(stackunit);
+
     manualActionReference = stackunit;
     dbEntry = getCardObject(parseInt(stackunit.id, 10));
-
+    console.log(stackunit, dbEntry);
     if (stackunit.location === 'GRAVE') {
         $('.m-grave').css({
             'display': 'block'
