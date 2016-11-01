@@ -1199,6 +1199,20 @@ function manualToBottomOfDeck() {
 
 }
 
+function manualSlide() {
+    'use strict';
+
+    var index = manualActionReference.index + 1,
+        end = JSON.parse(JSON.stringify(manualActionReference)),
+        message = makeCardMovement(manualActionReference, end);
+
+    if (index === 5) {
+        index = 0;
+    }
+    message.moveindex = index;
+    message.action = 'moveCard';
+    manualServer.send(JSON.stringify(message));
+}
 
 function manualToGrave() {
     'use strict';
