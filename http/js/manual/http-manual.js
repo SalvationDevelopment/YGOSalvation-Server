@@ -534,7 +534,11 @@ function automaticZonePicker(realPlayer, zone) {
     'use strict';
     var player = orient(realPlayer),
         result,
-        safe = cardIs('xyz', getCardObject(parseInt(manualActionReference.id, 10)));
+        safe;
+    if (manualActionReference) {
+        safe = false;
+    }
+    safe = cardIs('xyz', getCardObject(parseInt(manualActionReference.id, 10)));
     if ($('#automationduelfield .p' + player + '.' + zone + '.i0').length < 1) {
         result = 0;
     }
@@ -648,6 +652,7 @@ function manualReciver(message) {
         break;
     case "newCard":
         manualDuel.newCard();
+        linkStack(message.field);
         setTimeout(function () {
             cardmargin(0, 'GRAVE');
             cardmargin(0, 'EXTRA');
@@ -1882,4 +1887,13 @@ $('#manualcontrols button').on('click', function () {
     'use strict';
     $('#revealed, #revealedclose').css('display', 'none');
 
+});
+
+$('body').on('mousedown', '.game', function (ev) {
+    'use strict';
+    if (ev.which === 3) {
+        $('#manualcontrols button').css({
+            'display': 'none'
+        });
+    }
 });
