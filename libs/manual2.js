@@ -219,6 +219,9 @@ function responseHandler(socket, message) {
     case "viewBanished":
         stateSystem[socket.activeduel].viewBanished(socket.slot);
         break;
+    case "viewXYZ":
+        stateSystem[socket.activeduel].viewXYZ(socket.slot, message.index, message.player);
+        break;
     case "shuffleDeck":
         stateSystem[socket.activeduel].shuffleDeck(socket.slot);
         break;

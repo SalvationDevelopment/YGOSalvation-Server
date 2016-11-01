@@ -683,6 +683,42 @@ function init(callback) {
         callback(result, stack);
 
     }
+
+
+    function viewXYZ(slot, index, player) {
+        var pile = filterIndex(filterlocation(filterPlayer(stack, player), 'MONSTERZONE'), index),
+            result = {
+                0: {
+                    action: 'server',
+                    info: state,
+                    call: 'Viewing Extra',
+                    player: slot
+                },
+                1: {
+                    action: 'server',
+                    info: state,
+                    call: 'Viewing Extra',
+                    player: slot
+                },
+                sepectators: {
+                    action: 'server',
+                    info: state,
+                    call: 'Viewing Extra',
+                    player: slot
+                }
+            };
+
+        result[player] = {
+            action: 'reveal',
+            info: state,
+            reveal: pile,
+            call: 'view',
+            player: slot
+        };
+
+        callback(result, stack);
+
+    }
     /**
      * Exposed method to initialize the field; You only run this once.
      */

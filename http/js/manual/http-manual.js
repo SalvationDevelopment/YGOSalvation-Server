@@ -858,6 +858,15 @@ function manualViewGrave() {
     }));
 }
 
+function manualViewXYZMaterials() {
+    'use strict';
+    manualServer.send(JSON.stringify({
+        action: 'viewXYZ',
+        index: manualActionReference.index,
+        player: manualActionReference.player
+    }));
+}
+
 function manualModeGamelistSwitch() {
     'use strict';
     $('#manualgamelistitems').css({
