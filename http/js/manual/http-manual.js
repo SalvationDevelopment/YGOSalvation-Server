@@ -319,10 +319,10 @@ function guiCard(dataBinding) {
             });
         }
         element.attr('style', 'z-index:' + ((-1) * ref.index));
-        if (ref.location === 'MONSTERZONE') {
-            offsetX = (ref.overlayindex % 2) ? (-1) * (ref.overlayindex + 1) * 4 : ref.overlayindex * 4;
+        if (ref.location === 'MONSTERZONE' && ref.overlayindex) {
+            offsetX = (ref.overlayindex % 2) ? (-1) * (ref.overlayindex + 1) * 3 : ref.overlayindex + (-1) * 3;
             offsetY = ref.overlayindex * 4;
-            element.attr('style', 'z-index:' + ref.overlayindex + '; transform: translate(' + offsetX + 'px, ' + offsetY + 'px)');
+            element.attr('style', 'z-index:-' + ref.overlayindex + '; transform: translate(' + offsetX + 'px, ' + offsetY + 'px)');
         }
 
 
