@@ -1689,7 +1689,7 @@ $(document).ready(function () {
         console.log(event.currentTarget, event.currentTarget.id);
         $('.imgContainer').attr('src', $('#' + uid).attr('src'));
         $('.cardDescription').html(html);
-        record = parseInt(id, 0);
+        record = parseInt(uid.split('uid')[1], 0);
 
     });
     $('#manualcontrols button').click(function () {
