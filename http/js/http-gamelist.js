@@ -705,7 +705,11 @@ $('body').on('mousedown', '.game', function (ev) {
         }
     }
 });
-
+$('body').on('mousedown', '.game', function (ev) {
+    $('#manualcontrols button').css({
+        'display': 'none'
+    });
+});
 $('body').on('mousedown', 'footer', function (ev) {
     'use strict';
     if (admin === "1" && launcher && ev.which === 3) {
