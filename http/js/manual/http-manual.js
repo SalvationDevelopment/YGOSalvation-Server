@@ -521,6 +521,15 @@ function doGuiShuffle(player, deck) {
     guishuffle('p' + player, deck);
 }
 
+function excludeTokens(card) {
+    // filter out Tokens
+    'use strict';
+    if (card.type === 16401 || card.type === 16417) {
+        return false;
+    }
+    return true;
+}
+
 var internalDB = [];
 $.getJSON('http://ygopro.us/manifest/database_0-en-OCGTCG.json', function (data) {
     'use strict';
@@ -1663,6 +1672,18 @@ function makeDescription(id) {
 
 var record;
 
+function checksetcode(obj, sc) {
+    'use strict';
+    var val = obj.setcode,
+        hexA = val.toString(16),
+        hexB = sc.toString(16);
+    if (val === sc || parseInt(hexA.substr(hexA.length - 4), 16) === parseInt(hexB, 16) || parseInt(hexA.substr(hexA.length - 2), 16) === parseInt(hexB, 16) || (val >> 16).toString(16) === hexB) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
 function guicardclick() {
     'use strict';
 
@@ -1766,6 +1787,16 @@ function guicardclick() {
         }
         if (cardIs('xyz', dbEntry)) {
             $('.m-monster-xyz').css({
+                'display': 'block'
+            });
+        }
+        if (!excludeTokens(dbEntry)) {
+            $('.m-monster-token').css({
+                'display': 'block'
+            });
+        }
+        if (checksetcode(dbEntry, 97)) {
+            $('.m-st').css({
                 'display': 'block'
             });
         }
