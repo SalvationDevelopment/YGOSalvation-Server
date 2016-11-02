@@ -1799,8 +1799,8 @@ function guicardclick() {
                 'display': 'block'
             });
         }
-        if (checksetcode(dbEntry, 97)) {
-            $('.m-st').css({
+        if (checksetcode(dbEntry, 151) || dbEntry.id === 9791914 || dbEntry.id === 58132856) {
+            $('.m-st-monster').css({
                 'display': 'block'
             });
         }
