@@ -721,6 +721,7 @@ function manualReciver(message) {
         break;
     case 'removeCard':
         $('#uid' + message.info.removed).remove();
+        delete manualDuel.stack[message.info.removed];
         break;
     default:
         break;
