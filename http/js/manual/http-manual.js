@@ -719,6 +719,9 @@ function manualReciver(message) {
     case "reveal":
         reveal(message.reveal, message.call);
         break;
+    case 'removeCard':
+        $('#uid' + message.info.removed).remove();
+        break;
     default:
         break;
     }
