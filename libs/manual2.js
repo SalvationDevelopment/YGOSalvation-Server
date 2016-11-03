@@ -311,7 +311,6 @@ function responseHandler(socket, message) {
             sound: message.sound
         }));
     }
-    break;
 }
 
 wss.on('connection', function (socket) {
