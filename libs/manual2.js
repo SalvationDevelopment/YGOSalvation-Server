@@ -301,6 +301,17 @@ function responseHandler(socket, message) {
     if (stateSystem[socket.activeduel]) {
         log[socket.activeduel].push(message);
     }
+    if (socket.slot !== undefined && message.sound) {
+        stateSystem[socket.activeduel].players[0].send(JSON.stringify({
+            action: 'sound',
+            sound: message.sound
+        }));
+        stateSystem[socket.activeduel].players[0].send(JSON.stringify({
+            action: 'sound',
+            sound: message.sound
+        }));
+    }
+    break;
 }
 
 wss.on('connection', function (socket) {
