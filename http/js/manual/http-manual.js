@@ -1,6 +1,17 @@
 /*jslint browser:true, plusplus:true, bitwise:true*/
 /*global WebSocket, $, singlesitenav, console, enums, alert*/
 
+var sound = {};
+
+
+(function () {
+    'use strict';
+    sound.play = function (targetID) {
+
+        //document.getElementById(targetID).play();
+    };
+}());
+
 var manualServer,
     broadcast,
     activegame,
@@ -646,6 +657,9 @@ function manualReciver(message) {
         }
         makeGames();
         break;
+    case "sound":
+        sound.play(message.sound);
+        break;
     case "slot":
         orientSlot = message.slot;
         break;
@@ -813,7 +827,8 @@ function manualChangeLifepoints(amount) {
     'use strict';
     manualServer.send(JSON.stringify({
         action: 'changeLifepoints',
-        amount: amount
+        amount: amount,
+        sound: 'soundchangeLifePoints'
     }));
 }
 
@@ -834,7 +849,8 @@ function manualShuffleHand() {
 function manualDraw() {
     'use strict';
     manualServer.send(JSON.stringify({
-        action: 'draw'
+        action: 'draw',
+        sound: 'sounddrawCard'
     }));
 }
 
@@ -1153,6 +1169,7 @@ function manualToAttack() {
         message = makeCardMovement(manualActionReference, end);
 
     message.action = 'moveCard';
+    message.sound = 'soundspecialSummon';
     manualServer.send(JSON.stringify(message));
 }
 
@@ -1210,6 +1227,7 @@ function manualActivate() {
         message = makeCardMovement(manualActionReference, end);
 
     message.action = 'moveCard';
+    message.sound = 'soundactivateCard';
     manualServer.send(JSON.stringify(message));
 }
 
@@ -1218,7 +1236,7 @@ function manualActivateFieldSpell() {
 
     var end = makeFieldSpell(manualActionReference),
         message = makeCardMovement(manualActionReference, end);
-
+    message.sound = 'soundactivateCard';
     message.action = 'moveCard';
     manualServer.send(JSON.stringify(message));
 }
@@ -1252,6 +1270,7 @@ function manualSTFlipDown() {
         message = makeCardMovement(manualActionReference, end);
 
     message.action = 'moveCard';
+    message.sound = 'soundflipSummon';
     manualServer.send(JSON.stringify(message));
 }
 
@@ -1263,6 +1282,7 @@ function manualSTFlipUp() {
         message = makeCardMovement(manualActionReference, end);
 
     message.action = 'moveCard';
+    message.sound = 'soundflipSummon';
     manualServer.send(JSON.stringify(message));
 }
 
