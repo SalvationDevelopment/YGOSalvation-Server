@@ -616,7 +616,7 @@ function reveal(cards, note) {
         var hardcard = JSON.stringify(card),
             src = (card.id) ? 'ygopro/pics/' + card.id + '.jpg' : 'img/textures/cover.jpg';
         revealcache.push(card);
-        html += '<img src="http://ygopro.us/' + src + '" onclick = "revealonclick(' + index + ',\'' + note + '\')" / > ';
+        html += '<img src="http://ygopro.us/' + src + '" data-"' + card.uid + '" onclick = "revealonclick(' + index + ', \'' + note + '\')" / > ';
     });
     if (cards.length > 5) {
         html += "</div>";
