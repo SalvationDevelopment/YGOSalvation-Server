@@ -8,7 +8,7 @@ var sound = {};
     'use strict';
     sound.play = function (targetID) {
 
-        //document.getElementById(targetID).play();
+        document.getElementById(targetID).play();
     };
 }());
 
