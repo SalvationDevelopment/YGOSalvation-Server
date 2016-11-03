@@ -219,7 +219,7 @@ var manualDuel;
 function linkStack(field) {
     'use strict';
     console.log('field:', field);
-    $('.cardselectionzone').removeAttr('data-counters');
+
 
     function linkgui(zone) {
         zone.forEach(function (card) {
