@@ -841,7 +841,8 @@ function manualMoveCard(movement) {
 function manualShuffleHand() {
     'use strict';
     manualServer.send(JSON.stringify({
-        action: 'shuffleHand'
+        action: 'shuffleHand',
+        sound: 'soundcardShuffle'
     }));
 }
 
@@ -858,7 +859,8 @@ function manualDraw() {
 function manualShuffleDeck() {
     'use strict';
     manualServer.send(JSON.stringify({
-        action: 'shuffleDeck'
+        action: 'shuffleDeck',
+        sound: 'soundcardShuffle'
     }));
 }
 
@@ -1159,6 +1161,7 @@ function manualNormalSummon() {
         message = makeCardMovement(manualActionReference, end);
 
     message.action = 'moveCard';
+    message.sound = 'soundspecialSummonFromExtra';
     manualServer.send(JSON.stringify(message));
 }
 
@@ -1170,7 +1173,7 @@ function manualToAttack() {
         message = makeCardMovement(manualActionReference, end);
 
     message.action = 'moveCard';
-    message.sound = 'soundspecialSummon';
+    message.sound = 'soundspecialSummonFromExtra';
     manualServer.send(JSON.stringify(message));
 }
 
@@ -1182,6 +1185,7 @@ function manualSetMonster() {
         message = makeCardMovement(manualActionReference, end);
 
     message.action = 'moveCard';
+    message.sound = 'soundspecialSummonFromExtra';
     manualServer.send(JSON.stringify(message));
 }
 
@@ -1217,6 +1221,7 @@ function manualSetMonsterFaceUp() {
         message = makeCardMovement(manualActionReference, end);
 
     message.action = 'moveCard';
+    message.sound = 'soundspecialSummonFromExtra';
     manualServer.send(JSON.stringify(message));
 }
 
@@ -1249,6 +1254,7 @@ function manualActivateFieldSpellFaceDown() {
         message = makeCardMovement(manualActionReference, end);
 
     message.action = 'moveCard';
+    message.sound = 'soundsetCard';
     manualServer.send(JSON.stringify(message));
 }
 
@@ -1260,6 +1266,7 @@ function manualSetSpell() {
         message = makeCardMovement(manualActionReference, end);
 
     message.action = 'moveCard';
+    message.sound = 'soundsetCard';
     manualServer.send(JSON.stringify(message));
 }
 
@@ -1379,6 +1386,7 @@ function manualOverlay() {
         var message = makeCardMovement(card, card);
         message.overlayindex = overlayindex;
         message.action = 'moveCard';
+        message.sound = 'soundspecialSummonFromExtra';
         manualServer.send(JSON.stringify(message));
     });
 }
@@ -1422,6 +1430,7 @@ function manualToExtra() {
         message = makeCardMovement(manualActionReference, end);
 
     message.action = 'moveCard';
+    message.sound = 'soundcardShuffle';
     console.log('EXTRA', index, end, message, manualActionReference);
     manualServer.send(JSON.stringify(message));
 }
@@ -1456,6 +1465,7 @@ function manualActivateField() {
         message = makeCardMovement(manualActionReference, end);
 
     message.action = 'moveCard';
+    message.sound = 'soundsetCard';
     manualServer.send(JSON.stringify(message));
 }
 
@@ -1469,6 +1479,7 @@ function manualToPZoneL() {
         message = makeCardMovement(manualActionReference, end);
 
     message.action = 'moveCard';
+    message.sound = 'soundsetCard';
     manualServer.send(JSON.stringify(message));
 }
 
@@ -1481,6 +1492,7 @@ function manualToPZoneR() {
         message = makeCardMovement(manualActionReference, end);
 
     message.action = 'moveCard';
+    message.sound = 'soundsetCard';
     manualServer.send(JSON.stringify(message));
 }
 
