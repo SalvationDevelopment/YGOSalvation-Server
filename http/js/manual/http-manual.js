@@ -812,7 +812,8 @@ function manualNextPhase(phase) {
     'use strict';
     manualServer.send(JSON.stringify({
         action: 'nextPhase',
-        phase: phase
+        phase: phase,
+        sound: 'soundphase'
     }));
 }
 
