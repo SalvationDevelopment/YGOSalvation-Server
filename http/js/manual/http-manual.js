@@ -1966,7 +1966,8 @@ $('#lobbychatinput, #sidechatinput').keypress(function (e) {
         manualServer.send(JSON.stringify({
             action: 'chat',
             name: localStorage.nickname,
-            chat: $(e.currentTarget).val()
+            chat: $(e.currentTarget).val(),
+            sound: 'sounchatmessage'
         }));
         $(e.currentTarget).val('');
         $('.ingamechatbox, #sidechat').scrollTop($('.ingamechatbox').prop("scrollHeight"));
