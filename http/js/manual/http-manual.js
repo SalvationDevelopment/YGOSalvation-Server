@@ -1892,6 +1892,9 @@ $.getJSON('http://ygopro.us/manifest/manifest_0-en-OCGTCG.json', function (data)
 var lastchat;
 $('#lobbychatinput, #sidechatinput').keypress(function (e) {
     'use strict';
+    if ($(e.currentTarget).val().length === 0) {
+        return;
+    }
     if (e.which === 40) {
         $(e.currentTarget).val(lastchat);
         return;
