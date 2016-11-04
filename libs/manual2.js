@@ -314,6 +314,7 @@ function responseHandler(socket, message) {
 
 }
 
+
 wss.on('connection', function (socket) {
     socket.send(JSON.stringify({
         action: 'broadcast',

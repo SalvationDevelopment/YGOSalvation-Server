@@ -1,6 +1,9 @@
 /*jslint browser:true, plusplus:true, bitwise:true*/
 /*global WebSocket, $, singlesitenav, console, enums, alert*/
 
+
+
+
 var sound = {};
 
 
@@ -757,6 +760,8 @@ function serverconnect() {
     };
 }
 
+
+
 function manualHost() {
     'use strict';
     manualServer.send(JSON.stringify({
@@ -780,6 +785,15 @@ function manualLeave(game) {
         action: 'leave',
         game: activegame
     }));
+}
+
+function surrender() {
+    'use strict';
+    if (prompt('Are you sure?')) {
+        internalLocal = 'surrendered';
+    }
+    manualLeave(activegame);
+    setTimeout(manualServer.close, 1000);
 }
 
 function manualLock() {
