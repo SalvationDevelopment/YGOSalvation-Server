@@ -114,7 +114,10 @@ var launcher = false,
 
 function singlesitenav(target) {
     'use strict';
-
+    if (internalLocal === 'duelscreen') {
+        alert('You are in a duel, surrender or finish it.');
+        return false;
+    }
     try {
         _gaq.push(['_trackEvent', 'Site', 'Navigation', target]);
         _gaq.push(['_trackEvent', 'Site', 'Navigation Movement', internalLocal + ' - ' + target]);
