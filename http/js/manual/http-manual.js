@@ -787,13 +787,20 @@ function manualLeave(game) {
     }));
 }
 
+function manualSurrender() {
+    manualServer.send(JSON.stringify({
+        action: 'surrender'
+    }));
+}
+
 function surrender() {
     'use strict';
-    if (prompt('Are you sure?')) {
+    if (confirm('Are you sure?')) {
         internalLocal = 'surrendered';
     }
     manualLeave(activegame);
-    setTimeout(manualServer.close, 1000);
+    setTimeout(manualSurrender.close, 1000);
+    setTimeout(manualServer.close, 1500);
 }
 
 function manualLock() {

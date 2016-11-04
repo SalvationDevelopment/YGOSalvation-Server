@@ -29,6 +29,15 @@
             return;
         }
 
+        function rageCheck() {
+            if (frames[0].internalLocal === 'duelscreen') {
+                alert('You are in a duel, surrender or finish it.');
+                return false;
+            } else {
+                win.close(true);
+            }
+        }
+
         function openConsole() {
             try {
                 require('nw.gui').Window.get().showDevTools();
@@ -44,7 +53,7 @@
         }, 3000);
     </script>
     <div id="control">
-        <div onclick="win.close(true);"></div>
+        <div onclick="rageCheck(true);"></div>
         <div onclick="maxrestore();"></div>
         <div onclick="win.minimize();"></div>
         <div onclick="openConsole();" style="display: none;" id="ccc"></div>
