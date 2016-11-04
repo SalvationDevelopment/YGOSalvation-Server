@@ -162,6 +162,8 @@ function responseHandler(socket, message) {
                 by: socket.slot
             }));
         }
+        delete games[socket.activeduel];
+        delete stateSystem[socket.activeduel];
         break;
     case "lock":
         if (socket.slot !== undefined) {
