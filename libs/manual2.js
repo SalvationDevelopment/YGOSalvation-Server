@@ -155,6 +155,14 @@ function responseHandler(socket, message) {
             action: 'leave'
         }));
         break;
+    case "surrender":
+        if (socket.slot !== undefined) {
+            socket.send(JSON.stringify({
+                action: 'surrender',
+                by: socket.slot
+            }));
+        }
+        break;
     case "lock":
         if (socket.slot !== undefined) {
             //ready = deckvalidator(message.deck);
