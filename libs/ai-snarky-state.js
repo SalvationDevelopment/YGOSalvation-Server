@@ -370,6 +370,9 @@ function init(callback) {
             pointer = uidLookup(card.uid);
             stack[pointer].index = index;
         });
+        stack.sort(function (a, b) {
+            return a.index - b.index;
+        });
     }
     //finds a card, then moves it elsewhere.
     function setState(player, clocation, index, moveplayer, movelocation, moveindex, moveposition, overlayindex, uid) {
