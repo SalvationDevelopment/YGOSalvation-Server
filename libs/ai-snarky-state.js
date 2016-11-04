@@ -345,17 +345,17 @@ function init(callback) {
             0: {
                 action: action || 'duel',
                 info: state,
-                field: generatePlayer1View()
+                field: (action === 'chat') ? [] : generatePlayer1View()
             },
             1: {
                 action: action || 'duel',
                 info: state,
-                field: generatePlayer2View()
+                field: (action === 'chat') ? [] : generatePlayer2View()
             },
             spectators: {
                 action: action || 'duel',
                 info: state,
-                field: generateSpectatorView()
+                field: (action === 'chat') ? [] : generateSpectatorView()
             }
         };
     }
@@ -839,7 +839,7 @@ function init(callback) {
      */
     function duelistChat(username, message) {
         state.duelistChat.push(username + ': ' + message);
-        callback(generateView(), stack);
+        callback(generateView('chat'), stack);
     }
 
     /**
@@ -849,7 +849,7 @@ function init(callback) {
      */
     function spectatorChat(username, message) {
         state.spectatorChat.push(username + ': ' + message);
-        callback(generateView(), stack);
+        callback(generateView('chat'), stack);
     }
 
     /**
