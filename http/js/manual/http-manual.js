@@ -747,8 +747,7 @@ function manualReciver(message) {
         reveal(message.reveal, message.call);
         break;
     case 'removeCard':
-        $('#uid' + message.info.removed).remove();
-        manualDuel.removeCard(message.info.removed);
+        $('#uid' + message.info.removed).css('display', 'none');
         break;
     default:
         break;
