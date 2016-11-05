@@ -181,7 +181,7 @@ function singlesitenav(target) {
         }, 3000);
 
     }
-    $('body').css('background-image', 'url(http://static.zerochan.net/Ghostrick.Nekomusume.full.1945016.jpg)');
+    //$('body').css('background-image', 'url(http://static.zerochan.net/Ghostrick.Nekomusume.full.1945016.jpg)');
     if (target === 'credits') {
         $('body').css('background-image', 'url(http://ygopro.us/img/bg.jpg)');
         $('#marquee').addClass('marquee');
