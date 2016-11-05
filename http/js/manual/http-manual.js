@@ -2014,7 +2014,7 @@ $('#lobbychatinput, #sidechatinput').keypress(function (e) {
             action: 'chat',
             name: localStorage.nickname,
             chat: $(e.currentTarget).val(),
-            sound: 'sounchatmessage'
+            sound: 'soundchatmessage'
         }));
         $(e.currentTarget).val('');
         $('.ingamechatbox, #sidechat').scrollTop($('.ingamechatbox').prop("scrollHeight"));
