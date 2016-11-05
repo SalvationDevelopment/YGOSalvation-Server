@@ -189,7 +189,6 @@ function init(callback) {
     }
 
     var stack = [],
-        numberOfCards = 0,
         state = {
             turn: 0,
             turnOfPlayer: 0,
@@ -428,10 +427,9 @@ function init(callback) {
     }
 
     function makeNewCard(currentLocation, currentController, currentSequence, position, code) {
-        stack.push(makeCard(currentLocation, currentController, currentSequence, numberOfCards, code));
-        stack[numberOfCards].position = position;
-        state.added = stack[numberOfCards];
-        numberOfCards++;
+        stack.push(makeCard(currentLocation, currentController, currentSequence, stack.length, code));
+        stack[stack.length - 1].position = position;
+        state.added = stack[stack.length - 1];
         callback(generateView('newCard'), stack);
     }
 
@@ -440,7 +438,6 @@ function init(callback) {
             pointer = uidLookup(target.uid);
 
         delete stack[pointer];
-        numberOfCards--;
         state.removed = uid;
         callback(generateView('removeCard'), stack);
     }
@@ -468,14 +465,12 @@ function init(callback) {
             zone;
 
         if (previousLocation === 0) {
-            stack.push(makeCard(enums.locations[currentLocation], currentController, currentSequence, numberOfCards, code));
-            numberOfCards++;
+            stack.push(makeCard(enums.locations[currentLocation], currentController, currentSequence, stack.length, code));
             return;
         } else if (currentLocation === 0) {
             target = queryCard(previousController, enums.locations[previousLocation], previousSequence, 0);
             pointer = uidLookup(target.uid);
             delete stack[pointer];
-            numberOfCards--;
             return;
         } else {
             if (!(previousLocation & 0x80) && !(currentLocation & 0x80)) { // see ygopro/gframe/duelclient.cpp line 1885
@@ -787,21 +782,17 @@ function init(callback) {
 
         console.log(player1.extra);
         player1.main.forEach(function (card, index) {
-            stack.push(makeCard('DECK', 0, index, numberOfCards, card));
-            numberOfCards++;
+            stack.push(makeCard('DECK', 0, index, stack.length, card));
         });
         player2.main.forEach(function (card, index) {
-            stack.push(makeCard('DECK', 1, index, numberOfCards, card));
-            numberOfCards++;
+            stack.push(makeCard('DECK', 1, index, stack.length, card));
         });
 
         player1.extra.forEach(function (card, index) {
-            stack.push(makeCard('EXTRA', 0, index, numberOfCards, card));
-            numberOfCards++;
+            stack.push(makeCard('EXTRA', 0, index, stack.length, card));
         });
         player2.extra.forEach(function (card, index) {
-            stack.push(makeCard('EXTRA', 1, index, numberOfCards, card));
-            numberOfCards++;
+            stack.push(makeCard('EXTRA', 1, index, stack.length, card));
         });
         callback(generateView('start'), stack);
     }
