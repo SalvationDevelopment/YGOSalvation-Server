@@ -559,7 +559,7 @@ function pondata(data) {
             ygopro('kk');
         }
         if (data.clientEvent === 'revive') {
-            localStorage.mindcrushed = undefined;
+            localStorage.mindcrushed = '';
             ygopro('kk');
         }
         if (data.clientEvent === 'duelrequest' && data.target === localStorage.nickname) {
