@@ -344,17 +344,17 @@ function init(callback) {
             0: {
                 action: action || 'duel',
                 info: state,
-                field: (action === 'chat') ? [] : generatePlayer1View()
+                field: generatePlayer1View()
             },
             1: {
                 action: action || 'duel',
                 info: state,
-                field: (action === 'chat') ? [] : generatePlayer2View()
+                field: generatePlayer2View()
             },
             spectators: {
                 action: action || 'duel',
                 info: state,
-                field: (action === 'chat') ? [] : generateSpectatorView()
+                field: generateSpectatorView()
             }
         };
     }
