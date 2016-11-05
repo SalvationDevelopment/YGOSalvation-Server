@@ -637,16 +637,17 @@ function reveal(cards, note) {
 
 var chatplace = 0;
 
-function updateChat(chatlog) {
+function updateChat(duelist, spectators) {
     'use strict';
-    console.log(chatlog);
     $('.ingamechatbox').html('');
-    chatlog.forEach(function (chatMessage, index) {
+    $('#spectatorchattext').html('');
+    duelist.forEach(function (chatMessage, index) {
         $('.ingamechatbox').append('<li>' + chatMessage + '</li>');
     });
-    $('.ingamechatbox, #sidechat').scrollTop($('.ingamechatbox').prop("scrollHeight"));
-
-    chatplace = chatlog.length;
+    spectators.forEach(function (chatMessage, index) {
+        $('#spectatorchattext').append('<li>' + chatMessage + '</li>');
+    });
+    $('.ingamechatbox, #sidechat, #spectatorchattext').scrollTop($('.ingamechatbox').prop("scrollHeight"));
 }
 
 var duelstash = {};
