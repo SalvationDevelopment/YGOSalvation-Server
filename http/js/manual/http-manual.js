@@ -483,6 +483,7 @@ function initGameState() {
 
 
     return {
+        removeCard: removeCard,
         startDuel: startDuel,
         uidLookup: uidLookup,
         stack: stack,
