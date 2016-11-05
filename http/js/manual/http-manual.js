@@ -656,6 +656,9 @@ var duelstash = {};
 function manualReciver(message) {
     'use strict';
     console.log(message);
+    if (message.info !== undefined) {
+        updateChat(message.info.duelistChat);
+    }
     switch (message.action) {
     case "lobby":
         singlesitenav('lobby');
