@@ -581,17 +581,15 @@ function automaticZonePicker(realPlayer, zone) {
     } else {
         safe = cardIs('xyz', getCardObject(parseInt(manualActionReference.id, 10)));
     }
-
-    if ($('#automationduelfield .p' + player + '.' + zone + '.i0').length < 1) {
-        result = 0;
-    }
     if ($('#automationduelfield .p' + player + '.' + zone + '.i1').length < 1) {
         result = 1;
     }
     if ($('#automationduelfield .p' + player + '.' + zone + '.i3').length < 1) {
         result = 3;
     }
-
+    if ($('#automationduelfield .p' + player + '.' + zone + '.i0').length < 1) {
+        result = 0;
+    }
     if ($('#automationduelfield .p' + player + '.' + zone + '.i4').length < 1) {
         result = 4;
     }
