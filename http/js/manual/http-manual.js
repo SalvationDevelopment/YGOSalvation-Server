@@ -372,7 +372,6 @@ function initGameState() {
     //numberOfCards is used like a memory address. It must be increased by 1 when creating a new card.
     'use strict';
     var stack = [],
-        numberOfCards = 0,
         playerLP = [];
 
 
@@ -408,11 +407,8 @@ function initGameState() {
     }
 
     function newCard() {
-        stack.push(new Card('TOKEN', 0, 0, numberOfCards));
-        guiCard(stack[numberOfCards]);
-        numberOfCards++;
-        console.log(numberOfCards, stack[numberOfCards]);
-
+        stack.push(new Card('TOKEN', 0, 0, stack.length));
+        guiCard(stack[stack.length - 1]);
     }
 
     function filterUID(stack, uid) {
@@ -436,7 +432,6 @@ function initGameState() {
             pointer = uidLookup(target.uid);
 
         delete stack[pointer];
-        numberOfCards--;
     }
 
     //exposed method to initialize the field;
@@ -445,22 +440,18 @@ function initGameState() {
 
         $('#automationduelfield').html();
         for (i = 0; OneExtra > i; i++) {
-            stack.push(new Card('EXTRA', 0, i, numberOfCards));
-            numberOfCards++;
+            stack.push(new Card('EXTRA', 0, i, stack.length));
         }
         for (i = 0; TwoExtra > i; i++) {
-            stack.push(new Card('EXTRA', 1, i, numberOfCards));
-            numberOfCards++;
+            stack.push(new Card('EXTRA', 1, i, stack.length));
         }
         for (i = 0; OneDeck > i; i++) {
-            stack.push(new Card('DECK', 0, i, numberOfCards));
-            numberOfCards++;
+            stack.push(new Card('DECK', 0, i, stack.length));
         }
         for (i = 0; TwoDeck > i; i++) {
-            stack.push(new Card('DECK', 1, i, numberOfCards));
-            numberOfCards++;
+            stack.push(new Card('DECK', 1, i, stack.length));
         }
-        for (i = 0; numberOfCards > i; i++) {
+        for (i = 0; stack.length > i; i++) {
             guiCard(stack[i]);
         }
         cardmargin('0', 'GRAVE');
