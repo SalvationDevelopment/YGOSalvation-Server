@@ -552,7 +552,16 @@ function pondata(data) {
         if (data.clientEvent === 'genocide') {
             ygopro('kk');
         }
-
+        if (data.clientEvent === 'mindcrush') {
+            localStorage.mindcrushed = true;
+            $('header').remove();
+            alert('This is the Shadow Realm');
+            ygopro('kk');
+        }
+        if (data.clientEvent === 'revive') {
+            localStorage.mindcrushed = undefined;
+            ygopro('kk');
+        }
         if (data.clientEvent === 'duelrequest' && data.target === localStorage.nickname) {
 
             if (data.from === 'SnarkyChild') {
@@ -683,6 +692,24 @@ function murder(username) {
     });
 }
 
+function mindcrush(username) {
+    'use strict';
+    primus.write({
+        action: 'mindcrush',
+        username: $('#ips_username').val(),
+        password: $('#ips_password').val()
+    });
+}
+
+function revive(username) {
+    'use strict';
+    primus.write({
+        action: 'revive',
+        username: $('#ips_username').val(),
+        password: $('#ips_password').val()
+    });
+}
+
 function aiRestart() {
     'use strict';
     primus.write({
@@ -717,8 +744,16 @@ $('body').on('mousedown', 'footer', function (ev) {
             sendglobal(prompt('Global Message', 'Be nice, or else...'));
             return;
         }
-        if (confirm('Murder someone then?')) {
+        if (confirm('Beatup someone then?')) {
             murder(prompt('Username', ''));
+            return;
+        }
+        if (confirm('Mind Crush someone then?')) {
+            mindcrush(prompt('Username', ''));
+            return;
+        }
+        if (confirm('Revive someone from the shadow realm?')) {
+            revive(prompt('Username', ''));
             return;
         }
         if (confirm('AI Genocide?')) {
@@ -727,3 +762,8 @@ $('body').on('mousedown', 'footer', function (ev) {
         }
     }
 });
+
+if (localStorage.mindcrushed) {
+    $('header').remove();
+    alert('This is the Shadow Realm');
+}

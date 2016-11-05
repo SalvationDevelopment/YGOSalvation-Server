@@ -372,6 +372,25 @@ function genocideCall(data) {
     });
 }
 
+function reviveCall(data) {
+    forumValidate(data, function (error, info, body) {
+        if (error) {
+            return;
+        }
+
+        if (info.success && adminlist[data.username]) {
+            announce({
+                clientEvent: 'revive',
+                target: data.target
+            });
+
+        } else {
+            console.log(data, 'asked for murder');
+        }
+
+    });
+}
+
 function murderCall(data) {
     forumValidate(data, function (error, info, body) {
         if (error) {
@@ -386,6 +405,25 @@ function murderCall(data) {
 
         } else {
             console.log(data, 'asked for murder');
+        }
+
+    });
+}
+
+function mindcrushCall(data) {
+    forumValidate(data, function (error, info, body) {
+        if (error) {
+            return;
+        }
+
+        if (info.success && adminlist[data.username]) {
+            announce({
+                clientEvent: 'mindcrush',
+                target: data.target
+            });
+
+        } else {
+            console.log(data, 'asked for mind crush');
         }
 
     });
@@ -531,6 +569,12 @@ function onData(data, socket) {
         break;
     case ('murder'):
         murderCall(data);
+        break;
+    case ('revive'):
+        reviveCall(data);
+        break;
+    case ('mindcrush'):
+        mindcrushCall(data);
         break;
     case ('airestart'):
         aiRestartCall(data);
