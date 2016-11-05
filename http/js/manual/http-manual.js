@@ -656,7 +656,7 @@ function manualReciver(message) {
     'use strict';
     console.log(message);
     if (message.info !== undefined) {
-        updateChat(message.info.duelistChat);
+        updateChat(message.info.duelistChat, message.info.spectatorChat);
     }
     switch (message.action) {
     case "lobby":
