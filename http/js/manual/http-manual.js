@@ -1,11 +1,12 @@
 /*jslint browser:true, plusplus:true, bitwise:true*/
-/*global WebSocket, $, singlesitenav, console, enums, alert*/
+/*global WebSocket, $, singlesitenav, console, enums, alert,  confirm*/
 
 
 
 
 var sound = {};
 
+var internalLocal = internalLocal;
 
 (function () {
     'use strict';
@@ -414,6 +415,30 @@ function initGameState() {
 
     }
 
+    function filterUID(stack, uid) {
+        return stack.filter(function (item) {
+            return item.uid === uid;
+        });
+    }
+
+    //the way the stack of cards is setup it requires a pointer to edit it.
+    function uidLookup(uid) {
+        var i;
+        for (i = 0; stack.length > i; i++) {
+            if (stack[i].uid === uid) {
+                return i;
+            }
+        }
+    }
+
+    function removeCard(uid) {
+        var target = filterUID(stack, uid)[0],
+            pointer = uidLookup(target.uid);
+
+        delete stack[pointer];
+        numberOfCards--;
+    }
+
     //exposed method to initialize the field;
     function startDuel(OneDeck, TwoDeck, OneExtra, TwoExtra) {
         var i;
@@ -449,15 +474,7 @@ function initGameState() {
         console.log('stack', stack, OneDeck, TwoDeck, OneExtra, TwoExtra);
     }
 
-    //the way the stack of cards is setup it requires a pointer to edit it.
-    function uidLookup(uid) {
-        var i;
-        for (i = 0; stack.length > i; i++) {
-            if (stack[i].uid === uid) {
-                return i;
-            }
-        }
-    }
+
 
     //returns info on a card.
     function queryCard(player, clocation, index, overlayindex) {
@@ -619,7 +636,7 @@ function reveal(cards, note) {
         var hardcard = JSON.stringify(card),
             src = (card.id) ? 'ygopro/pics/' + card.id + '.jpg' : 'img/textures/cover.jpg';
         revealcache.push(card);
-        html += '<img src="http://ygopro.us/' + src + '" data-"' + card.uid + '" onclick = "revealonclick(' + index + ', \'' + note + '\')" / > ';
+        html += '<img class="revealedcard" src="http://ygopro.us/' + src + '" data-"' + card.uid + '" onclick = "revealonclick(' + index + ', \'' + note + '\')" / > ';
     });
     if (cards.length > 5) {
         html += "</div>";
@@ -738,7 +755,7 @@ function manualReciver(message) {
         break;
     case 'removeCard':
         $('#uid' + message.info.removed).remove();
-        delete manualDuel.stack[message.info.removed];
+        delete manualDuel.removeCard[message.info.removed];
         break;
     default:
         break;
@@ -788,6 +805,7 @@ function manualLeave(game) {
 }
 
 function manualSurrender() {
+    'use strict';
     manualServer.send(JSON.stringify({
         action: 'surrender'
     }));
@@ -1876,7 +1894,7 @@ $(document).ready(function () {
     'use strict';
     serverconnect();
     $('.imgContainer').attr('src', 'img/textures/cover.jpg');
-    $('body').on('mouseover', '.card', function (event) {
+    $('body').on('mouseover', '.card, .revealedcard', function (event) {
 
         var uid = event.currentTarget.id,
             id = $('#' + uid).attr('data-id'),
