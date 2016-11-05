@@ -811,6 +811,7 @@ function surrender() {
     manualLeave(activegame);
     setTimeout(manualSurrender.close, 1000);
     setTimeout(manualServer.close, 1500);
+    singlesitenav('gamelist');
 }
 
 function manualLock() {
