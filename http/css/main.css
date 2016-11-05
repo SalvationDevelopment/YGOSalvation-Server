@@ -972,6 +972,15 @@ div#sidechat {
     width: 100%;
 }
 
+ul#spectatorchattext {}
+
+#tuckedchat {
+    height: calc(85vh - 254px);
+    position: relative;
+    bottom: calc(85vh - 254px);
+    display: none;
+}
+
 div#lobbychat {
     width: 100%;
     position: absolute;
