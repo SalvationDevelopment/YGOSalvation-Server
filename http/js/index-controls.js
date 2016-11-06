@@ -148,10 +148,7 @@ function singlesitenav(target) {
         $('body').css('background-image', 'url(http://ygopro.us/img/bg.jpg)');
     }
     if (target === 'chat' && !chatStarted) {
-        swfobject.embedSWF("lightIRC/lightIRC.swf", "lightIRC", "100%", "92%", "10.0.0", "expressInstall.swf", params, {
-            wmode: "transparent"
-        });
-        chatStarted = true;
+
     }
     if (target === 'dn' && !dnStarted) {
         $('#dnwindow').attr('src', 'http://www.duelingnetwork.com/?card_image_base=http://localhost:7591/dn/');
@@ -270,7 +267,7 @@ function translateLang(lang) {
             jsLang.spectate = translationDB[i][lang];
         }
     }
-    params.language = lang;
+
 }
 
 function achievementConstructor(data) {
@@ -396,8 +393,6 @@ $(document).ready(function () {
         $(document.body).addClass("web");
     }
 
-    params.showJoinPartMessages = false;
-    params.autoReconnect = false;
     var useLang = localStorage.language || 'en';
     translateLang(useLang);
     if (localStorage.loginnick && localStorage.loginpass) {
