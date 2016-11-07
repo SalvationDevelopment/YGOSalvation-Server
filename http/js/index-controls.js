@@ -210,8 +210,7 @@ function locallogin(init) {
     } catch (e) {}
 
 
-    params.nick = $('#ips_username').val();
-    params.identifyPassword = $('#ips_password').val();
+   
 
     //chatStarted = true;
     singlesitenav('faq');
