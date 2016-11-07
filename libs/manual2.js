@@ -41,7 +41,7 @@ var WebSocketServer = require('ws').Server,
     wss = new WebSocketServer({
         port: 8080
     }),
-    stateSystem = require('./ai-snarky-state.js'),
+    stateSystem = require('./ygojs-core.js'),
     deckvalidator = require('./deckvalidator.js'),
     configParser = require('./configparser.js'),
     games = {},
