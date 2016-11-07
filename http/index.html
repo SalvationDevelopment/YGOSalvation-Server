@@ -1844,7 +1844,8 @@
             <button class="m-hand-st" onclick="manualActivate()">Activate</button>
             <button class="v-st" onclick="manualActivate()">To S/T Zone</button>
 
-            <button class="m-field v-deck v-grave v-removed v-extra" onclick="manualToHand()">To Hand</button>
+            <button class="m-field v-grave v-removed v-extra" onclick="manualToHand();">To Hand</button>
+            <button class="v-deck" onclick="manualToHand(); manualRevealHandSingle();">Reveal and Add to Hand</button>
 
             <button class="m-hand-p m-monster-p" onclick="manualToExtraFaceUp()">To Extra Deck Face Up</button>
             <button class="m-hand-p m-monster-extra v-monster-extra" onclick="manualToExtra()">To Extra Deck</button>
