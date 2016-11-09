@@ -762,8 +762,3 @@ $('body').on('mousedown', 'footer', function (ev) {
         }
     }
 });
-
-if (localStorage.mindcrushed) {
-    $('header').remove();
-    alert('This is the Shadow Realm');
-}
