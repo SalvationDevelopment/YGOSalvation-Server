@@ -552,13 +552,13 @@ function pondata(data) {
         if (data.clientEvent === 'genocide') {
             ygopro('kk');
         }
-        if (data.clientEvent === 'mindcrush') {
+        if (data.clientEvent === 'mindcrush' && data.target === localStorage.nickname) {
             localStorage.mindcrushed = true;
             $('header').remove();
             alert('This is the Shadow Realm');
             ygopro('kk');
         }
-        if (data.clientEvent === 'revive') {
+        if (data.clientEvent === 'revive' && data.target === localStorage.nickname) {
             localStorage.mindcrushed = '';
             ygopro('kk');
         }
