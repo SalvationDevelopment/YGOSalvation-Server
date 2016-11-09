@@ -688,7 +688,8 @@ function murder(username) {
     primus.write({
         action: 'murder',
         username: $('#ips_username').val(),
-        password: $('#ips_password').val()
+        password: $('#ips_password').val(),
+        target: username
     });
 }
 
@@ -697,7 +698,8 @@ function mindcrush(username) {
     primus.write({
         action: 'mindcrush',
         username: $('#ips_username').val(),
-        password: $('#ips_password').val()
+        password: $('#ips_password').val(),
+        target: username
     });
 }
 
@@ -706,7 +708,8 @@ function revive(username) {
     primus.write({
         action: 'revive',
         username: $('#ips_username').val(),
-        password: $('#ips_password').val()
+        password: $('#ips_password').val(),
+        target: username
     });
 }
 
