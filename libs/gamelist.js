@@ -313,12 +313,17 @@ function registrationCall(data, socket) {
                 clientEvent: 'login',
                 info: info
             });
-            if (banlist[data.username]) {
-                socket.write({
-                    clientEvent: 'banned',
-                    reason: [data.username]
-                });
-            }
+            Object.keys(banlist).some(function (bannedUser) {
+                if (bannedUser.toUpperCase() === data.username.toUpperCase()) {
+                    socket.write({
+                        clientEvent: 'banned',
+                        reason: banlist[data.username]
+                    });
+                    return true;
+                }
+                return false;
+            });
+
         } else {
             socket.write({
                 clientEvent: 'servererror',
