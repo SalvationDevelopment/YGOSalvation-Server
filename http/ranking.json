@@ -357,9 +357,18 @@
 {	"Melody": 8,
 	"Storm Wolf": 8,
 	"SoraShiunin": 8,
-	"BadBl00d": 8,
+	"Badbl00d": 8,
 	"TheRedComet": 16,
 	"TevinM24": 16,
 	"Exitium": 32,
 	"GalaxiaxD": 64
+},
+{	"Nam": 32,
+	"Badbl00d": 40,
+	"dannythestreet": 24,
+	"GalaxiaxD": 40,
+	"Exitium": 16,
+	"Sirocco": 16,
+	"Melody": 8,
+	"Lord Draco": 8
 }]
