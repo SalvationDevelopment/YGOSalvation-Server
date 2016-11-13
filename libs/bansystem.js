@@ -9,5 +9,7 @@ module.exports = {
 	'iDCniggas': "Intentionally crashing games",
 	'idcniggas': "This file needs to be case-insensitive",
 	'disconnect': "This file needs to be case-insensitive"
+	'boosted turtle': "Intentionally crashing games",
+	'itstimetoduel': "Intentionally crashing games"
 };
 
