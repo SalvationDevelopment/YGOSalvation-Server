@@ -278,7 +278,7 @@ function init(callback) {
             HAND: hand,
             GRAVE: grave,
             EXTRA: hideViewOfZone(extra),
-            REMOVED: hideViewOfZone(removed),
+            REMOVED: removed,
             SPELLZONE: spellzone,
             MONSTERZONE: monsterzone
         };
