@@ -575,66 +575,7 @@ function processServerRequest(data) {
 
 screenMessage.html('Update System Loaded');
 
-try {
-    var combinedmap = {},
-        dnmap = require('../dn/map.json'),
-        ygopromap = require('../dn/ygopromap.json'),
-        internalmap = {};
 
-    function doMapping() {
-        'use strict';
-        var i,
-            entries;
-        for (i = 0; ygopromap.length > i; i++) {
-            internalmap[ygopromap[i].name] = ygopromap[i].id;
-        }
-        for (entries in dnmap) {
-            if (dnmap.hasOwnProperty(entries)) {
-                combinedmap[entries] = internalmap[dnmap[entries]];
-            }
-        }
-    }
-
-    doMapping();
-    http.createServer(function (request, response) {
-        'use strict';
-        var uri = url.parse(request.url).pathname,
-            remap = 'dn/' + combinedmap[uri.split('dn/')[1]] + '.jpg',
-            filename = path.join(process.cwd(), remap);
-        console.log(filename);
-        path.exists(filename, function (exists) {
-            if (!exists) {
-                response.writeHead(404, {
-                    "Content-Type": "text/plain"
-                });
-                response.write("404 Not Found\n");
-                response.end();
-                return;
-            }
-
-            if (fs.statSync(filename).isDirectory()) {
-                filename += '/index.html';
-            }
-
-            fs.readFile(filename, "binary", function (err, file) {
-                if (err) {
-                    response.writeHead(500, {
-                        "Content-Type": "text/plain"
-                    });
-                    response.write(err + "\n");
-                    response.end();
-                    return;
-                }
-
-                response.writeHead(200);
-                response.write(file, "binary");
-                response.end();
-            });
-        });
-    }).listen(7591);
-} catch (e) {
-    console.log('failed to load DN server');
-}
 setInterval(function () {
     'use strict';
     if (frames[0].quedready) {

@@ -89,6 +89,48 @@ function filestreamer() {
     });
 }
 
+var fs = require('fs');
+
+function getcards(file) {
+    var filebuffer = fs.readFileSync('../http/ygopro/databases/' + file),
+        db = new SQL.Database(filebuffer),
+        string = "SELECT * FROM datas, texts WHERE datas.id = texts.id;",
+        texts = db.prepare(string),
+        asObject = {
+            texts: texts.getAsObject({
+                'id': 1
+            })
+        },
+        output = [],
+        row;
+
+    // Bind new values
+    texts.bind({
+        name: 1,
+        id: 2
+    });
+    while (texts.step()) { //
+        row = texts.getAsObject();
+        output.push(row);
+    }
+    db.close();
+
+    return output;
+}
+
+function generate() {
+    fs.readdir('../http/ygopro/databases/', function (err, files) {
+        var i;
+        for (i = 0; files.length > i; i++) {
+            try {
+                fs.writeFileSync('../http/manifest/manifest_' + files[i].slice(0, -4) + '.json', JSON.stringify(getcards(files[i])));
+            } catch (e) {
+
+            }
+        }
+    });
+}
+
 function fileupdate() {
     var fileContent,
         dbreplacer,
@@ -98,12 +140,11 @@ function fileupdate() {
         license = dirTree('license'),
         interfacefolder = dirTree('interface'),
         stringsfolder = dirTree('strings'),
-        dn = dirTree('dn'),
         installation = {
             "path": "/",
             "name": "/",
             "type": "folder",
-            "subfolder": [stringsfolder, ygopro, plugins, license, interfacefolder, dn]
+            "subfolder": [stringsfolder, ygopro, plugins, license, interfacefolder]
         };
 
     fileContent = 'var manifest = ' + JSON.stringify(installation, null, 4);
@@ -206,47 +247,9 @@ setTimeout(function () {
 }, 5000);
 
 
-var fs = require('fs');
 
-function getcards(file) {
-    var filebuffer = fs.readFileSync('../http/ygopro/databases/' + file),
-        db = new SQL.Database(filebuffer),
-        string = "SELECT * FROM datas, texts WHERE datas.id = texts.id;",
-        texts = db.prepare(string),
-        asObject = {
-            texts: texts.getAsObject({
-                'id': 1
-            })
-        },
-        output = [],
-        row;
 
-    // Bind new values
-    texts.bind({
-        name: 1,
-        id: 2
-    });
-    while (texts.step()) { //
-        row = texts.getAsObject();
-        output.push(row);
-    }
-    db.close();
 
-    return output;
-}
-
-function generate() {
-    fs.readdir('../http/ygopro/databases/', function (err, files) {
-        var i;
-        for (i = 0; files.length > i; i++) {
-            try {
-                fs.writeFileSync('../http/manifest/manifest_' + files[i].slice(0, -4) + '.json', JSON.stringify(getcards(files[i])));
-            } catch (e) {
-
-            }
-        }
-    });
-}
 
 fs.watch('../http/ygopro/databases/', generate);
 generate();

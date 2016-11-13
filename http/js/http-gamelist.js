@@ -1,6 +1,6 @@
 /*jslint plusplus: true, browser:true, node:true*/
 /*jslint nomen: true*/
-/*global localStorage, $, Primus, prompt, console, writeDeckList, makeDeck, confirm, launcher, alert, singlesitenav, startgame, _gaq, internalLocal, loggedIn, processServerCall, admin, jsLang*/
+/*global localStorage, $, Primus, prompt, console, writeDeckList, makeDeck, confirm, launcher, alert, singlesitenav, startgame, _gaq, internalLocal, loggedIn, processServerCall, admin, jsLang, manualHost*/
 /*exported connectToCheckmateServer, leaveGamelist, hostGame, connectgamelist, setHostSettings, setfilter*/
 
 
@@ -156,7 +156,7 @@ function connectgamelist() {
         uniqueID: uniqueID
     });
 }
-var browser = false
+var browser = false;
 
 function enterGame(string, pass) {
     'use strict';
@@ -266,15 +266,15 @@ function setHostSettings() {
     }
     if (isChecked('#useai')) {
         if (isChecked('#usepass')) {
-            alert('SnarkyChild: I dont want to be alone with you... please dont make me.')
+            alert('SnarkyChild: I dont want to be alone with you... please dont make me.');
             return;
         }
         if ($('#creategameduelmode').val() !== "0") {
-            alert('SnarkyChild: I have commitment issues, lets stay single.')
+            alert('SnarkyChild: I have commitment issues, lets stay single.');
             return;
         }
         if ($('#creategamebanlist').val() === "5") {
-            alert('SnarkyChild: I think you are to old for me if you are playing Goats.')
+            alert('SnarkyChild: I think you are to old for me if you are playing Goats.');
             return;
         }
     }
@@ -522,7 +522,7 @@ function pondata(data) {
                 $('footer, #popupbody').html(data.message).addClass('loud');
                 if (data.message && data.message.length) {
                     //singlesitenav('popup'); /* turned off per Stormwolf;*/
-                    quedfunc = 'launcherAlert'
+                    quedfunc = 'launcherAlert';
                     quedparams = data.message;
                 }
 
@@ -594,7 +594,9 @@ function pondata(data) {
         }
         if (data.clientEvent === 'ackresult') {
             $('#onlineconnectted').html(data.ackresult);
-            data.userlist = data.userlist.sort();
+            data.userlist = data.userlist.sort(function (a, b) {
+                return a.toLowerCase().localeCompare(b.toLowerCase());
+            });
             data.userlist.forEach(function (name) {
                 jsco = "duelrequestPerson('" + name.trim() + "');";
                 userlist = userlist + '<li onclick="' + jsco + '">' + name.trim() + '</li>';
@@ -736,6 +738,7 @@ $('body').on('mousedown', '.game', function (ev) {
     }
 });
 $('body').on('mousedown', '.game', function (ev) {
+    'use strict';
     $('#manualcontrols button').css({
         'display': 'none'
     });
