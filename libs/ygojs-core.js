@@ -380,6 +380,10 @@ function init(callback) {
             pointer = uidLookup(target.uid),
             zone;
 
+        if (movelocation === 'GRAVE' || movelocation === 'REMOVED') {
+            moveplayer = stack[pointer].originalcontroller;
+        }
+
         stack[pointer].player = moveplayer;
         stack[pointer].location = movelocation;
         stack[pointer].index = moveindex;
