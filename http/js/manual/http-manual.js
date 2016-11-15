@@ -640,14 +640,20 @@ var chatplace = 0;
 
 function updateChat(duelist, spectators) {
     'use strict';
-    $('.ingamechatbox').html('');
-    $('#spectatorchattext').html('');
-    duelist.forEach(function (chatMessage, index) {
-        $('.ingamechatbox').append('<li>' + chatMessage + '</li>');
-    });
-    spectators.forEach(function (chatMessage, index) {
-        $('#spectatorchattext').append('<li>' + chatMessage + '</li>');
-    });
+    if (duelist) {
+        $('.ingamechatbox').html('');
+
+        duelist.forEach(function (chatMessage, index) {
+            $('.ingamechatbox').append('<li>' + chatMessage + '</li>');
+        });
+    }
+    if (spectators) {
+        $('#spectatorchattext').html('');
+        spectators.forEach(function (chatMessage, index) {
+            $('#spectatorchattext').append('<li>' + chatMessage + '</li>');
+        });
+    }
+
     $('.ingamechatbox, #sidechat, #spectatorchattext').scrollTop($('.ingamechatbox').prop("scrollHeight"));
 }
 
@@ -683,7 +689,7 @@ function manualReciver(message) {
         //startDuel(player1StartLP, player2StartLP, OneDeck, TwoDeck, OneExtra, TwoExtra)
         linkStack(message.field);
 
-        updateChat(message.info.duelistChat);
+
         $('#phaseindicator').attr('data-currentphase', message.info.phase);
         $('.p0lp').val(message.info.lifepoints[0]);
         $('.p1lp').val(message.info.lifepoints[1]);
@@ -698,6 +704,7 @@ function manualReciver(message) {
             layouthand(1);
             $('#sidechatinput').focus();
         }, 1000);
+        updateChat(message.info.duelistChat);
         break;
     case "newCard":
         manualDuel.newCard();
@@ -712,11 +719,12 @@ function manualReciver(message) {
             layouthand(0);
             layouthand(1);
         }, 100);
-        updateChat(message.info.duelistChat);
+
         $('#phaseindicator').attr('data-currentphase', message.info.phase);
         $('.p0lp').val(message.info.lifepoints[0]);
         $('.p1lp').val(message.info.lifepoints[1]);
         duelstash = message;
+        updateChat(message.info.duelistChat, message.info.spectatorChat);
         break;
     case "shuffleDeck0":
         doGuiShuffle(orient(0), 'DECK');
