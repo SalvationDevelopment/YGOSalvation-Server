@@ -312,7 +312,7 @@ function responseHandler(socket, message) {
         if (socket.slot !== undefined) {
             duelBroadcast(socket.activeduel, {
                 action: 'attack',
-                sound: message.uid
+                attacker: message.uid
             });
         }
         break;

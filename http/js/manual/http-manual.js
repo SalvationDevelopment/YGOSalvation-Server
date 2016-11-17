@@ -1867,6 +1867,11 @@ function guicardclick() {
         $('.m-monster, .m-field').css({
             'display': 'block'
         });
+        if ($("#phaseindicator").attr('data-currentphase') === '3') {
+            $('.a-field').css({
+                'display': 'block'
+            });
+        }
         if (pendulumMap[dbEntry.type] || cardIs('fusion', dbEntry) || cardIs('syncho', dbEntry) || cardIs('xyz', dbEntry)) {
             $('.m-monster-extra').css({
                 'display': 'block'
@@ -1887,11 +1892,7 @@ function guicardclick() {
                 'display': 'block'
             });
         }
-        if ($("#phaseindicator").attr('data-currentphase') === '3') {
-            $('.a-field').css({
-                'display': 'block'
-            });
-        }
+
         if (checksetcode(dbEntry, 151) || dbEntry.id === 9791914 || dbEntry.id === 58132856) {
             $('.m-st-monster').css({
                 'display': 'block'
