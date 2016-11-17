@@ -397,38 +397,8 @@ function init(callback) {
 
     }
 
-    //update state of A SINGLE CARD based on info from YGOPro
-    function updateCard(player, clocation, index, card) {
-        var target,
-            pointer;
 
-        target = queryCard(player, enums.locations[clocation], index, 0);
-        pointer = uidLookup(target.uid);
-        Object.assign(stack[pointer], card);
-        callback(generateView(), stack);
-    }
 
-    //update state of A GROUP OF CARDS based on info from YGOPro
-    function updateData(player, clocation, arrayOfCards) {
-        var target,
-            pointer;
-
-        arrayOfCards.forEach(function (card, index) {
-            updateCard(player, clocation, index, card);
-        });
-
-        callback(generateView(), stack);
-    }
-
-    //Flip summon, change to attack mode, change to defense mode, and similar movements.
-    function changeCardPosition(code, currentController, cl, currentSequence, currentPosition) {
-        var target = queryCard(currentController, cl, currentSequence, 0),
-            pointer = uidLookup(target.uid);
-
-        stack[pointer].id = code;
-        setState(currentController, cl, currentSequence, currentController, cl, currentSequence, currentPosition, 0, false);
-        callback(generateView(), stack);
-    }
 
     function makeNewCard(currentLocation, currentController, currentSequence, position, code) {
         stack.push(makeCard(currentLocation, currentController, currentSequence, stack.length, code));
@@ -462,42 +432,6 @@ function init(callback) {
         callback(generateView(), stack);
     }
 
-    function moveCard(code, previousController, previousLocation, previousSequence, previousPosition, currentController, currentLocation, currentSequence, currentPosition) {
-
-        var target,
-            pointer,
-            zone;
-
-        if (previousLocation === 0) {
-            stack.push(makeCard(enums.locations[currentLocation], currentController, currentSequence, stack.length, code));
-            return;
-        } else if (currentLocation === 0) {
-            target = queryCard(previousController, enums.locations[previousLocation], previousSequence, 0);
-            pointer = uidLookup(target.uid);
-            delete stack[pointer];
-            return;
-        } else {
-            if (!(previousLocation & 0x80) && !(currentLocation & 0x80)) { // see ygopro/gframe/duelclient.cpp line 1885
-                setState(previousController, enums.locations[previousLocation], previousSequence, currentController, enums.locations[currentLocation], currentSequence, currentPosition, 0, false);
-            } else if (!(previousLocation & 0x80)) {
-                //targeting a card to become a xyz unit....
-                setState(previousController, enums.locations[previousLocation], previousSequence, currentController, enums.locations[(currentLocation & 0x7f)], currentSequence, currentPosition, 0, true);
-
-
-            } else if (!(currentLocation & 0x80)) {
-                //turning an xyz unit into a normal card....
-                setState(previousController, enums.locations[(previousLocation & 0x7f)], previousSequence, currentController, enums.locations[currentLocation], currentSequence, currentPosition, previousPosition);
-            } else {
-                setState(previousController, enums.locations[(previousLocation & 0x7f)], previousSequence, currentController, enums.locations[(currentLocation & 0x7f)], currentSequence, currentPosition, previousPosition, true);
-                zone = filterIndex(filterlocation(filterPlayer(stack, currentController), enums.locations[(currentLocation & 0x7f)]), currentSequence);
-                zone.forEach(function (card, index) {
-                    pointer = uidLookup(card.uid);
-                    stack[pointer].overlayindex = index;
-                });
-
-            }
-        }
-    }
 
     /**
      * Draws a card, updates state.
@@ -662,38 +596,25 @@ function init(callback) {
      * Reveal the players hand.
      * @param {number} player 
      */
-    function viewGrave(player) {
+    function viewGrave(player, username) {
+        state.duelistChat.push(username + ' is viewing thier extra deck.');
         revealCallback(filterlocation(filterPlayer(stack, player), 'GRAVE'), player, 'view');
     }
 
-    function viewBanished(player) {
+    function viewBanished(player, username) {
+        state.duelistChat.push(username + ' is viewing thier extra deck.');
         revealCallback(hideViewOfZone(filterlocation(filterPlayer(stack, player), 'REMOVED')), player, 'view');
     }
 
 
-    function viewDeck(player) {
+    function viewDeck(player, username) {
         var deck = filterlocation(filterPlayer(stack, player), 'DECK').reverse(),
             result = {
-                0: {
-                    action: 'server',
-                    info: state,
-                    call: 'Viewing Deck',
-                    player: player
-                },
-                1: {
-                    action: 'server',
-                    info: state,
-                    call: 'Viewing Deck',
-                    player: player
-                },
-                sepectators: {
-                    action: 'server',
-                    info: state,
-                    call: 'Viewing Deck',
-                    player: player
-                }
+                0: {},
+                1: {},
+                sepectators: {}
             };
-
+        state.duelistChat.push(username + ' is viewing thier deck.');
         result[player] = {
             action: 'reveal',
             info: state,
@@ -706,28 +627,14 @@ function init(callback) {
 
     }
 
-    function viewExtra(player) {
+    function viewExtra(player, username) {
         var deck = filterlocation(filterPlayer(stack, player), 'EXTRA'),
             result = {
-                0: {
-                    action: 'server',
-                    info: state,
-                    call: 'Viewing Extra',
-                    player: player
-                },
-                1: {
-                    action: 'server',
-                    info: state,
-                    call: 'Viewing Extra',
-                    player: player
-                },
-                sepectators: {
-                    action: 'server',
-                    info: state,
-                    call: 'Viewing Extra',
-                    player: player
-                }
+                0: {},
+                1: {},
+                sepectators: {}
             };
+        state.duelistChat.push(username + ' is viewing thier extra deck.');
 
         result[player] = {
             action: 'reveal',
@@ -745,25 +652,11 @@ function init(callback) {
     function viewXYZ(slot, index, player) {
         var pile = filterIndex(filterlocation(filterPlayer(stack, player), 'MONSTERZONE'), index),
             result = {
-                0: {
-                    action: 'server',
-                    info: state,
-                    call: 'Viewing XYZ',
-                    player: slot
-                },
-                1: {
-                    action: 'server',
-                    info: state,
-                    call: 'Viewing XYZ',
-                    player: slot
-                },
-                sepectators: {
-                    action: 'server',
-                    info: state,
-                    call: 'Viewing XYZ',
-                    player: slot
-                }
+                0: {},
+                1: {},
+                sepectators: {}
             };
+
 
         result[slot] = {
             action: 'reveal',
@@ -779,7 +672,7 @@ function init(callback) {
     /**
      * Exposed method to initialize the field; You only run this once.
      */
-    function startDuel(player1, player2) {
+    function startDuel(player1, player2, manual) {
 
         shuffle(player1.main);
         shuffle(player2.main);
@@ -946,11 +839,7 @@ function init(callback) {
     return {
         startDuel: startDuel,
         setState: setState,
-        updateData: updateData,
-        updateCard: updateCard,
         cardCollections: cardCollections,
-        changeCardPosition: changeCardPosition,
-        moveCard: moveCard,
         drawCard: drawCard,
         flipDeck: flipDeck,
         millCard: millCard,

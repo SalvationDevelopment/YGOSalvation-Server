@@ -1897,6 +1897,11 @@ function guicardclick() {
                 'display': 'block'
             });
         }
+        if (dbEntry.id === 27911549) {
+            $('.m-parasite').css({
+                'display': 'block'
+            });
+        }
         reorientmenu();
         return;
     }
