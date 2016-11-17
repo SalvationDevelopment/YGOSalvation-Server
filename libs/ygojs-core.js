@@ -725,6 +725,14 @@ function init(callback) {
         player2.extra.forEach(function (card, index) {
             stack.push(makeCard('EXTRA', 1, index, stack.length, card));
         });
+        if (manual) {
+            state.duelistChat.push('Commands: ');
+            state.duelistChat.push('Reduce LP:   /sub <amount>');
+            state.duelistChat.push('Increase LP: /add <amount>');
+            state.duelistChat.push('Flip Coin:   /flip');
+            state.duelistChat.push('Roll Dice:   /roll');
+            state.duelistChat.push('Make Token:  /token <id>');
+        }
         callback(generateView('start'), stack);
     }
 
