@@ -85,6 +85,11 @@ wss.broadcast = function broadcast() {
     });
 };
 
+function duelBroadcast(duel, message) {
+    stateSystem[duel].players[0].send(JSON.stringify(message));
+    stateSystem[duel].players[1].send(JSON.stringify(message));
+}
+
 function responseHandler(socket, message) {
     console.log(message);
     var generated,
@@ -302,7 +307,14 @@ function responseHandler(socket, message) {
                 log: log[socket.activeduel]
             }));
         }
-
+        break;
+    case "attack":
+        if (socket.slot !== undefined) {
+            duelBroadcast(socket.activeduel, {
+                action: 'attack',
+                sound: message.uid
+            });
+        }
         break;
 
     default:
@@ -316,7 +328,7 @@ function responseHandler(socket, message) {
             action: 'sound',
             sound: message.sound
         }));
-        stateSystem[socket.activeduel].players[0].send(JSON.stringify({
+        stateSystem[socket.activeduel].players[1].send(JSON.stringify({
             action: 'sound',
             sound: message.sound
         }));
