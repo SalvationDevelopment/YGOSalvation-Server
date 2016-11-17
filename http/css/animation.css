@@ -43,6 +43,7 @@ div#selectionsystem {
 .p0.EXTRA        {bottom : 10px; left: 97px; }
 .p0.GRAVE        {bottom : 207px; left: 633px; }
 .p0.REMOVED      {bottom : 207px; left: 713px; }
+.p0.EXCAVATED    {bottom : 10px; left: 732px; }
 
 .p0.SPELLZONE.i0     {bottom :64px; left:190px;}
 .p0.SPELLZONE.i1     {bottom :64px; left:276px;}
@@ -65,6 +66,7 @@ div#selectionsystem {
 .p1.EXTRA        {top : 10px; right: 106px; }
 .p1.GRAVE        {top : 207px; right: 640px; }
 .p1.REMOVED      {top : 207px; right: 719px; }
+.p1.EXCAVATED         {top : 10px; right: 739px; }
 
 .p1.SPELLZONE.i0     {top :64px; right:190px;}
 .p1.SPELLZONE.i1     {top :64px; right:276px;}
