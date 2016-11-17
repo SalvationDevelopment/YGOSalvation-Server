@@ -261,7 +261,7 @@ function init(callback) {
     /**
      * Generate the view for a specific given player
      * @param   {Number} the given player
-     * @returns {object} all the cards the given player can see on thier side of the field.
+     * @returns {object} all the cards the given player can see on their side of the field.
      */
     function generateSinglePlayerView(player) {
         var playersCards = filterPlayer(stack, player),
@@ -613,16 +613,20 @@ function init(callback) {
     }
 
     /**
-     * Reveal the players hand.
+     * Reveal the players graveyard.
      * @param {number} player 
      */
     function viewGrave(player, username) {
-        state.duelistChat.push(username + ' is viewing thier extra deck.');
+        state.duelistChat.push('<pre>' + username + ' is viewing their gaveyard.</pre>');
         revealCallback(filterlocation(filterPlayer(stack, player), 'GRAVE'), player, 'view');
     }
 
+    /**
+     * Reveal the players removed zone.
+     * @param {number} player 
+     */
     function viewBanished(player, username) {
-        state.duelistChat.push(username + ' is viewing thier extra deck.');
+        state.duelistChat.push('<pre>' + username + ' is viewing their banished pile.</pre>');
         revealCallback(hideViewOfZone(filterlocation(filterPlayer(stack, player), 'REMOVED')), player, 'view');
     }
 
@@ -634,7 +638,7 @@ function init(callback) {
                 1: {},
                 sepectators: {}
             };
-        state.duelistChat.push(username + ' is viewing thier deck.');
+        state.duelistChat.push('<pre>' + username + ' is viewing their deck.</pre>');
         result[player] = {
             action: 'reveal',
             info: state,
@@ -654,7 +658,7 @@ function init(callback) {
                 1: {},
                 sepectators: {}
             };
-        state.duelistChat.push(username + ' is viewing thier extra deck.');
+        state.duelistChat.push('<pre>' + username + ' is viewing their extra deck..</pre>');
 
         result[player] = {
             action: 'reveal',
