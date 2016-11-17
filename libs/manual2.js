@@ -192,7 +192,7 @@ function responseHandler(socket, message) {
     case "start":
         player1 = stateSystem[socket.activeduel].decks[0];
         player2 = stateSystem[socket.activeduel].decks[1];
-        stateSystem[socket.activeduel].startDuel(player1, player2);
+        stateSystem[socket.activeduel].startDuel(player1, player2, true);
         wss.broadcast(games);
         break;
     case "moveCard":
