@@ -649,6 +649,13 @@ function init(callback) {
     }
 
 
+
+    /**
+     * Show player their own deck, allow interaction with it.
+     * @param {Number} slot   
+     * @param {Number} index  
+     * @param {Number} player
+     */
     function viewXYZ(slot, index, player) {
         var pile = filterIndex(filterlocation(filterPlayer(stack, player), 'MONSTERZONE'), index),
             result = {
@@ -664,6 +671,33 @@ function init(callback) {
             reveal: pile,
             call: 'view',
             player: slot
+        };
+
+        callback(result, stack);
+
+    }
+
+    /**
+     * Show player their own deck, allow interaction with it.
+     * @param {Number} slot   
+     * @param {Number} index  
+     * @param {Number} player
+     */
+    function viewExcavated(player) {
+        var pile = filterlocation(filterPlayer(stack, player), 'EXCAVATED'),
+            result = {
+                0: {},
+                1: {},
+                sepectators: {}
+            };
+
+
+        result[player] = {
+            action: 'reveal',
+            info: state,
+            reveal: pile,
+            call: 'view',
+            player: player
         };
 
         callback(result, stack);
