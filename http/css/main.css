@@ -961,7 +961,9 @@ div#sidechat {
 
 .ingamechatbox li pre {
     opacity: .5;
-    line-height: 0em;
+    padding: 0;
+    margin: 0;
+    font-size: .75em;
 }
 
 #sidechatinput {
