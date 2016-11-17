@@ -986,6 +986,14 @@ function manualRemoveCounter() {
     }));
 }
 
+function manualAttack() {
+    'use strict';
+    manualServer.send(JSON.stringify({
+        action: 'attack',
+        uid: manualActionReference
+    }));
+}
+
 function manualRemoveToken() {
     'use strict';
     manualServer.send(JSON.stringify({
@@ -1876,6 +1884,11 @@ function guicardclick() {
         }
         if (!excludeTokens(dbEntry)) {
             $('.m-monster-token').css({
+                'display': 'block'
+            });
+        }
+        if ($("#phaseindicator").attr('data-currentphase') === '3') {
+            $('.a-field').css({
                 'display': 'block'
             });
         }
