@@ -399,7 +399,14 @@ function init(callback) {
 
 
 
-
+    /**
+     * Creates a new card outside of initial start
+     * @param {String} currentLocation   
+     * @param {Number} currentController 
+     * @param {Number} currentSequence   
+     * @param {Number} position          
+     * @param {NUmber code              
+     */
     function makeNewCard(currentLocation, currentController, currentSequence, position, code) {
         stack.push(makeCard(currentLocation, currentController, currentSequence, stack.length, code));
         stack[stack.length - 1].position = position;
@@ -407,6 +414,11 @@ function init(callback) {
         callback(generateView('newCard'), stack);
     }
 
+
+    /**
+     * Deletes a specific card from the stack.
+     * @param {Number} uid The unique identifier of the card, to quickly find it.
+     */
     function removeCard(uid) {
         var target = queryCard(undefined, undefined, undefined, 0, uid),
             pointer = uidLookup(target.uid);
@@ -416,6 +428,10 @@ function init(callback) {
         callback(generateView('removeCard'), stack);
     }
 
+    /**
+     * Finds a specific card and puts a counter on it.
+     * @param {Number} uid The unique identifier of the card, to quickly find it.
+     */
     function addCounter(uid) {
         var target = queryCard(undefined, undefined, undefined, 0, uid),
             pointer = uidLookup(target.uid);
@@ -424,6 +440,10 @@ function init(callback) {
         callback(generateView(), stack);
     }
 
+    /**
+     * Finds a specific card and remove a counter from it.
+     * @param {Number} uid The unique identifier of the card, to quickly find it.
+     */
     function removeCounter(uid) {
         var target = queryCard(undefined, undefined, undefined, 0, uid),
             pointer = uidLookup(target.uid);
@@ -726,12 +746,12 @@ function init(callback) {
             stack.push(makeCard('EXTRA', 1, index, stack.length, card));
         });
         if (manual) {
-            state.duelistChat.push('Commands: ');
-            state.duelistChat.push('Reduce LP:   /sub <amount>');
-            state.duelistChat.push('Increase LP: /add <amount>');
-            state.duelistChat.push('Flip Coin:   /flip');
-            state.duelistChat.push('Roll Dice:   /roll');
-            state.duelistChat.push('Make Token:  /token <id>');
+            state.duelistChat.push('<pre>Commands:</pre>');
+            state.duelistChat.push('<pre>Reduce LP:   /sub [amount]</pre>');
+            state.duelistChat.push('<pre>Increase LP: /add [amount]</pre>');
+            state.duelistChat.push('<pre>Flip Coin:   /flip</pre>');
+            state.duelistChat.push('<pre>Roll Dice:   /roll</pre>');
+            state.duelistChat.push('<pre>Make Token:  /token</pre>');
         }
         callback(generateView('start'), stack);
     }
