@@ -223,16 +223,16 @@ function responseHandler(socket, message) {
         stateSystem[socket.activeduel].revealHand(socket.slot);
         break;
     case "viewDeck":
-        stateSystem[socket.activeduel].viewDeck(socket.slot);
+        stateSystem[socket.activeduel].viewDeck(socket.slot, games[socket.activeduel].player[socket.slot].name);
         break;
     case "viewExtra":
-        stateSystem[socket.activeduel].viewExtra(socket.slot);
+        stateSystem[socket.activeduel].viewExtra(socket.slot, games[socket.activeduel].player[socket.slot].name);
         break;
     case "viewGrave":
-        stateSystem[socket.activeduel].viewGrave(socket.slot);
+        stateSystem[socket.activeduel].viewGrave(socket.slot, games[socket.activeduel].player[socket.slot].name);
         break;
     case "viewBanished":
-        stateSystem[socket.activeduel].viewBanished(socket.slot);
+        stateSystem[socket.activeduel].viewBanished(socket.slot, games[socket.activeduel].player[socket.slot].name);
         break;
     case "viewXYZ":
         stateSystem[socket.activeduel].viewXYZ(socket.slot, message.index, message.player);
