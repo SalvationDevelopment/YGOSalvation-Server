@@ -258,6 +258,9 @@ function responseHandler(socket, message) {
     case "addCounter":
         stateSystem[socket.activeduel].addCounter(message.uid);
         break;
+    case "flipDeck":
+        stateSystem[socket.activeduel].flipDeck(socket.slot);
+        break;
     case "removeCounter":
         stateSystem[socket.activeduel].removeCounter(message.uid);
         break;

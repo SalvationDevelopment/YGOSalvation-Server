@@ -970,6 +970,13 @@ function manualViewBanished() {
     }));
 }
 
+function manualFlipDeck() {
+    'use strict';
+    manualServer.send(JSON.stringify({
+        action: 'flipDeck'
+    }));
+}
+
 function manualAddCounter() {
     'use strict';
     manualServer.send(JSON.stringify({
@@ -1704,6 +1711,20 @@ function revealonclick(card, note) {
         reorientmenu();
         return;
     }
+    if (manualActionReference.location === 'SPELLZONE') {
+        $('.m-field').css({
+            'display': 'block'
+        });
+        if (dbEntry.id === 62966332) {
+            $('.m-convulse').css({
+                'display': 'block'
+            });
+        }
+        reorientmenu();
+        return;
+    }
+
+
 }
 
 
@@ -1910,6 +1931,11 @@ function guicardclick() {
         $('.m-st, .m-field').css({
             'display': 'block'
         });
+        if (dbEntry.id === 62966332) {
+            $('.m-convulse').css({
+                'display': 'block'
+            });
+        }
         reorientmenu();
         return;
     }
