@@ -1720,6 +1720,11 @@ function revealonclick(card, note) {
                 'display': 'block'
             });
         }
+        if (dbEntry.id === 63571750) {
+            $('.m-pharaohstreasure').css({
+
+            });
+        }
         reorientmenu();
         return;
     }
@@ -1924,6 +1929,7 @@ function guicardclick() {
                 'display': 'block'
             });
         }
+
         reorientmenu();
         return;
     }
@@ -1934,6 +1940,11 @@ function guicardclick() {
         if (dbEntry.id === 62966332) {
             $('.m-convulse').css({
                 'display': 'block'
+            });
+        }
+        if (dbEntry.id === 63571750) {
+            $('.m-pharaohstreasure').css({
+
             });
         }
         reorientmenu();
