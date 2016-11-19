@@ -164,7 +164,6 @@ function bootUpdateSystem() {
 }
 
 function bootAISystem() {
-    return;
     setTimeout(function () {
         console.log('    AI[SnarkyChild] connecting to port 127.0.0.1:24555 '.bold.yellow);
         processManager.fork('./ai.js', [], {
