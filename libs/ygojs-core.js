@@ -189,6 +189,8 @@ function init(callback) {
     }
 
     var stack = [],
+        lock = [false, false],
+        round = [],
         state = {
             turn: 0,
             turnOfPlayer: 0,
@@ -199,7 +201,19 @@ function init(callback) {
             },
             duelistChat: [],
             spectatorChat: []
-        };
+        },
+        decks = {
+            0: {
+                main: [],
+                extra: [],
+                side: []
+            },
+            1: {
+                main: [],
+                extra: [],
+                side: []
+            }
+        }; // holds decks
 
 
 
@@ -727,15 +741,82 @@ function init(callback) {
         callback(result, stack);
 
     }
+
+    /**
+     * Start side decking.
+     */
+    function startSide() {
+        stack = [];
+        decks = {
+            0: {
+                main: [],
+                extra: [],
+                side: []
+            },
+            1: {
+                main: [],
+                extra: [],
+                side: []
+            }
+        };
+    }
+
+    /**
+     * Validate that an incoming deck matches the existing deck based on the rules of siding.
+     * @param   {number} player
+     * @param   {object}   deck
+     * @returns {boolean}  if the deck is valid.
+     */
+    function validateDeckAgainstPrevious(player, deck) {
+        var previous = [],
+            current = [];
+
+        // If there is no deck, then this deck is ok to use, because we will need it.
+        if (!decks[player].main.length) {
+            return true;
+        }
+
+        previous.concat(round[0][player].main, round[0][player].extra, round[0][player].side);
+        current.concat(deck.main, deck.extra, deck.side);
+
+        previous.sort();
+        current.sort();
+
+        return (JSON.stringify(current) === JSON.stringify(previous));
+    }
+
+
+    /**
+     * Take a given deck, if it can, lock it in, return if it locked in.
+     * @param   {number} player 
+     * @param   {object} deck  
+     * @returns {boolean}  if it managed to lock in the deck.
+     */
+    function lockInDeck(player, deck) {
+        if (validateDeckAgainstPrevious(player, deck)) {
+            decks[player] = deck;
+            lock[player] = true;
+        } else {
+            return false;
+        }
+    }
+
+
     /**
      * Exposed method to initialize the field; You only run this once.
      */
     function startDuel(player1, player2, manual) {
 
+        if (!lock[0] && !lock[1]) {
+            return;
+        }
+
+        round.push(player1, player2);
+        lock[0] = false;
+        lock[1] = false;
         shuffle(player1.main);
         shuffle(player2.main);
 
-        console.log(player1.extra);
         player1.main.forEach(function (card, index) {
             stack.push(makeCard('DECK', 0, index, stack.length, card));
         });
@@ -762,8 +843,13 @@ function init(callback) {
     }
 
 
+    function rematch() {
+        stack = [];
+        startDuel(round[0][0], round[0][1], true);
+    }
     /**
-     * Mutation Fuction, moves game to next phase.
+     * moves game to next phase.
+     * @param {number} phase enumeral
      */
     function nextPhase(phase) {
         state.phase = phase;
@@ -771,7 +857,7 @@ function init(callback) {
     }
 
     /**
-     * Mutation Function, shifts the game to the start of the next turn and shifts the active player.
+     * shifts the game to the start of the next turn and shifts the active player.
      */
     function nextTurn() {
         state.turn++;
@@ -791,7 +877,7 @@ function init(callback) {
     }
 
     /**
-     * Mutation Function, record what a duelist said to another duelist.
+     * Record what a duelist said to another duelist.
      * @param {Number} player  player saying the message.
      * @param {String} message message to other spectators
      */
@@ -801,7 +887,7 @@ function init(callback) {
     }
 
     /**
-     * Mutation Function, record what a spectator said to another spectator.
+     * Record what a spectator said to another spectator.
      * @param {Number} player  player saying the message.
      * @param {String} message message to other spectators
      */
@@ -811,7 +897,7 @@ function init(callback) {
     }
 
     /**
-     * Mutation Function, after game start, shuffle a players deck.
+     * After game start, shuffle a players deck.
      * @param {number} player 
      */
     function shuffleDeck(player) {
@@ -832,7 +918,7 @@ function init(callback) {
         callback(generateView('shuffleDeck' + player), stack); // alert UI of the shuffle.
     }
     /**
-     * Mutation Function,  shuffle a players hand.
+     *   shuffle a players hand.
      * @param {number} player 
      */
     function shuffleHand(player) {
@@ -907,6 +993,7 @@ function init(callback) {
 
     //expose public functions.
     return {
+        startSide: startSide,
         startDuel: startDuel,
         setState: setState,
         cardCollections: cardCollections,
@@ -943,18 +1030,9 @@ function init(callback) {
         surrender: surrender,
         players: {}, // holds socket references
         spectators: {}, // holds socket references
-        decks: {
-            0: {
-                main: [],
-                extra: [],
-                side: []
-            },
-            1: {
-                main: [],
-                extra: [],
-                side: []
-            }
-        } // holds decks
+        lock: lock,
+        lockInDeck: lockInDeck,
+        rematch: 0
     };
 
 

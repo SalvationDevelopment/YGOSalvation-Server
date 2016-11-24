@@ -2015,6 +2015,11 @@ $('#lobbychatinput, #sidechatinput').keypress(function (e) {
             surrender();
             return;
         }
+        if (parts[0] === '/side') {
+            $(e.currentTarget).val('');
+            manualSide();
+            return;
+        }
         if (parts[0] === '/roll') {
             $(e.currentTarget).val('');
             manualServer.send(JSON.stringify({
