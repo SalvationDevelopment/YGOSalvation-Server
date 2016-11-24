@@ -146,6 +146,7 @@ function responseHandler(socket, message) {
             game: message.game
         }));
         socket.activeduel = message.game;
+        stateSystem[socket.activeduel].callback();
         break;
     case "leave":
         if (socket.slot !== undefined) {
@@ -166,6 +167,7 @@ function responseHandler(socket, message) {
                 action: 'surrender',
                 by: socket.slot
             }));
+            stateSystem[socket.activeduel].surrender(games[socket.activeduel].player[socket.slot].name);
         }
         delete games[socket.activeduel];
         delete stateSystem[socket.activeduel];
