@@ -1703,13 +1703,14 @@ div#duelspectate {
 
 div#phaseindicator {
     position: fixed;
-    top: -10%;
+    top: 48%;
     width: 100%;
+    pointer-events: all;
     /*    padding: 5px;*/
 }
 
 #phaseindicator div {
-    width: 323px;
+    width: 372px;
     margin: 0 auto;
     overflow: auto;
     display: flex;
@@ -1735,7 +1736,7 @@ div#phaseindicator {
 #phaseindicator[data-currentphase="3"] #battlephi,
 #phaseindicator[data-currentphase="4"] #main2phi,
 #phaseindicator[data-currentphase="5"] #endphi,
-#phaseindicator[data-currentphase="5"] #nextturn {
+#phaseindicator[data-currentphase="6"] #nextturn {
     opacity: 1;
     font-weight: bold;
     box-shadow: inset 0 0 7px #ccc, 0 0 7px #ccc;
