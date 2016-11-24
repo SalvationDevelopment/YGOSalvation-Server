@@ -1703,7 +1703,7 @@ div#duelspectate {
 
 div#phaseindicator {
     position: fixed;
-    top: 50%;
+    top: -10%;
     width: 100%;
     /*    padding: 5px;*/
 }
