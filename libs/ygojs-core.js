@@ -756,6 +756,7 @@ function init(callback) {
             state.duelistChat.push('<pre>Flip Coin:   /flip</pre>');
             state.duelistChat.push('<pre>Roll Dice:   /roll</pre>');
             state.duelistChat.push('<pre>Make Token:  /token</pre>');
+            state.duelistChat.push('<pre>Surrender:   /surrender</pre>');
         }
         callback(generateView('start'), stack);
     }
@@ -900,6 +901,9 @@ function init(callback) {
         return result;
     }
 
+    function surrender(username) {
+        duelistChat('Server', username + ' surrendered.');
+    }
 
     //expose public functions.
     return {
@@ -936,6 +940,7 @@ function init(callback) {
         rollDie: rollDie,
         flipCoin: flipCoin,
         offsetZone: offsetZone,
+        surrender: surrender,
         players: {}, // holds socket references
         spectators: {}, // holds socket references
         decks: {

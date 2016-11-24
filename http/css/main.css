@@ -2841,3 +2841,8 @@ table#sqleditorpowermodeoutput {
     text-align: left;
     font-size: .7em;
 }
+
+html {
+    position: fixed;
+    /* fixes tab issue */
+}

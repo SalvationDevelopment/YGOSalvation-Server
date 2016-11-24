@@ -2010,6 +2010,11 @@ $('#lobbychatinput, #sidechatinput').keypress(function (e) {
             amount = 0,
             card = {},
             i;
+        if (parts[0] === '/surrender') {
+            $(e.currentTarget).val('');
+            surrender();
+            return;
+        }
         if (parts[0] === '/roll') {
             $(e.currentTarget).val('');
             manualServer.send(JSON.stringify({
