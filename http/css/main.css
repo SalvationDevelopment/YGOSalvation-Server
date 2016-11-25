@@ -889,6 +889,7 @@ div#actions button {
     width: 801px;
     margin: 0 auto;
     margin-top: 166px;
+    display: none;
 }
 
 .fieldcontainer {
