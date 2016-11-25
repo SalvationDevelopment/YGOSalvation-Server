@@ -178,7 +178,7 @@ function updateloby(state) {
 
 function startSiding() {
     'use strict';
-    $('.field').removeClass('sidemode');
+    $('.field').addClass('sidemode');
     $('.sidingzone').addClass('sidemode');
 }
 
