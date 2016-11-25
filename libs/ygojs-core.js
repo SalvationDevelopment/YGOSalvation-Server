@@ -770,19 +770,23 @@ function init(callback) {
     function validateDeckAgainstPrevious(player, deck) {
         var previous = [],
             current = [];
+        try {
 
-        // If there is no deck, then this deck is ok to use, because we will need it.
-        if (round.length === 0) {
+            // If there is no deck, then this deck is ok to use, because we will need it.
+            if (round.length === 0) {
+                return true;
+            }
+
+            previous.concat(round[0][player].main, round[0][player].extra, round[0][player].side);
+            current.concat(deck.main, deck.extra, deck.side);
+
+            previous.sort();
+            current.sort();
+
+            return (JSON.stringify(current) === JSON.stringify(previous));
+        } catch (e) {
             return true;
         }
-
-        previous.concat(round[0][player].main, round[0][player].extra, round[0][player].side);
-        current.concat(deck.main, deck.extra, deck.side);
-
-        previous.sort();
-        current.sort();
-
-        return (JSON.stringify(current) === JSON.stringify(previous));
     }
 
 
