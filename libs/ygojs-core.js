@@ -797,6 +797,7 @@ function init(callback) {
         if (validateDeckAgainstPrevious(player, deck)) {
             decks[player] = deck;
             lock[player] = true;
+            return true;
         } else {
             return false;
         }
