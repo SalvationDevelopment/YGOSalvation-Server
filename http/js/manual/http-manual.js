@@ -176,6 +176,12 @@ function updateloby(state) {
 
 }
 
+function startSiding() {
+    'use strict';
+    $('.field').removeClass('sidemode');
+    $('.sidingzone').addClass('sidemode');
+}
+
 function makeGames() {
     'use strict';
     $('#manualgamelistitems').html('');
@@ -689,6 +695,7 @@ function manualReciver(message) {
         break;
     case "start":
         $('#ingamesidebutton').css('display', 'none');
+        $('.field').removeClass('sidemode');
 
         manualgamestart(message);
         //startDuel(player1StartLP, player2StartLP, OneDeck, TwoDeck, OneExtra, TwoExtra)
@@ -2055,7 +2062,7 @@ $('#lobbychatinput, #sidechatinput').keypress(function (e) {
         }
         if (parts[0] === '/side') {
             $(e.currentTarget).val('');
-            manualSide();
+            startSiding();
             return;
         }
         if (parts[0] === '/roll') {
