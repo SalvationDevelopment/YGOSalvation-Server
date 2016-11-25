@@ -818,9 +818,7 @@ function surrender() {
     if (confirm('Are you sure?')) {
         internalLocal = 'surrendered';
     }
-    manualLeave(activegame);
-    setTimeout(manualSurrender.close, 1000);
-    setTimeout(manualServer.close, 1500);
+    manualSurrender();
     //singlesitenav('gamelist');
 }
 
