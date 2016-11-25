@@ -176,6 +176,17 @@ function updateloby(state) {
 
 }
 
+var sidedDeck = {};
+
+function buildsidecard(zone) {
+    'use strict';
+}
+
+function buildsidingarea() {
+    'use strict';
+
+}
+
 function startSiding() {
     'use strict';
     $('.field').addClass('sidemode');
@@ -694,6 +705,7 @@ function manualReciver(message) {
         break;
     case "side":
         $('#ingamesidebutton').css('display', 'block');
+        sidedDeck = message.side;
         break;
     case "start":
         $('#ingamesidebutton').css('display', 'none');
