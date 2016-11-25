@@ -1993,6 +1993,35 @@ $.getJSON('http://ygopro.us/manifest/manifest_0-en-OCGTCG.json', function (data)
 });
 
 var lastchat;
+
+function manualToken() {
+    'use strict';
+    var card = {};
+    card.player = orientSlot;
+    card.location = 'MONSTERZONE';
+    card.position = 'FaceUpDefence';
+    card.id = 73915052; // sheep token
+    card.index = automaticZonePicker();
+    card.action = 'makeToken';
+    manualServer.send(JSON.stringify(card));
+}
+
+function manualRoll() {
+    'use strict';
+    manualServer.send(JSON.stringify({
+        action: 'rollDie',
+        name: localStorage.nickname
+    }));
+}
+
+function manualFlip() {
+    'use strict';
+    manualServer.send(JSON.stringify({
+        action: 'flipCoin',
+        name: localStorage.nickname
+    }));
+}
+
 $('#lobbychatinput, #sidechatinput').keypress(function (e) {
     'use strict';
     if ($(e.currentTarget).val().length === 0) {
@@ -2022,29 +2051,17 @@ $('#lobbychatinput, #sidechatinput').keypress(function (e) {
         }
         if (parts[0] === '/roll') {
             $(e.currentTarget).val('');
-            manualServer.send(JSON.stringify({
-                action: 'rollDie',
-                name: localStorage.nickname
-            }));
+            manualRoll();
             return;
         }
         if (parts[0] === '/flip') {
             $(e.currentTarget).val('');
-            manualServer.send(JSON.stringify({
-                action: 'flipCoin',
-                name: localStorage.nickname
-            }));
+            manualFlip();
             return;
         }
         if (parts[0] === '/token') {
             $(e.currentTarget).val('');
-            card.player = orientSlot;
-            card.location = 'MONSTERZONE';
-            card.position = 'FaceUpDefence';
-            card.id = 73915052; // sheep token
-            card.index = automaticZonePicker();
-            card.action = 'makeToken';
-            manualServer.send(JSON.stringify(card));
+            manualToken();
             return;
         }
 
