@@ -1037,6 +1037,7 @@ function init(callback) {
         generateView: generateView,
         players: {}, // holds socket references
         spectators: {}, // holds socket references
+        decks: decks,
         lock: lock,
         lockInDeck: lockInDeck,
         rematch: rematch,
