@@ -684,7 +684,12 @@ function manualReciver(message) {
     case "slot":
         orientSlot = message.slot;
         break;
+    case "side":
+        $('#ingamesidebutton').css('display', 'block');
+        break;
     case "start":
+        $('#ingamesidebutton').css('display', 'none');
+        internalLocal = 'duelscreen';
         manualgamestart(message);
         //startDuel(player1StartLP, player2StartLP, OneDeck, TwoDeck, OneExtra, TwoExtra)
         linkStack(message.field);
