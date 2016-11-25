@@ -27,7 +27,9 @@ function dirTree(filename) {
     if (stats.isDirectory()) {
         info.type = "folder";
         if (filename.indexOf('.git') < 0) {
-            info = {};
+            info.subfolder = fs.readdirSync(filename).map(function (child) {
+                return dirTree(filename + '/' + child);
+            });
         } else {
             info.type = "file";
             info.size = 0;
