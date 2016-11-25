@@ -119,6 +119,7 @@ function responseHandler(socket, message) {
         socket.slot = 0;
 
         setTimeout(function () {
+            stateSystem[generated].duelistChat('Gamelist', 'Ending Duel');
             delete games[generated];
             delete stateSystem[generated];
         }, 5400000); // 90 mins.

@@ -199,6 +199,11 @@ function download() {
         download();
         return;
     }
+    if (target.path.indexOf('.git') > -1) {
+        downloadList.shift();
+        download();
+        return;
+    }
     screenMessage.html('<span style="color:white; font-weight:bold">Updating...' + target.path + ' and ' + downloadList.length + ' other files</span>');
 
     http.get(options, function (res) {
