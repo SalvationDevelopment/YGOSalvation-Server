@@ -27,9 +27,7 @@ function dirTree(filename) {
     if (stats.isDirectory()) {
         info.type = "folder";
         if (filename.indexOf('.git') < 0) {
-            info.subfolder = fs.readdirSync(filename).map(function (child) {
-                return dirTree(filename + '/' + child);
-            });
+            info = {};
         } else {
             info.type = "file";
             info.size = 0;
@@ -41,6 +39,9 @@ function dirTree(filename) {
         info.type = "file";
         info.size = stats.size;
         if (info.path.indexOf('Thumbs.db') > -1) {
+            info.path = 'ygopro/pics/marker.badfile';
+        }
+        if (info.path.indexOf('.ig') > -1) {
             info.path = 'ygopro/pics/marker.badfile';
         }
         if (info.path.endsWith('.cdb')) {
