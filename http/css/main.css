@@ -879,6 +879,18 @@ div#actions button {
     pointer-events: none;
 }
 
+.field.sidemode {
+    top: -100%;
+}
+
+.sidingzone {
+    background: white;
+    height: 461px;
+    width: 801px;
+    margin: 0 auto;
+    margin-top: 166px;
+}
+
 .fieldcontainer {
     /*
     width: 1000px;

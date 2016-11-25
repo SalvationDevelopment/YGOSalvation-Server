@@ -1793,7 +1793,7 @@
                     <button id="ingameflipbutton" onclick="manualFlip()">Flip Coin</button>
                     <button id="ingametokenbutton" onclick="manualToken()">Make Token</button>
                     <button id="ingamesurrenderbutton" onclick="surrender()">Surrender</button>
-                    <button id="ingamesidebutton" onclick="manualSide()">Side</button>
+                    <button id="ingamesidebutton" onclick="startSiding()">Side</button>
                 </div>
 
             </div>
@@ -1884,6 +1884,7 @@
         </div>
         <div id="revealedclose" onclick="$('#revealed ').toggle();$('#revealedclose ').toggle()"></div>
         <div id="revealed"></div>
+        <div class="sidingzone"></div>
         <div class="field" id="duelzone">
             <div class="fieldimage" id="automationduelfield">
 
