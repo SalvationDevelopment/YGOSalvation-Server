@@ -180,6 +180,8 @@ function startSiding() {
     'use strict';
     $('.field').addClass('sidemode');
     $('.sidingzone').addClass('sidemode');
+    $('#ingamesidebutton').css('display', 'none');
+    $('#ingamexsidebutton').css('display', 'block');
 }
 
 function makeGames() {
