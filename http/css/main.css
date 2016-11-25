@@ -892,6 +892,10 @@ div#actions button {
     display: none;
 }
 
+.sidingzone.sidemode {
+    display: block;
+}
+
 .fieldcontainer {
     /*
     width: 1000px;
