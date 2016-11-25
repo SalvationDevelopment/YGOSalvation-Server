@@ -772,7 +772,7 @@ function init(callback) {
             current = [];
 
         // If there is no deck, then this deck is ok to use, because we will need it.
-        if (decks[player].main.length === 0) {
+        if (round.length === 0) {
             return true;
         }
 
