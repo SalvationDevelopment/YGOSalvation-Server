@@ -689,7 +689,7 @@ function manualReciver(message) {
         break;
     case "start":
         $('#ingamesidebutton').css('display', 'none');
-        internalLocal = 'duelscreen';
+
         manualgamestart(message);
         //startDuel(player1StartLP, player2StartLP, OneDeck, TwoDeck, OneExtra, TwoExtra)
         linkStack(message.field);
@@ -723,6 +723,7 @@ function manualReciver(message) {
             cardmargin(1, 'DECK');
             layouthand(0);
             layouthand(1);
+            internalLocal = 'duelscreen';
         }, 100);
 
         $('#phaseindicator').attr('data-currentphase', message.info.phase);
