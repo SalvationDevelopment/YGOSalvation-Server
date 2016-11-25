@@ -823,8 +823,9 @@ function surrender() {
     'use strict';
     if (confirm('Are you sure?')) {
         internalLocal = 'surrendered';
+        manualSurrender();
     }
-    manualSurrender();
+
     //singlesitenav('gamelist');
 }
 
