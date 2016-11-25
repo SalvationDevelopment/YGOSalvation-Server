@@ -1786,14 +1786,14 @@
             <button id="select_chains" data-action="5" onclick="idleReply(this)">Activate</button>
         </div>
         <div class="left" style="position:fixed;color:white; font-size:.9em; z-index:30;">
-            <div class="cardImage" style="position:relative">
+            <div class="cardImage" style="position:relative; height: auto;">
                 <img class="imgContainer" src="ygopro/pics/cover.jpg" />
                 <div class="ingameminorcontrols">
-                    <button id="ingamerollbutton">Roll Die</button>
-                    <button id="ingameflipbutton">Flip Coin</button>
-                    <button id="ingametokenbutton">Make Token</button>
-                    <button id="ingamesurrenderbutton">Surrender</button>
-                    <button id="ingamesidebutton">Side</button>
+                    <button id="ingamerollbutton" onclick="manualRoll()">Roll Die</button>
+                    <button id="ingameflipbutton" onclick="manualFlip()">Flip Coin</button>
+                    <button id="ingametokenbutton" onclick="manualToken()">Make Token</button>
+                    <button id="ingamesurrenderbutton" onclick="surrender()">Surrender</button>
+                    <button id="ingamesidebutton" onclick="manualSide()">Side</button>
                 </div>
 
             </div>

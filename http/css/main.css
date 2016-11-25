@@ -1816,6 +1816,19 @@ div#waiting {
     background: orange;
 }
 
+.ingameminorcontrols {
+    height: 100%;
+    position: absolute;
+    top: 152px;
+    left: 184px;
+    width: 7em;
+    font-size: .9em;
+}
+
+.ingameminorcontrols button {
+    width: 90px;
+}
+
 input#player1lobbyslot,
 input#player2lobbyslot,
 input#player3lobbyslot,
