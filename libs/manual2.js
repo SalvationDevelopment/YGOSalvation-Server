@@ -177,10 +177,12 @@ function responseHandler(socket, message) {
             if (games[activeduel].mode === 1) {
 
                 stateSystem[activeduel].players[0].send(JSON.stringify({
-                    action: 'side'
+                    action: 'side',
+                    deck: stateSystem[activeduel].decks[0]
                 }));
                 stateSystem[activeduel].players[1].send(JSON.stringify({
-                    action: 'side'
+                    action: 'side',
+                    deck: stateSystem[activeduel].decks[1]
                 }));
             }
 
