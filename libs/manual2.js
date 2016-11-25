@@ -190,7 +190,7 @@ function responseHandler(socket, message) {
         if (socket.slot !== undefined) {
             //ready = deckvalidator(message.deck);
 
-            games[activeduel].player[socket.slot].ready = stateSystem[activeduel].lockInDeck([socket.slot], message.deck);
+            games[activeduel].player[socket.slot].ready = stateSystem[activeduel].lockInDeck(socket.slot, message.deck);
 
             socket.send(JSON.stringify({
                 action: 'lock',
