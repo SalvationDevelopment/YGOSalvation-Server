@@ -1303,6 +1303,7 @@ function manualActivate() {
 
     message.action = 'moveCard';
     message.sound = 'soundactivateCard';
+    message.moveindex = automaticZonePicker(manualActionReference.player, 'SPELLZONE');
     manualServer.send(JSON.stringify(message));
 }
 
