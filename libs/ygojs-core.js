@@ -842,11 +842,15 @@ function init(callback) {
         callback(generateView('start'), stack);
     }
 
-
+    /**
+     * Restarts the game for a rematch.
+     */
     function rematch() {
         stack = [];
+        state.duelistChat.push('<pre>Server: Rematch started</pre>');
         startDuel(round[0][0], round[0][1], true);
     }
+
     /**
      * moves game to next phase.
      * @param {number} phase enumeral
@@ -857,7 +861,7 @@ function init(callback) {
     }
 
     /**
-     * shifts the game to the start of the next turn and shifts the active player.
+     * Shifts the game to the start of the next turn and shifts the active player.
      */
     function nextTurn() {
         state.turn++;
@@ -1028,11 +1032,14 @@ function init(callback) {
         flipCoin: flipCoin,
         offsetZone: offsetZone,
         surrender: surrender,
+        generateView: generateView,
         players: {}, // holds socket references
         spectators: {}, // holds socket references
         lock: lock,
         lockInDeck: lockInDeck,
-        rematch: 0
+        rematch: rematch,
+        rematchAccept: 0,
+        sideAccept: 0
     };
 
 
