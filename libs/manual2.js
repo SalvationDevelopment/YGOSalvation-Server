@@ -3,10 +3,11 @@
 
 function newGame() {
     return {
+        started: false,
         deckcheck: 0,
         draw_count: 0,
         lflist: 0,
-        mode: 0,
+        mode: 1,
         noshuffle: 0,
         prio: 0,
         rule: 0,
@@ -96,7 +97,8 @@ function responseHandler(socket, message) {
         joined = false,
         player1,
         player2,
-        ready;
+        ready,
+        activeduel = socket.activeduel;
     if (!message.action) {
         return;
     }
@@ -133,28 +135,31 @@ function responseHandler(socket, message) {
             player.name = message.name;
             stateSystem[message.game].players[index] = socket;
             socket.slot = index;
-            socket.activeDuel = message.game;
+            socket.activeduel = message.game;
             return true;
         });
         if (!joined) {
             message.game.spectators++;
             stateSystem[message.game].spectators[message.name] = socket;
+            if (games[message.game].started) {
+                socket.send(JSON.stringify(stateSystem[message.game].generateView('start')));
+            }
         }
         wss.broadcast(games);
         socket.send(JSON.stringify({
             action: 'lobby',
             game: message.game
         }));
-        socket.activeduel = message.game;
-        stateSystem[socket.activeduel].callback();
+        activeduel = message.game;
+        stateSystem[activeduel].callback();
         break;
     case "leave":
         if (socket.slot !== undefined) {
-            games[socket.activeduel].player[socket.slot].name = '';
-            games[socket.activeduel].player[socket.slot].ready = false;
+            games[activeduel].player[socket.slot].name = '';
+            games[activeduel].player[socket.slot].ready = false;
         } else {
             message.game.spectators--;
-            delete stateSystem[socket.activeduel].spectators[message.name];
+            delete stateSystem[activeduel].spectators[message.name];
         }
         wss.broadcast(games);
         socket.send(JSON.stringify({
@@ -167,22 +172,30 @@ function responseHandler(socket, message) {
                 action: 'surrender',
                 by: socket.slot
             }));
-            stateSystem[socket.activeduel].surrender(games[socket.activeduel].player[socket.slot].name);
+            stateSystem[activeduel].surrender(games[activeduel].player[socket.slot].name);
+            if (games[activeduel].mode === 1) {
+
+                stateSystem[activeduel].players[0].send(JSON.stringify({
+                    action: 'side'
+                }));
+                stateSystem[activeduel].players[1].send(JSON.stringify({
+                    action: 'side'
+                }));
+            }
+
         }
-        delete games[socket.activeduel];
-        delete stateSystem[socket.activeduel];
+
         break;
     case "lock":
         if (socket.slot !== undefined) {
             //ready = deckvalidator(message.deck);
 
-            games[socket.activeduel].player[socket.slot].ready = true;
-            stateSystem[socket.activeduel].lockInDeck([socket.slot], message.deck);
+            games[activeduel].player[socket.slot].ready = stateSystem[activeduel].lockInDeck([socket.slot], message.deck);
 
             socket.send(JSON.stringify({
                 action: 'lock',
                 result: 'success',
-                deck: stateSystem[socket.activeduel].decks[socket.slot]
+                deck: stateSystem[activeduel].decks[socket.slot]
             }));
 
         }
@@ -193,130 +206,131 @@ function responseHandler(socket, message) {
         wss.broadcast(games);
         break;
     case "start":
-        player1 = stateSystem[socket.activeduel].decks[0];
-        player2 = stateSystem[socket.activeduel].decks[1];
-        stateSystem[socket.activeduel].startDuel(player1, player2, true);
+        player1 = stateSystem[activeduel].decks[0];
+        player2 = stateSystem[activeduel].decks[1];
+        stateSystem[activeduel].startDuel(player1, player2, true);
+        games[activeduel].started = true;
         wss.broadcast(games);
         break;
     case "moveCard":
-        stateSystem[socket.activeduel].setState(message.player, message.clocation, message.index, message.moveplayer, message.movelocation, message.moveindex, message.moveposition, message.overlayindex, message.uid);
+        stateSystem[activeduel].setState(message.player, message.clocation, message.index, message.moveplayer, message.movelocation, message.moveindex, message.moveposition, message.overlayindex, message.uid);
         break;
     case "revealTop":
-        stateSystem[socket.activeduel].revealTop(socket.slot);
+        stateSystem[activeduel].revealTop(socket.slot);
         break;
     case "revealBottom":
-        stateSystem[socket.activeduel].revealBottom(socket.slot);
+        stateSystem[activeduel].revealBottom(socket.slot);
         break;
     case "offsetDeck":
-        stateSystem[socket.activeduel].offsetZone(socket.slot, 'DECK');
+        stateSystem[activeduel].offsetZone(socket.slot, 'DECK');
         break;
     case "makeToken":
-        stateSystem[socket.activeduel].makeNewCard(message.location, message.player, message.index, message.position, message.id);
+        stateSystem[activeduel].makeNewCard(message.location, message.player, message.index, message.position, message.id);
         break;
     case "removeToken":
-        stateSystem[socket.activeduel].removeCard(message.uid);
+        stateSystem[activeduel].removeCard(message.uid);
         break;
     case "revealDeck":
-        stateSystem[socket.activeduel].revealDeck(socket.slot);
+        stateSystem[activeduel].revealDeck(socket.slot);
         break;
     case "revealExtra":
-        stateSystem[socket.activeduel].revealExtra(socket.slot);
+        stateSystem[activeduel].revealExtra(socket.slot);
         break;
     case "revealHand":
-        stateSystem[socket.activeduel].revealHand(socket.slot);
+        stateSystem[activeduel].revealHand(socket.slot);
         break;
     case "viewDeck":
-        stateSystem[socket.activeduel].viewDeck(socket.slot, games[socket.activeduel].player[socket.slot].name);
+        stateSystem[activeduel].viewDeck(socket.slot, games[activeduel].player[socket.slot].name);
         break;
     case "viewExtra":
-        stateSystem[socket.activeduel].viewExtra(socket.slot, games[socket.activeduel].player[socket.slot].name);
+        stateSystem[activeduel].viewExtra(socket.slot, games[activeduel].player[socket.slot].name);
         break;
     case "viewGrave":
-        stateSystem[socket.activeduel].viewGrave(socket.slot, games[socket.activeduel].player[socket.slot].name);
+        stateSystem[activeduel].viewGrave(socket.slot, games[activeduel].player[socket.slot].name);
         break;
     case "viewBanished":
-        stateSystem[socket.activeduel].viewBanished(socket.slot, games[socket.activeduel].player[socket.slot].name);
+        stateSystem[activeduel].viewBanished(socket.slot, games[activeduel].player[socket.slot].name);
         break;
     case "viewXYZ":
-        stateSystem[socket.activeduel].viewXYZ(socket.slot, message.index, message.player);
+        stateSystem[activeduel].viewXYZ(socket.slot, message.index, message.player);
         break;
     case "shuffleDeck":
-        stateSystem[socket.activeduel].shuffleDeck(socket.slot);
+        stateSystem[activeduel].shuffleDeck(socket.slot);
         break;
     case "shuffleHand":
-        stateSystem[socket.activeduel].shuffleHand(socket.slot);
+        stateSystem[activeduel].shuffleHand(socket.slot);
         break;
     case "draw":
-        stateSystem[socket.activeduel].drawCard(socket.slot, 1);
+        stateSystem[activeduel].drawCard(socket.slot, 1);
         break;
     case "mill":
-        stateSystem[socket.activeduel].millCard(socket.slot, 1);
+        stateSystem[activeduel].millCard(socket.slot, 1);
         break;
     case "millRemovedCard":
-        stateSystem[socket.activeduel].millRemovedCard(socket.slot, 1);
+        stateSystem[activeduel].millRemovedCard(socket.slot, 1);
         break;
     case "millRemovedCardFaceDown":
-        stateSystem[socket.activeduel].millRemovedCardFaceDown(socket.slot, 1);
+        stateSystem[activeduel].millRemovedCardFaceDown(socket.slot, 1);
         break;
     case "addCounter":
-        stateSystem[socket.activeduel].addCounter(message.uid);
+        stateSystem[activeduel].addCounter(message.uid);
         break;
     case "flipDeck":
-        stateSystem[socket.activeduel].flipDeck(socket.slot);
+        stateSystem[activeduel].flipDeck(socket.slot);
         break;
     case "removeCounter":
-        stateSystem[socket.activeduel].removeCounter(message.uid);
+        stateSystem[activeduel].removeCounter(message.uid);
         break;
     case "rollDie":
         if (socket.slot !== undefined) {
-            stateSystem[socket.activeduel].rollDie(games[socket.activeduel].player[socket.slot].name);
+            stateSystem[activeduel].rollDie(games[activeduel].player[socket.slot].name);
         } else {
-            stateSystem[socket.activeduel].rollDie(message.name);
+            stateSystem[activeduel].rollDie(message.name);
         }
         break;
     case "flipCoin":
         if (socket.slot !== undefined) {
-            stateSystem[socket.activeduel].flipCoin(games[socket.activeduel].player[socket.slot].name);
+            stateSystem[activeduel].flipCoin(games[activeduel].player[socket.slot].name);
         } else {
-            stateSystem[socket.activeduel].flipCoin(message.name);
+            stateSystem[activeduel].flipCoin(message.name);
         }
         break;
     case "chat":
         if (socket.slot !== undefined) {
-            stateSystem[socket.activeduel].duelistChat(games[socket.activeduel].player[socket.slot].name, message.chat);
+            stateSystem[activeduel].duelistChat(games[activeduel].player[socket.slot].name, message.chat);
         } else {
-            stateSystem[socket.activeduel].spectatorChat(message.name, message.chat);
+            stateSystem[activeduel].spectatorChat(message.name, message.chat);
         }
         break;
     case "nextPhase":
         if (socket.slot !== undefined) {
-            stateSystem[socket.activeduel].nextPhase(message.phase);
+            stateSystem[activeduel].nextPhase(message.phase);
         }
         break;
     case "nextTurn":
         if (socket.slot !== undefined) {
-            stateSystem[socket.activeduel].nextTurn();
+            stateSystem[activeduel].nextTurn();
         }
         break;
     case "changeLifepoints":
         if (socket.slot !== undefined) {
-            stateSystem[socket.activeduel].changeLifepoints(socket.slot, message.amount);
+            stateSystem[activeduel].changeLifepoints(socket.slot, message.amount);
         }
         break;
     case "revealHandSingle":
-        stateSystem[socket.activeduel].revealCallback([message.card], socket.slot, 'revealHandSingle');
+        stateSystem[activeduel].revealCallback([message.card], socket.slot, 'revealHandSingle');
         break;
     case "getLog":
-        if (stateSystem[socket.activeduel]) {
+        if (stateSystem[activeduel]) {
             socket.send(JSON.stringify({
                 action: 'log',
-                log: log[socket.activeduel]
+                log: log[activeduel]
             }));
         }
         break;
     case "attack":
         if (socket.slot !== undefined) {
-            duelBroadcast(socket.activeduel, {
+            duelBroadcast(activeduel, {
                 action: 'attack',
                 attacker: message.uid
             });
@@ -326,15 +340,15 @@ function responseHandler(socket, message) {
     default:
         break;
     }
-    if (stateSystem[socket.activeduel]) {
-        log[socket.activeduel].push(message);
+    if (stateSystem[activeduel]) {
+        log[activeduel].push(message);
     }
     if (socket.slot !== undefined && message.sound) {
-        stateSystem[socket.activeduel].players[0].send(JSON.stringify({
+        stateSystem[activeduel].players[0].send(JSON.stringify({
             action: 'sound',
             sound: message.sound
         }));
-        stateSystem[socket.activeduel].players[1].send(JSON.stringify({
+        stateSystem[activeduel].players[1].send(JSON.stringify({
             action: 'sound',
             sound: message.sound
         }));
