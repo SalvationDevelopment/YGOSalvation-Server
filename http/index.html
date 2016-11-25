@@ -1747,9 +1747,7 @@
             <button onclick="runreUpdate()">RE RUN UPDATE SYSTEM</button>
         </div>
     </header>
-    <header style="padding-top:50px" id="dn">
-        <iframe id="dnwindow" width="100%" height="100%"></iframe>
-    </header>
+
     <header style="padding-top:50px" id="duelscreen">
 
         <div id="rpsunit1"></div>
@@ -1788,8 +1786,16 @@
             <button id="select_chains" data-action="5" onclick="idleReply(this)">Activate</button>
         </div>
         <div class="left" style="position:fixed;color:white; font-size:.9em; z-index:30;">
-            <div class="cardImage">
+            <div class="cardImage" style="position:relative">
                 <img class="imgContainer" src="ygopro/pics/cover.jpg" />
+                <div class="ingameminorcontrols">
+                    <button id="ingamerollbutton">Roll Die</button>
+                    <button id="ingameflipbutton">Flip Coin</button>
+                    <button id="ingametokenbutton">Make Token</button>
+                    <button id="ingamesurrenderbutton">Surrender</button>
+                    <button id="ingamesidebutton">Side</button>
+                </div>
+
             </div>
             <div class="cardDescription" style="width:80%;    height: calc(85vh - 254px);">
             </div>
