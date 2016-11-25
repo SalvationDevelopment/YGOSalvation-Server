@@ -1203,6 +1203,9 @@ function makeCardMovement(start, end) {
     if (end.isBecomingCard === undefined) {
         end.isBecomingCard = false;
     }
+    if (end.index === undefined) {
+        end.index = start.index;
+    }
     return {
         code: start.code,
         player: start.player,
