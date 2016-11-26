@@ -723,6 +723,10 @@ function manualReciver(message) {
     case "side":
         $('#ingamesidebutton').css('display', 'block');
         sidedDeck = message.deck;
+        sidedDeck.main.sort();
+        sidedDeck.extra.sort();
+        sidedDeck.side.sort();
+        console.log(sidedDeck.main);
         renderSideDeckZone(sidedDeck);
         break;
     case "start":
