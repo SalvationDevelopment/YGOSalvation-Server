@@ -217,8 +217,8 @@ function renderSideDeckZone(deck) {
         floatMarkerMain = 's50';
     }
 
-    $('.sidingzone .main,').attr('floatmarker', floatMarkerMain);
-    $('.sidingzone .extra,').attr('floatmarker', floatMarkerExtra);
+    $('.sidingzone .main').attr('floatmarker', floatMarkerMain);
+    $('.sidingzone .extra').attr('floatmarker', floatMarkerExtra);
     $('.sidingzone .side').attr('floatmarker', floatMarkerside);
 }
 
