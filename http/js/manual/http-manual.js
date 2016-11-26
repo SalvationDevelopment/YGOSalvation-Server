@@ -186,7 +186,7 @@ function makeSideCard(cards, zone) {
 
     cards.forEach(function (card, index) {
         var hardcard = JSON.stringify(card),
-            src = (card.id) ? 'ygopro/pics/' + card.id + '.jpg' : 'img/textures/cover.jpg';
+            src = 'ygopro/pics/' + card + '.jpg';
         html += '<img class="sidedeckzonecard" src="http://ygopro.us/' + src + '" data-"' + card + '" onclick = "sideonclick(' + index + ', \'' + zone + '\')" / > ';
     });
 
