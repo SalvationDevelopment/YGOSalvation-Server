@@ -178,14 +178,31 @@ function updateloby(state) {
 
 var sidedDeck = {};
 
-function buildsidecard(zone) {
+
+function makeSideCard(cards, zone) {
     'use strict';
+    var html = '';
+
+
+    cards.forEach(function (card, index) {
+        var hardcard = JSON.stringify(card),
+            src = (card.id) ? 'ygopro/pics/' + card.id + '.jpg' : 'img/textures/cover.jpg';
+        html += '<img class="sidedeckzonecard" src="http://ygopro.us/' + src + '" data-"' + card + '" onclick = "sideonclick(' + index + ', \'' + zone + '\')" / > ';
+    });
+
+    $('.sidingzone .' + zone).html(html);
+    //$('#subreveal').width(cards.length * 197);
 }
 
-function buildsidingarea() {
+function renderSideDeckZone(deck) {
     'use strict';
-
+    makeSideCard(deck.main, 'main');
+    makeSideCard(deck.extra, 'extra');
+    makeSideCard(deck.side, 'side');
 }
+
+
+
 
 function startSiding() {
     'use strict';
@@ -706,6 +723,7 @@ function manualReciver(message) {
     case "side":
         $('#ingamesidebutton').css('display', 'block');
         sidedDeck = message.side;
+        renderSideDeckZone(sidedDeck);
         break;
     case "start":
         $('#ingamesidebutton').css('display', 'none');
@@ -1612,6 +1630,73 @@ function reorientmenu() {
         'display': 'block'
     });
 
+}
+
+
+var sideReference = {};
+
+function moveInArray(array, old_index, new_index) {
+    'use strict';
+    if (new_index >= array.length) {
+        var k = new_index - array.length;
+        while ((k--) + 1) {
+            array.push(undefined);
+        }
+    }
+    array.splice(new_index, 0, array.splice(old_index, 1)[0]);
+    return array; // for testing purposes
+}
+
+function sidemoveTo(deck) {
+    'use strict';
+    moveInArray(sidedDeck[sideReference.zone], sideReference.index, 0);
+    var card = sidedDeck[sideReference.zone].shift();
+    sidedDeck[deck].push(card);
+    renderSideDeckZone(sidedDeck);
+}
+
+function sideonclick(index, zone) {
+    'use strict';
+
+    sideReference = {
+        id: sidedDeck[zone][index],
+        zone: zone,
+        index: index
+    };
+    $('#manualcontrols button').css({
+        'display': 'none'
+    });
+
+    $('#manualcontrols').css({
+        'top': currentMousePos.y,
+        'left': currentMousePos.x,
+        'display': 'block'
+    });
+    var dbEntry = getCardObject(parseInt(sideReference.id, 10));
+    if (sideReference.zone === 'main') {
+        $('.s-toside').css({
+            'display': 'block'
+        });
+
+    }
+    if (sideReference.zone === 'extra') {
+        $('.s-toside').css({
+            'display': 'block'
+        });
+    }
+    if (sideReference.zone === 'side') {
+        if (cardIs('xyz', dbEntry) || cardIs('fusion', dbEntry) || cardIs('synchro', dbEntry)) {
+            $('.s-toextra').css({
+                'display': 'block'
+            });
+        } else {
+            $('.s-tomain').css({
+                'display': 'block'
+            });
+        }
+    }
+    reorientmenu();
+    return;
 }
 
 
