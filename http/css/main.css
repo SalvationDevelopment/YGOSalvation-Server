@@ -894,9 +894,9 @@ div#actions button {
 
 .sidingzone {
     height: 500px;
-    width: 693px;
+    width: 600px;
     margin: 0 auto;
-    margin-top: 55px;
+    margin-top: 70px;
     display: none;
 }
 
@@ -905,7 +905,7 @@ div#actions button {
 }
 
 .sidingzone img {
-    width: 66px;
+    width: 56px;
     margin: 1px;
     float: left;
     position: relative;
@@ -920,7 +920,8 @@ div#actions button {
     float: left;
     border: 1px solid white;
     padding: 5px;
-    background: rgba(255, 255, 255, .25);
+    background: rgba(0, 0, 0, .25);
+    width: 100%;
 }
 
 [floatmarker="s50"] img {

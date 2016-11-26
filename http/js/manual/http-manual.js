@@ -202,7 +202,7 @@ function renderSideDeckZone(deck) {
 
     var floatMarkerMain = '',
         floatMarkerExtra = '',
-        floatMarkerside = '';
+        floatMarkerSide = '';
 
     if (deck.main > 40) {
         floatMarkerMain = 's50';
@@ -211,15 +211,15 @@ function renderSideDeckZone(deck) {
         floatMarkerMain = 's60';
     }
     if (deck.extra > 10) {
-        floatMarkerMain = 's50';
+        floatMarkerExtra = 's50';
     }
     if (deck.side > 10) {
-        floatMarkerMain = 's50';
+        floatMarkerSide = 's50';
     }
 
     $('.sidingzone .main').attr('floatmarker', floatMarkerMain);
     $('.sidingzone .extra').attr('floatmarker', floatMarkerExtra);
-    $('.sidingzone .side').attr('floatmarker', floatMarkerside);
+    $('.sidingzone .side').attr('floatmarker', floatMarkerSide);
 }
 
 
