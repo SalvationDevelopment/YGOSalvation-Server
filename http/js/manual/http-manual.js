@@ -211,10 +211,10 @@ function renderSideDeckZone(deck) {
         floatMarkerMain = 's60';
     }
     if (deck.extra.length > 10) {
-        floatMarkerExtra = 's50';
+        floatMarkerExtra = 's60';
     }
     if (deck.side.length > 10) {
-        floatMarkerSide = 's50';
+        floatMarkerSide = 's60';
     }
 
     $('.sidingzone .main').attr('floatmarker', floatMarkerMain);
