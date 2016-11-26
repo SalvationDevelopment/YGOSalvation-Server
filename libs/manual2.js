@@ -201,6 +201,9 @@ function responseHandler(socket, message) {
                 action: 'lock',
                 result: 'success'
             }));
+            if (games[activeduel].player[socket.slot].ready) {
+                stateSystem[activeduel].duelistChat('Server', '<pre>' + games[activeduel].player[socket.slot].name + ' locked in deck.</pre>');
+            }
 
         }
         socket.send(JSON.stringify({
