@@ -204,16 +204,16 @@ function renderSideDeckZone(deck) {
         floatMarkerExtra = '',
         floatMarkerSide = '';
 
-    if (deck.main > 40) {
+    if (deck.main.length > 40) {
         floatMarkerMain = 's50';
     }
-    if (deck.main > 59) {
+    if (deck.main.length > 59) {
         floatMarkerMain = 's60';
     }
-    if (deck.extra > 10) {
+    if (deck.extra.length > 10) {
         floatMarkerExtra = 's50';
     }
-    if (deck.side > 10) {
+    if (deck.side.length > 10) {
         floatMarkerSide = 's50';
     }
 
