@@ -782,6 +782,9 @@ function manualReciver(message) {
     case "start":
         $('#ingamesidebutton').css('display', 'none');
         $('.field').removeClass('sidemode');
+        $('.sidingzone').removeClass('sidemode');
+        $('#ingamesidebutton').css('display', 'none');
+        $('#ingamexsidebutton').css('display', 'none');
 
         manualgamestart(message);
         //startDuel(player1StartLP, player2StartLP, OneDeck, TwoDeck, OneExtra, TwoExtra)
@@ -803,6 +806,7 @@ function manualReciver(message) {
             $('#sidechatinput').focus();
         }, 1000);
         updateChat(message.info.duelistChat);
+        internalLocal = 'duelscreen';
         break;
     case "newCard":
         manualDuel.newCard();
