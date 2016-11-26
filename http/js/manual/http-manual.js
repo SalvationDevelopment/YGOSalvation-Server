@@ -199,6 +199,27 @@ function renderSideDeckZone(deck) {
     makeSideCard(deck.main, 'main');
     makeSideCard(deck.extra, 'extra');
     makeSideCard(deck.side, 'side');
+
+    var floatMarkerMain = '',
+        floatMarkerExtra = '',
+        floatMarkerside = '';
+
+    if (deck.main > 40) {
+        floatMarkerMain = 's50';
+    }
+    if (deck.main > 59) {
+        floatMarkerMain = 's60';
+    }
+    if (deck.extra > 10) {
+        floatMarkerMain = 's50';
+    }
+    if (deck.side > 10) {
+        floatMarkerMain = 's50';
+    }
+
+    $('.sidingzone .main,').attr('floatmarker', floatMarkerMain);
+    $('.sidingzone .extra,').attr('floatmarker', floatMarkerExtra);
+    $('.sidingzone .side').attr('floatmarker', floatMarkerside);
 }
 
 
