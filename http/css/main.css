@@ -885,15 +885,21 @@ div#actions button {
 
 .sidingzone {
     background: white;
-    height: 461px;
-    width: 801px;
+    height: 500px;
+    width: 696px;
     margin: 0 auto;
-    margin-top: 166px;
+    margin-top: 55px;
     display: none;
 }
 
 .sidingzone.sidemode {
     display: block;
+}
+
+.sidingzone img {
+    width: 66px;
+    margin: 1px;
+    float: left;
 }
 
 .fieldcontainer {
