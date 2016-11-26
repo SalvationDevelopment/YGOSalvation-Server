@@ -714,7 +714,33 @@ function updateChat(duelist, spectators) {
     $('.ingamechatbox, #sidechat, #spectatorchattext').scrollTop($('.ingamechatbox').prop("scrollHeight"));
 }
 
-var duelstash = {};
+var duelstash = {},
+    sidestach = {};
+
+
+function finishsiding() {
+    'use strict';
+
+    if (sidedDeck.side.length !== sidestach.side) {
+        alert('Side Deck is not at orginal amount of', sidestach.side);
+        return;
+    }
+    manualServer.send(JSON.stringify({
+        action: 'lock',
+        deck: sidedDeck,
+        side: true
+    }));
+    setTimeout(function () {
+        if (broadcast[activegame].player[0].ready && broadcast[activegame].player[1].ready) {
+            manualServer.send(JSON.stringify({
+                action: 'start'
+            }));
+            return;
+        } else {
+            alert('Opponent is still siding, please wait.');
+        }
+    }, 3000);
+}
 
 function manualReciver(message) {
     'use strict';
@@ -747,6 +773,9 @@ function manualReciver(message) {
         sidedDeck.main.sort();
         sidedDeck.extra.sort();
         sidedDeck.side.sort();
+        sidestach.main = sidedDeck.main.length;
+        sidestach.extra = sidedDeck.extra.length;
+        sidestach.side = sidedDeck.side.length;
         console.log(sidedDeck.main);
         renderSideDeckZone(sidedDeck);
         break;

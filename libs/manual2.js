@@ -180,10 +180,12 @@ function responseHandler(socket, message) {
                     action: 'side',
                     deck: stateSystem[activeduel].decks[0]
                 }));
+                games[activeduel].player[0].ready = false;
                 stateSystem[activeduel].players[1].send(JSON.stringify({
                     action: 'side',
                     deck: stateSystem[activeduel].decks[1]
                 }));
+                games[activeduel].player[1].ready = false;
             }
 
         }
@@ -379,4 +381,10 @@ wss.on('connection', function (socket) {
 });
 
 var fs = require('fs');
-fs.watch(__filename, process.exit);
+fs.watch(__filename, function () {
+    Object.keys(stateSystem).forEach(function (activeduel) {
+        stateSystem[activeduel].duelistChat('Server', 'New Source Code detected, restarting server. Duel has ended.');
+    });
+
+    setTimeout(process.exit, 3000);
+});
