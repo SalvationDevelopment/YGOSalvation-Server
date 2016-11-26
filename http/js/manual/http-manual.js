@@ -718,7 +718,7 @@ var duelstash = {},
     sidestach = {};
 
 
-function finishsiding() {
+function endSiding() {
     'use strict';
 
     if (sidedDeck.side.length !== sidestach.side) {
