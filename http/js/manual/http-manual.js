@@ -722,7 +722,7 @@ function manualReciver(message) {
         break;
     case "side":
         $('#ingamesidebutton').css('display', 'block');
-        sidedDeck = message.side;
+        sidedDeck = message.deck;
         renderSideDeckZone(sidedDeck);
         break;
     case "start":
