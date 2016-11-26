@@ -879,12 +879,20 @@ div#actions button {
     pointer-events: none;
 }
 
+.fieldcontainer {
+    /*
+    width: 1000px;
+    margin: 0 auto;
+    height: 1000px;
+    margin-top: -160px;
+*/
+}
+
 .field.sidemode {
     top: -100%;
 }
 
 .sidingzone {
-    background: white;
     height: 500px;
     width: 696px;
     margin: 0 auto;
@@ -902,13 +910,16 @@ div#actions button {
     float: left;
 }
 
-.fieldcontainer {
-    /*
-    width: 1000px;
-    margin: 0 auto;
-    height: 1000px;
-    margin-top: -160px;
-*/
+.sidingzone .main,
+.sidingzone .extra,
+.sidingzone .side {
+    margin-bottom: 10px;
+    height: auto;
+    overflow: auto;
+    float: left;
+    border: 1px solid white;
+    padding: 7px;
+    background: rgba(255, 255, 255, .25);
 }
 
 .info-controls {
