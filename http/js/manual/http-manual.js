@@ -1805,7 +1805,12 @@ function revealonclick(card, note) {
             $('.m-hand-p').css({
                 'display': 'block'
             });
+            $('.m-monster-p').css({
+                'display': 'block'
+            });
+
         }
+
         reorientmenu();
         return;
     }
@@ -1814,6 +1819,15 @@ function revealonclick(card, note) {
         $('.v-grave').css({
             'display': 'block'
         });
+        if (pendulumMap[dbEntry.type]) {
+            $('.m-hand-p').css({
+                'display': 'block'
+            });
+            $('.m-monster-p').css({
+                'display': 'block'
+            });
+
+        }
         if (monsterMap[dbEntry.type]) {
             $('.m-hand-m').css({
                 'display': 'block'
@@ -1841,6 +1855,15 @@ function revealonclick(card, note) {
         $('.v-removed').css({
             'display': 'block'
         });
+        if (pendulumMap[dbEntry.type]) {
+            $('.m-hand-p').css({
+                'display': 'block'
+            });
+            $('.m-monster-p').css({
+                'display': 'block'
+            });
+
+        }
         if (monsterMap[dbEntry.type]) {
             $('.m-hand-m').css({
                 'display': 'block'
@@ -1876,6 +1899,15 @@ function revealonclick(card, note) {
         $('.m-field').css({
             'display': 'block'
         });
+        if (pendulumMap[dbEntry.type]) {
+            $('.m-hand-p').css({
+                'display': 'block'
+            });
+            $('.m-monster-p').css({
+                'display': 'block'
+            });
+
+        }
         if (cardIs('xyz', dbEntry)) {
             $('.v-monster-xyz').css({
                 'display': 'block'
@@ -2009,6 +2041,11 @@ function guicardclick() {
         $('.m-deck').css({
             'display': 'block'
         });
+        if (pendulumMap[dbEntry.type]) {
+            $('.m-monster-p').css({
+                'display': 'block'
+            });
+        }
         reorientmenu();
         return;
     }
@@ -2032,10 +2069,12 @@ function guicardclick() {
             });
         }
         if (pendulumMap[dbEntry.type]) {
-            $('.m-hand-p').css({
+            $('.m-hand-p, .m-monster-p').css({
                 'display': 'block'
             });
         }
+
+
         reorientmenu();
         return;
     }
@@ -2043,6 +2082,11 @@ function guicardclick() {
         $('.m-grave').css({
             'display': 'block'
         });
+        if (pendulumMap[dbEntry.type]) {
+            $('.m-monster-p').css({
+                'display': 'block'
+            });
+        }
         reorientmenu();
         return;
     }
@@ -2059,6 +2103,11 @@ function guicardclick() {
         $('.m-removed').css({
             'display': 'block'
         });
+        if (pendulumMap[dbEntry.type]) {
+            $('.m-monster-p').css({
+                'display': 'block'
+            });
+        }
         reorientmenu();
         return;
     }
