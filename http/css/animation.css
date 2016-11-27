@@ -1,11 +1,7 @@
 div#selectionsystem {
     z-index: 200;
 }
-#attackanimation {
-    z-index: 90000;
-    position: absolute;
-    transition: all 100ms ease;
-}
+
 .card,.overlayunit, .cardselectionzone { transform-style: preserve-3d; width:63px; height:86px; background:rgba(200,100,200,.2);
     position:absolute; -z-index: 3; transition: all 500ms;
     z-index: 1;
@@ -118,3 +114,17 @@ div#selectionsystem {
 meter.p1lp {transform: rotateY(180deg);}
 
 /*transform: scale(1.5,2.5) rotate3d(1,0,0,-55deg) translate(8px,-10px) !important;*/
+
+#attackanimation {
+    z-index: 90000;
+    position: absolute;
+    transition: all 1000ms ease;
+}
+
+#attackanimation[data-orient="0"]{
+    transform: rotate(0deg) !imporant;
+}
+
+#attackanimation[data-orient="1"]{
+    transform: rotate(180deg) !imporant;
+}
