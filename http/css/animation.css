@@ -122,9 +122,9 @@ meter.p1lp {transform: rotateY(180deg);}
 }
 
 #attackanimation[data-orient="0"]{
-    transform: rotate(0deg) !imporant;
+    transform: rotate(0deg);
 }
 
 #attackanimation[data-orient="1"]{
-    transform: rotate(180deg) !imporant;
+    transform: rotate(180deg);
 }
