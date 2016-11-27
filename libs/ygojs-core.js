@@ -872,6 +872,8 @@ function init(callback) {
         });
         if (manual) {
             state.duelistChat.push('<pre>Commands:</pre>');
+            state.duelistChat.push('<pre>Draw Cards:  /draw [amount]</pre>');
+            state.duelistChat.push('<pre>Mill Cards:  /mill [amount]</pre>');
             state.duelistChat.push('<pre>Reduce LP:   /sub [amount]</pre>');
             state.duelistChat.push('<pre>Increase LP: /add [amount]</pre>');
             state.duelistChat.push('<pre>Flip Coin:   /flip</pre>');
