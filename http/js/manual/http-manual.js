@@ -773,9 +773,9 @@ function manualReciver(message) {
         orientSlot = message.slot;
         break;
     case "attack":
-        $('#automationduelfield').append('<img  id="attackanimation" class="card p' + message.source.player + ' ' + 'MONSTERZONE i' + message.source.index + '" src="img/textures/attack.png" />');
+        $('#automationduelfield').append('<img  id="attackanimation" class="card p' + orient(message.source.player) + ' ' + 'MONSTERZONE i' + message.source.index + '" src="img/textures/attack.png" />');
         setTimeout(function () {
-            $('#attackanimation').attr('class', 'card p' + message.target.player + ' ' + 'MONSTERZONE i' + message.target.index);
+            $('#attackanimation').attr('class', 'card p' + orient(message.target.player) + ' ' + 'MONSTERZONE i' + message.target.index);
         }, 200);
         setTimeout(function () {
             $('#attackanimation').remove();
