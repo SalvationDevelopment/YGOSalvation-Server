@@ -196,6 +196,7 @@ function responseHandler(socket, message) {
             //ready = deckvalidator(message.deck);
 
             games[activeduel].player[socket.slot].ready = true;
+            stateSystem[activeduel].lock[socket.slot] = true;
             stateSystem[activeduel].decks[socket.slot] = message.deck;
             socket.send(JSON.stringify({
                 action: 'lock',
