@@ -247,16 +247,16 @@ function responseHandler(socket, message) {
         stateSystem[activeduel].revealHand(socket.slot);
         break;
     case "viewDeck":
-        stateSystem[activeduel].viewDeck(socket.slot, games[activeduel].player[socket.slot].name);
+        stateSystem[activeduel].viewDeck(socket.slot, games[activeduel].player[socket.slot].name, socket.slot);
         break;
     case "viewExtra":
-        stateSystem[activeduel].viewExtra(socket.slot, games[activeduel].player[socket.slot].name);
+        stateSystem[activeduel].viewExtra(message.player, games[activeduel].player[socket.slot].name, socket.slot);
         break;
     case "viewGrave":
-        stateSystem[activeduel].viewGrave(socket.slot, games[activeduel].player[socket.slot].name);
+        stateSystem[activeduel].viewGrave(message.player, games[activeduel].player[socket.slot].name, socket.slot);
         break;
     case "viewBanished":
-        stateSystem[activeduel].viewBanished(socket.slot, games[activeduel].player[socket.slot].name);
+        stateSystem[activeduel].viewBanished(socket.slot, games[activeduel].player[socket.slot].name, socket.slot);
         break;
     case "viewXYZ":
         stateSystem[activeduel].viewXYZ(socket.slot, message.index, message.player);
