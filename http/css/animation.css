@@ -4,6 +4,7 @@ div#selectionsystem {
 #attackanimation {
     z-index: 90000;
     position: absolute;
+    transition: all 100ms ease;
 }
 .card,.overlayunit, .cardselectionzone { transform-style: preserve-3d; width:63px; height:86px; background:rgba(200,100,200,.2);
     position:absolute; -z-index: 3; transition: all 500ms;
