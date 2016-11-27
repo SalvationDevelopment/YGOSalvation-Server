@@ -1128,7 +1128,8 @@ function manualAttack() {
     manualServer.send(JSON.stringify({
         action: 'attack',
         source: manualActionReference,
-        target: targetreference
+        target: targetreference,
+        sound: 'soundattack'
     }));
     attackmode = false;
     $('.card.p1').removeClass('attackglow');
