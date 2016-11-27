@@ -65,27 +65,27 @@ div#selectionsystem {
 .p0.MONSTERZONE.i4,.overlayunit.p0.i4   {bottom :154px; left:541px;}
 
 
-.p1.DECK         {bottom : -100px; left: 98px; }
-.p1.HAND         {bottom : -160px; left: 613px; }
-.p1.EXTRA        {bottom : -100px; left: 631px; }
-.p1.GRAVE        {bottom : 97px; left: 97px; }
-.p1.REMOVED      {bottom : 97px; left: 18px; }
-.p1.EXCAVATED         {bottom : -100px; left: -2px; }
+.p1.DECK         {bottom : 300px; left: 98px; }
+.p1.HAND         {bottom : 360px; left: 613px; }
+.p1.EXTRA        {bottom : 300px; left: 631px; }
+.p1.GRAVE        {bottom : 497px; left: 97px; }
+.p1.REMOVED      {bottom : 497px; left: 18px; }
+.p1.EXCAVATED         {bottom : 300px; left: -2px; }
 
-.p1.SPELLZONE.i0     {bottom :46px; left:574px;}
-.p1.SPELLZONE.i1     {bottom :46px; left:461px;}
-.p1.SPELLZONE.i2     {bottom :46px; left:364px;}
-.p1.SPELLZONE.i3     {bottom :46px; left:275px;}
-.p1.SPELLZONE.i4     {bottom :46px; left:196px;}
-.p1.SPELLZONE.i5     {bottom :97px; left:631px;}/*fiendspell*/
-.p1.SPELLZONE.i6     {bottom :-2px; left:631px;}/*penzoneblue*/
-.p1.SPELLZONE.i7     {bottom :-2px; left:104px;}/*penzonered*/
+.p1.SPELLZONE.i0     {bottom :446px; left:574px;}
+.p1.SPELLZONE.i1     {bottom :446px; left:461px;}
+.p1.SPELLZONE.i2     {bottom :446px; left:364px;}
+.p1.SPELLZONE.i3     {bottom :446px; left:275px;}
+.p1.SPELLZONE.i4     {bottom :446px; left:196px;}
+.p1.SPELLZONE.i5     {bottom :497px; left:631px;}/*fiendspell*/
+.p1.SPELLZONE.i6     {bottom :398px; left:631px;}/*penzoneblue*/
+.p1.SPELLZONE.i7     {bottom :398px; left:104px;}/*penzonered*/
 
-.p1.MONSTERZONE.i0,.overlayunit.p1.i0     {bottom :44px; left:547px;}
-.p1.MONSTERZONE.i1,.overlayunit.p1.i1     {bottom :44px; left:461px;}
-.p1.MONSTERZONE.i2,.overlayunit.p1.i2     {bottom :44px; left:373px;}
-.p1.MONSTERZONE.i3,.overlayunit.p1.i3     {bottom :44px; left:284px;}
-.p1.MONSTERZONE.i4,.overlayunit.p1.i4     {bottom :44px; left:196px;}
+.p1.MONSTERZONE.i0,.overlayunit.p1.i0     {bottom :444px; left:547px;}
+.p1.MONSTERZONE.i1,.overlayunit.p1.i1     {bottom :444px; left:461px;}
+.p1.MONSTERZONE.i2,.overlayunit.p1.i2     {bottom :444px; left:373px;}
+.p1.MONSTERZONE.i3,.overlayunit.p1.i3     {bottom :444px; left:284px;}
+.p1.MONSTERZONE.i4,.overlayunit.p1.i4     {bottom :444px; left:196px;}
 
 
 .p0[data-position=FaceDown]  {transform: rotate3d(0,1,0,180deg );
