@@ -1116,7 +1116,7 @@ function manualRemoveCounter() {
 function startAttack() {
     'use strict';
     attackmode = true;
-    $('.p1').addClass('attackglow');
+    $('.card.p1').addClass('attackglow');
 }
 
 function manualAttack() {
@@ -1127,7 +1127,7 @@ function manualAttack() {
         target: targetreference
     }));
     attackmode = false;
-    $('.p1').removeClass('attackglow');
+    $('.card.p1').removeClass('attackglow');
 }
 
 
