@@ -773,13 +773,17 @@ function manualReciver(message) {
         orientSlot = message.slot;
         break;
     case "attack":
+        $('#attackanimation').remove();
         $('#automationduelfield').append('<img  id="attackanimation" class="card p' + orient(message.source.player) + ' ' + message.source.location + ' i' + message.source.index + '" src="img/textures/attack.png" />');
         setTimeout(function () {
             $('#attackanimation').attr('class', 'card p' + orient(message.target.player) + ' ' + message.target.location + ' i' + message.target.index);
+            $('.card.p' + orient(message.target.player) + '.' + message.target.location + '.i' + message.target.index).addClass('attackglow');
+            $('.card.p' + orient(message.source.player) + '.' + message.source.location + '.i' + message.source.index).addClass('attackglow');
         }, 1000);
         setTimeout(function () {
             $('#attackanimation').remove();
-        }, 2000);
+            $('.attackglow').removeClass('attackglow');
+        }, 3000);
         break;
     case "side":
         $('#ingamesidebutton').css('display', 'block');
