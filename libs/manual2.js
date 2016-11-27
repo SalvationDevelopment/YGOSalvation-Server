@@ -339,7 +339,8 @@ function responseHandler(socket, message) {
         if (socket.slot !== undefined) {
             duelBroadcast(activeduel, {
                 action: 'attack',
-                attacker: message.uid
+                source: message.source,
+                target: message.target
             });
         }
         break;
