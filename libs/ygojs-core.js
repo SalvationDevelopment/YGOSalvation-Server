@@ -630,18 +630,56 @@ function init(callback) {
      * Reveal the players graveyard.
      * @param {number} player 
      */
-    function viewGrave(player, username) {
-        state.duelistChat.push('<pre>' + username + ' is viewing their gaveyard.</pre>');
-        revealCallback(filterlocation(filterPlayer(stack, player), 'GRAVE'), player, 'view');
+    function viewGrave(player, username, requester) {
+        if (player === requester) {
+            state.duelistChat.push('<pre>' + username + ' is viewing their gaveyard.</pre>');
+        } else {
+            state.duelistChat.push('<pre>' + username + ' is viewing your gaveyard.</pre>');
+        }
+        var deck = filterlocation(filterPlayer(stack, player), 'GRAVE'),
+            result = {
+                0: {},
+                1: {},
+                sepectators: {}
+            };
+        state.duelistChat.push('<pre>' + username + ' is viewing their deck.</pre>');
+        result[requester] = {
+            action: 'reveal',
+            info: state,
+            reveal: deck,
+            call: 'view',
+            player: player
+        };
+
+        callback(result, stack);
     }
 
     /**
      * Reveal the players removed zone.
      * @param {number} player 
      */
-    function viewBanished(player, username) {
-        state.duelistChat.push('<pre>' + username + ' is viewing their banished pile.</pre>');
-        revealCallback(hideViewOfZone(filterlocation(filterPlayer(stack, player), 'REMOVED')), player, 'view');
+    function viewBanished(player, username, requester) {
+        if (player === requester) {
+            state.duelistChat.push('<pre>' + username + ' is viewing their banished pile.</pre>');
+        } else {
+            state.duelistChat.push('<pre>' + username + ' is viewing your banished pile.</pre>');
+        }
+        var deck = filterlocation(filterPlayer(stack, player), 'REMOVED'),
+            result = {
+                0: {},
+                1: {},
+                sepectators: {}
+            };
+
+        result[requester] = {
+            action: 'reveal',
+            info: state,
+            reveal: deck,
+            call: 'view',
+            player: player
+        };
+
+        callback(result, stack);
     }
 
 

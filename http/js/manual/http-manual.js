@@ -361,7 +361,7 @@ function guiCard(dataBinding) {
     } else {
         player = dataBinding.player;
     }
-    $(field).append('<img onclick="return guicardclick()" id="uid' + dataBinding.uid + '" class="card p' + player + ' ' + dataBinding.location + ' i' + dataBinding.index + ' o" src="img/textures/cover.jpg" data-position="FaceDown" />');
+    $(field).append('<img onclick="return guicardonclick()" id="uid' + dataBinding.uid + '" class="card p' + player + ' ' + dataBinding.location + ' i' + dataBinding.index + ' o" src="img/textures/cover.jpg" data-position="FaceDown" />');
     element = $('#uid' + dataBinding.uid);
 
     Object.observe(dataBinding, function (changes) {
@@ -1068,7 +1068,8 @@ function manualViewDeck() {
 function manualViewBanished() {
     'use strict';
     manualServer.send(JSON.stringify({
-        action: 'viewBanished'
+        action: 'viewBanished',
+        player: manualActionReference.player
     }));
 }
 
@@ -1114,14 +1115,16 @@ function manualRemoveToken() {
 function manualViewExtra() {
     'use strict';
     manualServer.send(JSON.stringify({
-        action: 'viewExtra'
+        action: 'viewExtra',
+        player: manualActionReference.player
     }));
 }
 
 function manualViewGrave() {
     'use strict';
     manualServer.send(JSON.stringify({
-        action: 'viewGrave'
+        action: 'viewGrave',
+        player: manualActionReference.player
     }));
 }
 
@@ -2007,7 +2010,7 @@ function checksetcode(obj, sc) {
     }
 }
 
-function guicardclick() {
+function guicardonclick() {
     'use strict';
 
     manualActionReference = null;
@@ -2028,6 +2031,11 @@ function guicardclick() {
         });
         reorientmenu();
         return;
+    }
+    if (stackunit.location === 'EXTRA') {
+        $('.m-extra-view').css({
+            'display': 'block'
+        });
     }
     if (stackunit.player !== orientSlot) {
         return;
