@@ -2044,7 +2044,7 @@ function guicardonclick() {
         dbEntry;
 
     if (attackmode) {
-        if (stackunit.player !== orient(orientSlot)) {
+        if (stackunit.player !== manualActionReference.player) {
             targetreference = stackunit;
             manualAttack();
             return;
