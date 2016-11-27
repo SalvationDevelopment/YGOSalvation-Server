@@ -776,10 +776,10 @@ function manualReciver(message) {
         $('#automationduelfield').append('<img  id="attackanimation" class="card p' + orient(message.source.player) + ' ' + message.source.location + ' i' + message.source.index + '" src="img/textures/attack.png" />');
         setTimeout(function () {
             $('#attackanimation').attr('class', 'card p' + orient(message.target.player) + ' ' + message.target.location + ' i' + message.target.index);
-        }, 1200);
+        }, 1000);
         setTimeout(function () {
             $('#attackanimation').remove();
-        }, 500);
+        }, 2000);
         break;
     case "side":
         $('#ingamesidebutton').css('display', 'block');
