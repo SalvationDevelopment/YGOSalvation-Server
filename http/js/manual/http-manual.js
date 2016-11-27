@@ -744,7 +744,7 @@ function endSiding() {
         } else {
             alert('Opponent is still siding, please wait.');
         }
-    }, 3000);
+    }, 2000);
 }
 
 function manualReciver(message) {

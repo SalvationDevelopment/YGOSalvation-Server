@@ -324,6 +324,9 @@ function createmanifest() {
 
         //then try again.
         setTimeout(createmanifest, 5000);
+        setTimeout(function () {
+            manifest = {};
+        }, 15000);
     });
     updateWatcher.run(function () {
         var quickfail = (!manifest);
