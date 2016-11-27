@@ -73,20 +73,20 @@ div#selectionsystem {
 .p1.REMOVED      {bottom : 497px; left: 18px; }
 .p1.EXCAVATED         {bottom : 300px; left: -2px; }
 
-.p1.SPELLZONE.i0     {bottom :446px; left:574px;}
-.p1.SPELLZONE.i1     {bottom :446px; left:461px;}
-.p1.SPELLZONE.i2     {bottom :446px; left:364px;}
-.p1.SPELLZONE.i3     {bottom :446px; left:275px;}
-.p1.SPELLZONE.i4     {bottom :446px; left:196px;}
-.p1.SPELLZONE.i5     {bottom :446px; left:631px;}/*fiendspell*/
-.p1.SPELLZONE.i6     {bottom :446px; left:631px;}/*penzoneblue*/
-.p1.SPELLZONE.i7     {bottom :446px; left:104px;}/*penzonered*/
+.p1.SPELLZONE.i0     {bottom :450px; left:574px;}
+.p1.SPELLZONE.i1     {bottom :450px; left:461px;}
+.p1.SPELLZONE.i2     {bottom :450px; left:364px;}
+.p1.SPELLZONE.i3     {bottom :450px; left:275px;}
+.p1.SPELLZONE.i4     {bottom :450px; left:196px;}
+.p1.SPELLZONE.i5     {bottom :450px; left:631px;}/*fiendspell*/
+.p1.SPELLZONE.i6     {bottom :406px; left:631px;}/*penzoneblue*/
+.p1.SPELLZONE.i7     {bottom :406px; left:104px;}/*penzonered*/
 
-.p1.MONSTERZONE.i0,.overlayunit.p1.i0     {bottom :444px; left:547px;}
-.p1.MONSTERZONE.i1,.overlayunit.p1.i1     {bottom :444px; left:461px;}
-.p1.MONSTERZONE.i2,.overlayunit.p1.i2     {bottom :444px; left:373px;}
-.p1.MONSTERZONE.i3,.overlayunit.p1.i3     {bottom :444px; left:284px;}
-.p1.MONSTERZONE.i4,.overlayunit.p1.i4     {bottom :444px; left:196px;}
+.p1.MONSTERZONE.i0,.overlayunit.p1.i0     {bottom :360px; left:547px;}
+.p1.MONSTERZONE.i1,.overlayunit.p1.i1     {bottom :360px; left:461px;}
+.p1.MONSTERZONE.i2,.overlayunit.p1.i2     {bottom :360px; left:373px;}
+.p1.MONSTERZONE.i3,.overlayunit.p1.i3     {bottom :360px; left:284px;}
+.p1.MONSTERZONE.i4,.overlayunit.p1.i4     {bottom :360px; left:196px;}
 
 
 .p0[data-position=FaceDown]  {transform: rotate3d(0,1,0,180deg );
