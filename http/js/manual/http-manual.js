@@ -349,6 +349,9 @@ function layouthand(player) {
     }
 }
 
+var targetreference,
+    attackmode = false;
+
 function guiCard(dataBinding) {
     'use strict';
 
@@ -407,7 +410,9 @@ function guiCard(dataBinding) {
 
 
 
-
+        if (attackmode) {
+            $('.p1').addClass('attackglow');
+        }
 
     });
 }
@@ -767,6 +772,15 @@ function manualReciver(message) {
     case "slot":
         orientSlot = message.slot;
         break;
+    case "attack":
+        $('#automationduelfield').append('<img  id="attackanimation" class="card p' + message.source.player + ' ' + 'MONSTERZONE i' + message.source.index + '" src="img/textures/attack.png" />');
+        setTimeout(function () {
+            $('#attackanimation').attr('class', 'card p' + message.target.player + ' ' + 'MONSTERZONE i' + message.target.index);
+        }, 200);
+        setTimeout(function () {
+            $('#attackanimation').remove();
+        }, 500);
+        break;
     case "side":
         $('#ingamesidebutton').css('display', 'block');
         sidedDeck = message.deck;
@@ -1096,13 +1110,26 @@ function manualRemoveCounter() {
     }));
 }
 
+
+
+
+function startAttack() {
+    'use strict';
+    attackmode = true;
+    $('.p1').addClass('attackglow');
+}
+
 function manualAttack() {
     'use strict';
     manualServer.send(JSON.stringify({
         action: 'attack',
-        uid: manualActionReference
+        source: manualActionReference,
+        target: targetreference
     }));
+    attackmode = false;
+    $('.p1').removeClass('attackglow');
 }
+
 
 function manualRemoveToken() {
     'use strict';
@@ -2012,14 +2039,23 @@ function checksetcode(obj, sc) {
 
 function guicardonclick() {
     'use strict';
+    var idIndex = manualDuel.uidLookup(record),
+        stackunit = manualDuel.stack[idIndex],
+        dbEntry;
 
+    if (attackmode) {
+        if (stackunit.player !== orientSlot) {
+            targetreference = stackunit;
+            manualAttack();
+            return;
+        }
+        return;
+    }
     manualActionReference = null;
     $('#manualcontrols button').css({
         'display': 'none'
     });
-    var idIndex = manualDuel.uidLookup(record),
-        stackunit = manualDuel.stack[idIndex],
-        dbEntry;
+
 
 
     manualActionReference = stackunit;
@@ -2362,5 +2398,6 @@ $('body').on('mousedown', '#duelscreen', function (ev) {
         $('#manualcontrols button').css({
             'display': 'none'
         });
+        attackmode = false;
     }
 });
