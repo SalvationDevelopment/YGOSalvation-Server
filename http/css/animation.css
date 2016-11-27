@@ -33,7 +33,7 @@ div#selectionsystem {
     outline-offset: 30px;}
 }
 .card.DECK { transition: left 150ms;}
-.attackglow {box-shadow:0px 0px 30px 10px yellow;}
+.attackglow {box-shadow:0px 0px 20px 10px yellow;}
 .nocard {
     display:none;
 }
