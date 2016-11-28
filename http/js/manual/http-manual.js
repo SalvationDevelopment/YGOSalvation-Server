@@ -810,6 +810,7 @@ function manualReciver(message) {
         $('#ingamesidebutton').css('display', 'none');
         $('#ingamexsidebutton').css('display', 'none');
         manualDuel = {};
+        duelstarted = false;
         manualgamestart(message);
         //startDuel(player1StartLP, player2StartLP, OneDeck, TwoDeck, OneExtra, TwoExtra)
         linkStack(message.field);
