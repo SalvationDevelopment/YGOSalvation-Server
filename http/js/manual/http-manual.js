@@ -753,6 +753,9 @@ function manualReciver(message) {
     if (message.info !== undefined) {
         updateChat(message.info.duelistChat, message.info.spectatorChat);
     }
+    if (broadcast[activegame]) {
+        updateloby(broadcast[activegame]);
+    }
     switch (message.action) {
     case "lobby":
         singlesitenav('lobby');
