@@ -500,7 +500,7 @@ function initGameState() {
     function startDuel(OneDeck, TwoDeck, OneExtra, TwoExtra) {
         var i;
 
-        $('#automationduelfield').html('');
+
         for (i = 0; OneExtra > i; i++) {
             stack.push(new Card('EXTRA', 0, i, stack.length));
         }
@@ -803,12 +803,13 @@ function manualReciver(message) {
         renderSideDeckZone(sidedDeck);
         break;
     case "start":
+        $('#automationduelfield').html(' ');
         $('#ingamesidebutton').css('display', 'none');
         $('.field').removeClass('sidemode');
         $('.sidingzone').removeClass('sidemode');
         $('#ingamesidebutton').css('display', 'none');
         $('#ingamexsidebutton').css('display', 'none');
-
+        manualDuel = {};
         manualgamestart(message);
         //startDuel(player1StartLP, player2StartLP, OneDeck, TwoDeck, OneExtra, TwoExtra)
         linkStack(message.field);

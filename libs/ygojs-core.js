@@ -108,6 +108,10 @@ function filterUID(stack, uid) {
     });
 }
 
+
+function byIndex(card, index) {
+
+}
 /**
  * Shuffles array in place.
  * @param {Array} a items The array containing the items This function is in no way optimized.
@@ -846,7 +850,7 @@ function init(callback) {
      * Exposed method to initialize the field; You only run this once.
      */
     function startDuel(player1, player2, manual) {
-
+        stack = [];
         if (!lock[0] && !lock[1]) {
             return;
         }
