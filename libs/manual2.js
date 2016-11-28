@@ -205,13 +205,13 @@ function responseHandler(socket, message) {
             if (games[activeduel].player[socket.slot].ready) {
                 stateSystem[activeduel].duelistChat('Server', '<pre>' + games[activeduel].player[socket.slot].name + ' locked in deck.</pre>');
             }
-
+            socket.send(JSON.stringify({
+                action: 'slot',
+                slot: socket.slot
+            }));
+            wss.broadcast(games);
         }
-        socket.send(JSON.stringify({
-            action: 'slot',
-            slot: socket.slot
-        }));
-        wss.broadcast(games);
+
         break;
     case "start":
         player1 = stateSystem[activeduel].decks[0];
