@@ -202,6 +202,7 @@ function responseHandler(socket, message) {
                 action: 'lock',
                 result: 'success'
             }));
+            wss.broadcast(games);
             if (games[activeduel].player[socket.slot].ready) {
                 stateSystem[activeduel].duelistChat('Server', '<pre>' + games[activeduel].player[socket.slot].name + ' locked in deck.</pre>');
             }
@@ -209,7 +210,7 @@ function responseHandler(socket, message) {
                 action: 'slot',
                 slot: socket.slot
             }));
-            wss.broadcast(games);
+
         }
 
         break;
