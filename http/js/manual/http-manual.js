@@ -500,7 +500,7 @@ function initGameState() {
     function startDuel(OneDeck, TwoDeck, OneExtra, TwoExtra) {
         var i;
 
-        $('#automationduelfield').html();
+        $('#automationduelfield').html('');
         for (i = 0; OneExtra > i; i++) {
             stack.push(new Card('EXTRA', 0, i, stack.length));
         }
