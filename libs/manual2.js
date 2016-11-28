@@ -126,7 +126,7 @@ function responseHandler(socket, message) {
         break;
 
     case "join":
-
+        socket.slot = undefined;
         Object.keys(games[message.game].player).some(function (playerNo, index) {
             var player = games[message.game].player[playerNo];
             if (player.name !== '') {
@@ -144,6 +144,7 @@ function responseHandler(socket, message) {
             stateSystem[message.game].spectators[message.name] = socket;
             if (games[message.game].started) {
                 socket.send(JSON.stringify(stateSystem[message.game].generateView('start')));
+                socket.activeduel = message.game;
             }
         }
         wss.broadcast(games);
