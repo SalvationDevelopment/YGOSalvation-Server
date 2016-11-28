@@ -2095,11 +2095,6 @@ function guicardonclick() {
         $('.m-deck').css({
             'display': 'block'
         });
-        if (pendulumMap[dbEntry.type]) {
-            $('.m-monster-p').css({
-                'display': 'block'
-            });
-        }
         reorientmenu();
         return;
     }
