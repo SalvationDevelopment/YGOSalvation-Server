@@ -778,6 +778,9 @@ function manualReciver(message) {
     case "slot":
         orientSlot = message.slot;
         break;
+    case "target":
+        $('.card.p' + orient(message.target.player) + '.' + message.target.location + '.i' + message.target.index).addClass('attackglow');
+        break;
     case "attack":
         $('#attackanimation').remove();
         $('#automationduelfield').append('<img  id="attackanimation" class="card p' + orient(message.source.player) + ' ' + message.source.location + ' i' + message.source.index + '" src="img/textures/attack.png" data-orient="' + orient(message.source.player) + '" />');

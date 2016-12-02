@@ -347,6 +347,14 @@ function responseHandler(socket, message) {
             });
         }
         break;
+    case "target":
+        if (socket.slot !== undefined) {
+            duelBroadcast(activeduel, {
+                action: 'target',
+                target: message.target
+            });
+        }
+        break;
 
     default:
         break;
