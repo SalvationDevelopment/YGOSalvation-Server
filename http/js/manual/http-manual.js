@@ -647,28 +647,15 @@ function automaticZonePicker(realPlayer, zone) {
 
     if ($('#automationduelfield .p' + player + '.' + zone + '.i2').length < 1) {
         result = 2; //1
-    }
-
-    if ($('#automationduelfield .p' + player + '.' + zone + '.i4').length < 1) {
-        result = 4; //2
-    }
-    if ($('#automationduelfield .p' + player + '.' + zone + '.i1').length < 1) {
-        result = 1; //3
-    }
-    if ($('#automationduelfield .p' + player + '.' + zone + '.i3').length < 1) {
-        result = 3; //4
-    }
-    if ($('#automationduelfield .p' + player + '.' + zone + '.i0').length < 1) {
+    } else if ($('#automationduelfield .p' + player + '.' + zone + '.i3').length < 1) {
+        result = 3; //2
+    } else if ($('#automationduelfield .p' + player + '.' + zone + '.i4').length < 1) {
+        result = 4; //3
+    } else if ($('#automationduelfield .p' + player + '.' + zone + '.i1').length < 1) {
+        result = 1; //4
+    } else if ($('#automationduelfield .p' + player + '.' + zone + '.i0').length < 1) {
         result = 0; //5
     }
-
-
-
-
-
-
-
-
 
     if (result === undefined && !safe) {
         throw new Error();
@@ -785,7 +772,7 @@ function manualReciver(message) {
         orientSlot = message.slot;
         break;
     case "target":
-        $('.attackglow').remove('attackglow');
+        $('.attackglow').removeClass('attackglow');
         $('.card.p' + orient(message.target.player) + '.' + message.target.location + '.i' + message.target.index).addClass('attackglow');
         break;
     case "attack":
@@ -840,6 +827,7 @@ function manualReciver(message) {
             layouthand(0);
             layouthand(1);
             $('#sidechatinput').focus();
+            sound.play('soundcardShuffle');
         }, 1000);
         updateChat(message.info.duelistChat);
         internalLocal = 'duelscreen';
@@ -885,6 +873,7 @@ function manualReciver(message) {
             cardmargin(1, 'DECK');
             layouthand(0);
             layouthand(1);
+            $('.attackglow').removeClass('attackglow');
         }, 100);
         updateChat(message.info.duelistChat);
         $('#phaseindicator').attr('data-currentphase', message.info.phase);
