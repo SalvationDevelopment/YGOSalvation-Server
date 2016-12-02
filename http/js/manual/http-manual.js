@@ -350,7 +350,8 @@ function layouthand(player) {
 }
 
 var targetreference,
-    attackmode = false;
+    attackmode = false,
+    targetmode = false;
 
 function guiCard(dataBinding) {
     'use strict';
@@ -1130,6 +1131,12 @@ function startAttack() {
     $('.card.p1').addClass('attackglow');
 }
 
+function startTarget() {
+    'use strict';
+    targetmode = true;
+    $('.card.p1, .card.p0').addClass('attackglow');
+}
+
 function manualAttack() {
     'use strict';
     manualServer.send(JSON.stringify({
@@ -1140,6 +1147,16 @@ function manualAttack() {
     }));
     attackmode = false;
     $('.card.p1').removeClass('attackglow');
+}
+
+function manualTarget(target) {
+    'use strict';
+    manualServer.send(JSON.stringify({
+        action: 'target',
+        target: target
+    }));
+    targetmode = false;
+    $('.card').removeClass('targetglow');
 }
 
 
@@ -2060,6 +2077,10 @@ function guicardonclick() {
     var idIndex = manualDuel.uidLookup(record),
         stackunit = manualDuel.stack[idIndex],
         dbEntry;
+
+    if (targetmode) {
+        manualTarget(stackunit);
+    }
 
     if (attackmode) {
         if (stackunit.player !== manualActionReference.player) {
