@@ -1973,7 +1973,7 @@ function revealonclick(card, note) {
             });
         }
         if (pendulumMap[dbEntry.type]) {
-            $('.m-monster-p').css({
+            $('.m-monster-to-extra-faceup').css({
                 'display': 'block'
             });
 
