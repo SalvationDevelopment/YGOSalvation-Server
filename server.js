@@ -45,7 +45,7 @@ if (os.platform() === 'win32') {
 if (!safe) {
     console.log('Installing missing modules...');
     processManager.execSync('npm install', {
-        cwd: '../'
+        cwd: './'
     });
 }
 
@@ -164,12 +164,12 @@ function bootUpdateSystem() {
 }
 
 function bootAISystem() {
-//    setTimeout(function () {
-            //        console.log('    AI[SnarkyChild] connecting to port 127.0.0.1:24555 '.bold.yellow);
-            //        processManager.fork('./ai.js', [], {
-            //            cwd: 'libs'
-            //        }).on('exit', bootAISystem);
-            //    }, 10000);
+    //    setTimeout(function () {
+    //        console.log('    AI[SnarkyChild] connecting to port 127.0.0.1:24555 '.bold.yellow);
+    //        processManager.fork('./ai.js', [], {
+    //            cwd: 'libs'
+    //        }).on('exit', bootAISystem);
+    //    }, 10000);
 }
 
 function bootFlashPolicyServer() {
