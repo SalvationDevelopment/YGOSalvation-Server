@@ -1972,6 +1972,12 @@ function revealonclick(card, note) {
 
             });
         }
+        if (pendulumMap[dbEntry.type]) {
+            $('.m-monster-p').css({
+                'display': 'block'
+            });
+
+        }
         reorientmenu();
         return;
     }
