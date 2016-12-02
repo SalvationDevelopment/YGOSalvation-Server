@@ -644,22 +644,28 @@ function automaticZonePicker(realPlayer, zone) {
     } else {
         safe = cardIs('xyz', getCardObject(parseInt(manualActionReference.id, 10)));
     }
-    if ($('#automationduelfield .p' + player + '.' + zone + '.i1').length < 1) {
-        result = 1;
+
+    if ($('#automationduelfield .p' + player + '.' + zone + '.i2').length < 1) {
+        result = 2; //1
     }
 
-    if ($('#automationduelfield .p' + player + '.' + zone + '.i0').length < 1) {
-        result = 0;
+    if ($('#automationduelfield .p' + player + '.' + zone + '.i4').length < 1) {
+        result = 4; //2
     }
-    if ($('#automationduelfield .p' + player + '.' + zone + '.i2').length < 1) {
-        result = 2;
+    if ($('#automationduelfield .p' + player + '.' + zone + '.i1').length < 1) {
+        result = 1; //3
     }
     if ($('#automationduelfield .p' + player + '.' + zone + '.i3').length < 1) {
-        result = 3;
+        result = 3; //4
     }
-    if ($('#automationduelfield .p' + player + '.' + zone + '.i4').length < 1) {
-        result = 4;
+    if ($('#automationduelfield .p' + player + '.' + zone + '.i0').length < 1) {
+        result = 0; //5
     }
+
+
+
+
+
 
 
 
@@ -779,6 +785,7 @@ function manualReciver(message) {
         orientSlot = message.slot;
         break;
     case "target":
+        $('.attackglow').remove('attackglow');
         $('.card.p' + orient(message.target.player) + '.' + message.target.location + '.i' + message.target.index).addClass('attackglow');
         break;
     case "attack":
@@ -2083,6 +2090,7 @@ function guicardonclick() {
 
     if (targetmode) {
         manualTarget(stackunit);
+        return;
     }
 
     if (attackmode) {
