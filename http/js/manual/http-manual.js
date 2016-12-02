@@ -647,14 +647,14 @@ function automaticZonePicker(realPlayer, zone) {
 
     if ($('#automationduelfield .p' + player + '.' + zone + '.i2').length < 1) {
         result = 2; //1
-    } else if ($('#automationduelfield .p' + player + '.' + zone + '.i3').length < 1) {
-        result = 3; //2
-    } else if ($('#automationduelfield .p' + player + '.' + zone + '.i4').length < 1) {
-        result = 4; //3
     } else if ($('#automationduelfield .p' + player + '.' + zone + '.i1').length < 1) {
-        result = 1; //4
+        result = 1; //2
+    } else if ($('#automationduelfield .p' + player + '.' + zone + '.i3').length < 1) {
+        result = 3; //3
+    } else if ($('#automationduelfield .p' + player + '.' + zone + '.i4').length < 1) {
+        result = 4; //5
     } else if ($('#automationduelfield .p' + player + '.' + zone + '.i0').length < 1) {
-        result = 0; //5
+        result = 0; //4
     }
 
     if (result === undefined && !safe) {
