@@ -51,7 +51,7 @@ var WebSocketServer = require('ws').Server,
 
 function socketBinding(game) {
     return function gameResponse(view, stack) {
-        if (stateSystem[game]) {
+        if (stateSystem[game] && view !== undefined) {
             if (stateSystem[game].players) {
                 if (stateSystem[game].players[0]) {
                     if (stateSystem[game].players[0].slot === 0) {
@@ -147,7 +147,6 @@ function responseHandler(socket, message) {
             return true;
         });
         if (!joined) {
-            message.game.spectators++;
             stateSystem[message.game].spectators[message.name] = socket;
             if (games[message.game].started) {
                 socket.send(JSON.stringify(stateSystem[message.game].generateView('start')));
