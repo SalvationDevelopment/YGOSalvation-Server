@@ -752,6 +752,10 @@ function manualReciver(message) {
             updateloby(broadcast[activegame]);
         }
     }
+    if (message.error) {
+        alert('An Error Occured');
+        return;
+    }
     switch (message.action) {
     case "lobby":
         singlesitenav('lobby');
@@ -903,6 +907,7 @@ function serverconnect() {
     };
     manualServer.onclose = function (message) {
         console.log('Manual Connection Died, reconnecting,...');
+        alert('A Connection Error Occured');
         setTimeout(serverconnect, 2000);
     };
 }
