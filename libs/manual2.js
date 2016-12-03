@@ -51,21 +51,24 @@ var WebSocketServer = require('ws').Server,
 
 function socketBinding(game) {
     return function gameResponse(view, stack) {
-        if (stateSystem[game].players[0]) {
-            if (stateSystem[game].players[0].slot === 0) {
-                stateSystem[game].players[0].send(JSON.stringify(view[stateSystem[game].players[0].slot]));
+        if (stateSystem[game]) {
+            if (stateSystem[game].players) {
+                if (stateSystem[game].players[0]) {
+                    if (stateSystem[game].players[0].slot === 0) {
+                        stateSystem[game].players[0].send(JSON.stringify(view[stateSystem[game].players[0].slot]));
+                    }
+                }
+                if (stateSystem[game].players[1]) {
+                    if (stateSystem[game].players[1].slot === 1) {
+                        stateSystem[game].players[1].send(JSON.stringify(view[stateSystem[game].players[1].slot]));
+                    }
+                }
+                Object.keys(stateSystem[game].spectators).forEach(function (username) {
+                    var spectator = stateSystem[game].spectators[username];
+                    spectator.send(JSON.stringify(view.spectators));
+                });
             }
         }
-        if (stateSystem[game].players[1]) {
-            if (stateSystem[game].players[1].slot === 1) {
-                stateSystem[game].players[1].send(JSON.stringify(view[stateSystem[game].players[1].slot]));
-            }
-        }
-
-        Object.keys(stateSystem[game].spectators).forEach(function (username) {
-            var spectator = stateSystem[game].spectators[username];
-            spectator.send(JSON.stringify(view.spectators));
-        });
     };
 }
 
