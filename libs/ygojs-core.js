@@ -1019,8 +1019,11 @@ function init(callback) {
     }
 
     function offsetZone(player, zone) {
-        var deck = filterlocation(filterPlayer(stack, player), 'DECK');
-        deck.index++;
+        stack.forEach(function (card, index) {
+            if (card.player === player || card.location === zone) {
+                card.index++;
+            }
+        });
     }
 
     function rollDie(username) {
