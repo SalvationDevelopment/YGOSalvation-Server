@@ -130,8 +130,9 @@ var avatarMap = {};
 function scaleScreenFactor() {
     'use strict';
     var requiredRes = 1368 / 728,
-        scale = 0.75 * (($(window).width() / $(window).height()) / requiredRes);
+        scale = 0.75 * ($(window).width() / requiredRes);
     $('.field').css('transform', 'scale(' + scale + ')');
+    return scale;
 }
 
 function getAvatar(name) {
