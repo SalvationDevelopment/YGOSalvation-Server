@@ -449,7 +449,7 @@ function cardmargin(player, deck) {
         var n = $(this).attr('data-index');
         $(this).attr('style', '').css({
             '-webkit-transform': 'translate3d(0,0,' + n + 'px)',
-            'z-index': (i * multi)
+            'z-index': (n * multi)
         });
     });
 }
