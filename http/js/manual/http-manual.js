@@ -1845,9 +1845,10 @@ function sideonclick(index, zone) {
 function revealonclick(card, note) {
     'use strict';
     console.log(revealcache[card], note);
-    if (note !== 'view') {
-        return;
-    }
+    // Goblin circus removes...
+    //    if (note !== 'view') {
+    //        return;
+    //    }
     revealcacheIndex = card;
     manualActionReference = revealcache[card];
     $('#manualcontrols button').css({
