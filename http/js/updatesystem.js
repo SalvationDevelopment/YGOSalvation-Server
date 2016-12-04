@@ -33,7 +33,6 @@ var downloadList = [], // Download list during recursive processing, when its em
 
 var updateRunning = false;
 var trycount = 0;
-
 localStorage.lastip = '192.99.11.19';
 localStorage.serverport = '8911';
 localStorage.lastport = '8911';
@@ -227,8 +226,8 @@ file system and compare its 'size' to the recorded size on the launcher.
 Comparison by size isnt ideal but that was the only way of doing this quickly!*/
 function hashcheck() {
     'use strict';
-    trycount++;
     updateRunning = true;
+    trycount++;
     if (completeList.length === 0) {
         if (downloadList.length > 1000) {
             $('.installationmessage').css({
@@ -327,7 +326,7 @@ function createmanifest() {
         completeList = [];
 
         //then try again.
-        if (trycount > 2) {
+        if (trycount < 2) {
             setTimeout(createmanifest, 5000);
         }
     });
