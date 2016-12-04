@@ -578,6 +578,9 @@ function init(callback) {
      * @param {Array} reveal array of cards
      */
     function revealCallback(reveal, player, call) {
+        reveal.forEach(function (card) {
+            card.position = 'FaceUp';
+        });
         callback({
             0: {
                 action: 'reveal',
