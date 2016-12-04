@@ -1003,15 +1003,15 @@ function init(callback) {
         // Ids are reassigned to new GUIs 
 
         var playersCards = filterPlayer(stack, player),
-            deck = filterlocation(playersCards, 'DECK'),
+            hand = filterlocation(playersCards, 'HAND'),
             idCollection = [];
 
-        deck.forEach(function (card) {
+        hand.forEach(function (card) {
             idCollection.push(card.id);
         });
 
         shuffle(idCollection); // shuffle the "deck".
-        deck.forEach(function (card, index) {
+        hand.forEach(function (card, index) {
             card.id = idCollection[index]; // finalize the shuffle
         });
         callback(generateView('shuffleHand' + player), stack); // alert UI of the shuffle.

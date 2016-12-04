@@ -875,6 +875,19 @@ function manualReciver(message) {
         duelstash = message;
         updateChat(message.info.duelistChat, message.info.spectatorChat);
         break;
+    case "shuffleHand0":
+        doGuiShuffle(orient(0), 'HAND');
+        setTimeout(function () {
+            linkStack(message.field);
+        }, 1000);
+
+        break;
+    case "shuffleHand1":
+        doGuiShuffle(orient(1), 'HAND');
+        setTimeout(function () {
+            linkStack(message.field);
+        }, 1000);
+        break;
     case "shuffleDeck0":
         doGuiShuffle(orient(0), 'DECK');
         linkStack(message.field);
@@ -1032,10 +1045,13 @@ function manualMoveCard(movement) {
 
 function manualShuffleHand() {
     'use strict';
-    manualServer.send(JSON.stringify({
-        action: 'shuffleHand',
-        sound: 'soundcardShuffle'
-    }));
+    setTimeout(function () {
+        manualServer.send(JSON.stringify({
+            action: 'shuffleHand',
+            sound: 'soundcardShuffle'
+        }));
+    });
+
 }
 
 
