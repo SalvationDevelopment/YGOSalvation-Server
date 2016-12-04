@@ -623,7 +623,7 @@ function doGuiShuffle(player, deck) {
         cardmargin(String() + player, deck);
         setTimeout(function () {
             layouthand(player);
-        }, 1000);
+        }, 500);
 
     }, 1000);
     guishuffle('p' + player, deck);
