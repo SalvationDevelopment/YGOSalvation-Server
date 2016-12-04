@@ -392,10 +392,10 @@ function init(callback) {
                     return 0;
                 }
                 if (primary.position === 'FaceUp' && secondary.position !== 'FaceUp') {
-                    return -1;
+                    return 1;
                 }
                 if (secondary.position === 'FaceUp' && primary.position !== 'FaceUp') {
-                    return 1;
+                    return -1;
                 }
             });
         }
