@@ -125,6 +125,15 @@ function cardIs(cat, obj) {
 
 var avatarMap = {};
 
+
+
+function scaleScreenFactor() {
+    'use strict';
+    var requiredRes = 1368,
+        scale = 0.75 * ($(window).width() / requiredRes);
+    $('.field').css('transform', 'scale(' + scale + ')');
+}
+
 function getAvatar(name) {
     'use strict';
     if (avatarMap[name]) {
@@ -291,6 +300,7 @@ var manualDuel;
 function linkStack(field) {
     'use strict';
     console.log('field:', field);
+    scaleScreenFactor();
 
 
     function linkgui(zone) {
