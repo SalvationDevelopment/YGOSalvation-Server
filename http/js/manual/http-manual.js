@@ -1661,7 +1661,8 @@ function manualToExtra() {
         message = makeCardMovement(manualActionReference, end);
 
     message.action = 'moveCard';
-    message.sound = 'soundcardShuffle';
+
+    message.position = 'FaceDown';
     console.log('EXTRA', index, end, message, manualActionReference);
     manualServer.send(JSON.stringify(message));
 }
@@ -1673,7 +1674,7 @@ function manualToExtraFaceUp() {
         message = makeCardMovement(manualActionReference, end);
 
     message.action = 'moveCard';
-    message.moveposition = 'FaceUp';
+    message.position = 'FaceUp';
     manualServer.send(JSON.stringify(message));
 }
 
@@ -1682,7 +1683,7 @@ function manualToRemovedFacedown() {
     var index = $('#automationduelfield .p' + orient(manualActionReference.player) + '.REMOVED').length,
         end = makeRemoved(manualActionReference, index),
         message = makeCardMovement(manualActionReference, end);
-    message.moveposition = 'FaceDown';
+    message.position = 'FaceDown';
     message.action = 'moveCard';
     manualServer.send(JSON.stringify(message));
 }
