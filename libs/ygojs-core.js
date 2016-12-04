@@ -97,10 +97,10 @@ function filterOverlyIndex(stack, overlayindex) {
 }
 
 /**
- * Filters out cards based on if they are overlay units or not.
- * @param {Array} Array a stack of cards attached to a single monster as overlay units.
- * @param {Number} overlayindex
- * @returns {Array} a single card
+ * Filters out cards based on if they are a specific UID
+ * @param {Array} stack a stack of cards attached to a single monster as overlay units.
+ * @param {Number} uid
+ * @returns {boolean} if a card is that UID
  */
 function filterUID(stack, uid) {
     return stack.filter(function (item) {
@@ -112,6 +112,9 @@ function filterUID(stack, uid) {
 function byIndex(card, index) {
 
 }
+
+
+
 /**
  * Shuffles array in place.
  * @param {Array} a items The array containing the items This function is in no way optimized.
@@ -383,13 +386,32 @@ function init(callback) {
         var zone = filterlocation(filterPlayer(stack, player), location),
             pointer;
 
+        if (location === 'EXTRA') {
+            zone.sort(function (primary, secondary) {
+                if (primary.position === secondary.position) {
+                    return 0;
+                }
+                if (primary.position === 'FaceUp' && secondary.position !== 'FaceUp') {
+                    return -1;
+                }
+                if (secondary.position === 'FaceUp' && primary.position !== 'FaceUp') {
+                    return 1;
+                }
+            });
+        }
+
         zone.forEach(function (card, index) {
             pointer = uidLookup(card.uid);
             stack[pointer].index = index;
         });
-        stack.sort(function (a, b) {
-            return a.index - b.index;
+
+
+        stack.sort(function (primary, b) {
+            return primary.index - b.index;
         });
+
+
+
     }
     //finds a card, then moves it elsewhere.
     function setState(player, clocation, index, moveplayer, movelocation, moveindex, moveposition, overlayindex, uid) {
@@ -1017,6 +1039,7 @@ function init(callback) {
         });
         callback(generateView('flipDeckOver'), stack); // alert UI of the shuffle.
     }
+
 
     function offsetZone(player, zone) {
         stack.forEach(function (card, index) {
