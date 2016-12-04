@@ -71,7 +71,8 @@ var manualServer,
     pendulumMap = {
         16777233: "Pendulum",
         16777249: "Pendulum / Effect",
-        16781345: "Pendulum / Tuner / Effect"
+        16781345: "Pendulum / Tuner / Effect",
+        25165857: "Xyz / Pendulum / Effect"
     },
     raceMap = {
         1: "Warrior",
