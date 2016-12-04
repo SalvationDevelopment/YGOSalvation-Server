@@ -335,6 +335,8 @@ function responseHandler(socket, message) {
         break;
     case "revealHandSingle":
         stateSystem[activeduel].revealCallback([message.card], socket.slot, 'revealHandSingle');
+    case "reveal":
+        stateSystem[activeduel].revealCallback(stateSystem[activeduel].findUIDCollection(message.card.uid), socket.slot, 'revealHandSingle');
         break;
     case "getLog":
         if (stateSystem[activeduel]) {

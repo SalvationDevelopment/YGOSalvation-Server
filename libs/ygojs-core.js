@@ -253,10 +253,11 @@ function init(callback) {
             return filterUID(stack, uid)[0];
         }
         return filterOverlyIndex(filterIndex(filterlocation(filterPlayer(stack, player), clocation), index), overlayindex)[0];
-
-
     }
 
+    function findUIDCollection(uid) {
+        return filterUID(stack, uid);
+    }
     /**
      * Returns the number of cards in each zone.
      * @param   {Number} player index
@@ -1093,6 +1094,7 @@ function init(callback) {
         nextPhase: nextPhase,
         nextTurn: nextTurn,
         changeLifepoints: changeLifepoints,
+        findUIDCollection: findUIDCollection,
         callback: callback,
         shuffleDeck: shuffleDeck,
         shuffleHand: shuffleHand,
