@@ -1673,7 +1673,7 @@ function manualToExtra() {
 
     message.action = 'moveCard';
 
-    message.position = 'FaceDown';
+    message.moveposition = 'FaceDown';
     console.log('EXTRA', index, end, message, manualActionReference);
     manualServer.send(JSON.stringify(message));
 }
@@ -1685,7 +1685,8 @@ function manualToExtraFaceUp() {
         message = makeCardMovement(manualActionReference, end);
 
     message.action = 'moveCard';
-    message.position = 'FaceUp';
+    message.moveposition = 'FaceUp';
+    console.log(message);
     manualServer.send(JSON.stringify(message));
 }
 
