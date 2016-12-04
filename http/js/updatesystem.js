@@ -298,6 +298,8 @@ function updateCheckFile(file, initial) {
     }
 }
 
+var trycount = 0;
+
 /* Trigger function for the update system
 Checks to see if the system has the manifest first,
 if it doesnt have the file yet, wait 5 seconds and 
@@ -323,10 +325,12 @@ function createmanifest() {
         completeList = [];
 
         //then try again.
-        setTimeout(createmanifest, 5000);
-        setTimeout(function () {
-            manifest = {};
-        }, 15000);
+        if (trycount > 2) {
+            setTimeout(createmanifest, 5000);
+            setTimeout(function () {
+                trycount++;
+            }, 15000);
+        }
     });
     updateWatcher.run(function () {
         var quickfail = (!manifest);
