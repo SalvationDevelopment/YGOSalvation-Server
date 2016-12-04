@@ -364,6 +364,16 @@ var targetreference,
     attackmode = false,
     targetmode = false;
 
+
+function orient(player) {
+    'use strict';
+    if (orientSlot) {
+        return (player === 1) ? 0 : 1;
+    }
+    return player;
+
+}
+
 function guiCard(dataBinding) {
     'use strict';
 
@@ -384,7 +394,9 @@ function guiCard(dataBinding) {
         var ref = changes[0].object,
             fieldings,
             offsetX,
-            offsetY;
+            offsetY,
+            deckCount = $('#automationduelfield .p' + orient(ref.player) + '.' + ref.location).length;
+
         if (orientSlot) {
             player = (ref.player === 1) ? 0 : 1;
         } else {
@@ -417,7 +429,7 @@ function guiCard(dataBinding) {
         if (ref.counters > 0) {
             $('.cardselectionzone.p' + player + '.' + ref.location + '.i' + ref.index).attr('data-counters', ref.counters + ' Counters').attr('style', 'z-index:' + (ref.index + 1));
         } else {
-            $('.cardselectionzone.p' + player + '.' + ref.location + '.i' + ref.index).removeAttr('data-counters').attr('style', 'z-index:0;');
+            $('.cardselectionzone.p' + player + '.' + ref.location + '.i' + ref.index).removeAttr('data-counters').attr('style', 'z-index:' + deckCount - ref.index + ';');
         }
 
 
@@ -574,14 +586,7 @@ function manualgamestart(message) {
 
 }
 
-function orient(player) {
-    'use strict';
-    if (orientSlot) {
-        return (player === 1) ? 0 : 1;
-    }
-    return player;
 
-}
 
 function guishuffle(player, deck) {
     'use strict';
