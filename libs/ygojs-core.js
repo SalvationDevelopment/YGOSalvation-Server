@@ -578,9 +578,11 @@ function init(callback) {
      * Triggers a callback that reveals the given array of cards to end users.
      * @param {Array} reveal array of cards
      */
-    function revealCallback(reveal, player, call) {
-        reveal.forEach(function (card) {
-            card.position = 'FaceUp';
+    function revealCallback(reference, player, call) {
+        var reveal = [];
+        reference.forEach(function (card, index) {
+            reveal.push(Object.assign({}, card));
+            reveal[index].position = 'FaceUp'; // make sure they can see the card and all data on it.
         });
         callback({
             0: {
