@@ -2013,7 +2013,11 @@ function revealonclick(card, note) {
             $('.v-extra-p').css({
                 'display': 'block'
             });
-
+          
+            $('.m-monster-p').css({
+                'display': 'block'
+            });
+       
         }
 
 
@@ -2312,6 +2316,11 @@ function guicardonclick() {
         if (dbEntry.id === 63571750) {
             $('.m-pharaohstreasure').css({
 
+            });
+        }
+        if (pendulumMap[dbEntry.type]) {
+            $('.m-monster-p').css({
+                'display': 'block'
             });
         }
         reorientmenu();
