@@ -448,7 +448,7 @@ function cardmargin(player, deck) {
     $('.card.p' + player + '.' + deck).each(function (i) {
         var n = $(this).attr('data-index');
         $(this).attr('style', '').css({
-            '-webkit-transform': 'translate3d(0,0,' + i + 'px)',
+            '-webkit-transform': 'translate3d(0,0,' + n + 'px)',
             'z-index': (i * multi)
         });
     });
