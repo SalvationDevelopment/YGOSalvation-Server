@@ -1832,6 +1832,7 @@
 
             <button class="m-extra m-extra-view" onclick="manualViewExtra()">View Extra Deck</button>
             <button class="m-extra" onclick="manualRevealExtra()">Reveal Extra Deck</button>
+            <button class="m-extra" onclick="manualRevealExtraDeck()">Reveal Random Card</button>
 
             <button class="m-hand m-field v-grave v-removed v-deck" onclick="manualToBottomOfDeck()">To Bottom of Deck</button>
             <button class="m-hand m-field v-grave v-removed v-deck" onclick="manualToTopOfDeck()">To Top of Deck</button>
@@ -1878,7 +1879,7 @@
 
             <button class="m-st" onclick="manualSetMonsterFaceUp()">To Monster Zone</button>
             <button class="m-st" onclick="manualSTFlipUp()">Activate</button>
-            <button class="m-convulse" onclick="manualFlipDeck()">Flip Deck Over</button>
+            <button class="v-deck m-convulse" onclick="manualFlipDeck()">Flip Deck Over</button>
             <button class="v-deck m-monster v-grave" onclick="manualSTFlipUp()">To S/T</button>
             <button class="a-field" onclick="startAttack()">Attack</button>
             <button class="m-st" onclick="manualSTFlipDown()">Flip Down</button>
