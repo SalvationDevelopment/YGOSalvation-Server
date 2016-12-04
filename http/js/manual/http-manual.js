@@ -394,8 +394,7 @@ function guiCard(dataBinding) {
         var ref = changes[0].object,
             fieldings,
             offsetX,
-            offsetY,
-            deckCount = $('#automationduelfield .p' + orient(ref.player) + '.' + ref.location).length;
+            offsetY;
 
         if (orientSlot) {
             player = (ref.player === 1) ? 0 : 1;
@@ -429,7 +428,7 @@ function guiCard(dataBinding) {
         if (ref.counters > 0) {
             $('.cardselectionzone.p' + player + '.' + ref.location + '.i' + ref.index).attr('data-counters', ref.counters + ' Counters').attr('style', 'z-index:' + (ref.index + 1));
         } else {
-            $('.cardselectionzone.p' + player + '.' + ref.location + '.i' + ref.index).removeAttr('data-counters').attr('style', 'z-index:' + deckCount - ref.index + ';');
+            $('.cardselectionzone.p' + player + '.' + ref.location + '.i' + ref.index).removeAttr('data-counters').attr('style', 'z-index:' + ref.index + ';');
         }
 
 
