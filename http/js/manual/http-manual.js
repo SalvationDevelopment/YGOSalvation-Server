@@ -621,6 +621,7 @@ function doGuiShuffle(player, deck) {
     setTimeout(function () {
         clearInterval(action);
         cardmargin(String() + player, deck);
+        layouthand(player);
     }, 1000);
     guishuffle('p' + player, deck);
 }
