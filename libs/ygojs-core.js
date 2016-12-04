@@ -1020,7 +1020,7 @@ function init(callback) {
 
     function offsetZone(player, zone) {
         stack.forEach(function (card, index) {
-            if (card.player === player || card.location === zone) {
+            if (card.player === player && card.location === zone) {
                 card.index++;
             }
         });
