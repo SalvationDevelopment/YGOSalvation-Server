@@ -1755,14 +1755,14 @@ function manualRevealHandSingle() {
     }));
 }
 
-function manualRevealExtraDeck() {
+function manualRevealExtraDeckRandom() {
     'use strict';
 
     var card = manualActionReference;
     card.index = Math.floor((Math.random() * $('#automationduelfield .p' + orient(manualActionReference.player) + '.EXTRA').length));
 
     manualServer.send(JSON.stringify({
-        action: 'revealHandSingle',
+        action: 'reveal',
         card: card
     }));
 }
