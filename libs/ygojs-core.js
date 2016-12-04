@@ -674,7 +674,7 @@ function init(callback) {
                 1: {},
                 sepectators: {}
             };
-        state.duelistChat.push('<pre>' + username + ' is viewing their deck.</pre>');
+       
         result[requester] = {
             action: 'reveal',
             info: state,
