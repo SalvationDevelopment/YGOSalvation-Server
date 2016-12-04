@@ -420,6 +420,7 @@ function guiCard(dataBinding) {
             });
         }
         element.attr('style', 'z-index:' + (ref.index));
+        element.attr('data-index', ref.index);
         if (ref.location === 'MONSTERZONE' && ref.overlayindex) {
             offsetX = (ref.overlayindex % 2) ? (-1) * (ref.overlayindex + 1) * 3 : ref.overlayindex + (-1) * 3;
             offsetY = ref.overlayindex * 4;
@@ -445,6 +446,7 @@ function cardmargin(player, deck) {
     var multi = (deck === 'GRAVE') ? -1 : 1;
     console.log('running cardmargin');
     $('.card.p' + player + '.' + deck).each(function (i) {
+        var n = $(this).attr('data-index');
         $(this).attr('style', '').css({
             '-webkit-transform': 'translate3d(0,0,' + i + 'px)',
             'z-index': (i * multi)
