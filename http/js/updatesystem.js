@@ -32,6 +32,7 @@ var downloadList = [], // Download list during recursive processing, when its em
     }; // structure filled out and sent to the server then back down to the other half of the interface. Provides access to the filesystem.
 
 var updateRunning = false;
+var trycount = 0;
 
 localStorage.lastip = '192.99.11.19';
 localStorage.serverport = '8911';
@@ -226,6 +227,7 @@ file system and compare its 'size' to the recorded size on the launcher.
 Comparison by size isnt ideal but that was the only way of doing this quickly!*/
 function hashcheck() {
     'use strict';
+    trycount++;
     updateRunning = true;
     if (completeList.length === 0) {
         if (downloadList.length > 1000) {
@@ -298,7 +300,7 @@ function updateCheckFile(file, initial) {
     }
 }
 
-var trycount = 0;
+
 
 /* Trigger function for the update system
 Checks to see if the system has the manifest first,
@@ -327,9 +329,6 @@ function createmanifest() {
         //then try again.
         if (trycount > 2) {
             setTimeout(createmanifest, 5000);
-            setTimeout(function () {
-                trycount++;
-            }, 15000);
         }
     });
     updateWatcher.run(function () {
