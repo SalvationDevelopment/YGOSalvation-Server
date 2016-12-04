@@ -1967,6 +1967,13 @@ function revealonclick(card, note) {
         $('.v-extra').css({
             'display': 'block'
         });
+        if (pendulumMap[dbEntry.type]) {
+            $('.v-extra-p').css({
+                'display': 'block'
+            });
+
+        }
+
 
         reorientmenu();
         return;
