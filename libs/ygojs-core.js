@@ -794,7 +794,7 @@ function init(callback) {
      * @param {Number} player
      */
     function viewExcavated(player, username) {
-        var deck = filterlocation(filterPlayer(stack, player), 'Excavated'),
+        var deck = filterlocation(filterPlayer(stack, player), 'EXCAVATED'),
             result = {
                 0: {},
                 1: {},
