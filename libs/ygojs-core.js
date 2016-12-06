@@ -275,6 +275,7 @@ function init(callback) {
             EXTRA: filterOverlyIndex(filterlocation(filterPlayer(stack, player), 'EXTRA'), 0).length,
             GRAVE: filterlocation(filterPlayer(stack, player), 'GRAVE').length,
             REMOVED: filterlocation(filterPlayer(stack, player), 'REMOVED').length,
+            EXCAVATED: filterlocation(filterPlayer(stack, player), 'EXCAVATED').length,
             SPELLZONE: 8,
             MONSTERZONE: 5
         };
@@ -293,7 +294,8 @@ function init(callback) {
             extra = filterOverlyIndex(filterlocation(playersCards, 'EXTRA'), 0),
             removed = filterlocation(playersCards, 'REMOVED'),
             spellzone = filterlocation(playersCards, 'SPELLZONE'),
-            monsterzone = filterlocation(playersCards, 'MONSTERZONE');
+            monsterzone = filterlocation(playersCards, 'MONSTERZONE'),
+            excavated = filterlocation(playersCards, 'EXCAVATED');
 
         return {
             DECK: hideViewOfZone(deck),
@@ -302,7 +304,8 @@ function init(callback) {
             EXTRA: hideViewOfZone(extra),
             REMOVED: removed,
             SPELLZONE: spellzone,
-            MONSTERZONE: monsterzone
+            MONSTERZONE: monsterzone,
+            EXCAVATED: excavated
         };
     }
 
@@ -319,7 +322,8 @@ function init(callback) {
             extra = filterOverlyIndex(filterlocation(playersCards, 'EXTRA'), 0),
             removed = filterlocation(playersCards, 'REMOVED'),
             spellzone = filterlocation(playersCards, 'SPELLZONE'),
-            monsterzone = filterlocation(playersCards, 'MONSTERZONE');
+            monsterzone = filterlocation(playersCards, 'MONSTERZONE'),
+            excavated = filterlocation(playersCards, 'EXCAVATED');
 
         return {
             DECK: hideViewOfZone(deck),
@@ -328,7 +332,8 @@ function init(callback) {
             EXTRA: hideViewOfZone(extra),
             REMOVED: hideViewOfZone(removed),
             SPELLZONE: hideViewOfZone(spellzone),
-            MONSTERZONE: hideViewOfZone(monsterzone)
+            MONSTERZONE: hideViewOfZone(monsterzone),
+            EXCAVATED: hideViewOfZone(excavated)
         };
     }
 
@@ -433,6 +438,7 @@ function init(callback) {
         reIndex(player, 'GRAVE');
         reIndex(player, 'HAND');
         reIndex(player, 'EXTRA');
+        reIndex(player, 'EXCAVATED');
         cleanCounters(stack);
         callback(generateView(), stack);
 
@@ -511,6 +517,23 @@ function init(callback) {
             topcard = filterlocation(filterPlayer(stack, player), 'DECK').length - 1;
             setState(player, 'DECK', topcard, player, 'HAND', currenthand + i, 'FaceUp', 0, false);
             target = queryCard(player, 'HAND', (currenthand + i), 0);
+            pointer = uidLookup(target.uid);
+            //stack[pointer].id = cards[i].Code;
+        }
+        callback(generateView(), stack);
+    }
+
+    function excavateCard(player, numberOfCards, cards) {
+        var currenthand = filterlocation(filterPlayer(stack, player), 'EXCAVATED').length,
+            topcard,
+            target,
+            i,
+            pointer;
+
+        for (i = 0; i < numberOfCards; i++) {
+            topcard = filterlocation(filterPlayer(stack, player), 'DECK').length - 1;
+            setState(player, 'DECK', topcard, player, 'EXCAVATED', currenthand + i, 'FaceDown', 0, false);
+            target = queryCard(player, 'EXCAVATED', (currenthand + i), 0);
             pointer = uidLookup(target.uid);
             //stack[pointer].id = cards[i].Code;
         }
@@ -651,6 +674,14 @@ function init(callback) {
     }
 
     /**
+     * Reveal the players Excavated pile.
+     * @param {number} player 
+     */
+    function revealExcavated(player) {
+        revealCallback(filterlocation(filterPlayer(stack, player), 'EXCAVATED'), player, 'excavated');
+    }
+
+    /**
      * Reveal the players hand.
      * @param {number} player 
      */
@@ -674,7 +705,7 @@ function init(callback) {
                 1: {},
                 sepectators: {}
             };
-       
+
         result[requester] = {
             action: 'reveal',
             info: state,
@@ -756,6 +787,33 @@ function init(callback) {
 
     }
 
+    /**
+     * Show player their own deck, allow interaction with it.
+     * @param {Number} slot   
+     * @param {Number} index  
+     * @param {Number} player
+     */
+    function viewExcavated(player, username) {
+        var deck = filterlocation(filterPlayer(stack, player), 'Excavated'),
+            result = {
+                0: {},
+                1: {},
+                sepectators: {}
+            };
+        state.duelistChat.push('<pre>' + username + ' is viewing their excavated pile..</pre>');
+
+        result[player] = {
+            action: 'reveal',
+            info: state,
+            reveal: deck,
+            call: 'view',
+            player: player
+        };
+
+        callback(result, stack);
+
+    }
+
 
 
     /**
@@ -785,32 +843,7 @@ function init(callback) {
 
     }
 
-    /**
-     * Show player their own deck, allow interaction with it.
-     * @param {Number} slot   
-     * @param {Number} index  
-     * @param {Number} player
-     */
-    function viewExcavated(player) {
-        var pile = filterlocation(filterPlayer(stack, player), 'EXCAVATED'),
-            result = {
-                0: {},
-                1: {},
-                sepectators: {}
-            };
 
-
-        result[player] = {
-            action: 'reveal',
-            info: state,
-            reveal: pile,
-            call: 'view',
-            player: player
-        };
-
-        callback(result, stack);
-
-    }
 
     /**
      * Start side decking.
@@ -1080,6 +1113,7 @@ function init(callback) {
         setState: setState,
         cardCollections: cardCollections,
         drawCard: drawCard,
+        excavateCard: excavateCard,
         flipDeck: flipDeck,
         millCard: millCard,
         millRemovedCard: millRemovedCard,
@@ -1088,6 +1122,8 @@ function init(callback) {
         revealBottom: revealBottom,
         revealDeck: revealDeck,
         revealExtra: revealExtra,
+        revealExcavated: revealExcavated,
+        viewExcavated: viewExcavated,
         viewGrave: viewGrave,
         viewDeck: viewDeck,
         viewExtra: viewExtra,

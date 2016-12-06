@@ -1068,6 +1068,14 @@ function manualDraw() {
     }));
 }
 
+function manualExcavateTop() {
+    'use strict';
+    manualServer.send(JSON.stringify({
+        action: 'excavate',
+        sound: 'sounddrawCard'
+    }));
+}
+
 function manualShuffleDeck() {
     'use strict';
     manualServer.send(JSON.stringify({
@@ -1101,6 +1109,13 @@ function manualRevealExtra() {
     'use strict';
     manualServer.send(JSON.stringify({
         action: 'revealExtra'
+    }));
+}
+
+function manualRevealExcavated() {
+    'use strict';
+    manualServer.send(JSON.stringify({
+        action: 'revealExcavated'
     }));
 }
 
@@ -1214,6 +1229,14 @@ function manualViewExtra() {
     'use strict';
     manualServer.send(JSON.stringify({
         action: 'viewExtra',
+        player: manualActionReference.player
+    }));
+}
+
+function manualViewExcavated() {
+    'use strict';
+    manualServer.send(JSON.stringify({
+        action: 'viewExcavated',
         player: manualActionReference.player
     }));
 }
@@ -1575,6 +1598,17 @@ function manualToHand() {
     manualServer.send(JSON.stringify(message));
 }
 
+function manualToExcavate() {
+    'use strict';
+    var index = $('#automationduelfield .p' + orient(manualActionReference.player) + '.EXCAVATED').length,
+        end = makeHand(manualActionReference, index),
+        message = makeCardMovement(manualActionReference, end);
+
+    message.movelocation = 'EXCAVATED';
+    message.action = 'moveCard';
+    manualServer.send(JSON.stringify(message));
+}
+
 function manualToOpponentsHand() {
     'use strict';
     var moveplayer = (manualActionReference.player) ? 0 : 1,
@@ -1787,6 +1821,18 @@ function manualRevealExtraDeckRandom() {
     }));
 }
 
+function manualRevealExcavatedRandom() {
+    'use strict';
+
+    var card = manualActionReference;
+    card.index = Math.floor((Math.random() * $('#automationduelfield .p' + orient(manualActionReference.player) + '.EXCAVATED').length));
+
+    manualServer.send(JSON.stringify({
+        action: 'reveal',
+        card: card
+    }));
+}
+
 
 var currentMousePos = {
     x: -1,
@@ -1969,6 +2015,42 @@ function revealonclick(card, note) {
         reorientmenu();
         return;
     }
+    if (manualActionReference.location === 'EXCAVATED') {
+        $('.v-excavated').css({
+            'display': 'block'
+        });
+        if (pendulumMap[dbEntry.type]) {
+            $('.m-hand-p').css({
+                'display': 'block'
+            });
+            $('.m-monster-p').css({
+                'display': 'block'
+            });
+
+        }
+        if (monsterMap[dbEntry.type]) {
+            $('.m-hand-m').css({
+                'display': 'block'
+            });
+        }
+        if (stMap[dbEntry.type] || dbEntry.type === 2 || dbEntry.type === 4) {
+            $('.m-hand-st').css({
+                'display': 'block'
+            });
+        }
+        if (fieldspell[dbEntry.type]) {
+            $('.m-hand-f').css({
+                'display': 'block'
+            });
+        }
+        if (pendulumMap[dbEntry.type]) {
+            $('.m-hand-p').css({
+                'display': 'block'
+            });
+        }
+        reorientmenu();
+        return;
+    }
     if (manualActionReference.location === "REMOVED") {
         $('.v-removed').css({
             'display': 'block'
@@ -2013,11 +2095,11 @@ function revealonclick(card, note) {
             $('.v-extra-p').css({
                 'display': 'block'
             });
-          
+
             $('.m-monster-p').css({
                 'display': 'block'
             });
-       
+
         }
 
 
@@ -2173,6 +2255,13 @@ function guicardonclick() {
     console.log(stackunit, dbEntry);
     if (stackunit.location === 'GRAVE') {
         $('.m-grave').css({
+            'display': 'block'
+        });
+        reorientmenu();
+        return;
+    }
+    if (stackunit.location === 'EXCAVATED') {
+        $('.m-excavated').css({
             'display': 'block'
         });
         reorientmenu();
@@ -2467,6 +2556,17 @@ $('#lobbychatinput, #sidechatinput').keypress(function (e) {
                 }
                 for (i = 0; i < amount; i++) {
                     manualDraw();
+                }
+                $(e.currentTarget).val('');
+                return;
+            }
+            if (parts[0] === '/excavate') {
+                amount = parseInt(parts[1], 10);
+                if (isNaN(amount)) {
+                    return;
+                }
+                for (i = 0; i < amount; i++) {
+                    manualExcavateTop();
                 }
                 $(e.currentTarget).val('');
                 return;
