@@ -249,6 +249,9 @@ function responseHandler(socket, message) {
     case "revealDeck":
         stateSystem[activeduel].revealDeck(socket.slot);
         break;
+    case "revealExcavated":
+        stateSystem[activeduel].revealExcavated(socket.slot);
+        break;
     case "revealExtra":
         stateSystem[activeduel].revealExtra(socket.slot);
         break;
@@ -260,6 +263,9 @@ function responseHandler(socket, message) {
         break;
     case "viewExtra":
         stateSystem[activeduel].viewExtra(message.player, games[activeduel].player[socket.slot].name, socket.slot);
+        break;
+    case "viewExcavated":
+        stateSystem[activeduel].viewExcavated(message.player, games[activeduel].player[socket.slot].name, socket.slot);
         break;
     case "viewGrave":
         stateSystem[activeduel].viewGrave(message.player, games[activeduel].player[socket.slot].name, socket.slot);
@@ -278,6 +284,9 @@ function responseHandler(socket, message) {
         break;
     case "draw":
         stateSystem[activeduel].drawCard(socket.slot, 1);
+        break;
+    case "excavate":
+        stateSystem[activeduel].excavateCard(socket.slot, 1);
         break;
     case "mill":
         stateSystem[activeduel].millCard(socket.slot, 1);
@@ -335,6 +344,7 @@ function responseHandler(socket, message) {
         break;
     case "revealHandSingle":
         stateSystem[activeduel].revealCallback([message.card], socket.slot, 'revealHandSingle');
+        break;
     case "reveal":
         stateSystem[activeduel].revealCallback(stateSystem[activeduel].findUIDCollection(message.card.uid), socket.slot, 'revealHandSingle');
         break;
