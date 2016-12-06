@@ -238,10 +238,13 @@ function renderSideDeckZone(deck) {
 
 function startSiding() {
     'use strict';
+    delete window.manualDuel;
+    $('#automationduelfield').html('');
     $('.field').addClass('sidemode');
     $('.sidingzone').addClass('sidemode');
     $('#ingamesidebutton').css('display', 'none');
     $('#ingamexsidebutton').css('display', 'block');
+
 }
 
 function makeGames() {
@@ -582,8 +585,8 @@ function manualgamestart(message) {
     if (!duelstarted) {
         loadField();
         duelstarted = true;
-        manualDuel = initGameState();
-        manualDuel.startDuel(main1, main2, extra1, extra2);
+        window.manualDuel = initGameState();
+        window.manualDuel.startDuel(main1, main2, extra1, extra2);
     }
 
 }
@@ -833,7 +836,7 @@ function manualReciver(message) {
         $('.sidingzone').removeClass('sidemode');
         $('#ingamesidebutton').css('display', 'none');
         $('#ingamexsidebutton').css('display', 'none');
-        manualDuel = {};
+        window.manualDuel = {};
         duelstarted = false;
         manualgamestart(message);
         //startDuel(player1StartLP, player2StartLP, OneDeck, TwoDeck, OneExtra, TwoExtra)
@@ -859,7 +862,7 @@ function manualReciver(message) {
         internalLocal = 'duelscreen';
         break;
     case "newCard":
-        manualDuel.newCard();
+        window.manualDuel.newCard();
         linkStack(message.field);
         setTimeout(function () {
             cardmargin(0, 'GRAVE');
@@ -2229,8 +2232,8 @@ function checksetcode(obj, sc) {
 
 function guicardonclick() {
     'use strict';
-    var idIndex = manualDuel.uidLookup(record),
-        stackunit = manualDuel.stack[idIndex],
+    var idIndex = window.manualDuel.uidLookup(record),
+        stackunit = window.manualDuel.stack[idIndex],
         dbEntry;
 
     if (targetmode) {
