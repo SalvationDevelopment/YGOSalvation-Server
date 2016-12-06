@@ -2019,6 +2019,9 @@ function revealonclick(card, note) {
         $('.v-excavated').css({
             'display': 'block'
         });
+        $('.m-hand').css({
+            'display': 'block'
+        });
         if (pendulumMap[dbEntry.type]) {
             $('.m-hand-p').css({
                 'display': 'block'
