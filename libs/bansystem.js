@@ -11,5 +11,5 @@ module.exports = {
     'disconnect': "Killing Games",
     'boosted turtle': "Intentionally crashing games",
     'itstimetoduel': "Intentionally crashing games",
-    'Colbalt Axis': 'Rudeness to staff'
+    'Cobalt Axis': 'Rudeness to staff'
 };
