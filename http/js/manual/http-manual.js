@@ -238,7 +238,6 @@ function renderSideDeckZone(deck) {
 
 function startSiding() {
     'use strict';
-    delete window.manualDuel;
     $('#automationduelfield').html('');
     $('.field').addClass('sidemode');
     $('.sidingzone').addClass('sidemode');
