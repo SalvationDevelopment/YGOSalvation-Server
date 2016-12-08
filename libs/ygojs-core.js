@@ -1,17 +1,7 @@
 /*jslint node:true, plusplus:true, bitwise : true, nomen:true*/
 'use strict';
 
-
-
-/* This is the state engine for a Yu-Gi-Oh game, it keeps track of the update information from YGOPro
- * or manual mode and maintains a repressentation of the game state, I know this looks kinda odd but the code is
- * based off of HTML/DOM manipulations  that allow for animations.I wanted to make the logic easy
- * to write by just copying and refactoring. In the mean time need to
- * know what some numbers mean in YGOPro land.
- */
-var enums = require('./enums.js'),
-    fs = require('fs');
-
+var fs = require('fs');
 
 
 /**

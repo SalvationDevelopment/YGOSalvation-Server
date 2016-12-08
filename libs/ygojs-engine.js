@@ -3,9 +3,13 @@
 
 var fs = require('fs'),
     stateEngine = require('./ygojs-core'),
-    scriptInterpreter = require('./ygojs-scriptsfuncs.js'),
     LuaVM = require('lua.vm.js'),
-    SQL = require('sql.js');
+    SQL = require('sql.js'),
+    card = require('./ygojs-card.js'),
+    effect = require('./ygojs-effect.js'),
+    group = require('./ygojs-group.js'),
+    duel = require('./ygojs-duel.js'),
+    debug = require('./ygojs-debug.js');
 
 
 function getcards(file) {
@@ -57,14 +61,20 @@ function startDuel(config, decks, callback) {
         state = stateEngine.initEvent(callback),
         lua = new LuaVM.Lua.State(),
 
-        Card = scriptInterpreter.Card(state),
-        Effect = scriptInterpreter.Effect(state),
-        Group = scriptInterpreter.Group(state);
+        engine = {
+            Card: card(state),
+            Effect: effect(state),
+            Group: group(state),
+            Duel: duel(state),
+            Debug: debug(state)
+        };
 
     state.startDuel(decks.player1, decks.player2, false);
 
     state.stack.forEach(function (card) {
         Object.assign(card, getCardObject(card.id, DB));
     });
+
+    engine.Duel.add_process('PROCESSOR_TURN', 0, 0, 0, 0, 0);
 
 }
