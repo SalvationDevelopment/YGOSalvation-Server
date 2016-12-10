@@ -555,16 +555,15 @@ function init(callback) {
      * @param {Number} numberOfCards number of cards milled
      */
     function millRemovedCard(player, numberOfCards) {
-        var currentbanished = filterlocation(filterPlayer(stack, player), 'REMOVED').length,
+        var currentgrave = filterlocation(filterPlayer(stack, player), 'REMOVED').length,
             topcard,
             target,
             i,
             pointer;
 
         for (i = 0; i < numberOfCards; i++) {
-            topcard = currentbanished.length - 1 - i;
-
-            setState(player, 'DECK', topcard, player, 'REMOVED', currentbanished, 'FaceUp', 0);
+            topcard = filterlocation(filterPlayer(stack, player), 'DECK').length - 1;
+            setState(player, 'DECK', topcard, player, 'REMOVED', currentgrave, 'FaceUp', 0);
         }
         callback(generateView(), stack);
     }
@@ -575,15 +574,15 @@ function init(callback) {
      * @param {Number} numberOfCards number of cards milled
      */
     function millRemovedCardFaceDown(player, numberOfCards) {
-        var currentbanished = filterlocation(filterPlayer(stack, player), 'REMOVED').length,
+        var currentgrave = filterlocation(filterPlayer(stack, player), 'REMOVED').length,
             topcard,
             target,
             i,
             pointer;
 
         for (i = 0; i < numberOfCards; i++) {
-            topcard = currentbanished.length - 1 - i;
-            setState(player, 'DECK', topcard, player, 'REMOVED', currentbanished, 'FaceDown', 0);
+            topcard = filterlocation(filterPlayer(stack, player), 'DECK').length - 1;
+            setState(player, 'DECK', topcard, player, 'REMOVED', currentgrave, 'FaceDown', 0);
         }
         callback(generateView(), stack);
     }
