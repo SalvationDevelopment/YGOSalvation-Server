@@ -196,7 +196,7 @@ function singlesitenav(target) {
         'display': 'none'
     });
     if (!launcher) {
-        $('#lobbycurrentdeck').css('display', 'none');
+        $('#lobbycurrentdeck, .notneededinweb').css('display', 'none');
     }
     return false;
 }
@@ -344,6 +344,7 @@ function processLogin(data) {
 }
 
 Handlebars.registerHelper("counter", function (index) {
+    'use strict';
     return index + 1;
 });
 
@@ -370,7 +371,7 @@ function updateranking() {
             });
         });
         rows = rows.sort(function (a, b) {
-            return b.points - a.points
+            return b.points - a.points;
         });
         $.get('handlebars/ranking.handlebars', function (template) {
             var parser = Handlebars.compile(template);
@@ -412,8 +413,7 @@ $(document).ready(function () {
         primus.write({
             action: 'register',
             username: $('#ips_username').val(),
-            password: $('#ips_password').val(),
-            uniqueID: uniqueID
+            password: $('#ips_password').val()
         });
         ev.preventDefault();
         return false; // avoid to execute the actual submit of the form.
