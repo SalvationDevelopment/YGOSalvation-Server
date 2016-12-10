@@ -260,7 +260,7 @@ function secure(prio, checkd, shuf) {
 
 function setHostSettings() {
     'use strict';
-    if (isChecked('#Manual')) {
+    if (isChecked('#Manual') || !launcher) {
         manualHost();
         return;
     }
