@@ -1,5 +1,5 @@
 /*jslint browser:true, plusplus:true, bitwise:true*/
-/*global WebSocket, $, singlesitenav, console, enums, alert,  confirm*/
+/*global WebSocket, $, singlesitenav, console, enums, alert,  confirm, FileReader*/
 
 
 
@@ -259,6 +259,28 @@ function makeGames() {
     });
 }
 
+var uploadedDeck = '';
+
+function readSingleFile(evt) {
+    //Retrieve the first (and only!) File from the FileList object
+    'use strict';
+    var f = evt.target.files[0],
+        r;
+
+    if (f) {
+        r = new FileReader();
+        r.onload = function (e) {
+            var contents = e.target.result;
+            uploadedDeck = contents;
+        };
+        r.readAsText(f);
+    } else {
+        alert("Failed to load file");
+    }
+}
+
+document.getElementById('deckupload').addEventListener('change', readSingleFile, false);
+
 function getdeck() {
     'use strict';
     var selection,
@@ -290,8 +312,11 @@ function getdeck() {
     }
 
     selection = $('#lobbycurrentdeck .currentdeck option:selected').eq(0).attr('data-file');
-    processedDeck = makeDeck(selection);
-    return processedDeck;
+    if (selection !== undefined) {
+        return makeDeck(selection);
+    }
+    return makeDeck(uploadedDeck);
+
 }
 
 function loadField() {
@@ -777,7 +802,9 @@ function manualReciver(message) {
         }
     }
     if (message.error) {
-        alert('An Error Occured');
+        if (internalLocal === 'surrendered') {
+            alert('An Error Occured');
+        }
         return;
     }
     switch (message.action) {
@@ -944,7 +971,9 @@ function serverconnect() {
     };
     manualServer.onclose = function (message) {
         console.log('Manual Connection Died, reconnecting,...');
-        alert('A Connection Error Occured');
+        if (internalLocal === 'surrendered') {
+            alert('A Connection Error Occured');
+        }
         setTimeout(serverconnect, 2000);
     };
 }

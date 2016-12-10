@@ -72,9 +72,9 @@
             </li>
             <li class="launcheronly"><span data-translation-replays class="psudolinksingle" onclick='ygopro("-r");'>Replays</span>
             </li>
-            <li class="launcheronly"><span data-translation-gamelist class="psudolinksingle" onclick="joinGamelist();singlesitenav('gamelist');">Game List</span>
+            <li class=""><span data-translation-gamelist class="psudolinksingle" onclick="joinGamelist();singlesitenav('gamelist');">Game List</span>
             </li>
-            <li class="launcheronly"><span data-translation-host class="psudolinksingle" onclick="singlesitenav('host')">Host</span>
+            <li class=""><span data-translation-host class="psudolinksingle" onclick="singlesitenav('host')">Host</span>
             </li>
             <li><a data-translation-forum class="psudolinksingle " style='text-decoration:none' onclick="singlesitenav('forum')" target="_blank" href="http://forum.ygopro.us">Forum</a>
             </li>
@@ -130,7 +130,7 @@
                 </ul>
 
             </nav>
-            <form id="ipblogin" style="text-align:center; color: white !important; margin:0 auto; margin-top:5vh" class="loginsystem launcheronly">
+            <form id="ipblogin" style="text-align:center; color: white !important; margin:0 auto; margin-top:5vh" class="loginsystem">
                 <input data-translation-forumusername id="ips_username" type="text" class="loginsystem" name="ips_username" tabindex="1" placeholder="Forum Username">
                 <input data-translation-forumpassword id="ips_password" type="password" class="loginsystem" name="ips_password" tabindex="2" placeholder="Forum Password">
                 <br><span style="font-size:.9em; display:block; margin-top:-0.5em;"><input type="checkbox" id="ips_remember" ><span data-translation-rememberusernamepassword> Remember Username &amp; Password?</span>
@@ -164,7 +164,7 @@
             </div>
 
 
-            <div id="intro" class="webonly shine">
+            <div id="intro" class="webonly shine" sytle="display:none;">
                 <img src="img/example.jpg" />
                 <p>YGOPRO Salvation Server the edge version of DevPro using the YGOPro engine an automated dueling system. Play with your friends and others around the world. Online multiplay with various game modes or LAN mode. <strong>The latest cards are added upon announcement</strong> for your review and experimentation.</p>
                 <p>Manage and <strong>construct an infinite amount of decks using all cards</strong>. Decks can be created for different banlists. Searching cards is simple by using the card text search function or card filters. Duels are recorded automatically. Watch duels at a later time and analyze them step by step. Game rules can be customized easily. You can <strong>set the banlist, timers, TCG or OCG rulings</strong> and much more. Duel together with a partner in 2vs2 mode, based on the tag duels from the Tag Force (PSP) series.</p>
@@ -172,7 +172,7 @@
                 <p>A growing forum community, active and approchable staff, you can speak directly with the developers. Completely open source, non-profit, and privately funded.</p>
 
             </div>
-            <iframe class="launcheronly" src="https://discordapp.com/widget?id=163474118853918720&theme=dark" height="50%" width="20%" style="width:250px;height: 60%; margin: 0 auto; display:block" allowtransparency="true" frameborder="0"></iframe>
+            <iframe class="" src="https://discordapp.com/widget?id=163474118853918720&theme=dark" height="50%" width="20%" style="width:250px;height: 60%; margin: 0 auto; display:block" allowtransparency="true" frameborder="0"></iframe>
             <div id="creditslink" onclick="singlesitenav('credits')" style="cursor:pointer;text-align:center; margin-top:1vh;">Credits</div>
         </div>
     </header>
@@ -1203,12 +1203,13 @@
                 <br/>
                 <span id="translatecdpt">Cards Drawn per Turn: </span><span id="lobbycdpt"></span>
             </div>
-            <div id="lobbycurrentdeck">
+            <div id="lobbycurrentdeck" class="launcheronly">
                 Select Deck :
                 <select class='currentdeck'>
                     <option selected value=""></option>
                 </select>
             </div>
+            <input id="deckupload" type="file" placeholder="Upload YDK" />
             <div id="lobbystartcancel">
                 <button onclick="manualStart()" id="lobbystart">Start Duel</button>
                 <button id="lobbycancel" onclick="manualLeave()">Cancel</button>
