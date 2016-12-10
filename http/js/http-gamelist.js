@@ -516,7 +516,10 @@ function pondata(data) {
             window.admin = "1";
             $('#Tournamentacp').addClass('isadmin');
         }
-        console.log(data);
+        if (data.clientEvent !== 'ackresult' || data.clientEvent !== 'ack') {
+            console.log(data);
+        }
+
         if (data.message) {
             if (data.clientEvent === 'global' && data.message.length && loggedIn) {
                 $('footer, #popupbody').html(data.message).addClass('loud');
