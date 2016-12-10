@@ -294,6 +294,9 @@ function getdeck() {
                 "extra": []
             },
             current = "";
+        lineSplit = lineSplit.map(function (item) {
+            return item.trim();
+        });
         try {
             lineSplit.forEach(function (value) {
                 if (value === "") {
