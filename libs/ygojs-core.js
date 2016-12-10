@@ -505,7 +505,7 @@ function init(callback) {
 
         for (i = 0; i < numberOfCards; i++) {
             topcard = filterlocation(filterPlayer(stack, player), 'DECK').length - 1;
-            setState(player, 'DECK', topcard, player, 'HAND', currenthand + i, 'FaceUp', 0, false);
+            setState(player, 'DECK', topcard, player, 'HAND', currenthand + i, 'FaceUp', 0);
             target = queryCard(player, 'HAND', (currenthand + i), 0);
             pointer = uidLookup(target.uid);
             //stack[pointer].id = cards[i].Code;
@@ -522,7 +522,7 @@ function init(callback) {
 
         for (i = 0; i < numberOfCards; i++) {
             topcard = filterlocation(filterPlayer(stack, player), 'DECK').length - 1;
-            setState(player, 'DECK', topcard, player, 'EXCAVATED', currenthand + i, 'FaceDown', 0, false);
+            setState(player, 'DECK', topcard, player, 'EXCAVATED', currenthand + i, 'FaceDown', 0);
             target = queryCard(player, 'EXCAVATED', (currenthand + i), 0);
             pointer = uidLookup(target.uid);
             //stack[pointer].id = cards[i].Code;
@@ -544,7 +544,7 @@ function init(callback) {
 
         for (i = 0; i < numberOfCards; i++) {
             topcard = filterlocation(filterPlayer(stack, player), 'DECK').length - 1;
-            setState(player, 'DECK', topcard, player, 'GRAVE', currentgrave, 'FaceUp', 0, false);
+            setState(player, 'DECK', topcard, player, 'GRAVE', currentgrave, 'FaceUp', 0);
         }
         callback(generateView(), stack);
     }
@@ -562,8 +562,9 @@ function init(callback) {
             pointer;
 
         for (i = 0; i < numberOfCards; i++) {
-            topcard = filterlocation(filterPlayer(stack, player), 'DECK').length - 1;
-            setState(player, 'DECK', topcard, player, 'REMOVED', currentbanished, 'FaceUp', 0, false);
+            topcard = currentbanished.length - 1 - i;
+
+            setState(player, 'DECK', topcard, player, 'REMOVED', currentbanished, 'FaceUp', 0);
         }
         callback(generateView(), stack);
     }
@@ -574,15 +575,15 @@ function init(callback) {
      * @param {Number} numberOfCards number of cards milled
      */
     function millRemovedCardFaceDown(player, numberOfCards) {
-        var currentgrave = filterlocation(filterPlayer(stack, player), 'REMOVED').length,
+        var currentbanished = filterlocation(filterPlayer(stack, player), 'REMOVED').length,
             topcard,
             target,
             i,
             pointer;
 
         for (i = 0; i < numberOfCards; i++) {
-            topcard = filterlocation(filterPlayer(stack, player), 'DECK').length - 1;
-            setState(player, 'DECK', topcard, player, 'REMOVED', currentgrave, 'FaceDown', 0, false);
+            topcard = currentbanished.length - 1 - i;
+            setState(player, 'DECK', topcard, player, 'REMOVED', currentbanished, 'FaceDown', 0);
         }
         callback(generateView(), stack);
     }
