@@ -294,20 +294,25 @@ function getdeck() {
                 "extra": []
             },
             current = "";
-        lineSplit.forEach(function (value) {
-            if (value === "") {
-                return;
-            }
-            if (value[0] === "#" || value[0] === "!") {
-                if (originalValues.hasOwnProperty(value.substr(1))) {
-                    current = value.substr(1);
-                } else {
+        try {
+            lineSplit.forEach(function (value) {
+                if (value === "") {
                     return;
                 }
-            } else {
-                originalValues[current].push(value);
-            }
-        });
+                if (value[0] === "#" || value[0] === "!") {
+                    if (originalValues.hasOwnProperty(value.substr(1))) {
+                        current = value.substr(1);
+                    } else {
+                        return;
+                    }
+                } else {
+                    console.log(current);
+                    originalValues[current].push(value);
+                }
+            });
+        } catch (er) {
+            console.log(er);
+        }
         return originalValues;
     }
 
