@@ -332,7 +332,68 @@ function loadField() {
     $('#duelzone').css('display', 'block');
 }
 
-var manualDuel;
+var manualDuel,
+    targetreference,
+    attackmode = false,
+    targetmode = false;
+
+function stateUpdate(dataBinding) {
+    'use strict';
+    var fieldings,
+        offsetX,
+        offsetY,
+        field = $('#automationduelfield'),
+        element = dataBinding.element,
+        player,
+        ref = dataBinding;
+
+    if (orientSlot) {
+        player = (dataBinding.player === 1) ? 0 : 1;
+    } else {
+        player = dataBinding.player;
+    }
+    if (orientSlot) {
+        player = (dataBinding.player === 1) ? 0 : 1;
+    } else {
+        player = dataBinding.player;
+    }
+    if (!ref.parent) {
+        fieldings = 'card p' + player + ' ' + ref.location + ' i' + ref.index;
+        element.attr({
+            'class': fieldings,
+            'data-position': ref.position,
+            'data-id': ref.id,
+            'src': (ref.id) ? 'ygopro/pics/' + ref.id + '.jpg' : 'img/textures/cover.jpg'
+        });
+    } else {
+        fieldings = 'card p' + player + ' ' + ref.location + ' i' + ref.index + ' o';
+        element.attr({
+            'class': fieldings,
+            'data-position': ref.position,
+            'data-id': ref.id,
+            'src': (ref.id) ? 'ygopro/pics/' + ref.id + '.jpg' : 'img/textures/cover.jpg'
+        });
+    }
+    element.attr('style', 'z-index:' + (ref.index));
+    element.attr('data-index', ref.index);
+    if (ref.location === 'MONSTERZONE' && ref.overlayindex) {
+        offsetX = (ref.overlayindex % 2) ? (-1) * (ref.overlayindex + 1) * 3 : ref.overlayindex + (-1) * 3;
+        offsetY = ref.overlayindex * 4;
+        element.attr('style', 'z-index: -' + ref.overlayindex + '; transform: translate(' + offsetX + 'px, ' + offsetY + 'px)');
+    }
+    if (ref.counters > 0) {
+        $('.cardselectionzone.p' + player + '.' + ref.location + '.i' + ref.index).attr('data-counters', ref.counters + ' Counters').attr('style', 'z-index:' + (ref.index + 1));
+    } else {
+        $('.cardselectionzone.p' + player + '.' + ref.location + '.i' + ref.index).removeAttr('data-counters').attr('style', 'z-index:' + ref.index + ';');
+    }
+
+
+
+    if (attackmode) {
+        $('.p1').addClass('attackglow');
+    }
+
+}
 
 function linkStack(field) {
     'use strict';
@@ -359,6 +420,7 @@ function linkStack(field) {
     Object.keys(field[1]).forEach(function (zone) {
         linkgui(field[1][zone]);
     });
+    manualDuel.stack.forEach(stateUpdate);
 }
 
 function Card(movelocation, player, index, unique) {
@@ -396,9 +458,7 @@ function layouthand(player) {
     }
 }
 
-var targetreference,
-    attackmode = false,
-    targetmode = false;
+
 
 
 function orient(player) {
@@ -424,58 +484,11 @@ function guiCard(dataBinding) {
     }
     $(field).append('<img onclick="return guicardonclick()" id="uid' + dataBinding.uid + '" class="card p' + player + ' ' + dataBinding.location + ' i' + dataBinding.index + ' o" src="img/textures/cover.jpg" data-position="FaceDown" />');
     element = $('#uid' + dataBinding.uid);
+    return element;
 
-    Object.observe(dataBinding, function (changes) {
-        // [{name: 'ofproperitychaned', object: {complete new object}, type: 'of edit', oldValue: 'previousvalueofproperity'}]
-        var ref = changes[0].object,
-            fieldings,
-            offsetX,
-            offsetY;
-
-        if (orientSlot) {
-            player = (ref.player === 1) ? 0 : 1;
-        } else {
-            player = ref.player;
-        }
-        if (!ref.parent) {
-            fieldings = 'card p' + player + ' ' + ref.location + ' i' + ref.index;
-            element.attr({
-                'class': fieldings,
-                'data-position': ref.position,
-                'data-id': ref.id,
-                'src': (ref.id) ? 'ygopro/pics/' + ref.id + '.jpg' : 'img/textures/cover.jpg'
-            });
-        } else {
-            ref = changes[0].object;
-            fieldings = 'card p' + player + ' ' + ref.location + ' i' + ref.index + ' o';
-            element.attr({
-                'class': fieldings,
-                'data-position': ref.position,
-                'data-id': ref.id,
-                'src': (ref.id) ? 'ygopro/pics/' + ref.id + '.jpg' : 'img/textures/cover.jpg'
-            });
-        }
-        element.attr('style', 'z-index:' + (ref.index));
-        element.attr('data-index', ref.index);
-        if (ref.location === 'MONSTERZONE' && ref.overlayindex) {
-            offsetX = (ref.overlayindex % 2) ? (-1) * (ref.overlayindex + 1) * 3 : ref.overlayindex + (-1) * 3;
-            offsetY = ref.overlayindex * 4;
-            element.attr('style', 'z-index: -' + ref.overlayindex + '; transform: translate(' + offsetX + 'px, ' + offsetY + 'px)');
-        }
-        if (ref.counters > 0) {
-            $('.cardselectionzone.p' + player + '.' + ref.location + '.i' + ref.index).attr('data-counters', ref.counters + ' Counters').attr('style', 'z-index:' + (ref.index + 1));
-        } else {
-            $('.cardselectionzone.p' + player + '.' + ref.location + '.i' + ref.index).removeAttr('data-counters').attr('style', 'z-index:' + ref.index + ';');
-        }
-
-
-
-        if (attackmode) {
-            $('.p1').addClass('attackglow');
-        }
-
-    });
 }
+
+
 
 function cardmargin(player, deck) {
     'use strict';
@@ -531,7 +544,7 @@ function initGameState() {
 
     function newCard() {
         stack.push(new Card('TOKEN', 0, 0, stack.length));
-        guiCard(stack[stack.length - 1]);
+        stack[stack.length - 1].element = guiCard(stack[stack.length - 1]);
     }
 
     function filterUID(stack, uid) {
@@ -575,7 +588,7 @@ function initGameState() {
             stack.push(new Card('DECK', 1, i, stack.length));
         }
         for (i = 0; stack.length > i; i++) {
-            guiCard(stack[i]);
+            stack[i].element = guiCard(stack[i]);
         }
         cardmargin('0', 'GRAVE');
         cardmargin('0', 'HAND');
