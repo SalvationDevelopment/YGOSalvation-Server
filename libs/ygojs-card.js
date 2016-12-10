@@ -5,7 +5,13 @@
 
 
 function get_code(card) {
-
+    var temp = card.temp;
+    if (card.assume_code) {
+        return card.assume_value;
+    }
+    if (temp.code !== 0xffffffff) {
+        return temp.code;
+    }
     return card.code;
 }
 
