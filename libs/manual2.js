@@ -33,7 +33,8 @@ function newGame() {
             //                ready: false
             //            }
         },
-        spectators: []
+        spectators: [],
+        delCount: 0
     };
 }
 
@@ -85,6 +86,15 @@ function randomString(len) {
 
 
 wss.broadcast = function broadcast() {
+    Object.keys(games).forEach(function (key) {
+        if (games[key].player[0].name === '' && games[key].player[1].name === '') {
+            games[key].delCount++;
+        }
+        if (games[key].delCount > 10) {
+            delete games[key];
+        }
+
+    });
     wss.clients.forEach(function each(client) {
         client.send(JSON.stringify({
             action: 'broadcast',
@@ -153,6 +163,7 @@ function responseHandler(socket, message) {
                 socket.activeduel = message.game;
             }
         }
+        games[message.game].delCount = 0;
         wss.broadcast(games);
         socket.send(JSON.stringify({
             action: 'lobby',
@@ -409,6 +420,15 @@ wss.on('connection', function (socket) {
                 stack: error.stack,
                 input: JSON.parse(message)
             }));
+        }
+    });
+    socket.on('close', function (message) {
+        try {
+            responseHandler(socket, {
+                action: 'leave'
+            });
+        } catch (error) {
+            console.log(error);
         }
     });
 });
