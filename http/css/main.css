@@ -696,6 +696,11 @@ header {
     font-size: .8em;
 }
 
+button#lobbycancel {
+    clear: both;
+    margin-top: 1vh;
+}
+
 .button {
     background: rgba(190, 0, 100, .50);
     width: 86px;
