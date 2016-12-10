@@ -283,7 +283,7 @@ document.getElementById('deckupload').addEventListener('change', readSingleFile,
 
 function getdeck() {
     'use strict';
-    var selection,
+    var selection = '',
         processedDeck;
 
     function makeDeck(ydkFileContents) {
@@ -312,7 +312,7 @@ function getdeck() {
     }
 
     selection = $('#lobbycurrentdeck .currentdeck option:selected').eq(0).attr('data-file');
-    if (selection !== undefined) {
+    if (selection) {
         return makeDeck(selection);
     }
     return makeDeck(uploadedDeck);
