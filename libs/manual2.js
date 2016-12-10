@@ -441,3 +441,5 @@ fs.watch(__filename, function () {
 
     setTimeout(process.exit, 3000);
 });
+
+setInterval(wss.broadcast, 15000);
