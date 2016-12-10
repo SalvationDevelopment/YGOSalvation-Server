@@ -195,6 +195,9 @@ function singlesitenav(target) {
     $('#manualcontrols button').css({
         'display': 'none'
     });
+    if (!launcher) {
+        $('#lobbycurrentdeck').css('display', 'none');
+    }
     return false;
 }
 
@@ -210,7 +213,7 @@ function locallogin(init) {
     } catch (e) {}
 
 
-   
+
 
     //chatStarted = true;
     singlesitenav('faq');
