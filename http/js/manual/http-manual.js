@@ -357,38 +357,32 @@ function stateUpdate(dataBinding) {
     } else {
         player = dataBinding.player;
     }
-    if (!ref.parent) {
-        fieldings = 'card p' + player + ' ' + ref.location + ' i' + ref.index;
+    fieldings = 'card p' + player + ' ' + ref.location + ' i' + ref.index;
+
+    if (fieldings !== element.attr('class') || ref.position !== element.attr('data-position') || String(ref.id) !== element.attr('data-id')) {
+
         element.attr({
             'class': fieldings,
             'data-position': ref.position,
             'data-id': ref.id,
             'src': (ref.id) ? 'ygopro/pics/' + ref.id + '.jpg' : 'img/textures/cover.jpg'
         });
-    } else {
-        fieldings = 'card p' + player + ' ' + ref.location + ' i' + ref.index + ' o';
-        element.attr({
-            'class': fieldings,
-            'data-position': ref.position,
-            'data-id': ref.id,
-            'src': (ref.id) ? 'ygopro/pics/' + ref.id + '.jpg' : 'img/textures/cover.jpg'
-        });
-    }
-    element.attr('style', 'z-index:' + (ref.index));
-    element.attr('data-index', ref.index);
-    if (ref.location === 'MONSTERZONE' && ref.overlayindex) {
-        offsetX = (ref.overlayindex % 2) ? (-1) * (ref.overlayindex + 1) * 3 : ref.overlayindex + (-1) * 3;
-        offsetY = ref.overlayindex * 4;
-        element.attr('style', 'z-index: -' + ref.overlayindex + '; transform: translate(' + offsetX + 'px, ' + offsetY + 'px)');
-    }
-    if (ref.counters > 0) {
-        $('.cardselectionzone.p' + player + '.' + ref.location + '.i' + ref.index).attr('data-counters', ref.counters + ' Counters').attr('style', 'z-index:' + (ref.index + 1));
-    } else {
-        $('.cardselectionzone.p' + player + '.' + ref.location + '.i' + ref.index).removeAttr('data-counters').attr('style', 'z-index:' + ref.index + ';');
-    }
+
+        element.attr('style', 'z-index:' + (ref.index));
+        element.attr('data-index', ref.index);
+        if (ref.location === 'MONSTERZONE' && ref.overlayindex) {
+            offsetX = (ref.overlayindex % 2) ? (-1) * (ref.overlayindex + 1) * 3 : ref.overlayindex + (-1) * 3;
+            offsetY = ref.overlayindex * 4;
+            element.attr('style', 'z-index: -' + ref.overlayindex + '; transform: translate(' + offsetX + 'px, ' + offsetY + 'px)');
+        }
+        if (ref.counters > 0) {
+            $('.cardselectionzone.p' + player + '.' + ref.location + '.i' + ref.index).attr('data-counters', ref.counters + ' Counters').attr('style', 'z-index:' + (ref.index + 1));
+        } else {
+            $('.cardselectionzone.p' + player + '.' + ref.location + '.i' + ref.index).removeAttr('data-counters').attr('style', 'z-index:' + ref.index + ';');
+        }
 
 
-
+    }
     if (attackmode) {
         $('.p1').addClass('attackglow');
     }
@@ -404,10 +398,10 @@ function linkStack(field) {
     function linkgui(zone) {
         zone.forEach(function (card) {
             var idIndex = manualDuel.uidLookup(card.uid),
-                stackunit = manualDuel.stack[idIndex];
-            Object.keys(stackunit).forEach(function (prop) {
+                unit = manualDuel.stack[idIndex];
+            Object.keys(unit).forEach(function (prop) {
                 if (card[prop] !== undefined) {
-                    stackunit[prop] = card[prop];
+                    unit[prop] = card[prop];
                 }
             });
         });
