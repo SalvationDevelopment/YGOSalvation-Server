@@ -118,7 +118,7 @@ function singlesitenav(target) {
         alert('You are in a duel, surrender or finish it.');
         return false;
     }
-    if (!launcher && target === 'deckedit') {
+    if (launcher && target === 'deckedit') {
         return;
     }
     manualDuel === undefined;
