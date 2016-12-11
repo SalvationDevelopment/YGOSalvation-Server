@@ -627,7 +627,7 @@ function manualgamestart(message) {
         extra1 = (Array.isArray(message.field[0].EXTRA)) ? message.field[0].EXTRA.length : message.field[0].EXTRA,
         extra2 = (Array.isArray(message.field[1].EXTRA)) ? message.field[1].EXTRA.length : message.field[1].EXTRA;
     singlesitenav('duelscreen');
-    if (!duelstarted) {
+    if (!duelstarted || !window.manualDuel) {
         loadField();
         duelstarted = true;
         window.manualDuel = initGameState();
@@ -811,6 +811,40 @@ function endSiding() {
     }, 2000);
 }
 
+function startGame(message) {
+    'use strict';
+    $('#automationduelfield').html(' ');
+    $('#ingamesidebutton').css('display', 'none');
+    $('.field').removeClass('sidemode');
+    $('.sidingzone').removeClass('sidemode');
+    $('#ingamesidebutton').css('display', 'none');
+    $('#ingamexsidebutton').css('display', 'none');
+    window.manualDuel = {};
+    duelstarted = false;
+    manualgamestart(message);
+    //startDuel(player1StartLP, player2StartLP, OneDeck, TwoDeck, OneExtra, TwoExtra)
+    linkStack(message.field);
+
+
+    $('#phaseindicator').attr('data-currentphase', message.info.phase);
+    $('.p0lp').val(message.info.lifepoints[0]);
+    $('.p1lp').val(message.info.lifepoints[1]);
+    setTimeout(function () {
+        cardmargin(0, 'GRAVE');
+        cardmargin(0, 'EXTRA');
+        cardmargin(0, 'DECK');
+        cardmargin(1, 'GRAVE');
+        cardmargin(1, 'EXTRA');
+        cardmargin(1, 'DECK');
+        layouthand(0);
+        layouthand(1);
+        $('#sidechatinput').focus();
+        sound.play('soundcardShuffle');
+    }, 1000);
+    updateChat(message.info.duelistChat);
+    internalLocal = 'duelscreen';
+}
+
 function manualReciver(message) {
     'use strict';
     console.log(message);
@@ -877,36 +911,7 @@ function manualReciver(message) {
         renderSideDeckZone(sidedDeck);
         break;
     case "start":
-        $('#automationduelfield').html(' ');
-        $('#ingamesidebutton').css('display', 'none');
-        $('.field').removeClass('sidemode');
-        $('.sidingzone').removeClass('sidemode');
-        $('#ingamesidebutton').css('display', 'none');
-        $('#ingamexsidebutton').css('display', 'none');
-        window.manualDuel = {};
-        duelstarted = false;
-        manualgamestart(message);
-        //startDuel(player1StartLP, player2StartLP, OneDeck, TwoDeck, OneExtra, TwoExtra)
-        linkStack(message.field);
-
-
-        $('#phaseindicator').attr('data-currentphase', message.info.phase);
-        $('.p0lp').val(message.info.lifepoints[0]);
-        $('.p1lp').val(message.info.lifepoints[1]);
-        setTimeout(function () {
-            cardmargin(0, 'GRAVE');
-            cardmargin(0, 'EXTRA');
-            cardmargin(0, 'DECK');
-            cardmargin(1, 'GRAVE');
-            cardmargin(1, 'EXTRA');
-            cardmargin(1, 'DECK');
-            layouthand(0);
-            layouthand(1);
-            $('#sidechatinput').focus();
-            sound.play('soundcardShuffle');
-        }, 1000);
-        updateChat(message.info.duelistChat);
-        internalLocal = 'duelscreen';
+        startGame(message);
         break;
     case "newCard":
         window.manualDuel.newCard();
@@ -951,6 +956,9 @@ function manualReciver(message) {
         linkStack(message.field);
         break;
     case "duel":
+        if (manualDuel === undefined) {
+            startGame(message);
+        }
         linkStack(message.field);
 
         setTimeout(function () {
