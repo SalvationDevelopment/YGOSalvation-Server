@@ -118,6 +118,7 @@ function singlesitenav(target) {
         alert('You are in a duel, surrender or finish it.');
         return false;
     }
+    manualDuel === undefined;
     try {
         _gaq.push(['_trackEvent', 'Site', 'Navigation', target]);
         _gaq.push(['_trackEvent', 'Site', 'Navigation Movement', internalLocal + ' - ' + target]);
