@@ -1,4 +1,4 @@
-/*global currentMousePos, getCardObject, reorientmenu, cardIs, $, internalDB, primus*/
+/*global currentMousePos, getCardObject, reorientmenu, cardIs, $, internalDB, primus,prompt, alert*/
 /*jslint bitwise: true, plusplus:true*/
 
 
@@ -545,6 +545,12 @@ var deckEditor = (function () {
 
     }
 
+    function removeCard(deck) {
+        inmemoryDeck[deck].splice(deckEditorReference.index, 1);
+        renderDeckZone(inmemoryDeck);
+
+    }
+
     function createNewDeck() {
         var deckName = prompt('New Deck Name?', 'New Deck'),
             deckCheck = usersDecks.filter(function (deck) {
@@ -561,10 +567,13 @@ var deckEditor = (function () {
         saveDeck();
     }
 
+    loadDecks([makeNewDeck('New Deck')]);
+
     return {
         updateDeckSelect: updateDeckSelect,
         addCardFromSearch: addCardFromSearch,
         deckEditorMoveTo: deckEditorMoveTo,
+        removeCard: removeCard,
         deleteDeck: deleteDeck,
         clearCurrentDeck: clearCurrentDeck,
         loadDecks: loadDecks,
@@ -595,34 +604,34 @@ function deckeditonclick(index, zone) {
 
     var dbEntry = getCardObject(parseInt(deckEditorReference.id, 10));
     if (deckEditorReference.zone === 'main') {
-        $('.de-toside, .de-remove').css({
+        $('.de-toside, .de-frommain').css({
             'display': 'block'
         });
 
     }
     if (deckEditorReference.zone === 'extra') {
-        $('.de-toside, .de-remove').css({
+        $('.de-toside, .de-fromextra').css({
             'display': 'block'
         });
     }
     if (deckEditorReference.zone === 'side') {
         if (cardIs('xyz', dbEntry) || cardIs('fusion', dbEntry) || cardIs('synchro', dbEntry)) {
-            $('.de-toextra, .de-remove').css({
+            $('.de-toextra, .de-fromextra').css({
                 'display': 'block'
             });
         } else {
-            $('.de-tomain, .de-remove').css({
+            $('.de-tomain, .de-fromextra').css({
                 'display': 'block'
             });
         }
     }
     if (deckEditorReference.zone === 'search') {
         if (cardIs('xyz', dbEntry) || cardIs('fusion', dbEntry) || cardIs('synchro', dbEntry)) {
-            $('.de-toextra').css({
+            $('.de-toextra, .de-toside').css({
                 'display': 'block'
             });
         } else {
-            $('.de-tomain').css({
+            $('.de-tomain, .de-toside').css({
                 'display': 'block'
             });
         }
