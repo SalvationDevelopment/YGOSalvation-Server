@@ -49,7 +49,8 @@ var databaseSystem = (function () {
 
     return {
         database: database,
-        swapDB: setDatabase
+        setDatabase: setDatabase,
+        dbs: dbs
     };
 }());
 
@@ -401,6 +402,7 @@ var currentSearchFilter = (function () {
     }
 
     return {
+        preformSearch: preformSearch,
         render: render,
         setFilter: setFilter,
         clearFilter: clearFilter,
@@ -570,6 +572,8 @@ var deckEditor = (function () {
     loadDecks([makeNewDeck('New Deck')]);
 
     return {
+        inmemoryDeck: inmemoryDeck,
+        createNewDeck: createNewDeck,
         updateDeckSelect: updateDeckSelect,
         addCardFromSearch: addCardFromSearch,
         deckEditorMoveTo: deckEditorMoveTo,
@@ -579,7 +583,12 @@ var deckEditor = (function () {
         loadDecks: loadDecks,
         switchDecks: switchDecks,
         saveDeck: saveDeck,
-        doSearch: doSearch
+        doSearch: doSearch,
+        renderDeckZone: renderDeckZone,
+        makeCard: makeCard,
+        makeNewDeck: makeNewDeck,
+        usersDecks: usersDecks,
+        activeIndex: activeIndex
     };
 }());
 
