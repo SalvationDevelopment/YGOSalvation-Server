@@ -705,13 +705,13 @@
                     </div>
                 </div>
             </div>
-            <div class="center">
-                <div class="mainDeck"></div>
-                <div class="extraDeck"></div>
-                <div class="sideDeck"></div>
+            <div class="center cardspace">
+                <div class="mainDeck main"></div>
+                <div class="extraDeck extra"></div>
+                <div class="sideDeck side"></div>
             </div>
-            <div class="right">
-                <div class="searchResults">
+            <div class="right cardspace">
+                <div class="searchResults search">
                 </div>
             </div>
         </div>
@@ -1818,6 +1818,7 @@
             <input id="sidechatinput">
         </div>
         <div id="manualcontrols">
+
             <button class="m-deck" onclick="manualRevealDeck()">Reveal Deck</button>
             <button class="m-deck" onclick="manualRevealTop()">Reveal Top Card</button>
             <button class="m-deck" onclick="manualRevealBottom()">Reveal Bottom Card</button>
@@ -1897,6 +1898,13 @@
             <button class="s-toextra" onclick="sidemoveTo('extra')">To Extra Deck</button>
             <button class="s-tomain" onclick="sidemoveTo('main')">To Main Deck</button>
 
+
+            <button class="de-toside" onclick="deckEditor.deckEditorMoveTo('side')">To Side Deck</button>
+            <button class="de-toextra" onclick="deckEditor.deckEditorMoveTo('extra')">To Extra Deck</button>
+            <button class="de-tomain" onclick="deckEditor.deckEditorMoveTo('main')">To Main Deck</button>
+            <button class="de-fromside" onclick="deckEditor.removeCard('side')">To Side Deck</button>
+            <button class="de-fromextra" onclick="deckEditor.removeCard('extra')">To Extra Deck</button>
+            <button class="de-frommain" onclick="deckEditor.removeCard('main')">To Main Deck</button>
 
 
         </div>
@@ -2032,29 +2040,9 @@
 
 
     <script src="js/http-gamelist.js"></script>
-    <script src="js/vendor/jquery-ui.min.js"></script>
-    <script src="js/deckedit/ConfigParser.js"></script>
-    <script src="js/deckedit/parseYDK.js"></script>
-    <script src="js/deckedit/deck-edit-launcher.js"></script>
-    <script src="js/vendor/observe-shim.js"></script>
+    <script src="js/deck-editor.js"></script>
     <script src="js/manual/http-manual.js"></script>
-    <script src="js/automation/enums.js"></script>
-    <!--
-    <script src="js/automation/require.js"></script>
 
-
-    
-   
-
-    <script src="js/automation/sound.js"></script>
-    <script src="js/automation/card.js"></script>
-    <script src="js/automation/receiver.js"></script>
-    <script src="js/automation/reply.js"></script>
-    <script src="js/automation/gui.js"></script>
-    <script src="js/automation/processor.js"></script>
-    <script src="js/automation/Queue.js"></script>
-    <script src="js/automation/ygopro-ws.js"></script>
--->
 
     <header style="padding-top:50px" id="legal">
         <div id="legaldisclaimer">
