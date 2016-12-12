@@ -2,6 +2,57 @@
 /*jslint bitwise: true, plusplus:true*/
 
 
+var databaseSystem = (function () {
+    'use strict';
+    var database = [],
+        dbs = {
+            'OCGTCG': []
+        };
+
+    function onlyUnique(value, index, self) {
+        return self.indexOf(value) === index;
+    }
+
+    function setDatabase(dbs) {
+        var dbsets = dbs.map(function (dbname) {
+                if (dbs[dbname]) {
+                    return dbs[dbname];
+                } else {
+                    return [];
+                }
+            }),
+            listOfCards = [].concat(dbsets);
+
+        database = listOfCards.filter(onlyUnique);
+    }
+
+
+    $.getJSON('http://ygopro.us/manifest/manifest_0-en-OCGTCG.json', function (data) {
+        dbs.OCGTCG = data;
+        setDatabase(['OCGTCG']);
+    });
+
+    $.getJSON('http://ygopro.us/manifest/manifest_1-Anime.json', function (data) {
+        dbs.Anime = data;
+    });
+    $.getJSON('http://ygopro.us/manifest/manifest_3-Goats.json', function (data) {
+
+        dbs.Goats = data;
+    });
+    $.getJSON('http://ygopro.us/manifest/manifest_4-World-Championship.json', function (data) {
+        dbs.Championship = data;
+    });
+    $.getJSON('http://ygopro.us/manifest/manifest_Z-CWA.json', function (data) {
+        dbs.CWA = data;
+    });
+
+
+    return {
+        database: database,
+        swapDB: setDatabase
+    };
+}());
+
 var deckEditorReference = {};
 
 var currentSearchFilter = (function () {
@@ -304,7 +355,7 @@ var currentSearchFilter = (function () {
 
 
     function preformSearch() {
-        currentSearch = filterAll(internalDB, currentFilter);
+        currentSearch = filterAll(databaseSystem.database, currentFilter);
         currentSearchIndex = 0;
     }
 
