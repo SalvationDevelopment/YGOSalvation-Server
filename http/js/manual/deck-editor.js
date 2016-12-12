@@ -1,4 +1,4 @@
-/*global currentMousePos, getCardObject, reorientmenu, cardIs, $*/
+/*global currentMousePos, getCardObject, reorientmenu, cardIs, $, internalDB*/
 /*jslint bitwise: true*/
 
 
@@ -6,7 +6,10 @@
 var deckEditor = (function () {
     'use strict';
     var usersDecks = [],
-        activeIndex = 0;
+        activeIndex = 0,
+        currentSearch = [],
+        currentSearchIndex = 0,
+        currentSearchPageSize = 40;
 
     function makeBlankDeck(name, username, date) {
         return {
@@ -294,7 +297,7 @@ var deckEditor = (function () {
         if (setcode !== undefined) {
 
             var output = cardsf.filter(function (item) {
-                return fSetCode(item, setcode);
+                return fSetcode(item, setcode);
             });
             return output;
         }
@@ -313,6 +316,107 @@ var deckEditor = (function () {
             return output;
         }
     }
+
+
+
+    //As above, but DEF
+    function filterDef(cardsf, def, op) {
+        if (def !== undefined) {
+
+            var output = cardsf.filter(function (item) {
+                return fAtkDef(item, def, 0, op);
+            });
+            return output;
+        }
+    }
+    //Just Level.. Zzz as Atk/Def
+    function filterLevel(cardsf, level, op) {
+        if (level !== undefined) {
+            var output = cardsf.filter(function (item) {
+                return fLevel(item, level, op);
+            });
+            return output;
+        }
+    }
+
+    function filterSetcode(result, setcode) {
+        return result.filter(function (item) {
+            return fSetcode(item, setcode);
+        });
+
+    }
+
+    function filterScale(result, scale, op) {
+        return result.filter(function (item) {
+            return fScale(item, scale, op);
+        });
+    }
+
+    function filterAll(cards, filter) {
+        var cardsf = cards;
+        cardsf = filterName(cardsf, filter.cardname);
+        cardsf = filterDesc(cardsf, filter.description);
+        cardsf = filterType(cardsf, filter.type);
+        cardsf = filterAttribute(cardsf, filter.attribute);
+        cardsf = filterRace(cardsf, filter.race);
+        cardsf = filterSetcode(cardsf, filter.setcode);
+        cardsf = filterAtk(cardsf, filter.atk, 1);
+        cardsf = filterDef(cardsf, filter.def, 1);
+        cardsf = filterLevel(cardsf, filter.level, 1);
+        cardsf = filterScale(cardsf, filter.scale, 1);
+        return cardsf;
+    }
+
+    function getFilter() {
+        return {
+            cardname: undefined,
+            description: undefined,
+            type: undefined,
+            attribute: undefined,
+            race: undefined,
+            setcode: undefined,
+            atk: undefined,
+            level: undefined,
+            scale: undefined
+        };
+    }
+
+    function renderSearch() {
+        var display = currentSearch.slice(currentSearchIndex, currentSearchPageSize);
+        makeCard(display, 'search');
+        return display;
+
+    }
+
+    function pageForward() {
+        var attempted = currentSearchIndex + currentSearchPageSize;
+        if (attempted > currentSearch.length) {
+            currentSearchIndex = currentSearch.length - currentSearchPageSize;
+            renderSearch();
+            return;
+        }
+        currentSearchIndex = attempted;
+        renderSearch();
+    }
+
+    function pageBack() {
+        var attempted = currentSearchIndex - currentSearchPageSize;
+        if (0 > attempted) {
+            currentSearchIndex = 0;
+            renderSearch();
+            return;
+        }
+        currentSearchIndex = attempted;
+        renderSearch();
+    }
+
+    function preformSearch() {
+        var filter = getFilter();
+        currentSearch = filterAll(internalDB, filter);
+        currentSearchIndex = 0;
+        renderSearch();
+    }
+
     return {
         updateDeckSelect: updateDeckSelect
     };
