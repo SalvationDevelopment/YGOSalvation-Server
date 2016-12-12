@@ -417,6 +417,16 @@ var deckEditor = (function () {
         renderSearch();
     }
 
+    function saveDeck() {}
+
+    function loadDecks() {}
+
+    function switchDecks() {}
+
+    function clearCurrentDeck() {}
+
+    function deleteDeck() {}
+
     return {
         updateDeckSelect: updateDeckSelect
     };
