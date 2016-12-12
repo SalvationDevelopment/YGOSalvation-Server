@@ -1,106 +1,32 @@
-/*global currentMousePos, getCardObject, reorientmenu, cardIs, $, internalDB*/
-/*jslint bitwise: true*/
+/*global currentMousePos, getCardObject, reorientmenu, cardIs, $, internalDB, primus*/
+/*jslint bitwise: true, plusplus:true*/
 
 
+var deckEditorReference = {};
 
-var deckEditor = (function () {
+var currentSearchFilter = (function () {
     'use strict';
-    var usersDecks = [],
-        activeIndex = 0,
-        currentSearch = [],
-        currentSearchIndex = 0,
-        currentSearchPageSize = 40;
 
-    function makeBlankDeck(name, username, date) {
+    function getFilter() {
         return {
-            main: [],
-            extra: [],
-            side: [],
-            name: [],
-            creator: username,
-            creationDate: date
+            cardname: undefined,
+            description: undefined,
+            type: undefined,
+            attribute: undefined,
+            race: undefined,
+            setcode: undefined,
+            atk: undefined,
+            level: undefined,
+            scale: undefined
         };
     }
 
-    function makeNewDeck(name) {
-        usersDecks.push(makeBlankDeck(name, localStorage.nickname, new Date()));
-        return usersDecks[usersDecks.length - 1];
-    }
+    var currentSearch = [],
+        currentSearchIndex = 0,
+        currentSearchPageSize = 40,
+        currentFilter = getFilter(),
+        render = [];
 
-    function updateDeckSelect() {
-        var text = '';
-        usersDecks.forEach(function (deck, index) {
-            text += '<option data-index=' + index + '>' + deck.name + '</option>';
-        });
-        return text;
-    }
-
-    function makeCard(cards, zone) {
-        var html = '';
-        cards.forEach(function (card, index) {
-            var hardcard = JSON.stringify(card),
-                src = 'ygopro/pics/' + card + '.jpg';
-            html += '<img class="deckeditcard card" src="http://ygopro.us/' + src + '" data-"' + card + '" onclick = "deckeditonclick(' + index + ', \'' + zone + '\')" / > ';
-        });
-
-        $('#deckedit .cardspace .' + zone).html(html);
-        //$('#subreveal').width(cards.length * 197);
-    }
-
-    function deckeditonclick(index, zone) {
-
-
-        $('#manualcontrols button').css({
-            'display': 'none'
-        });
-
-        $('#manualcontrols').css({
-            'top': currentMousePos.y,
-            'left': currentMousePos.x,
-            'display': 'block'
-        });
-        var sideReference = {
-                id: usersDecks[activeIndex][zone][index],
-                zone: zone,
-                index: index
-            },
-            dbEntry = getCardObject(parseInt(sideReference.id, 10));
-        if (sideReference.zone === 'main') {
-            $('.de-toside, .de-remove').css({
-                'display': 'block'
-            });
-
-        }
-        if (sideReference.zone === 'extra') {
-            $('.de-toside, .de-remove').css({
-                'display': 'block'
-            });
-        }
-        if (sideReference.zone === 'side') {
-            if (cardIs('xyz', dbEntry) || cardIs('fusion', dbEntry) || cardIs('synchro', dbEntry)) {
-                $('.de-toextra, .de-remove').css({
-                    'display': 'block'
-                });
-            } else {
-                $('.de-tomain, .de-remove').css({
-                    'display': 'block'
-                });
-            }
-        }
-        if (sideReference.zone === 'search') {
-            if (cardIs('xyz', dbEntry) || cardIs('fusion', dbEntry) || cardIs('synchro', dbEntry)) {
-                $('.de-toextra').css({
-                    'display': 'block'
-                });
-            } else {
-                $('.de-tomain').css({
-                    'display': 'block'
-                });
-            }
-        }
-        reorientmenu();
-        return;
-    }
 
     //-----------------------
     //FILTERS BEIGN HERE
@@ -234,6 +160,7 @@ var deckEditor = (function () {
             });
             return output;
         }
+        return cardsf;
     }
 
     //Filters effect or flavor texts for the txt string
@@ -245,6 +172,7 @@ var deckEditor = (function () {
             });
             return output;
         }
+        return cardsf;
     }
 
     // Returns all cards that have all the types input.
@@ -256,6 +184,7 @@ var deckEditor = (function () {
             });
             return output;
         }
+        return cardsf;
     }
 
     //Attribute must matcht he arg.
@@ -267,6 +196,7 @@ var deckEditor = (function () {
             });
             return output;
         }
+        return cardsf;
     }
 
     //Returns Cards whose race matches the arg.
@@ -278,6 +208,7 @@ var deckEditor = (function () {
             });
             return output;
         }
+        return cardsf;
     }
 
     //SC is setcode in decimal. This handles all possible combinations.
@@ -301,6 +232,7 @@ var deckEditor = (function () {
             });
             return output;
         }
+        return cardsf;
     }
 
     //OP here functions just as in the previous function.
@@ -315,6 +247,7 @@ var deckEditor = (function () {
             });
             return output;
         }
+        return cardsf;
     }
 
 
@@ -328,6 +261,7 @@ var deckEditor = (function () {
             });
             return output;
         }
+        return cardsf;
     }
     //Just Level.. Zzz as Atk/Def
     function filterLevel(cardsf, level, op) {
@@ -337,6 +271,7 @@ var deckEditor = (function () {
             });
             return output;
         }
+        return cardsf;
     }
 
     function filterSetcode(result, setcode) {
@@ -354,38 +289,28 @@ var deckEditor = (function () {
 
     function filterAll(cards, filter) {
         var cardsf = cards;
-        cardsf = filterName(cardsf, filter.cardname);
-        cardsf = filterDesc(cardsf, filter.description);
-        cardsf = filterType(cardsf, filter.type);
-        cardsf = filterAttribute(cardsf, filter.attribute);
-        cardsf = filterRace(cardsf, filter.race);
-        cardsf = filterSetcode(cardsf, filter.setcode);
-        cardsf = filterAtk(cardsf, filter.atk, 1);
-        cardsf = filterDef(cardsf, filter.def, 1);
-        cardsf = filterLevel(cardsf, filter.level, 1);
-        cardsf = filterScale(cardsf, filter.scale, 1);
+        cardsf = filterName(cardsf, filter.cardname) || cardsf;
+        cardsf = filterDesc(cardsf, filter.description) || cardsf;
+        cardsf = filterType(cardsf, filter.type) || cardsf;
+        cardsf = filterAttribute(cardsf, filter.attribute) || cardsf;
+        cardsf = filterRace(cardsf, filter.race) || cardsf;
+        cardsf = filterSetcode(cardsf, filter.setcode) || cardsf;
+        cardsf = filterAtk(cardsf, filter.atk, 1) || cardsf;
+        cardsf = filterDef(cardsf, filter.def, 1) || cardsf;
+        cardsf = filterLevel(cardsf, filter.level, 1) || cardsf;
+        cardsf = filterScale(cardsf, filter.scale, 1) || cardsf;
         return cardsf;
     }
 
-    function getFilter() {
-        return {
-            cardname: undefined,
-            description: undefined,
-            type: undefined,
-            attribute: undefined,
-            race: undefined,
-            setcode: undefined,
-            atk: undefined,
-            level: undefined,
-            scale: undefined
-        };
+
+    function preformSearch() {
+        currentSearch = filterAll(internalDB, currentFilter);
+        currentSearchIndex = 0;
     }
 
     function renderSearch() {
-        var display = currentSearch.slice(currentSearchIndex, currentSearchPageSize);
-        makeCard(display, 'search');
-        return display;
-
+        render = currentSearch.slice(currentSearchIndex, currentSearchPageSize);
+        return render;
     }
 
     function pageForward() {
@@ -410,24 +335,223 @@ var deckEditor = (function () {
         renderSearch();
     }
 
-    function preformSearch() {
-        var filter = getFilter();
-        currentSearch = filterAll(internalDB, filter);
-        currentSearchIndex = 0;
-        renderSearch();
+    function setFilter(prop, value) {
+        if (!value && value !== 0) {
+            return;
+        }
+        currentFilter[prop] = value;
+        preformSearch();
     }
 
-    function saveDeck() {}
+    function clearFilter() {
+        currentFilter = getFilter();
+        currentSearchIndex = 0;
+        preformSearch();
+    }
 
-    function loadDecks() {}
+    return {
+        render: render,
+        setFilter: setFilter,
+        clearFilter: clearFilter,
+        pageForward: pageForward,
+        pageBack: pageBack,
+        currentSearchIndex: currentSearchIndex
+    };
+}());
 
-    function switchDecks() {}
+var deckEditor = (function () {
+    'use strict';
+    var inmemoryDeck = {},
+        usersDecks = [],
+        activeIndex = 0;
 
-    function clearCurrentDeck() {}
+    function makeBlankDeck(name, username, date) {
+        return {
+            main: [],
+            extra: [],
+            side: [],
+            name: [],
+            creator: username,
+            creationDate: date
+        };
+    }
 
-    function deleteDeck() {}
+    function makeNewDeck(name) {
+        usersDecks.push(makeBlankDeck(name, localStorage.nickname, new Date()));
+        return usersDecks[usersDecks.length - 1];
+    }
+
+    function updateDeckSelect() {
+        var text = '';
+        usersDecks.forEach(function (deck, index) {
+            text += '<option data-index=' + index + '>' + deck.name + '</option>';
+        });
+        return text;
+    }
+
+    function makeCard(cards, zone) {
+        var html = '';
+        cards.forEach(function (card, index) {
+            var hardcard = JSON.stringify(card),
+                src = 'ygopro/pics/' + card + '.jpg';
+            html += '<img class="deckeditcard card" src="http://ygopro.us/' + src + '" data-"' + card + '" onclick = "deckeditonclick(' + index + ', \'' + zone + '\')" / > ';
+        });
+
+        $('#deckedit .cardspace .' + zone).html(html);
+        //$('#subreveal').width(cards.length * 197);
+    }
+
+    function renderDeckZone(deck) {
+
+        makeCard(deck.main, 'main');
+        makeCard(deck.extra, 'extra');
+        makeCard(deck.side, 'side');
+
+        var floatMarkerMain = '',
+            floatMarkerExtra = '',
+            floatMarkerSide = '';
+
+        if (deck.main.length > 40) {
+            floatMarkerMain = 's50';
+        }
+        if (deck.main.length > 59) {
+            floatMarkerMain = 's60';
+        }
+        if (deck.extra.length > 10) {
+            floatMarkerExtra = 's60';
+        }
+        if (deck.side.length > 10) {
+            floatMarkerSide = 's60';
+        }
+
+        $('#deckedit .cardspace .main').attr('floatmarker', floatMarkerMain);
+        $('#deckedit .cardspace .extra').attr('floatmarker', floatMarkerExtra);
+        $('#deckedit .cardspace .side').attr('floatmarker', floatMarkerSide);
+    }
+
+
+    function doSearch() {
+        makeCard(currentSearchFilter.render, 'search');
+    }
+
+
+
+    function saveDeck() {
+        usersDecks[activeIndex] = JSON.parse(JSON.stringify(inmemoryDeck));
+        primus.write({
+            action: 'saveDeck',
+            decks: usersDecks
+        });
+    }
+
+    function switchDecks(index) {
+        activeIndex = index;
+        renderDeckZone(usersDecks[activeIndex]);
+        inmemoryDeck = JSON.parse(JSON.stringify(usersDecks[activeIndex]));
+    }
+
+    function loadDecks(decks) {
+        usersDecks = decks || [makeNewDeck('New Deck')];
+        switchDecks(activeIndex);
+    }
+
+
+
+    function clearCurrentDeck() {
+        usersDecks[activeIndex] = makeNewDeck(usersDecks[activeIndex].name);
+    }
+
+    function deleteDeck() {
+        primus.write({
+            action: 'deleteDeck',
+            decks: usersDecks[activeIndex]
+        });
+    }
+
+    function moveInArray(array, old_index, new_index) {
+        if (new_index >= array.length) {
+            var k = new_index - array.length;
+            while ((k--) + 1) {
+                array.push(undefined);
+            }
+        }
+        array.splice(new_index, 0, array.splice(old_index, 1)[0]);
+        return array; // for testing purposes
+    }
+
+    function deckEditorMoveTo(deck) {
+        moveInArray(inmemoryDeck[deckEditorReference.zone], deckEditorReference.index, 0);
+        var card = inmemoryDeck[deckEditorReference.zone].shift();
+        inmemoryDeck[deck].push(card);
+
+        renderDeckZone(inmemoryDeck);
+
+    }
+
+    function addCardFromSearch(deck) {
+        inmemoryDeck[deck].push(deckEditorReference);
+        renderDeckZone(inmemoryDeck);
+
+    }
 
     return {
         updateDeckSelect: updateDeckSelect
     };
 }());
+
+
+function deckeditonclick(index, zone) {
+
+    'use strict';
+    $('#manualcontrols button').css({
+        'display': 'none'
+    });
+
+    $('#manualcontrols').css({
+        'top': currentMousePos.y,
+        'left': currentMousePos.x,
+        'display': 'block'
+    });
+    deckEditorReference = {
+        id: deckEditor.inmemoryDeck[zone][index],
+        zone: zone,
+        index: index
+    };
+
+    var dbEntry = getCardObject(parseInt(deckEditorReference.id, 10));
+    if (deckEditorReference.zone === 'main') {
+        $('.de-toside, .de-remove').css({
+            'display': 'block'
+        });
+
+    }
+    if (deckEditorReference.zone === 'extra') {
+        $('.de-toside, .de-remove').css({
+            'display': 'block'
+        });
+    }
+    if (deckEditorReference.zone === 'side') {
+        if (cardIs('xyz', dbEntry) || cardIs('fusion', dbEntry) || cardIs('synchro', dbEntry)) {
+            $('.de-toextra, .de-remove').css({
+                'display': 'block'
+            });
+        } else {
+            $('.de-tomain, .de-remove').css({
+                'display': 'block'
+            });
+        }
+    }
+    if (deckEditorReference.zone === 'search') {
+        if (cardIs('xyz', dbEntry) || cardIs('fusion', dbEntry) || cardIs('synchro', dbEntry)) {
+            $('.de-toextra').css({
+                'display': 'block'
+            });
+        } else {
+            $('.de-tomain').css({
+                'display': 'block'
+            });
+        }
+    }
+    reorientmenu();
+    return;
+}
