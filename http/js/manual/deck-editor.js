@@ -494,8 +494,32 @@ var deckEditor = (function () {
 
     }
 
+    function createNewDeck() {
+        var deckName = prompt('New Deck Name?', 'New Deck'),
+            deckCheck = usersDecks.filter(function (deck) {
+                return (deck.name === deckName);
+            });
+
+        if (deckCheck.length) {
+            alert('Deck Name Already Exist');
+            return;
+        }
+
+        usersDecks.push(makeBlankDeck(deckName));
+        switchDecks(usersDecks.length - 1);
+        saveDeck();
+    }
+
     return {
-        updateDeckSelect: updateDeckSelect
+        updateDeckSelect: updateDeckSelect,
+        addCardFromSearch: addCardFromSearch,
+        deckEditorMoveTo: deckEditorMoveTo,
+        deleteDeck: deleteDeck,
+        clearCurrentDeck: clearCurrentDeck,
+        loadDecks: loadDecks,
+        switchDecks: switchDecks,
+        saveDeck: saveDeck,
+        doSearch: doSearch
     };
 }());
 
