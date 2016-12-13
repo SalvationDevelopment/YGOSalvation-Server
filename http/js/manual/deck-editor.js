@@ -592,10 +592,15 @@ var deckEditor = (function () {
     };
 }());
 
-
+/**
+ * Opens action menu and sets deck edit card reference.
+ * @param {Number} index of card being clicked
+ * @param {Number} zone  zone card was clicked in.
+ */
 function deckeditonclick(index, zone) {
 
     'use strict';
+
     $('#manualcontrols button').css({
         'display': 'none'
     });
@@ -611,38 +616,29 @@ function deckeditonclick(index, zone) {
         index: index
     };
 
-    var dbEntry = getCardObject(parseInt(deckEditorReference.id, 10));
-    if (deckEditorReference.zone === 'main') {
-        $('.de-toside, .de-frommain').css({
+    var dbEntry = getCardObject(parseInt(deckEditorReference.id, 10)),
+        viewable = {
             'display': 'block'
-        });
+        };
+    if (zone === 'main') {
+        $('.de-toside, .de-frommain').css(viewable);
 
     }
-    if (deckEditorReference.zone === 'extra') {
-        $('.de-toside, .de-fromextra').css({
-            'display': 'block'
-        });
+    if (zone === 'extra') {
+        $('.de-toside, .de-fromextra').css(viewable);
     }
-    if (deckEditorReference.zone === 'side') {
+    if (zone === 'side') {
         if (cardIs('xyz', dbEntry) || cardIs('fusion', dbEntry) || cardIs('synchro', dbEntry)) {
-            $('.de-toextra, .de-fromextra').css({
-                'display': 'block'
-            });
+            $('.de-toextra, .de-fromextra').css(viewable);
         } else {
-            $('.de-tomain, .de-fromextra').css({
-                'display': 'block'
-            });
+            $('.de-tomain, .de-fromextra').css(viewable);
         }
     }
-    if (deckEditorReference.zone === 'search') {
+    if (zone === 'search') {
         if (cardIs('xyz', dbEntry) || cardIs('fusion', dbEntry) || cardIs('synchro', dbEntry)) {
-            $('.de-toextra, .de-toside').css({
-                'display': 'block'
-            });
+            $('.de-toextra, .de-toside').css(viewable);
         } else {
-            $('.de-tomain, .de-toside').css({
-                'display': 'block'
-            });
+            $('.de-tomain, .de-toside').css(viewable);
         }
     }
     reorientmenu();
