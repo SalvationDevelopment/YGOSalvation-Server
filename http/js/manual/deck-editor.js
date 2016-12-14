@@ -10,6 +10,10 @@ function cardStackSort(db) {
     }
     var result,
         monsters = db.filter(function (card) {
+            // filter out Tokens
+            if (card.type === 16401 || card.type === 16417) {
+                return false;
+            }
             return cardIs('monster', card);
         }),
         spells = db.filter(function (card) {
