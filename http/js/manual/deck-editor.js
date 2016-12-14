@@ -9,6 +9,11 @@ var databaseSystem = (function () {
             'OCGTCG': []
         };
 
+    /**
+     * Filters duplicate cards out
+     * @param   {Array[Object]} list of cards.
+     * @returns {Array[Object]} filtered list
+     */
     function filterCards(list) {
         var map = {},
             result = [];
@@ -22,10 +27,19 @@ var databaseSystem = (function () {
         return result;
     }
 
+    /**
+     * Exposes the current Database.
+     * @returns {Array[Object]} array of cards.
+     */
     function getDB() {
         return database;
     }
 
+    /**
+     * Sets the current database based on DB names given.
+     * @param   {Array[String]} set array of DB names
+     * @returns {Array[Object]}    returns array of cards
+     */
     function setDatabase(set) {
         var dbsets = set.map(function (dbname) {
                 if (dbs[dbname]) {
@@ -37,9 +51,7 @@ var databaseSystem = (function () {
             listOfCards = dbsets.reduce(function (a, b) {
                 return a.concat(b);
             }, []);
-        console.log(listOfCards.length);
         database = filterCards(listOfCards);
-        console.log(database.length);
     }
 
 
@@ -75,6 +87,10 @@ var deckEditorReference = {};
 var currentSearchFilter = (function () {
     'use strict';
 
+    /**
+     * Card Filteration Object
+     * @returns {object} [[Description]]
+     */
     function getFilter() {
         return {
             cardname: undefined,
@@ -557,6 +573,24 @@ var deckEditor = (function () {
         return array; // for testing purposes
     }
 
+    function checkLegality(card) {
+        function checkCard(reference) {
+            var id = card.alias || card.id;
+            if (reference.id === id || reference.alias === id) {
+                return false;
+            }
+            return true;
+        }
+        var mainCount = inmemoryDeck.main.filter(checkCard).length,
+            extraCount = inmemoryDeck.extra.filter(checkCard).length,
+            sideCount = inmemoryDeck.side.filter(checkCard).length;
+
+        if (mainCount + extraCount + sideCount >= 3) {
+            return false;
+        }
+        return true;
+    }
+
     function deckEditorMoveTo(deck) {
         moveInArray(inmemoryDeck[deckEditorReference.zone], deckEditorReference.index, 0);
         var card = inmemoryDeck[deckEditorReference.zone].shift();
@@ -567,18 +601,25 @@ var deckEditor = (function () {
     }
 
     function addCardFromSearch(deck) {
+        if (!checkLegality(deckEditorReference)) {
+            return;
+        }
         inmemoryDeck[deck].push(deckEditorReference);
         renderDeckZone(inmemoryDeck);
 
     }
 
     function removeCard(deck) {
-        inmemoryDeck[deck].splice(deckEditorReference.index, 1);
+        inmemoryDeck[deckEditorReference.zone].splice(deckEditorReference.index, 1);
         renderDeckZone(inmemoryDeck);
 
     }
 
     function createNewDeck() {
+        if (usersDecks.length > 60) {
+            // obviously lying.
+            alert('You own more than 60 decks. We cant store that many for you!');
+        }
         var deckName = prompt('New Deck Name?', 'New Deck'),
             deckCheck = usersDecks.filter(function (deck) {
                 return (deck.name === deckName);
