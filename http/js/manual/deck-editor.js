@@ -606,7 +606,15 @@ var deckEditor = (function () {
 
 
     function doSearch() {
-        var search = currentSearchFilter.getRender();
+        var search,
+            cardname = $('.nameInput').val();
+        console.log(name);
+        currentSearchFilter.clearFilter();
+
+        if (name) {
+            currentSearchFilter.setFilter('cardname', cardname);
+        }
+        search = currentSearchFilter.getRender();
         deckEditor.inmemoryDeck.search = search;
         makeCard(search, 'search');
     }
