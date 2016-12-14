@@ -483,6 +483,7 @@ var currentSearchFilter = (function () {
 
     function pageForward() {
         var attempted = currentSearchIndex + currentSearchPageSize;
+        console.log(attempted, currentSearchIndex, currentSearchPageSize, currentSearch.length);
         if (attempted > currentSearch.length) {
             currentSearchIndex = currentSearch.length - currentSearchPageSize;
             renderSearch();
@@ -517,10 +518,11 @@ var currentSearchFilter = (function () {
         preformSearch();
     }
 
-    function getRender() {
-        preformSearch();
-        renderSearch();
-        return render;
+    function getRender(newSearch) {
+        if (newSearch || currentSearch.length === 0) {
+            preformSearch();
+        }
+        return currentSearch.slice(currentSearchIndex, currentSearchIndex + currentSearchPageSize);
     }
     return {
         preformSearch: preformSearch,
@@ -604,21 +606,25 @@ var deckEditor = (function () {
 
 
     function doSearch() {
-        var search,
-            cardname = $('.nameInput').val(),
+        var search = currentSearchFilter.getRender();
+        deckEditor.inmemoryDeck.search = search;
+        makeCard(search, 'search');
+    }
+
+    function doNewSearch() {
+
+        var cardname = $('.nameInput').val(),
             description = $('.descInput').val();
 
         currentSearchFilter.clearFilter();
-
+        currentSearchFilter.getRender(true);
         if (cardname) {
             currentSearchFilter.setFilter('cardname', cardname);
         }
         if (description) {
             currentSearchFilter.setFilter('description', description);
         }
-        search = currentSearchFilter.getRender();
-        deckEditor.inmemoryDeck.search = search;
-        makeCard(search, 'search');
+        doSearch();
     }
 
 
@@ -666,7 +672,7 @@ var deckEditor = (function () {
         return array; // for testing purposes
     }
 
-    function checkLegality(card) {
+    function checkLegality(card, deck) {
         function checkCard(reference) {
             var id = card.alias || card.id;
             if (reference.id === id || reference.alias === id) {
@@ -681,10 +687,30 @@ var deckEditor = (function () {
         if (mainCount + extraCount + sideCount >= 3) {
             return false;
         }
+        if (deck === 'main' && inmemoryDeck[deck].length >= 60) {
+            return false;
+        }
+        if (deck === 'side' && inmemoryDeck[deck].length >= 15) {
+            return false;
+        }
+        if (deck === 'extra' && inmemoryDeck[deck].length >= 15) {
+            return false;
+        }
         return true;
     }
 
+    function spaceCheck() {}
+
     function deckEditorMoveTo(deck) {
+        if (deck === 'main' && inmemoryDeck[deck].length >= 60) {
+            return false;
+        }
+        if (deck === 'side' && inmemoryDeck[deck].length >= 15) {
+            return false;
+        }
+        if (deck === 'extra' && inmemoryDeck[deck].length >= 15) {
+            return false;
+        }
         moveInArray(inmemoryDeck[deckEditorReference.zone], deckEditorReference.index, 0);
         var card = inmemoryDeck[deckEditorReference.zone].shift();
         inmemoryDeck[deck].push(card);
@@ -694,7 +720,7 @@ var deckEditor = (function () {
     }
 
     function addCardFromSearch(deck) {
-        if (!checkLegality(deckEditorReference)) {
+        if (!checkLegality(deckEditorReference, deck)) {
             return;
         }
         inmemoryDeck[deck].push(deckEditorReference);
@@ -748,7 +774,8 @@ var deckEditor = (function () {
         makeCard: makeCard,
         makeNewDeck: makeNewDeck,
         usersDecks: usersDecks,
-        activeIndex: activeIndex
+        activeIndex: activeIndex,
+        doNewSearch: doNewSearch
     };
 }());
 

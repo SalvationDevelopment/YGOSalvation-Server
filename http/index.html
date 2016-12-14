@@ -700,8 +700,8 @@
                             <input class="descInput" type="text" data-input-desc>
                         </label>
                         <br />
-                        <button class="clearForm" onclick="currentSearchFilter.clearFilter();">Reset Filter</button>
-                        <button class="searchButton" onclick="deckEditor.doSearch()">Search</button>
+                        <button class="clearForm" onclick="currentSearchFilter.clearFilter();deckEditor.doNewSearch();">Reset Filter</button>
+                        <button class="searchButton" onclick="deckEditor.doNewSearch();">Search</button>
                     </div>
                 </div>
             </div>
@@ -713,44 +713,48 @@
             <div class="right cardspace">
                 <div class="searchResults search">
                 </div>
+                <div id="pagebuttons">
+                    <div onclick="currentSearchFilter.pageBack(); deckEditor.doSearch();">&lt;&lt;&lt;</div>
+                    <div onclick="currentSearchFilter.pageForward(); deckEditor.doSearch();">&gt;&gt;&gt;</div>
+                </div>
             </div>
         </div>
     </header>
-    <header style="padding-top:50px" id="chat">
+    <header style=" padding-top:50px " id="chat ">
 
     </header>
-    <header style="padding-top:50px" id="faq">
-        <div id="news"></div>
-        <div style="color:white; width:600px; margin:0 auto;" id="list">
+    <header style="padding-top:50px " id="faq ">
+        <div id="news "></div>
+        <div style="color:white; width:600px; margin:0 auto; " id="list ">
 
         </div>
         <!--
-        <audio id="podcast" style="width:100%" controls />
-            <source src="yugioh-ft-dj-harmony-your-move.ogg" type="audio/ogg">
+        <audio id="podcast " style="width:100% " controls />
+            <source src="yugioh-ft-dj-harmony-your-move.ogg " type="audio/ogg ">
         </audio>
 -->
     </header>
-    <header style="padding-top:50px" id="events">
-        <div id="eventsandtournaments" style="overflow-y:scroll"></div>
+    <header style="padding-top:50px " id="events ">
+        <div id="eventsandtournaments " style="overflow-y:scroll "></div>
     </header>
-    <header style="padding-top:50px" id="replay">
+    <header style="padding-top:50px " id="replay ">
 
     </header>
-    <header style="padding-top:50px" id="popup">
-        <div id="popupbody" style="color:white; text-align : center; margin-top: 10vh; font-size: 2em;">
+    <header style="padding-top:50px " id="popup ">
+        <div id="popupbody " style="color:white; text-align : center; margin-top: 10vh; font-size: 2em; ">
 
         </div>
     </header>
-    <header style="padding-top:50px; color:white" id="achievementprofile">
-        <div class="rankingcolumn">
+    <header style="padding-top:50px; color:white " id="achievementprofile ">
+        <div class="rankingcolumn ">
             <h2>Profile</h2>
-            <div id="profileblock"> <img id="avatar" />
-                <label id="profileusername"></label>
-                <label id="profilepoints">Ranked Play Score :<span>0</span>
+            <div id="profileblock "> <img id="avatar " />
+                <label id="profileusername "></label>
+                <label id="profilepoints ">Ranked Play Score :<span>0</span>
                 </label>
             </div>
 
-            <div id="achievements">
+            <div id="achievements ">
                 <h3>Achievements</h3>
                 <label> <span>Locked</span>Defeat AccessDenied in a Shadow Duel
                 </label>
@@ -787,259 +791,259 @@
 
             </div>
         </div>
-        <div class="rankingcolumn">
+        <div class="rankingcolumn ">
             <h2>High Scores</h2>
         </div>
     </header>
-    <header style="padding-top:50px" id="admin">
+    <header style="padding-top:50px " id="admin ">
         <div>
             <label>End Game Number</label>
-            <input type="text">
+            <input type="text ">
             <button>Kill</button>
             <label>Kick User</label>
-            <input type="text">
+            <input type="text ">
             <button>Murder</button>
             <label>Shutdown Server</label>
-            <input type="text">
+            <input type="text ">
             <button>Commit Genocide</button>
         </div>
     </header>
-    <header style="padding-top:50px" id="TournamentACP">
-        <div id="brackets">
-            <div id="tourney_rd1" class="tourney_col">
-                <div id="col_1_user1" class="entry">
+    <header style="padding-top:50px " id="TournamentACP ">
+        <div id="brackets ">
+            <div id="tourney_rd1 " class="tourney_col ">
+                <div id="col_1_user1 " class="entry ">
 
                     <button>Register</button>
                     <button>Unregister</button>
-                    <input class="entryname">
-                    <button class="lose">Loser</button>
-                    <button class="win">Winner</button>
+                    <input class="entryname ">
+                    <button class="lose ">Loser</button>
+                    <button class="win ">Winner</button>
                 </div>
-                <div id="col_1_user2" class="entry">
+                <div id="col_1_user2 " class="entry ">
 
                     <button>Register</button>
                     <button>Unregister</button>
-                    <input class="entryname">
-                    <button class="lose">Loser</button>
-                    <button class="win">Winner</button>
+                    <input class="entryname ">
+                    <button class="lose ">Loser</button>
+                    <button class="win ">Winner</button>
                 </div>
-                <div id="col_1_user3" class="entry">
+                <div id="col_1_user3 " class="entry ">
 
                     <button>Register</button>
                     <button>Unregister</button>
-                    <input class="entryname">
-                    <button class="lose">Loser</button>
-                    <button class="win">Winner</button>
+                    <input class="entryname ">
+                    <button class="lose ">Loser</button>
+                    <button class="win ">Winner</button>
                 </div>
-                <div id="col_1_user4" class="entry">
+                <div id="col_1_user4 " class="entry ">
 
 
                     <button>Register</button>
                     <button>Unregister</button>
-                    <input class="entryname">
-                    <button class="lose">Loser</button>
-                    <button class="win">Winner</button>
+                    <input class="entryname ">
+                    <button class="lose ">Loser</button>
+                    <button class="win ">Winner</button>
                 </div>
-                <div id="col_1_user5" class="entry">
+                <div id="col_1_user5 " class="entry ">
 
                     <button>Register</button>
                     <button>Unregister</button>
-                    <input class="entryname">
-                    <button class="lose">Loser</button>
-                    <button class="win">Winner</button>
+                    <input class="entryname ">
+                    <button class="lose ">Loser</button>
+                    <button class="win ">Winner</button>
                 </div>
-                <div id="col_1_user6" class="entry">
+                <div id="col_1_user6 " class="entry ">
 
                     <button>Register</button>
                     <button>Unregister</button>
-                    <input class="entryname">
-                    <button class="lose">Loser</button>
-                    <button class="win">Winner</button>
+                    <input class="entryname ">
+                    <button class="lose ">Loser</button>
+                    <button class="win ">Winner</button>
                 </div>
-                <div id="col_1_user7" class="entry">
+                <div id="col_1_user7 " class="entry ">
 
 
                     <button>Register</button>
                     <button>Unregister</button>
-                    <input class="entryname">
-                    <button class="lose">Loser</button>
-                    <button class="win">Winner</button>
+                    <input class="entryname ">
+                    <button class="lose ">Loser</button>
+                    <button class="win ">Winner</button>
                 </div>
-                <div id="col_1_user8" class="entry">
+                <div id="col_1_user8 " class="entry ">
 
                     <button>Register</button>
                     <button>Unregister</button>
-                    <input class="entryname">
-                    <button class="lose">Loser</button>
-                    <button class="win">Winner</button>
+                    <input class="entryname ">
+                    <button class="lose ">Loser</button>
+                    <button class="win ">Winner</button>
                 </div>
-                <div id="col_1_user9" class="entry">
+                <div id="col_1_user9 " class="entry ">
 
                     <button>Register</button>
                     <button>Unregister</button>
-                    <input class="entryname">
-                    <button class="lose">Loser</button>
-                    <button class="win">Winner</button>
+                    <input class="entryname ">
+                    <button class="lose ">Loser</button>
+                    <button class="win ">Winner</button>
                 </div>
-                <div id="col_1_user10" class="entry">
+                <div id="col_1_user10 " class="entry ">
 
 
                     <button>Register</button>
                     <button>Unregister</button>
-                    <input class="entryname">
-                    <button class="lose">Loser</button>
-                    <button class="win">Winner</button>
+                    <input class="entryname ">
+                    <button class="lose ">Loser</button>
+                    <button class="win ">Winner</button>
                 </div>
-                <div id="col_1_user11" class="entry">
+                <div id="col_1_user11 " class="entry ">
 
                     <button>Register</button>
                     <button>Unregister</button>
-                    <input class="entryname">
-                    <button class="lose">Loser</button>
-                    <button class="win">Winner</button>
+                    <input class="entryname ">
+                    <button class="lose ">Loser</button>
+                    <button class="win ">Winner</button>
                 </div>
-                <div id="col_1_user12" class="entry">
+                <div id="col_1_user12 " class="entry ">
 
 
                     <button>Register</button>
                     <button>Unregister</button>
-                    <input class="entryname">
-                    <button class="lose">Loser</button>
-                    <button class="win">Winner</button>
+                    <input class="entryname ">
+                    <button class="lose ">Loser</button>
+                    <button class="win ">Winner</button>
                 </div>
-                <div id="col_1_user13" class="entry">
+                <div id="col_1_user13 " class="entry ">
 
 
                     <button>Register</button>
                     <button>Unregister</button>
-                    <input class="entryname">
-                    <button class="lose">Loser</button>
-                    <button class="win">Winner</button>
+                    <input class="entryname ">
+                    <button class="lose ">Loser</button>
+                    <button class="win ">Winner</button>
                 </div>
-                <div id="col_1_user14" class="entry">
+                <div id="col_1_user14 " class="entry ">
 
                     <button>Register</button>
                     <button>Unregister</button>
-                    <input class="entryname">
-                    <button class="lose">Loser</button>
-                    <button class="win">Winner</button>
+                    <input class="entryname ">
+                    <button class="lose ">Loser</button>
+                    <button class="win ">Winner</button>
                 </div>
-                <div id="col_1_user15" class="entry">
+                <div id="col_1_user15 " class="entry ">
 
 
                     <button>Register</button>
                     <button>Unregister</button>
-                    <input class="entryname">
-                    <button class="lose">Loser</button>
-                    <button class="win">Winner</button>
+                    <input class="entryname ">
+                    <button class="lose ">Loser</button>
+                    <button class="win ">Winner</button>
                 </div>
-                <div id="col_1_user16" class="entry">
+                <div id="col_1_user16 " class="entry ">
 
 
                     <button>Register</button>
                     <button>Unregister</button>
-                    <input class="entryname">
-                    <button class="lose">Loser</button>
-                    <button class="win">Winner</button>
+                    <input class="entryname ">
+                    <button class="lose ">Loser</button>
+                    <button class="win ">Winner</button>
                 </div>
             </div>
-            <div id="tourney_rd2" class="tourney_col">
-                <div id="col_2_user1" class="entry">
-                    <input class="entryname">
-                    <button class="lose">Loser</button>
-                    <button class="win">Winner</button>
+            <div id="tourney_rd2 " class="tourney_col ">
+                <div id="col_2_user1 " class="entry ">
+                    <input class="entryname ">
+                    <button class="lose ">Loser</button>
+                    <button class="win ">Winner</button>
                 </div>
-                <div id="col_2_user2" class="entry">
-                    <input class="entryname">
-                    <button class="lose">Loser</button>
-                    <button class="win">Winner</button>
+                <div id="col_2_user2 " class="entry ">
+                    <input class="entryname ">
+                    <button class="lose ">Loser</button>
+                    <button class="win ">Winner</button>
                 </div>
-                <div id="col_2_user3" class="entry">
-                    <input class="entryname">
-                    <button class="lose">Loser</button>
-                    <button class="win">Winner</button>
+                <div id="col_2_user3 " class="entry ">
+                    <input class="entryname ">
+                    <button class="lose ">Loser</button>
+                    <button class="win ">Winner</button>
                 </div>
-                <div id="col_2_user4" class="entry">
-                    <input class="entryname">
-                    <button class="lose">Loser</button>
-                    <button class="win">Winner</button>
+                <div id="col_2_user4 " class="entry ">
+                    <input class="entryname ">
+                    <button class="lose ">Loser</button>
+                    <button class="win ">Winner</button>
                 </div>
-                <div id="col_2_user5" class="entry">
-                    <input class="entryname">
-                    <button class="lose">Loser</button>
-                    <button class="win">Winner</button>
+                <div id="col_2_user5 " class="entry ">
+                    <input class="entryname ">
+                    <button class="lose ">Loser</button>
+                    <button class="win ">Winner</button>
                 </div>
-                <div id="col_2_user6" class="entry">
-                    <input class="entryname">
-                    <button class="lose">Loser</button>
-                    <button class="win">Winner</button>
+                <div id="col_2_user6 " class="entry ">
+                    <input class="entryname ">
+                    <button class="lose ">Loser</button>
+                    <button class="win ">Winner</button>
                 </div>
-                <div id="col_2_user7" class="entry">
-                    <input class="entryname">
-                    <button class="lose">Loser</button>
-                    <button class="win">Winner</button>
+                <div id="col_2_user7 " class="entry ">
+                    <input class="entryname ">
+                    <button class="lose ">Loser</button>
+                    <button class="win ">Winner</button>
                 </div>
-                <div id="col_2_user8" class="entry">
-                    <input class="entryname">
-                    <button class="lose">Loser</button>
-                    <button class="win">Winner</button>
-                </div>
-            </div>
-            <div id="tourney_rd3" class="tourney_col">
-                <div id="col_3_user1" class="entry">
-                    <input class="entryname">
-                    <button class="lose">Loser</button>
-                    <button class="win">Winner</button>
-                </div>
-                <div id="col_3_user2" class="entry">
-                    <input class="entryname">
-                    <button class="lose">Loser</button>
-                    <button class="win">Winner</button>
-                </div>
-                <div id="col_3_user3" class="entry">
-                    <input class="entryname">
-                    <button class="lose">Loser</button>
-                    <button class="win">Winner</button>
-                </div>
-                <div id="col_3_user4" class="entry">
-                    <input class="entryname">
-                    <button class="lose">Loser</button>
-                    <button class="win">Winner</button>
+                <div id="col_2_user8 " class="entry ">
+                    <input class="entryname ">
+                    <button class="lose ">Loser</button>
+                    <button class="win ">Winner</button>
                 </div>
             </div>
-            <div id="tourney_rd4" class="tourney_col">
-                <div id="col_4_user1" class="entry">
-                    <input class="entryname">
-                    <button class="lose">Loser</button>
-                    <button class="win">Winner</button>
+            <div id="tourney_rd3 " class="tourney_col ">
+                <div id="col_3_user1 " class="entry ">
+                    <input class="entryname ">
+                    <button class="lose ">Loser</button>
+                    <button class="win ">Winner</button>
                 </div>
-                <div id="col_4_user2" class="entry">
-                    <input class="entryname">
-                    <button class="lose">Loser</button>
-                    <button class="win">Winner</button>
+                <div id="col_3_user2 " class="entry ">
+                    <input class="entryname ">
+                    <button class="lose ">Loser</button>
+                    <button class="win ">Winner</button>
+                </div>
+                <div id="col_3_user3 " class="entry ">
+                    <input class="entryname ">
+                    <button class="lose ">Loser</button>
+                    <button class="win ">Winner</button>
+                </div>
+                <div id="col_3_user4 " class="entry ">
+                    <input class="entryname ">
+                    <button class="lose ">Loser</button>
+                    <button class="win ">Winner</button>
                 </div>
             </div>
-            <div id="tourney_rd5" class="tourney_col">
-                <div id="col_5_user1" class="entry">
-                    <input class="entryname">
+            <div id="tourney_rd4 " class="tourney_col ">
+                <div id="col_4_user1 " class="entry ">
+                    <input class="entryname ">
+                    <button class="lose ">Loser</button>
+                    <button class="win ">Winner</button>
+                </div>
+                <div id="col_4_user2 " class="entry ">
+                    <input class="entryname ">
+                    <button class="lose ">Loser</button>
+                    <button class="win ">Winner</button>
+                </div>
+            </div>
+            <div id="tourney_rd5 " class="tourney_col ">
+                <div id="col_5_user1 " class="entry ">
+                    <input class="entryname ">
                 </div>
             </div>
         </div>
-        <div id="ACP" class="ACP_col">
-            <button id="start">Start</button>
-            <button id="finish">Finish</button>
-            <button id="announce">Announce</button>
-            <button id="randomize">Randomize</button>
+        <div id="ACP " class="ACP_col ">
+            <button id="start ">Start</button>
+            <button id="finish ">Finish</button>
+            <button id="announce ">Announce</button>
+            <button id="randomize ">Randomize</button>
         </div>
     </header>
-    <header style="padding-top:50px" id="ranking">
+    <header style="padding-top:50px " id="ranking ">
         <h2>Ranking</h2>
-        <div id="rankingtable"></div>
-        <div id="rankinginformation" style=" justify-content: center; display:flex;">
-            <SCRIPT language="Javascript">
+        <div id="rankingtable "></div>
+        <div id="rankinginformation " style=" justify-content: center; display:flex; ">
+            <SCRIPT language="Javascript ">
                 var cpmstar_rnd = Math.round(Math.random() * 999999);
                 var cpmstar_pid = 44429;
-                document.writeln("<SCR" + "IPT language='Javascript' src='//server.cpmstar.com/view.aspx?poolid=" + cpmstar_pid + "&script=1&rnd=" + cpmstar_rnd + "'></SCR" + "IPT>");
+                document.writeln("<SCR " + "IPT language='Javascript' src='//server.cpmstar.com/view.aspx?poolid=" + cpmstar_pid + "&script=1&rnd=" + cpmstar_rnd + "'> < /SCR " + "IPT>");
             </SCRIPT>
         </div>
     </header>
