@@ -2,12 +2,44 @@
 /*jslint bitwise: true, plusplus:true*/
 
 
+function cardStackSort(db) {
+    'use strict';
+
+    if (!db) {
+        return [];
+    }
+    var result,
+        monsters = db.filter(function (card) {
+            return cardIs('monster', card);
+        }),
+        spells = db.filter(function (card) {
+            return cardIs('spell', card);
+        }),
+        traps = db.filter(function (card) {
+            return cardIs('trap', card);
+        });
+
+    monsters.sort(function (a, b) {
+        return a.type - b.type;
+    });
+
+    result = [monsters, spells, traps];
+    console.log(monsters.length, spells.length, traps.length);
+    return result.reduce(function (a, b) {
+        return a.concat(b);
+    }, []);
+
+}
+
 var databaseSystem = (function () {
     'use strict';
     var database = [],
         dbs = {
             'OCGTCG': []
         };
+
+
+
 
     /**
      * Filters duplicate cards out
@@ -387,7 +419,7 @@ var currentSearchFilter = (function () {
 
 
     function preformSearch() {
-        currentSearch = filterAll(databaseSystem.getDB(), currentFilter);
+        currentSearch = cardStackSort(filterAll(databaseSystem.getDB(), currentFilter));
         currentSearchIndex = 0;
     }
 
@@ -491,6 +523,10 @@ var deckEditor = (function () {
     }
 
     function renderDeckZone(deck) {
+        console.log(inmemoryDeck);
+        cardStackSort(inmemoryDeck.main);
+        cardStackSort(inmemoryDeck.side);
+        cardStackSort(inmemoryDeck.extra);
 
         makeCard(deck.main, 'main');
         makeCard(deck.extra, 'extra');
@@ -582,7 +618,6 @@ var deckEditor = (function () {
             extraCount = inmemoryDeck.extra.filter(checkCard).length,
             sideCount = inmemoryDeck.side.filter(checkCard).length;
 
-        console.log(mainCount, extraCount, sideCount);
         if (mainCount + extraCount + sideCount >= 3) {
             return false;
         }
@@ -593,7 +628,6 @@ var deckEditor = (function () {
         moveInArray(inmemoryDeck[deckEditorReference.zone], deckEditorReference.index, 0);
         var card = inmemoryDeck[deckEditorReference.zone].shift();
         inmemoryDeck[deck].push(card);
-
         renderDeckZone(inmemoryDeck);
 
     }

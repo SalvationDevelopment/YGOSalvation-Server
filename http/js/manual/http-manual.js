@@ -2498,7 +2498,7 @@ $(document).ready(function () {
                 'display': 'none'
             });
             $('#sidechatinput').focus();
-        }, 600);
+        }, 100);
     });
 });
 
