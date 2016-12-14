@@ -58,10 +58,10 @@ he #deckedit {
 
 .searchBar {
     float: right;
-    width: 75.7%;
+    width: 73.7%;
     height: 22%;
     position: absolute;
-    top: 8vh;
+    top: 7vh;
     right: 0;
     background: rgba(0, 0, 0, .85);
     border: 1px solid #444;
@@ -97,32 +97,46 @@ input.decknameInput {
 }
 
 .center {
-    height: 100%;
-    width: 47.3vw !important;
-    border: 1px solid #444;
+    height: 75%;
+    width: 483px;
+    border: none;
     float: left;
-    background: rgba(0, 0, 0, .5)
+    background: rgba(0, 0, 0, .5);
+    margin-left: 9vw;
+    margin-top: 23vh;
 }
 
-.mainDeck {
+#deckedit .center img {
+    width: 47px;
+    margin: 0;
+    height: auto;
+}
+
+.center .mainDeck {
     float: left;
     height: 66%;
-    width: 47.3vw !important;
+    width: 100%;
     min-width: 390px;
+    padding: 5px;
+    border: 1px solid yellow;
 }
 
 .extraDeck {
     float: left;
     height: 17.25%;
-    width: 47.3vw !important;
+    width: 100% !important;
     border: 1px solid green;
+    padding: 5px;
+    margin-top: 5px;
 }
 
 .sideDeck {
     float: left;
     height: 17.25%;
-    width: 47.3vw !important;
+    width: 100% !important;
     border: 1px solid hotpink;
+    padding: 5px;
+    margin-top: 5px;
 }
 
 .right {
