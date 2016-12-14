@@ -78,7 +78,6 @@ function cardStackSort(db) {
         return 0;
     });
     result = [monsters, spells, traps];
-    console.log(monsters.length, spells.length, traps.length);
     return result.reduce(function (a, b) {
         return a.concat(b);
     }, []);
@@ -577,11 +576,6 @@ var deckEditor = (function () {
     }
 
     function renderDeckZone(deck) {
-        console.log(inmemoryDeck);
-        cardStackSort(inmemoryDeck.main);
-        cardStackSort(inmemoryDeck.side);
-        cardStackSort(inmemoryDeck.extra);
-
         makeCard(deck.main, 'main');
         makeCard(deck.extra, 'extra');
         makeCard(deck.side, 'side');
@@ -694,6 +688,7 @@ var deckEditor = (function () {
         moveInArray(inmemoryDeck[deckEditorReference.zone], deckEditorReference.index, 0);
         var card = inmemoryDeck[deckEditorReference.zone].shift();
         inmemoryDeck[deck].push(card);
+        inmemoryDeck[deck] = cardStackSort(inmemoryDeck[deck]);
         renderDeckZone(inmemoryDeck);
 
     }
@@ -703,6 +698,7 @@ var deckEditor = (function () {
             return;
         }
         inmemoryDeck[deck].push(deckEditorReference);
+        inmemoryDeck[deck] = cardStackSort(inmemoryDeck[deck]);
         renderDeckZone(inmemoryDeck);
 
     }
@@ -778,7 +774,10 @@ function deckeditonclick(index, zone) {
         id: deckEditor.inmemoryDeck[zone][index].id,
         alias: deckEditor.inmemoryDeck[zone][index].alias,
         zone: zone,
-        index: index
+        index: index,
+        type: deckEditor.inmemoryDeck[zone][index].type,
+        atk: deckEditor.inmemoryDeck[zone][index].atk,
+        def: deckEditor.inmemoryDeck[zone][index].def
     };
 
     var dbEntry = deckEditor.inmemoryDeck[zone][index],
