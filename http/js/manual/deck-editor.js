@@ -48,6 +48,31 @@ function cardStackSort(db) {
 
     });
 
+    spells.sort(function (a, b) {
+        if (a.type > b.type) {
+            return 1;
+        }
+        if (a.type < b.type) {
+            return -1;
+        }
+        if (a.id > b.id) {
+            return 1;
+        }
+        return 0;
+    });
+
+    traps.sort(function (a, b) {
+        if (a.type > b.type) {
+            return 1;
+        }
+        if (a.type < b.type) {
+            return -1;
+        }
+        if (a.id > b.id) {
+            return 1;
+        }
+        return 0;
+    });
     result = [monsters, spells, traps];
     console.log(monsters.length, spells.length, traps.length);
     return result.reduce(function (a, b) {
