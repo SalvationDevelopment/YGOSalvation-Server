@@ -20,7 +20,32 @@ function cardStackSort(db) {
         });
 
     monsters.sort(function (a, b) {
-        return a.type - b.type;
+        if (a.type === 4 && b.type !== 4) {
+            return 1;
+        }
+        if (a.type !== 4 && b.type === 4) {
+            return -1;
+        }
+        if (a.type > b.type) {
+            return 1;
+        }
+        if (a.type < b.type) {
+            return -1;
+        }
+        if (a.atk > b.atk) {
+            return -1;
+        }
+        if (a.atk < b.atk) {
+            return 1;
+        }
+        if (a.def > b.def) {
+            return -1;
+        }
+        if (a.id > b.id) {
+            return 1;
+        }
+        return 0;
+
     });
 
     result = [monsters, spells, traps];
@@ -63,7 +88,7 @@ var databaseSystem = (function () {
      * @returns {Array[Object]} array of cards.
      */
     function getDB() {
-        return database;
+        return cardStackSort(database);
     }
 
     /**
@@ -419,7 +444,7 @@ var currentSearchFilter = (function () {
 
 
     function preformSearch() {
-        currentSearch = cardStackSort(filterAll(databaseSystem.getDB(), currentFilter));
+        currentSearch = filterAll(databaseSystem.getDB(), currentFilter);
         currentSearchIndex = 0;
     }
 
