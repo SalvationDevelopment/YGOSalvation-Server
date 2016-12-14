@@ -607,12 +607,16 @@ var deckEditor = (function () {
 
     function doSearch() {
         var search,
-            cardname = $('.nameInput').val();
-        console.log(name);
+            cardname = $('.nameInput').val(),
+            description = $('.descInput').val();
+
         currentSearchFilter.clearFilter();
 
-        if (name) {
+        if (cardname) {
             currentSearchFilter.setFilter('cardname', cardname);
+        }
+        if (description) {
+            currentSearchFilter.setFilter('description', description);
         }
         search = currentSearchFilter.getRender();
         deckEditor.inmemoryDeck.search = search;
