@@ -23,7 +23,6 @@ var databaseSystem = (function () {
         Object.keys(map).forEach(function (id) {
             result.push(map[id]);
         });
-        console.log(result.length);
         return result;
     }
 
@@ -389,7 +388,6 @@ var currentSearchFilter = (function () {
 
     function preformSearch() {
         currentSearch = filterAll(databaseSystem.getDB(), currentFilter);
-        console.log(currentSearch);
         currentSearchIndex = 0;
     }
 
@@ -482,7 +480,6 @@ var deckEditor = (function () {
 
     function makeCard(cards, zone) {
         var html = '';
-        console.log(cards);
         cards.forEach(function (card, index) {
             var hardcard = JSON.stringify(card),
                 src = 'ygopro/pics/' + card.id + '.jpg';
@@ -577,14 +574,15 @@ var deckEditor = (function () {
         function checkCard(reference) {
             var id = card.alias || card.id;
             if (reference.id === id || reference.alias === id) {
-                return false;
+                return true;
             }
-            return true;
+            return false;
         }
         var mainCount = inmemoryDeck.main.filter(checkCard).length,
             extraCount = inmemoryDeck.extra.filter(checkCard).length,
             sideCount = inmemoryDeck.side.filter(checkCard).length;
 
+        console.log(mainCount, extraCount, sideCount);
         if (mainCount + extraCount + sideCount >= 3) {
             return false;
         }
@@ -678,6 +676,7 @@ function deckeditonclick(index, zone) {
     });
     deckEditorReference = {
         id: deckEditor.inmemoryDeck[zone][index].id,
+        alias: deckEditor.inmemoryDeck[zone][index].alias,
         zone: zone,
         index: index
     };
