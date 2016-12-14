@@ -516,7 +516,7 @@ function pondata(data) {
             window.admin = "1";
             $('#Tournamentacp').addClass('isadmin');
         }
-        if (data.clientEvent !== 'ackresult' || data.clientEvent !== 'ack') {
+        if (data.clientEvent !== 'ackresult' && data.clientEvent !== 'ack') {
             console.log(data);
         }
 
