@@ -399,3 +399,10 @@ button.searchtoggle {
     border: 5px solid silver;
     z-index: 50;
 }
+
+img.deckeditcard.card {
+    float: left;
+    /* clear: both; */
+    position: relative;
+    margin: 4px;
+}

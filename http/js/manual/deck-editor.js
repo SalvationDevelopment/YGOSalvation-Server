@@ -9,21 +9,37 @@ var databaseSystem = (function () {
             'OCGTCG': []
         };
 
-    function onlyUnique(value, index, self) {
-        return self.indexOf(value) === index;
+    function filterCards(list) {
+        var map = {},
+            result = [];
+        list.forEach(function (card) {
+            map[card.id] = card;
+        });
+        Object.keys(map).forEach(function (id) {
+            result.push(map[id]);
+        });
+        console.log(result.length);
+        return result;
     }
 
-    function setDatabase(dbs) {
-        var dbsets = dbs.map(function (dbname) {
+    function getDB() {
+        return database;
+    }
+
+    function setDatabase(set) {
+        var dbsets = set.map(function (dbname) {
                 if (dbs[dbname]) {
                     return dbs[dbname];
                 } else {
                     return [];
                 }
             }),
-            listOfCards = [].concat(dbsets);
-
-        database = listOfCards.filter(onlyUnique);
+            listOfCards = dbsets.reduce(function (a, b) {
+                return a.concat(b);
+            }, []);
+        console.log(listOfCards.length);
+        database = filterCards(listOfCards);
+        console.log(database.length);
     }
 
 
@@ -48,9 +64,9 @@ var databaseSystem = (function () {
 
 
     return {
-        database: database,
         setDatabase: setDatabase,
-        dbs: dbs
+        dbs: dbs,
+        getDB: getDB
     };
 }());
 
@@ -346,17 +362,18 @@ var currentSearchFilter = (function () {
         cardsf = filterType(cardsf, filter.type) || cardsf;
         cardsf = filterAttribute(cardsf, filter.attribute) || cardsf;
         cardsf = filterRace(cardsf, filter.race) || cardsf;
-        cardsf = filterSetcode(cardsf, filter.setcode) || cardsf;
+        //cardsf = filterSetcode(cardsf, filter.setcode) || cardsf;
         cardsf = filterAtk(cardsf, filter.atk, 1) || cardsf;
         cardsf = filterDef(cardsf, filter.def, 1) || cardsf;
         cardsf = filterLevel(cardsf, filter.level, 1) || cardsf;
-        cardsf = filterScale(cardsf, filter.scale, 1) || cardsf;
+        //cardsf = filterScale(cardsf, filter.scale, 1) || cardsf;
         return cardsf;
     }
 
 
     function preformSearch() {
-        currentSearch = filterAll(databaseSystem.database, currentFilter);
+        currentSearch = filterAll(databaseSystem.getDB(), currentFilter);
+        console.log(currentSearch);
         currentSearchIndex = 0;
     }
 
@@ -401,9 +418,14 @@ var currentSearchFilter = (function () {
         preformSearch();
     }
 
+    function getRender() {
+        preformSearch();
+        renderSearch();
+        return render;
+    }
     return {
         preformSearch: preformSearch,
-        render: render,
+        getRender: getRender,
         setFilter: setFilter,
         clearFilter: clearFilter,
         pageForward: pageForward,
@@ -444,10 +466,11 @@ var deckEditor = (function () {
 
     function makeCard(cards, zone) {
         var html = '';
+        console.log(cards);
         cards.forEach(function (card, index) {
             var hardcard = JSON.stringify(card),
-                src = 'ygopro/pics/' + card + '.jpg';
-            html += '<img class="deckeditcard card" src="http://ygopro.us/' + src + '" data-"' + card + '" onclick = "deckeditonclick(' + index + ', \'' + zone + '\')" / > ';
+                src = 'ygopro/pics/' + card.id + '.jpg';
+            html += '<img class="deckeditcard card" id="deceditcard' + index + '" src="http://ygopro.us/' + src + '" data-id="' + card.id + '" onclick = "deckeditonclick(' + index + ', \'' + zone + '\')" / > ';
         });
 
         $('#deckedit .cardspace .' + zone).html(html);
@@ -484,7 +507,9 @@ var deckEditor = (function () {
 
 
     function doSearch() {
-        makeCard(currentSearchFilter.render, 'search');
+        var search = currentSearchFilter.getRender();
+        deckEditor.inmemoryDeck.search = search;
+        makeCard(search, 'search');
     }
 
 
@@ -611,12 +636,12 @@ function deckeditonclick(index, zone) {
         'display': 'block'
     });
     deckEditorReference = {
-        id: deckEditor.inmemoryDeck[zone][index],
+        id: deckEditor.inmemoryDeck[zone][index].id,
         zone: zone,
         index: index
     };
 
-    var dbEntry = getCardObject(parseInt(deckEditorReference.id, 10)),
+    var dbEntry = deckEditor.inmemoryDeck[zone][index],
         viewable = {
             'display': 'block'
         };
@@ -636,9 +661,9 @@ function deckeditonclick(index, zone) {
     }
     if (zone === 'search') {
         if (cardIs('xyz', dbEntry) || cardIs('fusion', dbEntry) || cardIs('synchro', dbEntry)) {
-            $('.de-toextra, .de-toside').css(viewable);
+            $('.de-addtoextra, .de-addtoside').css(viewable);
         } else {
-            $('.de-tomain, .de-toside').css(viewable);
+            $('.de-addtomain, .de-addtoside').css(viewable);
         }
     }
     reorientmenu();

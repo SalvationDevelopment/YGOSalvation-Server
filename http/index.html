@@ -68,7 +68,7 @@
 
             <li class="launcheronly"><span class="psudolinksingle notneededinweb" onclick='ygopro("-l")'>LAN Mode</span>
             </li>
-            <li class="launcheronly"><span data-translation-deckedit class="psudolinksingle" onclick='ygopro("-d");singlesitenav("deckedit");'>Deck Edit</span>
+            <li class="launcheronly"><span data-translation-deckedit class="psudolinksingle" onclick='ygopro("-d");singlesitenav("deckedit");deckEditor.doSearch();'>Deck Edit</span>
             </li>
             <li class="launcheronly notneededinweb"><span data-translation-replays class="psudolinksingle" onclick='ygopro("-r");'>Replays</span>
             </li>
@@ -1902,9 +1902,14 @@
             <button class="de-toside" onclick="deckEditor.deckEditorMoveTo('side')">To Side Deck</button>
             <button class="de-toextra" onclick="deckEditor.deckEditorMoveTo('extra')">To Extra Deck</button>
             <button class="de-tomain" onclick="deckEditor.deckEditorMoveTo('main')">To Main Deck</button>
-            <button class="de-fromside" onclick="deckEditor.removeCard('side')">To Side Deck</button>
-            <button class="de-fromextra" onclick="deckEditor.removeCard('extra')">To Extra Deck</button>
-            <button class="de-frommain" onclick="deckEditor.removeCard('main')">To Main Deck</button>
+
+            <button class="de-fromside" onclick="deckEditor.removeCard('side')">Remove</button>
+            <button class="de-fromextra" onclick="deckEditor.removeCard('extra')">Remove</button>
+            <button class="de-frommain" onclick="deckEditor.removeCard('main')">Remove</button>
+
+            <button class="de-addtoside" onclick="deckEditor.addCardFromSearch('side')">To Side Deck</button>
+            <button class="de-addtoextra" onclick="deckEditor.addCardFromSearch('extra')">To Extra Deck</button>
+            <button class="de-addtomain" onclick="deckEditor.addCardFromSearch('main')">To Main Deck</button>
 
 
         </div>
