@@ -848,22 +848,22 @@ function deckeditonclick(index, zone) {
     reorientmenu();
     return;
 }
-
-$('.descInput, .nameInput, .atkInput, .defInput').on('input', deckEditor.doNewSearch);
-$('.typeSelect').on('change', function () {
-    var target = $('.typeSelect option:selected').text();
-    $('.monsterCardSelect, .monsterTypeSelect, .spellSelect, .trapSelect').css('display', 'none');
-    switch (target) {
-    case 'Monster':
-        $('.monsterCardSelect, .monsterTypeSelect').css('display', 'block');
-        break;
-    case 'Spell':
-        $('.spellSelect').css('display', 'block');
-        break;
-    case 'Trap':
-        $('.trapSelect').css('display', 'block');
-        break;
-    default:
-        break;
-    }
-});
+//
+//$('.descInput, .nameInput, .atkInput, .defInput').on('input', deckEditor.doNewSearch);
+//$('.typeSelect').on('change', function () {
+//    var target = $('.typeSelect option:selected').text();
+//    $('.monsterCardSelect, .monsterTypeSelect, .spellSelect, .trapSelect').css('display', 'none');
+//    switch (target) {
+//    case 'Monster':
+//        $('.monsterCardSelect, .monsterTypeSelect').css('display', 'block');
+//        break;
+//    case 'Spell':
+//        $('.spellSelect').css('display', 'block');
+//        break;
+//    case 'Trap':
+//        $('.trapSelect').css('display', 'block');
+//        break;
+//    default:
+//        break;
+//    }
+//});
