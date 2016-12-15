@@ -521,9 +521,14 @@ var currentSearchFilter = (function () {
     }
 
     function filterLimit(result, limit) {
-        return result.filter(function (item) {
-            return item.limit === limit;
-        });
+        if (limit !== undefined) {
+            return result.filter(function (item) {
+                console.log(item.limit, limit);
+                return item.limit === limit;
+            });
+        } else {
+            return result;
+        }
     }
 
     function filterScale(result, scale, op) {
@@ -708,7 +713,7 @@ var deckEditor = (function () {
         if (description) {
             currentSearchFilter.setFilter('description', description);
         }
-        if (limit) {
+        if (limit.length) {
             currentSearchFilter.setFilter('limit', parseInt(limit, 10));
         }
 
