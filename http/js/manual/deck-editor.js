@@ -618,7 +618,9 @@ var deckEditor = (function () {
             description = $('.descInput').val(),
             typeSelect = $('.typeSelect option:selected').val(),
             atk = $('.atkInput').val(),
-            def = $('.defInput').val();
+            def = $('.defInput').val(),
+            attribute = $('.attributeSelect option:selected').val(),
+            race = $('.raceSelect option:selected').val();
 
         currentSearchFilter.clearFilter();
         currentSearchFilter.getRender(true);
@@ -637,6 +639,18 @@ var deckEditor = (function () {
             if (def) {
                 currentSearchFilter.setFilter('def', parseInt(atk, 10));
             }
+            if (attribute) {
+                currentSearchFilter.setFilter('attribute', parseInt(atk, 10));
+            }
+            if (race) {
+                currentSearchFilter.setFilter('race', parseInt(atk, 10));
+            }
+        }
+        if (typeSelect === '2') {
+            currentSearchFilter.setFilter('type', parseInt($('.spellSelect option:selected').val(), 10));
+        }
+        if (typeSelect === '4') {
+            currentSearchFilter.setFilter('type', parseInt($('.trapSelect option:selected').val(), 10));
         }
         doSearch();
     }
