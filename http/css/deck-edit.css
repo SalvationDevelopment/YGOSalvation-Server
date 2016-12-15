@@ -455,3 +455,11 @@ select.typeSelect {
     width: 110px;
     height: auto;
 }
+
+.searchwrapper {
+    position: relative;
+    width: auto !important;
+    height: auto;
+    overflow: auto;
+    float: left;
+}

@@ -164,7 +164,7 @@ var databaseSystem = (function () {
             if (banlist[activeBanlist][id]) {
                 map[id].limit = parseInt(banlist[activeBanlist][id], 10);
             } else {
-                map[id].limit = 0;
+                map[id].limit = 3;
             }
             result.push(map[id]);
         });
