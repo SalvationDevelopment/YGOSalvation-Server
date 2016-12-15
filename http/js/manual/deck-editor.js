@@ -205,7 +205,7 @@ var currentSearchFilter = (function () {
     // Num is the value in the DB for a given attribute or race.
     function fAttrRace(obj, num, at) {
 
-        var val = (at === 1) ? obj.Attribute : obj.Type;
+        var val = (at === 1) ? obj.attribute : obj.race;
         if (val === num) {
             return true;
         } else {
@@ -640,10 +640,10 @@ var deckEditor = (function () {
                 currentSearchFilter.setFilter('def', parseInt(atk, 10));
             }
             if (attribute) {
-                currentSearchFilter.setFilter('attribute', parseInt(atk, 10));
+                currentSearchFilter.setFilter('attribute', parseInt(attribute, 10));
             }
             if (race) {
-                currentSearchFilter.setFilter('race', parseInt(atk, 10));
+                currentSearchFilter.setFilter('race', parseInt(race, 10));
             }
         }
         if (typeSelect === '2') {
