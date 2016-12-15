@@ -89,7 +89,8 @@ var databaseSystem = (function () {
     var database = [],
         dbs = {
             'OCGTCG': []
-        };
+        },
+        status = false;
 
 
 
@@ -852,15 +853,17 @@ function deckeditonclick(index, zone) {
 $('.descInput, .nameInput, .atkInput, .defInput').on('input', deckEditor.doNewSearch);
 $('.typeSelect').on('change', function () {
     var target = $('.typeSelect option:selected').text();
-    $('.monsterCardSelect, .monsterTypeSelect, .spellSelect, .trapSelect').css('display', 'none');
+    $('.monsterCardSelect, .monsterTypeSelect, .spellSelect, .trapSelect, .attributeSelect, .raceSelect').css('display', 'none');
+    $('.attributeSelectl, .raceSelectl').css('display', 'none');
     switch (target) {
     case 'Monster':
-        $('.monsterCardSelect, .monsterTypeSelect').css('display', 'block');
+        $('.monsterCardSelect, .monsterTypeSelect, .attributeSelect, .raceSelect').css('display', 'block');
+        $('.attributeSelectl, .raceSelectl').css('display', 'block');
         break;
-    case 'Spell':
+    case 'Spells':
         $('.spellSelect').css('display', 'block');
         break;
-    case 'Trap':
+    case 'Traps':
         $('.trapSelect').css('display', 'block');
         break;
     default:
