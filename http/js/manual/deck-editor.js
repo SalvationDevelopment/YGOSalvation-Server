@@ -902,7 +902,8 @@ function deckeditonclick(index, zone) {
         index: index,
         type: deckEditor.inmemoryDeck[zone][index].type,
         atk: deckEditor.inmemoryDeck[zone][index].atk,
-        def: deckEditor.inmemoryDeck[zone][index].def
+        def: deckEditor.inmemoryDeck[zone][index].def,
+        limit: deckEditor.inmemoryDeck[zone][index].limit
     };
 
     var dbEntry = deckEditor.inmemoryDeck[zone][index],
