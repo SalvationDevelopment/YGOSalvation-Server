@@ -629,7 +629,7 @@ var deckEditor = (function () {
         }
 
         currentSearchFilter.setFilter('type', parseInt(typeSelect, 10));
-        if (typeSelect === '5') {
+        if (typeSelect === '1') {
             if (atk) {
                 currentSearchFilter.setFilter('atk', parseInt(atk, 10));
             }
@@ -849,4 +849,21 @@ function deckeditonclick(index, zone) {
     return;
 }
 
-$('.descInput, .nameInput .atkInput, .defInput').on('input', deckEditor.doNewSearch);
+$('.descInput, .nameInput, .atkInput, .defInput').on('input', deckEditor.doNewSearch);
+$('.typeSelect').on('change', function () {
+    var target = $('.typeSelect option:selected').text();
+    $('.monsterCardSelect, .monsterTypeSelect, .spellSelect, .trapSelect').css('display', 'none');
+    switch (target) {
+    case 'Monster':
+        $('.monsterCardSelect, .monsterTypeSelect').css('display', 'block');
+        break;
+    case 'Spell':
+        $('.spellSelect').css('display', 'block');
+        break;
+    case 'Trap':
+        $('.trapSelect').css('display', 'block');
+        break;
+    default:
+        break;
+    }
+});
