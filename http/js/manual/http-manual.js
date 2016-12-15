@@ -2485,7 +2485,7 @@ $(document).ready(function () {
         var uid = event.currentTarget.id,
             id = $('#' + uid).attr('data-id'),
             html = makeDescription(id);
-        console.log(event.currentTarget, event.currentTarget.id);
+
         $('.imgContainer').attr('src', $('#' + event.currentTarget.id).attr('src'));
         $('.cardDescription').html(html);
         record = parseInt(uid.split('uid')[1], 0);

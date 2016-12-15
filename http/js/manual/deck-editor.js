@@ -840,5 +840,5 @@ function deckeditonclick(index, zone) {
     return;
 }
 
-$('.descInput').on('blur', deckEditor.doNewSearch);
-$('.nameInput').on('blur', deckEditor.doNewSearch);
+$('.descInput').on('input', deckEditor.doNewSearch);
+$('.nameInput').on('input', deckEditor.doNewSearch);
