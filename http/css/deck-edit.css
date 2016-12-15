@@ -424,6 +424,7 @@ img.deckeditcard.card {
 div#pagebuttons div {
     width: 50%;
     float: left;
+    cursor: pointer;
 }
 
 div#pageforward {
