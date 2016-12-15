@@ -430,3 +430,20 @@ div#pagebuttons div {
 div#pageforward {
     text-align: right;
 }
+
+label[for="typeSelect"] {
+    width: 100% !important;
+}
+
+select.trapSelect {
+    float: right;
+    margin-right: 28% !important;
+    padding: 0;
+    /* width: 23% !important; */
+}
+
+select.typeSelect {
+    width: 48% !important;
+    float: left;
+    margin-right: 29% !IMPORTANT;
+}
