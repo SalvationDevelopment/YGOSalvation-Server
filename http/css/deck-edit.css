@@ -420,3 +420,12 @@ img.deckeditcard.card {
     position: relative;
     margin: 4px;
 }
+
+div#pagebuttons div {
+    width: 50%;
+    float: left;
+}
+
+div#pageforward {
+    text-align: right;
+}

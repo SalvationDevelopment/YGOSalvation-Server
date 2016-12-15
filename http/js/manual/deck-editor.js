@@ -614,7 +614,8 @@ var deckEditor = (function () {
     function doNewSearch() {
 
         var cardname = $('.nameInput').val(),
-            description = $('.descInput').val();
+            description = $('.descInput').val(),
+            typeSelect = $('.typeSelect option:selected').val();
 
         currentSearchFilter.clearFilter();
         currentSearchFilter.getRender(true);
@@ -624,6 +625,9 @@ var deckEditor = (function () {
         if (description) {
             currentSearchFilter.setFilter('description', description);
         }
+
+        currentSearchFilter.setFilter('type', parseInt(typeSelect, 10));
+
         doSearch();
     }
 
@@ -835,3 +839,6 @@ function deckeditonclick(index, zone) {
     reorientmenu();
     return;
 }
+
+$('.descInput').on('blur', deckEditor.doNewSearch);
+$('.nameInput').on('blur', deckEditor.doNewSearch);
