@@ -520,6 +520,12 @@ var currentSearchFilter = (function () {
 
     }
 
+    function filterLimit(result, limit) {
+        return result.filter(function (item) {
+            return item.limit === limit;
+        });
+    }
+
     function filterScale(result, scale, op) {
         return result.filter(function (item) {
             return fScale(item, scale, op);
@@ -537,6 +543,7 @@ var currentSearchFilter = (function () {
         cardsf = filterAtk(cardsf, filter.atk, 1) || cardsf;
         cardsf = filterDef(cardsf, filter.def, 1) || cardsf;
         cardsf = filterLevel(cardsf, filter.level, 1) || cardsf;
+        cardsf = filterLimit(cardsf, filter.limit) || cardsf;
         //cardsf = filterScale(cardsf, filter.scale, 1) || cardsf;
         return cardsf;
     }
@@ -641,7 +648,7 @@ var deckEditor = (function () {
         cards.forEach(function (card, index) {
             var hardcard = JSON.stringify(card),
                 src = 'ygopro/pics/' + card.id + '.jpg';
-            html += '<div class="searchwrapper" data-card-limit="' + card.limit + '"><img class="deckeditcard card" id="deceditcard' + index + '" src="http://ygopro.us/' + src + '" data-id="' + card.id + '" onclick = "deckeditonclick(' + index + ', \'' + zone + '\')" / ></div>';
+            html += '<div class="searchwrapper" data-card-limit="' + card.limit + '"><img class="deckeditcard card" id="deceditcard' + index + zone + '" src="http://ygopro.us/' + src + '" data-id="' + card.id + '" onclick = "deckeditonclick(' + index + ', \'' + zone + '\')" / ></div>';
         });
 
         $('#deckedit .cardspace .' + zone).html(html);
@@ -690,7 +697,8 @@ var deckEditor = (function () {
             atk = $('.atkInput').val(),
             def = $('.defInput').val(),
             attribute = $('.attributeSelect option:selected').val(),
-            race = $('.raceSelect option:selected').val();
+            race = $('.raceSelect option:selected').val(),
+            limit = $('.forbiddenLimitedSelect option:selected').val();
 
         currentSearchFilter.clearFilter();
         currentSearchFilter.getRender(true);
@@ -699,6 +707,9 @@ var deckEditor = (function () {
         }
         if (description) {
             currentSearchFilter.setFilter('description', description);
+        }
+        if (limit) {
+            currentSearchFilter.setFilter('limit', parseInt(limit, 10));
         }
 
         currentSearchFilter.setFilter('type', parseInt(typeSelect, 10));
