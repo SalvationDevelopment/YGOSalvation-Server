@@ -1,5 +1,5 @@
 /*global currentMousePos, getCardObject, reorientmenu, cardIs, $, internalDB, primus,prompt, alert*/
-/*jslint bitwise: true, plusplus:true*/
+/*jslint bitwise: true, plusplus:true, regexp:true*/
 
 
 function cardStackSort(db) {
@@ -87,13 +87,67 @@ function cardStackSort(db) {
 var databaseSystem = (function () {
     'use strict';
     var database = [],
+        activeBanlist = '',
+        banlist = {},
         dbs = {
             'OCGTCG': []
         },
         status = false;
 
+    function getBanlist() {
+        return banlist[activeBanlist];
+    }
 
-
+    function configParser(content, options) {
+        var commentDelims = [
+            "#",
+            ";",
+            "@",
+            "//"
+        ],
+            blockRegexp = /^\s?\[\s?(.*?)\s?\]\s?$/,
+            keyValueDelim = "=",
+            newLineDelim = "\r\n",
+            joinKeyValue = false,
+            joinKeySlice = 0,
+            configObject = {},
+            currentBlock,
+            currentLine;
+        if (typeof options === "object") {
+            commentDelims = options.commentDelims || commentDelims;
+            blockRegexp = options.blockRegexp || blockRegexp;
+            keyValueDelim = options.keyValueDelim || keyValueDelim;
+            newLineDelim = options.newLineDelim || newLineDelim;
+            joinKeyValue = options.joinKeyValue || joinKeyValue;
+            joinKeySlice = options.joinKeySlice || joinKeySlice;
+        }
+        content = content.split(newLineDelim);
+        content.forEach(function (line) {
+            var isComment = false;
+            commentDelims.forEach(function (delim) {
+                if (line.indexOf(delim) === 0) {
+                    isComment = true;
+                } else {
+                    return;
+                }
+            });
+            if (isComment) {
+                return;
+            }
+            if (blockRegexp.test(line)) {
+                currentBlock = line.replace(blockRegexp, '$1');
+                configObject[currentBlock] = {};
+                return;
+            }
+            currentLine = line.split(keyValueDelim);
+            if (currentBlock === undefined) {
+                configObject[currentLine[joinKeySlice]] = joinKeyValue ? currentLine.slice(joinKeySlice + 1).join(keyValueDelim) : currentLine[1];
+            } else {
+                configObject[currentBlock][currentLine[joinKeySlice]] = joinKeyValue ? currentLine.slice(joinKeySlice + 1).join(keyValueDelim) : currentLine[1];
+            }
+        });
+        return configObject;
+    }
 
     /**
      * Filters duplicate cards out
@@ -107,6 +161,11 @@ var databaseSystem = (function () {
             map[card.id] = card;
         });
         Object.keys(map).forEach(function (id) {
+            if (banlist[activeBanlist][id]) {
+                map[id].limit = parseInt(banlist[activeBanlist][id], 10);
+            } else {
+                map[id].limit = 0;
+            }
             result.push(map[id]);
         });
         return result;
@@ -158,12 +217,23 @@ var databaseSystem = (function () {
     $.getJSON('http://ygopro.us/manifest/manifest_Z-CWA.json', function (data) {
         dbs.CWA = data;
     });
+    $.get('http://ygopro.us/ygopro/lflist.conf', function (data) {
+        banlist = configParser(data, {
+            keyValueDelim: " ",
+            blockRegexp: new RegExp("^\\s?!(.*?)\\s?$")
+        });
+        Object.keys(banlist).forEach(function (list) {
+            $('.banlistSelect').append('<option value="' + list + '">' + list + '</option>');
+        });
+        activeBanlist = $('.banlistSelect option:selected').val();
+    });
 
 
     return {
         setDatabase: setDatabase,
         dbs: dbs,
-        getDB: getDB
+        getDB: getDB,
+        getBanlist: getBanlist
     };
 }());
 
@@ -484,7 +554,7 @@ var currentSearchFilter = (function () {
 
     function pageForward() {
         var attempted = currentSearchIndex + currentSearchPageSize;
-        console.log(attempted, currentSearchIndex, currentSearchPageSize, currentSearch.length);
+
         if (attempted > currentSearch.length) {
             currentSearchIndex = currentSearch.length - currentSearchPageSize;
             renderSearch();
@@ -571,7 +641,7 @@ var deckEditor = (function () {
         cards.forEach(function (card, index) {
             var hardcard = JSON.stringify(card),
                 src = 'ygopro/pics/' + card.id + '.jpg';
-            html += '<img class="deckeditcard card" id="deceditcard' + index + '" src="http://ygopro.us/' + src + '" data-id="' + card.id + '" onclick = "deckeditonclick(' + index + ', \'' + zone + '\')" / > ';
+            html += '<div class="searchwrapper" data-card-limit="' + card.limit + '"><img class="deckeditcard card" id="deceditcard' + index + '" src="http://ygopro.us/' + src + '" data-id="' + card.id + '" onclick = "deckeditonclick(' + index + ', \'' + zone + '\')" / ></div>';
         });
 
         $('#deckedit .cardspace .' + zone).html(html);
@@ -865,7 +935,10 @@ function deckeditonclick(index, zone) {
 }
 
 $('.descInput, .nameInput, .atkInput, .defInput').on('input', deckEditor.doNewSearch);
+$('.typeSelect, .monsterCardSelect, .monsterTypeSelect, .spellSelect, .trapSelect, .attributeSelect, .raceSelect').on('change', deckEditor.doNewSearch);
+
 $('.typeSelect').on('change', function () {
+    'use strict';
     var target = $('.typeSelect option:selected').text();
     $('.monsterCardSelect, .monsterTypeSelect, .spellSelect, .trapSelect, .attributeSelect, .raceSelect').css('display', 'none');
     $('.attributeSelectl, .raceSelectl').css('display', 'none');
