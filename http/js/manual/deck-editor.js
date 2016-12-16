@@ -545,6 +545,8 @@ var currentSearchFilter = (function () {
         cardsf = filterName(cardsf, filter.cardname) || cardsf;
         cardsf = filterDesc(cardsf, filter.description) || cardsf;
         cardsf = filterType(cardsf, filter.type) || cardsf;
+        cardsf = filterType(cardsf, filter.type1) || cardsf;
+        cardsf = filterType(cardsf, filter.type2) || cardsf;
         cardsf = filterAttribute(cardsf, filter.attribute) || cardsf;
         cardsf = filterRace(cardsf, filter.race) || cardsf;
         //cardsf = filterSetcode(cardsf, filter.setcode) || cardsf;
@@ -725,11 +727,16 @@ var deckEditor = (function () {
             currentSearchFilter.setFilter('limit', parseInt(limit, 10));
         }
 
-        currentSearchFilter.setFilter('type', parseInt(typeSelect, 10));
+        //currentSearchFilter.setFilter('type', parseInt(typeSelect, 10));
         if (typeSelect === '1') {
-            type = 1 + monsterCardValue + monsterTypeValue;
-            console.log('type', type, monsterCardValue, monsterTypeValue);
-            //currentSearchFilter.setFilter('type', type);
+            //currentSearchFilter.setFilter('type', 1);
+
+            if (monsterCardValue) {
+                currentSearchFilter.setFilter('type1', parseInt(monsterCardValue, 10));
+            }
+            if (monsterTypeValue) {
+                currentSearchFilter.setFilter('type2', parseInt(monsterTypeValue, 10));
+            }
             if (atk) {
                 currentSearchFilter.setFilter('atk', parseInt(atk, 10));
             }
