@@ -226,6 +226,7 @@ var databaseSystem = (function () {
             keyValueDelim: " ",
             blockRegexp: new RegExp("^\\s?!(.*?)\\s?$")
         });
+        $('.banlistSelect').html('');
         Object.keys(banlist).forEach(function (list) {
             $('.banlistSelect').append('<option value="' + list + '">' + list + '</option>');
         });
@@ -242,7 +243,6 @@ var databaseSystem = (function () {
         });
         var setcode,
             strings = '<option value="0" data-calc="0">None</option>';
-        console.log(setcodes);
         for (setcode in setcodes) {
             if (setcodes.hasOwnProperty(setcode) && setcode[0] === '0' && setcode[1] === 'x' && setcode !== '0x0') {
                 strings = strings + '<option data-calc="' + setcode.slice(2) + '" value="' + parseInt(setcode, 16) + '">' + setcodes[setcode] + '</option>';
@@ -537,9 +537,13 @@ var currentSearchFilter = (function () {
     }
 
     function filterSetcode(result, setcode) {
-        return result.filter(function (item) {
-            return fSetcode(item, setcode);
-        });
+        if (setcode) {
+            return result.filter(function (item) {
+                return fSetcode(item, setcode);
+            });
+        } else {
+            return result;
+        }
 
     }
 
@@ -572,7 +576,7 @@ var currentSearchFilter = (function () {
         cardsf = filterType(cardsf, filter.type2) || cardsf;
         cardsf = filterAttribute(cardsf, filter.attribute) || cardsf;
         cardsf = filterRace(cardsf, filter.race) || cardsf;
-        //cardsf = filterSetcode(cardsf, filter.setcode) || cardsf;
+        cardsf = filterSetcode(cardsf, filter.setcode) || cardsf;
         cardsf = filterAtk(cardsf, filter.atk, 1) || cardsf;
         cardsf = filterDef(cardsf, filter.def, 1) || cardsf;
         cardsf = filterLevel(cardsf, filter.level, 1) || cardsf;
@@ -734,12 +738,14 @@ var deckEditor = (function () {
             attribute = $('.attributeSelect option:selected').val(),
             race = $('.raceSelect option:selected').val(),
             limit = $('.forbiddenLimitedSelect option:selected').val(),
+            setcode = parseInt($('.setcodeSelect option:selected').val() || 0, 10),
             monsterTypeValue = parseInt($('.monsterTypeSelect').val() || 0, 10),
             monsterCardValue = parseInt($('.monsterCardSelect').val() || 0, 10),
             type;
 
         currentSearchFilter.clearFilter();
         currentSearchFilter.getRender(true);
+        currentSearchFilter.setFilter('setcode', setcode);
         if (cardname) {
             currentSearchFilter.setFilter('cardname', cardname);
         }
@@ -999,9 +1005,10 @@ function deckeditonclick(index, zone) {
     return;
 }
 
-$('.descInput, .nameInput, .atkInput, .defInput').on('input', deckEditor.doNewSearch);
-$('.typeSelect, .monsterCardSelect, .monsterTypeSelect, .spellSelect, .trapSelect, .attributeSelect, .raceSelect').on('change', deckEditor.doNewSearch);
+$('.descInput, .nameInput').on('input', deckEditor.doNewSearch);
+$('.typeSelect, .monsterCardSelect, .monsterTypeSelect, .spellSelect, .trapSelect, .attributeSelect, .raceSelect, .setcodeSelect').on('change', deckEditor.doNewSearch);
 
+$('.atkInput, .defInput, .levelInput, .scaleInput').on('change', deckEditor.doNewSearch);
 $('.typeSelect').on('change', function () {
     'use strict';
     var target = $('.typeSelect option:selected').text();
