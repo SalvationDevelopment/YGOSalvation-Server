@@ -551,7 +551,7 @@
                         <select class="databaseSelect">
                             <option value="OCGTCG">OCG / TCG</option>
                             <option value="Anime">Anime</option>
-<!--                            <option value="MonsterLeague">Monster League</option>-->
+                            <!--                            <option value="MonsterLeague">Monster League</option>-->
                             <option value="Goats">Goat Format</option>
                             <option value="Championship">World Championship</option>
                             <option value="CWA">Crimsom Wind Acadamy CCG</option>
@@ -561,7 +561,7 @@
                     <label for="deckSelect">Deck:
                         <select class="deckSelect"></select>
                     </label>
-                    <button class="saveDeck">Save</button>
+                    <button class="saveDeck" onclick="deckEditor.saveDeck();">Save</button>
                     <br />
                     <button class="saveDeckAs">Save as</button>
                     <label for="decknameInput">Name:
@@ -569,10 +569,12 @@
                     </label>
                     <button class="deleteDeck">Delete</button>
                     <br />
+                    <!--
                     <button class="shuffleDeck">Shuffle</button>
                     <button class="sortDeck">Sort</button>
-                    <button class="clearDeck">Clear</button>
-                    <button class="newDeck">New</button>
+-->
+                    <button class="clearDeck" onclick="deckEditor.clearCurrentDeck();">Clear</button>
+                    <button class="newDeck" onclick="deckEditor.createNewDeck();">New</button>
                 </div>
                 <div class="searchRight">
                     <div class="searchBlock">
