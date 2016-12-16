@@ -544,6 +544,9 @@ function pondata(data) {
         }
         if (data.clientEvent === 'login') {
             processLogin(data.info);
+            primus.write({
+                userName: localStorage.nickname
+            });
         }
         if (data.clientEvent === 'banned') {
             alert(data.reason);
