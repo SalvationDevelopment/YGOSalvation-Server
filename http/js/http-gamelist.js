@@ -550,10 +550,10 @@ function pondata(data) {
             });
         }
         if (data.clientEvent === 'deckLoad') {
-
+            deckEditor.loadDecks(data.decks);
         }
         if (data.clientEvent === 'deckSave') {
-
+            alert('Saved');
         }
         if (data.clientEvent === 'banned') {
             alert(data.reason);
