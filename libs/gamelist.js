@@ -631,7 +631,7 @@ function onData(data, socket) {
             }, function (error, docs) {
                 primus.room(socket.address.ip + data.uniqueID).write({
                     clientEvent: 'deckSaved',
-                    decks: docs,
+                    decks: docs[0].decks,
                     error: error
                 });
             });
@@ -642,10 +642,12 @@ function onData(data, socket) {
             deckStorage.find({
                 username: socket.username
             }, function (error, docs) {
-                primus.room(socket.address.ip + data.uniqueID).write({
-                    clientEvent: 'deckLoad',
-                    decks: docs
-                });
+                if (docs.length) {
+                    primus.room(socket.address.ip + data.uniqueID).write({
+                        clientEvent: 'deckLoad',
+                        decks: docs[0].decks
+                    });
+                }
 
             });
         }
