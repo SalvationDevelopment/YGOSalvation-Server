@@ -728,8 +728,8 @@ var deckEditor = (function () {
         currentSearchFilter.setFilter('type', parseInt(typeSelect, 10));
         if (typeSelect === '1') {
             type = 1 + monsterCardValue + monsterTypeValue;
-            console.log('type', type, monsterCardValue, monsterTypeValue)
-                //currentSearchFilter.setFilter('type', type);
+            console.log('type', type, monsterCardValue, monsterTypeValue);
+            //currentSearchFilter.setFilter('type', type);
             if (atk) {
                 currentSearchFilter.setFilter('atk', parseInt(atk, 10));
             }
@@ -749,13 +749,12 @@ var deckEditor = (function () {
                 currentSearchFilter.setFilter('race', parseInt(race, 10));
             }
         }
-        type = parseInt(typeSelect, 10);
         if (typeSelect === '2') {
 
-            currentSearchFilter.setFilter('type', type + parseInt($('.spellSelect option:selected').val(), 10));
+            currentSearchFilter.setFilter('type', parseInt($('.spellSelect option:selected').val(), 10));
         }
         if (typeSelect === '4') {
-            currentSearchFilter.setFilter('type', type + parseInt($('.trapSelect option:selected').val(), 10));
+            currentSearchFilter.setFilter('type', parseInt($('.trapSelect option:selected').val(), 10));
         }
         doSearch();
     }
