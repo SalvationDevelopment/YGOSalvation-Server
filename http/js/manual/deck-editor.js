@@ -678,8 +678,8 @@ var deckEditor = (function () {
     }
 
     function makeNewDeck(name) {
-        usersDecks.push(makeBlankDeck(name, localStorage.nickname, new Date()));
-        return usersDecks[usersDecks.length - 1];
+        return makeBlankDeck(name, localStorage.nickname, new Date());
+
     }
 
     function updateDeckSelect() {
@@ -936,6 +936,7 @@ var deckEditor = (function () {
         usersDecks.push(makeNewDeck(deckName));
         switchDecks(usersDecks.length - 1);
         saveDeck();
+        loadDecks(usersDecks);
     }
 
     loadDecks([makeNewDeck('New Deck')]);
