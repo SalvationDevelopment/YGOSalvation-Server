@@ -631,7 +631,6 @@ function onData(data, socket) {
             }, function (error, docs) {
                 primus.room(socket.address.ip + data.uniqueID).write({
                     clientEvent: 'deckSaved',
-                    decks: docs[0].decks,
                     error: error
                 });
             });
