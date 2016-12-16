@@ -671,7 +671,7 @@ var deckEditor = (function () {
             main: [],
             extra: [],
             side: [],
-            name: [],
+            name: name,
             creator: username,
             creationDate: date
         };
@@ -810,19 +810,24 @@ var deckEditor = (function () {
     function saveDeck() {
         usersDecks[activeIndex] = JSON.parse(JSON.stringify(inmemoryDeck));
         primus.write({
-            action: 'saveDeck',
-            decks: usersDecks
+            action: 'save',
+            decks: usersDecks,
+            username: localStorage.nickname
         });
     }
 
     function switchDecks(index) {
         activeIndex = index;
-        renderDeckZone(usersDecks[activeIndex]);
         inmemoryDeck = JSON.parse(JSON.stringify(usersDecks[activeIndex]));
+        renderDeckZone(inmemoryDeck);
     }
 
     function loadDecks(decks) {
         usersDecks = decks || [makeNewDeck('New Deck')];
+        $('.deckSelect').html('');
+        usersDecks.forEach(function (deck, index) {
+            $('.deckSelect').append('<option value="' + index + '">' + deck.name + '</option>');
+        });
         switchDecks(activeIndex);
     }
 
@@ -928,7 +933,7 @@ var deckEditor = (function () {
             return;
         }
 
-        usersDecks.push(makeBlankDeck(deckName));
+        usersDecks.push(makeNewDeck(deckName));
         switchDecks(usersDecks.length - 1);
         saveDeck();
     }
@@ -1053,4 +1058,9 @@ $('.banlistSelect').on('change', function () {
     var newList = $('.banlistSelect').val();
     databaseSystem.setBanlist(newList);
     deckEditor.doNewSearch();
+});
+
+$('.deckSelect').on('change', function () {
+    'use strict';
+    deckEditor.switchDecks(parseInt($('.deckSelect').val(), 10));
 });
