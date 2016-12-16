@@ -625,12 +625,12 @@ function onData(data, socket) {
     case 'save':
         if (socket.username) {
             deckStorage.update({
-                username: data.username
+                username: socket.username
             }, data, {
                 upsert: true
             }, function (error, docs) {
                 primus.room(socket.address.ip + data.uniqueID).write({
-                    clientEvent: 'decksaved',
+                    clientEvent: 'deckSaved',
                     decks: docs,
                     error: error
                 });
@@ -640,10 +640,10 @@ function onData(data, socket) {
     case 'load':
         if (socket.username) {
             deckStorage.find({
-                username: data.username
+                username: socket.username
             }, function (error, docs) {
                 primus.room(socket.address.ip + data.uniqueID).write({
-                    clientEvent: 'deckload',
+                    clientEvent: 'deckLoad',
                     decks: docs
                 });
 

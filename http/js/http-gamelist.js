@@ -545,8 +545,15 @@ function pondata(data) {
         if (data.clientEvent === 'login') {
             processLogin(data.info);
             primus.write({
-                userName: localStorage.nickname
+                userName: localStorage.nickname,
+                action: 'load'
             });
+        }
+        if (data.clientEvent === 'deckLoad') {
+
+        }
+        if (data.clientEvent === 'deckSave') {
+
         }
         if (data.clientEvent === 'banned') {
             alert(data.reason);

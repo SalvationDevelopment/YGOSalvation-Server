@@ -916,7 +916,6 @@ var deckEditor = (function () {
     function removeCard(deck) {
         inmemoryDeck[deckEditorReference.zone].splice(deckEditorReference.index, 1);
         renderDeckZone(inmemoryDeck);
-
     }
 
     function createNewDeck() {
