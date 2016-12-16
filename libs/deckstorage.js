@@ -44,79 +44,23 @@ function reply(username, replaymessage) {
 }
 
 function onDB(data) {
-
-    if (!data.deck) {
-        return;
-    }
-    if (!data.room) {
-        return;
-    }
-    console.log('processing', data.command);
-    switch (data.command) {
-    case 'new':
-
-        break;
+    switch (data.action) {
     case 'save':
-        if (data.deck.owner === undefined) {
-            data.deck.owner = data.username;
-        }
-        if (data.deck['_id'] === undefined) {
-            console.log('no ID!');
-            data.deck.owner = data.username;
-            deckStorage.insert(data.deck, function (err) {
-                console.log(data.deck);
-                client.write({
-                    action: 'deckreply',
-                    clientEvent: 'deck',
-                    command: 'save',
-                    note: 'newdeck!',
-                    room: data.room
-                });
-            });
-        } else {
-            data.deck.owner = data.username;
-            console.log('updating:', data.deck['_id']);
-            deckStorage.update({
-                _id: data.deck['_id']
+        deckStorage.update({
+            username: data.username
+        }, data, {
+            upsert: true
+        }, function () {
 
-            }, data.deck, function (err, numReplaced) {
-                client.write({
-                    action: 'deckreply',
-                    clientEvent: 'deck',
-                    command: 'save',
-                    room: data.room
-                });
-            });
-        }
-        break;
-    case 'delete':
-        console.log('Deleting:', data.deck);
-        deckStorage.remove({
-            _id: data.deck['_id']
-        }, {}, function (err, numRemoved) {
-            client.write({
-                action: 'deckreply',
-                clientEvent: 'delete',
-                command: 'delete',
-                room: data.room
-            });
         });
         break;
-
-    case 'get':
+    case 'load':
         deckStorage.find({
-            owner: data.username
-        }, function (err, docs) {
-            client.write({
-                action: 'deckreply',
-                clientEvent: 'deck',
-                command: 'get',
-                decklist: docs,
-                room: data.room
-            });
+            username: data.username
+        }, function (error, docs) {
+            reply(data.username, docs);
         });
         break;
-
     }
 }
 

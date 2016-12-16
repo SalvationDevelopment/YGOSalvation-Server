@@ -38,6 +38,12 @@ setTimeout(function () {
     booting = false;
 }, 5000);
 
+var Datastore = require('nedb'),
+    deckStorage = new Datastore({
+        filename: '../databases/deckStorage.nedb',
+        autoload: true
+    });
+
 
 function internalMessage(announcement) {
     process.nextTick(function () {
@@ -616,24 +622,48 @@ function onData(data, socket) {
         });
 
         break;
-    case ('saveDeckRequest'):
-        primus.room(socket.address.ip + data.uniqueID).write({
-            clientEvent: 'saveDeck',
-            deckList: data.deckList,
-            deckName: data.deckName
-        });
+    case 'save':
+        if (socket.username) {
+            deckStorage.update({
+                username: data.username
+            }, data, {
+                upsert: true
+            }, function (error, docs) {
+                primus.room(socket.address.ip + data.uniqueID).write({
+                    clientEvent: 'decksaved',
+                    decks: docs,
+                    error: error
+                });
+            });
+        }
         break;
-    case ('unlinkDeckRequest'):
-        primus.room(socket.address.ip + data.uniqueID).write({
-            clientEvent: 'unlinkDeck',
-            deckName: data.deckName
-        });
+    case 'load':
+        if (socket.username) {
+            deckStorage.find({
+                username: data.username
+            }, function (error, docs) {
+                primus.room(socket.address.ip + data.uniqueID).write({
+                    clientEvent: 'deckload',
+                    decks: docs
+                });
+
+            });
+        }
         break;
     default:
         console.log(data);
     }
+
     socketwatcher.exit();
+
 }
+
+
+
+
+
+
+
 
 primus.on('connection', function (socket) {
     var connectionwatcher = domain.create();
