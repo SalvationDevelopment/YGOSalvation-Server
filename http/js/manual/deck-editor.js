@@ -92,12 +92,15 @@ var databaseSystem = (function () {
         dbs = {
             'OCGTCG': []
         },
+        activedbs = '',
         setcodes,
         status = false;
 
     function getBanlist() {
         return banlist[activeBanlist];
     }
+
+
 
     function configParser(content, options) {
         var commentDelims = [
@@ -199,7 +202,14 @@ var databaseSystem = (function () {
             listOfCards = dbsets.reduce(function (a, b) {
                 return a.concat(b);
             }, []);
+        activedbs = set;
         database = filterCards(listOfCards);
+    }
+
+    function setBanlist(newlist) {
+        activeBanlist = newlist;
+        setDatabase(activedbs);
+        return getBanlist();
     }
 
 
@@ -256,7 +266,8 @@ var databaseSystem = (function () {
         setDatabase: setDatabase,
         dbs: dbs,
         getDB: getDB,
-        getBanlist: getBanlist
+        getBanlist: getBanlist,
+        setBanlist: setBanlist
     };
 }());
 
@@ -488,7 +499,6 @@ var currentSearchFilter = (function () {
     //All cards that share at least 1 setcode with the arg.
     function filteSetcode(cardsf, setcode) {
         if (setcode !== undefined) {
-            console.log(setcode);
             var output = cardsf.filter(function (item) {
                 return fSetcode(item, setcode);
             });
@@ -1035,4 +1045,12 @@ $('.databaseSelect').on('change', function () {
     'use strict';
     var newDB = $('.databaseSelect').val();
     databaseSystem.setDatabase([newDB]);
+    deckEditor.doNewSearch();
+});
+
+$('.banlistSelect').on('change', function () {
+    'use strict';
+    var newList = $('.banlistSelect').val();
+    databaseSystem.setBanlist(newList);
+    deckEditor.doNewSearch();
 });
