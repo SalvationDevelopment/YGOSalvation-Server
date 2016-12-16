@@ -1029,3 +1029,10 @@ $('.typeSelect').on('change', function () {
         break;
     }
 });
+
+
+$('.databaseSelect').on('change', function () {
+    'use strict';
+    var newDB = $('.databaseSelect').val();
+    databaseSystem.setDatabase([newDB]);
+});
