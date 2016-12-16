@@ -1006,7 +1006,7 @@ function deckeditonclick(index, zone) {
 }
 
 $('.descInput, .nameInput').on('input', deckEditor.doNewSearch);
-$('.typeSelect, .monsterCardSelect, .monsterTypeSelect, .spellSelect, .trapSelect, .attributeSelect, .raceSelect, .setcodeSelect').on('change', deckEditor.doNewSearch);
+$('.typeSelect, .monsterCardSelect, .monsterTypeSelect, .spellSelect, .trapSelect, .attributeSelect, .raceSelect, .setcodeSelect, .forbiddenLimitedSelect').on('change', deckEditor.doNewSearch);
 
 $('.atkInput, .defInput, .levelInput, .scaleInput').on('change', deckEditor.doNewSearch);
 $('.typeSelect').on('change', function () {
