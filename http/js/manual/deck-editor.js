@@ -465,7 +465,7 @@ var currentSearchFilter = (function () {
     //All cards that share at least 1 setcode with the arg.
     function filteSetcode(cardsf, setcode) {
         if (setcode !== undefined) {
-
+            console.log(setcode);
             var output = cardsf.filter(function (item) {
                 return fSetcode(item, setcode);
             });
@@ -523,7 +523,6 @@ var currentSearchFilter = (function () {
     function filterLimit(result, limit) {
         if (limit !== undefined) {
             return result.filter(function (item) {
-                console.log(item.limit, limit);
                 return item.limit === limit;
             });
         } else {
@@ -532,9 +531,13 @@ var currentSearchFilter = (function () {
     }
 
     function filterScale(result, scale, op) {
-        return result.filter(function (item) {
-            return fScale(item, scale, op);
-        });
+        if (scale !== undefined) {
+            return result.filter(function (item) {
+                return fScale(item, scale, op);
+            });
+        } else {
+            return result;
+        }
     }
 
     function filterAll(cards, filter) {
@@ -549,7 +552,7 @@ var currentSearchFilter = (function () {
         cardsf = filterDef(cardsf, filter.def, 1) || cardsf;
         cardsf = filterLevel(cardsf, filter.level, 1) || cardsf;
         cardsf = filterLimit(cardsf, filter.limit) || cardsf;
-        //cardsf = filterScale(cardsf, filter.scale, 1) || cardsf;
+        cardsf = filterScale(cardsf, filter.scale, 1) || cardsf;
         return cardsf;
     }
 
@@ -701,9 +704,14 @@ var deckEditor = (function () {
             typeSelect = $('.typeSelect option:selected').val(),
             atk = $('.atkInput').val(),
             def = $('.defInput').val(),
+            level = $('.levelInput').val(),
+            scale = $('.scaleInput').val(),
             attribute = $('.attributeSelect option:selected').val(),
             race = $('.raceSelect option:selected').val(),
-            limit = $('.forbiddenLimitedSelect option:selected').val();
+            limit = $('.forbiddenLimitedSelect option:selected').val(),
+            monsterTypeValue = parseInt($('.monsterTypeSelect').val() || 0, 10),
+            monsterCardValue = parseInt($('.monsterCardSelect').val() || 0, 10),
+            type;
 
         currentSearchFilter.clearFilter();
         currentSearchFilter.getRender(true);
@@ -719,11 +727,20 @@ var deckEditor = (function () {
 
         currentSearchFilter.setFilter('type', parseInt(typeSelect, 10));
         if (typeSelect === '1') {
+            type = 1 + monsterCardValue + monsterTypeValue;
+            console.log('type', type, monsterCardValue, monsterTypeValue)
+                //currentSearchFilter.setFilter('type', type);
             if (atk) {
                 currentSearchFilter.setFilter('atk', parseInt(atk, 10));
             }
             if (def) {
                 currentSearchFilter.setFilter('def', parseInt(atk, 10));
+            }
+            if (level) {
+                currentSearchFilter.setFilter('level', parseInt(level, 10));
+            }
+            if (scale) {
+                currentSearchFilter.setFilter('scale', parseInt(scale, 10));
             }
             if (attribute) {
                 currentSearchFilter.setFilter('attribute', parseInt(attribute, 10));
@@ -732,11 +749,13 @@ var deckEditor = (function () {
                 currentSearchFilter.setFilter('race', parseInt(race, 10));
             }
         }
+        type = parseInt(typeSelect, 10);
         if (typeSelect === '2') {
-            currentSearchFilter.setFilter('type', parseInt($('.spellSelect option:selected').val(), 10));
+
+            currentSearchFilter.setFilter('type', type + parseInt($('.spellSelect option:selected').val(), 10));
         }
         if (typeSelect === '4') {
-            currentSearchFilter.setFilter('type', parseInt($('.trapSelect option:selected').val(), 10));
+            currentSearchFilter.setFilter('type', type + parseInt($('.trapSelect option:selected').val(), 10));
         }
         doSearch();
     }
