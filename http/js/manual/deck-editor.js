@@ -92,6 +92,7 @@ var databaseSystem = (function () {
         dbs = {
             'OCGTCG': []
         },
+        setcodes,
         status = false;
 
     function getBanlist() {
@@ -149,6 +150,9 @@ var databaseSystem = (function () {
         return configObject;
     }
 
+    function updateSetcodes() {
+
+    }
     /**
      * Filters duplicate cards out
      * @param   {Array[Object]} list of cards.
@@ -226,6 +230,25 @@ var databaseSystem = (function () {
             $('.banlistSelect').append('<option value="' + list + '">' + list + '</option>');
         });
         activeBanlist = $('.banlistSelect option:selected').val();
+    });
+
+    $.get('./ygopro/strings.conf', 'utf-8', function (data) {
+        setcodes = configParser(data, {
+            keyValueDelim: " ",
+            commentDelims: [],
+            blockRegexp: new RegExp("^\\s?#(.*?)\\s?$/"),
+            joinKeyValue: true,
+            joinKeySlice: 1
+        });
+        var setcode,
+            strings = '<option value="0" data-calc="0">None</option>';
+        console.log(setcodes);
+        for (setcode in setcodes) {
+            if (setcodes.hasOwnProperty(setcode) && setcode[0] === '0' && setcode[1] === 'x' && setcode !== '0x0') {
+                strings = strings + '<option data-calc="' + setcode.slice(2) + '" value="' + parseInt(setcode, 16) + '">' + setcodes[setcode] + '</option>';
+            }
+        }
+        $('.setcodeSelect').html(strings);
     });
 
 
@@ -729,7 +752,7 @@ var deckEditor = (function () {
 
         //currentSearchFilter.setFilter('type', parseInt(typeSelect, 10));
         if (typeSelect === '1') {
-            //currentSearchFilter.setFilter('type', 1);
+            currentSearchFilter.setFilter('type', 1);
 
             if (monsterCardValue) {
                 currentSearchFilter.setFilter('type1', parseInt(monsterCardValue, 10));
