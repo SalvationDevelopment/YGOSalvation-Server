@@ -86,7 +86,7 @@ function cardStackSort(db) {
 
 var databaseSystem = (function () {
     'use strict';
-    var database = [],
+    var database = localStorage.compiledDB || [],
         activeBanlist = '',
         banlist = {},
         dbs = {
@@ -204,6 +204,7 @@ var databaseSystem = (function () {
             }, []);
         activedbs = set;
         database = filterCards(listOfCards);
+        localStorage.compiledDB = database;
     }
 
     function setBanlist(newlist) {
@@ -677,6 +678,10 @@ var deckEditor = (function () {
         };
     }
 
+    function getInmemoryDeck() {
+        return inmemoryDeck;
+    }
+
     function makeNewDeck(name) {
         return makeBlankDeck(name, localStorage.nickname, new Date());
 
@@ -959,7 +964,8 @@ var deckEditor = (function () {
         makeNewDeck: makeNewDeck,
         usersDecks: usersDecks,
         activeIndex: activeIndex,
-        doNewSearch: doNewSearch
+        doNewSearch: doNewSearch,
+        getInmemoryDeck: getInmemoryDeck
     };
 }());
 
@@ -982,17 +988,17 @@ function deckeditonclick(index, zone) {
         'display': 'block'
     });
     deckEditorReference = {
-        id: deckEditor.inmemoryDeck[zone][index].id,
-        alias: deckEditor.inmemoryDeck[zone][index].alias,
+        id: deckEditor.getInmemoryDeck()[zone][index].id,
+        alias: deckEditor.getInmemoryDeck()[zone][index].alias,
         zone: zone,
         index: index,
-        type: deckEditor.inmemoryDeck[zone][index].type,
-        atk: deckEditor.inmemoryDeck[zone][index].atk,
-        def: deckEditor.inmemoryDeck[zone][index].def,
-        limit: deckEditor.inmemoryDeck[zone][index].limit
+        type: deckEditor.getInmemoryDeck()[zone][index].type,
+        atk: deckEditor.getInmemoryDeck()[zone][index].atk,
+        def: deckEditor.getInmemoryDeck()[zone][index].def,
+        limit: deckEditor.getInmemoryDeck()[zone][index].limit
     };
 
-    var dbEntry = deckEditor.inmemoryDeck[zone][index],
+    var dbEntry = deckEditor.getInmemoryDeck()[zone][index],
         viewable = {
             'display': 'block'
         };
