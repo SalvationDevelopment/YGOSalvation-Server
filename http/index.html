@@ -514,29 +514,11 @@
             We are currently developing an online deck editor which will be available in the near future.
             <br /> If after updating your launcher a new window does not open, please consult our Bug Reports Forum for help.
         </div>
-        <script>
-            $(function () {
-                var keyArray = [];
-                $(document).on('keypress', function (ev) {
-                    if (keyArray.length >= 100) {
-                        keyArray = [];
-                    }
-                    keyArray.push(ev.which);
-                    if (charCodeStringMatch("deckedit", keyArray)) {
-                        $('.mainContainer').css('display', 'block');
-                        $('.deckEditNotice').css('display', 'none');
-                    }
-                });
 
-                function charCodeStringMatch(str, charArray) {
-                    return (new RegExp('' + str, 'i')).test(String.fromCharCode.apply(this, charArray));
-                }
-            });
-        </script>
         <div class="mainContainer" style="display: block;">
             <div class="left">
                 <div class="cardImage">
-                    <img class="imgContainer" src="ygopro/pics/cover.jpg" />
+                    <img class="imgContainer" />
                 </div>
                 <div class="cardDescription">
                 </div>
@@ -554,7 +536,7 @@
                             <!--                            <option value="MonsterLeague">Monster League</option>-->
                             <option value="Goats">Goat Format</option>
                             <option value="Championship">World Championship</option>
-                            <option value="CWA">Crimsom Wind Acadamy CCG</option>
+<!--                            <option value="CWA">Crimsom Wind Acadamy CCG</option>-->
                         </select>
                     </label>
                     <br />
@@ -1209,14 +1191,16 @@
                 <br/>
                 <span id="translatecdpt">Cards Drawn per Turn: </span><span id="lobbycdpt"></span>
             </div>
-            <div id="lobbycurrentdeck" class="launcheronly">
+            <div id="lobbycurrentdeck" class="">
                 Select Deck :
                 <select class='currentdeck'>
-                    <option selected value=""></option>
+
                 </select>
             </div>
+            <!--
             <label style="margin-top:2vh">Upload YDK File</label>
-            <input style="color:white;" class="shine" id="deckupload" type="file" placeholder="Upload YDK">
+<input style="color:white;" class="shine" id="deckupload" type="file" placeholder="Upload YDK">
+-->
             <div id="lobbystartcancel">
                 <button onclick="manualStart()" id="lobbystart">Start Duel</button>
                 <button id="lobbycancel" onclick="manualLeave()">Cancel</button>

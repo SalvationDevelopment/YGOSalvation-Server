@@ -830,14 +830,16 @@ var deckEditor = (function () {
 
     function loadDecks(decks) {
         usersDecks = decks || [makeNewDeck('New Deck')];
-        $('.deckSelect').html('');
+        $('.deckSelect,  #lobbycurrentdeck select').html('');
         usersDecks.forEach(function (deck, index) {
-            $('.deckSelect').append('<option value="' + index + '">' + deck.name + '</option>');
+            $('.deckSelect, #lobbycurrentdeck select').append('<option value="' + index + '">' + deck.name + '</option>');
         });
         switchDecks(activeIndex);
     }
 
-
+    function getDeck(index) {
+        return JSON.parse(JSON.stringify(usersDecks[activeIndex]));
+    }
 
     function clearCurrentDeck() {
         usersDecks[activeIndex] = makeNewDeck(usersDecks[activeIndex].name);
@@ -947,7 +949,7 @@ var deckEditor = (function () {
     loadDecks([makeNewDeck('New Deck')]);
 
     return {
-        inmemoryDeck: inmemoryDeck,
+        getDeck: getDeck,
         createNewDeck: createNewDeck,
         updateDeckSelect: updateDeckSelect,
         addCardFromSearch: addCardFromSearch,

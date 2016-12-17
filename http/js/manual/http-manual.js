@@ -681,7 +681,7 @@ function excludeTokens(card) {
 }
 
 var internalDB = [];
-$.getJSON('http://ygopro.us/manifest/database_0-en-OCGTCG.json', function (data) {
+$.getJSON('http://ygopro.us/manifest/manifest_0-en-OCGTCG.json', function (data) {
     'use strict';
     var internalDB = data;
 });
