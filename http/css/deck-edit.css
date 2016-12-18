@@ -328,11 +328,13 @@ button.saveDeck {
     margin-right: 0.9vw;
 }
 
+/*
 button.saveDeckAs {
     float: right;
     margin-top: -1.5vw;
     margin-right: 0.9vw;
 }
+*/
 
 button.deleteDeck {
     float: right;
