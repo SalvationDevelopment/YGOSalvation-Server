@@ -1,5 +1,5 @@
 /*jslint browser:true, plusplus:true, bitwise:true*/
-/*global WebSocket, $, singlesitenav, console, enums, alert,  confirm, FileReader*/
+/*global WebSocket, $, singlesitenav, console, enums, alert,  confirm, deckEditor, FileReader*/
 
 
 
@@ -283,48 +283,9 @@ function readSingleFile(evt) {
 
 function getdeck() {
     'use strict';
-    var selection = '',
-        processedDeck;
+    var selection = $('#lobbycurrentdeck .currentdeck option:selected').val() || 0;
 
-    function makeDeck(ydkFileContents) {
-        var lineSplit = ydkFileContents.split("\n"),
-            originalValues = {
-                "main": [],
-                "side": [],
-                "extra": []
-            },
-            current = "";
-        lineSplit = lineSplit.map(function (item) {
-            return item.trim();
-        });
-        try {
-            lineSplit.forEach(function (value) {
-                if (value === "") {
-                    return;
-                }
-                if (value[0] === "#" || value[0] === "!") {
-                    if (originalValues.hasOwnProperty(value.substr(1))) {
-                        current = value.substr(1);
-                    } else {
-                        return;
-                    }
-                } else {
-                    console.log(current);
-                    originalValues[current].push(value);
-                }
-            });
-        } catch (er) {
-            console.log(er);
-        }
-        return originalValues;
-    }
-
-    selection = $('#lobbycurrentdeck .currentdeck option:selected').eq(0).attr('data-file');
-    if (selection) {
-        return makeDeck(selection);
-    }
-    return makeDeck(uploadedDeck);
-
+    return deckEditor.getDeck(selection);
 }
 
 function loadField() {

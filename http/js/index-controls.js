@@ -200,7 +200,7 @@ function singlesitenav(target) {
         'display': 'none'
     });
     if (!launcher) {
-        $('#lobbycurrentdeck, .notneededinweb').css('display', 'none');
+        $('.notneededinweb').css('display', 'none');
     }
     return false;
 }

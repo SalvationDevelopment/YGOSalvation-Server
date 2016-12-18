@@ -948,6 +948,39 @@ var deckEditor = (function () {
 
     loadDecks([makeNewDeck('New Deck')]);
 
+    function makeDeckfromydk(ydkFileContents) {
+        var lineSplit = ydkFileContents.split("\n"),
+            originalValues = {
+                "main": [],
+                "side": [],
+                "extra": []
+            },
+            current = "";
+        lineSplit = lineSplit.map(function (item) {
+            return item.trim();
+        });
+        try {
+            lineSplit.forEach(function (value) {
+                if (value === "") {
+                    return;
+                }
+                if (value[0] === "#" || value[0] === "!") {
+                    if (originalValues.hasOwnProperty(value.substr(1))) {
+                        current = value.substr(1);
+                    } else {
+                        return;
+                    }
+                } else {
+                    console.log(current);
+                    originalValues[current].push(value);
+                }
+            });
+        } catch (er) {
+            console.log(er);
+        }
+        return originalValues;
+    }
+
     return {
         getDeck: getDeck,
         createNewDeck: createNewDeck,
