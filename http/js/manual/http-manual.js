@@ -279,7 +279,7 @@ function readSingleFile(evt) {
     }
 }
 
-document.getElementById('deckupload').addEventListener('change', readSingleFile, false);
+//document.getElementById('deckupload').addEventListener('change', readSingleFile, false);
 
 function getdeck() {
     'use strict';
