@@ -623,18 +623,18 @@ function onData(data, socket) {
 
         break;
     case 'save':
-        if (socket.username) {
-            deckStorage.update({
-                username: socket.username
-            }, data, {
-                upsert: true
-            }, function (error, docs) {
-                primus.room(socket.address.ip + data.uniqueID).write({
-                    clientEvent: 'deckSaved',
-                    error: error
-                });
+
+        deckStorage.update({
+            username: data.username
+        }, data, {
+            upsert: true
+        }, function (error, docs) {
+            primus.room(socket.address.ip + data.uniqueID).write({
+                clientEvent: 'deckSaved',
+                error: error
             });
-        }
+        });
+
         break;
     case 'load':
         console.log(data);
