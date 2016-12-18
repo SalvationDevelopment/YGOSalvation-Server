@@ -285,7 +285,7 @@ function getdeck() {
     'use strict';
 
     function getter(card) {
-        return card.id;
+        return String(card.id);
     }
     var selection = $('#lobbycurrentdeck .currentdeck option:selected').val() || 0,
         deck = deckEditor.getDeck(selection),
@@ -293,7 +293,11 @@ function getdeck() {
         side = deck.side.map(getter),
         extra = deck.extra.map(getter);
 
-    return [].concat(main, side, extra);
+    return {
+        main: main,
+        side: side,
+        extra: extra
+    };
 }
 
 function loadField() {
