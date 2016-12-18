@@ -283,11 +283,17 @@ function readSingleFile(evt) {
 
 function getdeck() {
     'use strict';
-    var selection = $('#lobbycurrentdeck .currentdeck option:selected').val() || 0;
 
-    return deckEditor.getDeck(selection).map(function (card) {
+    function getter(card) {
         return card.id;
-    });
+    }
+    var selection = $('#lobbycurrentdeck .currentdeck option:selected').val() || 0,
+        deck = deckEditor.getDeck(selection),
+        main = deck.main.map(getter),
+        side = deck.side.map(getter),
+        extra = deck.extra.map(getter);
+
+    return [].concat(main, side, extra);
 }
 
 function loadField() {
