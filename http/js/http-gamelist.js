@@ -545,7 +545,7 @@ function pondata(data) {
         if (data.clientEvent === 'login') {
             processLogin(data.info);
             primus.write({
-                userName: localStorage.nickname,
+                username: localStorage.nickname,
                 action: 'load'
             });
         }
