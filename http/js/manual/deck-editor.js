@@ -229,9 +229,9 @@ var databaseSystem = (function () {
     $.getJSON('http://ygopro.us/manifest/manifest_4-World-Championship.json', function (data) {
         dbs.Championship = data;
     });
-    $.getJSON('http://ygopro.us/manifest/manifest_Z-CWA.json', function (data) {
-        dbs.CWA = data;
-    });
+//    $.getJSON('http://ygopro.us/manifest/manifest_Z-CWA.json', function (data) {
+            //        dbs.CWA = data;
+            //    });
     $.get('http://ygopro.us/ygopro/lflist.conf', function (data) {
         banlist = configParser(data, {
             keyValueDelim: " ",
