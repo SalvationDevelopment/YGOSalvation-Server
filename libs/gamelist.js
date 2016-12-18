@@ -308,7 +308,7 @@ function registrationCall(data, socket) {
         }
         if (info.success) {
             registry[info.displayname] = socket.address.ip;
-            socket.username = data.username;
+            socket.username = data.displayname;
             sendRegistry();
             socket.write({
                 clientEvent: 'global',
@@ -649,6 +649,8 @@ function onData(data, socket) {
                 }
 
             });
+        } else {
+            console.log('could not load', socket.username, 'for', data.username);
         }
         break;
     default:
