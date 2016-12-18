@@ -285,7 +285,9 @@ function getdeck() {
     'use strict';
     var selection = $('#lobbycurrentdeck .currentdeck option:selected').val() || 0;
 
-    return deckEditor.getDeck(selection);
+    return deckEditor.getDeck(selection).map(function (card) {
+        return card.id;
+    });
 }
 
 function loadField() {
