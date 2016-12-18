@@ -942,6 +942,7 @@ var deckEditor = (function () {
         if (newDeck !== undefined) {
             newDeck.name = deckName;
             usersDecks.push(newDeck.name);
+            console.log(userDecks);
         } else {
             usersDecks.push(makeNewDeck(deckName));
         }
