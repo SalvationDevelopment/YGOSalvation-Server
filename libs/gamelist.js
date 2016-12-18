@@ -637,21 +637,17 @@ function onData(data, socket) {
         }
         break;
     case 'load':
-        if (socket.username) {
-            deckStorage.find({
-                username: socket.username
-            }, function (error, docs) {
-                if (docs.length) {
-                    primus.room(socket.address.ip + data.uniqueID).write({
-                        clientEvent: 'deckLoad',
-                        decks: docs[0].decks
-                    });
-                }
+        deckStorage.find({
+            username: data.username
+        }, function (error, docs) {
+            if (docs.length) {
+                primus.room(socket.address.ip + data.uniqueID).write({
+                    clientEvent: 'deckLoad',
+                    decks: docs[0].decks
+                });
+            }
 
-            });
-        } else {
-            console.log('could not load', socket.username, 'for', data.username);
-        }
+        });
         break;
     default:
         console.log(data);
