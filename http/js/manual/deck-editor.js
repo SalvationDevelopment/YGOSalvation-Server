@@ -925,7 +925,7 @@ var deckEditor = (function () {
         renderDeckZone(inmemoryDeck);
     }
 
-    function createNewDeck() {
+    function createNewDeck(newDeck) {
         if (usersDecks.length > 60) {
             // obviously lying.
             alert('You own more than 60 decks. We cant store that many for you!');
@@ -939,12 +939,23 @@ var deckEditor = (function () {
             alert('Deck Name Already Exist');
             return;
         }
+        if (newDeck !== undefined) {
+            newDeck.name = deckName;
+            usersDecks.push(newDeck.name);
+        } else {
+            usersDecks.push(makeNewDeck(deckName));
+        }
 
-        usersDecks.push(makeNewDeck(deckName));
         switchDecks(usersDecks.length - 1);
         saveDeck();
         loadDecks(usersDecks);
     }
+
+    function saveDeckAs() {
+        var newDeck = JSON.parse(JSON.stringify(inmemoryDeck));
+        createNewDeck(newDeck);
+    }
+
 
     loadDecks([makeNewDeck('New Deck')]);
 
@@ -971,7 +982,6 @@ var deckEditor = (function () {
                         return;
                     }
                 } else {
-                    console.log(current);
                     originalValues[current].push(value);
                 }
             });
@@ -993,6 +1003,7 @@ var deckEditor = (function () {
         loadDecks: loadDecks,
         switchDecks: switchDecks,
         saveDeck: saveDeck,
+        saveDeckAs: saveDeckAs,
         doSearch: doSearch,
         renderDeckZone: renderDeckZone,
         makeCard: makeCard,
