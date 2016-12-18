@@ -637,9 +637,11 @@ function onData(data, socket) {
         }
         break;
     case 'load':
+        console.log(data);
         deckStorage.find({
             username: data.username
         }, function (error, docs) {
+            console.log(error, docs);
             if (docs.length) {
                 primus.room(socket.address.ip + data.uniqueID).write({
                     clientEvent: 'deckLoad',
