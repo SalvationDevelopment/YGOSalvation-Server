@@ -819,7 +819,7 @@ var deckEditor = (function () {
         if (!okToDelete) {
             return;
         }
-        if (usersDecks.length === 0) {
+        if (usersDecks.length === 1) {
             alert('Thats your last Deck!');
             return;
         }
