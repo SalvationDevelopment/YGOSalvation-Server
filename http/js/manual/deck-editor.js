@@ -851,7 +851,7 @@ var deckEditor = (function () {
             activeIndex = usersDecks.length;
         }
         saveDeck();
-        switchDecks(activeIndex);
+        loadDecks(userDecks);
     }
 
     function moveInArray(array, old_index, new_index) {
