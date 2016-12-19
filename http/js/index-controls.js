@@ -180,6 +180,9 @@ function singlesitenav(target) {
         setTimeout(function () {
             $('#cusomizationselection').trigger('change');
         }, 3000);
+    if (launcher === false) {
+        manualModeGamelistSwitch();
+    }
 
     }
     //$('body').css('background-image', 'url(http://static.zerochan.net/Ghostrick.Nekomusume.full.1945016.jpg)');
@@ -689,7 +692,7 @@ function runPowerDB() {
         message = {
             sql: sql,
             db: $('#sqldblist2 option:selected').text()
-        };
+        };  
 
     window.quedparams = message;
     window.quedfunc = 'powerdb';
