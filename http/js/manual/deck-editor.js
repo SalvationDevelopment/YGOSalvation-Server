@@ -846,10 +846,12 @@ var deckEditor = (function () {
     }
 
     function deleteDeck() {
-        primus.write({
-            action: 'deleteDeck',
-            decks: usersDecks[activeIndex]
-        });
+        usersDecks.splice(activeIndex, 1);
+        if (usersDecks.length > activeIndex) {
+            activeIndex = usersDecks.length;
+        }
+        saveDeck();
+        switchDecks(activeIndex);
     }
 
     function moveInArray(array, old_index, new_index) {
@@ -941,7 +943,7 @@ var deckEditor = (function () {
         }
         if (newDeck !== undefined) {
             newDeck.name = deckName;
-            usersDecks.push(newDeck.name);
+            usersDecks.push(newDeck);
             console.log(userDecks);
         } else {
             usersDecks.push(makeNewDeck(deckName));
