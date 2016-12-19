@@ -810,6 +810,7 @@ var deckEditor = (function () {
 
     function clearCurrentDeck() {
         inmemoryDeck = makeNewDeck(usersDecks[activeIndex].name);
+        renderDeckZone(inmemoryDeck);
         doSearch();
     }
 
