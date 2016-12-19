@@ -809,7 +809,8 @@ var deckEditor = (function () {
     }
 
     function clearCurrentDeck() {
-        usersDecks[activeIndex] = makeNewDeck(usersDecks[activeIndex].name);
+        inmemoryDeck = makeNewDeck(usersDecks[activeIndex].name);
+        doSearch();
     }
 
     function deleteDeck() {
@@ -893,6 +894,25 @@ var deckEditor = (function () {
     function removeCard(deck) {
         inmemoryDeck[deckEditorReference.zone].splice(deckEditorReference.index, 1);
         renderDeckZone(inmemoryDeck);
+    }
+
+    function rename() {
+
+        var deckName = prompt('New Deck Name?', inmemoryDeck.name),
+            deckCheck = usersDecks.filter(function (deck) {
+                return (deck.name === deckName);
+            });
+
+        if (!deckName) {
+            return;
+        }
+        if (deckCheck.length) {
+            alert('Deck Name Already Exist');
+            return;
+        }
+        usersDecks[activeIndex].name = deckName;
+        saveDeck();
+        loadDecks(usersDecks);
     }
 
     function createNewDeck(newDeck) {
@@ -985,7 +1005,8 @@ var deckEditor = (function () {
         usersDecks: usersDecks,
         activeIndex: activeIndex,
         doNewSearch: doNewSearch,
-        getInmemoryDeck: getInmemoryDeck
+        getInmemoryDeck: getInmemoryDeck,
+        rename: rename
     };
 }());
 
