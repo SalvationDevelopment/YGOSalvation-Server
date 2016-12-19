@@ -814,10 +814,15 @@ var deckEditor = (function () {
     }
 
     function deleteDeck() {
+        var okToDelete = confirm('Delete ' + inmemoryDeck.name + '?');
+        if (!okToDelete) {
+            return;
+        }
         usersDecks.splice(activeIndex, 1);
         if (usersDecks.length > activeIndex) {
             activeIndex = usersDecks.length;
         }
+        inmemoryDeck = JSON.parse(JSON.stringify(usersDecks[activeIndex]));
         saveDeck();
         loadDecks(usersDecks);
     }
