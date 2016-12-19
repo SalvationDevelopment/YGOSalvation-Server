@@ -84,9 +84,17 @@ function cardStackSort(db) {
 
 }
 
+var oldDB = '[]';
+
+try {
+    oldDB = JSON.parse(localStorage.compiledDB);
+} catch (error) {
+    oldDB = '[]';
+}
+
 var databaseSystem = (function () {
     'use strict';
-    var database = localStorage.compiledDB || [],
+    var database = oldDB || [],
         activeBanlist = '',
         banlist = {},
         dbs = {
@@ -204,7 +212,7 @@ var databaseSystem = (function () {
             }, []);
         activedbs = set;
         database = filterCards(listOfCards);
-        localStorage.compiledDB = database;
+        localStorage.compiledDB = JSON.stringify(database);
     }
 
     function setBanlist(newlist) {
