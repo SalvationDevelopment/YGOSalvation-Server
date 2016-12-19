@@ -910,7 +910,7 @@ var deckEditor = (function () {
             alert('Deck Name Already Exist');
             return;
         }
-        usersDecks[activeIndex].name = deckName;
+        inmemoryDeck.name = deckName;
         saveDeck();
         loadDecks(usersDecks);
     }
