@@ -8,22 +8,16 @@ function cardStackSort(db) {
     if (!db) {
         return [];
     }
-    var result,
-        monsters = db.filter(function (card) {
-            // filter out Tokens
-            if (card.type === 16401 || card.type === 16417) {
-                return false;
-            }
-            return cardIs('monster', card);
-        }),
-        spells = db.filter(function (card) {
-            return cardIs('spell', card);
-        }),
-        traps = db.filter(function (card) {
-            return cardIs('trap', card);
-        });
-
-    monsters.sort(function (a, b) {
+    db.sort(function (a, b) {
+        if (a.atk > b.atk) {
+            return -1;
+        }
+        if (a.atk < b.atk) {
+            return 1;
+        }
+        if (a.def > b.def) {
+            return -1;
+        }
         if (a.type === 4 && b.type !== 4) {
             return 1;
         }
@@ -36,15 +30,7 @@ function cardStackSort(db) {
         if (a.type < b.type) {
             return -1;
         }
-        if (a.atk > b.atk) {
-            return -1;
-        }
-        if (a.atk < b.atk) {
-            return 1;
-        }
-        if (a.def > b.def) {
-            return -1;
-        }
+
         if (a.id > b.id) {
             return 1;
         }
@@ -52,36 +38,9 @@ function cardStackSort(db) {
 
     });
 
-    spells.sort(function (a, b) {
-        if (a.type > b.type) {
-            return 1;
-        }
-        if (a.type < b.type) {
-            return -1;
-        }
-        if (a.id > b.id) {
-            return 1;
-        }
-        return 0;
-    });
 
-    traps.sort(function (a, b) {
-        if (a.type > b.type) {
-            return 1;
-        }
-        if (a.type < b.type) {
-            return -1;
-        }
-        if (a.id > b.id) {
-            return 1;
-        }
-        return 0;
-    });
-    result = [monsters, spells, traps];
-    return result.reduce(function (a, b) {
-        return a.concat(b);
-    }, []);
 
+    return db;
 }
 
 var oldDB = '[]';
@@ -914,8 +873,9 @@ var deckEditor = (function () {
         }
         moveInArray(inmemoryDeck[deckEditorReference.zone], deckEditorReference.index, 0);
         var card = inmemoryDeck[deckEditorReference.zone].shift();
-        inmemoryDeck[deck].push(card);
         inmemoryDeck[deck] = cardStackSort(inmemoryDeck[deck]);
+        inmemoryDeck[deck].push(card);
+
         renderDeckZone(inmemoryDeck);
 
     }
@@ -925,7 +885,7 @@ var deckEditor = (function () {
             return;
         }
         inmemoryDeck[deck].push(deckEditorReference);
-        inmemoryDeck[deck] = cardStackSort(inmemoryDeck[deck]);
+        cardStackSort(inmemoryDeck[deck]);
         renderDeckZone(inmemoryDeck);
 
     }
