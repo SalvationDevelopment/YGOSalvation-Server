@@ -818,7 +818,7 @@ var deckEditor = (function () {
             activeIndex = usersDecks.length;
         }
         saveDeck();
-        loadDecks(userDecks);
+        loadDecks(usersDecks);
     }
 
     function moveInArray(array, old_index, new_index) {
@@ -905,6 +905,9 @@ var deckEditor = (function () {
                 return (deck.name === deckName);
             });
 
+        if (!deckName) {
+            return;
+        }
         if (deckCheck.length) {
             alert('Deck Name Already Exist');
             return;
@@ -912,7 +915,7 @@ var deckEditor = (function () {
         if (newDeck !== undefined) {
             newDeck.name = deckName;
             usersDecks.push(newDeck);
-            console.log(userDecks);
+            console.log(usersDecks);
         } else {
             usersDecks.push(makeNewDeck(deckName));
         }
