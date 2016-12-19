@@ -261,25 +261,9 @@ function makeGames() {
 
 var uploadedDeck = '';
 
-function readSingleFile(evt) {
-    //Retrieve the first (and only!) File from the FileList object
-    'use strict';
-    var f = evt.target.files[0],
-        r;
 
-    if (f) {
-        r = new FileReader();
-        r.onload = function (e) {
-            var contents = e.target.result;
-            uploadedDeck = contents;
-        };
-        r.readAsText(f);
-    } else {
-        alert("Failed to load file");
-    }
-}
 
-//document.getElementById('deckupload').addEventListener('change', readSingleFile, false);
+
 
 function getdeck() {
     'use strict';
@@ -662,7 +646,7 @@ $.getJSON('http://ygopro.us/manifest/manifest_0-en-OCGTCG.json', function (data)
 function getCardObject(id) {
     'use strict';
 
-    return internalDB.filter(function (card, index) {
+    return internalDB.some(function (card, index) {
         if (id === card.id) {
             return true;
         } else {

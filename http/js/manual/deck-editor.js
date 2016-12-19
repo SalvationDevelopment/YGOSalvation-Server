@@ -995,9 +995,12 @@ var deckEditor = (function () {
 
     function upload(ydk) {
         var newDeck = makeDeckfromydk(ydk);
-
+        console.log(newDeck);
         newDeck.creator = localStorage.nickname;
         newDeck.creationDate = new Date();
+        newDeck.main = newDeck.main.map(function (cardid) {
+            return getCardObject(cardid);
+        });
 
         createNewDeck(newDeck);
 
