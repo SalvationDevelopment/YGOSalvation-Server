@@ -1,5 +1,5 @@
-/*global currentMousePos, getCardObject, reorientmenu, cardIs, $, internalDB, primus,prompt, alert*/
-/*jslint bitwise: true, plusplus:true, regexp:true*/
+/*global currentMousePos, getCardObject, reorientmenu, cardIs, $, internalDB, primus,prompt, alert, confirm, FileReader*/
+/*jslint bitwise: true, plusplus:true, regexp:true, browser:true*/
 
 
 function cardStackSort(db) {
@@ -993,6 +993,16 @@ var deckEditor = (function () {
         return originalValues;
     }
 
+    function upload(ydk) {
+        var newDeck = makeDeckfromydk(ydk);
+
+        newDeck.creator = localStorage.nickname;
+        newDeck.creationDate = new Date();
+
+        createNewDeck(newDeck);
+
+
+    }
     return {
         getDeck: getDeck,
         createNewDeck: createNewDeck,
@@ -1014,7 +1024,8 @@ var deckEditor = (function () {
         activeIndex: activeIndex,
         doNewSearch: doNewSearch,
         getInmemoryDeck: getInmemoryDeck,
-        rename: rename
+        rename: rename,
+        upload: upload
     };
 }());
 
@@ -1120,3 +1131,30 @@ $('.deckSelect').on('change', function () {
     'use strict';
     deckEditor.switchDecks(parseInt($('.deckSelect').val(), 10));
 });
+
+
+function readSingleFile(evt) {
+    //Retrieve the first (and only!) File from the FileList object
+    'use strict';
+    var f = evt.target.files[0],
+        r;
+
+    if (f) {
+        r = new FileReader();
+        r.onload = function (e) {
+            var contents = e.target.result,
+                action = false;
+
+            action = confirm('Upload Deck?');
+            if (action) {
+                deckEditor.upload(contents);
+            }
+
+        };
+        r.readAsText(f);
+    } else {
+        alert("Failed to load file");
+    }
+}
+
+$('#deckupload').on('change', readSingleFile);
