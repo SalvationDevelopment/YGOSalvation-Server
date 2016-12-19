@@ -819,10 +819,12 @@ var deckEditor = (function () {
         if (!okToDelete) {
             return;
         }
-        usersDecks.splice(activeIndex, 1);
-        if (usersDecks.length > activeIndex) {
-            activeIndex = usersDecks.length;
+        if (usersDecks.length === 0) {
+            alert('Thats your last Deck!');
+            return;
         }
+        usersDecks.splice(activeIndex, 1);
+        activeIndex = 0;
         inmemoryDeck = JSON.parse(JSON.stringify(usersDecks[activeIndex]));
         saveDeck();
         loadDecks(usersDecks);
