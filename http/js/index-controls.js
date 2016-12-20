@@ -67,7 +67,7 @@ function updatenews() {
                     });
                 });
                 output = parser(news);
-                console.log(feed, parser, topics, output);
+                //console.log(feed, parser, topics, output);
                 $('#news').html(output);
             });
         }
