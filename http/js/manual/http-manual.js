@@ -2240,192 +2240,198 @@ function checksetcode(obj, sc) {
 
 function guicardonclick() {
     'use strict';
-    var idIndex = window.manualDuel.uidLookup(record),
-        stackunit = window.manualDuel.stack[idIndex],
-        dbEntry;
+    try {
+        var idIndex = window.manualDuel.uidLookup(record),
+            stackunit = window.manualDuel.stack[idIndex],
+            dbEntry;
 
-    if (targetmode) {
-        manualTarget(stackunit);
-        return;
-    }
-
-    if (attackmode) {
-        if (stackunit.player !== manualActionReference.player) {
-            targetreference = stackunit;
-            manualAttack();
+        if (targetmode) {
+            manualTarget(stackunit);
             return;
         }
-        return;
-    }
-    manualActionReference = null;
-    $('#manualcontrols button').css({
-        'display': 'none'
-    });
+
+        if (attackmode) {
+            if (stackunit.player !== manualActionReference.player) {
+                targetreference = stackunit;
+                manualAttack();
+                return;
+            }
+            return;
+        }
+        manualActionReference = null;
+        $('#manualcontrols button').css({
+            'display': 'none'
+        });
 
 
 
-    manualActionReference = stackunit;
-    dbEntry = getCardObject(parseInt(stackunit.id, 10));
-    console.log(stackunit, dbEntry);
-    if (stackunit.location === 'GRAVE') {
-        $('.m-grave').css({
-            'display': 'block'
-        });
-        reorientmenu();
-        return;
-    }
-    if (stackunit.location === 'EXCAVATED') {
-        $('.m-excavated').css({
-            'display': 'block'
-        });
-        reorientmenu();
-        return;
-    }
-    if (stackunit.location === 'EXTRA') {
-        $('.m-extra-view').css({
-            'display': 'block'
-        });
-    }
-    if (stackunit.player !== orientSlot) {
-        return;
-    }
-    $('#manualcontrols').css({
-        'top': currentMousePos.y,
-        'left': currentMousePos.x,
-        'display': 'block'
-    });
-    if (stackunit.location === 'DECK') {
-        $('.m-deck').css({
-            'display': 'block'
-        });
-        reorientmenu();
-        return;
-    }
-    if (stackunit.location === 'HAND') {
-        $('.m-hand').css({
-            'display': 'block'
-        });
-        if (monsterMap[dbEntry.type]) {
-            $('.m-hand-m').css({
+        manualActionReference = stackunit;
+        dbEntry = getCardObject(parseInt(stackunit.id, 10));
+        console.log(stackunit, dbEntry);
+        if (stackunit.location === 'GRAVE') {
+            $('.m-grave').css({
+                'display': 'block'
+            });
+            reorientmenu();
+            return;
+        }
+        if (stackunit.location === 'EXCAVATED') {
+            $('.m-excavated').css({
+                'display': 'block'
+            });
+            reorientmenu();
+            return;
+        }
+        if (stackunit.location === 'EXTRA') {
+            $('.m-extra-view').css({
                 'display': 'block'
             });
         }
-        if (stMap[dbEntry.type] || dbEntry.type === 2 || dbEntry.type === 4) {
-            $('.m-hand-st').css({
+        if (stackunit.player !== orientSlot) {
+            return;
+        }
+        $('#manualcontrols').css({
+            'top': currentMousePos.y,
+            'left': currentMousePos.x,
+            'display': 'block'
+        });
+        if (stackunit.location === 'DECK') {
+            $('.m-deck').css({
                 'display': 'block'
             });
+            reorientmenu();
+            return;
         }
-        if (fieldspell[dbEntry.type]) {
-            $('.m-hand-f').css({
+        if (stackunit.location === 'HAND') {
+            $('.m-hand').css({
                 'display': 'block'
             });
-        }
-        if (pendulumMap[dbEntry.type]) {
-            $('.m-hand-p, .m-monster-p').css({
-                'display': 'block'
-            });
-        }
+            if (monsterMap[dbEntry.type]) {
+                $('.m-hand-m').css({
+                    'display': 'block'
+                });
+            }
+            if (stMap[dbEntry.type] || dbEntry.type === 2 || dbEntry.type === 4) {
+                $('.m-hand-st').css({
+                    'display': 'block'
+                });
+            }
+            if (fieldspell[dbEntry.type]) {
+                $('.m-hand-f').css({
+                    'display': 'block'
+                });
+            }
+            if (pendulumMap[dbEntry.type]) {
+                $('.m-hand-p, .m-monster-p').css({
+                    'display': 'block'
+                });
+            }
 
 
-        reorientmenu();
-        return;
-    }
-    if (stackunit.location === 'GRAVE') {
-        $('.m-grave').css({
-            'display': 'block'
-        });
-        if (pendulumMap[dbEntry.type]) {
-            $('.m-monster-p').css({
-                'display': 'block'
-            });
+            reorientmenu();
+            return;
         }
-        reorientmenu();
-        return;
-    }
-
-    if (stackunit.location === 'EXTRA') {
-        $('.m-extra').css({
-            'display': 'block'
-        });
-        reorientmenu();
-        return;
-    }
-
-    if (stackunit.location === 'REMOVED') {
-        $('.m-removed').css({
-            'display': 'block'
-        });
-        if (pendulumMap[dbEntry.type]) {
-            $('.m-monster-p').css({
+        if (stackunit.location === 'GRAVE') {
+            $('.m-grave').css({
                 'display': 'block'
             });
-        }
-        reorientmenu();
-        return;
-    }
-    if (stackunit.location === 'MONSTERZONE') {
-        $('.m-monster, .m-field').css({
-            'display': 'block'
-        });
-        if ($("#phaseindicator").attr('data-currentphase') === '3') {
-            $('.a-field').css({
-                'display': 'block'
-            });
-        }
-        if (pendulumMap[dbEntry.type] || cardIs('fusion', dbEntry) || cardIs('syncho', dbEntry) || cardIs('xyz', dbEntry)) {
-            $('.m-monster-extra').css({
-                'display': 'block'
-            });
-        }
-        if (pendulumMap[dbEntry.type]) {
-            $('.m-monster-p').css({
-                'display': 'block'
-            });
-        }
-        if (cardIs('xyz', dbEntry)) {
-            $('.m-monster-xyz').css({
-                'display': 'block'
-            });
-        }
-        if (!excludeTokens(dbEntry)) {
-            $('.m-monster-token').css({
-                'display': 'block'
-            });
+            if (pendulumMap[dbEntry.type]) {
+                $('.m-monster-p').css({
+                    'display': 'block'
+                });
+            }
+            reorientmenu();
+            return;
         }
 
-        if (checksetcode(dbEntry, 151) || dbEntry.id === 9791914 || dbEntry.id === 58132856) {
-            $('.m-st-monster').css({
+        if (stackunit.location === 'EXTRA') {
+            $('.m-extra').css({
                 'display': 'block'
             });
-        }
-        if (dbEntry.id === 27911549) {
-            $('.m-parasite').css({
-                'display': 'block'
-            });
+            reorientmenu();
+            return;
         }
 
-        reorientmenu();
-        return;
-    }
-    if (stackunit.location === 'SPELLZONE') {
-        $('.m-st, .m-field').css({
-            'display': 'block'
-        });
-        if (dbEntry.id === 62966332) {
-            $('.m-convulse').css({
+        if (stackunit.location === 'REMOVED') {
+            $('.m-removed').css({
                 'display': 'block'
             });
+            if (pendulumMap[dbEntry.type]) {
+                $('.m-monster-p').css({
+                    'display': 'block'
+                });
+            }
+            reorientmenu();
+            return;
         }
-        if (dbEntry.id === 63571750) {
-            $('.m-pharaohstreasure').css({
+        if (stackunit.location === 'MONSTERZONE') {
+            $('.m-monster, .m-field').css({
+                'display': 'block'
+            });
+            if ($("#phaseindicator").attr('data-currentphase') === '3') {
+                $('.a-field').css({
+                    'display': 'block'
+                });
+            }
+            if (pendulumMap[dbEntry.type] || cardIs('fusion', dbEntry) || cardIs('syncho', dbEntry) || cardIs('xyz', dbEntry)) {
+                $('.m-monster-extra').css({
+                    'display': 'block'
+                });
+            }
+            if (pendulumMap[dbEntry.type]) {
+                $('.m-monster-p').css({
+                    'display': 'block'
+                });
+            }
+            if (cardIs('xyz', dbEntry)) {
+                $('.m-monster-xyz').css({
+                    'display': 'block'
+                });
+            }
+            if (!excludeTokens(dbEntry)) {
+                $('.m-monster-token').css({
+                    'display': 'block'
+                });
+            }
 
-            });
+            if (checksetcode(dbEntry, 151) || dbEntry.id === 9791914 || dbEntry.id === 58132856) {
+                $('.m-st-monster').css({
+                    'display': 'block'
+                });
+            }
+            if (dbEntry.id === 27911549) {
+                $('.m-parasite').css({
+                    'display': 'block'
+                });
+            }
+
+            reorientmenu();
+            return;
         }
-        if (pendulumMap[dbEntry.type]) {
-            $('.m-monster-p').css({
+        if (stackunit.location === 'SPELLZONE') {
+            $('.m-st, .m-field').css({
                 'display': 'block'
             });
+            if (dbEntry.id === 62966332) {
+                $('.m-convulse').css({
+                    'display': 'block'
+                });
+            }
+            if (dbEntry.id === 63571750) {
+                $('.m-pharaohstreasure').css({
+
+                });
+            }
+            if (pendulumMap[dbEntry.type]) {
+                $('.m-monster-p').css({
+                    'display': 'block'
+                });
+            }
+            reorientmenu();
+            return;
         }
+    } catch (error) {
+        console.log('On Card Click Error:', error);
         reorientmenu();
         return;
     }
