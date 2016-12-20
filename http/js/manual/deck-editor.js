@@ -48,7 +48,7 @@ var oldDB = '[]';
 try {
     oldDB = JSON.parse(localStorage.compiledDB);
 } catch (error) {
-    oldDB = '[]';
+    oldDB = [];
 }
 
 var databaseSystem = (function () {
@@ -995,15 +995,32 @@ var deckEditor = (function () {
         return originalValues;
     }
 
+    function pullcard(id, data) {
+        return data.filter(function (card, index) {
+            if (id === card.id) {
+                return true;
+            } else {
+                return false;
+            }
+        })[0];
+    }
+
     function upload(ydk) {
-        var newDeck = makeDeckfromydk(ydk);
+        var newDeck = makeDeckfromydk(ydk),
+            data = databaseSystem.getDB();
         console.log(newDeck);
         newDeck.creator = localStorage.nickname;
         newDeck.creationDate = new Date();
         newDeck.main = newDeck.main.map(function (cardid) {
-            var card = getCardObject(parseInt(cardid, 10));
+            var card = pullcard(parseInt(cardid, 10), data);
             console.log(cardid, card);
             return card;
+        });
+        newDeck.side = newDeck.side.map(function (cardid) {
+            return pullcard(parseInt(cardid, 10), data);
+        });
+        newDeck.extra = newDeck.extra.map(function (cardid) {
+            return pullcard(parseInt(cardid, 10), data);
         });
 
         createNewDeck(newDeck);
