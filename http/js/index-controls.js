@@ -50,8 +50,9 @@ function updatenews() {
                     topics = feed.items,
                     news = {
                         articles: []
-                    };
-                console.log(feed, parser, topics);
+                    },
+                    output;
+
                 topics.forEach(function (topic, index) {
                     if (index > 5) {
                         //limit the number of post in the news feed.
@@ -65,7 +66,9 @@ function updatenews() {
                         link: topic.link
                     });
                 });
-                $('#news').html(parser(news));
+                output = parser(news);
+                console.log(feed, parser, topics, output);
+                $('#news').html(output);
             });
         }
     });
