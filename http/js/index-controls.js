@@ -45,15 +45,13 @@ function updatenews() {
     $.getFeed({
         url: 'http://forum.ygopro.us/index.php?/forum/14-announcements-and-news.xml/',
         success: function (feed) {
-            console.log(feed);
-
-
             $.get('handlebars/forumnews.handlebars', function (template) {
                 var parser = Handlebars.compile(template),
                     topics = feed.items,
                     news = {
                         articles: []
                     };
+                console.log(feed, parser, topics);
                 topics.forEach(function (topic, index) {
                     if (index > 5) {
                         //limit the number of post in the news feed.
