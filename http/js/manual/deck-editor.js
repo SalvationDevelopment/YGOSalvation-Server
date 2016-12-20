@@ -793,6 +793,7 @@ var deckEditor = (function () {
         inmemoryDeck = JSON.parse(JSON.stringify(usersDecks[activeIndex]));
         renderDeckZone(inmemoryDeck);
         $('.deckSelect').val(activeIndex);
+        doSearch();
     }
 
     function loadDecks(decks) {
@@ -802,6 +803,7 @@ var deckEditor = (function () {
             $('.deckSelect, #lobbycurrentdeck select').append('<option value="' + index + '">' + deck.name + '</option>');
         });
         switchDecks(activeIndex);
+        doSearch();
     }
 
     function getDeck(index) {
@@ -999,7 +1001,9 @@ var deckEditor = (function () {
         newDeck.creator = localStorage.nickname;
         newDeck.creationDate = new Date();
         newDeck.main = newDeck.main.map(function (cardid) {
-            return getCardObject(cardid);
+            var card = getCardObject(parseInt(cardid, 10));
+            console.log(cardid, card);
+            return card;
         });
 
         createNewDeck(newDeck);
