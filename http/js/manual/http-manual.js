@@ -269,7 +269,7 @@ function getdeck() {
     'use strict';
 
     function getter(card) {
-        return String(card.id);
+        return Number(card.id);
     }
     var selection = $('#lobbycurrentdeck .currentdeck option:selected').val() || 0,
         deck = deckEditor.getDeck(selection),
