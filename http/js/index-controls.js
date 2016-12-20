@@ -160,6 +160,9 @@ function singlesitenav(target) {
     }
     if (target === 'gamelist') {
         $('body').css('background-image', 'url(http://ygopro.us/img/magimagipinkshadow.jpg)');
+        if (launcher === false) {
+            manualModeGamelistSwitch();
+        }
     }
     if (target === 'chat') {
         $('body').css('background-image', 'url(http://ygopro.us/img/magimagipinkshadow.jpg)');
@@ -180,9 +183,7 @@ function singlesitenav(target) {
         setTimeout(function () {
             $('#cusomizationselection').trigger('change');
         }, 3000);
-    if (launcher === false) {
-        manualModeGamelistSwitch();
-    }
+
 
     }
     //$('body').css('background-image', 'url(http://static.zerochan.net/Ghostrick.Nekomusume.full.1945016.jpg)');
@@ -692,11 +693,36 @@ function runPowerDB() {
         message = {
             sql: sql,
             db: $('#sqldblist2 option:selected').text()
-        };  
+        };
 
     window.quedparams = message;
     window.quedfunc = 'powerdb';
     window.quedready = true;
 
 
+}
+
+
+function confirmDialog(title, message, confirm, reject) {
+    var dialog = $('<div />').html(message).dialog({
+        appendTo: 'body',
+        title: title,
+        modal: true,
+        buttons: {
+            "OK": function () {
+                $(this).dialog("close");
+                confirm();
+            },
+            "cancel": function () {
+                $(this).dialog("close");
+                if ($.isFunction(reject)) {
+                    reject();
+                }
+            }
+        },
+        close: function (event, ui) {
+            $(this).dialog('destroy');
+            $(this).remove()
+        }
+    })
 }
