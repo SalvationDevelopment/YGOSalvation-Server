@@ -444,7 +444,6 @@ function guiCard(dataBinding) {
 function cardmargin(player, deck) {
     'use strict';
     var multi = (deck === 'GRAVE') ? -1 : 1;
-    console.log('running cardmargin');
     $('.card.p' + player + '.' + deck).each(function (i) {
         var n = $(this).attr('data-index');
         $(this).attr('style', '').css({
@@ -798,7 +797,7 @@ function startGame(message) {
 
 function manualReciver(message) {
     'use strict';
-    console.log(message);
+
     if (message.info !== undefined) {
         updateChat(message.info.duelistChat, message.info.spectatorChat);
     }
@@ -806,13 +805,16 @@ function manualReciver(message) {
         if (activegame) {
             updateloby(broadcast[activegame]);
         }
+        return;
     }
     if (message.error) {
         if (internalLocal === 'surrendered') {
             alert('An Error Occured');
         }
+        console.log(message);
         return;
     }
+    console.log(message);
     switch (message.action) {
     case "lobby":
         singlesitenav('lobby');
@@ -858,7 +860,6 @@ function manualReciver(message) {
         sidestach.main = sidedDeck.main.length;
         sidestach.extra = sidedDeck.extra.length;
         sidestach.side = sidedDeck.side.length;
-        console.log(sidedDeck.main);
         renderSideDeckZone(sidedDeck);
         break;
     case "start":
@@ -1746,7 +1747,6 @@ function manualToExtra() {
     message.action = 'moveCard';
 
     message.moveposition = 'FaceDown';
-    console.log('EXTRA', index, end, message, manualActionReference);
     manualServer.send(JSON.stringify(message));
 }
 
@@ -1758,7 +1758,6 @@ function manualToExtraFaceUp() {
 
     message.action = 'moveCard';
     message.moveposition = 'FaceUp';
-    console.log(message);
     manualServer.send(JSON.stringify(message));
 }
 
@@ -1935,7 +1934,6 @@ function sideonclick(index, zone) {
 
 function revealonclick(card, note) {
     'use strict';
-    console.log(revealcache[card], note);
     // Goblin circus removes...
     //    if (note !== 'view') {
     //        return;
@@ -2267,7 +2265,6 @@ function guicardonclick() {
 
         manualActionReference = stackunit;
         dbEntry = getCardObject(parseInt(stackunit.id, 10));
-        console.log(stackunit, dbEntry);
         if (stackunit.location === 'GRAVE') {
             $('.m-grave').css({
                 'display': 'block'
