@@ -1,5 +1,5 @@
 /*jslint browser:true, plusplus:true, bitwise:true*/
-/*global WebSocket, $, singlesitenav, console, enums, alert,  confirm, deckEditor, FileReader*/
+/*global WebSocket, $, singlesitenav, console, enums, alert,  confirm, deckEditor, FileReader, databaseSystem*/
 
 
 
@@ -636,16 +636,12 @@ function excludeTokens(card) {
     return true;
 }
 
-var internalDB = databaseSystem.getDB();
-$.getJSON('http://ygopro.us/manifest/manifest_0-en-OCGTCG.json', function (data) {
-    'use strict';
-    var internalDB = data;
-});
+
 
 function getCardObject(id) {
     'use strict';
     var result = {};
-    internalDB.some(function (card, index) {
+    databaseSystem.getDB().some(function (card, index) {
         if (id === card.id) {
             result = card;
             return true;
@@ -2472,10 +2468,6 @@ $(document).mousemove(function (event) {
 });
 
 
-$.getJSON('http://ygopro.us/manifest/manifest_0-en-OCGTCG.json', function (data) {
-    'use strict';
-    internalDB = data;
-});
 
 var lastchat;
 
