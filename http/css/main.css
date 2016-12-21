@@ -929,13 +929,11 @@ div#actions button {
     width: 100%;
 }
 
-[floatmarker="s50"] .searchmarker,
-[floatmarker="s50"] > img {
+[floatmarker="s50"] >* {
     margin-right: -10px;
 }
 
-[floatmarker="s60"] .searchmarker,
-[floatmarker="s60"] > img {
+[floatmarker="s60"] >* {
     margin-right: -20px;
 }
 
