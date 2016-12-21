@@ -762,14 +762,14 @@ var deckEditor = (function () {
             $('#decktextoutput').append(sorter.main[id].unit + 'x ' + sorter.main[id].card.name + '<br />');
         });
 
-        $('#decktextoutput').append('<br />Side Deck<br/>');
+        $('#decktextoutput').append('<br />Extra Deck<br/>');
         Object.keys(sorter.extra).sort(function (a, b) {
             return cardStackSort(sorter.extra[a].card, sorter.extra[b].card);
         }).forEach(function (id) {
             $('#decktextoutput').append(sorter.extra[id].unit + 'x ' + sorter.extra[id].card.name + '<br />');
         });
 
-        $('#decktextoutput').append('<br/ >Extra Deck<br/>');
+        $('#decktextoutput').append('<br/ >Side Deck<br/>');
         Object.keys(sorter.side).sort(function (a, b) {
             return cardStackSort(sorter.side[a].card, sorter.side[b].card);
         }).forEach(function (id) {
