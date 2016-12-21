@@ -2,41 +2,45 @@
 /*jslint bitwise: true, plusplus:true, regexp:true, browser:true*/
 
 
-function cardStackSort(db) {
+
+function cardStackSort(a, b) {
+    'use strict';
+    if (a.atk > b.atk) {
+        return -1;
+    }
+    if (a.atk < b.atk) {
+        return 1;
+    }
+    if (a.def > b.def) {
+        return -1;
+    }
+    if (a.type === 4 && b.type !== 4) {
+        return 1;
+    }
+    if (a.type !== 4 && b.type === 4) {
+        return -1;
+    }
+    if (a.type > b.type) {
+        return 1;
+    }
+    if (a.type < b.type) {
+        return -1;
+    }
+
+    if (a.id > b.id) {
+        return 1;
+    }
+    return 0;
+
+}
+
+function docardStackSort(db) {
     'use strict';
 
     if (!db) {
         return [];
     }
-    db.sort(function (a, b) {
-        if (a.atk > b.atk) {
-            return -1;
-        }
-        if (a.atk < b.atk) {
-            return 1;
-        }
-        if (a.def > b.def) {
-            return -1;
-        }
-        if (a.type === 4 && b.type !== 4) {
-            return 1;
-        }
-        if (a.type !== 4 && b.type === 4) {
-            return -1;
-        }
-        if (a.type > b.type) {
-            return 1;
-        }
-        if (a.type < b.type) {
-            return -1;
-        }
-
-        if (a.id > b.id) {
-            return 1;
-        }
-        return 0;
-
-    });
+    db.sort(cardStackSort);
 
 
 
@@ -150,7 +154,7 @@ var databaseSystem = (function () {
      * @returns {Array[Object]} array of cards.
      */
     function getDB() {
-        return cardStackSort(database);
+        return docardStackSort(database);
     }
 
     /**
@@ -753,21 +757,23 @@ var deckEditor = (function () {
         });
         $('#decktextoutput').html('Main Deck<br/>');
         Object.keys(sorter.main).sort(function (a, b) {
-            return sorter.main[a].card.type > sorter.main[b].card.type;
+            return cardStackSort(sorter.extra[a].card, sorter.extra[b].card);
         }).forEach(function (id) {
             $('#decktextoutput').append(sorter.main[id].unit + 'x ' + sorter.main[id].card.name + '<br />');
         });
-        $('#decktextoutput').append('<br/ >Extra Deck<br/>');
-        Object.keys(sorter.side).sort(function (a, b) {
-            return sorter.side[a].card.type > sorter.side[b].card.type;
-        }).forEach(function (id) {
-            $('#decktextoutput').append(sorter.side[id].unit + 'x ' + sorter.side[id].card.name + '<br />');
-        });
+
         $('#decktextoutput').append('<br />Side Deck<br/>');
         Object.keys(sorter.extra).sort(function (a, b) {
-            return sorter.extra[a].card.type > sorter.extra[b].card.type;
+            return cardStackSort(sorter.extra[a].card, sorter.extra[b].card);
         }).forEach(function (id) {
             $('#decktextoutput').append(sorter.extra[id].unit + 'x ' + sorter.extra[id].card.name + '<br />');
+        });
+
+        $('#decktextoutput').append('<br/ >Extra Deck<br/>');
+        Object.keys(sorter.side).sort(function (a, b) {
+            return cardStackSort(sorter.extra[a].card, sorter.extra[b].card);
+        }).forEach(function (id) {
+            $('#decktextoutput').append(sorter.extra[id].unit + 'x ' + sorter.side[id].card.name + '<br />');
         });
 
     }
@@ -955,7 +961,7 @@ var deckEditor = (function () {
         }
         moveInArray(inmemoryDeck[deckEditorReference.zone], deckEditorReference.index, 0);
         var card = inmemoryDeck[deckEditorReference.zone].shift();
-        inmemoryDeck[deck] = cardStackSort(inmemoryDeck[deck]);
+        inmemoryDeck[deck] = docardStackSort(inmemoryDeck[deck]);
         inmemoryDeck[deck].push(card);
 
         renderDeckZone(inmemoryDeck);
@@ -967,7 +973,7 @@ var deckEditor = (function () {
             return;
         }
         inmemoryDeck[deck].push(deckEditorReference);
-        cardStackSort(inmemoryDeck[deck]);
+        docardStackSort(inmemoryDeck[deck]);
         renderDeckZone(inmemoryDeck);
 
     }
