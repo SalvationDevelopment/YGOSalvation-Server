@@ -1141,6 +1141,7 @@ function deckeditonclick(index, zone) {
     });
     deckEditorReference = {
         id: deckEditor.getInmemoryDeck()[zone][index].id,
+        name: deckEditor.getInmemoryDeck()[zone][index].name,
         alias: deckEditor.getInmemoryDeck()[zone][index].alias,
         zone: zone,
         index: index,
