@@ -102,7 +102,7 @@ input.decknameInput {
     border: none;
     float: left;
     background: rgba(0, 0, 0, .5);
-    margin-left: 9vw;
+    margin-left: 15px;
     margin-top: 23vh;
 }
 
@@ -328,6 +328,7 @@ button.saveDeck {
     margin-right: 0.9vw;
 }
 
+
 /*
 button.saveDeckAs {
     float: right;
@@ -464,4 +465,16 @@ select.typeSelect {
     height: auto;
     overflow: auto;
     float: left;
+}
+
+textarea#decktextoutput {
+    float: left;
+    width: 17vw;
+    margin-left: 10px;
+    margin-top: 24vh;
+    height: 70%;
+    background: transparent;
+    padding: 5px;
+    color: white;
+    border: 1px solid silver;
 }
