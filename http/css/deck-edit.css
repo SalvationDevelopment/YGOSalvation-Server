@@ -477,4 +477,6 @@ select.typeSelect {
     padding: 5px;
     color: white;
     border: 1px solid silver;
+    font-size: 10px;
+    overflow: auto;
 }
