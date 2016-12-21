@@ -752,15 +752,21 @@ var deckEditor = (function () {
             }
         });
         $('#decktextoutput').html('Main Deck<br/>');
-        Object.keys(sorter.main).forEach(function (id) {
+        Object.keys(sorter.main).sort(function (a, b) {
+            return sorter.main[a].card.type > sorter.main[b].card.type;
+        }).forEach(function (id) {
             $('#decktextoutput').append(sorter.main[id].unit + 'x ' + sorter.main[id].card.name + '<br />');
         });
         $('#decktextoutput').append('<br/ >Extra Deck<br/>');
-        Object.keys(sorter.side).forEach(function (id) {
+        Object.keys(sorter.side).sort(function (a, b) {
+            return sorter.side[a].card.type > sorter.side[b].card.type;
+        }).forEach(function (id) {
             $('#decktextoutput').append(sorter.side[id].unit + 'x ' + sorter.side[id].card.name + '<br />');
         });
         $('#decktextoutput').append('<br />Side Deck<br/>');
-        Object.keys(sorter.extra).forEach(function (id) {
+        Object.keys(sorter.extra).sort(function (a, b) {
+            return sorter.extra[a].card.type > sorter.extra[b].card.type;
+        }).forEach(function (id) {
             $('#decktextoutput').append(sorter.extra[id].unit + 'x ' + sorter.extra[id].card.name + '<br />');
         });
 
