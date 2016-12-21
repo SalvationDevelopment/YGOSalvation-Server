@@ -757,7 +757,7 @@ var deckEditor = (function () {
         });
         $('#decktextoutput').html('Main Deck<br/>');
         Object.keys(sorter.main).sort(function (a, b) {
-            return cardStackSort(sorter.extra[a].card, sorter.extra[b].card);
+            return cardStackSort(sorter.main[a].card, sorter.main[b].card);
         }).forEach(function (id) {
             $('#decktextoutput').append(sorter.main[id].unit + 'x ' + sorter.main[id].card.name + '<br />');
         });
@@ -771,7 +771,7 @@ var deckEditor = (function () {
 
         $('#decktextoutput').append('<br/ >Extra Deck<br/>');
         Object.keys(sorter.side).sort(function (a, b) {
-            return cardStackSort(sorter.extra[a].card, sorter.extra[b].card);
+            return cardStackSort(sorter.side[a].card, sorter.side[b].card);
         }).forEach(function (id) {
             $('#decktextoutput').append(sorter.extra[id].unit + 'x ' + sorter.side[id].card.name + '<br />');
         });
