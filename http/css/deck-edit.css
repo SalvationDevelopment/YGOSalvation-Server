@@ -467,7 +467,7 @@ select.typeSelect {
     float: left;
 }
 
-textarea#decktextoutput {
+#decktextoutput {
     float: left;
     width: 17vw;
     margin-left: 10px;
