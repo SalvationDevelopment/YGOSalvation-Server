@@ -674,6 +674,16 @@ var deckEditor = (function () {
         //$('#subreveal').width(cards.length * 197);
     }
 
+    function pullcard(id, data) {
+        return data.filter(function (card, index) {
+            if (id === card.id) {
+                return true;
+            } else {
+                return false;
+            }
+        })[0];
+    }
+
     function renderDeckZone(deck) {
         makeCard(deck.main, 'main');
         makeCard(deck.extra, 'extra');
@@ -681,7 +691,12 @@ var deckEditor = (function () {
 
         var floatMarkerMain = '',
             floatMarkerExtra = '',
-            floatMarkerSide = '';
+            floatMarkerSide = '',
+            sorter = {
+                main: {},
+                side: {},
+                extra: {}
+            };
 
         if (deck.main.length > 40) {
             floatMarkerMain = 's50';
@@ -699,6 +714,54 @@ var deckEditor = (function () {
         $('#deckedit .cardspace .main').attr('floatmarker', floatMarkerMain);
         $('#deckedit .cardspace .extra').attr('floatmarker', floatMarkerExtra);
         $('#deckedit .cardspace .side').attr('floatmarker', floatMarkerSide);
+
+        deck.main.forEach(function (card) {
+            if (sorter.main[card.id] === undefined) {
+                sorter.main[card.id] = {
+                    unit: 1,
+                    card: card
+                };
+                return;
+            }
+            if (sorter.main[card.id]) {
+                sorter.main[card.id].unit++;
+            }
+        });
+        deck.extra.forEach(function (card) {
+            if (sorter.extra[card.id] === undefined) {
+                sorter.extra[card.id] = {
+                    unit: 1,
+                    card: card
+                };
+                return;
+            }
+            if (sorter.extra[card.id]) {
+                sorter.extra[card.id].unit++;
+            }
+        });
+        deck.side.forEach(function (card) {
+            if (sorter.side[card.id] === undefined) {
+                sorter.side[card.id] = {
+                    unit: 1,
+                    card: card
+                };
+                return;
+            }
+            if (sorter.side[card.id]) {
+                sorter.side[card.id].unit++;
+            }
+        });
+        $('#decktextoutput').html('Main Deck<br/>');
+        Object.keys(sorter.main).forEach(function (id) {
+            $('#decktextoutput').append(sorter.main[id].unit + 'x ' + sorter.main[id].card.name + '<br />');
+        });
+        Object.keys(sorter.main).forEach(function (id) {
+            $('#decktextoutput').append(sorter.side[id].unit + 'x ' + sorter.side[id].card.name + '<br />');
+        });
+        Object.keys(sorter.main).forEach(function (id) {
+            $('#decktextoutput').append(sorter.extra[id].unit + 'x ' + sorter.extra[id].card.name + '<br />');
+        });
+
     }
 
 
@@ -945,7 +1008,7 @@ var deckEditor = (function () {
         if (newDeck !== undefined) {
             newDeck.name = deckName;
             usersDecks.push(newDeck);
-            console.log(usersDecks);
+            //console.log(usersDecks);
         } else {
             usersDecks.push(makeNewDeck(deckName));
         }
@@ -995,15 +1058,6 @@ var deckEditor = (function () {
         return originalValues;
     }
 
-    function pullcard(id, data) {
-        return data.filter(function (card, index) {
-            if (id === card.id) {
-                return true;
-            } else {
-                return false;
-            }
-        })[0];
-    }
 
     function upload(ydk) {
         var newDeck = makeDeckfromydk(ydk),
