@@ -645,7 +645,7 @@ $.getJSON('http://ygopro.us/manifest/manifest_0-en-OCGTCG.json', function (data)
 function getCardObject(id) {
     'use strict';
 
-    return internalDB.some(function (card, index) {
+    return internalDB.filter(function (card, index) {
         if (id === card.id) {
             return true;
         } else {
