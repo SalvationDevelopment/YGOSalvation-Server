@@ -636,7 +636,7 @@ function excludeTokens(card) {
     return true;
 }
 
-var internalDB = [];
+var internalDB = databaseSystem.getDB();
 $.getJSON('http://ygopro.us/manifest/manifest_0-en-OCGTCG.json', function (data) {
     'use strict';
     var internalDB = data;
@@ -644,14 +644,17 @@ $.getJSON('http://ygopro.us/manifest/manifest_0-en-OCGTCG.json', function (data)
 
 function getCardObject(id) {
     'use strict';
-
-    return internalDB.filter(function (card, index) {
+    var result = {};
+    internalDB.some(function (card, index) {
         if (id === card.id) {
+            result = card;
             return true;
         } else {
             return false;
         }
-    })[0];
+    });
+
+    return result;
 }
 
 function automaticZonePicker(realPlayer, zone) {
