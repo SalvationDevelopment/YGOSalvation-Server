@@ -1206,10 +1206,11 @@ function startTarget() {
     $('.card.p1, .card.p0').addClass('attackglow');
 }
 
-function startXYZSummon() {
+function startXYZSummon(target) {
     'use strict';
     overlaymode = true;
     $('.card.p0').addClass('attackglow');
+
 }
 
 function manualAttack() {
@@ -1233,6 +1234,7 @@ function manualTarget(target) {
     targetmode = false;
     $('.card').removeClass('targetglow');
 }
+
 
 
 function manualRemoveToken() {
@@ -1711,6 +1713,24 @@ function manualOverlay() {
         manualServer.send(JSON.stringify(message));
     });
 }
+
+function manualXYZSummon(target) {
+    'use strict';
+    overlaymode = false;
+    $('.card').removeClass('targetglow');
+
+
+    var index = target.index,
+        end = makeHand(manualActionReference, index),
+        message = makeCardMovement(manualActionReference, end);
+
+    message.action = 'moveCard';
+    manualServer.send(JSON.stringify(message));
+    setTimeout(function () {
+        manualOverlay();
+    }, 1000);
+}
+
 
 function manualToGrave() {
     'use strict';
