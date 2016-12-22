@@ -292,7 +292,8 @@ function loadField() {
 var manualDuel,
     targetreference,
     attackmode = false,
-    targetmode = false;
+    targetmode = false,
+    overlaymode = false;
 
 function stateUpdate(dataBinding) {
     'use strict';
@@ -1203,6 +1204,12 @@ function startTarget() {
     'use strict';
     targetmode = true;
     $('.card.p1, .card.p0').addClass('attackglow');
+}
+
+function startXYZSummon() {
+    'use strict';
+    overlaymode = true;
+    $('.card.p0').addClass('attackglow');
 }
 
 function manualAttack() {
@@ -2244,6 +2251,11 @@ function guicardonclick() {
 
         if (targetmode) {
             manualTarget(stackunit);
+            return;
+        }
+
+        if (overlaymode) {
+            manualXYZSummon(stackunit);
             return;
         }
 
