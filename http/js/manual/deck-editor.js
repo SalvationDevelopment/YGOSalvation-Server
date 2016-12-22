@@ -709,10 +709,16 @@ var deckEditor = (function () {
             floatMarkerMain = 's60';
         }
         if (deck.extra.length > 10) {
+            floatMarkerExtra = 's50';
+        }
+        if (deck.extra.length > 14) {
             floatMarkerExtra = 's60';
         }
         if (deck.side.length > 10) {
-            floatMarkerSide = 's60';
+            floatMarkerSide = 's50';
+        }
+        if (deck.extra.length > 14) {
+            floatMarkerExtra = 's60';
         }
 
         $('#deckedit .cardspace .main').attr('floatmarker', floatMarkerMain);
