@@ -114,8 +114,8 @@ input.decknameInput {
 
 .center .mainDeck {
     float: left;
-    height: 66%;
-    width: 100%;
+    height: 285px;
+    width: 483px;
     min-width: 390px;
     padding: 5px;
     border: 1px solid yellow;
