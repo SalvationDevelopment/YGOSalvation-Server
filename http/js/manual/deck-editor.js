@@ -268,7 +268,7 @@ var currentSearchFilter = (function () {
 
     var currentSearch = [],
         currentSearchIndex = 0,
-        currentSearchPageSize = 40,
+        currentSearchPageSize = 42,
         currentFilter = getFilter(),
         render = [];
 
