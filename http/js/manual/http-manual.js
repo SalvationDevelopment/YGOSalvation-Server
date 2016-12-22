@@ -804,16 +804,16 @@ function manualReciver(message) {
         if (activegame) {
             updateloby(broadcast[activegame]);
         }
-        return;
+
     }
+    console.log(message);
     if (message.error) {
         if (internalLocal === 'surrendered') {
             alert('An Error Occured');
         }
-        console.log(message);
-        return;
+
     }
-    console.log(message);
+
     switch (message.action) {
     case "lobby":
         singlesitenav('lobby');
