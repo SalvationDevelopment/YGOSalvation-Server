@@ -938,7 +938,7 @@ var deckEditor = (function () {
             extraCount = inmemoryDeck.extra.filter(checkCard).length,
             sideCount = inmemoryDeck.side.filter(checkCard).length;
 
-        if (mainCount + extraCount + sideCount >= 3) {
+        if (mainCount + extraCount + sideCount >= card.limit) {
             return false;
         }
         if (deck === 'main' && inmemoryDeck[deck].length >= 60) {
