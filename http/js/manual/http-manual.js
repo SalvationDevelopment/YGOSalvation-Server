@@ -2482,7 +2482,7 @@ function processCardHover(event) {
 
     // this is in a higher scope.
     console.log('setting record', uid);
-    record = $('#' + uid).attr('data-uid');
+    record = parseInt($('#' + uid).attr('data-uid'), 10);
 
     $('.imgContainer').attr('src', $('#' + event.currentTarget.id).attr('src'));
     $('.cardDescription').html(html);
