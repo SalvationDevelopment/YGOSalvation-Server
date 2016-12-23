@@ -2467,22 +2467,26 @@ function guicardonclick() {
 var internalDB = [];
 
 
+function processCardHover(event) {
+    'use strict';
+    var uid = event.currentTarget.id,
+        id = $('#' + uid).attr('data-id'),
+        html = makeDescription(id);
+
+    // this is in a higher scope.
+    record = $('#' + uid).attr('data-uid');
+
+    $('.imgContainer').attr('src', $('#' + event.currentTarget.id).attr('src'));
+    $('.cardDescription').html(html);
+
+
+}
+
 $(document).ready(function () {
     'use strict';
     serverconnect();
     $('.imgContainer').attr('src', 'img/textures/cover.jpg');
-    $('body').on('mouseover', '.card, .revealedcard', function (event) {
-
-        var uid = event.currentTarget.id,
-            id = $('#' + uid).attr('data-id'),
-            record = $('#' + uid).attr('data-uid'),
-            html = makeDescription(id);
-
-        $('.imgContainer').attr('src', $('#' + event.currentTarget.id).attr('src'));
-        $('.cardDescription').html(html);
-
-
-    });
+    $('body').on('mouseover', '.card, .revealedcard', processCardHover);
     $('#manualcontrols button').click(function () {
 
         setTimeout(function () {
