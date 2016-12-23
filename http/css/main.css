@@ -1035,6 +1035,20 @@ ul#spectatorchattext {}
     position: relative;
     bottom: calc(85vh - 254px);
     display: none;
+    border: 1px solid silver;
+    background: black;
+    position: relative;
+}
+
+ul#spectatorchattext {
+    height: 87%;
+}
+
+input#spectatorchatinput {
+    width: 100%;
+    position: absolute;
+    bottom: 0;
+    left: 0;
 }
 
 div#lobbychat {
