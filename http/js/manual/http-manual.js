@@ -688,6 +688,7 @@ function automaticZonePicker(realPlayer, zone) {
 }
 
 var revealcache = [],
+    pasedReveal,
     revealcacheIndex = 0;
 
 function reveal(cards, note) {
@@ -1206,10 +1207,12 @@ function startTarget() {
     targetmode = true;
     $('.card.p1, .card.p0').addClass('attackglow');
 }
+var overlaylist;
 
 function startXYZSummon(target) {
     'use strict';
     overlaymode = true;
+    overlaylist = [manualActionReference];
     $('.card.p0').addClass('attackglow');
 
 }
@@ -1717,6 +1720,7 @@ function manualOverlay() {
 function manualXYZSummon(target) {
     'use strict';
     overlaymode = false;
+    overlaylist.push(JSON.parse(JSON.stringify(target)));
     $('.card').removeClass('targetglow');
 
 
@@ -1727,7 +1731,15 @@ function manualXYZSummon(target) {
     message.action = 'moveCard';
     manualServer.send(JSON.stringify(message));
     setTimeout(function () {
-        manualOverlay();
+        var overlayindex = 0;
+        overlaylist.forEach(function (card, cindex) {
+            overlayindex++;
+            var message = makeCardMovement(card, card);
+            message.overlayindex = overlayindex;
+            message.action = index;
+            message.action = 'moveCard';
+            manualServer.send(JSON.stringify(message));
+        });
     }, 1000);
 }
 
@@ -2239,7 +2251,7 @@ function makeDescription(id) {
     output += '<div class="descContainer"><span class="cardName">' + targetCard.name + ' [' + id + ']</span><br />';
     if (cardIs("monster", targetCard)) {
         output += "<span class='monsterDesc'>[ Monster / " + monsterMap[targetCard.type] + " ]<br />" + raceMap[targetCard.race] + " / " + attributeMap[targetCard.attribute] + "<br />";
-        output += "[ " + parseLevelScales(targetCard.level) + " ]<br />" + parseAtkDef(targetCard.atk, targetCard.def) + "</span>";
+        output += "[ " + targetCard.level + " ]<br />" + parseAtkDef(targetCard.atk, targetCard.def) + "</span>";
     } else if (cardIs("spell", targetCard)) {
         output += "<span class='spellDesc'>[ Spell" + (stMap[targetCard.type] || "") + " ]</span>";
     } else if (cardIs("trap", targetCard)) {
