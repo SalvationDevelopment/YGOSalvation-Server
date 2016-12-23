@@ -2470,11 +2470,11 @@ var internalDB = [];
 function processCardHover(event) {
     'use strict';
     var uid = event.currentTarget.id,
-        id = $('#' + uid).attr('data-id'),
         html = '';
 
+    record = parseInt($('#' + uid).attr('data-uid'), 10);
     try {
-        makeDescription(id);
+        makeDescription($('#uid' + record).attr('data-id'));
     } catch (fail) {
         console.log(fail);
         html = '';
@@ -2482,7 +2482,7 @@ function processCardHover(event) {
 
     // this is in a higher scope.
     console.log('setting record', uid);
-    record = parseInt($('#' + uid).attr('data-uid'), 10);
+
 
     $('.imgContainer').attr('src', $('#' + event.currentTarget.id).attr('src'));
     $('.cardDescription').html(html);
