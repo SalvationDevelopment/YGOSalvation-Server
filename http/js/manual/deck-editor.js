@@ -1036,6 +1036,7 @@ var deckEditor = (function () {
         switchDecks(usersDecks.length - 1);
         saveDeck();
         loadDecks(usersDecks);
+        doNewSearch();
     }
 
     function saveDeckAs() {
