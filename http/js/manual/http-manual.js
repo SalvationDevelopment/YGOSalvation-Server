@@ -2141,6 +2141,11 @@ function revealonclick(card, note) {
         $('.v-extra').css({
             'display': 'block'
         });
+        if (cardIs('xyz', dbEntry)) {
+            $('.v-monster-xyz').css({
+                'display': 'block'
+            });
+        }
         if (pendulumMap[dbEntry.type]) {
             $('.v-extra-p').css({
                 'display': 'block'
@@ -2155,6 +2160,11 @@ function revealonclick(card, note) {
 
         reorientmenu();
         return;
+    }
+    if (cardIs('xyz', dbEntry)) {
+        $('.v-monster-xyz').css({
+            'display': 'block'
+        });
     }
     if (manualActionReference.location === 'MONSTERZONE') {
         $('.m-field').css({
