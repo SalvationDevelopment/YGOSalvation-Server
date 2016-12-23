@@ -2474,9 +2474,8 @@ function processCardHover(event) {
 
     record = parseInt($('#' + uid).attr('data-uid'), 10);
     try {
-        html = makeDescription($('#uid' + record).attr('data-id'));
+        html = makeDescription($('#' + uid).attr('data-id'));
     } catch (fail) {
-        console.log(fail);
         html = '';
     }
 
