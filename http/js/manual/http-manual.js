@@ -1213,7 +1213,7 @@ function startXYZSummon(target) {
     'use strict';
     overlaymode = true;
     overlaylist = [manualActionReference];
-    $('.card.p0').addClass('attackglow');
+    $('.card.p0.MONSTERZONE').addClass('attackglow');
 
 }
 
@@ -1720,12 +1720,12 @@ function manualOverlay() {
 function manualXYZSummon(target) {
     'use strict';
     overlaymode = false;
-    overlaylist.push(JSON.parse(JSON.stringify(target)));
+    overlaylist.push(target);
     $('.card').removeClass('targetglow');
 
 
     var index = target.index,
-        end = makeHand(manualActionReference, index),
+        end = makeMonster(manualActionReference, index),
         message = makeCardMovement(manualActionReference, end);
 
     message.action = 'moveCard';
@@ -2287,7 +2287,9 @@ function guicardonclick() {
         }
 
         if (overlaymode) {
-            manualXYZSummon(stackunit);
+            if (stackunit.location === 'MONSTERZONE') {
+                manualXYZSummon(stackunit);
+            }
             return;
         }
 
