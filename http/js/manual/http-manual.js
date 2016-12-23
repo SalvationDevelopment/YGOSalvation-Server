@@ -2471,9 +2471,17 @@ function processCardHover(event) {
     'use strict';
     var uid = event.currentTarget.id,
         id = $('#' + uid).attr('data-id'),
-        html = makeDescription(id);
+        html = '';
+
+    try {
+        makeDescription(id);
+    } catch (fail) {
+        console.log(fail);
+        html = '';
+    }
 
     // this is in a higher scope.
+    console.log('setting record', uid);
     record = $('#' + uid).attr('data-uid');
 
     $('.imgContainer').attr('src', $('#' + event.currentTarget.id).attr('src'));
