@@ -271,7 +271,7 @@ function getdeck() {
     function getter(card) {
         return Number(card.id);
     }
-    var selection = $('#lobbycurrentdeck .currentdeck option:selected').val() || 0,
+    var selection = $('#lobbycurrentdeck .currentdeck').val() || 0,
         deck = deckEditor.getDeck(selection),
         main = deck.main.map(getter),
         side = deck.side.map(getter),
@@ -2563,7 +2563,7 @@ function manualFlip() {
     }));
 }
 
-$('#lobbychatinput, #sidechatinput').keypress(function (e) {
+$('#lobbychatinput, #sidechatinput, #spectatorchatinput').keypress(function (e) {
     'use strict';
     if ($(e.currentTarget).val().length === 0) {
         return;
