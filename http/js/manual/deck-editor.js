@@ -875,7 +875,7 @@ var deckEditor = (function () {
         activeIndex = index;
         inmemoryDeck = JSON.parse(JSON.stringify(usersDecks[activeIndex]));
         renderDeckZone(inmemoryDeck);
-        $('.deckSelect').val(activeIndex);
+        $('.deckSelect, #lobbycurrentdeck select').val(activeIndex);
         doSearch();
     }
 
@@ -1227,7 +1227,7 @@ $('.banlistSelect').on('change', function () {
     deckEditor.doNewSearch();
 });
 
-$('.deckSelect').on('change', function () {
+$('.deckSelect, #lobbycurrentdeck select').on('change', function () {
     'use strict';
     deckEditor.switchDecks(parseInt($('.deckSelect').val(), 10));
 });
