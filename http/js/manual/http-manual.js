@@ -2474,15 +2474,11 @@ function processCardHover(event) {
 
     record = parseInt($('#' + uid).attr('data-uid'), 10);
     try {
-        makeDescription($('#uid' + record).attr('data-id'));
+        html = makeDescription($('#uid' + record).attr('data-id'));
     } catch (fail) {
         console.log(fail);
         html = '';
     }
-
-    // this is in a higher scope.
-    console.log('setting record', uid);
-
 
     $('.imgContainer').attr('src', $('#' + event.currentTarget.id).attr('src'));
     $('.cardDescription').html(html);
