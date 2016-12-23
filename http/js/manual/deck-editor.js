@@ -890,7 +890,7 @@ var deckEditor = (function () {
     }
 
     function getDeck(index) {
-        return JSON.parse(JSON.stringify(usersDecks[activeIndex]));
+        return JSON.parse(JSON.stringify(usersDecks[index]));
     }
 
     function clearCurrentDeck() {
