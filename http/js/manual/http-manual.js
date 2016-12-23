@@ -323,6 +323,7 @@ function stateUpdate(dataBinding) {
             'class': fieldings,
             'data-position': ref.position,
             'data-id': ref.id,
+            'data-uid': ref.uid,
             'src': (ref.id) ? 'ygopro/pics/' + ref.id + '.jpg' : 'img/textures/cover.jpg'
         });
 
@@ -1709,7 +1710,6 @@ function manualOverlay() {
         var message = makeCardMovement(card, card);
         message.overlayindex = overlayindex;
         message.action = 'moveCard';
-        message.sound = 'soundspecialSummonFromExtra';
         manualServer.send(JSON.stringify(message));
     });
 }
@@ -2475,11 +2475,12 @@ $(document).ready(function () {
 
         var uid = event.currentTarget.id,
             id = $('#' + uid).attr('data-id'),
+            record = $('#' + uid).attr('data-uid'),
             html = makeDescription(id);
 
         $('.imgContainer').attr('src', $('#' + event.currentTarget.id).attr('src'));
         $('.cardDescription').html(html);
-        record = parseInt(uid.split('uid')[1], 0);
+
 
     });
     $('#manualcontrols button').click(function () {
