@@ -875,7 +875,7 @@ var deckEditor = (function () {
         activeIndex = index;
         inmemoryDeck = JSON.parse(JSON.stringify(usersDecks[activeIndex]));
         renderDeckZone(inmemoryDeck);
-        $('.deckSelect, #lobbycurrentdeck select').val(activeIndex);
+        $('.deckSelect').val(activeIndex);
         doSearch();
     }
 
