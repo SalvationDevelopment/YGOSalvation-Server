@@ -944,6 +944,12 @@ function manualReciver(message) {
 
 function serverconnect() {
     'use strict';
+    try {
+        window.manualServer.close();
+        return;
+    } catch (non_error) {
+        console.log('Attempted to close manualmode websocket. Failed. Everything is fine.');
+    }
     window.manualServer = new WebSocket("ws://" + location.hostname + ":8080");
     manualServer.onopen = function () {
         console.log('Connected to Manual');
@@ -958,7 +964,13 @@ function serverconnect() {
         }
         setTimeout(serverconnect, 2000);
     };
+    window.onbeforeunload = function () {
+        manualServer.onclose = function () {}; // disable onclose handler first
+        manualServer.close()
+    };
+
 }
+
 
 
 
@@ -979,7 +991,7 @@ function manualJoin(game) {
     }));
 }
 
-function manualLeave(game) {
+function manualLeave() {
     'use strict';
     manualServer.send(JSON.stringify({
         action: 'leave',
