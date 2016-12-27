@@ -42,6 +42,10 @@ he #deckedit {
     font-size: 0.8em;
 }
 
+pre.description {
+    font-family: sans-serif;
+}
+
 .f40 img {
     float: left;
 }

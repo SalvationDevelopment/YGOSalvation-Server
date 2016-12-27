@@ -782,7 +782,7 @@ var deckEditor = (function () {
             $('#decktextoutput').append(sorter.side[id].unit + 'x ' + sorter.side[id].card.name + '<br />');
         });
 
-        $('#deckexporter').attr('href', exporter());
+        $('#deckexporter').attr('href', exporter()).attr('download', inmemoryDeck.name + '.ydk');
 
     }
 
