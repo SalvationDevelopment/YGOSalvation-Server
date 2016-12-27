@@ -693,7 +693,7 @@ var deckEditor = (function () {
         makeCard(deck.extra, 'extra');
         makeCard(deck.side, 'side');
 
-        var floatMarkerMain = 's' + Math.floor(deck.main.length / 4),
+        var floatMarkerMain = 's' + (Math.floor(deck.main.length / 4) + 1),
             floatMarkerExtra = 's' + deck.extra.length,
             floatMarkerSide = 's' + deck.side.length,
             sorter = {
