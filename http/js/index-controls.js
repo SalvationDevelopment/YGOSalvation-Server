@@ -729,3 +729,14 @@ function confirmDialog(title, message, confirm, reject) {
         }
     })
 }
+
+function screenshot() {
+    'use strict';
+    html2canvas(document.body, {
+        onrendered: function (canvas) {
+            var dt = canvas.toDataURL('image/png');
+            dt = dt.replace(/^data:image\/[^;]*/, 'data:application/octet-stream');
+            window.open(dt);
+        }
+    });
+}
