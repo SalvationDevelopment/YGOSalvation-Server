@@ -929,11 +929,23 @@ div#actions button {
     width: 100%;
 }
 
-[floatmarker="s50"] >* {
+#duelscreen [floatmarker="s11"] >* {
+    margin-right: -5px;
+}
+
+#duelscreen [floatmarker="s12"] >* {
     margin-right: -10px;
 }
 
-[floatmarker="s60"] >* {
+#duelscreen [floatmarker="s13"] >* {
+    margin-right: -14px;
+}
+
+#duelscreen [floatmarker="s14"] >* {
+    margin-right: -17px;
+}
+
+#duelscreen [floatmarker="s15"] >* {
     margin-right: -20px;
 }
 
