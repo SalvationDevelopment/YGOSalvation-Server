@@ -690,7 +690,7 @@ var deckEditor = (function () {
 
 
     function exporter() {
-        var file = '#Created by ' + inmemoryDeck.creator + 'on ' + inmemoryDeck.creationDate + '\r\n#main';
+        var file = '#Created by ' + inmemoryDeck.creator + ' on ' + inmemoryDeck.creationDate + '\r\n#main';
 
         function printCard(card) {
             file += card.id + '\r\n';
@@ -865,6 +865,7 @@ var deckEditor = (function () {
 
 
     function saveDeck() {
+        inmemoryDeck.creationDate = new Date();
         usersDecks[activeIndex] = JSON.parse(JSON.stringify(inmemoryDeck));
         primus.write({
             action: 'save',
