@@ -598,6 +598,26 @@ div#actions button {
     margin-right: -20px;
 }
 
+#deckedit [floatmarker="s11"] >* {
+    margin-right: -5px;
+}
+
+#deckedit [floatmarker="s12"] >* {
+    margin-right: -9px;
+}
+
+#deckedit [floatmarker="s13"] >* {
+    margin-right: -12px;
+}
+
+#deckedit [floatmarker="s14"] >* {
+    margin-right: -15px;
+}
+
+#deckedit [floatmarker="s15"] >* {
+    margin-right: -17px;
+}
+
 .info-controls {
     float: left;
 }
