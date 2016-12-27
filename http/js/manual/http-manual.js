@@ -434,7 +434,7 @@ function guiCard(dataBinding) {
     } else {
         player = dataBinding.player;
     }
-    $(field).append('<img onclick="return guicardonclick()" id="uid' + dataBinding.uid + '" class="card p' + player + ' ' + dataBinding.location + ' i' + dataBinding.index + ' o" src="img/textures/cover.jpg" data-position="FaceDown" />');
+    $(field).append('<img onclick="return guicardonclick()" id="uid' + dataBinding.uid + '" class="card p' + player + ' ' + dataBinding.location + ' i' + dataBinding.index + ' o" src="img/textures/cover.jpg" data-position="FaceDown" onError="this.onerror=null;this.src=\'/img/textures/unknown.jpg\';" />');
     element = $('#uid' + dataBinding.uid);
     return element;
 
