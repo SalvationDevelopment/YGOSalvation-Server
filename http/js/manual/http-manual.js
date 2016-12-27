@@ -2263,7 +2263,7 @@ function makeDescription(id) {
     } else if (cardIs("trap", targetCard)) {
         output += "<span class='trapDesc'>[ Trap" + (stMap[targetCard.type] || "") + " ]</span>";
     }
-    return output + "<br /><span class='description'>" + targetCard.desc.replace(/\r\n/g, '<br />') + "</span>";
+    return output + "<br /><pre class='description'>" + targetCard.desc + "</pre>";
 }
 
 var record;
