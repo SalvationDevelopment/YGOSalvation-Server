@@ -5,32 +5,44 @@
 
 function cardStackSort(a, b) {
     'use strict';
-    if (a.atk > b.atk) {
-        return -1;
-    }
-    if (a.atk < b.atk) {
-        return 1;
-    }
-    if (a.def > b.def) {
-        return -1;
-    }
-    if (a.type === 4 && b.type !== 4) {
-        return 1;
-    }
-    if (a.type !== 4 && b.type === 4) {
-        return -1;
-    }
-    if (a.type > b.type) {
-        return 1;
-    }
-    if (a.type < b.type) {
-        return -1;
-    }
 
-    if (a.id > b.id) {
-        return 1;
+    if (a.id === b.id) {
+        return 0;
     }
-    return 0;
+    if (cardIs('monster', a) && cardIs('monster', b)) {
+        if (a.atk > b.atk) {
+            return -1;
+        }
+        if (a.atk < b.atk) {
+            return 1;
+        }
+        if (a.def > b.def) {
+            return -1;
+        }
+        if (a.type === 4 && b.type !== 4) {
+            return 1;
+        }
+        if (a.type !== 4 && b.type === 4) {
+            return -1;
+        }
+        if (a.type > b.type) {
+            return 1;
+        }
+        if (a.type < b.type) {
+            return -1;
+        }
+    }
+    if (cardIs('spell', a) && cardIs('spell', b)) {
+        if (a.type < b.type) {
+            return -1;
+        }
+    }
+    if (cardIs('trap', a) && cardIs('trap', b)) {
+        if (a.type < b.type) {
+            return -1;
+        }
+    }
+    return a.type > b.type;
 
 }
 
