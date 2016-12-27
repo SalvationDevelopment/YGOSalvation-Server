@@ -736,7 +736,15 @@ function screenshot() {
         onrendered: function (canvas) {
             var dt = canvas.toDataURL('image/png');
             dt = dt.replace(/^data:image\/[^;]*/, 'data:application/octet-stream');
-            window.open(dt);
+            var image = new Image();
+            image.src = dt;
+            var newWin = window.open("<title>Screenshot</title>");
+            if (!newWin || newWin.closed || typeof newWin.closed == 'undefined') {
+                //POPUP BLOCKED
+                alert('Popups are blocked, cant display screenshot!');
+                return;
+            }
+            newWin.document.write(image.outerHTML);
         }
     });
 }
