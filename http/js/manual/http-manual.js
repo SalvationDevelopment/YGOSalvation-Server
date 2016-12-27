@@ -130,8 +130,8 @@ var avatarMap = {};
 
 function scaleScreenFactor() {
     'use strict';
-    var requiredRes = 1368,
-        scale = 0.75 * ($(window).width() / requiredRes);
+    var requiredRes = 2500,
+        scale = ($(window).width() / requiredRes);
     $('.field').css('transform', 'scale(' + scale + ')');
     return scale;
 }
