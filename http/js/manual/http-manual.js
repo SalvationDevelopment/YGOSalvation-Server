@@ -966,7 +966,7 @@ function serverconnect() {
     };
     window.onbeforeunload = function () {
         manualServer.onclose = function () {}; // disable onclose handler first
-        manualServer.close()
+        manualServer.close();
     };
 
 }
