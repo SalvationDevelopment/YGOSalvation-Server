@@ -2220,14 +2220,16 @@ function revealonclick(card, note) {
 
 
 
-function parseLevelScales(level) {
+function parseLevelScales(card) {
     'use strict';
     var output = "",
         leftScale,
         rightScale,
-        pendulumLevel;
+        pendulumLevel,
+        level = card.level,
+        ranklevel = (cardIs('xyz', card)) ? '☆' : '★';
     if (level > 0 && level <= 12) {
-        output += '<span class="levels">★' + level;
+        output += '<span class="levels">' + level;
 
     } else {
         level = level.toString(16); // format: [0-9A-F]0[0-9A-F][0-9A-F]{4}
@@ -2255,7 +2257,7 @@ function makeDescription(id) {
     output += '<div class="descContainer"><span class="cardName">' + targetCard.name + ' [' + id + ']</span><br />';
     if (cardIs("monster", targetCard)) {
         output += "<span class='monsterDesc'>[ Monster / " + monsterMap[targetCard.type] + " ]<br />" + raceMap[targetCard.race] + " / " + attributeMap[targetCard.attribute] + "<br />";
-        output += "[ " + parseLevelScales(targetCard.level) + " ]<br />" + parseAtkDef(targetCard.atk, targetCard.def) + "</span>";
+        output += "[ " + parseLevelScales(targetCard) + " ]<br />" + parseAtkDef(targetCard.atk, targetCard.def) + "</span>";
     } else if (cardIs("spell", targetCard)) {
         output += "<span class='spellDesc'>[ Spell" + (stMap[targetCard.type] || "") + " ]</span>";
     } else if (cardIs("trap", targetCard)) {
