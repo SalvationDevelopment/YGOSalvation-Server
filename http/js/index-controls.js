@@ -172,6 +172,7 @@ function singlesitenav(target) {
 
     if (target === 'host') {
         $('body').css('background-image', 'url(http://ygopro.us/img/magimagipinkshadow2.jpg)');
+        serverconnect();
     }
 
     if (target === 'settings') {
