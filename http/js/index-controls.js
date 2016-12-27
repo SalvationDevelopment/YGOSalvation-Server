@@ -164,7 +164,7 @@ function singlesitenav(target) {
         if (launcher === false) {
             manualModeGamelistSwitch();
         }
-        serverconnect();
+        manualLeave();
     }
     if (target === 'chat') {
         $('body').css('background-image', 'url(http://ygopro.us/img/magimagipinkshadow.jpg)');
@@ -172,7 +172,7 @@ function singlesitenav(target) {
 
     if (target === 'host') {
         $('body').css('background-image', 'url(http://ygopro.us/img/magimagipinkshadow2.jpg)');
-        serverconnect();
+        manualLeave();
     }
 
     if (target === 'settings') {
