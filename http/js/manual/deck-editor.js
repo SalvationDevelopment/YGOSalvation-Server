@@ -1,4 +1,4 @@
-/*global currentMousePos, getCardObject, reorientmenu, cardIs, $, internalDB, primus,prompt, alert, confirm, FileReader*/
+/*global currentMousePos, getCardObject, reorientmenu, cardIs, $, internalDB, primus,prompt, alert, confirm, FileReader, btoa*/
 /*jslint bitwise: true, plusplus:true, regexp:true, browser:true*/
 
 
@@ -688,6 +688,23 @@ var deckEditor = (function () {
         })[0];
     }
 
+
+    function exporter() {
+        var file = '#Created by ' + inmemoryDeck.creator + 'on ' + inmemoryDeck.creationDate + '\r\n#main';
+
+        function printCard(card) {
+            file += card.id + '\r\n';
+        }
+
+        inmemoryDeck.main.forEach(printCard);
+        file += '#extra\r\n';
+        inmemoryDeck.extra.forEach(printCard);
+        file += '!side\r\n';
+        inmemoryDeck.side.forEach(printCard);
+
+        return 'data:application/octet-stream;charset=utf-16le;base64,' + btoa(file);
+    }
+
     function renderDeckZone(deck) {
         makeCard(deck.main, 'main');
         makeCard(deck.extra, 'extra');
@@ -762,8 +779,10 @@ var deckEditor = (function () {
         Object.keys(sorter.side).sort(function (a, b) {
             return cardStackSort(sorter.side[a].card, sorter.side[b].card);
         }).forEach(function (id) {
-            $('#decktextoutput').append(sorter.extra[id].unit + 'x ' + sorter.side[id].card.name + '<br />');
+            $('#decktextoutput').append(sorter.side[id].unit + 'x ' + sorter.side[id].card.name + '<br />');
         });
+
+        $('#deckexporter').attr('href', exporter());
 
     }
 
@@ -875,6 +894,8 @@ var deckEditor = (function () {
     function getDeck(index) {
         return JSON.parse(JSON.stringify(usersDecks[index]));
     }
+
+
 
     function clearCurrentDeck() {
         inmemoryDeck = makeNewDeck(usersDecks[activeIndex].name);
@@ -1020,6 +1041,7 @@ var deckEditor = (function () {
         saveDeck();
         loadDecks(usersDecks);
         doNewSearch();
+
     }
 
     function saveDeckAs() {
@@ -1066,12 +1088,11 @@ var deckEditor = (function () {
     function upload(ydk) {
         var newDeck = makeDeckfromydk(ydk),
             data = databaseSystem.getDB();
-        console.log(newDeck);
+
         newDeck.creator = localStorage.nickname;
         newDeck.creationDate = new Date();
         newDeck.main = newDeck.main.map(function (cardid) {
             var card = pullcard(parseInt(cardid, 10), data);
-            console.log(cardid, card);
             return card;
         });
         newDeck.side = newDeck.side.map(function (cardid) {
