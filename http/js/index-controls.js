@@ -164,6 +164,7 @@ function singlesitenav(target) {
         if (launcher === false) {
             manualModeGamelistSwitch();
         }
+        serverconnect();
     }
     if (target === 'chat') {
         $('body').css('background-image', 'url(http://ygopro.us/img/magimagipinkshadow.jpg)');
