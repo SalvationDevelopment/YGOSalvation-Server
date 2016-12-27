@@ -269,6 +269,7 @@ var currentSearchFilter = (function () {
     var currentSearch = [],
         currentSearchIndex = 0,
         currentSearchPageSize = 42,
+        currentSearchNumberOfPages = Math.ceil(currentSearch.length / currentSearchPageSize),
         currentFilter = getFilter(),
         render = [];
 
@@ -575,6 +576,7 @@ var currentSearchFilter = (function () {
 
     function renderSearch() {
         render = currentSearch.slice(currentSearchIndex, currentSearchPageSize);
+        currentSearchNumberOfPages = Math.ceil(render.length / currentSearchPageSize);
         return render;
     }
 
@@ -761,21 +763,21 @@ var deckEditor = (function () {
                 sorter.side[card.id].unit++;
             }
         });
-        $('#decktextoutput').html('Main Deck<br/>');
+        $('#decktextoutput').html('Main Deck ' + deck.main.length + 'x<br/>');
         Object.keys(sorter.main).sort(function (a, b) {
             return cardStackSort(sorter.main[a].card, sorter.main[b].card);
         }).forEach(function (id) {
             $('#decktextoutput').append(sorter.main[id].unit + 'x ' + sorter.main[id].card.name + '<br />');
         });
 
-        $('#decktextoutput').append('<br />Extra Deck<br/>');
+        $('#decktextoutput').append('<br />Extra Deck ' + deck.extra.length + 'x<br/>');
         Object.keys(sorter.extra).sort(function (a, b) {
             return cardStackSort(sorter.extra[a].card, sorter.extra[b].card);
         }).forEach(function (id) {
             $('#decktextoutput').append(sorter.extra[id].unit + 'x ' + sorter.extra[id].card.name + '<br />');
         });
 
-        $('#decktextoutput').append('<br/ >Side Deck<br/>');
+        $('#decktextoutput').append('<br/ >Side Deck ' + deck.side.length + 'x<br/>');
         Object.keys(sorter.side).sort(function (a, b) {
             return cardStackSort(sorter.side[a].card, sorter.side[b].card);
         }).forEach(function (id) {
