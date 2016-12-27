@@ -693,33 +693,16 @@ var deckEditor = (function () {
         makeCard(deck.extra, 'extra');
         makeCard(deck.side, 'side');
 
-        var floatMarkerMain = '',
-            floatMarkerExtra = '',
-            floatMarkerSide = '',
+        var floatMarkerMain = 's' + Math.floor(deck.extra.length / 4),
+            floatMarkerExtra = 's' + deck.extra.length,
+            floatMarkerSide = 's' + deck.side.length,
             sorter = {
                 main: {},
                 side: {},
                 extra: {}
             };
 
-        if (deck.main.length > 40) {
-            floatMarkerMain = 's50';
-        }
-        if (deck.main.length > 59) {
-            floatMarkerMain = 's60';
-        }
-        if (deck.extra.length > 10) {
-            floatMarkerExtra = 's50';
-        }
-        if (deck.extra.length > 14) {
-            floatMarkerExtra = 's60';
-        }
-        if (deck.side.length > 10) {
-            floatMarkerSide = 's50';
-        }
-        if (deck.extra.length > 14) {
-            floatMarkerExtra = 's60';
-        }
+
 
         $('#deckedit .cardspace .main').attr('floatmarker', floatMarkerMain);
         $('#deckedit .cardspace .extra').attr('floatmarker', floatMarkerExtra);
