@@ -2229,14 +2229,14 @@ function parseLevelScales(card) {
         level = card.level,
         ranklevel = (cardIs('xyz', card)) ? '☆' : '★';
     if (level > 0 && level <= 12) {
-        output += '<span class="levels">' + level;
+        output += '<span class="levels">' + ranklevel + level;
 
     } else {
         level = level.toString(16); // format: [0-9A-F]0[0-9A-F][0-9A-F]{4}
         leftScale = parseInt(level.charAt(0), 16); // first digit: left scale in hex (0-16)
         rightScale = parseInt(level.charAt(2), 16); // third digit: right scale in hex (0-16)
         pendulumLevel = parseInt(level.charAt(6), 16); // seventh digit: level of the monster in hex (technically, all 4 digits are levels, but here we only need the last char)
-        output += '<span class="levels">★' + pendulumLevel + '</span> <span class="scales"><< ' + leftScale + ' | ' + rightScale + ' >>';
+        output += '<span class="levels">' + ranklevel + pendulumLevel + '</span> <span class="scales"><< ' + leftScale + ' | ' + rightScale + ' >>';
     }
     return output + '</span>';
 }
