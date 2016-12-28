@@ -3,21 +3,32 @@
 
 
 
+
 function cardStackSort(a, b) {
     'use strict';
+    var aExtra = (cardIs('xyz', a) || cardIs('synchro', a) || cardIs('fusion', a)),
+        bExtra = (cardIs('xyz', b) || cardIs('synchro', b) || cardIs('fusion', b));
 
-    if (a.id === b.id) {
-        return 0;
-    }
     if (cardIs('monster', a) && cardIs('monster', b)) {
-        if (a.atk > b.atk) {
+
+
+        if (!cardIs('xyz', a) && cardIs('xyz', b)) {
             return -1;
         }
-        if (a.atk < b.atk) {
+        if (cardIs('xyz', a) && !cardIs('xyz', b)) {
             return 1;
         }
-        if (a.def > b.def) {
+        if (!cardIs('synchro', a) && cardIs('synhro', b)) {
             return -1;
+        }
+        if (cardIs('synchro', a) && !cardIs('synchro', b)) {
+            return 1;
+        }
+        if (!cardIs('fusion', a) && cardIs('fusion', b)) {
+            return -1;
+        }
+        if (cardIs('fusion', a) && !cardIs('fusion', b)) {
+            return 1;
         }
         if (a.type === 4 && b.type !== 4) {
             return 1;
@@ -25,25 +36,38 @@ function cardStackSort(a, b) {
         if (a.type !== 4 && b.type === 4) {
             return -1;
         }
-        if (a.type > b.type) {
-            return 1;
-        }
-        if (a.type < b.type) {
-            return -1;
-        }
-    }
-    if (cardIs('spell', a) && cardIs('spell', b)) {
-        if (a.type < b.type) {
-            return -1;
-        }
-    }
-    if (cardIs('trap', a) && cardIs('trap', b)) {
-        if (a.type < b.type) {
-            return -1;
-        }
-    }
-    return a.type > b.type;
 
+    }
+    if (!aExtra && bExtra) {
+        return -1;
+    }
+    if (aExtra && !bExtra) {
+        return 1;
+    }
+    if (a.atk > b.atk) {
+        return -1;
+    }
+    if (a.atk < b.atk) {
+        return 1;
+    }
+    if (a.def > b.def) {
+        return -1;
+    }
+
+    if (a.type > b.type) {
+        return 1;
+    }
+    if (a.type < b.type) {
+        return -1;
+    }
+
+    if (a.id > b.id) {
+        return 1;
+    }
+    if (a.id < b.id) {
+        return -1;
+    }
+    return 0;
 }
 
 function docardStackSort(db) {
