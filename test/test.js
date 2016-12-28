@@ -7,41 +7,17 @@ var assert = require("assert");
 var join = new Buffer([41, 0, 16, 91, 0, 65, 0, 73, 0, 93, 0, 83, 0, 110, 0, 97, 0, 114, 0, 107, 0, 121, 0, 67, 0, 104, 0, 105, 0, 108, 0, 100, 0, 0, 0, 254, 255, 255, 255, 230, 110, 238, 118, 69, 0, 18, 50, 19, 75, 114, 0, 0, 0, 0, 50, 0, 48, 0, 48, 0, 79, 0, 79, 0, 79, 0, 56, 0, 48, 0, 48, 0, 48, 0, 44, 0, 48, 0, 44, 0, 53, 0, 44, 0, 49, 0, 44, 0, 85, 0, 44, 0, 102, 0, 48, 0, 77, 0, 85, 0, 103, 0, 0, 0, 0, 0, 254, 255, 255, 255, 230, 110, 238, 118]);
 
 describe('Boot Test', function () {
-    'use strict';
-    it('Should test parseframes.js', function () {
-        require('../libs/slave.js');
-    });
+    'use strict';;
 
-    it('Should test  datetimestamp.js', function () {
-        var datestamp = require('../libs/datetimestamp.js');
-        datestamp();
-    });
-    it('Should test  draft.jsjs', function () {
-        require('../libs/draft.js');
-    });
+
+
     it('Should test duelserv.js', function () {
         require('../libs/duelserv.js');
     });
     it('Should test enums.js', function () {
         require('../libs/enums.js');
     });
-    //    it('Should test gamelist.js', function () {
-    //        require('../libs/gamelist.js');
-    //    });
-    // it('Should test ircbot.js', function () {
-    //     require('../libs/ircbot.js');
-    // });
 
-    it('Should test parseframes.js', function () {
-        require('../libs/parseframes.js');
-    });
-    it('Should test parsepackets.js', function () {
-        var pack = require('../libs/parsepackets.js');
-        pack('CTOS', join);
-    });
-    //    it('Should test policyserver.js', function () {
-    //        require('../libs/policyserver.js');
-    //    });
     it('Should test processCTOS.js', function () {
         var processCTOS = require('../libs/processCTOS.js'),
             parsePackets = require('../libs/parseframes.js');
