@@ -1222,6 +1222,9 @@ var overlaylist;
 
 function startXYZSummon(target) {
     'use strict';
+    if ($('.card.p0.MONSTERZONE').length === 0) {
+        return;
+    }
     overlaymode = true;
     overlaylist = [manualActionReference];
     $('.card.p0.MONSTERZONE').addClass('attackglow');
