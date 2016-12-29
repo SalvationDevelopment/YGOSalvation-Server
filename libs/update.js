@@ -301,10 +301,10 @@ function makeDescription(id) {
     } else if (cardIs("trap", targetCard)) {
         output += "<span class='trapDesc'>[ Trap" + (stMap[targetCard.type] || "") + " ]</span>";
     }
-    return output + "<br /><pre class='description'>" + targetCard.desc + "</pre>";
+    return output + "<br /><pre class='description'>" + targetCard.desc + "</pre></div>";
 }
 
-function generate() {
+function generate(callback) {
 
     fs.readdir('../http/ygopro/databases/', function (err, files) {
         var i,
@@ -335,7 +335,9 @@ function generate() {
                 htmlOutput += makeDescription(card.id);
             });
             htmlOutput += '</body></html>';
-            console.log('generated', htmlOutput.length, newCards.length);
+            if (callback) {
+                callback();
+            }
 
         } catch (e2) {
             console.log(e2);
@@ -366,7 +368,6 @@ function fileupdate() {
             return;
         }
     });
-    generate();
     return 'Update Detection System[' + ((new Date()).getTime() - startTime.getTime()) + 'ms]';
 
 }
