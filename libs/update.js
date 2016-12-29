@@ -330,9 +330,9 @@ function generate() {
                 }
             });
             htmlOutput = '<html><body>';
-            newCards.forEach(function (id) {
-                htmlOutput += '<img src="http://ygopro.us/ygopro/pics/' + id + '.jpg" />';
-                htmlOutput += makeDescription(id);
+            newCards.forEach(function (card) {
+                htmlOutput += '<img src="http://ygopro.us/ygopro/pics/' + card.id + '.jpg" />';
+                htmlOutput += makeDescription(card.id);
             });
             htmlOutput += '</body></html>';
             console.log('generated', htmlOutput.length, newCards.length);
