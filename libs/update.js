@@ -326,7 +326,7 @@ function generate() {
                 if (oldDB[id] !== undefined) {
                     return;
                 } else {
-                    newCards.push(newCards[id]);
+                    newCards.push(newDB[id]);
                 }
             });
             Object.keys(newCards).forEach(function (id) {
