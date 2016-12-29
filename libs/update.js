@@ -15,7 +15,7 @@ var zlib = require('zlib'),
     crypto = require('crypto'),
     SQL = require('sql.js'),
     jsonfile = require('jsonfile'),
-    newDB = [],
+    newCards = [],
     htmlOutput = '',
     attributeMap = {
         1: "EARTH",
@@ -204,7 +204,7 @@ function getcards(file) {
 
 function getCardObject(id) {
     var result = {};
-    newDB.some(function (card, index) {
+    newCards.some(function (card, index) {
         if (id === card.id) {
             result = card;
             return true;
@@ -227,7 +227,7 @@ function inversionID(db) {
 
 function getCardObject(id) {
     var result = {};
-    newDB.some(function (card, index) {
+    newCards.some(function (card, index) {
         if (id === card.id) {
             result = card;
             return true;
@@ -309,7 +309,8 @@ function generate() {
     fs.readdir('../http/ygopro/databases/', function (err, files) {
         var i,
             oldDB,
-            newCards = [];
+            newDB;
+
         for (i = 0; files.length > i; i++) {
             try {
                 fs.writeFileSync('../http/manifest/manifest_' + files[i].slice(0, -4) + '.json', JSON.stringify(getcards(files[i])));
@@ -325,7 +326,7 @@ function generate() {
                 if (oldDB[id] !== undefined) {
                     return;
                 } else {
-                    newCards.push(newDB[id]);
+                    newCards.push(newCards[id]);
                 }
             });
             Object.keys(newCards).forEach(function (id) {
@@ -333,7 +334,7 @@ function generate() {
                 htmlOutput += makeDescription(id);
             });
 
-            console.log('generated', htmlOutput.length)
+            console.log('generated', htmlOutput.length);
 
         } catch (e2) {
             console.log(e2);
