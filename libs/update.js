@@ -321,7 +321,7 @@ function generate() {
         try {
             oldDB = inversionID(jsonfile.readFileSync('../http/manifest/manifest_old.json'));
             newDB = inversionID(jsonfile.readFileSync('../http/manifest/manifest_0-en-OCGTCG.json'));
-
+            newCards = [];
             Object.keys(newDB).forEach(function (id) {
                 if (oldDB[id] !== undefined) {
                     return;
@@ -330,7 +330,7 @@ function generate() {
                 }
             });
             htmlOutput = '<html><body>';
-            Object.keys(newCards).forEach(function (id) {
+            newCards.forEach(function (id) {
                 htmlOutput += '<img src="http://ygopro.us/ygopro/pics/' + id + '.jpg" />';
                 htmlOutput += makeDescription(id);
             });
