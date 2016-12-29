@@ -319,7 +319,7 @@ function generate() {
         }
         try {
             oldDB = inversionID(jsonfile.readFileSync('../http/manifest/manifest_old.json'));
-            newDB = inversionID(jsonfile.readFileSync('../http/manifest/0-en-OCGTCG.json'));
+            newDB = inversionID(jsonfile.readFileSync('../http/manifest/manifest_0-en-OCGTCG.json'));
 
             Object.keys(newDB).forEach(function (id) {
                 if (oldDB[id] !== undefined) {
@@ -333,9 +333,11 @@ function generate() {
                 htmlOutput += makeDescription(id);
             });
 
+            console.log('generated', htmlOutput.length)
 
-
-        } catch (e2) {}
+        } catch (e2) {
+            console.log(e2);
+        }
     });
 }
 
