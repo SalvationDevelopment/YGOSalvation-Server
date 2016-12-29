@@ -329,12 +329,12 @@ function generate() {
                     newCards.push(newDB[id]);
                 }
             });
-            htmlOutput = '';
+            htmlOutput = '<html><body>';
             Object.keys(newCards).forEach(function (id) {
                 htmlOutput += '<img src="http://ygopro.us/ygopro/pics/' + id + '.jpg" />';
                 htmlOutput += makeDescription(id);
             });
-
+            htmlOutput = '</body></html>';
             console.log('generated', htmlOutput.length);
 
         } catch (e2) {
@@ -424,7 +424,7 @@ var server = http.createServer(function (request, response) {
         if (error) {
             rate = rate + error;
         }
-        response.end(rate + htmlOutput);
+        response.end(htmlOutput);
         console.log('[Update System]', rate, new Date(), ((error) || ''));
         generate();
     });
