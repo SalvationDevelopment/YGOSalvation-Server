@@ -444,9 +444,10 @@ function init(callback) {
      * @param {Number} position          
      * @param {NUmber code              
      */
-    function makeNewCard(currentLocation, currentController, currentSequence, position, code) {
+    function makeNewCard(currentLocation, currentController, currentSequence, position, code, index) {
         stack.push(makeCard(currentLocation, currentController, currentSequence, stack.length, code));
         stack[stack.length - 1].position = position;
+        stack[stack.length - 1].index = index;
         state.added = stack[stack.length - 1];
         callback(generateView('newCard'), stack);
     }
