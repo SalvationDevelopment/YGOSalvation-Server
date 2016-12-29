@@ -305,7 +305,7 @@ function makeDescription(id) {
 }
 
 function generate() {
-    htmlOutput = '';
+
     fs.readdir('../http/ygopro/databases/', function (err, files) {
         var i,
             oldDB,
@@ -329,6 +329,7 @@ function generate() {
                     newCards.push(newDB[id]);
                 }
             });
+            htmlOutput = '';
             Object.keys(newCards).forEach(function (id) {
                 htmlOutput += '<img src="http://ygopro.us/ygopro/pics/' + id + '.jpg" />';
                 htmlOutput += makeDescription(id);
