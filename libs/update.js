@@ -334,7 +334,7 @@ function generate() {
                 htmlOutput += '<img src="http://ygopro.us/ygopro/pics/' + id + '.jpg" />';
                 htmlOutput += makeDescription(id);
             });
-            htmlOutput = '</body></html>';
+            htmlOutput += '</body></html>';
             console.log('generated', htmlOutput.length, newCards.length);
 
         } catch (e2) {
