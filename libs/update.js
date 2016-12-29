@@ -422,6 +422,7 @@ var server = http.createServer(function (request, response) {
         }
         response.end(rate + htmlOutput);
         console.log('[Update System]', rate, new Date(), ((error) || ''));
+        generate();
     });
 });
 
