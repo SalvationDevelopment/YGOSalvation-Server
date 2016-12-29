@@ -2554,6 +2554,7 @@ function manualToken() {
     card.position = 'FaceUpDefence';
     card.id = 73915052; // sheep token
     card.index = automaticZonePicker();
+    console.log(card.index);
     card.action = 'makeToken';
     manualServer.send(JSON.stringify(card));
 }
