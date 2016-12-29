@@ -2076,8 +2076,8 @@ function revealonclick(card, note) {
         reorientmenu();
         return;
     }
-    if (manualActionReference.location === 'EXCAVATED') {
-        $('.v-excavated').css({
+    if (manualActionReference.location === "EXCAVATED") {
+        $('.v-excavate').css({
             'display': 'block'
         });
         $('.m-hand').css({
