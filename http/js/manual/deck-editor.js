@@ -217,7 +217,7 @@ var databaseSystem = (function () {
         tokens = database.filter(function (card) {
             return (card.type === 16401 || card.type === 16417);
         });
-        $('#tokendropdown').html();
+        $('#tokendropdown').html('');
         tokens.forEach(function (card) {
             var defaulttext = (card.id === 73915052) ? 'defuault' : ''; // sheep token
             $('#tokendropdown').append('<option ' + defaulttext + 'value="' + card.id + '">' + card.name + '</option>');

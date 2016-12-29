@@ -1561,16 +1561,20 @@ div#waiting {
 }
 
 .ingameminorcontrols {
-    height: 100%;
+    height: 28%;
     position: absolute;
     top: 152px;
     left: 184px;
-    width: 7em;
+    width: 257px;
     font-size: .9em;
+    /* overflow: auto; */
 }
 
 .ingameminorcontrols button {
     width: 90px;
+    float: left;
+    display: block;
+    margin-right: 1em;
 }
 
 input#player1lobbyslot,
