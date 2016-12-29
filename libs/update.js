@@ -335,7 +335,7 @@ function generate() {
                 htmlOutput += makeDescription(id);
             });
             htmlOutput = '</body></html>';
-            console.log('generated', htmlOutput.length);
+            console.log('generated', htmlOutput.length, newCards.length);
 
         } catch (e2) {
             console.log(e2);
