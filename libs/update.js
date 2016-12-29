@@ -329,7 +329,7 @@ function generate(callback) {
                     newCards.push(newDB[id]);
                 }
             });
-            htmlOutput = '<html><body><head><style>.descContainer {width: 50%;}</style>';
+            htmlOutput = '<html><body><head><style>.descContainer {width: 50%;}pre.description {width: 50%;white-space: pre-wrap;}</style>';
             newCards.forEach(function (card) {
                 htmlOutput += '<img src="http://ygopro.us/ygopro/pics/' + card.id + '.jpg" />';
                 htmlOutput += makeDescription(card.id);
