@@ -758,7 +758,8 @@ $('body').on('mousedown', '.game', function (ev) {
 });
 $('body').on('mousedown', 'footer', function (ev) {
     'use strict';
-    if (admin === "1" && launcher && ev.which === 3) {
+    ev.preventDefault();
+    if (admin === "1" && ev.which === 3) {
         if (confirm('Send Global?')) {
             sendglobal(prompt('Global Message', 'Be nice, or else...'));
             return;
@@ -780,6 +781,7 @@ $('body').on('mousedown', 'footer', function (ev) {
             return;
         }
     }
+    return false;
 });
 
 if (localStorage.mindcrushed === true) {
