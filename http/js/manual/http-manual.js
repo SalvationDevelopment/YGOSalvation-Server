@@ -127,7 +127,6 @@ function cardIs(cat, obj) {
 var avatarMap = {};
 
 
-
 function scaleScreenFactor() {
     'use strict';
     var requiredRes = 2500,
@@ -2552,7 +2551,7 @@ function manualToken() {
     card.player = orientSlot;
     card.location = 'MONSTERZONE';
     card.position = 'FaceUpDefence';
-    card.id = 73915052; // sheep token
+    card.id = parseInt($('#tokendropdown').val(), 10);
     card.index = automaticZonePicker(orientSlot, 'MONSTERZONE');
     card.action = 'makeToken';
     manualServer.send(JSON.stringify(card));
