@@ -199,7 +199,8 @@ var databaseSystem = (function () {
      * @returns {Array[Object]}    returns array of cards
      */
     function setDatabase(set) {
-        var dbsets = set.map(function (dbname) {
+        var tokens = [],
+            dbsets = set.map(function (dbname) {
                 if (dbs[dbname]) {
                     return dbs[dbname];
                 } else {
@@ -209,9 +210,18 @@ var databaseSystem = (function () {
             listOfCards = dbsets.reduce(function (a, b) {
                 return a.concat(b);
             }, []);
+
         activedbs = set;
         database = filterCards(listOfCards);
         localStorage.compiledDB = JSON.stringify(database);
+        tokens = database.filter(function (card) {
+            return (card.type === 16401 || card.type === 16417);
+        });
+        $('#tokendropdown').html();
+        tokens.forEach(function (card) {
+            var defaulttext = (card.id === 73915052) ? 'defuault' : ''; // sheep token
+            $('#tokendropdown').append('<option ' + defaulttext + 'value="' + card.id + '">' + card.name + '</option>');
+        });
     }
 
     function setBanlist(newlist) {
