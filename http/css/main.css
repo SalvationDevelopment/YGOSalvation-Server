@@ -2428,6 +2428,7 @@ ul#onlinepublicchat {
     font-size: 0.8em;
     transition: border 100ms;
     color: silver;
+    background: rgba(0, 0, 0, .8);
 }
 
 .onlineopen ul li:hover {
