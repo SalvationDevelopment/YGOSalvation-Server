@@ -2389,11 +2389,10 @@ div#onlinelistwrapper.onlineopen input {
 
 div#onlinelistwrapper.onlineopen {
     height: 70vh;
-    width: 63%;
-    background: black;
+    width: 100%;
+    background: rgba(0, 0, 0, .5);
     position: absolute;
     bottom: 13vh;
-    right: 3%;
     border: 1px solid silver;
     padding: 5px;
 }
