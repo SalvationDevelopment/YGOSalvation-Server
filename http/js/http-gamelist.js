@@ -788,3 +788,27 @@ if (localStorage.mindcrushed === true) {
     $('header').remove();
     alert('This is the Shadow Realm');
 }
+
+function manualModeGamelistSwitch() {
+    'use strict';
+    if (!launcher) {
+        $('#manualgamelistitems').css({
+            'display': 'block'
+        });
+        $('#gamelistitems').css({
+            'display': 'none'
+        });
+    }
+}
+
+function mautomaticModeGamelistSwitch() {
+    'use strict';
+    if (launcher) {
+        $('#manualgamelistitems').css({
+            'display': 'none'
+        });
+        $('#gamelistitems').css({
+            'display': 'block'
+        });
+    }
+}
