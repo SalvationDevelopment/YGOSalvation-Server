@@ -2389,6 +2389,11 @@ div#onlinelistwrapper.onlineopen input {
     margin-left: 1%;
 }
 
+div#onlinelistwrapper.onlineopen:hover {
+    height: 1px;
+    width: 1px;
+}
+
 div#onlinelistwrapper.onlineopen {
     height: 91vh;
     width: 98%;
@@ -2396,7 +2401,8 @@ div#onlinelistwrapper.onlineopen {
     position: absolute;
     bottom: 0;
     border: 1px solid silver;
-    /* padding: 5px; */
+    resize: both;
+    overflow: auto;
 }
 
 #onlinelistwrapper.onlineopen ul {
