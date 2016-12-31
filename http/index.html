@@ -59,6 +59,15 @@
 
 <body class="unlogged">
     <div id="uniqueid" style="display:none"></div>
+    <div id="" style="    position: fixed;    bottom: 2em;    right: 2em;">
+        <div id="onlinelistwrapper" class="">
+            <ul id="onlinelist"></ul>
+            <ul id="onlinepublicchat"></ul>
+            <input id="publicchat">
+            <button id="onlinelisttogger" onclick="openusers()">Chatbox</button>
+
+        </div>
+    </div>
     <div style="z-index:40; position:relative;">
         <span class="psudolinksingle" onclick="singlesitenav('home')" id='psudologo'>
             <h1 style="font-size:1.2em">
@@ -402,13 +411,7 @@
                 </select>
             </div>
             <div class='gamelistcenter' style="float:left; margin:1vh 1vw">
-                <div id="onlinelistwrapper" class="">
-                    <ul id="onlinelist"></ul>
-                    <ul id="onlinepublicchat"></ul>
-                    <input id="publicchat">
-                    <button id="onlinelisttogger" onclick="openusers()">Chatbox</button>
 
-                </div>
             </div>
 
 
@@ -2163,6 +2166,7 @@ General Terms and Conditions applicable to Use of a Web Site.
         <audio id="soundsummonCard" preloaded="auto" src="sounds/summon.wav"></audio>
         <audio id="soundtakeScreenshot" preloaded="auto" src="sounds/takeScreenshot.mp3"></audio>
     </section>
+
 </body>
 
 </html>
