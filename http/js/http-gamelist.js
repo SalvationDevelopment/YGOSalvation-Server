@@ -828,6 +828,7 @@ function openusers() {
     } else {
         $('#onlinelistwrapper').toggleClass('onlineopen');
         $('#onlinelisttogger').css('display', 'block');
+        $('#onlinechatbox').css('display', 'none');
     }
 }
 
@@ -838,6 +839,7 @@ function openchatbox() {
         chatopen = true;
     } else {
         $('#onlinechatbox').toggleClass('onlineopen');
+        $('#onlinelisttogger').css('display', 'none');
         $('#onlinechatbox').css('display', 'block');
     }
 }
