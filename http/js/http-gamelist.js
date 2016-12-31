@@ -847,10 +847,7 @@ $('#publicchat').keypress(function (e) {
         }
         chatline($(e.currentTarget).val(), 'text');
         $(e.currentTarget).val('');
-
-        if ($('#onlinepublicchat').scrollTop() + $('#onlinepublicchat').innerHeight() >= $('#onlinepublicchat')[0].scrollHeight) {
-            $('#onlinepublicchat').scrollTop($('#onlinepublicchat').prop("scrollHeight"));
-        }
+        $('#onlinepublicchat').scrollTop($('#onlinepublicchat').prop("scrollHeight"));
         return false;
     }
 });
