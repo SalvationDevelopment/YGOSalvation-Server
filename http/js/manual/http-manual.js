@@ -252,7 +252,8 @@ function makeGames() {
             player1 = game.player[0].name || '___',
             player2 = game.player[1].name || '___',
             players = player1 + ' vs ' + player2,
-            string = '<div class="manualgame" onclick="manualJoin(\'' + gameName + '\')">' + players + '</div>';
+            started = (game.started) ? 'started' : '',
+            string = '<div class="manualgame ' + started + '" onclick="manualJoin(\'' + gameName + '\')">' + players + '</div>';
         $('#manualgamelistitems').append(string);
     });
 }

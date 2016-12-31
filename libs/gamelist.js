@@ -485,6 +485,23 @@ primus.on('error', function (error) {
     console.log('[Gamelist]:', error);
 });
 
+
+var tagBody = '(?:[^"\'>]|"[^"]*"|\'[^\']*\')*';
+
+var tagOrComment = new RegExp(
+    '<(?:' + '!--(?:(?:-*[^->])*--+|-?)|script\\b' + tagBody + '>[\\s\\S]*?</script\\s*' + '|style\\b' + tagBody + '>[\\s\\S]*?</style\\s*' + '|/?[a-z]' + tagBody + ')>',
+    'gi'
+);
+
+function removeTags(html) {
+    var oldHtml;
+    do {
+        oldHtml = html;
+        html = html.replace(tagOrComment, '');
+    } while (html !== oldHtml);
+    return html.replace(/</g, '&lt;');
+}
+
 function onData(data, socket) {
     var socketwatcher = domain.create(),
         action,

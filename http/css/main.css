@@ -149,6 +149,11 @@ header {
     background-repeat: no-repeat;
 }
 
+.manualgame.started {
+    color: #888;
+    width: 23%;
+}
+
 .game.true:before {
     position: absolute;
     top: 5px;
