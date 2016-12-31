@@ -913,6 +913,11 @@ function init(callback) {
         shuffle(player1.main);
         shuffle(player2.main);
 
+        state.lifepoints = {
+            0: 8000,
+            1: 8000
+        };
+
         player1.main.forEach(function (card, index) {
             stack.push(makeCard('DECK', 0, index, stack.length, card));
         });

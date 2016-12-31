@@ -2349,6 +2349,13 @@ function guicardonclick() {
                 'display': 'block'
             });
         }
+        if (stackunit.location === 'REMOVED') {
+            $('.m-removed').css({
+                'display': 'block'
+            });
+            reorientmenu();
+            return;
+        }
         if (stackunit.player !== orientSlot) {
             return;
         }
