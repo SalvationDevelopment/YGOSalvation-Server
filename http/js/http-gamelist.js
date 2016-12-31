@@ -691,18 +691,9 @@ function sendglobal(message) {
 
 function duelrequestPerson(person) {
     'use strict';
-    var really = confirm("Send Duel Request to " + person + "?");
-
-    if (!really) {
-        return;
+    if (admin) {
+        adminElect(person);
     }
-    setHostSettings();
-    primus.write({
-        action: 'duelrequest',
-        target: person,
-        from: localStorage.nickname,
-        roompass: localStorage.roompass
-    });
 }
 
 function murder(username) {
@@ -763,28 +754,32 @@ $('body').on('mousedown', '.game', function (ev) {
         'display': 'none'
     });
 });
+
+function adminElect(person) {
+    if (confirm('Beatup someone?')) {
+        murder(prompt('Username', person));
+        return;
+    }
+    if (confirm('Mind Crush someone?')) {
+        mindcrush(prompt('Username', person));
+        return;
+    }
+    if (confirm('Revive someone from the shadow realm?')) {
+        revive(prompt('Username', person));
+        return;
+    }
+    if (confirm('AI Genocide?')) {
+        aiRestart();
+        return;
+    }
+}
+
 $('body').on('mousedown', 'footer', function (ev) {
     'use strict';
     ev.preventDefault();
     if (admin === "1" && ev.which === 3) {
         if (confirm('Send Global?')) {
             sendglobal(prompt('Global Message', 'Be nice, or else...'));
-            return;
-        }
-        if (confirm('Beatup someone then?')) {
-            murder(prompt('Username', ''));
-            return;
-        }
-        if (confirm('Mind Crush someone then?')) {
-            mindcrush(prompt('Username', ''));
-            return;
-        }
-        if (confirm('Revive someone from the shadow realm?')) {
-            revive(prompt('Username', ''));
-            return;
-        }
-        if (confirm('AI Genocide?')) {
-            aiRestart();
             return;
         }
     }
