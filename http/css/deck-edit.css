@@ -459,7 +459,6 @@ select.typeSelect {
 .right .searchwrapper img {
     width: 110px;
     height: 158px;
-    opacity: .85;
 }
 
 .searchwrapper {
@@ -470,6 +469,7 @@ select.typeSelect {
     float: left;
     border: 1px solid black;
     background: black;
+    opacity: .9;
 }
 
 #decktextoutput {

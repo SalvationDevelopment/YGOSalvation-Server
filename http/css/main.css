@@ -2389,13 +2389,13 @@ div#onlinelistwrapper.onlineopen input {
 }
 
 div#onlinelistwrapper.onlineopen {
-    height: 70vh;
-    width: 100%;
-    background: rgba(0, 0, 0, .5);
+    height: 91vh;
+    width: 98%;
+    background: rgba(0, 0, 0, .90);
     position: absolute;
-    bottom: 13vh;
+    bottom: 0;
     border: 1px solid silver;
-    padding: 5px;
+    /* padding: 5px; */
 }
 
 #onlinelistwrapper.onlineopen ul {
