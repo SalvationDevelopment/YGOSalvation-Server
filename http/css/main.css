@@ -2390,8 +2390,6 @@ div#onlinelistwrapper.onlineopen input {
 }
 
 div#onlinelistwrapper.onlineopen {
-    height: 91vh;
-    width: 98%;
     background: rgba(0, 0, 0, .90);
     position: absolute;
     bottom: 0;
