@@ -802,7 +802,10 @@ function mautomaticModeGamelistSwitch() {
 
 function openusers() {
     'use strict';
-    $('#onlinelistwrapper').toggleClass('onlineopen');
+    $('#onlinelistwrapper').toggleClass('onlineopen').css({
+        'height': '91vh',
+        'width': '98%'
+    });
 }
 
 
