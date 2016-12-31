@@ -548,7 +548,7 @@ function pondata(data) {
                 if (data.chatbox.length) {
                     $('#onlinepublicchat').html('');
                     data.chatbox.forEach(function (message) {
-                        $('#onlinepublicchat').append('<li><strong>' + data.from + ':</strong> ' + data.msg + '</li>');
+                        $('#onlinepublicchat').append('<li><strong>' + message.from + ':</strong> ' + message.msg + '</li>');
                     });
                 }
             }
