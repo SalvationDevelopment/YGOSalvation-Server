@@ -2379,9 +2379,17 @@ a.launcheronly.loginsystem {
     display: none;
 }
 
+#onlinelistwrapper input {
+    display: none;
+}
+
+div#onlinelistwrapper.onlineopen input {
+    display: block;
+}
+
 div#onlinelistwrapper.onlineopen {
     height: 70vh;
-    width: 30%;
+    width: 63%%;
     background: black;
     position: absolute;
     bottom: 13vh;
@@ -2397,6 +2405,15 @@ div#onlinelistwrapper.onlineopen {
     overflow-y: scroll;
     height: 95%;
     display: block;
+    float: right;
+}
+
+ul#onlinelist {
+    width: 25%;
+}
+
+ul#onlinepublicchat {
+    width: 75%;
 }
 
 .gamelistcenter select {
