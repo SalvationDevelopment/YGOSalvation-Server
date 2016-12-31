@@ -30,7 +30,8 @@ var primus,
     forumValidate = require('./forum-validator.js'),
     currentGlobalMessage = '',
     adminlist = require('../package.json').admins,
-    banlist = require('./bansystem.js');
+    banlist = require('./bansystem.js'),
+    chatbox = [];
 
 
 setTimeout(function () {
@@ -318,7 +319,8 @@ function registrationCall(data, socket) {
             socket.speak = true;
             socket.write({
                 clientEvent: 'login',
-                info: info
+                info: info,
+                chatbox: chatbox
             });
             Object.keys(banlist).some(function (bannedUser) {
                 if (bannedUser.toUpperCase() === data.username.toUpperCase()) {
@@ -594,8 +596,15 @@ function onData(data, socket) {
     case ('chatline'):
         if (socket.username && socket.speak) {
             socket.speak = false;
+            if (chatbox.length > 100) {
+                chatbox.shfit();
+            }
             announce({
                 clientEvent: 'chatline',
+                from: socket.username,
+                msg: removeTags(data.msg)
+            });
+            chatbox.push({
                 from: socket.username,
                 msg: removeTags(data.msg)
             });

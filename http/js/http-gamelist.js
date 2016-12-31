@@ -544,6 +544,15 @@ function pondata(data) {
         }
         if (data.clientEvent === 'login') {
             processLogin(data.info);
+            if (data.chatbox) {
+                if (data.chatbox.length) {
+                    $('#onlinepublicchat').html('');
+                    data.chatbox.forEach(function (message) {
+                        $('#onlinepublicchat').append('<li><strong>' + data.from + ':</strong> ' + data.msg + '</li>');
+                    });
+                }
+            }
+            $('#onlinepublicchat').scrollTop($('#onlinepublicchat').prop("scrollHeight"));
             primus.write({
                 username: localStorage.nickname,
                 action: 'load'
