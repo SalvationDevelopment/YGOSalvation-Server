@@ -2672,6 +2672,8 @@ $('#lobbychatinput, #sidechatinput, #spectatorchatinput').keypress(function (e) 
     }
 });
 
+var friendsList = [];
+
 $('#manualcontrols button').on('click', function () {
     'use strict';
     $('#revealed, #revealedclose').css('display', 'none');
