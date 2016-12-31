@@ -823,24 +823,24 @@ var chatopen = false;
 function openusers() {
     if (chatopen) {
         $('#onlinelisttogger').css('display', 'block');
-        $('#onlinechatbox').css('display', 'none');
+        $('#onlinepublicchat').css('display', 'none');
         chatopen = false;
     } else {
         $('#onlinelistwrapper').toggleClass('onlineopen');
         $('#onlinelisttogger').css('display', 'block');
-        $('#onlinechatbox').css('display', 'none');
+        $('#onlinepublicchat').css('display', 'none');
     }
 }
 
 function openchatbox() {
     if (!chatopen) {
         $('#onlinelisttogger').css('display', 'none');
-        $('#onlinechatbox').css('display', 'block');
+        $('#onlinepublicchat').css('display', 'block');
         chatopen = true;
     } else {
-        $('#onlinechatbox').toggleClass('onlineopen');
+        $('#onlinelistwrapper').toggleClass('onlineopen');
         $('#onlinelisttogger').css('display', 'none');
-        $('#onlinechatbox').css('display', 'block');
+        $('#onlinepublicchat').css('display', 'block');
     }
 }
 
