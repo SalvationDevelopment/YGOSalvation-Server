@@ -2385,6 +2385,7 @@ a.launcheronly.loginsystem {
 
 div#onlinelistwrapper.onlineopen input {
     display: inline;
+    width: 75%;
 }
 
 div#onlinelistwrapper.onlineopen {
