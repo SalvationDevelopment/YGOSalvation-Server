@@ -2400,11 +2400,6 @@ div#onlinelistwrapper.onlineopen {
     overflow: auto;
 }
 
-div#onlinelistwrapper.onlineopen:active {
-    height: 0;
-    width: 0;
-}
-
 #onlinelistwrapper.onlineopen ul {
     list-style: none;
     padding: 0;
