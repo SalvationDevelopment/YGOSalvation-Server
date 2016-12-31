@@ -818,31 +818,12 @@ function mautomaticModeGamelistSwitch() {
 }
 
 
-var chatopen = false;
 
 function openusers() {
-    if (chatopen) {
-        $('#onlinelisttogger').css('display', 'block');
-        $('#onlinepublicchat').css('display', 'none');
-        chatopen = false;
-    } else {
-        $('#onlinelistwrapper').toggleClass('onlineopen');
-        $('#onlinelisttogger').css('display', 'block');
-        $('#onlinepublicchat').css('display', 'none');
-    }
+    $('#onlinelistwrapper').toggleClass('onlineopen');
 }
 
-function openchatbox() {
-    if (!chatopen) {
-        $('#onlinelisttogger').css('display', 'none');
-        $('#onlinepublicchat').css('display', 'block');
-        chatopen = true;
-    } else {
-        $('#onlinelistwrapper').toggleClass('onlineopen');
-        $('#onlinelisttogger').css('display', 'none');
-        $('#onlinepublicchat').css('display', 'block');
-    }
-}
+
 
 function chatline(text) {
     'use strict';
