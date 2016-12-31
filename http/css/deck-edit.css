@@ -119,7 +119,7 @@ input.decknameInput {
 .center .mainDeck {
     float: left;
     height: 285px;
-    width: 487px;
+    width: 483px;
     min-width: 390px;
     padding: 5px;
     border: 1px solid yellow;
@@ -459,6 +459,7 @@ select.typeSelect {
 .right .searchwrapper img {
     width: 110px;
     height: 158px;
+    opacity: .85;
 }
 
 .searchwrapper {
@@ -467,7 +468,8 @@ select.typeSelect {
     height: auto;
     overflow: auto;
     float: left;
-    opacity: .9;
+    border: 1px solid black;
+    background: black;
 }
 
 #decktextoutput {
@@ -486,7 +488,9 @@ select.typeSelect {
 
 .searchwrapper:hover {
     box-sizing: border-box;
-    opacity: 1;
     border: 1px dashed white !important;
-    border: 1px solid black;
+}
+
+.searchwrapper:hover img {
+    opacity: 1;
 }
