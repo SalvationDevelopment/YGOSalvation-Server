@@ -560,6 +560,7 @@ function onData(data, socket) {
         break;
     case ('ai'):
         if (socket.username) {
+            console.log(socket.username, 'requested AI Duel');
             announce({
                 clientEvent: 'duelrequest',
                 target: 'SnarkyChild',
@@ -588,6 +589,13 @@ function onData(data, socket) {
         break;
     case ('register'):
         registrationCall(data, socket);
+        break;
+    case ('chatline'):
+        announce({
+            clientEvent: 'chatline',
+            from: socket.username,
+            msg: removeTags(data.msg)
+        });
         break;
     case ('global'):
         globalCall(data);
