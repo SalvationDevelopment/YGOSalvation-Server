@@ -697,14 +697,6 @@ function sendglobal(message) {
     });
 }
 
-
-function duelrequestPerson(person) {
-    'use strict';
-    if (admin) {
-        adminElect(person);
-    }
-}
-
 function murder(username) {
     'use strict';
     primus.write({
@@ -764,24 +756,6 @@ $('body').on('mousedown', '.game', function (ev) {
     });
 });
 
-function adminElect(person) {
-    if (confirm('Beatup someone?')) {
-        murder(prompt('Username', person));
-        return;
-    }
-    if (confirm('Mind Crush someone?')) {
-        mindcrush(prompt('Username', person));
-        return;
-    }
-    if (confirm('Revive someone from the shadow realm?')) {
-        revive(prompt('Username', person));
-        return;
-    }
-    if (confirm('AI Genocide?')) {
-        aiRestart();
-        return;
-    }
-}
 
 $('body').on('mousedown', 'footer', function (ev) {
     'use strict';
@@ -855,3 +829,32 @@ $('#publicchat').keypress(function (e) {
         return false;
     }
 });
+
+function adminElect(person) {
+    'use strict';
+    if (admin) {
+        if (confirm('Beatup someone?')) {
+            murder(prompt('Username', person));
+            return;
+        }
+        if (confirm('Mind Crush someone?')) {
+            mindcrush(prompt('Username', person));
+            return;
+        }
+        if (confirm('Revive someone from the shadow realm?')) {
+            revive(prompt('Username', person));
+            return;
+        }
+        if (confirm('AI Genocide?')) {
+            aiRestart();
+            return;
+        }
+    }
+}
+
+function duelrequestPerson(person) {
+    'use strict';
+    if (admin === "1") {
+        adminElect(person);
+    }
+}
