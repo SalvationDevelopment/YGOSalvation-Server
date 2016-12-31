@@ -2400,11 +2400,6 @@ div#onlinelistwrapper.onlineopen {
     overflow: auto;
 }
 
-div#onlinelistwrapper.onlineopen:hover {
-    height: 1px;
-    width: 1px;
-}
-
 #onlinelistwrapper.onlineopen ul {
     list-style: none;
     padding: 0;
