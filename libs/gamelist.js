@@ -308,13 +308,14 @@ function registrationCall(data, socket) {
         }
         if (info.success) {
             registry[info.displayname] = socket.address.ip;
-            socket.username = data.displayname;
+            socket.username = info.displayname;
             sendRegistry();
             socket.write({
                 clientEvent: 'global',
                 message: currentGlobalMessage,
                 admin: adminlist[data.username]
             });
+            socket.speak = true;
             socket.write({
                 clientEvent: 'login',
                 info: info
@@ -591,11 +592,22 @@ function onData(data, socket) {
         registrationCall(data, socket);
         break;
     case ('chatline'):
-        announce({
-            clientEvent: 'chatline',
-            from: socket.username,
-            msg: removeTags(data.msg)
-        });
+        if (socket.username && socket.speak) {
+            socket.speak = false;
+            announce({
+                clientEvent: 'chatline',
+                from: socket.username,
+                msg: removeTags(data.msg)
+            });
+            setTimeout(function () {
+                socket.speak = true;
+            }, 500);
+        } else {
+            primus.room(socket.address.ip + data.uniqueID).write({
+                clientEvent: 'slowchat',
+                error: 'Exceeded 500ms chat timeout'
+            });
+        }
         break;
     case ('global'):
         globalCall(data);
