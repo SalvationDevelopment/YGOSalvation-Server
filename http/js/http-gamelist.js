@@ -557,7 +557,7 @@ function pondata(data) {
             alert('Saved');
         }
         if (data.clientEvent === 'chatline') {
-            console.log(data.msg);
+            $('#onlinepublicchat').append('<li><strong>' + data.from + '</strong>' + data.msg + '</li>');
         }
         if (data.clientEvent === 'banned') {
             alert(data.reason);
