@@ -557,7 +557,10 @@ function pondata(data) {
             alert('Saved');
         }
         if (data.clientEvent === 'chatline') {
-            $('#onlinepublicchat').append('<li><strong>' + data.from + '</strong>' + data.msg + '</li>');
+            $('#onlinepublicchat').append('<li><strong>' + data.from + ':</strong> ' + data.msg + '</li>');
+            if ($('#onlinepublicchat').scrollTop() + $('#onlinepublicchat').innerHeight() >= $('#onlinepublicchat')[0].scrollHeight) {
+                $('#onlinepublicchat').scrollTop($('#onlinepublicchat').prop("scrollHeight"));
+            }
         }
         if (data.clientEvent === 'banned') {
             alert(data.reason);
@@ -820,15 +823,34 @@ function mautomaticModeGamelistSwitch() {
 
 
 function openusers() {
+    'use strict';
     $('#onlinelistwrapper').toggleClass('onlineopen');
 }
 
 
 
-function chatline(text) {
+function chatline(text, type) {
     'use strict';
     primus.write({
         action: 'chatline',
-        msg: text
+        msg: text,
+        type: type
     });
 }
+
+$('#publicchat').keypress(function (e) {
+    'use strict';
+
+    if (e.which === 13) {
+        if ($(e.currentTarget).val().length === 0) {
+            return;
+        }
+        chatline($(e.currentTarget).val(), 'text');
+        $(e.currentTarget).val('');
+
+        if ($('#onlinepublicchat').scrollTop() + $('#onlinepublicchat').innerHeight() >= $('#onlinepublicchat')[0].scrollHeight) {
+            $('#onlinepublicchat').scrollTop($('#onlinepublicchat').prop("scrollHeight"));
+        }
+        return false;
+    }
+});
