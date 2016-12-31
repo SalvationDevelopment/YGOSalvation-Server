@@ -1,6 +1,6 @@
 /*jslint plusplus: true, browser:true, node:true*/
 /*jslint nomen: true*/
-/*global localStorage, $, Primus, prompt, console, writeDeckList, makeDeck, confirm, launcher, alert, singlesitenav, startgame, _gaq, internalLocal, loggedIn, processServerCall, admin, jsLang, manualHost*/
+/*global localStorage, $, Primus, prompt, console, writeDeckList, makeDeck, confirm, launcher, alert, singlesitenav, startgame, _gaq, internalLocal, loggedIn, processServerCall, admin, jsLang, manualHost, deckEditor, processLogin*/
 /*exported connectToCheckmateServer, leaveGamelist, hostGame, connectgamelist, setHostSettings, setfilter*/
 
 
@@ -552,8 +552,12 @@ function pondata(data) {
         if (data.clientEvent === 'deckLoad') {
             deckEditor.loadDecks(data.decks);
         }
+
         if (data.clientEvent === 'deckSave') {
             alert('Saved');
+        }
+        if (data.clientEvent === 'chatline') {
+            console.log(data.msg);
         }
         if (data.clientEvent === 'banned') {
             alert(data.reason);
@@ -811,4 +815,14 @@ function mautomaticModeGamelistSwitch() {
             'display': 'block'
         });
     }
+}
+
+
+
+function chatline(text) {
+    'use strict';
+    primus.write({
+        action: 'chatline',
+        msg: text
+    });
 }
