@@ -1245,7 +1245,7 @@ header a:hover {
     color: white;
     padding: 2px;
     float: left;
-    width: 100%%;
+    width: 100%;
 }
 
 .chatbody {
@@ -2389,7 +2389,7 @@ div#onlinelistwrapper.onlineopen input {
 
 div#onlinelistwrapper.onlineopen {
     height: 70vh;
-    width: 63%%;
+    width: 63%;
     background: black;
     position: absolute;
     bottom: 13vh;
