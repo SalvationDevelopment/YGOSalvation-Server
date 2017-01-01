@@ -1134,22 +1134,24 @@ var deckEditor = (function () {
     }
 
 
+    function returnPulledCard(cardid) {
+        var card = pullcard(parseInt(cardid, 10), data);
+        return card;
+    }
+
+    function filterPulledCard(card) {
+        return (card !== undefined);
+    }
+
     function upload(ydk) {
         var newDeck = makeDeckfromydk(ydk),
             data = databaseSystem.getDB();
 
         newDeck.creator = localStorage.nickname;
         newDeck.creationDate = new Date();
-        newDeck.main = newDeck.main.map(function (cardid) {
-            var card = pullcard(parseInt(cardid, 10), data);
-            return card;
-        });
-        newDeck.side = newDeck.side.map(function (cardid) {
-            return pullcard(parseInt(cardid, 10), data);
-        });
-        newDeck.extra = newDeck.extra.map(function (cardid) {
-            return pullcard(parseInt(cardid, 10), data);
-        });
+        newDeck.main = newDeck.main.map(returnPulledCard);
+        newDeck.side = newDeck.side.map(returnPulledCard);
+        newDeck.extra = newDeck.extra.map(returnPulledCard);
 
         createNewDeck(newDeck);
 
