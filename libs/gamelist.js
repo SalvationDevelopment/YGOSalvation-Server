@@ -31,7 +31,8 @@ var primus,
     currentGlobalMessage = '',
     adminlist = require('../package.json').admins,
     banlist = require('./bansystem.js'),
-    chatbox = [];
+    chatbox = [],
+    sayCount = 0;
 
 
 setTimeout(function () {
@@ -405,6 +406,7 @@ function reviveCall(data) {
     });
 }
 
+
 function murderCall(data) {
     forumValidate(data, function (error, info, body) {
         if (error) {
@@ -413,12 +415,33 @@ function murderCall(data) {
 
         if (info.success && adminlist[data.username]) {
             announce({
-                clientEvent: 'kill',
+                clientEvent: 'censor',
                 target: data.target
+            });
+        } else {
+            console.log(data, 'asked for murder');
+        }
+
+    });
+}
+
+function censorCall(data) {
+    forumValidate(data, function (error, info, body) {
+        if (error) {
+            return;
+        }
+
+        if (info.success && adminlist[data.username]) {
+            announce({
+                clientEvent: 'censor',
+                messageID: data.messageID
+            });
+            chatbox = chatbox.filter(function (message) {
+                return message !== Number(data.messageID);
             });
 
         } else {
-            console.log(data, 'asked for murder');
+            console.log(data, 'asked for censor');
         }
 
     });
@@ -606,8 +629,10 @@ function onData(data, socket) {
             });
             chatbox.push({
                 from: socket.username,
-                msg: removeTags(data.msg)
+                msg: removeTags(data.msg),
+                uid: sayCount
             });
+            sayCount++;
             setTimeout(function () {
                 socket.speak = true;
             }, 500);
@@ -626,6 +651,9 @@ function onData(data, socket) {
         break;
     case ('murder'):
         murderCall(data);
+        break;
+    case ('censor'):
+        censorCall(data);
         break;
     case ('revive'):
         reviveCall(data);
