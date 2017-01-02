@@ -53,11 +53,11 @@ function cardStackSort(a, b) {
     if (aExtra && !bExtra) {
         return 1;
     }
-    if (a.level > b.level) {
-        return -1;
-    }
     if (a.level < b.level) {
         return 1;
+    }
+    if (a.level > b.level) {
+        return -1;
     }
     if (a.atk > b.atk) {
         return -1;
@@ -969,6 +969,10 @@ var deckEditor = (function () {
         doSearch();
     }
 
+    function loadFriends(newFriends) {
+        friends = newFriends;
+    }
+
     function getDeck(index) {
         return JSON.parse(JSON.stringify(usersDecks[index]));
     }
@@ -1210,7 +1214,8 @@ var deckEditor = (function () {
         rename: rename,
         upload: upload,
         addFriend: addFriend,
-        removeFriend: removeFriend
+        removeFriend: removeFriend,
+        getFriends: getFriends
     };
 }());
 
