@@ -40,12 +40,7 @@ function cardStackSort(a, b) {
         }
 
     }
-    if (cardIs('monster', a) && !cardIs('monster', b)) {
-        return -1;
-    }
-    if (!cardIs('monster', a) && cardIs('monster', b)) {
-        return 1;
-    }
+
 
     if (!aExtra && bExtra) {
         return -1;
