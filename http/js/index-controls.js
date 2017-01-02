@@ -331,7 +331,7 @@ function processLogin(data) {
         localStorage.nickname = info.displayname;
         admin = info.data.g_access_cp;
         if (admin === "1") {
-            $('body').addclass('adminuser');
+            $('body').addClass('adminuser');
         }
         if (isChecked('#ips_remember')) {
             localStorage.loginnick = $('#ips_username').val();
