@@ -1886,8 +1886,12 @@ var currentMousePos = {
 function reorientmenu() {
     'use strict';
     var height = $('#manualcontrols').height(),
-        width = $('#manualcontrols').width() / 2;
+        width = $('#manualcontrols').width() / 2,
+        systemHeight = $(document).height();
 
+    if (currentMousePos.y - height < 0) {
+        currentMousePos.y = height;
+    }
 
     $('#manualcontrols').css({
         'top': currentMousePos.y - height,
