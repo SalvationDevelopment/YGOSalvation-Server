@@ -66,6 +66,10 @@ function updatenews() {
                         link: topic.link
                     });
                 });
+                news.articles.sort(function (arti) {
+                    return new Date(arti.date).getTime();
+                });
+                news.articles.reverse();
                 output = parser(news);
                 //console.log(feed, parser, topics, output);
                 $('#news').html(output);
