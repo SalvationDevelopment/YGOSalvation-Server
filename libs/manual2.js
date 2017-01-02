@@ -169,8 +169,7 @@ function responseHandler(socket, message) {
             action: 'lobby',
             game: message.game
         }));
-        activeduel = message.game;
-        stateSystem[activeduel].callback(stateSystem[activeduel].generateView(), stateSystem[activeduel].stack);
+
         break;
     case "leave":
         if (socket.slot !== undefined) {
