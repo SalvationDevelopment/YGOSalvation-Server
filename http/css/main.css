@@ -982,6 +982,11 @@ div#selectwhogoesfirst {
     box-shadow: 0px 0px 31px black;
 }
 
+#manualcontrols button:hover {
+    border: 1px outset #fff;
+    color: #444;
+}
+
 div#gofirst,
 #gosecond {
     margin: .25em auto;
