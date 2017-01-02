@@ -625,7 +625,8 @@ function onData(data, socket) {
             announce({
                 clientEvent: 'chatline',
                 from: socket.username,
-                msg: removeTags(data.msg)
+                msg: removeTags(data.msg),
+                uid: sayCount
             });
             chatbox.push({
                 from: socket.username,
