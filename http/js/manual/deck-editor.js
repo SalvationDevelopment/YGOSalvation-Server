@@ -9,6 +9,8 @@ function cardStackSort(a, b) {
     var aExtra = (cardIs('xyz', a) || cardIs('synchro', a) || cardIs('fusion', a)),
         bExtra = (cardIs('xyz', b) || cardIs('synchro', b) || cardIs('fusion', b));
 
+
+
     if (cardIs('monster', a) && cardIs('monster', b)) {
 
 
@@ -38,10 +40,23 @@ function cardStackSort(a, b) {
         }
 
     }
+    if (cardIs('monster', a) && !cardIs('monster', b)) {
+        return -1;
+    }
+    if (!cardIs('monster', a) && cardIs('monster', b)) {
+        return 1;
+    }
+
     if (!aExtra && bExtra) {
         return -1;
     }
     if (aExtra && !bExtra) {
+        return 1;
+    }
+    if (a.level > b.level) {
+        return -1;
+    }
+    if (a.level < b.level) {
         return 1;
     }
     if (a.atk > b.atk) {
@@ -848,6 +863,10 @@ var deckEditor = (function () {
 
     function removeFriend() {
         friends.splice(friends.indexOf(personOfIntrest), 1);
+    }
+
+    function getFriends() {
+        return friends;
     }
 
     function doNewSearch() {
