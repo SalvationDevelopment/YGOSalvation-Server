@@ -170,7 +170,7 @@ function responseHandler(socket, message) {
             game: message.game
         }));
         activeduel = message.game;
-        stateSystem[activeduel].callback();
+        stateSystem[activeduel].callback(stateSystem[activeduel].generateView(), stateSystem[activeduel].stack);
         break;
     case "leave":
         if (socket.slot !== undefined) {
@@ -180,6 +180,7 @@ function responseHandler(socket, message) {
             message.game.spectators--;
             delete stateSystem[activeduel].spectators[message.name];
         }
+        socket.slot = undefined;
         wss.broadcast(games);
         socket.send(JSON.stringify({
             action: 'leave'
@@ -233,11 +234,13 @@ function responseHandler(socket, message) {
 
         break;
     case "start":
-        player1 = stateSystem[activeduel].decks[0];
-        player2 = stateSystem[activeduel].decks[1];
-        stateSystem[activeduel].startDuel(player1, player2, true);
-        games[activeduel].started = true;
-        wss.broadcast(games);
+        if (socket.slot !== undefined) {
+            player1 = stateSystem[activeduel].decks[0];
+            player2 = stateSystem[activeduel].decks[1];
+            stateSystem[activeduel].startDuel(player1, player2, true);
+            games[activeduel].started = true;
+            wss.broadcast(games);
+        }
         break;
     case "moveCard":
         stateSystem[activeduel].setState(message.player, message.clocation, message.index, message.moveplayer, message.movelocation, message.moveindex, message.moveposition, message.overlayindex, message.uid);
