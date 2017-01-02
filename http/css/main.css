@@ -989,7 +989,7 @@ div#selectwhogoesfirst {
 .adminuser span.admincensor {
     width: 1em;
     height: 1em;
-    border: 1px solid black;
+    border: 1px solid #444;
     display: block;
     float: right;
 }
