@@ -548,7 +548,7 @@ function pondata(data) {
                 if (data.chatbox.length) {
                     $('#onlinepublicchat').html('');
                     data.chatbox.forEach(function (message) {
-                        $('#onlinepublicchat').append('<li><strong>' + message.from + ':</strong> ' + message.msg + '</li>');
+                        $('#onlinepublicchat').append('<li><strong>' + message.from + ':</strong> ' + message.msg + '<span class="admincensor" onclick="censor(' + message.uid + ')"></span></li>');
                     });
                 }
             }
@@ -627,7 +627,7 @@ function pondata(data) {
                 return a.toLowerCase().localeCompare(b.toLowerCase());
             });
             data.userlist.forEach(function (name) {
-                jsco = "duelrequestPerson('" + name.trim() + "');";
+                jsco = "userlistonclick('" + name.trim() + "');";
                 userlist = userlist + '<li onclick="' + jsco + '">' + name.trim() + '</li>';
             });
             $('#onlinelist').html(userlist);
@@ -697,13 +697,25 @@ function sendglobal(message) {
     });
 }
 
-function murder(username) {
+var personOfIntrest = '';
+
+function censor(messageID) {
+    'use strict';
+    primus.write({
+        action: 'censor',
+        username: $('#ips_username').val(),
+        password: $('#ips_password').val(),
+        messageID: messageID
+    });
+}
+
+function murder() {
     'use strict';
     primus.write({
         action: 'murder',
         username: $('#ips_username').val(),
         password: $('#ips_password').val(),
-        target: username
+        target: personOfIntrest
     });
 }
 
@@ -713,7 +725,7 @@ function mindcrush(username) {
         action: 'mindcrush',
         username: $('#ips_username').val(),
         password: $('#ips_password').val(),
-        target: username
+        target: personOfIntrest
     });
 }
 
@@ -723,7 +735,7 @@ function revive(username) {
         action: 'revive',
         username: $('#ips_username').val(),
         password: $('#ips_password').val(),
-        target: username
+        target: personOfIntrest
     });
 }
 
@@ -830,26 +842,16 @@ $('#publicchat').keypress(function (e) {
     }
 });
 
-function adminElect(person) {
+
+
+function userlistonclick(person) {
     'use strict';
+    personOfIntrest = person;
     if (admin) {
-        if (confirm('Beatup someone?')) {
-            murder(prompt('Username', person));
-            return;
-        }
-        if (confirm('Mind Crush someone?')) {
-            mindcrush(prompt('Username', person));
-            return;
-        }
-        if (confirm('Revive someone from the shadow realm?')) {
-            revive(prompt('Username', person));
-            return;
-        }
-        if (confirm('AI Genocide?')) {
-            aiRestart();
-            return;
-        }
+        $('.a-admin').css('display', 'block');
     }
+    $('.a-user').css('display', 'block');
+    reorientmenu();
 }
 
 function duelrequestPerson(person) {
