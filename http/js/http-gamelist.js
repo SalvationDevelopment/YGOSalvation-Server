@@ -11,6 +11,25 @@ var localstorageIter = 0,
 
 var tournament = {};
 
+$.fn.urlize = function () {
+    if (this.length > 0) {
+        this.each(function (i, obj) {
+            // making links active
+            var x = $(obj).html(),
+                list = x.match(/\b(http:\/\/|www\.|http:\/\/www\.)[^ <]{2,200}\b/g),
+                prot;
+            if (list) {
+                for (i = 0; i < list.length; i++) {
+                    prot = list[i].indexOf('http://') === 0 || list[i].indexOf('https://') === 0 ? '' : 'http://';
+                    x = x.replace(list[i], "<a target='_blank' href='" + prot + list[i] + "'>" + list[i] + "</a>");
+                }
+
+            }
+            $(obj).html(x);
+        });
+    }
+};
+
 function applySettings() {
     'use strict';
     $('[data-localhost]').each(function () {
@@ -566,7 +585,7 @@ function pondata(data) {
             alert('Saved');
         }
         if (data.clientEvent === 'chatline') {
-            $('#onlinepublicchat').append('<li  data-chatuid="' + data.uid + '"><strong>' + data.from + ':</strong> ' + data.msg + '<span class="admincensor" onclick="censor(' + data.uid + ')"></span></li>');
+            $('#onlinepublicchat').append('<li  data-chatuid="' + data.uid + '"><strong>' + data.from + ':</strong> ' + data.msg + '<span class="admincensor" onclick="censor(' + data.uid + ')"></span></li>').urlize();
             if ($('#onlinepublicchat').scrollTop() + $('#onlinepublicchat').innerHeight() >= $('#onlinepublicchat')[0].scrollHeight) {
                 $('#onlinepublicchat').scrollTop($('#onlinepublicchat').prop("scrollHeight"));
             }
