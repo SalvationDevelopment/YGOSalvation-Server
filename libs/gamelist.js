@@ -415,7 +415,7 @@ function murderCall(data) {
 
         if (info.success && adminlist[data.username]) {
             announce({
-                clientEvent: 'censor',
+                clientEvent: 'murder',
                 target: data.target
             });
         } else {
@@ -437,7 +437,7 @@ function censorCall(data) {
                 messageID: data.messageID
             });
             chatbox = chatbox.filter(function (message) {
-                return message !== Number(data.messageID);
+                return message.uid !== Number(data.messageID);
             });
 
         } else {
