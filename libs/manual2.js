@@ -159,7 +159,7 @@ function responseHandler(socket, message) {
         if (!joined) {
             stateSystem[message.game].spectators[message.name] = socket;
             if (games[message.game].started) {
-                socket.send(JSON.stringify(stateSystem[message.game].generateView('start')));
+                socket.send(JSON.stringify(stateSystem[message.game].generateView('start').spectators));
                 socket.activeduel = message.game;
             }
         }
