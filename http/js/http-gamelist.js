@@ -572,7 +572,7 @@ function pondata(data) {
             }
         }
         if (data.clientEvent === 'censor') {
-            $('[data-chatuid="' + data.uid + '"]').remove();
+            $('[data-chatuid="' + data.messageID + '"]').remove();
         }
         if (data.clientEvent === 'banned') {
             alert(data.reason);
