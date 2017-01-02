@@ -684,7 +684,8 @@ var deckEditor = (function () {
     'use strict';
     var inmemoryDeck = {},
         usersDecks = [],
-        activeIndex = 0;
+        activeIndex = 0,
+        friends = []
 
     function makeBlankDeck(name, username, date) {
         return {
@@ -841,6 +842,14 @@ var deckEditor = (function () {
         makeCard(search, 'search');
     }
 
+    function addFriend() {
+        friends.push(personOfIntrest);
+    }
+
+    function removeFriend() {
+        friends.splice(friends.indexOf(personOfIntrest), 1);
+    }
+
     function doNewSearch() {
 
         var cardname = $('.nameInput').val(),
@@ -918,6 +927,7 @@ var deckEditor = (function () {
         primus.write({
             action: 'save',
             decks: usersDecks,
+            friends: friends,
             username: localStorage.nickname
         });
     }
@@ -1134,7 +1144,7 @@ var deckEditor = (function () {
     }
 
 
-    function returnPulledCard(cardid) {
+    function returnPulledCard(cardid, i, data) {
         var card = pullcard(parseInt(cardid, 10), data);
         return card;
     }
@@ -1179,7 +1189,9 @@ var deckEditor = (function () {
         doNewSearch: doNewSearch,
         getInmemoryDeck: getInmemoryDeck,
         rename: rename,
-        upload: upload
+        upload: upload,
+        addFriend: addFriend,
+        removeFriend: removeFriend
     };
 }());
 

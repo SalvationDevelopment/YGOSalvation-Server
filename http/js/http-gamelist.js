@@ -854,9 +854,13 @@ function userlistonclick(person) {
     reorientmenu();
 }
 
-function duelrequestPerson(person) {
+function duelrequestPerson() {
     'use strict';
-    if (admin === "1") {
-        adminElect(person);
-    }
+    setHostSettings();
+    primus.write({
+        clientEvent: 'duelrequest',
+        target: personOfIntrest,
+        from: localStorage.nickname,
+        roompass: localStorage.roompass
+    });
 }
