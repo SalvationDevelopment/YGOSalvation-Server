@@ -10,7 +10,7 @@ var tournament = {};
 function isChecked(id) {
     'use strict';
     return ($(id).is(':checked'));
-};
+}
 
 Handlebars.getTemplate = function (name) {
     'use strict';
@@ -330,6 +330,9 @@ function processLogin(data) {
     if (info.success) {
         localStorage.nickname = info.displayname;
         admin = info.data.g_access_cp;
+        if (admin === "1") {
+            $('body').addclass('adminuser');
+        }
         if (isChecked('#ips_remember')) {
             localStorage.loginnick = $('#ips_username').val();
             localStorage.loginpass = $('#ips_password').val();

@@ -986,6 +986,14 @@ div#selectwhogoesfirst {
     border: 1px outset #fff;
 }
 
+.adminuser span.admincensor {
+    width: 1em;
+    height: 1em;
+    border: 1px solid white;
+    display: block;
+    float: right;
+}
+
 div#gofirst,
 #gosecond {
     margin: .25em auto;

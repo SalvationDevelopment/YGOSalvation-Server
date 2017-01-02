@@ -1,6 +1,6 @@
 /*jslint plusplus: true, browser:true, node:true*/
 /*jslint nomen: true*/
-/*global localStorage, $, Primus, prompt, console, writeDeckList, makeDeck, confirm, launcher, alert, singlesitenav, startgame, _gaq, internalLocal, loggedIn, processServerCall, admin, jsLang, manualHost, deckEditor, processLogin*/
+/*global localStorage, $, Primus, prompt, console, writeDeckList, makeDeck, confirm, launcher, alert, singlesitenav, startgame, _gaq, internalLocal, loggedIn, processServerCall, admin, jsLang, manualHost, deckEditor, processLogin, reorientmenu*/
 /*exported connectToCheckmateServer, leaveGamelist, hostGame, connectgamelist, setHostSettings, setfilter*/
 
 
@@ -548,7 +548,7 @@ function pondata(data) {
                 if (data.chatbox.length) {
                     $('#onlinepublicchat').html('');
                     data.chatbox.forEach(function (message) {
-                        $('#onlinepublicchat').append('<li><strong>' + message.from + ':</strong> ' + message.msg + '<span class="admincensor" onclick="censor(' + message.uid + ')"></span></li>');
+                        $('#onlinepublicchat').append('<li data-chatuid="' + message.uid + '"><strong>' + message.from + ':</strong> ' + message.msg + '<span class="admincensor" onclick="censor(' + message.uid + ')" ></span></li>');
                     });
                 }
             }
@@ -566,10 +566,13 @@ function pondata(data) {
             alert('Saved');
         }
         if (data.clientEvent === 'chatline') {
-            $('#onlinepublicchat').append('<li><strong>' + data.from + ':</strong> ' + data.msg + '</li>');
+            $('#onlinepublicchat').append('<li  data-chatuid="' + data.uid + '"><strong>' + data.from + ':</strong> ' + data.msg + '<span class="admincensor" onclick="censor(' + data.uid + ')"></span></li>');
             if ($('#onlinepublicchat').scrollTop() + $('#onlinepublicchat').innerHeight() >= $('#onlinepublicchat')[0].scrollHeight) {
                 $('#onlinepublicchat').scrollTop($('#onlinepublicchat').prop("scrollHeight"));
             }
+        }
+        if (data.clientEvent === 'censor') {
+            $('[data-chatuid="' + data.uid + '"]').remove();
         }
         if (data.clientEvent === 'banned') {
             alert(data.reason);
