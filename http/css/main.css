@@ -967,7 +967,7 @@ div#selectwhogoesfirst {
 #manualcontrols {
     position: fixed;
     width: 7em;
-    z-index: 300;
+    z-index: 1000;
 }
 
 #manualcontrols button {
