@@ -2417,6 +2417,11 @@ div#chatpmlist > div {
     display: block;
     border: 1px solid white;
     padding: 1px;
+    float: right;
+    font-size: .4em;
+    padding: 4px;
+    border-radius: 13px;
+    margin-left: 10px;
 }
 
 .onlineopen .chatlabel {
