@@ -571,7 +571,7 @@ function pondata(data) {
                 if (data.chatbox.length) {
                     $('#onlinepublicchat').html('');
                     data.chatbox.forEach(function (message) {
-                        $('#onlinepublicchat').append('<li data-chatuid="' + message.uid + '"><strong>' + message.from + ':</strong> ' + message.msg + '<span class="admincensor" onclick="censor(' + message.uid + ')" ></span></li>');
+                        $('#onlinepublicchat').append('<li data-chatuid="' + message.uid + '"><strong>[' + new Date(message.date).toLocaleTimeString() + '] ' + message.from + ':</strong> ' + message.msg + '<span class="admincensor" onclick="censor(' + message.uid + ')" ></span></li>');
                         $('[data-chatuid="' + message.uid + '"').urlize();
                     });
                 }
@@ -591,7 +591,7 @@ function pondata(data) {
             alert('Saved');
         }
         if (data.clientEvent === 'chatline') {
-            $('#onlinepublicchat').append('<li  data-chatuid="' + data.uid + '"><strong>' + data.from + ':</strong> ' + data.msg + '<span class="admincensor" onclick="censor(' + data.uid + ')"></span></li>');
+            $('#onlinepublicchat').append('<li  data-chatuid="' + data.uid + '"><strong>[' + new Date(data.date).toLocaleTimeString() + ']' + data.from + ':</strong> ' + data.msg + '<span class="admincensor" onclick="censor(' + data.uid + ')"></span></li>');
             if ($('#onlinepublicchat').scrollTop() + $('#onlinepublicchat').innerHeight() >= $('#onlinepublicchat')[0].scrollHeight) {
                 $('#onlinepublicchat').scrollTop($('#onlinepublicchat').prop("scrollHeight"));
             }
