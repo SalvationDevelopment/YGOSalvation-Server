@@ -628,13 +628,15 @@ function onData(data, socket) {
                 from: socket.username,
                 msg: removeTags(data.msg),
                 uid: sayCount,
-                date: new Date()
+                date: new Date(),
+                timezone: data.timezone
             });
             chatbox.push({
                 from: socket.username,
                 msg: removeTags(data.msg),
                 uid: sayCount,
-                date: new Date()
+                date: new Date(),
+                timezone: data.timezone
             });
             sayCount++;
             setTimeout(function () {
@@ -698,8 +700,10 @@ function onData(data, socket) {
             clientEvent: 'privateServer',
             serverUpdate: data.serverUpdate
         });
+        break;
     case ('privateMessage'):
         if (socket.username) {
+            data.date = new Date();
             primus.room(data.to).write(data);
         }
         break;
