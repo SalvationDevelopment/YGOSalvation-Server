@@ -704,6 +704,7 @@ function onData(data, socket) {
     case ('privateMessage'):
         if (socket.username) {
             data.date = new Date();
+            console.log(data);
             primus.room(data.to).write(data);
         }
         break;
