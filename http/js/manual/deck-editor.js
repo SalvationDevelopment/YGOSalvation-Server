@@ -10,7 +10,7 @@ function cardStackSort(a, b) {
         bExtra = (cardIs('xyz', b) || cardIs('synchro', b) || cardIs('fusion', b));
 
     if (cardIs('monster', a) && !cardIs('monster', b)) {
-        return -1;
+        return 0;
     }
     if (!cardIs('monster', a) && cardIs('monster', b)) {
         return 1;
@@ -43,31 +43,35 @@ function cardStackSort(a, b) {
         if (a.type !== 4 && b.type === 4) {
             return -1;
         }
+        if (!aExtra && bExtra) {
+            return -1;
+        }
+        if (aExtra && !bExtra) {
+            return 1;
+        }
+        if (a.level < b.level) {
+            return 1;
+        }
+        if (a.level > b.level) {
+            return -1;
+        }
+        if (a.atk > b.atk) {
+            return -1;
+        }
+        if (a.atk < b.atk) {
+            return 1;
+        }
+        if (a.def < b.def) {
+            return 1;
+        }
+        if (a.def > b.def) {
+            return -1;
+        }
 
     }
 
 
-    if (!aExtra && bExtra) {
-        return -1;
-    }
-    if (aExtra && !bExtra) {
-        return 1;
-    }
-    if (a.level < b.level) {
-        return 1;
-    }
-    if (a.level > b.level) {
-        return -1;
-    }
-    if (a.atk > b.atk) {
-        return -1;
-    }
-    if (a.atk < b.atk) {
-        return 1;
-    }
-    if (a.def > b.def) {
-        return -1;
-    }
+
 
     if (a.type > b.type) {
         return 1;
@@ -859,6 +863,9 @@ var deckEditor = (function () {
 
     function addFriend() {
         friends.push(personOfIntrest);
+        friends = friends.filter(function (item, pos, self) {
+            return self.indexOf(item) === pos;
+        });
     }
 
     function removeFriend() {
