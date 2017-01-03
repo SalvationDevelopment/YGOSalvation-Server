@@ -529,7 +529,7 @@ function renderPrivateChat() {
         target = '';
     $('#onlineprivatechat').html('');
     openChats.forEach(function (message) {
-        $('#onlineprivatechat').append('<li data-person="' + message.from + '"><strong>[' + new Date(message.date).toLocaleTimeString() + '] ' + message.from + ':</strong> ' + message.msg + '</li>');
+        $('#onlineprivatechat').append('<li data-person="' + message.from + '"><strong>[' + new Date(message.date).toLocaleTimeString() + '] ' + message.name + ':</strong> ' + message.msg + '</li>');
         $('[data-chatuid="' + message.uid + '"').urlize();
         if (chatlist.indexOf(message.from) <= 0) {
             chatlist.push(message.from);
@@ -928,6 +928,7 @@ function chatline(text) {
             action: 'privateMessage',
             msg: text,
             from: localStorage.nickname,
+            name: localStorage.nickname,
             to: chatTarget,
             clientEvent: 'privateMessage',
             timezone: new Date().getTimezoneOffset() / 60
@@ -936,6 +937,7 @@ function chatline(text) {
             action: 'privateMessage',
             msg: text,
             from: chatTarget,
+            name: localStorage.nickname,
             to: localStorage.nickname,
             clientEvent: 'privateMessage',
             timezone: new Date().getTimezoneOffset() / 60
