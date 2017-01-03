@@ -106,6 +106,9 @@ function cardIs(cat, obj) {
     if (cat === "monster" && (obj.race !== 0 || obj.level !== 0 || obj.attribute !== 0)) {
         return true;
     }
+    if (cat === "monster") {
+        return (obj.type & 1) === 1;
+    }
     if (cat === "spell") {
         return (obj.type & 2) === 2;
     }
