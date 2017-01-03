@@ -524,7 +524,9 @@ function pondata(data) {
         time,
         player,
         userlist = '',
-        jsco;
+        jsco,
+        friends;
+
     //console.log(data);
     if (!data.clientEvent) {
         gamelistcache = JSON.parse(data);
@@ -647,11 +649,13 @@ function pondata(data) {
         }
         if (data.clientEvent === 'ackresult') {
             $('#onlineconnectted').html(data.ackresult);
+            friends = deckEditor.getFriends();
             data.userlist = data.userlist.sort(function (a, b) {
                 return a.toLowerCase().localeCompare(b.toLowerCase());
             });
             data.userlist.forEach(function (name) {
-                jsco = "userlistonclick('" + name.trim() + "');";
+
+                jsco = (friends.indexOf(name.trim()) > -1) ? "userlistonclick('" + name.trim() + "'); data-friend" : "userlistonclick('" + name.trim() + "');";
                 userlist = userlist + '<li onclick="' + jsco + '">' + name.trim() + '</li>';
             });
             $('#onlinelist').html(userlist);
