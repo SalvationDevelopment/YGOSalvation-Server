@@ -2391,15 +2391,12 @@ a.launcheronly.loginsystem {
     display: none;
 }
 
-.chatpmlist {
-    display: none;
-}
-
-.onlineopen .chatpmlist {
+.onlineopen div#chatpmlist {
     display: block;
 }
 
 div#chatpmlist {
+    display: none;
     width: 100%;
     border: 1px solid white;
     overflow: auto;
