@@ -521,9 +521,11 @@ var stats24 = 0,
     connected = 0,
     storedUserlist = [];
 
+
+
 function renderPrivateChat() {
     'use strict';
-    var chatlist = ['public'];
+    var chatlist = ['Public'];
     $('#onlineprivatechat').html('');
     openChats.forEach(function (message) {
         $('#onlineprivatechat').append('<li data-person="' + message.from + '"><strong>[' + new Date(message.date).toLocaleTimeString() + '] ' + message.from + ':</strong> ' + message.msg + '</li>');
@@ -538,9 +540,16 @@ function renderPrivateChat() {
 
     $('#chatpmlist').html('');
     chatlist.forEach(function (person) {
-        $('#chatpmlist').append('<div onclick="privateMessage(\'' + person + '\')">' + person + '</div>');
+        $('#chatpmlist').append('<div onclick="privateMessage(\'' + person + '\')">' + person + '<span onclick="closeprivatechat(\'' + person + '\')">X</span></div>');
     });
+}
 
+function closeprivatechat(person) {
+    openChats = openChats.filter(function (message) {
+        return (message.from === person);
+    });
+    renderPrivateChat();
+    privateMessage('Public')
 }
 
 var personOfIntrest = '';
@@ -549,7 +558,7 @@ function privateMessage(person) {
     'use strict';
     chatTarget = person || personOfIntrest;
     renderPrivateChat();
-    if (chatTarget === 'public') {
+    if (chatTarget === 'Public') {
         $('#onlinepublicchat').css('display', 'block');
         $('#onlineprivatechat').css('display', 'none');
     } else {
@@ -902,7 +911,7 @@ function openusers() {
 
 function chatline(text) {
     'use strict';
-    if (chatTarget === 'public') {
+    if (chatTarget === 'Public') {
         primus.write({
             action: 'chatline',
             msg: text,
