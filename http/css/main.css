@@ -2402,6 +2402,10 @@ a.launcheronly.loginsystem {
     line-height: 200%;
 }
 
+.onlineopen ul li[data-online] {
+    color: gold;
+}
+
 .chatlabel.ch {
     width: 70%;
 }

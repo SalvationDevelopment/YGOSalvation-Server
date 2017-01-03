@@ -584,6 +584,7 @@ function pondata(data) {
         }
         if (data.clientEvent === 'deckLoad') {
             deckEditor.loadDecks(data.decks);
+            deckEditor.loadFriends(data.friends);
         }
 
         if (data.clientEvent === 'deckSave') {
