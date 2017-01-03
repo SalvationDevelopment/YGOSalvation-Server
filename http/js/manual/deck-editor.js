@@ -861,15 +861,41 @@ var deckEditor = (function () {
         makeCard(search, 'search');
     }
 
+    function renderFriendsList() {
+        var userlist = '';
+        friends = friends.sort(function (a, b) {
+            return a.toLowerCase().localeCompare(b.toLowerCase());
+        });
+        friends.forEach(function (name) {
+            var jsco = "userlistonclick('" + name.trim() + "');";
+            userlist = userlist + '<li data-friend onclick="' + jsco + '">' + name.trim() + '</li>';
+        });
+        $('#friendslist').html(userlist);
+    }
+
     function addFriend() {
         friends.push(personOfIntrest);
         friends = friends.filter(function (item, pos, self) {
             return self.indexOf(item) === pos;
         });
+        primus.write({
+            action: 'save',
+            decks: usersDecks,
+            friends: friends,
+            username: localStorage.nickname
+        });
+        renderFriendsList();
     }
 
     function removeFriend() {
         friends.splice(friends.indexOf(personOfIntrest), 1);
+        primus.write({
+            action: 'save',
+            decks: usersDecks,
+            friends: friends,
+            username: localStorage.nickname
+        });
+        renderFriendsList();
     }
 
     function getFriends() {
@@ -978,6 +1004,7 @@ var deckEditor = (function () {
 
     function loadFriends(newFriends) {
         friends = newFriends;
+        renderFriendsList();
     }
 
     function getDeck(index) {
