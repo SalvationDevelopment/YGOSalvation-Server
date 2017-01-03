@@ -961,8 +961,14 @@ $('#publicchat').keypress(function (e) {
 function userlistonclick(person) {
     'use strict';
     personOfIntrest = person;
+    var friends = deckEditor.getFriends();
     if (admin === "1") {
         $('.a-admin').css('display', 'block');
+    }
+    if (friends.indexOf(person) > -1) {
+        $('.a-remove').css('display', 'block');
+    } else {
+        $('.a-add').css('display', 'block');
     }
     $('.a-user').css('display', 'block');
     reorientmenu();
