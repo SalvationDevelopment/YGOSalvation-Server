@@ -333,6 +333,7 @@ function registrationCall(data, socket) {
                 }
                 return false;
             });
+            socket.join(socket.username);
 
         } else {
             socket.write({
@@ -697,7 +698,10 @@ function onData(data, socket) {
             clientEvent: 'privateServer',
             serverUpdate: data.serverUpdate
         });
-
+    case ('privateMessage'):
+        if (socket.username) {
+            primus.room(data.to).write(data);
+        }
         break;
     case 'save':
 
