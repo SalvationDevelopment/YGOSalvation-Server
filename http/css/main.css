@@ -2388,6 +2388,11 @@ a.launcheronly.loginsystem {
 }
 
 .chatlabel {
+    display: none;
+}
+
+.onlineopen .chatlabel {
+    display: block;
     width: auto;
     float: right;
     color: white;
