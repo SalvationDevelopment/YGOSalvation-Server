@@ -516,7 +516,9 @@ function setfilter() {
 }
 var stats24 = 0,
     statsShut = 0,
-    connected = 0;
+    connected = 0,
+    storedUserlist = [];
+
 
 function pondata(data) {
     'use strict';
@@ -648,6 +650,7 @@ function pondata(data) {
             ackback();
         }
         if (data.clientEvent === 'ackresult') {
+            storedUserlist = [];
             $('#onlineconnectted').html(data.ackresult);
             friends = deckEditor.getFriends();
             data.userlist = data.userlist.sort(function (a, b) {
@@ -657,8 +660,10 @@ function pondata(data) {
 
                 jsco = "userlistonclick('" + name.trim() + "');";
                 userlist = (friends.indexOf(name.trim()) > -1) ? userlist + '<li data-friend onclick="' + jsco + '">' + name.trim() + '</li>' : userlist + '<li onclick="' + jsco + '">' + name.trim() + '</li>';
+                storedUserlist.push(name.trim());
             });
             $('#onlinelist').html(userlist);
+
 
         }
         if (data.stats) {

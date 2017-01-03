@@ -1,4 +1,4 @@
-/*global currentMousePos, getCardObject, reorientmenu, cardIs, $, internalDB, primus,prompt, alert, confirm, FileReader, btoa*/
+/*global currentMousePos, getCardObject, reorientmenu, cardIs, $, storedUserlist, primus,prompt, alert, confirm, FileReader, btoa*/
 /*jslint bitwise: true, plusplus:true, regexp:true, browser:true*/
 
 
@@ -867,8 +867,9 @@ var deckEditor = (function () {
             return a.toLowerCase().localeCompare(b.toLowerCase());
         });
         friends.forEach(function (name) {
-            var jsco = "userlistonclick('" + name.trim() + "');";
-            userlist = userlist + '<li data-friend onclick="' + jsco + '">' + name.trim() + '</li>';
+            var jsco = "userlistonclick('" + name + "');",
+                isOnline = (storedUserlist.indexOf(name) > -1) ? 'data-online' : '';
+            userlist = userlist + '<li ' + isOnline + ' onclick="' + jsco + '">' + name.trim() + '</li>';
         });
         $('#friendslist').html(userlist);
     }
