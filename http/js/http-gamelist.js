@@ -9,7 +9,9 @@ var localstorageIter = 0,
     quedfunc,
     quedparams;
 
+var openChats = [];
 var tournament = {};
+var chatTarget = 'public';
 
 $.fn.urlize = function () {
     if (this.length > 0) {
@@ -519,6 +521,38 @@ var stats24 = 0,
     connected = 0,
     storedUserlist = [];
 
+function renderPrivateChat() {
+    'use strict';
+    var chatlist = ['public'];
+    $('#onlineprivatechat').html('');
+    openChats.forEach(function (message) {
+        $('#onlineprivatechat').append('<li data-person="' + message.from + '"><strong>[' + new Date(message.date).toLocaleTimeString() + '] ' + message.from + ':</strong> ' + message.msg + '</li>');
+        $('[data-chatuid="' + message.uid + '"').urlize();
+
+        if (chatlist.indexOf(message.from) < -1) {
+            chatlist.push(message.from);
+        }
+    });
+    $('#onlineprivatechat li').css('display', 'none');
+    $('[data-person="' + chatTarget + '"]').css('display', 'block');
+
+    $('#chatpmlist').html('');
+    chatlist.forEach(function (person) {
+        $('#chatpmlist').append('<div onclick="privateMessage(\'' + person + '\')"></div>');
+    })
+
+}
+
+var personOfIntrest = '';
+
+function privateMessage(person) {
+    'use strict';
+    chatTarget = person || personOfIntrest;
+    renderPrivateChat();
+    $('#onlinepublicchat').css('display', 'none');
+    $('#onlineprivatechat').css('display', 'block');
+}
+
 
 function pondata(data) {
     'use strict';
@@ -596,6 +630,10 @@ function pondata(data) {
                 $('#onlinepublicchat').scrollTop($('#onlinepublicchat').prop("scrollHeight"));
             }
             $('[data-chatuid="' + data.uid + '"').urlize();
+        }
+        if (data.clientEvent === 'privateMessage') {
+            openChats.push(data);
+            renderPrivateChat();
         }
         if (data.clientEvent === 'censor') {
             $('[data-chatuid="' + data.messageID + '"]').remove();
@@ -730,7 +768,7 @@ function sendglobal(message) {
     });
 }
 
-var personOfIntrest = '';
+
 
 function censor(messageID) {
     'use strict';
@@ -852,14 +890,29 @@ function openusers() {
 
 
 
-function chatline(text, type) {
+function chatline(text) {
     'use strict';
-    primus.write({
-        action: 'chatline',
-        msg: text,
-        type: type
-    });
+    if (chatTarget === 'public') {
+        primus.write({
+            action: 'chatline',
+            msg: text,
+            timezone: new Date().getTimezoneOffset() / 60
+        });
+    } else {
+        primus.write({
+            action: 'privateMessage',
+            msg: text,
+            from: localStorage,
+            to: chatTarget,
+            clientEvent: 'privateMessage',
+            timezone: new Date().getTimezoneOffset() / 60
+        });
+    }
 }
+
+
+
+
 
 $('#publicchat').keypress(function (e) {
     'use strict';
