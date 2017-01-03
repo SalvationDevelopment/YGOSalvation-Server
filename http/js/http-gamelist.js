@@ -912,7 +912,7 @@ function chatline(text) {
         primus.write({
             action: 'privateMessage',
             msg: text,
-            from: localStorage,
+            from: localStorage.nickname,
             to: chatTarget,
             clientEvent: 'privateMessage',
             timezone: new Date().getTimezoneOffset() / 60
