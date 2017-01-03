@@ -9,7 +9,12 @@ function cardStackSort(a, b) {
     var aExtra = (cardIs('xyz', a) || cardIs('synchro', a) || cardIs('fusion', a)),
         bExtra = (cardIs('xyz', b) || cardIs('synchro', b) || cardIs('fusion', b));
 
-
+    if (cardIs('monster', a) && !cardIs('monster', b)) {
+        return -1;
+    }
+    if (!cardIs('monster', a) && cardIs('monster', b)) {
+        return 1;
+    }
 
     if (cardIs('monster', a) && cardIs('monster', b)) {
 
