@@ -539,7 +539,7 @@ function renderPrivateChat() {
     $('#chatpmlist').html('');
     chatlist.forEach(function (person) {
         $('#chatpmlist').append('<div onclick="privateMessage(\'' + person + '\')"></div>');
-    })
+    });
 
 }
 
@@ -549,8 +549,14 @@ function privateMessage(person) {
     'use strict';
     chatTarget = person || personOfIntrest;
     renderPrivateChat();
-    $('#onlinepublicchat').css('display', 'none');
-    $('#onlineprivatechat').css('display', 'block');
+    if (chatTarget === 'public') {
+        $('#onlinepublicchat').css('display', 'block');
+        $('#onlineprivatechat').css('display', 'none');
+    } else {
+        $('#onlinepublicchat').css('display', 'none');
+        $('#onlineprivatechat').css('display', 'block');
+    }
+
 }
 
 
