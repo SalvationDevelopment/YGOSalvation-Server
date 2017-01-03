@@ -907,6 +907,7 @@ function mautomaticModeGamelistSwitch() {
 function openusers() {
     'use strict';
     $('#onlinelistwrapper').toggleClass('onlineopen');
+    $('#onlinelistwrapper ul').attr('style', '');
 }
 
 
