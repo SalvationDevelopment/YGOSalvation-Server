@@ -1177,9 +1177,9 @@ var deckEditor = (function () {
 
         newDeck.creator = localStorage.nickname;
         newDeck.creationDate = new Date();
-        newDeck.main = newDeck.main.map(returnPulledCard).filter(filterPulledCard);
-        newDeck.side = newDeck.side.map(returnPulledCard).filter(filterPulledCard);
-        newDeck.extra = newDeck.extra.map(returnPulledCard).filter(filterPulledCard);
+        newDeck.main = newDeck.main.map(returnPulledCard);
+        newDeck.side = newDeck.side.map(returnPulledCard);
+        newDeck.extra = newDeck.extra.map(returnPulledCard);
 
         createNewDeck(newDeck);
 
