@@ -871,7 +871,7 @@ $('#publicchat').keypress(function (e) {
 function userlistonclick(person) {
     'use strict';
     personOfIntrest = person;
-    if (admin) {
+    if (admin === "1") {
         $('.a-admin').css('display', 'block');
     }
     $('.a-user').css('display', 'block');
