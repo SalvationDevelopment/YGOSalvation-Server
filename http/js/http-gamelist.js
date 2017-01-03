@@ -972,7 +972,7 @@ function userlistonclick(person) {
     } else {
         $('button.a-add').css('display', 'block');
     }
-    //$('.a-user').css('display', 'block');
+    $('.a-user').css('display', 'block');
     reorientmenu();
 }
 
