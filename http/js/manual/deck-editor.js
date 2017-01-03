@@ -1255,7 +1255,8 @@ var deckEditor = (function () {
         addFriend: addFriend,
         removeFriend: removeFriend,
         getFriends: getFriends,
-        loadFriends: loadFriends
+        loadFriends: loadFriends,
+        renderFriendsList: renderFriendsList
     };
 }());
 

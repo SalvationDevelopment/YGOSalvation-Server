@@ -664,8 +664,7 @@ function pondata(data) {
                 storedUserlist.push(name.trim());
             });
             $('#onlinelist').html(userlist);
-
-
+            deckEditor.renderFriendsList();
         }
         if (data.stats) {
             stats24 = 0;
