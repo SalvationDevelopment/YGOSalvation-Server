@@ -525,7 +525,8 @@ var stats24 = 0,
 
 function renderPrivateChat() {
     'use strict';
-    var chatlist = ['Public'];
+    var chatlist = ['Public'],
+        target = '';
     $('#onlineprivatechat').html('');
     openChats.forEach(function (message) {
         $('#onlineprivatechat').append('<li data-person="' + message.from + '"><strong>[' + new Date(message.date).toLocaleTimeString() + '] ' + message.from + ':</strong> ' + message.msg + '</li>');
@@ -540,16 +541,11 @@ function renderPrivateChat() {
 
     $('#chatpmlist').html('');
     chatlist.forEach(function (person) {
-        $('#chatpmlist').append('<div onclick="privateMessage(\'' + person + '\')">' + person + '<span onclick="closeprivatechat(\'' + person + '\')">X</span></div>');
+        $('#chatpmlist').append('<div data-name="' + person + '" onclick="privateMessage(\'' + person + '\')">' + person + '<span onclick="closeprivatechat(\'' + person + '\')">X</span></div>');
     });
-}
 
-function closeprivatechat(person) {
-    openChats = openChats.filter(function (message) {
-        return (message.from === person);
-    });
-    renderPrivateChat();
-    privateMessage('Public')
+    target = $('#onlineprivatechat li').last().attr('data-person');
+    $('#chatpmlist [data-name="' + target + '"]').addClass('active');
 }
 
 var personOfIntrest = '';
@@ -568,6 +564,13 @@ function privateMessage(person) {
 
 }
 
+function closeprivatechat(person) {
+    openChats = openChats.filter(function (message) {
+        return (message.from === person);
+    });
+    renderPrivateChat();
+    privateMessage('Public');
+}
 
 function pondata(data) {
     'use strict';
