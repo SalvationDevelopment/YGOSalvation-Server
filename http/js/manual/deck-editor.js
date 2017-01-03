@@ -695,7 +695,7 @@ var deckEditor = (function () {
     var inmemoryDeck = {},
         usersDecks = [],
         activeIndex = 0,
-        friends = []
+        friends = [];
 
     function makeBlankDeck(name, username, date) {
         return {
@@ -1162,10 +1162,7 @@ var deckEditor = (function () {
     }
 
 
-    function returnPulledCard(cardid, i, data) {
-        var card = pullcard(parseInt(cardid, 10), data);
-        return card;
-    }
+
 
     function filterPulledCard(card) {
         return (card !== undefined);
@@ -1177,9 +1174,18 @@ var deckEditor = (function () {
 
         newDeck.creator = localStorage.nickname;
         newDeck.creationDate = new Date();
-        newDeck.main = newDeck.main.map(returnPulledCard);
-        newDeck.side = newDeck.side.map(returnPulledCard);
-        newDeck.extra = newDeck.extra.map(returnPulledCard);
+        newDeck.main = newDeck.main.map(function (cardid, i, data) {
+            var card = pullcard(parseInt(cardid, 10), newDeck.main);
+            return card;
+        });
+        newDeck.side = newDeck.side.map(function (cardid, i, data) {
+            var card = pullcard(parseInt(cardid, 10), newDeck.side);
+            return card;
+        });
+        newDeck.extra = newDeck.extra.map(function (cardid, i, data) {
+            var card = pullcard(parseInt(cardid, 10), newDeck.extra);
+            return card;
+        });
 
         createNewDeck(newDeck);
 
