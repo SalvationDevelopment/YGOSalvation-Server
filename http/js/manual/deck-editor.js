@@ -1254,7 +1254,8 @@ var deckEditor = (function () {
         upload: upload,
         addFriend: addFriend,
         removeFriend: removeFriend,
-        getFriends: getFriends
+        getFriends: getFriends,
+        loadFriends: loadFriends
     };
 }());
 
