@@ -2443,6 +2443,10 @@ ul#onlinepublicchat {
     background: rgba(0, 0, 0, .8);
 }
 
+#onlinelist li[data-friend] {
+    color: gold !important;
+}
+
 .onlineopen ul li:hover {
     border: 1px solid silver;
     color: white;

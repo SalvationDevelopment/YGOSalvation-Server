@@ -588,7 +588,7 @@ function pondata(data) {
             alert('Saved');
         }
         if (data.clientEvent === 'chatline') {
-            $('#onlinepublicchat').append('<li  data-chatuid="' + data.uid + '"><strong>' + data.from + ':</strong> ' + data.msg + '<span class="admincensor" onclick="censor(' + data.uid + ')"></span></li>')
+            $('#onlinepublicchat').append('<li  data-chatuid="' + data.uid + '"><strong>' + data.from + ':</strong> ' + data.msg + '<span class="admincensor" onclick="censor(' + data.uid + ')"></span></li>');
             if ($('#onlinepublicchat').scrollTop() + $('#onlinepublicchat').innerHeight() >= $('#onlinepublicchat')[0].scrollHeight) {
                 $('#onlinepublicchat').scrollTop($('#onlinepublicchat').prop("scrollHeight"));
             }
@@ -655,8 +655,8 @@ function pondata(data) {
             });
             data.userlist.forEach(function (name) {
 
-                jsco = (friends.indexOf(name.trim()) > -1) ? "userlistonclick('" + name.trim() + "'); data-friend" : "userlistonclick('" + name.trim() + "');";
-                userlist = userlist + '<li onclick="' + jsco + '">' + name.trim() + '</li>';
+                jsco = "userlistonclick('" + name.trim() + "');";
+                userlist = (friends.indexOf(name.trim()) > -1) ? userlist + '<li data-friend onclick="' + jsco + '">' + name.trim() + '</li>' : userlist + '<li onclick="' + jsco + '">' + name.trim() + '</li>';
             });
             $('#onlinelist').html(userlist);
 
