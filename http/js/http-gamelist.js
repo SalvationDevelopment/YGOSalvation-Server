@@ -529,7 +529,7 @@ function renderPrivateChat() {
         $('#onlineprivatechat').append('<li data-person="' + message.from + '"><strong>[' + new Date(message.date).toLocaleTimeString() + '] ' + message.from + ':</strong> ' + message.msg + '</li>');
         $('[data-chatuid="' + message.uid + '"').urlize();
         console.log(message.from, chatlist);
-        if (chatlist.indexOf(message.from) >= 0) {
+        if (chatlist.indexOf(message.from) <= 0) {
             chatlist.push(message.from);
         }
     });
