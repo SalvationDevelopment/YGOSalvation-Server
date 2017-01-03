@@ -2391,6 +2391,19 @@ a.launcheronly.loginsystem {
     display: none;
 }
 
+div#chatpmlist {
+    width: 100%;
+    border: 1px solid white;
+    overflow: auto;
+    margin-bottom: 2%;
+    color: white;
+}
+
+div#chatpmlist > div {
+    width: auto;
+    text-align: center;
+}
+
 .onlineopen .chatlabel {
     display: block;
     width: auto;
@@ -2446,10 +2459,9 @@ div#onlinelistwrapper.onlineopen {
     padding: 0;
     margin: 0;
     overflow-y: scroll;
-    height: 88%;
+    height: 84%;
     display: block;
     float: right;
-    margin-bottom: 1%;
 }
 
 ul#onlinelist {
