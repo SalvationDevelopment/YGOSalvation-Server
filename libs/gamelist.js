@@ -626,12 +626,14 @@ function onData(data, socket) {
                 clientEvent: 'chatline',
                 from: socket.username,
                 msg: removeTags(data.msg),
-                uid: sayCount
+                uid: sayCount,
+                date: new Date()
             });
             chatbox.push({
                 from: socket.username,
                 msg: removeTags(data.msg),
-                uid: sayCount
+                uid: sayCount,
+                date: new Date()
             });
             sayCount++;
             setTimeout(function () {
@@ -720,7 +722,8 @@ function onData(data, socket) {
             if (docs.length) {
                 primus.room(socket.address.ip + data.uniqueID).write({
                     clientEvent: 'deckLoad',
-                    decks: docs[0].decks
+                    decks: docs[0].decks,
+                    friends: docs[0].friends
                 });
             }
 
