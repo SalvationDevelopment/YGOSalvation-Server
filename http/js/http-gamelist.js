@@ -11,7 +11,7 @@ var localstorageIter = 0,
 
 var openChats = [];
 var tournament = {};
-var chatTarget = 'public';
+var chatTarget = 'Public';
 
 $.fn.urlize = function () {
     if (this.length > 0) {

@@ -2413,6 +2413,12 @@ div#chatpmlist > div {
     border: 1px solid white;
 }
 
+#chatpmlist > div > span {
+    display: block;
+    border: 1px solid white;
+    padding: 1px;
+}
+
 .onlineopen .chatlabel {
     display: block;
     width: auto;
