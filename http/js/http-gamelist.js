@@ -538,7 +538,7 @@ function renderPrivateChat() {
 
     $('#chatpmlist').html('');
     chatlist.forEach(function (person) {
-        $('#chatpmlist').append('<div onclick="privateMessage(\'' + person + '\')"></div>');
+        $('#chatpmlist').append('<div onclick="privateMessage(\'' + person + '\')">' + person + '</div>');
     });
 
 }
@@ -624,7 +624,11 @@ function pondata(data) {
         }
         if (data.clientEvent === 'deckLoad') {
             deckEditor.loadDecks(data.decks);
-            deckEditor.loadFriends(data.friends);
+            if (data.friends) {
+                deckEditor.loadFriends(data.friends);
+            } else {
+                deckEditor.loadFriends([]);
+            }
         }
 
         if (data.clientEvent === 'deckSave') {
