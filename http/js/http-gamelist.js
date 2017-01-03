@@ -917,6 +917,15 @@ function chatline(text) {
             clientEvent: 'privateMessage',
             timezone: new Date().getTimezoneOffset() / 60
         });
+        openChats.push({
+            action: 'privateMessage',
+            msg: text,
+            from: localStorage.nickname,
+            to: chatTarget,
+            clientEvent: 'privateMessage',
+            timezone: new Date().getTimezoneOffset() / 60
+        });
+        renderPrivateChat();
     }
 }
 
