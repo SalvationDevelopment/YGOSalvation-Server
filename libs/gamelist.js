@@ -621,7 +621,7 @@ function onData(data, socket) {
         if (socket.username && socket.speak) {
             socket.speak = false;
             if (chatbox.length > 100) {
-                chatbox.shfit();
+                chatbox.shift();
             }
             announce({
                 clientEvent: 'chatline',
