@@ -940,7 +940,7 @@ function chatline(text) {
             name: localStorage.nickname,
             to: localStorage.nickname,
             clientEvent: 'privateMessage',
-            date: new Date.toString(),
+            date: new Date().toString(),
             timezone: new Date().getTimezoneOffset() / 60
         });
         renderPrivateChat();
