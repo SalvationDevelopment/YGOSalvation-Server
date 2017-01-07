@@ -325,6 +325,7 @@ function setHostSettings() {
             deck: $("#aidecks option:selected").text()
         });
         setTimeout(ygopro, 1500, '-j');
+        singlesitenav('gamelist');
     } else {
         ygopro('-j');
     }
