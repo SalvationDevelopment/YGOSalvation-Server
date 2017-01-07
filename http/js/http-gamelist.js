@@ -286,6 +286,11 @@ function setHostSettings() {
         return;
     }
     if (isChecked('#useai')) {
+        primus.write({
+            action: 'register',
+            username: $('#ips_username').val(),
+            password: $('#ips_password').val()
+        });
         if (isChecked('#usepass')) {
             alert('SnarkyChild: I dont want to be alone with you... please dont make me.');
             return;
@@ -628,10 +633,6 @@ function pondata(data) {
                 }
             }
             $('#onlinepublicchat').scrollTop($('#onlinepublicchat').prop("scrollHeight"));
-            primus.write({
-                username: localStorage.nickname,
-                action: 'load'
-            });
         }
         if (data.clientEvent === 'deckLoad') {
             deckEditor.loadDecks(data.decks);
