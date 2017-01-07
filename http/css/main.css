@@ -1663,10 +1663,10 @@ input#player4lobbyslot {
 
 #p0avatar,
 #p1avatar {
-    z-index: 500;
+    z-index: 400;
     position: absolute;
-    width: 100px;
-    height: 100px;
+    width: 75px;
+    height: 75px;
     top: 15vh;
     background: black;
 }
