@@ -325,6 +325,7 @@ function processLogin(data) {
     if (loggedIn || !allowLogin) {
         return;
     }
+
     var info = data;
     console.log('Attempting to do login based on :', data);
     if (info.success) {
@@ -355,6 +356,11 @@ function processLogin(data) {
         }
         window.quedfunc = 'populatealllist';
         window.quedready = true;
+
+        primus.write({
+            username: localStorage.nickname,
+            action: 'load'
+        });
     } else {
         alert(info.message);
     }
