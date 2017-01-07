@@ -586,7 +586,7 @@ function onData(data, socket) {
 
         break;
     case ('ai'):
-        if (socket.username) {
+        if (socket.username && socket.aiReady) {
             console.log(socket.username, 'requested AI Duel');
             announce({
                 clientEvent: 'duelrequest',
@@ -595,6 +595,10 @@ function onData(data, socket) {
                 roompass: data.roompass,
                 deck: data.deck
             });
+            socket.aiReady = false;
+            setTimeout(function () {
+                socket.aiReady = true;
+            }, 10000);
         }
         break;
     case ('join'):
@@ -762,6 +766,7 @@ primus.on('connection', function (socket) {
     socket.on('error', function (error) {
         console.log('[Gamelist]:Generic Socket Error:', error);
     });
+    socket.aiReady = true;
     socket.on('data', function (data) {
         var save = false;
         if (socket.readyState !== primus.Spark.CLOSED) {
