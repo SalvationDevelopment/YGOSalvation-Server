@@ -299,7 +299,7 @@ function setHostSettings() {
             alert('SnarkyChild: I have commitment issues, lets stay single.');
             return;
         }
-        if ($('#creategamebanlist').val() === "5") {
+        if ($('#creategamebanlist').val() === "2") {
             alert('SnarkyChild: I think you are to old for me if you are playing Goats.');
             return;
         }
