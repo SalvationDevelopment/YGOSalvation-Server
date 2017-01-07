@@ -2702,7 +2702,7 @@ $('#manualcontrols button').on('click', function () {
 
 });
 
-$('body').on('mousedown', '#duelscreen', function (ev) {
+$('body').on('mousedown', function (ev) {
     'use strict';
     if (ev.which === 3) {
         $('#manualcontrols button').css({
