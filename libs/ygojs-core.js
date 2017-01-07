@@ -1151,7 +1151,8 @@ function init(callback) {
         lockInDeck: lockInDeck,
         rematch: rematch,
         rematchAccept: 0,
-        sideAccept: 0
+        sideAccept: 0,
+        names: []
     };
 
 
