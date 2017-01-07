@@ -821,6 +821,12 @@ function manualReciver(message) {
     }
 
     switch (message.action) {
+    case "register":
+        manualServer.send(JSON.stringify({
+            action: 'register',
+            name: localStorage.nickname
+        }));
+        break;
     case "lobby":
         singlesitenav('lobby');
         activegame = message.game;

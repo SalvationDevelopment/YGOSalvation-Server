@@ -98,7 +98,8 @@ wss.broadcast = function broadcast() {
     wss.clients.forEach(function each(client) {
         client.send(JSON.stringify({
             action: 'broadcast',
-            data: games
+            data: games,
+            username: client.username
         }));
     });
 };
@@ -120,6 +121,10 @@ function responseHandler(socket, message) {
         return;
     }
     switch (message.action) {
+    case "register":
+        // need a registration system here.
+        socket.username = message.name;
+        break;
     case "host":
         generated = randomString(12);
         games[generated] = newGame();
@@ -420,6 +425,9 @@ wss.on('connection', function (socket) {
     socket.send(JSON.stringify({
         action: 'broadcast',
         data: games
+    }));
+    socket.send(JSON.stringify({
+        action: 'manualRegister'
     }));
     socket.on('message', function (message) {
         try {
