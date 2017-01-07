@@ -995,6 +995,15 @@ function manualJoin(game) {
     }));
 }
 
+function manualKickDuelist(slot) {
+    'use strict';
+    manualServer.send(JSON.stringify({
+        action: 'kick',
+        slot: slot,
+        game: activegame
+    }));
+}
+
 function manualLeave() {
     'use strict';
     manualServer.send(JSON.stringify({
@@ -1232,7 +1241,6 @@ function startXYZSummon(target) {
     overlaymode = true;
     overlaylist = [manualActionReference];
     $('.card.p0.MONSTERZONE').addClass('attackglow');
-
 }
 
 function manualAttack() {

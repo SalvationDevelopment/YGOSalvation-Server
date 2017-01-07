@@ -171,6 +171,15 @@ function responseHandler(socket, message) {
         }));
 
         break;
+    case "kick":
+        if (socket.slot !== undefined) {
+            if (socket.slot === 1) {
+                games[activeduel].player[message.slot].name = '';
+                games[activeduel].player[message.slot].ready = false;
+                wss.broadcast(games);
+            }
+        }
+        break;
     case "leave":
         if (socket.slot !== undefined) {
             games[activeduel].player[socket.slot].name = '';
