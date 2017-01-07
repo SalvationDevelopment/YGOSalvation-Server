@@ -73,6 +73,22 @@ function socketBinding(game) {
     };
 }
 
+function nameBinding(game) {
+    return function (view, stack) {
+        wss.clients.forEach(function each(client) {
+            if (view.name[0] === client.username && client.slot === 0) {
+                client.send(JSON.stringify(view[0]));
+            }
+            if (view.name[1] === client.username && client.slot === 1) {
+                client.send(JSON.stringify(view[1]));
+            }
+            if (view.spectators.indexOf(client.username) > -1) {
+                client.send(JSON.stringify(view.spectators));
+            }
+        });
+    };
+}
+
 function randomString(len) {
     var i,
         text = "",
@@ -157,6 +173,7 @@ function responseHandler(socket, message) {
             joined = true;
             player.name = message.name;
             stateSystem[message.game].players[index] = socket;
+            stateSystem[message.game].names[index] = socket.username;
             socket.slot = index;
             socket.activeduel = message.game;
             return true;
@@ -427,7 +444,7 @@ wss.on('connection', function (socket) {
         data: games
     }));
     socket.send(JSON.stringify({
-        action: 'manualRegister'
+        action: 'register'
     }));
     socket.on('message', function (message) {
         try {
