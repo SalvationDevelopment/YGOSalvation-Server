@@ -76,14 +76,16 @@ function socketBinding(game) {
 function nameBinding(game) {
     return function (view, stack) {
         wss.clients.forEach(function each(client) {
-            if (view.name[0] === client.username && client.slot === 0) {
-                client.send(JSON.stringify(view[0]));
-            }
-            if (view.name[1] === client.username && client.slot === 1) {
-                client.send(JSON.stringify(view[1]));
-            }
-            if (view.spectators.indexOf(client.username) > -1) {
-                client.send(JSON.stringify(view.spectators));
+            if (client.activeduel === game) {
+                if (view.names[0] === client.username && client.slot === 0) {
+                    client.send(JSON.stringify(view[0]));
+                }
+                if (view.names[1] === client.username && client.slot === 1) {
+                    client.send(JSON.stringify(view[1]));
+                }
+                if (view.spectators.indexOf(client.username) > -1) {
+                    client.send(JSON.stringify(view.spectators));
+                }
             }
         });
     };
@@ -148,6 +150,7 @@ function responseHandler(socket, message) {
         stateSystem[generated] = stateSystem(socketBinding(generated));
         games[generated].player[0].name = message.name;
         stateSystem[generated].players[0] = socket;
+        stateSystem[generated].setNames(socket.username, 0);
         socket.activeduel = generated;
         wss.broadcast(games);
         socket.send(JSON.stringify({
@@ -173,7 +176,7 @@ function responseHandler(socket, message) {
             joined = true;
             player.name = message.name;
             stateSystem[message.game].players[index] = socket;
-            stateSystem[message.game].names[index] = socket.username;
+            stateSystem[message.game].setNames(socket.username, index);
             socket.slot = index;
             socket.activeduel = message.game;
             return true;
