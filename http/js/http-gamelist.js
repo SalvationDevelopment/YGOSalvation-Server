@@ -923,7 +923,8 @@ function chatline(text) {
         primus.write({
             action: 'chatline',
             msg: text,
-            timezone: new Date().getTimezoneOffset() / 60
+            timezone: new Date().getTimezoneOffset() / 60,
+            launcher: launcher
         });
     } else {
         primus.write({
@@ -933,7 +934,8 @@ function chatline(text) {
             name: localStorage.nickname,
             to: chatTarget,
             clientEvent: 'privateMessage',
-            timezone: new Date().getTimezoneOffset() / 60
+            timezone: new Date().getTimezoneOffset() / 60,
+            launcher: launcher
         });
         openChats.push({
             action: 'privateMessage',
@@ -943,7 +945,8 @@ function chatline(text) {
             to: localStorage.nickname,
             clientEvent: 'privateMessage',
             date: new Date().toString(),
-            timezone: new Date().getTimezoneOffset() / 60
+            timezone: new Date().getTimezoneOffset() / 60,
+            launcher: launcher
         });
         renderPrivateChat();
     }
@@ -986,11 +989,15 @@ function userlistonclick(person) {
 
 function duelrequestPerson() {
     'use strict';
+    if (!launcher) {
+        alert('You currently cant duel request someone while using manual mode.');
+    }
     setHostSettings();
     primus.write({
         clientEvent: 'duelrequest',
         target: personOfIntrest,
         from: localStorage.nickname,
-        roompass: localStorage.roompass
+        roompass: localStorage.roompass,
+        launcher: launcher
     });
 }
