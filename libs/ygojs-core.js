@@ -186,6 +186,7 @@ function init(callback) {
     }
 
     var stack = [],
+        names = ['', ''],
         lock = [false, false],
         round = [],
         state = {
@@ -213,6 +214,9 @@ function init(callback) {
         }; // holds decks
 
 
+    function setName(slot, username) {
+        names[slot] = username;
+    }
 
     /**
      * The way the stack of cards is setup it requires a pointer to edit it.
@@ -358,6 +362,7 @@ function init(callback) {
      */
     function generateView(action) {
         return {
+            names: names,
             0: {
                 action: action || 'duel',
                 info: state,
@@ -1152,7 +1157,7 @@ function init(callback) {
         rematch: rematch,
         rematchAccept: 0,
         sideAccept: 0,
-        names: []
+        setName: setName
     };
 
 
