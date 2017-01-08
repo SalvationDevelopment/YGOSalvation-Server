@@ -214,7 +214,7 @@ function init(callback) {
         }; // holds decks
 
 
-    function setName(slot, username) {
+    function setNames(slot, username) {
         names[slot] = username;
     }
 
@@ -1157,7 +1157,7 @@ function init(callback) {
         rematch: rematch,
         rematchAccept: 0,
         sideAccept: 0,
-        setName: setName
+        setNames: setNames
     };
 
 
