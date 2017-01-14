@@ -82,3 +82,4 @@ server/http/setups/*
 server/http/ygopro/deck.exe
 *.lua
 documentation/~$ygopro id sheet.xlsx
+databases/deckStorage.nedb
