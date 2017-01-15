@@ -183,6 +183,10 @@ function enterGame(string, pass) {
     'use strict';
     var guess = '';
     if (browser) {
+        if(navigator.userAgent.toLowerCase().indexOf('firefox') > -1){
+            alert('Firefox is not supported.');
+            return;
+        }
         startgame(string);
         return;
     }
