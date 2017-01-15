@@ -184,7 +184,7 @@ function enterGame(string, pass) {
     var guess = '';
     if (browser) {
         if(navigator.userAgent.toLowerCase().indexOf('firefox') > -1){
-            alert('Firefox is not supported.');
+            alert('Firefox isnt supported at this time, please use Google Chrome.');
             return;
         }
         startgame(string);
