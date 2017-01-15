@@ -1037,9 +1037,11 @@ function surrender() {
 
 function manualLock() {
     'use strict';
+    var deck  = getdeck();
+    console.log(deck);
     manualServer.send(JSON.stringify({
         action: 'lock',
-        deck: getdeck()
+        deck: deck
     }));
 }
 
