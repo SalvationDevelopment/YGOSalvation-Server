@@ -1037,12 +1037,16 @@ function surrender() {
 
 function manualLock() {
     'use strict';
-    var deck  = getdeck();
-    console.log(deck);
-    manualServer.send(JSON.stringify({
-        action: 'lock',
-        deck: deck
-    }));
+    var deck = getdeck();
+    if (deck.main.length > 40) {
+        manualServer.send(JSON.stringify({
+            action: 'lock',
+            deck: deck
+        }));
+    } else {
+        alert('Main Deck is less than 40 cards, please choose another deck.');
+    }
+
 }
 
 function manualStart() {
