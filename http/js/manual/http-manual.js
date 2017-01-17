@@ -1038,7 +1038,7 @@ function surrender() {
 function manualLock() {
     'use strict';
     var deck = getdeck();
-    if (deck.main.length > 40) {
+    if (deck.main.length > 39) {
         manualServer.send(JSON.stringify({
             action: 'lock',
             deck: deck
