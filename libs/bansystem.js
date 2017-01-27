@@ -11,5 +11,6 @@ module.exports = {
     'disconnect': "Killing Games",
     'boosted turtle': "Intentionally crashing games",
     'itstimetoduel': "Intentionally crashing games",
-    'Cobalt Axis': 'Rudeness to staff'
+    'Cobalt Axis': 'Rudeness to staff',
+    'Exitium': 'Starting drama between staff members, general disrespectful actions to others.'
 };
