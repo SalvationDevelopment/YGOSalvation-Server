@@ -9,8 +9,15 @@ function cardStackSort(a, b) {
     var aExtra = (cardIs('xyz', a) || cardIs('synchro', a) || cardIs('fusion', a)),
         bExtra = (cardIs('xyz', b) || cardIs('synchro', b) || cardIs('fusion', b));
 
+    if (parseInt(a.level, 10) > parseInt(b.level, 10)) {
+        return -1;
+    }
+    if (parseInt(a.level, 10) < parseInt(b.level, 10)) {
+        return 1;
+    }
+
     if (cardIs('monster', a) && !cardIs('monster', b)) {
-        return 0;
+        return -1;
     }
     if (!cardIs('monster', a) && cardIs('monster', b)) {
         return 1;
@@ -18,7 +25,12 @@ function cardStackSort(a, b) {
 
     if (cardIs('monster', a) && cardIs('monster', b)) {
 
-
+        if (!aExtra && bExtra) {
+            return -1;
+        }
+        if (aExtra && !bExtra) {
+            return 1;
+        }
         if (!cardIs('xyz', a) && cardIs('xyz', b)) {
             return -1;
         }
@@ -37,40 +49,21 @@ function cardStackSort(a, b) {
         if (cardIs('fusion', a) && !cardIs('fusion', b)) {
             return 1;
         }
-        if (a.type === 4 && b.type !== 4) {
-            return 1;
-        }
-        if (a.type !== 4 && b.type === 4) {
-            return -1;
-        }
-        if (!aExtra && bExtra) {
-            return -1;
-        }
-        if (aExtra && !bExtra) {
-            return 1;
-        }
-        if (a.level < b.level) {
-            return 1;
-        }
-        if (a.level > b.level) {
-            return -1;
-        }
-        if (a.atk > b.atk) {
-            return -1;
-        }
-        if (a.atk < b.atk) {
-            return 1;
-        }
-        if (a.def < b.def) {
-            return 1;
-        }
-        if (a.def > b.def) {
-            return -1;
-        }
-
     }
 
 
+    if (a.atk > b.atk) {
+        return -1;
+    }
+    if (a.atk < b.atk) {
+        return 1;
+    }
+    if (a.def < b.def) {
+        return 1;
+    }
+    if (a.def > b.def) {
+        return -1;
+    }
 
 
     if (a.type > b.type) {
