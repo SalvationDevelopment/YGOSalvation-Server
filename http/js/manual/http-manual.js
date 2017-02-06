@@ -307,8 +307,8 @@ function stateUpdate(dataBinding) {
         element = dataBinding.element,
         player,
         ref = dataBinding,
-        face = element.attr('data-position').indexOf('FaceDown') > -1;
-
+        face = element.attr('data-position').indexOf('FaceDown') > -1 && ref.id;
+    console.log(face, element.attr('data-position'));
     if (orientSlot) {
         player = (dataBinding.player === 1) ? 0 : 1;
     } else {
