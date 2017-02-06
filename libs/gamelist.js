@@ -603,8 +603,6 @@ function onData(data, socket) {
         break;
     case ('join'):
         socket.join(socket.address.ip + data.uniqueID);
-
-
         socket.join('activegames');
         socket.write(JSON.stringify(gamelist));
 

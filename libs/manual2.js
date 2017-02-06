@@ -1,6 +1,95 @@
 /*jslint node:true, plusplus:true, bitwise : true, nomen:true*/
 'use strict';
 
+
+var configParser = require('./ConfigParser'),
+    fs = require('fs'),
+    banLists = {},
+    databases = {};
+
+function banListUpdater() {
+    var data = fs.readFileSync('../http/ygopro/lflist.conf', {
+        encoding: "UTF-8"
+    });
+    banLists = configParser(data, {
+        keyValueDelim: " ",
+        blockRegexp: /^\s?\!(.*?)\s?$/
+    });
+
+}
+
+function validDeck(deckList, banList, database) {
+    banList = banList || {};
+    database = database || databases["0-en-OCGTCG"];
+    var decks = ["main", "side", "extra"],
+        card,
+        mainMin = 40,
+        mainMax = 60,
+        isValid = true,
+        cardObject,
+        getCardObject = function (id) {
+            var cardObject,
+                i = 0,
+                len = database.length;
+            for (i, len; i < len; i++) {
+                if (id === database[i].id) {
+                    cardObject = database[i];
+                    break;
+                }
+            }
+            return cardObject;
+        };
+    decks.forEach(function (deck) {
+        if (!isValid) {
+            return;
+        }
+        if (deck === "main") {
+            if (deckList[deck + "Length"] < mainMin || deckList[deck + "Length"] > mainMax) {
+                isValid = false;
+                return;
+            }
+        } else {
+            if (deckList[deck + "Length"] < 0 || deckList[deck + "Length"] > 15) {
+                isValid = false;
+                return;
+            }
+        }
+        deck = deckList[deck];
+        Object.keys(deck).forEach(function (card) {
+            if (!isValid) {
+                return;
+            }
+            if (!banList.hasOwnProperty(card) && deck[card] > 0 && deck[card] <= 3) {
+                return;
+            }
+            if (banList.hasOwnProperty(card) && banList[card] == "0" && deck[card]) {
+                isValid = false;
+                return;
+            }
+            if (banList.hasOwnProperty(card) && deck[card] <= banList[card]) {
+                return;
+            }
+            if (banList.hasOwnProperty(card) && deck[card] > banList[card]) {
+                isValid = false;
+                return;
+            }
+            if (deck[card] < 0 || deck[card] > 3) {
+                isValid = false;
+                return;
+            }
+            cardObject = getCardObject(parseInt(card, 10));
+            if (cardObject.alias !== 0) {
+                if (deck[card] + deck[cardObject.alias] > 3) {
+                    isValid = false;
+                    return;
+                }
+            }
+        });
+
+    });
+    return isValid;
+}
+
 function newGame() {
     return {
         started: false,
@@ -79,11 +168,9 @@ function nameBinding(game) {
             if (client.activeduel === game) {
                 if (view.names[0] === client.username && client.slot === 0) {
                     client.send(JSON.stringify(view[0]));
-                }
-                if (view.names[1] === client.username && client.slot === 1) {
+                } else if (view.names[1] === client.username && client.slot === 1) {
                     client.send(JSON.stringify(view[1]));
-                }
-                if (view.spectators.indexOf(client.username) > -1) {
+                } else {
                     client.send(JSON.stringify(view.spectators));
                 }
             }
@@ -178,7 +265,7 @@ function responseHandler(socket, message) {
             stateSystem[message.game].players[index] = socket;
             stateSystem[message.game].setNames(socket.username, index);
             socket.slot = index;
-            socket.activeduel = message.game;
+
             return true;
         });
         if (!joined) {
@@ -194,7 +281,7 @@ function responseHandler(socket, message) {
             action: 'lobby',
             game: message.game
         }));
-
+        socket.activeduel = message.game;
         break;
     case "kick":
         if (socket.slot !== undefined) {
@@ -206,6 +293,7 @@ function responseHandler(socket, message) {
         }
         break;
     case "leave":
+        socket.activeduel = undefined;
         if (socket.slot !== undefined) {
             games[activeduel].player[socket.slot].name = '';
             games[activeduel].player[socket.slot].ready = false;
@@ -218,6 +306,7 @@ function responseHandler(socket, message) {
         socket.send(JSON.stringify({
             action: 'leave'
         }));
+
         break;
     case "surrender":
         if (socket.slot !== undefined) {
