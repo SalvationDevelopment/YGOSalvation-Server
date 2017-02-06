@@ -307,7 +307,7 @@ function stateUpdate(dataBinding) {
         element = dataBinding.element,
         player,
         ref = dataBinding,
-        face = (element.attr('data-position').indexOf('FaceDown') > -1 && ref.id);
+        face = Boolean(element.attr('data-position').indexOf('FaceDown') > -1 || !ref.id);
 
     console.log(face, element.attr('data-position'), element.attr('data-position').indexOf('FaceDown'));
     if (orientSlot) {
@@ -329,7 +329,7 @@ function stateUpdate(dataBinding) {
             'data-position': ref.position,
             'data-id': ref.id,
             'data-uid': ref.uid,
-            'src': (face === false) ? 'ygopro/pics/' + ref.id + '.jpg' : 'img/textures/cover.jpg'
+            'src': (face) ? 'ygopro/pics/' + ref.id + '.jpg' : 'img/textures/cover.jpg'
         });
 
         element.attr('style', 'z-index:' + (ref.index));
