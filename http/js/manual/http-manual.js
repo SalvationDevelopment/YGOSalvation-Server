@@ -329,7 +329,7 @@ function stateUpdate(dataBinding) {
             'data-position': ref.position,
             'data-id': ref.id,
             'data-uid': ref.uid,
-            'src': (face && ref.id) ? 'ygopro/pics/' + ref.id + '.jpg' : 'img/textures/cover.jpg'
+            'src': (face === false && ref.id) ? 'ygopro/pics/' + ref.id + '.jpg' : 'img/textures/cover.jpg'
         });
 
         element.attr('style', 'z-index:' + (ref.index));
