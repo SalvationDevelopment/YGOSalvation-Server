@@ -309,7 +309,7 @@ function stateUpdate(dataBinding) {
         ref = dataBinding,
         face = Boolean(element.attr('data-position').indexOf('FaceDown') > -1 || !ref.id);
 
-    console.log(face, element.attr('data-position'), element.attr('data-position').indexOf('FaceDown'));
+    console.log(face, element.attr('data-position'), element.attr('data-position').indexOf('FaceDown'), ref.if);
     if (orientSlot) {
         player = (dataBinding.player === 1) ? 0 : 1;
     } else {
@@ -329,7 +329,7 @@ function stateUpdate(dataBinding) {
             'data-position': ref.position,
             'data-id': ref.id,
             'data-uid': ref.uid,
-            'src': (face === false && ref.id) ? 'ygopro/pics/' + ref.id + '.jpg' : 'img/textures/cover.jpg'
+            'src': (!face && ref.id) ? 'ygopro/pics/' + ref.id + '.jpg' : 'img/textures/cover.jpg'
         });
 
         element.attr('style', 'z-index:' + (ref.index));
