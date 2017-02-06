@@ -306,7 +306,8 @@ function stateUpdate(dataBinding) {
         field = $('#automationduelfield'),
         element = dataBinding.element,
         player,
-        ref = dataBinding;
+        ref = dataBinding,
+        face = element.attr('data-position').indexOf('own') > 0 && ref.id;
 
     if (orientSlot) {
         player = (dataBinding.player === 1) ? 0 : 1;
@@ -327,7 +328,7 @@ function stateUpdate(dataBinding) {
             'data-position': ref.position,
             'data-id': ref.id,
             'data-uid': ref.uid,
-            'src': (ref.id) ? 'ygopro/pics/' + ref.id + '.jpg' : 'img/textures/cover.jpg'
+            'src': (face) ? 'ygopro/pics/' + ref.id + '.jpg' : 'img/textures/cover.jpg'
         });
 
         element.attr('style', 'z-index:' + (ref.index));
