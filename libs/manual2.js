@@ -5,7 +5,7 @@
 
 
 var validateDeck = require('./validate-Deck'),
-    configParser = require('./ConfigPaser.js'),
+    configParser = require('./ConfigParser.js'),
     database = require('../http/manifest/manifest_0-en-OCGTCG.json'),
     fs = require('fs'),
     banLists = {},
