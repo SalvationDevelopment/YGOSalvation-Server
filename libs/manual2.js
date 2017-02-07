@@ -2,7 +2,11 @@
 'use strict';
 
 
-var configParser = require('./ConfigParser'),
+
+
+var validateDeck = require('./validate-Deck'),
+    configParser = require('./ConfigPaser.js'),
+    database = require('../http/manifest/manifest_0-en-OCGTCG.json'),
     fs = require('fs'),
     banLists = {},
     databases = {};
@@ -15,80 +19,10 @@ function banListUpdater() {
         keyValueDelim: " ",
         blockRegexp: /^\s?\!(.*?)\s?$/
     });
-
+    return banLists;
 }
 
-function validDeck(deckList, banList, database) {
-    banList = banList || {};
-    database = database || databases["0-en-OCGTCG"];
-    var decks = ["main", "side", "extra"],
-        card,
-        mainMin = 40,
-        mainMax = 60,
-        isValid = true,
-        cardObject,
-        getCardObject = function (id) {
-            var cardObject,
-                i = 0,
-                len = database.length;
-            for (i, len; i < len; i++) {
-                if (id === database[i].id) {
-                    cardObject = database[i];
-                    break;
-                }
-            }
-            return cardObject;
-        };
-    decks.forEach(function (deck) {
-        if (!isValid) {
-            return;
-        }
-        if (deck === "main") {
-            if (deckList[deck + "Length"] < mainMin || deckList[deck + "Length"] > mainMax) {
-                isValid = false;
-                return;
-            }
-        } else {
-            if (deckList[deck + "Length"] < 0 || deckList[deck + "Length"] > 15) {
-                isValid = false;
-                return;
-            }
-        }
-        deck = deckList[deck];
-        Object.keys(deck).forEach(function (card) {
-            if (!isValid) {
-                return;
-            }
-            if (!banList.hasOwnProperty(card) && deck[card] > 0 && deck[card] <= 3) {
-                return;
-            }
-            if (banList.hasOwnProperty(card) && banList[card] == "0" && deck[card]) {
-                isValid = false;
-                return;
-            }
-            if (banList.hasOwnProperty(card) && deck[card] <= banList[card]) {
-                return;
-            }
-            if (banList.hasOwnProperty(card) && deck[card] > banList[card]) {
-                isValid = false;
-                return;
-            }
-            if (deck[card] < 0 || deck[card] > 3) {
-                isValid = false;
-                return;
-            }
-            cardObject = getCardObject(parseInt(card, 10));
-            if (cardObject.alias !== 0) {
-                if (deck[card] + deck[cardObject.alias] > 3) {
-                    isValid = false;
-                    return;
-                }
-            }
-        });
-
-    });
-    return isValid;
-}
+var banlist = banListUpdater();
 
 function newGame() {
     return {
@@ -336,8 +270,32 @@ function responseHandler(socket, message) {
         if (socket.slot !== undefined) {
             //ready = deckvalidator(message.deck);
 
+            try {
+
+                message.validate = validateDeck(message.deck, banlist['2016.8.29 (TCG)'], database);
+                if (message.validate) {
+                    if (message.validate.error) {
+                        console.log(message.validate.error);
+                        socket.send(JSON.stringify({
+                            action: 'error',
+                            error: message.validate.error,
+                            msg: message.validate.msg
+                        }));
+                        return;
+                    }
+                }
+            } catch (error) {
+                socket.send(JSON.stringify({
+                    error: error.message,
+                    stack: error.stack,
+                    input: JSON.parse(message)
+                }));
+            }
+
+            console.log(message.validate);
             games[activeduel].player[socket.slot].ready = true;
             stateSystem[activeduel].lock[socket.slot] = true;
+
             stateSystem[activeduel].decks[socket.slot] = message.deck;
             socket.send(JSON.stringify({
                 action: 'lock',
