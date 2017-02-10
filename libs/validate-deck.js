@@ -1,4 +1,14 @@
-function validateDeck (deck, banlist) {
+function validateDeck (deck, banlist, database) {
+
+  function getCardById (cardId) {
+    for (var i = 0; i < database.length; i++) {
+      if (database[i].id == cardId) {
+        return database[i];
+      }
+    }
+    return null;
+  }
+
   var validate = {
     error: false,
     msg: ''
@@ -35,6 +45,10 @@ function validateDeck (deck, banlist) {
   var side = {};
   var extra = {};
   deck.main.forEach(function (card) {
+    var cardObject = getCardById(card);
+    if (cardObject.alias) {
+      card = cardObject.alias;
+    }
     if (!main[card]) {
       main[card] = 1;
     } else {
@@ -42,6 +56,10 @@ function validateDeck (deck, banlist) {
     }
   });
   deck.side.forEach(function (card) {
+    var cardObject = getCardById(card);
+    if (cardObject.alias) {
+      card = cardObject.alias;
+    }
     if (!side[card]) {
       side[card] = 1;
     } else {
@@ -49,6 +67,10 @@ function validateDeck (deck, banlist) {
     }
   });
   deck.extra.forEach(function (card) {
+    var cardObject = getCardById(card);
+    if (cardObject.alias) {
+      card = cardObject.alias;
+    }
     if (!extra[card]) {
       extra[card] = 1;
     } else {
