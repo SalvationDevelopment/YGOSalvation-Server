@@ -11,6 +11,9 @@ var validateDeck = require('./validate-Deck'),
     banLists = {},
     databases = {};
 
+/**
+ * Update the banlist
+ */
 function banListUpdater() {
     var data = fs.readFileSync('../http/ygopro/lflist.conf', {
         encoding: "UTF-8"
@@ -24,6 +27,11 @@ function banListUpdater() {
 
 var banlist = banListUpdater();
 
+
+/**
+ * Create a new game object.
+ * @returns {object} customized game object
+ */
 function newGame() {
     return {
         started: false,
@@ -73,8 +81,19 @@ var WebSocketServer = require('ws').Server,
     states = {},
     log = {};
 
+/**
+ * Create a function that sorts to the correct viewers.
+ * @param   {Object} game 
+ * @returns {function} binding function
+ */
 function socketBinding(game) {
-    return function gameResponse(view, stack) {
+
+    /**
+     * response handler
+     * @param {object}   view  view definition set
+     * @param {Array} stack of cards
+     */
+    function gameResponse(view, stack) {
         if (stateSystem[game] && view !== undefined) {
             if (stateSystem[game].players) {
                 if (stateSystem[game].players[0]) {
@@ -93,7 +112,8 @@ function socketBinding(game) {
                 });
             }
         }
-    };
+    }
+    return gameResponse;
 }
 
 function nameBinding(game) {
@@ -112,6 +132,12 @@ function nameBinding(game) {
     };
 }
 
+
+/**
+ * Return a random string.
+ * @param   {Number} len Length of resulting string
+ * @returns {String} random string
+ */
 function randomString(len) {
     var i,
         text = "",
