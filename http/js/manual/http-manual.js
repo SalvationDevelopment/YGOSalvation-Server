@@ -8,6 +8,7 @@ var sound = {};
 
 var internalLocal = internalLocal;
 
+var livingIn2017 = true;
 (function () {
     'use strict';
     sound.play = function (targetID) {
@@ -15,6 +16,16 @@ var internalLocal = internalLocal;
         document.getElementById(targetID).play();
     };
 }());
+
+function penR() {
+    'use strict';
+    return (livingIn2017) ? 7 : 4;
+}
+
+function penL() {
+    'use strict';
+    return (livingIn2017) ? 6 : 0;
+}
 
 var manualServer,
     broadcast,
