@@ -60,6 +60,8 @@ div#selectionsystem {
 .p0.MONSTERZONE.i2,.overlayunit.p0.i2   {bottom :154px; left:360px;}
 .p0.MONSTERZONE.i3,.overlayunit.p0.i3   {bottom :154px; left:453px;}
 .p0.MONSTERZONE.i4,.overlayunit.p0.i4   {bottom :154px; left:541px;}
+.p0.MONSTERZONE.i5,.overlayunit.p0.i5   {bottom :255px; left:276px;} /*speczone left*/
+.p0.MONSTERZONE.i6,.overlayunit.p0.i6   {bottom :255px; left:453px;} /*speczone right*/
 
 
 .p1.DECK         {bottom : 500px; left: 98px; }
@@ -83,6 +85,8 @@ div#selectionsystem {
 .p1.MONSTERZONE.i2,.overlayunit.p1.i2     {bottom :360px; left:373px;}
 .p1.MONSTERZONE.i3,.overlayunit.p1.i3     {bottom :360px; left:284px;}
 .p1.MONSTERZONE.i4,.overlayunit.p1.i4     {bottom :360px; left:196px;}
+.p1.MONSTERZONE.i5,.overlayunit.p1.i5     {bottom :255px; left:276px;} /*speczone left*/
+.p1.MONSTERZONE.i3,.overlayunit.p1.i3     {bottom :255px; left:453px;} /*speczone right*/
 
 
 .p0[data-position=FaceDown]  {transform: rotate3d(0,1,0,180deg );
