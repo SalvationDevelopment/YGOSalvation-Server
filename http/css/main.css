@@ -1464,7 +1464,7 @@ div#duelspectate {
 
 div#phaseindicator {
     position: fixed;
-    top: 48%;
+    top: -20%;
     width: 100%;
     pointer-events: all;
     /*    padding: 5px;*/
