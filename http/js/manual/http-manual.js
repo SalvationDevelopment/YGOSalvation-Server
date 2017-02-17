@@ -309,7 +309,7 @@ function stateUpdate(dataBinding) {
         ref = dataBinding,
         face = Boolean(element.attr('data-position').indexOf('FaceDown') > -1 || !ref.id);
 
-    console.log(face, element.attr('data-position'), element.attr('data-position').indexOf('FaceDown'), ref.if);
+
     if (orientSlot) {
         player = (dataBinding.player === 1) ? 0 : 1;
     } else {
@@ -1452,12 +1452,12 @@ function makeFieldSpellFaceDown(card) {
 
 function makePendulumZoneL(card) {
     'use strict';
-    return makeSpell(card, 6);
+    return makeSpell(card, 0);
 }
 
 function makePendulumZoneR(card) {
     'use strict';
-    return makeSpell(card, 7);
+    return makeSpell(card, 4);
 }
 
 function makeCardMovement(start, end) {
@@ -1847,10 +1847,10 @@ function manualActivateField() {
 function manualToPZoneL() {
     'use strict';
 
-    if ($('#automationduelfield .p' + orient(manualActionReference.player) + '.SPELLZONE.i6').length) {
+    if ($('#automationduelfield .p' + orient(manualActionReference.player) + '.SPELLZONE.i0').length) {
         return;
     }
-    var end = makeSpell(manualActionReference, 6),
+    var end = makeSpell(manualActionReference, 0),
         message = makeCardMovement(manualActionReference, end);
 
     message.action = 'moveCard';
@@ -1860,10 +1860,10 @@ function manualToPZoneL() {
 
 function manualToPZoneR() {
     'use strict';
-    if ($('#automationduelfield .p' + orient(manualActionReference.player) + '.SPELLZONE.i7').length) {
+    if ($('#automationduelfield .p' + orient(manualActionReference.player) + '.SPELLZONE.i4').length) {
         return;
     }
-    var end = makeSpell(manualActionReference, 7),
+    var end = makeSpell(manualActionReference, 4),
         message = makeCardMovement(manualActionReference, end);
 
     message.action = 'moveCard';
