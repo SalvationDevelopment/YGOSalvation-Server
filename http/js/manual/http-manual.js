@@ -1253,7 +1253,7 @@ function manualRemoveCounter() {
 }
 
 
-
+var specialsummonmode;
 
 function startAttack() {
     'use strict';
@@ -1265,6 +1265,12 @@ function startTarget() {
     'use strict';
     targetmode = true;
     $('.card.p1, .card.p0').addClass('attackglow');
+}
+
+function startSpecialSummon() {
+    'use strict';
+    specialsummonmode = true;
+    $('.cardselectionzone.p1.MONSTERZONE, .cardselectionzone.p0.MONSTERZONE').addClass('attackglow');
 }
 var overlaylist;
 
@@ -2328,6 +2334,15 @@ function checksetcode(obj, sc) {
     }
 }
 
+function selectionzoneonclick() {
+    'use strict';
+    console.log('selectionzoneonclick');
+    if (specialsummonmode) {
+        manualTarget();
+        return;
+    }
+}
+
 function guicardonclick() {
     'use strict';
     try {
@@ -2337,6 +2352,10 @@ function guicardonclick() {
 
         if (targetmode) {
             manualTarget(stackunit);
+            return;
+        }
+        if (specialsummonmode) {
+            manualTarget();
             return;
         }
 
