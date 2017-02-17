@@ -27,6 +27,16 @@ function penL() {
     return (livingIn2017) ? 6 : 0;
 }
 
+function setMidSchool(set) {
+    'use strict';
+    livingIn2017 = set;
+    if (set) {
+        $('.field').css('background-image', "url(http://ygopro.us/img/textures/field.png)");
+    } else {
+        $('.field').css('background-image', "url(http://ygopro.us/img/textures/field.png)");
+    }
+}
+
 var manualServer,
     broadcast,
     activegame,
