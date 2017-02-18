@@ -119,7 +119,8 @@ var manualServer,
         1048576: "Psychic",
         2097152: "Divine-Beast",
         4194304: "Creator God",
-        8388608: "Wyrm"
+        8388608: "Wyrm",
+        16777216 : "Cyber"
     };
 
 function cardIs(cat, obj) {
