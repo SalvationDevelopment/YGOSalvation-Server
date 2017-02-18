@@ -6,8 +6,8 @@
 
 function cardStackSort(a, b) {
     'use strict';
-    var aExtra = (cardIs('xyz', a) || cardIs('synchro', a) || cardIs('fusion', a)),
-        bExtra = (cardIs('xyz', b) || cardIs('synchro', b) || cardIs('fusion', b));
+    var aExtra = (cardIs('xyz', a) || cardIs('synchro', a) || cardIs('fusion', a) || cardIs('link', a)),
+        bExtra = (cardIs('xyz', b) || cardIs('synchro', b) || cardIs('fusion', b) || cardIs('link', b));
 
     if (parseInt(a.level, 10) > parseInt(b.level, 10)) {
         return -1;
@@ -1295,14 +1295,14 @@ function deckeditonclick(index, zone) {
         $('.de-toside, .de-fromextra').css(viewable);
     }
     if (zone === 'side') {
-        if (cardIs('xyz', dbEntry) || cardIs('fusion', dbEntry) || cardIs('synchro', dbEntry)) {
+        if (cardIs('xyz', dbEntry) || cardIs('fusion', dbEntry) || cardIs('synchro', dbEntry) || cardIs('link', dbEntry)) {
             $('.de-toextra, .de-fromextra').css(viewable);
         } else {
             $('.de-tomain, .de-fromextra').css(viewable);
         }
     }
     if (zone === 'search') {
-        if (cardIs('xyz', dbEntry) || cardIs('fusion', dbEntry) || cardIs('synchro', dbEntry)) {
+        if (cardIs('xyz', dbEntry) || cardIs('fusion', dbEntry) || cardIs('synchro', dbEntry) || cardIs('link', dbEntry)) {
             $('.de-addtoextra, .de-addtoside').css(viewable);
         } else {
             $('.de-addtomain, .de-addtoside').css(viewable);
