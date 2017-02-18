@@ -389,26 +389,6 @@ function update(cb) {
         spawn('git', ['pull'], {}, function () {
             n++;
         });
-        spawn('git', ['pull'], {
-            cwd: './ygopro/script'
-        }, function () {
-            n++;
-        });
-        spawn('git', ['pull'], {
-            cwd: './ygopro/pics'
-        }, function () {
-            n++;
-        });
-        spawn('git', ['pull'], {
-            cwd: '../ygopro-tcg-scripts'
-        }, function () {
-            n++;
-        });
-        spawn('git', ['pull'], {
-            cwd: '../ygopro-goat-scripts'
-        }, function () {
-            n++;
-        });
     });
 }
 
