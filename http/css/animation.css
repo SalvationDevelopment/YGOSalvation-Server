@@ -71,7 +71,7 @@ div#selectionsystem {
 .p1.REMOVED      {bottom : 306px; left: 18px; }
 .p1.EXCAVATED         {bottom : 300px; left: -2px; }
 
-.p1.SPELLZONE.i0     {bottom :450px; left:574px;}
+.p1.SPELLZONE.i0     {bottom :450px; left:540px;}
 .p1.SPELLZONE.i1     {bottom :450px; left:461px;}
 .p1.SPELLZONE.i2     {bottom :450px; left:364px;}
 .p1.SPELLZONE.i3     {bottom :450px; left:275px;}
@@ -85,8 +85,8 @@ div#selectionsystem {
 .p1.MONSTERZONE.i2,.overlayunit.p1.i2     {bottom :360px; left:373px;}
 .p1.MONSTERZONE.i3,.overlayunit.p1.i3     {bottom :360px; left:284px;}
 .p1.MONSTERZONE.i4,.overlayunit.p1.i4     {bottom :360px; left:196px;}
-.p1.MONSTERZONE.i5,.overlayunit.p1.i5     {bottom :255px; left:276px;} /*speczone left*/
-.p1.MONSTERZONE.i3,.overlayunit.p1.i3     {bottom :255px; left:453px;} /*speczone right*/
+.p1.MONSTERZONE.i5,.overlayunit.p1.i5     {bottom :255px; left:453px;} /*speczone left*/
+.p1.MONSTERZONE.i6,.overlayunit.p1.i6     {bottom :255px; left:276px;} /*speczone right*/
 
 
 .p0[data-position=FaceDown]  {transform: rotate3d(0,1,0,180deg );
