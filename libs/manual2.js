@@ -314,7 +314,7 @@ function responseHandler(socket, message) {
                 socket.send(JSON.stringify({
                     error: error.message,
                     stack: error.stack,
-                    input: JSON.parse(message)
+                    input: JSON.stringify(message)
                 }));
             }
 
