@@ -88,8 +88,8 @@ var manualServer,
         16777249: "Pendulum / Effect",
         16781345: "Pendulum / Tuner / Effect",
         25165857: "Xyz / Pendulum / Effect",
-        33554433 : "Link",
-        33554465 : "Link / Effect"
+        33554433: "Link",
+        33554465: "Link / Effect"
     },
     pendulumMap = {
         16777233: "Pendulum",
@@ -122,7 +122,7 @@ var manualServer,
         2097152: "Divine-Beast",
         4194304: "Creator God",
         8388608: "Wyrm",
-        16777216 : "Cybers"
+        16777216: "Cybers"
     };
 
 function cardIs(cat, obj) {
@@ -850,6 +850,12 @@ function manualReciver(message) {
     }
 
     switch (message.action) {
+    case "ack":
+        manualServer.send(JSON.stringify({
+            action: 'ack',
+            game: activegame
+        }));
+        break;
     case "register":
         manualServer.send(JSON.stringify({
             action: 'register',
