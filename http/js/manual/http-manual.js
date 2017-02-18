@@ -1267,10 +1267,10 @@ function startTarget() {
     $('.card.p1, .card.p0').addClass('attackglow');
 }
 
-function startSpecialSummon() {
+function startSpecialSummon(atkdef) {
     'use strict';
-    specialsummonmode = true;
-    $('.cardselectionzone.p1.MONSTERZONE, .cardselectionzone.p0.MONSTERZONE').addClass('attackglow');
+    specialsummonmode = atkdef;
+    $('.cardselectionzone.p0.MONSTERZONE').addClass('attackglow card');
 }
 var overlaylist;
 
@@ -1529,11 +1529,11 @@ function manualNormalSummon() {
     manualServer.send(JSON.stringify(message));
 }
 
-function manualToAttack() {
+function manualToAttack(index) {
     'use strict';
 
-    var index = manualActionReference.index,
-        end = makeMonster(manualActionReference, index),
+    index = (index !== undefined) ? index : manualActionReference.index;
+    var end = makeMonster(manualActionReference, index),
         message = makeCardMovement(manualActionReference, end);
 
     message.action = 'moveCard';
@@ -1541,11 +1541,11 @@ function manualToAttack() {
     manualServer.send(JSON.stringify(message));
 }
 
-function manualSetMonster() {
+function manualSetMonster(index) {
     'use strict';
 
-    var index = automaticZonePicker(manualActionReference.player, 'MONSTERZONE'),
-        end = setMonster(manualActionReference, index),
+    index = (index !== undefined) ? index : automaticZonePicker(manualActionReference.player, 'MONSTERZONE');
+    var end = setMonster(manualActionReference, index),
         message = makeCardMovement(manualActionReference, end);
 
     message.action = 'moveCard';
@@ -2334,13 +2334,22 @@ function checksetcode(obj, sc) {
     }
 }
 
-function selectionzoneonclick() {
+function selectionzoneonclick(choice) {
     'use strict';
-    console.log('selectionzoneonclick');
+    console.log('selectionzoneonclick', choice);
     if (specialsummonmode) {
-        manualTarget();
+        $('.cardselectionzone.p0.MONSTERZONE').removeClass('card');
+        $('.cardselectionzone.p0.MONSTERZONE').removeClass('attackglow');
+        if (specialsummonmode === 'atk') {
+            manualToAttack(choice);
+        }
+        if (specialsummonmode === 'def') {
+            manualSetMonster(choice);
+        }
         return;
     }
+    specialsummonmode = false;
+
 }
 
 function guicardonclick() {
@@ -2355,7 +2364,6 @@ function guicardonclick() {
             return;
         }
         if (specialsummonmode) {
-            manualTarget();
             return;
         }
 
