@@ -2346,10 +2346,9 @@ function selectionzoneonclick(choice) {
         if (specialsummonmode === 'def') {
             manualSetMonster(choice);
         }
+        specialsummonmode = false;
         return;
     }
-    specialsummonmode = false;
-
 }
 
 function guicardonclick() {
