@@ -730,9 +730,9 @@ function reveal(cards, note) {
     }
     cards.forEach(function (card, index) {
         var hardcard = JSON.stringify(card),
-            src = (card.id) ? 'ygopro/pics/' + card.id + '.jpg' : 'img/textures/cover.jpg';
+            src = (card.id) ? 'https://rawgit.com/SalvationDevelopment/YGOPro-Images/master/' + card.id + '.jpg' : 'img/textures/cover.jpg';
         revealcache.push(card);
-        html += '<img id="revealuid' + card.uid + '" class="revealedcard" src="http://ygopro.us/' + src + '" data-id="' + card.id + '" onclick = "revealonclick(' + index + ', \'' + note + '\')" data-uid="' + card.uid + '" / > ';
+        html += '<img id="revealuid' + card.uid + '" class="revealedcard" src="' + src + '" data-id="' + card.id + '" onclick = "revealonclick(' + index + ', \'' + note + '\')" data-uid="' + card.uid + '" / > ';
     });
     if (cards.length > 5) {
         html += "</div>";
