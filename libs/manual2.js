@@ -169,6 +169,26 @@ wss.broadcast = function broadcast() {
     });
 };
 
+var realgames = [];
+
+function ackgames() {
+    Object.keys(games).forEach(function (key) {
+        if (realgames.indexOf(key) > -1) {
+            return;
+        } else {
+            delete games[key];
+        }
+    });
+    realgames = [];
+    wss.clients.forEach(function each(client) {
+        client.send(JSON.stringify({
+            action: 'ack'
+        }));
+    });
+}
+
+setInterval(ackgames, 60000);
+
 function duelBroadcast(duel, message) {
     stateSystem[duel].players[0].send(JSON.stringify(message));
     stateSystem[duel].players[1].send(JSON.stringify(message));
@@ -186,6 +206,9 @@ function responseHandler(socket, message) {
         return;
     }
     switch (message.action) {
+    case "ack":
+        realgames.push[message.game];
+        break;
     case "register":
         // need a registration system here.
         socket.username = message.name;
@@ -262,6 +285,9 @@ function responseHandler(socket, message) {
             delete stateSystem[activeduel].spectators[message.name];
         }
         socket.slot = undefined;
+        if (games[activeduel].player[0].name === '' && games[activeduel].player[1].name === '') {
+            delete games[activeduel];
+        }
         wss.broadcast(games);
         socket.send(JSON.stringify({
             action: 'leave'
