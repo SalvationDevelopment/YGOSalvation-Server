@@ -177,6 +177,9 @@ function getAvatar(name) {
 
 function updateloby(state) {
     'use strict';
+    if (state === undefined) {
+        return;
+    }
     $('#player1lobbyslot').val(state.player[0].name);
     $('#player2lobbyslot').val(state.player[1].name);
     //    $('#player3lobbyslot').val(state.player[2].name);
