@@ -220,8 +220,8 @@ function makeSideCard(cards, zone) {
 
     cards.forEach(function (card, index) {
         var hardcard = JSON.stringify(card),
-            src = 'ygopro/pics/' + card + '.jpg';
-        html += '<img class="sidedeckzonecard" src="http://ygopro.us/' + src + '" data-"' + card + '" onclick = "sideonclick(' + index + ', \'' + zone + '\')" / > ';
+            src = card + '.jpg';
+        html += '<img class="sidedeckzonecard" src="https://rawgit.com/SalvationDevelopment/YGOPro-Images/master/' + src + '" data-"' + card + '" onclick = "sideonclick(' + index + ', \'' + zone + '\')" / > ';
     });
 
     $('.sidingzone .' + zone).html(html);
@@ -350,7 +350,7 @@ function stateUpdate(dataBinding) {
             'data-position': ref.position,
             'data-id': ref.id,
             'data-uid': ref.uid,
-            'src': (ref.id) ? 'ygopro/pics/' + ref.id + '.jpg' : 'img/textures/cover.jpg'
+            'src': (ref.id) ? 'https://rawgit.com/SalvationDevelopment/YGOPro-Images/master/' + ref.id + '.jpg' : 'img/textures/cover.jpg'
         });
 
         element.attr('style', 'z-index:' + (ref.index));
