@@ -148,6 +148,9 @@ function cardIs(cat, obj) {
     if (cat === "xyz") {
         return (obj.type & 8388608) === 8388608;
     }
+    if (cat === "link") {
+        return (obj.type & 33554432) === 33554432;
+    }
 }
 
 
