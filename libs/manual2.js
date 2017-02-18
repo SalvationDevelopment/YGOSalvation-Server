@@ -187,7 +187,7 @@ function ackgames() {
     });
 }
 
-setInterval(ackgames, 60000);
+//setInterval(ackgames, 60000);
 
 function duelBroadcast(duel, message) {
     stateSystem[duel].players[0].send(JSON.stringify(message));
