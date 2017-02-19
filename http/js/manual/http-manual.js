@@ -281,6 +281,7 @@ function makeGames() {
     'use strict';
     $('#manualgamelistitems').html('');
     Object.keys(broadcast).forEach(function (gameName) {
+
         var game = broadcast[gameName],
             player1 = game.player[0].name || '___',
             player2 = game.player[1].name || '___',
@@ -1563,11 +1564,11 @@ function makeCardMovement(start, end) {
 }
 
 
-function manualNormalSummon() {
+function manualNormalSummon(index) {
     'use strict';
 
-    var index = automaticZonePicker(manualActionReference.player, 'MONSTERZONE'),
-        end = makeMonster(manualActionReference, index),
+    index = (index !== undefined) ? index : manualActionReference.index;
+    var end = makeMonster(manualActionReference, index),
         message = makeCardMovement(manualActionReference, end);
 
     message.action = 'moveCard';
@@ -2390,6 +2391,12 @@ function selectionzoneonclick(choice) {
             manualToAttack(choice);
         }
         if (specialsummonmode === 'def') {
+            manualSetMonster(choice);
+        }
+        if (specialsummonmode === 'normalatk') {
+            manualNormalSummon(choice);
+        }
+        if (specialsummonmode === 'normaldef') {
             manualSetMonster(choice);
         }
         specialsummonmode = false;
