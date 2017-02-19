@@ -992,6 +992,7 @@ function manualReciver(message) {
 
 function serverconnect() {
     'use strict';
+
     try {
         window.manualServer.close();
         return;
@@ -1024,6 +1025,21 @@ function serverconnect() {
 
 function manualHost() {
     'use strict';
+    var isChromium = window.chrome,
+        winNav = window.navigator,
+        vendorName = winNav.vendor,
+        isOpera = winNav.userAgent.indexOf("OPR") > -1,
+        isIEedge = winNav.userAgent.indexOf("Edge") > -1,
+        isIOSChrome = winNav.userAgent.match("CriOS");
+
+    if (isIOSChrome) {
+        console.log();
+    } else if (isChromium !== null && isChromium !== undefined && vendorName === "Google Inc." && isOpera === false && isIEedge === false) {
+        console.log();
+    } else {
+        alert('This site only works with Google Chrome');
+        return;
+    }
     manualServer.send(JSON.stringify({
         action: 'host',
         name: localStorage.nickname
