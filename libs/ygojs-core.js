@@ -507,11 +507,13 @@ function init(callback) {
             topcard,
             target,
             i,
-            pointer;
+            pointer,
+            deck;
 
         for (i = 0; i < numberOfCards; i++) {
-            topcard = filterlocation(filterPlayer(stack, player), 'DECK').length - 1;
-            setState(player, 'DECK', topcard, player, 'HAND', currenthand + i, 'FaceUp', 0);
+            deck = filterlocation(filterPlayer(stack, player), 'DECK');
+            topcard = deck[deck.length - 1];
+            setState(topcard.player, 'DECK', topcard.index, player, 'HAND', currenthand + i, 'FaceUp', 0, topcard.uid);
             target = queryCard(player, 'HAND', (currenthand + i), 0);
             pointer = uidLookup(target.uid);
             //stack[pointer].id = cards[i].Code;
