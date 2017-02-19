@@ -697,7 +697,7 @@ function init(callback) {
         } else {
             state.duelistChat.push('<pre>' + username + ' is viewing your gaveyard.</pre>');
         }
-        var deck = filterlocation(filterPlayer(stack, player), 'GRAVE'),
+        var deck = filterlocation(filterPlayer(stack, player), 'GRAVE').reverse(),
             result = {
                 0: {},
                 1: {},
