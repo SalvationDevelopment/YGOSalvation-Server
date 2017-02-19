@@ -119,6 +119,10 @@ meter.p1lp {transform: rotateY(180deg);}
 
 /*transform: scale(1.5,2.5) rotate3d(1,0,0,-55deg) translate(8px,-10px) !important;*/
 
+meter::-webkit-meter-bar {
+  -webkit-transition: width 4s;
+}
+
 #attackanimation {
     z-index: 90000;
     position: absolute;
