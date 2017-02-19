@@ -143,20 +143,27 @@ function randomString(len) {
 
 wss.broadcast = function broadcast() {
     Object.keys(games).forEach(function (key) {
-        if (games[key].player[0].name === '' && games[key].player[1].name === '') {
-            games[key].delCount++;
+        try {
+            if (games[key].player[0].name === '' && games[key].player[1].name === '') {
+                games[key].delCount++;
+            }
+            if (games[key].delCount > 10) {
+                delete games[key];
+            }
+        } catch (failedDeletion) {
+            console.log('failedDeletion', failedDeletion);
         }
-        if (games[key].delCount > 10) {
-            delete games[key];
-        }
-
     });
     wss.clients.forEach(function each(client) {
-        client.send(JSON.stringify({
-            action: 'broadcast',
-            data: games,
-            username: client.username
-        }));
+        try {
+            client.send(JSON.stringify({
+                action: 'broadcast',
+                data: games,
+                username: client.username
+            }));
+        } catch (failedSend) {
+            console.log('failedSend', failedSend);
+        }
     });
 };
 
