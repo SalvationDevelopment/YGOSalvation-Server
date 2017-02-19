@@ -567,6 +567,9 @@ wss.on('connection', function (socket) {
             console.log(error);
         }
     });
+    socket.on('error', function (errorMessage) {
+        console.log(errorMessage);
+    });
 });
 
 var fs = require('fs');
