@@ -130,7 +130,7 @@ function hideViewOfZone(view) {
     view.forEach(function (card, index) {
         output[index] = {};
         Object.assign(output[index], card);
-        if (output[index].position === 'FaceDown' || output[index].position === 'FaceDownDefense') {
+        if (output[index].position === 'FaceDown' || output[index].position === 'FaceDownDefence' || output[index].position === 'FaceDownDefense') {
             output[index].id = 0;
             output[index].counters = 0;
             delete output[index].originalcontroller;
