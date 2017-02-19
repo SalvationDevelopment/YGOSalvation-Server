@@ -2391,8 +2391,8 @@ function selectionzoneonclick(choice) {
     'use strict';
     console.log('selectionzoneonclick', choice);
     if (zonetargetingmode) {
-        $('.cardselectionzone.p0.MONSTERZONE').removeClass('card');
-        $('.cardselectionzone.p0.MONSTERZONE').removeClass('attackglow');
+        $('.cardselectionzone.p0').removeClass('card');
+        $('.cardselectionzone.p0').removeClass('attackglow');
         if (zonetargetingmode === 'atk') {
             manualToAttack(choice);
         }
