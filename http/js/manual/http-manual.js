@@ -1300,7 +1300,7 @@ function manualRemoveCounter() {
 }
 
 
-var specialsummonmode;
+var zonetargetingmode;
 
 function startAttack() {
     'use strict';
@@ -1314,11 +1314,18 @@ function startTarget() {
     $('.card.p1, .card.p0').addClass('attackglow');
 }
 
-function startSpecialSummon(atkdef) {
+function startSpecialSummon(mode) {
     'use strict';
-    specialsummonmode = atkdef;
+    zonetargetingmode = mode;
     $('.cardselectionzone.p0.MONSTERZONE').addClass('attackglow card');
 }
+
+function startSpellTargeting(mode) {
+    'use strict';
+    zonetargetingmode = mode;
+    $('.cardselectionzone.p0.SPELLZONE').addClass('attackglow card');
+}
+
 var overlaylist;
 
 function startXYZSummon(target) {
@@ -1636,16 +1643,15 @@ function manualSetMonsterFaceUp() {
     manualServer.send(JSON.stringify(message));
 }
 
-function manualActivate() {
+function manualActivate(index) {
     'use strict';
 
-    var index = automaticZonePicker(manualActionReference.player, 'SPELLZONE'),
-        end = makeSpell(manualActionReference, index),
+    index = (index !== undefined) ? index : automaticZonePicker(manualActionReference.player, 'SPELLZONE');
+    var end = makeSpell(manualActionReference, index),
         message = makeCardMovement(manualActionReference, end);
 
     message.action = 'moveCard';
     message.sound = 'soundactivateCard';
-    message.moveindex = automaticZonePicker(manualActionReference.player, 'SPELLZONE');
     manualServer.send(JSON.stringify(message));
 }
 
@@ -1670,11 +1676,11 @@ function manualActivateFieldSpellFaceDown() {
     manualServer.send(JSON.stringify(message));
 }
 
-function manualSetSpell() {
+function manualSetSpell(index) {
     'use strict';
 
-    var index = automaticZonePicker(manualActionReference.player, 'SPELLZONE'),
-        end = setSpell(manualActionReference, index),
+    index = (index !== undefined) ? index : automaticZonePicker(manualActionReference.player, 'SPELLZONE');
+    var end = setSpell(manualActionReference, index),
         message = makeCardMovement(manualActionReference, end);
 
     message.action = 'moveCard';
@@ -2384,22 +2390,28 @@ function checksetcode(obj, sc) {
 function selectionzoneonclick(choice) {
     'use strict';
     console.log('selectionzoneonclick', choice);
-    if (specialsummonmode) {
+    if (zonetargetingmode) {
         $('.cardselectionzone.p0.MONSTERZONE').removeClass('card');
         $('.cardselectionzone.p0.MONSTERZONE').removeClass('attackglow');
-        if (specialsummonmode === 'atk') {
+        if (zonetargetingmode === 'atk') {
             manualToAttack(choice);
         }
-        if (specialsummonmode === 'def') {
+        if (zonetargetingmode === 'def') {
             manualSetMonster(choice);
         }
-        if (specialsummonmode === 'normalatk') {
+        if (zonetargetingmode === 'normalatk') {
             manualNormalSummon(choice);
         }
-        if (specialsummonmode === 'normaldef') {
+        if (zonetargetingmode === 'normaldef') {
             manualSetMonster(choice);
         }
-        specialsummonmode = false;
+        if (zonetargetingmode === 'activate') {
+            manualActivate(choice);
+        }
+        if (zonetargetingmode === 'set') {
+            manualSetSpell(choice);
+        }
+        zonetargetingmode = false;
         return;
     }
 }
@@ -2415,7 +2427,7 @@ function guicardonclick() {
             manualTarget(stackunit);
             return;
         }
-        if (specialsummonmode) {
+        if (zonetargetingmode) {
             return;
         }
 

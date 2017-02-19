@@ -1876,7 +1876,7 @@
             <button class="m-hand m-field v-deck v-extra v-grave v-excavate" onclick="manualToRemoved()">Banish</button>
             <button class="m-hand m-field v-deck v-removed v-extra v-excavate" onclick="manualToGrave()">To Graveyard</button>
 
-            <button class="m-hand-st m-monster-st v-st m-st-monster v-excavate" onclick="manualSetSpell()">Set in S/T</button>
+            <button class="m-hand-st m-monster-st v-st m-st-monster v-excavate" onclick="startSpellTargeting('set')">Set in S/T</button>
             <button class="m-hand-st" onclick="manualActivate()">Activate</button>
             <!--            <button class="v-st" onclick="manualActivate()">To S/T Zone</button>-->
             <!-- disabling st from deck atm. needed for metaphos-->
@@ -1912,10 +1912,10 @@
             <button class="m-hand-p m-monster-p" onclick="manualToPZoneR()">To Right Pendulumn Zone</button>
             <button class="m-parasite" onclick="manualSendToDeckFaceup()">Send to Deck FaceUp</button>
 
-            <button class="m-st" onclick="manualSetMonsterFaceUp()">To Monster Zone</button>
-            <button class="m-st" onclick="manualSTFlipUp()">Activate</button>
+            <button class="m-st" onclick="startSpellTargeting('activate')">To Monster Zone</button>
+            <button class="m-st" onclick="startSpellTargeting('activate')">Activate</button>
             <button class="v-deck m-convulse" onclick="manualFlipDeck()">Flip Deck Over</button>
-            <button class="v-deck m-monster v-grave" onclick="manualActivate()">To S/T</button>
+            <button class="v-deck m-monster v-grave" onclick="startSpellTargeting('activate')">To S/T</button>
             <button class="a-field" onclick="startAttack()">Attack</button>
             <button class="m-st" onclick="manualSTFlipDown()">Flip Down</button>
 
