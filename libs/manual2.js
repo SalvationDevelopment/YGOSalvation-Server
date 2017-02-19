@@ -54,15 +54,6 @@ function newGame() {
                 name: '',
                 ready: false
             }
-            //            ,
-            //            2: {
-            //                name: '',
-            //                ready: false
-            //            },
-            //            3: {
-            //                name: '',
-            //                ready: false
-            //            }
         },
         spectators: [],
         delCount: 0
@@ -207,7 +198,7 @@ function responseHandler(socket, message) {
     }
     switch (message.action) {
     case "ack":
-        realgames.push[message.game];
+        realgames.push(message.game);
         break;
     case "register":
         // need a registration system here.
