@@ -125,6 +125,9 @@ function singlesitenav(target) {
         alert('You are in a duel, surrender or finish it.');
         return false;
     }
+    if (!launcher){
+        
+    }
     if (launcher && target === 'deckedit') {
         return;
     }
@@ -421,6 +424,7 @@ $(document).ready(function () {
         } catch (e) {}
     } else {
         $(document.body).addClass("web");
+        $('.launcheronly').css('display', 'none');
     }
 
     var useLang = localStorage.language || 'en';
