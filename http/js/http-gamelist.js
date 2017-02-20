@@ -503,9 +503,9 @@ function renderList(JSONdata) {
     }
     elem = $('#gamelistitems').find('div:not(.avaliable)').sort(sortMe);
     $('#gamelistitems').append(elem);
-    $('.avaliable').first()
+    $('#gamelistitems .avaliable').first()
         .before('<br style="clear:both"><span class="gamelabel">' + jsLang.join + '<span><br style="clear:both">');
-    $('.started')
+    $('#gamelistitems .started')
         .first().before('<br style="clear:both"><span class="gamelabel">' + jsLang.spectate + '<span><br style="clear:both">');
     $('#activeduels').html($('.game').length);
     $('#activeduelist').html($('.playername').length + spectators - $('.playername:contains(SnarkyChild)').length);
