@@ -160,7 +160,9 @@ var avatarMap = {};
 function scaleScreenFactor() {
     'use strict';
     var requiredRes = 2500,
-        scale = ($(window).width() / requiredRes);
+    var sideBarSize = 712,
+       actualRequiredRes = requiredRes - sideBarSize;
+        scale = ($(window).height() / actualRequiredRes);
     $('.field').css('transform', 'scale(' + scale + ')');
     return scale;
 }
