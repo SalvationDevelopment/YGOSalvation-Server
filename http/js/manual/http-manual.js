@@ -1727,8 +1727,24 @@ function manualToExcavate() {
     manualServer.send(JSON.stringify(message));
 }
 
+function manualToExtra() {
+    'use strict';
+    var index = $('#automationduelfield .p' + orient(manualActionReference.player) + '.EXTRA').length,
+        end = makeExtra(manualActionReference, index),
+        message = makeCardMovement(manualActionReference, end);
+
+    message.action = 'moveCard';
+
+    message.moveposition = 'FaceDown';
+    manualServer.send(JSON.stringify(message));
+}
+
 function manualToOpponentsHand() {
     'use strict';
+    if (cardIs('fusion', manualActionReference) || cardIs('synchro', manualActionReference) || cardIs('xyz', manualActionReference) || cardIs('link', manualActionReference)) {
+        manualToExtra();
+        return;
+    }
     var moveplayer = (manualActionReference.player) ? 0 : 1,
         index = $('#automationduelfield .p' + orient(manualActionReference.player) + '.HAND').length,
         end = makeHand(manualActionReference, index),
@@ -1741,6 +1757,14 @@ function manualToOpponentsHand() {
 
 function manualToTopOfDeck() {
     'use strict';
+    if (cardIs('fusion', manualActionReference) || cardIs('synchro', manualActionReference) || cardIs('xyz', manualActionReference) || cardIs('link', manualActionReference)) {
+        manualToExtra();
+        return;
+    }
+    if (cardIs('fusion', manualActionReference) || cardIs('synchro', manualActionReference) || cardIs('xyz', manualActionReference) || cardIs('link', manualActionReference)) {
+        manualToExtra();
+        return;
+    }
     var index = $('#automationduelfield .p' + orient(manualActionReference.player) + '.DECK').length,
         end = makeDeckCard(manualActionReference, index),
         message = makeCardMovement(manualActionReference, end);
@@ -1870,17 +1894,7 @@ function manualToRemoved() {
     manualServer.send(JSON.stringify(message));
 }
 
-function manualToExtra() {
-    'use strict';
-    var index = $('#automationduelfield .p' + orient(manualActionReference.player) + '.EXTRA').length,
-        end = makeExtra(manualActionReference, index),
-        message = makeCardMovement(manualActionReference, end);
 
-    message.action = 'moveCard';
-
-    message.moveposition = 'FaceDown';
-    manualServer.send(JSON.stringify(message));
-}
 
 function manualToExtraFaceUp() {
     'use strict';
@@ -1904,6 +1918,18 @@ function manualToHand() {
         message = makeCardMovement(manualActionReference, end);
 
     message.action = 'moveCard';
+    manualServer.send(JSON.stringify(message));
+}
+
+function manualToExtra() {
+    'use strict';
+    var index = $('#automationduelfield .p' + orient(manualActionReference.player) + '.EXTRA').length,
+        end = makeExtra(manualActionReference, index),
+        message = makeCardMovement(manualActionReference, end);
+
+    message.action = 'moveCard';
+
+    message.moveposition = 'FaceDown';
     manualServer.send(JSON.stringify(message));
 }
 
