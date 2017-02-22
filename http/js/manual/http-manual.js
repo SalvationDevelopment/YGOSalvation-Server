@@ -491,7 +491,7 @@ function guiCard(dataBinding) {
 
 function cardmargin(player, deck) {
     'use strict';
-    var multi = (deck === 'GRAVE') ? -1 : 1;
+    var multi = 1;
     $('.card.p' + player + '.' + deck).each(function (i) {
         var n = $(this).attr('data-index');
         $(this).attr('style', '').css({
