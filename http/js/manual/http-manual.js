@@ -1334,6 +1334,10 @@ function startSpellTargeting(mode) {
     'use strict';
     zonetargetingmode = mode;
     $('.cardselectionzone.p0.SPELLZONE').addClass('attackglow card');
+    $('.cardselectionzone.p0.SPELLZONE.i5').removeClass('attackglow card');
+    $('.cardselectionzone.p0.SPELLZONE.i6').removeClass('attackglow card');
+    $('.cardselectionzone.p0.SPELLZONE.i7').removeClass('attackglow card');
+
 }
 
 var overlaylist;
