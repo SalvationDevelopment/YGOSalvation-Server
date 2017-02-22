@@ -171,6 +171,7 @@ function scaleScreenFactor() {
 function tiltFactor() {
     'use strict';
     var tilt = $('#tiltvalue').val();
+    $('.fieldimage').css('transform', 'rotate3d(1, 0, 0, ' + tilt + 'deg)');
     return tilt;
 }
 
