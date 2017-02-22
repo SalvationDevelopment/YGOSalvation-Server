@@ -159,9 +159,10 @@ var avatarMap = {};
 
 function scaleScreenFactor() {
     'use strict';
-    var requiredRes = 512;
-    var adaptedScreenSize = ($(window).height() / 16) * 9;
-    var scale = (adaptedScreenSize / requiredRes);
+    var requiredRes = 512,
+        adaptedScreenSize = ($(window).height() / 16) * 9,
+        scale = (adaptedScreenSize / requiredRes);
+
     $('.field').css('transform', 'scale(' + scale + ')');
     return scale;
 }
