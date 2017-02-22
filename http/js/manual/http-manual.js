@@ -864,140 +864,140 @@ function manualReciver(message) {
     }
 
     switch (message.action) {
-    case "ack":
-        manualServer.send(JSON.stringify({
-            action: 'ack',
-            game: activegame
-        }));
-        break;
-    case "register":
-        manualServer.send(JSON.stringify({
-            action: 'register',
-            name: localStorage.nickname
-        }));
-        break;
-    case "lobby":
-        singlesitenav('lobby');
-        activegame = message.game;
-        updateloby(broadcast[activegame]);
-        break;
-    case "broadcast":
-        broadcast = message.data;
-        if (activegame) {
+        case "ack":
+            manualServer.send(JSON.stringify({
+                action: 'ack',
+                game: activegame
+            }));
+            break;
+        case "register":
+            manualServer.send(JSON.stringify({
+                action: 'register',
+                name: localStorage.nickname
+            }));
+            break;
+        case "lobby":
+            singlesitenav('lobby');
+            activegame = message.game;
             updateloby(broadcast[activegame]);
-        }
-        makeGames();
-        break;
-    case "sound":
-        sound.play(message.sound);
-        break;
-    case "slot":
-        orientSlot = message.slot;
-        break;
-    case "target":
-        $('.attackglow').removeClass('attackglow');
-        $('.card.p' + orient(message.target.player) + '.' + message.target.location + '.i' + message.target.index).addClass('attackglow');
-        break;
-    case "attack":
-        $('#attackanimation').remove();
-        $('#automationduelfield').append('<img  id="attackanimation" class="card p' + orient(message.source.player) + ' ' + message.source.location + ' i' + message.source.index + '" src="img/textures/attack.png" data-orient="' + orient(message.source.player) + '" />');
-        setTimeout(function () {
-            $('#attackanimation').attr('class', 'card p' + orient(message.target.player) + ' ' + message.target.location + ' i' + message.target.index);
+            break;
+        case "broadcast":
+            broadcast = message.data;
+            if (activegame) {
+                updateloby(broadcast[activegame]);
+            }
+            makeGames();
+            break;
+        case "sound":
+            sound.play(message.sound);
+            break;
+        case "slot":
+            orientSlot = message.slot;
+            break;
+        case "target":
+            $('.attackglow').removeClass('attackglow');
             $('.card.p' + orient(message.target.player) + '.' + message.target.location + '.i' + message.target.index).addClass('attackglow');
-            $('.card.p' + orient(message.source.player) + '.' + message.source.location + '.i' + message.source.index).addClass('attackglow');
-        }, 1000);
-        setTimeout(function () {
+            break;
+        case "attack":
             $('#attackanimation').remove();
-            $('.attackglow').removeClass('attackglow');
-        }, 3000);
-        break;
-    case "side":
-        $('#ingamesidebutton').css('display', 'block');
-        sidedDeck = message.deck;
-        sidedDeck.main.sort();
-        sidedDeck.extra.sort();
-        sidedDeck.side.sort();
-        sidestach.main = sidedDeck.main.length;
-        sidestach.extra = sidedDeck.extra.length;
-        sidestach.side = sidedDeck.side.length;
-        renderSideDeckZone(sidedDeck);
-        break;
-    case "start":
-        startGame(message);
-        break;
-    case "newCard":
-        window.manualDuel.newCard();
-        linkStack(message.field);
-        setTimeout(function () {
-            cardmargin(0, 'GRAVE');
-            cardmargin(0, 'EXTRA');
-            cardmargin(0, 'DECK');
-            cardmargin(1, 'GRAVE');
-            cardmargin(1, 'EXTRA');
-            cardmargin(1, 'DECK');
-            layouthand(0);
-            layouthand(1);
-            internalLocal = 'duelscreen';
-        }, 100);
-
-        $('#phaseindicator').attr('data-currentphase', message.info.phase);
-        $('.p0lp').val(message.info.lifepoints[0]);
-        $('.p1lp').val(message.info.lifepoints[1]);
-        duelstash = message;
-        updateChat(message.info.duelistChat, message.info.spectatorChat);
-        break;
-    case "shuffleHand0":
-        doGuiShuffle(orient(0), 'HAND');
-        setTimeout(function () {
-            linkStack(message.field);
-        }, 1000);
-
-        break;
-    case "shuffleHand1":
-        doGuiShuffle(orient(1), 'HAND');
-        setTimeout(function () {
-            linkStack(message.field);
-        }, 1000);
-        break;
-    case "shuffleDeck0":
-        doGuiShuffle(orient(0), 'DECK');
-        linkStack(message.field);
-        break;
-    case "shuffleDeck1":
-        doGuiShuffle(orient(1), 'DECK');
-        linkStack(message.field);
-        break;
-    case "duel":
-        if (manualDuel === undefined) {
+            $('#automationduelfield').append('<img  id="attackanimation" class="card p' + orient(message.source.player) + ' ' + message.source.location + ' i' + message.source.index + '" src="img/textures/attack.png" data-orient="' + orient(message.source.player) + '" />');
+            setTimeout(function () {
+                $('#attackanimation').attr('class', 'card p' + orient(message.target.player) + ' ' + message.target.location + ' i' + message.target.index);
+                $('.card.p' + orient(message.target.player) + '.' + message.target.location + '.i' + message.target.index).addClass('attackglow');
+                $('.card.p' + orient(message.source.player) + '.' + message.source.location + '.i' + message.source.index).addClass('attackglow');
+            }, 1000);
+            setTimeout(function () {
+                $('#attackanimation').remove();
+                $('.attackglow').removeClass('attackglow');
+            }, 3000);
+            break;
+        case "side":
+            $('#ingamesidebutton').css('display', 'block');
+            sidedDeck = message.deck;
+            sidedDeck.main.sort();
+            sidedDeck.extra.sort();
+            sidedDeck.side.sort();
+            sidestach.main = sidedDeck.main.length;
+            sidestach.extra = sidedDeck.extra.length;
+            sidestach.side = sidedDeck.side.length;
+            renderSideDeckZone(sidedDeck);
+            break;
+        case "start":
             startGame(message);
-        }
-        linkStack(message.field);
+            break;
+        case "newCard":
+            window.manualDuel.newCard();
+            linkStack(message.field);
+            setTimeout(function () {
+                cardmargin(0, 'GRAVE');
+                cardmargin(0, 'EXTRA');
+                cardmargin(0, 'DECK');
+                cardmargin(1, 'GRAVE');
+                cardmargin(1, 'EXTRA');
+                cardmargin(1, 'DECK');
+                layouthand(0);
+                layouthand(1);
+                internalLocal = 'duelscreen';
+            }, 100);
 
-        setTimeout(function () {
-            cardmargin(0, 'GRAVE');
-            cardmargin(0, 'EXTRA');
-            cardmargin(0, 'DECK');
-            cardmargin(1, 'GRAVE');
-            cardmargin(1, 'EXTRA');
-            cardmargin(1, 'DECK');
-            layouthand(0);
-            layouthand(1);
-            $('.attackglow').removeClass('attackglow');
-        }, 100);
-        updateChat(message.info.duelistChat);
-        $('#phaseindicator').attr('data-currentphase', message.info.phase);
-        $('.p0lp').val(message.info.lifepoints[0]);
-        $('.p1lp').val(message.info.lifepoints[1]);
-        duelstash = message;
-        break;
-    case "reveal":
-        reveal(message.reveal, message.call);
-        break;
-    case 'removeCard':
-        $('#uid' + message.info.removed).css('display', 'none');
-        break;
-    default:
-        break;
+            $('#phaseindicator').attr('data-currentphase', message.info.phase);
+            $('.p0lp').val(message.info.lifepoints[0]);
+            $('.p1lp').val(message.info.lifepoints[1]);
+            duelstash = message;
+            updateChat(message.info.duelistChat, message.info.spectatorChat);
+            break;
+        case "shuffleHand0":
+            doGuiShuffle(orient(0), 'HAND');
+            setTimeout(function () {
+                linkStack(message.field);
+            }, 1000);
+
+            break;
+        case "shuffleHand1":
+            doGuiShuffle(orient(1), 'HAND');
+            setTimeout(function () {
+                linkStack(message.field);
+            }, 1000);
+            break;
+        case "shuffleDeck0":
+            doGuiShuffle(orient(0), 'DECK');
+            linkStack(message.field);
+            break;
+        case "shuffleDeck1":
+            doGuiShuffle(orient(1), 'DECK');
+            linkStack(message.field);
+            break;
+        case "duel":
+            if (manualDuel === undefined) {
+                startGame(message);
+            }
+            linkStack(message.field);
+
+            setTimeout(function () {
+                cardmargin(0, 'GRAVE');
+                cardmargin(0, 'EXTRA');
+                cardmargin(0, 'DECK');
+                cardmargin(1, 'GRAVE');
+                cardmargin(1, 'EXTRA');
+                cardmargin(1, 'DECK');
+                layouthand(0);
+                layouthand(1);
+                $('.attackglow').removeClass('attackglow');
+            }, 100);
+            updateChat(message.info.duelistChat);
+            $('#phaseindicator').attr('data-currentphase', message.info.phase);
+            $('.p0lp').val(message.info.lifepoints[0]);
+            $('.p1lp').val(message.info.lifepoints[1]);
+            duelstash = message;
+            break;
+        case "reveal":
+            reveal(message.reveal, message.call);
+            break;
+        case 'removeCard':
+            $('#uid' + message.info.removed).css('display', 'none');
+            break;
+        default:
+            break;
     }
 }
 
@@ -1025,7 +1025,7 @@ function serverconnect() {
         setTimeout(serverconnect, 2000);
     };
     window.onbeforeunload = function () {
-        manualServer.onclose = function () {}; // disable onclose handler first
+        manualServer.onclose = function () { }; // disable onclose handler first
         manualServer.close();
     };
 
@@ -2605,7 +2605,7 @@ function guicardonclick() {
             return;
         }
         if (stackunit.location === 'MONSTERZONE') {
-            $('.m-monster, .m-field').css({
+            $('.m-monster, .m-field').not('.non-link').css({
                 'display': 'block'
             });
             if ($("#phaseindicator").attr('data-currentphase') === '3') {
