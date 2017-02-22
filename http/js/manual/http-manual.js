@@ -159,12 +159,19 @@ var avatarMap = {};
 
 function scaleScreenFactor() {
     'use strict';
-    var requiredRes = 512,
+    var requiredRes = $('#scaledvalue').val(),
         adaptedScreenSize = ($(window).height() / 16) * 9,
         scale = (adaptedScreenSize / requiredRes);
 
     $('.field').css('transform', 'scale(' + scale + ')');
+    localStorage.scaledvalue = requiredRes;
     return scale;
+}
+
+function tiltFactor() {
+    'use strict';
+    var tilt = $('#tiltvalue').val();
+    return tilt;
 }
 
 function getAvatar(name) {
