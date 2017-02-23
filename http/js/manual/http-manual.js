@@ -2751,6 +2751,8 @@ function getLinkedZone(player, index, link) {
 
 function processCardHover(event) {
     'use strict';
+    $('.linkglow').removeClass('linkglow');
+    
     //Get card description
     var uid = event.currentTarget.id,
         html = '';
@@ -2778,9 +2780,9 @@ function processCardHover(event) {
         for (var i = 0; i < ulinks.length; i++) {
             var linkedZone = getLinkedZone(uplayer, uindex, ulinks[i]);
             if (linkedZone !== null) {
-                var linkPlayer = linkedZone.player,
+                var linkPlayer =linkedZone.player,
                     linkIndex = linkedZone.index;
-                $('.cardselectionzone.p' + linkPlayer + '.MONSTERZONE.i' + linkIndex).addClass('attackglow card');
+                $('.cardselectionzone.p' + orient(linkPlayer) + '.MONSTERZONE.i' + linkIndex).addClass('linkglow');
             }
         }
     } catch (TypeError) {
