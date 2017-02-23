@@ -31,6 +31,7 @@ div#selectionsystem {
 }
 .card.DECK { transition: left 150ms;}
 .attackglow {box-shadow:0px 0px 20px 10px yellow; background-color:yellow;}
+.linkglow {box-shadow:0px 0px 20px 10px rgba(102, 102, 255, 0.5); background-color:rgba(102, 102, 255, 0.5);}
 .nocard {
     display:none;
 }
