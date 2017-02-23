@@ -78,7 +78,7 @@ module.exports =
 		53839837: 2, //Vampire Lord
     },
      bannedTypes : [],
-     exceptions : []
+     exceptions : [],
      startDate : new Date('2005-04-01'),
      endDate : new Date('2005-08-01'),
      name : 'Goat Format',
