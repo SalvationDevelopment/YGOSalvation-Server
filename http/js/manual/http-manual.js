@@ -2772,7 +2772,8 @@ function processCardHover(event) {
             stackunit = window.manualDuel.stack[idIndex],
             uindex = stackunit.index,
             uplayer = stackunit.player,
-            ulinks = stackunit.links;
+            cardTarget = getCardObject(stackunit.id)
+            ulinks = cardTarget.links;
 
         for (var i = 0; i < ulinks.length; i++) {
             var linkedZone = getLinkedZone(uplayer, uindex, ulinks);
