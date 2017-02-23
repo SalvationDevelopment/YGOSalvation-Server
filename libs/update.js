@@ -196,11 +196,7 @@ function getcards(file) {
     });
     while (texts.step()) { //
         row = texts.getAsObject();
-        
-        if (linkMarkers[row.id]) {
-            row.links = linkMarkers[row.id];
-        }
-        
+        row.links = linkMarkers[row.id] || [];
         output.push(row);
     }
     db.close();
