@@ -2678,8 +2678,80 @@ function guicardonclick() {
 }
 var internalDB = [];
 
+function getLinkedZone(player, index, link) {
+    'use strict';
+    switch (link) {
+    case 0://Top-Left
+        if (index === 2) {
+            return {player: player, index: 5};
+        } else if (index === 4) {
+            return {player: player, index: 6};
+        } else if (index === 5) {
+            return {player: 1 - player, index: 4};
+        } else if (index === 6) {
+            return {player: 1 - player, index: 2};
+        }
+        break;
+    case 1://Top
+        if (index === 1) {
+            return {player: player, index: 5};
+        } else if (index === 3) {
+            return {player: player, index: 6};
+        } else if (index === 5) {
+            return {player: 1 - player, index: 3};
+        } else if (index === 6) {
+            return {player: 1 - player, index: 1};
+        }
+        break;
+    case 2://Top-Right
+        if (index === 0) {
+            return {player: player, index: 5};
+        } else if (index === 2) {
+            return {player: player, index: 6};
+        } else if (index === 5) {
+            return {player: 1 - player, index: 2};
+        } else if (index === 6) {
+            return {player: 1 - player, index: 0};
+        }
+        break;
+    case 3://Left
+        if (index > 0 && index < 5) {
+            return {player: player, index: index - 1};
+        }
+        break;
+    case 4://Right
+        if (index >= 0 && index < 4) {
+            return {player: player, index: index + 1};
+        }
+        break;
+    case 5://Bottom-Left
+        if (index === 5) {
+            return {player: player, index: 0};
+        } else if (index === 6) {
+            return {player: player, index: 2};
+        }
+        break;
+    case 6://Bottom
+        if (index === 5) {
+            return {player: player, index: 1};
+        } else if (index === 6) {
+            return {player: player, index: 3};
+        }
+        break;
+    case 7://Bottom-Right
+        if (index === 5) {
+            return {player: player, index: 2};
+        } else if (index === 6) {
+            return {player: player, index: 4};
+        }
+        break;
+    }
+    return null;
+}
+
 function processCardHover(event) {
     'use strict';
+    //Get card description
     var uid = event.currentTarget.id,
         html = '';
 
@@ -2692,6 +2764,27 @@ function processCardHover(event) {
 
     $('.imgContainer').attr('src', $('#' + event.currentTarget.id).attr('src'));
     $('.cardDescription').html(html);
+    
+    
+    //Get Linked Zones
+    try {
+        var idIndex = window.manualDuel.uidLookup(record),
+            stackunit = window.manualDuel.stack[idIndex],
+            uindex = stackunit.index,
+            uplayer = stackunit.player,
+            ulinks = stackunit.links;
+
+        for (var i = 0; i < ulinks.length; i++) {
+            var linkedZone = getLinkedZone(uplayer, uindex, ulinks);
+            if (linkedZone !== null) {
+                var linkPlayer = linkedZone.player,
+                    linkIndex = linkedZone.index;
+                $('.cardselectionzone.p' + linkPlayer + 'SPELLZONE.i' + linkIndex).addClass('attackglow card');
+            }
+        }
+    } catch (TypeError) {
+        
+    }
 }
 
 $(document).ready(function () {
