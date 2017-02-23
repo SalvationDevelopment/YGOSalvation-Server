@@ -2772,7 +2772,7 @@ function processCardHover(event) {
             stackunit = window.manualDuel.stack[idIndex],
             uindex = stackunit.index,
             uplayer = stackunit.player,
-            cardTarget = getCardObject(stackunit.id)
+            cardTarget = getCardObject(stackunit.id),
             ulinks = cardTarget.links;
 
         for (var i = 0; i < ulinks.length; i++) {
