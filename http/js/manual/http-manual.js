@@ -2780,7 +2780,7 @@ function processCardHover(event) {
             if (linkedZone !== null) {
                 var linkPlayer = linkedZone.player,
                     linkIndex = linkedZone.index;
-                $('.cardselectionzone.p' + linkPlayer + 'MONSTERZONE.i' + linkIndex).addClass('attackglow card');
+                $('.cardselectionzone.p' + linkPlayer + '.MONSTERZONE.i' + linkIndex).addClass('attackglow card');
             }
         }
     } catch (TypeError) {
