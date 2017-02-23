@@ -2678,7 +2678,6 @@ function guicardonclick() {
 }
 var internalDB = [];
 
-
 function processCardHover(event) {
     'use strict';
     var uid = event.currentTarget.id,
@@ -2693,8 +2692,6 @@ function processCardHover(event) {
 
     $('.imgContainer').attr('src', $('#' + event.currentTarget.id).attr('src'));
     $('.cardDescription').html(html);
-
-
 }
 
 $(document).ready(function () {
