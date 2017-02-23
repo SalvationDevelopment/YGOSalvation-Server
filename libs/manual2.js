@@ -228,7 +228,7 @@ function responseHandler(socket, message) {
         socket.slot = 0;
 
         setTimeout(function () {
-            stateSystem[generated].duelistChat('Gamelist', 'Ending Duel');
+            stateSystem[generated].duelistChat('Gamelist', '90min Time limit reached. Ending Duel');
             delete games[generated];
             delete stateSystem[generated];
         }, 5400000); // 90 mins.

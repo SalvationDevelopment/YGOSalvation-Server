@@ -204,7 +204,7 @@ function main() {
         //boot anope
         //boot 
         bootGameList();
-        bootFlashPolicyServer();
+        //bootFlashPolicyServer();
         setTimeout(function () {
             bootUpdateSystem();
             bootlogger();

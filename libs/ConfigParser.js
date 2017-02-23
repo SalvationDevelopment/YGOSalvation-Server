@@ -23,7 +23,7 @@ module.exports = function ConfigParser(content) {
         joinKeyValue = options.joinKeyValue || joinKeyValue;
         joinKeySlice = options.joinKeySlice || joinKeySlice;
     }
-    console.log(content);
+
     content = content.split(newLineDelim);
     content.forEach(function (line) {
         var isComment = false;
