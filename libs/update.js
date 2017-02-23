@@ -186,7 +186,8 @@ function getcards(file) {
             })
         },
         output = [],
-        row;
+        row,
+        linkMarkers = jsonfile.readFileSync("../http/linkmarkersmap.json");
 
     // Bind new values
     texts.bind({
@@ -195,6 +196,11 @@ function getcards(file) {
     });
     while (texts.step()) { //
         row = texts.getAsObject();
+        
+        if (linkMarkers[row.id]) {
+            row.links = linkMarkers[row.id];
+        }
+        
         output.push(row);
     }
     db.close();
