@@ -152,7 +152,7 @@ module.exports =
 		72714461: 2, //Wisdom-Eye Magician
     },
      bannedTypes : [],
-     exceptions : []
+     exceptions : [],
      startDate : new Date('2017-01-01'),
      endDate : new Date('2017-04-01'),
      name : '2017.1.1 (OCG)',
