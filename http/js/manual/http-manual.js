@@ -2605,11 +2605,9 @@ function guicardonclick() {
             return;
         }
         if (stackunit.location === 'MONSTERZONE') {
-        $('.m-monster, .m-field').not('.non-link').css({'display': 'block' });
-         if  (cardIs('link', dbEntry)) {
-               $('.m-field.non-link').css({'display':none'});
-         }
-                                          
+            $('.m-monster, .m-field').css({
+                'display': 'block'
+            });
             if ($("#phaseindicator").attr('data-currentphase') === '3') {
                 $('.a-field').css({
                     'display': 'block'
