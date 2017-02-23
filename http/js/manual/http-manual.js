@@ -2776,11 +2776,11 @@ function processCardHover(event) {
             ulinks = cardTarget.links;
 
         for (var i = 0; i < ulinks.length; i++) {
-            var linkedZone = getLinkedZone(uplayer, uindex, ulinks);
+            var linkedZone = getLinkedZone(uplayer, uindex, ulinks[i]);
             if (linkedZone !== null) {
                 var linkPlayer = linkedZone.player,
                     linkIndex = linkedZone.index;
-                $('.cardselectionzone.p' + linkPlayer + 'SPELLZONE.i' + linkIndex).addClass('attackglow card');
+                $('.cardselectionzone.p' + linkPlayer + 'MONSTERZONE.i' + linkIndex).addClass('attackglow card');
             }
         }
     } catch (TypeError) {
