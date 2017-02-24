@@ -380,7 +380,7 @@ Handlebars.registerHelper("counter", function (index) {
 
 function updateranking() {
     'use strict';
-    $.getJSON('http://ygopro.us/ranking.json', function (feed) {
+    $.getJSON('/ranking.json', function (feed) {
         var rows = [],
             merged = {};
 
