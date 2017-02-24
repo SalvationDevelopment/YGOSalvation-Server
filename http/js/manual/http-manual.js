@@ -2613,7 +2613,7 @@ function guicardonclick() {
                     'display': 'block'
                 });
             }
-            if (pendulumMap[dbEntry.type] || cardIs('fusion', dbEntry) || cardIs('syncho', dbEntry) || cardIs('xyz', dbEntry)) {
+            if (pendulumMap[dbEntry.type] || cardIs('fusion', dbEntry) || cardIs('syncho', dbEntry) || cardIs('xyz', dbEntry) || cardIs('link', dbEntry)) {
                 $('.m-monster-extra').css({
                     'display': 'block'
                 });
