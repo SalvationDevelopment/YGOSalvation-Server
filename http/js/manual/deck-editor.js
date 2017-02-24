@@ -970,13 +970,21 @@ var deckEditor = (function () {
     function saveDeck() {
         inmemoryDeck.creationDate = new Date();
         usersDecks[activeIndex] = JSON.parse(JSON.stringify(inmemoryDeck));
-        primus.write({
-            action: 'save',
-            decks: usersDecks,
-            friends: friends,
-            username: localStorage.nickname
-        });
+        usersDecks[activeIndex].search =
+            primus.write({
+                action: 'save',
+                decks: usersDecks,
+                friends: friends,
+                username: localStorage.nickname
+            });
     }
+
+    console.log({
+        action: 'save',
+        decks: usersDecks,
+        friends: friends,
+        username: localStorage.nickname
+    });
 
     function switchDecks(index) {
         activeIndex = index;
