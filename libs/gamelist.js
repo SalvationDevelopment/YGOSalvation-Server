@@ -2,6 +2,7 @@
 // Gamelist object acts similar to a Redis server, could be replaced with on but its the gamelist state.
 'use strict';
 var http = require('http'),
+    https = require('https'),
     fs = require('fs');
 
 var primus,
@@ -22,8 +23,8 @@ var primus,
     lockStatus = false,
     Primus = require('primus'),
     Rooms = require('primus-rooms'),
-    primusServer = http.createServer().listen(24555),
-    duelserv = require('./duelserv.js'),
+    //primusServer = http.createServer().listen(24555),
+    primusServer,
     domain = require('domain'),
     path = require('path'),
     ps = require('ps-node'),
@@ -503,6 +504,18 @@ function killgameCall(data) {
     });
 }
 
+
+try {
+    var privateKey = fs.readFileSync(path.resolve(process.env.SSL + '\\ssl.key')).toString();
+    var certificate = fs.readFileSync(path.resolve(process.env.SSL + '\\ssl.crt')).toString();
+    var primusServer = https.createServer({
+        key: privateKey,
+        cert: certificate
+    }).listen(24555);
+} catch (noSSL) {
+    console.log('Primus is not using SSL');
+    primusServer = http.createServer().listen(24555);
+}
 primus = new Primus(primusServer, {
     parser: 'JSON'
 });

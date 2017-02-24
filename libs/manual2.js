@@ -6,6 +6,9 @@
 
 var validateDeck = require('./validate-Deck'),
     configParser = require('./ConfigParser.js'),
+    http = require('http'),
+    https = require('https'),
+    path = require('path'),
     database = require('../http/manifest/manifest_0-en-OCGTCG.json'),
     fs = require('fs'),
     banLists = {},
@@ -60,10 +63,21 @@ function newGame() {
     };
 }
 
+try {
+    var privateKey = fs.readFileSync(path.resolve(process.env.SSL + '\\ssl.key')).toString();
+    var certificate = fs.readFileSync(path.resolve(process.env.SSL + '\\ssl.crt')).toString();
+    var preServer = https.createServer({
+        key: privateKey,
+        cert: certificate
+    }).listen(8080);
+} catch (noSSL) {
+    console.log('manual is not using SSL');
+    var preServer = http.createServer().listen(8080);
+}
 
 var WebSocketServer = require('ws').Server,
     wss = new WebSocketServer({
-        port: 8080
+        server: preServer
     }),
     stateSystem = require('./ygojs-core.js'),
     deckvalidator = require('./deckvalidator.js'),
