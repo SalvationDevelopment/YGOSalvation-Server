@@ -12,7 +12,6 @@ var express = require('express'),
     vhost = require('vhost'),
     serveIndex = require('serve-index');
 
-console.log(path.join(__dirname, 'http'));
 app.use(express.static(path.join(__dirname, '../http')));
 
 
@@ -28,6 +27,7 @@ app.use(function (req, res, next) {
 
 require('fs').watch(__filename, process.exit);
 try {
+    throw new Error('Disabling SSL');
     var privateKey = fs.readFileSync(path.resolve(process.env.SSL + '\\ssl.key')).toString();
     var certificate = fs.readFileSync(path.resolve(process.env.SSL + '\\ssl.crt')).toString();
 
