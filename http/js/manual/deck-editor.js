@@ -243,25 +243,25 @@ var databaseSystem = (function () {
     }
 
 
-    $.getJSON('http://ygopro.us/manifest/manifest_0-en-OCGTCG.json', function (data) {
+    $.getJSON('/manifest/manifest_0-en-OCGTCG.json', function (data) {
         dbs.OCGTCG = data;
         setDatabase(['OCGTCG']);
     });
 
-    $.getJSON('http://ygopro.us/manifest/manifest_1-Anime.json', function (data) {
+    $.getJSON('/manifest/manifest_1-Anime.json', function (data) {
         dbs.Anime = data;
     });
-    $.getJSON('http://ygopro.us/manifest/manifest_3-Goats.json', function (data) {
+    $.getJSON('/manifest/manifest_3-Goats.json', function (data) {
 
         dbs.Goats = data;
     });
-    $.getJSON('http://ygopro.us/manifest/manifest_4-World-Championship.json', function (data) {
+    $.getJSON('/manifest/manifest_4-World-Championship.json', function (data) {
         dbs.Championship = data;
     });
-    //    $.getJSON('http://ygopro.us/manifest/manifest_Z-CWA.json', function (data) {
+    //    $.getJSON('/manifest/manifest_Z-CWA.json', function (data) {
     //        dbs.CWA = data;
     //    });
-    $.get('http://ygopro.us/ygopro/lflist.conf', function (data) {
+    $.get('/ygopro/lflist.conf', function (data) {
         banlist = configParser(data, {
             keyValueDelim: " ",
             blockRegexp: new RegExp("^\\s?!(.*?)\\s?$")
