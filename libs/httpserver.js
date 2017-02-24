@@ -3,6 +3,8 @@
 var express = require('express'),
     fs = require('fs'),
     https = require('https'),
+    http = require('http'),
+    url = require('url'),
     php = require("node-php"),
     path = require("path"),
     toobusy = require('toobusy-js'),
@@ -39,7 +41,6 @@ app.use(function (req, res, next) {
 
 
 require('fs').watch(__filename, process.exit);
-console.log('SSL var', process.env.SSL);
 try {
     var privateKey = fs.readFileSync(path.resolve(process.env.SSL + '\\ssl.key')).toString();
     var certificate = fs.readFileSync(path.resolve(process.env.SSL + '\\ssl.crt')).toString();
@@ -49,15 +50,15 @@ try {
         key: privateKey,
         cert: certificate
     }, app).listen(443);
-    var http = express().createServer();
-
+    var openserver = express();
     // set up a route to redirect http to https
-    http.get('*', function (req, res) {
-        res.redirect(process.env.ProductionSITE + req.url);
+    openserver.get('*', function (req, res) {
+        console.log(req.get('host'));
+        res.redirect('https://' + req.get('host') + req.url);
     });
 
+    openserver.listen(80);
     // have it listen on 8080
-    http.listen(80);
 } catch (nossl) {
     console.log('FAILED TO APPLY SSL', nossl);
     app.listen(80);
