@@ -45,7 +45,7 @@ $.browser = {};
 function updatenews() {
     'use strict';
     $.getFeed({
-        url: 'http://forum.ygopro.us/index.php?/forum/14-announcements-and-news.xml/',
+        url: 'https://forum.ygopro.us/index.php?/forum/14-announcements-and-news.xml/',
         success: function (feed) {
             $.get('handlebars/forumnews.handlebars', function (template) {
                 var parser = Handlebars.compile(template),
@@ -83,7 +83,7 @@ function updatenews() {
 function updateevents() {
     'use strict';
     $.getFeed({
-        url: 'http://forum.ygopro.us/index.php?/forum/15-official-tournaments.xml',
+        url: 'https://forum.ygopro.us/index.php?/forum/15-official-tournaments.xml',
         success: function (feed) {
             console.log(feed);
 
@@ -160,10 +160,6 @@ function singlesitenav(target) {
     }
     if (target === 'chat' && !chatStarted) {
 
-    }
-    if (target === 'dn' && !dnStarted) {
-        $('#dnwindow').attr('src', 'http://www.duelingnetwork.com/?card_image_base=http://localhost:7591/dn/');
-        dnStarted = true;
     }
     if (target === 'gamelist') {
         $('body').css('background-image', 'url(../img/magimagipinkshadow.jpg)');
