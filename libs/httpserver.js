@@ -12,23 +12,9 @@ var express = require('express'),
     vhost = require('vhost'),
     serveIndex = require('serve-index');
 
-function createVirtualStaticHost(domainName, dirPath) {
-    return vhost(domainName, express['static'](dirPath));
-}
+console.log(path.join(__dirname, 'http'));
+app.use(express.static(path.join(__dirname, '../http')));
 
-function createVirtualPHPHost(domainName, dirPath) {
-    return vhost(domainName, php.cgi(dirPath));
-}
-
-
-app.use(createVirtualStaticHost('localhost', require('path').resolve(process.cwd() + '\\..\\http')));
-app.use(createVirtualPHPHost('localforum', require('path').resolve(process.cwd() + '\\..\\..\\..\\invision')));
-app.use(createVirtualStaticHost(process.env.ProductionSITE, require('path').resolve(process.cwd() + '\\..\\http')));
-app.use(createVirtualPHPHost(process.env.ProductionFORUM, require('path').resolve(process.cwd() + '\\..\\..\\..\\invision')));
-
-//app.use('/ygopro', serveIndex(require('path').resolve(process.cwd() + '\\..\\http\\ygopro', {
-//    'icons': true
-//})));
 
 app.use(function (req, res, next) {
     if (toobusy()) {
@@ -53,7 +39,6 @@ try {
     var openserver = express();
     // set up a route to redirect http to https
     openserver.get('*', function (req, res) {
-        console.log(req.get('host'));
         res.redirect('https://' + req.get('host') + req.url);
     });
 
