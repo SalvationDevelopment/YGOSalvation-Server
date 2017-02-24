@@ -73,7 +73,7 @@ var mode = "production",
     screenMessage = $('#servermessages'),
     uniqueID = $('#uniqueid').html();
 
-var primus = Primus.connect('ws://' + location.host + ':24555');
+var primus = Primus.connect('wss://' + location.host + ':24555');
 
 
 function isChecked(id) {
@@ -183,7 +183,7 @@ function enterGame(string, pass) {
     'use strict';
     var guess = '';
     if (browser) {
-        if(navigator.userAgent.toLowerCase().indexOf('firefox') > -1){
+        if (navigator.userAgent.toLowerCase().indexOf('firefox') > -1) {
             alert('Firefox isnt supported at this time, please use Google Chrome.');
             return;
         }
