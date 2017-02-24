@@ -873,7 +873,7 @@ meter.p1time {
     transform: rotate3d(1, 0, 0, 20deg);
     perspective-origin: 0;
     margin: 0 auto;
-    background-image: url(https://ygopro.us/img/textures/newfield.png);
+    background-image: url(../img/textures/newfield.png);
     background-size: 100% 100%;
     background-repeat: no-repeat;
     background-position: center;
