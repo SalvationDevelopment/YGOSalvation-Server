@@ -145,18 +145,18 @@ function singlesitenav(target) {
     } else if ($('.unlogged.in-iframe').length > 0 && target === 'gamelist') {
         return;
     }
-    $('body').css('background-image', 'url(http://ygopro.us/img/magimagipinkshadow2.jpg)');
+    $('body').css('background-image', 'url(../img/magimagipinkshadow2.jpg)');
     $('#marquee').removeClass('marquee');
     if (target === 'faq') {
         updatenews();
-        $('body').css('background-image', 'url(http://ygopro.us/img/magimagipinkshadow.jpg)');
+        $('body').css('background-image', 'url(../img/magimagipinkshadow.jpg)');
     }
     if (target === 'events') {
         updateevents();
-        $('body').css('background-image', 'url(http://ygopro.us/img/magimagipinkshadow.jpg)');
+        $('body').css('background-image', 'url(../img/magimagipinkshadow.jpg)');
     }
     if (target === 'sqleditor') {
-        $('body').css('background-image', 'url(http://ygopro.us/img/bg.jpg)');
+        $('body').css('background-image', 'url(../img/bg.jpg)');
     }
     if (target === 'chat' && !chatStarted) {
 
@@ -166,18 +166,18 @@ function singlesitenav(target) {
         dnStarted = true;
     }
     if (target === 'gamelist') {
-        $('body').css('background-image', 'url(http://ygopro.us/img/magimagipinkshadow.jpg)');
+        $('body').css('background-image', 'url(../img/magimagipinkshadow.jpg)');
         if (launcher === false) {
             manualModeGamelistSwitch();
         }
         manualLeave();
     }
     if (target === 'chat') {
-        $('body').css('background-image', 'url(http://ygopro.us/img/magimagipinkshadow.jpg)');
+        $('body').css('background-image', 'url(../img/magimagipinkshadow.jpg)');
     }
 
     if (target === 'host') {
-        $('body').css('background-image', 'url(http://ygopro.us/img/magimagipinkshadow2.jpg)');
+        $('body').css('background-image', 'url(../img/magimagipinkshadow2.jpg)');
         manualLeave();
         if (launcher === false) {
             $('.automaticonly').css('display', 'none');
@@ -185,13 +185,13 @@ function singlesitenav(target) {
     }
 
     if (target === 'settings') {
-        $('body').css('background-image', 'url(http://ygopro.us/img/magimagipinkshadow2.jpg)');
+        $('body').css('background-image', 'url(../img/magimagipinkshadow2.jpg)');
         if (admin === "1") {
             $('#sqleditorbutton').css('display', 'block');
         }
     }
     if (target === 'customization') {
-        $('body').css('background-image', 'url(http://ygopro.us/img/magimagipinkshadow2.jpg)');
+        $('body').css('background-image', 'url(../img/magimagipinkshadow2.jpg)');
         setTimeout(function () {
             $('#cusomizationselection').trigger('change');
         }, 3000);
@@ -200,7 +200,7 @@ function singlesitenav(target) {
     }
     //$('body').css('background-image', 'url(http://static.zerochan.net/Ghostrick.Nekomusume.full.1945016.jpg)');
     if (target === 'credits') {
-        $('body').css('background-image', 'url(http://ygopro.us/img/bg.jpg)');
+        $('body').css('background-image', 'url(../img/bg.jpg)');
         $('#marquee').addClass('marquee');
     }
     if (target === 'home') {
