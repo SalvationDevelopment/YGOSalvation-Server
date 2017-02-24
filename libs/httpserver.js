@@ -41,8 +41,8 @@ app.use(function (req, res, next) {
 require('fs').watch(__filename, process.exit);
 console.log('SSL var', process.env.SSL);
 try {
-    var privateKey = fs.readFileSync(process.env.SSL + 'ssl.key').toString();
-    var certificate = fs.readFileSync(process.env.SSL + 'ssl.crt').toString();
+    var privateKey = fs.readFileSync(path.resolve(process.env.SSL + '\\ssl.key')).toString();
+    var certificate = fs.readFileSync(path.resolve(process.env.SSL + '\\ssl.crt')).toString();
 
 
     https.createServer({
