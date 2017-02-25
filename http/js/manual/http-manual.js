@@ -2215,6 +2215,11 @@ function revealonclick(card, note) {
             $('.m-hand-m').css({
                 'display': 'block'
             });
+            if (!(cardIs('link', dbEntry))) {
+                $('.m-monster-non-link').css({
+                    'display': 'block'
+                });
+            }
         }
         if (stMap[dbEntry.type] || dbEntry.type === 2 || dbEntry.type === 4) {
             $('.m-hand-st').css({
@@ -2237,11 +2242,6 @@ function revealonclick(card, note) {
             });
         } else {
             $('.v-grave-non-extra').css({
-                'display': 'block'
-            });
-        }
-        if (!(cardIs('link', dbEntry))) {
-            $('.v-grave-non-link').css({
                 'display': 'block'
             });
         }
@@ -2304,6 +2304,11 @@ function revealonclick(card, note) {
             $('.m-hand-m').css({
                 'display': 'block'
             });
+            if (!(cardIs('link', dbEntry))) {
+                $('.m-monster-non-link').css({
+                    'display': 'block'
+                });
+            }
         }
         if (stMap[dbEntry.type] || dbEntry.type === 2 || dbEntry.type === 4) {
             $('.m-hand-st').css({
@@ -2326,11 +2331,6 @@ function revealonclick(card, note) {
             });
         } else {
             $('.v-removed-non-extra').css({
-                'display': 'block'
-            });
-        }
-        if (!(cardIs('link', dbEntry))) {
-            $('.v-removed-non-link').css({
                 'display': 'block'
             });
         }
