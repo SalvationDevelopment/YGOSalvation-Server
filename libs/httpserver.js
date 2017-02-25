@@ -43,7 +43,7 @@ try {
     // have it listen on 8080
     protection = true;
 } catch (nossl) {
-    console.log('FAILED TO APPLY SSL', nossl);
+    console.log('Failed to apply SSL to HTTP server');
     app.listen(80);
 }
 
