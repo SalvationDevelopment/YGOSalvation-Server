@@ -226,7 +226,7 @@ button.shuffleDeck {
     position: absolute;
     top: 0;
     left: 0;
-    background-image: url(http://ygopro.us/img/textures/lim.png);
+    background-image: url(../img/textures/lim.png);
     background-size: 42px 41px;
     z-index: 10;
 }
@@ -239,7 +239,7 @@ button.shuffleDeck {
     position: absolute;
     top: 0;
     left: 0;
-    background-image: url(http://ygopro.us/img/textures/lim.png);
+    background-image: url(../img/textures/lim.png);
     background-size: 42px 41px;
     background-position-x: 20px;
     z-index: 10;
