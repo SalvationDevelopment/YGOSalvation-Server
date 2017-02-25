@@ -72,7 +72,7 @@ var mode = "production",
     gamelistcache,
     screenMessage = $('#servermessages'),
     uniqueID = $('#uniqueid').html(),
-    primusprotocol = (window.sslProtection) ? "wss://" : "ws://",
+    primusprotocol = (location.protocol === 'https:') ? "wss://" : "ws://",
     primus = Primus.connect(primusprotocol + location.host + ':24555');
 
 

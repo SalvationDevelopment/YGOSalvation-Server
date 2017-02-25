@@ -1010,7 +1010,7 @@ function serverconnect() {
     } catch (non_error) {
         console.log('Attempted to close manualmode websocket. Failed. Everything is fine.');
     }
-    var protocol = (window.sslProtection) ? "wss://" : "ws://";
+    var protocol = (location.protocol === 'https:') ? "wss://" : "ws://";
     window.manualServer = new WebSocket(protocol + location.hostname + ":8080");
     manualServer.onopen = function () {
         console.log('Connected to Manual');
