@@ -1951,18 +1951,17 @@
             </div>
         </div>
         <div class="field" id="selectionsystem">
-            <div id="phaseindicator" data-currentphase="">
-                <div>
-                    <button onclick="manualNextPhase(0)" id="drawphi">Draw</button>
-                    <button onclick="manualNextPhase(1)" id="standbyphi">Standby</button>
-                    <button onclick="manualNextPhase(2)" id="main1phi">Main 1</button>
-                    <button onclick="manualNextPhase(3)" id="battlephi">Battle</button>
-                    <button onclick="manualNextPhase(4)" id="main2phi">Main 2</button>
-                    <button onclick="manualNextPhase(5)" id="endphi">End</button>
-                    <button onclick="manualNextPhase(6)" id="nextturn">Opponent</button>
-                </div>
-            </div>
+
             <div class="fieldimage">
+                <div id="phaseindicator" data-currentphase="">
+                    <button class="phaseindicator" onclick="manualNextPhase(0)" id="drawphi">Draw</button>
+                    <button class="phaseindicator" onclick="manualNextPhase(1)" id="standbyphi">Standby</button>
+                    <button class="phaseindicator" onclick="manualNextPhase(2)" id="main1phi">Main 1</button>
+                    <button class="phaseindicator" onclick="manualNextPhase(3)" id="battlephi">Battle</button>
+                    <button class="phaseindicator" onclick="manualNextPhase(4)" id="main2phi">Main 2</button>
+                    <button class="phaseindicator" onclick="manualNextPhase(5)" id="endphi">End</button>
+                    <button class="phaseindicator" onclick="manualNextPhase(6)" id="nextturn">Opponent</button>
+                </div>
                 <div onclick="selectionzoneonclick('DECK')" class="cardselectionzone p0 DECK"></div>
                 <div onclick="selectionzoneonclick('EXTRA')" class="cardselectionzone p0 EXTRA"></div>
                 <div onclick="selectionzoneonclick('GRAVE')" class="cardselectionzone p0 GRAVE"></div>
