@@ -61,7 +61,7 @@ div#selectionsystem {
 
 .p0.MONSTERZONE.i0,.overlayunit.p0.i0   {bottom :154px; left:190px;}
 .p0.MONSTERZONE.i1,.overlayunit.p0.i1   {bottom :154px; left:276px;}
-.p0.MONSTERZONE.i2,.overlayunit.p0.i2   {bottom :154px; left:360px;}
+.p0.MONSTERZONE.i2,.overlayunit.p0.i2   {bottom :154px; left:364px;}
 .p0.MONSTERZONE.i3,.overlayunit.p0.i3   {bottom :154px; left:453px;}
 .p0.MONSTERZONE.i4,.overlayunit.p0.i4   {bottom :154px; left:541px;}
 .p0.MONSTERZONE.i5,.overlayunit.p0.i5   {bottom :255px; left:276px;} /*speczone left*/
@@ -77,22 +77,22 @@ div#selectionsystem {
 .newfield .p1.GRAVE    {bottom :406px; left:97px;}
 .newfield .p1.REMOVED  {bottom : 306px; left: 98px; }    
 
-.p1.SPELLZONE.i0     {bottom :450px; left:540px;}
-.p1.SPELLZONE.i1     {bottom :450px; left:461px;}
+.p1.SPELLZONE.i0     {bottom :450px; left:541px;}
+.p1.SPELLZONE.i1     {bottom :450px; left:453px;}
 .p1.SPELLZONE.i2     {bottom :450px; left:364px;}
-.p1.SPELLZONE.i3     {bottom :450px; left:275px;}
-.p1.SPELLZONE.i4     {bottom :450px; left:196px;}
+.p1.SPELLZONE.i3     {bottom :450px; left:276px;}
+.p1.SPELLZONE.i4     {bottom :450px; left:190px;}
 .p1.SPELLZONE.i5     {bottom :306px; left:631px;}/*fieldspell*/
 .p1.SPELLZONE.i6     {bottom :406px; left:631px;}/*penzoneblue*/
 .p1.SPELLZONE.i7     {bottom :406px; left:97px;}/*penzonered*/
 .newfield .p1.SPELLZONE.i5 {bottom :406px; left:631px;}/*new fieldspell*/
 
 
-.p1.MONSTERZONE.i0,.overlayunit.p1.i0     {bottom :360px; left:547px;}
-.p1.MONSTERZONE.i1,.overlayunit.p1.i1     {bottom :360px; left:461px;}
-.p1.MONSTERZONE.i2,.overlayunit.p1.i2     {bottom :360px; left:373px;}
-.p1.MONSTERZONE.i3,.overlayunit.p1.i3     {bottom :360px; left:284px;}
-.p1.MONSTERZONE.i4,.overlayunit.p1.i4     {bottom :360px; left:196px;}
+.p1.MONSTERZONE.i0,.overlayunit.p1.i0     {bottom :360px; left:541px;}
+.p1.MONSTERZONE.i1,.overlayunit.p1.i1     {bottom :360px; left:453px;}
+.p1.MONSTERZONE.i2,.overlayunit.p1.i2     {bottom :360px; left:364px;}
+.p1.MONSTERZONE.i3,.overlayunit.p1.i3     {bottom :360px; left:276px;}
+.p1.MONSTERZONE.i4,.overlayunit.p1.i4     {bottom :360px; left:190px;}
 .p1.MONSTERZONE.i5,.overlayunit.p1.i5     {bottom :255px; left:453px;} /*speczone left*/
 .p1.MONSTERZONE.i6,.overlayunit.p1.i6     {bottom :255px; left:276px;} /*speczone right*/
 
