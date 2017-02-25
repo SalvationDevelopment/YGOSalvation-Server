@@ -190,3 +190,13 @@ meter::-webkit-meter-optimum-value {
 #phaseindicator[data-currentphase="5"] #nextturn {
     box-shadow: 0 0 10px white;
 }
+
+[data-content]:after{
+    position: absolute;
+    content: attr(data-content);
+    color: yellow;
+    font-size: 1.2em;
+    text-shadow: 0 0 7px yellow;
+    text-align: center;
+    top: 104%;
+}

@@ -180,7 +180,7 @@ function getAvatar(name) {
     if (avatarMap[name]) {
         return;
     }
-    $.getJSON('http://forum.ygopro.us/avatar.php?username=' + name, function processAvatar(avatarUnit) {
+    $.getJSON('//forum.ygopro.us/avatar.php?username=' + name, function processAvatar(avatarUnit) {
         avatarMap[name] = 'http://forum.ygopro.us/uploads/' + avatarUnit.url;
     });
 }
@@ -394,6 +394,14 @@ function stateUpdate(dataBinding) {
 
 }
 
+function orient(player) {
+    'use strict';
+    if (orientSlot) {
+        return (player === 1) ? 0 : 1;
+    }
+    return player;
+
+}
 function linkStack(field) {
     'use strict';
     console.log('field:', field);
@@ -419,7 +427,25 @@ function linkStack(field) {
     Object.keys(field[1]).forEach(function (zone) {
         linkgui(field[1][zone]);
     });
+    
     manualDuel.stack.forEach(stateUpdate);
+    var p0deck = field[orient(0)].DECK.length,
+        p1deck = field[orient(1)].DECK.length,
+        p0extra = field[orient(0)].EXTRA.length,
+        p1extra = field[orient(1)].EXTRA.length,
+        p0removed = field[orient(0)].REMOVED.length,
+        p1removed = field[orient(1)].REMOVED.length,
+        p0grave = field[orient(0)].GRAVE.length,
+        p1grave = field[orient(1)].GRAVE.length;
+    
+    $('.cardselectionzone.p0.DECK').attr('data-content', p0deck);
+    $('.cardselectionzone.p1.DECK').attr('data-content', p1deck);
+    $('.cardselectionzone.p0.EXTRA').attr('data-content', p0extra);
+    $('.cardselectionzone.p1.EXTRA').attr('data-content', p1extra);
+    $('.cardselectionzone.p0.REMOVED').attr('data-content', p0removed);
+    $('.cardselectionzone.p1.REMOVED').attr('data-content', p1removed);
+    $('.cardselectionzone.p0.GRAVE').attr('data-content', p0grave);
+    $('.cardselectionzone.p1.GRAVE').attr('data-content', p1grave);
 }
 
 function Card(movelocation, player, index, unique) {
@@ -460,14 +486,7 @@ function layouthand(player) {
 
 
 
-function orient(player) {
-    'use strict';
-    if (orientSlot) {
-        return (player === 1) ? 0 : 1;
-    }
-    return player;
 
-}
 
 function guiCard(dataBinding) {
     'use strict';
