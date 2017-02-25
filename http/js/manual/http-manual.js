@@ -2603,6 +2603,9 @@ function guicardonclick() {
                 $('.m-hand-m').css({
                     'display': 'block'
                 });
+                $('.m-monster-non-link').css({
+                    'display': 'block'
+                });
             }
             if (stMap[dbEntry.type] || dbEntry.type === 2 || dbEntry.type === 4) {
                 $('.m-hand-st').css({
