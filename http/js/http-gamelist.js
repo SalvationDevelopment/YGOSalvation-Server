@@ -71,9 +71,9 @@ function saveSettings() {
 var mode = "production",
     gamelistcache,
     screenMessage = $('#servermessages'),
-    uniqueID = $('#uniqueid').html();
-
-var primus = Primus.connect('wss://' + location.host + ':24555');
+    uniqueID = $('#uniqueid').html(),
+    primusprotocol = (window.sslProtection) ? "wss://" : "ws://",
+    primus = Primus.connect(primusprotocol + location.host + ':24555');
 
 
 function isChecked(id) {

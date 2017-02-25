@@ -10,11 +10,12 @@ var express = require('express'),
     toobusy = require('toobusy-js'),
     app = express(),
     vhost = require('vhost'),
-    serveIndex = require('serve-index');
+    serveIndex = require('serve-index'),
+    protection = false;
 
-app.use(express.static(path.join(__dirname, '../http')));
+require('fs').watch(__filename, process.exit);
 
-
+app.use(express['static'](path.join(__dirname, '../http')));
 app.use(function (req, res, next) {
     if (toobusy()) {
         res.send(503, "I'm busy right now, sorry.");
@@ -23,9 +24,14 @@ app.use(function (req, res, next) {
     }
 });
 
+app.get('/status/protection.js', function (req, res) {
+    res.setHeader('Content-Type', 'application/json');
+    res.send('var sslProtection = ' + protection + ';');
+
+});
 
 
-require('fs').watch(__filename, process.exit);
+
 try {
     var privateKey = fs.readFileSync(path.resolve(process.env.SSL + '\\ssl.key')).toString();
     var certificate = fs.readFileSync(path.resolve(process.env.SSL + '\\ssl.crt')).toString();
@@ -43,6 +49,7 @@ try {
 
     openserver.listen(80);
     // have it listen on 8080
+    protection = true;
 } catch (nossl) {
     console.log('FAILED TO APPLY SSL', nossl);
     app.listen(80);
