@@ -24,14 +24,6 @@ app.use(function (req, res, next) {
     }
 });
 
-app.get('/status/protection.js', function (req, res) {
-    res.setHeader('Content-Type', 'application/json');
-    res.send('var sslProtection = ' + protection + ';');
-
-});
-
-
-
 try {
     var privateKey = fs.readFileSync(path.resolve(process.env.SSL + '\\ssl.key')).toString();
     var certificate = fs.readFileSync(path.resolve(process.env.SSL + '\\ssl.crt')).toString();
