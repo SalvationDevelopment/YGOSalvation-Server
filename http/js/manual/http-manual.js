@@ -2346,6 +2346,11 @@ function revealonclick(card, note) {
             });
 
         }
+        if (!(cardIs('link', dbEntry))) {
+            $('.v-extra-non-link').css({
+                'display': 'block'
+            });
+        }
 
 
         reorientmenu();
@@ -2658,6 +2663,11 @@ function guicardonclick() {
             }
             if (!(cardIs('fusion', dbEntry) || cardIs('syncho', dbEntry) || cardIs('xyz', dbEntry) || cardIs('link', dbEntry))) {
                 $('.m-field-non-extra').css({
+                    'display': 'block'
+                });
+            }
+            if (!(cardIs('link', dbEntry))) {
+                $('.m-monster-non-link').css({
                     'display': 'block'
                 });
             }
