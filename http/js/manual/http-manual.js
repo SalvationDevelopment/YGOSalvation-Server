@@ -2231,6 +2231,15 @@ function revealonclick(card, note) {
                 'display': 'block'
             });
         }
+        if (cardIs('fusion', dbEntry) || cardIs('syncho', dbEntry) || cardIs('xyz', dbEntry) || cardIs('link', dbEntry)) {
+            $('.v-monster-extra').css({
+                'display': 'block'
+            });
+        } else {
+            $('.v-grave-non-extra').css({
+                'display': 'block'
+            });
+        }
         reorientmenu();
         return;
     }
@@ -2303,6 +2312,15 @@ function revealonclick(card, note) {
         }
         if (pendulumMap[dbEntry.type]) {
             $('.m-hand-p').css({
+                'display': 'block'
+            });
+        }
+        if (cardIs('fusion', dbEntry) || cardIs('syncho', dbEntry) || cardIs('xyz', dbEntry) || cardIs('link', dbEntry)) {
+            $('.v-monster-extra').css({
+                'display': 'block'
+            });
+        } else {
+            $('.v-removed-non-extra').css({
                 'display': 'block'
             });
         }
