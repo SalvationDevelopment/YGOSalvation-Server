@@ -1860,11 +1860,11 @@
             <button class="m-excavated" onclick="manualRevealExcavated()">Reveal Excavated Deck</button>
             <button class="m-excavated" onclick="manualRevealExcavatedRandom()">Reveal Random Card</button>
 
-            <button class="m-hand m-field v-grave v-removed v-deck v-excavate" onclick="manualToBottomOfDeck()">To Bottom of Deck</button>
-            <button class="m-hand m-field v-grave v-removed v-deck v-excavate" onclick="manualToTopOfDeck()">To Top of Deck</button>
+            <button class="m-hand m-field-non-extra v-grave-non-extra v-removed-non-extra v-deck v-excavate" onclick="manualToBottomOfDeck()">To Bottom of Deck</button>
+            <button class="m-hand m-field-non-extra v-grave-non-extra v-removed-non-extra v-deck v-excavate" onclick="manualToTopOfDeck()">To Top of Deck</button>
             <button class="m-hand m-field v-grave v-removed v-deck" onclick="manualToExcavate()">Excavate</button>
 
-            <button class="m-hand m-field" onclick="manualToOpponentsHand()">To Opponents Hand</button>
+            <button class="m-hand m-field-non-extra" onclick="manualToOpponentsHand()">To Opponents Hand</button>
             <button class="m-hand v-extra v-excavate" onclick="manualRevealHandSingle()">Reveal</button>
             <button class="m-hand m-field v-deck v-extra v-grave v-excavate" onclick="manualToRemoved()">Banish</button>
             <button class="m-hand m-field v-deck v-removed v-extra v-excavate" onclick="manualToGrave()">To Graveyard</button>
@@ -1873,7 +1873,7 @@
             <button class="m-hand-st m-st" onclick="startSpellTargeting('activate')">Activate</button>
             <!--            <button class="v-st" onclick="manualActivate()">To S/T Zone</button>-->
             <!-- disabling st from deck atm. needed for metaphos-->
-            <button class="m-field v-grave v-removed v-extra-p v-excavate" onclick="manualToHand();">To Hand</button>
+            <button class="m-field-non-extra v-grave-non-extra v-removed-non-extra v-extra-p v-excavate" onclick="manualToHand();">To Hand</button>
             <button class="v-deck" onclick="manualToHand(); manualRevealHandSingle(); v-excavate">Reveal and Add to Hand</button>
 
             <button class="m-hand-p m-monster-p m-monster-to-extra-faceup" onclick="manualToExtraFaceUp()">To Extra Deck Face Up</button>

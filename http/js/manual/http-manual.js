@@ -2211,6 +2211,11 @@ function revealonclick(card, note) {
             });
 
         }
+        if (!(cardIs('fusion', dbEntry) || cardIs('syncho', dbEntry) || cardIs('xyz', dbEntry) || cardIs('link', dbEntry))) {
+                $('.v-grave-non-extra').css({
+                    'display': 'block'
+                });
+            }
         if (monsterMap[dbEntry.type]) {
             $('.m-hand-m').css({
                 'display': 'block'
@@ -2286,6 +2291,11 @@ function revealonclick(card, note) {
             });
 
         }
+        if (!(cardIs('fusion', dbEntry) || cardIs('syncho', dbEntry) || cardIs('xyz', dbEntry) || cardIs('link', dbEntry))) {
+                $('.v-removed-non-extra').css({
+                    'display': 'block'
+                });
+            }
         if (monsterMap[dbEntry.type]) {
             $('.m-hand-m').css({
                 'display': 'block'
@@ -2638,6 +2648,11 @@ function guicardonclick() {
                     'display': 'block'
                 });
             }
+            if (!(cardIs('fusion', dbEntry) || cardIs('syncho', dbEntry) || cardIs('xyz', dbEntry) || cardIs('link', dbEntry))) {
+                $('.m-field-non-extra').css({
+                    'display': 'block'
+                });
+            }
             if (pendulumMap[dbEntry.type]) {
                 $('.m-monster-p').css({
                     'display': 'block'
@@ -2684,6 +2699,11 @@ function guicardonclick() {
             }
             if (pendulumMap[dbEntry.type]) {
                 $('.m-monster-p').css({
+                    'display': 'block'
+                });
+            }
+            if (!(cardIs('fusion', dbEntry) || cardIs('syncho', dbEntry) || cardIs('xyz', dbEntry) || cardIs('link', dbEntry))) {
+                $('.m-field-non-extra').css({
                     'display': 'block'
                 });
             }
