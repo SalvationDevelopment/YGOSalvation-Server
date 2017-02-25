@@ -2240,6 +2240,11 @@ function revealonclick(card, note) {
                 'display': 'block'
             });
         }
+        if (!(cardIs('link', dbEntry))) {
+            $('.v-grave-non-link').css({
+                'display': 'block'
+            });
+        }
         reorientmenu();
         return;
     }
@@ -2321,6 +2326,11 @@ function revealonclick(card, note) {
             });
         } else {
             $('.v-removed-non-extra').css({
+                'display': 'block'
+            });
+        }
+        if (!(cardIs('link', dbEntry))) {
+            $('.v-removed-non-link').css({
                 'display': 'block'
             });
         }
