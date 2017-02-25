@@ -2463,7 +2463,7 @@ function selectionzoneonclick(choice) {
             manualToAttack(choice);
         }
         if (zonetargetingmode === 'def') {
-            manualSetMonster(choice);
+            manualSetMonsterFaceUp(choice);
         }
         if (zonetargetingmode === 'normalatk') {
             manualNormalSummon(choice);
