@@ -2211,11 +2211,6 @@ function revealonclick(card, note) {
             });
 
         }
-        if (!(cardIs('fusion', dbEntry) || cardIs('syncho', dbEntry) || cardIs('xyz', dbEntry) || cardIs('link', dbEntry))) {
-                $('.v-grave-non-extra').css({
-                    'display': 'block'
-                });
-            }
         if (monsterMap[dbEntry.type]) {
             $('.m-hand-m').css({
                 'display': 'block'
@@ -2291,11 +2286,6 @@ function revealonclick(card, note) {
             });
 
         }
-        if (!(cardIs('fusion', dbEntry) || cardIs('syncho', dbEntry) || cardIs('xyz', dbEntry) || cardIs('link', dbEntry))) {
-                $('.v-removed-non-extra').css({
-                    'display': 'block'
-                });
-            }
         if (monsterMap[dbEntry.type]) {
             $('.m-hand-m').css({
                 'display': 'block'
