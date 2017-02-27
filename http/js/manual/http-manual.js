@@ -2509,15 +2509,21 @@ function checksetcode(obj, sc) {
 
 function selectionzoneonclick(choice, zone) {
     'use strict';
-    console.log('selectionzoneonclick', choice);
+
     if (zonetargetingmode) {
+
         $('.cardselectionzone.p0').removeClass('card');
         $('.cardselectionzone.p0').removeClass('attackglow');
         if (zonetargetingmode === 'atk') {
             manualToAttack(choice);
         }
         if (zonetargetingmode === 'generic') {
-            manualMoveGeneric(choice, zone);
+            if (zone === 'GRAVE') {
+                manualToGrave();
+            } else {
+                manualMoveGeneric(choice, zone);
+            }
+
         }
         if (zonetargetingmode === 'def') {
             manualSetMonsterFaceUp(choice);
