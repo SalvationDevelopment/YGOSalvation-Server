@@ -1840,6 +1840,16 @@ function manualSlideRight() {
     manualServer.send(JSON.stringify(message));
 }
 
+function manualMoveGeneric(index) {
+    'use strict';
+    var end = JSON.parse(JSON.stringify(manualActionReference)),
+        message = makeCardMovement(manualActionReference, end);
+
+    message.moveindex = index;
+    message.action = 'moveCard';
+    manualServer.send(JSON.stringify(message));
+}
+
 function manualSlideLeft() {
     'use strict';
 
@@ -2488,7 +2498,7 @@ function checksetcode(obj, sc) {
     }
 }
 
-function selectionzoneonclick(choice) {
+function selectionzoneonclick(choice, zone) {
     'use strict';
     console.log('selectionzoneonclick', choice);
     if (zonetargetingmode) {
@@ -2496,6 +2506,9 @@ function selectionzoneonclick(choice) {
         $('.cardselectionzone.p0').removeClass('attackglow');
         if (zonetargetingmode === 'atk') {
             manualToAttack(choice);
+        }
+        if (zonetargetingmode === 'generic') {
+            manualMoveGeneric(choice, zone);
         }
         if (zonetargetingmode === 'def') {
             manualSetMonsterFaceUp(choice);
