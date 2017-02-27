@@ -402,6 +402,7 @@ function orient(player) {
     return player;
 
 }
+
 function linkStack(field) {
     'use strict';
     console.log('field:', field);
@@ -427,7 +428,7 @@ function linkStack(field) {
     Object.keys(field[1]).forEach(function (zone) {
         linkgui(field[1][zone]);
     });
-    
+
     manualDuel.stack.forEach(stateUpdate);
     var p0deck = field[orient(0)].DECK.length,
         p1deck = field[orient(1)].DECK.length,
@@ -437,7 +438,7 @@ function linkStack(field) {
         p1removed = field[orient(1)].REMOVED.length,
         p0grave = field[orient(0)].GRAVE.length,
         p1grave = field[orient(1)].GRAVE.length;
-    
+
     $('.cardselectionzone.p0.DECK').attr('data-content', p0deck);
     $('.cardselectionzone.p1.DECK').attr('data-content', p1deck);
     $('.cardselectionzone.p0.EXTRA').attr('data-content', p0extra);
@@ -1831,7 +1832,7 @@ function manualSlideRight() {
         end = JSON.parse(JSON.stringify(manualActionReference)),
         message = makeCardMovement(manualActionReference, end);
 
-    if (index === 5) {
+    if (index === (livingIn2017) ? 7 : 5) {
         index = 0;
     }
     message.moveindex = index;
@@ -1847,7 +1848,8 @@ function manualSlideLeft() {
         message = makeCardMovement(manualActionReference, end);
 
     if (index === -1) {
-        index = 4;
+        index = (livingIn2017) ? 6 : 4;
+        index = (livingIn2017) ? 6 : 4;
     }
     message.moveindex = index;
     message.action = 'moveCard';
