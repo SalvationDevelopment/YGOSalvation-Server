@@ -293,7 +293,6 @@ function responseHandler(socket, message) {
             games[activeduel].player[socket.slot].name = '';
             games[activeduel].player[socket.slot].ready = false;
         } else {
-            message.game.spectators--;
             delete stateSystem[activeduel].spectators[message.name];
         }
         socket.slot = undefined;
