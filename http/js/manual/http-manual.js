@@ -1349,6 +1349,12 @@ function startSpecialSummon(mode) {
     'use strict';
     zonetargetingmode = mode;
     $('.cardselectionzone.p0.MONSTERZONE').addClass('attackglow card');
+    if (mode === 'generic') {
+        $('.cardselectionzone.p0.SPELLZONE').addClass('attackglow card');
+        $('.cardselectionzone.p0.SPELLZONE.i5').removeClass('attackglow card');
+        $('.cardselectionzone.p0.SPELLZONE.i6').removeClass('attackglow card');
+        $('.cardselectionzone.p0.SPELLZONE.i7').removeClass('attackglow card');
+    }
 }
 
 function startSpellTargeting(mode) {
@@ -1840,13 +1846,16 @@ function manualSlideRight() {
     manualServer.send(JSON.stringify(message));
 }
 
-function manualMoveGeneric(index) {
+function manualMoveGeneric(index, zone) {
     'use strict';
     var end = JSON.parse(JSON.stringify(manualActionReference)),
         message = makeCardMovement(manualActionReference, end);
 
     message.moveindex = index;
     message.action = 'moveCard';
+    if (zone) {
+        message.movelocation = zone;
+    }
     manualServer.send(JSON.stringify(message));
 }
 
