@@ -2248,7 +2248,7 @@ function revealonclick(card, note) {
                 'display': 'block'
             });
         }
-        if (cardIs('fusion', dbEntry) || cardIs('syncho', dbEntry) || cardIs('xyz', dbEntry) || cardIs('link', dbEntry)) {
+        if (cardIs('fusion', dbEntry) || cardIs('synchro', dbEntry) || cardIs('xyz', dbEntry) || cardIs('link', dbEntry)) {
             $('.v-monster-extra').css({
                 'display': 'block'
             });
@@ -2337,7 +2337,7 @@ function revealonclick(card, note) {
                 'display': 'block'
             });
         }
-        if (cardIs('fusion', dbEntry) || cardIs('syncho', dbEntry) || cardIs('xyz', dbEntry) || cardIs('link', dbEntry)) {
+        if (cardIs('fusion', dbEntry) || cardIs('synchro', dbEntry) || cardIs('xyz', dbEntry) || cardIs('link', dbEntry)) {
             $('.v-monster-extra').css({
                 'display': 'block'
             });
@@ -2684,18 +2684,18 @@ function guicardonclick() {
                     'display': 'block'
                 });
             }
-            if (pendulumMap[dbEntry.type] || cardIs('fusion', dbEntry) || cardIs('syncho', dbEntry) || cardIs('xyz', dbEntry) || cardIs('link', dbEntry)) {
+            if (pendulumMap[dbEntry.type] || cardIs('fusion', dbEntry) || cardIs('synchro', dbEntry) || cardIs('xyz', dbEntry) || cardIs('link', dbEntry)) {
                 $('.m-monster-extra').css({
                     'display': 'block'
                 });
             }
-            if (!(cardIs('fusion', dbEntry) || cardIs('syncho', dbEntry) || cardIs('xyz', dbEntry) || cardIs('link', dbEntry))) {
+            if (!(cardIs('fusion', dbEntry) || cardIs('synchro', dbEntry) || cardIs('xyz', dbEntry) || cardIs('link', dbEntry))) {
                 $('.m-field-non-extra').css({
                     'display': 'block'
                 });
             }
             if (!(cardIs('link', dbEntry))) {
-                $('.m-monster-non-link').css({
+                $('.m-field-non-link').css({
                     'display': 'block'
                 });
             }
@@ -2748,7 +2748,7 @@ function guicardonclick() {
                     'display': 'block'
                 });
             }
-            if (!(cardIs('fusion', dbEntry) || cardIs('syncho', dbEntry) || cardIs('xyz', dbEntry) || cardIs('link', dbEntry))) {
+            if (!(cardIs('fusion', dbEntry) || cardIs('synchro', dbEntry) || cardIs('xyz', dbEntry) || cardIs('link', dbEntry))) {
                 $('.m-field-non-extra').css({
                     'display': 'block'
                 });
