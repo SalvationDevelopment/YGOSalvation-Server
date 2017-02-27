@@ -89,6 +89,7 @@ var manualServer,
         16777233: "Pendulum",
         16777249: "Pendulum / Effect",
         16781345: "Pendulum / Tuner / Effect",
+		18874401: "Pendulum / Flip / Effect",
         25165857: "Xyz / Pendulum / Effect",
         33554433: "Link",
         33554465: "Link / Effect"
