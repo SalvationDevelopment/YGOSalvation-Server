@@ -2223,7 +2223,7 @@ function revealonclick(card, note) {
     }
 
     if (manualActionReference.location === 'GRAVE') {
-        $('.v-grave').not('.non-link').css({
+        $('.v-grave').css({
             'display': 'block'
         });
         if (pendulumMap[dbEntry.type]) {
@@ -2236,7 +2236,7 @@ function revealonclick(card, note) {
 
         }
         if (monsterMap[dbEntry.type]) {
-            $('.m-hand-m').css({
+            $('.m-hand-m').not('.non-link').css({
                 'display': 'block'
             });
             if (!(cardIs('link', dbEntry))) {
@@ -2312,7 +2312,7 @@ function revealonclick(card, note) {
         return;
     }
     if (manualActionReference.location === "REMOVED") {
-        $('.v-removed').not('.non-link').css({
+        $('.v-removed').css({
             'display': 'block'
         });
         if (pendulumMap[dbEntry.type]) {
@@ -2325,7 +2325,7 @@ function revealonclick(card, note) {
 
         }
         if (monsterMap[dbEntry.type]) {
-            $('.m-hand-m').css({
+            $('.m-hand-m').not('.non-link').css({
                 'display': 'block'
             });
             if (!(cardIs('link', dbEntry))) {
@@ -2710,7 +2710,7 @@ function guicardonclick() {
                 });
             }
             if (!(cardIs('link', dbEntry))) {
-                $('.non-link').css({
+                $('.non-link').not('.m-hand-m').css({
                     'display': 'block'
                 });
             }
