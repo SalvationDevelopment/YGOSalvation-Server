@@ -2365,7 +2365,7 @@ function revealonclick(card, note) {
         return;
     }
     if (manualActionReference.location === 'EXTRA') {
-        $('.v-extra').css({
+        $('.v-extra').non('.non-link').css({
             'display': 'block'
         });
         if (cardIs('xyz', dbEntry)) {
@@ -2384,7 +2384,7 @@ function revealonclick(card, note) {
 
         }
         if (!(cardIs('link', dbEntry))) {
-            $('.v-extra-non-link').css({
+            $('.non-link').css({
                 'display': 'block'
             });
         }
