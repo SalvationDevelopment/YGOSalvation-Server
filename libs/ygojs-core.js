@@ -99,8 +99,14 @@ function filterUID(stack, uid) {
 }
 
 
-function byIndex(card, index) {
-
+/**
+ * Sort function, sorts by card index
+ * @param   {object}   first  card object
+ * @param   {object}   second card object
+ * @returns {boolean} 
+ */
+function sortByIndex(first, second) {
+    return first.index > second.index;
 }
 
 
@@ -697,7 +703,7 @@ function init(callback) {
         } else {
             state.duelistChat.push('<pre>' + username + ' is viewing your gaveyard.</pre>');
         }
-        var deck = filterlocation(filterPlayer(stack, player), 'GRAVE').reverse(),
+        var deck = filterlocation(filterPlayer(stack, player), 'GRAVE').sort(sortByIndex).reverse(),
             result = {
                 0: {},
                 1: {},
@@ -952,6 +958,10 @@ function init(callback) {
         callback(generateView('start'), stack);
     }
 
+    function getStack() {
+        return JSON.parse(JSON.stringify(stack));
+    }
+
     /**
      * Restarts the game for a rematch.
      */
@@ -1159,7 +1169,8 @@ function init(callback) {
         rematch: rematch,
         rematchAccept: 0,
         sideAccept: 0,
-        setNames: setNames
+        setNames: setNames,
+        getStack: getStack
     };
 
 

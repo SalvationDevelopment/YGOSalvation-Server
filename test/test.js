@@ -1,43 +1,36 @@
-/*jslint node: true, plusplus: true, unparam: false, nomen: true*/
-/*mocha globals*/
-/*global describe, it*/
-var assert = require("assert");
+const ygoEngine = require('../libs/ygojs-core.js'),
+    testDecks = require('./testDecks.js'),
+    assert = require('chai').assert;
 
-//global.__base = __dirname + '/';
-var join = new Buffer([41, 0, 16, 91, 0, 65, 0, 73, 0, 93, 0, 83, 0, 110, 0, 97, 0, 114, 0, 107, 0, 121, 0, 67, 0, 104, 0, 105, 0, 108, 0, 100, 0, 0, 0, 254, 255, 255, 255, 230, 110, 238, 118, 69, 0, 18, 50, 19, 75, 114, 0, 0, 0, 0, 50, 0, 48, 0, 48, 0, 79, 0, 79, 0, 79, 0, 56, 0, 48, 0, 48, 0, 48, 0, 44, 0, 48, 0, 44, 0, 53, 0, 44, 0, 49, 0, 44, 0, 85, 0, 44, 0, 102, 0, 48, 0, 77, 0, 85, 0, 103, 0, 0, 0, 0, 0, 254, 255, 255, 255, 230, 110, 238, 118]);
+/**
+ * `describe` is output sugar, it helps with the listing.
+ * `it` is output sugar, it helps with the listing.
+ * `done` is a function passed into it by Mocha itself,
+ * run it when the test is fully completed. If you dont call
+ * done the test will fail.
+ */
 
-describe('Boot Test', function () {
-    'use strict';
+describe('Salvation Duel Core', function () {
 
-
-
-
-
-});
-
-describe('Client Boot', function () {
-    'use strict';
-    // it('Should start the client', function () {
-    //     require('../client/interface/js/configuration.js');
-    //     var runYGOPro = require('../client/interface/js/offline-server.js');
-    //     // require('../client/interface/js/offline.js');
-    //     //requires refactor before testable.
-    //     runYGOPro('-j');
-
-    // });
-    it('Test battlepack3.js', function () {
-        require('../http/js/battlepack3.js');
+    it('Should create a game state', function (done) {
+        let game = ygoEngine(function (view, stack) {});
+        done();
     });
-    // it('Test cardmake.js', function () {
-    //     require('../http/js/card.js');
-    // });
-    // it('Test http-gamelist.js', function () {
-    //     require('../http/js/http-gamelist.js');    
-    // });
-    // it('Test updatesystem.js', function () {
-    //     require('../http/js/updatesystem.js');    
-    // });
 
+    it('Should start a game state', function (done) {
+        let game = ygoEngine(function (view, stack) {
+            // console.log(view, stack);
+            // you can test the view (what it sends users) and the stack (all the cards in the system) here.
+        });
+        var player1Deck = testDecks.modernYugiDeck,
+            player2Deck = testDecks.modernYugiDeck;
+
+        assert.equal(game.getStack().length, 0) // check the stack is emptry
+        game.lock[0] = true; // lock in player 1
+        game.lock[1] = true; // lock in player 2
+        game.startDuel(player1Deck, player2Deck, true); // start the duel with manual enabled.
+        console.log(game.getStack().length);
+        assert.equal(game.getStack().length, 110, 'should contain 110 cards');
+        done();
+    });
 });
-//check all JSON files are JSON
-//do JSLint on everything
