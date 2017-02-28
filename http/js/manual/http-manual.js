@@ -1678,7 +1678,7 @@ function manualToFaceDownDefence() {
 function manualSetMonsterFaceUp() {
     'use strict';
 
-    var index = automaticZonePicker(manualActionReference.player, 'MONSTERZONE'),
+    var index = manualActionReference.index,
         end = defenceMonster(manualActionReference, index),
         message = makeCardMovement(manualActionReference, end);
 
@@ -2198,7 +2198,7 @@ function revealonclick(card, note) {
                 'display': 'block'
             });
             $('.m-monster-non-link').css({
-                    'display': 'block'
+                'display': 'block'
             });
         }
         if (stMap[dbEntry.type] || dbEntry.type === 2 || dbEntry.type === 4) {
