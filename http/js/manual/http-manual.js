@@ -2197,6 +2197,9 @@ function revealonclick(card, note) {
             $('.m-hand-m').css({
                 'display': 'block'
             });
+            $('.m-monster-non-link').css({
+                    'display': 'block'
+            });
         }
         if (stMap[dbEntry.type] || dbEntry.type === 2 || dbEntry.type === 4) {
             $('.m-hand-st').css({
@@ -2223,7 +2226,7 @@ function revealonclick(card, note) {
     }
 
     if (manualActionReference.location === 'GRAVE') {
-        $('.v-grave').non('.non-link').css({
+        $('.v-grave').css({
             'display': 'block'
         });
         if (pendulumMap[dbEntry.type]) {
@@ -2240,7 +2243,7 @@ function revealonclick(card, note) {
                 'display': 'block'
             });
             if (!(cardIs('link', dbEntry))) {
-                $('.non-link').css({
+                $('.m-monster-non-link').css({
                     'display': 'block'
                 });
             }
@@ -2312,7 +2315,7 @@ function revealonclick(card, note) {
         return;
     }
     if (manualActionReference.location === "REMOVED") {
-        $('.v-removed').non('.non-link').css({
+        $('.v-removed').css({
             'display': 'block'
         });
         if (pendulumMap[dbEntry.type]) {
@@ -2329,7 +2332,7 @@ function revealonclick(card, note) {
                 'display': 'block'
             });
             if (!(cardIs('link', dbEntry))) {
-                $('.non-link').css({
+                $('.m-monster-non-link').css({
                     'display': 'block'
                 });
             }
@@ -2362,7 +2365,7 @@ function revealonclick(card, note) {
         return;
     }
     if (manualActionReference.location === 'EXTRA') {
-        $('.v-extra').non('.non-link').css({
+        $('.v-extra').css({
             'display': 'block'
         });
         if (cardIs('xyz', dbEntry)) {
@@ -2381,7 +2384,7 @@ function revealonclick(card, note) {
 
         }
         if (!(cardIs('link', dbEntry))) {
-            $('.non-link').css({
+            $('.v-extra-non-link').css({
                 'display': 'block'
             });
         }
@@ -2636,6 +2639,9 @@ function guicardonclick() {
                 $('.m-hand-m').css({
                     'display': 'block'
                 });
+                $('.m-monster-non-link').css({
+                    'display': 'block'
+                });
             }
             if (stMap[dbEntry.type] || dbEntry.type === 2 || dbEntry.type === 4) {
                 $('.m-hand-st').css({
@@ -2691,7 +2697,7 @@ function guicardonclick() {
             return;
         }
         if (stackunit.location === 'MONSTERZONE') {
-            $('.m-monster, .m-field').non('.non-link').css({
+            $('.m-monster, .m-field').css({
                 'display': 'block'
             });
             if ($("#phaseindicator").attr('data-currentphase') === '3') {
@@ -2710,7 +2716,7 @@ function guicardonclick() {
                 });
             }
             if (!(cardIs('link', dbEntry))) {
-                $('.non-link').css({
+                $('.m-field-non-link').css({
                     'display': 'block'
                 });
             }
