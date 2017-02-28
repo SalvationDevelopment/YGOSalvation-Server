@@ -2223,7 +2223,7 @@ function revealonclick(card, note) {
     }
 
     if (manualActionReference.location === 'GRAVE') {
-        $('.v-grave').css({
+        $('.v-grave').not('.non-extra').css({
             'display': 'block'
         });
         if (pendulumMap[dbEntry.type]) {
@@ -2265,7 +2265,7 @@ function revealonclick(card, note) {
                 'display': 'block'
             });
         } else {
-            $('.v-grave-non-extra').css({
+            $('.non-extra').css({
                 'display': 'block'
             });
         }
@@ -2312,7 +2312,7 @@ function revealonclick(card, note) {
         return;
     }
     if (manualActionReference.location === "REMOVED") {
-        $('.v-removed').css({
+        $('.v-removed').not('.non-extra').css({
             'display': 'block'
         });
         if (pendulumMap[dbEntry.type]) {
@@ -2354,7 +2354,7 @@ function revealonclick(card, note) {
                 'display': 'block'
             });
         } else {
-            $('.v-removed-non-extra').css({
+            $('.non-extra').css({
                 'display': 'block'
             });
         }
@@ -2691,7 +2691,7 @@ function guicardonclick() {
             return;
         }
         if (stackunit.location === 'MONSTERZONE') {
-            $('.m-monster, .m-field').not('.non-link').css({
+            $('.m-monster, .m-field').not('.non-link, .non-extra').css({
                 'display': 'block'
             });
             if ($("#phaseindicator").attr('data-currentphase') === '3') {
@@ -2705,7 +2705,7 @@ function guicardonclick() {
                 });
             }
             if (!(cardIs('fusion', dbEntry) || cardIs('synchro', dbEntry) || cardIs('xyz', dbEntry) || cardIs('link', dbEntry))) {
-                $('.m-field-non-extra').css({
+                $('.non-extra').css({
                     'display': 'block'
                 });
             }
@@ -2745,7 +2745,7 @@ function guicardonclick() {
             return;
         }
         if (stackunit.location === 'SPELLZONE') {
-            $('.m-st, .m-field').css({
+            $('.m-st, .m-field').not('.non-extra').css({
                 'display': 'block'
             });
             if (dbEntry.id === 62966332) {
@@ -2764,7 +2764,7 @@ function guicardonclick() {
                 });
             }
             if (!(cardIs('fusion', dbEntry) || cardIs('synchro', dbEntry) || cardIs('xyz', dbEntry) || cardIs('link', dbEntry))) {
-                $('.m-field-non-extra').css({
+                $('.non-extra').css({
                     'display': 'block'
                 });
             }
