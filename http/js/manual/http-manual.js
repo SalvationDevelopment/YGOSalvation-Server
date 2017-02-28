@@ -1675,11 +1675,11 @@ function manualToFaceDownDefence() {
     manualServer.send(JSON.stringify(message));
 }
 
-function manualSetMonsterFaceUp() {
+function manualSetMonsterFaceUp(index) {
     'use strict';
 
-    var index = automaticZonePicker(manualActionReference.player, 'MONSTERZONE'),
-        end = defenceMonster(manualActionReference, index),
+    index = (index !== undefined) ? index : manualActionReference.index;
+    var end = defenceMonster(manualActionReference, index),
         message = makeCardMovement(manualActionReference, end);
 
     message.action = 'moveCard';
