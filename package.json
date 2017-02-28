@@ -15,6 +15,7 @@
     "url": "https://github.com/salvationdevelopment/YGOPro-Salvation-Server.git"
   },
   "dependencies": {
+    "chai": "^3.5.0",
     "colors": "*",
     "compression": "*",
     "debug": "*",
