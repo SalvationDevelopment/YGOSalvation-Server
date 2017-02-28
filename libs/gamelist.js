@@ -734,6 +734,7 @@ function onData(data, socket) {
                 clientEvent: 'deckSaved',
                 error: error
             });
+            deckStorage.persistence.compactDatafile();
         });
 
         break;
