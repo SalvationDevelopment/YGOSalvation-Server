@@ -725,7 +725,7 @@ function init(callback) {
      * Reveal the players removed zone.
      * @param {number} player 
      */
-    function viewBanished(player, username, requester) {
+    function viewBanished(requester, username, player) {
         if (player === requester) {
             state.duelistChat.push('<pre>' + username + ' is viewing their banished pile.</pre>');
         } else {
