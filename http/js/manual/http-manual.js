@@ -1017,7 +1017,7 @@ function manualReciver(message) {
         reveal(message.reveal, message.call);
         break;
     case 'removeCard':
-        $('#uid' + message.info.removed).css('display', 'none').attr('data-deletedToken', true);
+        $('#uid' + message.info.removed).css('display', 'none').attr('data-deletedToken', true).attr('class', '').attr('id','t'+message.info.removed);
         break;
     default:
         break;
