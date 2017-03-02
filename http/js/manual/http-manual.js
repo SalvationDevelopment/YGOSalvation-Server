@@ -1017,7 +1017,7 @@ function manualReciver(message) {
         reveal(message.reveal, message.call);
         break;
     case 'removeCard':
-        $('#uid' + message.info.removed).css('display', 'none').attr('data-deletedToken', true).attr('class', '').attr('id','t'+message.info.removed);
+        $('#uid' + message.info.removed).css('display', 'none').attr('data-deletedToken', true).attr('class', '').attr('id', 't' + message.info.removed);
         break;
     default:
         break;
@@ -2543,7 +2543,7 @@ function selectionzoneonclick(choice, zone) {
         if (zonetargetingmode === 'set') {
             manualSetSpell(choice);
         }
-         if (zonetargetingmode === 'token') {
+        if (zonetargetingmode === 'token') {
             manualToken(choice);
         }
         zonetargetingmode = false;
@@ -3133,5 +3133,7 @@ $('body').on('mousedown', function (ev) {
             'display': 'none'
         });
         attackmode = false;
+        targetmode = false;
+        overlaymode = false;
     }
 });
