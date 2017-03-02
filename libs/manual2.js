@@ -428,7 +428,7 @@ function responseHandler(socket, message) {
         stateSystem[activeduel].viewGrave(message.player, games[activeduel].player[socket.slot].name, socket.slot);
         break;
     case "viewBanished":
-        stateSystem[activeduel].viewBanished(socket.slot, games[activeduel].player[socket.slot].name, socket.slot);
+        stateSystem[activeduel].viewBanished(socket.slot, games[activeduel].player[socket.slot].name, message.player);
         break;
     case "viewXYZ":
         stateSystem[activeduel].viewXYZ(socket.slot, message.index, message.player);
