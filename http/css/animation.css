@@ -200,3 +200,5 @@ meter::-webkit-meter-optimum-value {
     text-align: center;
     top: 104%;
 }
+
+[data-deletedToken] {display: none !important}

@@ -80,16 +80,16 @@ var manualServer,
         8193: "Synchro",
         8225: "Synchro / Effect",
         12321: "Synchro / Tuner / Effect",
-		16401: "Token",
+        16401: "Token",
         2097185: "Flip / Effect",
-		2101281: "Flip / Tuner / Effect",
+        2101281: "Flip / Tuner / Effect",
         4194337: "Toon / Effect",
         8388609: "Xyz",
         8388641: "Xyz / Effect",
         16777233: "Pendulum",
         16777249: "Pendulum / Effect",
         16781345: "Pendulum / Tuner / Effect",
-		18874401: "Pendulum / Flip / Effect",
+        18874401: "Pendulum / Flip / Effect",
         25165857: "Xyz / Pendulum / Effect",
         33554433: "Link",
         33554465: "Link / Effect"
@@ -1017,7 +1017,7 @@ function manualReciver(message) {
         reveal(message.reveal, message.call);
         break;
     case 'removeCard':
-        $('#uid' + message.info.removed).css('display', 'none');
+        $('#uid' + message.info.removed).css('display', 'none').attr('data-deletedToken', true);
         break;
     default:
         break;
