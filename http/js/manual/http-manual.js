@@ -2543,6 +2543,9 @@ function selectionzoneonclick(choice, zone) {
         if (zonetargetingmode === 'set') {
             manualSetSpell(choice);
         }
+         if (zonetargetingmode === 'token') {
+            manualToken(choice);
+        }
         zonetargetingmode = false;
         return;
     }
@@ -2978,14 +2981,14 @@ $(document).mousemove(function (event) {
 
 var lastchat;
 
-function manualToken() {
+function manualToken(index) {
     'use strict';
     var card = {};
     card.player = orientSlot;
     card.location = 'MONSTERZONE';
     card.position = 'FaceUpDefence';
     card.id = parseInt($('#tokendropdown').val(), 10);
-    card.index = automaticZonePicker(orientSlot, 'MONSTERZONE');
+    card.index = index;
     card.action = 'makeToken';
     manualServer.send(JSON.stringify(card));
 }
