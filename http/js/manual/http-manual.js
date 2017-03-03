@@ -1016,10 +1016,10 @@ function manualReciver(message) {
         break;
     case "give":
         if (message.target.player !== orientSlot) {
+            manualActionReference = message.target;
             if (message.choice === 'HAND') {
-                manualMoveGeneric(0, 'HAND');
+                manualMoveGeneric($('.card.p' + orientSlot + '.HAND').length, 'HAND');
             } else {
-                manualActionReference = message.target;
                 startSpecialSummon('generic');
             }
         }
@@ -1815,7 +1815,7 @@ function manualToOpponent() {
     }));
 }
 
-function manualToOpponentHand() {
+function manualToOpponentsHand() {
     'use strict';
     manualServer.send(JSON.stringify({
         action: 'give',
