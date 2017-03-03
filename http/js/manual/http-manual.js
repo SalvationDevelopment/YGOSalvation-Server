@@ -921,6 +921,9 @@ function manualReciver(message) {
         $('.attackglow').removeClass('attackglow');
         $('.card.p' + orient(message.target.player) + '.' + message.target.location + '.i' + message.target.index).addClass('attackglow');
         break;
+    case "give":
+
+        break;
     case "attack":
         $('#attackanimation').remove();
         $('#automationduelfield').append('<img  id="attackanimation" class="card p' + orient(message.source.player) + ' ' + message.source.location + ' i' + message.source.index + '" src="img/textures/attack.png" data-orient="' + orient(message.source.player) + '" />');
@@ -1756,10 +1759,6 @@ function manualSTFlipUp() {
     manualServer.send(JSON.stringify(message));
 }
 
-
-
-
-
 function manualToExcavate() {
     'use strict';
     var index = $('#automationduelfield .p' + orient(manualActionReference.player) + '.EXCAVATED').length,
@@ -1785,18 +1784,11 @@ function manualToExtra() {
 
 function manualToOpponentsHand() {
     'use strict';
-    if (cardIs('fusion', manualActionReference) || cardIs('synchro', manualActionReference) || cardIs('xyz', manualActionReference) || cardIs('link', manualActionReference)) {
-        manualToExtra();
-        return;
-    }
-    var moveplayer = (manualActionReference.player) ? 0 : 1,
-        index = $('#automationduelfield .p' + orient(manualActionReference.player) + '.HAND').length,
-        end = makeHand(manualActionReference, index),
-        message = makeCardMovement(manualActionReference, end);
-
-    message.action = 'moveCard';
-    message.moveplayer = moveplayer;
-    manualServer.send(JSON.stringify(message));
+    manualServer.send(JSON.stringify({
+        action: 'give',
+        target: manualActionReference
+    }));
+    $('.card').removeClass('targetglow');
 }
 
 function manualToTopOfDeck() {
