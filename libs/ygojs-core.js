@@ -1136,6 +1136,7 @@ function init(callback) {
         revealDeck: revealDeck,
         revealExtra: revealExtra,
         revealExcavated: revealExcavated,
+        revealHand: revealHand,
         viewExcavated: viewExcavated,
         viewGrave: viewGrave,
         viewDeck: viewDeck,

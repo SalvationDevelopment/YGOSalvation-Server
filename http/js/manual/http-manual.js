@@ -866,6 +866,99 @@ function startGame(message) {
     internalLocal = 'duelscreen';
 }
 
+
+
+var zonetargetingmode;
+
+function startAttack() {
+    'use strict';
+    attackmode = true;
+    $('.card.p1').addClass('attackglow');
+}
+
+function startTarget() {
+    'use strict';
+    targetmode = true;
+    $('.card.p1, .card.p0').addClass('attackglow');
+}
+
+function startSpecialSummon(mode) {
+    'use strict';
+    zonetargetingmode = mode;
+    $('.cardselectionzone.p0.MONSTERZONE').addClass('attackglow card');
+    if (mode === 'generic') {
+        $('.cardselectionzone.p0.SPELLZONE').addClass('attackglow card');
+        $('.cardselectionzone.p0.SPELLZONE.i5').removeClass('attackglow card');
+        $('.cardselectionzone.p0.SPELLZONE.i6').removeClass('attackglow card');
+        $('.cardselectionzone.p0.SPELLZONE.i7').removeClass('attackglow card');
+    }
+}
+
+function startSpellTargeting(mode) {
+    'use strict';
+    zonetargetingmode = mode;
+    $('.cardselectionzone.p0.SPELLZONE').addClass('attackglow card');
+    $('.cardselectionzone.p0.SPELLZONE.i5').removeClass('attackglow card');
+    $('.cardselectionzone.p0.SPELLZONE.i6').removeClass('attackglow card');
+    $('.cardselectionzone.p0.SPELLZONE.i7').removeClass('attackglow card');
+
+}
+
+var overlaylist;
+
+function startXYZSummon(target) {
+    'use strict';
+    if ($('.card.p0.MONSTERZONE').length === 0) {
+        return;
+    }
+    overlaymode = true;
+    overlaylist = [manualActionReference];
+    $('.card.p0.MONSTERZONE').addClass('attackglow');
+}
+
+function makeCardMovement(start, end) {
+    'use strict';
+    if (end.position === undefined) {
+        end.position = start.position;
+    }
+    if (end.overlayindex === undefined) {
+        end.overlayindex = 0;
+    }
+    if (end.isBecomingCard === undefined) {
+        end.isBecomingCard = false;
+    }
+    if (end.index === undefined) {
+        end.index = start.index;
+    }
+    return {
+        code: start.code,
+        player: start.player,
+        clocation: start.location,
+        index: start.index,
+        moveplayer: end.player,
+        movelocation: end.location,
+        moveindex: end.index,
+        moveposition: end.position,
+        overlayindex: end.overlayindex,
+        isBecomingCard: end.isBecomingCard,
+        uid: start.uid
+    };
+}
+
+function manualMoveGeneric(index, zone) {
+    'use strict';
+    var end = JSON.parse(JSON.stringify(manualActionReference)),
+        message = makeCardMovement(manualActionReference, end);
+
+    message.moveindex = index;
+    message.moveplayer = orientSlot;
+    message.action = 'moveCard';
+    if (zone) {
+        message.movelocation = zone;
+    }
+    manualServer.send(JSON.stringify(message));
+}
+
 function manualReciver(message) {
     'use strict';
 
@@ -920,6 +1013,16 @@ function manualReciver(message) {
     case "target":
         $('.attackglow').removeClass('attackglow');
         $('.card.p' + orient(message.target.player) + '.' + message.target.location + '.i' + message.target.index).addClass('attackglow');
+        break;
+    case "give":
+        if (message.target.player !== orientSlot) {
+            manualActionReference = message.target;
+            if (message.choice === 'HAND') {
+                manualMoveGeneric($('.card.p' + orientSlot + '.HAND').length, 'HAND');
+            } else {
+                startSpecialSummon('generic');
+            }
+        }
         break;
     case "attack":
         $('#attackanimation').remove();
@@ -1334,54 +1437,6 @@ function manualRemoveCounter() {
 }
 
 
-var zonetargetingmode;
-
-function startAttack() {
-    'use strict';
-    attackmode = true;
-    $('.card.p1').addClass('attackglow');
-}
-
-function startTarget() {
-    'use strict';
-    targetmode = true;
-    $('.card.p1, .card.p0').addClass('attackglow');
-}
-
-function startSpecialSummon(mode) {
-    'use strict';
-    zonetargetingmode = mode;
-    $('.cardselectionzone.p0.MONSTERZONE').addClass('attackglow card');
-    if (mode === 'generic') {
-        $('.cardselectionzone.p0.SPELLZONE').addClass('attackglow card');
-        $('.cardselectionzone.p0.SPELLZONE.i5').removeClass('attackglow card');
-        $('.cardselectionzone.p0.SPELLZONE.i6').removeClass('attackglow card');
-        $('.cardselectionzone.p0.SPELLZONE.i7').removeClass('attackglow card');
-    }
-}
-
-function startSpellTargeting(mode) {
-    'use strict';
-    zonetargetingmode = mode;
-    $('.cardselectionzone.p0.SPELLZONE').addClass('attackglow card');
-    $('.cardselectionzone.p0.SPELLZONE.i5').removeClass('attackglow card');
-    $('.cardselectionzone.p0.SPELLZONE.i6').removeClass('attackglow card');
-    $('.cardselectionzone.p0.SPELLZONE.i7').removeClass('attackglow card');
-
-}
-
-var overlaylist;
-
-function startXYZSummon(target) {
-    'use strict';
-    if ($('.card.p0.MONSTERZONE').length === 0) {
-        return;
-    }
-    overlaymode = true;
-    overlaylist = [manualActionReference];
-    $('.card.p0.MONSTERZONE').addClass('attackglow');
-}
-
 function manualAttack() {
     'use strict';
     manualServer.send(JSON.stringify({
@@ -1585,34 +1640,7 @@ function makePendulumZoneR(card) {
     return makeSpell(card, 4);
 }
 
-function makeCardMovement(start, end) {
-    'use strict';
-    if (end.position === undefined) {
-        end.position = start.position;
-    }
-    if (end.overlayindex === undefined) {
-        end.overlayindex = 0;
-    }
-    if (end.isBecomingCard === undefined) {
-        end.isBecomingCard = false;
-    }
-    if (end.index === undefined) {
-        end.index = start.index;
-    }
-    return {
-        code: start.code,
-        player: start.player,
-        clocation: start.location,
-        index: start.index,
-        moveplayer: end.player,
-        movelocation: end.location,
-        moveindex: end.index,
-        moveposition: end.position,
-        overlayindex: end.overlayindex,
-        isBecomingCard: end.isBecomingCard,
-        uid: start.uid
-    };
-}
+
 
 
 function manualNormalSummon(index) {
@@ -1756,10 +1784,6 @@ function manualSTFlipUp() {
     manualServer.send(JSON.stringify(message));
 }
 
-
-
-
-
 function manualToExcavate() {
     'use strict';
     var index = $('#automationduelfield .p' + orient(manualActionReference.player) + '.EXCAVATED').length,
@@ -1783,20 +1807,21 @@ function manualToExtra() {
     manualServer.send(JSON.stringify(message));
 }
 
+function manualToOpponent() {
+    'use strict';
+    manualServer.send(JSON.stringify({
+        action: 'give',
+        target: manualActionReference
+    }));
+}
+
 function manualToOpponentsHand() {
     'use strict';
-    if (cardIs('fusion', manualActionReference) || cardIs('synchro', manualActionReference) || cardIs('xyz', manualActionReference) || cardIs('link', manualActionReference)) {
-        manualToExtra();
-        return;
-    }
-    var moveplayer = (manualActionReference.player) ? 0 : 1,
-        index = $('#automationduelfield .p' + orient(manualActionReference.player) + '.HAND').length,
-        end = makeHand(manualActionReference, index),
-        message = makeCardMovement(manualActionReference, end);
-
-    message.action = 'moveCard';
-    message.moveplayer = moveplayer;
-    manualServer.send(JSON.stringify(message));
+    manualServer.send(JSON.stringify({
+        action: 'give',
+        target: manualActionReference,
+        choice: 'HAND'
+    }));
 }
 
 function manualToTopOfDeck() {
@@ -1849,18 +1874,6 @@ function manualSlideRight() {
     manualServer.send(JSON.stringify(message));
 }
 
-function manualMoveGeneric(index, zone) {
-    'use strict';
-    var end = JSON.parse(JSON.stringify(manualActionReference)),
-        message = makeCardMovement(manualActionReference, end);
-
-    message.moveindex = index;
-    message.action = 'moveCard';
-    if (zone) {
-        message.movelocation = zone;
-    }
-    manualServer.send(JSON.stringify(message));
-}
 
 function manualSlideLeft() {
     'use strict';
@@ -2049,6 +2062,14 @@ function manualRevealHandSingle() {
     }));
 }
 
+function manualRevealHand() {
+    'use strict';
+    manualServer.send(JSON.stringify({
+        action: 'revealHand',
+        card: manualActionReference
+    }));
+}
+
 function manualRevealExtraDeckRandom() {
     'use strict';
 
@@ -2073,6 +2094,17 @@ function manualRevealExcavatedRandom() {
     }));
 }
 
+function manualRevealDeckRandom() {
+    'use strict';
+
+    var card = manualActionReference;
+    card.index = Math.floor((Math.random() * $('#automationduelfield .p' + orient(manualActionReference.player) + '.DECK').length));
+
+    manualServer.send(JSON.stringify({
+        action: 'reveal',
+        card: card
+    }));
+}
 
 var currentMousePos = {
     x: -1,
@@ -2508,6 +2540,18 @@ function checksetcode(obj, sc) {
     } else {
         return false;
     }
+}
+
+function manualToken(index) {
+    'use strict';
+    var card = {};
+    card.player = orientSlot;
+    card.location = 'MONSTERZONE';
+    card.position = 'FaceUpDefence';
+    card.id = parseInt($('#tokendropdown').val(), 10);
+    card.index = index;
+    card.action = 'makeToken';
+    manualServer.send(JSON.stringify(card));
 }
 
 function selectionzoneonclick(choice, zone) {
@@ -2981,17 +3025,7 @@ $(document).mousemove(function (event) {
 
 var lastchat;
 
-function manualToken(index) {
-    'use strict';
-    var card = {};
-    card.player = orientSlot;
-    card.location = 'MONSTERZONE';
-    card.position = 'FaceUpDefence';
-    card.id = parseInt($('#tokendropdown').val(), 10);
-    card.index = index;
-    card.action = 'makeToken';
-    manualServer.send(JSON.stringify(card));
-}
+
 
 function manualRoll() {
     'use strict';
