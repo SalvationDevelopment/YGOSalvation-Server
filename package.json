@@ -7,8 +7,7 @@
   "keywords": [
     "ygopro",
     "Salvation Development",
-    "yugioh",
-    "irc"
+    "yugioh"
   ],
   "repository": {
     "type": "git",
@@ -31,7 +30,7 @@
     "nedb": "^1.7.2",
     "node-php": "*",
     "policyfile": "*",
-    "primus": "*",
+    "primus": "4.0.4",
     "primus-rooms": "*",
     "ps-node": "*",
     "request": "^2.58.0",
