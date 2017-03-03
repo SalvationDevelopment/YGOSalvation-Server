@@ -916,6 +916,49 @@ function startXYZSummon(target) {
     $('.card.p0.MONSTERZONE').addClass('attackglow');
 }
 
+function makeCardMovement(start, end) {
+    'use strict';
+    if (end.position === undefined) {
+        end.position = start.position;
+    }
+    if (end.overlayindex === undefined) {
+        end.overlayindex = 0;
+    }
+    if (end.isBecomingCard === undefined) {
+        end.isBecomingCard = false;
+    }
+    if (end.index === undefined) {
+        end.index = start.index;
+    }
+    return {
+        code: start.code,
+        player: start.player,
+        clocation: start.location,
+        index: start.index,
+        moveplayer: end.player,
+        movelocation: end.location,
+        moveindex: end.index,
+        moveposition: end.position,
+        overlayindex: end.overlayindex,
+        isBecomingCard: end.isBecomingCard,
+        uid: start.uid
+    };
+}
+
+function manualMoveGeneric(index, zone) {
+    'use strict';
+    var end = JSON.parse(JSON.stringify(manualActionReference)),
+        message = makeCardMovement(manualActionReference, end);
+
+    message.moveindex = index;
+    message.moveplayer = orientSlot;
+    message.action = 'moveCard';
+    if (zone) {
+        message.movelocation = zone;
+    }
+    manualServer.send(JSON.stringify(message));
+}
+
 function manualReciver(message) {
     'use strict';
 
@@ -973,7 +1016,12 @@ function manualReciver(message) {
         break;
     case "give":
         if (message.target.player !== orientSlot) {
-            startSpecialSummon('generic');
+            if (message.choice === 'HAND') {
+                manualMoveGeneric(0, 'HAND');
+            } else {
+                manualActionReference = message.target;
+                startSpecialSummon('generic');
+            }
         }
         break;
     case "attack":
@@ -1592,34 +1640,7 @@ function makePendulumZoneR(card) {
     return makeSpell(card, 4);
 }
 
-function makeCardMovement(start, end) {
-    'use strict';
-    if (end.position === undefined) {
-        end.position = start.position;
-    }
-    if (end.overlayindex === undefined) {
-        end.overlayindex = 0;
-    }
-    if (end.isBecomingCard === undefined) {
-        end.isBecomingCard = false;
-    }
-    if (end.index === undefined) {
-        end.index = start.index;
-    }
-    return {
-        code: start.code,
-        player: start.player,
-        clocation: start.location,
-        index: start.index,
-        moveplayer: end.player,
-        movelocation: end.location,
-        moveindex: end.index,
-        moveposition: end.position,
-        overlayindex: end.overlayindex,
-        isBecomingCard: end.isBecomingCard,
-        uid: start.uid
-    };
-}
+
 
 
 function manualNormalSummon(index) {
@@ -1786,13 +1807,21 @@ function manualToExtra() {
     manualServer.send(JSON.stringify(message));
 }
 
-function manualToOpponentsHand() {
+function manualToOpponent() {
     'use strict';
     manualServer.send(JSON.stringify({
         action: 'give',
         target: manualActionReference
     }));
-    $('.card').removeClass('targetglow');
+}
+
+function manualToOpponentHand() {
+    'use strict';
+    manualServer.send(JSON.stringify({
+        action: 'give',
+        target: manualActionReference,
+        choice: 'HAND'
+    }));
 }
 
 function manualToTopOfDeck() {
@@ -1845,19 +1874,6 @@ function manualSlideRight() {
     manualServer.send(JSON.stringify(message));
 }
 
-function manualMoveGeneric(index, zone) {
-    'use strict';
-    var end = JSON.parse(JSON.stringify(manualActionReference)),
-        message = makeCardMovement(manualActionReference, end);
-
-    message.moveindex = index;
-    message.moveplayer = orientSlot;
-    message.action = 'moveCard';
-    if (zone) {
-        message.movelocation = zone;
-    }
-    manualServer.send(JSON.stringify(message));
-}
 
 function manualSlideLeft() {
     'use strict';
