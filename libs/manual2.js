@@ -530,11 +530,12 @@ function responseHandler(socket, message) {
             });
         }
         break;
-	case "give":
+    case "give":
         if (socket.slot !== undefined) {
             duelBroadcast(activeduel, {
                 action: 'give',
-                target: message.target
+                target: message.target,
+                choice: message.choice
             });
         }
     default:
