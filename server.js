@@ -31,81 +31,17 @@ var dependencies = require('./package.json').dependencies,
     modules,
     safe = true,
     moduleIsAvaliable = true;
-if (os.platform() === 'win32') {
-    for (modules in dependencies) {
-        if (dependencies.hasOwnProperty(modules)) {
-            moduleIsAvaliable = fs.existsSync('./node_modules/' + modules);
-            if (!moduleIsAvaliable) {
-                safe = false;
-                console.log('Missing module', modules);
-            }
-        }
-    }
-}
-if (!safe) {
-    console.log('Installing missing modules...');
-    processManager.execSync('npm install', {
-        cwd: './'
-    });
-}
 
-var extended_fs = require('extended-fs'),
-    colors = require('colors'), // oo pretty colors!
+
+var colors = require('colors'), // oo pretty colors!
     request = require('request'), //talking HTTP here
     needHTTPMicroService = false, //if there is an HTTPD then dont do anything.
     net = require('net'); // ping!;;
 
-function vgetMSBuildPath(framework) {
-    framework = framework || '4.0';
-    if (os.platform() === 'linux') {
-        return "xbuild";
-    }
-
-    var toolsVersion = {
-            '2.0': '2.0.50727', // can only target 2.0
-            '3.0': '3.0',
-            '3.5': '3.5',
-            '4.0': '4.0.30319', // can target 2.0, 3.0, 3.5 and 4
-            '4.5': '4.0.30319'
-        },
-        windir = process.env.WINDIR,
-        frameworkprocessorDirectory = process.arch ? 'framework64' : 'framework',
-        frameworkDirectory = 'v' + toolsVersion[framework];
-    return (windir + '\\Microsoft.NET\\' + frameworkprocessorDirectory + '\\' + frameworkDirectory + '\\msbuild.exe').toLowerCase();
-}
 
 
-function makeygosharp(callback) {
 
-    var buildpath = vgetMSBuildPath(),
-        solution = ' "' + path.resolve('./ygosharp/source/YGOSharp.sln') + '" ',
-        parameters = '/p:Configuration=Release /p:Platform="Any CPU" /t:Clean,Build',
-        buildString = buildpath + solution + parameters,
-        ygocoreBuilder = processManager.exec(buildString, function () {
-            if (os.platform() === 'win32') {
-                var binaries = fs.readdirSync('./ygosharp/source/YGOSharp/bin/Release/'),
-                    i;
-                try {
-                    for (i = 0; binaries.length > i; i++) {
-                        extended_fs.copyFileSync('./ygosharp/source/YGOSharp/bin/Release/' + binaries[i], './ygosharp/' + binaries[i]);
-                    }
-                    callback();
-                } catch (error) {
-                    console.log('Could not put the files in place!');
-                }
 
-            } else {
-                callback();
-            }
-        });
-
-    ygocoreBuilder.stdout.on('data', function (data) {
-        console.log(data);
-    });
-    ygocoreBuilder.stdout.on('error', function (error) {
-        console.log(error);
-    });
-}
 
 //var ygopro_core = processManager.exec('./premake4 vs2012', {
 //    cwd: path.resolve('../../ygopro-core')
@@ -239,55 +175,9 @@ function main() {
 }
 
 
-function checkDependencies() {
-    var servercoreIsInPlace = true,
-        ocgcoreIsInPlace = false;
-
-
-    if (os.platform() === 'win32') {
-        if (!fs.existsSync('./ygosharp/YGOSharp.exe')) {
-            console.log('/ygosharp/YGOServer.exe is missing!');
-            servercoreIsInPlace = false;
-        }
-        if (!fs.existsSync('./ygosharp/OcgWrapper.dll')) {
-            console.log('/ygosharp/OcgWrapper.dll is missing!');
-            servercoreIsInPlace = false;
-        }
-        if (!fs.existsSync('./ygosharp/Mono.Data.Sqlite.dll')) {
-            console.log('/ygosharp/Mono.Data.Sqlite.dll!');
-            servercoreIsInPlace = false;
-        }
-        if (!fs.existsSync('./ygosharp/sqlite3.dll')) {
-            console.log('/ygosharp/sqlite3.dll!');
-            servercoreIsInPlace = false;
-        }
-        if (!fs.existsSync('./ygosharp/SevenZip.dll')) {
-            console.log('/ygosharp/SevenZip.dll!');
-            servercoreIsInPlace = false;
-        }
-        if (!fs.existsSync('./ygosharp/YGOSharp.Network.dll')) {
-            console.log('/ygosharp/YGOSharp.Network.dll!');
-            servercoreIsInPlace = false;
-        }
-        if (!fs.existsSync('./ygosharp/ocgcore.dll')) {
-            try {
-                extended_fs.copyFileSync('./ocgcore/bin/release/ocgcore.dll', './ygosharp/ocgcore.dll');
-            } catch (error) {
-                console.log('/ygosharp/ocgcore.dll is missing please compile it!');
-            }
-        }
-        if (!servercoreIsInPlace) {
-            console.log('Attempting to compile missing binaries');
-            makeygosharp(main);
-        } else {
-            main();
-        }
-
-    }
-}
 
 
 
 // segfaultHandler = require('segfault-handler'); //http://imgs.xkcd.com/comics/compiler_complaint.png
 //https://www.npmjs.com/package/segfault-handler
-checkDependencies();
+main();
