@@ -866,6 +866,56 @@ function startGame(message) {
     internalLocal = 'duelscreen';
 }
 
+
+
+var zonetargetingmode;
+
+function startAttack() {
+    'use strict';
+    attackmode = true;
+    $('.card.p1').addClass('attackglow');
+}
+
+function startTarget() {
+    'use strict';
+    targetmode = true;
+    $('.card.p1, .card.p0').addClass('attackglow');
+}
+
+function startSpecialSummon(mode) {
+    'use strict';
+    zonetargetingmode = mode;
+    $('.cardselectionzone.p0.MONSTERZONE').addClass('attackglow card');
+    if (mode === 'generic') {
+        $('.cardselectionzone.p0.SPELLZONE').addClass('attackglow card');
+        $('.cardselectionzone.p0.SPELLZONE.i5').removeClass('attackglow card');
+        $('.cardselectionzone.p0.SPELLZONE.i6').removeClass('attackglow card');
+        $('.cardselectionzone.p0.SPELLZONE.i7').removeClass('attackglow card');
+    }
+}
+
+function startSpellTargeting(mode) {
+    'use strict';
+    zonetargetingmode = mode;
+    $('.cardselectionzone.p0.SPELLZONE').addClass('attackglow card');
+    $('.cardselectionzone.p0.SPELLZONE.i5').removeClass('attackglow card');
+    $('.cardselectionzone.p0.SPELLZONE.i6').removeClass('attackglow card');
+    $('.cardselectionzone.p0.SPELLZONE.i7').removeClass('attackglow card');
+
+}
+
+var overlaylist;
+
+function startXYZSummon(target) {
+    'use strict';
+    if ($('.card.p0.MONSTERZONE').length === 0) {
+        return;
+    }
+    overlaymode = true;
+    overlaylist = [manualActionReference];
+    $('.card.p0.MONSTERZONE').addClass('attackglow');
+}
+
 function manualReciver(message) {
     'use strict';
 
@@ -922,7 +972,9 @@ function manualReciver(message) {
         $('.card.p' + orient(message.target.player) + '.' + message.target.location + '.i' + message.target.index).addClass('attackglow');
         break;
     case "give":
-
+        if (message.target.player !== orientSlot) {
+            startSpecialSummon('generic');
+        }
         break;
     case "attack":
         $('#attackanimation').remove();
@@ -1336,54 +1388,6 @@ function manualRemoveCounter() {
     }));
 }
 
-
-var zonetargetingmode;
-
-function startAttack() {
-    'use strict';
-    attackmode = true;
-    $('.card.p1').addClass('attackglow');
-}
-
-function startTarget() {
-    'use strict';
-    targetmode = true;
-    $('.card.p1, .card.p0').addClass('attackglow');
-}
-
-function startSpecialSummon(mode) {
-    'use strict';
-    zonetargetingmode = mode;
-    $('.cardselectionzone.p0.MONSTERZONE').addClass('attackglow card');
-    if (mode === 'generic') {
-        $('.cardselectionzone.p0.SPELLZONE').addClass('attackglow card');
-        $('.cardselectionzone.p0.SPELLZONE.i5').removeClass('attackglow card');
-        $('.cardselectionzone.p0.SPELLZONE.i6').removeClass('attackglow card');
-        $('.cardselectionzone.p0.SPELLZONE.i7').removeClass('attackglow card');
-    }
-}
-
-function startSpellTargeting(mode) {
-    'use strict';
-    zonetargetingmode = mode;
-    $('.cardselectionzone.p0.SPELLZONE').addClass('attackglow card');
-    $('.cardselectionzone.p0.SPELLZONE.i5').removeClass('attackglow card');
-    $('.cardselectionzone.p0.SPELLZONE.i6').removeClass('attackglow card');
-    $('.cardselectionzone.p0.SPELLZONE.i7').removeClass('attackglow card');
-
-}
-
-var overlaylist;
-
-function startXYZSummon(target) {
-    'use strict';
-    if ($('.card.p0.MONSTERZONE').length === 0) {
-        return;
-    }
-    overlaymode = true;
-    overlaylist = [manualActionReference];
-    $('.card.p0.MONSTERZONE').addClass('attackglow');
-}
 
 function manualAttack() {
     'use strict';
@@ -1847,6 +1851,7 @@ function manualMoveGeneric(index, zone) {
         message = makeCardMovement(manualActionReference, end);
 
     message.moveindex = index;
+    message.moveplayer = orientSlot;
     message.action = 'moveCard';
     if (zone) {
         message.movelocation = zone;
@@ -2502,6 +2507,18 @@ function checksetcode(obj, sc) {
     }
 }
 
+function manualToken(index) {
+    'use strict';
+    var card = {};
+    card.player = orientSlot;
+    card.location = 'MONSTERZONE';
+    card.position = 'FaceUpDefence';
+    card.id = parseInt($('#tokendropdown').val(), 10);
+    card.index = index;
+    card.action = 'makeToken';
+    manualServer.send(JSON.stringify(card));
+}
+
 function selectionzoneonclick(choice, zone) {
     'use strict';
 
@@ -2973,17 +2990,7 @@ $(document).mousemove(function (event) {
 
 var lastchat;
 
-function manualToken(index) {
-    'use strict';
-    var card = {};
-    card.player = orientSlot;
-    card.location = 'MONSTERZONE';
-    card.position = 'FaceUpDefence';
-    card.id = parseInt($('#tokendropdown').val(), 10);
-    card.index = index;
-    card.action = 'makeToken';
-    manualServer.send(JSON.stringify(card));
-}
+
 
 function manualRoll() {
     'use strict';
