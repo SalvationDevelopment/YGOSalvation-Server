@@ -2062,6 +2062,14 @@ function manualRevealHandSingle() {
     }));
 }
 
+function manualRevealHand() {
+    'use strict';
+    manualServer.send(JSON.stringify({
+        action: 'revealHand',
+        card: manualActionReference
+    }));
+}
+
 function manualRevealExtraDeckRandom() {
     'use strict';
 
