@@ -2094,6 +2094,17 @@ function manualRevealExcavatedRandom() {
     }));
 }
 
+function manualRevealDeckRandom() {
+    'use strict';
+
+    var card = manualActionReference;
+    card.index = Math.floor((Math.random() * $('#automationduelfield .p' + orient(manualActionReference.player) + '.DECK').length));
+
+    manualServer.send(JSON.stringify({
+        action: 'reveal',
+        card: card
+    }));
+}
 
 var currentMousePos = {
     x: -1,
