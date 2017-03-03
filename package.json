@@ -18,7 +18,7 @@
     "colors": "*",
     "compression": "*",
     "debug": "*",
-    "electron-prebuilt": "*",
+    "electron": "*",
     "express": "*",
     "extended-fs": "^0.3.3",
     "fs-extended": "*",
