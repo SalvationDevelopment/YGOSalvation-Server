@@ -258,28 +258,6 @@ function init(callback) {
     function findUIDCollection(uid) {
         return filterUID(stack, uid);
     }
-    /**
-     * Returns the number of cards in each zone.
-     * @param   {Number} player index
-     * @returns {object}   information on number of slots on each zone.
-     */
-    function cardCollections(player) {
-        /*The YGOPro messages have a design flaw in them where they dont tell the number of cards
-          that you have to itterate over in order to get a proper message, this function resolves that problem,
-          this flaw has caused me all types of grief.
-        */
-
-        return {
-            DECK: filterlocation(filterPlayer(stack, player), 'DECK').length,
-            HAND: filterlocation(filterPlayer(stack, player), 'HAND').length,
-            EXTRA: filterOverlyIndex(filterlocation(filterPlayer(stack, player), 'EXTRA'), 0).length,
-            GRAVE: filterlocation(filterPlayer(stack, player), 'GRAVE').length,
-            REMOVED: filterlocation(filterPlayer(stack, player), 'REMOVED').length,
-            EXCAVATED: filterlocation(filterPlayer(stack, player), 'EXCAVATED').length,
-            SPELLZONE: 8,
-            MONSTERZONE: 5
-        };
-    }
 
     /**
      * Generate the view for a specific given player
@@ -728,13 +706,15 @@ function init(callback) {
         } else {
             state.duelistChat.push('<pre>' + username + ' is viewing your banished pile.</pre>');
         }
-        var deck = filterlocation(filterPlayer(stack, player), 'REMOVED'),
+        var deck = filterlocation(filterPlayer(stack, player), 'REMOVED').reverse(), // its face up so its reversed.
             result = {
                 0: {},
                 1: {},
                 sepectators: {}
             };
-
+        if (requester !== player) {
+            deck = hideViewOfZone(deck);
+        }
         result[requester] = {
             action: 'reveal',
             info: state,
@@ -1121,7 +1101,6 @@ function init(callback) {
         startSide: startSide,
         startDuel: startDuel,
         setState: setState,
-        cardCollections: cardCollections,
         drawCard: drawCard,
         excavateCard: excavateCard,
         flipDeck: flipDeck,
