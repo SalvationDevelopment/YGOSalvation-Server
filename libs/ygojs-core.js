@@ -106,7 +106,7 @@ function filterUID(stack, uid) {
  * @returns {boolean} 
  */
 function sortByIndex(first, second) {
-    return first.index > second.index;
+    return first.index - second.index;
 }
 
 
@@ -407,19 +407,16 @@ function init(callback) {
             });
         }
 
+        zone.sort(sortByIndex);
+
         zone.forEach(function (card, index) {
             pointer = uidLookup(card.uid);
             stack[pointer].index = index;
         });
 
-
-        stack.sort(function (primary, b) {
-            return primary.index - b.index;
-        });
-
-
-
+        stack.sort(sortByIndex);
     }
+
     //finds a card, then moves it elsewhere.
     function setState(player, clocation, index, moveplayer, movelocation, moveindex, moveposition, overlayindex, uid) {
         console.log('set:', player, clocation, index, moveplayer, movelocation, moveindex, moveposition, overlayindex, uid);
