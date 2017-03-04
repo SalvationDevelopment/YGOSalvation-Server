@@ -766,7 +766,7 @@ function reveal(cards, note) {
     revealcache = [];
     $('#revealedclose').css('display', 'block');
     $('#revealed').css('display', 'flex');
-    if (cards.length > 5) {
+    if (cards.length > 4) {
         html += "<div id='subreveal'>";
         $('#revealed').css('display', 'block');
     }
@@ -774,9 +774,9 @@ function reveal(cards, note) {
         var hardcard = JSON.stringify(card),
             src = (card.id) ? 'https://rawgit.com/SalvationDevelopment/YGOPro-Images/master/' + card.id + '.jpg' : 'img/textures/cover.jpg';
         revealcache.push(card);
-        html += '<img id="revealuid' + card.uid + '" class="revealedcard" src="' + src + '" data-id="' + card.id + '" onclick = "revealonclick(' + index + ', \'' + note + '\')" data-uid="' + card.uid + '" / > ';
+        html += '<img id="revealuid' + card.uid + '" class="revealedcard" src="' + src + '" data-id="' + card.id + '" onclick = "revealonclick(' + index + ', \'' + note + '\')" data-uid="' + card.uid + '" data-position="' + card.position + '" / > ';
     });
-    if (cards.length > 5) {
+    if (cards.length > 4) {
         html += "</div>";
     }
     $('#revealed').html(html);
