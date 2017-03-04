@@ -144,14 +144,14 @@ var translationDB = [{
     "he": "פוֹרוּם"
 }, {
     "item": "data-translation-chat",
-    "en": "Chat",
-    "es": "Chat",
-    "de": "Chat",
-    "fr": "Chat",
-    "fr-ca": "Chat",
-    "pt": "Chat",
-    "nl": "Chat",
-    "it": "Chat",
+    "en": "Discord",
+    "es": "Discord",
+    "de": "Discord",
+    "fr": "Discord",
+    "fr-ca": "Discord",
+    "pt": "Discord",
+    "nl": "Discord",
+    "it": "Discord",
     "tr": "Sohbet",
     "el": "Συνομιλια",
     "zh": "聊天",
@@ -159,7 +159,7 @@ var translationDB = [{
     "jp": "チャット",
     "fa": "چت",
     "ar": "دردشة",
-    "he": "IRC חדר"
+    "he": "Discord חדר"
 }, {
     "item": "data-translation-faq",
     "en": "News",
