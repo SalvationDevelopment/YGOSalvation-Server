@@ -203,13 +203,12 @@ meter::-webkit-meter-optimum-value {
 
 [data-deletedToken] {display: none !important}
 
-.revealedcard[data-position="FaceDown"],
-.revealedcard[data-position="FaceDownAttack"],
-.revealedcard[data-position="FaceDownDefence"] {
+.revealedcard[data-position="FaceDownREMOVED"],
+.revealedcard[data-position="FaceDownAttackREMOVED"],
+.revealedcard[data-position="FaceDownDefenceREMOVED"] {
      content:url(http://ygopro.us/img/textures/cover.jpg) }
 }
 
 .revealedcard:hover {
-    content: initial;
-    filter: grayscale();
+    content: initial !important;
 }
