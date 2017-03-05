@@ -35,15 +35,16 @@ var banlist = banListUpdater();
  * Create a new game object.
  * @returns {object} customized game object
  */
-function newGame() {
+function newGame(settings) {
     return {
+        roompass: settings.roompass,
         started: false,
         deckcheck: 0,
         draw_count: 0,
         lflist: 0,
-        mode: 1,
+        mode: settings.mode,
         noshuffle: 0,
-        prio: 0,
+        prio: settings.prio,
         rule: 0,
         startlp: 0,
         starthand: 0,
@@ -227,7 +228,7 @@ function responseHandler(socket, message) {
         break;
     case "host":
         generated = randomString(12);
-        games[generated] = newGame();
+        games[generated] = newGame(message);
         log[generated] = [];
         stateSystem[generated] = stateSystem(socketBinding(generated));
         games[generated].player[0].name = message.name;
