@@ -184,7 +184,7 @@ function getAvatar(name) {
         return;
     }
     $.getJSON('//forum.ygopro.us/avatar.php?username=' + name, function processAvatar(avatarUnit) {
-        avatarMap[name] = 'http://forum.ygopro.us/uploads/' + avatarUnit.url;
+        avatarMap[name] = '//forum.ygopro.us/uploads/' + avatarUnit.url;
     });
 }
 
