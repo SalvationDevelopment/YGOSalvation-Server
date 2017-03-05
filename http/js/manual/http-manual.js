@@ -301,7 +301,7 @@ function makeGames() {
             players = player1 + ' vs ' + player2,
             started = (game.started) ? 'started' : '',
             action = (game.started) ? '' : 'onclick = "manualJoin(\'' + gameName + '\')"',
-            string = '<div class="manualgame ' + started + '" ' + action + '>' + players + '</div>';
+            string = '<div data-game="' + game.roompass + '" class="game ' + started + '" ' + action + ' ' + game.roompass + '>' + players + '</div>';
         $('#manualgamelistitems').append(string);
     });
 }
@@ -774,7 +774,7 @@ function reveal(cards, note) {
         var hardcard = JSON.stringify(card),
             src = (card.id) ? 'https://rawgit.com/SalvationDevelopment/YGOPro-Images/master/' + card.id + '.jpg' : 'img/textures/cover.jpg';
         revealcache.push(card);
-        html += '<img id="revealuid' + card.uid + '" class="revealedcard" src="' + src + '" data-id="' + card.id + '" onclick = "revealonclick(' + index + ', \'' + note + '\')" data-uid="' + card.uid + '" data-position="' + card.position + card.location+'" / > ';
+        html += '<img id="revealuid' + card.uid + '" class="revealedcard" src="' + src + '" data-id="' + card.id + '" onclick = "revealonclick(' + index + ', \'' + note + '\')" data-uid="' + card.uid + '" data-position="' + card.position + card.location + '" / > ';
     });
     if (cards.length > 4) {
         html += "</div>";
@@ -1163,25 +1163,11 @@ function serverconnect() {
 
 function manualHost(info) {
     'use strict';
-    console.log(info);
-    var isChromium = window.chrome,
-        winNav = window.navigator,
-        vendorName = winNav.vendor,
-        isOpera = winNav.userAgent.indexOf("OPR") > -1,
-        isIEedge = winNav.userAgent.indexOf("Edge") > -1,
-        isIOSChrome = winNav.userAgent.match("CriOS");
-
-    //    if (isIOSChrome) {
-    //        console.log();
-    //    } else if (isChromium !== null && isChromium !== undefined && vendorName === "Google Inc." && isOpera === false && isIEedge === false) {
-    //        console.log();
-    //    } else {
-    //        alert('This site only works with Google Chrome');
-    //        return;
-    //    }
     manualServer.send(JSON.stringify({
         action: 'host',
-        name: localStorage.nickname
+        name: localStorage.nickname,
+        info: getManualDuelRequest(),
+        roompass: localStorage.roompass
     }));
 }
 

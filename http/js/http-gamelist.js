@@ -265,8 +265,30 @@ function getDuelRequest() {
 
     out.prio = ($('#creategamebanlist').val() === "4") ? "T" : out.prio;
     out.prio = ($('#creategamebanlist').val() === "5") ? "T" : out.prio;
-    out.string[0] = ($('#creategamebanlist').val() === "3") ? "1" : out.string[0];
+    if ($('#creategamebanlist').val() === "3") {
+        out.string[0] = "1"
+    }
 
+    return out;
+}
+
+function getManualDuelRequest() {
+    'use strict';
+    var pretypecheck = '',
+        out,
+        stnds = isChecked('#usepass'),
+        randneed = 16;
+    out = {
+        cardpool: $('#creategamecardpool option:selected').text(),
+        mode: $('#creategameduelmode option:selected').text(),
+        timelimit: $('#creategametimelimit').val(),
+        prio: isChecked('#enableprio'),
+        checkd: isChecked('#discheckdeck'),
+        shuf: isChecked('#disshuffledeck'),
+        pass: isChecked('#usepass') ? setpass() : randomString(randneed)
+
+    };
+    out.prio = ($('#creategamebanlist').val() === "5") ? true : out.prio;
     return out;
 }
 
@@ -285,10 +307,7 @@ function secure(prio, checkd, shuf) {
 
 function setHostSettings() {
     'use strict';
-    if (isChecked('#Manual') || !launcher) {
-        manualHost();
-        return;
-    }
+
     if (isChecked('#useai')) {
         primus.write({
             action: 'register',
@@ -308,12 +327,19 @@ function setHostSettings() {
             return;
         }
     }
+
     var duelRequest = getDuelRequest();
+
     localStorage.roompass =
         (duelRequest.string + duelRequest.prio +
             duelRequest.checkd + duelRequest.shuf +
             $('#creategamelp').val() + duelRequest.stnds +
             duelRequest.pass).substring(0, 24);
+
+    if (isChecked('#Manual') || !launcher) {
+        manualHost(duelRequest);
+        return;
+    }
 
     localStorage.lastip = '192.99.11.19';
     localStorage.serverport = '8911';
