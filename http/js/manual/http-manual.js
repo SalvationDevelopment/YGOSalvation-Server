@@ -8,7 +8,7 @@ var sound = {};
 
 var internalLocal = internalLocal;
 
-var livingIn2017 = true;
+var legacyMode = true;
 (function () {
     'use strict';
     sound.play = function (targetID) {
@@ -19,21 +19,25 @@ var livingIn2017 = true;
 
 function penR() {
     'use strict';
-    return (livingIn2017) ? 7 : 4;
+    return (legacyMode) ? 7 : 4;
 }
 
 function penL() {
     'use strict';
-    return (livingIn2017) ? 6 : 0;
+    return (legacyMode) ? 6 : 0;
 }
 
 function setMidSchool(set) {
     'use strict';
-    livingIn2017 = Boolean(set);
-    console.log('setting living as', livingIn2017)
-    if (livingIn2017) {
+    legacyMode = Boolean(set);
+    console.log('setting living as', legacyMode)
+    if (legacyMode) {
+        $('.field').removeClass('newfield');
         $('.fieldimage').css('background-image', "url(../img/textures/field.png)");
     } else {
+        if (!$('.field').eq(0).hasClass('newfield')) {
+            $('.field').addClass('newfield');
+        }
         $('.fieldimage').css('background-image', "url(../img/textures/newfield.png)");
 
     }
@@ -91,7 +95,7 @@ var manualServer,
         16777233: "Pendulum",
         16777249: "Pendulum / Effect",
         16781345: "Pendulum / Tuner / Effect",
-		16785441: "Synchro / Pendulum / Effect",
+        16785441: "Synchro / Pendulum / Effect",
         18874401: "Pendulum / Flip / Effect",
         25165857: "Xyz / Pendulum / Effect",
         33554433: "Link",
@@ -890,11 +894,18 @@ function startSpecialSummon(mode) {
     'use strict';
     zonetargetingmode = mode;
     $('.cardselectionzone.p0.MONSTERZONE').addClass('attackglow card');
+    if (legacyMode) {
+        $('.cardselectionzone.p0.MONSTERZONE.i5').removeClass('attackglow card');
+        $('.cardselectionzone.p0.MONSTERZONE.i6').removeClass('attackglow card');
+    }
     if (mode === 'generic') {
         $('.cardselectionzone.p0.SPELLZONE').addClass('attackglow card');
+        if (!legacyMode) {
+            $('.cardselectionzone.p0.SPELLZONE.i6').removeClass('attackglow card');
+            $('.cardselectionzone.p0.SPELLZONE.i7').removeClass('attackglow card');
+        }
         $('.cardselectionzone.p0.SPELLZONE.i5').removeClass('attackglow card');
-        $('.cardselectionzone.p0.SPELLZONE.i6').removeClass('attackglow card');
-        $('.cardselectionzone.p0.SPELLZONE.i7').removeClass('attackglow card');
+
     }
 }
 
@@ -902,9 +913,11 @@ function startSpellTargeting(mode) {
     'use strict';
     zonetargetingmode = mode;
     $('.cardselectionzone.p0.SPELLZONE').addClass('attackglow card');
+    if (!legacyMode) {
+        $('.cardselectionzone.p0.SPELLZONE.i6').removeClass('attackglow card');
+        $('.cardselectionzone.p0.SPELLZONE.i7').removeClass('attackglow card');
+    }
     $('.cardselectionzone.p0.SPELLZONE.i5').removeClass('attackglow card');
-    $('.cardselectionzone.p0.SPELLZONE.i6').removeClass('attackglow card');
-    $('.cardselectionzone.p0.SPELLZONE.i7').removeClass('attackglow card');
 
 }
 
@@ -1857,7 +1870,7 @@ function manualSlideRight() {
         end = JSON.parse(JSON.stringify(manualActionReference)),
         message = makeCardMovement(manualActionReference, end);
 
-    if (index === (livingIn2017) ? 7 : 5) {
+    if (index === (legacyMode) ? 7 : 5) {
         index = 0;
     }
     message.moveindex = index;
@@ -1874,8 +1887,8 @@ function manualSlideLeft() {
         message = makeCardMovement(manualActionReference, end);
 
     if (index === -1) {
-        index = (livingIn2017) ? 6 : 4;
-        index = (livingIn2017) ? 6 : 4;
+        index = (legacyMode) ? 6 : 4;
+        index = (legacyMode) ? 6 : 4;
     }
     message.moveindex = index;
     message.action = 'moveCard';
