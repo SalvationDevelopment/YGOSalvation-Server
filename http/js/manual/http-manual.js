@@ -125,7 +125,7 @@ var manualServer,
         2097152: "Divine-Beast",
         4194304: "Creator God",
         8388608: "Wyrm",
-        16777216: "Cybers"
+        16777216: "Cyverse"
     };
 
 function cardIs(cat, obj) {

@@ -660,7 +660,7 @@
                                 <option value="2097152">Divine-Beast</option>
                                 <option value="4194304">Creator God</option>
                                 <option value="8388608">Wyrm</option>
-                                <option value="16777216">Cybers</option>
+                                <option value="16777216">Cyverse</option>
                             </select>
                         </label>
                         <br />
@@ -1877,8 +1877,8 @@
             <button class="m-hand-st m-st" onclick="startSpellTargeting('activate')">Activate</button>
             <!--            <button class="v-st" onclick="manualActivate()">To S/T Zone</button>-->
             <!-- disabling st from deck atm. needed for metaphos-->
-            <button class="m-field non-extra v-removed v-extra-p v-excavate" onclick="manualToHand();">To Hand</button>
-            <button class="v-deck  v-grave v-removed  v-excavate" onclick="manualToHand(); manualRevealHandSingle(); v-excavate">Reveal and Add to Hand</button>
+            <button class="m-field" onclick="manualToHand();">To Hand</button>
+            <button class="v-deck  v-grave v-removed  v-excavate v-extra-p" onclick="manualToHand(); manualRevealHandSingle(); v-excavate">Reveal and Add to Hand</button>
 
             <button class="m-hand-p m-monster-p m-monster-to-extra-faceup" onclick="manualToExtraFaceUp()">To Extra Deck Face Up</button>
             <button class="m-hand-p m-monster-extra v-monster-extra" onclick="manualToExtra()">To Extra Deck</button>
