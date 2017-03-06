@@ -889,7 +889,7 @@ meter.p1time {
 }
 
 div#selectionsystem .fieldimage {
-    background: none;
+    background: none !important;
 }
 
 .cardselectionzone:after {
