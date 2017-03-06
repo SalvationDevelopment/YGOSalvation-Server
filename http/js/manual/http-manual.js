@@ -30,10 +30,12 @@ function penL() {
 function setMidSchool(set) {
     'use strict';
     livingIn2017 = Boolean(set);
-    if (set) {
-        $('.field').css('background-image', "url(http://ygopro.us/img/textures/field.png)");
+    console.log('setting living as', livingIn2017)
+    if (livingIn2017) {
+        $('.fieldimage').css('background-image', "url(../img/textures/field.png)");
     } else {
-        $('.field').css('background-image', "url(http://ygopro.us/img/textures/field.png)");
+        $('.fieldimage').css('background-image', "url(../img/textures/newfield.png)");
+
     }
 }
 
@@ -1620,12 +1622,12 @@ function makeFieldSpellFaceDown(card) {
 
 function makePendulumZoneL(card) {
     'use strict';
-    return makeSpell(card, 0);
+    return makeSpell(card, penL());
 }
 
 function makePendulumZoneR(card) {
     'use strict';
-    return makeSpell(card, 4);
+    return makeSpell(card, penR());
 }
 
 
@@ -2018,10 +2020,10 @@ function manualActivateField() {
 function manualToPZoneL() {
     'use strict';
 
-    if ($('#automationduelfield .p' + orient(manualActionReference.player) + '.SPELLZONE.i0').length) {
+    if ($('#automationduelfield .p' + orient(manualActionReference.player) + '.SPELLZONE.i' + penL()).length) {
         return;
     }
-    var end = makeSpell(manualActionReference, 0),
+    var end = makeSpell(manualActionReference, penL()),
         message = makeCardMovement(manualActionReference, end);
 
     message.action = 'moveCard';
@@ -2031,10 +2033,10 @@ function manualToPZoneL() {
 
 function manualToPZoneR() {
     'use strict';
-    if ($('#automationduelfield .p' + orient(manualActionReference.player) + '.SPELLZONE.i4').length) {
+    if ($('#automationduelfield .p' + orient(manualActionReference.player) + '.SPELLZONE.i' + penR()).length) {
         return;
     }
-    var end = makeSpell(manualActionReference, 4),
+    var end = makeSpell(manualActionReference, penR()),
         message = makeCardMovement(manualActionReference, end);
 
     message.action = 'moveCard';
