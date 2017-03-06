@@ -29,7 +29,7 @@ function penL() {
 
 function setMidSchool(set) {
     'use strict';
-    livingIn2017 = set;
+    livingIn2017 = Boolean(set);
     if (set) {
         $('.field').css('background-image', "url(http://ygopro.us/img/textures/field.png)");
     } else {
