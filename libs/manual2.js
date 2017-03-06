@@ -36,15 +36,16 @@ var banlist = banListUpdater();
  * @returns {object} customized game object
  */
 function newGame(settings) {
+    console.log('settings', settings);
     return {
         roompass: settings.roompass,
         started: false,
         deckcheck: 0,
         draw_count: 0,
         lflist: 0,
-        mode: settings.mode,
+        mode: settings.info.mode,
         noshuffle: 0,
-        prio: settings.prio,
+        prio: settings.info.prio,
         rule: 0,
         startlp: 0,
         starthand: 0,
