@@ -307,6 +307,12 @@ module.exports = function (wss) {
 
             break;
         case "lock":
+            if (games[activeduel].player[socket.slot].ready) {
+                games[activeduel].player[socket.slot].ready = false;
+                stateSystem[activeduel].lock[socket.slot] = false;
+                wss.broadcast(games);
+                break;
+            }
             if (socket.slot !== undefined) {
                 //ready = deckvalidator(message.deck);
 
