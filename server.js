@@ -56,12 +56,6 @@ function bootlogger() {
     }).on('exit', bootlogger);
 }
 
-function manualModeBoot() {
-    //console.log('    Logging Enabled @ ../logs'.bold.gold);
-    processManager.fork('./manual2.js', [], {
-        cwd: 'libs'
-    }).on('exit', manualModeBoot);
-}
 
 function deckstorageBoot() {
     console.log('    DeckStorage Online');
@@ -143,8 +137,6 @@ function main() {
             bootManager();
             bootAISystem();
             deckstorageBoot();
-            manualModeBoot();
-
         }, 2000);
 
 
