@@ -45,10 +45,11 @@ function newGame(settings) {
         banlist: settings.info.banlist,
         banlistid: settings.info.banlistid,
         mode: settings.info.mode,
+        cardpool: settings.info.cardpool,
         noshuffle: 0,
         prio: settings.info.prio,
         rule: 0,
-        startlp: 0,
+        startLP: settings.info.startLP,
         starthand: 0,
         timelimit: 0,
         player: {
