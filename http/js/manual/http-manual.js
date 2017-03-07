@@ -213,8 +213,8 @@ function updateloby(state) {
     $('#lobbyflist').text(state.banlist);
     $('#lobbylp').text(state.startLP);
     $('#lobbycdpt').text(state.drawcount);
-    $('#lobbyallowed').text($('#creategamecardpool option').eq(state.rule).text());
-    $('#lobbygamemode').text($('#creategameduelmode option').eq(state.mode).text());
+    $('#lobbyallowed').text(state.cardpool);
+    $('#lobbygamemode').text(state.mode);
     if (state.ishost) {
         $('#lobbystart').css('display', 'inline-block');
     } else {
@@ -373,7 +373,11 @@ function stateUpdate(dataBinding) {
         player = dataBinding.player;
     }
     fieldings = 'card p' + player + ' ' + ref.location + ' i' + ref.index;
-
+    if (ref.counters > 0) {
+        $('.cardselectionzone.p' + player + '.' + ref.location + '.i' + ref.index).attr('data-counters', ref.counters + ' Counters').attr('style', 'z-index:' + (ref.index + 1));
+    } else {
+        $('.cardselectionzone.p' + player + '.' + ref.location + '.i' + ref.index).removeAttr('data-counters').attr('style', 'z-index:' + ref.index + ';');
+    }
     if (fieldings !== element.attr('class') || ref.position !== element.attr('data-position') || String(ref.id) !== element.attr('data-id')) {
 
         element.attr({
@@ -391,11 +395,7 @@ function stateUpdate(dataBinding) {
             offsetY = ref.overlayindex * 4;
             element.attr('style', 'z-index: -' + ref.overlayindex + '; transform: translate(' + offsetX + 'px, ' + offsetY + 'px)');
         }
-        if (ref.counters > 0) {
-            $('.cardselectionzone.p' + player + '.' + ref.location + '.i' + ref.index).attr('data-counters', ref.counters + ' Counters').attr('style', 'z-index:' + (ref.index + 1));
-        } else {
-            $('.cardselectionzone.p' + player + '.' + ref.location + '.i' + ref.index).removeAttr('data-counters').attr('style', 'z-index:' + ref.index + ';');
-        }
+
 
 
     }
