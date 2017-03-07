@@ -73,7 +73,7 @@ var mode = "production",
     screenMessage = $('#servermessages'),
     uniqueID = $('#uniqueid').html(),
     primusprotocol = (location.protocol === 'https:') ? "wss://" : "ws://",
-    primus = Primus.connect(primusprotocol + location.host + ':24555');
+    primus = Primus.connect(primusprotocol + location.host);
 
 
 function isChecked(id) {
