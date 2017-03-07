@@ -467,12 +467,12 @@
                 <select id="creategameduelmode">
                     <option value="0" selected data-lp="8000">Single</option>
                     <option value="1" data-lp="8000">Match</option>
-                    <option value="2" data-lp="16000">Tag</option>
+                    <option disabled value="2" data-lp="16000">Tag</option>
 
                 </select>
                 <br />
                 <label data-translation-timelimit>Time Limit</label>
-                <select id="creategametimelimit">
+                <select id="creategametimelimit" disabled>
                     <option value="0">3 Minutes</option>
                     <option value="1" selected>6 Minutes</option>
                     <option value="2">9 Minutes</option>
@@ -523,11 +523,6 @@
         </div>
     </header>
     <header style="padding-top:50px" id="deckedit">
-        <div class="deckEditNotice" style=" display:none; text-align: center; margin-top: 25vh; display: none;">
-            We are currently developing an online deck editor which will be available in the near future.
-            <br /> If after updating your launcher a new window does not open, please consult our Bug Reports Forum for help.
-        </div>
-
         <div class="mainContainer" style="display: block;">
             <div class="left">
                 <div class="cardImage">
@@ -1199,12 +1194,16 @@
                 <span id="translateacp">Allowed Card Pool</span><span id="lobbyallowed"></span>
                 <br/>
                 <span id="translategamemode">Game Mode </span><span id="lobbygamemode"></span>
+                <!--
                 <br/>
-                <span id="translatetimelimit">Time Limit </span><span id="lobbytimelimit"></span>
+<span id="translatetimelimit">Time Limit </span><span id="lobbytimelimit"></span>
+-->
                 <br/>
                 <span id="translatestartinglifepoints">Starting Lifepoints</span><span id="lobbylp"></span>
+                <!--
                 <br/>
-                <span id="translatecdpt">Cards Drawn per Turn: </span><span id="lobbycdpt"></span>
+<span id="translatecdpt">Cards Drawn per Turn: </span><span id="lobbycdpt"></span>
+-->
             </div>
             <div id="lobbycurrentdeck" class="">
                 Select Deck :

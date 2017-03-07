@@ -284,6 +284,7 @@ function getManualDuelRequest() {
         banlist: $('#creategamebanlist option:selected').text(),
         banlistid: $('#creategamebanlist').val(),
         timelimit: $('#creategametimelimit').val(),
+        startLP: $('#creategamelp').val(),
         prio: isChecked('#enableprio'),
         checkd: isChecked('#discheckdeck'),
         shuf: isChecked('#disshuffledeck'),
