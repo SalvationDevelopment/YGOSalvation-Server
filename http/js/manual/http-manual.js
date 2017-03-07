@@ -1046,6 +1046,13 @@ function manualReciver(message) {
             }
         }
         break;
+    case "effect":
+        $('#effectflasher').css('display', 'block');
+        $('#effectflasher .mainimage').attr('src', 'https://rawgit.com/SalvationDevelopment/YGOPro-Images/master/' + message.id + '.jpg');
+        setTimeout(function () {
+            $('#effectflasher').css('display', 'none');
+        }, 1000);
+        break;
     case "attack":
         $('#attackanimation').remove();
         $('#automationduelfield').append('<img  id="attackanimation" class="card p' + orient(message.source.player) + ' ' + message.source.location + ' i' + message.source.index + '" src="img/textures/attack.png" data-orient="' + orient(message.source.player) + '" />');
@@ -1468,6 +1475,13 @@ function manualTarget(target) {
     $('.card').removeClass('targetglow');
 }
 
+function manualSignalEffectActivation(target) {
+    'use strict';
+    manualServer.send(JSON.stringify({
+        action: 'effect',
+        id: manualActionReference.id
+    }));
+}
 
 
 function manualRemoveToken() {

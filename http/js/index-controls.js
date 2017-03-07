@@ -399,11 +399,19 @@ function updateranking() {
         rows = rows.sort(function (a, b) {
             return b.points - a.points;
         });
-        $.get('handlebars/ranking.handlebars', function (template) {
-            var parser = Handlebars.compile(template);
-            $('#rankingtable').html(parser(rows));
+        var requests = [],
+            i
+        for (i = 0; i < rows.length; i++) {
+            console.log(rows[i].name);
+            requests.push($.ajax('https://forum.ygopro.us/avatar2.php?username=' + rows[i].name));
+        }
+        $.when.apply(undefined, requests).then(function () {
+            console.log(arguments);
+            $.get('handlebars/ranking.handlebars', function (template) {
+                var parser = Handlebars.compile(template);
+                $('#rankingtable').html(parser(rows));
+            });
         });
-
     });
 }
 

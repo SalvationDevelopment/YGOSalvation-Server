@@ -505,6 +505,14 @@ module.exports = function (wss) {
                 });
             }
             break;
+        case "effect":
+            if (socket.slot !== undefined) {
+                duelBroadcast(activeduel, {
+                    action: 'effect',
+                    id: message.id
+                });
+            }
+            break;
         case "target":
             if (socket.slot !== undefined) {
                 duelBroadcast(activeduel, {
