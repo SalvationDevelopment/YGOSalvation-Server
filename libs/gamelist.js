@@ -78,7 +78,7 @@ var WebSocketServer = require('ws').Server,
     wss = new WebSocketServer({
         noServer: true
     });
-var manualServer = require('./manual2.js')(wss);
+var manualServer = require('./manual.js')(wss);
 primusServer.on('upgrade', function (req, socket, head) {
     wss.handleUpgrade(req, socket, head, function (websocket) {
         manualServer(websocket);
