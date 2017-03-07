@@ -71,19 +71,20 @@ try {
 } catch (nossl) {
     console.log('Failed to apply SSL to HTTP server');
     primusServer = http.createServer(app);
+    primusServer.listen(80);
 }
 
-//var WebSocketServer = require('ws').Server,
-//    wss = new WebSocketServer({
-//        noServer: true
-//    });
-//
-//var manualServer = require('./manual2.js')(wss);
-//primusServer.on('upgrade', function (req, socket, head) {
-//    wss.handleUpgrade(req, socket, head, function (websocket) {
-//        manualServer(websocket);
-//    });
-//});
+var WebSocketServer = require('ws').Server,
+    wss = new WebSocketServer({
+        noServer: true
+    });
+var manualServer = require('./manual2.js')(wss);
+primusServer.on('upgrade', function (req, socket, head) {
+    wss.handleUpgrade(req, socket, head, function (websocket) {
+        console.log('new connection', websocket);
+        manualServer(websocket);
+    });
+});
 
 
 primus = new Primus(primusServer, {
