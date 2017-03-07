@@ -281,6 +281,8 @@ function getManualDuelRequest() {
     out = {
         cardpool: $('#creategamecardpool option:selected').text(),
         mode: $('#creategameduelmode option:selected').text(),
+        banlist: $('#creategamebanlist option:selected').text(),
+        banlistid: $('#creategamebanlist').val(),
         timelimit: $('#creategametimelimit').val(),
         prio: isChecked('#enableprio'),
         checkd: isChecked('#discheckdeck'),
