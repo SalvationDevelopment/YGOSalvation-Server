@@ -66,7 +66,7 @@ function deckstorageBoot() {
 
 
 function bootGameList() {
-    console.log('    Primus Server Game Manager @ port 24555'.bold.yellow);
+    console.log('    Primus Server Game Manager @ port 80/443'.bold.yellow);
     processManager.fork('./gamelist.js', [], {
         cwd: 'libs'
     }).on('exit', bootGameList);
@@ -102,13 +102,6 @@ function bootFlashPolicyServer() {
     }).on('exit', bootFlashPolicyServer);
 }
 
-function bootIRC() {
-    console.log('    IRCServer Started'.bold.yellow);
-    processManager.exec('./inspircd.exe', [], {
-        cwd: '../../Salvation-inspire-ws-binary'
-    }, bootIRC);
-}
-
 function main() {
     var mainStack = domain.create();
 
@@ -132,12 +125,12 @@ function main() {
             bootUpdateSystem();
             bootlogger();
             //manualModeBoot();
-        }, 1000);
+        }, 500);
         setTimeout(function () {
             bootManager();
             bootAISystem();
             deckstorageBoot();
-        }, 2000);
+        }, 1000);
 
 
         var httpcheck = net.createServer(),
