@@ -30,7 +30,7 @@ function penL() {
 function setMidSchool(set) {
     'use strict';
     legacyMode = Boolean(set);
-    console.log('setting living as', legacyMode)
+    console.log('setting living as', legacyMode);
     if (legacyMode) {
         $('.field').removeClass('newfield');
         $('.fieldimage').css('background-image', "url(../img/textures/field.png)");
@@ -388,6 +388,11 @@ function stateUpdate(dataBinding) {
             'src': (ref.id) ? 'https://rawgit.com/SalvationDevelopment/YGOPro-Images/master/' + ref.id + '.jpg' : 'img/textures/cover.jpg'
         });
 
+        if (ref.position === 'FaceDownDefence' || ref.position === 'FaceDownAttack') {
+            element.attr({
+                'src': 'img/textures/cover.jpg'
+            });
+        }
         element.attr('style', 'z-index:' + (ref.index));
         element.attr('data-index', ref.index);
         if (ref.location === 'MONSTERZONE' && ref.overlayindex) {
