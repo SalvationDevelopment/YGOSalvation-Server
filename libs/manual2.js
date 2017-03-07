@@ -314,19 +314,18 @@ function responseHandler(socket, message) {
                 by: socket.slot
             }));
             stateSystem[activeduel].surrender(games[activeduel].player[socket.slot].name);
-            if (games[activeduel].mode === 1) {
 
-                stateSystem[activeduel].players[0].send(JSON.stringify({
-                    action: 'side',
-                    deck: stateSystem[activeduel].decks[0]
-                }));
-                games[activeduel].player[0].ready = false;
-                stateSystem[activeduel].players[1].send(JSON.stringify({
-                    action: 'side',
-                    deck: stateSystem[activeduel].decks[1]
-                }));
-                games[activeduel].player[1].ready = false;
-            }
+            stateSystem[activeduel].players[0].send(JSON.stringify({
+                action: 'side',
+                deck: stateSystem[activeduel].decks[0]
+            }));
+            games[activeduel].player[0].ready = false;
+            stateSystem[activeduel].players[1].send(JSON.stringify({
+                action: 'side',
+                deck: stateSystem[activeduel].decks[1]
+            }));
+            games[activeduel].player[1].ready = false;
+
 
         }
 
