@@ -309,7 +309,7 @@ function makeGames() {
             players = player1 + ' vs ' + player2,
             started = (game.started) ? 'started' : '',
             action = (game.started) ? '' : 'onclick = "manualJoin(\'' + gameName + '\')"',
-            string = '<div data-game="' + game.roompass + '" class="game ' + started + '" ' + action + ' ' + game.roompass + '>' + players + '</div>';
+            string = '<div data-game="' + game.roompass + '" class="game ' + started + '" ' + action + ' ' + game.roompass + '>' + players + '<span class="subtext" style="font-size:.5em"><br>' + game.mode + ' ' + game.banlist + ' </span></div>';
         $('#manualgamelistitems').append(string);
     });
 }
