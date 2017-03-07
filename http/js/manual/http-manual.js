@@ -1154,7 +1154,7 @@ function serverconnect() {
         console.log('Attempted to close manualmode websocket. Failed. Everything is fine.');
     }
     var protocol = (location.protocol === 'https:') ? "wss://" : "ws://";
-    window.manualServer = new WebSocket(protocol + location.hostname, '/duel');
+    window.manualServer = new WebSocket(protocol + location.hostname, 'duel');
     manualServer.onopen = function () {
         console.log('Connected to Manual');
     };
