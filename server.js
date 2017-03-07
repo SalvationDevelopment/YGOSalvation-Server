@@ -70,13 +70,6 @@ function deckstorageBoot() {
     }).on('exit', deckstorageBoot);
 }
 
-function bootHTTPServer() {
-    console.log('    HTTP Server @ port 80'.bold.yellow);
-    processManager.fork('./httpserver.js', [], {
-        cwd: 'libs',
-        env: CONFIGURATION
-    }).on('exit', bootHTTPServer);
-}
 
 function bootGameList() {
     console.log('    Primus Server Game Manager @ port 24555'.bold.yellow);
@@ -166,7 +159,6 @@ function main() {
         httpcheck.once('listening', function () {
             // close the server if listening doesn't fail
             httpcheck.close();
-            bootHTTPServer();
         });
         httpcheck.listen(80, localhost);
 

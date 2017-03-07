@@ -1,9 +1,16 @@
 /*jslint  node: true, plusplus: true, white: false, nomen  : true*/
 // Gamelist object acts similar to a Redis server, could be replaced with on but its the gamelist state.
 'use strict';
-var http = require('http'),
+
+var express = require('express'),
+    fs = require('fs'),
     https = require('https'),
-    fs = require('fs');
+    http = require('http'),
+    url = require('url'),
+    path = require("path"),
+    toobusy = require('toobusy-js'),
+    app = express();
+
 
 var primus,
     gamelist = {},
@@ -34,6 +41,48 @@ var primus,
     banlist = require('./bansystem.js'),
     chatbox = [],
     sayCount = 0;
+
+require('fs').watch(__filename, process.exit);
+
+app.use(express['static'](path.join(__dirname, '../http')));
+app.use(function (req, res, next) {
+    if (toobusy()) {
+        res.send(503, "I'm busy right now, sorry.");
+    } else {
+        next();
+    }
+});
+
+try {
+    var privateKey = fs.readFileSync(path.resolve(process.env.SSL + '\\ssl.key')).toString();
+    var certificate = fs.readFileSync(path.resolve(process.env.SSL + '\\ssl.crt')).toString();
+
+
+    primusServer = https.createServer({
+        key: privateKey,
+        cert: certificate
+    }, app).listen(443);
+    var openserver = express();
+    // set up a route to redirect http to https
+    openserver.get('*', function (req, res) {
+        res.redirect('https://' + req.get('host') + req.url);
+    });
+    openserver.listen(80);
+} catch (nossl) {
+    console.log('Failed to apply SSL to HTTP server');
+    primusServer = http.createServer(app);
+}
+
+primus = new Primus(primusServer, {
+    parser: 'JSON'
+});
+primus.use('rooms', Rooms);
+if (process.env.SSL !== undefined) {
+    try {
+        require('fs').watch(process.env.SSL, process.exit);
+    } catch (error) {}
+}
+
 
 
 setTimeout(function () {
@@ -505,25 +554,8 @@ function killgameCall(data) {
 }
 
 
-try {
-    var privateKey = fs.readFileSync(path.resolve(process.env.SSL + '\\ssl.key')).toString();
-    var certificate = fs.readFileSync(path.resolve(process.env.SSL + '\\ssl.crt')).toString();
-    var primusServer = https.createServer({
-        key: privateKey,
-        cert: certificate
-    }).listen(24555);
-} catch (noSSL) {
-    console.log('Primus is not using SSL');
-    primusServer = http.createServer().listen(24555);
-}
-primus = new Primus(primusServer, {
-    parser: 'JSON'
-});
-primus.use('rooms', Rooms);
 
-primus.on('error', function (error) {
-    console.log('[Gamelist]:', error);
-});
+
 
 
 var tagBody = '(?:[^"\'>]|"[^"]*"|\'[^\']*\')*';
