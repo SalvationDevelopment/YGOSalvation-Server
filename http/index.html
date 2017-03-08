@@ -1048,64 +1048,9 @@
         <div style="color:white; width:970px; margin:0 auto;">
             <section id="settings">
                 <div class='section-content'>
-                    <div style="width: 29%;float: left;color: #aaa;margin-right: 4vw;">
-                        <p data-translation-autoplacementwillhavethegameautomaticllypickwherecardsareplaced>Auto Placement will have the game automatically pick where cards are placed.</p>
-                        <p data-translation-ifautoplacementisonyoucanrandomizeit>If Auto Placement is on, you can randomize it.</p>
-                        <p data-translation-ifyouselectedmultiplecardsinresponsetoachainsuggestionyoumayhavethegameautomaticallypicktheresolutionorderifautoplacementisonyoucanrandomizeit>If you selected multiple cards in response to a chain suggestion. You may have the game automatically pick the resolution order. If Auto Placement is on, you can randomize it.</p>
-                        <p data-translation-noobviousdelayforchainsaddadditionalpausestogameplaytospookyouropponent>No (obvious) Delay for Chains, add additional pauses to game play to spook your opponent.</p>
-                    </div>
+
                     <div style="width:32%; float:left; border-left:1px solid white; padding-left:1vw">
 
-                        <label data-translation-autocardplacement>Auto Card Placement</label>
-                        <input type="checkbox" data-localhost="auto_card_placing" />
-                        <br />
-                        <label data-translation-randomcardplacement style="padding-left:1em">Random Card Placement</label>
-                        <input type="checkbox" data-localhost="random_card_placing" />
-                        <br />
-                        <label data-translation-autochainorder>OCG Chain Order</label>
-                        <input type="checkbox" data-localhost="auto_chain_order" />
-                        <br />
-                        <label data-translation-nodelayforchains>No Delay for Chains</label>
-                        <input type="checkbox" data-localhost="no_delay_for_chain" />
-                        <br />
-                        <label data-translation-enabledirectx>Enable DirectX</label>
-                        <input type="checkbox" data-localhost="use_d3d" />
-                        <br />
-                        <label data-translation-enablesound>Enable Sound</label>
-                        <input type="checkbox" data-localhost="enable_sound" />
-                        <br />
-                        <label data-translation-enablemusic>Enable Music</label>
-                        <input type="checkbox" data-localhost="enable_music" />
-                        <br />
-                        <label data-translation-savelastreplay>Save Last Replay</label>
-                        <input type="checkbox" data-localhost="save_last_replay" />
-                        <br />
-                        <label data-translation-hidesetname>Hide Archetype Labels</label>
-                        <input type="checkbox" data-localhost="hide_setname" />
-                        <br />
-                        <label data-translation-hidechainbutton>Hide Chain Buttons</label>
-                        <input type="checkbox" data-localhost="hide_chain_button" />
-                        <br />
-                        <label data-translation-alternative-pictures>Alternative Pictures</label>
-                        <input type="checkbox" data-localhost="altpics" />
-                        <br />
-                        <label data-translation-fontsize>Font Size</label>
-                        <input type="range" min="8" max="18" value="10" id="fontsize">
-                        <br />
-                        <label data-translation-font>Font</label>
-                        <select id="fontlist">
-                            <option value="noto.otf">noto.otf</option>
-                        </select>
-                        <br />
-                        <label data-translation-skin>Skin</label>
-                        <select id="skinlist">
-                            <option data-translation-default value="default">Default</option>
-                        </select>
-                        <br />
-
-
-
-                        <br />
                     </div>
                     <div style="width:32%; float:left;">
                         <label data-translation-soundvolume>Sound Volume</label>
@@ -1114,9 +1059,6 @@
                         <label data-translation-musicvolume>Music Volume</label>
                         <input type="range" min="0" max="100" value="50" id="music_volume">
                         <br />
-                        <label data-translation-databasefile>Database File</label>
-                        <select id="dblist">
-                        </select>
 
                         <h3 data-translation-launchersettings style="text-align: left; border-top: 1px solid silver; padding-top: 10px; color: silver">Launcher Settings</h3>
                         <label data-translation-refuseduelrequests>Refuse Duel Requests</label>
@@ -1142,16 +1084,8 @@
                         <br />
                         <br />
                         <label></label>
-                        <button data-translation-viewygoprofolder onclick="ygopro('-c')" style="float:left">View YGOPro Folder</button>
-                        <br />
-                        <br />
-                        <button onclick="ygopro('-n')" style="float:left">View DN Images</button>
-                        <br />
-                        <br />
-                        <a href="http://www.duelingnetwork.com/?card_image_base=http://localhost:7591/dn/" target="_blank">
-                            <button>DuelingNetwork</button>
-                        </a>
-                        <br />
+
+
                         <br />
                         <button id="sqleditorbutton" onclick="singlesitenav('sqleditor')">SQL Editor</button>
                     </div>
