@@ -81,10 +81,12 @@ try {
     app.use(helmet({
         contentSecurityPolicy: {
             directives: {
+                defaultSrc: ["'self'", 'ygopro.us', 'forum.ygopro.us'],
                 styleSrc: ["'self'", 'maxcdn.bootstrapcdn.com'],
                 imgSrc: ['rawgit.com', 'data:', 'forum.ygopro.us'],
                 sandbox: ['allow-forms', 'allow-scripts'],
                 reportUri: '/report-violation',
+                objectSrc: ["'none'"]
             }
         }
     }));
