@@ -1,0 +1,23 @@
+- [ ] Common Suggestions (please don't suggest these anymore): Manual mode, matches, no time limits, showing which monster declares an attack, different formats, better search function, customizable settings (list will be updated as more suggestions roll in)  
+- [ ] Separate `name` search from `description` search  
+- [ ] Demand for ranking
+- [ ] Allow users to pick deck for AI
+- [ ] Allow the AI to play decks uploaded by the user
+- [ ] Anti-spam detection for chat boxes
+- [ ] Option to `blacklist` or `whitelist` other users
+- [ ] Confirmation window for when a user clicks the `Surrender` button
+- [ ] As many opportunities to cancel misclicks or misplays as possible
+- [ ] Friend list system
+- [ ] Manipulate the timer
+- [ ] Team chats
+- [ ] Rules customization (LP, cards drawn, etc)
+- [ ] Counter to count the number of turns in a duel
+- [ ] Customizable sound/music
+- [ ] Field Spell backgrounds to be transparant
+- [ ] Allow text to remain permanently in the chat box
+- [ ] Search for user profile
+- [ ] Campaign mode
+- [ ] Goat format
+- [ ] A count for the number of each card type (Monster, Spell, Trap, Fusion, Synchro, etc)
+- [ ] Distinction between North American, European, and Asian territory ruling conflicts
+- [ ] Several sorting options for Deck Edit
