@@ -886,13 +886,23 @@ var zonetargetingmode;
 function startAttack() {
     'use strict';
     attackmode = true;
-    $('.card.p1').addClass('attackglow');
+    $('.card.p1.MONSTERZONE').addClass('attackglow');
+    if (legacyMode) {
+        $('.cardselectionzone.p1.MONSTERZONE.i5').removeClass('attackglow card');
+        $('.cardselectionzone.p1.MONSTERZONE.i6').removeClass('attackglow card');
+    }
 }
 
 function startTarget() {
     'use strict';
     targetmode = true;
     $('.card.p1, .card.p0').addClass('attackglow');
+    if (legacyMode) {
+        $('.cardselectionzone.p0.MONSTERZONE.i5').removeClass('attackglow card');
+        $('.cardselectionzone.p0.MONSTERZONE.i6').removeClass('attackglow card');
+        $('.cardselectionzone.p1.MONSTERZONE.i5').removeClass('attackglow card');
+        $('.cardselectionzone.p1.MONSTERZONE.i6').removeClass('attackglow card');
+    }
 }
 
 function startSpecialSummon(mode) {
@@ -1060,11 +1070,11 @@ function manualReciver(message) {
             $('#attackanimation').attr('class', 'card p' + orient(message.target.player) + ' ' + message.target.location + ' i' + message.target.index);
             $('.card.p' + orient(message.target.player) + '.' + message.target.location + '.i' + message.target.index).addClass('attackglow');
             $('.card.p' + orient(message.source.player) + '.' + message.source.location + '.i' + message.source.index).addClass('attackglow');
-        }, 1000);
+        }, 500);
         setTimeout(function () {
             $('#attackanimation').remove();
             $('.attackglow').removeClass('attackglow');
-        }, 3000);
+        }, 2000);
         break;
     case "side":
         $('#ingamesidebutton').css('display', 'block');
