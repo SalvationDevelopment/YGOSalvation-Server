@@ -23,6 +23,7 @@
         "extended-fs": "^0.3.3",
         "fs-extended": "*",
         "fs-walk": "*",
+        "hsts": "^2.0.0",
         "instaqueue": "*",
         "irc": "*",
         "jsonfile": "^2.4.0",
