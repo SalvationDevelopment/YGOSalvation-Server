@@ -14,7 +14,7 @@ var express = require('express'),
     Ddos = require('ddos'),
     helmet = require('helmet'),
     ddos = new Ddos({
-        maxcount: 150,
+        maxcount: 200,
         burst: 50,
         limit: 50 * 4,
         maxexpiry: 120,
@@ -64,7 +64,6 @@ var primus,
 require('fs').watch(__filename, process.exit);
 
 app.use(ddos.express);
-app.use(helmet());
 app.use(express['static'](path.join(__dirname, '../http')));
 app.use(function (req, res, next) {
     if (toobusy()) {
@@ -79,10 +78,17 @@ app.use(function (req, res, next) {
 try {
     var privateKey = fs.readFileSync(path.resolve(process.env.SSL + '\\ssl.key')).toString();
     var certificate = fs.readFileSync(path.resolve(process.env.SSL + '\\ssl.crt')).toString();
-
-    app.use(hsts({
-        maxAge: 15552000 // 180 days in seconds
+    app.use(helmet({
+        contentSecurityPolicy: {
+            directives: {
+                styleSrc: ["'self'", 'maxcdn.bootstrapcdn.com'],
+                imgSrc: ['rawgit.com', 'data:', 'forum.ygopro.us'],
+                sandbox: ['allow-forms', 'allow-scripts'],
+                reportUri: '/report-violation',
+            }
+        }
     }));
+
 
     primusServer = spdy.createServer({
         key: privateKey,
@@ -97,7 +103,7 @@ try {
     });
     openserver.listen(80);
 } catch (nossl) {
-    console.log('Failed to apply SSL to HTTP server');
+    console.log('Failed to apply SSL to HTTP server', nossl);
     primusServer = http.createServer(app);
     primusServer.listen(80);
 }
