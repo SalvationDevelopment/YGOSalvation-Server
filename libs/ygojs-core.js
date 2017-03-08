@@ -483,7 +483,7 @@ function init(callback) {
      * @param {Number} numberOfCards number of cards drawn
      * @param {Array} cards         array of objects representing each of those drawn cards.
      */
-    function drawCard(player, numberOfCards, cards) {
+    function drawCard(player, numberOfCards, cards, username) {
         var currenthand = filterlocation(filterPlayer(stack, player), 'HAND').length,
             topcard,
             target,
@@ -498,6 +498,9 @@ function init(callback) {
             target = queryCard(player, 'HAND', (currenthand + i), 0);
             pointer = uidLookup(target.uid);
             //stack[pointer].id = cards[i].Code;
+        }
+        if (username) {
+            state.duelistChat.push('<pre>' + username + ' drew a card.</pre>');
         }
         callback(generateView(), stack);
     }
@@ -972,7 +975,12 @@ function init(callback) {
      * @param {Number} player player to edit
      * @param {Number} amount amount of lifepoints to take or remove.
      */
-    function changeLifepoints(player, amount) {
+    function changeLifepoints(player, amount, username) {
+        if (amount > 0) {
+            state.duelistChat.push('<pre>' + username + ' gained' + amount + ' Lifepoints.</pre>');
+        } else {
+            state.duelistChat.push('<pre>' + username + ' lose' + Math.abs(amount) + ' Lifepoints.</pre>');
+        }
         state.lifepoints[player] = state.lifepoints[player] + amount;
         callback(generateView(), stack);
     }

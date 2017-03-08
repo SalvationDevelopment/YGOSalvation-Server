@@ -9,7 +9,25 @@ var express = require('express'),
     url = require('url'),
     path = require("path"),
     toobusy = require('toobusy-js'),
-    app = express();
+    app = express(),
+    hsts = require('hsts'),
+    Ddos = require('ddos'),
+    helmet = require('helmet'),
+    ddos = new Ddos({
+        maxcount: 150,
+        burst: 50,
+        limit: 50 * 4,
+        maxexpiry: 120,
+        checkinterval: 1,
+        trustProxy: true,
+        includeUserAgent: true,
+        whitelist: [],
+        errormessage: 'Error',
+        testmode: false,
+        silent: true,
+        silentStart: true,
+        responseStatus: 429
+    });
 
 
 var primus,
@@ -23,6 +41,7 @@ var primus,
         Chibi: '::ffff:127.0.0.1',
         OmniMage: '::ffff:127.0.0.1'
     },
+
     online = 0,
     activeDuels = 0,
     logins = 0,
@@ -44,6 +63,8 @@ var primus,
 
 require('fs').watch(__filename, process.exit);
 
+app.use(ddos.express);
+app.use(helmet());
 app.use(express['static'](path.join(__dirname, '../http')));
 app.use(function (req, res, next) {
     if (toobusy()) {
@@ -53,10 +74,15 @@ app.use(function (req, res, next) {
     }
 });
 
+
+
 try {
     var privateKey = fs.readFileSync(path.resolve(process.env.SSL + '\\ssl.key')).toString();
     var certificate = fs.readFileSync(path.resolve(process.env.SSL + '\\ssl.crt')).toString();
 
+    app.use(hsts({
+        maxAge: 15552000 // 180 days in seconds
+    }));
 
     primusServer = spdy.createServer({
         key: privateKey,
@@ -64,6 +90,8 @@ try {
     }, app).listen(443);
     var openserver = express();
     // set up a route to redirect http to spdy
+    openserver.use(helmet());
+    openserver.use(ddos.express);
     openserver.get('*', function (req, res) {
         res.redirect(301, 'https://' + req.get('host') + req.url);
     });
