@@ -32,7 +32,6 @@ module.exports = function (wss) {
     var databases = {},
         realgames = [],
         stateSystem = require('./ygojs-core.js'),
-        deckvalidator = require('./deckvalidator.js'),
         configParser = require('./configparser.js'),
         games = {},
         states = {},
@@ -314,7 +313,6 @@ module.exports = function (wss) {
                 break;
             }
             if (socket.slot !== undefined) {
-                //ready = deckvalidator(message.deck);
 
                 try {
 
