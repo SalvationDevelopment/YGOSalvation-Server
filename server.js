@@ -49,12 +49,7 @@ var colors = require('colors'), // oo pretty colors!
 //    makeYGOProCore();
 //});
 
-function bootlogger() {
-    console.log('    Logging Enabled @ ../logs'.bold.yellow);
-    processManager.fork('./logger.js', [], {
-        cwd: 'libs'
-    }).on('exit', bootlogger);
-}
+
 
 
 function deckstorageBoot() {
@@ -72,12 +67,7 @@ function bootGameList() {
     }).on('exit', bootGameList);
 }
 
-function bootManager() {
-    console.log('    YGOSharp Service @ port 8911'.bold.yellow);
-    processManager.fork('./game-manager.js', [], {
-        cwd: 'libs'
-    }).on('exit', bootManager);
-}
+
 
 function bootUpdateSystem() {
     console.log('    Update System @ port 12000'.bold.yellow);
@@ -86,21 +76,9 @@ function bootUpdateSystem() {
     }).on('exit', bootUpdateSystem);
 }
 
-function bootAISystem() {
-    setTimeout(function () {
-        console.log('    AI[SnarkyChild] connecting to port 127.0.0.1:24555 '.bold.yellow);
-        processManager.fork('./ai.js', [], {
-            cwd: 'libs'
-        }).on('exit', bootAISystem);
-    }, 10000);
-}
 
-function bootFlashPolicyServer() {
-    console.log('    Flash Policy @ Port 843'.bold.yellow);
-    processManager.fork('./policyserver.js', [], {
-        cwd: 'libs'
-    }).on('exit', bootFlashPolicyServer);
-}
+
+
 
 function main() {
     var mainStack = domain.create();
@@ -114,38 +92,17 @@ function main() {
         process.title = 'YGOPro Salvation Server ' + new Date();
         console.log('YGOPro Salvation Server - Saving Yu-Gi-Oh!'.bold.yellow);
 
-        //boot the microservices
 
-        //boot IRC
-        //boot anope
-        //boot 
         bootGameList();
-        //bootFlashPolicyServer();
+
         setTimeout(function () {
             bootUpdateSystem();
-            bootlogger();
-            //manualModeBoot();
         }, 500);
         setTimeout(function () {
-            bootManager();
-            bootAISystem();
             deckstorageBoot();
         }, 1000);
 
 
-        var httpcheck = net.createServer(),
-            localhost = process.env.MAINSITE || '127.0.0.1';
-
-        httpcheck.once('error', function (err) {
-            httpcheck.close();
-            return;
-        });
-
-        httpcheck.once('listening', function () {
-            // close the server if listening doesn't fail
-            httpcheck.close();
-        });
-        httpcheck.listen(80, localhost);
 
     });
     delete process.send; // in case we're a child process
