@@ -411,6 +411,9 @@ function init(callback) {
         stack[pointer].index = moveindex;
         stack[pointer].position = moveposition;
         stack[pointer].overlayindex = overlayindex;
+        if (stack[pointer].position === 'HAND') {
+            stack[pointer].position = 'FaceUp';
+        }
         reIndex(player, 'GRAVE');
         reIndex(player, 'HAND');
         reIndex(player, 'EXTRA');
