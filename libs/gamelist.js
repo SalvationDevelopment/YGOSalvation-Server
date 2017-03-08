@@ -78,18 +78,7 @@ app.use(function (req, res, next) {
 try {
     var privateKey = fs.readFileSync(path.resolve(process.env.SSL + '\\ssl.key')).toString();
     var certificate = fs.readFileSync(path.resolve(process.env.SSL + '\\ssl.crt')).toString();
-    app.use(helmet({
-        contentSecurityPolicy: {
-            directives: {
-                defaultSrc: ["'self'", 'ygopro.us', 'forum.ygopro.us'],
-                styleSrc: ["'self'", 'maxcdn.bootstrapcdn.com'],
-                imgSrc: ['rawgit.com', 'data:', 'forum.ygopro.us'],
-                sandbox: ['allow-forms', 'allow-scripts'],
-                reportUri: '/report-violation',
-                objectSrc: ["'none'"]
-            }
-        }
-    }));
+    app.use(helmet());
 
 
     primusServer = spdy.createServer({
