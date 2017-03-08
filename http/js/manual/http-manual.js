@@ -1453,6 +1453,8 @@ function manualRemoveCounter() {
 }
 
 
+
+
 function manualAttack() {
     'use strict';
     manualServer.send(JSON.stringify({
@@ -1463,6 +1465,17 @@ function manualAttack() {
     }));
     attackmode = false;
     $('.card.p1').removeClass('attackglow');
+}
+
+function manualAttackDirectly() {
+    'use strict';
+    targetreference = {
+        player: (orientSlot) ? 0 : 1,
+        location: 'HAND',
+        index: 0,
+        position: 'FaceUp'
+    };
+    manualAttack();
 }
 
 function manualTarget(target) {
