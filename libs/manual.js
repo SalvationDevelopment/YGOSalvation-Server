@@ -421,7 +421,7 @@ module.exports = function (wss) {
             stateSystem[activeduel].shuffleHand(socket.slot);
             break;
         case "draw":
-            stateSystem[activeduel].drawCard(socket.slot, 1);
+            stateSystem[activeduel].drawCard(socket.slot, 1, games[activeduel].player[socket.slot].name);
             break;
         case "excavate":
             stateSystem[activeduel].excavateCard(socket.slot, 1);
@@ -477,7 +477,7 @@ module.exports = function (wss) {
             break;
         case "changeLifepoints":
             if (socket.slot !== undefined) {
-                stateSystem[activeduel].changeLifepoints(socket.slot, message.amount);
+                stateSystem[activeduel].changeLifepoints(socket.slot, message.amount, games[activeduel].player[socket.slot].name);
             }
             break;
         case "revealHandSingle":
