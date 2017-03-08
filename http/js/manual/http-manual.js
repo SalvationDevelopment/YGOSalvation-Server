@@ -1741,7 +1741,7 @@ function manualSetMonsterFaceUp(index) {
 function manualActivate(index) {
     'use strict';
 
-    index = (index !== undefined) ? index : automaticZonePicker(manualActionReference.player, 'SPELLZONE');
+    index = (index !== undefined) ? index : manualActionReference.index;
     var end = makeSpell(manualActionReference, index),
         message = makeCardMovement(manualActionReference, end);
 

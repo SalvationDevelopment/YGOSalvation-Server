@@ -4,7 +4,7 @@
 
 var express = require('express'),
     fs = require('fs'),
-    https = require('https'),
+    spdy = require('spdy'),
     http = require('http'),
     url = require('url'),
     path = require("path"),
@@ -58,14 +58,14 @@ try {
     var certificate = fs.readFileSync(path.resolve(process.env.SSL + '\\ssl.crt')).toString();
 
 
-    primusServer = https.createServer({
+    primusServer = spdy.createServer({
         key: privateKey,
         cert: certificate
     }, app).listen(443);
     var openserver = express();
-    // set up a route to redirect http to https
+    // set up a route to redirect http to spdy
     openserver.get('*', function (req, res) {
-        res.redirect('https://' + req.get('host') + req.url);
+        res.redirect(301, 'https://' + req.get('host') + req.url);
     });
     openserver.listen(80);
 } catch (nossl) {
