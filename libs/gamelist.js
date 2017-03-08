@@ -31,7 +31,6 @@ var express = require('express'),
 
 
 var primus,
-    gamelist = {},
     userlist = [],
     registry = {
         //People that have read this source code.
@@ -134,182 +133,14 @@ var Datastore = require('nedb'),
     });
 
 
-function internalMessage(announcement) {
-    process.nextTick(function () {
-        primus.room('internalservers').write(announcement);
-    });
-}
-
-function logger(announcement) {
-    internalMessage({
-        messagetype: 'log',
-        log: announcement
-    });
-}
-
-function handleCoreMessage(core_message_raw, port, pid, game) {
-
-    var chat,
-        join_slot,
-        leave_slot,
-        lock_slot,
-        core_message,
-        handleCoreMessageWatcher = domain.create();
-    handleCoreMessageWatcher.on('error', function (error) {
-        console.log('[Gamelist]:Error-CoreMessage', core_message_raw, error);
-    });
-    handleCoreMessageWatcher.enter();
-
-    if (core_message_raw.toString().indexOf("::::") < 0) {
-        return gamelist; //means its not a message pertaining to the gamelist API.
-    }
-
-    core_message = core_message_raw.toString().split('|');
-    //console.log(core_message, core_message_raw);
-    core_message[0] = core_message[0].trim();
-    if (core_message[0] === '::::network-ready') {
-        return;
-    }
-    if (gamelist[game] === undefined) {
-        gamelist[game] = {
-            players: [],
-            locked: [false, false, false, false],
-            spectators: 0,
-            started: false,
-            time: new Date().getTime(),
-            pid: pid || undefined
-        };
-        //if the room its talking about isnt on the gamelist, put it on the gamelist.
-    }
-
-    switch (core_message[0]) {
-    case ('::::network-end'):
-        //console.log('--');
-        break;
-    case ('::::join-slot'):
-        join_slot = parseInt(core_message[1], 10);
-        if (join_slot === -1) {
-            return;
-        }
-        gamelist[game].players[join_slot] = core_message[2].trim();
-        gamelist[game].time = new Date().getTime();
-        gamelist[game].port = port;
-        break;
-
-    case ('::::left-slot'):
-        leave_slot = parseInt(core_message[1], 10);
-        if (leave_slot === -1) {
-            return;
-        }
-        gamelist[game].players.splice(leave_slot, 1);
-        cleanGamelist();
-        break;
-
-    case ('::::spectator'):
-        gamelist[game].spectators = parseInt(core_message[1], 10);
-        break;
-
-    case ('::::lock-slot'):
-        lock_slot = parseInt(core_message[1], 10);
-        gamelist[game].locked[lock_slot] = Boolean(core_message[1]);
-        break;
-    case ('::::end-duel'):
-        console.log('[Results]', core_message, game);
-        cleanGamelist();
-        break;
-    case ('::::endduel'):
-        //ps.kill(gamelist[game].pid, function (error) {});
-        delete gamelist[game];
-        cleanGamelist();
-        //process.kill(pid);
-        break;
-    case ('::::end-game'):
-        //ps.kill(gamelist[game].pid, function (error) {});
-        delete gamelist[game];
-        cleanGamelist();
-        //process.kill(pid);
-        break;
-    case ('::::chat'):
-        chat = core_message.join(' ');
-        process.nextTick(function () {
-            logger(pid + '|' + core_message[1] + ': ' + core_message[2]);
-        });
-        process.nextTick(function () {
-            //duelserv.bot.say('#public', gamelist[game].pid + '|' + core_message[2] + ': ' + core_message[3]);
-        });
-        break;
-    case ('::::start-game'):
-        gamelist[game].started = true;
-        gamelist[game].time = new Date().getTime();
-        //duelserv.bot.say('#public', gamelist[game].pid + '|Duel starting|' + JSON.stringify(gamelist[game].players));
-        //console.log('real start-game', game);
-        internalMessage({
-            record: true,
-            port: port,
-            roompass: game
-        });
-        break;
-
-
-    default:
-        console.log('unknown command', game, core_message, core_message[1].length);
-    }
-    handleCoreMessageWatcher.exit();
-}
 
 function announce(announcement) {
     primus.room('activegames').write(announcement);
 }
 
 
-function del(pid) {
-    var game;
-    for (game in gamelist) {
-        if (gamelist.hasOwnProperty(game)) {
-            if (String() + gamelist[game].pid === pid) {
-                delete gamelist[game];
-                announce(JSON.stringify(gamelist));
-            }
-        }
-    }
-    setTimeout(function () {
-        ps.kill(pid, function (error) {});
-    }, 5000);
-}
 
-function messageListener(message) {
 
-    var messageListenerWatcher = domain.create();
-    messageListenerWatcher.on('error', function (err) {
-        if (err) {
-            console.log(err);
-        }
-    });
-    messageListenerWatcher.run(function () {
-        activeDuels = 0;
-        var brokenup = message.core_message_raw.toString().split('\r\n'),
-            game,
-            users,
-            i = 0;
-        for (i; brokenup.length > i; i++) {
-            handleCoreMessage(brokenup[i], message.port, message.pid, message.game);
-        }
-        activeDuels = 0;
-        for (game in gamelist) {
-            if (gamelist.hasOwnProperty(game)) {
-                activeDuels++;
-            }
-        }
-        logins = 0;
-        for (users in registry) {
-            if (registry.hasOwnProperty(users)) {
-                logins++;
-            }
-        }
-        announce(JSON.stringify(gamelist));
-    });
-    return gamelist;
-}
 
 var pidList = [];
 
@@ -324,46 +155,10 @@ function massAck() {
 
 }
 
-function cleanGamelist() {
-    var game,
-        update = false;
-    for (game in gamelist) {
-        if (gamelist.hasOwnProperty(game)) {
-            if (gamelist[game].players.length === 0 && gamelist[game].spectators === 0) {
-                //delete if no one is using the game.
-                //del(gamelist[game].pid);
-                delete gamelist[game];
-                update = true;
-            }
-        }
-    }
-    for (game in gamelist) {
-        if (gamelist.hasOwnProperty(game)) {
-            if (gamelist[game] && game.length !== 24) {
-                //delete if some wierd game makes it into the list somehow. Unlikely.
-                delete gamelist[game];
-                update = true;
-            }
-        }
-    }
-    for (game in gamelist) {
-        if (gamelist.hasOwnProperty(game)) {
-            if (new Date().getTime() - gamelist[game].time > 2700000) {
-                //delete if the game is older than 45mins.
-                delete gamelist[game];
-                update = true;
-            }
-        }
-    }
-    if (update) {
-        announce(JSON.stringify(gamelist));
-    }
 
-}
 
 
 setInterval(function () {
-    cleanGamelist();
     announce({
         clientEvent: 'ackresult',
         ackresult: acklevel,
@@ -372,19 +167,8 @@ setInterval(function () {
     massAck();
 }, 15000);
 
-function sendRegistry() {
-    internalMessage({
-        messagetype: 'registry',
-        registry: registry
-    });
-}
 
-function sendGamelist() {
-    internalMessage({
-        messagetype: 'gamelist',
-        gamelist: gamelist
-    });
-}
+
 
 function registrationCall(data, socket) {
     forumValidate(data, function (error, info, body) {
@@ -398,7 +182,7 @@ function registrationCall(data, socket) {
         if (info.success) {
             registry[info.displayname] = socket.address.ip;
             socket.username = info.displayname;
-            sendRegistry();
+
             socket.write({
                 clientEvent: 'global',
                 message: currentGlobalMessage,
@@ -572,23 +356,7 @@ function aiRestartCall(data) {
     });
 }
 
-function killgameCall(data) {
-    forumValidate(data, function (error, info, body) {
-        if (error) {
-            return;
-        }
-        if (info.success && adminlist[data.username]) {
-            ps.kill(data.killTarget, function (err) {
-                if (err) {
-                    del(data.killTarget);
-                }
-            });
 
-        } else {
-            console.log(data, 'tried to kill');
-        }
-    });
-}
 
 
 
@@ -635,28 +403,9 @@ function onData(data, socket) {
 
     socket.join(socket.address.ip + data.uniqueID);
     switch (action) {
-    case ('internalServerLogin'):
-        if (data.password !== process.env.OPERPASS) {
-            return;
-        }
-        socket.join('internalservers');
-        if (booting && data.gamelist && data.registry) {
-            gamelist = data.gamelist;
-            registry = data.registry;
-            booting = false;
-            //console.log('[Gamelist]:', data.gamelist, data.registry);
-        }
-        break;
 
-    case ('gamelistEvent'):
 
-        if (data.password === process.env.OPERPASS) {
-            messageListener(data.coreMessage);
-            sendGamelist();
-        } else {
-            console.log('bad insternal request');
-        }
-        break;
+
     case ('duelrequest'):
 
         announce({
@@ -683,15 +432,7 @@ function onData(data, socket) {
             }, 10000);
         }
         break;
-    case ('join'):
-        socket.join(socket.address.ip + data.uniqueID);
-        socket.join('activegames');
-        socket.write(JSON.stringify(gamelist));
 
-        break;
-    case ('leave'):
-        socket.leave('activegames');
-        break;
     case ('ack'):
         acklevel++;
         if (data.name) {
@@ -763,9 +504,7 @@ function onData(data, socket) {
     case ('restart'):
         //restartCall(data);
         break;
-    case ('killgame'):
-        killgameCall(data);
-        break;
+
     case ('privateServerRequest'):
         primus.room(socket.address.ip + data.uniqueID).write({
             clientEvent: 'privateServerRequest',
@@ -773,18 +512,8 @@ function onData(data, socket) {
             local: data.local
         });
         break;
-    case ('privateServer'):
-        break;
-    case ('joinTournament'):
-        socket.join('tournament');
-        socket.write(JSON.stringify(gamelist));
-        break;
-    case ('privateUpdate'):
-        primus.room(socket.address.ip + data.uniqueID).write({
-            clientEvent: 'privateServer',
-            serverUpdate: data.serverUpdate
-        });
-        break;
+
+
     case ('privateMessage'):
         if (socket.username) {
             data.date = new Date();
