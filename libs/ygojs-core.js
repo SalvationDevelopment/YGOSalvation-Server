@@ -980,9 +980,9 @@ function init(callback) {
      */
     function changeLifepoints(player, amount, username) {
         if (amount > 0) {
-            state.duelistChat.push('<pre>' + username + ' gained' + amount + ' Lifepoints.</pre>');
+            state.duelistChat.push('<pre>' + username + ' gained ' + amount + ' Lifepoints.</pre>');
         } else {
-            state.duelistChat.push('<pre>' + username + ' lose' + Math.abs(amount) + ' Lifepoints.</pre>');
+            state.duelistChat.push('<pre>' + username + ' lost ' + Math.abs(amount) + ' Lifepoints.</pre>');
         }
         state.lifepoints[player] = state.lifepoints[player] + amount;
         callback(generateView(), stack);
