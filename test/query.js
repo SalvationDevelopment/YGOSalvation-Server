@@ -1,3 +1,4 @@
+'use strict';
 /**
  * Filters out cards based on player.
  * @param   {Array} Array a stack of cards.
@@ -89,8 +90,8 @@ function filterUID(stack, uid) {
  * @returns {object} The card you where looking for.
  */
 function queryCard(stack, search) {
-    if (uid) {
-        return filterUID(stack, uid)[0];
+    if (search) {
+        return filterUID(stack, search)[0];
     }
     return filterOverlyIndex(filterIndex(filterlocation(filterPlayer(stack, search.player), search.clocation), search.index), search.overlayindex)[0];
 }
@@ -127,9 +128,11 @@ function field(stack) {
             SPELLZONE: filterlocation(filterPlayer(stack, 1), 'SPELLZONE'),
             MONSTERZONE: filterlocation(filterPlayer(stack, 1), 'MONSTERZONE')
         }
-    }
+    };
 }
 
 module.exports = {
-    queryCard, filterUID, field
-}
+    queryCard: queryCard,
+    filterUID: filterUID,
+    field: field
+};

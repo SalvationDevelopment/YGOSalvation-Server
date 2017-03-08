@@ -60,6 +60,7 @@ ygosharp/sqlite3.dll
 ygosharp/*.txt
 installer/output*
 installer/input/*
+coverage/*
 
 server/http/setups/*
 *.bat
