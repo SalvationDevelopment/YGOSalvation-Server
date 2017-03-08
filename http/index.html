@@ -1875,6 +1875,7 @@
 
             <button class="m-hand-st m-monster-st v-st m-st-monster v-excavate" onclick="startSpellTargeting('set')">Set in S/T</button>
             <button class="m-hand-st m-st" onclick="startSpellTargeting('activate')">Activate</button>
+            <button class="m-st" onclick="manualActivate()">Flip Faceup</button>
             <!--            <button class="v-st" onclick="manualActivate()">To S/T Zone</button>-->
             <!-- disabling st from deck atm. needed for metaphos-->
             <button class="m-field" onclick="manualToHand();">To Hand</button>
@@ -1900,7 +1901,7 @@
             <button class="m-monster m-st" onclick="manualRemoveCounter()">Remove Counter</button>
             <button class="m-monster" onclick="manualViewXYZMaterials()">View</button>
             <button class="m-monster m-monster-xyz v-monster-xyz" onclick="startXYZSummon()">Overlay</button>
-            <button class="m-field non-link" onclick="manualToFaceDownDefence()">Flip Facedown</button>
+            <button class="m-monster non-link" onclick="manualToFaceDownDefence()">Flip Facedown</button>
             <button class="m-monster" onclick="manualToAttack()">To Attack</button>
             <button class="m-field non-link" onclick="manualToDefence()">To Defense</button>
             <button class="m-monster-token" onclick="manualRemoveToken()">Remove Token</button>
