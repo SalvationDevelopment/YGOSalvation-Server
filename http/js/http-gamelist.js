@@ -145,7 +145,7 @@ function joinGamelist() {
 }
 joinGamelist();
 
-setInterval(joinGamelist, 5000);
+setInterval(joinGamelist, 35000);
 
 
 function leaveGamelist() {
