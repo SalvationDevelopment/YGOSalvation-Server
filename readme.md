@@ -33,9 +33,9 @@ To run the system use `node server`. This will create a version of the system on
 
 - Install [Nodist](https://github.com/marcelklehr/nodist) instead of Node JS.
 - Open your PowerShell as Administrator (this is important), then `cd` to the root of the cloned repository to install the following 
-  - - `npm install --global windows-build-tools`
-  - - `npm install yarn -g`
-  - - `yarn install`
+  - `npm install --global windows-build-tools`
+  - `npm install yarn -g`
+  - `yarn install`
 
 ## Licensing
 **Do not use our software without our permission.** It is ment for use at http://ygopro.us if you want to use this software for something please leave open an issue explaining your intended use and we will write you a custom licence.
