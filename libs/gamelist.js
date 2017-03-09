@@ -16,9 +16,9 @@ var express = require('express'),
     ddos = new Ddos({
         maxcount: 200,
         burst: 50,
-        limit: 50 * 4,
-        maxexpiry: 120,
-        checkinterval: 1,
+        limit: 50 * 10,
+        maxexpiry: 15,
+        checkinterval: 5,
         trustProxy: true,
         includeUserAgent: true,
         whitelist: [],
@@ -135,7 +135,8 @@ var Datastore = require('nedb'),
 
 
 function announce(announcement) {
-    primus.room('activegames').write(announcement);
+    console.log('announcing');
+    primus.write(announcement);
 }
 
 
