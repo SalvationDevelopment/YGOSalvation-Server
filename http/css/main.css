@@ -2696,3 +2696,9 @@ html {
     position: fixed;
     /* fixes tab issue */
 }
+
+button#onlinelisttogger {
+    position: fixed;
+    bottom: 13px;
+    right: 13px;
+}
