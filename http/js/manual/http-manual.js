@@ -27,18 +27,54 @@ function penL() {
     return (legacyMode) ? 6 : 0;
 }
 
-function setMidSchool(set) {
+function setFieldSpellBG() {
+    $('#fieldbg0 .fieldimage, #fieldbg1 .fieldimage').css({
+        'background-image': 'none',
+        'background-size': '439px 473px',
+        'background-position': '177px 64px'
+    });
+    var picID0 = $('#automationduelfield .p0.SPELLZONE.i5').attr('data-id'),
+        picID1 = $('#automationduelfield .p1.SPELLZONE.i5').attr('data-id'),
+        p0URL = 'url(https://rawgit.com/SalvationDevelopment/YGOPro-Images/master/field/' + picID0 + '.png)',
+        p1URL = 'url(https://rawgit.com/SalvationDevelopment/YGOPro-Images/master/field/' + picID1 + '.png)';
+
+    if (picID0 && !picID1) {
+        $('#fieldbg0 .fieldimage').css({
+            'background-image': p0URL
+        });
+        $('#fieldbg1 .fieldimage').attr('background-image', 'none');
+    } else if (!picID0 && picID1) {
+        $('#fieldbg1 .fieldimage').css({
+            'background-image': p1URL,
+
+        });
+        $('#fieldbg0 .fieldimage').attr('background-image', 'none');
+    } else if (picID0 && picID1) {
+        $('#fieldbg0 .fieldimage').css({
+            'background-image': p0URL,
+            'background-size': ' 437px 177px',
+            'background-position': '178px 360px'
+        });
+
+        $('#fieldbg1 .fieldimage').css({
+            'background-image': p1URL,
+            'background-size': '437px 177px'
+        });
+
+    }
+}
+
+function setMidSchool() {
     'use strict';
-    legacyMode = Boolean(set);
     console.log('setting living as', legacyMode);
     if (legacyMode) {
         $('.field').removeClass('newfield');
-        $('.fieldimage').css('background-image', "url(../img/textures/field.png)");
+        $('#automationduelfield.fieldimage').css('background-image', "url(../img/textures/field.png)");
     } else {
         if (!$('.field').eq(0).hasClass('newfield')) {
             $('.field').addClass('newfield');
         }
-        $('.fieldimage').css('background-image', "url(../img/textures/newfield.png)");
+        $('#automationduelfield.fieldimage').css('background-image', "url(../img/textures/newfield.png)");
 
     }
 }
@@ -200,7 +236,7 @@ function updateloby(state) {
     if (state === undefined) {
         return;
     }
-    setMidSchool(state.prio);
+    legacyMode = state.prio;
     $('#player1lobbyslot').val(state.player[0].name);
     $('#player2lobbyslot').val(state.player[1].name);
     //    $('#player3lobbyslot').val(state.player[2].name);
@@ -463,6 +499,7 @@ function linkStack(field) {
     $('.cardselectionzone.p1.REMOVED').attr('data-content', p1removed);
     $('.cardselectionzone.p0.GRAVE').attr('data-content', p0grave);
     $('.cardselectionzone.p1.GRAVE').attr('data-content', p1grave);
+    setFieldSpellBG();
 }
 
 function Card(movelocation, player, index, unique) {
@@ -666,6 +703,7 @@ function manualgamestart(message) {
         duelstarted = true;
         window.manualDuel = initGameState();
         window.manualDuel.startDuel(main1, main2, extra1, extra2);
+        setMidSchool(legacyMode);
     }
 
 }
@@ -1164,6 +1202,7 @@ function manualReciver(message) {
     default:
         break;
     }
+
 }
 
 function serverconnect() {

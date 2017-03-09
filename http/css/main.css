@@ -892,6 +892,27 @@ div#selectionsystem .fieldimage {
     background: none !important;
 }
 
+#fieldbg0,
+#fieldbg1 {
+    z-index: -200;
+}
+
+#fieldbg0 .fieldimage {
+    background-image: none;
+    background-position: 177px 64px;
+    background-size: 439px 473px;
+    z-index: -200;
+    background-repeat: no-repeat;
+}
+
+#fieldbg1 .fieldimage {
+    background-image: none;
+    background-position: 177px 64px;
+    background-size: 439px 473px;
+    z-index: -200;
+    background-repeat: no-repeat;
+}
+
 .cardselectionzone:after {
     content: attr(data-counters);
     width: 100%;
