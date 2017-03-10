@@ -119,6 +119,9 @@ var launcher = false,
 
 function singlesitenav(target) {
     'use strict';
+    if (target === 'forum') {
+        return;
+    }
     if (internalLocal === 'duelscreen') {
         alert('You are in a duel, surrender or finish it.');
         return false;
