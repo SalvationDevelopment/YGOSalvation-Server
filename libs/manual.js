@@ -315,8 +315,11 @@ module.exports = function (wss) {
             if (socket.slot !== undefined) {
 
                 try {
+					//testing for deck validation
 					var banlist = require('../http/banlist/2016.8.29 (TCG Advanced).js');
+					console.log(banlist);
                     message.validate = validateDeck(message.deck, banlist, database);
+					//done testing for validation 
                     if (message.validate) {
                         if (message.validate.error) {
                             console.log(message.validate.error);
