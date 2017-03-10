@@ -1889,7 +1889,7 @@ div#eventsandtournaments {
 }
 
 div#rankingtable {
-    height: 65vh !important;
+    height: 100%;
     overflow-y: scroll;
 }
 
@@ -2695,6 +2695,13 @@ table#sqleditorpowermodeoutput {
 html {
     position: fixed;
     /* fixes tab issue */
+}
+
+.clickable-row img {
+    height: 100px;
+    display: block;
+    float: left;
+    width: 100px;
 }
 
 button#onlinelisttogger {

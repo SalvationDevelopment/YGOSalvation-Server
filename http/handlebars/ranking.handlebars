@@ -6,9 +6,9 @@
     </tr>
     {{#each this}}
 
-    <tr>
+    <tr class="clickable-row" data-href="https://forum.ygopro.us/index.php?/profile/{{member_id}}-{{name}}/">
         <td>{{counter @index}}</td>
-        <td>{{name}}</td>
+        <td>{{#if url}}<img src="//forum.ygopro.us/uploads/{{url}}" />{{else}} <img src="/img/newgiohtoken.png" />{{/if}}{{name}}</td>
         <td>{{points}}</td>
     </tr>
     {{/each}}
