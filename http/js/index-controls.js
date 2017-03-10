@@ -5,7 +5,8 @@ var admin = false,
     chatStarted = false,
     dnStarted = false;
 
-var tournament = {};
+var tournament = {},
+    loadedprofiles = {}
 
 
 
@@ -85,9 +86,6 @@ function updateevents() {
     $.getFeed({
         url: 'https://forum.ygopro.us/index.php?/forum/15-official-tournaments.xml',
         success: function (feed) {
-            console.log(feed);
-
-
             $.get('handlebars/forumnews.handlebars', function (template) {
                 var parser = Handlebars.compile(template),
                     topics = feed.items,
@@ -402,21 +400,44 @@ function updateranking() {
         var requests = [],
             i
         for (i = 0; i < rows.length; i++) {
-            console.log(rows[i].name);
             requests.push($.ajax('https://forum.ygopro.us/avatar2.php?username=' + rows[i].name));
         }
         $.when.apply(undefined, requests).then(function () {
-            console.log(arguments);
+            var duelist = [].slice.call(arguments),
+                convert = [],
+                endresult;
+
+            duelist.forEach(function (item) {
+                try {
+                    convert.push(JSON.parse(item[0]));
+                } catch (ignoreError) {};
+            });
+
+
+            endresult = rows.map(function (item) {
+                var forumresult = convert.find(function (forumitem) {
+                    return (forumitem.username === item.name);
+                });
+                return Object.assign({}, item, forumresult);
+            });
             $.get('handlebars/ranking.handlebars', function (template) {
                 var parser = Handlebars.compile(template);
-                $('#rankingtable').html(parser(rows));
+                $('#rankingtable').html(parser(endresult));
+            });
+            endresult.forEach(function (item) {
+                loadedprofiles[item.username] = item;
+            });
+            $(".clickable-row").click(function () {
+                window.open($(this).data("href"));
             });
         });
     });
 }
 
+
 $(document).ready(function () {
     'use strict';
+
     $('#creategameduelmode').on('change', function () {
         $('#creategamelp').val($('#creategameduelmode option:selected').attr('data-lp'));
     });

@@ -2726,6 +2726,11 @@ function guicardonclick() {
             reorientmenu();
             return;
         }
+        if (stackunit.location === 'MONSTERZONE') {
+            $('.m-opponent').css({
+                'display': 'block'
+            });
+        }
         if (stackunit.location === 'EXCAVATED') {
             $('.m-excavated').css({
                 'display': 'block'
