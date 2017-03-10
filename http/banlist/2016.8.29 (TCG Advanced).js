@@ -164,21 +164,21 @@ module.exports =
 		5851097: 1, //Vanity's Emptiness
 		17078030: 1, //Wall of Revealing Light
 		72714461: 1, //Wisdom-Eye Magician
-		74311226: 2 //Atlantean Dragoons
-		85087012: 2 //Card Trooper
-		36468556: 2 //Ceasefire
-		91623717: 2 //Chain Strike
-		94886282: 2 //Charge of the Light Brigade
-		53129443: 2 //Dark Hole
-		14943837: 2 //Debris Dragon
-		62265044: 2 //Dragon Ravine
-		37742478: 2 //Honest
-		23434538: 2 //Maxx C
-		28297833: 2 //Necroface
-		29843091: 2 //Ojama Trio
-		423585: 2 //Summoner Monk
-		71564252: 2 //Thunder King Rai-Oh
-		59297550: 2 //Wind-Up Magician
+		74311226: 2, //Atlantean Dragoons
+		85087012: 2, //Card Trooper
+		36468556: 2, //Ceasefire
+		91623717: 2, //Chain Strike
+		94886282: 2, //Charge of the Light Brigade
+		53129443: 2, //Dark Hole
+		14943837: 2, //Debris Dragon
+		62265044: 2, //Dragon Ravine
+		37742478: 2, //Honest
+		23434538: 2, //Maxx C
+		28297833: 2, //Necroface
+		29843091: 2, //Ojama Trio
+		423585: 2, //Summoner Monk
+		71564252: 2, //Thunder King Rai-Oh
+		59297550: 2, //Wind-Up Magician
     },
      bannedTypes : [],
      exceptions : [],
