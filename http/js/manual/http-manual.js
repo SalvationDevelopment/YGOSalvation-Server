@@ -1124,6 +1124,7 @@ function manualReciver(message) {
         sidestach.extra = sidedDeck.extra.length;
         sidestach.side = sidedDeck.side.length;
         renderSideDeckZone(sidedDeck);
+        internalLocal = 'surrendered';
         break;
     case "start":
         startGame(message);
