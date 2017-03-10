@@ -1,5 +1,4 @@
 function validateDeck (deck, banlist, database) {
-  console.log(banlist);
   function getCardById (cardId) {
     for (var i = 0; i < database.length; i++) {
       if (database[i].id == cardId) {
@@ -81,26 +80,26 @@ function validateDeck (deck, banlist, database) {
   for (var card in main) {
     if (main[card] > 3 || side[card] && main[card] + side[card] > 3) {
       validate.error = true;
-      validate.message = card;
+      validate.msg = "You have " + cardAmount+ " copies of " + card + " but the limit is " + banlist[card];
       return validate;
     }
   }
   for (var card in side) {
     if (side[card] > 3 || main[card] && main[card] + side[card] > 3) {
       validate.error = true;
-      validate.message = card;
+      validate.msg = "You have " + cardAmount+ " copies of " + card + " but the limit is " + banlist[card];
       return validate;
     }
   }
   for (var card in extra) {
     if (extra[card] > 3 || side[card] && extra[card] + side[card] > 3) {
       validate.error = true;
-      validate.message = card;
+      validate.msg = "You have " + cardAmount+ " copies of " + card + " but the limit is " + banlist[card];
       return validate;
     }
   }
   // check banlist, assume banlist is an object generated from ConfigParser()
-  for (var card in banlist) {
+  for (var card in banlist.bannedCards) {
     var cardAmount = 0;
     if (main[card]) {
       cardAmount += main[card];
@@ -111,9 +110,9 @@ function validateDeck (deck, banlist, database) {
     if (extra[card]) {
       cardAmount += extra[card];
     }
-    if (cardAmount > banlist[card]) {
+    if (cardAmount > banlist.bannedCards[card]) {
       validate.error = true;
-      validate.message = card;
+      validate.msg = "You have " + cardAmount+ " copies of " + card + " but the limit is " + banlist[card];
       return validate;
     }
   }
