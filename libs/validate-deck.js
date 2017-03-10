@@ -1,5 +1,5 @@
 function validateDeck (deck, banlist, database) {
-
+  console.log(banlist);
   function getCardById (cardId) {
     for (var i = 0; i < database.length; i++) {
       if (database[i].id == cardId) {
