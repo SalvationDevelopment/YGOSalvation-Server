@@ -51,6 +51,7 @@ module.exports = function (wss) {
             started: false,
             deckcheck: 0,
             draw_count: 0,
+            ot: settings.info.ot,
             banlist: settings.info.banlist,
             banlistid: settings.info.banlistid,
             mode: settings.info.mode,
@@ -315,7 +316,7 @@ module.exports = function (wss) {
             if (socket.slot !== undefined) {
 
                 try {
-					var banlist = require('../http/banlist/2016.8.29 (TCG Advanced).js');
+                    var banlist = require('../http/banlist/2016.8.29 (TCG Advanced).js');
                     message.validate = validateDeck(message.deck, banlist, database);
                     if (message.validate) {
                         if (message.validate.error) {
