@@ -313,11 +313,9 @@ module.exports = function (wss) {
                 break;
             }
             if (socket.slot !== undefined) {
-				//testing for deck validation
-				var banlist = require('../http/banlist/2016.8.29 (TCG Advanced).js');
+				var banlist = require('../http/banlist/' + games[activeduel].banlist + '.js');
 				message.validate = validateDeck(message.deck, banlist, database);
 				console.log(banlist);
-				//done testing for validation 
                 try {
                     if (message.validate) {
                         if (message.validate.error) {
