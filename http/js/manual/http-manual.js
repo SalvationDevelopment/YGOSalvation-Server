@@ -2700,6 +2700,7 @@ function guicardonclick() {
             if (stackunit.location === 'MONSTERZONE') {
                 manualXYZSummon(stackunit);
             }
+
             return;
         }
 
@@ -2731,6 +2732,7 @@ function guicardonclick() {
             $('.m-opponent').css({
                 'display': 'block'
             });
+            reorientmenu();
         }
         if (stackunit.location === 'EXCAVATED') {
             $('.m-excavated').css({
@@ -3048,6 +3050,12 @@ function getLinkedZone(player, index, link) {
     return null;
 }
 
+function processCardDblclick(event) {
+    'use strict';
+
+}
+var recentClassString = '';
+
 function processCardHover(event) {
     'use strict';
     $('.linkglow').removeClass('linkglow');
@@ -3059,8 +3067,10 @@ function processCardHover(event) {
     record = parseInt($('#' + uid).attr('data-uid'), 10);
     try {
         html = makeDescription($('#' + uid).attr('data-id'));
+        recentClassString = ($('#' + uid).attr('class'));
     } catch (fail) {
         html = '';
+        recentClassString = '';
     }
 
     $('.imgContainer').attr('src', $('#' + event.currentTarget.id).attr('src'));
@@ -3095,6 +3105,7 @@ $(document).ready(function () {
     serverconnect();
     $('.imgContainer').attr('src', 'img/textures/cover.jpg');
     $('body').on('mouseover', '.card, .revealedcard', processCardHover);
+    $('body').on('dblclick', '.card, .revealedcard', processCardDblclick);
     $('#manualcontrols button').click(function () {
 
         setTimeout(function () {
