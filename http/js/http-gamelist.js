@@ -280,6 +280,7 @@ function getManualDuelRequest() {
         randneed = 16;
     out = {
         cardpool: $('#creategamecardpool option:selected').text(),
+        ot: $('#creategamecardpool option:selected').val(),
         mode: $('#creategameduelmode option:selected').text(),
         banlist: $('#creategamebanlist option:selected').text(),
         banlistid: $('#creategamebanlist').val(),

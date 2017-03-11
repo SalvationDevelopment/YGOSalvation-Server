@@ -1460,6 +1460,7 @@ div#gamelist {
     margin-bottom: 1em;
     background: rgba(0, 0, 0, .5);
     box-shadow: 0 0 10px black;
+    cursor: pointer;
 }
 
 div#duelspectate {
