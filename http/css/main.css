@@ -1540,13 +1540,14 @@ div#waiting {
 }
 
 .lockindicator[data-state=true] {
-    width: 3em;
-    border: 1px solid black;
+    /* width: 3em; */
+    border: 2px solid darkgreen;
     background: green;
 }
 
 .lockindicator[data-state=false] {
-    background: orange;
+    background: yellow;
+    border: 2px solid orange;
 }
 
 .ingameminorcontrols {
