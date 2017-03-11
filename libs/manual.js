@@ -319,11 +319,11 @@ module.exports = function (wss) {
 				console.log(banlist);
 				//done testing for validation 
                 try {
-
                     if (message.validate) {
                         if (message.validate.error) {
                             console.log(message.validate.error);
                             socket.send(JSON.stringify({
+								errorType: 'validation',
                                 action: 'error',
                                 error: message.validate.error,
                                 msg: message.validate.msg

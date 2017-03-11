@@ -1046,7 +1046,8 @@ function manualReciver(message) {
         if (internalLocal === 'surrendered') {
             alert('An Error Occured');
         }
-
+	if (message.errorType == "validation")
+		alert(message.msg);
     }
 
     switch (message.action) {
