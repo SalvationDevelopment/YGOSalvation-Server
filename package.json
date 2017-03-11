@@ -19,19 +19,15 @@
         "compression": "*",
         "ddos": "^0.1.16",
         "debug": "*",
-        "electron": "*",
         "express": "*",
         "extended-fs": "^0.3.3",
         "fs-extended": "*",
         "fs-walk": "*",
         "helmet": "^3.4.1",
-        "hsts": "^2.0.0",
         "instaqueue": "*",
-        "irc": "*",
         "jsonfile": "^2.4.0",
         "mysql": "^2.10.2",
         "nedb": "^1.7.2",
-        "node-php": "*",
         "policyfile": "*",
         "primus": "4.0.4",
         "primus-rooms": "*",
@@ -48,6 +44,7 @@
         "zip-folder": "*"
     },
     "optionalDependencies": {
+        "electron": "*",
         "httpsys": "*"
     },
     "devDependencies": {
