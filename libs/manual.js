@@ -318,7 +318,7 @@ module.exports = function (wss) {
 				message.validate = validateDeck(message.deck, banlist, database);
 				console.log(banlist);
                 try {
-                    message.validate = validateDeck(message.deck, banlist, database);
+                    message.validate = validateDeck(message.deck, banlist, database, games[activegame].ot);
                     if (message.validate) {
                         if (message.validate.error) {
                             console.log(message.validate.error);
