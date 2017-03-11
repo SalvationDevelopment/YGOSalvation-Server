@@ -112,7 +112,7 @@ function validateDeck (deck, banlist, database) {
     }
     if (cardAmount > banlist.bannedCards[card]) {
       validate.error = true;
-      validate.msg = "You have " + cardAmount+ " copies of " + '"' + getCardById(card).name + '"' + " but the legal amount is " + banlist.bannedCards[card] + " in this ruleset";
+      validate.msg = "The number of copies of " + '"' + getCardById(card).name + '"' + " exceeds the number permitted by the selected Forbidden/Limited Card List";
       return validate;
     }
   }
