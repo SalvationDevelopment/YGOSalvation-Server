@@ -7,5 +7,5 @@ module.exports =
      exceptions : [],
      startDate : 'null',
      endDate : 'null',
-     name : 'null',
+     name : 'Unlimited',
 }
