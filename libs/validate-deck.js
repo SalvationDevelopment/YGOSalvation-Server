@@ -80,21 +80,21 @@ function validateDeck (deck, banlist, database) {
   for (var card in main) {
     if (main[card] > 3 || side[card] && main[card] + side[card] > 3) {
       validate.error = true;
-      validate.msg = "You can't have " + cardAmount+ " copies of " + getCardById(card).name;
+      validate.msg = "You can't have " + cardAmount+ " copies of " + '"' + getCardById(card).name + '"';
       return validate;
     }
   }
   for (var card in side) {
     if (side[card] > 3 || main[card] && main[card] + side[card] > 3) {
       validate.error = true;
-      validate.msg = "You can't have " + cardAmount+ " copies of " + getCardById(card).name;
+      validate.msg = "You can't have " + cardAmount+ " copies of " + '"' + getCardById(card).name + '"';
       return validate;
     }
   }
   for (var card in extra) {
     if (extra[card] > 3 || side[card] && extra[card] + side[card] > 3) {
       validate.error = true;
-      validate.msg = "You can't have " + cardAmount+ " copies of " + getCardById(card).name;
+      validate.msg = "You can't have " + cardAmount+ " copies of " + '"' + getCardById(card).name + '"';
       return validate;
     }
   }
