@@ -2,56 +2,61 @@
 /*jslint bitwise: true, plusplus:true, regexp:true, browser:true*/
 
 
+function getLevel(card) {
+    var lv = card.level || 0,
+        val = lv.toString(16),
+        value = parseInt(val.toString().substr(val.length - 2), 10) || 0;
+    return value;
+}
 
+function cardEvaluate(card) {
+    var value = 0;
+
+    if (cardIs('monster', card)) {
+        value -= 100;
+    }
+    if (card.type === 17) { // normal monster
+        value -= 100;
+    }
+    if (cardIs('ritual', card)) {
+        value += 300;
+    }
+    if (cardIs('fusion', card)) {
+        value += 400;
+    }
+    if (cardIs('synchro', card)) {
+        value += 500;
+    }
+    if (cardIs('xyz', card)) {
+        value += 600;
+    }
+    if (cardIs('link', card)) {
+        value += 700;
+    }
+    if (cardIs('spell', card)) {
+        value += 10000;
+    }
+    if (cardIs('trap', card)) {
+        value += 100000;
+    }
+    return value;
+
+}
 
 function cardStackSort(a, b) {
     'use strict';
-    var aExtra = (cardIs('xyz', a) || cardIs('synchro', a) || cardIs('fusion', a) || cardIs('link', a)),
-        bExtra = (cardIs('xyz', b) || cardIs('synchro', b) || cardIs('fusion', b) || cardIs('link', b));
-
-    if (parseInt(a.level, 10) > parseInt(b.level, 10)) {
-        return -1;
-    }
-    if (parseInt(a.level, 10) < parseInt(b.level, 10)) {
+    if (cardEvaluate(a) > cardEvaluate(b)) {
         return 1;
     }
-
-    if (cardIs('monster', a) && !cardIs('monster', b)) {
+    if (cardEvaluate(a) < cardEvaluate(b)) {
         return -1;
     }
-    if (!cardIs('monster', a) && cardIs('monster', b)) {
+    if (getLevel(a) > getLevel(b)) {
+        return -1;
+    }
+    if ((getLevel(a) < getLevel(b))) {
         return 1;
     }
-
-    if (cardIs('monster', a) && cardIs('monster', b)) {
-
-        if (!aExtra && bExtra) {
-            return -1;
-        }
-        if (aExtra && !bExtra) {
-            return 1;
-        }
-        if (!cardIs('xyz', a) && cardIs('xyz', b)) {
-            return -1;
-        }
-        if (cardIs('xyz', a) && !cardIs('xyz', b)) {
-            return 1;
-        }
-        if (!cardIs('synchro', a) && cardIs('synhro', b)) {
-            return -1;
-        }
-        if (cardIs('synchro', a) && !cardIs('synchro', b)) {
-            return 1;
-        }
-        if (!cardIs('fusion', a) && cardIs('fusion', b)) {
-            return -1;
-        }
-        if (cardIs('fusion', a) && !cardIs('fusion', b)) {
-            return 1;
-        }
-    }
-
-
     if (a.atk > b.atk) {
         return -1;
     }
@@ -64,7 +69,6 @@ function cardStackSort(a, b) {
     if (a.def > b.def) {
         return -1;
     }
-
 
     if (a.type > b.type) {
         return 1;
@@ -732,7 +736,7 @@ var deckEditor = (function () {
         cards.forEach(function (card, index) {
             var hardcard = JSON.stringify(card),
                 src = card.id + '.jpg';
-            html += '<div class="searchwrapper" data-card-limit="' + card.limit + '"><img class="deckeditcard card" id="deceditcard' + index + zone + '" src="https://rawgit.com/SalvationDevelopment/YGOPro-Images/master/' + src + '" data-id="' + card.id + '" onError="this.onerror=null;this.src=\'/img/textures/unknown.jpg\';" onclick = "deckeditonclick(' + index + ', \'' + zone + '\')" / ></div>';
+            html += '<div class="searchwrapper" data-card-limit="' + card.limit + '"><img class="deckeditcard card" id="deceditcard' + index + zone + '" data-dropindex="' + index + '" data-dropzone="' + zone + '" src="https://rawgit.com/SalvationDevelopment/YGOPro-Images/master/' + src + '" data-id="' + card.id + '" onError="this.onerror=null;this.src=\'/img/textures/unknown.jpg\';" onclick = "deckeditonclick(' + index + ', \'' + zone + '\')" / ></div>';
         });
 
         $('#deckedit .cardspace .' + zone).html(html);
