@@ -51,7 +51,7 @@ module.exports = function (wss) {
             started: false,
             deckcheck: 0,
             draw_count: 0,
-            ot: settings.info.ot,
+            ot: parseInt(settings.info.ot, 10),
             banlist: settings.info.banlist,
             banlistid: settings.info.banlistid,
             mode: settings.info.mode,
@@ -315,8 +315,8 @@ module.exports = function (wss) {
             }
             if (socket.slot !== undefined) {
                 var banlist = require('../http/banlist/' + games[activeduel].banlist + '.js');
-                message.validate = validateDeck(message.deck, banlist, database, cardPool);
-                console.log(banlist);
+                message.validate = validateDeck(message.deck, banlist, database, games[activeduel].ot);
+
                 try {
                     //message.validate = validateDeck(message.deck, banlist, database, games[activegame].ot);
                     if (message.validate) {
