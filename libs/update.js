@@ -215,7 +215,7 @@ function getcards(file) {
     while (texts.step()) { //
         row = texts.getAsObject();
         row.links = linkMarkers[row.id] || [];
-        row.ots = getotString(row.ot)
+        row.cardpool = getotString(row.ot)
         output.push(row);
     }
     db.close();
