@@ -1541,14 +1541,6 @@ function manualTarget(target) {
     $('.card').removeClass('targetglow');
 }
 
-function manualSignalEffectActivation(target) {
-    'use strict';
-    manualServer.send(JSON.stringify({
-        action: 'effect',
-        id: manualActionReference.id
-    }));
-}
-
 
 function manualRemoveToken() {
     'use strict';
@@ -1731,6 +1723,17 @@ function makePendulumZoneR(card) {
 
 
 
+function manualSignalEffect() {
+    'use strict';
+
+    manualServer.send(JSON.stringify({
+        action: 'effect',
+        id: manualActionReference.id,
+        player: manualActionReference.player,
+        index: manualActionReference.index,
+        location: manualActionReference.location
+    }));
+}
 
 function manualNormalSummon(index) {
     'use strict';
@@ -3053,10 +3056,6 @@ function getLinkedZone(player, index, link) {
     return null;
 }
 
-function processCardDblclick(event) {
-    'use strict';
-
-}
 var recentClassString = '';
 
 function processCardHover(event) {
