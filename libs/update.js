@@ -175,6 +175,24 @@ function filestreamer() {
 
 var fs = require('fs');
 
+function getotString(ot) {
+    switch (ot) {
+    case 0:
+        return 'OCG';
+    case 1:
+        return 'TCG';
+    case 3:
+        return 'OCG/TCG';
+    case 4:
+        return 'Anime';
+    case 5:
+        return 'OCG Prerelease';
+    case 6:
+        return 'TCG Prerelease';
+        return '';
+    }
+}
+
 function getcards(file) {
     var filebuffer = fs.readFileSync('../http/ygopro/databases/' + file),
         db = new SQL.Database(filebuffer),
@@ -197,10 +215,10 @@ function getcards(file) {
     while (texts.step()) { //
         row = texts.getAsObject();
         row.links = linkMarkers[row.id] || [];
+        row.ots = getotString(row.ot)
         output.push(row);
     }
     db.close();
-
     return output;
 }
 
@@ -316,6 +334,7 @@ function generate(callback) {
         for (i = 0; files.length > i; i++) {
             try {
                 fs.writeFileSync('../http/manifest/manifest_' + files[i].slice(0, -4) + '.json', JSON.stringify(getcards(files[i])));
+                console.log('    Generated ../http/manifest/manifest_' + files[i].slice(0, -4) + '.json');
             } catch (e) {
 
             }
