@@ -188,6 +188,9 @@ function cardIs(cat, obj) {
     if (cat === "fusion") {
         return (obj.type & 64) === 64;
     }
+    if (cat === "ritual") {
+        return (obj.type & 128) === 128;
+    }
     if (cat === "synchro") {
         return (obj.type & 8192) === 8192;
     }
