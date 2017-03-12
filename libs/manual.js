@@ -315,10 +315,10 @@ module.exports = function (wss) {
             }
             if (socket.slot !== undefined) {
 				var banlist = require('../http/banlist/' + games[activeduel].banlist + '.js');
-				message.validate = validateDeck(message.deck, banlist, database);
+				message.validate = validateDeck(message.deck, banlist, database, cardPool);
 				console.log(banlist);
                 try {
-                    message.validate = validateDeck(message.deck, banlist, database, games[activegame].ot);
+                    //message.validate = validateDeck(message.deck, banlist, database, games[activegame].ot);
                     if (message.validate) {
                         if (message.validate.error) {
                             console.log(message.validate.error);

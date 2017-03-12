@@ -1,4 +1,4 @@
-function validateDeck (deck, banlist, database, cardpool) {
+function validateDeck (deck, banlist, database, cardPool) {
   function getCardById (cardId) {
     for (var i = 0; i < database.length; i++) {
       if (database[i].id == cardId) {
