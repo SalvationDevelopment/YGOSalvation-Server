@@ -517,7 +517,10 @@ module.exports = function (wss) {
             if (socket.slot !== undefined) {
                 duelBroadcast(activeduel, {
                     action: 'effect',
-                    id: message.id
+                    id: message.id,
+                    player: message.player,
+                    index: message.index,
+                    location: message.location
                 });
             }
             break;
