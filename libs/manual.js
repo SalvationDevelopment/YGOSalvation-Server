@@ -314,14 +314,11 @@ module.exports = function (wss) {
                 break;
             }
             if (socket.slot !== undefined) {
-                //testing for deck validation
-                var banlist = require('../http/banlist/2016.8.29 (TCG Advanced).js');
-                message.validate = validateDeck(message.deck, banlist, database);
+                var banlist = require('../http/banlist/' + games[activeduel].banlist + '.js');
+                message.validate = validateDeck(message.deck, banlist, database, cardPool);
                 console.log(banlist);
-                //done testing for validation 
                 try {
-                    banlist = require('../http/banlist/2016.8.29 (TCG Advanced).js');
-                    message.validate = validateDeck(message.deck, banlist, database);
+                    //message.validate = validateDeck(message.deck, banlist, database, games[activegame].ot);
                     if (message.validate) {
                         if (message.validate.error) {
                             console.log(message.validate.error);
