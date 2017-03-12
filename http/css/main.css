@@ -2709,5 +2709,5 @@ html {
 button#onlinelisttogger {
     position: fixed;
     bottom: 13px;
-    right: 13px;
+    left: 13px;
 }
