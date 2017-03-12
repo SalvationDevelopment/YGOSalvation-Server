@@ -177,9 +177,9 @@ var fs = require('fs');
 
 function getotString(ot) {
     switch (ot) {
-    case 0:
-        return 'OCG';
     case 1:
+        return 'OCG';
+    case 2:
         return 'TCG';
     case 3:
         return 'OCG/TCG';
