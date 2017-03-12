@@ -3,14 +3,15 @@
 /*jslint plusplus :true*/
 
 function validateDeck(deck, banlist, database, cardPool) {
+
     function getCardById(cardId) {
-        var i;
-        for (i = 0; i < database.length; i++) {
-            if (database[i].id === cardId) {
-                return database[i];
+        var result = database.find(function (card) {
+            if (card.id === cardId) {
+                return true;
             }
-        }
-        return null;
+            return false;
+        });
+        return result || null;
     }
 
     var main = {},
