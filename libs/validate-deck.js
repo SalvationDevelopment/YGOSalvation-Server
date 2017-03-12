@@ -6,7 +6,7 @@ function validateDeck(deck, banlist, database, cardPool) {
 
     function getCardById(cardId) {
         var result = database.find(function (card) {
-            if (card.id === cardId) {
+            if (card.id === parseInt(cardId, 10)) {
                 return true;
             }
             return false;
