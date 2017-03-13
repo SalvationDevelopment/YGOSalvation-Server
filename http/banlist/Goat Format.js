@@ -82,4 +82,5 @@ module.exports =
      startDate : new Date('2005-04-01'),
      endDate : new Date('2005-08-01'),
      name : 'Goat Format',
+	 masterRule : 0,
 }
