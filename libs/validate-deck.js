@@ -109,51 +109,51 @@ function validateDeck(deck, banlist, database, cardpool) {
     // check cardpool 
     console.log('checking against', cardpool);
     for (var card in main) {
-        if (cardpool == 'OCG/TCG' && card.cardpool != 4) {
+        if (cardpool == 'OCG/TCG' && getCardById(card).ot == 4) {
             validate.error = true;
             validate.msg = getCardById(card).name + " is not allowed in the OCG/TCG card pool";
             return validate;
         }
-        if (cardpool == 'TCG' && (card.cardpool != 3 || card.cardpool != 2 || card.cardpool != 6)) {
+        if (cardpool == 'TCG' && (getCardById(card).ot == 4 || getCardById(card).ot == 1 || getCardById(card).ot == 5)) {
             validate.error = true;
             validate.msg = getCardById(card).name + " is not allowed in the TCG card pool";
             return validate;
         }
-        if (cardpool == 'OCG' && (card.cardpool != 3 || card.cardpool != 1 || card.cardpool != 5)) {
+        if (cardpool == 'OCG' && (getCardById(card).ot == 4 || getCardById(card).ot == 2 || getCardById(card).ot == 6)) {
             validate.error = true;
             validate.msg = getCardById(card).name + " is not allowed in the OCG card pool";
             return validate;
         }
     }
     for (var card in side) {
-        if (cardpool == 'OCG/TCG' && card.cardpool != 4) {
+        if (cardpool == 'OCG/TCG' && getCardById(card).ot == 4) {
             validate.error = true;
             validate.msg = getCardById(card).name + " is not allowed in the OCG/TCG card pool";
             return validate;
         }
-        if (cardpool == 'TCG' && (card.cardpool != 3 || card.cardpool != 2 || card.cardpool != 6)) {
+        if (cardpool == 'TCG' && (getCardById(card).ot == 4 || getCardById(card).ot == 1 || getCardById(card).ot == 5)) {
             validate.error = true;
             validate.msg = getCardById(card).name + " is not allowed in the TCG card pool";
             return validate;
         }
-        if (cardpool == 'OCG' && (card.cardpool != 3 || card.cardpool != 1 || card.cardpool != 5)) {
+        if (cardpool == 'OCG' && (getCardById(card).ot == 4 || getCardById(card).ot == 2 || getCardById(card).ot == 6)) {
             validate.error = true;
             validate.msg = getCardById(card).name + " is not allowed in the OCG card pool";
             return validate;
         }
     }
     for (var card in extra) {
-        if (cardpool == 'OCG/TCG' && card.cardpool != 4) {
+        if (cardpool == 'OCG/TCG' && getCardById(card).ot == 4) {
             validate.error = true;
             validate.msg = getCardById(card).name + " is not allowed in the OCG/TCG card pool";
             return validate;
         }
-        if (cardpool == 'TCG' && (card.cardpool != 3 || card.cardpool != 2 || card.cardpool != 6)) {
+        if (cardpool == 'TCG' && (getCardById(card).ot == 4 || getCardById(card).ot == 1 || getCardById(card).ot == 5)) {
             validate.error = true;
             validate.msg = getCardById(card).name + " is not allowed in the TCG card pool";
             return validate;
         }
-        if (cardpool == 'OCG' && (card.cardpool != 3 || card.cardpool != 1 || card.cardpool != 5)) {
+        if (cardpool == 'OCG' && (getCardById(card).ot == 4 || getCardById(card).ot == 2 || getCardById(card).ot == 6)) {
             validate.error = true;
             validate.msg = getCardById(card).name + " is not allowed in the OCG card pool";
             return validate;
