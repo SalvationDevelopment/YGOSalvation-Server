@@ -180,7 +180,7 @@ function validateDeck(deck, banlist, database, cardpool) {
     return validate;
 	if (banlist.masterRule !== 4) {
 		for (var card in extra) {
-			if (getCardById(card).type >== 33554433) {
+			if (getCardById(card).type >= 33554433) {
 				validate.error = true;
 				validate.msg = "Link Monsters are not permitted by the selected Forbidden/Limited Card List";
 				return validate;
