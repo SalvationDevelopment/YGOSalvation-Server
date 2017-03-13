@@ -8,4 +8,5 @@ module.exports =
      startDate : 'null',
      endDate : 'null',
      name : 'Unlimited',
+	 masterRule : 3,
 }
