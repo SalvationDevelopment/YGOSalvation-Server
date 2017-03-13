@@ -57,6 +57,7 @@ module.exports = function (wss) {
             mode: settings.info.mode,
             cardpool: settings.info.cardpool,
             noshuffle: 0,
+			prerelease: settings.info.prerelease,
             prio: settings.info.prio,
             rule: 0,
             startLP: settings.info.startLP,
