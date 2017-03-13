@@ -135,7 +135,6 @@ var Datastore = require('nedb'),
 
 
 function announce(announcement) {
-    console.log('announcing');
     primus.write(announcement);
 }
 
