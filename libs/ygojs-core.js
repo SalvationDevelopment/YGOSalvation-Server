@@ -486,7 +486,7 @@ function init(callback) {
      * @param {Number} numberOfCards number of cards drawn
      * @param {Array} cards         array of objects representing each of those drawn cards.
      */
-    function drawCard(player, numberOfCards, cards, username) {
+    function drawCard(player, numberOfCards, username) {
         var currenthand = filterlocation(filterPlayer(stack, player), 'HAND').length,
             topcard,
             target,
@@ -974,6 +974,13 @@ function init(callback) {
     }
 
     /**
+     * Sets the current turn player.
+     */
+    function setTurnPlayer() {
+        state.turnOfPlayer = (state.turnOfPlayer === 0) ? 1 : 0;
+    }
+
+    /**
      * Change lifepoints of a player
      * @param {Number} player player to edit
      * @param {Number} amount amount of lifepoints to take or remove.
@@ -1158,7 +1165,8 @@ function init(callback) {
         rematchAccept: 0,
         sideAccept: 0,
         setNames: setNames,
-        getStack: getStack
+        getStack: getStack,
+        setTurnPlayer: setTurnPlayer
     };
 
 
