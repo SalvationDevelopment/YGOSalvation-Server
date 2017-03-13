@@ -156,4 +156,5 @@ module.exports =
      startDate : new Date('2017-01-01'),
      endDate : new Date('2017-04-01'),
      name : '2017.1.1 (OCG)',
+	 masterRule : 3,
 }
