@@ -1542,8 +1542,8 @@ div#waiting {
 
 .lockindicator[data-state=true] {
     /* width: 3em; */
-    border: 2px solid darkgreen;
-    background: green;
+    border: 2px solid #049c1f;
+    background: #04e51f;
 }
 
 .lockindicator[data-state=false] {
