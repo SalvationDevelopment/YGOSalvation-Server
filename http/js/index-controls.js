@@ -55,7 +55,7 @@ function updatenews() {
                         articles: []
                     },
                     output;
-                console.log(topics);
+
                 topics.forEach(function (topic, index) {
                     if (index > 5) {
                         //limit the number of post in the news feed.

@@ -97,6 +97,20 @@ var zlib = require('zlib'),
     };
 
 
+function getBanlist() {
+    var banlist = {},
+        files = fs.readdirSync('../http/banlist/');
+    files.forEach(function (filename) {
+        if (filename.indexOf('.js') > -1) {
+            var listname = filename.slice(0, -3);
+            banlist[listname] = require('../http/banlist/' + '/' + filename);
+        }
+    });
+    return banlist;
+}
+
+var banlistfiles = getBanlist();
+
 function dirTree(filename) {
 
     var stats = fs.lstatSync(filename),
@@ -325,7 +339,7 @@ function makeDescription(id) {
 }
 
 function generate(callback) {
-
+    fs.writeFileSync('../http/manifest/banlist.json', JSON.stringify(banlistfiles, null, 1));
     fs.readdir('../http/ygopro/databases/', function (err, files) {
         var i,
             oldDB,
