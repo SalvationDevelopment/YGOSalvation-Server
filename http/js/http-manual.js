@@ -867,7 +867,7 @@ function endSiding() {
     'use strict';
 
     if (sidedDeck.side.length !== sidestach.side) {
-        alert('Side Deck is not at orginal amount of', sidestach.side);
+        alertmodal('Side Deck is not at orginal amount of', sidestach.side);
         return;
     }
     manualServer.send(JSON.stringify({
@@ -882,7 +882,7 @@ function endSiding() {
             }));
             return;
         } else {
-            alert('Opponent is still siding, please wait.');
+            alertmodal('Opponent is still siding, please wait.');
         }
     }, 2000);
 }
@@ -1048,10 +1048,10 @@ function manualReciver(message) {
     console.log(message);
     if (message.error) {
         if (internalLocal === 'surrendered') {
-            alert('An Error Occured');
+            alertmodal('An Error Occured');
         }
         if (message.errorType === "validation") {
-            alert(message.msg);
+            alertmodal(message.msg);
         }
     }
 
@@ -1232,7 +1232,7 @@ function serverconnect() {
     manualServer.onclose = function (message) {
         console.log('Manual Connection Died, reconnecting,...');
         if (internalLocal === 'surrendered') {
-            alert('A Connection Error Occured');
+            alertmodal('A Connection Error Occured');
         }
         setTimeout(serverconnect, 2000);
     };
@@ -1270,7 +1270,7 @@ function manualJoin(game) {
     //    } else if (isChromium !== null && isChromium !== undefined && vendorName === "Google Inc." && isOpera === false && isIEedge === false) {
     //        console.log();
     //    } else {
-    //        alert('This site only works with Google Chrome');
+    //        alertmodal('This site only works with Google Chrome');
     //        return;
     //    }
     manualServer.send(JSON.stringify({
@@ -1323,7 +1323,7 @@ function manualLock() {
             deck: deck
         }));
     } else {
-        alert('Main Deck is less than 40 cards, please choose another deck.');
+        alertmodal('Main Deck is less than 40 cards, please choose another deck.');
     }
 
 }
@@ -1338,7 +1338,7 @@ function manualStart() {
             return;
         }
     }
-    alert('Duelist not ready yet. Please Lock in decks');
+    alertmodal('Duelist not ready yet. Please Lock in decks');
 }
 
 function manualChat(message) {
