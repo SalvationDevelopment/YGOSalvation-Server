@@ -239,7 +239,7 @@ function updateloby(state) {
     if (state === undefined) {
         return;
     }
-    legacyMode = state.prio;
+    legacyMode = state.legacyfield;
     $('#player1lobbyslot').val(state.player[0].name);
     $('#player2lobbyslot').val(state.player[1].name);
     //    $('#player3lobbyslot').val(state.player[2].name);

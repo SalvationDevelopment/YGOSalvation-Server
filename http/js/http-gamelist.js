@@ -255,7 +255,6 @@ function getDuelRequest() {
         randneed = ($('#creategamebanlist').val() > 9) ? 4 : 5;
     out = {
         string: pretypecheck + $('#creategamecardpool').val() + $('#creategameduelmode').val() + $('#creategametimelimit').val(),
-        prio: isChecked('#enableprio') ? ("T") : ("O"),
         checkd: isChecked('#discheckdeck') ? ("T") : ("O"),
         shuf: isChecked('#disshuffledeck') ? ("T") : ("O"),
         stnds: "," + $('#creategamebanlist').val() + stnds,
@@ -263,10 +262,9 @@ function getDuelRequest() {
 
     };
 
-    out.prio = ($('#creategamebanlist').val() === "4") ? "T" : out.prio;
-    out.prio = ($('#creategamebanlist').val() === "5") ? "T" : out.prio;
+
     if ($('#creategamebanlist').val() === "3") {
-        out.string[0] = "1"
+        out.string[0] = "1";
     }
 
     return out;
@@ -286,28 +284,18 @@ function getManualDuelRequest() {
         banlistid: $('#creategamebanlist').val(),
         timelimit: $('#creategametimelimit').val(),
         startLP: $('#creategamelp').val(),
-        prio: isChecked('#enableprio'),
+
         checkd: isChecked('#discheckdeck'),
         shuf: isChecked('#disshuffledeck'),
         pass: isChecked('#usepass') ? setpass() : randomString(randneed)
 
     };
-    out.prio = ($('#creategamebanlist').val() === "5") ? true : out.prio;
+
+
     return out;
 }
 
-function secure(prio, checkd, shuf) {
-    'use strict';
-    if (prio + checkd + shuf !== "OOO" && $('input:radio[name=ranked]:checked').val() === 'R') {
-        $('#servermessages').text('You may not cheat here.');
-        return false;
-    }
-    if ($('#creategamecardpool').val() === 2 && $('input:radio[name=ranked]:checked').val() === 'R') {
-        $('#servermessages').text('OCG/TCG is not a valid mode for ranked, please select a different mode for ranked play');
-        return false;
-    }
-    return true;
-}
+
 
 function setHostSettings() {
     'use strict';
@@ -335,7 +323,7 @@ function setHostSettings() {
     var duelRequest = getDuelRequest();
 
     localStorage.roompass =
-        (duelRequest.string + duelRequest.prio +
+        (duelRequest.string + 'O' +
             duelRequest.checkd + duelRequest.shuf +
             $('#creategamelp').val() + duelRequest.stnds +
             duelRequest.pass).substring(0, 24);
@@ -365,7 +353,7 @@ function setHostSettings() {
     }
     try {
         _gaq.push(['_trackEvent', 'Launcher', 'YGOPro', 'Host']);
-        _gaq.push(['_trackEvent', 'Launcher', 'YGOPro Host', duelRequest.string + duelRequest.prio +
+        _gaq.push(['_trackEvent', 'Launcher', 'YGOPro Host', duelRequest.string + 'O' +
             duelRequest.checkd + duelRequest.shuf +
             $('#creategamelp').val() + duelRequest.stnds]);
     } catch (e) {}
