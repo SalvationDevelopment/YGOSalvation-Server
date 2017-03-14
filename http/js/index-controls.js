@@ -123,7 +123,7 @@ function singlesitenav(target) {
         return;
     }
     if (internalLocal === 'duelscreen') {
-        alert('You are in a duel, surrender or finish it.');
+        alertmodal('You are in a duel, surrender or finish it.');
         return false;
     }
     if (launcher && target === 'deckedit') {
@@ -217,6 +217,17 @@ function singlesitenav(target) {
     }
     return false;
 }
+
+function alertmodal(message) {
+    $('#alertmodal').css('display', 'flex');
+    $('#alertmodaltext').html(message);
+}
+
+function closealertmodal() {
+    $('#alertmodal').css('display', 'none');
+    $('#alertmodaltext').html('');
+}
+
 
 function locallogin(init) {
     'use strict';
@@ -355,7 +366,7 @@ function processLogin(data) {
         $('#profileusername').text(info.displayname);
         $('#profilepoints span').text(info.data.field_12);
         if (parseInt(info.data.post, 10) < 1) {
-            alert('Please visit our forums and introduce yourself!');
+            alertmodal('Please visit our forums and introduce yourself!');
         }
         window.quedfunc = 'populatealllist';
         window.quedready = true;
@@ -365,7 +376,7 @@ function processLogin(data) {
             action: 'load'
         });
     } else {
-        alert(info.message);
+        alertmodal(info.message);
     }
 
 }
@@ -733,7 +744,7 @@ function convertID() {
             $('#sqloutput').val(message.sql);
         }
     } else {
-        alert('Invalid ID, not a number');
+        alertmodal('Invalid ID, not a number');
     }
 }
 
@@ -788,7 +799,7 @@ function screenshot() {
             var newWin = window.open("<title>Screenshot</title>");
             if (!newWin || newWin.closed || typeof newWin.closed == 'undefined') {
                 //POPUP BLOCKED
-                alert('Popups are blocked, cant display screenshot!');
+                alertmodal('Popups are blocked, cant display screenshot!');
                 return;
             }
             newWin.document.write(image.outerHTML);
