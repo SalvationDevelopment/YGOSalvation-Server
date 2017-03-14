@@ -47,7 +47,7 @@ module.exports = function (wss) {
             cardpool: settings.info.cardpool,
             noshuffle: 0,
             prerelease: settings.info.prerelease,
-            prio: settings.info.prio,
+            legacyfield: (banlist[settings.info.banlist].masterRule !== 4),
             rule: 0,
             startLP: settings.info.startLP,
             starthand: 0,
