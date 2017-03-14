@@ -184,7 +184,7 @@ function enterGame(string, pass) {
     var guess = '';
     if (browser) {
         if (navigator.userAgent.toLowerCase().indexOf('firefox') > -1) {
-            alert('Firefox isnt supported at this time, please use Google Chrome.');
+            alertmodal('Firefox isnt supported at this time, please use Google Chrome.');
             return;
         }
         startgame(string);
@@ -194,7 +194,7 @@ function enterGame(string, pass) {
     if (pass && admin !== "1") {
         guess = prompt('Password?', guess);
         if (string.substring(26, 19) !== guess) {
-            alert('Wrong Password!');
+            alertmodal('Wrong Password!');
             return;
         }
     }
@@ -307,15 +307,15 @@ function setHostSettings() {
             password: $('#ips_password').val()
         });
         if (isChecked('#usepass')) {
-            alert('SnarkyChild: I dont want to be alone with you... please dont make me.');
+            alertmodal('SnarkyChild: I dont want to be alone with you... please dont make me.');
             return;
         }
         if ($('#creategameduelmode').val() !== "0") {
-            alert('SnarkyChild: I have commitment issues, lets stay single.');
+            alertmodal('SnarkyChild: I have commitment issues, lets stay single.');
             return;
         }
         if ($('#creategamebanlist').val() === "2") {
-            alert('SnarkyChild: I think you are to old for me if you are playing Goats.');
+            alertmodal('SnarkyChild: I think you are to old for me if you are playing Goats.');
             return;
         }
     }
@@ -667,7 +667,7 @@ function pondata(data) {
         }
 
         if (data.clientEvent === 'deckSave') {
-            alert('Saved');
+            alertmodal('Saved');
         }
         if (data.clientEvent === 'chatline') {
             $('#onlinepublicchat').append('<li  data-chatuid="' + data.uid + '"><strong>[' + new Date(data.date).toLocaleTimeString() + ']' + data.from + ':</strong> ' + data.msg + '<span class="admincensor" onclick="censor(' + data.uid + ')"></span></li>');
@@ -684,7 +684,7 @@ function pondata(data) {
             $('[data-chatuid="' + data.messageID + '"]').remove();
         }
         if (data.clientEvent === 'banned') {
-            alert(data.reason);
+            alertmodal(data.reason);
             $('html').html('');
         }
         if (data.clientEvent === 'kill' && data.target === localStorage.nickname) {
@@ -696,7 +696,7 @@ function pondata(data) {
         if (data.clientEvent === 'mindcrush' && data.target === localStorage.nickname) {
             localStorage.mindcrushed = true;
             $('header').remove();
-            alert('This is the Shadow Realm');
+            alertmodal('This is the Shadow Realm');
             ygopro('kk');
         }
         if (data.clientEvent === 'revive' && data.target === localStorage.nickname) {
@@ -899,7 +899,7 @@ $('body').on('mousedown', 'footer', function (ev) {
 
 if (localStorage.mindcrushed === true) {
     $('header').remove();
-    alert('This is the Shadow Realm');
+    alertmodal('This is the Shadow Realm');
 }
 
 function manualModeGamelistSwitch() {
@@ -1012,7 +1012,7 @@ function userlistonclick(person) {
 function duelrequestPerson() {
     'use strict';
     if (!launcher) {
-        alert('You currently cant duel request someone while using manual mode.');
+        alertmodal('You currently cant duel request someone while using manual mode.');
     }
     setHostSettings();
     primus.write({
