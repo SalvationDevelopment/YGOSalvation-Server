@@ -28,6 +28,7 @@ function penL() {
 }
 
 function setFieldSpellBG() {
+    'use strict';
     $('#fieldbg0 .fieldimage, #fieldbg1 .fieldimage').css({
         'background-image': 'none',
         'background-size': '439px 473px',
@@ -45,8 +46,7 @@ function setFieldSpellBG() {
         $('#fieldbg1 .fieldimage').attr('background-image', 'none');
     } else if (!picID0 && picID1) {
         $('#fieldbg1 .fieldimage').css({
-            'background-image': p1URL,
-
+            'background-image': p1URL
         });
         $('#fieldbg0 .fieldimage').attr('background-image', 'none');
     } else if (picID0 && picID1) {
@@ -254,7 +254,7 @@ function updateloby(state) {
     $('#lobbycdpt').text(state.drawcount);
     $('#lobbyallowed').text(state.cardpool);
     $('#lobbygamemode').text(state.mode);
-	//$('#lobbyprerelease').boolean(state.prerelease);
+    //$('#lobbyprerelease').boolean(state.prerelease);
     if (state.ishost) {
         $('#lobbystart').css('display', 'inline-block');
     } else {
@@ -1050,8 +1050,9 @@ function manualReciver(message) {
         if (internalLocal === 'surrendered') {
             alert('An Error Occured');
         }
-	if (message.errorType == "validation")
-		alert(message.msg);
+        if (message.errorType === "validation") {
+            alert(message.msg);
+        }
     }
 
     switch (message.action) {
@@ -3091,10 +3092,12 @@ function processCardHover(event) {
             ulinks = cardTarget.links;
 
         ulinks.forEach(function (indicator, i) {
-            var linkedZone = getLinkedZone(uplayer, uindex, ulinks[i]);
+            var linkedZone = getLinkedZone(uplayer, uindex, ulinks[i]),
+                linkPlayer,
+                linkIndex;
             if (linkedZone !== null) {
-                var linkPlayer = linkedZone.player,
-                    linkIndex = linkedZone.index;
+                linkPlayer = linkedZone.player;
+                linkIndex = linkedZone.index;
                 $('.cardselectionzone.p' + orient(linkPlayer) + '.MONSTERZONE.i' + linkIndex).addClass('linkglow');
             }
         });
@@ -3109,7 +3112,6 @@ $(document).ready(function () {
     serverconnect();
     $('.imgContainer').attr('src', 'img/textures/cover.jpg');
     $('body').on('mouseover', '.card, .revealedcard', processCardHover);
-    $('body').on('dblclick', '.card, .revealedcard', processCardDblclick);
     $('#manualcontrols button').click(function () {
 
         setTimeout(function () {
