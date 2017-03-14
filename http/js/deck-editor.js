@@ -1036,7 +1036,7 @@ var deckEditor = (function () {
             return;
         }
         if (usersDecks.length === 1) {
-            alert('Thats your last Deck!');
+            alertmodal('Thats your last Deck!');
             return;
         }
         usersDecks.splice(activeIndex, 1);
@@ -1131,7 +1131,7 @@ var deckEditor = (function () {
             return;
         }
         if (deckCheck.length) {
-            alert('Deck Name Already Exist');
+            alertmodal('Deck Name Already Exist');
             return;
         }
         inmemoryDeck.name = deckName;
@@ -1142,7 +1142,7 @@ var deckEditor = (function () {
     function createNewDeck(newDeck) {
         if (usersDecks.length > 60) {
             // obviously lying.
-            alert('You own more than 60 decks. We cant store that many for you!');
+            alertmodal('You own more than 60 decks. We cant store that many for you!');
         }
         var deckName = prompt('New Deck Name?', 'New Deck'),
             deckCheck = usersDecks.filter(function (deck) {
@@ -1153,7 +1153,7 @@ var deckEditor = (function () {
             return;
         }
         if (deckCheck.length) {
-            alert('Deck Name Already Exist');
+            alertmodal('Deck Name Already Exist');
             return;
         }
         if (newDeck !== undefined) {
@@ -1395,7 +1395,7 @@ function readSingleFile(evt) {
         };
         r.readAsText(f);
     } else {
-        alert("Failed to load file");
+        alertmodal("Failed to load file");
     }
 }
 
