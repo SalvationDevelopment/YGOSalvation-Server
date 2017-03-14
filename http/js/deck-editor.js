@@ -3,6 +3,7 @@
 
 
 function getLevel(card) {
+    'use strict';
     var lv = card.level || 0,
         val = lv.toString(16),
         value = parseInt(val.toString().substr(val.length - 2), 10) || 0;
@@ -10,6 +11,7 @@ function getLevel(card) {
 }
 
 function cardEvaluate(card) {
+    'use strict';
     var value = 0;
 
     if (cardIs('monster', card)) {
@@ -120,7 +122,7 @@ var databaseSystem = (function () {
         status = false;
 
     function getBanlist() {
-        return banlist[activeBanlist];
+        return banlist[activeBanlist].bannedCards;
     }
 
 
@@ -190,9 +192,10 @@ var databaseSystem = (function () {
         list.forEach(function (card) {
             map[card.id] = card;
         });
+
         Object.keys(map).forEach(function (id) {
-            if (banlist[activeBanlist][id]) {
-                map[id].limit = parseInt(banlist[activeBanlist][id], 10);
+            if (banlist[activeBanlist].bannedCards[id] !== undefined) {
+                map[id].limit = parseInt(banlist[activeBanlist].bannedCards[id], 10);
             } else {
                 map[id].limit = 3;
             }
@@ -229,7 +232,12 @@ var databaseSystem = (function () {
 
         activedbs = set;
         database = filterCards(listOfCards);
-        localStorage.compiledDB = JSON.stringify(database);
+        try {
+            localStorage.compiledDB = JSON.stringify(database);
+        } catch (e) {
+            console.log('Failed to store cache of database!');
+            console.log(e);
+        }
         tokens = database.filter(function (card) {
             return (card.type === 16401 || card.type === 16417);
         });
@@ -265,14 +273,11 @@ var databaseSystem = (function () {
     //    $.getJSON('/manifest/manifest_Z-CWA.json', function (data) {
     //        dbs.CWA = data;
     //    });
-    $.get('/ygopro/lflist.conf', function (data) {
-        banlist = configParser(data, {
-            keyValueDelim: " ",
-            blockRegexp: new RegExp("^\\s?!(.*?)\\s?$")
-        });
+    $.getJSON('/manifest/banlist.json', function (data) {
+        banlist = data;
         $('.banlistSelect').html('');
         Object.keys(banlist).forEach(function (list) {
-            $('.banlistSelect').append('<option value="' + list + '">' + list + '</option>');
+            $('.banlistSelect, #creategamebanlist').append('<option value="' + list + '">' + list + '</option>');
         });
         activeBanlist = $('.banlistSelect option:selected').val();
     });
