@@ -7,26 +7,15 @@ var validateDeck = require('./validate-Deck'),
     https = require('https'),
     path = require('path'),
     database = require('../http/manifest/manifest_0-en-OCGTCG.json'),
+    banlist = require('../http/manifest/banlist.json'),
     fs = require('fs'),
     banLists = {};
 
 /**
  * Update the banlist
  */
-function banListUpdater() {
-    var data = fs.readFileSync('../http/ygopro/lflist.conf', {
-        encoding: "UTF-8"
-    });
-    banLists = configParser(data, {
-        keyValueDelim: " ",
-        blockRegexp: /^\s?\!(.*?)\s?$/
-    });
-    return banLists;
-}
 
-var banlist = banListUpdater();
-
-
+console.log(banlist);
 module.exports = function (wss) {
 
     var databases = {},
@@ -57,7 +46,8 @@ module.exports = function (wss) {
             mode: settings.info.mode,
             cardpool: settings.info.cardpool,
             noshuffle: 0,
-            prio: settings.info.prio,
+            prerelease: settings.info.prerelease,
+            legacyfield: (banlist[settings.info.banlist].masterRule !== 4),
             rule: 0,
             startLP: settings.info.startLP,
             starthand: 0,
@@ -314,8 +304,8 @@ module.exports = function (wss) {
                 break;
             }
             if (socket.slot !== undefined) {
-                var banlist = require('../http/banlist/' + games[activeduel].banlist + '.js');
-                message.validate = validateDeck(message.deck, banlist, database, games[activeduel].cardpool);
+                console.log(games[activeduel].banlist);
+                message.validate = validateDeck(message.deck, banlist[games[activeduel].banlist], database, games[activeduel].cardpool);
                 try {
                     if (message.validate) {
                         if (message.validate.error) {

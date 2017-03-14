@@ -48,10 +48,10 @@ function doDrawPhase(duel, drawPhaseActionQueue) {
     return;
 }
 
-function doEndPhase(processActionQueue) {
+function doEndPhase(duel, endPhaseActionQueue) {
     processActionQueue.push({
         command: doDrawPhase,
-        params: [duel, drawPhaseActionQueue]
+        params: [duel, endPhaseActionQueue]
     });
 }
 
