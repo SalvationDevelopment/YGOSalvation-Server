@@ -351,7 +351,7 @@ function makeGames() {
             player2 = game.player[1].name || '___',
             players = player1 + ' vs ' + player2,
             started = (game.started) ? 'started' : '',
-            action = (game.started) ? '' : 'onclick = "manualJoin(\'' + gameName + '\')"',
+            action = 'onclick = "manualJoin(\'' + gameName + '\')"',
             string = '<div data-game="' + game.roompass + '" class="game ' + started + '" ' + action + ' ' + game.roompass + '>' + players + '<span class="subtext" style="font-size:.5em"><br>' + game.mode + ' ' + game.banlist + ' </span></div>';
         $('#manualgamelistitems').append(string);
     });
@@ -470,8 +470,8 @@ function linkStack(field) {
 
     function linkgui(zone) {
         zone.forEach(function (card) {
-            var idIndex = manualDuel.uidLookup(card.uid),
-                unit = manualDuel.stack[idIndex];
+            var idIndex = manualDuel.uidLookup(card.uid) || card.uid,
+                unit = manualDuel.stack[idIndex] || {};
             Object.keys(unit).forEach(function (prop) {
                 if (card[prop] !== undefined) {
                     unit[prop] = card[prop];
@@ -677,6 +677,12 @@ function initGameState() {
         cardmargin('1', 'HAND');
         cardmargin('1', 'EXTRA');
         console.log('stack', stack, OneDeck, TwoDeck, OneExtra, TwoExtra);
+        setTimeout(function () {
+            singlesitenav('duelscreen');
+            setMidSchool(legacyMode);
+        }, 2000);
+
+
     }
 
 
@@ -711,6 +717,7 @@ function manualgamestart(message) {
         window.manualDuel = initGameState();
         window.manualDuel.startDuel(main1, main2, extra1, extra2);
         setMidSchool(legacyMode);
+
     }
 
 }
@@ -892,6 +899,7 @@ function endSiding() {
 
 function startGame(message) {
     'use strict';
+
     $('#automationduelfield').html(' ');
     $('#ingamesidebutton').css('display', 'none');
     $('.field').removeClass('sidemode');
@@ -1188,6 +1196,7 @@ function manualReciver(message) {
     case "duel":
         if (manualDuel === undefined) {
             startGame(message);
+
         }
         linkStack(message.field);
 
@@ -2771,7 +2780,7 @@ function guicardonclick() {
             reorientmenu();
             return;
         }
-        if (stackunit.player !== orientSlot) {
+        if (stackunit.player !== orientSlot || !activelyDueling) {
             return;
         }
         $('#manualcontrols').css({
