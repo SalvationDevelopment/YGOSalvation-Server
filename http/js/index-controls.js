@@ -1,12 +1,12 @@
 /*jslint browser:true, plusplus:true, nomen: true, regexp:true*/
-/*global $, saveSettings, Handlebars, prompt, _gaq, isChecked, alert, primus, ygopro, translationDB, params, swfobject, console, FileReader, prompt, confirm, jQuery*/
+/*global $, saveSettings, Handlebars, prompt, _gaq, isChecked, alert, primus, ygopro, translationDB, params, swfobject, console, FileReader, prompt, confirm, jQuery, activelyDueling*/
 
 var admin = false,
     chatStarted = false,
     dnStarted = false;
 
 var tournament = {},
-    loadedprofiles = {}
+    loadedprofiles = {};
 
 
 
@@ -117,14 +117,27 @@ var launcher = false,
     allowLogin = false,
     list = {};
 
+function alertmodal(message) {
+    $('#alertmodal').css('display', 'flex');
+    $('#alertmodaltext').html(message);
+}
+
+function closealertmodal() {
+    'use strict';
+    $('#alertmodal').css('display', 'none');
+    $('#alertmodaltext').html('');
+}
+
 function singlesitenav(target) {
     'use strict';
     if (target === 'forum') {
         return;
     }
-    if (internalLocal === 'duelscreen') {
-        alertmodal('You are in a duel, surrender or finish it.');
-        return false;
+    if (activelyDueling === undefined) {
+        if (internalLocal === 'duelscreen' && activelyDueling) {
+            alertmodal('You are in a duel, surrender or finish it.');
+            return false;
+        }
     }
     if (launcher && target === 'deckedit') {
         return;
@@ -215,18 +228,11 @@ function singlesitenav(target) {
     if (!launcher) {
         $('.notneededinweb').css('display', 'none');
     }
+    activelyDueling = false;
     return false;
 }
 
-function alertmodal(message) {
-    $('#alertmodal').css('display', 'flex');
-    $('#alertmodaltext').html(message);
-}
 
-function closealertmodal() {
-    $('#alertmodal').css('display', 'none');
-    $('#alertmodaltext').html('');
-}
 
 
 function locallogin(init) {

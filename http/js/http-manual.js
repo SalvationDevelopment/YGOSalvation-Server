@@ -1,5 +1,5 @@
 /*jslint browser:true, plusplus:true, bitwise:true*/
-/*global WebSocket, $, singlesitenav, console, enums, alert,  confirm, deckEditor, FileReader, databaseSystem*/
+/*global WebSocket, $, singlesitenav, console, enums, alert,  confirm, deckEditor, FileReader, databaseSystem, alertmodal*/
 
 
 
@@ -8,7 +8,9 @@ var sound = {};
 
 var internalLocal = internalLocal;
 
-var legacyMode = true;
+var legacyMode = true,
+    activelyDueling = false;
+
 (function () {
     'use strict';
     sound.play = function (targetID) {
@@ -1081,10 +1083,14 @@ function manualReciver(message) {
         }
         makeGames();
         break;
+    case "kick":
+        singlesitenav('gamelist');
+        break;
     case "sound":
         sound.play(message.sound);
         break;
     case "slot":
+        activelyDueling = true;
         orientSlot = message.slot;
         break;
     case "target":
@@ -1132,6 +1138,7 @@ function manualReciver(message) {
         sidestach.side = sidedDeck.side.length;
         renderSideDeckZone(sidedDeck);
         internalLocal = 'surrendered';
+        activelyDueling = false;
         break;
     case "start":
         startGame(message);
@@ -1288,6 +1295,7 @@ function manualKickDuelist(slot) {
         slot: slot,
         game: activegame
     }));
+
 }
 
 function manualLeave() {
