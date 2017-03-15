@@ -12,8 +12,9 @@ var legacyMode = true;
 (function () {
     'use strict';
     sound.play = function (targetID) {
-
-        document.getElementById(targetID).play();
+        setTimeout(function () {
+            document.getElementById(targetID).play();
+        }, 400);
     };
 }());
 
