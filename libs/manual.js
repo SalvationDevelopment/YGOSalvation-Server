@@ -15,7 +15,6 @@ var validateDeck = require('./validate-Deck'),
  * Update the banlist
  */
 
-console.log(banlist);
 module.exports = function (wss) {
 
     var databases = {},
@@ -210,9 +209,15 @@ module.exports = function (wss) {
             socket.slot = 0;
 
             setTimeout(function () {
-                stateSystem[generated].duelistChat('Gamelist', '90min Time limit reached. Ending Duel');
-                delete games[generated];
-                delete stateSystem[generated];
+                if (!stateSystem[generated].started) {
+                    try {
+                        stateSystem[generated].duelistChat('Gamelist', '90min Time limit reached. Ending Duel');
+                        delete games[generated];
+                        delete stateSystem[generated];
+                    } catch (error) {
+                        console.log('Could not end game:', generated);
+                    }
+                }
             }, 5400000); // 90 mins.
             break;
 
@@ -248,10 +253,11 @@ module.exports = function (wss) {
             break;
         case "kick":
             if (socket.slot !== undefined) {
-                if (socket.slot === 1) {
-                    games[activeduel].player[message.slot].name = '';
-                    games[activeduel].player[message.slot].ready = false;
-                    wss.broadcast(games);
+                if (socket.slot === 0) {
+                    stateSystem[message.game].players[message.slot].send(JSON.stringify({
+                        action: 'kick'
+                    }));
+
                 }
             }
             break;
@@ -304,12 +310,10 @@ module.exports = function (wss) {
                 break;
             }
             if (socket.slot !== undefined) {
-                console.log(games[activeduel].banlist);
                 message.validate = validateDeck(message.deck, banlist[games[activeduel].banlist], database, games[activeduel].cardpool);
                 try {
                     if (message.validate) {
                         if (message.validate.error) {
-                            console.log(message.validate.error);
                             socket.send(JSON.stringify({
                                 errorType: 'validation',
                                 action: 'error',
@@ -327,7 +331,6 @@ module.exports = function (wss) {
                     }));
                 }
 
-                console.log(message.validate);
                 games[activeduel].player[socket.slot].ready = true;
                 stateSystem[activeduel].lock[socket.slot] = true;
 

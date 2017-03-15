@@ -1520,14 +1520,14 @@ div#waiting {
 }
 
 .kickbutton {
-    width: 1em;
-    height: .4em;
+    width: 0;
+    height: 0;
     display: inline-block;
-    /* border: 1px solid white; */
-    position: relative;
-    bottom: .2em;
-    background-color: red;
-    /* background-size: cover; */
+    border-top: 10px solid transparent;
+    border-bottom: 10px solid transparent;
+    border-right: 10px solid red;
+    font-size: 4px;
+    color: transparent;
 }
 
 .lockindicator {
