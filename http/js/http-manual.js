@@ -2780,7 +2780,7 @@ function guicardonclick() {
             reorientmenu();
             return;
         }
-        if (stackunit.player !== orientSlot || !activelyDueling) {
+        if (stackunit.player !== orientSlot || activelyDueling) {
             return;
         }
         $('#manualcontrols').css({
