@@ -90,7 +90,6 @@ module.exports =
 		23171610: 1, //Limiter Removal
 		92746535: 1, //Luster Pendulum, the Dracoslayer
 		32723153: 1, //Magical Explosion
-		31178212: 1, //Majespecter Unicorn - Kirin
 		93600443: 1, //Mask Change II
 		83764718: 1, //Monster Reborn
 		83764719: 1, //Monster Reborn
