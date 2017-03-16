@@ -48,6 +48,7 @@ module.exports =
 		18326736: 0, //Tellarknight Ptolemaeus
 		89399912: 0, //Tempest, Dragon Ruler of Storms
 		42829885: 0, //The Forceful Sentry
+		88071625: 0, //The Tyrant Neptune
 		26400609: 0, //Tidal, Dragon Ruler of Waterfalls
 		35316708: 0, //Time Seal
 		64697231: 0, //Trap Dustshoot
@@ -56,12 +57,11 @@ module.exports =
 		80604092: 0, //Ultimate Offering
 		44910027: 0, //Victory Dragon
 		16923472: 0, //Wind-Up Hunter
-		78010363: 0, //Witch of the Black Forest
 		3078576: 0, //Yata-Garasu
-		28985331: 1, //Armageddon Knight
+		46060017: 0, //Zoodiac Barrage
+		48905153: 0, //Zoodiac Drident
+		9929398: 1, //Blackwing - Gofu the Vague Shadow
 		6602300: 1, //Blaze Fenix, the Burning Bombardment Bird
-		87910978: 1, //Brain Control
-		50321796: 1, //Brionac, Dragon of the Ice Barrier
 		48976825: 1, //Burial from a Different Dimension
 		72892473: 1, //Card Destruction
 		36468556: 1, //Ceasefire
@@ -75,19 +75,16 @@ module.exports =
 		14733538: 1, //Draco Face-Off
 		62265044: 1, //Dragon Ravine
 		50720316: 1, //Elemental HERO Shadow Mist
-		40044918: 1, //Elemental HERO Stratos
 		67723438: 1, //Emergency Teleport
 		33396948: 1, //Exodia the Forbidden One
-		57103969: 1, //Fire Formation - Tenki
 		81439173: 1, //Foolish Burial
 		77565204: 1, //Future Fusion
 		64034255: 1, //Genex Ally Birdman
-		7391448: 1, //Goyo Guardian
 		18144506: 1, //Harpie's Feather Duster
 		18144507: 1, //Harpie's Feather Duster
-		18239909: 1, //Ignister Prominence, the Blasting Dracoslayer
 		61740673: 1, //Imperial Order
 		66957584: 1, //Infernity Launcher
+		99330325: 1, //Interrupted Kaiju Slumber		
 		7902349: 1, //Left Arm of the Forbidden One
 		44519536: 1, //Left Leg of the Forbidden One
 		23171610: 1, //Limiter Removal
@@ -137,24 +134,31 @@ module.exports =
 		66399653: 1, //Union Hangar
 		5851097: 1, //Vanity's Emptiness
 		31222701: 1, //Wavering Eyes
-		85103922: 2, //Artifact Moralltach
+		78010363: 1, //Witch of the Black Forest
+		78872731: 1, //Zoodiac Ratpier
+		28985331: 2, //Armageddon Knight		
 		74311226: 2, //Atlantean Dragoons
 		72989439: 2, //Black Luster Soldier - Envoy of the Beginning
+		87910978: 2, //Brain Control
+		50321796: 2, //Brionac, Dragon of the Ice Barrier
 		91623717: 2, //Chain Strike
-		19580308: 2, //D/D Lamia
 		45206713: 2, //D/D Swirl Slime
 		15341821: 2, //Dandylion
 		84171830: 2, //Domain of the True Monarchs
+		40044918: 2, //Elemental HERO Stratos		
 		45222299: 2, //Evigishki Gustkraken
-		31560081: 2, //Magician of Faith
+		55623480: 2, //Fairy Tail - Snow
+		57103969: 2, //Fire Formation - Tenki		
+		7391448: 2, //Goyo Guardian		
+		18239909: 2, //Ignister Prominence, the Blasting Dracoslayer
 		43040603: 2, //Monster Gate
 		10028593: 2, //Reborn Tengu
 		72714461: 2, //Wisdom-Eye Magician
     },
      bannedTypes : [],
      exceptions : [],
-     startDate : new Date('2017-01-01'),
-     endDate : new Date('2017-04-01'),
-     name : '2017.1.1 (OCG with Link Monsters)',
+     startDate : new Date('2017-04-01'),
+     endDate : new Date('2017-07-01'),
+     name : '2017.4.1 (OCG)',
 	 masterRule : 4,
 }
