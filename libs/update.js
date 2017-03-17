@@ -111,55 +111,6 @@ function getBanlist() {
 
 var banlistfiles = getBanlist();
 
-function dirTree(filename) {
-
-    var stats = fs.lstatSync(filename),
-        info = {
-            path: filename,
-            name: path.basename(filename)
-        };
-
-    if (stats.isDirectory()) {
-        info.type = "folder";
-        if (filename.indexOf('.git') < 0) {
-            info.subfolder = fs.readdirSync(filename).map(function (child) {
-                return dirTree(filename + '/' + child);
-            });
-        } else {
-            info.type = "file";
-            info.size = 0;
-        }
-
-    } else {
-        // Assuming it's a file. In real life it could be a symlink or
-        // something else!
-        info.type = "file";
-        info.size = stats.size;
-        if (info.path.indexOf('Thumbs.db') > -1) {
-            info.path = 'ygopro/pics/marker.badfile';
-        }
-        if (info.path.indexOf('.ig') > -1) {
-            info.path = 'ygopro/pics/marker.badfile';
-        }
-        if (info.path.endsWith('.cdb')) {
-            info.md5 = crypto.createHash('md5').update(fs.readFileSync(info.path)).digest("hex");
-        }
-        if (info.path.endsWith('.dll')) {
-            info.md5 = crypto.createHash('md5').update(fs.readFileSync(info.path)).digest("hex");
-        }
-        if (info.path.endsWith('.exe')) {
-            info.md5 = crypto.createHash('md5').update(fs.readFileSync(info.path)).digest("hex");
-        }
-        if (info.path.endsWith('lflist.conf')) {
-            info.md5 = crypto.createHash('md5').update(fs.readFileSync(info.path)).digest("hex");
-        }
-        if (info.path.endsWith('strings.conf')) {
-            info.md5 = crypto.createHash('md5').update(fs.readFileSync(info.path)).digest("hex");
-        }
-    }
-
-    return info;
-}
 
 function gitError(error) {
     console.log('Issue with git', error);
@@ -203,6 +154,7 @@ function getotString(ot) {
         return 'OCG Prerelease';
     case 6:
         return 'TCG Prerelease';
+    default:
         return '';
     }
 }
@@ -229,7 +181,33 @@ function getcards(file) {
     while (texts.step()) { //
         row = texts.getAsObject();
         row.links = linkMarkers[row.id] || [];
-        row.cardpool = getotString(row.ot)
+        row.cardpool = getotString(row.ot);
+        output.push(row);
+    }
+    db.close();
+    return output;
+}
+
+function getpacks(file) {
+    var filebuffer = fs.readFileSync('../http/ygopro/databases/pack/' + file),
+        db = new SQL.Database(filebuffer),
+        string = "SELECT * FROM pack;",
+        texts = db.prepare(string),
+        asObject = {
+            texts: texts.getAsObject({
+                'id': 1
+            })
+        },
+        output = [],
+        row;
+
+    // Bind new values
+    texts.bind({
+        name: 1,
+        id: 2
+    });
+    while (texts.step()) { //
+        row = texts.getAsObject();
         output.push(row);
     }
     db.close();
@@ -383,29 +361,8 @@ function generate(callback) {
 }
 
 function fileupdate() {
-    var fileContent,
-        dbreplacer,
-        startTime = new Date(),
-        ygopro = dirTree('ygopro'),
-        plugins = dirTree('plugins'),
-        license = dirTree('license'),
-        interfacefolder = dirTree('interface'),
-        stringsfolder = dirTree('strings'),
-        installation = {
-            "path": "/",
-            "name": "/",
-            "type": "folder",
-            "subfolder": [stringsfolder, ygopro, plugins, license, interfacefolder]
-        };
 
-    fileContent = 'var manifest = ' + JSON.stringify(installation, null, 4);
-    fs.writeFile('manifest/manifest-ygopro.js', fileContent, function (error) {
-        //'use strict';
-        if (error) {
-            return;
-        }
-    });
-    return 'Update Detection System[' + ((new Date()).getTime() - startTime.getTime()) + 'ms]';
+    return 'Update Detection System[ms]';
 
 }
 
