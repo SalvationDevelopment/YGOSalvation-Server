@@ -105,7 +105,7 @@ var manualServer,
         131074: " / Continuous",
         131076: " / Continuous",
         262146: " / Equip",
-		524290: " / Field"
+		524290: " / Field",
         1048580: " / Counter"
     },
     fieldspell = {
