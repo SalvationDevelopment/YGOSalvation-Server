@@ -105,6 +105,7 @@ var manualServer,
         131074: " / Continuous",
         131076: " / Continuous",
         262146: " / Equip",
+		524290: " / Field",
         1048580: " / Counter"
     },
     fieldspell = {
@@ -134,6 +135,7 @@ var manualServer,
         8388641: "Xyz / Effect",
         16777233: "Pendulum",
         16777249: "Pendulum / Effect",
+		16777313: "Fusion / Pendulum / Effect",
         16781345: "Pendulum / Tuner / Effect",
         16785441: "Synchro / Pendulum / Effect",
         18874401: "Pendulum / Flip / Effect",
@@ -144,7 +146,10 @@ var manualServer,
     pendulumMap = {
         16777233: "Pendulum",
         16777249: "Pendulum / Effect",
+		16777313: "Fusion / Pendulum / Effect",
         16781345: "Pendulum / Tuner / Effect",
+        16785441: "Synchro / Pendulum / Effect",
+        18874401: "Pendulum / Flip / Effect",
         25165857: "Xyz / Pendulum / Effect"
     },
     raceMap = {
