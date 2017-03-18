@@ -863,6 +863,17 @@ var deckEditor = (function () {
         makeCard(search, 'search');
     }
 
+    function externalDoSearch() {
+        var search,
+            description,
+            name;
+        if (description || name) {
+            search = currentSearchFilter.getRender();
+            inmemoryDeck.search = search;
+            makeCard(search, 'search');
+        }
+    }
+
     function renderFriendsList() {
         var userlist = '';
         friends = friends.sort(function (a, b) {
