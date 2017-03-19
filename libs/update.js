@@ -209,6 +209,7 @@ function getcards(file) {
         db.some(function (card, index) {
             if (id === card.id) {
                 result = card;
+                result.date = new Date(result.date).getTime();
                 return true;
             } else {
                 return false;
