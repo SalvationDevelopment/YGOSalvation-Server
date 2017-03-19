@@ -521,7 +521,7 @@ function onData(data, socket) {
         }
         break;
     case 'save':
-
+        delete data.action;
         deckStorage.update({
             username: data.username
         }, data, {

@@ -182,7 +182,7 @@ module.exports = {
     bannedTypes: [],
     exceptions: [],
     startDate: new Date('2016-08-29'),
-    endDate: 'null',
     name: '2016.8.29 (TCG Advanced w/ Link Monsters)',
     masterRule: 4,
+    primary: true
 }
