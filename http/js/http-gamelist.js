@@ -666,7 +666,7 @@ function pondata(data) {
             }
         }
 
-        if (data.clientEvent === 'deckSaved') {
+        if (data.clientEvent === 'deckSave') {
             alertmodal('Saved');
         }
         if (data.clientEvent === 'chatline') {
