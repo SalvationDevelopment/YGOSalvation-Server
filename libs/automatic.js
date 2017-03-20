@@ -15,12 +15,12 @@ var waterfall = require('async-waterfall');
 /*
     Action Object
     {
-        command  : {Function},
-        callback : {Function},
-        params   : {Array}
+        command  : {Function}, required
+        callback : {Function}, optional
+        params   : {Array}     optional
     }
     Can be understood as:
-    `command(...params, callback);`
+    `command(params[0], params[1], etc..., callback);`
     
     When sending a question to the user, make sure to set a duel.responseEngine.once listener with a
     unique id to catch the response. Do not use `.on`.
@@ -31,6 +31,8 @@ var waterfall = require('async-waterfall');
  * @param {Array} actionQueue Array of action objects. Each contains a command and parameters.
  */
 function processActionQueue(actionQueue, callback) {
+
+    // waterfall takes a list of functions, we need to generate those functions.
     waterfall(actionQueue.map(function (action) {
         return function (lastActionResult, nextCallback) {
             var params = action.parameters || [],
@@ -55,14 +57,6 @@ function processActionQueue(actionQueue, callback) {
 }
 
 
-function askYesNo(duel, player, id, callback) {
-    var question = {
-        action: 'askYesNo',
-        player: player,
-        id: id
-    };
-    duel.question(question, callback);
-}
 
 /**
  * Set the starting Lifepoints of a duel.
@@ -78,18 +72,28 @@ function setLP(duel, lp) {
 
 /**
  * Do the automatic processsing of the draw phase. Start by emptying the queue then doing base logic.
- * @param {object}   duel              Engine instance.
+ * @param {Object}   duel              Engine instance.
  * @param {Array} drawPhaseActionQueue The queue for the draw phase.
+ * @param {Function} callback          Function to call to move onto next phase.
  */
 function doDrawPhase(duel, drawPhaseActionQueue, callback) {
 
-    var state = duel.state(),
-        player = state.turnOfPlayer,
-        turnCount = state.turnCount;
+    if (duel.skipDrawPhase) {
+        // kill everything in the draw phase queue. Skip it, but make sure it isnt around next turn.
+        drawPhaseActionQueue.length = 0;
+        callback();
+        return;
+    }
 
     duel.nextPhase(DRAW_PHASE);
+
+    // Do any "on start of phase", actions first, then attempt to draw.
     processActionQueue(drawPhaseActionQueue, function () {
-        if (turnCount && !state.skipDrawPhase) {
+        var state = duel.state(),
+            player = state.turnOfPlayer,
+            turnCount = state.turnCount;
+
+        if (turnCount && !state.skipDraw) {
 
             /* duel engine moves the card, then triggers its effects
                when its done it moves on. That is why the callback is passed. */
@@ -106,8 +110,21 @@ function doDrawPhase(duel, drawPhaseActionQueue, callback) {
     return;
 }
 
-
+/**
+ * Do the automatic processsing of the standby phase.
+ * @param {Object}   duel                      Engine instance
+ * @param {Array}    standbyPhaseActionQueue   The queue
+ * @param {Function} callback                  Function to call to move onto next phase.
+ */
 function doStandbyPhase(duel, standbyPhaseActionQueue, callback) {
+    if (duel.skipStandbyPhase) {
+        // kill everything in the standby phase queue. Skip it, but make sure it isnt around next turn.
+        standbyPhaseActionQueue.length = 0;
+        callback();
+        return;
+    }
+
+
     duel.nextPhase(DRAW_PHASE);
     processActionQueue(standbyPhaseActionQueue, function () {
         callback();
@@ -115,7 +132,11 @@ function doStandbyPhase(duel, standbyPhaseActionQueue, callback) {
     return;
 }
 
-
+/**
+ * Generate action list for main phases.
+ * @param   {Object} duel Engine instance
+ * @returns {Object} options that user can take.
+ */
 function getMainPhaseActions(duel) {
     return {
         normalsummonable: duel.query.getGroup({
@@ -148,7 +169,13 @@ function getMainPhaseActions(duel) {
     };
 }
 
-function doMainPhase1(duel, mainPhase1ActionQueue, endPhaseActionQueue, callback) {
+/**
+ * Do the automatic processsing of the main phase 1.
+ * @param {Object}   duel                      Engine instance
+ * @param {Array}    mainPhase1ActionQueue     The queue
+ * @param {Function} callback                  Function to call to move onto next phase.
+ */
+function doMainPhase1(duel, mainPhase1ActionQueue, callback) {
 
     duel.nextPhase(MAIN_PHASE_1);
 
@@ -195,6 +222,13 @@ function doMainPhase1(duel, mainPhase1ActionQueue, endPhaseActionQueue, callback
     return;
 }
 
+
+/**
+ * Do the automatic processsing of the battle phase.
+ * @param {Object}   duel                      Engine instance
+ * @param {Array}    battlePhaseActionQueue    The queue
+ * @param {Function} callback                  Function to call to move onto next phase.
+ */
 function doBattlePhase(duel, battlePhaseActionQueue, callback) {
 
     if (duel.skipbattlephase) {
@@ -244,6 +278,13 @@ function doBattlePhase(duel, battlePhaseActionQueue, callback) {
     return;
 }
 
+
+/**
+ * Do the automatic processsing of the main phase 2.
+ * @param {Object}   duel                      Engine instance
+ * @param {Array}    mainPhase2ActionQueue     The queue
+ * @param {Function} callback                  Function to call to move onto next phase.
+ */
 function doMainPhase2(duel, mainPhase2ActionQueue, callback) {
 
     if (duel.skipmainphase2) {
@@ -291,6 +332,12 @@ function doMainPhase2(duel, mainPhase2ActionQueue, callback) {
     return;
 }
 
+/**
+ * Do the automatic processsing of the end phase.
+ * @param {Object}   duel                      Engine instance
+ * @param {Array}    mainPhase1ActionQueue     The queue
+ * @param {Function} callback                  Function to call go to setup the next turn.
+ */
 function doEndPhase(duel, endPhaseActionQueue, callback) {
     duel.nextPhase(END_PHASE);
     processActionQueue(endPhaseActionQueue, function () {
@@ -336,6 +383,11 @@ function init(duel, params) {
         duel.skipmainphase2 = false;
         duel.skipbattlephase = false;
 
+
+        // queue up each of the game phase.
+        // each phase is "done" even if skipped by a card effect.
+        // each phase processing function has a way of handling skips.
+
         actionQueue.push({
             command: doDrawPhase,
             params: [duel, drawPhaseActionQueue]
@@ -360,6 +412,7 @@ function init(duel, params) {
             command: doDrawPhase,
             params: [duel, endPhaseActionQueue]
         });
+
         processActionQueue(actionQueue, function () {
             setTimeout(setupTurn);
         });
