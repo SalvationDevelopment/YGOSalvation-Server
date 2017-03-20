@@ -5,8 +5,10 @@
 // review the following https://github.com/Fluorohydride/ygopro-core/blob/master/processor.cpp
 
 var DRAW_PHASE = 0,
-    STANDBY_PHASE = 1;
+    STANDBY_PHASE = 1,
+    MAIN_PHASE_1;
 
+var waterfall = require('async-waterfall');
 /*
     Action Object
     {
@@ -42,7 +44,11 @@ function processActionQueue(actionQueue, callback) {
             params.push(actionCallback);
             action.command.apply(params);
         };
-    }), callback);
+    }), function () {
+        if (typeof callback === 'function') {
+            callback();
+        }
+    });
 }
 
 
@@ -52,8 +58,7 @@ function askYesNo(duel, player, id, callback) {
         player: player,
         id: id
     };
-    duel.question(question);
-    duel.responseEngine.once(id, callback);
+    duel.question(question, callback);
 }
 
 /**
@@ -73,24 +78,104 @@ function setLP(duel, lp) {
  * @param {object}   duel              Engine instance.
  * @param {Array} drawPhaseActionQueue The queue for the draw phase.
  */
-function doDrawPhase(duel, drawPhaseActionQueue) {
+function doDrawPhase(duel, drawPhaseActionQueue, callback) {
 
     var state = duel.state(),
         player = state.turnOfPlayer,
         turnCount = state.turnCount;
 
+    duel.nextPhase(DRAW_PHASE);
     processActionQueue(drawPhaseActionQueue, function () {
         if (turnCount && !state.skipDrawPhase) {
-            duel.drawCard(player, 1, duel.playerName[player]);
+
+            /* duel engine moves the card, then triggers its effects
+               when its done it moves on. That is why the callback is passed. */
+
+            duel.drawCard(player, 1, duel.playerName[player], function () {
+
+                /* drawing a card may have added an action to the phase stack so do it again */
+                processActionQueue(drawPhaseActionQueue, callback);
+            });
         }
-        duel.nextPhase(STANDBY_PHASE);
-        processActionQueue.push({
-            command: doStandbyPhase,
-            params: [duel, standbyPhaseActionQueue]
-        });
     });
+    return;
+}
 
 
+function doStandbyPhase(duel, standbyPhaseActionQueue, callback) {
+    duel.nextPhase(DRAW_PHASE);
+    processActionQueue(standbyPhaseActionQueue, function () {
+        callback();
+    });
+    return;
+}
+
+function doMainPhase1(duel, mainPhase1ActionQueue, callback) {
+
+    var state = duel.state(),
+        player = state.turnOfPlayer,
+        turnCount = state.turnCount;
+
+    duel.nextPhase(MAIN_PHASE_1);
+
+    function askUserNextAction() {
+        processActionQueue(mainPhase1ActionQueue, function () {
+            var normalsummonable = duel.query.getGroup({
+                    normalSummonable: true
+                }),
+                specialsummonable = duel.query.getGroup({
+                    specialsummonable: true
+                }),
+                canchangetodefense = duel.query.getGroup({
+                    canchangetodefense: true
+                }),
+                canactivatespelltrap = duel.query.getGroup({
+                    canactivate: true
+                }),
+                cansetmonster = duel.query.getGroup({
+                    cansetmonster: true
+                }),
+                cantributesummon = duel.query.getGroup({
+                    canTributeSummon: true
+                }),
+                cansetspelltrap = duel.query.getGroup({
+                    cansetspelltrap: true
+                }),
+                canactivategrave = duel.query.getGroup({
+                    canactivategrave: true
+                }),
+                canactivatebanished = duel.query.getGroup({
+                    canactivatebanished: true
+                });
+
+
+            duel.question({
+                questionType: 'mainphase',
+                battlephase: state.battlephaseAvaliable,
+                endphase: state.endPhaseAvaliable,
+                normalSummon: normalsummonable,
+                specialSummon: specialsummonable,
+                toDefense: canchangetodefense,
+                setMonster: cansetmonster,
+                activateSpellTrap: canactivatespelltrap,
+                setSpellTrap: cansetspelltrap,
+                pendulumSummon: state.pendulumnSummonAvaliable
+
+            }, function (error, answer) {
+                switch (answer.action) {
+                case 'battlephase':
+                    break;
+                case 'endphase':
+                    break;
+                default:
+                    askUserNextAction();
+                    break;
+                }
+            });
+
+        });
+    }
+    askUserNextAction();
     return;
 }
 
@@ -108,29 +193,44 @@ function doEndPhase(duel, endPhaseActionQueue) {
  */
 function init(duel, params) {
     var actionQueue = [],
-        drawPhaseActionQueue = [];
+        drawPhaseActionQueue = [],
+        standbyPhaseActionQueue = [],
+        mainPhase1ActionQueue = [],
+        battlePhaseActionQueue = [],
+        mainPhase2ActionQueue = [],
+        endPhaseActionQueue = [];
 
     // load all cards
 
 
     // Set the starting Life Points
-    processActionQueue.push({
+    actionQueue.push({
         command: setLP,
         params: [params.lifePoints]
     });
 
     // Set the starting Player
-    processActionQueue.push({
+    actionQueue.push({
         command: duel.setTurnPlayer,
         params: [params.firstPlayer]
     });
 
     // Assume the starting mode is Draw
 
-    processActionQueue.push({
-        command: doDrawPhase,
-        params: [duel, drawPhaseActionQueue]
-    });
+    function setupTurn() {
+        actionQueue.push({
+            command: doDrawPhase,
+            params: [duel, drawPhaseActionQueue]
+        });
+        actionQueue.push({
+            command: doStandbyPhase,
+            params: [duel, standbyPhaseActionQueue]
+        });
+        actionQueue.push({
+            command: doMainPhase1,
+            params: [duel, mainPhase1ActionQueue]
+        });
+    }
 }
 module.exports = {
     init: init
