@@ -6,7 +6,10 @@
 
 var DRAW_PHASE = 0,
     STANDBY_PHASE = 1,
-    MAIN_PHASE_1;
+    MAIN_PHASE_1 = 2,
+    BATTLE_PHASE = 3,
+    MAIN_PHASE_2 = 4,
+    END_PHASE = 5;
 
 var waterfall = require('async-waterfall');
 /*
@@ -96,6 +99,8 @@ function doDrawPhase(duel, drawPhaseActionQueue, callback) {
                 /* drawing a card may have added an action to the phase stack so do it again */
                 processActionQueue(drawPhaseActionQueue, callback);
             });
+        } else {
+            processActionQueue(drawPhaseActionQueue, callback);
         }
     });
     return;
@@ -110,62 +115,73 @@ function doStandbyPhase(duel, standbyPhaseActionQueue, callback) {
     return;
 }
 
-function doMainPhase1(duel, mainPhase1ActionQueue, callback) {
 
-    var state = duel.state(),
-        player = state.turnOfPlayer,
-        turnCount = state.turnCount;
+function getMainPhaseActions(duel) {
+    return {
+        normalsummonable: duel.query.getGroup({
+            normalSummonable: true
+        }),
+        specialsummonable: duel.query.getGroup({
+            specialsummonable: true
+        }),
+        canchangetodefense: duel.query.getGroup({
+            canchangetodefense: true
+        }),
+        canactivatespelltrap: duel.query.getGroup({
+            canactivate: true
+        }),
+        cansetmonster: duel.query.getGroup({
+            cansetmonster: true
+        }),
+        cantributesummon: duel.query.getGroup({
+            canTributeSummon: true
+        }),
+        cansetspelltrap: duel.query.getGroup({
+            cansetspelltrap: true
+        }),
+        canactivategrave: duel.query.getGroup({
+            canactivategrave: true
+        }),
+        canactivatebanished: duel.query.getGroup({
+            canactivatebanished: true
+        })
+    };
+}
+
+function doMainPhase1(duel, mainPhase1ActionQueue, endPhaseActionQueue, callback) {
 
     duel.nextPhase(MAIN_PHASE_1);
 
     function askUserNextAction() {
         processActionQueue(mainPhase1ActionQueue, function () {
-            var normalsummonable = duel.query.getGroup({
-                    normalSummonable: true
-                }),
-                specialsummonable = duel.query.getGroup({
-                    specialsummonable: true
-                }),
-                canchangetodefense = duel.query.getGroup({
-                    canchangetodefense: true
-                }),
-                canactivatespelltrap = duel.query.getGroup({
-                    canactivate: true
-                }),
-                cansetmonster = duel.query.getGroup({
-                    cansetmonster: true
-                }),
-                cantributesummon = duel.query.getGroup({
-                    canTributeSummon: true
-                }),
-                cansetspelltrap = duel.query.getGroup({
-                    cansetspelltrap: true
-                }),
-                canactivategrave = duel.query.getGroup({
-                    canactivategrave: true
-                }),
-                canactivatebanished = duel.query.getGroup({
-                    canactivatebanished: true
-                });
+            var state = duel.state(),
+                player = state.turnOfPlayer,
+                turnCount = state.turnCount,
+                options = getMainPhaseActions(duel);
 
 
             duel.question({
                 questionType: 'mainphase',
                 battlephase: state.battlephaseAvaliable,
                 endphase: state.endPhaseAvaliable,
-                normalSummon: normalsummonable,
-                specialSummon: specialsummonable,
-                toDefense: canchangetodefense,
-                setMonster: cansetmonster,
-                activateSpellTrap: canactivatespelltrap,
-                setSpellTrap: cansetspelltrap,
-                pendulumSummon: state.pendulumnSummonAvaliable
+                normalSummon: options.normalsummonable,
+                specialSummon: options.specialsummonable,
+                toDefense: options.canchangetodefense,
+                setMonster: options.cansetmonster,
+                activateSpellTrap: options.canactivatespelltrap,
+                setSpellTrap: options.cansetspelltrap,
+                pendulumSummon: state.pendulumnSummonAvaliable,
+                player: state.turnOfPlayer
 
             }, function (error, answer) {
                 switch (answer.action) {
                 case 'battlephase':
+                    callback();
                     break;
                 case 'endphase':
+                    duel.skipbattlephase = true;
+                    duel.skipmainphase2 = true;
+                    callback();
                     break;
                 default:
                     askUserNextAction();
@@ -179,11 +195,109 @@ function doMainPhase1(duel, mainPhase1ActionQueue, callback) {
     return;
 }
 
-function doEndPhase(duel, endPhaseActionQueue) {
-    processActionQueue.push({
-        command: doDrawPhase,
-        params: [duel, endPhaseActionQueue]
+function doBattlePhase(duel, battlePhaseActionQueue, callback) {
+
+    if (duel.skipbattlephase) {
+        // kill everything in the battle queue. Skip it, but make sure it isnt around next turn.
+        battlePhaseActionQueue.length = 0;
+        callback();
+        return;
+    }
+
+    duel.nextPhase(BATTLE_PHASE);
+
+    function askUserNextAction() {
+        processActionQueue(battlePhaseActionQueue, function () {
+            var state = duel.state(),
+                player = state.turnOfPlayer,
+                turnCount = state.turnCount,
+                canattack = duel.query.getGroup({
+                    canattack: true
+                }),
+                canactivate = duel.query.getGroup({
+                    canactivate: true
+                });
+
+            duel.question({
+                questionType: 'battlephase',
+                attackOptions: canattack,
+                activationOptions: canactivate,
+                player: state.turnOfPlayer
+            }, function (error, answer) {
+
+                switch (answer.action) {
+                case 'mainphase2':
+                    callback();
+                    break;
+                case 'endphase':
+                    duel.skipmainphase2 = true;
+                    callback();
+                    break;
+                default:
+                    askUserNextAction();
+                    break;
+                }
+            });
+        });
+    }
+    askUserNextAction();
+    return;
+}
+
+function doMainPhase2(duel, mainPhase2ActionQueue, callback) {
+
+    if (duel.skipmainphase2) {
+        // kill everything in the main phase 2 queue. Skip it, but make sure it isnt around next turn.
+        mainPhase2ActionQueue.length = 0;
+        callback();
+        return;
+    }
+    duel.nextPhase(MAIN_PHASE_2);
+
+    function askUserNextAction() {
+        processActionQueue(mainPhase2ActionQueue, function () {
+            var state = duel.state(),
+                player = state.turnOfPlayer,
+                turnCount = state.turnCount,
+                options = getMainPhaseActions(duel);
+
+
+            duel.question({
+                questionType: 'mainphase',
+                battlephase: state.battlephaseAvaliable,
+                endphase: state.endPhaseAvaliable,
+                normalSummon: options.normalsummonable,
+                specialSummon: options.specialsummonable,
+                toDefense: options.canchangetodefense,
+                setMonster: options.cansetmonster,
+                activateSpellTrap: options.canactivatespelltrap,
+                setSpellTrap: options.cansetspelltrap,
+                pendulumSummon: state.pendulumnSummonAvaliable,
+                player: state.turnOfPlayer
+            }, function (error, answer) {
+                switch (answer.action) {
+                case 'endphase':
+                    callback();
+                    break;
+                default:
+                    askUserNextAction();
+                    break;
+                }
+            });
+
+        });
+    }
+    askUserNextAction();
+    return;
+}
+
+function doEndPhase(duel, endPhaseActionQueue, callback) {
+    duel.nextPhase(END_PHASE);
+    processActionQueue(endPhaseActionQueue, function () {
+        duel.nextTurn();
+        callback();
     });
+    return;
 }
 
 /**
@@ -215,9 +329,13 @@ function init(duel, params) {
         params: [params.firstPlayer]
     });
 
-    // Assume the starting mode is Draw
 
     function setupTurn() {
+
+        // main phase 2, and battle phase skips to be determined by other mechanisms that reset each turn.
+        duel.skipmainphase2 = false;
+        duel.skipbattlephase = false;
+
         actionQueue.push({
             command: doDrawPhase,
             params: [duel, drawPhaseActionQueue]
@@ -230,7 +348,23 @@ function init(duel, params) {
             command: doMainPhase1,
             params: [duel, mainPhase1ActionQueue]
         });
+        actionQueue.push({
+            command: doBattlePhase,
+            params: [duel, battlePhaseActionQueue]
+        });
+        actionQueue.push({
+            command: doMainPhase2,
+            params: [duel, mainPhase2ActionQueue]
+        });
+        actionQueue.push({
+            command: doDrawPhase,
+            params: [duel, endPhaseActionQueue]
+        });
+        processActionQueue(actionQueue, function () {
+            setTimeout(setupTurn);
+        });
     }
+    setupTurn();
 }
 module.exports = {
     init: init
