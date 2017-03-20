@@ -111,6 +111,55 @@ function getBanlist() {
 
 var banlistfiles = getBanlist();
 
+function dirTree(filename) {
+
+    var stats = fs.lstatSync(filename),
+        info = {
+            path: filename,
+            name: path.basename(filename)
+        };
+
+    if (stats.isDirectory()) {
+        info.type = "folder";
+        if (filename.indexOf('.git') < 0) {
+            info.subfolder = fs.readdirSync(filename).map(function (child) {
+                return dirTree(filename + '/' + child);
+            });
+        } else {
+            info.type = "file";
+            info.size = 0;
+        }
+
+    } else {
+        // Assuming it's a file. In real life it could be a symlink or
+        // something else!
+        info.type = "file";
+        info.size = stats.size;
+        if (info.path.indexOf('Thumbs.db') > -1) {
+            info.path = 'ygopro/pics/marker.badfile';
+        }
+        if (info.path.indexOf('.ig') > -1) {
+            info.path = 'ygopro/pics/marker.badfile';
+        }
+        if (info.path.endsWith('.cdb')) {
+            info.md5 = crypto.createHash('md5').update(fs.readFileSync(info.path)).digest("hex");
+        }
+        if (info.path.endsWith('.dll')) {
+            info.md5 = crypto.createHash('md5').update(fs.readFileSync(info.path)).digest("hex");
+        }
+        if (info.path.endsWith('.exe')) {
+            info.md5 = crypto.createHash('md5').update(fs.readFileSync(info.path)).digest("hex");
+        }
+        if (info.path.endsWith('lflist.conf')) {
+            info.md5 = crypto.createHash('md5').update(fs.readFileSync(info.path)).digest("hex");
+        }
+        if (info.path.endsWith('strings.conf')) {
+            info.md5 = crypto.createHash('md5').update(fs.readFileSync(info.path)).digest("hex");
+        }
+    }
+
+    return info;
+}
 
 function gitError(error) {
     console.log('Issue with git', error);
@@ -154,35 +203,8 @@ function getotString(ot) {
         return 'OCG Prerelease';
     case 6:
         return 'TCG Prerelease';
-    default:
         return '';
     }
-}
-
-function getdates(file) {
-    var filebuffer = fs.readFileSync('../http/ygopro/databases/pack/' + file),
-        db = new SQL.Database(filebuffer),
-        string = "SELECT * FROM pack;",
-        texts = db.prepare(string),
-        asObject = {
-            texts: texts.getAsObject({
-                'id': 1
-            })
-        },
-        output = [],
-        row;
-
-    // Bind new values
-    texts.bind({
-        name: 1,
-        id: 2
-    });
-    while (texts.step()) { //
-        row = texts.getAsObject();
-        output.push(row);
-    }
-    db.close();
-    return output;
 }
 
 function getcards(file) {
@@ -197,57 +219,7 @@ function getcards(file) {
         },
         output = [],
         row,
-        i,
-        linkMarkers = jsonfile.readFileSync("../http/linkmarkersmap.json"),
-        ocg_packs = jsonfile.readFileSync("../http/manifest/manifest_ja-pack.json"),
-        tcg_packs = jsonfile.readFileSync("../http/manifest/manifest_en-pack.json"),
-        packs = {};
-
-    function getCardObject(id, db) {
-
-        var result = {};
-        db.some(function (card, index) {
-            if (id === card.id) {
-                result = card;
-                result.date = new Date(result.date).getTime();
-                return true;
-            } else {
-                return false;
-            }
-        });
-
-        return result;
-    }
-
-
-    // Bind new values
-    texts.bind({
-        id: 2
-    });
-    while (texts.step()) { //
-        row = texts.getAsObject();
-        row.links = linkMarkers[row.id] || [];
-        row.cardpool = getotString(row.ot);
-        row.ocg = getCardObject(row.id, ocg_packs);
-        row.tcg = getCardObject(row.id, tcg_packs);
-        output.push(row);
-    }
-    db.close();
-    return output;
-}
-
-function getpacks(file) {
-    var filebuffer = fs.readFileSync('../http/ygopro/databases/pack/' + file),
-        db = new SQL.Database(filebuffer),
-        string = "SELECT * FROM pack;",
-        texts = db.prepare(string),
-        asObject = {
-            texts: texts.getAsObject({
-                'id': 1
-            })
-        },
-        output = [],
-        row;
+        linkMarkers = jsonfile.readFileSync("../http/linkmarkersmap.json");
 
     // Bind new values
     texts.bind({
@@ -256,6 +228,8 @@ function getpacks(file) {
     });
     while (texts.step()) { //
         row = texts.getAsObject();
+        row.links = linkMarkers[row.id] || [];
+        row.cardpool = getotString(row.ot)
         output.push(row);
     }
     db.close();
@@ -263,7 +237,6 @@ function getpacks(file) {
 }
 
 function getCardObject(id) {
-
     var result = {};
     newCards.some(function (card, index) {
         if (id === card.id) {
@@ -367,58 +340,73 @@ function makeDescription(id) {
 
 function generate(callback) {
     fs.writeFileSync('../http/manifest/banlist.json', JSON.stringify(banlistfiles, null, 1));
+    fs.readdir('../http/ygopro/databases/', function (err, files) {
+        var i,
+            oldDB,
+            newDB;
 
-    fs.readdir('../http/ygopro/databases/pack', function (err, packs) {
-        packs.forEach(function (pack) {
+        for (i = 0; files.length > i; i++) {
             try {
-                fs.writeFileSync('../http/manifest/manifest_' + pack.slice(0, -3) + '.json', JSON.stringify(getdates(pack)));
-                console.log('    Generated ../http/manifest/manifest_' + pack.slice(0, -3) + '.json');
+                fs.writeFileSync('../http/manifest/manifest_' + files[i].slice(0, -4) + '.json', JSON.stringify(getcards(files[i])));
+                console.log('    Generated ../http/manifest/manifest_' + files[i].slice(0, -4) + '.json');
             } catch (e) {
-                console.log(e);
+
             }
-        });
-        fs.readdir('../http/ygopro/databases/', function (err, files) {
-            var i,
-                oldDB,
-                newDB;
-
-            for (i = 0; files.length > i; i++) {
-                try {
-                    fs.writeFileSync('../http/manifest/manifest_' + files[i].slice(0, -4) + '.json', JSON.stringify(getcards(files[i])));
-                    console.log('    Generated ../http/manifest/manifest_' + files[i].slice(0, -4) + '.json');
-                } catch (e) {
-
+        }
+        try {
+            oldDB = inversionID(jsonfile.readFileSync('../http/manifest/manifest_old.json'));
+            newDB = inversionID(jsonfile.readFileSync('../http/manifest/manifest_0-en-OCGTCG.json'));
+            newCards = [];
+            Object.keys(newDB).forEach(function (id) {
+                if (oldDB[id] !== undefined) {
+                    return;
+                } else {
+                    newCards.push(newDB[id]);
                 }
+            });
+            htmlOutput = '<html><body><head><style>.descContainer {width: 50%;}pre.description {width: 50%;white-space: pre-wrap;}</style>';
+            newCards.forEach(function (card) {
+                htmlOutput += '<img src="http://ygopro.us/ygopro/pics/' + card.id + '.jpg" />';
+            });
+            newCards.forEach(function (card) {
+                htmlOutput += makeDescription(card.id);
+            });
+            htmlOutput += '</body></html>';
+            if (callback) {
+                callback();
             }
-            try {
-                oldDB = inversionID(jsonfile.readFileSync('../http/manifest/manifest_old.json'));
-                newDB = inversionID(jsonfile.readFileSync('../http/manifest/manifest_0-en-OCGTCG.json'));
-                newCards = [];
-                Object.keys(newDB).forEach(function (id) {
-                    if (oldDB[id] !== undefined) {
-                        return;
-                    } else {
-                        newCards.push(newDB[id]);
-                    }
-                });
-                htmlOutput = '<html><body><head><style>.descContainer {width: 50%;}pre.description {width: 50%;white-space: pre-wrap;}</style>';
-                newCards.forEach(function (card) {
-                    htmlOutput += '<img src="https://rawgit.com/SalvationDevelopment/YGOPro-Images/master/' + card.id + '.jpg" />';
-                });
-                newCards.forEach(function (card) {
-                    htmlOutput += makeDescription(card.id);
-                    htmlOutput += "<br/><hr/>";
-                });
-                htmlOutput += '</body></html>';
-                if (callback) {
-                    callback();
-                }
 
-            } catch (e2) {
-                console.log(e2);
-            }
-        });
+        } catch (e2) {
+            console.log(e2);
+        }
     });
+}
+
+function fileupdate() {
+    var fileContent,
+        dbreplacer,
+        startTime = new Date(),
+        ygopro = dirTree('ygopro'),
+        plugins = dirTree('plugins'),
+        license = dirTree('license'),
+        interfacefolder = dirTree('interface'),
+        stringsfolder = dirTree('strings'),
+        installation = {
+            "path": "/",
+            "name": "/",
+            "type": "folder",
+            "subfolder": [stringsfolder, ygopro, plugins, license, interfacefolder]
+        };
+
+    fileContent = 'var manifest = ' + JSON.stringify(installation, null, 4);
+    fs.writeFile('manifest/manifest-ygopro.js', fileContent, function (error) {
+        //'use strict';
+        if (error) {
+            return;
+        }
+    });
+    return 'Update Detection System[' + ((new Date()).getTime() - startTime.getTime()) + 'ms]';
+
 }
 
 function update(cb) {
@@ -450,8 +438,12 @@ var server = http.createServer(function (request, response) {
         "Content-Type": "text/html"
     });
     update(function (error) {
+        var rate = fileupdate();
+        if (error) {
+            rate = rate + error;
+        }
         response.end(htmlOutput);
-        console.log('[Update System Triggered]');
+        console.log('[Update System]', rate, new Date(), ((error) || ''));
         generate();
     });
 });
