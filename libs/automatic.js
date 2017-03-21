@@ -64,6 +64,8 @@ function processActionQueue(actionQueue, callback) {
  * @param {number} lp   Number of Lifepoints to start with.
  */
 function setLP(duel, lp) {
+
+    // this needs to be reworked.
     duel.lp.forEach(function (currentLP, index) {
         duel.lp[index] = lp;
     });
@@ -73,11 +75,10 @@ function setLP(duel, lp) {
 /**
  * Do the automatic processsing of the draw phase. Start by emptying the queue then doing base logic.
  * @param {Object}   duel              Engine instance.
- * @param {Array} drawPhaseActionQueue The queue for the draw phase.
  * @param {Function} callback          Function to call to move onto next phase.
  */
-function doDrawPhase(duel, drawPhaseActionQueue, callback) {
-
+function doDrawPhase(duel, callback) {
+    var drawPhaseActionQueue = duel.drawPhaseActionQueue;
     if (duel.skipDrawPhase) {
         // kill everything in the draw phase queue. Skip it, but make sure it isnt around next turn.
         drawPhaseActionQueue.length = 0;
@@ -113,10 +114,10 @@ function doDrawPhase(duel, drawPhaseActionQueue, callback) {
 /**
  * Do the automatic processsing of the standby phase.
  * @param {Object}   duel                      Engine instance
- * @param {Array}    standbyPhaseActionQueue   The queue
  * @param {Function} callback                  Function to call to move onto next phase.
  */
-function doStandbyPhase(duel, standbyPhaseActionQueue, callback) {
+function doStandbyPhase(duel, callback) {
+    var standbyPhaseActionQueue = duel.standbyPhaseActionQueue;
     if (duel.skipStandbyPhase) {
         // kill everything in the standby phase queue. Skip it, but make sure it isnt around next turn.
         standbyPhaseActionQueue.length = 0;
@@ -172,10 +173,10 @@ function getMainPhaseActions(duel) {
 /**
  * Do the automatic processsing of the main phase 1.
  * @param {Object}   duel                      Engine instance
- * @param {Array}    mainPhase1ActionQueue     The queue
  * @param {Function} callback                  Function to call to move onto next phase.
  */
-function doMainPhase1(duel, mainPhase1ActionQueue, callback) {
+function doMainPhase1(duel, callback) {
+    var mainPhase1ActionQueue = duel.mainPhase1ActionQueue;
 
     duel.nextPhase(MAIN_PHASE_1);
 
@@ -226,10 +227,11 @@ function doMainPhase1(duel, mainPhase1ActionQueue, callback) {
 /**
  * Do the automatic processsing of the battle phase.
  * @param {Object}   duel                      Engine instance
- * @param {Array}    battlePhaseActionQueue    The queue
  * @param {Function} callback                  Function to call to move onto next phase.
  */
-function doBattlePhase(duel, battlePhaseActionQueue, callback) {
+function doBattlePhase(duel, callback) {
+
+    var battlePhaseActionQueue = duel.battlePhaseActionQueue;
 
     if (duel.skipbattlephase) {
         // kill everything in the battle queue. Skip it, but make sure it isnt around next turn.
@@ -280,12 +282,85 @@ function doBattlePhase(duel, battlePhaseActionQueue, callback) {
 
 
 /**
+ * Process Damage Calculation
+ * @param {Object}        duel       Engine Instance
+ * @param {Number}        attackerID Attacking Cards UID
+ * @param {Number|Null}   defenderID Defending Cards UID, 
+ * @param {Function}      callback   Finishing function
+ */
+function doDamageCalculation(duel, attackerID, defenderID, callback) {
+    var damageCalculationActionQueue = duel.damageCalculationActionQueue;
+
+    // Give cards notice that damage calculation is starting.
+    duel.enterDamageCalculation();
+
+    function afterDamageCalculation() {
+
+        // Process any cards that where moved effects after damage calculation.
+        processActionQueue(damageCalculationActionQueue, function () {
+
+            // leave damage calculation and then give cards a chance to respond.
+            duel.leaveDamageCalculation();
+            processActionQueue(damageCalculationActionQueue, callback);
+        });
+    }
+
+    // do any events at the start of damage calculation to change attack values
+    processActionQueue(damageCalculationActionQueue, function () {
+
+        // This doesnt return the card but a modified version of the card for easy math.
+        var attackingCard = duel.getDamageCalculationCard(attackerID),
+            defendingCard = duel.getDamageCalculationCard(defenderID),
+            sendAttackerToGrave = false,
+            sendDefenderToGrave = false;
+
+        // Actual damage calculation mathmatics
+        if (defendingCard.card === undefined) {
+            duel.changeLifepoints(defendingCard.player, (-1 * attackingCard.atk));
+        } else if (defendingCard.card.position === 'FaceUpDefense') {
+            if (attackingCard.card.atk > defendingCard.card.def) {
+                sendDefenderToGrave = true;
+                if (attackingCard.piercing) {
+                    duel.changeLifepoints(defendingCard.player, defendingCard.card.def - attackingCard.card.atk);
+                }
+            } else if (attackingCard.card.atk < defendingCard.card.def) {
+                duel.changeLifepoints(attackingCard.player, attackingCard.card.atk - defendingCard.card.atk);
+            }
+        } else {
+            if (attackingCard.card.atk > defendingCard.card.atk) {
+                duel.changeLifepoints(defendingCard.player, defendingCard.card.atk - attackingCard.card.atk);
+                if (attackingCard.card.atk) {
+                    sendAttackerToGrave = true;
+                }
+            } else if ((attackingCard.card.atk < defendingCard.card.atk)) {
+                duel.changeLifepoints(defendingCard.player, attackingCard.card.atk - defendingCard.card.atk);
+                sendDefenderToGrave = true;
+            } else {
+                sendAttackerToGrave = true;
+                sendDefenderToGrave = true;
+            }
+        }
+
+
+        // Pick one of three outcomes for card movements and do them.
+        if (sendAttackerToGrave && !sendDefenderToGrave) {
+            duel.setState({}, afterDamageCalculation);
+        } else if (sendAttackerToGrave && sendDefenderToGrave) {
+            duel.setState({}, afterDamageCalculation);
+        } else if (!sendAttackerToGrave && !sendDefenderToGrave) {
+            duel.setState({}, afterDamageCalculation);
+        }
+    });
+}
+
+/**
  * Do the automatic processsing of the main phase 2.
  * @param {Object}   duel                      Engine instance
- * @param {Array}    mainPhase2ActionQueue     The queue
  * @param {Function} callback                  Function to call to move onto next phase.
  */
-function doMainPhase2(duel, mainPhase2ActionQueue, callback) {
+function doMainPhase2(duel, callback) {
+
+    var mainPhase2ActionQueue = duel.mainPhase2ActionQueue;
 
     if (duel.skipmainphase2) {
         // kill everything in the main phase 2 queue. Skip it, but make sure it isnt around next turn.
@@ -335,10 +410,10 @@ function doMainPhase2(duel, mainPhase2ActionQueue, callback) {
 /**
  * Do the automatic processsing of the end phase.
  * @param {Object}   duel                      Engine instance
- * @param {Array}    mainPhase1ActionQueue     The queue
  * @param {Function} callback                  Function to call go to setup the next turn.
  */
-function doEndPhase(duel, endPhaseActionQueue, callback) {
+function doEndPhase(duel, callback) {
+    var endPhaseActionQueue = duel.endPhaseActionQueue;
     duel.nextPhase(END_PHASE);
     processActionQueue(endPhaseActionQueue, function () {
         duel.nextTurn();
@@ -353,13 +428,7 @@ function doEndPhase(duel, endPhaseActionQueue, callback) {
  * @param {object} params Object with a bunch of info to use as start up info.
  */
 function init(duel, params) {
-    var actionQueue = [],
-        drawPhaseActionQueue = [],
-        standbyPhaseActionQueue = [],
-        mainPhase1ActionQueue = [],
-        battlePhaseActionQueue = [],
-        mainPhase2ActionQueue = [],
-        endPhaseActionQueue = [];
+    var actionQueue = [];
 
     // load all cards
 
@@ -390,27 +459,27 @@ function init(duel, params) {
 
         actionQueue.push({
             command: doDrawPhase,
-            params: [duel, drawPhaseActionQueue]
+            params: [duel]
         });
         actionQueue.push({
             command: doStandbyPhase,
-            params: [duel, standbyPhaseActionQueue]
+            params: [duel]
         });
         actionQueue.push({
             command: doMainPhase1,
-            params: [duel, mainPhase1ActionQueue]
+            params: [duel]
         });
         actionQueue.push({
             command: doBattlePhase,
-            params: [duel, battlePhaseActionQueue]
+            params: [duel]
         });
         actionQueue.push({
             command: doMainPhase2,
-            params: [duel, mainPhase2ActionQueue]
+            params: [duel]
         });
         actionQueue.push({
             command: doDrawPhase,
-            params: [duel, endPhaseActionQueue]
+            params: [duel]
         });
 
         processActionQueue(actionQueue, function () {
