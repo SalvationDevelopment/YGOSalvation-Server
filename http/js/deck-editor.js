@@ -1,6 +1,10 @@
-/*global currentMousePos, getCardObject, reorientmenu, cardIs, $, storedUserlist, primus,prompt, alert, confirm, FileReader, btoa*/
+/*global currentMousePos, getCardObject, reorientmenu, cardIs, $, storedUserlist, primus,prompt, alert, confirm, FileReader, btoa, alertmodal, personOfIntrest*/
 /*jslint bitwise: true, plusplus:true, regexp:true, browser:true*/
 
+function printError(error) {
+    'use strict';
+    console.log(error);
+}
 
 function getLevel(card) {
     'use strict';
@@ -182,13 +186,15 @@ var databaseSystem = (function () {
 
     }
     /**
-     * Filters duplicate cards out
+     * Filters duplicate, and unprinted cards out
      * @param   {Array[Object]} list of cards.
      * @returns {Array[Object]} filtered list
      */
     function filterCards(list) {
         var map = {},
-            result = [];
+            result = [],
+            filteredCards = [],
+            region = banlist[activeBanlist].region;
         list.forEach(function (card) {
             map[card.id] = card;
         });
@@ -201,7 +207,23 @@ var databaseSystem = (function () {
             }
             result.push(map[id]);
         });
-        return result;
+
+        filteredCards = result.filter(function (card) {
+            if (region && banlist[activeBanlist].endDate) {
+                if (card[region]) {
+                    if (card[region].date) {
+                        return new Date(banlist[activeBanlist].endDate).getTime() > card[region].date;
+                    } else {
+                        return false;
+                    }
+                } else {
+                    return false;
+                }
+            }
+            return true;
+        });
+        console.log('Total Cards:', result.length, 'Returned Cards:', filteredCards.length);
+        return filteredCards;
     }
 
     /**
@@ -209,6 +231,15 @@ var databaseSystem = (function () {
      * @returns {Array[Object]} array of cards.
      */
     function getDB() {
+        setTimeout(function () {
+            try {
+                localStorage.compiledDB = JSON.stringify(database);
+            } catch (e) {
+                printError('Failed to store cache of database!');
+                printError(e);
+            }
+        }, 1000);
+
         return docardStackSort(database);
     }
 
@@ -232,12 +263,7 @@ var databaseSystem = (function () {
 
         activedbs = set;
         database = filterCards(listOfCards);
-        try {
-            localStorage.compiledDB = JSON.stringify(database);
-        } catch (e) {
-            console.log('Failed to store cache of database!');
-            console.log(e);
-        }
+
         tokens = database.filter(function (card) {
             return (card.type === 16401 || card.type === 16417);
         });
@@ -277,7 +303,8 @@ var databaseSystem = (function () {
         banlist = data;
         $('.banlistSelect').html('');
         Object.keys(banlist).forEach(function (list) {
-            $('.banlistSelect, #creategamebanlist').append('<option value="' + list + '">' + list + '</option>');
+            var selected = (banlist[list].primary) ? 'selected' : '';
+            $('.banlistSelect, #creategamebanlist').append('<option ' + selected + ' value="' + list + '">' + list + '</option>');
         });
         activeBanlist = $('.banlistSelect option:selected').val();
     });
@@ -300,13 +327,28 @@ var databaseSystem = (function () {
         $('.setcodeSelect').html(strings);
     });
 
+    function directLookup(id) {
+        var result = {};
+        database.some(function (card, index) {
+            if (id === card.id) {
+                result = card;
+                result.date = new Date(result.date).getTime();
+                return true;
+            } else {
+                return false;
+            }
+        });
+
+        return result;
+    }
 
     return {
         setDatabase: setDatabase,
         dbs: dbs,
         getDB: getDB,
         getBanlist: getBanlist,
-        setBanlist: setBanlist
+        setBanlist: setBanlist,
+        directLookup: directLookup
     };
 }());
 
@@ -863,6 +905,17 @@ var deckEditor = (function () {
         makeCard(search, 'search');
     }
 
+    function externalDoSearch() {
+        var search,
+            description,
+            name;
+        if (description || name) {
+            search = currentSearchFilter.getRender();
+            inmemoryDeck.search = search;
+            makeCard(search, 'search');
+        }
+    }
+
     function renderFriendsList() {
         var userlist = '';
         friends = friends.sort(function (a, b) {
@@ -876,6 +929,25 @@ var deckEditor = (function () {
         $('#friendslist').html(userlist);
     }
 
+    function condenseDeck(card) {
+        return {
+            id: card.id
+        };
+    }
+
+    function condenseDecks(decks) {
+        return decks.map(function (deck) {
+            return {
+                main: deck.main.map(condenseDeck),
+                extra: deck.extra.map(condenseDeck),
+                side: deck.side.map(condenseDeck),
+                name: deck.name,
+                creator: deck.creator,
+                creationDate: deck.creationDate
+            };
+        });
+    }
+
     function addFriend() {
         friends.push(personOfIntrest);
         friends = friends.filter(function (item, pos, self) {
@@ -883,7 +955,7 @@ var deckEditor = (function () {
         });
         primus.write({
             action: 'save',
-            decks: usersDecks,
+            decks: condenseDecks(usersDecks),
             friends: friends,
             username: localStorage.nickname
         });
@@ -979,21 +1051,15 @@ var deckEditor = (function () {
     function saveDeck() {
         inmemoryDeck.creationDate = new Date();
         usersDecks[activeIndex] = JSON.parse(JSON.stringify(inmemoryDeck));
-        usersDecks[activeIndex].search =
-            primus.write({
-                action: 'save',
-                decks: usersDecks,
-                friends: friends,
-                username: localStorage.nickname
-            });
+        var message = {
+            action: 'save',
+            decks: condenseDecks(usersDecks),
+            friends: friends,
+            username: localStorage.nickname
+        };
+        console.log(message);
+        primus.write(message);
     }
-
-    console.log({
-        action: 'save',
-        decks: usersDecks,
-        friends: friends,
-        username: localStorage.nickname
-    });
 
     function switchDecks(index) {
         activeIndex = index;
@@ -1003,8 +1069,56 @@ var deckEditor = (function () {
         doSearch();
     }
 
+    function expandDeck(card, index, deck) {
+
+        var output = databaseSystem.directLookup(card.id);
+        console.log(output, card.id);
+        return output;
+    }
+
+    function labelMain(card) {
+        card.zone = 'main';
+        return card;
+    }
+
+    function labelExtra(card, index, array, thing) {
+        console.log(card, index, array);
+        card.zone = 'extra';
+        return card;
+    }
+
+    function labelSide(card) {
+        card.zone = 'side';
+        return card;
+    }
+
+    function expandDecks(decks) {
+        if (!decks) {
+            return false;
+        }
+        var output = decks.map(function (deck) {
+            var expanded = {
+                main: deck.main.map(expandDeck),
+                extra: deck.extra.map(expandDeck),
+                side: deck.side.map(expandDeck),
+                name: deck.name,
+                creator: deck.creator,
+                creationDate: deck.creationDate
+            };
+            expanded.main = expanded.main.map(labelMain);
+            expanded.extra = expanded.extra.map(labelMain);
+            expanded.side = expanded.side.map(labelMain);
+            return expanded;
+        });
+        console.log(decks, output);
+        return output;
+    }
+
+
+
     function loadDecks(decks) {
-        usersDecks = decks || [makeNewDeck('New Deck')];
+        usersDecks = expandDecks(decks) || [makeNewDeck('New Deck')];
+        console.log(usersDecks);
         $('.deckSelect,  #lobbycurrentdeck select').html('');
         usersDecks.forEach(function (deck, index) {
             $('.deckSelect, #lobbycurrentdeck select').append('<option value="' + index + '">' + deck.name + '</option>');
