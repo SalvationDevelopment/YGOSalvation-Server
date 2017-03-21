@@ -2,8 +2,6 @@ module.exports = {
     bannedCards: {
         27279764: 1, //Apoqliphort Towers
         53804307: 1, //Blaster, Dragon Ruler of Infernos
-        87910978: 1, //Brain Control
-        50321796: 1, //Brionac, Dragon of the Ice Barrier
         69243953: 1, //Butterfly Dagger - Elma
         72892473: 1, //Card Destruction
         57953380: 1, //Card of Safe Return
@@ -23,19 +21,18 @@ module.exports = {
         46772449: 1, //Evilswarm Exciton Knight
         78706415: 1, //Fiber Jar
         93369354: 1, //Fishborg Blaster
-        77565204: 1, //Future Fusion
         27970830: 1, //Gateway of the Six
         42703248: 1, //Giant Trunade
         79571449: 1, //Graceful Charity
         18144506: 1, //Harpie's Feather Duster
         18144507: 1, //Harpie's Feather Duster
         19613556: 1, //Heavy Storm
-        61740673: 1, //Imperial Order
         35059553: 1, //Kaiser Colosseum
         28566710: 1, //Last Turn
         85602018: 1, //Last Will
         34086406: 1, //Lavalval Chain
         34206604: 1, //Magical Scientist
+		31178212: 1, //Majespecter Unicorn - Kirin
         21593977: 1, //Makyura the Destructor
         34906152: 1, //Mass Driver
         46411259: 1, //Metamorphosis
@@ -54,10 +51,8 @@ module.exports = {
         55144522: 1, //Pot of Greed
         70828912: 1, //Premature Burial
         90411554: 1, //Redox, Dragon Ruler of Boulders
-        14878871: 1, //Rescue Cat
         27174286: 1, //Return from the Different Dimension
         93016201: 1, //Royal Oppression
-        26202165: 1, //Sangan
         57585212: 1, //Self-Destruct Button
         90307777: 1, //Shurit, Strategist of the Nekroz
         3280747: 1, //Sixth Sense
@@ -70,12 +65,14 @@ module.exports = {
         18326736: 1, //Tellarknight Ptolemaeus
         89399912: 1, //Tempest, Dragon Ruler of Storms
         42829885: 1, //The Forceful Sentry
+		88071625: 1, //The Tyrant Neptune
         26400609: 1, //Tidal, Dragon Ruler of Waterfalls
         35316708: 1, //Time Seal
         64697231: 1, //Trap Dustshoot
         33184167: 1, //Tribe-Infecting Virus
         80604091: 1, //Ultimate Offering
         80604092: 1, //Ultimate Offering
+        5851097: 1, //Vanity's Emptiness
         44910027: 1, //Victory Dragon
         31222701: 1, //Wavering Eyes
         81122844: 1, //Wind-Up Carrier Zenmaity
@@ -86,6 +83,8 @@ module.exports = {
         72989439: 1, //Black Luster Soldier - Envoy of the Beginning
         14087893: 1, //Book of Moon
         29401950: 1, //Bottomless Trap Hole
+        87910978: 1, //Brain Control
+        50321796: 1, //Brionac, Dragon of the Ice Barrier
         48976825: 1, //Burial from a Different Dimension
         57143342: 1, //Cir, Malebranche of the Burning Abyss
         94192409: 1, //Compulsory Evacuation Device
@@ -106,9 +105,11 @@ module.exports = {
         33396948: 1, //Exodia the Forbidden One
         95308449: 1, //Final Countdown
         81439173: 1, //Foolish Burial
+        77565204: 1, //Future Fusion
         64034255: 1, //Genex Ally Birdman
         20758643: 1, //Graff, Malebranche of the Burning Abyss
         18239909: 1, //Ignister Prominence, the Blasting Dracoslayer
+        61740673: 1, //Imperial Order
         99177923: 1, //Infernity Archfiend
         9059700: 1, //Infernity Barrier
         66957584: 1, //Infernity Launcher
@@ -121,8 +122,8 @@ module.exports = {
         92746535: 1, //Luster Pendulum, the Dracoslayer
         30241314: 1, //Macro Cosmos
         32723153: 1, //Magical Explosion
-        31178212: 1, //Majespecter Unicorn - Kirin
         41386308: 1, //Mathematician
+        23434538: 1, //Maxx "C"
         37520316: 1, //Mind Control
         43040603: 1, //Monster Gate
         26674724: 1, //Nekroz of Brionac
@@ -141,6 +142,7 @@ module.exports = {
         88264978: 1, //Red-Eyes Darkness Metal Dragon
         32807846: 1, //Reinforcement of the Army
         74845897: 1, //Rekindling
+        14878871: 1, //Rescue Cat
         85138716: 1, //Rescue Rabbit
         70903634: 1, //Right Arm of the Forbidden One
         8124921: 1, //Right Leg of the Forbidden One
@@ -160,9 +162,7 @@ module.exports = {
         10802915: 1, //Tour Guide From the Underworld
         52687916: 1, //Trishula, Dragon of the Ice Barrier
         70368879: 1, //Upstart Goblin
-        5851097: 1, //Vanity's Emptiness
         17078030: 1, //Wall of Revealing Light
-        72714461: 1, //Wisdom-Eye Magician
         74311226: 2, //Atlantean Dragoons
         85087012: 2, //Card Trooper
         36468556: 2, //Ceasefire
@@ -172,17 +172,19 @@ module.exports = {
         14943837: 2, //Debris Dragon
         62265044: 2, //Dragon Ravine
         37742478: 2, //Honest
-        23434538: 2, //Maxx C
+		99330325: 2, //Interrupted Kaiju Slumber
         28297833: 2, //Necroface
         29843091: 2, //Ojama Trio
         423585: 2, //Summoner Monk
         71564252: 2, //Thunder King Rai-Oh
         59297550: 2, //Wind-Up Magician
+        72714461: 2, //Wisdom-Eye Magician
+		78872731: 2, //Zoodiac Ratpier
     },
     bannedTypes: [],
     exceptions: [],
-    startDate: new Date('2016-08-29'),
-    name: '2016.8.29 (TCG Traditional)',
-    masterRule: 3,
-    region: 'tcg'
+    startDate: new Date('2017-03-31'),
+    name: '2017.3.31 (TCG Traditional)',
+    masterRule: 4,
+    region: 'tcg',
 }
