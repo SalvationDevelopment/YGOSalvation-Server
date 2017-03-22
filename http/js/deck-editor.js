@@ -110,8 +110,11 @@ var oldDB = '[]';
 try {
     oldDB = JSON.parse(localStorage.compiledDB);
 } catch (error) {
+    printError('Unable to load cached Database.');
     oldDB = [];
 }
+
+console.log(oldDB);
 
 var databaseSystem = (function () {
     'use strict';
@@ -232,14 +235,6 @@ var databaseSystem = (function () {
      * @returns {Array[Object]} array of cards.
      */
     function getDB() {
-        setTimeout(function () {
-            try {
-                localStorage.compiledDB = JSON.stringify(dbs.OCGTCG);
-            } catch (e) {
-                printError('Failed to store cache of database!');
-                printError(e);
-            }
-        }, 1000);
 
         return docardStackSort(database);
     }
@@ -285,7 +280,16 @@ var databaseSystem = (function () {
     $.getJSON('/manifest/manifest_0-en-OCGTCG.json', function (data) {
         dbs.OCGTCG = data;
         completedatabase = dbs.OCGTCG;
+
         setDatabase(['OCGTCG']);
+        setTimeout(function () {
+            try {
+                localStorage.compiledDB = JSON.stringify(data);
+            } catch (e) {
+                printError('Failed to store cache of database!');
+                printError(e);
+            }
+        }, 1000);
     });
 
 
