@@ -234,7 +234,7 @@ var databaseSystem = (function () {
     function getDB() {
         setTimeout(function () {
             try {
-                localStorage.compiledDB = JSON.stringify(database);
+                localStorage.compiledDB = JSON.stringify(dbs.OCGTCG);
             } catch (e) {
                 printError('Failed to store cache of database!');
                 printError(e);
@@ -288,15 +288,10 @@ var databaseSystem = (function () {
         setDatabase(['OCGTCG']);
     });
 
-    $.getJSON('/manifest/manifest_1-Anime.json', function (data) {
-        dbs.Anime = data;
-    });
+
     $.getJSON('/manifest/manifest_3-Goats.json', function (data) {
 
         dbs.Goats = data;
-    });
-    $.getJSON('/manifest/manifest_4-World-Championship.json', function (data) {
-        dbs.Championship = data;
     });
     //    $.getJSON('/manifest/manifest_Z-CWA.json', function (data) {
     //        dbs.CWA = data;
@@ -331,7 +326,7 @@ var databaseSystem = (function () {
 
     function directLookup(id) {
         var result = {},
-            dbuse = (dbs.OCGTCG.length) ? dbs.OCGTCG : database;
+            dbuse = (dbs.OCGTCG.length) ? dbs.OCGTCG : oldDB;
 
         dbuse.some(function (card, index) {
             if (id === card.id) {
