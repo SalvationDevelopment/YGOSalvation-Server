@@ -123,7 +123,8 @@ var databaseSystem = (function () {
         },
         activedbs = '',
         setcodes,
-        status = false;
+        status = false,
+        completedatabase = [];
 
     function getBanlist() {
         return banlist[activeBanlist].bannedCards;
@@ -283,6 +284,7 @@ var databaseSystem = (function () {
 
     $.getJSON('/manifest/manifest_0-en-OCGTCG.json', function (data) {
         dbs.OCGTCG = data;
+        completedatabase = dbs.OCGTCG;
         setDatabase(['OCGTCG']);
     });
 
@@ -328,8 +330,10 @@ var databaseSystem = (function () {
     });
 
     function directLookup(id) {
-        var result = {};
-        database.some(function (card, index) {
+        var result = {},
+            dbuse = (oldDB.length) ? oldDB : database;
+
+        dbuse.some(function (card, index) {
             if (id === card.id) {
                 result = card;
                 result.date = new Date(result.date).getTime();
@@ -1057,7 +1061,6 @@ var deckEditor = (function () {
             friends: friends,
             username: localStorage.nickname
         };
-        console.log(message);
         primus.write(message);
     }
 
@@ -1072,7 +1075,6 @@ var deckEditor = (function () {
     function expandDeck(card, index, deck) {
 
         var output = databaseSystem.directLookup(card.id);
-        console.log(output, card.id);
         return output;
     }
 
@@ -1082,7 +1084,6 @@ var deckEditor = (function () {
     }
 
     function labelExtra(card, index, array, thing) {
-        console.log(card, index, array);
         card.zone = 'extra';
         return card;
     }
@@ -1110,7 +1111,6 @@ var deckEditor = (function () {
             expanded.side = expanded.side.map(labelMain);
             return expanded;
         });
-        console.log(decks, output);
         return output;
     }
 
@@ -1118,7 +1118,6 @@ var deckEditor = (function () {
 
     function loadDecks(decks) {
         usersDecks = expandDecks(decks) || [makeNewDeck('New Deck')];
-        console.log(usersDecks);
         $('.deckSelect,  #lobbycurrentdeck select').html('');
         usersDecks.forEach(function (deck, index) {
             $('.deckSelect, #lobbycurrentdeck select').append('<option value="' + index + '">' + deck.name + '</option>');
@@ -1320,7 +1319,7 @@ var deckEditor = (function () {
                 }
             });
         } catch (er) {
-            console.log(er);
+            printError(er);
         }
         return originalValues;
     }
@@ -1443,7 +1442,7 @@ function deckeditonclick(index, zone) {
     return;
 }
 
-$('.descInput, .nameInput').on('input', deckEditor.doNewSearch);
+//$('.descInput, .nameInput').on('input', deckEditor.doNewSearch);
 $('.typeSelect, .monsterCardSelect, .monsterTypeSelect, .spellSelect, .trapSelect, .attributeSelect, .raceSelect, .setcodeSelect, .forbiddenLimitedSelect').on('change', deckEditor.doNewSearch);
 
 $('.atkInput, .defInput, .levelInput, .scaleInput').on('change', deckEditor.doNewSearch);
