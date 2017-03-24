@@ -14,9 +14,9 @@ var express = require('express'),
     Ddos = require('ddos'),
     helmet = require('helmet'),
     ddos = new Ddos({
-        maxcount: 200,
-        burst: 50,
-        limit: 50 * 10,
+        maxcount: 2000,
+        burst: 500,
+        limit: 500 * 10,
         maxexpiry: 15,
         checkinterval: 5,
         trustProxy: true,
@@ -521,7 +521,7 @@ function onData(data, socket) {
         }
         break;
     case 'save':
-
+        delete data.action;
         deckStorage.update({
             username: data.username
         }, data, {

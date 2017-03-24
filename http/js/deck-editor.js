@@ -1,6 +1,10 @@
-/*global currentMousePos, getCardObject, reorientmenu, cardIs, $, storedUserlist, primus,prompt, alert, confirm, FileReader, btoa*/
+/*global currentMousePos, getCardObject, reorientmenu, cardIs, $, storedUserlist, primus,prompt, alert, confirm, FileReader, btoa, alertmodal, personOfIntrest*/
 /*jslint bitwise: true, plusplus:true, regexp:true, browser:true*/
 
+function printError(error) {
+    'use strict';
+    console.log(error);
+}
 
 function getLevel(card) {
     'use strict';
@@ -106,8 +110,11 @@ var oldDB = '[]';
 try {
     oldDB = JSON.parse(localStorage.compiledDB);
 } catch (error) {
+    printError('Unable to load cached Database.');
     oldDB = [];
 }
+
+console.log(oldDB);
 
 var databaseSystem = (function () {
     'use strict';
@@ -119,76 +126,23 @@ var databaseSystem = (function () {
         },
         activedbs = '',
         setcodes,
-        status = false;
+        status = false,
+        completedatabase = [];
 
     function getBanlist() {
         return banlist[activeBanlist].bannedCards;
     }
 
-
-
-    function configParser(content, options) {
-        var commentDelims = [
-            "#",
-            ";",
-            "@",
-            "//"
-        ],
-            blockRegexp = /^\s?\[\s?(.*?)\s?\]\s?$/,
-            keyValueDelim = "=",
-            newLineDelim = "\r\n",
-            joinKeyValue = false,
-            joinKeySlice = 0,
-            configObject = {},
-            currentBlock,
-            currentLine;
-        if (typeof options === "object") {
-            commentDelims = options.commentDelims || commentDelims;
-            blockRegexp = options.blockRegexp || blockRegexp;
-            keyValueDelim = options.keyValueDelim || keyValueDelim;
-            newLineDelim = options.newLineDelim || newLineDelim;
-            joinKeyValue = options.joinKeyValue || joinKeyValue;
-            joinKeySlice = options.joinKeySlice || joinKeySlice;
-        }
-        content = content.split(newLineDelim);
-        content.forEach(function (line) {
-            var isComment = false;
-            commentDelims.forEach(function (delim) {
-                if (line.indexOf(delim) === 0) {
-                    isComment = true;
-                } else {
-                    return;
-                }
-            });
-            if (isComment) {
-                return;
-            }
-            if (blockRegexp.test(line)) {
-                currentBlock = line.replace(blockRegexp, '$1');
-                configObject[currentBlock] = {};
-                return;
-            }
-            currentLine = line.split(keyValueDelim);
-            if (currentBlock === undefined) {
-                configObject[currentLine[joinKeySlice]] = joinKeyValue ? currentLine.slice(joinKeySlice + 1).join(keyValueDelim) : currentLine[1];
-            } else {
-                configObject[currentBlock][currentLine[joinKeySlice]] = joinKeyValue ? currentLine.slice(joinKeySlice + 1).join(keyValueDelim) : currentLine[1];
-            }
-        });
-        return configObject;
-    }
-
-    function updateSetcodes() {
-
-    }
     /**
-     * Filters duplicate cards out
+     * Filters duplicate, and unprinted cards out
      * @param   {Array[Object]} list of cards.
      * @returns {Array[Object]} filtered list
      */
     function filterCards(list) {
         var map = {},
-            result = [];
+            result = [],
+            filteredCards = [],
+            region = banlist[activeBanlist].region;
         list.forEach(function (card) {
             map[card.id] = card;
         });
@@ -201,7 +155,23 @@ var databaseSystem = (function () {
             }
             result.push(map[id]);
         });
-        return result;
+
+        filteredCards = result.filter(function (card) {
+            if (region && banlist[activeBanlist].endDate) {
+                if (card[region]) {
+                    if (card[region].date) {
+                        return new Date(banlist[activeBanlist].endDate).getTime() > card[region].date;
+                    } else {
+                        return false;
+                    }
+                } else {
+                    return false;
+                }
+            }
+            return true;
+        });
+        console.log('Total Cards:', result.length, 'Returned Cards:', filteredCards.length);
+        return filteredCards;
     }
 
     /**
@@ -209,6 +179,7 @@ var databaseSystem = (function () {
      * @returns {Array[Object]} array of cards.
      */
     function getDB() {
+
         return docardStackSort(database);
     }
 
@@ -232,12 +203,7 @@ var databaseSystem = (function () {
 
         activedbs = set;
         database = filterCards(listOfCards);
-        try {
-            localStorage.compiledDB = JSON.stringify(database);
-        } catch (e) {
-            console.log('Failed to store cache of database!');
-            console.log(e);
-        }
+
         tokens = database.filter(function (card) {
             return (card.type === 16401 || card.type === 16417);
         });
@@ -257,18 +223,23 @@ var databaseSystem = (function () {
 
     $.getJSON('/manifest/manifest_0-en-OCGTCG.json', function (data) {
         dbs.OCGTCG = data;
+        completedatabase = dbs.OCGTCG;
+
         setDatabase(['OCGTCG']);
+        setTimeout(function () {
+            try {
+                localStorage.compiledDB = JSON.stringify(data);
+            } catch (e) {
+                printError('Failed to store cache of database!');
+                printError(e);
+            }
+        }, 1000);
     });
 
-    $.getJSON('/manifest/manifest_1-Anime.json', function (data) {
-        dbs.Anime = data;
-    });
+
     $.getJSON('/manifest/manifest_3-Goats.json', function (data) {
 
         dbs.Goats = data;
-    });
-    $.getJSON('/manifest/manifest_4-World-Championship.json', function (data) {
-        dbs.Championship = data;
     });
     //    $.getJSON('/manifest/manifest_Z-CWA.json', function (data) {
     //        dbs.CWA = data;
@@ -277,21 +248,17 @@ var databaseSystem = (function () {
         banlist = data;
         $('.banlistSelect').html('');
         Object.keys(banlist).forEach(function (list) {
-            $('.banlistSelect, #creategamebanlist').append('<option value="' + list + '">' + list + '</option>');
+            var selected = (banlist[list].primary) ? 'selected' : '';
+            $('.banlistSelect, #creategamebanlist').append('<option ' + selected + ' value="' + list + '">' + list + '</option>');
         });
         activeBanlist = $('.banlistSelect option:selected').val();
     });
 
-    $.get('./ygopro/strings.conf', 'utf-8', function (data) {
-        setcodes = configParser(data, {
-            keyValueDelim: " ",
-            commentDelims: [],
-            blockRegexp: new RegExp("^\\s?#(.*?)\\s?$/"),
-            joinKeyValue: true,
-            joinKeySlice: 1
-        });
+    $.getJSON('./setcodes.json', 'utf-8', function (data) {
+        setcodes = data;
         var setcode,
             strings = '<option value="0" data-calc="0">None</option>';
+        console.log(JSON.stringify(setcodes));
         for (setcode in setcodes) {
             if (setcodes.hasOwnProperty(setcode) && setcode[0] === '0' && setcode[1] === 'x' && setcode !== '0x0') {
                 strings = strings + '<option data-calc="' + setcode.slice(2) + '" value="' + parseInt(setcode, 16) + '">' + setcodes[setcode] + '</option>';
@@ -300,13 +267,30 @@ var databaseSystem = (function () {
         $('.setcodeSelect').html(strings);
     });
 
+    function directLookup(id) {
+        var result = {},
+            dbuse = (dbs.OCGTCG.length) ? dbs.OCGTCG : oldDB;
+
+        dbuse.some(function (card, index) {
+            if (id === card.id) {
+                result = card;
+                result.date = new Date(result.date).getTime();
+                return true;
+            } else {
+                return false;
+            }
+        });
+
+        return result;
+    }
 
     return {
         setDatabase: setDatabase,
         dbs: dbs,
         getDB: getDB,
         getBanlist: getBanlist,
-        setBanlist: setBanlist
+        setBanlist: setBanlist,
+        directLookup: directLookup
     };
 }());
 
@@ -863,6 +847,17 @@ var deckEditor = (function () {
         makeCard(search, 'search');
     }
 
+    function externalDoSearch() {
+        var search,
+            description,
+            name;
+        if (description || name) {
+            search = currentSearchFilter.getRender();
+            inmemoryDeck.search = search;
+            makeCard(search, 'search');
+        }
+    }
+
     function renderFriendsList() {
         var userlist = '';
         friends = friends.sort(function (a, b) {
@@ -876,6 +871,25 @@ var deckEditor = (function () {
         $('#friendslist').html(userlist);
     }
 
+    function condenseDeck(card) {
+        return {
+            id: card.id
+        };
+    }
+
+    function condenseDecks(decks) {
+        return decks.map(function (deck) {
+            return {
+                main: deck.main.map(condenseDeck),
+                extra: deck.extra.map(condenseDeck),
+                side: deck.side.map(condenseDeck),
+                name: deck.name,
+                creator: deck.creator,
+                creationDate: deck.creationDate
+            };
+        });
+    }
+
     function addFriend() {
         friends.push(personOfIntrest);
         friends = friends.filter(function (item, pos, self) {
@@ -883,7 +897,7 @@ var deckEditor = (function () {
         });
         primus.write({
             action: 'save',
-            decks: usersDecks,
+            decks: condenseDecks(usersDecks),
             friends: friends,
             username: localStorage.nickname
         });
@@ -979,21 +993,14 @@ var deckEditor = (function () {
     function saveDeck() {
         inmemoryDeck.creationDate = new Date();
         usersDecks[activeIndex] = JSON.parse(JSON.stringify(inmemoryDeck));
-        usersDecks[activeIndex].search =
-            primus.write({
-                action: 'save',
-                decks: usersDecks,
-                friends: friends,
-                username: localStorage.nickname
-            });
+        var message = {
+            action: 'save',
+            decks: condenseDecks(usersDecks),
+            friends: friends,
+            username: localStorage.nickname
+        };
+        primus.write(message);
     }
-
-    console.log({
-        action: 'save',
-        decks: usersDecks,
-        friends: friends,
-        username: localStorage.nickname
-    });
 
     function switchDecks(index) {
         activeIndex = index;
@@ -1003,8 +1010,52 @@ var deckEditor = (function () {
         doSearch();
     }
 
+    function expandDeck(card, index, deck) {
+
+        var output = databaseSystem.directLookup(card.id);
+        return output;
+    }
+
+    function labelMain(card) {
+        card.zone = 'main';
+        return card;
+    }
+
+    function labelExtra(card, index, array, thing) {
+        card.zone = 'extra';
+        return card;
+    }
+
+    function labelSide(card) {
+        card.zone = 'side';
+        return card;
+    }
+
+    function expandDecks(decks) {
+        if (!decks) {
+            return false;
+        }
+        var output = decks.map(function (deck) {
+            var expanded = {
+                main: deck.main.map(expandDeck),
+                extra: deck.extra.map(expandDeck),
+                side: deck.side.map(expandDeck),
+                name: deck.name,
+                creator: deck.creator,
+                creationDate: deck.creationDate
+            };
+            expanded.main = expanded.main.map(labelMain);
+            expanded.extra = expanded.extra.map(labelMain);
+            expanded.side = expanded.side.map(labelMain);
+            return expanded;
+        });
+        return output;
+    }
+
+
+
     function loadDecks(decks) {
-        usersDecks = decks || [makeNewDeck('New Deck')];
+        usersDecks = expandDecks(decks) || [makeNewDeck('New Deck')];
         $('.deckSelect,  #lobbycurrentdeck select').html('');
         usersDecks.forEach(function (deck, index) {
             $('.deckSelect, #lobbycurrentdeck select').append('<option value="' + index + '">' + deck.name + '</option>');
@@ -1206,7 +1257,7 @@ var deckEditor = (function () {
                 }
             });
         } catch (er) {
-            console.log(er);
+            printError(er);
         }
         return originalValues;
     }
@@ -1329,7 +1380,7 @@ function deckeditonclick(index, zone) {
     return;
 }
 
-$('.descInput, .nameInput').on('input', deckEditor.doNewSearch);
+//$('.descInput, .nameInput').on('input', deckEditor.doNewSearch);
 $('.typeSelect, .monsterCardSelect, .monsterTypeSelect, .spellSelect, .trapSelect, .attributeSelect, .raceSelect, .setcodeSelect, .forbiddenLimitedSelect').on('change', deckEditor.doNewSearch);
 
 $('.atkInput, .defInput, .levelInput, .scaleInput').on('change', deckEditor.doNewSearch);
