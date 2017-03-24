@@ -34,6 +34,7 @@ module.exports = function (wss) {
      */
     function newGame(settings) {
         console.log('settings', settings);
+
         return {
             roompass: settings.roompass,
             started: false,
@@ -207,18 +208,13 @@ module.exports = function (wss) {
                 game: generated
             }));
             socket.slot = 0;
-
             setTimeout(function () {
-                if (!stateSystem[generated].started) {
-                    try {
-                        stateSystem[generated].duelistChat('Gamelist', '90min Time limit reached. Ending Duel');
-                        delete games[generated];
-                        delete stateSystem[generated];
-                    } catch (error) {
-                        console.log('Could not end game:', generated);
-                    }
-                }
-            }, 5400000); // 90 mins.
+                stateSystem[generated].duelistChat('Gamelist', '90min Time limit reached. Ending Duel');
+                delete games[generated];
+                delete stateSystem[generated];
+            }, 10800000); // 180 mins.
+
+
             break;
 
         case "join":

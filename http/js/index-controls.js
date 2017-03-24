@@ -139,8 +139,9 @@ function singlesitenav(target) {
             return false;
         }
     }
-    if (launcher && target === 'deckedit') {
-        return;
+
+    if (target === 'deckedit') {
+        deckeditloader();
     }
     manualDuel === undefined;
     try {
@@ -385,6 +386,13 @@ function processLogin(data) {
         alertmodal(info.message);
     }
 
+}
+
+function deckeditloader() {
+    primus.write({
+        username: localStorage.nickname,
+        action: 'load'
+    });
 }
 
 Handlebars.registerHelper("counter", function (index) {
