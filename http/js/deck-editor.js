@@ -1,4 +1,4 @@
-/*global currentMousePos, getCardObject, reorientmenu, cardIs, $, storedUserlist, primus,prompt, alert, confirm, FileReader, btoa, alertmodal, personOfIntrest*/
+/*global currentMousePos, getCardObject, reorientmenu, cardIs, $, storedUserlist, primus,prompt, alert, confirm, FileReader, btoa, alertmodal, personOfIntrest, deckeditloader*/
 /*jslint bitwise: true, plusplus:true, regexp:true, browser:true*/
 
 function printError(error) {
@@ -226,6 +226,10 @@ var databaseSystem = (function () {
         completedatabase = dbs.OCGTCG;
 
         setDatabase(['OCGTCG']);
+        $('#deckeditloading').remove();
+        if (internalLocal === 'deckedit') {
+            deckeditloader();
+        }
         setTimeout(function () {
             try {
                 localStorage.compiledDB = JSON.stringify(data);
