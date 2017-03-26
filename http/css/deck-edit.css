@@ -65,7 +65,7 @@ pre.description {
     width: 73.7%;
     height: 22%;
     position: absolute;
-    top: 7vh;
+    top: 8vh;
     right: 0;
     background: rgba(0, 0, 0, .85);
     border: 1px solid #444;
@@ -493,4 +493,12 @@ select.typeSelect {
 
 .searchwrapper:hover img {
     opacity: 1;
+}
+
+div#deckeditloading {
+    background: black;
+    width: 100%;
+    height: 100%;
+    z-index: 10;
+    position: absolute;
 }
