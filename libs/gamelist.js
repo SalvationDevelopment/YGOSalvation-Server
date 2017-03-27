@@ -2,6 +2,26 @@
 // Gamelist object acts similar to a Redis server, could be replaced with on but its the gamelist state.
 'use strict';
 
+
+var hotload = require("hotload");
+var cardidmap = hotload("../http/cardidmap.js", function (cardidmap2) {
+        if (cardidmap === cardidmap2) {
+            console.log("Hotload successful");
+            var cardlist = [{id: 100200125}, {id: 100331005}];
+            console.log(mapCards(cardlist));
+        } else {
+            console.log("Hotload failed");
+        }
+    });
+
+function mapCards(list) {
+    list.map(function (entry) {
+        if (cardidmap[entry.id]) {
+            entry.id = cardidmap[entry.id];
+        }
+    });
+}
+
 var express = require('express'),
     fs = require('fs'),
     spdy = require('spdy'),
