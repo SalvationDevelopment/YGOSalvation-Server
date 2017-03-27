@@ -234,12 +234,13 @@ function tiltFactor() {
 }
 
 function getAvatar(name) {
+
     'use strict';
     if (avatarMap[name]) {
         return;
     }
     $.getJSON('//forum.ygopro.us/avatar.php?username=' + name, function processAvatar(avatarUnit) {
-        avatarMap[name] = '//forum.ygopro.us/uploads/' + avatarUnit.url;
+        avatarMap[name] = (avatarUnit.url) ? '//forum.ygopro.us/uploads/' + avatarUnit.url || undefined;
     });
 }
 
