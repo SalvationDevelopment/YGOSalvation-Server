@@ -4,22 +4,17 @@
 
 
 var hotload = require("hotload");
-var cardidmap = hotload("../http/cardidmap.js", function (cardidmap2) {
-        if (cardidmap === cardidmap2) {
-            console.log("Hotload successful");
-            var cardlist = [{id: 100200125}, {id: 100331005}];
-            console.log(mapCards(cardlist));
-        } else {
-            console.log("Hotload failed");
-        }
-    });
+var cardidmap = hotload("../http/cardidmap.js");
 
 function mapCards(list) {
-    list.map(function (entry) {
-        if (cardidmap[entry.id]) {
-            entry.id = cardidmap[entry.id];
+    var updatedList = list.map(function (entry) {
+        var newEntry = {id: entry.id};
+        if (cardidmap[newEntry.id]) {
+            newEntry.id = cardidmap[newEntry.id];
         }
+        return newEntry;
     });
+    return updatedList;
 }
 
 var express = require('express'),
@@ -542,6 +537,9 @@ function onData(data, socket) {
         break;
     case 'save':
         delete data.action;
+        data.decks.forEach(function(deck) {
+            deck = mapCard(deck);
+        });
         deckStorage.update({
             username: data.username
         }, data, {
