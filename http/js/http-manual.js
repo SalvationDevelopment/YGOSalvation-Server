@@ -240,7 +240,7 @@ function getAvatar(name) {
         return;
     }
     $.getJSON('//forum.ygopro.us/avatar.php?username=' + name, function processAvatar(avatarUnit) {
-        avatarMap[name] = (avatarUnit.url) ? '//forum.ygopro.us/uploads/' + avatarUnit.url || undefined;
+        avatarMap[name] = (avatarUnit.url) ? '//forum.ygopro.us/uploads/' + avatarUnit.url : undefined;
     });
 }
 
