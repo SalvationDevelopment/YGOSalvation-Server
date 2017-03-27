@@ -105,7 +105,7 @@ var manualServer,
         131074: " / Continuous",
         131076: " / Continuous",
         262146: " / Equip",
-		524290: " / Field",
+        524290: " / Field",
         1048580: " / Counter"
     },
     fieldspell = {
@@ -123,7 +123,7 @@ var manualServer,
         2081: "Gemini / Effect",
         4113: "Tuner",
         4129: "Tuner / Effect",
-		4161: "Fusion / Tuner",
+        4161: "Fusion / Tuner",
         8193: "Synchro",
         8225: "Synchro / Effect",
         12321: "Synchro / Tuner / Effect",
@@ -135,7 +135,7 @@ var manualServer,
         8388641: "Xyz / Effect",
         16777233: "Pendulum",
         16777249: "Pendulum / Effect",
-		16777313: "Fusion / Pendulum / Effect",
+        16777313: "Fusion / Pendulum / Effect",
         16781345: "Pendulum / Tuner / Effect",
         16785441: "Synchro / Pendulum / Effect",
         18874401: "Pendulum / Flip / Effect",
@@ -146,7 +146,7 @@ var manualServer,
     pendulumMap = {
         16777233: "Pendulum",
         16777249: "Pendulum / Effect",
-		16777313: "Fusion / Pendulum / Effect",
+        16777313: "Fusion / Pendulum / Effect",
         16781345: "Pendulum / Tuner / Effect",
         16785441: "Synchro / Pendulum / Effect",
         18874401: "Pendulum / Flip / Effect",
@@ -280,8 +280,16 @@ function updateloby(state) {
     getAvatar(state.player[0].name);
     getAvatar(state.player[1].name);
     setTimeout(function () {
-        $('#p0avatar').attr('src', avatarMap[state.player[0].name]);
-        $('#p1avatar').attr('src', avatarMap[state.player[1].name]);
+        if (avatarMap[state.player[0].name]) {
+            $('#p0avatar').attr('src', avatarMap[state.player[0].name]);
+        } else {
+            $('#p0avatar').attr('src', '/img/newgiohtoken.png');
+        }
+        if (avatarMap[state.player[1].name]) {
+            $('#p1avatar').attr('src', avatarMap[state.player[1].name]);
+        } else {
+            $('#p1avatar').attr('src', '/img/newgiohtoken.png');
+        }
         $('.p0name').html(state.player[0].name);
         $('.p1name').html(state.player[1].name);
     }, 3000);
