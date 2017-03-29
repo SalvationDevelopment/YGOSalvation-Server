@@ -33,7 +33,7 @@ function forumValidate(data, callback) {
     //        
     //    }
     process.nextTick(function () {
-        var url = 'http://forum.ygopro.us/log.php',
+        var url = 'https://forum.ygopro.us/log.php',
             post = {
                 ips_username: data.username,
                 ips_password: data.password
@@ -75,8 +75,8 @@ function forumValidate(data, callback) {
 module.exports = forumValidate;
 
 var qs = require('querystring');
-var http = require('http');
-var server = http.createServer(function (request, response) {
+var https = require('https');
+var server = https.createServer(function (request, response) {
     response.writeHead(200, {
         "Content-Type": "text/json"
     });
