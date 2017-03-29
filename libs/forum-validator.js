@@ -43,7 +43,8 @@ function forumValidate(data, callback) {
                 data: {}
             };
         request.post(url, {
-            form: post
+            form: post,
+            rejectUnauthorized: false
         }, function (error, response, body) {
             forumdata = {
                 data: {}
@@ -73,39 +74,3 @@ function forumValidate(data, callback) {
 }
 
 module.exports = forumValidate;
-
-var qs = require('querystring');
-var https = require('https');
-var server = https.createServer(function (request, response) {
-    response.writeHead(200, {
-        "Content-Type": "text/json"
-    });
-    if (request.method === 'POST') {
-        var body = '';
-
-        request.on('data', function (data) {
-            body += data;
-
-            // Too much POST data, kill the connection!
-            // 1e6 === 1 * Math.pow(10, 6) === 1 * 1000000 ~~~ 1MB
-            if (body.length > 1e6) {
-
-
-                request.connection.destroy();
-            }
-        });
-
-        request.on('end', function () {
-            var post = qs.parse(body),
-                data = {
-                    username: post.ips_username,
-                    password: post.ips_password
-                };
-            forumValidate(data, function (error, result) {
-                response.end(JSON.stringify(result));
-            });
-        });
-    }
-});
-
-server.listen(12001);
