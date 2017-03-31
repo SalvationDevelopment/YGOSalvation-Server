@@ -30,6 +30,10 @@ he #deckedit {
     display: block;
 }*/
 
+img.imgContainer {
+    max-width: 100%;
+}
+
 .cardDescription {
     top: 0%;
     left: 0%;
