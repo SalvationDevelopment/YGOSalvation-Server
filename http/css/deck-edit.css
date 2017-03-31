@@ -521,3 +521,28 @@ div#deckeditloading {
     z-index: 10;
     position: absolute;
 }
+
+media (max-width: 1300px) {
+    #decktextoutput {
+        width: 14vw;
+    }
+}
+
+@media (max-width: 1200px) {
+    #decktextoutput {
+        display: none;
+    }
+}
+
+@media (max-width: 800px) {
+    .left {
+        width: 9%;
+    }
+    .right {
+        width: 100px
+    }
+    .right img {
+        width: 72px !important;
+        height: 100px !important;
+    }
+}
