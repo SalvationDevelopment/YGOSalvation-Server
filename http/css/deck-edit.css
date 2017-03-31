@@ -145,11 +145,14 @@ input.decknameInput {
 
 .right {
     height: 74%;
-    width: 20.5%;
+    width: 20%;
     border: 1px solid #444;
     background: rgba(0, 0, 0, .5);
     margin-top: 23vh;
     margin-left: .5%;
+    position: absolute;
+    top: 8vh;
+    right: 1vh;
 }
 
 .searchResults {
