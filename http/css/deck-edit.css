@@ -489,6 +489,18 @@ select.typeSelect {
     overflow: auto;
 }
 
+@media (max-width: 1300px) {
+    #decktextoutput {
+        width: 14vw;
+    }
+}
+
+@media (max-width: 1200px) {
+    #decktextoutput {
+        display: none;
+    }
+}
+
 .searchwrapper:hover {
     box-sizing: border-box;
     border: 1px dashed white !important;
