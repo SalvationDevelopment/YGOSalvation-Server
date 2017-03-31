@@ -23,7 +23,7 @@ body {
     background-repeat: no-repeat;
     background-color: black;
     background-image: url(../img/magimagipinkshadow2.jpg);
-    background-size: 100%;
+    background-size: cover;
     font-family: 'Roboto', sans-serif;
     font-size: 15px;
     font-weight: 400;
