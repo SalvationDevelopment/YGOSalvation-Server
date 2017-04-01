@@ -123,6 +123,7 @@ input.decknameInput {
     width: 100%;
     padding: 5px;
     border: 1px solid yellow;
+    min-height: 20vw;
 }
 
 .extraDeck {
@@ -131,6 +132,7 @@ input.decknameInput {
     border: 1px solid green;
     padding: 5px;
     margin-top: 5px;
+    min-height: 5vw;
 }
 
 .sideDeck {
@@ -139,6 +141,7 @@ input.decknameInput {
     border: 1px solid hotpink;
     padding: 5px;
     margin-top: 5px;
+    min-height: 5vw;
 }
 
 .right {
