@@ -1385,6 +1385,14 @@ function deckeditonclick(index, zone) {
 }
 
 //$('.descInput, .nameInput').on('input', deckEditor.doNewSearch);
+
+$('.descInput, .nameInput').keypress('input', function (event) {
+
+    if (event.which === 13) {
+        deckEditor.doNewSearch();
+    }
+
+});
 $('.typeSelect, .monsterCardSelect, .monsterTypeSelect, .spellSelect, .trapSelect, .attributeSelect, .raceSelect, .setcodeSelect, .forbiddenLimitedSelect').on('change', deckEditor.doNewSearch);
 
 $('.atkInput, .defInput, .levelInput, .scaleInput').on('change', deckEditor.doNewSearch);
