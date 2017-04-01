@@ -734,7 +734,7 @@ var deckEditor = (function () {
         cards.forEach(function (card, index) {
             var hardcard = JSON.stringify(card),
                 src = card.id + '.jpg';
-            html += '<div class="searchwrapper" data-card-limit="' + card.limit + '"><img class="deckeditcard card" id="deceditcard' + index + zone + '" data-dropindex="' + index + '" data-dropzone="' + zone + '" src="https://rawgit.com/SalvationDevelopment/YGOPro-Images/master/' + src + '" data-id="' + card.id + '" onError="this.onerror=null;this.src=\'/img/textures/unknown.jpg\';" ondrag="setDragIndex(' + index + ');setDragZone(\'' + zone + '\')" onclick = "deckeditonclick(' + index + ', \'' + zone + '\')" / ></div>';
+            html += '<div class="searchwrapper" data-card-limit="' + card.limit + '"><img class="deckeditcard card" id="deceditcard' + index + zone + '" data-dropindex="' + index + '" data-dropzone="' + zone + '" src="https://rawgit.com/SalvationDevelopment/YGOPro-Images/master/' + src + '" data-id="' + card.id + '" onError="this.onerror=null;this.src=\'/img/textures/unknown.jpg\';" ondragstart="setDragIndex(' + index + ');setDragZone(\'' + zone + '\')" onclick = "deckeditonclick(' + index + ', \'' + zone + '\')" / ></div>';
         });
 
         $('#deckedit .cardspace .' + zone).html(html);
@@ -1485,8 +1485,10 @@ var dropzone = "",
 
 function setDragIndex(index) {
     'use strict';
-    console.log(index, dragindex);
+
     dragindex = index;
+
+
 }
 
 function setDragZone(zone) {
@@ -1529,4 +1531,7 @@ $("#deckedit .mainDeck,#deckedit .extraDeck,#deckedit .sideDeck").on("drop", fun
 
     }
     dragindex = undefined;
+    $('#manualcontrols button').css({
+        'display': 'none'
+    });
 });
