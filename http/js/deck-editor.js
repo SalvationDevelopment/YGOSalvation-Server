@@ -261,7 +261,7 @@ var databaseSystem = (function () {
     $.getJSON('./setcodes.json', 'utf-8', function (data) {
         setcodes = data;
         var setcode,
-            strings = '<option value="0" data-calc="0">None</option>';
+            strings = '<option value="0" data-calc="0">Archetype</option>';
         console.log(JSON.stringify(setcodes));
         for (setcode in setcodes) {
             if (setcodes.hasOwnProperty(setcode) && setcode[0] === '0' && setcode[1] === 'x' && setcode !== '0x0') {
