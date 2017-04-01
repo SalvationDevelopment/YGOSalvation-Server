@@ -299,7 +299,7 @@ img.deckeditcard.card {
     float: left;
     /* clear: both; */
     position: relative;
-    margin: 4px;
+    margin: 2px;
 }
 
 div#pagebuttons div {
@@ -336,10 +336,9 @@ label[for="typeSelect"] {
     position: relative;
     width: auto;
     height: auto;
-    overflow: auto;
+    overflow: hidden;
     float: left;
-    border: 1px solid black;
-    background: black;
+    border: 1px solid transparent;
     opacity: .9;
 }
 
