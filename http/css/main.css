@@ -848,20 +848,6 @@ meter.p1time {
     border: 1px dashed white;
 }
 
-.center div {
-    font-size: .7em;
-    color: white;
-    float: left;
-    width: 50%;
-}
-
-.left,
-.right,
-.center {
-    float: left;
-    width: 33%;
-}
-
 .gameplayarea {
     width: 750px;
     height: 750px;

@@ -261,7 +261,7 @@ var databaseSystem = (function () {
     $.getJSON('./setcodes.json', 'utf-8', function (data) {
         setcodes = data;
         var setcode,
-            strings = '<option value="0" data-calc="0">None</option>';
+            strings = '<option value="0" data-calc="0">Archetype</option>';
         console.log(JSON.stringify(setcodes));
         for (setcode in setcodes) {
             if (setcodes.hasOwnProperty(setcode) && setcode[0] === '0' && setcode[1] === 'x' && setcode !== '0x0') {
@@ -323,7 +323,7 @@ var currentSearchFilter = (function () {
 
     var currentSearch = [],
         currentSearchIndex = 0,
-        currentSearchPageSize = 42,
+        currentSearchPageSize = 18,
         currentSearchNumberOfPages = Math.ceil(currentSearch.length / currentSearchPageSize),
         currentFilter = getFilter(),
         render = [];
@@ -1385,6 +1385,14 @@ function deckeditonclick(index, zone) {
 }
 
 //$('.descInput, .nameInput').on('input', deckEditor.doNewSearch);
+
+$('.descInput, .nameInput').keypress('input', function (event) {
+
+    if (event.which === 13) {
+        deckEditor.doNewSearch();
+    }
+
+});
 $('.typeSelect, .monsterCardSelect, .monsterTypeSelect, .spellSelect, .trapSelect, .attributeSelect, .raceSelect, .setcodeSelect, .forbiddenLimitedSelect').on('change', deckEditor.doNewSearch);
 
 $('.atkInput, .defInput, .levelInput, .scaleInput').on('change', deckEditor.doNewSearch);
