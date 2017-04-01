@@ -14,6 +14,11 @@ function getLevel(card) {
     return value;
 }
 
+function isExtra(card) {
+    'use strict';
+    return (cardIs('fusion', card) || cardIs('synchro', card) || cardIs('xyz', card) || cardIs('link', card));
+}
+
 function cardEvaluate(card) {
     'use strict';
     var value = 0;
@@ -729,7 +734,7 @@ var deckEditor = (function () {
         cards.forEach(function (card, index) {
             var hardcard = JSON.stringify(card),
                 src = card.id + '.jpg';
-            html += '<div class="searchwrapper" data-card-limit="' + card.limit + '"><img class="deckeditcard card" id="deceditcard' + index + zone + '" data-dropindex="' + index + '" data-dropzone="' + zone + '" src="https://rawgit.com/SalvationDevelopment/YGOPro-Images/master/' + src + '" data-id="' + card.id + '" onError="this.onerror=null;this.src=\'/img/textures/unknown.jpg\';" onclick = "deckeditonclick(' + index + ', \'' + zone + '\')" / ></div>';
+            html += '<div class="searchwrapper" data-card-limit="' + card.limit + '"><img class="deckeditcard card" id="deceditcard' + index + zone + '" data-dropindex="' + index + '" data-dropzone="' + zone + '" src="https://rawgit.com/SalvationDevelopment/YGOPro-Images/master/' + src + '" data-id="' + card.id + '" onError="this.onerror=null;this.src=\'/img/textures/unknown.jpg\';" ondrag="setDragIndex(' + index + ');setDragZone(\'' + zone + '\')" onclick = "deckeditonclick(' + index + ', \'' + zone + '\')" / ></div>';
         });
 
         $('#deckedit .cardspace .' + zone).html(html);
@@ -1161,6 +1166,10 @@ var deckEditor = (function () {
     }
 
     function addCardFromSearch(deck) {
+        console.log(deckEditorReference.zone, deck);
+        if (deckEditorReference.zone === deck) {
+            return;
+        }
         if (!checkLegality(deckEditorReference, deck)) {
             return;
         }
@@ -1325,24 +1334,9 @@ var deckEditor = (function () {
     };
 }());
 
-/**
- * Opens action menu and sets deck edit card reference.
- * @param {Number} index of card being clicked
- * @param {Number} zone  zone card was clicked in.
- */
-function deckeditonclick(index, zone) {
 
+function dodeckeditcardmovement(zone, index) {
     'use strict';
-
-    $('#manualcontrols button').css({
-        'display': 'none'
-    });
-
-    $('#manualcontrols').css({
-        'top': currentMousePos.y,
-        'left': currentMousePos.x,
-        'display': 'block'
-    });
     deckEditorReference = {
         id: deckEditor.getInmemoryDeck()[zone][index].id,
         name: deckEditor.getInmemoryDeck()[zone][index].name,
@@ -1380,6 +1374,26 @@ function deckeditonclick(index, zone) {
             $('.de-addtomain, .de-addtoside').css(viewable);
         }
     }
+}
+/**
+ * Opens action menu and sets deck edit card reference.
+ * @param {Number} index of card being clicked
+ * @param {Number} zone  zone card was clicked in.
+ */
+function deckeditonclick(index, zone) {
+
+    'use strict';
+
+    $('#manualcontrols button').css({
+        'display': 'none'
+    });
+
+    $('#manualcontrols').css({
+        'top': currentMousePos.y,
+        'left': currentMousePos.x,
+        'display': 'block'
+    });
+    dodeckeditcardmovement(zone, index);
     reorientmenu();
     return;
 }
@@ -1387,7 +1401,7 @@ function deckeditonclick(index, zone) {
 //$('.descInput, .nameInput').on('input', deckEditor.doNewSearch);
 
 $('.descInput, .nameInput').keypress('input', function (event) {
-
+    'use strict';
     if (event.which === 13) {
         deckEditor.doNewSearch();
     }
@@ -1463,3 +1477,56 @@ function readSingleFile(evt) {
 }
 
 $('#deckupload').on('change', readSingleFile);
+
+
+var dropzone = "",
+    dragindex,
+    dragzone;
+
+function setDragIndex(index) {
+    'use strict';
+    console.log(index, dragindex);
+    dragindex = index;
+}
+
+function setDragZone(zone) {
+    'use strict';
+
+    dragzone = zone;
+}
+$("#deckedit .mainDeck,#deckedit .extraDeck,#deckedit .sideDeck").on("dragover", function (event) {
+    'use strict';
+    event.preventDefault();
+    event.stopPropagation();
+    dropzone = $(this).attr('data-dragzone');
+});
+
+$("#deckedit .mainDeck,#deckedit .extraDeck,#deckedit .sideDeck").on("dragleave", function (event) {
+    'use strict';
+    event.preventDefault();
+    event.stopPropagation();
+    dropzone = "";
+});
+
+$("#deckedit .mainDeck,#deckedit .extraDeck,#deckedit .sideDeck").on("drop", function (event) {
+    'use strict';
+    event.preventDefault();
+    event.stopPropagation();
+    if (dragindex !== undefined && dropzone) {
+        dodeckeditcardmovement(dragzone, dragindex);
+        if (!dropzone && dragzone !== 'search') {
+            deckEditor.removeCard(dragzone);
+        }
+        if (dropzone === 'search') {
+            deckEditor.addCardFromSearch(dropzone);
+        } else if (dropzone === 'main' && isExtra(deckEditorReference)) {
+            return;
+        } else if (dropzone === 'extra' && !isExtra(deckEditorReference)) {
+            return;
+        } else {
+            deckEditor.deckEditorMoveTo(dropzone);
+        }
+
+    }
+    dragindex = undefined;
+});
