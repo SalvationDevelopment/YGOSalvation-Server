@@ -701,6 +701,20 @@ var deckEditor = (function () {
         activeIndex = 0,
         friends = [];
 
+    /**
+     * Shuffles array in place.
+     * @param {Array} a items The array containing the items This function is in no way optimized.
+     */
+    function shuffle(deck) {
+        var j, x, index;
+        for (index = deck.length; index; index--) {
+            j = Math.floor(Math.random() * index);
+            x = deck[index - 1];
+            deck[index - 1] = deck[j];
+            deck[j] = x;
+        }
+    }
+
     function makeBlankDeck(name, username, date) {
         return {
             main: [],
@@ -1172,6 +1186,11 @@ var deckEditor = (function () {
         renderDeckZone(inmemoryDeck);
     }
 
+    function shuffleMainDeck() {
+        shuffle(inmemoryDeck.main);
+        renderDeckZone(inmemoryDeck);
+    }
+
     function moveInSameZone(deck, oldIndex, newIndex) {
         moveInArray(inmemoryDeck[deck], oldIndex, newIndex);
         renderDeckZone(inmemoryDeck);
@@ -1344,7 +1363,8 @@ var deckEditor = (function () {
         loadFriends: loadFriends,
         renderFriendsList: renderFriendsList,
         moveInSameZone: moveInSameZone,
-        sortDeck: sortDeck
+        sortDeck: sortDeck,
+        shuffleMainDeck: shuffleMainDeck
     };
 }());
 
