@@ -84,6 +84,9 @@ module.exports = function (wss) {
          * @param {Array} stack of cards
          */
         function gameResponse(view, stack) {
+            if (stateSystem[game] === undefined) {
+                return;
+            }
             if (stateSystem[game] && view !== undefined) {
                 if (stateSystem[game].players) {
                     if (stateSystem[game].players[0]) {
@@ -96,6 +99,7 @@ module.exports = function (wss) {
                             stateSystem[game].players[1].send(JSON.stringify(view[stateSystem[game].players[1].slot]));
                         }
                     }
+
                     Object.keys(stateSystem[game].spectators).forEach(function (username) {
                         var spectator = stateSystem[game].spectators[username];
                         spectator.send(JSON.stringify(view.spectators));
@@ -232,7 +236,7 @@ module.exports = function (wss) {
 
                 return true;
             });
-            if (!joined) {
+            if (!joined && stateSystem[message.game]) {
                 stateSystem[message.game].spectators[message.name] = socket;
                 if (games[message.game].started) {
                     socket.send(JSON.stringify(stateSystem[message.game].generateView('start').spectators));
@@ -262,7 +266,7 @@ module.exports = function (wss) {
             if (socket.slot !== undefined) {
                 games[activeduel].player[socket.slot].name = '';
                 games[activeduel].player[socket.slot].ready = false;
-            } else {
+            } else if (stateSystem[activeduel]) {
                 delete stateSystem[activeduel].spectators[message.name];
             }
             socket.slot = undefined;
@@ -449,7 +453,7 @@ module.exports = function (wss) {
             }
             break;
         case "chat":
-            if (socket.slot !== undefined) {
+            if (socket.slot !== undefined && stateSystem[activeduel]) {
                 stateSystem[activeduel].duelistChat(games[activeduel].player[socket.slot].name, message.chat);
             } else {
                 stateSystem[activeduel].spectatorChat(message.name, message.chat);
