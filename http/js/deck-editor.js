@@ -1158,11 +1158,23 @@ var deckEditor = (function () {
         }
         moveInArray(inmemoryDeck[deckEditorReference.zone], deckEditorReference.index, 0);
         var card = inmemoryDeck[deckEditorReference.zone].shift();
-        inmemoryDeck[deck] = docardStackSort(inmemoryDeck[deck]);
+        //inmemoryDeck[deck] = docardStackSort(inmemoryDeck[deck]);
         inmemoryDeck[deck].push(card);
 
         renderDeckZone(inmemoryDeck);
 
+    }
+
+    function sortDeck() {
+        inmemoryDeck.main = docardStackSort(inmemoryDeck.main);
+        inmemoryDeck.extra = docardStackSort(inmemoryDeck.extra);
+        inmemoryDeck.side = docardStackSort(inmemoryDeck.side);
+        renderDeckZone(inmemoryDeck);
+    }
+
+    function moveInSameZone(deck, oldIndex, newIndex) {
+        moveInArray(inmemoryDeck[deck], oldIndex, newIndex);
+        renderDeckZone(inmemoryDeck);
     }
 
     function addCardFromSearch(deck) {
@@ -1174,7 +1186,7 @@ var deckEditor = (function () {
             return;
         }
         inmemoryDeck[deck].push(deckEditorReference);
-        docardStackSort(inmemoryDeck[deck]);
+        //docardStackSort(inmemoryDeck[deck]);
         renderDeckZone(inmemoryDeck);
 
     }
@@ -1330,7 +1342,9 @@ var deckEditor = (function () {
         removeFriend: removeFriend,
         getFriends: getFriends,
         loadFriends: loadFriends,
-        renderFriendsList: renderFriendsList
+        renderFriendsList: renderFriendsList,
+        moveInSameZone: moveInSameZone,
+        sortDeck: sortDeck
     };
 }());
 
@@ -1481,7 +1495,8 @@ $('#deckupload').on('change', readSingleFile);
 
 var dropzone = "",
     dragindex,
-    dragzone;
+    dragzone,
+    dragSameIndex;
 
 function setDragIndex(index) {
     'use strict';
@@ -1496,6 +1511,9 @@ function setDragZone(zone) {
 
     dragzone = zone;
 }
+$("#deckedit .mainDeck,#deckedit .extraDeck,#deckedit .sideDeck").on("dragover", 'img', function (event) {
+    dragSameIndex = $(this).attr('data-dropindex');
+});
 $("#deckedit .mainDeck,#deckedit .extraDeck,#deckedit .sideDeck").on("dragover", function (event) {
     'use strict';
     event.preventDefault();
@@ -1516,11 +1534,11 @@ $("#deckedit .mainDeck,#deckedit .extraDeck,#deckedit .sideDeck").on("drop", fun
     event.stopPropagation();
     if (dragindex !== undefined && dropzone) {
         dodeckeditcardmovement(dragzone, dragindex);
-        if (!dropzone && dragzone !== 'search') {
-            deckEditor.removeCard(dragzone);
-        }
         if (dropzone === 'search') {
             deckEditor.addCardFromSearch(dropzone);
+
+        } else if (dropzone === dragzone) {
+            deckEditor.moveInSameZone(dragzone, deckEditorReference.index, dragSameIndex);
         } else if (dropzone === 'main' && isExtra(deckEditorReference)) {
             return;
         } else if (dropzone === 'extra' && !isExtra(deckEditorReference)) {
