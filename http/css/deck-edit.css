@@ -123,7 +123,7 @@ input.decknameInput {
     width: 100%;
     padding: 5px;
     border: 1px solid yellow;
-    min-height: 20vw;
+    min-height: 19vw;
 }
 
 .extraDeck {
@@ -142,6 +142,16 @@ input.decknameInput {
     padding: 5px;
     margin-top: 5px;
     min-height: 5vw;
+}
+
+.infoclass {
+    /* height: 1em; */
+    border: 1px solid white;
+    float: left;
+    width: 100%;
+    margin: 1vh 0;
+    padding: .4em;
+    font-size: .8em;
 }
 
 .right {
