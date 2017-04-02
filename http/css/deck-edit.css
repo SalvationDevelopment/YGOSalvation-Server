@@ -124,6 +124,7 @@ input.decknameInput {
     padding: 5px;
     border: 1px solid yellow;
     min-height: 19vw;
+    background-color: rgba(255, 255, 0, .3);
 }
 
 .extraDeck {
@@ -133,6 +134,7 @@ input.decknameInput {
     padding: 5px;
     margin-top: 5px;
     min-height: 5vw;
+    background-color: rgba(0, 125, 0, .3);
 }
 
 .sideDeck {
@@ -142,6 +144,7 @@ input.decknameInput {
     padding: 5px;
     margin-top: 5px;
     min-height: 5vw;
+    background-color: rgba(0, 0, 255, .3);
 }
 
 .infoclass {
@@ -156,14 +159,17 @@ input.decknameInput {
 
 .infoclass.infoclassmain {
     border-color: yellow;
+    background-color: rgba(255, 255, 0, .3);
 }
 
 .infoclass.infoclassextra {
     border-color: green;
+    background-color: rgba(0, 125, 0, .3);
 }
 
 .infoclass.infoclassside {
     border-color: blue;
+    background-color: rgba(0, 0, 255, .3);
 }
 
 .right {
