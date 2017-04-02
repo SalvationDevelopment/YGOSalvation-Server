@@ -138,7 +138,7 @@ input.decknameInput {
 .sideDeck {
     float: left;
     width: 100% !important;
-    border: 1px solid hotpink;
+    border: 1px solid blue;
     padding: 5px;
     margin-top: 5px;
     min-height: 5vw;
@@ -152,6 +152,18 @@ input.decknameInput {
     margin: 1vh 0;
     padding: .4em;
     font-size: .8em;
+}
+
+.infoclass.infoclassmain {
+    border-color: yellow;
+}
+
+.infoclass.infoclassextra {
+    border-color: green;
+}
+
+.infoclass.infoclassside {
+    border-color: blue;
 }
 
 .right {

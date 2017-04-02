@@ -1598,4 +1598,5 @@ $("#deckedit .mainDeck,#deckedit .extraDeck,#deckedit .sideDeck").on("drop", fun
     $('#manualcontrols button').css({
         'display': 'none'
     });
+    deckEditor.doSearch();
 });
