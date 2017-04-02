@@ -477,6 +477,25 @@ function orient(player) {
 
 }
 
+function exclusionList(player, location, classValue) {
+    'use strict';
+    var cardsOnField = manualDuel.stack.filter(function (card) {
+            return (orient(card.player) === player && card.location === location);
+        }),
+        selections = cardsOnField.map(function (card) {
+            return '.cardselectionzone.p' + player + '.' + location + '.i' + card.index;
+        });
+
+    selections.forEach(function (cardzone) {
+        $(cardzone).removeClass(classValue);
+    });
+    return {
+        selections: selections,
+        cardsOnField: cardsOnField
+    };
+
+}
+
 function linkStack(field) {
     'use strict';
     console.log('field:', field);
@@ -988,8 +1007,9 @@ function startSpecialSummon(mode) {
             $('.cardselectionzone.p0.SPELLZONE.i7').removeClass('attackglow card');
         }
         $('.cardselectionzone.p0.SPELLZONE.i5').removeClass('attackglow card');
-
+        exclusionList(0, 'SPELLZONE', 'attackglow');
     }
+    exclusionList(0, 'MONSTERZONE', 'attackglow');
 }
 
 function startSpellTargeting(mode) {
@@ -1001,6 +1021,7 @@ function startSpellTargeting(mode) {
         $('.cardselectionzone.p0.SPELLZONE.i7').removeClass('attackglow card');
     }
     $('.cardselectionzone.p0.SPELLZONE.i5').removeClass('attackglow card');
+    exclusionList(0, 'SPELLZONE', 'attackglow');
 
 }
 
