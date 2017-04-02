@@ -782,6 +782,13 @@ var deckEditor = (function () {
         return 'data:application/octet-stream;charset=utf-16le;base64,' + btoa(file);
     }
 
+
+    function typingLength(category, deck) {
+        return inmemoryDeck[deck].filter(function (card, index, array) {
+            return cardIs(category, card);
+        }).length;
+    }
+
     function renderDeckZone(deck) {
         makeCard(deck.main, 'main');
         makeCard(deck.extra, 'extra');
@@ -794,7 +801,21 @@ var deckEditor = (function () {
                 main: {},
                 side: {},
                 extra: {}
-            };
+            },
+            mainMonsters = typingLength('monster', 'main'),
+            mainSpells = typingLength('spell', 'main'),
+            mainTraps = typingLength('trap', 'main'),
+            extraFusions = typingLength('fusion', 'extra'),
+            extraSynchros = typingLength('synchro', 'extra'),
+            extraXYZ = typingLength('xyz', 'extra'),
+            extraLink = typingLength('link', 'extra'),
+            sideMonsters = typingLength('monster', 'side'),
+            sideSpells = typingLength('spell', 'side'),
+            sideTraps = typingLength('trap', 'side'),
+            sideFusions = typingLength('fusion', 'side'),
+            sideSynchros = typingLength('synchro', 'side'),
+            sideXYZ = typingLength('xyz', 'side'),
+            sideLink = typingLength('link', 'side');
 
 
 
@@ -839,13 +860,16 @@ var deckEditor = (function () {
             }
         });
         $('#decktextoutput').html('Main Deck ' + deck.main.length + 'x<br/>');
+        $('.infoclassmain').html('Main Deck Total:' + deck.main.length + ' | Monsters: ' + mainMonsters + ' | Spells: ' + mainSpells + ' | Traps: ' + mainTraps);
         Object.keys(sorter.main).sort(function (a, b) {
             return cardStackSort(sorter.main[a].card, sorter.main[b].card);
         }).forEach(function (id) {
             $('#decktextoutput').append(sorter.main[id].unit + 'x ' + sorter.main[id].card.name + '<br />');
+
         });
 
         $('#decktextoutput').append('<br />Extra Deck ' + deck.extra.length + 'x<br/>');
+        $('.infoclassextra').html('Extra Deck Total: ' + deck.extra.length + ' | Fusions: ' + extraFusions + ' | Synchros: ' + extraSynchros + ' | XYZs: ' + extraXYZ + ' | Links: ' + extraLink);
         Object.keys(sorter.extra).sort(function (a, b) {
             return cardStackSort(sorter.extra[a].card, sorter.extra[b].card);
         }).forEach(function (id) {
@@ -853,6 +877,7 @@ var deckEditor = (function () {
         });
 
         $('#decktextoutput').append('<br/ >Side Deck ' + deck.side.length + 'x<br/>');
+        $('.infoclassside').html('Side Deck Total: ' + deck.side.length + ' | Monsters: ' + sideMonsters + ' | Spells: ' + sideSpells + ' | Traps: ' + sideTraps + ' | Fusions: ' + sideFusions + ' | Synchros: ' + sideSynchros + ' | XYZs: ' + sideXYZ + ' | Links: ' + sideLink);
         Object.keys(sorter.side).sort(function (a, b) {
             return cardStackSort(sorter.side[a].card, sorter.side[b].card);
         }).forEach(function (id) {
@@ -1532,6 +1557,7 @@ function setDragZone(zone) {
     dragzone = zone;
 }
 $("#deckedit .mainDeck,#deckedit .extraDeck,#deckedit .sideDeck").on("dragover", 'img', function (event) {
+    'use strict';
     dragSameIndex = $(this).attr('data-dropindex');
 });
 $("#deckedit .mainDeck,#deckedit .extraDeck,#deckedit .sideDeck").on("dragover", function (event) {
