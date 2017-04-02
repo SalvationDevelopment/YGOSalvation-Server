@@ -575,7 +575,7 @@
                                 <option value="4">Traps</option>
                             </select>
                             <select class="monsterCardSelect" style="display:none">
-                                <option value>Monster Type</option>
+                                <option value>Sub Type</option>
                                 <option value="16">Normal</option>
                                 <option value="32">Effect</option>
                                 <option value="512">Spirit</option>
@@ -585,7 +585,7 @@
                                 <option value="4194304">Toon</option>
                             </select>
                             <select class="monsterTypeSelect" style="display:none">
-                                <option value>Trap Type</option>
+                                <option value>Sub Type</option>
                                 <option value="64">Fusion</option>
                                 <option value="128">Ritual</option>
                                 <option value="8192">Synchro</option>
@@ -1749,8 +1749,12 @@
                     <button id="ingamesreveal" onclick="manualRevealHand()">Reveal Hand</button>
                     <button id="ingamesidebutton" onclick="startSiding()">Side</button>
                     <button id="ingamexsidebutton" onclick="endSiding()" style="display:none;">Finish Siding</button>
-                    <input id="scaledvalue" type="range" min="400" value="510" max="1000" step="10" onchange="scaleScreenFactor()">
-                    <input id="tiltvalue" type="range" min="0" value="20" max="180" step="5" onchange="tiltFactor()">
+                    <details>
+                        <summary>>Camera Angle</summary>
+                        <input id="scaledvalue" type="range" min="400" value="510" max="1000" step="10" onchange="scaleScreenFactor()">
+                        <input id="tiltvalue" type="range" min="0" value="20" max="180" step="5" onchange="tiltFactor()">
+
+                    </details>
                 </div>
 
             </div>
