@@ -15,7 +15,11 @@ var legacyMode = true,
     'use strict';
     sound.play = function (targetID) {
         setTimeout(function () {
-            document.getElementById(targetID).play();
+            if (Number(localStorage.sound_volume)) {
+                var soundfile = document.getElementById(targetID);
+                soundfile.volume = (Number(localStorage.sound_volume) / 100);
+                soundfile.play();
+            }
         }, 400);
     };
 }());
