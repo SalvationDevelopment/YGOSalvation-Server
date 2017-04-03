@@ -264,17 +264,27 @@ var databaseSystem = (function () {
     });
 
     $.getJSON('./setcodes.json', 'utf-8', function (data) {
-        setcodes = data;
-        var setcode,
+        var raw = data,
+            setcodes = Object.keys(raw).map(function (arch) {
+                return {
+                    num: arch,
+                    name: raw[arch]
+                };
+            }).sort(function (a, b) {
+                return (a.name.localeCompare(b.name, undefined, {
+                    numeric: true,
+                    sensitivity: 'base'
+                }));
+            }),
             strings = '<option value="0" data-calc="0">Archetype</option>';
-        console.log(JSON.stringify(setcodes));
-        for (setcode in setcodes) {
-            if (setcodes.hasOwnProperty(setcode) && setcode[0] === '0' && setcode[1] === 'x' && setcode !== '0x0') {
-                strings = strings + '<option data-calc="' + setcode.slice(2) + '" value="' + parseInt(setcode, 16) + '">' + setcodes[setcode] + '</option>';
-            }
-        }
+        console.log(setcodes);
+        setcodes.forEach(function (setcode) {
+            strings = strings + '<option data-calc="' + setcode.num.slice(2) + '" value="' + parseInt(setcode.num, 16) + '">' + setcode.name + '</option>';
+        });
+
         $('.setcodeSelect').html(strings);
     });
+
 
     function directLookup(id) {
         var result = {},
