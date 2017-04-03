@@ -977,6 +977,8 @@ var deckEditor = (function () {
         return friends;
     }
 
+
+
     function doNewSearch() {
 
         var cardname = $('.nameInput').val(),
@@ -1044,6 +1046,15 @@ var deckEditor = (function () {
             currentSearchFilter.setFilter('type', parseInt($('.trapSelect option:selected').val(), 10));
         }
         doSearch();
+    }
+
+    function reset() {
+        $('#deckedit .searchRight input').val('');
+        $('#deckedit .searchRight select').each(function () {
+            var dropdown = $(this);
+            dropdown.val(dropdown.find('option').first().val());
+        });
+        $('.typeSelect').change();
     }
 
 
@@ -1399,7 +1410,8 @@ var deckEditor = (function () {
         renderFriendsList: renderFriendsList,
         moveInSameZone: moveInSameZone,
         sortDeck: sortDeck,
-        shuffleMainDeck: shuffleMainDeck
+        shuffleMainDeck: shuffleMainDeck,
+        reset: reset
     };
 }());
 
