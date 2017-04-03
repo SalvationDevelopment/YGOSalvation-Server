@@ -606,23 +606,23 @@ div#actions button {
 }
 
 #deckedit [floatmarker="s11"] >* {
-    margin-right: -5px;
+    margin-right: -1%;
 }
 
 #deckedit [floatmarker="s12"] >* {
-    margin-right: -9px;
+    margin-right: -1.8%;
 }
 
 #deckedit [floatmarker="s13"] >* {
-    margin-right: -12px;
+    margin-right: -2.5%;
 }
 
 #deckedit [floatmarker="s14"] >* {
-    margin-right: -15px;
+    margin-right: -3.1%;
 }
 
 #deckedit [floatmarker="s15"] >* {
-    margin-right: -17px;
+    margin-right: -3.6%;
 }
 
 .info-controls {
