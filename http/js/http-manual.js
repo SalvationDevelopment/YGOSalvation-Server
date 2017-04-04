@@ -219,21 +219,34 @@ function cardIs(cat, obj) {
 var avatarMap = {};
 
 
+function loadScreen() {
+    $('#slidevaluex').val(localStorage.x);
+    $('#slidevaluey').val(localStorage.y);
+    $('#scaledvalue').val(localStorage.scaledvalue);
+    $('#tiltvalue').val(localStorage.tilt);
+}
+
 function scaleScreenFactor() {
     'use strict';
     var requiredRes = $('#scaledvalue').val(),
         adaptedScreenSize = ($(window).height() / 16) * 9,
-        scale = (adaptedScreenSize / requiredRes);
+        scale = (adaptedScreenSize / requiredRes),
+        x = $('#slidevaluex').val(),
+        y = $('#slidevaluey').val();
 
-    $('.field').css('transform', 'scale(' + scale + ')');
+    $('.field').css('transform', 'matrix(' + scale + ',0,0,' + scale + ',' + x + ', ' + y + ')');
     localStorage.scaledvalue = requiredRes;
+    localStorage.x = x;
+    localStorage.y = y;
     return scale;
+    //     
 }
 
 function tiltFactor() {
     'use strict';
     var tilt = $('#tiltvalue').val();
     $('.fieldimage').css('transform', 'rotate3d(1, 0, 0, ' + tilt + 'deg)');
+    localStorage.tilt = tilt;
     return tilt;
 }
 
@@ -617,6 +630,7 @@ function cardmargin(player, deck) {
             'z-index': (n * multi)
         });
     });
+
 }
 
 function initGameState() {
