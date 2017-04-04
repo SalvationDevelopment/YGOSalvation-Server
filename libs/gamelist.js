@@ -25,6 +25,7 @@ var express = require('express'),
     path = require("path"),
     toobusy = require('toobusy-js'),
     app = express(),
+    compression = require('compression'),
     hsts = require('hsts'),
     Ddos = require('ddos'),
     helmet = require('helmet'),
@@ -78,6 +79,8 @@ var primus,
 require('fs').watch(__filename, process.exit);
 
 app.use(ddos.express);
+app.use(compression());
+app.use(helmet());
 app.use(express['static'](path.join(__dirname, '../http')));
 app.use(function (req, res, next) {
     if (toobusy()) {
@@ -91,7 +94,7 @@ app.use(function (req, res, next) {
 try {
     var privateKey = fs.readFileSync(path.resolve(process.env.SSL + '\\ssl.key')).toString();
     var certificate = fs.readFileSync(path.resolve(process.env.SSL + '\\ssl.crt')).toString();
-    app.use(helmet());
+
 
 
     primusServer = spdy.createServer({

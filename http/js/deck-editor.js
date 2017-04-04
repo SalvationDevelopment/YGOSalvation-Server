@@ -1,4 +1,4 @@
-/*global currentMousePos, getCardObject, reorientmenu, cardIs, $, storedUserlist, primus,prompt, alert, confirm, FileReader, btoa, alertmodal, personOfIntrest*/
+/*global currentMousePos, getCardObject, reorientmenu, cardIs, $, storedUserlist, primus,prompt, alert, confirm, FileReader, btoa, alertmodal, personOfIntrest, deckeditloader*/
 /*jslint bitwise: true, plusplus:true, regexp:true, browser:true*/
 
 function printError(error) {
@@ -12,6 +12,11 @@ function getLevel(card) {
         val = lv.toString(16),
         value = parseInt(val.toString().substr(val.length - 2), 10) || 0;
     return value;
+}
+
+function isExtra(card) {
+    'use strict';
+    return (cardIs('fusion', card) || cardIs('synchro', card) || cardIs('xyz', card) || cardIs('link', card));
 }
 
 function cardEvaluate(card) {
@@ -226,6 +231,10 @@ var databaseSystem = (function () {
         completedatabase = dbs.OCGTCG;
 
         setDatabase(['OCGTCG']);
+        $('#deckeditloading').remove();
+        if (internalLocal === 'deckedit') {
+            deckeditloader();
+        }
         setTimeout(function () {
             try {
                 localStorage.compiledDB = JSON.stringify(data);
@@ -255,17 +264,27 @@ var databaseSystem = (function () {
     });
 
     $.getJSON('./setcodes.json', 'utf-8', function (data) {
-        setcodes = data;
-        var setcode,
-            strings = '<option value="0" data-calc="0">None</option>';
-        console.log(JSON.stringify(setcodes));
-        for (setcode in setcodes) {
-            if (setcodes.hasOwnProperty(setcode) && setcode[0] === '0' && setcode[1] === 'x' && setcode !== '0x0') {
-                strings = strings + '<option data-calc="' + setcode.slice(2) + '" value="' + parseInt(setcode, 16) + '">' + setcodes[setcode] + '</option>';
-            }
-        }
+        var raw = data,
+            setcodes = Object.keys(raw).map(function (arch) {
+                return {
+                    num: arch,
+                    name: raw[arch]
+                };
+            }).sort(function (a, b) {
+                return (a.name.localeCompare(b.name, undefined, {
+                    numeric: true,
+                    sensitivity: 'base'
+                }));
+            }),
+            strings = '<option value="0" data-calc="0">Archetype</option>';
+        console.log(setcodes);
+        setcodes.forEach(function (setcode) {
+            strings = strings + '<option data-calc="' + setcode.num.slice(2) + '" value="' + parseInt(setcode.num, 16) + '">' + setcode.name + '</option>';
+        });
+
         $('.setcodeSelect').html(strings);
     });
+
 
     function directLookup(id) {
         var result = {},
@@ -319,7 +338,7 @@ var currentSearchFilter = (function () {
 
     var currentSearch = [],
         currentSearchIndex = 0,
-        currentSearchPageSize = 42,
+        currentSearchPageSize = 18,
         currentSearchNumberOfPages = Math.ceil(currentSearch.length / currentSearchPageSize),
         currentFilter = getFilter(),
         render = [];
@@ -692,6 +711,20 @@ var deckEditor = (function () {
         activeIndex = 0,
         friends = [];
 
+    /**
+     * Shuffles array in place.
+     * @param {Array} a items The array containing the items This function is in no way optimized.
+     */
+    function shuffle(deck) {
+        var j, x, index;
+        for (index = deck.length; index; index--) {
+            j = Math.floor(Math.random() * index);
+            x = deck[index - 1];
+            deck[index - 1] = deck[j];
+            deck[j] = x;
+        }
+    }
+
     function makeBlankDeck(name, username, date) {
         return {
             main: [],
@@ -725,7 +758,7 @@ var deckEditor = (function () {
         cards.forEach(function (card, index) {
             var hardcard = JSON.stringify(card),
                 src = card.id + '.jpg';
-            html += '<div class="searchwrapper" data-card-limit="' + card.limit + '"><img class="deckeditcard card" id="deceditcard' + index + zone + '" data-dropindex="' + index + '" data-dropzone="' + zone + '" src="https://rawgit.com/SalvationDevelopment/YGOPro-Images/master/' + src + '" data-id="' + card.id + '" onError="this.onerror=null;this.src=\'/img/textures/unknown.jpg\';" onclick = "deckeditonclick(' + index + ', \'' + zone + '\')" / ></div>';
+            html += '<div class="searchwrapper" data-card-limit="' + card.limit + '"><img class="deckeditcard card" id="deceditcard' + index + zone + '" data-dropindex="' + index + '" data-dropzone="' + zone + '" src="https://rawgit.com/SalvationDevelopment/YGOPro-Images/master/' + src + '" data-id="' + card.id + '" onError="this.onerror=null;this.src=\'/img/textures/unknown.jpg\';" ondragstart="setDragIndex(' + index + ');setDragZone(\'' + zone + '\')" onclick = "deckeditonclick(' + index + ', \'' + zone + '\')" / ></div>';
         });
 
         $('#deckedit .cardspace .' + zone).html(html);
@@ -759,6 +792,13 @@ var deckEditor = (function () {
         return 'data:application/octet-stream;charset=utf-16le;base64,' + btoa(file);
     }
 
+
+    function typingLength(category, deck) {
+        return inmemoryDeck[deck].filter(function (card, index, array) {
+            return cardIs(category, card);
+        }).length;
+    }
+
     function renderDeckZone(deck) {
         makeCard(deck.main, 'main');
         makeCard(deck.extra, 'extra');
@@ -771,7 +811,21 @@ var deckEditor = (function () {
                 main: {},
                 side: {},
                 extra: {}
-            };
+            },
+            mainMonsters = typingLength('monster', 'main'),
+            mainSpells = typingLength('spell', 'main'),
+            mainTraps = typingLength('trap', 'main'),
+            extraFusions = typingLength('fusion', 'extra'),
+            extraSynchros = typingLength('synchro', 'extra'),
+            extraXYZ = typingLength('xyz', 'extra'),
+            extraLink = typingLength('link', 'extra'),
+            sideMonsters = typingLength('monster', 'side'),
+            sideSpells = typingLength('spell', 'side'),
+            sideTraps = typingLength('trap', 'side'),
+            sideFusions = typingLength('fusion', 'side'),
+            sideSynchros = typingLength('synchro', 'side'),
+            sideXYZ = typingLength('xyz', 'side'),
+            sideLink = typingLength('link', 'side');
 
 
 
@@ -816,13 +870,16 @@ var deckEditor = (function () {
             }
         });
         $('#decktextoutput').html('Main Deck ' + deck.main.length + 'x<br/>');
+        $('.infoclassmain').html('Main Deck Total:' + deck.main.length + ' | Monsters: ' + mainMonsters + ' | Spells: ' + mainSpells + ' | Traps: ' + mainTraps);
         Object.keys(sorter.main).sort(function (a, b) {
             return cardStackSort(sorter.main[a].card, sorter.main[b].card);
         }).forEach(function (id) {
             $('#decktextoutput').append(sorter.main[id].unit + 'x ' + sorter.main[id].card.name + '<br />');
+
         });
 
         $('#decktextoutput').append('<br />Extra Deck ' + deck.extra.length + 'x<br/>');
+        $('.infoclassextra').html('Extra Deck Total: ' + deck.extra.length + ' | Fusions: ' + extraFusions + ' | Synchros: ' + extraSynchros + ' | XYZs: ' + extraXYZ + ' | Links: ' + extraLink);
         Object.keys(sorter.extra).sort(function (a, b) {
             return cardStackSort(sorter.extra[a].card, sorter.extra[b].card);
         }).forEach(function (id) {
@@ -830,6 +887,7 @@ var deckEditor = (function () {
         });
 
         $('#decktextoutput').append('<br/ >Side Deck ' + deck.side.length + 'x<br/>');
+        $('.infoclassside').html('Side Deck Total: ' + deck.side.length + ' | Monsters: ' + sideMonsters + ' | Spells: ' + sideSpells + ' | Traps: ' + sideTraps + ' | Fusions: ' + sideFusions + ' | Synchros: ' + sideSynchros + ' | XYZs: ' + sideXYZ + ' | Links: ' + sideLink);
         Object.keys(sorter.side).sort(function (a, b) {
             return cardStackSort(sorter.side[a].card, sorter.side[b].card);
         }).forEach(function (id) {
@@ -919,6 +977,8 @@ var deckEditor = (function () {
         return friends;
     }
 
+
+
     function doNewSearch() {
 
         var cardname = $('.nameInput').val(),
@@ -986,6 +1046,15 @@ var deckEditor = (function () {
             currentSearchFilter.setFilter('type', parseInt($('.trapSelect option:selected').val(), 10));
         }
         doSearch();
+    }
+
+    function reset() {
+        $('#deckedit .searchRight input').val('');
+        $('#deckedit .searchRight select').each(function () {
+            var dropdown = $(this);
+            dropdown.val(dropdown.find('option').first().val());
+        });
+        $('.typeSelect').change();
     }
 
 
@@ -1149,19 +1218,40 @@ var deckEditor = (function () {
         }
         moveInArray(inmemoryDeck[deckEditorReference.zone], deckEditorReference.index, 0);
         var card = inmemoryDeck[deckEditorReference.zone].shift();
-        inmemoryDeck[deck] = docardStackSort(inmemoryDeck[deck]);
+        //inmemoryDeck[deck] = docardStackSort(inmemoryDeck[deck]);
         inmemoryDeck[deck].push(card);
 
         renderDeckZone(inmemoryDeck);
 
     }
 
+    function sortDeck() {
+        inmemoryDeck.main = docardStackSort(inmemoryDeck.main);
+        inmemoryDeck.extra = docardStackSort(inmemoryDeck.extra);
+        inmemoryDeck.side = docardStackSort(inmemoryDeck.side);
+        renderDeckZone(inmemoryDeck);
+    }
+
+    function shuffleMainDeck() {
+        shuffle(inmemoryDeck.main);
+        renderDeckZone(inmemoryDeck);
+    }
+
+    function moveInSameZone(deck, oldIndex, newIndex) {
+        moveInArray(inmemoryDeck[deck], oldIndex, newIndex);
+        renderDeckZone(inmemoryDeck);
+    }
+
     function addCardFromSearch(deck) {
+        console.log(deckEditorReference.zone, deck);
+        if (deckEditorReference.zone === deck) {
+            return;
+        }
         if (!checkLegality(deckEditorReference, deck)) {
             return;
         }
         inmemoryDeck[deck].push(deckEditorReference);
-        docardStackSort(inmemoryDeck[deck]);
+        //docardStackSort(inmemoryDeck[deck]);
         renderDeckZone(inmemoryDeck);
 
     }
@@ -1317,28 +1407,17 @@ var deckEditor = (function () {
         removeFriend: removeFriend,
         getFriends: getFriends,
         loadFriends: loadFriends,
-        renderFriendsList: renderFriendsList
+        renderFriendsList: renderFriendsList,
+        moveInSameZone: moveInSameZone,
+        sortDeck: sortDeck,
+        shuffleMainDeck: shuffleMainDeck,
+        reset: reset
     };
 }());
 
-/**
- * Opens action menu and sets deck edit card reference.
- * @param {Number} index of card being clicked
- * @param {Number} zone  zone card was clicked in.
- */
-function deckeditonclick(index, zone) {
 
+function dodeckeditcardmovement(zone, index) {
     'use strict';
-
-    $('#manualcontrols button').css({
-        'display': 'none'
-    });
-
-    $('#manualcontrols').css({
-        'top': currentMousePos.y,
-        'left': currentMousePos.x,
-        'display': 'block'
-    });
     deckEditorReference = {
         id: deckEditor.getInmemoryDeck()[zone][index].id,
         name: deckEditor.getInmemoryDeck()[zone][index].name,
@@ -1376,11 +1455,39 @@ function deckeditonclick(index, zone) {
             $('.de-addtomain, .de-addtoside').css(viewable);
         }
     }
+}
+/**
+ * Opens action menu and sets deck edit card reference.
+ * @param {Number} index of card being clicked
+ * @param {Number} zone  zone card was clicked in.
+ */
+function deckeditonclick(index, zone) {
+
+    'use strict';
+
+    $('#manualcontrols button').css({
+        'display': 'none'
+    });
+
+    $('#manualcontrols').css({
+        'top': currentMousePos.y,
+        'left': currentMousePos.x,
+        'display': 'block'
+    });
+    dodeckeditcardmovement(zone, index);
     reorientmenu();
     return;
 }
 
 //$('.descInput, .nameInput').on('input', deckEditor.doNewSearch);
+
+$('.descInput, .nameInput').keypress('input', function (event) {
+    'use strict';
+    if (event.which === 13) {
+        deckEditor.doNewSearch();
+    }
+
+});
 $('.typeSelect, .monsterCardSelect, .monsterTypeSelect, .spellSelect, .trapSelect, .attributeSelect, .raceSelect, .setcodeSelect, .forbiddenLimitedSelect').on('change', deckEditor.doNewSearch);
 
 $('.atkInput, .defInput, .levelInput, .scaleInput').on('change', deckEditor.doNewSearch);
@@ -1451,3 +1558,67 @@ function readSingleFile(evt) {
 }
 
 $('#deckupload').on('change', readSingleFile);
+
+
+var dropzone = "",
+    dragindex,
+    dragzone,
+    dragSameIndex;
+
+function setDragIndex(index) {
+    'use strict';
+
+    dragindex = index;
+
+
+}
+
+function setDragZone(zone) {
+    'use strict';
+
+    dragzone = zone;
+}
+$("#deckedit .mainDeck,#deckedit .extraDeck,#deckedit .sideDeck").on("dragover", 'img', function (event) {
+    'use strict';
+    dragSameIndex = $(this).attr('data-dropindex');
+});
+$("#deckedit .mainDeck,#deckedit .extraDeck,#deckedit .sideDeck").on("dragover", function (event) {
+    'use strict';
+    event.preventDefault();
+    event.stopPropagation();
+    dropzone = $(this).attr('data-dragzone');
+});
+
+$("#deckedit .mainDeck,#deckedit .extraDeck,#deckedit .sideDeck").on("dragleave", function (event) {
+    'use strict';
+    event.preventDefault();
+    event.stopPropagation();
+    dropzone = "";
+});
+
+$("#deckedit .mainDeck,#deckedit .extraDeck,#deckedit .sideDeck").on("drop", function (event) {
+    'use strict';
+    event.preventDefault();
+    event.stopPropagation();
+    if (dragindex !== undefined && dropzone) {
+        dodeckeditcardmovement(dragzone, dragindex);
+        if (dropzone === 'search') {
+            deckEditor.addCardFromSearch(dropzone);
+
+        } else if (dropzone === dragzone) {
+            deckEditor.moveInSameZone(dragzone, deckEditorReference.index, dragSameIndex);
+        } else if (dropzone === 'main' && isExtra(deckEditorReference)) {
+            return;
+        } else if (dropzone === 'extra' && !isExtra(deckEditorReference)) {
+            return;
+        } else {
+            deckEditor.deckEditorMoveTo(dropzone);
+        }
+
+    }
+    dragindex = undefined;
+    $('#manualcontrols button').css({
+        'display': 'none'
+    });
+    deckEditor.doSearch();
+});
