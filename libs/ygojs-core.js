@@ -288,7 +288,8 @@ function init(callback) {
             removed = filterlocation(playersCards, 'REMOVED'),
             spellzone = filterlocation(playersCards, 'SPELLZONE'),
             monsterzone = filterlocation(playersCards, 'MONSTERZONE'),
-            excavated = filterlocation(playersCards, 'EXCAVATED');
+            excavated = filterlocation(playersCards, 'EXCAVATED'),
+            inmaterial = filterlocation(playersCards, 'INMATERIAL');
 
         return {
             DECK: hideViewOfZone(deck),
@@ -298,7 +299,8 @@ function init(callback) {
             REMOVED: removed,
             SPELLZONE: spellzone,
             MONSTERZONE: monsterzone,
-            EXCAVATED: excavated
+            EXCAVATED: excavated,
+            INMATERIAL : inmaterial
         };
     }
 
@@ -316,7 +318,8 @@ function init(callback) {
             removed = filterlocation(playersCards, 'REMOVED'),
             spellzone = filterlocation(playersCards, 'SPELLZONE'),
             monsterzone = filterlocation(playersCards, 'MONSTERZONE'),
-            excavated = filterlocation(playersCards, 'EXCAVATED');
+            excavated = filterlocation(playersCards, 'EXCAVATED'),
+            inmaterial = filterlocation(playersCards, 'INMATERIAL');
 
         return {
             DECK: hideViewOfZone(deck),
@@ -326,7 +329,8 @@ function init(callback) {
             REMOVED: hideViewOfZone(removed),
             SPELLZONE: hideViewOfZone(spellzone),
             MONSTERZONE: hideViewOfZone(monsterzone),
-            EXCAVATED: hideViewOfZone(excavated)
+            EXCAVATED: hideViewOfZone(excavated),
+            INMATERIAL : inmaterial
         };
     }
 
