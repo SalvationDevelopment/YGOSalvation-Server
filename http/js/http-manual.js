@@ -226,6 +226,7 @@ function loadScreen() {
     $('#scaledvalue').val(localStorage.scaledvalue);
     $('#tiltvalue').val(localStorage.tilt);
 }
+loadScreen();
 
 function scaleScreenFactor() {
     'use strict';
