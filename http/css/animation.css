@@ -201,7 +201,7 @@ meter::-webkit-meter-optimum-value {
     top: 104%;
 }
 
-[data-deletedToken] {display: none !important}
+.INMATERIAL, [data-deletedToken] {display: none !important; visibility: hidden !important; opacity: 0 !important; height: 0 !important; width: 0 !important;}
 
 .revealedcard[data-position="FaceDownREMOVED"],
 .revealedcard[data-position="FaceDownAttackREMOVED"],
