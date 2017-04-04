@@ -470,9 +470,9 @@ function init(callback) {
         var target = queryCard(undefined, undefined, undefined, 0, uid),
             pointer = uidLookup(target.uid);
 
-        delete stack[pointer];
-        state.removed = uid;
-        callback(generateView('removeCard'), stack);
+        stack[pointer].location = "INMATERIAL";
+        //state.removed = uid;
+        callback(generateView(), stack);
     }
 
     /**
