@@ -192,6 +192,8 @@ function init(callback) {
     }
 
     var stack = [],
+        previousStack = [],
+        outstack = [],
         names = ['', ''],
         lock = [false, false],
         round = [],
@@ -259,13 +261,26 @@ function init(callback) {
         return filterUID(stack, uid);
     }
 
+    function findUIDCollectionPrevious(uid) {
+        return filterUID(previousStack, uid);
+    }
+
+    function filterEdited(cards) {
+        return cards.filter(function (card) {
+            var newCards = findUIDCollection(card.uid)[0],
+                oldCards = findUIDCollectionPrevious(card.uid)[0] || {};
+            return !Object.keys(newCards).every(function (key) {
+                return newCards[key] === oldCards[key];
+            });
+        });
+    }
     /**
      * Generate the view for a specific given player
      * @param   {Number} the given player
      * @returns {object} all the cards the given player can see on their side of the field.
      */
     function generateSinglePlayerView(player) {
-        var playersCards = filterPlayer(stack, player),
+        var playersCards = filterEdited(filterPlayer(stack, player)),
             deck = filterlocation(playersCards, 'DECK'),
             hand = filterlocation(playersCards, 'HAND'),
             grave = filterlocation(playersCards, 'GRAVE'),
@@ -293,7 +308,7 @@ function init(callback) {
      * @returns {object} all the cards the given spectator/opponent can see on that side of the field.
      */
     function generateSinglePlayerSpectatorView(player) {
-        var playersCards = filterPlayer(stack, player),
+        var playersCards = filterEdited(filterPlayer(stack, player)),
             deck = filterlocation(playersCards, 'DECK'),
             hand = filterlocation(playersCards, 'HAND'),
             grave = filterlocation(playersCards, 'GRAVE'),
@@ -345,7 +360,10 @@ function init(callback) {
      * @returns {Array} complete view of the current field based on the stack for every view type.
      */
     function generateView(action) {
-        return {
+        if (action === 'start') {
+            previousStack = [];
+        }
+        var output = {
             names: names,
             0: {
                 action: action || 'duel',
@@ -363,6 +381,8 @@ function init(callback) {
                 field: generateSpectatorView()
             }
         };
+        previousStack = JSON.parse(JSON.stringify(stack));
+        return output;
     }
 
     function reIndex(player, location) {
