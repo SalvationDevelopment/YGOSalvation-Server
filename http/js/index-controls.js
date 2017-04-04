@@ -230,6 +230,7 @@ function singlesitenav(target) {
         $('.notneededinweb').css('display', 'none');
     }
     activelyDueling = false;
+    $('#camerazone').css('display', 'none');
     return false;
 }
 
