@@ -6,14 +6,37 @@ var validateDeck = require('./validate-Deck'),
     http = require('http'),
     https = require('https'),
     path = require('path'),
-    database = require('../http/manifest/manifest_0-en-OCGTCG.json'),
-    banlist = require('../http/manifest/banlist.json'),
     fs = require('fs'),
-    banLists = {};
+    jsonfile = require('jsonfile'),
+    database = [],
+    banlist = {},
+    dbfilename = '../http/manifest/manifest_0-en-OCGTCG.json',
+    banlistfilename = '../http/manifest/banlist.json';
 
-/**
- * Update the banlist
- */
+
+
+function generateDBs() {
+
+    jsonfile.readFile(banlistfilename, function (err, obj) {
+        banlist = obj;
+    });
+    jsonfile.readFile(dbfilename, function (err, obj) {
+        banlist = obj;
+    });
+}
+fs.watchFile(dbfilename, function () {
+    jsonfile.readFile(dbfilename, function (err, obj) {
+        database = obj;
+    });
+});
+
+fs.watchFile(banlistfilename, function () {
+    jsonfile.readFile(dbfilename, function (err, obj) {
+        banlist = obj;
+    });
+});
+
+generateDBs();
 
 module.exports = function (wss) {
 
