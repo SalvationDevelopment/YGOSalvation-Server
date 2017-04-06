@@ -15,28 +15,34 @@ var validateDeck = require('./validate-Deck'),
 
 
 
-function generateDBs() {
-
-    jsonfile.readFile(banlistfilename, function (err, obj) {
-        banlist = obj;
-    });
-    jsonfile.readFile(dbfilename, function (err, obj) {
-        banlist = obj;
-    });
-}
 fs.watchFile(dbfilename, function () {
-    jsonfile.readFile(dbfilename, function (err, obj) {
-        database = obj;
-    });
+    setTimeout(function () {
+        jsonfile.readFile(dbfilename, function (error, list) {
+            if (error) {
+                console.log(error);
+                return;
+            }
+            console.log('    Loaded cards in DB:', list.length, 'total');
+            database = list;
+        });
+    }, 5000);
+
 });
 
 fs.watchFile(banlistfilename, function () {
-    jsonfile.readFile(dbfilename, function (err, obj) {
-        banlist = obj;
-    });
+    setTimeout(function () {
+        jsonfile.readFile(dbfilename, function (error, obj) {
+            if (error) {
+                console.log(error);
+                return;
+            }
+            banlist = obj;
+            console.log('    Loaded banlist');
+        });
+    }, 5000);
+
 });
 
-generateDBs();
 
 module.exports = function (wss) {
 
