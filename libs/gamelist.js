@@ -2,7 +2,8 @@
 // Gamelist object acts similar to a Redis server, could be replaced with on but its the gamelist state.
 'use strict';
 
-var express = require('express'),
+var child_process = require('child_process'),
+    express = require('express'),
     fs = require('fs'),
     spdy = require('spdy'),
     http = require('http'),
@@ -73,6 +74,24 @@ app.use(function (req, res, next) {
     } else {
         next();
     }
+});
+
+app.get('/generate', function (req, res) {
+    res.send('Regenerating manifest...');
+    child_process.fork('./update.js');
+});
+
+app.get('/git', function (req, res) {
+    res.send('Attempting to Update Server...');
+    var gitUpdater = domain.create();
+    gitUpdater.on('error', function (err) {
+        console.log('        [Update System] ' + 'Git Failed'.grey, err);
+    });
+    gitUpdater.run(function () {
+        child_process.spawn('git', ['pull'], {}, function () {
+            child_process.fork('./update.js');
+        });
+    });
 });
 
 
@@ -562,13 +581,6 @@ function onData(data, socket) {
 
 }
 
-
-
-
-
-
-
-
 primus.on('connection', function (socket) {
     var connectionwatcher = domain.create();
     connectionwatcher.on('error', function (err) {
@@ -591,4 +603,8 @@ primus.on('connection', function (socket) {
     });
     connectionwatcher.exit();
 });
-require('fs').watch(__filename, process.exit);
+fs.watch(__filename, process.exit);
+fs.watch('../http/ygopro/databases/', function () {
+    child_process.fork('./update.js');
+});
+child_process.fork('./update.js');
