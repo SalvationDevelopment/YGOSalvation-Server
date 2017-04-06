@@ -145,6 +145,7 @@ if (process.env.SSL !== undefined) {
 setTimeout(function () {
     //give the system five seconds to figure itself out.
     booting = false;
+    child_process.fork('./update.js');
 }, 5000);
 
 var Datastore = require('nedb'),
@@ -607,4 +608,3 @@ fs.watch(__filename, process.exit);
 fs.watch('../http/ygopro/databases/', function () {
     child_process.fork('./update.js');
 });
-child_process.fork('./update.js');
