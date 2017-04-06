@@ -1,7 +1,6 @@
 /*jslint plusplus: true, browser:true, node:true*/
 /*jslint nomen: true*/
-/*global localStorage, $, Primus, prompt, console, writeDeckList, makeDeck, confirm, launcher, alert, singlesitenav, startgame, _gaq, internalLocal, loggedIn, processServerCall, admin, jsLang, manualHost, deckEditor, processLogin, reorientmenu*/
-/*exported connectToCheckmateServer, leaveGamelist, hostGame, connectgamelist, setHostSettings, setfilter*/
+/*global $, alertmodal, confirm, prompt*/
 
 
 var localstorageIter = 0,
@@ -73,7 +72,7 @@ var mode = "production",
     screenMessage = $('#servermessages'),
     uniqueID = $('#uniqueid').html(),
     primusprotocol = (location.protocol === 'https:') ? "wss://" : "ws://",
-    primus = Primus.connect(primusprotocol + location.host);
+    primus = window.Primus.connect(primusprotocol + location.host);
 
 
 function isChecked(id) {
@@ -92,7 +91,7 @@ function ygopro(parameter) {
     if (localStorage.roompass) {
         if (localStorage.roompass[0] === '4') {
             //if battleback
-            localStorage.battleback = writeDeckList(makeDeck(9));
+            localStorage.battleback = window.writeDeckList(window.makeDeck(9));
 
         }
     }
@@ -119,10 +118,10 @@ function ygopro(parameter) {
     };
     quedfunc = 'processServerRequest';
     quedready = true;
-    internalLocal = 'YGOPro';
+    window.internalLocal = 'YGOPro';
     try {
-        _gaq.push(['_trackEvent', 'Launcher', 'YGOPro', parameter]);
-        _gaq.push(['_trackEvent', 'Site', 'Navigation Movement', internalLocal + ' - ' + 'YGOPro']);
+        window._gaq.push(['_trackEvent', 'Launcher', 'YGOPro', parameter]);
+        window._gaq.push(['_trackEvent', 'Site', 'Navigation Movement', window.internalLocal + ' - ' + 'YGOPro']);
     } catch (e) {}
 
 
@@ -135,17 +134,6 @@ function ygopro(parameter) {
 
 
 $('#servermessages').text('Loading interface from server...');
-
-function joinGamelist() {
-    'use strict';
-    primus.write({
-        action: 'join',
-        uniqueID: uniqueID
-    });
-}
-joinGamelist();
-
-setInterval(joinGamelist, 35000);
 
 
 function leaveGamelist() {
@@ -187,12 +175,12 @@ function enterGame(string, pass) {
             alertmodal('Firefox isnt supported at this time, please use Google Chrome.');
             return;
         }
-        startgame(string);
+        window.startgame(string);
         return;
     }
 
-    if (pass && admin !== "1") {
-        guess = prompt('Password?', guess);
+    if (pass && window.admin !== "1") {
+        guess = window.prompt('Password?', guess);
         if (string.substring(26, 19) !== guess) {
             alertmodal('Wrong Password!');
             return;
@@ -204,7 +192,7 @@ function enterGame(string, pass) {
     localStorage.lastip = "192.99.11.19";
     ygopro('-j');
     try {
-        _gaq.push(['_trackEvent', 'Launcher', 'YGOPro', 'Join Duel']);
+        window._gaq.push(['_trackEvent', 'Launcher', 'YGOPro', 'Join Duel']);
     } catch (e) {}
     setTimeout(function () {
         $('body').css('background-image', 'url(http://ygopro.us/img/magimagipinkshadow2.jpg)');
@@ -243,7 +231,7 @@ function setpass() {
         pass = prompt('Password (5 char):', pass);
         pass.replace(/[^a-zA-Z0-9]/g, "");
     } while (pass.length !== 5);
-    prompt('Give this Password to your Opponent(s)!', pass);
+    window.prompt('Give this Password to your Opponent(s)!', pass);
     return pass;
 }
 
@@ -328,35 +316,8 @@ function setHostSettings() {
             $('#creategamelp').val() + duelRequest.stnds +
             duelRequest.pass).substring(0, 24);
 
-    if (isChecked('#Manual') || !launcher) {
-        manualHost(duelRequest);
-        return;
-    }
-
-    localStorage.lastip = '192.99.11.19';
-    localStorage.serverport = '8911';
-    localStorage.lastport = '8911';
-    //PER CHIBI
-
-    localStorage.lastdeck = $('#hostSettings .currentdeck').val();
-
-    if (isChecked('#useai')) {
-        primus.write({
-            action: 'ai',
-            roompass: localStorage.roompass,
-            deck: $("#aidecks option:selected").text()
-        });
-        setTimeout(ygopro, 1500, '-j');
-        singlesitenav('gamelist');
-    } else {
-        ygopro('-j');
-    }
-    try {
-        _gaq.push(['_trackEvent', 'Launcher', 'YGOPro', 'Host']);
-        _gaq.push(['_trackEvent', 'Launcher', 'YGOPro Host', duelRequest.string + 'O' +
-            duelRequest.checkd + duelRequest.shuf +
-            $('#creategamelp').val() + duelRequest.stnds]);
-    } catch (e) {}
+    window.manualHost(duelRequest);
+    return;
 }
 
 
@@ -522,9 +483,9 @@ function renderList(JSONdata) {
     elem = $('#gamelistitems').find('div:not(.avaliable)').sort(sortMe);
     $('#gamelistitems').append(elem);
     $('#gamelistitems .avaliable').first()
-        .before('<br style="clear:both"><span class="gamelabel">' + jsLang.join + '<span><br style="clear:both">');
+        .before('<br style="clear:both"><span class="gamelabel">' + window.jsLang.join + '<span><br style="clear:both">');
     $('#gamelistitems .started')
-        .first().before('<br style="clear:both"><span class="gamelabel">' + jsLang.spectate + '<span><br style="clear:both">');
+        .first().before('<br style="clear:both"><span class="gamelabel">' + window.jsLang.spectate + '<span><br style="clear:both">');
     $('#activeduels').html($('.game').length);
     $('#activeduelist').html($('.playername').length + spectators - $('.playername:contains(SnarkyChild)').length);
 
@@ -592,6 +553,7 @@ function privateMessage(person) {
 }
 
 function closeprivatechat(person) {
+    'use strict';
     openChats = openChats.filter(function (message) {
         return (message.from === person);
     });
@@ -623,7 +585,7 @@ function pondata(data) {
         }
 
         if (data.message) {
-            if (data.clientEvent === 'global' && data.message.length && loggedIn) {
+            if (data.clientEvent === 'global' && data.message.length && window.loggedIn) {
                 $('footer, #popupbody').html(data.message).addClass('loud');
                 if (data.message && data.message.length) {
                     //singlesitenav('popup'); /* turned off per Stormwolf;*/
@@ -645,7 +607,7 @@ function pondata(data) {
             }
         }
         if (data.clientEvent === 'login') {
-            processLogin(data.info);
+            window.processLogin(data.info);
             if (data.chatbox) {
                 if (data.chatbox.length) {
                     $('#onlinepublicchat').html('');
@@ -658,11 +620,11 @@ function pondata(data) {
             $('#onlinepublicchat').scrollTop($('#onlinepublicchat').prop("scrollHeight"));
         }
         if (data.clientEvent === 'deckLoad') {
-            deckEditor.loadDecks(data.decks);
+            window.deckEditor.loadDecks(data.decks);
             if (data.friends) {
-                deckEditor.loadFriends(data.friends);
+                window.deckEditor.loadFriends(data.friends);
             } else {
-                deckEditor.loadFriends([]);
+                window.deckEditor.loadFriends([]);
             }
         }
 
@@ -712,7 +674,7 @@ function pondata(data) {
                 quedfunc = 'newDuelRequest';
                 quedparams = data.from;
                 setTimeout(function () {
-                    if (confirm('Accept Duel Request from ' + data.from + '?')) {
+                    if (window.confirm('Accept Duel Request from ' + data.from + '?')) {
 
                         enterGame(data.roompass);
                     }
@@ -727,16 +689,13 @@ function pondata(data) {
         if (data.clientEvent === 'updateTournament') {
             tournament = data.tournament;
         }
-        if (data.clientEvent === 'privateServer') {
-            processServerCall(data.serverUpdate);
-        }
         if (data.clientEvent === 'ack') {
             ackback();
         }
         if (data.clientEvent === 'ackresult') {
             storedUserlist = [];
             $('#onlineconnectted').html(data.ackresult);
-            friends = deckEditor.getFriends();
+            friends = window.deckEditor.getFriends();
             data.userlist = data.userlist.sort(function (a, b) {
                 return a.toLowerCase().localeCompare(b.toLowerCase());
             });
@@ -747,7 +706,7 @@ function pondata(data) {
                 storedUserlist.push(name.trim());
             });
             $('#onlinelist').html(userlist);
-            deckEditor.renderFriendsList();
+            window.deckEditor.renderFriendsList();
         }
         if (data.stats) {
             stats24 = 0;
@@ -775,9 +734,6 @@ primus.on('connect', function () {
 primus.on('close', function () {
     'use strict';
     console.log('!!!!!! close');
-    try {
-        _gaq.push(['_trackEvent', 'Launcher', 'Primus', 'Failure']);
-    } catch (e) {}
 });
 
 function killgame(target) {
@@ -866,7 +822,7 @@ function aiRestart() {
 
 $('body').on('mousedown', '.game', function (ev) {
     'use strict';
-    if (admin === "1" && launcher && ev.which === 3) {
+    if (window.admin === "1" && ev.which === 3) {
         var killpoint = $(ev.target).attr('data-killpoint'),
             gameID = $(ev.target).attr('data-roomid');
         if (killpoint === undefined) {
@@ -945,8 +901,7 @@ function chatline(text) {
         primus.write({
             action: 'chatline',
             msg: text,
-            timezone: new Date().getTimezoneOffset() / 60,
-            launcher: launcher
+            timezone: new Date().getTimezoneOffset() / 60
         });
     } else {
         primus.write({
@@ -956,8 +911,7 @@ function chatline(text) {
             name: localStorage.nickname,
             to: chatTarget,
             clientEvent: 'privateMessage',
-            timezone: new Date().getTimezoneOffset() / 60,
-            launcher: launcher
+            timezone: new Date().getTimezoneOffset() / 60
         });
         openChats.push({
             action: 'privateMessage',
@@ -967,8 +921,7 @@ function chatline(text) {
             to: localStorage.nickname,
             clientEvent: 'privateMessage',
             date: new Date().toString(),
-            timezone: new Date().getTimezoneOffset() / 60,
-            launcher: launcher
+            timezone: new Date().getTimezoneOffset() / 60
         });
         renderPrivateChat();
     }
@@ -1000,26 +953,24 @@ function userlistonclick(person) {
     if (admin === "1") {
         $('.a-admin').css('display', 'block');
     }
-    if (deckEditor.getFriends().indexOf(personOfIntrest) > -1) {
+    if (window.deckEditor.getFriends().indexOf(personOfIntrest) > -1) {
         $('button.a-remove').css('display', 'block');
     } else {
         $('button.a-add').css('display', 'block');
     }
     $('.a-user').css('display', 'block');
-    reorientmenu();
+    window.reorientmenu();
 }
 
 function duelrequestPerson() {
     'use strict';
-    if (!launcher) {
-        alertmodal('You currently cant duel request someone while using manual mode.');
-    }
-    setHostSettings();
-    primus.write({
-        clientEvent: 'duelrequest',
-        target: personOfIntrest,
-        from: localStorage.nickname,
-        roompass: localStorage.roompass,
-        launcher: launcher
-    });
+
+    //    setHostSettings();
+    //    primus.write({
+    //        clientEvent: 'duelrequest',
+    //        target: personOfIntrest,
+    //        from: localStorage.nickname,
+    //        roompass: localStorage.roompass,
+    //        launcher: launcher
+    //    });
 }
