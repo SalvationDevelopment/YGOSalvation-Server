@@ -50,7 +50,7 @@ function getotString(ot) {
     }
 }
 
-function getdates(file, callback) {
+function getdates(file) {
     var filebuffer = fs.readFileSync('../http/ygopro/databases/pack/' + file),
         db = new SQL.Database(filebuffer),
         string = "SELECT * FROM pack;",
@@ -76,65 +76,55 @@ function getdates(file, callback) {
     return output;
 }
 
-function getcards(file, callback) {
-    fs.readFile('../http/ygopro/databases/' + file, function (error, filebuffer) {
-        if (error) {
-            console.log(error);
-        }
-        var db = new SQL.Database(filebuffer),
-            string = "SELECT * FROM datas, texts WHERE datas.id = texts.id;",
-            texts = db.prepare(string),
-            asObject = {
-                texts: texts.getAsObject({
-                    'id': 1
-                })
-            },
-            output = [],
-            row,
-            i,
-            linkMarkers = jsonfile.readFileSync("../http/linkmarkersmap.json"),
-            ocg_packs = jsonfile.readFileSync("../http/manifest/manifest_ja-pack.json"),
-            tcg_packs = jsonfile.readFileSync("../http/manifest/manifest_en-pack.json"),
-            packs = {};
+function getcards(file) {
+    var filebuffer = fs.readFileSync('../http/ygopro/databases/' + file),
+        db = new SQL.Database(filebuffer),
+        string = "SELECT * FROM datas, texts WHERE datas.id = texts.id;",
+        texts = db.prepare(string),
+        asObject = {
+            texts: texts.getAsObject({
+                'id': 1
+            })
+        },
+        output = [],
+        row,
+        i,
+        linkMarkers = jsonfile.readFileSync("../http/linkmarkersmap.json"),
+        ocg_packs = jsonfile.readFileSync("../http/manifest/manifest_ja-pack.json"),
+        tcg_packs = jsonfile.readFileSync("../http/manifest/manifest_en-pack.json"),
+        packs = {};
 
+    function getCardObject(id, db) {
 
-        function getCardObject(id, db) {
-
-            var result = {};
-            db.some(function (card, index) {
-                if (id === card.id) {
-                    result = card;
-                    result.date = new Date(result.date).getTime();
-                    return true;
-                } else {
-                    return false;
-                }
-            });
-
-            return result;
-        }
-
-
-        texts.bind({
-            id: 2
+        var result = {};
+        db.some(function (card, index) {
+            if (id === card.id) {
+                result = card;
+                result.date = new Date(result.date).getTime();
+                return true;
+            } else {
+                return false;
+            }
         });
-        while (texts.step()) { //
-            row = texts.getAsObject();
-            row.links = linkMarkers[row.id] || [];
-            row.cardpool = getotString(row.ot);
-            row.ocg = getCardObject(row.id, ocg_packs);
-            row.tcg = getCardObject(row.id, tcg_packs);
-            output.push(row);
-        }
-        db.close();
-        callback(output);
-        return output;
-    });
 
+        return result;
+    }
 
 
     // Bind new values
-
+    texts.bind({
+        id: 2
+    });
+    while (texts.step()) { //
+        row = texts.getAsObject();
+        row.links = linkMarkers[row.id] || [];
+        row.cardpool = getotString(row.ot);
+        row.ocg = getCardObject(row.id, ocg_packs);
+        row.tcg = getCardObject(row.id, tcg_packs);
+        output.push(row);
+    }
+    db.close();
+    return output;
 }
 
 function getpacks(file) {
@@ -219,7 +209,7 @@ function parseLevelScales(card) {
 
 
 function generate(callback) {
-    fs.writeFile('../http/manifest/banlist.json', JSON.stringify(banlistfiles, null, 1), function () {});
+    fs.writeFileSync('../http/manifest/banlist.json', JSON.stringify(banlistfiles, null, 1));
 
     fs.readdir('../http/ygopro/databases/pack', function (err, packs) {
         packs.forEach(function (pack) {
@@ -230,13 +220,20 @@ function generate(callback) {
                 console.log(e);
             }
         });
-        getcards('0-en-OCGTCG.cdb', function (output) {
-            fs.writeFile('../http/manifest/manifest_0-en-OCGTCG.json', JSON.stringify(output), function () {
-                console.log('    Generated ../http/manifest/manifest_0-en-OCGTCG.json');
-            });
+        fs.readdir('../http/ygopro/databases/', function (err, files) {
+            var i,
+                oldDB,
+                newDB;
+
+            for (i = 0; files.length > i; i++) {
+                try {
+                    fs.writeFileSync('../http/manifest/manifest_' + files[i].slice(0, -4) + '.json', JSON.stringify(getcards(files[i])));
+                    console.log('    Generated ../http/manifest/manifest_' + files[i].slice(0, -4) + '.json');
+                } catch (e) {
+
+                }
+            }
         });
-
-
     });
 }
 
