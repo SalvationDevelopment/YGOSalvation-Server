@@ -26,6 +26,18 @@ ratings:
   - "**.py"
   - "**.rb"
 exclude_paths:
+- "**.css"
+- "**.woff2"
+- "**.ttf"
+- "**.ico"
+- "**.txt"
+- "**.md"
+- "**.json"
+- "**.png"
+- "**.jpg
+- "**.jpeg"
+- "**.wav"
+- "**.*db"
 - test/**/*
 - http/js/translations.js
 - http/js/vendor/*
