@@ -87,7 +87,12 @@ function cardStackSort(a, b) {
     if (a.type < b.type) {
         return -1;
     }
-
+    if (a.name > b.name) {
+        return 1;
+    }
+    if (a.name < b.name) {
+        return -1;
+    }
     if (a.id > b.id) {
         return 1;
     }
@@ -623,6 +628,16 @@ var currentSearchFilter = (function () {
         }
     }
 
+    function filterExactType(result, type) {
+        if (type !== undefined) {
+            return result.filter(function (item) {
+                return item.type === type;
+            });
+        } else {
+            return result;
+        }
+    }
+
     function filterAll(cards, filter) {
         var cardsf = cards;
         cardsf = filterName(cardsf, filter.cardname) || cardsf;
@@ -638,6 +653,7 @@ var currentSearchFilter = (function () {
         cardsf = filterLevel(cardsf, filter.level, 1) || cardsf;
         cardsf = filterLimit(cardsf, filter.limit) || cardsf;
         cardsf = filterScale(cardsf, filter.scale, 1) || cardsf;
+        cardsf = filterExactType(cardsf, filter.exacttype) || cardsf;
         return cardsf;
     }
 
@@ -1042,11 +1058,14 @@ var deckEditor = (function () {
             }
         }
         if (typeSelect === '2') {
-
-            currentSearchFilter.setFilter('type', parseInt($('.spellSelect option:selected').val(), 10));
+            currentSearchFilter.setFilter('type', 2);
+            currentSearchFilter.setFilter('exacttype', parseInt($('.spellSelect option:selected').val(), 10));
+            console.log(parseInt($('.spellSelect option:selected').val(), 10));
         }
         if (typeSelect === '4') {
-            currentSearchFilter.setFilter('type', parseInt($('.trapSelect option:selected').val(), 10));
+            currentSearchFilter.setFilter('type', 4);
+            currentSearchFilter.setFilter('exacttype', parseInt($('.trapSelect option:selected').val(), 10));
+            console.log(parseInt($('.trapSelect option:selected').val(), 10));
         }
         doSearch();
     }
