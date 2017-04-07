@@ -210,11 +210,14 @@ var databaseSystem = (function () {
         database = filterCards(listOfCards);
 
         tokens = database.filter(function (card) {
-            return (card.type === 16401 || card.type === 16417);
+            return (card.type === 16401 || card.type === 16417) && (card.name !== "DO NOT USE");
         });
+        tokens.sort(function (current, next) {
+            return current.name > next.name;
+        })
         $('#tokendropdown').html('');
         tokens.forEach(function (card) {
-            var defaulttext = (card.id === 73915052) ? 'defuault' : ''; // sheep token
+            var defaulttext = (card.id === 73915052) ? ' selected ' : ''; // sheep token
             $('#tokendropdown').append('<option ' + defaulttext + 'value="' + card.id + '">' + card.name + '</option>');
         });
     }
