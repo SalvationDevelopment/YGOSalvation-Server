@@ -368,8 +368,9 @@ div#pageforward {
 }
 
 #deckedit input {
-    width: 100%;
+    width: 66%;
     float: right;
+    margin-left: 1em;
 }
 
 label[for="typeSelect"] {
@@ -423,4 +424,12 @@ div#deckeditloading {
     height: 100%;
     z-index: 10;
     position: absolute;
+}
+
+#deckedit select.searchrange {
+    width: 3em;
+}
+
+#deckedit label {
+    height: 1em;
 }

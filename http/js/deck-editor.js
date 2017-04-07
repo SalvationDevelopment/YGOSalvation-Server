@@ -219,7 +219,7 @@ var databaseSystem = (function () {
         });
         tokens.sort(function (current, next) {
             return current.name > next.name;
-        })
+        });
         $('#tokendropdown').html('');
         tokens.forEach(function (card) {
             var defaulttext = (card.id === 73915052) ? ' selected ' : ''; // sheep token
@@ -640,6 +640,8 @@ var currentSearchFilter = (function () {
 
     function filterAll(cards, filter) {
         var cardsf = cards;
+        cardsf = filterLimit(cardsf, filter.limit) || cardsf;
+        cardsf = filterExactType(cardsf, filter.exacttype) || cardsf;
         cardsf = filterName(cardsf, filter.cardname) || cardsf;
         cardsf = filterDesc(cardsf, filter.description) || cardsf;
         cardsf = filterType(cardsf, filter.type) || cardsf;
@@ -648,12 +650,11 @@ var currentSearchFilter = (function () {
         cardsf = filterAttribute(cardsf, filter.attribute) || cardsf;
         cardsf = filterRace(cardsf, filter.race) || cardsf;
         cardsf = filterSetcode(cardsf, filter.setcode) || cardsf;
-        cardsf = filterAtk(cardsf, filter.atk, 1) || cardsf;
-        cardsf = filterDef(cardsf, filter.def, 1) || cardsf;
-        cardsf = filterLevel(cardsf, filter.level, 1) || cardsf;
-        cardsf = filterLimit(cardsf, filter.limit) || cardsf;
-        cardsf = filterScale(cardsf, filter.scale, 1) || cardsf;
-        cardsf = filterExactType(cardsf, filter.exacttype) || cardsf;
+        cardsf = filterAtk(cardsf, filter.atk, filter.atkop) || cardsf;
+        cardsf = filterDef(cardsf, filter.def, filter.defop) || cardsf;
+        cardsf = filterLevel(cardsf, filter.level, filter.levelop) || cardsf;
+        cardsf = filterScale(cardsf, filter.scale, filter.scaleop) || cardsf;
+
         return cardsf;
     }
 
@@ -1007,6 +1008,10 @@ var deckEditor = (function () {
             def = $('.defInput').val(),
             level = $('.levelInput').val(),
             scale = $('.scaleInput').val(),
+            atkop = $('#attackrangeop').val(),
+            defop = $('#defenserangeop').val(),
+            levelop = $('#levelrangeop').val(),
+            scaleop = $('#scalerangeop').val(),
             attribute = $('.attributeSelect option:selected').val(),
             race = $('.raceSelect option:selected').val(),
             limit = $('.forbiddenLimitedSelect option:selected').val(),
@@ -1040,15 +1045,19 @@ var deckEditor = (function () {
             }
             if (atk) {
                 currentSearchFilter.setFilter('atk', parseInt(atk, 10));
+                currentSearchFilter.setFilter('atkop', parseInt(atkop, 10));
             }
             if (def) {
                 currentSearchFilter.setFilter('def', parseInt(atk, 10));
+                currentSearchFilter.setFilter('defop', parseInt(defop, 10));
             }
             if (level) {
                 currentSearchFilter.setFilter('level', parseInt(level, 10));
+                currentSearchFilter.setFilter('levelop', parseInt(levelop, 10));
             }
             if (scale) {
                 currentSearchFilter.setFilter('scale', parseInt(scale, 10));
+                currentSearchFilter.setFilter('scaleop', parseInt(scaleop, 10));
             }
             if (attribute) {
                 currentSearchFilter.setFilter('attribute', parseInt(attribute, 10));
@@ -1512,7 +1521,7 @@ $('.descInput, .nameInput').keypress('input', function (event) {
 });
 $('.typeSelect, .monsterCardSelect, .monsterTypeSelect, .spellSelect, .trapSelect, .attributeSelect, .raceSelect, .setcodeSelect, .forbiddenLimitedSelect').on('change', deckEditor.doNewSearch);
 
-$('.atkInput, .defInput, .levelInput, .scaleInput').on('change', deckEditor.doNewSearch);
+$('.atkInput, .defInput, .levelInput, .scaleInput, .searchrange').on('change', deckEditor.doNewSearch);
 $('.typeSelect').on('change', function () {
     'use strict';
     var target = $('.typeSelect option:selected').text();
