@@ -613,7 +613,6 @@
                                 <option value="1048580">Counter</option>
                             </select>
                         </label>
-                        <br />
                         <label for="attributeSelect" class="attributeSelectl" style="display:none">
                             <select class="attributeSelect" data-input-attribute style="display:none">
                                 <option value="">Specify an attribute</option>
@@ -626,7 +625,6 @@
                                 <option value="64">DIVINE</option>
                             </select>
                         </label>
-                        <br />
                         <label for="raceSelect" class="raceSelectl" style="display:none">
                             <select class="raceSelect" data-input-race style="display:none">
                                 <option value="">Specify a Monster type</option>
@@ -657,22 +655,6 @@
                                 <option value="16777216">Cyberse</option>
                             </select>
                         </label>
-                        <br />
-                        <label for="setcodeSelect">
-
-                            <select class="setcodeSelect" data-input-setcode>
-                                <option value="">Specify a card archetype</option>
-                            </select>
-                        </label>
-                        <br />
-                        <label for="levelInput">
-                            <input class="levelInput" placeholder="Level/Rank" type="number" min="1" max="12" data-input-level>
-                        </label>
-                        <label for="scaleInput">
-                            <input class="scaleInput" placeholder="Scale" type="number" min="0" max="13" data-input-scale>
-                        </label>
-                    </div>
-                    <div class="searchBlock">
                         <label for="forbiddenLimitedSelect">
                             <select class="forbiddenLimitedSelect" data-input-forbiddenlimited>
                                 <option value="">Limit</option>
@@ -682,24 +664,57 @@
                                 <option value="3">Not on the list</option>
                             </select>
                         </label>
-                        <br />
-                        <label for="atkInput">
-                            <input class="atkInput" placeholder="Attack" type="number" min="0" data-input-atk>
+                        <label for="setcodeSelect">
+
+                            <select class="setcodeSelect" data-input-setcode>
+                                <option value="">Specify a card archetype</option>
+                            </select>
                         </label>
-                        <br />
-                        <label for="defInput">
-                            <input class="defInput" placeholder="Defense" type="number" min="0" data-input-def>
-                        </label>
-                        <br />
                         <label for="nameInput">
                             <input class="nameInput" placeholder="Name" type="text" data-input-name>
                         </label>
-                        <br />
                         <label for="descInput">
                             <input class="descInput" placeholder="Description" type="text" data-input-desc>
                         </label>
-                        <br />
+                        <label for="levelInput">
+                            <input class="levelInput" placeholder="Level/Rank" type="number" min="1" max="12" data-input-level>
+                            <select id="levelrangeop" class="searchrange">
+                                <option value="1" selected>=</option>
+                                <option value="0">&#x3C;=</option>
+                                <option value="2">&#x3E;=</option>
+                            </select>
 
+                        </label>
+                        <label for="scaleInput">
+                            <input class="scaleInput" placeholder="Scale" type="number" min="0" max="13" data-input-scale>
+                            <select id="scalerangeop" class="searchrange">
+                                <option value="1" selected>=</option>
+                                <option value="0">&#x3C;=</option>
+                                <option value="2">&#x3E;=</option>
+                            </select>
+
+                        </label>
+                    </div>
+                    <div class="searchBlock">
+
+                        <label for="atkInput">
+                            <input class="atkInput" placeholder="Attack" type="number" min="0" data-input-atk>
+                            <select id="attackrangeop" class="searchrange">
+                                <option value="1" selected>=</option>
+                                <option value="0">&#x3C;=</option>
+                                <option value="2">&#x3E;=</option>
+                            </select>
+
+                        </label>
+                        <label for="defInput">
+                            <input class="defInput" placeholder="Defense" type="number" min="0" data-input-def>
+                            <select id="defenserangeop" class="searchrange">
+                                <option value="1" selected>=</option>
+                                <option value="0">&#x3C;=</option>
+                                <option value="2">&#x3E;=</option>
+                            </select>
+
+                        </label>
                     </div>
                 </div>
             </div>
