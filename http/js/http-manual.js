@@ -371,7 +371,7 @@ function startSiding() {
     $('.field').addClass('sidemode');
     $('.sidingzone').addClass('sidemode');
     $('#ingamesidebutton').css('display', 'none');
-    $('#ingamexsidebutton').css('display', 'block');
+    $('#ingamexsidebutton').css('display', 'inline-block');
 
 }
 
@@ -1192,7 +1192,7 @@ function manualReciver(message) {
         }, 2000);
         break;
     case "side":
-        $('#ingamesidebutton').css('display', 'block');
+        $('#ingamesidebutton').css('display', 'inline-block');
         sidedDeck = message.deck;
         sidedDeck.main.sort();
         sidedDeck.extra.sort();

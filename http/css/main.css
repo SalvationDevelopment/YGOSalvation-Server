@@ -552,11 +552,12 @@ div#actions button {
 }
 
 .sidingzone {
-    height: 500px;
-    width: 592px;
+    height: 56vh;
+    width: 50vw;
     margin: 0 auto;
     margin-top: 70px;
     display: none;
+    overflow: hidden;
 }
 
 .sidingzone.sidemode {
@@ -564,7 +565,7 @@ div#actions button {
 }
 
 .sidingzone img {
-    width: 56px;
+    width: 6%;
     margin: 1px;
     float: left;
     position: relative;
@@ -1565,6 +1566,12 @@ div#waiting {
     border-radius: 15px;
     font-weight: bold;
     font-size: .8em;
+}
+
+#ingamesidebutton {
+    background: green;
+    border: white;
+    box-shadow: 0 0 5px white;
 }
 
 div#camerazone {
