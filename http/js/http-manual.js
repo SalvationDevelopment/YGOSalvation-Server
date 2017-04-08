@@ -2276,9 +2276,10 @@ function manualRevealDeckRandom() {
 }
 
 var currentMousePos = {
-    x: -1,
-    y: -1
-};
+        x: -1,
+        y: -1
+    },
+    activecoord = 0;
 
 function reorientmenu() {
     'use strict';
@@ -2295,7 +2296,7 @@ function reorientmenu() {
         'left': currentMousePos.x - width,
         'display': 'block'
     });
-
+    activecoord = currentMousePos.x;
 }
 
 
@@ -3201,6 +3202,14 @@ $(document).mousemove(function (event) {
     'use strict';
     currentMousePos.x = event.pageX;
     currentMousePos.y = event.pageY;
+
+    var dif = Math.abs(currentMousePos.x - activecoord);
+
+    if (dif > 50) {
+        $('#manualcontrols button').css({
+            'display': 'none'
+        });
+    }
 });
 
 

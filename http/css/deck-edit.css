@@ -433,3 +433,13 @@ div#deckeditloading {
 #deckedit label {
     height: 1em;
 }
+
+select.monsterTypeSelect {
+    width: 50% !important;
+    float: left !important;
+}
+
+select.monsterCardSelect {
+    width: 50% !important;
+    float: left !important;
+}
