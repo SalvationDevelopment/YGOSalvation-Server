@@ -239,7 +239,7 @@ var databaseSystem = (function () {
                 return '';
             }),
             packs = uniqArrayOfStrings([].concat(tcgpacks, ocgpacks)).filter(function (pack) {
-                return (pack && pack.length < 7);
+                return (pack && pack.length <= 5);
             }),
             tokenbox = $('#tokendropdown'),
             packsbox = $('.packSelect');
