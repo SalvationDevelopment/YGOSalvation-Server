@@ -1300,7 +1300,6 @@ function serverconnect() {
         console.log('Connected to Manual');
     };
     manualServer.onmessage = function (message) {
-        console.log(message);
         manualReciver(JSON.parse(message.data));
     };
     manualServer.onclose = function (message) {
