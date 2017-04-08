@@ -102,6 +102,13 @@ function cardStackSort(a, b) {
     return 0;
 }
 
+function uniqArrayOfStrings(a) {
+    'use strict';
+    return a.sort().filter(function (item, pos, ary) {
+        return !pos || item !== ary[pos - 1];
+    });
+}
+
 function docardStackSort(db) {
     'use strict';
 
@@ -209,8 +216,34 @@ var databaseSystem = (function () {
             }),
             listOfCards = dbsets.reduce(function (a, b) {
                 return a.concat(b);
-            }, []);
-
+            }, []),
+            ocgpacks = listOfCards.map(function (card) {
+                if (card.ocg) {
+                    if (card.ocg.pack_id) {
+                        var code = card.ocg.pack_id.split('-');
+                        return code[0];
+                    }
+                    return '';
+                }
+                return '';
+            }),
+            tcgpacks = listOfCards.map(function (card) {
+                if (card.tcg) {
+                    if (card.tcg.pack_id) {
+                        var code = card.tcg.pack_id.split('-');
+                        console.log(code[0]);
+                        return code[0];
+                    }
+                    return '';
+                }
+                return '';
+            }),
+            packs = uniqArrayOfStrings([].concat(tcgpacks, ocgpacks)).filter(function (pack) {
+                return (pack && pack.length < 7);
+            }),
+            tokenbox = $('#tokendropdown'),
+            packsbox = $('.packSelect');
+        //console.log(packs.length, tcgpacks, ocgpacks);
         activedbs = set;
         database = filterCards(listOfCards);
 
@@ -223,8 +256,14 @@ var databaseSystem = (function () {
         $('#tokendropdown').html('');
         tokens.forEach(function (card) {
             var defaulttext = (card.id === 73915052) ? ' selected ' : ''; // sheep token
-            $('#tokendropdown').append('<option ' + defaulttext + 'value="' + card.id + '">' + card.name + '</option>');
+            tokenbox.append('<option ' + defaulttext + 'value="' + card.id + '">' + card.name + '</option>');
         });
+
+        packs.forEach(function (set) {
+            packsbox.append('<option value="' + set + '">' + set + '</option>');
+        });
+
+
     }
 
     function setBanlist(newlist) {
@@ -487,6 +526,26 @@ var currentSearchFilter = (function () {
         return cardsf;
     }
 
+    function filterSet(cardsf, set) {
+        if (set === undefined) {
+            return cardsf;
+        }
+
+        function check(card, region) {
+            if (card[region]) {
+                if (card[region].pack_id) {
+                    var code = card[region].pack_id.split('-');
+                    return code[0];
+                }
+                return '';
+            }
+            return '';
+        }
+        return cardsf.filter(function (card) {
+            return (check(card, 'ocg') === set || check(card, 'tcg') === set);
+        });
+
+    }
     //Filters effect or flavor texts for the txt string
     function filterDesc(cardsf, txt) {
         if (txt !== undefined) {
@@ -654,6 +713,7 @@ var currentSearchFilter = (function () {
         cardsf = filterDef(cardsf, filter.def, filter.defop) || cardsf;
         cardsf = filterLevel(cardsf, filter.level, filter.levelop) || cardsf;
         cardsf = filterScale(cardsf, filter.scale, filter.scaleop) || cardsf;
+        cardsf = filterSet(cardsf, filter.set) || cardsf;
 
         return cardsf;
     }
@@ -1012,6 +1072,7 @@ var deckEditor = (function () {
             defop = $('#defenserangeop').val(),
             levelop = $('#levelrangeop').val(),
             scaleop = $('#scalerangeop').val(),
+            set = $('.packSelect').val(),
             attribute = $('.attributeSelect option:selected').val(),
             race = $('.raceSelect option:selected').val(),
             limit = $('.forbiddenLimitedSelect option:selected').val(),
@@ -1031,6 +1092,9 @@ var deckEditor = (function () {
         }
         if (limit.length) {
             currentSearchFilter.setFilter('limit', parseInt(limit, 10));
+        }
+        if (set) {
+            currentSearchFilter.setFilter('set', set);
         }
 
         //currentSearchFilter.setFilter('type', parseInt(typeSelect, 10));
@@ -1519,7 +1583,7 @@ $('.descInput, .nameInput').keypress('input', function (event) {
     }
 
 });
-$('.typeSelect, .monsterCardSelect, .monsterTypeSelect, .spellSelect, .trapSelect, .attributeSelect, .raceSelect, .setcodeSelect, .forbiddenLimitedSelect').on('change', deckEditor.doNewSearch);
+$('.typeSelect, .monsterCardSelect, .monsterTypeSelect, .spellSelect, .trapSelect, .attributeSelect, .raceSelect, .setcodeSelect, .forbiddenLimitedSelect, .packSelect').on('change', deckEditor.doNewSearch);
 
 $('.atkInput, .defInput, .levelInput, .scaleInput, .searchrange').on('change', deckEditor.doNewSearch);
 $('.typeSelect').on('change', function () {
