@@ -542,14 +542,14 @@ function linkStack(field) {
     });
 
     manualDuel.stack.forEach(stateUpdate);
-    var p0deck = $('#automationduelfield .p' + orient(0) + '.DECK').length,
-        p1deck = $('#automationduelfield .p' + orient(1) + '.DECK').length,
-        p0extra = $('#automationduelfield .p' + orient(0) + '.EXTRA').length,
-        p1extra = $('#automationduelfield .p' + orient(1) + '.EXTRA').length,
-        p0removed = $('#automationduelfield .p' + orient(0) + '.REMOVED').length,
-        p1removed = $('#automationduelfield .p' + orient(1) + '.REMOVED').length,
-        p0grave = $('#automationduelfield .p' + orient(0) + '.GRAVE').length,
-        p1grave = $('#automationduelfield .p' + orient(1) + '.GRAVE').length;
+    var p0deck = $('#automationduelfield .p0.DECK').length,
+        p1deck = $('#automationduelfield .p1.DECK').length,
+        p0extra = $('#automationduelfield .p0.EXTRA').length,
+        p1extra = $('#automationduelfield .p1.EXTRA').length,
+        p0removed = $('#automationduelfield .p0.REMOVED').length,
+        p1removed = $('#automationduelfield .p1.REMOVED').length,
+        p0grave = $('#automationduelfield .p0.GRAVE').length,
+        p1grave = $('#automationduelfield .p1.GRAVE').length;
 
     $('.cardselectionzone.p0.DECK').attr('data-content', p0deck);
     $('.cardselectionzone.p1.DECK').attr('data-content', p1deck);
