@@ -231,7 +231,6 @@ var databaseSystem = (function () {
                 if (card.tcg) {
                     if (card.tcg.pack_id) {
                         var code = card.tcg.pack_id.split('-');
-                        console.log(code[0]);
                         return code[0];
                     }
                     return '';

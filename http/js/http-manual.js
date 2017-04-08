@@ -3185,6 +3185,18 @@ function processCardHover(event) {
 $(document).ready(function () {
     'use strict';
     serverconnect();
+    setInterval(function () {
+        if (manualServer.readyState !== 1) {
+            window.reload();
+        }
+    }, 60000);
+    setTimeout(function () {
+        setInterval(function () {
+            if (manualServer.readyState !== 1) {
+                alertmodal('...DISCONNECTED...');
+            }
+        }, 3000);
+    }, 15000);
     $('.imgContainer').attr('src', 'img/textures/cover.jpg');
     $('body').on('mouseover', '.card, .revealedcard', processCardHover);
     $('#manualcontrols button').click(function () {
