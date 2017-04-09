@@ -1696,7 +1696,7 @@ $("#deckedit .mainDeck,#deckedit .extraDeck,#deckedit .sideDeck").on("drop", fun
     event.stopPropagation();
     if (dragindex !== undefined && dropzone) {
         dodeckeditcardmovement(dragzone, dragindex);
-        if (dropzone === 'search') {
+        if (dragzone === 'search') { // this used to check for dropzone instead of dragzone
             deckEditor.addCardFromSearch(dropzone);
 
         } else if (dropzone === dragzone) {
