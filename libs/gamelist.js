@@ -76,12 +76,8 @@ app.use(function (req, res, next) {
     }
 });
 
-app.get('/generate', function (req, res) {
-    res.send('Regenerating manifest...');
-    child_process.fork('./update.js');
-});
 
-app.get('/git', function (req, res) {
+function gitRoute(req, res) {
     res.send('Attempting to Update Server...');
     var gitUpdater = domain.create();
     gitUpdater.on('error', function (err) {
@@ -92,6 +88,18 @@ app.get('/git', function (req, res) {
             child_process.fork('./update.js');
         });
     });
+}
+app.get('/generate', function (req, res) {
+    res.send('Regenerating manifest...');
+    child_process.fork('./update.js');
+});
+
+app.post('/git', function (req, res) {
+    gitRoute(req, res);
+});
+
+app.get('/git', function (req, res) {
+    gitRoute(req, res);
 });
 
 
