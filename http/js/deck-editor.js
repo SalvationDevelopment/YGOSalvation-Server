@@ -837,7 +837,7 @@ var deckEditor = (function () {
         cards.forEach(function (card, index) {
             var hardcard = JSON.stringify(card),
                 src = card.id + '.jpg';
-            html += '<div class="searchwrapper" data-card-limit="' + card.limit + '"><img class="deckeditcard card" id="deceditcard' + index + zone + '" data-dropindex="' + index + '" data-dropzone="' + zone + '" src="https://rawgit.com/SalvationDevelopment/YGOPro-Images/master/' + src + '" data-id="' + card.id + '" onError="this.onerror=null;this.src=\'/img/textures/unknown.jpg\';" ondragstart="setDragIndex(' + index + ');setDragZone(\'' + zone + '\')" onclick = "deckeditonclick(' + index + ', \'' + zone + '\')" / ></div>';
+            html += '<div class="searchwrapper" data-card-limit="' + card.limit + '"><img class="deckeditcard card" id="deceditcard' + index + zone + '" data-dropindex="' + index + '" data-dropzone="' + zone + '" src="https://rawgit.com/SalvationDevelopment/YGOPro-Images/master/' + src + '" data-id="' + card.id + '" onError="this.onerror=null;this.src=\'/img/textures/unknown.jpg\';" ondragstart="createCardReference(\'' + zone + '\', ' + index + ');" onclick = "deckeditonclick(' + index + ', \'' + zone + '\')" / ></div>';
         });
 
         $('#deckedit .cardspace .' + zone).html(html);
@@ -1509,8 +1509,12 @@ var deckEditor = (function () {
     };
 }());
 
-
-function dodeckeditcardmovement(zone, index) {
+/**
+ * Creates a card reference.
+ * @param {Number} zone  zone card was clicked in.
+ * @param {Number} index of card being clicked
+ */
+function createCardReference(zone, index) {
     'use strict';
     deckEditorReference = {
         id: deckEditor.getInmemoryDeck()[zone][index].id,
@@ -1523,8 +1527,17 @@ function dodeckeditcardmovement(zone, index) {
         def: deckEditor.getInmemoryDeck()[zone][index].def,
         limit: deckEditor.getInmemoryDeck()[zone][index].limit
     };
+}
 
-    var dbEntry = deckEditor.getInmemoryDeck()[zone][index],
+/**
+ * Opens the proper action menu for the card type
+ * @param {Number} zone  zone card was clicked in.
+ * @param {Number} index of card being clicked
+ */
+function openActionMenu(zone, index) {
+    'use strict';
+
+    var dbEntry = deckEditorReference,
         viewable = {
             'display': 'block'
         };
@@ -1550,6 +1563,7 @@ function dodeckeditcardmovement(zone, index) {
         }
     }
 }
+
 /**
  * Opens action menu and sets deck edit card reference.
  * @param {Number} index of card being clicked
@@ -1568,7 +1582,9 @@ function deckeditonclick(index, zone) {
         'left': currentMousePos.x,
         'display': 'block'
     });
-    dodeckeditcardmovement(zone, index);
+    
+    createCardReference(zone, index);
+    openActionMenu(zone, index);
     reorientmenu();
     return;
 }
@@ -1654,65 +1670,33 @@ function readSingleFile(evt) {
 $('#deckupload').on('change', readSingleFile);
 
 
-var dropzone = "",
-    dragindex,
-    dragzone,
-    dragSameIndex;
-
-function setDragIndex(index) {
-    'use strict';
-
-    dragindex = index;
-
-
-}
-
-function setDragZone(zone) {
-    'use strict';
-
-    dragzone = zone;
-}
-$("#deckedit .mainDeck,#deckedit .extraDeck,#deckedit .sideDeck").on("dragover", 'img', function (event) {
-    'use strict';
-    dragSameIndex = $(this).attr('data-dropindex');
-});
-$("#deckedit .mainDeck,#deckedit .extraDeck,#deckedit .sideDeck").on("dragover", function (event) {
+$("#deckedit .mainDeck,#deckedit .extraDeck,#deckedit .sideDeck").on("dragover dragleave", function (event) {
     'use strict';
     event.preventDefault();
     event.stopPropagation();
-    dropzone = $(this).attr('data-dragzone');
-});
-
-$("#deckedit .mainDeck,#deckedit .extraDeck,#deckedit .sideDeck").on("dragleave", function (event) {
-    'use strict';
-    event.preventDefault();
-    event.stopPropagation();
-    dropzone = "";
 });
 
 $("#deckedit .mainDeck,#deckedit .extraDeck,#deckedit .sideDeck").on("drop", function (event) {
     'use strict';
     event.preventDefault();
     event.stopPropagation();
-    if (dragindex !== undefined && dropzone) {
-        dodeckeditcardmovement(dragzone, dragindex);
-        if (dragzone === 'search') { // this used to check for dropzone instead of dragzone
-            deckEditor.addCardFromSearch(dropzone);
+    
+    var from = deckEditorReference.zone;
+    var target = $(this).data('dragzone');
+    var sameIndex = $(this).data('dropindex');
+    
+    if (from === 'search') {
+        deckEditor.addCardFromSearch(target);
 
-        } else if (dropzone === dragzone) {
-            deckEditor.moveInSameZone(dragzone, deckEditorReference.index, dragSameIndex);
-        } else if (dropzone === 'main' && isExtra(deckEditorReference)) {
-            return;
-        } else if (dropzone === 'extra' && !isExtra(deckEditorReference)) {
-            return;
-        } else {
-            deckEditor.deckEditorMoveTo(dropzone);
-        }
-
+    } else if (target === from) {
+        deckEditor.moveInSameZone(from, deckEditorReference.index, sameIndex);
+    } else if (target === 'main' && isExtra(deckEditorReference)) {
+        return;
+    } else if (target === 'extra' && !isExtra(deckEditorReference)) {
+        return;
+    } else {
+        deckEditor.deckEditorMoveTo(target);
     }
-    dragindex = undefined;
-    $('#manualcontrols button').css({
-        'display': 'none'
-    });
+
     deckEditor.doSearch();
 });
