@@ -1681,9 +1681,9 @@ $("#deckedit .mainDeck,#deckedit .extraDeck,#deckedit .sideDeck").on("drop", fun
     event.preventDefault();
     event.stopPropagation();
     
-    let from = deckEditorReference.zone;
-    let target = $(this).data('dragzone');
-    let sameIndex = $(this).data('dropindex');
+    var from = deckEditorReference.zone;
+    var target = $(this).data('dragzone');
+    var sameIndex = $(this).data('dropindex');
     
     if (from === 'search') {
         deckEditor.addCardFromSearch(target);
