@@ -3001,6 +3001,11 @@ function guicardonclick() {
                     'display': 'block'
                 });
             }
+            if (stackunit.position === 'FaceUp') {
+                $('#flipUp').css({
+                    'display': 'none'
+                });
+            }
             reorientmenu();
             return;
         }
