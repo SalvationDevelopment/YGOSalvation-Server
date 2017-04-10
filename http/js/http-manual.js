@@ -2418,7 +2418,7 @@ function revealonclick(card, note) {
                 'display': 'block'
             });
         }
-        $('#signalEffect').css({
+        $('#signalEffect, .non-deck').css({
             'display': 'none'
         });
 
@@ -2473,6 +2473,10 @@ function revealonclick(card, note) {
                 'display': 'block'
             });
         }
+        $('.non-grave').css({
+            'display': 'none'
+        });
+        non - deck
         reorientmenu();
         return;
     }
