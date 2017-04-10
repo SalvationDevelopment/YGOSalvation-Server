@@ -425,7 +425,8 @@ var manualDuel,
     targetreference,
     attackmode = false,
     targetmode = false,
-    overlaymode = false;
+    overlaymode = false,
+    viewmode = '';
 
 function stateUpdate(dataBinding) {
     'use strict';
@@ -883,6 +884,7 @@ function reveal(cards, note) {
     'use strict';
     var html = '';
     revealcache = [];
+    console.log('note', note);
     $('#revealedclose').css('display', 'block');
     $('#revealed').css('display', 'flex');
     if (cards.length > 4) {
@@ -2476,7 +2478,6 @@ function revealonclick(card, note) {
         $('.non-grave').css({
             'display': 'none'
         });
-        non - deck
         reorientmenu();
         return;
     }
