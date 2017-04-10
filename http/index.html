@@ -1813,12 +1813,11 @@
             <button class="m-deck" onclick="manualRevealDeck()">Reveal Deck</button>
             <button class="m-deck" onclick="manualRevealTop()">Reveal Top Card</button>
             <button class="m-deck" onclick="manualRevealBottom()">Reveal Bottom Card</button>
-            <button class="m-deck" onclick="manualViewDeck()">View Deck</button>
             <button class="m-deck" onclick="manualMillRemovedCard()">Banish Top Card</button>
             <button class="m-deck" onclick="manualMillRemovedCardFaceDown()">Banish Facedown</button>
+            <button class="m-deck" onclick="manualExcavateTop()">Excavate</button>
             <button class="m-deck" onclick="manualShuffleDeck()">Shuffle Deck</button>
             <button class="m-deck" onclick="manualViewDeck()">View Deck</button>
-            <button class="m-deck" onclick="manualExcavateTop()">Excavate</button>
             <button class="m-deck" onclick="manualMill()">Mill Card</button>
             <button class="m-deck" onclick="manualDraw()">Draw</button>
 
@@ -1854,7 +1853,7 @@
             <button class="v-deck v-grave v-removed v-excavate v-extra-p" onclick="manualToHand(); manualRevealHandSingle(); v-excavate">Reveal and Add to Hand</button>
 
             <button class="m-hand-p m-monster-p m-monster-to-extra-faceup" onclick="manualToExtraFaceUp()">To Extra Deck Face Up</button>
-            <button class="m-hand-p m-monster-extra v-monster-extra" onclick="manualToExtra()">To Extra Deck</button>
+            <button class="m-monster-extra v-monster-extra" onclick="manualToExtra()">To Extra Deck</button>
 
             <button class="m-hand-m non-link v-extra" onclick="startSpecialSummon('def')">Special Summon in Defense</button>
             <button class="m-hand-m v-extra non-spell" onclick="startSpecialSummon('atk')">Special Summon in Attack</button>
