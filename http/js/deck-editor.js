@@ -8,10 +8,7 @@ function printError(error) {
 
 function getLevel(card) {
     'use strict';
-    var lv = card.level || 0,
-        val = lv.toString(16),
-        value = parseInt(val.toString().substr(val.length - 2), 10) || 0;
-    return value;
+    return card.level & 0xff;
 }
 
 function isExtra(card) {
@@ -1582,7 +1579,7 @@ function deckeditonclick(index, zone) {
         'left': currentMousePos.x,
         'display': 'block'
     });
-    
+
     createCardReference(zone, index);
     openActionMenu(zone, index);
     reorientmenu();
@@ -1680,11 +1677,11 @@ $("#deckedit .mainDeck,#deckedit .extraDeck,#deckedit .sideDeck").on("drop", fun
     'use strict';
     event.preventDefault();
     event.stopPropagation();
-    
+
     var from = deckEditorReference.zone;
     var target = $(this).data('dragzone');
     var sameIndex = $(this).data('dropindex');
-    
+
     if (from === 'search') {
         deckEditor.addCardFromSearch(target);
 
