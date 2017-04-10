@@ -1871,9 +1871,9 @@
             <button class="m-monster m-st" onclick="startSpecialSummon('generic')">Move</button>
 
             <button class="m-monster m-st countercontroller" onclick="manualAddCounter()">Add Counter</button>
-            <button class="m-monster m-st countercontroller" onclick="manualRemoveCounter()">Remove Counter</button>
+            <button class="m-monster m-st countercontroller" id="removeCounter" onclick="manualRemoveCounter()">Remove Counter</button>
             <button class="" id="viewStack" onclick="manualViewXYZMaterials()">View</button>
-            <button class="m-monster m-monster-xyz v-monster-xyz" onclick="startXYZSummon()">Overlay</button>
+            <button class="m-monster m-monster-xyz v-monster-xyz" id="overlayStack" onclick="startXYZSummon()">Overlay</button>
             <button class="m-monster non-link non-extra" onclick="manualToFaceDownDefence()">Flip Facedown</button>
             <button class="m-monster" id="toAttack" onclick="manualToAttack()">To Attack</button>
             <button class="m-field non-link non-extra" id="toDefence" onclick="manualToDefence()">To Defense</button>

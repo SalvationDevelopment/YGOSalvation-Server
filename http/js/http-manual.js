@@ -2976,6 +2976,11 @@ function guicardonclick() {
                     'display': 'none'
                 });
             }
+            if (!stackunit.counters) {
+                $('#removeCounter').css({
+                    'display': 'none'
+                });
+            }
             if (stackunit.position === 'FaceDownDefence') {
                 $('#toDefence, #flipDown, #signalEffect, .countercontroller').css({
                     'display': 'none'
