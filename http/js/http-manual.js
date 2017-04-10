@@ -2442,11 +2442,6 @@ function revealonclick(card) {
             $('.m-hand-m').not('.non-link').css({
                 'display': 'block'
             });
-            if (!(cardIs('link', dbEntry))) {
-                $('.non-link').css({
-                    'display': 'block'
-                });
-            }
         }
         if (stMap[dbEntry.type] || dbEntry.type === 2 || dbEntry.type === 4) {
             $('.m-hand-st').css({
@@ -2622,11 +2617,15 @@ function revealonclick(card) {
                 'display': 'block'
             });
         }
+        $('#signalEffect, .non-deck').css({
+            'display': 'none'
+        });
+
         reorientmenu();
         return;
     }
     if (manualActionReference.location === 'SPELLZONE') {
-        $('.m-field').css({
+        $('.st-field').css({
             'display': 'block'
         });
         if (dbEntry.id === 62966332) {
@@ -2940,11 +2939,7 @@ function guicardonclick() {
                     'display': 'block'
                 });
             }
-            if (!(cardIs('link', dbEntry))) {
-                $('.non-link').not('.m-hand-m').css({
-                    'display': 'block'
-                });
-            }
+
             if (pendulumMap[dbEntry.type]) {
                 $('.m-monster-p').css({
                     'display': 'block'
@@ -2981,6 +2976,11 @@ function guicardonclick() {
                     'display': 'none'
                 });
             }
+            if (stackunit.position === 'FaceDownDefence') {
+                $('#toDefence, #flipDown, #signalEffect, .countercontroller').css({
+                    'display': 'none'
+                });
+            }
             if ($('#automationduelfield .p' + orient(stackunit.player) + '.MONSTERZONE.i' + stackunit.index).length > 1) {
                 $('#viewStack').css({
                     'display': 'block'
@@ -2990,14 +2990,9 @@ function guicardonclick() {
             return;
         }
         if (stackunit.location === 'SPELLZONE') {
-            $('.m-st, .m-field').not('.non-extra').css({
+            $('.m-st, .st-field').css({
                 'display': 'block'
             });
-            if (dbEntry.id === 62966332) {
-                $('.m-convulse').css({
-                    'display': 'block'
-                });
-            }
             if (dbEntry.id === 63571750) {
                 $('.m-pharaohstreasure').css({
 
@@ -3014,7 +3009,7 @@ function guicardonclick() {
                 });
             }
             if (stackunit.position === 'FaceDown') {
-                $('#flipDown, .countercontroller').css({
+                $('#flipDown, .countercontroller, #signalEffect').css({
                     'display': 'none'
                 });
             }
