@@ -2589,6 +2589,9 @@ function revealonclick(card, note) {
                 'display': 'block'
             });
         }
+        $('.non-extra').css({
+            'display': 'none'
+        });
 
 
         reorientmenu();
