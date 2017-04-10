@@ -1835,8 +1835,8 @@
             <button class="m-excavated" onclick="manualRevealExcavated()">Reveal Excavated Deck</button>
             <button class="m-excavated" onclick="manualRevealExcavatedRandom()">Reveal Random Card</button>
 
-            <button class="m-hand m-field non-extra v-grave v-removed v-deck v-excavate" onclick="manualToBottomOfDeck()">To Bottom of Deck</button>
-            <button class="m-hand m-field non-extra v-grave v-removed v-deck v-excavate" onclick="manualToTopOfDeck()">To Top of Deck</button>
+            <button class="m-hand m-field non-extra v-grave v-removed v-excavate" onclick="manualToBottomOfDeck()">To Bottom of Deck</button>
+            <button class="m-hand m-field non-extra v-grave v-removed v-excavate" onclick="manualToTopOfDeck()">To Top of Deck</button>
             <button class="m-hand m-field v-grave v-removed v-deck" onclick="manualToExcavate()">Excavate</button>
 
             <button class="m-hand m-field non-extra" onclick="manualToOpponentsHand()">To Opponents Hand</button>
@@ -1886,7 +1886,7 @@
             <button class="a-field" onclick="startAttack()">Attack</button>
             <button class="a-field" onclick="manualAttackDirectly()">Attack Directly</button>
             <button class="m-st" onclick="manualSTFlipDown()">Flip Down</button>
-            <button class="m-field m-hand-m v-grave v-removed" onclick="manualSignalEffect()">Signal Effect</button>
+            <button class="m-field m-hand-m v-grave v-removed" id="signalEffect" onclick="manualSignalEffect()">Signal Effect</button>
 
             <button class="s-toside" onclick="sidemoveTo('side')">To Side Deck</button>
             <button class="s-toextra" onclick="sidemoveTo('extra')">To Extra Deck</button>

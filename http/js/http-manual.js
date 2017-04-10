@@ -2417,8 +2417,10 @@ function revealonclick(card, note) {
             $('.m-monster-p').css({
                 'display': 'block'
             });
-
         }
+        $('#signalEffect').css({
+            'display': 'none'
+        });
 
         reorientmenu();
         return;
