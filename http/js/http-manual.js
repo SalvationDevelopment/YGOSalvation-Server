@@ -3008,11 +3008,6 @@ function guicardonclick() {
                     'display': 'block'
                 });
             }
-            if (!(cardIs('fusion', dbEntry) || cardIs('synchro', dbEntry) || cardIs('xyz', dbEntry) || cardIs('link', dbEntry))) {
-                $('.non-extra').css({
-                    'display': 'block'
-                });
-            }
             if (stackunit.position === 'FaceUp') {
                 $('#flipUp').css({
                     'display': 'none'
