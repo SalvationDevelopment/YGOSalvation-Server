@@ -2964,7 +2964,16 @@ function guicardonclick() {
                     'display': 'block'
                 });
             }
-
+            if (stackunit.position === 'FaceUpAttack') {
+                $('#toAttack').css({
+                    'display': 'none'
+                });
+            }
+            if (stackunit.position === 'FaceUpDefence') {
+                $('#toDefence').css({
+                    'display': 'none'
+                });
+            }
             reorientmenu();
             return;
         }
