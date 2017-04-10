@@ -2370,12 +2370,9 @@ function sideonclick(index, zone) {
 
 
 
-function revealonclick(card, note) {
+function revealonclick(card) {
     'use strict';
-    // Goblin circus removes...
-    //    if (note !== 'view') {
-    //        return;
-    //    }
+
     revealcacheIndex = card;
     manualActionReference = revealcache[card];
     $('#manualcontrols button').css({
@@ -2933,7 +2930,7 @@ function guicardonclick() {
                     'display': 'block'
                 });
             }
-            if (pendulumMap[dbEntry.type] || cardIs('fusion', dbEntry) || cardIs('synchro', dbEntry) || cardIs('xyz', dbEntry) || cardIs('link', dbEntry)) {
+            if (cardIs('fusion', dbEntry) || cardIs('synchro', dbEntry) || cardIs('xyz', dbEntry) || cardIs('link', dbEntry)) {
                 $('.m-monster-extra').css({
                     'display': 'block'
                 });
@@ -2982,6 +2979,11 @@ function guicardonclick() {
             if (stackunit.position === 'FaceUpDefence') {
                 $('#toDefence').css({
                     'display': 'none'
+                });
+            }
+            if ($('#automationduelfield .p' + orient(stackunit.player) + '.MONSTERZONE.i' + stackunit.index).length > 1) {
+                $('#viewStack').css({
+                    'display': 'block'
                 });
             }
             reorientmenu();
