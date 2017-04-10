@@ -3008,6 +3008,11 @@ function guicardonclick() {
                     'display': 'none'
                 });
             }
+            if (stackunit.position === 'FaceDown') {
+                $('#flipDown').css({
+                    'display': 'none'
+                });
+            }
             reorientmenu();
             return;
         }
