@@ -2977,7 +2977,7 @@ function guicardonclick() {
                 });
             }
             if (stackunit.position === 'FaceUpDefence') {
-                $('#toDefence').css({
+                $('#toDefence, .countercontroller').css({
                     'display': 'none'
                 });
             }
@@ -3014,7 +3014,7 @@ function guicardonclick() {
                 });
             }
             if (stackunit.position === 'FaceDown') {
-                $('#flipDown').css({
+                $('#flipDown, .countercontroller').css({
                     'display': 'none'
                 });
             }
