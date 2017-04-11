@@ -118,6 +118,7 @@ var launcher = false,
     list = {};
 
 function alertmodal(message) {
+    'use strict';
     $('#alertmodal').css('display', 'flex');
     $('#alertmodaltext').html(message);
 }
@@ -126,6 +127,30 @@ function closealertmodal() {
     'use strict';
     $('#alertmodal').css('display', 'none');
     $('#alertmodaltext').html('');
+}
+
+function deckeditloader() {
+    'use strict';
+    primus.write({
+        username: localStorage.nickname,
+        action: 'load'
+    });
+}
+
+var uncensoredcolor = 'url(../img/magimagipink.jpg)',
+    uncensoredblack = 'url(../img/magimagiblack.jpg)',
+    censoredcolor = 'url(../img/magimagipinkshadow.jpg)',
+    censoredblack = 'url(../img/magimagipinkshadow2.jpg)',
+    usecensor = (location.host === 'ygopro.us');
+
+function blackbg() {
+    'use strict';
+    return (usecensor) ? censoredblack : uncensoredblack;
+}
+
+function colorbg() {
+    'use strict';
+    return (usecensor) ? censoredcolor : uncensoredcolor;
 }
 
 function singlesitenav(target) {
@@ -160,15 +185,15 @@ function singlesitenav(target) {
     } else if ($('.unlogged.in-iframe').length > 0 && target === 'gamelist') {
         return;
     }
-    $('body').css('background-image', 'url(../img/magimagipinkshadow2.jpg)');
+    $('body').css('background-image', blackbg());
     $('#marquee').removeClass('marquee');
     if (target === 'faq') {
         updatenews();
-        $('body').css('background-image', 'url(../img/magimagipinkshadow.jpg)');
+        $('body').css('background-image', colorbg());
     }
     if (target === 'events') {
         updateevents();
-        $('body').css('background-image', 'url(../img/magimagipinkshadow.jpg)');
+        $('body').css('background-image', colorbg());
     }
     if (target === 'sqleditor') {
         $('body').css('background-image', 'url(../img/bg.jpg)');
@@ -177,32 +202,32 @@ function singlesitenav(target) {
 
     }
     if (target === 'gamelist') {
-        $('body').css('background-image', 'url(../img/magimagipinkshadow.jpg)');
+        $('body').css('background-image', colorbg());
         if (launcher === false) {
-            manualModeGamelistSwitch();
+            window.manualModeGamelistSwitch();
         }
-        manualLeave();
+        window.manualLeave();
     }
     if (target === 'chat') {
-        $('body').css('background-image', 'url(../img/magimagipinkshadow.jpg)');
+        $('body').css('background-image', colorbg());
     }
 
     if (target === 'host') {
-        $('body').css('background-image', 'url(../img/magimagipinkshadow2.jpg)');
-        manualLeave();
+        $('body').css('background-image', blackbg());
+        window.manualLeave();
         if (launcher === false) {
             $('.automaticonly').css('display', 'none');
         }
     }
 
     if (target === 'settings') {
-        $('body').css('background-image', 'url(../img/magimagipinkshadow2.jpg)');
+        $('body').css('background-image', blackbg());
         if (admin === "1") {
             $('#sqleditorbutton').css('display', 'block');
         }
     }
     if (target === 'customization') {
-        $('body').css('background-image', 'url(../img/magimagipinkshadow2.jpg)');
+        $('body').css('background-image', blackbg());
         setTimeout(function () {
             $('#cusomizationselection').trigger('change');
         }, 3000);
@@ -230,6 +255,7 @@ function singlesitenav(target) {
         $('.notneededinweb').css('display', 'none');
     }
     activelyDueling = false;
+    $('#camerazone').css('display', 'none');
     return false;
 }
 
@@ -388,12 +414,7 @@ function processLogin(data) {
 
 }
 
-function deckeditloader() {
-    primus.write({
-        username: localStorage.nickname,
-        action: 'load'
-    });
-}
+
 
 Handlebars.registerHelper("counter", function (index) {
     'use strict';
@@ -426,7 +447,7 @@ function updateranking() {
             return b.points - a.points;
         });
         var requests = [],
-            i
+            i;
         for (i = 0; i < rows.length; i++) {
             requests.push($.ajax('https://forum.ygopro.us/avatar2.php?username=' + rows[i].name));
         }
@@ -438,7 +459,7 @@ function updateranking() {
             duelist.forEach(function (item) {
                 try {
                     convert.push(JSON.parse(item[0]));
-                } catch (ignoreError) {};
+                } catch (ignoreError) {}
             });
 
 
@@ -797,9 +818,9 @@ function confirmDialog(title, message, confirm, reject) {
         },
         close: function (event, ui) {
             $(this).dialog('destroy');
-            $(this).remove()
+            $(this).remove();
         }
-    })
+    });
 }
 
 function screenshot() {
@@ -811,7 +832,7 @@ function screenshot() {
             var image = new Image();
             image.src = dt;
             var newWin = window.open("<title>Screenshot</title>");
-            if (!newWin || newWin.closed || typeof newWin.closed == 'undefined') {
+            if (!newWin || newWin.closed || typeof newWin.closed === 'undefined') {
                 //POPUP BLOCKED
                 alertmodal('Popups are blocked, cant display screenshot!');
                 return;

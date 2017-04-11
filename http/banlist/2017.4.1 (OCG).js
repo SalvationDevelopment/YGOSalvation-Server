@@ -134,6 +134,7 @@ module.exports = {
         31222701: 1, //Wavering Eyes
         78010363: 1, //Witch of the Black Forest
         78872731: 1, //Zoodiac Ratpier
+        81275020: 1, //Speedroid Terrortop
         28985331: 2, //Armageddon Knight		
         74311226: 2, //Atlantean Dragoons
         72989439: 2, //Black Luster Soldier - Envoy of the Beginning
@@ -151,7 +152,7 @@ module.exports = {
         18239909: 2, //Ignister Prominence, the Blasting Dracoslayer
         43040603: 2, //Monster Gate
         10028593: 2, //Reborn Tengu
-        72714461: 2, //Wisdom-Eye Magician
+        72714461: 2 //Wisdom-Eye Magician
     },
     bannedTypes: [],
     exceptions: [],
@@ -160,4 +161,4 @@ module.exports = {
     name: '2017.4.1 (OCG)',
     masterRule: 4,
     region: 'ocg'
-}
+};

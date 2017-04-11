@@ -15,7 +15,11 @@ var legacyMode = true,
     'use strict';
     sound.play = function (targetID) {
         setTimeout(function () {
-            document.getElementById(targetID).play();
+            if (Number(localStorage.sound_volume)) {
+                var soundfile = document.getElementById(targetID);
+                soundfile.volume = (Number(localStorage.sound_volume) / 100);
+                soundfile.play();
+            }
         }, 400);
     };
 }());
@@ -105,7 +109,7 @@ var manualServer,
         131074: " / Continuous",
         131076: " / Continuous",
         262146: " / Equip",
-		524290: " / Field",
+        524290: " / Field",
         1048580: " / Counter"
     },
     fieldspell = {
@@ -119,11 +123,12 @@ var manualServer,
         129: "Ritual",
         161: "Ritual / Effect",
         545: "Spirit",
+        673: "Ritual / Spirit / Effect",
         1057: "Union",
         2081: "Gemini / Effect",
         4113: "Tuner",
         4129: "Tuner / Effect",
-		4161: "Fusion / Tuner",
+        4161: "Fusion / Tuner",
         8193: "Synchro",
         8225: "Synchro / Effect",
         12321: "Synchro / Tuner / Effect",
@@ -135,7 +140,7 @@ var manualServer,
         8388641: "Xyz / Effect",
         16777233: "Pendulum",
         16777249: "Pendulum / Effect",
-		16777313: "Fusion / Pendulum / Effect",
+        16777313: "Fusion / Pendulum / Effect",
         16781345: "Pendulum / Tuner / Effect",
         16785441: "Synchro / Pendulum / Effect",
         18874401: "Pendulum / Flip / Effect",
@@ -146,7 +151,7 @@ var manualServer,
     pendulumMap = {
         16777233: "Pendulum",
         16777249: "Pendulum / Effect",
-		16777313: "Fusion / Pendulum / Effect",
+        16777313: "Fusion / Pendulum / Effect",
         16781345: "Pendulum / Tuner / Effect",
         16785441: "Synchro / Pendulum / Effect",
         18874401: "Pendulum / Flip / Effect",
@@ -177,7 +182,7 @@ var manualServer,
         2097152: "Divine-Beast",
         4194304: "Creator God",
         8388608: "Wyrm",
-        16777216: "Cyverse"
+        16777216: "Cyberse"
     };
 
 function cardIs(cat, obj) {
@@ -215,31 +220,46 @@ function cardIs(cat, obj) {
 var avatarMap = {};
 
 
+function loadScreen() {
+    $('#slidevaluex').val(localStorage.x);
+    $('#slidevaluey').val(localStorage.y);
+    $('#scaledvalue').val(localStorage.scaledvalue);
+    $('#tiltvalue').val(localStorage.tilt);
+}
+loadScreen();
+
 function scaleScreenFactor() {
     'use strict';
     var requiredRes = $('#scaledvalue').val(),
         adaptedScreenSize = ($(window).height() / 16) * 9,
-        scale = (adaptedScreenSize / requiredRes);
+        scale = (adaptedScreenSize / requiredRes),
+        x = $('#slidevaluex').val(),
+        y = $('#slidevaluey').val();
 
-    $('.field').css('transform', 'scale(' + scale + ')');
+    $('.field').css('transform', 'matrix(' + scale + ',0,0,' + scale + ',' + x + ', ' + y + ')');
     localStorage.scaledvalue = requiredRes;
+    localStorage.x = x;
+    localStorage.y = y;
     return scale;
+    //     
 }
 
 function tiltFactor() {
     'use strict';
     var tilt = $('#tiltvalue').val();
     $('.fieldimage').css('transform', 'rotate3d(1, 0, 0, ' + tilt + 'deg)');
+    localStorage.tilt = tilt;
     return tilt;
 }
 
 function getAvatar(name) {
+
     'use strict';
     if (avatarMap[name]) {
         return;
     }
     $.getJSON('//forum.ygopro.us/avatar.php?username=' + name, function processAvatar(avatarUnit) {
-        avatarMap[name] = '//forum.ygopro.us/uploads/' + avatarUnit.url;
+        avatarMap[name] = (avatarUnit.url) ? '//forum.ygopro.us/uploads/' + avatarUnit.url : undefined;
     });
 }
 
@@ -280,8 +300,16 @@ function updateloby(state) {
     getAvatar(state.player[0].name);
     getAvatar(state.player[1].name);
     setTimeout(function () {
-        $('#p0avatar').attr('src', avatarMap[state.player[0].name]);
-        $('#p1avatar').attr('src', avatarMap[state.player[1].name]);
+        if (avatarMap[state.player[0].name]) {
+            $('#p0avatar').attr('src', avatarMap[state.player[0].name]);
+        } else {
+            $('#p0avatar').attr('src', '/img/newgiohtoken.png');
+        }
+        if (avatarMap[state.player[1].name]) {
+            $('#p1avatar').attr('src', avatarMap[state.player[1].name]);
+        } else {
+            $('#p1avatar').attr('src', '/img/newgiohtoken.png');
+        }
         $('.p0name').html(state.player[0].name);
         $('.p1name').html(state.player[1].name);
     }, 3000);
@@ -343,7 +371,7 @@ function startSiding() {
     $('.field').addClass('sidemode');
     $('.sidingzone').addClass('sidemode');
     $('#ingamesidebutton').css('display', 'none');
-    $('#ingamexsidebutton').css('display', 'block');
+    $('#ingamexsidebutton').css('display', 'inline-block');
 
 }
 
@@ -397,7 +425,8 @@ var manualDuel,
     targetreference,
     attackmode = false,
     targetmode = false,
-    overlaymode = false;
+    overlaymode = false,
+    viewmode = '';
 
 function stateUpdate(dataBinding) {
     'use strict';
@@ -468,6 +497,25 @@ function orient(player) {
 
 }
 
+function exclusionList(player, location, classValue) {
+    'use strict';
+    var cardsOnField = manualDuel.stack.filter(function (card) {
+            return (orient(card.player) === player && card.location === location);
+        }),
+        selections = cardsOnField.map(function (card) {
+            return '.cardselectionzone.p' + player + '.' + location + '.i' + card.index;
+        });
+
+    selections.forEach(function (cardzone) {
+        $(cardzone).removeClass(classValue);
+    });
+    return {
+        selections: selections,
+        cardsOnField: cardsOnField
+    };
+
+}
+
 function linkStack(field) {
     'use strict';
     console.log('field:', field);
@@ -495,14 +543,14 @@ function linkStack(field) {
     });
 
     manualDuel.stack.forEach(stateUpdate);
-    var p0deck = field[orient(0)].DECK.length,
-        p1deck = field[orient(1)].DECK.length,
-        p0extra = field[orient(0)].EXTRA.length,
-        p1extra = field[orient(1)].EXTRA.length,
-        p0removed = field[orient(0)].REMOVED.length,
-        p1removed = field[orient(1)].REMOVED.length,
-        p0grave = field[orient(0)].GRAVE.length,
-        p1grave = field[orient(1)].GRAVE.length;
+    var p0deck = $('#automationduelfield .p0.DECK').length,
+        p1deck = $('#automationduelfield .p1.DECK').length,
+        p0extra = $('#automationduelfield .p0.EXTRA').length,
+        p1extra = $('#automationduelfield .p1.EXTRA').length,
+        p0removed = $('#automationduelfield .p0.REMOVED').length,
+        p1removed = $('#automationduelfield .p1.REMOVED').length,
+        p0grave = $('#automationduelfield .p0.GRAVE').length,
+        p1grave = $('#automationduelfield .p1.GRAVE').length;
 
     $('.cardselectionzone.p0.DECK').attr('data-content', p0deck);
     $('.cardselectionzone.p1.DECK').attr('data-content', p1deck);
@@ -585,6 +633,7 @@ function cardmargin(player, deck) {
             'z-index': (n * multi)
         });
     });
+
 }
 
 function initGameState() {
@@ -835,6 +884,7 @@ function reveal(cards, note) {
     'use strict';
     var html = '';
     revealcache = [];
+    console.log('note', note);
     $('#revealedclose').css('display', 'block');
     $('#revealed').css('display', 'flex');
     if (cards.length > 4) {
@@ -979,8 +1029,9 @@ function startSpecialSummon(mode) {
             $('.cardselectionzone.p0.SPELLZONE.i7').removeClass('attackglow card');
         }
         $('.cardselectionzone.p0.SPELLZONE.i5').removeClass('attackglow card');
-
+        exclusionList(0, 'SPELLZONE', 'attackglow');
     }
+    exclusionList(0, 'MONSTERZONE', 'attackglow');
 }
 
 function startSpellTargeting(mode) {
@@ -992,6 +1043,7 @@ function startSpellTargeting(mode) {
         $('.cardselectionzone.p0.SPELLZONE.i7').removeClass('attackglow card');
     }
     $('.cardselectionzone.p0.SPELLZONE.i5').removeClass('attackglow card');
+    exclusionList(0, 'SPELLZONE', 'attackglow');
 
 }
 
@@ -1142,7 +1194,7 @@ function manualReciver(message) {
         }, 2000);
         break;
     case "side":
-        $('#ingamesidebutton').css('display', 'block');
+        $('#ingamesidebutton').css('display', 'inline-block');
         sidedDeck = message.deck;
         sidedDeck.main.sort();
         sidedDeck.extra.sort();
@@ -2226,9 +2278,10 @@ function manualRevealDeckRandom() {
 }
 
 var currentMousePos = {
-    x: -1,
-    y: -1
-};
+        x: -1,
+        y: -1
+    },
+    activecoord = 0;
 
 function reorientmenu() {
     'use strict';
@@ -2245,7 +2298,7 @@ function reorientmenu() {
         'left': currentMousePos.x - width,
         'display': 'block'
     });
-
+    activecoord = currentMousePos.x;
 }
 
 
@@ -2317,12 +2370,9 @@ function sideonclick(index, zone) {
 
 
 
-function revealonclick(card, note) {
+function revealonclick(card) {
     'use strict';
-    // Goblin circus removes...
-    //    if (note !== 'view') {
-    //        return;
-    //    }
+
     revealcacheIndex = card;
     manualActionReference = revealcache[card];
     $('#manualcontrols button').css({
@@ -2366,8 +2416,10 @@ function revealonclick(card, note) {
             $('.m-monster-p').css({
                 'display': 'block'
             });
-
         }
+        $('#signalEffect, .non-deck').css({
+            'display': 'none'
+        });
 
         reorientmenu();
         return;
@@ -2390,11 +2442,6 @@ function revealonclick(card, note) {
             $('.m-hand-m').not('.non-link').css({
                 'display': 'block'
             });
-            if (!(cardIs('link', dbEntry))) {
-                $('.non-link').css({
-                    'display': 'block'
-                });
-            }
         }
         if (stMap[dbEntry.type] || dbEntry.type === 2 || dbEntry.type === 4) {
             $('.m-hand-st').css({
@@ -2420,6 +2467,9 @@ function revealonclick(card, note) {
                 'display': 'block'
             });
         }
+        $('.non-grave').css({
+            'display': 'none'
+        });
         reorientmenu();
         return;
     }
@@ -2536,6 +2586,9 @@ function revealonclick(card, note) {
                 'display': 'block'
             });
         }
+        $('.non-extra').css({
+            'display': 'none'
+        });
 
 
         reorientmenu();
@@ -2564,11 +2617,15 @@ function revealonclick(card, note) {
                 'display': 'block'
             });
         }
+        $('#signalEffect, .non-deck').css({
+            'display': 'none'
+        });
+
         reorientmenu();
         return;
     }
     if (manualActionReference.location === 'SPELLZONE') {
-        $('.m-field').css({
+        $('.st-field').css({
             'display': 'block'
         });
         if (dbEntry.id === 62966332) {
@@ -2613,10 +2670,10 @@ function parseLevelScales(card) {
         output += '<span class="levels">' + ranklevel + level;
 
     } else {
-        level = level.toString(16); // format: [0-9A-F]0[0-9A-F][0-9A-F]{4}
-        leftScale = parseInt(level.charAt(0), 16); // first digit: left scale in hex (0-16)
-        rightScale = parseInt(level.charAt(2), 16); // third digit: right scale in hex (0-16)
-        pendulumLevel = parseInt(level.charAt(6), 16); // seventh digit: level of the monster in hex (technically, all 4 digits are levels, but here we only need the last char)
+        // format: [0-9A-F]0[0-9A-F][0-9A-F]{4}
+        leftScale = (card.level >> 0x18) & 0xff; // first digit: left scale in hex (0-16)
+        rightScale = (card.level >> 0x10) & 0xff; // third digit: right scale in hex (0-16)
+        pendulumLevel = card.level & 0xff; // seventh digit: level of the monster in hex (technically, all 4 digits are levels, but here we only need the last char)
         output += '<span class="levels">' + ranklevel + pendulumLevel + '</span> <span class="scales"><< ' + leftScale + ' | ' + rightScale + ' >>';
     }
     return output + '</span>';
@@ -2872,7 +2929,7 @@ function guicardonclick() {
                     'display': 'block'
                 });
             }
-            if (pendulumMap[dbEntry.type] || cardIs('fusion', dbEntry) || cardIs('synchro', dbEntry) || cardIs('xyz', dbEntry) || cardIs('link', dbEntry)) {
+            if (cardIs('fusion', dbEntry) || cardIs('synchro', dbEntry) || cardIs('xyz', dbEntry) || cardIs('link', dbEntry)) {
                 $('.m-monster-extra').css({
                     'display': 'block'
                 });
@@ -2882,11 +2939,7 @@ function guicardonclick() {
                     'display': 'block'
                 });
             }
-            if (!(cardIs('link', dbEntry))) {
-                $('.non-link').not('.m-hand-m').css({
-                    'display': 'block'
-                });
-            }
+
             if (pendulumMap[dbEntry.type]) {
                 $('.m-monster-p').css({
                     'display': 'block'
@@ -2913,19 +2966,43 @@ function guicardonclick() {
                     'display': 'block'
                 });
             }
-
+            if (stackunit.position === 'FaceUpAttack') {
+                $('#toAttack').css({
+                    'display': 'none'
+                });
+            }
+            if (stackunit.position === 'FaceUpDefence') {
+                $('#toDefence, .countercontroller').css({
+                    'display': 'none'
+                });
+            }
+            if (!stackunit.counters) {
+                $('#removeCounter').css({
+                    'display': 'none'
+                });
+            }
+            if (stackunit.position === 'FaceDownDefence') {
+                $('#toDefence, #flipDown, #signalEffect, .countercontroller').css({
+                    'display': 'none'
+                });
+            }
+            if ($('#automationduelfield .p' + orient(stackunit.player) + '.MONSTERZONE.i' + stackunit.index).length > 1) {
+                $('#viewStack').css({
+                    'display': 'block'
+                });
+            }
+            if ($('#automationduelfield .p' + orient(stackunit.player) + '.MONSTERZONE').length > 1) {
+                $('#overlayStack').css({
+                    'display': 'block'
+                });
+            }
             reorientmenu();
             return;
         }
         if (stackunit.location === 'SPELLZONE') {
-            $('.m-st, .m-field').not('.non-extra').css({
+            $('.m-st, .st-field').css({
                 'display': 'block'
             });
-            if (dbEntry.id === 62966332) {
-                $('.m-convulse').css({
-                    'display': 'block'
-                });
-            }
             if (dbEntry.id === 63571750) {
                 $('.m-pharaohstreasure').css({
 
@@ -2936,9 +3013,14 @@ function guicardonclick() {
                     'display': 'block'
                 });
             }
-            if (!(cardIs('fusion', dbEntry) || cardIs('synchro', dbEntry) || cardIs('xyz', dbEntry) || cardIs('link', dbEntry))) {
-                $('.non-extra').css({
-                    'display': 'block'
+            if (stackunit.position === 'FaceUp') {
+                $('#flipUp').css({
+                    'display': 'none'
+                });
+            }
+            if (stackunit.position === 'FaceDown') {
+                $('#flipDown, .countercontroller, #signalEffect').css({
+                    'display': 'none'
                 });
             }
             reorientmenu();
@@ -3134,6 +3216,18 @@ function processCardHover(event) {
 $(document).ready(function () {
     'use strict';
     serverconnect();
+    setInterval(function () {
+        if (manualServer.readyState !== 1) {
+            window.reload();
+        }
+    }, 60000);
+    setTimeout(function () {
+        setInterval(function () {
+            if (manualServer.readyState !== 1) {
+                alertmodal('...DISCONNECTED...');
+            }
+        }, 3000);
+    }, 15000);
     $('.imgContainer').attr('src', 'img/textures/cover.jpg');
     $('body').on('mouseover', '.card, .revealedcard', processCardHover);
     $('#manualcontrols button').click(function () {
@@ -3143,7 +3237,7 @@ $(document).ready(function () {
                 'display': 'none'
             });
             $('#sidechatinput').focus();
-        }, 100);
+        }, 0);
     });
 });
 
@@ -3151,6 +3245,14 @@ $(document).mousemove(function (event) {
     'use strict';
     currentMousePos.x = event.pageX;
     currentMousePos.y = event.pageY;
+
+    var dif = Math.abs(currentMousePos.x - activecoord);
+
+    if (dif > 50) {
+        $('#manualcontrols button').css({
+            'display': 'none'
+        });
+    }
 });
 
 

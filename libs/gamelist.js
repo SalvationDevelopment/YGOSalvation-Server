@@ -2,7 +2,8 @@
 // Gamelist object acts similar to a Redis server, could be replaced with on but its the gamelist state.
 'use strict';
 
-var express = require('express'),
+var child_process = require('child_process'),
+    express = require('express'),
     fs = require('fs'),
     spdy = require('spdy'),
     http = require('http'),
@@ -10,6 +11,7 @@ var express = require('express'),
     path = require("path"),
     toobusy = require('toobusy-js'),
     app = express(),
+    compression = require('compression'),
     hsts = require('hsts'),
     Ddos = require('ddos'),
     helmet = require('helmet'),
@@ -63,6 +65,8 @@ var primus,
 require('fs').watch(__filename, process.exit);
 
 app.use(ddos.express);
+app.use(compression());
+app.use(helmet());
 app.use(express['static'](path.join(__dirname, '../http')));
 app.use(function (req, res, next) {
     if (toobusy()) {
@@ -73,10 +77,36 @@ app.use(function (req, res, next) {
 });
 
 
+function gitRoute(req, res) {
+    res.send('Attempting to Update Server...');
+    var gitUpdater = domain.create();
+    gitUpdater.on('error', function (err) {
+        console.log('        [Update System] ' + 'Git Failed'.grey, err);
+    });
+    gitUpdater.run(function () {
+        child_process.spawn('git', ['pull'], {}, function () {
+            child_process.fork('./update.js');
+        });
+    });
+}
+app.get('/generate', function (req, res) {
+    res.send('Regenerating manifest...');
+    child_process.fork('./update.js');
+});
+
+app.post('/git', function (req, res) {
+    gitRoute(req, res);
+});
+
+app.get('/git', function (req, res) {
+    gitRoute(req, res);
+});
+
+
 try {
     var privateKey = fs.readFileSync(path.resolve(process.env.SSL + '\\ssl.key')).toString();
     var certificate = fs.readFileSync(path.resolve(process.env.SSL + '\\ssl.crt')).toString();
-    app.use(helmet());
+
 
 
     primusServer = spdy.createServer({
@@ -123,6 +153,7 @@ if (process.env.SSL !== undefined) {
 setTimeout(function () {
     //give the system five seconds to figure itself out.
     booting = false;
+    child_process.fork('./update.js');
 }, 5000);
 
 var Datastore = require('nedb'),
@@ -559,13 +590,6 @@ function onData(data, socket) {
 
 }
 
-
-
-
-
-
-
-
 primus.on('connection', function (socket) {
     var connectionwatcher = domain.create();
     connectionwatcher.on('error', function (err) {
@@ -588,4 +612,7 @@ primus.on('connection', function (socket) {
     });
     connectionwatcher.exit();
 });
-require('fs').watch(__filename, process.exit);
+fs.watch(__filename, process.exit);
+fs.watch('../http/ygopro/databases/', function () {
+    child_process.fork('./update.js');
+});
