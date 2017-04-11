@@ -79,8 +79,8 @@ module.exports = {
     bannedTypes: [],
     exceptions: [],
     startDate: new Date('2005-04-01'),
-    endDate: new Date('2005-08-01'),
-    name: 'Goat Format',
+    endDate: new Date('2005-10-01'),
+    name: '2005.4.1 (Goat Format CRV)',
     masterRule: 0,
     region: 'tcg'
 }
