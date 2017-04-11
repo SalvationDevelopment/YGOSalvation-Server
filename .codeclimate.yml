@@ -11,6 +11,9 @@ engines:
       - php
   eslint:
     enabled: true
+    checks:
+      max-statements:
+        enabled: false
   fixme:
     enabled: true
 ratings:
@@ -23,18 +26,19 @@ ratings:
   - "**.py"
   - "**.rb"
 exclude_paths:
+- "**.css"
+- "**.woff2"
+- "**.ttf"
+- "**.ico"
+- "**.txt"
+- "**.md"
+- "**.json"
+- "**.png"
+- "**.jpg
+- "**.jpeg"
+- "**.wav"
+- "**.*db"
 - test/**/*
-- http/js/automation/buffer.js
-- http/js/automation/require.js
-- http/js/primus.js
-- http/js/swfobject.js
 - http/js/translations.js
-- http/js/vendor/primus.js
-- http/css/roboto.css
-- http/js/automation/EventEmitter.min.js
-- http/js/jquery-1.11.0.min.js
-- http/js/jquery-ui.min.js
-- http/js/automation/events.js
-- http/interface/js/vendor/primus.js
-- client/interface/js/vendor/primus.js
+- http/js/vendor/*
 

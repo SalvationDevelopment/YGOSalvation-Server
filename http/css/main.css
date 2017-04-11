@@ -23,7 +23,7 @@ body {
     background-repeat: no-repeat;
     background-color: black;
     background-image: url(../img/magimagipinkshadow2.jpg);
-    background-size: 100%;
+    background-size: cover;
     font-family: 'Roboto', sans-serif;
     font-size: 15px;
     font-weight: 400;
@@ -73,7 +73,7 @@ body.unlogged {
 
 h1 {
     color: white;
-    font-size: 80px;
+    font-size: 4.5em;
     margin: 0 auto;
     padding: 0;
     text-align: center;
@@ -552,11 +552,12 @@ div#actions button {
 }
 
 .sidingzone {
-    height: 500px;
-    width: 592px;
+    height: 56vh;
+    width: 50vw;
     margin: 0 auto;
     margin-top: 70px;
     display: none;
+    overflow: hidden;
 }
 
 .sidingzone.sidemode {
@@ -564,7 +565,7 @@ div#actions button {
 }
 
 .sidingzone img {
-    width: 56px;
+    width: 6%;
     margin: 1px;
     float: left;
     position: relative;
@@ -582,6 +583,8 @@ div#actions button {
     background: rgba(0, 0, 0, .25);
     width: 100%;
 }
+
+#duelscreen .cardDescription {}
 
 #duelscreen [floatmarker="s11"] >* {
     margin-right: -5px;
@@ -604,23 +607,23 @@ div#actions button {
 }
 
 #deckedit [floatmarker="s11"] >* {
-    margin-right: -5px;
+    margin-right: -1%;
 }
 
 #deckedit [floatmarker="s12"] >* {
-    margin-right: -9px;
+    margin-right: -1.8%;
 }
 
 #deckedit [floatmarker="s13"] >* {
-    margin-right: -12px;
+    margin-right: -2.5%;
 }
 
 #deckedit [floatmarker="s14"] >* {
-    margin-right: -15px;
+    margin-right: -3.1%;
 }
 
 #deckedit [floatmarker="s15"] >* {
-    margin-right: -17px;
+    margin-right: -3.6%;
 }
 
 .info-controls {
@@ -846,20 +849,6 @@ meter.p1time {
 .center {
     height: 35px;
     border: 1px dashed white;
-}
-
-.center div {
-    font-size: .7em;
-    color: white;
-    float: left;
-    width: 50%;
-}
-
-.left,
-.right,
-.center {
-    float: left;
-    width: 33%;
 }
 
 .gameplayarea {
@@ -1552,20 +1541,74 @@ div#waiting {
 }
 
 .ingameminorcontrols {
-    height: 28%;
-    position: absolute;
-    top: 152px;
-    left: 184px;
-    width: 257px;
+    /* height: 28%; */
+    position: fixed;
+    bottom: 7vh;
+    /* left: 184px; */
+    width: 66%;
     font-size: .9em;
     /* overflow: auto; */
+    margin: 0 16vw;
+    border: 1px solid silver;
+    text-align: center;
+}
+
+select#tokendropdown {
+    display: block;
+    float: left;
+    width: 8em;
+    margin: 1.2em .1em;
 }
 
 .ingameminorcontrols button {
-    width: 90px;
-    float: left;
+    /* width: 90px; */
+    /* float: left; */
     display: block;
-    margin-right: 1em;
+    margin: .5em .1em;
+    border: 1px solid #444;
+    background: black;
+    color: silver;
+    font-size: 1em;
+    padding: .8em;
+    border-radius: 15px;
+    font-weight: bold;
+    font-size: .8em;
+    float: left;
+    width: 8em;
+    height: 4em;
+    text-align: center;
+}
+
+#ingamesidebutton {
+    background: green;
+    border: white;
+    box-shadow: 0 0 5px white;
+}
+
+div#camerazone {
+    width: 10vw;
+    height: 36vh;
+    border: 1px solid white;
+    padding: 1vh 1vw;
+    position: absolute;
+    bottom: 17vh;
+    right: 18vw;
+    display: none;
+}
+
+#camerazone input {
+    width: 100%;
+    display: inline-block;
+    float: left;
+    margin-bottom: 4vh;
+}
+
+#camerazone label {
+    width: 100%;
+    display: inline-block;
+    overflow: hidden;
+    font-size: .8em;
+    float: left;
 }
 
 input#player1lobbyslot,

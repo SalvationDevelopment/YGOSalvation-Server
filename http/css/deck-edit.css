@@ -2,7 +2,13 @@
     box-sizing: border-box !important;
 }
 
-he #deckedit {
+.left,
+.right,
+.center {
+    float: left;
+}
+
+#deckedit {
     font-family: monospace;
     font-size: 12px;
 }
@@ -15,7 +21,7 @@ he #deckedit {
 .left {
     height: 100%;
     float: left;
-    width: 24%;
+    width: 15%;
 }
 
 
@@ -30,16 +36,24 @@ he #deckedit {
     display: block;
 }*/
 
+img.imgContainer {
+    margin: auto;
+    display: block;
+    height: 90%;
+    max-width: 100%;
+}
+
 .cardDescription {
     top: 0%;
     left: 0%;
     width: 100%;
-    height: 55.25%;
+    height: 50%;
     border: 1px solid #444;
-    padding: 12px;
+    padding: 2%;
     overflow: auto;
     background: rgba(0, 0, 0, .5);
     font-size: 0.8em;
+    line-height: 1.8em;
 }
 
 pre.description {
@@ -61,28 +75,23 @@ pre.description {
 }
 
 .searchBar {
-    float: right;
-    width: 73.7%;
-    height: 22%;
-    position: absolute;
-    top: 7vh;
-    right: 0;
-    background: rgba(0, 0, 0, .85);
+    height: 100%;
+    float: left;
+    width: 16%;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: .5%;
     border: 1px solid #444;
+    margin: 0 1%;
+    background: rgba(0, 0, 0, .5);
 }
 
 .searchBar.closed {
     right: -50.5vw;
 }
 
-.searchLeft {
-    float: left;
-    height: 100%;
-    width: 33.33%;
-    padding: 1%;
-    /*    border: 1px solid yellow;*/
-    padding-bottom: 0;
-    overflow-y: auto;
+#deckedit .cardImage {
+    height: 50%;
 }
 
 input.decknameInput {
@@ -92,64 +101,84 @@ input.decknameInput {
     margin-right: 5%;
 }
 
-.searchRight {
-    float: right;
-    height: 100%;
-    width: 66.66%;
-    /*    border: 1px solid orange;*/
-    overflow: auto;
-}
-
 .center {
-    height: 75%;
-    width: 483px;
+    height: 100%;
+    width: 33%;
     border: none;
     float: left;
-    background: rgba(0, 0, 0, .5);
     margin-left: 15px;
-    margin-top: 23vh;
+}
+
+.center .searchwrapper {
+    width: 10%;
 }
 
 #deckedit .center img {
-    width: 45px;
+    width: 100%;
     margin: 0;
     height: auto;
 }
 
 .center .mainDeck {
     float: left;
-    height: 285px;
-    width: 483px;
-    min-width: 390px;
+    width: 100%;
     padding: 5px;
     border: 1px solid yellow;
+    min-height: 19vw;
+    background-color: rgba(255, 255, 0, .3);
 }
 
 .extraDeck {
     float: left;
-    height: 17.25%;
     width: 100% !important;
     border: 1px solid green;
     padding: 5px;
     margin-top: 5px;
+    min-height: 5vw;
+    background-color: rgba(0, 125, 0, .3);
 }
 
 .sideDeck {
     float: left;
-    height: 17.25%;
     width: 100% !important;
-    border: 1px solid hotpink;
+    border: 1px solid blue;
     padding: 5px;
     margin-top: 5px;
+    min-height: 5vw;
+    background-color: rgba(0, 0, 255, .3);
+}
+
+.infoclass {
+    /* height: 1em; */
+    border: 1px solid white;
+    float: left;
+    width: 100%;
+    margin: 1vh 0;
+    padding: .4em;
+    font-size: .8em;
+}
+
+.infoclass.infoclassmain {
+    border-color: yellow;
+    background-color: rgba(255, 255, 0, .3);
+}
+
+.infoclass.infoclassextra {
+    border-color: green;
+    background-color: rgba(0, 125, 0, .3);
+}
+
+.infoclass.infoclassside {
+    border-color: blue;
+    background-color: rgba(0, 0, 255, .3);
 }
 
 .right {
     height: 74%;
-    width: 20.5%;
+    width: 15%;
     border: 1px solid #444;
+    height: 100%;
     background: rgba(0, 0, 0, .5);
-    margin-top: 23vh;
-    margin-left: .5%;
 }
 
 .searchResults {
@@ -187,19 +216,15 @@ select {
 }
 
 #deckedit button {
-    margin-bottom: 1%;
-    line-height: 1.2em;
-    width: 4vw;
-    white-space: nowrap;
-    padding: 0;
+    /* margin-bottom: 1%; */
+    /* line-height: 1.2em; */
+    /* width: 4vw; */
+    /* white-space: nowrap; */
+    /* padding: 0; */
     background: rgba(0, 0, 0, .85);
     border: 1px solid silver;
     color: white;
-}
-
-button.shuffleDeck {
-    margin-top: 0.2vw;
-    margin-left: 3.25vw;
+    width: 31%;
 }
 
 .resultDiv {
@@ -229,6 +254,11 @@ button.shuffleDeck {
     background-image: url(../img/textures/lim.png);
     background-size: 42px 41px;
     z-index: 10;
+}
+
+input#deckupload {
+    width: 100% !important;
+    clear: both;
 }
 
 [data-card-limit="1"]:before {
@@ -265,31 +295,6 @@ span.cardImage {
     position: relative;
 }
 
-#deckedit label select {
-    width: 11.5vw;
-    float: right;
-    margin-right: 7vw;
-    font-size: 1.7vh;
-}
-
-#deckedit select.deckSelect {
-    margin-left: 2.1vw;
-}
-
-#deckedit label {
-    /* border: 2px solid white; */
-    /* overflow: auto; */
-    display: block;
-    margin: 0;
-    padding: 0;
-    float: left;
-    clear: left;
-}
-
-label[for="typeSelect"] {
-    width: 32vw !important;
-}
-
 #deckedit label span {
     display: inline-block;
     float: left;
@@ -297,70 +302,13 @@ label[for="typeSelect"] {
     width: 7vw;
 }
 
-.searchBlock {
-    width: 50%;
-    float: left;
-}
-
-#deckedit br {
-    display: block;
-    height: 1em;
-    width: 100%;
-    clear: both;
-}
-
-label[for="decknameInput"] > * {
-    float: left;
-}
-
-.searchBar input {
-    height: 2.5vh;
-}
-
-input.decknameInput {
-    width: 11.5vw;
-    float: right;
-    margin-right: 7vw;
-    margin-top: -0.1vw;
-}
-
-button.saveDeck {
-    float: right;
-    margin-top: -3vw;
-    margin-right: 0.9vw;
-}
-
-
-/*
-button.saveDeckAs {
-    float: right;
-    margin-top: -1.5vw;
-    margin-right: 0.9vw;
-}
-*/
-
-button.deleteDeck {
-    float: right;
-    margin-top: -1.4vw;
-    margin-right: 0.9vw;
-}
-
-select.raceSelect {
-    margin-left: 2.65vw;
-}
-
-input.defInput {
-    margin-left: 1vw;
-    width: 8vw;
-}
-
-input.atkInput {
-    margin-left: 1vw;
-    width: 8vw;
-}
-
 .searchBar label {
     width: 100%;
+}
+
+.searchLeft {
+    position: relative;
+    overflow: auto;
 }
 
 .mainDeck span.cardImage {
@@ -382,51 +330,16 @@ input.atkInput {
     line-height: 1.5vh
 }
 
-select.typeSelect,
-select.trapSelect {
-    margin-right: 14vw !important;
-}
-
-select.forbiddenLimitedSelect {
-    margin-right: 10vw !important;
-}
-
 .mainContainer {
     font-size: 1.8vh;
     line-height: 3.1vh !important;
-}
-
-input.levelInput,
-input.scaleInput {
-    float: right;
-    margin-right: 7vw;
-}
-
-#deckedit .searchBlock input {
-    float: right;
-    margin-right: 7vw;
-}
-
-select.forbiddenLimitedSelect {
-    margin-right: 7vw !important;
-}
-
-button.searchtoggle {
-    position: absolute;
-    top: 9vh;
-    right: 0%;
-    height: 20%;
-    width: 1% !important;
-    background: black;
-    border: 5px solid silver;
-    z-index: 50;
 }
 
 img.deckeditcard.card {
     float: left;
     /* clear: both; */
     position: relative;
-    margin: 4px;
+    margin: 2px;
 }
 
 div#pagebuttons div {
@@ -439,49 +352,59 @@ div#pageforward {
     text-align: right;
 }
 
+#deckedit label {
+    display: block;
+    width: 100%;
+}
+
+#deckedit select {
+    float: right;
+    width: 10em;
+}
+
+#deckedit .searchBlock select {
+    float: right;
+    width: 100%;
+}
+
+#deckedit input {
+    width: 66%;
+    float: right;
+    margin-left: 1em;
+}
+
 label[for="typeSelect"] {
     width: 100% !important;
 }
 
-select.trapSelect {
-    float: right;
-    margin-right: 28% !important;
-    padding: 0;
-    /* width: 23% !important; */
-}
-
-select.typeSelect {
-    width: 48% !important;
-    float: left;
-    margin-right: 29% !IMPORTANT;
-}
-
 .right .searchwrapper img {
-    width: 110px;
-    height: 158px;
+    width: 90%;
+    height: auto;
 }
 
 .searchwrapper {
     position: relative;
-    width: auto !important;
+    width: auto;
     height: auto;
-    overflow: auto;
+    overflow: hidden;
     float: left;
-    border: 1px solid black;
-    background: black;
+    border: 1px solid transparent;
     opacity: .9;
+}
+
+.right .searchwrapper {
+    width: 33% !important;
 }
 
 #decktextoutput {
     float: left;
-    width: 17vw;
-    margin-left: 10px;
-    margin-top: 24vh;
-    height: 70%;
-    background: transparent;
+    width: 15%;
+    margin-left: 1%;
+    height: 100%;
+    background: rgba(0, 0, 0, .5);
     padding: 5px;
     color: white;
-    border: 1px solid silver;
+    border: 1px solid #444;
     font-size: 10px;
     overflow: auto;
 }
@@ -493,4 +416,30 @@ select.typeSelect {
 
 .searchwrapper:hover img {
     opacity: 1;
+}
+
+div#deckeditloading {
+    background: black;
+    width: 100%;
+    height: 100%;
+    z-index: 10;
+    position: absolute;
+}
+
+#deckedit select.searchrange {
+    width: 3em;
+}
+
+#deckedit label {
+    height: 1em;
+}
+
+select.monsterTypeSelect {
+    width: 50% !important;
+    float: left !important;
+}
+
+select.monsterCardSelect {
+    width: 50% !important;
+    float: left !important;
 }
