@@ -2991,6 +2991,11 @@ function guicardonclick() {
                     'display': 'block'
                 });
             }
+            if ($('#automationduelfield .p' + orient(stackunit.player) + '.MONSTERZONE').length > 1) {
+                $('#overlayStack').css({
+                    'display': 'block'
+                });
+            }
             reorientmenu();
             return;
         }
@@ -3232,7 +3237,7 @@ $(document).ready(function () {
                 'display': 'none'
             });
             $('#sidechatinput').focus();
-        }, 100);
+        }, 0);
     });
 });
 
