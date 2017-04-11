@@ -1553,11 +1553,18 @@ div#waiting {
     text-align: center;
 }
 
+select#tokendropdown {
+    display: block;
+    float: left;
+    width: 8em;
+    margin: 1.2em .1em;
+}
+
 .ingameminorcontrols button {
     /* width: 90px; */
     /* float: left; */
-    display: inline-block;
-    margin: 1em;
+    display: block;
+    margin: .5em .1em;
     border: 1px solid #444;
     background: black;
     color: silver;
@@ -1566,6 +1573,10 @@ div#waiting {
     border-radius: 15px;
     font-weight: bold;
     font-size: .8em;
+    float: left;
+    width: 8em;
+    height: 4em;
+    text-align: center;
 }
 
 #ingamesidebutton {
