@@ -270,8 +270,10 @@ module.exports = function (wss) {
                 delete stateSystem[activeduel].spectators[message.name];
             }
             socket.slot = undefined;
-            if (games[activeduel].player[0].name === '' && games[activeduel].player[1].name === '') {
-                delete games[activeduel];
+            if (games[activeduel]) {
+                if (games[activeduel].player[0].name === '' && games[activeduel].player[1].name === '') {
+                    delete games[activeduel];
+                }
             }
             wss.broadcast(games);
             socket.send(JSON.stringify({
