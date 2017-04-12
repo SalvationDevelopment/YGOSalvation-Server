@@ -101,7 +101,7 @@
             </li>
             <li class="launcheronly notneededinweb"><span data-translation-replays class="psudolinksingle" onclick='ygopro("-r");'>Replays</span>
             </li>
-            <li class="launcheronly"><span data-translation-gamelist class="psudolinksingle" onclick="joinGamelist();singlesitenav('gamelist');">Game List</span>
+            <li class="launcheronly"><span data-translation-gamelist class="psudolinksingle" onclick="singlesitenav('gamelist');">Game List</span>
             </li>
             <li class="launcheronly"><span data-translation-host class="psudolinksingle" onclick="singlesitenav('host')">Host</span>
             </li>
@@ -598,7 +598,7 @@
                             </select>
 
                             <select class="spellSelect" style="display:none">
-                                <option value="2">Spell Type</option>
+                                <option>Spell Type</option>
                                 <option value="2">Normal</option>
                                 <option value="65538">Quick-Play</option>
                                 <option value="131074">Continuous</option>
@@ -607,13 +607,12 @@
                                 <option value="524290">Field</option>
                             </select>
                             <select class="trapSelect" style="display:none">
-                                <option value="4">Type</option>
+                                <option>Trap Type</option>
                                 <option value="4">Normal</option>
-                                <option value="131072">Continuous</option>
-                                <option value="1048576">Counter</option>
+                                <option value="131076">Continuous</option>
+                                <option value="1048580">Counter</option>
                             </select>
                         </label>
-                        <br />
                         <label for="attributeSelect" class="attributeSelectl" style="display:none">
                             <select class="attributeSelect" data-input-attribute style="display:none">
                                 <option value="">Specify an attribute</option>
@@ -626,7 +625,6 @@
                                 <option value="64">DIVINE</option>
                             </select>
                         </label>
-                        <br />
                         <label for="raceSelect" class="raceSelectl" style="display:none">
                             <select class="raceSelect" data-input-race style="display:none">
                                 <option value="">Specify a Monster type</option>
@@ -657,22 +655,6 @@
                                 <option value="16777216">Cyberse</option>
                             </select>
                         </label>
-                        <br />
-                        <label for="setcodeSelect">
-
-                            <select class="setcodeSelect" data-input-setcode>
-                                <option value="">Specify a card archetype</option>
-                            </select>
-                        </label>
-                        <br />
-                        <label for="levelInput">
-                            <input class="levelInput" placeholder="Level/Rank" type="number" min="1" max="12" data-input-level>
-                        </label>
-                        <label for="scaleInput">
-                            <input class="scaleInput" placeholder="Scale" type="number" min="0" max="13" data-input-scale>
-                        </label>
-                    </div>
-                    <div class="searchBlock">
                         <label for="forbiddenLimitedSelect">
                             <select class="forbiddenLimitedSelect" data-input-forbiddenlimited>
                                 <option value="">Limit</option>
@@ -682,24 +664,62 @@
                                 <option value="3">Not on the list</option>
                             </select>
                         </label>
-                        <br />
-                        <label for="atkInput">
-                            <input class="atkInput" placeholder="Attack" type="number" min="0" data-input-atk>
+                        <label for="setcodeSelect">
+
+                            <select class="setcodeSelect" data-input-setcode>
+                                <option value="">Specify a card archetype</option>
+                            </select>
                         </label>
-                        <br />
-                        <label for="defInput">
-                            <input class="defInput" placeholder="Defense" type="number" min="0" data-input-def>
+                        <label for="packSelect">
+                            <select class="packSelect" data-input-pack>
+                                <option value="">Set/Pack</option>
+                            </select>
                         </label>
-                        <br />
                         <label for="nameInput">
                             <input class="nameInput" placeholder="Name" type="text" data-input-name>
                         </label>
-                        <br />
                         <label for="descInput">
                             <input class="descInput" placeholder="Description" type="text" data-input-desc>
                         </label>
-                        <br />
+                        <label for="levelInput">
+                            <input class="levelInput" placeholder="Level/Rank" type="number" min="1" max="12" data-input-level>
+                            <select id="levelrangeop" class="searchrange">
+                                <option value="1" selected>=</option>
+                                <option value="0">&#x3C;=</option>
+                                <option value="2">&#x3E;=</option>
+                            </select>
 
+                        </label>
+                        <label for="scaleInput">
+                            <input class="scaleInput" placeholder="Scale" type="number" min="0" max="13" data-input-scale>
+                            <select id="scalerangeop" class="searchrange">
+                                <option value="1" selected>=</option>
+                                <option value="0">&#x3C;=</option>
+                                <option value="2">&#x3E;=</option>
+                            </select>
+
+                        </label>
+                    </div>
+                    <div class="searchBlock">
+
+                        <label for="atkInput">
+                            <input class="atkInput" placeholder="Attack" type="number" min="0" data-input-atk>
+                            <select id="attackrangeop" class="searchrange">
+                                <option value="1" selected>=</option>
+                                <option value="0">&#x3C;=</option>
+                                <option value="2">&#x3E;=</option>
+                            </select>
+
+                        </label>
+                        <label for="defInput">
+                            <input class="defInput" placeholder="Defense" type="number" min="0" data-input-def>
+                            <select id="defenserangeop" class="searchrange">
+                                <option value="1" selected>=</option>
+                                <option value="0">&#x3C;=</option>
+                                <option value="2">&#x3E;=</option>
+                            </select>
+
+                        </label>
                     </div>
                 </div>
             </div>
@@ -1793,13 +1813,11 @@
             <button class="m-deck" onclick="manualRevealDeck()">Reveal Deck</button>
             <button class="m-deck" onclick="manualRevealTop()">Reveal Top Card</button>
             <button class="m-deck" onclick="manualRevealBottom()">Reveal Bottom Card</button>
-            <button class="m-deck" onclick="manualRevealDeckRandom()">Reveal Random Card</button>
-            <button class="m-deck" onclick="manualViewDeck()">View Deck</button>
             <button class="m-deck" onclick="manualMillRemovedCard()">Banish Top Card</button>
             <button class="m-deck" onclick="manualMillRemovedCardFaceDown()">Banish Facedown</button>
+            <button class="m-deck" onclick="manualExcavateTop()">Excavate</button>
             <button class="m-deck" onclick="manualShuffleDeck()">Shuffle Deck</button>
             <button class="m-deck" onclick="manualViewDeck()">View Deck</button>
-            <button class="m-deck" onclick="manualExcavateTop()">Excavate</button>
             <button class="m-deck" onclick="manualMill()">Mill Card</button>
             <button class="m-deck" onclick="manualDraw()">Draw</button>
 
@@ -1816,31 +1834,31 @@
             <button class="m-excavated" onclick="manualRevealExcavated()">Reveal Excavated Deck</button>
             <button class="m-excavated" onclick="manualRevealExcavatedRandom()">Reveal Random Card</button>
 
-            <button class="m-hand m-field non-extra v-grave v-removed v-deck v-excavate" onclick="manualToBottomOfDeck()">To Bottom of Deck</button>
-            <button class="m-hand m-field non-extra v-grave v-removed v-deck v-excavate" onclick="manualToTopOfDeck()">To Top of Deck</button>
-            <button class="m-hand m-field v-grave v-removed v-deck" onclick="manualToExcavate()">Excavate</button>
+            <button class="m-hand m-field st-field non-extra v-grave v-removed v-excavate non-deck" onclick="manualToBottomOfDeck()">To Bottom of Deck</button>
+            <button class="m-hand m-field st-field non-extra v-grave v-removed v-excavate non-deck" onclick="manualToTopOfDeck()">To Top of Deck</button>
+            <button class="m-hand v-grave v-removed v-deck" onclick="manualToExcavate()">Excavate</button>
 
-            <button class="m-hand m-field non-extra" onclick="manualToOpponentsHand()">To Opponents Hand</button>
+            <button class="m-hand m-field st-field non-extra" onclick="manualToOpponentsHand()">To Opponents Hand</button>
             <button class="m-hand m-field v-deck v-extra v-grave v-excavate v-removed" onclick="manualToOpponent()">To Opponents Field</button>
             <button class="m-hand v-extra v-excavate" onclick="manualRevealHandSingle()">Reveal</button>
-            <button class="m-hand m-field v-deck v-extra v-grave v-excavate" onclick="manualToRemoved()">Banish</button>
-            <button class="m-hand m-field v-deck v-removed v-extra v-excavate" onclick="manualToGrave()">To Graveyard</button>
+            <button class="m-hand m-field st-field v-deck v-extra v-grave v-excavate" onclick="manualToRemoved()">Banish</button>
+            <button class="m-hand m-field st-field v-deck v-removed v-extra v-excavate non-grave" onclick="manualToGrave()">To Graveyard</button>
 
-            <button class="m-hand-st m-monster-st v-st m-st-monster v-excavate" onclick="startSpellTargeting('set')">Set in S/T</button>
-            <button class="m-hand-st m-st" onclick="startSpellTargeting('activate')">Activate</button>
-            <button class="m-st" onclick="manualActivate()">Flip Faceup</button>
+            <button class="m-hand-st m-monster-st m-st-monster v-excavate non-deck" onclick="startSpellTargeting('set')">Set in S/T</button>
+            <button class="m-hand-st" onclick="startSpellTargeting('activate')">Activate</button>
+
             <!--            <button class="v-st" onclick="manualActivate()">To S/T Zone</button>-->
             <!-- disabling st from deck atm. needed for metaphos-->
-            <button class="m-field" onclick="manualToHand();">To Hand</button>
+            <button class="m-field st-field" onclick="manualToHand();">To Hand</button>
             <button class="v-deck v-grave v-removed v-excavate v-extra-p" onclick="manualToHand(); manualRevealHandSingle(); v-excavate">Reveal and Add to Hand</button>
 
             <button class="m-hand-p m-monster-p m-monster-to-extra-faceup" onclick="manualToExtraFaceUp()">To Extra Deck Face Up</button>
-            <button class="m-hand-p m-monster-extra v-monster-extra" onclick="manualToExtra()">To Extra Deck</button>
+            <button class="m-monster-extra v-monster-extra" onclick="manualToExtra()">To Extra Deck</button>
 
-            <button class="m-hand-m non-link v-extra m-st " onclick="startSpecialSummon('def')">Special Summon in Defense</button>
-            <button class="m-hand-m v-extra" onclick="startSpecialSummon('atk')">Special Summon in Attack</button>
-            <button class="m-hand-m" onclick="startSpecialSummon('normaldef')">Set Monster</button>
-            <button class="m-hand-m" onclick="startSpecialSummon('normalatk')">Normal Summon</button>
+            <button class="m-hand-m non-link v-extra" onclick="startSpecialSummon('def')">Special Summon in Defense</button>
+            <button class="m-hand-m v-extra non-spell" onclick="startSpecialSummon('atk')">Special Summon in Attack</button>
+            <button class="m-hand-m " onclick="startSpecialSummon('normaldef')">Set Monster</button>
+            <button class="m-hand-m non-grave" onclick="startSpecialSummon('normalatk')">Normal Summon</button>
 
 
             <button class="m-hand-f" onclick="manualActivateFieldSpell()">Activate Field Spell</button>
@@ -1848,26 +1866,27 @@
 
 
             <!--            <button class="m-monster">Change Owner</button>-->
+            <button class="m-st" id="flipDown" onclick="manualSTFlipDown()">Flip Face Down</button>
+            <button class="m-st" id="flipUp" onclick="manualActivate()">Flip Face Up</button>
             <button class="m-monster m-st" onclick="startSpecialSummon('generic')">Move</button>
 
-            <button class="m-monster m-st" onclick="manualAddCounter()">Add Counter</button>
-            <button class="m-monster m-st" onclick="manualRemoveCounter()">Remove Counter</button>
-            <button class="m-monster m-opponent" onclick="manualViewXYZMaterials()">View</button>
-            <button class="m-monster m-monster-xyz v-monster-xyz" onclick="startXYZSummon()">Overlay</button>
-            <button class="m-monster non-link" onclick="manualToFaceDownDefence()">Flip Facedown</button>
-            <button class="m-monster" onclick="manualToAttack()">To Attack</button>
-            <button class="m-field non-link" onclick="manualToDefence()">To Defense</button>
+            <button class="m-monster m-st countercontroller" onclick="manualAddCounter()">Add Counter</button>
+            <button class="m-monster m-st countercontroller" id="removeCounter" onclick="manualRemoveCounter()">Remove Counter</button>
+            <button class="" id="viewStack" onclick="manualViewXYZMaterials()">View</button>
+            <button class="m-monster m-monster-xyz v-monster-xyz" id="overlayStack" onclick="startXYZSummon()">Overlay</button>
+            <button class="m-monster non-link non-extra" onclick="manualToFaceDownDefence()">Flip Facedown</button>
+            <button class="m-monster" id="toAttack" onclick="manualToAttack()">To Attack</button>
+            <button class="m-field non-link non-extra" id="toDefence" onclick="manualToDefence()">To Defense</button>
             <button class="m-monster-token" onclick="manualRemoveToken()">Remove Token</button>
             <button class="m-hand-p m-monster-p" onclick="manualToPZoneL()">To Left Pendulumn Zone</button>
             <button class="m-hand-p m-monster-p" onclick="manualToPZoneR()">To Right Pendulumn Zone</button>
             <button class="m-parasite" onclick="manualSendToDeckFaceup()">Send to Deck FaceUp</button>
 
-            <button class="m-st" onclick="startSpellTargeting('activate')">To Monster Zone</button>
 
             <button class="a-field" onclick="startAttack()">Attack</button>
             <button class="a-field" onclick="manualAttackDirectly()">Attack Directly</button>
-            <button class="m-st" onclick="manualSTFlipDown()">Flip Down</button>
-            <button class="m-field m-hand-m v-grave v-removed" onclick="manualSignalEffect()">Signal Effect</button>
+
+            <button class="m-field st-field m-hand-m v-grave v-removed" id="signalEffect" onclick="manualSignalEffect()">Signal Effect</button>
 
             <button class="s-toside" onclick="sidemoveTo('side')">To Side Deck</button>
             <button class="s-toextra" onclick="sidemoveTo('extra')">To Extra Deck</button>

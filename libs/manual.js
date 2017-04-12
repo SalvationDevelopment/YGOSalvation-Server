@@ -263,15 +263,17 @@ module.exports = function (wss) {
             break;
         case "leave":
             socket.activeduel = undefined;
-            if (socket.slot !== undefined) {
+            if (socket.slot !== undefined && games[activeduel]) {
                 games[activeduel].player[socket.slot].name = '';
                 games[activeduel].player[socket.slot].ready = false;
             } else if (stateSystem[activeduel]) {
                 delete stateSystem[activeduel].spectators[message.name];
             }
             socket.slot = undefined;
-            if (games[activeduel].player[0].name === '' && games[activeduel].player[1].name === '') {
-                delete games[activeduel];
+            if (games[activeduel]) {
+                if (games[activeduel].player[0].name === '' && games[activeduel].player[1].name === '') {
+                    delete games[activeduel];
+                }
             }
             wss.broadcast(games);
             socket.send(JSON.stringify({
@@ -303,6 +305,9 @@ module.exports = function (wss) {
 
             break;
         case "lock":
+            if (games[activeduel] === undefined) {
+                return;
+            }
             if (games[activeduel].player[socket.slot].ready) {
                 games[activeduel].player[socket.slot].ready = false;
                 stateSystem[activeduel].lock[socket.slot] = false;
