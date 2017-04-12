@@ -143,9 +143,9 @@ var databaseSystem = (function () {
         status = false,
         completedatabase = [];
 
-    function getBanlist() {
-        return banlist[activeBanlist].bannedCards;
-    }
+	function getBanlist(prop) {
+			return (prop)?  banlist[activeBanlist][prop] : banlist[activeBanlist].bannedCards;
+	}
 
     /**
      * Filters duplicate, and unprinted cards out
@@ -946,7 +946,7 @@ var deckEditor = (function () {
             }
         });
         $('#decktextoutput').html('Main Deck ' + deck.main.length + 'x<br/>');
-        $('.infoclassmain').html('Main Deck Total:' + deck.main.length + ' | Monsters: ' + mainMonsters + ' | Spells: ' + mainSpells + ' | Traps: ' + mainTraps);
+        $('.infoclassmain').html('Main Deck Total: ' + deck.main.length + ' | Monsters: ' + mainMonsters + ' | Spells: ' + mainSpells + ' | Traps: ' + mainTraps);
         Object.keys(sorter.main).sort(function (a, b) {
             return cardStackSort(sorter.main[a].card, sorter.main[b].card);
         }).forEach(function (id) {
@@ -1269,6 +1269,7 @@ var deckEditor = (function () {
     }
 
     function checkLegality(card, deck) {
+		var masterRule = databaseSystem.getBanlist('masterRule');
         function checkCard(reference) {
             var id = card.alias || card.id;
             if (reference.id === id || reference.alias === id) {
@@ -1283,13 +1284,13 @@ var deckEditor = (function () {
         if (mainCount + extraCount + sideCount >= card.limit) {
             return false;
         }
-        if (deck === 'main' && inmemoryDeck[deck].length >= 60) {
+        if (deck === 'main' && inmemoryDeck[deck].length >= 60 && masterRule > 0) {
             return false;
         }
         if (deck === 'side' && inmemoryDeck[deck].length >= 15) {
             return false;
         }
-        if (deck === 'extra' && inmemoryDeck[deck].length >= 15) {
+        if (deck === 'extra' && inmemoryDeck[deck].length >= 15 && masterRule > 0) {
             return false;
         }
         return true;
@@ -1298,13 +1299,14 @@ var deckEditor = (function () {
     function spaceCheck() {}
 
     function deckEditorMoveTo(deck) {
-        if (deck === 'main' && inmemoryDeck[deck].length >= 60) {
+		var masterRule = databaseSystem.getBanlist('masterRule');
+        if (deck === 'main' && inmemoryDeck[deck].length >= 60 && masterRule > 0) {
             return false;
         }
         if (deck === 'side' && inmemoryDeck[deck].length >= 15) {
             return false;
         }
-        if (deck === 'extra' && inmemoryDeck[deck].length >= 15) {
+        if (deck === 'extra' && inmemoryDeck[deck].length >= 15 && masterRule > 0) {
             return false;
         }
         moveInArray(inmemoryDeck[deckEditorReference.zone], deckEditorReference.index, 0);
