@@ -8,10 +8,7 @@ function printError(error) {
 
 function getLevel(card) {
     'use strict';
-    var lv = card.level || 0,
-        val = lv.toString(16),
-        value = parseInt(val.toString().substr(val.length - 2), 10) || 0;
-    return value;
+    return card.level & 0xff;
 }
 
 function isExtra(card) {
@@ -87,7 +84,12 @@ function cardStackSort(a, b) {
     if (a.type < b.type) {
         return -1;
     }
-
+    if (a.name > b.name) {
+        return 1;
+    }
+    if (a.name < b.name) {
+        return -1;
+    }
     if (a.id > b.id) {
         return 1;
     }
@@ -95,6 +97,13 @@ function cardStackSort(a, b) {
         return -1;
     }
     return 0;
+}
+
+function uniqArrayOfStrings(a) {
+    'use strict';
+    return a.sort().filter(function (item, pos, ary) {
+        return !pos || item !== ary[pos - 1];
+    });
 }
 
 function docardStackSort(db) {
@@ -134,9 +143,9 @@ var databaseSystem = (function () {
         status = false,
         completedatabase = [];
 
-    function getBanlist() {
-        return banlist[activeBanlist].bannedCards;
-    }
+	function getBanlist(prop) {
+			return (prop)?  banlist[activeBanlist][prop] : banlist[activeBanlist].bannedCards;
+	}
 
     /**
      * Filters duplicate, and unprinted cards out
@@ -204,19 +213,53 @@ var databaseSystem = (function () {
             }),
             listOfCards = dbsets.reduce(function (a, b) {
                 return a.concat(b);
-            }, []);
-
+            }, []),
+            ocgpacks = listOfCards.map(function (card) {
+                if (card.ocg) {
+                    if (card.ocg.pack_id) {
+                        var code = card.ocg.pack_id.split('-');
+                        return code[0];
+                    }
+                    return '';
+                }
+                return '';
+            }),
+            tcgpacks = listOfCards.map(function (card) {
+                if (card.tcg) {
+                    if (card.tcg.pack_id) {
+                        var code = card.tcg.pack_id.split('-');
+                        return code[0];
+                    }
+                    return '';
+                }
+                return '';
+            }),
+            packs = uniqArrayOfStrings([].concat(tcgpacks, ocgpacks)).filter(function (pack) {
+                return (pack && pack.length <= 5);
+            }),
+            tokenbox = $('#tokendropdown'),
+            packsbox = $('.packSelect');
+        //console.log(packs.length, tcgpacks, ocgpacks);
         activedbs = set;
         database = filterCards(listOfCards);
 
         tokens = database.filter(function (card) {
-            return (card.type === 16401 || card.type === 16417);
+            return (card.type === 16401 || card.type === 16417) && (card.name !== "DO NOT USE");
+        });
+        tokens.sort(function (current, next) {
+            return current.name > next.name;
         });
         $('#tokendropdown').html('');
         tokens.forEach(function (card) {
-            var defaulttext = (card.id === 73915052) ? 'defuault' : ''; // sheep token
-            $('#tokendropdown').append('<option ' + defaulttext + 'value="' + card.id + '">' + card.name + '</option>');
+            var defaulttext = (card.id === 73915052) ? ' selected ' : ''; // sheep token
+            tokenbox.append('<option ' + defaulttext + 'value="' + card.id + '">' + card.name + '</option>');
         });
+
+        packs.forEach(function (set) {
+            packsbox.append('<option value="' + set + '">' + set + '</option>');
+        });
+
+
     }
 
     function setBanlist(newlist) {
@@ -479,6 +522,26 @@ var currentSearchFilter = (function () {
         return cardsf;
     }
 
+    function filterSet(cardsf, set) {
+        if (set === undefined) {
+            return cardsf;
+        }
+
+        function check(card, region) {
+            if (card[region]) {
+                if (card[region].pack_id) {
+                    var code = card[region].pack_id.split('-');
+                    return code[0];
+                }
+                return '';
+            }
+            return '';
+        }
+        return cardsf.filter(function (card) {
+            return (check(card, 'ocg') === set || check(card, 'tcg') === set);
+        });
+
+    }
     //Filters effect or flavor texts for the txt string
     function filterDesc(cardsf, txt) {
         if (txt !== undefined) {
@@ -620,8 +683,20 @@ var currentSearchFilter = (function () {
         }
     }
 
+    function filterExactType(result, type) {
+        if (type !== undefined) {
+            return result.filter(function (item) {
+                return item.type === type;
+            });
+        } else {
+            return result;
+        }
+    }
+
     function filterAll(cards, filter) {
         var cardsf = cards;
+        cardsf = filterLimit(cardsf, filter.limit) || cardsf;
+        cardsf = filterExactType(cardsf, filter.exacttype) || cardsf;
         cardsf = filterName(cardsf, filter.cardname) || cardsf;
         cardsf = filterDesc(cardsf, filter.description) || cardsf;
         cardsf = filterType(cardsf, filter.type) || cardsf;
@@ -630,11 +705,12 @@ var currentSearchFilter = (function () {
         cardsf = filterAttribute(cardsf, filter.attribute) || cardsf;
         cardsf = filterRace(cardsf, filter.race) || cardsf;
         cardsf = filterSetcode(cardsf, filter.setcode) || cardsf;
-        cardsf = filterAtk(cardsf, filter.atk, 1) || cardsf;
-        cardsf = filterDef(cardsf, filter.def, 1) || cardsf;
-        cardsf = filterLevel(cardsf, filter.level, 1) || cardsf;
-        cardsf = filterLimit(cardsf, filter.limit) || cardsf;
-        cardsf = filterScale(cardsf, filter.scale, 1) || cardsf;
+        cardsf = filterAtk(cardsf, filter.atk, filter.atkop) || cardsf;
+        cardsf = filterDef(cardsf, filter.def, filter.defop) || cardsf;
+        cardsf = filterLevel(cardsf, filter.level, filter.levelop) || cardsf;
+        cardsf = filterScale(cardsf, filter.scale, filter.scaleop) || cardsf;
+        cardsf = filterSet(cardsf, filter.set) || cardsf;
+
         return cardsf;
     }
 
@@ -758,7 +834,7 @@ var deckEditor = (function () {
         cards.forEach(function (card, index) {
             var hardcard = JSON.stringify(card),
                 src = card.id + '.jpg';
-            html += '<div class="searchwrapper" data-card-limit="' + card.limit + '"><img class="deckeditcard card" id="deceditcard' + index + zone + '" data-dropindex="' + index + '" data-dropzone="' + zone + '" src="https://rawgit.com/SalvationDevelopment/YGOPro-Images/master/' + src + '" data-id="' + card.id + '" onError="this.onerror=null;this.src=\'/img/textures/unknown.jpg\';" ondragstart="setDragIndex(' + index + ');setDragZone(\'' + zone + '\')" onclick = "deckeditonclick(' + index + ', \'' + zone + '\')" / ></div>';
+            html += '<div class="searchwrapper" data-card-limit="' + card.limit + '"><img class="deckeditcard card" id="deceditcard' + index + zone + '" data-dropindex="' + index + '" data-dropzone="' + zone + '" src="https://rawgit.com/SalvationDevelopment/YGOPro-Images/master/' + src + '" data-id="' + card.id + '" onError="this.onerror=null;this.src=\'/img/textures/unknown.jpg\';" ondragstart="createCardReference(\'' + zone + '\', ' + index + ');" onclick = "deckeditonclick(' + index + ', \'' + zone + '\')" / ></div>';
         });
 
         $('#deckedit .cardspace .' + zone).html(html);
@@ -870,7 +946,7 @@ var deckEditor = (function () {
             }
         });
         $('#decktextoutput').html('Main Deck ' + deck.main.length + 'x<br/>');
-        $('.infoclassmain').html('Main Deck Total:' + deck.main.length + ' | Monsters: ' + mainMonsters + ' | Spells: ' + mainSpells + ' | Traps: ' + mainTraps);
+        $('.infoclassmain').html('Main Deck Total: ' + deck.main.length + ' | Monsters: ' + mainMonsters + ' | Spells: ' + mainSpells + ' | Traps: ' + mainTraps);
         Object.keys(sorter.main).sort(function (a, b) {
             return cardStackSort(sorter.main[a].card, sorter.main[b].card);
         }).forEach(function (id) {
@@ -988,6 +1064,11 @@ var deckEditor = (function () {
             def = $('.defInput').val(),
             level = $('.levelInput').val(),
             scale = $('.scaleInput').val(),
+            atkop = $('#attackrangeop').val(),
+            defop = $('#defenserangeop').val(),
+            levelop = $('#levelrangeop').val(),
+            scaleop = $('#scalerangeop').val(),
+            set = $('.packSelect').val(),
             attribute = $('.attributeSelect option:selected').val(),
             race = $('.raceSelect option:selected').val(),
             limit = $('.forbiddenLimitedSelect option:selected').val(),
@@ -1008,6 +1089,9 @@ var deckEditor = (function () {
         if (limit.length) {
             currentSearchFilter.setFilter('limit', parseInt(limit, 10));
         }
+        if (set) {
+            currentSearchFilter.setFilter('set', set);
+        }
 
         //currentSearchFilter.setFilter('type', parseInt(typeSelect, 10));
         if (typeSelect === '1') {
@@ -1021,15 +1105,19 @@ var deckEditor = (function () {
             }
             if (atk) {
                 currentSearchFilter.setFilter('atk', parseInt(atk, 10));
+                currentSearchFilter.setFilter('atkop', parseInt(atkop, 10));
             }
             if (def) {
                 currentSearchFilter.setFilter('def', parseInt(atk, 10));
+                currentSearchFilter.setFilter('defop', parseInt(defop, 10));
             }
             if (level) {
                 currentSearchFilter.setFilter('level', parseInt(level, 10));
+                currentSearchFilter.setFilter('levelop', parseInt(levelop, 10));
             }
             if (scale) {
                 currentSearchFilter.setFilter('scale', parseInt(scale, 10));
+                currentSearchFilter.setFilter('scaleop', parseInt(scaleop, 10));
             }
             if (attribute) {
                 currentSearchFilter.setFilter('attribute', parseInt(attribute, 10));
@@ -1039,11 +1127,14 @@ var deckEditor = (function () {
             }
         }
         if (typeSelect === '2') {
-
-            currentSearchFilter.setFilter('type', parseInt($('.spellSelect option:selected').val(), 10));
+            currentSearchFilter.setFilter('type', 2);
+            currentSearchFilter.setFilter('exacttype', parseInt($('.spellSelect option:selected').val(), 10));
+            console.log(parseInt($('.spellSelect option:selected').val(), 10));
         }
         if (typeSelect === '4') {
-            currentSearchFilter.setFilter('type', parseInt($('.trapSelect option:selected').val(), 10));
+            currentSearchFilter.setFilter('type', 4);
+            currentSearchFilter.setFilter('exacttype', parseInt($('.trapSelect option:selected').val(), 10));
+            console.log(parseInt($('.trapSelect option:selected').val(), 10));
         }
         doSearch();
     }
@@ -1178,6 +1269,7 @@ var deckEditor = (function () {
     }
 
     function checkLegality(card, deck) {
+		var masterRule = databaseSystem.getBanlist('masterRule');
         function checkCard(reference) {
             var id = card.alias || card.id;
             if (reference.id === id || reference.alias === id) {
@@ -1192,13 +1284,13 @@ var deckEditor = (function () {
         if (mainCount + extraCount + sideCount >= card.limit) {
             return false;
         }
-        if (deck === 'main' && inmemoryDeck[deck].length >= 60) {
+        if (deck === 'main' && inmemoryDeck[deck].length >= 60 && masterRule > 0) {
             return false;
         }
         if (deck === 'side' && inmemoryDeck[deck].length >= 15) {
             return false;
         }
-        if (deck === 'extra' && inmemoryDeck[deck].length >= 15) {
+        if (deck === 'extra' && inmemoryDeck[deck].length >= 15 && masterRule > 0) {
             return false;
         }
         return true;
@@ -1207,13 +1299,14 @@ var deckEditor = (function () {
     function spaceCheck() {}
 
     function deckEditorMoveTo(deck) {
-        if (deck === 'main' && inmemoryDeck[deck].length >= 60) {
+		var masterRule = databaseSystem.getBanlist('masterRule');
+        if (deck === 'main' && inmemoryDeck[deck].length >= 60 && masterRule > 0) {
             return false;
         }
         if (deck === 'side' && inmemoryDeck[deck].length >= 15) {
             return false;
         }
-        if (deck === 'extra' && inmemoryDeck[deck].length >= 15) {
+        if (deck === 'extra' && inmemoryDeck[deck].length >= 15 && masterRule > 0) {
             return false;
         }
         moveInArray(inmemoryDeck[deckEditorReference.zone], deckEditorReference.index, 0);
@@ -1415,8 +1508,12 @@ var deckEditor = (function () {
     };
 }());
 
-
-function dodeckeditcardmovement(zone, index) {
+/**
+ * Creates a card reference.
+ * @param {Number} zone  zone card was clicked in.
+ * @param {Number} index of card being clicked
+ */
+function createCardReference(zone, index) {
     'use strict';
     deckEditorReference = {
         id: deckEditor.getInmemoryDeck()[zone][index].id,
@@ -1429,8 +1526,17 @@ function dodeckeditcardmovement(zone, index) {
         def: deckEditor.getInmemoryDeck()[zone][index].def,
         limit: deckEditor.getInmemoryDeck()[zone][index].limit
     };
+}
 
-    var dbEntry = deckEditor.getInmemoryDeck()[zone][index],
+/**
+ * Opens the proper action menu for the card type
+ * @param {Number} zone  zone card was clicked in.
+ * @param {Number} index of card being clicked
+ */
+function openActionMenu(zone, index) {
+    'use strict';
+
+    var dbEntry = deckEditorReference,
         viewable = {
             'display': 'block'
         };
@@ -1456,6 +1562,7 @@ function dodeckeditcardmovement(zone, index) {
         }
     }
 }
+
 /**
  * Opens action menu and sets deck edit card reference.
  * @param {Number} index of card being clicked
@@ -1474,7 +1581,9 @@ function deckeditonclick(index, zone) {
         'left': currentMousePos.x,
         'display': 'block'
     });
-    dodeckeditcardmovement(zone, index);
+
+    createCardReference(zone, index);
+    openActionMenu(zone, index);
     reorientmenu();
     return;
 }
@@ -1488,9 +1597,9 @@ $('.descInput, .nameInput').keypress('input', function (event) {
     }
 
 });
-$('.typeSelect, .monsterCardSelect, .monsterTypeSelect, .spellSelect, .trapSelect, .attributeSelect, .raceSelect, .setcodeSelect, .forbiddenLimitedSelect').on('change', deckEditor.doNewSearch);
+$('.typeSelect, .monsterCardSelect, .monsterTypeSelect, .spellSelect, .trapSelect, .attributeSelect, .raceSelect, .setcodeSelect, .forbiddenLimitedSelect, .packSelect').on('change', deckEditor.doNewSearch);
 
-$('.atkInput, .defInput, .levelInput, .scaleInput').on('change', deckEditor.doNewSearch);
+$('.atkInput, .defInput, .levelInput, .scaleInput, .searchrange').on('change', deckEditor.doNewSearch);
 $('.typeSelect').on('change', function () {
     'use strict';
     var target = $('.typeSelect option:selected').text();
@@ -1560,65 +1669,33 @@ function readSingleFile(evt) {
 $('#deckupload').on('change', readSingleFile);
 
 
-var dropzone = "",
-    dragindex,
-    dragzone,
-    dragSameIndex;
-
-function setDragIndex(index) {
-    'use strict';
-
-    dragindex = index;
-
-
-}
-
-function setDragZone(zone) {
-    'use strict';
-
-    dragzone = zone;
-}
-$("#deckedit .mainDeck,#deckedit .extraDeck,#deckedit .sideDeck").on("dragover", 'img', function (event) {
-    'use strict';
-    dragSameIndex = $(this).attr('data-dropindex');
-});
-$("#deckedit .mainDeck,#deckedit .extraDeck,#deckedit .sideDeck").on("dragover", function (event) {
+$("#deckedit .mainDeck,#deckedit .extraDeck,#deckedit .sideDeck").on("dragover dragleave", function (event) {
     'use strict';
     event.preventDefault();
     event.stopPropagation();
-    dropzone = $(this).attr('data-dragzone');
-});
-
-$("#deckedit .mainDeck,#deckedit .extraDeck,#deckedit .sideDeck").on("dragleave", function (event) {
-    'use strict';
-    event.preventDefault();
-    event.stopPropagation();
-    dropzone = "";
 });
 
 $("#deckedit .mainDeck,#deckedit .extraDeck,#deckedit .sideDeck").on("drop", function (event) {
     'use strict';
     event.preventDefault();
     event.stopPropagation();
-    if (dragindex !== undefined && dropzone) {
-        dodeckeditcardmovement(dragzone, dragindex);
-        if (dropzone === 'search') {
-            deckEditor.addCardFromSearch(dropzone);
 
-        } else if (dropzone === dragzone) {
-            deckEditor.moveInSameZone(dragzone, deckEditorReference.index, dragSameIndex);
-        } else if (dropzone === 'main' && isExtra(deckEditorReference)) {
-            return;
-        } else if (dropzone === 'extra' && !isExtra(deckEditorReference)) {
-            return;
-        } else {
-            deckEditor.deckEditorMoveTo(dropzone);
-        }
+    var from = deckEditorReference.zone;
+    var target = $(this).data('dragzone');
+    var sameIndex = $(this).data('dropindex');
 
+    if (from === 'search') {
+        deckEditor.addCardFromSearch(target);
+
+    } else if (target === from) {
+        deckEditor.moveInSameZone(from, deckEditorReference.index, sameIndex);
+    } else if (target === 'main' && isExtra(deckEditorReference)) {
+        return;
+    } else if (target === 'extra' && !isExtra(deckEditorReference)) {
+        return;
+    } else {
+        deckEditor.deckEditorMoveTo(target);
     }
-    dragindex = undefined;
-    $('#manualcontrols button').css({
-        'display': 'none'
-    });
+
     deckEditor.doSearch();
 });

@@ -33,7 +33,7 @@ function validateDeck(deck, banlist, database, cardpool) {
         validate.msg = 'Main Deck size below 40';
         return validate;
     }
-    if (deck.main.length > 60) {
+    if (deck.main.length > 60 && banlist.masterRule > 0) {
         validate.error = true;
         validate.msg = 'Main Deck size above 60';
         return validate;
@@ -43,7 +43,7 @@ function validateDeck(deck, banlist, database, cardpool) {
         validate.msg = 'Side Deck size above 15';
         return validate;
     }
-    if (deck.extra.length > 15) {
+    if (deck.extra.length > 15 && banlist.masterRule > 0) {
         validate.error = true;
         validate.msg = 'Extra Deck size above 15';
         return validate;

@@ -69,16 +69,6 @@ function bootGameList() {
 
 
 
-function bootUpdateSystem() {
-    console.log('    Update System @ port 12000'.bold.yellow);
-    processManager.fork('../libs/update.js', [], {
-        cwd: 'http'
-    }).on('exit', bootUpdateSystem);
-}
-
-
-
-
 
 function main() {
     var mainStack = domain.create();
@@ -95,12 +85,10 @@ function main() {
 
         bootGameList();
 
-        setTimeout(function () {
-            bootUpdateSystem();
-        }, 500);
+        
         setTimeout(function () {
             deckstorageBoot();
-        }, 1000);
+        }, 500);
 
 
 

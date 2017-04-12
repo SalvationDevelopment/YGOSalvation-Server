@@ -3,6 +3,7 @@
 'use strict';
 
 
+
 var hotload = require("hotload");
 var cardidmap = hotload("../http/cardidmap.js");
 
@@ -13,12 +14,17 @@ var cardidmap = hotload("../http/cardidmap.js");
 //then return it because its a map, and store teh whole ordial as a var, then do something //else....
 
 function mapCards(list) {
-    var idMapAsArray = Object.keys(list).map(function(key){
-       var value = list[key];
-        return { oldValue : key, newValue : value}
+    var idMapAsArray = Object.keys(list).map(function (key) {
+        var value = list[key];
+        return {
+            oldValue: key,
+            newValue: value
+        }
     });
     var updatedList = idMapAsArray.map(function (entry) {
-        var newEntry = {id: entry.id};
+        var newEntry = {
+            id: entry.id
+        };
         if (cardidmap[newEntry.id]) {
             newEntry.id = cardidmap[newEntry.id];
         }
@@ -28,6 +34,8 @@ function mapCards(list) {
 }
 
 var express = require('express'),
+    child_process = require('child_process'),
+    express = require('express'),
     fs = require('fs'),
     spdy = require('spdy'),
     http = require('http'),
@@ -101,6 +109,32 @@ app.use(function (req, res, next) {
 });
 
 
+function gitRoute(req, res) {
+    res.send('Attempting to Update Server...');
+    var gitUpdater = domain.create();
+    gitUpdater.on('error', function (err) {
+        console.log('        [Update System] ' + 'Git Failed'.grey, err);
+    });
+    gitUpdater.run(function () {
+        child_process.spawn('git', ['pull'], {}, function () {
+            child_process.fork('./update.js');
+        });
+    });
+}
+app.get('/generate', function (req, res) {
+    res.send('Regenerating manifest...');
+    child_process.fork('./update.js');
+});
+
+app.post('/git', function (req, res) {
+    gitRoute(req, res);
+});
+
+app.get('/git', function (req, res) {
+    gitRoute(req, res);
+});
+
+
 try {
     var privateKey = fs.readFileSync(path.resolve(process.env.SSL + '\\ssl.key')).toString();
     var certificate = fs.readFileSync(path.resolve(process.env.SSL + '\\ssl.crt')).toString();
@@ -151,6 +185,7 @@ if (process.env.SSL !== undefined) {
 setTimeout(function () {
     //give the system five seconds to figure itself out.
     booting = false;
+    child_process.fork('./update.js');
 }, 5000);
 
 var Datastore = require('nedb'),
@@ -550,7 +585,7 @@ function onData(data, socket) {
         break;
     case 'save':
         delete data.action;
-        data.decks.forEach(function(deck) {
+        data.decks.forEach(function (deck) {
             deck = mapCards(deck);
         });
         deckStorage.update({
@@ -590,13 +625,6 @@ function onData(data, socket) {
 
 }
 
-
-
-
-
-
-
-
 primus.on('connection', function (socket) {
     var connectionwatcher = domain.create();
     connectionwatcher.on('error', function (err) {
@@ -619,4 +647,7 @@ primus.on('connection', function (socket) {
     });
     connectionwatcher.exit();
 });
-require('fs').watch(__filename, process.exit);
+fs.watch(__filename, process.exit);
+fs.watch('../http/ygopro/databases/', function () {
+    child_process.fork('./update.js');
+});

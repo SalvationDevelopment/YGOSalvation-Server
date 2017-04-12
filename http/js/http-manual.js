@@ -226,6 +226,7 @@ function loadScreen() {
     $('#scaledvalue').val(localStorage.scaledvalue);
     $('#tiltvalue').val(localStorage.tilt);
 }
+loadScreen();
 
 function scaleScreenFactor() {
     'use strict';
@@ -370,7 +371,7 @@ function startSiding() {
     $('.field').addClass('sidemode');
     $('.sidingzone').addClass('sidemode');
     $('#ingamesidebutton').css('display', 'none');
-    $('#ingamexsidebutton').css('display', 'block');
+    $('#ingamexsidebutton').css('display', 'inline-block');
 
 }
 
@@ -424,7 +425,8 @@ var manualDuel,
     targetreference,
     attackmode = false,
     targetmode = false,
-    overlaymode = false;
+    overlaymode = false,
+    viewmode = '';
 
 function stateUpdate(dataBinding) {
     'use strict';
@@ -541,14 +543,14 @@ function linkStack(field) {
     });
 
     manualDuel.stack.forEach(stateUpdate);
-    var p0deck = $('#automationduelfield .p' + orient(0) + '.DECK').length,
-        p1deck = $('#automationduelfield .p' + orient(1) + '.DECK').length,
-        p0extra = $('#automationduelfield .p' + orient(0) + '.EXTRA').length,
-        p1extra = $('#automationduelfield .p' + orient(1) + '.EXTRA').length,
-        p0removed = $('#automationduelfield .p' + orient(0) + '.REMOVED').length,
-        p1removed = $('#automationduelfield .p' + orient(1) + '.REMOVED').length,
-        p0grave = $('#automationduelfield .p' + orient(0) + '.GRAVE').length,
-        p1grave = $('#automationduelfield .p' + orient(1) + '.GRAVE').length;
+    var p0deck = $('#automationduelfield .p0.DECK').length,
+        p1deck = $('#automationduelfield .p1.DECK').length,
+        p0extra = $('#automationduelfield .p0.EXTRA').length,
+        p1extra = $('#automationduelfield .p1.EXTRA').length,
+        p0removed = $('#automationduelfield .p0.REMOVED').length,
+        p1removed = $('#automationduelfield .p1.REMOVED').length,
+        p0grave = $('#automationduelfield .p0.GRAVE').length,
+        p1grave = $('#automationduelfield .p1.GRAVE').length;
 
     $('.cardselectionzone.p0.DECK').attr('data-content', p0deck);
     $('.cardselectionzone.p1.DECK').attr('data-content', p1deck);
@@ -882,6 +884,7 @@ function reveal(cards, note) {
     'use strict';
     var html = '';
     revealcache = [];
+    console.log('note', note);
     $('#revealedclose').css('display', 'block');
     $('#revealed').css('display', 'flex');
     if (cards.length > 4) {
@@ -1191,7 +1194,7 @@ function manualReciver(message) {
         }, 2000);
         break;
     case "side":
-        $('#ingamesidebutton').css('display', 'block');
+        $('#ingamesidebutton').css('display', 'inline-block');
         sidedDeck = message.deck;
         sidedDeck.main.sort();
         sidedDeck.extra.sort();
@@ -1299,7 +1302,6 @@ function serverconnect() {
         console.log('Connected to Manual');
     };
     manualServer.onmessage = function (message) {
-        console.log(message);
         manualReciver(JSON.parse(message.data));
     };
     manualServer.onclose = function (message) {
@@ -2276,9 +2278,10 @@ function manualRevealDeckRandom() {
 }
 
 var currentMousePos = {
-    x: -1,
-    y: -1
-};
+        x: -1,
+        y: -1
+    },
+    activecoord = 0;
 
 function reorientmenu() {
     'use strict';
@@ -2295,7 +2298,7 @@ function reorientmenu() {
         'left': currentMousePos.x - width,
         'display': 'block'
     });
-
+    activecoord = currentMousePos.x;
 }
 
 
@@ -2367,12 +2370,9 @@ function sideonclick(index, zone) {
 
 
 
-function revealonclick(card, note) {
+function revealonclick(card) {
     'use strict';
-    // Goblin circus removes...
-    //    if (note !== 'view') {
-    //        return;
-    //    }
+
     revealcacheIndex = card;
     manualActionReference = revealcache[card];
     $('#manualcontrols button').css({
@@ -2416,8 +2416,10 @@ function revealonclick(card, note) {
             $('.m-monster-p').css({
                 'display': 'block'
             });
-
         }
+        $('#signalEffect, .non-deck').css({
+            'display': 'none'
+        });
 
         reorientmenu();
         return;
@@ -2440,11 +2442,6 @@ function revealonclick(card, note) {
             $('.m-hand-m').not('.non-link').css({
                 'display': 'block'
             });
-            if (!(cardIs('link', dbEntry))) {
-                $('.non-link').css({
-                    'display': 'block'
-                });
-            }
         }
         if (stMap[dbEntry.type] || dbEntry.type === 2 || dbEntry.type === 4) {
             $('.m-hand-st').css({
@@ -2470,6 +2467,9 @@ function revealonclick(card, note) {
                 'display': 'block'
             });
         }
+        $('.non-grave').css({
+            'display': 'none'
+        });
         reorientmenu();
         return;
     }
@@ -2586,6 +2586,9 @@ function revealonclick(card, note) {
                 'display': 'block'
             });
         }
+        $('.non-extra').css({
+            'display': 'none'
+        });
 
 
         reorientmenu();
@@ -2614,11 +2617,15 @@ function revealonclick(card, note) {
                 'display': 'block'
             });
         }
+        $('#signalEffect, .non-deck').css({
+            'display': 'none'
+        });
+
         reorientmenu();
         return;
     }
     if (manualActionReference.location === 'SPELLZONE') {
-        $('.m-field').css({
+        $('.st-field').css({
             'display': 'block'
         });
         if (dbEntry.id === 62966332) {
@@ -2663,10 +2670,10 @@ function parseLevelScales(card) {
         output += '<span class="levels">' + ranklevel + level;
 
     } else {
-        level = level.toString(16); // format: [0-9A-F]0[0-9A-F][0-9A-F]{4}
-        leftScale = parseInt(level.charAt(0), 16); // first digit: left scale in hex (0-16)
-        rightScale = parseInt(level.charAt(2), 16); // third digit: right scale in hex (0-16)
-        pendulumLevel = parseInt(level.charAt(6), 16); // seventh digit: level of the monster in hex (technically, all 4 digits are levels, but here we only need the last char)
+        // format: [0-9A-F]0[0-9A-F][0-9A-F]{4}
+        leftScale = (card.level >> 0x18) & 0xff; // first digit: left scale in hex (0-16)
+        rightScale = (card.level >> 0x10) & 0xff; // third digit: right scale in hex (0-16)
+        pendulumLevel = card.level & 0xff; // seventh digit: level of the monster in hex (technically, all 4 digits are levels, but here we only need the last char)
         output += '<span class="levels">' + ranklevel + pendulumLevel + '</span> <span class="scales"><< ' + leftScale + ' | ' + rightScale + ' >>';
     }
     return output + '</span>';
@@ -2922,7 +2929,7 @@ function guicardonclick() {
                     'display': 'block'
                 });
             }
-            if (pendulumMap[dbEntry.type] || cardIs('fusion', dbEntry) || cardIs('synchro', dbEntry) || cardIs('xyz', dbEntry) || cardIs('link', dbEntry)) {
+            if (cardIs('fusion', dbEntry) || cardIs('synchro', dbEntry) || cardIs('xyz', dbEntry) || cardIs('link', dbEntry)) {
                 $('.m-monster-extra').css({
                     'display': 'block'
                 });
@@ -2932,11 +2939,7 @@ function guicardonclick() {
                     'display': 'block'
                 });
             }
-            if (!(cardIs('link', dbEntry))) {
-                $('.non-link').not('.m-hand-m').css({
-                    'display': 'block'
-                });
-            }
+
             if (pendulumMap[dbEntry.type]) {
                 $('.m-monster-p').css({
                     'display': 'block'
@@ -2963,19 +2966,43 @@ function guicardonclick() {
                     'display': 'block'
                 });
             }
-
+            if (stackunit.position === 'FaceUpAttack') {
+                $('#toAttack').css({
+                    'display': 'none'
+                });
+            }
+            if (stackunit.position === 'FaceUpDefence') {
+                $('#toDefence, .countercontroller').css({
+                    'display': 'none'
+                });
+            }
+            if (!stackunit.counters) {
+                $('#removeCounter').css({
+                    'display': 'none'
+                });
+            }
+            if (stackunit.position === 'FaceDownDefence') {
+                $('#toDefence, #flipDown, #signalEffect, .countercontroller').css({
+                    'display': 'none'
+                });
+            }
+            if ($('#automationduelfield .p' + orient(stackunit.player) + '.MONSTERZONE.i' + stackunit.index).length > 1) {
+                $('#viewStack').css({
+                    'display': 'block'
+                });
+            }
+            if ($('#automationduelfield .p' + orient(stackunit.player) + '.MONSTERZONE').length > 1) {
+                $('#overlayStack').css({
+                    'display': 'block'
+                });
+            }
             reorientmenu();
             return;
         }
         if (stackunit.location === 'SPELLZONE') {
-            $('.m-st, .m-field').not('.non-extra').css({
+            $('.m-st, .st-field').css({
                 'display': 'block'
             });
-            if (dbEntry.id === 62966332) {
-                $('.m-convulse').css({
-                    'display': 'block'
-                });
-            }
             if (dbEntry.id === 63571750) {
                 $('.m-pharaohstreasure').css({
 
@@ -2986,9 +3013,14 @@ function guicardonclick() {
                     'display': 'block'
                 });
             }
-            if (!(cardIs('fusion', dbEntry) || cardIs('synchro', dbEntry) || cardIs('xyz', dbEntry) || cardIs('link', dbEntry))) {
-                $('.non-extra').css({
-                    'display': 'block'
+            if (stackunit.position === 'FaceUp') {
+                $('#flipUp').css({
+                    'display': 'none'
+                });
+            }
+            if (stackunit.position === 'FaceDown') {
+                $('#flipDown, .countercontroller, #signalEffect').css({
+                    'display': 'none'
                 });
             }
             reorientmenu();
@@ -3184,6 +3216,18 @@ function processCardHover(event) {
 $(document).ready(function () {
     'use strict';
     serverconnect();
+    setInterval(function () {
+        if (manualServer.readyState !== 1) {
+            window.reload();
+        }
+    }, 60000);
+    setTimeout(function () {
+        setInterval(function () {
+            if (manualServer.readyState !== 1) {
+                alertmodal('...DISCONNECTED...');
+            }
+        }, 3000);
+    }, 15000);
     $('.imgContainer').attr('src', 'img/textures/cover.jpg');
     $('body').on('mouseover', '.card, .revealedcard', processCardHover);
     $('#manualcontrols button').click(function () {
@@ -3193,7 +3237,7 @@ $(document).ready(function () {
                 'display': 'none'
             });
             $('#sidechatinput').focus();
-        }, 100);
+        }, 0);
     });
 });
 
@@ -3201,6 +3245,14 @@ $(document).mousemove(function (event) {
     'use strict';
     currentMousePos.x = event.pageX;
     currentMousePos.y = event.pageY;
+
+    var dif = Math.abs(currentMousePos.x - activecoord);
+
+    if (dif > 50) {
+        $('#manualcontrols button').css({
+            'display': 'none'
+        });
+    }
 });
 
 
