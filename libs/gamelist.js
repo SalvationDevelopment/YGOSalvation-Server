@@ -8,29 +8,26 @@ var hotload = require("hotload");
 var cardidmap = hotload("../http/cardidmap.js");
 
 
-//Object.key(object) returns an array of keys on a given object
-//then you .map or .forEach it to loop over it, in this case we map.
-//the value of the key we have to rerefence so its the orginial object with that key as the //properity we are looking up
-//then return it because its a map, and store teh whole ordial as a var, then do something //else....
 
-function mapCards(list) {
-    var idMapAsArray = Object.keys(list).map(function (key) {
-        var value = list[key];
-        return {
-            oldValue: key,
-            newValue: value
+/**
+ * Maps a deck to updated IDs.
+ * @param   {[[Type]]} deck [[Description]]
+ * @returns {object}   [[Description]]
+ */
+function mapCards(deck) {
+    // [].map returns a new array so we are just gonna send it back, not store it as a var.
+    return deck.map(function (cardInDeck) {
+        // if there is an entry in the cardidmap for that card id, we change it to the new value
+        // and return a completely new object.
+        if (cardidmap[cardInDeck.id]) {
+            return {
+                id: cardidmap[cardInDeck.id]
+            };
+        } else {
+            // else we just return out the old card object
+            return cardInDeck;
         }
     });
-    var updatedList = idMapAsArray.map(function (entry) {
-        var newEntry = {
-            id: entry.id
-        };
-        if (cardidmap[newEntry.id]) {
-            newEntry.id = cardidmap[newEntry.id];
-        }
-        return newEntry;
-    });
-    return updatedList;
 }
 
 var express = require('express'),
@@ -585,8 +582,8 @@ function onData(data, socket) {
         break;
     case 'save':
         delete data.action;
-        data.decks.forEach(function (deck) {
-            deck = mapCards(deck);
+        data.decks = data.decks.map(function (deck) {
+            return mapCards(deck);
         });
         deckStorage.update({
             username: data.username
