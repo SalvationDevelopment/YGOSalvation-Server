@@ -6,8 +6,18 @@
 var hotload = require("hotload");
 var cardidmap = hotload("../http/cardidmap.js");
 
+
+//Object.key(object) returns an array of keys on a given object
+//then you .map or .forEach it to loop over it, in this case we map.
+//the value of the key we have to rerefence so its the orginial object with that key as the //properity we are looking up
+//then return it because its a map, and store teh whole ordial as a var, then do something //else....
+
 function mapCards(list) {
-    var updatedList = list.map(function (entry) {
+    var idMapAsArray = Object.keys(list).map(function(key){
+       var value = list[key];
+        return { oldValue : key, newValue : value}
+    });
+    var updatedList = idMapAsArray.map(function (entry) {
         var newEntry = {id: entry.id};
         if (cardidmap[newEntry.id]) {
             newEntry.id = cardidmap[newEntry.id];
@@ -541,7 +551,7 @@ function onData(data, socket) {
     case 'save':
         delete data.action;
         data.decks.forEach(function(deck) {
-            deck = mapCard(deck);
+            deck = mapCards(deck);
         });
         deckStorage.update({
             username: data.username
