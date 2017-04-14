@@ -221,6 +221,7 @@ var avatarMap = {};
 
 
 function loadScreen() {
+    'use strict';
     $('#slidevaluex').val(localStorage.x);
     $('#slidevaluey').val(localStorage.y);
     $('#scaledvalue').val(localStorage.scaledvalue);
@@ -1102,6 +1103,15 @@ function manualMoveGeneric(index, zone) {
     manualServer.send(JSON.stringify(message));
 }
 
+function question(message) {
+    'use strict';
+    var type = message.type;
+
+    if (type === 'specialcard') {
+
+    }
+}
+
 function manualReciver(message) {
     'use strict';
 
@@ -1278,8 +1288,11 @@ function manualReciver(message) {
     case "reveal":
         reveal(message.reveal, message.call);
         break;
-    case 'removeCard':
+    case "removeCard":
         $('#uid' + message.info.removed).css('display', 'none').attr('data-deletedToken', true).attr('class', '').attr('id', 't' + message.info.removed);
+        break;
+    case "question":
+        question(message);
         break;
     default:
         break;
@@ -3277,6 +3290,14 @@ function manualFlip() {
     }));
 }
 
+function manualRPS() {
+    'use strict';
+    manualServer.send(JSON.stringify({
+        action: 'rps',
+        name: localStorage.nickname
+    }));
+}
+
 $('#lobbychatinput, #sidechatinput, #spectatorchatinput').keypress(function (e) {
     'use strict';
     if ($(e.currentTarget).val().length === 0) {
@@ -3317,6 +3338,11 @@ $('#lobbychatinput, #sidechatinput, #spectatorchatinput').keypress(function (e) 
         if (parts[0] === '/token') {
             $(e.currentTarget).val('');
             manualToken();
+            return;
+        }
+        if (parts[0] === '/rps') {
+            $(e.currentTarget).val('');
+            manualRPS();
             return;
         }
 
