@@ -582,9 +582,7 @@ function onData(data, socket) {
         break;
     case 'save':
         delete data.action;
-        data.decks = data.decks.map(function (deck) {
-            return mapCards(deck);
-        });
+        data.decks = mapCards(data.decks);
         deckStorage.update({
             username: data.username
         }, data, {
