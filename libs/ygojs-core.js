@@ -1159,7 +1159,9 @@ function init(callback) {
 
     function rps(resolver) {
         var player1,
-            player2;
+            player2,
+            previous1,
+            previous2;
 
         function determineResult(player, answer) {
             if (player === 0) {
@@ -1171,6 +1173,8 @@ function init(callback) {
             if (player1 === undefined || player2 === undefined) {
                 return undefined;
             }
+            previous1 = player1;
+            previous2 = player2;
             if (player1 === player2) {
                 player1 = undefined;
                 player2 = undefined;
@@ -1179,36 +1183,66 @@ function init(callback) {
             return ((3 + player1 - player2) % 3) - 1; // returns 0 or 1, the winner;
         }
 
+        function notify(after) {
+            callback({
+                names: names,
+                0: {
+                    action: 'rps',
+                    result: [previous1, previous2]
+                },
+                1: {
+                    action: 'rps',
+                    result: [previous1, previous2]
+                },
+                spectators: {}
+            }, stack, after);
+        }
+
+
         function ask() {
-            question(0, 'specialCards', ['rock', 'paper', 'scissors'], function (answer) {
-                var result = determineResult(0, answer);
-                if (result === false) {
-                    ask();
-                    return;
-                }
-                if (result !== undefined) {
-                    resolver(result);
-                }
-            });
-            question(1, 'specialCards', [{
-                id: 'rock',
-                value: 0
-            }, {
-                id: 'paper',
-                value: 1
-            }, {
-                id: 'scissors',
-                value: 2
-            }], function (answer) {
-                var result = determineResult(1, answer);
-                if (result === false) {
-                    ask();
-                    return;
-                }
-                if (result !== undefined) {
-                    resolver(result);
-                }
-            });
+            var time = (previous1) ? 1000 : 0;
+            setTimeout(function () {
+                question(0, 'specialCards', [{
+                    id: 'rock',
+                    value: 0
+                }, {
+                    id: 'paper',
+                    value: 1
+                }, {
+                    id: 'scissors',
+                    value: 2
+                }], function (answer) {
+                    var result = determineResult(0, answer);
+                    if (result === false) {
+                        notify(ask);
+                        return;
+                    }
+                    if (result !== undefined) {
+                        notify(resolver(result));
+                    }
+                });
+                question(1, 'specialCards', [{
+                    id: 'rock',
+                    value: 0
+                }, {
+                    id: 'paper',
+                    value: 1
+                }, {
+                    id: 'scissors',
+                    value: 2
+                }], function (answer) {
+                    var result = determineResult(1, answer);
+                    if (result === false) {
+                        notify(ask);
+                        return;
+                    }
+                    if (result !== undefined) {
+                        notify(resolver(result));
+                    }
+                });
+
+            }, time);
+
         }
     }
 
