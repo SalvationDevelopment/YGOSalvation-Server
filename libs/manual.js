@@ -83,7 +83,7 @@ module.exports = function (wss) {
          * @param {object}   view  view definition set
          * @param {Array} stack of cards
          */
-        function gameResponse(view, stack) {
+        function gameResponse(view, stack, callback) {
             if (stateSystem[game] === undefined) {
                 return;
             }
@@ -105,6 +105,9 @@ module.exports = function (wss) {
                         spectator.send(JSON.stringify(view.spectators));
                     });
                 }
+            }
+            if (callback) {
+                callback();
             }
         }
         return gameResponse;
@@ -562,6 +565,15 @@ module.exports = function (wss) {
                 break;
             }
             stateSystem[activeduel].revealCallback([message.card], socket.slot, 'revealHandSingle');
+            break;
+        case "rps":
+            if (socket.slot === undefined) {
+                break;
+            }
+            stateSystem[activeduel].rps(function (result) {
+                var winner = 'Player ' + (1 + result);
+                stateSystem[generated].duelistChat('Server', winner + ' won.');
+            });
             break;
         case "reveal":
             if (socket.slot === undefined) {
