@@ -185,9 +185,10 @@ function validateDeck(deck, banlist, database, cardpool) {
         }
     }
 /* 	if (banlist.region == 'tcg') {
+		var reference = getCardById(card);
 		for (var card in main) {
-			if (card.tcg) {
-				if (card[banlist.region].date > banlist.endDate) {
+			if (reference.tcg) {
+				if (reference.tcg.date > banlist.endDate) {
 					console.log(card)
 					validate.error = true;
 					validate.msg = '"' + reference.name + '"' + " does not exist in the selected Forbidden/Limited Card List";
@@ -202,7 +203,6 @@ function validateDeck(deck, banlist, database, cardpool) {
 				}
 		}
 	} */
-    return validate;
 	if (banlist.masterRule !== 4) {
 		var reference = getCardById(card);
 		for (var card in extra) {
@@ -213,6 +213,7 @@ function validateDeck(deck, banlist, database, cardpool) {
 			}
 		}
 	}	
+    return validate;
 }
 
 if (module && typeof module.exports !== 'undefined') {
