@@ -177,6 +177,25 @@ function validateDeck(deck, banlist, database, cardpool) {
             return validate;
         }
     }
+	if (banlist.region == 'tcg') {
+		for (var card in main) {
+			if (card.tcg) {
+				if (card[banlist.region].date > banlist.endDate) {
+					console.log(card)
+					validate.error = true;
+					validate.msg = '"' + getCardById(card).name + '"' + " does not exist in the selected Forbidden/Limited Card List";
+					return validate;
+				}
+			}
+			else {
+				console.log(card.tcg,card)
+				//console.log(card.ocg)
+				validate.error = true;
+				validate.msg = '"' + getCardById(card).name + '"' + " does not exist in the TCG pack database";
+				return validate;				
+				}
+		}
+	}
     return validate;
 	if (banlist.masterRule !== 4) {
 		for (var card in extra) {
