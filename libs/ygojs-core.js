@@ -1148,13 +1148,17 @@ function init(callback) {
                 1: {},
                 spectators: {}
             };
+
+
         output[player] = {
             action: 'question',
             type: type,
             options: options,
             uuid: uuid
         };
+        console.log('sending question', output);
         answerListener.once(uuid, onAnswerFromUser);
+        callback(output, stack);
     }
 
     function rps(resolver) {
@@ -1163,7 +1167,10 @@ function init(callback) {
             previous1,
             previous2;
 
+        console.log('starting rps');
+
         function determineResult(player, answer) {
+            console.log('determining', player, answer);
             if (player === 0) {
                 player1 = answer;
             }
@@ -1200,6 +1207,7 @@ function init(callback) {
 
 
         function ask() {
+            console.log('asking rps');
             var time = (previous1) ? 1000 : 0;
             setTimeout(function () {
                 question(0, 'specialCards', [{
@@ -1244,6 +1252,7 @@ function init(callback) {
             }, time);
 
         }
+        ask();
     }
 
     //expose public functions.
