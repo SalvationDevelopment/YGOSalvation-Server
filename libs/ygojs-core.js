@@ -1140,7 +1140,7 @@ function init(callback) {
         duelistChat('Server', username + ' surrendered.');
     }
 
-    function question(player, type, options, onAnswerFromUser) {
+    function question(player, type, options, answerLength, onAnswerFromUser) {
         var uuid = uniqueIdenifier(),
             output = {
                 names: names,
@@ -1154,6 +1154,7 @@ function init(callback) {
             action: 'question',
             type: type,
             options: options,
+            answerLength: answerLength,
             uuid: uuid
         };
         console.log('sending question', output);
@@ -1219,7 +1220,7 @@ function init(callback) {
                 }, {
                     id: 'scissors',
                     value: 2
-                }], function (answer) {
+                }], 1, function (answer) {
                     var result = determineResult(0, answer);
                     if (result === false) {
                         notify(ask);
@@ -1238,7 +1239,7 @@ function init(callback) {
                 }, {
                     id: 'scissors',
                     value: 2
-                }], function (answer) {
+                }], 1, function (answer) {
                     var result = determineResult(1, answer);
                     if (result === false) {
                         notify(ask);
