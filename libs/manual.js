@@ -17,8 +17,7 @@ var validateDeck = require('./validate-Deck'),
 
 module.exports = function (wss) {
 
-    var databases = {},
-        realgames = [],
+    var realgames = [],
         stateSystem = require('./ygojs-core.js'),
         configParser = require('./configparser.js'),
         games = {},

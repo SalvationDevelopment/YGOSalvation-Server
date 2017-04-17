@@ -128,7 +128,6 @@ try {
     oldDB = [];
 }
 
-console.log(oldDB);
 
 var databaseSystem = (function () {
     'use strict';
@@ -143,9 +142,9 @@ var databaseSystem = (function () {
         status = false,
         completedatabase = [];
 
-	function getBanlist(prop) {
-			return (prop)?  banlist[activeBanlist][prop] : banlist[activeBanlist].bannedCards;
-	}
+    function getBanlist(prop) {
+        return (prop) ? banlist[activeBanlist][prop] : banlist[activeBanlist].bannedCards;
+    }
 
     /**
      * Filters duplicate, and unprinted cards out
@@ -184,7 +183,6 @@ var databaseSystem = (function () {
             }
             return true;
         });
-        console.log('Total Cards:', result.length, 'Returned Cards:', filteredCards.length);
         return filteredCards;
     }
 
@@ -320,7 +318,7 @@ var databaseSystem = (function () {
                 }));
             }),
             strings = '<option value="0" data-calc="0">Archetype</option>';
-        console.log(setcodes);
+
         setcodes.forEach(function (setcode) {
             strings = strings + '<option data-calc="' + setcode.num.slice(2) + '" value="' + parseInt(setcode.num, 16) + '">' + setcode.name + '</option>';
         });
@@ -1129,12 +1127,10 @@ var deckEditor = (function () {
         if (typeSelect === '2') {
             currentSearchFilter.setFilter('type', 2);
             currentSearchFilter.setFilter('exacttype', parseInt($('.spellSelect option:selected').val(), 10));
-            console.log(parseInt($('.spellSelect option:selected').val(), 10));
         }
         if (typeSelect === '4') {
             currentSearchFilter.setFilter('type', 4);
             currentSearchFilter.setFilter('exacttype', parseInt($('.trapSelect option:selected').val(), 10));
-            console.log(parseInt($('.trapSelect option:selected').val(), 10));
         }
         doSearch();
     }
@@ -1269,7 +1265,6 @@ var deckEditor = (function () {
     }
 
     function checkLegality(card, deck) {
-		var masterRule = databaseSystem.getBanlist('masterRule');
         function checkCard(reference) {
             var id = card.alias || card.id;
             if (reference.id === id || reference.alias === id) {
@@ -1277,7 +1272,8 @@ var deckEditor = (function () {
             }
             return false;
         }
-        var mainCount = inmemoryDeck.main.filter(checkCard).length,
+        var masterRule = databaseSystem.getBanlist('masterRule'),
+            mainCount = inmemoryDeck.main.filter(checkCard).length,
             extraCount = inmemoryDeck.extra.filter(checkCard).length,
             sideCount = inmemoryDeck.side.filter(checkCard).length;
 
@@ -1299,7 +1295,7 @@ var deckEditor = (function () {
     function spaceCheck() {}
 
     function deckEditorMoveTo(deck) {
-		var masterRule = databaseSystem.getBanlist('masterRule');
+        var masterRule = databaseSystem.getBanlist('masterRule');
         if (deck === 'main' && inmemoryDeck[deck].length >= 60 && masterRule > 0) {
             return false;
         }
@@ -1336,7 +1332,7 @@ var deckEditor = (function () {
     }
 
     function addCardFromSearch(deck) {
-        console.log(deckEditorReference.zone, deck);
+
         if (deckEditorReference.zone === deck) {
             return;
         }
@@ -1455,12 +1451,12 @@ var deckEditor = (function () {
     function upload(ydk) {
         var newDeck = makeDeckfromydk(ydk),
             data = databaseSystem.getDB();
-        console.log(newDeck);
+
         newDeck.creator = localStorage.nickname;
         newDeck.creationDate = new Date();
         newDeck.main = newDeck.main.map(function (cardid) {
             var card = pullcard(parseInt(cardid, 10), data);
-            console.log(cardid, card);
+
             return card;
         });
         newDeck.side = newDeck.side.map(function (cardid) {
@@ -1680,9 +1676,9 @@ $("#deckedit .mainDeck,#deckedit .extraDeck,#deckedit .sideDeck").on("drop", fun
     event.preventDefault();
     event.stopPropagation();
 
-    var from = deckEditorReference.zone;
-    var target = $(this).data('dragzone');
-    var sameIndex = $(this).data('dropindex');
+    var from = deckEditorReference.zone,
+        target = $(this).data('dragzone'),
+        sameIndex = $(this).data('dropindex');
 
     if (from === 'search') {
         deckEditor.addCardFromSearch(target);
