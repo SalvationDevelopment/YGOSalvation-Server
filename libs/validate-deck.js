@@ -17,6 +17,7 @@ function validateDeck(deck, banlist, database, cardpool) {
     var main = {},
         side = {},
         extra = {},
+		packDB = [],
         validate = {
             error: false,
             msg: ''
@@ -184,9 +185,23 @@ function validateDeck(deck, banlist, database, cardpool) {
             return validate; 
         }
     }
+	packDB = packDB.filter(function (card) {
+		if (region && banlist[activeBanlist].endDate) {
+			if (card[region]) {
+				if (card[region].date) {
+					return new Date(banlist[activeBanlist].endDate).getTime() > card[region].date;
+				} else {
+					return false;
+				}
+			} else {
+				return false;
+			}
+		}
+		return true;
+	});
 /* 	if (banlist.region == 'tcg') {
-		var reference = getCardById(card);
 		for (var card in main) {
+			var reference = getCardById(card);
 			if (reference.tcg) {
 				if (reference.tcg.date > banlist.endDate) {
 					console.log(card)
