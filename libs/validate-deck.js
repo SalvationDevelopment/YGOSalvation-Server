@@ -1,10 +1,56 @@
-'use strict';
-
 /*jslint plusplus :true*/
 
+
+function getBanlist() {
+    var banlist = {},
+        files = fs.readdirSync('../http/banlist/');
+    files.forEach(function (filename) {
+        if (filename.indexOf('.js') > -1) {
+            var listname = filename.slice(0, -3);
+            banlist[listname] = require('../http/banlist/' + '/' + filename);
+        }
+    });
+    return banlist;
+}
+
 function validateDeck(deck, banlist, database, cardpool) {
+    'use strict';
+
+    var main = {},
+        side = {},
+        extra = {},
+        region = banlist.region,
+        validate = {
+            error: false,
+            msg: ''
+        },
+        card,
+        packDB = database.filter(function (card) {
+            if (region && banlist.endDate) {
+                if (card[region]) {
+                    if (card[region].date) {
+                        return new Date(banlist.endDate).getTime() > card[region].date;
+                    } else {
+                        return false;
+                    }
+                } else {
+                    return false;
+                }
+            }
+            return true;
+        });
 
     function getCardById(cardId) {
+        var result = database.find(function (card) {
+            if (card.id === parseInt(cardId, 10)) {
+                return true;
+            }
+            return false;
+        });
+        return result || {};
+    }
+
+    function getFilteredCardById(cardId) {
         var result = database.find(function (card) {
             if (card.id === parseInt(cardId, 10)) {
                 return true;
@@ -14,14 +60,8 @@ function validateDeck(deck, banlist, database, cardpool) {
         return result || null;
     }
 
-    var main = {},
-        side = {},
-        extra = {},
-		packDB = [],
-        validate = {
-            error: false,
-            msg: ''
-        };
+
+
     // make sure we can work with the input
     if (!deck.main || !deck.side || !deck.extra || typeof deck.main.forEach !== 'function' || typeof deck.side.forEach !== 'function' || typeof deck.extra.forEach !== 'function') {
         validate.error = true;
@@ -85,9 +125,9 @@ function validateDeck(deck, banlist, database, cardpool) {
         }
     });
     // check amount of cards
-    var card;
+
     for (card in main) {
-		var reference = getCardById(card);
+        var reference = getCardById(card);
         if (main[card] > 3 || side[card] && main[card] + side[card] > 3) {
             validate.error = true;
             validate.msg = "You can't have " + cardAmount + " copies of " + '"' + reference.name + '"';
@@ -95,7 +135,7 @@ function validateDeck(deck, banlist, database, cardpool) {
         }
     }
     for (card in side) {
-		var reference = getCardById(card);
+        var reference = getCardById(card);
         if (side[card] > 3 || main[card] && main[card] + side[card] > 3) {
             validate.error = true;
             validate.msg = "You can't have " + cardAmount + " copies of " + '"' + reference.name + '"';
@@ -103,7 +143,7 @@ function validateDeck(deck, banlist, database, cardpool) {
         }
     }
     for (card in extra) {
-		var reference = getCardById(card);
+        var reference = getCardById(card);
         if (extra[card] > 3 || side[card] && extra[card] + side[card] > 3) {
             validate.error = true;
             validate.msg = "You can't have " + cardAmount + " copies of " + '"' + reference.name + '"';
@@ -113,7 +153,7 @@ function validateDeck(deck, banlist, database, cardpool) {
     // check cardpool 
     console.log('checking against', cardpool);
     for (var card in main) {
-		var reference = getCardById(card);
+        var reference = getCardById(card);
         if (cardpool == 'OCG/TCG' && reference.ot == 4) {
             validate.error = true;
             validate.msg = '"' + reference.name + '"' + " is not allowed in the OCG/TCG card pool";
@@ -131,7 +171,7 @@ function validateDeck(deck, banlist, database, cardpool) {
         }
     }
     for (var card in side) {
-		var reference = getCardById(card);
+        var reference = getCardById(card);
         if (cardpool == 'OCG/TCG' && reference.ot == 4) {
             validate.error = true;
             validate.msg = '"' + reference.name + '"' + " is not allowed in the OCG/TCG card pool";
@@ -149,7 +189,7 @@ function validateDeck(deck, banlist, database, cardpool) {
         }
     }
     for (var card in extra) {
-		var reference = getCardById(card);
+        var reference = getCardById(card);
         if (cardpool == 'OCG/TCG' && reference.ot == 4) {
             validate.error = true;
             validate.msg = '"' + reference.name + '"' + " is not allowed in the OCG/TCG card pool";
@@ -169,7 +209,7 @@ function validateDeck(deck, banlist, database, cardpool) {
     // check banlist, assume banlist is an object generated from ConfigParser()
     for (var card in banlist.bannedCards) {
         var cardAmount = 0,
-			reference = getCardById(card);
+            reference = getCardById(card);
         if (main[card]) {
             cardAmount += main[card];
         }
@@ -182,52 +222,41 @@ function validateDeck(deck, banlist, database, cardpool) {
         if (cardAmount > banlist.bannedCards[card]) {
             validate.error = true;
             validate.msg = "The number of copies of " + '"' + reference.name + '"' + " exceeds the number permitted by the selected Forbidden/Limited Card List";
-            return validate; 
+            return validate;
         }
     }
-	packDB = packDB.filter(function (card) {
-		if (region && banlist[activeBanlist].endDate) {
-			if (card[region]) {
-				if (card[region].date) {
-					return new Date(banlist[activeBanlist].endDate).getTime() > card[region].date;
-				} else {
-					return false;
-				}
-			} else {
-				return false;
-			}
-		}
-		return true;
-	});
-/* 	if (banlist.region == 'tcg') {
-		for (var card in main) {
-			var reference = getCardById(card);
-			if (reference.tcg) {
-				if (reference.tcg.date > banlist.endDate) {
-					console.log(card)
-					validate.error = true;
-					validate.msg = '"' + reference.name + '"' + " does not exist in the selected Forbidden/Limited Card List";
-					return validate;
-				}
-			}
-			else {
-				console.log(card.tcg,card)
-				validate.error = true;
-				validate.msg = '"' + reference.name + '"' + " does not exist in the TCG pack database";
-				return validate;				
-				}
-		}
-	} */
-	if (banlist.masterRule !== 4) {
-		var reference = getCardById(card);
-		for (var card in extra) {
-			if (reference.type >= 33554433) {
-				validate.error = true;
-				validate.msg = "Link Monsters are not permitted by the selected Forbidden/Limited Card List";
-				return validate;
-			}
-		}
-	}	
+    console.log(banlist.region);
+    if (banlist.region == 'tcg') {
+        console.log('checking against tcg');
+        for (var card in main) {
+            var reference = getFilteredCardById(card),
+                subreference = getCardById(card);
+            console.log(reference.name, subreference.tcg.date, new Date(banlist.endDate));
+            if (reference) {
+                if (reference.tcg.date > new Date(banlist.endDate)) {
+                    console.log(card)
+                    validate.error = true;
+                    validate.msg = '"' + subreference.name + '"' + " does not exist in the selected Forbidden/Limited Card List";
+                    return validate;
+                }
+            } else {
+                console.log(card.tcg, card)
+                validate.error = true;
+                validate.msg = '"' + reference.name + '"' + " does not exist in the TCG pack database";
+                return validate;
+            }
+        }
+    }
+    if (banlist.masterRule !== 4) {
+        var reference = getCardById(card);
+        for (var card in extra) {
+            if (reference.type >= 33554433) {
+                validate.error = true;
+                validate.msg = "Link Monsters are not permitted by the selected Forbidden/Limited Card List";
+                return validate;
+            }
+        }
+    }
     return validate;
 }
 
