@@ -959,6 +959,7 @@ function init(callback) {
             state.duelistChat.push('<pre>Mill Cards:  /mill [amount]</pre>');
             state.duelistChat.push('<pre>Reduce LP:   /sub [amount]</pre>');
             state.duelistChat.push('<pre>Increase LP: /add [amount]</pre>');
+            state.duelistChat.push('<pre>RPS:         /rps</pre>');
             state.duelistChat.push('<pre>Flip Coin:   /flip</pre>');
             state.duelistChat.push('<pre>Roll Dice:   /roll</pre>');
             state.duelistChat.push('<pre>Make Token:  /token</pre>');
