@@ -449,7 +449,7 @@
                     <option value="0">OCG</option>
                     <option value="1">TCG</option>
                     <option value="2" selected>OCG/TCG</option>
-                    <option value="3">Anime</option>
+                    <!--<option value="3">Anime</option>-->
                 </select>
                 <br />
                 <label data-translation-banlist>Ban List</label>
@@ -493,7 +493,10 @@
 <input type="checkbox" id="Manual">
 -->
                 <label data-translation-enableprerelease>Enable Pre-release Cards</label>
-                <input type="checkbox" value="checked" checked id="enableprerelease">
+                <select id="enableprerelease">
+                    <option value="0" selected>Yes</option>
+                    <option value="1">No</option>
+                </select>
                 <br />
                 <label data-translation-disablecheckdeck>Disable Check Deck</label>
                 <input type="checkbox" id="discheckdeck">

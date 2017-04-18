@@ -342,7 +342,7 @@ function validateDeck(deck, banlist, database, cardpool, prerelease) {
             }
         }
     }
-/*     if (banlist.masterRule !== 4) {
+    if (banlist.masterRule !== 4) {
         for (var card in extra) {
 			var reference = getCardById(card);
             if (reference.type >= 33554433) {
@@ -351,7 +351,7 @@ function validateDeck(deck, banlist, database, cardpool, prerelease) {
                 return validate;
             }
         }
-    } */
+    }
     return validate;
 }
 
