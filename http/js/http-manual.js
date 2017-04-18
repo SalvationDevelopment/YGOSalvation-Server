@@ -895,9 +895,8 @@ function reveal(cards, note) {
         $('#revealed').css('display', 'block');
     }
     cards.forEach(function (card, index) {
-        var hardcard = JSON.stringify(card),
-            src = (card.id) ? 'https://rawgit.com/SalvationDevelopment/YGOPro-Images/master/' + card.id + '.jpg' : 'img/textures/cover.jpg';
-        src = (note === 'specialcard') ? 'img/textures/' + card.id + '.jpg' : src;
+        var src = (card.id) ? 'https://rawgit.com/SalvationDevelopment/YGOPro-Images/master/' + card.id + '.jpg' : 'img/textures/cover.jpg';
+        src = (note === 'specialcard' || card.note) ? 'img/textures/' + card.id + '.jpg' : src;
         revealcache.push(card);
         html += '<img id="revealuid' + card.uid + '" class="revealedcard" src="' + src + '" data-id="' + card.id + '" onclick = "revealonclick(' + index + ', \'' + note + '\')" data-uid="' + card.uid + '" data-position="' + card.position + card.location + '" / > ';
     });
@@ -2386,14 +2385,12 @@ function sideonclick(index, zone) {
 }
 
 function resolveQuestion(answer) {
+    'use strict';
     console.log('resolving question');
     activeQuestion.answer.push(answer);
 
-    if (activeQuestion.answer >= activeQuestion.answerLength) {
-        manualServer.send(JSON.stringify({
-            action: 'question',
-            answer: activeQuestion
-        }));
+    if (activeQuestion.answer.length >= activeQuestion.answerLength) {
+        manualServer.send(JSON.stringify(activeQuestion));
         $('#revealed, #revealedclose').css('display', 'none');
     }
 }
@@ -2720,7 +2717,6 @@ function makeDescription(id) {
     'use strict';
     var targetCard = getCardObject(parseInt(id, 10)),
         output = "";
-    console.log(targetCard)
     if (!targetCard.desc) {
         return '';
     }
