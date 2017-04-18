@@ -2,6 +2,8 @@
 // Gamelist object acts similar to a Redis server, could be replaced with on but its the gamelist state.
 'use strict';
 
+
+
 var child_process = require('child_process'),
     express = require('express'),
     fs = require('fs'),
@@ -58,7 +60,7 @@ var primus,
     forumValidate = require('./forum-validator.js'),
     currentGlobalMessage = '',
     adminlist = require('../package.json').admins,
-    banlist = require('./bansystem.js'),
+    banlistedUsers = require('./bansystem.js'),
     chatbox = [],
     sayCount = 0;
 
@@ -224,11 +226,11 @@ function registrationCall(data, socket) {
                 info: info,
                 chatbox: chatbox
             });
-            Object.keys(banlist).some(function (bannedUser) {
+            Object.keys(banlistedUsers).some(function (bannedUser) {
                 if (bannedUser.toUpperCase() === data.username.toUpperCase()) {
                     socket.write({
                         clientEvent: 'banned',
-                        reason: banlist[data.username]
+                        reason: banlistedUsers[data.username]
                     });
                     return true;
                 }
