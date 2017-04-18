@@ -328,7 +328,7 @@ module.exports = function (wss) {
                 break;
             }
             if (socket.slot !== undefined) {
-                message.validate = validateDeck(message.deck, banlist[games[activeduel].banlist], database, games[activeduel].cardpool);
+                message.validate = validateDeck(message.deck, banlist[games[activeduel].banlist], database, games[activeduel].cardpool, games[activeduel].prerelease);
                 try {
                     if (message.validate) {
                         if (message.validate.error) {

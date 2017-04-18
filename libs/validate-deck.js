@@ -13,13 +13,15 @@ function getBanlist() {
     return banlist;
 }
 
-function validateDeck(deck, banlist, database, cardpool) {
+function validateDeck(deck, banlist, database, cardpool, prerelease) {
     'use strict';
 
     var main = {},
         side = {},
         extra = {},
         region = banlist.region,
+		today = new Date(),
+		today_date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate(),
         validate = {
             error: false,
             msg: ''
@@ -151,7 +153,7 @@ function validateDeck(deck, banlist, database, cardpool) {
         }
     }
     // check cardpool 
-    console.log('checking against', cardpool);
+/*     console.log('checking against', cardpool);
     for (var card in main) {
         var reference = getCardById(card);
         if (cardpool == 'OCG/TCG' && reference.ot == 4) {
@@ -205,7 +207,7 @@ function validateDeck(deck, banlist, database, cardpool) {
             validate.msg = '"' + reference.name + '"' + " is not allowed in the OCG card pool";
             return validate;
         }
-    }
+    } */
     // check banlist, assume banlist is an object generated from ConfigParser()
     for (var card in banlist.bannedCards) {
         var cardAmount = 0,
@@ -232,31 +234,124 @@ function validateDeck(deck, banlist, database, cardpool) {
             var reference = getFilteredCardById(card),
                 subreference = getCardById(card);
             console.log(reference.name, subreference.tcg.date, new Date(banlist.endDate));
-            if (reference) {
+            if (reference.tcg.date || (reference && cardpool == 'OCG/TCG')) {
                 if (reference.tcg.date > new Date(banlist.endDate)) {
                     console.log(card)
                     validate.error = true;
-                    validate.msg = '"' + subreference.name + '"' + " does not exist in the selected Forbidden/Limited Card List";
+                    validate.msg = '"' + subreference.name + '"' + " does not exist in the timeframe of the selected Forbidden/Limited Card List";
                     return validate;
                 }
             } else {
                 console.log(card.tcg, card)
                 validate.error = true;
-                validate.msg = '"' + reference.name + '"' + " does not exist in the TCG pack database";
+                validate.msg = '"' + reference.name + '"' + " does not exist in the TCG";
+                return validate;
+            }
+        }
+        for (var card in side) {
+            var reference = getFilteredCardById(card),
+                subreference = getCardById(card);
+            console.log(reference.name, subreference.tcg.date, new Date(banlist.endDate));
+            if (reference.tcg.date || (reference && cardpool == 'OCG/TCG')) {
+                if (reference.tcg.date > new Date(banlist.endDate)) {
+                    console.log(card)
+                    validate.error = true;
+                    validate.msg = '"' + subreference.name + '"' + " does not exist in the timeframe of the selected Forbidden/Limited Card List";
+                    return validate;
+                }
+            } else {
+                console.log(card.tcg, card)
+                validate.error = true;
+                validate.msg = '"' + reference.name + '"' + " does not exist in the TCG";
+                return validate;
+            }
+        }
+        for (var card in extra) {
+            var reference = getFilteredCardById(card),
+                subreference = getCardById(card);
+            console.log(reference.name, subreference.tcg.date, new Date(banlist.endDate));
+            if (reference.tcg.date || (reference && cardpool == 'OCG/TCG')) {
+                if (reference.tcg.date > new Date(banlist.endDate)) {
+                    console.log(card)
+                    validate.error = true;
+                    validate.msg = '"' + subreference.name + '"' + " does not exist in the timeframe of the selected Forbidden/Limited Card List";
+                    return validate;
+                }
+            } else {
+                console.log(card.tcg, card)
+                validate.error = true;
+                validate.msg = '"' + reference.name + '"' + " does not exist in the TCG";
                 return validate;
             }
         }
     }
-    if (banlist.masterRule !== 4) {
-        var reference = getCardById(card);
+    if (banlist.region == 'ocg') {
+        console.log('checking against ocg');
+        for (var card in main) {
+            var reference = getFilteredCardById(card),
+                subreference = getCardById(card);
+            console.log(reference.name, subreference.ocg.date, new Date(banlist.endDate));
+            if (reference.ocg.date || (reference && cardpool == 'OCG/TCG')) {
+                if (reference.ocg.date > new Date(banlist.endDate)) {
+                    console.log(card)
+                    validate.error = true;
+                    validate.msg = '"' + subreference.name + '"' + " does not exist in the timeframe of the selected Forbidden/Limited Card List";
+                    return validate;
+                }
+            } else {
+                console.log(card.ocg, card)
+                validate.error = true;
+                validate.msg = '"' + reference.name + '"' + " does not exist in the OCG";
+                return validate;
+            }
+        }
+        for (var card in side) {
+            var reference = getFilteredCardById(card),
+                subreference = getCardById(card);
+            console.log(reference.name, subreference.ocg.date, new Date(banlist.endDate));
+            if (reference.ocg.date || (reference && cardpool == 'OCG/TCG')) {
+                if (reference.ocg.date > new Date(banlist.endDate)) {
+                    console.log(card)
+                    validate.error = true;
+                    validate.msg = '"' + subreference.name + '"' + " does not exist in the timeframe of the selected Forbidden/Limited Card List";
+                    return validate;
+                }
+            } else {
+                console.log(card.ocg, card)
+                validate.error = true;
+                validate.msg = '"' + reference.name + '"' + " does not exist in the OCG";
+                return validate;
+            }
+        }
         for (var card in extra) {
+            var reference = getFilteredCardById(card),
+                subreference = getCardById(card);
+            console.log(reference.name, subreference.ocg.date, new Date(banlist.endDate));
+            if (reference.ocg.date || (reference && cardpool == 'OCG/TCG')) {
+                if (reference.ocg.date > new Date(banlist.endDate)) {
+                    console.log(card)
+                    validate.error = true;
+                    validate.msg = '"' + subreference.name + '"' + " does not exist in the timeframe of the selected Forbidden/Limited Card List";
+                    return validate;
+                }
+            } else {
+                console.log(card.ocg, card)
+                validate.error = true;
+                validate.msg = '"' + reference.name + '"' + " does not exist in the OCG";
+                return validate;
+            }
+        }
+    }
+/*     if (banlist.masterRule !== 4) {
+        for (var card in extra) {
+			var reference = getCardById(card);
             if (reference.type >= 33554433) {
                 validate.error = true;
                 validate.msg = "Link Monsters are not permitted by the selected Forbidden/Limited Card List";
                 return validate;
             }
         }
-    }
+    } */
     return validate;
 }
 
