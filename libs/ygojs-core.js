@@ -1166,7 +1166,12 @@ function init(callback) {
         var player1,
             player2,
             previous1,
-            previous2;
+            previous2,
+            cardMap = {
+                0: 'rock',
+                1: 'paper',
+                2: 'scissors'
+            };
 
         console.log('starting rps');
 
@@ -1191,67 +1196,79 @@ function init(callback) {
             return ((3 + player1 - player2) % 3) - 1; // returns 0 or 1, the winner;
         }
 
-        function notify(after) {
-            callback({
-                names: names,
-                0: {
-                    action: 'rps',
-                    result: [previous1, previous2]
-                },
-                1: {
-                    action: 'rps',
-                    result: [previous1, previous2]
-                },
-                spectators: {}
-            }, stack, after);
+        function notify(reAsk) {
+            revealCallback([{
+                id: cardMap[previous1],
+                value: previous1,
+                note: 'specialCards'
+            }, {
+                id: 'vs',
+                note: 'specialCards'
+            }, {
+                id: cardMap[previous2],
+                value: previous2,
+                note: 'specialCards'
+            }], 0, callback);
+            revealCallback([{
+                id: cardMap[previous1],
+                value: previous1,
+                note: 'specialCards'
+            }, {
+                id: 'vs',
+                note: 'specialCards'
+            }, {
+                id: cardMap[previous2],
+                value: previous2,
+                note: 'specialCards'
+            }], 1, callback);
+            if (reAsk) {
+                setTimeout(reAsk, 2500);
+            }
         }
 
 
         function ask() {
-            console.log('asking rps');
-            var time = (previous1) ? 1000 : 0;
-            setTimeout(function () {
-                question(0, 'specialCards', [{
-                    id: 'rock',
-                    value: 0
-                }, {
-                    id: 'paper',
-                    value: 1
-                }, {
-                    id: 'scissors',
-                    value: 2
-                }], 1, function (answer) {
-                    var result = determineResult(0, answer);
-                    if (result === false) {
-                        notify(ask);
-                        return;
-                    }
-                    if (result !== undefined) {
-                        notify(resolver(result));
-                    }
-                });
-                question(1, 'specialCards', [{
-                    id: 'rock',
-                    value: 0
-                }, {
-                    id: 'paper',
-                    value: 1
-                }, {
-                    id: 'scissors',
-                    value: 2
-                }], 1, function (answer) {
-                    var result = determineResult(1, answer);
-                    if (result === false) {
-                        notify(ask);
-                        return;
-                    }
-                    if (result !== undefined) {
-                        notify(resolver(result));
-                    }
-                });
+            var time = (previous1 !== undefined) ? 3000 : 0;
 
-            }, time);
-
+            question(0, 'specialCards', [{
+                id: 'rock',
+                value: 0
+            }, {
+                id: 'paper',
+                value: 1
+            }, {
+                id: 'scissors',
+                value: 2
+            }], 1, function (answer) {
+                console.log('question', answer);
+                var result = determineResult(0, answer[0]);
+                if (result === false) {
+                    notify(ask);
+                    return;
+                }
+                if (result !== undefined) {
+                    notify(resolver(result));
+                }
+            });
+            question(1, 'specialCards', [{
+                id: 'rock',
+                value: 0
+            }, {
+                id: 'paper',
+                value: 1
+            }, {
+                id: 'scissors',
+                value: 2
+            }], 1, function (answer) {
+                var result = determineResult(1, answer[0]);
+                if (result === false) {
+                    notify(ask);
+                    return;
+                }
+                if (result !== undefined) {
+                    notify(resolver(result));
+                }
+            });
         }
         ask();
     }
