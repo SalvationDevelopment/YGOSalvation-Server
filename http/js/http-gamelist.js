@@ -242,7 +242,7 @@ function getDuelRequest() {
         stnds = isChecked('#usepass') ? ',5,1,L,' : ',5,1,U,',
         randneed = ($('#creategamebanlist').val() > 9) ? 4 : 5;
     out = {
-        string: pretypecheck + $('#creategamecardpool').val() + $('#creategameduelmode').val() + $('#creategametimelimit').val(),
+        string: pretypecheck + $('#creategamecardpool').val() + $('#creategameduelmode').val() + $('#creategametimelimit').val() + $('#enableprerelease').val(),
         checkd: isChecked('#discheckdeck') ? ("T") : ("O"),
         shuf: isChecked('#disshuffledeck') ? ("T") : ("O"),
         stnds: "," + $('#creategamebanlist').val() + stnds,

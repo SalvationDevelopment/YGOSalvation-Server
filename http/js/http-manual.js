@@ -283,7 +283,7 @@ function updateloby(state) {
     $('#lobbycdpt').text(state.drawcount);
     $('#lobbyallowed').text(state.cardpool);
     $('#lobbygamemode').text(state.mode);
-    //$('#lobbyprerelease').boolean(state.prerelease);
+    $('#lobbyprerelease').text(state.prerelease);
     if (state.ishost) {
         $('#lobbystart').css('display', 'inline-block');
     } else {
