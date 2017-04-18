@@ -9,7 +9,8 @@ var sound = {};
 var internalLocal = internalLocal;
 
 var legacyMode = true,
-    activelyDueling = false;
+    activelyDueling = false,
+    activeQuestion;
 
 (function () {
     'use strict';
@@ -221,6 +222,7 @@ var avatarMap = {};
 
 
 function loadScreen() {
+    'use strict';
     $('#slidevaluex').val(localStorage.x);
     $('#slidevaluey').val(localStorage.y);
     $('#scaledvalue').val(localStorage.scaledvalue);
@@ -884,6 +886,7 @@ function reveal(cards, note) {
     'use strict';
     var html = '';
     revealcache = [];
+    note = note || '';
     console.log('note', note);
     $('#revealedclose').css('display', 'block');
     $('#revealed').css('display', 'flex');
@@ -894,6 +897,7 @@ function reveal(cards, note) {
     cards.forEach(function (card, index) {
         var hardcard = JSON.stringify(card),
             src = (card.id) ? 'https://rawgit.com/SalvationDevelopment/YGOPro-Images/master/' + card.id + '.jpg' : 'img/textures/cover.jpg';
+        src = (note === 'specialcard') ? 'img/textures/' + card.id + '.jpg' : src;
         revealcache.push(card);
         html += '<img id="revealuid' + card.uid + '" class="revealedcard" src="' + src + '" data-id="' + card.id + '" onclick = "revealonclick(' + index + ', \'' + note + '\')" data-uid="' + card.uid + '" data-position="' + card.position + card.location + '" / > ';
     });
@@ -1102,6 +1106,16 @@ function manualMoveGeneric(index, zone) {
     manualServer.send(JSON.stringify(message));
 }
 
+function question(message) {
+    'use strict';
+    var type = message.type;
+    activeQuestion = message;
+    activeQuestion.answer = [];
+    if (type === 'specialCards') {
+        reveal(activeQuestion.options, 'specialcard');
+    }
+}
+
 function manualReciver(message) {
     'use strict';
 
@@ -1276,10 +1290,13 @@ function manualReciver(message) {
         duelstash = message;
         break;
     case "reveal":
-        reveal(message.reveal, message.call);
+        reveal(message.reveal);
         break;
-    case 'removeCard':
+    case "removeCard":
         $('#uid' + message.info.removed).css('display', 'none').attr('data-deletedToken', true).attr('class', '').attr('id', 't' + message.info.removed);
+        break;
+    case "question":
+        question(message);
         break;
     default:
         break;
@@ -2368,11 +2385,24 @@ function sideonclick(index, zone) {
     return;
 }
 
+function resolveQuestion(answer) {
+    activeQuestion.answer.push(answer);
 
+    if (activeQuestion.answer >= activeQuestion.answerLength) {
+        manualServer.send(JSON.stringify({
+            action: 'question',
+            answer: activeQuestion
+        }));
+    }
+}
 
-function revealonclick(card) {
+function revealonclick(card, note) {
     'use strict';
 
+    if (note) {
+        resolveQuestion(card);
+        return;
+    }
     revealcacheIndex = card;
     manualActionReference = revealcache[card];
     $('#manualcontrols button').css({
@@ -3277,6 +3307,14 @@ function manualFlip() {
     }));
 }
 
+function manualRPS() {
+    'use strict';
+    manualServer.send(JSON.stringify({
+        action: 'rps',
+        name: localStorage.nickname
+    }));
+}
+
 $('#lobbychatinput, #sidechatinput, #spectatorchatinput').keypress(function (e) {
     'use strict';
     if ($(e.currentTarget).val().length === 0) {
@@ -3317,6 +3355,11 @@ $('#lobbychatinput, #sidechatinput, #spectatorchatinput').keypress(function (e) 
         if (parts[0] === '/token') {
             $(e.currentTarget).val('');
             manualToken();
+            return;
+        }
+        if (parts[0] === '/rps') {
+            $(e.currentTarget).val('');
+            manualRPS();
             return;
         }
 
