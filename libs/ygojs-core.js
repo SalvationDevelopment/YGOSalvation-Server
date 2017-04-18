@@ -1,8 +1,9 @@
 /*jslint node:true, plusplus:true, bitwise : true, nomen:true*/
 'use strict';
 
-var fs = require('fs');
-
+var fs = require('fs'), // file system access
+    EventEmitter = require('events'), // a way to "notice" things occuring
+    uniqueIdenifier = require('uuid/v1'); // time based unique identifier, RFC4122 version 1
 
 /**
  * Constructor for card objects.
@@ -191,7 +192,8 @@ function init(callback) {
         callback = function (view, internalState) {};
     }
 
-    var stack = [],
+    var answerListener = new EventEmitter(),
+        stack = [],
         previousStack = [],
         outstack = [],
         names = ['', ''],
@@ -300,7 +302,7 @@ function init(callback) {
             SPELLZONE: spellzone,
             MONSTERZONE: monsterzone,
             EXCAVATED: excavated,
-            INMATERIAL : inmaterial
+            INMATERIAL: inmaterial
         };
     }
 
@@ -330,7 +332,7 @@ function init(callback) {
             SPELLZONE: hideViewOfZone(spellzone),
             MONSTERZONE: hideViewOfZone(monsterzone),
             EXCAVATED: hideViewOfZone(excavated),
-            INMATERIAL : inmaterial
+            INMATERIAL: inmaterial
         };
     }
 
@@ -1138,6 +1140,122 @@ function init(callback) {
         duelistChat('Server', username + ' surrendered.');
     }
 
+    function question(player, type, options, answerLength, onAnswerFromUser) {
+        var uuid = uniqueIdenifier(),
+            output = {
+                names: names,
+                0: {},
+                1: {},
+                spectators: {}
+            };
+
+
+        output[player] = {
+            action: 'question',
+            type: type,
+            options: options,
+            answerLength: answerLength,
+            uuid: uuid
+        };
+        console.log('sending question', output);
+        answerListener.once(uuid, onAnswerFromUser);
+        callback(output, stack);
+    }
+
+    function rps(resolver) {
+        var player1,
+            player2,
+            previous1,
+            previous2;
+
+        console.log('starting rps');
+
+        function determineResult(player, answer) {
+            console.log('determining', player, answer);
+            if (player === 0) {
+                player1 = answer;
+            }
+            if (player === 1) {
+                player2 = answer;
+            }
+            if (player1 === undefined || player2 === undefined) {
+                return undefined;
+            }
+            previous1 = player1;
+            previous2 = player2;
+            if (player1 === player2) {
+                player1 = undefined;
+                player2 = undefined;
+                return false;
+            }
+            return ((3 + player1 - player2) % 3) - 1; // returns 0 or 1, the winner;
+        }
+
+        function notify(after) {
+            callback({
+                names: names,
+                0: {
+                    action: 'rps',
+                    result: [previous1, previous2]
+                },
+                1: {
+                    action: 'rps',
+                    result: [previous1, previous2]
+                },
+                spectators: {}
+            }, stack, after);
+        }
+
+
+        function ask() {
+            console.log('asking rps');
+            var time = (previous1) ? 1000 : 0;
+            setTimeout(function () {
+                question(0, 'specialCards', [{
+                    id: 'rock',
+                    value: 0
+                }, {
+                    id: 'paper',
+                    value: 1
+                }, {
+                    id: 'scissors',
+                    value: 2
+                }], 1, function (answer) {
+                    var result = determineResult(0, answer);
+                    if (result === false) {
+                        notify(ask);
+                        return;
+                    }
+                    if (result !== undefined) {
+                        notify(resolver(result));
+                    }
+                });
+                question(1, 'specialCards', [{
+                    id: 'rock',
+                    value: 0
+                }, {
+                    id: 'paper',
+                    value: 1
+                }, {
+                    id: 'scissors',
+                    value: 2
+                }], 1, function (answer) {
+                    var result = determineResult(1, answer);
+                    if (result === false) {
+                        notify(ask);
+                        return;
+                    }
+                    if (result !== undefined) {
+                        notify(resolver(result));
+                    }
+                });
+
+            }, time);
+
+        }
+        ask();
+    }
+
     //expose public functions.
     return {
         startSide: startSide,
@@ -1190,7 +1308,9 @@ function init(callback) {
         sideAccept: 0,
         setNames: setNames,
         getStack: getStack,
-        setTurnPlayer: setTurnPlayer
+        setTurnPlayer: setTurnPlayer,
+        answerListener: answerListener,
+        rps: rps
     };
 
 
