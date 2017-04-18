@@ -2386,6 +2386,7 @@ function sideonclick(index, zone) {
 }
 
 function resolveQuestion(answer) {
+    console.log('resolving question');
     activeQuestion.answer.push(answer);
 
     if (activeQuestion.answer >= activeQuestion.answerLength) {
@@ -2393,6 +2394,7 @@ function resolveQuestion(answer) {
             action: 'question',
             answer: activeQuestion
         }));
+        $('#revealed, #revealedclose').css('display', 'none');
     }
 }
 
@@ -2718,8 +2720,8 @@ function makeDescription(id) {
     'use strict';
     var targetCard = getCardObject(parseInt(id, 10)),
         output = "";
-    if (!targetCard) {
-        //        return '<span class="searchError">An error occurred while looking up the card in our database.<br />Please report this issue <a href="' + forumLink + '" target="_blank">at our forums</a> and be sure to include following details:<br /><br />Subject: Deck Editor Error<br />Function Call: makeDescription(' + id + ')<br />User Agent: ' + navigator.userAgent + '</span>';
+    console.log(targetCard)
+    if (!targetCard.desc) {
         return '';
     }
     output += '<div class="descContainer"><span class="cardName">' + targetCard.name + ' [' + id + ']</span><br />';
