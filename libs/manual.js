@@ -585,7 +585,7 @@ module.exports = function (wss) {
             }
             stateSystem[activeduel].rps(function (result) {
                 var winner = 'Player ' + (1 + result);
-                stateSystem[generated].duelistChat('Server', winner + ' won.');
+                stateSystem[activeduel].duelistChat('Server', games[activeduel].player[socket.slot].name + ' ' + winner + ' won.');
             });
             break;
         case "reveal":
@@ -593,6 +593,13 @@ module.exports = function (wss) {
                 break;
             }
             stateSystem[activeduel].revealCallback(stateSystem[activeduel].findUIDCollection(message.card.uid), socket.slot, 'revealHandSingle');
+            break;
+        case "question":
+            console.log('got question', message);
+            if (socket.slot === undefined) {
+                break;
+            }
+            stateSystem[activeduel].answerListener.emit(message.uuid, message.answer);
             break;
         case "getLog":
             if (socket.slot === undefined) {
