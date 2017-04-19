@@ -45,7 +45,7 @@
     "zip-folder": "*"
   },
   "optionalDependencies": {
-    "electron": "*",
+    "electron": "^1.6.5",
     "httpsys": "*"
   },
   "devDependencies": {
