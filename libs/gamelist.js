@@ -587,13 +587,6 @@ function onData(data, socket) {
             data.decks[i].side = mapCards(data.decks[i].side); //further due to the abstract
             data.decks[i].extra = mapCards(data.decks[i].extra); //of data.decks, afaik
 } //unsure if loop should run through all decks for a single save; might be resource intensive
-               console.log(data.decks[1].main); //returns an array of objects with id properties
-               console.log(data.decks[2].main);
-               console.log(data.decks[0].main);
-//               console.log(data.decks[1].main.id); //returns undefined
-//               console.log(data.decks[1].main[id]); //this statement causes crashing
-//               console.log(data.decks) //abstracts too much to use with mapCards
-//               console.log(data.decks[0].main[0].id) //returns the ids themselves
         deckStorage.update({
             username: data.username
         }, data, {
@@ -609,6 +602,12 @@ function onData(data, socket) {
         break;
     case 'load':
         console.log(data);
+        if (data.decks) { //if it doesn't exist [].length will scream at you
+            for (var i = 0; i < data.decks.length; i++) {
+                data.decks[i].main = mapCards(data.decks[i].main); 
+                data.decks[i].side = mapCards(data.decks[i].side);
+                data.decks[i].extra = mapCards(data.decks[i].extra);
+        }}
         deckStorage.find({
             username: data.username
         }, function (error, docs) {
