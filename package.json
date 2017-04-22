@@ -1,17 +1,11 @@
 {
-
     "name": "ygopro-salvation-server",
     "description": "YGOPro US Server (Salvation) - Saving Yu-Gi-Oh!",
     "main": "application.js",
     "version": "5.0.0",
     "private": true,
-    "keywords": [
-
-    "ygopro",
-    "Salvation Development",
-    "yugioh"
-  ],
-    << << << < HEAD "repository": {
+    "keywords": ["ygopro", "Salvation Development", "yugioh"],
+    "repository": {
         "type": "git",
         "url": "https://github.com/salvationdevelopment/YGOPro-Salvation-Server.git"
     },
