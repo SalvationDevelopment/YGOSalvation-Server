@@ -17,7 +17,7 @@ module.exports = {
     bannedTypes: [],
     exceptions: [],
     startDate: new Date('2002-05-01'),
-    endDate: new Date('2002-07-01'),
+    endDate: new Date('2002-06-25'),
     name: '2002.5.1 (TCG)',
     masterRule: 0,
     region: 'tcg'
