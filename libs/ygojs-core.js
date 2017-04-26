@@ -422,9 +422,17 @@ function init(callback) {
     }
 
     //finds a card, then moves it elsewhere.
-    function setState(player, clocation, index, moveplayer, movelocation, moveindex, moveposition, overlayindex, uid) {
-        console.log('set:', player, clocation, index, moveplayer, movelocation, moveindex, moveposition, overlayindex, uid);
-        var target = queryCard(player, clocation, index, 0, uid),
+    function setState(changeRequest) {
+        var player = changeRequest.player,
+            clocation = changeRequest.clocation,
+            index = changeRequest.index,
+            moveplayer = changeRequest.moveplayer,
+            movelocation = changeRequest.movelocation,
+            moveindex = changeRequest.moveindex,
+            moveposition = changeRequest.moveposition,
+            overlayindex = changeRequest.overlayindex,
+            uid = changeRequest.uid,
+            target = queryCard(player, clocation, index, 0, uid),
             pointer = uidLookup(target.uid),
             zone;
 
@@ -523,7 +531,17 @@ function init(callback) {
         for (i = 0; i < numberOfCards; i++) {
             deck = filterlocation(filterPlayer(stack, player), 'DECK');
             topcard = deck[deck.length - 1];
-            setState(topcard.player, 'DECK', topcard.index, player, 'HAND', currenthand + i, 'FaceUp', 0, topcard.uid);
+            setState({
+                player: topcard.player,
+                clocation: 'DECK',
+                index: topcard.index,
+                moveplayer: player,
+                movelocation: 'HAND',
+                moveindex: currenthand + i,
+                moveposition: 'FaceUp',
+                overlayindex: 0,
+                uid: topcard.uid
+            });
             target = queryCard(player, 'HAND', (currenthand + i), 0);
             pointer = uidLookup(target.uid);
             //stack[pointer].id = cards[i].Code;
@@ -543,7 +561,17 @@ function init(callback) {
 
         for (i = 0; i < numberOfCards; i++) {
             topcard = filterlocation(filterPlayer(stack, player), 'DECK').length - 1;
-            setState(player, 'DECK', topcard, player, 'EXCAVATED', currenthand + i, 'FaceDown', 0);
+            setState({
+                player: player,
+                clocation: 'DECK',
+                index: topcard,
+                moveplayer: player,
+                movelocation: 'EXCAVATED',
+                moveindex: currenthand + i,
+                moveposition: 'FaceDown',
+                overlayindex: 0,
+                uid: undefined
+            });
             target = queryCard(player, 'EXCAVATED', (currenthand + i), 0);
             pointer = uidLookup(target.uid);
             //stack[pointer].id = cards[i].Code;
@@ -565,7 +593,17 @@ function init(callback) {
 
         for (i = 0; i < numberOfCards; i++) {
             topcard = filterlocation(filterPlayer(stack, player), 'DECK').length - 1;
-            setState(player, 'DECK', topcard, player, 'GRAVE', currentgrave, 'FaceUp', 0);
+            setState({
+                player: player,
+                clocation: 'DECK',
+                index: topcard,
+                moveplayer: player,
+                movelocation: 'GRAVE',
+                moveindex: currentgrave,
+                moveposition: 'FaceUp',
+                overlayindex: 0,
+                uid: undefined
+            });
         }
         callback(generateView(), stack);
     }
@@ -584,7 +622,18 @@ function init(callback) {
 
         for (i = 0; i < numberOfCards; i++) {
             topcard = filterlocation(filterPlayer(stack, player), 'DECK').length - 1;
-            setState(player, 'DECK', topcard, player, 'REMOVED', currentgrave, 'FaceUp', 0);
+            setState({
+                player: player,
+                clocation: 'DECK',
+                index: topcard,
+                moveplayer: player,
+                movelocation: 'REMOVED',
+                moveindex: currentgrave,
+                moveposition: 'FaceUp',
+                overlayindex: 0,
+                uid: undefined
+            });
+
         }
         callback(generateView(), stack);
     }
@@ -603,7 +652,17 @@ function init(callback) {
 
         for (i = 0; i < numberOfCards; i++) {
             topcard = filterlocation(filterPlayer(stack, player), 'DECK').length - 1;
-            setState(player, 'DECK', topcard, player, 'REMOVED', currentgrave, 'FaceDown', 0);
+            setState({
+                player: player,
+                clocation: 'DECK',
+                index: topcard,
+                moveplayer: player,
+                movelocation: 'REMOVED',
+                moveindex: currentgrave,
+                moveposition: 'FaceDown',
+                overlayindex: 0,
+                uid: undefined
+            });
         }
         callback(generateView(), stack);
     }
