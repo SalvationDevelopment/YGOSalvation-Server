@@ -385,7 +385,7 @@ module.exports = function (wss) {
             if (socket.slot === undefined) {
                 break;
             }
-            stateSystem[activeduel].setState(message.player, message.clocation, message.index, message.moveplayer, message.movelocation, message.moveindex, message.moveposition, message.overlayindex, message.uid);
+            stateSystem[activeduel].setState(message);
             break;
         case "revealTop":
             if (socket.slot === undefined) {
