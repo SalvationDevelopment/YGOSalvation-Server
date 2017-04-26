@@ -538,7 +538,7 @@ function init(callback) {
                 moveplayer: player,
                 movelocation: 'HAND',
                 moveindex: currenthand + i,
-                position: 'FaceUp',
+                moveposition: 'FaceUp',
                 overlayindex: 0,
                 uid: topcard.uid
             });
@@ -568,7 +568,7 @@ function init(callback) {
                 moveplayer: player,
                 movelocation: 'EXCAVATED',
                 moveindex: currenthand + i,
-                position: 'FaceDown',
+                moveposition: 'FaceDown',
                 overlayindex: 0,
                 uid: undefined
             });
@@ -600,7 +600,7 @@ function init(callback) {
                 moveplayer: player,
                 movelocation: 'GRAVE',
                 moveindex: currentgrave,
-                position: 'FaceUp',
+                moveposition: 'FaceUp',
                 overlayindex: 0,
                 uid: undefined
             });
@@ -629,7 +629,7 @@ function init(callback) {
                 moveplayer: player,
                 movelocation: 'REMOVED',
                 moveindex: currentgrave,
-                position: 'FaceUp',
+                moveposition: 'FaceUp',
                 overlayindex: 0,
                 uid: undefined
             });
@@ -659,7 +659,7 @@ function init(callback) {
                 moveplayer: player,
                 movelocation: 'REMOVED',
                 moveindex: currentgrave,
-                position: 'FaceDown',
+                moveposition: 'FaceDown',
                 overlayindex: 0,
                 uid: undefined
             });
