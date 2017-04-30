@@ -305,11 +305,12 @@
     "0xf6": "Skyscraper",
     "0xf7": "Lyrilusc",
     "0x10f8": "Supreme King Gate",
-    "0x20f8": "Supreme King Servant Dragon",
+    "0x20f8": "Supreme King Dragon",
     "0xf9": "True Draco",
-    "0xfa": "Phantasmagoric Dragon",
-    "0x1fb": "Trickster",
-    "0x1fc": "Gouki",
-    "0x1fd": "Star Grail",
-	"0x1fe": "Star Relic"
+    "0xfa": "Phantasm Spiral",
+    "0xfb": "Trickstar",
+    "0xfc": "Gouki",
+    "0xfd": "Stargrail",
+    "0xfe": "Starrelic",
+    "0xff": "Clear Wing"
 }
