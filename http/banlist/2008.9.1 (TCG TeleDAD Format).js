@@ -118,7 +118,7 @@ module.exports = {
     exceptions: [],
     startDate: new Date('2008-09-01'),
     endDate: new Date('2009-02-27'),
-    name: '2008.9.1 (TCG TeleDAD)',
+    name: '2008.9.1 (TCG TeleDAD Format)',
     masterRule: 1,
     region: 'tcg'
 
