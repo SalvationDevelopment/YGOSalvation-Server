@@ -2370,7 +2370,7 @@ function sideonclick(index, zone) {
         });
     }
     if (sideReference.zone === 'side') {
-        if (cardIs('xyz', dbEntry) || cardIs('fusion', dbEntry) || cardIs('synchro', dbEntry)) {
+        if (cardIs('xyz', dbEntry) || cardIs('fusion', dbEntry) || cardIs('synchro', dbEntry) || cardIs('link', dbEntry)) {
             $('.s-toextra').css({
                 'display': 'block'
             });
@@ -2999,7 +2999,7 @@ function guicardonclick() {
                     'display': 'none'
                 });
             }
-            if (stackunit.position === 'FaceUpDefence') {
+            if (stackunit.position === 'FaceUpDefence' || cardIs('link', dbEntry)) {
                 $('#toDefence, .countercontroller').css({
                     'display': 'none'
                 });
