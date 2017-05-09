@@ -1013,9 +1013,12 @@ function init(callback) {
             stack.push(makeCard('EXTRA', 1, index, stack.length, card));
         });
         if (manual) {
-            state.duelistChat.push('<pre>Commands:</pre>');
+            state.duelistChat.push('<pre>!!! READ BELOW FOR GAME COMMANDS</pre>');
+            state.duelistChat.push('<pre>--Commands--</pre>');
             state.duelistChat.push('<pre>Draw Cards:  /draw [amount]</pre>');
             state.duelistChat.push('<pre>Mill Cards:  /mill [amount]</pre>');
+            state.duelistChat.push('<pre>Banish Mill Cards:  /banish [amount]</pre>');
+            state.duelistChat.push('<pre>Banish Mill Cards Face-down:  /banishfd [amount]</pre>');
             state.duelistChat.push('<pre>Reduce LP:   /sub [amount]</pre>');
             state.duelistChat.push('<pre>Increase LP: /add [amount]</pre>');
             state.duelistChat.push('<pre>RPS:         /rps</pre>');
