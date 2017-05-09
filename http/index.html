@@ -1819,7 +1819,7 @@
             <button class="m-deck" onclick="manualRevealTop()">Reveal Top Card</button>
             <button class="m-deck" onclick="manualRevealBottom()">Reveal Bottom Card</button>
             <button class="m-deck" onclick="manualMillRemovedCard()">Banish Top Card</button>
-            <button class="m-deck" onclick="manualMillRemovedCardFaceDown()">Banish Facedown</button>
+            <button class="m-deck" onclick="manualMillRemovedCardFaceDown()">Banish Face-down</button>
             <button class="m-deck" onclick="manualExcavateTop()">Excavate</button>
             <button class="m-deck" onclick="manualShuffleDeck()">Shuffle Deck</button>
             <button class="m-deck" onclick="manualViewDeck()">View Deck</button>
@@ -1857,12 +1857,12 @@
             <button class="m-field st-field" onclick="manualToHand();">To Hand</button>
             <button class="v-deck v-grave v-removed v-excavate v-extra-p" onclick="manualToHand(); manualRevealHandSingle(); v-excavate">Reveal and Add to Hand</button>
 
-            <button class="m-hand-p m-monster-p m-monster-to-extra-faceup" onclick="manualToExtraFaceUp()">To Extra Deck Face Up</button>
+            <button class="m-hand-p m-monster-p m-monster-to-extra-faceup" onclick="manualToExtraFaceUp()">To Extra Deck Face-up</button>
             <button class="m-monster-extra v-monster-extra" onclick="manualToExtra()">To Extra Deck</button>
 
-            <button class="m-hand-m non-link v-extra" onclick="startSpecialSummon('def')">Special Summon in Defense</button>
+            <button class="m-hand-m non-link v-extra non-spell" onclick="startSpecialSummon('def')">Special Summon in Defense</button>
             <button class="m-hand-m v-extra non-spell" onclick="startSpecialSummon('atk')">Special Summon in Attack</button>
-            <button class="m-hand-m " onclick="startSpecialSummon('normaldef')">Set Monster</button>
+            <button class="m-hand-m non-grave" onclick="startSpecialSummon('normaldef')">Set Monster</button>
             <button class="m-hand-m non-grave" onclick="startSpecialSummon('normalatk')">Normal Summon</button>
 
 
@@ -1871,21 +1871,22 @@
 
 
             <!--            <button class="m-monster">Change Owner</button>-->
-            <button class="m-st" id="flipDown" onclick="manualSTFlipDown()">Flip Face Down</button>
-            <button class="m-st" id="flipUp" onclick="manualActivate()">Flip Face Up</button>
+            <button class="m-st" id="flipDown" onclick="manualSTFlipDown()">Flip Face-down</button>
+            <button class="m-st" id="flipUp" onclick="manualActivate()">Flip Face-up</button>
             <button class="m-monster m-st" onclick="startSpecialSummon('generic')">Move</button>
 
             <button class="m-monster m-st countercontroller" onclick="manualAddCounter()">Add Counter</button>
             <button class="m-monster m-st countercontroller" id="removeCounter" onclick="manualRemoveCounter()">Remove Counter</button>
             <button class="" id="viewStack" onclick="manualViewXYZMaterials()">View</button>
             <button class="m-monster m-monster-xyz v-monster-xyz" id="overlayStack" onclick="startXYZSummon()">Overlay</button>
-            <button class="m-monster non-link non-extra" onclick="manualToFaceDownDefence()">Flip Facedown</button>
+            <button class="m-monster" id="flipUpMonster" onclick="manualToFaceUpDefence()">Flip Face-up</button>
+            <button class="m-monster" id="flipDownMonster" onclick="manualToFaceDownDefence()">Flip Face-down</button>
             <button class="m-monster" id="toAttack" onclick="manualToAttack()">To Attack</button>
             <button class="m-field" id="toDefence" onclick="manualToDefence()">To Defense</button>
             <button class="m-monster-token" onclick="manualRemoveToken()">Remove Token</button>
             <button class="m-hand-p m-monster-p" onclick="manualToPZoneL()">To Left Pendulumn Zone</button>
             <button class="m-hand-p m-monster-p" onclick="manualToPZoneR()">To Right Pendulumn Zone</button>
-            <button class="m-parasite" onclick="manualSendToDeckFaceup()">Send to Deck FaceUp</button>
+            <button class="m-parasite" onclick="manualSendToDeckFaceup()">Send to Deck Face-up</button>
 
 
             <button class="a-field" onclick="startAttack()">Attack</button>

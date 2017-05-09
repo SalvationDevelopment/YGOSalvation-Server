@@ -1877,13 +1877,22 @@ function manualToDefence() {
     manualServer.send(JSON.stringify(message));
 }
 
-
-
 function manualToFaceDownDefence() {
     'use strict';
 
     var index = manualActionReference.index,
         end = setMonster(manualActionReference, index),
+        message = makeCardMovement(manualActionReference, end);
+
+    message.action = 'moveCard';
+    manualServer.send(JSON.stringify(message));
+}
+
+function manualToFaceUpDefence() {
+    'use strict';
+
+    var index = manualActionReference.index,
+        end = defenceMonster(manualActionReference, index),
         message = makeCardMovement(manualActionReference, end);
 
     message.action = 'moveCard';
@@ -2995,12 +3004,17 @@ function guicardonclick() {
                 });
             }
             if (stackunit.position === 'FaceUpAttack') {
-                $('#toAttack').css({
+                $('#toAttack, #flipUpMonster').css({
                     'display': 'none'
                 });
             }
-            if (stackunit.position === 'FaceUpDefence' || cardIs('link', dbEntry)) {
-                $('#toDefence, .countercontroller').css({
+            if (cardIs('link', dbEntry)) {
+                $('#toDefence, #flipUpMonster, #flipDownMonster, #flipDown').css({
+                    'display': 'none'
+                });
+            }
+            if (stackunit.position === 'FaceUpDefence') {
+                $('#toDefence, #flipUpMonster, .countercontroller').css({
                     'display': 'none'
                 });
             }
@@ -3010,7 +3024,7 @@ function guicardonclick() {
                 });
             }
             if (stackunit.position === 'FaceDownDefence') {
-                $('#toDefence, #flipDown, #signalEffect, .countercontroller').css({
+                $('#toDefence, #flipDown, #signalEffect, #flipDownMonster, #overlayStack, .countercontroller').css({
                     'display': 'none'
                 });
             }
