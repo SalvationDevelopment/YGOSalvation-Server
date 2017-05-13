@@ -1,4 +1,4 @@
-/*jslint browser:true, plusplus:true, bitwise:true*/
+﻿/*jslint browser:true, plusplus:true, bitwise:true*/
 /*global WebSocket, $, singlesitenav, console, enums, alert,  confirm, deckEditor, FileReader, databaseSystem, alertmodal*/
 
 
@@ -2710,8 +2710,12 @@ function parseLevelScales(card) {
         rightScale,
         pendulumLevel,
         level = card.level,
-        ranklevel = (cardIs('xyz', card)) ? '☆' : '★';
-    if (level > 0 && level <= 12) {
+        ranklevel = (cardIs('xyz', card)) ? '☆ Rank ' : '★ Level ';
+    if (cardIs('link', card)) {
+        output += '<span class="levels">' + ' Link ' + level;
+        //def = '-';
+    }
+    else if (level > 0 && level <= 12) {
         output += '<span class="levels">' + ranklevel + level;
 
     } else {
@@ -2719,14 +2723,14 @@ function parseLevelScales(card) {
         leftScale = (card.level >> 0x18) & 0xff; // first digit: left scale in hex (0-16)
         rightScale = (card.level >> 0x10) & 0xff; // third digit: right scale in hex (0-16)
         pendulumLevel = card.level & 0xff; // seventh digit: level of the monster in hex (technically, all 4 digits are levels, but here we only need the last char)
-        output += '<span class="levels">' + ranklevel + pendulumLevel + '</span> <span class="scales"><< ' + leftScale + ' | ' + rightScale + ' >>';
+        output += '<span class="levels">' + ranklevel + pendulumLevel + '</span> <span class="scales">⬖ Scale ' + leftScale;
     }
     return output + '</span>';
 }
 
 function parseAtkDef(atk, def) {
     'use strict';
-    return ((atk < 0) ? "?" : atk) + " / " + ((def < 0) ? "?" : def);
+    return ((atk < 0) ? "ATK ?" : "ATK "+atk) + " / " + ((def < 0 && def != '-') ? "DEF ?" : "DEF "+def);
 }
 
 function makeDescription(id) {
