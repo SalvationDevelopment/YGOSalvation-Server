@@ -314,5 +314,8 @@
     "0xfc": "Gouki",
     "0xfd": "Stargrail",
     "0xfe": "Starrelic",
-    "0xff": "Clear Wing"
+    "0xff": "Clear Wing",
+    "0x200": "Bonding",
+    "0x201": "Vullet",
+    "0x202": "Metaphys"
 }
