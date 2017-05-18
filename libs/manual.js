@@ -229,7 +229,7 @@ module.exports = function (wss) {
             }));
             socket.slot = 0;
             setTimeout(function () {
-                stateSystem[generated].duelistChat('Gamelist', '90min Time limit reached. Ending Duel');
+                stateSystem[generated].duelistChat('Gamelist', '90min Time limit reached. Ending the duel');
                 delete games[generated];
                 delete stateSystem[generated];
             }, 10800000); // 180 mins.
@@ -288,6 +288,12 @@ module.exports = function (wss) {
             socket.slot = undefined;
             if (games[activeduel]) {
                 if (games[activeduel].player[0].name === '' && games[activeduel].player[1].name === '') {
+                    delete games[activeduel];
+                }
+            }
+            if (games[activeduel]) {
+                if ((games[activeduel].player[0].name === '' || games[activeduel].player[1].name === '') && games[activeduel].started === true) {
+                    stateSystem[activeduel].duelistChat('Server', 'Player left the game. Duel has ended.');
                     delete games[activeduel];
                 }
             }
