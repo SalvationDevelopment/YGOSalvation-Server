@@ -481,7 +481,7 @@ module.exports = function (wss) {
             if (socket.slot === undefined) {
                 break;
             }
-            stateSystem[activeduel].shuffleDeck(socket.slot);
+            stateSystem[activeduel].shuffleDeck(socket.slot, games[activeduel].player[socket.slot].name, message.player);
             break;
         case "shuffleHand":
             if (socket.slot === undefined) {
