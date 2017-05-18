@@ -765,9 +765,9 @@ function init(callback) {
      */
     function viewGrave(player, username, requester) {
         if (player === requester) {
-            state.duelistChat.push('<pre>' + username + ' is viewing their gaveyard.</pre>');
+            state.duelistChat.push('<pre>' + username + ' is viewing their graveyard.</pre>');
         } else {
-            state.duelistChat.push('<pre>' + username + ' is viewing your gaveyard.</pre>');
+            state.duelistChat.push('<pre>' + username + ' is viewing your graveyard.</pre>');
         }
         var deck = filterlocation(filterPlayer(stack, player), 'GRAVE').sort(sortByIndex).reverse(),
             result = {
@@ -833,9 +833,7 @@ function init(callback) {
             call: 'view',
             player: player
         };
-
         callback(result, stack);
-
     }
 
     function viewExtra(player, username) {
@@ -845,7 +843,7 @@ function init(callback) {
                 1: {},
                 sepectators: {}
             };
-        state.duelistChat.push('<pre>' + username + ' is viewing their extra deck..</pre>');
+        state.duelistChat.push('<pre>' + username + ' is viewing their extra deck.</pre>');
 
         result[player] = {
             action: 'reveal',
@@ -872,7 +870,7 @@ function init(callback) {
                 1: {},
                 sepectators: {}
             };
-        state.duelistChat.push('<pre>' + username + ' is viewing their excavated pile..</pre>');
+        state.duelistChat.push('<pre>' + username + ' is viewing their excavated pile.</pre>');
 
         result[player] = {
             action: 'reveal',
@@ -1108,9 +1106,9 @@ function init(callback) {
      * After game start, shuffle a players deck.
      * @param {number} player 
      */
-    function shuffleDeck(player) {
+    function shuffleDeck(player, username) {
         // Ids are reassigned to new GUIs 
-
+        console.log(player,username)
         var playersCards = filterPlayer(stack, player),
             deck = filterlocation(playersCards, 'DECK'),
             idCollection = [];
@@ -1123,6 +1121,7 @@ function init(callback) {
         deck.forEach(function (card, index) {
             card.id = idCollection[index]; // finalize the shuffle
         });
+        state.duelistChat.push('<pre>' + username + ' shuffled their deck.</pre>');
         callback(generateView('shuffleDeck' + player), stack); // alert UI of the shuffle.
     }
     /**
