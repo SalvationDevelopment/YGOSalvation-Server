@@ -3020,7 +3020,7 @@ function guicardonclick() {
                 });
             }
             if (cardIs('link', dbEntry)) {
-                $('#toDefence, #flipUpMonster, #flipDownMonster, #flipDown').css({
+                $('#toDefence, #flipUpMonster, #flipDownMonster, #flipDown', '#SpDef').css({
                     'display': 'none'
                 });
             }
@@ -3030,7 +3030,7 @@ function guicardonclick() {
                 });
             }
             if (stackunit.position === 'FaceUpDefence') {
-                $('#toDefence, #flipUpMonster, .countercontroller').css({
+                $('#toDefence, #flipUpMonster').css({
                     'display': 'none'
                 });
             }
