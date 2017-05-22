@@ -40,7 +40,7 @@ To run the system use `node server`. This will create a version of the system on
 ## Licensing
 **Do not use our software without our permission.** It is ment for use at http://ygopro.us if you want to use this software for something please leave open an issue explaining your intended use and we will write you a custom licence.
 
-*This software was developed and designed to help the Yu-Gi-Oh! Online community which for years has been socially suffering. In line with that, to protect the community this project is 'mostly open'. This software can not be used at scale without written permission. That means no more than 10 users. There is a very speific use case I have in mind where we will give out an a flexible licence if asked, by companies and major community leaders. I've seen this software abused we do not want to see that happen again. Basically you are not allowed to use this without asking its creators permission first.*
+*This software was developed and designed to help the Yu-Gi-Oh! Online community which for years has been socially suffering. In line with that, to protect the community, this project is 'mostly open'. This software can not be used at scale without written permission. That means no more than 10 users. There is a very speific use case I have in mind where we will give out an a flexible licence if asked by companies and major community leaders. I've seen this software abused, and we do not want to see that happen again. Basically you are not allowed to use this without asking for its creator's permission first.*
 
 ## Contributing
 Feel free to fork the project to change the code around and land patches back via pull request. For JavaScript please make sure it follows standard jslint rules on whitespace.
