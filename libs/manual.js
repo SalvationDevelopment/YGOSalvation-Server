@@ -228,11 +228,13 @@ module.exports = function (wss) {
                 game: generated
             }));
             socket.slot = 0;
-            setTimeout(function () {
-                stateSystem[generated].duelistChat('Gamelist', '90min Time limit reached. Ending the duel');
-                delete games[generated];
-                delete stateSystem[generated];
-            }, 10800000); // 180 mins.
+			setTimeout(function(){
+				 if(games[generated].started === false){
+							stateSystem[generated].duelistChat('Gamelist', '5min Time limit reached. Try hosting a game later.');
+							delete games[generated];
+							delete stateSystem[generated];
+				}
+			},5*60 * 1000); // kill game after 5mins
 
 
             break;
