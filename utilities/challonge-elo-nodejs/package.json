@@ -1,0 +1,52 @@
+{
+  "name": "challonge-elo-nodejs",
+  "version": "0.0.1",
+  "description": "Get player rankings and elo from challonge tournaments",
+  "main": "index.js",
+  "keywords": [
+    "elo",
+    "ranking",
+    "challonge"
+  ],
+  "author": {
+    "name": "Anthony Giniers",
+    "email": "anthony.giniers@gmail.com"
+  },
+  "engines": {
+    "node": "6"
+  },
+  "dependencies": {
+    "elo-js": "1.0.1",
+    "moment": "2.14.1",
+    "ramda": "0.22.1",
+    "request": "2.74.0",
+    "request-promise": "4.1.1"
+  },
+  "gitHead": "2fd5a552cd6e7219eeb01a4021c9653c937e97b6",
+  "_id": "challonge-elo-nodejs@0.0.1",
+  "scripts": {},
+  "_shasum": "cc65fecfa65989c3171a93d55a05c39d6feb8646",
+  "_from": "challonge-elo-nodejs@latest",
+  "_npmVersion": "2.15.5",
+  "_nodeVersion": "6.2.2",
+  "_npmUser": {
+    "name": "antogyn",
+    "email": "antogyn@gmail.com"
+  },
+  "dist": {
+    "shasum": "cc65fecfa65989c3171a93d55a05c39d6feb8646",
+    "tarball": "https://registry.npmjs.org/challonge-elo-nodejs/-/challonge-elo-nodejs-0.0.1.tgz"
+  },
+  "maintainers": [
+    {
+      "name": "antogyn",
+      "email": "antogyn@gmail.com"
+    }
+  ],
+  "_npmOperationalInternal": {
+    "host": "packages-16-east.internal.npmjs.com",
+    "tmp": "tmp/challonge-elo-nodejs-0.0.1.tgz_1472488834383_0.37146756728179753"
+  },
+  "directories": {},
+  "_resolved": "https://registry.npmjs.org/challonge-elo-nodejs/-/challonge-elo-nodejs-0.0.1.tgz"
+}
