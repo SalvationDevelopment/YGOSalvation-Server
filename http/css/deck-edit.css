@@ -123,29 +123,29 @@ input.decknameInput {
     float: left;
     width: 100%;
     padding: 5px;
-    border: 1px solid yellow;
+    border: 1px solid purple;
     min-height: 19vw;
-    background-color: rgba(255, 255, 0, .3);
+    background-color: rgba(139, 85, 122, .3);
 }
 
 .extraDeck {
     float: left;
     width: 100% !important;
-    border: 1px solid green;
+    border: 1px solid purple;
     padding: 5px;
     margin-top: 5px;
     min-height: 5vw;
-    background-color: rgba(0, 125, 0, .3);
+    background-color: rgba(139, 85, 122, .3);
 }
 
 .sideDeck {
     float: left;
     width: 100% !important;
-    border: 1px solid blue;
+    border: 1px solid purple;
     padding: 5px;
     margin-top: 5px;
     min-height: 5vw;
-    background-color: rgba(0, 0, 255, .3);
+    background-color: rgba(139, 85, 122, .3);
 }
 
 .infoclass {
@@ -159,18 +159,18 @@ input.decknameInput {
 }
 
 .infoclass.infoclassmain {
-    border-color: yellow;
-    background-color: rgba(255, 255, 0, .3);
+    border-color: purple;
+    background-color: rgba(139, 85, 122, .5);
 }
 
 .infoclass.infoclassextra {
-    border-color: green;
-    background-color: rgba(0, 125, 0, .3);
+    border-color: purple;
+    background-color: rgba(139, 85, 122, .5);
 }
 
 .infoclass.infoclassside {
-    border-color: blue;
-    background-color: rgba(0, 0, 255, .3);
+    border-color: purple;
+    background-color: rgba(139, 85, 122, .5);
 }
 
 .right {
