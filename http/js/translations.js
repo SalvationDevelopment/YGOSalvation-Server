@@ -51,7 +51,7 @@ var translationDB = [{
     "jp": "リプレイ",
     "fa": "بازپخش ها",
     "ar": "الإعادات",
-    "he": "
+    "he": "שידור חוזר"
 }, {
     "item": "data-translation-gamelist",
     "en": "Game List",
