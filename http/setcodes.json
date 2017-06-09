@@ -317,5 +317,7 @@
     "0xff": "Clear Wing",
     "0x200": "Bonding",
     "0x201": "Vullet",
-    "0x202": "Metaphys"
+    "0x202": "Metaphys",
+	"0x203": "code Talker",
+	"0x204": "Crawler"
 }
