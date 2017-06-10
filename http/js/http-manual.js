@@ -2511,6 +2511,11 @@ function revealonclick(card, note) {
         $('.non-grave').css({
             'display': 'none'
         });
+		if (cardIs('link', dbEntry)) {
+			$('#SpDef').css({
+				'display': 'none'
+			});
+		}
         reorientmenu();
         return;
     }
@@ -2550,6 +2555,11 @@ function revealonclick(card, note) {
                 'display': 'block'
             });
         }
+		if (cardIs('link', dbEntry)) {
+			$('#SpDef').css({
+				'display': 'none'
+			});
+		}
         reorientmenu();
         return;
     }
@@ -2603,7 +2613,11 @@ function revealonclick(card, note) {
         $('.non-banished').css({
             'display': 'none'
         });
-
+		if (cardIs('link', dbEntry)) {
+			$('#SpDef').css({
+				'display': 'none'
+			});
+		}
         reorientmenu();
         return;
     }
@@ -2634,8 +2648,11 @@ function revealonclick(card, note) {
         $('.non-extra').css({
             'display': 'none'
         });
-
-
+		if (cardIs('link', dbEntry)) {
+			$('#SpDef').css({
+				'display': 'none'
+			});
+		}
         reorientmenu();
         return;
     }
@@ -2939,6 +2956,11 @@ function guicardonclick() {
             $('.m-grave').css({
                 'display': 'block'
             });
+            if (cardIs('link', dbEntry)) {
+                $('#SpDef').css({
+                    'display': 'none'
+                });
+            }
             if (pendulumMap[dbEntry.type]) {
                 $('.m-monster-p').css({
                     'display': 'block'
@@ -2952,6 +2974,11 @@ function guicardonclick() {
             $('.m-extra').css({
                 'display': 'block'
             });
+            if (cardIs('link', dbEntry)) {
+                $('#SpDef').css({
+                    'display': 'none'
+                });
+            }
             reorientmenu();
             return;
         }
@@ -2963,6 +2990,11 @@ function guicardonclick() {
             if (pendulumMap[dbEntry.type]) {
                 $('.m-monster-p').css({
                     'display': 'block'
+                });
+            }
+            if (cardIs('link', dbEntry)) {
+                $('#SpDef').css({
+                    'display': 'none'
                 });
             }
             reorientmenu();
@@ -3002,6 +3034,9 @@ function guicardonclick() {
                 $('.m-monster-token').css({
                     'display': 'block'
                 });
+                $('#bottomdeck, #topdeck, #opphand, #banishcard, #tograve, #tohand, #overlayStack, #flipDownMonster, #banishcardfd').css({
+                    'display': 'none'
+                });
             }
 
             if (checksetcode(dbEntry, 151) || dbEntry.id === 9791914 || dbEntry.id === 58132856) {
@@ -3020,12 +3055,7 @@ function guicardonclick() {
                 });
             }
             if (cardIs('link', dbEntry)) {
-                $('#toDefence, #flipUpMonster, #flipDownMonster, #flipDown', '#SpDef').css({
-                    'display': 'none'
-                });
-            }
-            if (!excludeTokens(dbEntry)) {
-                $('#bottomdeck', '#topdeck', '#opphand', '#banishcard', '#tograve', '#tohand', '#overlayStack', '#flipDownMonster').css({
+                $('#toDefence, #flipUpMonster, #flipDownMonster, #flipDown').css({
                     'display': 'none'
                 });
             }
