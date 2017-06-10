@@ -34,6 +34,7 @@ module.exports = {
         19613556: 1, //Heavy Storm
         79575620: 1, //Injection Fairy Lily
         77585513: 1, //Jinzo
+        77585514: 1, //Jinzo
         7902349: 1, //Left Arm of the Forbidden One
         44519536: 1, //Left Leg of the Forbidden One
         69162969: 1, //Lightning Vortex
