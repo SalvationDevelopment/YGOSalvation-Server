@@ -2932,7 +2932,7 @@ function guicardonclick() {
                     'display': 'block'
                 });
             }
-            if (stMap[dbEntry.type] || dbEntry.type === 2 || dbEntry.type === 4) {
+            if (stMap[dbEntry.type] || dbEntry.type === 2 || dbEntry.type === 4 || checksetcode(dbEntry, 151) || dbEntry.id === 9791914 || dbEntry.id === 58132856) {
                 $('.m-hand-st').css({
                     'display': 'block'
                 });
