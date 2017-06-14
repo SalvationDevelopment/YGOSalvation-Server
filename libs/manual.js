@@ -21,7 +21,7 @@ function getBanlist() {
     return banlist;
 }
 
-var validateDeck = require('./validate-Deck'),
+var validateDeck = require('./validate-Deck.js'),
     configParser = require('./ConfigParser.js'),
     http = require('http'),
     https = require('https'),
