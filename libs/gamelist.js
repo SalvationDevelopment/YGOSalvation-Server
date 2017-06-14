@@ -633,8 +633,9 @@ function onData(data, socket) {
                 data.decks[i].extra = mapCards(data.decks[i].extra);
             });
         }
+        var regex = new RegExp(data.username, 'i');
         deckStorage.find({
-            username: data.username
+            username: regex
         }, function (error, docs) {
             console.log(error, docs);
             if (docs.length) {

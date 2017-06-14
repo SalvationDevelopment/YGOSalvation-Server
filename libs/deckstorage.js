@@ -28,8 +28,9 @@ var Primus = require('primus'),
     });
 
 function verifyUser(username) {
+    var regex = new RegExp(username, 'i');
     deckStorage.find({
-        '_id': username
+        '_id': regex
     }, function (err, docs) {
         if (docs.length === 0) {
             deckStorage.insert({
@@ -55,8 +56,9 @@ function onDB(data) {
         });
         break;
     case 'load':
+        var regex = new RegExp(data.username, 'i');
         deckStorage.find({
-            username: data.username
+            username: regex
         }, function (error, docs) {
             reply(data.username, docs);
         });
