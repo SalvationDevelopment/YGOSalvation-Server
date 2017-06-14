@@ -691,6 +691,13 @@ var currentSearchFilter = (function () {
         }
     }
 
+	function filterToken(result) {
+		return result.filter(function (item){ 
+			//item is not a token
+			return item.type !== 16401;
+		})
+	}
+
     function filterAll(cards, filter) {
         var cardsf = cards;
         cardsf = filterLimit(cardsf, filter.limit) || cardsf;
@@ -708,7 +715,7 @@ var currentSearchFilter = (function () {
         cardsf = filterLevel(cardsf, filter.level, filter.levelop) || cardsf;
         cardsf = filterScale(cardsf, filter.scale, filter.scaleop) || cardsf;
         cardsf = filterSet(cardsf, filter.set) || cardsf;
-
+		cardsf = filterToken(cardsf) || cardsf;
         return cardsf;
     }
 
