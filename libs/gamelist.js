@@ -10,6 +10,7 @@ var cardidmap = hotload("../http/cardidmap.js");
 
 
 
+
 /**
  * Maps a deck to updated IDs.
  * @param   {[[Type]]} deck [[Description]]
@@ -87,7 +88,9 @@ var primus,
     ps = require('ps-node'),
     forumValidate = require('./forum-validator.js'),
     currentGlobalMessage = '',
-    adminlist = require('../package.json').admins,
+    pack = require('../package.json'),
+    adminlist = pack.admins,
+    HTTP_PORT =pack.port || 80,
     banlistedUsers = require('./bansystem.js'),
     chatbox = [],
     sayCount = 0;
@@ -150,11 +153,11 @@ try {
     openserver.get('*', function (req, res) {
         res.redirect(301, 'https://' + req.get('host') + req.url);
     });
-    openserver.listen(80);
+    openserver.listen(HTTP_PORT);
 } catch (nossl) {
     console.log('Failed to apply SSL to HTTP server', nossl);
     primusServer = http.createServer(app);
-    primusServer.listen(80);
+    primusServer.listen(HTTP_PORT);
 }
 
 var WebSocketServer = require('ws').Server,
