@@ -58,24 +58,24 @@ module.exports = {
         16923472: 0, //Wind-Up Hunter
         3078576: 0, //Yata-Garasu
         46060017: 0, //Zoodiac Barrage
+        85115440: 0, //Zoodiac Broadbull
         48905153: 0, //Zoodiac Drident
         9929398: 1, //Blackwing - Gofu the Vague Shadow
         6602300: 1, //Blaze Fenix, the Burning Bombardment Bird
-        48976825: 1, //Burial from a Different Dimension
         72892473: 1, //Card Destruction
         36468556: 1, //Ceasefire
         69015963: 1, //Cyber-Stein
         83531441: 1, //Dante, Traveler of the Burning Abyss
         65192027: 1, //Dark Armed Dragon
-        53129443: 1, //Dark Hole
         78868119: 1, //Deep Sea Diva
         70583986: 1, //Dewloren, Tiger King of the Ice Barrier
         15854426: 1, //Divine Wind of Mist Valley
         14733538: 1, //Draco Face-Off
-        62265044: 1, //Dragon Ravine
+        13035077: 1, //Dragonic Diagram
         50720316: 1, //Elemental HERO Shadow Mist
         67723438: 1, //Emergency Teleport
         33396948: 1, //Exodia the Forbidden One
+        55623480: 1, //Fairy Tail - Snow
         81439173: 1, //Foolish Burial
         77565204: 1, //Future Fusion
         64034255: 1, //Genex Ally Birdman
@@ -90,6 +90,7 @@ module.exports = {
         92746535: 1, //Luster Pendulum, the Dracoslayer
         32723153: 1, //Magical Explosion
         93600443: 1, //Mask Change II
+        21377582: 1, //Master Peace, the True Dracoslaying King
         83764718: 1, //Monster Reborn
         83764719: 1, //Monster Reborn
         33508719: 1, //Morphing Jar
@@ -103,21 +104,16 @@ module.exports = {
         74586817: 1, //PSY-Framelord Omega
         22842126: 1, //Pantheism of the Monarchs
         53208660: 1, //Pendulum Call
-        47075569: 1, //Performapal Pendulum Sorcerer
         40318957: 1, //Performapal Skullcrobat Joker
         67169062: 1, //Pot of Avarice
-        96729612: 1, //Preparation of Rites
         23701465: 1, //Primal Seed
         58577036: 1, //Reasoning
         88264978: 1, //Red-Eyes Darkness Metal Dragon
         32807846: 1, //Reinforcement of the Army
-        14878871: 1, //Rescue Cat
         70903634: 1, //Right Arm of the Forbidden One
         8124921: 1, //Right Leg of the Forbidden One
         83555666: 1, //Ring of Destruction
         83555667: 1, //Ring of Destruction
-        17639150: 1, //Saqlifice
-        84764038: 1, //Scarm, Malebranche of the Burning Abyss
         90307777: 1, //Shurit, Strategist of the Nekroz
         41420027: 1, //Solemn Judgment
         84749824: 1, //Solemn Warning
@@ -129,36 +125,38 @@ module.exports = {
         90809975: 1, //Toadally Awesome
         10802915: 1, //Tour Guide From the Underworld
         52687916: 1, //Trishula, Dragon of the Ice Barrier
-        66399653: 1, //Union Hangar
         5851097: 1, //Vanity's Emptiness
-        31222701: 1, //Wavering Eyes
-        78010363: 1, //Witch of the Black Forest
         78872731: 1, //Zoodiac Ratpier
         81275020: 1, //Speedroid Terrortop
-        28985331: 2, //Armageddon Knight		
         74311226: 2, //Atlantean Dragoons
-        72989439: 2, //Black Luster Soldier - Envoy of the Beginning
-        87910978: 2, //Brain Control
-        50321796: 2, //Brionac, Dragon of the Ice Barrier
+        48976825: 2, //Burial from a Different Dimension
+        59750328: 2, //Card of Demise
         91623717: 2, //Chain Strike
-        45206713: 2, //D/D Swirl Slime
         15341821: 2, //Dandylion
+        53129443: 2, //Dark Hole
         84171830: 2, //Domain of the True Monarchs
-        40044918: 2, //Elemental HERO Stratos		
+        62265044: 2, //Dragon Ravine
+        40044918: 2, //Elemental HERO Stratos
         45222299: 2, //Evigishki Gustkraken
-        55623480: 2, //Fairy Tail - Snow
-        57103969: 2, //Fire Formation - Tenki		
-        7391448: 2, //Goyo Guardian		
-        18239909: 2, //Ignister Prominence, the Blasting Dracoslayer
+        57103969: 2, //Fire Formation - Tenki
         43040603: 2, //Monster Gate
+        47075569: 2, //Performapal Pendulum Sorcerer
+        96729612: 2, //Preparation of Rites
         10028593: 2, //Reborn Tengu
-        72714461: 2 //Wisdom-Eye Magician
+        14878871: 2, //Rescue Cat
+        17639150: 2, //Saqlifice
+        84764038: 2, //Scarm, Malebranche of the Burning Abyss
+        40605147: 2, //Solemn Strike
+        73628505: 2, //Terraforming
+        66399653: 2, //Union Hangar
+        31222701: 2, //Wavering Eyes
+        78010363: 2, //Witch of the Black Forest
     },
     bannedTypes: [],
     exceptions: [],
-    startDate: new Date('2017-04-01'),
-    endDate: new Date('2017-06-30'),
-    name: '2017.4.1 (OCG)',
+    startDate: new Date('2017-07-01'),
+    endDate: new Date('2017-09-30'),
+    name: '2017.7.1 (OCG)',
     masterRule: 4,
     region: 'ocg'
 };
