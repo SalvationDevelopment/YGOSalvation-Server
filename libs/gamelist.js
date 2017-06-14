@@ -298,6 +298,23 @@ function globalCall(data) {
     });
 }
 
+function globalRequested(data, socket){
+    forumValidate(data, function (error, info, body) {
+        if (error) {
+            console.log('[Gamelist]', error);
+            return;
+        }
+        if (info.success) {
+            socket.write({
+                clientEvent: 'global',
+                message: currentGlobalMessage
+            });
+        } else {
+            console.log("Failed to request the current global message");
+        }
+    });
+}
+
 
 function genocideCall(data) {
     forumValidate(data, function (error, info, body) {
@@ -536,6 +553,9 @@ function onData(data, socket) {
         break;
     case ('global'):
         globalCall(data);
+        break;
+    case ('globalrequest'):
+        globalRequested(data, socket);
         break;
     case ('genocide'):
         genocideCall(data);

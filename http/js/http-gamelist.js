@@ -618,6 +618,7 @@ function pondata(data) {
                 }
             }
             $('#onlinepublicchat').scrollTop($('#onlinepublicchat').prop("scrollHeight"));
+            requestglobal();
         }
         if (data.clientEvent === 'deckLoad') {
             window.deckEditor.loadDecks(data.decks);
@@ -768,6 +769,17 @@ function sendglobal(message) {
         uniqueID: uniqueID
     });
 }
+
+function requestglobal() {
+    'use strict';
+    primus.write({
+        action: 'globalrequest',
+        username: $('#ips_username').val(),
+        password: $('#ips_password').val(),
+        uniqueID: uniqueID
+    });
+}
+
 
 
 
