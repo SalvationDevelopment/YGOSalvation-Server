@@ -15,7 +15,7 @@ var translationDB = [{
     "jp": "Salvationサーバー",
     "fa": "سرور سلوایشن",
     "ar": "سالفيشن سرفر",
-    "he": "שרת ישועה"
+    "he": "שרת הגאולה"
 }, {
     "item": "data-translation-deckedit",
     "en": "Deck Edit",
@@ -33,7 +33,7 @@ var translationDB = [{
     "jp": "デッキ編集",
     "fa": "ویراستار دست",
     "ar": "تعديل المجموعة",
-    "he": "בחר את הקלפים"
+    "he": "ערוך את החפיסה שלך"
 }, {
     "item": "data-translation-replays",
     "en": "Replays",
@@ -51,7 +51,7 @@ var translationDB = [{
     "jp": "リプレイ",
     "fa": "بازپخش ها",
     "ar": "الإعادات",
-    "he": "מִשְׂחָק חוֹזֵר"
+    "he": "שידור חוזר"
 }, {
     "item": "data-translation-gamelist",
     "en": "Game List",
