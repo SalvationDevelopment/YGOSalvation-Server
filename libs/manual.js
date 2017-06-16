@@ -7,7 +7,8 @@
  */
 
 
-var fs = require('fs');
+var fs = require('fs'),
+    jsonfile = require('jsonfile');
 
 function getBanlist() {
     var banlist = {},
@@ -22,7 +23,6 @@ function getBanlist() {
 }
 
 var validateDeck = require('./validate-Deck.js'),
-    configParser = require('./ConfigParser.js'),
     http = require('http'),
     https = require('https'),
     path = require('path'),
@@ -34,7 +34,6 @@ module.exports = function (wss) {
 
     var realgames = [],
         stateSystem = require('./ygojs-core.js'),
-        configParser = require('./configparser.js'),
         games = {},
         states = {},
         log = {};
@@ -123,7 +122,7 @@ module.exports = function (wss) {
                     }
                 }
             } catch (error) {
-                console.log('failed messaging socket',error);
+                console.log('failed messaging socket', error);
             } finally {
                 if (callback) {
                     return callback();
@@ -727,6 +726,17 @@ module.exports = function (wss) {
         setTimeout(process.exit, 3000);
     });
 
+    fs.watch('../http/manifest/manifest_0-en-OCGTCG.json', function () {
+        setTimeout(function () {
+            jsonfile.readFile('../http/manifest/manifest_0-en-OCGTCG.json', function (err, data) {
+                if (err) {
+                    console.log(err);
+                    return;
+                }
+                database = data;
+            });
+        }, 5000);
+    });
     setInterval(wss.broadcast, 15000);
 
     return websocketHandle;
