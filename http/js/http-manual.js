@@ -1141,167 +1141,167 @@ function manualReciver(message) {
     }
 
     switch (message.action) {
-    case "ack":
-        manualServer.send(JSON.stringify({
-            action: 'ack',
-            game: activegame
-        }));
-        break;
-    case "register":
-        manualServer.send(JSON.stringify({
-            action: 'register',
-            name: localStorage.nickname
-        }));
-        break;
-    case "lobby":
-        singlesitenav('lobby');
-        activegame = message.game;
-        updateloby(broadcast[activegame]);
-        break;
-    case "broadcast":
-        broadcast = message.data;
-        if (activegame) {
+        case "ack":
+            manualServer.send(JSON.stringify({
+                action: 'ack',
+                game: activegame
+            }));
+            break;
+        case "register":
+            manualServer.send(JSON.stringify({
+                action: 'register',
+                name: localStorage.nickname
+            }));
+            break;
+        case "lobby":
+            singlesitenav('lobby');
+            activegame = message.game;
             updateloby(broadcast[activegame]);
-        }
-        makeGames();
-        break;
-    case "kick":
-        singlesitenav('gamelist');
-        break;
-    case "sound":
-        sound.play(message.sound);
-        break;
-    case "slot":
-        activelyDueling = true;
-        orientSlot = message.slot;
-        break;
-    case "target":
-        $('.attackglow').removeClass('attackglow');
-        $('.card.p' + orient(message.target.player) + '.' + message.target.location + '.i' + message.target.index).addClass('attackglow');
-        break;
-    case "give":
-        if (message.target.player !== orientSlot) {
-            manualActionReference = message.target;
-            if (message.choice === 'HAND') {
-                manualMoveGeneric($('.card.p' + orientSlot + '.HAND').length, 'HAND');
-            } else {
-                startSpecialSummon('generic');
+            break;
+        case "broadcast":
+            broadcast = message.data;
+            if (activegame) {
+                updateloby(broadcast[activegame]);
             }
-        }
-        break;
-    case "effect":
-        $('#effectflasher').css('display', 'block');
-        $('#effectflasher .mainimage').attr('src', 'https://rawgit.com/SalvationDevelopment/YGOPro-Images/master/' + message.id + '.jpg');
-        setTimeout(function () {
-            $('#effectflasher').css('display', 'none');
-        }, 1000);
-        break;
-    case "attack":
-        $('#attackanimation').remove();
-        $('#automationduelfield').append('<img  id="attackanimation" class="card p' + orient(message.source.player) + ' ' + message.source.location + ' i' + message.source.index + '" src="img/textures/attack.png" data-orient="' + orient(message.source.player) + '" />');
-        setTimeout(function () {
-            $('#attackanimation').attr('class', 'card p' + orient(message.target.player) + ' ' + message.target.location + ' i' + message.target.index);
+            makeGames();
+            break;
+        case "kick":
+            singlesitenav('gamelist');
+            break;
+        case "sound":
+            sound.play(message.sound);
+            break;
+        case "slot":
+            activelyDueling = true;
+            orientSlot = message.slot;
+            break;
+        case "target":
+            $('.attackglow').removeClass('attackglow');
             $('.card.p' + orient(message.target.player) + '.' + message.target.location + '.i' + message.target.index).addClass('attackglow');
-            $('.card.p' + orient(message.source.player) + '.' + message.source.location + '.i' + message.source.index).addClass('attackglow');
-        }, 500);
-        setTimeout(function () {
+            break;
+        case "give":
+            if (message.target.player !== orientSlot) {
+                manualActionReference = message.target;
+                if (message.choice === 'HAND') {
+                    manualMoveGeneric($('.card.p' + orientSlot + '.HAND').length, 'HAND');
+                } else {
+                    startSpecialSummon('generic');
+                }
+            }
+            break;
+        case "effect":
+            $('#effectflasher').css('display', 'block');
+            $('#effectflasher .mainimage').attr('src', 'https://rawgit.com/SalvationDevelopment/YGOPro-Images/master/' + message.id + '.jpg');
+            setTimeout(function () {
+                $('#effectflasher').css('display', 'none');
+            }, 1000);
+            break;
+        case "attack":
             $('#attackanimation').remove();
-            $('.attackglow').removeClass('attackglow');
-        }, 2000);
-        break;
-    case "side":
-        $('#ingamesidebutton').css('display', 'inline-block');
-        sidedDeck = message.deck;
-        sidedDeck.main.sort();
-        sidedDeck.extra.sort();
-        sidedDeck.side.sort();
-        sidestach.main = sidedDeck.main.length;
-        sidestach.extra = sidedDeck.extra.length;
-        sidestach.side = sidedDeck.side.length;
-        renderSideDeckZone(sidedDeck);
-        internalLocal = 'surrendered';
-        activelyDueling = false;
-        break;
-    case "start":
-        startGame(message);
-        break;
-    case "newCard":
-        window.manualDuel.newCard();
-        linkStack(message.field);
-        setTimeout(function () {
-            cardmargin(0, 'GRAVE');
-            cardmargin(0, 'EXTRA');
-            cardmargin(0, 'DECK');
-            cardmargin(1, 'GRAVE');
-            cardmargin(1, 'EXTRA');
-            cardmargin(1, 'DECK');
-            layouthand(0);
-            layouthand(1);
-            internalLocal = 'duelscreen';
-        }, 100);
-
-        $('#phaseindicator').attr('data-currentphase', message.info.phase);
-        $('.p0lp').val(message.info.lifepoints[0]);
-        $('.p1lp').val(message.info.lifepoints[1]);
-        duelstash = message;
-        updateChat(message.info.duelistChat, message.info.spectatorChat);
-        break;
-    case "shuffleHand0":
-        doGuiShuffle(orient(0), 'HAND');
-        setTimeout(function () {
-            linkStack(message.field);
-        }, 1000);
-
-        break;
-    case "shuffleHand1":
-        doGuiShuffle(orient(1), 'HAND');
-        setTimeout(function () {
-            linkStack(message.field);
-        }, 1000);
-        break;
-    case "shuffleDeck0":
-        doGuiShuffle(orient(0), 'DECK');
-        linkStack(message.field);
-        break;
-    case "shuffleDeck1":
-        doGuiShuffle(orient(1), 'DECK');
-        linkStack(message.field);
-        break;
-    case "duel":
-        if (manualDuel === undefined) {
+            $('#automationduelfield').append('<img  id="attackanimation" class="card p' + orient(message.source.player) + ' ' + message.source.location + ' i' + message.source.index + '" src="img/textures/attack.png" data-orient="' + orient(message.source.player) + '" />');
+            setTimeout(function () {
+                $('#attackanimation').attr('class', 'card p' + orient(message.target.player) + ' ' + message.target.location + ' i' + message.target.index);
+                $('.card.p' + orient(message.target.player) + '.' + message.target.location + '.i' + message.target.index).addClass('attackglow');
+                $('.card.p' + orient(message.source.player) + '.' + message.source.location + '.i' + message.source.index).addClass('attackglow');
+            }, 500);
+            setTimeout(function () {
+                $('#attackanimation').remove();
+                $('.attackglow').removeClass('attackglow');
+            }, 2000);
+            break;
+        case "side":
+            $('#ingamesidebutton').css('display', 'inline-block');
+            sidedDeck = message.deck;
+            sidedDeck.main.sort();
+            sidedDeck.extra.sort();
+            sidedDeck.side.sort();
+            sidestach.main = sidedDeck.main.length;
+            sidestach.extra = sidedDeck.extra.length;
+            sidestach.side = sidedDeck.side.length;
+            renderSideDeckZone(sidedDeck);
+            internalLocal = 'surrendered';
+            activelyDueling = false;
+            break;
+        case "start":
             startGame(message);
+            break;
+        case "newCard":
+            window.manualDuel.newCard();
+            linkStack(message.field);
+            setTimeout(function () {
+                cardmargin(0, 'GRAVE');
+                cardmargin(0, 'EXTRA');
+                cardmargin(0, 'DECK');
+                cardmargin(1, 'GRAVE');
+                cardmargin(1, 'EXTRA');
+                cardmargin(1, 'DECK');
+                layouthand(0);
+                layouthand(1);
+                internalLocal = 'duelscreen';
+            }, 100);
 
-        }
-        linkStack(message.field);
+            $('#phaseindicator').attr('data-currentphase', message.info.phase);
+            $('.p0lp').val(message.info.lifepoints[0]);
+            $('.p1lp').val(message.info.lifepoints[1]);
+            duelstash = message;
+            updateChat(message.info.duelistChat, message.info.spectatorChat);
+            break;
+        case "shuffleHand0":
+            doGuiShuffle(orient(0), 'HAND');
+            setTimeout(function () {
+                linkStack(message.field);
+            }, 1000);
 
-        setTimeout(function () {
-            cardmargin(0, 'GRAVE');
-            cardmargin(0, 'EXTRA');
-            cardmargin(0, 'DECK');
-            cardmargin(1, 'GRAVE');
-            cardmargin(1, 'EXTRA');
-            cardmargin(1, 'DECK');
-            layouthand(0);
-            layouthand(1);
-            $('.attackglow').removeClass('attackglow');
-        }, 100);
-        updateChat(message.info.duelistChat);
-        $('#phaseindicator').attr('data-currentphase', message.info.phase);
-        $('.p0lp').val(message.info.lifepoints[0]);
-        $('.p1lp').val(message.info.lifepoints[1]);
-        duelstash = message;
-        break;
-    case "reveal":
-        reveal(message.reveal);
-        break;
-    case "removeCard":
-        $('#uid' + message.info.removed).css('display', 'none').attr('data-deletedToken', true).attr('class', '').attr('id', 't' + message.info.removed);
-        break;
-    case "question":
-        question(message);
-        break;
-    default:
-        break;
+            break;
+        case "shuffleHand1":
+            doGuiShuffle(orient(1), 'HAND');
+            setTimeout(function () {
+                linkStack(message.field);
+            }, 1000);
+            break;
+        case "shuffleDeck0":
+            doGuiShuffle(orient(0), 'DECK');
+            linkStack(message.field);
+            break;
+        case "shuffleDeck1":
+            doGuiShuffle(orient(1), 'DECK');
+            linkStack(message.field);
+            break;
+        case "duel":
+            if (manualDuel === undefined) {
+                startGame(message);
+
+            }
+            linkStack(message.field);
+
+            setTimeout(function () {
+                cardmargin(0, 'GRAVE');
+                cardmargin(0, 'EXTRA');
+                cardmargin(0, 'DECK');
+                cardmargin(1, 'GRAVE');
+                cardmargin(1, 'EXTRA');
+                cardmargin(1, 'DECK');
+                layouthand(0);
+                layouthand(1);
+                $('.attackglow').removeClass('attackglow');
+            }, 100);
+            updateChat(message.info.duelistChat);
+            $('#phaseindicator').attr('data-currentphase', message.info.phase);
+            $('.p0lp').val(message.info.lifepoints[0]);
+            $('.p1lp').val(message.info.lifepoints[1]);
+            duelstash = message;
+            break;
+        case "reveal":
+            reveal(message.reveal);
+            break;
+        case "removeCard":
+            $('#uid' + message.info.removed).css('display', 'none').attr('data-deletedToken', true).attr('class', '').attr('id', 't' + message.info.removed);
+            break;
+        case "question":
+            question(message);
+            break;
+        default:
+            break;
     }
 
 }
@@ -1386,10 +1386,14 @@ function manualKickDuelist(slot) {
 
 function manualLeave() {
     'use strict';
-    manualServer.send(JSON.stringify({
-        action: 'leave',
-        game: activegame
-    }));
+    try {
+        manualServer.send(JSON.stringify({
+            action: 'leave',
+            game: activegame
+        }));
+    } catch (error) {
+        // odds are the connection isnt active, this is ok.
+    }
 }
 
 function manualSurrender() {
@@ -2511,11 +2515,11 @@ function revealonclick(card, note) {
         $('.non-grave').css({
             'display': 'none'
         });
-		if (cardIs('link', dbEntry)) {
-			$('#SpDef').css({
-				'display': 'none'
-			});
-		}
+        if (cardIs('link', dbEntry)) {
+            $('#SpDef').css({
+                'display': 'none'
+            });
+        }
         reorientmenu();
         return;
     }
@@ -2555,11 +2559,11 @@ function revealonclick(card, note) {
                 'display': 'block'
             });
         }
-		if (cardIs('link', dbEntry)) {
-			$('#SpDef').css({
-				'display': 'none'
-			});
-		}
+        if (cardIs('link', dbEntry)) {
+            $('#SpDef').css({
+                'display': 'none'
+            });
+        }
         $('.non-excavate').css({
             'display': 'none'
         });
@@ -2616,11 +2620,11 @@ function revealonclick(card, note) {
         $('.non-banished').css({
             'display': 'none'
         });
-		if (cardIs('link', dbEntry)) {
-			$('#SpDef').css({
-				'display': 'none'
-			});
-		}
+        if (cardIs('link', dbEntry)) {
+            $('#SpDef').css({
+                'display': 'none'
+            });
+        }
         reorientmenu();
         return;
     }
@@ -2651,11 +2655,11 @@ function revealonclick(card, note) {
         $('.non-extra').css({
             'display': 'none'
         });
-		if (cardIs('link', dbEntry)) {
-			$('#SpDef').css({
-				'display': 'none'
-			});
-		}
+        if (cardIs('link', dbEntry)) {
+            $('#SpDef').css({
+                'display': 'none'
+            });
+        }
         reorientmenu();
         return;
     }
@@ -2734,8 +2738,7 @@ function parseLevelScales(card) {
     if (cardIs('link', card)) {
         output += '<span class="levels">' + ' Link ' + level;
         //def = '-';
-    }
-    else if (level > 0 && level <= 12) {
+    } else if (level > 0 && level <= 12) {
         output += '<span class="levels">' + ranklevel + level;
 
     } else {
@@ -2750,7 +2753,7 @@ function parseLevelScales(card) {
 
 function parseAtkDef(atk, def) {
     'use strict';
-    return ((atk < 0) ? "ATK ?" : "ATK "+atk) + " / " + ((def < 0 && def != '-') ? "DEF ?" : "DEF "+def);
+    return ((atk < 0) ? "ATK ?" : "ATK " + atk) + " / " + ((def < 0 && def != '-') ? "DEF ?" : "DEF " + def);
 }
 
 function makeDescription(id) {
@@ -3128,130 +3131,130 @@ var internalDB = [];
 function getLinkedZone(player, index, link) {
     'use strict';
     switch (link) {
-    case 0: //Top-Left
-        if (index === 2) {
-            return {
-                player: player,
-                index: 5
-            };
-        } else if (index === 4) {
-            return {
-                player: player,
-                index: 6
-            };
-        } else if (index === 5) {
-            return {
-                player: 1 - player,
-                index: 4
-            };
-        } else if (index === 6) {
-            return {
-                player: 1 - player,
-                index: 2
-            };
-        }
-        break;
-    case 1: //Top
-        if (index === 1) {
-            return {
-                player: player,
-                index: 5
-            };
-        } else if (index === 3) {
-            return {
-                player: player,
-                index: 6
-            };
-        } else if (index === 5) {
-            return {
-                player: 1 - player,
-                index: 3
-            };
-        } else if (index === 6) {
-            return {
-                player: 1 - player,
-                index: 1
-            };
-        }
-        break;
-    case 2: //Top-Right
-        if (index === 0) {
-            return {
-                player: player,
-                index: 5
-            };
-        } else if (index === 2) {
-            return {
-                player: player,
-                index: 6
-            };
-        } else if (index === 5) {
-            return {
-                player: 1 - player,
-                index: 2
-            };
-        } else if (index === 6) {
-            return {
-                player: 1 - player,
-                index: 0
-            };
-        }
-        break;
-    case 3: //Left
-        if (index > 0 && index < 5) {
-            return {
-                player: player,
-                index: index - 1
-            };
-        }
-        break;
-    case 4: //Right
-        if (index >= 0 && index < 4) {
-            return {
-                player: player,
-                index: index + 1
-            };
-        }
-        break;
-    case 5: //Bottom-Left
-        if (index === 5) {
-            return {
-                player: player,
-                index: 0
-            };
-        } else if (index === 6) {
-            return {
-                player: player,
-                index: 2
-            };
-        }
-        break;
-    case 6: //Bottom
-        if (index === 5) {
-            return {
-                player: player,
-                index: 1
-            };
-        } else if (index === 6) {
-            return {
-                player: player,
-                index: 3
-            };
-        }
-        break;
-    case 7: //Bottom-Right
-        if (index === 5) {
-            return {
-                player: player,
-                index: 2
-            };
-        } else if (index === 6) {
-            return {
-                player: player,
-                index: 4
-            };
-        }
-        break;
+        case 0: //Top-Left
+            if (index === 2) {
+                return {
+                    player: player,
+                    index: 5
+                };
+            } else if (index === 4) {
+                return {
+                    player: player,
+                    index: 6
+                };
+            } else if (index === 5) {
+                return {
+                    player: 1 - player,
+                    index: 4
+                };
+            } else if (index === 6) {
+                return {
+                    player: 1 - player,
+                    index: 2
+                };
+            }
+            break;
+        case 1: //Top
+            if (index === 1) {
+                return {
+                    player: player,
+                    index: 5
+                };
+            } else if (index === 3) {
+                return {
+                    player: player,
+                    index: 6
+                };
+            } else if (index === 5) {
+                return {
+                    player: 1 - player,
+                    index: 3
+                };
+            } else if (index === 6) {
+                return {
+                    player: 1 - player,
+                    index: 1
+                };
+            }
+            break;
+        case 2: //Top-Right
+            if (index === 0) {
+                return {
+                    player: player,
+                    index: 5
+                };
+            } else if (index === 2) {
+                return {
+                    player: player,
+                    index: 6
+                };
+            } else if (index === 5) {
+                return {
+                    player: 1 - player,
+                    index: 2
+                };
+            } else if (index === 6) {
+                return {
+                    player: 1 - player,
+                    index: 0
+                };
+            }
+            break;
+        case 3: //Left
+            if (index > 0 && index < 5) {
+                return {
+                    player: player,
+                    index: index - 1
+                };
+            }
+            break;
+        case 4: //Right
+            if (index >= 0 && index < 4) {
+                return {
+                    player: player,
+                    index: index + 1
+                };
+            }
+            break;
+        case 5: //Bottom-Left
+            if (index === 5) {
+                return {
+                    player: player,
+                    index: 0
+                };
+            } else if (index === 6) {
+                return {
+                    player: player,
+                    index: 2
+                };
+            }
+            break;
+        case 6: //Bottom
+            if (index === 5) {
+                return {
+                    player: player,
+                    index: 1
+                };
+            } else if (index === 6) {
+                return {
+                    player: player,
+                    index: 3
+                };
+            }
+            break;
+        case 7: //Bottom-Right
+            if (index === 5) {
+                return {
+                    player: player,
+                    index: 2
+                };
+            } else if (index === 6) {
+                return {
+                    player: player,
+                    index: 4
+                };
+            }
+            break;
     }
     return null;
 }
