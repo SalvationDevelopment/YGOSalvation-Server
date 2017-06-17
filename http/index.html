@@ -1820,7 +1820,8 @@
             <button class="m-deck" onclick="manualRevealBottom()">Reveal Bottom Card</button>
             <button class="m-deck" onclick="manualMillRemovedCard()">Banish Top Card</button>
             <button class="m-deck" onclick="manualMillRemovedCardFaceDown()">Banish Face-down</button>
-            <button class="m-deck" onclick="manualExcavateTop()">Excavate</button>
+            <button class="m-hand m-deck v-grave v-removed v-deck non-excavate" onclick="manualToExcavate()">Excavate</button>
+            <button class="m-deck" onclick="manualExcavateTop()">Excavate Face-down</button>
             <button class="m-deck" onclick="manualShuffleDeck()">Shuffle Deck</button>
             <button class="m-deck" onclick="manualViewDeck()">View Deck</button>
             <button class="m-deck" onclick="manualMill()">Mill Card</button>
@@ -1841,7 +1842,6 @@
 
             <button class="m-hand m-field st-field non-extra v-grave v-removed v-excavate non-deck" id="bottomdeck" onclick="manualToBottomOfDeck()">To Bottom of Deck</button>
             <button class="m-hand m-field st-field non-extra v-grave v-removed v-excavate non-deck" id="topdeck" onclick="manualToTopOfDeck()">To Top of Deck</button>
-            <button class="m-hand v-grave v-removed v-deck" onclick="manualToExcavate()">Excavate</button>
 
             <button class="m-hand m-field st-field non-extra" id="opphand" onclick="manualToOpponentsHand()">To Opponents Hand</button>
             <button class="m-hand m-field v-deck v-extra v-grave v-excavate v-removed" onclick="manualToOpponent()">To Opponents Field</button>
@@ -1851,7 +1851,7 @@
 
             <button class="m-hand m-field st-field v-deck v-removed v-extra v-excavate non-grave" id="tograve" onclick="manualToGrave()">To Graveyard</button>
 
-            <button class="m-hand-st m-monster-st m-st-monster v-excavate non-deck non-banished" onclick="startSpellTargeting('set')">Set in S/T</button>
+            <button class="m-hand-st m-monster-st m-st-monster non-deck non-banished" onclick="startSpellTargeting('set')">Set in S/T</button>
             <button class="m-hand-st" onclick="startSpellTargeting('activate')">Activate</button>
 
             <!--            <button class="v-st" onclick="manualActivate()">To S/T Zone</button>-->
@@ -1864,7 +1864,7 @@
 
             <button class="m-hand-m v-extra" id="SpDef" onclick="startSpecialSummon('def')">Special Summon in Defense</button>
             <button class="m-hand-m v-extra" onclick="startSpecialSummon('atk')">Special Summon in Attack</button>
-            <button class="m-hand-m non-grave non-banished non-deck" onclick="startSpecialSummon('normaldef')">Set Monster</button>
+            <button class="m-hand-m non-grave non-excavate non-banished non-deck" onclick="startSpecialSummon('normaldef')">Set Monster</button>
             <button class="m-hand-m non-grave non-banished non-deck" onclick="startSpecialSummon('normalatk')">Normal Summon</button>
 
 
@@ -1879,7 +1879,7 @@
 
             <button class="m-monster m-st countercontroller" onclick="manualAddCounter()">Add Counter</button>
             <button class="m-monster m-st countercontroller" id="removeCounter" onclick="manualRemoveCounter()">Remove Counter</button>
-            <button class="" id="viewStack" onclick="manualViewXYZMaterials()">View</button>
+            <button class="" id="viewStack" onclick="manualViewXYZMaterials()">View Xyz Materials</button>
             <button class="m-monster m-monster-xyz v-monster-xyz" id="overlayStack" onclick="startXYZSummon()">Overlay</button>
             <button class="m-monster" id="flipUpMonster" onclick="manualToFaceUpDefence()">Flip Face-up</button>
             <button class="m-monster" id="flipDownMonster" onclick="manualToFaceDownDefence()">Flip Face-down</button>
