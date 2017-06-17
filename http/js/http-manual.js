@@ -2560,6 +2560,9 @@ function revealonclick(card, note) {
 				'display': 'none'
 			});
 		}
+        $('.non-excavate').css({
+            'display': 'none'
+        });
         reorientmenu();
         return;
     }
