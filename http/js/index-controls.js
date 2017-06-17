@@ -176,30 +176,21 @@ function singlesitenav(target) {
     internalLocal = target;
     //console.log(target);
 
-    if (launcher && target === 'forum') {
-        event.preventDefault();
-        ygopro('-a');
-        return false;
-    } else if (!launcher && target === 'forum') {
-        return true;
-    } else if ($('.unlogged.in-iframe').length > 0 && target === 'gamelist') {
-        return;
-    }
     $('body').css('background-image', blackbg());
     $('#marquee').removeClass('marquee');
     if (target === 'faq') {
         updatenews();
         $('body').css('background-image', colorbg());
+        window.manualLeave();
     }
     if (target === 'events') {
         updateevents();
         $('body').css('background-image', colorbg());
+        window.manualLeave();
     }
     if (target === 'sqleditor') {
         $('body').css('background-image', 'url(../img/bg.jpg)');
-    }
-    if (target === 'chat' && !chatStarted) {
-
+        window.manualLeave();
     }
     if (target === 'gamelist') {
         $('body').css('background-image', colorbg());
@@ -210,6 +201,7 @@ function singlesitenav(target) {
     }
     if (target === 'chat') {
         $('body').css('background-image', colorbg());
+        window.manualLeave();
     }
 
     if (target === 'host') {
@@ -225,22 +217,25 @@ function singlesitenav(target) {
         if (admin === "1") {
             $('#sqleditorbutton').css('display', 'block');
         }
+        window.manualLeave();
     }
     if (target === 'customization') {
         $('body').css('background-image', blackbg());
         setTimeout(function () {
             $('#cusomizationselection').trigger('change');
         }, 3000);
-
+        window.manualLeave();
 
     }
     //$('body').css('background-image', 'url(http://static.zerochan.net/Ghostrick.Nekomusume.full.1945016.jpg)');
     if (target === 'credits') {
         $('body').css('background-image', 'url(../img/bg.jpg)');
         $('#marquee').addClass('marquee');
+        window.manualLeave();
     }
     if (target === 'home') {
         allowLogin = false;
+        window.manualLeave();
     }
 
     $('.activescreen').removeClass('activescreen');
@@ -344,24 +339,24 @@ function mysql_real_escape_string(str) {
     'use strict';
     return str.replace(/[\0\x08\x09\x1a"\\\%]/g, function (char) {
         switch (char) {
-        case "\0":
-            return "\\0";
-        case "\x08":
-            return "\\b";
-        case "\x09":
-            return "\\t";
-        case "\x1a":
-            return "\\z";
-        case "\n":
-            return "\\n";
-        case "\r":
-            return "\\r";
-        case "\"":
-            return '""';
-        case "\\":
-        case "%":
-            return "\\" + char; // prepends a backslash to backslash, percent,
-            // and double/single quotes
+            case "\0":
+                return "\\0";
+            case "\x08":
+                return "\\b";
+            case "\x09":
+                return "\\t";
+            case "\x1a":
+                return "\\z";
+            case "\n":
+                return "\\n";
+            case "\r":
+                return "\\r";
+            case "\"":
+                return '""';
+            case "\\":
+            case "%":
+                return "\\" + char; // prepends a backslash to backslash, percent,
+                // and double/single quotes
         }
     });
 }
