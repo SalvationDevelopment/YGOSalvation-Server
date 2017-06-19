@@ -683,7 +683,8 @@ div#sidechat {
     z-index: 90;
     resize: both;
     overflow: auto;
-    font-size: .8em;
+    font-family: 'Roboto', serif;
+    font-size: 100%;
 }
 
 #sidechattext {
@@ -701,7 +702,8 @@ div#sidechat {
     /* opacity: .5; */
     padding: 0;
     margin: 0;
-    font-size: .75em;
+    font-family: 'Roboto', serif;
+    font-size: 100%;
     color: yellow;
 }
 
