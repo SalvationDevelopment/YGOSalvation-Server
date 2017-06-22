@@ -51,6 +51,7 @@ module.exports = {
         70903634: 1, //Right Arm of the Forbidden One
         8124921: 1, //Right Leg of the Forbidden One
         83555666: 1, //Ring of Destruction
+        83555667: 1, //Ring of Destruction
         61441708: 1, //Sacred Phoenix of Nephthys
         26202165: 1, //Sangan
         8131171: 1, //Sinister Serpent
