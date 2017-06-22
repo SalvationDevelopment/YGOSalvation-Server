@@ -153,66 +153,13 @@ function validateDeck(deck, banlist, database, cardpool, prerelease) {
                 return validate;
             }
         }
-        // check cardpool 
-        /*     console.log('checking against', cardpool);
-            for (var card in main) {
-                var reference = getCardById(card);
-                if (cardpool == 'OCG/TCG' && reference.ot == 4) {
-                    validate.error = true;
-                    validate.msg = '"' + reference.name + '"' + " is not allowed in the OCG/TCG card pool";
-                    return validate;
-                }
-                if (cardpool == 'TCG' && (reference.ot == 4 || reference.ot == 1 || reference.ot == 5)) {
-                    validate.error = true;
-                    validate.msg = '"' + reference.name + '"' + " is not allowed in the TCG card pool";
-                    return validate;
-                }
-                if (cardpool == 'OCG' && (reference.ot == 4 || reference.ot == 2 || reference.ot == 6)) {
-                    validate.error = true;
-                    validate.msg = '"' + reference.name + '"' + " is not allowed in the OCG card pool";
-                    return validate;
-                }
-            }
-            for (var card in side) {
-                var reference = getCardById(card);
-                if (cardpool == 'OCG/TCG' && reference.ot == 4) {
-                    validate.error = true;
-                    validate.msg = '"' + reference.name + '"' + " is not allowed in the OCG/TCG card pool";
-                    return validate;
-                }
-                if (cardpool == 'TCG' && (reference.ot == 4 || reference.ot == 1 || reference.ot == 5)) {
-                    validate.error = true;
-                    validate.msg = '"' + reference.name + '"' + " is not allowed in the TCG card pool";
-                    return validate;
-                }
-                if (cardpool == 'OCG' && (reference.ot == 4 || reference.ot == 2 || reference.ot == 6)) {
-                    validate.error = true;
-                    validate.msg = '"' + reference.name + '"' + " is not allowed in the OCG card pool";
-                    return validate;
-                }
-            }
-            for (var card in extra) {
-                var reference = getCardById(card);
-                if (cardpool == 'OCG/TCG' && reference.ot == 4) {
-                    validate.error = true;
-                    validate.msg = '"' + reference.name + '"' + " is not allowed in the OCG/TCG card pool";
-                    return validate;
-                }
-                if (cardpool == 'TCG' && (reference.ot == 4 || reference.ot == 1 || reference.ot == 5)) {
-                    validate.error = true;
-                    validate.msg = '"' + reference.name + '"' + " is not allowed in the TCG card pool";
-                    return validate;
-                }
-                if (cardpool == 'OCG' && (reference.ot == 4 || reference.ot == 2 || reference.ot == 6)) {
-                    validate.error = true;
-                    validate.msg = '"' + reference.name + '"' + " is not allowed in the OCG card pool";
-                    return validate;
-                }
-            } */
         // check banlist.
         for (var card in banlist.bannedCards) {
             var cardAmount = 0,
                 reference = getCardById(card);
+            if (reference.alias) {
+                card = reference.alias;
+            }
             if (main[card]) {
                 cardAmount += main[card];
             }
