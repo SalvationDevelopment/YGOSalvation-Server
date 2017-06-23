@@ -259,17 +259,7 @@ var databaseSystem = (function () {
     }
 
 
-    $.getJSON('/manifest/manifest_0-en-OCGTCG.json', function (data) {
-        dbs.OCGTCG = data;
-        completedatabase = dbs.OCGTCG;
 
-        setDatabase(['OCGTCG']);
-        $('#deckeditloading').remove();
-        if (internalLocal === 'deckedit') {
-            deckeditloader();
-        }
-        
-    });
 
 
     $.getJSON('/manifest/manifest_3-Goats.json', function (data) {
@@ -287,6 +277,17 @@ var databaseSystem = (function () {
             $('.banlistSelect, #creategamebanlist').append('<option ' + selected + ' value="' + list + '">' + list + '</option>');
         });
         activeBanlist = $('.banlistSelect option:selected').val();
+        $.getJSON('/manifest/manifest_0-en-OCGTCG.json', function (data) {
+            dbs.OCGTCG = data;
+            completedatabase = dbs.OCGTCG;
+
+            setDatabase(['OCGTCG']);
+            $('#deckeditloading').remove();
+            if (internalLocal === 'deckedit') {
+                deckeditloader();
+            }
+
+        });
     });
 
     $.getJSON('./setcodes.json', 'utf-8', function (data) {
