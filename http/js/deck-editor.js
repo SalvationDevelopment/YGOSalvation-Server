@@ -119,19 +119,11 @@ function docardStackSort(db) {
     return db;
 }
 
-var oldDB = '[]';
-
-try {
-    oldDB = JSON.parse(localStorage.compiledDB);
-} catch (error) {
-    printError('Unable to load cached Database.');
-    oldDB = [];
-}
 
 
 var databaseSystem = (function () {
     'use strict';
-    var database = oldDB || [],
+    var database = [],
         activeBanlist = '',
         banlist = {},
         dbs = {
@@ -267,24 +259,7 @@ var databaseSystem = (function () {
     }
 
 
-    $.getJSON('/manifest/manifest_0-en-OCGTCG.json', function (data) {
-        dbs.OCGTCG = data;
-        completedatabase = dbs.OCGTCG;
 
-        setDatabase(['OCGTCG']);
-        $('#deckeditloading').remove();
-        if (internalLocal === 'deckedit') {
-            deckeditloader();
-        }
-        setTimeout(function () {
-            try {
-                localStorage.compiledDB = JSON.stringify(data);
-            } catch (e) {
-                printError('Failed to store cache of database!');
-                printError(e);
-            }
-        }, 1000);
-    });
 
 
     $.getJSON('/manifest/manifest_3-Goats.json', function (data) {
@@ -302,6 +277,17 @@ var databaseSystem = (function () {
             $('.banlistSelect, #creategamebanlist').append('<option ' + selected + ' value="' + list + '">' + list + '</option>');
         });
         activeBanlist = $('.banlistSelect option:selected').val();
+        $.getJSON('/manifest/manifest_0-en-OCGTCG.json', function (data) {
+            dbs.OCGTCG = data;
+            completedatabase = dbs.OCGTCG;
+
+            setDatabase(['OCGTCG']);
+            $('#deckeditloading').remove();
+            if (internalLocal === 'deckedit') {
+                deckeditloader();
+            }
+
+        });
     });
 
     $.getJSON('./setcodes.json', 'utf-8', function (data) {
@@ -329,7 +315,7 @@ var databaseSystem = (function () {
 
     function directLookup(id) {
         var result = {},
-            dbuse = (dbs.OCGTCG.length) ? dbs.OCGTCG : oldDB;
+            dbuse = dbs.OCGTCG;
 
         dbuse.some(function (card, index) {
             if (id === card.id) {
@@ -691,12 +677,12 @@ var currentSearchFilter = (function () {
         }
     }
 
-	function filterToken(result) {
-		return result.filter(function (item){ 
-			//item is not a token
-			return item.type !== 16401;
-		})
-	}
+    function filterToken(result) {
+        return result.filter(function (item) {
+            //item is not a token
+            return item.type !== 16401;
+        })
+    }
 
     function filterAll(cards, filter) {
         var cardsf = cards;
@@ -715,7 +701,7 @@ var currentSearchFilter = (function () {
         cardsf = filterLevel(cardsf, filter.level, filter.levelop) || cardsf;
         cardsf = filterScale(cardsf, filter.scale, filter.scaleop) || cardsf;
         cardsf = filterSet(cardsf, filter.set) || cardsf;
-		cardsf = filterToken(cardsf) || cardsf;
+        cardsf = filterToken(cardsf) || cardsf;
         return cardsf;
     }
 
@@ -1609,18 +1595,18 @@ $('.typeSelect').on('change', function () {
     $('.monsterCardSelect, .monsterTypeSelect, .spellSelect, .trapSelect, .attributeSelect, .raceSelect').css('display', 'none');
     $('.attributeSelectl, .raceSelectl').css('display', 'none');
     switch (target) {
-    case 'Monster':
-        $('.monsterCardSelect, .monsterTypeSelect, .attributeSelect, .raceSelect').css('display', 'block');
-        $('.attributeSelectl, .raceSelectl').css('display', 'block');
-        break;
-    case 'Spells':
-        $('.spellSelect').css('display', 'block');
-        break;
-    case 'Traps':
-        $('.trapSelect').css('display', 'block');
-        break;
-    default:
-        break;
+        case 'Monster':
+            $('.monsterCardSelect, .monsterTypeSelect, .attributeSelect, .raceSelect').css('display', 'block');
+            $('.attributeSelectl, .raceSelectl').css('display', 'block');
+            break;
+        case 'Spells':
+            $('.spellSelect').css('display', 'block');
+            break;
+        case 'Traps':
+            $('.trapSelect').css('display', 'block');
+            break;
+        default:
+            break;
     }
 });
 
