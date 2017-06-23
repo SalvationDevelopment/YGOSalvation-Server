@@ -315,7 +315,7 @@ var databaseSystem = (function () {
 
     function directLookup(id) {
         var result = {},
-            dbuse = (dbs.OCGTCG.length) ? dbs.OCGTCG : oldDB;
+            dbuse = dbs.OCGTCG;
 
         dbuse.some(function (card, index) {
             if (id === card.id) {
