@@ -18,27 +18,22 @@ Salvation Development is a large scale social engineering non-profit project set
 If you are looking for a system to use just for dueling with custom cards server side this is not the system, please use [YGOCore](https://github.com/SalvationDevelopment/YGOCore) for that. This system is much more complex and geared to the sole use of SalvationDevelopment.
 
 ## Installation
+To run the system use `node server`. This will create a version of the system on your desktop at http://localhost.
 
-Install [Node JS](https://nodejs.org/en/) this will also install `node` and `npm` to your commandline, download or clone the program from this repository. Navigate to that folder in `cmd` or `terminal`. Run the following commands:
+- Install [Nodist](https://github.com/marcelklehr/nodist) for Windows Users, or [nvm](https://github.com/creationix/nvm) instead of Node JS. As nodejs versions increase we tend to stay with the latest releases. This helps simplify things.
+- For Windows users, open your PowerShell (not CMD) as Administrator (this is important), then `cd` to the root of the cloned repository to install the following. Non Windows users can skip this step.
+  - `npm install --global windows-build-tools`
 
-* `npm install -g istanbul` installs the code coverage check system.
-* `npm install -g mocha`  installs the test harness.
-* A local private IRC server is also recommended.
-
-This will setup a run enviroment  you a test harnesses.
+- Run the following commands. It installs a package manager, and a testing harness, and then the dependencies. 
+  - `npm install yarn -g`
+  - `npm install -g istanbul`
+  - `npm install -g mocha`
+  - `yarn install`
 
 To run the system use `node server`. This will create a version of the system on your desktop at http://localhost.
 
-### Windows 10 users (updated installation steps)
-
-- Install [Nodist](https://github.com/marcelklehr/nodist) instead of Node JS.
-- Open your PowerShell as Administrator (this is important), then `cd` to the root of the cloned repository to install the following 
-  - `npm install --global windows-build-tools`
-  - `npm install yarn -g`
-  - `yarn install`
-
 ## Licensing
-**Do not use our software without our permission.** It is ment for use at http://ygopro.us if you want to use this software for something please leave open an issue explaining your intended use and we will write you a custom licence.
+**Do not use our software without our permission.** It is ment for use at http://ygosalvation.com if you want to use this software for something please leave open an issue explaining your intended use and we will write you a custom licence.
 
 *This software was developed and designed to help the Yu-Gi-Oh! Online community which for years has been socially suffering. In line with that, to protect the community, this project is 'mostly open'. This software can not be used at scale without written permission. That means no more than 10 users. There is a very speific use case I have in mind where we will give out an a flexible licence if asked by companies and major community leaders. I've seen this software abused, and we do not want to see that happen again. Basically you are not allowed to use this without asking for its creator's permission first.*
 
