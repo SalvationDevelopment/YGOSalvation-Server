@@ -26,7 +26,7 @@ body {
     background-size: cover;
     font-family: 'Roboto', sans-serif;
     font-size: 15px;
-    font-weight: 400;
+    font-weight: 200;
     overflow: hidden;
     width: 100vw;
     transition: background-image 2s ease-in;
@@ -79,10 +79,11 @@ h1 {
     text-align: center;
     padding: 0;
     line-height: 1.2em;
-    font-family: 'Poiret One', cursive;
+    font-family: 'Lato', cursive;
     text-shadow: 0 0 0px white;
-    font-variant: small-caps ;
+    font-variant: small-caps;
     text-transform: none;
+    font-weight: 300;
 }
 
 h2 {
@@ -516,7 +517,7 @@ li.logolink {
 .psudolinksingle {
     cursor: pointer;
     color: white;
-    font-weight: bold;
+    font-weight: thin;
 }
 
 .psudolinksingle:hover {
@@ -2688,7 +2689,6 @@ div#creditslink:hover {
 #languagesetter {
     text-align: center;
     color: white;
-    font-weight: 800;
     width: 100%;
     position: absolute;
     bottom: 2.5em;
