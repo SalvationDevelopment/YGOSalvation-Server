@@ -194,10 +194,16 @@ function singlesitenav(target) {
     }
     if (target === 'gamelist') {
         $('body').css('background-image', colorbg());
-        if (launcher === false) {
-            window.manualModeGamelistSwitch();
-        }
         window.manualLeave();
+    }
+
+    if (target === 'lobby') {
+        $('#automationduelfield').html(' ');
+        $('#ingamesidebutton').css('display', 'none');
+        $('.field').removeClass('sidemode');
+        $('.sidingzone').removeClass('sidemode');
+        $('#ingamesidebutton').css('display', 'none');
+        $('#ingamexsidebutton').css('display', 'none');
     }
     if (target === 'chat') {
         $('body').css('background-image', colorbg());

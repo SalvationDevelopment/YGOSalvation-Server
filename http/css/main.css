@@ -73,15 +73,16 @@ body.unlogged {
 
 h1 {
     color: white;
-    font-size: 4.5em;
+    font-size: 10vw;
     margin: 0 auto;
     padding: 0;
     text-align: center;
     padding: 0;
     line-height: 1.2em;
     font-family: 'Poiret One', cursive;
-    text-shadow: 0 0 1px darkgrey;
-    font-weight: 200
+    text-shadow: 0 0 0px white;
+    font-variant: small-caps ;
+    text-transform: none;
 }
 
 h2 {
@@ -196,12 +197,12 @@ aside {
 
 .featurelist {
     font-size: 10px;
-    color: grey;
-    text-align: center;
-    padding: 5px;
-    text-align: center;
+    color: white;
+    background: rgba(0, 0, 0, .75);
+    padding: 5px 5%;
+    text-align: right;
     margin: 0 auto;
-    width: 80%;
+    width: 100%;
 }
 
 .featurelist li {
@@ -495,23 +496,51 @@ input#ips_remember {
 button#dolog {
     border-radius: 20px;
     border: 1px solid white;
-    background: rgba(255, 0, 100, .5);
+    background: rgba(0, 0, 0, .5);
     padding: 6px 40px;
     color: white;
     margin-bottom: 40px;
     text-transform: uppercase;
+}
+button#dolog:hover {
+    border: 1px solid white;
+    background: rgba(255, 0, 100, .5);
+    color: white;
+    text-transform: uppercase;
     box-shadow: 0 0 10px 5px black;
 }
-
+li.logolink {
+    float: left;
+     font-variant: small-caps ;
+}
 .psudolinksingle {
     cursor: pointer;
     color: white;
+    font-weight: bold;
 }
 
 .psudolinksingle:hover {
     color: hotpink;
 }
-
+ul#socialmediabuttons {
+    position: absolute;
+    right: 2vw;
+    top: 40%;
+    height: 20%;
+    padding: 0;
+    margin: 0;
+}
+#socialmediabuttons li {
+    height: 33%;
+    list-style: none;
+    text-align: center;
+    margin-top: 5%;
+    width: 3vw;
+}
+#socialmediabuttons img {
+    display: block;
+    width: 100%;
+}
 div#actions {
     position: absolute;
     width: 66px;
@@ -2347,7 +2376,7 @@ a.launcheronly.loginsystem {
     -webkit-animation-name: pulse;
     -webkit-animation-duration: 1s;
     -webkit-animation-iteration-count: 10;
-    border: 1px solid #444;
+    border: 1px solid #fff;
     box-shadow: 0 0 10px black;
 }
 
@@ -2656,15 +2685,25 @@ div#creditslink {
 div#creditslink:hover {
     color: purple;
 }
+#languagesetter {
+    text-align: center;
+    color: white;
+    font-weight: 800;
+    width: 100%;
+    position: absolute;
+    bottom: 2.5em;
+    background: black;
+    font-size: .8em;
+    /* border: 1px solid white; */
+}
 
 #languagesetter span {
     cursor: pointer;
-    background: rgba(0, 0, 0, .5);
     padding: 5px;
-    border-radius: 6px;
-    box-shadow: 0 0 17px black;
-    margin-top: 5px;
     /*    display: inline-block;*/
+}
+#languagesetter span:hover{
+    color: #e4a;
 }
 
 .game.true {

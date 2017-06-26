@@ -1,22 +1,4 @@
-var translationDB = [{
-    "item": "data-translation-salvationserver",
-    "en": "Salvation Server",
-    "es": "Servidor Salvation",
-    "de": "Salvation Server",
-    "fr": "Serveur Salvation",
-    "fr-ca": "Serveur Salvation",
-    "pt": "Servidor Salvation",
-    "nl": "Salvation Server",
-    "it": "Salvation Server",
-    "tr": "Salvation Sunucusu",
-    "el": "Salvation Server",
-    "zh": "Salvation服务器",
-    "ko": "",
-    "jp": "Salvationサーバー",
-    "fa": "سرور سلوایشن",
-    "ar": "سالفيشن سرفر",
-    "he": "שרת הגאולה"
-}, {
+var translationDB = [ {
     "item": "data-translation-deckedit",
     "en": "Deck Edit",
     "es": "Editar Mazo",
@@ -342,7 +324,7 @@ var translationDB = [{
     "he": "הרשם באמצעות פורום"
 }, {
     "item": "data-translation-forgotpassword",
-    "en": "Forgot Password",
+    "en": "Recover Password",
     "es": "Olvidaste tu Contraseña?",
     "de": "Passwort vergessen?",
     "fr": "Mot de passe oublié?",

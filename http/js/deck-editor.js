@@ -365,7 +365,7 @@ var currentSearchFilter = (function () {
 
     var currentSearch = [],
         currentSearchIndex = 0,
-        currentSearchPageSize = 18,
+        currentSearchPageSize = 15,
         currentSearchNumberOfPages = Math.ceil(currentSearch.length / currentSearchPageSize),
         currentFilter = getFilter(),
         render = [];
