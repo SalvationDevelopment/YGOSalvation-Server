@@ -46,6 +46,7 @@ function applySettings() {
     $('#music_volume').val(Number(localStorage.music_volume));
     $('#fontsize').val(Number(localStorage.textfontsize));
     $('#dblist').val(Number(localStorage.dblist));
+     $('#sitebgoption').val(localStorage.bg);
 }
 
 applySettings();
@@ -65,6 +66,7 @@ function saveSettings() {
     localStorage.music_volume = $('#music_volume').val();
     localStorage.textfontsize = $('#fontsize').val();
     localStorage.dblist = $('#dblist').val();
+    localStorage.bg = $('#sitebgoption').val();
     localStorage.dbtext = $('#dblist option:selected').text();
 }
 var mode = "production",
