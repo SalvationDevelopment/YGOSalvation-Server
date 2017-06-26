@@ -33,11 +33,7 @@ To run the system use `node server`. This will create a version of the system on
 To run the system use `node server`. This will create a version of the system on your desktop at http://localhost.
 
 ## Licensing
-<<<<<<< HEAD
-**Do not use our software without our permission.** It is ment for use at http://ygosalvation.com if you want to use this software for something please leave open an issue explaining your intended use and we will write you a custom licence.
-=======
-**Do not use our software without our permission.** It is meant for use at http://ygopro.us if you want to use this software for something please leave open an issue explaining your intended use and we will write you a custom licence.
->>>>>>> 4612068fb21eb002e5f391bf8234a923ecee2552
+**Do not use our software without our permission.** It is meant for use at http://ygosalvation.com if you want to use this software for something please leave open an issue explaining your intended use and we will write you a custom licence.
 
 *This software was developed and designed to help the Yu-Gi-Oh! Online community which for years has been socially suffering. In line with that, to protect the community, this project is 'mostly open'. This software can not be used at scale without written permission. That means no more than 10 users. There is a very specific use case I have in mind where we will give out an a flexible licence if asked by companies and major community leaders. I've seen this software abused, and we do not want to see that happen again. Basically you are not allowed to use this without asking for its creator's permission first.*
 

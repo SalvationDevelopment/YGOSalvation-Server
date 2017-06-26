@@ -34,24 +34,8 @@
     <link rel="stylesheet" href="css/animation.css">
     <link rel="stylesheet" type="text/css" href="css/deck-edit.css">
     <style>
-        #languagesetter {
-            text-align: center;
-            color: #e4a;
-            font-weight: 800;
-            text-shadow: 0 0 9px #FF3399;
-            padding: 0 15px;
-            word-spacing: 35px;
-            width: 100%;
-            position: absolute;
-            bottom: 3em;
-        }
-        
         #languagesetter span {
             cursor: pointer;
-        }
-        
-        #lightIRC {
-            width: 77%;
         }
     </style>
 
@@ -83,126 +67,72 @@
                 <div onclick="">Public</div>
             </div>
             <input id="publicchat">
-            <button id="onlinelisttogger" onclick="openusers()">Chatbox</button>
+            
 
         </div>
     </div>
     <div style="z-index:40; position:relative;">
-        <span class="psudolinksingle" onclick="singlesitenav('home')" id='psudologo'>
-            <h1 style="font-size:1.2em">
-            <span style="color:#e4a;">YGOPro</span> <span data-translation-salvationserver>Salvation Server</span>
-        </h1>
-        </span>
-        <ul class="featurelist" style="font-size:2vh">
 
-            <li class="launcheronly"><span class="psudolinksingle notneededinweb" onclick='ygopro("-l")'>LAN Mode</span>
-            </li>
-            <li class="launcheronly"><span data-translation-deckedit class="psudolinksingle" onclick='singlesitenav("deckedit");deckEditor.doSearch();'>Deck Edit</span>
-            </li>
-            <li class="launcheronly notneededinweb"><span data-translation-replays class="psudolinksingle" onclick='ygopro("-r");'>Replays</span>
-            </li>
-            <li class="launcheronly"><span data-translation-gamelist class="psudolinksingle" onclick="singlesitenav('gamelist');">Game List</span>
+        <ul class="featurelist" style="font-size:2vh">
+            <li class="logolink"><span class="psudolinksingle" onclick="singlesitenav('home')" id='psudologo'>
+            <h1 style="font-size:1.2em;" class="shine">
+                <span style="color:#e4a;text-shadow:none;">YGO</span>Salvation
+                </h1>
             </li>
             <li class="launcheronly"><span data-translation-host class="psudolinksingle" onclick="singlesitenav('host')">Host</span>
             </li>
-            <li><a data-translation-forum class="psudolinksingle " style='text-decoration:none' onclick="singlesitenav('forum')" target="_blank" href="https://forum.ygopro.us">Forum</a>
+            <li class="launcheronly"><span data-translation-deckedit class="psudolinksingle" onclick='singlesitenav("deckedit");deckEditor.doSearch();'>Deck Edit</span>
             </li>
-            <li><a data-translation-chat class="psudolinksingle " style='text-decoration:none' onclick="singlesitenav('forum')" target="_blank" href="https://discord.gg/J5wEPNG">Discord</a>
-                <li><span data-translation-faq class="psudolinksingle" onclick="singlesitenav('faq')">News</span>
-                </li>
-                <!--
-            <li><span data-translation-events class="psudolinksingle" onclick="singlesitenav('TournamentACP')">Tournaments</span>
-</li>
--->
-
-                <li><span data-translation-events class="psudolinksingle" onclick="singlesitenav('ranking');updateranking();">Ranking</span>
-                </li>
-                <!--
-            <li><span data-translation-ranking class="psudolinksingle" onclick="singlesitenav('ranking');">Profile</span>
-</li>
--->
-                <li class="launcheronly"><span class="psudolinksingle" onclick="singlesitenav('settings')" data-translation-settings>Settings</span>
-                </li>
-                <li class="launcheronly"><span class="psudolinksingle" onclick="singlesitenav('customization')" data-translation-customization>Customize</span>
-                </li>
+            <li class="launcheronly"><span data-translation-gamelist class="psudolinksingle" onclick="singlesitenav('gamelist');">Game List</span>
+            </li>
+            <li><span data-translation-events class="psudolinksingle" onclick="singlesitenav('ranking');updateranking();">Ranking</span>
+            </li>
+            <li class="launcheronly"><span class="psudolinksingle" onclick="singlesitenav('settings')" data-translation-settings>Settings</span>
+            </li>
+            <li><span data-translation-faq class="psudolinksingle" onclick="singlesitenav('faq')">News</span>
+            </li>
+            <li><a data-translation-forum class="psudolinksingle " style='text-decoration:none' onclick="singlesitenav('forum')"
+                    target="_blank" href="https://forum.ygopro.us">Forum</a>
+            </li>
+            <li><span data-translation-events class="psudolinksingle" id="onlinelisttogger" onclick="openusers()">Chat</span>
+            </li>
+            <li><a data-translation-chat class="psudolinksingle " style='text-decoration:none' onclick="singlesitenav('forum')"
+                    target="_blank" href="https://discord.gg/J5wEPNG">Discord</a></li>
+            
+            <li><span class="psudolinksingle" onclick="singlesitenav('credits')" data-translation-credits>Credits</span>
+            </li>
         </ul>
     </div>
     <header style="top:0vh;" id='anti'></header>
     <header style="top:0vh;" id='home'>
         <div id="homecontainer">
             <span class="psudolinksingle" onclick="singlesitenav('home')">
-                <h1 class="shine" style="padding-top:1em">
-                    <span  style="color:#e4a;">YGOPro</span> <span data-translation-salvationserver>Salvation Server</span>
+                <h1 class="shine" style="padding-top:16vh;letter-spacing: .2em;">
+                    <span  style="color:#e4a;text-shadow:none;">YGO</span><span>Salvation</span>
             </h1>
             </span>
 
             <form id="ipblogin" style="text-align:center; color: white !important; margin:0 auto;" class="loginsystem">
-                <input data-translation-forumusername id="ips_username" type="text" class="loginsystem" name="ips_username" tabindex="1" placeholder="Forum Username">
-                <input data-translation-forumpassword id="ips_password" type="password" class="loginsystem" name="ips_password" tabindex="2" placeholder="Forum Password">
+                <input data-translation-forumusername id="ips_username" type="text" class="loginsystem" name="ips_username" tabindex="1"
+                    placeholder="Forum Username">
+                <input data-translation-forumpassword id="ips_password" type="password" class="loginsystem" name="ips_password" tabindex="2"
+                    placeholder="Forum Password">
                 <br><span style="font-size:.9em; display:block; margin-top:-0.5em;"><input type="checkbox" id="ips_remember" ><span data-translation-rememberusernamepassword> Remember Username &amp; Password?</span>
-                <span style="display:inline-block; width:40px"></span><a data-translation-registerviaforum class=" loginsystem" href="https://forum.ygopro.us/index.php?/register/" target="_blank">Register via Forum</a> | <a data-translation-forgotpassword class=" loginsystem" href="https://forum.ygopro.us/index.php?/lostpassword/">Forgot Password</a>
+                <span style="display:inline-block; width:40px"></span><a data-translation-registerviaforum class=" loginsystem"
+                    href="https://forum.ygopro.us/index.php?/register/" target="_blank">Register via Forum</a> | <a data-translation-forgotpassword
+                    class=" loginsystem" href="https://forum.ygopro.us/index.php?/lostpassword/">Forgot Password</a>
                 </span>
                 <br />
                 <button data-translation-login id="dolog" class="loginsystem">Login</button>
             </form>
-            <div style="font-size:1.5em; text-align:center; color:pink" class='webonly'></div>
-            <div id="languagesetter">
-                <span onclick="translateLang('en')">English</span>
-
-                <span onclick="translateLang('es')">Español</span>
-                <span onclick="translateLang('de')">Deutsch</span>
-                <span onclick="translateLang('fr')">Français(France)</span>
-                <span onclick="translateLang('fr-ca')">Français(Québec)</span>
-                <span onclick="translateLang('it')">Italiano</span>
-                <span onclick="translateLang('pt')">Português</span>
-                <br />
-                <span onclick="translateLang('nl')">Nederlands</span>
-                <span onclick="translateLang('jp')">日本語</span>
-                <span onclick="translateLang('tr')">Türkçe</span>
-                <span onclick="translateLang('el')">Ελληνικά</span>
-                <span onclick="translateLang('fa')">فارسی</span>
-                <span onclick="translateLang('ar')">لغةعربي</span>
-                <span onclick="translateLang('zh')">中文(简体)</span>
-                <span onclick="translateLang('he')">עברית</span>
-            </div>
-            <div style="width:728px;margin:0 auto">
-
-            </div>
+            <ul id="socialmediabuttons">
+                <li><img src="img/social/Circle Color/Facebook.png"></li>
+                <li><img src="img/social/Circle Color/Twitter.png"></li>
+                <li><img src="img/social/Circle Color/Github.png"></li>
+            </ul>
 
 
-            <div id="intro" class="webonly shine" style="display:none;">
-                <img src="img/example.jpg" />
-                <p>YGOPRO Salvation Server the edge version of DevPro using the YGOPro engine an automated dueling system. Play with your friends and others around the world. Online multiplay with various game modes or LAN mode. <strong>The latest cards are added upon announcement</strong> for your review and experimentation.</p>
-                <p>Manage and <strong>construct an infinite amount of decks using all cards</strong>. Decks can be created for different banlists. Searching cards is simple by using the card text search function or card filters. Duels are recorded automatically. Watch duels at a later time and analyze them step by step. Game rules can be customized easily. You can <strong>set the banlist, timers, TCG or OCG rulings</strong> and much more. Duel together with a partner in 2vs2 mode, based on the tag duels from the Tag Force (PSP) series.</p>
-                <p>Background music for menu screens and during the duel. The music also changes when you have the advantage over your opponent, or when you are in a bad position. <strong>Change the music, sound effects, background image, card sleeves, card pictures, music and even the user interface elements!</strong></p>
-                <p>A growing forum community, active and approchable staff, you can speak directly with the developers. Completely open source, non-profit, and privately funded.</p>
 
-            </div>
-            <!--
-            <nav class="lander-main" style="margin-top: 15vh;">
-
-
-                <ul class="webonly" style="text-align:center; padding:0;" id="mirrors" itemscope itemtype="http://schema.org/SoftwareApplication">
-                   <li>Login</li>
-                <li>Sign Up</li>
-                    <li><a data-translation-playnow href="SalvationInstaller.exe" onclick="_gaq.push(['_trackEvent', 'Site', 'Download', 'Full Windows']);">Download</a>
-
-                    </li>
-
-                    <li><a href="setups/SalvationInstaller.exe.torrent">Torrent</a>
-                    </li>
-                    <li><a href="https://drive.google.com/open?id=0B1_kDjF-SO9wV0tBTll0THp1ekk">Mirror 1</a></li>
-
-                    <!--                    <li><a href="SalvationInstaller.exe">Mirror 3</a></li>-->
-            <!--
-                <li><a href="https://www.mediafire.com/?xrm3rko4ln3e64z">Mirror 4</a></li>
-
-                </ul>
-
-            </nav>
-    -->
-            <div style="cursor:pointer;text-align:center; color:white">100% browser based! No Download!<br />Works best on Google Chrome, incompatible with Microsoft Edge.</div>
-            <div id="creditslink" onclick="singlesitenav('credits')" style="cursor:pointer;text-align:center; margin-top:7vh; color:#aaa">Credits</div>
 
         </div>
     </header>
@@ -421,7 +351,8 @@
             <div id="gamelistitems"></div>
             <div id="manualgamelistitems" style="display:none"></div>
             <div class='gamelistcenter' style="float:left; margin:1vh 1vw">
-                Active Duels : <span id="activeduels"></span> | Duelist : <span id="activeduelist"></span> | Connected : <span id="onlineconnectted"></span>
+                Active Duels : <span id="activeduels"></span> | Duelist : <span id="activeduelist"></span> | Connected :
+                <span id="onlineconnectted"></span>
             </div>
 
 
@@ -494,7 +425,7 @@
                 <label data-translation-useai>Manual Mode</label>
 <input type="checkbox" id="Manual">
 -->
-<!--                 <label data-translation-enableprerelease>Enable Pre-release Cards</label>
+                <!--                 <label data-translation-enableprerelease>Enable Pre-release Cards</label>
                 <input type="checkbox" value="checked" id="enableprerelease">
                 <br /> -->
                 <label data-translation-disablecheckdeck>Disable Check Deck</label>
@@ -533,7 +464,7 @@
                     <label for="banlistSelect">Ban List:
                         <select class="banlistSelect"></select>
                     </label>
-<!--                    <br />
+                    <!--                    <br />
                      <label for="databaseSelect">Database:
                         <select class="databaseSelect">
                             <option value="OCGTCG">OCG / TCG</option>
@@ -1157,7 +1088,7 @@
                 <br/>
 <span id="translatetimelimit">Time Limit </span><span id="lobbytimelimit"></span>
 -->
-<!--                 <br/>
+                <!--                 <br/>
                 <span id="translateprerelease">Pre-release cards</span><span id="lobbyprerelease"></span> -->
                 <br />
                 <span id="translatestartinglifepoints">Starting Lifepoints</span><span id="lobbylp"></span>
@@ -1800,7 +1731,7 @@
 
             <button onclick="startSpecialSummon('token')">Create Token</button>
             <select id="tokendropdown"></select>
-<!--             <select id="ingamerps" onclick="manualRPS()">Rock-Paper-Scissors</button>
+            <!--             <select id="ingamerps" onclick="manualRPS()">Rock-Paper-Scissors</button>
             <select id="ingameflipcoin" onclick="manualFlip()">Flip Coin</button>
             <select id="ingamerolldice" onclick="manualRoll()">Roll Dice</button> -->
             <button id="ingamesurrenderbutton" onclick="surrender()">Surrender</button>
@@ -2029,9 +1960,29 @@
             <div class="dbcardeffecttext"></div>
         </div>
     </header>
+    <div id="languagesetter">
+        <span onclick="translateLang('en')">English</span>
+
+        <span onclick="translateLang('es')">Español</span>
+        <span onclick="translateLang('de')">Deutsch</span>
+        <span onclick="translateLang('fr')">Français(France)</span>
+        <span onclick="translateLang('fr-ca')">Français(Québec)</span>
+        <span onclick="translateLang('it')">Italiano</span>
+        <span onclick="translateLang('pt')">Português</span>
+        <span onclick="translateLang('nl')">Nederlands</span>
+        <span onclick="translateLang('jp')">日本語</span>
+        <span onclick="translateLang('tr')">Türkçe</span>
+        <span onclick="translateLang('el')">Ελληνικά</span>
+        <span onclick="translateLang('fa')">فارسی</span>
+        <span onclick="translateLang('ar')">لغةعربي</span>
+        <span onclick="translateLang('zh')">中文(简体)</span>
+        <span onclick="translateLang('he')">עברית</span>
+    </div>
     <footer class="superfooter">
         <div style='max-width:1000px; margin:0 auto '>
-            YGOPro Salvation Server is not affiliated with Konami, NAS, Shueisha, or Kazuki Takahashi. Salvation Server &copy; 2013-2017. Powered by Yu-Jo Friendship and fans of Yu-Gi-Oh! worldwide. Please support the offical release. Work with us, don't sue us.</div>
+            YGOPro Salvation Server is not affiliated with Konami, NAS, Shueisha, or Kazuki Takahashi. Salvation Server &copy; 2013-2017.
+            Powered by Yu-Jo Friendship and fans of Yu-Gi-Oh! worldwide. Please support the offical release. Work with us,
+            don't sue us.</div>
     </footer>
 
     <script src="js/translations.js"></script>
@@ -2047,7 +1998,8 @@
             var ga = document.createElement('script');
             ga.type = 'text/javascript';
             ga.async = true;
-            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') +
+                '.google-analytics.com/ga.js';
             var s = document.getElementsByTagName('script')[0];
             s.parentNode.insertBefore(ga, s);
         })();
@@ -2087,17 +2039,28 @@
             <h4>TERMS OF SERVICE</h4>
             <p> The Following is the Terms of Service of Salvation Development that all Users have agreed to upon Installation.</p>
 
-            <p>Owners, Developers, Investors, and Interns, Volunteers, and users of higher than standard ranking, access, or otherwise listed within the site, the site, the launcher, server side software, and /or launcher, are hereafter known as Salvation Development, administration, and or software where context is appropriate.</p>
+            <p>Owners, Developers, Investors, and Interns, Volunteers, and users of higher than standard ranking, access, or
+                otherwise listed within the site, the site, the launcher, server side software, and /or launcher, are hereafter
+                known as Salvation Development, administration, and or software where context is appropriate.</p>
 
             <h4>Privacy Policy</h4>
             <p>
-                Your privacy is very important to us. Accordingly, we developed this Policy in order for you to understand how we collect, use, communicate, disclose, and make use of personal information. The following outlines our privacy policy.</p>
+                Your privacy is very important to us. Accordingly, we developed this Policy in order for you to understand how we collect,
+                use, communicate, disclose, and make use of personal information. The following outlines our privacy policy.</p>
 
-            <p>Materials from all Salvation Development websites and applications identify themselves with unique identifiers, this information may at times be sent back to us along with including but not limited to; the username passwords and the internet protocol addresses and/or media access control address of the computer executing it. This information can be used to terminate the operation of what Salvation Development instance deemed breaching Terms of Service. Specific forms of communications from the User to our servers are made public record, it is linked to a user and serves as a public statement.</p>
+            <p>Materials from all Salvation Development websites and applications identify themselves with unique identifiers,
+                this information may at times be sent back to us along with including but not limited to; the username passwords
+                and the internet protocol addresses and/or media access control address of the computer executing it. This
+                information can be used to terminate the operation of what Salvation Development instance deemed breaching
+                Terms of Service. Specific forms of communications from the User to our servers are made public record, it
+                is linked to a user and serves as a public statement.</p>
 
-            <p>We will collect and use of personal information solely with the objective of fulfilling those purposes specified by us and for other compatible purposes, unless we obtain the consent of the individual concerned or as required by law.</p>
+            <p>We will collect and use of personal information solely with the objective of fulfilling those purposes specified
+                by us and for other compatible purposes, unless we obtain the consent of the individual concerned or as required
+                by law.</p>
 
-            <p>We will only retain personal information as long as necessary for the fulfilment of those purposes, or indefinitely to provide accurate records for the community of behavior of specific users.</p>
+            <p>We will only retain personal information as long as necessary for the fulfilment of those purposes, or indefinitely
+                to provide accurate records for the community of behavior of specific users.</p>
             <pre>
 <p>We will collect personal information by lawful and fair means and, where appropriate; where allowed by law.
 
