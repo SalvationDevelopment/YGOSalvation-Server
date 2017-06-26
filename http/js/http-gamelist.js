@@ -883,7 +883,7 @@ function manualModeGamelistSwitch() {
         });
     }
 }
-
+ manualModeGamelistSwitch();
 function mautomaticModeGamelistSwitch() {
     'use strict';
     if (launcher) {
