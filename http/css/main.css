@@ -91,7 +91,7 @@ h2 {
     text-align: center;
     margin: 0 auto;
     padding-top: 0;
-    font-family: 'Poiret One', cursive;
+    font-family: 'Lato', sans-serif;
     text-shadow: 0 0 1px #777;
     font-weight: 200;
     color: #aaa;
@@ -526,13 +526,13 @@ li.logolink {
 ul#socialmediabuttons {
     position: absolute;
     right: 2vw;
-    top: 40%;
-    height: 20%;
+    top: 30%;
+    height: 30%;
     padding: 0;
     margin: 0;
 }
 #socialmediabuttons li {
-    height: 33%;
+    height: 25%;
     list-style: none;
     text-align: center;
     margin-top: 5%;
