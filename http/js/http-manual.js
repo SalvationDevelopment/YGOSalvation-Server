@@ -383,7 +383,9 @@ function startSiding() {
 function makeGames() {
     'use strict';
     $('#manualgamelistitems').html('');
-    Object.keys(broadcast).forEach(function (gameName) {
+    var games = Object.keys(broadcast),
+        duelist = 0;
+    games.forEach(function (gameName) {
 
         var game = broadcast[gameName],
             player1 = game.player[0].name || '___',
@@ -393,7 +395,15 @@ function makeGames() {
             action = 'onclick = "manualJoin(\'' + gameName + '\')"',
             string = '<div data-game="' + game.roompass + '" class="game ' + started + '" ' + action + ' ' + game.roompass + '>' + players + '<span class="subtext" style="font-size:.5em"><br>' + game.mode + ' ' + game.banlist + ' </span></div>';
         $('#manualgamelistitems').append(string);
+        if (game.player[0].name) {
+            duelist++
+        }
+         if (game.player[1].name) {
+            duelist++
+        }
     });
+    $('#activeduels').text(games.length);
+    $('#activeduelist').text(duelist);
 }
 
 var uploadedDeck = '';
