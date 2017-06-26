@@ -843,3 +843,9 @@ function screenshot() {
         }
     });
 }
+
+$('[data-tooltip!=""]').qtip({ // Grab all elements with a non-blank data-tooltip attr.
+    content: {
+        attr: 'data-tooltip' // Tell qTip2 to look inside this attr for its content
+    }
+})
