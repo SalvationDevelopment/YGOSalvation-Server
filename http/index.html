@@ -33,7 +33,7 @@
     <link rel="stylesheet" href="css/animation.css">
     <link rel="stylesheet" type="text/css" href="css/deck-edit.css">
     <link rel="stylesheet" type="text/css" href="css/jquery.qtip.min.css">
-    
+
     <style>
         #languagesetter span {
             cursor: pointer;
@@ -68,7 +68,7 @@
                 <div onclick="">Public</div>
             </div>
             <input id="publicchat">
-            
+
 
         </div>
     </div>
@@ -78,26 +78,26 @@
             <li class="logolink"><span class="psudolinksingle" onclick="singlesitenav('home')" id='psudologo'>
             <h1 style="font-size:1.2em;" class="shine">
                 <span style="color:#e4a;text-shadow:none;">YGO</span>Salvation
-                </h1>
+              </h1>
             </li>
             <li class="launcheronly"><span data-translation-deckedit class="psudolinksingle" onclick='singlesitenav("deckedit");deckEditor.doSearch();'>Deck Edit</span>
             </li>
             <li class="launcheronly"><span data-translation-host class="psudolinksingle" onclick="singlesitenav('host')">Host</span>
             </li>
-            
+
             <li class="launcheronly"><span data-translation-gamelist class="psudolinksingle" onclick="singlesitenav('gamelist');">Game List</span>
             </li>
             <li class="launcheronly"><span class="psudolinksingle" onclick="singlesitenav('settings')" data-translation-settings>Settings</span>
             </li>
             <li><span data-translation-events class="psudolinksingle" onclick="singlesitenav('ranking');updateranking();">Ranking</span>
             </li>
-            
+
             <li><span data-translation-faq class="psudolinksingle" onclick="singlesitenav('faq')">News</span>
             </li>
             <li><a data-translation-forum class="psudolinksingle " style='text-decoration:none' onclick="singlesitenav('forum')"
                     target="_blank" href="https://forum.ygopro.us">Forum</a>
             </li>
-            <li><span data-translation-events class="psudolinksingle" id="onlinelisttogger" onclick="openusers()">Chat</span>
+            <li class="launcheronly"><span data-translation-events class="psudolinksingle" id="onlinelisttogger" onclick="openusers()">Chat</span>
             </li>
             <li><span class="psudolinksingle" onclick="singlesitenav('credits')" data-translation-credits>Credits</span>
             </li>
@@ -107,7 +107,7 @@
     <header style="top:0vh;" id='home'>
         <div id="homecontainer">
             <span class="psudolinksingle" onclick="singlesitenav('home')">
-                <h1 class="shine" style="padding-top:16vh;letter-spacing: .1em;">
+                <h1 class="testclass" style="padding-top:16vh;letter-spacing: .02em;">
                     <span  style="color:#e4a;text-shadow:none;">YGO</span><span>Salvation</span>
             </h1>
             </span>
@@ -1106,7 +1106,7 @@
                 </select>
             </div>
             <!--
-           
+
 -->
             <div id="lobbystartcancel">
                 <button onclick="manualStart()" id="lobbystart">Start Duel</button>
