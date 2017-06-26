@@ -145,16 +145,17 @@ var uncensoredcolor = 'url(../img/magimagipink.jpg)',
 
 function blackbg() {
     'use strict';
-    return (usecensor) ? censoredblack : uncensoredblack;
+    return (localStorage.bg !== 'magi') ? censoredblack : uncensoredblack;
 }
 
 function colorbg() {
     'use strict';
-    return (usecensor) ? censoredcolor : uncensoredcolor;
+    return (localStorage.bg  !== 'magi') ? censoredcolor : uncensoredcolor;
 }
 
 function singlesitenav(target) {
     'use strict';
+     saveSettings();
     if (target === 'forum') {
         return;
     }
@@ -248,7 +249,7 @@ function singlesitenav(target) {
     $('header').not('#anti').css('left', '100vw');
     $('#anti').css('left', '0');
     $('#' + target).css('left', '0').addClass('activescreen');
-    saveSettings();
+   
     $('#manualcontrols button').css({
         'display': 'none'
     });
