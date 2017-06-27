@@ -1099,7 +1099,7 @@ var deckEditor = (function () {
                 currentSearchFilter.setFilter('atkop', parseInt(atkop, 10));
             }
             if (def) {
-                currentSearchFilter.setFilter('def', parseInt(atk, 10));
+                currentSearchFilter.setFilter('def', parseInt(def, 10));
                 currentSearchFilter.setFilter('defop', parseInt(defop, 10));
             }
             if (level) {
