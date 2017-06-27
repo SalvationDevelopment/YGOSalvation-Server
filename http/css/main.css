@@ -500,12 +500,13 @@ button#doregister {
     background: rgba(0, 0, 0, .5);
     padding: 6px 40px;
     color: white;
-    margin-bottom: 40px;
     width:15%;
     text-transform: uppercase;
     border-top-left-radius: 0;
     border-bottom-left-radius: 0;
     font-size: 70%;
+     border-top-right-radius: 8px;
+    border-bottom-right-radius: 20px;
 }
 
 button#dolog {
@@ -515,19 +516,25 @@ button#dolog {
     background: rgba(0, 0, 0, .5);
     padding: 6px 40px;
     color: white;
-    margin-bottom: 40px;
+
     width:15%;
     text-transform: uppercase;
     border-top-right-radius: 0;
     border-bottom-right-radius: 0;
+     border-top-left-radius: 8px;
+    border-bottom-left-radius: 20px;
 }
 
-button#dolog:hover {
+button#dolog {
     border: 1px solid white;
     background: rgba(255, 0, 100, .5);
     color: white;
-    text-transform: uppercase;
-    box-shadow: 0 0 10px 5px black;
+}
+
+button#doregister {
+    border: 1px solid white;
+    background: rgba(75, 0, 100, .5);
+    color: white;
 }
 
 li.logolink {
@@ -2399,11 +2406,17 @@ a.launcheronly.loginsystem {
     text-align: center;
     color: white!important;
     font-weight: bold;
+    border: 1px solid #fff;
+    box-shadow: 0 0 10px black;
+}
+
+#ips_username,
+#ips_password,
+#dolog,
+#doregister {
     -webkit-animation-name: pulse;
     -webkit-animation-duration: 1s;
     -webkit-animation-iteration-count: 10;
-    border: 1px solid #fff;
-    box-shadow: 0 0 10px black;
 }
 
 #ips_username {
@@ -2422,16 +2435,16 @@ a.launcheronly.loginsystem {
 
 @-webkit-keyframes pulse {
     from {
-        background-color: rgba(0, 0, 0, .85);
+       
         -webkit-box-shadow: 0 0 5px #000;
     }
     50% {
-        background-color: rgba(0, 0, 0, .5);
+      
         -webkit-box-shadow: 0 0 50px rgba(255, 100, 200, .5);
         border-color: rgba(255, 100, 200, .5);
     }
     to {
-        background-color: rgba(0, 0, 0, .85);
+        
         -webkit-box-shadow: 0 0 5px #000;
     }
 }
