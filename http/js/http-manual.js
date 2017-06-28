@@ -44,8 +44,8 @@ function setFieldSpellBG() {
     });
     var picID0 = $('#automationduelfield .p0.SPELLZONE.i5').attr('data-id'),
         picID1 = $('#automationduelfield .p1.SPELLZONE.i5').attr('data-id'),
-        p0URL = 'url(https://rawgit.com/SalvationDevelopment/YGOPro-Images/master/field/' + picID0 + '.png)',
-        p1URL = 'url(https://rawgit.com/SalvationDevelopment/YGOPro-Images/master/field/' + picID1 + '.png)';
+        p0URL = 'url(https://raw.githubusercontent.com/shadowfox87/YGOSeries10CardPics/master/field/' + picID0 + '.png)',
+        p1URL = 'url(https://raw.githubusercontent.com/shadowfox87/YGOSeries10CardPics/master/field/' + picID1 + '.png)';
 
     if (picID0 && !picID1) {
         $('#fieldbg0 .fieldimage').css({
@@ -333,7 +333,7 @@ function makeSideCard(cards, zone) {
     cards.forEach(function (card, index) {
         var hardcard = JSON.stringify(card),
             src = card + '.jpg';
-        html += '<img class="sidedeckzonecard" src="https://rawgit.com/SalvationDevelopment/YGOPro-Images/master/' + src + '" data-"' + card + '" onclick = "sideonclick(' + index + ', \'' + zone + '\')" / > ';
+        html += '<img class="sidedeckzonecard" src="https://raw.githubusercontent.com/shadowfox87/YGOSeries10CardPics/master/' + src + '" data-"' + card + '" onclick = "sideonclick(' + index + ', \'' + zone + '\')" / > ';
     });
 
     $('.sidingzone .' + zone).html(html);
@@ -478,7 +478,7 @@ function stateUpdate(dataBinding) {
             'data-position': ref.position,
             'data-id': ref.id,
             'data-uid': ref.uid,
-            'src': (ref.id) ? 'https://rawgit.com/SalvationDevelopment/YGOPro-Images/master/' + ref.id + '.jpg' : 'img/textures/cover.jpg'
+            'src': (ref.id) ? 'https://raw.githubusercontent.com/shadowfox87/YGOSeries10CardPics/master/' + ref.id + '.png' : 'img/textures/cover.jpg'
         });
 
         if (ref.position === 'FaceDownDefence' || ref.position === 'FaceDownAttack') {
@@ -908,7 +908,7 @@ function reveal(cards, note) {
         $('#revealed').css('display', 'block');
     }
     cards.forEach(function (card, index) {
-        var src = (card.id) ? 'https://rawgit.com/SalvationDevelopment/YGOPro-Images/master/' + card.id + '.jpg' : 'img/textures/cover.jpg';
+        var src = (card.id) ? 'https://raw.githubusercontent.com/shadowfox87/YGOSeries10CardPics/master/' + card.id + '.jpg' : 'img/textures/cover.jpg';
         src = (note === 'specialcard' || card.note) ? 'img/textures/' + card.id + '.jpg' : src;
         revealcache.push(card);
         html += '<img id="revealuid' + card.uid + '" class="revealedcard" src="' + src + '" data-id="' + card.id + '" onclick = "revealonclick(' + index + ', \'' + note + '\')" data-uid="' + card.uid + '" data-position="' + card.position + card.location + '" / > ';
@@ -1201,7 +1201,7 @@ function manualReciver(message) {
             break;
         case "effect":
             $('#effectflasher').css('display', 'block');
-            $('#effectflasher .mainimage').attr('src', 'https://rawgit.com/SalvationDevelopment/YGOPro-Images/master/' + message.id + '.jpg');
+            $('#effectflasher .mainimage').attr('src', 'https://raw.githubusercontent.com/shadowfox87/YGOSeries10CardPics/master/' + message.id + '.jpg');
             setTimeout(function () {
                 $('#effectflasher').css('display', 'none');
             }, 1000);
