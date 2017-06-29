@@ -44,8 +44,8 @@ function setFieldSpellBG() {
     });
     var picID0 = $('#automationduelfield .p0.SPELLZONE.i5').attr('data-id'),
         picID1 = $('#automationduelfield .p1.SPELLZONE.i5').attr('data-id'),
-        p0URL = 'url(https://raw.githubusercontent.com/shadowfox87/YGOSeries10CardPics/master/field/' + picID0 + '.png)',
-        p1URL = 'url(https://raw.githubusercontent.com/shadowfox87/YGOSeries10CardPics/master/field/' + picID1 + '.png)';
+        p0URL = 'url(https://rawgit.com/Ygoproco/Live-images/master/pics/field/' + picID0 + '.png)',
+        p1URL = 'url(https://rawgit.com/Ygoproco/Live-images/master/pics/field/' + picID1 + '.png)';
 
     if (picID0 && !picID1) {
         $('#fieldbg0 .fieldimage').css({
