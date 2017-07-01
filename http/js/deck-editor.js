@@ -1,6 +1,7 @@
 /*global currentMousePos, getCardObject, reorientmenu, cardIs, $, storedUserlist, primus,prompt, alert, confirm, FileReader, btoa, alertmodal, personOfIntrest, deckeditloader*/
 /*jslint bitwise: true, plusplus:true, regexp:true, browser:true*/
 
+
 function printError(error) {
     'use strict';
     console.log(error);
@@ -825,10 +826,23 @@ var deckEditor = (function () {
         cards.forEach(function (card, index) {
             var hardcard = JSON.stringify(card),
                 src = card.id + '.png';
-            html += '<div class="searchwrapper" data-card-limit="' + card.limit + '"><img class="deckeditcard card" id="deceditcard' + index + zone + '" data-dropindex="' + index + '" data-dropzone="' + zone + '" src="https://raw.githubusercontent.com/shadowfox87/YGOSeries10CardPics/master/' + src + '" data-id="' + card.id + '" onError="this.onerror=null;this.src=\'https://rawgit.com/Ygoproco/Live-images/master/pics/' + src + '" data-id="' + card.id + '" onError="this.onerror=null;this.src=\'/img/textures/unknown.jpg\';" ondragstart="createCardReference(\'' + zone + '\', ' + index + ');" onclick = "deckeditonclick(' + index + ', \'' + zone + '\')" / ></div>';
+            html += '<div class="searchwrapper" data-card-limit="' + card.limit + '">'
+            html += '<img class="deckeditcard card" id="deceditcard' + index + zone + '" data-dropindex="' + index + '" data-dropzone="' + zone + '"  data-id = "' + card.id + '"'
+            html += 'src="https://raw.githubusercontent.com/shadowfox87/YGOSeries10CardPics/master/' + src + '" data-id="' + card.id + '" ondragstart="createCardReference(\'' + zone + '\', ' + index + ');" onclick = "deckeditonclick(' + index + ', \'' + zone + '\')" / >'
+            html += '</div>';
         });
 
         $('#deckedit .cardspace .' + zone).html(html);
+        $('#deckedit .cardspace .' + zone + ' img').error(function () {
+            if ($(this).attr('reloaded') === "attempted") {
+                $(this).attr('src', '/img/textures/unknown.jpg');
+            } else {
+                var src = $(this).attr('data-id');
+                $(this).attr('reloaded', "attempted");
+                $(this).attr('src', 'https://github.com/Ygoproco/Live-images/blob/master/pics/'+src+'.jpg?raw=true');
+            }
+        });
+
         //$('#subreveal').width(cards.length * 197);
     }
 
