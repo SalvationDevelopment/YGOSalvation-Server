@@ -839,7 +839,7 @@ var deckEditor = (function () {
             } else {
                 var src = $(this).attr('data-id');
                 $(this).attr('reloaded', "attempted");
-                $(this).attr('src', 'https://github.com/Ygoproco/Live-images/blob/master/pics/'+src+'.jpg?raw=true');
+                $(this).attr('src', 'https://rawgit.com/Ygoproco/Live-images/master/pics/'+src+'.jpg');
             }
         });
 
