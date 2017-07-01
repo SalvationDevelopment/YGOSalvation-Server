@@ -116,7 +116,7 @@ input.decknameInput {
 #deckedit .center img {
     width: 100%;
     margin: 0;
-    height: auto;
+    height: 4.5vw;
 }
 
 .center .mainDeck {
@@ -379,7 +379,6 @@ label[for="typeSelect"] {
 
 .right .searchwrapper img {
     width: 90%;
-    height: auto;
 }
 
 .searchwrapper {
