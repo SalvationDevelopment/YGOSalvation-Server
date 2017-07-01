@@ -334,6 +334,15 @@ function makeSideCard(cards, zone) {
         var hardcard = JSON.stringify(card),
             src = card + '.jpg';
         html += '<img class="sidedeckzonecard" src="https://raw.githubusercontent.com/shadowfox87/YGOSeries10CardPics/master/' + src + '" data-"' + card + '" onclick = "sideonclick(' + index + ', \'' + zone + '\')" / > ';
+        $('img.sidedeckzonecard').error(function () {
+            if ($(this).attr('reloaded') === "attempted") {
+                $(this).attr('src', '/img/textures/unknown.jpg');
+            } else {
+                var src = $(this).attr('data-id');
+                $(this).attr('reloaded', "attempted");
+                $(this).attr('src', 'https://rawgit.com/Ygoproco/Live-images/master/pics/'+src+'.jpg');
+            }
+        });
     });
 
     $('.sidingzone .' + zone).html(html);
