@@ -1,7 +1,7 @@
 {
     "name": "ygopro-salvation-server",
     "description": "YGOPro US Server (Salvation) - Saving Yu-Gi-Oh!",
-    "main": "application.js",
+    "main": "server.js",
     "version": "5.0.0",
     "private": true,
     "keywords": ["ygopro", "Salvation Development", "yugioh"],

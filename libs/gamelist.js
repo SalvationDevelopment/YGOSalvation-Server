@@ -33,8 +33,6 @@ function mapCards(deck) {
 }
 
 var express = require('express'),
-    child_process = require('child_process'),
-    express = require('express'),
     fs = require('fs'),
     spdy = require('spdy'),
     http = require('http'),
@@ -90,8 +88,9 @@ var primus,
     currentGlobalMessage = '',
     pack = require('../package.json'),
     adminlist = pack.admins,
-    HTTP_PORT =pack.port || 80,
+    HTTP_PORT = pack.port || 80,
     banlistedUsers = require('./bansystem.js'),
+    updateHTTP = require('./update_http.js'),
     chatbox = [],
     sayCount = 0;
 
@@ -110,15 +109,33 @@ app.use(function (req, res, next) {
 });
 
 
-function gitRoute(req, res) {
-    res.send('Attempting to Update Server...');
+updateHTTP(function (error, database, banlist) {
+    if (!error) {
+        process.database = database;
+        process.banlist = banlist;
+    } else {
+        console.log('No DB or banlist');
+    }
+});
+
+function gitRoute(req, res, next) {
+    res.send('Attempting to Update Server...<br />');
     var gitUpdater = domain.create();
     gitUpdater.on('error', function (err) {
         console.log('        [Update System] ' + 'Git Failed'.grey, err);
+        res.send('Failed to update server');
+        next();
     });
+
     gitUpdater.run(function () {
         child_process.spawn('git', ['pull'], {}, function () {
-            child_process.fork('./update.js');
+            updateHTTP(function (error, database, banlist) {
+                res.send('Updated Server, generating files...');
+                process.database = database;
+                process.banlist = banlist;
+                next();
+            });
+
         });
     });
 }
@@ -127,12 +144,12 @@ app.get('/generate', function (req, res) {
     child_process.fork('./update.js');
 });
 
-app.post('/git', function (req, res) {
-    gitRoute(req, res);
+app.post('/git', function (req, res, next) {
+    gitRoute(req, res, next);
 });
 
-app.get('/git', function (req, res) {
-    gitRoute(req, res);
+app.get('/git', function (req, res, next) {
+    gitRoute(req, res, next);
 });
 
 
@@ -301,7 +318,7 @@ function globalCall(data) {
     });
 }
 
-function globalRequested(data, socket){
+function globalRequested(data, socket) {
     forumValidate(data, function (error, info, body) {
         if (error) {
             console.log('[Gamelist]', error);
@@ -486,170 +503,170 @@ function onData(data, socket) {
 
 
 
-    case ('duelrequest'):
+        case ('duelrequest'):
 
-        announce({
-            clientEvent: 'duelrequest',
-            target: data.target,
-            from: data.from,
-            roompass: data.roompass
-        });
-
-        break;
-    case ('ai'):
-        if (socket.username && socket.aiReady) {
-            console.log(socket.username, 'requested AI Duel');
             announce({
                 clientEvent: 'duelrequest',
-                target: 'SnarkyChild',
-                from: socket.username,
-                roompass: data.roompass,
-                deck: data.deck
+                target: data.target,
+                from: data.from,
+                roompass: data.roompass
             });
-            socket.aiReady = false;
-            setTimeout(function () {
-                socket.aiReady = true;
-            }, 10000);
-        }
-        break;
 
-    case ('ack'):
-        acklevel++;
-        if (data.name) {
-            userlist.push(data.name);
-        }
-        break;
-    case ('register'):
-        registrationCall(data, socket);
-        break;
-    case ('chatline'):
-        if (socket.username && socket.speak) {
-            socket.speak = false;
-            if (chatbox.length > 100) {
-                chatbox.shift();
+            break;
+        case ('ai'):
+            if (socket.username && socket.aiReady) {
+                console.log(socket.username, 'requested AI Duel');
+                announce({
+                    clientEvent: 'duelrequest',
+                    target: 'SnarkyChild',
+                    from: socket.username,
+                    roompass: data.roompass,
+                    deck: data.deck
+                });
+                socket.aiReady = false;
+                setTimeout(function () {
+                    socket.aiReady = true;
+                }, 10000);
             }
-            announce({
-                clientEvent: 'chatline',
-                from: socket.username,
-                msg: removeTags(data.msg),
-                uid: sayCount,
-                date: new Date(),
-                timezone: data.timezone
-            });
-            chatbox.push({
-                from: socket.username,
-                msg: removeTags(data.msg),
-                uid: sayCount,
-                date: new Date(),
-                timezone: data.timezone
-            });
-            sayCount++;
-            setTimeout(function () {
-                socket.speak = true;
-            }, 500);
-        } else {
-            primus.room(socket.address.ip + data.uniqueID).write({
-                clientEvent: 'slowchat',
-                error: 'Exceeded 500ms chat timeout'
-            });
-        }
-        break;
-    case ('global'):
-        globalCall(data);
-        break;
-    case ('globalrequest'):
-        globalRequested(data, socket);
-        break;
-    case ('genocide'):
-        genocideCall(data);
-        break;
-    case ('murder'):
-        murderCall(data);
-        break;
-    case ('censor'):
-        censorCall(data);
-        break;
-    case ('revive'):
-        reviveCall(data);
-        break;
-    case ('mindcrush'):
-        mindcrushCall(data);
-        break;
-    case ('airestart'):
-        aiRestartCall(data);
-        break;
-    case ('internalRestart'):
-        if (data.password !== process.env.OPERPASS) {
-            return;
-        }
-        //restartAnnouncement();
-        break;
-    case ('restart'):
-        //restartCall(data);
-        break;
+            break;
 
-    case ('privateServerRequest'):
-        primus.room(socket.address.ip + data.uniqueID).write({
-            clientEvent: 'privateServerRequest',
-            parameter: data.parameter,
-            local: data.local
-        });
-        break;
-
-
-    case ('privateMessage'):
-        if (socket.username) {
-            data.date = new Date();
-            console.log(data);
-            primus.room(data.to).write(data);
-        }
-        break;
-    case 'save':
-        delete data.action;
-        data.decks.forEach(function (deck, i) { //cycles through the decks
-            data.decks[i].main = mapCards(data.decks[i].main); //This cannot be simplified 
-            data.decks[i].side = mapCards(data.decks[i].side); //further due to the abstract
-            data.decks[i].extra = mapCards(data.decks[i].extra); //of data.decks, afaik
-        }); //unsure if loop should run through all decks for a single save; might be resource intensive
-        deckStorage.update({
-            username: data.username
-        }, data, {
-            upsert: true
-        }, function (error, docs) {
-            primus.room(socket.address.ip + data.uniqueID).write({
-                clientEvent: 'deckSaved',
-                error: error
-            });
-            deckStorage.persistence.compactDatafile();
-        });
-
-        break;
-    case 'load':
-        console.log(data);
-        if (data.decks) { //if it doesn't exist [].length will scream at you
-            data.decks.forEach(function (deck, i) {
-                data.decks[i].main = mapCards(data.decks[i].main);
-                data.decks[i].side = mapCards(data.decks[i].side);
-                data.decks[i].extra = mapCards(data.decks[i].extra);
-            });
-        }
-        var regex = new RegExp(data.username, 'i');
-        deckStorage.find({
-            username: regex
-        }, function (error, docs) {
-            console.log(error, docs);
-            if (docs.length) {
+        case ('ack'):
+            acklevel++;
+            if (data.name) {
+                userlist.push(data.name);
+            }
+            break;
+        case ('register'):
+            registrationCall(data, socket);
+            break;
+        case ('chatline'):
+            if (socket.username && socket.speak) {
+                socket.speak = false;
+                if (chatbox.length > 100) {
+                    chatbox.shift();
+                }
+                announce({
+                    clientEvent: 'chatline',
+                    from: socket.username,
+                    msg: removeTags(data.msg),
+                    uid: sayCount,
+                    date: new Date(),
+                    timezone: data.timezone
+                });
+                chatbox.push({
+                    from: socket.username,
+                    msg: removeTags(data.msg),
+                    uid: sayCount,
+                    date: new Date(),
+                    timezone: data.timezone
+                });
+                sayCount++;
+                setTimeout(function () {
+                    socket.speak = true;
+                }, 500);
+            } else {
                 primus.room(socket.address.ip + data.uniqueID).write({
-                    clientEvent: 'deckLoad',
-                    decks: docs[0].decks,
-                    friends: docs[0].friends
+                    clientEvent: 'slowchat',
+                    error: 'Exceeded 500ms chat timeout'
                 });
             }
+            break;
+        case ('global'):
+            globalCall(data);
+            break;
+        case ('globalrequest'):
+            globalRequested(data, socket);
+            break;
+        case ('genocide'):
+            genocideCall(data);
+            break;
+        case ('murder'):
+            murderCall(data);
+            break;
+        case ('censor'):
+            censorCall(data);
+            break;
+        case ('revive'):
+            reviveCall(data);
+            break;
+        case ('mindcrush'):
+            mindcrushCall(data);
+            break;
+        case ('airestart'):
+            aiRestartCall(data);
+            break;
+        case ('internalRestart'):
+            if (data.password !== process.env.OPERPASS) {
+                return;
+            }
+            //restartAnnouncement();
+            break;
+        case ('restart'):
+            //restartCall(data);
+            break;
 
-        });
-        break;
-    default:
-        console.log(data);
+        case ('privateServerRequest'):
+            primus.room(socket.address.ip + data.uniqueID).write({
+                clientEvent: 'privateServerRequest',
+                parameter: data.parameter,
+                local: data.local
+            });
+            break;
+
+
+        case ('privateMessage'):
+            if (socket.username) {
+                data.date = new Date();
+                console.log(data);
+                primus.room(data.to).write(data);
+            }
+            break;
+        case 'save':
+            delete data.action;
+            data.decks.forEach(function (deck, i) { //cycles through the decks
+                data.decks[i].main = mapCards(data.decks[i].main); //This cannot be simplified 
+                data.decks[i].side = mapCards(data.decks[i].side); //further due to the abstract
+                data.decks[i].extra = mapCards(data.decks[i].extra); //of data.decks, afaik
+            }); //unsure if loop should run through all decks for a single save; might be resource intensive
+            deckStorage.update({
+                username: data.username
+            }, data, {
+                upsert: true
+            }, function (error, docs) {
+                primus.room(socket.address.ip + data.uniqueID).write({
+                    clientEvent: 'deckSaved',
+                    error: error
+                });
+                deckStorage.persistence.compactDatafile();
+            });
+
+            break;
+        case 'load':
+            console.log(data);
+            if (data.decks) { //if it doesn't exist [].length will scream at you
+                data.decks.forEach(function (deck, i) {
+                    data.decks[i].main = mapCards(data.decks[i].main);
+                    data.decks[i].side = mapCards(data.decks[i].side);
+                    data.decks[i].extra = mapCards(data.decks[i].extra);
+                });
+            }
+            var regex = new RegExp(data.username, 'i');
+            deckStorage.find({
+                username: regex
+            }, function (error, docs) {
+                console.log(error, docs);
+                if (docs.length) {
+                    primus.room(socket.address.ip + data.uniqueID).write({
+                        clientEvent: 'deckLoad',
+                        decks: docs[0].decks,
+                        friends: docs[0].friends
+                    });
+                }
+
+            });
+            break;
+        default:
+            console.log(data);
     }
 
     socketwatcher.exit();
