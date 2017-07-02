@@ -23,7 +23,7 @@ function getBanlist() {
 function getManifestFromAPI(callback) {
     var options = {
         host: '127.0.0.1',
-        port: 8081,
+        port: 8082,
         path: '/manifest.json',
         method: 'GET'
     };
