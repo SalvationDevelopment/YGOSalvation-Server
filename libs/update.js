@@ -29,24 +29,23 @@ function gitError(error) {
     console.log('Issue with git', error);
 }
 
-var fs = require('fs');
 
 function getotString(ot) {
     switch (ot) {
-    case 1:
-        return 'OCG';
-    case 2:
-        return 'TCG';
-    case 3:
-        return 'OCG/TCG';
-    case 4:
-        return 'Anime';
-    case 5:
-        return 'OCG Prerelease';
-    case 6:
-        return 'TCG Prerelease';
-    default:
-        return '';
+        case 1:
+            return 'OCG';
+        case 2:
+            return 'TCG';
+        case 3:
+            return 'OCG/TCG';
+        case 4:
+            return 'Anime';
+        case 5:
+            return 'OCG Prerelease';
+        case 6:
+            return 'TCG Prerelease';
+        default:
+            return '';
     }
 }
 
@@ -240,9 +239,5 @@ function generate(callback) {
     });
 }
 
-
-
-
-generate();
 
 module.exports = generate;

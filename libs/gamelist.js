@@ -120,29 +120,18 @@ updateHTTP(function (error, database, banlist) {
 
 function gitRoute(req, res, next) {
     res.send('Attempting to Update Server...<br />');
-    var gitUpdater = domain.create();
-    gitUpdater.on('error', function (err) {
-        console.log('        [Update System] ' + 'Git Failed'.grey, err);
-        res.send('Failed to update server');
-        next();
-    });
 
-    gitUpdater.run(function () {
+    updateHTTP(function (error, database, banlist) {
+        res.send('Updated Server, generating files...');
+        process.database = database;
+        process.banlist = banlist;
         child_process.spawn('git', ['pull'], {}, function () {
-            updateHTTP(function (error, database, banlist) {
-                res.send('Updated Server, generating files...');
-                process.database = database;
-                process.banlist = banlist;
-                next();
-            });
-
+            console.log('finished running git');
         });
     });
+
+
 }
-app.get('/generate', function (req, res) {
-    res.send('Regenerating manifest...');
-    child_process.fork('./update.js');
-});
 
 app.post('/git', function (req, res, next) {
     gitRoute(req, res, next);
@@ -199,12 +188,6 @@ if (process.env.SSL !== undefined) {
     } catch (error) {}
 }
 
-
-setTimeout(function () {
-    //give the system five seconds to figure itself out.
-    booting = false;
-    child_process.fork('./update.js');
-}, 5000);
 
 var Datastore = require('nedb'),
     deckStorage = new Datastore({
@@ -696,6 +679,3 @@ primus.on('connection', function (socket) {
     connectionwatcher.exit();
 });
 fs.watch(__filename, process.exit);
-fs.watch('../http/ygopro/databases/', function () {
-    child_process.fork('./update.js');
-});
