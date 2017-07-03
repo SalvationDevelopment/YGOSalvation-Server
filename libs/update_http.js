@@ -29,6 +29,7 @@ function getManifestFromAPI(callback) {
     };
 
     callback = callback || function () {};
+    console.log('got a call');
     http.request(options, function (res) {
         var responseString = '';
         res.on('data', function (chunk) {
@@ -38,6 +39,7 @@ function getManifestFromAPI(callback) {
             try {
                 var output = JSON.parse(responseString),
                     banlistfiles = getBanlist();
+                console.log('got data saving it.');
                 fs.writeFile('../http/manifest/manifest_0-en-OCGTCG.json', JSON.stringify(output), function () {
                     fs.writeFile('../http/manifest/banlist.json', JSON.stringify(banlistfiles, null, 1), function () {});
                     callback(null, output, banlistfiles);

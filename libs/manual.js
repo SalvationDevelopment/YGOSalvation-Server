@@ -26,7 +26,7 @@ var validateDeck = require('./validate-Deck.js'),
     http = require('http'),
     https = require('https'),
     path = require('path'),
-    database = require('../http/manifest/manifest_0-en-OCGTCG.json'),
+    database = [],
     banlist = getBanlist();
 
 
@@ -726,17 +726,7 @@ module.exports = function (wss) {
         setTimeout(process.exit, 3000);
     });
 
-    fs.watch('../http/manifest/manifest_0-en-OCGTCG.json', function () {
-        setTimeout(function () {
-            jsonfile.readFile('../http/manifest/manifest_0-en-OCGTCG.json', function (err, data) {
-                if (err) {
-                    console.log(err);
-                    return;
-                }
-                database = data;
-            });
-        }, 5000);
-    });
+
     setInterval(wss.broadcast, 15000);
 
     return websocketHandle;
