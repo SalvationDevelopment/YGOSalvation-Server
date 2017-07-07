@@ -340,7 +340,7 @@ function makeSideCard(cards, zone) {
             } else {
                 var src = $(this).attr('data-id');
                 $(this).attr('reloaded', "attempted");
-                $(this).attr('src', 'https://rawgit.com/Ygoproco/Live-images/master/pics/'+src+'.jpg');
+                $(this).attr('src', getCardObject(Number(src)).picture);
             }
         });
     });
