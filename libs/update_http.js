@@ -29,17 +29,18 @@ function getManifestFromAPI(callback) {
     };
 
     callback = callback || function () {};
-    console.log('got a call');
-    http.request(options, function (res) {
+    var call = http.request(options, function (res) {
         var responseString = '';
         res.on('data', function (chunk) {
             responseString += chunk;
+        });
+        res.on('error', function (errorMessage) {
+            console.log(errorMessage);
         });
         res.on('end', function () {
             try {
                 var output = JSON.parse(responseString),
                     banlistfiles = getBanlist();
-                console.log('got data saving it.');
                 fs.writeFile('../http/manifest/manifest_0-en-OCGTCG.json', JSON.stringify(output), function () {
                     fs.writeFile('../http/manifest/banlist.json', JSON.stringify(banlistfiles, null, 1), function () {});
                     callback(null, output, banlistfiles);
@@ -48,7 +49,11 @@ function getManifestFromAPI(callback) {
                 return callback(error, []);
             }
         });
-    }).end();
+    });
+    call.on('error', function () {
+        console.log('Unable to contact Database Application');
+    });
+    call.end();
 
 }
 
