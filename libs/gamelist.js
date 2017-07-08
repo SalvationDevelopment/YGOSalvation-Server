@@ -142,10 +142,29 @@ app.get('/git', function (req, res, next) {
 });
 
 
+try {
+    var privateKey = fs.readFileSync(path.resolve(process.env.SSL + '\\ssl.key')).toString();
+    var certificate = fs.readFileSync(path.resolve(process.env.SSL + '\\ssl.crt')).toString();
 
-primusServer = http.createServer(app);
-primusServer.listen(HTTP_PORT);
 
+
+    primusServer = spdy.createServer({
+        key: privateKey,
+        cert: certificate
+    }, app).listen(443);
+    var openserver = express();
+    // set up a route to redirect http to spdy
+    openserver.use(helmet());
+    openserver.use(ddos.express);
+    openserver.get('*', function (req, res) {
+        res.redirect(301, 'https://' + req.get('host') + req.url);
+    });
+    openserver.listen(HTTP_PORT);
+} catch (nossl) {
+    console.log('Failed to apply SSL to HTTP server', nossl);
+    primusServer = http.createServer(app);
+    primusServer.listen(HTTP_PORT);
+}
 
 var WebSocketServer = require('ws').Server,
     wss = new WebSocketServer({
