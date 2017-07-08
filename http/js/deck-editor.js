@@ -1,5 +1,5 @@
 /*global currentMousePos, getCardObject, reorientmenu, cardIs, $, storedUserlist, primus,prompt, alert, confirm, FileReader, btoa, alertmodal, personOfIntrest, deckeditloader*/
-/*jslint bitwise: true, plusplus:true, regexp:true, browser:true*/
+
 
 function cardLoadError() {
     var id = $(this).attr('data-id');

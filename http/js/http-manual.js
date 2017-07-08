@@ -334,9 +334,9 @@ function makeSideCard(cards, zone) {
         var hardcard = JSON.stringify(card),
             src = card + '.jpg';
         html += '<img class="sidedeckzonecard" src="https://raw.githubusercontent.com/shadowfox87/YGOSeries10CardPics/master/' + src + '" data-"' + card + '" onclick = "sideonclick(' + index + ', \'' + zone + '\')" / > ';
-        $('img.sidedeckzonecard').error(cardLoadError);
-    });
 
+    });
+    $('img.sidedeckzonecard').error(cardLoadError);
     $('.sidingzone .' + zone).html(html);
     //$('#subreveal').width(cards.length * 197);
 }
@@ -919,7 +919,10 @@ function reveal(cards, note) {
     }
     $('#revealed').html(html);
     //$('#subreveal').width(cards.length * 197);
+    $('#revealed img').error(cardLoadError);
 }
+
+
 
 var chatplace = 0;
 
