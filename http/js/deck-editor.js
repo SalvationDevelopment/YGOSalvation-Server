@@ -1,6 +1,24 @@
 /*global currentMousePos, getCardObject, reorientmenu, cardIs, $, storedUserlist, primus,prompt, alert, confirm, FileReader, btoa, alertmodal, personOfIntrest, deckeditloader*/
 /*jslint bitwise: true, plusplus:true, regexp:true, browser:true*/
 
+function cardLoadError() {
+    var id = $(this).attr('data-id');
+    if ($(this).attr('reloaded') === 'failed') {
+        $(this).attr('src', '/img/textures/unknown.jpg');
+    }
+    if ($(this).attr('reloaded') === 'attempted') {
+        $(this).attr('src', getCardObject(parseInt(id, 10)).picture);
+        $(this).attr('reloaded', 'failed');
+    } else {
+        $(this).attr('reloaded', 'attempted');
+        if (id !== 'undefined') {
+            $(this).attr('src', 'https://rawgit.com/Ygoproco/Live-images/master/pics/' + id + '.jpg');
+        } else {
+            $(this).attr('src', '/img/textures/unknown.jpg');
+        }
+
+    }
+}
 
 function printError(error) {
     'use strict';
@@ -682,7 +700,7 @@ var currentSearchFilter = (function () {
         return result.filter(function (item) {
             //item is not a token
             return item.type !== 16401;
-        })
+        });
     }
 
     function filterAll(cards, filter) {
@@ -732,7 +750,7 @@ var currentSearchFilter = (function () {
 
     function pageBack() {
         var attempted = currentSearchIndex - currentSearchPageSize;
-        if (0 > attempted) {
+        if (attempted < 0) {
             currentSearchIndex = 0;
             renderSearch();
             return;
@@ -826,22 +844,14 @@ var deckEditor = (function () {
         cards.forEach(function (card, index) {
             var hardcard = JSON.stringify(card),
                 src = card.id + '.png';
-            html += '<div class="searchwrapper" data-card-limit="' + card.limit + '">'
-            html += '<img class="deckeditcard card" id="deceditcard' + index + zone + '" data-dropindex="' + index + '" data-dropzone="' + zone + '"  data-id = "' + card.id + '"'
-            html += 'src="https://raw.githubusercontent.com/shadowfox87/YGOSeries10CardPics/master/' + src + '" data-id="' + card.id + '" ondragstart="createCardReference(\'' + zone + '\', ' + index + ');" onclick = "deckeditonclick(' + index + ', \'' + zone + '\')" / >'
+            html += '<div class="searchwrapper" data-card-limit="' + card.limit + '">';
+            html += '<img class="deckeditcard card" id="deceditcard' + index + zone + '" data-dropindex="' + index + '" data-dropzone="' + zone + '"  data-id = "' + card.id + '"';
+            html += 'src="https://raw.githubusercontent.com/shadowfox87/YGOSeries10CardPics/master/' + src + '" data-id="' + card.id + '" ondragstart="createCardReference(\'' + zone + '\', ' + index + ');" onclick = "deckeditonclick(' + index + ', \'' + zone + '\')" / >';
             html += '</div>';
         });
 
         $('#deckedit .cardspace .' + zone).html(html);
-        $('#deckedit .cardspace .' + zone + ' img').error(function () {
-            if ($(this).attr('reloaded') === "attempted") {
-                $(this).attr('src', '/img/textures/unknown.jpg');
-            } else {
-                var src = $(this).attr('data-id');
-                $(this).attr('reloaded', "attempted");
-                $(this).attr('src', 'https://rawgit.com/Ygoproco/Live-images/master/pics/'+src+'.jpg');
-            }
-        });
+        $('#deckedit .cardspace .' + zone + ' img').error(cardLoadError);
 
         //$('#subreveal').width(cards.length * 197);
     }

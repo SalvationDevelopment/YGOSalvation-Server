@@ -494,44 +494,47 @@ input#ips_remember {
     text-transform: uppercase
 }
 
-button#doregister {
+button#doregister,
+#backuplogin {
     border-radius: 20px;
     border: 1px solid white;
     background: rgba(0, 0, 0, .5);
     padding: 6px 40px;
     color: white;
-    width:15%;
+    width: 15%;
     text-transform: uppercase;
     border-top-left-radius: 0;
     border-bottom-left-radius: 0;
     font-size: 70%;
-     border-top-right-radius: 8px;
+    border-top-right-radius: 8px;
     border-bottom-right-radius: 20px;
 }
 
-button#dolog {
-     font-size: 70%;
+button#dolog,
+#openlogin {
+    font-size: 70%;
     border-radius: 20px;
     border: 1px solid white;
     background: rgba(0, 0, 0, .5);
     padding: 6px 40px;
     color: white;
-
-    width:15%;
+    width: 15%;
     text-transform: uppercase;
     border-top-right-radius: 0;
     border-bottom-right-radius: 0;
-     border-top-left-radius: 8px;
+    border-top-left-radius: 8px;
     border-bottom-left-radius: 20px;
 }
 
-button#dolog {
+button#dolog,
+#openlogin {
     border: 1px solid white;
     background: rgba(255, 0, 100, .5);
     color: white;
 }
 
-button#doregister {
+button#doregister,
+#backuplogin {
     border: 1px solid white;
     background: rgba(75, 0, 100, .5);
     color: white;
@@ -2410,10 +2413,23 @@ a.launcheronly.loginsystem {
     box-shadow: 0 0 10px black;
 }
 
+div#loginmodal {
+    position: absolute;
+    top: 38vh;
+    width: 70%;
+    background: rgba(0, 0, 0, .95);
+    border: 1px solid silver;
+    left: 15%;
+    text-align: center;
+    display: none;
+}
+
 #ips_username,
 #ips_password,
 #dolog,
-#doregister {
+#openlogin,
+#doregister,
+#backuplogin {
     -webkit-animation-name: pulse;
     -webkit-animation-duration: 1s;
     -webkit-animation-iteration-count: 10;
@@ -2435,16 +2451,13 @@ a.launcheronly.loginsystem {
 
 @-webkit-keyframes pulse {
     from {
-       
         -webkit-box-shadow: 0 0 5px #000;
     }
     50% {
-      
         -webkit-box-shadow: 0 0 50px rgba(255, 100, 200, .5);
         border-color: rgba(255, 100, 200, .5);
     }
     to {
-        
         -webkit-box-shadow: 0 0 5px #000;
     }
 }
@@ -2560,7 +2573,7 @@ div#onlinelistwrapper.onlineopen input {
 }
 
 div#onlinelistwrapper.onlineopen {
-    height: 91vh;
+    height: 88vh;
     width: 98%;
     background: rgba(0, 0, 0, .90);
     position: absolute;
