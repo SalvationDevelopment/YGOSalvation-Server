@@ -283,7 +283,7 @@ function locallogin(init) {
     $('.featurelist .launcheronly').addClass('boxshine');
     setTimeout(function () {
         $('.featurelist .launcheronly').removeClass('boxshine');
-    }, 20000);
+    }, 4000);
 
 
 }
