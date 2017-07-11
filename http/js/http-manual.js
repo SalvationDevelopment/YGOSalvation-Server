@@ -444,6 +444,7 @@ var manualDuel,
     overlaymode = false,
     viewmode = '';
 
+
 function stateUpdate(dataBinding) {
     'use strict';
     var fieldings,
@@ -481,7 +482,7 @@ function stateUpdate(dataBinding) {
             'data-uid': ref.uid,
             'src': (ref.id) ? 'https://raw.githubusercontent.com/shadowfox87/YGOSeries10CardPics/master/' + ref.id + '.png' : 'img/textures/cover.jpg'
         });
-        $('img.fieldings').error(cardLoadError);
+
         if (ref.position === 'FaceDownDefence' || ref.position === 'FaceDownAttack') {
             element.attr({
                 'src': 'img/textures/cover.jpg'
@@ -736,6 +737,7 @@ function initGameState() {
         for (i = 0; stack.length > i; i++) {
             stack[i].element = guiCard(stack[i]);
         }
+
         cardmargin('0', 'GRAVE');
         cardmargin('0', 'HAND');
         cardmargin('0', 'EXTRA');
@@ -749,8 +751,7 @@ function initGameState() {
             singlesitenav('duelscreen');
             setMidSchool(legacyMode);
         }, 2000);
-
-
+        $('#automationduelfield img').error(cardLoadError);
     }
 
 
@@ -1812,9 +1813,9 @@ function makeFieldSpell(card) {
     'use strict';
     // if ($('#automationduelfield .p' + card.player + '.SPELLZONE.i5').length < 1) {
     return makeSpell(card, 5);
-/*    } else {
-        throw new Error('There is a card in the field zone');
-    }*/
+    /*    } else {
+            throw new Error('There is a card in the field zone');
+        }*/
 
 }
 
