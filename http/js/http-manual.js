@@ -480,6 +480,7 @@ function stateUpdate(dataBinding) {
             'data-position': ref.position,
             'data-id': ref.id,
             'data-uid': ref.uid,
+            'reloaded': element.attr('reloaded'),
             'src': (ref.id) ? 'https://raw.githubusercontent.com/shadowfox87/YGOSeries10CardPics/master/' + ref.id + '.png' : 'img/textures/cover.jpg'
         });
 
