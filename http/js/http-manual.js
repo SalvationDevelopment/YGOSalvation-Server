@@ -1810,11 +1810,11 @@ function setSpell(card, index) {
 
 function makeFieldSpell(card) {
     'use strict';
-    if ($('#automationduelfield .p' + card.player + '.SPELLZONE.i5').length < 1) {
-        return makeSpell(card, 5);
-    } else {
+    // if ($('#automationduelfield .p' + card.player + '.SPELLZONE.i5').length < 1) {
+    return makeSpell(card, 5);
+/*    } else {
         throw new Error('There is a card in the field zone');
-    }
+    }*/
 
 }
 
