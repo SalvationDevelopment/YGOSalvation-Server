@@ -150,12 +150,12 @@ function blackbg() {
 
 function colorbg() {
     'use strict';
-    return (localStorage.bg  !== 'magi') ? censoredcolor : uncensoredcolor;
+    return (localStorage.bg !== 'magi') ? censoredcolor : uncensoredcolor;
 }
 
 function singlesitenav(target) {
     'use strict';
-     saveSettings();
+    saveSettings();
     if (target === 'forum') {
         return;
     }
@@ -249,7 +249,7 @@ function singlesitenav(target) {
     $('header').not('#anti').css('left', '100vw');
     $('#anti').css('left', '0');
     $('#' + target).css('left', '0').addClass('activescreen');
-   
+
     $('#manualcontrols button').css({
         'display': 'none'
     });
@@ -280,9 +280,12 @@ function locallogin(init) {
 
     //chatStarted = true;
     singlesitenav('faq');
+    $('.featurelist .launcheronly').addClass('boxshine');
     setTimeout(function () {
-        //singlesitenav('chat');
-    }, 2000);
+        $('.featurelist .launcheronly').removeClass('boxshine');
+    }, 20000);
+
+
 }
 var deckfiles;
 

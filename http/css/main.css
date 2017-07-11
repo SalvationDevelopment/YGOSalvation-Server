@@ -548,7 +548,7 @@ li.logolink {
 .psudolinksingle {
     cursor: pointer;
     color: white;
-    font-weight: thin;
+    font-weight: bold;
 }
 
 .psudolinksingle:hover {
@@ -2477,6 +2477,14 @@ div#loginmodal {
     -webkit-animation-timing-function: linear;
 }
 
+.boxshine {
+    -webkit-animation-name: boxshine;
+    -webkit-animation-duration: 1s;
+    -webkit-animation-iteration-count: 4;
+    -webkit-animation-direction: alternate;
+    -webkit-animation-timing-function: linear;
+}
+
 .gamelistcenter {
     width: 31.5%;
     margin: 0 auto;
@@ -2640,6 +2648,15 @@ ul#friendslist {
     }
     0% {
         background-position: top left;
+    }
+}
+
+@-webkit-keyframes boxshine {
+    0% {
+        box-shadow: inset 0px 0px 0em hotpink;
+    }
+    100% {
+        box-shadow: inset 0px 0px 7em hotpink;
     }
 }
 
