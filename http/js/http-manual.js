@@ -481,7 +481,7 @@ function stateUpdate(dataBinding) {
             'data-uid': ref.uid,
             'src': (ref.id) ? 'https://raw.githubusercontent.com/shadowfox87/YGOSeries10CardPics/master/' + ref.id + '.png' : 'img/textures/cover.jpg'
         });
-
+        $('img.fieldings').error(cardLoadError);
         if (ref.position === 'FaceDownDefence' || ref.position === 'FaceDownAttack') {
             element.attr({
                 'src': 'img/textures/cover.jpg'
@@ -494,9 +494,6 @@ function stateUpdate(dataBinding) {
             offsetY = ref.overlayindex * 4;
             element.attr('style', 'z-index: -' + ref.overlayindex + '; transform: translate(' + offsetX + 'px, ' + offsetY + 'px)');
         }
-
-
-
     }
     if (attackmode) {
         $('.p1').addClass('attackglow');
@@ -2458,7 +2455,7 @@ function revealonclick(card, note) {
                 'display': 'block'
             });
         }
-        if (stMap[dbEntry.type] || dbEntry.type === 2 || dbEntry.type === 4) {
+        if ((stMap[dbEntry.type] || dbEntry.type === 2 || dbEntry.type === 4) && !fieldspell[dbEntry.type]) {
             $('.m-hand-st').css({
                 'display': 'block'
             });
@@ -2502,7 +2499,7 @@ function revealonclick(card, note) {
                 'display': 'block'
             });
         }
-        if (stMap[dbEntry.type] || dbEntry.type === 2 || dbEntry.type === 4) {
+        if ((stMap[dbEntry.type] || dbEntry.type === 2 || dbEntry.type === 4) && !fieldspell[dbEntry.type]) {
             $('.m-hand-st').css({
                 'display': 'block'
             });
@@ -2558,7 +2555,7 @@ function revealonclick(card, note) {
                 'display': 'block'
             });
         }
-        if (stMap[dbEntry.type] || dbEntry.type === 2 || dbEntry.type === 4) {
+        if ((stMap[dbEntry.type] || dbEntry.type === 2 || dbEntry.type === 4) && !fieldspell[dbEntry.type]) {
             $('.m-hand-st').css({
                 'display': 'block'
             });
@@ -2607,7 +2604,7 @@ function revealonclick(card, note) {
                 });
             }
         }
-        if (stMap[dbEntry.type] || dbEntry.type === 2 || dbEntry.type === 4) {
+        if ((stMap[dbEntry.type] || dbEntry.type === 2 || dbEntry.type === 4) && !fieldspell[dbEntry.type]) {
             $('.m-hand-st').css({
                 'display': 'block'
             });
@@ -2952,7 +2949,7 @@ function guicardonclick() {
                     'display': 'block'
                 });
             }
-            if (stMap[dbEntry.type] || dbEntry.type === 2 || dbEntry.type === 4 || checksetcode(dbEntry, 151) || dbEntry.id === 9791914 || dbEntry.id === 58132856) {
+            if ((stMap[dbEntry.type] || dbEntry.type === 2 || dbEntry.type === 4 || checksetcode(dbEntry, 151) || dbEntry.id === 9791914 || dbEntry.id === 58132856) && !fieldspell[dbEntry.type]) {
                 $('.m-hand-st').css({
                     'display': 'block'
                 });
