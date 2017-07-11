@@ -46,7 +46,7 @@ function applySettings() {
     $('#music_volume').val(Number(localStorage.music_volume));
     $('#fontsize').val(Number(localStorage.textfontsize));
     $('#dblist').val(Number(localStorage.dblist));
-     $('#sitebgoption').val(localStorage.bg);
+    $('#sitebgoption').val(localStorage.bg);
 }
 
 applySettings();
@@ -519,6 +519,7 @@ function renderPrivateChat() {
     var chatlist = ['Public'],
         target = '';
     $('#onlineprivatechat').html('');
+
     openChats.forEach(function (message) {
         $('#onlineprivatechat').append('<li data-person="' + message.from + '"><strong>[' + new Date(message.date).toLocaleTimeString() + '] ' + message.name + ':</strong> ' + message.msg + '</li>');
         $('[data-chatuid="' + message.uid + '"').urlize();
@@ -536,6 +537,8 @@ function renderPrivateChat() {
 
     target = $('#onlineprivatechat li').last().attr('data-person');
     $('#chatpmlist [data-name="' + target + '"]').addClass('active');
+
+
 }
 
 var personOfIntrest = '';
@@ -640,10 +643,18 @@ function pondata(data) {
                 $('#onlinepublicchat').scrollTop($('#onlinepublicchat').prop("scrollHeight"));
             }
             $('[data-chatuid="' + data.uid + '"').urlize();
+            $('.chatlinker').addClass('boxshine');
+            setTimeout(function () {
+                $('.chatlinker').removeClass('boxshine');
+            }, 6000);
         }
         if (data.clientEvent === 'privateMessage') {
             openChats.push(data);
             renderPrivateChat();
+            $('.chatlinker').addClass('boxshine');
+            setTimeout(function () {
+                $('.chatlinker').removeClass('boxshine');
+            }, 6000);
         }
         if (data.clientEvent === 'censor') {
             $('[data-chatuid="' + data.messageID + '"]').remove();
@@ -883,7 +894,8 @@ function manualModeGamelistSwitch() {
         });
     }
 }
- manualModeGamelistSwitch();
+manualModeGamelistSwitch();
+
 function mautomaticModeGamelistSwitch() {
     'use strict';
     if (launcher) {
