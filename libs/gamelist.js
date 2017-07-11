@@ -119,10 +119,10 @@ updateHTTP(function (error, database, banlist) {
 });
 
 function gitRoute(req, res, next) {
-    res.send('Attempting to Update Server...<br />');
+
 
     updateHTTP(function (error, database, banlist) {
-        res.send('Updated Server, generating files...');
+        res.write('Updated Server, generating files...');
         process.database = database;
         process.banlist = banlist;
         child_process.spawn('git', ['pull'], {}, function () {
