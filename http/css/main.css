@@ -1039,7 +1039,9 @@ div#selectwhogoesfirst {
 }
 
 #subreveal img {
-    margin: 10px
+    margin: 10px;
+    height: 254px;
+    width: 177px;
 }
 
 #manualcontrols {
@@ -2402,7 +2404,7 @@ a.launcheronly.loginsystem {
 #ips_username,
 #ips_password {
     margin: 20px auto;
-    background: rgba(0, 0, 0, .5);
+    background: rgba(0, 0, 0, 1);
     border: none;
     width: 20em;
     padding: .4em;
@@ -2417,11 +2419,12 @@ div#loginmodal {
     position: absolute;
     top: 38vh;
     width: 70%;
-    background: rgba(0, 0, 0, .95);
+    background: rgba(0, 0, 0, .75);
     border: 1px solid silver;
     left: 15%;
     text-align: center;
     display: none;
+    box-shadow: 0px 0px 20px black;
 }
 
 #ips_username,
@@ -2480,9 +2483,13 @@ div#loginmodal {
 .boxshine {
     -webkit-animation-name: boxshine;
     -webkit-animation-duration: 1s;
-    -webkit-animation-iteration-count: 4;
+    -webkit-animation-iteration-count: infinite;
     -webkit-animation-direction: alternate;
     -webkit-animation-timing-function: linear;
+}
+
+.chatalert {
+    background: hotpink;
 }
 
 .gamelistcenter {
