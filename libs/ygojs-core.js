@@ -6,12 +6,13 @@ var fs = require('fs'), // file system access
     uniqueIdenifier = require('uuid/v1'); // time based unique identifier, RFC4122 version 1
 
 /**
- * Constructor for card objects.
- * @param    movelocation 'DECK'/'EXTRA' etc, in caps. 
- * @param   {Number} player       [[Description]]
- * @param   {Number} index        [[Description]]
- * @param   {Number} unique       [[Description]]
- * @returns {object}   a card
+ * Constructor for card Objects.
+ * @param   {Number} movelocation 'DECK'/'EXTRA' etc, in caps. 
+ * @param   {Number} player player int 0,1, etcplayerID
+ * @param   {Number} index  sequence of the card
+ * @param   {Number} unique unique ID of the card
+ * @param   {Number} code   passcode of the card
+ * @returns {Object}   a card
  */
 function makeCard(movelocation, player, index, unique, code) {
     return {
@@ -31,58 +32,58 @@ function makeCard(movelocation, player, index, unique, code) {
 
 /**
  * Filters non cards from a collection of possible cards.
- * @param   {Array} a stack of cards which may have overlay units attached to them.
+ * @param   {Array} stack a stack of cards which may have overlay units attached to them.
  * @returns {Array} a stack of cards, devoid of overlay units.
  */
 function filterIsCard(stack) {
-    return stack.filter(function (item) {
+    return stack.filter(function(item) {
         return item.type === 'card';
     });
 }
 
 /**
  * Filters out cards based on player.
- * @param   {Array} Array a stack of cards.
- * @param {Number} player 0 or 1
+ * @param {Array} stack Array a stack of cards.
+ * @param {Number} player player int 0,1, etc0 or 1
  * @returns {Array} a stack of cards that belong to only one specified player. 
  */
 function filterPlayer(stack, player) {
-    return stack.filter(function (item) {
+    return stack.filter(function(item) {
         return item.player === player;
     });
 }
 
 /**
  * Filters out cards based on zone.
- * @param   {Array} stack a stack of cards.
- * @param {String} location
+ * @param {Array} stack a stack of cards.
+ * @param {String} location zone the card is in.
  * @returns {Array} a stack of cards that are in only one location/zone.
  */
 function filterlocation(stack, location) {
-    return stack.filter(function (item) {
+    return stack.filter(function(item) {
         return item.location === location;
     });
 }
 
 /**
  * Filters out cards based on index.
- * @param   {Array}  a stack of cards.
- * @param {Number} index
+ * @param {Array}  stack a stack of cards.
+ * @param {Number} index index of the card being searched for.
  * @returns {Array} a stack of cards that are in only one index
  */
 function filterIndex(stack, index) {
-    return stack.filter(function (item) {
+    return stack.filter(function(item) {
         return item.index === index;
     });
 }
 /**
  * Filters out cards based on if they are overlay units or not.
  * @param {Array} stack a stack of cards attached to a single monster as overlay units.
- * @param {Number} overlayindex
+ * @param {Number} overlayindex sequence in an XYZ stack
  * @returns {Array} a single card
  */
 function filterOverlyIndex(stack, overlayindex) {
-    return stack.filter(function (item) {
+    return stack.filter(function(item) {
         return item.overlayindex === overlayindex;
     });
 }
@@ -90,11 +91,11 @@ function filterOverlyIndex(stack, overlayindex) {
 /**
  * Filters out cards based on if they are a specific UID
  * @param {Array} stack a stack of cards attached to a single monster as overlay units.
- * @param {Number} uid
+ * @param {Number} uid unique identifier
  * @returns {boolean} if a card is that UID
  */
 function filterUID(stack, uid) {
-    return stack.filter(function (item) {
+    return stack.filter(function(item) {
         return item.uid === uid;
     });
 }
@@ -102,9 +103,9 @@ function filterUID(stack, uid) {
 
 /**
  * Sort function, sorts by card index
- * @param   {object}   first  card object
- * @param   {object}   second card object
- * @returns {boolean} 
+ * @param   {Object}   first  card Object
+ * @param   {Object}   second card Object
+ * @returns {Number}  if it comes before or after
  */
 function sortByIndex(first, second) {
     return first.index - second.index;
@@ -114,11 +115,12 @@ function sortByIndex(first, second) {
 
 /**
  * Shuffles array in place.
- * @param {Array} a items The array containing the items This function is in no way optimized.
+ * @param {Array} deck a items The array containing the items This function is in no way optimized.
+ * @returns {undefined}
  */
 function shuffle(deck) {
     var j, x, index;
-    for (index = deck.length; index; index--) {
+    for (index = deck.length; index; index -= 1) {
         j = Math.floor(Math.random() * index);
         x = deck[index - 1];
         deck[index - 1] = deck[j];
@@ -134,7 +136,7 @@ function shuffle(deck) {
  */
 function hideViewOfZone(view) {
     var output = [];
-    view.forEach(function (card, index) {
+    view.forEach(function(card, index) {
         output[index] = {};
         Object.assign(output[index], card);
         if (output[index].position === 'FaceDown' || output[index].position === 'FaceDownDefence' || output[index].position === 'FaceDownDefense') {
@@ -154,7 +156,7 @@ function hideViewOfZone(view) {
  */
 function cleanCounters(stack) {
 
-    stack.forEach(function (card, index) {
+    stack.forEach(function(card, index) {
         if (card.position === 'FaceDown' || card.position === 'FaceDownDefense') {
             card.counters = 0;
         }
@@ -169,7 +171,7 @@ function cleanCounters(stack) {
  */
 function hideHand(view) {
     var output = [];
-    view.forEach(function (card, index) {
+    view.forEach(function(card, index) {
         output[index] = {};
         Object.assign(output[index], card);
         output[index].id = 0;
@@ -182,14 +184,14 @@ function hideHand(view) {
 /**
  * Initiation of a single independent state intance... I guess this is a class of sorts.
  * @param {function} callback function(view, internalState){}; called each time the stack is updated. 
- * @returns {object} State instance
+ * @returns {Object} State instance
  */
 function init(callback) {
     //the field is represented as a bunch of cards with metadata in an Array, <div>card/card/card/card</div>
     //numberOfCards is used like a memory address. It must be increased by 1 when creating a makeCard.
 
     if (typeof callback !== 'function') {
-        callback = function (view, internalState) {};
+        callback = function(view, internalState) {};
     }
 
     var answerListener = new EventEmitter(),
@@ -230,12 +232,12 @@ function init(callback) {
 
     /**
      * The way the stack of cards is setup it requires a pointer to edit it.
-     * @param {Number} provide a unique idenifier
+     * @param {Number} uid provide a unique idenifier
      * @returns {Number} index of that unique identifier in the stack.
      */
     function uidLookup(uid) {
         var result;
-        stack.some(function (card, index) {
+        stack.some(function(card, index) {
             if (card.uid === uid) {
                 result = index;
                 return true;
@@ -246,11 +248,12 @@ function init(callback) {
 
     /**
      * Returns info on a card, or rather a single card.
-     * @param   {Number} player       Player Interger
+     * @param   {Number} player player int 0,1, etc      Player Interger
      * @param   {Number} clocation    Location enumeral
      * @param   {Number} index        Index
      * @param   {Number} overlayindex Index of where a card is in an XYZ stack starting at 1
-     * @returns {object} The card you where looking for.
+     * @param   {Number} uid          Unique identifier, optional.
+     * @returns {Object} The card you where looking for.
      */
     function queryCard(player, clocation, index, overlayindex, uid) {
         if (uid) {
@@ -268,18 +271,18 @@ function init(callback) {
     }
 
     function filterEdited(cards) {
-        return cards.filter(function (card) {
+        return cards.filter(function(card) {
             var newCards = findUIDCollection(card.uid)[0],
                 oldCards = findUIDCollectionPrevious(card.uid)[0] || {};
-            return !Object.keys(newCards).every(function (key) {
+            return !Object.keys(newCards).every(function(key) {
                 return newCards[key] === oldCards[key];
             });
         });
     }
     /**
      * Generate the view for a specific given player
-     * @param   {Number} the given player
-     * @returns {object} all the cards the given player can see on their side of the field.
+     * @param   {Number} player player int 0,1, etcthe given player
+     * @returns {Object} all the cards the given player can see on their side of the field.
      */
     function generateSinglePlayerView(player) {
         var playersCards = filterEdited(filterPlayer(stack, player)),
@@ -308,8 +311,8 @@ function init(callback) {
 
     /**
      * Generate the view for a spectator or opponent
-     * @param   {Number} the given player
-     * @returns {object} all the cards the given spectator/opponent can see on that side of the field.
+     * @param   {Number} player player int 0,1, etcthe given player
+     * @returns {Object} all the cards the given spectator/opponent can see on that side of the field.
      */
     function generateSinglePlayerSpectatorView(player) {
         var playersCards = filterEdited(filterPlayer(stack, player)),
@@ -398,7 +401,7 @@ function init(callback) {
             pointer;
 
         if (location === 'EXTRA') {
-            zone.sort(function (primary, secondary) {
+            zone.sort(function(primary, secondary) {
                 if (primary.position === secondary.position) {
                     return 0;
                 }
@@ -413,7 +416,7 @@ function init(callback) {
 
         zone.sort(sortByIndex);
 
-        zone.forEach(function (card, index) {
+        zone.forEach(function(card, index) {
             pointer = uidLookup(card.uid);
             stack[pointer].index = index;
         });
@@ -454,18 +457,19 @@ function init(callback) {
         reIndex(player, 'EXCAVATED');
         cleanCounters(stack);
         callback(generateView(), stack);
-
     }
 
 
 
     /**
      * Creates a new card outside of initial start
-     * @param {String} currentLocation   
-     * @param {Number} currentController 
-     * @param {Number} currentSequence   
-     * @param {Number} position          
-     * @param {NUmber code              
+     * @param {String} currentLocation   zone the card can be found in.
+     * @param {Number} currentController player the card can be found under
+     * @param {Number} currentSequence   exact index of card in the zone
+     * @param {Number} position          position the card needs to be in   
+     * @param {Number} code              passcode
+     * @param {Number} index             index/sequence in the zone the card needs to become.
+     * @returns {undefined}            
      */
     function makeNewCard(currentLocation, currentController, currentSequence, position, code, index) {
         stack.push(makeCard(currentLocation, currentController, currentSequence, stack.length, code));
@@ -479,12 +483,13 @@ function init(callback) {
     /**
      * Deletes a specific card from the stack.
      * @param {Number} uid The unique identifier of the card, to quickly find it.
+     * @returns {undefined}
      */
     function removeCard(uid) {
         var target = queryCard(undefined, undefined, undefined, 0, uid),
             pointer = uidLookup(target.uid);
 
-        stack[pointer].location = "INMATERIAL";
+        stack[pointer].location = 'INMATERIAL';
         //state.removed = uid;
         callback(generateView(), stack);
     }
@@ -492,33 +497,36 @@ function init(callback) {
     /**
      * Finds a specific card and puts a counter on it.
      * @param {Number} uid The unique identifier of the card, to quickly find it.
+     * @returns {undefined}
      */
     function addCounter(uid) {
         var target = queryCard(undefined, undefined, undefined, 0, uid),
             pointer = uidLookup(target.uid);
 
-        stack[pointer].counters++;
+        stack[pointer].counters += 1;
         callback(generateView(), stack);
     }
 
     /**
      * Finds a specific card and remove a counter from it.
      * @param {Number} uid The unique identifier of the card, to quickly find it.
+     * @return {undefined}
      */
     function removeCounter(uid) {
         var target = queryCard(undefined, undefined, undefined, 0, uid),
             pointer = uidLookup(target.uid);
 
-        stack[pointer].counters--;
+        stack[pointer].counters -= 1;
         callback(generateView(), stack);
     }
 
 
     /**
      * Draws a card, updates state.
-     * @param {Number} player        Player drawing the cards
+     * @param {Number} player player int 0,1, etc       Player drawing the cards
      * @param {Number} numberOfCards number of cards drawn
-     * @param {Array} cards         array of objects representing each of those drawn cards.
+     * @param {String} username      name of player drawing cards
+     * @returns {undefined}
      */
     function drawCard(player, numberOfCards, username) {
         var currenthand = filterlocation(filterPlayer(stack, player), 'HAND').length,
@@ -528,7 +536,7 @@ function init(callback) {
             pointer,
             deck;
 
-        for (i = 0; i < numberOfCards; i++) {
+        for (i = 0; i < numberOfCards; i += 1) {
             deck = filterlocation(filterPlayer(stack, player), 'DECK');
             topcard = deck[deck.length - 1];
             setState({
@@ -559,7 +567,7 @@ function init(callback) {
             i,
             pointer;
 
-        for (i = 0; i < numberOfCards; i++) {
+        for (i = 0; i < numberOfCards; i += 1) {
             topcard = filterlocation(filterPlayer(stack, player), 'DECK').length - 1;
             setState({
                 player: player,
@@ -581,8 +589,9 @@ function init(callback) {
 
     /**
      * Mills a card, updates state.
-     * @param {Number} player        Player milling the cards
+     * @param {Number} player player int 0,1, etc       Player milling the cards
      * @param {Number} numberOfCards number of cards milled
+     * @returns {undefined}
      */
     function millCard(player, numberOfCards) {
         var currentgrave = filterlocation(filterPlayer(stack, player), 'GRAVE').length,
@@ -591,7 +600,7 @@ function init(callback) {
             i,
             pointer;
 
-        for (i = 0; i < numberOfCards; i++) {
+        for (i = 0; i < numberOfCards; i += 1) {
             topcard = filterlocation(filterPlayer(stack, player), 'DECK').length - 1;
             setState({
                 player: player,
@@ -610,8 +619,9 @@ function init(callback) {
 
     /**
      * Mills a card to banished zone, updates state.
-     * @param {Number} player        Player milling the cards
+     * @param {Number} player player int 0,1, etc       Player milling the cards
      * @param {Number} numberOfCards number of cards milled
+     * @returns {undefined}
      */
     function millRemovedCard(player, numberOfCards) {
         var currentgrave = filterlocation(filterPlayer(stack, player), 'REMOVED').length,
@@ -620,7 +630,7 @@ function init(callback) {
             i,
             pointer;
 
-        for (i = 0; i < numberOfCards; i++) {
+        for (i = 0; i < numberOfCards; i += 1) {
             topcard = filterlocation(filterPlayer(stack, player), 'DECK').length - 1;
             setState({
                 player: player,
@@ -640,8 +650,9 @@ function init(callback) {
 
     /**
      * Mills a card to banished zone face down, updates state.
-     * @param {Number} player        Player milling the cards
+     * @param {Number} player player int 0,1, etc       Player milling the cards
      * @param {Number} numberOfCards number of cards milled
+     * @returns {undefined}
      */
     function millRemovedCardFaceDown(player, numberOfCards) {
         var currentgrave = filterlocation(filterPlayer(stack, player), 'REMOVED').length,
@@ -650,7 +661,7 @@ function init(callback) {
             i,
             pointer;
 
-        for (i = 0; i < numberOfCards; i++) {
+        for (i = 0; i < numberOfCards; i += 1) {
             topcard = filterlocation(filterPlayer(stack, player), 'DECK').length - 1;
             setState({
                 player: player,
@@ -669,11 +680,14 @@ function init(callback) {
 
     /**
      * Triggers a callback that reveals the given array of cards to end users.
-     * @param {Array} reveal array of cards
+     * @param {Array} reference reveal array of cards
+     * @param {Number} player player int 0,1, etc
+     * @param {function} call second callback
+     * @returns {undefined}
      */
     function revealCallback(reference, player, call) {
         var reveal = [];
-        reference.forEach(function (card, index) {
+        reference.forEach(function(card, index) {
             reveal.push(Object.assign({}, card));
             reveal[index].position = 'FaceUp'; // make sure they can see the card and all data on it.
         });
@@ -706,7 +720,8 @@ function init(callback) {
 
     /**
      * Reveal the top card of the players deck.
-     * @param {number} player 
+     * @param {Number} player player int 0,1, etc
+     * @returns {undefined}
      */
     function revealTop(player) {
         var deck = filterlocation(filterPlayer(stack, player), 'DECK'),
@@ -718,7 +733,8 @@ function init(callback) {
 
     /**
      * Reveal the bottom card of the players deck.
-     * @param {number} player 
+     * @param {Number} player player int 0,1, etc
+     * @returns {undefined}
      */
     function revealBottom(player) {
         var deck = filterlocation(filterPlayer(stack, player), 'DECK'),
@@ -729,7 +745,8 @@ function init(callback) {
 
     /**
      * Reveal the players deck.
-     * @param {number} player 
+     * @param {Number} player player int 0,1, etc
+     * @returns {undefined}
      */
     function revealDeck(player) {
         revealCallback(filterlocation(filterPlayer(stack, player), 'DECK').reverse(), player, 'deck');
@@ -737,7 +754,8 @@ function init(callback) {
 
     /**
      * Reveal the players extra deck.
-     * @param {number} player 
+     * @param {Number} player player int 0,1, etc
+     * @returns {undefined}
      */
     function revealExtra(player) {
         revealCallback(filterlocation(filterPlayer(stack, player), 'EXTRA'), player, 'extra');
@@ -745,7 +763,8 @@ function init(callback) {
 
     /**
      * Reveal the players Excavated pile.
-     * @param {number} player 
+     * @param {Number} player player int 0,1, etc
+     * @returns {undefined}
      */
     function revealExcavated(player) {
         revealCallback(filterlocation(filterPlayer(stack, player), 'EXCAVATED'), player, 'excavated');
@@ -753,7 +772,8 @@ function init(callback) {
 
     /**
      * Reveal the players hand.
-     * @param {number} player 
+     * @param {Number} player player int 0,1, etc
+     * @returns {undefined}
      */
     function revealHand(player) {
         revealCallback(filterlocation(filterPlayer(stack, player), 'HAND'), player, 'hand');
@@ -761,7 +781,10 @@ function init(callback) {
 
     /**
      * Reveal the players graveyard.
-     * @param {number} player 
+     * @param {Number} player player int 0,1, etc
+     * @param {String} username name of player being viewed.
+     * @param {Number} requester name of player requesting the view call
+     * @returns {undefined}
      */
     function viewGrave(player, username, requester) {
         if (player === requester) {
@@ -789,9 +812,12 @@ function init(callback) {
 
     /**
      * Reveal the players removed zone.
-     * @param {number} player 
+     * @param {Number} player player int 0,1, etc
+     * @param {String} username name of player being viewed.
+     * @param {Number} requester name of player requesting the view call
+     * @returns {undefined}
      */
-    function viewBanished(requester, username, player) {
+    function viewBanished(player, username, requester) {
         if (player === requester) {
             state.duelistChat.push('<pre>' + username + ' is viewing their banished pile.</pre>');
         } else {
@@ -836,6 +862,12 @@ function init(callback) {
         callback(result, stack);
     }
 
+    /**
+     * Player views their own Extra deck
+     * @param {Number} player player int 0,1, etc
+     * @param {String} username name of player being viewed.
+     * @returns {undefined}
+     */
     function viewExtra(player, username) {
         var deck = filterlocation(filterPlayer(stack, player), 'EXTRA'),
             result = {
@@ -859,9 +891,9 @@ function init(callback) {
 
     /**
      * Show player their own deck, allow interaction with it.
-     * @param {Number} slot   
-     * @param {Number} index  
-     * @param {Number} player
+     * @param {Number} player player int 0,1, etc
+     * @param {String} username name of player being viewed.
+     * @return {undefined}
      */
     function viewExcavated(player, username) {
         var deck = filterlocation(filterPlayer(stack, player), 'EXCAVATED'),
@@ -888,9 +920,10 @@ function init(callback) {
 
     /**
      * Show player their own deck, allow interaction with it.
-     * @param {Number} slot   
-     * @param {Number} index  
-     * @param {Number} player
+     * @param {Number} slot   player info
+     * @param {Number} index  sequence/index of the Monster zone.
+     * @param {Number} player player int 0, 1, etc
+     * @return {undefined}
      */
     function viewXYZ(slot, index, player) {
         var pile = filterIndex(filterlocation(filterPlayer(stack, player), 'MONSTERZONE'), index),
@@ -917,6 +950,7 @@ function init(callback) {
 
     /**
      * Start side decking.
+     * @return {undefined}
      */
     function startSide() {
         stack = [];
@@ -936,8 +970,8 @@ function init(callback) {
 
     /**
      * Validate that an incoming deck matches the existing deck based on the rules of siding.
-     * @param   {number} player
-     * @param   {object}   deck
+     * @param   {Number} player player int 0, 1, etc
+     * @param   {Object}   deck stack of cards
      * @returns {boolean}  if the deck is valid.
      */
     function validateDeckAgainstPrevious(player, deck) {
@@ -962,8 +996,8 @@ function init(callback) {
 
     /**
      * Take a given deck, if it can, lock it in, return if it locked in.
-     * @param   {number} player 
-     * @param   {object} deck  
+     * @param   {Number} player player int 0,1, etc
+     * @param   {Object} deck  stack of cards
      * @returns {boolean}  if it managed to lock in the deck.
      */
     function lockInDeck(player, deck) {
@@ -979,6 +1013,10 @@ function init(callback) {
 
     /**
      * Exposed method to initialize the field; You only run this once.
+     * @param {Object} player1 player instance
+     * @param {Object} player2 player instance
+     * @param {Boolean} manual if using manual, or automatic
+     * @returns {undefined}
      */
     function startDuel(player1, player2, manual) {
         stack = [];
@@ -997,17 +1035,17 @@ function init(callback) {
             1: 8000
         };
 
-        player1.main.forEach(function (card, index) {
+        player1.main.forEach(function(card, index) {
             stack.push(makeCard('DECK', 0, index, stack.length, card));
         });
-        player2.main.forEach(function (card, index) {
+        player2.main.forEach(function(card, index) {
             stack.push(makeCard('DECK', 1, index, stack.length, card));
         });
 
-        player1.extra.forEach(function (card, index) {
+        player1.extra.forEach(function(card, index) {
             stack.push(makeCard('EXTRA', 0, index, stack.length, card));
         });
-        player2.extra.forEach(function (card, index) {
+        player2.extra.forEach(function(card, index) {
             stack.push(makeCard('EXTRA', 1, index, stack.length, card));
         });
         if (manual) {
@@ -1034,6 +1072,7 @@ function init(callback) {
 
     /**
      * Restarts the game for a rematch.
+     * @returns {undefined}
      */
     function rematch() {
         stack = [];
@@ -1043,7 +1082,8 @@ function init(callback) {
 
     /**
      * moves game to next phase.
-     * @param {number} phase enumeral
+     * @param {Number} phase enumeral
+     * @returns {undefined}
      */
     function nextPhase(phase) {
         state.phase = phase;
@@ -1052,9 +1092,10 @@ function init(callback) {
 
     /**
      * Shifts the game to the start of the next turn and shifts the active player.
+     * @returns {undefined}
      */
     function nextTurn() {
-        state.turn++;
+        state.turn += 1;
         state.phase = 0;
         state.turnOfPlayer = (state.turnOfPlayer === 0) ? 1 : 0;
         callback(generateView(), stack);
@@ -1062,6 +1103,7 @@ function init(callback) {
 
     /**
      * Sets the current turn player.
+     * @returns {undefined}
      */
     function setTurnPlayer() {
         state.turnOfPlayer = (state.turnOfPlayer === 0) ? 1 : 0;
@@ -1069,8 +1111,10 @@ function init(callback) {
 
     /**
      * Change lifepoints of a player
-     * @param {Number} player player to edit
+     * @param {Number} player player int 0,1, etcplayer to edit
      * @param {Number} amount amount of lifepoints to take or remove.
+     * @param {String} username name of player being viewed.
+     * @return {undefined}
      */
     function changeLifepoints(player, amount, username) {
         if (amount > 0) {
@@ -1084,8 +1128,9 @@ function init(callback) {
 
     /**
      * Record what a duelist said to another duelist.
-     * @param {Number} player  player saying the message.
+     * @param {Number} username  player saying the message.
      * @param {String} message message to other spectators
+     * @returns {undefined}
      */
     function duelistChat(username, message) {
         state.duelistChat.push(username + ': ' + message);
@@ -1094,8 +1139,9 @@ function init(callback) {
 
     /**
      * Record what a spectator said to another spectator.
-     * @param {Number} player  player saying the message.
+     * @param {Number} username  player saying the message.
      * @param {String} message message to other spectators
+     * @returns {undefined}
      */
     function spectatorChat(username, message) {
         state.spectatorChat.push(username + ': ' + message);
@@ -1104,21 +1150,23 @@ function init(callback) {
 
     /**
      * After game start, shuffle a players deck.
-     * @param {number} player 
+     * @param {Number} player player int 0,1, etcplayer int
+     * @param {String} username users name in the current game.
+     * @returns {undefined}
      */
     function shuffleDeck(player, username) {
         // Ids are reassigned to new GUIs 
-        console.log(player,username)
+
         var playersCards = filterPlayer(stack, player),
             deck = filterlocation(playersCards, 'DECK'),
             idCollection = [];
 
-        deck.forEach(function (card) {
+        deck.forEach(function(card) {
             idCollection.push(card.id);
         });
 
         shuffle(idCollection); // shuffle the "deck".
-        deck.forEach(function (card, index) {
+        deck.forEach(function(card, index) {
             card.id = idCollection[index]; // finalize the shuffle
         });
         state.duelistChat.push('<pre>' + username + ' shuffled their deck.</pre>');
@@ -1126,7 +1174,8 @@ function init(callback) {
     }
     /**
      *   shuffle a players hand.
-     * @param {number} player 
+     * @param {Number} player player int 0,1, etc
+     * @returns {undefined}
      */
     function shuffleHand(player) {
         // Ids are reassigned to new GUIs 
@@ -1135,12 +1184,12 @@ function init(callback) {
             hand = filterlocation(playersCards, 'HAND'),
             idCollection = [];
 
-        hand.forEach(function (card) {
+        hand.forEach(function(card) {
             idCollection.push(card.id);
         });
 
         shuffle(idCollection); // shuffle the "deck".
-        hand.forEach(function (card, index) {
+        hand.forEach(function(card, index) {
             card.id = idCollection[index]; // finalize the shuffle
         });
         callback(generateView('shuffleHand' + player), stack); // alert UI of the shuffle.
@@ -1150,7 +1199,8 @@ function init(callback) {
 
     /**
      * Convulstion of Nature
-     * @param {number} player
+     * @param {Number} player player int 0, 1, etc
+     * @returns {undefined}
      */
     function flipDeck(player) {
         var playersCards = filterPlayer(stack, player),
@@ -1158,7 +1208,7 @@ function init(callback) {
             idCollection = [];
 
         // copy the ids to a sperate place
-        deck.forEach(function (card) {
+        deck.forEach(function(card) {
             idCollection.push(card.id);
         });
 
@@ -1166,7 +1216,7 @@ function init(callback) {
         idCollection.reverse();
 
         // reassign them.
-        deck.forEach(function (card, index) {
+        deck.forEach(function(card, index) {
             card.id = idCollection[index];
 
             // flip the card over.
@@ -1177,9 +1227,9 @@ function init(callback) {
 
 
     function offsetZone(player, zone) {
-        stack.forEach(function (card, index) {
+        stack.forEach(function(card, index) {
             if (card.player === player && card.location === zone) {
-                card.index++;
+                card.index += 1;
             }
         });
     }
@@ -1219,7 +1269,6 @@ function init(callback) {
             answerLength: answerLength,
             uuid: uuid
         };
-        console.log('sending question', output);
         answerListener.once(uuid, onAnswerFromUser);
         callback(output, stack);
     }
@@ -1235,10 +1284,8 @@ function init(callback) {
                 2: 'scissors'
             };
 
-        console.log('starting rps');
 
         function determineResult(player, answer) {
-            console.log('determining', player, answer);
             if (player === 0) {
                 player1 = answer;
             }
@@ -1301,8 +1348,7 @@ function init(callback) {
             }, {
                 id: 'scissors',
                 value: 2
-            }], 1, function (answer) {
-                console.log('question', answer);
+            }], 1, function(answer) {
                 var result = determineResult(0, answer[0]);
                 if (result === false) {
                     notify(ask);
@@ -1321,7 +1367,7 @@ function init(callback) {
             }, {
                 id: 'scissors',
                 value: 2
-            }], 1, function (answer) {
+            }], 1, function(answer) {
                 var result = determineResult(1, answer[0]);
                 if (result === false) {
                     notify(ask);
