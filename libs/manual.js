@@ -13,7 +13,7 @@ var fs = require('fs'),
 function getBanlist() {
     var banlist = {},
         files = fs.readdirSync('../http/banlist/');
-    files.forEach(function (filename) {
+    files.forEach(function(filename) {
         if (filename.indexOf('.js') > -1) {
             var listname = filename.slice(0, -3);
             banlist[listname] = require('../http/banlist/' + '/' + filename);
@@ -30,7 +30,7 @@ var validateDeck = require('./validate-Deck.js'),
     banlist = getBanlist();
 
 
-module.exports = function (wss) {
+module.exports = function(wss) {
 
     var realgames = [],
         stateSystem = require('./ygojs-core.js'),
@@ -115,7 +115,7 @@ module.exports = function (wss) {
                             }
                         }
 
-                        Object.keys(stateSystem[game].spectators).forEach(function (username) {
+                        Object.keys(stateSystem[game].spectators).forEach(function(username) {
                             var spectator = stateSystem[game].spectators[username];
                             spectator.send(JSON.stringify(view.spectators));
                         });
@@ -150,7 +150,7 @@ module.exports = function (wss) {
 
 
     wss.broadcast = function broadcast() {
-        Object.keys(games).forEach(function (key) {
+        Object.keys(games).forEach(function(key) {
             try {
                 if (games[key].player[0].name === '' && games[key].player[1].name === '') {
                     games[key].delCount++;
@@ -178,7 +178,7 @@ module.exports = function (wss) {
 
 
     function ackgames() {
-        Object.keys(games).forEach(function (key) {
+        Object.keys(games).forEach(function(key) {
             if (realgames.indexOf(key) > -1) {
                 return;
             } else {
@@ -234,7 +234,7 @@ module.exports = function (wss) {
                     game: generated
                 }));
                 socket.slot = 0;
-                setTimeout(function () {
+                setTimeout(function() {
                     stateSystem[generated].duelistChat('Gamelist', '90min Time limit reached. Ending the duel');
                     delete games[generated];
                     delete stateSystem[generated];
@@ -245,7 +245,7 @@ module.exports = function (wss) {
 
             case "join":
                 socket.slot = undefined;
-                Object.keys(games[message.game].player).some(function (playerNo, index) {
+                Object.keys(games[message.game].player).some(function(playerNo, index) {
                     var player = games[message.game].player[playerNo];
                     if (player.name !== '') {
                         return false;
@@ -481,7 +481,7 @@ module.exports = function (wss) {
                 if (socket.slot === undefined) {
                     break;
                 }
-                stateSystem[activeduel].viewBanished(socket.slot, games[activeduel].player[socket.slot].name, message.player);
+                stateSystem[activeduel].viewBanished(message.player, games[activeduel].player[socket.slot].name, socket.slot);
                 break;
             case "viewXYZ":
                 if (socket.slot === undefined) {
@@ -595,7 +595,7 @@ module.exports = function (wss) {
                 if (socket.slot === undefined) {
                     break;
                 }
-                stateSystem[activeduel].rps(function (result) {
+                stateSystem[activeduel].rps(function(result) {
                     var winner = 'Player ' + (1 + result);
                     stateSystem[activeduel].duelistChat('Server', games[activeduel].player[socket.slot].name + ' ' + winner + ' won.');
                 });
@@ -692,7 +692,7 @@ module.exports = function (wss) {
         socket.send(JSON.stringify({
             action: 'register'
         }));
-        socket.on('message', function (message) {
+        socket.on('message', function(message) {
             try {
                 responseHandler(socket, JSON.parse(message));
             } catch (error) {
@@ -704,7 +704,7 @@ module.exports = function (wss) {
                 }));
             }
         });
-        socket.on('close', function (message) {
+        socket.on('close', function(message) {
             try {
                 responseHandler(socket, {
                     action: 'leave'
@@ -713,13 +713,13 @@ module.exports = function (wss) {
                 console.log(error);
             }
         });
-        socket.on('error', function (errorMessage) {
+        socket.on('error', function(errorMessage) {
             console.log(errorMessage);
         });
     }
 
-    fs.watch(__filename, function () {
-        Object.keys(stateSystem).forEach(function (activeduel) {
+    fs.watch(__filename, function() {
+        Object.keys(stateSystem).forEach(function(activeduel) {
             stateSystem[activeduel].duelistChat('Server', 'New Source Code detected, restarting server. Duel has ended.');
         });
 
