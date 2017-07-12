@@ -1038,7 +1038,8 @@ div#selectwhogoesfirst {
     overflow: auto;
 }
 
-#subreveal img {
+#subreveal img,
+#revealed img {
     margin: 10px;
     height: 254px;
     width: 177px;
