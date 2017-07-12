@@ -38,9 +38,7 @@ module.exports = {
         'no-new': 2,
         'no-new-func': 2,
         'no-native-reassign': 2,
-        'no-plusplus': [1, {
-            "allowForLoopAfterthoughts": true
-        }],
+        'no-plusplus': 2,
         'no-delete-var': 2,
         'no-return-assign': 2,
         'no-new-object': 2,
