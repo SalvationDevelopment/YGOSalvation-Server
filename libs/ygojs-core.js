@@ -1,7 +1,87 @@
-/*jslint node:true, plusplus:true, bitwise : true, nomen:true*/
 'use strict';
+/**
+ * @file Creates instances of game state, and methods of manipulating them.
+ */
 
-var fs = require('fs'), // file system access
+/**
+ * @typedef Card
+ * @type {Object}
+ * @property {String} type Card/Token/Etc
+ * @property {Number} movelocation 'DECK'/'EXTRA' etc, in caps. 
+ * @property {Number} player player int 0,1, etc of controlling player
+ * @property {Number} originalController  player int 0,1, etc of owner
+ * @property {Number} index  sequence of the card
+ * @property {Number} unique unique ID of the card
+ * @property {Number} id   passcode of the card
+ * @property {Number} counters  counters on the card
+ * @property {Number} overlayIndex  counters on the card
+ * @property {String} position Faceup, Facedown, etc
+ */
+
+/**
+ * @typedef FieldView
+ * @type {Object}
+ * @property {Card[]} DECK Cards in the deck of one player.
+ * @property {Card[]} HAND Cards in the hand of one player.
+ * @property {Card[]} GRAVE Cards in the graveyard "GY" of one player.
+ * @property {Card[]} EXTRA Cards in the extra deck of one player.
+ * @property {Card[]} REMOVED Cards removed from play,"Banished" of one player.
+ * @property {Card[]} SPELLZONE Cards in the spell and pendulum zones of one player.
+ * @property {Card[]} MONSTERZONE Cards in the Main Monster zones and Extra Monster zone of one player.
+ * @property {Card[]} EXCAVATED Cards Excavated by one player atm, or held.
+ * @property {Card[]} INMATERIAL Tokens removed from the board after being created.
+ */
+
+/**
+ * @typedef GameState
+ * @type {Object}
+ * @property {Number} turn Current total turn count
+ * @property {Number} turnOfPlayer player int, 0, 1, etc that is currently making moves
+ * @property {Array.<Number>} lifepoints LP count of all players
+ * @property {String} duelChat Chat and action log of all players
+ * @property {String} spectatorChat Chat log of people not playing
+ */
+
+/**
+ * @typedef UIPayloadUnit
+ * @type {Object}
+ * @property {String} action Action the UI cases off of when it gets this message
+ * @property {GameState} state State of the game for the UI to update itself with
+ * @property {FieldView} view view of the field
+ */
+
+/**
+ * @typedef UIPayload
+ * @type {Object}
+ * @property {Array.<String>} name Names of each player
+ * @property {UIPayloadUnit} p0 State of the game for the UI to update itself with
+ * @property {UIPayloadUnit} p1 view of the field
+ * @property {UIPayloadUnit} spectators
+ */
+
+/**
+ * @typedef {function(UIPayload, Card[], function(Card[]))} UICallback callback of initiation module, shoots directly to UI.
+ */
+
+/**
+ * @typedef ChangeRequest
+ * @type {Object}
+ * @property {Number} uid   Unique card identifier in this game
+ * @property {Number} player current player int 0,1, etc of controlling player
+ * @property {String} clocation current location of the target card 'DECK'/'EXTRA' etc, in caps. 
+ * @property {Number} index  current sequence of the card in the current location
+ * @property {Number} overlayindex  current overlay slot
+ * @property {Number} moveplayer Requested end player int 0,1, etc of controlling player
+ * @property {String} movelocation Requested end location of the target card 'DECK'/'EXTRA' etc, in caps. 
+ * @property {Number} moveindex  Requested end sequence of the card in the current location
+ * @property {String} moveposition Requested Faceup, Facedown, etc
+ */
+
+
+
+
+
+var watcherInstance = require('fs').watch(__filename, process.exit),
     EventEmitter = require('events'), // a way to "notice" things occuring
     uniqueIdenifier = require('uuid/v1'); // time based unique identifier, RFC4122 version 1
 
@@ -12,7 +92,7 @@ var fs = require('fs'), // file system access
  * @param   {Number} index  sequence of the card
  * @param   {Number} unique unique ID of the card
  * @param   {Number} code   passcode of the card
- * @returns {Object}   a card
+ * @returns {Card} a card
  */
 function makeCard(movelocation, player, index, unique, code) {
     return {
@@ -32,8 +112,8 @@ function makeCard(movelocation, player, index, unique, code) {
 
 /**
  * Filters non cards from a collection of possible cards.
- * @param   {Array} stack a stack of cards which may have overlay units attached to them.
- * @returns {Array} a stack of cards, devoid of overlay units.
+ * @param   {Card[]} stack a stack of cards which may have overlay units attached to them.
+ * @returns {Card[]} a stack of cards, devoid of overlay units.
  */
 function filterIsCard(stack) {
     return stack.filter(function(item) {
@@ -43,9 +123,9 @@ function filterIsCard(stack) {
 
 /**
  * Filters out cards based on player.
- * @param {Array} stack Array a stack of cards.
+ * @param {Card[]} stack Array a stack of cards.
  * @param {Number} player player int 0,1, etc0 or 1
- * @returns {Array} a stack of cards that belong to only one specified player. 
+ * @returns {Card[]} a stack of cards that belong to only one specified player. 
  */
 function filterPlayer(stack, player) {
     return stack.filter(function(item) {
@@ -55,9 +135,9 @@ function filterPlayer(stack, player) {
 
 /**
  * Filters out cards based on zone.
- * @param {Array} stack a stack of cards.
+ * @param {Card[]} stack a stack of cards.
  * @param {String} location zone the card is in.
- * @returns {Array} a stack of cards that are in only one location/zone.
+ * @returns {Card[]} a stack of cards that are in only one location/zone.
  */
 function filterlocation(stack, location) {
     return stack.filter(function(item) {
@@ -67,9 +147,9 @@ function filterlocation(stack, location) {
 
 /**
  * Filters out cards based on index.
- * @param {Array}  stack a stack of cards.
+ * @param {Card[]}  stack a stack of cards.
  * @param {Number} index index of the card being searched for.
- * @returns {Array} a stack of cards that are in only one index
+ * @returns {Card[]} a stack of cards that are in only one index
  */
 function filterIndex(stack, index) {
     return stack.filter(function(item) {
@@ -78,9 +158,9 @@ function filterIndex(stack, index) {
 }
 /**
  * Filters out cards based on if they are overlay units or not.
- * @param {Array} stack a stack of cards attached to a single monster as overlay units.
+ * @param {Card[]} stack a stack of cards attached to a single monster as overlay units.
  * @param {Number} overlayindex sequence in an XYZ stack
- * @returns {Array} a single card
+ * @returns {Card[]} a single card
  */
 function filterOverlyIndex(stack, overlayindex) {
     return stack.filter(function(item) {
@@ -90,9 +170,9 @@ function filterOverlyIndex(stack, overlayindex) {
 
 /**
  * Filters out cards based on if they are a specific UID
- * @param {Array} stack a stack of cards attached to a single monster as overlay units.
+ * @param {Card[]} stack a stack of cards attached to a single monster as overlay units.
  * @param {Number} uid unique identifier
- * @returns {boolean} if a card is that UID
+ * @returns {Boolean} if a card is that UID
  */
 function filterUID(stack, uid) {
     return stack.filter(function(item) {
@@ -100,22 +180,19 @@ function filterUID(stack, uid) {
     });
 }
 
-
 /**
  * Sort function, sorts by card index
- * @param   {Object}   first  card Object
- * @param   {Object}   second card Object
+ * @param   {Card}   first  card Object
+ * @param   {Card}   second card Object
  * @returns {Number}  if it comes before or after
  */
 function sortByIndex(first, second) {
     return first.index - second.index;
 }
 
-
-
 /**
  * Shuffles array in place.
- * @param {Array} deck a items The array containing the items This function is in no way optimized.
+ * @param {Card[]} deck a items The array containing the items This function is in no way optimized.
  * @returns {undefined}
  */
 function shuffle(deck) {
@@ -131,8 +208,8 @@ function shuffle(deck) {
 
 /**
  * Changes a view of cards so the opponent can not see what they are.
- * @param   {Array} view a collection of cards
- * @returns {Array} a collection of cards
+ * @param   {Card[]} view a collection of cards
+ * @returns {Card[]} a collection of cards
  */
 function hideViewOfZone(view) {
     var output = [];
@@ -151,8 +228,8 @@ function hideViewOfZone(view) {
 
 /**
  * Clean counters from the stack.
- * @param   {Array} stack a collection of cards
- * @returns {Array} a collection of cards
+ * @param   {Card[]} stack a collection of cards
+ * @returns {Card[]} a collection of cards
  */
 function cleanCounters(stack) {
 
@@ -166,8 +243,8 @@ function cleanCounters(stack) {
 
 /**
  * Changes a view of cards in the hand so the opponent can not see what they are.
- * @param   {Array} view a collection of cards
- * @returns {Array} a collection of cards
+ * @param   {Card[]} view a collection of cards
+ * @returns {Card[]} a collection of cards
  */
 function hideHand(view) {
     var output = [];
@@ -182,13 +259,16 @@ function hideHand(view) {
 }
 
 /**
- * Initiation of a single independent state intance... I guess this is a class of sorts.
- * @param {function} callback function(view, internalState){}; called each time the stack is updated. 
- * @returns {Object} State instance
+ * Initiation of a single independent state intance.
+ * @class
+ * @param {UICallback} callback function(view, internalState){}; called each time the stack is updated. 
+ * @returns {Object} Interface to the created game instance
  */
 function init(callback) {
     //the field is represented as a bunch of cards with metadata in an Array, <div>card/card/card/card</div>
     //numberOfCards is used like a memory address. It must be increased by 1 when creating a makeCard.
+
+
 
     if (typeof callback !== 'function') {
         callback = function(view, internalState) {};
@@ -201,14 +281,15 @@ function init(callback) {
         names = ['', ''],
         lock = [false, false],
         round = [],
+        instance,
         state = {
             turn: 0,
             turnOfPlayer: 0,
             phase: 0,
-            lifepoints: {
-                0: 8000,
-                1: 8000
-            },
+            lifepoints: [
+                8000,
+                8000
+            ],
             duelistChat: [],
             spectatorChat: []
         },
@@ -226,6 +307,13 @@ function init(callback) {
         }; // holds decks
 
 
+    /**
+     * Set a username to a specific slot on lock in.
+     * @public
+     * @param {any} slot Index in names
+     * @param {any} username name of the player
+     * @returns {undefined}
+     */
     function setNames(slot, username) {
         names[slot] = username;
     }
@@ -341,7 +429,7 @@ function init(callback) {
 
     /**
      * Generate a full view of the field for a spectator.
-     * @returns {Array} complete view of the current field based on the stack.
+     * @returns {Card[]} complete view of the current field based on the stack.
      */
     function generateSpectatorView() {
         return [generateSinglePlayerSpectatorView(0), generateSinglePlayerSpectatorView(1)];
@@ -349,7 +437,7 @@ function init(callback) {
 
     /**
      * Generate a full view of the field for a Player 1.
-     * @returns {Array} complete view of the current field based on the stack.
+     * @returns {Card[]} complete view of the current field based on the stack.
      */
     function generatePlayer1View() {
         return [generateSinglePlayerView(0), generateSinglePlayerSpectatorView(1)];
@@ -357,7 +445,7 @@ function init(callback) {
 
     /**
      * Generate a full view of the field for a Player 2.
-     * @returns {Array} complete view of the current field based on the stack.
+     * @returns {Card[]} complete view of the current field based on the stack.
      */
     function generatePlayer2View() {
         return [generateSinglePlayerSpectatorView(0), generateSinglePlayerView(1)];
@@ -366,7 +454,7 @@ function init(callback) {
     /**
      * Generate a full view of the field for all view types.
      * @param {string} action callback case statement this should trigger, defaults to 'duel'.
-     * @returns {Array} complete view of the current field based on the stack for every view type.
+     * @returns {Object} complete view of the current field based on the stack for every view type.
      */
     function generateView(action) {
         if (action === 'start') {
@@ -374,12 +462,12 @@ function init(callback) {
         }
         var output = {
             names: names,
-            0: {
+            p0: {
                 action: action || 'duel',
                 info: state,
                 field: generatePlayer1View()
             },
-            1: {
+            p1: {
                 action: action || 'duel',
                 info: state,
                 field: generatePlayer2View()
@@ -424,7 +512,11 @@ function init(callback) {
         stack.sort(sortByIndex);
     }
 
-    //finds a card, then moves it elsewhere.
+    /**
+     * Finds a card, then moves it elsewhere. Crux of the engine.
+     * @param {ChangeRequest} changeRequest Payload describing a query to find a card, and what to change it to.
+     * @returns {undefined}
+     */
     function setState(changeRequest) {
         var player = changeRequest.player,
             clocation = changeRequest.clocation,
@@ -680,7 +772,7 @@ function init(callback) {
 
     /**
      * Triggers a callback that reveals the given array of cards to end users.
-     * @param {Array} reference reveal array of cards
+     * @param {Card[]} reference reveal array of cards
      * @param {Number} player player int 0,1, etc
      * @param {function} call second callback
      * @returns {undefined}
@@ -1382,6 +1474,10 @@ function init(callback) {
     }
 
     //expose public functions.
+    /**
+     * @const
+     * @name Core
+     */
     return {
         startSide: startSide,
         startDuel: startDuel,
@@ -1437,13 +1533,9 @@ function init(callback) {
         answerListener: answerListener,
         rps: rps
     };
-
-
 }
 
-fs.watch(__filename, process.exit);
 module.exports = init;
-
 
 /** Usage
 
