@@ -184,7 +184,7 @@ var databaseSystem = (function () {
             if (region && banlist[activeBanlist].endDate) {
                 if (card[region]) {
                     if (card[region].date) {
-                        return new Date(banlist[activeBanlist].endDate).getTime() > card[region].date;
+                        return new Date(banlist[activeBanlist].endDate).getTime() > new Date(card[region].date).getTime();
                     } else {
                         return false;
                     }
