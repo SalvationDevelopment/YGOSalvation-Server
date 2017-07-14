@@ -332,7 +332,7 @@ function makeSideCard(cards, zone) {
 
     cards.forEach(function (card, index) {
         var hardcard = JSON.stringify(card),
-            src = card + '.jpg';
+            src = card + '.png';
         html += '<img class="sidedeckzonecard" src="https://raw.githubusercontent.com/shadowfox87/YGOSeries10CardPics/master/' + src + '" data-"' + card + '" onclick = "sideonclick(' + index + ', \'' + zone + '\')" / > ';
 
     });
@@ -908,7 +908,7 @@ function reveal(cards, note) {
         $('#revealed').css('display', 'block');
     }
     cards.forEach(function (card, index) {
-        var src = (card.id) ? 'https://raw.githubusercontent.com/shadowfox87/YGOSeries10CardPics/master/' + card.id + '.jpg' : 'img/textures/cover.jpg';
+        var src = (card.id) ? 'https://raw.githubusercontent.com/shadowfox87/YGOSeries10CardPics/master/' + card.id + '.png' : 'img/textures/cover.jpg';
         src = (note === 'specialcard' || card.note) ? 'img/textures/' + card.id + '.jpg' : src;
         revealcache.push(card);
         html += '<img id="revealuid' + card.uid + '" class="revealedcard" src="' + src + '" data-id="' + card.id + '" onclick = "revealonclick(' + index + ', \'' + note + '\')" data-uid="' + card.uid + '" data-position="' + card.position + card.location + '" / > ';
@@ -1204,7 +1204,7 @@ function manualReciver(message) {
             break;
         case "effect":
             $('#effectflasher').css('display', 'block');
-            $('#effectflasher .mainimage').attr('src', 'https://raw.githubusercontent.com/shadowfox87/YGOSeries10CardPics/master/' + message.id + '.jpg');
+            $('#effectflasher .mainimage').attr('src', 'https://raw.githubusercontent.com/shadowfox87/YGOSeries10CardPics/master/' + message.id + '.png');
             setTimeout(function () {
                 $('#effectflasher').css('display', 'none');
             }, 1000);
