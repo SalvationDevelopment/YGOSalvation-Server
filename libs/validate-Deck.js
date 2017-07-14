@@ -4,7 +4,7 @@
 function getBanlist() {
     var banlist = {},
         files = fs.readdirSync('../http/banlist/');
-    files.forEach(function (filename) {
+    files.forEach(function(filename) {
         if (filename.indexOf('.js') > -1) {
             var listname = filename.slice(0, -3);
             banlist[listname] = require('../http/banlist/' + '/' + filename);
@@ -15,7 +15,7 @@ function getBanlist() {
 
 function validateDeck(deck, banlist, database, cardpool, prerelease) {
     'use strict';
-
+    database = process.database;
     var main = {},
         side = {},
         extra = {},
@@ -27,7 +27,7 @@ function validateDeck(deck, banlist, database, cardpool, prerelease) {
             msg: ''
         },
         card,
-        packDB = database.filter(function (card) {
+        packDB = database.filter(function(card) {
             if (region && banlist.endDate) {
                 if (card[region]) {
                     if (card[region].date) {
@@ -44,7 +44,7 @@ function validateDeck(deck, banlist, database, cardpool, prerelease) {
 
 
     function getCardById(cardId) {
-        var result = database.find(function (card) {
+        var result = database.find(function(card) {
             if (card.id === parseInt(cardId, 10)) {
                 return true;
             }
@@ -54,7 +54,7 @@ function validateDeck(deck, banlist, database, cardpool, prerelease) {
     }
 
     function getFilteredCardById(cardId) {
-        var result = database.find(function (card) {
+        var result = database.find(function(card) {
             if (card.id === parseInt(cardId, 10)) {
                 return true;
             }
@@ -94,7 +94,7 @@ function validateDeck(deck, banlist, database, cardpool, prerelease) {
         }
         // remap decks
 
-        deck.main.forEach(function (card) {
+        deck.main.forEach(function(card) {
             var cardObject = getCardById(card);
             if (cardObject.alias) {
                 card = cardObject.alias;
@@ -105,7 +105,7 @@ function validateDeck(deck, banlist, database, cardpool, prerelease) {
                 main[card]++;
             }
         });
-        deck.side.forEach(function (card) {
+        deck.side.forEach(function(card) {
             var cardObject = getCardById(card);
             if (cardObject.alias) {
                 card = cardObject.alias;
@@ -116,7 +116,7 @@ function validateDeck(deck, banlist, database, cardpool, prerelease) {
                 side[card]++;
             }
         });
-        deck.extra.forEach(function (card) {
+        deck.extra.forEach(function(card) {
             var cardObject = getCardById(card);
             if (cardObject.alias) {
                 card = cardObject.alias;
@@ -181,6 +181,9 @@ function validateDeck(deck, banlist, database, cardpool, prerelease) {
             for (var card in main) {
                 var reference = getFilteredCardById(card),
                     subreference = getCardById(card);
+                if (!reference) {
+
+                }
                 //console.log(reference.name, subreference.tcg.date, new Date(banlist.endDate));
                 if (reference.tcg.date || (reference && cardpool == 'OCG/TCG')) {
                     if (reference.tcg.date > new Date(banlist.endDate)) {
