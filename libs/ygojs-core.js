@@ -784,14 +784,14 @@ function init(callback) {
             reveal[index].position = 'FaceUp'; // make sure they can see the card and all data on it.
         });
         callback({
-            0: {
+            p0: {
                 action: 'reveal',
                 info: state,
                 reveal: reveal,
                 call: call,
                 player: player
             },
-            1: {
+            p1: {
                 action: 'reveal',
                 info: state,
                 reveal: reveal,
