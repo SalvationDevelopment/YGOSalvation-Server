@@ -131,26 +131,47 @@ function validateDeck(deck, banlist, database, cardpool, prerelease) {
 
         for (card in main) {
             var reference = getCardById(card);
-            if (main[card] > 3 || side[card] && main[card] + side[card] > 3) {
+            if (reference == null) {
                 validate.error = true;
-                validate.msg = "You can't have " + cardAmount + " copies of " + '"' + reference.name + '"';
+                validate.msg = "Error loading deck: check Deck Edit to verify that your deck looks fine";
                 return validate;
+            }
+            else {               
+                if (main[card] > 3 || side[card] && main[card] + side[card] > 3) {
+                    validate.error = true;
+                    validate.msg = "You can't have " + cardAmount + " copies of " + '"' + reference.name + '"';
+                    return validate;
+                }
             }
         }
         for (card in side) {
             var reference = getCardById(card);
-            if (side[card] > 3 || main[card] && main[card] + side[card] > 3) {
+            if (reference == null) {
                 validate.error = true;
-                validate.msg = "You can't have " + cardAmount + " copies of " + '"' + reference.name + '"';
+                validate.msg = "Error loading deck: check Deck Edit to verify that your deck looks fine";
                 return validate;
+            }
+            else {    
+                if (side[card] > 3 || main[card] && main[card] + side[card] > 3) {
+                    validate.error = true;
+                    validate.msg = "You can't have " + cardAmount + " copies of " + '"' + reference.name + '"';
+                    return validate;
+                }
             }
         }
         for (card in extra) {
-            var reference = getCardById(card);
-            if (extra[card] > 3 || side[card] && extra[card] + side[card] > 3) {
+            if (reference == null) {
                 validate.error = true;
-                validate.msg = "You can't have " + cardAmount + " copies of " + '"' + reference.name + '"';
+                validate.msg = "Error loading deck: check Deck Edit to verify that your deck looks fine";
                 return validate;
+            }
+            else {    
+                var reference = getCardById(card);
+                if (extra[card] > 3 || side[card] && extra[card] + side[card] > 3) {
+                    validate.error = true;
+                    validate.msg = "You can't have " + cardAmount + " copies of " + '"' + reference.name + '"';
+                    return validate;
+                }
             }
         }
         // check banlist.
