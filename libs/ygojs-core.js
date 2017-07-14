@@ -891,7 +891,7 @@ function init(callback) {
                 sepectators: {}
             };
 
-        result[requester] = {
+        result['p' + requester] = {
             action: 'reveal',
             info: state,
             reveal: deck,
@@ -924,7 +924,7 @@ function init(callback) {
         if (requester !== player) {
             deck = hideViewOfZone(deck);
         }
-        result[requester] = {
+        result['p' + requester] = {
             action: 'reveal',
             info: state,
             reveal: deck,
@@ -944,7 +944,7 @@ function init(callback) {
                 sepectators: {}
             };
         state.duelistChat.push('<pre>' + username + ' is viewing their deck.</pre>');
-        result[player] = {
+        result['p' + player] = {
             action: 'reveal',
             info: state,
             reveal: deck,
@@ -969,7 +969,7 @@ function init(callback) {
             };
         state.duelistChat.push('<pre>' + username + ' is viewing their extra deck.</pre>');
 
-        result[player] = {
+        result['p' + player] = {
             action: 'reveal',
             info: state,
             reveal: deck,
@@ -996,7 +996,7 @@ function init(callback) {
             };
         state.duelistChat.push('<pre>' + username + ' is viewing their excavated pile.</pre>');
 
-        result[player] = {
+        result['p' + player] = {
             action: 'reveal',
             info: state,
             reveal: deck,
@@ -1026,7 +1026,7 @@ function init(callback) {
             };
 
 
-        result[slot] = {
+        result['p' + slot] = {
             action: 'reveal',
             info: state,
             reveal: pile,
