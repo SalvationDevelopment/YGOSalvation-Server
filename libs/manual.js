@@ -106,12 +106,12 @@ module.exports = function(wss) {
                     if (stateSystem[game].players) {
                         if (stateSystem[game].players[0]) {
                             if (stateSystem[game].players[0].slot === 0) {
-                                stateSystem[game].players[0].send(JSON.stringify(view[stateSystem[game].players[0].slot]));
+                                stateSystem[game].players[0].send(JSON.stringify(view['p' + stateSystem[game].players[0].slot]));
                             }
                         }
                         if (stateSystem[game].players[1]) {
                             if (stateSystem[game].players[1].slot === 1) {
-                                stateSystem[game].players[1].send(JSON.stringify(view[stateSystem[game].players[1].slot]));
+                                stateSystem[game].players[1].send(JSON.stringify(view['p' + stateSystem[game].players[1].slot]));
                             }
                         }
 
@@ -125,7 +125,7 @@ module.exports = function(wss) {
                 console.log('failed messaging socket', error);
             } finally {
                 if (callback) {
-                    return callback();
+                    return callback(stack);
                 }
             }
         }
@@ -362,6 +362,13 @@ module.exports = function(wss) {
                             stack: error.stack,
                             input: JSON.stringify(message)
                         }));
+                        socket.send(JSON.stringify({
+                            errorType: 'validation',
+                            action: 'error',
+                            error: 'Server Error',
+                            msg: 'Server Error'
+                        }));
+                        return;
                     }
 
                     games[activeduel].player[socket.slot].ready = true;
