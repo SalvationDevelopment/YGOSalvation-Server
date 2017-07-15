@@ -1354,7 +1354,7 @@ function init(callback) {
             };
 
 
-        output[player] = {
+        output['p' + player] = {
             action: 'question',
             type: type,
             options: options,
