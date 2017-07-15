@@ -1348,8 +1348,8 @@ function init(callback) {
         var uuid = uniqueIdenifier(),
             output = {
                 names: names,
-                0: {},
-                1: {},
+                p0: {},
+                p1: {},
                 spectators: {}
             };
 
