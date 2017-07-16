@@ -12,10 +12,10 @@ var legacyMode = true,
     activelyDueling = false,
     activeQuestion;
 
-(function () {
+(function() {
     'use strict';
-    sound.play = function (targetID) {
-        setTimeout(function () {
+    sound.play = function(targetID) {
+        setTimeout(function() {
             if (Number(localStorage.sound_volume)) {
                 var soundfile = document.getElementById(targetID);
                 soundfile.volume = (Number(localStorage.sound_volume) / 100);
@@ -304,7 +304,7 @@ function updateloby(state) {
     }
     getAvatar(state.player[0].name);
     getAvatar(state.player[1].name);
-    setTimeout(function () {
+    setTimeout(function() {
         if (avatarMap[state.player[0].name]) {
             $('#p0avatar').attr('src', avatarMap[state.player[0].name]);
         } else {
@@ -330,7 +330,7 @@ function makeSideCard(cards, zone) {
     var html = '';
 
 
-    cards.forEach(function (card, index) {
+    cards.forEach(function(card, index) {
         var hardcard = JSON.stringify(card),
             src = card + '.png';
         html += '<img class="sidedeckzonecard" src="https://raw.githubusercontent.com/shadowfox87/YGOSeries10CardPics/master/' + src + '" data-"' + card + '" onclick = "sideonclick(' + index + ', \'' + zone + '\')" / > ';
@@ -386,7 +386,7 @@ function makeGames() {
     $('#manualgamelistitems').html('');
     var games = Object.keys(broadcast),
         duelist = 0;
-    games.forEach(function (gameName) {
+    games.forEach(function(gameName) {
 
         var game = broadcast[gameName],
             player1 = game.player[0].name || '___',
@@ -514,14 +514,14 @@ function orient(player) {
 
 function exclusionList(player, location, classValue) {
     'use strict';
-    var cardsOnField = manualDuel.stack.filter(function (card) {
+    var cardsOnField = manualDuel.stack.filter(function(card) {
             return (orient(card.player) === player && card.location === location);
         }),
-        selections = cardsOnField.map(function (card) {
+        selections = cardsOnField.map(function(card) {
             return '.cardselectionzone.p' + player + '.' + location + '.i' + card.index;
         });
 
-    selections.forEach(function (cardzone) {
+    selections.forEach(function(cardzone) {
         $(cardzone).removeClass(classValue);
     });
     return {
@@ -538,10 +538,10 @@ function linkStack(field) {
 
 
     function linkgui(zone) {
-        zone.forEach(function (card) {
+        zone.forEach(function(card) {
             var idIndex = manualDuel.uidLookup(card.uid) || card.uid,
                 unit = manualDuel.stack[idIndex] || {};
-            Object.keys(unit).forEach(function (prop) {
+            Object.keys(unit).forEach(function(prop) {
                 if (card[prop] !== undefined) {
                     unit[prop] = card[prop];
                 }
@@ -550,10 +550,10 @@ function linkStack(field) {
 
     }
 
-    Object.keys(field[0]).forEach(function (zone) {
+    Object.keys(field[0]).forEach(function(zone) {
         linkgui(field[0][zone]);
     });
-    Object.keys(field[1]).forEach(function (zone) {
+    Object.keys(field[1]).forEach(function(zone) {
         linkgui(field[1][zone]);
     });
 
@@ -641,7 +641,7 @@ function guiCard(dataBinding) {
 function cardmargin(player, deck) {
     'use strict';
     var multi = 1;
-    $('.card.p' + player + '.' + deck).each(function (i) {
+    $('.card.p' + player + '.' + deck).each(function(i) {
         var n = $(this).attr('data-index');
         $(this).attr('style', '').css({
             '-webkit-transform': 'translate3d(0,0,' + n + 'px)',
@@ -661,31 +661,31 @@ function initGameState() {
 
     //various query filters for doing various things.
     function filterIsCard(array) {
-        return array.filter(function (item) {
+        return array.filter(function(item) {
             return item.type === 'card';
         });
     }
 
     function filterPlayer(array, player) {
-        return array.filter(function (item) {
+        return array.filter(function(item) {
             return item.player === player;
         });
     }
 
     function filterlocation(array, location) {
-        return array.filter(function (item) {
+        return array.filter(function(item) {
             return item.location === location;
         });
     }
 
     function filterIndex(array, index) {
-        return array.filter(function (item) {
+        return array.filter(function(item) {
             return item.index === index;
         });
     }
 
     function filterOverlyIndex(array, overlayindex) {
-        return array.filter(function (item) {
+        return array.filter(function(item) {
             return item.overlayindex === overlayindex;
         });
     }
@@ -696,7 +696,7 @@ function initGameState() {
     }
 
     function filterUID(stack, uid) {
-        return stack.filter(function (item) {
+        return stack.filter(function(item) {
             return item.uid === uid;
         });
     }
@@ -748,7 +748,7 @@ function initGameState() {
         cardmargin('1', 'HAND');
         cardmargin('1', 'EXTRA');
         console.log('stack', stack, OneDeck, TwoDeck, OneExtra, TwoExtra);
-        setTimeout(function () {
+        setTimeout(function() {
             singlesitenav('duelscreen');
             setMidSchool(legacyMode);
         }, 2000);
@@ -806,7 +806,7 @@ function guishuffle(player, deck) {
         direction: -1
     });
     cardmargin(player, deck);
-    $($('.card.' + player + '.' + deck).get().reverse()).each(function (i) {
+    $($('.card.' + player + '.' + deck).get().reverse()).each(function(i) {
         var cache = $(this).css(orientation.x),
             spatical = Math.floor((Math.random() * 100) - 50);
         $(this).css(orientation.x, '-=' + spatical + 'px');
@@ -816,16 +816,16 @@ function guishuffle(player, deck) {
 
 function doGuiShuffle(player, deck) {
     'use strict';
-    var action = setInterval(function () {
+    var action = setInterval(function() {
         guishuffle('p' + player, deck);
-        setTimeout(function () {
+        setTimeout(function() {
             cardmargin(String() + player, deck);
         }, 50);
     }, 200);
-    setTimeout(function () {
+    setTimeout(function() {
         clearInterval(action);
         cardmargin(String() + player, deck);
-        setTimeout(function () {
+        setTimeout(function() {
             layouthand(player);
         }, 500);
 
@@ -847,7 +847,7 @@ function excludeTokens(card) {
 function getCardObject(id) {
     'use strict';
     var result = {};
-    databaseSystem.getDB().some(function (card, index) {
+    databaseSystem.getDB().some(function(card, index) {
         if (id === card.id) {
             result = card;
             return true;
@@ -907,7 +907,7 @@ function reveal(cards, note) {
         html += "<div id='subreveal'>";
         $('#revealed').css('display', 'block');
     }
-    cards.forEach(function (card, index) {
+    cards.forEach(function(card, index) {
         var src = (card.id) ? 'https://raw.githubusercontent.com/shadowfox87/YGOSeries10CardPics/master/' + card.id + '.png' : 'img/textures/cover.jpg';
         src = (note === 'specialcard' || card.note) ? 'img/textures/' + card.id + '.jpg' : src;
         revealcache.push(card);
@@ -930,13 +930,13 @@ function updateChat(duelist, spectators) {
     if (duelist) {
         $('.ingamechatbox').html('');
 
-        duelist.forEach(function (chatMessage, index) {
+        duelist.forEach(function(chatMessage, index) {
             $('.ingamechatbox').append('<li>' + chatMessage + '</li>');
         });
     }
     if (spectators) {
         $('#spectatorchattext').html('');
-        spectators.forEach(function (chatMessage, index) {
+        spectators.forEach(function(chatMessage, index) {
             $('#spectatorchattext').append('<li>' + chatMessage + '</li>');
         });
     }
@@ -960,7 +960,7 @@ function endSiding() {
         deck: sidedDeck,
         side: true
     }));
-    setTimeout(function () {
+    setTimeout(function() {
         if (broadcast[activegame].player[0].ready && broadcast[activegame].player[1].ready) {
             manualServer.send(JSON.stringify({
                 action: 'start'
@@ -991,7 +991,7 @@ function startGame(message) {
     $('#phaseindicator').attr('data-currentphase', message.info.phase);
     $('.p0lp').val(message.info.lifepoints[0]);
     $('.p1lp').val(message.info.lifepoints[1]);
-    setTimeout(function () {
+    setTimeout(function() {
         cardmargin(0, 'GRAVE');
         cardmargin(0, 'EXTRA');
         cardmargin(0, 'DECK');
@@ -1205,19 +1205,19 @@ function manualReciver(message) {
         case "effect":
             $('#effectflasher').css('display', 'block');
             $('#effectflasher .mainimage').attr('src', 'https://raw.githubusercontent.com/shadowfox87/YGOSeries10CardPics/master/' + message.id + '.png');
-            setTimeout(function () {
+            setTimeout(function() {
                 $('#effectflasher').css('display', 'none');
             }, 1000);
             break;
         case "attack":
             $('#attackanimation').remove();
             $('#automationduelfield').append('<img  id="attackanimation" class="card p' + orient(message.source.player) + ' ' + message.source.location + ' i' + message.source.index + '" src="img/textures/attack.png" data-orient="' + orient(message.source.player) + '" />');
-            setTimeout(function () {
+            setTimeout(function() {
                 $('#attackanimation').attr('class', 'card p' + orient(message.target.player) + ' ' + message.target.location + ' i' + message.target.index);
                 $('.card.p' + orient(message.target.player) + '.' + message.target.location + '.i' + message.target.index).addClass('attackglow');
                 $('.card.p' + orient(message.source.player) + '.' + message.source.location + '.i' + message.source.index).addClass('attackglow');
             }, 500);
-            setTimeout(function () {
+            setTimeout(function() {
                 $('#attackanimation').remove();
                 $('.attackglow').removeClass('attackglow');
             }, 2000);
@@ -1241,7 +1241,7 @@ function manualReciver(message) {
         case "newCard":
             window.manualDuel.newCard();
             linkStack(message.field);
-            setTimeout(function () {
+            setTimeout(function() {
                 cardmargin(0, 'GRAVE');
                 cardmargin(0, 'EXTRA');
                 cardmargin(0, 'DECK');
@@ -1261,14 +1261,14 @@ function manualReciver(message) {
             break;
         case "shuffleHand0":
             doGuiShuffle(orient(0), 'HAND');
-            setTimeout(function () {
+            setTimeout(function() {
                 linkStack(message.field);
             }, 1000);
 
             break;
         case "shuffleHand1":
             doGuiShuffle(orient(1), 'HAND');
-            setTimeout(function () {
+            setTimeout(function() {
                 linkStack(message.field);
             }, 1000);
             break;
@@ -1287,7 +1287,7 @@ function manualReciver(message) {
             }
             linkStack(message.field);
 
-            setTimeout(function () {
+            setTimeout(function() {
                 cardmargin(0, 'GRAVE');
                 cardmargin(0, 'EXTRA');
                 cardmargin(0, 'DECK');
@@ -1330,21 +1330,21 @@ function serverconnect() {
     }
     var protocol = (location.protocol === 'https:') ? "wss://" : "ws://";
     window.manualServer = new WebSocket(protocol + location.hostname, 'duel');
-    manualServer.onopen = function () {
+    manualServer.onopen = function() {
         console.log('Connected to Manual');
     };
-    manualServer.onmessage = function (message) {
+    manualServer.onmessage = function(message) {
         manualReciver(JSON.parse(message.data));
     };
-    manualServer.onclose = function (message) {
+    manualServer.onclose = function(message) {
         console.log('Manual Connection Died, reconnecting,...');
         if (internalLocal === 'surrendered') {
             alertmodal('A Connection Error Occured');
         }
         setTimeout(serverconnect, 2000);
     };
-    window.onbeforeunload = function () {
-        manualServer.onclose = function () {}; // disable onclose handler first
+    window.onbeforeunload = function() {
+        manualServer.onclose = function() {}; // disable onclose handler first
         manualServer.close();
     };
 
@@ -1408,6 +1408,7 @@ function manualLeave() {
         // odds are the connection isnt active, this is ok.
     }
 }
+window.onbeforeunload = manualLeave;
 
 function manualSurrender() {
     'use strict';
@@ -1490,7 +1491,7 @@ function manualMoveCard(movement) {
 
 function manualShuffleHand() {
     'use strict';
-    setTimeout(function () {
+    setTimeout(function() {
         manualServer.send(JSON.stringify({
             action: 'shuffleHand',
             sound: 'soundcardShuffle'
@@ -2069,7 +2070,7 @@ function manualToBottomOfDeck() {
         message = makeCardMovement(manualActionReference, end);
 
     message.action = 'moveCard';
-    setTimeout(function () {
+    setTimeout(function() {
         manualServer.send(JSON.stringify(message));
     }, 300);
 
@@ -2110,7 +2111,7 @@ function manualSlideLeft() {
 function manualOverlay() {
     'use strict';
     var overlayindex = 0;
-    revealcache.forEach(function (card, index) {
+    revealcache.forEach(function(card, index) {
         if (index === revealcacheIndex) {
             return;
         }
@@ -2135,9 +2136,9 @@ function manualXYZSummon(target) {
 
     message.action = 'moveCard';
     manualServer.send(JSON.stringify(message));
-    setTimeout(function () {
+    setTimeout(function() {
         var overlayindex = 0;
-        overlaylist.forEach(function (card, cindex) {
+        overlaylist.forEach(function(card, cindex) {
             overlayindex++;
             var message = makeCardMovement(card, card);
             message.overlayindex = overlayindex;
@@ -3304,7 +3305,7 @@ function processCardHover(event) {
             cardTarget = getCardObject(stackunit.id),
             ulinks = cardTarget.links;
 
-        ulinks.forEach(function (indicator, i) {
+        ulinks.forEach(function(indicator, i) {
             var linkedZone = getLinkedZone(uplayer, uindex, ulinks[i]),
                 linkPlayer,
                 linkIndex;
@@ -3320,16 +3321,16 @@ function processCardHover(event) {
     }
 }
 
-$(document).ready(function () {
+$(document).ready(function() {
     'use strict';
     serverconnect();
-    setInterval(function () {
+    setInterval(function() {
         if (manualServer.readyState !== 1) {
             window.reload();
         }
     }, 60000);
-    setTimeout(function () {
-        setInterval(function () {
+    setTimeout(function() {
+        setInterval(function() {
             if (manualServer.readyState !== 1) {
                 alertmodal('...DISCONNECTED...');
             }
@@ -3337,9 +3338,9 @@ $(document).ready(function () {
     }, 15000);
     $('.imgContainer').attr('src', 'img/textures/cover.jpg');
     $('body').on('mouseover', '.card, .revealedcard', processCardHover);
-    $('#manualcontrols button').click(function () {
+    $('#manualcontrols button').click(function() {
 
-        setTimeout(function () {
+        setTimeout(function() {
             $('#manualcontrols button').css({
                 'display': 'none'
             });
@@ -3348,7 +3349,7 @@ $(document).ready(function () {
     });
 });
 
-$(document).mousemove(function (event) {
+$(document).mousemove(function(event) {
     'use strict';
     currentMousePos.x = event.pageX;
     currentMousePos.y = event.pageY;
@@ -3392,7 +3393,7 @@ function manualRPS() {
     }));
 }
 
-$('#lobbychatinput, #sidechatinput, #spectatorchatinput').keypress(function (e) {
+$('#lobbychatinput, #sidechatinput, #spectatorchatinput').keypress(function(e) {
     'use strict';
     if ($(e.currentTarget).val().length === 0) {
         return;
@@ -3529,13 +3530,13 @@ $('#lobbychatinput, #sidechatinput, #spectatorchatinput').keypress(function (e) 
 
 var friendsList = [];
 
-$('#manualcontrols button').on('click', function () {
+$('#manualcontrols button').on('click', function() {
     'use strict';
     $('#revealed, #revealedclose').css('display', 'none');
 
 });
 
-$('body').on('mousedown', function (ev) {
+$('body').on('mousedown', function(ev) {
     'use strict';
     if (ev.which === 3) {
         $('#manualcontrols button').css({
