@@ -18,7 +18,7 @@ var cardidmap = hotload("../http/cardidmap.js");
  */
 function mapCards(deck) {
     // [].map returns a new array so we are just gonna send it back, not store it as a var.
-    return deck.map(function (cardInDeck) {
+    return deck.map(function(cardInDeck) {
         // if there is an entry in the cardidmap for that card id, we change it to the new value
         // and return a completely new object.
         if (cardidmap[cardInDeck.id]) {
@@ -100,7 +100,7 @@ app.use(ddos.express);
 app.use(compression());
 app.use(helmet());
 app.use(express['static'](path.join(__dirname, '../http')));
-app.use(function (req, res, next) {
+app.use(function(req, res, next) {
     if (toobusy()) {
         res.send(503, "I'm busy right now, sorry.");
     } else {
@@ -109,7 +109,7 @@ app.use(function (req, res, next) {
 });
 
 
-updateHTTP(function (error, database, banlist) {
+updateHTTP(function(error, database, banlist) {
     if (!error) {
         process.database = database;
         process.banlist = banlist;
@@ -121,11 +121,11 @@ updateHTTP(function (error, database, banlist) {
 function gitRoute(req, res, next) {
 
 
-    updateHTTP(function (error, database, banlist) {
+    updateHTTP(function(error, database, banlist) {
         res.write('Updated Server, generating files...');
         process.database = database;
         process.banlist = banlist;
-        child_process.spawn('git', ['pull'], {}, function () {
+        child_process.spawn('git', ['pull'], {}, function() {
             console.log('finished running git');
         });
     });
@@ -133,11 +133,11 @@ function gitRoute(req, res, next) {
 
 }
 
-app.post('/git', function (req, res, next) {
+app.post('/git', function(req, res, next) {
     gitRoute(req, res, next);
 });
 
-app.get('/git', function (req, res, next) {
+app.get('/git', function(req, res, next) {
     gitRoute(req, res, next);
 });
 
@@ -156,7 +156,7 @@ try {
     // set up a route to redirect http to spdy
     openserver.use(helmet());
     openserver.use(ddos.express);
-    openserver.get('*', function (req, res) {
+    openserver.get('*', function(req, res) {
         res.redirect(301, 'https://' + req.get('host') + req.url);
     });
     openserver.listen(HTTP_PORT);
@@ -171,8 +171,8 @@ var WebSocketServer = require('ws').Server,
         noServer: true
     });
 var manualServer = require('./manual.js')(wss);
-primusServer.on('upgrade', function (req, socket, head) {
-    wss.handleUpgrade(req, socket, head, function (websocket) {
+primusServer.on('upgrade', function(req, socket, head) {
+    wss.handleUpgrade(req, socket, head, function(websocket) {
         manualServer(websocket);
     });
 });
@@ -221,7 +221,7 @@ function massAck() {
 
 
 
-setInterval(function () {
+setInterval(function() {
     announce({
         clientEvent: 'ackresult',
         ackresult: acklevel,
@@ -234,7 +234,7 @@ setInterval(function () {
 
 
 function registrationCall(data, socket) {
-    forumValidate(data, function (error, info, body) {
+    forumValidate(data, function(error, info, body) {
         if (error) {
             //console.log(error);
             return;
@@ -251,13 +251,19 @@ function registrationCall(data, socket) {
                 message: currentGlobalMessage,
                 admin: adminlist[data.username]
             });
+            socket.write({
+                clientEvent: 'ackresult',
+                ackresult: acklevel,
+                userlist: userlist
+            });
             socket.speak = true;
             socket.write({
                 clientEvent: 'login',
                 info: info,
                 chatbox: chatbox
             });
-            Object.keys(banlistedUsers).some(function (bannedUser) {
+
+            Object.keys(banlistedUsers).some(function(bannedUser) {
                 if (bannedUser.toUpperCase() === data.username.toUpperCase()) {
                     socket.write({
                         clientEvent: 'banned',
@@ -284,7 +290,7 @@ function registrationCall(data, socket) {
 }
 
 function globalCall(data) {
-    forumValidate(data, function (error, info, body) {
+    forumValidate(data, function(error, info, body) {
         if (error) {
             console.log('[Gamelist]', error);
             return;
@@ -302,7 +308,7 @@ function globalCall(data) {
 }
 
 function globalRequested(data, socket) {
-    forumValidate(data, function (error, info, body) {
+    forumValidate(data, function(error, info, body) {
         if (error) {
             console.log('[Gamelist]', error);
             return;
@@ -320,7 +326,7 @@ function globalRequested(data, socket) {
 
 
 function genocideCall(data) {
-    forumValidate(data, function (error, info, body) {
+    forumValidate(data, function(error, info, body) {
         if (error) {
             return;
         }
@@ -340,7 +346,7 @@ function genocideCall(data) {
 }
 
 function reviveCall(data) {
-    forumValidate(data, function (error, info, body) {
+    forumValidate(data, function(error, info, body) {
         if (error) {
             return;
         }
@@ -360,7 +366,7 @@ function reviveCall(data) {
 
 
 function murderCall(data) {
-    forumValidate(data, function (error, info, body) {
+    forumValidate(data, function(error, info, body) {
         if (error) {
             return;
         }
@@ -378,7 +384,7 @@ function murderCall(data) {
 }
 
 function censorCall(data) {
-    forumValidate(data, function (error, info, body) {
+    forumValidate(data, function(error, info, body) {
         if (error) {
             return;
         }
@@ -388,7 +394,7 @@ function censorCall(data) {
                 clientEvent: 'censor',
                 messageID: data.messageID
             });
-            chatbox = chatbox.filter(function (message) {
+            chatbox = chatbox.filter(function(message) {
                 return message.uid !== Number(data.messageID);
             });
 
@@ -400,7 +406,7 @@ function censorCall(data) {
 }
 
 function mindcrushCall(data) {
-    forumValidate(data, function (error, info, body) {
+    forumValidate(data, function(error, info, body) {
         if (error) {
             return;
         }
@@ -419,7 +425,7 @@ function mindcrushCall(data) {
 }
 
 function aiRestartCall(data) {
-    forumValidate(data, function (error, info, body) {
+    forumValidate(data, function(error, info, body) {
         if (error) {
             return;
         }
@@ -463,7 +469,7 @@ function onData(data, socket) {
     var socketwatcher = domain.create(),
         action,
         save;
-    socketwatcher.on('error', function (err) {
+    socketwatcher.on('error', function(err) {
         if (err.message === "TypeError: Cannot read property 'forwarded' of undefined") {
             // not sure how to handle this yet.
             return;
@@ -507,7 +513,7 @@ function onData(data, socket) {
                     deck: data.deck
                 });
                 socket.aiReady = false;
-                setTimeout(function () {
+                setTimeout(function() {
                     socket.aiReady = true;
                 }, 10000);
             }
@@ -544,7 +550,7 @@ function onData(data, socket) {
                     timezone: data.timezone
                 });
                 sayCount++;
-                setTimeout(function () {
+                setTimeout(function() {
                     socket.speak = true;
                 }, 500);
             } else {
@@ -606,7 +612,7 @@ function onData(data, socket) {
             break;
         case 'save':
             delete data.action;
-            data.decks.forEach(function (deck, i) { //cycles through the decks
+            data.decks.forEach(function(deck, i) { //cycles through the decks
                 data.decks[i].main = mapCards(data.decks[i].main); //This cannot be simplified 
                 data.decks[i].side = mapCards(data.decks[i].side); //further due to the abstract
                 data.decks[i].extra = mapCards(data.decks[i].extra); //of data.decks, afaik
@@ -615,7 +621,7 @@ function onData(data, socket) {
                 username: data.username
             }, data, {
                 upsert: true
-            }, function (error, docs) {
+            }, function(error, docs) {
                 primus.room(socket.address.ip + data.uniqueID).write({
                     clientEvent: 'deckSaved',
                     error: error
@@ -627,7 +633,7 @@ function onData(data, socket) {
         case 'load':
             console.log(data);
             if (data.decks) { //if it doesn't exist [].length will scream at you
-                data.decks.forEach(function (deck, i) {
+                data.decks.forEach(function(deck, i) {
                     data.decks[i].main = mapCards(data.decks[i].main);
                     data.decks[i].side = mapCards(data.decks[i].side);
                     data.decks[i].extra = mapCards(data.decks[i].extra);
@@ -636,7 +642,7 @@ function onData(data, socket) {
             var regex = new RegExp(data.username, 'i');
             deckStorage.find({
                 username: regex
-            }, function (error, docs) {
+            }, function(error, docs) {
                 console.log(error, docs);
                 if (docs.length) {
                     primus.room(socket.address.ip + data.uniqueID).write({
@@ -656,17 +662,17 @@ function onData(data, socket) {
 
 }
 
-primus.on('connection', function (socket) {
+primus.on('connection', function(socket) {
     var connectionwatcher = domain.create();
-    connectionwatcher.on('error', function (err) {
+    connectionwatcher.on('error', function(err) {
         console.log('[Gamelist]Error Critical User-Connection:', err);
     });
     connectionwatcher.enter();
-    socket.on('error', function (error) {
+    socket.on('error', function(error) {
         console.log('[Gamelist]:Generic Socket Error:', error);
     });
     socket.aiReady = true;
-    socket.on('data', function (data) {
+    socket.on('data', function(data) {
         var save = false;
         if (socket.readyState !== primus.Spark.CLOSED) {
             save = true;
