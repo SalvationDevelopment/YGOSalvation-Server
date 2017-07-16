@@ -618,6 +618,7 @@ function init(callback) {
      * @param {Number} player player int 0,1, etc       Player drawing the cards
      * @param {Number} numberOfCards number of cards drawn
      * @param {String} username      name of player drawing cards
+     * @param {Function} drawCallback callback used by automatic
      * @returns {undefined}
      */
     function drawCard(player, numberOfCards, username, drawCallback) {
@@ -738,7 +739,6 @@ function init(callback) {
                 overlayindex: 0,
                 uid: undefined
             });
-
         }
         callback(generateView(), stack);
     }
@@ -1482,6 +1482,7 @@ function init(callback) {
      * @name Core
      */
     return {
+        stack: stack,
         startSide: startSide,
         startDuel: startDuel,
         setState: setState,

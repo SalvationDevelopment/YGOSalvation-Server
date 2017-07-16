@@ -141,7 +141,7 @@ module.exports = function(wss) {
         var i,
             text = "",
             chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-        for (i = 0; i < len; i++) {
+        for (i = 0; i < len; i += 1) {
             text += chars.charAt(Math.floor(Math.random() * chars.length));
         }
         return text;
@@ -153,7 +153,7 @@ module.exports = function(wss) {
         Object.keys(games).forEach(function(key) {
             try {
                 if (games[key].player[0].name === '' && games[key].player[1].name === '') {
-                    games[key].delCount++;
+                    games[key].delCount += 1;
                 }
                 if (games[key].delCount > 10) {
                     delete games[key];

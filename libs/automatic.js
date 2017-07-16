@@ -5,14 +5,13 @@
 // review the following https://github.com/Fluorohydride/ygopro-core/blob/master/processor.cpp
 
 
-var DRAW_PHASE = 0,
+const DRAW_PHASE = 0,
     STANDBY_PHASE = 1,
     MAIN_PHASE_1 = 2,
     BATTLE_PHASE = 3,
     MAIN_PHASE_2 = 4,
-    END_PHASE = 5;
-
-var waterfall = require('async-waterfall'), // Async flow control
+    END_PHASE = 5,
+    waterfall = require('async-waterfall'), // Async flow control
     hotload = require('hotload'), // Allows for cards to be live edited
     aux = hotload('../scripts/utilities'); // Tools that are exposed to help manipulate the duel instance
 
@@ -23,7 +22,7 @@ var waterfall = require('async-waterfall'), // Async flow control
  * @param   {String} effectType Text String to look for
  * @returns {Array} Array of card
  */
-function getForEffects(duel, effectType) {
+function getForType(duel, effectType) {
     return duel.stack.filter(function(card) {
         var validEffectList = card.effectList.some(function(effect) {
             if (Array.isArray(effectType)) {
@@ -42,7 +41,7 @@ function getForEffects(duel, effectType) {
  * @param   {String} effectCategory Text String to look for
  * @returns {Array} Array of card
  */
-function getForEffects(duel, effectCategory) {
+function getForCategory(duel, effectCategory) {
     return duel.stack.filter(function(card) {
         var validEffectList = card.effectList.some(function(effect) {
             if (Array.isArray(effectCategory)) {
@@ -80,7 +79,7 @@ function getForEffects(duel, effectCode) {
  * @param   {String} effectProperty Text String to look for
  * @returns {Array} Array of card
  */
-function getForEffects(duel, effectProperty) {
+function getForProperty(duel, effectProperty) {
     return duel.stack.filter(function(card) {
         var validEffectList = card.effectList.some(function(effect) {
             if (Array.isArray(effectProperty)) {
@@ -111,7 +110,9 @@ function getForEffects(duel, effectProperty) {
 
 /**
  * Process a queue of actions (as defined by above Action Object).
- * @param {Array} actionQueue Array of action objects. Each contains a command and parameters.
+ * @param {Array} actionQueue Array of action Objects. Each contains a command and parameters.
+ * @param {callback} callback allow function to be recursive.
+ * @returns {undefined}
  */
 function processQueue(actionQueue, callback) {
 
@@ -143,6 +144,7 @@ function processQueue(actionQueue, callback) {
  * Do the automatic processsing of the draw phase. Start by emptying the queue then doing base logic.
  * @param {Object}   duel              Engine instance.
  * @param {Function} callback          Function to call to move onto next phase.
+ * @return {undefined}
  */
 function doDrawPhase(duel, callback) {
     var drawPhaseActionQueue = duel.drawPhaseActionQueue;
@@ -183,6 +185,7 @@ function doDrawPhase(duel, callback) {
  * Do the automatic processsing of the standby phase.
  * @param {Object}   duel                      Engine instance
  * @param {Function} callback                  Function to call to move onto next phase.
+ * @return {undefined}
  */
 function doStandbyPhase(duel, callback) {
     var standbyPhaseActionQueue = duel.standbyPhaseActionQueue;
@@ -223,7 +226,7 @@ function getNormalSummons(duel) {
 
 /**
  * Get a list of cards that the active user can normal summon at the moment.
- * @param   {object} duel Engine Instance
+ * @param   {Object} duel Engine Instance
  * @returns {Array}  List of Cards
  */
 function getNormalSets(duel) {
@@ -255,26 +258,26 @@ function getMainPhaseActions(duel) {
     return {
         normalsummonable: getNormalSummons(duel),
         cansetmonster: getNormalSets(duel),
-        specialsummonable: duel.query.getGroup({
+        specialsummonable: duel.getGroup({
             specialsummonable: true
         }),
-        canchangetodefense: duel.query.getGroup({
+        canchangetodefense: duel.getGroup({
             canchangetodefense: true
         }),
-        canactivatespelltrap: duel.query.getGroup({
+        canactivatespelltrap: duel.getGroup({
             canactivate: true
         }),
 
-        cantributesummon: duel.query.getGroup({
+        cantributesummon: duel.getGroup({
             canTributeSummon: true
         }),
-        cansetspelltrap: duel.query.getGroup({
+        cansetspelltrap: duel.getGroup({
             cansetspelltrap: true
         }),
-        canactivategrave: duel.query.getGroup({
+        canactivategrave: duel.getGroup({
             canactivategrave: true
         }),
-        canactivatebanished: duel.query.getGroup({
+        canactivatebanished: duel.getGroup({
             canactivatebanished: true
         })
     };
@@ -284,6 +287,7 @@ function getMainPhaseActions(duel) {
  * Do the automatic processsing of the main phase 1.
  * @param {Object}   duel        Engine instance
  * @param {Function} callback    Function to call to move onto next phase.
+ * @return {undefined}
  */
 function doMainPhase1(duel, callback) {
     var mainPhase1ActionQueue = duel.mainPhase1ActionQueue;
@@ -324,7 +328,7 @@ function doMainPhase1(duel, callback) {
                     case 'normalsummon':
                         duel.question({
                             questionType: 'openMonsterSlots'
-                        }, function(error, openMonsterSlots) {
+                        }, function(querytionError, openMonsterSlots) {
                             message.index = openMonsterSlots;
                             // Really need to fix
                             duel.setState(message);
@@ -349,6 +353,7 @@ function doMainPhase1(duel, callback) {
  * Do the automatic processsing of the battle phase.
  * @param {Object}   duel                      Engine instance
  * @param {Function} callback                  Function to call to move onto next phase.
+ * @return {undefined}
  */
 function doBattlePhase(duel, callback) {
 
@@ -368,10 +373,10 @@ function doBattlePhase(duel, callback) {
             var state = duel.state(),
                 player = state.turnOfPlayer,
                 turnCount = state.turnCount,
-                canattack = duel.query.getGroup({
+                canattack = duel.getGroup({
                     canattack: true
                 }),
-                canactivate = duel.query.getGroup({
+                canactivate = duel.getGroup({
                     canactivate: true
                 });
 
@@ -408,6 +413,7 @@ function doBattlePhase(duel, callback) {
  * @param {Number}        attackerID Attacking Cards UID
  * @param {Number|Null}   defenderID Defending Cards UID, 
  * @param {Function}      callback   Finishing function
+ * @return {undefined}
  */
 function doDamageCalculation(duel, attackerID, defenderID, callback) {
     var damageCalculationActionQueue = duel.damageCalculationActionQueue;
@@ -494,6 +500,7 @@ function doDamageCalculation(duel, attackerID, defenderID, callback) {
  * Do the automatic processsing of the main phase 2.
  * @param {Object}   duel                      Engine instance
  * @param {Function} callback                  Function to call to move onto next phase.
+ * @return {undefined}
  */
 function doMainPhase2(duel, callback) {
 
@@ -548,6 +555,7 @@ function doMainPhase2(duel, callback) {
  * Do the automatic processsing of the end phase.
  * @param {Object}   duel                      Engine instance
  * @param {Function} callback                  Function to call go to setup the next turn.
+ * @return {undefined}
  */
 function doEndPhase(duel, callback) {
     var endPhaseActionQueue = duel.endPhaseActionQueue;
@@ -584,6 +592,7 @@ function doEndPhase(duel, callback) {
 /**
  * Start cycle through phases of the game
  * @param {Object} duel  Engine Instance
+ * @return {undefined}
  */
 function setupTurn(duel) {
 
@@ -646,7 +655,8 @@ function generic() {
 
 /**
  * Initialize all the cards in a duel.
- * @param {object} duel Engine Instance 
+ * @param {Object} duel Engine Instance 
+ * @return {undefined}
  */
 function loadCardScripts(duel) {
 
@@ -658,15 +668,7 @@ function loadCardScripts(duel) {
                 card.effectList.push(effect);
             };
             card.script.initial_effect(card, duel);
-            card.runEffects = function() {
-                card.effectList.forEach(function(effect) {
-                    try {
-                        effect.operation();
-                    } catch (effectError) {
-                        console.log(effect.name + 'Failed', effectError);
-                    }
-                });
-            };
+            card.runEffects = function() {};
         } catch (couldNotLoadCard) {
             card.runEffects = generic;
             card.script = {
@@ -678,8 +680,9 @@ function loadCardScripts(duel) {
 
 /**
  * Initiate the duel
- * @param {object} duel   Engine instance (ygojs-core.js)
- * @param {object} params Object with a bunch of info to use as start up info.
+ * @param {Object} duel   Engine instance (ygojs-core.js)
+ * @param {Object} params Object with a bunch of info to use as start up info.
+ * @return {undefined}
  */
 function init(duel, params) {
     var actionQueue = [];
