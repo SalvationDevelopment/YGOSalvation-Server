@@ -620,7 +620,7 @@ function init(callback) {
      * @param {String} username      name of player drawing cards
      * @returns {undefined}
      */
-    function drawCard(player, numberOfCards, username) {
+    function drawCard(player, numberOfCards, username, drawCallback) {
         var currenthand = filterlocation(filterPlayer(stack, player), 'HAND').length,
             topcard,
             target,
@@ -650,6 +650,9 @@ function init(callback) {
             state.duelistChat.push('<pre>' + username + ' drew a card.</pre>');
         }
         callback(generateView(), stack);
+        if (typeof drawCallback === 'function') {
+            drawCallback();
+        }
     }
 
     function excavateCard(player, numberOfCards, cards) {
