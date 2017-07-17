@@ -2,15 +2,22 @@
 /*global WebSocket, $, singlesitenav, console, enums, alert,  confirm, deckEditor, FileReader, databaseSystem, alertmodal*/
 
 
-
-
-var sound = {};
-
-var internalLocal = internalLocal;
-
-var legacyMode = true,
+var manualDuel,
+    targetreference,
+    attackmode = false,
+    targetmode = false,
+    overlaymode = false,
+    viewmode = '',
+    uploadedDeck = '',
+    sound = {},
+    internalLocal = 'internalLocal',
+    legacyMode = true,
     activelyDueling = false,
-    activeQuestion;
+    activeQuestion,
+    duelstash = {},
+    sidestach = {},
+    gui = {},
+    chatplace = 0;
 
 (function() {
     'use strict';
@@ -77,12 +84,12 @@ function setMidSchool() {
     console.log('setting living as', legacyMode);
     if (legacyMode) {
         $('.field').removeClass('newfield');
-        $('#automationduelfield.fieldimage').css('background-image', "url(../img/textures/field.png)");
+        $('#automationduelfield.fieldimage').css('background-image', 'url(../img/textures/field.png)');
     } else {
         if (!$('.field').eq(0).hasClass('newfield')) {
             $('.field').addClass('newfield');
         }
-        $('#automationduelfield.fieldimage').css('background-image', "url(../img/textures/newfield.png)");
+        $('#automationduelfield.fieldimage').css('background-image', 'url(../img/textures/newfield.png)');
 
     }
 }
@@ -94,128 +101,128 @@ var manualServer,
     orientSlot = 0,
     manualActionReference,
     attributeMap = {
-        1: "EARTH",
-        2: "WATER",
-        4: "FIRE",
-        8: "WIND",
-        16: "LIGHT",
-        32: "DARK",
-        64: "DIVINE"
+        1: 'EARTH',
+        2: 'WATER',
+        4: 'FIRE',
+        8: 'WIND',
+        16: 'LIGHT',
+        32: 'DARK',
+        64: 'DIVINE'
     },
     stMap = {
         2: '',
         4: '',
-        130: " / Ritual",
-        65538: " / Quick-Play",
-        131074: " / Continuous",
-        131076: " / Continuous",
-        262146: " / Equip",
-        524290: " / Field",
-        1048580: " / Counter"
+        130: ' / Ritual',
+        65538: ' / Quick-Play',
+        131074: ' / Continuous',
+        131076: ' / Continuous',
+        262146: ' / Equip',
+        524290: ' / Field',
+        1048580: ' / Counter'
     },
     fieldspell = {
-        524290: " / Field"
+        524290: ' / Field'
     },
     monsterMap = {
-        17: "Normal",
-        33: "Effect",
-        65: "Fusion",
-        97: "Fusion / Effect",
-        129: "Ritual",
-        161: "Ritual / Effect",
-        545: "Spirit",
-        673: "Ritual / Spirit / Effect",
-        1057: "Union",
-        2081: "Gemini / Effect",
-        4113: "Tuner",
-        4129: "Tuner / Effect",
-        4161: "Fusion / Tuner",
-        8193: "Synchro",
-        8225: "Synchro / Effect",
-        12321: "Synchro / Tuner / Effect",
-        16401: "Token",
-        2097185: "Flip / Effect",
-        2101281: "Flip / Tuner / Effect",
-        4194337: "Toon / Effect",
-        8388609: "Xyz",
-        8388641: "Xyz / Effect",
-        16777233: "Pendulum",
-        16777249: "Pendulum / Effect",
-        16777313: "Fusion / Pendulum / Effect",
-        16781345: "Pendulum / Tuner / Effect",
-        16785441: "Synchro / Pendulum / Effect",
-        18874401: "Pendulum / Flip / Effect",
-        25165857: "Xyz / Pendulum / Effect",
-        33554433: "Link",
-        33554465: "Link / Effect"
+        17: 'Normal',
+        33: 'Effect',
+        65: 'Fusion',
+        97: 'Fusion / Effect',
+        129: 'Ritual',
+        161: 'Ritual / Effect',
+        545: 'Spirit',
+        673: 'Ritual / Spirit / Effect',
+        1057: 'Union',
+        2081: 'Gemini / Effect',
+        4113: 'Tuner',
+        4129: 'Tuner / Effect',
+        4161: 'Fusion / Tuner',
+        8193: 'Synchro',
+        8225: 'Synchro / Effect',
+        12321: 'Synchro / Tuner / Effect',
+        16401: 'Token',
+        2097185: 'Flip / Effect',
+        2101281: 'Flip / Tuner / Effect',
+        4194337: 'Toon / Effect',
+        8388609: 'Xyz',
+        8388641: 'Xyz / Effect',
+        16777233: 'Pendulum',
+        16777249: 'Pendulum / Effect',
+        16777313: 'Fusion / Pendulum / Effect',
+        16781345: 'Pendulum / Tuner / Effect',
+        16785441: 'Synchro / Pendulum / Effect',
+        18874401: 'Pendulum / Flip / Effect',
+        25165857: 'Xyz / Pendulum / Effect',
+        33554433: 'Link',
+        33554465: 'Link / Effect'
     },
     pendulumMap = {
-        16777233: "Pendulum",
-        16777249: "Pendulum / Effect",
-        16777313: "Fusion / Pendulum / Effect",
-        16781345: "Pendulum / Tuner / Effect",
-        16785441: "Synchro / Pendulum / Effect",
-        18874401: "Pendulum / Flip / Effect",
-        25165857: "Xyz / Pendulum / Effect"
+        16777233: 'Pendulum',
+        16777249: 'Pendulum / Effect',
+        16777313: 'Fusion / Pendulum / Effect',
+        16781345: 'Pendulum / Tuner / Effect',
+        16785441: 'Synchro / Pendulum / Effect',
+        18874401: 'Pendulum / Flip / Effect',
+        25165857: 'Xyz / Pendulum / Effect'
     },
     raceMap = {
-        1: "Warrior",
-        2: "Spellcaster",
-        4: "Fairy",
-        8: "Fiend",
-        16: "Zombie",
-        32: "Machine",
-        64: "Aqua",
-        128: "Pyro",
-        256: "Rock",
-        512: "Winged-Beast",
-        1024: "Plant",
-        2048: "Insect",
-        4096: "Thunder",
-        8192: "Dragon",
-        16384: "Beast",
-        32768: "Beast-Warrior",
-        65536: "Dinosaur",
-        131072: "Fish",
-        262144: "Sea-Serpent",
-        524288: "Reptile",
-        1048576: "Psychic",
-        2097152: "Divine-Beast",
-        4194304: "Creator God",
-        8388608: "Wyrm",
-        16777216: "Cyberse"
+        1: 'Warrior',
+        2: 'Spellcaster',
+        4: 'Fairy',
+        8: 'Fiend',
+        16: 'Zombie',
+        32: 'Machine',
+        64: 'Aqua',
+        128: 'Pyro',
+        256: 'Rock',
+        512: 'Winged-Beast',
+        1024: 'Plant',
+        2048: 'Insect',
+        4096: 'Thunder',
+        8192: 'Dragon',
+        16384: 'Beast',
+        32768: 'Beast-Warrior',
+        65536: 'Dinosaur',
+        131072: 'Fish',
+        262144: 'Sea-Serpent',
+        524288: 'Reptile',
+        1048576: 'Psychic',
+        2097152: 'Divine-Beast',
+        4194304: 'Creator God',
+        8388608: 'Wyrm',
+        16777216: 'Cyberse'
     };
 
 function cardIs(cat, obj) {
     'use strict';
-    if (cat === "monster" && (obj.race !== 0 || obj.level !== 0 || obj.attribute !== 0)) {
+    if (cat === 'monster' && (obj.race !== 0 || obj.level !== 0 || obj.attribute !== 0)) {
         return true;
     }
-    if (cat === "monster") {
+    if (cat === 'monster') {
         return (obj.type & 1) === 1;
     }
-    if (cat === "spell") {
+    if (cat === 'spell') {
         return (obj.type & 2) === 2;
     }
-    if (cat === "trap") {
+    if (cat === 'trap') {
         return (obj.type & 4) === 4;
     }
-    if (cat === "fusion") {
+    if (cat === 'fusion') {
         return (obj.type & 64) === 64;
     }
-    if (cat === "ritual") {
+    if (cat === 'ritual') {
         return (obj.type & 128) === 128;
     }
-    if (cat === "synchro") {
+    if (cat === 'synchro') {
         return (obj.type & 8192) === 8192;
     }
-    if (cat === "token") {
+    if (cat === 'token') {
         return (obj.type & 16400) === 16400;
     }
-    if (cat === "xyz") {
+    if (cat === 'xyz') {
         return (obj.type & 8388608) === 8388608;
     }
-    if (cat === "link") {
+    if (cat === 'link') {
         return (obj.type & 33554432) === 33554432;
     }
 }
@@ -397,17 +404,16 @@ function makeGames() {
             string = '<div data-game="' + game.roompass + '" class="game ' + started + '" ' + action + ' ' + game.roompass + '>' + players + '<span class="subtext" style="font-size:.5em"><br>' + game.mode + ' ' + game.banlist + ' </span></div>';
         $('#manualgamelistitems').append(string);
         if (game.player[0].name) {
-            duelist++
+            duelist += 1;
         }
         if (game.player[1].name) {
-            duelist++
+            duelist += 1;
         }
     });
     $('#activeduels').text(games.length);
     $('#activeduelist').text(duelist);
 }
 
-var uploadedDeck = '';
 
 
 
@@ -437,12 +443,7 @@ function loadField() {
     $('#duelzone').css('display', 'block');
 }
 
-var manualDuel,
-    targetreference,
-    attackmode = false,
-    targetmode = false,
-    overlaymode = false,
-    viewmode = '';
+
 
 
 function stateUpdate(dataBinding) {
@@ -601,7 +602,7 @@ function layouthand(player) {
         xCoord,
         sequence;
     //    console.log(count,f,xCoord);
-    for (sequence = 0; sequence < count; sequence++) {
+    for (sequence = 0; sequence < count; sequence += 1) {
         if (count < 6) {
             xCoord = (5.5 * f - 0.8 * f * count) / 2 + 1.55 * f + sequence * 0.8 * f;
         } else {
@@ -704,7 +705,7 @@ function initGameState() {
     //the way the stack of cards is setup it requires a pointer to edit it.
     function uidLookup(uid) {
         var i;
-        for (i = 0; stack.length > i; i++) {
+        for (i = 0; stack.length > i; i += 1) {
             if (stack[i].uid === uid) {
                 return i;
             }
@@ -723,19 +724,19 @@ function initGameState() {
         var i;
 
 
-        for (i = 0; OneExtra > i; i++) {
+        for (i = 0; OneExtra > i; i += 1) {
             stack.push(new Card('EXTRA', 0, i, stack.length));
         }
-        for (i = 0; TwoExtra > i; i++) {
+        for (i = 0; TwoExtra > i; i += 1) {
             stack.push(new Card('EXTRA', 1, i, stack.length));
         }
-        for (i = 0; OneDeck > i; i++) {
+        for (i = 0; OneDeck > i; i += 1) {
             stack.push(new Card('DECK', 0, i, stack.length));
         }
-        for (i = 0; TwoDeck > i; i++) {
+        for (i = 0; TwoDeck > i; i += 1) {
             stack.push(new Card('DECK', 1, i, stack.length));
         }
-        for (i = 0; stack.length > i; i++) {
+        for (i = 0; stack.length > i; i += 1) {
             stack[i].element = guiCard(stack[i]);
         }
 
@@ -904,7 +905,7 @@ function reveal(cards, note) {
     $('#revealedclose').css('display', 'block');
     $('#revealed').css('display', 'flex');
     if (cards.length > 4) {
-        html += "<div id='subreveal'>";
+        html += '<div id=\'subreveal\'>';
         $('#revealed').css('display', 'block');
     }
     cards.forEach(function(card, index) {
@@ -914,7 +915,7 @@ function reveal(cards, note) {
         html += '<img id="revealuid' + card.uid + '" class="revealedcard" src="' + src + '" data-id="' + card.id + '" onclick = "revealonclick(' + index + ', \'' + note + '\')" data-uid="' + card.uid + '" data-position="' + card.position + card.location + '" / > ';
     });
     if (cards.length > 4) {
-        html += "</div>";
+        html += '</div>';
     }
     $('#revealed').html(html);
     //$('#subreveal').width(cards.length * 197);
@@ -923,7 +924,7 @@ function reveal(cards, note) {
 
 
 
-var chatplace = 0;
+
 
 function updateChat(duelist, spectators) {
     'use strict';
@@ -941,11 +942,10 @@ function updateChat(duelist, spectators) {
         });
     }
 
-    $('.ingamechatbox, #sidechat, #spectatorchattext').scrollTop($('.ingamechatbox').prop("scrollHeight"));
+    $('.ingamechatbox, #sidechat, #spectatorchattext').scrollTop($('.ingamechatbox').prop('scrollHeight'));
 }
 
-var duelstash = {},
-    sidestach = {};
+
 
 
 function endSiding() {
@@ -1148,51 +1148,51 @@ function manualReciver(message) {
         if (internalLocal === 'surrendered') {
             alertmodal('An Error Occured');
         }
-        if (message.errorType === "validation") {
+        if (message.errorType === 'validation') {
             alertmodal(message.msg);
         }
     }
 
     switch (message.action) {
-        case "ack":
+        case 'ack':
             manualServer.send(JSON.stringify({
                 action: 'ack',
                 game: activegame
             }));
             break;
-        case "register":
+        case 'register':
             manualServer.send(JSON.stringify({
                 action: 'register',
                 name: localStorage.nickname
             }));
             break;
-        case "lobby":
+        case 'lobby':
             singlesitenav('lobby');
             activegame = message.game;
             updateloby(broadcast[activegame]);
             break;
-        case "broadcast":
+        case 'broadcast':
             broadcast = message.data;
             if (activegame) {
                 updateloby(broadcast[activegame]);
             }
             makeGames();
             break;
-        case "kick":
+        case 'kick':
             singlesitenav('gamelist');
             break;
-        case "sound":
+        case 'sound':
             sound.play(message.sound);
             break;
-        case "slot":
+        case 'slot':
             activelyDueling = true;
             orientSlot = message.slot;
             break;
-        case "target":
+        case 'target':
             $('.attackglow').removeClass('attackglow');
             $('.card.p' + orient(message.target.player) + '.' + message.target.location + '.i' + message.target.index).addClass('attackglow');
             break;
-        case "give":
+        case 'give':
             if (message.target.player !== orientSlot) {
                 manualActionReference = message.target;
                 if (message.choice === 'HAND') {
@@ -1202,14 +1202,14 @@ function manualReciver(message) {
                 }
             }
             break;
-        case "effect":
+        case 'effect':
             $('#effectflasher').css('display', 'block');
             $('#effectflasher .mainimage').attr('src', 'https://raw.githubusercontent.com/shadowfox87/YGOSeries10CardPics/master/' + message.id + '.png');
             setTimeout(function() {
                 $('#effectflasher').css('display', 'none');
             }, 1000);
             break;
-        case "attack":
+        case 'attack':
             $('#attackanimation').remove();
             $('#automationduelfield').append('<img  id="attackanimation" class="card p' + orient(message.source.player) + ' ' + message.source.location + ' i' + message.source.index + '" src="img/textures/attack.png" data-orient="' + orient(message.source.player) + '" />');
             setTimeout(function() {
@@ -1222,7 +1222,7 @@ function manualReciver(message) {
                 $('.attackglow').removeClass('attackglow');
             }, 2000);
             break;
-        case "side":
+        case 'side':
             $('#ingamesidebutton').css('display', 'inline-block');
             sidedDeck = message.deck;
             sidedDeck.main.sort();
@@ -1235,10 +1235,10 @@ function manualReciver(message) {
             internalLocal = 'surrendered';
             activelyDueling = false;
             break;
-        case "start":
+        case 'start':
             startGame(message);
             break;
-        case "newCard":
+        case 'newCard':
             window.manualDuel.newCard();
             linkStack(message.field);
             setTimeout(function() {
@@ -1259,28 +1259,28 @@ function manualReciver(message) {
             duelstash = message;
             updateChat(message.info.duelistChat, message.info.spectatorChat);
             break;
-        case "shuffleHand0":
+        case 'shuffleHand0':
             doGuiShuffle(orient(0), 'HAND');
             setTimeout(function() {
                 linkStack(message.field);
             }, 1000);
 
             break;
-        case "shuffleHand1":
+        case 'shuffleHand1':
             doGuiShuffle(orient(1), 'HAND');
             setTimeout(function() {
                 linkStack(message.field);
             }, 1000);
             break;
-        case "shuffleDeck0":
+        case 'shuffleDeck0':
             doGuiShuffle(orient(0), 'DECK');
             linkStack(message.field);
             break;
-        case "shuffleDeck1":
+        case 'shuffleDeck1':
             doGuiShuffle(orient(1), 'DECK');
             linkStack(message.field);
             break;
-        case "duel":
+        case 'duel':
             if (manualDuel === undefined) {
                 startGame(message);
 
@@ -1304,13 +1304,13 @@ function manualReciver(message) {
             $('.p1lp').val(message.info.lifepoints[1]);
             duelstash = message;
             break;
-        case "reveal":
+        case 'reveal':
             reveal(message.reveal);
             break;
-        case "removeCard":
+        case 'removeCard':
             $('#uid' + message.info.removed).css('display', 'none').attr('data-deletedToken', true).attr('class', '').attr('id', 't' + message.info.removed);
             break;
-        case "question":
+        case 'question':
             question(message);
             break;
         default:
@@ -1328,7 +1328,7 @@ function serverconnect() {
     } catch (non_error) {
         console.log('Attempted to close manualmode websocket. Failed. Everything is fine.');
     }
-    var protocol = (location.protocol === 'https:') ? "wss://" : "ws://";
+    var protocol = (location.protocol === 'https:') ? 'wss://' : 'ws://';
     window.manualServer = new WebSocket(protocol + location.hostname, 'duel');
     manualServer.onopen = function() {
         console.log('Connected to Manual');
@@ -1368,9 +1368,9 @@ function manualJoin(game) {
     var isChromium = window.chrome,
         winNav = window.navigator,
         vendorName = winNav.vendor,
-        isOpera = winNav.userAgent.indexOf("OPR") > -1,
-        isIEedge = winNav.userAgent.indexOf("Edge") > -1,
-        isIOSChrome = winNav.userAgent.match("CriOS");
+        isOpera = winNav.userAgent.indexOf('OPR') > -1,
+        isIEedge = winNav.userAgent.indexOf('Edge') > -1,
+        isIOSChrome = winNav.userAgent.match('CriOS');
 
     //    if (isIOSChrome) {
     //        console.log();
@@ -1702,7 +1702,6 @@ function manualViewXYZMaterials() {
 
 
 
-var gui = {};
 
 
 
@@ -2115,7 +2114,7 @@ function manualOverlay() {
         if (index === revealcacheIndex) {
             return;
         }
-        overlayindex++;
+        overlayindex += 1;
         var message = makeCardMovement(card, card);
         message.overlayindex = overlayindex;
         message.action = 'moveCard';
@@ -2139,7 +2138,7 @@ function manualXYZSummon(target) {
     setTimeout(function() {
         var overlayindex = 0;
         overlaylist.forEach(function(card, cindex) {
-            overlayindex++;
+            overlayindex += 1;
             var message = makeCardMovement(card, card);
             message.overlayindex = overlayindex;
             message.action = index;
@@ -2537,7 +2536,7 @@ function revealonclick(card, note) {
         reorientmenu();
         return;
     }
-    if (manualActionReference.location === "EXCAVATED") {
+    if (manualActionReference.location === 'EXCAVATED') {
         $('.v-excavate').css({
             'display': 'block'
         });
@@ -2584,7 +2583,7 @@ function revealonclick(card, note) {
         reorientmenu();
         return;
     }
-    if (manualActionReference.location === "REMOVED") {
+    if (manualActionReference.location === 'REMOVED') {
         $('.v-removed').not('.non-extra').css({
             'display': 'block'
         });
@@ -2743,7 +2742,7 @@ function revealonclick(card, note) {
 
 function parseLevelScales(card) {
     'use strict';
-    var output = "",
+    var output = '',
         leftScale,
         rightScale,
         pendulumLevel,
@@ -2767,26 +2766,26 @@ function parseLevelScales(card) {
 
 function parseAtkDef(atk, def) {
     'use strict';
-    return ((atk < 0) ? "ATK ?" : "ATK " + atk) + " / " + ((def < 0 && def != '-') ? "DEF ?" : "DEF " + def);
+    return ((atk < 0) ? 'ATK ?' : 'ATK ' + atk) + ' / ' + ((def < 0 && def != '-') ? 'DEF ?' : 'DEF ' + def);
 }
 
 function makeDescription(id) {
     'use strict';
     var targetCard = getCardObject(parseInt(id, 10)),
-        output = "";
+        output = '';
     if (!targetCard.desc) {
         return '';
     }
     output += '<div class="descContainer"><span class="cardName">' + targetCard.name + ' [' + id + ']</span><br />';
-    if (cardIs("monster", targetCard)) {
-        output += "<span class='monsterDesc'>[ Monster / " + monsterMap[targetCard.type] + " ]<br />" + raceMap[targetCard.race] + " / " + attributeMap[targetCard.attribute] + "<br />";
-        output += "[ " + parseLevelScales(targetCard) + " ]<br />" + parseAtkDef(targetCard.atk, targetCard.def) + "</span>";
-    } else if (cardIs("spell", targetCard)) {
-        output += "<span class='spellDesc'>[ Spell" + (stMap[targetCard.type] || "") + " ]</span>";
-    } else if (cardIs("trap", targetCard)) {
-        output += "<span class='trapDesc'>[ Trap" + (stMap[targetCard.type] || "") + " ]</span>";
+    if (cardIs('monster', targetCard)) {
+        output += '<span class=\'monsterDesc\'>[ Monster / ' + monsterMap[targetCard.type] + ' ]<br />' + raceMap[targetCard.race] + ' / ' + attributeMap[targetCard.attribute] + '<br />';
+        output += '[ ' + parseLevelScales(targetCard) + ' ]<br />' + parseAtkDef(targetCard.atk, targetCard.def) + '</span>';
+    } else if (cardIs('spell', targetCard)) {
+        output += '<span class=\'spellDesc\'>[ Spell' + (stMap[targetCard.type] || '') + ' ]</span>';
+    } else if (cardIs('trap', targetCard)) {
+        output += '<span class=\'trapDesc\'>[ Trap' + (stMap[targetCard.type] || '') + ' ]</span>';
     }
-    return output + "<br /><pre class='description'>" + targetCard.desc + "</pre>";
+    return output + '<br /><pre class=\'description\'>' + targetCard.desc + '</pre>';
 }
 
 var record;
@@ -3024,7 +3023,7 @@ function guicardonclick() {
             $('.m-monster, .m-field').not('.non-link, .non-extra').css({
                 'display': 'block'
             });
-            if ($("#phaseindicator").attr('data-currentphase') === '3') {
+            if ($('#phaseindicator').attr('data-currentphase') === '3') {
                 $('.a-field').css({
                     'display': 'block'
                 });
@@ -3465,7 +3464,7 @@ $('#lobbychatinput, #sidechatinput, #spectatorchatinput').keypress(function(e) {
                 if (isNaN(amount)) {
                     return;
                 }
-                for (i = 0; i < amount; i++) {
+                for (i = 0; i < amount; i += 1) {
                     manualDraw();
                 }
                 $(e.currentTarget).val('');
@@ -3476,7 +3475,7 @@ $('#lobbychatinput, #sidechatinput, #spectatorchatinput').keypress(function(e) {
                 if (isNaN(amount)) {
                     return;
                 }
-                for (i = 0; i < amount; i++) {
+                for (i = 0; i < amount; i += 1) {
                     manualExcavateTop();
                 }
                 $(e.currentTarget).val('');
@@ -3487,7 +3486,7 @@ $('#lobbychatinput, #sidechatinput, #spectatorchatinput').keypress(function(e) {
                 if (isNaN(amount)) {
                     return;
                 }
-                for (i = 0; i < amount; i++) {
+                for (i = 0; i < amount; i += 1) {
                     manualMill();
                 }
                 $(e.currentTarget).val('');
@@ -3498,7 +3497,7 @@ $('#lobbychatinput, #sidechatinput, #spectatorchatinput').keypress(function(e) {
                 if (isNaN(amount)) {
                     return;
                 }
-                for (i = 0; i < amount; i++) {
+                for (i = 0; i < amount; i += 1) {
                     manualMillRemovedCard();
                 }
                 $(e.currentTarget).val('');
@@ -3509,7 +3508,7 @@ $('#lobbychatinput, #sidechatinput, #spectatorchatinput').keypress(function(e) {
                 if (isNaN(amount)) {
                     return;
                 }
-                for (i = 0; i < amount; i++) {
+                for (i = 0; i < amount; i += 1) {
                     manualMillRemovedCardFaceDown();
                 }
                 $(e.currentTarget).val('');
@@ -3523,7 +3522,7 @@ $('#lobbychatinput, #sidechatinput, #spectatorchatinput').keypress(function(e) {
             sound: 'soundchatmessage'
         }));
         $(e.currentTarget).val('');
-        $('.ingamechatbox, #sidechat').scrollTop($('.ingamechatbox').prop("scrollHeight"));
+        $('.ingamechatbox, #sidechat').scrollTop($('.ingamechatbox').prop('scrollHeight'));
         return false;
     }
 });
