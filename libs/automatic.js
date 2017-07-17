@@ -16,6 +16,45 @@ const DRAW_PHASE = 0,
     aux = hotload('../scripts/utilities'); // Tools that are exposed to help manipulate the duel instance
 
 
+function cardIs(cat, obj) {
+    'use strict';
+    if (cat === 'monster' && (obj.race !== 0 || obj.level !== 0 || obj.attribute !== 0)) {
+        return true;
+    }
+    if (cat === 'monster') {
+        return (obj.type & 1) === 1;
+    }
+    if (cat === 'spell') {
+        return (obj.type & 2) === 2;
+    }
+    if (cat === 'trap') {
+        return (obj.type & 4) === 4;
+    }
+    if (cat === 'fusion') {
+        return (obj.type & 64) === 64;
+    }
+    if (cat === 'ritual') {
+        return (obj.type & 128) === 128;
+    }
+    if (cat === 'synchro') {
+        return (obj.type & 8192) === 8192;
+    }
+    if (cat === 'token') {
+        return (obj.type & 16400) === 16400;
+    }
+    if (cat === 'xyz') {
+        return (obj.type & 8388608) === 8388608;
+    }
+    if (cat === 'link') {
+        return (obj.type & 33554432) === 33554432;
+    }
+}
+
+function setupCard(card) {
+    if (cardIs('monster', card)) {
+        card.canNorm
+    } else if (cardIs('monster', card)) {}
+}
 /**
  * Get cards that have a specific effect type.
  * @param   {Object}   duel       Engine Instance
@@ -229,24 +268,26 @@ function getNormalSummons(duel) {
  * @param   {Object} duel Engine Instance
  * @returns {Array}  List of Cards
  */
-function getNormalSets(duel) {
+function getNormalOptions(duel, prevention) {
     if (!duel.normalSummonedThisTurn) {
-        var state = duel.getState(),
-            player = state.turnOfPlayer,
-            ownedCards = aux.filterPlayer(player),
-            inHand = aux.filterlocation(ownedCards, 'HAND'),
-            monsters = aux.filterType(inHand, 'MONSTER');
+        var cards = duel.getGroup({
+                player: duel.turnOfPlayer,
+                location: 'HAND'
+            }),
 
-        return inHand.filter(function(card) {
+            monsters = cards.filter(function(card) {
+                return isCard('monster', card);
+            });
+
+        return monsters.filter(function(card) {
             var validEffectList = card.effectList.some(function(effect) {
-                return effect.SetCode !== 'EFFECT_CANNOT_MSET';
+                return effect.SetCode !== prevention;
             });
             return (validEffectList.length && card.level < 5);
         });
     } else {
         return [];
     }
-
 }
 
 /**
@@ -256,29 +297,35 @@ function getNormalSets(duel) {
  */
 function getMainPhaseActions(duel) {
     return {
-        normalsummonable: getNormalSummons(duel),
-        cansetmonster: getNormalSets(duel),
+        normalsummonable: getNormalSummons(getNormalOptions(duel, 'CANNONT_NORMAL_SUMMON')),
+        cansetmonster: getNormalOptions(duel, 'CANNONT_SET'),
         specialsummonable: duel.getGroup({
-            specialsummonable: true
+            specialsummonable: true,
+            location: 'HAND'
         }),
         canchangetodefense: duel.getGroup({
-            canchangetodefense: true
+            canchangetodefense: true,
+            location: 'MONSTERZONE'
         }),
         canactivatespelltrap: duel.getGroup({
-            canactivate: true
+            canactivate: true,
+            location: 'SPELLZONE'
         }),
-
         cantributesummon: duel.getGroup({
-            canTributeSummon: true
+            canTributeSummon: true,
+            location: 'HAND'
         }),
         cansetspelltrap: duel.getGroup({
-            cansetspelltrap: true
+            cansetspelltrap: true,
+            location: 'HAND'
         }),
         canactivategrave: duel.getGroup({
-            canactivategrave: true
+            canactivategrave: true,
+            location: 'GRAVE'
         }),
         canactivatebanished: duel.getGroup({
-            canactivatebanished: true
+            canactivatebanished: true,
+            location: 'REMOVED'
         })
     };
 }
@@ -374,7 +421,8 @@ function doBattlePhase(duel, callback) {
                 player = state.turnOfPlayer,
                 turnCount = state.turnCount,
                 canattack = duel.getGroup({
-                    canattack: true
+                    canattack: true,
+                    location: 'MONSTERZONE'
                 }),
                 canactivate = duel.getGroup({
                     canactivate: true
@@ -669,6 +717,8 @@ function loadCardScripts(duel) {
             };
             card.script.initial_effect(card, duel);
             card.runEffects = function() {};
+            card.canattack = true;
+            card.
         } catch (couldNotLoadCard) {
             card.runEffects = generic;
             card.script = {
