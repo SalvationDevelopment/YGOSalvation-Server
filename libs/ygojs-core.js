@@ -1161,10 +1161,26 @@ function init(callback) {
         callback(generateView('start'), stack);
     }
 
+    /**
+     * Returns a COPY of all the cards in the game.
+     * @returns {Card[]} collection of cards
+     */
     function getStack() {
         return JSON.parse(JSON.stringify(stack));
     }
 
+    /**
+     * Query a card based on more than one of its properties.
+     * @param {Object} requirement values to look for as a hashmap
+     * @returns {Card[]} colllection of cards
+     */
+    function getGroup(requirement) {
+        return stack.filter(function(card) {
+            return Object.keys.filter(function(property) {
+                return (requirement[property] === card.property);
+            }).length;
+        });
+    }
     /**
      * Restarts the game for a rematch.
      * @returns {undefined}
@@ -1523,6 +1539,7 @@ function init(callback) {
         offsetZone: offsetZone,
         surrender: surrender,
         generateView: generateView,
+        getGroup: getGroup,
         players: {}, // holds socket references
         spectators: {}, // holds socket references
         decks: decks,
