@@ -12,8 +12,7 @@ const DRAW_PHASE = 0,
     MAIN_PHASE_2 = 4,
     END_PHASE = 5,
     waterfall = require('async-waterfall'), // Async flow control
-    hotload = require('hotload'), // Allows for cards to be live edited
-    aux = hotload('../scripts/utilities'); // Tools that are exposed to help manipulate the duel instance
+    hotload = require('hotload'); // Allows for cards to be live edited
 
 
 function cardIs(cat, obj) {
@@ -243,26 +242,6 @@ function doStandbyPhase(duel, callback) {
     return;
 }
 
-function getNormalSummons(duel) {
-    if (!duel.normalSummonedThisTurn) {
-        var state = duel.getState(),
-            player = state.turnOfPlayer,
-            ownedCards = aux.filterPlayer(player),
-            inHand = aux.filterlocation(ownedCards, 'HAND'),
-            monsters = aux.filterType(inHand, 'MONSTER');
-
-        return inHand.filter(function(card) {
-            var validEffectList = card.effectList.some(function(effect) {
-                return effect.SetCode !== 'EFFECT_CANNOT_SUMMON';
-            });
-            return (validEffectList.length && card.level < 5);
-        });
-    } else {
-        return [];
-    }
-
-}
-
 /**
  * Get a list of cards that the active user can normal summon at the moment.
  * @param   {Object} duel Engine Instance
@@ -297,7 +276,7 @@ function getNormalOptions(duel, prevention) {
  */
 function getMainPhaseActions(duel) {
     return {
-        normalsummonable: getNormalSummons(getNormalOptions(duel, 'CANNONT_NORMAL_SUMMON')),
+        normalsummonable: getNormalOptions(duel, 'CANNONT_NORMAL_SUMMON'),
         cansetmonster: getNormalOptions(duel, 'CANNONT_SET'),
         specialsummonable: duel.getGroup({
             specialsummonable: true,
@@ -612,7 +591,10 @@ function doEndPhase(duel, callback) {
     function checkCardCount() {
         processQueue(endPhaseActionQueue, function() {
             var state = duel.getState(),
-                hand = aux.filterlocation(aux.filterPlayer(duel.stack, state.turnOfPlayer), 'HAND');
+                hand = duel.getGroup({
+                    player: state.turnOfPlayer,
+                    location: 'HAND'
+                })
             if (hand.length > duel.maxHandSize) {
                 duel.question({
                     'questiontype': 'select',
@@ -718,7 +700,6 @@ function loadCardScripts(duel) {
             card.script.initial_effect(card, duel);
             card.runEffects = function() {};
             card.canattack = true;
-            card.
         } catch (couldNotLoadCard) {
             card.runEffects = generic;
             card.script = {
