@@ -1,0 +1,66 @@
+<div class="container">
+  <h4>Liste des tournois</h4>
+  <div class="col-md-8">
+    <table class="table table-hover">
+      <thead>
+        <tr>
+          <td>
+            Nom
+          </td>
+          <td>
+            Jeu
+          </td>
+          <td>
+            Places
+          </td>
+        </tr>
+      </thead>
+      <tr ng-repeat="tournament in tournaments">
+        <td>
+          {{tournament.name}}
+        </td>
+        <td>
+          {{tournament.game}}
+        </td>
+        <td>
+          <span class="label label-default">{{tournament.players_count}}/{{tournament.player_max}}</span>
+        </td>
+        <td>
+          <a ui-sref="tournament({id:tournament.id})" class="btn btn-primary btn-sm">Voir <i class="mdi mdi-content-paste"></i></a>
+        </td>
+      </tr>
+    </table>
+  </div>
+  <div class="col-md-4">
+    <h4>Mes tournois</h4>
+    <table class="table table-hover">
+      <thead>
+        <tr>
+          <td>
+            Nom
+          </td>
+          <td>
+            Jeu
+          </td>
+          <td>
+            Places
+          </td>
+        </tr>
+      </thead>
+      <tr ng-repeat="tournament in registered">
+        <td>
+          {{tournament.name}}
+        </td>
+        <td>
+          {{tournament.game}}
+        </td>
+        <td>
+          <span class="label label-default">{{tournament.players_count}}/{{tournament.player_max}}</span>
+        </td>
+        <td>
+          <a ui-sref="tournament({id:tournament.id})" class="btn btn-primary btn-sm">Voir <i class="mdi mdi-content-paste"></i></a>
+        </td>
+      </tr>
+    </table>
+  </div>
+</div>

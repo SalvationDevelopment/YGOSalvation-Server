@@ -1,0 +1,68 @@
+<div class="container-fluid" style="background-color:#212121;background-image:url('{{getBannerPath(profil.banner)}}'); background-size:cover;">
+  <div class="container banner">
+    <div class="col-md-3">
+      <img ng-click="profil.setFile('img')" style="cursor:pointer" title="Modifier mon Avatar" fallback-src="img/default_avatar.png" ng-src="{{getImagePath(profil.img)}}" class="img-thumbnail img-responsive" alt="{{profil.nickname}}" ng-class="{'uploading' : uploadProcessing}" style="height:150px;" />
+    </div>
+    <div class="col-md-3 col-md-offset-6 text-right">
+      <button ng-click="profil.setFile('banner')" class="btn btn-primary">Changer la bannière</button>
+    </div>
+  </div>
+</div>
+<div class="container">
+  <h3>Modifier vos informations</h3>
+  <div class="col-md-6 col-md-offset-3">
+
+      <div class="alert alert-danger" role="alert" ng-show="profil.error">{{profil.error}}</div>
+      <div class="alert alert-success" role="alert" ng-show="profil.success">Vos informations ont bien été enregistrées</div>
+
+    <form ng-submit="profil.save()">
+      <div class="form-group">
+        <label>Pays</label>
+        <input type="text" placeholder="" class="form-control" ng-model="profil.country" ng-disabled="profil.processing">
+      </div>
+
+      <div class="form-group">
+        <label>Prénom</label>
+        <input type="text" placeholder="" class="form-control" ng-model="profil.name" ng-disabled="profil.processing">
+      </div>
+
+      <div class="form-group">
+        <label>Nom</label>
+        <input type="text" placeholder="" class="form-control" ng-model="profil.lastname" ng-disabled="profil.processing">
+      </div>
+
+      <div class="form-group">
+        <label>Date de naissance</label>
+        <input type="date" class="form-control" ng-model="profil.birth_date" ng-disabled="profil.processing" required>
+      </div>
+
+      <div class="form-group">
+        <label>Adresse</label>
+        <input type="text" class="form-control" ng-model="profil.address" ng-disabled="profil.processing">
+      </div>
+
+      <div class="form-group">
+        <label>Région</label>
+        <input type="text" class="form-control" ng-model="profil.region" ng-disabled="profil.processing">
+      </div>
+
+      <div class="form-group">
+        <label>Ville</label>
+        <input type="text" class="form-control" ng-model="profil.city" ng-disabled="profil.processing">
+      </div>
+
+      <div class="text-right">
+        <button type="submit" class="btn btn-primary btn-lg">{{profil.buttonLabel}}</button>
+      </div>
+
+    </form>
+
+    <input id="profil-img" class="hidden" fileread="file.img"
+       type="file" onchange="angular.element(this).scope().profil.sendFile('img')" accept="image/*" />
+
+    <input id="profil-banner" onchange="angular.element(this).scope().profil.sendFile('banner')" class="hidden" fileread="file.banner"
+          type="file" accept="image/*" />
+
+  </div>
+
+</div>

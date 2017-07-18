@@ -1,0 +1,63 @@
+body{
+
+}
+
+.navbar{
+  margin-bottom: 0px;
+}
+
+.marged{
+  margin-top:50px;
+}
+
+.banner{
+  padding: 50px;
+  h1,h2,h3,h4,p{
+    color:#ffffff;
+  }
+}
+
+.uploading{
+  transition-duration:0.5s;
+  opacity: 0.7;
+}
+
+.tournament-info{
+  opacity:0.3;
+}
+
+.new-tournament-icon{
+  opacity: 0.1;
+  margin-top:30%;
+}
+
+footer{
+  padding-top: 50px;
+  padding-bottom: 50px;
+}
+
+.notification{
+  cursor:pointer;
+  position: fixed;
+  z-index:500;
+  top: 0;
+  right: 0;
+  margin:20px;
+  margin-top:70px;
+}
+
+div.jQBracket .team{
+  background-color: #337AB7;
+}
+
+@media (min-width: 768px ) {
+  .row {
+      position: relative;
+  }
+
+  .bottom-align-text {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+  }
+}

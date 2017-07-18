@@ -1,0 +1,80 @@
+<div class="container-fluid" style="background-image:url('img/lan_bg.jpg'); background-size:cover;">
+  <div class="container banner">
+    <div class="col-md-6">
+      <h2>{{tournament.name}}</h2>
+    </div>
+    <div class="col-md-6 text-right">
+      <button ng-show="tournamentOpt.canSuscribe" class="btn btn-primary btn-lg" ng-click="tournamentOpt.join()" ng-disabled="tournamentOpt.processing"><i class="mdi mdi-content-paste"></i> {{tournamentOpt.buttonLabel}}</button>
+      <button ng-show="tournamentOpt.canGenerate" class="btn btn-primary btn-lg" ng-click="tournamentOpt.generate()" data-toggle="tooltip" data-placement="bottom" title="Verouiller et générer le tournoi"><i class="mdi mdi-auto-fix"></i></button>
+    </div>
+  </div>
+
+</div>
+
+<div class="container">
+  <div class="col-md-8">
+    <h4>A propos de ce tournoi</h4>
+    <p>Jeu : <b>{{tournament.game}}</b></p>
+    <p>{{tournament.description}}</p>
+
+  </div>
+  <div class="col-md-4 panel panel-default pull-right">
+    <div class="panel-body">
+      <span class="label label-default pull-right">{{tournament.players_count}}/{{tournament.player_max}}</span>
+      <h4>Participants</h4>
+      <table class="table-hover col-md-12">
+        <tr>
+          <td class="col-md-2">
+            <img  fallback-src="img/default_avatar.png" ng-src="{{getImagePath(tournament.account.img)}}" class="img-responsive" />
+          </td>
+          <td class="col-md-8">
+            <a ui-sref="profil({id:tournament.account.id})">{{tournament.account.name}} {{tournament.account.lastname}}</a>
+          </td>
+          <td>
+            <!-- level -->
+          </td>
+          <td class="col-md-2">
+            <span class="label label-info" data-toggle="tooltip" data-placement="top" title="Organisateur du tournoi"> <i class="mdi mdi-crown"></i></span>
+          </td>
+        </tr>
+
+        <tr ng-repeat="account in tournament.accounts">
+          <td class="col-md-2">
+            <img fallback-src="img/default_avatar.png" ng-src="{{getImagePath(account.img)}}" class="img-responsive img-thumbnail" />
+          </td>
+          <td class="col-md-7">
+            <a ui-sref="profil({id:account.id})">{{account.nickname}}</a>
+          </td>
+          <td>
+            <span class="badge" title="Niveau {{account.level.level}}">{{account.level.level}}</span>
+          </td>
+          <td class="col-md-3">
+            <span ng-if="account.me" style="cursor : pointer;" class="label label-danger" title="Se désinscrire du tournoi" ng-click="unsuscribe()"><i class="mdi mdi-close"></i></span>
+          </td>
+        </tr>
+      </table>
+
+    </div>
+  </div>
+
+  <div class="col-md-7 alert alert-info battle-alert" ng-if="currentBattle">
+    <div class="col-md-9 text-center">
+      <b>Votre match est prêt à etre disputé !</b>
+    </div>
+    <div class="col-md-3">
+      <button ng-click="setReady()" class="btn btn-info" title="Je suis prêt !"><i class="mdi mdi-gamepad-variant"></i> Je suis prêt !</button>
+    </div>
+  </div>
+
+  <div class="col-md-7" ng-show="tournament.state === 'Verrouillé'">
+    <div id="bracket">
+      Chargement...
+    </div>
+  </div>
+
+  <div class="col-md-6 text-center tournament-info" ng-hide="tournament.state === 'Verrouillé'">
+    <h4>Le tournoi n'a pas encoré été complété...</h4>
+    <img src="img/tournament.png" class="col-md-8 col-md-offset-2 img-responsive" />
+  </div>
+
+</div>

@@ -1,0 +1,76 @@
+<div class="container-fluid" style="background-color:#212121;background-image:url('{{getBannerPath(profil.banner)}}'); background-size:cover;">
+  <div class="container banner">
+    <div class="col-md-3">
+      <img fallback-src="img/default_avatar.png" ng-src="{{getImagePath(profil.img)}}" class="img-thumbnail img-responsive" alt="{{profil.nickname}}" style="height:150px;" />
+    </div>
+    <div class="col-md-6">
+      <h2>{{profil.nickname}}   <span class="badge">{{profil.level.level}}</span></h2>
+      <p>{{profil.description}}</p>
+    </div>
+    <div class="col-md-3 text-right">
+      <a ui-sref="editProfil" class="btn btn-primary" title="Editer mon profil" ng-show="profil.id === me.id"><i class="mdi mdi-pencil"></i> Editer mon profil</a>
+    </div>
+  </div>
+
+</div>
+
+<div class="container">
+
+  <div class="col-md-4 panel panel-default pull-right">
+    <div class="panel-body">
+      <h4>Statistiques</h4>
+    </div>
+  </div>
+
+  <div class="col-md-8">
+    <h4>Overview pour {{profil.nickname}}</h4>
+    <p>{{profil.nickname}} <span ng-if="profil.name">({{profil.name}})</span>   <span class="badge">Niveau  {{profil.level.level}} - {{profil.current_exp}} / {{profil.level.required}}</span></p>
+    <p><b>Ville :</b> {{profil.city}}</p>
+    <p><b>Region :</b> {{profil.region}}</p>
+    <p><b>Pays :</b> {{profil.country}}</p>
+    <p><b>Membre depuis le :</b> <i>A venir...</i></p>
+
+  </div>
+
+  <div class="col-md-8">
+    <h5>Description</h5>
+    <p>
+      Fonctionnalité à venir...
+    </p>
+  </div>
+
+  <div class="col-md-8">
+    <h5>Jeux les plus joués</h5>
+    <p>
+      Fonctionnalité à venir...
+    </p>
+  </div>
+
+  <div class="col-md-8">
+    <h4>Commentaires</h4>
+    <form class="row" ng-submit="comment.post()" ng-if="me">
+      <div class="alert alert-danger" ng-show="comment.error">
+        {{comment.error}}
+      </div>
+      <textarea rows="2" cols="40" placeholder="Entrez un commentaire" class="form-control" ng-model="comment.message" ng-disabled="comment.processing" required></textarea>
+      <div class="text-right">
+          <button type="submit" style="margin:10px;" class="btn btn-info" ng-disabled="comment.processing">Poster</button>
+      </div>
+    </form>
+
+    <table class="table">
+      <tr ng-repeat="c in profil.comments" id="comment-{{c.id}}">
+        <td class="col-md-2">
+          <img fallback-src="img/default_avatar.png" ng-src="{{getImagePath(c.send_by.img)}}" alt="{{c.send_by.nickname}}" class="img-reponsive col-md-12 img-thumbnail" />
+          <a ui-sref="profil({id:c.send_by.id})">{{c.send_by.nickname}}</a>
+        </td>
+        <td class="col-md-8">
+          {{c.message}}
+        </td>
+        <td class="col-md-2" ng-show="profil.id === me.id">
+          <button class="btn btn-sm btn-danger" ng-click="comment.delete(c.id);" title="Supprimer ce commentaire"><i class="mdi mdi-close"></i></button>
+        </td>
+      </tr>
+    </table>
+  </div>
+</div>

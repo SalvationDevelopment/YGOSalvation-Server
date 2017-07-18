@@ -1,0 +1,60 @@
+2017-07-18 02:47:29.929  
+
+************ Package Script  ************************************* process id: 9680
+2017-07-18 02:48:42.371  Package Script : npm
+2017-07-18 02:48:42.418  Package Script :  WARN deprecated minimatch@2.0.10: Please update to minimatch 3.0.2 or higher to avoid a RegExp DoS issue
+
+2017-07-18 02:48:44.271  Package Script : npm
+2017-07-18 02:48:44.272  Package Script :  WARN deprecated minimatch@0.2.14: Please update to minimatch 3.0.2 or higher to avoid a RegExp DoS issue
+
+2017-07-18 02:48:44.513  Package Script : npm
+2017-07-18 02:48:44.514  Package Script :  WARN deprecated graceful-fs@1.2.3: graceful-fs v3.0.0 and before will fail on node releases >= v7.0. Please update to graceful-fs@^4.0.0 as soon as possible. Use 'npm ls graceful-fs' to find it in the tree.
+
+2017-07-18 02:48:54.581  CAT Installer: C:\Program Files (x86)\Nodist\bin\gulp -> C:\Program Files (x86)\Nodist\bin\node_modules\gulp\bin\gulp.js
+
+2017-07-18 02:48:54.711  CAT Installer: C:\Program Files (x86)\Nodist\bin
+`-- gulp@3.9.1 
+
+
+2017-07-18 02:48:54.767  Package Script Complete 0
+2017-07-18 02:48:58.716  Package Script : npm
+2017-07-18 02:48:58.717  Package Script :  WARN deprecated bower@1.8.0: ..psst! While Bower is maintained, we recommend Yarn and Webpack for *new* front-end projects! Yarn's advantage is security and reliability, and Webpack's is support for both CommonJS and AMD projects. Currently there's no migration path, but please help to create it: https://github.com/bower/bower/issues/2467
+
+2017-07-18 02:50:19.261  CAT Installer: C:\Program Files (x86)\Nodist\bin\bower -> C:\Program Files (x86)\Nodist\bin\node_modules\bower\bin\bower
+
+2017-07-18 02:50:19.290  CAT Installer: C:\Program Files (x86)\Nodist\bin
+`-- bower@1.8.0 
+
+
+2017-07-18 02:50:19.349  Package Script Complete 0
+2017-07-18 02:55:15.805  CAT Installer: [02:55:15] 
+2017-07-18 02:55:15.805  CAT Installer: Using gulpfile ~\Documents\tournament-manager-website-master\gulpfile.js
+
+2017-07-18 02:55:15.807  CAT Installer: [02:55:15] 
+2017-07-18 02:55:15.808  CAT Installer: Starting 'sync group1:0'...
+
+2017-07-18 02:55:15.808  CAT Installer: [02:55:15] Starting 'clean:public'...
+
+2017-07-18 02:55:15.904  CAT Installer: [02:55:15] 
+2017-07-18 02:55:15.904  CAT Installer: Finished 'clean:public' after 52 ms
+
+2017-07-18 02:55:15.906  CAT Installer: [02:55:15] Finished 'sync group1:0' after 96 ms
+[02:55:15] Starting 'sync group1:1'...
+
+2017-07-18 02:55:15.906  CAT Installer: [02:55:15] Starting 'install-src-dependencies'...
+
+2017-07-18 02:55:15.908  CAT Installer: [02:55:15] 
+2017-07-18 02:55:15.909  CAT Installer: Using cwd: ./src
+[02:55:15] Using bower dir: ./bower_components
+
+2017-07-18 02:55:36.160  CAT Installer: [02:55:36] 
+2017-07-18 02:55:36.161  CAT Installer: 'install-src-dependencies' errored after 20 s
+[02:55:36] Error in plugin 'gulp-bower'
+Message:
+    git is not installed or not in the PATH
+Details:
+    code: ENOGIT
+    data: [object Object]
+
+2017-07-18 02:55:36.193  Package Script Complete 1
+2017-07-18 02:55:36.195  [package-script] process completed, see pkgscript.log for more information
