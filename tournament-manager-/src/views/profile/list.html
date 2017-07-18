@@ -1,0 +1,68 @@
+<div class="container">
+  <h4>Liste des utilisateurs</h4>
+  <div class="col-md-8">
+    <table class="table table-hover">
+      <thead>
+        <tr>
+          <td>
+            <!-- avatar -->
+          </td>
+          <td>
+            Pseudonyme
+          </td>
+          <td>
+            Niveau
+          </td>
+          <td>
+          <!-- options -->
+          </td>
+        </tr>
+      </thead>
+      <tr ng-repeat="profil in profils">
+        <td class="col-md-1">
+          <img fallback-src="img/default_avatar.png" ng-src="{{getImagePath(profil.img)}}" class="img-responsive img-thumbnail" alt="{{profil.nickname}}" class="img-responsive" />
+        </td>
+        <td>
+          {{profil.nickname}} <span class="label label-info" ng-if="me.id === profil.id" title="C'est vous !"><i class="mdi mdi-account"></i></span>
+        </td>
+        <td>
+          <span class="badge">{{profil.level.level}}</span>
+        </td>
+        <td>
+          <a ui-sref="profil({id:profil.id})" class="btn btn-primary btn-sm">Voir <i class="mdi mdi-account"></i></a>
+        </td>
+      </tr>
+    </table>
+  </div>
+  <div class="col-md-4">
+    <h4>Top des utilisateurs</h4>
+
+    <table class="table table-hover">
+      <thead>
+        <tr>
+          <td>
+            Pseudonyme
+          </td>
+          <td>
+            Niveau
+          </td>
+          <td>
+          <!-- options -->
+          </td>
+        </tr>
+      </thead>
+      <tr ng-repeat="profil in topUsers">
+        <td>
+          {{profil.nickname}} <span class="label label-info" ng-if="me.id === profil.id" title="C'est vous !"><i class="mdi mdi-account"></i></span>
+        </td>
+        <td>
+          <span class="badge">{{profil.level.level}}</span>
+        </td>
+        <td>
+          <a ui-sref="profil({id:profil.id})" class="btn btn-info btn-sm">Voir <i class="mdi mdi-account"></i></a>
+        </td>
+      </tr>
+    </table>
+
+  </div>
+</div>

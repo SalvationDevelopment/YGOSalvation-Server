@@ -1,0 +1,75 @@
+<div class="container-fluid" style="background-image:url('img/banner.jpg'); background-size:cover;">
+  <div class="container banner">
+    <h1>Une nouvelle approche de la compétition</h1>
+    <p>Créer son tournoi n'a jamais été aussi facile ! Commencez dès maintenant</p>
+    <p><a class="btn btn-primary btn-lg" ui-sref="tournamentNew" role="button">Créer mon tournoi</a></p>
+  </div>
+</div>
+<div class="container">
+  <div class="col-md-8">
+    <div class="row">
+      <div class="col-md-6">
+        <h3>Les Tournois</h3>
+      </div>
+      <div class="col-md-6 text-right bottom-align-text">
+        <a class="btn btn-md btn-info btn-embossed" ui-sref="tournamentList" style="margin-bottom:10px;">Voir tous</a>
+        <a class="btn btn-md btn-primary btn-embossed" ui-sref="tournamentNew" style="margin-bottom:10px;">Créer mon tournoi</a>
+      </div>
+    </div>
+
+    <ul class="list-group">
+      <li class="list-group-item clearfix" ng-repeat="tournament in tournaments.current">
+        <i class="mdi mdi-trophy"></i> {{tournament.name}}
+        <span class="pull-right" data-toggle="tooltip" data-placement="top" title="Voir ce tournois">
+          <a class="btn btn-sm btn-primary" ui-sref="tournaments({id : tournament.id})">
+            <i class="mdi mdi-arrow-right-drop-circle"></i>
+          </a>
+        </span>
+      </li>
+      <li class="list-group-item clearfix" ng-repeat="tournament in tournaments.last">
+        <i class="mdi mdi-trophy"></i> {{tournament.name}}
+        <span class="pull-right" data-toggle="tooltip" data-placement="top" title="Voir ce tournois">
+          <a class="btn btn-sm btn-info" ui-sref="tournaments({id : tournament.id})">
+            <i class="mdi mdi-arrow-right-drop-circle"></i>
+          </a>
+        </span>
+      </li>
+    </ul>
+  </div>
+
+  <div class="col-md-4">
+    <h4>Top joueurs</h4>
+
+    <div class="alert alert-info" ng-if="!me">
+      <a ui-sref="login">Connectez-vous</a> pour voir le classement
+    </div>
+
+    <table class="table table-hover" ng-if="me">
+      <thead>
+        <tr>
+          <td>
+            Pseudonyme
+          </td>
+          <td>
+            Niveau
+          </td>
+          <td>
+          <!-- options -->
+          </td>
+        </tr>
+      </thead>
+      <tr ng-repeat="profil in topUsers">
+        <td>
+          {{profil.nickname}} <span class="label label-info" ng-if="me.id === profil.id" title="C'est vous !"><i class="mdi mdi-account"></i></span>
+        </td>
+        <td>
+          <span class="badge">{{profil.level.level}}</span>
+        </td>
+        <td>
+          <a ui-sref="profil({id:profil.id})" class="btn btn-info btn-sm">Voir <i class="mdi mdi-account"></i></a>
+        </td>
+      </tr>
+    </table>
+
+  </div>
+</div>

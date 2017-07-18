@@ -1,0 +1,52 @@
+<div class="container" ng-hide="tournament.success">
+  <div class="panel panel-default col-md-4 col-md-offset-1 marged">
+    <form class="panel-body" ng-submit="tournament.send()">
+      <h4>Créer un tournoi</h4>
+
+      <div class="alert alert-danger" role="alert" ng-show="tournament.error">{{tournament.error}}</div>
+
+      <div class="form-group">
+        <label>Nom du tournoi</label>
+        <input type="text" placeholder="" class="form-control" ng-model="tournament.name" ng-disabled="tournament.processing">
+      </div>
+
+      <div class="form-group">
+        <label>Nom du jeu / de l'activité</label>
+        <input type="text" placeholder="" class="form-control" ng-model="tournament.game" ng-disabled="tournament.processing">
+      </div>
+
+      <div class="form-group">
+        <label>Courte description</label>
+        <textarea class="form-control" ng-model="tournament.description" ng-disabled="tournament.processing"></textarea>
+      </div>
+
+
+      <div class="form-group">
+        <label>Date de début du tournoi</label>
+        <input type="date" class="form-control" ng-model="tournament.date_begin" ng-disabled="tournament.processing">
+      </div>
+
+      <div class="form-group">
+        <label>Temps entre les rounds (minutes)</label>
+        <input type="number" placeholder="" class="form-control" ng-model="tournament.duration_between_round" ng-disabled="tournament.processing">
+      </div>
+
+      <div class="form-group">
+        <label>Nombre maximum de participants</label>
+        <select class="form-control" ng-model="tournament.player_max" ng-disabled="tournament.processing">
+          <option value="4">4</option>
+          <option value="8">8</option>
+          <option value="16">16</option>
+        </select>
+      </div>
+
+      <div class="form-group text-right">
+        <button class="btn btn-primary" type="submit" ng-disabled="tournament.processing">{{tournament.buttonLabel}}</button>
+      </div>
+
+    </form>
+  </div>
+  <div class="col-md-5 col-md-offset-1 text-center">
+    <img src="img/tournament.png" class="img-responsive new-tournament-icon" />
+  </div>
+</div>
