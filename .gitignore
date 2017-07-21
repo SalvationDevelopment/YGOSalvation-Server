@@ -80,6 +80,7 @@ server/http/setups/*
 *crash*
 *.log.*
 *.yrp
+*.env
 server/http/ygopro/deck.exe
 *.lua
 documentation/~$ygopro id sheet.xlsx

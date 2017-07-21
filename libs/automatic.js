@@ -51,7 +51,7 @@ function cardIs(cat, obj) {
 
 function setupCard(card) {
     if (cardIs('monster', card)) {
-        card.canNorm
+
     } else if (cardIs('monster', card)) {}
 }
 /**
