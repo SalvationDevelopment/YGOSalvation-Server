@@ -2749,7 +2749,7 @@ function parseLevelScales(card) {
         level = card.level,
         ranklevel = (cardIs('xyz', card)) ? '☆ Rank ' : '★ Level ';
     if (cardIs('link', card)) {
-        output += '<span class="levels">' + ' Link ' + level;
+        output += '<span class="levels">' + ' LINK-' + level;
         //def = '-';
     } else if (level > 0 && level <= 12) {
         output += '<span class="levels">' + ranklevel + level;
