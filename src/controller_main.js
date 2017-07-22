@@ -5,8 +5,8 @@
 
 
 var child_process = require('child_process');
-var hotload = require("hotload");
-var cardidmap = hotload("../http/cardidmap.js");
+var hotload = require('hotload');
+var cardidmap = hotload('../http/cardidmap.js');
 
 
 
@@ -37,7 +37,7 @@ var express = require('express'),
     spdy = require('spdy'),
     http = require('http'),
     url = require('url'),
-    path = require("path"),
+    path = require('path'),
     toobusy = require('toobusy-js'),
     app = express(),
     compression = require('compression'),
@@ -82,27 +82,26 @@ var primus,
     //primusServer = http.createServer().listen(24555),
     primusServer,
     domain = require('domain'),
-    path = require('path'),
     ps = require('ps-node'),
-    forumValidate = require('./forum-validator.js'),
+    forumValidate = require('./validate_login.js'),
     currentGlobalMessage = '',
     pack = require('../package.json'),
-    adminlist = pack.admins,
-    HTTP_PORT = pack.port || 80,
-    banlistedUsers = require('./bansystem.js'),
+    adminlist = hotload('./record_admins.js'),
+    banlistedUsers = hotload('./record_bansystem.js'),
     updateHTTP = require('./update_http.js'),
     chatbox = [],
-    sayCount = 0;
+    sayCount = 0,
+    HTTP_PORT = pack.port || 80;
 
 require('fs').watch(__filename, process.exit);
 
 app.use(ddos.express);
 app.use(compression());
 app.use(helmet());
-app.use(express['static'](path.join(__dirname, '../http')));
+app.use(express.static(path.join(__dirname, '../http')));
 app.use(function(req, res, next) {
     if (toobusy()) {
-        res.send(503, "I'm busy right now, sorry.");
+        res.send(503, 'I\'m busy right now, sorry.');
     } else {
         next();
     }
@@ -170,7 +169,7 @@ var WebSocketServer = require('ws').Server,
     wss = new WebSocketServer({
         noServer: true
     });
-var manualServer = require('./manual.js')(wss);
+var manualServer = require('./controller_dueling.js')(wss);
 primusServer.on('upgrade', function(req, socket, head) {
     wss.handleUpgrade(req, socket, head, function(websocket) {
         manualServer(websocket);
@@ -191,7 +190,7 @@ if (process.env.SSL !== undefined) {
 
 var Datastore = require('nedb'),
     deckStorage = new Datastore({
-        filename: '../databases/deckStorage.nedb',
+        filename: './databases/deckStorage.nedb',
         autoload: true
     });
 
@@ -319,7 +318,7 @@ function globalRequested(data, socket) {
                 message: currentGlobalMessage
             });
         } else {
-            console.log("Failed to request the current global message");
+            console.log('Failed to request the current global message');
         }
     });
 }
@@ -331,7 +330,7 @@ function genocideCall(data) {
             return;
         }
         if (info.data) {
-            if (info.success && info.data.g_access_cp === "1") {
+            if (info.success && info.data.g_access_cp === '1') {
                 announce({
                     clientEvent: 'genocide',
                     message: data.message
@@ -470,7 +469,7 @@ function onData(data, socket) {
         action,
         save;
     socketwatcher.on('error', function(err) {
-        if (err.message === "TypeError: Cannot read property 'forwarded' of undefined") {
+        if (err.message === 'TypeError: Cannot read property \'forwarded\' of undefined') {
             // not sure how to handle this yet.
             return;
         }
@@ -520,7 +519,7 @@ function onData(data, socket) {
             break;
 
         case ('ack'):
-            acklevel++;
+            acklevel += 1;
             if (data.name) {
                 userlist.push(data.name);
             }
@@ -549,7 +548,7 @@ function onData(data, socket) {
                     date: new Date(),
                     timezone: data.timezone
                 });
-                sayCount++;
+                sayCount = +1;
                 setTimeout(function() {
                     socket.speak = true;
                 }, 500);
@@ -684,4 +683,3 @@ primus.on('connection', function(socket) {
     });
     connectionwatcher.exit();
 });
-fs.watch(__filename, process.exit);

@@ -6,13 +6,12 @@
  * Update the banlist
  */
 
-
 var fs = require('fs'),
     jsonfile = require('jsonfile');
 
 function getBanlist() {
     var banlist = {},
-        files = fs.readdirSync('../http/banlist/');
+        files = fs.readdirSync('./http/banlist/');
     files.forEach(function(filename) {
         if (filename.indexOf('.js') > -1) {
             var listname = filename.slice(0, -3);
@@ -22,18 +21,19 @@ function getBanlist() {
     return banlist;
 }
 
-var validateDeck = require('./validate-Deck.js'),
+var validateDeck = require('./validate_deck.js'),
     http = require('http'),
     https = require('https'),
     path = require('path'),
     database = [],
-    banlist = getBanlist();
+    banlist = getBanlist(),
+    automatic = require('./engine_automatic.js');
 
 
 module.exports = function(wss) {
 
     var realgames = [],
-        stateSystem = require('./ygojs-core.js'),
+        stateSystem = require('./engine_manual.js'),
         games = {},
         states = {},
         log = {};
@@ -139,8 +139,8 @@ module.exports = function(wss) {
      */
     function randomString(len) {
         var i,
-            text = "",
-            chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+            text = '',
+            chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
         for (i = 0; i < len; i += 1) {
             text += chars.charAt(Math.floor(Math.random() * chars.length));
         }
@@ -212,14 +212,14 @@ module.exports = function(wss) {
             return;
         }
         switch (message.action) {
-            case "ack":
+            case 'ack':
                 realgames.push(message.game);
                 break;
-            case "register":
+            case 'register':
                 // need a registration system here.
                 socket.username = message.name;
                 break;
-            case "host":
+            case 'host':
                 generated = randomString(12);
                 games[generated] = newGame(message);
                 log[generated] = [];
@@ -243,7 +243,7 @@ module.exports = function(wss) {
 
                 break;
 
-            case "join":
+            case 'join':
                 socket.slot = undefined;
                 Object.keys(games[message.game].player).some(function(playerNo, index) {
                     var player = games[message.game].player[playerNo];
@@ -273,7 +273,7 @@ module.exports = function(wss) {
                 }));
                 socket.activeduel = message.game;
                 break;
-            case "kick":
+            case 'kick':
                 if (socket.slot !== undefined) {
                     if (socket.slot === 0) {
                         stateSystem[message.game].players[message.slot].send(JSON.stringify({
@@ -283,7 +283,7 @@ module.exports = function(wss) {
                     }
                 }
                 break;
-            case "leave":
+            case 'leave':
                 socket.activeduel = undefined;
                 if (socket.slot !== undefined && games[activeduel]) {
                     games[activeduel].player[socket.slot].name = '';
@@ -309,7 +309,7 @@ module.exports = function(wss) {
                 }));
 
                 break;
-            case "surrender":
+            case 'surrender':
                 if (socket.slot !== undefined) {
                     socket.send(JSON.stringify({
                         action: 'surrender',
@@ -332,7 +332,7 @@ module.exports = function(wss) {
                 }
 
                 break;
-            case "lock":
+            case 'lock':
                 if (games[activeduel] === undefined) {
                     return;
                 }
@@ -391,214 +391,217 @@ module.exports = function(wss) {
                 }
 
                 break;
-            case "start":
+            case 'start':
                 if (socket.slot !== undefined) {
                     player1 = stateSystem[activeduel].decks[0];
                     player2 = stateSystem[activeduel].decks[1];
                     stateSystem[activeduel].startDuel(player1, player2, true);
+                    if (true) { /// <-- dumb.
+                        automatic(stateSystem[activeduel]);
+                    }
                     games[activeduel].started = true;
                     wss.broadcast(games);
                 }
                 break;
-            case "moveCard":
+            case 'moveCard':
                 if (socket.slot === undefined) {
                     break;
                 }
                 stateSystem[activeduel].setState(message);
                 break;
-            case "revealTop":
+            case 'revealTop':
                 if (socket.slot === undefined) {
                     break;
                 }
                 stateSystem[activeduel].revealTop(socket.slot);
                 break;
-            case "revealBottom":
+            case 'revealBottom':
                 if (socket.slot === undefined) {
                     break;
                 }
                 stateSystem[activeduel].revealBottom(socket.slot);
                 break;
-            case "offsetDeck":
+            case 'offsetDeck':
                 if (socket.slot === undefined) {
                     break;
                 }
                 stateSystem[activeduel].offsetZone(socket.slot, 'DECK');
                 break;
-            case "makeToken":
+            case 'makeToken':
                 if (socket.slot === undefined) {
                     break;
                 }
                 stateSystem[activeduel].makeNewCard(message.location, message.player, message.index, message.position, message.id, message.index);
                 break;
-            case "removeToken":
+            case 'removeToken':
                 if (socket.slot === undefined) {
                     break;
                 }
                 stateSystem[activeduel].removeCard(message.uid);
                 break;
-            case "revealDeck":
+            case 'revealDeck':
                 if (socket.slot === undefined) {
                     break;
                 }
                 stateSystem[activeduel].revealDeck(socket.slot);
                 break;
-            case "revealExcavated":
+            case 'revealExcavated':
                 if (socket.slot === undefined) {
                     break;
                 }
                 stateSystem[activeduel].revealExcavated(socket.slot);
                 break;
-            case "revealExtra":
+            case 'revealExtra':
                 if (socket.slot === undefined) {
                     break;
                 }
                 stateSystem[activeduel].revealExtra(socket.slot);
                 break;
-            case "revealHand":
+            case 'revealHand':
                 if (socket.slot === undefined) {
                     break;
                 }
                 stateSystem[activeduel].revealHand(socket.slot);
                 break;
-            case "viewDeck":
+            case 'viewDeck':
                 if (socket.slot === undefined) {
                     break;
                 }
                 stateSystem[activeduel].viewDeck(socket.slot, games[activeduel].player[socket.slot].name, socket.slot);
                 break;
-            case "viewExtra":
+            case 'viewExtra':
                 if (socket.slot === undefined) {
                     break;
                 }
                 stateSystem[activeduel].viewExtra(message.player, games[activeduel].player[socket.slot].name, socket.slot);
                 break;
-            case "viewExcavated":
+            case 'viewExcavated':
                 if (socket.slot === undefined) {
                     break;
                 }
                 stateSystem[activeduel].viewExcavated(message.player, games[activeduel].player[socket.slot].name, socket.slot);
                 break;
-            case "viewGrave":
+            case 'viewGrave':
                 if (socket.slot === undefined) {
                     break;
                 }
                 stateSystem[activeduel].viewGrave(message.player, games[activeduel].player[socket.slot].name, socket.slot);
                 break;
-            case "viewBanished":
+            case 'viewBanished':
                 if (socket.slot === undefined) {
                     break;
                 }
                 stateSystem[activeduel].viewBanished(message.player, games[activeduel].player[socket.slot].name, socket.slot);
                 break;
-            case "viewXYZ":
+            case 'viewXYZ':
                 if (socket.slot === undefined) {
                     break;
                 }
                 stateSystem[activeduel].viewXYZ(socket.slot, message.index, message.player);
                 break;
-            case "shuffleDeck":
+            case 'shuffleDeck':
                 if (socket.slot === undefined) {
                     break;
                 }
                 stateSystem[activeduel].shuffleDeck(socket.slot, games[activeduel].player[socket.slot].name, message.player);
                 break;
-            case "shuffleHand":
+            case 'shuffleHand':
                 if (socket.slot === undefined) {
                     break;
                 }
                 stateSystem[activeduel].shuffleHand(socket.slot);
                 break;
-            case "draw":
+            case 'draw':
                 if (socket.slot === undefined) {
                     break;
                 }
                 stateSystem[activeduel].drawCard(socket.slot, 1, games[activeduel].player[socket.slot].name);
                 break;
-            case "excavate":
+            case 'excavate':
                 if (socket.slot === undefined) {
                     break;
                 }
                 stateSystem[activeduel].excavateCard(socket.slot, 1);
                 break;
-            case "mill":
+            case 'mill':
                 if (socket.slot === undefined) {
                     break;
                 }
                 stateSystem[activeduel].millCard(socket.slot, 1);
                 break;
-            case "millRemovedCard":
+            case 'millRemovedCard':
                 if (socket.slot === undefined) {
                     break;
                 }
                 stateSystem[activeduel].millRemovedCard(socket.slot, 1);
                 break;
-            case "millRemovedCardFaceDown":
+            case 'millRemovedCardFaceDown':
                 if (socket.slot === undefined) {
                     break;
                 }
                 stateSystem[activeduel].millRemovedCardFaceDown(socket.slot, 1);
                 break;
-            case "addCounter":
+            case 'addCounter':
                 if (socket.slot === undefined) {
                     break;
                 }
                 stateSystem[activeduel].addCounter(message.uid);
                 break;
-            case "flipDeck":
+            case 'flipDeck':
                 if (socket.slot === undefined) {
                     break;
                 }
                 stateSystem[activeduel].flipDeck(socket.slot);
                 break;
-            case "removeCounter":
+            case 'removeCounter':
                 if (socket.slot === undefined) {
                     break;
                 }
                 stateSystem[activeduel].removeCounter(message.uid);
                 break;
-            case "rollDie":
+            case 'rollDie':
                 if (socket.slot !== undefined) {
                     stateSystem[activeduel].rollDie(games[activeduel].player[socket.slot].name);
                 } else {
                     stateSystem[activeduel].rollDie(message.name);
                 }
                 break;
-            case "flipCoin":
+            case 'flipCoin':
                 if (socket.slot !== undefined) {
                     stateSystem[activeduel].flipCoin(games[activeduel].player[socket.slot].name);
                 } else {
                     stateSystem[activeduel].flipCoin(message.name);
                 }
                 break;
-            case "chat":
+            case 'chat':
                 if (socket.slot !== undefined && stateSystem[activeduel]) {
                     stateSystem[activeduel].duelistChat(games[activeduel].player[socket.slot].name, message.chat);
                 } else {
                     stateSystem[activeduel].spectatorChat(message.name, message.chat);
                 }
                 break;
-            case "nextPhase":
+            case 'nextPhase':
                 if (socket.slot !== undefined) {
                     stateSystem[activeduel].nextPhase(message.phase);
                 }
                 break;
-            case "nextTurn":
+            case 'nextTurn':
                 if (socket.slot !== undefined) {
                     stateSystem[activeduel].nextTurn();
                 }
                 break;
-            case "changeLifepoints":
+            case 'changeLifepoints':
                 if (socket.slot !== undefined) {
                     stateSystem[activeduel].changeLifepoints(socket.slot, message.amount, games[activeduel].player[socket.slot].name);
                 }
                 break;
-            case "revealHandSingle":
+            case 'revealHandSingle':
                 if (socket.slot === undefined) {
                     break;
                 }
                 stateSystem[activeduel].revealCallback([message.card], socket.slot, 'revealHandSingle');
                 break;
-            case "rps":
+            case 'rps':
                 if (socket.slot === undefined) {
                     break;
                 }
@@ -607,20 +610,20 @@ module.exports = function(wss) {
                     stateSystem[activeduel].duelistChat('Server', games[activeduel].player[socket.slot].name + ' ' + winner + ' won.');
                 });
                 break;
-            case "reveal":
+            case 'reveal':
                 if (socket.slot === undefined) {
                     break;
                 }
                 stateSystem[activeduel].revealCallback(stateSystem[activeduel].findUIDCollection(message.card.uid), socket.slot, 'revealHandSingle');
                 break;
-            case "question":
+            case 'question':
                 console.log('got question', message);
                 if (socket.slot === undefined) {
                     break;
                 }
                 stateSystem[activeduel].answerListener.emit(message.uuid, message.answer);
                 break;
-            case "getLog":
+            case 'getLog':
                 if (socket.slot === undefined) {
                     break;
                 }
@@ -631,7 +634,7 @@ module.exports = function(wss) {
                     }));
                 }
                 break;
-            case "attack":
+            case 'attack':
                 if (socket.slot === undefined) {
                     break;
                 }
@@ -643,7 +646,7 @@ module.exports = function(wss) {
                     });
                 }
                 break;
-            case "effect":
+            case 'effect':
                 if (socket.slot !== undefined) {
                     duelBroadcast(activeduel, {
                         action: 'effect',
@@ -654,7 +657,7 @@ module.exports = function(wss) {
                     });
                 }
                 break;
-            case "target":
+            case 'target':
                 if (socket.slot !== undefined) {
                     duelBroadcast(activeduel, {
                         action: 'target',
@@ -662,7 +665,7 @@ module.exports = function(wss) {
                     });
                 }
                 break;
-            case "give":
+            case 'give':
                 if (socket.slot !== undefined) {
                     duelBroadcast(activeduel, {
                         action: 'give',
@@ -724,15 +727,6 @@ module.exports = function(wss) {
             console.log(errorMessage);
         });
     }
-
-    fs.watch(__filename, function() {
-        Object.keys(stateSystem).forEach(function(activeduel) {
-            stateSystem[activeduel].duelistChat('Server', 'New Source Code detected, restarting server. Duel has ended.');
-        });
-
-        setTimeout(process.exit, 3000);
-    });
-
 
     setInterval(wss.broadcast, 15000);
 

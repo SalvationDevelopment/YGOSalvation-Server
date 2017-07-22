@@ -45,21 +45,6 @@ pip-log.txt
 
 #nodejs
 node_modules/*
-server/node_modules/*
-client/ygopro/*
-client/dn/*.jpg
-/ygosharp/Mono.Data.Sqlite.dll
-ygosharp/OCGWrapper.dll
-ygosharp/SevenZip.dll
-ygosharp/YGOSharp.Network.dll
-ygosharp/YGOSharp.exe
-ygosharp/YGOSharp.exe.config
-ygosharp/YGOSharp.vshost.exe
-ygosharp/YGOSharp.vshost.exe.config
-ygosharp/sqlite3.dll
-ygosharp/*.txt
-installer/output*
-installer/input/*
 coverage/*
 
 server/http/setups/*
@@ -85,3 +70,5 @@ server/http/ygopro/deck.exe
 *.lua
 documentation/~$ygopro id sheet.xlsx
 databases/deckStorage.nedb
+coverage
+.vscode

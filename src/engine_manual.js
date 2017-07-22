@@ -1,4 +1,7 @@
 'use strict';
+
+// You should be drinking scotch and listening to german electronica while reading this.
+
 /**
  * @file Creates instances of game state, and methods of manipulating them.
  */
@@ -80,9 +83,7 @@
 
 
 
-
-var watcherInstance = require('fs').watch(__filename, process.exit),
-    EventEmitter = require('events'), // a way to "notice" things occuring
+const EventEmitter = require('events'), // a way to "notice" things occuring
     uniqueIdenifier = require('uuid/v1'); // time based unique identifier, RFC4122 version 1
 
 /**
