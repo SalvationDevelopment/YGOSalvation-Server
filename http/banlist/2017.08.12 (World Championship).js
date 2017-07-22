@@ -269,7 +269,7 @@ module.exports = {
 	exceptions: [],
 	startDate: new Date('2017-07-20'),
 	endDate: new Date('2017-07-22'),
-	name: '2017 World Championship',
+	name: '2017.08.12 (World Championship)',
 	masterRule: 4,
 	region: 'tcg',
 }
