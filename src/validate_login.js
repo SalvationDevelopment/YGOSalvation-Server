@@ -5,18 +5,19 @@ var validationCache = {},
     request = require('request'),
     fs = require('fs'),
     mysql = require('mysql'),
-    crypto = require('crypto');
+    crypto = require('crypto'),
+    hotload = require('hotload');
 
-setInterval(function () {
+setInterval(function() {
     validationCache = {};
 }, 600000); // cache the forum request for 10 mins.
 
 
-var admins = JSON.parse(fs.readFileSync('../package.json', 'utf8')).admins;
+var admins = hotload('./record_admins.js');
 
 function isAdmin(data) {
     var result = '0';
-    Object.keys(admins).forEach(function (admin) {
+    Object.keys(admins).forEach(function(admin) {
         if (admin === data.username && admins[admin]) {
             result = '1';
         }
@@ -32,7 +33,7 @@ function forumValidate(data, callback) {
     //        }
     //        
     //    }
-    process.nextTick(function () {
+    process.nextTick(function() {
         var url = 'https://forum.ygopro.us/log.php',
             post = {
                 ips_username: data.username,
@@ -45,7 +46,7 @@ function forumValidate(data, callback) {
         request.post(url, {
             form: post,
             rejectUnauthorized: false
-        }, function (error, response, body) {
+        }, function(error, response, body) {
             forumdata = {
                 data: {}
             };

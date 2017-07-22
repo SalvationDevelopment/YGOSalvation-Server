@@ -96,6 +96,10 @@ ast-types@0.8.15:
   version "0.8.15"
   resolved "https://registry.yarnpkg.com/ast-types/-/ast-types-0.8.15.tgz#8eef0827f04dff0ec8857ba925abe3fea6194e52"
 
+async-waterfall@^0.1.5:
+  version "0.1.5"
+  resolved "https://registry.yarnpkg.com/async-waterfall/-/async-waterfall-0.1.5.tgz#398bd48b0eac5d40ffbe400fe9e37a53ba966dae"
+
 async@*, async@0.7.x:
   version "0.7.0"
   resolved "https://registry.yarnpkg.com/async/-/async-0.7.0.tgz#4429e0e62f5de0a54f37458c49f0b897eb52ada5"
@@ -550,6 +554,10 @@ dns-prefetch-control@0.1.0:
 dont-sniff-mimetype@1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/dont-sniff-mimetype/-/dont-sniff-mimetype-1.0.0.tgz#5932890dc9f4e2f19e5eb02a20026e5e5efc8f58"
+
+dotenv@^4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/dotenv/-/dotenv-4.0.0.tgz#864ef1379aced55ce6f95debecdce179f7a0cd1d"
 
 ecc-jsbn@~0.1.1:
   version "0.1.1"
@@ -2154,6 +2162,10 @@ sumchecker@^1.2.0:
   dependencies:
     debug "^2.2.0"
     es6-promise "^4.0.5"
+
+supervisor@^0.12.0:
+  version "0.12.0"
+  resolved "https://registry.yarnpkg.com/supervisor/-/supervisor-0.12.0.tgz#de7e6337015b291851c10f3538c4a7f04917ecc1"
 
 supports-color@3.1.2:
   version "3.1.2"

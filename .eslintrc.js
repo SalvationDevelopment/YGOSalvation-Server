@@ -10,7 +10,6 @@ module.exports = {
         'no-caller': 2,
         'no-bitwise': 0,
         'no-catch-shadow': 2,
-        'no-console': 1,
         'comma-dangle': 2,
         'no-control-regex': 2,
         'no-debugger': 2,

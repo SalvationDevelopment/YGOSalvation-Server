@@ -52,7 +52,9 @@ function cardIs(cat, obj) {
 function setupCard(card) {
     if (cardIs('monster', card)) {
 
-    } else if (cardIs('monster', card)) {}
+    } else {
+
+    }
 }
 /**
  * Get cards that have a specific effect type.
@@ -244,7 +246,8 @@ function doStandbyPhase(duel, callback) {
 
 /**
  * Get a list of cards that the active user can normal summon at the moment.
- * @param   {Object} duel Engine Instance
+ * @param {Object} duel Engine Instance
+ * @param {String} prevention Card type text to ignore
  * @returns {Array}  List of Cards
  */
 function getNormalOptions(duel, prevention) {
@@ -433,7 +436,6 @@ function doBattlePhase(duel, callback) {
     return;
 }
 
-
 /**
  * Process Damage Calculation
  * @param {Object}        duel       Engine Instance
@@ -594,7 +596,7 @@ function doEndPhase(duel, callback) {
                 hand = duel.getGroup({
                     player: state.turnOfPlayer,
                     location: 'HAND'
-                })
+                });
             if (hand.length > duel.maxHandSize) {
                 duel.question({
                     'questiontype': 'select',
@@ -706,6 +708,7 @@ function loadCardScripts(duel) {
                 initial_effect: generic
             };
         }
+        setupCard(card);
     });
 }
 
