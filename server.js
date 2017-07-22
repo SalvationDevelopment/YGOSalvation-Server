@@ -20,8 +20,7 @@ function main() {
     var mainStack = domain.create();
 
     mainStack.on('error', function(err) {
-        console.error((new Date()).toUTCString(), ' mainStackException:', err.message);
-
+        throw err;
     });
 
     mainStack.run(function() {
