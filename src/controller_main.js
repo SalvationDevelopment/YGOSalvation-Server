@@ -14,7 +14,7 @@ const child_process = require('child_process'),
     cardidmap = hotload('../http/cardidmap.js'),
     express = require('express'),
     fs = require('fs'),
-    spdy = require('spdy'),
+    https = require('https'),
     http = require('http'),
     url = require('url'),
     path = require('path'),
@@ -142,7 +142,7 @@ try {
 
 
 
-    primusServer = spdy.createServer({
+    primusServer = https.createServer({
         key: privateKey,
         cert: certificate
     }, app).listen(443);
