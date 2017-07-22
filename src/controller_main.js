@@ -167,7 +167,7 @@ var WebSocketServer = require('ws').Server,
 var manualServer = require('./controller_dueling.js')(wss);
 primusServer.on('upgrade', function(req, socket, head) {
     wss.handleUpgrade(req, socket, head, function(websocket) {
-        console.log(websocket.upgradeReq.headers['sec-websocket-protocol']);
+        console.log(websocket.upgradeReq);
         manualServer(websocket);
     });
 });

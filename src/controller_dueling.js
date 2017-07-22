@@ -694,13 +694,8 @@ module.exports = function(wss) {
 
 
     function websocketHandle(socket) {
-        socket.send(JSON.stringify({
-            action: 'broadcast',
-            data: games
-        }));
-        socket.send(JSON.stringify({
-            action: 'register'
-        }));
+
+
         socket.on('message', function(message) {
             try {
                 responseHandler(socket, JSON.parse(message));
@@ -725,6 +720,13 @@ module.exports = function(wss) {
         socket.on('error', function(errorMessage) {
             console.log(errorMessage);
         });
+        socket.send(JSON.stringify({
+            action: 'broadcast',
+            data: games
+        }));
+        socket.send(JSON.stringify({
+            action: 'register'
+        }));
     }
 
     setInterval(wss.broadcast, 15000);
