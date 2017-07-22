@@ -24,9 +24,10 @@ function main() {
     });
 
     mainStack.run(function() {
-        process.title = 'YGOPro Salvation Server ' + new Date();
-        console.log('YGO Salvation Server - Saving Yu-Gi-Oh!'.bold.yellow);
-        require('./src/controller_main.js');
+
     });
+    process.title = 'YGOPro Salvation Server ' + new Date();
+    console.log('YGO Salvation Server - Saving Yu-Gi-Oh!'.bold.yellow);
+    require('./src/controller_main.js');
 }
 main();
