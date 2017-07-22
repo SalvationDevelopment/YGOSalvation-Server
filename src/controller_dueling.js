@@ -46,7 +46,6 @@ module.exports = function(wss) {
      * @returns {object} customized game object
      */
     function newGame(settings) {
-        console.log('settings', settings);
         return {
             roompass: settings.roompass,
             started: false,
@@ -397,7 +396,7 @@ module.exports = function(wss) {
                     player2 = stateSystem[activeduel].decks[1];
                     stateSystem[activeduel].startDuel(player1, player2, true);
                     if (true) { /// <-- dumb.
-                        automatic(stateSystem[activeduel]);
+                        // automatic(stateSystem[activeduel]);
                     }
                     games[activeduel].started = true;
                     wss.broadcast(games);
