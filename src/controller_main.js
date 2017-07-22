@@ -2,37 +2,17 @@
 // Gamelist object acts similar to a Redis server, could be replaced with on but its the gamelist state.
 'use strict';
 
-
-
-var child_process = require('child_process');
-var hotload = require('hotload');
-var cardidmap = hotload('../http/cardidmap.js');
-
-
-
-
 /**
- * Maps a deck to updated IDs.
- * @param   {[[Type]]} deck [[Description]]
- * @returns {object}   [[Description]]
+ * @typedef CardRecord
+ * @type {Object}
+ * @property {Number} id passcode of the card.
  */
-function mapCards(deck) {
-    // [].map returns a new array so we are just gonna send it back, not store it as a var.
-    return deck.map(function(cardInDeck) {
-        // if there is an entry in the cardidmap for that card id, we change it to the new value
-        // and return a completely new object.
-        if (cardidmap[cardInDeck.id]) {
-            return {
-                id: cardidmap[cardInDeck.id]
-            };
-        } else {
-            // else we just return out the old card object
-            return cardInDeck;
-        }
-    });
-}
 
-var express = require('express'),
+// Mostly just stuff so that Express runs
+const child_process = require('child_process'),
+    hotload = require('hotload'),
+    cardidmap = hotload('../http/cardidmap.js'),
+    express = require('express'),
     fs = require('fs'),
     spdy = require('spdy'),
     http = require('http'),
@@ -44,6 +24,16 @@ var express = require('express'),
     hsts = require('hsts'),
     Ddos = require('ddos'),
     helmet = require('helmet'),
+    Primus = require('primus'),
+    Rooms = require('primus-rooms'),
+    domain = require('domain'),
+    ps = require('ps-node'),
+    forumValidate = require('./validate_login.js'),
+    pack = require('../package.json'),
+    adminlist = hotload('./record_admins.js'),
+    banlistedUsers = hotload('./record_bansystem.js'),
+    updateHTTP = require('./update_http.js'),
+    HTTP_PORT = pack.port || 80,
     ddos = new Ddos({
         maxcount: 2000,
         burst: 500,
@@ -58,11 +48,7 @@ var express = require('express'),
         silent: true,
         silentStart: true,
         responseStatus: 429
-    });
-
-
-var primus,
-    userlist = [],
+    }),
     registry = {
         //People that have read this source code.
         SnarkyChild: '::ffff:127.0.0.1',
@@ -70,30 +56,20 @@ var primus,
         Irate: '::ffff:127.0.0.1',
         Chibi: '::ffff:127.0.0.1',
         OmniMage: '::ffff:127.0.0.1'
-    },
+    };
 
+var userlist = [],
+    chatbox = [],
+    sayCount = 0,
+    primus,
     online = 0,
     activeDuels = 0,
     logins = 0,
     booting = true,
     lockStatus = false,
-    Primus = require('primus'),
-    Rooms = require('primus-rooms'),
-    //primusServer = http.createServer().listen(24555),
     primusServer,
-    domain = require('domain'),
-    ps = require('ps-node'),
-    forumValidate = require('./validate_login.js'),
-    currentGlobalMessage = '',
-    pack = require('../package.json'),
-    adminlist = hotload('./record_admins.js'),
-    banlistedUsers = hotload('./record_bansystem.js'),
-    updateHTTP = require('./update_http.js'),
-    chatbox = [],
-    sayCount = 0,
-    HTTP_PORT = pack.port || 80;
+    currentGlobalMessage = '';
 
-require('fs').watch(__filename, process.exit);
 
 app.use(ddos.express);
 app.use(compression());
@@ -107,6 +83,24 @@ app.use(function(req, res, next) {
     }
 });
 
+
+/**
+ * Maps a deck to updated IDs.
+ * @param   {CardRecord[]} deck A deck of cards from the user possibly containing old cards.
+ * @returns {CardRecord[]} A deck of cards from the user.
+ */
+function mapCards(deck) {
+    return deck.map(function(cardInDeck) {
+        if (cardidmap[cardInDeck.id]) {
+            return {
+                id: cardidmap[cardInDeck.id]
+            };
+        } else {
+            // else we just return out the old card object
+            return cardInDeck;
+        }
+    });
+}
 
 updateHTTP(function(error, database, banlist) {
     if (!error) {
@@ -142,8 +136,9 @@ app.get('/git', function(req, res, next) {
 
 
 try {
-    var privateKey = fs.readFileSync(path.resolve(process.env.SSL + '\\ssl.key')).toString();
-    var certificate = fs.readFileSync(path.resolve(process.env.SSL + '\\ssl.crt')).toString();
+    var privateKey = fs.readFileSync(path.resolve(process.env.SSL + '\\ssl.key')).toString(),
+        certificate = fs.readFileSync(path.resolve(process.env.SSL + '\\ssl.crt')).toString(),
+        openserver = express();
 
 
 
@@ -151,7 +146,7 @@ try {
         key: privateKey,
         cert: certificate
     }, app).listen(443);
-    var openserver = express();
+
     // set up a route to redirect http to spdy
     openserver.use(helmet());
     openserver.use(ddos.express);
