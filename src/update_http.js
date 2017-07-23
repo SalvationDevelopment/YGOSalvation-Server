@@ -11,7 +11,7 @@ var zlib = require('zlib'),
 function getBanlist() {
     // this needs to be rewritten;
     var banlist = {},
-        files = fs.readdirSync('../http/banlist/');
+        files = fs.readdirSync('./http/banlist/');
     files.forEach(function(filename) {
         if (filename.indexOf('.js') > -1) {
             var listname = filename.slice(0, -3);
@@ -30,32 +30,36 @@ function getManifestFromAPI(callback) {
     };
 
     callback = callback || function() {};
-    var call = http.request(options, function(res) {
-        var responseString = '';
-        res.on('data', function(chunk) {
-            responseString += chunk;
-        });
-        res.on('error', function(errorMessage) {
-            console.log(errorMessage);
-        });
-        res.on('end', function() {
-            try {
-                var output = JSON.parse(responseString),
-                    banlistfiles = getBanlist();
-                fs.writeFile('../http/manifest/manifest_0-en-OCGTCG.json', JSON.stringify(output), function() {
-                    fs.writeFile('../http/manifest/banlist.json', JSON.stringify(banlistfiles, null, 1), function() {});
-                    callback(null, output, banlistfiles);
-                });
-            } catch (error) {
-                return callback(error, []);
-            }
-        });
-    });
-    call.on('error', function() {
-        console.log('Unable to contact Database Application');
-    });
-    call.end();
 
+    var banlistfiles = getBanlist(),
+        call;
+
+    fs.writeFile('../http/manifest/banlist.json', JSON.stringify(banlistfiles, null, 1), function() {
+        call = http.request(options, function(res) {
+            var responseString = '';
+            res.on('data', function(chunk) {
+                responseString += chunk;
+            });
+            res.on('error', function(errorMessage) {
+                console.log(errorMessage);
+            });
+            res.on('end', function() {
+                try {
+                    var output = JSON.parse(responseString);
+                    fs.writeFile('./http/manifest/manifest_0-en-OCGTCG.json', JSON.stringify(output), function() {
+                        callback(null, output, banlistfiles);
+                    });
+                } catch (error) {
+                    return callback(error, []);
+                }
+            });
+        });
+        call.on('error', function() {
+            console.log('Unable to contact Database Application');
+            callback(null, fs.readFileSync('./http/manifest/manifest_0-en-OCGTCG.json'), banlistfiles);
+        });
+        call.end();
+    });
 }
 
 
