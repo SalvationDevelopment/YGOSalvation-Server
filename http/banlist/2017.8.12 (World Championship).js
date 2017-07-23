@@ -95,6 +95,7 @@ module.exports = {
         42703248: 0, //Giant Trunade
         79571449: 0, //Graceful Charity
         18144506: 0, //Harpie's Feather Duster
+        19613556: 0, //Heavy Storm
         35059553: 0, //Kaiser Colosseum
         85602018: 0, //Last Will
         34906152: 0, //Mass Driver
@@ -206,6 +207,7 @@ module.exports = {
         6417578: 1, //El Shaddoll Fusion
         67723438: 1, //Emergency Teleport
         95308449: 1, //Final Countdown
+        81439173: 1, //Foolish Burial
         77565204: 1, //Future Fusion
         66957584: 1, //Infernity Launcher
         99330325: 1, //Interrupted Kaiju Slumber
