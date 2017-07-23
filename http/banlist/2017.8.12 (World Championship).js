@@ -144,6 +144,7 @@ module.exports = {
         64697231: 0, //Trap Dustshoot
         73988674: 0, //Tri-and-Guess
         80604091: 0, //Ultimate Offering
+        80604092: 0, //Ultimate Offering
         5851097: 0, //Vanity's Emptiness
         7902349: 1, //Left Arm of the Forbidden One
         44519536: 1, //Left Leg of the Forbidden One
