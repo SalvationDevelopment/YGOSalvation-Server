@@ -1,5 +1,5 @@
 module.exports = {
-	bannedCards: {
+    bannedCards: {
         27279764: 0, //Apoqliphort Towers
         30603688: 0, //Apprentice Illusion Magician
         53804307: 0, //Blaster, Dragon Ruler of Infernos
@@ -263,13 +263,13 @@ module.exports = {
         73628505: 2, //Terraforming
         66399653: 2, //Union Hangar
         29843091: 2, //Ojama Trio
-        40605147: 2, //Solemn Strike
-	},
-	bannedTypes: [],
-	exceptions: [],
-	startDate: new Date('2017-07-20'),
-	endDate: new Date('2017-07-22'),
-	name: '2017.08.12 (World Championship)',
-	masterRule: 4,
-	region: 'tcg',
-}
+        40605147: 2 //Solemn Strike
+    },
+    bannedTypes: [],
+    exceptions: [],
+    startDate: new Date('2017-07-20'),
+    endDate: new Date('2017-07-22'),
+    name: '2017.08.12 (World Championship)',
+    masterRule: 4,
+    region: 'tcg'
+};
