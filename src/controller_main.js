@@ -111,6 +111,17 @@ updateHTTP(function(error, database, banlist) {
     }
 });
 
+fs.watch('./http/banlist/', function() {
+    updateHTTP(function(error, database, banlist) {
+        if (!error) {
+            process.database = database;
+            process.banlist = banlist;
+        } else {
+            console.log('No DB or banlist');
+        }
+    });
+});
+
 function gitRoute(req, res, next) {
 
 
@@ -176,11 +187,7 @@ primus = new Primus(primusServer, {
     parser: 'JSON'
 });
 primus.use('rooms', Rooms);
-if (process.env.SSL !== undefined) {
-    try {
-        require('fs').watch(process.env.SSL, process.exit);
-    } catch (error) {}
-}
+
 
 
 var Datastore = require('nedb'),

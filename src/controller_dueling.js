@@ -9,24 +9,12 @@
 var fs = require('fs'),
     jsonfile = require('jsonfile');
 
-function getBanlist() {
-    var banlist = {},
-        files = fs.readdirSync('./http/banlist/');
-    files.forEach(function(filename) {
-        if (filename.indexOf('.js') > -1) {
-            var listname = filename.slice(0, -3);
-            banlist[listname] = require('../http/banlist/' + '/' + filename);
-        }
-    });
-    return banlist;
-}
 
 var validateDeck = require('./validate_deck.js'),
     http = require('http'),
     https = require('https'),
     path = require('path'),
     database = [],
-    banlist = getBanlist(),
     automatic = require('./engine_automatic.js');
 
 
@@ -58,7 +46,7 @@ module.exports = function(wss) {
             cardpool: settings.info.cardpool,
             noshuffle: 0,
             prerelease: settings.info.prerelease,
-            legacyfield: (banlist[settings.info.banlist].masterRule !== 4),
+            legacyfield: (process.banlist[settings.info.banlist].masterRule !== 4),
             rule: 0,
             startLP: settings.info.startLP,
             starthand: 0,
@@ -343,7 +331,7 @@ module.exports = function(wss) {
                 }
                 if (socket.slot !== undefined) {
                     try {
-                        message.validate = validateDeck(message.deck, banlist[games[activeduel].banlist], database, games[activeduel].cardpool, games[activeduel].prerelease);
+                        message.validate = validateDeck(message.deck, process.banlist[games[activeduel].banlist], database, games[activeduel].cardpool, games[activeduel].prerelease);
                         if (message.validate) {
                             if (message.validate.error) {
                                 socket.send(JSON.stringify({
