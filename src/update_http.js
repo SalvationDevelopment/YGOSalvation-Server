@@ -34,7 +34,7 @@ function getManifestFromAPI(callback) {
     var banlistfiles = getBanlist(),
         call;
 
-    fs.writeFile('../http/manifest/banlist.json', JSON.stringify(banlistfiles, null, 1), function() {
+    fs.writeFile('./http/manifest/banlist.json', JSON.stringify(banlistfiles, null, 1), function() {
         call = http.request(options, function(res) {
             var responseString = '';
             res.on('data', function(chunk) {
