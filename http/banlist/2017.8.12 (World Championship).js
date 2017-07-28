@@ -95,6 +95,7 @@ module.exports = {
         42703248: 0, //Giant Trunade
         79571449: 0, //Graceful Charity
         18144506: 0, //Harpie's Feather Duster
+        19613556: 0, //Heavy Storm
         35059553: 0, //Kaiser Colosseum
         85602018: 0, //Last Will
         34906152: 0, //Mass Driver
@@ -143,6 +144,7 @@ module.exports = {
         64697231: 0, //Trap Dustshoot
         73988674: 0, //Tri-and-Guess
         80604091: 0, //Ultimate Offering
+        80604092: 0, //Ultimate Offering
         5851097: 0, //Vanity's Emptiness
         7902349: 1, //Left Arm of the Forbidden One
         44519536: 1, //Left Leg of the Forbidden One
@@ -206,6 +208,7 @@ module.exports = {
         6417578: 1, //El Shaddoll Fusion
         67723438: 1, //Emergency Teleport
         95308449: 1, //Final Countdown
+        81439173: 1, //Foolish Burial
         77565204: 1, //Future Fusion
         66957584: 1, //Infernity Launcher
         99330325: 1, //Interrupted Kaiju Slumber
@@ -269,7 +272,7 @@ module.exports = {
     exceptions: [],
     startDate: new Date('2017-07-20'),
     endDate: new Date('2017-07-22'),
-    name: '2017.08.12 (World Championship)',
+    name: '2017.8.12 (World Championship)',
     masterRule: 4,
     region: 'tcg'
 };

@@ -1,84 +1,84 @@
 module.exports = {
 	bannedCards: {
-		27279764: 0, //Apoqliphort Towers
-		53804307: 0, //Blaster, Dragon Ruler of Infernos
-		69243953: 0, //Butterfly Dagger - Elma
-		72892473: 0, //Card Destruction
-		57953380: 0, //Card of Safe Return
-		4031928: 0, //Change of Heart
-		82301904: 0, //Chaos Emperor Dragon - Envoy of the End
-		67616300: 0, //Chicken Game
-		60682203: 0, //Cold Wave
-		17375316: 0, //Confiscation
-		34124316: 0, //Cyber Jar
-		69015963: 0, //Cyber-Stein
-		44763025: 0, //Delinquent Duo
-		56570271: 0, //Destiny HERO - Disk Commander
-		23557835: 0, //Dimension Fusion
-		8903700: 0, //Djinn Releaser of Rituals
-		20366274: 0, //El Shaddoll Construct
-		17412721: 0, //Elder Entity Norden
-		40044918: 0, //Elemental HERO Stratos
-		46772449: 0, //Evilswarm Exciton Knight
-		78706415: 0, //Fiber Jar
-		93369354: 0, //Fishborg Blaster
-		27970830: 0, //Gateway of the Six
-		42703248: 0, //Giant Trunade
-		79571449: 0, //Graceful Charity
-		18144506: 0, //Harpie's Feather Duster
-		18144507: 0, //Harpie's Feather Duster
-		19613556: 0, //Heavy Storm
-		35059553: 0, //Kaiser Colosseum
-		28566710: 0, //Last Turn
-		85602018: 0, //Last Will
-		34086406: 0, //Lavalval Chain
-		34206604: 0, //Magical Scientist
-		31178212: 0, //Majespecter Unicorn - Kirin
-		21593977: 0, //Makyura the Destructor
-		34906152: 0, //Mass Driver
-		46411259: 0, //Metamorphosis
-		96782886: 0, //Mind Master
-		41482598: 0, //Mirage of Nightmare
-		83764718: 0, //Monster Reborn
-		83764719: 0, //Monster Reborn
-		33508719: 0, //Morphing Jar
-		79106360: 0, //Morphing Jar #2
-		54719828: 0, //Number 16: Shock Master
-		74191942: 0, //Painful Choice
-		68819554: 0, //Performage Damage Juggler
-		7563579: 0, //Performage Plushfire
-		17330916: 0, //Performapal Monkeyboard
-		67169062: 0, //Pot of Avarice
-		55144522: 0, //Pot of Greed
-		70828912: 0, //Premature Burial
-		90411554: 0, //Redox, Dragon Ruler of Boulders
-		27174286: 0, //Return from the Different Dimension
-		93016201: 0, //Royal Oppression
-		57585212: 0, //Self-Destruct Button
-		90307777: 0, //Shurit, Strategist of the Nekroz
-		3280747: 0, //Sixth Sense
-		45986603: 0, //Snatch Steal
-		41420027: 0, //Solemn Judgment
-		46448938: 0, //Spellbook of Judgment
-		20663556: 0, //Substitoad
-		48130397: 0, //Super Polymerization
-		27770341: 0, //Super Rejuvenation
-		18326736: 0, //Tellarknight Ptolemaeus
-		89399912: 0, //Tempest, Dragon Ruler of Storms
-		42829885: 0, //The Forceful Sentry
-		88071625: 0, //The Tyrant Neptune
-		26400609: 0, //Tidal, Dragon Ruler of Waterfalls
-		35316708: 0, //Time Seal
-		64697231: 0, //Trap Dustshoot
-		33184167: 0, //Tribe-Infecting Virus
-		80604091: 0, //Ultimate Offering
-		80604092: 0, //Ultimate Offering
-		5851097: 0, //Vanity's Emptiness
-		44910027: 0, //Victory Dragon
-		31222701: 0, //Wavering Eyes
-		81122844: 0, //Wind-Up Carrier Zenmaity
-		78010363: 0, //Witch of the Black Forest
-		3078576: 0, //Yata-Garasu
+		27279764: 1, //Apoqliphort Towers
+		53804307: 1, //Blaster, Dragon Ruler of Infernos
+		69243953: 1, //Butterfly Dagger - Elma
+		72892473: 1, //Card Destruction
+		57953380: 1, //Card of Safe Return
+		4031928: 1, //Change of Heart
+		82301904: 1, //Chaos Emperor Dragon - Envoy of the End
+		67616300: 1, //Chicken Game
+		60682203: 1, //Cold Wave
+		17375316: 1, //Confiscation
+		34124316: 1, //Cyber Jar
+		69015963: 1, //Cyber-Stein
+		44763025: 1, //Delinquent Duo
+		56570271: 1, //Destiny HERO - Disk Commander
+		23557835: 1, //Dimension Fusion
+		8903700: 1, //Djinn Releaser of Rituals
+		20366274: 1, //El Shaddoll Construct
+		17412721: 1, //Elder Entity Norden
+		40044918: 1, //Elemental HERO Stratos
+		46772449: 1, //Evilswarm Exciton Knight
+		78706415: 1, //Fiber Jar
+		93369354: 1, //Fishborg Blaster
+		27970830: 1, //Gateway of the Six
+		42703248: 1, //Giant Trunade
+		79571449: 1, //Graceful Charity
+		18144506: 1, //Harpie's Feather Duster
+		18144507: 1, //Harpie's Feather Duster
+		19613556: 1, //Heavy Storm
+		35059553: 1, //Kaiser Colosseum
+		28566710: 1, //Last Turn
+		85602018: 1, //Last Will
+		34086406: 1, //Lavalval Chain
+		34206604: 1, //Magical Scientist
+		31178212: 1, //Majespecter Unicorn - Kirin
+		21593977: 1, //Makyura the Destructor
+		34906152: 1, //Mass Driver
+		46411259: 1, //Metamorphosis
+		96782886: 1, //Mind Master
+		41482598: 1, //Mirage of Nightmare
+		83764718: 1, //Monster Reborn
+		83764719: 1, //Monster Reborn
+		33508719: 1, //Morphing Jar
+		79106360: 1, //Morphing Jar #2
+		54719828: 1, //Number 16: Shock Master
+		74191942: 1, //Painful Choice
+		68819554: 1, //Performage Damage Juggler
+		7563579: 1, //Performage Plushfire
+		17330916: 1, //Performapal Monkeyboard
+		67169062: 1, //Pot of Avarice
+		55144522: 1, //Pot of Greed
+		70828912: 1, //Premature Burial
+		90411554: 1, //Redox, Dragon Ruler of Boulders
+		27174286: 1, //Return from the Different Dimension
+		93016201: 1, //Royal Oppression
+		57585212: 1, //Self-Destruct Button
+		90307777: 1, //Shurit, Strategist of the Nekroz
+		3280747: 1, //Sixth Sense
+		45986603: 1, //Snatch Steal
+		41420027: 1, //Solemn Judgment
+		46448938: 1, //Spellbook of Judgment
+		20663556: 1, //Substitoad
+		48130397: 1, //Super Polymerization
+		27770341: 1, //Super Rejuvenation
+		18326736: 1, //Tellarknight Ptolemaeus
+		89399912: 1, //Tempest, Dragon Ruler of Storms
+		42829885: 1, //The Forceful Sentry
+		88071625: 1, //The Tyrant Neptune
+		26400609: 1, //Tidal, Dragon Ruler of Waterfalls
+		35316708: 1, //Time Seal
+		64697231: 1, //Trap Dustshoot
+		33184167: 1, //Tribe-Infecting Virus
+		80604091: 1, //Ultimate Offering
+		80604092: 1, //Ultimate Offering
+		5851097: 1, //Vanity's Emptiness
+		44910027: 1, //Victory Dragon
+		31222701: 1, //Wavering Eyes
+		81122844: 1, //Wind-Up Carrier Zenmaity
+		78010363: 1, //Witch of the Black Forest
+		3078576: 1, //Yata-Garasu
 		85103922: 1, //Artifact Moralltach
 		27552504: 1, //Beatrice, Lady of the Eternal
 		72989439: 1, //Black Luster Soldier - Envoy of the Beginning
@@ -183,8 +183,7 @@ module.exports = {
 	bannedTypes: [],
 	exceptions: [],
 	startDate: new Date('2017-06-12'),
-	endDate: new Date('2017-07-19'),
-	name: '2017.6.12 (TCG Advanced)',
-	masterRule: 3,
-	region: 'tcg'
+	name: '2017.6.12 (TCG Traditional)',
+	masterRule: 4,
+	region: 'tcg',
 }
