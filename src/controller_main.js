@@ -171,23 +171,15 @@ try {
     primusServer.listen(HTTP_PORT);
 }
 
-var WebSocketServer = require('ws').Server,
-    wss = new WebSocketServer({
-        noServer: true
-    });
-var manualServer = require('./controller_dueling.js')(wss);
-primusServer.on('upgrade', function(req, socket, head) {
-    wss.handleUpgrade(req, socket, head, function(websocket) {
-        manualServer(websocket);
-    });
-});
+
 
 
 primus = new Primus(primusServer, {
     parser: 'JSON'
 });
-primus.use('rooms', Rooms);
 
+primus.use('rooms', Rooms);
+var duelLogic = require('./controller_dueling.js')(primus);
 
 
 var Datastore = require('nedb'),
@@ -450,12 +442,11 @@ function aiRestartCall(data) {
 
 
 
-var tagBody = '(?:[^"\'>]|"[^"]*"|\'[^\']*\')*';
-
-var tagOrComment = new RegExp(
-    '<(?:' + '!--(?:(?:-*[^->])*--+|-?)|script\\b' + tagBody + '>[\\s\\S]*?</script\\s*' + '|style\\b' + tagBody + '>[\\s\\S]*?</style\\s*' + '|/?[a-z]' + tagBody + ')>',
-    'gi'
-);
+var tagBody = '(?:[^"\'>]|"[^"]*"|\'[^\']*\')*',
+    tagOrComment = new RegExp(
+        '<(?:' + '!--(?:(?:-*[^->])*--+|-?)|script\\b' + tagBody + '>[\\s\\S]*?</script\\s*' + '|style\\b' + tagBody + '>[\\s\\S]*?</style\\s*' + '|/?[a-z]' + tagBody + ')>',
+        'gi'
+    );
 
 function removeTags(html) {
     var oldHtml;
@@ -488,7 +479,9 @@ function onData(data, socket) {
         return;
     }
 
+
     socket.join(socket.address.ip + data.uniqueID);
+    duelLogic(socket, data);
     switch (action) {
 
 
