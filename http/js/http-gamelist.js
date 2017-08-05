@@ -468,6 +468,7 @@ function renderList(JSONdata) {
         spectators = 0;
 
     $('#gamelistitems').html('');
+    console.log(JSONdata);
     for (rooms in JSONdata) {
         if (JSONdata.hasOwnProperty(rooms)) {
             player1 = (JSONdata[rooms].players[0]) ? '<label class="playername">' + JSONdata[rooms].players[0] + '</label>' : '___';
@@ -575,11 +576,12 @@ function pondata(data) {
         jsco,
         friends;
 
-    //console.log(data);
-    if (!data.clientEvent) {
-        gamelistcache = JSON.parse(data);
-        renderList(gamelistcache);
+    console.log(data);
+    if (!data.clientEvent && !data.duelAction) {
+        renderList(data);
         //console.log(gamelistcache);
+    } else if (data.duelAction) {
+        manualReciver(data);
     } else {
         if (data.admin) {
             window.admin = "1";
