@@ -577,7 +577,7 @@ function pondata(data) {
         friends;
 
     console.log(data);
-    if (!data.clientEvent && !data.duelAction) {
+    if (!data.clientEvent && !data.duelAction && !data.action) {
         renderList(data);
         //console.log(gamelistcache);
     } else if (data.duelAction) {
