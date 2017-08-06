@@ -464,17 +464,17 @@ function init(callback) {
         var output = {
             names: names,
             p0: {
-                action: action || 'duel',
+                duelAction: action || 'duel',
                 info: state,
                 field: generatePlayer1View()
             },
             p1: {
-                action: action || 'duel',
+                duelAction: action || 'duel',
                 info: state,
                 field: generatePlayer2View()
             },
             spectators: {
-                action: action || 'duel',
+                duelAction: action || 'duel',
                 info: state,
                 field: generateSpectatorView()
             }
@@ -789,21 +789,21 @@ function init(callback) {
         });
         callback({
             p0: {
-                action: 'reveal',
+                duelAction: 'reveal',
                 info: state,
                 reveal: reveal,
                 call: call,
                 player: player
             },
             p1: {
-                action: 'reveal',
+                duelAction: 'reveal',
                 info: state,
                 reveal: reveal,
                 call: call,
                 player: player
             },
             sepectators: {
-                action: 'reveal',
+                duelAction: 'reveal',
                 info: state,
                 reveal: reveal,
                 call: call,
@@ -896,7 +896,7 @@ function init(callback) {
             };
 
         result['p' + requester] = {
-            action: 'reveal',
+            duelAction: 'reveal',
             info: state,
             reveal: deck,
             call: 'view',
@@ -929,7 +929,7 @@ function init(callback) {
             deck = hideViewOfZone(deck);
         }
         result['p' + requester] = {
-            action: 'reveal',
+            duelAction: 'reveal',
             info: state,
             reveal: deck,
             call: 'view',
@@ -949,7 +949,7 @@ function init(callback) {
             };
         state.duelistChat.push('<pre>' + username + ' is viewing their deck.</pre>');
         result['p' + player] = {
-            action: 'reveal',
+            duelAction: 'reveal',
             info: state,
             reveal: deck,
             call: 'view',
@@ -974,7 +974,7 @@ function init(callback) {
         state.duelistChat.push('<pre>' + username + ' is viewing their extra deck.</pre>');
 
         result['p' + player] = {
-            action: 'reveal',
+            duelAction: 'reveal',
             info: state,
             reveal: deck,
             call: 'view',
@@ -1001,7 +1001,7 @@ function init(callback) {
         state.duelistChat.push('<pre>' + username + ' is viewing their excavated pile.</pre>');
 
         result['p' + player] = {
-            action: 'reveal',
+            duelAction: 'reveal',
             info: state,
             reveal: deck,
             call: 'view',
@@ -1031,7 +1031,7 @@ function init(callback) {
 
 
         result['p' + slot] = {
-            action: 'reveal',
+            duelAction: 'reveal',
             info: state,
             reveal: pile,
             call: 'view',
@@ -1375,7 +1375,7 @@ function init(callback) {
 
 
         output['p' + player] = {
-            action: 'question',
+            duelAction: 'question',
             type: type,
             options: options,
             answerLength: answerLength,
