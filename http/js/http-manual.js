@@ -1,5 +1,5 @@
 ﻿/*jslint browser:true, plusplus:true, bitwise:true*/
-/*global WebSocket, $, singlesitenav, console, enums, alert,  confirm, deckEditor, FileReader, databaseSystem, alertmodal*/
+/*global primus, $, singlesitenav, console, enums, alert,  confirm, deckEditor, FileReader, databaseSystem, alertmodal*/
 
 
 var manualDuel,
@@ -955,14 +955,14 @@ function endSiding() {
         alertmodal('Side Deck is not at orginal amount of', sidestach.side);
         return;
     }
-    manualServer.send(JSON.stringify({
+    primus.write(({
         action: 'lock',
         deck: sidedDeck,
         side: true
     }));
     setTimeout(function() {
         if (broadcast[activegame].player[0].ready && broadcast[activegame].player[1].ready) {
-            manualServer.send(JSON.stringify({
+            primus.write(({
                 action: 'start'
             }));
             return;
@@ -1118,7 +1118,7 @@ function manualMoveGeneric(index, zone) {
     if (zone) {
         message.movelocation = zone;
     }
-    manualServer.send(JSON.stringify(message));
+    primus.write((message));
 }
 
 function question(message) {
@@ -1143,7 +1143,7 @@ function manualReciver(message) {
         }
 
     }
-    console.log(message);
+    console.log('manualReciver', message);
     if (message.error) {
         if (internalLocal === 'surrendered') {
             alertmodal('An Error Occured');
@@ -1153,15 +1153,15 @@ function manualReciver(message) {
         }
     }
 
-    switch (message.action) {
+    switch (message.duelAction) {
         case 'ack':
-            manualServer.send(JSON.stringify({
+            primus.write(({
                 action: 'ack',
                 game: activegame
             }));
             break;
         case 'register':
-            manualServer.send(JSON.stringify({
+            primus.write(({
                 action: 'register',
                 name: localStorage.nickname
             }));
@@ -1319,43 +1319,11 @@ function manualReciver(message) {
 
 }
 
-function serverconnect() {
-    'use strict';
-
-    try {
-        window.manualServer.close();
-        return;
-    } catch (non_error) {
-        console.log('Attempted to close manualmode websocket. Failed. Everything is fine.');
-    }
-    var protocol = (location.protocol === 'https:') ? 'wss://' : 'ws://';
-    window.manualServer = new WebSocket(protocol + location.hostname, 'duel');
-    manualServer.onopen = function() {
-        console.log('Connected to Manual');
-    };
-    manualServer.onmessage = function(message) {
-        manualReciver(JSON.parse(message.data));
-    };
-    manualServer.onclose = function(message) {
-        console.log('Manual Connection Died, reconnecting,...');
-        if (internalLocal === 'surrendered') {
-            alertmodal('A Connection Error Occured');
-        }
-        setTimeout(serverconnect, 2000);
-    };
-    window.onbeforeunload = function() {
-        manualServer.onclose = function() {}; // disable onclose handler first
-        manualServer.close();
-    };
-
-}
-
-
 
 
 function manualHost(info) {
     'use strict';
-    manualServer.send(JSON.stringify({
+    primus.write(({
         action: 'host',
         name: localStorage.nickname,
         info: getManualDuelRequest(),
@@ -1380,7 +1348,7 @@ function manualJoin(game) {
     //        alertmodal('This site only works with Google Chrome');
     //        return;
     //    }
-    manualServer.send(JSON.stringify({
+    primus.write(({
         action: 'join',
         game: game,
         name: localStorage.nickname
@@ -1389,7 +1357,7 @@ function manualJoin(game) {
 
 function manualKickDuelist(slot) {
     'use strict';
-    manualServer.send(JSON.stringify({
+    primus.write(({
         action: 'kick',
         slot: slot,
         game: activegame
@@ -1400,7 +1368,7 @@ function manualKickDuelist(slot) {
 function manualLeave() {
     'use strict';
     try {
-        manualServer.send(JSON.stringify({
+        primus.write(({
             action: 'leave',
             game: activegame
         }));
@@ -1412,7 +1380,7 @@ window.onbeforeunload = manualLeave;
 
 function manualSurrender() {
     'use strict';
-    manualServer.send(JSON.stringify({
+    primus.write(({
         action: 'surrender'
     }));
 }
@@ -1431,7 +1399,7 @@ function manualLock() {
     'use strict';
     var deck = getdeck();
     if (deck.main.length > 39) {
-        manualServer.send(JSON.stringify({
+        primus.write(({
             action: 'lock',
             deck: deck
         }));
@@ -1445,7 +1413,7 @@ function manualStart() {
     'use strict';
     if (activegame) {
         if (broadcast[activegame].player[0].ready && broadcast[activegame].player[1].ready) {
-            manualServer.send(JSON.stringify({
+            primus.write(({
                 action: 'start'
             }));
             return;
@@ -1456,12 +1424,12 @@ function manualStart() {
 
 function manualChat(message) {
     'use strict';
-    manualServer.send(JSON.stringify({}));
+    primus.write(({}));
 }
 
 function manualNextPhase(phase) {
     'use strict';
-    manualServer.send(JSON.stringify({
+    primus.write(({
         action: 'nextPhase',
         phase: phase,
         sound: 'soundphase'
@@ -1470,14 +1438,14 @@ function manualNextPhase(phase) {
 
 function manualNextTurn() {
     'use strict';
-    manualServer.send({
+    primus.write({
         action: 'nextTurn'
     });
 }
 
 function manualChangeLifepoints(amount) {
     'use strict';
-    manualServer.send(JSON.stringify({
+    primus.write(({
         action: 'changeLifepoints',
         amount: amount,
         sound: 'soundchangeLifePoints'
@@ -1486,13 +1454,13 @@ function manualChangeLifepoints(amount) {
 
 function manualMoveCard(movement) {
     'use strict';
-    manualServer.send(JSON.stringify(movement));
+    primus.write((movement));
 }
 
 function manualShuffleHand() {
     'use strict';
     setTimeout(function() {
-        manualServer.send(JSON.stringify({
+        primus.write(({
             action: 'shuffleHand',
             sound: 'soundcardShuffle'
         }));
@@ -1504,7 +1472,7 @@ function manualShuffleHand() {
 
 function manualDraw() {
     'use strict';
-    manualServer.send(JSON.stringify({
+    primus.write(({
         action: 'draw',
         sound: 'sounddrawCard'
     }));
@@ -1512,7 +1480,7 @@ function manualDraw() {
 
 function manualExcavateTop() {
     'use strict';
-    manualServer.send(JSON.stringify({
+    primus.write(({
         action: 'excavate',
         sound: 'sounddrawCard'
     }));
@@ -1520,7 +1488,7 @@ function manualExcavateTop() {
 
 function manualShuffleDeck() {
     'use strict';
-    manualServer.send(JSON.stringify({
+    primus.write(({
         action: 'shuffleDeck',
         sound: 'soundcardShuffle'
     }));
@@ -1528,42 +1496,42 @@ function manualShuffleDeck() {
 
 function manualRevealTop() {
     'use strict';
-    manualServer.send(JSON.stringify({
+    primus.write(({
         action: 'revealTop'
     }));
 }
 
 function manualRevealBottom() {
     'use strict';
-    manualServer.send(JSON.stringify({
+    primus.write(({
         action: 'revealBottom'
     }));
 }
 
 function manualRevealDeck() {
     'use strict';
-    manualServer.send(JSON.stringify({
+    primus.write(({
         action: 'revealDeck'
     }));
 }
 
 function manualRevealExtra() {
     'use strict';
-    manualServer.send(JSON.stringify({
+    primus.write(({
         action: 'revealExtra'
     }));
 }
 
 function manualRevealExcavated() {
     'use strict';
-    manualServer.send(JSON.stringify({
+    primus.write(({
         action: 'revealExcavated'
     }));
 }
 
 function manualMill() {
     'use strict';
-    manualServer.send(JSON.stringify({
+    primus.write(({
         action: 'mill'
     }));
 }
@@ -1571,28 +1539,28 @@ function manualMill() {
 
 function manualMillRemovedCard() {
     'use strict';
-    manualServer.send(JSON.stringify({
+    primus.write(({
         action: 'millRemovedCard'
     }));
 }
 
 function manualMillRemovedCardFaceDown() {
     'use strict';
-    manualServer.send(JSON.stringify({
+    primus.write(({
         action: 'millRemovedCardFaceDown'
     }));
 }
 
 function manualViewDeck() {
     'use strict';
-    manualServer.send(JSON.stringify({
+    primus.write(({
         action: 'viewDeck'
     }));
 }
 
 function manualViewBanished() {
     'use strict';
-    manualServer.send(JSON.stringify({
+    primus.write(({
         action: 'viewBanished',
         player: manualActionReference.player
     }));
@@ -1600,14 +1568,14 @@ function manualViewBanished() {
 
 function manualFlipDeck() {
     'use strict';
-    manualServer.send(JSON.stringify({
+    primus.write(({
         action: 'flipDeck'
     }));
 }
 
 function manualAddCounter() {
     'use strict';
-    manualServer.send(JSON.stringify({
+    primus.write(({
         action: 'addCounter',
         uid: manualActionReference.uid
     }));
@@ -1615,7 +1583,7 @@ function manualAddCounter() {
 
 function manualRemoveCounter() {
     'use strict';
-    manualServer.send(JSON.stringify({
+    primus.write(({
         action: 'removeCounter',
         uid: manualActionReference.uid
     }));
@@ -1626,7 +1594,7 @@ function manualRemoveCounter() {
 
 function manualAttack() {
     'use strict';
-    manualServer.send(JSON.stringify({
+    primus.write(({
         action: 'attack',
         source: manualActionReference,
         target: targetreference,
@@ -1649,7 +1617,7 @@ function manualAttackDirectly() {
 
 function manualTarget(target) {
     'use strict';
-    manualServer.send(JSON.stringify({
+    primus.write(({
         action: 'target',
         target: target
     }));
@@ -1660,7 +1628,7 @@ function manualTarget(target) {
 
 function manualRemoveToken() {
     'use strict';
-    manualServer.send(JSON.stringify({
+    primus.write(({
         action: 'removeToken',
         uid: manualActionReference.uid
     }));
@@ -1668,7 +1636,7 @@ function manualRemoveToken() {
 
 function manualViewExtra() {
     'use strict';
-    manualServer.send(JSON.stringify({
+    primus.write(({
         action: 'viewExtra',
         player: manualActionReference.player
     }));
@@ -1676,7 +1644,7 @@ function manualViewExtra() {
 
 function manualViewExcavated() {
     'use strict';
-    manualServer.send(JSON.stringify({
+    primus.write(({
         action: 'viewExcavated',
         player: manualActionReference.player
     }));
@@ -1684,7 +1652,7 @@ function manualViewExcavated() {
 
 function manualViewGrave() {
     'use strict';
-    manualServer.send(JSON.stringify({
+    primus.write(({
         action: 'viewGrave',
         player: manualActionReference.player
     }));
@@ -1692,7 +1660,7 @@ function manualViewGrave() {
 
 function manualViewXYZMaterials() {
     'use strict';
-    manualServer.send(JSON.stringify({
+    primus.write(({
         action: 'viewXYZ',
         index: manualActionReference.index,
         player: manualActionReference.player
@@ -1841,7 +1809,7 @@ function makePendulumZoneR(card) {
 function manualSignalEffect() {
     'use strict';
 
-    manualServer.send(JSON.stringify({
+    primus.write(({
         action: 'effect',
         id: manualActionReference.id,
         player: manualActionReference.player,
@@ -1859,7 +1827,7 @@ function manualNormalSummon(index) {
 
     message.action = 'moveCard';
     message.sound = 'soundspecialSummonFromExtra';
-    manualServer.send(JSON.stringify(message));
+    primus.write((message));
 }
 
 function manualToAttack(index) {
@@ -1871,7 +1839,7 @@ function manualToAttack(index) {
 
     message.action = 'moveCard';
     message.sound = 'soundspecialSummonFromExtra';
-    manualServer.send(JSON.stringify(message));
+    primus.write((message));
 }
 
 function manualSetMonster(index) {
@@ -1883,7 +1851,7 @@ function manualSetMonster(index) {
 
     message.action = 'moveCard';
     message.sound = 'soundspecialSummonFromExtra';
-    manualServer.send(JSON.stringify(message));
+    primus.write((message));
 }
 
 function manualToDefence() {
@@ -1894,7 +1862,7 @@ function manualToDefence() {
         message = makeCardMovement(manualActionReference, end);
 
     message.action = 'moveCard';
-    manualServer.send(JSON.stringify(message));
+    primus.write((message));
 }
 
 function manualToFaceDownDefence() {
@@ -1905,7 +1873,7 @@ function manualToFaceDownDefence() {
         message = makeCardMovement(manualActionReference, end);
 
     message.action = 'moveCard';
-    manualServer.send(JSON.stringify(message));
+    primus.write((message));
 }
 
 function manualToFaceUpDefence() {
@@ -1916,7 +1884,7 @@ function manualToFaceUpDefence() {
         message = makeCardMovement(manualActionReference, end);
 
     message.action = 'moveCard';
-    manualServer.send(JSON.stringify(message));
+    primus.write((message));
 }
 
 function manualSetMonsterFaceUp(index) {
@@ -1928,7 +1896,7 @@ function manualSetMonsterFaceUp(index) {
 
     message.action = 'moveCard';
     message.sound = 'soundspecialSummonFromExtra';
-    manualServer.send(JSON.stringify(message));
+    primus.write((message));
 }
 
 function manualActivate(index) {
@@ -1940,7 +1908,7 @@ function manualActivate(index) {
 
     message.action = 'moveCard';
     message.sound = 'soundactivateCard';
-    manualServer.send(JSON.stringify(message));
+    primus.write((message));
 }
 
 function manualActivateFieldSpell() {
@@ -1950,7 +1918,7 @@ function manualActivateFieldSpell() {
         message = makeCardMovement(manualActionReference, end);
     message.sound = 'soundactivateCard';
     message.action = 'moveCard';
-    manualServer.send(JSON.stringify(message));
+    primus.write((message));
 }
 
 function manualActivateFieldSpellFaceDown() {
@@ -1961,7 +1929,7 @@ function manualActivateFieldSpellFaceDown() {
 
     message.action = 'moveCard';
     message.sound = 'soundsetCard';
-    manualServer.send(JSON.stringify(message));
+    primus.write((message));
 }
 
 function manualSetSpell(index) {
@@ -1973,7 +1941,7 @@ function manualSetSpell(index) {
 
     message.action = 'moveCard';
     message.sound = 'soundsetCard';
-    manualServer.send(JSON.stringify(message));
+    primus.write((message));
 }
 
 function manualSTFlipDown() {
@@ -1985,7 +1953,7 @@ function manualSTFlipDown() {
 
     message.action = 'moveCard';
     message.sound = 'soundflipSummon';
-    manualServer.send(JSON.stringify(message));
+    primus.write((message));
 }
 
 function manualSTFlipUp() {
@@ -1997,7 +1965,7 @@ function manualSTFlipUp() {
 
     message.action = 'moveCard';
     message.sound = 'soundflipSummon';
-    manualServer.send(JSON.stringify(message));
+    primus.write((message));
 }
 
 function manualToExcavate() {
@@ -2008,7 +1976,7 @@ function manualToExcavate() {
 
     message.movelocation = 'EXCAVATED';
     message.action = 'moveCard';
-    manualServer.send(JSON.stringify(message));
+    primus.write((message));
 }
 
 function manualToExtra() {
@@ -2020,12 +1988,12 @@ function manualToExtra() {
     message.action = 'moveCard';
 
     message.moveposition = 'FaceDown';
-    manualServer.send(JSON.stringify(message));
+    primus.write((message));
 }
 
 function manualToOpponent() {
     'use strict';
-    manualServer.send(JSON.stringify({
+    primus.write(({
         action: 'give',
         target: manualActionReference
     }));
@@ -2033,7 +2001,7 @@ function manualToOpponent() {
 
 function manualToOpponentsHand() {
     'use strict';
-    manualServer.send(JSON.stringify({
+    primus.write(({
         action: 'give',
         target: manualActionReference,
         choice: 'HAND'
@@ -2055,13 +2023,13 @@ function manualToTopOfDeck() {
         message = makeCardMovement(manualActionReference, end);
 
     message.action = 'moveCard';
-    manualServer.send(JSON.stringify(message));
+    primus.write((message));
 }
 
 function manualToBottomOfDeck() {
     'use strict';
 
-    manualServer.send(JSON.stringify({
+    primus.write(({
         action: 'offsetDeck'
     }));
     var index = 0,
@@ -2070,7 +2038,7 @@ function manualToBottomOfDeck() {
 
     message.action = 'moveCard';
     setTimeout(function() {
-        manualServer.send(JSON.stringify(message));
+        primus.write((message));
     }, 300);
 
 }
@@ -2087,7 +2055,7 @@ function manualSlideRight() {
     }
     message.moveindex = index;
     message.action = 'moveCard';
-    manualServer.send(JSON.stringify(message));
+    primus.write((message));
 }
 
 
@@ -2104,7 +2072,7 @@ function manualSlideLeft() {
     }
     message.moveindex = index;
     message.action = 'moveCard';
-    manualServer.send(JSON.stringify(message));
+    primus.write((message));
 }
 
 function manualOverlay() {
@@ -2118,7 +2086,7 @@ function manualOverlay() {
         var message = makeCardMovement(card, card);
         message.overlayindex = overlayindex;
         message.action = 'moveCard';
-        manualServer.send(JSON.stringify(message));
+        primus.write((message));
     });
 }
 
@@ -2134,7 +2102,7 @@ function manualXYZSummon(target) {
         message = makeCardMovement(manualActionReference, end);
 
     message.action = 'moveCard';
-    manualServer.send(JSON.stringify(message));
+    primus.write((message));
     setTimeout(function() {
         var overlayindex = 0;
         overlaylist.forEach(function(card, cindex) {
@@ -2143,7 +2111,7 @@ function manualXYZSummon(target) {
             message.overlayindex = overlayindex;
             message.action = index;
             message.action = 'moveCard';
-            manualServer.send(JSON.stringify(message));
+            primus.write((message));
         });
     }, 1000);
 }
@@ -2156,7 +2124,7 @@ function manualToGrave() {
         message = makeCardMovement(manualActionReference, end);
 
     message.action = 'moveCard';
-    manualServer.send(JSON.stringify(message));
+    primus.write((message));
 }
 
 function manualToOpponentsGrave() {
@@ -2168,7 +2136,7 @@ function manualToOpponentsGrave() {
 
     message.action = 'moveCard';
     message.moveplayer = moveplayer;
-    manualServer.send(JSON.stringify(message));
+    primus.write((message));
 }
 
 function manualToRemoved() {
@@ -2178,7 +2146,7 @@ function manualToRemoved() {
         message = makeCardMovement(manualActionReference, end);
 
     message.action = 'moveCard';
-    manualServer.send(JSON.stringify(message));
+    primus.write((message));
 }
 
 
@@ -2191,7 +2159,7 @@ function manualToExtraFaceUp() {
 
     message.action = 'moveCard';
     message.moveposition = 'FaceUp';
-    manualServer.send(JSON.stringify(message));
+    primus.write((message));
 }
 
 function manualToHand() {
@@ -2205,7 +2173,7 @@ function manualToHand() {
         message = makeCardMovement(manualActionReference, end);
 
     message.action = 'moveCard';
-    manualServer.send(JSON.stringify(message));
+    primus.write((message));
 }
 
 function manualToExtra() {
@@ -2217,7 +2185,7 @@ function manualToExtra() {
     message.action = 'moveCard';
 
     message.moveposition = 'FaceDown';
-    manualServer.send(JSON.stringify(message));
+    primus.write((message));
 }
 
 function manualToRemovedFacedown() {
@@ -2227,7 +2195,7 @@ function manualToRemovedFacedown() {
         message = makeCardMovement(manualActionReference, end);
     message.action = 'moveCard';
     message.moveposition = 'FaceDown';
-    manualServer.send(JSON.stringify(message));
+    primus.write((message));
 }
 
 function manualActivateField() {
@@ -2240,7 +2208,7 @@ function manualActivateField() {
 
     message.action = 'moveCard';
     message.sound = 'soundsetCard';
-    manualServer.send(JSON.stringify(message));
+    primus.write((message));
 }
 
 function manualToPZoneL() {
@@ -2254,7 +2222,7 @@ function manualToPZoneL() {
 
     message.action = 'moveCard';
     message.sound = 'soundsetCard';
-    manualServer.send(JSON.stringify(message));
+    primus.write((message));
 }
 
 function manualToPZoneR() {
@@ -2267,12 +2235,12 @@ function manualToPZoneR() {
 
     message.action = 'moveCard';
     message.sound = 'soundsetCard';
-    manualServer.send(JSON.stringify(message));
+    primus.write((message));
 }
 
 function manualRevealHandSingle() {
     'use strict';
-    manualServer.send(JSON.stringify({
+    primus.write(({
         action: 'revealHandSingle',
         card: manualActionReference
     }));
@@ -2280,7 +2248,7 @@ function manualRevealHandSingle() {
 
 function manualRevealHand() {
     'use strict';
-    manualServer.send(JSON.stringify({
+    primus.write(({
         action: 'revealHand',
         card: manualActionReference
     }));
@@ -2292,7 +2260,7 @@ function manualRevealExtraDeckRandom() {
     var card = manualActionReference;
     card.index = Math.floor((Math.random() * $('#automationduelfield .p' + orient(manualActionReference.player) + '.EXTRA').length));
 
-    manualServer.send(JSON.stringify({
+    primus.write(({
         action: 'reveal',
         card: card
     }));
@@ -2304,7 +2272,7 @@ function manualRevealExcavatedRandom() {
     var card = manualActionReference;
     card.index = Math.floor((Math.random() * $('#automationduelfield .p' + orient(manualActionReference.player) + '.EXCAVATED').length));
 
-    manualServer.send(JSON.stringify({
+    primus.write(({
         action: 'reveal',
         card: card
     }));
@@ -2316,7 +2284,7 @@ function manualRevealDeckRandom() {
     var card = manualActionReference;
     card.index = Math.floor((Math.random() * $('#automationduelfield .p' + orient(manualActionReference.player) + '.DECK').length));
 
-    manualServer.send(JSON.stringify({
+    primus.write(({
         action: 'reveal',
         card: card
     }));
@@ -2419,7 +2387,7 @@ function resolveQuestion(answer) {
     activeQuestion.answer.push(answer);
 
     if (activeQuestion.answer.length >= activeQuestion.answerLength) {
-        manualServer.send(JSON.stringify(activeQuestion));
+        primus.write((activeQuestion));
         $('#revealed, #revealedclose').css('display', 'none');
     }
 }
@@ -2811,7 +2779,7 @@ function manualToken(index) {
     card.id = parseInt($('#tokendropdown').val(), 10);
     card.index = index;
     card.action = 'makeToken';
-    manualServer.send(JSON.stringify(card));
+    primus.write((card));
 }
 
 function selectionzoneonclick(choice, zone) {
@@ -3322,19 +3290,6 @@ function processCardHover(event) {
 
 $(document).ready(function() {
     'use strict';
-    serverconnect();
-    setInterval(function() {
-        if (manualServer.readyState !== 1) {
-            window.reload();
-        }
-    }, 60000);
-    setTimeout(function() {
-        setInterval(function() {
-            if (manualServer.readyState !== 1) {
-                alertmodal('...DISCONNECTED...');
-            }
-        }, 3000);
-    }, 15000);
     $('.imgContainer').attr('src', 'img/textures/cover.jpg');
     $('body').on('mouseover', '.card, .revealedcard', processCardHover);
     $('#manualcontrols button').click(function() {
@@ -3370,7 +3325,7 @@ var lastchat;
 
 function manualRoll() {
     'use strict';
-    manualServer.send(JSON.stringify({
+    primus.write(({
         action: 'rollDie',
         name: localStorage.nickname
     }));
@@ -3378,7 +3333,7 @@ function manualRoll() {
 
 function manualFlip() {
     'use strict';
-    manualServer.send(JSON.stringify({
+    primus.write(({
         action: 'flipCoin',
         name: localStorage.nickname
     }));
@@ -3386,7 +3341,7 @@ function manualFlip() {
 
 function manualRPS() {
     'use strict';
-    manualServer.send(JSON.stringify({
+    primus.write(({
         action: 'rps',
         name: localStorage.nickname
     }));
@@ -3515,7 +3470,7 @@ $('#lobbychatinput, #sidechatinput, #spectatorchatinput').keypress(function(e) {
                 return;
             }
         }
-        manualServer.send(JSON.stringify({
+        primus.write(({
             action: 'chat',
             name: localStorage.nickname,
             chat: $(e.currentTarget).val(),

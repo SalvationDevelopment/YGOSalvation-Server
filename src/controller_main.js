@@ -32,7 +32,6 @@ const child_process = require('child_process'),
     pack = require('../package.json'),
     adminlist = hotload('./record_admins.js'),
     banlistedUsers = hotload('./record_bansystem.js'),
-    updateHTTP = require('./update_http.js'),
     HTTP_PORT = pack.port || 80,
     ddos = new Ddos({
         maxcount: 2000,
@@ -56,7 +55,8 @@ const child_process = require('child_process'),
         Irate: '::ffff:127.0.0.1',
         Chibi: '::ffff:127.0.0.1',
         OmniMage: '::ffff:127.0.0.1'
-    };
+    },
+    manualController = require('./controller_dueling.js');
 
 var userlist = [],
     chatbox = [],
@@ -102,39 +102,11 @@ function mapCards(deck) {
     });
 }
 
-updateHTTP(function(error, database, banlist) {
-    if (!error) {
-        process.database = database;
-        process.banlist = banlist;
-    } else {
-        console.log('No DB or banlist');
-    }
-});
-
-fs.watch('./http/banlist/', function() {
-    updateHTTP(function(error, database, banlist) {
-        if (!error) {
-            process.database = database;
-            process.banlist = banlist;
-        } else {
-            console.log('No DB or banlist');
-        }
-    });
-});
-
 function gitRoute(req, res, next) {
-
-
-    updateHTTP(function(error, database, banlist) {
-        res.write('Updated Server, generating files...');
-        process.database = database;
-        process.banlist = banlist;
-        child_process.spawn('git', ['pull'], {}, function() {
-            console.log('finished running git');
-        });
+    manualController.setter();
+    child_process.spawn('git', ['pull'], {}, function() {
+        console.log('finished running git');
     });
-
-
 }
 
 app.post('/git', function(req, res, next) {
@@ -171,23 +143,16 @@ try {
     primusServer.listen(HTTP_PORT);
 }
 
-var WebSocketServer = require('ws').Server,
-    wss = new WebSocketServer({
-        noServer: true
-    });
-var manualServer = require('./controller_dueling.js')(wss);
-primusServer.on('upgrade', function(req, socket, head) {
-    wss.handleUpgrade(req, socket, head, function(websocket) {
-        manualServer(websocket);
-    });
-});
+
 
 
 primus = new Primus(primusServer, {
     parser: 'JSON'
 });
+
 primus.use('rooms', Rooms);
 
+var duelLogic = manualController.init(primus)
 
 
 var Datastore = require('nedb'),
@@ -450,12 +415,11 @@ function aiRestartCall(data) {
 
 
 
-var tagBody = '(?:[^"\'>]|"[^"]*"|\'[^\']*\')*';
-
-var tagOrComment = new RegExp(
-    '<(?:' + '!--(?:(?:-*[^->])*--+|-?)|script\\b' + tagBody + '>[\\s\\S]*?</script\\s*' + '|style\\b' + tagBody + '>[\\s\\S]*?</style\\s*' + '|/?[a-z]' + tagBody + ')>',
-    'gi'
-);
+var tagBody = '(?:[^"\'>]|"[^"]*"|\'[^\']*\')*',
+    tagOrComment = new RegExp(
+        '<(?:' + '!--(?:(?:-*[^->])*--+|-?)|script\\b' + tagBody + '>[\\s\\S]*?</script\\s*' + '|style\\b' + tagBody + '>[\\s\\S]*?</style\\s*' + '|/?[a-z]' + tagBody + ')>',
+        'gi'
+    );
 
 function removeTags(html) {
     var oldHtml;
@@ -487,6 +451,7 @@ function onData(data, socket) {
     if (save === false) {
         return;
     }
+
 
     socket.join(socket.address.ip + data.uniqueID);
     switch (action) {
@@ -656,7 +621,7 @@ function onData(data, socket) {
             });
             break;
         default:
-            console.log(data);
+            duelLogic(socket, data);
     }
 
     socketwatcher.exit();
