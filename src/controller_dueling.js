@@ -7,18 +7,44 @@
  */
 
 var fs = require('fs'),
-    jsonfile = require('jsonfile');
-
-
-var validateDeck = require('./validate_deck.js'),
+    validateDeck = require('./validate_deck.js'),
     http = require('http'),
     https = require('https'),
     path = require('path'),
     database = [],
-    automatic = require('./engine_automatic.js');
+    automatic = require('./engine_automatic.js'),
+    banlist = {};
 
 
-module.exports = function(wss) {
+
+var hotload = require('hotload');
+
+function getBanlist() {
+    // this needs to be rewritten;
+    banlist = {};
+    var files = fs.readdirSync('./http/banlist/');
+    files.forEach(function(filename) {
+        if (filename.indexOf('.js') > -1) {
+            var listname = filename.slice(0, -3);
+            banlist[listname] = hotload('../http/banlist/' + '/' + filename);
+        }
+    });
+    fs.writeFile('./http/manifest/banlist.json', JSON.stringify(banlist, null, 1), function() {});
+    return banlist;
+}
+
+var updateHTTP = require('./update_http.js');
+
+function setter() {
+    banlist = getBanlist();
+    updateHTTP(function(error, data) {
+        database = JSON.parse(data);
+    });
+}
+
+setter();
+
+function init(primus) {
 
     var realgames = [],
         stateSystem = require('./engine_manual.js'),
@@ -47,7 +73,7 @@ module.exports = function(wss) {
             cardpool: settings.info.cardpool,
             noshuffle: 0,
             prerelease: settings.info.prerelease,
-            legacyfield: (process.banlist[settings.info.banlist].masterRule !== 4),
+            legacyfield: (banlist[settings.info.banlist].masterRule !== 4),
             rule: 0,
             startLP: settings.info.startLP,
             starthand: 0,
@@ -94,18 +120,18 @@ module.exports = function(wss) {
                     if (stateSystem[game].players) {
                         if (stateSystem[game].players[0]) {
                             if (stateSystem[game].players[0].slot === 0) {
-                                stateSystem[game].players[0].send(JSON.stringify(view['p' + stateSystem[game].players[0].slot]));
+                                stateSystem[game].players[0].write((view['p' + stateSystem[game].players[0].slot]));
                             }
                         }
                         if (stateSystem[game].players[1]) {
                             if (stateSystem[game].players[1].slot === 1) {
-                                stateSystem[game].players[1].send(JSON.stringify(view['p' + stateSystem[game].players[1].slot]));
+                                stateSystem[game].players[1].write((view['p' + stateSystem[game].players[1].slot]));
                             }
                         }
 
                         Object.keys(stateSystem[game].spectators).forEach(function(username) {
                             var spectator = stateSystem[game].spectators[username];
-                            spectator.send(JSON.stringify(view.spectators));
+                            spectator.write((view.spectators));
                         });
                     }
                 }
@@ -137,7 +163,7 @@ module.exports = function(wss) {
 
 
 
-    wss.broadcast = function broadcast() {
+    primus.duelBroadcast = function broadcast() {
         Object.keys(games).forEach(function(key) {
             try {
                 if (games[key].player[0].name === '' && games[key].player[1].name === '') {
@@ -150,16 +176,9 @@ module.exports = function(wss) {
                 console.log('failedDeletion', failedDeletion);
             }
         });
-        wss.clients.forEach(function each(client) {
-            try {
-                client.send(JSON.stringify({
-                    action: 'broadcast',
-                    data: games,
-                    username: client.username
-                }));
-            } catch (failedSend) {
-                console.log('failedSend', failedSend);
-            }
+        primus.write({
+            duelAction: 'broadcast',
+            data: games
         });
     };
 
@@ -174,9 +193,9 @@ module.exports = function(wss) {
             }
         });
         realgames = [];
-        wss.clients.forEach(function each(client) {
-            client.send(JSON.stringify({
-                action: 'ack'
+        primus.clients.forEach(function each(client) {
+            client.write(({
+                duelAction: 'ack'
             }));
         });
     }
@@ -184,12 +203,12 @@ module.exports = function(wss) {
     //setInterval(ackgames, 60000);
 
     function duelBroadcast(duel, message) {
-        stateSystem[duel].players[0].send(JSON.stringify(message));
-        stateSystem[duel].players[1].send(JSON.stringify(message));
+        stateSystem[duel].players[0].write((message));
+        stateSystem[duel].players[1].write((message));
     }
 
     function responseHandler(socket, message) {
-        console.log(message);
+        //console.log(message);
         var generated,
             joined = false,
             player1,
@@ -216,9 +235,9 @@ module.exports = function(wss) {
                 stateSystem[generated].players[0] = socket;
                 stateSystem[generated].setNames(socket.username, 0);
                 socket.activeduel = generated;
-                wss.broadcast(games);
-                socket.send(JSON.stringify({
-                    action: 'lobby',
+                primus.duelBroadcast(games);
+                socket.write(({
+                    duelAction: 'lobby',
                     game: generated
                 }));
                 socket.slot = 0;
@@ -249,14 +268,14 @@ module.exports = function(wss) {
                 if (!joined && stateSystem[message.game]) {
                     stateSystem[message.game].spectators[message.name] = socket;
                     if (games[message.game].started) {
-                        socket.send(JSON.stringify(stateSystem[message.game].generateView('start').spectators));
+                        socket.write((stateSystem[message.game].generateView('start').spectators));
                         socket.activeduel = message.game;
                     }
                 }
                 games[message.game].delCount = 0;
-                wss.broadcast(games);
-                socket.send(JSON.stringify({
-                    action: 'lobby',
+                primus.duelBroadcast(games);
+                socket.write(({
+                    duelAction: 'lobby',
                     game: message.game
                 }));
                 socket.activeduel = message.game;
@@ -264,8 +283,8 @@ module.exports = function(wss) {
             case 'kick':
                 if (socket.slot !== undefined) {
                     if (socket.slot === 0) {
-                        stateSystem[message.game].players[message.slot].send(JSON.stringify({
-                            action: 'kick'
+                        stateSystem[message.game].players[message.slot].write(({
+                            duelAction: 'kick'
                         }));
 
                     }
@@ -291,27 +310,27 @@ module.exports = function(wss) {
                         delete games[activeduel];
                     }
                 }
-                wss.broadcast(games);
-                socket.send(JSON.stringify({
-                    action: 'leave'
+                primus.duelBroadcast(games);
+                socket.write(({
+                    duelAction: 'leave'
                 }));
 
                 break;
             case 'surrender':
                 if (socket.slot !== undefined) {
-                    socket.send(JSON.stringify({
-                        action: 'surrender',
+                    socket.write(({
+                        duelAction: 'surrender',
                         by: socket.slot
                     }));
                     stateSystem[activeduel].surrender(games[activeduel].player[socket.slot].name);
 
-                    stateSystem[activeduel].players[0].send(JSON.stringify({
-                        action: 'side',
+                    stateSystem[activeduel].players[0].write(({
+                        duelAction: 'side',
                         deck: stateSystem[activeduel].decks[0]
                     }));
                     games[activeduel].player[0].ready = false;
-                    stateSystem[activeduel].players[1].send(JSON.stringify({
-                        action: 'side',
+                    stateSystem[activeduel].players[1].write(({
+                        duelAction: 'side',
                         deck: stateSystem[activeduel].decks[1]
                     }));
                     games[activeduel].player[1].ready = false;
@@ -321,23 +340,26 @@ module.exports = function(wss) {
 
                 break;
             case 'lock':
+                console.log('attempting to lock');
                 if (games[activeduel] === undefined) {
+                    console.log('activeduel not defined');
                     return;
                 }
                 if (games[activeduel].player[socket.slot].ready) {
                     games[activeduel].player[socket.slot].ready = false;
                     stateSystem[activeduel].lock[socket.slot] = false;
-                    wss.broadcast(games);
+                    primus.duelBroadcast(games, 'new game locked');
                     break;
                 }
                 if (socket.slot !== undefined) {
                     try {
-                        message.validate = validateDeck(message.deck, process.banlist[games[activeduel].banlist], database, games[activeduel].cardpool, games[activeduel].prerelease);
+                        message.validate = validateDeck(message.deck, banlist[games[activeduel].banlist], database, games[activeduel].cardpool, games[activeduel].prerelease);
+                        console.log('exiting validation');
                         if (message.validate) {
                             if (message.validate.error) {
-                                socket.send(JSON.stringify({
+                                socket.write(({
                                     errorType: 'validation',
-                                    action: 'error',
+                                    duelAction: 'error',
                                     error: message.validate.error,
                                     msg: message.validate.msg
                                 }));
@@ -345,14 +367,14 @@ module.exports = function(wss) {
                             }
                         }
                     } catch (error) {
-                        socket.send(JSON.stringify({
-                            error: error.message,
+                        socket.write(({
+                            error: error,
                             stack: error.stack,
-                            input: JSON.stringify(message)
+                            input: (message)
                         }));
-                        socket.send(JSON.stringify({
+                        socket.write(({
                             errorType: 'validation',
-                            action: 'error',
+                            duelAction: 'error',
                             error: 'Server Error',
                             msg: 'Server Error'
                         }));
@@ -363,16 +385,17 @@ module.exports = function(wss) {
                     stateSystem[activeduel].lock[socket.slot] = true;
 
                     stateSystem[activeduel].decks[socket.slot] = message.deck;
-                    socket.send(JSON.stringify({
-                        action: 'lock',
+                    console.log('deck is locked');
+                    socket.write(({
+                        duelAction: 'lock',
                         result: 'success'
                     }));
-                    wss.broadcast(games);
+                    primus.duelBroadcast(games);
                     if (games[activeduel].player[socket.slot].ready) {
                         stateSystem[activeduel].duelistChat('Server', '<pre>' + games[activeduel].player[socket.slot].name + ' locked in deck.</pre>');
                     }
-                    socket.send(JSON.stringify({
-                        action: 'slot',
+                    socket.write(({
+                        duelAction: 'slot',
                         slot: socket.slot
                     }));
 
@@ -388,7 +411,7 @@ module.exports = function(wss) {
                         automatic(stateSystem[activeduel]);
                     }
                     games[activeduel].started = true;
-                    wss.broadcast(games);
+                    primus.duelBroadcast(games);
                 }
                 break;
             case 'moveCard':
@@ -616,8 +639,8 @@ module.exports = function(wss) {
                     break;
                 }
                 if (stateSystem[activeduel]) {
-                    socket.send(JSON.stringify({
-                        action: 'log',
+                    socket.write(({
+                        duelAction: 'log',
                         log: log[activeduel]
                     }));
                 }
@@ -628,7 +651,7 @@ module.exports = function(wss) {
                 }
                 if (socket.slot !== undefined) {
                     duelBroadcast(activeduel, {
-                        action: 'attack',
+                        duelAction: 'attack',
                         source: message.source,
                         target: message.target
                     });
@@ -637,7 +660,7 @@ module.exports = function(wss) {
             case 'effect':
                 if (socket.slot !== undefined) {
                     duelBroadcast(activeduel, {
-                        action: 'effect',
+                        duelAction: 'effect',
                         id: message.id,
                         player: message.player,
                         index: message.index,
@@ -648,7 +671,7 @@ module.exports = function(wss) {
             case 'target':
                 if (socket.slot !== undefined) {
                     duelBroadcast(activeduel, {
-                        action: 'target',
+                        duelAction: 'target',
                         target: message.target
                     });
                 }
@@ -656,7 +679,7 @@ module.exports = function(wss) {
             case 'give':
                 if (socket.slot !== undefined) {
                     duelBroadcast(activeduel, {
-                        action: 'give',
+                        duelAction: 'give',
                         target: message.target,
                         choice: message.choice
                     });
@@ -669,12 +692,12 @@ module.exports = function(wss) {
             log[activeduel].push(message);
         }
         if (socket.slot !== undefined && message.sound) {
-            stateSystem[activeduel].players[0].send(JSON.stringify({
-                action: 'sound',
+            stateSystem[activeduel].players[0].write(({
+                duelAction: 'sound',
                 sound: message.sound
             }));
-            stateSystem[activeduel].players[1].send(JSON.stringify({
-                action: 'sound',
+            stateSystem[activeduel].players[1].write(({
+                duelAction: 'sound',
                 sound: message.sound
             }));
         }
@@ -682,43 +705,22 @@ module.exports = function(wss) {
     }
 
 
-    function websocketHandle(socket) {
+    function websocketHandle(socket, message) {
 
+        try {
+            responseHandler(socket, message);
+        } catch (error) {
+            console.log(error);
+            socket.write({
+                error: error.message,
+                stack: error.stack,
+                input: (message)
+            });
+        }
 
-        socket.on('message', function(message) {
-            try {
-                responseHandler(socket, JSON.parse(message));
-            } catch (error) {
-                console.log(error);
-                socket.send(JSON.stringify({
-                    error: error.message,
-                    stack: error.stack,
-                    input: JSON.parse(message)
-                }));
-            }
-        });
-        socket.on('close', function(message) {
-            try {
-                responseHandler(socket, {
-                    action: 'leave'
-                });
-            } catch (error) {
-                console.log(error);
-            }
-        });
-        socket.on('error', function(errorMessage) {
-            console.log(errorMessage);
-        });
-        socket.send(JSON.stringify({
-            action: 'broadcast',
-            data: games
-        }));
-        socket.send(JSON.stringify({
-            action: 'register'
-        }));
     }
-
-    setInterval(wss.broadcast, 15000);
 
     return websocketHandle;
 };
+
+module.exports = { init: init, setter: setter };

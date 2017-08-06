@@ -1,21 +1,8 @@
 /*jslint plusplus :true*/
 
-
-function getBanlist() {
-    var banlist = {},
-        files = fs.readdirSync('../http/banlist/');
-    files.forEach(function(filename) {
-        if (filename.indexOf('.js') > -1) {
-            var listname = filename.slice(0, -3);
-            banlist[listname] = require('../http/banlist/' + '/' + filename);
-        }
-    });
-    return banlist;
-}
-
 function validateDeck(deck, banlist, database, cardpool, prerelease) {
     'use strict';
-    database = process.database;
+    console.log(database[0], database.length);
     var main = {},
         side = {},
         extra = {},
@@ -135,8 +122,7 @@ function validateDeck(deck, banlist, database, cardpool, prerelease) {
                 validate.error = true;
                 validate.msg = "Error loading deck: check Deck Edit to verify that your deck looks fine";
                 return validate;
-            }
-            else {               
+            } else {
                 if (main[card] > 3 || side[card] && main[card] + side[card] > 3) {
                     validate.error = true;
                     validate.msg = "You can't have " + cardAmount + " copies of " + '"' + reference.name + '"';
@@ -150,8 +136,7 @@ function validateDeck(deck, banlist, database, cardpool, prerelease) {
                 validate.error = true;
                 validate.msg = "Error loading deck: check Deck Edit to verify that your deck looks fine";
                 return validate;
-            }
-            else {    
+            } else {
                 if (side[card] > 3 || main[card] && main[card] + side[card] > 3) {
                     validate.error = true;
                     validate.msg = "You can't have " + cardAmount + " copies of " + '"' + reference.name + '"';
@@ -164,8 +149,7 @@ function validateDeck(deck, banlist, database, cardpool, prerelease) {
                 validate.error = true;
                 validate.msg = "Error loading deck: check Deck Edit to verify that your deck looks fine";
                 return validate;
-            }
-            else {    
+            } else {
                 var reference = getCardById(card);
                 if (extra[card] > 3 || side[card] && extra[card] + side[card] > 3) {
                     validate.error = true;
