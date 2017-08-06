@@ -12,10 +12,39 @@ var fs = require('fs'),
     https = require('https'),
     path = require('path'),
     database = [],
-    automatic = require('./engine_automatic.js');
+    automatic = require('./engine_automatic.js'),
+    banlist = {};
 
 
-module.exports = function(primus) {
+
+var hotload = require('hotload');
+
+function getBanlist() {
+    // this needs to be rewritten;
+    banlist = {};
+    var files = fs.readdirSync('./http/banlist/');
+    files.forEach(function(filename) {
+        if (filename.indexOf('.js') > -1) {
+            var listname = filename.slice(0, -3);
+            banlist[listname] = hotload('../http/banlist/' + '/' + filename);
+        }
+    });
+    fs.writeFile('./http/manifest/banlist.json', JSON.stringify(banlist, null, 1), function() {});
+    return banlist;
+}
+
+var updateHTTP = require('./update_http.js');
+
+function setter() {
+    banlist = getBanlist();
+    updateHTTP(function(error, data) {
+        database = JSON.parse(data);
+    });
+}
+
+setter();
+
+function init(primus) {
 
     var realgames = [],
         stateSystem = require('./engine_manual.js'),
@@ -44,7 +73,7 @@ module.exports = function(primus) {
             cardpool: settings.info.cardpool,
             noshuffle: 0,
             prerelease: settings.info.prerelease,
-            legacyfield: (process.banlist[settings.info.banlist].masterRule !== 4),
+            legacyfield: (banlist[settings.info.banlist].masterRule !== 4),
             rule: 0,
             startLP: settings.info.startLP,
             starthand: 0,
@@ -91,18 +120,18 @@ module.exports = function(primus) {
                     if (stateSystem[game].players) {
                         if (stateSystem[game].players[0]) {
                             if (stateSystem[game].players[0].slot === 0) {
-                                stateSystem[game].players[0].send((view['p' + stateSystem[game].players[0].slot]));
+                                stateSystem[game].players[0].write((view['p' + stateSystem[game].players[0].slot]));
                             }
                         }
                         if (stateSystem[game].players[1]) {
                             if (stateSystem[game].players[1].slot === 1) {
-                                stateSystem[game].players[1].send((view['p' + stateSystem[game].players[1].slot]));
+                                stateSystem[game].players[1].write((view['p' + stateSystem[game].players[1].slot]));
                             }
                         }
 
                         Object.keys(stateSystem[game].spectators).forEach(function(username) {
                             var spectator = stateSystem[game].spectators[username];
-                            spectator.send((view.spectators));
+                            spectator.write((view.spectators));
                         });
                     }
                 }
@@ -165,7 +194,7 @@ module.exports = function(primus) {
         });
         realgames = [];
         primus.clients.forEach(function each(client) {
-            client.send(({
+            client.write(({
                 duelAction: 'ack'
             }));
         });
@@ -174,12 +203,12 @@ module.exports = function(primus) {
     //setInterval(ackgames, 60000);
 
     function duelBroadcast(duel, message) {
-        stateSystem[duel].players[0].send((message));
-        stateSystem[duel].players[1].send((message));
+        stateSystem[duel].players[0].write((message));
+        stateSystem[duel].players[1].write((message));
     }
 
     function responseHandler(socket, message) {
-        console.log(message);
+        //console.log(message);
         var generated,
             joined = false,
             player1,
@@ -254,7 +283,7 @@ module.exports = function(primus) {
             case 'kick':
                 if (socket.slot !== undefined) {
                     if (socket.slot === 0) {
-                        stateSystem[message.game].players[message.slot].send(({
+                        stateSystem[message.game].players[message.slot].write(({
                             duelAction: 'kick'
                         }));
 
@@ -295,12 +324,12 @@ module.exports = function(primus) {
                     }));
                     stateSystem[activeduel].surrender(games[activeduel].player[socket.slot].name);
 
-                    stateSystem[activeduel].players[0].send(({
+                    stateSystem[activeduel].players[0].write(({
                         duelAction: 'side',
                         deck: stateSystem[activeduel].decks[0]
                     }));
                     games[activeduel].player[0].ready = false;
-                    stateSystem[activeduel].players[1].send(({
+                    stateSystem[activeduel].players[1].write(({
                         duelAction: 'side',
                         deck: stateSystem[activeduel].decks[1]
                     }));
@@ -319,12 +348,13 @@ module.exports = function(primus) {
                 if (games[activeduel].player[socket.slot].ready) {
                     games[activeduel].player[socket.slot].ready = false;
                     stateSystem[activeduel].lock[socket.slot] = false;
-                    primus.duelBroadcast(games);
+                    primus.duelBroadcast(games, 'new game locked');
                     break;
                 }
                 if (socket.slot !== undefined) {
                     try {
-                        message.validate = validateDeck(message.deck, process.banlist[games[activeduel].banlist], database, games[activeduel].cardpool, games[activeduel].prerelease);
+                        message.validate = validateDeck(message.deck, banlist[games[activeduel].banlist], database, games[activeduel].cardpool, games[activeduel].prerelease);
+                        console.log('exiting validation');
                         if (message.validate) {
                             if (message.validate.error) {
                                 socket.write(({
@@ -338,7 +368,7 @@ module.exports = function(primus) {
                         }
                     } catch (error) {
                         socket.write(({
-                            error: error.message,
+                            error: error,
                             stack: error.stack,
                             input: (message)
                         }));
@@ -355,6 +385,7 @@ module.exports = function(primus) {
                     stateSystem[activeduel].lock[socket.slot] = true;
 
                     stateSystem[activeduel].decks[socket.slot] = message.deck;
+                    console.log('deck is locked');
                     socket.write(({
                         duelAction: 'lock',
                         result: 'success'
@@ -661,11 +692,11 @@ module.exports = function(primus) {
             log[activeduel].push(message);
         }
         if (socket.slot !== undefined && message.sound) {
-            stateSystem[activeduel].players[0].send(({
+            stateSystem[activeduel].players[0].write(({
                 duelAction: 'sound',
                 sound: message.sound
             }));
-            stateSystem[activeduel].players[1].send(({
+            stateSystem[activeduel].players[1].write(({
                 duelAction: 'sound',
                 sound: message.sound
             }));
@@ -691,3 +722,5 @@ module.exports = function(primus) {
 
     return websocketHandle;
 };
+
+module.exports = { init: init, setter: setter };

@@ -32,7 +32,6 @@ const child_process = require('child_process'),
     pack = require('../package.json'),
     adminlist = hotload('./record_admins.js'),
     banlistedUsers = hotload('./record_bansystem.js'),
-    updateHTTP = require('./update_http.js'),
     HTTP_PORT = pack.port || 80,
     ddos = new Ddos({
         maxcount: 2000,
@@ -56,7 +55,8 @@ const child_process = require('child_process'),
         Irate: '::ffff:127.0.0.1',
         Chibi: '::ffff:127.0.0.1',
         OmniMage: '::ffff:127.0.0.1'
-    };
+    },
+    manualController = require('./controller_dueling.js');
 
 var userlist = [],
     chatbox = [],
@@ -102,39 +102,11 @@ function mapCards(deck) {
     });
 }
 
-updateHTTP(function(error, database, banlist) {
-    if (!error) {
-        process.database = database;
-        process.banlist = banlist;
-    } else {
-        console.log('No DB or banlist');
-    }
-});
-
-fs.watch('./http/banlist/', function() {
-    updateHTTP(function(error, database, banlist) {
-        if (!error) {
-            process.database = database;
-            process.banlist = banlist;
-        } else {
-            console.log('No DB or banlist');
-        }
-    });
-});
-
 function gitRoute(req, res, next) {
-
-
-    updateHTTP(function(error, database, banlist) {
-        res.write('Updated Server, generating files...');
-        process.database = database;
-        process.banlist = banlist;
-        child_process.spawn('git', ['pull'], {}, function() {
-            console.log('finished running git');
-        });
+    manualController.setter();
+    child_process.spawn('git', ['pull'], {}, function() {
+        console.log('finished running git');
     });
-
-
 }
 
 app.post('/git', function(req, res, next) {
@@ -179,7 +151,8 @@ primus = new Primus(primusServer, {
 });
 
 primus.use('rooms', Rooms);
-var duelLogic = require('./controller_dueling.js')(primus);
+
+var duelLogic = manualController.init(primus)
 
 
 var Datastore = require('nedb'),
@@ -481,7 +454,6 @@ function onData(data, socket) {
 
 
     socket.join(socket.address.ip + data.uniqueID);
-    duelLogic(socket, data);
     switch (action) {
 
 
@@ -649,7 +621,7 @@ function onData(data, socket) {
             });
             break;
         default:
-            console.log(data);
+            duelLogic(socket, data);
     }
 
     socketwatcher.exit();
