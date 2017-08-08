@@ -36,7 +36,7 @@ module.exports = function getManifestFromAPI(callback) {
             try {
                 var output = JSON.parse(responseString);
                 fs.writeFile('./http/manifest/manifest_0-en-OCGTCG.json', JSON.stringify(output), function() {
-                    callback(null, output);
+                    callback(null, JSON.stringify(output));
                 });
             } catch (error) {
                 return callback(error, []);
