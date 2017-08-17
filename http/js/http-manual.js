@@ -2633,11 +2633,18 @@ function revealonclick(card, note) {
                 'display': 'block'
             });
         }
-        $('.non-extra').css({
-            'display': 'none'
-        });
+        if (cardIs('fusion', dbEntry) || cardIs('synchro', dbEntry) || cardIs('xyz', dbEntry) || cardIs('link', dbEntry)) {
+            $('.non-extra').css({
+                'display': 'none'
+            });
+        }
         if (cardIs('link', dbEntry)) {
             $('#SpDef').css({
+                'display': 'none'
+            });
+        }
+        if (pendulumMap[dbEntry.type]) {
+            $('.m-monster-to-extra-faceup').css({
                 'display': 'none'
             });
         }
@@ -2660,7 +2667,6 @@ function revealonclick(card, note) {
             $('.m-monster-p').css({
                 'display': 'block'
             });
-
         }
         if (cardIs('xyz', dbEntry)) {
             $('.v-monster-xyz').css({
@@ -2692,7 +2698,6 @@ function revealonclick(card, note) {
             $('.m-monster-to-extra-faceup').css({
                 'display': 'block'
             });
-
         }
         reorientmenu();
         return;
