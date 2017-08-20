@@ -13,7 +13,7 @@
  * @property {Number} movelocation 'DECK'/'EXTRA' etc, in caps. 
  * @property {Number} player player int 0,1, etc of controlling player
  * @property {Number} originalController  player int 0,1, etc of owner
- * @property {Number} index  sequence of the card
+ * @property {Number} index  sequence of the card in the stack group. Example, nth card of DECK.
  * @property {Number} unique unique ID of the card
  * @property {Number} id   passcode of the card
  * @property {Number} counters  counters on the card
@@ -72,11 +72,11 @@
  * @property {Number} uid   Unique card identifier in this game
  * @property {Number} player current player int 0,1, etc of controlling player
  * @property {String} clocation current location of the target card 'DECK'/'EXTRA' etc, in caps. 
- * @property {Number} index  current sequence of the card in the current location
+ * @property {Number} index  current sequence of the card in the stack group. Example, nth card of DECK. in the current location
  * @property {Number} overlayindex  current overlay slot
  * @property {Number} moveplayer Requested end player int 0,1, etc of controlling player
  * @property {String} movelocation Requested end location of the target card 'DECK'/'EXTRA' etc, in caps. 
- * @property {Number} moveindex  Requested end sequence of the card in the current location
+ * @property {Number} moveindex  Requested end sequence of the card in the stack group. Example, nth card of DECK. in the current location
  * @property {String} moveposition Requested Faceup, Facedown, etc
  */
 
@@ -90,7 +90,7 @@ const EventEmitter = require('events'), // a way to "notice" things occuring
  * Constructor for card Objects.
  * @param   {Number} movelocation 'DECK'/'EXTRA' etc, in caps. 
  * @param   {Number} player player int 0,1, etcplayerID
- * @param   {Number} index  sequence of the card
+ * @param   {Number} index  sequence of the card in the stack group. Example, nth card of DECK.
  * @param   {Number} unique unique ID of the card
  * @param   {Number} code   passcode of the card
  * @returns {Card} a card
@@ -149,7 +149,7 @@ function filterlocation(stack, location) {
 /**
  * Filters out cards based on index.
  * @param {Card[]}  stack a stack of cards.
- * @param {Number} index index of the card being searched for.
+ * @param {Number} index index of the card being searched for. Example, nth card of DECK.
  * @returns {Card[]} a stack of cards that are in only one index
  */
 function filterIndex(stack, index) {
@@ -322,7 +322,7 @@ function init(callback) {
     /**
      * The way the stack of cards is setup it requires a pointer to edit it.
      * @param {Number} uid provide a unique idenifier
-     * @returns {Number} index of that unique identifier in the stack.
+     * @returns {Number} index sequence of the card in the stack group. Example, nth card of DECK.
      */
     function uidLookup(uid) {
         var result;
@@ -339,7 +339,7 @@ function init(callback) {
      * Returns info on a card, or rather a single card.
      * @param   {Number} player player int 0,1, etc      Player Interger
      * @param   {Number} clocation    Location enumeral
-     * @param   {Number} index        Index
+     * @param   {Number} index        sequence of the card in the stack group. Example, nth card of DECK.
      * @param   {Number} overlayindex Index of where a card is in an XYZ stack starting at 1
      * @param   {Number} uid          Unique identifier, optional.
      * @returns {Object} The card you where looking for.
