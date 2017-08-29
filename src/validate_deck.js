@@ -2,7 +2,7 @@
 
 function validateDeck(deck, banlist, database, cardpool, prerelease) {
     'use strict';
-    console.log(database[0], database.length);
+    //console.log(database[0], database.length);
     var main = {},
         side = {},
         extra = {},
@@ -180,9 +180,9 @@ function validateDeck(deck, banlist, database, cardpool, prerelease) {
                 return validate;
             }
         }
-        console.log(banlist.region);
+        //console.log(banlist.region);
         if (banlist.region == 'tcg') {
-            console.log('checking against tcg');
+            //console.log('checking against tcg');
             for (var card in main) {
                 var reference = getFilteredCardById(card),
                     subreference = getCardById(card);
@@ -192,13 +192,13 @@ function validateDeck(deck, banlist, database, cardpool, prerelease) {
                 //console.log(reference.name, subreference.tcg.date, new Date(banlist.endDate));
                 if (reference.tcg.date || (reference && cardpool == 'OCG/TCG')) {
                     if (reference.tcg.date > new Date(banlist.endDate)) {
-                        console.log(card)
+                        //console.log(card)
                         validate.error = true;
                         validate.msg = '"' + subreference.name + '"' + " does not exist in the timeframe of the selected Forbidden/Limited Card List";
                         return validate;
                     }
                 } else {
-                    console.log(card.tcg, card)
+                    //console.log(card.tcg, card)
                     validate.error = true;
                     validate.msg = '"' + reference.name + '"' + " does not exist in the TCG";
                     return validate;
@@ -207,16 +207,16 @@ function validateDeck(deck, banlist, database, cardpool, prerelease) {
             for (var card in side) {
                 var reference = getFilteredCardById(card),
                     subreference = getCardById(card);
-                console.log(reference.name, subreference.tcg.date, new Date(banlist.endDate));
+                //console.log(reference.name, subreference.tcg.date, new Date(banlist.endDate));
                 if (reference.tcg.date || (reference && cardpool == 'OCG/TCG')) {
                     if (reference.tcg.date > new Date(banlist.endDate)) {
-                        console.log(card)
+                        //console.log(card)
                         validate.error = true;
                         validate.msg = '"' + subreference.name + '"' + " does not exist in the timeframe of the selected Forbidden/Limited Card List";
                         return validate;
                     }
                 } else {
-                    console.log(card.tcg, card)
+                    //console.log(card.tcg, card)
                     validate.error = true;
                     validate.msg = '"' + reference.name + '"' + " does not exist in the TCG";
                     return validate;
@@ -225,16 +225,16 @@ function validateDeck(deck, banlist, database, cardpool, prerelease) {
             for (var card in extra) {
                 var reference = getFilteredCardById(card),
                     subreference = getCardById(card);
-                console.log(reference.name, subreference.tcg.date, new Date(banlist.endDate));
+                //console.log(reference.name, subreference.tcg.date, new Date(banlist.endDate));
                 if (reference.tcg.date || (reference && cardpool == 'OCG/TCG')) {
                     if (reference.tcg.date > new Date(banlist.endDate)) {
-                        console.log(card)
+                        //console.log(card)
                         validate.error = true;
                         validate.msg = '"' + subreference.name + '"' + " does not exist in the timeframe of the selected Forbidden/Limited Card List";
                         return validate;
                     }
                 } else {
-                    console.log(card.tcg, card)
+                    //console.log(card.tcg, card)
                     validate.error = true;
                     validate.msg = '"' + reference.name + '"' + " does not exist in the TCG";
                     return validate;
@@ -242,20 +242,20 @@ function validateDeck(deck, banlist, database, cardpool, prerelease) {
             }
         }
         if (banlist.region == 'ocg') {
-            console.log('checking against ocg');
+            //console.log('checking against ocg');
             for (var card in main) {
                 var reference = getFilteredCardById(card),
                     subreference = getCardById(card);
-                console.log(reference.name, subreference.ocg.date, new Date(banlist.endDate));
+                //console.log(reference.name, subreference.ocg.date, new Date(banlist.endDate));
                 if (reference.ocg.date || (reference && cardpool == 'OCG/TCG')) {
                     if (reference.ocg.date > new Date(banlist.endDate)) {
-                        console.log(card)
+                        //console.log(card)
                         validate.error = true;
                         validate.msg = '"' + subreference.name + '"' + " does not exist in the timeframe of the selected Forbidden/Limited Card List";
                         return validate;
                     }
                 } else {
-                    console.log(card.ocg, card)
+                    //console.log(card.ocg, card)
                     validate.error = true;
                     validate.msg = '"' + reference.name + '"' + " does not exist in the OCG";
                     return validate;
@@ -264,16 +264,16 @@ function validateDeck(deck, banlist, database, cardpool, prerelease) {
             for (var card in side) {
                 var reference = getFilteredCardById(card),
                     subreference = getCardById(card);
-                console.log(reference.name, subreference.ocg.date, new Date(banlist.endDate));
+                //console.log(reference.name, subreference.ocg.date, new Date(banlist.endDate));
                 if (reference.ocg.date || (reference && cardpool == 'OCG/TCG')) {
                     if (reference.ocg.date > new Date(banlist.endDate)) {
-                        console.log(card)
+                        //console.log(card)
                         validate.error = true;
                         validate.msg = '"' + subreference.name + '"' + " does not exist in the timeframe of the selected Forbidden/Limited Card List";
                         return validate;
                     }
                 } else {
-                    console.log(card.ocg, card)
+                    //console.log(card.ocg, card)
                     validate.error = true;
                     validate.msg = '"' + reference.name + '"' + " does not exist in the OCG";
                     return validate;
@@ -282,16 +282,16 @@ function validateDeck(deck, banlist, database, cardpool, prerelease) {
             for (var card in extra) {
                 var reference = getFilteredCardById(card),
                     subreference = getCardById(card);
-                console.log(reference.name, subreference.ocg.date, new Date(banlist.endDate));
+                //console.log(reference.name, subreference.ocg.date, new Date(banlist.endDate));
                 if (reference.ocg.date || (reference && cardpool == 'OCG/TCG')) {
                     if (reference.ocg.date > new Date(banlist.endDate)) {
-                        console.log(card)
+                        //console.log(card)
                         validate.error = true;
                         validate.msg = '"' + subreference.name + '"' + " does not exist in the timeframe of the selected Forbidden/Limited Card List";
                         return validate;
                     }
                 } else {
-                    console.log(card.ocg, card)
+                    //console.log(card.ocg, card)
                     validate.error = true;
                     validate.msg = '"' + reference.name + '"' + " does not exist in the OCG";
                     return validate;
@@ -310,7 +310,7 @@ function validateDeck(deck, banlist, database, cardpool, prerelease) {
         }
         return validate;
     } catch (error) {
-        console.log(error);
+        //console.log(error);
         return validate;
     }
 }
