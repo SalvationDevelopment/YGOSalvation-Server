@@ -308,6 +308,9 @@ function init(callback) {
         }; // holds decks
 
 
+    function getState() {
+        return Object.assign({}, state);
+    }
     /**
      * Set a username to a specific slot on lock in.
      * @public
@@ -1541,6 +1544,7 @@ function init(callback) {
         surrender: surrender,
         generateView: generateView,
         getGroup: getGroup,
+        getState: getState,
         players: {}, // holds socket references
         spectators: {}, // holds socket references
         decks: decks,
