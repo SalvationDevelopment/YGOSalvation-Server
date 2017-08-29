@@ -12,7 +12,7 @@ var fs = require('fs'),
     https = require('https'),
     path = require('path'),
     database = [],
-    automatic = require('./engine_automatic.js'),
+    automatic = require('./engine_automatic.js').init,
     banlist = {};
 
 
@@ -406,9 +406,14 @@ function init(primus) {
                 if (socket.slot !== undefined) {
                     player1 = stateSystem[activeduel].decks[0];
                     player2 = stateSystem[activeduel].decks[1];
-                    stateSystem[activeduel].startDuel(player1, player2, true);
-                    if (stateSystem[activeduel].automatic) {
-                        automatic(stateSystem[activeduel]);
+                    if (games[activeduel].automatic) {
+                        stateSystem[activeduel].rps(function(result) {
+                            stateSystem[activeduel].startDuel(player1, player2, false);
+                            automatic(stateSystem[activeduel]);
+                        });
+
+                    } else {
+                        stateSystem[activeduel].startDuel(player1, player2, true);
                     }
                     games[activeduel].started = true;
                     primus.duelBroadcast(games);

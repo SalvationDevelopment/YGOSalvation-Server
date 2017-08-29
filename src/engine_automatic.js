@@ -155,11 +155,11 @@ function getForProperty(duel, effectProperty) {
  * @returns {undefined}
  */
 function processQueue(actionQueue, callback) {
-
+    console.log('start doing stuff');
     // waterfall takes a list of functions, we need to generate those functions.
     waterfall(actionQueue.map(function(action) {
         return function(lastActionResult, nextCallback) {
-            var params = action.parameters || [],
+            var params = action.params || [],
                 actionCallback = function(error, result) {
                     if (error) {
                         nextCallback(error);
@@ -171,7 +171,7 @@ function processQueue(actionQueue, callback) {
                     }
                 };
             params.push(actionCallback);
-            action.command.apply(params);
+            action.command.apply(null, params);
         };
     }), function() {
         if (typeof callback === 'function') {
@@ -187,6 +187,7 @@ function processQueue(actionQueue, callback) {
  * @return {undefined}
  */
 function doDrawPhase(duel, callback) {
+    console.log('draw');
     var drawPhaseActionQueue = duel.drawPhaseActionQueue;
     if (duel.skipDrawPhase) {
         // kill everything in the draw phase queue. Skip it, but make sure it isnt around next turn.
@@ -199,7 +200,7 @@ function doDrawPhase(duel, callback) {
 
     // Do any "on start of phase", actions first, then attempt to draw.
     processQueue(drawPhaseActionQueue, function() {
-        var state = duel.state(),
+        var state = duel.getgetState(),
             player = state.turnOfPlayer,
             turnCount = state.turnCount;
 
@@ -325,7 +326,7 @@ function doMainPhase1(duel, callback) {
 
     function askUserNextAction() {
         processQueue(mainPhase1ActionQueue, function() {
-            var state = duel.state(),
+            var state = duel.getState(),
                 player = state.turnOfPlayer,
                 turnCount = state.turnCount,
                 options = getMainPhaseActions(duel);
@@ -399,7 +400,7 @@ function doBattlePhase(duel, callback) {
 
     function askUserNextAction() {
         processQueue(battlePhaseActionQueue, function() {
-            var state = duel.state(),
+            var state = duel.getState(),
                 player = state.turnOfPlayer,
                 turnCount = state.turnCount,
                 canattack = duel.getGroup({
@@ -545,7 +546,7 @@ function doMainPhase2(duel, callback) {
 
     function askUserNextAction() {
         processQueue(mainPhase2ActionQueue, function() {
-            var state = duel.state(),
+            var state = duel.getState(),
                 player = state.turnOfPlayer,
                 turnCount = state.turnCount,
                 options = getMainPhaseActions(duel);
@@ -592,7 +593,7 @@ function doEndPhase(duel, callback) {
 
     function checkCardCount() {
         processQueue(endPhaseActionQueue, function() {
-            var state = duel.getState(),
+            var state = duel.getgetState(),
                 hand = duel.getGroup({
                     player: state.turnOfPlayer,
                     location: 'HAND'
@@ -650,6 +651,8 @@ function setupTurn(duel) {
 
     var actionQueue = duel.actionQueue;
 
+    duel.drawPhaseActionQueue = [];
+
     actionQueue.push({
         command: doDrawPhase,
         params: [duel]
@@ -674,7 +677,10 @@ function setupTurn(duel) {
         command: doDrawPhase,
         params: [duel]
     });
-
+    console.log('everything is queued');
+    duel.rps(function(error, answer) {
+        console.log('error, answer', error, answer);
+    });
     processQueue(actionQueue, function() {
         setTimeout(setupTurn);
     });
@@ -691,7 +697,7 @@ function generic() {
  * @return {undefined}
  */
 function loadCardScripts(duel) {
-
+    console.log('loading scripts');
     duel.stack.forEach(function(card) {
         try {
             card.script = hotload('../script/' + card.id + '.js');
@@ -723,6 +729,7 @@ function init(duel, params) {
 
     duel.maxHandSize = 5;
     loadCardScripts(duel);
+    console.log('setting up turns');
     setupTurn(duel, actionQueue);
 }
 module.exports = {
