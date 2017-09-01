@@ -407,9 +407,12 @@ function init(primus) {
                     player1 = stateSystem[activeduel].decks[0];
                     player2 = stateSystem[activeduel].decks[1];
                     if (games[activeduel].automatic) {
+                        stateSystem[activeduel].startDuel(player1, player2, false);
                         stateSystem[activeduel].rps(function(result) {
-                            stateSystem[activeduel].startDuel(player1, player2, false);
-                            automatic(stateSystem[activeduel]);
+                            var winner = 'Player ' + (1 + result);
+                            stateSystem[activeduel].duelistChat('Server', games[activeduel].player[socket.slot].name + ' ' + winner + ' won.');
+                            console.log(result, x)
+                            automatic(stateSystem[activeduel], result);
                         });
 
                     } else {

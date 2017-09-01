@@ -200,7 +200,7 @@ function doDrawPhase(duel, callback) {
 
     // Do any "on start of phase", actions first, then attempt to draw.
     processQueue(drawPhaseActionQueue, function() {
-        var state = duel.getgetState(),
+        var state = duel.getState(),
             player = state.turnOfPlayer,
             turnCount = state.turnCount;
 
