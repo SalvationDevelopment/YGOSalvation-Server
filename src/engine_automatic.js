@@ -15,7 +15,7 @@ const DRAW_PHASE = 0,
     hotload = require('hotload'); // Allows for cards to be live edited
 
 
-function cardIs(cat, obj) {
+function isCard(cat, obj) {
     'use strict';
     if (cat === 'monster' && (obj.race !== 0 || obj.level !== 0 || obj.attribute !== 0)) {
         return true;
@@ -50,7 +50,7 @@ function cardIs(cat, obj) {
 }
 
 function setupCard(card) {
-    if (cardIs('monster', card)) {
+    if (isCard('monster', card)) {
 
     } else {
 
@@ -154,30 +154,10 @@ function getForProperty(duel, effectProperty) {
  * @param {callback} callback allow function to be recursive.
  * @returns {undefined}
  */
-function processQueue(actionQueue, callback) {
+function processQueue(actionQueue, duel, callback) {
     console.log('start doing stuff');
     // waterfall takes a list of functions, we need to generate those functions.
-    waterfall(actionQueue.map(function(action) {
-        return function(lastActionResult, nextCallback) {
-            var params = action.params || [],
-                actionCallback = function(error, result) {
-                    if (error) {
-                        nextCallback(error);
-                    } else {
-                        if (typeof action.callback === 'function') {
-                            action.callback(error, result);
-                        }
-                        nextCallback(null, true);
-                    }
-                };
-            params.push(actionCallback);
-            action.command.apply(null, params);
-        };
-    }), function() {
-        if (typeof callback === 'function') {
-            callback();
-        }
-    });
+    waterfall(actionQueue, callback);
 }
 
 /**
@@ -192,18 +172,18 @@ function doDrawPhase(duel, callback) {
     if (duel.skipDrawPhase) {
         // kill everything in the draw phase queue. Skip it, but make sure it isnt around next turn.
         drawPhaseActionQueue.length = 0;
-        callback();
+        callback(null);
         return;
     }
 
     duel.nextPhase(DRAW_PHASE);
 
     // Do any "on start of phase", actions first, then attempt to draw.
-    processQueue(drawPhaseActionQueue, function() {
+    processQueue(drawPhaseActionQueue, duel, function() {
         var state = duel.getState(),
             player = state.turnOfPlayer,
-            turnCount = state.turnCount;
-
+            turnCount = state.turn;
+        console.log(turnCount, player)
         if (turnCount && !state.skipDraw) {
 
             /* duel engine moves the card, then triggers its effects
@@ -213,10 +193,15 @@ function doDrawPhase(duel, callback) {
             duel.drawCard(player, 1, duel.playerName[player], function() {
 
                 /* drawing a card may have added an action to the phase stack so do it again */
-                processQueue(drawPhaseActionQueue, callback);
+                processQueue(drawPhaseActionQueue, duel, function() {
+                    callback(null);
+                });
             });
         } else {
-            processQueue(drawPhaseActionQueue, callback);
+            console.log('start turn not drawing...');
+            processQueue(drawPhaseActionQueue, duel, function() {
+                callback(null);
+            });
         }
     });
     return;
@@ -233,14 +218,14 @@ function doStandbyPhase(duel, callback) {
     if (duel.skipStandbyPhase) {
         // kill everything in the standby phase queue. Skip it, but make sure it isnt around next turn.
         standbyPhaseActionQueue.length = 0;
-        callback();
+        callback(null);
         return;
     }
 
 
     duel.nextPhase(MAIN_PHASE_1);
-    processQueue(standbyPhaseActionQueue, function() {
-        callback();
+    processQueue(standbyPhaseActionQueue, duel, function() {
+        callback(null);
     });
     return;
 }
@@ -263,10 +248,14 @@ function getNormalOptions(duel, prevention) {
             });
 
         return monsters.filter(function(card) {
-            var validEffectList = card.effectList.some(function(effect) {
-                return effect.SetCode !== prevention;
-            });
-            return (validEffectList.length && card.level < 5);
+            if (card.effectList) {
+                var validEffectList = card.effectList.some(function(effect) {
+                    return effect.SetCode !== prevention;
+                });
+                return (validEffectList.length && card.level < 5);
+            } else {
+                return false;
+            }
         });
     } else {
         return [];
@@ -321,18 +310,16 @@ function getMainPhaseActions(duel) {
  */
 function doMainPhase1(duel, callback) {
     var mainPhase1ActionQueue = duel.mainPhase1ActionQueue;
-
+    console.log('MARK');
     duel.nextPhase(MAIN_PHASE_1);
 
     function askUserNextAction() {
-        processQueue(mainPhase1ActionQueue, function() {
+        processQueue(mainPhase1ActionQueue, duel, function() {
             var state = duel.getState(),
                 player = state.turnOfPlayer,
                 turnCount = state.turnCount,
                 options = getMainPhaseActions(duel);
-
-
-            duel.question({
+            duel.question(player, 'mainphase', {
                 questionType: 'mainphase',
                 battlephase: state.battlephaseAvaliable,
                 endphase: state.endPhaseAvaliable,
@@ -345,15 +332,15 @@ function doMainPhase1(duel, callback) {
                 pendulumSummon: state.pendulumnSummonAvaliable,
                 player: state.turnOfPlayer
 
-            }, function(error, message) {
+            }, 1, function(message) {
                 switch (message.action) {
                     case 'battlephase':
-                        callback();
+                        callback(null);
                         break;
                     case 'endphase':
                         duel.skipbattlephase = true;
                         duel.skipmainphase2 = true;
-                        callback();
+                        callback(null);
                         break;
                     case 'normalsummon':
                         duel.question({
@@ -392,14 +379,14 @@ function doBattlePhase(duel, callback) {
     if (duel.skipbattlephase) {
         // kill everything in the battle queue. Skip it, but make sure it isnt around next turn.
         battlePhaseActionQueue.length = 0;
-        callback();
+        callback(null);
         return;
     }
 
     duel.nextPhase(BATTLE_PHASE);
 
     function askUserNextAction() {
-        processQueue(battlePhaseActionQueue, function() {
+        processQueue(battlePhaseActionQueue, duel, function() {
             var state = duel.getState(),
                 player = state.turnOfPlayer,
                 turnCount = state.turnCount,
@@ -420,11 +407,11 @@ function doBattlePhase(duel, callback) {
 
                 switch (answer.action) {
                     case 'mainphase2':
-                        callback();
+                        callback(null);
                         break;
                     case 'endphase':
                         duel.skipmainphase2 = true;
-                        callback();
+                        callback(null);
                         break;
                     default:
                         askUserNextAction();
@@ -454,16 +441,16 @@ function doDamageCalculation(duel, attackerID, defenderID, callback) {
     function afterDamageCalculation() {
 
         // Process any cards that where moved effects after damage calculation.
-        processQueue(damageCalculationActionQueue, function() {
+        processQueue(damageCalculationActionQueue, duel, function() {
 
             // leave damage calculation and then give cards a chance to respond.
             duel.leaveDamageCalculation();
-            processQueue(damageCalculationActionQueue, callback);
+            processQueue(damageCalculationActionQueue, duel, callback);
         });
     }
 
     // do any events at the start of damage calculation to change attack values
-    processQueue(damageCalculationActionQueue, function() {
+    processQueue(damageCalculationActionQueue, duel, function() {
 
         // This doesnt return the card but a modified version of the card for easy math.
         var attackingCard = duel.getDamageCalculationCard(attackerID),
@@ -516,7 +503,7 @@ function doDamageCalculation(duel, attackerID, defenderID, callback) {
         // then do damage calculation.
         if (defendingCard.card.position === 'FaceDownDefense') {
             duel.setState({}, function() {
-                processQueue(damageCalculationActionQueue, function() {
+                processQueue(damageCalculationActionQueue, duel, function() {
                     calculate();
                 });
             });
@@ -539,13 +526,13 @@ function doMainPhase2(duel, callback) {
     if (duel.skipmainphase2) {
         // kill everything in the main phase 2 queue. Skip it, but make sure it isnt around next turn.
         mainPhase2ActionQueue.length = 0;
-        callback();
+        callback(null);
         return;
     }
     duel.nextPhase(MAIN_PHASE_2);
 
     function askUserNextAction() {
-        processQueue(mainPhase2ActionQueue, function() {
+        processQueue(mainPhase2ActionQueue, duel, function() {
             var state = duel.getState(),
                 player = state.turnOfPlayer,
                 turnCount = state.turnCount,
@@ -567,7 +554,7 @@ function doMainPhase2(duel, callback) {
             }, function(error, answer) {
                 switch (answer.action) {
                     case 'endphase':
-                        callback();
+                        callback(null);
                         break;
                     default:
                         askUserNextAction();
@@ -592,7 +579,7 @@ function doEndPhase(duel, callback) {
     duel.nextPhase(END_PHASE);
 
     function checkCardCount() {
-        processQueue(endPhaseActionQueue, function() {
+        processQueue(endPhaseActionQueue, duel, function() {
             var state = duel.getgetState(),
                 hand = duel.getGroup({
                     player: state.turnOfPlayer,
@@ -609,7 +596,7 @@ function doEndPhase(duel, callback) {
                 });
             } else {
                 duel.nextTurn();
-                callback();
+                callback(null);
             }
 
         });
@@ -629,19 +616,10 @@ function doEndPhase(duel, callback) {
  */
 function setupTurn(duel) {
 
-    // this function can only run once per engine instance.
-    if (duel.engineActive) {
-        return;
-    }
-
-    // lock out this function from running again.
-    duel.engineActive = true;
-    duel.actionQueue = [];
-
 
     // main phase 2, and battle phase skips to be determined by other mechanisms that reset each turn.
-    duel.skipmainphase2 = false;
-    duel.skipbattlephase = false;
+    duel.skipmainphase2 = duel.skipmainphase2 || false;
+    duel.skipbattlephase = duel.skipbattlephase || false;
     duel.normalSummonedThisTurn = false;
 
 
@@ -649,40 +627,35 @@ function setupTurn(duel) {
     // each phase is "done" even if skipped by a card effect.
     // each phase processing function has a way of handling skips.
 
-    var actionQueue = duel.actionQueue;
 
-    duel.drawPhaseActionQueue = [];
+    duel.drawPhaseActionQueue = duel.drawPhaseActionQueue || [];
+    duel.standbyPhaseActionQueue = duel.standbyPhaseActionQueue || [];
+    duel.mainPhase1ActionQueue = duel.mainPhase1ActionQueue || [];
+    duel.damageCalculationActionQueue = duel.damageCalculationActionQueue || [];
+    duel.mainPhase2ActionQueue = duel.mainPhase2ActionQueue || [];
+    duel.endPhaseActionQueue = duel.endPhaseActionQueue || [];
 
-    actionQueue.push({
-        command: doDrawPhase,
-        params: [duel]
-    });
-    actionQueue.push({
-        command: doStandbyPhase,
-        params: [duel]
-    });
-    actionQueue.push({
-        command: doMainPhase1,
-        params: [duel]
-    });
-    actionQueue.push({
-        command: doBattlePhase,
-        params: [duel]
-    });
-    actionQueue.push({
-        command: doMainPhase2,
-        params: [duel]
-    });
-    actionQueue.push({
-        command: doDrawPhase,
-        params: [duel]
-    });
+    function run() {
+        doDrawPhase(duel, function() {
+            doStandbyPhase(duel, function() {
+                doMainPhase1(duel, function() {
+                    doBattlePhase(duel, function() {
+                        doMainPhase2(duel, function() {
+                            doEndPhase(duel, function() {});
+                        });
+                    });
+                });
+            });
+        });
+    }
+
+
     console.log('everything is queued');
-    duel.rps(function(error, answer) {
-        console.log('error, answer', error, answer);
-    });
-    processQueue(actionQueue, function() {
-        setTimeout(setupTurn);
+
+    run(function() {
+        if (!duel.quit) {
+            setTimeout(run, 0);
+        }
     });
 }
 
@@ -696,10 +669,22 @@ function generic() {
  * @param {Object} duel Engine Instance 
  * @return {undefined}
  */
-function loadCardScripts(duel) {
+function loadCardScripts(duel, database) {
     console.log('loading scripts');
+
+    function getCardById(cardId) {
+        var result = database.find(function(card) {
+            if (card.id === parseInt(cardId, 10)) {
+                return true;
+            }
+            return false;
+        });
+        return result || {};
+    }
+
     duel.stack.forEach(function(card) {
         try {
+            Object.assign(card, getCardById(card.id));
             card.script = hotload('../script/' + card.id + '.js');
             card.effectList = [];
             card.registerEffect = function(effect) {
@@ -724,13 +709,21 @@ function loadCardScripts(duel) {
  * @param {Object} params Object with a bunch of info to use as start up info.
  * @return {undefined}
  */
-function init(duel, params) {
-    var actionQueue = [];
+function init(duel, firstPlayer, database) {
 
+    var state = duel.getState();
+    duel.database = database;
     duel.maxHandSize = 5;
-    loadCardScripts(duel);
+    loadCardScripts(duel, database);
     console.log('setting up turns');
-    setupTurn(duel, actionQueue);
+    if (firstPlayer) {
+        duel.setTurnPlayer();
+    }
+    duel.drawCard(0, 5, state.names[0], function() {
+        duel.drawCard(1, 5, state.names[1], function() {
+            setupTurn(duel);
+        });
+    });
 }
 module.exports = {
     init: init

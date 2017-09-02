@@ -897,6 +897,7 @@ var revealcache = [],
     revealcacheIndex = 0;
 
 function reveal(cards, note) {
+    console.log(cards, note);
     'use strict';
     var html = '';
     revealcache = [];
@@ -911,6 +912,7 @@ function reveal(cards, note) {
     cards.forEach(function(card, index) {
         var src = (card.id) ? 'https://raw.githubusercontent.com/shadowfox87/YGOSeries10CardPics/master/' + card.id + '.png' : 'img/textures/cover.jpg';
         src = (note === 'specialcard' || card.note) ? 'img/textures/' + card.id + '.jpg' : src;
+        card.uid = card.uid || card.id;
         revealcache.push(card);
         html += '<img id="revealuid' + card.uid + '" class="revealedcard" src="' + src + '" data-id="' + card.id + '" onclick = "revealonclick(' + index + ', \'' + note + '\')" data-uid="' + card.uid + '" data-position="' + card.position + card.location + '" / > ';
     });
@@ -1126,6 +1128,7 @@ function question(message) {
     var type = message.type;
     activeQuestion = message;
     activeQuestion.answer = [];
+    activeQuestion.action = 'question';
     if (type === 'specialCards') {
         reveal(activeQuestion.options, 'specialcard');
     }

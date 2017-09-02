@@ -309,7 +309,10 @@ function init(callback) {
 
 
     function getState() {
-        return Object.assign({}, state);
+        var info = {
+            names: names
+        };
+        return Object.assign(info, state);
     }
     /**
      * Set a username to a specific slot on lock in.
@@ -1180,7 +1183,7 @@ function init(callback) {
      */
     function getGroup(requirement) {
         return stack.filter(function(card) {
-            return Object.keys.filter(function(property) {
+            return Object.keys(card).filter(function(property) {
                 return (requirement[property] === card.property);
             }).length;
         });
@@ -1202,6 +1205,7 @@ function init(callback) {
      */
     function nextPhase(phase) {
         state.phase = phase;
+        console.log(phase);
         callback(generateView(), stack);
     }
 
@@ -1384,7 +1388,10 @@ function init(callback) {
             answerLength: answerLength,
             uuid: uuid
         };
-        answerListener.once(uuid, onAnswerFromUser);
+        console.log(uuid);
+        answerListener.once(uuid, function(data) {
+            onAnswerFromUser(data);
+        });
         callback(output, stack);
     }
 
@@ -1557,6 +1564,7 @@ function init(callback) {
         getStack: getStack,
         setTurnPlayer: setTurnPlayer,
         answerListener: answerListener,
+        question: question,
         rps: rps
     };
 }
