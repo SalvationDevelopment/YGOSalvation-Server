@@ -410,9 +410,8 @@ function init(primus) {
                         stateSystem[activeduel].startDuel(player1, player2, false);
                         stateSystem[activeduel].rps(function(result) {
                             var winner = 'Player ' + (1 + result);
-                            stateSystem[activeduel].duelistChat('Server', games[activeduel].player[socket.slot].name + ' ' + winner + ' won.');
-                            console.log(result, x)
-                            automatic(stateSystem[activeduel], result);
+                            stateSystem[activeduel].duelistChat('Server', games[activeduel].player[socket.slot].name + ' ' + winner + ' decides starting player.');
+                            automatic(stateSystem[activeduel], result, database);
                         });
 
                     } else {
@@ -640,6 +639,7 @@ function init(primus) {
                 if (socket.slot === undefined) {
                     break;
                 }
+                console.log('question answered by', socket.slot, message);
                 stateSystem[activeduel].answerListener.emit(message.uuid, message.answer);
                 break;
             case 'getLog':

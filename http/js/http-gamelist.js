@@ -274,7 +274,7 @@ function getManualDuelRequest() {
         banlistid: $('#creategamebanlist').val(),
         timelimit: $('#creategametimelimit').val(),
         startLP: $('#creategamelp').val(),
-        automatic: isChecked('useautomatic'),
+        automatic: isChecked('#useautomatic'),
         checkd: isChecked('#discheckdeck'),
         shuf: isChecked('#disshuffledeck'),
         pass: isChecked('#usepass') ? setpass() : randomString(randneed)
