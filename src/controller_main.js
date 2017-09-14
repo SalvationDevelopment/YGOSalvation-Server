@@ -74,7 +74,7 @@ var userlist = [],
 app.use(ddos.express);
 app.use(compression());
 app.use(helmet());
-app.use(express.static(path.join(__dirname, '../http')));
+
 app.use(function(req, res, next) {
     if (toobusy()) {
         res.send(503, 'I\'m busy right now, sorry.');
@@ -88,7 +88,7 @@ app.get('*', function(req, res) {
     }
 });
 
-
+app.use(express.static(path.join(__dirname, '../http')));
 /**
  * Maps a deck to updated IDs.
  * @param   {CardRecord[]} deck A deck of cards from the user possibly containing old cards.
