@@ -87,9 +87,7 @@ app.use(function(req, res, next) {
         }
     }
 });
-app.get('*', function(req, res) {
 
-});
 
 app.use(express.static(path.join(__dirname, '../http')));
 /**
