@@ -82,6 +82,11 @@ app.use(function(req, res, next) {
         next();
     }
 });
+app.get('*', function(req, res) {
+    if (req.get('host') === 'ygopro.us') {
+        res.redirect(301, 'https://ygosalvation.com' + req.url);
+    }
+});
 
 
 /**
@@ -134,7 +139,11 @@ try {
     openserver.use(helmet());
     openserver.use(ddos.express);
     openserver.get('*', function(req, res) {
-        res.redirect(301, 'https://' + req.get('host') + req.url);
+        if (req.get('host') === 'ygopro.us') {
+            res.redirect(301, 'https://ygosalvation.com' + req.url);
+        } else {
+            res.redirect(301, 'https://' + req.get('host') + req.url);
+        }
     });
     openserver.listen(HTTP_PORT);
 } catch (nossl) {
