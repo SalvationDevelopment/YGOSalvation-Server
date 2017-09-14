@@ -79,13 +79,15 @@ app.use(function(req, res, next) {
     if (toobusy()) {
         res.send(503, 'I\'m busy right now, sorry.');
     } else {
-        next();
+        if (req.get('host') === 'ygopro.us') {
+            res.redirect(301, 'https://ygosalvation.com' + req.url);
+        } else {
+            next();
+        }
     }
 });
 app.get('*', function(req, res) {
-    if (req.get('host') === 'ygopro.us') {
-        res.redirect(301, 'https://ygosalvation.com' + req.url);
-    }
+
 });
 
 app.use(express.static(path.join(__dirname, '../http')));
