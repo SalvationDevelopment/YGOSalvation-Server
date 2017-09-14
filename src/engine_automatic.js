@@ -246,7 +246,7 @@ function getNormalOptions(duel, prevention) {
             monsters = cards.filter(function(card) {
                 return isCard('monster', card);
             });
-
+        console.log(cards);
         return monsters.filter(function(card) {
             if (card.effectList) {
                 var validEffectList = card.effectList.some(function(effect) {
@@ -683,22 +683,17 @@ function loadCardScripts(duel, database) {
     }
 
     duel.stack.forEach(function(card) {
-        try {
-            Object.assign(card, getCardById(card.id));
-            card.script = hotload('../script/' + card.id + '.js');
-            card.effectList = [];
-            card.registerEffect = function(effect) {
-                card.effectList.push(effect);
-            };
-            card.script.initial_effect(card, duel);
-            card.runEffects = function() {};
-            card.canattack = true;
-        } catch (couldNotLoadCard) {
-            card.runEffects = generic;
-            card.script = {
-                initial_effect: generic
-            };
-        }
+        console.log(duel.stack.length);
+
+        Object.assign(card, getCardById(card.id));
+        card.script = hotload('../script/' + card.id + '.js');
+        card.effectList = [];
+        card.registerEffect = function(effect) {
+            card.effectList.push(effect);
+        };
+        card.script.initial_effect(card, duel);
+        card.runEffects = function() {};
+        card.canattack = true;
         setupCard(card);
     });
 }
