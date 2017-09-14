@@ -34,7 +34,7 @@ function forumValidate(data, callback) {
     //        
     //    }
     process.nextTick(function() {
-        var url = 'https://forum.ygosalvation.us/log.php',
+        var url = 'https://forum.ygosalvation.com/log.php',
             post = {
                 ips_username: data.username,
                 ips_password: data.password
