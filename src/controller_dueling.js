@@ -340,9 +340,7 @@ function init(primus) {
 
                 break;
             case 'lock':
-                console.log('attempting to lock');
                 if (games[activeduel] === undefined) {
-                    console.log('activeduel not defined');
                     return;
                 }
                 if (games[activeduel].player[socket.slot].ready) {
@@ -354,7 +352,6 @@ function init(primus) {
                 if (socket.slot !== undefined) {
                     try {
                         message.validate = validateDeck(message.deck, banlist[games[activeduel].banlist], database, games[activeduel].cardpool, games[activeduel].prerelease);
-                        console.log('exiting validation');
                         if (message.validate) {
                             if (message.validate.error) {
                                 socket.write(({
@@ -385,7 +382,6 @@ function init(primus) {
                     stateSystem[activeduel].lock[socket.slot] = true;
 
                     stateSystem[activeduel].decks[socket.slot] = message.deck;
-                    console.log('deck is locked');
                     socket.write(({
                         duelAction: 'lock',
                         result: 'success'

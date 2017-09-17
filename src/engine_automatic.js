@@ -11,6 +11,7 @@ const DRAW_PHASE = 0,
     BATTLE_PHASE = 3,
     MAIN_PHASE_2 = 4,
     END_PHASE = 5,
+    aux = require('../scripts/utilities/index.js'),
     waterfall = require('async-waterfall'), // Async flow control
     hotload = require('hotload'); // Allows for cards to be live edited
 
@@ -239,14 +240,14 @@ function doStandbyPhase(duel, callback) {
 function getNormalOptions(duel, prevention) {
     if (!duel.normalSummonedThisTurn) {
         var cards = duel.getGroup({
-                player: duel.turnOfPlayer,
-                location: 'HAND'
+                location: 'HAND',
+                player: duel.getState().turnOfPlayer
             }),
 
             monsters = cards.filter(function(card) {
                 return isCard('monster', card);
             });
-        console.log(cards);
+        console.log('getting normal options', cards.length);
         return monsters.filter(function(card) {
             if (card.effectList) {
                 var validEffectList = card.effectList.some(function(effect) {
@@ -682,18 +683,33 @@ function loadCardScripts(duel, database) {
         return result || {};
     }
 
-    duel.stack.forEach(function(card) {
-        console.log(duel.stack.length);
+    duel.getState().stack.forEach(function(card) {
 
         Object.assign(card, getCardById(card.id));
-        card.script = hotload('../script/' + card.id + '.js');
-        card.effectList = [];
-        card.registerEffect = function(effect) {
-            card.effectList.push(effect);
-        };
-        card.script.initial_effect(card, duel);
-        card.runEffects = function() {};
-        card.canattack = true;
+        try {
+            card.effectList = [];
+            card.registerEffect = function(effect) {
+                card.effectList.push(effect);
+            };
+            card.runEffects = function() {};
+            card.canattack = true;
+            card.script = hotload('../scripts/' + card.id + '.js');
+            console.log(card.script.initial_effect);
+            card.script.initial_effect(card, duel, aux);
+            console.log('Loaded script for', card.id, card.name);
+        } catch (script_error) {
+            if (script_error.code !== 'MODULE_NOT_FOUND') {
+                console.log(card.id, card.name, script_error);
+            } else {
+                console.log('Script not found', card.id, card.name);
+            }
+
+            card.script = {
+                initial_effect: function() {}
+            };
+            card.runEffects = function() {};
+            card.canattack = true;
+        }
         setupCard(card);
     });
 }

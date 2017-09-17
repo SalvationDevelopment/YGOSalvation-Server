@@ -310,7 +310,8 @@ function init(callback) {
 
     function getState() {
         var info = {
-            names: names
+            names: names,
+            stack: stack
         };
         return Object.assign(info, state);
     }
@@ -1188,6 +1189,7 @@ function init(callback) {
             }).length;
         });
     }
+
     /**
      * Restarts the game for a rematch.
      * @returns {undefined}

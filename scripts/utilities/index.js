@@ -3,37 +3,37 @@
 
 
 function cardIs(card, query) {
-    if (query === "MONSTER" && (card.race !== 0 || card.level !== 0 || card.attribute !== 0)) {
+    if (query === 'MONSTER' && (card.race !== 0 || card.level !== 0 || card.attribute !== 0)) {
         return true;
     }
-    if (query === "MONSTER") {
+    if (query === 'MONSTER') {
         return (card.type & 1) === 1;
     }
-    if (query === "SPELL") {
+    if (query === 'SPELL') {
         return (card.type & 2) === 2;
     }
-    if (query === "TRAP") {
+    if (query === 'TRAP') {
         return (card.type & 4) === 4;
     }
-    if (query === "FUSION") {
+    if (query === 'FUSION') {
         return (card.type & 64) === 64;
     }
-    if (query === "RITUAL") {
+    if (query === 'RITUAL') {
         return (card.type & 128) === 128;
     }
-    if (query === "SYNCHRO") {
+    if (query === 'SYNCHRO') {
         return (card.type & 8192) === 8192;
     }
-    if (query === "XYZ") {
+    if (query === 'XYZ') {
         return (card.type & 8388608) === 8388608;
     }
-    if (query === "LINK") {
+    if (query === 'LINK') {
         return (card.type & 33554432) === 33554432;
     }
 }
 
 function filterType(stack, type) {
-    return stack.filter(function (card) {
+    return stack.filter(function(card) {
         return cardIs(card, type);
     });
 }
@@ -44,7 +44,7 @@ function filterType(stack, type) {
  * @returns {Array} a stack of cards, devoid of overlay units.
  */
 function filterIsCard(stack) {
-    return stack.filter(function (item) {
+    return stack.filter(function(item) {
         return item.type === 'card';
     });
 }
@@ -56,7 +56,7 @@ function filterIsCard(stack) {
  * @returns {Array} a stack of cards that belong to only one specified player. 
  */
 function filterPlayer(stack, player) {
-    return stack.filter(function (item) {
+    return stack.filter(function(item) {
         return item.player === player;
     });
 }
@@ -68,7 +68,7 @@ function filterPlayer(stack, player) {
  * @returns {Array} a stack of cards that are in only one location/zone.
  */
 function filterlocation(stack, location) {
-    return stack.filter(function (item) {
+    return stack.filter(function(item) {
         return item.location === location;
     });
 }
@@ -80,7 +80,7 @@ function filterlocation(stack, location) {
  * @returns {Array} a stack of cards that are in only one index
  */
 function filterIndex(stack, index) {
-    return stack.filter(function (item) {
+    return stack.filter(function(item) {
         return item.index === index;
     });
 }
@@ -91,7 +91,7 @@ function filterIndex(stack, index) {
  * @returns {Array} a single card
  */
 function filterOverlyIndex(stack, overlayindex) {
-    return stack.filter(function (item) {
+    return stack.filter(function(item) {
         return item.overlayindex === overlayindex;
     });
 }
@@ -103,7 +103,7 @@ function filterOverlyIndex(stack, overlayindex) {
  * @returns {boolean} if a card is that UID
  */
 function filterUID(stack, uid) {
-    return stack.filter(function (item) {
+    return stack.filter(function(item) {
         return item.uid === uid;
     });
 }
