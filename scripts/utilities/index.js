@@ -49,6 +49,10 @@ function filterIsCard(stack) {
     });
 }
 
+function Stringid(code, id) {
+    return code * 16 + id;
+}
+
 /**
  * Filters out cards based on player.
  * @param   {Array} Array a stack of cards.
@@ -139,5 +143,6 @@ module.exports = {
     filterOverlyIndex: filterOverlyIndex,
     filterlocation: filterlocation,
     filterUID: filterUID,
-    sortByIndex: sortByIndex
+    sortByIndex: sortByIndex,
+    Stringid: Stringid
 };

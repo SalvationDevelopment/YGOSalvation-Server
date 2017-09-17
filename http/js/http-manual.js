@@ -1372,11 +1372,13 @@ function manualKickDuelist(slot) {
 
 function manualLeave() {
     'use strict';
+
     try {
         primus.write(({
             action: 'leave',
             game: activegame
         }));
+        $('#revealed, #revealedclose').css('display', 'none');
     } catch (error) {
         // odds are the connection isnt active, this is ok.
     }
