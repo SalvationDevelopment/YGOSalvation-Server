@@ -1254,7 +1254,12 @@ function init(callback) {
      * @returns {undefined}
      */
     function duelistChat(username, message) {
-        state.duelistChat.push(username + ': ' + message);
+        if (username) {
+            state.duelistChat.push(username + ': ' + message);
+        } else {
+            state.duelistChat.push(message);
+        }
+
         callback(generateView('chat'), stack);
     }
 

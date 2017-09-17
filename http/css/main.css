@@ -2906,3 +2906,10 @@ img.mainimage {
     flex: 1;
     text-align: center;
 }
+
+pre.errortext {
+    color: red !important;
+    font-size: .8em !important;
+    font-weight: bold !important;
+    font-family: monospace;
+}

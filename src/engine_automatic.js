@@ -11,6 +11,8 @@ const DRAW_PHASE = 0,
     BATTLE_PHASE = 3,
     MAIN_PHASE_2 = 4,
     END_PHASE = 5,
+    path = require('path'),
+    sourceDir = path.resolve('../'),
     aux = require('../scripts/utilities/index.js'),
     waterfall = require('async-waterfall'), // Async flow control
     hotload = require('hotload'); // Allows for cards to be live edited
@@ -671,7 +673,7 @@ function generic() {
  * @return {undefined}
  */
 function loadCardScripts(duel, database) {
-    console.log('loading scripts');
+    console.log('loading scripts', sourceDir);
 
     function getCardById(cardId) {
         var result = database.find(function(card) {
@@ -694,12 +696,13 @@ function loadCardScripts(duel, database) {
             card.runEffects = function() {};
             card.canattack = true;
             card.script = hotload('../scripts/' + card.id + '.js');
-            console.log(card.script.initial_effect);
             card.script.initial_effect(card, duel, aux);
             console.log('Loaded script for', card.id, card.name);
         } catch (script_error) {
             if (script_error.code !== 'MODULE_NOT_FOUND') {
+                var errorText = script_error.stack.split(sourceDir).join('')
                 console.log(card.id, card.name, script_error);
+                duel.duelistChat('Engine', '<pre class="errortext">' + errorText + '</pre>');
             } else {
                 console.log('Script not found', card.id, card.name);
             }
