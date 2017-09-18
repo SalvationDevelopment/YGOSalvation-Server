@@ -265,6 +265,48 @@ function getNormalOptions(duel, prevention) {
     }
 }
 
+
+/**
+ * Get a list of cards that the active user can normal summon at the moment.
+ * @param {Object} duel Engine Instance
+ * @param {String} prevention Card type text to ignore
+ * @returns {Array}  List of Cards
+ */
+function getSpecialSummonOptions(duel) {
+    if (!duel.preventSpecialSummoning) {
+        var cards = duel.getGroup({
+                location: 'HAND',
+                player: duel.getState().turnOfPlayer
+            }),
+
+            monsters = cards.filter(function(card) {
+                return isCard('monster', card);
+            });
+        return monsters.filter(function(card) {
+            if (card.effectList) {
+                var validEffectList = card.effectList.some(function(effect) {
+                    return effect.SetCode === 'EFFECT_SPSUMMON_PROC';
+                });
+                return Boolean(validEffectList.length);
+            } else {
+                return false;
+            }
+        }).filter(function(card) {
+            card.effectList.some(function(effect) {
+                if (effect.SetCode !== 'EFFECT_SPSUMMON_PROC') {
+                    return false;
+                }
+                if (typeof effect.SetCondition !== 'function') {
+                    return false;
+                }
+                return effect.SetCondition();
+            });
+        });
+    } else {
+        return [];
+    }
+}
+
 /**
  * Generate action list for main phases.
  * @param   {Object} duel Engine instance
@@ -274,17 +316,14 @@ function getMainPhaseActions(duel) {
     return {
         normalsummonable: getNormalOptions(duel, 'CANNONT_NORMAL_SUMMON'),
         cansetmonster: getNormalOptions(duel, 'CANNONT_SET'),
-        specialsummonable: duel.getGroup({
-            specialsummonable: true,
-            location: 'HAND'
-        }),
+        specialsummonable: getSpecialSummonOptions(duel),
         canchangetodefense: duel.getGroup({
             canchangetodefense: true,
             location: 'MONSTERZONE'
         }),
         canactivatespelltrap: duel.getGroup({
             canactivate: true,
-            location: 'SPELLZONE'
+            location: 'HAND'
         }),
         cantributesummon: duel.getGroup({
             canTributeSummon: true,

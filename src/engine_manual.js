@@ -1184,9 +1184,9 @@ function init(callback) {
      */
     function getGroup(requirement) {
         return stack.filter(function(card) {
-            return Object.keys(card).filter(function(property) {
-                return (requirement[property] === card.property);
-            }).length;
+            return Object.keys(requirement).filter(function(property) {
+                return (requirement[property] === card[property]);
+            }).length > 0;
         });
     }
 
