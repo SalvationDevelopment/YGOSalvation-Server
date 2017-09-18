@@ -183,8 +183,8 @@ module.exports = {
 	bannedTypes: [],
 	exceptions: [],
 	startDate: new Date('2017-06-12'),
+	endDate: new Date('2017-09-17'),
 	name: '2017.6.12 (TCG Advanced w/ Link Monsters)',
 	masterRule: 4,
-	region: 'tcg',
-	primary: true
+	region: 'tcg'
 }
