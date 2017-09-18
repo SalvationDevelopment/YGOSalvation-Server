@@ -52,13 +52,7 @@ function isCard(cat, obj) {
     }
 }
 
-function setupCard(card) {
-    if (isCard('monster', card)) {
 
-    } else {
-
-    }
-}
 /**
  * Get cards that have a specific effect type.
  * @param   {Object}   duel       Engine Instance
@@ -186,7 +180,6 @@ function doDrawPhase(duel, callback) {
         var state = duel.getState(),
             player = state.turnOfPlayer,
             turnCount = state.turn;
-        console.log(turnCount, player)
         if (turnCount && !state.skipDraw) {
 
             /* duel engine moves the card, then triggers its effects
@@ -241,6 +234,15 @@ function doStandbyPhase(duel, callback) {
  */
 function getNormalOptions(duel, prevention) {
     if (!duel.normalSummonedThisTurn) {
+        if (duel.getGroup({
+                player: duel.getState().turnOfPlayer,
+                location: 'MONSTERZONE'
+            }).filter(function(card) {
+                return (card.index < 5);
+            }).length > 4) {
+            return [];
+        }
+
         var cards = duel.getGroup({
                 location: 'HAND',
                 player: duel.getState().turnOfPlayer
@@ -249,7 +251,7 @@ function getNormalOptions(duel, prevention) {
             monsters = cards.filter(function(card) {
                 return isCard('monster', card);
             });
-        console.log('getting normal options', cards.length);
+
         return monsters.filter(function(card) {
             if (card.effectList) {
                 var validEffectList = card.effectList.some(function(effect) {
@@ -292,7 +294,7 @@ function getSpecialSummonOptions(duel) {
                 return false;
             }
         }).filter(function(card) {
-            card.effectList.some(function(effect) {
+            return card.effectList.some(function(effect) {
                 if (effect.SetCode !== 'EFFECT_SPSUMMON_PROC') {
                     return false;
                 }
@@ -308,39 +310,100 @@ function getSpecialSummonOptions(duel) {
 }
 
 /**
+ * Get a list of cards that the active user can normal summon at the moment.
+ * @param {Object} duel Engine Instance
+ * @param {String} prevention Card type text to ignore
+ * @returns {Array}  List of Cards
+ */
+function getActivationOptions(duel, location) {
+    var cards = duel.getGroup({
+        player: duel.getState().turnOfPlayer,
+        location: location
+    }).filter(function(card) {
+        return (card.location === 'REMOVED' && card.position === 'FaceDown');
+    });
+
+    return cards.filter(function(card) {
+        if (card.effectList) {
+            var validEffectList = card.effectList.some(function(effect) {
+                return effect.SetType === 'EFFECT_TYPE_ACTIVATE';
+            });
+            return Boolean(validEffectList.length);
+        } else {
+            return false;
+        }
+    }).filter(function(card) {
+        return card.effectList.some(function(effect) {
+            if (effect.SetType === 'EFFECT_TYPE_ACTIVATE') {
+                return false;
+            }
+            if (typeof effect.SetCondition !== 'function') {
+                return false;
+            }
+            return effect.SetCondition();
+        });
+    });
+}
+/**
+ * Get a list of cards that the active user can normal summon at the moment.
+ * @param {Object} duel Engine Instance
+ * @returns {Array}  List of Cards
+ */
+function getDefenseOptions(duel) {
+    var cards = duel.getGroup({
+        player: duel.getState().turnOfPlayer,
+        location: 'MONSTERZONE'
+    });
+
+    return cards.filter(function(card) {
+        if (card.position === 'FaceUpAttack' && !card.preventDefenceMode && !isCard('link', card)) {
+            return true;
+        } else {
+            return false;
+        }
+    });
+}
+
+/**
+ * Get a list of cards that the active user can normal summon at the moment.
+ * @param {Object} duel Engine Instance
+ * @returns {Array}  List of Cards
+ */
+function getSetSpellTrapOptions(duel) {
+    var player = duel.getState().turnOfPlayer,
+        cards = duel.getGroup({
+            player: player,
+            location: 'HAND'
+        }).filter(function(card) {
+            return (isCard('spell', card) || isCard('trap', card));
+        });
+
+    if (duel.getGroup({
+            player: player,
+            location: 'SPELLZONE'
+        }).filter(function(card) {
+            return (card.index < 5);
+        }).length > 4) {
+        return [];
+    }
+}
+
+
+/**
  * Generate action list for main phases.
  * @param   {Object} duel Engine instance
  * @returns {Object} options that user can take.
  */
 function getMainPhaseActions(duel) {
     return {
-        normalsummonable: getNormalOptions(duel, 'CANNONT_NORMAL_SUMMON'),
-        cansetmonster: getNormalOptions(duel, 'CANNONT_SET'),
+        normalsummonable: getNormalOptions(duel, 'CANNONT_SET'),
         specialsummonable: getSpecialSummonOptions(duel),
-        canchangetodefense: duel.getGroup({
-            canchangetodefense: true,
-            location: 'MONSTERZONE'
-        }),
-        canactivatespelltrap: duel.getGroup({
-            canactivate: true,
-            location: 'HAND'
-        }),
-        cantributesummon: duel.getGroup({
-            canTributeSummon: true,
-            location: 'HAND'
-        }),
-        cansetspelltrap: duel.getGroup({
-            cansetspelltrap: true,
-            location: 'HAND'
-        }),
-        canactivategrave: duel.getGroup({
-            canactivategrave: true,
-            location: 'GRAVE'
-        }),
-        canactivatebanished: duel.getGroup({
-            canactivatebanished: true,
-            location: 'REMOVED'
-        })
+        canchangetodefense: getDefenseOptions(duel),
+        cantributesummon: getNormalOptions(duel, 'CANNONT_NORMAL_SUMMON'),
+        cansetspelltrap: getSetSpellTrapOptions(duel),
+        canactivategrave: getActivationOptions(duel, 'GRAVE'),
+        canactivatespelltrap: getActivationOptions(duel, 'HAND'),
+        canactivatebanished: getActivationOptions(duel, 'REMOVED')
     };
 }
 
@@ -739,7 +802,7 @@ function loadCardScripts(duel, database) {
             console.log('Loaded script for', card.id, card.name);
         } catch (script_error) {
             if (script_error.code !== 'MODULE_NOT_FOUND') {
-                var errorText = script_error.stack.split(sourceDir).join('')
+                var errorText = script_error.stack.split(sourceDir).join('');
                 console.log(card.id, card.name, script_error);
                 duel.duelistChat('Engine', '<pre class="errortext">' + errorText + '</pre>');
             } else {
@@ -752,7 +815,7 @@ function loadCardScripts(duel, database) {
             card.runEffects = function() {};
             card.canattack = true;
         }
-        setupCard(card);
+
     });
 }
 
