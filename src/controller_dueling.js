@@ -60,6 +60,8 @@ function init(primus) {
      * @returns {object} customized game object
      */
     function newGame(settings) {
+        console.log('noshuffle: '+settings.info.shuf);
+        console.log('prerelease: '+settings.info.prerelease);
         return {
             automatic: settings.info.automatic,
             roompass: settings.roompass,
@@ -71,7 +73,7 @@ function init(primus) {
             banlistid: settings.info.banlistid,
             mode: settings.info.mode,
             cardpool: settings.info.cardpool,
-            noshuffle: 0,
+            noshuffle: settings.info.shuf,
             prerelease: settings.info.prerelease,
             legacyfield: (banlist[settings.info.banlist].masterRule !== 4),
             rule: 0,
@@ -92,10 +94,6 @@ function init(primus) {
             delCount: 0
         };
     }
-
-
-
-
 
     /**
      * Create a function that sorts to the correct viewers.
@@ -403,7 +401,7 @@ function init(primus) {
                     player1 = stateSystem[activeduel].decks[0];
                     player2 = stateSystem[activeduel].decks[1];
                     if (games[activeduel].automatic) {
-                        stateSystem[activeduel].startDuel(player1, player2, false);
+                        stateSystem[activeduel].startDuel(player1, player2, false, games[activeduel]);
                         stateSystem[activeduel].rps(function(result) {
                             var winner = 'Player ' + (1 + result);
                             stateSystem[activeduel].duelistChat('Server', games[activeduel].player[socket.slot].name + ' ' + winner + ' decides starting player.');
@@ -411,7 +409,7 @@ function init(primus) {
                         });
 
                     } else {
-                        stateSystem[activeduel].startDuel(player1, player2, true);
+                        stateSystem[activeduel].startDuel(player1, player2, true, games[activeduel]);
                     }
                     games[activeduel].started = true;
                     primus.duelBroadcast(games);
