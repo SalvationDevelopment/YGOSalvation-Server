@@ -1136,8 +1136,8 @@ function init(callback) {
         }
 
         state.lifepoints = {
-            0: 8000,
-            1: 8000
+            0: settings.startLP,
+            1: settings.startLP
         };
 
         player1.main.forEach(function(card, index) {
