@@ -407,9 +407,10 @@ function init(primus) {
                         stateSystem[activeduel].rps(function(result) {
                             var winner = 'Player ' + (1 + result);
                             stateSystem[activeduel].duelistChat('Server', games[activeduel].player[socket.slot].name + ' ' + winner + ' decides starting player.');
-                            automatic(stateSystem[activeduel], result, database);
+                            stateSystem[activeduel].question(result, 'startingPlayer', [0, 1], 1, function(startingPlayer) {
+                                automatic(stateSystem[activeduel], Number(startingPlayer[0]), database);
+                            });
                         });
-
                     } else {
                         stateSystem[activeduel].startDuel(player1, player2, true);
                     }

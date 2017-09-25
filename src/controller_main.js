@@ -162,7 +162,7 @@ primus = new Primus(primusServer, {
 
 primus.use('rooms', Rooms);
 
-var duelLogic = manualController.init(primus)
+var duelLogic = manualController.init(primus);
 
 
 var Datastore = require('nedb'),

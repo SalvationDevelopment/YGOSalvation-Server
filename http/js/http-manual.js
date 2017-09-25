@@ -1125,14 +1125,26 @@ function manualMoveGeneric(index, zone) {
     primus.write((message));
 }
 
+function selectStartingPlayer() {
+    var randomSelection = (Math.random() < 0.5) ? 0 : 1;
+    resolveQuestion(randomSelection);
+}
+
 function question(message) {
     'use strict';
     var type = message.type;
     activeQuestion = message;
     activeQuestion.answer = [];
     activeQuestion.action = 'question';
-    if (type === 'specialCards') {
-        reveal(activeQuestion.options, 'specialcard');
+    switch (type) {
+        case 'specialCards':
+            reveal(activeQuestion.options, 'specialcard');
+            break;
+        case 'startingPlayer':
+            selectStartingPlayer();
+            break;
+        default:
+            break;
     }
 }
 
@@ -2396,6 +2408,7 @@ function resolveQuestion(answer) {
     if (activeQuestion.answer.length >= activeQuestion.answerLength) {
         primus.write((activeQuestion));
         $('#revealed, #revealedclose').css('display', 'none');
+        $('.selectQuestionSet').css('display', 'none');
     }
 }
 

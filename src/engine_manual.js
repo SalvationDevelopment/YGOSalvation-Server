@@ -1378,6 +1378,15 @@ function init(callback) {
         duelistChat('Server', username + ' surrendered.');
     }
 
+    /**
+     * 
+     * @param {Number} player 
+     * @param {String} type 
+     * @param {Object[]} options 
+     * @param {Number} answerLength 
+     * @param {Function} onAnswerFromUser 
+     * @return {undefined}
+     */
     function question(player, type, options, answerLength, onAnswerFromUser) {
         var uuid = uniqueIdenifier(),
             output = {
