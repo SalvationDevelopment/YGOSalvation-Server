@@ -1121,21 +1121,23 @@ function init(callback) {
      * @param {Boolean} manual if using manual, or automatic
      * @returns {undefined}
      */
-    function startDuel(player1, player2, manual) {
+    function startDuel(player1, player2, manual, settings) {
         stack = [];
         if (!lock[0] && !lock[1]) {
             return;
         }
 
-        round.push(player1, player2);
+        round.push(player1, player2);   
         lock[0] = false;
         lock[1] = false;
-        shuffle(player1.main);
-        shuffle(player2.main);
+        if (!settings.noshuffle) {
+            shuffle(player1.main);
+            shuffle(player2.main);
+        }
 
         state.lifepoints = {
-            0: 8000,
-            1: 8000
+            0: parseInt(settings.startLP),
+            1: parseInt(settings.startLP)
         };
 
         player1.main.forEach(function(card, index) {
