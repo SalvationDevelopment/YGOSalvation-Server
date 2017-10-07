@@ -1,152 +1,374 @@
-function boardController(instance, message) {
+function boardController(gameBoard, message) {
     'use strict';
     switch (message.command) {
-        case ('STOC_JOIN_GAME'):
-            //copy the object over into the model
-            instance.deckcheck = message.deckcheck;
-            instance.draw_count = message.draw_count;
-            instance.banlistHashCode = message.banlistHashCode;
-            instance.mode = message.mode;
-            instance.noshuffle = message.noshuffle;
-            instance.prio = message.prio;
-            instance.startlp = message.startlp;
-            instance.starthand = message.startlp;
-            //fire handbars to render the view.
+        case ('STOC_UNKNOWN'):
+            message = {
+                command: 'STOC_UNKNOWN'
+            };
             break;
-        case ('STOC_TYPE_CHANGE'):
-            //remember who is the host, use this message to rotate the field properly.
-            instance.ishost = message.ishost;
+
+        case ('STOC_GAME_MSG'):
             break;
-        case ('STOC_HS_PLAYER_ENTER'):
-            //someone entered the duel lobby as a challenger.
-            //slot them into the avaliable open duel slots.
-            var i;
-            for (i = 0; 3 > i; i++) {
-                if (!instance.player[i].name) {
-                    instance.player[i].name = message.person;
-                    return;
-                }
-            }
+
+        case ('MSG_RETRY'):
             break;
-        case ('STOC_HS_PLAYER_CHANGE'):
-            //update to the names in the slots,
-            //signals leaving also.
-            var state = message.state,
-                stateText = message.stateText,
-                pos = message.changepos,
-                previousName;
-            if (message.pos > 3) {
-                return;
-            }
-            if (message.state < 8) {
-                previousName = String(instance.player[pos]); //copy then delete...
-                instance.player[state].name = previousName;
-                instance.player[pos].name = '';
-                instance.player[pos].ready = false;
-                console.log('???');
-            } else if (stateText === 'PLAYERCHANGE_READY') {
-                instance.player[pos].ready = true;
-            } else if (stateText === 'PLAYERCHANGE_NOTREADY') {
-                instance.player[pos].ready = false;
-            } else if (stateText === 'PLAYERCHANGE_LEAVE') {
-                instance.player[pos].name = '';
-                instance.player[pos].ready = false;
-            } else if (stateText === 'PLAYERCHANGE_OBSERVE') {
-                instance.player[pos].name = '';
-                instance.player[pos].ready = false;
-                instance.spectators++;
-            }
-            break;
-        case ('STOC_HS_WATCH_CHANGE'):
-            //update the number of spectators.
-            message.spectators = instance.spectators;
-            break;
-        case ('STOC_DUEL_START'):
-            //switch view from duel to duel field.
-            break;
+
         case ('MSG_START'):
-            //set the LP.
-            instance.player[0].lifepoints = message.lifepoints1;
-            instance.player[1].lifepoints = message.lifepoints2;
-            //set the size of each deck
-            break;
-        case ('MSG_NEW_TURN'):
-            //new turn, 
-            instance.turn++;
-            instance.turnOfPlayer = message.player;
-            //refresh field
-            break;
-        case ('MSG_RELOAD_FIELD'):
-            //???
-            break;
-        case ('MSG_UPDATE_message'):
-            //ygopro-core sent information about the state of a collection of related cards.
-            //field[message.player][message.fieldmodel] = ???;
-            //reimage field;
-            break;
-        case ('MSG_MOVE'):
-            //use animation system in gui.js
 
             break;
-        case ('MSG_UPDATE_CARD'):
-            //ygopro-core sent information about the state of one specific card.
-            field[message.player][message.fieldmodel][message.index] = message.card;
-            //redraw field;
+
+        case ('MSG_HINT'):
             break;
-        case ('MSG_CHAIN_END'):
-            //???
+        case 'HINT_EVENT':
+
             break;
-        case ('MSG_WAITING'):
-            //waiting animation/flag set to true.
+        case 'HINT_MESSAGE':
+
             break;
-        case ('MSG_SUMMONING'):
-            //attempting to summon animation
-            //message.code give the id of the card
+        case 'HINT_SELECTMSG':
+
             break;
-        case ('MSG_SUMMONED'):
-            //???
+
+        case 'HINT_OPSELECTED':
             break;
+        case 'HINT_EFFECT':
+
+
+            break;
+
+        case ('MSG_NEW_TURN'):
+
+            break;
+
+        case ('MSG_WIN'):
+
+            break;
+
+        case ('MSG_NEW_PHASE'):
+
+            break;
+
+        case ('MSG_DRAW'):
+
+            break;
+
+        case ('MSG_SHUFFLE_DECK'):
+
+            break;
+
+        case ('MSG_SHUFFLE_HAND'):
+
+            break;
+
         case ('MSG_CHAINING'):
-            //gives a card location and card
+
             break;
         case ('MSG_CHAINED'):
-            //???
+
             break;
-        case ('MSG_EQUIP'):
-            //???
+
+        case ('MSG_CHAIN_SOLVING'):
+
             break;
-        case ('MSG_POS_CHANGE'):
-            //??? might be extention of move command?
-            break;
-        case ('MSG_SHUFFLE_DECK'):
-            //use gui to shuffle deck of message.player
-            break;
+
         case ('MSG_CHAIN_SOLVED'):
-            //???
+
             break;
-        case ('MSG_NEW_PHASE'):
-            instance.phase = message.phase;
+
+        case ('MSG_CHAIN_END'):
             break;
-        case ('MSG_DRAW'):
-            var i = 0;
-            for (i; message.count > i; i++) {
-                field[message.player].DECK[(field.DECK.length - i)] = message.cardslist[i];
-            }
-            //due draw animation/update
+
+        case ('MSG_CHAIN_NEGATED'):
+
             break;
+
+        case ('MSG_CHAIN_DISABLED'):
+            break;
+
+        case ('MSG_CARD_SELECTED'):
+
+            break;
+        case ('MSG_RANDOM_SELECTED'):
+
+            break;
+        case ('MSG_BECOME_TARGET'):
+
+            break;
+
+        case ('MSG_PAY_LPCOST'):
+
+            break;
+
+        case ('MSG_DAMAGE'):
+
+            break;
+
+        case ('MSG_RECOVER'):
+
+            break;
+        case ('MSG_LPUPDATE'):
+
+            break;
+
+        case ('MSG_SUMMONING '):
+
+            break;
+
+        case ('MSG_EQUIP'):
+
+            break;
+
+        case ('MSG_UNEQUIP'):
+
+            break;
+
+        case ('MSG_CANCEL_TARGET'):
+
+            break;
+
+        case ('MSG_ADD_COUNTER'):
+
+            break;
+
+        case ('MSG_REMOVE_COUNTER'):
+
+            break;
+
+        case ('MSG_ATTACK'):
+
+            break;
+        case ('MSG_BATTLE'):
+
+            break;
+
+        case ('MSG_ATTACK_DISABLED'):
+
+            break;
+
+        case ('MSG_DAMAGE_STEP_START'):
+
+            break;
+
+        case ('MSG_DAMAGE_STEP_END'):
+
+            break;
+        case ('MSG_MISSED_EFFECT'):
+
+            break;
+        case ('MSG_TOSS_COIN'):
+
+            break;
+        case ('MSG_SELECT_IDLECMD'):
+
+            break;
+
+        case ('MSG_MOVE'):
+
+            break;
+
+        case ('MSG_POS_CHANGE'):
+
+            break;
+
+        case ('MSG_SET'):
+            //check for variables
+            break;
+
+        case ('MSG_SWAP'):
+
+            break;
+
+        case ('MSG_FIELD_DISABLED'):
+            break;
+        case ('MSG_SUMMONING'):
+
+            break;
+
         case ('MSG_SPSUMMONING'):
-            //special summoning animation with message
+
             break;
+
+        case ('MSG_SUMMONED'):
+
+            break;
+
         case ('MSG_SPSUMMONED'):
-            //???
+
+            break;
+
+        case ('MSG_FLIPSUMMONED'):
+
+            break;
+        case ('MSG_FLIPSUMMONING'):
+
+            break;
+
+        case ('MSG_REQUEST_DECK'):
+
+            break;
+        case ('MSG_SELECT_BATTLECMD'):
+
+            break;
+        case ('MSG_SELECT_EFFECTYN'):
+
+            break;
+
+        case ('MSG_SELECT_YESNO'):
+
+            break;
+        case ('MSG_SELECT_OPTION'):
+
+            break;
+        case ('MSG_SELECT_CARD'):
+
+            break;
+        case ('MSG_SELECT_CHAIN'):
+
+            break;
+        case ('MSG_SELECT_PLACE'):
+
+            break;
+        case ('MSG_SELECT_POSITION'):
+
+            break;
+        case ('MSG_SELECT_TRIBUTE'):
+
+            break;
+
+        case ('MSG_SORT_CHAIN'):
+
+            break;
+        case ('MSG_SELECT_COUNTER'):
+
+            break;
+        case ('MSG_SELECT_SUM'):
+
+            break;
+        case ('MSG_SELECT_DISFIELD'):
+
+            break;
+        case ('MSG_SORT_CARD'):
+
+            break;
+        case ('MSG_CONFIRM_DECKTOP'):
+
+            break;
+        case ('MSG_CONFIRM_CARDS'):
+
+            break;
+
+
+        case ('MSG_UPDATE_DATA'):
+
+            break;
+
+        case ('MSG_UPDATE_CARD'):
+
+            break;
+
+        case ('MSG_WAITING'):
+
+            break;
+        case ('MSG_SWAP_GRAVE_DECK'):
+
+            break;
+
+        case ('MSG_REVERSE_DECK'):
+
+            break;
+        case ('MSG_DECK_TOP'):
+
+            break;
+
+
+
+
+
+        case ('STOC_ERROR_MSG'):
+
+            break;
+        case ('ERRMSG_JOINERROR'):
             break;
         case ('ERRMSG_DECKERROR'):
-            //something is wrong with the deck you asked the server to validate!
-            console.log(message.error);
+
             break;
+
+        case ('ERRMSG_SIDEERROR'):
+
+            break;
+        case ('ERRMSG_VERERROR'):
+
+            break;
+
         case ('STOC_SELECT_HAND'):
-            //Trigger RPS Prompt
+
             break;
+
+        case ('STOC_SELECT_TP'):
+
+            break;
+
+        case ('STOC_HAND_RESULT'):
+
+            break;
+        case ('STOC_TP_RESULT'):
+            break;
+
+        case ('STOC_CHANGE_SIDE'):
+
+            break;
+
+        case ('STOC_WAITING_SIDE'):
+
+            break;
+
+        case ('STOC_CREATE_GAME'):
+            break;
+
+        case ('STOC_JOIN_GAME'):
+
+            break;
+        case ('STOC_TYPE_CHANGE'):
+
+            break;
+
+        case ('STOC_LEAVE_GAME'):
+            break;
+
+        case ('STOC_DUEL_START'):
+            //trigger to start duel, nothing more.
+            break;
+
+        case ('STOC_DUEL_END'):
+            //trigger to close the duel, nothing more.
+            break;
+
+        case ('STOC_REPLAY'):
+            break;
+
+        case ('STOC_TIME_LIMIT'):
+
+            break;
+
+        case ('STOC_CHAT'):
+
+            break;
+
+        case ('STOC_HS_PLAYER_ENTER'):
+
+            break;
+
+        case ('STOC_HS_PLAYER_CHANGE'):
+
+
+            break;
+
+        case ('STOC_HS_WATCH_CHANGE'):
+
+            break;
+
+
     }
+    return message;
 }
 module.exports = boardController;

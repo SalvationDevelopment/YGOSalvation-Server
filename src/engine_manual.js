@@ -1127,7 +1127,7 @@ function init(callback) {
             return;
         }
 
-        round.push(player1, player2);   
+        round.push(player1, player2);
         lock[0] = false;
         lock[1] = false;
         if (!settings.noshuffle) {

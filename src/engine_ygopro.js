@@ -104,7 +104,7 @@ function connectToYGOSharp(port, webSockectConnection, callback) {
         tcpConnection;
 
     function gameStateUpdater(gameAction) {
-        boardController(gameBoard, gameAction);
+        webSockectConnection.send(boardController(gameBoard, gameAction));
     }
 
     function cutConnections() {
@@ -121,7 +121,7 @@ function connectToYGOSharp(port, webSockectConnection, callback) {
             dataStream.input(data)
                 .map(parsePackets)
                 .map(translateYGOProAPI)
-                .map(gameStateUpdater.update);
+                .map(gameStateUpdater);
         });
         webSockectConnection.on('error', cutConnections);
         webSockectConnection.on('close', cutConnections);
