@@ -60,8 +60,8 @@ function init(primus) {
      * @returns {object} customized game object
      */
     function newGame(settings) {
-        console.log('noshuffle: '+settings.info.shuf);
-        console.log('prerelease: '+settings.info.prerelease);
+        console.log('noshuffle: ' + settings.info.shuf);
+        console.log('prerelease: ' + settings.info.prerelease);
         return {
             automatic: settings.info.automatic,
             roompass: settings.roompass,
@@ -686,6 +686,11 @@ function init(primus) {
                         target: message.target,
                         choice: message.choice
                     });
+                }
+                break;
+            case 'ygopro':
+                if (socket.slot !== undefined) {
+                    stateSystem[activeduel].relayYGOPro(socket.slot, message.data);
                 }
                 break;
             default:
