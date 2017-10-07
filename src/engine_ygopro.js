@@ -12,12 +12,13 @@
  * @property {Function} input
  */
 
-var child_process = require('child_process'),
+const child_process = require('child_process'),
     EventEmitter = require('events'),
     net = require('net'),
     enums = require('./enums.js'),
     translateYGOProAPI = require('./receiver.js'),
-    manualControlEngine = require('./engine_manual.js');
+    manualControlEngine = require('./engine_manual.js'),
+    boardController = require('./controller_ygopro.js');
 
 /**
  * Create a single players view of the game that is reflected down to the UI.
@@ -99,13 +100,12 @@ function DataStream() {
  */
 function connectToYGOSharp(port, webSockectConnection, callback) {
     var dataStream = new DataStream(),
-        gameStateUpdater = new EventEmitter(),
         gameBoard = new GameBoard(webSockectConnection),
         tcpConnection;
 
-    gameStateUpdater.update = function(gameAction) {
-        gameStateUpdater.emit(gameAction.command, gameAction);
-    };
+    function gameStateUpdater(gameAction) {
+        boardController(gameBoard, gameAction);
+    }
 
     function cutConnections() {
         if (tcpConnection) {
@@ -123,8 +123,8 @@ function connectToYGOSharp(port, webSockectConnection, callback) {
                 .map(translateYGOProAPI)
                 .map(gameStateUpdater.update);
         });
-        webSockectConnection.on(cutConnections);
-        webSockectConnection.on(cutConnections);
+        webSockectConnection.on('error', cutConnections);
+        webSockectConnection.on('close', cutConnections);
 
         /*artificial connection initiation*/
         // tcpConnection.write(data);
