@@ -308,5 +308,3 @@ function makeCheck(target) {
 }
 makeCheck('STOC');
 makeCheck('CTOS');
-
-var enums = module.exports;
