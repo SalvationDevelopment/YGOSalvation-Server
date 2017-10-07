@@ -18,7 +18,9 @@ const child_process = require('child_process'),
     enums = require('./enums.js'),
     translateYGOProAPI = require('./receiver.js'),
     manualControlEngine = require('./engine_manual.js'),
-    boardController = require('./controller_ygopro.js');
+    boardController = require('./controller_ygopro.js'),
+    YGOSharp = './bin/ygosharp.exe',
+    ip = '127.0.0.1';
 
 /**
  * Create a single players view of the game that is reflected down to the UI.
@@ -116,7 +118,7 @@ function connectToYGOSharp(port, webSockectConnection, callback) {
         }
     }
 
-    tcpConnection = net.connect(port, '127.0.0.1', function() {
+    tcpConnection = net.connect(port, ip, function() {
         tcpConnection.on('data', function(data) {
             dataStream.input(data)
                 .map(parsePackets)
@@ -144,7 +146,7 @@ function connectToYGOSharp(port, webSockectConnection, callback) {
  * @returns {Object} augmented game state object
  */
 function startYGOSharp(instance, sockets) {
-    instance.ygopro = child_process.spawn('./ygosharp/ygosharp.exe', function(error, stdout, stderr) {
+    instance.ygopro = child_process.spawn(YGOSharp, function(error, stdout, stderr) {
 
     });
 
