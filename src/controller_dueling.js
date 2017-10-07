@@ -729,6 +729,6 @@ function init(primus) {
     }
 
     return websocketHandle;
-};
+}
 
 module.exports = { init: init, setter: setter };

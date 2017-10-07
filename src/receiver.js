@@ -66,7 +66,7 @@ function recieveSTOC(packet) {
         case ('STOC_GAME_MSG'):
             command = enums.STOC.STOC_GAME_MSG[BufferIO.readInt8()];
             task.command = command;
-            bitreader++;
+            bitreader += 1;
             switch (command) {
                 case ('MSG_RETRY'):
                     break;
@@ -367,7 +367,7 @@ function recieveSTOC(packet) {
                         });
                     }
                     iter = 0;
-                    bitreader++;
+                    bitreader += 1;
                     task.repositionable_cards = [];
                     for (i = 0; i < task.count; ++i) {
                         task.repositionable_cards.push({
@@ -379,7 +379,7 @@ function recieveSTOC(packet) {
                         bitreader = bitreader + 7;
                     }
                     iter = 0;
-                    bitreader++;
+                    bitreader += 1;
                     task.msetable_cards = [];
                     for (iter; packet.message[bitreader] > iter; iter++) {
                         task.msetable_cards.push({
@@ -391,7 +391,7 @@ function recieveSTOC(packet) {
                         bitreader = bitreader + 7;
                     }
                     iter = 0;
-                    bitreader++;
+                    bitreader += 1;
                     task.select_chains = [];
                     for (iter; packet.message[bitreader] > iter; iter++) {
                         task.select_chains.push({
@@ -403,7 +403,7 @@ function recieveSTOC(packet) {
                         bitreader = bitreader + 7;
                     }
                     iter = 0;
-                    bitreader++;
+                    bitreader += 1;
                     task.ssetable_cards = [];
                     for (iter; packet.message[bitreader] > iter; iter++) {
                         task.ssetable_cards.push({
@@ -415,7 +415,7 @@ function recieveSTOC(packet) {
                         bitreader = bitreader + 7;
                     }
                     iter = 0;
-                    bitreader++;
+                    bitreader += 1;
                     task.select_chains = [];
                     for (iter; packet.message[bitreader] > iter; iter++) {
                         task.select_chains.push({

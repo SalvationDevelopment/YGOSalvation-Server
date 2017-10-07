@@ -2,9 +2,25 @@ var child_process = require('child_process'),
     EventEmitter = require('events'),
     net = require('net'),
     enums = require('./enums.js'),
-    receiver = require('./receiver.js')
+    receiver = require('./receiver.js'),
+    manual = require('./engine_manual.js');
 
-function parsePackets(command, message) {
+
+function makeUICallback(socket) {
+    return function gameResponse(view, stack, callback) {
+        try {
+            socket.write((view.p0));
+        } catch (error) {
+            console.log('failed messaging socket', error);
+        } finally {
+            if (callback) {
+                return callback(stack);
+            }
+        }
+    };
+}
+
+function parsePackets(message) {
     'use strict';
 
     var task = [],
@@ -12,16 +28,11 @@ function parsePackets(command, message) {
             message: message.slice(1),
             readposition: 0
         };
-    packet[command] = enums[command][message[0]];
+    packet.STOC = enums.STOC[message[0]];
     task.push(packet);
     return task;
 }
 
-
-function CommandParser() {
-    'use strict';
-
-}
 
 function Framemaker() {
     'use strict';
@@ -60,51 +71,48 @@ module.exports = function(instance, sockets) {
 
     var ygopro = instance.ygopro;
 
-    function connectToCore(port, socket) {
+    function connectToCore(port, socket, callback) {
+        var framer = new Framemaker(),
+            network = new EventEmitter(),
+            ui = manual(makeUICallback(socket)),
+            tcpConnection;
 
+        network.input = function(input) {
+            network.emit(input.command, input);
+        };
 
-        socket.active_ygocore = net.connect(port, '127.0.0.1', function() {
-            var framer = new Framemaker(),
-                network = new EventEmitter();
+        tcpConnection = net.connect(port, '127.0.0.1', function() {
+            tcpConnection.setNoDelay(true);
 
-            network.input = function(input) {
-                network.emit(input.command, input);
-            };
+            tcpConnection.on('data', function(data) {
+                framer.input(data)
+                    .map(parsePackets)
+                    .map(receiver)
+                    .map(network.input);
 
-            /* Unlimit the speed of the connection
-            by not doing processing on the data
-            to incease up network optimization */
-            socket.active_ygocore.setNoDelay(true);
-
-            /*artificial connection initiation*/
-            // socket.active_ygocore.write(data);
-
-
-            socket.active = false;
-            socket.active_ygocore.on('data', function(data) {
-                // need to send to reciver here.
-                framer.input(data).forEach(function(frame) {
-                    parsePackets('STOC', new Buffer(frame))
-                        .map(receiver)
-                        .map(network.input);
-                });
             });
 
             socket.on('close', function() {
-                if (socket.active_ygocore) {
-                    socket.active_ygocore.end();
+                if (tcpConnection) {
+                    tcpConnection.end();
                 }
             });
             socket.on('error', function(error) {
-                socket.active_ygocore.end();
+                tcpConnection.end();
             });
+
+            /*artificial connection initiation*/
+            // tcpConnection.write(data);
+            callback();
         });
-        socket.active_ygocore.on('error', function(error) {
+        tcpConnection.on('error', function(error) {
             socket.end();
         });
-        socket.active_ygocore.on('close', function() {
+        tcpConnection.on('close', function() {
             socket.end();
         });
+
+        return tcpConnection;
 
     }
 
@@ -119,8 +127,8 @@ module.exports = function(instance, sockets) {
         var core_message = core_message_raw.toString().split('|');
 
         if (core_message[0].trim() === '::::network-ready') {
-            connectToCore(port, data, sockets[0], function() {
-                connectToCore(port, data, sockets[1], function() {});
+            ygopro.sockets[0] = connectToCore(instance.port, sockets[0], function() {
+                ygopro.sockets[1] = connectToCore(instance.port, sockets[1], function() {});
             });
 
         }
@@ -129,7 +137,4 @@ module.exports = function(instance, sockets) {
     instance.relay = function(socket, message) {
         ygopro.sockets[socket].send(message);
     };
-
-
-
 };
