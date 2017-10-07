@@ -2,7 +2,7 @@ var child_process = require('child_process'),
     EventEmitter = require('events'),
     net = require('net'),
     enums = require('./enums.js'),
-    receiver = require('./receiver.js'),
+    translateYGOProAPI = require('./receiver.js'),
     manual = require('./engine_manual.js');
 
 
@@ -71,47 +71,42 @@ module.exports = function(instance, sockets) {
 
     var ygopro = instance.ygopro;
 
-    function connectToCore(port, socket, callback) {
-        var framer = new Framemaker(),
-            network = new EventEmitter(),
-            ui = manual(makeUICallback(socket)),
+    function connectToCore(port, webSockectConnection, callback) {
+        var dataStream = new Framemaker(),
+            gameStateUpdater = new EventEmitter(),
+            gameBoard = manual(makeUICallback(webSockectConnection)),
             tcpConnection;
 
-        network.input = function(input) {
-            network.emit(input.command, input);
+        gameStateUpdater.update = function(gameAction) {
+            gameStateUpdater.emit(gameAction.command, gameAction);
         };
 
-        tcpConnection = net.connect(port, '127.0.0.1', function() {
-            tcpConnection.setNoDelay(true);
-
-            tcpConnection.on('data', function(data) {
-                framer.input(data)
-                    .map(parsePackets)
-                    .map(receiver)
-                    .map(network.input);
-
-            });
-
-            socket.on('close', function() {
-                if (tcpConnection) {
-                    tcpConnection.end();
-                }
-            });
-            socket.on('error', function(error) {
+        function cutConnections() {
+            if (tcpConnection) {
                 tcpConnection.end();
+            }
+            if (webSockectConnection) {
+                webSockectConnection.end();
+            }
+        }
+
+        tcpConnection = net.connect(port, '127.0.0.1', function() {
+            tcpConnection.on('data', function(data) {
+                dataStream.input(data)
+                    .map(parsePackets)
+                    .map(translateYGOProAPI)
+                    .map(gameStateUpdater.update);
             });
+            webSockectConnection.on(cutConnections);
+            webSockectConnection.on(cutConnections);
 
             /*artificial connection initiation*/
             // tcpConnection.write(data);
             callback();
         });
-        tcpConnection.on('error', function(error) {
-            socket.end();
-        });
-        tcpConnection.on('close', function() {
-            socket.end();
-        });
-
+        tcpConnection.setNoDelay(true);
+        tcpConnection.on('error', cutConnections);
+        tcpConnection.on('close', cutConnections);
         return tcpConnection;
 
     }
