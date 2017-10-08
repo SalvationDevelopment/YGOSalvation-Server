@@ -29,10 +29,10 @@ function makeCTOS(command, message) {
         return proto;
     };
 
-    say.CTOS_PlayerInfo = function(message) {
+    say.CTOS_PlayerInfo = function(response) {
         var ctos = new Buffer([0x10]),
             name = Array.apply(null, new Array(40)).map(Number.prototype.valueOf, 0),
-            username = new Buffer(message, 'utf16le'),
+            username = new Buffer(response, 'utf16le'),
             usernamef = new Buffer(name),
             x = username.copy(usernamef),
             len = usernamef.length + 1,
@@ -214,11 +214,11 @@ function makeCTOS(command, message) {
         return proto;
     };
 
-    say.CTOS_CHAT = function(message) {
+    say.CTOS_CHAT = function(response) {
         // be sure to add \0 at the end.
-        message = message + '\u0000';
+        response = response + '\u0000';
         var ctos = new Buffer([0x16]),
-            chat = new Buffer(message, 'utf16le'),
+            chat = new Buffer(response, 'utf16le'),
             len = chat.length + 1,
             proto = new Buffer(2);
 
@@ -236,3 +236,5 @@ function makeCTOS(command, message) {
 
     return say[command](message);
 }
+
+module.exports = makeCTOS();

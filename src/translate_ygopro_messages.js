@@ -8,8 +8,8 @@
  * @property {Packet} packet
  */
 
-const enums = require('./enums.js'),
-    makeCard = require('./card.js');
+const enums = require('./translate_ygopro_enums.js'),
+    makeCard = require('./model_ygopro_card.js');
 
 /**
  * Takes a packet and makes a readable object out of it.

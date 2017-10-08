@@ -15,10 +15,11 @@
 const child_process = require('child_process'),
     EventEmitter = require('events'),
     net = require('net'),
-    enums = require('./enums.js'),
+    enums = require('./translate_ygopro_enums.js'),
     translateYGOProAPI = require('./receiver.js'),
     manualControlEngine = require('./engine_manual.js'),
     boardController = require('./controller_ygopro.js'),
+    gameResponse = require('./translate_ygopro_reply.js'),
     YGOSharp = './bin/ygosharp.exe',
     ip = '127.0.0.1';
 
@@ -28,7 +29,7 @@ const child_process = require('child_process'),
  * @returns {Object} A game instance with manual controls.
  */
 function GameBoard(webSockectConnection) {
-    return manualControlEngine(function gameResponse(view, stack, callback) {
+    return manualControlEngine(function(view, stack, callback) {
         try {
             webSockectConnection.write((view.p0));
         } catch (error) {
@@ -128,8 +129,12 @@ function connectToYGOSharp(port, webSockectConnection, callback) {
         webSockectConnection.on('error', cutConnections);
         webSockectConnection.on('close', cutConnections);
 
-        /*artificial connection initiation*/
-        // tcpConnection.write(data);
+        console.log('Send Game request for', webSockectConnection.activeDuel);
+        var CTOS_PlayerInfo = gameResponse('CTOS_PlayerInfo', webSockectConnection.username),
+            CTOS_JoinGame = gameResponse('CTOS_JoinGame', webSockectConnection.activeDuel),
+            toDuelist = gameResponse('CTOS_HS_TODUELIST');
+
+        tcpConnection.write(Buffer.concat([CTOS_PlayerInfo, CTOS_JoinGame]));
         callback();
     });
     tcpConnection.setNoDelay(true);
@@ -137,6 +142,12 @@ function connectToYGOSharp(port, webSockectConnection, callback) {
     tcpConnection.on('close', cutConnections);
     return tcpConnection;
 
+}
+
+
+function lockInDeck(tcpConnection, deck) {
+    tcpConnection.write(gameResponse('CTOS_UPDATE_DECK', deck));
+    tcpConnection.write(gameResponse('CTOS_HS_READY'));
 }
 
 /**
@@ -164,9 +175,12 @@ function startYGOSharp(instance, sockets) {
 
         if (core_message[0].trim() === '::::network-ready') {
             ygopro.sockets[0] = connectToYGOSharp(instance.port, sockets[0], function() {
-                ygopro.sockets[1] = connectToYGOSharp(instance.port, sockets[1], function() {});
+                lockInDeck(ygopro.sockets[0], sockets[0].deck);
+                ygopro.sockets[1] = connectToYGOSharp(instance.port, sockets[1], function() {
+                    lockInDeck(ygopro.sockets[1], sockets[1].deck);
+                    ygopro.sockets[0].write(gameResponse('CTOS_START'));
+                });
             });
-
         }
     });
 
