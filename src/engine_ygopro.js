@@ -29,7 +29,16 @@ const child_process = require('child_process'),
     boardController = require('./controller_ygopro.js'),
     gameResponse = require('./translate_ygopro_reply.js'),
     YGOSharp = './bin/ygosharp.exe',
-    ip = '127.0.0.1';
+    ip = '127.0.0.1',
+    scripts = {
+        0: '../ygopro-scripts',
+        1: '../ygopro-scripts',
+        2: '../ygopro-scripts',
+        3: '../ygopro-scripts',
+        4: '../ygopro-scripts',
+        5: '../ygopro-scripts'
+    };
+
 
 /**
  * Create a single players view of the game that is reflected down to the UI.
@@ -149,13 +158,13 @@ function connectToYGOSharp(port, webSockectConnection, callback) {
     tcpConnection.on('error', cutConnections);
     tcpConnection.on('close', cutConnections);
     return tcpConnection;
-
 }
 
 /**
  * Takes a deck, sends it to YGOSharp, then locks in the deck.
  * @param {Object} tcpConnection Connection to YGOSharp
  * @param {YGOProDeck} deck a deck in the proper format
+ * @returns {undefined}
  */
 function lockInDeck(tcpConnection, deck) {
     tcpConnection.write(gameResponse('CTOS_UPDATE_DECK', deck));
@@ -169,6 +178,21 @@ function lockInDeck(tcpConnection, deck) {
  * @returns {Object} augmented game state object
  */
 function startYGOSharp(instance, sockets) {
+    var paramlist = ['StandardStreamProtocol=true',
+        'Port=' + instance.port,
+        'ClientVersion=0x1338',
+        'BanlistFile=./lflist.conf',
+        'ScriptDirectory=' + scripts[instance.masterrule],
+        'DatabaseFile=./cards.cdb',
+        'Rule=' + instance.allowedCards,
+        'Mode=' + instance.gameMode,
+        'Banlist=' + instance.banList,
+        'StartLp=' + instance.lifePoints,
+        'GameTimer=' + instance.timeLimit,
+        'NoCheckDeck=' + instance.isDeckChecked,
+        'NoShuffleDeck=' + instance.isShuffled,
+        'EnablePriority=false'
+    ];
     instance.ygopro = child_process.spawn(YGOSharp, function(error, stdout, stderr) {
 
     });
