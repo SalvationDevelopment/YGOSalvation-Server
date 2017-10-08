@@ -12,6 +12,14 @@
  * @property {Function} input
  */
 
+/**
+ * @typedef YGOProDeck
+ * @type {Object}
+ * @property {Number[]} main
+ * @property {Number[]} extra
+ * @property {Number[]} side
+ */
+
 const child_process = require('child_process'),
     EventEmitter = require('events'),
     net = require('net'),
@@ -144,7 +152,11 @@ function connectToYGOSharp(port, webSockectConnection, callback) {
 
 }
 
-
+/**
+ * Takes a deck, sends it to YGOSharp, then locks in the deck.
+ * @param {Object} tcpConnection Connection to YGOSharp
+ * @param {YGOProDeck} deck a deck in the proper format
+ */
 function lockInDeck(tcpConnection, deck) {
     tcpConnection.write(gameResponse('CTOS_UPDATE_DECK', deck));
     tcpConnection.write(gameResponse('CTOS_HS_READY'));
