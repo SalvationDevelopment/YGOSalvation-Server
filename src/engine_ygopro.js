@@ -178,26 +178,24 @@ function lockInDeck(tcpConnection, deck) {
  * @returns {Object} augmented game state object
  */
 function startYGOSharp(instance, sockets) {
-    var paramlist = ['StandardStreamProtocol=true',
-        'Port=' + instance.port,
-        'ClientVersion=0x1338',
-        'BanlistFile=./lflist.conf',
-        'ScriptDirectory=' + scripts[instance.masterrule],
-        'DatabaseFile=./cards.cdb',
-        'Rule=' + instance.allowedCards,
-        'Mode=' + instance.gameMode,
-        'Banlist=' + instance.banList,
-        'StartLp=' + instance.lifePoints,
-        'GameTimer=' + instance.timeLimit,
-        'NoCheckDeck=' + instance.isDeckChecked,
-        'NoShuffleDeck=' + instance.isShuffled,
-        'EnablePriority=false'
-    ];
-    instance.ygopro = child_process.spawn(YGOSharp, function(error, stdout, stderr) {
+    var gameParameters = ['StandardStreamProtocol=true',
+            'Port=' + instance.port,
+            'ClientVersion=0x1338',
+            'BanlistFile=./lflist.conf',
+            'ScriptDirectory=' + scripts[instance.masterrule],
+            'DatabaseFile=./cards.cdb',
+            'Rule=' + instance.allowedCards,
+            'Mode=' + instance.gameMode,
+            'Banlist=' + instance.banList,
+            'StartLp=' + instance.lifePoints,
+            'GameTimer=' + instance.timeLimit,
+            'NoCheckDeck=' + instance.isDeckChecked,
+            'NoShuffleDeck=' + instance.isShuffled,
+            'EnablePriority=false'
+        ],
+        ygopro = instance.ygopro = child_process.spawn(YGOSharp, gameParameters, function(error, stdout, stderr) {
 
-    });
-
-    var ygopro = instance.ygopro;
+        });
 
     ygopro.stdout.on('error', function(error) {
         ygopro.kill();
