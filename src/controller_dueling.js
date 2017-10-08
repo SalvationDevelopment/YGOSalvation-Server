@@ -12,7 +12,7 @@ var fs = require('fs'),
     https = require('https'),
     path = require('path'),
     database = [],
-    automatic = require('./engine_automatic.js').init,
+    ygopro = require('./engine_ygopro.js'),
     banlist = {};
 
 
@@ -401,14 +401,7 @@ function init(primus) {
                     player1 = stateSystem[activeduel].decks[0];
                     player2 = stateSystem[activeduel].decks[1];
                     if (games[activeduel].automatic) {
-                        stateSystem[activeduel].startDuel(player1, player2, false, games[activeduel]);
-                        stateSystem[activeduel].rps(function(result) {
-                            var winner = 'Player ' + (1 + result);
-                            stateSystem[activeduel].duelistChat('Server', games[activeduel].player[socket.slot].name + ' ' + winner + ' decides starting player.');
-                            stateSystem[activeduel].question(result, 'startingPlayer', [0, 1], 1, function(startingPlayer) {
-                                automatic(stateSystem[activeduel], Number(startingPlayer[0]), database);
-                            });
-                        });
+                        stateSystem[activeduel] = ygopro(Object.assign({}, games[activeduel]), stateSystem[activeduel].players);
                     } else {
                         stateSystem[activeduel].startDuel(player1, player2, true, games[activeduel]);
                     }

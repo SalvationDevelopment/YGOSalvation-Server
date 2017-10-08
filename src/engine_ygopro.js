@@ -171,6 +171,40 @@ function lockInDeck(tcpConnection, deck) {
     tcpConnection.write(gameResponse('CTOS_HS_READY'));
 }
 
+/*
+ {
+            automatic: settings.info.automatic,
+            roompass: settings.roompass,
+            started: false,
+            deckcheck: 0,
+            draw_count: 0,
+            ot: parseInt(settings.info.ot, 10),
+            banlist: settings.info.banlist,
+            banlistid: settings.info.banlistid,
+            mode: settings.info.mode,
+            cardpool: settings.info.cardpool,
+            noshuffle: settings.info.shuf,
+            prerelease: settings.info.prerelease,
+            legacyfield: (banlist[settings.info.banlist].masterRule !== 4),
+            rule: 0,
+            startLP: settings.info.startLP,
+            starthand: 0,
+            timelimit: 0,
+            player: {
+                0: {
+                    name: '',
+                    ready: false
+                },
+                1: {
+                    name: '',
+                    ready: false
+                }
+            },
+            spectators: [],
+            delCount: 0
+        };
+        */
+
 /**
  * Start a YGOSharp instance, and connect users to it.
  * @param {Object} instance game state object
