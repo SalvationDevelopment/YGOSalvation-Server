@@ -237,4 +237,4 @@ function makeCTOS(command, message) {
     return say[command](message);
 }
 
-module.exports = makeCTOS();
+module.exports = makeCTOS;

@@ -1171,6 +1171,8 @@ function manualReciver(message) {
     }
 
     switch (message.duelAction) {
+        case 'ygopro':
+            //console.log(message.packet);
         case 'ack':
             primus.write(({
                 action: 'ack',

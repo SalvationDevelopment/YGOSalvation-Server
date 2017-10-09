@@ -53,16 +53,17 @@ function BufferStreamReader(packet) {
  * @returns {YGOProMessage} Object with various types of information stored in it.
  */
 function recieveSTOC(packet) {
-    var message = {},
+    var BufferIO = new BufferStreamReader(packet.message),
         command,
         bitreader = 0,
         iter = 0,
         errorCode,
         i = 0,
-        BufferIO = new BufferStreamReader(packet.message);
-
-    message.command = packet.STOC;
-    message.packet = packet;
+        message = {
+            duelAction: 'ygopro',
+            command: packet.command,
+            packet: packet
+        };
 
     switch (message.command) {
         case ('STOC_UNKNOWN'):
@@ -772,3 +773,5 @@ function recieveSTOC(packet) {
     }
     return message;
 }
+
+module.exports = recieveSTOC;

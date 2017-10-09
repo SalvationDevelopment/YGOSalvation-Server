@@ -12,8 +12,11 @@ var fs = require('fs'),
     https = require('https'),
     path = require('path'),
     database = [],
+    random_port = require('random-port'),
+
     ygopro = require('./engine_ygopro.js'),
-    banlist = {};
+    banlist = {},
+    ygopros = {};
 
 
 
@@ -401,12 +404,23 @@ function init(primus) {
                     player1 = stateSystem[activeduel].decks[0];
                     player2 = stateSystem[activeduel].decks[1];
                     if (games[activeduel].automatic) {
-                        stateSystem[activeduel] = ygopro(Object.assign({}, games[activeduel]), stateSystem[activeduel].players);
+                        random_port({ from: 10000, range: 10000 }, function(port) {
+                            var players = [stateSystem[activeduel].players[0], stateSystem[activeduel].players[1]];
+                            games[activeduel].port = port;
+                            players.forEach(function(item, iteration) {
+                                item.activeduel = activeduel;
+                            });
+                            ygopros[activeduel] = ygopro(Object.assign({}, games[activeduel]), players);
+                            games[activeduel].started = true;
+                            primus.duelBroadcast(games);
+                        });
+
                     } else {
                         stateSystem[activeduel].startDuel(player1, player2, true, games[activeduel]);
+                        games[activeduel].started = true;
+                        primus.duelBroadcast(games);
                     }
-                    games[activeduel].started = true;
-                    primus.duelBroadcast(games);
+
                 }
                 break;
             case 'moveCard':

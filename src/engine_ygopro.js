@@ -24,11 +24,11 @@ const child_process = require('child_process'),
     EventEmitter = require('events'),
     net = require('net'),
     enums = require('./translate_ygopro_enums.js'),
-    translateYGOProAPI = require('./receiver.js'),
+    translateYGOProAPI = require('./translate_ygopro_messages.js'),
     manualControlEngine = require('./engine_manual.js'),
     boardController = require('./controller_ygopro.js'),
     gameResponse = require('./translate_ygopro_reply.js'),
-    YGOSharp = './bin/ygosharp.exe',
+    YGOSharp = './ygosharp.exe',
     ip = '127.0.0.1',
     scripts = {
         0: '../ygopro-scripts',
@@ -64,16 +64,16 @@ function GameBoard(webSockectConnection) {
  * @param {Buffer} message YGOPro Protocol Message.
  * @returns {Packet[]} Disected message in an array.
  */
-function parsePackets(message) {
+function parsePackets(data) {
     'use strict';
-
-    var task = [],
+    var message = new Buffer(data),
+        task = [],
         packet = {
             message: message.slice(1),
             readposition: 0
         };
-    packet.STOC = enums.STOC[message[0]];
-    task.push(packet);
+    packet.command = enums.STOC[message[0]];
+    task.push(translateYGOProAPI(packet));
     return task;
 }
 
@@ -123,8 +123,11 @@ function connectToYGOSharp(port, webSockectConnection, callback) {
         gameBoard = new GameBoard(webSockectConnection),
         tcpConnection;
 
-    function gameStateUpdater(gameAction) {
-        webSockectConnection.send(boardController(gameBoard, gameAction));
+    function gameStateUpdater(gameActions) {
+        gameActions.forEach(function(gameAction) {
+            webSockectConnection.write(boardController(gameBoard, gameAction));
+        });
+
     }
 
     function cutConnections() {
@@ -140,15 +143,14 @@ function connectToYGOSharp(port, webSockectConnection, callback) {
         tcpConnection.on('data', function(data) {
             dataStream.input(data)
                 .map(parsePackets)
-                .map(translateYGOProAPI)
                 .map(gameStateUpdater);
         });
         webSockectConnection.on('error', cutConnections);
         webSockectConnection.on('close', cutConnections);
 
-        console.log('Send Game request for', webSockectConnection.activeDuel);
-        var CTOS_PlayerInfo = gameResponse('CTOS_PlayerInfo', webSockectConnection.username),
-            CTOS_JoinGame = gameResponse('CTOS_JoinGame', webSockectConnection.activeDuel),
+        console.log('Send Game request for', webSockectConnection.activeduel);
+        var CTOS_PlayerInfo = gameResponse('CTOS_PlayerInfo', 'Player'),
+            CTOS_JoinGame = gameResponse('CTOS_JoinGame', webSockectConnection.activeduel),
             toDuelist = gameResponse('CTOS_HS_TODUELIST');
 
         tcpConnection.write(Buffer.concat([CTOS_PlayerInfo, CTOS_JoinGame]));
@@ -212,43 +214,58 @@ function lockInDeck(tcpConnection, deck) {
  * @returns {Object} augmented game state object
  */
 function startYGOSharp(instance, sockets) {
-    var paramlist = ['StandardStreamProtocol=true',
+    var parametersList = ['StandardStreamProtocol=true',
         'Port=' + instance.port,
         'ClientVersion=0x1338',
         'BanlistFile=./lflist.conf',
-        'ScriptDirectory=' + scripts[instance.masterrule],
+        'ScriptDirectory=' + '../ygopro-scripts',
         'DatabaseFile=./cards.cdb',
-        'Rule=' + instance.allowedCards,
-        'Mode=' + instance.gameMode,
-        'Banlist=' + instance.banList,
-        'StartLp=' + instance.lifePoints,
-        'GameTimer=' + instance.timeLimit,
-        'NoCheckDeck=' + instance.isDeckChecked,
-        'NoShuffleDeck=' + instance.isShuffled,
+        'Rule=' + 0,
+        'Mode=' + 0,
+        'Banlist=' + 0,
+        'StartLp=' + instance.startLP,
+        'GameTimer=' + 300,
+        'NoCheckDeck=true',
+        'NoShuffleDeck=' + Boolean(instance.shuf),
         'EnablePriority=false'
     ];
-    instance.ygopro = child_process.spawn(YGOSharp, function(error, stdout, stderr) {
-
+    console.log(YGOSharp + ' ' + parametersList.join(' '));
+    instance.ygopro = child_process.spawn(YGOSharp, parametersList, {
+        cwd: './bin/'
     });
 
     var ygopro = instance.ygopro;
-
+    ygopro.sockets = [];
+    ygopro.on('close', function(error) {
+        console.log(error);
+    });
+    ygopro.stderr.on('error', function(error) {
+        console.log(error);
+        ygopro.kill();
+        console.log('Game ended with issues', error);
+    });
     ygopro.stdout.on('error', function(error) {
+        console.log(error);
         ygopro.kill();
         console.log('Game ended with issues', error);
     });
     ygopro.stdout.on('data', function(core_message_raw) {
+
         if (core_message_raw.toString().indexOf('::::') < 0) {
             return;
         }
         var core_message = core_message_raw.toString().split('|');
-
+        console.log(core_message);
         if (core_message[0].trim() === '::::network-ready') {
             ygopro.sockets[0] = connectToYGOSharp(instance.port, sockets[0], function() {
                 lockInDeck(ygopro.sockets[0], sockets[0].deck);
                 ygopro.sockets[1] = connectToYGOSharp(instance.port, sockets[1], function() {
                     lockInDeck(ygopro.sockets[1], sockets[1].deck);
-                    ygopro.sockets[0].write(gameResponse('CTOS_START'));
+                    setTimeout(function() {
+                        console.log('Starting!');
+                        ygopro.sockets[0].write(gameResponse('CTOS_START'));
+                    }, 1000);
+
                 });
             });
         }

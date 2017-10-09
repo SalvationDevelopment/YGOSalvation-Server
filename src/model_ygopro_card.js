@@ -1,7 +1,7 @@
 /*jslint bitwise: true, node:true, plusplus:true*/
 /*global field*/
 
-var enums = enums || require('../../libs/enums.js');
+var enums = require('./translate_ygopro_enums.js');
 
 function makeCard(buffer, start, controller) {
     'use strict';
