@@ -651,7 +651,17 @@ function recieveSTOC(packet) {
                     break;
 
                 case ('MSG_SORT_CHAIN'):
-
+                    message.player = BufferIO.readInt8();
+                    message.count = BufferIO.readInt8();
+                    message.selectable_targets = [];
+                    for (i = 0; i < message.count; ++i) {
+                        message.selectable_targets.push({
+                            code: BufferIO.readInt32(),
+                            c: BufferIO.readInt8(),
+                            l: BufferIO.readInt8(),
+                            s: BufferIO.readInt8()
+                        });
+                    }
                     break;
                 case ('MSG_SELECT_COUNTER'):
 
@@ -665,9 +675,18 @@ function recieveSTOC(packet) {
                     message.selectable_field = ~BufferIO.readInt32(); // mind the bitwise modifier.
                     message.selected_field = 0;
                     break;
-                    break;
                 case ('MSG_SORT_CARD'):
-
+                    message.player = BufferIO.readInt8();
+                    message.count = BufferIO.readInt8();
+                    message.selectable_targets = [];
+                    for (i = 0; i < message.count; ++i) {
+                        message.selectable_targets.push({
+                            code: BufferIO.readInt32(),
+                            c: BufferIO.readInt8(),
+                            l: BufferIO.readInt8(),
+                            s: BufferIO.readInt8()
+                        });
+                    }
                     break;
                 case ('MSG_CONFIRM_DECKTOP'):
 
