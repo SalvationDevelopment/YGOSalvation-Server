@@ -560,7 +560,8 @@ function recieveSTOC(packet) {
                     break;
 
                 case ('MSG_SELECT_YESNO'):
-
+                    message.selecting_player = BufferIO.readInt8();
+                    message.desc = BufferIO.readInt32();
                     break;
                 case ('MSG_SELECT_OPTION'):
 
