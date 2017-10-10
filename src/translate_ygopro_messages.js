@@ -61,6 +61,7 @@ function recieveSTOC(packet) {
         bitreader = 0,
         iter = 0,
         errorCode,
+        val = 0,
         i = 0,
         message = {
             duelAction: 'ygopro',
@@ -700,7 +701,9 @@ function recieveSTOC(packet) {
                     message.filter = 0x1;
                     message.startpos = 0;
                     while (message.filter !== 0x10) {
-                        if (message.positions & message.filter) { message.count++; }
+                        if (message.positions & message.filter) {
+                            message.count++;
+                        }
                         message.filter <<= 1;
                     }
                     if (message.count === 4) {
@@ -853,6 +856,80 @@ function recieveSTOC(packet) {
                     for (i = 0; i < message.ecount; ++i) {
                         message.extra_deck.push(BufferIO.readInt32());
                     }
+                    break;
+                case ('MSG_RELOAD_FIELD'):
+                    message.lp = [];
+                    message.mzone = [];
+                    message.stzone = [];
+                    for (i = 0; i < 2; ++i) {
+                        message.lp[i] = BufferIO.readInt32();
+                        for (let seq = 0; seq < 7; ++seq) {
+                            val = BufferIO.readInt8();
+                            if (val) {
+                                let card = {
+                                    val: val,
+                                    position: BufferIO.readInt8()
+                                };
+                                message.mzone.push(card);
+                                val = BufferIO.readInt8();
+                                if (val) {
+                                    for (let xyz = 0; xyz < val; ++xyz) {
+                                        message.mzone.push({
+                                            position: card.position,
+                                            sequence: seq,
+                                            overlayunit: xyz
+                                        });
+                                    }
+                                }
+
+                            }
+                        }
+                        for (let seq = 0; seq < 8; ++seq) {
+                            val = BufferIO.readInt8();
+                            if (val) {
+                                message.stzone.push({
+                                    sequence: seq,
+                                    position: BufferIO.readInt8()
+                                });
+                            }
+                        }
+                        val = BufferIO.readInt8();
+                        for (let seq = 0; seq < val; ++seq) {
+                            message.deck.push({
+                                sequence: seq
+                            });
+                        }
+                        val = BufferIO.readInt8();
+                        for (let seq = 0; seq < val; ++seq) {
+                            message.hand.push({
+                                sequence: seq
+                            });
+                        }
+
+                        val = BufferIO.readInt8();
+                        for (let seq = 0; seq < val; ++seq) {
+                            message.grave.push({
+                                sequence: seq
+                            });
+                        }
+                        val = BufferIO.readInt8();
+                        for (let seq = 0; seq < val; ++seq) {
+                            message.removed.push({
+                                sequence: seq
+                            });
+                        }
+                        message.extra_deck_p = BufferIO.readInt8();
+                    }
+                    val = BufferIO.readInt8(); //chains
+                    message.code = BufferIO.readInt32();
+                    message.pcc = BufferIO.readInt8();
+                    message.pcl = BufferIO.readInt8();
+                    message.pcs = BufferIO.readInt8();
+                    message.subs = BufferIO.readInt8();
+                    message.cc = BufferIO.readInt8();
+                    message.cl = BufferIO.readInt8();
+                    message.cs = BufferIO.readInt8();
+                    message.desc = BufferIO.readInt32();
                     break;
                 default:
                     //console.log('bad', command, packet, task);
