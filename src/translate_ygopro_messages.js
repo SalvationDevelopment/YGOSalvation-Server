@@ -331,7 +331,7 @@ function recieveSTOC(packet) {
                     break;
 
                 case ('MSG_ATTACK_DISABLED'):
-                    //myswprintf(event_string, dataManager.GetSysString(1621), dataManager.GetName(mainGame->dField.attacker->code));
+                    //myswprintf(event_string, dataManager.GetSysString(1621), dataManager.GetName(message.attacker->code));
                     break;
 
                 case ('MSG_DAMAGE_STEP_START'):
@@ -609,11 +609,13 @@ function recieveSTOC(packet) {
 
                     break;
                 case ('MSG_SELECT_PLACE'):
-
+                    message.selecting_player = BufferIO.readInt8();
+                    message.select_min = BufferIO.readInt8();
+                    message.selectable_field = ~BufferIO.readInt32(); // mind the bitwise modifier.
+                    message.selected_field = 0;
                     break;
                 case ('MSG_SELECT_POSITION'):
 
-                    break;
                 case ('MSG_SELECT_TRIBUTE'):
 
                     break;
@@ -628,7 +630,11 @@ function recieveSTOC(packet) {
 
                     break;
                 case ('MSG_SELECT_DISFIELD'):
-
+                    message.selecting_player = BufferIO.readInt8();
+                    message.select_min = BufferIO.readInt8();
+                    message.selectable_field = ~BufferIO.readInt32(); // mind the bitwise modifier.
+                    message.selected_field = 0;
+                    break;
                     break;
                 case ('MSG_SORT_CARD'):
 
@@ -653,7 +659,7 @@ function recieveSTOC(packet) {
                     message.fieldlocation = BufferIO.readInt8();
                     message.fieldmodel = enums.locations[message.fieldlocation];
                     message.message = packet.message;
-                    //mainGame->dField.UpdateFieldCard(player, location, pbuf);
+                    //message.UpdateFieldCard(player, location, pbuf);
                     // ^ problem.
                     break;
 
