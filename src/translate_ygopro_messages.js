@@ -634,7 +634,20 @@ function recieveSTOC(packet) {
                     }
                     break;
                 case ('MSG_SELECT_TRIBUTE'):
-
+                    message.select_cancelable = BufferIO.readInt8() ? true : false;
+                    message.select_min = BufferIO.readInt8();
+                    message.select_max = BufferIO.readInt8();
+                    message.count = BufferIO.readInt8();
+                    message.selectable_targets = [];
+                    for (i = 0; i < message.count; ++i) {
+                        message.selectable_targets.push({
+                            code: BufferIO.readInt32(),
+                            c: BufferIO.readInt8(),
+                            l: BufferIO.readInt8(),
+                            s: BufferIO.readInt8(),
+                            t: BufferIO.readInt8()
+                        });
+                    }
                     break;
 
                 case ('MSG_SORT_CHAIN'):
@@ -676,7 +689,7 @@ function recieveSTOC(packet) {
                     message.fieldlocation = BufferIO.readInt8();
                     message.fieldmodel = enums.locations[message.fieldlocation];
                     message.message = packet.message;
-                    //message.UpdateFieldCard(player, location, pbuf);
+                    //message.UpdateFieldCard(player, location, );
                     // ^ problem.
                     break;
 
