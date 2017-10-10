@@ -564,7 +564,12 @@ function recieveSTOC(packet) {
                     message.desc = BufferIO.readInt32();
                     break;
                 case ('MSG_SELECT_OPTION'):
-
+                    message.selecting_player = BufferIO.readInt8();
+                    message.count = BufferIO.readInt8();
+                    message.select_options = [];
+                    for (i = 0; i < message.count; ++i) {
+                        message.select_options.push(BufferIO.readInt32());
+                    }
                     break;
                 case ('MSG_SELECT_CARD'):
 
