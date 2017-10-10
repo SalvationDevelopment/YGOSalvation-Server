@@ -807,7 +807,27 @@ function recieveSTOC(packet) {
                     message.code = BufferIO.readInt32();
                     message.rev = ((message.code & 0x80000000) !== 0);
                     break;
-
+                case ('MSG_SHUFFLE_SET_CARD'):
+                    message.count = BufferIO.readInt8();
+                    message.targets = [];
+                    for (i = 0; i < message.count; ++i) {
+                        message.targets.push({
+                            c: BufferIO.readInt8(),
+                            l: BufferIO.readInt8(),
+                            s: BufferIO.readInt8()
+                        });
+                        BufferIO.readInt8();
+                    }
+                    message.new_cards = [];
+                    for (i = 0; i < message.count; ++i) {
+                        message.new_cards.push({
+                            c: BufferIO.readInt8(),
+                            l: BufferIO.readInt8(),
+                            s: BufferIO.readInt8()
+                        });
+                        BufferIO.readInt8();
+                    }
+                    break;
                 default:
                     //console.log('bad', command, packet, task);
                     break;
