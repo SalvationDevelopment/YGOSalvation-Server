@@ -44,6 +44,9 @@ function BufferStreamReader(packet) {
         readposition += 4;
         return output;
     };
+    stream.move = function(amount) {
+        readposition += amount;
+    };
     return stream;
 }
 
@@ -689,7 +692,13 @@ function recieveSTOC(packet) {
                     }
                     break;
                 case ('MSG_CONFIRM_DECKTOP'):
-
+                    message.player = BufferIO.readInt8();
+                    message.count = BufferIO.readInt8();
+                    message.cards = [];
+                    for (i = 0; i < message.count; ++i) {
+                        message.cards.push(BufferIO.readInt32());
+                        BufferIO.move(3);
+                    }
                     break;
                 case ('MSG_CONFIRM_CARDS'):
                     message.player = BufferIO.readInt8(); /* defunct in code */
