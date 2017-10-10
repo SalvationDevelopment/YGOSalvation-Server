@@ -248,7 +248,7 @@ function recieveSTOC(packet) {
                     message.multiplier = 1;
                     break;
 
-                case ('MSG_SUMMONING '):
+                case ('MSG_SUMMONING'):
                     message.player = BufferIO.readInt8();
                     message.code = BufferIO.readInt32();
                     message.cc = BufferIO.readInt8(); //defunct in code
@@ -349,7 +349,12 @@ function recieveSTOC(packet) {
                     message.code = BufferIO.readInt32();
                     break;
                 case ('MSG_TOSS_COIN'):
-                    //ugh....new BufferIO stuff. Does it take all this to flip a coin?
+                    message.player = BufferIO.readInt8();
+                    message.count = BufferIO.readInt8();
+                    message.results = [];
+                    for (i = 0; i < message.count; ++i) {
+                        message.results.push(BufferIO.readInt8());
+                    }
                     break;
                 case ('MSG_SELECT_IDLECMD'):
                     message.command = 'MSG_SELECT_IDLECMD';
@@ -701,17 +706,16 @@ function recieveSTOC(packet) {
                     }
                     break;
                 case ('MSG_CONFIRM_CARDS'):
-                    message.player = BufferIO.readInt8(); /* defunct in code */
+                    message.player = BufferIO.readInt8();
                     message.count = BufferIO.readInt8();
-                    message.c = undefined;
-                    message.l = undefined;
-                    message.s = undefined;
                     for (i = 0; i < message.count; ++i) {
-                        /*sigh this goes into something extremely complex and that overwrites itself*/
+                        message.selections.push({
+                            c: BufferIO.readInt8(),
+                            l: BufferIO.readInt8(),
+                            s: BufferIO.readInt8()
+                        });
                     }
                     break;
-
-
                 case ('MSG_UPDATE_DATA'):
                     message.player = BufferIO.readInt8();
                     message.fieldlocation = BufferIO.readInt8();
