@@ -278,6 +278,16 @@ function recieveSTOC(packet) {
                     message.s1 = BufferIO.readInt8();
                     BufferIO.readInt8(); //padding wtf
                     break;
+                case ('MSG_CARD_TARGET'):
+                    message.c1 = BufferIO.readInt8();
+                    message.l1 = BufferIO.readInt8();
+                    message.s1 = BufferIO.readInt8();
+                    BufferIO.readInt8(); //padding wtf
+                    message.c1 = BufferIO.readInt8();
+                    message.l1 = BufferIO.readInt8();
+                    message.s1 = BufferIO.readInt8();
+                    BufferIO.readInt8(); //padding wtf
+                    break;
 
                 case ('MSG_CANCEL_TARGET'):
                     message.c1 = BufferIO.readInt8();
@@ -550,7 +560,7 @@ function recieveSTOC(packet) {
                     break;
 
                 case ('MSG_FIELD_DISABLED'):
-                    message.disabled = BufferIO.readInt8();
+                    message.disabled = BufferIO.readInt32();
                     message.ifisfirst_disabled = (message.disabled >> 16) | (message.disabled << 16);
                     break;
                 case ('MSG_SUMMONING'):
