@@ -572,7 +572,21 @@ function recieveSTOC(packet) {
                     }
                     break;
                 case ('MSG_SELECT_CARD'):
-
+                    message.selecting_player = BufferIO.readInt8();
+                    message.select_cancelable = BufferIO.readInt8();
+                    message.select_min = BufferIO.readInt8();
+                    message.select_max = BufferIO.readInt8();
+                    message.count = BufferIO.readInt8();
+                    message.select_options = [];
+                    for (i = 0; i < message.count; ++i) {
+                        message.select_options.push({
+                            code: BufferIO.readInt32(),
+                            c: BufferIO.readInt8(),
+                            l: BufferIO.readInt8(),
+                            s: BufferIO.readInt8(),
+                            ss: BufferIO.readInt8()
+                        });
+                    }
                     break;
                 case ('MSG_SELECT_CHAIN'):
 
