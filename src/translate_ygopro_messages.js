@@ -717,8 +717,6 @@ function recieveSTOC(packet) {
                     message.fieldlocation = BufferIO.readInt8();
                     message.fieldmodel = enums.locations[message.fieldlocation];
                     message.message = packet.message;
-                    //message.UpdateFieldCard(player, location, );
-                    // ^ problem.
                     break;
 
                 case ('MSG_UPDATE_CARD'):
