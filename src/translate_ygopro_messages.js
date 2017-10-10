@@ -402,6 +402,22 @@ function recieveSTOC(packet) {
                         message.opcodes.push(BufferIO.readInt32());
                     }
                     break;
+                case ('MSG_CARD_HINT'):
+                    message.controller = BufferIO.readInt8();
+                    message.location = BufferIO.readInt8();
+                    message.sequence = BufferIO.readInt8();
+                    BufferIO.readInt8(); //padding
+                    message.chtype = BufferIO.readInt8();
+                    message.value = BufferIO.readInt32();
+                    break;
+                case ('MSG_PLAYER_HINT'):
+                    message.player = BufferIO.readInt8();
+                    message.chtype = BufferIO.readInt8();
+                    message.value = BufferIO.readInt32();
+                    break;
+                case ('MSG_MATCH_KILL'):
+                    message.match_kill = BufferIO.readInt32();
+                    break;
                 case ('MSG_SELECT_IDLECMD'):
                     //https://github.com/Fluorohydride/ygopro/blob/d9450dbb35676db3d5b7c2a5241a54d7f2c21e98/ocgcore/playerop.cpp#L69
                     message.idleplayer = BufferIO.readInt8();
