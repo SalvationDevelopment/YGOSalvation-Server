@@ -348,6 +348,22 @@ function recieveSTOC(packet) {
                     BufferIO.readInt8(); //padding
                     message.code = BufferIO.readInt32();
                     break;
+                case ('MSG_TOSS_DICE'):
+                    message.player = BufferIO.readInt8();
+                    message.count = BufferIO.readInt8();
+                    message.results = [];
+                    for (i = 0; i < message.count; ++i) {
+                        message.results.push(BufferIO.readInt8());
+                    }
+                    break;
+                case ('MSG_ROCK_PAPER_SCISSORS'):
+                    message.player = BufferIO.readInt8();
+                    break;
+                case ('MSG_HAND_RES'):
+                    message.res = BufferIO.readInt8();
+                    message.res1 = (message.res & 0x3) - 1;
+                    message.res2 = ((message.res >> 2) & 0x3) - 1;
+                    break;
                 case ('MSG_TOSS_COIN'):
                     message.player = BufferIO.readInt8();
                     message.count = BufferIO.readInt8();
