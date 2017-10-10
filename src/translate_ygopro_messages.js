@@ -838,6 +838,22 @@ function recieveSTOC(packet) {
                         BufferIO.readInt8();
                     }
                     break;
+                case ('MSG_TAG_SWAP'):
+                    message.player = BufferIO.readInt8();
+                    message.mcount = BufferIO.readInt8();
+                    message.ecount = BufferIO.readInt8();
+                    message.pcount = BufferIO.readInt8();
+                    message.hcount = BufferIO.readInt8();
+                    message.topcode = BufferIO.readInt32();
+                    message.hand = [];
+                    message.extra_deck = [];
+                    for (i = 0; i < message.hcount; ++i) {
+                        message.hand.push(BufferIO.readInt32());
+                    }
+                    for (i = 0; i < message.ecount; ++i) {
+                        message.extra_deck.push(BufferIO.readInt32());
+                    }
+                    break;
                 default:
                     //console.log('bad', command, packet, task);
                     break;
