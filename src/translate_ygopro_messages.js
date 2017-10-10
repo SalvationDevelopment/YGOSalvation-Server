@@ -382,10 +382,29 @@ function recieveSTOC(packet) {
                     message.announce_count = BufferIO.readInt8();
                     message.avaliable = BufferIO.readInt32();
                     break;
+                case ('MSG_ANNOUNCE_CARD'):
+                    message.player = BufferIO.readInt8();
+                    message.declarable_type = BufferIO.readInt32();
+                    break;
+                case ('MSG_ANNOUNCE_NUMBER'):
+                    message.player = BufferIO.readInt8();
+                    message.count = BufferIO.readInt8();
+                    message.values = [];
+                    for (i = 0; i < message.count; ++i) {
+                        message.values.push(BufferIO.readInt32());
+                    }
+                    break;
+                case ('MSG_ANNOUNCE_CARD_FILTER'):
+                    message.player = BufferIO.readInt8();
+                    message.count = BufferIO.readInt8();
+                    message.opcodes = [];
+                    for (i = 0; i < message.count; ++i) {
+                        message.opcodes.push(BufferIO.readInt32());
+                    }
+                    break;
                 case ('MSG_SELECT_IDLECMD'):
                     //https://github.com/Fluorohydride/ygopro/blob/d9450dbb35676db3d5b7c2a5241a54d7f2c21e98/ocgcore/playerop.cpp#L69
                     message.idleplayer = BufferIO.readInt8();
-                    i = 0;
                     message.summonable_cards = [];
                     message.count = BufferIO.readInt8();
                     for (i = 0; i < message.count; ++i) {
