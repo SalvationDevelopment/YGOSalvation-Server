@@ -615,7 +615,24 @@ function recieveSTOC(packet) {
                     message.selected_field = 0;
                     break;
                 case ('MSG_SELECT_POSITION'):
-
+                    message.selecting_player = BufferIO.readInt8();
+                    message.code = BufferIO.readInt32();
+                    message.positions = BufferIO.readInt8();
+                    message.count = 0;
+                    message.filter = 0x1;
+                    message.startpos = 0;
+                    while (message.filter !== 0x10) {
+                        if (message.positions & message.filter) { message.count++; }
+                        message.filter <<= 1;
+                    }
+                    if (message.count === 4) {
+                        message.startpos = 10;
+                    } else if (message.count === 3) {
+                        message.startpos = 82;
+                    } else {
+                        message.startpos = 155;
+                    }
+                    break;
                 case ('MSG_SELECT_TRIBUTE'):
 
                     break;
