@@ -372,8 +372,17 @@ function recieveSTOC(packet) {
                         message.results.push(BufferIO.readInt8());
                     }
                     break;
+                case ('MSG_ANNOUNCE_RACE'):
+                    message.player = BufferIO.readInt8();
+                    message.announce_count = BufferIO.readInt8();
+                    message.avaliable = BufferIO.readInt32();
+                    break;
+                case ('MSG_ANNOUNCE_ATTRIB'):
+                    message.player = BufferIO.readInt8();
+                    message.announce_count = BufferIO.readInt8();
+                    message.avaliable = BufferIO.readInt32();
+                    break;
                 case ('MSG_SELECT_IDLECMD'):
-                    message.command = 'MSG_SELECT_IDLECMD';
                     //https://github.com/Fluorohydride/ygopro/blob/d9450dbb35676db3d5b7c2a5241a54d7f2c21e98/ocgcore/playerop.cpp#L69
                     message.idleplayer = BufferIO.readInt8();
                     i = 0;
