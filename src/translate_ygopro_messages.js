@@ -861,6 +861,9 @@ function recieveSTOC(packet) {
                     message.lp = [];
                     message.mzone = [];
                     message.stzone = [];
+                    message.deck = [];
+                    message.hand = [];
+                    message.grave = [];
                     for (i = 0; i < 2; ++i) {
                         message.lp[i] = BufferIO.readInt32();
                         for (let seq = 0; seq < 7; ++seq) {
@@ -932,7 +935,7 @@ function recieveSTOC(packet) {
                     message.desc = BufferIO.readInt32();
                     break;
                 default:
-                    //console.log('bad', command, packet, task);
+                    console.log('Unparsed!:', command, packet, message);
                     break;
             }
             return message;
