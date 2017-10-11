@@ -92,7 +92,7 @@ function DataStream() {
             frameLength;
         memory = Buffer.concat([memory, buffer]);
         while (incomplete === true && memory.length > 2) {
-            frameLength = memory[0] + memory[1];
+            frameLength = memory.readUInt16LE(0);
             if ((memory.length - 2) < frameLength) {
                 incomplete = false;
             } else {
