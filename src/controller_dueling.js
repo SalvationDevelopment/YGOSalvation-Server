@@ -410,6 +410,8 @@ function init(primus) {
                             players.forEach(function(item, iteration) {
                                 item.activeduel = activeduel;
                             });
+                            players[0].deck = player1;
+                            players[1].deck = player2;
                             ygopros[activeduel] = ygopro(Object.assign({}, games[activeduel]), players);
                             games[activeduel].started = true;
                             primus.duelBroadcast(games);
@@ -637,12 +639,15 @@ function init(primus) {
                 stateSystem[activeduel].revealCallback(stateSystem[activeduel].findUIDCollection(message.card.uid), socket.slot, 'revealHandSingle');
                 break;
             case 'question':
-                console.log('got question', message);
                 if (socket.slot === undefined) {
                     break;
                 }
-                console.log('question answered by', socket.slot, message);
-                stateSystem[activeduel].answerListener.emit(message.uuid, message.answer);
+
+                if (games[socket.activeduel].automatic) {
+                    ygopros[activeduel].answerListener(socket.slot, message.uuid, message.answer);
+                } else {
+                    stateSystem[activeduel].answerListener.emit(message.uuid, message.answer);
+                }
                 break;
             case 'getLog':
                 if (socket.slot === undefined) {

@@ -1130,7 +1130,7 @@ function init(callback) {
         round.push(player1, player2);
         lock[0] = false;
         lock[1] = false;
-        if (!settings.noshuffle) {
+        if (!settings.noshuffle || !manual) {
             shuffle(player1.main);
             shuffle(player2.main);
         }

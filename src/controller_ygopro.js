@@ -1,4 +1,11 @@
-function boardController(gameBoard, message) {
+const gameResponse = require('./translate_ygopro_reply.js'),
+    cardMap = {
+        0: 'rock',
+        1: 'paper',
+        2: 'scissors'
+    };
+
+function boardController(gameBoard, message, ygopro) {
     'use strict';
     switch (message.command) {
         case ('STOC_UNKNOWN'):
@@ -8,6 +15,17 @@ function boardController(gameBoard, message) {
         case ('MSG_RETRY'):
             break;
         case ('MSG_START'):
+            gameBoard.startDuel({
+                main: Array(message.player1decksize),
+                side: Array(0),
+                extra: Array(message.player1extrasize)
+            }, {
+                main: Array(message.player2decksize),
+                side: Array(0),
+                extra: Array(message.player2extrasize)
+            }, false, {
+                startLP: message.lifepoints1
+            });
             break;
         case ('MSG_HINT'):
             break;
@@ -169,8 +187,25 @@ function boardController(gameBoard, message) {
         case ('ERRMSG_VERERROR'):
             break;
         case ('STOC_SELECT_HAND'):
+
+            gameBoard.question(0, 'specialCards', [{
+                id: 'rock',
+                value: 0
+            }, {
+                id: 'paper',
+                value: 1
+            }, {
+                id: 'scissors',
+                value: 2
+            }], 1, function(answer) {
+                var choice = cardMap[answer[0]];
+                ygopro.write(gameResponse(choice));
+            });
             break;
         case ('STOC_SELECT_TP'):
+            gameBoard.question(0, 'STOC_SELECT_TP', [0, 1], 1, function(answer) {
+                ygopro.write(gameResponse('CTOS_TP_RESULT', answer[0]));
+            });
             break;
         case ('STOC_HAND_RESULT'):
             break;

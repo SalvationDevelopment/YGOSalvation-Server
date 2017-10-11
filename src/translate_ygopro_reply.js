@@ -227,11 +227,21 @@ function makeCTOS(command, message) {
         console.log(proto);
         return proto;
     };
-    say.scissors = new Buffer([0x2, 0x0, 0x3, 0x1]);
-    say.rock = new Buffer([0x2, 0x0, 0x3, 0x2]);
-    say.paper = new Buffer([0x2, 0x0, 0x3, 0x3]);
-    say.gofirst = new Buffer([0x1, 0x0, 0x15]);
-    say.gosecond = new Buffer([0x2, 0x0, 0x4, 0x0]);
+    say.scissors = function() {
+        return new Buffer([0x2, 0x0, 0x3, 0x1]);
+    };
+    say.rock = function() {
+        return new Buffer([0x2, 0x0, 0x3, 0x2]);
+    };
+    say.paper = function() {
+        return new Buffer([0x2, 0x0, 0x3, 0x3]);
+    };
+    say.gofirst = function() {
+        return new Buffer([0x1, 0x0, 0x15]);
+    };
+    say.gosecond = function() {
+        return new Buffer([0x2, 0x0, 0x4, 0x0]);
+    };
 
 
     return say[command](message);

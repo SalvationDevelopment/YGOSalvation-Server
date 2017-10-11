@@ -1126,8 +1126,7 @@ function manualMoveGeneric(index, zone) {
 }
 
 function selectStartingPlayer() {
-    var randomSelection = (Math.random() < 0.5) ? 0 : 1;
-    resolveQuestion(randomSelection);
+    $('#selectplayer').css('display', 'block');
 }
 
 function question(message) {
@@ -1141,6 +1140,9 @@ function question(message) {
             reveal(activeQuestion.options, 'specialcard');
             break;
         case 'startingPlayer':
+
+            break;
+        case 'STOC_SELECT_TP':
             selectStartingPlayer();
             break;
         default:
@@ -1172,7 +1174,7 @@ function manualReciver(message) {
 
     switch (message.duelAction) {
         case 'ygopro':
-            //console.log(message.packet);
+            ygoproController(message);
         case 'ack':
             primus.write(({
                 action: 'ack',

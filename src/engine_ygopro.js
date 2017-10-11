@@ -125,7 +125,7 @@ function connectToYGOSharp(port, webSockectConnection, callback) {
 
     function gameStateUpdater(gameActions) {
         gameActions.forEach(function(gameAction) {
-            webSockectConnection.write(boardController(gameBoard, gameAction));
+            webSockectConnection.write(boardController(gameBoard, gameAction, tcpConnection));
         });
 
     }
@@ -133,9 +133,6 @@ function connectToYGOSharp(port, webSockectConnection, callback) {
     function cutConnections() {
         if (tcpConnection) {
             tcpConnection.end();
-        }
-        if (webSockectConnection) {
-            webSockectConnection.end();
         }
     }
 
@@ -159,6 +156,7 @@ function connectToYGOSharp(port, webSockectConnection, callback) {
     tcpConnection.setNoDelay(true);
     tcpConnection.on('error', cutConnections);
     tcpConnection.on('close', cutConnections);
+    tcpConnection.answerListener = gameBoard.answerListener;
     return tcpConnection;
 }
 
@@ -271,14 +269,14 @@ function startYGOSharp(instance, sockets) {
         }
     });
 
-    instance.relay = function(socket, message) {
-        ygopro.sockets[socket].send(message);
-    };
-
     instance.newConnection = function(socket) {
         ygopro.sockets.push(connectToYGOSharp(instance.port, socket, function() {
 
         }));
+    };
+
+    instance.answerListener = function(player, uid, answer) {
+        ygopro.sockets[player].answerListener.emit(uid, answer);
     };
 
     return instance;

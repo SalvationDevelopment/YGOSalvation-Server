@@ -65,8 +65,7 @@ function recieveSTOC(packet) {
         i = 0,
         message = {
             duelAction: 'ygopro',
-            command: packet.command,
-            packet: packet
+            command: packet.command
         };
 
     switch (message.command) {

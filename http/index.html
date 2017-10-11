@@ -1872,6 +1872,11 @@
 
         </div>
         <div id="revealedclose" onclick="$('#revealed ').toggle();$('#revealedclose ').toggle()"></div>
+        <div id="selectplayer" class="selectQuestionSet">
+            Select Player to go First
+            <button onclick="resolveQuestion(orient(0))">Self</button>
+            <button onclick="resolveQuestion(orient(1))">Opponent</button>
+        </div>
         <div id="revealed"></div>
         <div class="sidingzone">
             <div class="main"></div>
@@ -2042,6 +2047,7 @@
 
     <script src="js/http-gamelist.js"></script>
     <script src="js/http-manual.js"></script>
+    <script src="js/http-ygopro.js"></script>
     <script src="js/deck-editor.js"></script>
     <script src="js/vendor/html2canvas.js"></script>
 
