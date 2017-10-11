@@ -216,7 +216,7 @@ function startYGOSharp(instance, sockets) {
         'Port=' + instance.port,
         'ClientVersion=0x1338',
         'BanlistFile=./lflist.conf',
-        'ScriptDirectory=' + '../ygopro-scripts',
+        'ScriptDirectory=' + './../../ygopro-scripts',
         'DatabaseFile=./cards.cdb',
         'Rule=' + 0,
         'Mode=' + 0,

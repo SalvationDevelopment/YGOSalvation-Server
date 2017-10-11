@@ -16,13 +16,13 @@ function boardController(gameBoard, message, ygopro) {
             break;
         case ('MSG_START'):
             gameBoard.startDuel({
-                main: Array(message.player1decksize),
+                main: Array(message.player1decksize).fill(0),
                 side: Array(0),
-                extra: Array(message.player1extrasize)
+                extra: Array(message.player1extrasize).fill(0)
             }, {
-                main: Array(message.player2decksize),
+                main: Array(message.player2decksize).fill(0),
                 side: Array(0),
-                extra: Array(message.player2extrasize)
+                extra: Array(message.player2extrasize).fill(0)
             }, false, {
                 startLP: message.lifepoints1
             });
