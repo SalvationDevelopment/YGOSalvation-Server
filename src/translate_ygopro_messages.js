@@ -40,7 +40,7 @@ function BufferStreamReader(packet) {
         return output;
     };
     stream.readInt32 = function() {
-        var output = packet.readUInt32LE(readposition);
+        var output = packet.readUInt32BE(readposition);
         readposition += 4;
         return output;
     };
@@ -53,15 +53,16 @@ function BufferStreamReader(packet) {
 
 function getFieldCards(gameBoard, controller, location, BufferIO) {
     'use strict';
-    let readposition = BufferIO.readposition();
     const cards = [],
         values = gameBoard.generateViewCount(controller),
         requiredIterations = values[location];
-    console.log(controller, values.HAND, location);
+    console.log(controller, values.HAND, location, requiredIterations);
     for (let i = 0; requiredIterations > i; ++i) {
-        var result = makeCard(BufferIO.packet, readposition, controller);
-        readposition = result.readposition;
-        cards.push(result.card);
+        var len = BufferIO.readInt32();
+        if (len > 8) {
+            cards.push(makeCard(BufferIO, controller));
+        }
+        BufferIO.move(len - 4);
     }
     return cards;
 }

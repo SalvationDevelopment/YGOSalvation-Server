@@ -1,161 +1,145 @@
-/*jslint bitwise: true, node:true, plusplus:true*/
-/*global field*/
+/*eslint no-plusplus: 0*/
+'use strict';
 
 var enums = require('./translate_ygopro_enums.js');
 
-function makeCard(buffer, start, controller) {
+const TYPE_LINK = 0x4000000;
+
+function makeCard(BufferIO, controller) {
     'use strict';
-    if (buffer.length < 4) {
-        return {
-            card: {
-                Code: 'nocard'
-            },
-            readposition: start
-        };
-    }
-    var flag = buffer.readUInt32LE(start),
-        card,
-        readposition,
-        i,
-        ii,
-        iii;
 
-    if (!flag) {
-        return {
-            card: {
-                Code: 'cover',
-                Position: 'FaceDownAttack'
-            },
-            readposition: start + 9
+    let i,
+        count;
+    const flag = BufferIO.readInt32(),
+        card = {
+            Code: 'cover',
+            Position: 'FaceDownAttack',
+            controller: controller
         };
-    }
-    card = {
-        Code: 'cover',
-        Position: 'FaceDownAttack'
-    };
 
-    //console.log('flag:', flag);
-    readposition = start + 4;
+    if (flag === 0) {
+        return card;
+    }
 
     if (flag & enums.query.Code) {
-        card.Code = buffer.readUInt32LE(readposition);
-        readposition = readposition + 4;
+        card.Code = BufferIO.readInt32();
     }
     if (flag & enums.query.Position) {
-        card.Controller = buffer[readposition];
-        card.Position = enums.Positions[buffer[readposition + 3]];
-        readposition = readposition + 4;
+        card.Position = (BufferIO.readInt32() >> 24) & 0xff;
     }
     if (flag & enums.query.Alias) {
-        card.Alias = buffer.readUInt32LE(readposition);
-        readposition = readposition + 4;
+        card.Alias = BufferIO.readInt32();
     }
     if (flag & enums.query.Type) {
-        card.Type = enums.cardTypes[buffer.readUInt32LE(readposition)];
-        readposition = readposition + 4;
+        card.TypeVal = BufferIO.readInt32();
+        card.Type = enums.cardTypes[card.TypeVal];
     }
     if (flag & enums.query.Level) {
-        card.Level = buffer.readUInt32LE(readposition);
-        readposition = readposition + 4;
+        card.Level = BufferIO.readInt32();
     }
     if (flag & enums.query.Rank) {
-        card.Rank = buffer.readUInt32LE(readposition);
-        readposition = readposition + 4;
+        card.Rank = BufferIO.readInt32();
     }
     if (flag & enums.query.Attribute) {
-        card.Attribute = enums.cardAttributes[buffer.readUInt32LE(readposition)];
-        readposition = readposition + 4;
+        card.Attribute = enums.cardAttributes[BufferIO.readInt32()];
     }
     if (flag & enums.query.Race) {
-        card.Race = enums.race[buffer.readUInt32LE(readposition)];
-        readposition = readposition + 4;
+        card.Race = enums.race[BufferIO.readInt32()];
     }
     if (flag & enums.query.Attack) {
-        card.Attack = buffer.readUInt32LE(readposition);
-        readposition = readposition + 4;
+        card.Attack = BufferIO.readInt32();
+        card.atkstring = [];
+        if (card.Attack < 0) {
+            card.atkstring[0] = '?';
+            card.atkstring[1] = 0;
+        } else {
+            card.atkstring[0] = card.Attack;
+            card.atkstring[1] = card.Attack;
+        }
     }
     if (flag & enums.query.Defense) {
-        card.Defense = buffer.readUInt32LE(readposition);
-        readposition = readposition + 4;
+        card.Defense = BufferIO.readInt32();
+        card.defstring = [];
+        if (card.TypeVal & TYPE_LINK) {
+            card.defstring[0] = '-';
+            card.defstring[1] = 0;
+        } else if (card.Defense < 0) {
+            card.defstring[0] = '?';
+            card.defstring[1] = 0;
+        } else {
+            card.defstring[0] = card.Defense;
+            card.defstring[1] = card.Defense;
+        }
     }
     if (flag & enums.query.BaseAttack) {
-        card.Attribute = buffer.readUInt32LE(readposition);
-        readposition = readposition + 4;
+        card.Attribute = BufferIO.readInt32();
     }
     if (flag & enums.query.BaseDefense) {
-        card.Attribute = buffer.readUInt32LE(readposition);
-        readposition = readposition + 4;
+        card.Attribute = BufferIO.readInt32();
     }
     if (flag & enums.query.Reason) {
-        card.Attribute = buffer.readUInt16LE(readposition);
-        readposition = readposition + 4;
+        card.Attribute = BufferIO.readInt8();
     }
     if (flag & enums.query.ReasonCard) {
-        card.Attribute = buffer.readUInt32LE(readposition);
-        readposition = readposition + 4;
+        card.Attribute = BufferIO.readInt32();
     }
     if (flag & enums.query.EquipCard) {
         card.EquipCard = {
-            c: buffer[readposition],
-            l: buffer[readposition + 1],
-            s: buffer[readposition + 2]
+            c: BufferIO.readInt8(),
+            l: BufferIO.readInt8(),
+            s: BufferIO.readInt8()
         };
-        readposition = readposition + 4;
+        BufferIO.readInt8(); //padding
     }
     if (flag & enums.query.TargetCard) {
         card.TargetCard = [];
-        for (i = 0; i < buffer.readUInt32LE(readposition); ++i) {
+        count = BufferIO.readInt32();
+        for (i = 0; i < count; ++i) {
             card.TargetCard.push({
-                c: buffer[readposition],
-                l: buffer[readposition + 1],
-                s: buffer[readposition + 2]
+                c: BufferIO.readInt8(),
+                l: BufferIO.readInt8(),
+                s: BufferIO.readInt8()
             });
-            readposition = readposition + 4;
+            BufferIO.readInt8(); //padding
         }
     }
     if (flag & enums.query.OverlayCard) {
         card.OverlayCard = [];
-        for (ii = 0; ii < buffer.readUInt32LE(readposition); ++ii) {
-            card.OverlayCard.push(buffer.readUInt32LE(readposition));
-            readposition = readposition + 4;
+        count = BufferIO.readInt32();
+        for (i = 0; i < count; ++i) {
+            card.OverlayCard.push(BufferIO.readInt32());
         }
     }
     if (flag & enums.query.Counters) {
         card.Counters = [];
-        for (iii = 0; iii < buffer.readUInt32LE(readposition); ++iii) {
+        count = BufferIO.readInt32();
+        for (i = 0; i < count; ++i) {
             card.Counters.push({
-                counterType: buffer.readUInt16LE(readposition),
-                amount: buffer.readUInt16LE(readposition + 2)
+                counterType: BufferIO.readInt16(),
+                amount: BufferIO.readInt16()
             });
-            readposition = readposition + 4;
         }
     }
     if (flag & enums.query.Owner) {
-        card.EquipCard = buffer.readUInt32LE(readposition);
-        readposition = readposition + 4;
+        card.Owner = BufferIO.readInt32();
     }
     if (flag & enums.query.IsDisabled) {
-        card.EquipCard = buffer.readUInt32LE(readposition);
-        readposition = readposition + 4;
+        card.IsDisabled = BufferIO.readInt32();
     }
     if (flag & enums.query.IsPublic) {
-        card.EquipCard = buffer.readUInt32LE(readposition);
-        readposition = readposition + 4;
+        card.IsPublic = BufferIO.readInt32();
     }
     if (flag & enums.query.LScale) {
-        card.lscale = buffer.readUInt32LE(readposition);
-        readposition = readposition + 4;
+        card.LScale = BufferIO.readInt32();
     }
     if (flag & enums.query.RScale) {
-        card.rscale = buffer.readUInt32LE(readposition);
-        readposition = readposition + 4;
+        card.RScale = BufferIO.readInt32();
     }
-    return {
-        card: card,
-        readposition: readposition
-    };
-
-
+    if (flag & enums.query.Link) {
+        card.Link = BufferIO.readInt32();
+        card.Link_marker = BufferIO.readInt32();
+    }
+    return card;
 }
 
 

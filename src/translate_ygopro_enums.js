@@ -61,7 +61,9 @@ module.exports = {
         IsDisabled: 0x80000,
         IsPublic: 0x100000,
         LScale: 0x200000,
-        RScale: 0x400000
+        RScale: 0x400000,
+        Link: 0x800000
+
     },
     cardAttributes: {
         0x01: 'Earth',
@@ -114,7 +116,8 @@ module.exports = {
         0x100000: 'Counter',
         0x200000: 'Flip',
         0x400000: 'Toon',
-        0x800000: 'Xyz'
+        0x800000: 'Xyz',
+        0x4000000: 'Link'
     },
     lobbyStates: {
         0x8: 'PLAYERCHANGE_OBSERVE',
