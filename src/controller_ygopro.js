@@ -46,6 +46,7 @@ function boardController(gameBoard, message, ygopro) {
         case ('MSG_NEW_PHASE'):
             break;
         case ('MSG_DRAW'):
+            gameBoard.drawCard(message.player, message.count);
             break;
         case ('MSG_SHUFFLE_DECK'):
             break;

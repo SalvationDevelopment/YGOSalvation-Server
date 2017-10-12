@@ -50,12 +50,31 @@ function BufferStreamReader(packet) {
     return stream;
 }
 
+
+function getFieldCards(gameBoard, controller, location, BufferIO) {
+    'use strict';
+    let readposition = BufferIO.readposition();
+    const cards = [],
+        values = gameBoard.generateViewCount(controller),
+        requiredIterations = values[location];
+    console.log(controller, values.HAND, location);
+    for (let i = 0; requiredIterations > i; ++i) {
+        var result = makeCard(BufferIO.packet, readposition, controller);
+        readposition = result.readposition;
+        cards.push(result.card);
+    }
+    return cards;
+}
+
 /**
  * Turn a delimited packet and turn it into a JavaScript Object.
+ * @param {Object} gameBoard instance of the manual engine the player is using.
  * @param {Packet} packet delimited buffer of information containing a YGOProMessage.
  * @returns {YGOProMessage} Object with various types of information stored in it.
  */
-function recieveSTOC(packet) {
+function recieveSTOC(gameBoard, packet) {
+
+
     var BufferIO = new BufferStreamReader(packet.message),
         command,
         bitreader = 0,
@@ -790,16 +809,15 @@ function recieveSTOC(packet) {
                     break;
                 case ('MSG_UPDATE_DATA'):
                     message.player = BufferIO.readInt8();
-                    message.fieldlocation = BufferIO.readInt8();
-                    message.fieldmodel = enums.locations[message.fieldlocation];
-                    message.message = packet.message;
+                    message.location = enums.locations[BufferIO.readInt8()];
+                    message.cards = getFieldCards(gameBoard, message.player, message.location, BufferIO);
                     break;
 
                 case ('MSG_UPDATE_CARD'):
                     message.player = BufferIO.readInt8();
                     message.fieldlocation = BufferIO.readInt8();
                     message.index = BufferIO.readInt8();
-                    message.card = makeCard(packet.message, 8, message.udplayer).card;
+                    message.card = makeCard(BufferIO.stream, BufferIO.readposition(), message.udplayer).card;
                     message.fieldmodel = enums.locations[message.fieldlocation];
                     break;
 
@@ -1011,7 +1029,7 @@ function recieveSTOC(packet) {
             message.start_hand = packet.message[16];
             message.draw_count = packet.message[17];
             message.time_limit = packet.message.readUInt16LE(18);
-            message.message = packet.message;
+
             break;
         case ('STOC_TYPE_CHANGE'):
             message.typec = packet.message[0];

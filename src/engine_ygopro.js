@@ -59,23 +59,7 @@ function GameBoard(webSockectConnection) {
     });
 }
 
-/**
- * Disect a message header from YGOPro.
- * @param {Buffer} message YGOPro Protocol Message.
- * @returns {Packet[]} Disected message in an array.
- */
-function parsePackets(data) {
-    'use strict';
-    var message = new Buffer(data),
-        task = [],
-        packet = {
-            message: message.slice(1),
-            readposition: 0
-        };
-    packet.command = enums.STOC[message[0]];
-    task.push(translateYGOProAPI(packet));
-    return task;
-}
+
 
 /**
  * Takes streamed broken up incoming data, stores it in a buffer, and as completed, returns complete messages.
@@ -122,6 +106,24 @@ function connectToYGOSharp(port, webSockectConnection, callback) {
     var dataStream = new DataStream(),
         gameBoard = new GameBoard(webSockectConnection),
         tcpConnection;
+
+    /**
+     * Disect a message header from YGOPro.
+     * @param {Buffer} data YGOPro Protocol Message.
+     * @returns {Packet[]} Disected message in an array.
+     */
+    function parsePackets(data) {
+        'use strict';
+        var message = new Buffer(data),
+            task = [],
+            packet = {
+                message: message.slice(1),
+                readposition: 0
+            };
+        packet.command = enums.STOC[message[0]];
+        task.push(translateYGOProAPI(gameBoard, packet));
+        return task;
+    }
 
     function gameStateUpdater(gameActions) {
         gameActions.forEach(function(gameAction) {

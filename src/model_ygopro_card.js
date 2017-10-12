@@ -159,14 +159,6 @@ function makeCard(buffer, start, controller) {
 }
 
 
-function updateFieldCard(controller, location, data) {
-    'use strict';
-    var i,
-        cards = [],
-        requiredIterations = field[controller][location].length;
-    for (i = 0; requiredIterations > i; i++) {
 
-    }
-}
-var module = module || {};
+
 module.exports = makeCard;

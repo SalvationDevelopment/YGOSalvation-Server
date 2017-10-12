@@ -375,6 +375,32 @@ function init(callback) {
             });
         });
     }
+
+    /**
+     * Generate the view of the field, for use by YGOPro
+     * @param   {Number} player player int 0,1, etcthe given player
+     * @returns {Object} all the cards the given player can see on their side of the field.
+     */
+    function generateViewCount(player) {
+        var playersCards = filterPlayer(stack, player),
+            deck = filterlocation(playersCards, 'DECK'),
+            hand = filterlocation(playersCards, 'HAND'),
+            grave = filterlocation(playersCards, 'GRAVE'),
+            extra = filterOverlyIndex(filterlocation(playersCards, 'EXTRA'), 0),
+            removed = filterlocation(playersCards, 'REMOVED'),
+            spellzone = filterlocation(playersCards, 'SPELLZONE'),
+            monsterzone = filterlocation(playersCards, 'MONSTERZONE');
+        return {
+            DECK: deck.length,
+            HAND: hand.length,
+            GRAVE: grave.length,
+            EXTRA: extra.length,
+            REMOVED: removed.length,
+            SPELLZONE: spellzone.length,
+            MONSTERZONE: monsterzone.length
+        };
+    }
+
     /**
      * Generate the view for a specific given player
      * @param   {Number} player player int 0,1, etcthe given player
@@ -1123,7 +1149,7 @@ function init(callback) {
      */
     function startDuel(player1, player2, manual, settings) {
         stack = [];
-        if (!lock[0] && !lock[1]) {
+        if (manual && !lock[0] && !lock[1]) {
             return;
         }
 
@@ -1527,24 +1553,24 @@ function init(callback) {
      * @name Core
      */
     return {
-        stack: stack,
-        startSide: startSide,
-        startDuel: startDuel,
-        setState: setState,
-        drawCard: drawCard,
-        excavateCard: excavateCard,
-        flipDeck: flipDeck,
-        millCard: millCard,
-        millRemovedCard: millRemovedCard,
-        millRemovedCardFaceDown: millRemovedCardFaceDown,
-        revealTop: revealTop,
-        revealBottom: revealBottom,
-        revealDeck: revealDeck,
-        revealExtra: revealExtra,
-        revealExcavated: revealExcavated,
-        revealHand: revealHand,
-        viewExcavated: viewExcavated,
-        viewGrave: viewGrave,
+        stack,
+        startSide,
+        startDuel,
+        setState,
+        drawCard,
+        excavateCard,
+        flipDeck,
+        millCard,
+        millRemovedCard,
+        millRemovedCardFaceDown,
+        revealTop,
+        revealBottom,
+        revealDeck,
+        revealExtra,
+        revealExcavated,
+        revealHand,
+        viewExcavated,
+        viewGrave,
         viewDeck: viewDeck,
         viewExtra: viewExtra,
         viewBanished: viewBanished,
@@ -1567,6 +1593,7 @@ function init(callback) {
         flipCoin: flipCoin,
         offsetZone: offsetZone,
         surrender: surrender,
+        generateViewCount: generateViewCount,
         generateView: generateView,
         getGroup: getGroup,
         getState: getState,
