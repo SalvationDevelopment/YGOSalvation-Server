@@ -45,8 +45,8 @@ const child_process = require('child_process'),
  * @param {Object} webSockectConnection A players connection to the server.
  * @returns {Object} A game instance with manual controls.
  */
-function GameBoard(webSockectConnection) {
-    return manualControlEngine(function(view, stack, callback) {
+function GameBoard(webSockectConnection, masterRule) {
+    const board = manualControlEngine(function(view, stack, callback) {
         try {
             webSockectConnection.write((view.p0));
         } catch (error) {
@@ -57,6 +57,8 @@ function GameBoard(webSockectConnection) {
             }
         }
     });
+    board.masterRule = masterRule;
+    return board;
 }
 
 
@@ -102,9 +104,10 @@ function DataStream() {
  * @param {Function} callback Function to run once player is connected.
  * @returns {Object} TCP Client Connection Instance
  */
-function connectToYGOSharp(port, webSockectConnection, callback) {
-    var dataStream = new DataStream(),
-        gameBoard = new GameBoard(webSockectConnection),
+function connectToYGOSharp(roomInstance, webSockectConnection, callback) {
+    var port = roomInstance.port,
+        dataStream = new DataStream(),
+        gameBoard = new GameBoard(webSockectConnection, roomInstance.masterRule),
         tcpConnection;
 
     /**
@@ -257,9 +260,9 @@ function startYGOSharp(instance, sockets) {
         var core_message = core_message_raw.toString().split('|');
         console.log(core_message);
         if (core_message[0].trim() === '::::network-ready') {
-            ygopro.sockets[0] = connectToYGOSharp(instance.port, sockets[0], function() {
+            ygopro.sockets[0] = connectToYGOSharp(instance, sockets[0], function() {
                 lockInDeck(ygopro.sockets[0], sockets[0].deck);
-                ygopro.sockets[1] = connectToYGOSharp(instance.port, sockets[1], function() {
+                ygopro.sockets[1] = connectToYGOSharp(instance, sockets[1], function() {
                     lockInDeck(ygopro.sockets[1], sockets[1].deck);
                     setTimeout(function() {
                         console.log('Starting!');
@@ -272,7 +275,7 @@ function startYGOSharp(instance, sockets) {
     });
 
     instance.newConnection = function(socket) {
-        ygopro.sockets.push(connectToYGOSharp(instance.port, socket, function() {
+        ygopro.sockets.push(connectToYGOSharp(instance, socket, function() {
 
         }));
     };
