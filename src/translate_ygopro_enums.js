@@ -1,4 +1,4 @@
-module.exports = {
+const enums = {
     locations: {
         0x01: 'DECK',
         0x02: 'HAND',
@@ -127,7 +127,7 @@ module.exports = {
 
     }
 };
-module.exports.STOC = {
+enums.STOC = {
     0x0: 'STOC_UNKNOWN',
     0x1: 'STOC_GAME_MSG',
     0x2: 'STOC_ERROR_MSG',
@@ -275,7 +275,52 @@ module.exports.STOC = {
         ]
     }
 };
-module.exports.CTOS = {
+
+enums.complexTypes = {
+    'Normal': 17,
+    'Effect': 33,
+    'Fusion': 65,
+    'Fusion / Effect': 97,
+    'Ritual': 129,
+    'Ritual / Effect': 161,
+    'Spirit': 545,
+    'Ritual / Spirit / Effect': 673,
+    'Union': 1057,
+    'Gemini / Effect': 2081,
+    'Tuner': 4113,
+    'Tuner / Effect': 4129,
+    'Fusion / Tuner': 4161,
+    'Synchro': 8193,
+    'Synchro / Effect': 8225,
+    'Synchro / Tuner / Effect': 12321,
+    'Token': 16401,
+    'Flip / Effect': 2097185,
+    'Flip / Tuner / Effect': 2101281,
+    'Toon / Effect': 4194337,
+    'Xyz': 8388609,
+    'Xyz / Effect': 8388641,
+    'Pendulum / Normal': 16777233,
+    'Pendulum / Effect': 16777249,
+    'Fusion / Pendulum / Effect': 16777313,
+    'Pendulum / Tuner / Normal': 16781313,
+    'Pendulum / Tuner / Effect': 16781345,
+    'Synchro / Pendulum / Effect': 16785441,
+    'Pendulum / Flip / Effect': 18874401,
+    'Xyz / Pendulum / Effect': 25165857,
+    'Link': 33554433,
+    'Link / Effect': 33554465,
+    'Spell / Normal': 2,
+    'Trap / Normal': 4,
+    'Spell / Ritual': 130,
+    'Spell / Quick-Play': 65538,
+    'Spell / Continuous': 131074,
+    'Trap / Continuous': 131076,
+    'Spell / Equip': 262146,
+    'Spell / Field': 524290,
+    'Trap / Counter': 1048580
+};
+
+enums.CTOS = {
     0x1: 'CTOS_RESPONSE',
     0x2: 'CTOS_UPDATE_DECK',
     0x3: 'CTOS_HAND_RESULT',
@@ -297,16 +342,28 @@ module.exports.CTOS = {
 
 };
 
+function invert(target) {
+    var output = {};
+    Object.keys(target).forEach(function(key) {
+        output[target[key]] = key;
+    });
+    return output;
+}
+
+enums.textTypes = invert(enums.complexTypes);
+
 function makeCheck(target) {
     'use strict';
     var destination = target + 'Check',
         value;
-    module.exports[destination] = {};
-    for (value in module.exports[target]) {
-        if (module.exports[target].hasOwnProperty(value)) {
-            module.exports[destination][value] = false;
+    enums[destination] = {};
+    for (value in enums[target]) {
+        if (enums[target].hasOwnProperty(value)) {
+            enums[destination][value] = false;
         }
     }
 }
 makeCheck('STOC');
 makeCheck('CTOS');
+
+module.exports = enums;
