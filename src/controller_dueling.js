@@ -429,6 +429,7 @@ function init(primus) {
                 if (socket.slot === undefined) {
                     break;
                 }
+                console.log(message);
                 stateSystem[activeduel].setState(message);
                 break;
             case 'revealTop':
@@ -537,7 +538,7 @@ function init(primus) {
                 if (socket.slot === undefined) {
                     break;
                 }
-                stateSystem[activeduel].drawCard(socket.slot, 1, games[activeduel].player[socket.slot].name);
+                stateSystem[activeduel].drawCard(socket.slot, 1, [{}], games[activeduel].player[socket.slot].name);
                 break;
             case 'excavate':
                 if (socket.slot === undefined) {

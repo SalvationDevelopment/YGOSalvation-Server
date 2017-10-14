@@ -45,10 +45,10 @@ const child_process = require('child_process'),
  * @param {Object} webSockectConnection A players connection to the server.
  * @returns {Object} A game instance with manual controls.
  */
-function GameBoard(webSockectConnection, masterRule) {
+function GameBoard(webSockectConnection, slot, masterRule) {
     const board = manualControlEngine(function(view, stack, callback) {
         try {
-            webSockectConnection.write((view.p0));
+            webSockectConnection.write((view[slot]));
         } catch (error) {
             console.log('failed messaging socket', error);
         } finally {
@@ -104,10 +104,10 @@ function DataStream() {
  * @param {Function} callback Function to run once player is connected.
  * @returns {Object} TCP Client Connection Instance
  */
-function connectToYGOSharp(roomInstance, webSockectConnection, callback) {
+function connectToYGOSharp(roomInstance, webSockectConnection, slot, callback) {
     var port = roomInstance.port,
         dataStream = new DataStream(),
-        gameBoard = new GameBoard(webSockectConnection, roomInstance.masterRule),
+        gameBoard = new GameBoard(webSockectConnection, slot, roomInstance.masterRule),
         tcpConnection;
 
     /**
@@ -130,7 +130,7 @@ function connectToYGOSharp(roomInstance, webSockectConnection, callback) {
 
     function gameStateUpdater(gameActions) {
         gameActions.forEach(function(gameAction) {
-            webSockectConnection.write(boardController(gameBoard, gameAction, tcpConnection));
+            webSockectConnection.write(boardController(gameBoard, slot, gameAction, tcpConnection));
         });
 
     }
@@ -260,22 +260,21 @@ function startYGOSharp(instance, sockets) {
         var core_message = core_message_raw.toString().split('|');
         console.log(core_message);
         if (core_message[0].trim() === '::::network-ready') {
-            ygopro.sockets[0] = connectToYGOSharp(instance, sockets[0], function() {
+            ygopro.sockets[0] = connectToYGOSharp(instance, sockets[0], 'p0', function() {
                 lockInDeck(ygopro.sockets[0], sockets[0].deck);
-                ygopro.sockets[1] = connectToYGOSharp(instance, sockets[1], function() {
+                ygopro.sockets[1] = connectToYGOSharp(instance, sockets[1], 'p1', function() {
                     lockInDeck(ygopro.sockets[1], sockets[1].deck);
                     setTimeout(function() {
-                        console.log('Starting!');
                         ygopro.sockets[0].write(gameResponse('CTOS_START'));
-                    }, 1000);
+                    }, 500);
 
                 });
             });
         }
     });
 
-    instance.newConnection = function(socket) {
-        ygopro.sockets.push(connectToYGOSharp(instance, socket, function() {
+    instance.newConnection = function(socket, slot) {
+        ygopro.sockets.push(connectToYGOSharp(instance, socket, slot, function() {
 
         }));
     };

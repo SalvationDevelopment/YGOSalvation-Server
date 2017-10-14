@@ -5,7 +5,7 @@ const gameResponse = require('./translate_ygopro_reply.js'),
         2: 'scissors'
     };
 
-function boardController(gameBoard, message, ygopro) {
+function boardController(gameBoard, slot, message, ygopro) {
     'use strict';
     switch (message.command) {
         case ('STOC_UNKNOWN'):
@@ -40,13 +40,15 @@ function boardController(gameBoard, message, ygopro) {
         case 'HINT_EFFECT':
             break;
         case ('MSG_NEW_TURN'):
+            gameBoard.nextTurn();
             break;
         case ('MSG_WIN'):
             break;
         case ('MSG_NEW_PHASE'):
+            gameBoard.nextPhase(message.phase);
             break;
         case ('MSG_DRAW'):
-            gameBoard.drawCard(message.player, message.count);
+            gameBoard.drawCard(message.player, message.count, message.cards);
             break;
         case ('MSG_SHUFFLE_DECK'):
             break;
@@ -166,7 +168,25 @@ function boardController(gameBoard, message, ygopro) {
         case ('MSG_CONFIRM_CARDS'):
             break;
         case ('MSG_UPDATE_DATA'):
-            break;
+            message.cards.forEach(function(card, index) {
+                if (card) {
+                    gameBoard.setState({
+                        id: message.id,
+                        player: message.player,
+                        clocation: message.location,
+                        index: index,
+                        moveplayer: message.player,
+                        movelocation: message.location,
+                        moveindex: index,
+                        moveposition: card.Position,
+                        overlayindex: 0
+                    });
+                }
+            });
+            if (message.cards.length) {
+                gameBoard.ygoproUpdate();
+            }
+            return {};
         case ('MSG_UPDATE_CARD'):
             break;
         case ('MSG_WAITING'):
@@ -189,7 +209,7 @@ function boardController(gameBoard, message, ygopro) {
             break;
         case ('STOC_SELECT_HAND'):
 
-            gameBoard.question(0, 'specialCards', [{
+            gameBoard.question(slot, 'specialCards', [{
                 id: 'rock',
                 value: 0
             }, {
@@ -204,10 +224,10 @@ function boardController(gameBoard, message, ygopro) {
             });
             break;
         case ('STOC_SELECT_TP'):
-            gameBoard.question(0, 'STOC_SELECT_TP', [0, 1], 1, function(answer) {
+            gameBoard.question(slot, 'STOC_SELECT_TP', [0, 1], 1, function(answer) {
                 ygopro.write(gameResponse('CTOS_TP_RESULT', answer[0]));
             });
-            break;
+            return {};
         case ('STOC_HAND_RESULT'):
             break;
         case ('STOC_TP_RESULT'):

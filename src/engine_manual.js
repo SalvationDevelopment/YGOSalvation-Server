@@ -377,7 +377,7 @@ function init(callback) {
     }
 
     /**
-     * Generate the view of the field, for use by YGOPro
+     * Generate the view of the field, for use by YGOPro MSG_UPDATE_DATA to get counts.
      * @param   {Number} player player int 0,1, etcthe given player
      * @returns {Object} all the cards the given player can see on their side of the field.
      */
@@ -398,6 +398,30 @@ function init(callback) {
             REMOVED: removed.length,
             SPELLZONE: spellzone.length,
             MONSTERZONE: monsterzone.length
+        };
+    }
+    /**
+     * Generate the view of the field, for use by YGOPro MSG_UPDATE_DATA to update data.
+     * @param   {Number} player player int 0,1, etcthe given player
+     * @returns {Object} all the cards the given player can see on their side of the field.
+     */
+    function generateUpdateView(player) {
+        var playersCards = filterPlayer(stack, player),
+            deck = filterlocation(playersCards, 'DECK'),
+            hand = filterlocation(playersCards, 'HAND'),
+            grave = filterlocation(playersCards, 'GRAVE'),
+            extra = filterOverlyIndex(filterlocation(playersCards, 'EXTRA'), 0),
+            removed = filterlocation(playersCards, 'REMOVED'),
+            spellzone = filterlocation(playersCards, 'SPELLZONE'),
+            monsterzone = filterlocation(playersCards, 'MONSTERZONE');
+        return {
+            DECK: deck.sort(sortByIndex),
+            HAND: hand.sort(sortByIndex),
+            GRAVE: grave.sort(sortByIndex),
+            EXTRA: extra.sort(sortByIndex),
+            REMOVED: removed.sort(sortByIndex),
+            SPELLZONE: spellzone.sort(sortByIndex),
+            MONSTERZONE: monsterzone.sort(sortByIndex)
         };
     }
 
@@ -574,6 +598,9 @@ function init(callback) {
         stack[pointer].index = moveindex;
         stack[pointer].position = moveposition;
         stack[pointer].overlayindex = overlayindex;
+        if (changeRequest.id !== undefined) {
+            stack[pointer].id = changeRequest.id;
+        }
         if (stack[pointer].position === 'HAND') {
             stack[pointer].position = 'FaceUp';
         }
@@ -586,6 +613,9 @@ function init(callback) {
     }
 
 
+    function ygoproUpdate() {
+        callback(generateView(), stack);
+    }
 
     /**
      * Creates a new card outside of initial start
@@ -655,7 +685,7 @@ function init(callback) {
      * @param {Function} drawCallback callback used by automatic
      * @returns {undefined}
      */
-    function drawCard(player, numberOfCards, username, drawCallback) {
+    function drawCard(player, numberOfCards, cards, username, drawCallback) {
         var currenthand = filterlocation(filterPlayer(stack, player), 'HAND').length,
             topcard,
             target,
@@ -675,7 +705,8 @@ function init(callback) {
                 moveindex: currenthand + i,
                 moveposition: 'FaceUp',
                 overlayindex: 0,
-                uid: topcard.uid
+                uid: topcard.uid,
+                id: cards[i].id || topcard.id
             });
             target = queryCard(player, 'HAND', (currenthand + i), 0);
             pointer = uidLookup(target.uid);
@@ -1408,14 +1439,14 @@ function init(callback) {
 
     /**
      * 
-     * @param {Number} player 
+     * @param {Number} slot 
      * @param {String} type 
      * @param {Object[]} options 
      * @param {Number} answerLength 
      * @param {Function} onAnswerFromUser 
      * @return {undefined}
      */
-    function question(player, type, options, answerLength, onAnswerFromUser) {
+    function question(slot, type, options, answerLength, onAnswerFromUser) {
         var uuid = uniqueIdenifier(),
             output = {
                 names: names,
@@ -1425,7 +1456,7 @@ function init(callback) {
             };
 
 
-        output['p' + player] = {
+        output[slot] = {
             duelAction: 'question',
             type: type,
             options: options,
@@ -1505,7 +1536,7 @@ function init(callback) {
         function ask() {
             var time = (previous1 !== undefined) ? 3000 : 0;
 
-            question(0, 'specialCards', [{
+            question('p0', 'specialCards', [{
                 id: 'rock',
                 value: 0
             }, {
@@ -1524,7 +1555,7 @@ function init(callback) {
                     notify(resolver(result));
                 }
             });
-            question(1, 'specialCards', [{
+            question('p1', 'specialCards', [{
                 id: 'rock',
                 value: 0
             }, {
@@ -1610,7 +1641,9 @@ function init(callback) {
         setTurnPlayer: setTurnPlayer,
         answerListener: answerListener,
         question: question,
-        rps: rps
+        rps: rps,
+        generateUpdateView,
+        ygoproUpdate
     };
 }
 

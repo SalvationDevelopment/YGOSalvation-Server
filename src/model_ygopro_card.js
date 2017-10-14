@@ -12,16 +12,16 @@ function makeCard(BufferIO, controller, masterRule4) {
         count;
     const flag = BufferIO.readInt32(),
         card = {
-            Code: 'cover',
+            id: 0,
             Position: 'FaceDownAttack',
             controller: controller
         };
     if (flag === 0) {
-        return card;
+        return null;
     }
 
     if (flag & enums.query.Code) {
-        card.Code = BufferIO.readInt32();
+        card.id = BufferIO.readInt32();
     }
     if (flag & enums.query.Position) {
         card.Position = BufferIO.readInt32();

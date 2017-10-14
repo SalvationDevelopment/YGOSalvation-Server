@@ -161,10 +161,10 @@ function recieveSTOC(gameBoard, packet) {
                 case ('MSG_DRAW'):
                     message.player = BufferIO.readInt8();
                     message.count = BufferIO.readInt8();
-                    message.cardslist = [];
+                    message.cards = [];
                     for (i = 0; i < message.count; ++i) {
-                        message.cardslist.push({
-                            code: BufferIO.readInt32()
+                        message.cards.push({
+                            id: BufferIO.readInt32()
                         });
                     }
                     break;
