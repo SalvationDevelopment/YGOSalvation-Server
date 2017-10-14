@@ -61,13 +61,38 @@ function getFieldCards(gameBoard, controller, location, BufferIO) {
         var len = BufferIO.readInt32();
         if (len > 8) {
             let card = makeCard(BufferIO, controller, (gameBoard.masterRule === 4));
-            console.log(card);
             cards.push(card);
         }
     }
     return cards;
 }
 
+function getIdleSet(BufferIO, hasDescriptions) {
+    var i,
+        cards,
+        count = BufferIO.readInt8();
+    if (hasDescriptions) {
+        for (i = 0; i < count; ++i) {
+            cards.push({
+                code: BufferIO.readInt32(),
+                controller: BufferIO.readInt8(),
+                location: BufferIO.readInt8(),
+                sequence: BufferIO.readInt8(),
+                description: BufferIO.readInt32()
+            });
+        }
+    } else {
+        for (i = 0; i < count; ++i) {
+            cards.push({
+                code: BufferIO.readInt32(),
+                controller: BufferIO.readInt8(),
+                location: BufferIO.readInt8(),
+                sequence: BufferIO.readInt8()
+            });
+        }
+    }
+    return cards;
+}
 /**
  * Turn a delimited packet and turn it into a JavaScript Object.
  * @param {Object} gameBoard instance of the manual engine the player is using.
@@ -82,6 +107,7 @@ function recieveSTOC(gameBoard, packet) {
         bitreader = 0,
         iter = 0,
         errorCode,
+        count,
         val = 0,
         i = 0,
         message = {
@@ -450,97 +476,18 @@ function recieveSTOC(gameBoard, packet) {
                     message.match_kill = BufferIO.readInt32();
                     break;
                 case ('MSG_SELECT_IDLECMD'):
-                    //https://github.com/Fluorohydride/ygopro/blob/d9450dbb35676db3d5b7c2a5241a54d7f2c21e98/ocgcore/playerop.cpp#L69
-                    message.idleplayer = BufferIO.readInt8();
-                    message.summonable_cards = [];
-                    message.count = BufferIO.readInt8();
-                    for (i = 0; i < message.count; ++i) {
-                        message.summonable_cards.push({
-                            code: BufferIO.readInt32(),
-                            controller: BufferIO.readInt8(),
-                            location: BufferIO.readInt8(),
-                            sequence: BufferIO.readInt8()
-                        });
-                    }
-                    iter = 0;
+                    message.selecting_player = BufferIO.readInt8();
+                    message.summonable_cards = getIdleSet(BufferIO);
+                    message.spsummonable_cards = getIdleSet(BufferIO);
+                    message.repositionable_cards = getIdleSet(BufferIO);
+                    message.msetable_cards = getIdleSet(BufferIO);
+                    message.ssetable_cards = getIdleSet(BufferIO);
+                    message.activatable_cards = getIdleSet(BufferIO, true);
 
-                    message.spsummonable_cards = [];
-                    message.count = BufferIO.readInt8();
-                    for (i = 0; i < message.count; ++i) {
-                        message.spsummonable_cards.push({
-                            code: BufferIO.readInt32(),
-                            controller: BufferIO.readInt8(),
-                            location: BufferIO.readInt8(),
-                            sequence: BufferIO.readInt8()
-                        });
-                    }
-                    iter = 0;
-                    bitreader += 1;
-                    message.repositionable_cards = [];
-                    for (i = 0; i < message.count; ++i) {
-                        message.repositionable_cards.push({
-                            code: packet.message.readUInt16LE(bitreader + 1),
-                            controller: packet.message[bitreader + 5],
-                            location: packet.message[bitreader + 6],
-                            sequence: packet.message[bitreader + 7]
-                        });
-                        bitreader = bitreader + 7;
-                    }
-                    iter = 0;
-                    bitreader += 1;
-                    message.msetable_cards = [];
-                    for (iter; packet.message[bitreader] > iter; iter++) {
-                        message.msetable_cards.push({
-                            code: packet.message.readUInt16LE(bitreader + 1),
-                            controller: packet.message[bitreader + 5],
-                            location: packet.message[bitreader + 6],
-                            sequence: packet.message[bitreader + 7]
-                        });
-                        bitreader = bitreader + 7;
-                    }
-                    iter = 0;
-                    bitreader += 1;
-                    message.select_chains = [];
-                    for (iter; packet.message[bitreader] > iter; iter++) {
-                        message.select_chains.push({
-                            code: packet.message.readUInt16LE(bitreader + 1),
-                            controller: packet.message[bitreader + 5],
-                            location: packet.message[bitreader + 6],
-                            sequence: packet.message[bitreader + 7]
-                        });
-                        bitreader = bitreader + 7;
-                    }
-                    iter = 0;
-                    bitreader += 1;
-                    message.ssetable_cards = [];
-                    for (iter; packet.message[bitreader] > iter; iter++) {
-                        message.ssetable_cards.push({
-                            code: packet.message.readUInt16LE(bitreader + 1),
-                            controller: packet.message[bitreader + 5],
-                            location: packet.message[bitreader + 6],
-                            sequence: packet.message[bitreader + 7]
-                        });
-                        bitreader = bitreader + 7;
-                    }
-                    iter = 0;
-                    bitreader += 1;
-                    message.select_chains = [];
-                    for (iter; packet.message[bitreader] > iter; iter++) {
-                        message.select_chains.push({
-                            code: packet.message.readUInt16LE(bitreader + 1),
-                            controller: packet.message[bitreader + 5],
-                            location: packet.message[bitreader + 6],
-                            sequence: packet.message[bitreader + 7]
-                        });
-                        bitreader = bitreader + 7;
-                    }
-                    message.bp = packet.message[bitreader];
-                    message.ep = packet.message[bitreader + 1];
-                    message.shufflecount = packet.message[bitreader + 2];
-                    //https://github.com/Fluorohydride/ygopro/blob/d9450dbb35676db3d5b7c2a5241a54d7f2c21e98/ocgcore/playerop.cpp#L147
-                    //something is gonna go wrong;
+                    message.enableBattlePhase = BufferIO.readInt8();
+                    message.enableEndPhase = BufferIO.readInt8();
+                    message.shufflecount = BufferIO.readInt8();
                     break;
-
                 case ('MSG_MOVE'):
                     message.code = BufferIO.readInt32();
                     message.pc = BufferIO.readInt8(); // original controller
@@ -1020,7 +967,6 @@ function recieveSTOC(gameBoard, packet) {
             break;
 
         case ('STOC_JOIN_GAME'):
-            console.log(packet.message);
             message.banlistHashCode = packet.message.readUInt16LE(0);
             message.rule = packet.message[4];
             message.mode = packet.message[5];

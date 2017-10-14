@@ -67,16 +67,6 @@ function makeCTOS(command, message) {
             extra: [],
             side: []
         };
-        //         GamePacketWriter deck = new GamePacketWriter(CtosMessage.UpdateDeck);
-        //            deck.Write(Deck.Cards.Count + Deck.ExtraCards.Count);
-        //            deck.Write(Deck.SideCards.Count);
-        //            foreach (NamedCard card in Deck.Cards)
-        //                deck.Write(card.Id);
-        //            foreach (NamedCard card in Deck.ExtraCards)
-        //                deck.Write(card.Id);
-        //            foreach (NamedCard card in Deck.SideCards)
-        //                deck.Write(card.Id);
-        //            Connection.Send(deck);
         var deck = new Buffer([0x2]),
             proto = new Buffer(2),
             r;

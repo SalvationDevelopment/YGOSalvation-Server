@@ -10,6 +10,7 @@ var manualDuel,
     viewmode = '',
     uploadedDeck = '',
     sound = {},
+    autoygopro = false,
     internalLocal = 'internalLocal',
     legacyMode = true,
     activelyDueling = false,
@@ -283,6 +284,7 @@ function updateloby(state) {
         return;
     }
     legacyMode = state.legacyfield;
+    autoygopro = state.automatic;
     $('#player1lobbyslot').val(state.player[0].name);
     $('#player2lobbyslot').val(state.player[1].name);
     //    $('#player3lobbyslot').val(state.player[2].name);
@@ -625,6 +627,7 @@ function guiCard(dataBinding) {
     'use strict';
 
     var field = $('#automationduelfield'),
+        cardFunction = (autoygopro) ? 'idleOnClick' : 'guicardonclick',
         element,
         player;
 
@@ -633,7 +636,7 @@ function guiCard(dataBinding) {
     } else {
         player = dataBinding.player;
     }
-    $(field).append('<img onclick="return guicardonclick()" id="uid' + dataBinding.uid + '" class="card p' + player + ' ' + dataBinding.location + ' i' + dataBinding.index + ' o" src="img/textures/cover.jpg" data-position="FaceDown" onError="this.onerror=null;this.src=\'/img/textures/unknown.jpg\';" />');
+    $(field).append('<img onclick="return ' + cardFunction + '()" id="uid' + dataBinding.uid + '" class="card p' + player + ' ' + dataBinding.location + ' i' + dataBinding.index + ' o" src="img/textures/cover.jpg" data-position="FaceDown" onError="this.onerror=null;this.src=\'/img/textures/unknown.jpg\';" />');
     element = $('#uid' + dataBinding.uid);
     return element;
 
@@ -1144,6 +1147,9 @@ function question(message) {
             break;
         case 'STOC_SELECT_TP':
             selectStartingPlayer();
+            break;
+        case 'MSG_SELECT_IDLECMD':
+            idleQuestion = message.options;
             break;
         default:
             break;
