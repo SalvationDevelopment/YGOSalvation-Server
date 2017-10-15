@@ -5,14 +5,22 @@ const gameResponse = require('./translate_ygopro_reply.js'),
         2: 'scissors'
     };
 
+function askUser(gameBoard, slot, message, ygopro) {
+    gameBoard.question(slot, message.command, message, 1, function(answer) {
+        ygopro.write(gameResponse('CTOS_RESPONSE', new Buffer(answer[0])));
+    });
+}
+
 function boardController(gameBoard, slot, message, ygopro) {
     'use strict';
+    console.log(message.command);
     switch (message.command) {
         case ('STOC_UNKNOWN'):
             break;
         case ('STOC_GAME_MSG'):
             break;
         case ('MSG_RETRY'):
+            gameBoard.retryLastQuestion();
             break;
         case ('MSG_START'):
             gameBoard.startDuel({
@@ -109,11 +117,17 @@ function boardController(gameBoard, slot, message, ygopro) {
         case ('MSG_TOSS_COIN'):
             break;
         case ('MSG_SELECT_IDLECMD'):
-            gameBoard.question(slot, 'MSG_SELECT_IDLECMD', message, function(answer) {
-                ygopro.write(gameResponse('CTOS_RESPONSE', new Buffer(answer)));
-            });
-            break;
+            askUser(gameBoard, slot, message, ygopro)
         case ('MSG_MOVE'):
+            console.log('xx', {
+                player: message.pc,
+                clocation: message.pl,
+                index: message.ps,
+                moveplayer: message.cc,
+                movelocation: message.cl,
+                moveindex: message.cs,
+                moveposition: message.cp
+            });
             gameBoard.setState({
                 player: message.pc,
                 clocation: message.pl,
@@ -148,30 +162,41 @@ function boardController(gameBoard, slot, message, ygopro) {
         case ('MSG_REQUEST_DECK'):
             break;
         case ('MSG_SELECT_BATTLECMD'):
+            askUser(gameBoard, slot, message, ygopro);
             break;
         case ('MSG_SELECT_EFFECTYN'):
+            askUser(gameBoard, slot, message, ygopro);
             break;
         case ('MSG_SELECT_YESNO'):
+            askUser(gameBoard, slot, message, ygopro);
             break;
         case ('MSG_SELECT_OPTION'):
+            askUser(gameBoard, slot, message, ygopro);
             break;
         case ('MSG_SELECT_CARD'):
+            askUser(gameBoard, slot, message, ygopro);
             break;
         case ('MSG_SELECT_CHAIN'):
             break;
         case ('MSG_SELECT_PLACE'):
+            askUser(gameBoard, slot, message, ygopro);
             break;
         case ('MSG_SELECT_POSITION'):
+            askUser(gameBoard, slot, message, ygopro);
             break;
         case ('MSG_SELECT_TRIBUTE'):
+            askUser(gameBoard, slot, message, ygopro);
             break;
         case ('MSG_SORT_CHAIN'):
             break;
         case ('MSG_SELECT_COUNTER'):
+            askUser(gameBoard, slot, message, ygopro);
             break;
         case ('MSG_SELECT_SUM'):
+            askUser(gameBoard, slot, message, ygopro);
             break;
         case ('MSG_SELECT_DISFIELD'):
+            askUser(gameBoard, slot, message, ygopro);
             break;
         case ('MSG_SORT_CARD'):
             break;
@@ -200,6 +225,18 @@ function boardController(gameBoard, slot, message, ygopro) {
             }
             return {};
         case ('MSG_UPDATE_CARD'):
+
+            gameBoard.setState({
+                player: message.player,
+                clocation: message.location,
+                index: message.index,
+                moveplayer: message.player,
+                movelocation: message.location,
+                moveindex: message.index,
+                moveposition: message.card.Position,
+                overlayindex: 0,
+                id: message.card.id || message.card.Alias
+            });
             break;
         case ('MSG_WAITING'):
             break;

@@ -1151,6 +1151,11 @@ function question(message) {
         case 'MSG_SELECT_IDLECMD':
             idleQuestion = message.options;
             break;
+        case 'MSG_SELECT_PLACE':
+            zonetargetingmode = 'ygo';
+            message.options.zones.forEach(function(zone) {
+                $('.cardselectionzone.p' + zone.player + '.' + zone.zone + '.i' + zone.slot).addClass('attackglow card')
+            });
         default:
             break;
     }
@@ -2817,13 +2822,16 @@ function manualToken(index) {
     primus.write((card));
 }
 
-function selectionzoneonclick(choice, zone) {
+function selectionzoneonclick(choice, zone, player) {
     'use strict';
 
     if (zonetargetingmode) {
 
         $('.cardselectionzone.p0').removeClass('card');
         $('.cardselectionzone.p0').removeClass('attackglow');
+        if (zonetargetingmode === 'ygo') {
+            resolveQuestion([player, ygoproLocations[zone], choice]);
+        }
         if (zonetargetingmode === 'atk') {
             manualToAttack(choice);
         }

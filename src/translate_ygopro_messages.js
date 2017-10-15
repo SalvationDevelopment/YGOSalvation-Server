@@ -67,27 +67,77 @@ function getFieldCards(gameBoard, controller, location, BufferIO) {
     return cards;
 }
 
+function getSelectableZones(mask) {
+    var i,
+        zones = [],
+        filter = 0x1;
+    for (i = 0; i < 7; ++i, filter <<= 1) {
+        if (mask & filter) {
+            zones.push({
+                player: 0,
+                zone: 'MONSTERZONE',
+                slot: i,
+                status: !(mask & filter)
+            });
+        }
+    }
+    filter = 0x100;
+    for (i = 0; i < 8; ++i, filter <<= 1) {
+        if (mask & filter) {
+            zones.push({
+                player: 0,
+                zone: 'SPELLZONE',
+                slot: i,
+                status: !(mask & filter)
+            });
+        }
+    }
+    filter = 0x10000;
+    for (i = 0; i < 7; ++i, filter <<= 1) {
+        if (mask & filter) {
+            zones.push({
+                player: 1,
+                zone: 'MONSTERZONE',
+                slot: i,
+                status: !(mask & filter)
+            });
+        }
+    }
+    filter = 0x1000000;
+    for (i = 0; i < 8; ++i, filter <<= 1) {
+        if (mask & filter) {
+            zones.push({
+                player: 1,
+                zone: 'SPELLZONE',
+                slot: i,
+                status: !(mask & filter)
+            });
+        }
+    }
+    return zones;
+}
+
 function getIdleSet(BufferIO, hasDescriptions) {
     var i,
-        cards,
+        cards = [],
         count = BufferIO.readInt8();
     if (hasDescriptions) {
         for (i = 0; i < count; ++i) {
             cards.push({
-                code: BufferIO.readInt32(),
-                controller: BufferIO.readInt8(),
-                location: BufferIO.readInt8(),
-                sequence: BufferIO.readInt8(),
+                id: BufferIO.readInt32(),
+                player: BufferIO.readInt8(),
+                location: enums.locations[BufferIO.readInt8()],
+                index: BufferIO.readInt8(),
                 description: BufferIO.readInt32()
             });
         }
     } else {
         for (i = 0; i < count; ++i) {
             cards.push({
-                code: BufferIO.readInt32(),
-                controller: BufferIO.readInt8(),
-                location: BufferIO.readInt8(),
-                sequence: BufferIO.readInt8()
+                id: BufferIO.readInt32(),
+                player: BufferIO.readInt8(),
+                location: enums.locations[BufferIO.readInt8()],
+                index: BufferIO.readInt8(),
             });
         }
     }
@@ -301,7 +351,7 @@ function recieveSTOC(gameBoard, packet) {
                     message.cc = BufferIO.readInt8(); //defunct in code
                     message.cl = BufferIO.readInt8(); //defunct in code
                     message.cs = BufferIO.readInt8(); //defunct in code
-                    message.cp = BufferIO.readInt8(); //defunct in code
+                    message.cp = enums.positions[BufferIO.readInt8()]; //defunct in code
                     break;
 
                 case ('MSG_EQUIP'):
@@ -491,13 +541,13 @@ function recieveSTOC(gameBoard, packet) {
                 case ('MSG_MOVE'):
                     message.code = BufferIO.readInt32();
                     message.pc = BufferIO.readInt8(); // original controller
-                    message.pl = BufferIO.readInt8(); // original cLocation
+                    message.pl = enums.locations[BufferIO.readInt8()]; // original cLocation
                     message.ps = BufferIO.readInt8(); // original sequence (index)
                     message.pp = BufferIO.readInt8(); // padding??
                     message.cc = BufferIO.readInt8(); // current controller
-                    message.cl = BufferIO.readInt8(); // current cLocation
+                    message.cl = enums.locations[BufferIO.readInt8()]; // current cLocation
                     message.cs = BufferIO.readInt8(); // current sequence (index)
-                    message.cp = BufferIO.readInt8(); // current position
+                    message.cp = enums.positions[BufferIO.readInt8()]; // current position
                     message.reason = BufferIO.readInt32(); //debug data??
                     break;
 
@@ -507,7 +557,7 @@ function recieveSTOC(gameBoard, packet) {
                     message.cl = BufferIO.readInt8(); // current cLocation
                     message.cs = BufferIO.readInt8(); // current sequence (index)
                     message.pp = BufferIO.readInt8(); // padding??
-                    message.cp = BufferIO.readInt8(); // current position
+                    message.cp = enums.positions[BufferIO.readInt8()]; // current position
                     break;
 
                 case ('MSG_SET'):
@@ -541,7 +591,7 @@ function recieveSTOC(gameBoard, packet) {
                     message.cc = BufferIO.readInt8();
                     message.cl = BufferIO.readInt8();
                     message.cs = BufferIO.readInt8();
-                    message.cp = BufferIO.readInt8();
+                    message.cp = enums.positions[BufferIO.readInt8()];
                     break;
 
                 case ('MSG_SUMMONED'):
@@ -564,7 +614,7 @@ function recieveSTOC(gameBoard, packet) {
                     message.cc = BufferIO.readInt8(); // current controller
                     message.cl = BufferIO.readInt8(); // current cLocation
                     message.cs = BufferIO.readInt8(); // current sequence (index)
-                    message.cp = BufferIO.readInt8(); // current position
+                    message.cp = enums.positions[BufferIO.readInt8()]; // current position
                     break;
 
                 case ('MSG_REQUEST_DECK'):
@@ -659,6 +709,7 @@ function recieveSTOC(gameBoard, packet) {
                     message.select_min = BufferIO.readInt8();
                     message.selectable_field = ~BufferIO.readInt32(); // mind the bitwise modifier.
                     message.selected_field = 0;
+                    message.zones = getSelectableZones(message.selectable_field);
                     break;
                 case ('MSG_SELECT_POSITION'):
                     message.selecting_player = BufferIO.readInt8();
@@ -764,11 +815,9 @@ function recieveSTOC(gameBoard, packet) {
 
                 case ('MSG_UPDATE_CARD'):
                     message.player = BufferIO.readInt8();
-                    message.fieldlocation = BufferIO.readInt8();
+                    message.location = enums.locations[BufferIO.readInt8()];
                     message.index = BufferIO.readInt8();
-                    message.card = makeCard(BufferIO.stream, BufferIO.readposition(), message.udplayer).card;
-                    message.fieldmodel = enums.locations[message.fieldlocation];
-                    break;
+                    message.card = makeCard(BufferIO, message.player, (gameBoard.masterRule === 4)) break;
 
                 case ('MSG_WAITING'):
                     //mainGame->stHintMsg->setText(dataManager.GetSysString(1390));

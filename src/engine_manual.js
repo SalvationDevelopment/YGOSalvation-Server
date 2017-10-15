@@ -276,6 +276,7 @@ function init(callback) {
     }
 
     var answerListener = new EventEmitter(),
+        lastQuestion = {},
         stack = [],
         previousStack = [],
         outstack = [],
@@ -576,6 +577,7 @@ function init(callback) {
      * @returns {undefined}
      */
     function setState(changeRequest) {
+        console.log(changeRequest);
         var player = changeRequest.player,
             clocation = changeRequest.clocation,
             index = changeRequest.index,
@@ -1454,7 +1456,13 @@ function init(callback) {
                 p1: {},
                 spectators: {}
             };
-
+        lastQuestion = {
+            slot,
+            type,
+            options,
+            answerLength,
+            onAnswerFromUser
+        };
 
         output[slot] = {
             duelAction: 'question',
@@ -1468,6 +1476,10 @@ function init(callback) {
             onAnswerFromUser(data);
         });
         callback(output, stack);
+    }
+
+    function retryLastQuestion() {
+        question(lastQuestion.slot, lastQuestion.type, lastQuestion.options, lastQuestion.answerLength, lastQuestion.onAnswerFromUser);
     }
 
     function rps(resolver) {
@@ -1632,15 +1644,16 @@ function init(callback) {
         spectators: {}, // holds socket references
         decks: decks,
         lock: lock,
-        lockInDeck: lockInDeck,
-        rematch: rematch,
+        lockInDeck,
+        rematch,
         rematchAccept: 0,
         sideAccept: 0,
-        setNames: setNames,
-        getStack: getStack,
-        setTurnPlayer: setTurnPlayer,
-        answerListener: answerListener,
-        question: question,
+        setNames,
+        getStack,
+        setTurnPlayer,
+        answerListener,
+        question,
+        retryLastQuestion,
         rps: rps,
         generateUpdateView,
         ygoproUpdate

@@ -84,7 +84,7 @@ const enums = {
         7: 'Main Phase 2',
         8: 'End Phase'
     },
-    Positions: {
+    positions: {
         0x1: 'FaceUpAttack',
         0x2: 'FaceDownAttack',
         0x4: 'FaceUpDefence',
