@@ -77,7 +77,18 @@ app.use(helmet());
 
 app.use(function(req, res, next) {
     if (toobusy()) {
-        res.status(503).send('I\'m busy right now, sorry.');
+        res.status(503).send(`<html><head>
+        <title>YGOSalvation</title>
+        <style>
+        body {color:white;background:black; text-align:center}
+        div {margin-top:45vh}
+        </style>
+        </head><body>
+            <div>Server is loading,...</div>
+            <script>
+                setTimeout(window.location.reload.bind(window.location),5000);
+            </script>
+        </body></html>`);
     } else {
         if (req.get('host') === 'ygopro.us') {
             res.redirect(301, 'https://ygosalvation.com' + req.url);
