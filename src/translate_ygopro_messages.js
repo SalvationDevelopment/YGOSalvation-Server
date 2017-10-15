@@ -817,7 +817,8 @@ function recieveSTOC(gameBoard, packet) {
                     message.player = BufferIO.readInt8();
                     message.location = enums.locations[BufferIO.readInt8()];
                     message.index = BufferIO.readInt8();
-                    message.card = makeCard(BufferIO, message.player, (gameBoard.masterRule === 4)) break;
+                    message.card = makeCard(BufferIO, message.player, (gameBoard.masterRule === 4));
+                    break;
 
                 case ('MSG_WAITING'):
                     //mainGame->stHintMsg->setText(dataManager.GetSysString(1390));
