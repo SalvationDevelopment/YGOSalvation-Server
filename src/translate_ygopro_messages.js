@@ -137,7 +137,7 @@ function getIdleSet(BufferIO, hasDescriptions) {
                 id: BufferIO.readInt32(),
                 player: BufferIO.readInt8(),
                 location: enums.locations[BufferIO.readInt8()],
-                index: BufferIO.readInt8(),
+                index: BufferIO.readInt8()
             });
         }
     }

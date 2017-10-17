@@ -72,45 +72,46 @@ function idleOnClick() {
         $('#manualcontrols button').css({
             'display': 'none'
         });
-
-        idleQuestion.msetable_cards.forEach(function(card, slot) {
+        idleQuestion.summonable_cards.forEach(function(card, slot) {
             if (cardEquvilanceCheck(manualActionReference, card)) {
-                $('.ygo-set').attr('data-slot', ((slot << 16) + 3)).css({
-                    'display': 'block'
-                });
-            }
-        });
-        idleQuestion.repositionable_cards.forEach(function(card, slot) {
-            if (cardEquvilanceCheck(manualActionReference, card)) {
-                $('.ygo-reposition').attr('data-slot', ((slot << 16) + 2)).css({
+                $('.ygo-summon').attr('data-slot', ((slot) << 16)).css({
                     'display': 'block'
                 });
             }
         });
         idleQuestion.spsummonable_cards.forEach(function(card, slot) {
             if (cardEquvilanceCheck(manualActionReference, card)) {
-                $('.ygo-special').attr('data-slot', ((slot << 16) + 1)).css({
+                $('.ygo-special').attr('data-slot', (((slot) << 16) + 1)).css({
+                    'display': 'block'
+                });
+            }
+        });
+        idleQuestion.repositionable_cards.forEach(function(card, slot) {
+            if (cardEquvilanceCheck(manualActionReference, card)) {
+                $('.ygo-reposition').attr('data-slot', (((slot + 1) << 16) + 2)).css({
+                    'display': 'block'
+                });
+            }
+        });
+
+        idleQuestion.msetable_cards.forEach(function(card, slot) {
+            if (cardEquvilanceCheck(manualActionReference, card)) {
+                $('.ygo-set').attr('data-slot', (((slot + 1) << 16) + 3)).css({
                     'display': 'block'
                 });
             }
         });
         idleQuestion.ssetable_cards.forEach(function(card, slot) {
             if (cardEquvilanceCheck(manualActionReference, card)) {
-                $('.ygo-st-set').attr('data-slot', (slot << 16) + 4).css({
-                    'display': 'block'
-                });
-            }
-        });
-        idleQuestion.summonable_cards.forEach(function(card, slot) {
-            if (cardEquvilanceCheck(manualActionReference, card)) {
-                $('.ygo-summon').attr('data-slot', (slot << 16) + 1).css({
+                $('.ygo-st-set').attr('data-slot', ((slot << 16) + 4)).css({
                     'display': 'block'
                 });
             }
         });
         idleQuestion.activatable_cards.forEach(function(card, slot) {
             if (cardEquvilanceCheck(manualActionReference, card)) {
-                $('.ygo-activate').attr('data-slot', ((slot << 16) + 5)).css({
+                var message = ((slot << 16) + 5);
+                $('.ygo-activate').attr('data-slot', message).css({
                     'display': 'block'
                 });
             }
@@ -121,6 +122,14 @@ function idleOnClick() {
     reorientmenu();
 }
 
+function toBytesInt32(num) {
+    var arr = new ArrayBuffer(4), // an Int32 takes 4 bytes
+        view = new DataView(arr);
+    view.setUint32(0, num, true); // byteOffset = 0; litteEndian = false
+    return [view.getInt8(0), view.getInt8(1), view.getInt8(2), view.getInt8(3)];
+}
+
+
 function idleResponse(action, target) {
-    resolveQuestion([$(target).attr('data-slot')]);
+    resolveQuestion(toBytesInt32(parseInt($(target).attr('data-slot'), 10)));
 }

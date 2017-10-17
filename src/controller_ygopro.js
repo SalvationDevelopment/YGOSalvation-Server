@@ -13,7 +13,7 @@ function askUser(gameBoard, slot, message, ygopro) {
 
 function boardController(gameBoard, slot, message, ygopro) {
     'use strict';
-    console.log(message.command);
+    console.log(slot, message.command);
     switch (message.command) {
         case ('STOC_UNKNOWN'):
             break;
@@ -117,17 +117,10 @@ function boardController(gameBoard, slot, message, ygopro) {
         case ('MSG_TOSS_COIN'):
             break;
         case ('MSG_SELECT_IDLECMD'):
-            askUser(gameBoard, slot, message, ygopro)
+            askUser(gameBoard, slot, message, ygopro);
+            break;
         case ('MSG_MOVE'):
-            console.log('xx', {
-                player: message.pc,
-                clocation: message.pl,
-                index: message.ps,
-                moveplayer: message.cc,
-                movelocation: message.cl,
-                moveindex: message.cs,
-                moveposition: message.cp
-            });
+            console.log(slot, message);
             gameBoard.setState({
                 player: message.pc,
                 clocation: message.pl,
@@ -135,7 +128,8 @@ function boardController(gameBoard, slot, message, ygopro) {
                 moveplayer: message.cc,
                 movelocation: message.cl,
                 moveindex: message.cs,
-                moveposition: message.cp
+                moveposition: message.cp,
+                overlayindex: 0
             });
             break;
         case ('MSG_POS_CHANGE'):
@@ -207,17 +201,21 @@ function boardController(gameBoard, slot, message, ygopro) {
         case ('MSG_UPDATE_DATA'):
             message.cards.forEach(function(card, index) {
                 if (card) {
-                    gameBoard.setState({
-                        id: message.id,
-                        player: message.player,
-                        clocation: message.location,
-                        index: index,
-                        moveplayer: message.player,
-                        movelocation: message.location,
-                        moveindex: index,
-                        moveposition: card.Position,
-                        overlayindex: 0
-                    });
+                    try {
+                        gameBoard.setState({
+                            id: message.id,
+                            player: message.player,
+                            clocation: message.location,
+                            index: index,
+                            moveplayer: message.player,
+                            movelocation: message.location,
+                            moveindex: index,
+                            moveposition: card.Position,
+                            overlayindex: 0
+                        });
+                    } catch (no) {
+                        console.log(no);
+                    }
                 }
             });
             if (message.cards.length) {
