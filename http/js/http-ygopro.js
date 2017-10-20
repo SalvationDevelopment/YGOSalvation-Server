@@ -133,3 +133,15 @@ function toBytesInt32(num) {
 function idleResponse(action, target) {
     resolveQuestion(toBytesInt32(parseInt($(target).attr('data-slot'), 10)));
 }
+
+function sayYES() {
+    resolveQuestion(toBytesInt32(parseInt(1, 10)));
+}
+
+function sayNO() {
+    resolveQuestion(toBytesInt32(parseInt(0, 10)));
+}
+
+function sayCANCEL() {
+    resolveQuestion(toBytesInt32(parseInt(-1, 10)));
+}
