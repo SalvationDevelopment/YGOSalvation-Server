@@ -75,14 +75,26 @@ const enums = {
         0x40: 'Divine'
     },
     phase: {
-        1: 'Draw Phase',
-        2: 'Standby Phase',
-        3: 'Main Phase 1',
-        4: 'Battle Phase',
-        5: 'Battle Phase: Damage',
-        6: 'Battle Phase: Damage Calculation',
-        7: 'Main Phase 2',
-        8: 'End Phase'
+        /* PHASE_DRAW */
+        0x01: 0,
+        /* PHASE_STANDBY */
+        0x02: 1,
+        /* PHASE_MAIN1 */
+        0x04: 2,
+        /* PHASE_BATTLE_START */
+        0x08: 3,
+        /* PHASE_BATTLE_STEP */
+        0x10: 3,
+        /* PHASE_DAMAGE */
+        0x20: 3,
+        /* PHASE_DAMAGE_CAL */
+        0x40: 3,
+        /* PHASE_BATTLE */
+        0x80: 3,
+        /* PHASE_MAIN2 */
+        0x100: 4,
+        /* PHASE_END */
+        0x200: 5
     },
     positions: {
         0x1: 'FaceUpAttack',
@@ -333,12 +345,13 @@ enums.CTOS = {
     0x15: 'CTOS_TIME_COMFIRM',
     0x16: 'CTOS_CHAT',
     0x20: 'CTOS_HS_TODUELIST',
-    0x21: 'CTOS_HS_TOOBSERVER', //to observer
+    0x21: 'CTOS_HS_TOOBSERVER',
+    /*to observer*/
     0x22: 'CTOS_HS_READY',
     0x23: 'CTOS_HS_NOTREADY',
     0x24: 'CTOS_HS_KICK',
     0x25: 'CTOS_HS_START'
-        //defunc 0x26: "DEVPRO_GAME_INFO"
+        /*defunc 0x26: "DEVPRO_GAME_INFO" */
 
 };
 

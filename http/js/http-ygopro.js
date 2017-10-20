@@ -1,13 +1,6 @@
 /* global $, manualActionReference, singlesitenav, targetmode, record, manualTarget, zonetargetingmode, reorientmenu, resolveQuestion */
 
-var COMMAND_SUMMON = 0,
-    COMMAND_SPECIAL_SUMMON = 1,
-    COMMAND_CHANGE_POS = 2,
-    COMMAND_SET_MONSTER = 3, // ???
-    COMMAND_SET_ST = 4,
-    COMMAND_ACTIVATE = 5,
-    COMMAND_TO_NEXT_PHASE = 6,
-    COMMAND_TO_END_PHASE = 7,
+var idleQuestion = {},
     ygoproLocations = {
         'DECK': 0x01,
         'HAND': 0x02,
@@ -17,7 +10,7 @@ var COMMAND_SUMMON = 0,
         'REMOVED': 0x20,
         'EXTRA': 0x40,
         'OVERLAY': 0x80
-    }
+    };
 
 
 
@@ -35,7 +28,7 @@ function ygoproController(message) {
     }
 }
 
-var idleQuestion = {};
+
 
 function idleCommands(message) {
     if (message.enableBattlePhase) {
@@ -130,7 +123,7 @@ function toBytesInt32(num) {
 }
 
 
-function idleResponse(action, target) {
+function idleResponse(target) {
     resolveQuestion(toBytesInt32(parseInt($(target).attr('data-slot'), 10)));
 }
 
@@ -139,9 +132,17 @@ function sayYES() {
 }
 
 function sayNO() {
-    resolveQuestion(toBytesInt32(parseInt(0, 10)));
+    resolveQuestion(toBytesInt32(0));
 }
 
 function sayCANCEL() {
-    resolveQuestion(toBytesInt32(parseInt(-1, 10)));
+    resolveQuestion(toBytesInt32(-1));
+}
+
+function changeAttackPosition(AttackPosition) {
+    resolveQuestion(toBytesInt32(AttackPosition));
+}
+
+function ygoNextPhase() {
+    resolveQuestion(toBytesInt32(parseInt(6, 10)));
 }

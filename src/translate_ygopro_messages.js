@@ -232,6 +232,7 @@ function recieveSTOC(gameBoard, packet) {
 
                 case ('MSG_NEW_PHASE'):
                     message.phase = BufferIO.readInt8();
+                    message.gui_phase = enums.phase[message.phase];
                     break;
 
                 case ('MSG_DRAW'):
@@ -533,7 +534,6 @@ function recieveSTOC(gameBoard, packet) {
                     message.msetable_cards = getIdleSet(BufferIO);
                     message.ssetable_cards = getIdleSet(BufferIO);
                     message.activatable_cards = getIdleSet(BufferIO, true);
-
                     message.enableBattlePhase = BufferIO.readInt8();
                     message.enableEndPhase = BufferIO.readInt8();
                     message.shufflecount = BufferIO.readInt8();

@@ -53,7 +53,7 @@ function boardController(gameBoard, slot, message, ygopro) {
         case ('MSG_WIN'):
             break;
         case ('MSG_NEW_PHASE'):
-            gameBoard.nextPhase(message.phase);
+            gameBoard.nextPhase(message.gui_phase);
             break;
         case ('MSG_DRAW'):
             gameBoard.drawCard(message.player, message.count, message.cards);
