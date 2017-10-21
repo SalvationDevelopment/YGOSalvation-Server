@@ -15,7 +15,7 @@ var idleQuestion = {},
 
 
 function ygoproController(message) {
-    $('.idleoption').removeClass('.idleoption');
+
     scaleScreenFactor();
     switch (message.command) {
         case ('STOC_DUEL_START'):
@@ -24,6 +24,10 @@ function ygoproController(message) {
         case ('STOC_SELECT_TP'):
             break;
         case ('MSG_SELECT_IDLECMD'):
+            break;
+        case ('MSG_NEW_PHASE'):
+            $('#phaseindicator button.option').removeClass('option');
+            idleQuestion = {};
             break;
     }
 }
@@ -143,6 +147,13 @@ function changeAttackPosition(AttackPosition) {
     resolveQuestion(toBytesInt32(AttackPosition));
 }
 
-function ygoNextPhase() {
-    resolveQuestion(toBytesInt32(parseInt(6, 10)));
+function ygoproNextPhase(phase) {
+    if (idleQuestion.enableEndPhase && phase === 5) {
+        resolveQuestion(toBytesInt32(parseInt(7, 10)));
+        return;
+    }
+    if (battleQuestion.enableEndPhase && phase == 3) {
+        resolveQuestion(toBytesInt32(parseInt(3, 10)));
+        return;
+    }
 }

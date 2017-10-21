@@ -1150,6 +1150,15 @@ function question(message) {
             break;
         case 'MSG_SELECT_IDLECMD':
             idleQuestion = message.options;
+            if (idleQuestion.enableBattlePhase) {
+                $('#battlephi').addClass('option');
+            }
+            if (idleQuestion.enableEndPhase) {
+                $('#endphi').addClass('option');
+            }
+            if (idleQuestion.shufflecount) {
+
+            }
             break;
         case 'MSG_SELECT_PLACE':
             zonetargetingmode = 'ygo';
@@ -1463,11 +1472,16 @@ function manualChat(message) {
 
 function manualNextPhase(phase) {
     'use strict';
-    primus.write(({
-        action: 'nextPhase',
-        phase: phase,
-        sound: 'soundphase'
-    }));
+    if (broadcast[activegame].automatic) {
+        ygoproNextPhase(phase);
+        return;
+    } else {
+        primus.write(({
+            action: 'nextPhase',
+            phase: phase,
+            sound: 'soundphase'
+        }));
+    }
 }
 
 function manualNextTurn() {
@@ -2830,7 +2844,7 @@ function selectionzoneonclick(choice, zone, player) {
         $('.cardselectionzone.p0').removeClass('card');
         $('.cardselectionzone.p0').removeClass('attackglow');
         if (zonetargetingmode === 'ygo') {
-            resolveQuestion([player, ygoproLocations[zone], choice]);
+            resolveQuestion([orient(player), ygoproLocations[zone], choice]);
         }
         if (zonetargetingmode === 'atk') {
             manualToAttack(choice);

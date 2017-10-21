@@ -78,7 +78,7 @@ function init(primus) {
             cardpool: settings.info.cardpool,
             noshuffle: settings.info.shuf,
             prerelease: settings.info.prerelease,
-            legacyfield: (banlist[settings.info.banlist].masterRule !== 4),
+            legacyfield: (banlist[settings.info.banlist].masterRule !== 4 || settings.info.automatic),
             rule: 0,
             startLP: settings.info.startLP,
             starthand: 0,

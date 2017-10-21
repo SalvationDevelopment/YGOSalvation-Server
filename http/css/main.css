@@ -2935,3 +2935,10 @@ div#selectplayer button {
     background: transparent;
     color: white;
 }
+
+#phaseindicator button.option {
+    border: 1px solid white;
+    background: #eee;
+    color: black;
+    font-weight: bold;
+}

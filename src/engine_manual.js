@@ -587,7 +587,7 @@ function init(callback) {
             moveposition = changeRequest.moveposition,
             overlayindex = changeRequest.overlayindex,
             uid = changeRequest.uid,
-            target = queryCard(player, clocation, index, 0, uid),
+            target = queryCard(player, clocation, index, overlayindex, uid),
             pointer = uidLookup(target.uid),
             zone;
 
