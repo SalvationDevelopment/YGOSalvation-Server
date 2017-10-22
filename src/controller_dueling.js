@@ -63,8 +63,6 @@ function init(primus) {
      * @returns {object} customized game object
      */
     function newGame(settings) {
-        console.log('noshuffle: ' + settings.info.shuf);
-        console.log('prerelease: ' + settings.info.prerelease);
         return {
             automatic: settings.info.automatic,
             roompass: settings.roompass,
@@ -78,7 +76,7 @@ function init(primus) {
             cardpool: settings.info.cardpool,
             noshuffle: settings.info.shuf,
             prerelease: settings.info.prerelease,
-            legacyfield: (banlist[settings.info.banlist].masterRule !== 4 || settings.info.automatic),
+            legacyfield: (banlist[settings.info.banlist].masterRule !== 4),
             rule: 0,
             startLP: settings.info.startLP,
             starthand: 0,

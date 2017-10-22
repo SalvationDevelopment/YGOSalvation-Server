@@ -1440,7 +1440,7 @@ function init(callback) {
     }
 
     /**
-     * 
+     * Send a question to the player
      * @param {Number} slot 
      * @param {String} type 
      * @param {Object[]} options 
@@ -1449,6 +1449,8 @@ function init(callback) {
      * @return {undefined}
      */
     function question(slot, type, options, answerLength, onAnswerFromUser) {
+
+        // Create a mock view to populate with information so it gets sent to the right place.
         var uuid = uniqueIdenifier(),
             output = {
                 names: names,
@@ -1471,7 +1473,10 @@ function init(callback) {
             answerLength: answerLength,
             uuid: uuid
         };
-        console.log(uuid);
+
+        // Here we set an event listener. `answerListener` is exposed to the controller.
+        // So when the user answers this question we can fire `onAnswerFromUser` and pass the data to it.
+        // https://nodejs.org/api/events.html#events_emitter_once_eventname_listener
         answerListener.once(uuid, function(data) {
             onAnswerFromUser(data);
         });

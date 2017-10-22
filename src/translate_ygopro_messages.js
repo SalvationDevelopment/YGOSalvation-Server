@@ -681,6 +681,7 @@ function recieveSTOC(gameBoard, packet) {
                     message.forced = BufferIO.readInt8();
                     message.hint0 = BufferIO.readInt32();
                     message.hint1 = BufferIO.readInt32();
+                    message.select_options = [];
                     for (i = 0; i < message.count; ++i) {
                         message.select_options.push({
                             flag: BufferIO.readInt8(),

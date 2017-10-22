@@ -227,7 +227,7 @@ function startYGOSharp(instance, sockets) {
         'Mode=' + 0,
         'Banlist=' + 0,
         'StartLp=' + instance.startLP,
-        'GameTimer=' + 300,
+        'GameTimer=300',
         'NoCheckDeck=true',
         'NoShuffleDeck=' + Boolean(instance.shuf),
         'EnablePriority=false'

@@ -13,7 +13,17 @@ var idleQuestion = {},
         'OVERLAY': 0x80
     };
 
-
+function setIdle() {
+    idleQuestion = {
+        summonable_cards: [],
+        spsummonable_cards: [],
+        repositionable_cards: [],
+        msetable_cards: [],
+        ssetable_cards: [],
+        activatable_cards: [],
+        battle: false
+    };
+}
 
 
 function selectStartingPlayer() {
@@ -42,6 +52,16 @@ function ygoproQuestion(message) {
 
             }
             break;
+        case 'MSG_SELECT_BATTLECMD':
+            idleQuestion = message.options;
+            idleQuestion.battle = true;
+            if (idleQuestion.enableMainPhase2) {
+                $('#main2phi').addClass('option');
+            }
+            if (idleQuestion.enableEndPhase) {
+                $('#endphi').addClass('option');
+            }
+            break;
         case 'MSG_SELECT_PLACE':
             zonetargetingmode = 'ygo';
             message.options.zones.forEach(function(zone) {
@@ -65,7 +85,7 @@ function ygoproController(message) {
             break;
         case ('MSG_NEW_PHASE'):
             $('#phaseindicator button.option').removeClass('option');
-            idleQuestion = {};
+            setIdle();
             break;
         case ('STOC_TIME_LIMIT'):
             $('.p' + message.player + 'time').val(message.time);
@@ -154,6 +174,14 @@ function idleOnClick() {
                 });
             }
         });
+        idleQuestion.attackable_cards.forEach(function(card, slot) {
+            if (cardEquvilanceCheck(manualActionReference, card)) {
+                var message = ((slot << 16) + 1);
+                $('.ygo-activate').attr('data-slot', message).css({
+                    'display': 'block'
+                });
+            }
+        });
     } catch (onError) {
         console.log(onError);
     }
@@ -191,11 +219,11 @@ function changeAttackPosition(AttackPosition) {
 function ygoproNextPhase(phase) {
     if (phase === 5) {
         if (idleQuestion.enableEndPhase) {
-            resolveQuestion(toBytesInt32(parseInt(7, 10)));
+            resolveQuestion(toBytesInt32(7));
             return;
         }
-        if (battleQuestion.enableEndPhase) {
-            resolveQuestion(toBytesInt32(parseInt(3, 10)));
+        if (idleQuestion.battle) {
+            resolveQuestion(toBytesInt32(3));
             return;
         }
     }
