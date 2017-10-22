@@ -622,23 +622,11 @@ function recieveSTOC(gameBoard, packet) {
                     break;
                 case ('MSG_SELECT_BATTLECMD'):
                     message.selecting_player = BufferIO.readInt8(); // defunct in the code, just reading ahead.
-                    message.count = BufferIO.readInt8();
-                    message.cardsThatCanBattle = [];
-                    for (i = 0; i < message.count; ++i) {
-                        message.cardsThatCanBattle.push({
-                            con: BufferIO.readInt8(),
-                            loc: BufferIO.readInt8(),
-                            seq: BufferIO.readInt8(),
-                            desc: BufferIO.readInt32()
-                        });
-                        // client looks at the field, gets a cmdflag, does bytemath on it to see if it can activate.
-                        // if it can do the can activate animations.
-
-                    }
-                    message.cardsThatAreAttackable = [];
+                    message.activatable_cards = getIdleSet(BufferIO, true);
+                    message.attackable_cards = [];
                     message.count = BufferIO.readInt8();
                     for (i = 0; i < message.count; ++i) {
-                        message.cardsThatAreAttackable.push({
+                        message.attackable_cards.push({
                             code: BufferIO.readInt32(),
                             con: BufferIO.readInt8(),
                             loc: BufferIO.readInt8(),
@@ -646,6 +634,8 @@ function recieveSTOC(gameBoard, packet) {
                             diratt: BufferIO.readInt32() // defuct in code
                         });
                     }
+                    message.enableMainPhase2 = BufferIO.readInt8();
+                    message.enableEndPhase = BufferIO.readInt8();
                     break;
                 case ('MSG_SELECT_EFFECTYN'):
                     message.selecting_player = BufferIO.readInt8();

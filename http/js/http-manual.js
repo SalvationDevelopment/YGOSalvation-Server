@@ -1128,9 +1128,7 @@ function manualMoveGeneric(index, zone) {
     primus.write((message));
 }
 
-function selectStartingPlayer() {
-    $('#selectplayer').css('display', 'block');
-}
+
 
 function question(message) {
     'use strict';
@@ -1145,27 +1143,8 @@ function question(message) {
         case 'startingPlayer':
 
             break;
-        case 'STOC_SELECT_TP':
-            selectStartingPlayer();
-            break;
-        case 'MSG_SELECT_IDLECMD':
-            idleQuestion = message.options;
-            if (idleQuestion.enableBattlePhase) {
-                $('#battlephi').addClass('option');
-            }
-            if (idleQuestion.enableEndPhase) {
-                $('#endphi').addClass('option');
-            }
-            if (idleQuestion.shufflecount) {
-
-            }
-            break;
-        case 'MSG_SELECT_PLACE':
-            zonetargetingmode = 'ygo';
-            message.options.zones.forEach(function(zone) {
-                $('.cardselectionzone.p' + zone.player + '.' + zone.zone + '.i' + zone.slot).addClass('attackglow card')
-            });
         default:
+            ygoproQuestion(message);
             break;
     }
 }

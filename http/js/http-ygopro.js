@@ -1,6 +1,7 @@
-/* global $, manualActionReference, singlesitenav, targetmode, record, manualTarget, zonetargetingmode, reorientmenu, resolveQuestion */
+/* global $, manualActionReference,activeQuestion, singlesitenav, targetmode, record, manualTarget, zonetargetingmode, reorientmenu, resolveQuestion */
 
 var idleQuestion = {},
+    battleQuestion = {},
     ygoproLocations = {
         'DECK': 0x01,
         'HAND': 0x02,
@@ -13,6 +14,43 @@ var idleQuestion = {},
     };
 
 
+
+
+function selectStartingPlayer() {
+    $('#selectplayer').css('display', 'block');
+}
+
+function ygoproQuestion(message) {
+    'use strict';
+    var type = message.type;
+    activeQuestion = message;
+    activeQuestion.answer = [];
+    activeQuestion.action = 'question';
+    switch (type) {
+        case 'STOC_SELECT_TP':
+            selectStartingPlayer();
+            break;
+        case 'MSG_SELECT_IDLECMD':
+            idleQuestion = message.options;
+            if (idleQuestion.enableBattlePhase) {
+                $('#battlephi').addClass('option');
+            }
+            if (idleQuestion.enableEndPhase) {
+                $('#endphi').addClass('option');
+            }
+            if (idleQuestion.shufflecount) {
+
+            }
+            break;
+        case 'MSG_SELECT_PLACE':
+            zonetargetingmode = 'ygo';
+            message.options.zones.forEach(function(zone) {
+                $('.cardselectionzone.p' + zone.player + '.' + zone.zone + '.i' + zone.slot).addClass('attackglow card')
+            });
+        default:
+            break;
+    }
+}
 
 function ygoproController(message) {
 
@@ -28,6 +66,9 @@ function ygoproController(message) {
         case ('MSG_NEW_PHASE'):
             $('#phaseindicator button.option').removeClass('option');
             idleQuestion = {};
+            break;
+        case ('STOC_TIME_LIMIT'):
+            $('.p' + message.player + 'time').val(message.time);
             break;
     }
 }
@@ -148,12 +189,24 @@ function changeAttackPosition(AttackPosition) {
 }
 
 function ygoproNextPhase(phase) {
-    if (idleQuestion.enableEndPhase && phase === 5) {
-        resolveQuestion(toBytesInt32(parseInt(7, 10)));
-        return;
+    if (phase === 5) {
+        if (idleQuestion.enableEndPhase) {
+            resolveQuestion(toBytesInt32(parseInt(7, 10)));
+            return;
+        }
+        if (battleQuestion.enableEndPhase) {
+            resolveQuestion(toBytesInt32(parseInt(3, 10)));
+            return;
+        }
     }
-    if (battleQuestion.enableEndPhase && phase == 3) {
-        resolveQuestion(toBytesInt32(parseInt(3, 10)));
-        return;
+    if (phase === 3) {
+        if (idleQuestion.enableBattlePhase) {
+            resolveQuestion(toBytesInt32(parseInt(6, 10)));
+            return;
+        }
+        if (battleQuestion.enableEndPhase) {
+            resolveQuestion(toBytesInt32(parseInt(3, 10)));
+            return;
+        }
     }
 }
