@@ -631,7 +631,7 @@ function recieveSTOC(gameBoard, packet) {
                             con: BufferIO.readInt8(),
                             loc: BufferIO.readInt8(),
                             seq: BufferIO.readInt8(),
-                            diratt: BufferIO.readInt32() // defuct in code
+                            diratt: BufferIO.readInt8() // defuct in code
                         });
                     }
                     message.enableMainPhase2 = BufferIO.readInt8();
