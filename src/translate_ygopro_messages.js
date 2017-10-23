@@ -627,10 +627,10 @@ function recieveSTOC(gameBoard, packet) {
                     message.count = BufferIO.readInt8();
                     for (i = 0; i < message.count; ++i) {
                         message.attackable_cards.push({
-                            code: BufferIO.readInt32(),
-                            con: BufferIO.readInt8(),
-                            loc: BufferIO.readInt8(),
-                            seq: BufferIO.readInt8(),
+                            id: BufferIO.readInt32(),
+                            player: BufferIO.readInt8(),
+                            location: enums.locations[BufferIO.readInt8()],
+                            index: BufferIO.readInt8(),
                             diratt: BufferIO.readInt8() // defuct in code
                         });
                     }

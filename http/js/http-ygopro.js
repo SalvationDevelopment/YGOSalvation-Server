@@ -51,12 +51,8 @@ function ygoproQuestion(message) {
             if (idleQuestion.shufflecount) {
 
             }
-            idleQuestion.selecting_player = [];
-            idleQuestion.summonable_cards = [];
-            idleQuestion.spsummonable_cards = [];
-            idleQuestion.repositionable_cards = [];
-            idleQuestion.msetable_cards = [];
-            idleQuestion.ssetable_cards = [];
+
+
             break;
         case 'MSG_SELECT_BATTLECMD':
             idleQuestion = message.options;
@@ -67,6 +63,11 @@ function ygoproQuestion(message) {
             if (idleQuestion.enableEndPhase) {
                 $('#endphi').addClass('option');
             }
+            idleQuestion.summonable_cards = [];
+            idleQuestion.spsummonable_cards = [];
+            idleQuestion.repositionable_cards = [];
+            idleQuestion.msetable_cards = [];
+            idleQuestion.ssetable_cards = [];
             break;
         case 'MSG_SELECT_PLACE':
             zonetargetingmode = 'ygo';
