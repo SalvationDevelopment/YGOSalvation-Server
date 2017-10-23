@@ -120,7 +120,6 @@ function boardController(gameBoard, slot, message, ygopro) {
             askUser(gameBoard, slot, message, ygopro);
             break;
         case ('MSG_MOVE'):
-            console.log(slot, message);
             gameBoard.setState({
                 player: message.pc,
                 clocation: message.pl,
@@ -233,7 +232,7 @@ function boardController(gameBoard, slot, message, ygopro) {
                 moveindex: message.index,
                 moveposition: message.card.Position,
                 overlayindex: 0,
-                id: message.card.id || message.card.Alias
+                id: message.card.id
             });
             break;
         case ('MSG_WAITING'):

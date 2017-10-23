@@ -11,11 +11,7 @@ function makeCard(BufferIO, controller, masterRule4) {
     var i,
         count;
     const flag = BufferIO.readInt32(),
-        card = {
-            id: 0,
-            Position: 'FaceDownAttack',
-            controller: controller
-        };
+        card = {};
     if (flag === 0) {
         return null;
     }
