@@ -184,7 +184,7 @@ function idleOnClick() {
         idleQuestion.attackable_cards.forEach(function(card, slot) {
             if (cardEquvilanceCheck(manualActionReference, card)) {
                 var message = ((slot << 16) + 1);
-                $('.ygo-activate').attr('data-slot', message).css({
+                $('.ygo-attack').attr('data-slot', message).css({
                     'display': 'block'
                 });
             }

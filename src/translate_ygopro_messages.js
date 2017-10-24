@@ -667,9 +667,9 @@ function recieveSTOC(gameBoard, packet) {
                     for (i = 0; i < message.count; ++i) {
                         message.select_options.push({
                             code: BufferIO.readInt32(),
-                            c: BufferIO.readInt8(),
-                            l: BufferIO.readInt8(),
-                            s: BufferIO.readInt8(),
+                            player: BufferIO.readInt8(),
+                            location: enums.locations[BufferIO.readInt8()],
+                            index: BufferIO.readInt8(),
                             ss: BufferIO.readInt8()
                         });
                     }

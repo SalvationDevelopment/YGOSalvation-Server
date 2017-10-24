@@ -15,12 +15,12 @@ function isChecked(id) {
     return ($(id).is(':checked'));
 }
 
-Handlebars.getTemplate = function (name) {
+Handlebars.getTemplate = function(name) {
     'use strict';
     if (Handlebars.templates === undefined || Handlebars.templates[name] === undefined) {
         $.ajax({
             url: 'templatesfolder/' + name + '.handlebars',
-            success: function (data) {
+            success: function(data) {
                 if (Handlebars.templates === undefined) {
                     Handlebars.templates = {};
                 }
@@ -32,7 +32,7 @@ Handlebars.getTemplate = function (name) {
     return Handlebars.templates[name];
 };
 $.browser = {};
-(function () {
+(function() {
     'use strict';
     $.browser.msie = false;
     $.browser.version = 0;
@@ -47,8 +47,8 @@ function updatenews() {
     'use strict';
     $.getFeed({
         url: 'https://forum.ygopro.us/index.php?/forum/14-announcements-and-news.xml/',
-        success: function (feed) {
-            $.get('handlebars/forumnews.handlebars', function (template) {
+        success: function(feed) {
+            $.get('handlebars/forumnews.handlebars', function(template) {
                 var parser = Handlebars.compile(template),
                     topics = feed.items,
                     news = {
@@ -56,7 +56,7 @@ function updatenews() {
                     },
                     output;
 
-                topics.forEach(function (topic, index) {
+                topics.forEach(function(topic, index) {
                     if (index > 5) {
                         //limit the number of post in the news feed.
                         return;
@@ -69,7 +69,7 @@ function updatenews() {
                         link: topic.link
                     });
                 });
-                news.articles.sort(function (arti) {
+                news.articles.sort(function(arti) {
                     return new Date(arti.date).getTime();
                 });
                 news.articles.reverse();
@@ -85,14 +85,14 @@ function updateevents() {
     'use strict';
     $.getFeed({
         url: 'https://forum.ygopro.us/index.php?/forum/15-official-tournaments.xml',
-        success: function (feed) {
-            $.get('handlebars/forumnews.handlebars', function (template) {
+        success: function(feed) {
+            $.get('handlebars/forumnews.handlebars', function(template) {
                 var parser = Handlebars.compile(template),
                     topics = feed.items,
                     news = {
                         articles: []
                     };
-                topics.forEach(function (topic, index) {
+                topics.forEach(function(topic, index) {
                     if (index > 5) {
                         //limit the number of post in the news feed.
                         return;
@@ -137,10 +137,10 @@ function deckeditloader() {
     });
 }
 
-var uncensoredcolor = 'url(../img/magimagipink.jpg)',
-    uncensoredblack = 'url(../img/magimagiblack.jpg)',
-    censoredcolor = 'url(../img/magimagipinkshadow.jpg)',
-    censoredblack = 'url(../img/magimagipinkshadow2.jpg)',
+var uncensoredcolor = 'url(../img/Chibi.jpg)',
+    uncensoredblack = 'url(../img/Chibi.jpg)',
+    censoredcolor = 'url(../img/Chibi.jpg)',
+    censoredblack = 'url(../img/Chibi.jpg)',
     usecensor = (location.host === 'ygopro.us');
 
 function blackbg() {
@@ -228,7 +228,7 @@ function singlesitenav(target) {
     }
     if (target === 'customization') {
         $('body').css('background-image', blackbg());
-        setTimeout(function () {
+        setTimeout(function() {
             $('#cusomizationselection').trigger('change');
         }, 3000);
         window.manualLeave();
@@ -281,7 +281,7 @@ function locallogin(init) {
     //chatStarted = true;
     singlesitenav('faq');
     $('.featurelist .launcheronly').addClass('boxshine');
-    setTimeout(function () {
+    setTimeout(function() {
         $('.featurelist .launcheronly').removeClass('boxshine');
     }, 4000);
 
@@ -347,7 +347,7 @@ function achievementConstructor(data) {
 
 function mysql_real_escape_string(str) {
     'use strict';
-    return str.replace(/[\0\x08\x09\x1a"\\\%]/g, function (char) {
+    return str.replace(/[\0\x08\x09\x1a"\\\%]/g, function(char) {
         switch (char) {
             case "\0":
                 return "\\0";
@@ -421,19 +421,19 @@ function processLogin(data) {
 
 
 
-Handlebars.registerHelper("counter", function (index) {
+Handlebars.registerHelper("counter", function(index) {
     'use strict';
     return index + 1;
 });
 
 function updateranking() {
     'use strict';
-    $.getJSON('/ranking.json', function (feed) {
+    $.getJSON('/ranking.json', function(feed) {
         var rows = [],
             merged = {};
 
-        feed.forEach(function (tournament) {
-            Object.keys(tournament).forEach(function (name) {
+        feed.forEach(function(tournament) {
+            Object.keys(tournament).forEach(function(name) {
                 if (merged[name]) {
                     merged[name] += tournament[name];
                 } else {
@@ -442,13 +442,13 @@ function updateranking() {
             });
         });
 
-        Object.keys(merged).forEach(function (person) {
+        Object.keys(merged).forEach(function(person) {
             rows.push({
                 name: person,
                 points: merged[person]
             });
         });
-        rows = rows.sort(function (a, b) {
+        rows = rows.sort(function(a, b) {
             return b.points - a.points;
         });
         var requests = [],
@@ -456,32 +456,32 @@ function updateranking() {
         for (i = 0; i < rows.length; i++) {
             requests.push($.ajax('https://forum.ygopro.us/avatar2.php?username=' + rows[i].name));
         }
-        $.when.apply(undefined, requests).then(function () {
+        $.when.apply(undefined, requests).then(function() {
             var duelist = [].slice.call(arguments),
                 convert = [],
                 endresult;
 
-            duelist.forEach(function (item) {
+            duelist.forEach(function(item) {
                 try {
                     convert.push(JSON.parse(item[0]));
                 } catch (ignoreError) {}
             });
 
 
-            endresult = rows.map(function (item) {
-                var forumresult = convert.find(function (forumitem) {
+            endresult = rows.map(function(item) {
+                var forumresult = convert.find(function(forumitem) {
                     return (forumitem.username === item.name);
                 });
                 return Object.assign({}, item, forumresult);
             });
-            $.get('handlebars/ranking.handlebars', function (template) {
+            $.get('handlebars/ranking.handlebars', function(template) {
                 var parser = Handlebars.compile(template);
                 $('#rankingtable').html(parser(endresult));
             });
-            endresult.forEach(function (item) {
+            endresult.forEach(function(item) {
                 loadedprofiles[item.username] = item;
             });
-            $(".clickable-row").click(function () {
+            $(".clickable-row").click(function() {
                 window.open($(this).data("href"));
             });
         });
@@ -489,10 +489,10 @@ function updateranking() {
 }
 
 
-$(document).ready(function () {
+$(document).ready(function() {
     'use strict';
 
-    $('#creategameduelmode').on('change', function () {
+    $('#creategameduelmode').on('change', function() {
         $('#creategamelp').val($('#creategameduelmode option:selected').attr('data-lp'));
     });
     if (window.self !== window.top) {
@@ -514,7 +514,7 @@ $(document).ready(function () {
     if (localStorage.remember) {
         $('#ips_remember').prop('checked', true);
     }
-    $("#dolog").click(function (ev) {
+    $("#dolog").click(function(ev) {
         allowLogin = true;
         try {
             _gaq.push(['_trackEvent', 'Launcher', 'Attempt Login', $('#ips_username').val()]);
@@ -537,7 +537,7 @@ $(document).ready(function () {
 
 
     $('#ipblogin').css('display', 'block');
-    $('#cusomizationselection').change(function () {
+    $('#cusomizationselection').change(function() {
         $('#displaybody').html('<div class="loading">Loading...</div>');
         var option = $('#cusomizationselection option:selected'),
             source = option.attr('data-source');
@@ -545,7 +545,7 @@ $(document).ready(function () {
         window.quedfunc = 'getCustoms';
         window.quedready = true;
     });
-    $('#displaybody').on('click', 'img', function (item) {
+    $('#displaybody').on('click', 'img', function(item) {
         if (!confirm('Install as ' + $('#cusomizationselection option:selected').text() + ' image?')) {
             return;
         }
@@ -563,7 +563,7 @@ $(document).ready(function () {
         console.log(window.quedparams);
 
     });
-    $('#displaybody').on('click', '.soundsets span', function (item) {
+    $('#displaybody').on('click', '.soundsets span', function(item) {
         if (!confirm('Install as ' + $(this).text() + ' music?')) {
             return;
         }
@@ -580,7 +580,7 @@ $(document).ready(function () {
         console.log(window.quedparams);
 
     });
-    $('#sqlsearch').keypress(function (e) {
+    $('#sqlsearch').keypress(function(e) {
         if (e.which === 13) {
             window.quedparams = {
                 db: $('#sqldblist option:selected').text(),
@@ -592,7 +592,7 @@ $(document).ready(function () {
             return false;
         }
     });
-    $('#sqlsearchresults').change(function (e) {
+    $('#sqlsearchresults').change(function(e) {
         window.quedparams = {
             db: $('#sqldblist option:selected').text(),
             text: $(this).val()
@@ -613,7 +613,7 @@ function customizationadd() {
         source = option.attr('data-source');
 
     reader.readAsDataURL(file);
-    reader.addEventListener("load", function () {
+    reader.addEventListener("load", function() {
         window.quedparams = {
             target: './ygopro/Assets/' + source + '/' + file.name,
             code: reader.result
@@ -621,7 +621,7 @@ function customizationadd() {
         window.quedfunc = 'addcustom';
         window.quedready = true;
         console.log(reader, window.quedparams);
-        setTimeout(function () {
+        setTimeout(function() {
             $('#cusomizationselection').change();
         }, 1300);
     }, false);
@@ -673,7 +673,7 @@ function leftpad(str, len, ch) {
 }
 
 
-$("#sqlcardtypes input[type=radio]").change(function () {
+$("#sqlcardtypes input[type=radio]").change(function() {
     'use strict';
     var checked = $(this).is(':checked');
     $("#sqlcardtypes input").prop('checked', false);
@@ -682,7 +682,7 @@ $("#sqlcardtypes input[type=radio]").change(function () {
     }
 });
 
-$("#sqlcardtypes input[type=checkbox]").change(function () {
+$("#sqlcardtypes input[type=checkbox]").change(function() {
     'use strict';
     var checked = $(this).is(':checked');
     $("#sqlcardtypes input[type=radio]").prop('checked', false);
@@ -704,19 +704,19 @@ function makedatasSQL() {
         texts = [],
         montype;
 
-    $('.typebox input:checked').each(function () {
+    $('.typebox input:checked').each(function() {
         var val = parseInt($(this).val(), 10);
         type = type + val;
     });
 
-    $('#sqlcardcategorybox input:checked').each(function () {
+    $('#sqlcardcategorybox input:checked').each(function() {
         var val = parseInt($(this).val(), 16);
         if (val) {
             category = Number(category) + val;
         }
     });
     montype = 0;
-    $('#monbox input:checked').each(function () {
+    $('#monbox input:checked').each(function() {
         montype = 1;
     });
     type = '"' + (type + montype) + '"';
@@ -810,18 +810,18 @@ function confirmDialog(title, message, confirm, reject) {
         title: title,
         modal: true,
         buttons: {
-            "OK": function () {
+            "OK": function() {
                 $(this).dialog("close");
                 confirm();
             },
-            "cancel": function () {
+            "cancel": function() {
                 $(this).dialog("close");
                 if ($.isFunction(reject)) {
                     reject();
                 }
             }
         },
-        close: function (event, ui) {
+        close: function(event, ui) {
             $(this).dialog('destroy');
             $(this).remove();
         }
@@ -831,7 +831,7 @@ function confirmDialog(title, message, confirm, reject) {
 function screenshot() {
     'use strict';
     html2canvas(document.body, {
-        onrendered: function (canvas) {
+        onrendered: function(canvas) {
             var dt = canvas.toDataURL('image/png');
             dt = dt.replace(/^data:image\/[^;]*/, 'data:application/octet-stream');
             var image = new Image();
