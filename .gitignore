@@ -72,3 +72,5 @@ documentation/~$ygopro id sheet.xlsx
 databases/deckStorage.nedb
 coverage
 .vscode
+bin/*.txt
+databases/*.nedb

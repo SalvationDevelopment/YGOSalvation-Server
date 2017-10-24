@@ -24,11 +24,11 @@ const child_process = require('child_process'),
     EventEmitter = require('events'),
     net = require('net'),
     enums = require('./translate_ygopro_enums.js'),
-    translateYGOProAPI = require('./receiver.js'),
+    translateYGOProAPI = require('./translate_ygopro_messages.js'),
     manualControlEngine = require('./engine_manual.js'),
     boardController = require('./controller_ygopro.js'),
     gameResponse = require('./translate_ygopro_reply.js'),
-    YGOSharp = './bin/ygosharp.exe',
+    YGOSharp = './ygosharp.exe',
     ip = '127.0.0.1',
     scripts = {
         0: '../ygopro-scripts',
@@ -45,10 +45,10 @@ const child_process = require('child_process'),
  * @param {Object} webSockectConnection A players connection to the server.
  * @returns {Object} A game instance with manual controls.
  */
-function GameBoard(webSockectConnection) {
-    return manualControlEngine(function(view, stack, callback) {
+function GameBoard(webSockectConnection, slot, masterRule) {
+    const board = manualControlEngine(function(view, stack, callback) {
         try {
-            webSockectConnection.write((view.p0));
+            webSockectConnection.write((view[slot]));
         } catch (error) {
             console.log('failed messaging socket', error);
         } finally {
@@ -57,25 +57,11 @@ function GameBoard(webSockectConnection) {
             }
         }
     });
+    board.masterRule = masterRule;
+    return board;
 }
 
-/**
- * Disect a message header from YGOPro.
- * @param {Buffer} message YGOPro Protocol Message.
- * @returns {Packet[]} Disected message in an array.
- */
-function parsePackets(message) {
-    'use strict';
 
-    var task = [],
-        packet = {
-            message: message.slice(1),
-            readposition: 0
-        };
-    packet.STOC = enums.STOC[message[0]];
-    task.push(packet);
-    return task;
-}
 
 /**
  * Takes streamed broken up incoming data, stores it in a buffer, and as completed, returns complete messages.
@@ -92,7 +78,7 @@ function DataStream() {
             frameLength;
         memory = Buffer.concat([memory, buffer]);
         while (incomplete === true && memory.length > 2) {
-            frameLength = memory[0] + memory[1];
+            frameLength = memory.readUInt16LE(0);
             if ((memory.length - 2) < frameLength) {
                 incomplete = false;
             } else {
@@ -118,21 +104,40 @@ function DataStream() {
  * @param {Function} callback Function to run once player is connected.
  * @returns {Object} TCP Client Connection Instance
  */
-function connectToYGOSharp(port, webSockectConnection, callback) {
-    var dataStream = new DataStream(),
-        gameBoard = new GameBoard(webSockectConnection),
+function connectToYGOSharp(roomInstance, webSockectConnection, slot, callback) {
+    var port = roomInstance.port,
+        dataStream = new DataStream(),
+        gameBoard = new GameBoard(webSockectConnection, slot, roomInstance.masterRule),
         tcpConnection;
 
-    function gameStateUpdater(gameAction) {
-        webSockectConnection.send(boardController(gameBoard, gameAction));
+    /**
+     * Disect a message header from YGOPro.
+     * @param {Buffer} data YGOPro Protocol Message.
+     * @returns {Packet[]} Disected message in an array.
+     */
+    function parsePackets(data) {
+        'use strict';
+        var message = new Buffer(data),
+            task = [],
+            packet = {
+                message: message.slice(1),
+                readposition: 0
+            };
+        packet.command = enums.STOC[message[0]];
+        task.push(translateYGOProAPI(gameBoard, packet));
+        return task;
+    }
+
+    function gameStateUpdater(gameActions) {
+        gameActions.forEach(function(gameAction) {
+            webSockectConnection.write(boardController(gameBoard, slot, gameAction, tcpConnection));
+        });
+
     }
 
     function cutConnections() {
         if (tcpConnection) {
             tcpConnection.end();
-        }
-        if (webSockectConnection) {
-            webSockectConnection.end();
         }
     }
 
@@ -140,15 +145,14 @@ function connectToYGOSharp(port, webSockectConnection, callback) {
         tcpConnection.on('data', function(data) {
             dataStream.input(data)
                 .map(parsePackets)
-                .map(translateYGOProAPI)
                 .map(gameStateUpdater);
         });
         webSockectConnection.on('error', cutConnections);
         webSockectConnection.on('close', cutConnections);
 
-        console.log('Send Game request for', webSockectConnection.activeDuel);
-        var CTOS_PlayerInfo = gameResponse('CTOS_PlayerInfo', webSockectConnection.username),
-            CTOS_JoinGame = gameResponse('CTOS_JoinGame', webSockectConnection.activeDuel),
+        console.log('Send Game request for', webSockectConnection.activeduel);
+        var CTOS_PlayerInfo = gameResponse('CTOS_PlayerInfo', 'Player'),
+            CTOS_JoinGame = gameResponse('CTOS_JoinGame', webSockectConnection.activeduel),
             toDuelist = gameResponse('CTOS_HS_TODUELIST');
 
         tcpConnection.write(Buffer.concat([CTOS_PlayerInfo, CTOS_JoinGame]));
@@ -157,6 +161,7 @@ function connectToYGOSharp(port, webSockectConnection, callback) {
     tcpConnection.setNoDelay(true);
     tcpConnection.on('error', cutConnections);
     tcpConnection.on('close', cutConnections);
+    tcpConnection.answerListener = gameBoard.answerListener;
     return tcpConnection;
 }
 
@@ -171,6 +176,40 @@ function lockInDeck(tcpConnection, deck) {
     tcpConnection.write(gameResponse('CTOS_HS_READY'));
 }
 
+/*
+ {
+            automatic: settings.info.automatic,
+            roompass: settings.roompass,
+            started: false,
+            deckcheck: 0,
+            draw_count: 0,
+            ot: parseInt(settings.info.ot, 10),
+            banlist: settings.info.banlist,
+            banlistid: settings.info.banlistid,
+            mode: settings.info.mode,
+            cardpool: settings.info.cardpool,
+            noshuffle: settings.info.shuf,
+            prerelease: settings.info.prerelease,
+            legacyfield: (banlist[settings.info.banlist].masterRule !== 4),
+            rule: 0,
+            startLP: settings.info.startLP,
+            starthand: 0,
+            timelimit: 0,
+            player: {
+                0: {
+                    name: '',
+                    ready: false
+                },
+                1: {
+                    name: '',
+                    ready: false
+                }
+            },
+            spectators: [],
+            delCount: 0
+        };
+        */
+
 /**
  * Start a YGOSharp instance, and connect users to it.
  * @param {Object} instance game state object
@@ -178,6 +217,38 @@ function lockInDeck(tcpConnection, deck) {
  * @returns {Object} augmented game state object
  */
 function startYGOSharp(instance, sockets) {
+<<<<<<< HEAD
+    var parametersList = ['StandardStreamProtocol=true',
+        'Port=' + instance.port,
+        'ClientVersion=0x1338',
+        'BanlistFile=./lflist.conf',
+        'ScriptDirectory=' + './../../ygopro-scripts',
+        'DatabaseFile=./cards.cdb',
+        'Rule=' + 0,
+        'Mode=' + 0,
+        'Banlist=' + 0,
+        'StartLp=' + instance.startLP,
+        'GameTimer=300',
+        'NoCheckDeck=true',
+        'NoShuffleDeck=' + Boolean(instance.shuf),
+        'EnablePriority=false'
+    ];
+    console.log(YGOSharp + ' ' + parametersList.join(' '));
+    instance.ygopro = child_process.spawn(YGOSharp, parametersList, {
+        cwd: './bin/'
+    });
+
+    var ygopro = instance.ygopro;
+    ygopro.sockets = [];
+    ygopro.on('close', function(error) {
+        console.log(error);
+    });
+    ygopro.stderr.on('error', function(error) {
+        console.log(error);
+        ygopro.kill();
+        console.log('Game ended with issues', error);
+    });
+=======
     var gameParameters = ['StandardStreamProtocol=true',
             'Port=' + instance.port,
             'ClientVersion=0x1338',
@@ -197,35 +268,41 @@ function startYGOSharp(instance, sockets) {
 
         });
 
+>>>>>>> origin
     ygopro.stdout.on('error', function(error) {
+        console.log(error);
         ygopro.kill();
         console.log('Game ended with issues', error);
     });
     ygopro.stdout.on('data', function(core_message_raw) {
+
         if (core_message_raw.toString().indexOf('::::') < 0) {
             return;
         }
         var core_message = core_message_raw.toString().split('|');
-
+        console.log(core_message);
         if (core_message[0].trim() === '::::network-ready') {
-            ygopro.sockets[0] = connectToYGOSharp(instance.port, sockets[0], function() {
+            ygopro.sockets[0] = connectToYGOSharp(instance, sockets[0], 'p0', function() {
                 lockInDeck(ygopro.sockets[0], sockets[0].deck);
-                ygopro.sockets[1] = connectToYGOSharp(instance.port, sockets[1], function() {
+                ygopro.sockets[1] = connectToYGOSharp(instance, sockets[1], 'p1', function() {
                     lockInDeck(ygopro.sockets[1], sockets[1].deck);
-                    ygopro.sockets[0].write(gameResponse('CTOS_START'));
+                    setTimeout(function() {
+                        ygopro.sockets[0].write(gameResponse('CTOS_START'));
+                    }, 500);
+
                 });
             });
         }
     });
 
-    instance.relay = function(socket, message) {
-        ygopro.sockets[socket].send(message);
-    };
-
-    instance.newConnection = function(socket) {
-        ygopro.sockets.push(connectToYGOSharp(instance.port, socket, function() {
+    instance.newConnection = function(socket, slot) {
+        ygopro.sockets.push(connectToYGOSharp(instance, socket, slot, function() {
 
         }));
+    };
+
+    instance.answerListener = function(player, uid, answer) {
+        ygopro.sockets[player].answerListener.emit(uid, answer);
     };
 
     return instance;

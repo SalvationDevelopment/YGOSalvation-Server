@@ -67,16 +67,6 @@ function makeCTOS(command, message) {
             extra: [],
             side: []
         };
-        //         GamePacketWriter deck = new GamePacketWriter(CtosMessage.UpdateDeck);
-        //            deck.Write(Deck.Cards.Count + Deck.ExtraCards.Count);
-        //            deck.Write(Deck.SideCards.Count);
-        //            foreach (NamedCard card in Deck.Cards)
-        //                deck.Write(card.Id);
-        //            foreach (NamedCard card in Deck.ExtraCards)
-        //                deck.Write(card.Id);
-        //            foreach (NamedCard card in Deck.SideCards)
-        //                deck.Write(card.Id);
-        //            Connection.Send(deck);
         var deck = new Buffer([0x2]),
             proto = new Buffer(2),
             r;
@@ -227,14 +217,24 @@ function makeCTOS(command, message) {
         console.log(proto);
         return proto;
     };
-    say.scissors = new Buffer([0x2, 0x0, 0x3, 0x1]);
-    say.rock = new Buffer([0x2, 0x0, 0x3, 0x2]);
-    say.paper = new Buffer([0x2, 0x0, 0x3, 0x3]);
-    say.gofirst = new Buffer([0x1, 0x0, 0x15]);
-    say.gosecond = new Buffer([0x2, 0x0, 0x4, 0x0]);
+    say.scissors = function() {
+        return new Buffer([0x2, 0x0, 0x3, 0x1]);
+    };
+    say.rock = function() {
+        return new Buffer([0x2, 0x0, 0x3, 0x2]);
+    };
+    say.paper = function() {
+        return new Buffer([0x2, 0x0, 0x3, 0x3]);
+    };
+    say.gofirst = function() {
+        return new Buffer([0x1, 0x0, 0x15]);
+    };
+    say.gosecond = function() {
+        return new Buffer([0x2, 0x0, 0x4, 0x0]);
+    };
 
 
     return say[command](message);
 }
 
-module.exports = makeCTOS();
+module.exports = makeCTOS;

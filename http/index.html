@@ -1689,10 +1689,10 @@
             <meter class="p1lp" type="meter" value="8000" max="8000" min="0"></meter>
             <input disabled class="p0lp" value="8000">
             <input disabled class="p1lp" value="8000">
-            <!--
+
             <meter class="p0time" type="meter" value="180" max="360" min="0"></meter>
-<meter class="p1time" type="meter" value="180" max="360" min="0"></meter>
--->
+            <meter class="p1time" type="meter" value="180" max="360" min="0"></meter>
+
             <span class="p0name"></span>
             <span class="p1name"></span>
             <img id="p0avatar" src='/img/newgiohtoken.png' onError="this.onerror=null;this.src='/img/newgiohtoken.png';" />
@@ -1761,8 +1761,15 @@
             <button id="ingamecamera" onclick="$('#camerazone').toggle();">Camera / Zoom</button>
 
         </div>
-        <div id="manualcontrols">
 
+        <div id="manualcontrols">
+            <button class="ygo-activate" onclick="idleResponse(this)">Activate</button>
+            <button class="ygo-set" onclick="idleResponse(this)">Set</button>
+            <button class="ygo-reposition" onclick="idleResponse(this)">Reposition</button>
+            <button class="ygo-special" onclick="idleResponse(this)">Special Summon</button>
+            <button class="ygo-st-set" onclick="idleResponse(this)">Set S/T</button>
+            <button class="ygo-summon" onclick="idleResponse(this)">Normal Summon</button>
+            <button class="ygo-attack" onclick="idleResponse(this)">Attack</button>
             <button class="m-deck m-convulse" onclick="manualFlipDeck()">Flip Deck Over</button>
             <button class="m-deck" onclick="manualRevealDeck()">Reveal Deck</button>
             <button class="m-deck" onclick="manualRevealTop()">Reveal Top Card</button>
@@ -1872,6 +1879,11 @@
 
         </div>
         <div id="revealedclose" onclick="$('#revealed ').toggle();$('#revealedclose ').toggle()"></div>
+        <div id="selectplayer" class="selectQuestionSet">
+            Select Player to go First
+            <button onclick="resolveQuestion(orient(0))">Self</button>
+            <button onclick="resolveQuestion(orient(1))">Opponent</button>
+        </div>
         <div id="revealed"></div>
         <div class="sidingzone">
             <div class="main"></div>
@@ -1911,44 +1923,44 @@
                     <button class="phaseindicator" onclick="manualNextPhase(5)" id="endphi">End</button>
                     <button class="phaseindicator" onclick="manualNextPhase(6)" id="nextturn">Opponent</button>
                 </div>
-                <div onclick="selectionzoneonclick(0,'DECK')" data-content="" class="cardselectionzone p0 DECK"></div>
-                <div onclick="selectionzoneonclick(0,'EXTRA')" data-content="" class="cardselectionzone p0 EXTRA"></div>
-                <div onclick="selectionzoneonclick(0,'GRAVE')" data-content="" class="cardselectionzone p0 GRAVE"></div>
-                <div onclick="selectionzoneonclick(0,'REMOVED')" data-content="" class="cardselectionzone p0 REMOVED"></div>
-                <div onclick="selectionzoneonclick(0,'SPELLZONE')" class="cardselectionzone p0 SPELLZONE i0"></div>
-                <div onclick="selectionzoneonclick(1,'SPELLZONE')" class="cardselectionzone p0 SPELLZONE i1"></div>
-                <div onclick="selectionzoneonclick(2,'SPELLZONE')" class="cardselectionzone p0 SPELLZONE i2"></div>
-                <div onclick="selectionzoneonclick(3,'SPELLZONE')" class="cardselectionzone p0 SPELLZONE i3"></div>
-                <div onclick="selectionzoneonclick(4,'SPELLZONE')" class="cardselectionzone p0 SPELLZONE i4"></div>
-                <div onclick="selectionzoneonclick(5,'SPELLZONE')" class="cardselectionzone p0 SPELLZONE i5"></div>
-                <div onclick="selectionzoneonclick(6,'SPELLZONE')" class="cardselectionzone p0 SPELLZONE i6"></div>
-                <div onclick="selectionzoneonclick(7,'SPELLZONE')" class="cardselectionzone p0 SPELLZONE i7"></div>
-                <div onclick="selectionzoneonclick(0,'MONSTERZONE')" class="cardselectionzone p0 MONSTERZONE i0"></div>
-                <div onclick="selectionzoneonclick(1,'MONSTERZONE')" class="cardselectionzone p0 MONSTERZONE i1"></div>
-                <div onclick="selectionzoneonclick(2,'MONSTERZONE')" class="cardselectionzone p0 MONSTERZONE i2"></div>
-                <div onclick="selectionzoneonclick(3,'MONSTERZONE')" class="cardselectionzone p0 MONSTERZONE i3"></div>
-                <div onclick="selectionzoneonclick(4,'MONSTERZONE')" class="cardselectionzone p0 MONSTERZONE i4"></div>
-                <div onclick="selectionzoneonclick(5,'MONSTERZONE')" class="cardselectionzone p0 MONSTERZONE i5"></div>
-                <div onclick="selectionzoneonclick(6,'MONSTERZONE')" class="cardselectionzone p0 MONSTERZONE i6"></div>
-                <div onclick="selectionzoneonclick(0,'DECK')" data-content="" class="cardselectionzone p1 DECK"></div>
-                <div onclick="selectionzoneonclick(0,'EXTRA')" data-content="" class="cardselectionzone p1 EXTRA"></div>
-                <div onclick="selectionzoneonclick(0,'GRAVE')" data-content="" class="cardselectionzone p1 GRAVE"></div>
-                <div onclick="selectionzoneonclick(0,'REMOVED')" data-content="" class="cardselectionzone p1 REMOVED"></div>
-                <div onclick="selectionzoneonclick(0,'SPELLZONE')" class="cardselectionzone p1 SPELLZONE i0"></div>
-                <div onclick="selectionzoneonclick(1,'SPELLZONE')" class="cardselectionzone p1 SPELLZONE i1"></div>
-                <div onclick="selectionzoneonclick(2,'SPELLZONE')" class="cardselectionzone p1 SPELLZONE i2"></div>
-                <div onclick="selectionzoneonclick(3,'SPELLZONE')" class="cardselectionzone p1 SPELLZONE i3"></div>
-                <div onclick="selectionzoneonclick(4,'SPELLZONE')" class="cardselectionzone p1 SPELLZONE i4"></div>
-                <div onclick="selectionzoneonclick(5,'SPELLZONE')" class="cardselectionzone p1 SPELLZONE i5"></div>
-                <div onclick="selectionzoneonclick(6,'SPELLZONE')" class="cardselectionzone p1 SPELLZONE i6"></div>
-                <div onclick="selectionzoneonclick(7,'SPELLZONE')" class="cardselectionzone p1 SPELLZONE i7"></div>
-                <div onclick="selectionzoneonclick(0,'MONSTERZONE')" class="cardselectionzone p1 MONSTERZONE i0"></div>
-                <div onclick="selectionzoneonclick(1,'MONSTERZONE')" class="cardselectionzone p1 MONSTERZONE i1"></div>
-                <div onclick="selectionzoneonclick(2,'MONSTERZONE')" class="cardselectionzone p1 MONSTERZONE i2"></div>
-                <div onclick="selectionzoneonclick(3,'MONSTERZONE')" class="cardselectionzone p1 MONSTERZONE i3"></div>
-                <div onclick="selectionzoneonclick(4,'MONSTERZONE')" class="cardselectionzone p1 MONSTERZONE i4"></div>
-                <div onclick="selectionzoneonclick(5,'MONSTERZONE')" class="cardselectionzone p1 MONSTERZONE i5"></div>
-                <div onclick="selectionzoneonclick(6,'MONSTERZONE')" class="cardselectionzone p1 MONSTERZONE i6"></div>
+                <div onclick="selectionzoneonclick(0,'DECK',0)" data-content="" class="cardselectionzone p0 DECK"></div>
+                <div onclick="selectionzoneonclick(0,'EXTRA',0)" data-content="" class="cardselectionzone p0 EXTRA"></div>
+                <div onclick="selectionzoneonclick(0,'GRAVE',0)" data-content="" class="cardselectionzone p0 GRAVE"></div>
+                <div onclick="selectionzoneonclick(0,'REMOVED',0)" data-content="" class="cardselectionzone p0 REMOVED"></div>
+                <div onclick="selectionzoneonclick(0,'SPELLZONE',0)" class="cardselectionzone p0 SPELLZONE i0"></div>
+                <div onclick="selectionzoneonclick(1,'SPELLZONE',0)" class="cardselectionzone p0 SPELLZONE i1"></div>
+                <div onclick="selectionzoneonclick(2,'SPELLZONE',0)" class="cardselectionzone p0 SPELLZONE i2"></div>
+                <div onclick="selectionzoneonclick(3,'SPELLZONE',0)" class="cardselectionzone p0 SPELLZONE i3"></div>
+                <div onclick="selectionzoneonclick(4,'SPELLZONE',0)" class="cardselectionzone p0 SPELLZONE i4"></div>
+                <div onclick="selectionzoneonclick(5,'SPELLZONE',0)" class="cardselectionzone p0 SPELLZONE i5"></div>
+                <div onclick="selectionzoneonclick(6,'SPELLZONE',0)" class="cardselectionzone p0 SPELLZONE i6"></div>
+                <div onclick="selectionzoneonclick(7,'SPELLZONE',0)" class="cardselectionzone p0 SPELLZONE i7"></div>
+                <div onclick="selectionzoneonclick(0,'MONSTERZONE',0)" class="cardselectionzone p0 MONSTERZONE i0"></div>
+                <div onclick="selectionzoneonclick(1,'MONSTERZONE',0)" class="cardselectionzone p0 MONSTERZONE i1"></div>
+                <div onclick="selectionzoneonclick(2,'MONSTERZONE',0)" class="cardselectionzone p0 MONSTERZONE i2"></div>
+                <div onclick="selectionzoneonclick(3,'MONSTERZONE',0)" class="cardselectionzone p0 MONSTERZONE i3"></div>
+                <div onclick="selectionzoneonclick(4,'MONSTERZONE',0)" class="cardselectionzone p0 MONSTERZONE i4"></div>
+                <div onclick="selectionzoneonclick(5,'MONSTERZONE',0)" class="cardselectionzone p0 MONSTERZONE i5"></div>
+                <div onclick="selectionzoneonclick(6,'MONSTERZONE',0)" class="cardselectionzone p0 MONSTERZONE i6"></div>
+                <div onclick="selectionzoneonclick(0,'DECK',1)" data-content="" class="cardselectionzone p1 DECK"></div>
+                <div onclick="selectionzoneonclick(0,'EXTRA',1)" data-content="" class="cardselectionzone p1 EXTRA"></div>
+                <div onclick="selectionzoneonclick(0,'GRAVE',1)" data-content="" class="cardselectionzone p1 GRAVE"></div>
+                <div onclick="selectionzoneonclick(0,'REMOVED',1)" data-content="" class="cardselectionzone p1 REMOVED"></div>
+                <div onclick="selectionzoneonclick(0,'SPELLZONE',1)" class="cardselectionzone p1 SPELLZONE i0"></div>
+                <div onclick="selectionzoneonclick(1,'SPELLZONE',1)" class="cardselectionzone p1 SPELLZONE i1"></div>
+                <div onclick="selectionzoneonclick(2,'SPELLZONE',1)" class="cardselectionzone p1 SPELLZONE i2"></div>
+                <div onclick="selectionzoneonclick(3,'SPELLZONE',1)" class="cardselectionzone p1 SPELLZONE i3"></div>
+                <div onclick="selectionzoneonclick(4,'SPELLZONE',1)" class="cardselectionzone p1 SPELLZONE i4"></div>
+                <div onclick="selectionzoneonclick(5,'SPELLZONE',1)" class="cardselectionzone p1 SPELLZONE i5"></div>
+                <div onclick="selectionzoneonclick(6,'SPELLZONE',1)" class="cardselectionzone p1 SPELLZONE i6"></div>
+                <div onclick="selectionzoneonclick(7,'SPELLZONE',1)" class="cardselectionzone p1 SPELLZONE i7"></div>
+                <div onclick="selectionzoneonclick(0,'MONSTERZONE',1)" class="cardselectionzone p1 MONSTERZONE i0"></div>
+                <div onclick="selectionzoneonclick(1,'MONSTERZONE',1)" class="cardselectionzone p1 MONSTERZONE i1"></div>
+                <div onclick="selectionzoneonclick(2,'MONSTERZONE',1)" class="cardselectionzone p1 MONSTERZONE i2"></div>
+                <div onclick="selectionzoneonclick(3,'MONSTERZONE',1)" class="cardselectionzone p1 MONSTERZONE i3"></div>
+                <div onclick="selectionzoneonclick(4,'MONSTERZONE',1)" class="cardselectionzone p1 MONSTERZONE i4"></div>
+                <div onclick="selectionzoneonclick(5,'MONSTERZONE',1)" class="cardselectionzone p1 MONSTERZONE i5"></div>
+                <div onclick="selectionzoneonclick(6,'MONSTERZONE',1)" class="cardselectionzone p1 MONSTERZONE i6"></div>
             </div>
         </div>
     </header>
@@ -2042,6 +2054,7 @@
 
     <script src="js/http-gamelist.js"></script>
     <script src="js/http-manual.js"></script>
+    <script src="js/http-ygopro.js"></script>
     <script src="js/deck-editor.js"></script>
     <script src="js/vendor/html2canvas.js"></script>
 

@@ -1,13 +1,39 @@
-function boardController(gameBoard, message) {
+const gameResponse = require('./translate_ygopro_reply.js'),
+    cardMap = {
+        0: 'rock',
+        1: 'paper',
+        2: 'scissors'
+    };
+
+function askUser(gameBoard, slot, message, ygopro) {
+    gameBoard.question(slot, message.command, message, 1, function(answer) {
+        ygopro.write(gameResponse('CTOS_RESPONSE', new Buffer(answer[0])));
+    });
+}
+
+function boardController(gameBoard, slot, message, ygopro) {
     'use strict';
+    console.log(slot, message.command);
     switch (message.command) {
         case ('STOC_UNKNOWN'):
             break;
         case ('STOC_GAME_MSG'):
             break;
         case ('MSG_RETRY'):
+            gameBoard.retryLastQuestion();
             break;
         case ('MSG_START'):
+            gameBoard.startDuel({
+                main: Array(message.player1decksize).fill(0),
+                side: Array(0),
+                extra: Array(message.player1extrasize).fill(0)
+            }, {
+                main: Array(message.player2decksize).fill(0),
+                side: Array(0),
+                extra: Array(message.player2extrasize).fill(0)
+            }, false, {
+                startLP: message.lifepoints1
+            });
             break;
         case ('MSG_HINT'):
             break;
@@ -22,12 +48,15 @@ function boardController(gameBoard, message) {
         case 'HINT_EFFECT':
             break;
         case ('MSG_NEW_TURN'):
+            gameBoard.nextTurn();
             break;
         case ('MSG_WIN'):
             break;
         case ('MSG_NEW_PHASE'):
+            gameBoard.nextPhase(message.gui_phase);
             break;
         case ('MSG_DRAW'):
+            gameBoard.drawCard(message.player, message.count, message.cards);
             break;
         case ('MSG_SHUFFLE_DECK'):
             break;
@@ -88,8 +117,19 @@ function boardController(gameBoard, message) {
         case ('MSG_TOSS_COIN'):
             break;
         case ('MSG_SELECT_IDLECMD'):
+            askUser(gameBoard, slot, message, ygopro);
             break;
         case ('MSG_MOVE'):
+            gameBoard.setState({
+                player: message.pc,
+                clocation: message.pl,
+                index: message.ps,
+                moveplayer: message.cc,
+                movelocation: message.cl,
+                moveindex: message.cs,
+                moveposition: message.cp,
+                overlayindex: 0
+            });
             break;
         case ('MSG_POS_CHANGE'):
             break;
@@ -115,30 +155,41 @@ function boardController(gameBoard, message) {
         case ('MSG_REQUEST_DECK'):
             break;
         case ('MSG_SELECT_BATTLECMD'):
+            askUser(gameBoard, slot, message, ygopro);
             break;
         case ('MSG_SELECT_EFFECTYN'):
+            askUser(gameBoard, slot, message, ygopro);
             break;
         case ('MSG_SELECT_YESNO'):
+            askUser(gameBoard, slot, message, ygopro);
             break;
         case ('MSG_SELECT_OPTION'):
+            askUser(gameBoard, slot, message, ygopro);
             break;
         case ('MSG_SELECT_CARD'):
+            askUser(gameBoard, slot, message, ygopro);
             break;
         case ('MSG_SELECT_CHAIN'):
             break;
         case ('MSG_SELECT_PLACE'):
+            askUser(gameBoard, slot, message, ygopro);
             break;
         case ('MSG_SELECT_POSITION'):
+            askUser(gameBoard, slot, message, ygopro);
             break;
         case ('MSG_SELECT_TRIBUTE'):
+            askUser(gameBoard, slot, message, ygopro);
             break;
         case ('MSG_SORT_CHAIN'):
             break;
         case ('MSG_SELECT_COUNTER'):
+            askUser(gameBoard, slot, message, ygopro);
             break;
         case ('MSG_SELECT_SUM'):
+            askUser(gameBoard, slot, message, ygopro);
             break;
         case ('MSG_SELECT_DISFIELD'):
+            askUser(gameBoard, slot, message, ygopro);
             break;
         case ('MSG_SORT_CARD'):
             break;
@@ -147,8 +198,42 @@ function boardController(gameBoard, message) {
         case ('MSG_CONFIRM_CARDS'):
             break;
         case ('MSG_UPDATE_DATA'):
-            break;
+            message.cards.forEach(function(card, index) {
+                if (card) {
+                    try {
+                        gameBoard.setState({
+                            id: message.id,
+                            player: message.player,
+                            clocation: message.location,
+                            index: index,
+                            moveplayer: message.player,
+                            movelocation: message.location,
+                            moveindex: index,
+                            moveposition: card.Position,
+                            overlayindex: 0
+                        });
+                    } catch (no) {
+                        console.log(no);
+                    }
+                }
+            });
+            if (message.cards.length) {
+                gameBoard.ygoproUpdate();
+            }
+            return {};
         case ('MSG_UPDATE_CARD'):
+
+            gameBoard.setState({
+                player: message.player,
+                clocation: message.location,
+                index: message.index,
+                moveplayer: message.player,
+                movelocation: message.location,
+                moveindex: message.index,
+                moveposition: message.card.Position,
+                overlayindex: 0,
+                id: message.card.id
+            });
             break;
         case ('MSG_WAITING'):
             break;
@@ -169,9 +254,26 @@ function boardController(gameBoard, message) {
         case ('ERRMSG_VERERROR'):
             break;
         case ('STOC_SELECT_HAND'):
+
+            gameBoard.question(slot, 'specialCards', [{
+                id: 'rock',
+                value: 0
+            }, {
+                id: 'paper',
+                value: 1
+            }, {
+                id: 'scissors',
+                value: 2
+            }], 1, function(answer) {
+                var choice = cardMap[answer[0]];
+                ygopro.write(gameResponse(choice));
+            });
             break;
         case ('STOC_SELECT_TP'):
-            break;
+            gameBoard.question(slot, 'STOC_SELECT_TP', [0, 1], 1, function(answer) {
+                ygopro.write(gameResponse('CTOS_TP_RESULT', answer[0]));
+            });
+            return {};
         case ('STOC_HAND_RESULT'):
             break;
         case ('STOC_TP_RESULT'):

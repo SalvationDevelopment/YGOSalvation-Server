@@ -12,8 +12,11 @@ var fs = require('fs'),
     https = require('https'),
     path = require('path'),
     database = [],
-    automatic = require('./engine_automatic.js').init,
-    banlist = {};
+    random_port = require('random-port'),
+
+    ygopro = require('./engine_ygopro.js'),
+    banlist = {},
+    ygopros = {};
 
 
 
@@ -60,8 +63,6 @@ function init(primus) {
      * @returns {object} customized game object
      */
     function newGame(settings) {
-        console.log('noshuffle: ' + settings.info.shuf);
-        console.log('prerelease: ' + settings.info.prerelease);
         return {
             automatic: settings.info.automatic,
             roompass: settings.roompass,
@@ -401,25 +402,32 @@ function init(primus) {
                     player1 = stateSystem[activeduel].decks[0];
                     player2 = stateSystem[activeduel].decks[1];
                     if (games[activeduel].automatic) {
-                        stateSystem[activeduel].startDuel(player1, player2, false, games[activeduel]);
-                        stateSystem[activeduel].rps(function(result) {
-                            var winner = 'Player ' + (1 + result);
-                            stateSystem[activeduel].duelistChat('Server', games[activeduel].player[socket.slot].name + ' ' + winner + ' decides starting player.');
-                            stateSystem[activeduel].question(result, 'startingPlayer', [0, 1], 1, function(startingPlayer) {
-                                automatic(stateSystem[activeduel], Number(startingPlayer[0]), database);
+                        random_port({ from: 10000, range: 10000 }, function(port) {
+                            var players = [stateSystem[activeduel].players[0], stateSystem[activeduel].players[1]];
+                            games[activeduel].port = port;
+                            players.forEach(function(item, iteration) {
+                                item.activeduel = activeduel;
                             });
+                            players[0].deck = player1;
+                            players[1].deck = player2;
+                            ygopros[activeduel] = ygopro(Object.assign({}, games[activeduel]), players);
+                            games[activeduel].started = true;
+                            primus.duelBroadcast(games);
                         });
+
                     } else {
                         stateSystem[activeduel].startDuel(player1, player2, true, games[activeduel]);
+                        games[activeduel].started = true;
+                        primus.duelBroadcast(games);
                     }
-                    games[activeduel].started = true;
-                    primus.duelBroadcast(games);
+
                 }
                 break;
             case 'moveCard':
                 if (socket.slot === undefined) {
                     break;
                 }
+                console.log(message);
                 stateSystem[activeduel].setState(message);
                 break;
             case 'revealTop':
@@ -528,7 +536,7 @@ function init(primus) {
                 if (socket.slot === undefined) {
                     break;
                 }
-                stateSystem[activeduel].drawCard(socket.slot, 1, games[activeduel].player[socket.slot].name);
+                stateSystem[activeduel].drawCard(socket.slot, 1, [{}], games[activeduel].player[socket.slot].name);
                 break;
             case 'excavate':
                 if (socket.slot === undefined) {
@@ -630,12 +638,15 @@ function init(primus) {
                 stateSystem[activeduel].revealCallback(stateSystem[activeduel].findUIDCollection(message.card.uid), socket.slot, 'revealHandSingle');
                 break;
             case 'question':
-                console.log('got question', message);
                 if (socket.slot === undefined) {
                     break;
                 }
-                console.log('question answered by', socket.slot, message);
-                stateSystem[activeduel].answerListener.emit(message.uuid, message.answer);
+
+                if (games[socket.activeduel].automatic) {
+                    ygopros[activeduel].answerListener(socket.slot, message.uuid, message.answer);
+                } else {
+                    stateSystem[activeduel].answerListener.emit(message.uuid, message.answer);
+                }
                 break;
             case 'getLog':
                 if (socket.slot === undefined) {

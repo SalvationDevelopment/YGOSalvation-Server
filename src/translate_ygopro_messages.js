@@ -44,25 +44,126 @@ function BufferStreamReader(packet) {
         readposition += 4;
         return output;
     };
+    stream.move = function(amount) {
+        readposition += amount;
+    };
     return stream;
 }
 
+
+function getFieldCards(gameBoard, controller, location, BufferIO) {
+    'use strict';
+    const cards = [],
+        values = gameBoard.generateViewCount(controller),
+        requiredIterations = values[location];
+
+    for (let i = 0; requiredIterations > i; ++i) {
+        var len = BufferIO.readInt32();
+        if (len > 8) {
+            let card = makeCard(BufferIO, controller, (gameBoard.masterRule === 4));
+            cards.push(card);
+        }
+    }
+    return cards;
+}
+
+function getSelectableZones(mask) {
+    var i,
+        zones = [],
+        filter = 0x1;
+    for (i = 0; i < 7; ++i, filter <<= 1) {
+        if (mask & filter) {
+            zones.push({
+                player: 0,
+                zone: 'MONSTERZONE',
+                slot: i,
+                status: !(mask & filter)
+            });
+        }
+    }
+    filter = 0x100;
+    for (i = 0; i < 8; ++i, filter <<= 1) {
+        if (mask & filter) {
+            zones.push({
+                player: 0,
+                zone: 'SPELLZONE',
+                slot: i,
+                status: !(mask & filter)
+            });
+        }
+    }
+    filter = 0x10000;
+    for (i = 0; i < 7; ++i, filter <<= 1) {
+        if (mask & filter) {
+            zones.push({
+                player: 1,
+                zone: 'MONSTERZONE',
+                slot: i,
+                status: !(mask & filter)
+            });
+        }
+    }
+    filter = 0x1000000;
+    for (i = 0; i < 8; ++i, filter <<= 1) {
+        if (mask & filter) {
+            zones.push({
+                player: 1,
+                zone: 'SPELLZONE',
+                slot: i,
+                status: !(mask & filter)
+            });
+        }
+    }
+    return zones;
+}
+
+function getIdleSet(BufferIO, hasDescriptions) {
+    var i,
+        cards = [],
+        count = BufferIO.readInt8();
+    if (hasDescriptions) {
+        for (i = 0; i < count; ++i) {
+            cards.push({
+                id: BufferIO.readInt32(),
+                player: BufferIO.readInt8(),
+                location: enums.locations[BufferIO.readInt8()],
+                index: BufferIO.readInt8(),
+                description: BufferIO.readInt32()
+            });
+        }
+    } else {
+        for (i = 0; i < count; ++i) {
+            cards.push({
+                id: BufferIO.readInt32(),
+                player: BufferIO.readInt8(),
+                location: enums.locations[BufferIO.readInt8()],
+                index: BufferIO.readInt8()
+            });
+        }
+    }
+    return cards;
+}
 /**
  * Turn a delimited packet and turn it into a JavaScript Object.
+ * @param {Object} gameBoard instance of the manual engine the player is using.
  * @param {Packet} packet delimited buffer of information containing a YGOProMessage.
  * @returns {YGOProMessage} Object with various types of information stored in it.
  */
-function recieveSTOC(packet) {
-    var message = {},
+function recieveSTOC(gameBoard, packet) {
+
+
+    var BufferIO = new BufferStreamReader(packet.message),
         command,
         bitreader = 0,
         iter = 0,
         errorCode,
+        count,
+        val = 0,
         i = 0,
-        BufferIO = new BufferStreamReader(packet.message);
-
-    message.command = packet.STOC;
-    message.packet = packet;
+        message = {
+            duelAction: 'ygopro',
+            command: packet.command
+        };
 
     switch (message.command) {
         case ('STOC_UNKNOWN'):
@@ -131,15 +232,16 @@ function recieveSTOC(packet) {
 
                 case ('MSG_NEW_PHASE'):
                     message.phase = BufferIO.readInt8();
+                    message.gui_phase = enums.phase[message.phase];
                     break;
 
                 case ('MSG_DRAW'):
                     message.player = BufferIO.readInt8();
                     message.count = BufferIO.readInt8();
-                    message.cardslist = [];
+                    message.cards = [];
                     for (i = 0; i < message.count; ++i) {
-                        message.cardslist.push({
-                            code: BufferIO.readInt32()
+                        message.cards.push({
+                            id: BufferIO.readInt32()
                         });
                     }
                     break;
@@ -244,13 +346,13 @@ function recieveSTOC(packet) {
                     message.multiplier = 1;
                     break;
 
-                case ('MSG_SUMMONING '):
+                case ('MSG_SUMMONING'):
                     message.player = BufferIO.readInt8();
                     message.code = BufferIO.readInt32();
                     message.cc = BufferIO.readInt8(); //defunct in code
                     message.cl = BufferIO.readInt8(); //defunct in code
                     message.cs = BufferIO.readInt8(); //defunct in code
-                    message.cp = BufferIO.readInt8(); //defunct in code
+                    message.cp = enums.positions[BufferIO.readInt8()]; //defunct in code
                     break;
 
                 case ('MSG_EQUIP'):
@@ -265,6 +367,16 @@ function recieveSTOC(packet) {
                     break;
 
                 case ('MSG_UNEQUIP'):
+                    message.c1 = BufferIO.readInt8();
+                    message.l1 = BufferIO.readInt8();
+                    message.s1 = BufferIO.readInt8();
+                    BufferIO.readInt8(); //padding wtf
+                    message.c1 = BufferIO.readInt8();
+                    message.l1 = BufferIO.readInt8();
+                    message.s1 = BufferIO.readInt8();
+                    BufferIO.readInt8(); //padding wtf
+                    break;
+                case ('MSG_CARD_TARGET'):
                     message.c1 = BufferIO.readInt8();
                     message.l1 = BufferIO.readInt8();
                     message.s1 = BufferIO.readInt8();
@@ -330,7 +442,7 @@ function recieveSTOC(packet) {
                     break;
 
                 case ('MSG_ATTACK_DISABLED'):
-                    //myswprintf(event_string, dataManager.GetSysString(1621), dataManager.GetName(mainGame->dField.attacker->code));
+                    //myswprintf(event_string, dataManager.GetSysString(1621), dataManager.GetName(message.attacker->code));
                     break;
 
                 case ('MSG_DAMAGE_STEP_START'):
@@ -344,113 +456,98 @@ function recieveSTOC(packet) {
                     BufferIO.readInt8(); //padding
                     message.code = BufferIO.readInt32();
                     break;
+                case ('MSG_TOSS_DICE'):
+                    message.player = BufferIO.readInt8();
+                    message.count = BufferIO.readInt8();
+                    message.results = [];
+                    for (i = 0; i < message.count; ++i) {
+                        message.results.push(BufferIO.readInt8());
+                    }
+                    break;
+                case ('MSG_ROCK_PAPER_SCISSORS'):
+                    message.player = BufferIO.readInt8();
+                    break;
+                case ('MSG_HAND_RES'):
+                    message.res = BufferIO.readInt8();
+                    message.res1 = (message.res & 0x3) - 1;
+                    message.res2 = ((message.res >> 2) & 0x3) - 1;
+                    break;
                 case ('MSG_TOSS_COIN'):
-                    //ugh....new BufferIO stuff. Does it take all this to flip a coin?
+                    message.player = BufferIO.readInt8();
+                    message.count = BufferIO.readInt8();
+                    message.results = [];
+                    for (i = 0; i < message.count; ++i) {
+                        message.results.push(BufferIO.readInt8());
+                    }
+                    break;
+                case ('MSG_ANNOUNCE_RACE'):
+                    message.player = BufferIO.readInt8();
+                    message.announce_count = BufferIO.readInt8();
+                    message.avaliable = BufferIO.readInt32();
+                    break;
+                case ('MSG_ANNOUNCE_ATTRIB'):
+                    message.player = BufferIO.readInt8();
+                    message.announce_count = BufferIO.readInt8();
+                    message.avaliable = BufferIO.readInt32();
+                    break;
+                case ('MSG_ANNOUNCE_CARD'):
+                    message.player = BufferIO.readInt8();
+                    message.declarable_type = BufferIO.readInt32();
+                    break;
+                case ('MSG_ANNOUNCE_NUMBER'):
+                    message.player = BufferIO.readInt8();
+                    message.count = BufferIO.readInt8();
+                    message.values = [];
+                    for (i = 0; i < message.count; ++i) {
+                        message.values.push(BufferIO.readInt32());
+                    }
+                    break;
+                case ('MSG_ANNOUNCE_CARD_FILTER'):
+                    message.player = BufferIO.readInt8();
+                    message.count = BufferIO.readInt8();
+                    message.opcodes = [];
+                    for (i = 0; i < message.count; ++i) {
+                        message.opcodes.push(BufferIO.readInt32());
+                    }
+                    break;
+                case ('MSG_CARD_HINT'):
+                    message.controller = BufferIO.readInt8();
+                    message.location = BufferIO.readInt8();
+                    message.sequence = BufferIO.readInt8();
+                    BufferIO.readInt8(); //padding
+                    message.chtype = BufferIO.readInt8();
+                    message.value = BufferIO.readInt32();
+                    break;
+                case ('MSG_PLAYER_HINT'):
+                    message.player = BufferIO.readInt8();
+                    message.chtype = BufferIO.readInt8();
+                    message.value = BufferIO.readInt32();
+                    break;
+                case ('MSG_MATCH_KILL'):
+                    message.match_kill = BufferIO.readInt32();
                     break;
                 case ('MSG_SELECT_IDLECMD'):
-                    message.command = 'MSG_SELECT_IDLECMD';
-                    //https://github.com/Fluorohydride/ygopro/blob/d9450dbb35676db3d5b7c2a5241a54d7f2c21e98/ocgcore/playerop.cpp#L69
-                    message.idleplayer = BufferIO.readInt8();
-                    i = 0;
-                    message.summonable_cards = [];
-                    message.count = BufferIO.readInt8();
-                    for (i = 0; i < message.count; ++i) {
-                        message.summonable_cards.push({
-                            code: BufferIO.readInt32(),
-                            controller: BufferIO.readInt8(),
-                            location: BufferIO.readInt8(),
-                            sequence: BufferIO.readInt8()
-                        });
-                    }
-                    iter = 0;
-
-                    message.spsummonable_cards = [];
-                    message.count = BufferIO.readInt8();
-                    for (i = 0; i < message.count; ++i) {
-                        message.spsummonable_cards.push({
-                            code: BufferIO.readInt32(),
-                            controller: BufferIO.readInt8(),
-                            location: BufferIO.readInt8(),
-                            sequence: BufferIO.readInt8()
-                        });
-                    }
-                    iter = 0;
-                    bitreader += 1;
-                    message.repositionable_cards = [];
-                    for (i = 0; i < message.count; ++i) {
-                        message.repositionable_cards.push({
-                            code: packet.message.readUInt16LE(bitreader + 1),
-                            controller: packet.message[bitreader + 5],
-                            location: packet.message[bitreader + 6],
-                            sequence: packet.message[bitreader + 7]
-                        });
-                        bitreader = bitreader + 7;
-                    }
-                    iter = 0;
-                    bitreader += 1;
-                    message.msetable_cards = [];
-                    for (iter; packet.message[bitreader] > iter; iter++) {
-                        message.msetable_cards.push({
-                            code: packet.message.readUInt16LE(bitreader + 1),
-                            controller: packet.message[bitreader + 5],
-                            location: packet.message[bitreader + 6],
-                            sequence: packet.message[bitreader + 7]
-                        });
-                        bitreader = bitreader + 7;
-                    }
-                    iter = 0;
-                    bitreader += 1;
-                    message.select_chains = [];
-                    for (iter; packet.message[bitreader] > iter; iter++) {
-                        message.select_chains.push({
-                            code: packet.message.readUInt16LE(bitreader + 1),
-                            controller: packet.message[bitreader + 5],
-                            location: packet.message[bitreader + 6],
-                            sequence: packet.message[bitreader + 7]
-                        });
-                        bitreader = bitreader + 7;
-                    }
-                    iter = 0;
-                    bitreader += 1;
-                    message.ssetable_cards = [];
-                    for (iter; packet.message[bitreader] > iter; iter++) {
-                        message.ssetable_cards.push({
-                            code: packet.message.readUInt16LE(bitreader + 1),
-                            controller: packet.message[bitreader + 5],
-                            location: packet.message[bitreader + 6],
-                            sequence: packet.message[bitreader + 7]
-                        });
-                        bitreader = bitreader + 7;
-                    }
-                    iter = 0;
-                    bitreader += 1;
-                    message.select_chains = [];
-                    for (iter; packet.message[bitreader] > iter; iter++) {
-                        message.select_chains.push({
-                            code: packet.message.readUInt16LE(bitreader + 1),
-                            controller: packet.message[bitreader + 5],
-                            location: packet.message[bitreader + 6],
-                            sequence: packet.message[bitreader + 7]
-                        });
-                        bitreader = bitreader + 7;
-                    }
-                    message.bp = packet.message[bitreader];
-                    message.ep = packet.message[bitreader + 1];
-                    message.shufflecount = packet.message[bitreader + 2];
-                    //https://github.com/Fluorohydride/ygopro/blob/d9450dbb35676db3d5b7c2a5241a54d7f2c21e98/ocgcore/playerop.cpp#L147
-                    //something is gonna go wrong;
+                    message.selecting_player = BufferIO.readInt8();
+                    message.summonable_cards = getIdleSet(BufferIO);
+                    message.spsummonable_cards = getIdleSet(BufferIO);
+                    message.repositionable_cards = getIdleSet(BufferIO);
+                    message.msetable_cards = getIdleSet(BufferIO);
+                    message.ssetable_cards = getIdleSet(BufferIO);
+                    message.activatable_cards = getIdleSet(BufferIO, true);
+                    message.enableBattlePhase = BufferIO.readInt8();
+                    message.enableEndPhase = BufferIO.readInt8();
+                    message.shufflecount = BufferIO.readInt8();
                     break;
-
                 case ('MSG_MOVE'):
                     message.code = BufferIO.readInt32();
                     message.pc = BufferIO.readInt8(); // original controller
-                    message.pl = BufferIO.readInt8(); // original cLocation
+                    message.pl = enums.locations[BufferIO.readInt8()]; // original cLocation
                     message.ps = BufferIO.readInt8(); // original sequence (index)
                     message.pp = BufferIO.readInt8(); // padding??
                     message.cc = BufferIO.readInt8(); // current controller
-                    message.cl = BufferIO.readInt8(); // current cLocation
+                    message.cl = enums.locations[BufferIO.readInt8()]; // current cLocation
                     message.cs = BufferIO.readInt8(); // current sequence (index)
-                    message.cp = BufferIO.readInt8(); // current position
+                    message.cp = enums.positions[BufferIO.readInt8()]; // current position
                     message.reason = BufferIO.readInt32(); //debug data??
                     break;
 
@@ -460,7 +557,7 @@ function recieveSTOC(packet) {
                     message.cl = BufferIO.readInt8(); // current cLocation
                     message.cs = BufferIO.readInt8(); // current sequence (index)
                     message.pp = BufferIO.readInt8(); // padding??
-                    message.cp = BufferIO.readInt8(); // current position
+                    message.cp = enums.positions[BufferIO.readInt8()]; // current position
                     break;
 
                 case ('MSG_SET'):
@@ -481,7 +578,7 @@ function recieveSTOC(packet) {
                     break;
 
                 case ('MSG_FIELD_DISABLED'):
-                    message.disabled = BufferIO.readInt8();
+                    message.disabled = BufferIO.readInt32();
                     message.ifisfirst_disabled = (message.disabled >> 16) | (message.disabled << 16);
                     break;
                 case ('MSG_SUMMONING'):
@@ -494,7 +591,7 @@ function recieveSTOC(packet) {
                     message.cc = BufferIO.readInt8();
                     message.cl = BufferIO.readInt8();
                     message.cs = BufferIO.readInt8();
-                    message.cp = BufferIO.readInt8();
+                    message.cp = enums.positions[BufferIO.readInt8()];
                     break;
 
                 case ('MSG_SUMMONED'):
@@ -517,7 +614,7 @@ function recieveSTOC(packet) {
                     message.cc = BufferIO.readInt8(); // current controller
                     message.cl = BufferIO.readInt8(); // current cLocation
                     message.cs = BufferIO.readInt8(); // current sequence (index)
-                    message.cp = BufferIO.readInt8(); // current position
+                    message.cp = enums.positions[BufferIO.readInt8()]; // current position
                     break;
 
                 case ('MSG_REQUEST_DECK'):
@@ -525,59 +622,136 @@ function recieveSTOC(packet) {
                     break;
                 case ('MSG_SELECT_BATTLECMD'):
                     message.selecting_player = BufferIO.readInt8(); // defunct in the code, just reading ahead.
-                    message.count = BufferIO.readInt8();
-                    message.cardsThatCanBattle = [];
-                    for (i = 0; i < message.count; ++i) {
-                        message.cardsThatCanBattle.push({
-                            con: BufferIO.readInt8(),
-                            loc: BufferIO.readInt8(),
-                            seq: BufferIO.readInt8(),
-                            desc: BufferIO.readInt32()
-                        });
-                        // client looks at the field, gets a cmdflag, does bytemath on it to see if it can activate.
-                        // if it can do the can activate animations.
-
-                    }
-                    message.cardsThatAreAttackable = [];
+                    message.activatable_cards = getIdleSet(BufferIO, true);
+                    message.attackable_cards = [];
                     message.count = BufferIO.readInt8();
                     for (i = 0; i < message.count; ++i) {
-                        message.cardsThatAreAttackable.push({
-                            code: BufferIO.readInt32(),
-                            con: BufferIO.readInt8(),
-                            loc: BufferIO.readInt8(),
-                            seq: BufferIO.readInt8(),
-                            diratt: BufferIO.readInt32() // defuct in code
+                        message.attackable_cards.push({
+                            id: BufferIO.readInt32(),
+                            player: BufferIO.readInt8(),
+                            location: enums.locations[BufferIO.readInt8()],
+                            index: BufferIO.readInt8(),
+                            diratt: BufferIO.readInt8() // defuct in code
                         });
                     }
+                    message.enableMainPhase2 = BufferIO.readInt8();
+                    message.enableEndPhase = BufferIO.readInt8();
                     break;
                 case ('MSG_SELECT_EFFECTYN'):
-
+                    message.selecting_player = BufferIO.readInt8();
+                    message.c = BufferIO.readInt8();
+                    message.cl = BufferIO.readInt8();
+                    message.cs = BufferIO.readInt8();
+                    message.cp = BufferIO.readInt8();
                     break;
 
                 case ('MSG_SELECT_YESNO'):
-
+                    message.selecting_player = BufferIO.readInt8();
+                    message.desc = BufferIO.readInt32();
                     break;
                 case ('MSG_SELECT_OPTION'):
-
+                    message.selecting_player = BufferIO.readInt8();
+                    message.count = BufferIO.readInt8();
+                    message.select_options = [];
+                    for (i = 0; i < message.count; ++i) {
+                        message.select_options.push(BufferIO.readInt32());
+                    }
                     break;
                 case ('MSG_SELECT_CARD'):
-
+                    message.selecting_player = BufferIO.readInt8();
+                    message.select_cancelable = BufferIO.readInt8();
+                    message.select_min = BufferIO.readInt8();
+                    message.select_max = BufferIO.readInt8();
+                    message.count = BufferIO.readInt8();
+                    message.select_options = [];
+                    for (i = 0; i < message.count; ++i) {
+                        message.select_options.push({
+                            code: BufferIO.readInt32(),
+                            player: BufferIO.readInt8(),
+                            location: enums.locations[BufferIO.readInt8()],
+                            index: BufferIO.readInt8(),
+                            ss: BufferIO.readInt8()
+                        });
+                    }
                     break;
                 case ('MSG_SELECT_CHAIN'):
+                    message.selecting_player = BufferIO.readInt8();
+                    message.count = BufferIO.readInt8();
+                    message.specount = BufferIO.readInt8();
+                    message.forced = BufferIO.readInt8();
+                    message.hint0 = BufferIO.readInt32();
+                    message.hint1 = BufferIO.readInt32();
+                    message.select_options = [];
+                    for (i = 0; i < message.count; ++i) {
+                        message.select_options.push({
+                            flag: BufferIO.readInt8(),
+                            code: BufferIO.readInt32(),
+                            c: BufferIO.readInt8(),
+                            l: BufferIO.readInt8(),
+                            s: BufferIO.readInt8(),
+                            ss: BufferIO.readInt8(),
+                            desc: BufferIO.readInt32()
+                        });
+                    }
 
                     break;
                 case ('MSG_SELECT_PLACE'):
-
+                    message.selecting_player = BufferIO.readInt8();
+                    message.select_min = BufferIO.readInt8();
+                    message.selectable_field = ~BufferIO.readInt32(); // mind the bitwise modifier.
+                    message.selected_field = 0;
+                    message.zones = getSelectableZones(message.selectable_field);
                     break;
                 case ('MSG_SELECT_POSITION'):
-
+                    message.selecting_player = BufferIO.readInt8();
+                    message.code = BufferIO.readInt32();
+                    message.positions = BufferIO.readInt8();
+                    message.count = 0;
+                    message.filter = 0x1;
+                    message.startpos = 0;
+                    while (message.filter !== 0x10) {
+                        if (message.positions & message.filter) {
+                            message.count++;
+                        }
+                        message.filter <<= 1;
+                    }
+                    if (message.count === 4) {
+                        message.startpos = 10;
+                    } else if (message.count === 3) {
+                        message.startpos = 82;
+                    } else {
+                        message.startpos = 155;
+                    }
                     break;
                 case ('MSG_SELECT_TRIBUTE'):
-
+                    message.select_cancelable = BufferIO.readInt8() ? true : false;
+                    message.select_min = BufferIO.readInt8();
+                    message.select_max = BufferIO.readInt8();
+                    message.count = BufferIO.readInt8();
+                    message.selectable_targets = [];
+                    for (i = 0; i < message.count; ++i) {
+                        message.selectable_targets.push({
+                            code: BufferIO.readInt32(),
+                            c: BufferIO.readInt8(),
+                            l: BufferIO.readInt8(),
+                            s: BufferIO.readInt8(),
+                            t: BufferIO.readInt8()
+                        });
+                    }
                     break;
 
                 case ('MSG_SORT_CHAIN'):
-
+                    message.player = BufferIO.readInt8();
+                    message.count = BufferIO.readInt8();
+                    message.selectable_targets = [];
+                    for (i = 0; i < message.count; ++i) {
+                        message.selectable_targets.push({
+                            code: BufferIO.readInt32(),
+                            c: BufferIO.readInt8(),
+                            l: BufferIO.readInt8(),
+                            s: BufferIO.readInt8()
+                        });
+                    }
                     break;
                 case ('MSG_SELECT_COUNTER'):
 
@@ -586,41 +760,55 @@ function recieveSTOC(packet) {
 
                     break;
                 case ('MSG_SELECT_DISFIELD'):
-
+                    message.selecting_player = BufferIO.readInt8();
+                    message.select_min = BufferIO.readInt8();
+                    message.selectable_field = ~BufferIO.readInt32(); // mind the bitwise modifier.
+                    message.selected_field = 0;
                     break;
                 case ('MSG_SORT_CARD'):
-
-                    break;
-                case ('MSG_CONFIRM_DECKTOP'):
-
-                    break;
-                case ('MSG_CONFIRM_CARDS'):
-                    message.player = BufferIO.readInt8(); /* defunct in code */
+                    message.player = BufferIO.readInt8();
                     message.count = BufferIO.readInt8();
-                    message.c = undefined;
-                    message.l = undefined;
-                    message.s = undefined;
+                    message.selectable_targets = [];
                     for (i = 0; i < message.count; ++i) {
-                        /*sigh this goes into something extremely complex and that overwrites itself*/
+                        message.selectable_targets.push({
+                            code: BufferIO.readInt32(),
+                            c: BufferIO.readInt8(),
+                            l: BufferIO.readInt8(),
+                            s: BufferIO.readInt8()
+                        });
                     }
                     break;
-
-
+                case ('MSG_CONFIRM_DECKTOP'):
+                    message.player = BufferIO.readInt8();
+                    message.count = BufferIO.readInt8();
+                    message.cards = [];
+                    for (i = 0; i < message.count; ++i) {
+                        message.cards.push(BufferIO.readInt32());
+                        BufferIO.move(3);
+                    }
+                    break;
+                case ('MSG_CONFIRM_CARDS'):
+                    message.player = BufferIO.readInt8();
+                    message.count = BufferIO.readInt8();
+                    for (i = 0; i < message.count; ++i) {
+                        message.selections.push({
+                            c: BufferIO.readInt8(),
+                            l: BufferIO.readInt8(),
+                            s: BufferIO.readInt8()
+                        });
+                    }
+                    break;
                 case ('MSG_UPDATE_DATA'):
                     message.player = BufferIO.readInt8();
-                    message.fieldlocation = BufferIO.readInt8();
-                    message.fieldmodel = enums.locations[message.fieldlocation];
-                    message.message = packet.message;
-                    //mainGame->dField.UpdateFieldCard(player, location, pbuf);
-                    // ^ problem.
+                    message.location = enums.locations[BufferIO.readInt8()];
+                    message.cards = getFieldCards(gameBoard, message.player, message.location, BufferIO);
                     break;
 
                 case ('MSG_UPDATE_CARD'):
                     message.player = BufferIO.readInt8();
-                    message.fieldlocation = BufferIO.readInt8();
+                    message.location = enums.locations[BufferIO.readInt8()];
                     message.index = BufferIO.readInt8();
-                    message.card = makeCard(packet.message, 8, message.udplayer).card;
-                    message.fieldmodel = enums.locations[message.fieldlocation];
+                    message.card = makeCard(BufferIO, message.player, (gameBoard.masterRule === 4));
                     break;
 
                 case ('MSG_WAITING'):
@@ -639,9 +827,122 @@ function recieveSTOC(packet) {
                     message.code = BufferIO.readInt32();
                     message.rev = ((message.code & 0x80000000) !== 0);
                     break;
+                case ('MSG_SHUFFLE_SET_CARD'):
+                    message.count = BufferIO.readInt8();
+                    message.targets = [];
+                    for (i = 0; i < message.count; ++i) {
+                        message.targets.push({
+                            c: BufferIO.readInt8(),
+                            l: BufferIO.readInt8(),
+                            s: BufferIO.readInt8()
+                        });
+                        BufferIO.readInt8();
+                    }
+                    message.new_cards = [];
+                    for (i = 0; i < message.count; ++i) {
+                        message.new_cards.push({
+                            c: BufferIO.readInt8(),
+                            l: BufferIO.readInt8(),
+                            s: BufferIO.readInt8()
+                        });
+                        BufferIO.readInt8();
+                    }
+                    break;
+                case ('MSG_TAG_SWAP'):
+                    message.player = BufferIO.readInt8();
+                    message.mcount = BufferIO.readInt8();
+                    message.ecount = BufferIO.readInt8();
+                    message.pcount = BufferIO.readInt8();
+                    message.hcount = BufferIO.readInt8();
+                    message.topcode = BufferIO.readInt32();
+                    message.hand = [];
+                    message.extra_deck = [];
+                    for (i = 0; i < message.hcount; ++i) {
+                        message.hand.push(BufferIO.readInt32());
+                    }
+                    for (i = 0; i < message.ecount; ++i) {
+                        message.extra_deck.push(BufferIO.readInt32());
+                    }
+                    break;
+                case ('MSG_RELOAD_FIELD'):
+                    message.lp = [];
+                    message.mzone = [];
+                    message.stzone = [];
+                    message.deck = [];
+                    message.hand = [];
+                    message.grave = [];
+                    for (i = 0; i < 2; ++i) {
+                        message.lp[i] = BufferIO.readInt32();
+                        for (let seq = 0; seq < 7; ++seq) {
+                            val = BufferIO.readInt8();
+                            if (val) {
+                                let card = {
+                                    val: val,
+                                    position: BufferIO.readInt8()
+                                };
+                                message.mzone.push(card);
+                                val = BufferIO.readInt8();
+                                if (val) {
+                                    for (let xyz = 0; xyz < val; ++xyz) {
+                                        message.mzone.push({
+                                            position: card.position,
+                                            sequence: seq,
+                                            overlayunit: xyz
+                                        });
+                                    }
+                                }
 
+                            }
+                        }
+                        for (let seq = 0; seq < 8; ++seq) {
+                            val = BufferIO.readInt8();
+                            if (val) {
+                                message.stzone.push({
+                                    sequence: seq,
+                                    position: BufferIO.readInt8()
+                                });
+                            }
+                        }
+                        val = BufferIO.readInt8();
+                        for (let seq = 0; seq < val; ++seq) {
+                            message.deck.push({
+                                sequence: seq
+                            });
+                        }
+                        val = BufferIO.readInt8();
+                        for (let seq = 0; seq < val; ++seq) {
+                            message.hand.push({
+                                sequence: seq
+                            });
+                        }
+
+                        val = BufferIO.readInt8();
+                        for (let seq = 0; seq < val; ++seq) {
+                            message.grave.push({
+                                sequence: seq
+                            });
+                        }
+                        val = BufferIO.readInt8();
+                        for (let seq = 0; seq < val; ++seq) {
+                            message.removed.push({
+                                sequence: seq
+                            });
+                        }
+                        message.extra_deck_p = BufferIO.readInt8();
+                    }
+                    val = BufferIO.readInt8(); //chains
+                    message.code = BufferIO.readInt32();
+                    message.pcc = BufferIO.readInt8();
+                    message.pcl = BufferIO.readInt8();
+                    message.pcs = BufferIO.readInt8();
+                    message.subs = BufferIO.readInt8();
+                    message.cc = BufferIO.readInt8();
+                    message.cl = BufferIO.readInt8();
+                    message.cs = BufferIO.readInt8();
+                    message.desc = BufferIO.readInt32();
+                    break;
                 default:
-                    //console.log('bad', command, packet, task);
+                    console.log('Unparsed!:', command, packet, message);
                     break;
             }
             return message;
@@ -707,7 +1008,6 @@ function recieveSTOC(packet) {
             break;
 
         case ('STOC_JOIN_GAME'):
-            console.log(packet.message);
             message.banlistHashCode = packet.message.readUInt16LE(0);
             message.rule = packet.message[4];
             message.mode = packet.message[5];
@@ -718,7 +1018,7 @@ function recieveSTOC(packet) {
             message.start_hand = packet.message[16];
             message.draw_count = packet.message[17];
             message.time_limit = packet.message.readUInt16LE(18);
-            message.message = packet.message;
+
             break;
         case ('STOC_TYPE_CHANGE'):
             message.typec = packet.message[0];
@@ -772,3 +1072,5 @@ function recieveSTOC(packet) {
     }
     return message;
 }
+
+module.exports = recieveSTOC;

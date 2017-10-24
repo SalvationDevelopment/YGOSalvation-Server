@@ -276,6 +276,7 @@ function init(callback) {
     }
 
     var answerListener = new EventEmitter(),
+        lastQuestion = {},
         stack = [],
         previousStack = [],
         outstack = [],
@@ -375,6 +376,56 @@ function init(callback) {
             });
         });
     }
+
+    /**
+     * Generate the view of the field, for use by YGOPro MSG_UPDATE_DATA to get counts.
+     * @param   {Number} player player int 0,1, etcthe given player
+     * @returns {Object} all the cards the given player can see on their side of the field.
+     */
+    function generateViewCount(player) {
+        var playersCards = filterPlayer(stack, player),
+            deck = filterlocation(playersCards, 'DECK'),
+            hand = filterlocation(playersCards, 'HAND'),
+            grave = filterlocation(playersCards, 'GRAVE'),
+            extra = filterOverlyIndex(filterlocation(playersCards, 'EXTRA'), 0),
+            removed = filterlocation(playersCards, 'REMOVED'),
+            spellzone = filterlocation(playersCards, 'SPELLZONE'),
+            monsterzone = filterlocation(playersCards, 'MONSTERZONE');
+        return {
+            DECK: deck.length,
+            HAND: hand.length,
+            GRAVE: grave.length,
+            EXTRA: extra.length,
+            REMOVED: removed.length,
+            SPELLZONE: spellzone.length,
+            MONSTERZONE: monsterzone.length
+        };
+    }
+    /**
+     * Generate the view of the field, for use by YGOPro MSG_UPDATE_DATA to update data.
+     * @param   {Number} player player int 0,1, etcthe given player
+     * @returns {Object} all the cards the given player can see on their side of the field.
+     */
+    function generateUpdateView(player) {
+        var playersCards = filterPlayer(stack, player),
+            deck = filterlocation(playersCards, 'DECK'),
+            hand = filterlocation(playersCards, 'HAND'),
+            grave = filterlocation(playersCards, 'GRAVE'),
+            extra = filterOverlyIndex(filterlocation(playersCards, 'EXTRA'), 0),
+            removed = filterlocation(playersCards, 'REMOVED'),
+            spellzone = filterlocation(playersCards, 'SPELLZONE'),
+            monsterzone = filterlocation(playersCards, 'MONSTERZONE');
+        return {
+            DECK: deck.sort(sortByIndex),
+            HAND: hand.sort(sortByIndex),
+            GRAVE: grave.sort(sortByIndex),
+            EXTRA: extra.sort(sortByIndex),
+            REMOVED: removed.sort(sortByIndex),
+            SPELLZONE: spellzone.sort(sortByIndex),
+            MONSTERZONE: monsterzone.sort(sortByIndex)
+        };
+    }
+
     /**
      * Generate the view for a specific given player
      * @param   {Number} player player int 0,1, etcthe given player
@@ -526,6 +577,7 @@ function init(callback) {
      * @returns {undefined}
      */
     function setState(changeRequest) {
+        console.log(changeRequest);
         var player = changeRequest.player,
             clocation = changeRequest.clocation,
             index = changeRequest.index,
@@ -535,7 +587,7 @@ function init(callback) {
             moveposition = changeRequest.moveposition,
             overlayindex = changeRequest.overlayindex,
             uid = changeRequest.uid,
-            target = queryCard(player, clocation, index, 0, uid),
+            target = queryCard(player, clocation, index, overlayindex, uid),
             pointer = uidLookup(target.uid),
             zone;
 
@@ -548,6 +600,9 @@ function init(callback) {
         stack[pointer].index = moveindex;
         stack[pointer].position = moveposition;
         stack[pointer].overlayindex = overlayindex;
+        if (changeRequest.id !== undefined) {
+            stack[pointer].id = changeRequest.id;
+        }
         if (stack[pointer].position === 'HAND') {
             stack[pointer].position = 'FaceUp';
         }
@@ -560,6 +615,9 @@ function init(callback) {
     }
 
 
+    function ygoproUpdate() {
+        callback(generateView(), stack);
+    }
 
     /**
      * Creates a new card outside of initial start
@@ -629,7 +687,7 @@ function init(callback) {
      * @param {Function} drawCallback callback used by automatic
      * @returns {undefined}
      */
-    function drawCard(player, numberOfCards, username, drawCallback) {
+    function drawCard(player, numberOfCards, cards, username, drawCallback) {
         var currenthand = filterlocation(filterPlayer(stack, player), 'HAND').length,
             topcard,
             target,
@@ -649,7 +707,8 @@ function init(callback) {
                 moveindex: currenthand + i,
                 moveposition: 'FaceUp',
                 overlayindex: 0,
-                uid: topcard.uid
+                uid: topcard.uid,
+                id: cards[i].id || topcard.id
             });
             target = queryCard(player, 'HAND', (currenthand + i), 0);
             pointer = uidLookup(target.uid);
@@ -1123,14 +1182,14 @@ function init(callback) {
      */
     function startDuel(player1, player2, manual, settings) {
         stack = [];
-        if (!lock[0] && !lock[1]) {
+        if (manual && !lock[0] && !lock[1]) {
             return;
         }
 
         round.push(player1, player2);
         lock[0] = false;
         lock[1] = false;
-        if (!settings.noshuffle) {
+        if (!settings.noshuffle || !manual) {
             shuffle(player1.main);
             shuffle(player2.main);
         }
@@ -1381,15 +1440,17 @@ function init(callback) {
     }
 
     /**
-     * 
-     * @param {Number} player 
+     * Send a question to the player
+     * @param {Number} slot 
      * @param {String} type 
      * @param {Object[]} options 
      * @param {Number} answerLength 
      * @param {Function} onAnswerFromUser 
      * @return {undefined}
      */
-    function question(player, type, options, answerLength, onAnswerFromUser) {
+    function question(slot, type, options, answerLength, onAnswerFromUser) {
+
+        // Create a mock view to populate with information so it gets sent to the right place.
         var uuid = uniqueIdenifier(),
             output = {
                 names: names,
@@ -1397,20 +1458,33 @@ function init(callback) {
                 p1: {},
                 spectators: {}
             };
+        lastQuestion = {
+            slot,
+            type,
+            options,
+            answerLength,
+            onAnswerFromUser
+        };
 
-
-        output['p' + player] = {
+        output[slot] = {
             duelAction: 'question',
             type: type,
             options: options,
             answerLength: answerLength,
             uuid: uuid
         };
-        console.log(uuid);
+
+        // Here we set an event listener. `answerListener` is exposed to the controller.
+        // So when the user answers this question we can fire `onAnswerFromUser` and pass the data to it.
+        // https://nodejs.org/api/events.html#events_emitter_once_eventname_listener
         answerListener.once(uuid, function(data) {
             onAnswerFromUser(data);
         });
         callback(output, stack);
+    }
+
+    function retryLastQuestion() {
+        question(lastQuestion.slot, lastQuestion.type, lastQuestion.options, lastQuestion.answerLength, lastQuestion.onAnswerFromUser);
     }
 
     function rps(resolver) {
@@ -1479,7 +1553,7 @@ function init(callback) {
         function ask() {
             var time = (previous1 !== undefined) ? 3000 : 0;
 
-            question(0, 'specialCards', [{
+            question('p0', 'specialCards', [{
                 id: 'rock',
                 value: 0
             }, {
@@ -1498,7 +1572,7 @@ function init(callback) {
                     notify(resolver(result));
                 }
             });
-            question(1, 'specialCards', [{
+            question('p1', 'specialCards', [{
                 id: 'rock',
                 value: 0
             }, {
@@ -1527,24 +1601,24 @@ function init(callback) {
      * @name Core
      */
     return {
-        stack: stack,
-        startSide: startSide,
-        startDuel: startDuel,
-        setState: setState,
-        drawCard: drawCard,
-        excavateCard: excavateCard,
-        flipDeck: flipDeck,
-        millCard: millCard,
-        millRemovedCard: millRemovedCard,
-        millRemovedCardFaceDown: millRemovedCardFaceDown,
-        revealTop: revealTop,
-        revealBottom: revealBottom,
-        revealDeck: revealDeck,
-        revealExtra: revealExtra,
-        revealExcavated: revealExcavated,
-        revealHand: revealHand,
-        viewExcavated: viewExcavated,
-        viewGrave: viewGrave,
+        stack,
+        startSide,
+        startDuel,
+        setState,
+        drawCard,
+        excavateCard,
+        flipDeck,
+        millCard,
+        millRemovedCard,
+        millRemovedCardFaceDown,
+        revealTop,
+        revealBottom,
+        revealDeck,
+        revealExtra,
+        revealExcavated,
+        revealHand,
+        viewExcavated,
+        viewGrave,
         viewDeck: viewDeck,
         viewExtra: viewExtra,
         viewBanished: viewBanished,
@@ -1567,6 +1641,7 @@ function init(callback) {
         flipCoin: flipCoin,
         offsetZone: offsetZone,
         surrender: surrender,
+        generateViewCount: generateViewCount,
         generateView: generateView,
         getGroup: getGroup,
         getState: getState,
@@ -1574,16 +1649,19 @@ function init(callback) {
         spectators: {}, // holds socket references
         decks: decks,
         lock: lock,
-        lockInDeck: lockInDeck,
-        rematch: rematch,
+        lockInDeck,
+        rematch,
         rematchAccept: 0,
         sideAccept: 0,
-        setNames: setNames,
-        getStack: getStack,
-        setTurnPlayer: setTurnPlayer,
-        answerListener: answerListener,
-        question: question,
-        rps: rps
+        setNames,
+        getStack,
+        setTurnPlayer,
+        answerListener,
+        question,
+        retryLastQuestion,
+        rps: rps,
+        generateUpdateView,
+        ygoproUpdate
     };
 }
 

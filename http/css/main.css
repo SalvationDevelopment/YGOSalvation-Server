@@ -2913,3 +2913,32 @@ pre.errortext {
     font-weight: bold !important;
     font-family: monospace;
 }
+
+div#selectplayer {
+    position: absolute;
+    top: 40%;
+    left: 40%;
+    width: 20%;
+    background: black;
+    height: 10vh;
+    z-index: 1000;
+    box-shadow: 0 0 10px black;
+    border: 1px solid silver;
+    text-align: center;
+    display: none;
+}
+
+div#selectplayer button {
+    display: block;
+    clear: left;
+    width: 100%;
+    background: transparent;
+    color: white;
+}
+
+#phaseindicator button.option {
+    border: 1px solid white;
+    background: #eee;
+    color: black;
+    font-weight: bold;
+}
