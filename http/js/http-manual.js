@@ -2413,7 +2413,7 @@ function resolveQuestion(answer) {
     console.log('resolving question');
     activeQuestion.answer.push(answer);
 
-    if (activeQuestion.answer.length >= activeQuestion.answerLength) {
+    if (activeQuestion.answer.length >= activeQuestion.min && activeQuestion.answer.length <= activeQuestion.max) {
         primus.write((activeQuestion));
         $('#revealed, #revealedclose').css('display', 'none');
         $('.selectQuestionSet').css('display', 'none');

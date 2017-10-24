@@ -6,7 +6,10 @@ const gameResponse = require('./translate_ygopro_reply.js'),
     };
 
 function askUser(gameBoard, slot, message, ygopro) {
-    gameBoard.question(slot, message.command, message, 1, function(answer) {
+    gameBoard.question(slot, message.command, message, {
+        max: 1,
+        min: 1
+    }, function(answer) {
         ygopro.write(gameResponse('CTOS_RESPONSE', new Buffer(answer[0])));
     });
 }
@@ -167,7 +170,11 @@ function boardController(gameBoard, slot, message, ygopro) {
             askUser(gameBoard, slot, message, ygopro);
             break;
         case ('MSG_SELECT_CARD'):
-            askUser(gameBoard, slot, message, ygopro);
+
+            gameBoard.question(slot, message.command, message, { min: message.select_min, max: message.select_max }, function(answer) {
+                ygopro.write(gameResponse('CTOS_RESPONSE', new Buffer(answer[0])));
+            });
+
             break;
         case ('MSG_SELECT_CHAIN'):
             break;
