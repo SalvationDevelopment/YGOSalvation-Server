@@ -2413,7 +2413,19 @@ function resolveQuestion(answer) {
     console.log('resolving question');
     activeQuestion.answer.push(answer);
 
-    if (activeQuestion.answer.length >= activeQuestion.min && activeQuestion.answer.length <= activeQuestion.max) {
+    if (activeQuestion.answer.length === activeQuestion.max) {
+        primus.write((activeQuestion));
+        $('#revealed, #revealedclose').css('display', 'none');
+        $('.selectQuestionSet').css('display', 'none');
+    }
+}
+
+function forceResolveQuestion(answer) {
+    'use strict';
+    console.log('resolving question');
+    activeQuestion.answer.push(answer);
+
+    if (activeQuestion.answer.length >= activeQuestion.min) {
         primus.write((activeQuestion));
         $('#revealed, #revealedclose').css('display', 'none');
         $('.selectQuestionSet').css('display', 'none');
