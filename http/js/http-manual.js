@@ -727,7 +727,7 @@ function initGameState() {
     //exposed method to initialize the field;
     function startDuel(OneDeck, TwoDeck, OneExtra, TwoExtra) {
         var i;
-
+        zonetargetingmode = false;
 
         for (i = 0; OneExtra > i; i += 1) {
             stack.push(new Card('EXTRA', 0, i, stack.length));
@@ -2413,7 +2413,7 @@ function resolveQuestion(answer) {
     console.log('resolving question');
     activeQuestion.answer.push(answer);
 
-    if (activeQuestion.answer.length === activeQuestion.max) {
+    if (activeQuestion.answer.length === activeQuestion.answerLength.max) {
         primus.write((activeQuestion));
         $('#revealed, #revealedclose').css('display', 'none');
         $('.selectQuestionSet').css('display', 'none');
@@ -2425,7 +2425,7 @@ function forceResolveQuestion(answer) {
     console.log('resolving question');
     activeQuestion.answer.push(answer);
 
-    if (activeQuestion.answer.length >= activeQuestion.min) {
+    if (activeQuestion.answer.length >= activeQuestion.answerLength.min) {
         primus.write((activeQuestion));
         $('#revealed, #revealedclose').css('display', 'none');
         $('.selectQuestionSet').css('display', 'none');

@@ -42,6 +42,7 @@ function ygoproQuestion(message) {
             break;
         case 'MSG_SELECT_IDLECMD':
             idleQuestion = message.options;
+            idleQuestion.attackable_cards = [];
             if (idleQuestion.enableBattlePhase) {
                 $('#battlephi').addClass('option');
             }
@@ -72,8 +73,20 @@ function ygoproQuestion(message) {
         case 'MSG_SELECT_PLACE':
             zonetargetingmode = 'ygo';
             message.options.zones.forEach(function(zone) {
-                $('.cardselectionzone.p' + zone.player + '.' + zone.zone + '.i' + zone.slot).addClass('attackglow card')
+                $('.cardselectionzone.p' + zone.player + '.' + zone.zone + '.i' + zone.slot).addClass('attackglow card');
             });
+            break;
+        case 'MSG_SELECT_CARD':
+            if (message.options.select_options.some(function(card) {
+                    return !(card.location === 'MONSTERZONE' || card.location === 'SPELLZONE' || card.location === 'HAND');
+                })) {
+                // do panel mode;
+            } else {
+                zonetargetingmode = 'ygo';
+                message.options.select_options.forEach(function(card) {
+                    $('.cardselectionzone.p' + orient(card.player) + '.' + card.location + '.i' + card.index).addClass('attackglow card');
+                });
+            }
         default:
             break;
     }
@@ -120,78 +133,74 @@ function cardEquvilanceCheck(gui, data) {
 }
 
 function idleOnClick() {
-    try {
-        var idIndex = window.manualDuel.uidLookup(record),
-            stackunit = window.manualDuel.stack[idIndex],
-            dbEntry;
+    var idIndex = window.manualDuel.uidLookup(record),
+        stackunit = window.manualDuel.stack[idIndex],
+        dbEntry;
 
-        if (targetmode) {
-            manualTarget(stackunit);
-            return;
-        }
-        if (zonetargetingmode) {
-            return;
-        }
-
-        manualActionReference = stackunit;
-        $('#manualcontrols button').css({
-            'display': 'none'
-        });
-        idleQuestion.summonable_cards.forEach(function(card, slot) {
-            if (cardEquvilanceCheck(manualActionReference, card)) {
-                $('.ygo-summon').attr('data-slot', ((slot) << 16)).css({
-                    'display': 'block'
-                });
-            }
-        });
-        idleQuestion.spsummonable_cards.forEach(function(card, slot) {
-            if (cardEquvilanceCheck(manualActionReference, card)) {
-                $('.ygo-special').attr('data-slot', (((slot) << 16) + 1)).css({
-                    'display': 'block'
-                });
-            }
-        });
-        idleQuestion.repositionable_cards.forEach(function(card, slot) {
-            if (cardEquvilanceCheck(manualActionReference, card)) {
-                $('.ygo-reposition').attr('data-slot', (((slot + 1) << 16) + 2)).css({
-                    'display': 'block'
-                });
-            }
-        });
-
-        idleQuestion.msetable_cards.forEach(function(card, slot) {
-            if (cardEquvilanceCheck(manualActionReference, card)) {
-                $('.ygo-set').attr('data-slot', (((slot + 1) << 16) + 3)).css({
-                    'display': 'block'
-                });
-            }
-        });
-        idleQuestion.ssetable_cards.forEach(function(card, slot) {
-            if (cardEquvilanceCheck(manualActionReference, card)) {
-                $('.ygo-st-set').attr('data-slot', ((slot << 16) + 4)).css({
-                    'display': 'block'
-                });
-            }
-        });
-        idleQuestion.activatable_cards.forEach(function(card, slot) {
-            if (cardEquvilanceCheck(manualActionReference, card)) {
-                var message = ((slot << 16) + 5);
-                $('.ygo-activate').attr('data-slot', message).css({
-                    'display': 'block'
-                });
-            }
-        });
-        idleQuestion.attackable_cards.forEach(function(card, slot) {
-            if (cardEquvilanceCheck(manualActionReference, card)) {
-                var message = ((slot << 16) + 1);
-                $('.ygo-attack').attr('data-slot', message).css({
-                    'display': 'block'
-                });
-            }
-        });
-    } catch (onError) {
-        console.log(onError);
+    if (targetmode) {
+        manualTarget(stackunit);
+        return;
     }
+    if (zonetargetingmode) {
+        return;
+    }
+
+    manualActionReference = stackunit;
+    $('#manualcontrols button').css({
+        'display': 'none'
+    });
+    idleQuestion.summonable_cards.forEach(function(card, slot) {
+        if (cardEquvilanceCheck(manualActionReference, card)) {
+            $('.ygo-summon').attr('data-slot', ((slot) << 16)).css({
+                'display': 'block'
+            });
+        }
+    });
+    idleQuestion.spsummonable_cards.forEach(function(card, slot) {
+        if (cardEquvilanceCheck(manualActionReference, card)) {
+            $('.ygo-special').attr('data-slot', (((slot) << 16) + 1)).css({
+                'display': 'block'
+            });
+        }
+    });
+    idleQuestion.repositionable_cards.forEach(function(card, slot) {
+        if (cardEquvilanceCheck(manualActionReference, card)) {
+            $('.ygo-reposition').attr('data-slot', (((slot + 1) << 16) + 2)).css({
+                'display': 'block'
+            });
+        }
+    });
+
+    idleQuestion.msetable_cards.forEach(function(card, slot) {
+        if (cardEquvilanceCheck(manualActionReference, card)) {
+            $('.ygo-set').attr('data-slot', (((slot + 1) << 16) + 3)).css({
+                'display': 'block'
+            });
+        }
+    });
+    idleQuestion.ssetable_cards.forEach(function(card, slot) {
+        if (cardEquvilanceCheck(manualActionReference, card)) {
+            $('.ygo-st-set').attr('data-slot', ((slot << 16) + 4)).css({
+                'display': 'block'
+            });
+        }
+    });
+    idleQuestion.activatable_cards.forEach(function(card, slot) {
+        if (cardEquvilanceCheck(manualActionReference, card)) {
+            var message = ((slot << 16) + 5);
+            $('.ygo-activate').attr('data-slot', message).css({
+                'display': 'block'
+            });
+        }
+    });
+    idleQuestion.attackable_cards.forEach(function(card, slot) {
+        if (cardEquvilanceCheck(manualActionReference, card)) {
+            var message = ((slot << 16) + 1);
+            $('.ygo-attack').attr('data-slot', message).css({
+                'display': 'block'
+            });
+        }
+    });
     reorientmenu();
 }
 
@@ -225,11 +234,11 @@ function changeAttackPosition(AttackPosition) {
 
 function ygoproNextPhase(phase) {
     if (phase === 5) {
-        if (idleQuestion.enableEndPhase) {
+        if (idleQuestion.command === 'MSG_SELECT_IDLECMD') {
             resolveQuestion(toBytesInt32(7));
             return;
         }
-        if (idleQuestion.battle) {
+        if (idleQuestion.command === 'MSG_SELECT_BATTLECMD') {
             resolveQuestion(toBytesInt32(3));
             return;
         }

@@ -258,7 +258,7 @@ function recieveSTOC(gameBoard, packet) {
                     break;
 
                 case ('MSG_CHAINING'):
-                    message.code = BufferIO.readInt32();
+                    message.id = BufferIO.readInt32();
                     message.pcc = BufferIO.readInt8();
                     message.pcl = BufferIO.readInt8();
                     message.pcs = BufferIO.readInt8();
@@ -347,12 +347,11 @@ function recieveSTOC(gameBoard, packet) {
                     break;
 
                 case ('MSG_SUMMONING'):
-                    message.player = BufferIO.readInt8();
-                    message.code = BufferIO.readInt32();
-                    message.cc = BufferIO.readInt8(); //defunct in code
-                    message.cl = BufferIO.readInt8(); //defunct in code
-                    message.cs = BufferIO.readInt8(); //defunct in code
-                    message.cp = enums.positions[BufferIO.readInt8()]; //defunct in code
+                    message.id = BufferIO.readInt32();
+                    message.player = BufferIO.readInt8(); //defunct in code
+                    message.location = enums.locations[BufferIO.readInt8()]; //defunct in code
+                    message.index = BufferIO.readInt8(); //defunct in code
+                    message.position = enums.positions[BufferIO.readInt8()]; //defunct in code
                     break;
 
                 case ('MSG_EQUIP'):
@@ -454,7 +453,7 @@ function recieveSTOC(gameBoard, packet) {
                     break;
                 case ('MSG_MISSED_EFFECT'):
                     BufferIO.readInt8(); //padding
-                    message.code = BufferIO.readInt32();
+                    message.id = BufferIO.readInt32();
                     break;
                 case ('MSG_TOSS_DICE'):
                     message.player = BufferIO.readInt8();
@@ -539,7 +538,7 @@ function recieveSTOC(gameBoard, packet) {
                     message.shufflecount = BufferIO.readInt8();
                     break;
                 case ('MSG_MOVE'):
-                    message.code = BufferIO.readInt32();
+                    message.id = BufferIO.readInt32();
                     message.pc = BufferIO.readInt8(); // original controller
                     message.pl = enums.locations[BufferIO.readInt8()]; // original cLocation
                     message.ps = BufferIO.readInt8(); // original sequence (index)
@@ -552,7 +551,7 @@ function recieveSTOC(gameBoard, packet) {
                     break;
 
                 case ('MSG_POS_CHANGE'):
-                    message.code = BufferIO.readInt32();
+                    message.id = BufferIO.readInt32();
                     message.cc = BufferIO.readInt8(); // current controller
                     message.cl = BufferIO.readInt8(); // current cLocation
                     message.cs = BufferIO.readInt8(); // current sequence (index)
@@ -565,12 +564,12 @@ function recieveSTOC(gameBoard, packet) {
                     break;
 
                 case ('MSG_SWAP'):
-                    message.code1 = BufferIO.readInt8(); // defunct in the code
+                    message.id1 = BufferIO.readInt8(); // defunct in the code
                     message.c1 = BufferIO.readInt8();
                     message.l1 = BufferIO.readInt8();
                     message.s1 = BufferIO.readInt8();
                     message.p1 = BufferIO.readInt8(); //defunct in the code
-                    message.code2 = BufferIO.readInt8(); //defunct in the code
+                    message.id2 = BufferIO.readInt8(); //defunct in the code
                     message.c2 = BufferIO.readInt8();
                     message.l2 = BufferIO.readInt8();
                     message.s2 = BufferIO.readInt8();
@@ -581,13 +580,9 @@ function recieveSTOC(gameBoard, packet) {
                     message.disabled = BufferIO.readInt32();
                     message.ifisfirst_disabled = (message.disabled >> 16) | (message.disabled << 16);
                     break;
-                case ('MSG_SUMMONING'):
-                    message.code = BufferIO.readInt32();
-                    //check for variables
-                    break;
 
                 case ('MSG_SPSUMMONING'):
-                    message.code = BufferIO.readInt32();
+                    message.id = BufferIO.readInt32();
                     message.cc = BufferIO.readInt8();
                     message.cl = BufferIO.readInt8();
                     message.cs = BufferIO.readInt8();
@@ -610,7 +605,7 @@ function recieveSTOC(gameBoard, packet) {
                     break;
                 case ('MSG_FLIPSUMMONING'):
                     // notice pp is missing, and everything is upshifted; not repeating code.
-                    message.code = BufferIO.readInt32();
+                    message.id = BufferIO.readInt32();
                     message.cc = BufferIO.readInt8(); // current controller
                     message.cl = BufferIO.readInt8(); // current cLocation
                     message.cs = BufferIO.readInt8(); // current sequence (index)
@@ -704,7 +699,7 @@ function recieveSTOC(gameBoard, packet) {
                     break;
                 case ('MSG_SELECT_POSITION'):
                     message.selecting_player = BufferIO.readInt8();
-                    message.code = BufferIO.readInt32();
+                    message.id = BufferIO.readInt32();
                     message.positions = BufferIO.readInt8();
                     message.count = 0;
                     message.filter = 0x1;
@@ -823,9 +818,9 @@ function recieveSTOC(gameBoard, packet) {
                     break;
                 case ('MSG_DECK_TOP'):
                     message.player = BufferIO.readInt8();
-                    message.seq = BufferIO.readInt8();
-                    message.code = BufferIO.readInt32();
-                    message.rev = ((message.code & 0x80000000) !== 0);
+                    message.index = BufferIO.readInt8();
+                    message.id = BufferIO.readInt32();
+                    message.rev = ((message.id & 0x80000000) !== 0);
                     break;
                 case ('MSG_SHUFFLE_SET_CARD'):
                     message.count = BufferIO.readInt8();
@@ -931,7 +926,7 @@ function recieveSTOC(gameBoard, packet) {
                         message.extra_deck_p = BufferIO.readInt8();
                     }
                     val = BufferIO.readInt8(); //chains
-                    message.code = BufferIO.readInt32();
+                    message.id = BufferIO.readInt32();
                     message.pcc = BufferIO.readInt8();
                     message.pcl = BufferIO.readInt8();
                     message.pcs = BufferIO.readInt8();

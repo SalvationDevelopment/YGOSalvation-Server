@@ -1299,10 +1299,12 @@ function init(callback) {
      * @return {undefined}
      */
     function changeLifepoints(player, amount, username) {
-        if (amount > 0) {
-            state.duelistChat.push('<pre>' + username + ' gained ' + amount + ' Lifepoints.</pre>');
-        } else {
-            state.duelistChat.push('<pre>' + username + ' lost ' + Math.abs(amount) + ' Lifepoints.</pre>');
+        if (username) {
+            if (amount > 0) {
+                state.duelistChat.push('<pre>' + username + ' gained ' + amount + ' Lifepoints.</pre>');
+            } else {
+                state.duelistChat.push('<pre>' + username + ' lost ' + Math.abs(amount) + ' Lifepoints.</pre>');
+            }
         }
         state.lifepoints[player] = state.lifepoints[player] + amount;
         callback(generateView(), stack);
