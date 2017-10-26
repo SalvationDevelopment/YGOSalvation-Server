@@ -151,29 +151,30 @@ function idleOnClick() {
     });
     idleQuestion.summonable_cards.forEach(function(card, slot) {
         if (cardEquvilanceCheck(manualActionReference, card)) {
-            $('.ygo-summon').attr('data-slot', ((slot) << 16)).css({
+            $('.ygo-summon').attr('data-slot', (slot << 16)).css({
                 'display': 'block'
             });
         }
     });
     idleQuestion.spsummonable_cards.forEach(function(card, slot) {
         if (cardEquvilanceCheck(manualActionReference, card)) {
-            $('.ygo-special').attr('data-slot', (((slot) << 16) + 1)).css({
+            $('.ygo-special').attr('data-slot', ((slot << 16) + 1)).css({
                 'display': 'block'
             });
         }
     });
     idleQuestion.repositionable_cards.forEach(function(card, slot) {
+        var text = (manualActionReference.position.indexOf('Attack')) ? 'to Defense' : 'to Attack';
         if (cardEquvilanceCheck(manualActionReference, card)) {
-            $('.ygo-reposition').attr('data-slot', (((slot + 1) << 16) + 2)).css({
+            $('.ygo-reposition').attr('data-slot', ((slot << 16) + 2)).css({
                 'display': 'block'
-            });
+            }).text(text);
         }
     });
 
     idleQuestion.msetable_cards.forEach(function(card, slot) {
         if (cardEquvilanceCheck(manualActionReference, card)) {
-            $('.ygo-set').attr('data-slot', (((slot + 1) << 16) + 3)).css({
+            $('.ygo-set').attr('data-slot', ((slot << 16) + 3)).css({
                 'display': 'block'
             });
         }
