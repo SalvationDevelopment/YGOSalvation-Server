@@ -41,7 +41,7 @@ div#selectionsystem {
 }
 
 .p0.DECK         {bottom : 10px; left: 632px; }
-.p0.HAND         {bottom : -50px; left: 350px; }
+.p0.HAND         {bottom : -50px; left: 350px;  transition-delay: 200ms;}
 .p0.EXTRA        {bottom : 10px; left: 97px; }
 .p0.GRAVE        {bottom : 207px; left: 633px; }
 .p0.REMOVED      {bottom : 207px; left: 713px; }
@@ -69,7 +69,7 @@ div#selectionsystem {
 
 
 .p1.DECK         {bottom : 500px; left: 98px; }
-.p1.HAND         {bottom : 560px; left: 350px; }
+.p1.HAND         {bottom : 560px; left: 350px;  transition-delay: 200ms;}
 .p1.EXTRA        {bottom : 500px; left: 631px; }
 .p1.GRAVE        {bottom : 306px; left: 98px; }
 .p1.REMOVED      {bottom : 306px; left: 18px; }

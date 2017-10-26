@@ -87,13 +87,21 @@ function ygoproQuestion(message) {
                     $('.cardselectionzone.p' + orient(card.player) + '.' + card.location + '.i' + card.index).addClass('attackglow card');
                 });
             }
+            break;
         default:
             break;
     }
 }
 
-function ygoproController(message) {
+function summonFlash(id) {
+    $('#effectflasher').css('display', 'block');
+    $('#effectflasher .mainimage').attr('src', 'https://raw.githubusercontent.com/shadowfox87/YGOSeries10CardPics/master/' + id + '.png');
+    setTimeout(function() {
+        $('#effectflasher').css('display', 'none');
+    }, 800);
+}
 
+function ygoproController(message) {
     scaleScreenFactor();
     switch (message.command) {
         case ('STOC_DUEL_START'):
@@ -110,8 +118,20 @@ function ygoproController(message) {
         case ('STOC_TIME_LIMIT'):
             $('.p' + message.player + 'time').val(message.time);
             break;
+        case ('MSG_SUMMONING'):
+            summonFlash(message.id);
+            break;
+        case ('MSG_SPSUMMONING'):
+            summonFlash(message.id);
+            break;
+        case ('MSG_FLIPSUMMONING'):
+            summonFlash(message.id);
+            break;
+        default:
+            break;
     }
 }
+
 
 
 
@@ -164,7 +184,7 @@ function idleOnClick() {
         }
     });
     idleQuestion.repositionable_cards.forEach(function(card, slot) {
-        var text = (manualActionReference.position.indexOf('Attack')) ? 'to Defense' : 'to Attack';
+        var text = (manualActionReference.position.indexOf('Attack') > -1) ? 'to Defense' : 'to Attack';
         if (cardEquvilanceCheck(manualActionReference, card)) {
             $('.ygo-reposition').attr('data-slot', ((slot << 16) + 2)).css({
                 'display': 'block'

@@ -61,7 +61,7 @@
 const child_process = require('child_process'),
     EventEmitter = require('events'),
     net = require('net'),
-    queue = require('queue'),
+    queue = require('function-queue'),
     enums = require('./translate_ygopro_enums.js'),
     translateYGOProAPI = require('./translate_ygopro_messages.js'),
     manualControlEngine = require('./engine_manual.js'),
@@ -201,6 +201,7 @@ function connectToYGOSharp(roomInstance, webSockectConnection, slot, callback) {
                     next();
                 }, pause);
             });
+
         });
     }
 
@@ -235,6 +236,8 @@ function connectToYGOSharp(roomInstance, webSockectConnection, slot, callback) {
     tcpConnection.on('error', cutConnections);
     tcpConnection.on('close', cutConnections);
     tcpConnection.answerListener = gameBoard.answerListener;
+
+    gameQueue.autostart = true;
     return tcpConnection;
 }
 

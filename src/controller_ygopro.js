@@ -200,6 +200,16 @@ function boardController(gameBoard, slot, message, ygopro) {
             });
             break;
         case ('MSG_POS_CHANGE'):
+            gameBoard.setState({
+                player: message.player,
+                clocation: message.location,
+                index: message.index,
+                moveplayer: message.player,
+                movelocation: message.location,
+                moveindex: message.index,
+                moveposition: message.position,
+                overlayindex: 0
+            });
             break;
         case ('MSG_SET'):
             //check for variables
@@ -212,7 +222,7 @@ function boardController(gameBoard, slot, message, ygopro) {
             break;
         case ('MSG_FIELD_DISABLED'):
             break;
-        case ('MSG_SUMMONING'):
+        case ('MSG_SUMMONING'): // Good
             gameBoard.setState({
                 player: message.player,
                 clocation: message.location,
@@ -230,15 +240,37 @@ function boardController(gameBoard, slot, message, ygopro) {
             };
             gameBoard.callback(output);
             break;
-        case ('MSG_SPSUMMONING'):
+        case ('MSG_SPSUMMONING'): // Good
+            gameBoard.setState({
+                id: message.id,
+                player: message.player,
+                clocation: message.location,
+                index: message.index,
+                moveplayer: message.player,
+                movelocation: message.location,
+                moveindex: message.index,
+                moveposition: message.position,
+                overlayindex: 0
+            });
             break;
-        case ('MSG_SUMMONED'):
+        case ('MSG_SUMMONED'): // Good
             break;
-        case ('MSG_SPSUMMONED'):
+        case ('MSG_SPSUMMONED'): // Good
             break;
-        case ('MSG_FLIPSUMMONED'):
+        case ('MSG_FLIPSUMMONED'): // Good
             break;
-        case ('MSG_FLIPSUMMONING'):
+        case ('MSG_FLIPSUMMONING'): // Good
+            gameBoard.setState({
+                id: message.id,
+                player: message.player,
+                clocation: message.location,
+                index: message.index,
+                moveplayer: message.player,
+                movelocation: message.location,
+                moveindex: message.index,
+                moveposition: message.position,
+                overlayindex: 0
+            });
             break;
         case ('MSG_REQUEST_DECK'):
             break;
@@ -312,7 +344,7 @@ function boardController(gameBoard, slot, message, ygopro) {
                 gameBoard.ygoproUpdate();
             }
             return {};
-        case ('MSG_UPDATE_CARD'): // Good
+        case ('MSG_UPDATE_CARD'): // Inconsistent
             gameBoard.setState({
                 player: message.player,
                 clocation: message.location,
@@ -371,29 +403,28 @@ function boardController(gameBoard, slot, message, ygopro) {
             break;
         case ('STOC_WAITING_SIDE'):
             break;
-        case ('STOC_CREATE_GAME'):
+        case ('STOC_CREATE_GAME'): // Good
             break;
-        case ('STOC_JOIN_GAME'):
+        case ('STOC_JOIN_GAME'): // Good
             break;
-        case ('STOC_TYPE_CHANGE'):
+        case ('STOC_TYPE_CHANGE'): // Good
             break;
         case ('STOC_LEAVE_GAME'):
             break;
-        case ('STOC_DUEL_START'):
-            //trigger to start duel, nothing more.
+        case ('STOC_DUEL_START'): // Good
             break;
         case ('STOC_DUEL_END'):
             //trigger to close the duel, nothing more.
             break;
         case ('STOC_REPLAY'):
             break;
-        case ('STOC_TIME_LIMIT'):
+        case ('STOC_TIME_LIMIT'): // Good
             break;
         case ('STOC_CHAT'):
             break;
-        case ('STOC_HS_PLAYER_ENTER'):
+        case ('STOC_HS_PLAYER_ENTER'): // Good
             break;
-        case ('STOC_HS_PLAYER_CHANGE'):
+        case ('STOC_HS_PLAYER_CHANGE'): // Good
             break;
         case ('STOC_HS_WATCH_CHANGE'):
             break;

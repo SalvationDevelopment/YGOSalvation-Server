@@ -552,11 +552,11 @@ function recieveSTOC(gameBoard, packet) {
 
                 case ('MSG_POS_CHANGE'):
                     message.id = BufferIO.readInt32();
-                    message.cc = BufferIO.readInt8(); // current controller
-                    message.cl = BufferIO.readInt8(); // current cLocation
-                    message.cs = BufferIO.readInt8(); // current sequence (index)
+                    message.player = BufferIO.readInt8(); // current controller
+                    message.location = enums.locations[BufferIO.readInt8()]; // current cLocation
+                    message.index = BufferIO.readInt8(); // current sequence (index)
                     message.pp = BufferIO.readInt8(); // padding??
-                    message.cp = enums.positions[BufferIO.readInt8()]; // current position
+                    message.position = enums.positions[BufferIO.readInt8()]; // current position
                     break;
 
                 case ('MSG_SET'):
@@ -583,10 +583,10 @@ function recieveSTOC(gameBoard, packet) {
 
                 case ('MSG_SPSUMMONING'):
                     message.id = BufferIO.readInt32();
-                    message.cc = BufferIO.readInt8();
-                    message.cl = BufferIO.readInt8();
-                    message.cs = BufferIO.readInt8();
-                    message.cp = enums.positions[BufferIO.readInt8()];
+                    message.player = BufferIO.readInt8();
+                    message.location = enums.locations[BufferIO.readInt8()];
+                    message.index = BufferIO.readInt8();
+                    message.position = enums.positions[BufferIO.readInt8()];
                     break;
 
                 case ('MSG_SUMMONED'):
@@ -606,10 +606,10 @@ function recieveSTOC(gameBoard, packet) {
                 case ('MSG_FLIPSUMMONING'):
                     // notice pp is missing, and everything is upshifted; not repeating code.
                     message.id = BufferIO.readInt32();
-                    message.cc = BufferIO.readInt8(); // current controller
-                    message.cl = BufferIO.readInt8(); // current cLocation
-                    message.cs = BufferIO.readInt8(); // current sequence (index)
-                    message.cp = enums.positions[BufferIO.readInt8()]; // current position
+                    message.player = BufferIO.readInt8(); // current controller
+                    message.location = enums.locations[BufferIO.readInt8()]; // current cLocation
+                    message.index = BufferIO.readInt8(); // current sequence (index)
+                    message.position = enums.positions[BufferIO.readInt8()]; // current position
                     break;
 
                 case ('MSG_REQUEST_DECK'):
