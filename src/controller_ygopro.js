@@ -88,7 +88,7 @@ function boardController(gameBoard, slot, message, ygopro) {
             break;
         case 'HINT_EFFECT':
             break;
-        case ('MSG_NEW_TURN'):
+        case ('MSG_NEW_TURN'): // Good
             gameBoard.nextTurn();
             break;
         case ('MSG_WIN'):
@@ -211,8 +211,7 @@ function boardController(gameBoard, slot, message, ygopro) {
                 overlayindex: 0
             });
             break;
-        case ('MSG_SET'):
-            //check for variables
+        case ('MSG_SET'): // Good
             output[slot] = {
                 duelAction: 'sound',
                 sound: 'soundsummonCard'
@@ -253,12 +252,6 @@ function boardController(gameBoard, slot, message, ygopro) {
                 overlayindex: 0
             });
             break;
-        case ('MSG_SUMMONED'): // Good
-            break;
-        case ('MSG_SPSUMMONED'): // Good
-            break;
-        case ('MSG_FLIPSUMMONED'): // Good
-            break;
         case ('MSG_FLIPSUMMONING'): // Good
             gameBoard.setState({
                 id: message.id,
@@ -271,6 +264,12 @@ function boardController(gameBoard, slot, message, ygopro) {
                 moveposition: message.position,
                 overlayindex: 0
             });
+            break;
+        case ('MSG_SUMMONED'): // Good
+            break;
+        case ('MSG_SPSUMMONED'): // Good
+            break;
+        case ('MSG_FLIPSUMMONED'): // Good
             break;
         case ('MSG_REQUEST_DECK'):
             break;

@@ -560,7 +560,12 @@ function recieveSTOC(gameBoard, packet) {
                     break;
 
                 case ('MSG_SET'):
-                    //check for variables
+                    //check for variables, defunct in the codebase....
+                    message.id = BufferIO.readInt32();
+                    message.player = BufferIO.readInt8(); // current controller
+                    message.location = enums.locations[BufferIO.readInt8()]; // current cLocation
+                    message.index = BufferIO.readInt8(); // current sequence (index)
+                    message.position = enums.positions[BufferIO.readInt8()]; // current position
                     break;
 
                 case ('MSG_SWAP'):
