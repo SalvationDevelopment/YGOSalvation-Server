@@ -331,17 +331,21 @@ function boardController(gameBoard, slot, message, ygopro) {
         case ('MSG_UPDATE_DATA'): // inconsistent
             message.cards.forEach(function(card, index) {
                 if (card) {
-                    gameBoard.setState({
-                        id: message.id,
-                        player: message.player,
-                        clocation: message.location,
-                        index: index,
-                        moveplayer: message.player,
-                        movelocation: message.location,
-                        moveindex: index,
-                        moveposition: card.Position,
-                        overlayindex: 0
-                    });
+                    try {
+                        gameBoard.setState({
+                            id: message.id,
+                            player: message.player,
+                            clocation: message.location,
+                            index: index,
+                            moveplayer: message.player,
+                            movelocation: message.location,
+                            moveindex: index,
+                            moveposition: card.Position,
+                            overlayindex: 0
+                        });
+                    } catch (e) {
+                        console.log(e);
+                    }
                 }
             });
             if (message.cards.length) {
@@ -349,17 +353,21 @@ function boardController(gameBoard, slot, message, ygopro) {
             }
             return {};
         case ('MSG_UPDATE_CARD'): // Inconsistent
-            gameBoard.setState({
-                player: message.player,
-                clocation: message.location,
-                index: message.index,
-                moveplayer: message.player,
-                movelocation: message.location,
-                moveindex: message.index,
-                moveposition: message.card.Position,
-                overlayindex: 0,
-                id: message.card.id
-            });
+            try {
+                gameBoard.setState({
+                    player: message.player,
+                    clocation: message.location,
+                    index: message.index,
+                    moveplayer: message.player,
+                    movelocation: message.location,
+                    moveindex: message.index,
+                    moveposition: message.card.Position,
+                    overlayindex: 0,
+                    id: message.card.id
+                });
+            } catch (e) {
+                console.log(e);
+            }
             break;
         case ('MSG_WAITING'):
             break;

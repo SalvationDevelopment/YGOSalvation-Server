@@ -36,6 +36,9 @@ function ygoproQuestion(message) {
     activeQuestion = message;
     activeQuestion.answer = [];
     activeQuestion.action = 'question';
+    zonetargetingmode = false;
+    $('.cardselectionzone.p0').removeClass('card');
+    $('.cardselectionzone.p0').removeClass('attackglow');
     switch (type) {
         case 'STOC_SELECT_TP':
             selectStartingPlayer();
@@ -190,7 +193,7 @@ function idleOnClick() {
         }
     });
     idleQuestion.repositionable_cards.forEach(function(card, slot) {
-        var text = (manualActionReference.position.indexOf('Attack') > -1) ? 'to Defense' : 'to Attack';
+        var text = (manualActionReference.position && manualActionReference.position.indexOf('Attack') > -1) ? 'to Defense' : 'to Attack';
         if (cardEquvilanceCheck(manualActionReference, card)) {
             $('.ygo-reposition').attr('data-slot', ((slot << 16) + 2)).css({
                 'display': 'block'
