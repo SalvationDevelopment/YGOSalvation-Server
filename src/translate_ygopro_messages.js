@@ -75,8 +75,8 @@ function getSelectableZones(mask) {
         if (mask & filter) {
             zones.push({
                 player: 0,
-                zone: 'MONSTERZONE',
-                slot: i,
+                location: 'MONSTERZONE',
+                index: i,
                 status: !(mask & filter)
             });
         }
@@ -724,17 +724,18 @@ function recieveSTOC(gameBoard, packet) {
                     }
                     break;
                 case ('MSG_SELECT_TRIBUTE'):
+                    message.selecting_player = BufferIO.readInt8();
                     message.select_cancelable = BufferIO.readInt8() ? true : false;
                     message.select_min = BufferIO.readInt8();
                     message.select_max = BufferIO.readInt8();
-                    message.count = BufferIO.readInt8();
+                    count = BufferIO.readInt8();
                     message.selectable_targets = [];
-                    for (i = 0; i < message.count; ++i) {
+                    for (i = 0; i < count; ++i) {
                         message.selectable_targets.push({
                             code: BufferIO.readInt32(),
-                            c: BufferIO.readInt8(),
-                            l: BufferIO.readInt8(),
-                            s: BufferIO.readInt8(),
+                            player: BufferIO.readInt8(),
+                            location: enums.locations[BufferIO.readInt8()],
+                            index: BufferIO.readInt8(),
                             t: BufferIO.readInt8()
                         });
                     }

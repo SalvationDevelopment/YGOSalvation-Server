@@ -70,10 +70,16 @@ function ygoproQuestion(message) {
             idleQuestion.msetable_cards = [];
             idleQuestion.ssetable_cards = [];
             break;
+        case 'MSG_SELECT_TRIBUTE':
+            zonetargetingmode = 'ygo';
+            message.options.selectable_targets.forEach(function(zone) {
+                $('.cardselectionzone.p' + zone.player + '.' + zone.location + '.i' + zone.index).addClass('attackglow card');
+            });
+            break;
         case 'MSG_SELECT_PLACE':
             zonetargetingmode = 'ygo';
             message.options.zones.forEach(function(zone) {
-                $('.cardselectionzone.p' + zone.player + '.' + zone.zone + '.i' + zone.slot).addClass('attackglow card');
+                $('.cardselectionzone.p' + zone.player + '.' + zone.location + '.i' + zone.index).addClass('attackglow card');
             });
             break;
         case 'MSG_SELECT_CARD':

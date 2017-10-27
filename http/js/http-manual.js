@@ -1317,7 +1317,7 @@ function manualReciver(message) {
                 layouthand(0);
                 layouthand(1);
                 $('.attackglow').removeClass('attackglow');
-            }, 100);
+            }, 300);
             updateChat(message.info.duelistChat);
             $('#phaseindicator').attr('data-currentphase', message.info.phase);
             $('.p0lp').val(message.info.lifepoints[0]);
