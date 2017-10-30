@@ -1,4 +1,4 @@
-/* global $, doGuiShuffle, manualActionReference,activeQuestion, singlesitenav, targetmode, record, manualTarget, zonetargetingmode, reorientmenu, resolveQuestion */
+/* global $, doGuiShuffle, orient, manualActionReference,activeQuestion, singlesitenav, targetmode, record, manualTarget, zonetargetingmode, reorientmenu, resolveQuestion */
 
 var idleQuestion = {},
     battleQuestion = {},
@@ -55,6 +55,7 @@ function ygoproQuestion(message) {
             if (idleQuestion.shufflecount) {
 
             }
+            idleQuestion.select_options = [];
 
 
             break;
@@ -72,17 +73,18 @@ function ygoproQuestion(message) {
             idleQuestion.repositionable_cards = [];
             idleQuestion.msetable_cards = [];
             idleQuestion.ssetable_cards = [];
+            idleQuestion.select_options = [];
             break;
         case 'MSG_SELECT_TRIBUTE':
             zonetargetingmode = 'ygo';
             message.options.selectable_targets.forEach(function(zone) {
-                $('.cardselectionzone.p' + zone.player + '.' + zone.location + '.i' + zone.index).addClass('attackglow card');
+                $('.cardselectionzone.p' + orient(zone.player) + '.' + zone.location + '.i' + zone.index).addClass('attackglow card');
             });
             break;
         case 'MSG_SELECT_PLACE':
             zonetargetingmode = 'ygo';
             message.options.zones.forEach(function(zone) {
-                $('.cardselectionzone.p' + zone.player + '.' + zone.location + '.i' + zone.index).addClass('attackglow card');
+                $('.cardselectionzone.p' + orient(zone.player) + '.' + zone.location + '.i' + zone.index).addClass('attackglow card');
             });
             break;
         case 'MSG_SELECT_CARD':

@@ -6,7 +6,8 @@
  * @property {Number} index sequence in the zone or deck.
  */
 
-const gameResponse = require('./translate_ygopro_reply.js'),
+const enums = require('./translate_ygopro_enums'),
+    gameResponse = require('./translate_ygopro_reply.js'),
     cardMap = {
         0: 'rock',
         1: 'paper',
@@ -34,16 +35,18 @@ function askUser(gameBoard, slot, message, ygopro) {
 /**
  * Return the Array Index of a matching card in a list of cards.
  * @param {FieldCoordinate[]} list list of cards the option appears in.
- * @param {FieldCoordinate} card card being searched for.
+ * @param {Number[]} card card being searched for.
  * @returns {Number} Index of the card in the given options.
  */
 function resolveCardIndex(list, card) {
-    return list.find(function(option) {
-        var index = (option.player === card.player),
-            location = (option.location === card.location),
-            sequence = (option.index === card.index);
+    var number = list.findIndex(function(option) {
+        var index = (option.player === card[0]),
+            location = (option.location === enums.locations[card[1]]),
+            sequence = (option.index === card[2]);
         return (index && location && sequence);
+
     });
+    return number;
 }
 
 // Good, means completed in the UI.
@@ -315,7 +318,9 @@ function boardController(gameBoard, slot, message, ygopro) {
             gameBoard.question(slot, message.command, message, { min: message.select_min, max: message.select_max }, function(answer) {
                 var messageBuffer = [answer.length].concat(answer.map(function(card) {
                     return resolveCardIndex(message.selectable_targets, card);
-                }));
+                })).filter(function(card) {
+                    return (card !== undefined)
+                });
                 ygopro.write(gameResponse('CTOS_RESPONSE', new Buffer(messageBuffer)));
             });
             break;
