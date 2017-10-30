@@ -183,9 +183,9 @@ module.exports = {
 	},
 	bannedTypes: [],
 	exceptions: [],
-	startDate: new Date('2017-09-18'),
+        startDate: new Date('2017-09-18'),
+        endDate: new Date('2017-11-05'),
 	name: '2017.9.18 (TCG Advanced)',
 	masterRule: 4,
 	region: 'tcg',
-	primary: true
 }
