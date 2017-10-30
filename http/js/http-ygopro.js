@@ -112,15 +112,23 @@ function summonFlash(id) {
 
 function ygoproController(message) {
     scaleScreenFactor();
+    if (message.command.indexOf('SELECT') > -1) {
+        $('#ygowaiting').css('display', 'block').text('Your Move...');
+    }
     switch (message.command) {
         case ('STOC_DUEL_START'):
             singlesitenav('duelscreen');
             break;
+        case ('MSG_WAITING' || 'STOC_TIME_LIMIT'):
+            $('#ygowaiting').css('display', 'block').text('Waiting,...');
+            break;
         case ('STOC_SELECT_TP'):
             break;
         case ('MSG_SELECT_IDLECMD'):
+            $('#ygowaiting').css('display', 'block');
             break;
         case ('MSG_NEW_PHASE'):
+            $('#ygowaiting').css('display', 'none');
             $('#phaseindicator button.option').removeClass('option');
             setIdle();
             break;

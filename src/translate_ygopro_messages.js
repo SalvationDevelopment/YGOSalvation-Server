@@ -813,7 +813,7 @@ function recieveSTOC(gameBoard, packet) {
                     break;
 
                 case ('MSG_WAITING'):
-                    //mainGame->stHintMsg->setText(dataManager.GetSysString(1390));
+                    // Nothing happens, ui only.
                     break;
                 case ('MSG_SWAP_GRAVE_DECK'):
                     message.player = BufferIO.readInt8();

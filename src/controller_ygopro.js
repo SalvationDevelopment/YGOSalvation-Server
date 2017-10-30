@@ -369,7 +369,7 @@ function boardController(gameBoard, slot, message, ygopro) {
                 console.log(e);
             }
             break;
-        case ('MSG_WAITING'):
+        case ('MSG_WAITING'): // Good
             break;
         case ('MSG_SWAP_GRAVE_DECK'):
             break;
@@ -424,15 +424,17 @@ function boardController(gameBoard, slot, message, ygopro) {
         case ('STOC_LEAVE_GAME'):
             break;
         case ('STOC_DUEL_START'): // Good
+            gameBoard.duelistChat('Gamelist', 'Duel has started.');
             break;
         case ('STOC_DUEL_END'):
-            //trigger to close the duel, nothing more.
+            gameBoard.duelistChat('Gamelist', 'Duel has ended.');
             break;
         case ('STOC_REPLAY'):
             break;
         case ('STOC_TIME_LIMIT'): // Good
             break;
         case ('STOC_CHAT'):
+            gameBoard.duelistChat(message.from, message.chat);
             break;
         case ('STOC_HS_PLAYER_ENTER'): // Good
             break;

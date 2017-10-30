@@ -1568,14 +1568,28 @@ div#lobbygameinfo {
     box-shadow: 0 0 10px black;
 }
 
-div#waiting {
+div#ygowaiting {
     position: absolute;
     top: 20vh;
-    color: white;
+    color: yellow;
     width: 100%;
     text-align: center;
     text-shadow: 0 0 20px white, 0 0 4px black;
     text-decoration: blink !important;
+    animation: blink-animation 1s steps(5, start) infinite;
+    transition: 500ms all;
+}
+
+@keyframes blink-animation {
+    to {
+        visibility: hidden;
+    }
+}
+
+@-webkit-keyframes blink-animation {
+    to {
+        visibility: hidden;
+    }
 }
 
 .kickbutton {
