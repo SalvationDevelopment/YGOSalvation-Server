@@ -21,7 +21,7 @@ function setIdle() {
         msetable_cards: [],
         ssetable_cards: [],
         activatable_cards: [],
-        battle: false
+        select_options: []
     };
 }
 
@@ -191,6 +191,13 @@ function idleOnClick() {
     manualActionReference = stackunit;
     $('#manualcontrols button').css({
         'display': 'none'
+    });
+    idleQuestion.select_options.forEach(function(card, slot) {
+        if (cardEquvilanceCheck(manualActionReference, card)) {
+            resolveQuestion({
+
+            });
+        }
     });
     idleQuestion.summonable_cards.forEach(function(card, slot) {
         if (cardEquvilanceCheck(manualActionReference, card)) {

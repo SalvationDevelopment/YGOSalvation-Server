@@ -270,11 +270,11 @@ function recieveSTOC(gameBoard, packet) {
                     message.ct = BufferIO.readInt8(); // defunct in code
                     break;
                 case ('MSG_CHAINED'):
-                    message.ct = BufferIO.readInt8();
+                    message.chain_link = BufferIO.readInt8();
                     break;
 
                 case ('MSG_CHAIN_SOLVING'):
-                    message.ct = BufferIO.readInt8();
+                    message.chain_link = BufferIO.readInt8();
                     break;
 
                 case ('MSG_CHAIN_SOLVED'):
@@ -286,11 +286,11 @@ function recieveSTOC(gameBoard, packet) {
                     break;
 
                 case ('MSG_CHAIN_NEGATED'):
-                    message.ct = BufferIO.readInt8();
+                    message.chain_link = BufferIO.readInt8();
                     break; //graphical and trigger only for replay
 
                 case ('MSG_CHAIN_DISABLED'):
-                    message.ct = BufferIO.readInt8();
+                    message.chain_link = BufferIO.readInt8();
                     break; //graphical and trigger only for replay
 
                 case ('MSG_CARD_SELECTED'):
@@ -399,32 +399,32 @@ function recieveSTOC(gameBoard, packet) {
 
                 case ('MSG_ADD_COUNTER'):
                     message.type = BufferIO.readInt16();
-                    message.c = BufferIO.readInt8();
-                    message.l = BufferIO.readInt8();
-                    message.s = BufferIO.readInt8();
+                    message.player = BufferIO.readInt8();
+                    message.location = enums.locations[BufferIO.readInt8()];
+                    message.index = BufferIO.readInt8();
                     message.count = BufferIO.readInt8();
                     break;
 
                 case ('MSG_REMOVE_COUNTER'):
                     message.type = BufferIO.readInt16();
-                    message.c = BufferIO.readInt8();
-                    message.l = BufferIO.readInt8();
-                    message.s = BufferIO.readInt8();
+                    message.player = BufferIO.readInt8();
+                    message.location = enums.locations[BufferIO.readInt8()];
+                    message.index = BufferIO.readInt8();
                     message.count = BufferIO.readInt8();
                     break;
 
                 case ('MSG_ATTACK'):
                     message.attacker = {
                         player: BufferIO.readInt8(),
-                        location: enums.positions[BufferIO.readInt8()],
+                        location: enums.locations[BufferIO.readInt8()],
                         index: BufferIO.readInt8()
-                    }
+                    };
                     BufferIO.readInt8();
                     message.defender = {
                         player: BufferIO.readInt8(),
-                        location: enums.positions[BufferIO.readInt8()],
+                        location: enums.locations[BufferIO.readInt8()],
                         index: BufferIO.readInt8()
-                    }
+                    };
                     BufferIO.readInt8();
                     break;
                 case ('MSG_BATTLE'):

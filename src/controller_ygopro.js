@@ -170,7 +170,14 @@ function boardController(gameBoard, slot, message, ygopro) {
             break;
         case ('MSG_REMOVE_COUNTER'):
             break;
-        case ('MSG_ATTACK'):
+        case ('MSG_ATTACK'): // Good
+            output[slot] = {
+                duelAction: 'attack',
+                sound: 'soundattack',
+                source: message.attacker,
+                target: message.defender
+            };
+            gameBoard.callback(output);
             break;
         case ('MSG_BATTLE'):
             break;

@@ -423,7 +423,7 @@ enums.timeout = {
     'MSG_ADD_COUNTER': 2000,
     'MSG_REMOVE_COUNTER': 0,
     'MSG_ATTACK': 0,
-    'MSG_BATTLE': 0,
+    'MSG_BATTLE': 3000,
     'MSG_ATTACK_DISABLED': 0,
     'MSG_DAMAGE_STEP_START': 0,
     'MSG_DAMAGE_STEP_END': 0,
