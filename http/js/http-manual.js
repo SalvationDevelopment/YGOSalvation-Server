@@ -727,7 +727,7 @@ function initGameState() {
     //exposed method to initialize the field;
     function startDuel(OneDeck, TwoDeck, OneExtra, TwoExtra) {
         var i;
-
+        zonetargetingmode = false;
 
         for (i = 0; OneExtra > i; i += 1) {
             stack.push(new Card('EXTRA', 0, i, stack.length));
@@ -1317,7 +1317,7 @@ function manualReciver(message) {
                 layouthand(0);
                 layouthand(1);
                 $('.attackglow').removeClass('attackglow');
-            }, 100);
+            }, 300);
             updateChat(message.info.duelistChat);
             $('#phaseindicator').attr('data-currentphase', message.info.phase);
             $('.p0lp').val(message.info.lifepoints[0]);
@@ -2413,7 +2413,19 @@ function resolveQuestion(answer) {
     console.log('resolving question');
     activeQuestion.answer.push(answer);
 
-    if (activeQuestion.answer.length >= activeQuestion.answerLength) {
+    if (activeQuestion.answer.length === activeQuestion.answerLength.max) {
+        primus.write((activeQuestion));
+        $('#revealed, #revealedclose').css('display', 'none');
+        $('.selectQuestionSet').css('display', 'none');
+    }
+}
+
+function forceResolveQuestion(answer) {
+    'use strict';
+    console.log('resolving question');
+    activeQuestion.answer.push(answer);
+
+    if (activeQuestion.answer.length >= activeQuestion.answerLength.min) {
         primus.write((activeQuestion));
         $('#revealed, #revealedclose').css('display', 'none');
         $('.selectQuestionSet').css('display', 'none');
@@ -2815,44 +2827,51 @@ function manualToken(index) {
     primus.write((card));
 }
 
-function selectionzoneonclick(choice, zone, player) {
+function selectionzoneonclick(index, zone, player) {
     'use strict';
 
     if (zonetargetingmode) {
 
+
+        if (zonetargetingmode === 'ygo') {
+            resolveQuestion([orient(player), ygoproLocations[zone], index]);
+            if (activeQuestion.answer.length <= activeQuestion.answerLength.min) {
+                $('.cardselectionzone.p' + player + '.' + ygoproLocations[zone] + '.i' + index).removeClass('card');
+                $('.cardselectionzone.p' + player + '.' + ygoproLocations[zone] + '.i' + index).removeClass('attackglow');
+                return;
+            }
+
+        }
         $('.cardselectionzone.p0').removeClass('card');
         $('.cardselectionzone.p0').removeClass('attackglow');
-        if (zonetargetingmode === 'ygo') {
-            resolveQuestion([orient(player), ygoproLocations[zone], choice]);
-        }
         if (zonetargetingmode === 'atk') {
-            manualToAttack(choice);
+            manualToAttack(index);
         }
         if (zonetargetingmode === 'generic') {
             if (zone === 'GRAVE') {
                 manualToGrave();
             } else {
-                manualMoveGeneric(choice, zone);
+                manualMoveGeneric(index, zone);
             }
 
         }
         if (zonetargetingmode === 'def') {
-            manualSetMonsterFaceUp(choice);
+            manualSetMonsterFaceUp(index);
         }
         if (zonetargetingmode === 'normalatk') {
-            manualNormalSummon(choice);
+            manualNormalSummon(index);
         }
         if (zonetargetingmode === 'normaldef') {
-            manualSetMonster(choice);
+            manualSetMonster(index);
         }
         if (zonetargetingmode === 'activate') {
-            manualActivate(choice);
+            manualActivate(index);
         }
         if (zonetargetingmode === 'set') {
-            manualSetSpell(choice);
+            manualSetSpell(index);
         }
         if (zonetargetingmode === 'token') {
-            manualToken(choice);
+            manualToken(index);
         }
         zonetargetingmode = false;
         return;

@@ -1299,10 +1299,12 @@ function init(callback) {
      * @return {undefined}
      */
     function changeLifepoints(player, amount, username) {
-        if (amount > 0) {
-            state.duelistChat.push('<pre>' + username + ' gained ' + amount + ' Lifepoints.</pre>');
-        } else {
-            state.duelistChat.push('<pre>' + username + ' lost ' + Math.abs(amount) + ' Lifepoints.</pre>');
+        if (username) {
+            if (amount > 0) {
+                state.duelistChat.push('<pre>' + username + ' gained ' + amount + ' Lifepoints.</pre>');
+            } else {
+                state.duelistChat.push('<pre>' + username + ' lost ' + Math.abs(amount) + ' Lifepoints.</pre>');
+            }
         }
         state.lifepoints[player] = state.lifepoints[player] + amount;
         callback(generateView(), stack);
@@ -1451,6 +1453,7 @@ function init(callback) {
     function question(slot, type, options, answerLength, onAnswerFromUser) {
 
         // Create a mock view to populate with information so it gets sent to the right place.
+
         var uuid = uniqueIdenifier(),
             output = {
                 names: names,
@@ -1562,7 +1565,10 @@ function init(callback) {
             }, {
                 id: 'scissors',
                 value: 2
-            }], 1, function(answer) {
+            }], {
+                max: 1,
+                min: 1
+            }, function(answer) {
                 var result = determineResult(0, answer[0]);
                 if (result === false) {
                     notify(ask);
@@ -1581,7 +1587,10 @@ function init(callback) {
             }, {
                 id: 'scissors',
                 value: 2
-            }], 1, function(answer) {
+            }], {
+                max: 1,
+                min: 1
+            }, function(answer) {
                 var result = determineResult(1, answer[0]);
                 if (result === false) {
                     notify(ask);

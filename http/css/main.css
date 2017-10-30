@@ -1116,7 +1116,6 @@ div#gofirst,
 }
 
 .login,
-,
 #creategame {
     width: 100%;
     height: 100%;
@@ -1569,14 +1568,28 @@ div#lobbygameinfo {
     box-shadow: 0 0 10px black;
 }
 
-div#waiting {
+div#ygowaiting {
     position: absolute;
     top: 20vh;
-    color: white;
+    color: yellow;
     width: 100%;
     text-align: center;
     text-shadow: 0 0 20px white, 0 0 4px black;
     text-decoration: blink !important;
+    animation: blink-animation 1s steps(5, start) infinite;
+    transition: 500ms all;
+}
+
+@keyframes blink-animation {
+    to {
+        visibility: hidden;
+    }
+}
+
+@-webkit-keyframes blink-animation {
+    to {
+        visibility: hidden;
+    }
 }
 
 .kickbutton {
@@ -2886,8 +2899,9 @@ button#onlinelisttogger {
 }
 
 img.mainimage {
-    margin: 15% auto;
+    margin: 15vh auto;
     display: block;
+    height: 70vh;
 }
 
 #alertmodal {
