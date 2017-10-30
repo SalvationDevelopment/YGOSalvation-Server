@@ -1,4 +1,4 @@
-/* global $, doGuiShuffle, orient, manualActionReference,activeQuestion, singlesitenav, targetmode, record, manualTarget, zonetargetingmode, reorientmenu, resolveQuestion */
+/* global $, reveal, doGuiShuffle, orient, manualActionReference,activeQuestion, singlesitenav, targetmode, record, manualTarget, zonetargetingmode, reorientmenu, resolveQuestion */
 
 var idleQuestion = {},
     battleQuestion = {},
@@ -205,23 +205,7 @@ function cardEquvilanceCheck(gui, data) {
     return (index && location && sequence);
 }
 
-function idleOnClick() {
-    var idIndex = window.manualDuel.uidLookup(record),
-        stackunit = window.manualDuel.stack[idIndex],
-        dbEntry;
-
-    if (targetmode) {
-        manualTarget(stackunit);
-        return;
-    }
-    if (zonetargetingmode) {
-        return;
-    }
-
-    manualActionReference = stackunit;
-    $('#manualcontrols button').css({
-        'display': 'none'
-    });
+function ygoproReviewOptions() {
     idleQuestion.select_options.filter(filterSelectedOptions).forEach(function(card, slot) {
         if (cardEquvilanceCheck(manualActionReference, card)) {
             resolveQuestion([
@@ -284,7 +268,84 @@ function idleOnClick() {
             });
         }
     });
-    reorientmenu();
+}
+
+function zoneContainmentFilter(set, zone) {
+    return set.some(function(card) {
+        if (card.location === zone) {
+            return true;
+        }
+    });
+}
+
+function idleOnClick() {
+    var idIndex = window.manualDuel.uidLookup(record),
+        stackunit = window.manualDuel.stack[idIndex],
+        fullset = [].concat(idleQuestion.spsummonable_cards,
+            idleQuestion.activatable_cards,
+            idleQuestion.select_options);
+
+    if (targetmode) {
+        manualTarget(stackunit);
+        return;
+    }
+    if (zonetargetingmode) {
+        return;
+    }
+
+    manualActionReference = stackunit;
+    $('#manualcontrols button').css({
+        'display': 'none'
+    });
+    switch (manualActionReference.location) {
+        case ('EXTRA'):
+            $('.m-extra-view').css({
+                'display': 'block'
+            });
+            if (zoneContainmentFilter(idleQuestion.spsummonable_cards, 'GRAVE')) {
+                reveal(idleQuestion.spsummonable_cards.filter(function(card) {
+                    (card.location === 'EXTRA');
+                }), 'ygo');
+            }
+            break;
+        case ('DECK'):
+            break;
+        case ('GRAVE'):
+            $('.m-extra-grave').css({
+                'display': 'block'
+            });
+            if (zoneContainmentFilter(idleQuestion.spsummonable_cards, 'GRAVE')) {
+                reveal(idleQuestion.spsummonable_cards.filter(function(card) {
+                    (card.location === 'GRAVE');
+                }), 'ygo');
+            }
+            if (zoneContainmentFilter(idleQuestion.activatable_cards, 'GRAVE')) {
+                reveal(idleQuestion.activatable_cards.filter(function(card) {
+                    (card.location === 'GRAVE');
+                }), 'ygo');
+            }
+            break;
+        case ('REMOVED'):
+            $('.m-removed-view').css({
+                'display': 'block'
+            });
+            if (zoneContainmentFilter(idleQuestion.spsummonable_cards, 'GRAVE')) {
+                reveal(idleQuestion.spsummonable_cards.filter(function(card) {
+                    (card.location === 'REMOVED');
+                }), 'ygo');
+            }
+            if (zoneContainmentFilter(idleQuestion.activatable_cards, 'GRAVE')) {
+                reveal(idleQuestion.activatable_cards.filter(function(card) {
+                    (card.location === 'REMOVED');
+                }), 'ygo');
+            }
+            break;
+        default:
+            ygoproReviewOptions();
+            reorientmenu();
+    }
+
+
 }
 
 function toBytesInt32(num) {
