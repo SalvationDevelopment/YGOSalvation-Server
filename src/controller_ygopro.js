@@ -39,7 +39,7 @@ function askUser(gameBoard, slot, message, ygopro) {
  * @returns {Number} Index of the card in the given options.
  */
 function resolveCardIndex(list, card) {
-    var number = list.findIndex(function(option) {
+    var number = activeQuestion.answer.findIndex(function(option) {
         var index = (option.player === card[0]),
             location = (option.location === enums.locations[card[1]]),
             sequence = (option.index === card[2]);

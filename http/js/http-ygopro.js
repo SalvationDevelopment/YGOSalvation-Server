@@ -2,6 +2,17 @@
 
 var idleQuestion = {},
     battleQuestion = {},
+    ylocations = {
+        0x01: 'DECK',
+        0x02: 'HAND',
+        0x04: 'MONSTERZONE',
+        0x08: 'SPELLZONE',
+        0x10: 'GRAVE',
+        0x20: 'REMOVED',
+        0x40: 'EXTRA',
+        0x80: 'OVERLAY'
+
+    },
     ygoproLocations = {
         'DECK': 0x01,
         'HAND': 0x02,
@@ -13,7 +24,23 @@ var idleQuestion = {},
         'OVERLAY': 0x80
     };
 
-function setIdle() {
+
+function filterSelectedOptions(card) {
+    var result = activeQuestion.answer.contains(function(option) {
+        var index = (option.player === card[0]),
+            location = (option.location === ylocations[card[1]]),
+            sequence = (option.index === card[2]);
+        return (index && location && sequence);
+    });
+    return !result;
+}
+
+function unFilterSelectOptions(card) {
+    return !filterSelectedOptions(card);
+}
+
+function setIdle(input) {
+    input = input || {};
     idleQuestion = {
         summonable_cards: [],
         spsummonable_cards: [],
@@ -23,6 +50,7 @@ function setIdle() {
         activatable_cards: [],
         select_options: []
     };
+    Object.assign(idleQuestion, input);
 }
 
 
@@ -194,11 +222,13 @@ function idleOnClick() {
     $('#manualcontrols button').css({
         'display': 'none'
     });
-    idleQuestion.select_options.forEach(function(card, slot) {
+    idleQuestion.select_options.filter(filterSelectedOptions).forEach(function(card, slot) {
         if (cardEquvilanceCheck(manualActionReference, card)) {
-            resolveQuestion({
-
-            });
+            resolveQuestion([
+                manualActionReference.player,
+                ygoproLocations[manualActionReference.location],
+                manualActionReference.index
+            ]);
         }
     });
     idleQuestion.summonable_cards.forEach(function(card, slot) {
