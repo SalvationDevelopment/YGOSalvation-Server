@@ -1,4 +1,4 @@
-/* global $, manualActionReference,activeQuestion, singlesitenav, targetmode, record, manualTarget, zonetargetingmode, reorientmenu, resolveQuestion */
+/* global $, doGuiShuffle, manualActionReference,activeQuestion, singlesitenav, targetmode, record, manualTarget, zonetargetingmode, reorientmenu, resolveQuestion */
 
 var idleQuestion = {},
     battleQuestion = {},
@@ -119,7 +119,7 @@ function ygoproController(message) {
         case ('STOC_DUEL_START'):
             singlesitenav('duelscreen');
             break;
-        case ('MSG_WAITING' || 'STOC_TIME_LIMIT'):
+        case ('MSG_WAITING' || 'STOC_TIME_LIMIT' || 'STOC_WAITING_SIDE'):
             $('#ygowaiting').css('display', 'block').text('Waiting,...');
             break;
         case ('STOC_SELECT_TP'):
@@ -143,6 +143,12 @@ function ygoproController(message) {
             break;
         case ('MSG_FLIPSUMMONING'):
             summonFlash(message.id);
+            break;
+        case ('MSG_SHUFFLE_DECK'):
+            doGuiShuffle(orient(message.player), 'DECK');
+            break;
+        case ('MSG_SHUFFLE_HAND'):
+            doGuiShuffle(orient(message.player), 'DECK');
             break;
         default:
             break;

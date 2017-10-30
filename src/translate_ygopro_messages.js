@@ -414,13 +414,17 @@ function recieveSTOC(gameBoard, packet) {
                     break;
 
                 case ('MSG_ATTACK'):
-                    message.ca = BufferIO.readInt8();
-                    message.la = BufferIO.readInt8();
-                    message.sa = BufferIO.readInt8();
+                    message.attacker = {
+                        player: BufferIO.readInt8(),
+                        location: enums.positions[BufferIO.readInt8()],
+                        index: BufferIO.readInt8()
+                    }
                     BufferIO.readInt8();
-                    message.cd = BufferIO.readInt8();
-                    message.ld = BufferIO.readInt8();
-                    message.sd = BufferIO.readInt8();
+                    message.defender = {
+                        player: BufferIO.readInt8(),
+                        location: enums.positions[BufferIO.readInt8()],
+                        index: BufferIO.readInt8()
+                    }
                     BufferIO.readInt8();
                     break;
                 case ('MSG_BATTLE'):

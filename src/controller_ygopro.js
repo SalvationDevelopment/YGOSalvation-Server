@@ -99,7 +99,7 @@ function boardController(gameBoard, slot, message, ygopro) {
         case ('MSG_DRAW'): // Good
             gameBoard.drawCard(message.player, message.count, message.cards);
             break;
-        case ('MSG_SHUFFLE_DECK'):
+        case ('MSG_SHUFFLE_DECK'): // Good
             break;
         case ('MSG_SHUFFLE_HAND'):
             break;
@@ -176,9 +176,9 @@ function boardController(gameBoard, slot, message, ygopro) {
             break;
         case ('MSG_ATTACK_DISABLED'):
             break;
-        case ('MSG_DAMAGE_STEP_START'):
+        case ('MSG_DAMAGE_STEP_START'): // Good
             break;
-        case ('MSG_DAMAGE_STEP_END'):
+        case ('MSG_DAMAGE_STEP_END'): // Good
             break;
         case ('MSG_MISSED_EFFECT'):
             break;
@@ -296,6 +296,7 @@ function boardController(gameBoard, slot, message, ygopro) {
 
             break;
         case ('MSG_SELECT_CHAIN'):
+            askUser(gameBoard, slot, message, ygopro);
             break;
         case ('MSG_SELECT_PLACE'):
             askUser(gameBoard, slot, message, ygopro);
@@ -377,15 +378,15 @@ function boardController(gameBoard, slot, message, ygopro) {
             break;
         case ('MSG_DECK_TOP'):
             break;
-        case ('STOC_ERROR_MSG'):
+        case ('STOC_ERROR_MSG'): // Good (salvation takes care of)
             break;
-        case ('ERRMSG_JOINERROR'):
+        case ('ERRMSG_JOINERROR'): // Good (salvation takes care of)
             break;
-        case ('ERRMSG_DECKERROR'):
+        case ('ERRMSG_DECKERROR'): // Good (salvation takes care of)
             break;
         case ('ERRMSG_SIDEERROR'):
             break;
-        case ('ERRMSG_VERERROR'):
+        case ('ERRMSG_VERERROR'): // Good (salvation takes care of)
             break;
         case ('STOC_SELECT_HAND'): // Good
             gameBoard.question(slot, 'specialCards', [{
@@ -413,7 +414,7 @@ function boardController(gameBoard, slot, message, ygopro) {
             break;
         case ('STOC_CHANGE_SIDE'):
             break;
-        case ('STOC_WAITING_SIDE'):
+        case ('STOC_WAITING_SIDE'): // Good
             break;
         case ('STOC_CREATE_GAME'): // Good
             break;
@@ -440,7 +441,7 @@ function boardController(gameBoard, slot, message, ygopro) {
             break;
         case ('STOC_HS_PLAYER_CHANGE'): // Good
             break;
-        case ('STOC_HS_WATCH_CHANGE'):
+        case ('STOC_HS_WATCH_CHANGE'): // Good
             break;
         default:
             console.log('FAILURE!', message);
