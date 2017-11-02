@@ -48,7 +48,8 @@ function setIdle(input) {
         msetable_cards: [],
         ssetable_cards: [],
         activatable_cards: [],
-        select_options: []
+        select_options: [],
+        attackable_cards: []
     };
     Object.assign(idleQuestion, input);
 }
@@ -72,8 +73,7 @@ function ygoproQuestion(message) {
             selectStartingPlayer();
             break;
         case 'MSG_SELECT_IDLECMD':
-            idleQuestion = message.options;
-            idleQuestion.attackable_cards = [];
+            setIdle(message.options);
             if (idleQuestion.enableBattlePhase) {
                 $('#battlephi').addClass('option');
             }
@@ -88,20 +88,13 @@ function ygoproQuestion(message) {
 
             break;
         case 'MSG_SELECT_BATTLECMD':
-            idleQuestion = message.options;
-            idleQuestion.battle = true;
+            setIdle(message.options);
             if (idleQuestion.enableMainPhase2) {
                 $('#main2phi').addClass('option');
             }
             if (idleQuestion.enableEndPhase) {
                 $('#endphi').addClass('option');
             }
-            idleQuestion.summonable_cards = [];
-            idleQuestion.spsummonable_cards = [];
-            idleQuestion.repositionable_cards = [];
-            idleQuestion.msetable_cards = [];
-            idleQuestion.ssetable_cards = [];
-            idleQuestion.select_options = [];
             break;
         case 'MSG_SELECT_TRIBUTE':
             zonetargetingmode = 'ygo';
@@ -137,7 +130,7 @@ function summonFlash(id) {
     $('#effectflasher .mainimage').attr('src', 'https://raw.githubusercontent.com/shadowfox87/YGOSeries10CardPics/master/' + id + '.png');
     setTimeout(function() {
         $('#effectflasher').css('display', 'none');
-    }, 800);
+    }, 500);
 }
 
 function ygoproController(message) {
@@ -174,6 +167,8 @@ function ygoproController(message) {
         case ('MSG_FLIPSUMMONING'):
             summonFlash(message.id);
             break;
+        case ('MSG_CHAINING'):
+            summonFlash(message.id);
         case ('MSG_SHUFFLE_DECK'):
             doGuiShuffle(orient(message.player), 'DECK');
             break;
@@ -254,8 +249,7 @@ function ygoproReviewOptions() {
     });
     idleQuestion.activatable_cards.forEach(function(card, slot) {
         if (cardEquvilanceCheck(manualActionReference, card)) {
-            var message = ((slot << 16) + 5);
-            $('.ygo-activate').attr('data-slot', message).css({
+            $('.ygo-activate').attr('data-slot', ((slot << 16) + (5))).css({
                 'display': 'block'
             });
         }

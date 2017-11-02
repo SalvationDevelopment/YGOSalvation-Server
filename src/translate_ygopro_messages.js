@@ -86,8 +86,8 @@ function getSelectableZones(mask) {
         if (mask & filter) {
             zones.push({
                 player: 0,
-                zone: 'SPELLZONE',
-                slot: i,
+                location: 'SPELLZONE',
+                index: i,
                 status: !(mask & filter)
             });
         }
@@ -97,8 +97,8 @@ function getSelectableZones(mask) {
         if (mask & filter) {
             zones.push({
                 player: 1,
-                zone: 'MONSTERZONE',
-                slot: i,
+                location: 'MONSTERZONE',
+                index: i,
                 status: !(mask & filter)
             });
         }
@@ -108,8 +108,8 @@ function getSelectableZones(mask) {
         if (mask & filter) {
             zones.push({
                 player: 1,
-                zone: 'SPELLZONE',
-                slot: i,
+                location: 'SPELLZONE',
+                index: i,
                 status: !(mask & filter)
             });
         }

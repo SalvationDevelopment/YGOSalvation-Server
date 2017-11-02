@@ -39,7 +39,7 @@ function askUser(gameBoard, slot, message, ygopro) {
  * @returns {Number} Index of the card in the given options.
  */
 function resolveCardIndex(list, card) {
-    var number = activeQuestion.answer.findIndex(function(option) {
+    var number = list.findIndex(function(option) {
         var index = (option.player === card[0]),
             location = (option.location === enums.locations[card[1]]),
             sequence = (option.index === card[2]);
@@ -194,7 +194,7 @@ function boardController(gameBoard, slot, message, ygopro) {
             break;
         case ('MSG_TOSS_COIN'):
             break;
-        case ('MSG_SELECT_IDLECMD'):
+        case ('MSG_SELECT_IDLECMD'): // Good
             askUser(gameBoard, slot, message, ygopro);
             break;
         case ('MSG_MOVE'): // Good
