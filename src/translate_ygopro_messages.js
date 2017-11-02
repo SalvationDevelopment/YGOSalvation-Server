@@ -259,13 +259,17 @@ function recieveSTOC(gameBoard, packet) {
 
                 case ('MSG_CHAINING'):
                     message.id = BufferIO.readInt32();
-                    message.pcc = BufferIO.readInt8();
-                    message.pcl = BufferIO.readInt8();
-                    message.pcs = BufferIO.readInt8();
+                    message.pc = {
+                        player: BufferIO.readInt8(),
+                        location: enums.locations[BufferIO.readInt8()],
+                        index: BufferIO.readInt8()
+                    };
                     message.subs = BufferIO.readInt8();
-                    message.cc = BufferIO.readInt8();
-                    message.cl = BufferIO.readInt8();
-                    message.cs = BufferIO.readInt8();
+                    message.c = {
+                        player: BufferIO.readInt8(),
+                        location: enums.locations[BufferIO.readInt8()],
+                        index: BufferIO.readInt8()
+                    };
                     message.desc = BufferIO.readInt32();
                     message.ct = BufferIO.readInt8(); // defunct in code
                     break;
@@ -670,7 +674,7 @@ function recieveSTOC(gameBoard, packet) {
                     message.select_options = [];
                     for (i = 0; i < message.count; ++i) {
                         message.select_options.push({
-                            code: BufferIO.readInt32(),
+                            id: BufferIO.readInt32(),
                             player: BufferIO.readInt8(),
                             location: enums.locations[BufferIO.readInt8()],
                             index: BufferIO.readInt8(),
@@ -689,10 +693,10 @@ function recieveSTOC(gameBoard, packet) {
                     for (i = 0; i < message.count; ++i) {
                         message.select_options.push({
                             flag: BufferIO.readInt8(),
-                            code: BufferIO.readInt32(),
-                            c: BufferIO.readInt8(),
-                            l: BufferIO.readInt8(),
-                            s: BufferIO.readInt8(),
+                            id: BufferIO.readInt32(),
+                            player: BufferIO.readInt8(),
+                            location: enums.locations[BufferIO.readInt8()],
+                            index: BufferIO.readInt8(),
                             ss: BufferIO.readInt8(),
                             desc: BufferIO.readInt32()
                         });
@@ -736,7 +740,7 @@ function recieveSTOC(gameBoard, packet) {
                     message.selectable_targets = [];
                     for (i = 0; i < count; ++i) {
                         message.selectable_targets.push({
-                            code: BufferIO.readInt32(),
+                            id: BufferIO.readInt32(),
                             player: BufferIO.readInt8(),
                             location: enums.locations[BufferIO.readInt8()],
                             index: BufferIO.readInt8(),
@@ -751,10 +755,10 @@ function recieveSTOC(gameBoard, packet) {
                     message.selectable_targets = [];
                     for (i = 0; i < message.count; ++i) {
                         message.selectable_targets.push({
-                            code: BufferIO.readInt32(),
-                            c: BufferIO.readInt8(),
-                            l: BufferIO.readInt8(),
-                            s: BufferIO.readInt8()
+                            id: BufferIO.readInt32(),
+                            player: BufferIO.readInt8(),
+                            location: enums.locations[BufferIO.readInt8()],
+                            index: BufferIO.readInt8()
                         });
                     }
                     break;
@@ -776,10 +780,10 @@ function recieveSTOC(gameBoard, packet) {
                     message.selectable_targets = [];
                     for (i = 0; i < message.count; ++i) {
                         message.selectable_targets.push({
-                            code: BufferIO.readInt32(),
-                            c: BufferIO.readInt8(),
-                            l: BufferIO.readInt8(),
-                            s: BufferIO.readInt8()
+                            id: BufferIO.readInt32(),
+                            player: BufferIO.readInt8(),
+                            location: enums.locations[BufferIO.readInt8()],
+                            index: BufferIO.readInt8()
                         });
                     }
                     break;

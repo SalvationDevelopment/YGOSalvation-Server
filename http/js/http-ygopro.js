@@ -105,19 +105,17 @@ function ygoproQuestion(message) {
         case 'MSG_SELECT_PLACE':
             zonetargetingmode = 'ygo';
             message.options.zones.forEach(function(zone) {
-                $('.cardselectionzone.p' + orient(zone.player) + '.' + zone.location + '.i' + zone.index).addClass('attackglow card');
+                $('.cardselectionzone.p' + zone.player + '.' + zone.location + '.i' + zone.index).addClass('attackglow card');
             });
             break;
         case 'MSG_SELECT_CARD':
             if (message.options.select_options.some(function(card) {
                     return !(card.location === 'MONSTERZONE' || card.location === 'SPELLZONE' || card.location === 'HAND');
                 })) {
-                // do panel mode;
+                setIdle(message.options);
+                reveal(message.options.select_options, 'ygo');
             } else {
-                zonetargetingmode = 'ygo';
-                message.options.select_options.forEach(function(card) {
-                    $('.cardselectionzone.p' + orient(card.player) + '.' + card.location + '.i' + card.index).addClass('attackglow card');
-                });
+                setIdle(message.options);
             }
             break;
         default:
