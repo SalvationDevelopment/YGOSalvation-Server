@@ -71,10 +71,10 @@ function makeCTOS(command, message) {
             proto = new Buffer(2),
             r;
         r = new Buffer(4);
-        r.writeUInt32LE((suggestedDeck.main.length + suggestedDeck.side.length));
+        r.writeUInt32LE((suggestedDeck.main.length + suggestedDeck.extra.length));
         deck = Buffer.concat([deck, r]);
         r = new Buffer(4);
-        r.writeUInt32LE(suggestedDeck.extra.length);
+        r.writeUInt32LE(suggestedDeck.side.length);
         deck = Buffer.concat([deck, r]);
         suggestedDeck.main.forEach(function(item) {
             r = new Buffer(4);
