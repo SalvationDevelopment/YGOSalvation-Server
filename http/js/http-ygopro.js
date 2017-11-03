@@ -133,7 +133,7 @@ function ygoproQuestion(message) {
 
 function summonFlash(id) {
     $('#effectflasher').css('display', 'block');
-    $('#effectflasher .mainimage').attr('src', 'https://raw.githubusercontent.com/shadowfox87/YGOSeries10CardPics/master/' + id + '.png');
+    $('#effectflasher .mainimage').attr('src', 'https://raw.githubusercontent.com/shadowfox87/YGOSeries10CardPics/master/pics/' + id + '.png');
     setTimeout(function() {
         $('#effectflasher').css('display', 'none');
     }, 500);
