@@ -473,7 +473,7 @@ function stateUpdate(dataBinding) {
         player = dataBinding.player;
     }
     fieldings = 'card p' + player + ' ' + ref.location + ' i' + ref.index;
-    if (ref.counters > 0) {
+    if (ref.counters > 0 && ref.location !== 'HAND') {
         $('.cardselectionzone.p' + player + '.' + ref.location + '.i' + ref.index).attr('data-counters', ref.counters + ' Counters').attr('style', 'z-index:' + (ref.index + 1));
     } else {
         $('.cardselectionzone.p' + player + '.' + ref.location + '.i' + ref.index).removeAttr('data-counters').attr('style', 'z-index:' + ref.index + ';');
@@ -494,7 +494,9 @@ function stateUpdate(dataBinding) {
                 'src': 'img/textures/cover.jpg'
             });
         }
-        element.attr('style', 'z-index:' + (ref.index));
+        if (ref.position !== 'HAND') {
+            element.attr('style', 'z-index:' + (ref.index));
+        }
         element.attr('data-index', ref.index);
         if (ref.location === 'MONSTERZONE' && ref.overlayindex) {
             offsetX = (ref.overlayindex % 2) ? (-1) * (ref.overlayindex + 1) * 3 : ref.overlayindex + (-1) * 3;
@@ -538,11 +540,17 @@ function exclusionList(player, location, classValue) {
 
 function linkStack(field) {
     'use strict';
-    console.log('field:', field);
     scaleScreenFactor();
+    var runCount = 0,
+        p1 = 0,
+        p0 = 0;
 
 
     function linkgui(zone) {
+        if (!zone.length) {
+            return;
+        }
+        runCount += 1;
         zone.forEach(function(card) {
             var idIndex = manualDuel.uidLookup(card.uid) || card.uid,
                 unit = manualDuel.stack[idIndex] || {};
@@ -557,29 +565,44 @@ function linkStack(field) {
 
     Object.keys(field[0]).forEach(function(zone) {
         linkgui(field[0][zone]);
+        if (zone.length) {
+            p0 += 1;
+        }
     });
     Object.keys(field[1]).forEach(function(zone) {
         linkgui(field[1][zone]);
+        if (zone.length) {
+            p1 += 1;
+        }
     });
+    console.log(runCount);
+    if (runCount) {
+        if (p0) {
+            setTimeout(layouthand, 300, 0);
+        }
+        if (p1) {
+            setTimeout(layouthand, 300, 1);
+        }
+        manualDuel.stack.forEach(stateUpdate);
+        var p0deck = $('#automationduelfield .p0.DECK').length,
+            p1deck = $('#automationduelfield .p1.DECK').length,
+            p0extra = $('#automationduelfield .p0.EXTRA').length,
+            p1extra = $('#automationduelfield .p1.EXTRA').length,
+            p0removed = $('#automationduelfield .p0.REMOVED').length,
+            p1removed = $('#automationduelfield .p1.REMOVED').length,
+            p0grave = $('#automationduelfield .p0.GRAVE').length,
+            p1grave = $('#automationduelfield .p1.GRAVE').length;
 
-    manualDuel.stack.forEach(stateUpdate);
-    var p0deck = $('#automationduelfield .p0.DECK').length,
-        p1deck = $('#automationduelfield .p1.DECK').length,
-        p0extra = $('#automationduelfield .p0.EXTRA').length,
-        p1extra = $('#automationduelfield .p1.EXTRA').length,
-        p0removed = $('#automationduelfield .p0.REMOVED').length,
-        p1removed = $('#automationduelfield .p1.REMOVED').length,
-        p0grave = $('#automationduelfield .p0.GRAVE').length,
-        p1grave = $('#automationduelfield .p1.GRAVE').length;
+        $('.cardselectionzone.p0.DECK').attr('data-content', p0deck);
+        $('.cardselectionzone.p1.DECK').attr('data-content', p1deck);
+        $('.cardselectionzone.p0.EXTRA').attr('data-content', p0extra);
+        $('.cardselectionzone.p1.EXTRA').attr('data-content', p1extra);
+        $('.cardselectionzone.p0.REMOVED').attr('data-content', p0removed);
+        $('.cardselectionzone.p1.REMOVED').attr('data-content', p1removed);
+        $('.cardselectionzone.p0.GRAVE').attr('data-content', p0grave);
+        $('.cardselectionzone.p1.GRAVE').attr('data-content', p1grave);
 
-    $('.cardselectionzone.p0.DECK').attr('data-content', p0deck);
-    $('.cardselectionzone.p1.DECK').attr('data-content', p1deck);
-    $('.cardselectionzone.p0.EXTRA').attr('data-content', p0extra);
-    $('.cardselectionzone.p1.EXTRA').attr('data-content', p1extra);
-    $('.cardselectionzone.p0.REMOVED').attr('data-content', p0removed);
-    $('.cardselectionzone.p1.REMOVED').attr('data-content', p1removed);
-    $('.cardselectionzone.p0.GRAVE').attr('data-content', p0grave);
-    $('.cardselectionzone.p1.GRAVE').attr('data-content', p1grave);
+    }
     setFieldSpellBG();
 }
 
@@ -1314,8 +1337,6 @@ function manualReciver(message) {
                 cardmargin(1, 'GRAVE');
                 cardmargin(1, 'EXTRA');
                 cardmargin(1, 'DECK');
-                layouthand(0);
-                layouthand(1);
                 $('.attackglow').removeClass('attackglow');
             }, 300);
             updateChat(message.info.duelistChat);

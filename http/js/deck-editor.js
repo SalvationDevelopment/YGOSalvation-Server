@@ -7,7 +7,7 @@ function cardLoadError() {
         $(this).attr('src', '/img/textures/unknown.jpg');
     }
     if ($(this).attr('reloaded') === 'attempted') {
-        $(this).attr('src', getCardObject(parseInt(id, 10)).picture);
+        $(this).attr('src', getCardObject(parseInt(id, 10)).picture.split('?')[0]);
         $(this).attr('reloaded', 'failed');
     } else {
         $(this).attr('reloaded', 'attempted');
@@ -120,7 +120,7 @@ function cardStackSort(a, b) {
 
 function uniqArrayOfStrings(a) {
     'use strict';
-    return a.sort().filter(function (item, pos, ary) {
+    return a.sort().filter(function(item, pos, ary) {
         return !pos || item !== ary[pos - 1];
     });
 }
@@ -140,7 +140,7 @@ function docardStackSort(db) {
 
 
 
-var databaseSystem = (function () {
+var databaseSystem = (function() {
     'use strict';
     var database = [],
         activeBanlist = '',
@@ -167,11 +167,11 @@ var databaseSystem = (function () {
             result = [],
             filteredCards = [],
             region = banlist[activeBanlist].region;
-        list.forEach(function (card) {
+        list.forEach(function(card) {
             map[card.id] = card;
         });
 
-        Object.keys(map).forEach(function (id) {
+        Object.keys(map).forEach(function(id) {
             if (banlist[activeBanlist].bannedCards[id] !== undefined) {
                 map[id].limit = parseInt(banlist[activeBanlist].bannedCards[id], 10);
             } else {
@@ -180,7 +180,7 @@ var databaseSystem = (function () {
             result.push(map[id]);
         });
 
-        filteredCards = result.filter(function (card) {
+        filteredCards = result.filter(function(card) {
             if (region && banlist[activeBanlist].endDate) {
                 if (card[region]) {
                     if (card[region].date) {
@@ -213,17 +213,17 @@ var databaseSystem = (function () {
      */
     function setDatabase(set) {
         var tokens = [],
-            dbsets = set.map(function (dbname) {
+            dbsets = set.map(function(dbname) {
                 if (dbs[dbname]) {
                     return dbs[dbname];
                 } else {
                     return [];
                 }
             }),
-            listOfCards = dbsets.reduce(function (a, b) {
+            listOfCards = dbsets.reduce(function(a, b) {
                 return a.concat(b);
             }, []),
-            ocgpacks = listOfCards.map(function (card) {
+            ocgpacks = listOfCards.map(function(card) {
                 if (card.ocg) {
                     if (card.ocg.pack_id) {
                         var code = card.ocg.pack_id.split('-');
@@ -233,7 +233,7 @@ var databaseSystem = (function () {
                 }
                 return '';
             }),
-            tcgpacks = listOfCards.map(function (card) {
+            tcgpacks = listOfCards.map(function(card) {
                 if (card.tcg) {
                     if (card.tcg.pack_id) {
                         var code = card.tcg.pack_id.split('-');
@@ -243,7 +243,7 @@ var databaseSystem = (function () {
                 }
                 return '';
             }),
-            packs = uniqArrayOfStrings([].concat(tcgpacks, ocgpacks)).filter(function (pack) {
+            packs = uniqArrayOfStrings([].concat(tcgpacks, ocgpacks)).filter(function(pack) {
                 return (pack && pack.length <= 5);
             }),
             tokenbox = $('#tokendropdown'),
@@ -252,19 +252,19 @@ var databaseSystem = (function () {
         activedbs = set;
         database = filterCards(listOfCards);
 
-        tokens = database.filter(function (card) {
+        tokens = database.filter(function(card) {
             return (card.type === 16401 || card.type === 16417) && (card.name !== "DO NOT USE");
         });
-        tokens.sort(function (current, next) {
+        tokens.sort(function(current, next) {
             return current.name > next.name;
         });
         $('#tokendropdown').html('');
-        tokens.forEach(function (card) {
+        tokens.forEach(function(card) {
             var defaulttext = (card.id === 73915052) ? ' selected ' : ''; // sheep token
             tokenbox.append('<option ' + defaulttext + 'value="' + card.id + '">' + card.name + '</option>');
         });
 
-        packs.forEach(function (set) {
+        packs.forEach(function(set) {
             packsbox.append('<option value="' + set + '">' + set + '</option>');
         });
 
@@ -281,22 +281,22 @@ var databaseSystem = (function () {
 
 
 
-    $.getJSON('/manifest/manifest_3-Goats.json', function (data) {
+    $.getJSON('/manifest/manifest_3-Goats.json', function(data) {
 
         dbs.Goats = data;
     });
     //    $.getJSON('/manifest/manifest_Z-CWA.json', function (data) {
     //        dbs.CWA = data;
     //    });
-    $.getJSON('/manifest/banlist.json', function (data) {
+    $.getJSON('/manifest/banlist.json', function(data) {
         banlist = data;
         $('.banlistSelect').html('');
-        Object.keys(banlist).forEach(function (list) {
+        Object.keys(banlist).forEach(function(list) {
             var selected = (banlist[list].primary) ? 'selected' : '';
             $('.banlistSelect, #creategamebanlist').append('<option ' + selected + ' value="' + list + '">' + list + '</option>');
         });
         activeBanlist = $('.banlistSelect option:selected').val();
-        $.getJSON('/manifest/manifest_0-en-OCGTCG.json', function (data) {
+        $.getJSON('/manifest/manifest_0-en-OCGTCG.json', function(data) {
             dbs.OCGTCG = data;
             completedatabase = dbs.OCGTCG;
 
@@ -309,14 +309,14 @@ var databaseSystem = (function () {
         });
     });
 
-    $.getJSON('./setcodes.json', 'utf-8', function (data) {
+    $.getJSON('./setcodes.json', 'utf-8', function(data) {
         var raw = data,
-            setcodes = Object.keys(raw).map(function (arch) {
+            setcodes = Object.keys(raw).map(function(arch) {
                 return {
                     num: arch,
                     name: raw[arch]
                 };
-            }).sort(function (a, b) {
+            }).sort(function(a, b) {
                 return (a.name.localeCompare(b.name, undefined, {
                     numeric: true,
                     sensitivity: 'base'
@@ -324,7 +324,7 @@ var databaseSystem = (function () {
             }),
             strings = '<option value="0" data-calc="0">Archetype</option>';
 
-        setcodes.forEach(function (setcode) {
+        setcodes.forEach(function(setcode) {
             strings = strings + '<option data-calc="' + setcode.num.slice(2) + '" value="' + parseInt(setcode.num, 16) + '">' + setcode.name + '</option>';
         });
 
@@ -336,7 +336,7 @@ var databaseSystem = (function () {
         var result = {},
             dbuse = dbs.OCGTCG;
 
-        dbuse.some(function (card, index) {
+        dbuse.some(function(card, index) {
             if (id === card.id) {
                 result = card;
                 result.date = new Date(result.date).getTime();
@@ -361,7 +361,7 @@ var databaseSystem = (function () {
 
 var deckEditorReference = {};
 
-var currentSearchFilter = (function () {
+var currentSearchFilter = (function() {
     'use strict';
 
     /**
@@ -517,7 +517,7 @@ var currentSearchFilter = (function () {
     function filterName(cardsf, txt) {
         if (txt !== undefined) {
 
-            var output = cardsf.filter(function (item) {
+            var output = cardsf.filter(function(item) {
                 return fNameDesc(item, txt, 1);
             });
             return output;
@@ -540,7 +540,7 @@ var currentSearchFilter = (function () {
             }
             return '';
         }
-        return cardsf.filter(function (card) {
+        return cardsf.filter(function(card) {
             return (check(card, 'ocg') === set || check(card, 'tcg') === set);
         });
 
@@ -549,7 +549,7 @@ var currentSearchFilter = (function () {
     function filterDesc(cardsf, txt) {
         if (txt !== undefined) {
 
-            var output = cardsf.filter(function (item) {
+            var output = cardsf.filter(function(item) {
                 return fNameDesc(item, txt, 0);
             });
             return output;
@@ -561,7 +561,7 @@ var currentSearchFilter = (function () {
     function filterType(cardsf, type) {
         if (type !== undefined) {
 
-            var output = cardsf.filter(function (item) {
+            var output = cardsf.filter(function(item) {
                 return fType(item, type);
             });
             return output;
@@ -573,7 +573,7 @@ var currentSearchFilter = (function () {
     function filterAttribute(cardsf, attribute) {
         if (attribute !== undefined) {
 
-            var output = cardsf.filter(function (item) {
+            var output = cardsf.filter(function(item) {
                 return fAttrRace(item, attribute, 1);
             });
             return output;
@@ -585,7 +585,7 @@ var currentSearchFilter = (function () {
     function filterRace(cardsf, race) {
         if (race !== undefined) {
 
-            var output = cardsf.filter(function (item) {
+            var output = cardsf.filter(function(item) {
                 return fAttrRace(item, race, 0);
             });
             return output;
@@ -608,7 +608,7 @@ var currentSearchFilter = (function () {
     //All cards that share at least 1 setcode with the arg.
     function filteSetcode(cardsf, setcode) {
         if (setcode !== undefined) {
-            var output = cardsf.filter(function (item) {
+            var output = cardsf.filter(function(item) {
                 return fSetcode(item, setcode);
             });
             return output;
@@ -623,7 +623,7 @@ var currentSearchFilter = (function () {
     function filterAtk(cardsf, atk, op) {
         if (atk !== undefined) {
 
-            var output = cardsf.filter(function (item) {
+            var output = cardsf.filter(function(item) {
                 return fAtkDef(item, atk, 1, op);
             });
             return output;
@@ -637,7 +637,7 @@ var currentSearchFilter = (function () {
     function filterDef(cardsf, def, op) {
         if (def !== undefined) {
 
-            var output = cardsf.filter(function (item) {
+            var output = cardsf.filter(function(item) {
                 return fAtkDef(item, def, 0, op);
             });
             return output;
@@ -647,7 +647,7 @@ var currentSearchFilter = (function () {
     //Just Level.. Zzz as Atk/Def
     function filterLevel(cardsf, level, op) {
         if (level !== undefined) {
-            var output = cardsf.filter(function (item) {
+            var output = cardsf.filter(function(item) {
                 return fLevel(item, level, op);
             });
             return output;
@@ -657,7 +657,7 @@ var currentSearchFilter = (function () {
 
     function filterSetcode(result, setcode) {
         if (setcode) {
-            return result.filter(function (item) {
+            return result.filter(function(item) {
                 return fSetcode(item, setcode);
             });
         } else {
@@ -668,7 +668,7 @@ var currentSearchFilter = (function () {
 
     function filterLimit(result, limit) {
         if (limit !== undefined) {
-            return result.filter(function (item) {
+            return result.filter(function(item) {
                 return item.limit === limit;
             });
         } else {
@@ -678,7 +678,7 @@ var currentSearchFilter = (function () {
 
     function filterScale(result, scale, op) {
         if (scale !== undefined) {
-            return result.filter(function (item) {
+            return result.filter(function(item) {
                 return fScale(item, scale, op);
             });
         } else {
@@ -688,7 +688,7 @@ var currentSearchFilter = (function () {
 
     function filterExactType(result, type) {
         if (type !== undefined) {
-            return result.filter(function (item) {
+            return result.filter(function(item) {
                 return item.type === type;
             });
         } else {
@@ -697,7 +697,7 @@ var currentSearchFilter = (function () {
     }
 
     function filterToken(result) {
-        return result.filter(function (item) {
+        return result.filter(function(item) {
             //item is not a token
             return item.type !== 16401;
         });
@@ -790,7 +790,7 @@ var currentSearchFilter = (function () {
     };
 }());
 
-var deckEditor = (function () {
+var deckEditor = (function() {
     'use strict';
     var inmemoryDeck = {},
         usersDecks = [],
@@ -833,7 +833,7 @@ var deckEditor = (function () {
 
     function updateDeckSelect() {
         var text = '';
-        usersDecks.forEach(function (deck, index) {
+        usersDecks.forEach(function(deck, index) {
             text += '<option data-index=' + index + '>' + deck.name + '</option>';
         });
         return text;
@@ -841,12 +841,12 @@ var deckEditor = (function () {
 
     function makeCard(cards, zone) {
         var html = '';
-        cards.forEach(function (card, index) {
+        cards.forEach(function(card, index) {
             var hardcard = JSON.stringify(card),
                 src = card.id + '.png';
             html += '<div class="searchwrapper" data-card-limit="' + card.limit + '">';
             html += '<img class="deckeditcard card" id="deceditcard' + index + zone + '" data-dropindex="' + index + '" data-dropzone="' + zone + '"  data-id = "' + card.id + '"';
-            html += 'src="https://raw.githubusercontent.com/shadowfox87/YGOSeries10CardPics/master/' + src + '" data-id="' + card.id + '" ondragstart="createCardReference(\'' + zone + '\', ' + index + ');" onclick = "deckeditonclick(' + index + ', \'' + zone + '\')" / >';
+            html += 'src="' + card.picture.split('?')[0] + '" data-id="' + card.id + '" ondragstart="createCardReference(\'' + zone + '\', ' + index + ');" onclick = "deckeditonclick(' + index + ', \'' + zone + '\')" / >';
             html += '</div>';
         });
 
@@ -857,7 +857,7 @@ var deckEditor = (function () {
     }
 
     function pullcard(id, data) {
-        return data.filter(function (card, index) {
+        return data.filter(function(card, index) {
             if (id === card.id) {
                 return true;
             } else {
@@ -885,7 +885,7 @@ var deckEditor = (function () {
 
 
     function typingLength(category, deck) {
-        return inmemoryDeck[deck].filter(function (card, index, array) {
+        return inmemoryDeck[deck].filter(function(card, index, array) {
             return cardIs(category, card);
         }).length;
     }
@@ -924,7 +924,7 @@ var deckEditor = (function () {
         $('#deckedit .cardspace .extra').attr('floatmarker', floatMarkerExtra);
         $('#deckedit .cardspace .side').attr('floatmarker', floatMarkerSide);
 
-        deck.main.forEach(function (card) {
+        deck.main.forEach(function(card) {
             if (sorter.main[card.id] === undefined) {
                 sorter.main[card.id] = {
                     unit: 1,
@@ -936,7 +936,7 @@ var deckEditor = (function () {
                 sorter.main[card.id].unit++;
             }
         });
-        deck.extra.forEach(function (card) {
+        deck.extra.forEach(function(card) {
             if (sorter.extra[card.id] === undefined) {
                 sorter.extra[card.id] = {
                     unit: 1,
@@ -948,7 +948,7 @@ var deckEditor = (function () {
                 sorter.extra[card.id].unit++;
             }
         });
-        deck.side.forEach(function (card) {
+        deck.side.forEach(function(card) {
             if (sorter.side[card.id] === undefined) {
                 sorter.side[card.id] = {
                     unit: 1,
@@ -962,26 +962,26 @@ var deckEditor = (function () {
         });
         $('#decktextoutput').html('Main Deck ' + deck.main.length + 'x<br/>');
         $('.infoclassmain').html('Main Deck Total: ' + deck.main.length + ' | Monsters: ' + mainMonsters + ' | Spells: ' + mainSpells + ' | Traps: ' + mainTraps);
-        Object.keys(sorter.main).sort(function (a, b) {
+        Object.keys(sorter.main).sort(function(a, b) {
             return cardStackSort(sorter.main[a].card, sorter.main[b].card);
-        }).forEach(function (id) {
+        }).forEach(function(id) {
             $('#decktextoutput').append(sorter.main[id].unit + 'x ' + sorter.main[id].card.name + '<br />');
 
         });
 
         $('#decktextoutput').append('<br />Extra Deck ' + deck.extra.length + 'x<br/>');
         $('.infoclassextra').html('Extra Deck Total: ' + deck.extra.length + ' | Fusions: ' + extraFusions + ' | Synchros: ' + extraSynchros + ' | XYZs: ' + extraXYZ + ' | Links: ' + extraLink);
-        Object.keys(sorter.extra).sort(function (a, b) {
+        Object.keys(sorter.extra).sort(function(a, b) {
             return cardStackSort(sorter.extra[a].card, sorter.extra[b].card);
-        }).forEach(function (id) {
+        }).forEach(function(id) {
             $('#decktextoutput').append(sorter.extra[id].unit + 'x ' + sorter.extra[id].card.name + '<br />');
         });
 
         $('#decktextoutput').append('<br/ >Side Deck ' + deck.side.length + 'x<br/>');
         $('.infoclassside').html('Side Deck Total: ' + deck.side.length + ' | Monsters: ' + sideMonsters + ' | Spells: ' + sideSpells + ' | Traps: ' + sideTraps + ' | Fusions: ' + sideFusions + ' | Synchros: ' + sideSynchros + ' | XYZs: ' + sideXYZ + ' | Links: ' + sideLink);
-        Object.keys(sorter.side).sort(function (a, b) {
+        Object.keys(sorter.side).sort(function(a, b) {
             return cardStackSort(sorter.side[a].card, sorter.side[b].card);
-        }).forEach(function (id) {
+        }).forEach(function(id) {
             $('#decktextoutput').append(sorter.side[id].unit + 'x ' + sorter.side[id].card.name + '<br />');
         });
 
@@ -1009,10 +1009,10 @@ var deckEditor = (function () {
 
     function renderFriendsList() {
         var userlist = '';
-        friends = friends.sort(function (a, b) {
+        friends = friends.sort(function(a, b) {
             return a.toLowerCase().localeCompare(b.toLowerCase());
         });
-        friends.forEach(function (name) {
+        friends.forEach(function(name) {
             var jsco = "userlistonclick('" + name + "');",
                 isOnline = (storedUserlist.indexOf(name) > -1) ? 'data-online' : '';
             userlist = userlist + '<li ' + isOnline + ' onclick="' + jsco + '">' + name.trim() + '</li>';
@@ -1027,7 +1027,7 @@ var deckEditor = (function () {
     }
 
     function condenseDecks(decks) {
-        return decks.map(function (deck) {
+        return decks.map(function(deck) {
             return {
                 main: deck.main.map(condenseDeck),
                 extra: deck.extra.map(condenseDeck),
@@ -1041,7 +1041,7 @@ var deckEditor = (function () {
 
     function addFriend() {
         friends.push(personOfIntrest);
-        friends = friends.filter(function (item, pos, self) {
+        friends = friends.filter(function(item, pos, self) {
             return self.indexOf(item) === pos;
         });
         primus.write({
@@ -1154,7 +1154,7 @@ var deckEditor = (function () {
 
     function reset() {
         $('#deckedit .searchRight input').val('');
-        $('#deckedit .searchRight select').each(function () {
+        $('#deckedit .searchRight select').each(function() {
             var dropdown = $(this);
             dropdown.val(dropdown.find('option').first().val());
         });
@@ -1208,7 +1208,7 @@ var deckEditor = (function () {
         if (!decks) {
             return false;
         }
-        var output = decks.map(function (deck) {
+        var output = decks.map(function(deck) {
             var expanded = {
                 main: deck.main.map(expandDeck),
                 extra: deck.extra.map(expandDeck),
@@ -1230,7 +1230,7 @@ var deckEditor = (function () {
     function loadDecks(decks) {
         usersDecks = expandDecks(decks) || [makeNewDeck('New Deck')];
         $('.deckSelect,  #lobbycurrentdeck select').html('');
-        usersDecks.forEach(function (deck, index) {
+        usersDecks.forEach(function(deck, index) {
             $('.deckSelect, #lobbycurrentdeck select').append('<option value="' + index + '">' + deck.name + '</option>');
         });
         switchDecks(activeIndex);
@@ -1370,7 +1370,7 @@ var deckEditor = (function () {
     function rename() {
 
         var deckName = prompt('New Deck Name?', inmemoryDeck.name),
-            deckCheck = usersDecks.filter(function (deck) {
+            deckCheck = usersDecks.filter(function(deck) {
                 return (deck.name === deckName);
             });
 
@@ -1392,7 +1392,7 @@ var deckEditor = (function () {
             alertmodal('You own more than 60 decks. We cant store that many for you!');
         }
         var deckName = prompt('New Deck Name?', 'New Deck'),
-            deckCheck = usersDecks.filter(function (deck) {
+            deckCheck = usersDecks.filter(function(deck) {
                 return (deck.name === deckName);
             });
 
@@ -1434,11 +1434,11 @@ var deckEditor = (function () {
                 "extra": []
             },
             current = "";
-        lineSplit = lineSplit.map(function (item) {
+        lineSplit = lineSplit.map(function(item) {
             return item.trim();
         });
         try {
-            lineSplit.forEach(function (value) {
+            lineSplit.forEach(function(value) {
                 if (value === "") {
                     return;
                 }
@@ -1471,15 +1471,15 @@ var deckEditor = (function () {
 
         newDeck.creator = localStorage.nickname;
         newDeck.creationDate = new Date();
-        newDeck.main = newDeck.main.map(function (cardid) {
+        newDeck.main = newDeck.main.map(function(cardid) {
             var card = pullcard(parseInt(cardid, 10), data);
 
             return card;
         });
-        newDeck.side = newDeck.side.map(function (cardid) {
+        newDeck.side = newDeck.side.map(function(cardid) {
             return pullcard(parseInt(cardid, 10), data);
         });
-        newDeck.extra = newDeck.extra.map(function (cardid) {
+        newDeck.extra = newDeck.extra.map(function(cardid) {
             return pullcard(parseInt(cardid, 10), data);
         });
 
@@ -1603,7 +1603,7 @@ function deckeditonclick(index, zone) {
 
 //$('.descInput, .nameInput').on('input', deckEditor.doNewSearch);
 
-$('.descInput, .nameInput').keypress('input', function (event) {
+$('.descInput, .nameInput').keypress('input', function(event) {
     'use strict';
     if (event.which === 13) {
         deckEditor.doNewSearch();
@@ -1613,7 +1613,7 @@ $('.descInput, .nameInput').keypress('input', function (event) {
 $('.typeSelect, .monsterCardSelect, .monsterTypeSelect, .spellSelect, .trapSelect, .attributeSelect, .raceSelect, .setcodeSelect, .forbiddenLimitedSelect, .packSelect').on('change', deckEditor.doNewSearch);
 
 $('.atkInput, .defInput, .levelInput, .scaleInput, .searchrange').on('change', deckEditor.doNewSearch);
-$('.typeSelect').on('change', function () {
+$('.typeSelect').on('change', function() {
     'use strict';
     var target = $('.typeSelect option:selected').text();
     $('.monsterCardSelect, .monsterTypeSelect, .spellSelect, .trapSelect, .attributeSelect, .raceSelect').css('display', 'none');
@@ -1635,21 +1635,21 @@ $('.typeSelect').on('change', function () {
 });
 
 
-$('.databaseSelect').on('change', function () {
+$('.databaseSelect').on('change', function() {
     'use strict';
     var newDB = $('.databaseSelect').val();
     databaseSystem.setDatabase([newDB]);
     deckEditor.doNewSearch();
 });
 
-$('.banlistSelect').on('change', function () {
+$('.banlistSelect').on('change', function() {
     'use strict';
     var newList = $('.banlistSelect').val();
     databaseSystem.setBanlist(newList);
     deckEditor.doNewSearch();
 });
 
-$('.deckSelect, #lobbycurrentdeck select').on('change', function () {
+$('.deckSelect, #lobbycurrentdeck select').on('change', function() {
     'use strict';
     deckEditor.switchDecks(parseInt($('.deckSelect').val(), 10));
 });
@@ -1663,7 +1663,7 @@ function readSingleFile(evt) {
 
     if (f) {
         r = new FileReader();
-        r.onload = function (e) {
+        r.onload = function(e) {
             var contents = e.target.result,
                 action = false;
 
@@ -1682,13 +1682,13 @@ function readSingleFile(evt) {
 $('#deckupload').on('change', readSingleFile);
 
 
-$("#deckedit .mainDeck,#deckedit .extraDeck,#deckedit .sideDeck").on("dragover dragleave", function (event) {
+$("#deckedit .mainDeck,#deckedit .extraDeck,#deckedit .sideDeck").on("dragover dragleave", function(event) {
     'use strict';
     event.preventDefault();
     event.stopPropagation();
 });
 
-$("#deckedit .mainDeck,#deckedit .extraDeck,#deckedit .sideDeck").on("drop", function (event) {
+$("#deckedit .mainDeck,#deckedit .extraDeck,#deckedit .sideDeck").on("drop", function(event) {
     'use strict';
     event.preventDefault();
     event.stopPropagation();
