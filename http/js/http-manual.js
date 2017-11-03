@@ -1338,6 +1338,7 @@ function manualReciver(message) {
                 cardmargin(1, 'EXTRA');
                 cardmargin(1, 'DECK');
                 $('.attackglow').removeClass('attackglow');
+                $('.card, .cardselectionzone').removeClass('selection');
             }, 300);
             updateChat(message.info.duelistChat);
             $('#phaseindicator').attr('data-currentphase', message.info.phase);

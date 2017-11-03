@@ -75,7 +75,7 @@ function ygoproQuestion(message) {
     zonetargetingmode = false;
     $('.cardselectionzone.p0').removeClass('card');
     $('.cardselectionzone.p0').removeClass('attackglow');
-    $('.card').removeClass('selection');
+    $('.card, .cardselectionzone').removeClass('selection');
     switch (type) {
         case 'STOC_SELECT_TP':
             selectStartingPlayer();
@@ -107,13 +107,13 @@ function ygoproQuestion(message) {
         case 'MSG_SELECT_TRIBUTE':
             zonetargetingmode = 'ygo';
             message.options.selectable_targets.forEach(function(zone) {
-                $('.cardselectionzone.p' + orient(zone.player) + '.' + zone.location + '.i' + zone.index).addClass('attackglow card');
+                $('.cardselectionzone.p' + orient(zone.player) + '.' + zone.location + '.i' + zone.index).addClass('card selection');
             });
             break;
         case 'MSG_SELECT_PLACE':
             zonetargetingmode = 'ygo';
             message.options.zones.forEach(function(zone) {
-                $('.cardselectionzone.p' + zone.player + '.' + zone.location + '.i' + zone.index).addClass('attackglow card');
+                $('.cardselectionzone.p' + zone.player + '.' + zone.location + '.i' + zone.index).addClass('card selection');
             });
             break;
         case 'MSG_SELECT_CARD':
