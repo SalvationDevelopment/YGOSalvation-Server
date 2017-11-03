@@ -2956,3 +2956,8 @@ div#selectplayer button {
     color: black;
     font-weight: bold;
 }
+
+.card.selection {
+    border: 2px dashed white;
+    padding: 2px;
+}

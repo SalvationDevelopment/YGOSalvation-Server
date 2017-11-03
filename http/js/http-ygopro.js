@@ -26,7 +26,7 @@ var idleQuestion = {},
 
 
 function filterSelectedOptions(card) {
-    var result = activeQuestion.answer.contains(function(option) {
+    var result = activeQuestion.answer.includes(function(option) {
         var index = (option.player === card[0]),
             location = (option.location === ylocations[card[1]]),
             sequence = (option.index === card[2]);
@@ -59,6 +59,13 @@ function selectStartingPlayer() {
     $('#selectplayer').css('display', 'block');
 }
 
+function notImmediatelyVisible(card) {
+    return (card.location === 'GRAVE' ||
+        card.location === 'EXTRA' ||
+        card.location === 'DECK' ||
+        card.location === 'REMOVED');
+}
+
 function ygoproQuestion(message) {
     'use strict';
     var type = message.type;
@@ -68,6 +75,7 @@ function ygoproQuestion(message) {
     zonetargetingmode = false;
     $('.cardselectionzone.p0').removeClass('card');
     $('.cardselectionzone.p0').removeClass('attackglow');
+    $('.card').removeClass('selection');
     switch (type) {
         case 'STOC_SELECT_TP':
             selectStartingPlayer();
@@ -109,13 +117,13 @@ function ygoproQuestion(message) {
             });
             break;
         case 'MSG_SELECT_CARD':
-            if (message.options.select_options.some(function(card) {
-                    return !(card.location === 'MONSTERZONE' || card.location === 'SPELLZONE' || card.location === 'HAND');
-                })) {
-                setIdle(message.options);
-                reveal(message.options.select_options, 'ygo');
+            setIdle(message.options);
+            if (message.options.select_options.some(notImmediatelyVisible)) {
+                reveal(message.options.select_options);
             } else {
-                setIdle(message.options);
+                message.options.select_options.forEach(function(card) {
+                    $('.card.p' + orient(card.player) + '.' + card.location + '.i' + card.index).addClass('selection');
+                });
             }
             break;
         default:
