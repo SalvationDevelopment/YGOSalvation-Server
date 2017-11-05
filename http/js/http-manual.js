@@ -52,8 +52,8 @@ function setFieldSpellBG() {
     });
     var picID0 = $('#automationduelfield .p0.SPELLZONE.i5').attr('data-id'),
         picID1 = $('#automationduelfield .p1.SPELLZONE.i5').attr('data-id'),
-        p0URL = 'url(https://rawgit.com/Ygoproco/Live-images/master/pics/field/' + picID0 + '.png)',
-        p1URL = 'url(https://rawgit.com/Ygoproco/Live-images/master/pics/field/' + picID1 + '.png)';
+        p0URL = 'url(https://rawgit.com/shadowfox87/field544x544png/master/' + picID0 + '.png)',
+        p1URL = 'url(https://rawgit.com/shadowfox87/field544x544png/master/' + picID1 + '.png)';
 
     if (picID0 && !picID1) {
         $('#fieldbg0 .fieldimage').css({
@@ -925,31 +925,33 @@ var revealcache = [],
     revealcacheIndex = 0;
 
 function reveal(cards, note) {
-    console.log(cards, note);
-    'use strict';
-    var html = '';
-    revealcache = [];
-    note = note || '';
-    console.log('note', note);
-    $('#revealedclose').css('display', 'block');
-    $('#revealed').css('display', 'flex');
-    if (cards.length > 4) {
-        html += '<div id=\'subreveal\'>';
-        $('#revealed').css('display', 'block');
-    }
-    cards.forEach(function(card, index) {
-        var src = (card.id) ? 'https://raw.githubusercontent.com/shadowfox87/YGOSeries10CardPics/master/' + card.id + '.png' : 'img/textures/cover.jpg';
-        src = (note === 'specialcard' || card.note) ? 'img/textures/' + card.id + '.jpg' : src;
-        card.uid = card.uid || card.id;
-        revealcache.push(card);
-        html += '<img id="revealuid' + card.uid + '" class="revealedcard" src="' + src + '" data-id="' + card.id + '" onclick = "revealonclick(' + index + ', \'' + note + '\')" data-uid="' + card.uid + '" data-position="' + card.position + card.location + '" / > ';
-    });
-    if (cards.length > 4) {
-        html += '</div>';
-    }
-    $('#revealed').html(html);
-    //$('#subreveal').width(cards.length * 197);
-    $('#revealed img').error(cardLoadError);
+    setTimeout(function() {
+        console.log(cards, note);
+        'use strict';
+        var html = '';
+        revealcache = [];
+        note = note || '';
+        console.log('note', note);
+        $('#revealedclose').css('display', 'block');
+        $('#revealed').css('display', 'flex');
+        if (cards.length > 4) {
+            html += '<div id=\'subreveal\'>';
+            $('#revealed').css('display', 'block');
+        }
+        cards.forEach(function(card, index) {
+            var src = (card.id) ? 'https://raw.githubusercontent.com/shadowfox87/YGOSeries10CardPics/master/' + card.id + '.png' : 'img/textures/cover.jpg';
+            src = (note === 'specialcard' || card.note) ? 'img/textures/' + card.id + '.jpg' : src;
+            card.uid = card.uid || card.id;
+            revealcache.push(card);
+            html += '<img id="revealuid' + card.uid + '" class="revealedcard" src="' + src + '" data-id="' + card.id + '" onclick = "revealonclick(' + index + ', \'' + note + '\')" data-uid="' + card.uid + '" data-position="' + card.position + card.location + '" / > ';
+        });
+        if (cards.length > 4) {
+            html += '</div>';
+        }
+        $('#revealed').html(html);
+        //$('#subreveal').width(cards.length * 197);
+        $('#revealed img').error(cardLoadError);
+    }, 200);
 }
 
 
@@ -2457,6 +2459,10 @@ function forceResolveQuestion(answer) {
 function revealonclick(card, note) {
     'use strict';
 
+    if (note === 'ygo') {
+        idleOnClick();
+        return;
+    }
     if (note) {
         resolveQuestion(card);
         return;

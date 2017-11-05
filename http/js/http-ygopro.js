@@ -278,18 +278,38 @@ function zoneContainmentFilter(set, zone) {
     });
 }
 
+
+function viewExtraDeckSummonable() {
+    reveal(idleQuestion.spsummonable_cards.filter(function(card) {
+        return (card.location === 'EXTRA');
+    }), 'ygo');
+}
+
+
+
 function idleOnClick() {
     var idIndex = window.manualDuel.uidLookup(record),
         stackunit = window.manualDuel.stack[idIndex],
-        fullset = [].concat(idleQuestion.spsummonable_cards,
-            idleQuestion.activatable_cards,
-            idleQuestion.select_options);
+        fullset = [];
 
     if (targetmode) {
         manualTarget(stackunit);
         return;
     }
     if (zonetargetingmode) {
+        return;
+    }
+
+    if (stackunit === undefined) {
+        fullset = [].concat(idleQuestion.spsummonable_cards,
+            idleQuestion.activatable_cards,
+            idleQuestion.select_options);
+        stackunit = fullset.find(function(card) {
+            return (card.id === record);
+        });
+        manualActionReference = stackunit;
+        ygoproReviewOptions();
+        reorientmenu();
         return;
     }
 
@@ -302,10 +322,10 @@ function idleOnClick() {
             $('.m-extra-view').css({
                 'display': 'block'
             });
-            if (zoneContainmentFilter(idleQuestion.spsummonable_cards, 'GRAVE')) {
-                reveal(idleQuestion.spsummonable_cards.filter(function(card) {
-                    (card.location === 'EXTRA');
-                }), 'ygo');
+            if (zoneContainmentFilter(idleQuestion.spsummonable_cards, 'EXTRA')) {
+                $('.ygo-extra-summonable').css({
+                    'display': 'block'
+                });
             }
             break;
         case ('DECK'):
@@ -342,10 +362,9 @@ function idleOnClick() {
             break;
         default:
             ygoproReviewOptions();
-            reorientmenu();
+
     }
-
-
+    reorientmenu();
 }
 
 function toBytesInt32(num) {

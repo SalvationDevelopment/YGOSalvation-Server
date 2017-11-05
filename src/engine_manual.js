@@ -6,11 +6,13 @@
  * @file Creates instances of game state, and methods of manipulating them.
  */
 
+
+
 /**
  * @typedef Card
  * @type {Object}
  * @property {String} type Card/Token/Etc
- * @property {Number} movelocation 'DECK'/'EXTRA' etc, in caps. 
+ * @property {String} movelocation 'DECK'/'EXTRA' etc, in caps. 
  * @property {Number} player player int 0,1, etc of controlling player
  * @property {Number} originalController  player int 0,1, etc of owner
  * @property {Number} index  sequence of the card in the stack group. Example, nth card of DECK.
