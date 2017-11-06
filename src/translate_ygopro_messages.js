@@ -713,22 +713,19 @@ function recieveSTOC(gameBoard, packet) {
                 case ('MSG_SELECT_POSITION'):
                     message.selecting_player = BufferIO.readInt8();
                     message.id = BufferIO.readInt32();
-                    message.positions = BufferIO.readInt8();
-                    message.count = 0;
-                    message.filter = 0x1;
-                    message.startpos = 0;
-                    while (message.filter !== 0x10) {
-                        if (message.positions & message.filter) {
-                            message.count++;
-                        }
-                        message.filter <<= 1;
+                    message.positionsMask = BufferIO.readInt8();
+                    message.positions = [];
+                    if (message.positionsMask & 0x1) {
+                        message.positions.push(enums.positions[0x1]);
                     }
-                    if (message.count === 4) {
-                        message.startpos = 10;
-                    } else if (message.count === 3) {
-                        message.startpos = 82;
-                    } else {
-                        message.startpos = 155;
+                    if (message.positionsMask & 0x2) {
+                        message.positions.push(enums.positions[0x2]);
+                    }
+                    if (message.positionsMask & 0x4) {
+                        message.positions.push(enums.positions[0x4]);
+                    }
+                    if (message.positionsMask & 0x8) {
+                        message.positions.push(enums.positions[0x8]);
                     }
                     break;
                 case ('MSG_SELECT_TRIBUTE'):

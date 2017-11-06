@@ -22,7 +22,17 @@ var idleQuestion = {},
         'REMOVED': 0x20,
         'EXTRA': 0x40,
         'OVERLAY': 0x80
-    };
+    },
+    ygoproPositions = {
+        'FaceUpAttack': 0x1,
+        'FaceDownAttack': 0x2,
+        'FaceUpDefence': 0x4,
+        'FaceDownDefence': 0x8,
+        'FaceUp': 0x5,
+        'FaceDown': 0xA,
+        'Attack': 0x3,
+        'Defence': 0xC
+    }
 
 
 function filterSelectedOptions(card) {
@@ -119,11 +129,28 @@ function ygoproQuestion(message) {
         case 'MSG_SELECT_CARD':
             setIdle(message.options);
             if (message.options.select_options.some(notImmediatelyVisible)) {
-                reveal(message.options.select_options);
+                reveal(message.options.select_options, 'ygo');
             } else {
                 message.options.select_options.forEach(function(card) {
                     $('.card.p' + orient(card.player) + '.' + card.location + '.i' + card.index).addClass('selection');
                 });
+            }
+            break;
+        case 'MSG_SELECT_POSITION':
+            if (message.options.positionsMask === 0x1 ||
+                message.options.positionsMask === 0x2 ||
+                message.options.positionsMask === 0x4 ||
+                message.options.positionsMask === 0x8) {
+                resolveQuestion(toBytesInt32(message.options.positionsMask));
+            } else {
+                reveal(message.options.positions.map(function(position) {
+                    var
+                        card = message.options,
+                        src = (card.id) ? 'https://raw.githubusercontent.com/shadowfox87/YGOSeries10CardPics/master/' + card.id + '.png' : 'img/textures/cover.jpg';
+
+                    revealcache.push(card);
+                    return '<img id="revealuid' + card.id + '" class="revealedcard" src="' + src + '" data-id="' + card.id + '" onclick = "resolveQuestion(toBytesInt32(ygoproPositions["' + position + '"]))" data-uid="' + card.uid + '" data-position="' + position + '" / > ';
+                }), 'button');
             }
             break;
         default:

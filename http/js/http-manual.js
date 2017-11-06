@@ -926,8 +926,8 @@ var revealcache = [],
 
 function reveal(cards, note) {
     setTimeout(function() {
-        console.log(cards, note);
         'use strict';
+        console.log(cards, note);
         var html = '';
         revealcache = [];
         note = note || '';
@@ -938,18 +938,25 @@ function reveal(cards, note) {
             html += '<div id=\'subreveal\'>';
             $('#revealed').css('display', 'block');
         }
-        cards.forEach(function(card, index) {
-            var src = (card.id) ? 'https://raw.githubusercontent.com/shadowfox87/YGOSeries10CardPics/master/' + card.id + '.png' : 'img/textures/cover.jpg';
-            src = (note === 'specialcard' || card.note) ? 'img/textures/' + card.id + '.jpg' : src;
-            card.uid = card.uid || card.id;
-            revealcache.push(card);
-            html += '<img id="revealuid' + card.uid + '" class="revealedcard" src="' + src + '" data-id="' + card.id + '" onclick = "revealonclick(' + index + ', \'' + note + '\')" data-uid="' + card.uid + '" data-position="' + card.position + card.location + '" / > ';
-        });
+        if ('note' === 'button') {
+            cards.forEach(function(card) {
+                html += card;
+            });
+        } else {
+            cards.forEach(function(card, index) {
+                var src = (card.id) ? 'https://raw.githubusercontent.com/shadowfox87/YGOSeries10CardPics/master/' + card.id + '.png' : 'img/textures/cover.jpg';
+                src = (note === 'specialcard' || card.note) ? 'img/textures/' + card.id + '.jpg' : src;
+                card.uid = card.uid || card.id;
+                revealcache.push(card);
+                html += '<img id="revealuid' + card.uid + '" class="revealedcard" src="' + src + '" data-id="' + card.id + '" onclick = "revealonclick(' + index + ', \'' + note + '\')" data-uid="' + card.uid + '" data-position="' + card.position + card.location + '" / > ';
+            });
+
+        }
         if (cards.length > 4) {
             html += '</div>';
         }
         $('#revealed').html(html);
-        //$('#subreveal').width(cards.length * 197);
+
         $('#revealed img').error(cardLoadError);
     }, 200);
 }
