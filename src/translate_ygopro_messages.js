@@ -86,8 +86,8 @@ function getSelectableZones(mask) {
         if (mask & filter) {
             zones.push({
                 player: 0,
-                zone: 'SPELLZONE',
-                slot: i,
+                location: 'SPELLZONE',
+                index: i,
                 status: !(mask & filter)
             });
         }
@@ -97,8 +97,8 @@ function getSelectableZones(mask) {
         if (mask & filter) {
             zones.push({
                 player: 1,
-                zone: 'MONSTERZONE',
-                slot: i,
+                location: 'MONSTERZONE',
+                index: i,
                 status: !(mask & filter)
             });
         }
@@ -108,8 +108,8 @@ function getSelectableZones(mask) {
         if (mask & filter) {
             zones.push({
                 player: 1,
-                zone: 'SPELLZONE',
-                slot: i,
+                location: 'SPELLZONE',
+                index: i,
                 status: !(mask & filter)
             });
         }
@@ -259,13 +259,17 @@ function recieveSTOC(gameBoard, packet) {
 
                 case ('MSG_CHAINING'):
                     message.id = BufferIO.readInt32();
-                    message.pcc = BufferIO.readInt8();
-                    message.pcl = BufferIO.readInt8();
-                    message.pcs = BufferIO.readInt8();
+                    message.pc = {
+                        player: BufferIO.readInt8(),
+                        location: enums.locations[BufferIO.readInt8()],
+                        index: BufferIO.readInt8()
+                    };
                     message.subs = BufferIO.readInt8();
-                    message.cc = BufferIO.readInt8();
-                    message.cl = BufferIO.readInt8();
-                    message.cs = BufferIO.readInt8();
+                    message.c = {
+                        player: BufferIO.readInt8(),
+                        location: enums.locations[BufferIO.readInt8()],
+                        index: BufferIO.readInt8()
+                    };
                     message.desc = BufferIO.readInt32();
                     message.ct = BufferIO.readInt8(); // defunct in code
                     break;
@@ -670,7 +674,7 @@ function recieveSTOC(gameBoard, packet) {
                     message.select_options = [];
                     for (i = 0; i < message.count; ++i) {
                         message.select_options.push({
-                            code: BufferIO.readInt32(),
+                            id: BufferIO.readInt32(),
                             player: BufferIO.readInt8(),
                             location: enums.locations[BufferIO.readInt8()],
                             index: BufferIO.readInt8(),
@@ -689,10 +693,10 @@ function recieveSTOC(gameBoard, packet) {
                     for (i = 0; i < message.count; ++i) {
                         message.select_options.push({
                             flag: BufferIO.readInt8(),
-                            code: BufferIO.readInt32(),
-                            c: BufferIO.readInt8(),
-                            l: BufferIO.readInt8(),
-                            s: BufferIO.readInt8(),
+                            id: BufferIO.readInt32(),
+                            player: BufferIO.readInt8(),
+                            location: enums.locations[BufferIO.readInt8()],
+                            index: BufferIO.readInt8(),
                             ss: BufferIO.readInt8(),
                             desc: BufferIO.readInt32()
                         });
@@ -709,22 +713,19 @@ function recieveSTOC(gameBoard, packet) {
                 case ('MSG_SELECT_POSITION'):
                     message.selecting_player = BufferIO.readInt8();
                     message.id = BufferIO.readInt32();
-                    message.positions = BufferIO.readInt8();
-                    message.count = 0;
-                    message.filter = 0x1;
-                    message.startpos = 0;
-                    while (message.filter !== 0x10) {
-                        if (message.positions & message.filter) {
-                            message.count++;
-                        }
-                        message.filter <<= 1;
+                    message.positionsMask = BufferIO.readInt8();
+                    message.positions = [];
+                    if (message.positionsMask & 0x1) {
+                        message.positions.push(enums.positions[0x1]);
                     }
-                    if (message.count === 4) {
-                        message.startpos = 10;
-                    } else if (message.count === 3) {
-                        message.startpos = 82;
-                    } else {
-                        message.startpos = 155;
+                    if (message.positionsMask & 0x2) {
+                        message.positions.push(enums.positions[0x2]);
+                    }
+                    if (message.positionsMask & 0x4) {
+                        message.positions.push(enums.positions[0x4]);
+                    }
+                    if (message.positionsMask & 0x8) {
+                        message.positions.push(enums.positions[0x8]);
                     }
                     break;
                 case ('MSG_SELECT_TRIBUTE'):
@@ -736,7 +737,7 @@ function recieveSTOC(gameBoard, packet) {
                     message.selectable_targets = [];
                     for (i = 0; i < count; ++i) {
                         message.selectable_targets.push({
-                            code: BufferIO.readInt32(),
+                            id: BufferIO.readInt32(),
                             player: BufferIO.readInt8(),
                             location: enums.locations[BufferIO.readInt8()],
                             index: BufferIO.readInt8(),
@@ -751,10 +752,10 @@ function recieveSTOC(gameBoard, packet) {
                     message.selectable_targets = [];
                     for (i = 0; i < message.count; ++i) {
                         message.selectable_targets.push({
-                            code: BufferIO.readInt32(),
-                            c: BufferIO.readInt8(),
-                            l: BufferIO.readInt8(),
-                            s: BufferIO.readInt8()
+                            id: BufferIO.readInt32(),
+                            player: BufferIO.readInt8(),
+                            location: enums.locations[BufferIO.readInt8()],
+                            index: BufferIO.readInt8()
                         });
                     }
                     break;
@@ -776,10 +777,10 @@ function recieveSTOC(gameBoard, packet) {
                     message.selectable_targets = [];
                     for (i = 0; i < message.count; ++i) {
                         message.selectable_targets.push({
-                            code: BufferIO.readInt32(),
-                            c: BufferIO.readInt8(),
-                            l: BufferIO.readInt8(),
-                            s: BufferIO.readInt8()
+                            id: BufferIO.readInt32(),
+                            player: BufferIO.readInt8(),
+                            location: enums.locations[BufferIO.readInt8()],
+                            index: BufferIO.readInt8()
                         });
                     }
                     break;

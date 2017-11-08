@@ -194,7 +194,7 @@ function boardController(gameBoard, slot, message, ygopro) {
             break;
         case ('MSG_TOSS_COIN'):
             break;
-        case ('MSG_SELECT_IDLECMD'):
+        case ('MSG_SELECT_IDLECMD'): // Good
             askUser(gameBoard, slot, message, ygopro);
             break;
         case ('MSG_MOVE'): // Good

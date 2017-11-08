@@ -389,7 +389,7 @@ enums.timeout = {
     'MSG_REVERSE_DECK': 0,
     'MSG_DECK_TOP': 0,
     'MSG_NEW_TURN': 1000,
-    'MSG_NEW_PHASE': 1000,
+    'MSG_NEW_PHASE': 500,
     'MSG_MOVE': 300,
     'MSG_POS_CHANGE': 300,
     'MSG_SET': 300,

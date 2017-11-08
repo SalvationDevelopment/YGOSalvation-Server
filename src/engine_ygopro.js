@@ -264,7 +264,7 @@ function startYGOSharp(instance, sockets) {
         'Port=' + instance.port,
         'ClientVersion=0x1338',
         'BanlistFile=./lflist.conf',
-        'ScriptDirectory=' + './../../ygopro-scripts',
+        'ScriptDirectory=' + './../../../ygopro-scripts',
         'DatabaseFile=./cards.cdb',
         'Rule=' + 0,
         'Mode=' + 0,
@@ -277,7 +277,7 @@ function startYGOSharp(instance, sockets) {
     ];
 
     instance.ygopro = child_process.spawn(YGOSharp, parametersList, {
-        cwd: './bin/'
+        cwd: './bin/mr' + instance.masterRule
     });
 
     ygosharp = instance.ygopro;

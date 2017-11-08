@@ -1,7 +1,18 @@
-/* global $, doGuiShuffle, orient, manualActionReference,activeQuestion, singlesitenav, targetmode, record, manualTarget, zonetargetingmode, reorientmenu, resolveQuestion */
+/* global $, reveal, doGuiShuffle, orient, manualActionReference,activeQuestion, singlesitenav, targetmode, record, manualTarget, zonetargetingmode, reorientmenu, resolveQuestion */
 
 var idleQuestion = {},
     battleQuestion = {},
+    ylocations = {
+        0x01: 'DECK',
+        0x02: 'HAND',
+        0x04: 'MONSTERZONE',
+        0x08: 'SPELLZONE',
+        0x10: 'GRAVE',
+        0x20: 'REMOVED',
+        0x40: 'EXTRA',
+        0x80: 'OVERLAY'
+
+    },
     ygoproLocations = {
         'DECK': 0x01,
         'HAND': 0x02,
@@ -11,9 +22,35 @@ var idleQuestion = {},
         'REMOVED': 0x20,
         'EXTRA': 0x40,
         'OVERLAY': 0x80
-    };
+    },
+    ygoproPositions = {
+        'FaceUpAttack': 0x1,
+        'FaceDownAttack': 0x2,
+        'FaceUpDefence': 0x4,
+        'FaceDownDefence': 0x8,
+        'FaceUp': 0x5,
+        'FaceDown': 0xA,
+        'Attack': 0x3,
+        'Defence': 0xC
+    }
 
-function setIdle() {
+
+function filterSelectedOptions(card) {
+    var result = activeQuestion.answer.includes(function(option) {
+        var index = (option.player === card[0]),
+            location = (option.location === ylocations[card[1]]),
+            sequence = (option.index === card[2]);
+        return (index && location && sequence);
+    });
+    return !result;
+}
+
+function unFilterSelectOptions(card) {
+    return !filterSelectedOptions(card);
+}
+
+function setIdle(input) {
+    input = input || {};
     idleQuestion = {
         summonable_cards: [],
         spsummonable_cards: [],
@@ -21,13 +58,22 @@ function setIdle() {
         msetable_cards: [],
         ssetable_cards: [],
         activatable_cards: [],
-        select_options: []
+        select_options: [],
+        attackable_cards: []
     };
+    Object.assign(idleQuestion, input);
 }
 
 
 function selectStartingPlayer() {
     $('#selectplayer').css('display', 'block');
+}
+
+function notImmediatelyVisible(card) {
+    return (card.location === 'GRAVE' ||
+        card.location === 'EXTRA' ||
+        card.location === 'DECK' ||
+        card.location === 'REMOVED');
 }
 
 function ygoproQuestion(message) {
@@ -39,13 +85,13 @@ function ygoproQuestion(message) {
     zonetargetingmode = false;
     $('.cardselectionzone.p0').removeClass('card');
     $('.cardselectionzone.p0').removeClass('attackglow');
+    $('.card, .cardselectionzone').removeClass('selection');
     switch (type) {
         case 'STOC_SELECT_TP':
             selectStartingPlayer();
             break;
         case 'MSG_SELECT_IDLECMD':
-            idleQuestion = message.options;
-            idleQuestion.attackable_cards = [];
+            setIdle(message.options);
             if (idleQuestion.enableBattlePhase) {
                 $('#battlephi').addClass('option');
             }
@@ -60,43 +106,51 @@ function ygoproQuestion(message) {
 
             break;
         case 'MSG_SELECT_BATTLECMD':
-            idleQuestion = message.options;
-            idleQuestion.battle = true;
+            setIdle(message.options);
             if (idleQuestion.enableMainPhase2) {
                 $('#main2phi').addClass('option');
             }
             if (idleQuestion.enableEndPhase) {
                 $('#endphi').addClass('option');
             }
-            idleQuestion.summonable_cards = [];
-            idleQuestion.spsummonable_cards = [];
-            idleQuestion.repositionable_cards = [];
-            idleQuestion.msetable_cards = [];
-            idleQuestion.ssetable_cards = [];
-            idleQuestion.select_options = [];
             break;
         case 'MSG_SELECT_TRIBUTE':
             zonetargetingmode = 'ygo';
             message.options.selectable_targets.forEach(function(zone) {
-                $('.cardselectionzone.p' + orient(zone.player) + '.' + zone.location + '.i' + zone.index).addClass('attackglow card');
+                $('.cardselectionzone.p' + orient(zone.player) + '.' + zone.location + '.i' + zone.index).addClass('card selection');
             });
             break;
         case 'MSG_SELECT_PLACE':
             zonetargetingmode = 'ygo';
             message.options.zones.forEach(function(zone) {
-                $('.cardselectionzone.p' + orient(zone.player) + '.' + zone.location + '.i' + zone.index).addClass('attackglow card');
+                $('.cardselectionzone.p' + zone.player + '.' + zone.location + '.i' + zone.index).addClass('card selection');
             });
             break;
         case 'MSG_SELECT_CARD':
-            if (message.options.select_options.some(function(card) {
-                    return !(card.location === 'MONSTERZONE' || card.location === 'SPELLZONE' || card.location === 'HAND');
-                })) {
-                // do panel mode;
+            setIdle(message.options);
+            if (message.options.select_options.some(notImmediatelyVisible)) {
+                reveal(message.options.select_options, 'ygo');
             } else {
-                zonetargetingmode = 'ygo';
                 message.options.select_options.forEach(function(card) {
-                    $('.cardselectionzone.p' + orient(card.player) + '.' + card.location + '.i' + card.index).addClass('attackglow card');
+                    $('.card.p' + orient(card.player) + '.' + card.location + '.i' + card.index).addClass('selection');
                 });
+            }
+            break;
+        case 'MSG_SELECT_POSITION':
+            if (message.options.positionsMask === 0x1 ||
+                message.options.positionsMask === 0x2 ||
+                message.options.positionsMask === 0x4 ||
+                message.options.positionsMask === 0x8) {
+                resolveQuestion(toBytesInt32(message.options.positionsMask));
+            } else {
+                reveal(message.options.positions.map(function(position) {
+                    var
+                        card = message.options,
+                        src = (card.id) ? 'https://raw.githubusercontent.com/shadowfox87/YGOSeries10CardPics/master/' + card.id + '.png' : 'img/textures/cover.jpg';
+
+                    revealcache.push(card);
+                    return '<img id="revealuid' + card.id + '" class="revealedcard" src="' + src + '" data-id="' + card.id + '" onclick = "resolveQuestion(toBytesInt32(ygoproPositions["' + position + '"]))" data-uid="' + card.uid + '" data-position="' + position + '" / > ';
+                }), 'button');
             }
             break;
         default:
@@ -106,10 +160,10 @@ function ygoproQuestion(message) {
 
 function summonFlash(id) {
     $('#effectflasher').css('display', 'block');
-    $('#effectflasher .mainimage').attr('src', 'https://raw.githubusercontent.com/shadowfox87/YGOSeries10CardPics/master/' + id + '.png');
+    $('#effectflasher .mainimage').attr('src', 'https://raw.githubusercontent.com/shadowfox87/YGOSeries10CardPics/master/pics/' + id + '.png');
     setTimeout(function() {
         $('#effectflasher').css('display', 'none');
-    }, 800);
+    }, 500);
 }
 
 function ygoproController(message) {
@@ -146,6 +200,8 @@ function ygoproController(message) {
         case ('MSG_FLIPSUMMONING'):
             summonFlash(message.id);
             break;
+        case ('MSG_CHAINING'):
+            summonFlash(message.id);
         case ('MSG_SHUFFLE_DECK'):
             doGuiShuffle(orient(message.player), 'DECK');
             break;
@@ -177,28 +233,14 @@ function cardEquvilanceCheck(gui, data) {
     return (index && location && sequence);
 }
 
-function idleOnClick() {
-    var idIndex = window.manualDuel.uidLookup(record),
-        stackunit = window.manualDuel.stack[idIndex],
-        dbEntry;
-
-    if (targetmode) {
-        manualTarget(stackunit);
-        return;
-    }
-    if (zonetargetingmode) {
-        return;
-    }
-
-    manualActionReference = stackunit;
-    $('#manualcontrols button').css({
-        'display': 'none'
-    });
-    idleQuestion.select_options.forEach(function(card, slot) {
+function ygoproReviewOptions() {
+    idleQuestion.select_options.filter(filterSelectedOptions).forEach(function(card, slot) {
         if (cardEquvilanceCheck(manualActionReference, card)) {
-            resolveQuestion({
-
-            });
+            resolveQuestion([
+                manualActionReference.player,
+                ygoproLocations[manualActionReference.location],
+                manualActionReference.index
+            ]);
         }
     });
     idleQuestion.summonable_cards.forEach(function(card, slot) {
@@ -240,8 +282,7 @@ function idleOnClick() {
     });
     idleQuestion.activatable_cards.forEach(function(card, slot) {
         if (cardEquvilanceCheck(manualActionReference, card)) {
-            var message = ((slot << 16) + 5);
-            $('.ygo-activate').attr('data-slot', message).css({
+            $('.ygo-activate').attr('data-slot', ((slot << 16) + (5))).css({
                 'display': 'block'
             });
         }
@@ -254,6 +295,102 @@ function idleOnClick() {
             });
         }
     });
+}
+
+function zoneContainmentFilter(set, zone) {
+    return set.some(function(card) {
+        if (card.location === zone) {
+            return true;
+        }
+    });
+}
+
+
+function viewExtraDeckSummonable() {
+    reveal(idleQuestion.spsummonable_cards.filter(function(card) {
+        return (card.location === 'EXTRA');
+    }), 'ygo');
+}
+
+
+
+function idleOnClick() {
+    var idIndex = window.manualDuel.uidLookup(record),
+        stackunit = window.manualDuel.stack[idIndex],
+        fullset = [];
+
+    if (targetmode) {
+        manualTarget(stackunit);
+        return;
+    }
+    if (zonetargetingmode) {
+        return;
+    }
+
+    if (stackunit === undefined) {
+        fullset = [].concat(idleQuestion.spsummonable_cards,
+            idleQuestion.activatable_cards,
+            idleQuestion.select_options);
+        stackunit = fullset.find(function(card) {
+            return (card.id === record);
+        });
+        manualActionReference = stackunit;
+        ygoproReviewOptions();
+        reorientmenu();
+        return;
+    }
+
+    manualActionReference = stackunit;
+    $('#manualcontrols button').css({
+        'display': 'none'
+    });
+    switch (manualActionReference.location) {
+        case ('EXTRA'):
+            $('.m-extra-view').css({
+                'display': 'block'
+            });
+            if (zoneContainmentFilter(idleQuestion.spsummonable_cards, 'EXTRA')) {
+                $('.ygo-extra-summonable').css({
+                    'display': 'block'
+                });
+            }
+            break;
+        case ('DECK'):
+            break;
+        case ('GRAVE'):
+            $('.m-extra-grave').css({
+                'display': 'block'
+            });
+            if (zoneContainmentFilter(idleQuestion.spsummonable_cards, 'GRAVE')) {
+                reveal(idleQuestion.spsummonable_cards.filter(function(card) {
+                    (card.location === 'GRAVE');
+                }), 'ygo');
+            }
+            if (zoneContainmentFilter(idleQuestion.activatable_cards, 'GRAVE')) {
+                reveal(idleQuestion.activatable_cards.filter(function(card) {
+                    (card.location === 'GRAVE');
+                }), 'ygo');
+            }
+            break;
+        case ('REMOVED'):
+            $('.m-removed-view').css({
+                'display': 'block'
+            });
+            if (zoneContainmentFilter(idleQuestion.spsummonable_cards, 'GRAVE')) {
+                reveal(idleQuestion.spsummonable_cards.filter(function(card) {
+                    (card.location === 'REMOVED');
+                }), 'ygo');
+            }
+            if (zoneContainmentFilter(idleQuestion.activatable_cards, 'GRAVE')) {
+                reveal(idleQuestion.activatable_cards.filter(function(card) {
+                    (card.location === 'REMOVED');
+                }), 'ygo');
+            }
+            break;
+        default:
+            ygoproReviewOptions();
+
+    }
     reorientmenu();
 }
 

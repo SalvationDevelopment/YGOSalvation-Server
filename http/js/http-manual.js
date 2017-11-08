@@ -52,8 +52,8 @@ function setFieldSpellBG() {
     });
     var picID0 = $('#automationduelfield .p0.SPELLZONE.i5').attr('data-id'),
         picID1 = $('#automationduelfield .p1.SPELLZONE.i5').attr('data-id'),
-        p0URL = 'url(https://rawgit.com/Ygoproco/Live-images/master/pics/field/' + picID0 + '.png)',
-        p1URL = 'url(https://rawgit.com/Ygoproco/Live-images/master/pics/field/' + picID1 + '.png)';
+        p0URL = 'url(https://rawgit.com/shadowfox87/field544x544png/master/' + picID0 + '.png)',
+        p1URL = 'url(https://rawgit.com/shadowfox87/field544x544png/master/' + picID1 + '.png)';
 
     if (picID0 && !picID1) {
         $('#fieldbg0 .fieldimage').css({
@@ -473,7 +473,7 @@ function stateUpdate(dataBinding) {
         player = dataBinding.player;
     }
     fieldings = 'card p' + player + ' ' + ref.location + ' i' + ref.index;
-    if (ref.counters > 0) {
+    if (ref.counters > 0 && ref.location !== 'HAND') {
         $('.cardselectionzone.p' + player + '.' + ref.location + '.i' + ref.index).attr('data-counters', ref.counters + ' Counters').attr('style', 'z-index:' + (ref.index + 1));
     } else {
         $('.cardselectionzone.p' + player + '.' + ref.location + '.i' + ref.index).removeAttr('data-counters').attr('style', 'z-index:' + ref.index + ';');
@@ -486,7 +486,7 @@ function stateUpdate(dataBinding) {
             'data-id': ref.id,
             'data-uid': ref.uid,
             'reloaded': element.attr('reloaded'),
-            'src': (ref.id) ? 'https://raw.githubusercontent.com/shadowfox87/YGOSeries10CardPics/master/' + ref.id + '.png' : 'img/textures/cover.jpg'
+            'src': (ref.id) ? 'https://raw.githubusercontent.com/shadowfox87/YGOSeries10CardPics/master/pics/' + ref.id + '.png' : 'img/textures/cover.jpg'
         });
 
         if (ref.position === 'FaceDownDefence' || ref.position === 'FaceDownAttack') {
@@ -494,7 +494,9 @@ function stateUpdate(dataBinding) {
                 'src': 'img/textures/cover.jpg'
             });
         }
-        element.attr('style', 'z-index:' + (ref.index));
+        if (ref.position !== 'HAND') {
+            element.attr('style', 'z-index:' + (ref.index));
+        }
         element.attr('data-index', ref.index);
         if (ref.location === 'MONSTERZONE' && ref.overlayindex) {
             offsetX = (ref.overlayindex % 2) ? (-1) * (ref.overlayindex + 1) * 3 : ref.overlayindex + (-1) * 3;
@@ -538,11 +540,17 @@ function exclusionList(player, location, classValue) {
 
 function linkStack(field) {
     'use strict';
-    console.log('field:', field);
     scaleScreenFactor();
+    var runCount = 0,
+        p1 = 0,
+        p0 = 0;
 
 
     function linkgui(zone) {
+        if (!zone.length) {
+            return;
+        }
+        runCount += 1;
         zone.forEach(function(card) {
             var idIndex = manualDuel.uidLookup(card.uid) || card.uid,
                 unit = manualDuel.stack[idIndex] || {};
@@ -557,29 +565,44 @@ function linkStack(field) {
 
     Object.keys(field[0]).forEach(function(zone) {
         linkgui(field[0][zone]);
+        if (zone.length) {
+            p0 += 1;
+        }
     });
     Object.keys(field[1]).forEach(function(zone) {
         linkgui(field[1][zone]);
+        if (zone.length) {
+            p1 += 1;
+        }
     });
+    console.log(runCount);
+    if (runCount) {
+        if (p0) {
+            setTimeout(layouthand, 300, 0);
+        }
+        if (p1) {
+            setTimeout(layouthand, 300, 1);
+        }
+        manualDuel.stack.forEach(stateUpdate);
+        var p0deck = $('#automationduelfield .p0.DECK').length,
+            p1deck = $('#automationduelfield .p1.DECK').length,
+            p0extra = $('#automationduelfield .p0.EXTRA').length,
+            p1extra = $('#automationduelfield .p1.EXTRA').length,
+            p0removed = $('#automationduelfield .p0.REMOVED').length,
+            p1removed = $('#automationduelfield .p1.REMOVED').length,
+            p0grave = $('#automationduelfield .p0.GRAVE').length,
+            p1grave = $('#automationduelfield .p1.GRAVE').length;
 
-    manualDuel.stack.forEach(stateUpdate);
-    var p0deck = $('#automationduelfield .p0.DECK').length,
-        p1deck = $('#automationduelfield .p1.DECK').length,
-        p0extra = $('#automationduelfield .p0.EXTRA').length,
-        p1extra = $('#automationduelfield .p1.EXTRA').length,
-        p0removed = $('#automationduelfield .p0.REMOVED').length,
-        p1removed = $('#automationduelfield .p1.REMOVED').length,
-        p0grave = $('#automationduelfield .p0.GRAVE').length,
-        p1grave = $('#automationduelfield .p1.GRAVE').length;
+        $('.cardselectionzone.p0.DECK').attr('data-content', p0deck);
+        $('.cardselectionzone.p1.DECK').attr('data-content', p1deck);
+        $('.cardselectionzone.p0.EXTRA').attr('data-content', p0extra);
+        $('.cardselectionzone.p1.EXTRA').attr('data-content', p1extra);
+        $('.cardselectionzone.p0.REMOVED').attr('data-content', p0removed);
+        $('.cardselectionzone.p1.REMOVED').attr('data-content', p1removed);
+        $('.cardselectionzone.p0.GRAVE').attr('data-content', p0grave);
+        $('.cardselectionzone.p1.GRAVE').attr('data-content', p1grave);
 
-    $('.cardselectionzone.p0.DECK').attr('data-content', p0deck);
-    $('.cardselectionzone.p1.DECK').attr('data-content', p1deck);
-    $('.cardselectionzone.p0.EXTRA').attr('data-content', p0extra);
-    $('.cardselectionzone.p1.EXTRA').attr('data-content', p1extra);
-    $('.cardselectionzone.p0.REMOVED').attr('data-content', p0removed);
-    $('.cardselectionzone.p1.REMOVED').attr('data-content', p1removed);
-    $('.cardselectionzone.p0.GRAVE').attr('data-content', p0grave);
-    $('.cardselectionzone.p1.GRAVE').attr('data-content', p1grave);
+    }
     setFieldSpellBG();
 }
 
@@ -902,31 +925,40 @@ var revealcache = [],
     revealcacheIndex = 0;
 
 function reveal(cards, note) {
-    console.log(cards, note);
-    'use strict';
-    var html = '';
-    revealcache = [];
-    note = note || '';
-    console.log('note', note);
-    $('#revealedclose').css('display', 'block');
-    $('#revealed').css('display', 'flex');
-    if (cards.length > 4) {
-        html += '<div id=\'subreveal\'>';
-        $('#revealed').css('display', 'block');
-    }
-    cards.forEach(function(card, index) {
-        var src = (card.id) ? 'https://raw.githubusercontent.com/shadowfox87/YGOSeries10CardPics/master/' + card.id + '.png' : 'img/textures/cover.jpg';
-        src = (note === 'specialcard' || card.note) ? 'img/textures/' + card.id + '.jpg' : src;
-        card.uid = card.uid || card.id;
-        revealcache.push(card);
-        html += '<img id="revealuid' + card.uid + '" class="revealedcard" src="' + src + '" data-id="' + card.id + '" onclick = "revealonclick(' + index + ', \'' + note + '\')" data-uid="' + card.uid + '" data-position="' + card.position + card.location + '" / > ';
-    });
-    if (cards.length > 4) {
-        html += '</div>';
-    }
-    $('#revealed').html(html);
-    //$('#subreveal').width(cards.length * 197);
-    $('#revealed img').error(cardLoadError);
+    setTimeout(function() {
+        'use strict';
+        console.log(cards, note);
+        var html = '';
+        revealcache = [];
+        note = note || '';
+        console.log('note', note);
+        $('#revealedclose').css('display', 'block');
+        $('#revealed').css('display', 'flex');
+        if (cards.length > 4) {
+            html += '<div id=\'subreveal\'>';
+            $('#revealed').css('display', 'block');
+        }
+        if ('note' === 'button') {
+            cards.forEach(function(card) {
+                html += card;
+            });
+        } else {
+            cards.forEach(function(card, index) {
+                var src = (card.id) ? 'https://raw.githubusercontent.com/shadowfox87/YGOSeries10CardPics/master/' + card.id + '.png' : 'img/textures/cover.jpg';
+                src = (note === 'specialcard' || card.note) ? 'img/textures/' + card.id + '.jpg' : src;
+                card.uid = card.uid || card.id;
+                revealcache.push(card);
+                html += '<img id="revealuid' + card.uid + '" class="revealedcard" src="' + src + '" data-id="' + card.id + '" onclick = "revealonclick(' + index + ', \'' + note + '\')" data-uid="' + card.uid + '" data-position="' + card.position + card.location + '" / > ';
+            });
+
+        }
+        if (cards.length > 4) {
+            html += '</div>';
+        }
+        $('#revealed').html(html);
+
+        $('#revealed img').error(cardLoadError);
+    }, 200);
 }
 
 
@@ -1314,9 +1346,8 @@ function manualReciver(message) {
                 cardmargin(1, 'GRAVE');
                 cardmargin(1, 'EXTRA');
                 cardmargin(1, 'DECK');
-                layouthand(0);
-                layouthand(1);
                 $('.attackglow').removeClass('attackglow');
+                $('.card, .cardselectionzone').removeClass('selection');
             }, 300);
             updateChat(message.info.duelistChat);
             $('#phaseindicator').attr('data-currentphase', message.info.phase);
@@ -2435,6 +2466,10 @@ function forceResolveQuestion(answer) {
 function revealonclick(card, note) {
     'use strict';
 
+    if (note === 'ygo') {
+        idleOnClick();
+        return;
+    }
     if (note) {
         resolveQuestion(card);
         return;
