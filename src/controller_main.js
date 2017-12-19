@@ -28,7 +28,7 @@ const child_process = require('child_process'),
     Rooms = require('primus-rooms'),
     domain = require('domain'),
     ps = require('ps-node'),
-    userValidate = require('./controller_users.js'),
+    userController = require('./controller_users.js'),
     pack = require('../package.json'),
     adminlist = hotload('./record_admins.js'),
     banlistedUsers = hotload('./record_bansystem.js'),
@@ -221,7 +221,7 @@ setInterval(function() {
 
 
 function registrationCall(data, socket) {
-    userValidate(data, function(error, info, body) {
+    userController.validate(data, function(error, info, body) {
         if (error) {
             //console.log(error);
             return;
@@ -277,7 +277,7 @@ function registrationCall(data, socket) {
 }
 
 function globalCall(data) {
-    userValidate(data, function(error, info, body) {
+    userController.validate(data, function(error, info, body) {
         if (error) {
             console.log('[Gamelist]', error);
             return;
@@ -295,7 +295,7 @@ function globalCall(data) {
 }
 
 function globalRequested(data, socket) {
-    userValidate(data, function(error, info, body) {
+    userController.validate(data, function(error, info, body) {
         if (error) {
             console.log('[Gamelist]', error);
             return;
@@ -313,7 +313,7 @@ function globalRequested(data, socket) {
 
 
 function genocideCall(data) {
-    userValidate(data, function(error, info, body) {
+    userController.validate(data, function(error, info, body) {
         if (error) {
             return;
         }
@@ -333,7 +333,7 @@ function genocideCall(data) {
 }
 
 function reviveCall(data) {
-    userValidate(data, function(error, info, body) {
+    userController.validate(data, function(error, info, body) {
         if (error) {
             return;
         }
@@ -353,7 +353,7 @@ function reviveCall(data) {
 
 
 function murderCall(data) {
-    userValidate(data, function(error, info, body) {
+    userController.validate(data, function(error, info, body) {
         if (error) {
             return;
         }
@@ -371,7 +371,7 @@ function murderCall(data) {
 }
 
 function censorCall(data) {
-    userValidate(data, function(error, info, body) {
+    userController.validate(data, function(error, info, body) {
         if (error) {
             return;
         }
@@ -393,7 +393,7 @@ function censorCall(data) {
 }
 
 function mindcrushCall(data) {
-    userValidate(data, function(error, info, body) {
+    userController.validate(data, function(error, info, body) {
         if (error) {
             return;
         }
@@ -412,7 +412,7 @@ function mindcrushCall(data) {
 }
 
 function aiRestartCall(data) {
-    userValidate(data, function(error, info, body) {
+    userController.validate(data, function(error, info, body) {
         if (error) {
             return;
         }
