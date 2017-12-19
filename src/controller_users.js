@@ -2,17 +2,15 @@
 
 'use strict';
 var validationCache = {},
-    request = require('request'),
     fs = require('fs'),
     mysql = require('mysql'),
     crypto = require('crypto'),
-    zxcvbn = require('zxcvbn '),
+    zxcvbn = require('zxcvbn'),
     hotload = require('hotload'),
     mongoose = require('mongoose'),
     Schema = mongoose.Schema,
     ObjectId = Schema.ObjectId,
     UserEntry = new Schema({
-        userID: ObjectId,
         username: String,
         passwordHash: String,
         email: String,
@@ -35,11 +33,12 @@ var validationCache = {},
             avatar: Buffer
         }
     }),
+    BaseUser = mongoose.model('user', UserEntry),
     SparkPost = require('sparkpost'),
     emailClient = new SparkPost('YOUR_API_KEY');
 
 
-mongoose.connect('mongodb://localhost/salvation');
+var db = mongoose.connect('mongodb://localhost/salvation');
 
 function isAdmin(data) {
     var result = '0';
@@ -60,27 +59,72 @@ function validate(data, callback) {
     return validate;
 }
 
+function sendEmail(address, id) {
+    emailClient.transmissions.send({
+        content: {
+            from: 'no-replay@ygosalvation.com',
+            subject: 'Hello, World!',
+            html: '<html><body><p>Testing SparkPost - the world\'s most awesomest email service!</p></body></html>'
+        },
+        recipients: [
+            { address }
+        ]
+    }).then(data => {
+        console.log('Woohoo! You just sent your first mailing!');
+        console.log(data);
+    })
+        .catch(err => {
+            console.log('Whoops! Something went wrong');
+            console.log(err);
+        });
+
+}
 
 function setupRegistrationService(app) {
-    app.post('register', function (request, response) {
-        var payload = request.body,
+    console.log('attaching registration endpoints');
+    app.post('/register', function (request, response) {
+        console.log('eep', request.body);
+        var payload = request.body || {},
             user;
+        if (!payload.username) {
+            response.send({
+                error: 'No username'
+            });
+            return;
+        }
+        if (!payload.password) {
+            response.send({
+                error: 'No Password'
+            });
+            return;
+        }
         if (zxcvbn(payload.password) < 3) {
-            response.write({
+            response.send({
                 error: 'Password is to weak'
             });
+            response.end();
+            return;
         } else {
-            user = mongoose.model('Person', UserEntry);
-
+            console.log('made new model');
             // find each person with a last name matching 'Ghost', selecting the `name` and `occupation` fields
-            user.findOne({ 'email': payload.email }, 'username email', function (err, person) {
-                if (err) { return handleError(err); }
-                if (person.length) {
+            BaseUser.findOne({ 'email': payload.email }, 'username email', function (err, person) {
+                if (err) {
+                    return console.log(err);
+                }
+                console.log('checking person', person);
+                if (person) {
                     // already exist
+                    console.log('person exist');
+                    response.send({
+                        error: 'Email exist in system already'
+                    });
+                    response.end();
                 } else {
-                    var newUser = new UserEntry();
+                   
+                    
+                    var newUser = new BaseUser();
                     newUser.username = payload.username;
-                    newUser.passwordHash = hash(payload.password);
+                    newUser.passwordHash = payload.password; // needs to be hashed
                     newUser.email = payload.email;
                     newUser.creation = new Date();
                     newUser.lastOnline = new Date();
@@ -94,21 +138,34 @@ function setupRegistrationService(app) {
                         rankedLosses: 0,
                         rankedTies: 0
                     };
-                    newUser.save(function () {
-
+                    console.log(newUser);
+                    BaseUser.create(newUser, function (error, resultingUser, numAffected) {
+                        response.send({
+                            success: resultingUser,
+                            error,
+                            numAffected
+                        });
+                        response.end();
                     });
                 }
             });
-
-            user = new UserEntry();
         }
     });
 
-    app.get('verify', function () {
+    app.get('/verify/:id', function (request, response) {
+        var id = request.params.id;
+
+        Adventure.findById(id, function (err, adventure) { });
 
     });
+
+    console.log(new ObjectId());
 }
 
 module.exports = {
-    validate
+    validate,
+    setupRegistrationService,
+    db
 };
+
+console.log( ObjectId(), 'eeee');

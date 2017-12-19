@@ -23,6 +23,7 @@ const child_process = require('child_process'),
     compression = require('compression'),
     hsts = require('hsts'),
     Ddos = require('ddos'),
+    bodyParser = require('body-parser'),
     helmet = require('helmet'),
     Primus = require('primus'),
     Rooms = require('primus-rooms'),
@@ -74,6 +75,8 @@ var userlist = [],
 app.use(ddos.express);
 app.use(compression());
 app.use(helmet());
+app.use(bodyParser.urlencoded({ extended: false })); 
+app.use(bodyParser.json()); // Body parser use JSON data
 
 app.use(function(req, res, next) {
     if (toobusy()) {
@@ -134,6 +137,8 @@ app.get('/git', function(req, res, next) {
     gitRoute(req, res, next);
 });
 
+userController.setupRegistrationService(app);
+
 
 try {
     var privateKey = fs.readFileSync(path.resolve(process.env.SSL + '\\ssl.key')).toString(),
@@ -163,6 +168,7 @@ try {
     primusServer = http.createServer(app);
     primusServer.listen(HTTP_PORT);
 }
+
 
 
 
