@@ -53,10 +53,6 @@
     "zip-folder": "*",
     "zxcvbn": "^4.4.2"
   },
-  "optionalDependencies": {
-    "electron": "^1.6.5",
-    "httpsys": "*"
-  },
   "devDependencies": {
     "istanbul": "*",
     "mocha": "*"
