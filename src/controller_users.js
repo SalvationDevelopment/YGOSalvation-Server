@@ -89,9 +89,10 @@ function updatePassword(data, callback){
     validate(data, function (error, result, person){
         var password = data.newPassword,
             salt = salt();
-            passwordHash = hash(password, salt);
+            passwordHash = hash(password, salt),
+            recoveryPass = undefined;
         if (result){
-            BaseUser.findByIdAndUpdate(person._id, {passwordHash, salt}, callback);
+            BaseUser.findByIdAndUpdate(person._id, {passwordHash, salt, recoveryPass}, callback);
         }
     });
 }
@@ -102,7 +103,7 @@ function startRecoverPassword(data, callback){
 }
 
 function recoverPassword(data, id, callback){
-    BaseUser.findOneAndUpdate({username : data.username, recoveryPass : id} function (error, result, person){
+    BaseUser.findOne({username : data.username, recoveryPass : id} , function (error, result, person){
         var password = data.newPassword,
             salt = salt();
             passwordHash = hash(password, salt);
@@ -120,6 +121,30 @@ function sendEmail(address, username, id) {
                 from: 'no-replay@ygosalvation.com',
                 subject: 'User Validation for ' + username,
                 html: '<html><body><p>Click the link to activate account. <a href="http://ygosalvation.com/verify/' + id + '" >http://ygosalvation.com/verify/' + id + '</a></p></body></html>'
+            },
+            recipients: [
+                { address }
+            ]
+        }).then(data => {
+            console.log(data);
+        }).catch(err => {
+            console.log('Whoops! Something went wrong');
+            console.log(err);
+        });
+    } catch (fatal) {
+        console.log(address, username, id, fatal);
+    }
+
+}
+
+function sendEmail(address, username, salt) {
+    try {
+        var emailClient = new SparkPost(process.env.SPARKPOST);
+        emailClient.transmissions.send({
+            content: {
+                from: 'no-replay@ygosalvation.com',
+                subject: 'User Validation for ' + username,
+                html: '<html><body><p>Click the link to recover account. <a href="http://ygosalvation.com/recover/' + salt + '" >http://ygosalvation.com/recover/' + salt + '</a></p></body></html>'
             },
             recipients: [
                 { address }
