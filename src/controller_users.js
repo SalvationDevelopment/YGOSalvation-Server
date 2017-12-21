@@ -51,12 +51,22 @@ function isAdmin(data) {
 }
 
 function validate(data, callback) {
-    var post = {
-        ips_username: data.username,
-        ips_password: data.password
-    };
+    BaseUser.findOne({
+        'username': data.username
+    }, function (error, person) { 
+        if (error || !person){
+            callback(new Error('Not found'));
+            return;
+        }
 
-    return validate;
+
+        // add salt hash!
+        if (data.password === person.password){
+            callback(error, true, person);
+        }else {
+            callback(error, false);
+        }
+    });
 }
 
 function sendEmail(address, id) {
@@ -120,8 +130,8 @@ function setupRegistrationService(app) {
                     });
                     response.end();
                 } else {
-                   
-                    
+
+
                     var newUser = new BaseUser();
                     newUser.username = payload.username;
                     newUser.passwordHash = payload.password; // needs to be hashed
@@ -168,4 +178,4 @@ module.exports = {
     db
 };
 
-console.log( ObjectId(), 'eeee');
+console.log(ObjectId(), 'eeee');

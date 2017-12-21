@@ -227,17 +227,14 @@ setInterval(function() {
 
 
 function registrationCall(data, socket) {
-    userController.validate(data, function(error, info, body) {
+    userController.validate(data, function(error, valid, info) {
         if (error) {
             //console.log(error);
             return;
         }
-        if (info === undefined) {
-            console.log(data, error, info, body);
-        }
-        if (info.success) {
-            registry[info.displayname] = socket.address.ip;
-            socket.username = info.displayname;
+        if (valid) {
+            registry[info.username] = socket.address.ip;
+            socket.username = info.username;
 
             socket.write({
                 clientEvent: 'global',
