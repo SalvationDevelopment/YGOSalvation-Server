@@ -13,6 +13,7 @@ var validationCache = {},
     UserEntry = new Schema({
         username: String,
         passwordHash: String,
+        salt: String,
         email: String,
         creation: Date,
         verified: { type: Boolean, default: false },
@@ -35,10 +36,24 @@ var validationCache = {},
     }),
     BaseUser = mongoose.model('user', UserEntry),
     SparkPost = require('sparkpost'),
-    emailClient = new SparkPost('YOUR_API_KEY');
+    uuidv4 = require('uuid/v4'),
+    emailClient = new SparkPost(process.env.SPARKPOST);
 
 
 var db = mongoose.connect('mongodb://localhost/salvation');
+
+
+function salt() {
+    var text = "";
+    for (var i = 0; i < 8; i++) {
+        text += uuidv4().split('-').join();
+    }
+    return text;
+}
+
+function hash(string, salt) {
+    return crypto.createHash('md5').update(string + salt + process.env.SALT).digest("hex");
+}
 
 function isAdmin(data) {
     var result = '0';
@@ -53,47 +68,49 @@ function isAdmin(data) {
 function validate(data, callback) {
     BaseUser.findOne({
         'username': data.username
-    }, function (error, person) { 
-        if (error || !person){
-            callback(new Error('Not found'));
+    }, function (error, person) {
+        if (error) {
+            callback(error);
             return;
+        }
+        if (!person) {
+            callback(new Error('Incorrect Login Information.'), false);
+            return;
+        }
+        if (!person.verified) {
+            callback(new Error('User email not verified.'), false);
         }
 
 
-        // add salt hash!
-        if (data.password === person.password){
+        if (hash(data.password, person.salt) === person.password) {
             callback(error, true, person);
-        }else {
-            callback(error, false);
+        } else {
+            callback(new Error('Incorrect Login Information.'), false);
         }
     });
 }
 
-function sendEmail(address, id) {
+function sendEmail(address, username, id) {
     emailClient.transmissions.send({
         content: {
             from: 'no-replay@ygosalvation.com',
-            subject: 'Hello, World!',
-            html: '<html><body><p>Testing SparkPost - the world\'s most awesomest email service!</p></body></html>'
+            subject: 'User Validation for ' + username,
+            html: '<html><body><p>Click the link to activate account. <a href="http://ygosalvation.com/verify/' + id + '" >http://ygosalvation.com/verify/' + id + '</a></p></body></html>'
         },
         recipients: [
             { address }
         ]
     }).then(data => {
-        console.log('Woohoo! You just sent your first mailing!');
         console.log(data);
-    })
-        .catch(err => {
-            console.log('Whoops! Something went wrong');
-            console.log(err);
-        });
+    }).catch(err => {
+        console.log('Whoops! Something went wrong');
+        console.log(err);
+    });
 
 }
 
 function setupRegistrationService(app) {
-    console.log('attaching registration endpoints');
     app.post('/register', function (request, response) {
-        console.log('eep', request.body);
         var payload = request.body || {},
             user;
         if (!payload.username) {
@@ -115,16 +132,13 @@ function setupRegistrationService(app) {
             response.end();
             return;
         } else {
-            console.log('made new model');
             // find each person with a last name matching 'Ghost', selecting the `name` and `occupation` fields
             BaseUser.findOne({ 'email': payload.email }, 'username email', function (err, person) {
                 if (err) {
                     return console.log(err);
                 }
-                console.log('checking person', person);
                 if (person) {
                     // already exist
-                    console.log('person exist');
                     response.send({
                         error: 'Email exist in system already'
                     });
@@ -134,7 +148,8 @@ function setupRegistrationService(app) {
 
                     var newUser = new BaseUser();
                     newUser.username = payload.username;
-                    newUser.passwordHash = payload.password; // needs to be hashed
+                    newUser.salt = salt();
+                    newUser.passwordHash = hash(payload.password, newUser.salt);
                     newUser.email = payload.email;
                     newUser.creation = new Date();
                     newUser.lastOnline = new Date();
@@ -148,13 +163,14 @@ function setupRegistrationService(app) {
                         rankedLosses: 0,
                         rankedTies: 0
                     };
-                    console.log(newUser);
                     BaseUser.create(newUser, function (error, resultingUser, numAffected) {
                         response.send({
-                            success: resultingUser,
+                            info: resultingUser,
+                            success: true,
                             error,
                             numAffected
                         });
+                        sendEmail(payload.email, payload.username, resultingUser._id);
                         response.end();
                     });
                 }
@@ -165,11 +181,13 @@ function setupRegistrationService(app) {
     app.get('/verify/:id', function (request, response) {
         var id = request.params.id;
 
-        Adventure.findById(id, function (err, adventure) { });
-
+        BaseUser.findByIdAndUpdate(id, { verified: true }, function (err, person) {
+            response.write({
+                success: error,
+                result: person
+            });
+        });
     });
-
-    console.log(new ObjectId());
 }
 
 module.exports = {
@@ -177,5 +195,3 @@ module.exports = {
     setupRegistrationService,
     db
 };
-
-console.log(ObjectId(), 'eeee');
