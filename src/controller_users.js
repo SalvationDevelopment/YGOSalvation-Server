@@ -32,12 +32,13 @@ var validationCache = {},
         settings: {
             sleeves: Buffer,
             avatar: Buffer
-        }
+        },
+        bans : [Schema.Types.Mixed]
     }),
     BaseUser = mongoose.model('user', UserEntry),
     SparkPost = require('sparkpost'),
-    uuidv4 = require('uuid/v4'),
-    emailClient = new SparkPost(process.env.SPARKPOST);
+    uuidv4 = require('uuid/v4');
+
 
 
 var db = mongoose.connect('mongodb://localhost/salvation');
@@ -90,22 +91,38 @@ function validate(data, callback) {
     });
 }
 
-function sendEmail(address, username, id) {
-    emailClient.transmissions.send({
-        content: {
-            from: 'no-replay@ygosalvation.com',
-            subject: 'User Validation for ' + username,
-            html: '<html><body><p>Click the link to activate account. <a href="http://ygosalvation.com/verify/' + id + '" >http://ygosalvation.com/verify/' + id + '</a></p></body></html>'
-        },
-        recipients: [
-            { address }
-        ]
-    }).then(data => {
-        console.log(data);
-    }).catch(err => {
-        console.log('Whoops! Something went wrong');
-        console.log(err);
+function updatePassword(data, callback){
+    validate(data, function (error, result, person){
+        var password = data.newPassword,
+            salt = salt();
+            passwordHash = hash(password, salt);
+        if (result){
+            BaseUser.findByIdAndUpdate(person._id, {passwordHash, salt}, callback);
+        }
     });
+}
+
+function sendEmail(address, username, id) {
+    try {
+        var emailClient = new SparkPost(process.env.SPARKPOST);
+        emailClient.transmissions.send({
+            content: {
+                from: 'no-replay@ygosalvation.com',
+                subject: 'User Validation for ' + username,
+                html: '<html><body><p>Click the link to activate account. <a href="http://ygosalvation.com/verify/' + id + '" >http://ygosalvation.com/verify/' + id + '</a></p></body></html>'
+            },
+            recipients: [
+                { address }
+            ]
+        }).then(data => {
+            console.log(data);
+        }).catch(err => {
+            console.log('Whoops! Something went wrong');
+            console.log(err);
+        });
+    } catch (fatal) {
+        console.log(address, username, id, fatal);
+    }
 
 }
 

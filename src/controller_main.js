@@ -32,7 +32,6 @@ const child_process = require('child_process'),
     userController = require('./controller_users.js'),
     pack = require('../package.json'),
     adminlist = hotload('./record_admins.js'),
-    banlistedUsers = hotload('./record_bansystem.js'),
     HTTP_PORT = pack.port || 80,
     ddos = new Ddos({
         maxcount: 2000,
@@ -251,17 +250,6 @@ function registrationCall(data, socket) {
                 clientEvent: 'login',
                 info: info,
                 chatbox: chatbox
-            });
-
-            Object.keys(banlistedUsers).some(function(bannedUser) {
-                if (bannedUser.toUpperCase() === data.username.toUpperCase()) {
-                    socket.write({
-                        clientEvent: 'banned',
-                        reason: banlistedUsers[data.username]
-                    });
-                    return true;
-                }
-                return false;
             });
             socket.join(socket.username);
 
