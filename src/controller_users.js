@@ -23,7 +23,7 @@ var validationCache = {},
         admin: Boolean,
         decks: [Schema.Types.Mixed],
         rewards: [String],
-        ranking: {
+        ranking: {recoveryPass
             rankPoints: Number,
             rankedWins: Number,
             rankedLosses: Number,
@@ -33,12 +33,16 @@ var validationCache = {},
             sleeves: Buffer,
             avatar: Buffer
         },
-        bans : [Schema.Types.Mixed]
+        bans : [Schema.Types.Mixed],
+         : String
     }),
     BaseUser = mongoose.model('user', UserEntry),
     SparkPost = require('sparkpost'),
     uuidv4 = require('uuid/v4');
 
+    process.env.SALT = process.env.SALT || function() {
+        console.log('')
+    } 
 
 
 var db = mongoose.connect('mongodb://localhost/salvation');
@@ -54,16 +58,6 @@ function salt() {
 
 function hash(string, salt) {
     return crypto.createHash('md5').update(string + salt + process.env.SALT).digest("hex");
-}
-
-function isAdmin(data) {
-    var result = '0';
-    Object.keys(admins).forEach(function (admin) {
-        if (admin === data.username && admins[admin]) {
-            result = '1';
-        }
-    });
-    return result;
 }
 
 function validate(data, callback) {
@@ -93,6 +87,22 @@ function validate(data, callback) {
 
 function updatePassword(data, callback){
     validate(data, function (error, result, person){
+        var password = data.newPassword,
+            salt = salt();
+            passwordHash = hash(password, salt);
+        if (result){
+            BaseUser.findByIdAndUpdate(person._id, {passwordHash, salt}, callback);
+        }
+    });
+}
+
+function startRecoverPassword(data, callback){
+    var code = salt();
+    BaseUser.findOneAndUpdate({username : data.username}, {recoveryPass : salt}, callback);
+}
+
+function recoverPassword(data, id, callback){
+    BaseUser.findOneAndUpdate({username : data.username, recoveryPass : id} function (error, result, person){
         var password = data.newPassword,
             salt = salt();
             passwordHash = hash(password, salt);
