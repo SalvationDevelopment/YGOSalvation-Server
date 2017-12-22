@@ -8,6 +8,7 @@ var validationCache = {},
     zxcvbn = require('zxcvbn'),
     hotload = require('hotload'),
     mongoose = require('mongoose'),
+    OAuthServer = require("express-oauth-server"),    
     Schema = mongoose.Schema,
     ObjectId = Schema.ObjectId,
     UserEntry = new Schema({
@@ -36,6 +37,7 @@ var validationCache = {},
         bans : [Schema.Types.Mixed],
          : String
     }),
+    oauthModel = require('./model_oauth.js'),
     BaseUser = mongoose.model('user', UserEntry),
     SparkPost = require('sparkpost'),
     uuidv4 = require('uuid/v4');
@@ -162,6 +164,8 @@ function sendEmail(address, username, salt) {
 }
 
 function setupRegistrationService(app) {
+   var oauth = new OAuthServer({ model: oauthModel });
+    
     app.post('/register', function (request, response) {
         var payload = request.body || {},
             user;
@@ -240,6 +244,32 @@ function setupRegistrationService(app) {
             });
         });
     });
+
+    app.use("/secure", oauth.authenticate());
+
+    function loadCurrentUser(req) {
+        return db.getUserBySessionId(req.session.sessionid);
+    }
+    
+    
+    // app.get("/oauth/authorize", function(req, res) {
+    //     // render an authorization form
+    // });
+
+    app.post("/oauth/authorize", oauth.authorize({
+        authenticateHandler: {
+            handle: loadCurrentUser
+        }
+    }));
+    
+    app.post("/oauth/authorize", oauth.authorize({
+        authenticateHandler: {
+            handle: loadCurrentUser
+        }
+    }));
+    
+    app.post("/oauth/token", oauth.token());
+    
 }
 
 module.exports = {
