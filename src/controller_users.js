@@ -8,7 +8,7 @@ var validationCache = {},
     zxcvbn = require('zxcvbn'),
     hotload = require('hotload'),
     mongoose = require('mongoose'),
-    OAuthServer = require("express-oauth-server"),    
+    OAuthServer = require("express-oauth-server"),
     Schema = mongoose.Schema,
     ObjectId = Schema.ObjectId,
     UserEntry = new Schema({
@@ -24,7 +24,8 @@ var validationCache = {},
         admin: Boolean,
         decks: [Schema.Types.Mixed],
         rewards: [String],
-        ranking: {recoveryPass
+        ranking: {
+            recoveryPass
             rankPoints: Number,
             rankedWins: Number,
             rankedLosses: Number,
@@ -34,17 +35,17 @@ var validationCache = {},
             sleeves: Buffer,
             avatar: Buffer
         },
-        bans : [Schema.Types.Mixed],
+        bans: [Schema.Types.Mixed],
          : String
     }),
-    oauthModel = require('./model_oauth.js'),
+oauthModel = require('./model_oauth.js'),
     BaseUser = mongoose.model('user', UserEntry),
     SparkPost = require('sparkpost'),
     uuidv4 = require('uuid/v4');
 
-    process.env.SALT = process.env.SALT || function() {
-        console.log('')
-    } 
+process.env.SALT = process.env.SALT || function () {
+    console.log('')
+}
 
 
 var db = mongoose.connect('mongodb://localhost/salvation');
@@ -87,30 +88,33 @@ function validate(data, callback) {
     });
 }
 
-function updatePassword(data, callback){
-    validate(data, function (error, result, person){
+function updatePassword(data, callback) {
+    validate(data, function (error, result, person) {
         var password = data.newPassword,
             salt = salt();
-            passwordHash = hash(password, salt),
+        passwordHash = hash(password, salt),
             recoveryPass = undefined;
-        if (result){
-            BaseUser.findByIdAndUpdate(person._id, {passwordHash, salt, recoveryPass}, callback);
+        if (result) {
+            BaseUser.findByIdAndUpdate(person._id, { passwordHash, salt, recoveryPass }, callback);
         }
     });
 }
 
-function startRecoverPassword(data, callback){
+function startRecoverPassword(data, callback) {
     var code = salt();
-    BaseUser.findOneAndUpdate({username : data.username}, {recoveryPass : salt}, callback);
+    BaseUser.findOneAndUpdate({ username: data.username }, { recoveryPass: salt }, function(error, person){
+        callback(error, person, code);
+        sendRecoveryEmail(person.email, person.username, code)
+    });
 }
 
-function recoverPassword(data, id, callback){
-    BaseUser.findOne({username : data.username, recoveryPass : id} , function (error, result, person){
+function recoverPassword(data, id, callback) {
+    BaseUser.findOne({ username: data.username, recoveryPass: id }, function (error, result, person) {
         var password = data.newPassword,
             salt = salt();
-            passwordHash = hash(password, salt);
-        if (result){
-            BaseUser.findByIdAndUpdate(person._id, {passwordHash, salt}, callback);
+        passwordHash = hash(password, salt);
+        if (result) {
+            BaseUser.findByIdAndUpdate(person._id, { passwordHash, salt }, callback);
         }
     });
 }
@@ -139,13 +143,13 @@ function sendEmail(address, username, id) {
 
 }
 
-function sendEmail(address, username, salt) {
+function sendRecoveryEmail(address, username, salt) {
     try {
         var emailClient = new SparkPost(process.env.SPARKPOST);
         emailClient.transmissions.send({
             content: {
                 from: 'no-replay@ygosalvation.com',
-                subject: 'User Validation for ' + username,
+                subject: 'User Recovery for ' + username,
                 html: '<html><body><p>Click the link to recover account. <a href="http://ygosalvation.com/recover/' + salt + '" >http://ygosalvation.com/recover/' + salt + '</a></p></body></html>'
             },
             recipients: [
@@ -164,8 +168,8 @@ function sendEmail(address, username, salt) {
 }
 
 function setupRegistrationService(app) {
-   var oauth = new OAuthServer({ model: oauthModel });
-    
+    var oauth = new OAuthServer({ model: oauthModel });
+
     app.post('/register', function (request, response) {
         var payload = request.body || {},
             user;
@@ -250,8 +254,8 @@ function setupRegistrationService(app) {
     function loadCurrentUser(req) {
         return db.getUserBySessionId(req.session.sessionid);
     }
-    
-    
+
+
     // app.get("/oauth/authorize", function(req, res) {
     //     // render an authorization form
     // });
@@ -261,15 +265,35 @@ function setupRegistrationService(app) {
             handle: loadCurrentUser
         }
     }));
-    
+
     app.post("/oauth/authorize", oauth.authorize({
         authenticateHandler: {
             handle: loadCurrentUser
         }
     }));
-    
+
     app.post("/oauth/token", oauth.token());
-    
+
+    app.post('/recover', function (request, response, next) {
+        var payload = request.body || {},
+            user;
+
+        if (!payload.username || !payload.email) {
+            response.send({
+                error: 'No username or email address'
+            });
+            return;
+        }
+        if (payload.username) {
+            BaseUser.findOne({ 'username': payload.username }, 'username email', function (err, person) {
+                startRecoverPassword(person, callback)
+            });
+        } else {
+            BaseUser.findOne({ 'email': payload.email }, 'username email', function (err, person) {
+                startRecoverPassword(person, callback)
+            });
+        }
+    });
 }
 
 module.exports = {
