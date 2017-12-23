@@ -1505,6 +1505,19 @@ div#gamelist {
     margin-top: -1%;
 }
 
+.formrow {
+    width: 25%;
+    margin: 2vh auto;
+    overflow:auto;
+}
+
+.formrow input, .formrow label{
+    float :left;
+    display : block;
+    width:50%
+}
+
+
 #lobbygotoduel,
 #lobbygotospectate,
 #lobbystart,

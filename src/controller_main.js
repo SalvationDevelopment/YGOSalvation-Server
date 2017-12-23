@@ -163,7 +163,7 @@ try {
     });
     openserver.listen(HTTP_PORT);
 } catch (nossl) {
-    console.log('Failed to apply SSL to HTTP server', nossl);
+    console.log('Failed to apply SSL to HTTP server', nossl.code);
     primusServer = http.createServer(app);
     primusServer.listen(HTTP_PORT);
 }

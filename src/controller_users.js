@@ -24,8 +24,8 @@ var validationCache = {},
         admin: Boolean,
         decks: [Schema.Types.Mixed],
         rewards: [String],
+        recoveryPass : String,         
         ranking: {
-            recoveryPass
             rankPoints: Number,
             rankedWins: Number,
             rankedLosses: Number,
@@ -35,8 +35,8 @@ var validationCache = {},
             sleeves: Buffer,
             avatar: Buffer
         },
-        bans: [Schema.Types.Mixed],
-         : String
+        bans: [Schema.Types.Mixed]
+
     }),
 oauthModel = require('./model_oauth.js'),
     BaseUser = mongoose.model('user', UserEntry),
