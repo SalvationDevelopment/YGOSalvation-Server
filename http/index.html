@@ -152,15 +152,21 @@
     <header style="padding-top:50px" id="registerprompt">
         <div class="formrow">
             <label>Email Address</label>
-            <input /></div>
-            <div class="formrow"><label>Username</label>
-            <input  /></div>
-            <div class="formrow">  <label>Password</label>
-            <input type="password"/></div>
-            <div class="formrow">  <label>Repeat Password</label>
-            <input type="password"/></div>
-            <div class="formrow">  <label>Repeat Password</label>
-                <button onclick="startNewUser()">Register</button></div>
+            <input id="newemail" /></div>
+            <div class="formrow">
+                <label>Username</label>
+                <input id="newusername"/>
+            </div>
+            <div class="formrow">  
+                <label>Password</label>
+                <input type="password" id="newpassword"/>
+            </div>
+            <div class="formrow">
+                <label>Repeat Password</label>
+                <input type="password" id="restatenewpassword"/>
+            </div>
+            <div class="formrow"> 
+            <button onclick="startNewUser()">Register</button></div>
     </header>
     <header style="padding-top:50px" id="recoveryprompt">
             <label>Email Address</label>

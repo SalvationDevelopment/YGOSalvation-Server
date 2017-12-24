@@ -76,11 +76,11 @@ function validate(data, callback) {
             return;
         }
         if (!person.verified) {
-            callback(new Error('User email not verified.'), false);
+            //callback(new Error('User email not verified.'), false);
         }
 
 
-        if (hash(data.password, person.salt) === person.password) {
+        if (hash(data.password, person.salt) === person.passwordHash) {
             callback(error, true, person);
         } else {
             callback(new Error('Incorrect Login Information.'), false);

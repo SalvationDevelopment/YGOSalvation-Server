@@ -1001,3 +1001,40 @@ function duelrequestPerson() {
     //        launcher: launcher
     //    });
 }
+
+function validateEmail(email) {
+    var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(email.toLowerCase());
+}
+
+
+function startNewUser (){
+    var username = $('#newusername').val(),
+        email =$('#newemail').val(),
+        password =$('#newpassword').val(),
+        repeatedPassword =$('#restatenewpassword').val();
+
+        if (password.length < 7){
+            return false;
+        }
+
+        if (repeatedPassword !== password){
+            return false;
+        }
+
+        if (!validateEmail(email)) {
+            return false;
+        }
+
+        $.post('/register', {email : email, username: username, password : password}, function (error, result){
+            if (error){
+                return;
+            }
+            if (!result.error){
+
+            }
+            alert('Please check your email.');
+            singlesitenav('home');
+        });
+
+}
