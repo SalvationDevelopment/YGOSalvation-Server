@@ -129,7 +129,7 @@
 
                 <br>
                 <a><button data-translation-login id="openlogin" class="loginsystem" onclick="$('#loginmodal, #ipblogin').toggle()">Login</button></a>
-                <a href="https://forum.ygopro.us/index.php?/register/" target="_blank"><button data-translation-registerviaforum id="doregister" class="loginsystem">Register via Forum</button></a>
+                <button data-translation-registerviaforum id="doregister" onclick="singlesitenav('registerprompt');" class="loginsystem">Register via Forum</button>
 
 
             </div>
@@ -148,6 +148,29 @@
                 </li>
             </ul>
         </div>
+    </header>
+    <header style="padding-top:50px" id="registerprompt">
+        <div class="formrow">
+            <label>Email Address</label>
+            <input id="newemail" /></div>
+            <div class="formrow">
+                <label>Username</label>
+                <input id="newusername"/>
+            </div>
+            <div class="formrow">  
+                <label>Password</label>
+                <input type="password" id="newpassword"/>
+            </div>
+            <div class="formrow">
+                <label>Repeat Password</label>
+                <input type="password" id="restatenewpassword"/>
+            </div>
+            <div class="formrow"> 
+            <button onclick="startNewUser()">Register</button></div>
+    </header>
+    <header style="padding-top:50px" id="recoveryprompt">
+            <label>Email Address</label>
+            <input /></div>
     </header>
     <header style="padding-top:50px" id="credits">
         <div class="marquee" id="marquee">

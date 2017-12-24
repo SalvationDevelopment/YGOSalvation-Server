@@ -23,15 +23,15 @@ const child_process = require('child_process'),
     compression = require('compression'),
     hsts = require('hsts'),
     Ddos = require('ddos'),
+    bodyParser = require('body-parser'),
     helmet = require('helmet'),
     Primus = require('primus'),
     Rooms = require('primus-rooms'),
     domain = require('domain'),
     ps = require('ps-node'),
-    userValidate = require('./controller_users.js'),
+    userController = require('./controller_users.js'),
     pack = require('../package.json'),
     adminlist = hotload('./record_admins.js'),
-    banlistedUsers = hotload('./record_bansystem.js'),
     HTTP_PORT = pack.port || 80,
     ddos = new Ddos({
         maxcount: 2000,
@@ -74,6 +74,8 @@ var userlist = [],
 app.use(ddos.express);
 app.use(compression());
 app.use(helmet());
+app.use(bodyParser.urlencoded({ extended: false })); 
+app.use(bodyParser.json()); // Body parser use JSON data
 
 app.use(function(req, res, next) {
     if (toobusy()) {
@@ -134,6 +136,8 @@ app.get('/git', function(req, res, next) {
     gitRoute(req, res, next);
 });
 
+userController.setupRegistrationService(app);
+
 
 try {
     var privateKey = fs.readFileSync(path.resolve(process.env.SSL + '\\ssl.key')).toString(),
@@ -159,10 +163,11 @@ try {
     });
     openserver.listen(HTTP_PORT);
 } catch (nossl) {
-    console.log('Failed to apply SSL to HTTP server', nossl);
+    console.log('Failed to apply SSL to HTTP server', nossl.code);
     primusServer = http.createServer(app);
     primusServer.listen(HTTP_PORT);
 }
+
 
 
 
@@ -221,17 +226,14 @@ setInterval(function() {
 
 
 function registrationCall(data, socket) {
-    userValidate(data, function(error, info, body) {
+    userController.validate(data, function(error, valid, info) {
         if (error) {
             //console.log(error);
             return;
         }
-        if (info === undefined) {
-            console.log(data, error, info, body);
-        }
-        if (info.success) {
-            registry[info.displayname] = socket.address.ip;
-            socket.username = info.displayname;
+        if (valid) {
+            registry[info.username] = socket.address.ip;
+            socket.username = info.username;
 
             socket.write({
                 clientEvent: 'global',
@@ -248,17 +250,6 @@ function registrationCall(data, socket) {
                 clientEvent: 'login',
                 info: info,
                 chatbox: chatbox
-            });
-
-            Object.keys(banlistedUsers).some(function(bannedUser) {
-                if (bannedUser.toUpperCase() === data.username.toUpperCase()) {
-                    socket.write({
-                        clientEvent: 'banned',
-                        reason: banlistedUsers[data.username]
-                    });
-                    return true;
-                }
-                return false;
             });
             socket.join(socket.username);
 
@@ -277,7 +268,7 @@ function registrationCall(data, socket) {
 }
 
 function globalCall(data) {
-    userValidate(data, function(error, info, body) {
+    userController.validate(data, function(error, info, body) {
         if (error) {
             console.log('[Gamelist]', error);
             return;
@@ -295,7 +286,7 @@ function globalCall(data) {
 }
 
 function globalRequested(data, socket) {
-    userValidate(data, function(error, info, body) {
+    userController.validate(data, function(error, info, body) {
         if (error) {
             console.log('[Gamelist]', error);
             return;
@@ -313,7 +304,7 @@ function globalRequested(data, socket) {
 
 
 function genocideCall(data) {
-    userValidate(data, function(error, info, body) {
+    userController.validate(data, function(error, info, body) {
         if (error) {
             return;
         }
@@ -333,7 +324,7 @@ function genocideCall(data) {
 }
 
 function reviveCall(data) {
-    userValidate(data, function(error, info, body) {
+    userController.validate(data, function(error, info, body) {
         if (error) {
             return;
         }
@@ -353,7 +344,7 @@ function reviveCall(data) {
 
 
 function murderCall(data) {
-    userValidate(data, function(error, info, body) {
+    userController.validate(data, function(error, info, body) {
         if (error) {
             return;
         }
@@ -371,7 +362,7 @@ function murderCall(data) {
 }
 
 function censorCall(data) {
-    userValidate(data, function(error, info, body) {
+    userController.validate(data, function(error, info, body) {
         if (error) {
             return;
         }
@@ -393,7 +384,7 @@ function censorCall(data) {
 }
 
 function mindcrushCall(data) {
-    userValidate(data, function(error, info, body) {
+    userController.validate(data, function(error, info, body) {
         if (error) {
             return;
         }
@@ -412,7 +403,7 @@ function mindcrushCall(data) {
 }
 
 function aiRestartCall(data) {
-    userValidate(data, function(error, info, body) {
+    userController.validate(data, function(error, info, body) {
         if (error) {
             return;
         }

@@ -380,10 +380,10 @@ function processLogin(data) {
 
     var info = data;
     console.log('Attempting to do login based on :', data);
-    if (info.success) {
-        localStorage.nickname = info.displayname;
-        admin = info.data.g_access_cp;
-        if (admin === "1") {
+    if (!info.bans.length) {
+        localStorage.nickname = info.username;
+        admin = String(Number(info.admin));
+        if (info.admin) {
             $('body').addClass('adminuser');
         }
         if (isChecked('#ips_remember')) {
@@ -401,11 +401,11 @@ function processLogin(data) {
         loggedIn = true;
 
 
-        $('#profileusername').text(info.displayname);
-        $('#profilepoints span').text(info.data.field_12);
-        if (parseInt(info.data.post, 10) < 1) {
-            alertmodal('Please visit our forums and introduce yourself!');
-        }
+        $('#profileusername').text(info.username);
+        $('#profilepoints span').text(info.rewards.join());
+        // if (parseInt(info.data.post, 10) < 1) {
+        //     alertmodal('Please visit our forums and introduce yourself!');
+        // }
         window.quedfunc = 'populatealllist';
         window.quedready = true;
 
