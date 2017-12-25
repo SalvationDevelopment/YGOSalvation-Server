@@ -24,7 +24,7 @@ var validationCache = {},
         admin: Boolean,
         decks: [Schema.Types.Mixed],
         rewards: [String],
-        recoveryPass : String,         
+        recoveryPass: String,
         ranking: {
             rankPoints: Number,
             rankedWins: Number,
@@ -38,7 +38,7 @@ var validationCache = {},
         bans: [Schema.Types.Mixed]
 
     }),
-oauthModel = require('./model_oauth.js'),
+    oauthModel = require('./model_oauth.js'),
     BaseUser = mongoose.model('user', UserEntry),
     SparkPost = require('sparkpost'),
     uuidv4 = require('uuid/v4');
@@ -102,7 +102,7 @@ function updatePassword(data, callback) {
 
 function startRecoverPassword(data, callback) {
     var code = salt();
-    BaseUser.findOneAndUpdate({ username: data.username }, { recoveryPass: salt }, function(error, person){
+    BaseUser.findOneAndUpdate({ username: data.username }, { recoveryPass: salt }, function (error, person) {
         callback(error, person, code);
         sendRecoveryEmail(person.email, person.username, code)
     });
@@ -296,8 +296,16 @@ function setupRegistrationService(app) {
     });
 }
 
+function saveDeck(user, callback) {
+    BaseUser.findOne({ 'username': user.username }, function (err, person) {
+       person.decks = user.decks;
+       person.save(callback);
+    });
+}
+
 module.exports = {
     validate,
+    saveDeck,
     setupRegistrationService,
     db
 };
