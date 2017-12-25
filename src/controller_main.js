@@ -140,8 +140,8 @@ userController.setupRegistrationService(app);
 
 
 try {
-    var privateKey = fs.readFileSync(path.resolve(process.env.SSL + '\\ssl.key')).toString(),
-        certificate = fs.readFileSync(path.resolve(process.env.SSL + '\\ssl.crt')).toString(),
+    var privateKey = fs.readFileSync(path.resolve(process.env.SSL + '\\private.key')).toString(),
+        certificate = fs.readFileSync(path.resolve(process.env.SSL + '\\certificate.crt')).toString(),
         openserver = express();
 
 
