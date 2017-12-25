@@ -595,42 +595,13 @@ function onData(data, socket) {
                 data.decks[i].side = mapCards(data.decks[i].side); //further due to the abstract
                 data.decks[i].extra = mapCards(data.decks[i].extra); //of data.decks, afaik
             }); //unsure if loop should run through all decks for a single save; might be resource intensive
-            deckStorage.update({
-                username: data.username
-            }, data, {
-                upsert: true
-            }, function(error, docs) {
+            userController.saveDeck( data,  function(error, docs) {
                 primus.room(socket.address.ip + data.uniqueID).write({
                     clientEvent: 'deckSaved',
                     error: error
                 });
-                deckStorage.persistence.compactDatafile();
             });
 
-            break;
-        case 'load':
-            console.log(data);
-            if (data.decks) { //if it doesn't exist [].length will scream at you
-                data.decks.forEach(function(deck, i) {
-                    data.decks[i].main = mapCards(data.decks[i].main);
-                    data.decks[i].side = mapCards(data.decks[i].side);
-                    data.decks[i].extra = mapCards(data.decks[i].extra);
-                });
-            }
-            var regex = new RegExp(data.username, 'i');
-            deckStorage.find({
-                username: regex
-            }, function(error, docs) {
-                console.log(error, docs);
-                if (docs.length) {
-                    primus.room(socket.address.ip + data.uniqueID).write({
-                        clientEvent: 'deckLoad',
-                        decks: docs[0].decks,
-                        friends: docs[0].friends
-                    });
-                }
-
-            });
             break;
         default:
             duelLogic(socket, data);

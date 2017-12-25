@@ -625,11 +625,9 @@ function pondata(data) {
             }
             $('#onlinepublicchat').scrollTop($('#onlinepublicchat').prop("scrollHeight"));
             requestglobal();
-        }
-        if (data.clientEvent === 'deckLoad') {
-            window.deckEditor.loadDecks(data.decks);
-            if (data.friends) {
-                window.deckEditor.loadFriends(data.friends);
+            window.deckEditor.loadDecks(data.info.decks);
+            if (data.info.friends.length) {
+                window.deckEditor.loadFriends(data.info.friends);
             } else {
                 window.deckEditor.loadFriends([]);
             }
