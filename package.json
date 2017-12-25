@@ -28,7 +28,7 @@
     "fs-walk": "*",
     "function-queue": "0.0.12",
     "helmet": "^3.4.1",
-    "hotload": "0.0.5",
+    "hotload": "git+https://github.com/SalvationDevelopment/node-hotload.git",
     "hsts": "^2.1.0",
     "instaqueue": "*",
     "jsonfile": "^2.4.0",

@@ -248,7 +248,17 @@ function registrationCall(data, socket) {
             socket.speak = true;
             socket.write({
                 clientEvent: 'login',
-                info: info,
+                info: {
+                    username : info.username,
+                    decks : info.decks,
+                    friends : info.friends,
+                    session : info.session,
+                    sessionExpiration : info.sessionExpiration,
+                    ranking : info.ranking,
+                    admin : info.admin,
+                    rewards : info.rewards,
+                    settings : info.settings
+                },
                 chatbox: chatbox
             });
             socket.join(socket.username);
