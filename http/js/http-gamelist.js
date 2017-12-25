@@ -1025,8 +1025,9 @@ function startNewUser() {
     }
 
     $.post('/register', { email: email, username: username, password: password }, function (error, result) {
-        alert('Verification Email will be sent out in a few days, we are still fixing stuff.');
         singlesitenav('home');
+        alert('Verification Email will be sent out in a few days, we are still fixing stuff.');
+        
     });
 
 }
