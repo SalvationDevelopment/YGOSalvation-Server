@@ -11,6 +11,16 @@ var validationCache = {},
     OAuthServer = require('express-oauth-server'),
     Schema = mongoose.Schema,
     ObjectId = Schema.ObjectId,
+    Message = new Schema({
+        updated: { type: Date, default: Date.now },
+        created: Date,
+        modified: Date,
+        author: String,
+        author_id: ObjectId,
+        content: String,
+        status: String,
+        comments :  [Comment]
+    }),
     UserEntry = new Schema({
         username: String,
         passwordHash: String,
@@ -27,6 +37,7 @@ var validationCache = {},
         recoveryPass: String,
         session: String,
         sessionExpiration: Date,
+        inbox = [Message],
         ranking: {
             rankPoints: Number,
             rankedWins: Number,
@@ -37,7 +48,8 @@ var validationCache = {},
             sleeves: Buffer,
             avatar: Buffer
         },
-        bans: [Schema.Types.Mixed]
+        bans: [Schema.Types.Mixed],
+        signiture : String
 
     }),
     oauthModel = require('./model_oauth.js'),
