@@ -30,6 +30,7 @@ const child_process = require('child_process'),
     domain = require('domain'),
     ps = require('ps-node'),
     userController = require('./controller_users.js'),
+    forumController = require('./controller_forum.js'),
     pack = require('../package.json'),
     adminlist = hotload('./record_admins.js'),
     HTTP_PORT = pack.port || 80,
@@ -137,7 +138,7 @@ app.get('/git', function(req, res, next) {
 });
 
 userController.setupRegistrationService(app);
-
+forumController(app);
 
 try {
     var privateKey = fs.readFileSync(path.resolve(process.env.SSL + '\\private.key')).toString(),
@@ -227,6 +228,7 @@ setInterval(function() {
 
 function registrationCall(data, socket) {
     userController.validate(data, function(error, valid, info) {
+        console.log(error, valid, info);
         if (error) {
             //console.log(error);
             return;
@@ -257,7 +259,9 @@ function registrationCall(data, socket) {
                     ranking : info.ranking,
                     admin : info.admin,
                     rewards : info.rewards,
-                    settings : info.settings
+                    settings : info.settings,
+                    bans : info.bans,
+                    session : info.session
                 },
                 chatbox: chatbox
             });

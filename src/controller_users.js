@@ -18,8 +18,7 @@ var validationCache = {},
         author: String,
         author_id: ObjectId,
         content: String,
-        status: String,
-        comments :  [Comment]
+        status: String
     }),
     UserEntry = new Schema({
         username: String,
@@ -37,7 +36,7 @@ var validationCache = {},
         recoveryPass: String,
         session: String,
         sessionExpiration: Date,
-        inbox = [Message],
+        inbox : [Message],
         ranking: {
             rankPoints: Number,
             rankedWins: Number,
