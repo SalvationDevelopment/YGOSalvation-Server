@@ -38,10 +38,10 @@ var validationCache = {},
         author_id: ObjectId,
         content: String,
         status: String,
-        forum : {
-            index : String,
+        forum: {
+            index: String,
             forum: String,
-            subForum : String
+            subForum: String
         },
         tags: [String],
         polls: [Poll],
@@ -95,9 +95,15 @@ function sessionTimeout(time) {
     return ((time.getTime() + hour) > Date.now());
 }
 
-function sessionCheck (request, response, next) {
+function sessionCheck(request, response, next) {
     var session = request.get('Session') || '';
-    Users.findOne({session}, function (error, person) {
+
+    if (request.method === 'GET') {
+        next();
+        return;
+    }
+
+    Users.findOne({ session }, function (error, person) {
         if (error) {
             response.status(500);
             response.json({ code: 500, error });
@@ -121,7 +127,7 @@ function sessionCheck (request, response, next) {
     });
 }
 
-function adminSessionCheck (request, response, next) {
+function adminSessionCheck(request, response, next) {
     var session = request.get('Session') || '';
     Users.findOne({ session, admin: true }, function (error, person) {
         if (error) {
@@ -146,87 +152,263 @@ function adminSessionCheck (request, response, next) {
     });
 }
 
-function updatePost(author_id, data, callback) {
-    Posts.findById(data.id, function (error, submission) {
+function createPost(request, response) {
+    var data = request.body,
+        submission = new Post();
+
+    Object.assign(submission, data);
+    submission.created = new Date();
+    submission.modified = new Date();
+    submission.author = request.user.username;
+    submission.author_id = request.user._id;
+    Post.create(submission, function (error, result, numAffected) {
         if (error) {
-            callback(error);
+            response.status(500);
+            response.send({
+                result,
+                success: false,
+                error,
+                numAffected
+            });
+            response.end();
             return;
         }
-        if (!submission) {
-            submission = new Post();
-            Object.assign(submission, data);
-            submission.created = new Date();
-            submission.modified = new Date();
-            submission.author_id = id;
-            callback();
+        response.send({
+            result: result,
+            success: true,
+            error,
+            numAffected
+        });
+        response.end();
+    });
+
+    return;
+}
+
+function updatePost(request, response) {
+    var data = request.body;
+    Posts.findById(data.id, function (error, post) {
+        if (error) {
+            response.status(500);
+            response.send({
+                success: false,
+                post,
+                error
+            });
+            response.end();
             return;
         }
-        submission.modified = new Date();
-        submission.content = data.content;
-        submission.content = data.title;
-        submission.save(callback);
+        if (!post) {
+            response.status(404);
+            response.send({
+                success: false,
+                post,
+                error
+            });
+            response.end();
+            return;
+        }
+        if (request.user._id !== post.author_id) {
+            response.status(401);
+            response.send({
+                success: false,
+                post,
+                error: '401 Unauthorized'
+            });
+            response.end();
+            return;
+        }
+        post.modified = new Date();
+        post.content = data.content;
+        post.content = data.title;
+        post.save(function (saveError, result, numAffected) {
+            if (error) {
+                response.status(500);
+                response.send({
+                    result,
+                    success: false,
+                    error: saveError,
+                    numAffected
+                });
+                response.end();
+                return;
+            }
+            response.send({
+                result: result,
+                success: true,
+                error,
+                numAffected
+            });
+            response.end();
+        });
     });
 }
 
-function updateComment(author_id, data, callback) {
+function createComment(request, response) {
+    var data = request.body;
+    Post.findById(data.parent, function (error, post) {
+        if (error) {
+            response.status(500);
+            response.send({
+                success: false,
+                post,
+                error
+            });
+            response.end();
+            return;
+        }
+        if (!post) {
+            response.status(404);
+            response.send({
+                success: false,
+                post,
+                error
+            });
+            response.end();
+            return;
+        }
+
+        var comment = new Comments();
+        Object.assign(comment, data);
+        comment.created = new Date();
+        comment.modified = new Date();
+        comment.author_id = request.user._id;
+        post.push(comment);
+        post.save(function (saveError, result, numAffected) {
+            if (error) {
+                response.status(500);
+                response.send({
+                    result,
+                    success: false,
+                    error: saveError,
+                    numAffected
+                });
+                response.end();
+                return;
+            }
+            response.send({
+                result: result,
+                success: true,
+                error,
+                numAffected
+            });
+            response.end();
+        });
+        return;
+    });
+}
+
+function updateComment(request, response) {
+    var data = request.body,
+    id = data._id
     Comments.findById(data.parent, function (error, post) {
         if (error) {
-            callback(error);
+            response.status(500);
+            response.send({
+                success: false,
+                post,
+                error
+            });
+            response.end();
             return;
         }
-        var comment;
-        if (!data._id) {
-            comment = new Comments();
-            Object.assign(comment, data);
-            comment.created = new Date();
-            comment.modified = new Date();
-            comment.author_id = author_id;
-            post.push(comment);
-            post.save(callback);
+        if (!post) {
+            response.status(404);
+            response.send({
+                success: false,
+                post,
+                error
+            });
+            response.end();
+            return;
+        }
+        if (!post.comments(id)) {
+            response.status(404);
+            response.send({
+                success: false,
+                post,
+                error
+            });
+            response.end();
+            return;
+        }
+        if (request.user._id !== post.comments(id).author_id) {
+            response.status(401);
+            response.send({
+                success: false,
+                post,
+                error: '401 Unauthorized'
+            });
+            response.end();
             return;
         }
 
-        post.comments(data._id).modified = new Date();
-        post.comments(data._id).content = data.content;
-        post.comments(data._id).save(callback);
+        post.comments(id).modified = new Date();
+        post.comments(id).content = data.content;
+        post.save(function (saveError, result, numAffected) {
+            if (error) {
+                response.status(500);
+                response.send({
+                    result,
+                    success: false,
+                    error: saveError,
+                    numAffected
+                });
+                response.end();
+                return;
+            }
+            response.send({
+                result: result,
+                success: true,
+                error,
+                numAffected
+            });
+            response.end();
+        });
     });
 }
 
+
+function getIndexes(request, response) {
+    Indexes.find({}, function (error, results) {
+        response.json({
+            error,
+            results
+        });
+    });
+}
+
+function getSubForum (request, response) {
+    Indexes.findOne({ slug: request.params.forum }, function (error, index) {
+        var forum = index.categories.find(function (sub) {
+            return sub.slug === request.params.sub;
+        });
+        response.json({
+            error,
+            forum
+        });
+    });
+}
+
+function getForum(request, response) {
+    Indexes.findOne({ slug: request.params.forum }, function (error, forum) {
+        response.json({
+            error,
+            forum
+        });
+    });
+}
 
 module.exports = function (app) {
     app.use('/api/post', sessionCheck);
+    app.use('/api/comment', sessionCheck);
     app.use('/api/admin', adminSessionCheck);
-    app.get('/api/forum/index', function (request, response) {
-        Indexes.find({}, function (error, results) {
-            response.json({
-                error,
-                results
-            });
-        });
-    });
 
-    app.get('/api/forum/:forum/sub/:sub', function (request, response) {
-        Indexes.findOne({ slug: request.params.forum }, function (error, index) {
-            var forum = index.categories.find(function (sub) {
-                return sub.slug === request.params.sub;
-            });
-            response.json({
-                error,
-                forum
-            });
-        });
-    });
+    app.get('/api/forum/index', getIndexes);
+    app.get('/api/forum/:forum/sub/:sub', getSubForum);
+    app.get('/api/forum/:forum', getForum);
 
-    app.get('/api/forum/:forum', function (request, response) {
-        Indexes.findOne({ slug: request.params.forum }, function (error, forum) {
-            response.json({
-                error,
-                forum
-            });
-        });
-    });
 
-    
 
     app.get('/api/post/:slug', function (request, response) {
         var slug = request.params.id;
@@ -238,7 +420,14 @@ module.exports = function (app) {
         });
     });
 
-    
+    app.patch('/api/post', createPost);
+    app.put('/api/post/:id', updatePost);
+
+    app.patch('/api/comment', createComment);
+    app.put('/api/comment/:id', updateComment);
+
+
+
 
     app.post('/api/admin/forum/add', function (request, response) {
         var payload = request.body || {},

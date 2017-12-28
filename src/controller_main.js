@@ -79,7 +79,8 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json()); // Body parser use JSON data
 
 app.use(function(req, res, next) {
-    if (toobusy()) {
+    var processing = toobusy();
+    if (processing && req.headers['Content-Type'] !== 'application/json') {
         res.status(503).send(`<html><head>
         <title>YGOSalvation</title>
         <style>
