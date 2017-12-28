@@ -60,7 +60,7 @@ var validationCache = {},
         title: String,
         slug: String,
         description: String,
-        subforums: [String],
+        subForums: [String],
         link: String,
         isLink: { type: Boolean, default: false },
         isQuestion: { type: Boolean, default: false },
@@ -152,16 +152,35 @@ function adminSessionCheck(request, response, next) {
     });
 }
 
-function createPost(request, response) {
-    var data = request.body,
-        submission = new Post();
+function checkForum(definition, callback) {
+    if (!definition.index && definition.forum) {
+        callback(null, false);
+    }
+    Indexes.findOne({ slug: definition.index }, function (error, index) {
+        if (error) {
+            callback(error, false);
+            return;
+        }
+        var subforum,
+            forum = index.categories.find(function (sub) {
+                return sub.slug === definition.forum;
+            });
 
-    Object.assign(submission, data);
-    submission.created = new Date();
-    submission.modified = new Date();
-    submission.author = request.user.username;
-    submission.author_id = request.user._id;
-    Post.create(submission, function (error, result, numAffected) {
+        if (forum && definition.subForum) {
+            subforum = forum.subforums.find(function (sub) {
+                return sub === definition.subForum;
+            });
+
+            callback(error, Boolean(subforum));
+        } else {
+            callback(error, Boolean(forum));
+        }
+
+    });
+}
+
+function finalResponse(response) {
+    return function (error, result, numAffected) {
         if (error) {
             response.status(500);
             response.send({
@@ -180,9 +199,38 @@ function createPost(request, response) {
             numAffected
         });
         response.end();
-    });
+    }
+}
 
-    return;
+function createPost(request, response) {
+    var data = request.body,
+        post = new Post();
+
+    checkForum(data.forum, function (error, valid) {
+        if (error) {
+            response.status(500);
+            response.send({
+                success: false,
+                error
+            });
+            response.end();
+            return;
+        }
+
+
+        post.title = data.title;
+        post.content = data.content;
+        post.status = 'active';
+        post.forum = data.forum;
+        post.tags = post.tags;
+        post.slug = data.slug;
+        post.created = new Date();
+        post.modified = new Date();
+        post.author = request.user.username;
+        post.author_id = request.user._id;
+
+        Post.create(post, finalResponse(response));
+    });
 }
 
 function updatePost(request, response) {
@@ -221,26 +269,7 @@ function updatePost(request, response) {
         post.modified = new Date();
         post.content = data.content;
         post.content = data.title;
-        post.save(function (saveError, result, numAffected) {
-            if (error) {
-                response.status(500);
-                response.send({
-                    result,
-                    success: false,
-                    error: saveError,
-                    numAffected
-                });
-                response.end();
-                return;
-            }
-            response.send({
-                result: result,
-                success: true,
-                error,
-                numAffected
-            });
-            response.end();
-        });
+        post.save(finalResponse(response));
     });
 }
 
@@ -274,33 +303,13 @@ function createComment(request, response) {
         comment.modified = new Date();
         comment.author_id = request.user._id;
         post.push(comment);
-        post.save(function (saveError, result, numAffected) {
-            if (error) {
-                response.status(500);
-                response.send({
-                    result,
-                    success: false,
-                    error: saveError,
-                    numAffected
-                });
-                response.end();
-                return;
-            }
-            response.send({
-                result: result,
-                success: true,
-                error,
-                numAffected
-            });
-            response.end();
-        });
-        return;
+        post.save(finalResponse(response));
     });
 }
 
 function updateComment(request, response) {
     var data = request.body,
-    id = data._id
+        id = data._id
     Comments.findById(data.parent, function (error, post) {
         if (error) {
             response.status(500);
@@ -345,58 +354,30 @@ function updateComment(request, response) {
 
         post.comments(id).modified = new Date();
         post.comments(id).content = data.content;
-        post.save(function (saveError, result, numAffected) {
-            if (error) {
-                response.status(500);
-                response.send({
-                    result,
-                    success: false,
-                    error: saveError,
-                    numAffected
-                });
-                response.end();
-                return;
-            }
-            response.send({
-                result: result,
-                success: true,
-                error,
-                numAffected
-            });
-            response.end();
-        });
+        post.save(finalResponse(response));
+
     });
 }
 
 
 function getIndexes(request, response) {
-    Indexes.find({}, function (error, results) {
-        response.json({
-            error,
-            results
-        });
-    });
+    Indexes.find({}, finalResponse(response));
 }
 
-function getSubForum (request, response) {
+function getSubForum(request, response) {
     Indexes.findOne({ slug: request.params.forum }, function (error, index) {
         var forum = index.categories.find(function (sub) {
             return sub.slug === request.params.sub;
         });
         response.json({
             error,
-            forum
+            result :forum
         });
     });
 }
 
 function getForum(request, response) {
-    Indexes.findOne({ slug: request.params.forum }, function (error, forum) {
-        response.json({
-            error,
-            forum
-        });
-    });
+    Indexes.findOne({ slug: request.params.forum },finalResponse(response));
 }
 
 module.exports = function (app) {
