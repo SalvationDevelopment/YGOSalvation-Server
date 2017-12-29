@@ -80,7 +80,11 @@ var validationCache = {},
     Posts = mongoose.model('post', Post),
     Comments = mongoose.model('comment', Comment),
     Indexes = mongoose.model('index', Index),
-    uuidv4 = require('uuid/v4');
+    uuidv4 = require('uuid/v4'),
+    sanitizer = require('sanitizer'),
+    BBCodeParser = require('bbcode-parser'),
+    parser = new BBCodeParser(BBCodeParser.defaultTags());
+
 
 
 var db = mongoose.connect('mongodb://localhost/salvation');
@@ -153,11 +157,18 @@ function adminSessionCheck(request, response, next) {
 }
 
 function checkForum(definition, callback) {
+    if (!definition) {
+        callback(null, false);
+    }
     if (!definition.index && definition.forum) {
         callback(null, false);
     }
     Indexes.findOne({ slug: definition.index }, function (error, index) {
         if (error) {
+            callback(error, false);
+            return;
+        }
+        if (!index) {
             callback(error, false);
             return;
         }
@@ -204,7 +215,8 @@ function finalResponse(response) {
 
 function createPost(request, response) {
     var data = request.body,
-        post = new Post();
+        post = new Posts(),
+        slug = [(new Date()).getTime()];
 
     checkForum(data.forum, function (error, valid) {
         if (error) {
@@ -216,20 +228,32 @@ function createPost(request, response) {
             response.end();
             return;
         }
+        if (!valid || !data.title || !data.content) {
+            response.status(200);
+            response.send({
+                success: false,
+                error
+            });
+            response.end();
+            return;
+        }
+        data.title.split(' ').forEach(function (element) {
+            slug.push(element.toLowerCase());
+        });
 
 
-        post.title = data.title;
-        post.content = data.content;
+        post.title = sanitizer.sanitize(data.title);
+        post.content = parser.parseString(sanitizer.sanitize(data.content));
         post.status = 'active';
         post.forum = data.forum;
-        post.tags = post.tags;
-        post.slug = data.slug;
+        post.tags = data.tags;
+        post.slug = slug.join('_');
         post.created = new Date();
         post.modified = new Date();
         post.author = request.user.username;
         post.author_id = request.user._id;
 
-        Post.create(post, finalResponse(response));
+        Posts.create(post, finalResponse(response));
     });
 }
 
@@ -365,19 +389,20 @@ function getIndexes(request, response) {
 }
 
 function getSubForum(request, response) {
-    Indexes.findOne({ slug: request.params.forum }, function (error, index) {
-        var forum = index.categories.find(function (sub) {
-            return sub.slug === request.params.sub;
-        });
-        response.json({
-            error,
-            result :forum
-        });
-    });
+    var index = request.params.index,
+        forum = request.params.forum,
+        sub = request.params.sub;
+
+    Posts.find({
+        'forum.index': index,
+        'forum.forum': forum,
+        'forum.sub': sub
+    }, finalResponse(response));
 }
 
 function getForum(request, response) {
-    Indexes.findOne({ slug: request.params.forum },finalResponse(response));
+    var forum = request.params.forum;
+    Posts.find({ 'forum.forum': forum }, finalResponse(response));
 }
 
 module.exports = function (app) {
@@ -386,7 +411,7 @@ module.exports = function (app) {
     app.use('/api/admin', adminSessionCheck);
 
     app.get('/api/forum/index', getIndexes);
-    app.get('/api/forum/:forum/sub/:sub', getSubForum);
+    app.get('/api/forum/index/:index/forum/:forum/sub/:sub', getSubForum);
     app.get('/api/forum/:forum', getForum);
 
 
@@ -401,11 +426,11 @@ module.exports = function (app) {
         });
     });
 
-    app.patch('/api/post', createPost);
-    app.put('/api/post/:id', updatePost);
+    app.post('/api/post', createPost);
+    app.patch('/api/post/:id', updatePost);
 
-    app.patch('/api/comment', createComment);
-    app.put('/api/comment/:id', updateComment);
+    app.post('/api/comment', createComment);
+    app.patch('/api/comment/:id', updateComment);
 
 
 

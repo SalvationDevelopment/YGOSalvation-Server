@@ -10,6 +10,7 @@ var validationCache = {},
     mongoose = require('mongoose'),
     OAuthServer = require('express-oauth-server'),
     Schema = mongoose.Schema,
+    sanitizer = require('sanitizer'),    
     ObjectId = Schema.ObjectId,
     Message = new Schema({
         updated: { type: Date, default: Date.now },
@@ -84,7 +85,7 @@ function hash(string, salt) {
     return crypto.createHash('md5').update(string + salt + process.env.SALT).digest('hex');
 }
 
-function validate(data, callback) {
+function validate(login, data, callback) {
     BaseUser.findOne({
         'username': data.username
     }, function (error, person) {
@@ -102,7 +103,7 @@ function validate(data, callback) {
 
 
         if (hash(data.password, person.salt) === person.passwordHash) {
-            if (sessionTimeout(person.sessionExpiration)) {
+            if (sessionTimeout(person.sessionExpiration) && login) {
                 person.session = uuidv4();
             }
             person.sessionExpiration = new Date();
@@ -225,15 +226,17 @@ function setupRegistrationService(app) {
     app.post('/register', function (request, response) {
         var payload = request.body || {},
             user;
-        if (!payload.username) {
-            response.send({
-                error: 'No username'
-            });
-            return;
-        }
+       
         if (!payload.password) {
             response.send({
                 error: 'No Password'
+            });
+            return;
+        }
+        payload.username = sanitizer.sanitize(payload.username);
+        if (!payload.username) {
+            response.send({
+                error: 'No username'
             });
             return;
         }
