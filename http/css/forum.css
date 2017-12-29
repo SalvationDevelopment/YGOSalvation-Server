@@ -1,0 +1,24 @@
+
+*,
+*:before,
+*:after {
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+body {
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    background-color: black;
+    background-image: url(../img/magimagipinkshadow2.jpg);
+    background-size: cover;
+    color:white;
+    font-family: 'Roboto', sans-serif;
+    font-size: 15px;
+    font-weight: 200;
+    overflow: hidden;
+    width: 100vw;
+    transition: background-image 2s ease-in;
+    height: 100vh;
+}
