@@ -368,7 +368,7 @@ function mysql_real_escape_string(str) {
 
 function processLogin(data) {
     'use strict';
-    if (loggedIn || !allowLogin) {
+    if (loggedIn ) {
         return;
     }
 
@@ -598,6 +598,14 @@ $(document).ready(function () {
         window.quedready = true;
         return false;
     });
+    if (localStorage.session) {
+        $.getJSON('api/session/' + localStorage.session, function (userInfo) {
+            console.log(userInfo);
+            if (userInfo.success) {
+                processLogin(userInfo.result);
+            }
+        });
+    }
 });
 
 
@@ -847,4 +855,4 @@ $('[data-tooltip!=""]').qtip({ // Grab all elements with a non-blank data-toolti
     content: {
         attr: 'data-tooltip' // Tell qTip2 to look inside this attr for its content
     }
-})
+});

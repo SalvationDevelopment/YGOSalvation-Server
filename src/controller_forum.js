@@ -57,6 +57,7 @@ var validationCache = {},
         signiture: String
     }),
     Forum = new Schema({
+        sort :  { type: Number, default: 0 },
         title: String,
         slug: String,
         description: String,
@@ -67,9 +68,11 @@ var validationCache = {},
         lastPost: Schema.Types.Mixed,
         threadCount: { type: Number, default: 0 },
         postCount: { type: Number, default: 0 },
+        adminOnly: { type: Boolean, default: false },
         icon: String
     }),
     Index = new Schema({
+        sort :  { type: Number, default: 0 },
         title: String,
         slug: String,
         description: String,
@@ -382,29 +385,6 @@ function updateComment(request, response) {
     });
 }
 
-
-function getSession(request, response) {
-    var session = request.params.session;
-
-    Users.findOne({ session }, function (error, person) {
-        if (error) {
-            finalResponse(response)(error);
-        }
-        if (!person) {
-            finalResponse(response)(null, {
-                success: false
-            }, 0);
-            return;
-        } else if (sessionTimeout(person.sessionExpiration)) {
-            var result = JSON.parse(JSON.stringify(person));
-            delete result.passwordHash;
-            delete result.salt;
-            finalResponse(response)(null, result, 1);
-            return;
-        }
-    });
-}
-
 function getIndexes(request, response) {
     Indexes.find({}, function (error, indexes) {
         if (error) {
@@ -517,7 +497,7 @@ module.exports = function (app) {
     app.get('/api/forum/index/:index/forum/:forum/sub/:sub', getSubForum);
     app.get('/api/forum/:forum', getForum);
 
-    app.get('api/session/:session', getSession);
+    app.get('/api/session/:session', getSession);
 
 
     app.get('/api/post/:slug', function (request, response) {

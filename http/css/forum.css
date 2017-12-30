@@ -105,16 +105,16 @@ body {
 }
     
 #forum > main {
-    width : 75%;
-    float: left;
-    padding : 1%;
+    width : 100%;
+    margin : 0 auto;
+    padding : 5% 10% ;
     background: rgba(0,0,0,.5);
 }
 
 #forum > aside {
-    width : 25%;
-    float: left;
-    padding : 1%;
+    width : 100%;
+    margin : 0 auto;
+    padding : 10%;
     overflow: auto;
     background: rgba(0,0,0,.5);
 }
@@ -145,7 +145,7 @@ section {
 
 .index_categories {
     overflow: auto;
-
+    margin-bottom : 1em;
     border : 1px solid rgba(100, 100, 100, 0.55);
     box-shadow: inset 0 0 10px black;
     border-radius : 15px;

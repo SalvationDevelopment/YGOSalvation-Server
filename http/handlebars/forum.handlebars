@@ -22,7 +22,7 @@
             <div class="index_title">
                 {{title}}
                 <span class="index_description">
-                    {{description}}
+                   - {{description}}
                 </span>
             </div>
 
@@ -44,6 +44,7 @@
                         {{postCount}}
                         <br /> Post
                     </div>
+                    {{#if postCount}}
                     <div class="category_last_post">
                         {{lastPost.title}}
 
@@ -52,6 +53,7 @@
                             by {{lastPost.author}} {{formatDate lastPost.modified "DD.MM.YYYY HH:mm"}}
                         </span>
                     </div>
+                    {{/if}}
                 </div>
                 {{/each}}
             </div>
