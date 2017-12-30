@@ -94,7 +94,7 @@
 
             <li><span data-translation-faq class="psudolinksingle" onclick="singlesitenav('faq')">News</span>
             </li>
-            <li><a data-translation-forum class="psudolinksingle " style='text-decoration:none' onclick="singlesitenav('forum')" target="_blank" href="https://forum.ygopro.us">Forum</a>
+            <li data-translation-forum class="psudolinksingle " style='text-decoration:none' onclick="singlesitenav('forum')">Forum
             </li>
             <li class="launcheronly chatlinker"><span data-translation-events class="psudolinksingle" id="onlinelisttogger" onclick="openusers()">Chat</span>
             </li>
@@ -103,6 +103,9 @@
         </ul>
     </div>
     <header style="top:0vh;" id='anti'></header>
+    <header style="top:0vh;" id='forum'>
+        <iframe src="forum.html" style="width:100%; height:100%; border:none;"></iframe>
+    </header>
     <header style="top:0vh;" id='home'>
         <div id="homecontainer">
             <span class="psudolinksingle" onclick="singlesitenav('home')">

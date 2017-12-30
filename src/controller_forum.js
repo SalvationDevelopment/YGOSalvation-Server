@@ -81,9 +81,7 @@ var validationCache = {},
     Comments = mongoose.model('comment', Comment),
     Indexes = mongoose.model('index', Index),
     uuidv4 = require('uuid/v4'),
-    sanitizer = require('sanitizer'),
-    BBCodeParser = require('bbcode-parser'),
-    parser = new BBCodeParser(BBCodeParser.defaultTags());
+    sanitizer = require('sanitizer');
 
 
 
@@ -210,7 +208,7 @@ function finalResponse(response) {
             numAffected
         });
         response.end();
-    }
+    };
 }
 
 function createPost(request, response) {
@@ -243,7 +241,7 @@ function createPost(request, response) {
 
 
         post.title = sanitizer.sanitize(data.title);
-        post.content = parser.parseString(sanitizer.sanitize(data.content));
+        post.content = sanitizer.sanitize(data.content);
         post.status = 'active';
         post.forum = data.forum;
         post.tags = data.tags;
@@ -254,6 +252,7 @@ function createPost(request, response) {
         post.author_id = request.user._id;
 
         Posts.create(post, finalResponse(response));
+        jobs();
     });
 }
 
@@ -333,7 +332,7 @@ function createComment(request, response) {
 
 function updateComment(request, response) {
     var data = request.body,
-        id = data._id
+        id = data._id;
     Comments.findById(data.parent, function (error, post) {
         if (error) {
             response.status(500);
@@ -384,8 +383,88 @@ function updateComment(request, response) {
 }
 
 
+function getSession(request, response) {
+    var session = request.params.session;
+
+    Users.findOne({ session }, function (error, person) {
+        if (error) {
+            finalResponse(response)(error);
+        }
+        if (!person) {
+            finalResponse(response)(null, {
+                success: false
+            }, 0);
+            return;
+        } else if (sessionTimeout(person.sessionExpiration)) {
+            var result = JSON.parse(JSON.stringify(person));
+            delete result.passwordHash;
+            delete result.salt;
+            finalResponse(response)(null, result, 1);
+            return;
+        }
+    });
+}
+
 function getIndexes(request, response) {
-    Indexes.find({}, finalResponse(response));
+    Indexes.find({}, function (error, indexes) {
+        if (error) {
+            response.status(500);
+            response.send({
+                result,
+                success: false,
+                error,
+                numAffected
+            });
+            response.end();
+            return;
+        }
+        Posts.find({}, function (error, posts) {
+            if (error) {
+                response.status(500);
+                response.send({
+                    success: false,
+                    error
+                });
+                response.end();
+                return;
+            }
+            posts.sort(function (reference, compared) {
+                return reference.updated - compared.updated;
+            });
+            if (posts.length > 10) {
+                posts.length = 10;
+            }
+            response.send({
+                result: indexes,
+                latestTopics: posts,
+                success: true,
+                error
+            });
+            response.end();
+        });
+    });
+}
+
+function getSession(request, response) {
+    var session = request.params.session;
+
+    Users.findOne({ session }, function (error, person) {
+        if (error) {
+            finalResponse(response)(error);
+        }
+        if (!person) {
+            finalResponse(response)(null, {
+                success: false
+            }, 0);
+            return;
+        } else if (sessionTimeout(person.sessionExpiration)) {
+            var result = JSON.parse(JSON.stringify(person));
+            delete result.passwordHash;
+            delete result.salt;
+            finalResponse(response)(null, result, 1);
+            return;
+        }
+    });
 }
 
 function getSubForum(request, response) {
@@ -405,6 +484,30 @@ function getForum(request, response) {
     Posts.find({ 'forum.forum': forum }, finalResponse(response));
 }
 
+function updateLastestPost(index) {
+    index.categories.forEach(function (forum) {
+        Posts.find({
+            'forum.index': index.slug,
+            'forum.forum': forum.slug
+        }, function (error, posts) {
+            posts.sort(function (reference, compared) {
+                return reference.updated - compared.updated;
+            });
+            forum.lastPost = posts[0];
+            forum.postCount = posts.length;
+            index.save();
+        });
+    });
+}
+
+function jobs() {
+    Indexes.find({}, function (error, indexes) {
+        indexes.forEach(function (index) {
+            updateLastestPost(index);
+        });
+    });
+}
+
 module.exports = function (app) {
     app.use('/api/post', sessionCheck);
     app.use('/api/comment', sessionCheck);
@@ -414,6 +517,7 @@ module.exports = function (app) {
     app.get('/api/forum/index/:index/forum/:forum/sub/:sub', getSubForum);
     app.get('/api/forum/:forum', getForum);
 
+    app.get('api/session/:session', getSession);
 
 
     app.get('/api/post/:slug', function (request, response) {
@@ -523,4 +627,7 @@ module.exports = function (app) {
             }
         });
     });
+
+    jobs();
+    setInterval(jobs, 60000);
 };

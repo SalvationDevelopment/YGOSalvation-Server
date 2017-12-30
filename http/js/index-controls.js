@@ -153,9 +153,7 @@ function colorbg() {
 function singlesitenav(target) {
     'use strict';
     saveSettings();
-    if (target === 'forum') {
-        return;
-    }
+
     if (activelyDueling === undefined) {
         if (internalLocal === 'duelscreen' && activelyDueling) {
             alertmodal('You are in a duel, surrender or finish it.');
@@ -377,6 +375,7 @@ function processLogin(data) {
 
     var info = data;
     console.log('Attempting to do login based on :', data);
+    localStorage.session = data.session;
     if (!info.bans.length) {
         localStorage.nickname = info.username;
         admin = String(Number(info.admin));
