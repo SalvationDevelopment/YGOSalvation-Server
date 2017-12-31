@@ -500,16 +500,15 @@ module.exports = function (app) {
     app.get('/api/session/:session', getSession);
 
 
-    app.get('/api/post/:slug', function (request, response) {
-        var slug = request.params.id;
-        Post.find({ slug }, function (error, results) {
+    app.get('/api/post/:id', function (request, response) {
+        var id = request.params.id;
+        Posts.findById(id, function (error, results) {
             response.json({
                 error,
                 results
             });
         });
     });
-
     app.post('/api/post', createPost);
     app.patch('/api/post/:id', updatePost);
 

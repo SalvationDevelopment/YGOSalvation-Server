@@ -9,15 +9,47 @@ Handlebars.registerHelper("formatDate", function (datetime, format) {
 
 
 $.getJSON('api/forum/index', function (board) {
-    board.latestTopics = board.latestTopics.map(function (post) { 
-        return post ;
+    board.latestTopics = board.latestTopics.map(function (post) {
+        return post;
     });
-    $.get('handlebars/forum.handlebars', function (template) {
-        console.log(board);
+    $.get('handlebars/forumheader.handlebars', function (header) {
+        $.get('handlebars/forumindex.handlebars', function (template) {
 
-        var parser = Handlebars.compile(template),
-            html = parser(board);
+            var parserTemplate = Handlebars.compile(template),
+                parserHeader = Handlebars.compile(header),
+                html = parserHeader(board) + parserTemplate(board);
 
-        $('#forum').html(html);
+            $('#forum').html(html);
+        });
     });
 });
+
+function viewForum(forum) {
+    $.getJSON('api/forum/' + forum, function (board) {
+        $.get('handlebars/forumheader.handlebars', function (header) {
+            $.get('handlebars/forumbody.handlebars', function (template) {
+                console.log(board);
+                var parserTemplate = Handlebars.compile(template),
+                    parserHeader = Handlebars.compile(header),
+                    html = parserHeader(board) + parserTemplate(board);
+
+                $('#forum').html(html);
+            });
+        });
+    });
+}
+
+function viewPost(id) {
+    $.getJSON('api/post/'+id, function (post) {
+        $.get('handlebars/forumheader.handlebars', function (header) {
+            $.get('handlebars/forumpost.handlebars', function (template) {
+                console.log(post);
+                var parserTemplate = Handlebars.compile(template),
+                    parserHeader = Handlebars.compile(header),
+                    html = parserHeader(post) + parserTemplate(post.results);
+
+                $('#forum').html(html);
+            });
+        });
+    });
+}

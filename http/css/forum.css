@@ -228,3 +228,27 @@ aside .category_last_post {
     width: 100%;
     padding:0;
 }
+
+.author_info {
+    width: 33%;
+    float: left;
+    border-bottom: 1px solid white;
+    border-right: 1px solid white;
+}
+
+.post_content {
+    border-left: 1px solid white;
+    width: 66%;
+    float: left;
+    padding: 2vw;
+}
+
+.post_title {
+    border: 1px solid white;
+    padding: 1em;
+    width: 100%;
+}
+
+.post {
+    width: 100%;
+}
