@@ -43,6 +43,10 @@ function viewPost(id) {
     $.getJSON('api/post/'+id, function (post) {
         $.get('handlebars/forumheader.handlebars', function (header) {
             $.get('handlebars/forumpost.handlebars', function (template) {
+                post.owned = (localStorage.session === post.author_id);
+                post.comments.forEach(function(comment) {
+                    comment.owned =  (localStorage.session === comment.author_id)
+                });
                 console.log(post);
                 var parserTemplate = Handlebars.compile(template),
                     parserHeader = Handlebars.compile(header),
