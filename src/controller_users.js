@@ -8,9 +8,19 @@ var validationCache = {},
     zxcvbn = require('zxcvbn'),
     hotload = require('hotload'),
     mongoose = require('mongoose'),
-    OAuthServer = require("express-oauth-server"),
+    OAuthServer = require('express-oauth-server'),
     Schema = mongoose.Schema,
+    sanitizer = require('sanitizer'),    
     ObjectId = Schema.ObjectId,
+    Message = new Schema({
+        updated: { type: Date, default: Date.now },
+        created: Date,
+        modified: Date,
+        author: String,
+        author_id: ObjectId,
+        content: String,
+        status: String
+    }),
     UserEntry = new Schema({
         username: String,
         passwordHash: String,
@@ -25,6 +35,9 @@ var validationCache = {},
         decks: [Schema.Types.Mixed],
         rewards: [String],
         recoveryPass: String,
+        session: String,
+        sessionExpiration: Date,
+        inbox : [Message],
         ranking: {
             rankPoints: Number,
             rankedWins: Number,
@@ -35,7 +48,8 @@ var validationCache = {},
             sleeves: Buffer,
             avatar: Buffer
         },
-        bans: [Schema.Types.Mixed]
+        bans: [Schema.Types.Mixed],
+        signiture : String
 
     }),
     oauthModel = require('./model_oauth.js'),
@@ -44,15 +58,23 @@ var validationCache = {},
     uuidv4 = require('uuid/v4');
 
 process.env.SALT = process.env.SALT || function () {
-    console.log('')
-}
+    console.log('');
+};
 
+
+function sessionTimeout(time) {
+    if (!time) {
+        return false;
+    }
+    const hour = 60 * 60 * 1000;
+    return ((time.getTime() + hour) > Date.now());
+}
 
 var db = mongoose.connect('mongodb://localhost/salvation');
 
 
 function salt() {
-    var text = "";
+    var text = '';
     for (var i = 0; i < 8; i++) {
         text += uuidv4().split('-').join();
     }
@@ -60,10 +82,10 @@ function salt() {
 }
 
 function hash(string, salt) {
-    return crypto.createHash('md5').update(string + salt + process.env.SALT).digest("hex");
+    return crypto.createHash('md5').update(string + salt + process.env.SALT).digest('hex');
 }
 
-function validate(data, callback) {
+function validate(login, data, callback) {
     BaseUser.findOne({
         'username': data.username
     }, function (error, person) {
@@ -81,10 +103,41 @@ function validate(data, callback) {
 
 
         if (hash(data.password, person.salt) === person.passwordHash) {
-            callback(error, true, person);
+            if (sessionTimeout(person.sessionExpiration) && login) {
+                person.session = uuidv4();
+            }
+            person.sessionExpiration = new Date();
+            person.save(function (saveError) {
+                callback(saveError, true, person);
+            });
         } else {
             callback(new Error('Incorrect Login Information.'), false);
         }
+    });
+}
+
+function validateSession(data, callback) {
+    BaseUser.findOne({
+        'session': data.session
+    }, function (error, person) {
+        if (error) {
+            callback(error, false);
+            return;
+        }
+        if (!person) {
+            callback(new Error('Invalid session.'), false);
+            return;
+        }
+
+        if (!sessionTimeout(person.sessionExpiration)) {
+            callback(new Error('Invalid session.'), false);
+            return;
+        }
+        person.sessionExpiration = new Date();
+        person.save(function (saveError) {
+            callback(saveError, true, person);
+        });
+        callback(null, true);
     });
 }
 
@@ -104,7 +157,7 @@ function startRecoverPassword(data, callback) {
     var code = salt();
     BaseUser.findOneAndUpdate({ username: data.username }, { recoveryPass: salt }, function (error, person) {
         callback(error, person, code);
-        sendRecoveryEmail(person.email, person.username, code)
+        sendRecoveryEmail(person.email, person.username, code);
     });
 }
 
@@ -173,15 +226,17 @@ function setupRegistrationService(app) {
     app.post('/register', function (request, response) {
         var payload = request.body || {},
             user;
-        if (!payload.username) {
-            response.send({
-                error: 'No username'
-            });
-            return;
-        }
+       
         if (!payload.password) {
             response.send({
                 error: 'No Password'
+            });
+            return;
+        }
+        payload.username = sanitizer.sanitize(payload.username);
+        if (!payload.username) {
+            response.send({
+                error: 'No username'
             });
             return;
         }
@@ -249,30 +304,10 @@ function setupRegistrationService(app) {
         });
     });
 
-    app.use("/secure", oauth.authenticate());
 
     function loadCurrentUser(req) {
         return db.getUserBySessionId(req.session.sessionid);
     }
-
-
-    // app.get("/oauth/authorize", function(req, res) {
-    //     // render an authorization form
-    // });
-
-    app.post("/oauth/authorize", oauth.authorize({
-        authenticateHandler: {
-            handle: loadCurrentUser
-        }
-    }));
-
-    app.post("/oauth/authorize", oauth.authorize({
-        authenticateHandler: {
-            handle: loadCurrentUser
-        }
-    }));
-
-    app.post("/oauth/token", oauth.token());
 
     app.post('/recover', function (request, response, next) {
         var payload = request.body || {},
@@ -286,11 +321,11 @@ function setupRegistrationService(app) {
         }
         if (payload.username) {
             BaseUser.findOne({ 'username': payload.username }, 'username email', function (err, person) {
-                startRecoverPassword(person, callback)
+                startRecoverPassword(person, callback);
             });
         } else {
             BaseUser.findOne({ 'email': payload.email }, 'username email', function (err, person) {
-                startRecoverPassword(person, callback)
+                startRecoverPassword(person, callback);
             });
         }
     });
@@ -298,8 +333,8 @@ function setupRegistrationService(app) {
 
 function saveDeck(user, callback) {
     BaseUser.findOne({ 'username': user.username }, function (err, person) {
-       person.decks = user.decks;
-       person.save(callback);
+        person.decks = user.decks;
+        person.save(callback);
     });
 }
 
