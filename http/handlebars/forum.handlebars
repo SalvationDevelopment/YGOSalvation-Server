@@ -1,0 +1,91 @@
+<header>
+    <h1 class="shine">
+        <span style="color:#e4a;text-shadow:none;">YGO</span>Salvation
+    </h1>
+
+    <nav>
+        <input placeholder="Search" />
+    </nav>
+
+</header>
+
+<main>
+    <section class="section_header">
+        <div class="section_bg">
+            Forums
+        </div>
+    </section>
+
+    <section class="index">
+        <div class="section_bg">
+            {{#each result}}
+            <div class="index_title">
+                {{title}}
+                <span class="index_description">
+                   - {{description}}
+                </span>
+            </div>
+
+
+            <div class="index_categories">
+                {{#each categories}}
+                <div class="category">
+                    <div class="category_icon">
+                        <img src="/img/comment-bubble-icon.png" />
+                    </div>
+                    <div class="category_title">
+                        {{title}}
+
+                        <div class="category_description">
+                            {{description}}
+                        </div>
+                    </div>
+                    <div class="category_post_count">
+                        {{postCount}}
+                        <br /> Post
+                    </div>
+                    {{#if postCount}}
+                    <div class="category_last_post">
+                        {{lastPost.title}}
+
+                        <br />
+                        <span>
+                            by {{lastPost.author}} {{formatDate lastPost.modified "DD.MM.YYYY HH:mm"}}
+                        </span>
+                    </div>
+                    {{/if}}
+                </div>
+                {{/each}}
+            </div>
+            {{/each}}
+        </div>
+    </section>
+</main>
+<aside>
+    <section class="index">
+        <div class="section_bg">
+            <div class="index_title">
+                Recent Topics
+            </div>
+
+
+            <div class="index_categories">
+                <div class="category">
+                    {{#each latestTopics}}
+                    <div class="category_last_post">
+                        {{title}}
+                        <br />
+                        <span>
+                            by {{author}} on {{formatDate modified "DD.MM.YYYY HH:mm"}}
+                        </span>
+                        
+                    </div>
+                    {{/each}}
+                </div>
+            </div>
+        </div>
+    </section>
+   </aside>
+<footer>
+
+</footer>

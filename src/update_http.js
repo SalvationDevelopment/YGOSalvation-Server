@@ -44,7 +44,7 @@ module.exports = function getManifestFromAPI(callback) {
         });
     });
     call.on('error', function() {
-        console.log('Unable to contact Database Application');
+        console.log('Unable to contact YGO_DB Instance');
         callback(null, fs.readFileSync('./http/manifest/manifest_0-en-OCGTCG.json'));
     });
     call.end();
