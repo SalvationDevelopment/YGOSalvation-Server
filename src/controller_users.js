@@ -10,7 +10,7 @@ var validationCache = {},
     mongoose = require('mongoose'),
     OAuthServer = require('express-oauth-server'),
     Schema = mongoose.Schema,
-    sanitizer = require('sanitizer'),    
+    sanitizer = require('sanitizer'),
     ObjectId = Schema.ObjectId,
     Message = new Schema({
         updated: { type: Date, default: Date.now },
@@ -37,7 +37,7 @@ var validationCache = {},
         recoveryPass: String,
         session: String,
         sessionExpiration: Date,
-        inbox : [Message],
+        inbox: [Message],
         ranking: {
             rankPoints: Number,
             rankedWins: Number,
@@ -49,7 +49,7 @@ var validationCache = {},
             avatar: Buffer
         },
         bans: [Schema.Types.Mixed],
-        signiture : String
+        signiture: String
 
     }),
     oauthModel = require('./model_oauth.js'),
@@ -57,7 +57,7 @@ var validationCache = {},
     SparkPost = require('sparkpost'),
     uuidv4 = require('uuid/v4');
 
-process.env.SALT = process.env.SALT || function () {
+process.env.SALT = process.env.SALT || function() {
     console.log('');
 };
 
@@ -88,13 +88,13 @@ function hash(string, salt) {
 function validate(login, data, callback) {
     BaseUser.findOne({
         'username': data.username
-    }, function (error, person) {
+    }, function(error, person) {
         if (error) {
             callback(error);
             return;
         }
         if (!person) {
-            callback(new Error('Incorrect Login Information.'), false);
+            callback(new Error('Incorrect Login Information.'), false, {});
             return;
         }
         if (!person.verified) {
@@ -107,11 +107,11 @@ function validate(login, data, callback) {
                 person.session = uuidv4();
             }
             person.sessionExpiration = new Date();
-            person.save(function (saveError) {
+            person.save(function(saveError) {
                 callback(saveError, true, person);
             });
         } else {
-            callback(new Error('Incorrect Login Information.'), false);
+            callback(new Error('Incorrect Login Information.'), false, {});
         }
     });
 }
@@ -119,7 +119,7 @@ function validate(login, data, callback) {
 function validateSession(data, callback) {
     BaseUser.findOne({
         'session': data.session
-    }, function (error, person) {
+    }, function(error, person) {
         if (error) {
             callback(error, false);
             return;
@@ -134,7 +134,7 @@ function validateSession(data, callback) {
             return;
         }
         person.sessionExpiration = new Date();
-        person.save(function (saveError) {
+        person.save(function(saveError) {
             callback(saveError, true, person);
         });
         callback(null, true);
@@ -142,7 +142,7 @@ function validateSession(data, callback) {
 }
 
 function updatePassword(data, callback) {
-    validate(data, function (error, result, person) {
+    validate(data, function(error, result, person) {
         var password = data.newPassword,
             salt = salt();
         passwordHash = hash(password, salt),
@@ -155,14 +155,14 @@ function updatePassword(data, callback) {
 
 function startRecoverPassword(data, callback) {
     var code = salt();
-    BaseUser.findOneAndUpdate({ username: data.username }, { recoveryPass: salt }, function (error, person) {
+    BaseUser.findOneAndUpdate({ username: data.username }, { recoveryPass: salt }, function(error, person) {
         callback(error, person, code);
         sendRecoveryEmail(person.email, person.username, code);
     });
 }
 
 function recoverPassword(data, id, callback) {
-    BaseUser.findOne({ username: data.username, recoveryPass: id }, function (error, result, person) {
+    BaseUser.findOne({ username: data.username, recoveryPass: id }, function(error, result, person) {
         var password = data.newPassword,
             salt = salt();
         passwordHash = hash(password, salt);
@@ -223,10 +223,10 @@ function sendRecoveryEmail(address, username, salt) {
 function setupRegistrationService(app) {
     var oauth = new OAuthServer({ model: oauthModel });
 
-    app.post('/register', function (request, response) {
+    app.post('/register', function(request, response) {
         var payload = request.body || {},
             user;
-       
+
         if (!payload.password) {
             response.send({
                 error: 'No Password'
@@ -248,7 +248,7 @@ function setupRegistrationService(app) {
             return;
         } else {
             // find each person with a last name matching 'Ghost', selecting the `name` and `occupation` fields
-            BaseUser.findOne({ 'email': payload.email }, 'username email', function (err, person) {
+            BaseUser.findOne({ 'email': payload.email }, 'username email', function(err, person) {
                 if (err) {
                     return console.log(err);
                 }
@@ -278,7 +278,7 @@ function setupRegistrationService(app) {
                         rankedLosses: 0,
                         rankedTies: 0
                     };
-                    BaseUser.create(newUser, function (error, resultingUser, numAffected) {
+                    BaseUser.create(newUser, function(error, resultingUser, numAffected) {
                         response.send({
                             info: resultingUser,
                             success: true,
@@ -293,10 +293,10 @@ function setupRegistrationService(app) {
         }
     });
 
-    app.get('/verify/:id', function (request, response) {
+    app.get('/verify/:id', function(request, response) {
         var id = request.params.id;
 
-        BaseUser.findByIdAndUpdate(id, { verified: true }, function (err, person) {
+        BaseUser.findByIdAndUpdate(id, { verified: true }, function(err, person) {
             response.write({
                 success: error,
                 result: person
@@ -309,7 +309,7 @@ function setupRegistrationService(app) {
         return db.getUserBySessionId(req.session.sessionid);
     }
 
-    app.post('/recover', function (request, response, next) {
+    app.post('/recover', function(request, response, next) {
         var payload = request.body || {},
             user;
 
@@ -320,11 +320,11 @@ function setupRegistrationService(app) {
             return;
         }
         if (payload.username) {
-            BaseUser.findOne({ 'username': payload.username }, 'username email', function (err, person) {
+            BaseUser.findOne({ 'username': payload.username }, 'username email', function(err, person) {
                 startRecoverPassword(person, callback);
             });
         } else {
-            BaseUser.findOne({ 'email': payload.email }, 'username email', function (err, person) {
+            BaseUser.findOne({ 'email': payload.email }, 'username email', function(err, person) {
                 startRecoverPassword(person, callback);
             });
         }
@@ -332,7 +332,7 @@ function setupRegistrationService(app) {
 }
 
 function saveDeck(user, callback) {
-    BaseUser.findOne({ 'username': user.username }, function (err, person) {
+    BaseUser.findOne({ 'username': user.username }, function(err, person) {
         person.decks = user.decks;
         person.save(callback);
     });
