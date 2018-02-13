@@ -42,6 +42,7 @@
     "ps-node": "*",
     "random-port": "^0.1.0",
     "request": "^2.58.0",
+    "sanitizer": "^0.1.3",
     "serve-index": "*",
     "sparkpost": "^2.1.2",
     "spdy": "^3.4.4",
