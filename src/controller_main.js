@@ -231,7 +231,18 @@ function registrationCall(data, socket) {
     userController.validate(true, data, function(error, valid, info) {
 
         if (error) {
-            //console.log(error);
+            console.log(error);
+            socket.write({
+                clientEvent: 'servererror',
+                message: currentGlobalMessage
+            });
+            socket.write({
+                clientEvent: 'login',
+                info: {
+                    message: error.message
+                },
+                error: error
+            });
             return;
         }
         if (valid) {

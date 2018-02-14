@@ -73,7 +73,7 @@ function sessionTimeout(time) {
 var db = mongoose.connect('mongodb://localhost/salvation');
 
 
-function salt() {
+function salter() {
     var text = '';
     for (var i = 0; i < 8; i++) {
         text += uuidv4().split('-').join();
@@ -94,7 +94,7 @@ function validate(login, data, callback) {
             return;
         }
         if (!person) {
-            callback(new Error('Incorrect Login Information.'), false, {});
+            callback(new Error('Incorrect Login Information.'), false, { bans: [] });
             return;
         }
         if (!person.verified) {
@@ -144,8 +144,8 @@ function validateSession(data, callback) {
 function updatePassword(data, callback) {
     validate(data, function(error, result, person) {
         var password = data.newPassword,
-            salt = salt();
-        passwordHash = hash(password, salt),
+            salt = salter(),
+            passwordHash = hash(password, salt),
             recoveryPass = undefined;
         if (result) {
             BaseUser.findByIdAndUpdate(person._id, { passwordHash, salt, recoveryPass }, callback);
@@ -154,8 +154,8 @@ function updatePassword(data, callback) {
 }
 
 function startRecoverPassword(data, callback) {
-    var code = salt();
-    BaseUser.findOneAndUpdate({ username: data.username }, { recoveryPass: salt }, function(error, person) {
+    var code = salter();
+    BaseUser.findOneAndUpdate({ username: data.username }, { recoveryPass: code }, function(error, person) {
         callback(error, person, code);
         sendRecoveryEmail(person.email, person.username, code);
     });
@@ -164,8 +164,8 @@ function startRecoverPassword(data, callback) {
 function recoverPassword(data, id, callback) {
     BaseUser.findOne({ username: data.username, recoveryPass: id }, function(error, result, person) {
         var password = data.newPassword,
-            salt = salt();
-        passwordHash = hash(password, salt);
+            salt = salter(),
+            passwordHash = hash(password, salt);
         if (result) {
             BaseUser.findByIdAndUpdate(person._id, { passwordHash, salt }, callback);
         }
@@ -263,7 +263,7 @@ function setupRegistrationService(app) {
 
                     var newUser = new BaseUser();
                     newUser.username = payload.username;
-                    newUser.salt = salt();
+                    newUser.salt = salter();
                     newUser.passwordHash = hash(payload.password, newUser.salt);
                     newUser.email = payload.email;
                     newUser.creation = new Date();
