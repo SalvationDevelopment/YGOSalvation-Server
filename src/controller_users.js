@@ -87,7 +87,7 @@ function hash(string, salt) {
 
 function validate(login, data, callback) {
     BaseUser.findOne({
-        'username': data.username
+        'username': { $regex: new RegExp('^' + data.username.toLowerCase(), 'i') }
     }, function(error, person) {
         if (error) {
             callback(error);
@@ -146,7 +146,7 @@ function updatePassword(data, callback) {
         var password = data.newPassword,
             salt = salter(),
             passwordHash = hash(password, salt),
-            recoveryPass = undefined;
+            recoveryPass;
         if (result) {
             BaseUser.findByIdAndUpdate(person._id, { passwordHash, salt, recoveryPass }, callback);
         }
