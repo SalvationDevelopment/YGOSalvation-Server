@@ -412,6 +412,9 @@ function processLogin(data) {
             username: localStorage.nickname,
             action: 'load'
         });
+        if (info.decks) {
+            window.deckEditor.loadDecks(info.decks);
+        }
     } else {
         if (info.message) {
             alertmodal(info.message);
