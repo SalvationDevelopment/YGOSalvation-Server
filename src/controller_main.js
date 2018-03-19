@@ -134,7 +134,7 @@ app.post('/git', function(req, res, next) {
     gitRoute(req, res, next);
 });
 
-app.git('/git', function(req, res, next) {
+app.get('/git', function(req, res, next) {
     gitRoute(req, res, next);
 });
 
