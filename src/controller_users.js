@@ -345,10 +345,17 @@ function getAllUsersDecks(callback) {
         if (error) {
             callback(error);
         }
-        const decks = users.map(function(user) {
+        const decks = [];
+        users.forEach(function(user) {
 
-            return user.decks;
+            user.decks.forEach(function(deck) {
+                delete deck.creator;
+                decks.push(deck);
+            });
         });
+
+
+
         callback(null, decks);
     });
 }
