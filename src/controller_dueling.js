@@ -13,7 +13,7 @@ var fs = require('fs'),
     path = require('path'),
     database = [],
     random_port = require('random-port'),
-
+    userController = require('./controller_users'),
     ygopro = require('./engine_ygopro.js'),
     banlist = {},
     ygopros = {};
@@ -318,26 +318,31 @@ function init(primus) {
                 break;
             case 'surrender':
                 if (socket.slot !== undefined) {
-                    socket.write(({
-                        duelAction: 'surrender',
-                        by: socket.slot
-                    }));
-                    stateSystem[activeduel].surrender(games[activeduel].player[socket.slot].name);
+                    userController.recordDuelResult({
+                        decks: stateSystem[activeduel].decks,
+                        loser: socket.slot,
+                        winner: ((socket.slot) ? 1 : 0),
+                        banlist: games[activeduel].banlistid,
+                        players: [stateSystem[activeduel].players[0].name, stateSystem[activeduel].players[1].name]
+                    }, function() {
+                        socket.write(({
+                            duelAction: 'surrender',
+                            by: socket.slot
+                        }));
+                        stateSystem[activeduel].surrender(games[activeduel].player[socket.slot].name);
 
-                    stateSystem[activeduel].players[0].write(({
-                        duelAction: 'side',
-                        deck: stateSystem[activeduel].decks[0]
-                    }));
-                    games[activeduel].player[0].ready = false;
-                    stateSystem[activeduel].players[1].write(({
-                        duelAction: 'side',
-                        deck: stateSystem[activeduel].decks[1]
-                    }));
-                    games[activeduel].player[1].ready = false;
-
-
+                        stateSystem[activeduel].players[0].write(({
+                            duelAction: 'side',
+                            deck: stateSystem[activeduel].decks[0]
+                        }));
+                        games[activeduel].player[0].ready = false;
+                        stateSystem[activeduel].players[1].write(({
+                            duelAction: 'side',
+                            deck: stateSystem[activeduel].decks[1]
+                        }));
+                        games[activeduel].player[1].ready = false;
+                    });
                 }
-
                 break;
             case 'lock':
                 if (games[activeduel] === undefined) {

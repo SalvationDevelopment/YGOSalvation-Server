@@ -161,6 +161,28 @@ app.get('/usercount', function(req, res, next) {
     });
 });
 
+app.get('/duelrecords', function(req, res, next) {
+    const start = req.params.start,
+        end = req.params.end || Date.now();
+    userController.getDuels(start, end, function(error, duels) {
+        res.write(JSON.stringify({
+            duels: duels,
+            error: error
+        }));
+        next();
+    });
+});
+
+app.get('/ranking', function(req, res, next) {
+    userController.getRanking(function(error, ranks) {
+        res.write(JSON.stringify({
+            ranks: ranks,
+            error: error
+        }));
+        next();
+    });
+});
+
 
 
 userController.setupRegistrationService(app);

@@ -21,6 +21,14 @@ var validationCache = {},
         content: String,
         status: String
     }),
+    Duel = new Schema({
+        created: { type: Date, default: Date.now },
+        decks: [Schema.Types.Mixed],
+        banlist: String,
+        winner: Number,
+        loser: Number,
+        players: [String]
+    }),
     UserEntry = new Schema({
         username: String,
         passwordHash: String,
@@ -54,6 +62,7 @@ var validationCache = {},
     }),
     oauthModel = require('./model_oauth.js'),
     BaseUser = mongoose.model('user', UserEntry),
+    DuelModel = mongoose.model('duel', Duel),
     SparkPost = require('sparkpost'),
     uuidv4 = require('uuid/v4');
 
@@ -360,9 +369,6 @@ function getAllUsersDecks(callback) {
     });
 }
 
-
-
-
 function getUserCount(callback) {
     BaseUser.find({}, function(error, users) {
         if (error) {
@@ -372,7 +378,48 @@ function getUserCount(callback) {
     });
 }
 
+function recordDuelResult(duel, callback) {
+    const input = new DuelModel(duel);
+    DuelModel.create(input, callback);
+    BaseUser.findOneAndUpdate({ username: duel.players[duel.winner] }, { $inc: { 'ranking.rankedPoints': 1 } });
+    callback();
+}
+
+function getDuels(start, end, callback) {
+    DuelModel.find({
+        created: {
+            '$gte': new Date(start),
+            '$lt': new Date(end)
+        }
+    }, function(error, result) {
+        if (error) {
+            callback(error);
+        }
+        callback(null, result);
+    });
+}
+
+function getRanks(callback) {
+    BaseUser.find({}, function(error, users) {
+        if (error) {
+            callback(error);
+        }
+        const ranks = users.map(function(user) {
+            return {
+                username: user.username,
+                points: user.ranking.rankPoints
+            };
+        });
+        ranks.sort(function(primary, secondary) {
+            return primary.points > secondary.points;
+        });
+        callback(null, ranks);
+    });
+}
+
 module.exports = {
+    getDuels,
+    recordDuelResult,
     validate,
     saveDeck,
     setupRegistrationService,
