@@ -134,6 +134,10 @@ app.post('/git', function(req, res, next) {
     gitRoute(req, res, next);
 });
 
+app.git('/git', function(req, res, next) {
+    gitRoute(req, res, next);
+});
+
 
 app.get('/decks', function(req, res, next) {
 
@@ -142,6 +146,17 @@ app.get('/decks', function(req, res, next) {
             next();
         }
         res.write(JSON.stringify(decks));
+        next();
+    });
+});
+
+app.get('/usercount', function(req, res, next) {
+
+    userController.getUserCount(function(error, count) {
+        res.write(JSON.stringify({
+            usercount: count,
+            error: error
+        }));
         next();
     });
 });

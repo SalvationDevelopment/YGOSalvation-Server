@@ -339,12 +339,6 @@ function saveDeck(user, callback) {
 }
 
 
-function flatten(arr) {
-    return arr.reduce(function(flat, toFlatten) {
-        return flat.concat(Array.isArray(toFlatten) ? flatten(toFlatten) : toFlatten);
-    }, []);
-}
-
 
 function getAllUsersDecks(callback) {
     BaseUser.find({}, function(error, users) {
@@ -359,10 +353,23 @@ function getAllUsersDecks(callback) {
     });
 }
 
+
+
+
+function getUserCount(callback) {
+    BaseUser.find({}, function(error, users) {
+        if (error) {
+            callback(error);
+        }
+        callback(null, users.length);
+    });
+}
+
 module.exports = {
     validate,
     saveDeck,
     setupRegistrationService,
     getAllUsersDecks,
+    getUserCount,
     db
 };
