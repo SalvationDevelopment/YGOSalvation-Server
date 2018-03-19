@@ -338,9 +338,31 @@ function saveDeck(user, callback) {
     });
 }
 
+
+function flatten(arr) {
+    return arr.reduce(function(flat, toFlatten) {
+        return flat.concat(Array.isArray(toFlatten) ? flatten(toFlatten) : toFlatten);
+    }, []);
+}
+
+
+function getAllUsersDecks(callback) {
+    BaseUser.find({}, function(error, users) {
+        if (error) {
+            callback(error);
+        }
+        const decks = users.map(function(user) {
+
+            return user.decks;
+        });
+        callback(null, decks);
+    });
+}
+
 module.exports = {
     validate,
     saveDeck,
     setupRegistrationService,
+    getAllUsersDecks,
     db
 };

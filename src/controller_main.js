@@ -134,9 +134,19 @@ app.post('/git', function(req, res, next) {
     gitRoute(req, res, next);
 });
 
-app.get('/git', function(req, res, next) {
-    gitRoute(req, res, next);
+
+app.get('/decks', function(req, res, next) {
+
+    userController.getAllUsersDecks(function(error, decks) {
+        if (error) {
+            next();
+        }
+        res.write(JSON.stringify(decks));
+        next();
+    });
 });
+
+
 
 userController.setupRegistrationService(app);
 forumController(app);
