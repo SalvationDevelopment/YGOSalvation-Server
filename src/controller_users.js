@@ -257,7 +257,7 @@ function setupRegistrationService(app) {
             return;
         } else {
             // find each person with a last name matching 'Ghost', selecting the `name` and `occupation` fields
-            BaseUser.findOne({ 'email': payload.email }, 'username email', function(err, person) {
+            BaseUser.findOne({ $or: [{ 'email': payload.email }, { 'username': payload.username }] }, 'username email', function(err, person) {
                 if (err) {
                     return console.log(err);
                 }

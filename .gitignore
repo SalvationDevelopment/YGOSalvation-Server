@@ -74,4 +74,4 @@ coverage
 .vscode
 bin/*.txt
 databases/*.nedb
-http\manifest\banlist.json
+http/manifest/banlist.json
