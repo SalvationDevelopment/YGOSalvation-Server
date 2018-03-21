@@ -410,7 +410,7 @@ function createTournament(banlist, callback) {
     Tournaments.create(input, callback);
 }
 
-function addTournamentEntry(id, entry, ) {
+function addTournamentEntry(id, entry) {
     Tournaments.update({
         _id: id,
         'entires.username': { $ne: entires.username }
