@@ -182,6 +182,31 @@ function updatePassword(data, callback) {
     });
 }
 
+
+function sendRecoveryEmail(address, username, salt) {
+    try {
+        var emailClient = new SparkPost(process.env.SPARKPOST);
+        emailClient.transmissions.send({
+            content: {
+                from: 'no-replay@ygosalvation.com',
+                subject: 'User Recovery for ' + username,
+                html: '<html><body><p>Click the link to recover account. <a href="http://ygosalvation.com/recover/' + salt + '" >http://ygosalvation.com/recover/' + salt + '</a></p></body></html>'
+            },
+            recipients: [
+                { address }
+            ]
+        }).then(data => {
+            console.log(data);
+        }).catch(err => {
+            console.log('Whoops! Something went wrong');
+            console.log(err);
+        });
+    } catch (fatal) {
+        console.log(address, username, id, fatal);
+    }
+
+}
+
 function startRecoverPassword(data, callback) {
     var code = salter();
     Users.findOneAndUpdate({ username: data.username }, { recoveryPass: code }, function(error, person) {
@@ -225,140 +250,8 @@ function sendEmail(address, username, id) {
 
 }
 
-function sendRecoveryEmail(address, username, salt) {
-    try {
-        var emailClient = new SparkPost(process.env.SPARKPOST);
-        emailClient.transmissions.send({
-            content: {
-                from: 'no-replay@ygosalvation.com',
-                subject: 'User Recovery for ' + username,
-                html: '<html><body><p>Click the link to recover account. <a href="http://ygosalvation.com/recover/' + salt + '" >http://ygosalvation.com/recover/' + salt + '</a></p></body></html>'
-            },
-            recipients: [
-                { address }
-            ]
-        }).then(data => {
-            console.log(data);
-        }).catch(err => {
-            console.log('Whoops! Something went wrong');
-            console.log(err);
-        });
-    } catch (fatal) {
-        console.log(address, username, id, fatal);
-    }
-
-}
-
-function setupRegistrationService(app) {
-    var oauth = new OAuthServer({ model: oauthModel });
-
-    app.post('/register', function(request, response) {
-        var payload = request.body || {},
-            user;
-
-        if (!payload.password) {
-            response.send({
-                error: 'No Password'
-            });
-            return;
-        }
-        payload.username = sanitizer.sanitize(payload.username);
-        if (!payload.username) {
-            response.send({
-                error: 'No username'
-            });
-            return;
-        }
-        if (zxcvbn(payload.password) < 3) {
-            response.send({
-                error: 'Password is to weak'
-            });
-            response.end();
-            return;
-        } else {
-            // find each person with a last name matching 'Ghost', selecting the `name` and `occupation` fields
-            Users.findOne({ $or: [{ 'email': payload.email }, { 'username': payload.username }] }, 'username email', function(err, person) {
-                if (err) {
-                    return console.log(err);
-                }
-                if (person) {
-                    // already exist
-                    response.send({
-                        error: 'Username or Email exist in system already'
-                    });
-                    response.end();
-                } else {
 
 
-                    var newUser = new Users();
-                    newUser.username = payload.username;
-                    newUser.salt = salter();
-                    newUser.passwordHash = hash(payload.password, newUser.salt);
-                    newUser.email = payload.email;
-                    newUser.creation = new Date();
-                    newUser.lastOnline = new Date();
-                    newUser.friends = [];
-                    newUser.admin = false;
-                    newUser.decks = [];
-                    newUser.rewards = [];
-                    newUser.ranking = {
-                        rankPoints: 0,
-                        rankedWins: 0,
-                        rankedLosses: 0,
-                        rankedTies: 0
-                    };
-                    Users.create(newUser, function(error, resultingUser, numAffected) {
-                        response.send({
-                            info: resultingUser,
-                            success: true,
-                            error,
-                            numAffected
-                        });
-                        sendEmail(payload.email, payload.username, resultingUser._id);
-                        response.end();
-                    });
-                }
-            });
-        }
-    });
-
-    app.get('/verify/:id', function(request, response) {
-        var id = request.params.id;
-
-        Users.findByIdAndUpdate(id, { verified: true }, function(err, person) {
-            response.write({
-                success: error,
-                result: person
-            });
-        });
-    });
-
-
-    function loadCurrentUser(req) {
-        return db.getUserBySessionId(req.session.sessionid);
-    }
-
-    app.post('/recover', function(request, response, next) {
-        var payload = request.body || {},
-            user;
-
-        if (!payload.username || !payload.email) {
-            response.send({
-                error: 'No username or email address'
-            });
-            return;
-        }
-        if (payload.username) {
-            Users.findOne({ 'username': payload.username }, 'username email', function(err, person) {
-                startRecoverPassword(person, callback);
-            });
-        } else {
-            Users.findOne({ 'email': payload.email }, 'username email', function(err, person) {
-                startRecoverPassword(person, callback);
-            });
-        }
-    });
-}
 
 function saveDeck(user, callback) {
     Users.findOne({ 'username': user.username }, function(err, person) {
@@ -474,6 +367,214 @@ function getRanking(callback) {
     });
 }
 
+function setupController(app) {
+    var oauth = new OAuthServer({ model: oauthModel });
+
+    app.post('/register', function(request, response) {
+        var payload = request.body || {},
+            user;
+
+        if (!payload.password) {
+            response.send({
+                error: 'No Password'
+            });
+            return;
+        }
+        payload.username = sanitizer.sanitize(payload.username);
+        if (!payload.username) {
+            response.send({
+                error: 'No username'
+            });
+            return;
+        }
+        if (zxcvbn(payload.password) < 3) {
+            response.send({
+                error: 'Password is to weak'
+            });
+            response.end();
+            return;
+        } else {
+            // find each person with a last name matching 'Ghost', selecting the `name` and `occupation` fields
+            Users.findOne({ $or: [{ 'email': payload.email }, { 'username': payload.username }] }, 'username email', function(err, person) {
+                if (err) {
+                    return console.log(err);
+                }
+                if (person) {
+                    // already exist
+                    response.send({
+                        error: 'Username or Email exist in system already'
+                    });
+                    response.end();
+                } else {
+
+
+                    var newUser = new Users();
+                    newUser.username = payload.username;
+                    newUser.salt = salter();
+                    newUser.passwordHash = hash(payload.password, newUser.salt);
+                    newUser.email = payload.email;
+                    newUser.creation = new Date();
+                    newUser.lastOnline = new Date();
+                    newUser.friends = [];
+                    newUser.admin = false;
+                    newUser.decks = [];
+                    newUser.rewards = [];
+                    newUser.ranking = {
+                        rankPoints: 0,
+                        rankedWins: 0,
+                        rankedLosses: 0,
+                        rankedTies: 0
+                    };
+                    Users.create(newUser, function(error, resultingUser, numAffected) {
+                        response.send({
+                            info: resultingUser,
+                            success: true,
+                            error,
+                            numAffected
+                        });
+                        sendEmail(payload.email, payload.username, resultingUser._id);
+                        response.end();
+                    });
+                }
+            });
+        }
+    });
+
+    app.get('/verify/:id', function(request, response) {
+        var id = request.params.id;
+
+        Users.findByIdAndUpdate(id, { verified: true }, function(err, person) {
+            response.write({
+                success: error,
+                result: person
+            });
+        });
+    });
+
+
+    function loadCurrentUser(req) {
+        return db.getUserBySessionId(req.session.sessionid);
+    }
+
+    app.post('/recover', function(request, response, next) {
+        var payload = request.body || {},
+            user;
+
+        function callback(error, person, code) {
+            response.send({
+                error: error
+            });
+        }
+        if (!payload.username || !payload.email) {
+            response.send({
+                error: 'No username or email address'
+            });
+            return;
+        }
+        if (payload.username) {
+            Users.findOne({ 'username': payload.username }, 'username email', function(err, person) {
+                startRecoverPassword(person, callback);
+            });
+        } else {
+            Users.findOne({ 'email': payload.email }, 'username email', function(err, person) {
+                startRecoverPassword(person, callback);
+            });
+        }
+    });
+
+
+    app.get('/decks', function(req, res, next) {
+
+        getAllUsersDecks(function(error, decks) {
+            if (error) {
+                next();
+            }
+            res.write(JSON.stringify(decks));
+            next();
+        });
+    });
+
+    app.get('/usercount', function(req, res, next) {
+
+        getUserCount(function(error, count) {
+            res.write(JSON.stringify({
+                usercount: count,
+                error: error
+            }));
+            next();
+        });
+    });
+
+    app.get('/duelrecords', function(req, res, next) {
+        const start = req.params.start,
+            end = req.params.end || Date.now();
+        getDuels(start, end, function(error, duels) {
+            res.write(JSON.stringify({
+                duels: duels,
+                error: error
+            }));
+            next();
+        });
+    });
+
+    app.get('/ranking', function(req, res, next) {
+        getRanking(function(error, ranks) {
+            res.write(JSON.stringify({
+                ranks: ranks,
+                error: error
+            }));
+            next();
+        });
+    });
+
+    app.post('/createtournament', function(req, res, next) {
+        const banlist = JSON.parse(req.body);
+        createTournament(banlist, function(error, tournament) {
+            res.write(JSON.stringify({
+                tournament: tournament,
+                error: error
+            }));
+            next();
+        });
+    });
+
+    app.post('/tournament', function(req, res, next) {
+        const id = req.params.id;
+        queryTournament(id, function(error, tournament) {
+            res.write(JSON.stringify({
+                tournament: tournament,
+                error: error
+            }));
+            next();
+        });
+    });
+
+    app.post('/addtournamententry', function(req, res, next) {
+        const id = req.params.id,
+            entry = JSON.parse(req.body);
+        addTournamentEntry(id, entry, function(error, result) {
+            res.write(JSON.stringify({
+                sucess: Boolean(result),
+                error: error
+            }));
+            next();
+        });
+    });
+
+    app.post('/updatetournamententry', function(req, res, next) {
+        const id = req.params.id,
+            entry = JSON.parse(req.body);
+        updateTournamentEntry(id, entry, function(error, result) {
+            res.write(JSON.stringify({
+                sucess: Boolean(result),
+                error: error
+            }));
+            next();
+        });
+    });
+
+}
+
 module.exports = {
     getDuels,
     recordDuelResult,
@@ -484,7 +585,7 @@ module.exports = {
     updateTournamentEntry,
     validate,
     saveDeck,
-    setupRegistrationService,
+    setupController,
     getAllUsersDecks,
     getUserCount,
     db

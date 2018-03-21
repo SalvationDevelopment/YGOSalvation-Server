@@ -126,7 +126,7 @@
 
                 <br />
 
-                <a data-translation-forgotpassword class=" loginsystem" href="https://forum.ygopro.us/index.php?/lostpassword/">Forgot Password?</a>
+                <a data-translation-forgotpassword class=" loginsystem" onclick="singlesitenav('recoveryprompt')">Forgot Password?</a>
 
                 <br />
             </div>
@@ -159,24 +159,27 @@
         <div class="formrow">
             <label>Email Address</label>
             <input id="newemail" /></div>
-            <div class="formrow">
-                <label>Username</label>
-                <input id="newusername"/>
-            </div>
-            <div class="formrow">  
-                <label>Password</label>
-                <input type="password" id="newpassword"/>
-            </div>
-            <div class="formrow">
-                <label>Repeat Password</label>
-                <input type="password" id="restatenewpassword"/>
-            </div>
-            <div class="formrow"> 
+        <div class="formrow">
+            <label>Username</label>
+            <input id="newusername" />
+        </div>
+        <div class="formrow">
+            <label>Password</label>
+            <input type="password" id="newpassword" />
+        </div>
+        <div class="formrow">
+            <label>Repeat Password</label>
+            <input type="password" id="restatenewpassword" />
+        </div>
+        <div class="formrow">
             <button onclick="startNewUser()">Register</button></div>
     </header>
     <header style="padding-top:50px" id="recoveryprompt">
+        <div class="formrow">
             <label>Email Address</label>
-            <input /></div>
+            <input id="oldemailforgot" /></div>
+        <div class="formrow">
+            <button onclick="recoverAccount()" data-translation-forgotpassword>Recover</button>
     </header>
     <header style="padding-top:50px" id="credits">
         <div class="marquee" id="marquee">

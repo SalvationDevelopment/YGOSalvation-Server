@@ -1039,3 +1039,18 @@ function startNewUser() {
     });
 
 }
+
+function recoverAccount() {
+    var email = $('#newemail').val();
+    $.post('/recover', { email: email }, function(result, networkStatus) {
+        if (result.error) {
+            alert(result.error);
+        } else {
+            singlesitenav('home');
+            alert('Account Created. Please check your email.');
+            processLogin(result.info);
+        }
+
+    });
+
+}
