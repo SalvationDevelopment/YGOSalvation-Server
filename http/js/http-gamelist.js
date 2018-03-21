@@ -1013,20 +1013,28 @@ function startNewUser() {
         repeatedPassword = $('#restatenewpassword').val();
 
     if (password.length < 7) {
+        alert('Stronger Password Required');
         return false;
     }
 
     if (repeatedPassword !== password) {
+        alert('Passwords do not match');
         return false;
     }
 
     if (!validateEmail(email)) {
+        alert('Invalid Email address');
         return false;
     }
 
-    $.post('/register', { email: email, username: username, password: password }, function(error, result) {
-        singlesitenav('home');
-        alert('Please check your email.');
+    $.post('/register', { email: email, username: username, password: password }, function(result, networkStatus) {
+        if (result.error) {
+            alert(result.error);
+        } else {
+            singlesitenav('home');
+            alert('Account Created. Please check your email.');
+            processLogin(result.info);
+        }
 
     });
 

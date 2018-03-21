@@ -284,7 +284,7 @@ function setupRegistrationService(app) {
                 if (person) {
                     // already exist
                     response.send({
-                        error: 'Email exist in system already'
+                        error: 'Username or Email exist in system already'
                     });
                     response.end();
                 } else {
@@ -470,7 +470,7 @@ function getRanking(callback) {
         ranks.sort(function(primary, secondary) {
             return primary.points > secondary.points;
         });
-        callback(null, ranks);
+        callback(null, ranks.slice(0, 100));
     });
 }
 
