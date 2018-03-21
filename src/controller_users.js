@@ -417,7 +417,7 @@ function addTournamentEntry(id, entry) {
     }, { $push: { entries: entry } }, callback);
 }
 
-function updateTournamentEntry(id, entry, ) {
+function updateTournamentEntry(id, entry) {
     Tournaments.update({
         _id: id,
         'entires.username': entry.username
