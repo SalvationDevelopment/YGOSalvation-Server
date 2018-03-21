@@ -12,9 +12,9 @@ var openChats = [];
 var tournament = {};
 var chatTarget = 'Public';
 
-$.fn.urlize = function () {
+$.fn.urlize = function() {
     if (this.length > 0) {
-        this.each(function (i, obj) {
+        this.each(function(i, obj) {
             // making links active
             var x = $(obj).html(),
                 list = x.match(/\b(http:\/\/|www\.|http:\/\/www\.)[^ <]{2,200}\b/g),
@@ -33,7 +33,7 @@ $.fn.urlize = function () {
 
 function applySettings() {
     'use strict';
-    $('[data-localhost]').each(function () {
+    $('[data-localhost]').each(function() {
         var property = $(this).attr('data-localhost'),
             value = ('1' === localStorage[property]) ? true : false;
         $(this).prop('checked', value);
@@ -53,7 +53,7 @@ applySettings();
 
 function saveSettings() {
     'use strict';
-    $('[data-localhost]').each(function () {
+    $('[data-localhost]').each(function() {
         var property = $(this).attr('data-localhost');
         localStorage[property] = Number($(this).prop('checked'));
     });
@@ -124,7 +124,7 @@ function ygopro(parameter) {
     try {
         window._gaq.push(['_trackEvent', 'Launcher', 'YGOPro', parameter]);
         window._gaq.push(['_trackEvent', 'Site', 'Navigation Movement', window.internalLocal + ' - ' + 'YGOPro']);
-    } catch (e) { }
+    } catch (e) {}
 
 
 }
@@ -195,8 +195,8 @@ function enterGame(string, pass) {
     ygopro('-j');
     try {
         window._gaq.push(['_trackEvent', 'Launcher', 'YGOPro', 'Join Duel']);
-    } catch (e) { }
-    setTimeout(function () {
+    } catch (e) {}
+    setTimeout(function() {
         $('body').css('background-image', 'url(http://ygopro.us/img/magimagipinkshadow2.jpg)');
     }, 3000);
     //singlesitenav('duelscreen');
@@ -520,7 +520,7 @@ function renderPrivateChat() {
         target = '';
     $('#onlineprivatechat').html('');
 
-    openChats.forEach(function (message) {
+    openChats.forEach(function(message) {
         $('#onlineprivatechat').append('<li data-person="' + message.from + '"><strong>[' + new Date(message.date).toLocaleTimeString() + '] ' + message.name + ':</strong> ' + message.msg + '</li>');
         $('[data-chatuid="' + message.uid + '"').urlize();
         if (chatlist.indexOf(message.from) <= 0) {
@@ -531,7 +531,7 @@ function renderPrivateChat() {
     $('[data-person="' + chatTarget + '"]').css('display', 'block');
 
     $('#chatpmlist').html('');
-    chatlist.forEach(function (person) {
+    chatlist.forEach(function(person) {
         $('#chatpmlist').append('<div data-name="' + person + '" onclick="privateMessage(\'' + person + '\')">' + person + '<span onclick="closeprivatechat(\'' + person + '\')">X</span></div>');
     });
 
@@ -559,7 +559,7 @@ function privateMessage(person) {
 
 function closeprivatechat(person) {
     'use strict';
-    openChats = openChats.filter(function (message) {
+    openChats = openChats.filter(function(message) {
         return (message.from === person);
     });
     renderPrivateChat();
@@ -617,7 +617,7 @@ function pondata(data) {
             if (data.chatbox) {
                 if (data.chatbox.length) {
                     $('#onlinepublicchat').html('');
-                    data.chatbox.forEach(function (message) {
+                    data.chatbox.forEach(function(message) {
                         $('#onlinepublicchat').append('<li data-chatuid="' + message.uid + '"><strong>[' + new Date(message.date).toLocaleTimeString() + '] ' + message.from + ':</strong> ' + message.msg + '<span class="admincensor" onclick="censor(' + message.uid + ')" ></span></li>');
                         $('[data-chatuid="' + message.uid + '"').urlize();
                     });
@@ -643,7 +643,7 @@ function pondata(data) {
             }
             $('[data-chatuid="' + data.uid + '"').urlize();
             $('.chatlinker').addClass('boxshine');
-            setTimeout(function () {
+            setTimeout(function() {
                 $('.chatlinker').removeClass('boxshine');
             }, 6000);
         }
@@ -651,7 +651,7 @@ function pondata(data) {
             openChats.push(data);
             renderPrivateChat();
             $('.chatlinker').addClass('boxshine');
-            setTimeout(function () {
+            setTimeout(function() {
                 $('.chatlinker').removeClass('boxshine');
             }, 6000);
         }
@@ -686,7 +686,7 @@ function pondata(data) {
             } else {
                 quedfunc = 'newDuelRequest';
                 quedparams = data.from;
-                setTimeout(function () {
+                setTimeout(function() {
                     if (window.confirm('Accept Duel Request from ' + data.from + '?')) {
 
                         enterGame(data.roompass);
@@ -709,10 +709,10 @@ function pondata(data) {
             storedUserlist = [];
             $('#onlineconnectted').html(data.ackresult);
             friends = window.deckEditor.getFriends();
-            data.userlist = data.userlist.sort(function (a, b) {
+            data.userlist = data.userlist.sort(function(a, b) {
                 return a.toLowerCase().localeCompare(b.toLowerCase());
             });
-            data.userlist.forEach(function (name) {
+            data.userlist.forEach(function(name) {
 
                 jsco = "userlistonclick('" + name.trim() + "');";
                 userlist = (friends.indexOf(name.trim()) > -1) ? userlist + '<li data-friend onclick="' + jsco + '">' + name.trim() + '</li>' : userlist + '<li onclick="' + jsco + '">' + name.trim() + '</li>';
@@ -737,14 +737,14 @@ function pondata(data) {
     }
 }
 primus.on('data', pondata);
-primus.on('connect', function () {
+primus.on('connect', function() {
     'use strict';
     console.log('!!!!!! connect');
     try {
         _gaq.push(['_trackEvent', 'Launcher', 'Primus', 'Init']);
-    } catch (e) { }
+    } catch (e) {}
 });
-primus.on('close', function () {
+primus.on('close', function() {
     'use strict';
     console.log('!!!!!! close');
 });
@@ -844,7 +844,7 @@ function aiRestart() {
     });
 }
 
-$('body').on('mousedown', '.game', function (ev) {
+$('body').on('mousedown', '.game', function(ev) {
     'use strict';
     if (window.admin === "1" && ev.which === 3) {
         var killpoint = $(ev.target).attr('data-killpoint'),
@@ -857,7 +857,7 @@ $('body').on('mousedown', '.game', function (ev) {
         }
     }
 });
-$('body').on('mousedown', '.game', function (ev) {
+$('body').on('mousedown', '.game', function(ev) {
     'use strict';
     $('#manualcontrols button').css({
         'display': 'none'
@@ -865,7 +865,7 @@ $('body').on('mousedown', '.game', function (ev) {
 });
 
 
-$('body').on('mousedown', 'footer', function (ev) {
+$('body').on('mousedown', 'footer', function(ev) {
     'use strict';
     ev.preventDefault();
     if (admin === "1" && ev.which === 3) {
@@ -956,7 +956,7 @@ function chatline(text) {
 
 
 
-$('#publicchat').keypress(function (e) {
+$('#publicchat').keypress(function(e) {
     'use strict';
 
     if (e.which === 13) {
@@ -1024,10 +1024,10 @@ function startNewUser() {
         return false;
     }
 
-    $.post('/register', { email: email, username: username, password: password }, function (error, result) {
+    $.post('/register', { email: email, username: username, password: password }, function(error, result) {
         singlesitenav('home');
-        alert('Verification Email will be sent out in a few days, we are still fixing stuff.');
-        
+        alert('Please check your email.');
+
     });
 
 }

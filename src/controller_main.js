@@ -183,6 +183,52 @@ app.get('/ranking', function(req, res, next) {
     });
 });
 
+app.post('/createtournament', function(req, res, next) {
+    const banlist = JSON.parse(req.body);
+    userController.createTournament(banlist, function(error, tournament) {
+        res.write(JSON.stringify({
+            tournament: tournament,
+            error: error
+        }));
+        next();
+    });
+});
+
+app.post('/tournament', function(req, res, next) {
+    const id = req.params.id;
+    userController.queryTournament(id, function(error, tournament) {
+        res.write(JSON.stringify({
+            tournament: tournament,
+            error: error
+        }));
+        next();
+    });
+});
+
+app.post('/addtournamententry', function(req, res, next) {
+    const id = req.params.id,
+        entry = JSON.parse(req.body);
+    userController.addTournamentEntry(id, entry, function(error, result) {
+        res.write(JSON.stringify({
+            sucess: Boolean(result),
+            error: error
+        }));
+        next();
+    });
+});
+
+app.post('/updatetournamententry', function(req, res, next) {
+    const id = req.params.id,
+        entry = JSON.parse(req.body);
+    userController.updateTournamentEntry(id, entry, function(error, result) {
+        res.write(JSON.stringify({
+            sucess: Boolean(result),
+            error: error
+        }));
+        next();
+    });
+});
+
 
 
 userController.setupRegistrationService(app);

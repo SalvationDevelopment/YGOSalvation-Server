@@ -21,7 +21,7 @@ var validationCache = {},
         content: String,
         status: String
     }),
-    Duel = new Schema({
+    DuelSchema = new Schema({
         created: { type: Date, default: Date.now },
         decks: [Schema.Types.Mixed],
         banlist: String,
@@ -29,7 +29,26 @@ var validationCache = {},
         loser: Number,
         players: [String]
     }),
-    UserEntry = new Schema({
+    MatchSchema = new Schema({
+        won: [Boolean],
+        loss: [Boolean],
+        draw: [Boolean],
+        opponent: String
+    }),
+    TournamentEntrySchema = new Schema({
+        joined: { type: Date, default: Date.now },
+        username: String,
+        deck: [Schema.Types.Mixed],
+        matches: [MatchSchema]
+    }),
+    TournamentSchema = new Schema({
+        created: { type: Date, default: Date.now },
+        entries: [TournamentEntrySchema],
+        banlist: String,
+        createdBy: String,
+        name: String
+    }),
+    UserSchema = new Schema({
         username: String,
         passwordHash: String,
         salt: String,
@@ -61,8 +80,9 @@ var validationCache = {},
 
     }),
     oauthModel = require('./model_oauth.js'),
-    BaseUser = mongoose.model('user', UserEntry),
-    DuelModel = mongoose.model('duel', Duel),
+    Users = mongoose.model('user', UserSchema),
+    Duels = mongoose.model('duel', DuelSchema),
+    Tournaments = mongoose.model('tournment', TournamentSchema),
     SparkPost = require('sparkpost'),
     uuidv4 = require('uuid/v4');
 
@@ -95,7 +115,7 @@ function hash(string, salt) {
 }
 
 function validate(login, data, callback) {
-    BaseUser.findOne({
+    Users.findOne({
         'username': { $regex: new RegExp('^' + data.username.toLowerCase(), 'i') }
     }, function(error, person) {
         if (error) {
@@ -126,7 +146,7 @@ function validate(login, data, callback) {
 }
 
 function validateSession(data, callback) {
-    BaseUser.findOne({
+    Users.findOne({
         'session': data.session
     }, function(error, person) {
         if (error) {
@@ -157,26 +177,26 @@ function updatePassword(data, callback) {
             passwordHash = hash(password, salt),
             recoveryPass;
         if (result) {
-            BaseUser.findByIdAndUpdate(person._id, { passwordHash, salt, recoveryPass }, callback);
+            Users.findByIdAndUpdate(person._id, { passwordHash, salt, recoveryPass }, callback);
         }
     });
 }
 
 function startRecoverPassword(data, callback) {
     var code = salter();
-    BaseUser.findOneAndUpdate({ username: data.username }, { recoveryPass: code }, function(error, person) {
+    Users.findOneAndUpdate({ username: data.username }, { recoveryPass: code }, function(error, person) {
         callback(error, person, code);
         sendRecoveryEmail(person.email, person.username, code);
     });
 }
 
 function recoverPassword(data, id, callback) {
-    BaseUser.findOne({ username: data.username, recoveryPass: id }, function(error, result, person) {
+    Users.findOne({ username: data.username, recoveryPass: id }, function(error, result, person) {
         var password = data.newPassword,
             salt = salter(),
             passwordHash = hash(password, salt);
         if (result) {
-            BaseUser.findByIdAndUpdate(person._id, { passwordHash, salt }, callback);
+            Users.findByIdAndUpdate(person._id, { passwordHash, salt }, callback);
         }
     });
 }
@@ -257,7 +277,7 @@ function setupRegistrationService(app) {
             return;
         } else {
             // find each person with a last name matching 'Ghost', selecting the `name` and `occupation` fields
-            BaseUser.findOne({ $or: [{ 'email': payload.email }, { 'username': payload.username }] }, 'username email', function(err, person) {
+            Users.findOne({ $or: [{ 'email': payload.email }, { 'username': payload.username }] }, 'username email', function(err, person) {
                 if (err) {
                     return console.log(err);
                 }
@@ -270,7 +290,7 @@ function setupRegistrationService(app) {
                 } else {
 
 
-                    var newUser = new BaseUser();
+                    var newUser = new Users();
                     newUser.username = payload.username;
                     newUser.salt = salter();
                     newUser.passwordHash = hash(payload.password, newUser.salt);
@@ -287,7 +307,7 @@ function setupRegistrationService(app) {
                         rankedLosses: 0,
                         rankedTies: 0
                     };
-                    BaseUser.create(newUser, function(error, resultingUser, numAffected) {
+                    Users.create(newUser, function(error, resultingUser, numAffected) {
                         response.send({
                             info: resultingUser,
                             success: true,
@@ -305,7 +325,7 @@ function setupRegistrationService(app) {
     app.get('/verify/:id', function(request, response) {
         var id = request.params.id;
 
-        BaseUser.findByIdAndUpdate(id, { verified: true }, function(err, person) {
+        Users.findByIdAndUpdate(id, { verified: true }, function(err, person) {
             response.write({
                 success: error,
                 result: person
@@ -329,11 +349,11 @@ function setupRegistrationService(app) {
             return;
         }
         if (payload.username) {
-            BaseUser.findOne({ 'username': payload.username }, 'username email', function(err, person) {
+            Users.findOne({ 'username': payload.username }, 'username email', function(err, person) {
                 startRecoverPassword(person, callback);
             });
         } else {
-            BaseUser.findOne({ 'email': payload.email }, 'username email', function(err, person) {
+            Users.findOne({ 'email': payload.email }, 'username email', function(err, person) {
                 startRecoverPassword(person, callback);
             });
         }
@@ -341,7 +361,7 @@ function setupRegistrationService(app) {
 }
 
 function saveDeck(user, callback) {
-    BaseUser.findOne({ 'username': user.username }, function(err, person) {
+    Users.findOne({ 'username': user.username }, function(err, person) {
         person.decks = user.decks;
         person.save(callback);
     });
@@ -350,7 +370,7 @@ function saveDeck(user, callback) {
 
 
 function getAllUsersDecks(callback) {
-    BaseUser.find({}, function(error, users) {
+    Users.find({}, function(error, users) {
         if (error) {
             callback(error);
         }
@@ -370,7 +390,7 @@ function getAllUsersDecks(callback) {
 }
 
 function getUserCount(callback) {
-    BaseUser.find({}, function(error, users) {
+    Users.find({}, function(error, users) {
         if (error) {
             callback(error);
         }
@@ -379,14 +399,51 @@ function getUserCount(callback) {
 }
 
 function recordDuelResult(duel, callback) {
-    const input = new DuelModel(duel);
-    DuelModel.create(input, callback);
-    BaseUser.findOneAndUpdate({ username: duel.players[duel.winner] }, { $inc: { 'ranking.rankedPoints': 1 } });
+    const input = new Duels(duel);
+    Duels.create(input, callback);
+    Users.findOneAndUpdate({ username: duel.players[duel.winner] }, { $inc: { 'ranking.rankedPoints': 1 } });
     callback();
 }
 
+function createTournament(banlist, callback) {
+    const input = new Tournaments({ banlist });
+    Tournaments.create(input, callback);
+}
+
+function addTournamentEntry(id, entry, ) {
+    Tournaments.update({
+        _id: id,
+        'entires.username': { $ne: entires.username }
+    }, { $push: { entries: entry } }, callback);
+}
+
+function updateTournamentEntry(id, entry, ) {
+    Tournaments.update({
+        _id: id,
+        'entires.username': entry.username
+    }, entry, callback);
+}
+
+function queryTournament(id, callback) {
+    Tournaments.find({ _id: id }, function(error, tournament) {
+        if (error) {
+            callback(error);
+        }
+        callback(null, tournament);
+    });
+}
+
+function removeTournament(id, callback) {
+    Tournaments.delete({ _id: id }, function(error, tournament) {
+        if (error) {
+            callback(error);
+        }
+        callback(null, tournament);
+    });
+}
+
 function getDuels(start, end, callback) {
-    DuelModel.find({
+    Duels.find({
         created: {
             '$gte': new Date(start),
             '$lt': new Date(end)
@@ -399,8 +456,8 @@ function getDuels(start, end, callback) {
     });
 }
 
-function getRanks(callback) {
-    BaseUser.find({}, function(error, users) {
+function getRanking(callback) {
+    Users.find({}, function(error, users) {
         if (error) {
             callback(error);
         }
@@ -420,6 +477,11 @@ function getRanks(callback) {
 module.exports = {
     getDuels,
     recordDuelResult,
+    getRanking,
+    createTournament,
+    queryTournament,
+    addTournamentEntry,
+    updateTournamentEntry,
     validate,
     saveDeck,
     setupRegistrationService,
