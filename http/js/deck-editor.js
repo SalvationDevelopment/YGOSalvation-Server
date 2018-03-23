@@ -843,7 +843,7 @@ var deckEditor = (function() {
         var html = '';
         cards.forEach(function(card, index) {
             var hardcard = JSON.stringify(card),
-                src = card.picture;
+                src = getCardObject(parseInt(card.id, 10)).picture;
             html += '<div class="searchwrapper" data-card-limit="' + card.limit + '">';
             html += '<img class="deckeditcard card" id="deceditcard' + index + zone + '" data-dropindex="' + index + '" data-dropzone="' + zone + '"  data-id = "' + card.id + '"';
             html += 'src="https://raw.githubusercontent.com/shadowfox87/YGOSeries10CardPics/master/pics/' + src + '" data-id="' + card.id + '" ondragstart="createCardReference(\'' + zone + '\', ' + index + ');" onclick = "deckeditonclick(' + index + ', \'' + zone + '\')" / >';
