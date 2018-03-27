@@ -306,6 +306,14 @@ var databaseSystem = (function() {
                 deckeditloader();
             }
             singlesitenav('home');
+            if (localStorage.session) {
+                $.getJSON('api/session/' + localStorage.session, function(userInfo) {
+                    console.log(userInfo);
+                    if (userInfo.success) {
+                        processLogin(userInfo.result);
+                    }
+                });
+            }
         });
     });
 
