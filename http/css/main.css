@@ -1508,15 +1508,15 @@ div#gamelist {
 .formrow {
     width: 25%;
     margin: 2vh auto;
-    overflow:auto;
+    overflow: auto;
 }
 
-.formrow input, .formrow label{
-    float :left;
-    display : block;
-    width:50%
+.formrow input,
+.formrow label {
+    float: left;
+    display: block;
+    width: 50%
 }
-
 
 #lobbygotoduel,
 #lobbygotospectate,
@@ -2973,4 +2973,14 @@ div#selectplayer button {
 .card.selection {
     border: 2px dashed white;
     padding: 2px;
+}
+
+header#loading {
+    background: rgba(0, 0, 0, .75);
+    text-align: center;
+}
+
+.fullscreenloading {
+    padding-top: 30vh;
+    font-size: 10vh;
 }

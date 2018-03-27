@@ -533,6 +533,9 @@ $(document).ready(function() {
     });
 
 
+    singlesitenav('loading');
+
+
 
     $('#ipblogin').css('display', 'block');
     $('#cusomizationselection').change(function() {

@@ -486,7 +486,7 @@ function stateUpdate(dataBinding) {
             'data-id': ref.id,
             'data-uid': ref.uid,
             'reloaded': element.attr('reloaded'),
-            'src': (ref.id) ? 'https://raw.githubusercontent.com/shadowfox87/YGOSeries10CardPics/master/pics/' + ref.id + '.png' : 'img/textures/cover.jpg'
+            'src': (ref.id) ? ref.picture : 'img/textures/cover.jpg'
         });
 
         if (ref.position === 'FaceDownDefence' || ref.position === 'FaceDownAttack') {

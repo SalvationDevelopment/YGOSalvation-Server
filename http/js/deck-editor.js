@@ -268,7 +268,7 @@ var databaseSystem = (function() {
             packsbox.append('<option value="' + set + '">' + set + '</option>');
         });
 
-        singlesitenav('home');
+
     }
 
     function setBanlist(newlist) {
@@ -333,7 +333,7 @@ var databaseSystem = (function() {
 
 
     function directLookup(id) {
-        var result = { id: id },
+        var result = {},
             dbuse = dbs.OCGTCG;
 
         dbuse.some(function(card, index) {
@@ -847,7 +847,7 @@ var deckEditor = (function() {
                     src = getCardObject(parseInt(card.id, 10)).picture;
                 html += '<div class="searchwrapper" data-card-limit="' + card.limit + '">';
                 html += '<img class="deckeditcard card" id="deceditcard' + index + zone + '" data-dropindex="' + index + '" data-dropzone="' + zone + '"  data-id = "' + card.id + '"';
-                html += 'src="https://raw.githubusercontent.com/shadowfox87/YGOSeries10CardPics/master/pics/' + src + '" data-id="' + card.id + '" ondragstart="createCardReference(\'' + zone + '\', ' + index + ');" onclick = "deckeditonclick(' + index + ', \'' + zone + '\')" / >';
+                html += 'src="' + src + '" data-id="' + card.id + '" ondragstart="createCardReference(\'' + zone + '\', ' + index + ');" onclick = "deckeditonclick(' + index + ', \'' + zone + '\')" / >';
                 html += '</div>';
             }
         });
