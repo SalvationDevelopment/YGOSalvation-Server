@@ -305,7 +305,7 @@ var databaseSystem = (function() {
             if (internalLocal === 'deckedit') {
                 deckeditloader();
             }
-
+            singlesitenav('loading');
         });
     });
 
