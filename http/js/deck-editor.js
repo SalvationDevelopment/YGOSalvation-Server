@@ -268,7 +268,7 @@ var databaseSystem = (function() {
             packsbox.append('<option value="' + set + '">' + set + '</option>');
         });
 
-
+        singlesitenav('home');
     }
 
     function setBanlist(newlist) {
@@ -333,7 +333,7 @@ var databaseSystem = (function() {
 
 
     function directLookup(id) {
-        var result = {},
+        var result = { id: id },
             dbuse = dbs.OCGTCG;
 
         dbuse.some(function(card, index) {

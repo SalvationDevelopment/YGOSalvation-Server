@@ -532,12 +532,6 @@ $(document).ready(function() {
         return false; // avoid to execute the actual submit of the form.
     });
 
-    if (launcher) {
-        $('webonly').css('display', 'none');
-        singlesitenav('legal');
-    } else {
-        singlesitenav('home');
-    }
 
 
     $('#ipblogin').css('display', 'block');
