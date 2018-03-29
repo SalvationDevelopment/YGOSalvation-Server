@@ -1041,16 +1041,32 @@ function startNewUser() {
 }
 
 function recoverAccount() {
-    var email = $('#newemail').val();
+    var email = $('#oldemailforgot').val();
     $.post('/recover', { email: email }, function(result, networkStatus) {
         if (result.error) {
             alert(result.error);
         } else {
-            singlesitenav('home');
-            alert('Account Created. Please check your email.');
-            processLogin(result.info);
+            alert('Please check your email for recovery Pass.');
         }
 
     });
+}
 
+function recoverAccountWithKey() {
+    var email = $('#oldemailforgot').val(),
+        key = $('#forgotkey').val(),
+        newpass = $('#newemailforgot').val(),
+        confirmednewpass = $('#confirmednewpass').val();
+    if (newpass !== confirmednewpass) {
+        alert('passwords do not match');
+        return;
+    }
+    $.post('/recover', { email: email }, function(result, networkStatus) {
+        if (result.error) {
+            alert(result.error);
+        } else {
+            alert('Please check your email for recovery Pass.');
+        }
+
+    });
 }

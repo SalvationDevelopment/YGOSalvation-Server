@@ -216,7 +216,7 @@ function startRecoverPassword(data, callback) {
 }
 
 function recoverPassword(data, id, callback) {
-    Users.findOne({ username: data.username, recoveryPass: id }, function(error, result, person) {
+    Users.findOne({ email: data.email, recoveryPass: id }, function(error, result, person) {
         var password = data.newPassword,
             salt = salter(),
             passwordHash = hash(password, salt);
@@ -303,10 +303,10 @@ function createTournament(banlist, callback) {
     Tournaments.create(input, callback);
 }
 
-function addTournamentEntry(id, entry) {
+function addTournamentEntry(id, entry, callback) {
     Tournaments.update({
         _id: id,
-        'entires.username': { $ne: entires.username }
+        'entires.username': { $ne: 'entires.username' }
     }, { $push: { entries: entry } }, callback);
 }
 
@@ -465,21 +465,39 @@ function setupController(app) {
                 error: error
             });
         }
-        if (!payload.username || !payload.email) {
+        if (!payload.email) {
             response.send({
                 error: 'No username or email address'
             });
             return;
         }
-        if (payload.username) {
-            Users.findOne({ 'username': payload.username }, 'username email', function(err, person) {
-                startRecoverPassword(person, callback);
-            });
-        } else {
-            Users.findOne({ 'email': payload.email }, 'username email', function(err, person) {
-                startRecoverPassword(person, callback);
+
+        Users.findOne({ 'email': payload.email }, 'username email', function(err, person) {
+            startRecoverPassword(person, callback);
+        });
+
+    });
+
+    app.post('/recoverpassword', function(request, response, next) {
+        var payload = request.body || {},
+            user;
+
+        function callback(error, person, code) {
+            response.send({
+                error: error
             });
         }
+        if (!payload.email) {
+            response.send({
+                error: 'No username or email address'
+            });
+            return;
+        }
+
+
+        recoverPassword(payload, function(error) {});
+
+
     });
 
 
