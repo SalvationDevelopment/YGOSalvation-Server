@@ -18,6 +18,7 @@ const child_process = require('child_process'),
     url = require('url'),
     path = require('path'),
     toobusy = require('toobusy-js'),
+    random_port = require('random-port'),
     app = express(),
     compression = require('compression'),
     hsts = require('hsts'),
@@ -648,7 +649,17 @@ module.exports = function() {
             if (socket.active_ygocore) {
                 socket.active_ygocore.write(data);
             } else {
-                ygopro({}, [socket]);
+                //socket.initialData = data;
+                socket.activeduel = '11111'
+                random_port({ from: 10000, range: 10000 }, function(port) {
+                    ygopro({
+                        startLP: 8000,
+                        rule: 0,
+                        mode: 0,
+                        masterRule: 4,
+                        port
+                    }, [socket]);
+                });
             }
         });
         socket.on('close', function() {
@@ -661,3 +672,4 @@ module.exports = function() {
 
     ygoserver.listen(8911);
 };
+0
