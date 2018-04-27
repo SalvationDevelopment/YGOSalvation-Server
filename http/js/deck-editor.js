@@ -850,12 +850,12 @@ var deckEditor = (function() {
     function makeCard(cards, zone) {
         var html = '';
         cards.forEach(function(card, index) {
-            if (card.picture) {
+            if (card.picture && window.internalLocal === 'deckedit') {
                 var hardcard = JSON.stringify(card),
                     src = getCardObject(parseInt(card.id, 10)).picture;
                 html += '<div class="searchwrapper" data-card-limit="' + card.limit + '">';
-                html += '<img-2 src-preview="img/textures/cover.jpg" height="" width="" class="deckeditcard card" id="deceditcard' + index + zone + '" data-dropindex="' + index + '" data-dropzone="' + zone + '"  data-id = "' + card.id + '"';
-                html += 'src="' + src + '" data-id="' + card.id + '" ondragstart="createCardReference(\'' + zone + '\', ' + index + ');" onclick = "deckeditonclick(' + index + ', \'' + zone + '\')" ></img-2>';
+                html += '<img src-preview="./img/textures/cover.jpg" class="deckeditcard card" id="deceditcard' + index + zone + '" data-dropindex="' + index + '" data-dropzone="' + zone + '"  data-id = "' + card.id + '"';
+                html += 'src="' + src + '" data-id="' + card.id + '" ondragstart="createCardReference(\'' + zone + '\', ' + index + ');" onclick = "deckeditonclick(' + index + ', \'' + zone + '\')" >';
                 html += '</div>';
             }
         });
