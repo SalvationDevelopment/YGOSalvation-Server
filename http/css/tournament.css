@@ -1,0 +1,20 @@
+#tournamentcp .entry {
+    float: left;
+    width: 15vw;
+    clear: both;
+}
+
+#tournamentcp .entry button {
+    float: right;
+}
+
+input.entryname {
+    margin: 1vh 0;
+}
+
+input.entryname {
+    margin: .2vh 0;
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid white;
+}

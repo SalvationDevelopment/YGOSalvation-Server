@@ -49,8 +49,9 @@ function resolveCardIndex(list, card) {
     return number;
 }
 
+
 // Good, means completed in the UI.
-function boardController(gameBoard, slot, message, ygopro) {
+function boardController(gameBoard, slot, message, ygopro, player) {
     'use strict';
     var output = {
         p0: {},
@@ -58,6 +59,7 @@ function boardController(gameBoard, slot, message, ygopro) {
         spectators: {}
     };
     console.log(slot, message.command);
+    player.lastData = { message, state: gameBoard.generateUpdateView(slot) };
     switch (message.command) {
         case ('STOC_UNKNOWN'): // Good
             break;
@@ -319,7 +321,7 @@ function boardController(gameBoard, slot, message, ygopro) {
                 var messageBuffer = [answer.length].concat(answer.map(function(card) {
                     return resolveCardIndex(message.selectable_targets, card);
                 })).filter(function(card) {
-                    return (card !== undefined)
+                    return (card !== undefined);
                 });
                 ygopro.write(gameResponse('CTOS_RESPONSE', new Buffer(messageBuffer)));
             });

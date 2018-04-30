@@ -640,36 +640,5 @@ module.exports = function() {
     });
 
 
-    var ygoserver = net.createServer(function(socket) {
-        socket.active_ygocore = false;
-        socket.active = false;
-        socket.on('data', function(data) {
 
-
-            if (socket.active_ygocore) {
-                socket.active_ygocore.write(data);
-            } else {
-                //socket.initialData = data;
-                socket.activeduel = '11111'
-                random_port({ from: 10000, range: 10000 }, function(port) {
-                    ygopro({
-                        startLP: 8000,
-                        rule: 0,
-                        mode: 0,
-                        masterRule: 4,
-                        port
-                    }, [socket]);
-                });
-            }
-        });
-        socket.on('close', function() {
-
-        });
-        socket.on('error', function() {
-
-        });
-    });
-
-    ygoserver.listen(8911);
 };
-0

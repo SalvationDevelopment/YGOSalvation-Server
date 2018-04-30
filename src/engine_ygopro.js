@@ -44,15 +44,17 @@ const child_process = require('child_process'),
 
 /**
  * Create a single players view of the game that is reflected down to the UI.
- * @param {Object} webSockectConnection A players connection to the server.
+ * @param {Object} playerConnection A players connection to the server.
  * @param {String} slot Player callback identifier, slot they are in the duel lobby. This function is its ultimate usage.
  * @param {Number} masterRule Ruling variable to construct the board correctly.
  * @returns {Object} A game instance with manual controls.
  */
-function GameBoard(webSockectConnection, slot, masterRule) {
+function GameBoard(playerConnection, slot, masterRule) {
     const board = manualControlEngine(function(view, stack, callback) {
         try {
-            webSockectConnection.write((view[slot]));
+            if (!playerConnection.initialData) {
+                playerConnection.write((view[slot]));
+            }
         } catch (error) {
             console.log('failed messaging socket', error);
         } finally {
@@ -62,6 +64,9 @@ function GameBoard(webSockectConnection, slot, masterRule) {
         }
     });
     board.masterRule = masterRule;
+    if (playerConnection.initialData) {
+        board.question = function() {};
+    }
     return board;
 }
 
@@ -137,7 +142,7 @@ function linkYGOProToYGOSharp(roomInstance, clientConnection, callback) {
         });
         clientConnection.on('error', cutConnections);
         clientConnection.on('close', cutConnections);
-
+        console.log(clientConnection.initialData);
         tcpConnection.write(clientConnection.initialData);
         callback();
     });
@@ -151,15 +156,15 @@ function linkYGOProToYGOSharp(roomInstance, clientConnection, callback) {
 /**
  * Proxy a web socket connection for a Browser to a TCP connection, which connects to YGOSharp.
  * @param {Number} roomInstance Rules used for connecting and understanding YGOSharp
- * @param {Object} webSockectConnection Players connection to the server.
+ * @param {Object} playerConnection Players connection to the server.
  * @param {String} slot Player callback identifier, slot they are in the duel lobby.
  * @param {Function} callback Function to run once player is connected.
  * @returns {Object} TCP Client Connection Instance
  */
-function linkBrowserToYGOSharp(roomInstance, webSockectConnection, slot, callback) {
+function linkBrowserToYGOSharp(roomInstance, playerConnection, slot, callback) {
     var port = roomInstance.port,
         dataStream = new DataStream(),
-        gameBoard = new GameBoard(webSockectConnection, slot, roomInstance.masterRule),
+        gameBoard = new GameBoard(playerConnection, slot, roomInstance.masterRule),
         gameQueue = queue(),
         tcpConnection;
 
@@ -187,7 +192,7 @@ function linkBrowserToYGOSharp(roomInstance, webSockectConnection, slot, callbac
      * @returns {undefined}
      */
     function preformGameAction(gameAction) {
-        webSockectConnection.write(boardController(gameBoard, slot, gameAction, tcpConnection));
+        playerConnection.write(boardController(gameBoard, slot, gameAction, tcpConnection, playerConnection));
     }
 
     /**
@@ -224,15 +229,19 @@ function linkBrowserToYGOSharp(roomInstance, webSockectConnection, slot, callbac
                 .map(parsePackets)
                 .map(queueGameActions);
         });
-        webSockectConnection.on('error', cutConnections);
-        webSockectConnection.on('close', cutConnections);
+        playerConnection.on('error', cutConnections);
+        playerConnection.on('close', cutConnections);
 
-        console.log('Send Game request for', webSockectConnection.activeduel);
-        var CTOS_PlayerInfo = gameResponse('CTOS_PlayerInfo', 'Player'),
-            CTOS_JoinGame = gameResponse('CTOS_JoinGame', webSockectConnection.activeduel),
-            toDuelist = gameResponse('CTOS_HS_TODUELIST');
+        console.log('Send Game request for', playerConnection.activeduel);
+        if (!playerConnection.initialData) {
+            const CTOS_PlayerInfo = gameResponse('CTOS_PlayerInfo', 'Player'),
+                CTOS_JoinGame = gameResponse('CTOS_JoinGame', playerConnection.activeduel),
+                toDuelist = gameResponse('CTOS_HS_TODUELIST');
 
-        tcpConnection.write(Buffer.concat([CTOS_PlayerInfo, CTOS_JoinGame]));
+            tcpConnection.write(Buffer.concat([CTOS_PlayerInfo, CTOS_JoinGame]));
+        } else {
+            tcpConnection.write(playerConnection.initialData);
+        }
         callback();
     });
     tcpConnection.setNoDelay(true);
@@ -281,7 +290,9 @@ function startYGOSharp(instance, sockets) {
         'NoShuffleDeck=' + Boolean(instance.shuf),
         'EnablePriority=false'
     ];
-
+    console.log(YGOSharp, parametersList, {
+        cwd: './bin/mr' + instance.masterRule
+    });
     instance.ygopro = child_process.spawn(YGOSharp, parametersList, {
         cwd: './bin/mr' + instance.masterRule
     });
@@ -290,19 +301,21 @@ function startYGOSharp(instance, sockets) {
     function connectParties() {
         ygosharp.sockets[0] = linkBrowserToYGOSharp(instance, sockets[0], 'p0', function() {
             lockInDeck(ygosharp.sockets[0], sockets[0].deck);
-            ygosharp.sockets[1] = linkBrowserToYGOSharp(instance, sockets[1], 'p1', function() {
-                lockInDeck(ygosharp.sockets[1], sockets[1].deck);
-                setTimeout(function() {
-                    ygosharp.sockets[0].write(gameResponse('CTOS_START'));
-                }, 500);
-            });
+            if (sockets[1]) {
+                ygosharp.sockets[1] = linkBrowserToYGOSharp(instance, sockets[1], 'p1', function() {
+                    lockInDeck(ygosharp.sockets[1], sockets[1].deck);
+                    setTimeout(function() {
+                        ygosharp.sockets[0].write(gameResponse('CTOS_START'));
+                    }, 500);
+                });
+            }
         });
     }
 
     ygosharp = instance.ygopro;
     ygosharp.sockets = [];
     ygosharp.on('close', function(error) {
-        console.log(error);
+        console.log('error,', error);
     });
     ygosharp.stderr.on('error', function(error) {
         ygosharp.kill();
@@ -317,7 +330,7 @@ function startYGOSharp(instance, sockets) {
             return;
         }
         var core_message = core_message_raw.toString().split('|');
-        console.log(core_message);
+        console.log('core_message', core_message);
         if (core_message[0].trim() === '::::network-ready') {
             if (instance.external) {
                 ygosharp.sockets[0] = linkYGOProToYGOSharp(instance, sockets[0], function() {});

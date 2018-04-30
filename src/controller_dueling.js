@@ -7,6 +7,7 @@
  */
 
 var fs = require('fs'),
+    net = require('net'),
     validateDeck = require('./validate_deck.js'),
     http = require('http'),
     https = require('https'),
@@ -47,13 +48,57 @@ function setter() {
 
 setter();
 
-function init(primus) {
+var realgames = [],
+    stateSystem = require('./engine_manual.js'),
+    games = {},
+    states = {},
+    log = {};
 
-    var realgames = [],
-        stateSystem = require('./engine_manual.js'),
-        games = {},
-        states = {},
-        log = {};
+
+function recordAITraining(type, input, output, callback) {
+    const data = {
+        input: input,
+        output: output
+    };
+    console.log('AI:', input.message.command, output);
+    callback();
+}
+
+var ygoserver = net.createServer(function(socket) {
+    socket.active_ygocore = false;
+    socket.active = false;
+    socket.on('data', function(data) {
+
+
+        if (socket.active_ygocore) {
+            recordAITraining(socket.lastData, data, function() {
+                socket.active_ygocore.write(data);
+            });
+        } else {
+            //socket.initialData = data;
+            socket.activeduel = '11111';
+            random_port({ from: 10000, range: 10000 }, function(port) {
+                ygopro({
+                    startLP: 8000,
+                    rule: 0,
+                    mode: 0,
+                    masterRule: 4,
+                    port
+                }, [socket]);
+            });
+        }
+    });
+    socket.on('close', function() {
+
+    });
+    socket.on('error', function() {
+
+    });
+});
+
+ygoserver.listen(8911);
+
+function init(primus) {
 
 
 
