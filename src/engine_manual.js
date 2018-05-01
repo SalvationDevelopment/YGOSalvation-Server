@@ -1652,6 +1652,7 @@ function init(callback) {
         flipCoin: flipCoin,
         offsetZone: offsetZone,
         surrender: surrender,
+        generateSinglePlayerView: generateSinglePlayerView,
         generateViewCount: generateViewCount,
         generateView: generateView,
         getGroup: getGroup,

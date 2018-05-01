@@ -62,8 +62,7 @@ var realgames = [],
 
 function recordAITraining(input, output, callback) {
     const data = {
-        type: input.type,
-        input: input.state,
+        input: input,
         output: []
     };
     data.output.push(...output);

@@ -75,3 +75,4 @@ coverage
 bin/*.txt
 databases/*.nedb
 http/manifest/banlist.json
+bin/mr4/lua*.txt
