@@ -24,6 +24,7 @@
 const child_process = require('child_process'),
     EventEmitter = require('events'),
     net = require('net'),
+    http = require('http'),
     queue = require('function-queue'),
     enums = require('./translate_ygopro_enums.js'),
     translateYGOProAPI = require('./translate_ygopro_messages.js'),
@@ -209,7 +210,11 @@ function linkBrowserToYGOSharp(roomInstance, playerConnection, slot, callback) {
             const pause = enums.timeout[gameAction.command] || 0;
             gameQueue.push(function(next) {
                 setTimeout(function() {
-                    preformGameAction(gameAction);
+                    try {
+                        preformGameAction(gameAction);
+                    } catch (e) {
+                        console.log(e);
+                    }
                     next();
                 }, pause);
             });
@@ -230,9 +235,13 @@ function linkBrowserToYGOSharp(roomInstance, playerConnection, slot, callback) {
     tcpConnection = net.connect(port, ip, function() {
         playerConnection.active_ygocore = tcpConnection;
         tcpConnection.on('data', function(data) {
-            dataStream.input(data)
-                .map(parsePackets)
-                .map(queueGameActions);
+            try {
+                dataStream.input(data)
+                    .map(parsePackets)
+                    .map(queueGameActions);
+            } catch (error) {
+                console.log(error);
+            }
             if (playerConnection.externalClient) {
                 playerConnection.write(data);
             }
@@ -284,20 +293,22 @@ function lockInDeck(tcpConnection, deck) {
 function startYGOSharp(instance, sockets) {
     var ygosharp;
     const parametersList = ['StandardStreamProtocol=true',
-        'Port=' + instance.port,
-        'ClientVersion=0x1343',
-        'BanlistFile=./lflist.conf',
-        'ScriptDirectory=' + './../../../ygopro-scripts',
-        'DatabaseFile=./cards.cdb',
-        'Rule=' + 0,
-        'Mode=' + 0,
-        'Banlist=' + 0,
-        'StartLp=' + instance.startLP,
-        'GameTimer=300',
-        'NoCheckDeck=true',
-        'NoShuffleDeck=' + Boolean(instance.shuf),
-        'EnablePriority=false'
-    ];
+            'Port=' + instance.port,
+            'ClientVersion=0x1343',
+            'BanlistFile=./lflist.conf',
+            'ScriptDirectory=' + './../../../ygopro-scripts',
+            'DatabaseFile=./cards.cdb',
+            'Rule=' + 0,
+            'Mode=' + 0,
+            'Banlist=' + 0,
+            'MasterRule=' + instance.masterRule,
+            'StartLp=' + instance.startLP,
+            'GameTimer=300',
+            'NoCheckDeck=true',
+            'NoShuffleDeck=' + Boolean(instance.shuf),
+            'EnablePriority=false'
+        ],
+        aiURL = `http://127.0.0.1:8899/?name=Grandpa&host=127.0.0.1&port=${instance.port}`;
     console.log(YGOSharp, parametersList, {
         cwd: './bin/mr' + instance.masterRule
     });
@@ -345,8 +356,10 @@ function startYGOSharp(instance, sockets) {
             } else {
                 connectParties();
             }
+            http.get(aiURL);
 
         }
+
     });
 
 
@@ -368,5 +381,6 @@ function startYGOSharp(instance, sockets) {
 
     return instance;
 }
+
 
 module.exports = startYGOSharp;
