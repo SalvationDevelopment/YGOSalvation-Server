@@ -52,7 +52,7 @@ const child_process = require('child_process'),
 function GameBoard(playerConnection, slot, masterRule) {
     const board = manualControlEngine(function(view, stack, callback) {
         try {
-            if (!playerConnection.initialData) {
+            if (!playerConnection.externalClient) {
                 playerConnection.write((view[slot]));
             }
         } catch (error) {
@@ -64,7 +64,7 @@ function GameBoard(playerConnection, slot, masterRule) {
         }
     });
     board.masterRule = masterRule;
-    if (playerConnection.initialData) {
+    if (playerConnection.externalClient) {
         board.question = function() {};
     }
     return board;
@@ -139,11 +139,12 @@ function linkYGOProToYGOSharp(roomInstance, clientConnection, callback) {
     tcpConnection = net.connect(port, ip, function() {
         tcpConnection.on('data', function(data) {
             clientConnection.write(data);
+            console.log(data);
         });
         clientConnection.on('error', cutConnections);
         clientConnection.on('close', cutConnections);
-        console.log(clientConnection.initialData);
-        tcpConnection.write(clientConnection.initialData);
+        console.log(clientConnection.externalClient);
+        tcpConnection.write(clientConnection.externalClient);
         callback();
     });
     tcpConnection.setNoDelay(true);
@@ -192,7 +193,10 @@ function linkBrowserToYGOSharp(roomInstance, playerConnection, slot, callback) {
      * @returns {undefined}
      */
     function preformGameAction(gameAction) {
-        playerConnection.write(boardController(gameBoard, slot, gameAction, tcpConnection, playerConnection));
+        var output = boardController(gameBoard, slot, gameAction, tcpConnection, playerConnection);
+        if (!playerConnection.externalClient) {
+            playerConnection.write(output);
+        }
     }
 
     /**
@@ -224,23 +228,27 @@ function linkBrowserToYGOSharp(roomInstance, playerConnection, slot, callback) {
     }
 
     tcpConnection = net.connect(port, ip, function() {
+        playerConnection.active_ygocore = tcpConnection;
         tcpConnection.on('data', function(data) {
             dataStream.input(data)
                 .map(parsePackets)
                 .map(queueGameActions);
+            if (playerConnection.externalClient) {
+                playerConnection.write(data);
+            }
         });
         playerConnection.on('error', cutConnections);
         playerConnection.on('close', cutConnections);
 
         console.log('Send Game request for', playerConnection.activeduel);
-        if (!playerConnection.initialData) {
+        if (!playerConnection.externalClient) {
             const CTOS_PlayerInfo = gameResponse('CTOS_PlayerInfo', 'Player'),
                 CTOS_JoinGame = gameResponse('CTOS_JoinGame', playerConnection.activeduel),
                 toDuelist = gameResponse('CTOS_HS_TODUELIST');
 
             tcpConnection.write(Buffer.concat([CTOS_PlayerInfo, CTOS_JoinGame]));
         } else {
-            tcpConnection.write(playerConnection.initialData);
+            tcpConnection.write(playerConnection.externalClient);
         }
         callback();
     });
@@ -277,7 +285,7 @@ function startYGOSharp(instance, sockets) {
     var ygosharp;
     const parametersList = ['StandardStreamProtocol=true',
         'Port=' + instance.port,
-        'ClientVersion=0x1338',
+        'ClientVersion=0x1343',
         'BanlistFile=./lflist.conf',
         'ScriptDirectory=' + './../../../ygopro-scripts',
         'DatabaseFile=./cards.cdb',

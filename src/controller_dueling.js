@@ -17,8 +17,13 @@ var fs = require('fs'),
     userController = require('./controller_users'),
     ygopro = require('./engine_ygopro.js'),
     banlist = {},
-    ygopros = {};
+    ygopros = {},
+    NEDB = require('nedb'),
+    aiStore = new NEDB({ filename: './ailog.nedb' });
 
+aiStore.loadDatabase(function(err) {
+
+});
 
 
 var hotload = require('hotload');
@@ -55,13 +60,19 @@ var realgames = [],
     log = {};
 
 
-function recordAITraining(type, input, output, callback) {
+function recordAITraining(input, output, callback) {
     const data = {
-        input: input,
-        output: output
+        type: input.type,
+        input: input.state,
+        output: []
     };
-    console.log('AI:', input.message.command, output);
-    callback();
+    data.output.push(...output);
+
+    aiStore.insert(data, function() {
+        console.log('AI:', data);
+        callback();
+    });
+
 }
 
 var ygoserver = net.createServer(function(socket) {
@@ -75,7 +86,7 @@ var ygoserver = net.createServer(function(socket) {
                 socket.active_ygocore.write(data);
             });
         } else {
-            //socket.initialData = data;
+            socket.externalClient = data;
             socket.activeduel = '11111';
             random_port({ from: 10000, range: 10000 }, function(port) {
                 ygopro({

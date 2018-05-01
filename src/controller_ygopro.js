@@ -59,7 +59,7 @@ function boardController(gameBoard, slot, message, ygopro, player) {
         spectators: {}
     };
     console.log(slot, message.command);
-    player.lastData = { message, state: gameBoard.generateUpdateView(slot) };
+    player.lastData = { type: message.command, state: gameBoard.generateUpdateView(slot) };
     switch (message.command) {
         case ('STOC_UNKNOWN'): // Good
             break;
