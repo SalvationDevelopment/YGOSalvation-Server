@@ -9,8 +9,7 @@
 
 
 /**
- * @typedef Card
- * @type {Object}
+ * @typedef {Object} Card
  * @property {String} type Card/Token/Etc
  * @property {String} movelocation 'DECK'/'EXTRA' etc, in caps. 
  * @property {Number} player player int 0,1, etc of controlling player
@@ -24,8 +23,7 @@
  */
 
 /**
- * @typedef FieldView
- * @type {Object}
+ * @typedef  {Object} FieldView
  * @property {Card[]} DECK Cards in the deck of one player.
  * @property {Card[]} HAND Cards in the hand of one player.
  * @property {Card[]} GRAVE Cards in the graveyard "GY" of one player.
@@ -38,8 +36,7 @@
  */
 
 /**
- * @typedef GameState
- * @type {Object}
+ * @typedef {Object} GameState
  * @property {Number} turn Current total turn count
  * @property {Number} turnOfPlayer player int, 0, 1, etc that is currently making moves
  * @property {Array.<Number>} lifepoints LP count of all players
@@ -48,16 +45,14 @@
  */
 
 /**
- * @typedef UIPayloadUnit
- * @type {Object}
+ * @typedef  {Object} UIPayloadUnit
  * @property {String} action Action the UI cases off of when it gets this message
  * @property {GameState} state State of the game for the UI to update itself with
  * @property {FieldView} view view of the field
  */
 
 /**
- * @typedef UIPayload
- * @type {Object}
+ * @typedef  {Object} UIPayload
  * @property {Array.<String>} name Names of each player
  * @property {UIPayloadUnit} p0 State of the game for the UI to update itself with
  * @property {UIPayloadUnit} p1 view of the field
@@ -65,12 +60,15 @@
  */
 
 /**
- * @typedef {function(UIPayload, Card[], function(Card[]))} UICallback callback of initiation module, shoots directly to UI.
+ * @typedef {Function} UICallback callback of initiation module, shoots directly to UI.
+ * @param {UIPayload} view view of the field
+ * @param {Card[]} payload updated cards
+ * @param {Function(Card[]))} }
  */
 
+
 /**
- * @typedef ChangeRequest
- * @type {Object}
+ * @typedef  {Object} ChangeRequest
  * @property {Number} uid   Unique card identifier in this game
  * @property {Number} player current player int 0,1, etc of controlling player
  * @property {String} clocation current location of the target card 'DECK'/'EXTRA' etc, in caps. 
@@ -81,9 +79,6 @@
  * @property {Number} moveindex  Requested end sequence of the card in the stack group. Example, nth card of DECK. in the current location
  * @property {String} moveposition Requested Faceup, Facedown, etc
  */
-
-
-
 
 const EventEmitter = require('events'), // a way to "notice" things occuring
     uniqueIdenifier = require('uuid/v1'); // time based unique identifier, RFC4122 version 1
@@ -270,8 +265,6 @@ function hideHand(view) {
 function init(callback) {
     //the field is represented as a bunch of cards with metadata in an Array, <div>card/card/card/card</div>
     //numberOfCards is used like a memory address. It must be increased by 1 when creating a makeCard.
-
-
 
     if (typeof callback !== 'function') {
         callback = function(view, internalState) {};
@@ -1630,33 +1623,33 @@ function init(callback) {
         revealHand,
         viewExcavated,
         viewGrave,
-        viewDeck: viewDeck,
-        viewExtra: viewExtra,
-        viewBanished: viewBanished,
-        viewXYZ: viewXYZ,
-        nextPhase: nextPhase,
-        nextTurn: nextTurn,
-        changeLifepoints: changeLifepoints,
-        findUIDCollection: findUIDCollection,
-        callback: callback,
-        shuffleDeck: shuffleDeck,
-        shuffleHand: shuffleHand,
-        revealCallback: revealCallback,
-        addCounter: addCounter,
-        removeCounter: removeCounter,
-        duelistChat: duelistChat,
-        spectatorChat: spectatorChat,
-        makeNewCard: makeNewCard,
-        removeCard: removeCard,
-        rollDie: rollDie,
-        flipCoin: flipCoin,
-        offsetZone: offsetZone,
-        surrender: surrender,
-        generateSinglePlayerView: generateSinglePlayerView,
-        generateViewCount: generateViewCount,
-        generateView: generateView,
-        getGroup: getGroup,
-        getState: getState,
+        viewDeck,
+        viewExtra,
+        viewBanished,
+        viewXYZ,
+        nextPhase,
+        nextTurn,
+        changeLifepoints,
+        findUIDCollection,
+        callback,
+        shuffleDeck,
+        shuffleHand,
+        revealCallback,
+        addCounter,
+        removeCounter,
+        duelistChat,
+        spectatorChat,
+        makeNewCard,
+        removeCard,
+        rollDie,
+        flipCoin,
+        offsetZone,
+        surrender,
+        generateSinglePlayerView,
+        generateViewCount,
+        generateView,
+        getGroup,
+        getState,
         players: {}, // holds socket references
         spectators: {}, // holds socket references
         decks: decks,

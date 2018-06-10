@@ -50,14 +50,6 @@ const child_process = require('child_process'),
         silentStart: true,
         responseStatus: 429
     }),
-    registry = {
-        //People that have read this source code.
-        SnarkyChild: '::ffff:127.0.0.1',
-        AccessDenied: '::ffff:127.0.0.1',
-        Irate: '::ffff:127.0.0.1',
-        Chibi: '::ffff:127.0.0.1',
-        OmniMage: '::ffff:127.0.0.1'
-    },
     manualController = require('./controller_dueling.js');
 
 var userlist = [],
@@ -249,7 +241,6 @@ module.exports = function() {
                 return;
             }
             if (valid) {
-                registry[info.username] = socket.address.ip;
                 socket.username = info.username;
 
                 socket.write({

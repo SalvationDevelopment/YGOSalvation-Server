@@ -1,5 +1,5 @@
 require('dotenv').config();
-const controller = require('./src/controller_main.js');
+const controller = require('./src');
 
 /**
  * Program Entry Point
