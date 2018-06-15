@@ -16,6 +16,11 @@ const enums = require('./translate_ygopro_enums.js'),
     BufferStreamReader = require('./model_stream_reader');
 
 
+function user_interface_only() {}
+
+function unused() {}
+
+function incomplete() {}
 
 
 function getFieldCards(gameBoard, controller, location, BufferIO) {
@@ -572,6 +577,10 @@ function msg_select_effectyn(message, BufferIO) {
     message.cp = BufferIO.readInt8();
 }
 
+function msg_select_yesno(message, BufferIO) {
+    message.desc = BufferIO.readInt32();
+}
+
 function msg_select_option(message, BufferIO) {
     message.selecting_player = BufferIO.readInt8();
     message.count = BufferIO.readInt8();
@@ -652,7 +661,7 @@ function msg_select_tribute(message, BufferIO) {
     message.select_cancelable = BufferIO.readInt8() ? true : false;
     message.select_min = BufferIO.readInt8();
     message.select_max = BufferIO.readInt8();
-    count = BufferIO.readInt8();
+    const count = BufferIO.readInt8();
     message.selectable_targets = [];
     for (let i = 0; i < count; ++i) {
         message.selectable_targets.push({
@@ -663,6 +672,10 @@ function msg_select_tribute(message, BufferIO) {
             t: BufferIO.readInt8()
         });
     }
+}
+
+function msg_select_counter() {
+    user_interface_only();
 }
 
 function msg_soft_chain(message, BufferIO) {
@@ -866,8 +879,71 @@ function msg_reload_field(message, BufferIO) {
     message.desc = BufferIO.readInt32();
 }
 
+function msg_request_deck() {
+    unused();
+}
+
+function msg_sort_chain(message, BufferIO) {
+    msg_sort_chain(message, BufferIO);
+}
+
+function msg_select_sum(message, BufferIO) {
+    message.select_mode = BufferIO.readInt8();
+    message.select_player = BufferIO.readInt8();
+    message.select_sumval = BufferIO.readInt32();
+    message.select_min = BufferIO.readInt8();
+    message.select_max = BufferIO.readInt8();
+    message.must_select_count = BufferIO.readInt8();
+    message.select_panalmode = false;
+    message.must_select = [];
+    message.can_select = [];
+    for (let i = 0; i < message.must_select_count; ++i) {
+        message.must_select.push({
+            code: BufferIO.readInt32(),
+            player: BufferIO.readInt8(),
+            location: BufferIO.readInt8(),
+            index: BufferIO.readInt8(),
+            opParam: BufferIO.readInt32()
+        });
+
+    }
+    const count = BufferIO.readInt8();
+    for (let i = 0; i < count; ++i) {
+        message.can_select.push({
+            code: BufferIO.readInt32(),
+            player: BufferIO.readInt8(),
+            location: BufferIO.readInt8(),
+            index: BufferIO.readInt8(),
+            opParam: BufferIO.readInt32()
+        });
+    }
+}
+
+function msg_refresh_deck(message, BufferIO) {
+    message.player = BufferIO.readInt8();
+}
+
 
 function stoc_game_msg(packet, message, gameBoard) {
+    var msg_retry = incomplete,
+        msg_swap_grace_deck = incomplete,
+        msg_reverse_deck = incomplete,
+        msg_summoned = incomplete,
+        msg_spsummoned = incomplete,
+        msg_flipsummoned = incomplete,
+        msg_chain_end = incomplete,
+        msg_attack_disabled = incomplete,
+        msg_damage_start = incomplete,
+        msg_damage_step_end = incomplete,
+        msg_be_chain_target = incomplete,
+        msg_create_relation = incomplete,
+        msg_release_relation = incomplete,
+        msg_annound_race = incomplete,
+        msg_announce_number = incomplete,
+        msg_ai_name = incomplete,
+        msg_show_hint = incomplete,
+        msg_custom_msg = incomplete;
+
     const BufferIO = new BufferStreamReader(packet.message),
         translator = {
             MSG_RETRY: msg_retry,
