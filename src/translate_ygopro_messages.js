@@ -300,9 +300,9 @@ function stoc_hs_player_change(packet) {
         duelAction: 'ygopro',
         command: packet.command,
         change,
-        changepos: (change >> 4) & 0xF;
+        changepos: (change >> 4) & 0xF,
         state,
-        stateText: enums.lobbyStates[state];
+        stateText: enums.lobbyStates[state]
     };
 }
 

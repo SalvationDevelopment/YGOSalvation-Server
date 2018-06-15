@@ -32,7 +32,7 @@ function getFieldCards(gameBoard, controller, location, BufferIO) {
     for (let i = 0; requiredIterations > i; ++i) {
         const len = BufferIO.readInt32();
         if (len > 8) {
-            let card = makeCard(BufferIO, controller, (gameBoard.masterRule === 4));
+            const card = makeCard(BufferIO, controller, (gameBoard.masterRule === 4));
             cards.push(card);
         }
     }
@@ -116,6 +116,9 @@ function getIdleSet(BufferIO, hasDescriptions) {
     return cards;
 }
 
+function msg_retry(message, BufferIO) {
+    message.desc = 'Error Occurs.';
+}
 
 function msg_start(message, BufferIO) {
     message.playertype = BufferIO.readInt8();
@@ -435,6 +438,15 @@ function msg_announce_attrib(message, BufferIO) {
 function msg_announce_card(message, BufferIO) {
     message.player = BufferIO.readInt8();
     message.declarable_type = BufferIO.readInt32();
+}
+
+function msg_announce_number(message, BufferIO) {
+    message.player = BufferIO.readInt8();
+    message.announce_count = BufferIO.readInt8();
+    message.values = [];
+    for (let i = 0; i < message.announce_count; ++i) {
+        message.values.push(BufferIO.readInt32());
+    }
 }
 
 function msg_accounce_number(message, BufferIO) {
@@ -815,7 +827,7 @@ function msg_reload_field(message, BufferIO) {
         for (let seq = 0; seq < 7; ++seq) {
             val = BufferIO.readInt8();
             if (val) {
-                let card = {
+                const card = {
                     val: val,
                     position: BufferIO.readInt8()
                 };
@@ -923,27 +935,67 @@ function msg_refresh_deck(message, BufferIO) {
     message.player = BufferIO.readInt8();
 }
 
+function msg_swap_grace_deck() {
+    unused();
+}
+
+function msg_reverse_deck(message, BufferIO) {
+    user_interface_only();
+}
+
+function msg_summoned(message, BufferIO) {
+    user_interface_only();
+}
+
+function msg_spsummoned(message, BufferIO) {
+    user_interface_only();
+}
+
+function msg_flipsummoned(message, BufferIO) {
+    user_interface_only();
+}
+
+function msg_chain_end(message, BufferIO) {
+    user_interface_only();
+}
+
+function msg_attack_disabled(message, BufferIO) {
+    user_interface_only();
+}
+
+function msg_damage_step_start(message, BufferIO) {
+    unused();
+}
+
+function msg_damage_step_end(message, BufferIO) {
+    unused();
+}
+
+function msg_be_chain_target(message, BufferIO) {
+    unused();
+}
+
+function msg_create_relation(message, BufferIO) {
+    unused();
+}
+
+function msg_release_relation(message, BufferIO) {
+    unused();
+}
+
+function msg_ai_name(message, BufferIO) {
+    unused();
+}
+
+function msg_show_hint(message, BufferIO) {
+    unused();
+}
+
+function msg_custom_msg(message, BufferIO) {
+    unused();
+}
 
 function stoc_game_msg(packet, message, gameBoard) {
-    var msg_retry = incomplete,
-        msg_swap_grace_deck = incomplete,
-        msg_reverse_deck = incomplete,
-        msg_summoned = incomplete,
-        msg_spsummoned = incomplete,
-        msg_flipsummoned = incomplete,
-        msg_chain_end = incomplete,
-        msg_attack_disabled = incomplete,
-        msg_damage_start = incomplete,
-        msg_damage_step_end = incomplete,
-        msg_be_chain_target = incomplete,
-        msg_create_relation = incomplete,
-        msg_release_relation = incomplete,
-        msg_annound_race = incomplete,
-        msg_announce_number = incomplete,
-        msg_ai_name = incomplete,
-        msg_show_hint = incomplete,
-        msg_custom_msg = incomplete;
-
     const BufferIO = new BufferStreamReader(packet.message),
         translator = {
             MSG_RETRY: msg_retry,
@@ -1015,7 +1067,7 @@ function stoc_game_msg(packet, message, gameBoard) {
             MSG_ATTACK: msg_attack,
             MSG_BATTLE: msg_battle,
             MSG_ATTACK_DISABLED: msg_attack_disabled,
-            MSG_DAMAGE_STEP_START: msg_damage_start,
+            MSG_DAMAGE_STEP_START: msg_damage_step_start,
             MSG_DAMAGE_STEP_END: msg_damage_step_end,
             MSG_MISSED_EFFECT: msg_missed_effect,
             MSG_BE_CHAIN_TARGET: msg_be_chain_target,
@@ -1023,7 +1075,7 @@ function stoc_game_msg(packet, message, gameBoard) {
             MSG_RELEASE_RELATION: msg_release_relation,
             MSG_TOSS_COIN: msg_toss_coin,
             MSG_TOSS_DICE: msg_toss_dice,
-            MSG_ANNOUNCE_RACE: msg_annound_race,
+            MSG_ANNOUNCE_RACE: msg_announce_race,
             MSG_ANNOUNCE_ATTRIB: msg_announce_attrib,
             MSG_ANNOUNCE_CARD: msg_announce_card,
             MSG_ANNOUNCE_NUMBER: msg_announce_number,
@@ -1039,5 +1091,9 @@ function stoc_game_msg(packet, message, gameBoard) {
     translator[message.command](message, BufferIO);
     return message;
 }
+
+
+// monitor new functionality 
+// https://github.com/Fluorohydride/ygopro/commits/master/gframe/duelclient.cpp
 
 module.exports = stoc_game_msg;
