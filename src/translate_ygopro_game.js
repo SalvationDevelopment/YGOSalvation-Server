@@ -776,6 +776,7 @@ function msg_deck_top(message, BufferIO) {
 }
 
 function msg_shuffle_set_card(message, BufferIO) {
+    message.location = BufferIO.readInt8();
     message.count = BufferIO.readInt8();
     message.targets = [];
     for (let i = 0; i < message.count; ++i) {
@@ -995,6 +996,37 @@ function msg_custom_msg(message, BufferIO) {
     unused();
 }
 
+function msg_select_unselect_card(message, BufferIO) {
+    message.selecting_player = BufferIO.readInt8();
+    message.buttonok = Boolean(!!BufferIO.readInt8());
+    message.select_cancelable = BufferIO.readInt8();
+    message.select_min = BufferIO.readInt8();
+    message.select_max = BufferIO.readInt8();
+    message.count1 = BufferIO.readInt8();
+    message.select_ready = false;
+    message.cards1 = [];
+    message.cards2 = [];
+    for (let i = 0; i < count1; ++i) {
+        message.cards.push({
+            code: BufferIO.readInt32();
+            player: BufferIO.readInt8();
+            location: BufferIO.readInt8();
+            index: BufferIO.readInt8();
+            ss: BufferIO.readInt8();
+        });
+    }
+    message.count2 = BufferIO.readInt8();
+    for (let i = count1; i < count1 + count2; ++i) {
+        message.cards.push({
+            code: BufferIO.readInt32(),
+            player: BufferIO.readInt8(),
+            location: BufferIO.readInt8(),
+            index: BufferIO.readInt8(),
+            ss: BufferIO.readInt8()
+        });
+    }
+}
+
 function stoc_game_msg(packet, message, gameBoard) {
     const BufferIO = new BufferStreamReader(packet.message),
         translator = {
@@ -1085,7 +1117,8 @@ function stoc_game_msg(packet, message, gameBoard) {
             MSG_AI_NAME: msg_ai_name,
             MSG_SHOW_HINT: msg_show_hint,
             MSG_MATCH_KILL: msg_match_kill,
-            MSG_CUSTOM_MSG: msg_custom_msg
+            MSG_CUSTOM_MSG: msg_custom_msg,
+            MSG_SELECT_UNSELECT_CARD: msg_select_unselect_card
         };
     message.command = enums.STOC.STOC_GAME_MSG[BufferIO.readInt8()];
     translator[message.command](message, BufferIO);
