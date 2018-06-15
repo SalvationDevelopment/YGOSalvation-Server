@@ -191,6 +191,14 @@ function msg_shuffle_deck(message, BufferIO) {
 
 function msg_shuffle_hand(message, BufferIO) {
     message.player = BufferIO.readInt8();
+    BufferIO.readInt8();
+    message.count = BufferIO.readInt8();
+    //for some number that cant be determined here because the count was not sent (getting it from the state like an idiot)
+    // readInt32 off.
+}
+
+function msg_shuffle_extra(message, BufferIO) {
+    message.player = BufferIO.readInt8();
     message.count = BufferIO.readInt8();
     //for some number that cant be determined here because the count was not sent (getting it from the state like an idiot)
     // readInt32 off.
@@ -583,13 +591,15 @@ function msg_select_battlecmd(message, BufferIO) {
 
 function msg_select_effectyn(message, BufferIO) {
     message.selecting_player = BufferIO.readInt8();
-    message.c = BufferIO.readInt8();
-    message.cl = BufferIO.readInt8();
-    message.cs = BufferIO.readInt8();
-    message.cp = BufferIO.readInt8();
+    message.id = BufferIO.readInt32();
+    message.location = BufferIO.readInt8();
+    message.index = BufferIO.readInt8();
+    BufferIO.readInt8();
+    message.desc = BufferIO.readInt32();
 }
 
 function msg_select_yesno(message, BufferIO) {
+    message.selecting_player = BufferIO.readInt8();
     message.desc = BufferIO.readInt32();
 }
 
@@ -822,6 +832,8 @@ function msg_reload_field(message, BufferIO) {
     message.deck = [];
     message.hand = [];
     message.grave = [];
+    message.chains = [];
+    message.duel_rule = BufferIO.readInt8();
     let val;
     for (let i = 0; i < 2; ++i) {
         message.lp[i] = BufferIO.readInt32();
@@ -881,15 +893,19 @@ function msg_reload_field(message, BufferIO) {
         message.extra_deck_p = BufferIO.readInt8();
     }
     val = BufferIO.readInt8(); //chains
-    message.id = BufferIO.readInt32();
-    message.pcc = BufferIO.readInt8();
-    message.pcl = BufferIO.readInt8();
-    message.pcs = BufferIO.readInt8();
-    message.subs = BufferIO.readInt8();
-    message.cc = BufferIO.readInt8();
-    message.cl = BufferIO.readInt8();
-    message.cs = BufferIO.readInt8();
-    message.desc = BufferIO.readInt32();
+    for (let i = 0; i < val; ++i) {
+        message.chains.push({
+            id: BufferIO.readInt32(),
+            pcc: BufferIO.readInt8(),
+            pcl: BufferIO.readInt8(),
+            pcs: BufferIO.readInt8(),
+            subs: BufferIO.readInt8(),
+            cc: BufferIO.readInt8(),
+            cl: BufferIO.readInt8(),
+            cs: BufferIO.readInt8(),
+            desc: BufferIO.readInt32()
+        });
+    }
 }
 
 function msg_request_deck() {
@@ -1006,18 +1022,18 @@ function msg_select_unselect_card(message, BufferIO) {
     message.select_ready = false;
     message.cards1 = [];
     message.cards2 = [];
-    for (let i = 0; i < count1; ++i) {
-        message.cards.push({
-            code: BufferIO.readInt32();
-            player: BufferIO.readInt8();
-            location: BufferIO.readInt8();
-            index: BufferIO.readInt8();
-            ss: BufferIO.readInt8();
+    for (let i = 0; i < message.count1; ++i) {
+        message.cards1.push({
+            code: BufferIO.readInt32(),
+            player: BufferIO.readInt8(),
+            location: BufferIO.readInt8(),
+            index: BufferIO.readInt8(),
+            ss: BufferIO.readInt8()
         });
     }
     message.count2 = BufferIO.readInt8();
-    for (let i = count1; i < count1 + count2; ++i) {
-        message.cards.push({
+    for (let i = message.count1; i < message.count1 + message.count2; ++i) {
+        message.cards2.push({
             code: BufferIO.readInt32(),
             player: BufferIO.readInt8(),
             location: BufferIO.readInt8(),
@@ -1028,6 +1044,7 @@ function msg_select_unselect_card(message, BufferIO) {
 }
 
 function stoc_game_msg(packet, message, gameBoard) {
+    var msg_confirm_extratop = incomplete;
     const BufferIO = new BufferStreamReader(packet.message),
         translator = {
             MSG_RETRY: msg_retry,
@@ -1057,6 +1074,7 @@ function stoc_game_msg(packet, message, gameBoard) {
             MSG_CONFIRM_CARDS: msg_confirm_cards,
             MSG_SHUFFLE_DECK: msg_shuffle_deck,
             MSG_SHUFFLE_HAND: msg_shuffle_hand,
+            MSG_SHUFFLE_EXTRA: msg_shuffle_extra,
             MSG_REFRESH_DECK: msg_refresh_deck,
             MSG_SWAP_GRAVE_DECK: msg_swap_grace_deck,
             MSG_SHUFFLE_SET_CARD: msg_shuffle_set_card,
@@ -1118,7 +1136,8 @@ function stoc_game_msg(packet, message, gameBoard) {
             MSG_SHOW_HINT: msg_show_hint,
             MSG_MATCH_KILL: msg_match_kill,
             MSG_CUSTOM_MSG: msg_custom_msg,
-            MSG_SELECT_UNSELECT_CARD: msg_select_unselect_card
+            MSG_SELECT_UNSELECT_CARD: msg_select_unselect_card,
+            MSG_CONFIRM_EXTRATOP: msg_confirm_extratop
         };
     message.command = enums.STOC.STOC_GAME_MSG[BufferIO.readInt8()];
     translator[message.command](message, BufferIO);

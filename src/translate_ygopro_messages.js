@@ -52,7 +52,7 @@ function stoc_error_msg(packet) {
             message.errorCode = packet.message[1];
             message.cardID = packet.message.readUInt32LE(1);
             // complain about deck error. Invalid Deck.
-            message.error = (message.errorCode === 1) ? 'Invalid Deck' : 'Invalid Card, ' + message.cardID; // 
+            message.error = enums.STOC.STOC_ERROR_MSG.ERRMSG_DECKERROR[message.errorCode];
             break;
 
         case ('ERRMSG_SIDEERROR'):

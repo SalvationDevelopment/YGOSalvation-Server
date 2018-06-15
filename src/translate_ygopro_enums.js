@@ -281,9 +281,14 @@ enums.STOC = {
         0x3: 'ERRMSG_SIDEERROR',
         0x4: 'ERRMSG_VERERROR',
         ERRMSG_DECKERROR: [
-            'Can\'t join host',
-            'Password is incorrect.',
-            'The host refused the connection.'
+            'DECKERROR_LFLIST',
+            'DECKERROR_OCGONLY',
+            'DECKERROR_TCGONLY',
+            'DECKERROR_UNKNOWNCARD',
+            'DECKERROR_CARDCOUNT',
+            'DECKERROR_MAINCOUNT',
+            'DECKERROR_EXTRACOUNT',
+            'DECKERROR_SIDECOUNT'
         ]
     }
 };
