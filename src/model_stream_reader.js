@@ -1,11 +1,10 @@
 /**
  * @typedef {Object} BufferStreamReader
- * @param {Function} readposition
- * @param {Function} setReadposition
- * @param {Function} readInt8
- * @param {Function} readInt16
- * @param {Function} readInt32
- * @param {Function} move
+ * @param {Function} setReadposition set the internal read position directly. (Careful)
+ * @param {Function} readInt8 read one unit.
+ * @param {Function} readInt16 read two units.
+ * @param {Function} readInt32 read four units.
+ * @param {Function} move set internal read position by moving given units.
  */
 
 /**

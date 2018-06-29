@@ -294,11 +294,11 @@ function startYGOSharp(instance, sockets) {
     var ygosharp;
     const parametersList = ['StandardStreamProtocol=true',
             'Port=' + instance.port,
-            'ClientVersion=0x1343',
+            'ClientVersion=0x1344',
             'BanlistFile=./lflist.conf',
             'ScriptDirectory=' + './../../../ygopro-scripts',
             'DatabaseFile=./cards.cdb',
-            'Rule=' + 0,
+            'Region=' + 0,
             'Mode=' + 0,
             'Banlist=' + 0,
             'MasterRule=' + instance.masterRule,
