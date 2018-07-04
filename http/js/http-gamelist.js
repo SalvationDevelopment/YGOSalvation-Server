@@ -625,11 +625,11 @@ function pondata(data) {
             }
             $('#onlinepublicchat').scrollTop($('#onlinepublicchat').prop("scrollHeight"));
             requestglobal();
-            window.deckEditor.loadDecks(data.info.decks);
+            //window.deckEditor.loadDecks(data.info.decks);
             if (data.info.friends.length) {
-                window.deckEditor.loadFriends(data.info.friends);
+                // window.deckEditor.loadFriends(data.info.friends);
             } else {
-                window.deckEditor.loadFriends([]);
+                // window.deckEditor.loadFriends([]);
             }
         }
 
@@ -705,7 +705,7 @@ function pondata(data) {
         if (data.clientEvent === 'ack') {
             ackback();
         }
-        if (data.clientEvent === 'ackresult') {
+        if (data.clientEvent === 'ackresultz') {
             storedUserlist = [];
             $('#onlineconnectted').html(data.ackresult);
             friends = window.deckEditor.getFriends();
@@ -884,27 +884,20 @@ if (localStorage.mindcrushed === true) {
 
 function manualModeGamelistSwitch() {
     'use strict';
-    if (!launcher) {
-        $('#manualgamelistitems').css({
-            'display': 'block'
-        });
-        $('#gamelistitems').css({
-            'display': 'none'
-        });
-    }
+
+    $('#manualgamelistitems').css({
+        'display': 'block'
+    });
+    $('#gamelistitems').css({
+        'display': 'none'
+    });
+
 }
 manualModeGamelistSwitch();
 
 function mautomaticModeGamelistSwitch() {
     'use strict';
-    if (launcher) {
-        $('#manualgamelistitems').css({
-            'display': 'none'
-        });
-        $('#gamelistitems').css({
-            'display': 'block'
-        });
-    }
+
 }
 
 

@@ -65,6 +65,9 @@ body.unlogged {
     width: 150px;
     display: inline-block;
     text-align: center;
+    -webkit-animation-name: pulse;
+    -webkit-animation-duration: 5s;
+    -webkit-animation-iteration-count: 10;
 }
 
 #faq img {
@@ -306,11 +309,10 @@ ul#mirrors {
     max-height: 5%;
 }
 
-header {
+main {
     height: 96vh;
     overflow: hidden;
     position: absolute;
-    left: 100vw;
     top: 0;
     width: 100vw;
     background-size: 500% 100%;
@@ -1236,14 +1238,14 @@ div#gofirst,
 }
 */
 
-header a,
-header a:visited,
-header {
+main a,
+main a:visited,
+main {
     color: #bbb;
     text-decoration: none;
 }
 
-header a:hover {
+main a:hover {
     color: pink;
 }
 
@@ -2447,11 +2449,15 @@ div#loginmodal {
     top: 38vh;
     width: 70%;
     background: rgba(0, 0, 0, .75);
-    border: 1px solid silver;
+    border: 1px solid hotpink;
     left: 15%;
     text-align: center;
     display: none;
     box-shadow: 0px 0px 20px black;
+    padding-bottom: 3vh;
+    -webkit-animation-name: pulse;
+    -webkit-animation-duration: 1s;
+    -webkit-animation-iteration-count: 1;
 }
 
 #ips_username,
@@ -2461,7 +2467,7 @@ div#loginmodal {
 #doregister,
 #backuplogin {
     -webkit-animation-name: pulse;
-    -webkit-animation-duration: 1s;
+    -webkit-animation-duration: 5s;
     -webkit-animation-iteration-count: 10;
 }
 
@@ -2484,7 +2490,7 @@ div#loginmodal {
         -webkit-box-shadow: 0 0 5px #000;
     }
     50% {
-        -webkit-box-shadow: 0 0 50px rgba(255, 100, 200, .5);
+        -webkit-box-shadow: 0 0 150px rgba(184, 72, 144, 0.911);
         border-color: rgba(255, 100, 200, .5);
     }
     to {
@@ -2499,8 +2505,8 @@ div#loginmodal {
 .shine {
     background: -webkit-gradient(linear, left top, right bottom, color-stop(0%, #000000), color-stop(38%, #000000), color-stop(38%, #000000), color-stop(44%, #ee44aa), color-stop(49%, #ffffff), color-stop(51%, #000000), color-stop(100%, #000000));
     -webkit-background-size: 50% 100%;
-    color: rgba(255, 255, 255, 0.1);
-    -webkit-background-clip: text;
+    color: rgba(255, 255, 255, 0.1) !important;
+    -webkit-background-clip: text !important;
     -webkit-animation-name: shine;
     -webkit-animation-duration: 10s;
     -webkit-animation-iteration-count: 10;
@@ -2975,7 +2981,7 @@ div#selectplayer button {
     padding: 2px;
 }
 
-header#loading {
+main {
     background: rgba(0, 0, 0, .75);
     text-align: center;
 }

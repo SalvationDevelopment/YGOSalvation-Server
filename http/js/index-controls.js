@@ -108,8 +108,7 @@ function updateevents() {
     });
 }
 updatenews();
-var launcher = false,
-    internalLocal = 'home',
+var internalLocal = 'home',
     loggedIn = false,
     allowLogin = false,
     list = {};
@@ -134,11 +133,11 @@ function deckeditloader() {
     });
 }
 
-var uncensoredcolor = 'url(../img/Chibi.jpg)',
-    uncensoredblack = 'url(../img/Chibi.jpg)',
-    censoredcolor = 'url(../img/Chibi.jpg)',
-    censoredblack = 'url(../img/Chibi.jpg)',
-    usecensor = (location.host === 'ygopro.us');
+var uncensoredcolor = 'url(../im/magimagipink.jpg)',
+    uncensoredblack = 'url(../img/magimagiblack.jpg)',
+    censoredcolor = 'url(../img/magimagipinkshadow.jpg)',
+    censoredblack = 'url(../img/magimagipinkshadow2.jpg)',
+    usecensor = (location.host === 'ygosalvation.com');
 
 function blackbg() {
     'use strict';
@@ -174,20 +173,13 @@ function singlesitenav(target) {
 
     $('body').css('background-image', blackbg());
     $('#marquee').removeClass('marquee');
+    $('main').load(target + '.html');
     if (target === 'faq') {
         updatenews();
         $('body').css('background-image', colorbg());
         window.manualLeave();
     }
-    if (target === 'events') {
-        updateevents();
-        $('body').css('background-image', colorbg());
-        window.manualLeave();
-    }
-    if (target === 'sqleditor') {
-        $('body').css('background-image', 'url(../img/bg.jpg)');
-        window.manualLeave();
-    }
+
     if (target === 'gamelist') {
         $('body').css('background-image', colorbg());
         window.manualLeave();
@@ -209,9 +201,7 @@ function singlesitenav(target) {
     if (target === 'host') {
         $('body').css('background-image', blackbg());
         window.manualLeave();
-        if (launcher === false) {
-            $('.automaticonly').css('display', 'none');
-        }
+
     }
 
     if (target === 'settings') {
@@ -229,7 +219,6 @@ function singlesitenav(target) {
         window.manualLeave();
 
     }
-    //$('body').css('background-image', 'url(http://static.zerochan.net/Ghostrick.Nekomusume.full.1945016.jpg)');
     if (target === 'credits') {
         $('body').css('background-image', 'url(../img/bg.jpg)');
         $('#marquee').addClass('marquee');
@@ -248,9 +237,7 @@ function singlesitenav(target) {
     $('#manualcontrols button').css({
         'display': 'none'
     });
-    if (!launcher) {
-        $('.notneededinweb').css('display', 'none');
-    }
+
     activelyDueling = false;
     $('#camerazone').css('display', 'none');
     return false;
@@ -264,21 +251,11 @@ function locallogin(init) {
     localStorage.nickname = localStorage.nickname || '';
 
 
-    $(document.body).addClass("launcher").removeClass('unlogged').removeClass('web');
-    //    $('#ipblogin').css('display', 'none');
-    try {
-        _gaq.push(['_trackEvent', 'Launcher', 'Login', localStorage.nickname]);
-    } catch (e) {}
-
-
 
 
     //chatStarted = true;
-    singlesitenav('faq');
-    $('.featurelist .launcheronly').addClass('boxshine');
-    setTimeout(function() {
-        $('.featurelist .launcheronly').removeClass('boxshine');
-    }, 4000);
+    singlesitenav('news');
+
 
 
 }
@@ -501,7 +478,7 @@ $(document).ready(function() {
     });
     if (window.self !== window.top) {
         $(document.body).addClass("in-iframe");
-        launcher = true;
+
         try {
             _gaq.push(['_trackEvent', 'Launcher', 'Load', 'Boot Launcher']);
         } catch (e) {}
@@ -837,27 +814,10 @@ function confirmDialog(title, message, confirm, reject) {
     });
 }
 
-function screenshot() {
-    'use strict';
-    html2canvas(document.body, {
-        onrendered: function(canvas) {
-            var dt = canvas.toDataURL('image/png');
-            dt = dt.replace(/^data:image\/[^;]*/, 'data:application/octet-stream');
-            var image = new Image();
-            image.src = dt;
-            var newWin = window.open("<title>Screenshot</title>");
-            if (!newWin || newWin.closed || typeof newWin.closed === 'undefined') {
-                //POPUP BLOCKED
-                alertmodal('Popups are blocked, cant display screenshot!');
-                return;
-            }
-            newWin.document.write(image.outerHTML);
-        }
-    });
-}
-
 $('[data-tooltip!=""]').qtip({ // Grab all elements with a non-blank data-tooltip attr.
     content: {
         attr: 'data-tooltip' // Tell qTip2 to look inside this attr for its content
     }
 });
+
+$('main').load('home.html')

@@ -1,0 +1,80 @@
+<html>
+
+<head>
+    <link href="css/roboto.css" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Lato:100,300,400,700,900" rel="stylesheet">
+    <link rel="stylesheet" href="css/normalize.css">
+    <link rel="stylesheet" href="css/main.css">
+</head>
+
+<body>
+
+    <div id="lobbymenu">
+        <div id="duelspectate">
+            <span id="lobbygotoduel" onclick="manualStart();">Duel</span>
+            <span id="lobbygotospectate" onclick="movetoSpectator();">Spectate</span>
+
+            <div class="slot" id="slot1">
+                <div id="player1lobbykick" class="kickbutton" onclick="manualKickDuelist(0);">X</div>
+                <input id="player1lobbyslot" placeholder="empty slot">
+                <div class="lockindicator" onclick="manualLock(0)"></div>
+            </div>
+            <div class="slot" id="slot2">
+                <div id="player2lobbykick" class="kickbutton" onclick="manualKickDuelist(1);">X</div>
+                <input id="player2lobbyslot" placeholder="empty slot">
+                <div class="lockindicator" onclick="manualLock(1)"></div>
+            </div>
+            <div class="slot" id="slot3">
+                <div id="player3lobbykick" class="kickbutton" onclick="manualKickDuelist(2);">X</div>
+                <input id="player3lobbyslot" placeholder="empty slot">
+                <div class="lockindicator" onclick="manualLock(2)"></div>
+            </div>
+            <div class="slot" id="slot4">
+                <div id="player4lobbykick" class="kickbutton" onclick="manualKickDuelist(3);">X</div>
+                <input id="player4lobbyslot" placeholder="empty slot">
+                <div class="lockindicator" onclick="manualLock(3)"></div>
+            </div>
+        </div>
+
+        <div id="lobbygameinfo">
+            <span id=translatefl>Forbidden List</span><span id="lobbyflist"></span>
+            <br/>
+            <span id="translateacp">Allowed Card Pool</span><span id="lobbyallowed"></span>
+            <br/>
+            <span id="translategamemode">Game Mode </span><span id="lobbygamemode"></span>
+            <!--
+                    <br/>
+    <span id="translatetimelimit">Time Limit </span><span id="lobbytimelimit"></span>
+    -->
+            <!--                 <br/>
+                    <span id="translateprerelease">Pre-release cards</span><span id="lobbyprerelease"></span> -->
+            <br />
+            <span id="translatestartinglifepoints">Starting Lifepoints</span><span id="lobbylp"></span>
+            <!--
+                    <br/>
+    <span id="translatecdpt">Cards Drawn per Turn: </span><span id="lobbycdpt"></span>
+    -->
+        </div>
+        <div id="lobbycurrentdeck" class="">
+            Select Deck :
+            <select class='currentdeck'>
+    
+                    </select>
+        </div>
+        <!--
+    
+    -->
+        <div id="lobbystartcancel">
+            <button onclick="manualStart()" id="lobbystart">Start Duel</button>
+            <button id="lobbycancel" onclick="manualLeave()">Cancel</button>
+        </div>
+    </div>
+    <div id="lobbychat">
+        <ul id="lobbychattext" class="ingamechatbox">
+        </ul>
+        <input id="lobbychatinput">
+    </div>
+
+</body>
+
+</html>

@@ -1,0 +1,309 @@
+<html>
+
+<head>
+    <link href="css/roboto.css" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Lato:100,300,400,700,900" rel="stylesheet">
+    <link rel="stylesheet" href="css/normalize.css">
+    <link rel="stylesheet" href="css/main.css">
+</head>
+
+<body>
+
+
+    <div id="rpsunit1"></div>
+    <div id="rpsunit2"></div>
+    <div id="selectwhogoesfirst">
+        <div id="gofirst" onclick="gofirst(true)">Go First</div>
+        <div id="gosecond" onclick="gofirst(false)">Go Second</div>
+    </div>
+    <div id="rpschoice">
+        <div class="rpschooser" style="background-image:url(img/textures/f1.jpg)" onclick="rps('scissors')"></div>
+        <div class="rpschooser" style="background-image:url(img/textures/f2.jpg)" onclick="rps('rock')"></div>
+        <div class="rpschooser" style="background-image:url(img/textures/f3.jpg)" onclick="rps('paper')"></div>
+    </div>
+
+    <div id="lifepoints">
+        <meter class="p0lp" type="meter" value="8000" max="8000" min="0"></meter>
+        <meter class="p1lp" type="meter" value="8000" max="8000" min="0"></meter>
+        <input disabled class="p0lp" value="8000">
+        <input disabled class="p1lp" value="8000">
+
+        <meter class="p0time" type="meter" value="180" max="360" min="0"></meter>
+        <meter class="p1time" type="meter" value="180" max="360" min="0"></meter>
+
+        <span class="p0name"></span>
+        <span class="p1name"></span>
+        <img id="p0avatar" src='/img/newgiohtoken.png' onError="this.onerror=null;this.src='/img/newgiohtoken.png';" />
+        <img id="p1avatar" src='/img/newgiohtoken.png' onError="this.onerror=null;this.src='/img/newgiohtoken.png';" />
+        <div id="ygowaiting" class="blick">Waiting...</div>
+
+    </div>
+
+    <div id="actions">
+        <button id="summonable_cards" data-action="0" onclick="idleReply(this)">Normal Summon</button>
+        <button id="spsummonable_cards" data-action="1" onclick="idleReply(this)">Special Summon</button>
+        <button id="repositionable_cards" data-action="2" onclick="idleReply(this)">Change Position</button>
+        <button id="msetable_cards" data-action="3" onclick="idleReply(this)">Set</button>
+        <button id="ssetable_cards" data-action="4" onclick="idleReply(this)">Set</button>
+        <button id="activatable" data-action="5" onclick="idleReply(this)">Activate</button>
+        <button id="select_chains" data-action="5" onclick="idleReply(this)">Activate</button>
+    </div>
+    <div class="left" style="position:fixed;color:white; font-size:.9em; z-index:30;">
+        <div class="cardImage" style="position:relative; height: auto;">
+            <img class="imgContainer" src="" />
+
+
+        </div>
+        <div class="cardDescription" style="height: calc(85vh - 254px);">
+        </div>
+        <div id="tuckedchat" draggable="true">
+            <ul id="spectatorchattext" class="ingamespectatorchatbox">
+            </ul>
+            <input id="spectatorchatinput">
+        </div>
+    </div>
+    <div id="sidechat" draggable="true">
+        <ul id="sidechattext" class="ingamechatbox">
+        </ul>
+        <input id="sidechatinput">
+    </div>
+    <div id="camerazone">
+        <label>Zoom</label>
+        <input id="scaledvalue" type="range" min="400" value="510" max="1000" step="10" onchange="scaleScreenFactor()">
+
+        <label>Tilt</label>
+        <input id="tiltvalue" type="range" min="0" value="10" max="180" step="5" onchange="tiltFactor()">
+
+        <label>Up/Down</label>
+        <input id="slidevaluey" type="range" min="-300" value="0" max="300" step="10" onchange="scaleScreenFactor()">
+
+        <label>Left/Right</label>
+        <input id="slidevaluex" type="range" min="-300" value="0" max="300" step="10" onchange="scaleScreenFactor()">
+    </div>
+    <div class="ingameminorcontrols">
+        <!--
+                    <button id="ingamerollbutton" onclick="manualRoll()">Roll Die</button>
+<button id="ingameflipbutton" onclick="manualFlip()">Flip Coin</button>
+-->
+
+        <button onclick="startSpecialSummon('token')">Create Token</button>
+        <select id="tokendropdown"></select>
+        <!--             <select id="ingamerps" onclick="manualRPS()">Rock-Paper-Scissors</button>
+            <select id="ingameflipcoin" onclick="manualFlip()">Flip Coin</button>
+            <select id="ingamerolldice" onclick="manualRoll()">Roll Dice</button> -->
+        <button id="ingamesurrenderbutton" onclick="surrender()">Surrender</button>
+        <button id="ingametarget" onclick="startTarget()">Target</button>
+        <button id="ingameshuffle" onclick="manualShuffleHand()">Shuffle Hand</button>
+        <button id="ingamesreveal" onclick="manualRevealHand()">Reveal Hand</button>
+        <button id="ingamesidebutton" onclick="startSiding()">Side</button>
+        <button id="ingamexsidebutton" onclick="endSiding()" style="display:none;">Finish Siding</button>
+        <button id="ingamecamera" onclick="$('#camerazone').toggle();">Camera / Zoom</button>
+
+    </div>
+
+    <div id="manualcontrols">
+        <button class="ygo-activate" onclick="idleResponse(this)">Activate</button>
+        <button class="ygo-set" onclick="idleResponse(this)">Set</button>
+        <button class="ygo-reposition" onclick="idleResponse(this)">Reposition</button>
+        <button class="ygo-special" onclick="idleResponse(this)">Special Summon</button>
+        <button class="ygo-st-set" onclick="idleResponse(this)">Set S/T</button>
+        <button class="ygo-summon" onclick="idleResponse(this)">Normal Summon</button>
+        <button class="ygo-attack" onclick="idleResponse(this)">Attack</button>
+        <button class="ygo-extra-summonable" onclick="viewExtraDeckSummonable()">Special Summon</button>
+        <button class="m-deck m-convulse" onclick="manualFlipDeck()">Flip Deck Over</button>
+        <button class="m-deck" onclick="manualRevealDeck()">Reveal Deck</button>
+        <button class="m-deck" onclick="manualRevealTop()">Reveal Top Card</button>
+        <button class="m-deck" onclick="manualRevealBottom()">Reveal Bottom Card</button>
+        <button class="m-deck" onclick="manualMillRemovedCard()">Banish Top Card</button>
+        <button class="m-deck" onclick="manualMillRemovedCardFaceDown()">Banish Face-down</button>
+        <button class="m-hand m-deck v-grave v-removed v-deck non-excavate" onclick="manualToExcavate()">Excavate</button>
+        <button class="m-deck" onclick="manualExcavateTop()">Excavate Face-down</button>
+        <button class="m-deck" onclick="manualShuffleDeck()">Shuffle Deck</button>
+        <button class="m-deck" onclick="manualViewDeck()">View Deck</button>
+        <button class="m-deck" onclick="manualMill()">Mill Card</button>
+        <button class="m-deck" onclick="manualDraw()">Draw</button>
+
+
+        <button class="m-grave" onclick="manualViewGrave()">View Graveyard</button>
+        <button class="m-removed" onclick="manualViewBanished()">View Banished</button>
+
+        <button class="m-extra m-extra-view" onclick="manualViewExtra()">View Extra Deck</button>
+        <button class="m-extra" onclick="manualRevealExtra()">Reveal Extra Deck</button>
+        <button class="m-extra" onclick="manualRevealExtraDeckRandom()">Reveal Random Card</button>
+
+
+        <button class="m-excavated" onclick="manualViewExcavated()">View Excavated</button>
+        <button class="m-excavated" onclick="manualRevealExcavated()">Reveal Excavated Deck</button>
+        <button class="m-excavated" onclick="manualRevealExcavatedRandom()">Reveal Random Card</button>
+
+        <button class="m-hand m-field st-field non-extra v-grave v-removed v-excavate non-deck" id="bottomdeck" onclick="manualToBottomOfDeck()">To Bottom of Deck</button>
+        <button class="m-hand m-field st-field non-extra v-grave v-removed v-excavate non-deck" id="topdeck" onclick="manualToTopOfDeck()">To Top of Deck</button>
+
+        <button class="m-hand m-field st-field non-extra" id="opphand" onclick="manualToOpponentsHand()">To Opponents Hand</button>
+        <button class="m-hand m-field st-field v-deck v-extra v-grave v-excavate v-removed" onclick="manualToOpponent()">To Opponents Field</button>
+        <button class="m-hand v-extra v-excavate" onclick="manualRevealHandSingle()">Reveal</button>
+        <button class="m-hand m-field st-field v-deck v-extra v-grave v-excavate" id="banishcard" onclick="manualToRemoved()">Banish</button>
+        <button class="m-hand m-field st-field v-deck v-extra v-grave v-excavate" id="banishcardfd" onclick="manualToRemovedFacedown()">Banish Face-down</button>
+
+        <button class="m-hand m-field st-field v-deck v-removed v-extra v-excavate non-grave" id="tograve" onclick="manualToGrave()">To Graveyard</button>
+
+        <button class="m-hand-st m-monster-st m-st-monster non-deck non-banished" onclick="startSpellTargeting('set')">Set in S/T</button>
+        <button class="m-hand-st" onclick="startSpellTargeting('activate')">Activate</button>
+
+        <!--            <button class="v-st" onclick="manualActivate()">To S/T Zone</button>-->
+        <!-- disabling st from deck atm. needed for metaphos-->
+        <button class="m-field st-field non-extra" id="tohand" onclick="manualToHand();">To Hand</button>
+        <button class="v-deck v-grave v-removed v-excavate v-extra-p non-extra" onclick="manualToHand(); manualRevealHandSingle(); v-excavate">Reveal and Add to Hand</button>
+
+        <button class="m-hand-p m-monster-p m-monster-to-extra-faceup" onclick="manualToExtraFaceUp()">To Extra Deck Face-up</button>
+        <button class="m-monster-extra v-monster-extra" onclick="manualToExtra()">To Extra Deck</button>
+
+        <button class="m-hand-m v-extra" id="SpDef" onclick="startSpecialSummon('def')">Special Summon in Defense</button>
+        <button class="m-hand-m v-extra" onclick="startSpecialSummon('atk')">Special Summon in Attack</button>
+        <button class="m-hand-m non-grave non-excavate non-banished non-deck" onclick="startSpecialSummon('normaldef')">Set Monster</button>
+        <button class="m-hand-m non-grave non-banished non-deck" onclick="startSpecialSummon('normalatk')">Normal Summon</button>
+
+
+        <button class="m-hand-f" onclick="manualActivateFieldSpell()">Activate Field Spell</button>
+        <button class="m-hand-f" onclick="manualActivateFieldSpellFaceDown()">Set Field Spell</button>
+
+
+        <!--            <button class="m-monster">Change Owner</button>-->
+        <button class="m-st" id="flipDown" onclick="manualSTFlipDown()">Flip Face-down</button>
+        <button class="m-st" id="flipUp" onclick="manualActivate()">Flip Face-up</button>
+        <button class="m-monster m-st" onclick="startSpecialSummon('generic')">Move</button>
+
+        <button class="m-monster m-st countercontroller" onclick="manualAddCounter()">Add Counter</button>
+        <button class="m-monster m-st countercontroller" id="removeCounter" onclick="manualRemoveCounter()">Remove Counter</button>
+        <button class="" id="viewStack" onclick="manualViewXYZMaterials()">View Xyz Materials</button>
+        <button class="m-monster m-monster-xyz v-monster-xyz" id="overlayStack" onclick="startXYZSummon()">Overlay</button>
+        <button class="m-monster" id="flipUpMonster" onclick="manualToFaceUpDefence()">Flip Face-up</button>
+        <button class="m-monster" id="flipDownMonster" onclick="manualToFaceDownDefence()">Flip Face-down</button>
+        <button class="m-monster" id="toAttack" onclick="manualToAttack()">To Attack</button>
+        <button class="m-field" id="toDefence" onclick="manualToDefence()">To Defense</button>
+        <button class="m-monster-token" onclick="manualRemoveToken()">Remove Token</button>
+        <button class="m-hand-p m-monster-p" onclick="manualToPZoneL()">To Left Pendulumn Zone</button>
+        <button class="m-hand-p m-monster-p" onclick="manualToPZoneR()">To Right Pendulumn Zone</button>
+        <button class="m-parasite" onclick="manualSendToDeckFaceup()">Send to Deck Face-up</button>
+
+
+        <button class="a-field" onclick="startAttack()">Attack</button>
+        <button class="a-field" onclick="manualAttackDirectly()">Attack Directly</button>
+
+        <button class="m-field st-field m-hand-m v-grave v-removed" id="signalEffect" onclick="manualSignalEffect()">Signal Effect</button>
+
+        <button class="s-toside" onclick="sidemoveTo('side')">To Side Deck</button>
+        <button class="s-toextra" onclick="sidemoveTo('extra')">To Extra Deck</button>
+        <button class="s-tomain" onclick="sidemoveTo('main')">To Main Deck</button>
+
+
+        <button class="de-toside" onclick="deckEditor.deckEditorMoveTo('side')">To Side Deck</button>
+        <button class="de-toextra" onclick="deckEditor.deckEditorMoveTo('extra')">To Extra Deck</button>
+        <button class="de-tomain" onclick="deckEditor.deckEditorMoveTo('main')">To Main Deck</button>
+
+        <button class="de-fromside" onclick="deckEditor.removeCard('side')">Remove</button>
+        <button class="de-fromextra" onclick="deckEditor.removeCard('extra')">Remove</button>
+        <button class="de-frommain" onclick="deckEditor.removeCard('main')">Remove</button>
+
+        <button class="de-addtoside" onclick="deckEditor.addCardFromSearch('side')">To Side Deck</button>
+        <button class="de-addtoextra" onclick="deckEditor.addCardFromSearch('extra')">To Extra Deck</button>
+        <button class="de-addtomain" onclick="deckEditor.addCardFromSearch('main')">To Main Deck</button>
+
+        <button class="a-admin" onclick="murder();">Disconnect</button>
+        <button class="a-admin" onclick="mindcrush();">Ban</button>
+        <button class="a-admin" onclick="revive();">Unban</button>
+        <button class="a-remove" onclick="deckEditor.removeFriend();">Remove Friend</button>
+        <button class="a-add" onclick="deckEditor.addFriend();">Add as Friend</button>
+        <button class="a-user" onclick="duelrequest();">Duel Request</button>
+        <button class="a-user" onclick="privateMessage();">PM</button>
+
+    </div>
+    <div id="revealedclose" onclick="$('#revealed ').toggle();$('#revealedclose ').toggle()"></div>
+    <div id="selectplayer" class="selectQuestionSet">
+        Select Player to go First
+        <button onclick="resolveQuestion(orient(0))">Self</button>
+        <button onclick="resolveQuestion(orient(1))">Opponent</button>
+    </div>
+    <div id="revealed"></div>
+    <div class="sidingzone">
+        <div class="main"></div>
+        <div class="extra"></div>
+        <div class="side"></div>
+    </div>
+    <div id="effectflasher">
+        <img class="mainimage" src="" />
+    </div>
+    <div class="field newfield" id="duelzone">
+        <div class="fieldimage" id="automationduelfield">
+
+
+        </div>
+    </div>
+    <div class="field newfield" id="fieldbg0">
+        <div class="fieldimage">
+
+
+        </div>
+    </div>
+    <div class="field newfield" id="fieldbg1">
+        <div class="fieldimage">
+
+
+        </div>
+    </div>
+    <div class="field newfield" id="selectionsystem">
+
+        <div class="fieldimage">
+            <div id="phaseindicator" data-currentphase="">
+                <button class="phaseindicator" onclick="manualNextPhase(0)" id="drawphi">Draw</button>
+                <button class="phaseindicator" onclick="manualNextPhase(1)" id="standbyphi">Standby</button>
+                <button class="phaseindicator" onclick="manualNextPhase(2)" id="main1phi">Main 1</button>
+                <button class="phaseindicator" onclick="manualNextPhase(3)" id="battlephi">Battle</button>
+                <button class="phaseindicator" onclick="manualNextPhase(4)" id="main2phi">Main 2</button>
+                <button class="phaseindicator" onclick="manualNextPhase(5)" id="endphi">End</button>
+                <button class="phaseindicator" onclick="manualNextPhase(6)" id="nextturn">Opponent</button>
+            </div>
+            <div onclick="selectionzoneonclick(0,'DECK',0)" data-content="" class="cardselectionzone p0 DECK"></div>
+            <div onclick="selectionzoneonclick(0,'EXTRA',0)" data-content="" class="cardselectionzone p0 EXTRA"></div>
+            <div onclick="selectionzoneonclick(0,'GRAVE',0)" data-content="" class="cardselectionzone p0 GRAVE"></div>
+            <div onclick="selectionzoneonclick(0,'REMOVED',0)" data-content="" class="cardselectionzone p0 REMOVED"></div>
+            <div onclick="selectionzoneonclick(0,'SPELLZONE',0)" class="cardselectionzone p0 SPELLZONE i0"></div>
+            <div onclick="selectionzoneonclick(1,'SPELLZONE',0)" class="cardselectionzone p0 SPELLZONE i1"></div>
+            <div onclick="selectionzoneonclick(2,'SPELLZONE',0)" class="cardselectionzone p0 SPELLZONE i2"></div>
+            <div onclick="selectionzoneonclick(3,'SPELLZONE',0)" class="cardselectionzone p0 SPELLZONE i3"></div>
+            <div onclick="selectionzoneonclick(4,'SPELLZONE',0)" class="cardselectionzone p0 SPELLZONE i4"></div>
+            <div onclick="selectionzoneonclick(5,'SPELLZONE',0)" class="cardselectionzone p0 SPELLZONE i5"></div>
+            <div onclick="selectionzoneonclick(6,'SPELLZONE',0)" class="cardselectionzone p0 SPELLZONE i6"></div>
+            <div onclick="selectionzoneonclick(7,'SPELLZONE',0)" class="cardselectionzone p0 SPELLZONE i7"></div>
+            <div onclick="selectionzoneonclick(0,'MONSTERZONE',0)" class="cardselectionzone p0 MONSTERZONE i0"></div>
+            <div onclick="selectionzoneonclick(1,'MONSTERZONE',0)" class="cardselectionzone p0 MONSTERZONE i1"></div>
+            <div onclick="selectionzoneonclick(2,'MONSTERZONE',0)" class="cardselectionzone p0 MONSTERZONE i2"></div>
+            <div onclick="selectionzoneonclick(3,'MONSTERZONE',0)" class="cardselectionzone p0 MONSTERZONE i3"></div>
+            <div onclick="selectionzoneonclick(4,'MONSTERZONE',0)" class="cardselectionzone p0 MONSTERZONE i4"></div>
+            <div onclick="selectionzoneonclick(5,'MONSTERZONE',0)" class="cardselectionzone p0 MONSTERZONE i5"></div>
+            <div onclick="selectionzoneonclick(6,'MONSTERZONE',0)" class="cardselectionzone p0 MONSTERZONE i6"></div>
+            <div onclick="selectionzoneonclick(0,'DECK',1)" data-content="" class="cardselectionzone p1 DECK"></div>
+            <div onclick="selectionzoneonclick(0,'EXTRA',1)" data-content="" class="cardselectionzone p1 EXTRA"></div>
+            <div onclick="selectionzoneonclick(0,'GRAVE',1)" data-content="" class="cardselectionzone p1 GRAVE"></div>
+            <div onclick="selectionzoneonclick(0,'REMOVED',1)" data-content="" class="cardselectionzone p1 REMOVED"></div>
+            <div onclick="selectionzoneonclick(0,'SPELLZONE',1)" class="cardselectionzone p1 SPELLZONE i0"></div>
+            <div onclick="selectionzoneonclick(1,'SPELLZONE',1)" class="cardselectionzone p1 SPELLZONE i1"></div>
+            <div onclick="selectionzoneonclick(2,'SPELLZONE',1)" class="cardselectionzone p1 SPELLZONE i2"></div>
+            <div onclick="selectionzoneonclick(3,'SPELLZONE',1)" class="cardselectionzone p1 SPELLZONE i3"></div>
+            <div onclick="selectionzoneonclick(4,'SPELLZONE',1)" class="cardselectionzone p1 SPELLZONE i4"></div>
+            <div onclick="selectionzoneonclick(5,'SPELLZONE',1)" class="cardselectionzone p1 SPELLZONE i5"></div>
+            <div onclick="selectionzoneonclick(6,'SPELLZONE',1)" class="cardselectionzone p1 SPELLZONE i6"></div>
+            <div onclick="selectionzoneonclick(7,'SPELLZONE',1)" class="cardselectionzone p1 SPELLZONE i7"></div>
+            <div onclick="selectionzoneonclick(0,'MONSTERZONE',1)" class="cardselectionzone p1 MONSTERZONE i0"></div>
+            <div onclick="selectionzoneonclick(1,'MONSTERZONE',1)" class="cardselectionzone p1 MONSTERZONE i1"></div>
+            <div onclick="selectionzoneonclick(2,'MONSTERZONE',1)" class="cardselectionzone p1 MONSTERZONE i2"></div>
+            <div onclick="selectionzoneonclick(3,'MONSTERZONE',1)" class="cardselectionzone p1 MONSTERZONE i3"></div>
+            <div onclick="selectionzoneonclick(4,'MONSTERZONE',1)" class="cardselectionzone p1 MONSTERZONE i4"></div>
+            <div onclick="selectionzoneonclick(5,'MONSTERZONE',1)" class="cardselectionzone p1 MONSTERZONE i5"></div>
+            <div onclick="selectionzoneonclick(6,'MONSTERZONE',1)" class="cardselectionzone p1 MONSTERZONE i6"></div>
+        </div>
+    </div>
+
+</body>
+
+</html>

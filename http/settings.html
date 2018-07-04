@@ -1,0 +1,70 @@
+<html>
+
+<head>
+    <link href="css/roboto.css" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Lato:100,300,400,700,900" rel="stylesheet">
+    <link rel="stylesheet" href="css/normalize.css">
+    <link rel="stylesheet" href="css/main.css">
+</head>
+
+<body>
+
+
+
+    <h3 data-translation-gamesettings style="text-align:center; color:silver">Game Settings</h3>
+    <div style="color:white; width:970px; margin:0 auto;">
+        <section id="settings">
+            <div class='section-content'>
+
+                <div style="width:32%; float:left; border-left:1px solid white; padding-left:1vw">
+
+                </div>
+                <div style="width:32%; float:left;">
+                    <label data-translation-soundvolume>Sound Volume</label>
+                    <input type="range" min="0" max="100" value="50" id="sound_volume">
+                    <br />
+                    <label data-translation-musicvolume>Music Volume</label>
+                    <input type="range" min="0" max="100" value="50" id="music_volume">
+                    <br />
+
+                    <h3 data-translation-launchersettings style="text-align: left; border-top: 1px solid silver; padding-top: 10px; color: silver">Launcher Settings</h3>
+                    <label data-translation-refuseduelrequests>Refuse Duel Requests</label>
+                    <input type="checkbox" data-localhost="refuse_duel_requests">
+                    <label data-translation-launcherlanguage="">Launcher Language</label>
+                    <select id="language" onChange="translateLang(this.value)">
+                                    <option value="en">English</option>
+                                    <option value="es">Español</option>
+                                    <option value="de">Deutsch</option>
+                                    <option value="fr">Français(France)</option>
+                                    <option value="fr-ca">Français(Québec)</option>
+                                    <option value="it">Italiano</option>
+                                    <option value="pt">Português</option>
+                                    <option value="nl">Nederlands</option>
+                                    <option value="tr">Türkçe</option>
+                                    <option value="el">Ελληνικά</option>
+                                    <option value="jp">日本語</option>
+                                    <option value="zh">中文(简体)</option>
+                                    <option value="fa">فارسی</option>
+                                    <option value="ar">لغة عربي</option>
+                                    <option value="he">עברית</option>
+                                </select>
+                    <label>Background Image Set</label>
+                    <select id="sitebgoption">
+                                    <option value="silhouette" default>MM☆MG Silhouette</option>
+                                    <option value="magi">Magi Magi ☆ Magician Gal</option>
+                                </select>
+                    <br />
+                    <br />
+                    <label></label>
+
+
+                    <br />
+
+                </div>
+            </div>
+        </section>
+    </div>
+
+</body>
+
+</html>
