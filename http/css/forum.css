@@ -1,4 +1,3 @@
-
 *,
 *:before,
 *:after {
@@ -13,7 +12,7 @@ body {
     background-color: black;
     background-image: url(../img/magimagipinkshadow2.jpg);
     background-size: cover;
-    color:white;
+    color: white;
     font-family: 'Roboto', sans-serif;
     font-size: 15px;
     font-weight: 200;
@@ -44,24 +43,22 @@ body {
 }
 
 #full_site {
-    background : black;
+    background: black;
 }
 
-#forum > header {
+#forum>header {
     padding: 1%;
-
     padding-bottom: 0;
     border-bottom: 1px solid #444;
     overflow: auto;
-    font-family: 'Lato', cursive;
+    font-family: 'Lato', sans-serif;
     text-shadow: 0 0 0px white;
     font-weight: 300;
 }
 
-
-#forum > header > h1 {
-    width : 50%;
-    float:left;
+#forum>header>h1 {
+    width: 50%;
+    float: left;
     color: white;
     font-size: 10vw;
     margin: 0 auto;
@@ -69,96 +66,93 @@ body {
     text-align: center;
     padding: 0;
     line-height: 1.2em;
-    font-family: 'Lato', cursive;
+    font-family: 'Lato', sans-serif;
     text-shadow: 0 0 0px white;
     font-variant: small-caps;
     text-transform: none;
     font-weight: 300;
 }
 
-#forum > header > h2 {
+#forum>header>h2 {
     font-size: 1em;
-    opacity : 50%;
-    width : 50%;
+    opacity: 50%;
+    width: 50%;
     color: silver;
     font-weight: normal;
-    float:left;
-    clear:left;
+    float: left;
+    clear: left;
 }
 
-#forum > header > nav {
+#forum>header>nav {
     float: right;
     height: 100%;
     padding-top: 6em;
     padding-right: 1%;
 }
 
-#forum > header > nav > input, .section_bg  > input {
-
+#forum>header>nav>input,
+.section_bg>input {
     border: 1px solid rgba(26, 26, 26, 0.25);
     border-radius: 5px;
     background-repeat: repeat;
-    box-shadow: inset rgba(255,255,255,0.08) 0px 0px 0px 1px, inset rgba(255,255,255,0.15) 0px 1px 0px;
-    background-image: url('./img/box_pattern.png') ;
+    box-shadow: inset rgba(255, 255, 255, 0.08) 0px 0px 0px 1px, inset rgba(255, 255, 255, 0.15) 0px 1px 0px;
+    background-image: url('./img/box_pattern.png');
     padding: .5em 2em;
     text-align: center;
 }
-    
-#forum > main {
-    width : 100%;
-    margin : 0 auto;
-    padding : 5% 10% ;
-    background: rgba(0,0,0,.5);
+
+#forum>main {
+    width: 100%;
+    margin: 0 auto;
+    padding: 5% 10%;
+    background: rgba(0, 0, 0, .5);
 }
 
-#forum > aside {
-    width : 100%;
-    margin : 0 auto;
-    padding : 10%;
+#forum>aside {
+    width: 100%;
+    margin: 0 auto;
+    padding: 10%;
     overflow: auto;
-    background: rgba(0,0,0,.5);
+    background: rgba(0, 0, 0, .5);
 }
 
 .section_header {
     font-weight: 400;
     line-height: 1.2;
-    font-size : 1.2em;
-    margin-bottom : 1em;
-    border-radius : 5px;
+    font-size: 1.2em;
+    margin-bottom: 1em;
+    border-radius: 5px;
 }
 
 section {
-    border : 1px solid  rgba(26, 26, 26, 0.25);
-    border-radius : 5px;
-    
-    background : rgba(100,12,75,.75) repeat repeat;
-    box-shadow: inset rgba(255,255,255,0.08) 0px 0px 0px 1px, inset rgba(255,255,255,0.15) 0px 1px 0px;
-    background-image: url('./img/box_pattern.png') ;
-    
+    border: 1px solid rgba(26, 26, 26, 0.25);
+    border-radius: 5px;
+    background: rgba(100, 12, 75, .75) repeat repeat;
+    box-shadow: inset rgba(255, 255, 255, 0.08) 0px 0px 0px 1px, inset rgba(255, 255, 255, 0.15) 0px 1px 0px;
+    background-image: url('./img/box_pattern.png');
 }
 
 .section_bg {
-    border-radius : 5px;
-    background-image : linear-gradient(to bottom, rgba(255,255,255,0.15) 0%, rgba(0,0,0,.15) 100%);
-    padding : 15px;
+    border-radius: 5px;
+    background-image: linear-gradient(to bottom, rgba(255, 255, 255, 0.15) 0%, rgba(0, 0, 0, .15) 100%);
+    padding: 15px;
 }
 
 .index_categories {
     overflow: auto;
-    margin-bottom : 1em;
-    border : 1px solid rgba(100, 100, 100, 0.55);
+    margin-bottom: 1em;
+    border: 1px solid rgba(100, 100, 100, 0.55);
     box-shadow: inset 0 0 10px black;
-    border-radius : 15px;
-    box-shadow: inset rgba(0,0,0,1) 0px 0px 5px 5px, inset rgba(255,255,255,0.15) 0px 1px 0px;
+    border-radius: 15px;
+    box-shadow: inset rgba(0, 0, 0, 1) 0px 0px 5px 5px, inset rgba(255, 255, 255, 0.15) 0px 1px 0px;
 }
 
 .index_title {
     font-weight: bold;
     line-height: 1.2;
-    font-size : 1.2em;
-    margin-bottom : .5em;
+    font-size: 1.2em;
+    margin-bottom: .5em;
     color: white;
-
 }
 
 .index_description {
@@ -168,38 +162,38 @@ section {
     line-height: 2em;
     display: inline-block;
     height: 2em;
-    opacity : .5;
+    opacity: .5;
 }
 
 .category {
-    padding : 15px;
-    width:100%;
+    padding: 15px;
+    width: 100%;
     overflow: auto;
-    box-shadow: inset rgba(255,255,255,0.08) 0px 0px 1px 1px, inset rgba(255,255,255,0.15) 0px 1px 0px;
-    border : 1px solid  rgba(26, 26, 26, 0.25);
-    background : rgba(25,25,25, .85);
-    
+    box-shadow: inset rgba(255, 255, 255, 0.08) 0px 0px 1px 1px, inset rgba(255, 255, 255, 0.15) 0px 1px 0px;
+    border: 1px solid rgba(26, 26, 26, 0.25);
+    background: rgba(25, 25, 25, .85);
 }
-.category > div {
-    float:left;
+
+.category>div {
+    float: left;
 }
 
 .category_title {
-    font-weight : bold;
-    border-bottom : 1px solid white;
-    width:50%;
+    font-weight: bold;
+    border-bottom: 1px solid white;
+    width: 50%;
     cursor: pointer;
 }
 
 .category_description {
-    padding-left : 3em;
-    padding-bottom : 15px;
+    padding-left: 3em;
+    padding-bottom: 15px;
     font-weight: normal;
 }
 
 .category_icon {
     width: 5%;
-    margin-right : 2em;
+    margin-right: 2em;
 }
 
 .category_icon img {
@@ -210,8 +204,8 @@ section {
 }
 
 .category_post_count {
-    font-weight:bold;
-    width:15%;
+    font-weight: bold;
+    width: 15%;
     text-align: right;
 }
 
@@ -220,13 +214,14 @@ section {
     padding: 0 2em;
     font-weight: bold;
 }
+
 .category_last_post span {
     font-weight: normal;
 }
 
 aside .category_last_post {
     width: 100%;
-    padding:0;
+    padding: 0;
 }
 
 .author_info {

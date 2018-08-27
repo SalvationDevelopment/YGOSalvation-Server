@@ -3,8 +3,8 @@
 
 /**
  * @typedef {Object} YGOProMessage
- * @property {String} command
- * @property {Packet} packet
+ * @property {String} command duelclient.cpp case statement
+ * @property {Packet} packet data load
  */
 
 /**
@@ -134,30 +134,6 @@ function msg_hint(message, BufferIO) {
     message.command = enums.STOC.STOC_GAME_MSG.MSG_HINT[BufferIO.readInt8()];
     message.player = BufferIO.readInt8(); /* defunct in the code */
     message.data = BufferIO.readInt32();
-    message.hintforce = BufferIO.readInt8();
-
-    switch (message.command) {
-        case 'HINT_EVENT':
-            //myswprintf(event_string, L"%ls", dataManager.GetDesc(data));
-            //this is a rabbit hole, the hint system takes bytes and uses that to 
-            //calculate (hurr, god why) the string that should be used from strings.conf
-            // like a direct reference would be hard....
-            break;
-        case 'HINT_MESSAGE':
-            //display task.data after processing it against the DB.
-            break;
-        case 'HINT_SELECTMSG':
-            message.select_hint = message.data;
-            break;
-
-        case 'HINT_OPSELECTED':
-            break;
-        case 'HINT_EFFECT':
-            message.showcardcode = message.data;
-            message.showcarddif = 0;
-            message.showcard = 1;
-            break;
-    }
 }
 
 function msg_new_turn(message, BufferIO) {
@@ -844,7 +820,7 @@ function msg_reload_field(message, BufferIO) {
     message.grave = [];
     message.chains = [];
     message.duel_rule = BufferIO.readInt8();
-    let val;
+    let val = 0;
     for (let i = 0; i < 2; ++i) {
         message.lp[i] = BufferIO.readInt32();
         for (let seq = 0; seq < 7; ++seq) {
@@ -1156,5 +1132,6 @@ function stoc_game_msg(packet, message, gameBoard) {
 
 // monitor new functionality 
 // https://github.com/Fluorohydride/ygopro/commits/master/gframe/duelclient.cpp
+// Current as of Aug 26th 2018
 
 module.exports = stoc_game_msg;

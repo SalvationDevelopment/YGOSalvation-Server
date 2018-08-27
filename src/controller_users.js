@@ -90,6 +90,7 @@ process.env.SALT = process.env.SALT || function() {
     console.log('');
 };
 
+mongoose.Promise = Promise;
 
 function sessionTimeout(time) {
     if (!time) {
@@ -99,7 +100,7 @@ function sessionTimeout(time) {
     return ((time.getTime() + hour) > Date.now());
 }
 
-var db = mongoose.connect('mongodb://localhost/salvation');
+var db = mongoose.createConnection('mongodb://localhost/salvation', { useMongoClient: true }, console.log)
 
 
 function salter() {

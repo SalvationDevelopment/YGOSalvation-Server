@@ -82,7 +82,7 @@ h1 {
     text-align: center;
     padding: 0;
     line-height: 1.2em;
-    font-family: 'Lato', cursive;
+    font-family: 'Lato', sans-serif;
     text-shadow: 0 0 0px white;
     font-variant: small-caps;
     text-transform: none;
@@ -2445,11 +2445,12 @@ a.launcheronly.loginsystem {
 }
 
 div#loginmodal {
+    box-shadow: inset 0px 100px 100px rgba(255, 25, 120, .15);
     position: absolute;
     top: 38vh;
     width: 70%;
     background: rgba(0, 0, 0, .75);
-    border: 1px solid hotpink;
+    border: 1px solid #301;
     left: 15%;
     text-align: center;
     display: none;
