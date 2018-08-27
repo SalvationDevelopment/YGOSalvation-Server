@@ -745,6 +745,16 @@ function msg_confirm_decktop(message, BufferIO) {
     }
 }
 
+function msg_confirm_extratop(message, BufferIO) {
+    message.player = BufferIO.readInt8();
+    message.count = BufferIO.readInt8();
+    message.cards = [];
+    for (let i = 0; i < message.count; ++i) {
+        message.cards.push(BufferIO.readInt32());
+        BufferIO.move(3);
+    }
+}
+
 function msg_confirm_cards(message, BufferIO) {
     message.player = BufferIO.readInt8();
     message.count = BufferIO.readInt8();
@@ -1044,7 +1054,6 @@ function msg_select_unselect_card(message, BufferIO) {
 }
 
 function stoc_game_msg(packet, message, gameBoard) {
-    var msg_confirm_extratop = incomplete;
     const BufferIO = new BufferStreamReader(packet.message),
         translator = {
             MSG_RETRY: msg_retry,
