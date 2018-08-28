@@ -35,8 +35,12 @@ const sqlite3 = require('sqlite3').verbose(),
     }),
     cardDataPointer = ref.refType(cardData),
     charArray = arrayBuf(ref.types.char),
-    message_translate = require('./translate_ygopro_game'),
-    manualControlEngine = require('./engine_manual.js');
+    queue = require('function-queue'),
+    enums = require('./translate_ygopro_enums.js'),
+    boardController = require('./controller_ygopro.js'),
+    translateYGOProAPI = require('./translate_ygopro_messages.js'),
+    manualControlEngine = require('./engine_manual.js'),
+    DataStream = require('./model_data_stream.js');
 
 
 function constructDatabase(targetDB, targetFolder) {
@@ -221,35 +225,83 @@ function GameBoard(playerConnection, slot, masterRule) {
     return board;
 }
 
+function Responser(game, player) {
+
+    function write(data) {
+        const resb = Buffer.alloc(64);
+        resb.copy(data);
+        player.lock = false;
+        game.set_responseb(game.pduel, resb);
+    }
+
+    return {
+        write: write
+    };
+}
+
+function playerInstance(playerConnection, slot, game, settings) {
+    const dataStream = new DataStream(),
+        gameBoard = new GameBoard(playerConnection, slot, settings.masterRule),
+        gameQueue = queue(),
+        tcpConnection = new Responser(game, playerConnection);
+
+    function parsePackets(data) {
+        'use strict';
+        var message = new Buffer(data),
+            task = [],
+            packet = {
+                message: message.slice(1),
+                readposition: 0
+            };
+        packet.command = enums.STOC[message[0]];
+        task.push(translateYGOProAPI(gameBoard, packet));
+        return task;
+    }
+
+    function preformGameAction(gameAction) {
+        var output = boardController(gameBoard, slot, gameAction, tcpConnection, playerConnection);
+        if (!playerConnection.externalClient) {
+            playerConnection.write(output);
+        }
+    }
+
+    function queueGameActions(gameActions) {
+        gameActions.forEach(function(gameAction) {
+            const pause = enums.timeout[gameAction.command] || 0;
+            gameQueue.push(function(next) {
+                setTimeout(function() {
+                    try {
+                        preformGameAction(gameAction);
+                    } catch (e) {
+                        console.log(e);
+                    }
+                    next();
+                }, pause);
+            });
+
+        });
+    }
+
+    return function(data) {
+        try {
+            dataStream.input(data)
+                .map(parsePackets)
+                .map(queueGameActions);
+        } catch (error) {
+            console.log(error);
+        }
+
+    };
+}
+
 
 function analyze(engineBuffer, engLen) {
 
-    var data = engineBuffer.slice(0, engLen);
-    console.log(message_translate({
-        message: data
-    }, {}, {}));
 
     return 2;
 }
 
 function mainProcess(game, players) {
-    //    char engineBuffer[0x1000];
-    //	unsigned int engFlag = 0, engLen = 0;
-    //	int stop = 0;
-    //	while (!stop) {
-    //		if (engFlag == 2)
-    //			break;
-    //		int result = process(pduel);
-    //		engLen = result & 0xffff;
-    //		engFlag = result >> 16;
-    //		if (engLen > 0) {
-    //			get_message(pduel, (byte*)&engineBuffer);
-    //			stop = Analyze(engineBuffer, engLen);
-    //		}
-    //	}
-    //	if(stop == 2)
-    //		DuelEndProc();
-
     var engineBuffer = charArray(0x1000),
         engFlag = 0,
         engLen = 0,
@@ -273,15 +325,7 @@ function mainProcess(game, players) {
 }
 
 function duel(settings, players) {
-    /*
-    1.) who is going first?
 
-    3.) set time limit
-
-    11.) send start message over message with LP and sizes (fuck that do it in JSON)
-
-    13.) "Process();"
-    */
     var pduel,
         game = makeAPI(settings),
         buf = Buffer.alloc(1024);
@@ -307,11 +351,10 @@ function duel(settings, players) {
         game.new_card(pduel, cardID, 0, 0, LOCATION_EXTRA, 0, POS_FACEDOWN_DEFENSE);
     });
     //send start msg
-    console.log('starting');
     game.start_duel(pduel, settings.priority);
-    console.log('started');
+    game.pduel = pduel;
     mainProcess(game, players.map(function(playerConnection, slot) {
-        return new GameBoard(playerConnection, slot, settings.masterRule);
+        return playerInstance(playerConnection, slot, game, settings);
     }));
 }
 
