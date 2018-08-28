@@ -34,9 +34,9 @@ const sqlite3 = require('sqlite3').verbose(),
         rscale: ref.types.uint32
     }),
     cardDataPointer = ref.refType(cardData),
-    charArray = arrayBuf(ref.types.char),
     queue = require('function-queue'),
     enums = require('./translate_ygopro_enums.js'),
+    analyze = require('./translate_ygopro_analyzer.js'),
     boardController = require('./controller_ygopro.js'),
     translateYGOProAPI = require('./translate_ygopro_messages.js'),
     manualControlEngine = require('./engine_manual.js'),
@@ -295,19 +295,16 @@ function playerInstance(playerConnection, slot, game, settings) {
 }
 
 
-function analyze(engineBuffer, engLen) {
 
-
-    return 2;
-}
 
 function mainProcess(game, players) {
-    var engineBuffer = charArray(0x1000),
+    var engineBuffer = Buffer.alloc(0x1000),
         engFlag = 0,
         engLen = 0,
         stop = 0,
         result;
     while (!stop) {
+
         if (engFlag === 2) {
             break;
         }
@@ -317,7 +314,7 @@ function mainProcess(game, players) {
         if (engLen > 0) {
             game.get_message(game.pduel, engineBuffer);
         }
-        stop = analyze(engineBuffer, engLen);
+        stop = analyze(engineBuffer, engLen, players, game);
     }
     if (stop === 2) {
         duelEndProcedure(players);
