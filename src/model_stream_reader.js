@@ -48,6 +48,9 @@ function BufferStreamReader(packet) {
     stream.dump = function() {
         return packet.copy(0, readposition);
     };
+    stream.valueOf = function() {
+        return readposition;
+    };
     return stream;
 }
 

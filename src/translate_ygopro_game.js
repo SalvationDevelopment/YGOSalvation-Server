@@ -1028,6 +1028,7 @@ function msg_select_unselect_card(message, BufferIO) {
         });
     }
 }
+
 let translator = {};
 translator = {
     MSG_RETRY: msg_retry,
