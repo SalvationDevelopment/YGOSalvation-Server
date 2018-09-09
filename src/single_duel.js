@@ -2,7 +2,7 @@ var ocgwrapper = require('./engine_ocgcore.js'),
     conf = ocgwrapper.configurations.normal;
 
 ocgwrapper.duel(conf, [{
-    main: [],
+    main: [98905, 98905, 98905, 98905, 98905, 98905, 98905, 98905, 98905, 98905],
     extra: [],
     side: []
 }, {
@@ -10,3 +10,4 @@ ocgwrapper.duel(conf, [{
     extra: [],
     side: []
 }]);
+//

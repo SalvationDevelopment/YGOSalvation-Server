@@ -5,7 +5,7 @@
 /* allows dynamic linking of the ocgapi.dll, critical; */
 /* allows use of C++ pointers for C++ JS interactions, critical */
 /* allows use of C++ structures for C++ JS interactions, critical */
-const sqlite3 = require('sqlite3').verbose(),
+const sql = require('sql.js'),
     fs = require('fs'),
     os = require('os'),
     ffi = require('ffi'),
@@ -31,7 +31,8 @@ const sqlite3 = require('sqlite3').verbose(),
         attack: ref.types.int32,
         defense: ref.types.int32,
         lscale: ref.types.uint32,
-        rscale: ref.types.uint32
+        rscale: ref.types.uint32,
+        link: ref.types.uint32
     }),
     cardDataPointer = ref.refType(cardData),
     queue = require('function-queue'),
@@ -46,41 +47,39 @@ const sqlite3 = require('sqlite3').verbose(),
 function constructDatabase(targetDB, targetFolder) {
     // create instance of card database in memory 2MB, prevents sychronous read request and server lag.
     var database,
-        cards = {};
+        cards = {},
+        filebuffer = fs.readFileSync(targetDB);
 
-    function handleQueryRow(error, row) {
-        if (error) {
-            //throw error;
-            console.log(error); //fuck it keep moving.
-        }
-        cards[row.id] = row;
+    function hasType(card, type) {
+        return ((card.type & type) !== 0);
     }
 
-    database = new sqlite3.Database(targetDB);
-    database.on('open', function() {
-        console.log('database was opened successfully');
-    });
-    database.on('close', function() {
-        console.log('database was closed successfully');
-    });
-    //database.each(queryfor.statistics, {}, handleQueryRow, function () {}); // get all cards and load into memory.
-    //database.end();
 
-    return function(request) {
+
+    database = new sql.Database(filebuffer);
+
+    return function(code, buffer) {
         //function used by the core to process DB
-        var code = request.code;
-
-        return struct({
-            code: code,
-            alias: cards[code].alias || 0,
-            setcode: cards[code].setcode || 0,
-            type: cards[code].type || 0,
-            level: cards[code].level || 1,
-            attribute: cards[code].attribute || 0,
-            race: cards[code].race || 0,
-            attack: cards[code].attack || 0,
-            defence: cards[code].defense || 0
-        });
+        console.log(code, 'xxx', buffer);
+        var stmt = database.prepare('SELECT * FROM datas WHERE id =' + code);
+        var dbEntry = stmt.getAsObject({ id: 1 });
+        var card = {
+            code: dbEntry.id,
+            alias: dbEntry.alias,
+            setcode: dbEntry.setcode,
+            type: dbEntry.type,
+            level: dbEntry.level & 0xff,
+            attribute: dbEntry.attribute,
+            race: dbEntry.race,
+            attack: dbEntry.attack,
+            defence: (hasType(dbEntry, 0x4000000)) ? 0 : dbEntry.defense,
+            lscale: (dbEntry.level >> 24) & 0xff,
+            rscale: (dbEntry.level >> 16) & 0xff,
+            link: (hasType(dbEntry, 0x4000000)) ? dbEntry.defense : 0
+        };
+        console.log('card data:', cardData(card)['ref.buffer']);
+        buffer = cardData(card)['ref.buffer'];
+        return code;
     };
 }
 
@@ -114,7 +113,7 @@ function constructScripts(targetFolder) {
         id = id.toString('utf-8');
         console.log('SCRIPT ID REQUEST:', id, 'Length:', length);
         if (id === '.') {
-            return new Buffer([0]);
+            return Buffer.alloc(4);
         }
         var filename = id,
             output;
@@ -128,7 +127,7 @@ function constructScripts(targetFolder) {
 
 module.exports.configurations = {
     normal: {
-        card_reader: constructDatabase('./cards.cdb'),
+        card_reader: constructDatabase('../bin/mr4/cards.cdb'),
         script_reader: constructScripts('../../ygopro-scripts'),
         priority: false,
         draw_count: 1,
@@ -146,11 +145,8 @@ function messagHandler(input) {
 function makeAPI(settings) {
     // create new instance of flourohydride/ygopro/ocgcore
 
-    var pduelPointer = 'pointer', ///really need to figure out the dimensions of this pointer. "pointer" isnt gonna cut it.
-        script_reader = ffi.Callback(bytePointer, [charPointer, intPointer], settings.script_reader),
-        card_reader = ffi.Callback('uint32', [cardDataPointer], settings.card_reader),
-        message_handler = ffi.Callback('uint32', [voidPointer, 'uint32'], messagHandler),
-        ocgapi = ffi.Library(__dirname + '/../bin/mr4/ocgcore.dll', {
+    var pduelPointer = (ref.refType('string')), ///really need to figure out the dimensions of this pointer. "pointer" isnt gonna cut it.
+        ocgapi = ffi.Library('C://salvation//ygopro//bin//debug/ocgcore.dll', {
             'set_script_reader': ['void', [bytePointer]],
             'set_card_reader': ['void', ['uint32']],
             'set_message_handler': ['void', ['uint32']],
@@ -172,9 +168,8 @@ function makeAPI(settings) {
             'preload_script': ['int32', [pduelPointer, charPointer, 'int32']]
         });
 
-    ocgapi.set_script_reader(script_reader);
-    ocgapi.set_card_reader(card_reader);
-    ocgapi.set_message_handler(message_handler);
+
+
     return ocgapi;
 }
 
@@ -325,27 +320,49 @@ function duel(settings, players) {
 
     var pduel,
         game = makeAPI(settings),
-        buf = Buffer.alloc(1024);
+        responsei = ffi.Callback('int32', [voidPointer, 'uint32'], messagHandler),
+        script_reader = ffi.Callback(bytePointer, [charPointer, intPointer], settings.script_reader),
+        card_reader = ffi.Callback('uint32', ['uint32', cardDataPointer], settings.card_reader),
+        message_handler = ffi.Callback('uint32', [voidPointer, 'uint32'], messagHandler);
     if (settings.shuffleDeck) {
         shuffle(players[0].main);
         shuffle(players[0].extra);
         shuffle(players[1].main);
         shuffle(players[1].extra);
     }
+    process.on('exit', function() {
+        pduel;
+        responsei;
+        script_reader;
+        card_reader;
+        message_handler;
+    });
     pduel = game.create_duel(seed());
+    game.new_card(pduel, 88888888, 0, 0, LOCATION_EXTRA, 0, POS_FACEDOWN_DEFENSE);
+    console.log(pduel.hexAddress(), pduel.ref());
+    game.set_script_reader(script_reader); // good
+    //game.set_card_reader(card_reader); //bad
+    //game.set_message_handler(message_handler); //bad
+    game.set_responsei(pduel, responsei);
+
     game.set_player_info(pduel, 0, settings.start_lp, settings.start_hand_count, settings.draw_count);
     game.set_player_info(pduel, 1, settings.start_lp, settings.start_hand_count, settings.draw_count);
+
+    console.log(1);
     players[0].main.forEach(function(cardID, sequence) {
-        game.new_card(pduel, cardID, 0, 0, LOCATION_DECK, 0, POS_FACEDOWN_DEFENSE);
+        game.new_card(pduel, cardID, 0, 0, LOCATION_EXTRA, 0, POS_FACEDOWN_DEFENSE);
     });
+    console.log(2);
     players[0].extra.forEach(function(cardID, sequence) {
-        game.new_card(pduel, cardID, 0, 0, LOCATION_EXTRA, 0, POS_FACEDOWN_DEFENSE);
+        game.new_card(pduel.address(), cardID, 0, 0, LOCATION_EXTRA, sequence, POS_FACEDOWN_DEFENSE);
     });
+    console.log(3);
     players[1].main.forEach(function(cardID, sequence) {
-        game.new_card(pduel, cardID, 0, 0, LOCATION_DECK, 0, POS_FACEDOWN_DEFENSE);
+        game.new_card(pduel.address(), cardID, 1, 1, LOCATION_DECK, 0, POS_FACEDOWN_DEFENSE);
     });
+    console.log(4);
     players[1].extra.forEach(function(cardID, sequence) {
-        game.new_card(pduel, cardID, 0, 0, LOCATION_EXTRA, 0, POS_FACEDOWN_DEFENSE);
+        game.new_card(pduel.address(), cardID, 1, 1, LOCATION_EXTRA, 0, POS_FACEDOWN_DEFENSE);
     });
     //send start msg
     game.start_duel(pduel, settings.priority);

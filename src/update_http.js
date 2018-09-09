@@ -7,10 +7,6 @@ var zlib = require('zlib'),
     http = require('http'),
     jsonfile = require('jsonfile')
 
-
-
-
-
 module.exports = function getManifestFromAPI(callback) {
     var options = {
         host: '127.0.0.1',
