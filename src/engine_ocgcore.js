@@ -12,9 +12,13 @@ const sql = require('sql.js'),
     ref = require('ref'),
     struct = require('ref-struct'),
     arrayBuf = require('ref-array'),
+    POS_FACEDOWN = 0x1,
     POS_FACEDOWN_DEFENSE = 0x8,
     LOCATION_DECK = 0x01,
+    LOCATION_MZONE = 0x04,
+    LOCATION_SZONE = 0x08,
     LOCATION_EXTRA = 0x40,
+    LOCATION_GRAVE = 0x10,
     LOCATION_HAND = 0x02,
     charArray = arrayBuf(ref.types.char),
     bytePointer = ref.refType(ref.types.byte),
@@ -293,12 +297,20 @@ function playerInstance(playerConnection, slot, game, settings) {
 
 
 function makeGame(pduel, settings, players) {
+    let lastMessage = new Buffer('');
+
+
     function sendToPlayer(player, proto, buffer, length) {
         var stoc = new Buffer([proto]),
             frameSize = new Buffer(2);
         frameSize.writeUInt16LE(length + 1, 0);
         var message = Buffer.concat([frameSize, stoc, Buffer.from(buffer, 0, length + 1)]);
+        lastMessage = message;
         players[player](message);
+    }
+
+    function reSendToPlayer(player) {
+        players[player](lastMessage);
     }
 
     function sendStartInfo(player) {
@@ -327,9 +339,52 @@ function makeGame(pduel, settings, players) {
         sendToPlayer(player, proto, Buffer.concat([header, qbuf], len + 3), len + 3);
         return len;
     }
+
+    function refreshMzone(player, flag, use_cache) {
+        const qbuf = Buffer.alloc(0x2000),
+            header = Buffer.alloc(3),
+            proto = enums.STOC.enums.STOC_GAME_MSG,
+            len = ocgapi.query_field_card(pduel, player, LOCATION_MZONE, flag, qbuf, use_cache);
+        flag = flag || 0;
+        use_cache = use_cache || 0;
+        header[0] = 0x6;
+        header[1] = player;
+        header[2] = LOCATION_EXTRA;
+        var qlen = 0;
+        while (qlen < len) {
+            const clen = qbuf.readUInt32LE(qlen);
+            qlen += clen;
+            if (clen === 4) {
+                continue;
+            }
+            if (qbuf[11] & POS_FACEDOWN) {
+                qbuf[clen - 4] = 0;
+            }
+            qbuf += clen - 4;
+        }
+        sendToPlayer(player, proto, Buffer.concat([header, qbuf], len + 3), len + 3);
+        reSendToPlayer(1 - player);
+        return len;
+    }
+
+    function refreshGrave(player, flag, use_cache) {
+        const qbuf = Buffer.alloc(0x2000),
+            header = Buffer.alloc(3),
+            proto = enums.STOC.enums.STOC_GAME_MSG,
+            len = ocgapi.query_field_card(pduel, player, LOCATION_GRAVE, flag, qbuf, use_cache);
+        flag = flag || 0;
+        use_cache = use_cache || 0;
+        header[0] = 0x6;
+        header[1] = player;
+        header[2] = LOCATION_GRAVE;
+        sendToPlayer(player, proto, Buffer.concat([header, qbuf], len + 3), len + 3);
+        return len;
+    }
     return {
         sendStartInfo,
+        refreshMzone,
         refreshExtra,
+        refreshGrave,
         pduel
     };
 }
@@ -397,9 +452,10 @@ function duel(settings, players) {
         ocgapi.new_card(pduel, cardID, 0, 0, LOCATION_EXTRA, 0, POS_FACEDOWN_DEFENSE);
     });
     console.log(3);
-    // players[1].main.forEach(function(cardID, sequence) {
-    //     ocgapi.new_card(pduel, cardID, 1, 1, LOCATION_DECK, 0, POS_FACEDOWN_DEFENSE);
-    // });
+    players[1].main.forEach(function(cardID, sequence) {
+        console.log(cardID, sequence);
+        ocgapi.new_card(pduel, cardID, 1, 1, LOCATION_DECK, 0, POS_FACEDOWN_DEFENSE);
+    });
     console.log(4);
     players[1].extra.forEach(function(cardID, sequence) {
         ocgapi.new_card(pduel, cardID, 1, 1, LOCATION_EXTRA, 0, POS_FACEDOWN_DEFENSE);
@@ -417,6 +473,8 @@ function duel(settings, players) {
         setTimeout(function() {
             game.refreshExtra(0);
             game.refreshExtra(1);
+            game.refreshMzone(0);
+            game.refreshMzone(1);
             ocgapi.start_duel(pduel, settings.priority);
             mainProcess(pduel, game);
         }, 1000);
@@ -424,6 +482,5 @@ function duel(settings, players) {
     }, 1000);
 
 }
-
 
 module.exports.duel = duel;
