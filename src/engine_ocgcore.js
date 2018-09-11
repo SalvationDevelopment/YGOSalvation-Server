@@ -15,11 +15,14 @@ const sql = require('sql.js'),
     POS_FACEDOWN_DEFENSE = 0x8,
     LOCATION_DECK = 0x01,
     LOCATION_EXTRA = 0x40,
+    LOCATION_HAND = 0x02,
+    charArray = arrayBuf(ref.types.char),
     bytePointer = ref.refType(ref.types.byte),
     charPointer = ref.refType(ref.types.char),
     intPointer = ref.refType(ref.types.int),
     uint32Pointer = ref.refType(ref.types.uint32),
     voidPointer = ref.refType(ref.types.void),
+    btyeArray = arrayBuf(ref.types.byte),
     cardData = struct({
         code: ref.types.uint32,
         alias: ref.types.uint32,
@@ -35,9 +38,10 @@ const sql = require('sql.js'),
         link: ref.types.uint32
     }),
     cardDataPointer = ref.refType(cardData),
+
     card_reader_function = ffi.Function('uint32', ['uint32', cardDataPointer]),
     responsei_function = ffi.Function('int32', [voidPointer, 'uint32']),
-    script_reader_function = ffi.Function('string', ['string', intPointer]),
+    script_reader_function = ffi.Function('byte*', ['string', 'uint32*']),
     message_handler_function = ffi.Function('uint32', [voidPointer, 'uint32']),
     queue = require('function-queue'),
     enums = require('./translate_ygopro_enums.js'),
@@ -50,7 +54,8 @@ const sql = require('sql.js'),
 
 
 var scripts = {},
-    scriptsFolder = '../../ygopro-scripts';
+    scriptsFolder = '../../ygopro-scripts',
+    prescriptsFolder = '../../ygopro-scripts';
 
 
 function extention(filename) {
@@ -63,17 +68,17 @@ filelist.forEach(function(filename) {
     if (extention(filename) === 'lua') {
         //scripts['./expansions/script/' + filename] = fs.readFileSync(scriptsFolder + '/' + filename);
     }
+
 });
 console.log('Loaded Scripts');
 
-
 function scriptReader(scriptname, length) {
     var file = scriptsFolder + '/' + scriptname.substr(20);
-    console.log(scriptname, file);
     if (fs.existsSync(file)) {
-        var script = (fs.readFileSync(file));
-        ref.set(length, 0, script.length);
-        return script;
+        var script = fs.readFileSync(file);
+
+        ref.set(length, 0, script.byteLength);
+        return Buffer(script);
     } else {
         return Buffer.alloc(0);
 
@@ -111,7 +116,7 @@ function card_reader(code, buffer) {
         rscale: (dbEntry.level >> 16) & 0xff,
         link: (hasType(dbEntry, 0x4000000)) ? dbEntry.defense : 0
     };
-    buffer.copy(cardData(card)['ref.buffer']);
+    ref.set(buffer, 0, (cardData(card)));
     return code;
 }
 
@@ -131,7 +136,7 @@ module.exports.configurations = {
 
 
 var pduelPointer = (ref.refType('string')), ///really need to figure out the dimensions of this pointer. "pointer" isnt gonna cut it.
-    ocgapi = ffi.Library('C://salvation//ygopro//bin//debug/ocgcore.dll', {
+    ocgapi = ffi.Library('C:/salvation/ygopro/bin/release/ocgcore.dll', {
         'set_script_reader': ['void', [script_reader_function]],
         'set_card_reader': ['void', [card_reader_function]],
         'set_message_handler': ['void', [message_handler_function]],
@@ -146,7 +151,7 @@ var pduelPointer = (ref.refType('string')), ///really need to figure out the dim
         'new_tag_card': ['void', [pduelPointer, 'uint32', 'uint8', 'uint8']],
         'query_card': ['int32', [pduelPointer, 'uint8', 'uint8', 'int32', bytePointer, 'int32']],
         'query_field_count': ['int32', [pduelPointer, 'uint8', 'uint8']],
-        'query_field_card': ['int32', [pduelPointer, 'uint8', 'uint8', 'int32', bytePointer, 'int32']],
+        'query_field_card': ['int32', [pduelPointer, 'uint8', 'uint8', 'int32', (charArray), 'int32']],
         'query_field_info': ['int32', [pduelPointer, bytePointer]],
         'set_responsei': ['void', [pduelPointer, 'int32']],
         'set_responseb': ['void', [pduelPointer, bytePointer]],
@@ -196,7 +201,7 @@ function seed() {
 function GameBoard(playerConnection, slot, masterRule) {
     const board = manualControlEngine(function(view, stack, callback) {
         try {
-            if (!playerConnection.externalClient) {
+            if (playerConnection.externalClient) {
                 playerConnection.write((view[slot]));
             }
         } catch (error) {
@@ -220,7 +225,7 @@ function Responser(game, player) {
         const resb = Buffer.alloc(64);
         resb.copy(data);
         player.lock = false;
-        ocgapi.set_responseb(ocgapi.pduel, resb);
+        ocgapi.set_responseb(game.pduel, resb);
     }
 
     return {
@@ -243,13 +248,14 @@ function playerInstance(playerConnection, slot, game, settings) {
                 readposition: 0
             };
         packet.command = enums.STOC[message[0]];
+        console.log(packet.command, message);
         task.push(translateYGOProAPI(gameBoard, packet));
         return task;
     }
 
     function preformGameAction(gameAction) {
         var output = boardController(gameBoard, slot, gameAction, tcpConnection, playerConnection);
-        if (!playerConnection.externalClient) {
+        if (playerConnection.externalClient) {
             playerConnection.write(output);
         }
     }
@@ -286,29 +292,78 @@ function playerInstance(playerConnection, slot, game, settings) {
 
 
 
-function mainProcess(game, players) {
+function makeGame(pduel, settings, players) {
+    function sendToPlayer(player, proto, buffer, length) {
+        var stoc = new Buffer([proto]),
+            frameSize = new Buffer(2);
+        frameSize.writeUInt16LE(length + 1, 0);
+        var message = Buffer.concat([frameSize, stoc, Buffer.from(buffer, 0, length + 1)]);
+        players[player](message);
+    }
+
+    function sendStartInfo(player) {
+        const startbuf = Buffer.alloc(18);
+        startbuf[0] = 4;
+        startbuf[1] = 0;
+        startbuf.writeUInt32LE(settings.start_lp, 2);
+        startbuf.writeUInt32LE(settings.start_lp, 6);
+        startbuf.writeUInt16LE(ocgapi.query_field_count(pduel, 0, 0x1), 10);
+        startbuf.writeUInt16LE(ocgapi.query_field_count(pduel, 0, 0x40), 12);
+        startbuf.writeUInt16LE(ocgapi.query_field_count(pduel, 1, 0x1), 14);
+        startbuf.writeUInt16LE(ocgapi.query_field_count(pduel, 1, 0x40), 16);
+        sendToPlayer(player, enums.STOC.enums.STOC_GAME_MSG, startbuf, 18);
+    }
+
+    function refreshExtra(player, flag, use_cache) {
+        const qbuf = Buffer.alloc(0x2000),
+            header = Buffer.alloc(3),
+            proto = enums.STOC.enums.STOC_GAME_MSG,
+            len = ocgapi.query_field_card(pduel, player, LOCATION_EXTRA, flag, qbuf, use_cache);
+        flag = flag || 0;
+        use_cache = use_cache || 0;
+        header[0] = 0x6;
+        header[1] = player;
+        header[2] = LOCATION_EXTRA;
+        sendToPlayer(player, proto, Buffer.concat([header, qbuf], len + 3), len + 3);
+        return len;
+    }
+    return {
+        sendStartInfo,
+        refreshExtra,
+        pduel
+    };
+}
+
+
+function mainProcess(pduel, game) {
+
+
+
     var engineBuffer = Buffer.alloc(0x1000),
         engFlag = 0,
         engLen = 0,
         stop = 0,
         result;
+
     while (!stop) {
 
         if (engFlag === 2) {
             break;
         }
-        result = ocgapi.process(ocgapi.pduel);
+        result = ocgapi.process(game.pduel);
         engLen = result & 0xffff;
         engFlag = result >> 16;
         if (engLen > 0) {
-            ocgapi.get_message(ocgapi.pduel, engineBuffer);
+            ocgapi.get_message(game.pduel, engineBuffer);
         }
-        stop = analyze(engineBuffer, engLen, players, game);
+        stop = analyze(engineBuffer, engLen, game);
+
     }
     if (stop === 2) {
-        duelEndProcedure(players);
+        duelEndProcedure(game);
     }
 }
+
 
 function duel(settings, players) {
     var pduel;
@@ -328,33 +383,46 @@ function duel(settings, players) {
     ocgapi.set_message_handler(messagHandler); //bad
     ocgapi.preload_script(pduel, './expansions/script/constant.lua', 0x10000000);
     ocgapi.preload_script(pduel, './expansions/script/utility.lua', 0x10000000);
-    //ocgapi.set_responsei(pduel, console.log);
+    ocgapi.set_responsei(pduel, console.log);
 
     ocgapi.set_player_info(pduel, 0, settings.start_lp, settings.start_hand_count, settings.draw_count);
     ocgapi.set_player_info(pduel, 1, settings.start_lp, settings.start_hand_count, settings.draw_count);
 
     console.log(1);
     players[0].main.forEach(function(cardID, sequence) {
-        ocgapi.new_card(pduel, cardID, 0, 0, LOCATION_EXTRA, 0, POS_FACEDOWN_DEFENSE);
+        ocgapi.new_card(pduel, cardID, 0, 0, LOCATION_DECK, 0, POS_FACEDOWN_DEFENSE);
     });
     console.log(2);
     players[0].extra.forEach(function(cardID, sequence) {
-        ocgapi.new_card(pduel, cardID, 0, 0, LOCATION_EXTRA, sequence, POS_FACEDOWN_DEFENSE);
+        ocgapi.new_card(pduel, cardID, 0, 0, LOCATION_EXTRA, 0, POS_FACEDOWN_DEFENSE);
     });
     console.log(3);
-    players[1].main.forEach(function(cardID, sequence) {
-        ocgapi.new_card(pduel, cardID, 1, 1, LOCATION_DECK, 0, POS_FACEDOWN_DEFENSE);
-    });
+    // players[1].main.forEach(function(cardID, sequence) {
+    //     ocgapi.new_card(pduel, cardID, 1, 1, LOCATION_DECK, 0, POS_FACEDOWN_DEFENSE);
+    // });
     console.log(4);
     players[1].extra.forEach(function(cardID, sequence) {
         ocgapi.new_card(pduel, cardID, 1, 1, LOCATION_EXTRA, 0, POS_FACEDOWN_DEFENSE);
     });
     //send start msg
-    ocgapi.start_duel(pduel, settings.priority);
-    ocgapi.pduel = pduel;
-    mainProcess({ pduel }, players.map(function(playerConnection, slot) {
-        return playerInstance(playerConnection, slot, { pduel }, settings);
-    }));
+    console.log('all cards loaded');
+
+    setTimeout(function() {
+        var connections = players.map(function(playerConnection, slot) {
+            return playerInstance(playerConnection, slot, { pduel }, settings);
+        });
+        var game = makeGame(pduel, settings, connections);
+        game.sendStartInfo(0);
+        game.sendStartInfo(1);
+        setTimeout(function() {
+            game.refreshExtra(0);
+            game.refreshExtra(1);
+            ocgapi.start_duel(pduel, settings.priority);
+            mainProcess(pduel, game);
+        }, 1000);
+
+    }, 1000);
+
 }
 
 
