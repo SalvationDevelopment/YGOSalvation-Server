@@ -466,9 +466,11 @@ function makeCheck(target) {
     var destination = target + 'Check',
         value;
     enums[destination] = {};
+    enums[target].enums = {};
     for (value in enums[target]) {
-        if (enums[target].hasOwnProperty(value)) {
+        if (enums[target].hasOwnProperty(value) && typeof value === 'string') {
             enums[destination][value] = false;
+            enums[target].enums[enums[target][value]] = parseInt(value);
         }
     }
 }

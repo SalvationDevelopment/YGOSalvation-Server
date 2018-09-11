@@ -747,6 +747,7 @@ function msg_update_data(message, BufferIO, gameBoard) {
     message.player = BufferIO.readInt8();
     message.location = enums.locations[BufferIO.readInt8()];
     message.cards = getFieldCards(gameBoard, message.player, message.location, BufferIO);
+
 }
 
 function msg_update_card(message, BufferIO, gameBoard) {
@@ -1128,7 +1129,8 @@ function stoc_game_msg(packet, message, gameBoard) {
     const BufferIO = new BufferStreamReader(packet.message);
 
     message.command = enums.STOC.STOC_GAME_MSG[BufferIO.readInt8()];
-    translator[message.command](message, BufferIO);
+    translator[message.command](message, BufferIO, gameBoard);
+    console.log(message);
     return message;
 }
 

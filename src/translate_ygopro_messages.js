@@ -375,9 +375,9 @@ function recieveSTOC(gameBoard, packet) {
         STOC_HS_WATCH_CHANGE: stoc_hs_watch_change
     };
     try {
-        return translator[packet.command](packet);
+        return translator[packet.command](packet, {}, gameBoard);
     } catch (error) {
-        console.log(`${packet.command} is not routed`);
+        console.log(`${packet.command} is not routed`, error);
         return stoc_unknown(packet);
     }
 }

@@ -2,11 +2,6 @@ const enums = require('./translate_ygopro_enums.js'),
     makeCard = require('./model_ygopro_card.js'),
     BufferStreamReader = require('./model_stream_reader');
 
-function sendBufferToPlayer(player, messageType, buffer, length) {
-    player.write(messageType);
-    player.write(length);
-    player.write(buffer);
-}
 
 let translator = {};
 
@@ -1140,7 +1135,7 @@ translator = {
     MSG_CONFIRM_EXTRATOP: msg_confirm_extratop
 };
 
-function analyze(engineBuffer, len, players, game) {
+function analyze(engineBuffer, len, game) {
 
     // function refreshMzone(player, flag, use_cache) {
     //     const query_buffer = Buffer.alloc(0x2000);
