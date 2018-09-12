@@ -298,13 +298,22 @@ function playerInstance(playerConnection, slot, game, settings) {
 
 function makeGame(pduel, settings, players) {
     let lastMessage = new Buffer(''),
-        last_response = -1;
+        last_response = -1,
+        time_limit = settings.time_limit;
 
+    gameTick();
 
+    function gameTick() {
+        time_limit -= 1;
+        if (time_limit > 0) {
+            setTimeout(gameTick, 1000);
+        }
+    }
 
     function sendBufferToPlayer(player, proto, buffer, length) {
         var stoc = new Buffer([proto]),
             frameSize = new Buffer(2);
+        length = length || buffer.length;
         frameSize.writeUInt16LE(length + 1, 0);
         var message = Buffer.concat([frameSize, stoc, Buffer.from(buffer, 0, length + 1)]);
         lastMessage = message;
@@ -316,10 +325,19 @@ function makeGame(pduel, settings, players) {
     }
 
     function waitForResponse(player) {
-        last_response = player;
-        const MSG_WAITING = 3,
+        const STOC_TimeLimit = struct({
+                player: ref.types.char,
+                left_time: ref.types.short
+            }),
+            sctl = new STOC_TimeLimit(),
+            MSG_WAITING = 3,
             msg = new Buffer([MSG_WAITING]);
-        sendBufferToPlayer(players[1 - player], enums.STOC.enums.STOC_GAME_MSG, msg, msg.length);
+
+        last_response = player;
+        sendBufferToPlayer(players[1 - player], enums.STOC.enums.STOC_GAME_MSG, msg);
+        sctl.player = player;
+        sctl.left_time = time_limit;
+        sendBufferToPlayer(0, enums.STOC.enums.STOC_TIME_LIMIT, sctl);
 
     }
 
