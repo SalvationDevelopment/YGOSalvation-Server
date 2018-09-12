@@ -112,12 +112,12 @@ function getIdleSet(BufferIO, hasDescriptions) {
     return cards;
 }
 
-function msg_retry(message, BufferIO) {
+function msg_retry(message, BufferIO, game) {
     message.desc = 'Error Occurs.';
     return 1;
 }
 
-function msg_start(message, BufferIO) {
+function msg_start(message, BufferIO, game) {
     message.playertype = BufferIO.readInt8();
     message.lifepoints1 = BufferIO.readInt32();
     message.lifepoints2 = BufferIO.readInt32();
@@ -127,28 +127,28 @@ function msg_start(message, BufferIO) {
     message.player2extrasize = BufferIO.readInt16();
 }
 
-function msg_hint(message, BufferIO) {
+function msg_hint(message, BufferIO, game) {
     message.command = enums.STOC.STOC_GAME_MSG.MSG_HINT[BufferIO.readInt8()];
     message.player = BufferIO.readInt8(); /* defunct in the code */
     message.data = BufferIO.readInt32();
 }
 
-function msg_new_turn(message, BufferIO) {
+function msg_new_turn(message, BufferIO, game) {
     message.player = BufferIO.readInt8();
 }
 
-function msg_win(message, BufferIO) {
+function msg_win(message, BufferIO, game) {
     message.win = BufferIO.readInt8();
     //need to double check for more variables
     return 2;
 }
 
-function msg_new_phase(message, BufferIO) {
+function msg_new_phase(message, BufferIO, game) {
     message.phase = BufferIO.readInt8();
     message.gui_phase = enums.phase[message.phase];
 }
 
-function msg_draw(message, BufferIO) {
+function msg_draw(message, BufferIO, game) {
     message.player = BufferIO.readInt8();
     message.count = BufferIO.readInt8();
     message.cards = [];
@@ -159,11 +159,11 @@ function msg_draw(message, BufferIO) {
     }
 }
 
-function msg_shuffle_deck(message, BufferIO) {
+function msg_shuffle_deck(message, BufferIO, game) {
     message.player = BufferIO.readInt8();
 }
 
-function msg_shuffle_hand(message, BufferIO) {
+function msg_shuffle_hand(message, BufferIO, game) {
     message.player = BufferIO.readInt8();
     BufferIO.readInt8();
     message.count = BufferIO.readInt8();
@@ -171,14 +171,14 @@ function msg_shuffle_hand(message, BufferIO) {
     // readInt32 off.
 }
 
-function msg_shuffle_extra(message, BufferIO) {
+function msg_shuffle_extra(message, BufferIO, game) {
     message.player = BufferIO.readInt8();
     message.count = BufferIO.readInt8();
     //for some number that cant be determined here because the count was not sent (getting it from the state like an idiot)
     // readInt32 off.
 }
 
-function msg_chaining(message, BufferIO) {
+function msg_chaining(message, BufferIO, game) {
     message.id = BufferIO.readInt32();
     message.pc = {
         player: BufferIO.readInt8(),
@@ -195,34 +195,34 @@ function msg_chaining(message, BufferIO) {
     message.ct = BufferIO.readInt8(); // defunct in code
 }
 
-function msg_chained(message, BufferIO) {
+function msg_chained(message, BufferIO, game) {
     message.chain_link = BufferIO.readInt8();
 }
 
-function msg_chain_solving(message, BufferIO) {
+function msg_chain_solving(message, BufferIO, game) {
     message.chain_link = BufferIO.readInt8();
 }
 
-function msg_chain_solved(message, BufferIO) {
+function msg_chain_solved(message, BufferIO, game) {
     message.ct = BufferIO.readInt8(); // defunct in the code
 }
 
 
-function msg_chain_negated(message, BufferIO) {
+function msg_chain_negated(message, BufferIO, game) {
     message.chain_link = BufferIO.readInt8();
 }
 
-function msg_chain_disabled(message, BufferIO) {
+function msg_chain_disabled(message, BufferIO, game) {
     message.chain_link = BufferIO.readInt8();
 }
 
-function msg_card_selected(message, BufferIO) {
+function msg_card_selected(message, BufferIO, game) {
     message.player = BufferIO.readInt8();
     message.count = BufferIO.readInt8();
 
 }
 
-function msg_random_selected(message, BufferIO) {
+function msg_random_selected(message, BufferIO, game) {
     message.player = BufferIO.readInt8();
     message.count = BufferIO.readInt8();
     message.selections = [];
@@ -236,7 +236,7 @@ function msg_random_selected(message, BufferIO) {
     }
 }
 
-function msg_become_target(message, BufferIO) {
+function msg_become_target(message, BufferIO, game) {
     message.count = BufferIO.readInt8();
     message.selections = [];
     for (let i = 0; i < message.count; ++i) {
@@ -249,31 +249,31 @@ function msg_become_target(message, BufferIO) {
     }
 }
 
-function msg_pay_lpcost(message, BufferIO) {
+function msg_pay_lpcost(message, BufferIO, game) {
     message.player = BufferIO.readInt8();
     message.lp = BufferIO.readInt32();
     message.multiplier = -1;
 }
 
-function msg_damage(message, BufferIO) {
+function msg_damage(message, BufferIO, game) {
     message.player = BufferIO.readInt8();
     message.lp = BufferIO.readInt32();
     message.multiplier = -1;
 }
 
-function msg_recover(message, BufferIO) {
+function msg_recover(message, BufferIO, game) {
     message.player = BufferIO.readInt8();
     message.lp = BufferIO.readInt32();
     message.multiplier = 1;
 }
 
-function msg_lpupdate(message, BufferIO) {
+function msg_lpupdate(message, BufferIO, game) {
     message.player = BufferIO.readInt8();
     message.lp = BufferIO.readInt32();
     message.multiplier = 1;
 }
 
-function msg_summoning(message, BufferIO) {
+function msg_summoning(message, BufferIO, game) {
     message.id = BufferIO.readInt32();
     message.player = BufferIO.readInt8(); //defunct in code
     message.location = enums.locations[BufferIO.readInt8()]; //defunct in code
@@ -281,7 +281,7 @@ function msg_summoning(message, BufferIO) {
     message.position = enums.positions[BufferIO.readInt8()];
 }
 
-function msg_equip(message, BufferIO) {
+function msg_equip(message, BufferIO, game) {
     message.c1 = BufferIO.readInt8();
     message.l1 = BufferIO.readInt8();
     message.s1 = BufferIO.readInt8();
@@ -292,7 +292,7 @@ function msg_equip(message, BufferIO) {
     BufferIO.readInt8();
 }
 
-function msg_unequip(message, BufferIO) {
+function msg_unequip(message, BufferIO, game) {
     message.c1 = BufferIO.readInt8();
     message.l1 = BufferIO.readInt8();
     message.s1 = BufferIO.readInt8();
@@ -303,7 +303,7 @@ function msg_unequip(message, BufferIO) {
     BufferIO.readInt8();
 }
 
-function msg_card_target(message, BufferIO) {
+function msg_card_target(message, BufferIO, game) {
     message.c1 = BufferIO.readInt8();
     message.l1 = BufferIO.readInt8();
     message.s1 = BufferIO.readInt8();
@@ -314,7 +314,7 @@ function msg_card_target(message, BufferIO) {
     BufferIO.readInt8();
 }
 
-function msg_cancel_target(message, BufferIO) {
+function msg_cancel_target(message, BufferIO, game) {
     message.c1 = BufferIO.readInt8();
     message.l1 = BufferIO.readInt8();
     message.s1 = BufferIO.readInt8();
@@ -325,7 +325,7 @@ function msg_cancel_target(message, BufferIO) {
     BufferIO.readInt8();
 }
 
-function msg_add_counter(message, BufferIO) {
+function msg_add_counter(message, BufferIO, game) {
     message.type = BufferIO.readInt16();
     message.player = BufferIO.readInt8();
     message.location = enums.locations[BufferIO.readInt8()];
@@ -333,7 +333,7 @@ function msg_add_counter(message, BufferIO) {
     message.count = BufferIO.readInt8();
 }
 
-function msg_remove_conuter(message, BufferIO) {
+function msg_remove_conuter(message, BufferIO, game) {
     message.type = BufferIO.readInt16();
     message.player = BufferIO.readInt8();
     message.location = enums.locations[BufferIO.readInt8()];
@@ -341,7 +341,7 @@ function msg_remove_conuter(message, BufferIO) {
     message.count = BufferIO.readInt8();
 }
 
-function msg_attack(message, BufferIO) {
+function msg_attack(message, BufferIO, game) {
     message.attacker = {
         player: BufferIO.readInt8(),
         location: enums.locations[BufferIO.readInt8()],
@@ -356,7 +356,7 @@ function msg_attack(message, BufferIO) {
     BufferIO.readInt8();
 }
 
-function msg_battle(message, BufferIO) {
+function msg_battle(message, BufferIO, game) {
     message.ca = BufferIO.readInt8();
     message.la = BufferIO.readInt8();
     message.sa = BufferIO.readInt8();
@@ -379,7 +379,7 @@ function msg_missed_effect(BufferIO, message) {
     message.id = BufferIO.readInt32();
 }
 
-function msg_toss_dice(message, BufferIO) {
+function msg_toss_dice(message, BufferIO, game) {
     message.player = BufferIO.readInt8();
     message.count = BufferIO.readInt8();
     message.results = [];
@@ -388,18 +388,18 @@ function msg_toss_dice(message, BufferIO) {
     }
 }
 
-function msg_rock_paper_scissors(message, BufferIO) {
+function msg_rock_paper_scissors(message, BufferIO, game) {
     message.player = BufferIO.readInt8();
     return 1;
 }
 
-function msg_hand_res(message, BufferIO) {
+function msg_hand_res(message, BufferIO, game) {
     message.res = BufferIO.readInt8();
     message.res1 = (message.res & 0x3) - 1;
     message.res2 = ((message.res >> 2) & 0x3) - 1;
 }
 
-function msg_toss_coin(message, BufferIO) {
+function msg_toss_coin(message, BufferIO, game) {
     message.player = BufferIO.readInt8();
     message.count = BufferIO.readInt8();
     message.results = [];
@@ -408,27 +408,27 @@ function msg_toss_coin(message, BufferIO) {
     }
 }
 
-function msg_announce_race(message, BufferIO) {
+function msg_announce_race(message, BufferIO, game) {
     message.player = BufferIO.readInt8();
     message.announce_count = BufferIO.readInt8();
     message.avaliable = BufferIO.readInt32();
     return 1;
 }
 
-function msg_announce_attrib(message, BufferIO) {
+function msg_announce_attrib(message, BufferIO, game) {
     message.player = BufferIO.readInt8();
     message.announce_count = BufferIO.readInt8();
     message.avaliable = BufferIO.readInt32();
     return 1;
 }
 
-function msg_announce_card(message, BufferIO) {
+function msg_announce_card(message, BufferIO, game) {
     message.player = BufferIO.readInt8();
     message.declarable_type = BufferIO.readInt32();
     return 1;
 }
 
-function msg_announce_number(message, BufferIO) {
+function msg_announce_number(message, BufferIO, game) {
     message.player = BufferIO.readInt8();
     message.announce_count = BufferIO.readInt8();
     message.values = [];
@@ -437,7 +437,7 @@ function msg_announce_number(message, BufferIO) {
     }
 }
 
-function msg_announc_card_filter(message, BufferIO) {
+function msg_announc_card_filter(message, BufferIO, game) {
     message.player = BufferIO.readInt8();
     message.count = BufferIO.readInt8();
     message.opcodes = [];
@@ -447,7 +447,7 @@ function msg_announc_card_filter(message, BufferIO) {
     return 1;
 }
 
-function msg_card_hint(message, BufferIO) {
+function msg_card_hint(message, BufferIO, game) {
     message.controller = BufferIO.readInt8();
     message.location = BufferIO.readInt8();
     message.sequence = BufferIO.readInt8();
@@ -456,17 +456,17 @@ function msg_card_hint(message, BufferIO) {
     message.value = BufferIO.readInt32();
 }
 
-function msg_player_hint(message, BufferIO) {
+function msg_player_hint(message, BufferIO, game) {
     message.player = BufferIO.readInt8();
     message.chtype = BufferIO.readInt8();
     message.value = BufferIO.readInt32();
 }
 
-function msg_match_kill(message, BufferIO) {
+function msg_match_kill(message, BufferIO, game) {
     message.match_kill = BufferIO.readInt32();
 }
 
-function msg_select_idlecmd(message, BufferIO) {
+function msg_select_idlecmd(message, BufferIO, game) {
     message.selecting_player = BufferIO.readInt8();
     message.summonable_cards = getIdleSet(BufferIO);
     message.spsummonable_cards = getIdleSet(BufferIO);
@@ -480,7 +480,7 @@ function msg_select_idlecmd(message, BufferIO) {
     return 1;
 }
 
-function msg_move(message, BufferIO) {
+function msg_move(message, BufferIO, game) {
     message.id = BufferIO.readInt32();
     message.pc = BufferIO.readInt8(); // original controller
     message.pl = enums.locations[BufferIO.readInt8()]; // original cLocation
@@ -493,7 +493,7 @@ function msg_move(message, BufferIO) {
     message.reason = BufferIO.readInt32();
 }
 
-function msg_pos_change(message, BufferIO) {
+function msg_pos_change(message, BufferIO, game) {
     message.id = BufferIO.readInt32();
     message.player = BufferIO.readInt8(); // current controller
     message.location = enums.locations[BufferIO.readInt8()]; // current cLocation
@@ -502,7 +502,7 @@ function msg_pos_change(message, BufferIO) {
     message.position = enums.positions[BufferIO.readInt8()];
 }
 
-function msg_set(message, BufferIO) {
+function msg_set(message, BufferIO, game) {
     message.id = BufferIO.readInt32();
     message.player = BufferIO.readInt8(); // current controller
     message.location = enums.locations[BufferIO.readInt8()]; // current cLocation
@@ -510,7 +510,7 @@ function msg_set(message, BufferIO) {
     message.position = enums.positions[BufferIO.readInt8()];
 }
 
-function msg_swap(message, BufferIO) {
+function msg_swap(message, BufferIO, game) {
     message.id1 = BufferIO.readInt8(); // defunct in the code
     message.c1 = BufferIO.readInt8();
     message.l1 = BufferIO.readInt8();
@@ -523,12 +523,12 @@ function msg_swap(message, BufferIO) {
     message.p2 = BufferIO.readInt8();
 }
 
-function msg_field_disabled(message, BufferIO) {
+function msg_field_disabled(message, BufferIO, game) {
     message.disabled = BufferIO.readInt32();
     message.ifisfirst_disabled = (message.disabled >> 16) | (message.disabled << 16);
 }
 
-function msg_spsummoning(message, BufferIO) {
+function msg_spsummoning(message, BufferIO, game) {
     message.id = BufferIO.readInt32();
     message.player = BufferIO.readInt8();
     message.location = enums.locations[BufferIO.readInt8()];
@@ -536,7 +536,7 @@ function msg_spsummoning(message, BufferIO) {
     message.position = enums.positions[BufferIO.readInt8()];
 }
 
-function msg_flipsummoning(message, BufferIO) {
+function msg_flipsummoning(message, BufferIO, game) {
     message.id = BufferIO.readInt32();
     message.player = BufferIO.readInt8(); // current controller
     message.location = enums.locations[BufferIO.readInt8()]; // current cLocation
@@ -544,7 +544,7 @@ function msg_flipsummoning(message, BufferIO) {
     message.position = enums.positions[BufferIO.readInt8()];
 }
 
-function msg_select_battlecmd(message, BufferIO) {
+function msg_select_battlecmd(message, BufferIO, game) {
     message.selecting_player = BufferIO.readInt8(); // defunct in the code, just reading ahead.
     message.activatable_cards = getIdleSet(BufferIO, true);
     message.attackable_cards = [];
@@ -563,7 +563,7 @@ function msg_select_battlecmd(message, BufferIO) {
     return 1;
 }
 
-function msg_select_effectyn(message, BufferIO) {
+function msg_select_effectyn(message, BufferIO, game) {
     message.selecting_player = BufferIO.readInt8();
     message.id = BufferIO.readInt32();
     message.location = BufferIO.readInt8();
@@ -573,13 +573,13 @@ function msg_select_effectyn(message, BufferIO) {
     return 1;
 }
 
-function msg_select_yesno(message, BufferIO) {
+function msg_select_yesno(message, BufferIO, game) {
     message.selecting_player = BufferIO.readInt8();
     message.desc = BufferIO.readInt32();
     return 1;
 }
 
-function msg_select_option(message, BufferIO) {
+function msg_select_option(message, BufferIO, game) {
     message.selecting_player = BufferIO.readInt8();
     message.count = BufferIO.readInt8();
     message.select_options = [];
@@ -589,7 +589,7 @@ function msg_select_option(message, BufferIO) {
     return 1;
 }
 
-function msg_select_card(message, BufferIO) {
+function msg_select_card(message, BufferIO, game) {
     message.selecting_player = BufferIO.readInt8();
     message.select_cancelable = BufferIO.readInt8();
     message.select_min = BufferIO.readInt8();
@@ -608,7 +608,7 @@ function msg_select_card(message, BufferIO) {
     return 1;
 }
 
-function msg_select_chain(message, BufferIO) {
+function msg_select_chain(message, BufferIO, game) {
     message.selecting_player = BufferIO.readInt8();
     message.count = BufferIO.readInt8();
     message.specount = BufferIO.readInt8();
@@ -630,7 +630,7 @@ function msg_select_chain(message, BufferIO) {
     return 1;
 }
 
-function msg_select_place(message, BufferIO) {
+function msg_select_place(message, BufferIO, game) {
     message.selecting_player = BufferIO.readInt8();
     message.select_min = BufferIO.readInt8();
     message.selectable_field = ~BufferIO.readInt32(); // mind the bitwise modifier.
@@ -639,7 +639,7 @@ function msg_select_place(message, BufferIO) {
     return 1;
 }
 
-function msg_select_position(message, BufferIO) {
+function msg_select_position(message, BufferIO, game) {
     message.selecting_player = BufferIO.readInt8();
     message.id = BufferIO.readInt32();
     message.positionsMask = BufferIO.readInt8();
@@ -659,7 +659,7 @@ function msg_select_position(message, BufferIO) {
     return 1;
 }
 
-function msg_select_tribute(message, BufferIO) {
+function msg_select_tribute(message, BufferIO, game) {
     message.selecting_player = BufferIO.readInt8();
     message.select_cancelable = BufferIO.readInt8() ? true : false;
     message.select_min = BufferIO.readInt8();
@@ -683,7 +683,7 @@ function msg_select_counter() {
     return 1;
 }
 
-function msg_soft_chain(message, BufferIO) {
+function msg_soft_chain(message, BufferIO, game) {
     message.player = BufferIO.readInt8();
     message.count = BufferIO.readInt8();
     message.selectable_targets = [];
@@ -697,7 +697,7 @@ function msg_soft_chain(message, BufferIO) {
     }
 }
 
-function msg_select_disfield(message, BufferIO) {
+function msg_select_disfield(message, BufferIO, game) {
     message.selecting_player = BufferIO.readInt8();
     message.select_min = BufferIO.readInt8();
     message.selectable_field = ~BufferIO.readInt32(); // mind the bitwise modifier.
@@ -705,7 +705,7 @@ function msg_select_disfield(message, BufferIO) {
     return 1;
 }
 
-function msg_sort_card(message, BufferIO) {
+function msg_sort_card(message, BufferIO, game) {
     message.player = BufferIO.readInt8();
     message.count = BufferIO.readInt8();
     message.selectable_targets = [];
@@ -720,7 +720,7 @@ function msg_sort_card(message, BufferIO) {
     return 1;
 }
 
-function msg_confirm_decktop(message, BufferIO) {
+function msg_confirm_decktop(message, BufferIO, game) {
     message.player = BufferIO.readInt8();
     message.count = BufferIO.readInt8();
     message.cards = [];
@@ -730,7 +730,7 @@ function msg_confirm_decktop(message, BufferIO) {
     }
 }
 
-function msg_confirm_extratop(message, BufferIO) {
+function msg_confirm_extratop(message, BufferIO, game) {
     message.player = BufferIO.readInt8();
     message.count = BufferIO.readInt8();
     message.cards = [];
@@ -740,7 +740,7 @@ function msg_confirm_extratop(message, BufferIO) {
     }
 }
 
-function msg_confirm_cards(message, BufferIO) {
+function msg_confirm_cards(message, BufferIO, game) {
     message.player = BufferIO.readInt8();
     message.count = BufferIO.readInt8();
     for (let i = 0; i < message.count; ++i) {
@@ -752,35 +752,35 @@ function msg_confirm_cards(message, BufferIO) {
     }
 }
 
-function msg_update_data(message, BufferIO, gameBoard) {
+function msg_update_data(message, BufferIO, game, gameBoard) {
     message.player = BufferIO.readInt8();
     message.location = enums.locations[BufferIO.readInt8()];
     message.cards = getFieldCards(gameBoard, message.player, message.location, BufferIO);
 }
 
-function msg_update_card(message, BufferIO, gameBoard) {
+function msg_update_card(message, BufferIO, game, gameBoard) {
     message.player = BufferIO.readInt8();
     message.location = enums.locations[BufferIO.readInt8()];
     message.index = BufferIO.readInt8();
     message.card = makeCard(BufferIO, message.player, (gameBoard.masterRule === 4));
 }
 
-function msg_swap_grave_deck(message, BufferIO) {
+function msg_swap_grave_deck(message, BufferIO, game) {
     message.player = BufferIO.readInt8();
 }
 
-function msg_waiting(message, BufferIO) {
+function msg_waiting(message, BufferIO, game) {
     // Nothing happens, ui only.
 }
 
-function msg_deck_top(message, BufferIO) {
+function msg_deck_top(message, BufferIO, game) {
     message.player = BufferIO.readInt8();
     message.index = BufferIO.readInt8();
     message.id = BufferIO.readInt32();
     message.rev = ((message.id & 0x80000000) !== 0);
 }
 
-function msg_shuffle_set_card(message, BufferIO) {
+function msg_shuffle_set_card(message, BufferIO, game) {
     message.location = BufferIO.readInt8();
     message.count = BufferIO.readInt8();
     message.targets = [];
@@ -803,7 +803,7 @@ function msg_shuffle_set_card(message, BufferIO) {
     }
 }
 
-function msg_tag_swap(message, BufferIO) {
+function msg_tag_swap(message, BufferIO, game) {
     message.player = BufferIO.readInt8();
     message.mcount = BufferIO.readInt8();
     message.ecount = BufferIO.readInt8();
@@ -820,7 +820,7 @@ function msg_tag_swap(message, BufferIO) {
     }
 }
 
-function msg_reload_field(message, BufferIO) {
+function msg_reload_field(message, BufferIO, game) {
     message.lp = [];
     message.mzone = [];
     message.stzone = [];
@@ -907,12 +907,12 @@ function msg_request_deck() {
     unused();
 }
 
-function msg_sort_chain(message, BufferIO) {
-    msg_sort_chain(message, BufferIO);
+function msg_sort_chain(message, BufferIO, game) {
+    msg_sort_chain(message, BufferIO, game);
     return 1;
 }
 
-function msg_select_sum(message, BufferIO) {
+function msg_select_sum(message, BufferIO, game) {
     message.select_mode = BufferIO.readInt8();
     message.select_player = BufferIO.readInt8();
     message.select_sumval = BufferIO.readInt32();
@@ -945,7 +945,7 @@ function msg_select_sum(message, BufferIO) {
     return 1;
 }
 
-function msg_refresh_deck(message, BufferIO) {
+function msg_refresh_deck(message, BufferIO, game) {
     message.player = BufferIO.readInt8();
 }
 
@@ -953,63 +953,63 @@ function msg_swap_grace_deck() {
     unused();
 }
 
-function msg_reverse_deck(message, BufferIO) {
+function msg_reverse_deck(message, BufferIO, game) {
     user_interface_only();
 }
 
-function msg_summoned(message, BufferIO) {
+function msg_summoned(message, BufferIO, game) {
     user_interface_only();
 }
 
-function msg_spsummoned(message, BufferIO) {
+function msg_spsummoned(message, BufferIO, game) {
     user_interface_only();
 }
 
-function msg_flipsummoned(message, BufferIO) {
+function msg_flipsummoned(message, BufferIO, game) {
     user_interface_only();
 }
 
-function msg_chain_end(message, BufferIO) {
+function msg_chain_end(message, BufferIO, game) {
     user_interface_only();
 }
 
-function msg_attack_disabled(message, BufferIO) {
+function msg_attack_disabled(message, BufferIO, game) {
     user_interface_only();
 }
 
-function msg_damage_step_start(message, BufferIO) {
+function msg_damage_step_start(message, BufferIO, game) {
     unused();
 }
 
-function msg_damage_step_end(message, BufferIO) {
+function msg_damage_step_end(message, BufferIO, game) {
     unused();
 }
 
-function msg_be_chain_target(message, BufferIO) {
+function msg_be_chain_target(message, BufferIO, game) {
     unused();
 }
 
-function msg_create_relation(message, BufferIO) {
+function msg_create_relation(message, BufferIO, game) {
     unused();
 }
 
-function msg_release_relation(message, BufferIO) {
+function msg_release_relation(message, BufferIO, game) {
     unused();
 }
 
-function msg_ai_name(message, BufferIO) {
+function msg_ai_name(message, BufferIO, game) {
     unused();
 }
 
-function msg_show_hint(message, BufferIO) {
+function msg_show_hint(message, BufferIO, game) {
     unused();
 }
 
-function msg_custom_msg(message, BufferIO) {
+function msg_custom_msg(message, BufferIO, game) {
     unused();
 }
 
-function msg_select_unselect_card(message, BufferIO) {
+function msg_select_unselect_card(message, BufferIO, game) {
     message.selecting_player = BufferIO.readInt8();
     message.buttonok = Boolean(!!BufferIO.readInt8());
     message.select_cancelable = BufferIO.readInt8();
@@ -1137,14 +1137,6 @@ translator = {
 
 function analyze(engineBuffer, len, game) {
 
-    // function refreshMzone(player, flag, use_cache) {
-    //     const query_buffer = Buffer.alloc(0x2000);
-    //     query_buffer.writeInt8(enums.STOC.STOC_GAME_MSG.MSG_UPDATE_DATA);
-    //     query_buffer.writeInt8(player);
-    //     query_buffer.writeInt8(LOCATION_MZONE);
-    //     var len = game.query_field_card(game.pduel, player, LOCATION_MZONE, flag, query_buffer, use_cache);
-
-    // }
 
     let offset;
 
@@ -1159,8 +1151,6 @@ function analyze(engineBuffer, len, game) {
             console.log(engType);
             var message = {};
             const output = translator[engType](message, pbuf, offset);
-            console.log(message);
-
             if (output) {
                 return output;
             }

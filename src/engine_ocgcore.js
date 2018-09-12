@@ -459,6 +459,8 @@ function makeGame(pduel, settings, players) {
         sendStartInfo,
         refreshMzone,
         refreshExtra,
+        refreshHand,
+        refreshSingle,
         refreshGrave,
         pduel
     };
