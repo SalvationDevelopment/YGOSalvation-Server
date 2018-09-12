@@ -349,7 +349,7 @@ function makeGame(pduel, settings, players) {
         use_cache = use_cache || 0;
         header[0] = 0x6;
         header[1] = player;
-        header[2] = LOCATION_EXTRA;
+        header[2] = LOCATION_MZONE;
         var qlen = 0;
         while (qlen < len) {
             const clen = qbuf.readUInt32LE(qlen);
@@ -367,6 +367,61 @@ function makeGame(pduel, settings, players) {
         return len;
     }
 
+    function refreshSzone(player, flag, use_cache) {
+        const qbuf = Buffer.alloc(0x2000),
+            header = Buffer.alloc(3),
+            proto = enums.STOC.enums.STOC_GAME_MSG,
+            len = ocgapi.query_field_card(pduel, player, LOCATION_SZONE, flag, qbuf, use_cache);
+        flag = flag || 0;
+        use_cache = use_cache || 0;
+        header[0] = 0x6;
+        header[1] = player;
+        header[2] = LOCATION_SZONE;
+        var qlen = 0;
+        while (qlen < len) {
+            const clen = qbuf.readUInt32LE(qlen);
+            qlen += clen;
+            if (clen === 4) {
+                continue;
+            }
+            if (qbuf[11] & POS_FACEDOWN) {
+                qbuf[clen - 4] = 0;
+            }
+            qbuf += clen - 4;
+        }
+        sendToPlayer(player, proto, Buffer.concat([header, qbuf], len + 3), len + 3);
+        reSendToPlayer(1 - player);
+        return len;
+    }
+
+    function refreshHand(player, flag, use_cache) {
+        const qbuf = Buffer.alloc(0x2000),
+            header = Buffer.alloc(3),
+            proto = enums.STOC.enums.STOC_GAME_MSG,
+            len = ocgapi.query_field_card(pduel, player, LOCATION_HAND, flag, qbuf, use_cache);
+        flag = flag || 0;
+        use_cache = use_cache || 0;
+        header[0] = 0x6;
+        header[1] = player;
+        header[2] = LOCATION_HAND;
+        var qlen = 0;
+        while (qlen < len) {
+            const clen = qbuf.readUInt32LE(qlen);
+            qlen += clen;
+            if (clen === 4) {
+                continue;
+            }
+            if (qbuf[11] & POS_FACEDOWN) {
+                qbuf[clen - 4] = 0;
+            }
+            qbuf += clen - 4;
+        }
+        sendToPlayer(player, proto, Buffer.concat([header, qbuf], len + 3), len + 3);
+        reSendToPlayer(1 - player);
+        return len;
+    }
+
+
     function refreshGrave(player, flag, use_cache) {
         const qbuf = Buffer.alloc(0x2000),
             header = Buffer.alloc(3),
@@ -380,6 +435,26 @@ function makeGame(pduel, settings, players) {
         sendToPlayer(player, proto, Buffer.concat([header, qbuf], len + 3), len + 3);
         return len;
     }
+
+    function refreshSingle(player, location, sequence, flag) {
+        flag = flag || 0;
+        const qbuf = Buffer.alloc(0x2000),
+            header = Buffer.alloc(3),
+            proto = enums.STOC.enums.STOC_GAME_MSG,
+            len = ocgapi.query_field_card(pduel, player, location, sequence, flag, qbuf);
+
+        header[0] = 0x7;
+        header[1] = player;
+        header[2] = location;
+        header[3] = sequence;
+        sendToPlayer(player, proto, Buffer.concat([header, qbuf], len + 4), len + 4);
+        if ((location & 0x90) || ((location & 0x2c) && (qbuf[15] & 0x5))) {
+            reSendToPlayer(1 - player);
+        }
+        return len;
+    }
+
+
     return {
         sendStartInfo,
         refreshMzone,
