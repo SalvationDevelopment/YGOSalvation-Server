@@ -297,10 +297,12 @@ function playerInstance(playerConnection, slot, game, settings) {
 
 
 function makeGame(pduel, settings, players) {
-    let lastMessage = new Buffer('');
+    let lastMessage = new Buffer(''),
+        last_response = -1;
 
 
-    function sendToPlayer(player, proto, buffer, length) {
+
+    function sendBufferToPlayer(player, proto, buffer, length) {
         var stoc = new Buffer([proto]),
             frameSize = new Buffer(2);
         frameSize.writeUInt16LE(length + 1, 0);
@@ -313,6 +315,14 @@ function makeGame(pduel, settings, players) {
         players[player](lastMessage);
     }
 
+    function waitForResponse(player) {
+        last_response = player;
+        const MSG_WAITING = 3,
+            msg = new Buffer([MSG_WAITING]);
+        sendBufferToPlayer(players[1 - player], enums.STOC.enums.STOC_GAME_MSG, msg, msg.length);
+
+    }
+
     function sendStartInfo(player) {
         const startbuf = Buffer.alloc(18);
         startbuf[0] = 4;
@@ -323,7 +333,7 @@ function makeGame(pduel, settings, players) {
         startbuf.writeUInt16LE(ocgapi.query_field_count(pduel, 0, 0x40), 12);
         startbuf.writeUInt16LE(ocgapi.query_field_count(pduel, 1, 0x1), 14);
         startbuf.writeUInt16LE(ocgapi.query_field_count(pduel, 1, 0x40), 16);
-        sendToPlayer(player, enums.STOC.enums.STOC_GAME_MSG, startbuf, 18);
+        sendBufferToPlayer(player, enums.STOC.enums.STOC_GAME_MSG, startbuf, 18);
     }
 
     function refreshExtra(player, flag, use_cache) {
@@ -336,7 +346,7 @@ function makeGame(pduel, settings, players) {
         header[0] = 0x6;
         header[1] = player;
         header[2] = LOCATION_EXTRA;
-        sendToPlayer(player, proto, Buffer.concat([header, qbuf], len + 3), len + 3);
+        sendBufferToPlayer(player, proto, Buffer.concat([header, qbuf], len + 3), len + 3);
         return len;
     }
 
@@ -362,7 +372,7 @@ function makeGame(pduel, settings, players) {
             }
             qbuf += clen - 4;
         }
-        sendToPlayer(player, proto, Buffer.concat([header, qbuf], len + 3), len + 3);
+        sendBufferToPlayer(player, proto, Buffer.concat([header, qbuf], len + 3), len + 3);
         reSendToPlayer(1 - player);
         return len;
     }
@@ -389,7 +399,7 @@ function makeGame(pduel, settings, players) {
             }
             qbuf += clen - 4;
         }
-        sendToPlayer(player, proto, Buffer.concat([header, qbuf], len + 3), len + 3);
+        sendBufferToPlayer(player, proto, Buffer.concat([header, qbuf], len + 3), len + 3);
         reSendToPlayer(1 - player);
         return len;
     }
@@ -416,7 +426,7 @@ function makeGame(pduel, settings, players) {
             }
             qbuf += clen - 4;
         }
-        sendToPlayer(player, proto, Buffer.concat([header, qbuf], len + 3), len + 3);
+        sendBufferToPlayer(player, proto, Buffer.concat([header, qbuf], len + 3), len + 3);
         reSendToPlayer(1 - player);
         return len;
     }
@@ -432,7 +442,7 @@ function makeGame(pduel, settings, players) {
         header[0] = 0x6;
         header[1] = player;
         header[2] = LOCATION_GRAVE;
-        sendToPlayer(player, proto, Buffer.concat([header, qbuf], len + 3), len + 3);
+        sendBufferToPlayer(player, proto, Buffer.concat([header, qbuf], len + 3), len + 3);
         return len;
     }
 
@@ -447,7 +457,7 @@ function makeGame(pduel, settings, players) {
         header[1] = player;
         header[2] = location;
         header[3] = sequence;
-        sendToPlayer(player, proto, Buffer.concat([header, qbuf], len + 4), len + 4);
+        sendBufferToPlayer(player, proto, Buffer.concat([header, qbuf], len + 4), len + 4);
         if ((location & 0x90) || ((location & 0x2c) && (qbuf[15] & 0x5))) {
             reSendToPlayer(1 - player);
         }
@@ -462,6 +472,7 @@ function makeGame(pduel, settings, players) {
         refreshHand,
         refreshSingle,
         refreshGrave,
+        waitForResponse,
         pduel
     };
 }
