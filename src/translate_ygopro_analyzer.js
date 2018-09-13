@@ -499,7 +499,7 @@ function msg_match_kill(message, pbuf, offset, game) {
 }
 
 function msg_select_idlecmd(message, pbuf, offset, game) {
-    message.selecting_player = pbuf.readInt8();
+    message.player = pbuf.readInt8();
     message.summonable_cards = getIdleSet(pbuf);
     message.spsummonable_cards = getIdleSet(pbuf);
     message.repositionable_cards = getIdleSet(pbuf);
@@ -509,6 +509,14 @@ function msg_select_idlecmd(message, pbuf, offset, game) {
     message.enableBattlePhase = pbuf.readInt8();
     message.enableEndPhase = pbuf.readInt8();
     message.shufflecount = pbuf.readInt8();
+    game.refreshMzone(0);
+    game.refreshMzone(1);
+    game.refreshSzone(0);
+    game.refreshSzone(1);
+    game.refreshHand(0);
+    game.refreshHand(1);
+    game.waitforResponse(message.player);
+    game.sendBufferToPlayer(message.player, STOC_GAME_MSG, offset, pbuf - offset);
     return 1;
 }
 
@@ -577,7 +585,7 @@ function msg_flipsummoning(message, pbuf, offset, game) {
 }
 
 function msg_select_battlecmd(message, pbuf, offset, game) {
-    message.selecting_player = pbuf.readInt8(); // defunct in the code, just reading ahead.
+    message.player = pbuf.readInt8(); // defunct in the code, just reading ahead.
     message.activatable_cards = getIdleSet(pbuf, true);
     message.attackable_cards = [];
     message.count = pbuf.readInt8();
