@@ -208,14 +208,24 @@ function msg_shuffle_hand(message, pbuf, offset, game) {
         pbuf.writeInt32(0);
     }
     game.sendBufferToPlayer(1 - message.player, STOC_GAME_MSG, offset, pbuf - offset);
+    //send to observers
+    game.refreshHand(message.player, 0x781fff, 0);
+
 
 }
 
 function msg_shuffle_extra(message, pbuf, offset, game) {
+    let i;
     message.player = pbuf.readInt8();
     message.count = pbuf.readInt8();
-    //for some number that cant be determined here because the count was not sent (getting it from the state like an idiot)
-    // readInt32 off.
+    game.sendBufferToPlayer(0, STOC_GAME_MSG, offset, ((pbuf - offset) + message.count * 4));
+    // make all the other cards blank
+    for (int i = 0; i < message.count; ++i) {
+        pbuf.writeInt32(0);
+    }
+    game.sendBufferToPlayer(1 - message.player, STOC_GAME_MSG, offset, pbuf - offset);
+    //send to observers
+    game.refreshExtra(message.player);
 }
 
 function msg_chaining(message, pbuf, offset, game) {
@@ -861,6 +871,10 @@ function msg_update_card(message, pbuf, offset, game, gameBoard) {
 
 function msg_swap_grave_deck(message, pbuf, offset, game) {
     message.player = pbuf.readInt8();
+    game.sendBufferToPlayer(0, STOC_GAME_MSG, offset, pbuf - offset);
+    game.reSendToPlayer(1);
+    // send to observers
+    game.refreshGrave();
 }
 
 function msg_waiting(message, pbuf, offset, game) {
@@ -1055,14 +1069,15 @@ function msg_select_sum(message, pbuf, offset, game) {
 
 function msg_refresh_deck(message, pbuf, offset, game) {
     message.player = pbuf.readInt8();
-}
-
-function msg_swap_grace_deck() {
-    unused();
+    game.sendBufferToPlayer(0, STOC_GAME_MSG, offset, pbuf - offset);
+    game.reSendToPlayer(1);
+    // send to observers
 }
 
 function msg_reverse_deck(message, pbuf, offset, game) {
-    user_interface_only();
+    game.sendBufferToPlayer(0, STOC_GAME_MSG, offset, pbuf - offset);
+    game.reSendToPlayer(1);
+    // send to observers
 }
 
 function msg_summoned(message, pbuf, offset, game) {
@@ -1181,7 +1196,7 @@ translator = {
     MSG_SHUFFLE_HAND: msg_shuffle_hand,
     MSG_SHUFFLE_EXTRA: msg_shuffle_extra,
     MSG_REFRESH_DECK: msg_refresh_deck,
-    MSG_SWAP_GRAVE_DECK: msg_swap_grace_deck,
+    MSG_SWAP_GRAVE_DECK: msg_swap_grave_deck,
     MSG_SHUFFLE_SET_CARD: msg_shuffle_set_card,
     MSG_REVERSE_DECK: msg_reverse_deck,
     MSG_DECK_TOP: msg_deck_top,
