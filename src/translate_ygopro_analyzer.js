@@ -612,12 +612,14 @@ function msg_select_battlecmd(message, pbuf, offset, game) {
 }
 
 function msg_select_effectyn(message, pbuf, offset, game) {
-    message.selecting_player = pbuf.readInt8();
+    message.player = pbuf.readInt8();
     message.id = pbuf.readInt32();
     message.location = pbuf.readInt8();
     message.index = pbuf.readInt8();
     pbuf.readInt8();
     message.desc = pbuf.readInt32();
+    game.waitforResponse(message.player);
+    game.sendBufferToPlayer(message.player, STOC_GAME_MSG, offset, pbuf - offset);
     return 1;
 }
 
