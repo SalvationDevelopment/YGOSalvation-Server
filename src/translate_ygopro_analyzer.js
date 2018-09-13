@@ -786,6 +786,8 @@ function msg_sort_card(message, pbuf, offset, game) {
             index: pbuf.readInt8()
         });
     }
+    game.waitforResponse(message.player);
+    game.sendBufferToPlayer(message.player, STOC_GAME_MSG, offset, pbuf - offset);
     return 1;
 }
 
@@ -977,7 +979,19 @@ function msg_request_deck() {
 }
 
 function msg_sort_chain(message, pbuf, offset, game) {
-    msg_sort_chain(message, pbuf, offset, game);
+    message.player = pbuf.readInt8();
+    message.count = pbuf.readInt8();
+    message.selectable_targets = [];
+    for (let i = 0; i < message.count; ++i) {
+        message.selectable_targets.push({
+            id: pbuf.readInt32(),
+            player: pbuf.readInt8(),
+            location: enums.locations[pbuf.readInt8()],
+            index: pbuf.readInt8()
+        });
+    }
+    game.waitforResponse(message.player);
+    game.sendBufferToPlayer(message.player, STOC_GAME_MSG, offset, pbuf - offset);
     return 1;
 }
 
