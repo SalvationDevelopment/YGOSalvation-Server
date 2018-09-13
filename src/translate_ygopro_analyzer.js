@@ -683,6 +683,8 @@ function msg_select_chain(message, pbuf, offset, game) {
             desc: pbuf.readInt32()
         });
     }
+    game.waitforResponse(message.player);
+    game.sendBufferToPlayer(message.player, STOC_GAME_MSG, offset, pbuf - offset);
     return 1;
 }
 
@@ -692,6 +694,8 @@ function msg_select_place(message, pbuf, offset, game) {
     message.selectable_field = ~pbuf.readInt32(); // mind the bitwise modifier.
     message.selected_field = 0;
     message.zones = getSelectableZones(message.selectable_field);
+    game.waitforResponse(message.player);
+    game.sendBufferToPlayer(message.player, STOC_GAME_MSG, offset, pbuf - offset);
     return 1;
 }
 
@@ -712,6 +716,8 @@ function msg_select_position(message, pbuf, offset, game) {
     if (message.positionsMask & 0x8) {
         message.positions.push(enums.positions[0x8]);
     }
+    game.waitforResponse(message.player);
+    game.sendBufferToPlayer(message.player, STOC_GAME_MSG, offset, pbuf - offset);
     return 1;
 }
 
@@ -736,8 +742,13 @@ function msg_select_tribute(message, pbuf, offset, game) {
     return 1;
 }
 
-function msg_select_counter() {
-    user_interface_only();
+function msg_select_counter(message, pbuf, offset, game) {
+    message.player = pbuf.readInt8();
+    pbuf.readposition += 4;
+    message.count = pbuf.readInt8();
+    pbuf += message.count * 9;
+    game.waitforResponse(message.player);
+    game.sendBufferToPlayer(message.player, STOC_GAME_MSG, offset, pbuf - offset);
     return 1;
 }
 
@@ -1096,6 +1107,8 @@ function msg_select_unselect_card(message, pbuf, offset, game) {
             ss: pbuf.readInt8()
         });
     }
+    game.waitforResponse(message.player);
+    game.sendBufferToPlayer(message.player, STOC_GAME_MSG, offset, pbuf - offset);
     return 1;
 }
 
