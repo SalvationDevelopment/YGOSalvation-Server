@@ -799,6 +799,9 @@ function msg_confirm_decktop(message, pbuf, offset, game) {
         message.cards.push(pbuf.readInt32());
         pbuf.move(3);
     }
+    game.sendBufferToPlayer(0, STOC_GAME_MSG, offset, pbuf - offset);
+    game.reSendToPlayer(1);
+    // send to observers
 }
 
 function msg_confirm_extratop(message, pbuf, offset, game) {
