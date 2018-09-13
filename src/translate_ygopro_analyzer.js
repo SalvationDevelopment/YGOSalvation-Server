@@ -140,12 +140,12 @@ function msg_hint(message, pbuf, offset, game) {
             break;
         case 9:
             game.sendBufferToPlayer(1 - message.player, STOC_GAME_MSG, offset, pbuf - offset);
-            //send to observers;
+            game.sendToObservers();
             break;
         case 10:
             game.sendBufferToPlayer(0, STOC_GAME_MSG, offset, pbuf - offset);
             game.sendBufferToPlayer(1, STOC_GAME_MSG, offset, pbuf - offset);
-            //send to observers;
+            game.sendToObservers();
             break;
         default:
     }
@@ -161,7 +161,7 @@ function msg_new_turn(message, pbuf, offset, game) {
     message.player = pbuf.readInt8();
     game.sendBufferToPlayer(0, STOC_GAME_MSG, offset, pbuf - offset);
     game.reSendToPlayer(1);
-    // send to observers
+    game.sendToObservers();
 }
 
 function msg_win(message, pbuf, offset, game) {
@@ -170,7 +170,7 @@ function msg_win(message, pbuf, offset, game) {
     //need to double check for more variables
     game.sendBufferToPlayer(0, STOC_GAME_MSG, offset, pbuf - offset);
     game.reSendToPlayer(1);
-    // send to observers;
+    game.sendToObservers();;
     if (message.player > 1) {
         game.match_result[game.duel_count++] = 2;
         game.tp_player = 1 - game.tp_player;
@@ -205,7 +205,7 @@ function msg_shuffle_deck(message, pbuf, offset, game) {
     message.player = pbuf.readInt8();
     game.sendBufferToPlayer(0, STOC_GAME_MSG, offset, pbuf - offset);
     game.reSendToPlayer(1);
-    // send to observers
+    game.sendToObservers();
 }
 
 function msg_shuffle_hand(message, pbuf, offset, game) {
@@ -218,7 +218,7 @@ function msg_shuffle_hand(message, pbuf, offset, game) {
         pbuf.writeInt32(0);
     }
     game.sendBufferToPlayer(1 - message.player, STOC_GAME_MSG, offset, pbuf - offset);
-    //send to observers
+    game.sendToObservers();
     game.refreshHand(message.player, 0x781fff, 0);
 
 
@@ -234,7 +234,7 @@ function msg_shuffle_extra(message, pbuf, offset, game) {
         pbuf.writeInt32(0);
     }
     game.sendBufferToPlayer(1 - message.player, STOC_GAME_MSG, offset, pbuf - offset);
-    //send to observers
+    game.sendToObservers();
     game.refreshExtra(message.player);
 }
 
@@ -829,7 +829,7 @@ function msg_confirm_decktop(message, pbuf, offset, game) {
     }
     game.sendBufferToPlayer(0, STOC_GAME_MSG, offset, pbuf - offset);
     game.reSendToPlayer(1);
-    // send to observers
+    game.sendToObservers();
 }
 
 function msg_confirm_extratop(message, pbuf, offset, game) {
@@ -842,7 +842,7 @@ function msg_confirm_extratop(message, pbuf, offset, game) {
     }
     game.sendBufferToPlayer(0, STOC_GAME_MSG, offset, pbuf - offset);
     game.reSendToPlayer(1);
-    // send to observers
+    game.sendToObservers();
 }
 
 function msg_confirm_cards(message, pbuf, offset, game) {
@@ -859,7 +859,7 @@ function msg_confirm_cards(message, pbuf, offset, game) {
     if (pbuf[5] !== LOCATION_DECK) {
         game.sendBufferToPlayer(0, STOC_GAME_MSG, offset, pbuf - offset);
         game.reSendToPlayer(1);
-        // send to observers
+        game.sendToObservers();
         return;
     }
     game.sendBufferToPlayer(message.player, STOC_GAME_MSG, offset, pbuf - offset);
@@ -883,7 +883,7 @@ function msg_swap_grave_deck(message, pbuf, offset, game) {
     message.player = pbuf.readInt8();
     game.sendBufferToPlayer(0, STOC_GAME_MSG, offset, pbuf - offset);
     game.reSendToPlayer(1);
-    // send to observers
+    game.sendToObservers();
     game.refreshGrave();
 }
 
@@ -898,7 +898,7 @@ function msg_deck_top(message, pbuf, offset, game) {
     message.rev = ((message.id & 0x80000000) !== 0);
     game.sendBufferToPlayer(0, STOC_GAME_MSG, offset, pbuf - offset);
     game.reSendToPlayer(1);
-    // send to observers
+    game.sendToObservers();
 }
 
 function msg_shuffle_set_card(message, pbuf, offset, game) {
@@ -925,7 +925,7 @@ function msg_shuffle_set_card(message, pbuf, offset, game) {
     }
     game.sendBufferToPlayer(0, STOC_GAME_MSG, offset, pbuf - offset);
     game.reSendToPlayer(1);
-    // send to observers
+    game.sendToObservers();
     if (message.location === LOCATION_MZONE) {
         game.refreshMzone(0, 0x181fff, 0);
         game.refreshMzone(1, 0x181fff, 0);
@@ -1095,13 +1095,13 @@ function msg_refresh_deck(message, pbuf, offset, game) {
     message.player = pbuf.readInt8();
     game.sendBufferToPlayer(0, STOC_GAME_MSG, offset, pbuf - offset);
     game.reSendToPlayer(1);
-    // send to observers
+    game.sendToObservers();
 }
 
 function msg_reverse_deck(message, pbuf, offset, game) {
     game.sendBufferToPlayer(0, STOC_GAME_MSG, offset, pbuf - offset);
     game.reSendToPlayer(1);
-    // send to observers
+    game.sendToObservers();
 }
 
 function msg_summoned(message, pbuf, offset, game) {

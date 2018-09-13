@@ -296,7 +296,7 @@ function playerInstance(playerConnection, slot, game, settings) {
 
 
 
-function makeGame(pduel, settings, players) {
+function makeGame(pduel, settings, players, observers) {
     let lastMessage = new Buffer(''),
         last_response = -1,
         time_limit = settings.time_limit;
@@ -341,8 +341,12 @@ function makeGame(pduel, settings, players) {
         sctl.left_time = time_limit;
         sendBufferToPlayer(0, enums.STOC.enums.STOC_TIME_LIMIT, sctl.ref());
         sendBufferToPlayer(1, enums.STOC.enums.STOC_TIME_LIMIT, sctl.ref());
+    }
 
-
+    function sendToObservers() {
+        observers.forEach(function(observer) {
+            observer(lastMessage);
+        });
     }
 
     function sendStartInfo(player) {
@@ -499,6 +503,7 @@ function makeGame(pduel, settings, players) {
         waitforResponse,
         sendBufferToPlayer,
         reSendToPlayer,
+        sendToObservers,
         duel_count: 0,
         match_result: [],
         pduel
@@ -536,7 +541,7 @@ function mainProcess(pduel, game) {
 }
 
 
-function duel(settings, players) {
+function duel(settings, players, observers) {
     var pduel;
 
     if (settings.shuffleDeck) {
@@ -580,10 +585,14 @@ function duel(settings, players) {
     console.log('all cards loaded');
 
     setTimeout(function() {
-        var connections = players.map(function(playerConnection, slot) {
-            return playerInstance(playerConnection, slot, { pduel }, settings);
-        });
-        var game = makeGame(pduel, settings, connections);
+        const playerConnections = players.map(function(playerConnection, slot) {
+                return playerInstance(playerConnection, slot, { pduel }, settings);
+            }),
+            observerConnections = players.map(function(playerConnection, slot) {
+                return playerInstance(playerConnection, slot, { pduel }, settings);
+            }),
+            game = makeGame(pduel, settings, playerConnections, observerConnections);
+
         game.sendStartInfo(0);
         game.sendStartInfo(1);
         setTimeout(function() {

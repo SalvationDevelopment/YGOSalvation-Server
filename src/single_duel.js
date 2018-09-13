@@ -76,4 +76,4 @@ var x = ocgwrapper.duel(conf, [{
         94905343
     ],
     side: []
-}])
+}], []);
