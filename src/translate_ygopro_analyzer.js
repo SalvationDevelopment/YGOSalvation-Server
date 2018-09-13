@@ -1,6 +1,7 @@
 const enums = require('./translate_ygopro_enums.js'),
     makeCard = require('./model_ygopro_card.js'),
-    BufferStreamReader = require('./model_stream_reader');
+    BufferStreamReader = require('./model_stream_reader'),
+    STOC_GAME_MSG = enums.STOC.enums.STOC_GAME_MSG;
 
 
 let translator = {};
@@ -129,9 +130,24 @@ function msg_start(message, pbuf, offset, game) {
 }
 
 function msg_hint(message, pbuf, offset, game) {
-    message.command = enums.STOC.STOC_GAME_MSG.MSG_HINT[pbuf.readInt8()];
+    message.command = pbuf.readInt8();
     message.player = pbuf.readInt8(); /* defunct in the code */
     message.data = pbuf.readInt32();
+    switch (message.command) {
+        case 5:
+            game.sendBufferToPlayer(message.player, STOC_GAME_MSG, offset, pbuf - offset);
+            break;
+        case 9:
+            game.sendBufferToPlayer(1 - message.player, STOC_GAME_MSG, offset, pbuf - offset);
+            //send to observers;
+            break;
+        case 10:
+            game.sendBufferToPlayer(0, STOC_GAME_MSG, offset, pbuf - offset);
+            game.sendBufferToPlayer(1, STOC_GAME_MSG, offset, pbuf - offset);
+            //send to observers;
+            break;
+        default:
+    }
 }
 
 function msg_new_turn(message, pbuf, offset, game) {

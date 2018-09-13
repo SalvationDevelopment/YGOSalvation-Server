@@ -338,6 +338,8 @@ function makeGame(pduel, settings, players) {
         sctl.player = player;
         sctl.left_time = time_limit;
         sendBufferToPlayer(0, enums.STOC.enums.STOC_TIME_LIMIT, sctl);
+        sendBufferToPlayer(1, enums.STOC.enums.STOC_TIME_LIMIT, sctl);
+
 
     }
 
