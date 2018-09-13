@@ -193,6 +193,9 @@ function msg_draw(message, pbuf, offset, game) {
 
 function msg_shuffle_deck(message, pbuf, offset, game) {
     message.player = pbuf.readInt8();
+    game.sendBufferToPlayer(0, STOC_GAME_MSG, offset, pbuf - offset);
+    game.reSendToPlayer(1);
+    // send to observers
 }
 
 function msg_shuffle_hand(message, pbuf, offset, game) {
