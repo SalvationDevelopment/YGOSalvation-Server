@@ -493,6 +493,8 @@ function makeGame(pduel, settings, players) {
         refreshSingle,
         refreshGrave,
         waitForResponse,
+        duel_count: 0,
+        match_result: [],
         pduel
     };
 }

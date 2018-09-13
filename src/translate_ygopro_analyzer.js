@@ -155,8 +155,23 @@ function msg_new_turn(message, pbuf, offset, game) {
 }
 
 function msg_win(message, pbuf, offset, game) {
-    message.win = pbuf.readInt8();
+    message.player = pbuf.readInt8();
+    message.type = pbuf.readInt8();
     //need to double check for more variables
+    game.sendBufferToPlayer(0, STOC_GAME_MSG, offset, pbuf - offset);
+    game.reSendToPlayer(1);
+    // send to observers;
+    if (message.player > 1) {
+        game.match_result[game.duel_count++] = 2;
+        game.tp_player = 1 - game.tp_player;
+    } else if (players[message.player] == pplayer[message.player]) { //pplayer is not a typo?
+        game.match_result[game.duel_count++] = message.player;
+        game.tp_player = 1 - message.player;
+    } else {
+        game.match_result[game.duel_count++] = 1 - message.player;
+        game.tp_player = message.player;
+    }
+    game.endDuel();
     return 2;
 }
 
@@ -577,6 +592,14 @@ function msg_select_battlecmd(message, pbuf, offset, game) {
     }
     message.enableMainPhase2 = pbuf.readInt8();
     message.enableEndPhase = pbuf.readInt8();
+    game.refreshMzone(0);
+    game.refreshMzone(1);
+    game.refreshSzone(0);
+    game.refreshSzone(1);
+    game.refreshHand(0);
+    game.refreshHand(1);
+    game.waitforResponse(message.player);
+    game.sendBufferToPlayer(message.player, STOC_GAME_MSG, offset, pbuf - offset);
     return 1;
 }
 
