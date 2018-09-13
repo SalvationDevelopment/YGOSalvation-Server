@@ -1011,6 +1011,8 @@ function msg_select_sum(message, pbuf, offset, game) {
             opParam: pbuf.readInt32()
         });
     }
+    game.waitforResponse(message.player);
+    game.sendBufferToPlayer(message.player, STOC_GAME_MSG, offset, pbuf - offset);
     return 1;
 }
 
