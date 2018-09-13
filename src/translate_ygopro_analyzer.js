@@ -624,23 +624,27 @@ function msg_select_effectyn(message, pbuf, offset, game) {
 }
 
 function msg_select_yesno(message, pbuf, offset, game) {
-    message.selecting_player = pbuf.readInt8();
+    message.player = pbuf.readInt8();
     message.desc = pbuf.readInt32();
+    game.waitforResponse(message.player);
+    game.sendBufferToPlayer(message.player, STOC_GAME_MSG, offset, pbuf - offset);
     return 1;
 }
 
 function msg_select_option(message, pbuf, offset, game) {
-    message.selecting_player = pbuf.readInt8();
+    message.player = pbuf.readInt8();
     message.count = pbuf.readInt8();
     message.select_options = [];
     for (let i = 0; i < message.count; ++i) {
         message.select_options.push(pbuf.readInt32());
     }
+    game.waitforResponse(message.player);
+    game.sendBufferToPlayer(message.player, STOC_GAME_MSG, offset, pbuf - offset);
     return 1;
 }
 
 function msg_select_card(message, pbuf, offset, game) {
-    message.selecting_player = pbuf.readInt8();
+    message.player = pbuf.readInt8();
     message.select_cancelable = pbuf.readInt8();
     message.select_min = pbuf.readInt8();
     message.select_max = pbuf.readInt8();
@@ -655,11 +659,13 @@ function msg_select_card(message, pbuf, offset, game) {
             ss: pbuf.readInt8()
         });
     }
+    game.waitforResponse(message.player);
+    game.sendBufferToPlayer(message.player, STOC_GAME_MSG, offset, pbuf - offset);
     return 1;
 }
 
 function msg_select_chain(message, pbuf, offset, game) {
-    message.selecting_player = pbuf.readInt8();
+    message.player = pbuf.readInt8();
     message.count = pbuf.readInt8();
     message.specount = pbuf.readInt8();
     message.forced = pbuf.readInt8();
@@ -681,7 +687,7 @@ function msg_select_chain(message, pbuf, offset, game) {
 }
 
 function msg_select_place(message, pbuf, offset, game) {
-    message.selecting_player = pbuf.readInt8();
+    message.player = pbuf.readInt8();
     message.select_min = pbuf.readInt8();
     message.selectable_field = ~pbuf.readInt32(); // mind the bitwise modifier.
     message.selected_field = 0;
@@ -690,7 +696,7 @@ function msg_select_place(message, pbuf, offset, game) {
 }
 
 function msg_select_position(message, pbuf, offset, game) {
-    message.selecting_player = pbuf.readInt8();
+    message.player = pbuf.readInt8();
     message.id = pbuf.readInt32();
     message.positionsMask = pbuf.readInt8();
     message.positions = [];
@@ -710,7 +716,7 @@ function msg_select_position(message, pbuf, offset, game) {
 }
 
 function msg_select_tribute(message, pbuf, offset, game) {
-    message.selecting_player = pbuf.readInt8();
+    message.player = pbuf.readInt8();
     message.select_cancelable = pbuf.readInt8() ? true : false;
     message.select_min = pbuf.readInt8();
     message.select_max = pbuf.readInt8();
@@ -725,6 +731,8 @@ function msg_select_tribute(message, pbuf, offset, game) {
             t: pbuf.readInt8()
         });
     }
+    game.waitforResponse(message.player);
+    game.sendBufferToPlayer(message.player, STOC_GAME_MSG, offset, pbuf - offset);
     return 1;
 }
 
@@ -748,7 +756,7 @@ function msg_soft_chain(message, pbuf, offset, game) {
 }
 
 function msg_select_disfield(message, pbuf, offset, game) {
-    message.selecting_player = pbuf.readInt8();
+    message.player = pbuf.readInt8();
     message.select_min = pbuf.readInt8();
     message.selectable_field = ~pbuf.readInt32(); // mind the bitwise modifier.
     message.selected_field = 0;
@@ -1060,7 +1068,7 @@ function msg_custom_msg(message, pbuf, offset, game) {
 }
 
 function msg_select_unselect_card(message, pbuf, offset, game) {
-    message.selecting_player = pbuf.readInt8();
+    message.player = pbuf.readInt8();
     message.buttonok = Boolean(!!pbuf.readInt8());
     message.select_cancelable = pbuf.readInt8();
     message.select_min = pbuf.readInt8();
