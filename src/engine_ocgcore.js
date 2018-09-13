@@ -317,11 +317,11 @@ function makeGame(pduel, settings, players) {
         frameSize.writeUInt16LE(length + 1, 0);
         var message = Buffer.concat([frameSize, stoc, Buffer.from(buffer, 0, length + 1)]);
         lastMessage = message;
-        players[player](message);
+        players[Math.abs(player)](message);
     }
 
     function reSendToPlayer(player) {
-        players[player](lastMessage);
+        players[Math.abs(player)](lastMessage);
     }
 
     function waitForResponse(player) {

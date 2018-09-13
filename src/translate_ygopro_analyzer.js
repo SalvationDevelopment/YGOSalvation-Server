@@ -199,11 +199,16 @@ function msg_shuffle_deck(message, pbuf, offset, game) {
 }
 
 function msg_shuffle_hand(message, pbuf, offset, game) {
+    let i;
     message.player = pbuf.readInt8();
-    pbuf.readInt8();
     message.count = pbuf.readInt8();
-    //for some number that cant be determined here because the count was not sent (getting it from the state like an idiot)
-    // readInt32 off.
+    game.sendBufferToPlayer(0, STOC_GAME_MSG, offset, ((pbuf - offset) + message.count * 4));
+    // make all the other cards blank
+    for (int i = 0; i < message.count; ++i) {
+        pbuf.writeInt32(0);
+    }
+    game.sendBufferToPlayer(1 - message.player, STOC_GAME_MSG, offset, pbuf - offset);
+
 }
 
 function msg_shuffle_extra(message, pbuf, offset, game) {

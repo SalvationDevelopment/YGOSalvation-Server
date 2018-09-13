@@ -42,6 +42,11 @@ function BufferStreamReader(packet) {
         readposition += 4;
         return output;
     };
+    stream.writeInt32 = function(data) {
+        const output = packet.writeUInt32LE(data, readposition);
+        readposition += 4;
+        return output;
+    };
     stream.move = function(amount) {
         readposition += amount;
     };
