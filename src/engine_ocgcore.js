@@ -82,7 +82,7 @@ function scriptReader(scriptname, length) {
         var script = fs.readFileSync(file);
 
         ref.set(length, 0, script.byteLength);
-        return Buffer(script);
+        return script;
     } else {
         return Buffer.alloc(0);
 
@@ -301,7 +301,7 @@ function makeGame(pduel, settings, players) {
         last_response = -1,
         time_limit = settings.time_limit;
 
-    gameTick();
+
 
     function gameTick() {
         time_limit -= 1;
@@ -484,6 +484,7 @@ function makeGame(pduel, settings, players) {
         return len;
     }
 
+    gameTick();
 
     return {
         sendStartInfo,

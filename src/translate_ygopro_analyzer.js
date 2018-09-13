@@ -1,3 +1,4 @@
+/*eslint no-plusplus: 0*/
 const enums = require('./translate_ygopro_enums.js'),
     makeCard = require('./model_ygopro_card.js'),
     BufferStreamReader = require('./model_stream_reader'),
@@ -151,7 +152,16 @@ function msg_hint(message, pbuf, offset, game) {
 }
 
 function msg_new_turn(message, pbuf, offset, game) {
+    game.refreshMzone(0);
+    game.refreshMzone(1);
+    game.refreshSzone(0);
+    game.refreshSzone(1);
+    game.refreshHand(0);
+    game.refreshHand(1);
     message.player = pbuf.readInt8();
+    game.sendBufferToPlayer(0, STOC_GAME_MSG, offset, pbuf - offset);
+    game.reSendToPlayer(1);
+    // send to observers
 }
 
 function msg_win(message, pbuf, offset, game) {
@@ -164,7 +174,7 @@ function msg_win(message, pbuf, offset, game) {
     if (message.player > 1) {
         game.match_result[game.duel_count++] = 2;
         game.tp_player = 1 - game.tp_player;
-    } else if (players[message.player] == pplayer[message.player]) { //pplayer is not a typo?
+    } else if (message.players[message.player] === pplayer[message.player]) { //pplayer is not a typo?
         game.match_result[game.duel_count++] = message.player;
         game.tp_player = 1 - message.player;
     } else {
@@ -204,7 +214,7 @@ function msg_shuffle_hand(message, pbuf, offset, game) {
     message.count = pbuf.readInt8();
     game.sendBufferToPlayer(0, STOC_GAME_MSG, offset, ((pbuf - offset) + message.count * 4));
     // make all the other cards blank
-    for (int i = 0; i < message.count; ++i) {
+    for (i = 0; i < message.count; ++i) {
         pbuf.writeInt32(0);
     }
     game.sendBufferToPlayer(1 - message.player, STOC_GAME_MSG, offset, pbuf - offset);
@@ -220,7 +230,7 @@ function msg_shuffle_extra(message, pbuf, offset, game) {
     message.count = pbuf.readInt8();
     game.sendBufferToPlayer(0, STOC_GAME_MSG, offset, ((pbuf - offset) + message.count * 4));
     // make all the other cards blank
-    for (int i = 0; i < message.count; ++i) {
+    for (i = 0; i < message.count; ++i) {
         pbuf.writeInt32(0);
     }
     game.sendBufferToPlayer(1 - message.player, STOC_GAME_MSG, offset, pbuf - offset);
@@ -886,9 +896,13 @@ function msg_deck_top(message, pbuf, offset, game) {
     message.index = pbuf.readInt8();
     message.id = pbuf.readInt32();
     message.rev = ((message.id & 0x80000000) !== 0);
+    game.sendBufferToPlayer(0, STOC_GAME_MSG, offset, pbuf - offset);
+    game.reSendToPlayer(1);
+    // send to observers
 }
 
 function msg_shuffle_set_card(message, pbuf, offset, game) {
+    const LOCATION_MZONE = 0x04;
     message.location = pbuf.readInt8();
     message.count = pbuf.readInt8();
     message.targets = [];
@@ -908,6 +922,16 @@ function msg_shuffle_set_card(message, pbuf, offset, game) {
             s: pbuf.readInt8()
         });
         pbuf.readInt8();
+    }
+    game.sendBufferToPlayer(0, STOC_GAME_MSG, offset, pbuf - offset);
+    game.reSendToPlayer(1);
+    // send to observers
+    if (message.location === LOCATION_MZONE) {
+        game.refreshMzone(0, 0x181fff, 0);
+        game.refreshMzone(1, 0x181fff, 0);
+    } else {
+        game.refreshSzone(0, 0x181fff, 0);
+        game.refreshSzone(1, 0x181fff, 0);
     }
 }
 
