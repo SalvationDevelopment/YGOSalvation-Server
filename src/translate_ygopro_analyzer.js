@@ -188,6 +188,15 @@ function msg_win(message, pbuf, offset, game) {
 function msg_new_phase(message, pbuf, offset, game) {
     message.phase = pbuf.readInt8();
     message.gui_phase = enums.phase[message.phase];
+    game.refreshMzone(0);
+    game.refreshMzone(1);
+    game.refreshSzone(0);
+    game.refreshSzone(1);
+    game.refreshHand(0);
+    game.refreshHand(1);
+    game.sendBufferToPlayer(0, STOC_GAME_MSG, offset, pbuf - offset);
+    game.reSendToPlayer(1);
+    game.sendToObservers();
 }
 
 function msg_draw(message, pbuf, offset, game) {
@@ -549,6 +558,8 @@ function msg_select_idlecmd(message, pbuf, offset, game) {
 }
 
 function msg_move(message, pbuf, offset, game) {
+    const pbufw = new BufferStreamReader(pbuf.packet);
+    pbufw.readposition = pbuf.readposition;
     message.id = pbuf.readInt32();
     message.pc = pbuf.readInt8(); // original controller
     message.pl = enums.locations[pbuf.readInt8()]; // original cLocation
@@ -559,6 +570,16 @@ function msg_move(message, pbuf, offset, game) {
     message.cs = pbuf.readInt8(); // current sequence (index)
     message.cp = enums.positions[pbuf.readInt8()]; // current position
     message.reason = pbuf.readInt32();
+    game.sendBufferToPlayer(message.cc, STOC_GAME_MSG, offset, pbuf - offset);
+    // need to implement this!!!
+    // if (!(cl & (LOCATION_GRAVE + LOCATION_OVERLAY)) && ((cl & (LOCATION_DECK + LOCATION_HAND)) || (cp & POS_FACEDOWN)))
+    // 			BufferIO::WriteInt32(pbufw, 0);
+    game.sendBufferToPlayer(1 - message.cc, STOC_GAME_MSG, offset, pbuf - offset);
+    game.sendToObservers();
+
+    if (message.cl !== 0 && (message.cl & 0x80) === 0 && (message.cl !== message.pl || message.pc !== message.cc)) {
+        game.refreshSingle(message.cc, message.cl, message.cs);
+    }
 }
 
 function msg_pos_change(message, pbuf, offset, game) {
