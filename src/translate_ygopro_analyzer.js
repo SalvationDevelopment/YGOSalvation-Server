@@ -818,6 +818,7 @@ function msg_confirm_extratop(message, pbuf, offset, game) {
 }
 
 function msg_confirm_cards(message, pbuf, offset, game) {
+    const LOCATION_DECK = 0x01;
     message.player = pbuf.readInt8();
     message.count = pbuf.readInt8();
     for (let i = 0; i < message.count; ++i) {
@@ -827,6 +828,14 @@ function msg_confirm_cards(message, pbuf, offset, game) {
             s: pbuf.readInt8()
         });
     }
+    if (pbuf[5] !== LOCATION_DECK) {
+        game.sendBufferToPlayer(0, STOC_GAME_MSG, offset, pbuf - offset);
+        game.reSendToPlayer(1);
+        // send to observers
+        return;
+    }
+    game.sendBufferToPlayer(message.player, STOC_GAME_MSG, offset, pbuf - offset);
+    return;
 }
 
 function msg_update_data(message, pbuf, offset, game, gameBoard) {
