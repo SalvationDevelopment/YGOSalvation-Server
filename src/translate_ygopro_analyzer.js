@@ -1301,7 +1301,7 @@ function analyze(engineBuffer, len, game) {
         if (translator[engType]) {
             console.log(engType);
             var message = {};
-            const output = translator[engType](message, pbuf, offset);
+            const output = translator[engType](message, pbuf, offset, game);
             if (output) {
                 return output;
             }

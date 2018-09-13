@@ -311,20 +311,22 @@ function makeGame(pduel, settings, players) {
     }
 
     function sendBufferToPlayer(player, proto, buffer, length) {
-        var stoc = new Buffer([proto]),
+        buffer = buffer.packet || buffer;
+        player = Math.abs(player);
+        const stoc = new Buffer([proto]),
             frameSize = new Buffer(2);
         length = length || buffer.length;
         frameSize.writeUInt16LE(length + 1, 0);
         var message = Buffer.concat([frameSize, stoc, Buffer.from(buffer, 0, length + 1)]);
         lastMessage = message;
-        players[Math.abs(player)](message);
+        players[player](message);
     }
 
     function reSendToPlayer(player) {
         players[Math.abs(player)](lastMessage);
     }
 
-    function waitForResponse(player) {
+    function waitforResponse(player) {
         const STOC_TimeLimit = struct({
                 player: ref.types.char,
                 left_time: ref.types.short
@@ -334,11 +336,11 @@ function makeGame(pduel, settings, players) {
             msg = new Buffer([MSG_WAITING]);
 
         last_response = player;
-        sendBufferToPlayer(players[1 - player], enums.STOC.enums.STOC_GAME_MSG, msg);
+        sendBufferToPlayer((1 - player), enums.STOC.enums.STOC_GAME_MSG, msg);
         sctl.player = player;
         sctl.left_time = time_limit;
-        sendBufferToPlayer(0, enums.STOC.enums.STOC_TIME_LIMIT, sctl);
-        sendBufferToPlayer(1, enums.STOC.enums.STOC_TIME_LIMIT, sctl);
+        sendBufferToPlayer(0, enums.STOC.enums.STOC_TIME_LIMIT, sctl.ref());
+        sendBufferToPlayer(1, enums.STOC.enums.STOC_TIME_LIMIT, sctl.ref());
 
 
     }
@@ -425,7 +427,7 @@ function makeGame(pduel, settings, players) {
     }
 
     function refreshHand(player, flag, use_cache) {
-        const qbuf = Buffer.alloc(0x2000),
+        let qbuf = Buffer.alloc(0x2000),
             header = Buffer.alloc(3),
             proto = enums.STOC.enums.STOC_GAME_MSG,
             len = ocgapi.query_field_card(pduel, player, LOCATION_HAND, flag, qbuf, use_cache);
@@ -435,17 +437,17 @@ function makeGame(pduel, settings, players) {
         header[1] = player;
         header[2] = LOCATION_HAND;
         var qlen = 0;
-        while (qlen < len) {
-            const clen = qbuf.readUInt32LE(qlen);
-            qlen += clen;
-            if (clen === 4) {
-                continue;
-            }
-            if (qbuf[11] & POS_FACEDOWN) {
-                qbuf[clen - 4] = 0;
-            }
-            qbuf += clen - 4;
-        }
+        // while (qlen < len) {
+        //     let clen = qbuf.readUInt32LE(qlen);
+        //     qlen += clen;
+        //     if (clen === 4) {
+        //         continue;
+        //     }
+        //     if (qbuf[11] & POS_FACEDOWN) {
+        //         qbuf[clen - 4] = 0;
+        //     }
+        //     qbuf += clen - 4;
+        // }
         sendBufferToPlayer(player, proto, Buffer.concat([header, qbuf], len + 3), len + 3);
         reSendToPlayer(1 - player);
         return len;
@@ -489,11 +491,14 @@ function makeGame(pduel, settings, players) {
     return {
         sendStartInfo,
         refreshMzone,
+        refreshSzone,
         refreshExtra,
         refreshHand,
         refreshSingle,
         refreshGrave,
-        waitForResponse,
+        waitforResponse,
+        sendBufferToPlayer,
+        reSendToPlayer,
         duel_count: 0,
         match_result: [],
         pduel
