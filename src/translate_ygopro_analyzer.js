@@ -344,6 +344,9 @@ function msg_random_selected(message, pbuf, offset, game) {
             ss: pbuf.readInt8()
         });
     }
+    game.sendBufferToPlayer(0, STOC_GAME_MSG, offset, pbuf - offset);
+    game.sendBufferToPlayer(1, STOC_GAME_MSG, offset, pbuf - offset);
+    game.sendToObservers();
 }
 
 function msg_become_target(message, pbuf, offset, game) {
@@ -357,6 +360,10 @@ function msg_become_target(message, pbuf, offset, game) {
             ss: pbuf.readInt8()
         });
     }
+    game.sendBufferToPlayer(0, STOC_GAME_MSG, offset, pbuf - offset);
+    game.sendBufferToPlayer(1, STOC_GAME_MSG, offset, pbuf - offset);
+    game.sendToObservers();
+
 }
 
 function msg_pay_lpcost(message, pbuf, offset, game) {
