@@ -14,7 +14,15 @@ let translator = {};
 
 
 
-function user_interface_only() {}
+function user_interface_only(message, pbuf, offset, game) {
+    game.sendBufferToPlayer(0, STOC_GAME_MSG, offset, pbuf - offset);
+    game.sendBufferToPlayer(1, STOC_GAME_MSG, offset, pbuf - offset);
+    game.sendToObservers();
+    game.refreshMzone(0);
+    game.refreshMzone(1);
+    game.refreshSzone(0);
+    game.refreshSzone(1);
+}
 
 function unused() {}
 
@@ -589,6 +597,10 @@ function msg_pos_change(message, pbuf, offset, game) {
     message.index = pbuf.readInt8(); // current sequence (index)
     message.pp = pbuf.readInt8(); // padding??
     message.position = enums.positions[pbuf.readInt8()];
+    game.sendBufferToPlayer(0, STOC_GAME_MSG, offset, pbuf - offset);
+    game.sendBufferToPlayer(1, STOC_GAME_MSG, offset, pbuf - offset);
+    game.sendToObservers();
+
 }
 
 function msg_set(message, pbuf, offset, game) {
@@ -597,6 +609,9 @@ function msg_set(message, pbuf, offset, game) {
     message.location = enums.locations[pbuf.readInt8()]; // current cLocation
     message.index = pbuf.readInt8(); // current sequence (index)
     message.position = enums.positions[pbuf.readInt8()];
+    game.sendBufferToPlayer(0, STOC_GAME_MSG, offset, pbuf - offset);
+    game.sendBufferToPlayer(1, STOC_GAME_MSG, offset, pbuf - offset);
+    game.sendToObservers();
 }
 
 function msg_swap(message, pbuf, offset, game) {
@@ -610,11 +625,19 @@ function msg_swap(message, pbuf, offset, game) {
     message.l2 = pbuf.readInt8();
     message.s2 = pbuf.readInt8();
     message.p2 = pbuf.readInt8();
+    game.sendBufferToPlayer(0, STOC_GAME_MSG, offset, pbuf - offset);
+    game.sendBufferToPlayer(1, STOC_GAME_MSG, offset, pbuf - offset);
+    game.sendToObservers();
+    game.refreshSingle(message.c1, message.l1, message.s1);
+    game.refreshSingle(message.c2, message.l2, message.s2);
 }
 
 function msg_field_disabled(message, pbuf, offset, game) {
     message.disabled = pbuf.readInt32();
     message.ifisfirst_disabled = (message.disabled >> 16) | (message.disabled << 16);
+    game.sendBufferToPlayer(0, STOC_GAME_MSG, offset, pbuf - offset);
+    game.sendBufferToPlayer(1, STOC_GAME_MSG, offset, pbuf - offset);
+    game.sendToObservers();
 }
 
 function msg_spsummoning(message, pbuf, offset, game) {
@@ -1126,23 +1149,23 @@ function msg_reverse_deck(message, pbuf, offset, game) {
 }
 
 function msg_summoned(message, pbuf, offset, game) {
-    user_interface_only();
+    user_interface_only(message, pbuf, offset, game);;
 }
 
 function msg_spsummoned(message, pbuf, offset, game) {
-    user_interface_only();
+    user_interface_only(message, pbuf, offset, game);
 }
 
 function msg_flipsummoned(message, pbuf, offset, game) {
-    user_interface_only();
+    user_interface_only(message, pbuf, offset, game);
 }
 
 function msg_chain_end(message, pbuf, offset, game) {
-    user_interface_only();
+    user_interface_only(message, pbuf, offset, game);
 }
 
 function msg_attack_disabled(message, pbuf, offset, game) {
-    user_interface_only();
+    user_interface_only(message, pbuf, offset, game);
 }
 
 function msg_damage_step_start(message, pbuf, offset, game) {
