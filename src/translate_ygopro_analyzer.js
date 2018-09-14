@@ -210,14 +210,20 @@ function msg_new_phase(message, pbuf, offset, game) {
 }
 
 function msg_draw(message, pbuf, offset, game) {
+    //pbufw issue
     message.player = pbuf.readInt8();
     message.count = pbuf.readInt8();
     message.cards = [];
+    game.sendBufferToPlayer(message.player, STOC_GAME_MSG, offset, pbuf - offset);
+
     for (let i = 0; i < message.count; ++i) {
         message.cards.push({
             id: pbuf.readInt32()
         });
     }
+    game.sendBufferToPlayer(message.player, STOC_GAME_MSG, offset, pbuf - offset);
+    game.reSendToPlayer(1);
+    game.sendToObservers();
 }
 
 function msg_shuffle_deck(message, pbuf, offset, game) {
@@ -376,12 +382,18 @@ function msg_damage(message, pbuf, offset, game) {
     message.player = pbuf.readInt8();
     message.lp = pbuf.readInt32();
     message.multiplier = -1;
+    game.sendBufferToPlayer(0, STOC_GAME_MSG, offset, pbuf - offset);
+    game.reSendToPlayer(1);
+    game.sendToObservers();
 }
 
 function msg_recover(message, pbuf, offset, game) {
     message.player = pbuf.readInt8();
     message.lp = pbuf.readInt32();
     message.multiplier = 1;
+    game.sendBufferToPlayer(0, STOC_GAME_MSG, offset, pbuf - offset);
+    game.reSendToPlayer(1);
+    game.sendToObservers();
 }
 
 function msg_lpupdate(message, pbuf, offset, game) {
@@ -407,6 +419,9 @@ function msg_equip(message, pbuf, offset, game) {
     message.l2 = pbuf.readInt8();
     message.s2 = pbuf.readInt8();
     pbuf.readInt8();
+    game.sendBufferToPlayer(0, STOC_GAME_MSG, offset, pbuf - offset);
+    game.reSendToPlayer(1);
+    game.sendToObservers();
 }
 
 function msg_unequip(message, pbuf, offset, game) {
@@ -606,6 +621,7 @@ function msg_select_idlecmd(message, pbuf, offset, game) {
 }
 
 function msg_move(message, pbuf, offset, game) {
+    //pbufw issue
     const pbufw = new BufferStreamReader(pbuf.packet);
     pbufw.readposition = pbuf.readposition;
     message.id = pbuf.readInt32();
