@@ -22,6 +22,8 @@ function user_interface_only(message, pbuf, offset, game) {
     game.refreshMzone(1);
     game.refreshSzone(0);
     game.refreshSzone(1);
+    game.refreshHand(0);
+    game.refreshHand(1);
 }
 
 function unused() {}
@@ -270,33 +272,64 @@ function msg_chaining(message, pbuf, offset, game) {
     };
     message.desc = pbuf.readInt32();
     message.ct = pbuf.readInt8(); // defunct in code
+    game.sendBufferToPlayer(0, STOC_GAME_MSG, offset, pbuf - offset);
+    game.sendBufferToPlayer(1, STOC_GAME_MSG, offset, pbuf - offset);
+    game.sendToObservers();
 }
 
 function msg_chained(message, pbuf, offset, game) {
     message.chain_link = pbuf.readInt8();
+    game.sendBufferToPlayer(0, STOC_GAME_MSG, offset, pbuf - offset);
+    game.sendBufferToPlayer(1, STOC_GAME_MSG, offset, pbuf - offset);
+    game.sendToObservers();
+    game.refreshMzone(0);
+    game.refreshMzone(1);
+    game.refreshSzone(0);
+    game.refreshSzone(1);
+    game.refreshHand(0);
+    game.refreshHand(1);
 }
+
 
 function msg_chain_solving(message, pbuf, offset, game) {
     message.chain_link = pbuf.readInt8();
+    game.sendBufferToPlayer(0, STOC_GAME_MSG, offset, pbuf - offset);
+    game.sendBufferToPlayer(1, STOC_GAME_MSG, offset, pbuf - offset);
+    game.sendToObservers();
+
 }
 
 function msg_chain_solved(message, pbuf, offset, game) {
     message.ct = pbuf.readInt8(); // defunct in the code
+    game.sendBufferToPlayer(0, STOC_GAME_MSG, offset, pbuf - offset);
+    game.sendBufferToPlayer(1, STOC_GAME_MSG, offset, pbuf - offset);
+    game.sendToObservers();
+    game.refreshMzone(0);
+    game.refreshMzone(1);
+    game.refreshSzone(0);
+    game.refreshSzone(1);
+    game.refreshHand(0);
+    game.refreshHand(1);
 }
 
 
 function msg_chain_negated(message, pbuf, offset, game) {
     message.chain_link = pbuf.readInt8();
+    game.sendBufferToPlayer(0, STOC_GAME_MSG, offset, pbuf - offset);
+    game.sendBufferToPlayer(1, STOC_GAME_MSG, offset, pbuf - offset);
+    game.sendToObservers();
 }
 
 function msg_chain_disabled(message, pbuf, offset, game) {
     message.chain_link = pbuf.readInt8();
+    game.sendBufferToPlayer(0, STOC_GAME_MSG, offset, pbuf - offset);
+    game.sendBufferToPlayer(1, STOC_GAME_MSG, offset, pbuf - offset);
 }
 
 function msg_card_selected(message, pbuf, offset, game) {
     message.player = pbuf.readInt8();
     message.count = pbuf.readInt8();
-
+    // in single this doesnt do anything, is this a bug?
 }
 
 function msg_random_selected(message, pbuf, offset, game) {
@@ -651,9 +684,13 @@ function msg_spsummoning(message, pbuf, offset, game) {
 function msg_flipsummoning(message, pbuf, offset, game) {
     message.id = pbuf.readInt32();
     message.player = pbuf.readInt8(); // current controller
-    message.location = enums.locations[pbuf.readInt8()]; // current cLocation
+    message.location = pbuf.readInt8(); // current cLocation
     message.index = pbuf.readInt8(); // current sequence (index)
-    message.position = enums.positions[pbuf.readInt8()];
+    message.position = pbuf.readInt8();
+    game.sendBufferToPlayer(0, STOC_GAME_MSG, offset, pbuf - offset);
+    game.sendBufferToPlayer(1, STOC_GAME_MSG, offset, pbuf - offset);
+    game.sendToObservers();
+    game.refreshSingle(message.player, message.location, message.index);
 }
 
 function msg_select_battlecmd(message, pbuf, offset, game) {
