@@ -558,6 +558,9 @@ function msg_hand_res(message, pbuf, offset, game) {
     message.res = pbuf.readInt8();
     message.res1 = (message.res & 0x3) - 1;
     message.res2 = ((message.res >> 2) & 0x3) - 1;
+    game.sendBufferToPlayer(0, STOC_GAME_MSG, offset, pbuf - offset);
+    game.reSendToPlayer(1);
+    game.sendToObservers();
 }
 
 function msg_toss_coin(message, pbuf, offset, game) {
@@ -1417,7 +1420,9 @@ translator = {
     MSG_MATCH_KILL: msg_match_kill,
     MSG_CUSTOM_MSG: msg_custom_msg,
     MSG_SELECT_UNSELECT_CARD: msg_select_unselect_card,
-    MSG_CONFIRM_EXTRATOP: msg_confirm_extratop
+    MSG_CONFIRM_EXTRATOP: msg_confirm_extratop,
+    MSG_ROCK_PAPER_SCISSORS: msg_rock_paper_scissors,
+    MSG_HAND_RES: msg_hand_res
 };
 
 function analyze(engineBuffer, len, game) {
