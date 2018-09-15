@@ -579,6 +579,8 @@ function msg_announce_race(message, pbuf, offset, game) {
     message.player = pbuf.readInt8();
     message.announce_count = pbuf.readInt8();
     message.avaliable = pbuf.readInt32();
+    game.waitforResponse(message.player);
+    game.sendBufferToPlayer(message.player, STOC_GAME_MSG, offset, pbuf - offset);
     return 1;
 }
 
@@ -586,12 +588,16 @@ function msg_announce_attrib(message, pbuf, offset, game) {
     message.player = pbuf.readInt8();
     message.announce_count = pbuf.readInt8();
     message.avaliable = pbuf.readInt32();
+    game.waitforResponse(message.player);
+    game.sendBufferToPlayer(message.player, STOC_GAME_MSG, offset, pbuf - offset);
     return 1;
 }
 
 function msg_announce_card(message, pbuf, offset, game) {
     message.player = pbuf.readInt8();
+    game.waitforResponse(message.player);
     message.declarable_type = pbuf.readInt32();
+    game.sendBufferToPlayer(message.player, STOC_GAME_MSG, offset, pbuf - offset);
     return 1;
 }
 
@@ -602,15 +608,20 @@ function msg_announce_number(message, pbuf, offset, game) {
     for (let i = 0; i < message.announce_count; ++i) {
         message.values.push(pbuf.readInt32());
     }
+    game.waitforResponse(message.player);
+    game.sendBufferToPlayer(message.player, STOC_GAME_MSG, offset, pbuf - offset);
+    return 1;
 }
 
-function msg_announc_card_filter(message, pbuf, offset, game) {
+function msg_announce_card_filter(message, pbuf, offset, game) {
     message.player = pbuf.readInt8();
     message.count = pbuf.readInt8();
     message.opcodes = [];
     for (let i = 0; i < message.count; ++i) {
         message.opcodes.push(pbuf.readInt32());
     }
+    game.waitforResponse(message.player);
+    game.sendBufferToPlayer(message.player, STOC_GAME_MSG, offset, pbuf - offset);
     return 1;
 }
 
@@ -621,16 +632,27 @@ function msg_card_hint(message, pbuf, offset, game) {
     pbuf.readInt8(); //padding
     message.chtype = pbuf.readInt8();
     message.value = pbuf.readInt32();
+    game.sendBufferToPlayer(0, STOC_GAME_MSG, offset, pbuf - offset);
+    game.sendBufferToPlayer(1, STOC_GAME_MSG, offset, pbuf - offset);
+    game.sendToObservers();
 }
 
 function msg_player_hint(message, pbuf, offset, game) {
     message.player = pbuf.readInt8();
     message.chtype = pbuf.readInt8();
     message.value = pbuf.readInt32();
+    game.sendBufferToPlayer(0, STOC_GAME_MSG, offset, pbuf - offset);
+    game.sendBufferToPlayer(1, STOC_GAME_MSG, offset, pbuf - offset);
+    game.sendToObservers();
 }
 
 function msg_match_kill(message, pbuf, offset, game) {
     message.match_kill = pbuf.readInt32();
+    if (game.match_mode) {
+        game.sendBufferToPlayer(0, STOC_GAME_MSG, offset, pbuf - offset);
+        game.sendBufferToPlayer(1, STOC_GAME_MSG, offset, pbuf - offset);
+        game.sendToObservers();
+    }
 }
 
 function msg_select_idlecmd(message, pbuf, offset, game) {
@@ -1332,6 +1354,7 @@ function msg_select_unselect_card(message, pbuf, offset, game) {
 translator = {
     MSG_RETRY: msg_retry,
     MSG_HINT: msg_hint,
+    MSG_PLAYER_HINT: msg_player_hint,
     MSG_WAITING: msg_waiting,
     MSG_START: msg_start,
     MSG_WIN: msg_win,
@@ -1422,7 +1445,8 @@ translator = {
     MSG_SELECT_UNSELECT_CARD: msg_select_unselect_card,
     MSG_CONFIRM_EXTRATOP: msg_confirm_extratop,
     MSG_ROCK_PAPER_SCISSORS: msg_rock_paper_scissors,
-    MSG_HAND_RES: msg_hand_res
+    MSG_HAND_RES: msg_hand_res,
+    MSG_ANNOUNCE_CARD_FILTER: msg_announce_card_filter
 };
 
 function analyze(engineBuffer, len, game) {
