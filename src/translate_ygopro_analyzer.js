@@ -400,6 +400,9 @@ function msg_lpupdate(message, pbuf, offset, game) {
     message.player = pbuf.readInt8();
     message.lp = pbuf.readInt32();
     message.multiplier = 1;
+    game.sendBufferToPlayer(0, STOC_GAME_MSG, offset, pbuf - offset);
+    game.reSendToPlayer(1);
+    game.sendToObservers();
 }
 
 function msg_summoning(message, pbuf, offset, game) {
@@ -433,6 +436,9 @@ function msg_unequip(message, pbuf, offset, game) {
     message.l1 = pbuf.readInt8();
     message.s1 = pbuf.readInt8();
     pbuf.readInt8();
+    game.sendBufferToPlayer(0, STOC_GAME_MSG, offset, pbuf - offset);
+    game.reSendToPlayer(1);
+    game.sendToObservers();
 }
 
 function msg_card_target(message, pbuf, offset, game) {
@@ -444,6 +450,9 @@ function msg_card_target(message, pbuf, offset, game) {
     message.l1 = pbuf.readInt8();
     message.s1 = pbuf.readInt8();
     pbuf.readInt8();
+    game.sendBufferToPlayer(0, STOC_GAME_MSG, offset, pbuf - offset);
+    game.reSendToPlayer(1);
+    game.sendToObservers();
 }
 
 function msg_cancel_target(message, pbuf, offset, game) {
@@ -455,6 +464,9 @@ function msg_cancel_target(message, pbuf, offset, game) {
     message.l2 = pbuf.readInt8();
     message.s2 = pbuf.readInt8();
     pbuf.readInt8();
+    game.sendBufferToPlayer(0, STOC_GAME_MSG, offset, pbuf - offset);
+    game.reSendToPlayer(1);
+    game.sendToObservers();
 }
 
 function msg_add_counter(message, pbuf, offset, game) {
@@ -463,6 +475,9 @@ function msg_add_counter(message, pbuf, offset, game) {
     message.location = enums.locations[pbuf.readInt8()];
     message.index = pbuf.readInt8();
     message.count = pbuf.readInt8();
+    game.sendBufferToPlayer(0, STOC_GAME_MSG, offset, pbuf - offset);
+    game.reSendToPlayer(1);
+    game.sendToObservers();
 }
 
 function msg_remove_conuter(message, pbuf, offset, game) {
@@ -471,6 +486,9 @@ function msg_remove_conuter(message, pbuf, offset, game) {
     message.location = enums.locations[pbuf.readInt8()];
     message.index = pbuf.readInt8();
     message.count = pbuf.readInt8();
+    game.sendBufferToPlayer(0, STOC_GAME_MSG, offset, pbuf - offset);
+    game.reSendToPlayer(1);
+    game.sendToObservers();
 }
 
 function msg_attack(message, pbuf, offset, game) {
@@ -486,6 +504,9 @@ function msg_attack(message, pbuf, offset, game) {
         index: pbuf.readInt8()
     };
     pbuf.readInt8();
+    game.sendBufferToPlayer(0, STOC_GAME_MSG, offset, pbuf - offset);
+    game.reSendToPlayer(1);
+    game.sendToObservers();
 }
 
 function msg_battle(message, pbuf, offset, game) {
@@ -503,7 +524,9 @@ function msg_battle(message, pbuf, offset, game) {
     message.datk = pbuf.readInt32();
     message.ddef = pbuf.readInt32();
     message.dd = pbuf.readInt8();
-    return 1;
+    game.sendBufferToPlayer(0, STOC_GAME_MSG, offset, pbuf - offset);
+    game.reSendToPlayer(1);
+    game.sendToObservers();
 }
 
 function msg_missed_effect(pbuf, message) {
