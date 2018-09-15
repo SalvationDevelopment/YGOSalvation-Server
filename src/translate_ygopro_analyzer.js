@@ -529,9 +529,10 @@ function msg_battle(message, pbuf, offset, game) {
     game.sendToObservers();
 }
 
-function msg_missed_effect(pbuf, message) {
-    pbuf.readInt8(); //padding
+function msg_missed_effect(pbuf, message, offset, game) {
+    var player = pbuf.readInt8(); //padding
     message.id = pbuf.readInt32();
+    game.sendBufferToPlayer(player, STOC_GAME_MSG, offset, pbuf - offset);
 }
 
 function msg_toss_dice(message, pbuf, offset, game) {
@@ -541,10 +542,15 @@ function msg_toss_dice(message, pbuf, offset, game) {
     for (let i = 0; i < message.count; ++i) {
         message.results.push(pbuf.readInt8());
     }
+    game.sendBufferToPlayer(0, STOC_GAME_MSG, offset, pbuf - offset);
+    game.reSendToPlayer(1);
+    game.sendToObservers();
 }
 
 function msg_rock_paper_scissors(message, pbuf, offset, game) {
     message.player = pbuf.readInt8();
+    game.waitforResponse(message.player);
+    game.sendBufferToPlayer(message.player, STOC_GAME_MSG, offset, pbuf - offset);
     return 1;
 }
 
@@ -561,6 +567,9 @@ function msg_toss_coin(message, pbuf, offset, game) {
     for (let i = 0; i < message.count; ++i) {
         message.results.push(pbuf.readInt8());
     }
+    game.sendBufferToPlayer(0, STOC_GAME_MSG, offset, pbuf - offset);
+    game.reSendToPlayer(1);
+    game.sendToObservers();
 }
 
 function msg_announce_race(message, pbuf, offset, game) {
@@ -1252,11 +1261,11 @@ function msg_attack_disabled(message, pbuf, offset, game) {
 }
 
 function msg_damage_step_start(message, pbuf, offset, game) {
-    unused();
+    user_interface_only(message, pbuf, offset, game);
 }
 
 function msg_damage_step_end(message, pbuf, offset, game) {
-    unused();
+    user_interface_only(message, pbuf, offset, game);
 }
 
 function msg_be_chain_target(message, pbuf, offset, game) {
