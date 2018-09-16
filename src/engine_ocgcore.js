@@ -431,6 +431,7 @@ function makeGame(pduel, settings, players, observers) {
     }
 
     function refreshHand(player, flag, use_cache) {
+        return;
         let qbuf = Buffer.alloc(0x2000),
             header = Buffer.alloc(3),
             proto = enums.STOC.enums.STOC_GAME_MSG,

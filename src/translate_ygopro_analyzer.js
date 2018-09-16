@@ -214,8 +214,6 @@ function msg_draw(message, pbuf, offset, game) {
     message.player = pbuf.readInt8();
     message.count = pbuf.readInt8();
     message.cards = [];
-    game.sendBufferToPlayer(message.player, STOC_GAME_MSG, offset, pbuf - offset);
-
     for (let i = 0; i < message.count; ++i) {
         message.cards.push({
             id: pbuf.readInt32()
@@ -1462,11 +1460,12 @@ function analyze(engineBuffer, len, game) {
         snippet = Buffer.from(msgbuffer.packet, pbuf.readposition);
         offset = new BufferStreamReader(snippet);
         const engType = enums.STOC.STOC_GAME_MSG[pbuf.readInt8()];
-        console.log(pbuf - msgbuffer);
         if (translator[engType]) {
             console.log(engType);
             var message = {};
+            console.log('----engType', engType);
             const output = translator[engType](message, pbuf, offset, game);
+            console.log(pbuf - msgbuffer);
             if (output) {
                 return output;
             }

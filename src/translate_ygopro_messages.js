@@ -21,6 +21,7 @@ const enums = require('./translate_ygopro_enums.js'),
  * @returns {YGOProMessage} augmented YGOProMessage
  */
 function stoc_unknown(packet, translationError) {
+    process.exit();
     return {
         duelAction: 'ygopro',
         command: 'STOC_UNKNOWN',

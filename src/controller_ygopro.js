@@ -62,6 +62,7 @@ function boardController(gameBoard, slot, message, ygopro, player) {
     player.lastData = message;
     switch (message.command) {
         case ('STOC_UNKNOWN'): // Good
+            process.exit();
             break;
         case ('STOC_GAME_MSG'): // Good
             break;
