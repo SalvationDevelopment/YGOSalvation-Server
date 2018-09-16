@@ -219,8 +219,9 @@ function msg_draw(message, pbuf, offset, game) {
             id: pbuf.readInt32()
         });
     }
+    console.log(pbuf - offset, pbuf.valueOf(), offset.valueOf());
     game.sendBufferToPlayer(message.player, STOC_GAME_MSG, offset, pbuf - offset);
-    game.reSendToPlayer(1);
+    game.reSendToPlayer(1 - message.player);
     game.sendToObservers();
 }
 
@@ -1461,7 +1462,6 @@ function analyze(engineBuffer, len, game) {
         offset = new BufferStreamReader(snippet);
         const engType = enums.STOC.STOC_GAME_MSG[pbuf.readInt8()];
         if (translator[engType]) {
-            console.log(engType);
             var message = {};
             console.log('----engType', engType);
             const output = translator[engType](message, pbuf, offset, game);

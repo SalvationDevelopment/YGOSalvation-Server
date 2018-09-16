@@ -572,7 +572,6 @@ function init(callback) {
      * @returns {undefined}
      */
     function setState(changeRequest) {
-        console.log(changeRequest);
         var player = changeRequest.player,
             clocation = changeRequest.clocation,
             index = changeRequest.index,
@@ -1263,7 +1262,6 @@ function init(callback) {
      */
     function nextPhase(phase) {
         state.phase = phase;
-        console.log(phase);
         callback(generateView(), stack);
     }
 

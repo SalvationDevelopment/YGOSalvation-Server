@@ -187,7 +187,8 @@ function shuffle(a) {
 }
 
 function duelEndProcedure(players) {
-
+    console.log('game ended');
+    process.exit();
 }
 
 function seed() {
@@ -252,8 +253,10 @@ function playerInstance(playerConnection, slot, game, settings) {
                 readposition: 0
             };
         packet.command = enums.STOC[message[0]];
-        console.log(packet.command, message);
-        task.push(translateYGOProAPI(gameBoard, packet));
+        if (packet.command !== "STOC_UNKNOWN") {
+            task.push(translateYGOProAPI(gameBoard, packet));
+        }
+
         return task;
     }
 
@@ -575,7 +578,6 @@ function duel(settings, players, observers) {
     });
     console.log(3);
     players[1].main.forEach(function(cardID, sequence) {
-        console.log(cardID, sequence);
         ocgapi.new_card(pduel, cardID, 1, 1, LOCATION_DECK, 0, POS_FACEDOWN_DEFENSE);
     });
     console.log(4);
