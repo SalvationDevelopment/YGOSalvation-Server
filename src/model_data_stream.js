@@ -30,6 +30,7 @@ function DataStream() {
                 incomplete = false;
             } else {
                 recordOfBuffer = memory.slice(2).toJSON();
+                recordOfBuffer.frameLength = frameLength;
                 output.push(recordOfBuffer);
                 if (memory.length === (frameLength + 2)) {
                     memory = new Buffer([]);
