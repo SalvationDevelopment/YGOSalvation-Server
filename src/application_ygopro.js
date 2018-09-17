@@ -14,22 +14,38 @@ const http = require('http'),
 primus.use('rooms', Rooms);
 
 
+function Game(data) {
+    return {
+        password: data.password
+    };
+}
+
 function onData(data, socket) {
     data = data || {};
     const action = data.action;
 
     switch (action) {
         case 'CTOS_JOIN_GAME':
+            if (!games[data.game]) {
+                games[data.game] = new Game(data);
+            }
+            if (games[data.game].password !== data.password) {
+                return;
+            }
             socket.join(data.game);
             break;
     }
+
     if (!socket.game) {
         return;
     }
+
     switch (action) {
         case 'CTOS_RESPONSE':
+            games[data.game].game.respond(data.buffer);
             break;
         case 'CTOS_UPDATE_DECK':
+            games[data.game].players[socket.slot].deck = data.deck;
             break;
         case 'CTOS_HAND_RESULT':
             break;
@@ -39,10 +55,8 @@ function onData(data, socket) {
             break;
         case 'CTOS_CREATE_GAME':
             break;
-        case 'CTOS_JOIN_GAME':
-            socket.join(data.game);
-            break;
         case 'CTOS_LEAVE_GAME':
+            socket.leave(data.game);
             break;
         case 'CTOS_SURRENDER':
             break;
