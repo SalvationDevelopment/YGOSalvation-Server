@@ -5,8 +5,9 @@ const net = require('net'),
     rooms = {};
 
 function onConnection(socket) {
-    const dataStream = new DataStream(),
-        tcpConnection = socket;
+    const dataStream = new DataStream();
+
+    socket.state = {};
 
     function parsePackets(data) {
         'use strict';
@@ -17,8 +18,8 @@ function onConnection(socket) {
                 readposition: 0
             };
         packet.command = enums.STOC[message[0]];
-        if (packet.command !== "STOC_UNKNOWN") {
-            task.push(translateYGOProAPI(gameBoard, packet));
+        if (packet.command !== 'STOC_UNKNOWN') {
+            task.push(translateYGOProAPI(socket.state, packet));
         }
 
         return task;

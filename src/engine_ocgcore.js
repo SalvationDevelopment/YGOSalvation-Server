@@ -1,6 +1,4 @@
-/*jslint node:true, plusplus:true, bitwise:true */
-
-'use strict';
+/*eslint no-plusplus: 0*/
 
 /* allows dynamic linking of the ocgapi.dll, critical; */
 /* allows use of C++ pointers for C++ JS interactions, critical */
@@ -12,6 +10,7 @@ const sql = require('sql.js'),
     ref = require('ref'),
     struct = require('ref-struct'),
     arrayBuf = require('ref-array'),
+    BufferStreamReader = require('./model_stream_reader'),
     POS_FACEDOWN = 0x1,
     POS_FACEDOWN_DEFENSE = 0x8,
     LOCATION_DECK = 0x01,
@@ -20,6 +19,7 @@ const sql = require('sql.js'),
     LOCATION_EXTRA = 0x40,
     LOCATION_GRAVE = 0x10,
     LOCATION_HAND = 0x02,
+    makeCard = require('./model_ygopro_card.js'),
     charArray = arrayBuf(ref.types.char),
     bytePointer = ref.refType(ref.types.byte),
     charPointer = ref.refType(ref.types.char),
@@ -90,7 +90,6 @@ function scriptReader(scriptname, length) {
 }
 
 var database,
-    cards = {},
     filebuffer = fs.readFileSync('../bin/mr4/cards.cdb');
 
 
@@ -244,21 +243,6 @@ function playerInstance(playerConnection, slot, game, settings) {
         gameQueue = queue(),
         tcpConnection = new Responser(game, playerConnection);
 
-    function parsePackets(data) {
-        'use strict';
-        var message = new Buffer(data),
-            task = [],
-            packet = {
-                message: message.slice(1),
-                readposition: 0
-            };
-        packet.command = enums.STOC[message[0]];
-        if (packet.command !== "STOC_UNKNOWN") {
-            task.push(translateYGOProAPI(gameBoard, packet));
-        }
-
-        return task;
-    }
 
     function preformGameAction(gameAction) {
         var output = boardController(gameBoard, slot, gameAction, tcpConnection, playerConnection);
@@ -269,6 +253,7 @@ function playerInstance(playerConnection, slot, game, settings) {
 
     function queueGameActions(gameActions) {
         gameActions.forEach(function(gameAction) {
+            console.log(gameAction);
             const pause = enums.timeout[gameAction.command] || 0;
             gameQueue.push(function(next) {
                 setTimeout(function() {
@@ -285,15 +270,8 @@ function playerInstance(playerConnection, slot, game, settings) {
     }
 
     return function(data) {
-        try {
-            dataStream.input(data)
-                .map(parsePackets)
-                .map(queueGameActions);
-        } catch (error) {
-            console.log(error);
-        }
-
-    };
+        queueGameActions([data]);
+    }
 }
 
 
@@ -313,14 +291,7 @@ function makeGame(pduel, settings, players, observers) {
         }
     }
 
-    function sendBufferToPlayer(player, proto, buffer, length) {
-        buffer = buffer.packet || buffer;
-        player = Math.abs(player);
-        const stoc = new Buffer([proto]),
-            frameSize = new Buffer(2);
-        length = length || buffer.length;
-        frameSize.writeUInt16LE(length + 1, 0);
-        var message = Buffer.concat([frameSize, stoc, Buffer.from(buffer, 0, length + 1)]);
+    function sendBufferToPlayer(player, message) {
         lastMessage = message;
         players[player](message);
     }
@@ -330,20 +301,13 @@ function makeGame(pduel, settings, players, observers) {
     }
 
     function waitforResponse(player) {
-        const STOC_TimeLimit = struct({
-                player: ref.types.char,
-                left_time: ref.types.short
-            }),
-            sctl = new STOC_TimeLimit(),
-            MSG_WAITING = 3,
-            msg = new Buffer([MSG_WAITING]);
+        const message = {
+            command: 'MSG_WAITING',
+            time: time_limit
+        };
 
-        last_response = player;
-        sendBufferToPlayer((1 - player), enums.STOC.enums.STOC_GAME_MSG, msg);
-        sctl.player = player;
-        sctl.left_time = time_limit;
-        sendBufferToPlayer(0, enums.STOC.enums.STOC_TIME_LIMIT, sctl.ref());
-        sendBufferToPlayer(1, enums.STOC.enums.STOC_TIME_LIMIT, sctl.ref());
+        sendBufferToPlayer(0, message);
+        sendBufferToPlayer(1, message);
     }
 
     function sendToObservers() {
@@ -353,145 +317,125 @@ function makeGame(pduel, settings, players, observers) {
     }
 
     function sendStartInfo(player) {
-        const startbuf = Buffer.alloc(18);
-        startbuf[0] = 4;
-        startbuf[1] = 0;
-        startbuf.writeUInt32LE(settings.start_lp, 2);
-        startbuf.writeUInt32LE(settings.start_lp, 6);
-        startbuf.writeUInt16LE(ocgapi.query_field_count(pduel, 0, 0x1), 10);
-        startbuf.writeUInt16LE(ocgapi.query_field_count(pduel, 0, 0x40), 12);
-        startbuf.writeUInt16LE(ocgapi.query_field_count(pduel, 1, 0x1), 14);
-        startbuf.writeUInt16LE(ocgapi.query_field_count(pduel, 1, 0x40), 16);
-        sendBufferToPlayer(player, enums.STOC.enums.STOC_GAME_MSG, startbuf, 18);
+        const message = {
+            command: 'MSG_START',
+            playertype: player,
+            lifepoints1: settings.start_lp,
+            lifepoints2: settings.start_lp,
+            player1decksize: ocgapi.query_field_count(pduel, 0, 0x1),
+            player1extrasize: ocgapi.query_field_count(pduel, 0, 0x40),
+            player2decksize: ocgapi.query_field_count(pduel, 1, 0x1),
+            player2extrasize: ocgapi.query_field_count(pduel, 1, 0x40)
+        };
+        sendBufferToPlayer(player, message);
+    }
+
+    function queryFieldCount(player) {
+        return {
+            DECK: ocgapi.query_field_count(pduel, player, 0x1),
+            HAND: ocgapi.query_field_count(pduel, player, 0x2),
+            GRAVE: ocgapi.query_field_count(pduel, player, 0x10),
+            EXTRA: ocgapi.query_field_count(pduel, player, 0x40),
+            REMOVED: ocgapi.query_field_count(pduel, player, 0x20),
+            SPELLZONE: ocgapi.query_field_count(pduel, player, 0x8),
+            MONSTERZONE: ocgapi.query_field_count(pduel, player, 0x4)
+        };
+    }
+
+    function getFieldCards(player, location, pbuf) {
+        'use strict';
+        const cards = [],
+            values = queryFieldCount(player),
+            requiredIterations = values[location];
+
+        for (let i = 0; requiredIterations > i; ++i) {
+            const len = pbuf.readInt32();
+            if (len > 8) {
+                const card = makeCard(pbuf, undefined, true);
+                cards.push(card);
+            }
+        }
+        return cards;
+    }
+
+    function msg_update_data(message, pbuf) {
+        message.command = 'MSG_UPDATE_DATA';
+        message.location = enums.locations[pbuf.readInt8()];
+        message.cards = getFieldCards(message.player, message.location, pbuf);
+        return message;
+    }
+
+    function msg_update_card(message, pbuf, game, gameBoard) {
+        message.command = 'MSG_UPDATE_CARD';
+        message.location = enums.locations[pbuf.readInt8()];
+        message.index = pbuf.readInt8();
+        message.card = makeCard(pbuf, undefined, true);
+        return message;
     }
 
     function refreshExtra(player, flag, use_cache) {
-        const qbuf = Buffer.alloc(0x2000),
-            header = Buffer.alloc(3),
-            proto = enums.STOC.enums.STOC_GAME_MSG,
-            len = ocgapi.query_field_card(pduel, player, LOCATION_EXTRA, flag, qbuf, use_cache);
         flag = flag || 0;
         use_cache = use_cache || 0;
-        header[0] = 0x6;
-        header[1] = player;
-        header[2] = LOCATION_EXTRA;
-        sendBufferToPlayer(player, proto, Buffer.concat([header, qbuf], len + 3), len + 3);
-        return len;
+        const qbuf = Buffer.alloc(0x2000);
+        ocgapi.query_field_card(pduel, player, LOCATION_EXTRA, flag, qbuf, use_cache);
+        var message = msg_update_data({}, new BufferStreamReader(qbuf));
+        sendBufferToPlayer(player, message);
     }
 
     function refreshMzone(player, flag, use_cache) {
-        const qbuf = Buffer.alloc(0x2000),
-            header = Buffer.alloc(3),
-            proto = enums.STOC.enums.STOC_GAME_MSG,
-            len = ocgapi.query_field_card(pduel, player, LOCATION_MZONE, flag, qbuf, use_cache);
-        flag = flag || 0;
-        use_cache = use_cache || 0;
-        header[0] = 0x6;
-        header[1] = player;
-        header[2] = LOCATION_MZONE;
-        var qlen = 0;
-        while (qlen < len) {
-            const clen = qbuf.readUInt32LE(qlen);
-            qlen += clen;
-            if (clen === 4) {
-                continue;
-            }
-            if (qbuf[11] & POS_FACEDOWN) {
-                qbuf[clen - 4] = 0;
-            }
-            qbuf += clen - 4;
-        }
-        sendBufferToPlayer(player, proto, Buffer.concat([header, qbuf], len + 3), len + 3);
+        const qbuf = Buffer.alloc(0x2000);
+        ocgapi.query_field_card(pduel, player, LOCATION_MZONE, flag, qbuf, use_cache);
+        var message = msg_update_data({}, new BufferStreamReader(qbuf));
+        sendBufferToPlayer(player, message);
         reSendToPlayer(1 - player);
-        return len;
+        sendToObservers();
     }
 
     function refreshSzone(player, flag, use_cache) {
-        const qbuf = Buffer.alloc(0x2000),
-            header = Buffer.alloc(3),
-            proto = enums.STOC.enums.STOC_GAME_MSG,
-            len = ocgapi.query_field_card(pduel, player, LOCATION_SZONE, flag, qbuf, use_cache);
-        flag = flag || 0;
-        use_cache = use_cache || 0;
-        header[0] = 0x6;
-        header[1] = player;
-        header[2] = LOCATION_SZONE;
-        var qlen = 0;
-        while (qlen < len) {
-            const clen = qbuf.readUInt32LE(qlen);
-            qlen += clen;
-            if (clen === 4) {
-                continue;
-            }
-            if (qbuf[11] & POS_FACEDOWN) {
-                qbuf[clen - 4] = 0;
-            }
-            qbuf += clen - 4;
-        }
-        sendBufferToPlayer(player, proto, Buffer.concat([header, qbuf], len + 3), len + 3);
+        const qbuf = Buffer.alloc(0x2000);
+        ocgapi.query_field_card(pduel, player, LOCATION_SZONE, flag, qbuf, use_cache);
+        var message = msg_update_data({}, new BufferStreamReader(qbuf));
+        sendBufferToPlayer(player, message);
         reSendToPlayer(1 - player);
-        return len;
+        sendToObservers();
     }
 
     function refreshHand(player, flag, use_cache) {
-        return;
-        let qbuf = Buffer.alloc(0x2000),
-            header = Buffer.alloc(3),
-            proto = enums.STOC.enums.STOC_GAME_MSG,
-            len = ocgapi.query_field_card(pduel, player, LOCATION_HAND, flag, qbuf, use_cache);
-        flag = flag || 0;
-        use_cache = use_cache || 0;
-        header[0] = 0x6;
-        header[1] = player;
-        header[2] = LOCATION_HAND;
-        var qlen = 0;
-        // while (qlen < len) {
-        //     let clen = qbuf.readUInt32LE(qlen);
-        //     qlen += clen;
-        //     if (clen === 4) {
-        //         continue;
-        //     }
-        //     if (qbuf[11] & POS_FACEDOWN) {
-        //         qbuf[clen - 4] = 0;
-        //     }
-        //     qbuf += clen - 4;
-        // }
-        sendBufferToPlayer(player, proto, Buffer.concat([header, qbuf], len + 3), len + 3);
+
+        const qbuf = Buffer.alloc(0x2000);
+        ocgapi.query_field_card(pduel, player, LOCATION_HAND, flag, qbuf, use_cache);
+        var message = msg_update_data({}, new BufferStreamReader(qbuf));
+        sendBufferToPlayer(player, message);
         reSendToPlayer(1 - player);
-        return len;
+        sendToObservers();
     }
 
 
     function refreshGrave(player, flag, use_cache) {
         const qbuf = Buffer.alloc(0x2000),
             header = Buffer.alloc(3),
-            proto = enums.STOC.enums.STOC_GAME_MSG,
-            len = ocgapi.query_field_card(pduel, player, LOCATION_GRAVE, flag, qbuf, use_cache);
-        flag = flag || 0;
-        use_cache = use_cache || 0;
-        header[0] = 0x6;
-        header[1] = player;
-        header[2] = LOCATION_GRAVE;
-        sendBufferToPlayer(player, proto, Buffer.concat([header, qbuf], len + 3), len + 3);
-        return len;
+            proto = enums.STOC.enums.STOC_GAME_MSG;
+        ocgapi.query_field_card(pduel, player, LOCATION_GRAVE, flag, qbuf, use_cache);
+        var message = msg_update_data({}, new BufferStreamReader(qbuf));
+        sendBufferToPlayer(player, message);
+        reSendToPlayer(1 - player);
+        sendToObservers();
     }
 
     function refreshSingle(player, location, sequence, flag) {
         flag = flag || 0;
         const qbuf = Buffer.alloc(0x2000),
             header = Buffer.alloc(3),
-            proto = enums.STOC.enums.STOC_GAME_MSG,
-            len = ocgapi.query_field_card(pduel, player, location, sequence, flag, qbuf);
+            proto = enums.STOC.enums.STOC_GAME_MSG;
+        ocgapi.query_field_card(pduel, player, location, sequence, flag, qbuf);
 
-        header[0] = 0x7;
-        header[1] = player;
-        header[2] = location;
-        header[3] = sequence;
-        sendBufferToPlayer(player, proto, Buffer.concat([header, qbuf], len + 4), len + 4);
-        if ((location & 0x90) || ((location & 0x2c) && (qbuf[15] & 0x5))) {
-            reSendToPlayer(1 - player);
-        }
-        return len;
+        var message = msg_update_card({
+            player
+        }, new BufferStreamReader(qbuf));
+        sendBufferToPlayer(player, message);
+        reSendToPlayer(1 - player);
+        sendToObservers();
+
     }
 
     gameTick();
@@ -599,10 +543,10 @@ function duel(settings, players, observers) {
         game.sendStartInfo(0);
         game.sendStartInfo(1);
         setTimeout(function() {
-            game.refreshExtra(0);
-            game.refreshExtra(1);
-            game.refreshMzone(0);
-            game.refreshMzone(1);
+            // game.refreshExtra(0);
+            // game.refreshExtra(1);
+            // game.refreshMzone(0);
+            // game.refreshMzone(1);
             ocgapi.start_duel(pduel, settings.priority);
             mainProcess(pduel, game);
         }, 1000);

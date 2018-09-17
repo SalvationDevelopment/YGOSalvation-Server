@@ -218,7 +218,6 @@ function msg_draw(message, pbuf, game) {
             id: pbuf.readInt32()
         });
     }
-    console.log(pbuf - offset, pbuf.valueOf().valueOf());
     game.sendBufferToPlayer(message.player, message);
     game.reSendToPlayer(1 - message.player);
     game.sendToObservers();
@@ -246,10 +245,6 @@ function msg_shuffle_extra(message, pbuf, game) {
     message.player = pbuf.readInt8();
     message.count = pbuf.readInt8();
     game.sendBufferToPlayer(0, message);
-    // make all the other cards blank
-    for (i = 0; i < message.count; ++i) {
-        pbuf.writeInt32(0);
-    }
     game.sendBufferToPlayer(1 - message.player, message);
     game.sendToObservers();
     game.refreshExtra(message.player);
@@ -1444,16 +1439,14 @@ translator = {
 function analyze(engineBuffer, len, game) {
 
 
-    let offset,
-        snippet;
+    let snippet = 0;
 
     const msgbuffer = new BufferStreamReader(engineBuffer),
         pbuf = new BufferStreamReader(engineBuffer);
 
     while (pbuf - msgbuffer < len) {
-        snippet = Buffer.from(msgbuffer.packet, pbuf.readposition);
-        offset = new BufferStreamReader(snippet);
-        const engType = enums.STOC.message[pbuf.readInt8()];
+        console.log('n', snippet++);
+        const engType = enums.STOC.STOC_GAME_MSG[pbuf.readInt8()];
         if (translator[engType]) {
             var message = {};
             console.log('----engType', engType);
