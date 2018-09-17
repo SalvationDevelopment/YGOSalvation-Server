@@ -1,8 +1,7 @@
 /*eslint no-plusplus: 0*/
 const enums = require('./translate_ygopro_enums.js'),
     makeCard = require('./model_ygopro_card.js'),
-    BufferStreamReader = require('./model_stream_reader'),
-    STOC_GAME_MSG = enums.STOC.enums.STOC_GAME_MSG;
+    BufferStreamReader = require('./model_stream_reader');
 
 
 let translator = {};
@@ -14,9 +13,9 @@ let translator = {};
 
 
 
-function user_interface_only(message, pbuf, offset, game) {
-    game.sendBufferToPlayer(0, STOC_GAME_MSG, offset, pbuf - offset);
-    game.sendBufferToPlayer(1, STOC_GAME_MSG, offset, pbuf - offset);
+function user_interface_only(message, pbuf, game) {
+    game.sendBufferToPlayer(0, message);
+    game.sendBufferToPlayer(1, message);
     game.sendToObservers();
     game.refreshMzone(0);
     game.refreshMzone(1);
@@ -124,13 +123,13 @@ function getIdleSet(pbuf, hasDescriptions) {
     return cards;
 }
 
-function msg_retry(message, pbuf, offset, game) {
+function msg_retry(message, pbuf, game) {
     message.desc = 'Error Occurs.';
-    game.sendToPlayer(game.lastSentToPlayer, STOC_GAME_MSG, offset.packet, pbuf - offset);
+    game.sendToPlayer(game.lastSentToPlayer, message.packet);
     return 1;
 }
 
-function msg_start(message, pbuf, offset, game) {
+function msg_start(message, pbuf, game) {
     message.playertype = pbuf.readInt8();
     message.lifepoints1 = pbuf.readInt32();
     message.lifepoints2 = pbuf.readInt32();
@@ -140,28 +139,28 @@ function msg_start(message, pbuf, offset, game) {
     message.player2extrasize = pbuf.readInt16();
 }
 
-function msg_hint(message, pbuf, offset, game) {
+function msg_hint(message, pbuf, game) {
     message.command = pbuf.readInt8();
     message.player = pbuf.readInt8(); /* defunct in the code */
     message.data = pbuf.readInt32();
     switch (message.command) {
         case 5:
-            game.sendBufferToPlayer(message.player, STOC_GAME_MSG, offset, pbuf - offset);
+            game.sendBufferToPlayer(message.player, message);
             break;
         case 9:
-            game.sendBufferToPlayer(1 - message.player, STOC_GAME_MSG, offset, pbuf - offset);
+            game.sendBufferToPlayer(1 - message.player, message);
             game.sendToObservers();
             break;
         case 10:
-            game.sendBufferToPlayer(0, STOC_GAME_MSG, offset, pbuf - offset);
-            game.sendBufferToPlayer(1, STOC_GAME_MSG, offset, pbuf - offset);
+            game.sendBufferToPlayer(0, message);
+            game.sendBufferToPlayer(1, message);
             game.sendToObservers();
             break;
         default:
     }
 }
 
-function msg_new_turn(message, pbuf, offset, game) {
+function msg_new_turn(message, pbuf, game) {
     game.refreshMzone(0);
     game.refreshMzone(1);
     game.refreshSzone(0);
@@ -169,16 +168,16 @@ function msg_new_turn(message, pbuf, offset, game) {
     game.refreshHand(0);
     game.refreshHand(1);
     message.player = pbuf.readInt8();
-    game.sendBufferToPlayer(0, STOC_GAME_MSG, offset, pbuf - offset);
+    game.sendBufferToPlayer(0, message);
     game.reSendToPlayer(1);
     game.sendToObservers();
 }
 
-function msg_win(message, pbuf, offset, game) {
+function msg_win(message, pbuf, game) {
     message.player = pbuf.readInt8();
     message.type = pbuf.readInt8();
     //need to double check for more variables
-    game.sendBufferToPlayer(0, STOC_GAME_MSG, offset, pbuf - offset);
+    game.sendBufferToPlayer(0, message);
     game.reSendToPlayer(1);
     game.sendToObservers();;
     if (message.player > 1) {
@@ -195,7 +194,7 @@ function msg_win(message, pbuf, offset, game) {
     return 2;
 }
 
-function msg_new_phase(message, pbuf, offset, game) {
+function msg_new_phase(message, pbuf, game) {
     message.phase = pbuf.readInt8();
     message.gui_phase = enums.phase[message.phase];
     game.refreshMzone(0);
@@ -204,12 +203,12 @@ function msg_new_phase(message, pbuf, offset, game) {
     game.refreshSzone(1);
     game.refreshHand(0);
     game.refreshHand(1);
-    game.sendBufferToPlayer(0, STOC_GAME_MSG, offset, pbuf - offset);
+    game.sendBufferToPlayer(0, message);
     game.reSendToPlayer(1);
     game.sendToObservers();
 }
 
-function msg_draw(message, pbuf, offset, game) {
+function msg_draw(message, pbuf, game) {
     //pbufw issue
     message.player = pbuf.readInt8();
     message.count = pbuf.readInt8();
@@ -219,50 +218,44 @@ function msg_draw(message, pbuf, offset, game) {
             id: pbuf.readInt32()
         });
     }
-    console.log(pbuf - offset, pbuf.valueOf(), offset.valueOf());
-    game.sendBufferToPlayer(message.player, STOC_GAME_MSG, offset, pbuf - offset);
+    console.log(pbuf - offset, pbuf.valueOf().valueOf());
+    game.sendBufferToPlayer(message.player, message);
     game.reSendToPlayer(1 - message.player);
     game.sendToObservers();
 }
 
-function msg_shuffle_deck(message, pbuf, offset, game) {
+function msg_shuffle_deck(message, pbuf, game) {
     message.player = pbuf.readInt8();
-    game.sendBufferToPlayer(0, STOC_GAME_MSG, offset, pbuf - offset);
+    game.sendBufferToPlayer(0, message);
     game.reSendToPlayer(1);
     game.sendToObservers();
 }
 
-function msg_shuffle_hand(message, pbuf, offset, game) {
+function msg_shuffle_hand(message, pbuf, game) {
     let i;
     message.player = pbuf.readInt8();
     message.count = pbuf.readInt8();
-    game.sendBufferToPlayer(0, STOC_GAME_MSG, offset, ((pbuf - offset) + message.count * 4));
-    // make all the other cards blank
-    for (i = 0; i < message.count; ++i) {
-        pbuf.writeInt32(0);
-    }
-    game.sendBufferToPlayer(1 - message.player, STOC_GAME_MSG, offset, pbuf - offset);
+    game.sendBufferToPlayer(0, message);
+    game.sendBufferToPlayer(1 - message.player, message);
     game.sendToObservers();
     game.refreshHand(message.player, 0x781fff, 0);
-
-
 }
 
-function msg_shuffle_extra(message, pbuf, offset, game) {
+function msg_shuffle_extra(message, pbuf, game) {
     let i;
     message.player = pbuf.readInt8();
     message.count = pbuf.readInt8();
-    game.sendBufferToPlayer(0, STOC_GAME_MSG, offset, ((pbuf - offset) + message.count * 4));
+    game.sendBufferToPlayer(0, message);
     // make all the other cards blank
     for (i = 0; i < message.count; ++i) {
         pbuf.writeInt32(0);
     }
-    game.sendBufferToPlayer(1 - message.player, STOC_GAME_MSG, offset, pbuf - offset);
+    game.sendBufferToPlayer(1 - message.player, message);
     game.sendToObservers();
     game.refreshExtra(message.player);
 }
 
-function msg_chaining(message, pbuf, offset, game) {
+function msg_chaining(message, pbuf, game) {
     message.id = pbuf.readInt32();
     message.pc = {
         player: pbuf.readInt8(),
@@ -277,15 +270,15 @@ function msg_chaining(message, pbuf, offset, game) {
     };
     message.desc = pbuf.readInt32();
     message.ct = pbuf.readInt8(); // defunct in code
-    game.sendBufferToPlayer(0, STOC_GAME_MSG, offset, pbuf - offset);
-    game.sendBufferToPlayer(1, STOC_GAME_MSG, offset, pbuf - offset);
+    game.sendBufferToPlayer(0, message);
+    game.sendBufferToPlayer(1, message);
     game.sendToObservers();
 }
 
-function msg_chained(message, pbuf, offset, game) {
+function msg_chained(message, pbuf, game) {
     message.chain_link = pbuf.readInt8();
-    game.sendBufferToPlayer(0, STOC_GAME_MSG, offset, pbuf - offset);
-    game.sendBufferToPlayer(1, STOC_GAME_MSG, offset, pbuf - offset);
+    game.sendBufferToPlayer(0, message);
+    game.sendBufferToPlayer(1, message);
     game.sendToObservers();
     game.refreshMzone(0);
     game.refreshMzone(1);
@@ -296,18 +289,18 @@ function msg_chained(message, pbuf, offset, game) {
 }
 
 
-function msg_chain_solving(message, pbuf, offset, game) {
+function msg_chain_solving(message, pbuf, game) {
     message.chain_link = pbuf.readInt8();
-    game.sendBufferToPlayer(0, STOC_GAME_MSG, offset, pbuf - offset);
-    game.sendBufferToPlayer(1, STOC_GAME_MSG, offset, pbuf - offset);
+    game.sendBufferToPlayer(0, message);
+    game.sendBufferToPlayer(1, message);
     game.sendToObservers();
 
 }
 
-function msg_chain_solved(message, pbuf, offset, game) {
+function msg_chain_solved(message, pbuf, game) {
     message.ct = pbuf.readInt8(); // defunct in the code
-    game.sendBufferToPlayer(0, STOC_GAME_MSG, offset, pbuf - offset);
-    game.sendBufferToPlayer(1, STOC_GAME_MSG, offset, pbuf - offset);
+    game.sendBufferToPlayer(0, message);
+    game.sendBufferToPlayer(1, message);
     game.sendToObservers();
     game.refreshMzone(0);
     game.refreshMzone(1);
@@ -318,26 +311,26 @@ function msg_chain_solved(message, pbuf, offset, game) {
 }
 
 
-function msg_chain_negated(message, pbuf, offset, game) {
+function msg_chain_negated(message, pbuf, game) {
     message.chain_link = pbuf.readInt8();
-    game.sendBufferToPlayer(0, STOC_GAME_MSG, offset, pbuf - offset);
-    game.sendBufferToPlayer(1, STOC_GAME_MSG, offset, pbuf - offset);
+    game.sendBufferToPlayer(0, message);
+    game.sendBufferToPlayer(1, message);
     game.sendToObservers();
 }
 
-function msg_chain_disabled(message, pbuf, offset, game) {
+function msg_chain_disabled(message, pbuf, game) {
     message.chain_link = pbuf.readInt8();
-    game.sendBufferToPlayer(0, STOC_GAME_MSG, offset, pbuf - offset);
-    game.sendBufferToPlayer(1, STOC_GAME_MSG, offset, pbuf - offset);
+    game.sendBufferToPlayer(0, message);
+    game.sendBufferToPlayer(1, message);
 }
 
-function msg_card_selected(message, pbuf, offset, game) {
+function msg_card_selected(message, pbuf, game) {
     message.player = pbuf.readInt8();
     message.count = pbuf.readInt8();
     // in single this doesnt do anything, is this a bug?
 }
 
-function msg_random_selected(message, pbuf, offset, game) {
+function msg_random_selected(message, pbuf, game) {
     message.player = pbuf.readInt8();
     message.count = pbuf.readInt8();
     message.selections = [];
@@ -349,12 +342,12 @@ function msg_random_selected(message, pbuf, offset, game) {
             ss: pbuf.readInt8()
         });
     }
-    game.sendBufferToPlayer(0, STOC_GAME_MSG, offset, pbuf - offset);
-    game.sendBufferToPlayer(1, STOC_GAME_MSG, offset, pbuf - offset);
+    game.sendBufferToPlayer(0, message);
+    game.sendBufferToPlayer(1, message);
     game.sendToObservers();
 }
 
-function msg_become_target(message, pbuf, offset, game) {
+function msg_become_target(message, pbuf, game) {
     message.count = pbuf.readInt8();
     message.selections = [];
     for (let i = 0; i < message.count; ++i) {
@@ -365,46 +358,46 @@ function msg_become_target(message, pbuf, offset, game) {
             ss: pbuf.readInt8()
         });
     }
-    game.sendBufferToPlayer(0, STOC_GAME_MSG, offset, pbuf - offset);
-    game.sendBufferToPlayer(1, STOC_GAME_MSG, offset, pbuf - offset);
+    game.sendBufferToPlayer(0, message);
+    game.sendBufferToPlayer(1, message);
     game.sendToObservers();
 
 }
 
-function msg_pay_lpcost(message, pbuf, offset, game) {
+function msg_pay_lpcost(message, pbuf, game) {
     message.player = pbuf.readInt8();
     message.lp = pbuf.readInt32();
     message.multiplier = -1;
 }
 
-function msg_damage(message, pbuf, offset, game) {
+function msg_damage(message, pbuf, game) {
     message.player = pbuf.readInt8();
     message.lp = pbuf.readInt32();
     message.multiplier = -1;
-    game.sendBufferToPlayer(0, STOC_GAME_MSG, offset, pbuf - offset);
+    game.sendBufferToPlayer(0, message);
     game.reSendToPlayer(1);
     game.sendToObservers();
 }
 
-function msg_recover(message, pbuf, offset, game) {
+function msg_recover(message, pbuf, game) {
     message.player = pbuf.readInt8();
     message.lp = pbuf.readInt32();
     message.multiplier = 1;
-    game.sendBufferToPlayer(0, STOC_GAME_MSG, offset, pbuf - offset);
+    game.sendBufferToPlayer(0, message);
     game.reSendToPlayer(1);
     game.sendToObservers();
 }
 
-function msg_lpupdate(message, pbuf, offset, game) {
+function msg_lpupdate(message, pbuf, game) {
     message.player = pbuf.readInt8();
     message.lp = pbuf.readInt32();
     message.multiplier = 1;
-    game.sendBufferToPlayer(0, STOC_GAME_MSG, offset, pbuf - offset);
+    game.sendBufferToPlayer(0, message);
     game.reSendToPlayer(1);
     game.sendToObservers();
 }
 
-function msg_summoning(message, pbuf, offset, game) {
+function msg_summoning(message, pbuf, game) {
     message.id = pbuf.readInt32();
     message.player = pbuf.readInt8(); //defunct in code
     message.location = enums.locations[pbuf.readInt8()]; //defunct in code
@@ -412,7 +405,7 @@ function msg_summoning(message, pbuf, offset, game) {
     message.position = enums.positions[pbuf.readInt8()];
 }
 
-function msg_equip(message, pbuf, offset, game) {
+function msg_equip(message, pbuf, game) {
     message.c1 = pbuf.readInt8();
     message.l1 = pbuf.readInt8();
     message.s1 = pbuf.readInt8();
@@ -421,12 +414,12 @@ function msg_equip(message, pbuf, offset, game) {
     message.l2 = pbuf.readInt8();
     message.s2 = pbuf.readInt8();
     pbuf.readInt8();
-    game.sendBufferToPlayer(0, STOC_GAME_MSG, offset, pbuf - offset);
+    game.sendBufferToPlayer(0, message);
     game.reSendToPlayer(1);
     game.sendToObservers();
 }
 
-function msg_unequip(message, pbuf, offset, game) {
+function msg_unequip(message, pbuf, game) {
     message.c1 = pbuf.readInt8();
     message.l1 = pbuf.readInt8();
     message.s1 = pbuf.readInt8();
@@ -435,12 +428,12 @@ function msg_unequip(message, pbuf, offset, game) {
     message.l1 = pbuf.readInt8();
     message.s1 = pbuf.readInt8();
     pbuf.readInt8();
-    game.sendBufferToPlayer(0, STOC_GAME_MSG, offset, pbuf - offset);
+    game.sendBufferToPlayer(0, message);
     game.reSendToPlayer(1);
     game.sendToObservers();
 }
 
-function msg_card_target(message, pbuf, offset, game) {
+function msg_card_target(message, pbuf, game) {
     message.c1 = pbuf.readInt8();
     message.l1 = pbuf.readInt8();
     message.s1 = pbuf.readInt8();
@@ -449,12 +442,12 @@ function msg_card_target(message, pbuf, offset, game) {
     message.l1 = pbuf.readInt8();
     message.s1 = pbuf.readInt8();
     pbuf.readInt8();
-    game.sendBufferToPlayer(0, STOC_GAME_MSG, offset, pbuf - offset);
+    game.sendBufferToPlayer(0, message);
     game.reSendToPlayer(1);
     game.sendToObservers();
 }
 
-function msg_cancel_target(message, pbuf, offset, game) {
+function msg_cancel_target(message, pbuf, game) {
     message.c1 = pbuf.readInt8();
     message.l1 = pbuf.readInt8();
     message.s1 = pbuf.readInt8();
@@ -463,34 +456,34 @@ function msg_cancel_target(message, pbuf, offset, game) {
     message.l2 = pbuf.readInt8();
     message.s2 = pbuf.readInt8();
     pbuf.readInt8();
-    game.sendBufferToPlayer(0, STOC_GAME_MSG, offset, pbuf - offset);
+    game.sendBufferToPlayer(0, message);
     game.reSendToPlayer(1);
     game.sendToObservers();
 }
 
-function msg_add_counter(message, pbuf, offset, game) {
+function msg_add_counter(message, pbuf, game) {
     message.type = pbuf.readInt16();
     message.player = pbuf.readInt8();
     message.location = enums.locations[pbuf.readInt8()];
     message.index = pbuf.readInt8();
     message.count = pbuf.readInt8();
-    game.sendBufferToPlayer(0, STOC_GAME_MSG, offset, pbuf - offset);
+    game.sendBufferToPlayer(0, message);
     game.reSendToPlayer(1);
     game.sendToObservers();
 }
 
-function msg_remove_conuter(message, pbuf, offset, game) {
+function msg_remove_conuter(message, pbuf, game) {
     message.type = pbuf.readInt16();
     message.player = pbuf.readInt8();
     message.location = enums.locations[pbuf.readInt8()];
     message.index = pbuf.readInt8();
     message.count = pbuf.readInt8();
-    game.sendBufferToPlayer(0, STOC_GAME_MSG, offset, pbuf - offset);
+    game.sendBufferToPlayer(0, message);
     game.reSendToPlayer(1);
     game.sendToObservers();
 }
 
-function msg_attack(message, pbuf, offset, game) {
+function msg_attack(message, pbuf, game) {
     message.attacker = {
         player: pbuf.readInt8(),
         location: enums.locations[pbuf.readInt8()],
@@ -503,12 +496,12 @@ function msg_attack(message, pbuf, offset, game) {
         index: pbuf.readInt8()
     };
     pbuf.readInt8();
-    game.sendBufferToPlayer(0, STOC_GAME_MSG, offset, pbuf - offset);
+    game.sendBufferToPlayer(0, message);
     game.reSendToPlayer(1);
     game.sendToObservers();
 }
 
-function msg_battle(message, pbuf, offset, game) {
+function msg_battle(message, pbuf, game) {
     message.ca = pbuf.readInt8();
     message.la = pbuf.readInt8();
     message.sa = pbuf.readInt8();
@@ -523,84 +516,84 @@ function msg_battle(message, pbuf, offset, game) {
     message.datk = pbuf.readInt32();
     message.ddef = pbuf.readInt32();
     message.dd = pbuf.readInt8();
-    game.sendBufferToPlayer(0, STOC_GAME_MSG, offset, pbuf - offset);
+    game.sendBufferToPlayer(0, message);
     game.reSendToPlayer(1);
     game.sendToObservers();
 }
 
-function msg_missed_effect(pbuf, message, offset, game) {
+function msg_missed_effect(pbuf, message, game) {
     var player = pbuf.readInt8(); //padding
     message.id = pbuf.readInt32();
-    game.sendBufferToPlayer(player, STOC_GAME_MSG, offset, pbuf - offset);
+    game.sendBufferToPlayer(player, message);
 }
 
-function msg_toss_dice(message, pbuf, offset, game) {
+function msg_toss_dice(message, pbuf, game) {
     message.player = pbuf.readInt8();
     message.count = pbuf.readInt8();
     message.results = [];
     for (let i = 0; i < message.count; ++i) {
         message.results.push(pbuf.readInt8());
     }
-    game.sendBufferToPlayer(0, STOC_GAME_MSG, offset, pbuf - offset);
+    game.sendBufferToPlayer(0, message);
     game.reSendToPlayer(1);
     game.sendToObservers();
 }
 
-function msg_rock_paper_scissors(message, pbuf, offset, game) {
+function msg_rock_paper_scissors(message, pbuf, game) {
     message.player = pbuf.readInt8();
     game.waitforResponse(message.player);
-    game.sendBufferToPlayer(message.player, STOC_GAME_MSG, offset, pbuf - offset);
+    game.sendBufferToPlayer(message.player, message);
     return 1;
 }
 
-function msg_hand_res(message, pbuf, offset, game) {
+function msg_hand_res(message, pbuf, game) {
     message.res = pbuf.readInt8();
     message.res1 = (message.res & 0x3) - 1;
     message.res2 = ((message.res >> 2) & 0x3) - 1;
-    game.sendBufferToPlayer(0, STOC_GAME_MSG, offset, pbuf - offset);
+    game.sendBufferToPlayer(0, message);
     game.reSendToPlayer(1);
     game.sendToObservers();
 }
 
-function msg_toss_coin(message, pbuf, offset, game) {
+function msg_toss_coin(message, pbuf, game) {
     message.player = pbuf.readInt8();
     message.count = pbuf.readInt8();
     message.results = [];
     for (let i = 0; i < message.count; ++i) {
         message.results.push(pbuf.readInt8());
     }
-    game.sendBufferToPlayer(0, STOC_GAME_MSG, offset, pbuf - offset);
+    game.sendBufferToPlayer(0, message);
     game.reSendToPlayer(1);
     game.sendToObservers();
 }
 
-function msg_announce_race(message, pbuf, offset, game) {
+function msg_announce_race(message, pbuf, game) {
     message.player = pbuf.readInt8();
     message.announce_count = pbuf.readInt8();
     message.avaliable = pbuf.readInt32();
     game.waitforResponse(message.player);
-    game.sendBufferToPlayer(message.player, STOC_GAME_MSG, offset, pbuf - offset);
+    game.sendBufferToPlayer(message.player, message);
     return 1;
 }
 
-function msg_announce_attrib(message, pbuf, offset, game) {
+function msg_announce_attrib(message, pbuf, game) {
     message.player = pbuf.readInt8();
     message.announce_count = pbuf.readInt8();
     message.avaliable = pbuf.readInt32();
     game.waitforResponse(message.player);
-    game.sendBufferToPlayer(message.player, STOC_GAME_MSG, offset, pbuf - offset);
+    game.sendBufferToPlayer(message.player, message);
     return 1;
 }
 
-function msg_announce_card(message, pbuf, offset, game) {
+function msg_announce_card(message, pbuf, game) {
     message.player = pbuf.readInt8();
     game.waitforResponse(message.player);
     message.declarable_type = pbuf.readInt32();
-    game.sendBufferToPlayer(message.player, STOC_GAME_MSG, offset, pbuf - offset);
+    game.sendBufferToPlayer(message.player, message);
     return 1;
 }
 
-function msg_announce_number(message, pbuf, offset, game) {
+function msg_announce_number(message, pbuf, game) {
     message.player = pbuf.readInt8();
     message.announce_count = pbuf.readInt8();
     message.values = [];
@@ -608,11 +601,11 @@ function msg_announce_number(message, pbuf, offset, game) {
         message.values.push(pbuf.readInt32());
     }
     game.waitforResponse(message.player);
-    game.sendBufferToPlayer(message.player, STOC_GAME_MSG, offset, pbuf - offset);
+    game.sendBufferToPlayer(message.player, message);
     return 1;
 }
 
-function msg_announce_card_filter(message, pbuf, offset, game) {
+function msg_announce_card_filter(message, pbuf, game) {
     message.player = pbuf.readInt8();
     message.count = pbuf.readInt8();
     message.opcodes = [];
@@ -620,41 +613,41 @@ function msg_announce_card_filter(message, pbuf, offset, game) {
         message.opcodes.push(pbuf.readInt32());
     }
     game.waitforResponse(message.player);
-    game.sendBufferToPlayer(message.player, STOC_GAME_MSG, offset, pbuf - offset);
+    game.sendBufferToPlayer(message.player, message);
     return 1;
 }
 
-function msg_card_hint(message, pbuf, offset, game) {
+function msg_card_hint(message, pbuf, game) {
     message.controller = pbuf.readInt8();
     message.location = pbuf.readInt8();
     message.sequence = pbuf.readInt8();
     pbuf.readInt8(); //padding
     message.chtype = pbuf.readInt8();
     message.value = pbuf.readInt32();
-    game.sendBufferToPlayer(0, STOC_GAME_MSG, offset, pbuf - offset);
-    game.sendBufferToPlayer(1, STOC_GAME_MSG, offset, pbuf - offset);
+    game.sendBufferToPlayer(0, message);
+    game.sendBufferToPlayer(1, message);
     game.sendToObservers();
 }
 
-function msg_player_hint(message, pbuf, offset, game) {
+function msg_player_hint(message, pbuf, game) {
     message.player = pbuf.readInt8();
     message.chtype = pbuf.readInt8();
     message.value = pbuf.readInt32();
-    game.sendBufferToPlayer(0, STOC_GAME_MSG, offset, pbuf - offset);
-    game.sendBufferToPlayer(1, STOC_GAME_MSG, offset, pbuf - offset);
+    game.sendBufferToPlayer(0, message);
+    game.sendBufferToPlayer(1, message);
     game.sendToObservers();
 }
 
-function msg_match_kill(message, pbuf, offset, game) {
+function msg_match_kill(message, pbuf, game) {
     message.match_kill = pbuf.readInt32();
     if (game.match_mode) {
-        game.sendBufferToPlayer(0, STOC_GAME_MSG, offset, pbuf - offset);
-        game.sendBufferToPlayer(1, STOC_GAME_MSG, offset, pbuf - offset);
+        game.sendBufferToPlayer(0, message);
+        game.sendBufferToPlayer(1, message);
         game.sendToObservers();
     }
 }
 
-function msg_select_idlecmd(message, pbuf, offset, game) {
+function msg_select_idlecmd(message, pbuf, game) {
     message.player = pbuf.readInt8();
     message.summonable_cards = getIdleSet(pbuf);
     message.spsummonable_cards = getIdleSet(pbuf);
@@ -672,11 +665,11 @@ function msg_select_idlecmd(message, pbuf, offset, game) {
     game.refreshHand(0);
     game.refreshHand(1);
     game.waitforResponse(message.player);
-    game.sendBufferToPlayer(message.player, STOC_GAME_MSG, offset, pbuf - offset);
+    game.sendBufferToPlayer(message.player, message);
     return 1;
 }
 
-function msg_move(message, pbuf, offset, game) {
+function msg_move(message, pbuf, game) {
     //pbufw issue
     const pbufw = new BufferStreamReader(pbuf.packet);
     pbufw.readposition = pbuf.readposition;
@@ -690,11 +683,11 @@ function msg_move(message, pbuf, offset, game) {
     message.cs = pbuf.readInt8(); // current sequence (index)
     message.cp = enums.positions[pbuf.readInt8()]; // current position
     message.reason = pbuf.readInt32();
-    game.sendBufferToPlayer(message.cc, STOC_GAME_MSG, offset, pbuf - offset);
+    game.sendBufferToPlayer(message.cc, message);
     // need to implement this!!!
     // if (!(cl & (LOCATION_GRAVE + LOCATION_OVERLAY)) && ((cl & (LOCATION_DECK + LOCATION_HAND)) || (cp & POS_FACEDOWN)))
     // 			BufferIO::WriteInt32(pbufw, 0);
-    game.sendBufferToPlayer(1 - message.cc, STOC_GAME_MSG, offset, pbuf - offset);
+    game.sendBufferToPlayer(1 - message.cc, message);
     game.sendToObservers();
 
     if (message.cl !== 0 && (message.cl & 0x80) === 0 && (message.cl !== message.pl || message.pc !== message.cc)) {
@@ -702,31 +695,31 @@ function msg_move(message, pbuf, offset, game) {
     }
 }
 
-function msg_pos_change(message, pbuf, offset, game) {
+function msg_pos_change(message, pbuf, game) {
     message.id = pbuf.readInt32();
     message.player = pbuf.readInt8(); // current controller
     message.location = enums.locations[pbuf.readInt8()]; // current cLocation
     message.index = pbuf.readInt8(); // current sequence (index)
     message.pp = pbuf.readInt8(); // padding??
     message.position = enums.positions[pbuf.readInt8()];
-    game.sendBufferToPlayer(0, STOC_GAME_MSG, offset, pbuf - offset);
-    game.sendBufferToPlayer(1, STOC_GAME_MSG, offset, pbuf - offset);
+    game.sendBufferToPlayer(0, message);
+    game.sendBufferToPlayer(1, message);
     game.sendToObservers();
 
 }
 
-function msg_set(message, pbuf, offset, game) {
+function msg_set(message, pbuf, game) {
     message.id = pbuf.readInt32();
     message.player = pbuf.readInt8(); // current controller
     message.location = enums.locations[pbuf.readInt8()]; // current cLocation
     message.index = pbuf.readInt8(); // current sequence (index)
     message.position = enums.positions[pbuf.readInt8()];
-    game.sendBufferToPlayer(0, STOC_GAME_MSG, offset, pbuf - offset);
-    game.sendBufferToPlayer(1, STOC_GAME_MSG, offset, pbuf - offset);
+    game.sendBufferToPlayer(0, message);
+    game.sendBufferToPlayer(1, message);
     game.sendToObservers();
 }
 
-function msg_swap(message, pbuf, offset, game) {
+function msg_swap(message, pbuf, game) {
     message.id1 = pbuf.readInt8(); // defunct in the code
     message.c1 = pbuf.readInt8();
     message.l1 = pbuf.readInt8();
@@ -737,22 +730,22 @@ function msg_swap(message, pbuf, offset, game) {
     message.l2 = pbuf.readInt8();
     message.s2 = pbuf.readInt8();
     message.p2 = pbuf.readInt8();
-    game.sendBufferToPlayer(0, STOC_GAME_MSG, offset, pbuf - offset);
-    game.sendBufferToPlayer(1, STOC_GAME_MSG, offset, pbuf - offset);
+    game.sendBufferToPlayer(0, message);
+    game.sendBufferToPlayer(1, message);
     game.sendToObservers();
     game.refreshSingle(message.c1, message.l1, message.s1);
     game.refreshSingle(message.c2, message.l2, message.s2);
 }
 
-function msg_field_disabled(message, pbuf, offset, game) {
+function msg_field_disabled(message, pbuf, game) {
     message.disabled = pbuf.readInt32();
     message.ifisfirst_disabled = (message.disabled >> 16) | (message.disabled << 16);
-    game.sendBufferToPlayer(0, STOC_GAME_MSG, offset, pbuf - offset);
-    game.sendBufferToPlayer(1, STOC_GAME_MSG, offset, pbuf - offset);
+    game.sendBufferToPlayer(0, message);
+    game.sendBufferToPlayer(1, message);
     game.sendToObservers();
 }
 
-function msg_spsummoning(message, pbuf, offset, game) {
+function msg_spsummoning(message, pbuf, game) {
     message.id = pbuf.readInt32();
     message.player = pbuf.readInt8();
     message.location = enums.locations[pbuf.readInt8()];
@@ -760,19 +753,19 @@ function msg_spsummoning(message, pbuf, offset, game) {
     message.position = enums.positions[pbuf.readInt8()];
 }
 
-function msg_flipsummoning(message, pbuf, offset, game) {
+function msg_flipsummoning(message, pbuf, game) {
     message.id = pbuf.readInt32();
     message.player = pbuf.readInt8(); // current controller
     message.location = pbuf.readInt8(); // current cLocation
     message.index = pbuf.readInt8(); // current sequence (index)
     message.position = pbuf.readInt8();
-    game.sendBufferToPlayer(0, STOC_GAME_MSG, offset, pbuf - offset);
-    game.sendBufferToPlayer(1, STOC_GAME_MSG, offset, pbuf - offset);
+    game.sendBufferToPlayer(0, message);
+    game.sendBufferToPlayer(1, message);
     game.sendToObservers();
     game.refreshSingle(message.player, message.location, message.index);
 }
 
-function msg_select_battlecmd(message, pbuf, offset, game) {
+function msg_select_battlecmd(message, pbuf, game) {
     message.player = pbuf.readInt8(); // defunct in the code, just reading ahead.
     message.activatable_cards = getIdleSet(pbuf, true);
     message.attackable_cards = [];
@@ -795,11 +788,11 @@ function msg_select_battlecmd(message, pbuf, offset, game) {
     game.refreshHand(0);
     game.refreshHand(1);
     game.waitforResponse(message.player);
-    game.sendBufferToPlayer(message.player, STOC_GAME_MSG, offset, pbuf - offset);
+    game.sendBufferToPlayer(message.player, message);
     return 1;
 }
 
-function msg_select_effectyn(message, pbuf, offset, game) {
+function msg_select_effectyn(message, pbuf, game) {
     message.player = pbuf.readInt8();
     message.id = pbuf.readInt32();
     message.location = pbuf.readInt8();
@@ -807,19 +800,19 @@ function msg_select_effectyn(message, pbuf, offset, game) {
     pbuf.readInt8();
     message.desc = pbuf.readInt32();
     game.waitforResponse(message.player);
-    game.sendBufferToPlayer(message.player, STOC_GAME_MSG, offset, pbuf - offset);
+    game.sendBufferToPlayer(message.player, message);
     return 1;
 }
 
-function msg_select_yesno(message, pbuf, offset, game) {
+function msg_select_yesno(message, pbuf, game) {
     message.player = pbuf.readInt8();
     message.desc = pbuf.readInt32();
     game.waitforResponse(message.player);
-    game.sendBufferToPlayer(message.player, STOC_GAME_MSG, offset, pbuf - offset);
+    game.sendBufferToPlayer(message.player, message);
     return 1;
 }
 
-function msg_select_option(message, pbuf, offset, game) {
+function msg_select_option(message, pbuf, game) {
     message.player = pbuf.readInt8();
     message.count = pbuf.readInt8();
     message.select_options = [];
@@ -827,11 +820,11 @@ function msg_select_option(message, pbuf, offset, game) {
         message.select_options.push(pbuf.readInt32());
     }
     game.waitforResponse(message.player);
-    game.sendBufferToPlayer(message.player, STOC_GAME_MSG, offset, pbuf - offset);
+    game.sendBufferToPlayer(message.player, message);
     return 1;
 }
 
-function msg_select_card(message, pbuf, offset, game) {
+function msg_select_card(message, pbuf, game) {
     message.player = pbuf.readInt8();
     message.select_cancelable = pbuf.readInt8();
     message.select_min = pbuf.readInt8();
@@ -848,11 +841,11 @@ function msg_select_card(message, pbuf, offset, game) {
         });
     }
     game.waitforResponse(message.player);
-    game.sendBufferToPlayer(message.player, STOC_GAME_MSG, offset, pbuf - offset);
+    game.sendBufferToPlayer(message.player, message);
     return 1;
 }
 
-function msg_select_chain(message, pbuf, offset, game) {
+function msg_select_chain(message, pbuf, game) {
     message.player = pbuf.readInt8();
     message.count = pbuf.readInt8();
     message.specount = pbuf.readInt8();
@@ -872,22 +865,22 @@ function msg_select_chain(message, pbuf, offset, game) {
         });
     }
     game.waitforResponse(message.player);
-    game.sendBufferToPlayer(message.player, STOC_GAME_MSG, offset, pbuf - offset);
+    game.sendBufferToPlayer(message.player, message);
     return 1;
 }
 
-function msg_select_place(message, pbuf, offset, game) {
+function msg_select_place(message, pbuf, game) {
     message.player = pbuf.readInt8();
     message.select_min = pbuf.readInt8();
     message.selectable_field = ~pbuf.readInt32(); // mind the bitwise modifier.
     message.selected_field = 0;
     message.zones = getSelectableZones(message.selectable_field);
     game.waitforResponse(message.player);
-    game.sendBufferToPlayer(message.player, STOC_GAME_MSG, offset, pbuf - offset);
+    game.sendBufferToPlayer(message.player, message);
     return 1;
 }
 
-function msg_select_position(message, pbuf, offset, game) {
+function msg_select_position(message, pbuf, game) {
     message.player = pbuf.readInt8();
     message.id = pbuf.readInt32();
     message.positionsMask = pbuf.readInt8();
@@ -905,11 +898,11 @@ function msg_select_position(message, pbuf, offset, game) {
         message.positions.push(enums.positions[0x8]);
     }
     game.waitforResponse(message.player);
-    game.sendBufferToPlayer(message.player, STOC_GAME_MSG, offset, pbuf - offset);
+    game.sendBufferToPlayer(message.player, message);
     return 1;
 }
 
-function msg_select_tribute(message, pbuf, offset, game) {
+function msg_select_tribute(message, pbuf, game) {
     message.player = pbuf.readInt8();
     message.select_cancelable = pbuf.readInt8() ? true : false;
     message.select_min = pbuf.readInt8();
@@ -926,21 +919,21 @@ function msg_select_tribute(message, pbuf, offset, game) {
         });
     }
     game.waitforResponse(message.player);
-    game.sendBufferToPlayer(message.player, STOC_GAME_MSG, offset, pbuf - offset);
+    game.sendBufferToPlayer(message.player, message);
     return 1;
 }
 
-function msg_select_counter(message, pbuf, offset, game) {
+function msg_select_counter(message, pbuf, game) {
     message.player = pbuf.readInt8();
     pbuf.readposition += 4;
     message.count = pbuf.readInt8();
     pbuf += message.count * 9;
     game.waitforResponse(message.player);
-    game.sendBufferToPlayer(message.player, STOC_GAME_MSG, offset, pbuf - offset);
+    game.sendBufferToPlayer(message.player, message);
     return 1;
 }
 
-function msg_soft_chain(message, pbuf, offset, game) {
+function msg_soft_chain(message, pbuf, game) {
     message.player = pbuf.readInt8();
     message.count = pbuf.readInt8();
     message.selectable_targets = [];
@@ -954,7 +947,7 @@ function msg_soft_chain(message, pbuf, offset, game) {
     }
 }
 
-function msg_select_disfield(message, pbuf, offset, game) {
+function msg_select_disfield(message, pbuf, game) {
     message.player = pbuf.readInt8();
     message.select_min = pbuf.readInt8();
     message.selectable_field = ~pbuf.readInt32(); // mind the bitwise modifier.
@@ -962,7 +955,7 @@ function msg_select_disfield(message, pbuf, offset, game) {
     return 1;
 }
 
-function msg_sort_card(message, pbuf, offset, game) {
+function msg_sort_card(message, pbuf, game) {
     message.player = pbuf.readInt8();
     message.count = pbuf.readInt8();
     message.selectable_targets = [];
@@ -975,11 +968,11 @@ function msg_sort_card(message, pbuf, offset, game) {
         });
     }
     game.waitforResponse(message.player);
-    game.sendBufferToPlayer(message.player, STOC_GAME_MSG, offset, pbuf - offset);
+    game.sendBufferToPlayer(message.player, message);
     return 1;
 }
 
-function msg_confirm_decktop(message, pbuf, offset, game) {
+function msg_confirm_decktop(message, pbuf, game) {
     message.player = pbuf.readInt8();
     message.count = pbuf.readInt8();
     message.cards = [];
@@ -987,12 +980,12 @@ function msg_confirm_decktop(message, pbuf, offset, game) {
         message.cards.push(pbuf.readInt32());
         pbuf.move(3);
     }
-    game.sendBufferToPlayer(0, STOC_GAME_MSG, offset, pbuf - offset);
+    game.sendBufferToPlayer(0, message);
     game.reSendToPlayer(1);
     game.sendToObservers();
 }
 
-function msg_confirm_extratop(message, pbuf, offset, game) {
+function msg_confirm_extratop(message, pbuf, game) {
     message.player = pbuf.readInt8();
     message.count = pbuf.readInt8();
     message.cards = [];
@@ -1000,12 +993,12 @@ function msg_confirm_extratop(message, pbuf, offset, game) {
         message.cards.push(pbuf.readInt32());
         pbuf.move(3);
     }
-    game.sendBufferToPlayer(0, STOC_GAME_MSG, offset, pbuf - offset);
+    game.sendBufferToPlayer(0, message);
     game.reSendToPlayer(1);
     game.sendToObservers();
 }
 
-function msg_confirm_cards(message, pbuf, offset, game) {
+function msg_confirm_cards(message, pbuf, game) {
     const LOCATION_DECK = 0x01;
     message.player = pbuf.readInt8();
     message.count = pbuf.readInt8();
@@ -1017,51 +1010,51 @@ function msg_confirm_cards(message, pbuf, offset, game) {
         });
     }
     if (pbuf[5] !== LOCATION_DECK) {
-        game.sendBufferToPlayer(0, STOC_GAME_MSG, offset, pbuf - offset);
+        game.sendBufferToPlayer(0, message);
         game.reSendToPlayer(1);
         game.sendToObservers();
         return;
     }
-    game.sendBufferToPlayer(message.player, STOC_GAME_MSG, offset, pbuf - offset);
+    game.sendBufferToPlayer(message.player, message);
     return;
 }
 
-function msg_update_data(message, pbuf, offset, game, gameBoard) {
+function msg_update_data(message, pbuf, game, gameBoard) {
     message.player = pbuf.readInt8();
     message.location = enums.locations[pbuf.readInt8()];
     message.cards = getFieldCards(gameBoard, message.player, message.location, pbuf);
 }
 
-function msg_update_card(message, pbuf, offset, game, gameBoard) {
+function msg_update_card(message, pbuf, game, gameBoard) {
     message.player = pbuf.readInt8();
     message.location = enums.locations[pbuf.readInt8()];
     message.index = pbuf.readInt8();
     message.card = makeCard(pbuf, message.player, (gameBoard.masterRule === 4));
 }
 
-function msg_swap_grave_deck(message, pbuf, offset, game) {
+function msg_swap_grave_deck(message, pbuf, game) {
     message.player = pbuf.readInt8();
-    game.sendBufferToPlayer(0, STOC_GAME_MSG, offset, pbuf - offset);
+    game.sendBufferToPlayer(0, message);
     game.reSendToPlayer(1);
     game.sendToObservers();
     game.refreshGrave();
 }
 
-function msg_waiting(message, pbuf, offset, game) {
+function msg_waiting(message, pbuf, game) {
     // Nothing happens, ui only.
 }
 
-function msg_deck_top(message, pbuf, offset, game) {
+function msg_deck_top(message, pbuf, game) {
     message.player = pbuf.readInt8();
     message.index = pbuf.readInt8();
     message.id = pbuf.readInt32();
     message.rev = ((message.id & 0x80000000) !== 0);
-    game.sendBufferToPlayer(0, STOC_GAME_MSG, offset, pbuf - offset);
+    game.sendBufferToPlayer(0, message);
     game.reSendToPlayer(1);
     game.sendToObservers();
 }
 
-function msg_shuffle_set_card(message, pbuf, offset, game) {
+function msg_shuffle_set_card(message, pbuf, game) {
     const LOCATION_MZONE = 0x04;
     message.location = pbuf.readInt8();
     message.count = pbuf.readInt8();
@@ -1083,7 +1076,7 @@ function msg_shuffle_set_card(message, pbuf, offset, game) {
         });
         pbuf.readInt8();
     }
-    game.sendBufferToPlayer(0, STOC_GAME_MSG, offset, pbuf - offset);
+    game.sendBufferToPlayer(0, message);
     game.reSendToPlayer(1);
     game.sendToObservers();
     if (message.location === LOCATION_MZONE) {
@@ -1095,7 +1088,7 @@ function msg_shuffle_set_card(message, pbuf, offset, game) {
     }
 }
 
-function msg_tag_swap(message, pbuf, offset, game) {
+function msg_tag_swap(message, pbuf, game) {
     message.player = pbuf.readInt8();
     message.mcount = pbuf.readInt8();
     message.ecount = pbuf.readInt8();
@@ -1112,7 +1105,7 @@ function msg_tag_swap(message, pbuf, offset, game) {
     }
 }
 
-function msg_reload_field(message, pbuf, offset, game) {
+function msg_reload_field(message, pbuf, game) {
     message.lp = [];
     message.mzone = [];
     message.stzone = [];
@@ -1199,7 +1192,7 @@ function msg_request_deck() {
     unused();
 }
 
-function msg_sort_chain(message, pbuf, offset, game) {
+function msg_sort_chain(message, pbuf, game) {
     message.player = pbuf.readInt8();
     message.count = pbuf.readInt8();
     message.selectable_targets = [];
@@ -1212,11 +1205,11 @@ function msg_sort_chain(message, pbuf, offset, game) {
         });
     }
     game.waitforResponse(message.player);
-    game.sendBufferToPlayer(message.player, STOC_GAME_MSG, offset, pbuf - offset);
+    game.sendBufferToPlayer(message.player, message);
     return 1;
 }
 
-function msg_select_sum(message, pbuf, offset, game) {
+function msg_select_sum(message, pbuf, game) {
     message.select_mode = pbuf.readInt8();
     message.select_player = pbuf.readInt8();
     message.select_sumval = pbuf.readInt32();
@@ -1247,76 +1240,76 @@ function msg_select_sum(message, pbuf, offset, game) {
         });
     }
     game.waitforResponse(message.player);
-    game.sendBufferToPlayer(message.player, STOC_GAME_MSG, offset, pbuf - offset);
+    game.sendBufferToPlayer(message.player, message);
     return 1;
 }
 
-function msg_refresh_deck(message, pbuf, offset, game) {
+function msg_refresh_deck(message, pbuf, game) {
     message.player = pbuf.readInt8();
-    game.sendBufferToPlayer(0, STOC_GAME_MSG, offset, pbuf - offset);
+    game.sendBufferToPlayer(0, message);
     game.reSendToPlayer(1);
     game.sendToObservers();
 }
 
-function msg_reverse_deck(message, pbuf, offset, game) {
-    game.sendBufferToPlayer(0, STOC_GAME_MSG, offset, pbuf - offset);
+function msg_reverse_deck(message, pbuf, game) {
+    game.sendBufferToPlayer(0, message);
     game.reSendToPlayer(1);
     game.sendToObservers();
 }
 
-function msg_summoned(message, pbuf, offset, game) {
-    user_interface_only(message, pbuf, offset, game);;
+function msg_summoned(message, pbuf, game) {
+    user_interface_only(message, pbuf, game);;
 }
 
-function msg_spsummoned(message, pbuf, offset, game) {
-    user_interface_only(message, pbuf, offset, game);
+function msg_spsummoned(message, pbuf, game) {
+    user_interface_only(message, pbuf, game);
 }
 
-function msg_flipsummoned(message, pbuf, offset, game) {
-    user_interface_only(message, pbuf, offset, game);
+function msg_flipsummoned(message, pbuf, game) {
+    user_interface_only(message, pbuf, game);
 }
 
-function msg_chain_end(message, pbuf, offset, game) {
-    user_interface_only(message, pbuf, offset, game);
+function msg_chain_end(message, pbuf, game) {
+    user_interface_only(message, pbuf, game);
 }
 
-function msg_attack_disabled(message, pbuf, offset, game) {
-    user_interface_only(message, pbuf, offset, game);
+function msg_attack_disabled(message, pbuf, game) {
+    user_interface_only(message, pbuf, game);
 }
 
-function msg_damage_step_start(message, pbuf, offset, game) {
-    user_interface_only(message, pbuf, offset, game);
+function msg_damage_step_start(message, pbuf, game) {
+    user_interface_only(message, pbuf, game);
 }
 
-function msg_damage_step_end(message, pbuf, offset, game) {
-    user_interface_only(message, pbuf, offset, game);
+function msg_damage_step_end(message, pbuf, game) {
+    user_interface_only(message, pbuf, game);
 }
 
-function msg_be_chain_target(message, pbuf, offset, game) {
+function msg_be_chain_target(message, pbuf, game) {
     unused();
 }
 
-function msg_create_relation(message, pbuf, offset, game) {
+function msg_create_relation(message, pbuf, game) {
     unused();
 }
 
-function msg_release_relation(message, pbuf, offset, game) {
+function msg_release_relation(message, pbuf, game) {
     unused();
 }
 
-function msg_ai_name(message, pbuf, offset, game) {
+function msg_ai_name(message, pbuf, game) {
     unused();
 }
 
-function msg_show_hint(message, pbuf, offset, game) {
+function msg_show_hint(message, pbuf, game) {
     unused();
 }
 
-function msg_custom_msg(message, pbuf, offset, game) {
+function msg_custom_msg(message, pbuf, game) {
     unused();
 }
 
-function msg_select_unselect_card(message, pbuf, offset, game) {
+function msg_select_unselect_card(message, pbuf, game) {
     message.player = pbuf.readInt8();
     message.buttonok = Boolean(!!pbuf.readInt8());
     message.select_cancelable = pbuf.readInt8();
@@ -1346,7 +1339,7 @@ function msg_select_unselect_card(message, pbuf, offset, game) {
         });
     }
     game.waitforResponse(message.player);
-    game.sendBufferToPlayer(message.player, STOC_GAME_MSG, offset, pbuf - offset);
+    game.sendBufferToPlayer(message.player, message);
     return 1;
 }
 
@@ -1460,11 +1453,11 @@ function analyze(engineBuffer, len, game) {
     while (pbuf - msgbuffer < len) {
         snippet = Buffer.from(msgbuffer.packet, pbuf.readposition);
         offset = new BufferStreamReader(snippet);
-        const engType = enums.STOC.STOC_GAME_MSG[pbuf.readInt8()];
+        const engType = enums.STOC.message[pbuf.readInt8()];
         if (translator[engType]) {
             var message = {};
             console.log('----engType', engType);
-            const output = translator[engType](message, pbuf, offset, game);
+            const output = translator[engType](message, pbuf, game);
             console.log(pbuf - msgbuffer);
             if (output) {
                 return output;
