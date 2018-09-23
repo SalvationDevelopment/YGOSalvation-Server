@@ -3,8 +3,10 @@ const http = require('http'),
     server = http.createServer().listen(port),
     domain = require('domain'),
     validateDeck = require('./validate_deck'),
-    games = {},
+    stateSystem = {},
     database = require('../http/manifest/manifest-ygopro'),
+    banlist = {},
+    games = {},
     uuid = require('uuid'),
     Rooms = require('primus-rooms'),
     Primus = require('primus'),
@@ -15,7 +17,8 @@ const http = require('http'),
 primus.use('rooms', Rooms);
 
 
-function rps(resolver, callback) {
+
+function rps(question, resolver, revealCallback, callback) {
     var player1,
         player2,
         previous1,
@@ -129,32 +132,96 @@ function rps(resolver, callback) {
     ask();
 }
 
-function Game(data) {
+function newGame(settings) {
     return {
-        password: data.password,
-        players: [null, null, null, null],
-        observers: []
+        automatic: settings.info.automatic,
+        roompass: settings.roompass,
+        started: false,
+        deckcheck: 0,
+        draw_count: 0,
+        ot: parseInt(settings.info.ot, 10),
+        banlist: settings.info.banlist,
+        banlistid: settings.info.banlistid,
+        mode: settings.info.mode,
+        cardpool: settings.info.cardpool,
+        noshuffle: settings.info.shuf,
+        prerelease: settings.info.prerelease,
+        masterRule: banlist[settings.info.banlist].masterRule,
+        legacyfield: (banlist[settings.info.banlist].masterRule !== 4),
+        rule: 0,
+        startLP: settings.info.startLP,
+        starthand: 0,
+        timelimit: 0,
+        player: {
+            0: {
+                name: '',
+                ready: false
+            },
+            1: {
+                name: '',
+                ready: false
+            }
+        },
+        spectators: [],
+        delCount: 0
     };
 }
 
-function onData(data, socket) {
-    data = data || {};
-    const action = data.action;
+function onData(message, socket) {
+    let generated;
+    message = message || {};
+    const action = message.action;
 
     switch (action) {
         case 'CTOS_CREATE_GAME':
-            if (!games[data.game]) {
-                games[data.game] = new Game(data);
-                return;
-            }
+            generated = uuid(12);
+            stateSystem[generated] = newGame(message);
+            stateSystem[generated] = stateSystem(socketBinding(generated));
+            stateSystem[generated].player[0].name = message.name;
+            stateSystem[generated].players[0] = socket;
+            stateSystem[generated].setNames(socket.username, 0);
+            socket.activeduel = generated;
+            primus.duelBroadcast(stateSystem);
+            socket.write(({
+                duelAction: 'lobby',
+                game: generated
+            }));
+            socket.slot = 0;
+            setTimeout(function() {
+                stateSystem[generated].duelistChat('Gamelist', '90min Time limit reached. Ending the duel');
+                delete stateSystem[generated];
+                delete stateSystem[generated];
+            }, 10800000); // 180 mins.
             break;
         case 'CTOS_JOIN_GAME':
-            if (!games[data.game]) {
-                games[data.game] = new Game(data);
-                return;
+            socket.slot = undefined;
+            Object.keys(games[message.game].player).some(function(playerNo, index) {
+                var player = games[message.game].player[playerNo];
+                if (player.name !== '') {
+                    return false;
+                }
+                joined = true;
+                player.name = message.name;
+                stateSystem[message.game].players[index] = socket;
+                stateSystem[message.game].setNames(socket.username, index);
+                socket.slot = index;
+
+                return true;
+            });
+            if (!joined && stateSystem[message.game]) {
+                stateSystem[message.game].spectators[message.name] = socket;
+                if (games[message.game].started) {
+                    socket.write((stateSystem[message.game].generateView('start').spectators));
+                    socket.activeduel = message.game;
+                }
             }
-            socket.join(data.game);
-            socket.game = data.game;
+            games[message.game].delCount = 0;
+            primus.duelBroadcast(games);
+            socket.write(({
+                duelAction: 'lobby',
+                game: message.game
+            }));
+            socket.activeduel = message.game;
             break;
     }
 
@@ -164,13 +231,13 @@ function onData(data, socket) {
 
     switch (action) {
         case 'CTOS_RESPONSE':
-            games[socket.game].game.respond(data.buffer);
+            stateSystem[socket.game].game.respond(message.buffer);
             break;
         case 'CTOS_UPDATE_DECK':
             if (!socket.game) {
                 return;
             }
-            games[socket.game].players[socket.slot].deck = data.deck;
+            stateSystem[socket.game].players[socket.slot].deck = message.deck;
             break;
         case 'CTOS_HAND_RESULT':
             break;
@@ -179,11 +246,13 @@ function onData(data, socket) {
         case 'CTOS_PLAYER_INFO':
             break;
         case 'CTOS_LEAVE_GAME':
-            socket.leave(data.game);
+            socket.leave(message.game);
             break;
         case 'CTOS_SURRENDER':
+            stateSystem[socket.game].game.respond(socket.slot);
             break;
         case 'CTOS_TIME_COMFIRM':
+            stateSystem[socket.game].game.timeComfirm(socket.slot, message.buffer);
             break;
         case 'CTOS_CHAT':
             break;

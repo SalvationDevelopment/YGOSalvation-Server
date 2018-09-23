@@ -179,11 +179,11 @@ function msg_win(message, pbuf, game) {
     //need to double check for more variables
     game.sendBufferToPlayer(0, message);
     game.reSendToPlayer(1);
-    game.sendToObservers();;
+    game.sendToObservers();
     if (message.player > 1) {
         game.match_result[game.duel_count++] = 2;
         game.tp_player = 1 - game.tp_player;
-    } else if (message.players[message.player] === pplayer[message.player]) { //pplayer is not a typo?
+    } else if (message.players[message.player] === game.pplayer[message.player]) { //pplayer is not a typo?
         game.match_result[game.duel_count++] = message.player;
         game.tp_player = 1 - message.player;
     } else {
