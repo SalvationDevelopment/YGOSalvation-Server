@@ -8,12 +8,17 @@
 
 var fs = require('fs'),
     net = require('net'),
+    http = require('http'),
+    Primus = require('primus'),
+    Rooms = require('primus-rooms'),
     validateDeck = require('./validate_deck.js'),
     database = require('../http/manifest/manifest_0-en-OCGTCG.json'),
     userController = require('./controller_users'),
     ygopro = require('./engine_ygopro.js'),
     banlist = {},
-    ygopros = {};
+    ygopros = {},
+    primusServer = http.createServer().listen(process.env.PORT || 8891);
+
 
 function getBanlist() {
     // this needs to be rewritten;
@@ -34,30 +39,6 @@ var realgames = [],
     games = {},
     states = {},
     log = {};
-
-
-var ygoserver = net.createServer(function(socket) {
-    socket.active_ygocore = false;
-    socket.active = false;
-    socket.on('data', function(data) {
-
-
-        if (socket.active_ygocore) {
-
-        }
-    });
-    socket.on('close', function() {
-
-    });
-    socket.on('error', function() {
-
-    });
-});
-
-
-
-
-
 
 
 /**
@@ -163,6 +144,11 @@ function randomString(len) {
     return text;
 }
 
+const primus = new Primus(primusServer, {
+    parser: 'JSON'
+});
+
+primus.use('rooms', Rooms);
 
 
 primus.duelBroadcast = function broadcast() {
@@ -412,19 +398,15 @@ function responseHandler(socket, message) {
                 player1 = stateSystem[activeduel].decks[0];
                 player2 = stateSystem[activeduel].decks[1];
                 if (games[activeduel].automatic) {
-                    random_port({ from: 10000, range: 10000 }, function(port) {
-                        var players = [stateSystem[activeduel].players[0], stateSystem[activeduel].players[1]];
-                        games[activeduel].port = port;
-                        players.forEach(function(item, iteration) {
-                            item.activeduel = activeduel;
-                        });
-                        players[0].deck = player1;
-                        players[1].deck = player2;
-                        ygopros[activeduel] = ygopro(Object.assign({}, games[activeduel]), players);
-                        games[activeduel].started = true;
-                        primus.duelBroadcast(games);
+                    const players = [stateSystem[activeduel].players[0], stateSystem[activeduel].players[1]];
+                    players.forEach(function(item, iteration) {
+                        item.activeduel = activeduel;
                     });
-
+                    players[0].deck = player1;
+                    players[1].deck = player2;
+                    ygopros[activeduel] = ygopro(Object.assign({}, games[activeduel]), players);
+                    games[activeduel].started = true;
+                    primus.duelBroadcast(games);
                 } else {
                     stateSystem[activeduel].startDuel(player1, player2, true, games[activeduel]);
                     games[activeduel].started = true;
@@ -749,8 +731,4 @@ function websocketHandle(socket, message) {
 
 }
 
-
-
-
-ygoserver.listen((process.env.PORT || 8911));
 getBanlist();
