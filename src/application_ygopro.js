@@ -7,7 +7,6 @@
  */
 
 var fs = require('fs'),
-    net = require('net'),
     http = require('http'),
     Primus = require('primus'),
     Rooms = require('primus-rooms'),
