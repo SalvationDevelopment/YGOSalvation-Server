@@ -12,17 +12,16 @@ var fs = require('fs'),
     Rooms = require('primus-rooms'),
     validateDeck = require('./validate_deck.js'),
     database = require('../http/manifest/manifest_0-en-OCGTCG.json'),
-    userController = require('./controller_users'),
     ygopro = require('./engine_ygopro.js'),
     banlist = {},
     ygopros = {},
-    primusServer = http.createServer().listen(process.env.PORT || 8891);
+    primusServer = http.createServer().listen(process.env.PORT || 8082);
 
 
 function getBanlist() {
     // this needs to be rewritten;
     banlist = {};
-    var files = fs.readdirSync('./http/banlist/');
+    var files = fs.readdirSync('../http/banlist/');
     files.forEach(function(filename) {
         if (filename.indexOf('.js') > -1) {
             var listname = filename.slice(0, -3);
