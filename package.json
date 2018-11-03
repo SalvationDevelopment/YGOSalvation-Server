@@ -35,6 +35,7 @@
         "mongoose": "^4.13.17",
         "mysql": "^2.16.0",
         "nedb": "^1.7.2",
+        "node-static": "^0.7.11",
         "policyfile": "0.0.6",
         "primus": "^7.2.3",
         "primus-rooms": "^3.4.1",
@@ -66,7 +67,8 @@
     "scripts": {
         "start": "supervisor --watch ./server.js,./src server.js",
         "test": "istanbul cover node_modules/mocha/bin/_mocha -- -u exports -R spec test/test.js",
-        "server": "node server"
+        "server": "node server",
+        "ygopro": "cd src && node application_ygopro"
     },
     "port": 80
 }

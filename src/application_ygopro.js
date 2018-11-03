@@ -1,11 +1,4 @@
-/*jslint node:true, plusplus:true, bitwise : true, nomen:true*/
-'use strict';
-
-
-/**
- * Update the banlist
- */
-
+require('dotenv').config();
 var fs = require('fs'),
     http = require('http'),
     Primus = require('primus'),
@@ -15,7 +8,25 @@ var fs = require('fs'),
     ygopro = require('./engine_ygopro.js'),
     banlist = {},
     ygopros = {},
-    primusServer = http.createServer().listen(process.env.PORT || 8082);
+    port = process.env.PORT || 8082,
+    realgames = [],
+    stateSystem = require('./engine_manual.js'),
+    games = {},
+    states = {},
+    log = {},
+    static = require('node-static'),
+    file = new static.Server('../http'),
+    primusServer = http.createServer(function(request, response) {
+        request.addListener('end', function() {
+            //
+            // Serve files!
+            //
+            file.serve(request, response);
+        }).resume();
+    }).listen(port, function(request, response) {
+        console.log('Listening on port', port);
+    });
+
 
 
 function getBanlist() {
@@ -32,15 +43,12 @@ function getBanlist() {
     return banlist;
 }
 
-var realgames = [],
-    stateSystem = require('./engine_manual.js'),
-    games = {},
-    states = {},
-    log = {};
+
 
 
 /**
  * Create a new game object.
+ * @param {Object} settings game settings
  * @returns {object} customized game object
  */
 function newGame(settings) {
@@ -80,15 +88,17 @@ function newGame(settings) {
 
 /**
  * Create a function that sorts to the correct viewers.
- * @param   {Object} game 
+ * @param   {Object} game active game
  * @returns {function} binding function
  */
 function socketBinding(game) {
 
     /**
      * response handler
-     * @param {object}   view  view definition set
+     * @param {Object} view  view definition set
      * @param {Array} stack of cards
+     * @param {callback} callback optional finishing function
+     * @returns {undefined} 
      */
     function gameResponse(view, stack, callback) {
         if (stateSystem[game] === undefined) {
@@ -120,7 +130,7 @@ function socketBinding(game) {
             console.log('failed messaging socket', error);
         } finally {
             if (callback) {
-                return callback(stack);
+                callback(stack);
             }
         }
     }
@@ -146,7 +156,7 @@ const primus = new Primus(primusServer, {
     parser: 'JSON'
 });
 
-primus.use('rooms', Rooms);
+primus.plugin('rooms', Rooms);
 
 
 primus.duelBroadcast = function broadcast() {
@@ -305,30 +315,23 @@ function responseHandler(socket, message) {
             break;
         case 'surrender':
             if (socket.slot !== undefined) {
-                userController.recordDuelResult({
-                    decks: stateSystem[activeduel].decks,
-                    loser: socket.slot,
-                    winner: ((socket.slot) ? 1 : 0),
-                    banlist: games[activeduel].banlistid,
-                    players: [stateSystem[activeduel].players[0].name, stateSystem[activeduel].players[1].name]
-                }, function() {
-                    socket.write(({
-                        duelAction: 'surrender',
-                        by: socket.slot
-                    }));
-                    stateSystem[activeduel].surrender(games[activeduel].player[socket.slot].name);
 
-                    stateSystem[activeduel].players[0].write(({
-                        duelAction: 'side',
-                        deck: stateSystem[activeduel].decks[0]
-                    }));
-                    games[activeduel].player[0].ready = false;
-                    stateSystem[activeduel].players[1].write(({
-                        duelAction: 'side',
-                        deck: stateSystem[activeduel].decks[1]
-                    }));
-                    games[activeduel].player[1].ready = false;
-                });
+                socket.write(({
+                    duelAction: 'surrender',
+                    by: socket.slot
+                }));
+                stateSystem[activeduel].surrender(games[activeduel].player[socket.slot].name);
+
+                stateSystem[activeduel].players[0].write(({
+                    duelAction: 'side',
+                    deck: stateSystem[activeduel].decks[0]
+                }));
+                games[activeduel].player[0].ready = false;
+                stateSystem[activeduel].players[1].write(({
+                    duelAction: 'side',
+                    deck: stateSystem[activeduel].decks[1]
+                }));
+                games[activeduel].player[1].ready = false;
             }
             break;
         case 'lock':
