@@ -269,7 +269,7 @@ function responseHandler(socket, message) {
             primus.duelBroadcast(games);
             socket.write(({
                 duelAction: 'lobby',
-                game: message.game
+                game: games[message.game]
             }));
             socket.activeduel = message.game;
             break;
