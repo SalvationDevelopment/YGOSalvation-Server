@@ -8,7 +8,6 @@ var validationCache = {},
     zxcvbn = require('zxcvbn'),
     hotload = require('hotload'),
     mongoose = require('mongoose'),
-    OAuthServer = require('express-oauth-server'),
     Schema = mongoose.Schema,
     sanitizer = require('sanitizer'),
     ObjectId = Schema.ObjectId,
@@ -79,7 +78,6 @@ var validationCache = {},
         signiture: String
 
     }),
-    oauthModel = require('./model_oauth.js'),
     Users = mongoose.model('user', UserSchema),
     Duels = mongoose.model('duel', DuelSchema),
     Tournaments = mongoose.model('tournment', TournamentSchema),
@@ -369,7 +367,6 @@ function getRanking(callback) {
 }
 
 function setupController(app) {
-    var oauth = new OAuthServer({ model: oauthModel });
 
     app.post('/register', function(request, response) {
         var payload = request.body || {},
