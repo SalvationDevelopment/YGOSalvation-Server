@@ -15,7 +15,7 @@ var fs = require('fs'),
     states = {},
     log = {},
     static = require('node-static'),
-    file = new static.Server('../http'),
+    file = new static.Server('../http', { cache: 0 }),
     primusServer = http.createServer(function(request, response) {
         request.addListener('end', function() {
             //
@@ -26,8 +26,6 @@ var fs = require('fs'),
     }).listen(port, function(request, response) {
         console.log('Listening on port', port);
     });
-
-
 
 function getBanlist() {
     // this needs to be rewritten;
@@ -53,22 +51,21 @@ function getBanlist() {
  */
 function newGame(settings) {
     return {
-        automatic: settings.info.automatic,
         roompass: settings.roompass,
         started: false,
         deckcheck: 0,
         draw_count: 0,
-        ot: parseInt(settings.info.ot, 10),
-        banlist: settings.info.banlist,
-        banlistid: settings.info.banlistid,
-        mode: settings.info.mode,
-        cardpool: settings.info.cardpool,
-        noshuffle: settings.info.shuf,
-        prerelease: settings.info.prerelease,
-        masterRule: banlist[settings.info.banlist].masterRule,
-        legacyfield: (banlist[settings.info.banlist].masterRule !== 4),
+        ot: parseInt(settings.ot, 10),
+        banlist: settings.banlist,
+        banlistid: settings.banlistid,
+        mode: settings.mode,
+        cardpool: settings.cardpool,
+        noshuffle: settings.shuf,
+        prerelease: settings.prerelease,
+        masterRule: 4 || banlist[settings.banlist].masterRule,
+        legacyfield: false, //(banlist[settings.banlist].masterRule !== 4),
         rule: 0,
-        startLP: settings.info.startLP,
+        startLP: settings.startLP,
         starthand: 0,
         timelimit: 0,
         player: {
@@ -158,6 +155,7 @@ const primus = new Primus(primusServer, {
 
 primus.plugin('rooms', Rooms);
 
+primus.save(__dirname + '/../http/js/vendor/primus.js');
 
 primus.duelBroadcast = function broadcast() {
     Object.keys(games).forEach(function(key) {
@@ -256,20 +254,18 @@ function responseHandler(socket, message) {
                 }
                 joined = true;
                 player.name = message.name;
-                stateSystem[message.game].players[index] = socket;
-                stateSystem[message.game].setNames(socket.username, index);
                 socket.slot = index;
 
                 return true;
             });
             if (!joined && stateSystem[message.game]) {
-                stateSystem[message.game].spectators[message.name] = socket;
+
                 if (games[message.game].started) {
-                    socket.write((stateSystem[message.game].generateView('start').spectators));
-                    socket.activeduel = message.game;
+
+
                 }
             }
-            games[message.game].delCount = 0;
+
             primus.duelBroadcast(games);
             socket.write(({
                 duelAction: 'lobby',
@@ -437,3 +433,13 @@ function websocketHandle(socket, message) {
 }
 
 getBanlist();
+games.default_game = newGame({
+    masterRule: 4,
+    startLP: 8000
+});
+
+primus.on('connection', function(socket) {
+    socket.on('data', function(data) {
+        websocketHandle(socket, data);
+    });
+});
