@@ -1,6 +1,7 @@
 require('dotenv').config();
 var fs = require('fs'),
     http = require('http'),
+    engine = require('./engine_ocgcore'),
     Primus = require('primus'),
     Rooms = require('primus-rooms'),
     validateDeck = require('./validate_deck.js'),
@@ -9,11 +10,7 @@ var fs = require('fs'),
     banlist = {},
     ygopros = {},
     port = process.env.PORT || 8082,
-    realgames = [],
-    stateSystem = require('./engine_manual.js'),
-    games = {},
-    states = {},
-    log = {},
+    game = {},
     static = require('node-static'),
     file = new static.Server('../http', { cache: 0 }),
     primusServer = http.createServer(function(request, response) {
@@ -42,111 +39,52 @@ function getBanlist() {
 }
 
 
-
-
 /**
  * Create a new game object.
- * @param {Object} settings game settings
+ * @param {Object} process.env game settings
  * @returns {object} customized game object
  */
-function newGame(settings) {
+function newGame() {
     return {
-        roompass: settings.roompass,
+        roompass: process.env.ROOMPASS || 'default',
         started: false,
-        deckcheck: 0,
-        draw_count: 0,
-        ot: parseInt(settings.ot, 10),
-        banlist: settings.banlist,
-        banlistid: settings.banlistid,
-        mode: settings.mode,
-        cardpool: settings.cardpool,
-        noshuffle: settings.shuf,
-        prerelease: settings.prerelease,
-        masterRule: 4 || banlist[settings.banlist].masterRule,
-        legacyfield: false, //(banlist[settings.banlist].masterRule !== 4),
-        rule: 0,
-        startLP: settings.startLP,
-        starthand: 0,
-        timelimit: 0,
+        deckcheck: process.env.DECK_CHECK || false,
+        ot: process.env.OT || 0,
+        banlist: process.env.BANLIST || 'No Banlist',
+        banlistid: process.env.BANLIST_ID,
+        mode: process.env.MODE || 0,
+        cardpool: process.env.CARD_POOL || 0,
+        noshuffle: process.env.SHUFFLE || false,
+        prerelease: process.env.PRERELEASE || true,
+        masterRule: process.env.MASTER_RULE || 4,
+        legacyfield: process.env.LEGACY || false,
+        rule: process.env.RULE || 0,
+        startLP: process.env.LIFEPOINTS || 8000,
+        draw_count: process.env.STARTING_HAND || 5,
+        timelimit: process.env.TIME_LIMIT || 180000,
         player: {
             0: {
                 name: '',
-                ready: false
+                ready: false,
+                deck: {
+                    main: [],
+                    extra: [],
+                    side: []
+                }
             },
             1: {
                 name: '',
-                ready: false
+                ready: false,
+                deck: {
+                    main: [],
+                    extra: [],
+                    side: []
+                }
             }
         },
         spectators: [],
         delCount: 0
     };
-}
-
-/**
- * Create a function that sorts to the correct viewers.
- * @param   {Object} game active game
- * @returns {function} binding function
- */
-function socketBinding(game) {
-
-    /**
-     * response handler
-     * @param {Object} view  view definition set
-     * @param {Array} stack of cards
-     * @param {callback} callback optional finishing function
-     * @returns {undefined} 
-     */
-    function gameResponse(view, stack, callback) {
-        if (stateSystem[game] === undefined) {
-            return;
-        }
-        try {
-
-
-            if (stateSystem[game] && view !== undefined) {
-                if (stateSystem[game].players) {
-                    if (stateSystem[game].players[0]) {
-                        if (stateSystem[game].players[0].slot === 0) {
-                            stateSystem[game].players[0].write((view['p' + stateSystem[game].players[0].slot]));
-                        }
-                    }
-                    if (stateSystem[game].players[1]) {
-                        if (stateSystem[game].players[1].slot === 1) {
-                            stateSystem[game].players[1].write((view['p' + stateSystem[game].players[1].slot]));
-                        }
-                    }
-
-                    Object.keys(stateSystem[game].spectators).forEach(function(username) {
-                        var spectator = stateSystem[game].spectators[username];
-                        spectator.write((view.spectators));
-                    });
-                }
-            }
-        } catch (error) {
-            console.log('failed messaging socket', error);
-        } finally {
-            if (callback) {
-                callback(stack);
-            }
-        }
-    }
-    return gameResponse;
-}
-
-/**
- * Return a random string.
- * @param   {Number} len Length of resulting string
- * @returns {String} random string
- */
-function randomString(len) {
-    var i,
-        text = '',
-        chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    for (i = 0; i < len; i += 1) {
-        text += chars.charAt(Math.floor(Math.random() * chars.length));
-    }
-    return text;
 }
 
 const primus = new Primus(primusServer, {
@@ -158,13 +96,13 @@ primus.plugin('rooms', Rooms);
 primus.save(__dirname + '/../http/js/vendor/primus.js');
 
 primus.duelBroadcast = function broadcast() {
-    Object.keys(games).forEach(function(key) {
+    Object.keys(game).forEach(function(key) {
         try {
-            if (games[key].player[0].name === '' && games[key].player[1].name === '') {
-                games[key].delCount += 1;
+            if (game[key].player[0].name === '' && game[key].player[1].name === '') {
+                game[key].delCount += 1;
             }
-            if (games[key].delCount > 10) {
-                delete games[key];
+            if (game[key].delCount > 10) {
+                delete game[key];
             }
         } catch (failedDeletion) {
             console.log('failedDeletion', failedDeletion);
@@ -172,34 +110,10 @@ primus.duelBroadcast = function broadcast() {
     });
     primus.write({
         action: 'broadcast',
-        data: games
+        data: game
     });
 };
 
-
-
-function ackgames() {
-    Object.keys(games).forEach(function(key) {
-        if (realgames.indexOf(key) > -1) {
-            return;
-        } else {
-            delete games[key];
-        }
-    });
-    realgames = [];
-    primus.clients.forEach(function each(client) {
-        client.write(({
-            action: 'ack'
-        }));
-    });
-}
-
-//setInterval(ackgames, 60000);
-
-function duelBroadcast(duel, message) {
-    stateSystem[duel].players[0].write((message));
-    stateSystem[duel].players[1].write((message));
-}
 
 function responseHandler(socket, message) {
     //console.log(message);
@@ -216,7 +130,7 @@ function responseHandler(socket, message) {
         case 'ping':
             primus.room('main').send({
                 port: process.env.PORT,
-                games: games
+                games: game
             });
             break;
         case 'register':
@@ -225,10 +139,11 @@ function responseHandler(socket, message) {
             socket.write({
                 action: 'registered'
             });
+            break;
         case 'join':
             socket.slot = undefined;
-            Object.keys(games[message.game].player).some(function(playerNo, index) {
-                var player = games[message.game].player[playerNo];
+            Object.keys(game.player).some(function(playerNo, index) {
+                var player = game.player[playerNo];
                 if (player.name !== '') {
                     return false;
                 }
@@ -238,18 +153,18 @@ function responseHandler(socket, message) {
 
                 return true;
             });
-            if (!joined && stateSystem[message.game]) {
+            if (!joined && game) {
 
-                if (games[message.game].started) {
+                if (game.started) {
 
 
                 }
             }
 
-            primus.duelBroadcast(games);
+            primus.duelBroadcast(game);
             socket.write(({
                 action: 'lobby',
-                game: games[message.game]
+                game: game
             }));
             socket.activeduel = message.game;
             break;
@@ -258,32 +173,32 @@ function responseHandler(socket, message) {
                 return;
             }
             if (socket.slot === 0) {
-                stateSystem[message.game].players[message.slot].write(({
+                game.players[message.slot].write(({
                     action: 'kick'
                 }));
             }
             break;
         case 'leave':
             socket.activeduel = undefined;
-            if (socket.slot !== undefined && games[activeduel]) {
-                games[activeduel].player[socket.slot].name = '';
-                games[activeduel].player[socket.slot].ready = false;
-            } else if (stateSystem[activeduel]) {
-                delete stateSystem[activeduel].spectators[message.name];
+            if (socket.slot !== undefined && game) {
+                game.player[socket.slot].name = '';
+                game.player[socket.slot].ready = false;
+            } else if (game) {
+                delete game.spectators[message.name];
             }
             socket.slot = undefined;
-            if (games[activeduel]) {
-                if (games[activeduel].player[0].name === '' && games[activeduel].player[1].name === '') {
-                    delete games[activeduel];
+            if (game) {
+                if (game.player[0].name === '' && game.player[1].name === '') {
+                    throw game;
                 }
             }
-            if (games[activeduel]) {
-                if ((games[activeduel].player[0].name === '' || games[activeduel].player[1].name === '') && games[activeduel].started === true) {
-                    stateSystem[activeduel].duelistChat('Server', 'Player left the game. Duel has ended.');
-                    delete games[activeduel];
+            if (game) {
+                if ((game.player[0].name === '' || game.player[1].name === '') && game.started === true) {
+                    game.duelistChat('Server', 'Player left the game. Duel has ended.');
+                    throw game;
                 }
             }
-            primus.duelBroadcast(games);
+            primus.duelBroadcast(game);
             socket.write(({
                 action: 'leave'
             }));
@@ -296,35 +211,35 @@ function responseHandler(socket, message) {
                     action: 'surrender',
                     by: socket.slot
                 }));
-                stateSystem[activeduel].surrender(games[activeduel].player[socket.slot].name);
+                game.surrender(game.player[socket.slot].name);
 
-                stateSystem[activeduel].players[0].write(({
+                game.players[0].write(({
                     action: 'side',
-                    deck: stateSystem[activeduel].decks[0]
+                    deck: game.decks[0]
                 }));
-                games[activeduel].player[0].ready = false;
-                stateSystem[activeduel].players[1].write(({
+                game.player[0].ready = false;
+                game.players[1].write(({
                     action: 'side',
-                    deck: stateSystem[activeduel].decks[1]
+                    deck: game.decks[1]
                 }));
-                games[activeduel].player[1].ready = false;
+                game.player[1].ready = false;
             }
             break;
         case 'lock':
-            if (games[activeduel] === undefined) {
+            if (game === undefined) {
                 return;
             }
-            if (games[activeduel].player[socket.slot].ready) {
-                games[activeduel].player[socket.slot].ready = false;
-                stateSystem[activeduel].lock[socket.slot] = false;
-                primus.duelBroadcast(games, 'new game locked');
+            if (game.player[socket.slot].ready) {
+                game.player[socket.slot].ready = false;
+                game.lock[socket.slot] = false;
+                primus.duelBroadcast(game, 'new game locked');
                 break;
             }
             if (socket.slot === undefined) {
                 return;
             }
             try {
-                message.validate = validateDeck(message.deck, banlist[games[activeduel].banlist], database, games[activeduel].cardpool, games[activeduel].prerelease);
+                message.validate = validateDeck(message.deck, banlist[game.banlist], database, game.cardpool, game.prerelease);
                 if (message.validate) {
                     if (message.validate.error) {
                         socket.write(({
@@ -351,17 +266,17 @@ function responseHandler(socket, message) {
                 return;
             }
 
-            games[activeduel].player[socket.slot].ready = true;
-            stateSystem[activeduel].lock[socket.slot] = true;
+            game.player[socket.slot].ready = true;
+            game.lock[socket.slot] = true;
 
-            stateSystem[activeduel].decks[socket.slot] = message.deck;
+            game.decks[socket.slot] = message.deck;
             socket.write(({
                 action: 'lock',
                 result: 'success'
             }));
-            primus.duelBroadcast(games);
-            if (games[activeduel].player[socket.slot].ready) {
-                stateSystem[activeduel].duelistChat('Server', '<pre>' + games[activeduel].player[socket.slot].name + ' locked in deck.</pre>');
+            primus.duelBroadcast(game);
+            if (game.player[socket.slot].ready) {
+                game.duelistChat('Server', '<pre>' + game.player[socket.slot].name + ' locked in deck.</pre>');
             }
             socket.write(({
                 action: 'slot',
@@ -373,22 +288,22 @@ function responseHandler(socket, message) {
             break;
         case 'start':
             if (socket.slot !== undefined) {
-                player1 = stateSystem[activeduel].decks[0];
-                player2 = stateSystem[activeduel].decks[1];
-                if (games[activeduel].automatic) {
-                    const players = [stateSystem[activeduel].players[0], stateSystem[activeduel].players[1]];
+                player1 = game.decks[0];
+                player2 = game.decks[1];
+                if (game.automatic) {
+                    const players = [game.players[0], game.players[1]];
                     players.forEach(function(item, iteration) {
                         item.activeduel = activeduel;
                     });
                     players[0].deck = player1;
                     players[1].deck = player2;
-                    ygopros[activeduel] = ygopro(Object.assign({}, games[activeduel]), players);
-                    games[activeduel].started = true;
-                    primus.duelBroadcast(games);
+                    ygopros[activeduel] = ygopro(Object.assign({}, game), players);
+                    game.started = true;
+                    primus.duelBroadcast(game);
                 } else {
-                    stateSystem[activeduel].startDuel(player1, player2, true, games[activeduel]);
-                    games[activeduel].started = true;
-                    primus.duelBroadcast(games);
+                    game.startDuel(player1, player2, true, game);
+                    game.started = true;
+                    primus.duelBroadcast(game);
                 }
 
             }
@@ -415,7 +330,7 @@ function websocketHandle(socket, message) {
 }
 
 getBanlist();
-games.default_game = newGame({
+game = newGame({
     masterRule: 4,
     startLP: 8000,
     banlist: '2017.09.18 (TCG Advanced)'
