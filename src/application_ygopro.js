@@ -171,7 +171,7 @@ primus.duelBroadcast = function broadcast() {
         }
     });
     primus.write({
-        duelAction: 'broadcast',
+        action: 'broadcast',
         data: games
     });
 };
@@ -189,7 +189,7 @@ function ackgames() {
     realgames = [];
     primus.clients.forEach(function each(client) {
         client.write(({
-            duelAction: 'ack'
+            action: 'ack'
         }));
     });
 }
@@ -219,32 +219,12 @@ function responseHandler(socket, message) {
                 games: games
             });
             break;
-        case 'host':
-            generated = randomString(12);
-            games[generated] = newGame(message);
-            log[generated] = [];
-            stateSystem[generated] = {
-
-            };
-            games[generated].player[0].name = message.name;
-            stateSystem[generated].players[0] = socket;
-            stateSystem[generated].setNames(socket.username, 0);
-            socket.activeduel = generated;
-            primus.duelBroadcast(games);
-            socket.write(({
-                duelAction: 'lobby',
-                game: generated
-            }));
-            socket.slot = 0;
-            setTimeout(function() {
-                stateSystem[generated].duelistChat('Gamelist', '90min Time limit reached. Ending the duel');
-                delete games[generated];
-                delete stateSystem[generated];
-            }, 10800000); // 180 mins.
-
-
-            break;
-
+        case 'register':
+            // Expand later
+            socket.username = message.username;
+            socket.write({
+                action: 'registered'
+            });
         case 'join':
             socket.slot = undefined;
             Object.keys(games[message.game].player).some(function(playerNo, index) {
@@ -253,7 +233,7 @@ function responseHandler(socket, message) {
                     return false;
                 }
                 joined = true;
-                player.name = message.name;
+                player.name = socket.username;
                 socket.slot = index;
 
                 return true;
@@ -268,19 +248,19 @@ function responseHandler(socket, message) {
 
             primus.duelBroadcast(games);
             socket.write(({
-                duelAction: 'lobby',
+                action: 'lobby',
                 game: games[message.game]
             }));
             socket.activeduel = message.game;
             break;
         case 'kick':
-            if (socket.slot !== undefined) {
-                if (socket.slot === 0) {
-                    stateSystem[message.game].players[message.slot].write(({
-                        duelAction: 'kick'
-                    }));
-
-                }
+            if (socket.slot === undefined) {
+                return;
+            }
+            if (socket.slot === 0) {
+                stateSystem[message.game].players[message.slot].write(({
+                    action: 'kick'
+                }));
             }
             break;
         case 'leave':
@@ -305,7 +285,7 @@ function responseHandler(socket, message) {
             }
             primus.duelBroadcast(games);
             socket.write(({
-                duelAction: 'leave'
+                action: 'leave'
             }));
 
             break;
@@ -313,18 +293,18 @@ function responseHandler(socket, message) {
             if (socket.slot !== undefined) {
 
                 socket.write(({
-                    duelAction: 'surrender',
+                    action: 'surrender',
                     by: socket.slot
                 }));
                 stateSystem[activeduel].surrender(games[activeduel].player[socket.slot].name);
 
                 stateSystem[activeduel].players[0].write(({
-                    duelAction: 'side',
+                    action: 'side',
                     deck: stateSystem[activeduel].decks[0]
                 }));
                 games[activeduel].player[0].ready = false;
                 stateSystem[activeduel].players[1].write(({
-                    duelAction: 'side',
+                    action: 'side',
                     deck: stateSystem[activeduel].decks[1]
                 }));
                 games[activeduel].player[1].ready = false;
@@ -340,53 +320,55 @@ function responseHandler(socket, message) {
                 primus.duelBroadcast(games, 'new game locked');
                 break;
             }
-            if (socket.slot !== undefined) {
-                try {
-                    message.validate = validateDeck(message.deck, banlist[games[activeduel].banlist], database, games[activeduel].cardpool, games[activeduel].prerelease);
-                    if (message.validate) {
-                        if (message.validate.error) {
-                            socket.write(({
-                                errorType: 'validation',
-                                duelAction: 'error',
-                                error: message.validate.error,
-                                msg: message.validate.msg
-                            }));
-                            return;
-                        }
-                    }
-                } catch (error) {
-                    socket.write(({
-                        error: error,
-                        stack: error.stack,
-                        input: (message)
-                    }));
-                    socket.write(({
-                        errorType: 'validation',
-                        duelAction: 'error',
-                        error: 'Server Error',
-                        msg: 'Server Error'
-                    }));
-                    return;
-                }
-
-                games[activeduel].player[socket.slot].ready = true;
-                stateSystem[activeduel].lock[socket.slot] = true;
-
-                stateSystem[activeduel].decks[socket.slot] = message.deck;
-                socket.write(({
-                    duelAction: 'lock',
-                    result: 'success'
-                }));
-                primus.duelBroadcast(games);
-                if (games[activeduel].player[socket.slot].ready) {
-                    stateSystem[activeduel].duelistChat('Server', '<pre>' + games[activeduel].player[socket.slot].name + ' locked in deck.</pre>');
-                }
-                socket.write(({
-                    duelAction: 'slot',
-                    slot: socket.slot
-                }));
-
+            if (socket.slot === undefined) {
+                return;
             }
+            try {
+                message.validate = validateDeck(message.deck, banlist[games[activeduel].banlist], database, games[activeduel].cardpool, games[activeduel].prerelease);
+                if (message.validate) {
+                    if (message.validate.error) {
+                        socket.write(({
+                            errorType: 'validation',
+                            action: 'error',
+                            error: message.validate.error,
+                            msg: message.validate.msg
+                        }));
+                        return;
+                    }
+                }
+            } catch (error) {
+                socket.write(({
+                    error: error,
+                    stack: error.stack,
+                    input: (message)
+                }));
+                socket.write(({
+                    errorType: 'validation',
+                    action: 'error',
+                    error: 'Server Error',
+                    msg: 'Server Error'
+                }));
+                return;
+            }
+
+            games[activeduel].player[socket.slot].ready = true;
+            stateSystem[activeduel].lock[socket.slot] = true;
+
+            stateSystem[activeduel].decks[socket.slot] = message.deck;
+            socket.write(({
+                action: 'lock',
+                result: 'success'
+            }));
+            primus.duelBroadcast(games);
+            if (games[activeduel].player[socket.slot].ready) {
+                stateSystem[activeduel].duelistChat('Server', '<pre>' + games[activeduel].player[socket.slot].name + ' locked in deck.</pre>');
+            }
+            socket.write(({
+                action: 'slot',
+                slot: socket.slot
+            }));
+
+
 
             break;
         case 'start':
@@ -435,7 +417,8 @@ function websocketHandle(socket, message) {
 getBanlist();
 games.default_game = newGame({
     masterRule: 4,
-    startLP: 8000
+    startLP: 8000,
+    banlist: '2017.09.18 (TCG Advanced)'
 });
 
 primus.on('connection', function(socket) {

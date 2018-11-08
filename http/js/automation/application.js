@@ -43,24 +43,6 @@ function updateloby(state) {
         $('.slot').eq(2).css('display', 'none');
         $('.slot').eq(3).css('display', 'none');
     }
-    getAvatar(state.player[0].name);
-    getAvatar(state.player[1].name);
-    setTimeout(function() {
-        if (avatarMap[state.player[0].name]) {
-            $('#p0avatar').attr('src', avatarMap[state.player[0].name]);
-        } else {
-            $('#p0avatar').attr('src', '/img/newgiohtoken.png');
-        }
-        if (avatarMap[state.player[1].name]) {
-            $('#p1avatar').attr('src', avatarMap[state.player[1].name]);
-        } else {
-            $('#p1avatar').attr('src', '/img/newgiohtoken.png');
-        }
-        $('.p0name').html(state.player[0].name);
-        $('.p1name').html(state.player[1].name);
-    }, 3000);
-
-
 }
 
 function duelController(message) {
@@ -68,11 +50,18 @@ function duelController(message) {
         case 'lobby':
             updateloby(message.game);
             break;
+        case 'registered':
+            primus.write({
+                action: 'join',
+                game: 'default_game',
+                name: 'username',
+                key: 'randomloginstring'
+            });
     }
 }
 primus.on('data', function(data) {
     console.log(data);
-    if (data.duelAction) {
+    if (data.action) {
         duelController(data);
     }
 });
@@ -80,8 +69,12 @@ primus.on('data', function(data) {
 primus.on('open', function() {
     console.log('connected');
     primus.write({
-        action: 'join',
-        game: 'default_game'
+        action: 'ping'
+    });
+    primus.write({
+        action: 'register',
+        name: 'username',
+        key: 'randomloginstring'
     });
 });
 
