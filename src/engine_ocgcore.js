@@ -1,8 +1,28 @@
 /*eslint no-plusplus: 0*/
 
-/* allows dynamic linking of the ocgapi.dll, critical; */
-/* allows use of C++ pointers for C++ JS interactions, critical */
-/* allows use of C++ structures for C++ JS interactions, critical */
+/**
+ * @type DuelSettings
+ * @property {Boolean} priority
+ * @property {Number} draw_count
+ * @property {Number} start_hand_count
+ * @property {Number`} time Timelimit per turn in seconds
+ * @property {Boolean} shuffleDeck
+ * @property {Number} start_lp
+ * @property {String} roompass
+ * @property {Boolean} started
+ * @property {Boolean} deckcheck
+ * @property {Number} ot
+ * @property {String} banlist
+ * @property {Number} banlistid
+ * @property {Number} mode
+ * @property {Number} cardpool
+ * @property {Boolean} prerelease
+ * @property {Number} masterRule
+ * @property {Boolean} legacyfield
+ * @property {Number} rule
+ * @property {Number} startLP
+ * @property {Object} player
+ */
 const sql = require('sql.js'),
     fs = require('fs'),
     os = require('os'),
@@ -488,7 +508,13 @@ function mainProcess(pduel, game) {
     }
 }
 
-
+/**
+ * Start a duel
+ * @param settings {DuelSettings} settings for starting the duel
+ * @param players {Socket[]}
+ * @param observers {} 1-4 players for the duel
+ * @returns {undefined}
+ */
 function duel(settings, players, observers) {
     var pduel;
 
