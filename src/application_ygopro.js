@@ -27,15 +27,17 @@
  * @property {Function} write Send data to clients
  */
 
-const database = require('../http/manifest/manifest_0-en-OCGTCG.json'),
+const banlist = './http/manifest/banlist.json',
+    database = require('../http/manifest/manifest_0-en-OCGTCG.json'),
     fs = require('fs'),
     http = require('http'),
     ocgcore = require('./engine_ocgcore'),
     Primus = require('primus'),
     Rooms = require('server-rooms'),
     static = require('node-static'),
-    validateDeck = require('./validate_deck.js'),
-    banlist = './http/manifest/banlist.json';
+    uuid = require('uuid/v4'),
+    validateDeck = require('./validate_deck.js');
+
 
 /**
  * Start a static HTTP web server.
@@ -66,7 +68,7 @@ function broadcast(server) {
 
 /**
  * Register the user with the server via external authentication.
- * @param {client} client connected websocket and Primus user (spark in documentation).
+ * @param {Spark} client connected websocket and Primus user (spark in documentation).
  * @param {Message} message JSON communication sent from client.
  * @returns {undefined}
  */
@@ -82,7 +84,7 @@ function register(client, message) {
 /**
  * Chat with other users.
  * @param {Primus} server Primus instance.
- * @param {client} client connected websocket and Primus user (spark in documentation).
+ * @param {Spark} client connected websocket and Primus user (spark in documentation).
  * @param {Message} message JSON communication sent from client.
  * @param {Date} date built in date object, used for timestamping.
  * @returns {Object} formated chat message.
@@ -102,7 +104,7 @@ function chat(server, client, message, date) {
 /**
  * If authorized reconnect a client to an active duel.
  * @param {Primus} server Primus instance.
- * @param {client} client connected websocket and Primus user (spark in documentation).
+ * @param {Spark} client connected websocket and Primus user (spark in documentation).
  * @param {Message} message JSON communication sent from client.
  * @returns {undefined}
  */
@@ -126,7 +128,7 @@ function reconnect(server, client, message) {
  * Join the user to a room
  * @param {Error|Null} error unlikely websocket Adapter error.
  * @param {Primus} server Primus instance.
- * @param {client} client connected websocket and Primus user (spark in documentation).
+ * @param {Spark} client connected websocket and Primus user (spark in documentation).
  * @return {undefined}
  */
 function join(error, server, client) {
@@ -155,7 +157,7 @@ function join(error, server, client) {
 /**
  * Join the user to a room
  * @param {Primus} server Primus instance.
- * @param {client} client connected websocket and Primus user (spark in documentation).
+ * @param {Spark} client connected websocket and Primus user (spark in documentation).
  * @return {undefined}
  */
 function attemptJoin(server, client) {
@@ -198,7 +200,7 @@ function spectate(server, message, user) {
 /**
  * Kick the user in a specific slot if authorized to do so.
  * @param {Primus} server Primus instance.
- * @param {client} client connected websocket and Primus user (spark in documentation).
+ * @param {Spark} client connected websocket and Primus user (spark in documentation).
  * @param {Message} message JSON communication sent from client.
  * @returns {Boolean} if the kick was valid and attempted to be executed.
  */
@@ -227,7 +229,7 @@ function surrender(server, message) {
 /**
  * Validate a requested deck.
  * @param {Primus} server Primus instance.
- * @param {client} client connected websocket and Primus user (spark in documentation).
+ * @param {Spark} client connected websocket and Primus user (spark in documentation).
  * @param {Message} message JSON communication sent from client.
  * @returns {Boolean} If the deck is valid or not.
  */
@@ -252,34 +254,31 @@ function deckCheck(server, client, message) {
 }
 
 /**
- * Validate a requested deck and if valid lock in the player as ready.
+ * Validate a requested deck and if valid lock in the player as ready, otherwise toggle it off.
  * @param {Primus} server Primus instance.
- * @param {client} client connected websocket and Primus user (spark in documentation).
+ * @param {Spark} client connected websocket and Primus user (spark in documentation).
  * @param {Message} message JSON communication sent from client.
  * @returns {undefined} 
  */
 function lock(server, client, message) {
-    if (client.slot === undefined) {
-        return;
-    }
-    if (server.game.player[client.slot].ready) {
-        server.game.player[client.slot].ready = false;
+    if (client.ready) {
+        client.ready = false;
         return;
     }
     try {
-        server.game.player[client.slot].ready = deckCheck(client, message, banlist);
+        client.ready = deckCheck(client, message, banlist);
     } catch (error) {
         server.game.player[client.slot].ready = false;
         throw error;
     }
-    server.game.player[client.slot].deck = message.deck;
+    client.deck = message.deck;
 }
 
 /**
  * Create reconnection service for a client.
  * @param {Primus} server Primus instance.
  * @param {String} room room to act as player abstraction.
- * @param {client} client connected websocket and Primus user (spark in documentation).
+ * @param {Spark} client connected websocket and Primus user (spark in documentation).
  * @returns {PlayerAbstraction} Representation of a player or group of players a client can reconnect to if disconnected.
  */
 function PlayerAbstraction(server, room, client) {
@@ -302,12 +301,12 @@ function PlayerAbstraction(server, room, client) {
 }
 
 /**
- * Start the duel
+ * Determine who goes first via a coin toss.
  * @param {Primus} server Primus instance.
- * @param {client} client connected websocket and Primus user (spark in documentation).
+ * @param {Spark} client connected websocket and Primus user (spark in documentation).
  * @returns {undefined}
  */
-function start(server, client) {
+function determine(server, client) {
     if (client.slot !== 0) {
         return;
     }
@@ -317,22 +316,52 @@ function start(server, client) {
     if (!server.game.player[0].ready && !server.game.player[1].ready) {
         return;
     }
+    server.game.verification = uuid();
+    ocgcore.shuffle(server.game.player);
+    server.game.player[0].write({
+        action: 'cointoss',
+        result: 'heads'
+    });
+    server.game.player[1].write({
+        action: 'cointoss',
+        result: 'tails'
+    });
+    server.game.player[0].write({
+        action: 'turn_player',
+        verification: server.game.verification
+    });
+    server.game.started = true;
+}
+
+/**
+ * Start the duel
+ * @param {Primus} server Primus instance.
+ * @param {Spark} client connected websocket and Primus user (spark in documentation).
+ * @param {Message} message JSON communication sent from client.
+ * @returns {undefined}
+ */
+function start(server, client, message) {
+    if (message.verification !== server.game.verification) {
+        return;
+    }
+    if (message.turn_player) {
+        server.game.players = server.game.player.reverse();
+    }
 
     const players = [
-            new PlayerAbstraction(server, 'player1', server.game.player[0]),
-            new PlayerAbstraction(server, 'player2', server.game.player[1])
+            new PlayerAbstraction(server, 'player1', server.game.players[0]),
+            new PlayerAbstraction(server, 'player2', server.game.players[1])
         ],
         spectators = [new PlayerAbstraction(server, 'spectators', {})];
 
 
-    ocgcore(server.game, players, spectators);
-    server.game.started = true;
+    ocgcore.duel(server.game, players, spectators);
 }
 
 /**
  * Respond to a question from the OCGCore game engine.
  * @param {Primus} server Primus instance.
- * @param {client} client connected websocket and Primus user (spark in documentation).
+ * @param {Spark} client connected websocket and Primus user (spark in documentation).
  * @param {Message} message JSON communication sent from client.
  * @returns {undefined}
  */
@@ -346,7 +375,7 @@ function respond(server, client, message) {
 /**
  * Process incoming messages from clients.
  * @param {Primus} server Primus instance.
- * @param {client} client connected websocket and Primus user (spark in documentation).
+ * @param {Spark} client connected websocket and Primus user (spark in documentation).
  * @param {Message} message JSON communication sent from client.
  * @returns {Boolean} If the deck is valid or not.
  */
@@ -383,8 +412,12 @@ function controller(server, client, message) {
             lock(server, client, message, banlist);
             broadcast(server);
             break;
+        case 'determine':
+            determine(server, client);
+            broadcast(server);
+            break;
         case 'start':
-            start(server, client);
+            start(server, client, message);
             broadcast(server);
             break;
         case 'ocgcore':
@@ -398,7 +431,7 @@ function controller(server, client, message) {
 /**
  * Add additional error handling and then, process incoming messages from clients.
  * @param {Primus} server Primus instance.
- * @param {client} client connected websocket and Primus user (spark in documentation).
+ * @param {Spark} client connected websocket and Primus user (spark in documentation).
  * @param {Message} message JSON communication sent from client.
  * @returns {Boolean} If the deck is valid or not.
  */
@@ -433,7 +466,8 @@ function main() {
         time: process.env.TIME_LIMIT || 3000,
         shuffleDeck: process.env.SHUFFLE || false,
         startLP: process.env.LIFEPOINTS || 8000,
-        roompass: process.env.ROOMPASS || 'default',
+        roompass: process.env.ROOMPASS || uuid(),
+        verification: uuid(),
         started: false,
         deckcheck: process.env.DECK_CHECK || false,
         ot: process.env.OT || 0,

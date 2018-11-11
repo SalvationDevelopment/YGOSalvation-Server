@@ -585,4 +585,7 @@ function duel(settings, players, observers) {
 
 }
 
-module.exports.duel = duel;
+module.exports = {
+    duel: duel,
+    shuffle: shuffle
+};
