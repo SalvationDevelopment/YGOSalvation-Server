@@ -33,7 +33,8 @@ const banlist = './http/manifest/banlist.json',
     http = require('http'),
     ocgcore = require('./engine_ocgcore'),
     Primus = require('primus'),
-    Rooms = require('server-rooms'),
+    Rooms = require('primus-rooms'),
+    sanitize = require('./lib_html_sanitizer.js'),
     static = require('node-static'),
     uuid = require('uuid/v4'),
     validateDeck = require('./validate_deck.js');
@@ -54,12 +55,17 @@ function staticWebServer(request, response) {
 
 
 /**
- * Broadcast current game lobby status to connected clients.
+ * Broadcast current game lobby status to connected clients and management system.
  * @param {Primus} server Primus instance.
  * @returns {undefined}
  */
 function broadcast(server) {
     server.write({
+        action: 'lobby',
+        game: server.game,
+        port: process.env.PORT || 8083
+    });
+    server.client.write({
         action: 'lobby',
         game: server.game,
         port: process.env.PORT || 8083
@@ -80,7 +86,6 @@ function register(client, message) {
     });
 }
 
-
 /**
  * Chat with other users.
  * @param {Primus} server Primus instance.
@@ -92,7 +97,7 @@ function register(client, message) {
 function chat(server, client, message, date) {
     date = date || new Date();
     const chatMessage = {
-        message: message.message,
+        message: sanitize(message.message),
         username: client.username,
         date: date.toISOString()
     };
@@ -455,9 +460,10 @@ function messageHandler(server, client, message) {
 function main() {
     require('dotenv').config();
     const port = process.env.PORT || 8082,
-        server = new Primus(http.createServer(staticWebServer), {
+        httpserver = http.createServer(staticWebServer),
+        server = new Primus(httpserver, {
             parser: 'JSON'
-        }).listen(port);
+        });
 
     server.game = {
         priority: false,
@@ -485,13 +491,14 @@ function main() {
     };
 
     server.plugin('rooms', Rooms);
-
+    server.client = new server.Socket(process.env.CENTRAL_SERVER);
     server.save(__dirname + '/../http/js/vendor/server.js');
     server.on('connection', function(client) {
         client.on('data', function(data) {
             messageHandler(server, client, data, banlist);
         });
     });
+    httpserver.listen(port);
 }
 
 main();

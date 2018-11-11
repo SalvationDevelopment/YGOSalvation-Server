@@ -608,28 +608,12 @@ module.exports = function() {
     }
 
     primus.on('connection', function(socket) {
-        var connectionwatcher = domain.create();
-        connectionwatcher.on('error', function(err) {
-            console.log('[Gamelist]Error Critical User-Connection:', err);
-        });
-        connectionwatcher.enter();
-        socket.on('error', function(error) {
-            console.log('[Gamelist]:Generic Socket Error:', error);
-        });
-        socket.aiReady = true;
         socket.on('data', function(data) {
-            var save = false;
-            if (socket.readyState !== primus.Spark.CLOSED) {
-                save = true;
+            try {
+                onData(data, socket);
+            } catch (error) {
+                console.log(error);
             }
-            if (save === false) {
-                return;
-            }
-            onData(data, socket);
         });
-        connectionwatcher.exit();
     });
-
-
-
 };

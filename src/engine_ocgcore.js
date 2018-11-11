@@ -291,7 +291,7 @@ function playerInstance(playerConnection, slot, game, settings) {
 
     return function(data) {
         queueGameActions([data]);
-    }
+    };
 }
 
 
@@ -302,7 +302,15 @@ function makeGame(pduel, settings, players, observers) {
         last_response = -1,
         time_limit = settings.time_limit;
 
-
+    function respond(player, data) {
+        if (last_response !== player) {
+            return;
+        }
+        const resb = Buffer.alloc(64);
+        resb.copy(data);
+        player.lock = false;
+        ocgapi.set_responseb(pduel, resb);
+    }
 
     function gameTick() {
         time_limit -= 1;
@@ -469,6 +477,7 @@ function makeGame(pduel, settings, players, observers) {
         refreshHand,
         refreshSingle,
         refreshGrave,
+        respond,
         waitforResponse,
         sendBufferToPlayer,
         reSendToPlayer,
@@ -511,7 +520,7 @@ function mainProcess(pduel, game) {
 
 /**
  * Start a duel
- * @param settings {DuelSettings} settings for starting the duel
+ * @param {DuelSettings} settings parameters for starting the duel
  * @param players {Socket[]}
  * @param observers {} 1-4 players for the duel
  * @returns {undefined}
