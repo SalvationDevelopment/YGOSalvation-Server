@@ -321,6 +321,7 @@ function makeGame(pduel, settings, players, observers) {
     }
 
     function waitforResponse(player) {
+        last_response = player;
         const message = {
             command: 'MSG_WAITING',
             time: time_limit
@@ -516,7 +517,8 @@ function mainProcess(pduel, game) {
  * @returns {undefined}
  */
 function duel(settings, players, observers) {
-    var pduel;
+    var pduel,
+        game = {};
 
     if (settings.shuffleDeck) {
         shuffle(players[0].main);
@@ -557,15 +559,16 @@ function duel(settings, players, observers) {
     //send start msg
     console.log('all cards loaded');
 
-    setTimeout(function() {
-        const playerConnections = players.map(function(playerConnection, slot) {
-                return playerInstance(playerConnection, slot, { pduel }, settings);
-            }),
-            observerConnections = players.map(function(playerConnection, slot) {
-                return playerInstance(playerConnection, slot, { pduel }, settings);
-            }),
-            game = makeGame(pduel, settings, playerConnections, observerConnections);
+    const playerConnections = players.map(function(playerConnection, slot) {
+            return playerInstance(playerConnection, slot, { pduel }, settings);
+        }),
+        observerConnections = players.map(function(playerConnection, slot) {
+            return playerInstance(playerConnection, slot, { pduel }, settings);
+        });
 
+    game = makeGame(pduel, settings, playerConnections, observerConnections);
+
+    setTimeout(function() {
         game.sendStartInfo(0);
         game.sendStartInfo(1);
         setTimeout(function() {
@@ -578,6 +581,7 @@ function duel(settings, players, observers) {
         }, 1000);
 
     }, 1000);
+    return game;
 
 }
 

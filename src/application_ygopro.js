@@ -1,10 +1,23 @@
 require('dotenv').config();
 
 /**
- * @typedef Message
+ * @typedef {Object} Message
  * @property {String} action game model manipulation or general action to take place. 
+ * @property {Deck} deck deck for validation and use
  * @property {String} [username] clients username.
  * @property {String} [validationKey] clients validation key from authentication server. 
+ */
+
+/**
+ * @typedef {Object} Deck
+ * @property {Number[]} main Passcode/YGOPRO_ID of cards in the main deck
+ * @property {Number[]} extra Passcode/YGOPRO_ID cards in the extra deck
+ * @property {Number[]} side Passcode/YGOPRO_ID cards in the side deck
+ */
+
+/**
+ * @typedef {Deck} PlayerAbstraction
+ * @property {Function} write Send data to clients
  */
 
 const database = require('../http/manifest/manifest_0-en-OCGTCG.json'),
@@ -36,7 +49,8 @@ const database = require('../http/manifest/manifest_0-en-OCGTCG.json'),
         legacyfield: process.env.LEGACY || false,
         rule: process.env.RULE || 0,
         player: [],
-        chat: []
+        chat: [],
+        reconnection: {}
     };
 
 /**
@@ -101,6 +115,58 @@ function chat(spark, message, date) {
 }
 
 /**
+ * If authorized reconnect a client to an active duel.
+ * @param {Spark} spark connected websocket and Primus user.
+ * @param {Message} message JSON communication sent from client.
+ * @returns {undefined}
+ */
+function reconnect(spark, message) {
+    if (!game.reconnection[message.room]) {
+        return;
+    }
+    if (game.reconnection[message.room]) {
+        return;
+    }
+    if (game.reconnection[message.room] = spark.username) {
+        spark.join(message.room);
+    }
+    if (message.room !== 'spectator') {
+        game.duel.getField();
+    }
+
+}
+
+/**
+ * Join the user to a room
+ * @param {Error|Null} error unlikely websocket Adapter error.
+ * @param {Primus} server Primus instance.
+ * @param {Spark} spark connected websocket and Primus user.
+ * @return {undefined}
+ */
+function join(error, server, spark) {
+    function findAvaliableSlot(player, index) {
+        if (player) {
+            return false;
+        }
+        spark.slot = index;
+        game.player[index] = spark;
+        broadcast(server);
+        return true;
+    }
+
+    if (error) {
+        throw error;
+    }
+
+    const isPlayer = game.players.some(findAvaliableSlot);
+    if (!isPlayer) {
+        spark.join('spectator', function() {
+            broadcast(server);
+        });
+    }
+}
+
+/**
  * Join the user to a room
  * @param {Primus} server Primus instance.
  * @param {Spark} spark connected websocket and Primus user.
@@ -109,21 +175,7 @@ function chat(spark, message, date) {
 function attemptJoin(server, spark) {
     spark.slot = undefined;
     spark.leave('spectators', function(error) {
-        if (error) {
-            throw error;
-        }
-        const isPlayer = game.player.some(function(player, index) {
-            if (player) {
-                return false;
-            }
-            spark.slot = index;
-            game.player[index] = spark;
-            broadcast(server);
-            return true;
-        });
-        if (!isPlayer) {
-            spark.join('spectator', broadcast);
-        }
+        join(error, server, spark);
     });
     spark.join('chat');
 }
@@ -235,11 +287,38 @@ function lock(spark, message) {
 }
 
 /**
+ * Create reconnection service for a client.
+ * @param {Primus} server Primus instance.
+ * @param {String} room room to act as player abstraction.
+ * @param {Spark} spark connected websocket and Primus user.
+ * @returns {PlayerAbstraction} Representation of a player or group of players a client can reconnect to if disconnected.
+ */
+function PlayerAbstraction(server, room, spark) {
+    if (spark.username) {
+        spark.join(room);
+        game.reconnection[room] = spark.username;
+    }
+    server.room('room').write({
+        action: 'reconnection',
+        room: room
+    });
+    return {
+        write: function(data) {
+            server.room('room').write(data);
+        },
+        main: spark.main,
+        extra: spark.extra,
+        side: spark.side
+    };
+}
+
+/**
  * Start the duel
+ * @param {Primus} server Primus instance.
  * @param {Spark} spark connected websocket and Primus user.
  * @returns {undefined}
  */
-function start(spark) {
+function start(server, spark) {
     if (spark.slot !== 0) {
         return;
     }
@@ -249,8 +328,15 @@ function start(spark) {
     if (!game.player[0].ready && !game.player[1].ready) {
         return;
     }
-    const players = [game.player[0], game.player[1]];
-    ocgcore(game, players, []);
+
+    const players = [
+            new PlayerAbstraction(server, 'player1', game.player[0]),
+            new PlayerAbstraction(server, 'player2', game.player[1])
+        ],
+        spectators = [new PlayerAbstraction(server, 'spectators', {})];
+
+
+    ocgcore(game, players, spectators);
     game.started = true;
 }
 
