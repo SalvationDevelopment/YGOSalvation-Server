@@ -1,4 +1,11 @@
-require('dotenv').config();
+/**
+ * OCGCore, the YGOPro game engine, is very unstable. Its a C++ libary that will cause
+ * a crash if it sees improper logic in the Lua scripts it dynamically loads in that
+ * represent the game logic of indidual cards. For that reason the room system wrapping
+ * it runs in a sperate child process. 
+ * 
+ * Configuration is passed via enviromental variables.
+ */
 
 /**
  * @typedef {Object} Message
@@ -28,30 +35,7 @@ const database = require('../http/manifest/manifest_0-en-OCGTCG.json'),
     Rooms = require('server-rooms'),
     static = require('node-static'),
     validateDeck = require('./validate_deck.js'),
-    banlist = './http/manifest/banlist.json',
-    game = {
-        priority: false,
-        draw_count: process.env.DRAW_COUNT || 1,
-        start_hand_count: process.env.STARTING_HAND || 5,
-        time: process.env.TIME_LIMIT || 3000,
-        shuffleDeck: process.env.SHUFFLE || false,
-        startLP: process.env.LIFEPOINTS || 8000,
-        roompass: process.env.ROOMPASS || 'default',
-        started: false,
-        deckcheck: process.env.DECK_CHECK || false,
-        ot: process.env.OT || 0,
-        banlist: process.env.BANLIST || 'No Banlist',
-        banlistid: process.env.BANLIST_ID,
-        mode: process.env.MODE || 0,
-        cardpool: process.env.CARD_POOL || 0,
-        prerelease: process.env.PRERELEASE || true,
-        masterRule: process.env.MASTER_RULE || 4,
-        legacyfield: process.env.LEGACY || false,
-        rule: process.env.RULE || 0,
-        player: [],
-        chat: [],
-        reconnection: {}
-    };
+    banlist = './http/manifest/banlist.json';
 
 /**
  * Start a static HTTP web server.
@@ -75,21 +59,21 @@ function staticWebServer(request, response) {
 function broadcast(server) {
     server.write({
         action: 'lobby',
-        game: game,
+        game: server.game,
         port: process.env.PORT || 8083
     });
 }
 
 /**
  * Register the user with the server via external authentication.
- * @param {Spark} spark connected websocket and Primus user.
+ * @param {client} client connected websocket and Primus user (spark in documentation).
  * @param {Message} message JSON communication sent from client.
  * @returns {undefined}
  */
-function register(spark, message) {
+function register(client, message) {
     // Expand later
-    spark.username = message.username;
-    spark.write({
+    client.username = message.username;
+    client.write({
         action: 'registered'
     });
 }
@@ -97,41 +81,43 @@ function register(spark, message) {
 
 /**
  * Chat with other users.
- * @param {Spark} spark connected websocket and Primus user.
+ * @param {Primus} server Primus instance.
+ * @param {client} client connected websocket and Primus user (spark in documentation).
  * @param {Message} message JSON communication sent from client.
  * @param {Date} date built in date object, used for timestamping.
  * @returns {Object} formated chat message.
  */
-function chat(spark, message, date) {
+function chat(server, client, message, date) {
     date = date || new Date();
     const chatMessage = {
         message: message.message,
-        username: spark.username,
+        username: client.username,
         date: date.toISOString()
     };
-    spark.room('chat').write(chatMessage);
-    game.chat.push(chatMessage);
+    client.room('chat').write(chatMessage);
+    server.game.chat.push(chatMessage);
     return chatMessage;
 }
 
 /**
  * If authorized reconnect a client to an active duel.
- * @param {Spark} spark connected websocket and Primus user.
+ * @param {Primus} server Primus instance.
+ * @param {client} client connected websocket and Primus user (spark in documentation).
  * @param {Message} message JSON communication sent from client.
  * @returns {undefined}
  */
-function reconnect(spark, message) {
-    if (!game.reconnection[message.room]) {
+function reconnect(server, client, message) {
+    if (!server.game.reconnection[message.room]) {
         return;
     }
-    if (game.reconnection[message.room]) {
+    if (server.game.reconnection[message.room]) {
         return;
     }
-    if (game.reconnection[message.room] = spark.username) {
-        spark.join(message.room);
+    if (server.game.reconnection[message.room] = client.username) {
+        client.join(message.room);
     }
     if (message.room !== 'spectator') {
-        game.duel.getField();
+        server.duel.getField();
     }
 
 }
@@ -140,16 +126,16 @@ function reconnect(spark, message) {
  * Join the user to a room
  * @param {Error|Null} error unlikely websocket Adapter error.
  * @param {Primus} server Primus instance.
- * @param {Spark} spark connected websocket and Primus user.
+ * @param {client} client connected websocket and Primus user (spark in documentation).
  * @return {undefined}
  */
-function join(error, server, spark) {
+function join(error, server, client) {
     function findAvaliableSlot(player, index) {
         if (player) {
             return false;
         }
-        spark.slot = index;
-        game.player[index] = spark;
+        client.slot = index;
+        server.game.player[index] = client;
         broadcast(server);
         return true;
     }
@@ -158,9 +144,9 @@ function join(error, server, spark) {
         throw error;
     }
 
-    const isPlayer = game.players.some(findAvaliableSlot);
+    const isPlayer = server.game.players.some(findAvaliableSlot);
     if (!isPlayer) {
-        spark.join('spectator', function() {
+        client.join('spectator', function() {
             broadcast(server);
         });
     }
@@ -169,15 +155,15 @@ function join(error, server, spark) {
 /**
  * Join the user to a room
  * @param {Primus} server Primus instance.
- * @param {Spark} spark connected websocket and Primus user.
+ * @param {client} client connected websocket and Primus user (spark in documentation).
  * @return {undefined}
  */
-function attemptJoin(server, spark) {
-    spark.slot = undefined;
-    spark.leave('spectators', function(error) {
-        join(error, server, spark);
+function attemptJoin(server, client) {
+    client.slot = undefined;
+    client.leave('spectators', function(error) {
+        join(error, server, client);
     });
-    spark.join('chat');
+    client.join('chat');
 }
 
 /**
@@ -188,12 +174,12 @@ function attemptJoin(server, spark) {
  * @returns {undefined}
  */
 function spectate(server, message, user) {
-    if (game.player[message.slot]) {
-        game.player[message.slot].write(({
+    if (server.game.player[message.slot]) {
+        server.game.player[message.slot].write(({
             action: 'leave',
             user: user
         }));
-        game.player[message.slot].join('spectators', function(error) {
+        server.game.player[message.slot].join('spectators', function(error) {
             if (error) {
                 throw error;
             }
@@ -201,7 +187,7 @@ function spectate(server, message, user) {
         });
         return;
     }
-    game.player[message.slot].join('spectators', function(error) {
+    server.game.player[message.slot].join('spectators', function(error) {
         if (error) {
             throw error;
         }
@@ -212,42 +198,44 @@ function spectate(server, message, user) {
 /**
  * Kick the user in a specific slot if authorized to do so.
  * @param {Primus} server Primus instance.
- * @param {Spark} spark connected websocket and Primus user.
+ * @param {client} client connected websocket and Primus user (spark in documentation).
  * @param {Message} message JSON communication sent from client.
  * @returns {Boolean} if the kick was valid and attempted to be executed.
  */
-function kick(server, spark, message) {
-    if (spark.slot !== 0 && !spark.admin) {
+function kick(server, client, message) {
+    if (client.slot !== 0 && !client.admin) {
         return false;
     }
-    spectate(server, message, spark.username);
+    spectate(server, message, client.username);
     return true;
 }
 
 /**
  * Surrender in active duel.
+ * @param {Primus} server Primus instance.
  * @param {Message} message JSON communication sent from client.
  * @returns {undefined}
  */
-function surrender(message) {
-    if (!game.duel) {
+function surrender(server, message) {
+    if (!server.duel) {
         return;
     }
-    game.duel.surrender(message.slot);
-    game.started = false;
+    server.duel.surrender(message.slot);
+    server.game.started = false;
 }
 
 /**
  * Validate a requested deck.
- * @param {Spark} spark connected websocket and Primus user.
+ * @param {Primus} server Primus instance.
+ * @param {client} client connected websocket and Primus user (spark in documentation).
  * @param {Message} message JSON communication sent from client.
  * @returns {Boolean} If the deck is valid or not.
  */
-function deckCheck(spark, message) {
-    message.validate = validateDeck(message.deck, banlist[game.banlist], database, game.cardpool, game.prerelease);
+function deckCheck(server, client, message) {
+    message.validate = validateDeck(message.deck, banlist[server.game.banlist], database, server.game.cardpool, server.game.prerelease);
     if (message.validate) {
         if (message.validate.error) {
-            spark.write(({
+            client.write(({
                 errorType: 'validation',
                 action: 'error',
                 error: message.validate.error,
@@ -256,7 +244,7 @@ function deckCheck(spark, message) {
             return false;
         }
     }
-    spark.write(({
+    client.write(({
         action: 'lock',
         result: 'success'
     }));
@@ -265,38 +253,39 @@ function deckCheck(spark, message) {
 
 /**
  * Validate a requested deck and if valid lock in the player as ready.
- * @param {Spark} spark connected websocket and Primus user.
+ * @param {Primus} server Primus instance.
+ * @param {client} client connected websocket and Primus user (spark in documentation).
  * @param {Message} message JSON communication sent from client.
  * @returns {undefined} 
  */
-function lock(spark, message) {
-    if (spark.slot === undefined) {
+function lock(server, client, message) {
+    if (client.slot === undefined) {
         return;
     }
-    if (game.player[spark.slot].ready) {
-        game.player[spark.slot].ready = false;
+    if (server.game.player[client.slot].ready) {
+        server.game.player[client.slot].ready = false;
         return;
     }
     try {
-        game.player[spark.slot].ready = deckCheck(spark, message, banlist);
+        server.game.player[client.slot].ready = deckCheck(client, message, banlist);
     } catch (error) {
-        game.player[spark.slot].ready = false;
+        server.game.player[client.slot].ready = false;
         throw error;
     }
-    game.player[spark.slot].deck = message.deck;
+    server.game.player[client.slot].deck = message.deck;
 }
 
 /**
  * Create reconnection service for a client.
  * @param {Primus} server Primus instance.
  * @param {String} room room to act as player abstraction.
- * @param {Spark} spark connected websocket and Primus user.
+ * @param {client} client connected websocket and Primus user (spark in documentation).
  * @returns {PlayerAbstraction} Representation of a player or group of players a client can reconnect to if disconnected.
  */
-function PlayerAbstraction(server, room, spark) {
-    if (spark.username) {
-        spark.join(room);
-        game.reconnection[room] = spark.username;
+function PlayerAbstraction(server, room, client) {
+    if (client.username) {
+        client.join(room);
+        server.game.reconnection[room] = client.username;
     }
     server.room('room').write({
         action: 'reconnection',
@@ -306,54 +295,68 @@ function PlayerAbstraction(server, room, spark) {
         write: function(data) {
             server.room('room').write(data);
         },
-        main: spark.main,
-        extra: spark.extra,
-        side: spark.side
+        main: client.main,
+        extra: client.extra,
+        side: client.side
     };
 }
 
 /**
  * Start the duel
  * @param {Primus} server Primus instance.
- * @param {Spark} spark connected websocket and Primus user.
+ * @param {client} client connected websocket and Primus user (spark in documentation).
  * @returns {undefined}
  */
-function start(server, spark) {
-    if (spark.slot !== 0) {
+function start(server, client) {
+    if (client.slot !== 0) {
         return;
     }
-    if (!game.player[0] && !game.player[1]) {
+    if (!server.game.player[0] && !server.game.player[1]) {
         return;
     }
-    if (!game.player[0].ready && !game.player[1].ready) {
+    if (!server.game.player[0].ready && !server.game.player[1].ready) {
         return;
     }
 
     const players = [
-            new PlayerAbstraction(server, 'player1', game.player[0]),
-            new PlayerAbstraction(server, 'player2', game.player[1])
+            new PlayerAbstraction(server, 'player1', server.game.player[0]),
+            new PlayerAbstraction(server, 'player2', server.game.player[1])
         ],
         spectators = [new PlayerAbstraction(server, 'spectators', {})];
 
 
-    ocgcore(game, players, spectators);
-    game.started = true;
+    ocgcore(server.game, players, spectators);
+    server.game.started = true;
+}
+
+/**
+ * Respond to a question from the OCGCore game engine.
+ * @param {Primus} server Primus instance.
+ * @param {client} client connected websocket and Primus user (spark in documentation).
+ * @param {Message} message JSON communication sent from client.
+ * @returns {undefined}
+ */
+function respond(server, client, message) {
+    if (!server.duel) {
+        return;
+    }
+    server.duel.respond(client.slot, message.response);
 }
 
 /**
  * Process incoming messages from clients.
  * @param {Primus} server Primus instance.
- * @param {Spark} spark connected websocket and Primus user.
+ * @param {client} client connected websocket and Primus user (spark in documentation).
  * @param {Message} message JSON communication sent from client.
  * @returns {Boolean} If the deck is valid or not.
  */
-function controller(server, spark, message) {
+function controller(server, client, message) {
     //console.log(message);
     if (!message.action) {
         return;
     }
-    if (!spark.username) {
-        register(spark, message);
+    if (!client.username) {
+        register(client, message);
         return;
     }
     switch (message.action) {
@@ -361,31 +364,33 @@ function controller(server, spark, message) {
             broadcast(server);
             break;
         case 'chat':
-            chat(spark, message);
+            chat(server, client, message);
             break;
         case 'join':
-            attemptJoin(server, spark);
+            attemptJoin(server, client);
             break;
         case 'kick':
-            kick(server, spark, message);
+            kick(server, client, message);
             break;
         case 'spectate':
-            spectate(server, message, spark.username);
+            spectate(server, message, client.username);
             break;
         case 'surrender':
-            surrender(message);
+            surrender(server, message);
             broadcast(server);
             break;
         case 'lock':
-            lock(spark, message, banlist);
+            lock(server, client, message, banlist);
             broadcast(server);
             break;
         case 'start':
-            start(spark);
+            start(server, client);
             broadcast(server);
             break;
+        case 'ocgcore':
+            respond(server, client, message);
+            break;
         default:
-            broadcast(server);
             break;
     }
 }
@@ -393,22 +398,21 @@ function controller(server, spark, message) {
 /**
  * Add additional error handling and then, process incoming messages from clients.
  * @param {Primus} server Primus instance.
- * @param {Spark} spark connected websocket and Primus user.
+ * @param {client} client connected websocket and Primus user (spark in documentation).
  * @param {Message} message JSON communication sent from client.
  * @returns {Boolean} If the deck is valid or not.
  */
-function messageHandler(server, spark, message) {
+function messageHandler(server, client, message) {
     try {
-        controller(server, spark, message, banlist);
+        controller(server, client, message, banlist);
     } catch (error) {
         console.log(error);
-        spark.write({
+        client.write({
             error: error.message,
             stack: error.stack,
             input: (message)
         });
     }
-
 }
 
 /**
@@ -416,17 +420,42 @@ function messageHandler(server, spark, message) {
  * @returns {undefined}
  */
 function main() {
+    require('dotenv').config();
     const port = process.env.PORT || 8082,
         server = new Primus(http.createServer(staticWebServer), {
             parser: 'JSON'
         }).listen(port);
 
+    server.game = {
+        priority: false,
+        draw_count: process.env.DRAW_COUNT || 1,
+        start_hand_count: process.env.STARTING_HAND || 5,
+        time: process.env.TIME_LIMIT || 3000,
+        shuffleDeck: process.env.SHUFFLE || false,
+        startLP: process.env.LIFEPOINTS || 8000,
+        roompass: process.env.ROOMPASS || 'default',
+        started: false,
+        deckcheck: process.env.DECK_CHECK || false,
+        ot: process.env.OT || 0,
+        banlist: process.env.BANLIST || 'No Banlist',
+        banlistid: process.env.BANLIST_ID,
+        mode: process.env.MODE || 0,
+        cardpool: process.env.CARD_POOL || 0,
+        prerelease: process.env.PRERELEASE || true,
+        masterRule: process.env.MASTER_RULE || 4,
+        legacyfield: process.env.LEGACY || false,
+        rule: process.env.RULE || 0,
+        player: [],
+        chat: [],
+        reconnection: {}
+    };
+
     server.plugin('rooms', Rooms);
 
     server.save(__dirname + '/../http/js/vendor/server.js');
-    server.on('connection', function(spark) {
-        spark.on('data', function(data) {
-            messageHandler(server, spark, data, banlist);
+    server.on('connection', function(client) {
+        client.on('data', function(data) {
+            messageHandler(server, client, data, banlist);
         });
     });
 }
@@ -434,8 +463,5 @@ function main() {
 main();
 
 module.exports = {
-    getGame: function() {
-        return game;
-    },
     main: main
 };
