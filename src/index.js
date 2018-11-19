@@ -22,16 +22,14 @@ const child_process = require('child_process'),
 
 var userlist = [],
     chatbox = [],
-    sayCount = 0,
     primus,
     online = 0,
     activeDuels = 0,
     logins = 0,
     acklevel = 0,
-    booting = true,
-    lockStatus = false,
     primusServer,
     currentGlobalMessage = '',
+    uuid = require('uuid/4'),
     ygopro = require('./engine_ygopro.js'),
     sanitize = require('./lib_html_sanitizer.js');
 
@@ -275,9 +273,6 @@ function mindcrushCall(data) {
     });
 }
 
-
-const duelLogic = manualController.init(primus);
-
 function onData(data, socket) {
     var action,
         save;
@@ -335,6 +330,7 @@ function onData(data, socket) {
             break;
         case ('chatline'):
             if (socket.username && socket.speak) {
+                const chatuuid = uuid();
                 socket.speak = false;
                 if (chatbox.length > 100) {
                     chatbox.shift();
@@ -343,18 +339,17 @@ function onData(data, socket) {
                     clientEvent: 'chatline',
                     from: socket.username,
                     msg: sanitize(data.msg),
-                    uid: sayCount,
+                    uid: chatuuid,
                     date: new Date(),
                     timezone: data.timezone
                 });
                 chatbox.push({
                     from: socket.username,
                     msg: sanitize(data.msg),
-                    uid: sayCount,
+                    uid: chatuuid,
                     date: new Date(),
                     timezone: data.timezone
                 });
-                sayCount = +1;
                 setTimeout(function() {
                     socket.speak = true;
                 }, 500);
@@ -386,26 +381,6 @@ function onData(data, socket) {
         case ('mindcrush'):
             mindcrushCall(data);
             break;
-
-        case ('internalRestart'):
-            if (data.password !== process.env.OPERPASS) {
-                return;
-            }
-            //restartAnnouncement();
-            break;
-        case ('restart'):
-            //restartCall(data);
-            break;
-
-        case ('privateServerRequest'):
-            primus.room(socket.address.ip + data.uniqueID).write({
-                clientEvent: 'privateServerRequest',
-                parameter: data.parameter,
-                local: data.local
-            });
-            break;
-
-
         case ('privateMessage'):
             if (socket.username) {
                 data.date = new Date();
@@ -429,7 +404,7 @@ function onData(data, socket) {
 
             break;
         default:
-            duelLogic(socket, data);
+            return;
     }
 
 
