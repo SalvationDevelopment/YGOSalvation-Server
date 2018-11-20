@@ -165,7 +165,6 @@ function validateSession(data, callback) {
         person.save(function(saveError) {
             callback(saveError, true, person);
         });
-        callback(null, true);
     });
 }
 
@@ -604,5 +603,6 @@ module.exports = {
     setupController,
     getAllUsersDecks,
     getUserCount,
+    validateSession,
     db
 };

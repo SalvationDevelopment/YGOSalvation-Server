@@ -11,17 +11,13 @@
 const child_process = require('child_process'),
     hotload = require('hotload'),
     cardidmap = hotload('../http/cardidmap.js'),
-
-    ps = require('ps-node'),
     userController = require('./controller_users.js'),
-    forumController = require('./controller_forum.js'),
-    pack = require('../package.json'),
-    adminlist = hotload('./record_admins.js'),
-
-    manualController = require('./controller_dueling.js');
+    adminlist = hotload('./record_admins.js');
 
 var userlist = [],
     chatbox = [],
+    games = [],
+    gamelist = {},
     primus,
     online = 0,
     activeDuels = 0,
@@ -32,10 +28,6 @@ var userlist = [],
     uuid = require('uuid/4'),
     ygopro = require('./engine_ygopro.js'),
     sanitize = require('./lib_html_sanitizer.js');
-
-
-
-
 
 
 /**
@@ -67,8 +59,10 @@ function announce(announcement) {
 function massAck() {
     acklevel = 0;
     userlist = [];
+    gamelist = {};
     announce({
-        clientEvent: 'ack'
+        clientEvent: 'ack',
+        serverEvent: 'ack'
     });
 }
 
@@ -273,139 +267,173 @@ function mindcrushCall(data) {
     });
 }
 
-function onData(data, socket) {
-    var action,
-        save;
-    data = data || {};
-    action = data.action;
-    save = false;
-    if (socket.readyState !== primus.Spark.CLOSED) {
-        save = true;
-    }
-    if (save === false) {
-        return;
-    }
+function childHandler(child, socket, message) {
+    switch (message.action) {
+        case 'lobby':
+            gamelist[message.roompass] = message.game;
+            gamelist[message.roompass].port = message.port;
+            break;
+        case 'ready':
+            socket.send({
 
-
-    socket.join(socket.address.ip + data.uniqueID);
-    switch (action) {
-
-
-
-        case ('duelrequest'):
-
-            announce({
-                clientEvent: 'duelrequest',
-                target: data.target,
-                from: data.from,
-                roompass: data.roompass
             });
 
             break;
-        case ('ai'):
-            if (socket.username && socket.aiReady) {
-                console.log(socket.username, 'requested AI Duel');
+        case 'register':
+            userController.validateSession({
+                    session: message.session
+                }, function(error, valid, person) {
+                    child.send({
+                        error,
+                        valid,
+                        person
+                    });
+                }
+                break;
+            }
+    }
+
+    function onData(data, socket) {
+        var action,
+            save;
+        data = data || {};
+        action = data.action;
+        save = false;
+        if (socket.readyState !== primus.Spark.CLOSED) {
+            save = true;
+        }
+        if (save === false) {
+            return;
+        }
+
+
+        socket.join(socket.address.ip + data.uniqueID);
+        switch (action) {
+
+
+
+            case ('duelrequest'):
+
                 announce({
                     clientEvent: 'duelrequest',
-                    target: 'SnarkyChild',
-                    from: socket.username,
-                    roompass: data.roompass,
-                    deck: data.deck
+                    target: data.target,
+                    from: data.from,
+                    roompass: data.roompass
                 });
-                socket.aiReady = false;
-                setTimeout(function() {
-                    socket.aiReady = true;
-                }, 10000);
-            }
-            break;
 
-        case ('ack'):
-            acklevel += 1;
-            if (data.name) {
-                userlist.push(data.name);
-            }
-            break;
-        case ('register'):
-            registrationCall(data, socket);
-            break;
-        case ('chatline'):
-            if (socket.username && socket.speak) {
-                const chatuuid = uuid();
-                socket.speak = false;
-                if (chatbox.length > 100) {
-                    chatbox.shift();
+                break;
+            case ('ai'):
+                if (socket.username && socket.aiReady) {
+                    console.log(socket.username, 'requested AI Duel');
+                    announce({
+                        clientEvent: 'duelrequest',
+                        target: 'SnarkyChild',
+                        from: socket.username,
+                        roompass: data.roompass,
+                        deck: data.deck
+                    });
+                    socket.aiReady = false;
+                    setTimeout(function() {
+                        socket.aiReady = true;
+                    }, 10000);
                 }
-                announce({
-                    clientEvent: 'chatline',
-                    from: socket.username,
-                    msg: sanitize(data.msg),
-                    uid: chatuuid,
-                    date: new Date(),
-                    timezone: data.timezone
-                });
-                chatbox.push({
-                    from: socket.username,
-                    msg: sanitize(data.msg),
-                    uid: chatuuid,
-                    date: new Date(),
-                    timezone: data.timezone
-                });
-                setTimeout(function() {
-                    socket.speak = true;
-                }, 500);
-            } else {
-                primus.room(socket.address.ip + data.uniqueID).write({
-                    clientEvent: 'slowchat',
-                    error: 'Exceeded 500ms chat timeout'
-                });
-            }
-            break;
-        case ('global'):
-            globalCall(data);
-            break;
-        case ('globalrequest'):
-            globalRequested(socket);
-            break;
-        case ('genocide'):
-            genocideCall(data);
-            break;
-        case ('murder'):
-            murderCall(data);
-            break;
-        case ('censor'):
-            censorCall(data);
-            break;
-        case ('revive'):
-            reviveCall(data);
-            break;
-        case ('mindcrush'):
-            mindcrushCall(data);
-            break;
-        case ('privateMessage'):
-            if (socket.username) {
-                data.date = new Date();
-                console.log(data);
-                primus.room(data.to).write(data);
-            }
-            break;
-        case 'save':
-            delete data.action;
-            data.decks.forEach(function(deck, i) { //cycles through the decks
-                data.decks[i].main = mapCards(data.decks[i].main); //This cannot be simplified 
-                data.decks[i].side = mapCards(data.decks[i].side); //further due to the abstract
-                data.decks[i].extra = mapCards(data.decks[i].extra); //of data.decks, afaik
-            }); //unsure if loop should run through all decks for a single save; might be resource intensive
-            userController.saveDeck(data, function(error, docs) {
-                primus.room(socket.address.ip + data.uniqueID).write({
-                    clientEvent: 'deckSaved',
-                    error: error
-                });
-            });
+                break;
 
-            break;
-        default:
-            return;
+            case ('ack'):
+                acklevel += 1;
+                if (data.name) {
+                    userlist.push(data.name);
+                }
+                break;
+            case ('register'):
+                registrationCall(data, socket);
+                break;
+            case ('chatline'):
+                if (socket.username && socket.speak) {
+                    const chatuuid = uuid();
+                    socket.speak = false;
+                    if (chatbox.length > 100) {
+                        chatbox.shift();
+                    }
+                    announce({
+                        clientEvent: 'chatline',
+                        from: socket.username,
+                        msg: sanitize(data.msg),
+                        uid: chatuuid,
+                        date: new Date(),
+                        timezone: data.timezone
+                    });
+                    chatbox.push({
+                        from: socket.username,
+                        msg: sanitize(data.msg),
+                        uid: chatuuid,
+                        date: new Date(),
+                        timezone: data.timezone
+                    });
+                    setTimeout(function() {
+                        socket.speak = true;
+                    }, 500);
+                } else {
+                    primus.room(socket.address.ip + data.uniqueID).write({
+                        clientEvent: 'slowchat',
+                        error: 'Exceeded 500ms chat timeout'
+                    });
+                }
+                break;
+            case ('global'):
+                globalCall(data);
+                break;
+            case ('globalrequest'):
+                globalRequested(socket);
+                break;
+            case ('genocide'):
+                genocideCall(data);
+                break;
+            case ('murder'):
+                murderCall(data);
+                break;
+            case ('censor'):
+                censorCall(data);
+                break;
+            case ('revive'):
+                reviveCall(data);
+                break;
+            case ('mindcrush'):
+                mindcrushCall(data);
+                break;
+            case ('host'):
+                const child = child_process.fork(
+                    './application_ygopro.js',
+                    Object.assign({}, process.env, data.game), {}
+                );
+                child.on('message', function(message) {
+                    childHandler(child, socket, message);
+                });
+                games.push(child);
+                break;
+            case ('privateMessage'):
+                if (socket.username) {
+                    data.date = new Date();
+                    console.log(data);
+                    primus.room(data.to).write(data);
+                }
+                break;
+            case 'save':
+                delete data.action;
+                data.decks.forEach(function(deck, i) { //cycles through the decks
+                    data.decks[i].main = mapCards(data.decks[i].main); //This cannot be simplified 
+                    data.decks[i].side = mapCards(data.decks[i].side); //further due to the abstract
+                    data.decks[i].extra = mapCards(data.decks[i].extra); //of data.decks, afaik
+                }); //unsure if loop should run through all decks for a single save; might be resource intensive
+                userController.saveDeck(data, function(error, docs) {
+                    primus.room(socket.address.ip + data.uniqueID).write({
+                        clientEvent: 'deckSaved',
+                        error: error
+                    });
+                });
+
+                break;
+            default:
+                return;
+        }
     }
-
-
-}

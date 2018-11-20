@@ -29,7 +29,7 @@
 
 const banlist = './http/manifest/banlist.json',
     database = require('../http/manifest/manifest_0-en-OCGTCG.json'),
-    fs = require('fs'),
+    EventEmitter = require('events'),
     http = require('http'),
     ocgcore = require('./engine_ocgcore'),
     Primus = require('primus'),
@@ -37,7 +37,8 @@ const banlist = './http/manifest/banlist.json',
     sanitize = require('./lib_html_sanitizer.js'),
     static = require('node-static'),
     uuid = require('uuid/v4'),
-    validateDeck = require('./validate_deck.js');
+    validateDeck = require('./validate_deck.js'),
+    verificationSystem = new EventEmitter();
 
 
 /**
@@ -62,27 +63,58 @@ function staticWebServer(request, response) {
 function broadcast(server) {
     server.write({
         action: 'lobby',
-        game: server.game,
-        port: process.env.PORT || 8083
+        game: server.game
     });
-    server.client.write({
+    process.send({
         action: 'lobby',
-        game: server.game,
-        port: process.env.PORT || 8083
+        game: server.game
     });
 }
 
 /**
- * Register the user with the server via external authentication.
+ * Report back to the client that they are registered.
+ * @param {Spark} client connected websocket and Primus user (spark in documentation).
+ * @param {Message} message JSON communication sent from client.
+ * @returns {undefined}
+ */
+function enableClient(client, message) {
+    client.username = message.username;
+    client.write({
+        action: 'registered'
+    });
+}
+
+/**
+ * Register the user with the server via external authentication, if avaliable.
  * @param {Spark} client connected websocket and Primus user (spark in documentation).
  * @param {Message} message JSON communication sent from client.
  * @returns {undefined}
  */
 function register(client, message) {
-    // Expand later
-    client.username = message.username;
-    client.write({
-        action: 'registered'
+
+    if (!process.child) {
+        enableClient(client, message);
+        return;
+    }
+
+    if (typeof message.session !== 'string') {
+        throw Error('Session information required to proceed');
+    }
+
+    client.session = message.session;
+    verificationSystem.once(message.session, function(error, valid, person) {
+        if (error) {
+            throw error;
+        }
+        if (valid) {
+            enableClient(client, person);
+            return;
+        }
+    });
+    process.send({
+        action: 'register',
+        username: message.username,
+        session: message.session
     });
 }
 
@@ -239,7 +271,13 @@ function surrender(server, message) {
  * @returns {Boolean} If the deck is valid or not.
  */
 function deckCheck(server, client, message) {
-    message.validate = validateDeck(message.deck, banlist[server.game.banlist], database, server.game.cardpool, server.game.prerelease);
+
+    message.validate = validateDeck(message.deck,
+        banlist[server.game.banlist],
+        database,
+        server.game.cardpool,
+        server.game.prerelease);
+
     if (message.validate) {
         if (message.validate.error) {
             client.write(({
@@ -453,11 +491,98 @@ function messageHandler(server, client, message) {
     }
 }
 
+
 /**
- * Start the server.
+ * Add additional error handling and then, process incoming messages from clients.
+ * @param {Primus} server Primus instance.
+ * @param {Spark} client DEAD DISCONNECTED websocket and Primus user (spark in documentation).
+ * @returns {Boolean} If the deck is valid or not.
+ */
+function disconnectionHandler(server, client) {
+    const message = {
+        action: 'spectate',
+        slot: client.slot
+    };
+    if (client.session) {
+        verificationSystem.removeListener('client.session');
+    }
+    try {
+        messageHandler(server, client, message, banlist);
+    } catch (error) {
+        console.log(error);
+        process.send({
+            action: 'error',
+            error: error
+        });
+    }
+}
+
+
+/**
+ * Process incoming messages from master process.
+ * @param {Primus} server Primus instance.
+ * @param {Message} message JSON communication sent from client.
+ * @returns {Boolean} If the deck is valid or not.
+ */
+function adminMessageHandler(server, message) {
+    switch (message.action) {
+        case 'kill':
+            process.exit(0);
+            break;
+        case 'kick':
+            kick(server, { admin: true }, message);
+            break;
+        case 'lobby':
+            broadcast(server);
+            break;
+        case 'register':
+            verificationSystem.emit(message.session,
+                message.error,
+                message.valid,
+                message.person);
+            break;
+        default:
+            break;
+    }
+}
+
+/**
+ * Process incoming messages from clients.
+ * @param {Object} httpserver HTTP Server instance from `net.createServer()`
+ * @param {Primus} server Primus instance.
+ * @param {Number} port port to listen on
  * @returns {undefined}
  */
-function main() {
+function boot(httpserver, server, port) {
+    httpserver.listen(port, function() {
+
+        process.on('message', function(message) {
+            try {
+                adminMessageHandler(server, message);
+            } catch (error) {
+                console.log(error);
+                process.send({
+                    action: 'error',
+                    error: error
+                });
+            }
+        });
+
+        broadcast(server);
+
+        process.send({
+            action: 'ready',
+            port: port
+        });
+    });
+}
+
+/**
+ * Start the server.
+ * @param {Function} callback replacement for process.send
+ * @returns {undefined}
+ */
+function main(callback) {
     require('dotenv').config();
     const port = process.env.PORT || 8082,
         httpserver = http.createServer(staticWebServer),
@@ -487,18 +612,32 @@ function main() {
         rule: process.env.RULE || 0,
         player: [],
         chat: [],
-        reconnection: {}
+        reconnection: {},
+        port: port
     };
 
     server.plugin('rooms', Rooms);
-    server.client = new server.Socket(process.env.CENTRAL_SERVER);
     server.save(__dirname + '/../http/js/vendor/server.js');
     server.on('connection', function(client) {
         client.on('data', function(data) {
             messageHandler(server, client, data, banlist);
         });
     });
-    httpserver.listen(port);
+    server.on('disconnection', function(deadSpark) {
+        disconnectionHandler(server, deadSpark);
+    });
+
+
+    // If the callback is given, use the callback,
+    // otherwise report to parent process if it exist,
+    // if it does not, print to the console.
+
+    process.child = (process.send) ? true : false;
+    process.send = (callback) ? callback : process.send;
+    process.send = (process.send) ? process.send : console.log;
+
+    boot(httpserver, server, port);
+
 }
 
 main();
