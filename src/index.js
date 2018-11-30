@@ -12,21 +12,19 @@ const child_process = require('child_process'),
     hotload = require('hotload'),
     cardidmap = hotload('../http/cardidmap.js'),
     userController = require('./controller_users.js'),
-    adminlist = hotload('./record_admins.js');
+    adminlist = hotload('./record_admins.js'),
+    primusServer = require('./controller_http'),
+    Primus = require('primus'),
+    Rooms = require('primus-rooms');
 
 var userlist = [],
     chatbox = [],
     games = [],
     gamelist = {},
     primus,
-    online = 0,
-    activeDuels = 0,
-    logins = 0,
     acklevel = 0,
-    primusServer,
     currentGlobalMessage = '',
     uuid = require('uuid/4'),
-    ygopro = require('./engine_ygopro.js'),
     sanitize = require('./lib_html_sanitizer.js');
 
 
@@ -253,17 +251,14 @@ function mindcrushCall(data) {
         if (error) {
             return;
         }
-
         if (info.success && adminlist[data.username]) {
             announce({
                 clientEvent: 'mindcrush',
                 target: data.target
             });
-
-        } else {
-            console.log(data, 'asked for mind crush');
+            return;
         }
-
+        console.log(data, 'asked for mind crush');
     });
 }
 
@@ -437,3 +432,20 @@ function onData(data, socket) {
             return;
     }
 }
+
+primus = new Primus(primusServer, {
+    parser: 'JSON'
+});
+
+primus.use('rooms', Rooms);
+
+
+primus.on('connection', function(socket) {
+    socket.on('data', function(data) {
+        try {
+            onData(data, socket);
+        } catch (error) {
+            console.log(error);
+        }
+    });
+});
