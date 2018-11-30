@@ -2,7 +2,7 @@
     "name": "ygopro-salvation-server",
     "description": "YGOPro US Server (Salvation) - Saving Yu-Gi-Oh!",
     "main": "server.js",
-    "version": "5.0.0",
+    "version": "6.0.0",
     "private": true,
     "keywords": [
         "ygopro",
@@ -54,7 +54,7 @@
     "homepage": "http://ygopro.us",
     "license": "LicenseRef-LICENSE",
     "scripts": {
-        "start": "supervisor --watch ./server.js,./src server.js",
+        "start": "node ./src",
         "test": "istanbul cover node_modules/mocha/bin/_mocha -- -u exports -R spec test/test.js",
         "server": "node server",
         "ygopro": "cd src && node application_ygopro"

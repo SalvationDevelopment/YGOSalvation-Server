@@ -13,7 +13,7 @@ const child_process = require('child_process'),
     cardidmap = hotload('../http/cardidmap.js'),
     userController = require('./controller_users.js'),
     adminlist = hotload('./record_admins.js'),
-    primusServer = require('./controller_http'),
+    primusServer = require('./controller_http')(),
     Primus = require('primus'),
     Rooms = require('primus-rooms');
 
@@ -24,7 +24,7 @@ var userlist = [],
     primus,
     acklevel = 0,
     currentGlobalMessage = '',
-    uuid = require('uuid/4'),
+    uuid = require('uuid').uuid4,
     sanitize = require('./lib_html_sanitizer.js');
 
 
@@ -437,7 +437,7 @@ primus = new Primus(primusServer, {
     parser: 'JSON'
 });
 
-primus.use('rooms', Rooms);
+primus.plugin('rooms', Rooms);
 
 
 primus.on('connection', function(socket) {

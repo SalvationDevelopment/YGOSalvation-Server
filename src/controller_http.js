@@ -69,7 +69,7 @@ function useSSL(primusServer) {
     }, app).listen(443);
     // set up a route to redirect http to spdy
     openserver.use(helmet());
-    openserver.use(ddos.express);
+    //openserver.use(ddos.express);
     openserver.get('*', function(req, res) {
         if (req.get('host') === 'ygopro.us') {
             res.redirect(301, 'https://ygosalvation.com' + req.url);
@@ -83,7 +83,7 @@ function useSSL(primusServer) {
 
 
 module.exports = function() {
-    app.use(ddos.express);
+
     app.use(compression());
     app.use(helmet());
     app.use(bodyParser.urlencoded({ extended: false }));
@@ -93,7 +93,6 @@ module.exports = function() {
 
 
     app.use(express.static(path.join(__dirname, '../http')));
-
 
     app.post('/git', function(req, res, next) {
         gitRoute(req, res, next);
@@ -112,6 +111,6 @@ module.exports = function() {
         primusServer = http.createServer(app);
         primusServer.listen(HTTP_PORT);
     }
-
+    app.use(ddos.express);
     return primusServer;
 };
