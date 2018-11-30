@@ -1,12 +1,8 @@
 /*jslint node:true*/
 
 'use strict';
-var validationCache = {},
-    fs = require('fs'),
-    mysql = require('mysql'),
-    crypto = require('crypto'),
+var crypto = require('crypto'),
     zxcvbn = require('zxcvbn'),
-    hotload = require('hotload'),
     mongoose = require('mongoose'),
     Schema = mongoose.Schema,
     sanitizer = require('sanitizer'),
