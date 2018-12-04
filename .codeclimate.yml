@@ -34,7 +34,7 @@ exclude_paths:
 - "**.md"
 - "**.json"
 - "**.png"
-- "**.jpg
+- "**.jpg"
 - "**.jpeg"
 - "**.wav"
 - "**.*db"
