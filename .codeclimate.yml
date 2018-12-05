@@ -1,14 +1,17 @@
-engines:
+checks:
+  file-lines:
+      config:
+        threshold: 1250
+plugins:
   csslint:
     enabled: false
   duplication:
     enabled: false
     config:
       languages:
-      - ruby
       - javascript
-      - python
-      - php
+  nodesecurity:
+    enabled: true
   eslint:
     enabled: true
     checks:
