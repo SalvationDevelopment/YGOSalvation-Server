@@ -41,4 +41,4 @@ exclude_paths:
 - test/**/*
 - http/js/translations.js
 - http/js/vendor/*
-
+- node_modules/*
