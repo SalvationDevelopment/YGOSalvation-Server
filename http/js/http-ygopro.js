@@ -32,7 +32,7 @@ var idleQuestion = {},
         'FaceDown': 0xA,
         'Attack': 0x3,
         'Defence': 0xC
-    }
+    };
 
 
 function filterSelectedOptions(card) {

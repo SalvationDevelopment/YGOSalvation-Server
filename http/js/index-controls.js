@@ -206,7 +206,7 @@ function singlesitenav(target) {
 
     if (target === 'settings') {
         $('body').css('background-image', blackbg());
-        if (admin === "1") {
+        if (admin === '1') {
             $('#sqleditorbutton').css('display', 'block');
         }
         window.manualLeave();
@@ -266,10 +266,10 @@ function processServerCall(data) {
     if (!data) {
         return;
     }
-    var selected = $(".currentdeck option:selected").val(),
-        selectedskin = $("#skinlist option:selected").val(),
-        selectedfont = $("#fontlist option:selected").val(),
-        selecteddb = $("#dblist option:selected").val(),
+    var selected = $('.currentdeck option:selected').val(),
+        selectedskin = $('#skinlist option:selected').val(),
+        selectedfont = $('#fontlist option:selected').val(),
+        selecteddb = $('#dblist option:selected').val(),
         deckfile;
     $('.currentdeck').not('.activescreen .currentdeck').html(data.currentdeck);
     $('#skinlist').not('.activescreen #skinlist').html(data.skinlist);
@@ -290,7 +290,7 @@ var jsLang = {};
 
 
 function translateLang(lang) {
-    "use strict";
+    'use strict';
     var i = 0;
     localStorage.language = lang;
     for (i; translationDB.length > i; i++) {
@@ -313,7 +313,7 @@ function translateLang(lang) {
 function achievementConstructor(data) {
     'use strict';
     return {
-        "shadow": (data.field_13 === 'u') ? 'Unlocked' : 'Locked'
+        'shadow': (data.field_13 === 'u') ? 'Unlocked' : 'Locked'
     };
 }
 
@@ -321,23 +321,23 @@ function mysql_real_escape_string(str) {
     'use strict';
     return str.replace(/[\0\x08\x09\x1a"\\\%]/g, function(char) {
         switch (char) {
-            case "\0":
-                return "\\0";
-            case "\x08":
-                return "\\b";
-            case "\x09":
-                return "\\t";
-            case "\x1a":
-                return "\\z";
-            case "\n":
-                return "\\n";
-            case "\r":
-                return "\\r";
-            case "\"":
+            case '\0':
+                return '\\0';
+            case '\x08':
+                return '\\b';
+            case '\x09':
+                return '\\t';
+            case '\x1a':
+                return '\\z';
+            case '\n':
+                return '\\n';
+            case '\r':
+                return '\\r';
+            case '"':
                 return '""';
-            case "\\":
-            case "%":
-                return "\\" + char; // prepends a backslash to backslash, percent,
+            case '\\':
+            case '%':
+                return '\\' + char; // prepends a backslash to backslash, percent,
                 // and double/single quotes
         }
     });
@@ -402,7 +402,7 @@ function processLogin(data) {
 
 
 
-Handlebars.registerHelper("counter", function(index) {
+Handlebars.registerHelper('counter', function(index) {
     'use strict';
     return index + 1;
 });
@@ -462,8 +462,8 @@ function updateranking() {
             endresult.forEach(function(item) {
                 loadedprofiles[item.username] = item;
             });
-            $(".clickable-row").click(function() {
-                window.open($(this).data("href"));
+            $('.clickable-row').click(function() {
+                window.open($(this).data('href'));
             });
         });
     });
@@ -477,13 +477,13 @@ $(document).ready(function() {
         $('#creategamelp').val($('#creategameduelmode option:selected').attr('data-lp'));
     });
     if (window.self !== window.top) {
-        $(document.body).addClass("in-iframe");
+        $(document.body).addClass('in-iframe');
 
         try {
             _gaq.push(['_trackEvent', 'Launcher', 'Load', 'Boot Launcher']);
         } catch (e) {}
     } else {
-        $(document.body).addClass("web");
+        $(document.body).addClass('web');
     }
 
     var useLang = localStorage.language || 'en';
@@ -495,7 +495,7 @@ $(document).ready(function() {
     if (localStorage.remember) {
         $('#ips_remember').prop('checked', true);
     }
-    $("#dolog").click(function(ev) {
+    $('#dolog').click(function(ev) {
         allowLogin = true;
         try {
             _gaq.push(['_trackEvent', 'Launcher', 'Attempt Login', $('#ips_username').val()]);
@@ -599,7 +599,7 @@ function customizationadd() {
         source = option.attr('data-source');
 
     reader.readAsDataURL(file);
-    reader.addEventListener("load", function() {
+    reader.addEventListener('load', function() {
         window.quedparams = {
             target: './ygopro/Assets/' + source + '/' + file.name,
             code: reader.result
@@ -659,19 +659,19 @@ function leftpad(str, len, ch) {
 }
 
 
-$("#sqlcardtypes input[type=radio]").change(function() {
+$('#sqlcardtypes input[type=radio]').change(function() {
     'use strict';
     var checked = $(this).is(':checked');
-    $("#sqlcardtypes input").prop('checked', false);
+    $('#sqlcardtypes input').prop('checked', false);
     if (checked) {
         $(this).prop('checked', true);
     }
 });
 
-$("#sqlcardtypes input[type=checkbox]").change(function() {
+$('#sqlcardtypes input[type=checkbox]').change(function() {
     'use strict';
     var checked = $(this).is(':checked');
-    $("#sqlcardtypes input[type=radio]").prop('checked', false);
+    $('#sqlcardtypes input[type=radio]').prop('checked', false);
 });
 
 function makedatasSQL() {
@@ -752,7 +752,7 @@ function convertID() {
     'use strict';
     var regex = /^\d+$/,
         id = $('#sqlid').val(),
-        convert = prompt("Please enter NEW ID", ""),
+        convert = prompt('Please enter NEW ID', ''),
         message;
 
     if (convert && convert.match(regex)) {
@@ -796,12 +796,12 @@ function confirmDialog(title, message, confirm, reject) {
         title: title,
         modal: true,
         buttons: {
-            "OK": function() {
-                $(this).dialog("close");
+            'OK': function() {
+                $(this).dialog('close');
                 confirm();
             },
-            "cancel": function() {
-                $(this).dialog("close");
+            'cancel': function() {
+                $(this).dialog('close');
                 if ($.isFunction(reject)) {
                     reject();
                 }
@@ -820,4 +820,4 @@ $('[data-tooltip!=""]').qtip({ // Grab all elements with a non-blank data-toolti
     }
 });
 
-$('main').load('home.html')
+$('main').load('home.html');

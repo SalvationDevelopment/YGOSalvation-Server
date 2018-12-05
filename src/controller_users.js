@@ -94,7 +94,7 @@ function sessionTimeout(time) {
     return ((time.getTime() + hour) > Date.now());
 }
 
-var db = mongoose.createConnection('mongodb://localhost/salvation', { useMongoClient: true }, console.log)
+var db = mongoose.createConnection('mongodb://localhost/salvation', { useMongoClient: true }, console.log);
 
 
 function salter() {

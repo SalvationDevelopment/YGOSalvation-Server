@@ -5,7 +5,7 @@ var zlib = require('zlib'),
     fs = require('fs'),
     url = require('url'),
     http = require('http'),
-    jsonfile = require('jsonfile')
+    jsonfile = require('jsonfile');
 
 module.exports = function getManifestFromAPI(callback) {
     var options = {
@@ -44,4 +44,4 @@ module.exports = function getManifestFromAPI(callback) {
         callback(null, fs.readFileSync('./http/manifest/manifest_0-en-OCGTCG.json'));
     });
     call.end();
-}
+};

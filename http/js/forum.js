@@ -1,8 +1,7 @@
-Handlebars.registerHelper("formatDate", function (datetime, format) {
+Handlebars.registerHelper('formatDate', function (datetime, format) {
     if (moment) {
         return moment(datetime).calendar();
-    }
-    else {
+    }    else {
         return datetime;
     }
 });
@@ -45,7 +44,7 @@ function viewPost(id) {
             $.get('handlebars/forumpost.handlebars', function (template) {
                 post.owned = (localStorage.session === post.author_id);
                 post.comments.forEach(function(comment) {
-                    comment.owned =  (localStorage.session === comment.author_id)
+                    comment.owned =  (localStorage.session === comment.author_id);
                 });
                 console.log(post);
                 var parserTemplate = Handlebars.compile(template),

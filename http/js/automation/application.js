@@ -6,7 +6,7 @@
 
 
 
-var primusprotocol = (location.protocol === 'https:') ? "wss://" : "ws://",
+var primusprotocol = (location.protocol === 'https:') ? 'wss://' : 'ws://',
     primus = window.Primus.connect(primusprotocol + location.host);
 
 function updateloby(state) {

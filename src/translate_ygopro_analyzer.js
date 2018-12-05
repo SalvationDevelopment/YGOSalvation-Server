@@ -1253,7 +1253,7 @@ function msg_reverse_deck(message, pbuf, game) {
 }
 
 function msg_summoned(message, pbuf, game) {
-    user_interface_only(message, pbuf, game);;
+    user_interface_only(message, pbuf, game);
 }
 
 function msg_spsummoned(message, pbuf, game) {

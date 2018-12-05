@@ -6,7 +6,7 @@
 
 
 function parsePackets(command, message) {
-    "use strict";
+    'use strict';
 
     var task = [],
         packet = {
@@ -48,7 +48,7 @@ function startgame(roompass) {
         return;
     }
     var framer = new Framemaker(),
-        ws = new WebSocket("ws://127.0.0.1:8082", "duel"),
+        ws = new WebSocket('ws://127.0.0.1:8082', 'duel'),
         network = new CommandParser(),
         dInfo = {};
     window.activeReplayRecorde = [];

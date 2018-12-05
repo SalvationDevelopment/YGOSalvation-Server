@@ -120,12 +120,12 @@ function validateDeck(deck, banlist, database, cardpool, prerelease) {
             var reference = getCardById(card);
             if (reference == null) {
                 validate.error = true;
-                validate.msg = "Error loading deck: check Deck Edit to verify that your deck looks fine";
+                validate.msg = 'Error loading deck: check Deck Edit to verify that your deck looks fine';
                 return validate;
             } else {
                 if (main[card] > 3 || side[card] && main[card] + side[card] > 3) {
                     validate.error = true;
-                    validate.msg = "You can't have " + cardAmount + " copies of " + '"' + reference.name + '"';
+                    validate.msg = 'You can\'t have ' + cardAmount + ' copies of ' + '"' + reference.name + '"';
                     return validate;
                 }
             }
@@ -134,12 +134,12 @@ function validateDeck(deck, banlist, database, cardpool, prerelease) {
             var reference = getCardById(card);
             if (reference == null) {
                 validate.error = true;
-                validate.msg = "Error loading deck: check Deck Edit to verify that your deck looks fine";
+                validate.msg = 'Error loading deck: check Deck Edit to verify that your deck looks fine';
                 return validate;
             } else {
                 if (side[card] > 3 || main[card] && main[card] + side[card] > 3) {
                     validate.error = true;
-                    validate.msg = "You can't have " + cardAmount + " copies of " + '"' + reference.name + '"';
+                    validate.msg = 'You can\'t have ' + cardAmount + ' copies of ' + '"' + reference.name + '"';
                     return validate;
                 }
             }
@@ -147,13 +147,13 @@ function validateDeck(deck, banlist, database, cardpool, prerelease) {
         for (card in extra) {
             if (reference == null) {
                 validate.error = true;
-                validate.msg = "Error loading deck: check Deck Edit to verify that your deck looks fine";
+                validate.msg = 'Error loading deck: check Deck Edit to verify that your deck looks fine';
                 return validate;
             } else {
                 var reference = getCardById(card);
                 if (extra[card] > 3 || side[card] && extra[card] + side[card] > 3) {
                     validate.error = true;
-                    validate.msg = "You can't have " + cardAmount + " copies of " + '"' + reference.name + '"';
+                    validate.msg = 'You can\'t have ' + cardAmount + ' copies of ' + '"' + reference.name + '"';
                     return validate;
                 }
             }
@@ -176,7 +176,7 @@ function validateDeck(deck, banlist, database, cardpool, prerelease) {
             }
             if (cardAmount > banlist.bannedCards[card]) {
                 validate.error = true;
-                validate.msg = "The number of copies of " + '"' + reference.name + '"' + " exceeds the number permitted by the selected Forbidden/Limited Card List";
+                validate.msg = 'The number of copies of ' + '"' + reference.name + '"' + ' exceeds the number permitted by the selected Forbidden/Limited Card List';
                 return validate;
             }
         }
@@ -194,13 +194,13 @@ function validateDeck(deck, banlist, database, cardpool, prerelease) {
                     if (reference.tcg.date > new Date(banlist.endDate)) {
                         //console.log(card)
                         validate.error = true;
-                        validate.msg = '"' + subreference.name + '"' + " does not exist in the timeframe of the selected Forbidden/Limited Card List";
+                        validate.msg = '"' + subreference.name + '"' + ' does not exist in the timeframe of the selected Forbidden/Limited Card List';
                         return validate;
                     }
                 } else {
                     //console.log(card.tcg, card)
                     validate.error = true;
-                    validate.msg = '"' + reference.name + '"' + " does not exist in the TCG";
+                    validate.msg = '"' + reference.name + '"' + ' does not exist in the TCG';
                     return validate;
                 }
             }
@@ -212,13 +212,13 @@ function validateDeck(deck, banlist, database, cardpool, prerelease) {
                     if (reference.tcg.date > new Date(banlist.endDate)) {
                         //console.log(card)
                         validate.error = true;
-                        validate.msg = '"' + subreference.name + '"' + " does not exist in the timeframe of the selected Forbidden/Limited Card List";
+                        validate.msg = '"' + subreference.name + '"' + ' does not exist in the timeframe of the selected Forbidden/Limited Card List';
                         return validate;
                     }
                 } else {
                     //console.log(card.tcg, card)
                     validate.error = true;
-                    validate.msg = '"' + reference.name + '"' + " does not exist in the TCG";
+                    validate.msg = '"' + reference.name + '"' + ' does not exist in the TCG';
                     return validate;
                 }
             }
@@ -230,13 +230,13 @@ function validateDeck(deck, banlist, database, cardpool, prerelease) {
                     if (reference.tcg.date > new Date(banlist.endDate)) {
                         //console.log(card)
                         validate.error = true;
-                        validate.msg = '"' + subreference.name + '"' + " does not exist in the timeframe of the selected Forbidden/Limited Card List";
+                        validate.msg = '"' + subreference.name + '"' + ' does not exist in the timeframe of the selected Forbidden/Limited Card List';
                         return validate;
                     }
                 } else {
                     //console.log(card.tcg, card)
                     validate.error = true;
-                    validate.msg = '"' + reference.name + '"' + " does not exist in the TCG";
+                    validate.msg = '"' + reference.name + '"' + ' does not exist in the TCG';
                     return validate;
                 }
             }
@@ -251,13 +251,13 @@ function validateDeck(deck, banlist, database, cardpool, prerelease) {
                     if (reference.ocg.date > new Date(banlist.endDate)) {
                         //console.log(card)
                         validate.error = true;
-                        validate.msg = '"' + subreference.name + '"' + " does not exist in the timeframe of the selected Forbidden/Limited Card List";
+                        validate.msg = '"' + subreference.name + '"' + ' does not exist in the timeframe of the selected Forbidden/Limited Card List';
                         return validate;
                     }
                 } else {
                     //console.log(card.ocg, card)
                     validate.error = true;
-                    validate.msg = '"' + reference.name + '"' + " does not exist in the OCG";
+                    validate.msg = '"' + reference.name + '"' + ' does not exist in the OCG';
                     return validate;
                 }
             }
@@ -269,13 +269,13 @@ function validateDeck(deck, banlist, database, cardpool, prerelease) {
                     if (reference.ocg.date > new Date(banlist.endDate)) {
                         //console.log(card)
                         validate.error = true;
-                        validate.msg = '"' + subreference.name + '"' + " does not exist in the timeframe of the selected Forbidden/Limited Card List";
+                        validate.msg = '"' + subreference.name + '"' + ' does not exist in the timeframe of the selected Forbidden/Limited Card List';
                         return validate;
                     }
                 } else {
                     //console.log(card.ocg, card)
                     validate.error = true;
-                    validate.msg = '"' + reference.name + '"' + " does not exist in the OCG";
+                    validate.msg = '"' + reference.name + '"' + ' does not exist in the OCG';
                     return validate;
                 }
             }
@@ -287,13 +287,13 @@ function validateDeck(deck, banlist, database, cardpool, prerelease) {
                     if (reference.ocg.date > new Date(banlist.endDate)) {
                         //console.log(card)
                         validate.error = true;
-                        validate.msg = '"' + subreference.name + '"' + " does not exist in the timeframe of the selected Forbidden/Limited Card List";
+                        validate.msg = '"' + subreference.name + '"' + ' does not exist in the timeframe of the selected Forbidden/Limited Card List';
                         return validate;
                     }
                 } else {
                     //console.log(card.ocg, card)
                     validate.error = true;
-                    validate.msg = '"' + reference.name + '"' + " does not exist in the OCG";
+                    validate.msg = '"' + reference.name + '"' + ' does not exist in the OCG';
                     return validate;
                 }
             }
@@ -303,7 +303,7 @@ function validateDeck(deck, banlist, database, cardpool, prerelease) {
                 var reference = getCardById(card);
                 if (reference.type >= 33554433) {
                     validate.error = true;
-                    validate.msg = "Link Monsters are not permitted by the selected Forbidden/Limited Card List";
+                    validate.msg = 'Link Monsters are not permitted by the selected Forbidden/Limited Card List';
                     return validate;
                 }
             }

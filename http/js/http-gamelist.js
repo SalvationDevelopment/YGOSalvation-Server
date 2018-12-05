@@ -22,7 +22,7 @@ $.fn.urlize = function() {
             if (list) {
                 for (i = 0; i < list.length; i++) {
                     prot = list[i].indexOf('http://') === 0 || list[i].indexOf('https://') === 0 ? '' : 'http://';
-                    x = x.replace(list[i], "<a target='_blank' href='" + prot + list[i] + "'>" + list[i] + "</a>");
+                    x = x.replace(list[i], '<a target=\'_blank\' href=\'' + prot + list[i] + '\'>' + list[i] + '</a>');
                 }
 
             }
@@ -35,7 +35,7 @@ function applySettings() {
     'use strict';
     $('[data-localhost]').each(function() {
         var property = $(this).attr('data-localhost'),
-            value = ('1' === localStorage[property]) ? true : false;
+            value = (localStorage[property] === '1') ? true : false;
         $(this).prop('checked', value);
     });
     $('#skinlist').append('<option selected value="' + localStorage.skin_index + '">' + localStorage.skin_text + '</option>');
@@ -69,11 +69,11 @@ function saveSettings() {
     localStorage.bg = $('#sitebgoption').val();
     localStorage.dbtext = $('#dblist option:selected').text();
 }
-var mode = "production",
+var mode = 'production',
     gamelistcache,
     screenMessage = $('#servermessages'),
     uniqueID = $('#uniqueid').html(),
-    primusprotocol = (location.protocol === 'https:') ? "wss://" : "ws://",
+    primusprotocol = (location.protocol === 'https:') ? 'wss://' : 'ws://',
     primus = window.Primus.connect(primusprotocol + location.host);
 
 
@@ -181,7 +181,7 @@ function enterGame(string, pass) {
         return;
     }
 
-    if (pass && window.admin !== "1") {
+    if (pass && window.admin !== '1') {
         guess = window.prompt('Password?', guess);
         if (string.substring(26, 19) !== guess) {
             alertmodal('Wrong Password!');
@@ -191,7 +191,7 @@ function enterGame(string, pass) {
     $('body').css('background-image', 'url(http://ygopro.us/img/magimagiblack.jpg)');
     localStorage.lastdeck = $('.currentdeck').val();
     localStorage.roompass = string;
-    localStorage.lastip = "192.99.11.19";
+    localStorage.lastip = '192.99.11.19';
     ygopro('-j');
     try {
         window._gaq.push(['_trackEvent', 'Launcher', 'YGOPro', 'Join Duel']);
@@ -231,7 +231,7 @@ function setpass() {
             pass = randomString(5);
         }
         pass = prompt('Password (5 char):', pass);
-        pass.replace(/[^a-zA-Z0-9]/g, "");
+        pass.replace(/[^a-zA-Z0-9]/g, '');
     } while (pass.length !== 5);
     window.prompt('Give this Password to your Opponent(s)!', pass);
     return pass;
@@ -245,16 +245,16 @@ function getDuelRequest() {
         randneed = ($('#creategamebanlist').val() > 9) ? 4 : 5;
     out = {
         string: pretypecheck + $('#creategamecardpool').val() + $('#creategameduelmode').val() + $('#creategametimelimit').val() + $('#enableprerelease').val(),
-        checkd: isChecked('#discheckdeck') ? ("T") : ("O"),
-        shuf: isChecked('#disshuffledeck') ? ("T") : ("O"),
-        stnds: "," + $('#creategamebanlist').val() + stnds,
+        checkd: isChecked('#discheckdeck') ? ('T') : ('O'),
+        shuf: isChecked('#disshuffledeck') ? ('T') : ('O'),
+        stnds: ',' + $('#creategamebanlist').val() + stnds,
         pass: isChecked('#usepass') ? setpass() : randomString(randneed)
 
     };
 
 
-    if ($('#creategamebanlist').val() === "3") {
-        out.string[0] = "1";
+    if ($('#creategamebanlist').val() === '3') {
+        out.string[0] = '1';
     }
 
     return out;
@@ -300,11 +300,11 @@ function setHostSettings() {
             alertmodal('SnarkyChild: I dont want to be alone with you... please dont make me.');
             return;
         }
-        if ($('#creategameduelmode').val() !== "0") {
+        if ($('#creategameduelmode').val() !== '0') {
             alertmodal('SnarkyChild: I have commitment issues, lets stay single.');
             return;
         }
-        if ($('#creategamebanlist').val() === "2") {
+        if ($('#creategamebanlist').val() === '2') {
             alertmodal('SnarkyChild: I think you are to old for me if you are playing Goats.');
             return;
         }
@@ -583,7 +583,7 @@ function pondata(data) {
         manualReciver(data);
     } else {
         if (data.admin) {
-            window.admin = "1";
+            window.admin = '1';
             $('#Tournamentacp').addClass('isadmin');
         }
         if (data.clientEvent !== 'ackresult' && data.clientEvent !== 'ack') {
@@ -623,7 +623,7 @@ function pondata(data) {
                     });
                 }
             }
-            $('#onlinepublicchat').scrollTop($('#onlinepublicchat').prop("scrollHeight"));
+            $('#onlinepublicchat').scrollTop($('#onlinepublicchat').prop('scrollHeight'));
             requestglobal();
             //window.deckEditor.loadDecks(data.info.decks);
             if (data.info.friends.length) {
@@ -639,7 +639,7 @@ function pondata(data) {
         if (data.clientEvent === 'chatline') {
             $('#onlinepublicchat').append('<li  data-chatuid="' + data.uid + '"><strong>[' + new Date(data.date).toLocaleTimeString() + ']' + data.from + ':</strong> ' + data.msg + '<span class="admincensor" onclick="censor(' + data.uid + ')"></span></li>');
             if ($('#onlinepublicchat').scrollTop() + $('#onlinepublicchat').innerHeight() >= $('#onlinepublicchat')[0].scrollHeight) {
-                $('#onlinepublicchat').scrollTop($('#onlinepublicchat').prop("scrollHeight"));
+                $('#onlinepublicchat').scrollTop($('#onlinepublicchat').prop('scrollHeight'));
             }
             $('[data-chatuid="' + data.uid + '"').urlize();
             $('.chatlinker').addClass('boxshine');
@@ -714,7 +714,7 @@ function pondata(data) {
             });
             data.userlist.forEach(function(name) {
 
-                jsco = "userlistonclick('" + name.trim() + "');";
+                jsco = 'userlistonclick(\'' + name.trim() + '\');';
                 userlist = (friends.indexOf(name.trim()) > -1) ? userlist + '<li data-friend onclick="' + jsco + '">' + name.trim() + '</li>' : userlist + '<li onclick="' + jsco + '">' + name.trim() + '</li>';
                 storedUserlist.push(name.trim());
             });
@@ -846,7 +846,7 @@ function aiRestart() {
 
 $('body').on('mousedown', '.game', function(ev) {
     'use strict';
-    if (window.admin === "1" && ev.which === 3) {
+    if (window.admin === '1' && ev.which === 3) {
         var killpoint = $(ev.target).attr('data-killpoint'),
             gameID = $(ev.target).attr('data-roomid');
         if (killpoint === undefined) {
@@ -868,7 +868,7 @@ $('body').on('mousedown', '.game', function(ev) {
 $('body').on('mousedown', 'footer', function(ev) {
     'use strict';
     ev.preventDefault();
-    if (admin === "1" && ev.which === 3) {
+    if (admin === '1' && ev.which === 3) {
         if (confirm('Send Global?')) {
             sendglobal(prompt('Global Message', 'Be nice, or else...'));
             return;
@@ -958,7 +958,7 @@ $('#publicchat').keypress(function(e) {
         }
         chatline($(e.currentTarget).val(), 'text');
         $(e.currentTarget).val('');
-        $('#onlinepublicchat').scrollTop($('#onlinepublicchat').prop("scrollHeight"));
+        $('#onlinepublicchat').scrollTop($('#onlinepublicchat').prop('scrollHeight'));
         return false;
     }
 });
@@ -968,7 +968,7 @@ $('#publicchat').keypress(function(e) {
 function userlistonclick(person) {
     'use strict';
     personOfIntrest = person;
-    if (admin === "1") {
+    if (admin === '1') {
         $('.a-admin').css('display', 'block');
     }
     if (window.deckEditor.getFriends().indexOf(personOfIntrest) > -1) {

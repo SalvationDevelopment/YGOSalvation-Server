@@ -25,7 +25,7 @@ ratings:
   - "**.php"
   - "**.py"
   - "**.rb"
-exclude_paths:
+exclude_patterns:
 - "**.css"
 - "**.woff2"
 - "**.ttf"

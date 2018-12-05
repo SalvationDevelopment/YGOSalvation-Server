@@ -253,7 +253,7 @@ var databaseSystem = (function() {
         database = filterCards(listOfCards);
 
         tokens = database.filter(function(card) {
-            return (card.type === 16401 || card.type === 16417) && (card.name !== "DO NOT USE");
+            return (card.type === 16401 || card.type === 16417) && (card.name !== 'DO NOT USE');
         });
         tokens.sort(function(current, next) {
             return current.name > next.name;
@@ -1023,7 +1023,7 @@ var deckEditor = (function() {
             return a.toLowerCase().localeCompare(b.toLowerCase());
         });
         friends.forEach(function(name) {
-            var jsco = "userlistonclick('" + name + "');",
+            var jsco = 'userlistonclick(\'' + name + '\');',
                 isOnline = (storedUserlist.indexOf(name) > -1) ? 'data-online' : '';
             userlist = userlist + '<li ' + isOnline + ' onclick="' + jsco + '">' + name.trim() + '</li>';
         });
@@ -1437,22 +1437,22 @@ var deckEditor = (function() {
     loadDecks([makeNewDeck('New Deck')]);
 
     function makeDeckfromydk(ydkFileContents) {
-        var lineSplit = ydkFileContents.split("\n"),
+        var lineSplit = ydkFileContents.split('\n'),
             originalValues = {
-                "main": [],
-                "side": [],
-                "extra": []
+                'main': [],
+                'side': [],
+                'extra': []
             },
-            current = "";
+            current = '';
         lineSplit = lineSplit.map(function(item) {
             return item.trim();
         });
         try {
             lineSplit.forEach(function(value) {
-                if (value === "") {
+                if (value === '') {
                     return;
                 }
-                if (value[0] === "#" || value[0] === "!") {
+                if (value[0] === '#' || value[0] === '!') {
                     if (originalValues.hasOwnProperty(value.substr(1))) {
                         current = value.substr(1);
                     } else {
@@ -1685,20 +1685,20 @@ function readSingleFile(evt) {
         };
         r.readAsText(f);
     } else {
-        alertmodal("Failed to load file");
+        alertmodal('Failed to load file');
     }
 }
 
 $('#deckupload').on('change', readSingleFile);
 
 
-$("#deckedit .mainDeck,#deckedit .extraDeck,#deckedit .sideDeck").on("dragover dragleave", function(event) {
+$('#deckedit .mainDeck,#deckedit .extraDeck,#deckedit .sideDeck').on('dragover dragleave', function(event) {
     'use strict';
     event.preventDefault();
     event.stopPropagation();
 });
 
-$("#deckedit .mainDeck,#deckedit .extraDeck,#deckedit .sideDeck").on("drop", function(event) {
+$('#deckedit .mainDeck,#deckedit .extraDeck,#deckedit .sideDeck').on('drop', function(event) {
     'use strict';
     event.preventDefault();
     event.stopPropagation();

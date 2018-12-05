@@ -4,7 +4,7 @@ var ygoEngine = require('../libs/ygojs-core.js'),
     query = require('./query.js');
 
 function setupDuel(player1Deck, player2Deck) {
-    let game = ygoEngine(function (view, stack) {
+    const game = ygoEngine(function (view, stack) {
         // console.log(view, stack);
         // you can test the view (what it sends users) and the stack (all the cards in the system) here.
     });
@@ -28,7 +28,7 @@ function setupDuel(player1Deck, player2Deck) {
 describe('Salvation Duel Core', function () {
 
     it('Should create a game state', function (done) {
-        let game = ygoEngine(function (view, stack) {});
+        const game = ygoEngine(function (view, stack) {});
         done();
     });
 
