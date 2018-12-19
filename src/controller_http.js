@@ -6,26 +6,26 @@ const express = require('express'),
     toobusy = require('toobusy-js'),
     app = express(),
     compression = require('compression'),
-    Ddos = require('ddos'),
+    // Ddos = require('ddos'),
     bodyParser = require('body-parser'),
     helmet = require('helmet'),
     child_process = require('child_process'),
-    HTTP_PORT = 80,
-    ddos = new Ddos({
-        maxcount: 2000,
-        burst: 500,
-        limit: 500 * 10,
-        maxexpiry: 15,
-        checkinterval: 5,
-        trustProxy: true,
-        includeUserAgent: true,
-        whitelist: [],
-        errormessage: 'Error',
-        testmode: false,
-        silent: true,
-        silentStart: true,
-        responseStatus: 429
-    });
+    HTTP_PORT = 80;
+// ddos = new Ddos({
+//     maxcount: 2000,
+//     burst: 500,
+//     limit: 500 * 10,
+//     maxexpiry: 15,
+//     checkinterval: 5,
+//     trustProxy: true,
+//     includeUserAgent: true,
+//     whitelist: [],
+//     errormessage: 'Error',
+//     testmode: false,
+//     silent: true,
+//     silentStart: true,
+//     responseStatus: 429
+// });
 
 function systemLoad(req, res, next) {
     var processing = toobusy();
@@ -111,6 +111,6 @@ module.exports = function() {
         primusServer = http.createServer(app);
         primusServer.listen(HTTP_PORT);
     }
-    app.use(ddos.express);
+    // app.use(ddos.express);
     return primusServer;
 };
