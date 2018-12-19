@@ -9,8 +9,8 @@ const express = require('express'),
     // Ddos = require('ddos'),
     bodyParser = require('body-parser'),
     helmet = require('helmet'),
-    child_process = require('child_process');
-HTTP_PORT = 80;
+    child_process = require('child_process'),
+    HTTP_PORT = 80;
 // ddos = new Ddos({
 //     maxcount: 2000,
 //     burst: 500,
