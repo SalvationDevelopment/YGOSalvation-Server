@@ -94,12 +94,16 @@ function sessionTimeout(time) {
     return ((time.getTime() + hour) > Date.now());
 }
 
-var db = mongoose.createConnection('mongodb://localhost/salvation', { useMongoClient: true }, function(error, connection) {
+var db = mongoose.connect('mongodb://localhost/salvation', function(error, connection) {
     if (error) {
         console.log(error);
     }
-    console.log('Connected to Mongodb');
 });
+
+mongoose.connection.on('error', function(err) {
+    console.error('MongoDB error: %s', err);
+});
+
 
 
 function salter() {

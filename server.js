@@ -9,7 +9,7 @@ function main() {
 
     process.title = 'YGOPro Salvation Server ' + new Date();
     console.log('YGO Salvation Server - Saving Yu-Gi-Oh!'.bold.yellow);
-    controller();
+    //controller();
 }
 
 main();
