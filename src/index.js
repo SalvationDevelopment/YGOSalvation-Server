@@ -433,6 +433,9 @@ function onData(data, socket) {
     }
 }
 
+
+
+
 primus = new Primus(primusServer, {
     parser: 'JSON'
 });
@@ -442,6 +445,7 @@ primus.plugin('rooms', Rooms);
 
 primus.on('connection', function(socket) {
     socket.on('data', function(data) {
+        console.log(data);
         try {
             onData(data, socket);
         } catch (error) {
