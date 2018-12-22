@@ -154,6 +154,11 @@ var databaseSystem = (function() {
         completedatabase = [];
 
     function getBanlist(prop) {
+        if (!activeBanlist) {
+            activeBanlist = Object.keys(banlist).find(function(list) {
+                return list;
+            });
+        }
         return (prop) ? banlist[activeBanlist][prop] : banlist[activeBanlist].bannedCards;
     }
 
@@ -293,9 +298,11 @@ var databaseSystem = (function() {
         $('.banlistSelect').html('');
         Object.keys(banlist).forEach(function(list) {
             var selected = (banlist[list].primary) ? 'selected' : '';
+            if (selected) {
+                activeBanlist = list;
+            }
             $('.banlistSelect, #creategamebanlist').append('<option ' + selected + ' value="' + list + '">' + list + '</option>');
         });
-        activeBanlist = $('.banlistSelect option:selected').val();
         $.getJSON('/manifest/manifest_0-en-OCGTCG.json', function(data) {
             dbs.OCGTCG = data;
             completedatabase = dbs.OCGTCG;

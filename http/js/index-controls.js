@@ -254,7 +254,7 @@ function locallogin(init) {
 
 
     //chatStarted = true;
-    singlesitenav('news');
+    singlesitenav('forum');
 
 
 
@@ -375,6 +375,7 @@ function processLogin(data) {
 
         locallogin();
         loggedIn = true;
+        $('.web').removeClass('web');
 
 
         $('#profileusername').text(info.username);
@@ -495,7 +496,7 @@ $(document).ready(function() {
     if (localStorage.remember) {
         $('#ips_remember').prop('checked', true);
     }
-    $('#dolog').click(function(ev) {
+    $('body').on('click', '#dolog', function(ev) {
         allowLogin = true;
         try {
             _gaq.push(['_trackEvent', 'Launcher', 'Attempt Login', $('#ips_username').val()]);
