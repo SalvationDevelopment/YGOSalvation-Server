@@ -312,7 +312,9 @@ var databaseSystem = (function() {
             if (internalLocal === 'deckedit') {
                 deckeditloader();
             }
-            singlesitenav('home');
+            if (!window.loggedIn) {
+                singlesitenav('home');
+            }
             if (localStorage.session) {
                 $.getJSON('api/session/' + localStorage.session, function(userInfo) {
                     console.log(userInfo);
