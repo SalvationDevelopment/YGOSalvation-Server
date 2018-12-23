@@ -94,7 +94,16 @@
 
 
     </div>
-
+    <script>
+        $.getJSON('/manifest/banlist.json', function(data) {
+            banlist = data;
+            $('.banlistSelect').html('');
+            Object.keys(banlist).forEach(function(list) {
+                var selected = (banlist[list].primary) ? 'selected' : '';
+                $('.banlistSelect, #creategamebanlist').append('<option ' + selected + ' value="' + list + '">' + list + '</option>');
+            });
+        });
+    </script>
 </body>
 
 </html>
