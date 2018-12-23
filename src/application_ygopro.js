@@ -31,13 +31,14 @@
 
 const banlist = './http/manifest/banlist.json',
     database = require('../http/manifest/manifest_0-en-OCGTCG.json'),
+    dotenv = require('dotenv'),
     EventEmitter = require('events'),
+    fileStream = require('node-static'),
     http = require('http'),
     ocgcore = require('./engine_ocgcore'),
     Primus = require('primus'),
     Rooms = require('primus-rooms'),
     sanitize = require('./lib_html_sanitizer.js'),
-    fileStream = require('node-static'),
     uuid = require('uuid/v4'),
     validateDeck = require('./validate_deck.js'),
     verificationSystem = new EventEmitter();
@@ -421,7 +422,7 @@ function respond(server, client, message) {
  * @param {Primus} server Primus instance.
  * @param {Spark} client connected websocket and Primus user (spark in documentation).
  * @param {Message} message JSON communication sent from client.
- * @returns {Boolean} If the deck is valid or not.
+ * @returns {undefined}
  */
 function controller(server, client, message) {
     //console.log(message);
@@ -595,7 +596,7 @@ function Game(settings) {
         masterRule: settings.MASTER_RULE || 4,
         mode: settings.MODE || 0,
         ot: settings.OT || 0,
-        port: settings.PORT,
+        port: settings.PORT || 8082,
         player: [],
         priority: false,
         reconnection: {},
@@ -616,15 +617,24 @@ function Game(settings) {
  * @returns {undefined}
  */
 function main(callback) {
-    require('dotenv').config();
-    const port = process.env.PORT || 8082,
-        httpserver = http.createServer(staticWebServer),
-        server = new Primus(httpserver, {
-            parser: 'JSON'
-        });
+
+    // If the callback is given, use the callback,
+    // otherwise report to parent process if it exist,
+    // if it does not, print to the console.
+
+    process.child = (process.send) ? true : false;
+    process.send = (callback) ? callback : process.send;
+    process.send = (process.send) ? process.send : console.log;
+
+    dotenv.config();
+
+    const httpserver = http.createServer(staticWebServer),
+        server = new Primus(
+            httpserver, {
+                parser: 'JSON'
+            });
 
     server.game = new Game(process.env);
-
     server.plugin('rooms', Rooms);
     server.save(__dirname + '/../http/js/vendor/server.js');
     server.on('connection', function(client) {
@@ -636,16 +646,7 @@ function main(callback) {
         disconnectionHandler(server, deadSpark);
     });
 
-
-    // If the callback is given, use the callback,
-    // otherwise report to parent process if it exist,
-    // if it does not, print to the console.
-
-    process.child = (process.send) ? true : false;
-    process.send = (callback) ? callback : process.send;
-    process.send = (process.send) ? process.send : console.log;
-
-    boot(httpserver, server, port);
+    boot(httpserver, server, server.game.port);
 
 }
 

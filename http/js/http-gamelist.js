@@ -705,7 +705,7 @@ function pondata(data) {
         if (data.clientEvent === 'ack') {
             ackback();
         }
-        if (data.clientEvent === 'ackresultz') {
+        if (data.clientEvent === 'ackresult') {
             storedUserlist = [];
             $('#onlineconnectted').html(data.ackresult);
             friends = window.deckEditor.getFriends();

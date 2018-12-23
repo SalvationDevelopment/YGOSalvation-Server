@@ -109,7 +109,7 @@ function registrationCall(data, socket) {
                 chatbox: chatbox
             });
             socket.join(socket.username);
-
+            announce(gamelist);
         } else {
             socket.write({
                 clientEvent: 'servererror',
@@ -389,6 +389,7 @@ function onData(data, socket) {
                 childHandler(child, socket, message);
             });
             games.push(child);
+            announce(gamelist);
             break;
         case ('privateMessage'):
             if (socket.username) {
@@ -444,5 +445,6 @@ setInterval(function() {
         ackresult: acklevel,
         userlist: userlist
     });
+    announce(gamelist);
     massAck();
 }, 15000);
