@@ -169,7 +169,7 @@ var databaseSystem = (function() {
             completedatabase = dbs.OCGTCG;
 
             setDatabase(['OCGTCG']);
-            $('#deckeditloading').remove();
+            $('loading').remove();
             if (internalLocal === 'deckedit') {
                 deckeditloader();
             }
@@ -316,13 +316,13 @@ function readSingleFile(evt) {
 $('#deckupload').on('change', readSingleFile);
 
 
-$('#deckedit .mainDeck,#deckedit .extraDeck,#deckedit .sideDeck').on('dragover dragleave', function(event) {
+$(' .mainDeck, .extraDeck, .sideDeck').on('dragover dragleave', function(event) {
     'use strict';
     event.preventDefault();
     event.stopPropagation();
 });
 
-$('#deckedit .mainDeck,#deckedit .extraDeck,#deckedit .sideDeck').on('drop', function(event) {
+$(' .mainDeck, .extraDeck, .sideDeck').on('drop', function(event) {
     'use strict';
     event.preventDefault();
     event.stopPropagation();

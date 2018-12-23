@@ -304,7 +304,7 @@ var databaseSystem = (function() {
             completedatabase = dbs.OCGTCG;
 
             setDatabase(['OCGTCG']);
-            $('#deckeditloading').remove();
+            $('loading').remove();
             if (internalLocal === 'deckedit') {
                 deckeditloader();
             }
@@ -863,8 +863,8 @@ var deckEditor = (function() {
             }
         });
 
-        $('#deckedit .cardspace .' + zone).html(html);
-        $('#deckedit .cardspace .' + zone + ' img').error(cardLoadError);
+        $('.mainContainer .cardspace .' + zone).html(html);
+        $('.mainContainer .cardspace .' + zone + ' img').error(cardLoadError);
 
         //$('#subreveal').width(cards.length * 197);
     }
@@ -933,9 +933,9 @@ var deckEditor = (function() {
 
 
 
-        $('#deckedit .cardspace .main').attr('floatmarker', floatMarkerMain);
-        $('#deckedit .cardspace .extra').attr('floatmarker', floatMarkerExtra);
-        $('#deckedit .cardspace .side').attr('floatmarker', floatMarkerSide);
+        $('.cardspace .main').attr('floatmarker', floatMarkerMain);
+        $('.cardspace .extra').attr('floatmarker', floatMarkerExtra);
+        $('.cardspace .side').attr('floatmarker', floatMarkerSide);
 
         deck.main.forEach(function(card) {
             if (sorter.main[card.id] === undefined) {
@@ -1166,8 +1166,8 @@ var deckEditor = (function() {
     }
 
     function reset() {
-        $('#deckedit .searchRight input').val('');
-        $('#deckedit .searchRight select').each(function() {
+        $('.searchRight input').val('');
+        $('.searchRight select').each(function() {
             var dropdown = $(this);
             dropdown.val(dropdown.find('option').first().val());
         });
@@ -1695,13 +1695,13 @@ function readSingleFile(evt) {
 $('#deckupload').on('change', readSingleFile);
 
 
-$('#deckedit .mainDeck,#deckedit .extraDeck,#deckedit .sideDeck').on('dragover dragleave', function(event) {
+$('.mainDeck, .extraDeck, .sideDeck').on('dragover dragleave', function(event) {
     'use strict';
     event.preventDefault();
     event.stopPropagation();
 });
 
-$('#deckedit .mainDeck,#deckedit .extraDeck,#deckedit .sideDeck').on('drop', function(event) {
+$('.mainDeck, .extraDeck, .sideDeck').on('drop', function(event) {
     'use strict';
     event.preventDefault();
     event.stopPropagation();
