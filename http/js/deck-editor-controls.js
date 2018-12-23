@@ -176,6 +176,7 @@ var databaseSystem = (function() {
             if (!window.loggedIn) {
                 singlesitenav('home');
             }
+            $('#deckeditloading').remove();
             if (localStorage.session) {
                 $.getJSON('api/session/' + localStorage.session, function(userInfo) {
                     console.log(userInfo);

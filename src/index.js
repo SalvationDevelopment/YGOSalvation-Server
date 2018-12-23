@@ -147,6 +147,7 @@ function globalRequested(socket) {
         clientEvent: 'global',
         message: currentGlobalMessage
     });
+    socket.write(gamelist);
 }
 
 

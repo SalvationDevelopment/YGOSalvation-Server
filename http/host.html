@@ -102,6 +102,9 @@
                 var selected = (banlist[list].primary) ? 'selected' : '';
                 $('.banlistSelect, #creategamebanlist').append('<option ' + selected + ' value="' + list + '">' + list + '</option>');
             });
+            window.decks.forEach(function(deck, index) {
+                $('.currentdeck ').append('<option value="' + index + '">' + deck.name + '</option>');
+            });
         });
     </script>
 </body>

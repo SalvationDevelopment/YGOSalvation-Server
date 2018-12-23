@@ -183,7 +183,6 @@ input.decknameInput {
 }
 
 .searchResults {
-    height: 96%;
     width: 100%;
     overflow-y: auto;
 }

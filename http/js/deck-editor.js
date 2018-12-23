@@ -12,7 +12,7 @@ function cardLoadError() {
     } else {
         $(this).attr('reloaded', 'attempted');
         if (id !== 'undefined') {
-            $(this).attr('src', 'https://github.com/shadowfox87/YGOSeries10CardPics/blob/master/pics/' + id + '.png');
+            $(this).attr('src', 'http://127.0.0.1:8887/' + id + '.jpg');
         } else {
             $(this).attr('src', '/img/textures/unknown.jpg');
         }
@@ -293,7 +293,7 @@ var databaseSystem = (function() {
         $('.banlistSelect').html('');
         Object.keys(banlist).forEach(function(list) {
             var selected = (banlist[list].primary) ? 'selected' : '';
-            if (activeBanlist) {
+            if (selected) {
                 activeBanlist = list;
             }
             $('.banlistSelect, #creategamebanlist').append('<option ' + selected + ' value="' + list + '">' + list + '</option>');
@@ -302,9 +302,9 @@ var databaseSystem = (function() {
         $.getJSON('/manifest/manifest_0-en-OCGTCG.json', function(data) {
             dbs.OCGTCG = data;
             completedatabase = dbs.OCGTCG;
-
+            console.log(activeBanlist);
             setDatabase(['OCGTCG']);
-            $('loading').remove();
+
             if (internalLocal === 'deckedit') {
                 deckeditloader();
             }
@@ -855,7 +855,7 @@ var deckEditor = (function() {
         cards.forEach(function(card, index) {
             if (card.picture && window.internalLocal === 'deckedit') {
                 var hardcard = JSON.stringify(card),
-                    src = getCardObject(parseInt(card.id, 10)).picture;
+                    src = 'http://127.0.0.1:8887/' + card.id + '.jpg';
                 html += '<div class="searchwrapper" data-card-limit="' + card.limit + '">';
                 html += '<img src-preview="./img/textures/cover.jpg" class="deckeditcard card" id="deceditcard' + index + zone + '" data-dropindex="' + index + '" data-dropzone="' + zone + '"  data-id = "' + card.id + '"';
                 html += 'src="' + src + '" data-id="' + card.id + '" ondragstart="createCardReference(\'' + zone + '\', ' + index + ');" onclick = "deckeditonclick(' + index + ', \'' + zone + '\')" >';
