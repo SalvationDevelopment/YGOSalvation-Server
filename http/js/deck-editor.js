@@ -853,7 +853,7 @@ var deckEditor = (function() {
     function makeCard(cards, zone) {
         var html = '';
         cards.forEach(function(card, index) {
-            if (card.picture && window.internalLocal === 'deckedit') {
+            if (window.internalLocal === 'deckedit') {
                 var hardcard = JSON.stringify(card),
                     src = 'http://127.0.0.1:8887/' + card.id + '.jpg';
                 html += '<div class="searchwrapper" data-card-limit="' + card.limit + '">';
@@ -863,8 +863,8 @@ var deckEditor = (function() {
             }
         });
 
-        $('.mainContainer .cardspace .' + zone).html(html);
-        $('.mainContainer .cardspace .' + zone + ' img').error(cardLoadError);
+        $('.cardspace .' + zone).html(html);
+        $('.cardspace .' + zone + ' img').error(cardLoadError);
 
         //$('#subreveal').width(cards.length * 197);
     }
