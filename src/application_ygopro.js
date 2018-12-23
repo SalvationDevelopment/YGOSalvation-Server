@@ -35,7 +35,7 @@ const banlist = './http/manifest/banlist.json',
     EventEmitter = require('events'),
     fileStream = require('node-static'),
     http = require('http'),
-    ocgcore = require('./engine_ocgcore'),
+    //ocgcore = require('./engine_ocgcore'),
     Primus = require('primus'),
     Rooms = require('primus-rooms'),
     sanitize = require('./lib_html_sanitizer.js'),
@@ -137,7 +137,7 @@ function chat(server, client, message, date) {
         date: date.toISOString()
     };
     client.room('chat').write(chatMessage);
-    server.game.chat.push(chatMessage);
+    server.state.chat.push(chatMessage);
     return chatMessage;
 }
 
@@ -149,10 +149,10 @@ function chat(server, client, message, date) {
  * @returns {undefined}
  */
 function reconnect(server, client, message) {
-    if (!server.game.reconnection[message.room]) {
+    if (!server.state.reconnection[message.room]) {
         return;
     }
-    if (server.game.reconnection[message.room] = client.username) {
+    if (server.state.reconnection[message.room] = client.username) {
         client.join(message.room);
     }
     if (message.room !== 'spectator') {
@@ -328,7 +328,7 @@ function lock(server, client, message) {
 function PlayerAbstraction(server, room, client) {
     if (client.username) {
         client.join(room);
-        server.game.reconnection[room] = client.username;
+        server.state.reconnection[room] = client.username;
     }
     server.room('room').write({
         action: 'reconnection',
@@ -361,8 +361,8 @@ function determine(server, client) {
     if (!server.game.player[0].ready && !server.game.player[1].ready) {
         return;
     }
-    server.game.verification = uuid();
-    ocgcore.shuffle(server.game.player);
+    server.state.verification = uuid();
+    //ocgcore.shuffle(server.game.player);
     server.game.player[0].write({
         action: 'cointoss',
         result: 'heads'
@@ -373,7 +373,7 @@ function determine(server, client) {
     });
     server.game.player[0].write({
         action: 'turn_player',
-        verification: server.game.verification
+        verification: server.state.verification
     });
     server.game.started = true;
 }
@@ -400,7 +400,7 @@ function start(server, client, message) {
         spectators = [new PlayerAbstraction(server, 'spectators', {})];
 
     // This is the part where everything goes wrong.
-    ocgcore.duel(server.game, players, spectators);
+    //ocgcore.duel(server.game, players, spectators);
 }
 
 /**
@@ -574,6 +574,7 @@ function boot(httpserver, server, port) {
 
         process.send({
             action: 'ready',
+            roompass: server.game.roompass,
             port: port
         });
     });
@@ -586,11 +587,10 @@ function boot(httpserver, server, port) {
  */
 function Game(settings) {
     return {
-        chat: [],
         banlist: settings.BANLIST || 'No Banlist',
         banlistid: settings.BANLIST_ID,
         cardpool: settings.CARD_POOL || 0,
-        deckcheck: settings.DECK_CHECK || false,
+        deckcheck: (settings.DECK_CHECK === undefined) ? settings.DECK_CHECK || true,
         draw_count: settings.DRAW_COUNT || 1,
         legacyfield: settings.LEGACY || false,
         masterRule: settings.MASTER_RULE || 4,
@@ -599,7 +599,6 @@ function Game(settings) {
         port: settings.PORT || 8082,
         player: [],
         priority: false,
-        reconnection: {},
         prerelease: settings.PRERELEASE || true,
         roompass: settings.ROOMPASS || uuid(),
         rule: settings.RULE || 0,
@@ -607,7 +606,14 @@ function Game(settings) {
         started: false,
         startLP: settings.LIFEPOINTS || 8000,
         start_hand_count: settings.STARTING_HAND || 5,
-        time: settings.TIME_LIMIT || 3000,
+        time: settings.TIME_LIMIT || 3000
+    };
+}
+
+function State() {
+    return {
+        chat: [],
+        reconnection: {},
         verification: uuid()
     };
 }
@@ -626,8 +632,6 @@ function main(callback) {
     process.send = (callback) ? callback : process.send;
     process.send = (process.send) ? process.send : console.log;
 
-    dotenv.config();
-
     const httpserver = http.createServer(staticWebServer),
         server = new Primus(
             httpserver, {
@@ -635,6 +639,7 @@ function main(callback) {
             });
 
     server.game = new Game(process.env);
+    server.state = new State();
     server.plugin('rooms', Rooms);
     server.save(__dirname + '/../http/js/vendor/server.js');
     server.on('connection', function(client) {
@@ -647,7 +652,6 @@ function main(callback) {
     });
 
     boot(httpserver, server, server.game.port);
-
 }
 
 main();

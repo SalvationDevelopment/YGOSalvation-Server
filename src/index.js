@@ -53,11 +53,14 @@ function announce(announcement) {
 function massAck() {
     acklevel = 0;
     userlist = [];
-    gamelist = {};
     announce({
         clientEvent: 'ack',
         serverEvent: 'ack'
     });
+}
+
+function unsafePort() {
+    return Math.floor(Math.random() * (9000 - 2000) + 2000);
 }
 
 function registrationCall(data, socket) {
@@ -250,20 +253,26 @@ function mindcrushCall(data) {
 function childHandler(child, socket, message) {
     switch (message.action) {
         case 'lobby':
-            gamelist[message.roompass] = message.game;
-            gamelist[message.roompass].port = message.port;
+            gamelist[message.game.roompass] = message.game;
+            gamelist[message.game.roompass].port = message.port;
+            announce(gamelist);
+            break;
+        case 'stop':
+            delete gamelist[message.game.roompass];
+            announce(gamelist);
             break;
         case 'ready':
-            socket.send({
-
+            socket.write({
+                clientEvent: 'lobby',
+                roompass: message.roompass,
+                port: message.port
             });
-
             break;
         case 'register':
             userController.validateSession({
                 session: message.session
             }, function(error, valid, person) {
-                child.send({
+                child.write({
                     error,
                     valid,
                     person
@@ -383,14 +392,13 @@ function onData(data, socket) {
             break;
         case ('host'):
             const child = child_process.fork(
-                './application_ygopro.js',
-                Object.assign({}, process.env, data.game), {}
+                './src/application_ygopro.js', [], { env: Object.assign({}, process.env, data.info, { PORT: unsafePort() }) }
             );
             child.on('message', function(message) {
+                console.log('...', message);
                 childHandler(child, socket, message);
             });
             games.push(child);
-            announce(gamelist);
             break;
         case ('privateMessage'):
             if (socket.username) {

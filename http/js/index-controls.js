@@ -182,6 +182,9 @@ function singlesitenav(target) {
 
     if (target === 'gamelist') {
         $('body').css('background-image', colorbg());
+        primus.write({
+            action: 'globalrequest'
+        });
         window.manualLeave();
     }
 

@@ -1249,10 +1249,6 @@ main a:hover {
     color: pink;
 }
 
-.undefined {
-    display: none
-}
-
 .card.real {
     display: block
 }

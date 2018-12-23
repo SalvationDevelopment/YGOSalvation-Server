@@ -337,75 +337,62 @@ function parseFilters() {
 
 function parseDuelOptions(duelOptions) {
     'use strict';
-    //{"200OOO8000,0,5,1,U,PaS5w":{"port":8000,"players":[],"started":false}}
-    var duelOptionsParts = duelOptions.split(','),
-        settings = { //Determine time limit
-            timeLimit: (duelOptionsParts[0][2] === '0') ? '3 minutes' : '5 minutes',
-            //Use classic TCG rules?
-            isTCGRuled: (duelOptionsParts[0][3] === 'O') ? 'OCG rules' : 'TCG Rules',
+    var settings = { //Determine time limit
+        timeLimit: duelOptions.time ? '3 minutes' : '5 minutes',
+        //Use classic TCG rules?
+        isTCGRuled: duelOptions.cardpool ? 'OCG rules' : 'TCG Rules',
 
-            //Check Deck for Illegal cards?
-            isDeckChecked: (duelOptionsParts[0][4] === 'O') ? 'Check' : 'Dont Check',
+        //Check Deck for Illegal cards?
+        isDeckChecked: duelOptions.deckcheck ? 'Check' : 'Dont Check',
 
-            //Shuffle deck at start?
-            isShuffled: (duelOptionsParts[0][5] === 'O') ? 'Shuffle' : 'Dont Shuffle',
+        legality: (!duelOptions.deckcheck || !duelOptions.shuffleDeck) ? 'OOO' : 'TTT',
 
-            //Choose Starting Life Points
-            lifePoints: duelOptionsParts[0].substring(6),
+        //Shuffle deck at start?
+        isShuffled: duelOptions.shuffleDeck ? 'Shuffle' : 'Dont Shuffle',
 
-            //Determine Banlist
-            banList: parseInt(duelOptionsParts[1], 10),
+        //Choose Starting Life Points
+        lifePoints: duelOptions.startLP,
 
-            //Select how many cards to draw on first hand
-            openDraws: duelOptionsParts[2],
+        //Determine Banlist
+        banList: duelOptions.banlist,
 
-            //Select how many cards to draw each turn
-            turnDraws: duelOptionsParts[3],
+        //Select how many cards to draw on first hand
+        openDraws: duelOptions.start_hand_count,
 
-            //Choose whether duel is locked
-            isLocked: (duelOptionsParts[4] === 'U') ? false : true,
+        //Select how many cards to draw each turn
+        turnDraws: duelOptions.draw_count,
 
-            //Copy password
-            password: duelOptionsParts[5]
-        };
+        //Choose whether duel is locked
+        isLocked: Boolean(duelOptions.locked),
+
+        //Copy password
+        password: duelOptions.roompass
+    };
 
 
 
     //Determine allowed cards
-    if (duelOptionsParts[0][0] === '0') {
+    if (duelOptions.cardpool === 0) {
         settings.allowedCards = 'OCG';
     }
-    if (duelOptionsParts[0][0] === '1') {
+    if (duelOptions.cardpool === 1) {
         settings.allowedCards = 'TCG';
     }
-    if (duelOptionsParts[0][0] === '2') {
+    if (duelOptions.cardpool === 2) {
         settings.allowedCards = 'TCG/OCG';
     }
-    if (duelOptionsParts[0][0] === '3') {
+    if (duelOptions.cardpool === 3) {
         settings.allowedCards = 'Anime';
     }
-    if (duelOptionsParts[0][0] === '4') {
+    if (duelOptions.cardpool === 4) {
         settings.allowedCards = 'Sealed BP3';
     }
-    if (duelOptionsParts[0][0] === '5') {
+    if (duelOptions.cardpool === 5) {
         settings.allowedCards = 'Constructed BP3';
     }
 
-    //Determine game mode
-    if (duelOptionsParts[0][1] === '0') {
-        settings.gameMode = 'Single';
-    }
-    if (duelOptionsParts[0][1] === '1') {
-        settings.gameMode = 'Match';
-    }
-    if (duelOptionsParts[0][1] === '2') {
-        settings.gameMode = 'Tag';
-    }
-
-    //    if (settings.gameMode === 'single' || settings.gameMode === 'match') {
-    //
-    //    }
-    settings.poolFormat = $('#creategamebanlist [value="' + duelOptionsParts[1] + '"]').html();
+    settings.gameMode = duelOptions.mode;
+    settings.poolFormat = duelOptions.banlist;
     return settings;
 
 }
@@ -446,7 +433,7 @@ function preformfilter(translated, players, rooms, started, pid, watchers) {
         //console.log(translated);
         content = '<div class="game ' + rooms + ' ' + started + ' ' + translated.isLocked + ' ' + translated.gameMode;
         content += '"onclick=enterGame("' + rooms + '",' + translated.isLocked + ')';
-        content += ' data-roomid="' + rooms + '" data-' + game + '="' + rooms + '"data-killpoint="' + pid + '">' + duelist + spectators;
+        content += ' data-roomid="' + rooms + '" data-' + game + '="' + translated.legality + '"data-killpoint="' + pid + '">' + duelist + spectators;
         content += '<span class="subtext" style="font-size:.5em"><br>' + translated.gameMode;
         content += ' ' + $('#creategamebanlist option[value=' + translated.banlist + ']').text() + ' ' + translated.poolFormat + '</div>';
     }
@@ -470,12 +457,12 @@ function renderList(JSONdata) {
     $('#gamelistitems').html('');
     for (rooms in JSONdata) {
         if (JSONdata.hasOwnProperty(rooms)) {
-            player1 = (JSONdata[rooms].players[0]) ? '<label class="playername">' + JSONdata[rooms].players[0] + '</label>' : '___';
-            player2 = (JSONdata[rooms].players[1]) ? '<label class="playername">' + JSONdata[rooms].players[1] + '</label>' : '___';
-            player3 = (JSONdata[rooms].players[2]) ? '<label class="playername">' + JSONdata[rooms].players[2] + '</label>' : '___';
-            player4 = (JSONdata[rooms].players[3]) ? '<label class="playername">' + JSONdata[rooms].players[3] + '</label>' : '___';
+            player1 = (JSONdata[rooms].player[0]) ? '<label class="playername">' + JSONdata[rooms].player[0] + '</label>' : '___';
+            player2 = (JSONdata[rooms].player[1]) ? '<label class="playername">' + JSONdata[rooms].player[1] + '</label>' : '___';
+            player3 = (JSONdata[rooms].player[2]) ? '<label class="playername">' + JSONdata[rooms].player[2] + '</label>' : '___';
+            player4 = (JSONdata[rooms].player[3]) ? '<label class="playername">' + JSONdata[rooms].player[3] + '</label>' : '___';
             started = (JSONdata[rooms].started) ? 'started' : 'avaliable';
-            translated = parseDuelOptions(rooms);
+            translated = parseDuelOptions(JSONdata[rooms]);
             players = [player1, player2, player3, player4];
             content = preformfilter(translated, players, rooms, started, JSONdata[rooms].pid, JSONdata[rooms].spectators);
             spectators = spectators + JSONdata[rooms].spectators;
