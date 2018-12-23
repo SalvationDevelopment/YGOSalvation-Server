@@ -1,8 +1,8 @@
 /**
- * OCGCore, the YGOPro game engine, is very unstable. Its a C++ libary that will cause
- * a crash if it sees improper logic in the Lua scripts it dynamically loads in that
- * represent the game logic of indidual cards. For that reason the room system wrapping
- * it runs in a sperate child process. 
+ * OCGCore, the YGOPro game engine, is very unstable. Its a C++ library that will cause
+ * a crash if it sees improper logic in the Lua scripts it dynamically loads  in that
+ * represent the game logic of individual cards. For that reason the room system wrapping
+ * it runs in is a sperate child process. 
  * 
  * Configuration is passed via enviromental variables.
  */
@@ -35,7 +35,7 @@ const banlist = './http/manifest/banlist.json',
     Primus = require('primus'),
     Rooms = require('primus-rooms'),
     sanitize = require('./lib_html_sanitizer.js'),
-    static = require('node-static'),
+    fileStream = require('node-static'),
     uuid = require('uuid/v4'),
     validateDeck = require('./validate_deck.js'),
     verificationSystem = new EventEmitter();
@@ -48,9 +48,9 @@ const banlist = './http/manifest/banlist.json',
  * @returns {undefined}
  */
 function staticWebServer(request, response) {
-    const file = new static.Server('../http', { cache: 0 });
+    const server = new fileStream.Server('../http', { cache: 0 });
     request.addListener('end', function() {
-        file.serve(request, response);
+        server.serve(request, response);
     }).resume();
 }
 

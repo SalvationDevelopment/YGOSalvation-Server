@@ -154,11 +154,6 @@ var databaseSystem = (function() {
         completedatabase = [];
 
     function getBanlist(prop) {
-        if (!activeBanlist) {
-            activeBanlist = Object.keys(banlist).find(function(list) {
-                return list;
-            });
-        }
         return (prop) ? banlist[activeBanlist][prop] : banlist[activeBanlist].bannedCards;
     }
 
@@ -298,11 +293,12 @@ var databaseSystem = (function() {
         $('.banlistSelect').html('');
         Object.keys(banlist).forEach(function(list) {
             var selected = (banlist[list].primary) ? 'selected' : '';
-            if (selected) {
+            if (activeBanlist) {
                 activeBanlist = list;
             }
             $('.banlistSelect, #creategamebanlist').append('<option ' + selected + ' value="' + list + '">' + list + '</option>');
         });
+
         $.getJSON('/manifest/manifest_0-en-OCGTCG.json', function(data) {
             dbs.OCGTCG = data;
             completedatabase = dbs.OCGTCG;
@@ -312,9 +308,7 @@ var databaseSystem = (function() {
             if (internalLocal === 'deckedit') {
                 deckeditloader();
             }
-            if (!window.loggedIn) {
-                singlesitenav('home');
-            }
+            singlesitenav('home');
             if (localStorage.session) {
                 $.getJSON('api/session/' + localStorage.session, function(userInfo) {
                     console.log(userInfo);

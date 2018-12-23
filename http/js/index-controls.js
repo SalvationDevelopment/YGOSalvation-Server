@@ -391,7 +391,7 @@ function processLogin(data) {
             action: 'load'
         });
         if (info.decks) {
-            window.deckEditor.loadDecks(info.decks);
+            window.decks = info.decks;
         }
     } else {
         if (info.message) {
