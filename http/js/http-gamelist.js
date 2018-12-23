@@ -244,12 +244,12 @@ function getDuelRequest() {
         stnds = isChecked('#usepass') ? ',5,1,L,' : ',5,1,U,',
         randneed = ($('#creategamebanlist').val() > 9) ? 4 : 5;
     out = {
-        string: pretypecheck + $('#creategamecardpool').val() + $('#creategameduelmode').val() + $('#creategametimelimit').val() + $('#enableprerelease').val(),
-        checkd: isChecked('#discheckdeck') ? ('T') : ('O'),
-        shuf: isChecked('#disshuffledeck') ? ('T') : ('O'),
-        stnds: ',' + $('#creategamebanlist').val() + stnds,
-        pass: isChecked('#usepass') ? setpass() : randomString(randneed)
-
+        OT: Number($('#creategamecardpool').val()),
+        MODE: Number($('#creategamecardpool').val()),
+        DECK_CHECK: !isChecked('#discheckdeck'),
+        SHUFFLE: !isChecked('#disshuffledeck'),
+        BANLIST: $('#creategamebanlist').val(),
+        PASSWORD: isChecked('#usepass') ? setpass() : ''
     };
 
 
@@ -341,7 +341,7 @@ function parseDuelOptions(duelOptions) {
         timeLimit: duelOptions.time ? '3 minutes' : '5 minutes',
         //Use classic TCG rules?
         isTCGRuled: duelOptions.cardpool ? 'OCG rules' : 'TCG Rules',
-
+        ot: duelOptions.ot,
         //Check Deck for Illegal cards?
         isDeckChecked: duelOptions.deckcheck ? 'Check' : 'Dont Check',
 
@@ -370,7 +370,7 @@ function parseDuelOptions(duelOptions) {
     };
 
 
-
+    settings.cardpool = duelOptions.cardpool;
     //Determine allowed cards
     if (duelOptions.cardpool === 0) {
         settings.allowedCards = 'OCG';
@@ -433,7 +433,7 @@ function preformfilter(translated, players, rooms, started, pid, watchers) {
         //console.log(translated);
         content = '<div class="game ' + rooms + ' ' + started + ' ' + translated.isLocked + ' ' + translated.gameMode;
         content += '"onclick=enterGame("' + rooms + '",' + translated.isLocked + ')';
-        content += ' data-roomid="' + rooms + '" data-' + game + '="' + translated.legality + '"data-killpoint="' + pid + '">' + duelist + spectators;
+        content += ' data-roomid="' + rooms + '" data-' + game + '="' + translated.ot + translated.legality + '"data-killpoint="' + pid + '">' + duelist + spectators;
         content += '<span class="subtext" style="font-size:.5em"><br>' + translated.gameMode;
         content += ' ' + $('#creategamebanlist option[value=' + translated.banlist + ']').text() + ' ' + translated.poolFormat + '</div>';
     }
