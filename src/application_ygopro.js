@@ -12,20 +12,22 @@
  * @property {String} action game model manipulation or general action to take place. 
  * @property {Deck} deck deck for validation and use
  * @property {String} [username] clients username.
+ * @property {String} [session] uuid session identifier.
  * @property {String} [validationKey] clients validation key from authentication server. 
  */
 
 /**
  * @typedef {Object} Deck
- * @property {Number[]} main Passcode/YGOPRO_ID of cards in the main deck
- * @property {Number[]} extra Passcode/YGOPRO_ID cards in the extra deck
- * @property {Number[]} side Passcode/YGOPRO_ID cards in the side deck
+ * @property {Number[]} main Passcode/YGOPRO_ID of cards in the main deck.
+ * @property {Number[]} extra Passcode/YGOPRO_ID cards in the extra deck.
+ * @property {Number[]} side Passcode/YGOPRO_ID cards in the side deck.
  */
 
 /**
  * @typedef {Deck} PlayerAbstraction
  * @property {Function} write Send data to clients
  */
+
 
 const banlist = './http/manifest/banlist.json',
     database = require('../http/manifest/manifest_0-en-OCGTCG.json'),
@@ -149,9 +151,6 @@ function reconnect(server, client, message) {
     if (!server.game.reconnection[message.room]) {
         return;
     }
-    if (server.game.reconnection[message.room]) {
-        return;
-    }
     if (server.game.reconnection[message.room] = client.username) {
         client.join(message.room);
     }
@@ -163,7 +162,7 @@ function reconnect(server, client, message) {
 
 /**
  * Join the user to a room
- * @param {Error|Null} error unlikely websocket Adapter error.
+ * @param {Error|Null} error unlikely websocket Adapter error.  "haha, unlikely."
  * @param {Primus} server Primus instance.
  * @param {Spark} client connected websocket and Primus user (spark in documentation).
  * @return {undefined}
@@ -206,19 +205,20 @@ function attemptJoin(server, client) {
 }
 
 /**
- * Remove the user from a specificed splot.
+ * Remove the user from a specificed slot.
  * @param {Primus} server Primus instance.
  * @param {Message} message JSON communication sent from client. 
  * @param {String} user user that requested that slot leave.
  * @returns {undefined}
  */
 function spectate(server, message, user) {
-    if (server.game.player[message.slot]) {
-        server.game.player[message.slot].write(({
+    const slot = message.slot;
+    if (server.game.player[slot]) {
+        server.game.player[slot].write(({
             action: 'leave',
             user: user
         }));
-        server.game.player[message.slot].join('spectators', function(error) {
+        server.game.player[slot].join('spectators', function(error) {
             if (error) {
                 throw error;
             }
@@ -226,7 +226,7 @@ function spectate(server, message, user) {
         });
         return;
     }
-    server.game.player[message.slot].join('spectators', function(error) {
+    server.game.player[slot].join('spectators', function(error) {
         if (error) {
             throw error;
         }
@@ -278,17 +278,17 @@ function deckCheck(server, client, message) {
         server.game.cardpool,
         server.game.prerelease);
 
-    if (message.validate) {
-        if (message.validate.error) {
-            client.write(({
-                errorType: 'validation',
-                action: 'error',
-                error: message.validate.error,
-                msg: message.validate.msg
-            }));
-            return false;
-        }
+
+    if (message.validate.error) {
+        client.write(({
+            errorType: 'validation',
+            action: 'error',
+            error: message.validate.error,
+            msg: message.validate.msg
+        }));
+        return false;
     }
+
     client.write(({
         action: 'lock',
         result: 'success'
@@ -345,6 +345,7 @@ function PlayerAbstraction(server, room, client) {
 
 /**
  * Determine who goes first via a coin toss.
+ * Its stupid but humans like feeling in control.
  * @param {Primus} server Primus instance.
  * @param {Spark} client connected websocket and Primus user (spark in documentation).
  * @returns {undefined}
@@ -397,7 +398,7 @@ function start(server, client, message) {
         ],
         spectators = [new PlayerAbstraction(server, 'spectators', {})];
 
-
+    // This is the part where everything goes wrong.
     ocgcore.duel(server.game, players, spectators);
 }
 
@@ -578,6 +579,38 @@ function boot(httpserver, server, port) {
 }
 
 /**
+ * Create a game object
+ * @param {Object} settings enviromental variables.
+ * @returns {Game} application state instance.
+ */
+function Game(settings) {
+    return {
+        chat: [],
+        banlist: settings.BANLIST || 'No Banlist',
+        banlistid: settings.BANLIST_ID,
+        cardpool: settings.CARD_POOL || 0,
+        deckcheck: settings.DECK_CHECK || false,
+        draw_count: settings.DRAW_COUNT || 1,
+        legacyfield: settings.LEGACY || false,
+        masterRule: settings.MASTER_RULE || 4,
+        mode: settings.MODE || 0,
+        ot: settings.OT || 0,
+        port: settings.PORT,
+        player: [],
+        priority: false,
+        reconnection: {},
+        prerelease: settings.PRERELEASE || true,
+        roompass: settings.ROOMPASS || uuid(),
+        rule: settings.RULE || 0,
+        shuffleDeck: settings.SHUFFLE || false,
+        started: false,
+        startLP: settings.LIFEPOINTS || 8000,
+        start_hand_count: settings.STARTING_HAND || 5,
+        time: settings.TIME_LIMIT || 3000,
+        verification: uuid()
+    };
+}
+/**
  * Start the server.
  * @param {Function} callback replacement for process.send
  * @returns {undefined}
@@ -590,31 +623,7 @@ function main(callback) {
             parser: 'JSON'
         });
 
-    server.game = {
-        priority: false,
-        draw_count: process.env.DRAW_COUNT || 1,
-        start_hand_count: process.env.STARTING_HAND || 5,
-        time: process.env.TIME_LIMIT || 3000,
-        shuffleDeck: process.env.SHUFFLE || false,
-        startLP: process.env.LIFEPOINTS || 8000,
-        roompass: process.env.ROOMPASS || uuid(),
-        verification: uuid(),
-        started: false,
-        deckcheck: process.env.DECK_CHECK || false,
-        ot: process.env.OT || 0,
-        banlist: process.env.BANLIST || 'No Banlist',
-        banlistid: process.env.BANLIST_ID,
-        mode: process.env.MODE || 0,
-        cardpool: process.env.CARD_POOL || 0,
-        prerelease: process.env.PRERELEASE || true,
-        masterRule: process.env.MASTER_RULE || 4,
-        legacyfield: process.env.LEGACY || false,
-        rule: process.env.RULE || 0,
-        player: [],
-        chat: [],
-        reconnection: {},
-        port: port
-    };
+    server.game = new Game(process.env);
 
     server.plugin('rooms', Rooms);
     server.save(__dirname + '/../http/js/vendor/server.js');

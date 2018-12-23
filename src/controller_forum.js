@@ -57,7 +57,7 @@ var validationCache = {},
         signiture: String
     }),
     Forum = new Schema({
-        sort :  { type: Number, default: 0 },
+        sort: { type: Number, default: 0 },
         title: String,
         slug: String,
         description: String,
@@ -72,7 +72,7 @@ var validationCache = {},
         icon: String
     }),
     Index = new Schema({
-        sort :  { type: Number, default: 0 },
+        sort: { type: Number, default: 0 },
         title: String,
         slug: String,
         description: String,
@@ -88,9 +88,11 @@ var validationCache = {},
 
 
 
-var db = mongoose.connect('mongodb://localhost/salvation');
-
-
+var db = mongoose.connect('mongodb://localhost/salvation', function(error, connection) {
+    if (error) {
+        console.log(error);
+    }
+});
 
 function sessionTimeout(time) {
     if (!time) {
@@ -108,7 +110,7 @@ function sessionCheck(request, response, next) {
         return;
     }
 
-    Users.findOne({ session }, function (error, person) {
+    Users.findOne({ session }, function(error, person) {
         if (error) {
             response.status(500);
             response.json({ code: 500, error });
@@ -134,7 +136,7 @@ function sessionCheck(request, response, next) {
 
 function adminSessionCheck(request, response, next) {
     var session = request.get('Session') || '';
-    Users.findOne({ session, admin: true }, function (error, person) {
+    Users.findOne({ session, admin: true }, function(error, person) {
         if (error) {
             response.status(500);
             response.json({ code: 500, error });
@@ -164,7 +166,7 @@ function checkForum(definition, callback) {
     if (!definition.index && definition.forum) {
         callback(null, false);
     }
-    Indexes.findOne({ slug: definition.index }, function (error, index) {
+    Indexes.findOne({ slug: definition.index }, function(error, index) {
         if (error) {
             callback(error, false);
             return;
@@ -174,12 +176,12 @@ function checkForum(definition, callback) {
             return;
         }
         var subforum,
-            forum = index.categories.find(function (sub) {
+            forum = index.categories.find(function(sub) {
                 return sub.slug === definition.forum;
             });
 
         if (forum && definition.subForum) {
-            subforum = forum.subforums.find(function (sub) {
+            subforum = forum.subforums.find(function(sub) {
                 return sub === definition.subForum;
             });
 
@@ -192,7 +194,7 @@ function checkForum(definition, callback) {
 }
 
 function finalResponse(response) {
-    return function (error, result, numAffected) {
+    return function(error, result, numAffected) {
         if (error) {
             response.status(500);
             response.send({
@@ -219,7 +221,7 @@ function createPost(request, response) {
         post = new Posts(),
         slug = [(new Date()).getTime()];
 
-    checkForum(data.forum, function (error, valid) {
+    checkForum(data.forum, function(error, valid) {
         if (error) {
             response.status(500);
             response.send({
@@ -238,7 +240,7 @@ function createPost(request, response) {
             response.end();
             return;
         }
-        data.title.split(' ').forEach(function (element) {
+        data.title.split(' ').forEach(function(element) {
             slug.push(element.toLowerCase());
         });
 
@@ -261,7 +263,7 @@ function createPost(request, response) {
 
 function updatePost(request, response) {
     var data = request.body;
-    Posts.findById(data.id, function (error, post) {
+    Posts.findById(data.id, function(error, post) {
         if (error) {
             response.status(500);
             response.send({
@@ -301,7 +303,7 @@ function updatePost(request, response) {
 
 function createComment(request, response) {
     var data = request.body;
-    Post.findById(data.parent, function (error, post) {
+    Post.findById(data.parent, function(error, post) {
         if (error) {
             response.status(500);
             response.send({
@@ -336,7 +338,7 @@ function createComment(request, response) {
 function updateComment(request, response) {
     var data = request.body,
         id = data._id;
-    Comments.findById(data.parent, function (error, post) {
+    Comments.findById(data.parent, function(error, post) {
         if (error) {
             response.status(500);
             response.send({
@@ -386,7 +388,7 @@ function updateComment(request, response) {
 }
 
 function getIndexes(request, response) {
-    Indexes.find({}, function (error, indexes) {
+    Indexes.find({}, function(error, indexes) {
         if (error) {
             response.status(500);
             response.send({
@@ -398,7 +400,7 @@ function getIndexes(request, response) {
             response.end();
             return;
         }
-        Posts.find({}, function (error, posts) {
+        Posts.find({}, function(error, posts) {
             if (error) {
                 response.status(500);
                 response.send({
@@ -408,7 +410,7 @@ function getIndexes(request, response) {
                 response.end();
                 return;
             }
-            posts.sort(function (reference, compared) {
+            posts.sort(function(reference, compared) {
                 return reference.updated - compared.updated;
             });
             if (posts.length > 10) {
@@ -428,7 +430,7 @@ function getIndexes(request, response) {
 function getSession(request, response) {
     var session = request.params.session;
 
-    Users.findOne({ session }, function (error, person) {
+    Users.findOne({ session }, function(error, person) {
         if (error) {
             finalResponse(response)(error);
         }
@@ -465,12 +467,12 @@ function getForum(request, response) {
 }
 
 function updateLastestPost(index) {
-    index.categories.forEach(function (forum) {
+    index.categories.forEach(function(forum) {
         Posts.find({
             'forum.index': index.slug,
             'forum.forum': forum.slug
-        }, function (error, posts) {
-            posts.sort(function (reference, compared) {
+        }, function(error, posts) {
+            posts.sort(function(reference, compared) {
                 return reference.updated - compared.updated;
             });
             forum.lastPost = posts[0];
@@ -481,14 +483,14 @@ function updateLastestPost(index) {
 }
 
 function jobs() {
-    Indexes.find({}, function (error, indexes) {
-        indexes.forEach(function (index) {
+    Indexes.find({}, function(error, indexes) {
+        indexes.forEach(function(index) {
             updateLastestPost(index);
         });
     });
 }
 
-module.exports = function (app) {
+module.exports = function(app) {
     app.use('/api/post', sessionCheck);
     app.use('/api/comment', sessionCheck);
     app.use('/api/admin', adminSessionCheck);
@@ -500,9 +502,9 @@ module.exports = function (app) {
     app.get('/api/session/:session', getSession);
 
 
-    app.get('/api/post/:id', function (request, response) {
+    app.get('/api/post/:id', function(request, response) {
         var id = request.params.id;
-        Posts.findById(id, function (error, results) {
+        Posts.findById(id, function(error, results) {
             response.json({
                 error,
                 results
@@ -518,7 +520,7 @@ module.exports = function (app) {
 
 
 
-    app.post('/api/admin/forum/add', function (request, response) {
+    app.post('/api/admin/forum/add', function(request, response) {
         var payload = request.body || {},
             user;
         if (!payload.slug) {
@@ -535,7 +537,7 @@ module.exports = function (app) {
             return;
         }
 
-        Indexes.findOne({ 'slug': payload.slug }, function (err, index) {
+        Indexes.findOne({ 'slug': payload.slug }, function(err, index) {
             if (err) {
                 response.send({
                     err,
@@ -552,10 +554,10 @@ module.exports = function (app) {
                 });
                 response.end();
             } else if (!index && payload.parent) {
-                Indexes.findOne({ 'slug': payload.parent }, function (err, parent) {
-                    if (err || !parent || parent.categories.some(function (sub) {
-                        return sub.slug === payload.slug;
-                    })) {
+                Indexes.findOne({ 'slug': payload.parent }, function(err, parent) {
+                    if (err || !parent || parent.categories.some(function(sub) {
+                            return sub.slug === payload.slug;
+                        })) {
                         response.send({
                             err,
                             parent,
@@ -566,7 +568,7 @@ module.exports = function (app) {
                     }
 
                     parent.categories.push(payload);
-                    parent.save(payload, function (error, result, numAffected) {
+                    parent.save(payload, function(error, result, numAffected) {
                         if (error) {
                             // already exist
                             response.send({
@@ -589,7 +591,7 @@ module.exports = function (app) {
                     });
                 });
             } else if (!payload.parent) {
-                Indexes.create(payload, function (error, result, numAffected) {
+                Indexes.create(payload, function(error, result, numAffected) {
                     response.send({
                         result: result,
                         success: true,

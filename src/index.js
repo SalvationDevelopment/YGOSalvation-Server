@@ -46,13 +46,9 @@ function mapCards(deck) {
     });
 }
 
-
-
-
 function announce(announcement) {
     primus.write(announcement);
 }
-
 
 function massAck() {
     acklevel = 0;
@@ -63,18 +59,6 @@ function massAck() {
         serverEvent: 'ack'
     });
 }
-
-
-setInterval(function() {
-    announce({
-        clientEvent: 'ackresult',
-        ackresult: acklevel,
-        userlist: userlist
-    });
-    massAck();
-}, 15000);
-
-
 
 function registrationCall(data, socket) {
     userController.validate(true, data, function(error, valid, info) {
@@ -453,3 +437,12 @@ primus.on('connection', function(socket) {
         }
     });
 });
+
+setInterval(function() {
+    announce({
+        clientEvent: 'ackresult',
+        ackresult: acklevel,
+        userlist: userlist
+    });
+    massAck();
+}, 15000);
