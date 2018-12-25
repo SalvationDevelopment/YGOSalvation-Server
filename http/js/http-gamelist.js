@@ -183,7 +183,7 @@ function enterGame(string, pass, port) {
         alertmodal('Firefox isnt supported at this time, please use Google Chrome.');
         return;
     }
-    window.open('/ygopro.html?duel=' + port);
+    window.open('/ygopro.html?room=' + port);
 }
 
 function joinTournament() {
@@ -350,7 +350,9 @@ function parseDuelOptions(duelOptions) {
         isLocked: Boolean(duelOptions.locked),
 
         //Copy password
-        password: duelOptions.roompass
+        password: duelOptions.roompass,
+
+        port: duelOptions.port
     };
 
 
@@ -416,7 +418,7 @@ function preformfilter(translated, players, rooms, started, pid, watchers) {
         duelist = (translated.gameMode === 'Single' || translated.gameMode === 'Match') ? players[0] + ' vs ' + players[1] : players[0] + ' &amp ' + players[1] + ' vs ' + players[2] + ' &amp ' + players[3];
         //console.log(translated);
         content = '<div class="game ' + rooms + ' ' + started + ' ' + translated.isLocked + ' ' + translated.gameMode;
-        content += '"onclick=enterGame("' + rooms + '",' + translated.isLocked + ')';
+        content += '"onclick=enterGame("' + rooms + '",' + translated.isLocked + ',' + translated.port + ')';
         content += ' data-roomid="' + rooms + '" data-' + game + '="' + translated.ot + translated.legality + '"data-killpoint="' + pid + '">' + duelist + spectators;
         content += '<span class="subtext" style="font-size:.5em"><br>' + translated.gameMode;
         content += ' ' + $('#creategamebanlist option[value=' + translated.banlist + ']').text() + ' ' + translated.poolFormat + '</div>';
@@ -442,10 +444,10 @@ function renderList(JSONdata) {
 
     for (rooms in JSONdata) {
         if (JSONdata.hasOwnProperty(rooms)) {
-            player1 = (JSONdata[rooms].player[0]) ? '<label class="playername">' + JSONdata[rooms].player[0] + '</label>' : '___';
-            player2 = (JSONdata[rooms].player[1]) ? '<label class="playername">' + JSONdata[rooms].player[1] + '</label>' : '___';
-            player3 = (JSONdata[rooms].player[2]) ? '<label class="playername">' + JSONdata[rooms].player[2] + '</label>' : '___';
-            player4 = (JSONdata[rooms].player[3]) ? '<label class="playername">' + JSONdata[rooms].player[3] + '</label>' : '___';
+            player1 = (JSONdata[rooms].player[0]) ? '<label class="playername">' + JSONdata[rooms].player[0].username + '</label>' : '___';
+            player2 = (JSONdata[rooms].player[1]) ? '<label class="playername">' + JSONdata[rooms].player[1].username + '</label>' : '___';
+            player3 = (JSONdata[rooms].player[2]) ? '<label class="playername">' + JSONdata[rooms].player[2].username + '</label>' : '___';
+            player4 = (JSONdata[rooms].player[3]) ? '<label class="playername">' + JSONdata[rooms].player[3].username + '</label>' : '___';
             started = (JSONdata[rooms].started) ? 'started' : 'avaliable';
             translated = parseDuelOptions(JSONdata[rooms]);
             players = [player1, player2, player3, player4];
@@ -609,7 +611,7 @@ function pondata(data) {
             alertmodal('Saved');
         }
         if (data.clientEvent === 'lobby') {
-            enterGame(data.roompass, data.password, data.password);
+            enterGame(data.roompass, data.password, data.port);
         }
         if (data.clientEvent === 'chatline') {
             $('#onlinepublicchat').append('<li  data-chatuid="' + data.uid + '"><strong>[' + new Date(data.date).toLocaleTimeString() + ']' + data.from + ':</strong> ' + data.msg + '<span class="admincensor" onclick="censor(' + data.uid + ')"></span></li>');

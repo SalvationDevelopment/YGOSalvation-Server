@@ -77,14 +77,23 @@ function broadcast(server) {
 /**
  * Report back to the client that they are registered.
  * @param {Spark} client connected websocket and Primus user (spark in documentation).
- * @param {Message} message JSON communication sent from client.
+ * @param {Message} person User definition and details.
  * @returns {undefined}
  */
-function enableClient(client, message) {
-    client.username = message.username;
+function enableClient(client, person) {
+    client.username = person.username;
+    client.avatar = person.avatar;
+    client.ranking = person.ranking;
     client.write({
         action: 'registered'
     });
+
+    if (person.decks) {
+        client.write({
+            action: 'decks',
+            decks: person.decks
+        });
+    }
 }
 
 /**
@@ -171,8 +180,10 @@ function reconnect(server, client, message) {
 function join(error, server, client) {
     function findAvaliableSlot(player, index) {
         if (player) {
+            console.log('player in slot', index);
             return false;
         }
+        console.log(client.username, 'assigning slot', index);
         client.slot = index;
         server.game.player[index] = client;
         broadcast(server);
@@ -183,12 +194,23 @@ function join(error, server, client) {
         throw error;
     }
 
-    const isPlayer = server.game.players.some(findAvaliableSlot);
-    if (!isPlayer) {
-        client.join('spectator', function() {
-            broadcast(server);
+    if (server.game.player.length < 2) {
+        client.slot = server.game.player.length;
+        server.game.player.push({
+            ready: Boolean(client.ready),
+            ranking: client.ranking,
+            slot: client.slot,
+            settings: client.settings,
+            username: client.username
         });
+        broadcast(server);
+        return;
     }
+
+    client.join('spectator', function() {
+        broadcast(server);
+    });
+
 }
 
 /**
@@ -274,7 +296,7 @@ function surrender(server, message) {
 function deckCheck(server, client, message) {
 
     message.validate = validateDeck(message.deck,
-        banlist[server.game.banlist],
+        banlist,
         database,
         server.game.cardpool,
         server.game.prerelease);
@@ -310,7 +332,7 @@ function lock(server, client, message) {
         return;
     }
     try {
-        client.ready = deckCheck(client, message, banlist);
+        client.ready = deckCheck(server, client, message);
     } catch (error) {
         server.game.player[client.slot].ready = false;
         throw error;
@@ -425,7 +447,7 @@ function respond(server, client, message) {
  * @returns {undefined}
  */
 function controller(server, client, message) {
-    //console.log(message);
+    console.log(message);
     if (!message.action) {
         return;
     }

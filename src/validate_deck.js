@@ -3,6 +3,7 @@
 function validateDeck(deck, banlist, database, cardpool, prerelease) {
     'use strict';
     //console.log(database[0], database.length);
+    cardpool = cardpool || 'OCG/TCG';
     var main = {},
         side = {},
         extra = {},

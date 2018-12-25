@@ -18,11 +18,7 @@
                     <input type="radio" name="ranked" value="R" />Yes
                     <input type="radio" name="ranked" value="U" checked />No
                     <br />-->
-            <label data-translation-currentdeck class="notneededinweb">Current Deck</label>
-            <select class='currentdeck notneededinweb'>
-                        <option selected value=""></option>
-                    </select>
-            </br>
+
             <label data-translation-cardpool>Card Pool</label>
             <select id="creategamecardpool">
                         <option value="0">OCG</option>
@@ -101,9 +97,6 @@
             Object.keys(banlist).forEach(function(list) {
                 var selected = (banlist[list].primary) ? 'selected' : '';
                 $('.banlistSelect, #creategamebanlist').append('<option ' + selected + ' value="' + list + '">' + list + '</option>');
-            });
-            window.decks.forEach(function(deck, index) {
-                $('.currentdeck ').append('<option value="' + index + '">' + deck.name + '</option>');
             });
         });
     </script>

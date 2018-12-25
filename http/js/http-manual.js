@@ -278,60 +278,6 @@ function getAvatar(name) {
     });
 }
 
-function updateloby(state) {
-    'use strict';
-    if (state === undefined) {
-        return;
-    }
-    legacyMode = state.legacyfield;
-    autoygopro = state.automatic;
-    $('#player1lobbyslot').val(state.player[0].name);
-    $('#player2lobbyslot').val(state.player[1].name);
-    //    $('#player3lobbyslot').val(state.player[2].name);
-    //    $('#player4lobbyslot').val(state.player[3].name);
-    $('#slot1 .lockindicator').attr('data-state', state.player[0].ready);
-    $('#slot2 .lockindicator').attr('data-state', state.player[1].ready);
-    //    $('#slot3 .lockindicator').attr('data-state', state.player[2].ready);
-    //    $('#slot4 .lockindicator').attr('data-state', state.player[3].ready);
-    $('#lobbytimelimit').text(state.timelimit + ' seconds');
-    $('#lobbyflist').text(state.banlist);
-    $('#lobbylp').text(state.startLP);
-    $('#lobbycdpt').text(state.drawcount);
-    $('#lobbyallowed').text(state.cardpool);
-    $('#lobbygamemode').text(state.mode);
-    $('#lobbyprerelease').text(state.prerelease);
-    if (state.ishost) {
-        $('#lobbystart').css('display', 'inline-block');
-    } else {
-        $('#lobbystart').css('display', 'none');
-    }
-
-    if ($('#creategameduelmode option').eq(state.mode).text() === 'Tag') {
-        $('.slot').eq(2).css('display', 'block');
-        $('.slot').eq(3).css('display', 'block');
-    } else {
-        $('.slot').eq(2).css('display', 'none');
-        $('.slot').eq(3).css('display', 'none');
-    }
-    getAvatar(state.player[0].name);
-    getAvatar(state.player[1].name);
-    setTimeout(function() {
-        if (avatarMap[state.player[0].name]) {
-            $('#p0avatar').attr('src', avatarMap[state.player[0].name]);
-        } else {
-            $('#p0avatar').attr('src', '/img/newgiohtoken.png');
-        }
-        if (avatarMap[state.player[1].name]) {
-            $('#p1avatar').attr('src', avatarMap[state.player[1].name]);
-        } else {
-            $('#p1avatar').attr('src', '/img/newgiohtoken.png');
-        }
-        $('.p0name').html(state.player[0].name);
-        $('.p1name').html(state.player[1].name);
-    }, 3000);
-
-
-}
 
 var sidedDeck = {};
 
@@ -418,11 +364,6 @@ function makeGames() {
     $('#activeduelist').text(duelist);
 }
 
-
-
-
-
-
 function getdeck() {
     'use strict';
 
@@ -430,7 +371,7 @@ function getdeck() {
         return Number(card.id);
     }
     var selection = $('#lobbycurrentdeck .currentdeck').val() || 0,
-        deck = deckEditor.getDeck(selection),
+        deck = window.decks[Number(selection)],
         main = deck.main.map(getter),
         side = deck.side.map(getter),
         extra = deck.extra.map(getter);
@@ -1187,12 +1128,7 @@ function manualReciver(message) {
     if (message.info !== undefined) {
         updateChat(message.info.duelistChat, message.info.spectatorChat);
     }
-    if (broadcast) {
-        if (activegame) {
-            updateloby(broadcast[activegame]);
-        }
 
-    }
     console.log('manualReciver', message);
     if (message.error) {
         if (internalLocal === 'surrendered') {
@@ -1206,32 +1142,8 @@ function manualReciver(message) {
     switch (message.duelAction) {
         case 'ygopro':
             ygoproController(message);
-        case 'ack':
-            primus.write(({
-                action: 'ack',
-                game: activegame
-            }));
-            break;
-        case 'register':
-            primus.write(({
-                action: 'register',
-                name: localStorage.nickname
-            }));
-            break;
-        case 'lobby':
-            singlesitenav('lobby');
-            activegame = message.game;
-            updateloby(broadcast[activegame]);
-            break;
-        case 'broadcast':
-            broadcast = message.data;
-            if (activegame) {
-                updateloby(broadcast[activegame]);
-            }
-            makeGames();
             break;
         case 'kick':
-            singlesitenav('gamelist');
             break;
         case 'sound':
             sound.play(message.sound);
@@ -1451,11 +1363,12 @@ function surrender() {
 function manualLock() {
     'use strict';
     var deck = getdeck();
+    primus.write(({
+        action: 'lock',
+        deck: deck
+    }));
     if (deck.main.length > 39) {
-        primus.write(({
-            action: 'lock',
-            deck: deck
-        }));
+
     } else {
         alertmodal('Main Deck is less than 40 cards, please choose another deck.');
     }

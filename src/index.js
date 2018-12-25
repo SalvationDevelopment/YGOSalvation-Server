@@ -273,10 +273,13 @@ function childHandler(child, socket, message) {
             userController.validateSession({
                 session: message.session
             }, function(error, valid, person) {
-                child.write({
+                child.send({
+                    action: 'register',
                     error,
-                    valid,
-                    person
+                    person,
+                    session: message.session,
+                    valid
+
                 });
             });
             break;

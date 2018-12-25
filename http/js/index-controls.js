@@ -393,9 +393,9 @@ function processLogin(data) {
             username: localStorage.nickname,
             action: 'load'
         });
-        if (info.decks) {
-            window.decks = info.decks;
-        }
+
+        window.decks = info.decks;
+        localStorage.decks = info.decks;
     } else {
         if (info.message) {
             alertmodal(info.message);

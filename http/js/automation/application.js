@@ -5,9 +5,9 @@
 
 
 
-
-var primusprotocol = (location.protocol === 'https:') ? 'wss://' : 'ws://',
-    primus = window.Primus.connect(primusprotocol + location.host);
+var urlParams = new URLSearchParams(window.location.search),
+    primusprotocol = (location.protocol === 'https:') ? 'wss://' : 'ws://',
+    primus = window.Primus.connect(primusprotocol + location.host + ':' + urlParams.get('room'));
 
 function updateloby(state) {
     'use strict';
@@ -15,19 +15,29 @@ function updateloby(state) {
         return;
     }
     //legacyMode = state.legacyfield;
-    $('#player1lobbyslot').val(state.player[0].name);
-    $('#player2lobbyslot').val(state.player[1].name);
-    //    $('#player3lobbyslot').val(state.player[2].name);
-    //    $('#player4lobbyslot').val(state.player[3].name);
-    $('#slot1 .lockindicator').attr('data-state', state.player[0].ready);
-    $('#slot2 .lockindicator').attr('data-state', state.player[1].ready);
-    //    $('#slot3 .lockindicator').attr('data-state', state.player[2].ready);
-    //    $('#slot4 .lockindicator').attr('data-state', state.player[3].ready);
+    var p1 = (state.player[0]) ? state.player[0].username : '',
+        p2 = (state.player[1]) ? state.player[1].username : '',
+        p3 = (state.player[2]) ? state.player[2].username : '',
+        p4 = (state.player[3]) ? state.player[3].username : '',
+        r1 = (state.player[0]) ? state.player[0].ready : '',
+        r2 = (state.player[1]) ? state.player[1].ready : '',
+        r3 = (state.player[2]) ? state.player[2].ready : '',
+        r4 = (state.player[3]) ? state.player[3].ready : '',
+        cardpool = state.cardpool ? 'OCG rules' : 'TCG Rules'
+
+    $('#player1lobbyslot').val(p1);
+    $('#player2lobbyslot').val(p2);
+    //    $('#player3lobbyslot').val(p3);
+    //    $('#player4lobbyslot').val(p4);
+    $('#slot1 .lockindicator').attr('data-state', r1);
+    $('#slot2 .lockindicator').attr('data-state', r2);
+    //    $('#slot3 .lockindicator').attr('data-state', r3);
+    //    $('#slot4 .lockindicator').attr('data-state', r4);
     $('#lobbytimelimit').text(state.timelimit + ' seconds');
     $('#lobbyflist').text(state.banlist);
     $('#lobbylp').text(state.startLP);
     $('#lobbycdpt').text(state.drawcount);
-    $('#lobbyallowed').text(state.cardpool);
+    $('#lobbyallowed').text(cardpool);
     $('#lobbygamemode').text(state.mode);
     $('#lobbyprerelease').text(state.prerelease);
     if (state.ishost) {
@@ -46,18 +56,23 @@ function updateloby(state) {
 }
 
 function duelController(message) {
-    switch (message.duelAction) {
+    switch (message.action) {
         case 'lobby':
             updateloby(message.game);
             break;
         case 'registered':
             primus.write({
-                action: 'join',
-                game: 'default_game',
-                name: 'username',
-                key: 'randomloginstring'
+                action: 'join'
             });
+            break;
+        case 'decks':
+            message.decks.forEach(function(deck, index) {
+                $('.currentdeck').append('<option value="' + index + '">' + deck.name + '</option>');
+            });
+            window.decks = message.decks;
+            break;
     }
+
 }
 primus.on('data', function(data) {
     console.log(data);
@@ -69,12 +84,9 @@ primus.on('data', function(data) {
 primus.on('open', function() {
     console.log('connected');
     primus.write({
-        action: 'ping'
-    });
-    primus.write({
         action: 'register',
-        name: 'username',
-        key: 'randomloginstring'
+        usernamename: localStorage.nickname,
+        session: localStorage.session
     });
 });
 

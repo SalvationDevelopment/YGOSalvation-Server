@@ -305,7 +305,7 @@ var databaseSystem = (function() {
             console.log(activeBanlist);
             setDatabase(['OCGTCG']);
             window.decks = window.decks || [];
-            window.deckEditor.loadDecks(window.decks);
+            window.deckEditor.loadDecks(localStorage.decks);
             if (internalLocal === 'deckedit') {
                 deckeditloader();
             }
