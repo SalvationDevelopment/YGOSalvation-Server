@@ -575,6 +575,7 @@ function boot(httpserver, server, port) {
         process.send({
             action: 'ready',
             roompass: server.game.roompass,
+            password: server.state.password,
             port: port
         });
     });

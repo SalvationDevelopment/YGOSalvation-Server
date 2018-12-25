@@ -32,7 +32,7 @@ $.fn.urlize = function() {
 };
 
 function applySettings() {
-    'use strict';
+
     $('[data-localhost]').each(function() {
         var property = $(this).attr('data-localhost'),
             value = (localStorage[property] === '1') ? true : false;
@@ -52,7 +52,7 @@ function applySettings() {
 applySettings();
 
 function saveSettings() {
-    'use strict';
+
     $('[data-localhost]').each(function() {
         var property = $(this).attr('data-localhost');
         localStorage[property] = Number($(this).prop('checked'));
@@ -78,12 +78,12 @@ var mode = 'production',
 
 
 function isChecked(id) {
-    'use strict';
+
     return ($(id).is(':checked'));
 }
 
 function ygopro(parameter) {
-    'use strict';
+
     uniqueID = $('#uniqueid').html();
     localStorage.serverport = '8911';
     localStorage.lastport = '8911';
@@ -139,7 +139,7 @@ $('#servermessages').text('Loading interface from server...');
 
 
 function leaveGamelist() {
-    'use strict';
+
     primus.write({
         action: 'leave',
         uniqueID: uniqueID
@@ -147,7 +147,7 @@ function leaveGamelist() {
 }
 
 function hostGame(parameters) {
-    'use strict';
+
     primus.write({
         serverEvent: 'hostgame',
         format: parameters,
@@ -156,7 +156,7 @@ function hostGame(parameters) {
 }
 
 function connectgamelist() {
-    'use strict';
+
     primus.write({
         action: 'join',
         uniqueID: uniqueID
@@ -169,41 +169,25 @@ function connectgamelist() {
 }
 var browser = false;
 
-function enterGame(string, pass) {
-    'use strict';
-    var guess = '';
-    if (browser) {
-        if (navigator.userAgent.toLowerCase().indexOf('firefox') > -1) {
-            alertmodal('Firefox isnt supported at this time, please use Google Chrome.');
-            return;
-        }
-        window.startgame(string);
-        return;
-    }
+function enterGame(string, pass, port) {
 
+    var guess = '';
     if (pass && window.admin !== '1') {
         guess = window.prompt('Password?', guess);
-        if (string.substring(26, 19) !== guess) {
+        if (string !== guess) {
             alertmodal('Wrong Password!');
             return;
         }
     }
-    $('body').css('background-image', 'url(http://ygopro.us/img/magimagiblack.jpg)');
-    localStorage.lastdeck = $('.currentdeck').val();
-    localStorage.roompass = string;
-    localStorage.lastip = '192.99.11.19';
-    ygopro('-j');
-    try {
-        window._gaq.push(['_trackEvent', 'Launcher', 'YGOPro', 'Join Duel']);
-    } catch (e) {}
-    setTimeout(function() {
-        $('body').css('background-image', 'url(http://ygopro.us/img/magimagipinkshadow2.jpg)');
-    }, 3000);
-    //singlesitenav('duelscreen');
+    if (navigator.userAgent.toLowerCase().indexOf('firefox') > -1) {
+        alertmodal('Firefox isnt supported at this time, please use Google Chrome.');
+        return;
+    }
+    window.open('/ygopro.html?duel=' + port);
 }
 
 function joinTournament() {
-    'use strict';
+
     primus.write({
         action: 'joinTournament',
         uniqueID: uniqueID
@@ -211,7 +195,7 @@ function joinTournament() {
 }
 
 function randomString(len, charSet) {
-    'use strict';
+
     charSet = charSet || 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
     var randomPoz,
         i = 0,
@@ -224,7 +208,7 @@ function randomString(len, charSet) {
 }
 
 function setpass() {
-    'use strict';
+
     var pass = randomString(5);
     do {
         if (pass.length !== 5) {
@@ -238,7 +222,7 @@ function setpass() {
 }
 
 function getDuelRequest() {
-    'use strict';
+
     var pretypecheck = '',
         out,
         stnds = isChecked('#usepass') ? ',5,1,L,' : ',5,1,U,',
@@ -261,7 +245,7 @@ function getDuelRequest() {
 }
 
 function getManualDuelRequest() {
-    'use strict';
+
     var pretypecheck = '',
         out,
         stnds = isChecked('#usepass'),
@@ -288,7 +272,7 @@ function getManualDuelRequest() {
 
 
 function setHostSettings() {
-    'use strict';
+
 
     if (isChecked('#useai')) {
         primus.write({
@@ -324,7 +308,7 @@ function setHostSettings() {
 
 
 function parseFilters() {
-    'use strict';
+
     return {
         banList: parseInt($('#filterbanlist option:selected').val(), 10),
         timeLimit: $('#filtertimelimit option:selected').text().toLocaleLowerCase(),
@@ -336,7 +320,7 @@ function parseFilters() {
 }
 
 function parseDuelOptions(duelOptions) {
-    'use strict';
+
     var settings = { //Determine time limit
         timeLimit: duelOptions.time ? '3 minutes' : '5 minutes',
         //Use classic TCG rules?
@@ -398,12 +382,12 @@ function parseDuelOptions(duelOptions) {
 }
 
 function sortMe(a, b) {
-    'use strict';
+
     return a.className < b.className;
 }
 
 function preformfilter(translated, players, rooms, started, pid, watchers) {
-    'use strict';
+
     var OK = true,
         content = '',
         duelist = '',
@@ -441,7 +425,7 @@ function preformfilter(translated, players, rooms, started, pid, watchers) {
 }
 
 function renderList(JSONdata) {
-    'use strict';
+
     var player1,
         player2,
         player3,
@@ -455,6 +439,7 @@ function renderList(JSONdata) {
         spectators = 0;
 
     $('#gamelistitems').html('');
+
     for (rooms in JSONdata) {
         if (JSONdata.hasOwnProperty(rooms)) {
             player1 = (JSONdata[rooms].player[0]) ? '<label class="playername">' + JSONdata[rooms].player[0] + '</label>' : '___';
@@ -482,7 +467,7 @@ function renderList(JSONdata) {
 
 
 function ackback() {
-    'use strict';
+
     primus.write({
         action: 'ack',
         name: localStorage.nickname
@@ -490,7 +475,7 @@ function ackback() {
 }
 
 function setfilter() {
-    'use strict';
+
     renderList(gamelistcache);
 
 }
@@ -502,7 +487,7 @@ var stats24 = 0,
 
 
 function renderPrivateChat() {
-    'use strict';
+
     var chatlist = ['Public'],
         target = '';
     $('#onlineprivatechat').html('');
@@ -531,7 +516,7 @@ function renderPrivateChat() {
 var personOfIntrest = '';
 
 function privateMessage(person) {
-    'use strict';
+
     chatTarget = person || personOfIntrest;
     renderPrivateChat();
     if (chatTarget === 'Public') {
@@ -545,7 +530,7 @@ function privateMessage(person) {
 }
 
 function closeprivatechat(person) {
-    'use strict';
+
     openChats = openChats.filter(function(message) {
         return (message.from === person);
     });
@@ -554,7 +539,7 @@ function closeprivatechat(person) {
 }
 
 function pondata(data) {
-    'use strict';
+
     var join = false,
         time,
         player,
@@ -622,6 +607,9 @@ function pondata(data) {
 
         if (data.clientEvent === 'deckSaved') {
             alertmodal('Saved');
+        }
+        if (data.clientEvent === 'lobby') {
+            enterGame(data.roompass, data.password, data.password);
         }
         if (data.clientEvent === 'chatline') {
             $('#onlinepublicchat').append('<li  data-chatuid="' + data.uid + '"><strong>[' + new Date(data.date).toLocaleTimeString() + ']' + data.from + ':</strong> ' + data.msg + '<span class="admincensor" onclick="censor(' + data.uid + ')"></span></li>');
@@ -725,19 +713,19 @@ function pondata(data) {
 }
 primus.on('data', pondata);
 primus.on('connect', function() {
-    'use strict';
+
     console.log('!!!!!! connect');
     try {
         _gaq.push(['_trackEvent', 'Launcher', 'Primus', 'Init']);
     } catch (e) {}
 });
 primus.on('close', function() {
-    'use strict';
+
     console.log('!!!!!! close');
 });
 
 function killgame(target) {
-    'use strict';
+
     primus.write({
         action: 'killgame',
         username: $('#ips_username').val(),
@@ -748,7 +736,7 @@ function killgame(target) {
 }
 
 ///function joinTournament(target) {
-///    'use strict';
+///    
 ///    primus.write({
 ///        action: 'joinTournament',
 ///        username: $('#ips_username').val(),
@@ -759,7 +747,7 @@ function killgame(target) {
 ///}
 
 function sendglobal(message) {
-    'use strict';
+
     primus.write({
         action: 'global',
         username: $('#ips_username').val(),
@@ -770,7 +758,7 @@ function sendglobal(message) {
 }
 
 function requestglobal() {
-    'use strict';
+
     primus.write({
         action: 'globalrequest',
         username: $('#ips_username').val(),
@@ -783,7 +771,7 @@ function requestglobal() {
 
 
 function censor(messageID) {
-    'use strict';
+
     primus.write({
         action: 'censor',
         username: $('#ips_username').val(),
@@ -793,7 +781,7 @@ function censor(messageID) {
 }
 
 function murder() {
-    'use strict';
+
     primus.write({
         action: 'murder',
         username: $('#ips_username').val(),
@@ -803,7 +791,7 @@ function murder() {
 }
 
 function mindcrush(username) {
-    'use strict';
+
     primus.write({
         action: 'mindcrush',
         username: $('#ips_username').val(),
@@ -813,7 +801,7 @@ function mindcrush(username) {
 }
 
 function revive(username) {
-    'use strict';
+
     primus.write({
         action: 'revive',
         username: $('#ips_username').val(),
@@ -823,7 +811,7 @@ function revive(username) {
 }
 
 function aiRestart() {
-    'use strict';
+
     primus.write({
         action: 'airestart',
         username: $('#ips_username').val(),
@@ -832,7 +820,7 @@ function aiRestart() {
 }
 
 $('body').on('mousedown', '.game', function(ev) {
-    'use strict';
+
     if (window.admin === '1' && ev.which === 3) {
         var killpoint = $(ev.target).attr('data-killpoint'),
             gameID = $(ev.target).attr('data-roomid');
@@ -845,7 +833,7 @@ $('body').on('mousedown', '.game', function(ev) {
     }
 });
 $('body').on('mousedown', '.game', function(ev) {
-    'use strict';
+
     $('#manualcontrols button').css({
         'display': 'none'
     });
@@ -853,7 +841,7 @@ $('body').on('mousedown', '.game', function(ev) {
 
 
 $('body').on('mousedown', 'footer', function(ev) {
-    'use strict';
+
     ev.preventDefault();
     if (admin === '1' && ev.which === 3) {
         if (confirm('Send Global?')) {
@@ -870,7 +858,7 @@ if (localStorage.mindcrushed === true) {
 }
 
 function manualModeGamelistSwitch() {
-    'use strict';
+
 
     $('#manualgamelistitems').css({
         'display': 'block'
@@ -883,14 +871,14 @@ function manualModeGamelistSwitch() {
 manualModeGamelistSwitch();
 
 function mautomaticModeGamelistSwitch() {
-    'use strict';
+
 
 }
 
 
 
 function openusers() {
-    'use strict';
+
     $('#onlinelistwrapper').toggleClass('onlineopen');
     $('#onlinelistwrapper ul').attr('style', '');
     $('#onlineprivatechat').css({
@@ -901,7 +889,7 @@ function openusers() {
 
 
 function chatline(text) {
-    'use strict';
+
     if (chatTarget === 'Public') {
         primus.write({
             action: 'chatline',
@@ -937,7 +925,7 @@ function chatline(text) {
 
 
 $('#publicchat').keypress(function(e) {
-    'use strict';
+
 
     if (e.which === 13) {
         if ($(e.currentTarget).val().length === 0) {
@@ -953,7 +941,7 @@ $('#publicchat').keypress(function(e) {
 
 
 function userlistonclick(person) {
-    'use strict';
+
     personOfIntrest = person;
     if (admin === '1') {
         $('.a-admin').css('display', 'block');
@@ -968,7 +956,7 @@ function userlistonclick(person) {
 }
 
 function duelrequestPerson() {
-    'use strict';
+
 
     //    setHostSettings();
     //    primus.write({

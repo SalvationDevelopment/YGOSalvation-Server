@@ -262,6 +262,7 @@ function childHandler(child, socket, message) {
             announce(gamelist);
             break;
         case 'ready':
+            announce(gamelist);
             socket.write({
                 clientEvent: 'lobby',
                 roompass: message.roompass,
@@ -392,7 +393,10 @@ function onData(data, socket) {
             break;
         case ('host'):
             const child = child_process.fork(
-                './src/application_ygopro.js', [], { env: Object.assign({}, process.env, data.info, { PORT: unsafePort() }) }
+                './application_ygopro.js', process.argv, {
+                    cwd: __dirname,
+                    env: Object.assign({}, process.env, data.info, { PORT: unsafePort() })
+                }
             );
             child.on('message', function(message) {
                 console.log('...', message);
