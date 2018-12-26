@@ -327,12 +327,12 @@ function deckCheck(server, client, message) {
  * @returns {undefined} 
  */
 function lock(server, client, message) {
-    if (client.ready) {
-        client.ready = false;
+    if (server.game.player[client.slot].ready) {
+        server.game.player[client.slot].ready = false;
         return;
     }
     try {
-        client.ready = deckCheck(server, client, message);
+        server.game.player[client.slot].ready = deckCheck(server, client, message);
     } catch (error) {
         server.game.player[client.slot].ready = false;
         throw error;
