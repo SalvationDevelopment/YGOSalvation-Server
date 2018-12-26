@@ -43,6 +43,8 @@ const banlist = './http/manifest/banlist.json',
     validateDeck = require('./validate_deck.js'),
     verificationSystem = new EventEmitter();
 
+let lastInteraction = new Date();
+
 
 /**
  * Start a static HTTP web server.
@@ -145,7 +147,7 @@ function chat(server, client, message, date) {
         username: client.username,
         date: date.toISOString()
     };
-    client.room('chat').write(chatMessage);
+    server.room('chat').write(chatMessage);
     server.state.chat.push(chatMessage);
     return chatMessage;
 }
@@ -581,6 +583,7 @@ function boot(httpserver, server, port) {
     httpserver.listen(port, function() {
 
         process.on('message', function(message) {
+            lastInteraction = new Date();
             try {
                 adminMessageHandler(server, message);
             } catch (error) {
@@ -634,9 +637,39 @@ function Game(settings) {
     };
 }
 
-function State() {
+function LifeCycle(server) {
+    const WARNING_COUNTDOWN = 300000,
+        CLEANUP_LATENCY = 10000;
+
+    function quit() {
+        chat(server, {
+            username: '[SYSTEM]'
+        }, 'Game has expired!');
+        setTimeout(process.send, CLEANUP_LATENCY);
+    }
+
+    function notify() {
+        chat(server, {
+            username: '[SYSTEM]'
+        }, 'Game will expire soon!');
+        setTimeout(quit, WARNING_COUNTDOWN);
+    }
+
+    function interactionCheck() {
+        if (new Date() - lastInteraction > WARNING_COUNTDOWN) {
+            quit();
+        }
+    }
+
+    setInterval(interactionCheck, CLEANUP_LATENCY);
+
+    return setTimeout(notify);
+}
+
+function State(server) {
     return {
         chat: [],
+        lifeCycle: new LifeCycle(server),
         reconnection: {},
         verification: uuid()
     };
@@ -663,7 +696,7 @@ function main(callback) {
             });
 
     server.game = new Game(process.env);
-    server.state = new State();
+    server.state = new State(server);
     server.plugin('rooms', Rooms);
     server.save(__dirname + '/../http/js/vendor/server.js');
     server.on('connection', function(client) {
