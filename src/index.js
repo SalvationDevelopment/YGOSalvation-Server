@@ -150,7 +150,7 @@ function globalRequested(socket) {
         clientEvent: 'global',
         message: currentGlobalMessage
     });
-    socket.write(gamelist);
+
 }
 
 
@@ -254,7 +254,6 @@ function childHandler(child, socket, message) {
     switch (message.action) {
         case 'lobby':
             gamelist[message.game.roompass] = message.game;
-            gamelist[message.game.roompass].port = message.port;
             announce(gamelist);
             break;
         case 'stop':
@@ -282,6 +281,10 @@ function childHandler(child, socket, message) {
 
                 });
             });
+            break;
+        case 'quit':
+            delete gamelist[message.game.roompass];
+            announce(gamelist);
             break;
     }
 }
@@ -449,6 +452,7 @@ primus.on('connection', function(socket) {
         console.log(data);
         try {
             onData(data, socket);
+            socket.write(gamelist);
         } catch (error) {
             console.log(error);
         }
