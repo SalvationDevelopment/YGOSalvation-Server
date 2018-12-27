@@ -318,6 +318,29 @@ function deckCheck(game, client, message) {
 }
 
 /**
+ * Determine ifa specific player has locked in their deck.
+ * @param {Object[]} player list of players.
+ * @param {Number} slot queried slot number.
+ * @returns {Boolean} status of queried player
+ */
+function isReady(player, slot) {
+    return player[slot].ready;
+}
+
+
+/**
+ * Determine ifa specific player has locked in their deck.
+ * @param {Object[]} player list of players.
+ * @param {Number} slot queried slot number.
+ * @param {Boolean} status new deck lock status.
+ * @returns {undefined}
+ */
+function updatePlayer(player, target, status) {
+    player[target].ready = status;
+}
+
+
+/**
  * Validate a requested deck and if valid lock in the player as ready, otherwise toggle it off.
  * @param {GameState} game public gamelist state information.
  * @param {Spark} client connected websocket and Primus user (spark in documentation).
@@ -325,17 +348,20 @@ function deckCheck(game, client, message) {
  * @returns {undefined} 
  */
 function lock(game, client, message) {
-    if (game.player[client.slot].ready) {
-        game.player[client.slot].ready = false;
+    if (isReady(game.player, client.slot)) {
+        updatePlayer(game.player, client.slot, false);
+        delete client.deck;
         return;
     }
     try {
-        game.player[client.slot].ready = deckCheck(game, client, message);
+        updatePlayer(game, client.slot, deckCheck(game, client, message));
+        client.deck = message.deck;
     } catch (error) {
-        game.player[client.slot].ready = false;
+        updatePlayer(game, client.slot, false);
+        delete client.deck;
         throw error;
     }
-    client.deck = message.deck;
+
 }
 
 /**
@@ -461,44 +487,40 @@ function processMessage(server, duel, game, state, client, message) {
         return;
     }
     switch (message.action) {
-        case 'ping':
-            broadcast(server, game);
-            break;
         case 'chat':
             chat(server, state, client, message.chat);
+            break;
+        case 'determine':
+            determine(server, game, state, client);
+            broadcast(server, game);
             break;
         case 'join':
             attemptJoin(server, game, state, client, function() {
                 broadcast(server, game);
             });
-            broadcast(server, game);
             break;
         case 'kick':
             kick(game, client, message);
             broadcast(server, game);
             break;
+        case 'lock':
+            lock(game, client, message);
+            broadcast(server, game);
+            break;
+        case 'respond':
+            respond(duel, client, message);
+            break;
         case 'spectate':
             spectate(game, message, client.username);
-            broadcast(server, game);
-            break;
-        case 'surrender':
-            surrender(state.duel, message);
-            broadcast(server, game);
-            break;
-        case 'lock':
-            lock(server, client, message, banlist);
-            broadcast(server, game);
-            break;
-        case 'determine':
-            determine(server, game, state, client);
             broadcast(server, game);
             break;
         case 'start':
             start(server, game, state, duel, message);
             broadcast(server, game);
             break;
-        case 'ocgcore':
-            respond(server, client, message);
+        case 'surrender':
+            surrender(state.duel, message);
+            broadcast(server, game);
             break;
         default:
             break;
