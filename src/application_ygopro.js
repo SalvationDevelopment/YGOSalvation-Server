@@ -143,7 +143,8 @@ function register(client, message) {
 function chat(server, client, message, date) {
     date = date || new Date();
     const chatMessage = {
-        message: sanitize(message.message),
+        action: 'chat',
+        message: sanitize(message),
         username: client.username,
         date: date.toISOString()
     };
@@ -462,7 +463,7 @@ function controller(server, client, message) {
             broadcast(server);
             break;
         case 'chat':
-            chat(server, client, message);
+            chat(server, client, message.chat);
             break;
         case 'join':
             attemptJoin(server, client);

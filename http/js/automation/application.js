@@ -71,6 +71,9 @@ function duelController(message) {
             });
             window.decks = message.decks;
             break;
+        case 'chat':
+            $('.ingamechatbox').append('<li>[' + new Date(message.date).toLocaleTimeString() + '] ' + message.username + ': ' + message.message + '</li>');
+            break;
     }
 
 }
