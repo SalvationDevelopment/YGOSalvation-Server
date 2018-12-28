@@ -1,3 +1,4 @@
+// @ts-no-misused-new
 /**
  * OCGCore, the YGOPro game engine, is very unstable. Its a C++ library that will cause
  * a crash if it sees improper logic in the Lua scripts it dynamically loads  in that
@@ -7,13 +8,25 @@
  * Configuration is passed via enviromental variables.
  */
 
+
 /**
- * @typedef {Object} Message
+ * @typedef {Object} ClientMessage
  * @property {String} action game model manipulation or general action to take place. 
- * @property {Deck} deck deck for validation and use
+ * @property {String} [chat] chat message
+ * @property {Deck} [deck] deck for validation and use
+ * @property {Number} [turn_player]
+ * @property {String} [room] room reconnection request
  * @property {String} [username] clients username.
+ * @property {Number[]} [response] message to the ocgcore.
  * @property {String} [session] uuid session identifier.
- * @property {String} [validationKey] clients validation key from authentication server. 
+ * @property {Number} [slot] slot to do actions on.
+ * @property {Boolean} [validate] 
+ * @property {String} [verification] clients validation key from authentication server. 
+ */
+
+
+/**
+ * @typedef {Object} ServerMessage
  */
 
 /**
@@ -24,9 +37,68 @@
  */
 
 /**
- * @typedef {Deck} PlayerAbstraction
- * @property {Function} write Send data to clients
+ * @typedef {Object} DeckValidation
+ * @property {Error} error
+ * @property {Boolean} valid if the deck is valid
  */
+
+/**
+ * @typedef {Deck} PlayerAbstraction
+ * @method write Send data to clients
+ */
+
+/**
+ * @typedef ChatMessage
+ * @property {String} message
+ */
+
+/**
+ * @typedef {Object} ApplicationState
+ * @property {Object[]}         clients
+ * @property {ChatMessage[]}    chat
+ * @property {NodeJS.Timeout}   [lifeCycle]
+ * @property {String}           [password]
+ * @property {Object}           reconnection
+ * @property {String}           verification
+ */
+
+/**
+ * @typedef  {Object} GameState
+ */
+
+/**
+ * @typedef {Object} Duel
+ * @method getField
+ * @method load
+ * @method respond
+ */
+
+/**
+ * @typedef {Object} Primus
+ * @method on
+ * @method save
+ * @method write
+ * @method [room]
+ * @method [join]
+ */
+
+/**
+ * @typedef {Object} Spark
+ * @method on
+ * @method save
+ * @method write
+ * @method [room]
+ * @method [join]
+ * @method [leave]
+ * @property {String} [username]
+ * @property {Number} [slot]
+ * @property {Deck} [deck]
+ */
+
+/**
+ * @typedef {Object} User
+ */
+
 
 
 const WARNING_COUNTDOWN = 300000,
@@ -53,7 +125,7 @@ let lastInteraction = new Date();
  * Start a static HTTP web server.
  * @param {Object} request incoming http request
  * @param {Object} response outgoing response handler
- * @returns {undefined}
+ * @returns {void}
  */
 function staticWebServer(request, response) {
     const server = new fileStream.Server('../http', { cache: 0 });
@@ -65,9 +137,9 @@ function staticWebServer(request, response) {
 
 /**
  * Broadcast current game lobby status to connected clients and management system.
- * @param {Primus} server Primus instance.
+ * @param {Object} server Primus instance.
  * @param {GameState} game public gamelist state information.
- * @returns {undefined}
+ * @returns {void}
  */
 function broadcast(server, game) {
     server.write({
@@ -83,8 +155,8 @@ function broadcast(server, game) {
 /**
  * Report back to the client that they are registered.
  * @param {Spark} client connected websocket and Primus user (spark in documentation).
- * @param {Message} person User definition and details.
- * @returns {undefined}
+ * @param {User} person User definition and details.
+ * @returns {void}
  */
 function enableClient(client, person) {
     client.username = person.username;
@@ -105,8 +177,8 @@ function enableClient(client, person) {
 /**
  * Register the user with the server via external authentication, if avaliable.
  * @param {Spark} client connected websocket and Primus user (spark in documentation).
- * @param {Message} message JSON communication sent from client.
- * @returns {undefined}
+ * @param {ClientMessage} message JSON communication sent from client.
+ * @returns {void}
  */
 function register(client, message) {
 
@@ -138,10 +210,10 @@ function register(client, message) {
 
 /**
  * Chat with other users.
- * @param {Primus} server Primus instance.
+ * @param {Object} server Primus instance.
  * @param {ApplicationState} state internal private state information not shown on the game list.
  * @param {Spark} client connected websocket and Primus user (spark in documentation).
- * @param {Message} message JSON communication sent from client.
+ * @param {String} message JSON communication sent from client.
  * @param {Date} date built in date object, used for timestamping.
  * @returns {Object} formated chat message.
  */
@@ -163,8 +235,8 @@ function chat(server, state, client, message, date) {
  * @param {Duel} duel OCGCore Instance
  * @param {ApplicationState} state internal private state information not shown on the game list.
  * @param {Spark} client connected websocket and Primus user (spark in documentation).
- * @param {Message} message JSON communication sent from client.
- * @returns {undefined}
+ * @param {ClientMessage} message JSON communication sent from client.
+ * @returns {void}
  */
 function reconnect(duel, state, client, message) {
     if (!state.reconnection[message.room]) {
@@ -186,7 +258,7 @@ function reconnect(duel, state, client, message) {
  * @param {ApplicationState} state internal private state information not shown on the game list.
  * @param {Spark} client connected websocket and Primus user (spark in documentation).
  * @param {Function} callback trigger after spectator add is complete
- * @return {undefined}
+ * @returns {void}
  */
 function join(error, game, state, client, callback) {
     if (error) {
@@ -218,7 +290,7 @@ function join(error, game, state, client, callback) {
  * @param {ApplicationState} state internal private state information not shown on the game list.
  * @param {Spark} client connected websocket and Primus user (spark in documentation).
  * @param {Function} callback trigger after spectator add is complete
- * @return {undefined}
+ * @returns {void}
  */
 function attemptJoin(game, state, client, callback) {
     delete state.clients[client.slot];
@@ -232,9 +304,9 @@ function attemptJoin(game, state, client, callback) {
 /**
  * Remove the user from a specificed slot.
  * @param {GameState} game public gamelist state information.
- * @param {Message} message JSON communication sent from client. 
+ * @param {ClientMessage} message JSON communication sent from client. 
  * @param {String} user user that requested that slot leave.
- * @returns {undefined}
+ * @returns {void}
  */
 function spectate(game, message, user) {
     const slot = message.slot;
@@ -261,7 +333,7 @@ function spectate(game, message, user) {
  * Kick the user in a specific slot if authorized to do so.
  * @param {GameState} game public gamelist state information.
  * @param {Spark} client connected websocket and Primus user (spark in documentation).
- * @param {Message} message JSON communication sent from client.
+ * @param {ClientMessage} message JSON communication sent from client.
  * @returns {Boolean} if the kick was valid and attempted to be executed.
  */
 function kick(game, client, message) {
@@ -275,37 +347,37 @@ function kick(game, client, message) {
 /**
  * Surrender in active duel.
  * @param {GameState} game public gamelist state information.
- * @param {ApplicationState} state internal private state information not shown on the game list.
- * @param {Message} message JSON communication sent from client.
- * @returns {undefined}
+ * @param {Duel} duel 
+ * @param {ClientMessage} message JSON communication sent from client.
+ * @returns {void}
  */
-function surrender(game, state, message) {
-    state.surrender(message.slot);
+function surrender(game, duel, message) {
     game.started = false;
+    duel.surrender(message.slot);
 }
 
 /**
  * Validate a requested deck.
  * @param {GameState} game public gamelist state information.
  * @param {Spark} client connected websocket and Primus user (spark in documentation).
- * @param {Message} message JSON communication sent from client.
+ * @param {ClientMessage} message JSON communication sent from client.
  * @returns {Boolean} If the deck is valid or not.
  */
 function deckCheck(game, client, message) {
 
-    message.validate = validateDeck(message.deck,
+    const validation = validateDeck(message.deck,
         banlist,
         database,
         game.cardpool,
         game.prerelease);
 
 
-    if (message.validate.error) {
+    if (validation.error) {
         client.write(({
             errorType: 'validation',
             action: 'error',
-            error: message.validate.error,
-            msg: message.validate.msg
+            error: validation.error,
+            msg: validation.msg
         }));
         return false;
     }
@@ -331,9 +403,9 @@ function isReady(player, slot) {
 /**
  * Determine ifa specific player has locked in their deck.
  * @param {Object[]} player list of players.
- * @param {Number} slot queried slot number.
+ * @param {Number} target queried slot number.
  * @param {Boolean} status new deck lock status.
- * @returns {undefined}
+ * @returns {void}
  */
 function updatePlayer(player, target, status) {
     player[target].ready = status;
@@ -344,8 +416,8 @@ function updatePlayer(player, target, status) {
  * Validate a requested deck and if valid lock in the player as ready, otherwise toggle it off.
  * @param {GameState} game public gamelist state information.
  * @param {Spark} client connected websocket and Primus user (spark in documentation).
- * @param {Message} message JSON communication sent from client.
- * @returns {undefined} 
+ * @param {ClientMessage} message JSON communication sent from client.
+ * @returns {void} 
  */
 function lock(game, client, message) {
     if (isReady(game.player, client.slot)) {
@@ -366,13 +438,13 @@ function lock(game, client, message) {
 
 /**
  * Create reconnection service for a client.
- * @param {Primus} server Primus instance.
+ * @param {Object} server Primus instance.
  * @param {ApplicationState} state internal private state information not shown on the game list.
  * @param {String} room room to act as player abstraction.
  * @param {Spark} client connected websocket and Primus user (spark in documentation).
  * @returns {PlayerAbstraction} Representation of a player or group of players a client can reconnect to if disconnected.
  */
-function PlayerAbstraction(server, state, room, client) {
+function createPlayerAbstraction(server, state, room, client) {
     if (client.username) {
         client.join(room);
         state.reconnection[room] = client.username;
@@ -381,24 +453,23 @@ function PlayerAbstraction(server, state, room, client) {
         action: 'reconnection',
         room: room
     });
-    return {
+
+    return Object.assign({}, client.deck, {
         write: function(data) {
             server.room('room').write(data);
-        },
-        main: client.main,
-        extra: client.extra,
-        side: client.side
-    };
+        }
+    });
 }
+
 
 /**
  * Determine who goes first via a coin toss.
  * Its stupid but humans like feeling in control.
- * @param {Primus} server Primus instance.
+ * @param {Object} server Primus instance.
  * @param {GameState} game public gamelist state information.
  * @param {ApplicationState} state internal private state information not shown on the game list.
  * @param {Spark} client connected websocket and Primus user (spark in documentation).
- * @returns {undefined}
+ * @returns {void}
  */
 function determine(server, game, state, client) {
     if (client.slot !== 0) {
@@ -432,12 +503,12 @@ function determine(server, game, state, client) {
 
 /**
  * Start the duel
- * @param {Primus} server Primus instance.
+ * @param {Object} server Primus instance.
  * @param {Duel} duel OCGCore Instance
  * @param {GameState} game public gamelist state information.
  * @param {ApplicationState} state internal private state information not shown on the game list.
- * @param {Message} message JSON communication sent from client.
- * @returns {undefined}
+ * @param {ClientMessage} message JSON communication sent from client.
+ * @returns {void}
  */
 function start(server, duel, game, state, message) {
     if (message.verification !== state.verification) {
@@ -448,10 +519,10 @@ function start(server, duel, game, state, message) {
     }
 
     const players = [
-            new PlayerAbstraction(server, state, 'player1', state.clients[0]),
-            new PlayerAbstraction(server, state, 'player2', state.clients[1])
+            createPlayerAbstraction(server, state, 'player1', state.clients[0]),
+            createPlayerAbstraction(server, state, 'player2', state.clients[1])
         ],
-        spectators = [new PlayerAbstraction(server, 'spectators', {})];
+        spectators = [createPlayerAbstraction(server, state, 'spectators', {})];
 
     duel.load(game, players, spectators);
 }
@@ -460,8 +531,8 @@ function start(server, duel, game, state, message) {
  * Respond to a question from the OCGCore game engine.
  * @param {Duel} duel OCGCore Instance
  * @param {Spark} client connected websocket and Primus user (spark in documentation).
- * @param {Message} message JSON communication sent from client.
- * @returns {undefined}
+ * @param {ClientMessage} message JSON communication sent from client.
+ * @returns {void}
  */
 function respond(duel, client, message) {
     duel.respond(client.slot, message.response);
@@ -469,13 +540,13 @@ function respond(duel, client, message) {
 
 /**
  * Process incoming messages from clients.
- * @param {Primus} server Primus instance.
+ * @param {Object} server Primus instance.
  * @param {Duel} duel OCGCore Instance
  * @param {GameState} game public gamelist state information.
  * @param {ApplicationState} state internal private state information not shown on the game list.
  * @param {Spark} client connected websocket and Primus user (spark in documentation).
- * @param {Message} message JSON communication sent from client.
- * @returns {undefined}
+ * @param {ClientMessage} message JSON communication sent from client.
+ * @returns {void}
  */
 function processMessage(server, duel, game, state, client, message) {
     console.log(message);
@@ -488,14 +559,14 @@ function processMessage(server, duel, game, state, client, message) {
     }
     switch (message.action) {
         case 'chat':
-            chat(server, state, client, message.chat);
+            chat(server, state, client, message.chat, undefined);
             break;
         case 'determine':
             determine(server, game, state, client);
             broadcast(server, game);
             break;
         case 'join':
-            attemptJoin(server, game, state, client, function() {
+            attemptJoin(game, state, client, function() {
                 broadcast(server, game);
             });
             break;
@@ -507,6 +578,9 @@ function processMessage(server, duel, game, state, client, message) {
             lock(game, client, message);
             broadcast(server, game);
             break;
+        case 'reconnect':
+            reconnect(duel, state, client, message);
+            break;
         case 'respond':
             respond(duel, client, message);
             break;
@@ -515,11 +589,11 @@ function processMessage(server, duel, game, state, client, message) {
             broadcast(server, game);
             break;
         case 'start':
-            start(server, game, state, duel, message);
+            start(server, duel, game, state, message);
             broadcast(server, game);
             break;
         case 'surrender':
-            surrender(state.duel, message);
+            surrender(game, duel, message);
             broadcast(server, game);
             break;
         default:
@@ -529,13 +603,13 @@ function processMessage(server, duel, game, state, client, message) {
 
 /**
  * Add additional error handling and then, process incoming messages from clients.
- * @param {Primus} server Primus instance.
+ * @param {Object} server Primus instance.
  * @param {Duel} duel OCGCore Instance
  * @param {GameState} game public gamelist state information.
  * @param {ApplicationState} state internal private state information not shown on the game list.
  * @param {Spark} client connected websocket and Primus user (spark in documentation).
- * @param {Message} message JSON communication sent from client.
- * @returns {Boolean} If the deck is valid or not.
+ * @param {ClientMessage} message JSON communication sent from client.
+ * @returns {void} If the deck is valid or not.
  */
 function messageHandler(server, duel, game, state, client, message) {
     try {
@@ -553,12 +627,12 @@ function messageHandler(server, duel, game, state, client, message) {
 
 /**
  * Add additional error handling and then, process incoming messages from clients.
- * @param {Primus} server Primus instance.
+ * @param {Object} server Primus instance.
  * @param {Duel} duel OCGCore Instance
  * @param {GameState} game public gamelist state information.
  * @param {ApplicationState} state internal private state information not shown on the game list.
  * @param {Spark} deadSpark DEAD DISCONNECTED websocket and Primus user (spark in documentation).
- * @returns {Boolean} If the deck is valid or not.
+ * @returns {void} If the deck is valid or not.
  */
 function disconnectionHandler(server, duel, game, state, deadSpark) {
     const message = {
@@ -566,7 +640,7 @@ function disconnectionHandler(server, duel, game, state, deadSpark) {
         slot: deadSpark.slot
     };
     if (deadSpark.session) {
-        verificationSystem.removeListener('client.session');
+        verificationSystem.removeListener('client.session', function() {});
     }
     try {
         messageHandler(server, duel, game, state, deadSpark, message);
@@ -582,10 +656,10 @@ function disconnectionHandler(server, duel, game, state, deadSpark) {
 
 /**
  * Process incoming messages from master process.
- * @param {Primus} server Primus instance.
+ * @param {Object} server Primus instance.
  * @param {GameState} game public gamelist state information.
- * @param {Message} message JSON communication sent from client.
- * @returns {Boolean} If the deck is valid or not.
+ * @param {ServerMessage} message JSON communication sent from client.
+ * @returns {void} If the deck is valid or not.
  */
 function adminMessageHandler(server, game, message) {
     switch (message.action) {
@@ -593,7 +667,7 @@ function adminMessageHandler(server, game, message) {
             process.exit(0);
             break;
         case 'kick':
-            kick({ admin: true }, message);
+            kick(game, { admin: true }, message);
             break;
         case 'lobby':
             broadcast(server, game);
@@ -607,20 +681,21 @@ function adminMessageHandler(server, game, message) {
         default:
             break;
     }
+    return undefined;
 }
 
 
 /**
  * Notify connected users and middleware that the game has ended.
- * @param {Primus} server Primus instance.
+ * @param {Object} server Primus instance.
  * @param {GameState} game public gamelist state information.
  * @param {ApplicationState} state internal private state information not shown on the game list.
- * @returns {Number} setTimeout reference number for lifetime cycle.
+ * @returns {NodeJS.Timeout} setTimeout reference number for lifetime cycle.
  */
 function quit(server, game, state) {
     chat(server, state, {
         username: '[SYSTEM]'
-    }, 'Game has expired!');
+    }, 'Game has expired!', undefined);
     process.send({
         action: 'quit',
         game: game
@@ -630,39 +705,39 @@ function quit(server, game, state) {
 
 /**
  * Notify connected users that the game will momentarily.
- * @param {Primus} server Primus instance.
+ * @param {Object} server Primus instance.
  * @param {GameState} game public gamelist state information.
  * @param {ApplicationState} state internal private state information not shown on the game list.
- * @returns {Number} setTimeout reference number for lifetime cycle.
+ * @returns {NodeJS.Timeout} setTimeout reference number for lifetime cycle.
  */
 function notify(server, game, state) {
-    chat(server, {
+    chat(server, state, {
         username: '[SYSTEM]'
-    }, 'Game will expire soon!');
+    }, 'Game will expire soon!', undefined);
     return setTimeout(quit, WARNING_COUNTDOWN, server, game, state);
 }
 
 /**
  * Check if the game is not being interacted with.
- * @param {Primus} server Primus instance.
+ * @param {Object} server Primus instance.
  * @param {GameState} game public gamelist state information.
  * @param {ApplicationState} state internal private state information not shown on the game list.
- * @returns {undefined}
+ * @returns {void}
  */
 function interactionCheck(server, game, state) {
-    if (new Date() - lastInteraction > WARNING_COUNTDOWN) {
+    if (new Date().getTime() - lastInteraction.getTime() > WARNING_COUNTDOWN) {
         quit(server, game, state);
     }
 }
 
 /**
  * Kick off new Lifecycle
- * @param {Primus} server Primus instance.
+ * @param {Object} server Primus instance.
  * @param {GameState} game public gamelist state information.
  * @param {ApplicationState} state internal private state information not shown on the game list.
- * @returns {Number} setTimeout reference number for lifetime cycle.
+ * @returns {NodeJS.Timeout} setTimeout reference number for lifetime cycle.
  */
-function LifeCycle(server, game, state) {
+function createLifeCycle(server, game, state) {
     setInterval(interactionCheck, CLEANUP_LATENCY, server);
     return setTimeout(notify, MAX_GAME_TIME, server, game, state);
 }
@@ -670,13 +745,13 @@ function LifeCycle(server, game, state) {
 /**
  * Process incoming messages from clients.
  * @param {Object} httpserver HTTP Server instance from `net.createServer()`
- * @param {Primus} server Primus instance.
+ * @param {Object} server Primus instance.
  * @param {GameState} game public gamelist state information.
  * @param {ApplicationState} state internal private state information not shown on the game list.
- * @returns {undefined}
+ * @returns {void}
  */
 function boot(httpserver, server, game, state) {
-    state.lifeCycle = new LifeCycle(server, game, state);
+    state.lifeCycle = createLifeCycle(server, game, state);
 
     httpserver.listen(game.port, function() {
 
@@ -709,7 +784,7 @@ function boot(httpserver, server, game, state) {
  * @param {Object} settings enviromental variables.
  * @returns {GameState} public gamelist state information.
  */
-function Game(settings) {
+function createGame(settings) {
     return {
         banlist: settings.BANLIST || 'No Banlist',
         banlistid: settings.BANLIST_ID,
@@ -737,12 +812,11 @@ function Game(settings) {
 
 /**
  * Create a server state instance. States life cycle. Holds private information.
- * @param {Primus} server Primus instance.
+ * @param {Object} server Primus instance.
  * @param {GameState} game public gamelist state information.
- * @param {ApplicationState} state internal private state information not shown on the game list.
  * @returns {ApplicationState} internal private state information not shown on the game list.
  */
-function State(server, game, state) {
+function createState(server, game) {
     return {
         clients: [],
         chat: [],
@@ -755,7 +829,7 @@ function State(server, game, state) {
  * Create a new ocgcore duel instance with constructor, getter, and setter mechanisms.
  * @returns {Duel} OCGCore Instance
  */
-function Duel() {
+function createDuel() {
 
     const duel = {};
 
@@ -777,9 +851,19 @@ function Duel() {
 }
 
 /**
+ * @returns {Primus}
+ */
+function primusInstance(httpserver) {
+    return new Primus(
+        httpserver, {
+            parser: 'JSON'
+        });
+}
+
+/**
  * Start the server.
  * @param {Function} callback replacement for process.send
- * @returns {undefined}
+ * @returns {void}
  */
 function main(callback) {
 
@@ -791,14 +875,11 @@ function main(callback) {
     process.send = (callback) ? callback : process.send;
     process.send = (process.send) ? process.send : console.log;
 
-    const duel = new Duel(),
-        game = new Game(process.env),
+    const duel = createDuel(),
+        game = createGame(process.env),
         httpserver = http.createServer(staticWebServer),
-        server = new Primus(
-            httpserver, {
-                parser: 'JSON'
-            }),
-        state = new State(server);
+        server = primusInstance(httpserver),
+        state = createState(server, game);
 
     server.plugin('rooms', Rooms);
     server.save(__dirname + '/../http/js/vendor/server.js');
@@ -808,13 +889,13 @@ function main(callback) {
         });
     });
     server.on('disconnection', function(deadSpark) {
-        disconnectionHandler(server, deadSpark);
+        disconnectionHandler(server, duel, game, state, deadSpark);
     });
 
     boot(httpserver, server, game, state);
 }
 
-main();
+main(undefined);
 
 module.exports = {
     main
