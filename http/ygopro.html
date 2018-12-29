@@ -9,7 +9,7 @@
 </head>
 
 <body>
-    <section>
+    <section id="lobby">
 
         <div id="lobbymenu">
             <div id="duelspectate">
@@ -77,12 +77,12 @@
             <input id="lobbychatinput">
         </div>
     </section>
-    <section style="display:none">
+    <section id="duelscreen" style="display:none">
 
 
         <div id="rpsunit1"></div>
         <div id="rpsunit2"></div>
-        <div id="selectwhogoesfirst">
+        <div id="selectwhogoesfirst" style="display: none">
             <div id="gofirst" onclick="gofirst(true)">Go First</div>
             <div id="gosecond" onclick="gofirst(false)">Go Second</div>
         </div>

@@ -74,9 +74,23 @@ function duelController(message) {
         case 'chat':
             $('.ingamechatbox').append('<li>[' + new Date(message.date).toLocaleTimeString() + '] ' + message.username + ': ' + message.message + '</li>');
             break;
+        case 'start':
+            $('#lobby').toggle();
+            $('#duelscreen').toggle();
+        case 'turn_player':
+            window.verification = message.verification;
+            $('#selectwhogoesfirst').toggle();
     }
-
 }
+
+function gofirst(startplayer) {
+    primus.write({
+        action: 'start',
+        turn_player: Number(startplayer),
+        verification: window.verification
+    });
+}
+
 primus.on('data', function(data) {
     console.log(data);
     if (data.action) {

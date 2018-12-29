@@ -1002,10 +1002,9 @@ div#selectwhogoesfirst {
     position: absolute;
     top: 45%;
     width: 100%;
-    z-index: 30;
+    z-index: 3000;
     background: rgba(0, 0, 0, .95);
     box-shadow: 0 0 50px 62px rgba(0, 0, 0, .95);
-    display: none;
 }
 
 #revealedclose {

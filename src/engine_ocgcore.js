@@ -181,13 +181,19 @@ var pduelPointer = (ref.refType('string')), ///really need to figure out the dim
         'preload_script': ['int32', [pduelPointer, 'string', 'int32']]
     });
 process.on('exit', function() {
-    let x;
-    x = card_reader_function;
-    x = responsei_function;
-    x = script_reader_function;
-    x = message_handler_function;
+    let a = card_reader_function;
+    let b = responsei_function;
+    let c = script_reader_function;
+    let d = message_handler_function;
 });
 
+global.duel_functions = {
+    card_reader_function,
+    responsei_function,
+    script_reader_function,
+    message_handler_function,
+    ocgapi
+}
 
 function messagHandler(pduel, type) {
     var messageBuffer = Buffer.alloc(1024);
@@ -544,7 +550,9 @@ function duel(settings, players, observers) {
     ocgapi.set_message_handler(messagHandler); //bad
     ocgapi.preload_script(pduel, './expansions/script/constant.lua', 0x10000000);
     ocgapi.preload_script(pduel, './expansions/script/utility.lua', 0x10000000);
-    ocgapi.set_responsei(pduel, console.log);
+    ocgapi.set_responsei(pduel, function(data) {
+        console.log(data)
+    });
 
     ocgapi.set_player_info(pduel, 0, settings.start_lp, settings.start_hand_count, settings.draw_count);
     ocgapi.set_player_info(pduel, 1, settings.start_lp, settings.start_hand_count, settings.draw_count);

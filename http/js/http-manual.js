@@ -1377,16 +1377,11 @@ function manualLock() {
 
 function manualStart() {
     'use strict';
-    if (activegame) {
-        if (broadcast[activegame].player[0].ready && broadcast[activegame].player[1].ready) {
-            primus.write(({
-                action: 'start'
-            }));
-            return;
-        }
-    }
-    alertmodal('Duelist not ready yet. Please Lock in decks');
+    primus.write({
+        action: 'determine'
+    });
 }
+
 
 function manualChat(message) {
     'use strict';

@@ -1,4 +1,3 @@
-// @ts-no-misused-new
 /**
  * OCGCore, the YGOPro game engine, is very unstable. Its a C++ library that will cause
  * a crash if it sees improper logic in the Lua scripts it dynamically loads  in that
@@ -397,10 +396,10 @@ function lock(game, client, message) {
         return;
     }
     try {
-        updatePlayer(game, client.slot, deckCheck(game, client, message));
+        updatePlayer(game.player, client.slot, deckCheck(game, client, message));
         client.deck = message.deck;
     } catch (error) {
-        updatePlayer(game, client.slot, false);
+        updatePlayer(game.player, client.slot, false);
         delete client.deck;
         throw error;
     }
@@ -483,7 +482,7 @@ function determine(server, game, state, client) {
  */
 function start(server, duel, game, state, message) {
     if (message.verification !== state.verification) {
-        return;
+        throw 'Incorrect Validation Code';
     }
     if (message.turn_player) {
         state.clients = state.clients.reverse();
@@ -809,7 +808,7 @@ function Duel() {
     }
 
     function load(game, players, spectators) {
-        const instance = ocgcore.start(game, players, spectators);
+        const instance = ocgcore.duel(game, players, spectators);
         duel.getField = instance.getField;
         duel.respond = instance.respond;
     }
