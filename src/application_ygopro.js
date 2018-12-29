@@ -20,7 +20,6 @@
  * @property {Number[]} [response] message to the ocgcore.
  * @property {String} [session] uuid session identifier.
  * @property {Number} [slot] slot to do actions on.
- * @property {Boolean} [validate] 
  * @property {String} [verification] clients validation key from authentication server. 
  */
 
@@ -38,7 +37,7 @@
 
 /**
  * @typedef {Object} DeckValidation
- * @property {Error} error
+ * @property {Error} error deck validation failure information
  * @property {Boolean} valid if the deck is valid
  */
 
@@ -49,17 +48,17 @@
 
 /**
  * @typedef ChatMessage
- * @property {String} message
+ * @property {String} message text string sent from client asa chat message.
  */
 
 /**
  * @typedef {Object} ApplicationState
- * @property {Object[]}         clients
- * @property {ChatMessage[]}    chat
- * @property {NodeJS.Timeout}   [lifeCycle]
- * @property {String}           [password]
- * @property {Object}           reconnection
- * @property {String}           verification
+ * @property {Object[]}         clients player socket connections.
+ * @property {ChatMessage[]}    chat duel chat message history.
+ * @property {NodeJS.Timeout}   [lifeCycle] duel process expiration timeout pointer
+ * @property {String}           [password] duel password as set by host
+ * @property {Object}           reconnection reconnection codes
+ * @property {String}           verification duel turn player pick validation code
  */
 
 /**
@@ -68,38 +67,10 @@
 
 /**
  * @typedef {Object} Duel
- * @method getField
- * @method load
- * @method respond
+ * @method getField get full field information
+ * @method load start duel
+ * @method respond respond to a ocgcore question
  */
-
-/**
- * @typedef {Object} Primus
- * @method on
- * @method save
- * @method write
- * @method [room]
- * @method [join]
- */
-
-/**
- * @typedef {Object} Spark
- * @method on
- * @method save
- * @method write
- * @method [room]
- * @method [join]
- * @method [leave]
- * @property {String} [username]
- * @property {Number} [slot]
- * @property {Deck} [deck]
- */
-
-/**
- * @typedef {Object} User
- */
-
-
 
 const WARNING_COUNTDOWN = 300000,
     CLEANUP_LATENCY = 10000,
@@ -347,7 +318,7 @@ function kick(game, client, message) {
 /**
  * Surrender in active duel.
  * @param {GameState} game public gamelist state information.
- * @param {Duel} duel 
+ * @param {Duel} duel OCGCore Instance
  * @param {ClientMessage} message JSON communication sent from client.
  * @returns {void}
  */
@@ -444,7 +415,7 @@ function lock(game, client, message) {
  * @param {Spark} client connected websocket and Primus user (spark in documentation).
  * @returns {PlayerAbstraction} Representation of a player or group of players a client can reconnect to if disconnected.
  */
-function createPlayerAbstraction(server, state, room, client) {
+function PlayerAbstraction(server, state, room, client) {
     if (client.username) {
         client.join(room);
         state.reconnection[room] = client.username;
@@ -519,10 +490,10 @@ function start(server, duel, game, state, message) {
     }
 
     const players = [
-            createPlayerAbstraction(server, state, 'player1', state.clients[0]),
-            createPlayerAbstraction(server, state, 'player2', state.clients[1])
+            new PlayerAbstraction(server, state, 'player1', state.clients[0]),
+            new PlayerAbstraction(server, state, 'player2', state.clients[1])
         ],
-        spectators = [createPlayerAbstraction(server, state, 'spectators', {})];
+        spectators = [new PlayerAbstraction(server, state, 'spectators', {})];
 
     duel.load(game, players, spectators);
 }
@@ -737,7 +708,7 @@ function interactionCheck(server, game, state) {
  * @param {ApplicationState} state internal private state information not shown on the game list.
  * @returns {NodeJS.Timeout} setTimeout reference number for lifetime cycle.
  */
-function createLifeCycle(server, game, state) {
+function LifeCycle(server, game, state) {
     setInterval(interactionCheck, CLEANUP_LATENCY, server);
     return setTimeout(notify, MAX_GAME_TIME, server, game, state);
 }
@@ -751,7 +722,7 @@ function createLifeCycle(server, game, state) {
  * @returns {void}
  */
 function boot(httpserver, server, game, state) {
-    state.lifeCycle = createLifeCycle(server, game, state);
+    state.lifeCycle = new LifeCycle(server, game, state);
 
     httpserver.listen(game.port, function() {
 
@@ -784,7 +755,7 @@ function boot(httpserver, server, game, state) {
  * @param {Object} settings enviromental variables.
  * @returns {GameState} public gamelist state information.
  */
-function createGame(settings) {
+function Game(settings) {
     return {
         banlist: settings.BANLIST || 'No Banlist',
         banlistid: settings.BANLIST_ID,
@@ -816,7 +787,7 @@ function createGame(settings) {
  * @param {GameState} game public gamelist state information.
  * @returns {ApplicationState} internal private state information not shown on the game list.
  */
-function createState(server, game) {
+function State(server, game) {
     return {
         clients: [],
         chat: [],
@@ -829,7 +800,7 @@ function createState(server, game) {
  * Create a new ocgcore duel instance with constructor, getter, and setter mechanisms.
  * @returns {Duel} OCGCore Instance
  */
-function createDuel() {
+function Duel() {
 
     const duel = {};
 
@@ -850,9 +821,6 @@ function createDuel() {
     return duel;
 }
 
-/**
- * @returns {Primus}
- */
 function primusInstance(httpserver) {
     return new Primus(
         httpserver, {
@@ -875,11 +843,11 @@ function main(callback) {
     process.send = (callback) ? callback : process.send;
     process.send = (process.send) ? process.send : console.log;
 
-    const duel = createDuel(),
-        game = createGame(process.env),
+    const duel = new Duel(),
+        game = new Game(process.env),
         httpserver = http.createServer(staticWebServer),
         server = primusInstance(httpserver),
-        state = createState(server, game);
+        state = new State(server, game);
 
     server.plugin('rooms', Rooms);
     server.save(__dirname + '/../http/js/vendor/server.js');
