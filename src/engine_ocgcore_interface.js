@@ -44,7 +44,7 @@ function({ 'new_card': ['void', ['pointer', 'uint32', 'uint8', 'uint8', 'uint8',
 function({ 'new_tag_card': ['void', ['pointer', 'uint32', 'uint8', 'uint8']] }).
 function({ 'query_card': ['int32', ['pointer', 'uint8', 'uint8', 'int32', bytePointer, 'int32']] }).
 function({ 'query_field_count': ['int32', ['pointer', 'uint8', 'uint8']] }).
-function({ 'query_field_card': ['int32', ['pointer', 'uint8', 'uint8', 'int32', (charArray), 'int32']] }).
+function({ 'query_field_card': ['int32', ['pointer', 'uint8', 'uint8', 'int32', bytePointer, 'int32']] }).
 function({ 'query_field_info': ['int32', ['pointer', bytePointer]] }).
 function({ 'set_responsei': ['void', ['pointer', 'int32']] }).
 function({ 'set_responseb': ['void', ['pointer', bytePointer]] }).

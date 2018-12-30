@@ -1245,10 +1245,10 @@ function manualReciver(message) {
             linkStack(message.field);
             break;
         case 'duel':
-            if (manualDuel === undefined) {
-                startGame(message);
 
-            }
+            startGame(message);
+
+
             linkStack(message.field);
 
             setTimeout(function() {

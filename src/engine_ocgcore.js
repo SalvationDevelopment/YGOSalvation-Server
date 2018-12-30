@@ -136,7 +136,6 @@ function card_reader(code, buffer) {
         race: 0,
         atk: 0,
         def: 0,
-        level: 0,
         defense: 0
     };
     var card = {
@@ -184,11 +183,7 @@ process.on('exit', function() {
 });
 
 
-function messagHandler(pduel, type) {
-    var messageBuffer = Buffer.alloc(1024);
-    ocgapi.get_log_message(pduel, messageBuffer);
-    console.log(messageBuffer.toString());
-}
+
 
 function shuffle(a) {
     var j, x, i;
@@ -220,9 +215,9 @@ function seed() {
 function GameBoard(playerConnection, slot, masterRule) {
     const board = manualControlEngine(function(view, stack, callback) {
         try {
-            if (playerConnection.externalClient) {
-                playerConnection.write((view[slot]));
-            }
+
+            playerConnection.write((view[slot]));
+
         } catch (error) {
             console.log('failed messaging socket', error);
         } finally {
@@ -232,9 +227,7 @@ function GameBoard(playerConnection, slot, masterRule) {
         }
     });
     board.masterRule = masterRule;
-    if (playerConnection.externalClient) {
-        board.question = function() {};
-    }
+
     return board;
 }
 
@@ -261,9 +254,7 @@ function playerInstance(playerConnection, slot, game, settings) {
 
     function preformGameAction(gameAction) {
         var output = boardController(gameBoard, slot, gameAction, tcpConnection, playerConnection);
-        if (playerConnection.externalClient) {
-            playerConnection.write(output);
-        }
+        //playerConnection.write(output);
     }
 
     function queueGameActions(gameActions) {
@@ -408,6 +399,7 @@ function makeGame(pduel, settings, players, observers) {
 
     function refreshMzone(player, flag, use_cache) {
         const qbuf = Buffer.alloc(0x2000);
+        qbuf.type = ref.types.byte;
         ocgapi.query_field_card(pduel, player, LOCATION_MZONE, flag, qbuf, use_cache);
         var message = msg_update_data({}, new BufferStreamReader(qbuf));
         sendBufferToPlayer(player, message);
@@ -520,7 +512,7 @@ function mainProcess(pduel, game) {
  * @param observers {} 1-4 players for the duel
  * @returns {undefined}
  */
-function duel(settings, players, observers) {
+function duel(settings, errorHandler, players, observers) {
     var pduel,
         game = {};
 
@@ -533,10 +525,17 @@ function duel(settings, players, observers) {
     process.on('exit', function() {
 
     });
+
+    function messageHandler(external_pduel, type) {
+        var messageBuffer = Buffer.alloc(1024);
+        ocgapi.get_log_message(external_pduel, messageBuffer);
+        ///errorHandler(messageBuffer.toString(), type);
+    }
+
     pduel = ocgapi.create_duel(seed());
     ocgapi.set_script_reader(scriptReader); // good
     ocgapi.set_card_reader(card_reader); //bad
-    ocgapi.set_message_handler(messagHandler); //bad
+    ocgapi.set_message_handler(messageHandler); //bad
     ocgapi.preload_script(pduel, './expansions/script/constant.lua', 0x10000000);
     ocgapi.preload_script(pduel, './expansions/script/utility.lua', 0x10000000);
     ocgapi.set_responsei(pduel, console.log);
@@ -546,22 +545,18 @@ function duel(settings, players, observers) {
 
     console.log(1);
     players[0].main.forEach(function(cardID, sequence) {
-        if (sequence > 6) return;
         ocgapi.new_card(pduel, cardID, 0, 0, LOCATION_DECK, 0, POS_FACEDOWN_DEFENSE);
     });
     console.log(2);
     players[0].extra.forEach(function(cardID, sequence) {
-        if (sequence > 6) return;
         ocgapi.new_card(pduel, cardID, 0, 0, LOCATION_EXTRA, 0, POS_FACEDOWN_DEFENSE);
     });
     console.log(3);
     players[1].main.forEach(function(cardID, sequence) {
-        if (sequence > 6) return;
         ocgapi.new_card(pduel, cardID, 1, 1, LOCATION_DECK, 0, POS_FACEDOWN_DEFENSE);
     });
     console.log(4);
     players[1].extra.forEach(function(cardID, sequence) {
-        if (sequence > 6) return;
         ocgapi.new_card(pduel, cardID, 1, 1, LOCATION_EXTRA, 0, POS_FACEDOWN_DEFENSE);
     });
     //send start msg

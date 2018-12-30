@@ -196,7 +196,7 @@ function chat(server, state, client, message, date) {
         date: date.toISOString()
     };
     server.room('chat').write(chatMessage);
-    state.chat.push(chatMessage);
+    //state.chat.push(chatMessage);
     return chatMessage;
 }
 
@@ -419,14 +419,17 @@ function PlayerAbstraction(server, state, room, client) {
         client.join(room);
         state.reconnection[room] = client.username;
     }
-    server.room('room').write({
+    server.room(room).write({
         action: 'reconnection',
         room: room
     });
 
     return Object.assign({}, client.deck, {
         write: function(data) {
-            server.room('room').write(data);
+            server.room(room).write({
+                action: 'ygopro',
+                message: data
+            });
         }
     });
 }
@@ -494,7 +497,11 @@ function start(server, duel, game, state, message) {
         ],
         spectators = [new PlayerAbstraction(server, state, 'spectators', {})];
 
-    duel.load(game, players, spectators);
+    duel.load(game, function(error, type) {
+        chat(server, state, {
+            username: '[SYSTEM]'
+        }, error, undefined);
+    }, players, spectators);
 }
 
 /**
@@ -709,7 +716,7 @@ function interactionCheck(server, game, state) {
  * @returns {NodeJS.Timeout} setTimeout reference number for lifetime cycle.
  */
 function LifeCycle(server, game, state) {
-    setInterval(interactionCheck, CLEANUP_LATENCY, server);
+    setInterval(interactionCheck, CLEANUP_LATENCY, server, game, state);
     return setTimeout(notify, MAX_GAME_TIME, server, game, state);
 }
 

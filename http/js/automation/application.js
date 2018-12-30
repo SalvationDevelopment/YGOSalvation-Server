@@ -77,9 +77,13 @@ function duelController(message) {
         case 'start':
             $('#lobby').toggle();
             $('#duelscreen').toggle();
+            break;
         case 'turn_player':
             window.verification = message.verification;
             $('#selectwhogoesfirst').css('display', 'block');
+            break;
+        default:
+            return;
     }
 }
 
@@ -89,6 +93,7 @@ function gofirst(startplayer) {
         turn_player: Number(startplayer),
         verification: window.verification
     });
+    $('#selectwhogoesfirst').css('display', 'none');
 }
 
 primus.on('data', function(data) {

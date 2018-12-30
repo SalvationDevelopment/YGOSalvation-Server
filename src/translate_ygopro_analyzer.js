@@ -180,17 +180,17 @@ function msg_win(message, pbuf, game) {
     game.sendBufferToPlayer(0, message);
     game.reSendToPlayer(1);
     game.sendToObservers();
-    if (message.player > 1) {
-        game.match_result[game.duel_count++] = 2;
-        game.tp_player = 1 - game.tp_player;
-    } else if (message.players[message.player] === game.pplayer[message.player]) { //pplayer is not a typo?
-        game.match_result[game.duel_count++] = message.player;
-        game.tp_player = 1 - message.player;
-    } else {
-        game.match_result[game.duel_count++] = 1 - message.player;
-        game.tp_player = message.player;
-    }
-    game.endDuel();
+    // if (message.player > 1) {
+    //     game.match_result[game.duel_count++] = 2;
+    //     game.tp_player = 1 - game.tp_player;
+    // } else if (message.players[message.player] === game.pplayer[message.player]) { //pplayer is not a typo?
+    //     game.match_result[game.duel_count++] = message.player;
+    //     game.tp_player = 1 - message.player;
+    // } else {
+    //     game.match_result[game.duel_count++] = 1 - message.player;
+    //     game.tp_player = message.player;
+    // }
+    // game.endDuel();
     return 2;
 }
 
@@ -1448,7 +1448,9 @@ function analyze(engineBuffer, len, game) {
         console.log('n', snippet++);
         const engType = enums.STOC.STOC_GAME_MSG[pbuf.readInt8()];
         if (translator[engType]) {
-            var message = {};
+            var message = {
+                command: engType
+            };
             console.log('----engType', engType);
             const output = translator[engType](message, pbuf, game);
             console.log(pbuf - msgbuffer);
