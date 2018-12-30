@@ -20,6 +20,25 @@ var manualDuel,
     gui = {},
     chatplace = 0;
 
+function cardLoadError() {
+    var id = $(this).attr('data-id');
+    if ($(this).attr('reloaded') === 'failed') {
+        $(this).attr('src', '/img/textures/unknown.jpg');
+    }
+    if ($(this).attr('reloaded') === 'attempted') {
+        $(this).attr('src', getCardObject(parseInt(id, 10)).picture);
+        $(this).attr('reloaded', 'failed');
+    } else {
+        $(this).attr('reloaded', 'attempted');
+        if (id !== 'undefined') {
+            $(this).attr('src', 'http://127.0.0.1:8887/' + id + '.jpg');
+        } else {
+            $(this).attr('src', '/img/textures/unknown.jpg');
+        }
+
+    }
+}
+
 (function() {
     'use strict';
     sound.play = function(targetID) {
@@ -719,7 +738,7 @@ function initGameState() {
         cardmargin('1', 'EXTRA');
         console.log('stack', stack, OneDeck, TwoDeck, OneExtra, TwoExtra);
         setTimeout(function() {
-            singlesitenav('duelscreen');
+            //singlesitenav('duelscreen');
             setMidSchool(legacyMode);
         }, 2000);
         $('#automationduelfield img').error(cardLoadError);
@@ -750,7 +769,7 @@ function manualgamestart(message) {
         main2 = (Array.isArray(message.field[1].DECK)) ? message.field[1].DECK.length : message.field[1].DECK,
         extra1 = (Array.isArray(message.field[0].EXTRA)) ? message.field[0].EXTRA.length : message.field[0].EXTRA,
         extra2 = (Array.isArray(message.field[1].EXTRA)) ? message.field[1].EXTRA.length : message.field[1].EXTRA;
-    singlesitenav('duelscreen');
+    //singlesitenav('duelscreen');
     if (!duelstarted || !window.manualDuel) {
         loadField();
         duelstarted = true;

@@ -82,6 +82,10 @@ function duelController(message) {
             window.verification = message.verification;
             $('#selectwhogoesfirst').css('display', 'block');
             break;
+        case 'ygopro':
+
+            manualReciver(message.message);
+            break;
         default:
             return;
     }
