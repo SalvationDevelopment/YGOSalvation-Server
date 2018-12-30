@@ -449,10 +449,13 @@ primus.plugin('rooms', Rooms);
 
 primus.on('connection', function(socket) {
     socket.on('data', function(data) {
-        console.log(data);
+        if (data.action !== 'ack') {
+            console.log(data);
+        }
         try {
-            onData(data, socket);
             socket.write(gamelist);
+            onData(data, socket);
+
         } catch (error) {
             console.log(error);
         }

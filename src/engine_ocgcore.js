@@ -23,8 +23,7 @@
  * @property {Number} startLP
  * @property {Object} player
  */
-const sql = require('sql.js'),
-    fs = require('fs'),
+const fs = require('fs'),
     os = require('os'),
     ffi = require('ffi'),
     ref = require('ref'),
@@ -73,7 +72,8 @@ const sql = require('sql.js'),
     boardController = require('./controller_ygopro.js'),
     translateYGOProAPI = require('./translate_ygopro_messages.js'),
     manualControlEngine = require('./engine_manual.js'),
-    DataStream = require('./model_data_stream.js');
+    DataStream = require('./model_data_stream.js'),
+    ocgapi = require('./engine_ocgcore_interface');
 
 
 
@@ -97,20 +97,21 @@ filelist.forEach(function(filename) {
 console.log('Loaded Scripts');
 
 function scriptReader(scriptname, length) {
+    scriptname = ref.readCString(scriptname, 0);
     var file = scriptsFolder + '/' + scriptname.substr(20);
     if (fs.existsSync(file)) {
-        var script = fs.readFileSync(file);
-
-        ref.set(length, 0, script.byteLength);
-        return script;
+        try {
+            var script = fs.readFileSync(file);
+            return script;
+        } catch (e) {
+            console.log(e);
+            return Buffer.alloc(0);
+        }
     } else {
         return Buffer.alloc(0);
 
     }
 }
-
-var database,
-    filebuffer = fs.readFileSync('../bin/mr4/cards.cdb');
 
 
 function hasType(card, type) {
@@ -119,12 +120,25 @@ function hasType(card, type) {
 
 
 
-database = new sql.Database(filebuffer);
+var database = require('../http/manifest/manifest_0-en-OCGTCG.json');
 
 function card_reader(code, buffer) {
     //function used by the core to process DB
-    var stmt = database.prepare('SELECT * FROM datas WHERE id =' + code);
-    var dbEntry = stmt.getAsObject({ id: 1 });
+    var dbEntry = database.find(function(cardEntry) {
+        cardEntry.id === code;
+    }) || {
+        id: code,
+        alias: 0,
+        setcode: 0,
+        type: 0,
+        level: 0,
+        attribute: 0,
+        race: 0,
+        atk: 0,
+        def: 0,
+        level: 0,
+        defense: 0
+    };
     var card = {
         code: dbEntry.id,
         alias: dbEntry.alias,
@@ -139,7 +153,7 @@ function card_reader(code, buffer) {
         rscale: (dbEntry.level >> 16) & 0xff,
         link: (hasType(dbEntry, 0x4000000)) ? dbEntry.defense : 0
     };
-    ref.set(buffer, 0, (cardData(card)));
+    cardData(card);
     return code;
 }
 
@@ -158,42 +172,17 @@ module.exports.configurations = {
 
 
 
-var pduelPointer = (ref.refType('string')), ///really need to figure out the dimensions of this pointer. "pointer" isnt gonna cut it.
-    ocgapi = ffi.Library('C:/salvation/ygopro/bin/release/ocgcore.dll', {
-        'set_script_reader': ['void', [script_reader_function]],
-        'set_card_reader': ['void', [card_reader_function]],
-        'set_message_handler': ['void', [message_handler_function]],
-        'create_duel': [pduelPointer, ['uint32']],
-        'start_duel': ['void', [pduelPointer, 'int']],
-        'end_duel': ['void', [pduelPointer]],
-        'set_player_info': ['void', [pduelPointer, 'int32', 'int32', 'int32', 'int32']],
-        'get_log_message': ['void', [pduelPointer, bytePointer]],
-        'get_message': ['int32', [pduelPointer, bytePointer]],
-        'process': ['int32', [pduelPointer]],
-        'new_card': ['void', [pduelPointer, 'uint32', 'uint8', 'uint8', 'uint8', 'uint8', 'uint8']],
-        'new_tag_card': ['void', [pduelPointer, 'uint32', 'uint8', 'uint8']],
-        'query_card': ['int32', [pduelPointer, 'uint8', 'uint8', 'int32', bytePointer, 'int32']],
-        'query_field_count': ['int32', [pduelPointer, 'uint8', 'uint8']],
-        'query_field_card': ['int32', [pduelPointer, 'uint8', 'uint8', 'int32', (charArray), 'int32']],
-        'query_field_info': ['int32', [pduelPointer, bytePointer]],
-        'set_responsei': ['void', [pduelPointer, 'int32']],
-        'set_responseb': ['void', [pduelPointer, bytePointer]],
-        'preload_script': ['int32', [pduelPointer, 'string', 'int32']]
-    });
+var pduelPointer = (ref.refType('string')); ///really need to figure out the dimensions of this pointer. "pointer" isnt gonna cut it.
+
+
 process.on('exit', function() {
-    let a = card_reader_function;
-    let b = responsei_function;
-    let c = script_reader_function;
-    let d = message_handler_function;
+    let x;
+    x = card_reader_function;
+    x = responsei_function;
+    x = script_reader_function;
+    x = message_handler_function;
 });
 
-global.duel_functions = {
-    card_reader_function,
-    responsei_function,
-    script_reader_function,
-    message_handler_function,
-    ocgapi
-}
 
 function messagHandler(pduel, type) {
     var messageBuffer = Buffer.alloc(1024);
@@ -550,27 +539,29 @@ function duel(settings, players, observers) {
     ocgapi.set_message_handler(messagHandler); //bad
     ocgapi.preload_script(pduel, './expansions/script/constant.lua', 0x10000000);
     ocgapi.preload_script(pduel, './expansions/script/utility.lua', 0x10000000);
-    ocgapi.set_responsei(pduel, function(data) {
-        console.log(data)
-    });
+    ocgapi.set_responsei(pduel, console.log);
 
     ocgapi.set_player_info(pduel, 0, settings.start_lp, settings.start_hand_count, settings.draw_count);
     ocgapi.set_player_info(pduel, 1, settings.start_lp, settings.start_hand_count, settings.draw_count);
 
     console.log(1);
     players[0].main.forEach(function(cardID, sequence) {
+        if (sequence > 6) return;
         ocgapi.new_card(pduel, cardID, 0, 0, LOCATION_DECK, 0, POS_FACEDOWN_DEFENSE);
     });
     console.log(2);
     players[0].extra.forEach(function(cardID, sequence) {
+        if (sequence > 6) return;
         ocgapi.new_card(pduel, cardID, 0, 0, LOCATION_EXTRA, 0, POS_FACEDOWN_DEFENSE);
     });
     console.log(3);
     players[1].main.forEach(function(cardID, sequence) {
+        if (sequence > 6) return;
         ocgapi.new_card(pduel, cardID, 1, 1, LOCATION_DECK, 0, POS_FACEDOWN_DEFENSE);
     });
     console.log(4);
     players[1].extra.forEach(function(cardID, sequence) {
+        if (sequence > 6) return;
         ocgapi.new_card(pduel, cardID, 1, 1, LOCATION_EXTRA, 0, POS_FACEDOWN_DEFENSE);
     });
     //send start msg
@@ -584,7 +575,7 @@ function duel(settings, players, observers) {
         });
 
     game = makeGame(pduel, settings, playerConnections, observerConnections);
-
+    game.refer = ref.deref(pduel);
     setTimeout(function() {
         game.sendStartInfo(0);
         game.sendStartInfo(1);

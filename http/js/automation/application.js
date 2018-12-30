@@ -79,7 +79,7 @@ function duelController(message) {
             $('#duelscreen').toggle();
         case 'turn_player':
             window.verification = message.verification;
-            $('#selectwhogoesfirst').toggle();
+            $('#selectwhogoesfirst').css('display', 'block');
     }
 }
 

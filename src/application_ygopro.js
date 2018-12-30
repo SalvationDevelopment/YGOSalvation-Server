@@ -451,7 +451,7 @@ function determine(server, game, state, client) {
     if (!game.player[0].ready && !game.player[1].ready) {
         return;
     }
-    //ocgcore.shuffle(state.player);
+    ocgcore.shuffle(state.clients);
 
     server.write({
         action: 'start'
@@ -605,6 +605,7 @@ function messageHandler(server, duel, game, state, client, message) {
  * @returns {void} If the deck is valid or not.
  */
 function disconnectionHandler(server, duel, game, state, deadSpark) {
+    console.log(deadSpark.slot, deadSpark.username, deadSpark.session);
     const message = {
         action: 'spectate',
         slot: deadSpark.slot
@@ -854,6 +855,7 @@ function main(callback) {
         client.on('data', function(message) {
             messageHandler(server, duel, game, state, client, message);
         });
+        broadcast(server, game);
     });
     server.on('disconnection', function(deadSpark) {
         disconnectionHandler(server, duel, game, state, deadSpark);
