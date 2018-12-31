@@ -114,7 +114,12 @@ function registrationCall(data, socket) {
                 chatbox: chatbox
             });
             socket.join(socket.username);
-            announce({ clientEvent: 'gamelist', gamelist });
+            announce({
+                clientEvent: 'gamelist',
+                gamelist,
+                ackresult: acklevel,
+                userlist: userlist
+            });
         } else {
             socket.write({
                 clientEvent: 'servererror',
@@ -256,14 +261,29 @@ function childHandler(child, socket, message) {
     switch (message.action) {
         case 'lobby':
             gamelist[message.game.roompass] = message.game;
-            announce({ clientEvent: 'gamelist', gamelist });
+            announce({
+                clientEvent: 'gamelist',
+                gamelist,
+                ackresult: acklevel,
+                userlist: userlist
+            });
             break;
         case 'stop':
             delete gamelist[message.game.roompass];
-            announce({ clientEvent: 'gamelist', gamelist });
+            announce({
+                clientEvent: 'gamelist',
+                gamelist,
+                ackresult: acklevel,
+                userlist: userlist
+            });
             break;
         case 'ready':
-            announce({ clientEvent: 'gamelist', gamelist });
+            announce({
+                clientEvent: 'gamelist',
+                gamelist,
+                ackresult: acklevel,
+                userlist: userlist
+            });
             socket.write({
                 clientEvent: 'lobby',
                 roompass: message.roompass,
@@ -287,7 +307,12 @@ function childHandler(child, socket, message) {
         case 'quit':
             delete gamelist[message.game.roompass];
             delete gameports[message.game.port];
-            announce({ clientEvent: 'gamelist', gamelist });
+            announce({
+                clientEvent: 'gamelist',
+                gamelist,
+                ackresult: acklevel,
+                userlist: userlist
+            });
             break;
     }
 }
@@ -458,7 +483,9 @@ primus.on('connection', function(socket) {
         try {
             socket.write({
                 clientEvent: 'gamelist',
-                gamelist
+                gamelist,
+                ackresult: acklevel,
+                userlist: userlist
             });
             onData(data, socket);
 
@@ -474,6 +501,11 @@ setInterval(function() {
         ackresult: acklevel,
         userlist: userlist
     });
-    announce({ clientEvent: 'gamelist', gamelist });
+    announce({
+        clientEvent: 'gamelist',
+        gamelist,
+        ackresult: acklevel,
+        userlist: userlist
+    });
     massAck();
 }, 15000);

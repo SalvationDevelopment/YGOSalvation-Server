@@ -273,44 +273,49 @@ function attemptJoin(game, state, client, callback) {
 
 /**
  * Remove the user from a specificed slot.
+ * @param {Object} server Primus instance.
  * @param {GameState} game public gamelist state information.
+ * @param {ApplicationState} state internal private state information not shown on the game list.
  * @param {ClientMessage} message JSON communication sent from client. 
  * @param {String} user user that requested that slot leave.
- * @returns {void}
+ * @returns {                                                       void}
  */
-function spectate(game, message, user) {
+function spectate(server, game, state, message, user) {
     const slot = message.slot;
     if (game.player[slot]) {
-        game.player[slot].write(({
+        state.clients[slot].slot = undefined;
+        state.clients[slot].write(({
             action: 'leave',
             user: user
         }));
-        game.player[slot].join('spectators', function(error) {
+        state.clients[slot].join('spectators', function(error) {
             if (error) {
                 throw error;
             }
         });
+        game.player.splice(slot, 1);
+        state.clients.splice(slot, 1);
+        game.player.forEach(function(client, index) {
+            state.clients.slot = index;
+        });
         return;
     }
-    game.player[slot].join('spectators', function(error) {
-        if (error) {
-            throw error;
-        }
-    });
 }
 
 /**
  * Kick the user in a specific slot if authorized to do so.
+ * @param {Object} server Primus instance.
  * @param {GameState} game public gamelist state information.
+ * @param {ApplicationState} state internal private state information not shown on the game list.
  * @param {Spark} client connected websocket and Primus user (spark in documentation).
  * @param {ClientMessage} message JSON communication sent from client.
  * @returns {Boolean} if the kick was valid and attempted to be executed.
  */
-function kick(game, client, message) {
+function kick(server, game, state, client, message) {
     if (client.slot !== 0 && !client.admin) {
         return false;
     }
-    spectate(game, message, client.username);
+    spectate(server, game, state, message, client.username);
     return true;
 }
 
@@ -547,7 +552,13 @@ function processMessage(server, duel, game, state, client, message) {
             });
             break;
         case 'kick':
-            kick(game, client, message);
+            if (client.slot === undefined) {
+                attemptJoin(game, state, client, function() {
+                    broadcast(server, game);
+                });
+                return;
+            }
+            kick(server, game, state, client, message);
             broadcast(server, game);
             break;
         case 'lock':
@@ -561,7 +572,7 @@ function processMessage(server, duel, game, state, client, message) {
             respond(duel, client, message);
             break;
         case 'spectate':
-            spectate(game, message, client.username);
+            spectate(server, game, state, message, client.username);
             broadcast(server, game);
             break;
         case 'start':

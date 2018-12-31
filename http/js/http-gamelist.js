@@ -452,10 +452,11 @@ function renderList(JSONdata) {
             translated = parseDuelOptions(JSONdata[rooms]);
             players = [player1, player2, player3, player4];
             content = preformfilter(translated, players, rooms, started, JSONdata[rooms].pid, JSONdata[rooms].spectators);
-            spectators = spectators + JSONdata[rooms].spectators;
+            spectators = spectators + (JSONdata[rooms].spectators || 0);
             $('#gamelistitems').prepend(content);
         }
     }
+
     elem = $('#gamelistitems').find('div:not(.avaliable)').sort(sortMe);
     $('#gamelistitems').append(elem);
     $('#gamelistitems .avaliable').first()
@@ -463,7 +464,9 @@ function renderList(JSONdata) {
     $('#gamelistitems .started')
         .first().before('<br style="clear:both"><span class="gamelabel">' + window.jsLang.spectate + '<span><br style="clear:both">');
     $('#activeduels').html($('.game').length);
-    $('#activeduelist').html($('.playername').length + spectators - $('.playername:contains(SnarkyChild)').length);
+    var pzzs = $('.playername').length + spectators - $('.playername:contains(SnarkyChild)').length;
+    console.log(pzzs, spectators);
+    $('#activeduelist').html(pzzs, spectators);
 
 }
 
@@ -563,6 +566,8 @@ function pondata(data) {
 
         if (data.clientEvent === 'gamelist') {
             renderList(data.gamelist);
+            $('#onlineconnectted').html(data.ackresult);
+
         }
 
         if (data.message) {
