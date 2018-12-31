@@ -1264,10 +1264,6 @@ function manualReciver(message) {
             linkStack(message.field);
             break;
         case 'duel':
-
-            startGame(message);
-
-
             linkStack(message.field);
 
             setTimeout(function() {

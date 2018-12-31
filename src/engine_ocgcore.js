@@ -215,7 +215,6 @@ function seed() {
 function GameBoard(playerConnection, slot, masterRule) {
     const board = manualControlEngine(function(view, stack, callback) {
         try {
-            console.log(view);
             playerConnection.write((view['p' + slot]));
 
         } catch (error) {
