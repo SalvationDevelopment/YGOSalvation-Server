@@ -21,6 +21,7 @@ var userlist = [],
     chatbox = [],
     games = [],
     gamelist = {},
+    gameports = {},
     primus,
     acklevel = 0,
     currentGlobalMessage = '',
@@ -58,6 +59,7 @@ function massAck() {
         serverEvent: 'ack'
     });
 }
+
 
 function unsafePort() {
     return Math.floor(Math.random() * (9000 - 2000) + 2000);
@@ -112,7 +114,7 @@ function registrationCall(data, socket) {
                 chatbox: chatbox
             });
             socket.join(socket.username);
-            announce(gamelist);
+            announce({ clientEvent: 'gamelist', gamelist });
         } else {
             socket.write({
                 clientEvent: 'servererror',
@@ -254,14 +256,14 @@ function childHandler(child, socket, message) {
     switch (message.action) {
         case 'lobby':
             gamelist[message.game.roompass] = message.game;
-            announce(gamelist);
+            announce({ clientEvent: 'gamelist', gamelist });
             break;
         case 'stop':
             delete gamelist[message.game.roompass];
-            announce(gamelist);
+            announce({ clientEvent: 'gamelist', gamelist });
             break;
         case 'ready':
-            announce(gamelist);
+            announce({ clientEvent: 'gamelist', gamelist });
             socket.write({
                 clientEvent: 'lobby',
                 roompass: message.roompass,
@@ -284,7 +286,8 @@ function childHandler(child, socket, message) {
             break;
         case 'quit':
             delete gamelist[message.game.roompass];
-            announce(gamelist);
+            delete gameports[message.game.port];
+            announce({ clientEvent: 'gamelist', gamelist });
             break;
     }
 }
@@ -398,17 +401,17 @@ function onData(data, socket) {
             mindcrushCall(data);
             break;
         case ('host'):
+            let port = unsafePort();
             const child = child_process.fork(
                 './application_ygopro.js', process.argv, {
                     cwd: __dirname,
-                    env: Object.assign({}, process.env, data.info, { PORT: unsafePort() })
+                    env: Object.assign({}, process.env, data.info, { PORT: port })
                 }
             );
             child.on('message', function(message) {
-                console.log('...', message);
                 childHandler(child, socket, message);
             });
-            games.push(child);
+            gameports[port] = child;
             break;
         case ('privateMessage'):
             if (socket.username) {
@@ -453,7 +456,10 @@ primus.on('connection', function(socket) {
             console.log(data);
         }
         try {
-            socket.write(gamelist);
+            socket.write({
+                clientEvent: 'gamelist',
+                gamelist
+            });
             onData(data, socket);
 
         } catch (error) {
@@ -468,6 +474,6 @@ setInterval(function() {
         ackresult: acklevel,
         userlist: userlist
     });
-    announce(gamelist);
+    announce({ clientEvent: 'gamelist', gamelist });
     massAck();
 }, 15000);

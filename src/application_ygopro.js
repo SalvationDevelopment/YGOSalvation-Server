@@ -526,7 +526,6 @@ function respond(duel, client, message) {
  * @returns {void}
  */
 function processMessage(server, duel, game, state, client, message) {
-    console.log(message);
     if (!message.action) {
         return;
     }
@@ -612,7 +611,6 @@ function messageHandler(server, duel, game, state, client, message) {
  * @returns {void} If the deck is valid or not.
  */
 function disconnectionHandler(server, duel, game, state, deadSpark) {
-    console.log(deadSpark.slot, deadSpark.username, deadSpark.session);
     const message = {
         action: 'spectate',
         slot: deadSpark.slot

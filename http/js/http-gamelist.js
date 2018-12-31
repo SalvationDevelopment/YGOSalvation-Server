@@ -550,10 +550,7 @@ function pondata(data) {
         friends;
 
     //console.log(data);
-    if (!data.clientEvent && !data.duelAction && !data.action) {
-        renderList(data);
-        //console.log(gamelistcache);
-    } else if (data.duelAction) {
+    if (data.duelAction) {
         manualReciver(data);
     } else {
         if (data.admin) {
@@ -562,6 +559,10 @@ function pondata(data) {
         }
         if (data.clientEvent !== 'ackresult' && data.clientEvent !== 'ack') {
             console.log(data);
+        }
+
+        if (data.clientEvent === 'gamelist') {
+            renderList(data.gamelist);
         }
 
         if (data.message) {
