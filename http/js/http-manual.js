@@ -21,6 +21,7 @@ var manualDuel,
     chatplace = 0;
 
 function cardLoadError() {
+    return;
     var id = $(this).attr('data-id');
     if ($(this).attr('reloaded') === 'failed') {
         $(this).attr('src', '/img/textures/unknown.jpg');
@@ -308,8 +309,8 @@ function makeSideCard(cards, zone) {
 
     cards.forEach(function(card, index) {
         var hardcard = JSON.stringify(card),
-            src = card + '.png';
-        html += '<img class="sidedeckzonecard" src="https://raw.githubusercontent.com/shadowfox87/YGOSeries10CardPics/master/' + src + '" data-"' + card + '" onclick = "sideonclick(' + index + ', \'' + zone + '\')" / > ';
+            src = 'http://127.0.0.1:8887/' + card + '.jpg';
+        html += '<img class="sidedeckzonecard" src="' + src + '" data-"' + card + '" onclick = "sideonclick(' + index + ', \'' + zone + '\')" / > ';
 
     });
     $('img.sidedeckzonecard').error(cardLoadError);
@@ -446,7 +447,7 @@ function stateUpdate(dataBinding) {
             'data-id': ref.id,
             'data-uid': ref.uid,
             'reloaded': element.attr('reloaded'),
-            'src': (ref.id) ? ref.picture : 'img/textures/cover.jpg'
+            'src': (ref.id) ? 'http://127.0.0.1:8887/' + ref.id + '.jpg' : 'img/textures/cover.jpg'
         });
 
         if (ref.position === 'FaceDownDefence' || ref.position === 'FaceDownAttack') {
@@ -619,7 +620,7 @@ function guiCard(dataBinding) {
     } else {
         player = dataBinding.player;
     }
-    $(field).append('<img onclick="return ' + cardFunction + '()" id="uid' + dataBinding.uid + '" class="card p' + player + ' ' + dataBinding.location + ' i' + dataBinding.index + ' o" src="img/textures/cover.jpg" data-position="FaceDown" onError="this.onerror=null;this.src=\'/img/textures/unknown.jpg\';" />');
+    $(field).append('<img onclick="return ' + cardFunction + '()" id="uid' + dataBinding.uid + '" class="card p' + player + ' ' + dataBinding.location + ' i' + dataBinding.index + ' o" src="img/textures/cover.jpg" data-position="FaceDown"  />');
     element = $('#uid' + dataBinding.uid);
     return element;
 
@@ -904,7 +905,7 @@ function reveal(cards, note) {
             });
         } else {
             cards.forEach(function(card, index) {
-                var src = (card.id) ? 'https://raw.githubusercontent.com/shadowfox87/YGOSeries10CardPics/master/' + card.id + '.png' : 'img/textures/cover.jpg';
+                var src = (card.id) ? 'http://127.0.0.1:8887/' + card.id + '.jpg' : 'img/textures/cover.jpg';
                 src = (note === 'specialcard' || card.note) ? 'img/textures/' + card.id + '.jpg' : src;
                 card.uid = card.uid || card.id;
                 revealcache.push(card);

@@ -215,6 +215,7 @@ function seed() {
 function GameBoard(playerConnection, slot, masterRule) {
     const board = manualControlEngine(function(view, stack, callback) {
         try {
+            console.log('p' + slot);
             playerConnection.write((view['p' + slot]));
 
         } catch (error) {
@@ -391,6 +392,7 @@ function makeGame(pduel, settings, players, observers) {
         flag = flag || 0;
         use_cache = use_cache || 0;
         const qbuf = Buffer.alloc(0x2000);
+        qbuf.type = ref.types.byte;
         ocgapi.query_field_card(pduel, player, LOCATION_EXTRA, flag, qbuf, use_cache);
         var message = msg_update_data({}, new BufferStreamReader(qbuf));
         sendBufferToPlayer(player, message);
@@ -408,6 +410,7 @@ function makeGame(pduel, settings, players, observers) {
 
     function refreshSzone(player, flag, use_cache) {
         const qbuf = Buffer.alloc(0x2000);
+        qbuf.type = ref.types.byte;
         ocgapi.query_field_card(pduel, player, LOCATION_SZONE, flag, qbuf, use_cache);
         var message = msg_update_data({}, new BufferStreamReader(qbuf));
         sendBufferToPlayer(player, message);
@@ -418,6 +421,7 @@ function makeGame(pduel, settings, players, observers) {
     function refreshHand(player, flag, use_cache) {
 
         const qbuf = Buffer.alloc(0x2000);
+        qbuf.type = ref.types.byte;
         ocgapi.query_field_card(pduel, player, LOCATION_HAND, flag, qbuf, use_cache);
         var message = msg_update_data({}, new BufferStreamReader(qbuf));
         sendBufferToPlayer(player, message);
@@ -430,6 +434,7 @@ function makeGame(pduel, settings, players, observers) {
         const qbuf = Buffer.alloc(0x2000),
             header = Buffer.alloc(3),
             proto = enums.STOC.enums.STOC_GAME_MSG;
+        qbuf.type = ref.types.byte;
         ocgapi.query_field_card(pduel, player, LOCATION_GRAVE, flag, qbuf, use_cache);
         var message = msg_update_data({}, new BufferStreamReader(qbuf));
         sendBufferToPlayer(player, message);
@@ -442,6 +447,7 @@ function makeGame(pduel, settings, players, observers) {
         const qbuf = Buffer.alloc(0x2000),
             header = Buffer.alloc(3),
             proto = enums.STOC.enums.STOC_GAME_MSG;
+        qbuf.type = ref.types.byte;
         ocgapi.query_field_card(pduel, player, location, sequence, flag, qbuf);
 
         var message = msg_update_card({
