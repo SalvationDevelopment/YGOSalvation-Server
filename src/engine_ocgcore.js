@@ -24,13 +24,9 @@
  * @property {Object} player
  */
 const fs = require('fs'),
-    os = require('os'),
-    ffi = require('ffi'),
     ref = require('ref'),
     struct = require('ref-struct'),
-    arrayBuf = require('ref-array'),
     BufferStreamReader = require('./model_stream_reader'),
-    POS_FACEDOWN = 0x1,
     POS_FACEDOWN_DEFENSE = 0x8,
     LOCATION_DECK = 0x01,
     LOCATION_MZONE = 0x04,
@@ -39,13 +35,6 @@ const fs = require('fs'),
     LOCATION_GRAVE = 0x10,
     LOCATION_HAND = 0x02,
     makeCard = require('./model_ygopro_card.js'),
-    charArray = arrayBuf(ref.types.char),
-    bytePointer = ref.refType(ref.types.byte),
-    charPointer = ref.refType(ref.types.char),
-    intPointer = ref.refType(ref.types.int),
-    uint32Pointer = ref.refType(ref.types.uint32),
-    voidPointer = ref.refType(ref.types.void),
-    btyeArray = arrayBuf(ref.types.byte),
     cardData = struct({
         code: ref.types.uint32,
         alias: ref.types.uint32,
@@ -60,26 +49,15 @@ const fs = require('fs'),
         rscale: ref.types.uint32,
         link: ref.types.uint32
     }),
-    cardDataPointer = ref.refType(cardData),
-
-    card_reader_function = ffi.Function('uint32', ['uint32', cardDataPointer]),
-    responsei_function = ffi.Function('int32', [voidPointer, 'uint32']),
-    script_reader_function = ffi.Function('byte*', ['string', 'uint32*']),
-    message_handler_function = ffi.Function('uint32', [voidPointer, 'uint32']),
     queue = require('function-queue'),
     enums = require('./translate_ygopro_enums.js'),
     analyze = require('./translate_ygopro_analyzer.js'),
     boardController = require('./controller_ygopro.js'),
-    translateYGOProAPI = require('./translate_ygopro_messages.js'),
     manualControlEngine = require('./engine_manual.js'),
     DataStream = require('./model_data_stream.js'),
-    ocgapi = require('./engine_ocgcore_interface');
-
-
-
-var scripts = {},
-    scriptsFolder = '../../ygopro-scripts',
-    prescriptsFolder = '../../ygopro-scripts';
+    ocgapi = require('./engine_ocgcore_interface'),
+    database = require('../http/manifest/manifest_0-en-OCGTCG.json'),
+    scriptsFolder = '../../ygopro-scripts';
 
 
 function extention(filename) {
@@ -119,14 +97,9 @@ function hasType(card, type) {
 }
 
 
-
-var database = require('../http/manifest/manifest_0-en-OCGTCG.json');
-
 function card_reader(code, buffer) {
     //function used by the core to process DB
-    var dbEntry = database.find(function(cardEntry) {
-        cardEntry.id === code;
-    }) || {
+    var baseCard = {
         id: code,
         alias: 0,
         setcode: 0,
@@ -138,6 +111,10 @@ function card_reader(code, buffer) {
         def: 0,
         defense: 0
     };
+
+    var dbEntry = database.find(function(cardEntry) {
+        cardEntry.id === code;
+    }) || baseCard;
     var card = {
         code: dbEntry.id,
         alias: dbEntry.alias,
@@ -169,29 +146,24 @@ module.exports.configurations = {
     }
 };
 
+function seed() {
+    var max = 4294967295,
+        min = 0;
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
 
+function shuffle(array) {
+    for (var i = array.length - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i + 1));
+        var temp = array[i];
+        array[i] = array[j];
+        array[j] = temp;
+    }
+}
 
-var pduelPointer = (ref.refType('string')); ///really need to figure out the dimensions of this pointer. "pointer" isnt gonna cut it.
-
-
-process.on('exit', function() {
-    let x;
-    x = card_reader_function;
-    x = responsei_function;
-    x = script_reader_function;
-    x = message_handler_function;
-});
-
-
-
-
-function shuffle(a) {
-    var j, x, i;
-    for (i = a.length; i; i--) {
-        j = Math.floor(Math.random() * i);
-        x = a[i - 1];
-        a[i - 1] = a[j];
-        a[j] = x;
+function deepShuffle(array) {
+    for (var i = 0; i < array.length; i++) {
+        shuffle(array);
     }
 }
 
@@ -200,9 +172,7 @@ function duelEndProcedure(players) {
     process.exit();
 }
 
-function seed() {
-    return Math.floor(Math.random() * (4294967295));
-}
+
 
 
 /**
@@ -522,14 +492,9 @@ function duel(settings, errorHandler, players, observers) {
         game = {};
 
     if (settings.shuffleDeck) {
-        shuffle(players[0].main);
-        shuffle(players[0].extra);
-        shuffle(players[1].main);
-        shuffle(players[1].extra);
+        deepShuffle(players[0].main);
+        deepShuffle(players[1].main);
     }
-    process.on('exit', function() {
-
-    });
 
     function messageHandler(external_pduel, type) {
         var messageBuffer = Buffer.alloc(1024);
