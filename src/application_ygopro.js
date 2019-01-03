@@ -80,7 +80,9 @@ const WARNING_COUNTDOWN = 300000,
     EventEmitter = require('events'),
     fileStream = require('node-static'),
     http = require('http'),
-    ocgcore = require('./engine_ocgcore'),
+    manualEngine = require('./engine_manual.js'),
+    automaticEngine = require('./engine_ocgcore'),
+    manualController = require('./controller_dueling'),
     Primus = require('primus'),
     Rooms = require('primus-rooms'),
     sanitize = require('./lib_html_sanitizer.js'),
@@ -459,7 +461,7 @@ function determine(server, game, state, client) {
     if (!game.player[0].ready && !game.player[1].ready) {
         return;
     }
-    ocgcore.shuffle(state.clients);
+    automaticEngine.shuffle(state.clients);
 
     server.write({
         action: 'start'
@@ -520,6 +522,17 @@ function respond(duel, client, message) {
     duel.respond(client.slot, message.response);
 }
 
+function requiresManualEngine(game, client) {
+    if (!game.automatic) {
+        return;
+    }
+    if (!game.start) {
+        return;
+    }
+    if (client.slot === undefined) {
+        return;
+    }
+}
 /**
  * Process incoming messages from clients.
  * @param {Object} server Primus instance.
@@ -586,6 +599,10 @@ function processMessage(server, duel, game, state, client, message) {
         default:
             break;
     }
+    if (!requiresManualEngine(game, client)) {
+        return;
+    }
+    manualController.responseHandler(duel, state.clients, client, message);
 }
 
 /**
@@ -613,6 +630,40 @@ function messageHandler(server, duel, game, state, client, message) {
 
 
 /**
+ * Notify connected users and middleware that the game has ended.
+ * @param {Object} server Primus instance.
+ * @param {GameState} game public gamelist state information.
+ * @param {ApplicationState} state internal private state information not shown on the game list.
+ * @returns {NodeJS.Timeout} setTimeout reference number for lifetime cycle.
+ */
+function quit(server, game, state) {
+    chat(server, state, {
+        username: '[SYSTEM]'
+    }, 'Game has expired!', undefined);
+    process.send({
+        action: 'quit',
+        game: game
+    });
+    return setTimeout(process.exit, CLEANUP_LATENCY);
+}
+
+/**
+ * Culmulative connected clients on a server.
+ * @param {Object} server Primus instance.
+ * @param {GameState} game public gamelist state information.
+ * @param {ApplicationState} state internal private state information not shown on the game list.
+ * @returns {Number} Number of connected clients
+ */
+function countClients(server, game, state) {
+    const total = [];
+    // Primus does not have an reduce method, or length property.
+    server.forEach((spark, id) => {
+        total.push(id);
+    });
+    return total.length;
+}
+
+/**
  * Add additional error handling and then, process incoming messages from clients.
  * @param {Object} server Primus instance.
  * @param {Duel} duel OCGCore Instance
@@ -628,6 +679,10 @@ function disconnectionHandler(server, duel, game, state, deadSpark) {
     };
     if (deadSpark.session) {
         verificationSystem.removeListener('client.session', function() {});
+    }
+    if (!countClients(server)) {
+        quit(server, game, state);
+        return;
     }
     try {
         messageHandler(server, duel, game, state, deadSpark, message);
@@ -673,24 +728,6 @@ function adminMessageHandler(server, game, message) {
 
 
 /**
- * Notify connected users and middleware that the game has ended.
- * @param {Object} server Primus instance.
- * @param {GameState} game public gamelist state information.
- * @param {ApplicationState} state internal private state information not shown on the game list.
- * @returns {NodeJS.Timeout} setTimeout reference number for lifetime cycle.
- */
-function quit(server, game, state) {
-    chat(server, state, {
-        username: '[SYSTEM]'
-    }, 'Game has expired!', undefined);
-    process.send({
-        action: 'quit',
-        game: game
-    });
-    return setTimeout(process.exit, CLEANUP_LATENCY);
-}
-
-/**
  * Notify connected users that the game will momentarily.
  * @param {Object} server Primus instance.
  * @param {GameState} game public gamelist state information.
@@ -716,6 +753,8 @@ function interactionCheck(server, game, state) {
         quit(server, game, state);
     }
 }
+
+
 
 /**
  * Kick off new Lifecycle
@@ -773,6 +812,7 @@ function boot(httpserver, server, game, state) {
  */
 function Game(settings) {
     return {
+        automatic: true,
         banlist: settings.BANLIST || 'No Banlist',
         banlistid: settings.BANLIST_ID,
         cardpool: settings.CARD_POOL || 0,
@@ -825,9 +865,15 @@ function Duel() {
     }
 
     function load(game, players, spectators) {
-        const instance = ocgcore.duel(game, players, spectators);
-        duel.getField = instance.getField;
-        duel.respond = instance.respond;
+        if (game.automatic) {
+            const instance = automaticEngine.duel(game, players, spectators);
+            duel.getField = instance.getField;
+            duel.respond = instance.respond;
+            return;
+        }
+        const callback = manualController.clientBinding(players, spectators);
+        Object.assign(duel, manualEngine.init(callback));
+        duel.startDuel(players[0], players[1], true, game);
     }
 
     duel.getField = failure;
@@ -872,12 +918,14 @@ function main(callback) {
             messageHandler(server, duel, game, state, client, message);
         });
         broadcast(server, game);
+
     });
     server.on('disconnection', function(deadSpark) {
         disconnectionHandler(server, duel, game, state, deadSpark);
     });
 
     boot(httpserver, server, game, state);
+
 }
 
 main(undefined);
