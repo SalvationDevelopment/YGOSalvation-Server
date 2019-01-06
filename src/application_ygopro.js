@@ -812,7 +812,7 @@ function boot(httpserver, server, game, state) {
  */
 function Game(settings) {
     return {
-        automatic: true,
+        automatic: settings.AUTOMATIC || false,
         banlist: settings.BANLIST || 'No Banlist',
         banlistid: settings.BANLIST_ID,
         cardpool: settings.CARD_POOL || 0,

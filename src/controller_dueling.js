@@ -181,25 +181,26 @@ function responseHandler(duel, players, client, message) {
 
 /**
  * Create a new game object.
- * @returns {object} customized game object
+ * @param {GameState} game public gamelist state information.
+ * @returns {Object} customized game object
  */
-function Game(settings) {
+function Game(game) {
     return {
-        roompass: settings.roompass,
+        roompass: game.roompass,
         started: false,
         deckcheck: 0,
         draw_count: 0,
-        ot: parseInt(settings.info.ot, 10),
-        banlist: settings.info.banlist,
-        banlistid: settings.info.banlistid,
-        mode: settings.info.mode,
-        cardpool: settings.info.cardpool,
-        noshuffle: settings.info.shuf,
-        prerelease: settings.info.prerelease,
-        masterRule: banlist[settings.info.banlist].masterRule,
-        legacyfield: (banlist[settings.info.banlist].masterRule !== 4),
+        ot: parseInt(game.ot, 10),
+        banlist: game.banlist,
+        banlistid: game.banlistid,
+        mode: game.mode,
+        cardpool: game.cardpool,
+        noshuffle: game.shuf,
+        prerelease: game.prerelease,
+        masterRule: banlist[game.banlist].masterRule,
+        legacyfield: (banlist[game.banlist].masterRule !== 4),
         rule: 0,
-        startLP: settings.info.startLP,
+        startLP: game.startLP,
         starthand: 0,
         timelimit: 0,
         player: {
@@ -219,15 +220,18 @@ function Game(settings) {
 
 /**
  * Create a function that sorts to the correct viewers.
- * @param   {Object} game 
- * @returns {function} binding function
+ * @param {PlayerAbstraction[]} clients array of dueling players.
+ * @param {PlayerAbstraction} spectators clients that are watching the duel.
+ * @returns {Function} binding function
  */
 function clientBinding(clients, spectators) {
 
     /**
      * response handler
-     * @param {object}   view  view definition set
+     * @param {Object} view  view definition set
      * @param {Array} stack of cards
+     * @param {Function} callback gamestate watcher
+     * @returns {Function} manual duel mode update state callback function
      */
     function gameResponse(view, stack, callback) {
         try {

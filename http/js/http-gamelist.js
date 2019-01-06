@@ -228,6 +228,7 @@ function getDuelRequest() {
         stnds = isChecked('#usepass') ? ',5,1,L,' : ',5,1,U,',
         randneed = ($('#creategamebanlist').val() > 9) ? 4 : 5;
     out = {
+        AUTOMATIC: Boolean(isChecked('#useautomatic')),
         OT: Number($('#creategamecardpool').val()),
         MODE: Number($('#creategamecardpool').val()),
         DECK_CHECK: !isChecked('#discheckdeck'),
@@ -876,13 +877,6 @@ function manualModeGamelistSwitch() {
     });
 
 }
-manualModeGamelistSwitch();
-
-function mautomaticModeGamelistSwitch() {
-
-
-}
-
 
 
 function openusers() {
