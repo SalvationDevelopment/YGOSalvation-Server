@@ -280,7 +280,7 @@ function attemptJoin(game, state, client, callback) {
  * @param {ApplicationState} state internal private state information not shown on the game list.
  * @param {ClientMessage} message JSON communication sent from client. 
  * @param {String} user user that requested that slot leave.
- * @returns {                                                       void}
+ * @returns {void}
  */
 function spectate(server, game, state, message, user) {
     const slot = message.slot;
@@ -812,13 +812,13 @@ function boot(httpserver, server, game, state) {
  */
 function Game(settings) {
     return {
-        automatic: settings.AUTOMATIC || false,
+        automatic: (settings.AUTOMATIC === 'true'),
         banlist: settings.BANLIST || 'No Banlist',
         banlistid: settings.BANLIST_ID,
         cardpool: settings.CARD_POOL || 0,
-        deckcheck: settings.DECK_CHECK,
+        deckcheck: (settings.DECK_CHECK === 'true'),
         draw_count: settings.DRAW_COUNT || 1,
-        legacyfield: settings.LEGACY || false,
+        legacyfield: (settings.LEGACY === 'true'),
         locked: Boolean(settings.ROOMPASS),
         masterRule: settings.MASTER_RULE || 4,
         mode: settings.MODE || 0,
@@ -829,7 +829,7 @@ function Game(settings) {
         prerelease: settings.PRERELEASE || true,
         roompass: settings.ROOMPASS || uuid(),
         rule: settings.RULE || 0,
-        shuffleDeck: settings.SHUFFLE || false,
+        shuffleDeck: (settings.SHUFFLE === 'true'),
         started: false,
         startLP: settings.LIFEPOINTS || 8000,
         start_hand_count: settings.STARTING_HAND || 5,
@@ -866,13 +866,14 @@ function Duel() {
 
     function load(game, players, spectators) {
         if (game.automatic) {
+            console.log('auto detected');
             const instance = automaticEngine.duel(game, players, spectators);
             duel.getField = instance.getField;
             duel.respond = instance.respond;
             return;
         }
         const callback = manualController.clientBinding(players, spectators);
-        Object.assign(duel, manualEngine.init(callback));
+        Object.assign(duel, manualEngine(callback));
         duel.startDuel(players[0], players[1], true, game);
     }
 

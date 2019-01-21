@@ -58,7 +58,7 @@ function boardController(gameBoard, slot, message, ygopro, player) {
         p1: {},
         spectators: {}
     };
-    console.log(slot, message.command);
+    //console.log(slot, message.command);
     player.lastData = message;
     switch (message.command) {
         case ('STOC_UNKNOWN'): // Good
