@@ -388,6 +388,41 @@ function updatePlayer(player, target, status) {
     player[target].ready = status;
 }
 
+function checkSideDeck(oldDeck, newDeck) {
+    if (oldDeck.main.length !== newDeck.main.length) {
+        return false;
+    }
+    if (oldDeck.extra.length !== newDeck.extra.length) {
+        return false;
+    }
+    if (oldDeck.side.length !== newDeck.side.length) {
+        return false;
+    }
+
+    const oldStack = [].concat(oldDeck.main, oldDeck.extra, oldDeck.side),
+        newStack = [].concat(newDeck.main, newDeck.extra, newDeck.side);
+
+    oldStack.sort();
+    newStack.sort();
+
+    return (JSON.stringify(oldStack) === JSON.stringify(newStack));
+}
+
+function sideLock(game, client, message) {
+    if (isReady(game.player, client.slot)) {
+        updatePlayer(game.player, client.slot, false);
+        // send client.deck;
+        return;
+    }
+
+    const validSideOption = checkSideDeck(client.deck, message.deck);
+
+    if (validSideOption) {
+        client.deck = message.deck;
+        updatePlayer(game.player, client.slot, true);
+    }
+
+}
 
 /**
  * Validate a requested deck and if valid lock in the player as ready, otherwise toggle it off.
@@ -397,6 +432,9 @@ function updatePlayer(player, target, status) {
  * @returns {void} 
  */
 function lock(game, client, message) {
+    if (game.started) {
+        return;
+    }
     if (isReady(game.player, client.slot)) {
         updatePlayer(game.player, client.slot, false);
         delete client.deck;
@@ -533,6 +571,38 @@ function requiresManualEngine(game, client) {
         return;
     }
 }
+
+/**
+ * Create a new ocgcore duel instance with constructor, getter, and setter mechanisms.
+ * @returns {Duel} OCGCore Instance
+ */
+function Duel() {
+
+    const duel = {};
+
+    function failure() {
+        throw ('Duel has not started');
+    }
+
+    function load(game, players, spectators) {
+        if (game.automatic) {
+            const instance = automaticEngine.duel(game, players, spectators);
+            duel.getField = instance.getField;
+            duel.respond = instance.respond;
+            return;
+        }
+        const callback = manualController.clientBinding(players, spectators);
+        Object.assign(duel, manualEngine(callback));
+        duel.startDuel(players[0], players[1], true, game);
+    }
+
+    duel.getField = failure;
+    duel.respond = failure;
+    duel.load = load;
+
+    return duel;
+}
+
 /**
  * Process incoming messages from clients.
  * @param {Object} server Primus instance.
@@ -595,6 +665,16 @@ function processMessage(server, duel, game, state, client, message) {
         case 'surrender':
             surrender(game, duel, message);
             broadcast(server, game);
+            break;
+        case 'side':
+
+            break;
+        case 'sideLock':
+            sideLock(game, client, message);
+            broadcast(server, game);
+            break;
+        case 'restart':
+            duel = new Duel();
             break;
         default:
             break;
@@ -852,37 +932,7 @@ function State(server, game) {
     };
 }
 
-/**
- * Create a new ocgcore duel instance with constructor, getter, and setter mechanisms.
- * @returns {Duel} OCGCore Instance
- */
-function Duel() {
 
-    const duel = {};
-
-    function failure() {
-        throw ('Duel has not started');
-    }
-
-    function load(game, players, spectators) {
-        if (game.automatic) {
-            console.log('auto detected');
-            const instance = automaticEngine.duel(game, players, spectators);
-            duel.getField = instance.getField;
-            duel.respond = instance.respond;
-            return;
-        }
-        const callback = manualController.clientBinding(players, spectators);
-        Object.assign(duel, manualEngine(callback));
-        duel.startDuel(players[0], players[1], true, game);
-    }
-
-    duel.getField = failure;
-    duel.respond = failure;
-    duel.load = load;
-
-    return duel;
-}
 
 function primusInstance(httpserver) {
     return new Primus(
