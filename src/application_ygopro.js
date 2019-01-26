@@ -367,7 +367,7 @@ function deckCheck(game, client, message) {
 }
 
 /**
- * Determine ifa specific player has locked in their deck.
+ * Determine if a specific player has locked in their deck.
  * @param {Object[]} player list of players.
  * @param {Number} slot queried slot number.
  * @returns {Boolean} status of queried player
@@ -388,6 +388,12 @@ function updatePlayer(player, target, status) {
     player[target].ready = status;
 }
 
+/**
+ * Check if a new deck is a legal side
+ * @param {Deck} oldDeck previous deck used for a duel
+ * @param {Deck} newDeck deck being inspected against
+ * @returns {Boolean} if the deck is valid
+ */
 function checkSideDeck(oldDeck, newDeck) {
     if (oldDeck.main.length !== newDeck.main.length) {
         return false;
@@ -411,7 +417,6 @@ function checkSideDeck(oldDeck, newDeck) {
 function sideLock(game, client, message) {
     if (isReady(game.player, client.slot)) {
         updatePlayer(game.player, client.slot, false);
-        // send client.deck;
         return;
     }
 
@@ -422,6 +427,51 @@ function sideLock(game, client, message) {
         updatePlayer(game.player, client.slot, true);
     }
 
+}
+
+
+/**
+ * Create a new ocgcore duel instance with constructor, getter, and setter mechanisms.
+ * @returns {Duel} OCGCore Instance
+ */
+function Duel() {
+
+    const duel = {};
+
+    function failure() {
+        throw ('Duel has not started');
+    }
+
+    function load(game, players, spectators) {
+        if (game.automatic) {
+            const instance = automaticEngine.duel(game, players, spectators);
+            duel.getField = instance.getField;
+            duel.respond = instance.respond;
+            return;
+        }
+        const clientBinding = manualController.clientBinding(players, spectators);
+        Object.assign(duel, manualEngine(clientBinding));
+        duel.startDuel(players[0], players[1], true, game);
+    }
+
+    duel.getField = failure;
+    duel.respond = failure;
+    duel.load = load;
+
+    return duel;
+}
+
+function startSiding(players, clients, duel) {
+    players.forEach(function(player, slot) {
+        updatePlayer(players, slot, false);
+    });
+    clients.forEach(function(client) {
+        client.send({
+            action: 'side',
+            deck: client.deck
+        });
+    });
+    duel = new Duel();
 }
 
 /**
@@ -572,36 +622,6 @@ function requiresManualEngine(game, client) {
     }
 }
 
-/**
- * Create a new ocgcore duel instance with constructor, getter, and setter mechanisms.
- * @returns {Duel} OCGCore Instance
- */
-function Duel() {
-
-    const duel = {};
-
-    function failure() {
-        throw ('Duel has not started');
-    }
-
-    function load(game, players, spectators) {
-        if (game.automatic) {
-            const instance = automaticEngine.duel(game, players, spectators);
-            duel.getField = instance.getField;
-            duel.respond = instance.respond;
-            return;
-        }
-        const callback = manualController.clientBinding(players, spectators);
-        Object.assign(duel, manualEngine(callback));
-        duel.startDuel(players[0], players[1], true, game);
-    }
-
-    duel.getField = failure;
-    duel.respond = failure;
-    duel.load = load;
-
-    return duel;
-}
 
 /**
  * Process incoming messages from clients.
@@ -666,15 +686,15 @@ function processMessage(server, duel, game, state, client, message) {
             surrender(game, duel, message);
             broadcast(server, game);
             break;
-        case 'side':
-
+        case 'startSide':
+            startSiding(game.players, state.clients, duel);
+            broadcast(server, game);
             break;
         case 'sideLock':
             sideLock(game, client, message);
             broadcast(server, game);
             break;
         case 'restart':
-            duel = new Duel();
             break;
         default:
             break;
@@ -710,7 +730,7 @@ function messageHandler(server, duel, game, state, client, message) {
 
 
 /**
- * Notify connected users and middleware that the game has ended.
+ * Notify connected users and parent process that the game has ended.
  * @param {Object} server Primus instance.
  * @param {GameState} game public gamelist state information.
  * @param {ApplicationState} state internal private state information not shown on the game list.
@@ -837,7 +857,7 @@ function interactionCheck(server, game, state) {
 
 
 /**
- * Kick off new Lifecycle
+ * Kick off new application lifecycle, countdown to application close.
  * @param {Object} server Primus instance.
  * @param {GameState} game public gamelist state information.
  * @param {ApplicationState} state internal private state information not shown on the game list.
