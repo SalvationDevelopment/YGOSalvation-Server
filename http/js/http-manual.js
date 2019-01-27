@@ -65,6 +65,7 @@ function penL() {
 
 function setFieldSpellBG() {
     'use strict';
+    $('.fieldimage').css('display', 'block');
     $('#fieldbg0 .fieldimage, #fieldbg1 .fieldimage').css({
         'background-image': 'none',
         'background-size': '439px 473px',
@@ -1144,7 +1145,7 @@ function question(message) {
 
 function manualReciver(message) {
     'use strict';
-
+    orientSlot = message.player;
     if (message.info !== undefined) {
         updateChat(message.info.duelistChat, message.info.spectatorChat);
     }

@@ -56,6 +56,7 @@
  * @property {Array.<String>} name Names of each player
  * @property {UIPayloadUnit} p0 State of the game for the UI to update itself with
  * @property {UIPayloadUnit} p1 view of the field
+ * @property {Number} player slot of the player, shifts view angle.
  * @property {UIPayloadUnit} spectators
  */
 
@@ -519,12 +520,14 @@ function init(callback) {
             p0: {
                 duelAction: action || 'duel',
                 info: state,
-                field: generatePlayer1View()
+                field: generatePlayer1View(),
+                player: 0
             },
             p1: {
                 duelAction: action || 'duel',
                 info: state,
-                field: generatePlayer2View()
+                field: generatePlayer2View(),
+                player: 1
             },
             spectators: {
                 duelAction: action || 'duel',

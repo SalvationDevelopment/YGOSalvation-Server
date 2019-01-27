@@ -940,6 +940,7 @@ meter.p1time {
     perspective: 1000px;
     perspective-origin: bottom;
     pointer-events: none;
+    display: none;
 }
 
 .card {
