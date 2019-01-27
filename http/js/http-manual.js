@@ -1148,8 +1148,10 @@ function manualReciver(message) {
     if (message.info !== undefined) {
         updateChat(message.info.duelistChat, message.info.spectatorChat);
     }
+    if (message.duelAction !== 'duel') {
+        console.log('manualReciver', message);
+    }
 
-    console.log('manualReciver', message);
     if (message.error) {
         if (internalLocal === 'surrendered') {
             alertmodal('An Error Occured');

@@ -23,7 +23,7 @@ const enums = require('./translate_ygopro_enums'),
  * @returns {undefined}
  */
 function askUser(gameBoard, slot, message, ygopro) {
-    gameBoard.question(slot, message.command, message, {
+    gameBoard.question('p' + slot, message.command, message, {
         max: 1,
         min: 1
     }, function(answer) {
