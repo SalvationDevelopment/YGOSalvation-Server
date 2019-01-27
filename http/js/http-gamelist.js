@@ -252,17 +252,17 @@ function getManualDuelRequest() {
         stnds = isChecked('#usepass'),
         randneed = 16;
     out = {
-        cardpool: $('#creategamecardpool option:selected').text(),
-        ot: $('#creategamecardpool option:selected').val(),
-        mode: $('#creategameduelmode option:selected').text(),
-        banlist: $('#creategamebanlist option:selected').text(),
-        banlistid: $('#creategamebanlist').val(),
-        timelimit: $('#creategametimelimit').val(),
-        startLP: $('#creategamelp').val(),
-        automatic: isChecked('#useautomatic'),
-        checkd: isChecked('#discheckdeck'),
-        shuf: isChecked('#disshuffledeck'),
-        pass: isChecked('#usepass') ? setpass() : randomString(randneed)
+        CARDPOOL: $('#creategamecardpool option:selected').text(),
+        OT: $('#creategamecardpool option:selected').val(),
+        MODE: $('#creategameduelmode option:selected').text(),
+        BANLIST: $('#creategamebanlist option:selected').text(),
+        BANLISTID: $('#creategamebanlist').val(),
+        TIMELIMIT: $('#creategametimelimit').val(),
+        STARTLP: $('#creategamelp').val(),
+        AUTOMATIC: isChecked('#useautomatic'),
+        DECK_CHECK: isChecked('#discheckdeck'),
+        SHUFFLE: !isChecked('#disshuffledeck'),
+        PASSWORD: isChecked('#usepass') ? setpass() : randomString(randneed)
 
     };
 
