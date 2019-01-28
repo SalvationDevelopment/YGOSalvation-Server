@@ -79,8 +79,7 @@ function duelController(message) {
             $('#lobby').toggle();
             $('#duelscreen').toggle();
             break;
-        case 'cointoss':
-            orientSlot = message.slot;
+
         case 'turn_player':
             window.verification = message.verification;
             $('#selectwhogoesfirst').css('display', 'block');

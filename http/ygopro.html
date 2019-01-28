@@ -83,8 +83,8 @@
         <div id="rpsunit1"></div>
         <div id="rpsunit2"></div>
         <div id="selectwhogoesfirst" style="display: none">
-            <div id="gofirst" onclick="gofirst(true)">Go First</div>
-            <div id="gosecond" onclick="gofirst(false)">Go Second</div>
+            <div id="gofirst" onclick="gofirst(false)">Go First</div>
+            <div id="gosecond" onclick="gofirst(true)">Go Second</div>
         </div>
         <div id="rpschoice">
             <div class="rpschooser" style="background-image:url(img/textures/f1.jpg)" onclick="rps('scissors')"></div>
@@ -274,8 +274,8 @@
         <div id="revealedclose" onclick="$('#revealed ').toggle();$('#revealedclose ').toggle()"></div>
         <div id="selectplayer" class="selectQuestionSet">
             Select Player to go First
-            <button onclick="resolveQuestion(orient(0))">Self</button>
-            <button onclick="resolveQuestion(orient(1))">Opponent</button>
+            <button onclick="resolveQuestion(1)">Self</button>
+            <button onclick="resolveQuestion(0)">Opponent</button>
         </div>
         <div id="revealed"></div>
         <div class="sidingzone">
