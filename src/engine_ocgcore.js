@@ -64,15 +64,7 @@ function extention(filename) {
     return filename.split('.').pop();
 
 }
-console.log('Loading Scripts...');
-var filelist = fs.readdirSync(scriptsFolder);
-filelist.forEach(function(filename) {
-    if (extention(filename) === 'lua') {
-        //scripts['./expansions/script/' + filename] = fs.readFileSync(scriptsFolder + '/' + filename);
-    }
 
-});
-console.log('Loaded Scripts');
 
 function scriptReader(scriptname, length) {
     scriptname = ref.readCString(scriptname, 0);
@@ -173,8 +165,6 @@ function duelEndProcedure(players) {
 }
 
 
-
-
 /**
  * Create a single players view of the game that is reflected down to the UI.
  * @param {Object} playerConnection A players connection to the server.
@@ -204,10 +194,13 @@ function GameBoard(playerConnection, slot, masterRule) {
 function Responser(game, player) {
 
     function write(data) {
+        console.log(data);
         const resb = Buffer.alloc(64);
-        resb.copy(data);
+        data.copy(resb);
         player.lock = false;
+        console.log('setting response', resb);
         ocgapi.set_responseb(game.pduel, resb);
+        mainProcess(game.pduel, game);
     }
 
     return {
@@ -219,11 +212,11 @@ function playerInstance(playerConnection, slot, game, settings) {
     const dataStream = new DataStream(),
         gameBoard = new GameBoard(playerConnection, slot, settings.masterRule),
         gameQueue = queue(),
-        tcpConnection = new Responser(game, playerConnection);
+        responder = new Responser(game, playerConnection);
 
 
     function preformGameAction(gameAction) {
-        var output = boardController(gameBoard, slot, gameAction, tcpConnection, playerConnection);
+        var output = boardController(gameBoard, slot, gameAction, responder, playerConnection);
         //playerConnection.write(output);
     }
 
@@ -245,28 +238,31 @@ function playerInstance(playerConnection, slot, game, settings) {
         });
     }
 
-    return function(data) {
-        queueGameActions([data]);
+    return {
+        write: function(data) {
+            queueGameActions([data]);
+        },
+        read: function(message) {
+            gameBoard.respond(message);
+        }
     };
 }
 
 
 
 
-function makeGame(pduel, settings, players, observers) {
+function makeGame(pduel, settings) {
     let lastMessage = new Buffer(''),
         last_response = -1,
-        time_limit = settings.time_limit;
+        time_limit = settings.time_limit,
+        players = [],
+        observers = {};
 
-    function respond(player, data) {
-        if (last_response !== player) {
-            return;
-        }
-        const resb = Buffer.alloc(64);
-        resb.copy(data);
-        player.lock = false;
-        ocgapi.set_responseb(pduel, resb);
+    function setPlayers(clients, additionalClients) {
+        players = clients;
+        observers = additionalClients;
     }
+
 
     function gameTick() {
         time_limit -= 1;
@@ -277,11 +273,17 @@ function makeGame(pduel, settings, players, observers) {
 
     function sendBufferToPlayer(player, message) {
         lastMessage = message;
-        players[player](message);
+        players[player].write(message);
     }
 
     function reSendToPlayer(player) {
-        players[Math.abs(player)](lastMessage);
+        players[Math.abs(player)].write(lastMessage);
+    }
+
+    function respond(message) {
+        players.forEach(function(player) {
+            player.read(message);
+        });
     }
 
     function waitforResponse(player) {
@@ -297,7 +299,7 @@ function makeGame(pduel, settings, players, observers) {
 
     function sendToObservers() {
         observers.forEach(function(observer) {
-            observer(lastMessage);
+            observer.write(lastMessage);
         });
     }
 
@@ -440,6 +442,7 @@ function makeGame(pduel, settings, players, observers) {
         refreshSingle,
         refreshGrave,
         respond,
+        setPlayers,
         waitforResponse,
         sendBufferToPlayer,
         reSendToPlayer,
@@ -531,15 +534,16 @@ function duel(settings, errorHandler, players, observers) {
     });
     //send start msg
     console.log('all cards loaded');
-
+    game = makeGame(pduel, settings);
     const playerConnections = players.map(function(playerConnection, slot) {
-            return playerInstance(playerConnection, slot, { pduel }, settings);
+            return playerInstance(playerConnection, slot, game, settings);
         }),
         observerConnections = players.map(function(playerConnection, slot) {
-            return playerInstance(playerConnection, slot, { pduel }, settings);
+            return playerInstance(playerConnection, slot, game, settings);
         });
 
-    game = makeGame(pduel, settings, playerConnections, observerConnections);
+
+    game.setPlayers(playerConnections, observerConnections);
     game.refer = ref.deref(pduel);
     setTimeout(function() {
         game.sendStartInfo(0);

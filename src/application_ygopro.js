@@ -556,11 +556,13 @@ function determine(server, game, state, client) {
     });
     state.clients[0].write({
         action: 'cointoss',
-        result: 'heads'
+        result: 'heads',
+        slot: 0
     });
     state.clients[1].write({
         action: 'cointoss',
-        result: 'tails'
+        result: 'tails',
+        slot: 1
     });
     state.clients[0].write({
         action: 'turn_player',
@@ -606,8 +608,9 @@ function start(server, duel, game, state, message) {
  * @param {ClientMessage} message JSON communication sent from client.
  * @returns {void}
  */
-function respond(duel, client, message) {
-    duel.respond(client.slot, message.response);
+function question(duel, client, message) {
+    console.log('recieved question');
+    duel.respond(message);
 }
 
 function requiresManualEngine(game, client) {
@@ -671,8 +674,8 @@ function processMessage(server, duel, game, state, client, message) {
         case 'reconnect':
             reconnect(duel, state, client, message);
             break;
-        case 'respond':
-            respond(duel, client, message);
+        case 'question':
+            question(duel, client, message);
             break;
         case 'spectate':
             spectate(server, game, state, message, client.username);

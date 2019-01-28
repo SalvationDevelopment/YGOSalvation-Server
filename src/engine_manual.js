@@ -1473,13 +1473,23 @@ function init(callback) {
             uuid: uuid
         };
 
-        // Here we set an event listener. `answerListener` is exposed to the controller.
+
         // So when the user answers this question we can fire `onAnswerFromUser` and pass the data to it.
         // https://nodejs.org/api/events.html#events_emitter_once_eventname_listener
         answerListener.once(uuid, function(data) {
             onAnswerFromUser(data);
         });
+        console.log('need answer from', uuid);
         callback(output, stack);
+    }
+
+    /**
+     * Answer a queued up question
+     * @param {Object} message response message
+     */
+    function respond(message) {
+        console.log('seeing answer from', message.uuid);
+        answerListener.emit(message.uuid, message.answer);
     }
 
     function retryLastQuestion() {
@@ -1665,6 +1675,7 @@ function init(callback) {
         answerListener,
         question,
         retryLastQuestion,
+        respond,
         rps: rps,
         generateUpdateView,
         ygoproUpdate

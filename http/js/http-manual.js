@@ -612,7 +612,7 @@ function guiCard(dataBinding) {
     'use strict';
 
     var field = $('#automationduelfield'),
-        cardFunction = (autoygopro) ? 'idleOnClick' : 'guicardonclick',
+        cardFunction = (settings.automatic) ? 'idleOnClick' : 'guicardonclick',
         element,
         player;
 
@@ -2372,6 +2372,7 @@ function resolveQuestion(answer) {
     activeQuestion.answer.push(answer);
 
     if (activeQuestion.answer.length === activeQuestion.answerLength.max) {
+        console.log(activeQuestion);
         primus.write((activeQuestion));
         $('#revealed, #revealedclose').css('display', 'none');
         $('.selectQuestionSet').css('display', 'none');

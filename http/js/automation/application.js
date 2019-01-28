@@ -7,14 +7,15 @@
 
 var urlParams = new URLSearchParams(window.location.search),
     primusprotocol = (location.protocol === 'https:') ? 'wss://' : 'ws://',
-    primus = window.Primus.connect(primusprotocol + location.host + ':' + urlParams.get('room'));
+    primus = window.Primus.connect(primusprotocol + location.host + ':' + urlParams.get('room')),
+    settings = {};
 
 function updateloby(state) {
     'use strict';
     if (state === undefined) {
         return;
     }
-    //legacyMode = state.legacyfield;
+    settings = state;
     var p1 = (state.player[0]) ? state.player[0].username : '',
         p2 = (state.player[1]) ? state.player[1].username : '',
         p3 = (state.player[2]) ? state.player[2].username : '',
@@ -78,6 +79,8 @@ function duelController(message) {
             $('#lobby').toggle();
             $('#duelscreen').toggle();
             break;
+        case 'cointoss':
+            orientSlot = message.slot;
         case 'turn_player':
             window.verification = message.verification;
             $('#selectwhogoesfirst').css('display', 'block');

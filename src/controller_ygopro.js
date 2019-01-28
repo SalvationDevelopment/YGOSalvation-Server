@@ -27,7 +27,9 @@ function askUser(gameBoard, slot, message, ygopro) {
         max: 1,
         min: 1
     }, function(answer) {
-        ygopro.write(gameResponse('CTOS_RESPONSE', new Buffer(answer[0])));
+        const response = Buffer.from(answer[0]);
+        console.log('got question response', response);
+        ygopro.write(response);
     });
 }
 
