@@ -420,7 +420,7 @@ function makeGame(pduel, settings) {
             header = Buffer.alloc(3),
             proto = enums.STOC.enums.STOC_GAME_MSG;
         qbuf.type = ref.types.byte;
-        ocgapi.query_field_card(pduel, player, location, sequence, flag, qbuf);
+        ocgapi.query_field_card(pduel, player, location, sequence, qbuf, flag);
 
         var message = msg_update_card({
             player
