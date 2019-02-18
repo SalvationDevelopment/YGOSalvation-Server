@@ -477,9 +477,6 @@ primus.plugin('rooms', Rooms);
 
 primus.on('connection', function(socket) {
     socket.on('data', function(data) {
-        if (data.action !== 'ack') {
-            console.log(data);
-        }
         try {
             socket.write({
                 clientEvent: 'gamelist',
