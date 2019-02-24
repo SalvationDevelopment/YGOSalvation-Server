@@ -4,7 +4,7 @@
 
 const fastcall = require('fastcall'),
     arrayBuf = fastcall.ArrayType,
-    ref = require('ref'),
+    ref = fastcall.ref,
     bytePointer = ref.refType(ref.types.byte),
     charArray = arrayBuf(ref.types.char),
     voidPointer = ref.refType(ref.types.void),

@@ -23,9 +23,10 @@
  * @property {Number} startLP
  * @property {Object} player
  */
-const fs = require('fs'),
-    ref = require('ref'),
-    struct = require('ref-struct'),
+const fastcall = require('fastcall'),
+    fs = require('fs'),
+    ref = fastcall.ref,
+    struct = fastcall.StructType,
     BufferStreamReader = require('./model_stream_reader'),
     POS_FACEDOWN_DEFENSE = 0x8,
     LOCATION_DECK = 0x01,
