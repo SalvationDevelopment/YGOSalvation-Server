@@ -85,6 +85,10 @@ process.env.SALT = process.env.SALT || function() {
 };
 
 mongoose.Promise = Promise;
+mongoose.set('useNewUrlParser', true);
+mongoose.set('useFindAndModify', false);
+mongoose.set('useCreateIndex', true);
+
 
 function sessionTimeout(time) {
     if (!time) {
@@ -94,10 +98,18 @@ function sessionTimeout(time) {
     return ((time.getTime() + hour) > Date.now());
 }
 
-var db = mongoose.connect('mongodb://localhost/salvation', function(error, connection) {
+var db = mongoose.connect('mongodb://localhost/salvation', {
+    useNewUrlParser: true,
+    socketTimeoutMS: 0,
+    keepAlive: true,
+    reconnectTries: 30
+}, function(error, connection) {
     if (error) {
         console.log(error);
+        console.log('Make sure MongoDB is running and `salvation` collection exist.');
+        return;
     }
+    console.log('Database online');
 });
 
 mongoose.connection.on('error', function(err) {

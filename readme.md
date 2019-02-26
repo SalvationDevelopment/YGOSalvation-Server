@@ -8,7 +8,7 @@
 #YGOPro Salvation Server
 **by Salvation Development**
 
-Salvation Development is a large scale social engineering non-profit project set out to tackle the 'wicked problem' of Yu-Gi-Oh! Online Simulators via enterprise level software design. To do so it employs a merit of interconnected support software based around the core support software of YGOPro, [Invision Power Boards](https://www.invisionpower.com/), and [InspIRCD](https://github.com/inspircd/inspircd/releases) written in HTML, CSS and JavaScript housed in this repository. The project addresses issues of negligence by automating deployment and updating.
+Salvation Development is a large scale social engineering non-profit project set out to tackle the 'wicked problem' of Yu-Gi-Oh! Online Simulators via enterprise level software design. To do so it employs a merit of interconnected support software based around the core support software of YGOPro, written in HTML, CSS and JavaScript housed in this repository. The project addresses issues of negligence by automating deployment and updating.
 
 ![Screenshot of Launcher featuring Magi Magi * Gal](/documentation/screenshot.jpg?raw=true)
 
@@ -22,13 +22,14 @@ To run the system use `node server`. This will create a version of the system on
 
 - Install [Nodist](https://github.com/marcelklehr/nodist) for Windows Users, or [nvm](https://github.com/creationix/nvm) instead of Node JS. As nodejs versions increase we tend to stay with the latest releases. This helps simplify things.
 - For Windows users, open your PowerShell (not CMD) as Administrator (this is important), then `cd` to the root of the cloned repository to install the following. Non Windows users can skip this step.
-  - `npm install --global windows-build-tools`
+  - `npm install --global windows-build-tools
+- [Install CMake](http://www.cmake.org/download/)
+- Install and setup MongoDB as a service
+- Create a collection in MongoDB called `salvation`
 
 - Run the following commands. It installs a package manager, and a testing harness, and then the dependencies. 
-  - `npm install yarn -g`
-  - `npm install -g istanbul`
-  - `npm install -g mocha`
-  - `yarn install`
+  - `nodist 8.11.4`
+  - `npm install`
 
 To run the system use `node server`. This will create a version of the system on your desktop at http://localhost.
 

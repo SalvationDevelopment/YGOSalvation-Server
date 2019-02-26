@@ -26,7 +26,7 @@
         "hotload": "git+https://github.com/SalvationDevelopment/node-hotload.git",
         "hsts": "^2.1.0",
         "jsonfile": "^2.4.0",
-        "mongoose": "^5.4.0",
+        "mongoose": "^5.4.15",
         "nedb": "^1.7.2",
         "node-static": "^0.7.11",
         "primus": "^7.2.3",

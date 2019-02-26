@@ -467,30 +467,37 @@ function onData(data, socket) {
 
 
 
+function onPrimusData(socket, data) {
+    try {
+        socket.write({
+            clientEvent: 'gamelist',
+            gamelist,
+            ackresult: acklevel,
+            userlist: userlist
+        });
+        onData(data, socket);
+
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+
+function onPrimusConnection(socket) {
+    socket.on('data', function(data) {
+        onPrimusData(socket, data);
+    });
+}
+
+
+
 
 primus = new Primus(primusServer, {
     parser: 'JSON'
 });
 
 primus.plugin('rooms', Rooms);
-
-
-primus.on('connection', function(socket) {
-    socket.on('data', function(data) {
-        try {
-            socket.write({
-                clientEvent: 'gamelist',
-                gamelist,
-                ackresult: acklevel,
-                userlist: userlist
-            });
-            onData(data, socket);
-
-        } catch (error) {
-            console.log(error);
-        }
-    });
-});
+primus.on('connection', onPrimusConnection);
 
 setInterval(function() {
     announce({

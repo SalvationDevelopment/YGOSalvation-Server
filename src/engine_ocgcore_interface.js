@@ -25,7 +25,7 @@ const fastcall = require('fastcall'),
         link: ref.types.uint32
     }),
     path = require('path'),
-    core_location = path.resolve('../bin/mr4/ocgcore.dll'),
+    core_location = path.resolve(__dirname, '../bin/mr4/ocgcore.dll'),
     cardDataPointer = ref.refType(cardData),
     ocgcore = new fastcall.Library(core_location).
 callback({ card_reader_function: ['uint32', ['uint32', cardDataPointer]] }).
