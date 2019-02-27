@@ -304,6 +304,7 @@ function childHandler(child, socket, message) {
                 });
             });
             break;
+
         case 'quit':
             delete gamelist[message.game.roompass];
             delete gameports[message.game.port];
@@ -371,6 +372,13 @@ function onData(data, socket) {
             break;
         case ('register'):
             registrationCall(data, socket);
+            break;
+        case 'sessionUpdate':
+            userController.validateSession({
+                session: data.session
+            }, function(error, valid, person) {
+
+            });
             break;
         case ('chatline'):
             if (socket.username && socket.speak) {
@@ -488,9 +496,6 @@ function onPrimusConnection(socket) {
         onPrimusData(socket, data);
     });
 }
-
-
-
 
 primus = new Primus(primusServer, {
     parser: 'JSON'

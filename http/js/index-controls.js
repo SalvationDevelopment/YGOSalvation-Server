@@ -355,6 +355,12 @@ function processLogin(data) {
     var info = data;
     console.log('Attempting to do login based on :', data);
     localStorage.session = data.session;
+    setInterval(function() {
+        primus.write({
+            action: 'sessionUpdate',
+            session: data.session
+        });
+    }, 10000);
     if (data.session && !info.bans.length) {
         localStorage.nickname = info.username;
         admin = String(Number(info.admin));
