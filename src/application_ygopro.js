@@ -79,10 +79,13 @@ const WARNING_COUNTDOWN = 300000,
     dotenv = require('dotenv'),
     EventEmitter = require('events'),
     fileStream = require('node-static'),
+    fs = require('fs'),
     http = require('http'),
+    https = require('http'),
     manualEngine = require('./engine_manual.js'),
     automaticEngine = require('./engine_ocgcore'),
     manualController = require('./controller_dueling'),
+    path = require('path'),
     Primus = require('primus'),
     Rooms = require('primus-rooms'),
     sanitize = require('./lib_html_sanitizer.js'),
@@ -955,9 +958,21 @@ function State(server, game) {
     };
 }
 
+function HTTPServer() {
+    try {
+        var privateKey = fs.readFileSync(path.resolve(process.env.SSL + '\\private.key')).toString(),
+            certificate = fs.readFileSync(path.resolve(process.env.SSL + '\\certificate.crt')).toString();
+        return https.createServer({
+            key: privateKey,
+            cert: certificate
+        }, staticWebServer);
+    } catch (nossl) {
+        return http.createServer(staticWebServer);
+    }
+}
 
 
-function primusInstance(httpserver) {
+function PrimusInstance(httpserver) {
     return new Primus(
         httpserver, {
             parser: 'JSON'
@@ -981,8 +996,8 @@ function main(callback) {
 
     const duel = new Duel(),
         game = new Game(process.env),
-        httpserver = http.createServer(staticWebServer),
-        server = primusInstance(httpserver),
+        httpserver = new HTTPServer(),
+        server = new PrimusInstance(httpserver),
         state = new State(server, game);
 
     server.plugin('rooms', Rooms);
