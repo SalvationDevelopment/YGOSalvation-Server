@@ -133,7 +133,7 @@ function deckeditloader() {
     });
 }
 
-var uncensoredcolor = 'url(../im/magimagipink.jpg)',
+var uncensoredcolor = 'url(../img/magimagipink.jpg)',
     uncensoredblack = 'url(../img/magimagiblack.jpg)',
     censoredcolor = 'url(../img/magimagipinkshadow.jpg)',
     censoredblack = 'url(../img/magimagipinkshadow2.jpg)',
