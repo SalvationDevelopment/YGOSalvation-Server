@@ -217,7 +217,7 @@ function sendRecoveryEmail(address, username, salt) {
             console.log(err);
         });
     } catch (fatal) {
-        console.log(address, username, id, fatal);
+        console.log(address, username, fatal);
     }
 
 }
@@ -457,7 +457,7 @@ function setupController(app) {
     app.get('/verify/:id', function(request, response) {
         var id = request.params.id;
 
-        Users.findByIdAndUpdate(id, { verified: true }, function(err, person) {
+        Users.findByIdAndUpdate(id, { verified: true }, function(error, person) {
             response.write({
                 success: error,
                 result: person
