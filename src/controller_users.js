@@ -226,7 +226,9 @@ function startRecoverPassword(data, callback) {
     var code = salter();
     Users.findOneAndUpdate({ username: data.username }, { recoveryPass: code }, function(error, person) {
         callback(error, person, code);
-        sendRecoveryEmail(person.email, person.username, code);
+        if (person) {
+            sendRecoveryEmail(person.email, person.username, code);
+        }
     });
 }
 
