@@ -481,7 +481,14 @@ function setupController(app) {
                 error: error
             });
         }
+        // basic security practice dont tell the attacker which part was correct.
         if (!payload.email) {
+            response.send({
+                error: 'No username or email address'
+            });
+            return;
+        }
+        if (!payload.username) {
             response.send({
                 error: 'No username or email address'
             });
@@ -489,7 +496,9 @@ function setupController(app) {
         }
 
         Users.findOne({ 'email': payload.email }, 'username email', function(err, person) {
-            startRecoverPassword(person, callback);
+            if (person) {
+                startRecoverPassword(person, callback);
+            }
         });
 
     });
@@ -503,17 +512,21 @@ function setupController(app) {
                 error: error
             });
         }
+        // basic security practice dont tell the attacker which part was correct.
         if (!payload.email) {
             response.send({
                 error: 'No username or email address'
             });
             return;
         }
-
+        if (!payload.username) {
+            response.send({
+                error: 'No username or email address'
+            });
+            return;
+        }
 
         recoverPassword(payload, function(error) {});
-
-
     });
 
 
