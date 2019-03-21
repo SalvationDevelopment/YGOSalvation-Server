@@ -460,7 +460,7 @@ function setupController(app) {
         var id = request.params.id;
 
         Users.findByIdAndUpdate(id, { verified: true }, function(error, person) {
-            response.write({
+            response.send({
                 success: error,
                 result: person
             });
