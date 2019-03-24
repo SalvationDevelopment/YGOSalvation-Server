@@ -546,7 +546,7 @@ function determine(server, game, state, client) {
     if (client.slot !== 0) {
         return;
     }
-    if (!game.player[0] && !game.player[1]) {
+    if (!game.player[0] || !game.player[1]) {
         return;
     }
     if (!game.player[0].ready && !game.player[1].ready) {
