@@ -200,7 +200,12 @@ function updatePassword(data, callback) {
 
 function sendRecoveryEmail(address, username, salt) {
     try {
-        var emailClient = new SparkPost(process.env.SPARKPOST);
+        var emailClient = new SparkPost(process.env.SPARKPOST),
+            emaildata = {
+                from: 'no-replay@ygosalvation.com',
+                subject: 'User Recovery for ' + username,
+                html: '<html><body><p>Click the link to recover account. <a href="http://ygosalvation.com/recover/' + salt + '" >http://ygosalvation.com/recover/' + salt + '</a></p></body></html>'
+            };
         emailClient.transmissions.send({
             content: {
                 from: 'no-replay@ygosalvation.com',
@@ -211,13 +216,13 @@ function sendRecoveryEmail(address, username, salt) {
                 { address }
             ]
         }).then(data => {
-            console.log(data);
+            console.log(data, emaildata);
         }).catch(err => {
             console.log('Whoops! Something went wrong');
-            console.log(err);
+            console.log(err, emaildata);
         });
     } catch (fatal) {
-        console.log(address, username, fatal);
+        console.log(address, username, fatal, emaildata);
     }
 
 }
@@ -226,6 +231,7 @@ function startRecoverPassword(data, callback) {
     var code = salter();
     Users.findOneAndUpdate({ username: data.username }, { recoveryPass: code }, function(error, person) {
         callback(error, person, code);
+        console.log('Attempting to recover', data.username);
         if (person) {
             sendRecoveryEmail(person.email, person.username, code);
         }
