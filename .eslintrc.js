@@ -1,7 +1,7 @@
 module.exports = {
     'env': {
         'node': true,
-        'mocha': true,
+        'mocha': false,
         'es6': true
     },
     'rules': {

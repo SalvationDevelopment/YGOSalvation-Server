@@ -1,3 +1,4 @@
+/* eslint-disable no-sync */
 /*eslint no-plusplus: 0*/
 
 /**
@@ -60,19 +61,17 @@ const fastcall = require('fastcall'),
     database = require('../http/manifest/manifest_0-en-OCGTCG.json'),
     scriptsFolder = '../../ygopro-scripts';
 
-
-function extention(filename) {
-    return filename.split('.').pop();
-
-}
-
-
-function scriptReader(scriptname, length) {
+/**
+ * Read a card from file.
+ * @param {String} scriptname filename of the script
+ * @returns {Buffer} script
+ */
+function scriptReader(scriptname) {
     scriptname = ref.readCString(scriptname, 0);
-    var file = scriptsFolder + '/' + scriptname.substr(20);
+    const file = scriptsFolder + '/' + scriptname.substr(20);
     if (fs.existsSync(file)) {
         try {
-            var script = fs.readFileSync(file);
+            const script = fs.readFileSync(file);
             return script;
         } catch (e) {
             console.log(e);
@@ -80,86 +79,104 @@ function scriptReader(scriptname, length) {
         }
     } else {
         return Buffer.alloc(0);
-
     }
 }
 
-
+/**
+ * Determine if a card has a certain type. Effect/Fusion/Sychro etc
+ * @param {Card} card Card in question
+ * @param {Number} type Enum of the type in question
+ * @returns {Boolean} result
+ */
 function hasType(card, type) {
     return ((card.type & type) !== 0);
 }
 
-
-function card_reader(code, buffer) {
+/**
+ * Callback function used by the core to get database information on a card
+ * @param {Number} code unique card, usually 8 digit, passcode.
+ * @returns {CardStructure} resulting card
+ */
+function card_reader(code) {
     //function used by the core to process DB
-    var baseCard = {
-        id: code,
-        alias: 0,
-        setcode: 0,
-        type: 0,
-        level: 0,
-        attribute: 0,
-        race: 0,
-        atk: 0,
-        def: 0,
-        defense: 0
-    };
-
     var dbEntry = database.find(function(cardEntry) {
-        cardEntry.id === code;
-    }) || baseCard;
-    var card = {
-        code: dbEntry.id,
-        alias: dbEntry.alias,
-        setcode: dbEntry.setcode,
-        type: dbEntry.type,
-        level: dbEntry.level & 0xff,
-        attribute: dbEntry.attribute,
-        race: dbEntry.race,
-        attack: dbEntry.atk,
-        defence: (hasType(dbEntry, 0x4000000)) ? 0 : dbEntry.def,
-        lscale: (dbEntry.level >> 24) & 0xff,
-        rscale: (dbEntry.level >> 16) & 0xff,
-        link: (hasType(dbEntry, 0x4000000)) ? dbEntry.defense : 0
-    };
+            return cardEntry.id === code;
+        }) || {
+            id: code,
+            alias: 0,
+            setcode: 0,
+            type: 0,
+            level: 0,
+            attribute: 0,
+            race: 0,
+            atk: 0,
+            def: 0,
+            defense: 0
+        },
+        card = {
+            code: dbEntry.id,
+            alias: dbEntry.alias,
+            setcode: dbEntry.setcode,
+            type: dbEntry.type,
+            level: dbEntry.level & 0xff,
+            attribute: dbEntry.attribute,
+            race: dbEntry.race,
+            attack: dbEntry.atk,
+            defence: (hasType(dbEntry, 0x4000000)) ? 0 : dbEntry.def,
+            lscale: (dbEntry.level >> 24) & 0xff,
+            rscale: (dbEntry.level >> 16) & 0xff,
+            link: (hasType(dbEntry, 0x4000000)) ? dbEntry.defense : 0
+        };
+
     cardData(card);
     return code;
 }
 
 
 
-module.exports.configurations = {
-    normal: {
-        priority: false,
-        draw_count: 1,
-        start_hand_count: 5,
-        time: 300,
-        shuffleDeck: true,
-        start_lp: 8000
-    }
-};
 
+/**
+ * Generate a random number for ygopro-core to use as a seed.
+ * Ideally this would be pulling from a random number service.
+ * @returns {Number} Seed number
+ */
 function seed() {
     var max = 4294967295,
         min = 0;
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
+/**
+ * Shuffles an array in place, once.
+ * @param {Array} array to shuffle
+ * @returns {void}
+ */
 function shuffle(array) {
-    for (var i = array.length - 1; i > 0; i--) {
-        var j = Math.floor(Math.random() * (i + 1));
-        var temp = array[i];
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1)),
+            temp = array[i];
+
         array[i] = array[j];
         array[j] = temp;
     }
 }
 
+/**
+ * Shuffles an array in place, multiple times.
+ * @param {Array} array to shuffle
+ * @returns {void}
+ */
 function deepShuffle(array) {
     for (var i = 0; i < array.length; i++) {
         shuffle(array);
     }
 }
 
+/**
+ * When the duel ends, send the replay, notify the users, etc...
+ * @param {Player[]} players connected player list.
+ * @returns {void}
+ */
 function duelEndProcedure(players) {
     console.log('game ended');
     process.exit();
@@ -192,6 +209,45 @@ function GameBoard(playerConnection, slot, masterRule) {
     return board;
 }
 
+
+/**
+ * Contious Game Ticker and ygopro-core output interpreter.
+ * @param {Duel} game Duel instance with controls setup
+ * @returns {void}
+ */
+function mainProcess(game) {
+    var engineBuffer = Buffer.alloc(0x1000),
+        engFlag = 0,
+        engLen = 0,
+        stop = 0,
+        result;
+
+    while (!stop) {
+
+        if (engFlag === 2) {
+            break;
+        }
+        result = ocgapi.process(game.pduel);
+        engLen = result & 0xffff;
+        engFlag = result >> 16;
+        if (engLen > 0) {
+            ocgapi.get_message(game.pduel, engineBuffer);
+        }
+        stop = analyze(engineBuffer, engLen, game);
+
+    }
+    if (stop === 2) {
+        duelEndProcedure(game);
+    }
+}
+
+/**
+ * Create a new abstraction for the player to set the response to questions ygopro-core ask.
+ * @class
+ * @param {Duel} game duel in question
+ * @param {Player} player Player inputer will be linked to
+ * @returns {Requester} Player-Core connection
+ */
 function Responser(game, player) {
 
     function write(data) {
@@ -201,7 +257,7 @@ function Responser(game, player) {
         player.lock = false;
         console.log('setting response', resb);
         ocgapi.set_responseb(game.pduel, resb);
-        mainProcess(game.pduel, game);
+        mainProcess(game);
     }
 
     return {
@@ -249,9 +305,12 @@ function playerInstance(playerConnection, slot, game, settings) {
     };
 }
 
-
-
-
+/**
+ * Setup duel control functions
+ * @param {Buffer} pduel pointer representing the duel inside ygopro-core
+ * @param {*} settings game settings
+ * @returns {Duel} Game instance with controls.
+ */
 function makeGame(pduel, settings) {
     let lastMessage = new Buffer(''),
         last_response = -1,
@@ -454,42 +513,13 @@ function makeGame(pduel, settings) {
     };
 }
 
-
-function mainProcess(pduel, game) {
-
-
-
-    var engineBuffer = Buffer.alloc(0x1000),
-        engFlag = 0,
-        engLen = 0,
-        stop = 0,
-        result;
-
-    while (!stop) {
-
-        if (engFlag === 2) {
-            break;
-        }
-        result = ocgapi.process(game.pduel);
-        engLen = result & 0xffff;
-        engFlag = result >> 16;
-        if (engLen > 0) {
-            ocgapi.get_message(game.pduel, engineBuffer);
-        }
-        stop = analyze(engineBuffer, engLen, game);
-
-    }
-    if (stop === 2) {
-        duelEndProcedure(game);
-    }
-}
-
 /**
  * Start a duel
  * @param {DuelSettings} settings parameters for starting the duel
- * @param players {Socket[]}
- * @param observers {} 1-4 players for the duel
- * @returns {undefined}
+ * @param {Function} errorHandler error reporting function, sends to UI.
+ * @param {Socket[]} players  1-4 players for the duel
+ * @param {Socket} observers  observer abstraction
+ * @returns {void}
  */
 function duel(settings, errorHandler, players, observers) {
     var pduel,
@@ -555,7 +585,7 @@ function duel(settings, errorHandler, players, observers) {
             // game.refreshMzone(0);
             // game.refreshMzone(1);
             ocgapi.start_duel(pduel, settings.priority);
-            mainProcess(pduel, game);
+            mainProcess(game);
         }, 1000);
 
     }, 1000);
@@ -566,4 +596,15 @@ function duel(settings, errorHandler, players, observers) {
 module.exports = {
     duel: duel,
     shuffle: shuffle
+};
+
+module.exports.configurations = {
+    normal: {
+        priority: false,
+        draw_count: 1,
+        start_hand_count: 5,
+        time: 300,
+        shuffleDeck: true,
+        start_lp: 8000
+    }
 };

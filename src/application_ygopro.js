@@ -287,24 +287,25 @@ function attemptJoin(game, state, client, callback) {
  */
 function spectate(server, game, state, message, user) {
     const slot = message.slot;
-    if (game.player[slot]) {
-        state.clients[slot].slot = undefined;
-        state.clients[slot].write(({
-            action: 'leave',
-            user: user
-        }));
-        state.clients[slot].join('spectators', function(error) {
-            if (error) {
-                throw error;
-            }
-        });
-        game.player.splice(slot, 1);
-        state.clients.splice(slot, 1);
-        game.player.forEach(function(client, index) {
-            state.clients.slot = index;
-        });
+    if (!game.player[slot]) {
         return;
     }
+    state.clients[slot].slot = undefined;
+    state.clients[slot].write(({
+        action: 'leave',
+        user: user
+    }));
+    state.clients[slot].join('spectators', function(error) {
+        if (error) {
+            throw error;
+        }
+    });
+    game.player.splice(slot, 1);
+    state.clients.splice(slot, 1);
+    game.player.forEach(function(client, index) {
+        state.clients.slot = index;
+    });
+    return;
 }
 
 /**
