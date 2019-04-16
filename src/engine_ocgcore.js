@@ -132,9 +132,6 @@ function card_reader(code) {
     return code;
 }
 
-
-
-
 /**
  * Generate a random number for ygopro-core to use as a seed.
  * Ideally this would be pulling from a random number service.
@@ -216,27 +213,27 @@ function GameBoard(playerConnection, slot, masterRule) {
  * @returns {void}
  */
 function mainProcess(game) {
-    var engineBuffer = Buffer.alloc(0x1000),
-        engFlag = 0,
-        engLen = 0,
-        stop = 0,
-        result;
+    const coreMessage = Buffer.alloc(0x1000);
+    let flag = 0,
+        message = 0;
 
-    while (!stop) {
+    while (!message) {
 
-        if (engFlag === 2) {
+        if (flag === 2) {
             break;
         }
-        result = ocgapi.process(game.pduel);
-        engLen = result & 0xffff;
-        engFlag = result >> 16;
-        if (engLen > 0) {
-            ocgapi.get_message(game.pduel, engineBuffer);
+        const result = ocgapi.process(game.pduel),
+            length = result & 0xffff;
+
+        flag = result >> 16;
+        if (length) {
+            ocgapi.get_message(game.pduel, coreMessage);
         }
-        stop = analyze(engineBuffer, engLen, game);
+        message = analyze(coreMessage, length, game);
 
     }
-    if (stop === 2) {
+
+    if (message === 2) {
         duelEndProcedure(game);
     }
 }
@@ -331,11 +328,22 @@ function makeGame(pduel, settings) {
         }
     }
 
+    /**
+     * Sends a message to a specific player
+     * @param {Player} player Player to send a message
+     * @param {Object} message Message to send
+     * @returns {void}
+     */
     function sendBufferToPlayer(player, message) {
         lastMessage = message;
         players[player].write(message);
     }
 
+    /**
+     * Send the last send message from the system, to a specific player.
+     * @param {Player} player Player to send to.
+     * @returns {void}
+     */
     function reSendToPlayer(player) {
         players[Math.abs(player)].write(lastMessage);
     }
@@ -346,6 +354,11 @@ function makeGame(pduel, settings) {
         });
     }
 
+    /**
+     * Tell both players that ygopro-core is waiting on a message.
+     * @param {Player} player 
+     * @returns {void}
+     */
     function waitforResponse(player) {
         last_response = player;
         const message = {
@@ -357,12 +370,21 @@ function makeGame(pduel, settings) {
         sendBufferToPlayer(1, message);
     }
 
+    /**
+     * Send message to observers
+     * @returns {void}
+     */
     function sendToObservers() {
         observers.forEach(function(observer) {
             observer.write(lastMessage);
         });
     }
 
+    /**
+     * Send start information to a specific player.
+     * @param {Player} player Player to send to.
+     * @returns {void}
+     */
     function sendStartInfo(player) {
         const message = {
             command: 'MSG_START',
@@ -377,6 +399,11 @@ function makeGame(pduel, settings) {
         sendBufferToPlayer(player, message);
     }
 
+    /**
+     * Queries the core for field information
+     * @param {Player} player player being queried.
+     * @returns {Field} current duel field counts.
+     */
     function queryFieldCount(player) {
         return {
             DECK: ocgapi.query_field_count(pduel, player, 0x1),
@@ -389,6 +416,13 @@ function makeGame(pduel, settings) {
         };
     }
 
+    /**
+     * Get Card Information for a certain location
+     * @param {Player} player Player side of the field to query
+     * @param {String} location Target field zone
+     * @param {Buffer} pbuf Duel pointer.
+     * @returns {Card[]} list of cards
+     */
     function getFieldCards(player, location, pbuf) {
         'use strict';
         const cards = [],
