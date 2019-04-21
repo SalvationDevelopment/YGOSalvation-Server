@@ -14,8 +14,8 @@ const fs = require('fs'),
     ref = fastcall.ref,
     bytePointer = ref.refType(ref.types.byte),
     voidPointer = ref.refType(ref.types.void),
-    core_location = path.resolve(__dirname, `../bin/${os.platform()}/${os.arch()}/ocgcore.dll`),
-    coreIsAvaliable = fs.existsSync(core_location);
+    coreLocation = path.resolve(__dirname, `../bin/${os.platform()}/${os.arch()}/ocgcore.dll`),
+    coreIsAvaliable = fs.existsSync(coreLocation);
 
 /**
  * @typedef coreInterfaceDefinition
@@ -268,10 +268,10 @@ function preload_script() {
  */
 function CoreInterface() {
     if (!coreIsAvaliable) {
-        throw new Error(`Can not find compiled version of ygopro-core (Edo) for: ${core_location}`);
+        throw new Error(`Can not find compiled version of ygopro-core (Edo) for: ${coreLocation}`);
     }
 
-    const ygoproCore = new fastcall.Library(core_location).
+    const ygoproCore = new fastcall.Library(coreLocation).
         callback(card_reader_function()).
         callback(responsei_function()).
         callback(script_reader_function()).
