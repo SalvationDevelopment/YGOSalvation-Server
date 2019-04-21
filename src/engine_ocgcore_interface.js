@@ -51,7 +51,7 @@ const fs = require('fs'),
  * @property {Function} card_reader_function
  * @property {Function} responsei_function
  * @property {Function} script_reader_function
- * @property {Function} message_handler_function
+ * @property {Function} message_handler_function    
  * @property {Function} set_script_reader           set script reading callback function
  * @property {Function} set_card_reader             set card reader callback function
  * @property {Function} set_message_handler         set messaging handle callbackfunction
@@ -259,7 +259,7 @@ function set_responseb() {
  * @returns {coreInterfaceDefinition} ygopro-core inferface definition. 
  */
 function preload_script() {
-    return { set_responseb: ['int32', ['pointer', 'string', 'int32']] };
+    return { preload_script: ['int32', ['pointer', 'string', 'int32']] };
 }
 
 /**

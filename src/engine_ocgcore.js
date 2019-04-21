@@ -26,6 +26,7 @@
  */
 const fastcall = require('fastcall'),
     fs = require('fs'),
+    path = require('path'),
     ref = fastcall.ref,
     struct = fastcall.StructType,
     BufferStreamReader = require('./model_stream_reader'),
@@ -66,15 +67,18 @@ const fastcall = require('fastcall'),
  * @param {String} scriptname filename of the script
  * @returns {Buffer} script
  */
-function scriptReader(scriptname) {
+function scriptReader(scriptname, overSizedScriptPointer) {
     scriptname = ref.readCString(scriptname, 0);
-    const file = scriptsFolder + '/' + scriptname.substr(20);
+    const file = path.resolve(scriptsFolder + '/' + scriptname);
     if (fs.existsSync(file)) {
         try {
             const script = fs.readFileSync(file);
+            if (script.length >= 0x20000) {
+                overSizedScriptPointer.copy(script.length);
+            }
             return script;
         } catch (e) {
-            console.log(e);
+            console.log(file, e);
             return Buffer.alloc(0);
         }
     } else {
@@ -128,7 +132,7 @@ function card_reader(code, callbackPointer) {
             link: (hasType(dbEntry, 0x4000000)) ? dbEntry.defense : 0
         };
 
-    callbackPointer.copy(cardData(card));
+    callbackPointer.copy(cardData(card).ref());
     return code;
 }
 
@@ -386,11 +390,12 @@ function makeGame(pduel, settings) {
      * @returns {void}
      */
     function sendStartInfo(player) {
+
         const message = {
             command: 'MSG_START',
             playertype: player,
-            lifepoints1: settings.start_lp,
-            lifepoints2: settings.start_lp,
+            lifepoints1: settings.startLP,
+            lifepoints2: settings.startLP,
             player1decksize: ocgapi.query_field_count(pduel, 0, 0x1),
             player1extrasize: ocgapi.query_field_count(pduel, 0, 0x40),
             player2decksize: ocgapi.query_field_count(pduel, 1, 0x1),
@@ -622,24 +627,18 @@ function duel(settings, errorHandler, players, observers) {
     ocgapi.set_message_handler(messageHandler); //bad
     ocgapi.preload_script(pduel, './expansions/script/constant.lua', 0x10000000);
     ocgapi.preload_script(pduel, './expansions/script/utility.lua', 0x10000000);
-    ocgapi.set_responsei(pduel, console.log);
 
     ocgapi.set_player_info(pduel, 0, settings.start_lp, settings.start_hand_count, settings.draw_count);
     ocgapi.set_player_info(pduel, 1, settings.start_lp, settings.start_hand_count, settings.draw_count);
-
-    console.log(1);
     players[0].main.forEach(function (cardID, sequence) {
         ocgapi.new_card(pduel, cardID, 0, 0, LOCATION_DECK, 0, POS_FACEDOWN_DEFENSE);
     });
-    console.log(2);
     players[0].extra.forEach(function (cardID, sequence) {
         ocgapi.new_card(pduel, cardID, 0, 0, LOCATION_EXTRA, 0, POS_FACEDOWN_DEFENSE);
     });
-    console.log(3);
     players[1].main.forEach(function (cardID, sequence) {
         ocgapi.new_card(pduel, cardID, 1, 1, LOCATION_DECK, 0, POS_FACEDOWN_DEFENSE);
     });
-    console.log(4);
     players[1].extra.forEach(function (cardID, sequence) {
         ocgapi.new_card(pduel, cardID, 1, 1, LOCATION_EXTRA, 0, POS_FACEDOWN_DEFENSE);
     });

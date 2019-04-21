@@ -18,42 +18,42 @@ function BufferStreamReader(packet) {
     const stream = {};
 
     stream.packet = packet; // maybe stream should be read only.
-    stream.readposition = function() {
+    stream.readposition = function () {
         return readposition;
     };
-    stream.setReadposition = function(value) {
+    stream.setReadposition = function (value) {
         readposition = Number(value);
         return readposition;
     };
-    stream.readInt8 = function() {
+    stream.readInt8 = function () {
         // read 1 byte
         const output = packet[readposition];
         readposition += 1;
         return output;
     };
     stream.readUInt8 = stream.readInt8;
-    stream.readInt16 = function() {
+    stream.readInt16 = function () {
         const output = packet.readUInt16LE(readposition);
         readposition += 2;
         return output;
     };
-    stream.readInt32 = function() {
+    stream.readInt32 = function () {
         const output = packet.readUInt32LE(readposition);
         readposition += 4;
         return output;
     };
-    stream.writeInt32 = function(data) {
+    stream.writeInt32 = function (data) {
         const output = packet.writeUInt32LE(data, readposition);
         readposition += 4;
         return output;
     };
-    stream.move = function(amount) {
+    stream.move = function (amount) {
         readposition += amount;
     };
-    stream.dump = function() {
+    stream.dump = function () {
         return packet.copy(0, readposition);
     };
-    stream.valueOf = function() {
+    stream.valueOf = function () {
         return readposition;
     };
     return stream;

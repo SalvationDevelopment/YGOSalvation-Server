@@ -146,7 +146,7 @@ function msg_win(message, BufferIO) {
 }
 
 function msg_new_phase(message, BufferIO) {
-    message.phase = BufferIO.readInt8();
+    message.phase = BufferIO.readInt16();
     message.gui_phase = enums.phase[message.phase];
 }
 
@@ -168,7 +168,7 @@ function msg_shuffle_deck(message, BufferIO) {
 function msg_shuffle_hand(message, BufferIO) {
     message.player = BufferIO.readInt8();
     BufferIO.readInt32();
-    message.count = BufferIO.readInt8();
+    message.count = BufferIO.readInt32();
     //for some number that cant be determined here because the count was not sent (getting it from the state like an idiot)
     // readInt32 off.
 }

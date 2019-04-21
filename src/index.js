@@ -35,7 +35,7 @@ var userlist = [],
  * @returns {CardRecord[]} A deck of cards from the user.
  */
 function mapCards(deck) {
-    return deck.map(function(cardInDeck) {
+    return deck.map(function (cardInDeck) {
         if (cardidmap[cardInDeck.id]) {
             return {
                 id: cardidmap[cardInDeck.id]
@@ -66,7 +66,7 @@ function unsafePort() {
 }
 
 function registrationCall(data, socket) {
-    userController.validate(true, data, function(error, valid, info) {
+    userController.validate(true, data, function (error, valid, info) {
 
         if (error) {
             console.log(error);
@@ -135,7 +135,7 @@ function registrationCall(data, socket) {
 }
 
 function globalCall(data) {
-    userController.validate(false, data, function(error, info, body) {
+    userController.validate(false, data, function (error, info, body) {
         if (error) {
             console.log('[Gamelist]', error);
             return;
@@ -162,7 +162,7 @@ function globalRequested(socket) {
 
 
 function genocideCall(data) {
-    userController.validate(false, data, function(error, info, body) {
+    userController.validate(false, data, function (error, info, body) {
         if (error) {
             return;
         }
@@ -182,7 +182,7 @@ function genocideCall(data) {
 }
 
 function reviveCall(data) {
-    userController.validate(false, data, function(error, info, body) {
+    userController.validate(false, data, function (error, info, body) {
         if (error) {
             return;
         }
@@ -202,7 +202,7 @@ function reviveCall(data) {
 
 
 function murderCall(data) {
-    userController.validate(false, data, function(error, info, body) {
+    userController.validate(false, data, function (error, info, body) {
         if (error) {
             return;
         }
@@ -220,7 +220,7 @@ function murderCall(data) {
 }
 
 function censorCall(data) {
-    userController.validate(false, data, function(error, info, body) {
+    userController.validate(false, data, function (error, info, body) {
         if (error) {
             return;
         }
@@ -230,7 +230,7 @@ function censorCall(data) {
                 clientEvent: 'censor',
                 messageID: data.messageID
             });
-            chatbox = chatbox.filter(function(message) {
+            chatbox = chatbox.filter(function (message) {
                 return message.uid !== Number(data.messageID);
             });
 
@@ -242,7 +242,7 @@ function censorCall(data) {
 }
 
 function mindcrushCall(data) {
-    userController.validate(false, data, function(error, info, body) {
+    userController.validate(false, data, function (error, info, body) {
         if (error) {
             return;
         }
@@ -293,7 +293,7 @@ function childHandler(child, socket, message) {
         case 'register':
             userController.validateSession({
                 session: message.session
-            }, function(error, valid, person) {
+            }, function (error, valid, person) {
                 child.send({
                     action: 'register',
                     error,
@@ -358,7 +358,7 @@ function onData(data, socket) {
                     deck: data.deck
                 });
                 socket.aiReady = false;
-                setTimeout(function() {
+                setTimeout(function () {
                     socket.aiReady = true;
                 }, 10000);
             }
@@ -376,7 +376,7 @@ function onData(data, socket) {
         case 'sessionUpdate':
             userController.validateSession({
                 session: data.session
-            }, function(error, valid, person) {
+            }, function (error, valid, person) {
 
             });
             break;
@@ -402,7 +402,7 @@ function onData(data, socket) {
                     date: new Date(),
                     timezone: data.timezone
                 });
-                setTimeout(function() {
+                setTimeout(function () {
                     socket.speak = true;
                 }, 500);
             } else {
@@ -441,8 +441,15 @@ function onData(data, socket) {
                     env: Object.assign({}, process.env, data.info, { PORT: port })
                 }
             );
-            child.on('message', function(message) {
+            child.on('message', function (message) {
+                console.log(message);
                 childHandler(child, socket, message);
+            });
+            child.on('error', function (message) {
+                console.log('error', message);
+            });
+            child.on('exit', function (message, signal) {
+                console.log('exit', message, signal);
             });
             gameports[port] = child;
             break;
@@ -455,12 +462,12 @@ function onData(data, socket) {
             break;
         case 'save':
             delete data.action;
-            data.decks.forEach(function(deck, i) { //cycles through the decks
+            data.decks.forEach(function (deck, i) { //cycles through the decks
                 data.decks[i].main = mapCards(data.decks[i].main); //This cannot be simplified 
                 data.decks[i].side = mapCards(data.decks[i].side); //further due to the abstract
                 data.decks[i].extra = mapCards(data.decks[i].extra); //of data.decks, afaik
             }); //unsure if loop should run through all decks for a single save; might be resource intensive
-            userController.saveDeck(data, function(error, docs) {
+            userController.saveDeck(data, function (error, docs) {
                 primus.room(socket.address.ip + data.uniqueID).write({
                     clientEvent: 'deckSaved',
                     error: error
@@ -492,7 +499,7 @@ function onPrimusData(socket, data) {
 
 
 function onPrimusConnection(socket) {
-    socket.on('data', function(data) {
+    socket.on('data', function (data) {
         onPrimusData(socket, data);
     });
 }
@@ -504,7 +511,7 @@ primus = new Primus(primusServer, {
 primus.plugin('rooms', Rooms);
 primus.on('connection', onPrimusConnection);
 
-setInterval(function() {
+setInterval(function () {
     announce({
         clientEvent: 'ackresult',
         ackresult: acklevel,

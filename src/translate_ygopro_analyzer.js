@@ -22,9 +22,9 @@ function user_interface_only(message, pbuf, game) {
     game.refreshHand(1);
 }
 
-function unused() {}
+function unused() { }
 
-function incomplete() {}
+function incomplete() { }
 
 
 function getFieldCards(gameBoard, controller, location, pbuf) {
@@ -122,7 +122,8 @@ function getIdleSet(pbuf, hasDescriptions) {
 
 function msg_retry(message, pbuf, game) {
     message.desc = 'Error Occurs.';
-    game.sendToPlayer(game.lastSentToPlayer, message.packet);
+    //game.sendBufferToPlayer(game.lastSentToPlayer, message.packet);
+    console.log(message);
     return 1;
 }
 
