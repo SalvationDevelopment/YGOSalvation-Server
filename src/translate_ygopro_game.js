@@ -16,11 +16,11 @@ const enums = require('./translate_ygopro_enums.js'),
     BufferStreamReader = require('./model_stream_reader');
 
 
-function user_interface_only() {}
+function user_interface_only() { }
 
-function unused() {}
+function unused() { }
 
-function incomplete() {}
+function incomplete() { }
 
 
 function getFieldCards(gameBoard, controller, location, BufferIO) {
@@ -91,7 +91,7 @@ function getSelectableZones(mask) {
 
 function getIdleSet(BufferIO, hasDescriptions) {
     const cards = [],
-        count = BufferIO.readInt8();
+        count = BufferIO.readInt32();
 
     if (hasDescriptions) {
         for (let i = 0; i < count; ++i) {
@@ -152,7 +152,7 @@ function msg_new_phase(message, BufferIO) {
 
 function msg_draw(message, BufferIO) {
     message.player = BufferIO.readInt8();
-    message.count = BufferIO.readInt8();
+    message.count = BufferIO.readInt32();
     message.cards = [];
     for (let i = 0; i < message.count; ++i) {
         message.cards.push({
@@ -167,7 +167,7 @@ function msg_shuffle_deck(message, BufferIO) {
 
 function msg_shuffle_hand(message, BufferIO) {
     message.player = BufferIO.readInt8();
-    BufferIO.readInt8();
+    BufferIO.readInt32();
     message.count = BufferIO.readInt8();
     //for some number that cant be determined here because the count was not sent (getting it from the state like an idiot)
     // readInt32 off.
@@ -175,7 +175,7 @@ function msg_shuffle_hand(message, BufferIO) {
 
 function msg_shuffle_extra(message, BufferIO) {
     message.player = BufferIO.readInt8();
-    message.count = BufferIO.readInt8();
+    message.count = BufferIO.readInt32();
     //for some number that cant be determined here because the count was not sent (getting it from the state like an idiot)
     // readInt32 off.
 }
@@ -185,13 +185,13 @@ function msg_chaining(message, BufferIO) {
     message.pc = {
         player: BufferIO.readInt8(),
         location: enums.locations[BufferIO.readInt8()],
-        index: BufferIO.readInt8()
+        index: BufferIO.readInt32()
     };
     message.subs = BufferIO.readInt8();
     message.c = {
         player: BufferIO.readInt8(),
         location: enums.locations[BufferIO.readInt8()],
-        index: BufferIO.readInt8()
+        index: BufferIO.readInt32()
     };
     message.desc = BufferIO.readInt32();
     message.ct = BufferIO.readInt8(); // defunct in code
@@ -220,12 +220,12 @@ function msg_chain_disabled(message, BufferIO) {
 
 function msg_card_selected(message, BufferIO) {
     message.player = BufferIO.readInt8();
-    message.count = BufferIO.readInt8();
+    message.count = BufferIO.readInt32();
 }
 
 function msg_random_selected(message, BufferIO) {
     message.player = BufferIO.readInt8();
-    message.count = BufferIO.readInt8();
+    message.count = BufferIO.readInt32();
     message.selections = [];
     for (let i = 0; i < message.count; ++i) {
         message.selections.push({
@@ -238,7 +238,7 @@ function msg_random_selected(message, BufferIO) {
 }
 
 function msg_become_target(message, BufferIO) {
-    message.count = BufferIO.readInt8();
+    message.count = BufferIO.readInt32();
     message.selections = [];
     for (let i = 0; i < message.count; ++i) {
         message.selections.push({
@@ -551,7 +551,7 @@ function msg_select_battlecmd(message, BufferIO) {
     message.selecting_player = BufferIO.readInt8(); // defunct in the code, just reading ahead.
     message.activatable_cards = getIdleSet(BufferIO, true);
     message.attackable_cards = [];
-    message.count = BufferIO.readInt8();
+    message.count = BufferIO.readInt32();
     for (let i = 0; i < message.count; ++i) {
         message.attackable_cards.push({
             id: BufferIO.readInt32(),
@@ -591,8 +591,8 @@ function msg_select_option(message, BufferIO) {
 function msg_select_card(message, BufferIO) {
     message.selecting_player = BufferIO.readInt8();
     message.select_cancelable = BufferIO.readInt8();
-    message.select_min = BufferIO.readInt8();
-    message.select_max = BufferIO.readInt8();
+    message.select_min = BufferIO.readInt32();
+    message.select_max = BufferIO.readInt32();
     message.count = BufferIO.readInt8();
     message.select_options = [];
     for (let i = 0; i < message.count; ++i) {
@@ -608,7 +608,7 @@ function msg_select_card(message, BufferIO) {
 
 function msg_select_chain(message, BufferIO) {
     message.selecting_player = BufferIO.readInt8();
-    message.count = BufferIO.readInt8();
+    message.count = BufferIO.readInt32();
     message.specount = BufferIO.readInt8();
     message.forced = BufferIO.readInt8();
     message.hint0 = BufferIO.readInt32();
@@ -657,8 +657,8 @@ function msg_select_position(message, BufferIO) {
 function msg_select_tribute(message, BufferIO) {
     message.selecting_player = BufferIO.readInt8();
     message.select_cancelable = BufferIO.readInt8() ? true : false;
-    message.select_min = BufferIO.readInt8();
-    message.select_max = BufferIO.readInt8();
+    message.select_min = BufferIO.readInt32();
+    message.select_max = BufferIO.readInt32();
     const count = BufferIO.readInt8();
     message.selectable_targets = [];
     for (let i = 0; i < count; ++i) {
@@ -699,7 +699,7 @@ function msg_select_disfield(message, BufferIO) {
 
 function msg_sort_card(message, BufferIO) {
     message.player = BufferIO.readInt8();
-    message.count = BufferIO.readInt8();
+    message.count = BufferIO.readInt32();
     message.selectable_targets = [];
     for (let i = 0; i < message.count; ++i) {
         message.selectable_targets.push({
@@ -713,7 +713,7 @@ function msg_sort_card(message, BufferIO) {
 
 function msg_confirm_decktop(message, BufferIO) {
     message.player = BufferIO.readInt8();
-    message.count = BufferIO.readInt8();
+    message.count = BufferIO.readInt32();
     message.cards = [];
     for (let i = 0; i < message.count; ++i) {
         message.cards.push(BufferIO.readInt32());
@@ -723,7 +723,7 @@ function msg_confirm_decktop(message, BufferIO) {
 
 function msg_confirm_extratop(message, BufferIO) {
     message.player = BufferIO.readInt8();
-    message.count = BufferIO.readInt8();
+    message.count = BufferIO.readInt32();
     message.cards = [];
     for (let i = 0; i < message.count; ++i) {
         message.cards.push(BufferIO.readInt32());
@@ -733,7 +733,7 @@ function msg_confirm_extratop(message, BufferIO) {
 
 function msg_confirm_cards(message, BufferIO) {
     message.player = BufferIO.readInt8();
-    message.count = BufferIO.readInt8();
+    message.count = BufferIO.readInt32();
     for (let i = 0; i < message.count; ++i) {
         message.selections.push({
             c: BufferIO.readInt8(),
@@ -767,7 +767,7 @@ function msg_waiting(message, BufferIO) {
 
 function msg_deck_top(message, BufferIO) {
     message.player = BufferIO.readInt8();
-    message.index = BufferIO.readInt8();
+    message.index = BufferIO.readInt32();
     message.id = BufferIO.readInt32();
     message.rev = ((message.id & 0x80000000) !== 0);
 }
@@ -797,10 +797,10 @@ function msg_shuffle_set_card(message, BufferIO) {
 
 function msg_tag_swap(message, BufferIO) {
     message.player = BufferIO.readInt8();
-    message.mcount = BufferIO.readInt8();
-    message.ecount = BufferIO.readInt8();
-    message.pcount = BufferIO.readInt8();
-    message.hcount = BufferIO.readInt8();
+    message.mcount = BufferIO.readInt32();
+    message.ecount = BufferIO.readInt32();
+    message.pcount = BufferIO.readInt32();
+    message.hcount = BufferIO.readInt32();
     message.topcode = BufferIO.readInt32();
     message.hand = [];
     message.extra_deck = [];
@@ -900,16 +900,16 @@ function msg_request_deck() {
 }
 
 function msg_sort_chain(message, BufferIO) {
-    msg_sort_chain(message, BufferIO);
+    msg_sort_card(message, BufferIO);
 }
 
 function msg_select_sum(message, BufferIO) {
     message.select_mode = BufferIO.readInt8();
     message.select_player = BufferIO.readInt8();
     message.select_sumval = BufferIO.readInt32();
-    message.select_min = BufferIO.readInt8();
-    message.select_max = BufferIO.readInt8();
-    message.must_select_count = BufferIO.readInt8();
+    message.select_min = BufferIO.readInt32();
+    message.select_max = BufferIO.readInt32();
+    message.must_select_count = BufferIO.readInt32();
     message.select_panalmode = false;
     message.must_select = [];
     message.can_select = [];
@@ -1003,8 +1003,8 @@ function msg_select_unselect_card(message, BufferIO) {
     message.selecting_player = BufferIO.readInt8();
     message.buttonok = Boolean(!!BufferIO.readInt8());
     message.select_cancelable = BufferIO.readInt8();
-    message.select_min = BufferIO.readInt8();
-    message.select_max = BufferIO.readInt8();
+    message.select_min = BufferIO.readInt32();
+    message.select_max = BufferIO.readInt32();
     message.count1 = BufferIO.readInt8();
     message.select_ready = false;
     message.cards1 = [];
