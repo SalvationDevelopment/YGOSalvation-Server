@@ -442,7 +442,6 @@ function onData(data, socket) {
                 }
             );
             child.on('message', function (message) {
-                console.log(message);
                 childHandler(child, socket, message);
             });
             child.on('error', function (message) {
