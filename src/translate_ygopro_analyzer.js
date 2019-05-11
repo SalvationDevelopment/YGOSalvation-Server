@@ -10,6 +10,9 @@ let translator = {};
  * @typedef {Buffer} Packet
  */
 
+
+
+
 function user_interface_only(message, pbuf, game) {
     game.sendBufferToPlayer(0, message);
     game.sendBufferToPlayer(1, message);
@@ -122,8 +125,7 @@ function getIdleSet(pbuf, hasDescriptions) {
 
 function msg_retry(message, pbuf, game) {
     message.desc = 'Error Occurs.';
-    //game.sendBufferToPlayer(game.lastSentToPlayer, message.packet);
-    console.log(message);
+    game.sendToPlayer(game.lastSentToPlayer, message.packet);
     return 1;
 }
 
@@ -209,16 +211,14 @@ function msg_new_phase(message, pbuf, game) {
 function msg_draw(message, pbuf, game) {
     //pbufw issue
     message.player = pbuf.readInt8();
-    message.count = pbuf.readInt32();
+    message.count = pbuf.readInt8();
     message.cards = [];
     for (let i = 0; i < message.count; ++i) {
         message.cards.push({
             id: pbuf.readInt32()
         });
     }
-    console.log('send');
     game.sendBufferToPlayer(message.player, message);
-    console.log('reflect');
     game.reSendToPlayer(1 - message.player);
     game.sendToObservers();
 }
@@ -233,7 +233,7 @@ function msg_shuffle_deck(message, pbuf, game) {
 function msg_shuffle_hand(message, pbuf, game) {
     let i;
     message.player = pbuf.readInt8();
-    message.count = pbuf.readInt32();
+    message.count = pbuf.readInt8();
     game.sendBufferToPlayer(0, message);
     game.sendBufferToPlayer(1 - message.player, message);
     game.sendToObservers();
@@ -243,7 +243,7 @@ function msg_shuffle_hand(message, pbuf, game) {
 function msg_shuffle_extra(message, pbuf, game) {
     let i;
     message.player = pbuf.readInt8();
-    message.count = pbuf.readInt32();
+    message.count = pbuf.readInt8();
     game.sendBufferToPlayer(0, message);
     game.sendBufferToPlayer(1 - message.player, message);
     game.sendToObservers();
@@ -321,13 +321,13 @@ function msg_chain_disabled(message, pbuf, game) {
 
 function msg_card_selected(message, pbuf, game) {
     message.player = pbuf.readInt8();
-    message.count = pbuf.readInt32();
+    message.count = pbuf.readInt8();
     // in single this doesnt do anything, is this a bug?
 }
 
 function msg_random_selected(message, pbuf, game) {
     message.player = pbuf.readInt8();
-    message.count = pbuf.readInt32();
+    message.count = pbuf.readInt8();
     message.selections = [];
     for (let i = 0; i < message.count; ++i) {
         message.selections.push({
@@ -343,7 +343,7 @@ function msg_random_selected(message, pbuf, game) {
 }
 
 function msg_become_target(message, pbuf, game) {
-    message.count = pbuf.readInt32();
+    message.count = pbuf.readInt8();
     message.selections = [];
     for (let i = 0; i < message.count; ++i) {
         message.selections.push({
@@ -461,7 +461,7 @@ function msg_add_counter(message, pbuf, game) {
     message.player = pbuf.readInt8();
     message.location = enums.locations[pbuf.readInt8()];
     message.index = pbuf.readInt8();
-    message.count = pbuf.readInt32();
+    message.count = pbuf.readInt8();
     game.sendBufferToPlayer(0, message);
     game.reSendToPlayer(1);
     game.sendToObservers();
@@ -472,7 +472,7 @@ function msg_remove_conuter(message, pbuf, game) {
     message.player = pbuf.readInt8();
     message.location = enums.locations[pbuf.readInt8()];
     message.index = pbuf.readInt8();
-    message.count = pbuf.readInt32();
+    message.count = pbuf.readInt8();
     game.sendBufferToPlayer(0, message);
     game.reSendToPlayer(1);
     game.sendToObservers();
@@ -602,7 +602,7 @@ function msg_announce_number(message, pbuf, game) {
 
 function msg_announce_card_filter(message, pbuf, game) {
     message.player = pbuf.readInt8();
-    message.count = pbuf.readInt32();
+    message.count = pbuf.readInt8();
     message.opcodes = [];
     for (let i = 0; i < message.count; ++i) {
         message.opcodes.push(pbuf.readInt32());
@@ -764,7 +764,7 @@ function msg_select_battlecmd(message, pbuf, game) {
     message.player = pbuf.readInt8(); // defunct in the code, just reading ahead.
     message.activatable_cards = getIdleSet(pbuf, true);
     message.attackable_cards = [];
-    message.count = pbuf.readInt32();
+    message.count = pbuf.readInt8();
     for (let i = 0; i < message.count; ++i) {
         message.attackable_cards.push({
             id: pbuf.readInt32(),
@@ -822,9 +822,9 @@ function msg_select_option(message, pbuf, game) {
 function msg_select_card(message, pbuf, game) {
     message.player = pbuf.readInt8();
     message.select_cancelable = pbuf.readInt8();
-    message.select_min = pbuf.readInt32();
-    message.select_max = pbuf.readInt32();
-    message.count = pbuf.readInt32();
+    message.select_min = pbuf.readInt8();
+    message.select_max = pbuf.readInt8();
+    message.count = pbuf.readInt8();
     message.select_options = [];
     for (let i = 0; i < message.count; ++i) {
         message.select_options.push({
@@ -952,7 +952,7 @@ function msg_select_disfield(message, pbuf, game) {
 
 function msg_sort_card(message, pbuf, game) {
     message.player = pbuf.readInt8();
-    message.count = pbuf.readInt32();
+    message.count = pbuf.readInt8();
     message.selectable_targets = [];
     for (let i = 0; i < message.count; ++i) {
         message.selectable_targets.push({
@@ -969,7 +969,7 @@ function msg_sort_card(message, pbuf, game) {
 
 function msg_confirm_decktop(message, pbuf, game) {
     message.player = pbuf.readInt8();
-    message.count = pbuf.readInt32();
+    message.count = pbuf.readInt8();
     message.cards = [];
     for (let i = 0; i < message.count; ++i) {
         message.cards.push(pbuf.readInt32());
@@ -982,7 +982,7 @@ function msg_confirm_decktop(message, pbuf, game) {
 
 function msg_confirm_extratop(message, pbuf, game) {
     message.player = pbuf.readInt8();
-    message.count = pbuf.readInt32();
+    message.count = pbuf.readInt8();
     message.cards = [];
     for (let i = 0; i < message.count; ++i) {
         message.cards.push(pbuf.readInt32());
@@ -996,7 +996,7 @@ function msg_confirm_extratop(message, pbuf, game) {
 function msg_confirm_cards(message, pbuf, game) {
     const LOCATION_DECK = 0x01;
     message.player = pbuf.readInt8();
-    message.count = pbuf.readInt32();
+    message.count = pbuf.readInt8();
     for (let i = 0; i < message.count; ++i) {
         message.selections.push({
             c: pbuf.readInt8(),
@@ -1052,7 +1052,7 @@ function msg_deck_top(message, pbuf, game) {
 function msg_shuffle_set_card(message, pbuf, game) {
     const LOCATION_MZONE = 0x04;
     message.location = pbuf.readInt8();
-    message.count = pbuf.readInt32();
+    message.count = pbuf.readInt8();
     message.targets = [];
     for (let i = 0; i < message.count; ++i) {
         message.targets.push({
@@ -1189,7 +1189,7 @@ function msg_request_deck() {
 
 function msg_sort_chain(message, pbuf, game) {
     message.player = pbuf.readInt8();
-    message.count = pbuf.readInt32();
+    message.count = pbuf.readInt8();
     message.selectable_targets = [];
     for (let i = 0; i < message.count; ++i) {
         message.selectable_targets.push({
@@ -1436,29 +1436,29 @@ translator = {
     MSG_ANNOUNCE_CARD_FILTER: msg_announce_card_filter
 };
 
-/**
- * 
- * @param {Buffer} coreMessage Message from ygopro-core
- * @param {Number} length Number of messages in the buffer
- * @param {Duel} game Duel Instance
- */
-function analyze(coreMessage, length, game) {
-    const msgbuffer = new BufferStreamReader(coreMessage),
-        pbuf = new BufferStreamReader(coreMessage);
+function analyze(engineBuffer, len, game) {
 
-    while (pbuf - msgbuffer < length) {
-        const messageFunction = enums.STOC.STOC_GAME_MSG[pbuf.readInt8()];
-        let output = 0;
-        if (!translator[messageFunction]) {
-            // there should always be a function to run. Otherwise is a bug in the BufferStreamReader step logic.
+
+    let snippet = 0;
+
+    const msgbuffer = new BufferStreamReader(engineBuffer),
+        pbuf = new BufferStreamReader(engineBuffer);
+
+    while (pbuf - msgbuffer < len) {
+        console.log('n', snippet++);
+        const engType = enums.STOC.STOC_GAME_MSG[pbuf.readInt8()];
+        if (translator[engType]) {
+            var message = {
+                command: engType
+            };
+            console.log('----engType', engType);
+            const output = translator[engType](message, pbuf, game);
+            console.log(pbuf - msgbuffer);
+            if (output) {
+                return output;
+            }
+        } else {
             debugger;
-        }
-        var message = {
-            command: messageFunction
-        };
-        output = translator[messageFunction](message, pbuf, game) || 0;
-        if (output) {
-            return output;
         }
     }
     return 0;

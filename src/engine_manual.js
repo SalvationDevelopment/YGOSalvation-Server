@@ -694,7 +694,6 @@ function init(callback) {
 
         for (i = 0; i < numberOfCards; i += 1) {
             deck = filterlocation(filterPlayer(stack, player), 'DECK');
-            console.log(player);
             topcard = deck[deck.length - 1];
             setState({
                 player: topcard.player,
@@ -1058,8 +1057,8 @@ function init(callback) {
     function viewExcavated(player, username) {
         var deck = filterlocation(filterPlayer(stack, player), 'EXCAVATED'),
             result = {
-                0: {},
-                1: {},
+                p0: {},
+                p1: {},
                 sepectators: {}
             };
         state.duelistChat.push('<pre>' + username + ' is viewing their excavated pile.</pre>');
@@ -1179,6 +1178,7 @@ function init(callback) {
      * @returns {undefined}
      */
     function startDuel(player1, player2, manual, settings) {
+        console.log('startDuel', player1.main.length);
         stack = [];
         if (manual && !lock[0] && !lock[1]) {
             return;
@@ -1210,6 +1210,7 @@ function init(callback) {
         player2.extra.forEach(function (card, index) {
             stack.push(makeCard('EXTRA', 1, index, stack.length, card));
         });
+        console.log('stack', stack.length);
         if (manual) {
             state.duelistChat.push('<pre>!!! READ BELOW FOR GAME COMMANDS</pre>');
             state.duelistChat.push('<pre>--Commands--</pre>');
@@ -1480,7 +1481,6 @@ function init(callback) {
         answerListener.once(uuid, function (data) {
             onAnswerFromUser(data);
         });
-        console.log('need answer from', uuid);
         callback(output, stack);
     }
 
@@ -1489,7 +1489,6 @@ function init(callback) {
      * @param {Object} message response message
      */
     function respond(message) {
-        console.log('seeing answer from', message.uuid);
         answerListener.emit(message.uuid, message.answer);
     }
 

@@ -272,7 +272,7 @@ function playerInstance(playerConnection, slot, game, settings) {
 
     function preformGameAction(gameAction) {
         var output = boardController(gameBoard, slot, gameAction, responder, playerConnection);
-        //playerConnection.write(output);
+        playerConnection.write(output);
     }
 
     function queueGameActions(gameActions) {
@@ -335,7 +335,7 @@ function makeGame(pduel, settings) {
      * @returns {void}
      */
     function sendBufferToPlayer(player, message) {
-        lastMessage = message;
+        //lastMessage = JSON.parse(JSON.stringify(message));
         players[player].write(message);
     }
 

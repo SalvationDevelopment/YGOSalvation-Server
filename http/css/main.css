@@ -2444,7 +2444,7 @@ a.launcheronly.loginsystem {
 div#loginmodal {
     box-shadow: inset 0px 100px 100px rgba(255, 25, 120, .15);
     position: absolute;
-    top: 38vh;
+    top: 45vh;
     width: 70%;
     background: rgba(0, 0, 0, .75);
     border: 1px solid #301;

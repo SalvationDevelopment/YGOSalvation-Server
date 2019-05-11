@@ -26,7 +26,7 @@ function askUser(gameBoard, slot, message, ygopro) {
     gameBoard.question('p' + slot, message.command, message, {
         max: 1,
         min: 1
-    }, function(answer) {
+    }, function (answer) {
         const response = Buffer.from(answer[0]);
         console.log('got question response', response);
         ygopro.write(response);
@@ -41,7 +41,7 @@ function askUser(gameBoard, slot, message, ygopro) {
  * @returns {Number} Index of the card in the given options.
  */
 function resolveCardIndex(list, card) {
-    var number = list.findIndex(function(option) {
+    var number = list.findIndex(function (option) {
         var index = (option.player === card[0]),
             location = (option.location === enums.locations[card[1]]),
             sequence = (option.index === card[2]);
@@ -60,6 +60,7 @@ function boardController(gameBoard, slot, message, ygopro, player) {
         p1: {},
         spectators: {}
     };
+    gameBoard.startcount = (gameBoard.startcount !== undefined) ? gameBoard.startcount : 0;
     //console.log(slot, message.command);
     player.lastData = message;
     switch (message.command) {
@@ -72,17 +73,19 @@ function boardController(gameBoard, slot, message, ygopro, player) {
             gameBoard.retryLastQuestion();
             break;
         case ('MSG_START'): // Good
+            gameBoard.startcount++;
+            console.log(gameBoard.startcount);
             gameBoard.startDuel({
                 main: Array(message.player1decksize).fill(0),
                 side: Array(0),
                 extra: Array(message.player1extrasize).fill(0)
             }, {
-                main: Array(message.player2decksize).fill(0),
-                side: Array(0),
-                extra: Array(message.player2extrasize).fill(0)
-            }, false, {
-                startLP: message.lifepoints1
-            });
+                    main: Array(message.player2decksize).fill(0),
+                    side: Array(0),
+                    extra: Array(message.player2extrasize).fill(0)
+                }, false, {
+                    startLP: message.lifepoints1
+                });
             break;
         case ('MSG_HINT'):
             break;
@@ -105,6 +108,7 @@ function boardController(gameBoard, slot, message, ygopro, player) {
             gameBoard.nextPhase(message.gui_phase);
             break;
         case ('MSG_DRAW'): // Good
+            console.log(message.player, message.count, message.cards);
             gameBoard.drawCard(message.player, message.count, message.cards);
             break;
         case ('MSG_SHUFFLE_DECK'): // Good
@@ -302,8 +306,8 @@ function boardController(gameBoard, slot, message, ygopro, player) {
             break;
         case ('MSG_SELECT_CARD'):
             // [number of cards selected, index of that card, etc...]
-            gameBoard.question(slot, message.command, message, { min: message.select_min, max: message.select_max }, function(answer) {
-                var messageBuffer = [answer.length].concat(answer.map(function(card) {
+            gameBoard.question(slot, message.command, message, { min: message.select_min, max: message.select_max }, function (answer) {
+                var messageBuffer = [answer.length].concat(answer.map(function (card) {
                     return resolveCardIndex(message.select_options, card);
                 }));
                 ygopro.write(gameResponse('CTOS_RESPONSE', new Buffer(messageBuffer)));
@@ -320,10 +324,10 @@ function boardController(gameBoard, slot, message, ygopro, player) {
             askUser(gameBoard, slot, message, ygopro);
             break;
         case ('MSG_SELECT_TRIBUTE'):
-            gameBoard.question(slot, message.command, message, { min: message.select_min, max: message.select_max }, function(answer) {
-                var messageBuffer = [answer.length].concat(answer.map(function(card) {
+            gameBoard.question(slot, message.command, message, { min: message.select_min, max: message.select_max }, function (answer) {
+                var messageBuffer = [answer.length].concat(answer.map(function (card) {
                     return resolveCardIndex(message.selectable_targets, card);
-                })).filter(function(card) {
+                })).filter(function (card) {
                     return (card !== undefined);
                 });
                 ygopro.write(gameResponse('CTOS_RESPONSE', new Buffer(messageBuffer)));
@@ -347,7 +351,7 @@ function boardController(gameBoard, slot, message, ygopro, player) {
         case ('MSG_CONFIRM_CARDS'):
             break;
         case ('MSG_UPDATE_DATA'): // inconsistent
-            message.cards.forEach(function(card, index) {
+            message.cards.forEach(function (card, index) {
                 if (card) {
                     try {
                         gameBoard.setState({
@@ -415,13 +419,13 @@ function boardController(gameBoard, slot, message, ygopro, player) {
             }, {
                 id: 'scissors',
                 value: 2
-            }], { min: 1, max: 1 }, function(answer) {
+            }], { min: 1, max: 1 }, function (answer) {
                 var choice = cardMap[answer[0]];
                 ygopro.write(gameResponse(choice));
             });
             break;
         case ('STOC_SELECT_TP'): // Good
-            gameBoard.question(slot, 'STOC_SELECT_TP', [0, 1], { min: 1, max: 1 }, function(answer) {
+            gameBoard.question(slot, 'STOC_SELECT_TP', [0, 1], { min: 1, max: 1 }, function (answer) {
                 ygopro.write(gameResponse('CTOS_TP_RESULT', answer[0]));
             });
             return {};
