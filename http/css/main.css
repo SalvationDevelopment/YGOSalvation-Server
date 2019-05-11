@@ -47,12 +47,15 @@ body.unlogged {
     0% {
         background-image: url(../img/magimagipinkshadow2.jpg);
     }
+
     25% {
         background-image: url(../img/magimagipinkshadow2.jpg);
     }
+
     75% {
         background-image: url(../img/magimagipinkshadow.jpg);
     }
+
     100% {
         background-image: url(../img/magimagipinkshadow2.jpg);
     }
@@ -283,6 +286,7 @@ ul#mirrors {
     0% {
         background-color: rgba(255, 100, 200, 0);
     }
+
     100% {
         background-color: rgba(255, 100, 200, .75);
     }
@@ -1294,7 +1298,7 @@ main a:hover {
 #hostSettings input,
 #settings select,
 #settings input,
-{
+    {
     width: 45%;
     border: 1px solid whitesmoke;
     height: 1.5em;
@@ -2140,6 +2144,7 @@ div#rankingtable table td {
     0% {
         transform: translate(0, 30%);
     }
+
     100% {
         transform: translate(0, -100%);
     }
@@ -2149,6 +2154,7 @@ keyframes marquee {
     0% {
         transform: translate(0, 30%);
     }
+
     100% {
         transform: translate(0, -100%);
     }
@@ -2390,9 +2396,11 @@ header#deckedit div {
     from {
         -webkit-box-shadow: 0 0 3px rgba(255, 255, 255, 0);
     }
+
     50% {
         -webkit-box-shadow: 0 0 18px white;
     }
+
     to {
         #ccc;
         -webkit-box-shadow: 0 0 3px rgba(255, 255, 255, 0);
@@ -2435,7 +2443,7 @@ a.launcheronly.loginsystem {
     width: 20em;
     padding: .4em;
     text-align: center;
-    color: white!important;
+    color: white !important;
     font-weight: bold;
     border: 1px solid #fff;
     box-shadow: 0 0 10px black;
@@ -2487,10 +2495,12 @@ div#loginmodal {
     from {
         -webkit-box-shadow: 0 0 5px #000;
     }
+
     50% {
         -webkit-box-shadow: 0 0 150px rgba(184, 72, 144, 0.911);
         border-color: rgba(255, 100, 200, .5);
     }
+
     to {
         -webkit-box-shadow: 0 0 5px #000;
     }
@@ -2681,9 +2691,11 @@ ul#friendslist {
     0% {
         background-position: top left;
     }
+
     50% {
         background-position: top right;
     }
+
     0% {
         background-position: top left;
     }
@@ -2693,6 +2705,7 @@ ul#friendslist {
     0% {
         box-shadow: inset 0px 0px 0em hotpink;
     }
+
     100% {
         box-shadow: inset 0px 0px 7em hotpink;
     }
@@ -2987,4 +3000,22 @@ main {
 .fullscreenloading {
     padding-top: 30vh;
     font-size: 10vh;
+}
+
+#ingamecardimage {
+    position: fixed;
+    color: white;
+    font-size: .9em;
+    z-index: 30;
+    width: 33vh;
+    text-align: justify
+}
+
+#ingamecardimage .cardImage {
+    position: relative;
+    height: auto;
+}
+
+#ingamecardimage .cardDescription {
+    height: calc(85vh - 254px);
 }
