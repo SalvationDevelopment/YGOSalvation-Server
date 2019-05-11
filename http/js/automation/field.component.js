@@ -13,8 +13,21 @@ class Field {
                 return this.state.cards[card].render();
             });
 
-        return [this.state.phase.render()].concat(cards);
+        return [].concat(
+            cards,
+            this.state.phase.render(),
+            this.state.selectors.render()
+        );
+    }
 
+    disableSelection() {
+        this.state.selectors.disableSelection();
+        ReactDOM.render(this.render(), this.root);
+    }
+
+    select(query) {
+        this.state.selectors.select(query);
+        ReactDOM.render(this.render(), this.root);
     }
 
     updateField(update) {
@@ -47,7 +60,8 @@ class Field {
         this.state = {
             cards: [],
             lp: new LifepointDisplay(state.info),
-            phase: new PhaseIndicator({ phase: state.info.phase })
+            phase: new PhaseIndicator({ phase: state.info.phase }),
+            selectors: new FieldSelector(store)
         };
 
         this.cast(state.field, (card) => {

@@ -93,7 +93,6 @@ class CardImage extends React.Component {
     }
 
     click() {
-        this.state.attackmode = !this.state.attackmode;
         this.store.dispatch({ action: 'CARD_CLICK', card: this.state });
         this.store.dispatch({ action: 'UPDATE_FIELD' });
     }

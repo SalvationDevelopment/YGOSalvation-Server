@@ -1,3 +1,4 @@
+/*global React */
 class Store {
     constructor(initialStates) {
         this.states = Object.assign({}, initialStates);
@@ -10,6 +11,7 @@ class Store {
     }
 
     dispatch(event) {
+        console.log(event);
         if (!this.states[event.action] || !this.reducers[event.action]) {
             return;
         }
@@ -165,7 +167,7 @@ function generateField() {
 
 const r = generateField(),
     store = new Store({}),
-    c = new Field(r, store),
+    field = new Field(r, store),
     info = new CardInfo(databaseSystem);
 
 store.register('UPDATE_FIELD', (event, state) => {
@@ -185,7 +187,7 @@ store.register('UPDATE_FIELD', (event, state) => {
             EXCAVATED: r.field.EXCAVATED.map(scramble)
         }
     };
-    c.updateField(newState);
+    field.updateField(newState);
     guishuffle(0, 'DECK');
     return newState;
 });
@@ -200,3 +202,4 @@ store.register('CARD_HOVER', (event, state) => {
     };
 });
 
+store.register('ZONE_CLICK', console.log);

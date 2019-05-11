@@ -1,0 +1,71 @@
+/*global React */
+class FieldSelector {
+    cast(field, callback) {
+        Object.keys(field).forEach((zone) => {
+            field[zone].forEach(callback);
+            field[zone].forEach(callback);
+        });
+    }
+
+    render() {
+        const zones = Object.keys(this.state.zones)
+            .map((zone) => {
+                return this.state.zones[zone].render();
+            });
+
+        return zones;
+
+    }
+
+    updateField(update) {
+        this.cast(update.field, (card) => {
+            Object.assign(this.state.cards[card.uid].state, card);
+        });
+    }
+
+    setup(zoneType, count) {
+        const selectors = [];
+        for (let player = 0; player <= 1; player++) {
+            for (let index = 0; index <= count; index++) {
+                selectors.push({
+                    index,
+                    location: zoneType,
+                    player,
+                    uid: `selector-player_${player}-${zoneType}-${index}`
+                });
+            }
+        }
+        return selectors;
+    }
+
+    disableSelection() {
+        Object.keys(this.state.zones).forEach((uid) => {
+            this.state.zones[uid].state.active = false;
+        });
+    }
+
+    select(query) {
+        Object.keys(this.state.zones).forEach((uid) => {
+            const zone = this.state.zones[uid].state,
+                active = Object.keys(query).every((prop) => {
+                    return zone[prop] === query[prop];
+                });
+            zone.active = active;
+        });
+    }
+
+    constructor(store) {
+        this.state = {
+            zones: {}
+        };
+
+        const initialField = {
+            SPELLZONE: this.setup('SPELLZONE', 7),
+            MONSTERZONE: this.setup('MONSTERZONE', 7)
+        };
+
+        this.cast(initialField, (zone) => {
+            this.state.zones[zone.uid] = new ZoneSelector(zone, store);
+        });
+    }
+}
