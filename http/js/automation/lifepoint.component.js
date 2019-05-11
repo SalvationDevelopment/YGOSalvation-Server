@@ -3,14 +3,15 @@ class LifepointDisplay extends React.Component {
         super();
         this.root = document.getElementById('lifepoints');
         this.state = state;
-
-
+        this.maxLifepoints = state.lifepoints[0];
+        ReactDOM.render(this.render(), this.root);
+        return this;
     }
 
     meter(className, value, max) {
         return React.createElement('meter', {
             className,
-            key: className,
+            key: `meter-${className}`,
             type: 'meter',
             value,
             max,
@@ -18,12 +19,40 @@ class LifepointDisplay extends React.Component {
         });
     }
 
+    input(className, value) {
+        return React.createElement('input', {
+            key: `input-${className}`,
+            disabled: true,
+            className,
+            value
+        });
+    }
+
+    span(className, value) {
+        return React.createElement('span', {
+            key: `span-${className}`,
+            className
+        }, value);
+    }
+
+
     render() {
-        ReactDOM.render([
-            this.meter('p0lp', this.state.lifepoints[0]),
-            this.meter('p1lp', this.state.lifepoints[0]),
+        return [
+            this.meter('p0lp', this.state.lifepoints[0], this.maxLifepoints),
+            this.meter('p1lp', this.state.lifepoints[1], this.maxLifepoints),
+            this.input('p0lp', this.state.lifepoints[0]),
+            this.input('p1lp', this.state.lifepoints[1]),
+            this.span('p0name', 'Player 1'),
+            this.span('p1name', 'Player 2'),
             this.meter('p0time'),
             this.meter('p1time')
-        ], this.root);
+        ];
+    }
+
+    update(state) {
+        if (state) {
+            this.state = state;
+        }
+        ReactDOM.render(this.render(), this.root);
     }
 }

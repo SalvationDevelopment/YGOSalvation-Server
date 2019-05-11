@@ -37,6 +37,7 @@ class Field {
                 });
             }
         });
+        this.state.lp.update(update.info);
         this.state.phase.update(update.info.phase);
         ReactDOM.render(this.render(), this.root);
     }
@@ -45,13 +46,14 @@ class Field {
         this.root = document.getElementById('automationduelfield');
         this.state = {
             cards: [],
-            lp: state.info.lifepoints,
+            lp: new LifepointDisplay(state.info),
             phase: new PhaseIndicator({ phase: state.info.phase })
         };
 
         this.cast(state.field, (card) => {
             this.state.cards[card.uid] = new CardImage(card);
         });
+        this.state.lp.update();
         ReactDOM.render(this.render(), this.root);
     }
 }
@@ -160,7 +162,8 @@ function generateField() {
 
     return {
         info: {
-            phase: 0
+            phase: 0,
+            lifepoints: [8000, 8000]
         },
         field: {
             DECK: (new Array(40).fill(newCard('DECK'))).map(scramble).map(setup),
@@ -183,7 +186,8 @@ const r = generateField(),
 setInterval(() => {
     c.updateField({
         info: {
-            phase: random(0, 7)
+            phase: random(0, 7),
+            lifepoints: [random(0, 16000), random(0, 16000)]
         },
         field: {
             DECK: r.field.DECK.map(scramble),
