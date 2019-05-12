@@ -55,8 +55,12 @@ class Field {
         ReactDOM.render(this.render(), this.root);
     }
 
+    flash(card) {
+        this.flasher.trigger(card);
+    }
     constructor(state, store) {
         this.root = document.getElementById('automationduelfield');
+        this.flasher = new Flasher({});
         this.state = {
             cards: [],
             lp: new LifepointDisplay(state.info),
