@@ -161,7 +161,7 @@ class CardInfo extends React.Component {
     }
 
     makeDescription(targetCard) {
-        if (!targetCard.desc) {
+        if (!targetCard) {
             return '';
         }
         return [

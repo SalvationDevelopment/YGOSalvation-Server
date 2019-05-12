@@ -1,4 +1,5 @@
-
+/*global React, ReactDOM,  */
+/*global ControlButtons, Flasher, Revealer, LifepointDisplay, PhaseIndicator, FieldSelector, CardImage*/
 class Field {
     cast(field, callback) {
         Object.keys(field).forEach((zone) => {
@@ -71,6 +72,7 @@ class Field {
         this.root = document.getElementById('automationduelfield');
         this.flasher = new Flasher({});
         this.revealer = new Revealer(store);
+        this.controls = new ControlButtons(store);
         this.state = {
             cards: [],
             lp: new LifepointDisplay(state.info),

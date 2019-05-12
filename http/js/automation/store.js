@@ -6,6 +6,7 @@ class Store {
     }
 
     register(action, behavior) {
+
         this.states[action] = {};
         this.reducers[action] = behavior;
     }
@@ -192,14 +193,39 @@ store.register('UPDATE_FIELD', (event, state) => {
     return newState;
 });
 
+// setInterval(() => {
+//     store.dispatch({ action: 'UPDATE_FIELD' });
+// }, speed);
+
 store.register('CARD_HOVER', (event, state) => {
     const description = info.update({
         id: event.id
     });
+    //store.dispatch({ action: 'UPDATE_FIELD' });
     return {
         id: event.id,
         description
     };
 });
-
+store.register('CARD_CLICK', (event, state) => {
+    field.controls.enable(event.card, { x: event.x, y: event.y });
+    return event;
+});
 store.register('ZONE_CLICK', console.log);
+
+field.controls.update({
+    summonable_cards: [],
+    spsummonable_cards: [],
+    repositionable_cards: [],
+    msetable_cards: [],
+    ssetable_cards: [
+        { player: 0, location: 'SPELLZONE', index: 0 },
+        { player: 0, location: 'SPELLZONE', index: 1 },
+        { player: 0, location: 'SPELLZONE', index: 2 },
+        { player: 0, location: 'SPELLZONE', index: 3 },
+        { player: 0, location: 'SPELLZONE', index: 4 }
+    ],
+    activatable_cards: [],
+    select_options: [],
+    attackable_cards: []
+});

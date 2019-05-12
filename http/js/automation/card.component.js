@@ -92,8 +92,8 @@ class CardImage extends React.Component {
         });
     }
 
-    click() {
-        this.store.dispatch({ action: 'CARD_CLICK', card: this.state });
+    click(event) {
+        this.store.dispatch({ action: 'CARD_CLICK', card: this.state, y: event.pageY, x: event.pageX });
         this.store.dispatch({ action: 'UPDATE_FIELD' });
     }
     render() {
