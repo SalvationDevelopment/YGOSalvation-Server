@@ -58,9 +58,19 @@ class Field {
     flash(card) {
         this.flasher.trigger(card);
     }
+
+    reveal(cards) {
+        this.revealer.trigger({ active: true, cards });
+    }
+
+    closeRevealer() {
+        this.revealer.trigger({ active: false });
+    }
+
     constructor(state, store) {
         this.root = document.getElementById('automationduelfield');
         this.flasher = new Flasher({});
+        this.revealer = new Revealer(store);
         this.state = {
             cards: [],
             lp: new LifepointDisplay(state.info),
