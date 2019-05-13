@@ -169,7 +169,8 @@ function generateField() {
 const r = generateField(),
     store = new Store({}),
     field = new Field(r, store),
-    info = new CardInfo(databaseSystem);
+    info = new CardInfo(databaseSystem),
+    sidechat = new SideChat(store);
 
 store.register('UPDATE_FIELD', (event, state) => {
     const newState = {
@@ -228,4 +229,9 @@ field.controls.update({
     activatable_cards: [],
     select_options: [],
     attackable_cards: []
+});
+
+store.register('CHAT', (event, state) => {
+    sidechat.add(event.message);
+    return sidechat.state;
 });
