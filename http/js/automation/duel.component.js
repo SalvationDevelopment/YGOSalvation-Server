@@ -2,19 +2,19 @@
 /*global Store, Field, CardInfo, SideChat, Flasher, Revealer, ControlButtons, LifepointDisplay */
 
 class DuelScreen extends React.Component {
-    constructor(databaseSystem) {
+    constructor(store, chat, databaseSystem) {
         super();
         this.state = {
             lastUpdate: {}
         };
-        this.store = new Store({});
-        this.field = new Field({}, this.store);
+        this.store = store;
+        this.field = new Field({ info: {}, field: {} }, this.store);
         this.info = new CardInfo(databaseSystem);
-        this.sidechat = new SideChat(this.store);
+        this.sidechat = chat;
         this.flasher = new Flasher({});
         this.revealer = new Revealer(this.store);
         this.controls = new ControlButtons(this.store);
-        this.lifepoints = new LifepointDisplay(this.info);
+        this.lifepoints = new LifepointDisplay({ lifepoints: [8000, 8000] });
 
         this.store.register('CARD_HOVER', this.onHover.bind(this));
         this.store.register('CARD_CLICK', this.onCardClick.bind(this));
