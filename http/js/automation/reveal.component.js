@@ -12,7 +12,7 @@ class Revealer extends React.Component {
     }
 
     click(card) {
-        this.store.dispatch({ action: 'CARD_CLICK', card: this.state });
+        this.store.dispatch({ action: 'REVEAL_CARD_CLICK', card: this.state });
     }
 
     img(card) {
@@ -35,6 +35,5 @@ class Revealer extends React.Component {
     trigger(state) {
         Object.assign(this.state, state);
         this.state.active = true;
-        ReactDOM.render(this.render(), this.root);
     }
 }

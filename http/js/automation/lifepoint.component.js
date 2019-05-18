@@ -1,10 +1,11 @@
+/*global React*/
+
 class LifepointDisplay extends React.Component {
     constructor(state) {
         super();
         this.root = document.getElementById('lifepoints');
         this.state = state;
         this.maxLifepoints = state.lifepoints[0];
-        ReactDOM.render(this.render(), this.root);
         return this;
     }
 
@@ -53,6 +54,5 @@ class LifepointDisplay extends React.Component {
         if (state) {
             this.state = state;
         }
-        ReactDOM.render(this.render(), this.root);
     }
 }

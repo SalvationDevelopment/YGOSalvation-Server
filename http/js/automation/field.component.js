@@ -1,5 +1,5 @@
 /*global React, ReactDOM,  */
-/*global ControlButtons, Flasher, Revealer, LifepointDisplay, PhaseIndicator, FieldSelector, CardImage*/
+/*global  PhaseIndicator, FieldSelector, CardImage*/
 class Field {
     cast(field, callback) {
         Object.keys(field).forEach((zone) => {
@@ -21,15 +21,7 @@ class Field {
         );
     }
 
-    disableSelection() {
-        this.state.selectors.disableSelection();
-        ReactDOM.render(this.render(), this.root);
-    }
 
-    select(query) {
-        this.state.selectors.select(query);
-        ReactDOM.render(this.render(), this.root);
-    }
 
     updateField(update) {
         this.cast(update.field, (card) => {
@@ -51,31 +43,22 @@ class Field {
                 });
             }
         });
-        this.state.lp.update(update.info);
+
         this.state.phase.update(update.info.phase);
-        ReactDOM.render(this.render(), this.root);
     }
 
-    flash(card) {
-        this.flasher.trigger(card);
+    disableSelection() {
+        this.state.selectors.disableSelection();
     }
 
-    reveal(cards) {
-        this.revealer.trigger({ active: true, cards });
-    }
-
-    closeRevealer() {
-        this.revealer.trigger({ active: false });
+    select(query) {
+        this.state.selectors.select(query);
     }
 
     constructor(state, store) {
-        this.root = document.getElementById('automationduelfield');
-        this.flasher = new Flasher({});
-        this.revealer = new Revealer(store);
-        this.controls = new ControlButtons(store);
+
         this.state = {
             cards: [],
-            lp: new LifepointDisplay(state.info),
             phase: new PhaseIndicator({ phase: state.info.phase }),
             selectors: new FieldSelector(store)
         };
@@ -83,7 +66,5 @@ class Field {
         this.cast(state.field, (card) => {
             this.state.cards[card.uid] = new CardImage(card, store);
         });
-        this.state.lp.update();
-        ReactDOM.render(this.render(), this.root);
     }
 }

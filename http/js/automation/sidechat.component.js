@@ -8,10 +8,9 @@ function sanitize(str) {
 
 class SideChat extends React.Component {
 
-    chatElement(message, i) {
+    messageElement(message, i) {
         return React.createElement('li', { key: `char-message-${i}` }, sanitize(message));
     }
-
 
 
     onKeyPress(event) {
@@ -32,7 +31,7 @@ class SideChat extends React.Component {
             id: 'sidechattext',
             key: 'sidechattext',
             className: 'ingamechatbox'
-        }, this.chat.map(this.chatElement)),
+        }, this.state.chat.map(this.messageElement)),
         React.createElement('input', {
             id: 'sidechatinput',
             key: 'sidechatinput',
@@ -41,15 +40,14 @@ class SideChat extends React.Component {
     }
 
     add(message) {
-        this.chat.push(sanitize(message));
-        ReactDOM.render(this.render(), this.root);
+        this.state.chat = this.state.chat.concat([sanitize(message)]);
     }
 
     constructor(store) {
         super();
-        this.root = document.getElementById('sidechat');
+        this.state = {
+            chat: []
+        };
         this.store = store;
-        this.chat = [];
-        ReactDOM.render(this.render(), this.root);
     }
 }

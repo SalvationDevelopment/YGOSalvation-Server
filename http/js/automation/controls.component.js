@@ -32,7 +32,6 @@ class ControlButtons {
         Object.keys(this.state.zones).forEach((uid) => {
             this.state.zones[uid].state.active = false;
         });
-        ReactDOM.render('', this.root);
     }
 
 
@@ -49,14 +48,14 @@ class ControlButtons {
         }, elements = list.map((card) => {
             return new GameplayControlButton(this.store, card, details[card.type]).render();
         });
-        console.log(this);
-        ReactDOM.render(React.createElement('div', {
+
+        return React.createElement('div', {
             style: {
                 left: `${(coords.x - 15)}px`,
                 top: `${(coords.y - 15)}px`,
                 position: 'fixed'
             }
-        }, elements), this.root);
+        }, elements);
     }
 
     enable(query, coords) {
@@ -74,7 +73,7 @@ class ControlButtons {
                 list.push({ type, card: query });
             }
         });
-        this.display(list, coords);
+        return this.display(list, coords);
     }
 
 
@@ -84,9 +83,6 @@ class ControlButtons {
     }
 
     constructor(store) {
-
-
-        this.root = document.getElementById('actions');
         this.store = store;
         this.state = {
             summonable_cards: [],

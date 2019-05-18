@@ -128,8 +128,6 @@ class CardInfo extends React.Component {
         super();
         this.state = {};
         this.cardInfo = this.cardInfo || {};
-        this.root = document.getElementById('ingamecardimage');
-        ReactDOM.render(this.render(), this.root);
         this.databaseSystem = databaseSystem;
     }
 
@@ -196,6 +194,5 @@ class CardInfo extends React.Component {
         });
         card = card || {};
         this.state.cardInfo = card;
-        ReactDOM.render(this.render(), this.root);
     }
 }
