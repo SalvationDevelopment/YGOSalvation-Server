@@ -1,39 +1,46 @@
 /*global React*/
 class LobbyScreen extends React.Component {
-    constructor(store, chat) {
+    constructor(store, chat, primus) {
         super();
+        this.primus = primus;
+        this.store = store;
         this.sidechat = chat;
         this.state = {
-            decks: []
+            decks: [],
+            selectedDeck: 0
         };
-
     }
 
     slotElement(player) {
-        const tag = React.createElement;
+        const tag = React.createElement,
+            p = this.state.player[player - 1],
+            username = (p) ? p.username : '',
+            lock = (p) ? p.ready : false;
         return tag('div', { id: `slot${player}`, className: 'slot' }, [
             tag('div', { key: 'kick', className: 'kickbutton', onClick: this.kickDuelist.bind(this, player) }, 'X'),
             '\r\n',
-            tag('input', { key: 'slot', id: `player${player}lobbyslot`, placeholder: 'empty slot' }),
-            tag('div', { key: 'lock', className: 'lockindicator', onClick: this.lock.bind(this, player) })
+            tag('input', { key: 'slot', id: `player${player}lobbyslot`, placeholder: 'empty slot', value: username }),
+            '\r\n',
+            tag('div', { key: 'lock', className: 'lockindicator', onClick: this.lock.bind(this, player), 'data-state': lock })
         ]);
     }
 
     deckElement(deck, index) {
         const tag = React.createElement;
-        return tag('option', { key: index }, deck.name);
+        return tag('option', { key: index, value: index }, deck.name);
     }
 
     currentDeckElement() {
         const tag = React.createElement;
         return tag('div', { id: 'lobbycurrentdeck', key: 'lobbycurrentdeck' }, [
             'Select Deck : ',
-            tag('select', { className: 'currentdeck', key: 'currentdeck' }, this.state.decks.map(this.deckElement))
+            tag('select', { className: 'currentdeck', key: 'currentdeck', onChange: this.deckSelect.bind(this) }, this.state.decks.map(this.deckElement))
         ]);
     }
 
     render() {
         const tag = React.createElement;
+        console.log('lobby render', this.state.banlist);
         return [
             tag('div', { id: 'lobbymenu' }, [
                 tag('div', { id: 'duelspectate', key: 'duelspectate' }, [
@@ -47,16 +54,16 @@ class LobbyScreen extends React.Component {
                 ]),
                 tag('div', { id: 'lobbygameinfo', key: 'lobbygameinfo' }, [
                     tag('span', { id: 'translatefl', key: 'translatefl' }, 'Forbidden List'),
-                    tag('span', { id: 'lobbyflist', key: 'lobbyflist' }, this.lobbyflist),
+                    tag('span', { id: 'lobbyflist', key: 'lobbyflist' }, this.state.banlist),
                     tag('br', { key: 'br1' }),
                     tag('span', { id: 'translateacp', key: 'translateacp' }, 'Allowed Card Pool'),
-                    tag('span', { id: 'lobbyallowed', key: 'lobbyallowed' }, this.lobbyallowed),
+                    tag('span', { id: 'lobbyallowed', key: 'lobbyallowed' }, this.state.lobbyallowed),
                     tag('br', { key: 'br2' }),
                     tag('span', { id: 'translategamemode', key: 'translategamemode' }, 'Game Mode'),
-                    tag('span', { id: 'lobbygamemode', key: 'lobbygamemode' }, this.lobbygamemode),
+                    tag('span', { id: 'lobbygamemode', key: 'lobbygamemode' }, this.state.mode),
                     tag('br', { key: 'br3' }),
                     tag('span', { id: 'translatestartinglifepoints', key: 'translatestartinglifepoints' }, 'Starting Lifepoints'),
-                    tag('span', { id: 'lobbylp', key: 'lobbylp' }, this.lobbylp)
+                    tag('span', { id: 'lobbylp', key: 'lobbylp' }, this.state.startLP)
                 ]),
                 this.currentDeckElement(),
                 tag('div', { id: 'lobbystartcancel', key: 'lobbystartcancel' }, [
@@ -68,26 +75,43 @@ class LobbyScreen extends React.Component {
     }
 
     start() {
-        this.store.dispatch('DUEL_START', {});
+        this.primus.write({
+            action: 'determine'
+        });
     }
 
     spectate() {
-        this.store.dispatch('PLAYER_SPECTATE', {});
+        this.primus.write({
+            action: 'leave'
+        });
     }
 
     kickDuelist(player) {
-        this.store.dispatch('DUEL_START', { player });
+        this.primus.write({
+            action: 'kick',
+            slot: player
+        });
     }
 
     leave() {
-        this.store.dispatch('PLAYER_LEAVE', {});
+        this.primus.write({
+            action: 'leave'
+        });
     }
 
 
     lock() {
-        this.store.dispatch('PLAYER_LOCK', {});
+        this.primus.write({
+            action: 'lock',
+            deck: this.state.decks[this.state.selectedDeck]
+        });
+    }
+
+    deckSelect(event, value) {
+        this.state.selectedDeck = event.currentTarget.value;
     }
     update(update) {
         Object.assign(this.state, update);
+        console.log('lobby', this.state);
     }
 }

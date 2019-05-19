@@ -5,26 +5,31 @@ class ApplicationComponent extends React.Component {
         this.store = store;
         this.chat = new SideChat(this.store);
         this.duel = new DuelScreen(this.store, this.chat, databaseSystem);
-        this.lobby = new LobbyScreen(this.store, this.chat);
+
         this.state = {
-            mode: 'lobby'
+            mode: 'lobby',
+            tick: 0
         };
         this.connect();
     }
+
 
     connect() {
         const urlParams = new URLSearchParams(window.location.search),
             primusprotocol = (location.protocol === 'https:') ? 'wss://' : 'ws://';
 
         this.primus = window.Primus.connect(primusprotocol + location.host + ':' + urlParams.get('room'));
-
+        this.lobby = new LobbyScreen(this.store, this.chat, this.primus);
         this.primus.on('data', (data) => {
+            console.log(data);
             if (data.action) {
                 this.action(data);
             }
+            ReactDOM.render(this.render(), document.getElementById('main'));
         });
 
         this.primus.on('open', () => {
+            console.log('connected, registering');
             this.primus.write({
                 action: 'register',
                 usernamename: localStorage.nickname,
@@ -35,6 +40,39 @@ class ApplicationComponent extends React.Component {
         this.primus.on('error', (error) => {
             console.log('error', error);
         });
+    }
+
+    process(message) {
+        if (message.command.indexOf('SELECT') > -1) {
+            his.duel.lifepoints.state.waiting = true;
+        }
+        switch (message.command) {
+            case ('MSG_WAITING' || 'STOC_TIME_LIMIT' || 'STOC_WAITING_SIDE'):
+                this.duel.lifepoints.state.waiting = true;
+                break;
+            case ('STOC_TIME_LIMIT'):
+                this.duel.lifepoints.time({ player: message.player, time: message.time });
+                break;
+            case ('MSG_SUMMONING'):
+                this.duel.flash({ id: message.id });
+                break;
+            case ('MSG_SPSUMMONING'):
+                this.duel.flash({ id: message.id });
+                break;
+            case ('MSG_FLIPSUMMONING'):
+                this.duel.flash({ id: message.id });
+                break;
+            case ('MSG_CHAINING'):
+                this.duel.flash({ id: message.id });
+            case ('MSG_SHUFFLE_DECK'):
+                doGuiShuffle(orient(message.player), 'DECK');
+                break;
+            case ('MSG_SHUFFLE_HAND'):
+                doGuiShuffle(orient(message.player), 'DECK');
+                break;
+            default:
+                break;
+        }
     }
 
     action(message) {
@@ -48,9 +86,7 @@ class ApplicationComponent extends React.Component {
                 });
                 break;
             case 'decks':
-                message.decks.forEach(function (deck, index) {
-                    $('.currentdeck').append('<option value="' + index + '">' + deck.name + '</option>');
-                });
+                this.lobby.update({ decks: message.decks });
                 window.decks = message.decks;
                 break;
             case 'chat':
@@ -59,16 +95,13 @@ class ApplicationComponent extends React.Component {
                 });
                 break;
             case 'start':
-                $('#lobby').toggle();
-                $('#duelscreen').toggle();
+                this.state.mode = 'duel';
                 break;
-
             case 'turn_player':
-                window.verification = message.verification;
-                $('#selectwhogoesfirst').css('display', 'block');
+                this.state.mode = 'choice';
                 break;
             case 'ygopro':
-                manualReciver(message.message);
+                this.process(message.message);
                 break;
             default:
                 return;
@@ -79,6 +112,8 @@ class ApplicationComponent extends React.Component {
         switch (this.state.mode) {
             case 'lobby':
                 return React.createElement('section', { id: 'lobby' }, this.lobby.render());
+            case 'choice':
+                return React.createElement('section', { id: 'choice' }, this.choice.render());
             case 'duel':
                 return React.createElement('section', { id: 'duel' }, this.duel.render());
             case 'siding':
@@ -91,8 +126,3 @@ class ApplicationComponent extends React.Component {
 
 const store = new Store(),
     app = new ApplicationComponent(store);
-
-document.addEventListener('DOMContentLoaded', function (event) {
-    ReactDOM.render(app.render(), document.getElementById('main'));
-});
-
