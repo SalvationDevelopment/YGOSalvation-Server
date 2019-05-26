@@ -6,7 +6,7 @@ class ApplicationComponent extends React.Component {
         this.store = store;
         this.chat = new SideChat(this.store);
         this.duel = new DuelScreen(this.store, this.chat, databaseSystem);
-        this.choice = new ChoiceScreen(this.store);
+        this.choice = new ChoiceScreen(this.store, this.chat);
         this.state = {
             mode: 'lobby',
             tick: 0
