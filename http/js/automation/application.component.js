@@ -1,4 +1,5 @@
-/*global React, Store, DuelScreen, SideChat, LobbyScreen, databaseSystem*/
+/*global React, ReactDOM*/
+/*global Store, DuelScreen, SideChat, LobbyScreen, databaseSystem*/
 class ApplicationComponent extends React.Component {
     constructor(store) {
         super();
@@ -13,7 +14,6 @@ class ApplicationComponent extends React.Component {
         this.connect();
     }
 
-
     connect() {
         const urlParams = new URLSearchParams(window.location.search),
             primusprotocol = (location.protocol === 'https:') ? 'wss://' : 'ws://';
@@ -21,11 +21,12 @@ class ApplicationComponent extends React.Component {
         this.primus = window.Primus.connect(primusprotocol + location.host + ':' + urlParams.get('room'));
         this.lobby = new LobbyScreen(this.store, this.chat, this.primus);
         this.primus.on('data', (data) => {
-            console.log(data);
             if (data.action) {
                 this.action(data);
             }
             ReactDOM.render(this.render(), document.getElementById('main'));
+            const list = document.getElementById('sidechattext');
+            list.scrollTop = list.scrollHeight;
         });
 
         this.primus.on('open', () => {
@@ -40,11 +41,20 @@ class ApplicationComponent extends React.Component {
         this.primus.on('error', (error) => {
             console.log('error', error);
         });
+
+        this.store.register('CHAT_ENTRY', (message, state) => {
+            console.log('p', message, state);
+            this.primus.write({
+                action: 'chat',
+                message: message.message
+            });
+            return state;
+        });
     }
 
     process(message) {
         if (message.command.indexOf('SELECT') > -1) {
-            his.duel.lifepoints.state.waiting = true;
+            this.duel.lifepoints.state.waiting = true;
         }
         switch (message.command) {
             case ('MSG_WAITING' || 'STOC_TIME_LIMIT' || 'STOC_WAITING_SIDE'):
@@ -90,9 +100,7 @@ class ApplicationComponent extends React.Component {
                 window.decks = message.decks;
                 break;
             case 'chat':
-                this.store.dispatch('CHAT_ENTRY', {
-                    message: `[${new Date(message.date).toLocaleTimeString()}] '${message.username}: ${message.message}`
-                });
+                this.chat.add(`[${new Date(message.date).toLocaleTimeString()}] ${message.username}: ${message.message}`);
                 break;
             case 'start':
                 this.state.mode = 'duel';

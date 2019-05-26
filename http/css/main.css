@@ -764,6 +764,10 @@ div#sidechat {
     overflow: auto;
 }
 
+#lobby #sidechattext {
+    padding: 1%;
+}
+
 .ingamechatbox li {
     color: white;
     list-style: none;

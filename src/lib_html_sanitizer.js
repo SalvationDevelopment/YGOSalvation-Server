@@ -5,7 +5,7 @@
  * @returns {String} sanitized user input.
  */
 function removeTags(html) {
-
+    console.log(html)
     var oldHtml,
         tagBody = '(?:[^"\'>]|"[^"]*"|\'[^\']*\')*',
         tagOrComment = new RegExp(

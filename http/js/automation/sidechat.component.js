@@ -12,14 +12,24 @@ class SideChat extends React.Component {
         return React.createElement('li', { key: `char-message-${i}` }, sanitize(message));
     }
 
+    onKeyDown(event) {
+        const key = {
+            RETURN: 13,
+            DOWN: 40
+        };
 
-    onKeyPress(event) {
         switch (event.which) {
-            case 40:
+            case key.DOWN:
+                event.target.value = this.sent;
                 break;
-            case 13:
+            case key.RETURN:
+                if (!event.target.value) {
+                    return;
+                }
                 const message = sanitize(event.target.value);
                 this.store.dispatch({ action: 'CHAT_ENTRY', message });
+                this.sent = message;
+                event.target.value = '';
                 break;
             default:
                 return;
@@ -35,7 +45,7 @@ class SideChat extends React.Component {
         React.createElement('input', {
             id: 'sidechatinput',
             key: 'sidechatinput',
-            onKeyPress: this.onKeyPress.bind(this)
+            onKeyDown: this.onKeyDown.bind(this)
         })];
     }
 
@@ -45,6 +55,7 @@ class SideChat extends React.Component {
 
     constructor(store) {
         super();
+        this.sent = [];
         this.state = {
             chat: []
         };
