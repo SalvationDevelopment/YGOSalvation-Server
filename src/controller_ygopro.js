@@ -12,8 +12,51 @@ const enums = require('./translate_ygopro_enums'),
         0: 'rock',
         1: 'paper',
         2: 'scissors'
-    };
+    },
+    buttonName = {
+        summonable_cards: (i) => i << 16,
+        spsummonable_cards: (i) => (i << 16) + 1,
+        repositionable_cards: (i) => (i << 16) + 2,
+        msetable_cards: (i) => (i << 16) + 3,
+        ssetable_cards: (i) => (i << 16) + 4,
+        activatable_cards: (i, command) => (command === 'MSG_SELECT_IDLECMD') ? (i << 16) + 5 : (i << 16),
+        select_options: (i, command) => {
+            switch (command) {
+                case 'MSG_SELECT_IDLECMD':
+                    return (i << 16) + 5;
+                case 'MSG_SELECT_BATTLECMD':
+                    return i << 16;
+                default:
+                    return i;
+            }
 
+        },
+        attackable_cards: (i) => (i << 16) + 1,
+        enableBattlePhase: () => 6,
+        enableMainPhase2: () => 2,
+        shuffle: () => 8,
+        enableEndPhase: (i, command) => {
+            switch (command) {
+                case 'MSG_SELECT_IDLECMD':
+                    return 3;
+                case 'MSG_SELECT_BATTLECMD':
+                    return 7;
+                default:
+                    return i;
+            }
+        },
+        yesno: (i, command) => {
+            switch (command) {
+                case 'MSG_SELECT_CHAIN':
+                    if (i === 0) {
+                        return -1;
+                    }
+                    return 1;
+                default:
+                    return Number(Boolean(i));
+            }
+        }
+    };
 /**
  * Standardized way of sending a preformatted message to the user from YGOSharp. 
  * @param {Object} gameBoard Instance of the manual state engine
@@ -22,14 +65,12 @@ const enums = require('./translate_ygopro_enums'),
  * @param {Object} ygopro TCP connection back to YGOSharp
  * @returns {undefined}
  */
-function askUser(gameBoard, slot, message, ygopro) {
+function askUser(gameBoard, slot, message, ygopro, command) {
     gameBoard.question('p' + slot, message.command, message, {
         max: 1,
         min: 1
-    }, function(answer) {
-        const response = Buffer.from(answer[0]);
-        console.log('got question response', response);
-        ygopro.write(response);
+    }, function (answer) {
+        ygopro.write(buttonName[answer.type](answer.i, command));
     });
 }
 
@@ -41,7 +82,7 @@ function askUser(gameBoard, slot, message, ygopro) {
  * @returns {Number} Index of the card in the given options.
  */
 function resolveCardIndex(list, card) {
-    var number = list.findIndex(function(option) {
+    var number = list.findIndex(function (option) {
         var index = (option.player === card[0]),
             location = (option.location === enums.locations[card[1]]),
             sequence = (option.index === card[2]);
@@ -77,12 +118,12 @@ function boardController(gameBoard, slot, message, ygopro, player) {
                 side: Array(0),
                 extra: Array(message.player1extrasize).fill(0)
             }, {
-                main: Array(message.player2decksize).fill(0),
-                side: Array(0),
-                extra: Array(message.player2extrasize).fill(0)
-            }, false, {
-                startLP: message.lifepoints1
-            });
+                    main: Array(message.player2decksize).fill(0),
+                    side: Array(0),
+                    extra: Array(message.player2extrasize).fill(0)
+                }, false, {
+                    startLP: message.lifepoints1
+                });
             break;
         case ('MSG_HINT'):
             break;
@@ -200,7 +241,7 @@ function boardController(gameBoard, slot, message, ygopro, player) {
         case ('MSG_TOSS_COIN'):
             break;
         case ('MSG_SELECT_IDLECMD'): // Good
-            askUser(gameBoard, slot, message, ygopro);
+            askUser(gameBoard, slot, message, ygopro, 'MSG_SELECT_IDLECMD');
             break;
         case ('MSG_MOVE'): // Good
             gameBoard.setState({
@@ -289,21 +330,21 @@ function boardController(gameBoard, slot, message, ygopro, player) {
         case ('MSG_REQUEST_DECK'):
             break;
         case ('MSG_SELECT_BATTLECMD'):
-            askUser(gameBoard, slot, message, ygopro);
+            askUser(gameBoard, slot, message, ygopro, 'MSG_SELECT_BATTLECMD');
             break;
         case ('MSG_SELECT_EFFECTYN'):
-            askUser(gameBoard, slot, message, ygopro);
+            askUser(gameBoard, slot, message, ygopro, 'MSG_SELECT_EFFECTYN');
             break;
         case ('MSG_SELECT_YESNO'):
-            askUser(gameBoard, slot, message, ygopro);
+            askUser(gameBoard, slot, message, ygopro, 'MSG_SELECT_YESNO');
             break;
         case ('MSG_SELECT_OPTION'):
-            askUser(gameBoard, slot, message, ygopro);
+            askUser(gameBoard, slot, message, ygopro, 'MSG_SELECT_OPTION');
             break;
         case ('MSG_SELECT_CARD'):
             // [number of cards selected, index of that card, etc...]
-            gameBoard.question(slot, message.command, message, { min: message.select_min, max: message.select_max }, function(answer) {
-                var messageBuffer = [answer.length].concat(answer.map(function(card) {
+            gameBoard.question(slot, message.command, message, { min: message.select_min, max: message.select_max }, function (answer) {
+                var messageBuffer = [answer.length].concat(answer.map(function (card) {
                     return resolveCardIndex(message.select_options, card);
                 }));
                 ygopro.write(gameResponse('CTOS_RESPONSE', new Buffer(messageBuffer)));
@@ -311,19 +352,19 @@ function boardController(gameBoard, slot, message, ygopro, player) {
 
             break;
         case ('MSG_SELECT_CHAIN'):
-            askUser(gameBoard, slot, message, ygopro);
+            askUser(gameBoard, slot, message, ygopro, 'MSG_SELECT_CHAIN');
             break;
         case ('MSG_SELECT_PLACE'):
-            askUser(gameBoard, slot, message, ygopro);
+            askUser(gameBoard, slot, message, ygopro, 'MSG_SELECT_PLACE');
             break;
         case ('MSG_SELECT_POSITION'):
-            askUser(gameBoard, slot, message, ygopro);
+            askUser(gameBoard, slot, message, ygopro, 'MSG_SELECT_POSITION');
             break;
         case ('MSG_SELECT_TRIBUTE'):
-            gameBoard.question(slot, message.command, message, { min: message.select_min, max: message.select_max }, function(answer) {
-                var messageBuffer = [answer.length].concat(answer.map(function(card) {
+            gameBoard.question(slot, message.command, message, { min: message.select_min, max: message.select_max }, function (answer) {
+                var messageBuffer = [answer.length].concat(answer.map(function (card) {
                     return resolveCardIndex(message.selectable_targets, card);
-                })).filter(function(card) {
+                })).filter(function (card) {
                     return (card !== undefined);
                 });
                 ygopro.write(gameResponse('CTOS_RESPONSE', new Buffer(messageBuffer)));
@@ -332,13 +373,13 @@ function boardController(gameBoard, slot, message, ygopro, player) {
         case ('MSG_SORT_CHAIN'):
             break;
         case ('MSG_SELECT_COUNTER'):
-            askUser(gameBoard, slot, message, ygopro);
+            askUser(gameBoard, slot, message, ygopro, 'MSG_SELECT_COUNTER');
             break;
         case ('MSG_SELECT_SUM'):
-            askUser(gameBoard, slot, message, ygopro);
+            askUser(gameBoard, slot, message, ygopro, 'MSG_SELECT_SUM');
             break;
         case ('MSG_SELECT_DISFIELD'):
-            askUser(gameBoard, slot, message, ygopro);
+            askUser(gameBoard, slot, message, ygopro, 'MSG_SELECT_DISFIELD');
             break;
         case ('MSG_SORT_CARD'):
             break;
@@ -347,7 +388,7 @@ function boardController(gameBoard, slot, message, ygopro, player) {
         case ('MSG_CONFIRM_CARDS'):
             break;
         case ('MSG_UPDATE_DATA'): // inconsistent
-            message.cards.forEach(function(card, index) {
+            message.cards.forEach(function (card, index) {
                 if (card) {
                     try {
                         gameBoard.setState({
@@ -415,13 +456,13 @@ function boardController(gameBoard, slot, message, ygopro, player) {
             }, {
                 id: 'scissors',
                 value: 2
-            }], { min: 1, max: 1 }, function(answer) {
+            }], { min: 1, max: 1 }, function (answer) {
                 var choice = cardMap[answer[0]];
                 ygopro.write(gameResponse(choice));
             });
             break;
         case ('STOC_SELECT_TP'): // Good
-            gameBoard.question(slot, 'STOC_SELECT_TP', [0, 1], { min: 1, max: 1 }, function(answer) {
+            gameBoard.question(slot, 'STOC_SELECT_TP', [0, 1], { min: 1, max: 1 }, function (answer) {
                 ygopro.write(gameResponse('CTOS_TP_RESULT', answer[0]));
             });
             return {};
