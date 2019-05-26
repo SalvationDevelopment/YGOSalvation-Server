@@ -10,9 +10,6 @@ let translator = {};
  * @typedef {Buffer} Packet
  */
 
-
-
-
 function user_interface_only(message, pbuf, game) {
     game.sendBufferToPlayer(0, message);
     game.sendBufferToPlayer(1, message);
@@ -25,9 +22,9 @@ function user_interface_only(message, pbuf, game) {
     game.refreshHand(1);
 }
 
-function unused() { }
+function unused() {}
 
-function incomplete() { }
+function incomplete() {}
 
 
 function getFieldCards(gameBoard, controller, location, pbuf) {
@@ -1436,29 +1433,29 @@ translator = {
     MSG_ANNOUNCE_CARD_FILTER: msg_announce_card_filter
 };
 
-function analyze(engineBuffer, len, game) {
+/**
+ * 
+ * @param {Buffer} coreMessage Message from ygopro-core
+ * @param {Number} length Number of messages in the buffer
+ * @param {Duel} game Duel Instance
+ */
+function analyze(coreMessage, length, game) {
+    const msgbuffer = new BufferStreamReader(coreMessage),
+        pbuf = new BufferStreamReader(coreMessage);
 
-
-    let snippet = 0;
-
-    const msgbuffer = new BufferStreamReader(engineBuffer),
-        pbuf = new BufferStreamReader(engineBuffer);
-
-    while (pbuf - msgbuffer < len) {
-        console.log('n', snippet++);
-        const engType = enums.STOC.STOC_GAME_MSG[pbuf.readInt8()];
-        if (translator[engType]) {
-            var message = {
-                command: engType
-            };
-            console.log('----engType', engType);
-            const output = translator[engType](message, pbuf, game);
-            console.log(pbuf - msgbuffer);
-            if (output) {
-                return output;
-            }
-        } else {
+    while (pbuf - msgbuffer < length) {
+        const messageFunction = enums.STOC.STOC_GAME_MSG[pbuf.readInt8()];
+        let output = 0;
+        if (!translator[messageFunction]) {
+            // there should always be a function to run. Otherwise is a bug in the BufferStreamReader step logic.
             debugger;
+        }
+        var message = {
+            command: messageFunction
+        };
+        output = translator[messageFunction](message, pbuf, game) || 0;
+        if (output) {
+            return output;
         }
     }
     return 0;

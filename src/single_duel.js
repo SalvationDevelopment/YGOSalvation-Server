@@ -1,8 +1,7 @@
 var ocgwrapper = require('./engine_ocgcore.js'),
     conf = ocgwrapper.configurations.normal;
 console.log('...');
-var x = ocgwrapper.duel(conf, console.log, [{
-    write: function () { },
+var x = ocgwrapper.duel(conf, [{
     main: [46986415,
         70781052,
         28279543,
@@ -54,7 +53,6 @@ var x = ocgwrapper.duel(conf, console.log, [{
     ],
     side: []
 }, {
-    write: function () { },
     main: [89631139,
         89631139,
         89631139,
