@@ -1,4 +1,4 @@
-/*global React, ReactDOM */
+/*global React */
 /*global Store, Field, CardInfo, SideChat, Flasher, Revealer, ControlButtons, LifepointDisplay */
 
 class DuelScreen extends React.Component {
@@ -18,6 +18,8 @@ class DuelScreen extends React.Component {
 
         this.store.register('CARD_HOVER', this.onHover.bind(this));
         this.store.register('CARD_CLICK', this.onCardClick.bind(this));
+
+        console.log(this.controls.render());
     }
 
     onCardClick(event, state) {
@@ -47,14 +49,14 @@ class DuelScreen extends React.Component {
 
     render() {
         return [
-            ReactDOM.createElement('div', { id: 'sidechat', key: 'sidechat' }, this.sidechat.render()),
-            ReactDOM.createElement('div', { id: 'actions', key: 'actions' }, this.controls.render()),
-            ReactDOM.createElement('div', { id: 'ingamecardimage', key: 'ingamecardimage' }, this.info.render()),
-            ReactDOM.createElement('div', { id: 'lifepoints', key: 'lifepoints' }, this.lifepoints.render()),
-            ReactDOM.createElement('div', { id: 'revealer', key: 'revealer' }, this.flasher.render()),
-            ReactDOM.createElement('div', { id: 'announcer', key: 'announcer' }, this.flasher.render()),
-            ReactDOM.createElement('div', { className: 'field newfield', key: 'field-newfield' }, [
-                ReactDOM.createElement('div', {
+            React.createElement('div', { id: 'sidechat', key: 'sidechat' }, this.sidechat.render()),
+            React.createElement('div', { id: 'actions', key: 'actions' }, this.controls.render()),
+            React.createElement('div', { id: 'ingamecardimage', key: 'ingamecardimage' }, this.info.render()),
+            React.createElement('div', { id: 'lifepoints', key: 'lifepoints' }, this.lifepoints.render()),
+            React.createElement('div', { id: 'revealer', key: 'revealer' }, this.flasher.render()),
+            React.createElement('div', { id: 'announcer', key: 'announcer' }, this.flasher.render()),
+            React.createElement('div', { className: 'field newfield', key: 'field-newfield' }, [
+                React.createElement('div', {
                     id: 'automationduelfield',
                     className: 'fieldimage',
                     key: 'automationduelfield',

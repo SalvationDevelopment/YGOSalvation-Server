@@ -99,17 +99,27 @@ class LobbyScreen extends React.Component {
         });
     }
 
+    get deck() {
+        const deck = this.state.decks[this.state.selectedDeck];
+        return {
+            main: deck.main.map((card) => card.id),
+            side: deck.side.map((card) => card.id),
+            extra: deck.extra.map((card) => card.id)
+        };
+
+    }
 
     lock() {
         this.primus.write({
             action: 'lock',
-            deck: this.state.decks[this.state.selectedDeck]
+            deck: this.deck
         });
     }
 
     deckSelect(event, value) {
         this.state.selectedDeck = event.currentTarget.value;
     }
+
     update(update) {
         Object.assign(this.state, update);
         console.log('lobby', this.state);

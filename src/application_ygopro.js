@@ -338,6 +338,15 @@ function surrender(game, duel, message) {
     duel.surrender(message.slot);
 }
 
+function Deck(deck) {
+    return {
+        main: deck.main.map((card) => card.id),
+        side: deck.side.map((card) => card.id),
+        extra: deck.extra.map((card) => card.id),
+    };
+
+}
+
 /**
  * Validate a requested deck.
  * @param {GameState} game public gamelist state information.
@@ -346,14 +355,14 @@ function surrender(game, duel, message) {
  * @returns {Boolean} If the deck is valid or not.
  */
 function deckCheck(game, client, message) {
-    console.log(message.deck);
+
     const validation = validateDeck(message.deck,
         banlist,
         database,
         game.cardpool,
         game.prerelease);
 
-
+    console.log(validation);
     if (validation.error) {
         client.write(({
             errorType: 'validation',
@@ -598,7 +607,7 @@ function start(server, duel, game, state, message) {
         new PlayerAbstraction(server, state, 'player2', state.clients[1])
     ],
         spectators = [new PlayerAbstraction(server, state, 'spectators', {})];
-
+    console.log('LOADING GAME!');
     duel.load(game, function (error, type) {
         chat(server, state, {
             username: '[SYSTEM]'

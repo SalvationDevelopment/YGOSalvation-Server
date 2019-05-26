@@ -6,7 +6,7 @@ class ApplicationComponent extends React.Component {
         this.store = store;
         this.chat = new SideChat(this.store);
         this.duel = new DuelScreen(this.store, this.chat, databaseSystem);
-
+        this.choice = new ChoiceScreen(this.store);
         this.state = {
             mode: 'lobby',
             tick: 0
@@ -43,10 +43,18 @@ class ApplicationComponent extends React.Component {
         });
 
         this.store.register('CHAT_ENTRY', (message, state) => {
-            console.log('p', message, state);
             this.primus.write({
                 action: 'chat',
                 message: message.message
+            });
+            return state;
+        });
+
+        this.store.register('START_CHOICE', (message, state) => {
+            this.primus.write({
+                action: 'start',
+                turn_player: message.player,
+                verification: window.verification
             });
             return state;
         });
@@ -107,6 +115,7 @@ class ApplicationComponent extends React.Component {
                 break;
             case 'turn_player':
                 this.state.mode = 'choice';
+                window.verification = message.verification;
                 break;
             case 'ygopro':
                 this.process(message.message);

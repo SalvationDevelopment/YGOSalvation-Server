@@ -13,7 +13,7 @@ class Store {
 
     dispatch(event) {
         console.log(event);
-        if (!this.states[event.action] || !this.reducers[event.action]) {
+        if (!this.reducers[event.action]) {
             return;
         }
 

@@ -26,6 +26,7 @@ class GameplayControlButton extends React.Component {
         };
     }
 }
+
 class ControlButtons {
 
     hide() {
@@ -34,8 +35,7 @@ class ControlButtons {
         });
     }
 
-
-    display(list, coords) {
+    display(list) {
         const details = {
             summonable_cards: { text: 'Summon', id: 1 },
             spsummonable_cards: { text: 'Special Summon', id: 2 },
@@ -51,21 +51,22 @@ class ControlButtons {
 
         return React.createElement('div', {
             style: {
-                left: `${(coords.x - 15)}px`,
-                top: `${(coords.y - 15)}px`,
+                left: `${(this.info.coords.x - 15)}px`,
+                top: `${(this.info.coords.y - 15)}px`,
                 position: 'fixed'
             }
         }, elements);
     }
 
-    enable(query, coords) {
-        const list = [];
+    render() {
+        const list = [],
+            query = this.info.target;
 
         Object.keys(this.state).forEach((type) => {
             const options = this.state[type],
                 selectable = options.some((option) => {
                     const valid = Object.keys(option).every((prop) => {
-                        return option[prop] === query[prop];
+                        return option[prop] === this.state[prop];
                     });
                     return valid;
                 });
@@ -73,7 +74,7 @@ class ControlButtons {
                 list.push({ type, card: query });
             }
         });
-        return this.display(list, coords);
+        return this.display(list);
     }
 
 
@@ -92,7 +93,14 @@ class ControlButtons {
             ssetable_cards: [],
             activatable_cards: [],
             select_options: [],
-            attackable_cards: []
+            attackable_cards: [],
+        };
+        this.info = {
+            coords: {
+                x: 0,
+                y: 0
+            },
+            target: {}
         };
     }
 }
