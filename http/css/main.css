@@ -587,13 +587,11 @@ div#actions {
     position: absolute;
     width: 66px;
     font-size: .7em;
-    display: none;
     z-index: 7
 }
 
 div#actions button {
     width: 100%;
-    display: none;
     width: 50%;
 }
 

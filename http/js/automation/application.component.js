@@ -1,5 +1,6 @@
 /*global React, ReactDOM*/
 /*global Store, DuelScreen, SideChat, LobbyScreen, databaseSystem*/
+
 class ApplicationComponent extends React.Component {
     constructor(store) {
         super();
@@ -21,10 +22,13 @@ class ApplicationComponent extends React.Component {
         this.primus = window.Primus.connect(primusprotocol + location.host + ':' + urlParams.get('room'));
         this.lobby = new LobbyScreen(this.store, this.chat, this.primus);
         this.primus.on('data', (data) => {
+            console.log(data);
             if (data.action) {
                 this.action(data);
             }
             ReactDOM.render(this.render(), document.getElementById('main'));
+            layouthand(0);
+            layouthand(1);
             const list = document.getElementById('sidechattext');
             list.scrollTop = list.scrollHeight;
         });
@@ -58,6 +62,32 @@ class ApplicationComponent extends React.Component {
             });
             return state;
         });
+
+        this.store.register('RENDER', (message, state) => {
+            ReactDOM.render(this.render(), document.getElementById('main'));
+            return state;
+        });
+    }
+
+    duelAction(message) {
+        switch (message.duelAction) {
+            case 'start':
+                this.state.mode = 'duel';
+                this.duel.update(message.info);
+                this.duel.updateField(message.field[0]);
+                this.duel.updateField(message.field[1]);
+                break;
+            case 'duel':
+                this.duel.update(message.info);
+                this.duel.updateField(message.field[0]);
+                this.duel.updateField(message.field[1]);
+                break;
+            case 'question':
+                this.duel.idle(message.options);
+                break;
+            default:
+                throw (message.action);
+        }
     }
 
     process(message) {
@@ -118,7 +148,7 @@ class ApplicationComponent extends React.Component {
                 window.verification = message.verification;
                 break;
             case 'ygopro':
-                this.process(message.message);
+                this.duelAction(message.message);
                 break;
             default:
                 return;

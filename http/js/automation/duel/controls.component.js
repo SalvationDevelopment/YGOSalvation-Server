@@ -3,7 +3,7 @@
 class GameplayControlButton extends React.Component {
 
     click() {
-        this.store.dispatch('CONTROL_CLICK', this.state);
+        this.store.dispatch({ action: 'CONTROL_CLICK', card: this.state });
     }
 
     render() {
@@ -63,10 +63,10 @@ class ControlButtons {
             query = this.info.target;
 
         Object.keys(this.state).forEach((type) => {
-            const options = this.state[type],
+            const options = (Array.isArray(this.state[type])) ? this.state[type] : [],
                 selectable = options.some((option) => {
                     const valid = Object.keys(option).every((prop) => {
-                        return option[prop] === this.state[prop];
+                        return option[prop] === query[prop];
                     });
                     return valid;
                 });
@@ -81,6 +81,12 @@ class ControlButtons {
 
     update(newState) {
         Object.assign(this.state, newState);
+        this.store.dispatch({ action: 'RENDER' });
+    }
+
+    enable(query, coords) {
+        this.info.target = query;
+        this.info.coords = coords;
     }
 
     constructor(store) {
@@ -93,7 +99,7 @@ class ControlButtons {
             ssetable_cards: [],
             activatable_cards: [],
             select_options: [],
-            attackable_cards: [],
+            attackable_cards: []
         };
         this.info = {
             coords: {

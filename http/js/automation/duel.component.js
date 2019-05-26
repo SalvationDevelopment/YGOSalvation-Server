@@ -24,6 +24,7 @@ class DuelScreen extends React.Component {
 
     onCardClick(event, state) {
         this.controls.enable(event.card, { x: event.x, y: event.y });
+        this.store.dispatch({ action: 'RENDER' });
         return event;
     }
 
@@ -31,6 +32,7 @@ class DuelScreen extends React.Component {
         const description = this.info.update({
             id: event.id
         });
+        this.store.dispatch({ action: 'RENDER' });
         return {
             id: event.id,
             description
@@ -39,8 +41,11 @@ class DuelScreen extends React.Component {
 
     update(update) {
         this.lifepoints.update(update.info);
-        this.field.update(update.info.phase);
         this.state.lastUpdate = update;
+    }
+
+    updateField(field) {
+        this.field.updateField(field);
     }
 
     idle(commands) {

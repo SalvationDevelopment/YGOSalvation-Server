@@ -193,6 +193,11 @@ class CardInfo extends React.Component {
             }
         });
         card = card || {};
-        this.state.cardInfo = card;
+        if (card.id) {
+            this.state.id = card.id;
+            this.state.cardInfo = card;
+            return card;
+        }
+        return card;
     }
 }

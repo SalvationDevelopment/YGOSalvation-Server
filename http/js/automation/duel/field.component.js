@@ -1,5 +1,79 @@
 /*global React, ReactDOM,  */
 /*global  PhaseIndicator, FieldSelector, CardImage*/
+
+
+function layouthand(player) {
+    'use strict';
+    var count = $('.p' + player + '.HAND').length,
+        f = 75 / 0.8,
+        xCoord,
+        sequence;
+    //    console.log(count,f,xCoord);
+    for (sequence = 0; sequence < count; sequence += 1) {
+        if (count < 6) {
+            xCoord = (5.5 * f - 0.8 * f * count) / 2 + 1.55 * f + sequence * 0.8 * f;
+        } else {
+            xCoord = 1.9 * f + sequence * 4.0 * f / (count - 1);
+        }
+        // console.log('.'+player+'.Hand.i'+sequence);
+        //console.log(xCoord);
+        $('.p' + player + '.HAND.i' + sequence).css('left', String() + xCoord + 'px');
+    }
+}
+
+
+function cardmargin(player, deck) {
+    'use strict';
+    var multi = 1;
+    $('.card.p' + player + '.' + deck).each(function (i) {
+        var n = $(this).attr('data-index');
+        $(this).attr('style', '').css({
+            '-webkit-transform': 'translate3d(0,0,' + n + 'px)',
+            'z-index': (n * multi)
+        });
+    });
+
+}
+
+function guishuffle(player, deck) {
+    'use strict';
+    var orientation = (player === 'p0') ? ({
+        x: 'left',
+        y: 'bottom',
+        direction: 1
+    }) : ({
+        x: 'right',
+        y: 'top',
+        direction: -1
+    });
+    cardmargin(player, deck);
+    $($('.card.' + player + '.' + deck).get().reverse()).each(function (i) {
+        var cache = $(this).css(orientation.x),
+            spatical = Math.floor((Math.random() * 100) - 50);
+        $(this).css(orientation.x, '-=' + spatical + 'px');
+    });
+
+}
+
+function doGuiShuffle(player, deck) {
+    'use strict';
+    var action = setInterval(function () {
+        guishuffle('p' + player, deck);
+        setTimeout(function () {
+            cardmargin(String() + player, deck);
+        }, 50);
+    }, 200);
+    setTimeout(function () {
+        clearInterval(action);
+        cardmargin(String() + player, deck);
+        setTimeout(function () {
+            layouthand(player);
+        }, 500);
+
+    }, 1000);
+    guishuffle('p' + player, deck);
+}
+
 class Field {
     cast(field, callback) {
         Object.keys(field).forEach((zone) => {
@@ -21,30 +95,29 @@ class Field {
         );
     }
 
-
-
     updateField(update) {
-        this.cast(update.field, (card) => {
+        this.cast(update, (card) => {
+            if (!this.state.cards[card.uid]) {
+                this.state.cards[card.uid] = new CardImage(card, this.store);
+            }
             Object.assign(this.state.cards[card.uid].state, card);
         });
         const count = {
             0: 0,
             1: 0
         };
-        this.cast(update.field, (card) => {
+        this.cast(update, (card) => {
             if (card.location === 'HAND') {
                 count[this.state.cards[card.uid].state.player]++;
             }
         });
-        this.cast(update.field, (card) => {
+        this.cast(update, (card) => {
             if (card.location === 'HAND') {
                 Object.assign(this.state.cards[card.uid].state, {
                     handLocation: count[this.state.cards[card.uid].state.player]
                 });
             }
         });
-
-        this.state.phase.update(update.info.phase);
     }
 
     disableSelection() {
@@ -56,7 +129,7 @@ class Field {
     }
 
     constructor(state, store) {
-
+        this.store = store;
         this.state = {
             cards: [],
             phase: new PhaseIndicator({ phase: state.info.phase }),
