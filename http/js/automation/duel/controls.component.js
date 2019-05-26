@@ -3,7 +3,7 @@
 class GameplayControlButton extends React.Component {
 
     click() {
-        this.store.dispatch({ action: 'CONTROL_CLICK', card: this.state });
+        this.store.dispatch({ action: 'CONTROL_CLICK', card: this.state, uuid: this.uuid });
     }
 
     render() {
@@ -17,13 +17,17 @@ class GameplayControlButton extends React.Component {
         }, this.state.info.text);
     }
 
-    constructor(store, card, info) {
+    constructor(store, card, info, list, uuid) {
         super();
+        this.uuid = uuid;
         this.store = store;
         this.state = {
             card,
             info
         };
+        this.index = list.indexOf((item) => {
+            return item.id === card.id;
+        });
     }
 }
 
@@ -46,7 +50,12 @@ class ControlButtons {
             select_options: { text: 'Select', id: 7 },
             attackable_cards: { text: 'Attack', id: 8 }
         }, elements = list.map((card) => {
-            return new GameplayControlButton(this.store, card, details[card.type]).render();
+            return new GameplayControlButton(this.store,
+                card,
+                details[card.type],
+                this.state[card.type],
+                this.state.uuid
+            ).render();
         });
 
         return React.createElement('div', {
@@ -64,8 +73,13 @@ class ControlButtons {
 
         Object.keys(this.state).forEach((type) => {
             const options = (Array.isArray(this.state[type])) ? this.state[type] : [],
-                selectable = options.some((option) => {
+                selectable = options.some((option, i) => {
+                    option.i = i;
+                    option.type = type;
                     const valid = Object.keys(option).every((prop) => {
+                        if (prop === 'i' || prop === 'type') {
+                            return true;
+                        }
                         return option[prop] === query[prop];
                     });
                     return valid;
@@ -74,7 +88,7 @@ class ControlButtons {
                 list.push({ type, card: query });
             }
         });
-        return this.display(list);
+        return this.display(list, this.state.uuid);
     }
 
 

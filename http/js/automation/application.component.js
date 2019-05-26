@@ -1,5 +1,5 @@
 /*global React, ReactDOM*/
-/*global Store, DuelScreen, SideChat, LobbyScreen, databaseSystem*/
+/*global Store, ChoiceScreen, DuelScreen, SideChat, LobbyScreen, databaseSystem*/
 
 class ApplicationComponent extends React.Component {
     constructor(store) {
@@ -59,6 +59,14 @@ class ApplicationComponent extends React.Component {
                 action: 'start',
                 turn_player: message.player,
                 verification: window.verification
+            });
+            return state;
+        });
+
+        this.store.register('CONTROL_CLICK', (message, state) => {
+            this.primus.write({
+                action: 'question',
+                answer: message
             });
             return state;
         });
