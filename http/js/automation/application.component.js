@@ -151,6 +151,9 @@ class ApplicationComponent extends React.Component {
             case 'start':
                 this.state.mode = 'duel';
                 break;
+            case 'slot':
+                this.lobby.update({ slot: message.slot });
+                break;
             case 'turn_player':
                 this.state.mode = 'choice';
                 window.verification = message.verification;

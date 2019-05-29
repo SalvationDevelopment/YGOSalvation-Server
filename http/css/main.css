@@ -3008,14 +3008,14 @@ main {
     font-size: .9em;
     z-index: 30;
     width: 33vh;
-    text-align: justify
+    text-align: justify;
+    height: 100%;
+    background: rgba(0, 0, 0, .3);
+    padding: 1vh 1vw;
 }
 
 #ingamecardimage .cardImage {
     position: relative;
     height: auto;
-}
-
-#ingamecardimage .cardDescription {
-    height: calc(85vh - 254px);
+    margin-bottom: 2em;
 }

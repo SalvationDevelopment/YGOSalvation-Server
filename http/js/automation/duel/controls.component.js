@@ -95,6 +95,12 @@ class ControlButtons {
 
     update(newState) {
         Object.assign(this.state, newState);
+        this.store.dispatch({
+            action: 'ENABLE_PHASE',
+            endphi: this.state.enableEndPhase,
+            battlephi: this.state.enableBattlePhase,
+            main2phi: this.state.enableMain2Phase
+        });
         this.store.dispatch({ action: 'RENDER' });
     }
 

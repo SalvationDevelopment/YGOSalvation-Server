@@ -29,6 +29,9 @@ class DuelScreen extends React.Component {
     }
 
     onHover(event, state) {
+        if (!event.id) {
+            return;
+        }
         const description = this.info.update({
             id: event.id
         });
@@ -40,8 +43,9 @@ class DuelScreen extends React.Component {
     }
 
     update(update) {
-        this.lifepoints.update(update.info);
-        this.state.lastUpdate = update;
+        console.log(update);
+        this.lifepoints.update({ lifepoints: update.lifepoints });
+        this.field.phase(update.phase);
     }
 
     updateField(field) {

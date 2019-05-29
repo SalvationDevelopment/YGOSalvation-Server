@@ -21,6 +21,7 @@ class PhaseIndicator extends React.Component {
     }
 
     render() {
+        console.log('phase', this.state.phase);
         const buttons = [
             this.button(0, 'drawphi', 'Draw'),
             this.button(1, 'standbyphi', 'Standby'),
