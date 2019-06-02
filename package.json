@@ -21,6 +21,7 @@
         "dotenv": "^4.0.0",
         "express": "^4.16.4",
         "fastcall": "^0.2.6",
+        "ffi": "^2.3.0",
         "function-queue": "0.0.12",
         "helmet": "^3.14.0",
         "hotload": "git+https://github.com/SalvationDevelopment/node-hotload.git",

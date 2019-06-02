@@ -128,6 +128,10 @@ class Field {
         this.state.selectors.select(query);
     }
 
+    phase(value) {
+        this.state.phase.update(value);
+    }
+
     constructor(state, store) {
         this.store = store;
         this.state = {

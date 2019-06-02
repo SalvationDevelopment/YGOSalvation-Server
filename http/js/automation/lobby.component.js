@@ -11,7 +11,12 @@ class LobbyScreen extends React.Component {
         };
     }
 
+
+
     slotElement(player) {
+        if (this.state.mode !== 'Tag' && player > 2) {
+            return '';
+        }
         const tag = React.createElement,
             p = this.state.player[player - 1],
             username = (p) ? p.username : '',
@@ -37,6 +42,8 @@ class LobbyScreen extends React.Component {
             tag('select', { className: 'currentdeck', key: 'currentdeck', onChange: this.deckSelect.bind(this) }, this.state.decks.map(this.deckElement))
         ]);
     }
+
+
 
     render() {
         const tag = React.createElement;
@@ -68,7 +75,7 @@ class LobbyScreen extends React.Component {
                 this.currentDeckElement(),
                 tag('div', { id: 'lobbystartcancel', key: 'lobbystartcancel' }, [
                     tag('button', { id: 'lobbystart', key: 'lobbystart', onClick: this.start.bind(this) }, 'Duel'),
-                    tag('button', { id: 'lobbycancel', key: 'lobbycancel', onClick: this.leave.bind(this) }, 'Leave')
+                    tag('button', { id: 'lobbycancel', key: 'lobbycancel', onClick: this.spectate.bind(this) }, 'Spectate')
                 ])
             ]),
             tag('div', { id: 'lobbychat', key: 'sidechat' }, this.sidechat.render())];
@@ -82,7 +89,7 @@ class LobbyScreen extends React.Component {
 
     spectate() {
         this.primus.write({
-            action: 'leave'
+            action: 'spectate'
         });
     }
 

@@ -1,8 +1,15 @@
 <head>
     <tile>Deck Editor</tile>
+    <script src="js/vendor/jquery-1.11.0.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react@16/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+    <script src="./js/vendor/primus.js"></script>
 </head>
 
 <body>
+    <div id="main">
+    </div>
+    <script src="./js/deckedit/deckeditor.component.js"></script>
     <div id="decksetup">
         <h2>Setup</h2>
         <div id="searchfilter">
@@ -17,43 +24,43 @@
                     <div class="filterrow">
                         <input id="attack" placeholder="Attack" type="number">
                         <select id="attackfilter">
-                        <option>&gt;/option>
-                        <option>=&gt;/option>
-                        <option>=</option>
-                        <option>=&lt;</option>
-                        <option>&lt;</option>
-                    </select>
+                            <option>&gt;/option>
+                            <option>=&gt;/option>
+                            <option>=</option>
+                            <option>=&lt;</option>
+                            <option>&lt;</option>
+                        </select>
                     </div>
                     <div class="filterrow">
                         <input id="defense" placeholder="Defense" type="number">
                         <select id="defensefilter">
-                        <option>&gt;/option>
-                        <option>=&gt;/option>
-                        <option>=</option>
-                        <option>=&lt;</option>
-                        <option>&lt;</option>
-                    </select>
+                            <option>&gt;/option>
+                            <option>=&gt;/option>
+                            <option>=</option>
+                            <option>=&lt;</option>
+                            <option>&lt;</option>
+                        </select>
                     </div>
                     <input id="description" placeholder="Card Text" />
                     <div class="filterrow">
                         <input id="level" placeholder="Level/Rank/Rating" type="number">
                         <select id="">
-                        <option>&gt;/option>
-                        <option>=&gt;/option>
-                        <option>=</option>
-                        <option>=&lt;</option>
-                        <option>&lt;</option>
-                    </select>
+                            <option>&gt;/option>
+                            <option>=&gt;/option>
+                            <option>=</option>
+                            <option>=&lt;</option>
+                            <option>&lt;</option>
+                        </select>
                     </div>
                     <div class="filterrow">
                         <input id="scale" placeholder="Scale" type="number">
                         <select id="">
-                        <option>&gt;/option>
-                        <option>=&gt;/option>
-                        <option>=</option>
-                        <option>=&lt;</option>
-                        <option>&lt;</option>
-                    </select>
+                            <option>&gt;/option>
+                            <option>=&gt;/option>
+                            <option>=</option>
+                            <option>=&lt;</option>
+                            <option>&lt;</option>
+                        </select>
                     </div>
                     <button>Reset</button>
                     <button>Search</button>
