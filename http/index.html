@@ -12,187 +12,193 @@
     <!-- Schema.org markup for Google+ -->
     <meta itemprop="name" content="YGO Salvation Server - Online Dueling">
     <meta itemprop="description" content="">
-    <!--    <meta itemprop="image" content="http://www.example.com/image.jpg">-->
 
     <link rel="shortcut icon" href="/favicon.ico" />
 
     <meta name="viewport" content="width=device-width">
     <script src="js/vendor/jquery-1.11.0.min.js"></script>
     <script src="js/vendor/jquery.jfeed.pack.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/2.0.0/handlebars.min.js"></script>
     <link href="css/roboto.css" rel="stylesheet" type="text/css">
     <link href="https://fonts.googleapis.com/css?family=Lato:100,300,400,700,900" rel="stylesheet">
     <link href="css/normalize.css" rel="stylesheet" type="text/css">
     <link href="css/main.css" rel="stylesheet" type="text/css">
-    <link href="css/deck-edit.css" rel="stylesheet" type="text/css">
-
-    <script>
-        (adsbygoogle = window.adsbygoogle || []).push({
-            google_ad_client: "ca-pub-4030588625902392",
-            enable_page_level_ads: true
-        });
-    </script>
 </head>
-<div style="z-index:40; position:relative;">
-    <ul class="featurelist" style="font-size:2vh">
-        <li class="logolink"><span class="psudolinksingle" onclick="singlesitenav('home')" id='psudologo'>
-            <h1 style="font-size:1.2em;" class="shine">
-                <span style="color:#e4a;text-shadow:none;">YGO</span>Salvation
-            </h1>
-        </li>
-        <li class="launcheronly"><span data-translation-deckedit class="psudolinksingle" onclick='singlesitenav("deckedit2");deckEditor.doSearch();'>Deck Edit2</span>
-        </li>
-        <li class="launcheronly"><span data-translation-deckedit class="psudolinksingle" onclick='singlesitenav("deckedit");deckEditor.doSearch();'>Deck Edit</span>
-        </li>
-        <li class="launcheronly"><span data-translation-host class="psudolinksingle" onclick="singlesitenav('host')">Host</span>
-        </li>
+<main id="application">
 
-        <li class="launcheronly"><span data-translation-gamelist class="psudolinksingle" onclick="singlesitenav('gamelist');">Game List</span>
-        </li>
-
-
-        <li><span data-translation-events class="psudolinksingle" onclick="singlesitenav('ranking');updateranking();">Ranking</span>
-        </li>
-        <li><span data-translation-events class="psudolinksingle" onclick="singlesitenav('tournamentcp');">Tournament</span>
-        </li>
-        <li><span data-translation-faq class="psudolinksingle" onclick="singlesitenav('faq')">News</span>
-        </li>
-        <li data-translation-forum class="psudolinksingle " style='text-decoration:none' onclick="singlesitenav('forum')">Forum
-        </li>
-        <li class="launcheronly chatlinker"><span data-translation-events class="psudolinksingle" id="onlinelisttogger" onclick="openusers()">Chat</span>
-        </li>
-        <li class="launcheronly"><span class="psudolinksingle" onclick="singlesitenav('inbox')" data-translation-inbox>Inbox</span>
-        </li>
-        <li class="launcheronly"><span class="psudolinksingle" onclick="singlesitenav('settings')" data-translation-settings>Settings</span>
-        </li>
-        <li><span class="psudolinksingle" onclick="singlesitenav('credits')" data-translation-credits>Credits</span>
-        </li>
-    </ul>
-</div>
-<main>
-    <div class="fullscreenloading" style="text-align: center">
-        Loading,...
-    </div>
 </main>
+<template>
+    <div style="z-index:40; position:relative;">
+        <ul class="featurelist" style="font-size:2vh">
+            <li class="logolink"><span class="psudolinksingle" onclick="singlesitenav('home')" id='psudologo'>
+                    <h1 style="font-size:1.2em;" class="shine">
+                        <span style="color:#e4a;text-shadow:none;">YGO</span>Salvation
+                    </h1>
+            </li>
+            <li class="launcheronly"><span data-translation-deckedit class="psudolinksingle"
+                    onclick='singlesitenav("deckedit2");deckEditor.doSearch();'>Deck Edit2</span>
+            </li>
+            <li class="launcheronly"><span data-translation-deckedit class="psudolinksingle"
+                    onclick='singlesitenav("deckedit");deckEditor.doSearch();'>Deck Edit</span>
+            </li>
+            <li class="launcheronly"><span data-translation-host class="psudolinksingle"
+                    onclick="singlesitenav('host')">Host</span>
+            </li>
 
-<div id="alertmodal">
-    <div></div>
-    <div id="alertmodaltext"></div>
-    <div>
-        <button onclick="closealertmodal()">OK</button>
+            <li class="launcheronly"><span data-translation-gamelist class="psudolinksingle"
+                    onclick="singlesitenav('gamelist');">Game List</span>
+            </li>
+
+
+            <li><span data-translation-events class="psudolinksingle"
+                    onclick="singlesitenav('ranking');updateranking();">Ranking</span>
+            </li>
+            <li><span data-translation-events class="psudolinksingle"
+                    onclick="singlesitenav('tournamentcp');">Tournament</span>
+            </li>
+            <li><span data-translation-faq class="psudolinksingle" onclick="singlesitenav('faq')">News</span>
+            </li>
+            <li data-translation-forum class="psudolinksingle " style='text-decoration:none'
+                onclick="singlesitenav('forum')">Forum
+            </li>
+            <li class="launcheronly chatlinker"><span data-translation-events class="psudolinksingle"
+                    id="onlinelisttogger" onclick="openusers()">Chat</span>
+            </li>
+            <li class="launcheronly"><span class="psudolinksingle" onclick="singlesitenav('inbox')"
+                    data-translation-inbox>Inbox</span>
+            </li>
+            <li class="launcheronly"><span class="psudolinksingle" onclick="singlesitenav('settings')"
+                    data-translation-settings>Settings</span>
+            </li>
+            <li><span class="psudolinksingle" onclick="singlesitenav('credits')" data-translation-credits>Credits</span>
+            </li>
+        </ul>
     </div>
-    <div>
-
-    </div>
-</div>
-
-<div id="chatfloater" class="launcheronly" style="position: fixed;bottom: 3em; left:1em; z-index:700; width:100%;">
-    <div id="onlinelistwrapper" class="">
-        <div class="chatlabel fl">Friends List</div>
-        <div class="chatlabel ou">Online Users</div>
-        <div class="chatlabel ch">Chat</div>
-        <ul id="friendslist"></ul>
-        <ul id="onlinelist"></ul>
-        <ul id="onlinepublicchat"></ul>
-        <ul id="onlineprivatechat" style="display:none"></ul>
-        <div id="chatpmlist">
-            <div onclick="">Public</div>
+    <main>
+        <div class="fullscreenloading" style="text-align: center">
+            Loading,...
         </div>
-        <input id="publicchat">
+    </main>
 
+    <div id="alertmodal">
+        <div></div>
+        <div id="alertmodaltext"></div>
+        <div>
+            <button onclick="closealertmodal()">OK</button>
+        </div>
+        <div>
 
+        </div>
     </div>
-</div>
-<header style="padding-top:50px " id="popup">
-    <div id="popupbody " style="color:white; text-align : center; margin-top: 10vh; font-size: 2em; ">
 
+    <div id="chatfloater" class="launcheronly" style="position: fixed;bottom: 3em; left:1em; z-index:700; width:100%;">
+        <div id="onlinelistwrapper" class="">
+            <div class="chatlabel fl">Friends List</div>
+            <div class="chatlabel ou">Online Users</div>
+            <div class="chatlabel ch">Chat</div>
+            <ul id="friendslist"></ul>
+            <ul id="onlinelist"></ul>
+            <ul id="onlinepublicchat"></ul>
+            <ul id="onlineprivatechat" style="display:none"></ul>
+            <div id="chatpmlist">
+                <div onclick="">Public</div>
+            </div>
+            <input id="publicchat">
+
+
+        </div>
     </div>
-</header>
-<div id="languagesetter">
-    <span onclick="translateLang('en')">English</span>
-    <span onclick="translateLang('es')">Español</span>
-    <span onclick="translateLang('de')">Deutsch</span>
-    <span onclick="translateLang('fr')">Français(France)</span>
-    <span onclick="translateLang('fr-ca')">Français(Québec)</span>
-    <span onclick="translateLang('it')">Italiano</span>
-    <span onclick="translateLang('pt')">Português</span>
-    <span onclick="translateLang('nl')">Nederlands</span>
-    <span onclick="translateLang('jp')">日本語</span>
-    <span onclick="translateLang('tr')">Türkçe</span>
-    <span onclick="translateLang('el')">Ελληνικά</span>
-    <span onclick="translateLang('fa')">فارسی</span>
-    <span onclick="translateLang('ar')">لغةعربي</span>
-    <span onclick="translateLang('zh')">中文(简体)</span>
-    <span onclick="translateLang('he')">עברית</span>
-</div>
-<footer class="superfooter">
-    <div style='margin:0 auto '>
-        YGOPro Salvation Server is not affiliated with Konami, NAS, Shueisha, or Kazuki Takahashi. Salvation Server &copy; 2013-2017. Powered by Yu-Jo Friendship and fans of Yu-Gi-Oh! worldwide. Please support the offical release.</div>
-</footer>
+    <header style="padding-top:50px " id="popup">
+        <div id="popupbody " style="color:white; text-align : center; margin-top: 10vh; font-size: 2em; ">
+
+        </div>
+    </header>
+    <div id="languagesetter">
+        <span onclick="translateLang('en')">English</span>
+        <span onclick="translateLang('es')">Español</span>
+        <span onclick="translateLang('de')">Deutsch</span>
+        <span onclick="translateLang('fr')">Français(France)</span>
+        <span onclick="translateLang('fr-ca')">Français(Québec)</span>
+        <span onclick="translateLang('it')">Italiano</span>
+        <span onclick="translateLang('pt')">Português</span>
+        <span onclick="translateLang('nl')">Nederlands</span>
+        <span onclick="translateLang('jp')">日本語</span>
+        <span onclick="translateLang('tr')">Türkçe</span>
+        <span onclick="translateLang('el')">Ελληνικά</span>
+        <span onclick="translateLang('fa')">فارسی</span>
+        <span onclick="translateLang('ar')">لغةعربي</span>
+        <span onclick="translateLang('zh')">中文(简体)</span>
+        <span onclick="translateLang('he')">עברית</span>
+    </div>
+    <footer class="superfooter">
+        <div style='margin:0 auto '>
+            YGOPro Salvation Server is not affiliated with Konami, NAS, Shueisha, or Kazuki Takahashi. Salvation Server
+            &copy; 2013-2017. Powered by Yu-Jo Friendship and fans of Yu-Gi-Oh! worldwide. Please support the offical
+            release.</div>
+    </footer>
 
 
-<footer id='soundboard' style="display:none;">
-    <audio id="soundactivateCard" preloaded="auto" src="sounds/activate.wav"></audio>
-    <audio id="soundattack" preloaded="auto" src="sounds/attack.wav"></audio>
-    <audio id="soundbanishCard" preloaded="auto" src="sounds/banishCard.mp3"></audio>
-    <audio id="soundcardShuffle" preloaded="auto" src="sounds/shuffle.wav"></audio>
-    <audio id="sounddrawCard" preloaded="auto" src="sounds/draw.wav"></audio>
-    <audio id="soundendTurn" preloaded="auto" src="sounds/nextturn.wav"></audio>
-    <audio id="soundphase" preloaded="auto" src="sounds/phase.wav"></audio>
-    <audio id="soundflipCoin" preloaded="auto" src="sounds/coinflip.wav"></audio>
-    <audio id="soundflipSummon" preloaded="auto" src="sounds/flip.wav"></audio>
-    <audio id="soundchatmessage" preloaded="auto" src="sounds/chatmessage.wav"></audio>
-    <audio id="soundrollDie" preloaded="auto" src="sounds/diceroll.wav"></audio>
-    <audio id="soundsetCard" preloaded="auto" src="sounds/set.wav"></audio>
-    <audio id="soundspecialSummonFromExtra" preloaded="auto" src="sounds/specialsummon.wav"></audio>
-    <audio id="soundsummonCard" preloaded="auto" src="sounds/summon.wav"></audio>
-    <audio id="soundtakeScreenshot" preloaded="auto" src="sounds/takeScreenshot.mp3"></audio>
-</footer>
+    <footer id='soundboard' style="display:none;">
+        <audio id="soundactivateCard" preloaded="auto" src="sounds/activate.wav"></audio>
+        <audio id="soundattack" preloaded="auto" src="sounds/attack.wav"></audio>
+        <audio id="soundbanishCard" preloaded="auto" src="sounds/banishCard.mp3"></audio>
+        <audio id="soundcardShuffle" preloaded="auto" src="sounds/shuffle.wav"></audio>
+        <audio id="sounddrawCard" preloaded="auto" src="sounds/draw.wav"></audio>
+        <audio id="soundendTurn" preloaded="auto" src="sounds/nextturn.wav"></audio>
+        <audio id="soundphase" preloaded="auto" src="sounds/phase.wav"></audio>
+        <audio id="soundflipCoin" preloaded="auto" src="sounds/coinflip.wav"></audio>
+        <audio id="soundflipSummon" preloaded="auto" src="sounds/flip.wav"></audio>
+        <audio id="soundchatmessage" preloaded="auto" src="sounds/chatmessage.wav"></audio>
+        <audio id="soundrollDie" preloaded="auto" src="sounds/diceroll.wav"></audio>
+        <audio id="soundsetCard" preloaded="auto" src="sounds/set.wav"></audio>
+        <audio id="soundspecialSummonFromExtra" preloaded="auto" src="sounds/specialsummon.wav"></audio>
+        <audio id="soundsummonCard" preloaded="auto" src="sounds/summon.wav"></audio>
+        <audio id="soundtakeScreenshot" preloaded="auto" src="sounds/takeScreenshot.mp3"></audio>
+    </footer>
 
-<script src="js/translations.js"></script>
-<script src="js/vendor/primus.js"></script>
-<script src="js/index-controls.js"></script>
-<script src="js/battlepack3.js" async></script>
-<script type="text/javascript">
-    var _gaq = _gaq || [];
-    _gaq.push(['_setAccount', 'UA-56840301-1']);
-    _gaq.push(['_trackPageview']);
+    <script src="js/translations.js"></script>
+    <script src="js/vendor/primus.js"></script>
+    <script src="js/index-controls.js"></script>
+    <script src="js/battlepack3.js" async></script>
+    <script type="text/javascript">
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-56840301-1']);
+        _gaq.push(['_trackPageview']);
 
-    (function() {
-        var ga = document.createElement('script');
-        ga.type = 'text/javascript';
-        ga.async = true;
-        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') +
-            '.google-analytics.com/ga.js';
-        var s = document.getElementsByTagName('script')[0];
-        s.parentNode.insertBefore(ga, s);
-    })();
-</script>
-<script>
-    (function(i, s, o, g, r, a, m) {
-        i['GoogleAnalyticsObject'] = r;
-        i[r] = i[r] || function() {
-            (i[r].q = i[r].q || []).push(arguments)
-        }, i[r].l = 1 * new Date();
-        a = s.createElement(o),
-            m = s.getElementsByTagName(o)[0];
-        a.async = 1;
-        a.src = g;
-        m.parentNode.insertBefore(a, m)
-    })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+        (function () {
+            var ga = document.createElement('script');
+            ga.type = 'text/javascript';
+            ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') +
+                '.google-analytics.com/ga.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(ga, s);
+        })();
+    </script>
+    <script>
+        (function (i, s, o, g, r, a, m) {
+            i['GoogleAnalyticsObject'] = r;
+            i[r] = i[r] || function () {
+                (i[r].q = i[r].q || []).push(arguments)
+            }, i[r].l = 1 * new Date();
+            a = s.createElement(o),
+                m = s.getElementsByTagName(o)[0];
+            a.async = 1;
+            a.src = g;
+            m.parentNode.insertBefore(a, m)
+        })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
 
-    ga('create', 'UA-56840301-1', 'auto');
-    ga('require', 'displayfeatures');
-    ga('send', 'pageview');
-</script>
+        ga('create', 'UA-56840301-1', 'auto');
+        ga('require', 'displayfeatures');
+        ga('send', 'pageview');
+    </script>
 
 
 
-<script src="js/http-gamelist.js"></script>
-<script src="js/http-manual.js"></script>
-<script src="js/http-ygopro.js"></script>
-<script src="js/deck-editor.js"></script>
+    <script src="js/http-gamelist.js"></script>
+    <script src="js/http-manual.js"></script>
+    <script src="js/http-ygopro.js"></script>
+    <script src="js/deck-editor.js"></script>
 
-<!-- <script src=" js/vendor/html2canvas.js "></script> -->
+</template>
 
 </html>

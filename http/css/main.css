@@ -313,15 +313,6 @@ ul#mirrors {
     max-height: 5%;
 }
 
-main {
-    height: 96vh;
-    overflow: hidden;
-    position: absolute;
-    top: 0;
-    width: 100vw;
-    background-size: 500% 100%;
-}
-
 #anti {
     background-color: rgba(0, 0, 0, .5);
 }
@@ -2992,7 +2983,7 @@ div#selectplayer button {
     padding: 2px;
 }
 
-main {
+#ygopro main {
     background: rgba(0, 0, 0, .75);
     padding-top: 5vh;
 }
