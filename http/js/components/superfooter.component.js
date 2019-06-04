@@ -1,7 +1,8 @@
 /*global React, ReactDOM*/
 class SuperFooterComponent extends React.Component {
-    constructor(initialState) {
+    constructor(store, initialState) {
         super();
+        this.store = store;
         this.state = initialState || {};
     }
 

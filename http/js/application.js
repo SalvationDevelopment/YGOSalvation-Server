@@ -14,10 +14,30 @@ class ApplicationComponent extends React.Component {
             username: ''
 
         };
-        this.superfooter = new SuperHeaderComponent();
-        this.superfooter = new SuperFooterComponent();
+        this.loginScreen = new LoginScreen(store, {});
+        this.deckeditor = new DeckEditScreen(store, {});
+        this.superheader = new SuperHeaderComponent(store, {});
+        this.superfooter = new SuperFooterComponent(store, {});
         this.gamelist = {};
         this.root = document.getElementById('application');
+
+        store.register('NAVIGATE', (action) => {
+            this.state.screen = action.screen;
+            ReactDOM.render(this.render(), this.root);
+            return this.state;
+        });
+
+        store.register('LOGIN', (action) => {
+            const username = document.getElementById('ips_username').value,
+                password = document.getElementById('ips_password').value;
+
+            this.primus.write({
+                action: 'register',
+                username,
+                password
+            });
+        });
+
         this.connect();
         ReactDOM.render(this.render(), this.root);
     }
@@ -61,18 +81,20 @@ class ApplicationComponent extends React.Component {
             this.alert(data.error.message);
             return;
         }
+        const info = data.info;
 
-        if (data.session && !data.bans.length) {
+        if (info.session && info.bans.length) {
             return;
         }
 
-        this.state.session = data.session;
-        this.state.admin = data.admin;
+        this.state.session = info.session;
+        this.state.admin = info.admin;
         this.state.loggedIn = true;
         this.primus.write({
             username: this.state.username,
             action: 'load'
         });
+        this.store.dispatch({ action: 'LOGGEDIN' });
 
     }
 
@@ -147,7 +169,7 @@ class ApplicationComponent extends React.Component {
     screen() {
         switch (this.state.screen) {
             case 'login':
-                return React.createElement('section', { id: 'login' }, this.login.render());
+                return React.createElement('section', { id: 'login' }, this.loginScreen.render());
             case 'deckedit':
                 return React.createElement('section', { id: 'deckedit' }, this.deckedit.render());
             case 'host':
@@ -161,8 +183,8 @@ class ApplicationComponent extends React.Component {
 
     render() {
         return [
-            React.createElement('header', { key: 'header', id: 'navidation' }, ''),
-            React.createElement('section', { key: 'screen', id: 'screen' }, ''),
+            this.superheader.render(),
+            this.screen(),
             this.superfooter.render()
         ];
     }
