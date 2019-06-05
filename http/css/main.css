@@ -2460,6 +2460,22 @@ a.launcheronly.loginsystem {
     box-shadow: 0 0 10px black;
 }
 
+#loginmodal input.reg {
+    margin: 1vh auto;
+    background: rgba(0, 0, 0, 1);
+    border: none;
+    width: 20em;
+    padding: .4em;
+    text-align: center;
+    color: white !important;
+    font-weight: bold;
+    border: 1px solid #fff;
+    box-shadow: 0 0 10px black;
+    border-radius: 20px;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+}
+
 div#loginmodal {
     box-shadow: inset 0px 100px 100px rgba(255, 25, 120, .15);
     position: absolute;
@@ -3028,4 +3044,38 @@ div#selectplayer button {
     position: relative;
     height: auto;
     margin-bottom: 2em;
+}
+
+div#lightbox {
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background: rgba(0, 0, 0, .5);
+}
+
+button#modal-ok {
+    width: 10vw;
+    background: rgba(255, 100, 255, .5);
+    color: white;
+    border-width: 1px;
+    border-color: silver;
+    border-radius: 8px;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+    display: block;
+    margin: 10vh auto;
+}
+
+p#error {
+    color: white;
+    margin: 30vh auto;
+    background: black;
+    border: 1px solid #444;
+    width: 50%;
+    min-height: 20vh;
+    text-align: center;
+    padding: 1vh 1vw;
+    box-shadow: 0 0 200px 200px black;
 }

@@ -25,18 +25,28 @@ class LoginScreen extends React.Component {
         this.nav();
     }
 
-    login(login) {
-        this.store.dispatch({ action: 'LOGIN' });
+    forgot() {
+        this.state.mode = 'remember';
+        this.nav();
     }
-
 
     registration() {
         this.state.mode = 'register';
         this.nav();
     }
 
-    register() {
-        this.state.mode = 'register';
+    login(login) {
+        this.store.dispatch({ action: 'LOGIN' });
+        this.nav();
+    }
+
+    recoverAccount(login) {
+        this.store.dispatch({ action: 'RECOVER_ACCOUNT' });
+        this.nav();
+    }
+
+    registerAccount() {
+        this.store.dispatch({ action: 'REGISTER_ACCOUNT' });
         this.nav();
     }
 
@@ -57,7 +67,7 @@ class LoginScreen extends React.Component {
                     React.createElement('input', { id: 'ips_remember', type: 'checkbox' }),
                     React.createElement('span', {}, 'Remember Username & Password?'),
                     React.createElement('br'),
-                    React.createElement('a', { className: 'loginsystem' }, 'Forgot Password'),
+                    React.createElement('a', { className: 'loginsystem', onClick: this.forgot.bind(this) }, 'Forgot Password'),
                     React.createElement('br')
                 ]);
             case 'start':
@@ -69,25 +79,30 @@ class LoginScreen extends React.Component {
                 ]);
             case 'register':
                 return React.createElement('div', { id: 'loginmodal' }, [
-                    React.createElement('input', { id: 'ips_username', type: 'text', className: 'loginsystem', name: 'ips_username', tabIndex: '1', placeholder: 'Username' }),
-                    '\r\n',
-                    React.createElement('input', { id: 'ips_password', type: 'password', className: 'loginsystem', name: 'ips_password', tabIndex: '2', placeholder: 'Password' }),
+
+                    React.createElement('input', { id: 'new_email', type: 'text', className: 'loginsystem reg', tabIndex: '1', placeholder: 'Email Address' }),
                     React.createElement('br'),
-                    React.createElement('a', {},
-                        React.createElement('button', { id: 'dolog', className: 'loginsystem', onClick: this.register.bind(this) }, 'Register')),
+                    React.createElement('input', { id: 'new_username', type: 'text', className: 'loginsystem reg', tabIndex: '2', placeholder: 'Username' }),
+                    React.createElement('br'),
+                    React.createElement('input', { id: 'new_password', type: 'password', className: 'loginsystem reg', tabIndex: '3', placeholder: 'Password' }),
+                    React.createElement('br'),
+                    React.createElement('input', { id: 'repeat_new_password', type: 'password', className: 'loginsystem reg', tabIndex: '4', placeholder: 'Verify Password' }),
+                    React.createElement('br'),
+                    React.createElement('br'),
+                    React.createElement('button', { id: 'openlogin', className: 'loginsystem', onClick: this.registerAccount.bind(this) }, 'Register'),
                     '\r\n',
                     React.createElement('button', { id: 'backuplogin', className: 'loginsystem', onClick: this.openLogin.bind(this) }, 'Back'),
                     React.createElement('br')
                 ]);
             case 'remember':
                 return React.createElement('div', { id: 'loginmodal' }, [
-                    React.createElement('input', { id: 'ips_username', type: 'text', className: 'loginsystem', name: 'ips_username', tabIndex: '1', placeholder: 'Username' }),
-                    '\r\n',
-                    React.createElement('input', { id: 'ips_password', type: 'password', className: 'loginsystem', name: 'ips_password', tabIndex: '2', disabled: true }),
                     React.createElement('br'),
-                    React.createElement('a', {},
-                        React.createElement('button', { id: 'dolog', className: 'loginsystem' }, 'Remember')),
-                    React.createElement('button', { id: 'backuplogin', className: 'loginsystem' }, 'Back'),
+                    React.createElement('input', { id: 'remember', type: 'text', className: 'loginsystem reg', tabIndex: '1', placeholder: 'Email Address' }),
+                    React.createElement('br'),
+
+                    React.createElement('button', { id: 'dolog', className: 'loginsystem', onClick: this.recoverAccount.bind(this) }, 'Remember'),
+                    '\r\n',
+                    React.createElement('button', { id: 'backuplogin', className: 'loginsystem', onClick: this.openLogin.bind(this) }, 'Back'),
                     React.createElement('br')
                 ]);
             default:

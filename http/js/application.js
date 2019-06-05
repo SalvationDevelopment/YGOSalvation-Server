@@ -1,4 +1,4 @@
-/*global React, ReactDOM*/
+/*global React, ReactDOM, $*/
 /*global Store, SideChat, SuperFooterComponent, SuperHeaderComponent*/
 
 class ApplicationComponent extends React.Component {
@@ -11,7 +11,8 @@ class ApplicationComponent extends React.Component {
             globalMessage: '',
             screen: 'login',
             session: '',
-            username: ''
+            username: '',
+            modalActive: false
 
         };
         this.loginScreen = new LoginScreen(store, {});
@@ -27,7 +28,7 @@ class ApplicationComponent extends React.Component {
             return this.state;
         });
 
-        store.register('LOGIN', (action) => {
+        store.register('LOGIN_ACCOUNT', (action) => {
             const username = document.getElementById('ips_username').value,
                 password = document.getElementById('ips_password').value;
 
@@ -38,12 +39,35 @@ class ApplicationComponent extends React.Component {
             });
         });
 
+
+
+        store.register('RECOVER_ACCOUNT', (action) => {
+            const username = document.getElementById('ips_username').value,
+                password = document.getElementById('ips_password').value;
+
+            this.primus.write({
+                action: 'register',
+                username,
+                password
+            });
+        });
+
+
         this.connect();
         ReactDOM.render(this.render(), this.root);
     }
 
     alert(message) {
+        this.state.modalActive = true;
+        this.state.modalMessage = message;
+        ReactDOM.render(this.render(), this.root);
 
+    }
+
+    closeModal() {
+        this.state.modalActive = false;
+        this.state.modalMessage = '';
+        ReactDOM.render(this.render(), this.root);
     }
 
     ack() {
@@ -181,11 +205,51 @@ class ApplicationComponent extends React.Component {
         }
     }
 
+    modalRender() {
+        if (!this.state.modalActive) {
+            return '';
+        }
+        return React.createElement('div', { id: 'lightbox' }, [
+            React.createElement('p', { id: 'error' }, [
+                this.state.modalMessage,
+                React.createElement('button', { id: 'modal-ok', onClick: this.closeModal.bind(this) }, 'OK')
+            ])
+
+
+        ]);
+    }
+
+    translate(lang) {
+        this.state.language = lang;
+        ReactDOM.render(this.render(), this.root);
+    }
+    language() {
+        return React.createElement('div', { id: 'languagesetter', key: 'languagesetter' }, [
+            React.createElement('span', { key: 'en', onClick: this.translate.bind(this, 'en') }, 'English'),
+            React.createElement('span', { key: 'es', onClick: this.translate.bind(this, 'es') }, 'Español'),
+            React.createElement('span', { key: 'de', onClick: this.translate.bind(this, 'de') }, 'Deutsch'),
+            React.createElement('span', { key: 'fr', onClick: this.translate.bind(this, 'fr') }, 'Français(France)'),
+            React.createElement('span', { key: 'frca', onClick: this.translate.bind(this, 'fr-ca') }, 'Français(Québec)'),
+            React.createElement('span', { key: 'it', onClick: this.translate.bind(this, 'it') }, 'Italiano'),
+            React.createElement('span', { key: 'pt', onClick: this.translate.bind(this, 'pt') }, 'Português'),
+            React.createElement('span', { key: 'nl', onClick: this.translate.bind(this, 'nl') }, 'Nederlands'),
+            React.createElement('span', { key: 'jp', onClick: this.translate.bind(this, 'jp') }, '日本語'),
+            React.createElement('span', { key: 'tr', onClick: this.translate.bind(this, 'tr') }, 'Türkçe'),
+            React.createElement('span', { key: 'el', onClick: this.translate.bind(this, 'el') }, 'Ελληνικά'),
+            React.createElement('span', { key: 'fa', onClick: this.translate.bind(this, 'fa') }, 'فارسی'),
+            React.createElement('span', { key: 'ar', onClick: this.translate.bind(this, 'ar') }, 'لغةعربي'),
+            React.createElement('span', { key: 'zh', onClick: this.translate.bind(this, 'zh') }, '中文(简体)'),
+            React.createElement('span', { key: 'he', onClick: this.translate.bind(this, 'he') }, 'עברית')
+        ]);
+    }
+
     render() {
         return [
-            this.superheader.render(),
+            this.superheader.render(this.loggedIn),
             this.screen(),
-            this.superfooter.render()
+            this.language(),
+            this.superfooter.render(),
+            this.modalRender()
         ];
     }
 }
@@ -193,3 +257,39 @@ class ApplicationComponent extends React.Component {
 
 const store = new Store(),
     app = new ApplicationComponent(store);
+
+function validateEmail(email) {
+    var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(email.toLowerCase());
+}
+
+store.register('REGISTER_ACCOUNT', (action) => {
+    var username = $('#new_username').val(),
+        email = $('#new_email').val(),
+        password = $('#new_password').val(),
+        repeatedPassword = $('#repeat_new_password').val();
+
+    if (password.length < 7) {
+        alert('Stronger Password Required');
+        return false;
+    }
+
+    if (repeatedPassword !== password) {
+        alert('Passwords do not match');
+        return false;
+    }
+
+    if (!validateEmail(email)) {
+        alert('Invalid Email address');
+        return false;
+    }
+
+    $.post('/register', { email: email, username: username, password: password }, function (result, networkStatus) {
+        console.log(result);
+        if (result.error) {
+            alert(result.error);
+        } else {
+            alert('Account Created. Please check your email.');
+        }
+    });
+});
