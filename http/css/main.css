@@ -2568,6 +2568,7 @@ div#loginmodal {
     background: rgba(0, 0, 0, .5);
     box-shadow: 0 0 5px black;
     height: 3em;
+    text-align: center;
 }
 
 .chatlabel {

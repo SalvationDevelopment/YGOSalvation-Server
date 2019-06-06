@@ -11,77 +11,77 @@
 
 
     <section id="hostSettings" style="height:80%; margin-top:.5%; min-height:393px">
-        <div>
 
-            <h2 data-translation-settings>Settings</h2>
-            <!--<label data-translation-ranked>Ranked</label>
+
+        <h2 data-translation-settings>Settings</h2>
+        <!--<label data-translation-ranked>Ranked</label>
                     <input type="radio" name="ranked" value="R" />Yes
                     <input type="radio" name="ranked" value="U" checked />No
                     <br />-->
 
-            <label data-translation-cardpool>Card Pool</label>
-            <select id="creategamecardpool">
-                        <option value="0">OCG</option>
-                        <option value="1">TCG</option>
-                        <option value="2" selected>OCG/TCG</option>
-                        <!--<option value="3">Anime</option>-->
-                    </select>
-            <br />
-            <label data-translation-banlist>Ban List</label>
-            <select id="creategamebanlist">
-    
-                    </select>
-            <br />
-            <label data-translation-duelmode>Duel Mode</label>
-            <select id="creategameduelmode">
-                        <option value="0" selected data-lp="8000">Single</option>
-                        <option value="1" data-lp="8000">Match</option>
-                        <option disabled value="2" data-lp="16000">Tag</option>
-    
-                    </select>
-            <br />
-            <label data-translation-timelimit>Time Limit</label>
-            <select id="creategametimelimit" disabled>
-                        <option value="0">3 Minutes</option>
-                        <option value="1" selected>6 Minutes</option>
-                        <option value="2">9 Minutes</option>
-                        <option value="3">12 Minutes</option>
-                        <option value="4">15 Minutes</option>
-                    </select>
-            <br />
+        <label data-translation-cardpool>Card Pool</label>
+        <select id="creategamecardpool">
+            <option value="0">OCG</option>
+            <option value="1">TCG</option>
+            <option value="2" selected>OCG/TCG</option>
+            <!--<option value="3">Anime</option>-->
+        </select>
+        <br />
+        <label data-translation-banlist>Ban List</label>
+        <select id="creategamebanlist">
 
-            <h2 data-translation-additionaloptions>Additional Options</h2>
-            <label data-translation-useai class="launcheronly automaticonly">Use AI</label>
-            <input type="checkbox" class="launcheronly automaticonly" id="useai">
-            <select id="aidecks" class="automaticonly">
-                        <option>Random</option>
-                        <option>Burn</option>
-                        <option>Dragunity</option>
-                        <option>Frog</option>
-                        <option>Horus</option>
-                        <option>OldSchool</option>
-                        <option>Rank5</option>
-                        <option>ZexalWeapon</option>
-                    </select>
+        </select>
+        <br />
+        <label data-translation-duelmode>Duel Mode</label>
+        <select id="creategameduelmode">
+            <option value="0" selected data-lp="8000">Single</option>
+            <option value="1" data-lp="8000">Match</option>
+            <option disabled value="2" data-lp="16000">Tag</option>
 
-            <label>Automatic Mode(In Development)</label>
-            <input type="checkbox" id="useautomatic" checked>
+        </select>
+        <br />
+        <label data-translation-timelimit>Time Limit</label>
+        <select id="creategametimelimit" disabled>
+            <option value="0">3 Minutes</option>
+            <option value="1" selected>6 Minutes</option>
+            <option value="2">9 Minutes</option>
+            <option value="3">12 Minutes</option>
+            <option value="4">15 Minutes</option>
+        </select>
+        <br />
 
-            <!--                 <label data-translation-enableprerelease>Enable Pre-release Cards</label>
+        <h2 data-translation-additionaloptions>Additional Options</h2>
+        <label data-translation-useai class="launcheronly automaticonly">Use AI</label>
+        <input type="checkbox" class="launcheronly automaticonly" id="useai">
+        <select id="aidecks" class="automaticonly">
+            <option>Random</option>
+            <option>Burn</option>
+            <option>Dragunity</option>
+            <option>Frog</option>
+            <option>Horus</option>
+            <option>OldSchool</option>
+            <option>Rank5</option>
+            <option>ZexalWeapon</option>
+        </select>
+
+        <label>Automatic Mode(In Development)</label>
+        <input type="checkbox" id="useautomatic" checked>
+
+        <!--                 <label data-translation-enableprerelease>Enable Pre-release Cards</label>
                     <input type="checkbox" value="checked" id="enableprerelease">
                     <br /> -->
-            <label data-translation-disablecheckdeck>Disable Check Deck</label>
-            <input type="checkbox" id="discheckdeck">
-            <br />
-            <label data-translation-disableshuffledeck>Disable Shuffle Deck</label>
-            <input type="checkbox" id="disshuffledeck">
-            <label data-translation-usepassword>Use Password</label>
-            <input type="checkbox" id="usepass">
-            <label data-translation-lifepoints>Lifepoints</label>
-            <input type="number" value="8000" id="creategamelp" min="1" />
-            <br />
+        <label data-translation-disablecheckdeck>Disable Check Deck</label>
+        <input type="checkbox" id="discheckdeck">
+        <br />
+        <label data-translation-disableshuffledeck>Disable Shuffle Deck</label>
+        <input type="checkbox" id="disshuffledeck">
+        <label data-translation-usepassword>Use Password</label>
+        <input type="checkbox" id="usepass">
+        <label data-translation-lifepoints>Lifepoints</label>
+        <input type="number" value="8000" id="creategamelp" min="1" />
+        <br />
 
-            <div data-translation-host class="button" id="creategameok" onclick='setHostSettings();'>Host</div>
+        <div data-translation-host class="button" id="creategameok" onclick='setHostSettings();'>Host</div>
 
 
     </section>
@@ -91,12 +91,13 @@
 
     </div>
     <script>
-        $.getJSON('/manifest/banlist.json', function(data) {
+        $.getJSON('/manifest/banlist.json', function (data) {
             banlist = data;
             $('.banlistSelect').html('');
-            Object.keys(banlist).forEach(function(list) {
+            Object.keys(banlist).forEach(function (list) {
                 var selected = (banlist[list].primary) ? 'selected' : '';
-                $('.banlistSelect, #creategamebanlist').append('<option ' + selected + ' value="' + list + '">' + list + '</option>');
+                $('.banlistSelect, #creategamebanlist').append('<option ' + selected + ' value="' +
+                    list + '">' + list + '</option>');
             });
         });
     </script>

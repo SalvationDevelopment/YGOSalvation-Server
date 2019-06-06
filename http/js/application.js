@@ -15,6 +15,7 @@ class ApplicationComponent extends React.Component {
             modalActive: false
 
         };
+        this.host = new HostScreen(store, {});
         this.loginScreen = new LoginScreen(store, {});
         this.deckeditor = new DeckEditScreen(store, {});
         this.superheader = new SuperHeaderComponent(store, {});
@@ -145,7 +146,7 @@ class ApplicationComponent extends React.Component {
             case 'gamelist':
                 this.state.activeUsers = data.ackresult;
                 this.state.userlist = data.userlist;
-                this.gamelist.update(data.gamelist);
+                this.gamelist.update(data);
                 break;
             case 'global':
                 this.superfooter.update({ global: data.message });
