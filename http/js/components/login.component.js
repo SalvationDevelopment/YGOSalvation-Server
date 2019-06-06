@@ -7,7 +7,7 @@ class LoginScreen extends React.Component {
         };
         this.store = store;
         store.register('LOGGEDIN', (action) => {
-            this.state.mode = 'loggedin'
+            this.state.mode = 'loggedin';
         });
     }
 
@@ -17,6 +17,11 @@ class LoginScreen extends React.Component {
 
     openLogin() {
         this.state.mode = 'login';
+        this.nav();
+    }
+
+    openRecover() {
+        this.state.mode = 'recover';
         this.nav();
     }
 
@@ -36,7 +41,7 @@ class LoginScreen extends React.Component {
     }
 
     login(login) {
-        this.store.dispatch({ action: 'LOGIN' });
+        this.store.dispatch({ action: 'LOGIN_ACCOUNT' });
         this.nav();
     }
 
@@ -67,7 +72,7 @@ class LoginScreen extends React.Component {
                     React.createElement('input', { id: 'ips_remember', type: 'checkbox' }),
                     React.createElement('span', {}, 'Remember Username & Password?'),
                     React.createElement('br'),
-                    React.createElement('a', { className: 'loginsystem', onClick: this.forgot.bind(this) }, 'Forgot Password'),
+                    React.createElement('a', { className: 'loginsystem', onClick: this.forgot.bind(this) }, 'Forgot Password?'),
                     React.createElement('br')
                 ]);
             case 'start':
@@ -101,6 +106,19 @@ class LoginScreen extends React.Component {
                     React.createElement('br'),
 
                     React.createElement('button', { id: 'dolog', className: 'loginsystem', onClick: this.recoverAccount.bind(this) }, 'Remember'),
+                    '\r\n',
+                    React.createElement('button', { id: 'backuplogin', className: 'loginsystem', onClick: this.openLogin.bind(this) }, 'Back'),
+                    React.createElement('br'),
+                    React.createElement('br'),
+                    React.createElement('a', { className: 'loginsystem', onClick: this.openRecover.bind(this) }, 'Use Recovery Code')
+                ]);
+            case 'recover':
+                return React.createElement('div', { id: 'loginmodal' }, [
+                    React.createElement('br'),
+                    React.createElement('input', { id: 'recover', type: 'text', className: 'loginsystem reg', tabIndex: '1', placeholder: 'Recovery Code' }),
+                    React.createElement('br'),
+
+                    React.createElement('button', { id: 'dolog', className: 'loginsystem', onClick: this.recoverAccount.bind(this) }, 'Recover'),
                     '\r\n',
                     React.createElement('button', { id: 'backuplogin', className: 'loginsystem', onClick: this.openLogin.bind(this) }, 'Back'),
                     React.createElement('br')
