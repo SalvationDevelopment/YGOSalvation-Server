@@ -1,0 +1,175 @@
+.game span {
+    text-align: right;
+    /* width: 30%; */
+    display: inline-block;
+    padding: 2px;
+    border: 1px solid silver;
+    line-height: 1em;
+    margin-top: 4px;
+    padding-top: 0px;
+    padding-bottom: 6px;
+    position: absolute;
+    right: 5px;
+    top: 0px;
+}
+
+
+div[data-ot="0"] {
+    /* OCG */
+    border-color: yellow;
+    color: yellow;
+}
+
+div[data-ot="0"]:not(.started) {
+    background-image: url(../img/ocg.png);
+    background-size: 100% 100%;
+    color: white;
+    background-size: cover;
+}
+
+.started[data-ot="0"] {
+    background-image: url(../img/faded-ocg.png);
+    background-color: rgba(0, 0, 0, .5) !important;
+    border: 1px solid grey;
+    color: grey;
+    background-size: cover;
+}
+
+div[data-ot="1"] {
+    /* TCG */
+    border-color: blue;
+    color: blue;
+}
+
+div[data-ot="1"]:not(.started) {
+    background-image: url(../img/tcg.png);
+    background-size: cover;
+    color: white;
+    background-size: cover;
+}
+
+.started[data-ot^="1"] {
+    background-image: url(../img/faded-tcg.png);
+    background-color: rgba(0, 0, 0, .5) !important;
+    border: 1px solid grey;
+    color: grey;
+    background-size: cover;
+}
+
+div[data-ot="2"] {
+    /* TCG/OCG */
+    border-color: green;
+    color: green;
+}
+
+div[data-ot="2"]:not(.started) {
+    background-image: url(../img/tcgocg.png);
+    background-size: cover;
+    color: white;
+}
+
+.started[data-ot="2"] {
+    background-image: url(../img/faded-tcgocg.png);
+    background-color: rgba(0, 0, 0, .5) !important;
+    border: 1px solid grey;
+    color: grey;
+    background-size: cover;
+}
+
+div[data-ot="3"]:not(.started) {
+    /* Anime */
+    background-image: url(../img/anime.png);
+    background-size: cover;
+    color: white;
+    background-size: cover;
+}
+
+.started[data-ot="3"] {
+    background-image: url(../img/faded-anime.png);
+    background-color: rgba(0, 0, 0, .5) !important;
+    border: 1px solid grey;
+    color: grey;
+    background-size: cover;
+}
+
+div[data-mode="Single"] {
+    width: 23%;
+}
+
+
+div[data-mode="Match"] {
+    /* match */
+    border-width: 2px;
+}
+
+
+div[data-mode="Tag"] {
+    /* tags */
+}
+
+
+[data-bad] {
+    background: red !important;
+    border: 1px solid orange;
+}
+
+.started[data-bad] {
+    background: rgba(0, 0, 0, .5) !important;
+    border: 1px solid grey;
+    background-size: cover;
+    color: grey;
+    border: 1px solid grey;
+}
+
+[data-arg] {
+    background-image: url('../img/arg.png') !important;
+    background-color: rgba(0, 0, 0, .5) !important;
+    background-size: cover;
+    text-shadow: 0px 0px 19px black;
+    border: 1px solid grey;
+    background-repeat: no-repeat !important;
+    background-size: cover;
+}
+
+.started[data-arg] {
+    background-image: url('../img/faded-arg.png') !important;
+    background-color: rgba(0, 0, 0, .5) !important;
+    background-size: cover;
+    border: 1px solid grey;
+    color: grey;
+}
+
+[data-world-championship] {
+    background-image: url('../img/newgiohtoken.png') !important;
+    background-color: rgba(255, 255, 0, .5) !important;
+    background-size: cover;
+    text-shadow: 0px 0px 19px black;
+    background-repeat: no-repeat !important;
+    background-size: cover;
+}
+
+.started[data-world-championship] {
+    background-image: url('../img/outnewgiohtoken.png') !important;
+    background-color: rgba(0, 0, 0, .5) !important;
+    background-size: cover;
+    border: 1px solid grey;
+    color: grey;
+}
+
+[data-banlist*="Goat"] {
+    background-image: url('../img/goat.png') !important;
+    background-color: rgba(0, 0, 0, .5) !important;
+    background-size: contain !important;
+    text-shadow: 0px 0px 19px black;
+    background-repeat: no-repeat !important;
+    border: 1px solid pink;
+}
+
+/* Cheating
+.game[data-shuffledeck="false"] {
+    background: red;
+    font-weight: bold;
+    background-size: cover;
+    color: white;
+    border: 2px;
+} */

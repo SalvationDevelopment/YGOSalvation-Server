@@ -40,16 +40,10 @@ class ApplicationComponent extends React.Component {
             });
         });
 
-
-
-        store.register('RECOVER_ACCOUNT', (action) => {
-            const username = document.getElementById('ips_username').value,
-                password = document.getElementById('ips_password').value;
-
+        store.register('HOST', (action) => {
             this.primus.write({
-                action: 'register',
-                username,
-                password
+                action: 'host',
+                info: action.settings
             });
         });
 
@@ -94,7 +88,7 @@ class ApplicationComponent extends React.Component {
             this.alert('Firefox isnt supported at this time, please use Google Chrome.');
             return;
         }
-        window.open('/react_test.html?room=' + port);
+        window.open('/ygopro.html?room=' + port);
     }
 
     login(data) {

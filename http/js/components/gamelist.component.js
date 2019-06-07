@@ -34,19 +34,22 @@ class GamelistScreen extends React.Component {
     renderGamelist() {
         return Object.keys(this.state.gamelist).map((key) => {
             const room = this.state.gamelist[key],
-                info = Object.keys(room).reduce((data, hash) => {
+                status = (room.started) ? 'started' : 'avaliable',
+                info = Object.keys(room).reduce((hash, data) => {
                     hash['data-' + data] = room[data];
-                }, {})
+                    return hash;
+                }, {});
             return React.createElement('div', Object.assign({
-                onClick: this.enter.bind(this, key)
-            }, info));
+                onClick: this.enter.bind(this, key),
+                className: `game ${room.mode} ${status}`
+            }, info), React.createElement('span', {}, room.banlist));
         });
     }
 
     render() {
-        return React.createElement('div', { id: 'gamelistitems' }, [].concat(this.renderGamelist()),
-            React.createElement('div', { className: 'gamelistcenter' },
-                `Active Duels : ${this.state.activeduels} | Duelist : ${this.state.duelist} | Connected : ${this.state.userlist.length}`)
-        );
+        return React.createElement('div', { id: 'gamelistitems' }, [this.renderGamelist(),
+        React.createElement('div', { className: 'gamelistcenter' },
+            `Active Duels : ${this.state.activeduels} | Duelist : ${this.state.duelist} | Connected : ${this.state.userlist.length}`)
+        ]);
     }
 }
