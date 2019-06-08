@@ -23,10 +23,26 @@ class ApplicationComponent extends React.Component {
         this.gamelist = new GamelistScreen(store, {});
         this.root = document.getElementById('application');
 
+        window.addEventListener('unload', function (event) {
+            if (localStorage.remember === 'true') {
+                return;
+            }
+            window.localStorage.removeItem('username');
+            window.localStorage.removeItem('session');
+        });
+
+
         store.register('NAVIGATE', (action) => {
             this.state.screen = action.screen;
             ReactDOM.render(this.render(), this.root);
             return this.state;
+        });
+
+
+        store.register('LOGIN_ACCOUNT', (action) => {
+            this.state.loggedIn = false;
+            ReactDOM.render(this.render(), this.root);
+
         });
 
         store.register('LOGIN_ACCOUNT', (action) => {
@@ -45,6 +61,10 @@ class ApplicationComponent extends React.Component {
                 action: 'host',
                 info: action.settings
             });
+        });
+
+        store.register('DUEL', (action) => {
+            this.lobby(action.key, action.locked, action.port);
         });
 
 
@@ -75,8 +95,8 @@ class ApplicationComponent extends React.Component {
         });
     }
 
-    lobby(identifier, password, port) {
-        if (password && this.state.admin !== false) {
+    lobby(identifier, locked, port) {
+        if (locked && this.state.admin !== false) {
             let guess = '';
             guess = window.prompt('Password?', guess);
             if (identifier !== guess) {
@@ -100,7 +120,7 @@ class ApplicationComponent extends React.Component {
             this.alert(data.error.message);
             return;
         }
-        const info = data.info;
+        const info = data.info || data.result;
 
         if (info.session && info.bans.length) {
             return;
@@ -113,6 +133,8 @@ class ApplicationComponent extends React.Component {
             username: this.state.username,
             action: 'load'
         });
+        localStorage.session = info.session;
+        localStorage.username = this.state.username;
         this.store.dispatch({ action: 'LOGGEDIN' });
 
     }
@@ -166,13 +188,24 @@ class ApplicationComponent extends React.Component {
         const primusprotocol = (location.protocol === 'https:') ? 'wss://' : 'ws://';
         this.primus = window.Primus.connect(primusprotocol + location.host);
 
-        this.primus.on('data', this.onData.bind(this));
-        this.primus.on('connect', () => {
+        this.primus.on('open', () => {
             console.log('Connected to YGOSalvation Server');
+            if (localStorage.remember === 'true') {
+                if (localStorage.session) {
+                    $.getJSON('api/session/' + localStorage.session, (userInfo) => {
+                        console.log('Session Login', userInfo);
+                        if (userInfo.success) {
+                            this.login(userInfo);
+                        }
+                    });
+                }
+            }
         });
         this.primus.on('close', () => {
             console.log('Disconnected from YGOSalvation Server');
         });
+
+        this.primus.on('data', this.onData.bind(this));
 
         setInterval(function () {
             if (!this.state.session) {
@@ -240,7 +273,7 @@ class ApplicationComponent extends React.Component {
 
     render() {
         return [
-            this.superheader.render(this.loggedIn),
+            this.superheader.render(this.state.loggedIn),
             this.screen(),
             this.language(),
             this.superfooter.render(),

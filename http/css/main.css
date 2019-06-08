@@ -505,6 +505,21 @@ button#doregister,
     border-bottom-right-radius: 20px;
 }
 
+#logout {
+    border-radius: 20px;
+    border: 1px solid white;
+    background: rgba(0, 0, 0, .5);
+    padding: 6px 40px;
+    color: white;
+    width: 15%;
+    text-transform: uppercase;
+    border-top-left-radius: 8px;
+    border-bottom-left-radius: 20px;
+    font-size: 70%;
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 20px;
+}
+
 #ipblogin {
     text-align: center;
     color: white !important;
@@ -2188,9 +2203,6 @@ span.creditsname {
     text-align: center;
     color: #aaa;
 }
-
-
-
 
 div#news {
     /* width: 80%; */

@@ -37,7 +37,7 @@ class ApplicationComponent extends React.Component {
             console.log('connected, registering');
             this.primus.write({
                 action: 'register',
-                usernamename: localStorage.nickname,
+                username: localStorage.username,
                 session: localStorage.session
             });
         });

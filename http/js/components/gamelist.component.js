@@ -27,8 +27,20 @@ class GamelistScreen extends React.Component {
         }, new Set()).size;
     }
 
-    enter(port) {
-        this.store.dispatch({ action: 'DUEL', port });
+    enter(room) {
+        this.store.dispatch(Object.assign({ action: 'DUEL' }, room));
+    }
+
+    names(room) {
+        const players = room.player,
+            player1 = (players[0]) ? players[0].username : '_____',
+            player2 = (players[1]) ? players[1].username : '_____',
+            player3 = (players[0]) ? players[0].username : '_____',
+            player4 = (players[0]) ? players[0].username : '_____';
+        if (room.mode === 'Tag') {
+            return `${player1} & ${player2} vs ${player3} & ${player4} `;
+        }
+        return `${player1} vs ${player2}`;
     }
 
     renderGamelist() {
@@ -40,16 +52,16 @@ class GamelistScreen extends React.Component {
                     return hash;
                 }, {});
             return React.createElement('div', Object.assign({
-                onClick: this.enter.bind(this, key),
+                onClick: this.enter.bind(this, room),
                 className: `game ${room.mode} ${status}`
-            }, info), React.createElement('span', {}, room.banlist));
+            }, info), [this.names(room), React.createElement('span', {}, room.banlist)]);
         });
     }
 
     render() {
-        return React.createElement('div', { id: 'gamelistitems' }, [this.renderGamelist(),
+        return [React.createElement('div', { id: 'gamelistitems' }, this.renderGamelist()),
         React.createElement('div', { className: 'gamelistcenter' },
             `Active Duels : ${this.state.activeduels} | Duelist : ${this.state.duelist} | Connected : ${this.state.userlist.length}`)
-        ]);
+        ];
     }
 }

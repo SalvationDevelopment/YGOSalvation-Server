@@ -20,6 +20,15 @@ class LoginScreen extends React.Component {
         this.nav();
     }
 
+    logout() {
+        window.localStorage.removeItem('remember');
+        window.localStorage.removeItem('username');
+        window.localStorage.removeItem('session');
+        this.store.dispatch({ action: 'LOGOUT_ACCOUNT' });
+        this.state.mode = 'login';
+        this.nav();
+    }
+
     openRecover() {
         this.state.mode = 'recover';
         this.nav();
@@ -41,6 +50,7 @@ class LoginScreen extends React.Component {
     }
 
     login(login) {
+        localStorage.remember = document.getElementById('ips_remember').checked;
         this.store.dispatch({ action: 'LOGIN_ACCOUNT' });
         this.nav();
     }
@@ -56,6 +66,7 @@ class LoginScreen extends React.Component {
     }
 
     modal() {
+        const memory = (localStorage.remember === 'true') ? { defaultChecked: true } : {};
         switch (this.state.mode) {
             case 'login':
                 return React.createElement('div', { id: 'loginmodal' }, [
@@ -69,7 +80,7 @@ class LoginScreen extends React.Component {
                     React.createElement('button', { id: 'backuplogin', className: 'loginsystem', onClick: this.back.bind(this) }, 'Back'),
                     React.createElement('br'),
                     React.createElement('br'),
-                    React.createElement('input', { id: 'ips_remember', type: 'checkbox' }),
+                    React.createElement('input', Object.assign({ id: 'ips_remember', type: 'checkbox' }, memory)),
                     React.createElement('span', {}, 'Remember Username & Password?'),
                     React.createElement('br'),
                     React.createElement('a', { className: 'loginsystem', onClick: this.forgot.bind(this) }, 'Forgot Password?'),
@@ -122,6 +133,11 @@ class LoginScreen extends React.Component {
                     '\r\n',
                     React.createElement('button', { id: 'backuplogin', className: 'loginsystem', onClick: this.openLogin.bind(this) }, 'Back'),
                     React.createElement('br')
+                ]);
+            case 'loggedin':
+                return React.createElement('div', { id: 'ipblogin', className: 'loginsystem' }, [
+                    React.createElement('br'),
+                    React.createElement('button', { id: 'logout', className: 'loginsystem', onClick: this.logout.bind(this) }, 'Logout')
                 ]);
             default:
                 return '';
