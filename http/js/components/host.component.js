@@ -11,29 +11,22 @@ class HostScreen extends React.Component {
             banlist: 'No Banlist',
             cardpool: 0,
             deckcheck: true,
-            draw_count: 1,
-            legacyfield: false,
+            drawcount: 1,
             locked: false,
             masterRule: 4,
             mode: 'Match',
             ot: 2,
-            priority: false,
-            prerelease: true,
-            shuffleDeck: true,
+            shuffledeck: true,
             startLP: 8000,
-            start_hand_count: 5,
             time: 180000
         };
         this.store = store;
 
-        $.getJSON('/manifest/banlist.json', (data) => {
-            Object.keys(data).forEach((list) => {
-                this.state.banlist.push(data[list]);
-                if (data[list].primary) {
-                    this.settings.banlist = data[list].name;
-                }
-            });
+        store.register('HOST_BANLIST', (action) => {
+            this.settings.banlist = action.primary;
+            this.state.banlist = action.banlist;
         });
+
     }
 
     nav() {
@@ -109,7 +102,7 @@ class HostScreen extends React.Component {
             React.createElement('label', {}, 'Use Password'),
             React.createElement('input', { type: 'checkbox', id: 'locked', onChange: this.onChange.bind(this) }),
             React.createElement('label', {}, 'Lifepoints'),
-            React.createElement('input', { type: 'number', id: 'startLP', value: 8000 }),
+            React.createElement('input', { type: 'number', id: 'startLP', onChange: this.onChange.bind(this), value: 8000 }),
             React.createElement('br', {}),
             React.createElement('div', { className: 'button', id: 'creategameok', onClick: this.host.bind(this) }, 'Host')
         ]);

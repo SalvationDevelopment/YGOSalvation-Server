@@ -1,5 +1,6 @@
 /*global React, ReactDOM, $*/
-/*global Store, SideChat, SuperFooterComponent, SuperHeaderComponent*/
+/*global store, SideChat, SuperFooterComponent, SuperHeaderComponent*/
+/*global HostScreen, LoginScreen, DeckEditScreen, GamelistScreen*/
 
 class ApplicationComponent extends React.Component {
     constructor(store) {
@@ -38,9 +39,16 @@ class ApplicationComponent extends React.Component {
             return this.state;
         });
 
+        store.register('RENDER', (action) => {
+            ReactDOM.render(this.render(), this.root);
+        });
 
-        store.register('LOGIN_ACCOUNT', (action) => {
+
+        store.register('LOGOUT_ACCOUNT', (action) => {
             this.state.loggedIn = false;
+            window.localStorage.removeItem('remember');
+            window.localStorage.removeItem('username');
+            window.localStorage.removeItem('session');
             ReactDOM.render(this.render(), this.root);
 
         });
@@ -75,6 +83,12 @@ class ApplicationComponent extends React.Component {
     alert(message) {
         this.state.modalActive = true;
         this.state.modalMessage = message;
+        ReactDOM.render(this.render(), this.root);
+    }
+
+    prompt(message) {
+        // this.state.modalActive = true;
+        // this.state.modalMessage = message;
         ReactDOM.render(this.render(), this.root);
 
     }
@@ -135,6 +149,7 @@ class ApplicationComponent extends React.Component {
         });
         localStorage.session = info.session;
         localStorage.username = this.state.username;
+        this.store.dispatch({ action: 'LOAD_DECKS', decks: info.decks });
         this.store.dispatch({ action: 'LOGGEDIN' });
 
     }
@@ -223,7 +238,7 @@ class ApplicationComponent extends React.Component {
             case 'login':
                 return React.createElement('section', { id: 'login' }, this.loginScreen.render());
             case 'deckedit':
-                return React.createElement('section', { id: 'deckedit' }, this.deckedit.render());
+                return React.createElement('section', { id: 'deckedit' }, this.deckeditor.render());
             case 'host':
                 return React.createElement('section', { id: 'host' }, this.host.render());
             case 'gamelist':
@@ -282,5 +297,4 @@ class ApplicationComponent extends React.Component {
     }
 }
 
-const store = new Store(),
-    app = new ApplicationComponent(store);
+const app = new ApplicationComponent(store);

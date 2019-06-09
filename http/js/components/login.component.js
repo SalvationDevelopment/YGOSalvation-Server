@@ -21,11 +21,8 @@ class LoginScreen extends React.Component {
     }
 
     logout() {
-        window.localStorage.removeItem('remember');
-        window.localStorage.removeItem('username');
-        window.localStorage.removeItem('session');
-        this.store.dispatch({ action: 'LOGOUT_ACCOUNT' });
         this.state.mode = 'login';
+        this.store.dispatch({ action: 'LOGOUT_ACCOUNT' });
         this.nav();
     }
 
@@ -66,78 +63,79 @@ class LoginScreen extends React.Component {
     }
 
     modal() {
-        const memory = (localStorage.remember === 'true') ? { defaultChecked: true } : {};
+        const element = React.createElement,
+            memory = (localStorage.remember === 'true') ? { defaultChecked: true } : {};
         switch (this.state.mode) {
             case 'login':
-                return React.createElement('div', { id: 'loginmodal' }, [
-                    React.createElement('input', { id: 'ips_username', type: 'text', className: 'loginsystem', name: 'ips_username', tabIndex: '1', placeholder: 'Username' }),
+                return element('div', { id: 'loginmodal' }, [
+                    element('input', { id: 'ips_username', type: 'text', className: 'loginsystem', name: 'ips_username', tabIndex: '1', placeholder: 'Username' }),
                     '\r\n',
-                    React.createElement('input', { id: 'ips_password', type: 'password', className: 'loginsystem', name: 'ips_password', tabIndex: '2', placeholder: 'Password' }),
-                    React.createElement('br'),
-                    React.createElement('a', {},
-                        React.createElement('button', { id: 'dolog', className: 'loginsystem', onClick: this.login.bind(this) }, 'Login')),
+                    element('input', { id: 'ips_password', type: 'password', className: 'loginsystem', name: 'ips_password', tabIndex: '2', placeholder: 'Password' }),
+                    element('br'),
+                    element('a', {},
+                        element('button', { id: 'dolog', className: 'loginsystem', onClick: this.login.bind(this) }, 'Login')),
                     '\r\n',
-                    React.createElement('button', { id: 'backuplogin', className: 'loginsystem', onClick: this.back.bind(this) }, 'Back'),
-                    React.createElement('br'),
-                    React.createElement('br'),
-                    React.createElement('input', Object.assign({ id: 'ips_remember', type: 'checkbox' }, memory)),
-                    React.createElement('span', {}, 'Remember Username & Password?'),
-                    React.createElement('br'),
-                    React.createElement('a', { className: 'loginsystem', onClick: this.forgot.bind(this) }, 'Forgot Password?'),
-                    React.createElement('br')
+                    element('button', { id: 'backuplogin', className: 'loginsystem', onClick: this.back.bind(this) }, 'Back'),
+                    element('br'),
+                    element('br'),
+                    element('input', Object.assign({ id: 'ips_remember', type: 'checkbox' }, memory)),
+                    element('span', {}, 'Remember Username & Password?'),
+                    element('br'),
+                    element('a', { className: 'loginsystem', onClick: this.forgot.bind(this) }, 'Forgot Password?'),
+                    element('br')
                 ]);
             case 'start':
-                return React.createElement('div', { id: 'ipblogin', className: 'loginsystem' }, [
-                    React.createElement('br'),
-                    React.createElement('button', { id: 'openlogin', className: 'loginsystem', onClick: this.openLogin.bind(this) }, 'Login'),
+                return element('div', { id: 'ipblogin', className: 'loginsystem' }, [
+                    element('br'),
+                    element('button', { id: 'openlogin', className: 'loginsystem', onClick: this.openLogin.bind(this) }, 'Login'),
                     '\r\n',
-                    React.createElement('button', { id: 'doregister', className: 'loginsystem', onClick: this.registration.bind(this) }, 'Register')
+                    element('button', { id: 'doregister', className: 'loginsystem', onClick: this.registration.bind(this) }, 'Register')
                 ]);
             case 'register':
-                return React.createElement('div', { id: 'loginmodal' }, [
+                return element('div', { id: 'loginmodal' }, [
 
-                    React.createElement('input', { id: 'new_email', type: 'text', className: 'loginsystem reg', tabIndex: '1', placeholder: 'Email Address' }),
-                    React.createElement('br'),
-                    React.createElement('input', { id: 'new_username', type: 'text', className: 'loginsystem reg', tabIndex: '2', placeholder: 'Username' }),
-                    React.createElement('br'),
-                    React.createElement('input', { id: 'new_password', type: 'password', className: 'loginsystem reg', tabIndex: '3', placeholder: 'Password' }),
-                    React.createElement('br'),
-                    React.createElement('input', { id: 'repeat_new_password', type: 'password', className: 'loginsystem reg', tabIndex: '4', placeholder: 'Verify Password' }),
-                    React.createElement('br'),
-                    React.createElement('br'),
-                    React.createElement('button', { id: 'openlogin', className: 'loginsystem', onClick: this.registerAccount.bind(this) }, 'Register'),
+                    element('input', { id: 'new_email', type: 'text', className: 'loginsystem reg', tabIndex: '1', placeholder: 'Email Address' }),
+                    element('br'),
+                    element('input', { id: 'new_username', type: 'text', className: 'loginsystem reg', tabIndex: '2', placeholder: 'Username' }),
+                    element('br'),
+                    element('input', { id: 'new_password', type: 'password', className: 'loginsystem reg', tabIndex: '3', placeholder: 'Password' }),
+                    element('br'),
+                    element('input', { id: 'repeat_new_password', type: 'password', className: 'loginsystem reg', tabIndex: '4', placeholder: 'Verify Password' }),
+                    element('br'),
+                    element('br'),
+                    element('button', { id: 'openlogin', className: 'loginsystem', onClick: this.registerAccount.bind(this) }, 'Register'),
                     '\r\n',
-                    React.createElement('button', { id: 'backuplogin', className: 'loginsystem', onClick: this.openLogin.bind(this) }, 'Back'),
-                    React.createElement('br')
+                    element('button', { id: 'backuplogin', className: 'loginsystem', onClick: this.openLogin.bind(this) }, 'Back'),
+                    element('br')
                 ]);
             case 'remember':
-                return React.createElement('div', { id: 'loginmodal' }, [
-                    React.createElement('br'),
-                    React.createElement('input', { id: 'remember', type: 'text', className: 'loginsystem reg', tabIndex: '1', placeholder: 'Email Address' }),
-                    React.createElement('br'),
+                return element('div', { id: 'loginmodal' }, [
+                    element('br'),
+                    element('input', { id: 'remember', type: 'text', className: 'loginsystem reg', tabIndex: '1', placeholder: 'Email Address' }),
+                    element('br'),
 
-                    React.createElement('button', { id: 'dolog', className: 'loginsystem', onClick: this.recoverAccount.bind(this) }, 'Remember'),
+                    element('button', { id: 'dolog', className: 'loginsystem', onClick: this.recoverAccount.bind(this) }, 'Remember'),
                     '\r\n',
-                    React.createElement('button', { id: 'backuplogin', className: 'loginsystem', onClick: this.openLogin.bind(this) }, 'Back'),
-                    React.createElement('br'),
-                    React.createElement('br'),
-                    React.createElement('a', { className: 'loginsystem', onClick: this.openRecover.bind(this) }, 'Use Recovery Code')
+                    element('button', { id: 'backuplogin', className: 'loginsystem', onClick: this.openLogin.bind(this) }, 'Back'),
+                    element('br'),
+                    element('br'),
+                    element('a', { className: 'loginsystem', onClick: this.openRecover.bind(this) }, 'Use Recovery Code')
                 ]);
             case 'recover':
-                return React.createElement('div', { id: 'loginmodal' }, [
-                    React.createElement('br'),
-                    React.createElement('input', { id: 'recover', type: 'text', className: 'loginsystem reg', tabIndex: '1', placeholder: 'Recovery Code' }),
-                    React.createElement('br'),
+                return element('div', { id: 'loginmodal' }, [
+                    element('br'),
+                    element('input', { id: 'recover', type: 'text', className: 'loginsystem reg', tabIndex: '1', placeholder: 'Recovery Code' }),
+                    element('br'),
 
-                    React.createElement('button', { id: 'dolog', className: 'loginsystem', onClick: this.recoverAccount.bind(this) }, 'Recover'),
+                    element('button', { id: 'dolog', className: 'loginsystem', onClick: this.recoverAccount.bind(this) }, 'Recover'),
                     '\r\n',
-                    React.createElement('button', { id: 'backuplogin', className: 'loginsystem', onClick: this.openLogin.bind(this) }, 'Back'),
-                    React.createElement('br')
+                    element('button', { id: 'backuplogin', className: 'loginsystem', onClick: this.openLogin.bind(this) }, 'Back'),
+                    element('br')
                 ]);
             case 'loggedin':
-                return React.createElement('div', { id: 'ipblogin', className: 'loginsystem' }, [
-                    React.createElement('br'),
-                    React.createElement('button', { id: 'logout', className: 'loginsystem', onClick: this.logout.bind(this) }, 'Logout')
+                return element('div', { id: 'ipblogin', className: 'loginsystem' }, [
+                    element('br'),
+                    element('button', { id: 'logout', className: 'loginsystem', onClick: this.logout.bind(this) }, 'Logout')
                 ]);
             default:
                 return '';
@@ -145,33 +143,34 @@ class LoginScreen extends React.Component {
     }
 
     render() {
-        return React.createElement('div', { id: 'homecontainer' }, [
-            React.createElement('span', {},
-                React.createElement('h1', { className: 'shine superlogo' }, [
-                    React.createElement('span', { className: 'logopink' }, 'YGO'),
-                    React.createElement('span', {}, 'Salvation')
+        const element = React.createElement;
+        return element('div', { id: 'homecontainer' }, [
+            element('span', {},
+                element('h1', { className: 'shine superlogo' }, [
+                    element('span', { className: 'logopink' }, 'YGO'),
+                    element('span', {}, 'Salvation')
                 ])),
             this.modal(),
 
-            React.createElement('ul', { id: 'socialmediabuttons' }, [
-                React.createElement('li', { key: 'facebook' },
-                    React.createElement('a', { target: '_blank', href: '' },
-                        React.createElement('img', { 'src': 'img/social/Circle Color/Facebook.png' })
+            element('ul', { id: 'socialmediabuttons' }, [
+                element('li', { key: 'facebook' },
+                    element('a', { target: '_blank', href: '' },
+                        element('img', { 'src': 'img/social/Circle Color/Facebook.png' })
                     )
                 ),
-                React.createElement('li', { key: 'twitter' },
-                    React.createElement('a', { target: '_blank', href: '' },
-                        React.createElement('img', { 'src': 'img/social/Circle Color/Twitter.png' })
+                element('li', { key: 'twitter' },
+                    element('a', { target: '_blank', href: '' },
+                        element('img', { 'src': 'img/social/Circle Color/Twitter.png' })
                     )
                 ),
-                React.createElement('li', { key: 'github' },
-                    React.createElement('a', { target: '_blank', href: '' },
-                        React.createElement('img', { 'src': 'img/social/Circle Color/Github.png' })
+                element('li', { key: 'github' },
+                    element('a', { target: '_blank', href: '' },
+                        element('img', { 'src': 'img/social/Circle Color/Github.png' })
                     )
                 ),
-                React.createElement('li', { key: 'discord' },
-                    React.createElement('a', { target: '_blank', href: '' },
-                        React.createElement('img', { 'src': 'img/social/Circle Color/Discord.png' })
+                element('li', { key: 'discord' },
+                    element('a', { target: '_blank', href: '' },
+                        element('img', { 'src': 'img/social/Circle Color/Discord.png' })
                     )
                 )
             ])
