@@ -56,7 +56,7 @@ class DeckEditScreen extends React.Component {
             this.searchFilter = new SearchFilter(action.data);
             this.searchFilter.preformSearch();
             this.state.search = this.searchFilter.renderSearch();
-            this.info = new CardInfo(this.state.search);
+            this.info = new CardInfo(action.data);
             this.store.dispatch({ action: 'HOVER', id: this.state.search[0].id });
             this.store.dispatch({ action: 'RENDER' });
         });
@@ -80,11 +80,25 @@ class DeckEditScreen extends React.Component {
     export() { }
     import() { }
 
+    prev() {
+        this.searchFilter.pageBack();
+        this.state.search = this.searchFilter.renderSearch();
+        this.store.dispatch({ action: 'RENDER' });
+    }
+    next() {
+        this.searchFilter.pageForward();
+        this.state.search = this.searchFilter.renderSearch();
+        this.store.dispatch({ action: 'RENDER' });
+    }
+
     onChange() {
         const id = event.target.id;
         this.settings[id] = event.target.value;
         if (event.target.value === 'on') {
             this.settings[id] = event.target.checked;
+        }
+        if (id === 'decklist') {
+            this.state.activeDeck = this.state.decks[this.settings[id]];
         }
     }
 
@@ -224,12 +238,13 @@ class DeckEditScreen extends React.Component {
                         ]),
 
                         element('div', { className: 'filtercol' }, [
+                            element('select', { id: 'decklist', onChange: this.onChange.bind(this) }, this.state.decks.map((list, i) => {
+                                return React.createElement('option', { value: i }, list.name);
+                            })),
                             React.createElement('select', { id: 'banlist', onChange: this.onChange.bind(this) }, this.state.banlist.map((list, i) => {
                                 return React.createElement('option', { value: list.name, selected: list.primary }, list.name);
-                            })),
-                            element('select', { id: 'decklist' }, this.state.decks.map((list, i) => {
-                                return React.createElement('option', { value: list.name, selected: list.primary }, list.name);
                             }))
+
                         ]),
                         element('div', { className: 'deckcontrols' }, [
                             element('h3', { style: { width: 'auto' } }, 'Upload YDK File'),
@@ -250,7 +265,7 @@ class DeckEditScreen extends React.Component {
                 ]),
                 element('div', { id: 'decktextlist' })
             ]),
-            element('button', { id: 'prev' }, '<'),
+            element('button', { id: 'prev', onClick: this.prev.bind(this) }, '<'),
             element('div', { id: 'decksearch' }, [
 
                 element('div', { id: 'decksearchtitles' }, [
@@ -260,23 +275,23 @@ class DeckEditScreen extends React.Component {
 
                 element('div', { id: 'decksearchresults' }, this.renderCardCollection(this.state.search)),
                 element('div', { id: 'decksearchresultsofx' }),
-                element('button', { id: 'next' }, '>'),
+                element('button', { id: 'next', onClick: this.next.bind(this)  }, '>'),
                 element('div', { id: 'cardinformation' }, this.info.render())
             ]),
             element('div', { id: 'deckarea' }, [
                 element('div', { id: 'deckareamain' }, [
                     element('h2', {}, 'Main Deck'),
-                    element('div', { className: 'deckmetainfo' }, this.renderCardCollection(this.state.search).concat(this.renderCardCollection(this.state.search))),
+                    element('div', { className: 'deckmetainfo' }, this.renderCardCollection(this.state.activeDeck.main)),
                     element('div', { id: 'main' })
                 ]),
                 element('div', { id: 'deckareaextra' }, [
                     element('h2', {}, 'Extra Deck'),
-                    element('div', { className: 'deckmetainfo' }, this.renderCardCollection(this.state.search)),
+                    element('div', { className: 'deckmetainfo' }, this.renderCardCollection(this.state.activeDeck.extra)),
                     element('div', { id: 'main' })
                 ]),
                 element('div', { id: 'deckareaside' }, [
                     element('h2', {}, 'Side Deck'),
-                    element('div', { className: 'deckmetainfo' }, this.renderCardCollection(this.state.search)),
+                    element('div', { className: 'deckmetainfo' }, this.renderCardCollection(this.state.activeDeck.side)),
                     element('div', { id: 'main' })
                 ])
             ])

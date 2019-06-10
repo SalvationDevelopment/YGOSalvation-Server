@@ -236,7 +236,21 @@ control#linkmarkers {
     flex-wrap: wrap;
 }
 
+.deckmetainfo div {
+    height: 25%;
+    width: 10%;
+}
+
 .deckmetainfo img {
-    height: 6vh;
-    margin: .9vh;
+    height: 100%;
+}
+
+#deckareaextra .deckmetainfo div {
+    height: 25%;
+    width: 25%;
+}
+
+#deckareaside .deckmetainfo div {
+    height: 25%;
+    width: 25%;
 }
