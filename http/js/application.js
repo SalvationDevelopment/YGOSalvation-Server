@@ -40,7 +40,14 @@ class ApplicationComponent extends React.Component {
         });
 
         store.register('RENDER', (action) => {
+            if (this.rendering) {
+                return;
+            }
+            this.rendering = true;
             ReactDOM.render(this.render(), this.root);
+            setTimeout(() => {
+                this.rendering = false;
+            }, 50);
         });
 
 

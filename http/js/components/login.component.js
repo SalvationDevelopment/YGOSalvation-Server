@@ -8,6 +8,7 @@ class LoginScreen extends React.Component {
         this.store = store;
         store.register('LOGGEDIN', (action) => {
             this.state.mode = 'loggedin';
+            document.body.style.backgroundImage = 'url(../img/magimagiblack.jpg)';
         });
     }
 
@@ -17,6 +18,7 @@ class LoginScreen extends React.Component {
 
     openLogin() {
         this.state.mode = 'login';
+        document.body.style.backgroundImage = 'url(../img/magimagipinkshadow.jpg)';
         this.nav();
     }
 

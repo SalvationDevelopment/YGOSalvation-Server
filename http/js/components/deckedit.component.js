@@ -7,8 +7,10 @@ class DeckEditScreen extends React.Component {
         this.state = {
             search: [],
             setcodes: [],
+            releases: [],
             banlist: [],
             decks: [],
+            last: '',
             activeDeck: {
                 main: [],
                 extra: [],
@@ -16,7 +18,7 @@ class DeckEditScreen extends React.Component {
             }
         };
         this.settings = {
-            cardtype: 'monster',
+            cardtype: undefined,
             cardname: undefined,
             description: undefined,
             type: undefined,
@@ -27,8 +29,10 @@ class DeckEditScreen extends React.Component {
             setcode: undefined,
             atk: undefined,
             level: undefined,
-            scale: undefined
+            scale: undefined,
+            limit: undefined
         };
+        this.filterKeys = Object.keys(this.settings);
         this.store = store;
         this.store.register('CARD_HOVER', (event, state) => {
             if (!event.id) {
@@ -68,8 +72,23 @@ class DeckEditScreen extends React.Component {
             this.state.setcodes = action.data;
             this.store.dispatch({ action: 'RENDER' });
         });
+        store.register('LOAD_RELEASES', (action) => {
+            this.state.releases = action.sets;
+            this.store.dispatch({ action: 'RENDER' });
+        });
     }
 
+    search() {
+        Object.assign(this.searchFilter.currentFilter, this.settings);
+        this.searchFilter.preformSearch();
+        this.state.search = this.searchFilter.renderSearch();
+        this.store.dispatch({ action: 'RENDER' });
+    }
+    clearSearch() {
+        this.searchFilter.clearFilter();
+        this.state.search = this.searchFilter.renderSearch();
+        this.store.dispatch({ action: 'RENDER' });
+    }
     save() { }
     saveAs() { }
     delete() { }
@@ -96,6 +115,10 @@ class DeckEditScreen extends React.Component {
 
     onChange() {
         const id = event.target.id;
+        if (!id) {
+            return;
+        }
+
         this.settings[id] = event.target.value;
         if (event.target.value === 'on') {
             this.settings[id] = event.target.checked;
@@ -103,6 +126,42 @@ class DeckEditScreen extends React.Component {
         if (id === 'decklist') {
             this.state.activeDeck = this.state.decks[this.settings[id]];
         }
+        this.search();
+    }
+
+    onSearchChange() {
+        if (!event.target.id || this.state.last === event.target.id) {
+            return;
+        }
+        const id = event.target.id,
+            value = (isNaN(Number(event.target.value))) ? undefined : Number(event.target.value);
+        if (this.settings[id] === value) {
+            return;
+        }
+        this.settings[id] = value;
+        switch (id) {
+            case 'cardtype':
+                this.settings.type = Number(event.target.value);
+                this.settings.exacttype = undefined;
+                this.settings.type1 = undefined;
+                this.settings.type2 = undefined;
+                break;
+            case 'release':
+                this.settings[id] = event.target.value;
+                break;
+            case 'name':
+                this.settings[id] = event.target.value;
+                break;
+            case 'description':
+                this.settings[id] = event.target.value;
+                break;
+        }
+
+        if (isNaN(this.settings[id])) {
+            this.settings[id] = undefined;
+        }
+        this.state.last = event.target.id;
+        this.search();
     }
 
     renderCardCollection(input) {
@@ -117,9 +176,9 @@ class DeckEditScreen extends React.Component {
     cardTypes() {
         const element = React.createElement;
         switch (this.settings.cardtype) {
-            case 'monster':
-                return [element('select', { id: 'cardtype' }, [
-                    element('option', {}, ''),
+            case 1:
+                return [element('select', { id: 'type1', onChange: this.onSearchChange.bind(this) }, [
+                    element('option', { value: 1 }, 'Frame'),
                     element('option', { value: 64 }, 'Fusion'),
                     element('option', { value: 128 }, 'Ritual'),
                     element('option', { value: 8192 }, 'Synchro'),
@@ -127,8 +186,8 @@ class DeckEditScreen extends React.Component {
                     element('option', { value: 16777216 }, 'Pendulum'),
                     element('option', { value: 33554432 }, 'Link')
                 ]),
-                element('select', { id: 'cardtype' }, [
-                    element('option', {}, ''),
+                element('select', { id: 'type2', onChange: this.onSearchChange.bind(this) }, [
+                    element('option', { value: 1 }, 'Sub Card Type'),
                     element('option', { value: 16 }, 'Normal'),
                     element('option', { value: 32 }, 'Effect'),
                     element('option', { value: 512 }, 'Spirit'),
@@ -136,33 +195,46 @@ class DeckEditScreen extends React.Component {
                     element('option', { value: 4096 }, 'Tuner'),
                     element('option', { value: 2048 }, 'Gemini'),
                     element('option', { value: 4194304 }, 'Toon')]),
-                element('select', { id: 'racegroup' }, [
+                element('select', { id: 'attribute', onChange: this.onSearchChange.bind(this) }, [
+                    element('option', {}, 'Attribute'),
+                    element('option', { value: 1 }, 'EARTH'),
+                    element('option', { value: 2 }, 'WATER'),
+                    element('option', { value: 4 }, 'FIRE'),
+                    element('option', { value: 8 }, 'WIND'),
+                    element('option', { value: 16 }, 'LIGHT'),
+                    element('option', { value: 32 }, 'DARK'),
+                    element('option', { value: 64 }, 'DIVINE')]),
+                element('select', { id: 'race', onChange: this.onSearchChange.bind(this) }, [
                     element('option', {}, 'Type'),
-                    element('option', {}, 'Aqua'),
-                    element('option', {}, 'Monster'),
-                    element('option', {}, 'Monster'),
-                    element('option', {}, 'Monster'),
-                    element('option', {}, 'Monster'),
-                    element('option', {}, 'Monster'),
-                    element('option', {}, 'Monster'),
-                    element('option', {}, 'Monster'),
-                    element('option', {}, 'Monster'),
-                    element('option', {}, 'Monster'),
-                    element('option', {}, 'Monster'),
-                    element('option', {}, 'Monster'),
-                    element('option', {}, 'Monster'),
-                    element('option', {}, 'Monster'),
-                    element('option', {}, 'Monster'),
-                    element('option', {}, 'Monster'),
-                    element('option', {}, 'Monster'),
-                    element('option', {}, 'Monster'),
-                    element('option', {}, 'Monster'),
-                    element('option', {}, 'Monster')
+                    element('option', { value: 1 }, 'Warrior'),
+                    element('option', { value: 2 }, 'Spellcaster'),
+                    element('option', { value: 4 }, 'Fairy'),
+                    element('option', { value: 8 }, 'Fiend'),
+                    element('option', { value: 16 }, 'Zombie'),
+                    element('option', { value: 32 }, 'Machine'),
+                    element('option', { value: 64 }, 'Aqua'),
+                    element('option', { value: 128 }, 'Pyro'),
+                    element('option', { value: 256 }, 'Rock'),
+                    element('option', { value: 512 }, 'Winged-Beast'),
+                    element('option', { value: 1024 }, 'Plant'),
+                    element('option', { value: 2048 }, 'Insect'),
+                    element('option', { value: 4096 }, 'Thunder'),
+                    element('option', { value: 8192 }, 'Dragon'),
+                    element('option', { value: 16384 }, 'Beast'),
+                    element('option', { value: 32768 }, 'Beast-Warrior'),
+                    element('option', { value: 65536 }, 'Dinosaur'),
+                    element('option', { value: 131072 }, 'Fish'),
+                    element('option', { value: 262144 }, 'Sea Serpent'),
+                    element('option', { value: 524288 }, 'Reptile'),
+                    element('option', { value: 1048576 }, 'Psychic'),
+                    element('option', { value: 2097152 }, 'Divine-Beast'),
+                    element('option', { value: 4194304 }, 'Creator God'),
+                    element('option', { value: 8388608 }, 'Wyrm'),
+                    element('option', { value: 16777216 }, 'Cyberse')
                 ])];
-            case 'spell':
-
-                return element('select', { id: 'cardtype' }, [
-                    element('option', {}, ''),
+            case 2: // Spells
+                return element('select', { id: 'exacttype', onChange: this.onSearchChange.bind(this) }, [
+                    element('option', {}, 'Icon'),
                     element('option', { value: 2 }, 'Normal'),
                     element('option', { value: 65538 }, 'Quick-Play'),
                     element('option', { value: 131074 }, 'Continous'),
@@ -170,19 +242,97 @@ class DeckEditScreen extends React.Component {
                     element('option', { value: 262146 }, 'Field'),
                     element('option', { value: 524290 }, 'Equip')
                 ]);
-            case 'trap':
-                return element('select', { id: 'cardtype' }, [
-                    element('option', {}, ''),
+            case 4: //Traps
+                return element('select', { id: 'exacttype', onChange: this.onSearchChange.bind(this) }, [
+                    element('option', {}, 'Icon'),
                     element('option', { value: 4 }, 'Normal'),
                     element('option', { value: 131076 }, 'Continous'),
                     element('option', { value: 1048580 }, 'Counter')
                 ]);
 
             default:
-
         }
     }
 
+    renderLinks() {
+        const element = React.createElement;
+        if (this.settings.cardtype !== 1) {
+            return element('br', {});
+        }
+        return element('div', { className: 'filtercol' }, [
+            element('control', { id: 'linkmarkers' }, [
+                element('input', { id: 'link1', type: 'checkbox' }),
+                element('input', { id: 'link2', type: 'checkbox' }),
+                element('input', { id: 'link3', type: 'checkbox' }),
+                element('br'),
+                element('input', { id: 'link4', type: 'checkbox' }),
+                element('input', {
+                    type: 'checkbox', style: {
+                        visibility: 'hidden'
+                    }
+                }),
+                element('input', { id: 'link5', type: 'checkbox' }),
+                element('br'),
+                element('input', { id: 'link6', type: 'checkbox' }),
+                element('input', { id: 'link7', type: 'checkbox' }),
+                element('input', { id: 'link8', type: 'checkbox' })
+            ])
+        ]);
+    }
+    renderStats() {
+        const element = React.createElement;
+        if (this.settings.cardtype !== 1) {
+            return element('br', {});
+        }
+        return [element('div', { className: 'filterrow' }, [
+            element('input', { id: 'attack', placeholder: 'Attack', type: 'number', onChange: this.onSearchChange(this) }),
+            element('select', { id: 'atkop' }, [
+                element('option', {}, '<'),
+                element('option', {}, '=<'),
+                element('option', {}, '='),
+                element('option', {}, '>'),
+                element('option', {}, '=>')
+            ])
+        ]),
+        element('div', { className: 'filterrow' }, [
+            element('input', { id: 'defense', placeholder: 'Defense', type: 'number' }),
+            element('select', { id: 'defop' }, [
+                element('option', {}, '<'),
+                element('option', {}, '=<'),
+                element('option', {}, '='),
+                element('option', {}, '>'),
+                element('option', {}, '=>')
+            ])
+        ]),
+        element('div', { className: 'filterrow' }, [
+            element('input', { id: 'level', placeholder: 'Level/Rank/Rating', type: 'number' }),
+            element('select', { id: 'levelop' }, [
+                element('option', {}, '<'),
+                element('option', {}, '=<'),
+                element('option', {}, '='),
+                element('option', {}, '>'),
+                element('option', {}, '=>')
+            ])
+        ]),
+        element('div', { className: 'filterrow' }, [
+            element('input', { id: 'scale', placeholder: 'Scale', type: 'number', onChange: this.onSearchChange(this) }),
+            element('select', { id: 'scaleop' }, [
+                element('option', {}, '<'),
+                element('option', {}, '=<'),
+                element('option', {}, '='),
+                element('option', {}, '>'),
+                element('option', {}, '=>')
+            ])
+        ])];
+    }
+
+    renderReleases() {
+        const element = React.createElement,
+            list = this.state.releases.map((set) => {
+                return element('option', { value: set }, set);
+            });
+        return [element('option', {}, 'Release Set')].concat(list);
+    }
     render() {
         const element = React.createElement;
         return [
@@ -193,93 +343,33 @@ class DeckEditScreen extends React.Component {
                     element('h3', {}, 'Filter'),
                     element('controls', {}, [
                         element('div', { className: 'filtercol' }, [
-                            element('select', { id: 'cardtype' }, [
+                            element('select', { id: 'cardtype', onChange: this.onSearchChange.bind(this) }, [
                                 element('option', { value: 5 }, 'Monster/Spell/Trap'),
                                 element('option', { value: 1 }, 'Monster'),
                                 element('option', { value: 2 }, 'Spell'),
                                 element('option', { value: 4 }, 'Trap')
                             ]),
-                            element('select', { id: 'subtype' }, []),
+                            element('div', { className: 'filtercol' }, this.cardTypes()),
 
-                            element('select', { id: 'archetype' }, [
+                            element('select', { id: 'setcode', onChange: this.onSearchChange.bind(this) }, [
                                 element('option', {}, 'Archetype')
                             ].concat(this.state.setcodes.map((list, i) => {
-                                return React.createElement('option', { value: list.name }, list.name);
+                                return React.createElement('option', { value: parseInt(list.num) }, list.name);
                             }))),
-                            element('select', { id: 'release' }, [
-                                element('option', {}, 'Release Set')
-                            ]),
+                            element('select', { key: 'release', id: 'release', onChange: this.onChange.bind(this) }, this.renderReleases()),
                             element('select', { id: 'limit' }, [
                                 element('option', {}, 'Limit'),
                                 element('option', {}, 'Unlimited'),
                                 element('option', {}, 'Semi-Limited'),
                                 element('option', {}, 'Limited')
                             ]),
-                            element('input', { id: 'cardname', type: 'text', placeholder: 'Name' }),
-                            element('input', { id: 'description', type: 'text', placeholder: 'Card Text' }),
-                            element('div', { className: 'filterrow' }, [
-                                element('input', { id: 'attack', placeholder: 'Attack', type: 'number' }),
-                                element('select', { id: 'attackfilter' }, [
-                                    element('option', {}, '<'),
-                                    element('option', {}, '=<'),
-                                    element('option', {}, '='),
-                                    element('option', {}, '>'),
-                                    element('option', {}, '=>')
-                                ])
-                            ]),
-                            element('div', { className: 'filterrow' }, [
-                                element('input', { id: 'defense', placeholder: 'Defense', type: 'number' }),
-                                element('select', { id: 'defensefilter' }, [
-                                    element('option', {}, '<'),
-                                    element('option', {}, '=<'),
-                                    element('option', {}, '='),
-                                    element('option', {}, '>'),
-                                    element('option', {}, '=>')
-                                ])
-                            ]),
-                            element('div', { className: 'filterrow' }, [
-                                element('input', { id: 'level', placeholder: 'Level/Rank/Rating', type: 'number' }),
-                                element('select', { id: 'levelfilter' }, [
-                                    element('option', {}, '<'),
-                                    element('option', {}, '=<'),
-                                    element('option', {}, '='),
-                                    element('option', {}, '>'),
-                                    element('option', {}, '=>')
-                                ])
-                            ]),
-                            element('div', { className: 'filterrow' }, [
-                                element('input', { id: 'scale', placeholder: 'Scale', type: 'number' }),
-                                element('select', { id: 'scalefilter' }, [
-                                    element('option', {}, '<'),
-                                    element('option', {}, '=<'),
-                                    element('option', {}, '='),
-                                    element('option', {}, '>'),
-                                    element('option', {}, '=>')
-                                ])
-                            ]),
-                            element('button', {}, 'Reset'),
-                            element('button', {}, 'Search')
+                            element('input', { id: 'cardname', type: 'text', placeholder: 'Name', onBlur: this.onChange(this) }),
+                            element('input', { id: 'description', type: 'text', placeholder: 'Card Text', onBlur: this.onChange(this) }),
+                            this.renderStats(),
+                            element('button', { onClick: this.clearSearch.bind(this) }, 'Reset'),
+                            element('button', { onClick: this.search.bind(this) }, 'Search')
                         ]),
-                        element('div', { className: 'filtercol' }, [
-
-                            element('control', { id: 'linkmarkers' }, [
-                                element('input', { id: 'link1', type: 'checkbox' }),
-                                element('input', { id: 'link2', type: 'checkbox' }),
-                                element('input', { id: 'link3', type: 'checkbox' }),
-                                element('br'),
-                                element('input', { id: 'link4', type: 'checkbox' }),
-                                element('input', {
-                                    type: 'checkbox', style: {
-                                        visibility: 'hidden'
-                                    }
-                                }),
-                                element('input', { id: 'link5', type: 'checkbox' }),
-                                element('br'),
-                                element('input', { id: 'link6', type: 'checkbox' }),
-                                element('input', { id: 'link7', type: 'checkbox' }),
-                                element('input', { id: 'link8', type: 'checkbox' })
-                            ])
-                        ])
+                        this.renderLinks()
                     ]),
                     element('controls', {}, [
                         element('div', { className: 'filtercol' }, [

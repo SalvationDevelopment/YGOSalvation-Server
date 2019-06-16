@@ -1,10 +1,104 @@
-/*global store, $, app, Store */
+/*global store, $, app, Store, cardIs */
 
 const store = new Store();
 
 function validateEmail(email) {
     var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     return re.test(email.toLowerCase());
+}
+
+
+function isExtra(card) {
+    'use strict';
+    return (cardIs('fusion', card) || cardIs('synchro', card) || cardIs('xyz', card) || cardIs('link', card));
+}
+
+function cardEvaluate(card) {
+    'use strict';
+    var value = 0;
+
+    if (cardIs('monster', card)) {
+        value -= 100;
+    }
+    if (card.type === 17) { // normal monster
+        value -= 100;
+    }
+    if (cardIs('ritual', card)) {
+        value += 300;
+    }
+    if (cardIs('fusion', card)) {
+        value += 400;
+    }
+    if (cardIs('synchro', card)) {
+        value += 500;
+    }
+    if (cardIs('xyz', card)) {
+        value += 600;
+    }
+    if (cardIs('link', card)) {
+        value += 700;
+    }
+    if (cardIs('spell', card)) {
+        value += 10000;
+    }
+    if (cardIs('trap', card)) {
+        value += 100000;
+    }
+    return value;
+
+}
+
+function getLevel(card) {
+    'use strict';
+    return card.level & 0xff;
+}
+
+function cardStackSort(a, b) {
+    'use strict';
+    if (cardEvaluate(a) > cardEvaluate(b)) {
+        return 1;
+    }
+    if (cardEvaluate(a) < cardEvaluate(b)) {
+        return -1;
+    }
+    if (getLevel(a) > getLevel(b)) {
+        return -1;
+    }
+    if ((getLevel(a) < getLevel(b))) {
+        return 1;
+    }
+    if (a.atk > b.atk) {
+        return -1;
+    }
+    if (a.atk < b.atk) {
+        return 1;
+    }
+    if (a.def < b.def) {
+        return 1;
+    }
+    if (a.def > b.def) {
+        return -1;
+    }
+
+    if (a.type > b.type) {
+        return 1;
+    }
+    if (a.type < b.type) {
+        return -1;
+    }
+    if (a.name > b.name) {
+        return 1;
+    }
+    if (a.name < b.name) {
+        return -1;
+    }
+    if (a.id > b.id) {
+        return 1;
+    }
+    if (a.id < b.id) {
+        return -1;
+    }
+    return 0;
 }
 
 store.register('REGISTER_ACCOUNT', (action) => {
@@ -52,7 +146,19 @@ $.getJSON('/manifest/banlist.json', (data) => {
 });
 
 $.getJSON('/manifest/manifest_0-en-OCGTCG.json', function (data) {
+    data.sort(cardStackSort);
     store.dispatch({ action: 'LOAD_DATABASE', data });
+    const cardsets = data.reduce((hash, item) => {
+        if (item.ocg) {
+            hash[item.ocg.pack] = 0;
+        }
+        if (item.tcg) {
+            hash[item.tcg.pack] = 0;
+        }
+        return hash;
+    }), sets = Object.keys(cardsets).sort();
+
+    store.dispatch({ action: 'LOAD_RELEASES', sets });
 });
 
 $.getJSON('./setcodes.json', 'utf-8', function (data) {
@@ -70,6 +176,8 @@ $.getJSON('./setcodes.json', 'utf-8', function (data) {
         });
     store.dispatch({ action: 'LOAD_SETCODES', data: setcodes });
 });
+
+
 
 class SearchFilter {
     constructor(database) {
@@ -236,7 +344,7 @@ class SearchFilter {
         return cardsf;
     }
 
-    filterSet(cardsf, set) {
+    filterRelease(cardsf, set) {
         if (set === undefined) {
             return cardsf;
         }
@@ -430,7 +538,7 @@ class SearchFilter {
         cardsf = this.filterDef(cardsf, filter.def, filter.defop) || cardsf;
         cardsf = this.filterLevel(cardsf, filter.level, filter.levelop) || cardsf;
         cardsf = this.filterScale(cardsf, filter.scale, filter.scaleop) || cardsf;
-        cardsf = this.filterSet(cardsf, filter.set) || cardsf;
+        cardsf = this.filterRelease(cardsf, filter.release) || cardsf;
         cardsf = this.filterToken(cardsf) || cardsf;
         return cardsf;
     }

@@ -122,17 +122,18 @@
     clear: both;
 }
 
-
 control#linkmarkers {
     height: 10vh;
     display: block;
     float: right;
     position: absolute;
-    left: 17%;
-    top: 25%;
+    left: 13.5%;
+    top: 30%;
 }
 
-
+.filtercol {
+    clear: left;
+}
 
 #deckedit input[type=number] {
     float: left;
