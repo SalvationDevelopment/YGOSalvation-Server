@@ -442,7 +442,7 @@ class SearchFilter {
     }
 
     renderSearch() {
-        this.render = this.currentSearch.slice(this.currentSearchIndex, this.currentSearchPageSize);
+        this.render = this.currentSearch.slice(this.currentSearchIndex, this.currentSearchPageSize + this.currentSearchIndex);
         this.currentSearchNumberOfPages = Math.ceil(this.render.length / this.currentSearchPageSize);
         return this.render;
     }

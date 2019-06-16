@@ -16,9 +16,12 @@ class DeckEditScreen extends React.Component {
             }
         };
         this.settings = {
+            cardtype: 'monster',
             cardname: undefined,
             description: undefined,
             type: undefined,
+            type1: undefined,
+            type2: undefined,
             attribute: undefined,
             race: undefined,
             setcode: undefined,
@@ -38,7 +41,7 @@ class DeckEditScreen extends React.Component {
             return {
                 id: event.id,
                 description
-            }
+            };
         });
 
         store.register('HOST_BANLIST', (action) => {
@@ -104,11 +107,80 @@ class DeckEditScreen extends React.Component {
 
     renderCardCollection(input) {
         const element = React.createElement;
-        let output = input.map((card, i) => {
+        return input.map((card, i) => {
             card.uid = i;
             return element('div', {}, new CardImage(card, this.store).render());
         });
-        return output;
+
+    }
+
+    cardTypes() {
+        const element = React.createElement;
+        switch (this.settings.cardtype) {
+            case 'monster':
+                return [element('select', { id: 'cardtype' }, [
+                    element('option', {}, ''),
+                    element('option', { value: 64 }, 'Fusion'),
+                    element('option', { value: 128 }, 'Ritual'),
+                    element('option', { value: 8192 }, 'Synchro'),
+                    element('option', { value: 8388608 }, 'Xyz'),
+                    element('option', { value: 16777216 }, 'Pendulum'),
+                    element('option', { value: 33554432 }, 'Link')
+                ]),
+                element('select', { id: 'cardtype' }, [
+                    element('option', {}, ''),
+                    element('option', { value: 16 }, 'Normal'),
+                    element('option', { value: 32 }, 'Effect'),
+                    element('option', { value: 512 }, 'Spirit'),
+                    element('option', { value: 1024 }, 'Union'),
+                    element('option', { value: 4096 }, 'Tuner'),
+                    element('option', { value: 2048 }, 'Gemini'),
+                    element('option', { value: 4194304 }, 'Toon')]),
+                element('select', { id: 'racegroup' }, [
+                    element('option', {}, 'Type'),
+                    element('option', {}, 'Aqua'),
+                    element('option', {}, 'Monster'),
+                    element('option', {}, 'Monster'),
+                    element('option', {}, 'Monster'),
+                    element('option', {}, 'Monster'),
+                    element('option', {}, 'Monster'),
+                    element('option', {}, 'Monster'),
+                    element('option', {}, 'Monster'),
+                    element('option', {}, 'Monster'),
+                    element('option', {}, 'Monster'),
+                    element('option', {}, 'Monster'),
+                    element('option', {}, 'Monster'),
+                    element('option', {}, 'Monster'),
+                    element('option', {}, 'Monster'),
+                    element('option', {}, 'Monster'),
+                    element('option', {}, 'Monster'),
+                    element('option', {}, 'Monster'),
+                    element('option', {}, 'Monster'),
+                    element('option', {}, 'Monster'),
+                    element('option', {}, 'Monster')
+                ])];
+            case 'spell':
+
+                return element('select', { id: 'cardtype' }, [
+                    element('option', {}, ''),
+                    element('option', { value: 2 }, 'Normal'),
+                    element('option', { value: 65538 }, 'Quick-Play'),
+                    element('option', { value: 131074 }, 'Continous'),
+                    element('option', { value: 130 }, 'Ritual'),
+                    element('option', { value: 262146 }, 'Field'),
+                    element('option', { value: 524290 }, 'Equip')
+                ]);
+            case 'trap':
+                return element('select', { id: 'cardtype' }, [
+                    element('option', {}, ''),
+                    element('option', { value: 4 }, 'Normal'),
+                    element('option', { value: 131076 }, 'Continous'),
+                    element('option', { value: 1048580 }, 'Counter')
+                ]);
+
+            default:
+
+        }
     }
 
     render() {
@@ -122,35 +194,13 @@ class DeckEditScreen extends React.Component {
                     element('controls', {}, [
                         element('div', { className: 'filtercol' }, [
                             element('select', { id: 'cardtype' }, [
-                                element('option', {}, 'Monster/Spell/Trap'),
-                                element('option', {}, 'Monster'),
-                                element('option', {}, 'Spell'),
-                                element('option', {}, 'Trap')
+                                element('option', { value: 5 }, 'Monster/Spell/Trap'),
+                                element('option', { value: 1 }, 'Monster'),
+                                element('option', { value: 2 }, 'Spell'),
+                                element('option', { value: 4 }, 'Trap')
                             ]),
                             element('select', { id: 'subtype' }, []),
-                            element('select', { id: 'racegroup' }, [
-                                element('option', {}, 'Type'),
-                                element('option', {}, 'Aqua'),
-                                element('option', {}, 'Monster'),
-                                element('option', {}, 'Monster'),
-                                element('option', {}, 'Monster'),
-                                element('option', {}, 'Monster'),
-                                element('option', {}, 'Monster'),
-                                element('option', {}, 'Monster'),
-                                element('option', {}, 'Monster'),
-                                element('option', {}, 'Monster'),
-                                element('option', {}, 'Monster'),
-                                element('option', {}, 'Monster'),
-                                element('option', {}, 'Monster'),
-                                element('option', {}, 'Monster'),
-                                element('option', {}, 'Monster'),
-                                element('option', {}, 'Monster'),
-                                element('option', {}, 'Monster'),
-                                element('option', {}, 'Monster'),
-                                element('option', {}, 'Monster'),
-                                element('option', {}, 'Monster'),
-                                element('option', {}, 'Monster')
-                            ]),
+
                             element('select', { id: 'archetype' }, [
                                 element('option', {}, 'Archetype')
                             ].concat(this.state.setcodes.map((list, i) => {
@@ -275,7 +325,7 @@ class DeckEditScreen extends React.Component {
 
                 element('div', { id: 'decksearchresults' }, this.renderCardCollection(this.state.search)),
                 element('div', { id: 'decksearchresultsofx' }),
-                element('button', { id: 'next', onClick: this.next.bind(this)  }, '>'),
+                element('button', { id: 'next', onClick: this.next.bind(this) }, '>'),
                 element('div', { id: 'cardinformation' }, this.info.render())
             ]),
             element('div', { id: 'deckarea' }, [
