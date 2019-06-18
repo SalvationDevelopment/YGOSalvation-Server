@@ -130,31 +130,47 @@ class DeckEditScreen extends React.Component {
     }
 
     onSearchChange() {
-        if (!event.target.id || this.state.last === event.target.id) {
-            return;
-        }
+
         const id = event.target.id,
             value = (isNaN(Number(event.target.value))) ? undefined : Number(event.target.value);
+        if (!this.filterKeys.includes(id)) {
+            return;
+        }
         if (this.settings[id] === value) {
             return;
         }
-        this.settings[id] = value;
+
         switch (id) {
             case 'cardtype':
+                this.settings[id] = value;
                 this.settings.type = Number(event.target.value);
                 this.settings.exacttype = undefined;
                 this.settings.type1 = undefined;
                 this.settings.type2 = undefined;
                 break;
             case 'release':
+                this.settings[id] = value;
                 this.settings[id] = event.target.value;
+                if (event.target.value === 'Release Set') {
+                    this.settings[id] = undefined;
+                }
                 break;
             case 'name':
+                this.settings[id] = value;
                 this.settings[id] = event.target.value;
+                if (event.target.value === '') {
+                    this.settings[id] = undefined;
+                }
                 break;
             case 'description':
+                this.settings[id] = value;
                 this.settings[id] = event.target.value;
+                if (event.target.value === '') {
+                    this.settings[id] = undefined;
+                }
                 break;
+            default:
+                this.settings[id] = value;
         }
 
         if (isNaN(this.settings[id])) {
@@ -164,11 +180,18 @@ class DeckEditScreen extends React.Component {
         this.search();
     }
 
-    renderCardCollection(input) {
+    renderCardCollection(source, input) {
         const element = React.createElement;
         return input.map((card, i) => {
             card.uid = i;
-            return element('div', {}, new CardImage(card, this.store).render());
+            return element('div', {
+                draggable: true,
+                onDragStart: function (event, x) {
+                    console.log('drag start', card.name, event, card, i);
+                    event.dataTransfer.setData('index', i);
+                    event.dataTransfer.setData('source', source);
+                }
+            }, new CardImage(card, this.store).render());
         });
 
     }
@@ -326,6 +349,39 @@ class DeckEditScreen extends React.Component {
         ])];
     }
 
+    onDropExitZone(event) {
+        const index = event.dataTransfer.getData('index'),
+            source = event.dataTransfer.getData('source');
+
+        if (source === 'search') {
+            return;
+        }
+
+        this.state.activeDeck[source].splice(index, 1);
+        this.store.dispatch({ action: 'RENDER' });
+        event.preventDefault();
+    }
+
+    onDropDeckZone(zone, event) {
+
+        const index = event.dataTransfer.getData('index'),
+            source = event.dataTransfer.getData('source'),
+            list = (source === 'search') ? this.state.search : this.state.activeDeck[source],
+            card = list[index];
+        if (!card) {
+            return;
+        }
+        if (source === 'search') {
+            this.state.activeDeck[zone].push(card);
+        } else {
+            this.state.activeDeck[source].splice(index, 1);
+            this.state.activeDeck[zone].push(card);
+        }
+
+        this.store.dispatch({ action: 'RENDER' });
+        event.preventDefault();
+    }
+
     renderReleases() {
         const element = React.createElement,
             list = this.state.releases.map((set) => {
@@ -336,102 +392,132 @@ class DeckEditScreen extends React.Component {
     render() {
         const element = React.createElement;
         return [
-            element('div', { id: 'decksetup' }, [
-                element('h2', {}, 'Setup'),
-                element('br'),
-                element('div', { id: 'searchfilter' }, [
-                    element('h3', {}, 'Filter'),
-                    element('controls', {}, [
-                        element('div', { className: 'filtercol' }, [
-                            element('select', { id: 'cardtype', onChange: this.onSearchChange.bind(this) }, [
-                                element('option', { value: 5 }, 'Monster/Spell/Trap'),
-                                element('option', { value: 1 }, 'Monster'),
-                                element('option', { value: 2 }, 'Spell'),
-                                element('option', { value: 4 }, 'Trap')
+            element('div', {
+                id: 'decksetup',
+                onDragOver: function (event, x) {
+                    event.preventDefault();
+                },
+                onDrop: this.onDropExitZone.bind(this)
+            }, [
+                    element('h2', {}, 'Setup'),
+                    element('br'),
+                    element('div', { id: 'searchfilter' }, [
+                        element('h3', {}, 'Filter'),
+                        element('controls', {}, [
+                            element('div', { className: 'filtercol' }, [
+                                element('select', { id: 'cardtype', onChange: this.onSearchChange.bind(this) }, [
+                                    element('option', { value: 5 }, 'Monster/Spell/Trap'),
+                                    element('option', { value: 1 }, 'Monster'),
+                                    element('option', { value: 2 }, 'Spell'),
+                                    element('option', { value: 4 }, 'Trap')
+                                ]),
+                                element('div', { className: 'filtercol' }, this.cardTypes()),
+
+                                element('select', { id: 'setcode', onChange: this.onSearchChange.bind(this) }, [
+                                    element('option', {}, 'Archetype')
+                                ].concat(this.state.setcodes.map((list, i) => {
+                                    return React.createElement('option', { value: parseInt(list.num) }, list.name);
+                                }))),
+                                element('select', { key: 'release', id: 'release', onChange: this.onSearchChange.bind(this) }, this.renderReleases()),
+                                element('select', { id: 'limit' }, [
+                                    element('option', {}, 'Limit'),
+                                    element('option', {}, 'Unlimited'),
+                                    element('option', {}, 'Semi-Limited'),
+                                    element('option', {}, 'Limited')
+                                ]),
+                                element('input', { id: 'cardname', type: 'text', placeholder: 'Name', onBlur: this.onSearchChange(this) }),
+                                element('input', { id: 'description', type: 'text', placeholder: 'Card Text', onBlur: this.onSearchChange(this) }),
+                                this.renderStats(),
+                                element('button', { onClick: this.clearSearch.bind(this) }, 'Reset'),
+                                element('button', { onClick: this.search.bind(this) }, 'Search')
                             ]),
-                            element('div', { className: 'filtercol' }, this.cardTypes()),
-
-                            element('select', { id: 'setcode', onChange: this.onSearchChange.bind(this) }, [
-                                element('option', {}, 'Archetype')
-                            ].concat(this.state.setcodes.map((list, i) => {
-                                return React.createElement('option', { value: parseInt(list.num) }, list.name);
-                            }))),
-                            element('select', { key: 'release', id: 'release', onChange: this.onChange.bind(this) }, this.renderReleases()),
-                            element('select', { id: 'limit' }, [
-                                element('option', {}, 'Limit'),
-                                element('option', {}, 'Unlimited'),
-                                element('option', {}, 'Semi-Limited'),
-                                element('option', {}, 'Limited')
+                            this.renderLinks()
+                        ]),
+                        element('controls', {}, [
+                            element('div', { className: 'filtercol' }, [
+                                element('h3', {}, 'Deck'),
+                                element('h3', {}, 'Banlist')
                             ]),
-                            element('input', { id: 'cardname', type: 'text', placeholder: 'Name', onBlur: this.onChange(this) }),
-                            element('input', { id: 'description', type: 'text', placeholder: 'Card Text', onBlur: this.onChange(this) }),
-                            this.renderStats(),
-                            element('button', { onClick: this.clearSearch.bind(this) }, 'Reset'),
-                            element('button', { onClick: this.search.bind(this) }, 'Search')
-                        ]),
-                        this.renderLinks()
-                    ]),
-                    element('controls', {}, [
-                        element('div', { className: 'filtercol' }, [
-                            element('h3', {}, 'Deck'),
-                            element('h3', {}, 'Banlist')
-                        ]),
 
-                        element('div', { className: 'filtercol' }, [
-                            element('select', { id: 'decklist', onChange: this.onChange.bind(this) }, this.state.decks.map((list, i) => {
-                                return React.createElement('option', { value: i }, list.name);
-                            })),
-                            React.createElement('select', { id: 'banlist', onChange: this.onChange.bind(this) }, this.state.banlist.map((list, i) => {
-                                return React.createElement('option', { value: list.name, selected: list.primary }, list.name);
-                            }))
+                            element('div', { className: 'filtercol' }, [
+                                element('select', { id: 'decklist', onChange: this.onChange.bind(this) }, this.state.decks.map((list, i) => {
+                                    return React.createElement('option', { value: i }, list.name);
+                                })),
+                                React.createElement('select', { id: 'banlist', onChange: this.onChange.bind(this) }, this.state.banlist.map((list, i) => {
+                                    return React.createElement('option', { value: list.name, selected: list.primary }, list.name);
+                                }))
 
-                        ]),
-                        element('div', { className: 'deckcontrols' }, [
-                            element('h3', { style: { width: 'auto' } }, 'Upload YDK File'),
-                            element('input', { type: 'file', placeholder: 'Choose File' })]),
-                        element('div', { className: 'deckcontrols' }, [
-                            element('button', {}, 'New'),
-                            element('button', {}, 'Save'),
-                            element('button', {}, 'Delete'),
-                            element('button', {}, 'Rename'),
-                            element('button', {}, 'Clear'),
+                            ]),
+                            element('div', { className: 'deckcontrols' }, [
+                                element('h3', { style: { width: 'auto' } }, 'Upload YDK File'),
+                                element('input', { type: 'file', placeholder: 'Choose File' })]),
+                            element('div', { className: 'deckcontrols' }, [
+                                element('button', {}, 'New'),
+                                element('button', {}, 'Save'),
+                                element('button', {}, 'Delete'),
+                                element('button', {}, 'Rename'),
+                                element('button', {}, 'Clear'),
 
-                            element('button', {}, 'Sort'),
-                            element('button', {}, 'Export'),
-                            element('button', {}, 'Save As')
+                                element('button', {}, 'Sort'),
+                                element('button', {}, 'Export'),
+                                element('button', {}, 'Save As')
+                            ])
+
                         ])
-
-                    ])
+                    ]),
+                    element('div', { id: 'decktextlist' })
                 ]),
-                element('div', { id: 'decktextlist' })
-            ]),
             element('button', { id: 'prev', onClick: this.prev.bind(this) }, '<'),
-            element('div', { id: 'decksearch' }, [
+            element('div', {
+                id: 'decksearch',
+                onDragOver: function (event, x) {
+                    event.preventDefault();
+                },
+                onDrop: this.onDropExitZone.bind(this)
+            }, [
 
-                element('div', { id: 'decksearchtitles' }, [
-                    element('h2', {}, 'Search Results'),
-                    element('h2', {}, 'Card Information')
+                    element('div', { id: 'decksearchtitles' }, [
+                        element('h2', {}, 'Search Results'),
+                        element('h2', {}, 'Card Information')
+                    ]),
+
+                    element('div', { id: 'decksearchresults' }, this.renderCardCollection('search', this.state.search)),
+                    element('div', { id: 'decksearchresultsofx' }),
+                    element('button', { id: 'next', onClick: this.next.bind(this) }, '>'),
+                    element('div', { id: 'cardinformation' }, this.info.render())
                 ]),
-
-                element('div', { id: 'decksearchresults' }, this.renderCardCollection(this.state.search)),
-                element('div', { id: 'decksearchresultsofx' }),
-                element('button', { id: 'next', onClick: this.next.bind(this) }, '>'),
-                element('div', { id: 'cardinformation' }, this.info.render())
-            ]),
             element('div', { id: 'deckarea' }, [
                 element('div', { id: 'deckareamain' }, [
                     element('h2', {}, 'Main Deck'),
-                    element('div', { className: 'deckmetainfo' }, this.renderCardCollection(this.state.activeDeck.main)),
+                    element('div', {
+                        className: 'deckmetainfo',
+                        onDragOver: function (event, x) {
+                            event.preventDefault();
+                        },
+                        onDrop: this.onDropDeckZone.bind(this, 'main')
+                    }, this.renderCardCollection('main', this.state.activeDeck.main)),
                     element('div', { id: 'main' })
                 ]),
                 element('div', { id: 'deckareaextra' }, [
                     element('h2', {}, 'Extra Deck'),
-                    element('div', { className: 'deckmetainfo' }, this.renderCardCollection(this.state.activeDeck.extra)),
+                    element('div', {
+                        className: 'deckmetainfo',
+                        onDragOver: function (event, x) {
+                            event.preventDefault();
+                        },
+                        onDrop: this.onDropDeckZone.bind(this, 'extra')
+                    }, this.renderCardCollection('extra', this.state.activeDeck.extra)),
                     element('div', { id: 'main' })
                 ]),
                 element('div', { id: 'deckareaside' }, [
                     element('h2', {}, 'Side Deck'),
-                    element('div', { className: 'deckmetainfo' }, this.renderCardCollection(this.state.activeDeck.side)),
+                    element('div', {
+                        className: 'deckmetainfo',
+                        onDragOver: function (event, x) {
+                            event.preventDefault();
+                        },
+                        onDrop: this.onDropDeckZone.bind(this, 'side')
+                    }, this.renderCardCollection('side', this.state.activeDeck.side)),
                     element('div', { id: 'main' })
                 ])
             ])
