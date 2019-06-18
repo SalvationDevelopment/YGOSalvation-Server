@@ -89,18 +89,38 @@ class DeckEditScreen extends React.Component {
         this.state.search = this.searchFilter.renderSearch();
         this.store.dispatch({ action: 'RENDER' });
     }
-    save() { }
-    saveAs() { }
-    delete() { }
-    rename() { }
+
+    save() {
+
+    }
+
+    newDeck() {
+        this.save();
+    }
+
+    saveAs() {
+        this.save();
+    }
+    delete() {
+        this.save();
+    }
+    rename() {
+        this.save();
+    }
     clear() {
         this.state.activeDeck.main = [];
         this.state.activeDeck.extra = [];
         this.state.activeDeck.side = [];
     }
-    sort() { }
+    sort() {
+        this.state.activeDeck.main.sort(cardEvaluate);
+        this.state.activeDeck.extra.sort(cardEvaluate);
+        this.state.activeDeck.side.sort(cardEvaluate);
+    }
     export() { }
-    import() { }
+    import() {
+        this.save();
+    }
 
     prev() {
         this.searchFilter.pageBack();
@@ -452,15 +472,15 @@ class DeckEditScreen extends React.Component {
                                 element('h3', { style: { width: 'auto' } }, 'Upload YDK File'),
                                 element('input', { type: 'file', placeholder: 'Choose File' })]),
                             element('div', { className: 'deckcontrols' }, [
-                                element('button', {}, 'New'),
-                                element('button', {}, 'Save'),
-                                element('button', {}, 'Delete'),
-                                element('button', {}, 'Rename'),
-                                element('button', {}, 'Clear'),
+                                element('button', { onClick: this.newDeck.bind(this) }, 'New'),
+                                element('button', { onClick: this.save.bind(this) }, 'Save'),
+                                element('button', { onClick: this.delete.bind(this) }, 'Delete'),
+                                element('button', { onClick: this.rename.bind(this) }, 'Rename'),
+                                element('button', { onClick: this.clear.bind(this) }, 'Clear'),
 
-                                element('button', {}, 'Sort'),
-                                element('button', {}, 'Export'),
-                                element('button', {}, 'Save As')
+                                element('button', { onClick: this.sort.bind(this) }, 'Sort'),
+                                element('button', { onClick: this.export.bind(this) }, 'Export'),
+                                element('button', { onClick: this.saveAs.bind(this) }, 'Save As')
                             ])
 
                         ])
