@@ -55,7 +55,9 @@ class DeckEditScreen extends React.Component {
         });
 
         store.register('LOAD_DECKS', (action) => {
+            this.settings.decklist = '0';
             this.state.decks = action.decks;
+            this.state.activeDeck = this.state.decks[this.settings.decklist];
             this.store.dispatch({ action: 'RENDER' });
         });
 
@@ -91,20 +93,39 @@ class DeckEditScreen extends React.Component {
     }
 
     save() {
-
+        this.state.decks[this.settings.decklist] = this.state.activeDeck;
     }
 
     newDeck() {
-        this.save();
+        const name = prompt('New Deck Name?', this.state.decks[this.settings.decklist].name);
+        if (this.state.decks.some((deck) => name === deck.name)) {
+            return;
+        }
+        this.state.activeDeck.name = name;
+        this.state.activeDeck.creationDate = new Date();
+        this.state.decks.push(this.state.activeDeck);
     }
 
     saveAs() {
-        this.save();
+        const name = prompt('Save As?', this.state.decks[this.settings.decklist].name);
+        if (name === this.state.decks[this.settings.decklist].name) {
+            return;
+        }
+        this.state.activeDeck.name = name;
+        this.state.activeDeck.creationDate = new Date();
+        this.state.decks.push(this.state.activeDeck);
+        this.settings.decklist = this.state.decks.length - 1;
     }
     delete() {
-        this.save();
+        const ok = confirm(`Delete ${this.state.decks[this.settings.decklist].name}?`);
+        if (!ok) {
+            return;
+        }
+        this.state.decks.splice(this.settings.decklist, 1);
     }
     rename() {
+        const name = prompt('Deck Name?', this.state.decks[this.settings.decklist].name);
+        this.state.decks[this.settings.decklist].name = name;
         this.save();
     }
     clear() {
@@ -119,7 +140,7 @@ class DeckEditScreen extends React.Component {
     }
     export() { }
     import() {
-        this.save();
+
     }
 
     prev() {
