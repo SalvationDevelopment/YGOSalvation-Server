@@ -77,6 +77,7 @@
     width: 97%;
     margin-top: 1vh;
     height: 24vh;
+    overflow: auto;
 }
 
 #deckedit h3 {

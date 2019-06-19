@@ -212,16 +212,6 @@ class ApplicationComponent extends React.Component {
 
         this.primus.on('open', () => {
             console.log('Connected to YGOSalvation Server');
-            if (localStorage.remember === 'true') {
-                if (localStorage.session) {
-                    $.getJSON('api/session/' + localStorage.session, (userInfo) => {
-                        console.log('Session Login', userInfo);
-                        if (userInfo.success) {
-                            this.login(userInfo);
-                        }
-                    });
-                }
-            }
         });
         this.primus.on('close', () => {
             console.log('Disconnected from YGOSalvation Server');

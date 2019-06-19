@@ -3,14 +3,20 @@ class LoginScreen extends React.Component {
     constructor(store, initialState) {
         super();
         this.state = {
-            mode: 'start'
+            mode: 'loading'
         };
         this.store = store;
         store.register('LOGGEDIN', (action) => {
             this.state.mode = 'loggedin';
             document.body.style.backgroundImage = 'url(../img/magimagiblack.jpg)';
         });
+
+        store.register('LOAD_LOGIN', (action) => {
+            this.state.mode = 'start';
+        });
     }
+
+
 
     nav() {
         this.store.dispatch({ action: 'NAVIGATE', screen: 'login' });

@@ -1,5 +1,7 @@
 /*global React, ReactDOM, SearchFilter*/
 class DeckEditScreen extends React.Component {
+
+
     constructor(store) {
         super();
         this.searchFilter = new SearchFilter([]);
@@ -48,15 +50,25 @@ class DeckEditScreen extends React.Component {
             };
         });
 
-        store.register('HOST_BANLIST', (action) => {
+        store.register('DECK_EDITOR_BANLIST', (action) => {
             this.settings.banlist = action.primary;
             this.state.banlist = action.banlist;
             this.store.dispatch({ action: 'RENDER' });
         });
 
+
         store.register('LOAD_DECKS', (action) => {
             this.settings.decklist = '0';
-            this.state.decks = action.decks;
+            if (!action.decks) {
+                return;
+            }
+            this.state.decks = action.decks.map((deckIds) => {
+                const deck = Object.assign({}, deckIds);
+                deck.main = deck.main.map(this.findcard.bind(this));
+                deck.extra = deck.extra.map(this.findcard.bind(this));
+                deck.side = deck.side.map(this.findcard.bind(this));
+                return deck;
+            });
             this.state.activeDeck = this.state.decks[this.settings.decklist];
             this.store.dispatch({ action: 'RENDER' });
         });
@@ -78,6 +90,11 @@ class DeckEditScreen extends React.Component {
             this.state.releases = action.sets;
             this.store.dispatch({ action: 'RENDER' });
         });
+    }
+
+
+    findcard(card) {
+        return this.searchFilter.database.find((item) => card.id === item.id);
     }
 
     search() {
@@ -221,20 +238,39 @@ class DeckEditScreen extends React.Component {
         this.search();
     }
 
+    setIndex(source, index) {
+        this.state.overIndex = { source, index };
+    }
+
+    onDragStart(source, i, event) {
+        event.dataTransfer.setData('index', i);
+        event.dataTransfer.setData('source', source);
+    }
+
     renderCardCollection(source, input) {
         const element = React.createElement;
         return input.map((card, i) => {
             card.uid = i;
             return element('div', {
                 draggable: true,
-                onDragStart: function (event, x) {
-                    console.log('drag start', card.name, event, card, i);
-                    event.dataTransfer.setData('index', i);
-                    event.dataTransfer.setData('source', source);
-                }
+                onDragOver: this.setIndex.bind(this, source, i),
+                onDragStart: this.onDragStart.bind(this, source, i)
             }, new CardImage(card, this.store).render());
         });
+    }
 
+    renderCardList() {
+        const element = React.createElement,
+            main = this.state.activeDeck.main.map((card) => element('div', {}, card.name)),
+            side = this.state.activeDeck.side.map((card) => element('div', {}, card.name)),
+            extra = this.state.activeDeck.extra.map((card) => element('div', {}, card.name));
+        return [
+            element('h4', {}, 'Main Deck'),
+            main,
+            element('h4', {}, 'Side Deck'),
+            side,
+            element('h4', {}, 'Extra Deck'),
+            extra];
     }
 
     cardTypes() {
@@ -407,16 +443,28 @@ class DeckEditScreen extends React.Component {
 
         const index = event.dataTransfer.getData('index'),
             source = event.dataTransfer.getData('source'),
+            insert = this.state.overIndex,
             list = (source === 'search') ? this.state.search : this.state.activeDeck[source],
             card = list[index];
+        console.log(source, insert, card);
         if (!card) {
             return;
         }
         if (source === 'search') {
-            this.state.activeDeck[zone].push(card);
+            if (insert.source === zone) {
+                this.state.activeDeck[zone].splice(insert.index, 0, card);
+            } else {
+                this.state.activeDeck[zone].push(card);
+            }
         } else {
-            this.state.activeDeck[source].splice(index, 1);
-            this.state.activeDeck[zone].push(card);
+            console.log('insert', insert);
+            if (insert.source === zone) {
+                this.state.activeDeck[source].splice(index, 1);
+                this.state.activeDeck[zone].splice(insert.index, 0, card);
+            } else {
+                this.state.activeDeck[source].splice(index, 1);
+                this.state.activeDeck[zone].push(card);
+            }
         }
 
         this.store.dispatch({ action: 'RENDER' });
@@ -506,7 +554,7 @@ class DeckEditScreen extends React.Component {
 
                         ])
                     ]),
-                    element('div', { id: 'decktextlist' })
+                    element('div', { id: 'decktextlist' }, this.renderCardList())
                 ]),
             element('button', { id: 'prev', onClick: this.prev.bind(this) }, '<'),
             element('div', {

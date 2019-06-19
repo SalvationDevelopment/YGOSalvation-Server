@@ -1,4 +1,4 @@
-/*global store, $, app, Store, cardIs */
+/*global store, $, app, Store, cardId */
 
 const store = new Store();
 
@@ -132,18 +132,7 @@ store.register('REGISTER_ACCOUNT', (action) => {
     });
 });
 
-$.getJSON('/manifest/banlist.json', (data) => {
-    const banlist = [];
-    let primary;
-    Object.keys(data).forEach((list) => {
-        banlist.push(data[list]);
-        if (data[list].primary) {
-            primary = data[list].name;
-        }
-    });
-    store.dispatch({ action: 'HOST_BANLIST', banlist, primary });
-    store.dispatch({ action: 'DECK_EDITOR_BANLIST', banlist, primary });
-});
+
 
 $.getJSON('/manifest/manifest_0-en-OCGTCG.json', function (data) {
     data.sort(cardStackSort);
@@ -159,6 +148,30 @@ $.getJSON('/manifest/manifest_0-en-OCGTCG.json', function (data) {
     }), sets = Object.keys(cardsets).sort();
 
     store.dispatch({ action: 'LOAD_RELEASES', sets });
+    $.getJSON('/manifest/banlist.json', (bdata) => {
+        const banlist = [];
+        let primary;
+        Object.keys(bdata).forEach((list) => {
+            banlist.push(bdata[list]);
+            if (bdata[list].primary) {
+                primary = bdata[list].name;
+            }
+        });
+        store.dispatch({ action: 'HOST_BANLIST', banlist, primary });
+        store.dispatch({ action: 'DECK_EDITOR_BANLIST', banlist, primary });
+        store.dispatch({ action: 'SYSTEM_LOADED', banlist, primary });
+        store.dispatch({ action: 'LOAD_LOGIN', banlist, primary });
+        if (localStorage.remember === 'true') {
+            if (localStorage.session) {
+                $.getJSON('api/session/' + localStorage.session, (userInfo) => {
+                    console.log('Session Login', userInfo);
+                    if (userInfo.success) {
+                        app.login(userInfo);
+                    }
+                });
+            }
+        }
+    });
 });
 
 $.getJSON('./setcodes.json', 'utf-8', function (data) {
