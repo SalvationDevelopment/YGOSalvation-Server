@@ -166,7 +166,30 @@ class DeckEditScreen extends React.Component {
         this.state.activeDeck.extra.sort(cardEvaluate);
         this.state.activeDeck.side.sort(cardEvaluate);
     }
-    export() { }
+    export() {
+        let file = '#Created by ' + this.state.activeDeck.creator + ' on ' + this.state.activeDeck.creationDate + '\r\n#main';
+
+        function printCard(card) {
+            file += card.id + '\r\n';
+        }
+        this.state.activeDeck.main.forEach(printCard);
+        file += '#extra\r\n';
+        this.state.activeDeck.extra.forEach(printCard);
+        file += '!side\r\n';
+        this.state.activeDeck.side.forEach(printCard);
+
+        const url = 'data:application/octet-stream;charset=utf-16le;base64,' + btoa(file),
+            element = document.createElement('a');
+        element.setAttribute('href', url);
+        element.setAttribute('download', this.state.activeDeck.name + '.ydk');
+
+        element.style.display = 'none';
+        document.body.appendChild(element);
+
+        element.click();
+
+        document.body.removeChild(element);
+    }
     import() {
 
     }
