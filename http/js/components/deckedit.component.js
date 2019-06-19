@@ -222,7 +222,10 @@ class DeckEditScreen extends React.Component {
     }
 
     onSearchChange() {
-
+        if (!event.target.id) {
+            return;
+        }
+        console.log(event.target.id)
         const id = event.target.id;
         let value = (isNaN(Number(event.target.value))) ? undefined : Number(event.target.value);
         if (!this.filterKeys.includes(id)) {
@@ -242,24 +245,15 @@ class DeckEditScreen extends React.Component {
                 this.settings.exacttype = undefined;
                 this.settings.type1 = undefined;
                 this.settings.type2 = undefined;
-                debugger;
                 break;
             case 'release':
                 this.settings[id] = (event.target.value === 'undefined') ? undefined : event.target.value;
                 break;
-            case 'name':
-                this.settings[id] = value;
-                this.settings[id] = event.target.value;
-                if (event.target.value === '') {
-                    this.settings[id] = undefined;
-                }
+            case 'cardname':
+                this.settings[id] = (event.target.value) ? event.target.value : undefined;
                 break;
             case 'description':
-                this.settings[id] = value;
-                this.settings[id] = event.target.value;
-                if (event.target.value === '') {
-                    this.settings[id] = undefined;
-                }
+                this.settings[id] = (event.target.value) ? event.target.value : undefined;
                 break;
             default:
                 this.settings[id] = value;
@@ -414,43 +408,43 @@ class DeckEditScreen extends React.Component {
             return element('br', {});
         }
         return [element('div', { className: 'filterrow' }, [
-            element('input', { id: 'attack', placeholder: 'Attack', type: 'number', onChange: this.onSearchChange(this) }),
-            element('select', { id: 'atkop' }, [
-                element('option', {}, '<'),
-                element('option', {}, '=<'),
-                element('option', {}, '='),
-                element('option', {}, '>'),
-                element('option', {}, '=>')
+            element('input', { id: 'atk', placeholder: 'Attack', type: 'number', onChange: this.onSearchChange.bind(this) }),
+            element('select', { id: 'atkop', onChange: this.onSearchChange.bind(this) }, [
+                element('option', { value: -1 }, '<'),
+                element('option', { value: 0 }, '<='),
+                element('option', { value: 1 }, '='),
+                element('option', { value: 2 }, '>'),
+                element('option', { value: 3 }, '>=')
             ])
         ]),
         element('div', { className: 'filterrow' }, [
-            element('input', { id: 'defense', placeholder: 'Defense', type: 'number' }),
-            element('select', { id: 'defop' }, [
-                element('option', {}, '<'),
-                element('option', {}, '=<'),
-                element('option', {}, '='),
-                element('option', {}, '>'),
-                element('option', {}, '=>')
+            element('input', { id: 'def', placeholder: 'Defense', type: 'number', onChange: this.onSearchChange.bind(this) }),
+            element('select', { id: 'defop', onChange: this.onSearchChange.bind(this) }, [
+                element('option', { value: -1 }, '<'),
+                element('option', { value: 0 }, '<='),
+                element('option', { value: 1 }, '='),
+                element('option', { value: 2 }, '>'),
+                element('option', { value: 3 }, '>=')
             ])
         ]),
         element('div', { className: 'filterrow' }, [
-            element('input', { id: 'level', placeholder: 'Level/Rank/Rating', type: 'number' }),
+            element('input', { id: 'level', placeholder: 'Level/Rank/Rating', type: 'number', onChange: this.onSearchChange.bind(this) }),
             element('select', { id: 'levelop' }, [
-                element('option', {}, '<'),
-                element('option', {}, '=<'),
-                element('option', {}, '='),
-                element('option', {}, '>'),
-                element('option', {}, '=>')
+                element('option', { value: -1 }, '<'),
+                element('option', { value: 0 }, '<='),
+                element('option', { value: 1 }, '='),
+                element('option', { value: 2 }, '>'),
+                element('option', { value: 3 }, '>=')
             ])
         ]),
         element('div', { className: 'filterrow' }, [
-            element('input', { id: 'scale', placeholder: 'Scale', type: 'number', onChange: this.onSearchChange(this) }),
-            element('select', { id: 'scaleop' }, [
-                element('option', {}, '<'),
-                element('option', {}, '=<'),
-                element('option', {}, '='),
-                element('option', {}, '>'),
-                element('option', {}, '=>')
+            element('input', { id: 'scale', placeholder: 'Scale', type: 'number', onChange: this.onSearchChange.bind(this) }),
+            element('select', { id: 'scaleop', onChange: this.onSearchChange.bind(this), max: 13, min: 0 }, [
+                element('option', { value: -1 }, '<'),
+                element('option', { value: 0 }, '<='),
+                element('option', { value: 1 }, '='),
+                element('option', { value: 2 }, '>'),
+                element('option', { value: 3 }, '>=')
             ])
         ])];
     }
@@ -544,8 +538,8 @@ class DeckEditScreen extends React.Component {
                                     element('option', { value: 1 }, 'Limited'),
                                     element('option', { value: 0 }, 'Forbidden')
                                 ]),
-                                element('input', { id: 'cardname', type: 'text', placeholder: 'Name', onChange: this.onSearchChange(this) }),
-                                element('input', { id: 'description', type: 'text', placeholder: 'Card Text', onBlur: this.onSearchChange(this) }),
+                                element('input', { id: 'cardname', type: 'text', placeholder: 'Name', onChange: this.onSearchChange.bind(this) }),
+                                element('input', { id: 'description', type: 'text', placeholder: 'Card Text', onChange: this.onSearchChange.bind(this) }),
                                 this.renderStats(),
                                 element('button', { onClick: this.clearSearch.bind(this) }, 'Reset'),
                                 element('button', { onClick: this.search.bind(this) }, 'Search')
