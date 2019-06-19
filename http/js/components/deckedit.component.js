@@ -28,6 +28,7 @@ class DeckEditScreen extends React.Component {
             type2: undefined,
             attribute: undefined,
             race: undefined,
+            release: undefined,
             setcode: undefined,
             atk: undefined,
             level: undefined,
@@ -114,24 +115,34 @@ class DeckEditScreen extends React.Component {
     }
 
     newDeck() {
-        const name = prompt('New Deck Name?', this.state.decks[this.settings.decklist].name);
-        if (this.state.decks.some((deck) => name === deck.name)) {
+        const deck = {
+            main: [],
+            extra: [],
+            side: []
+        },
+            name = prompt('New Deck Name?', this.state.decks[this.settings.decklist].name);
+        if (this.state.decks.some((unit) => name === unit.name)) {
             return;
         }
-        this.state.activeDeck.name = name;
-        this.state.activeDeck.creationDate = new Date();
-        this.state.decks.push(this.state.activeDeck);
+        deck.name = name;
+        deck.creationDate = new Date();
+        this.state.decks.push(deck);
+        this.settings.decklist = this.state.decks.length - 1;
+        this.store.dispatch({ action: 'RENDER' });
     }
 
     saveAs() {
-        const name = prompt('Save As?', this.state.decks[this.settings.decklist].name);
+        const deck = {},
+            name = prompt('Save As?', this.state.decks[this.settings.decklist].name);
         if (name === this.state.decks[this.settings.decklist].name) {
             return;
         }
-        this.state.activeDeck.name = name;
-        this.state.activeDeck.creationDate = new Date();
-        this.state.decks.push(this.state.activeDeck);
+        Object.assign(deck, this.state.activeDeck);
+        deck.name = name;
+        deck.creationDate = new Date();
+        this.state.decks.push(deck);
         this.settings.decklist = this.state.decks.length - 1;
+        this.store.dispatch({ action: 'RENDER' });
     }
     delete() {
         const ok = confirm(`Delete ${this.state.decks[this.settings.decklist].name}?`);
@@ -189,12 +200,15 @@ class DeckEditScreen extends React.Component {
 
     onSearchChange() {
 
-        const id = event.target.id,
-            value = (isNaN(Number(event.target.value))) ? undefined : Number(event.target.value);
+        const id = event.target.id;
+        let value = (isNaN(Number(event.target.value))) ? undefined : Number(event.target.value);
         if (!this.filterKeys.includes(id)) {
             return;
         }
-        if (this.settings[id] === value) {
+        if (event.target.value === 'undefined') {
+            value = undefined;
+        }
+        if (this.settings[id] === value && value) {
             return;
         }
 
@@ -205,13 +219,10 @@ class DeckEditScreen extends React.Component {
                 this.settings.exacttype = undefined;
                 this.settings.type1 = undefined;
                 this.settings.type2 = undefined;
+                debugger;
                 break;
             case 'release':
-                this.settings[id] = value;
-                this.settings[id] = event.target.value;
-                if (event.target.value === 'Release Set') {
-                    this.settings[id] = undefined;
-                }
+                this.settings[id] = (event.target.value === 'undefined') ? undefined : event.target.value;
                 break;
             case 'name':
                 this.settings[id] = value;
@@ -230,11 +241,6 @@ class DeckEditScreen extends React.Component {
             default:
                 this.settings[id] = value;
         }
-
-        if (isNaN(this.settings[id])) {
-            this.settings[id] = undefined;
-        }
-        this.state.last = event.target.id;
         this.search();
     }
 
@@ -278,7 +284,7 @@ class DeckEditScreen extends React.Component {
         switch (this.settings.cardtype) {
             case 1:
                 return [element('select', { id: 'type1', onChange: this.onSearchChange.bind(this) }, [
-                    element('option', { value: 1 }, 'Frame'),
+                    element('option', { value: 'undefined' }, 'Frame'),
                     element('option', { value: 64 }, 'Fusion'),
                     element('option', { value: 128 }, 'Ritual'),
                     element('option', { value: 8192 }, 'Synchro'),
@@ -287,7 +293,7 @@ class DeckEditScreen extends React.Component {
                     element('option', { value: 33554432 }, 'Link')
                 ]),
                 element('select', { id: 'type2', onChange: this.onSearchChange.bind(this) }, [
-                    element('option', { value: 1 }, 'Sub Card Type'),
+                    element('option', { value: 'undefined' }, 'Sub Card Type'),
                     element('option', { value: 16 }, 'Normal'),
                     element('option', { value: 32 }, 'Effect'),
                     element('option', { value: 512 }, 'Spirit'),
@@ -296,7 +302,7 @@ class DeckEditScreen extends React.Component {
                     element('option', { value: 2048 }, 'Gemini'),
                     element('option', { value: 4194304 }, 'Toon')]),
                 element('select', { id: 'attribute', onChange: this.onSearchChange.bind(this) }, [
-                    element('option', {}, 'Attribute'),
+                    element('option', { value: 'undefined' }, 'Attribute'),
                     element('option', { value: 1 }, 'EARTH'),
                     element('option', { value: 2 }, 'WATER'),
                     element('option', { value: 4 }, 'FIRE'),
@@ -305,7 +311,7 @@ class DeckEditScreen extends React.Component {
                     element('option', { value: 32 }, 'DARK'),
                     element('option', { value: 64 }, 'DIVINE')]),
                 element('select', { id: 'race', onChange: this.onSearchChange.bind(this) }, [
-                    element('option', {}, 'Type'),
+                    element('option', { value: 'undefined' }, 'Type'),
                     element('option', { value: 1 }, 'Warrior'),
                     element('option', { value: 2 }, 'Spellcaster'),
                     element('option', { value: 4 }, 'Fairy'),
@@ -334,7 +340,7 @@ class DeckEditScreen extends React.Component {
                 ])];
             case 2: // Spells
                 return element('select', { id: 'exacttype', onChange: this.onSearchChange.bind(this) }, [
-                    element('option', {}, 'Icon'),
+                    element('option', { value: 'undefined' }, 'Icon'),
                     element('option', { value: 2 }, 'Normal'),
                     element('option', { value: 65538 }, 'Quick-Play'),
                     element('option', { value: 131074 }, 'Continous'),
@@ -344,7 +350,7 @@ class DeckEditScreen extends React.Component {
                 ]);
             case 4: //Traps
                 return element('select', { id: 'exacttype', onChange: this.onSearchChange.bind(this) }, [
-                    element('option', {}, 'Icon'),
+                    element('option', { value: 'undefined' }, 'Icon'),
                     element('option', { value: 4 }, 'Normal'),
                     element('option', { value: 131076 }, 'Continous'),
                     element('option', { value: 1048580 }, 'Counter')
@@ -476,7 +482,7 @@ class DeckEditScreen extends React.Component {
             list = this.state.releases.map((set) => {
                 return element('option', { value: set }, set);
             });
-        return [element('option', {}, 'Release Set')].concat(list);
+        return [element('option', { value: 'undefined' }, 'Release Set')].concat(list);
     }
     render() {
         const element = React.createElement;
@@ -503,18 +509,19 @@ class DeckEditScreen extends React.Component {
                                 element('div', { className: 'filtercol' }, this.cardTypes()),
 
                                 element('select', { id: 'setcode', onChange: this.onSearchChange.bind(this) }, [
-                                    element('option', {}, 'Archetype')
+                                    element('option', { value: 'undefined' }, 'Archetype')
                                 ].concat(this.state.setcodes.map((list, i) => {
                                     return React.createElement('option', { value: parseInt(list.num) }, list.name);
                                 }))),
                                 element('select', { key: 'release', id: 'release', onChange: this.onSearchChange.bind(this) }, this.renderReleases()),
                                 element('select', { id: 'limit' }, [
-                                    element('option', {}, 'Limit'),
-                                    element('option', {}, 'Unlimited'),
-                                    element('option', {}, 'Semi-Limited'),
-                                    element('option', {}, 'Limited')
+                                    element('option', { value: 'undefined' }, 'Limit'),
+                                    element('option', { value: 3 }, 'Unlimited'),
+                                    element('option', { value: 2 }, 'Semi-Limited'),
+                                    element('option', { value: 1 }, 'Limited'),
+                                    element('option', { value: 0 }, 'Forbidden')
                                 ]),
-                                element('input', { id: 'cardname', type: 'text', placeholder: 'Name', onBlur: this.onSearchChange(this) }),
+                                element('input', { id: 'cardname', type: 'text', placeholder: 'Name', onChange: this.onSearchChange(this) }),
                                 element('input', { id: 'description', type: 'text', placeholder: 'Card Text', onBlur: this.onSearchChange(this) }),
                                 this.renderStats(),
                                 element('button', { onClick: this.clearSearch.bind(this) }, 'Reset'),
