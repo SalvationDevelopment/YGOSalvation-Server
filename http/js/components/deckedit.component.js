@@ -1,4 +1,7 @@
 /*global React, ReactDOM, SearchFilter*/
+
+
+
 class DeckEditScreen extends React.Component {
 
 
@@ -23,6 +26,7 @@ class DeckEditScreen extends React.Component {
             cardtype: undefined,
             cardname: undefined,
             description: undefined,
+            banlist: undefined,
             type: undefined,
             type1: undefined,
             type2: undefined,
@@ -31,8 +35,13 @@ class DeckEditScreen extends React.Component {
             release: undefined,
             setcode: undefined,
             atk: undefined,
+            atkop: 0,
+            def: undefined,
+            defop: 0,
             level: undefined,
+            levelop: 0,
             scale: undefined,
+            scaleop: 0,
             limit: undefined
         };
         this.filterKeys = Object.keys(this.settings);
@@ -54,6 +63,7 @@ class DeckEditScreen extends React.Component {
         store.register('DECK_EDITOR_BANLIST', (action) => {
             this.settings.banlist = action.primary;
             this.state.banlist = action.banlist;
+            this.applyBanlist();
             this.store.dispatch({ action: 'RENDER' });
         });
 
@@ -75,12 +85,8 @@ class DeckEditScreen extends React.Component {
         });
 
         store.register('LOAD_DATABASE', (action) => {
-            this.searchFilter = new SearchFilter(action.data);
-            this.searchFilter.preformSearch();
-            this.state.search = this.searchFilter.renderSearch();
+            this.fullDatabase = action.data;
             this.info = new CardInfo(action.data);
-            this.store.dispatch({ action: 'HOVER', id: this.state.search[0].id });
-            this.store.dispatch({ action: 'RENDER' });
         });
 
         store.register('LOAD_SETCODES', (action) => {
@@ -93,6 +99,48 @@ class DeckEditScreen extends React.Component {
         });
     }
 
+    applyBanlist() {
+        const banlist = this.state.banlist.find((list) => (list.name === this.settings.banlist)),
+            database = this.fullDatabase;
+        var map = {},
+            result = [],
+            filteredCards = [],
+            region = banlist.region;
+        database.forEach(function (card) {
+            map[card.id] = card;
+        });
+
+        if (!banlist) {
+            return;
+        }
+
+        Object.keys(map).forEach(function (id) {
+            if (banlist.bannedCards[id] !== undefined) {
+                map[id].limit = parseInt(banlist.bannedCards[id], 10);
+            } else {
+                map[id].limit = 3;
+            }
+            result.push(map[id]);
+        });
+
+        filteredCards = result.filter(function (card) {
+            if (region && banlist.endDate) {
+                if (card[region]) {
+                    if (card[region].date) {
+                        return new Date(banlist.endDate).getTime() > new Date(card[region].date).getTime();
+                    } else {
+                        return false;
+                    }
+                } else {
+                    return false;
+                }
+            }
+            return true;
+        });
+        this.searchFilter = new SearchFilter(filteredCards.sort(cardStackSort));
+        this.searchFilter.preformSearch();
+        this.state.search = this.searchFilter.renderSearch();
+    }
 
     findcard(card) {
         return this.searchFilter.database.find((item) => card.id === item.id);
@@ -255,6 +303,10 @@ class DeckEditScreen extends React.Component {
             case 'description':
                 this.settings[id] = (event.target.value) ? event.target.value : undefined;
                 break;
+            case 'banlist':
+                this.settings[id] = (event.target.value) ? event.target.value : undefined;
+                this.applyBanlist();
+                break;
             default:
                 this.settings[id] = value;
         }
@@ -410,41 +462,41 @@ class DeckEditScreen extends React.Component {
         return [element('div', { className: 'filterrow' }, [
             element('input', { id: 'atk', placeholder: 'Attack', type: 'number', onChange: this.onSearchChange.bind(this) }),
             element('select', { id: 'atkop', onChange: this.onSearchChange.bind(this) }, [
-                element('option', { value: -1 }, '<'),
-                element('option', { value: 0 }, '<='),
-                element('option', { value: 1 }, '='),
-                element('option', { value: 2 }, '>'),
-                element('option', { value: 3 }, '>=')
+                element('option', { value: -2 }, '<'),
+                element('option', { value: -1 }, '<='),
+                element('option', { value: 0 }, '='),
+                element('option', { value: 1 }, '>='),
+                element('option', { value: 2 }, '>')
             ])
         ]),
         element('div', { className: 'filterrow' }, [
             element('input', { id: 'def', placeholder: 'Defense', type: 'number', onChange: this.onSearchChange.bind(this) }),
             element('select', { id: 'defop', onChange: this.onSearchChange.bind(this) }, [
-                element('option', { value: -1 }, '<'),
-                element('option', { value: 0 }, '<='),
-                element('option', { value: 1 }, '='),
-                element('option', { value: 2 }, '>'),
-                element('option', { value: 3 }, '>=')
+                element('option', { value: -2 }, '<'),
+                element('option', { value: -1 }, '<='),
+                element('option', { value: 0 }, '='),
+                element('option', { value: 1 }, '>='),
+                element('option', { value: 2 }, '>')
             ])
         ]),
         element('div', { className: 'filterrow' }, [
             element('input', { id: 'level', placeholder: 'Level/Rank/Rating', type: 'number', onChange: this.onSearchChange.bind(this) }),
-            element('select', { id: 'levelop' }, [
-                element('option', { value: -1 }, '<'),
-                element('option', { value: 0 }, '<='),
-                element('option', { value: 1 }, '='),
-                element('option', { value: 2 }, '>'),
-                element('option', { value: 3 }, '>=')
+            element('select', { id: 'levelop', onChange: this.onSearchChange.bind(this) }, [
+                element('option', { value: -2 }, '<'),
+                element('option', { value: -1 }, '<='),
+                element('option', { value: 0 }, '='),
+                element('option', { value: 1 }, '>='),
+                element('option', { value: 2 }, '>')
             ])
         ]),
         element('div', { className: 'filterrow' }, [
             element('input', { id: 'scale', placeholder: 'Scale', type: 'number', onChange: this.onSearchChange.bind(this) }),
             element('select', { id: 'scaleop', onChange: this.onSearchChange.bind(this), max: 13, min: 0 }, [
-                element('option', { value: -1 }, '<'),
-                element('option', { value: 0 }, '<='),
-                element('option', { value: 1 }, '='),
-                element('option', { value: 2 }, '>'),
-                element('option', { value: 3 }, '>=')
+                element('option', { value: -2 }, '<'),
+                element('option', { value: -1 }, '<='),
+                element('option', { value: 0 }, '='),
+                element('option', { value: 1 }, '>='),
+                element('option', { value: 2 }, '>')
             ])
         ])];
     }
@@ -531,7 +583,7 @@ class DeckEditScreen extends React.Component {
                                     return React.createElement('option', { value: parseInt(list.num) }, list.name);
                                 }))),
                                 element('select', { key: 'release', id: 'release', onChange: this.onSearchChange.bind(this) }, this.renderReleases()),
-                                element('select', { id: 'limit' }, [
+                                element('select', { id: 'limit', onChange: this.onSearchChange.bind(this) }, [
                                     element('option', { value: 'undefined' }, 'Limit'),
                                     element('option', { value: 3 }, 'Unlimited'),
                                     element('option', { value: 2 }, 'Semi-Limited'),
@@ -556,7 +608,7 @@ class DeckEditScreen extends React.Component {
                                 element('select', { id: 'decklist', onChange: this.onChange.bind(this) }, this.state.decks.map((list, i) => {
                                     return React.createElement('option', { value: i }, list.name);
                                 })),
-                                React.createElement('select', { id: 'banlist', onChange: this.onChange.bind(this) }, this.state.banlist.map((list, i) => {
+                                React.createElement('select', { id: 'banlist', onChange: this.onSearchChange.bind(this) }, this.state.banlist.map((list, i) => {
                                     return React.createElement('option', { value: list.name, selected: list.primary }, list.name);
                                 }))
 

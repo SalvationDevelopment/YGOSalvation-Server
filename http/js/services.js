@@ -314,24 +314,19 @@ class SearchFilter {
     fAtkDef(obj, num, ad, op) {
 
         var val = (ad === 1) ? obj.atk : obj.def;
-        if (op === 0) {
-            if (val <= num) {
-                return true;
-            } else {
-                return false;
-            }
-        } else if (op === 1) {
-            if (val === num) {
-                return true;
-            } else {
-                return false;
-            }
-        } else {
-            if (val >= num) {
-                return true;
-            } else {
-                return false;
-            }
+        switch (op) {
+            case -2:
+                return val < num;
+            case -1:
+                return val <= num;
+            case 0:
+                return val === num;
+            case -1:
+                return val >= num;
+            case -2:
+                return val > num;
+            default:
+                return val === num;
         }
     }
     // ND=1 is Name, else Desc. Checks if the TXT string is contained.

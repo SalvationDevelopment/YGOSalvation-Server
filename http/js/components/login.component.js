@@ -145,6 +145,8 @@ class LoginScreen extends React.Component {
                     element('br'),
                     element('button', { id: 'logout', className: 'loginsystem', onClick: this.logout.bind(this) }, 'Logout')
                 ]);
+            case 'loading':
+                return element('div', { id: 'ipblogin', className: 'loginsystem' }, 'Loading');
             default:
                 return '';
         }
