@@ -6,6 +6,9 @@
     width: 20%;
     float: left;
     font-size: 70%;
+    display: flex;
+    height: 86vh;
+    flex-direction: column;
 }
 
 #decksearch,
@@ -78,6 +81,8 @@
     margin-top: 1vh;
     height: 24vh;
     overflow: auto;
+    padding: .5vh .5vw;
+    flex: 1;
 }
 
 #deckedit h3 {
@@ -263,4 +268,37 @@ control#linkmarkers {
     width: 43%;
     text-align: center;
     background: rgba(0, 0, 0, .8);
+}
+
+[data-limit] {
+    position: relative;
+}
+
+[data-limit]:before {
+    height: 1.5em;
+    width: 1.5em;
+    background: yellow;
+    display: block;
+    position: absolute;
+    top: 0;
+    right: 0;
+    text-align: center;
+    font-weight: bold;
+    color: black;
+    border-radius: 7vw;
+    line-height: 1.2em;
+    border: 3px solid red;
+}
+
+[data-limit="0"]:before {
+    content: "0";
+}
+
+[data-limit="1"]:before {
+    content: "1";
+}
+
+
+[data-limit="2"]:before {
+    content: "2";
 }

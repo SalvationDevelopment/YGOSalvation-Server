@@ -443,6 +443,7 @@ class DeckEditScreen extends React.Component {
             card.uid = i;
             return element('div', {
                 draggable: true,
+                'data-limit': card.limit,
                 onDragOver: this.setIndex.bind(this, source, i),
                 onDragStart: this.onDragStart.bind(this, source, i)
             }, new CardImage(card, this.store).render());
@@ -678,9 +679,10 @@ class DeckEditScreen extends React.Component {
                 },
                 onDrop: this.onDropExitZone.bind(this)
             }, [
-                    element('h2', {}, 'Setup'),
-                    element('br'),
+
                     element('div', { id: 'searchfilter' }, [
+                        element('h2', {}, 'Setup'),
+                        element('br'),
                         element('h3', {}, 'Filter'),
                         element('controls', {}, [
                             element('div', { className: 'filtercol' }, [
