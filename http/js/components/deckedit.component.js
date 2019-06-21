@@ -176,7 +176,14 @@ class DeckEditScreen extends React.Component {
         deck.creationDate = new Date();
         this.state.decks.push(deck);
         this.settings.decklist = this.state.decks.length - 1;
+        this.state.activeDeck = this.state.decks[this.settings.decklist];
         this.store.dispatch({ action: 'RENDER' });
+        setTimeout(() => {
+            var element = document.getElementById('decklist');
+            element.value = this.settings.decklist;
+        }, 200);
+
+
     }
 
     saveAs() {
@@ -185,12 +192,17 @@ class DeckEditScreen extends React.Component {
         if (name === this.state.decks[this.settings.decklist].name) {
             return;
         }
-        Object.assign(deck, this.state.activeDeck);
+        Object.assign(deck, JSON.parse(JSON.stringify(this.state.activeDeck)));
         deck.name = name;
         deck.creationDate = new Date();
         this.state.decks.push(deck);
         this.settings.decklist = this.state.decks.length - 1;
+        this.state.activeDeck = this.state.decks[this.settings.decklist];
         this.store.dispatch({ action: 'RENDER' });
+        setTimeout(() => {
+            var element = document.getElementById('decklist');
+            element.value = this.settings.decklist;
+        }, 200);
     }
     delete() {
         const ok = confirm(`Delete ${this.state.decks[this.settings.decklist].name}?`);
@@ -198,6 +210,13 @@ class DeckEditScreen extends React.Component {
             return;
         }
         this.state.decks.splice(this.settings.decklist, 1);
+        this.settings.decklist = this.state.decks.length - 1;
+        this.state.activeDeck = this.state.decks[this.settings.decklist];
+        this.store.dispatch({ action: 'RENDER' });
+        setTimeout(() => {
+            var element = document.getElementById('decklist');
+            element.value = this.settings.decklist;
+        }, 200);
     }
     rename() {
         const name = prompt('Deck Name?', this.state.decks[this.settings.decklist].name);
@@ -253,7 +272,7 @@ class DeckEditScreen extends React.Component {
         this.store.dispatch({ action: 'RENDER' });
     }
 
-    onChange() {
+    onChange(event) {
         const id = event.target.id;
         if (!id) {
             return;
