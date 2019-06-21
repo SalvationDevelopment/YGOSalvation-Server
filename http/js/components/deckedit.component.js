@@ -1,5 +1,41 @@
-/*global React, ReactDOM, SearchFilter*/
+/*global React, ReactDOM, SearchFilter, store*/
 
+
+function readSingleFile(callback, evt) {
+
+}
+
+function makeDeckfromydk(ydkFileContents) {
+    var lineSplit = ydkFileContents.split('\n'),
+        originalValues = {
+            'main': [],
+            'side': [],
+            'extra': []
+        },
+        current = '';
+    lineSplit = lineSplit.map(function (item) {
+        return item.trim();
+    });
+    try {
+        lineSplit.forEach(function (value) {
+            if (value === '') {
+                return;
+            }
+            if (value[0] === '#' || value[0] === '!') {
+                if (originalValues.hasOwnProperty(value.substr(1))) {
+                    current = value.substr(1);
+                } else {
+                    return;
+                }
+            } else {
+                originalValues[current].push(value);
+            }
+        });
+    } catch (er) {
+        console.log(er);
+    }
+    return originalValues;
+}
 
 
 class DeckEditScreen extends React.Component {
@@ -96,6 +132,10 @@ class DeckEditScreen extends React.Component {
         store.register('LOAD_RELEASES', (action) => {
             this.state.releases = action.sets;
             this.store.dispatch({ action: 'RENDER' });
+        });
+
+        store.register('IMPORT', (action) => {
+            this.import(action.file, action.name);
         });
     }
 
@@ -257,7 +297,63 @@ class DeckEditScreen extends React.Component {
 
         document.body.removeChild(element);
     }
-    import() {
+
+    upload(event) {
+        //Retrieve the first (and only!) File from the FileList object
+        'use strict';
+        var f = event.target.files[0],
+            r;
+
+        if (f) {
+            r = new FileReader();
+            r.onload = ((e) => {
+                var file = e.target.result,
+                    name = f.name,
+                    action = confirm('Upload Deck?');
+                if (action) {
+                    store.dispatch({
+                        action: 'IMPORT',
+                        file,
+                        name: name.substring(0, name.lastIndexOf('.'))
+                    });
+                }
+            }).bind(this);
+            r.readAsText(f);
+        } else {
+            alertmodal('Failed to load file');
+        }
+    }
+
+    import(file, name) {
+
+
+        var deck = makeDeckfromydk(file);
+        deck.name = name;
+        deck.creator = localStorage.nickname;
+        deck.creationDate = new Date();
+        deck.main = deck.main.map((cardid) => {
+            return this.findcard({
+                id: parseInt(cardid, 10)
+            });
+        }).filter((card) => card);
+        deck.side = deck.side.map((cardid) => {
+            return this.findcard({
+                id: parseInt(cardid, 10)
+            })
+        }).filter((card) => card);
+        deck.extra = deck.extra.map((cardid) => {
+            return this.findcard({
+                id: parseInt(cardid, 10)
+            });
+        }).filter((card) => card);
+        this.state.decks.push(deck);
+        this.settings.decklist = this.state.decks.length - 1;
+        this.state.activeDeck = this.state.decks[this.settings.decklist];
+        this.store.dispatch({ action: 'RENDER' });
+        setTimeout(() => {
+            var element = document.getElementById('decklist');
+            element.value = this.settings.decklist;
+        }, 200);
 
     }
 
@@ -481,9 +577,9 @@ class DeckEditScreen extends React.Component {
         return [element('div', { className: 'filterrow' }, [
             element('input', { id: 'atk', placeholder: 'Attack', type: 'number', onChange: this.onSearchChange.bind(this) }),
             element('select', { id: 'atkop', onChange: this.onSearchChange.bind(this) }, [
+                element('option', { value: 0 }, '='),
                 element('option', { value: -2 }, '<'),
                 element('option', { value: -1 }, '<='),
-                element('option', { value: 0 }, '='),
                 element('option', { value: 1 }, '>='),
                 element('option', { value: 2 }, '>')
             ])
@@ -491,9 +587,9 @@ class DeckEditScreen extends React.Component {
         element('div', { className: 'filterrow' }, [
             element('input', { id: 'def', placeholder: 'Defense', type: 'number', onChange: this.onSearchChange.bind(this) }),
             element('select', { id: 'defop', onChange: this.onSearchChange.bind(this) }, [
+                element('option', { value: 0 }, '='),
                 element('option', { value: -2 }, '<'),
                 element('option', { value: -1 }, '<='),
-                element('option', { value: 0 }, '='),
                 element('option', { value: 1 }, '>='),
                 element('option', { value: 2 }, '>')
             ])
@@ -501,9 +597,9 @@ class DeckEditScreen extends React.Component {
         element('div', { className: 'filterrow' }, [
             element('input', { id: 'level', placeholder: 'Level/Rank/Rating', type: 'number', onChange: this.onSearchChange.bind(this) }),
             element('select', { id: 'levelop', onChange: this.onSearchChange.bind(this) }, [
+                element('option', { value: 0 }, '='),
                 element('option', { value: -2 }, '<'),
                 element('option', { value: -1 }, '<='),
-                element('option', { value: 0 }, '='),
                 element('option', { value: 1 }, '>='),
                 element('option', { value: 2 }, '>')
             ])
@@ -511,9 +607,9 @@ class DeckEditScreen extends React.Component {
         element('div', { className: 'filterrow' }, [
             element('input', { id: 'scale', placeholder: 'Scale', type: 'number', onChange: this.onSearchChange.bind(this) }),
             element('select', { id: 'scaleop', onChange: this.onSearchChange.bind(this), max: 13, min: 0 }, [
+                element('option', { value: 0 }, '='),
                 element('option', { value: -2 }, '<'),
                 element('option', { value: -1 }, '<='),
-                element('option', { value: 0 }, '='),
                 element('option', { value: 1 }, '>='),
                 element('option', { value: 2 }, '>')
             ])
@@ -634,7 +730,7 @@ class DeckEditScreen extends React.Component {
                             ]),
                             element('div', { className: 'deckcontrols' }, [
                                 element('h3', { style: { width: 'auto' } }, 'Upload YDK File'),
-                                element('input', { type: 'file', placeholder: 'Choose File' })]),
+                                element('input', { type: 'file', accept: '.ydk', placeholder: 'Choose File', onChange: this.upload.bind() })]),
                             element('div', { className: 'deckcontrols' }, [
                                 element('button', { onClick: this.newDeck.bind(this) }, 'New'),
                                 element('button', { onClick: this.save.bind(this) }, 'Save'),
