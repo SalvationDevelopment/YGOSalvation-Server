@@ -762,7 +762,7 @@ class DeckEditScreen extends React.Component {
                     ]),
 
                     element('div', { id: 'decksearchresults' }, this.renderCardCollection('search', this.state.search)),
-                    element('div', { id: 'decksearchresultsofx' }),
+                    element('div', { id: 'decksearchresultsofx' }, `${Math.ceil(this.searchFilter.currentSearchNumberOfPages)} of ${this.searchFilter.maxPages}`),
                     element('button', { id: 'next', onClick: this.next.bind(this) }, '>'),
                     element('div', { id: 'cardinformation' }, this.info.render())
                 ]),

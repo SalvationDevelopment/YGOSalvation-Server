@@ -255,3 +255,12 @@ control#linkmarkers {
     height: 25%;
     width: 25%;
 }
+
+#decksearchresultsofx {
+    position: absolute;
+    top: 43vh;
+    left: 6vw;
+    width: 43%;
+    text-align: center;
+    background: rgba(0, 0, 0, .8);
+}

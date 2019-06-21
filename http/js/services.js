@@ -197,7 +197,8 @@ class SearchFilter {
         this.currentSearch = [];
         this.currentSearchIndex = 0;
         this.currentSearchPageSize = 27;
-        this.currentSearchNumberOfPages = Math.ceil(this.currentSearch.length / this.currentSearchPageSize);
+        this.currentSearchNumberOfPages = 1;
+        this.maxPages = Math.ceil(this.currentSearchPageSize / this.currentSearch.length);
         this.currentFilter = this.getFilter();
         this.render = [];
         this.database = database;
@@ -559,7 +560,8 @@ class SearchFilter {
 
     renderSearch() {
         this.render = this.currentSearch.slice(this.currentSearchIndex, this.currentSearchPageSize + this.currentSearchIndex);
-        this.currentSearchNumberOfPages = Math.ceil(this.render.length / this.currentSearchPageSize);
+        this.currentSearchNumberOfPages = Math.ceil(this.currentSearchIndex / this.currentSearchPageSize) || 1;
+        this.maxPages = Math.ceil(this.currentSearch.length / this.currentSearchPageSize);
         return this.render;
     }
 
