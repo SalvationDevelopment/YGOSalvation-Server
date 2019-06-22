@@ -1,3 +1,21 @@
+#deckedit ::-webkit-input-placeholder {
+    text-align: center;
+}
+
+#deckedit :-moz-placeholder {
+    /* Firefox 18- */
+    text-align: center;
+}
+
+#deckedit ::-moz-placeholder {
+    /* Firefox 19+ */
+    text-align: center;
+}
+
+#deckedit :-ms-input-placeholder {
+    text-align: center;
+}
+
 #deckedit {
     padding: 1vh 1vw;
 }
@@ -106,7 +124,6 @@
 }
 
 #deckedit input[type=text] {
-    padding: .2vh 1vw;
     float: left;
     margin-bottom: 1vh;
     clear: left;
@@ -144,12 +161,13 @@ control#linkmarkers {
 #deckedit input[type=number] {
     float: left;
     margin-right: 5%;
-    width: 32%
+    width: 45%;
+    padding-left: 1.5em;
 }
 
 #deckedit input[type=number]+select {
     float: left;
-    width: 7%;
+    width: 3em;
 }
 
 #deckedit select option {
@@ -163,6 +181,7 @@ control#linkmarkers {
     margin-right: 5%;
     margin-bottom: 1vh;
     text-align-last: center;
+    text-align: center;
 }
 
 .filterrow {
@@ -249,6 +268,7 @@ control#linkmarkers {
 
 .deckmetainfo img {
     height: 100%;
+    border: 1px solid black;
 }
 
 #deckareaextra .deckmetainfo div {
@@ -277,21 +297,22 @@ control#linkmarkers {
 [data-limit]:before {
     height: 1.5em;
     width: 1.5em;
-    background: yellow;
+    background: black;
     display: block;
     position: absolute;
     top: 0;
     right: 0;
     text-align: center;
     font-weight: bold;
-    color: black;
+    color: yellow;
     border-radius: 7vw;
     line-height: 1.2em;
     border: 3px solid red;
 }
 
 [data-limit="0"]:before {
-    content: "0";
+    content: "X";
+    color: red;
 }
 
 [data-limit="1"]:before {

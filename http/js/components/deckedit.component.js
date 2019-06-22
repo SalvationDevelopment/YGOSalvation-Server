@@ -1,5 +1,33 @@
-/*global React, ReactDOM, SearchFilter, store*/
+/*global React, ReactDOM, SearchFilter, store, cardIs*/
 
+
+function checkLegality(card, zone, deck, banlist) {
+    function checkCard(reference) {
+        var id = card.alias || card.id;
+        if (reference.id === id || reference.alias === id) {
+            return true;
+        }
+        return false;
+    }
+    var masterRule = banlist.masterRule,
+        mainCount = deck.main.filter(checkCard).length,
+        extraCount = deck.extra.filter(checkCard).length,
+        sideCount = deck.side.filter(checkCard).length;
+
+    if (mainCount + extraCount + sideCount >= card.limit) {
+        return false;
+    }
+    if (zone === 'main' && deck[zone].length >= 60 && masterRule > 0) {
+        return false;
+    }
+    if (zone === 'side' && deck[zone].length >= 15) {
+        return false;
+    }
+    if (zone === 'extra' && deck[zone].length >= 15 && masterRule > 0) {
+        return false;
+    }
+    return true;
+}
 
 function condenseDeck(card) {
     return {
@@ -7,6 +35,10 @@ function condenseDeck(card) {
     };
 }
 
+function isExtra(card) {
+    'use strict';
+    return (cardIs('fusion', card) || cardIs('synchro', card) || cardIs('xyz', card) || cardIs('link', card));
+}
 
 function condenseDecks(decks) {
     return decks.map(function (deck) {
@@ -458,8 +490,15 @@ class DeckEditScreen extends React.Component {
     }
 
     onDragStart(source, i, event) {
+        var c = event.target.childNodes;
+        console.log(c, c[0]);
         event.dataTransfer.setData('index', i);
         event.dataTransfer.setData('source', source);
+        event.target.style.opacity = '0';
+    }
+
+    onDragEnd(event) {
+        event.target.style.opacity = '1';
     }
 
     renderCardCollection(source, input) {
@@ -470,7 +509,8 @@ class DeckEditScreen extends React.Component {
                 draggable: true,
                 'data-limit': card.limit,
                 onDragOver: this.setIndex.bind(this, source, i),
-                onDragStart: this.onDragStart.bind(this, source, i)
+                onDragStart: this.onDragStart.bind(this, source, i),
+                onDragEnd: this.onDragEnd.bind(this)
             }, new CardImage(card, this.store).render());
         });
     }
@@ -666,7 +706,15 @@ class DeckEditScreen extends React.Component {
         if (!card) {
             return;
         }
+        if (zone === 'extra' && !isExtra(card)) {
+            return;
+        }
         if (source === 'search') {
+
+            const legal = (checkLegality(card, this.state.activeDeck[zone], this.state.activeDeck, banlist));
+            if (!legal) {
+                return;
+            }
             if (insert.source === zone) {
                 this.state.activeDeck[zone].splice(insert.index, 0, card);
             } else {
