@@ -82,6 +82,16 @@ class ApplicationComponent extends React.Component {
             this.lobby(action.key, action.locked, action.port);
         });
 
+        store.register('SAVE_DECKS', (action) => {
+
+            var message = {
+                action: 'save',
+                decks: action.decks,
+                username: localStorage.nickname
+            };
+            this.primus.write(message);
+        });
+
 
         this.connect();
         ReactDOM.render(this.render(), this.root);
