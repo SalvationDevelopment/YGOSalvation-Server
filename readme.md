@@ -29,7 +29,9 @@ To run the system use `node server`. This will create a version of the system on
 - Run the following commands. It installs a package manager, and a testing harness, and then the dependencies. 
   - `nodist 8.11.4`
   - `npm install`
-
+- create a `.env` file in the top folder (beside this file). 
+  - Set `SSL=<path>` SSL isnt needed to work locally
+  - Set `SPARKPOST=<string>`
 To run the system use `node server`. This will create a version of the system on your desktop at http://localhost.
 
 ## Licensing
