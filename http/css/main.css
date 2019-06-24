@@ -2138,17 +2138,6 @@ div#rankingtable table td {
     *zoom: 1;
 }
 
-.marquee {
-    animation: marquee 210s linear infinite;
-    -webkit-animation: marquee 210s linear infinite;
-    width: 50%;
-    margin: 0 auto;
-}
-
-.marquee:hover {
-    animation-play-state: paused
-}
-
 
 /* Make it move */
 
@@ -2160,40 +2149,6 @@ div#rankingtable table td {
     100% {
         transform: translate(0, -100%);
     }
-}
-
-keyframes marquee {
-    0% {
-        transform: translate(0, 30%);
-    }
-
-    100% {
-        transform: translate(0, -100%);
-    }
-}
-
-.creditsperson {
-    margin: 9px auto;
-    /* height: 1.5em; */
-    font-size: 10px;
-    /* background: blue; */
-    overflow: auto;
-}
-
-header#credits {
-    overflow-y: scroll;
-}
-
-.creditsperson span {
-    display: block;
-    float: left;
-    width: 50%;
-}
-
-span.creditsname {
-    text-align: right;
-    padding-right: 8px;
-    color: white;
 }
 
 
@@ -2649,13 +2604,6 @@ div#intro strong {
     max-height: 98%;
 }
 
-div#creditslink {
-    color: #222;
-}
-
-div#creditslink:hover {
-    color: purple;
-}
 
 #languagesetter {
     text-align: center;

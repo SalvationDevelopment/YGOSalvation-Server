@@ -807,8 +807,7 @@ class DeckEditScreen extends React.Component {
                                 element('input', { id: 'cardname', type: 'text', placeholder: 'Name', onChange: this.onSearchChange.bind(this) }),
                                 element('input', { id: 'description', type: 'text', placeholder: 'Card Text', onChange: this.onSearchChange.bind(this) }),
                                 this.renderStats(),
-                                element('button', { onClick: this.clearSearch.bind(this) }, 'Reset'),
-                                element('button', { onClick: this.search.bind(this) }, 'Search')
+                                element('button', { onClick: this.clearSearch.bind(this) }, 'Reset')
                             ]),
                             this.renderLinks()
                         ]),

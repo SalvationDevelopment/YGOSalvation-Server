@@ -178,7 +178,7 @@ class CardInfo extends React.Component {
         if (isMonster) {
             className = 'monstDesc';
 
-            text = `[ Monster / '${monsterMap[targetCard.type]} ]
+            text = `[ Monster / ${monsterMap[targetCard.type]} ]
             ${raceMap[targetCard.race]} / ${attributeMap[targetCard.attribute]}
             [ ${parseLevelScales(targetCard)}
             ${parseAtkDef(targetCard.atk, targetCard.def)}`;

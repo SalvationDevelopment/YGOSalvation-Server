@@ -1,6 +1,6 @@
 /*global React, ReactDOM, $*/
 /*global store, SideChat, SuperFooterComponent, SuperHeaderComponent*/
-/*global HostScreen, LoginScreen, DeckEditScreen, GamelistScreen*/
+/*global HostScreen, LoginScreen, DeckEditScreen, GamelistScreen, CreditsScreen, SettingsScreen*/
 
 class ApplicationComponent extends React.Component {
     constructor(store) {
@@ -22,6 +22,9 @@ class ApplicationComponent extends React.Component {
         this.superheader = new SuperHeaderComponent(store, {});
         this.superfooter = new SuperFooterComponent(store, {});
         this.gamelist = new GamelistScreen(store, {});
+        this.faqs = new FAQsScreen();
+        this.credits = new CreditsScreen();
+        this.settings = new SettingsScreen(store);
         this.root = document.getElementById('application');
 
         window.addEventListener('unload', function (event) {
@@ -250,6 +253,12 @@ class ApplicationComponent extends React.Component {
                 return React.createElement('section', { id: 'host' }, this.host.render());
             case 'gamelist':
                 return React.createElement('section', { id: 'gamelist' }, this.gamelist.render());
+            case 'settings':
+                return React.createElement('section', { id: 'settings' }, this.settings.render());
+            case 'faqs':
+                return React.createElement('section', { id: 'faqs' }, this.faqs.render());
+            case 'credits':
+                return React.createElement('section', { id: 'credits' }, this.credits.render());
             default:
                 return React.createElement('section', { id: 'error' }, '');
         }

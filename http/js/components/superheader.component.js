@@ -27,19 +27,21 @@ class SuperHeaderComponent extends React.Component {
                 // React.createElement('li', { onClick: this.nav.bind(this, 'chat'), key: 'chat', className: 'psudolinksingle' }, 'Chat'),
                 // React.createElement('li', { onClick: this.nav.bind(this, 'inbox'), key: 'inbox', className: 'psudolinksingle' }, 'Inbox'),
                 React.createElement('li', { onClick: this.nav.bind(this, 'settings'), key: 'settings', className: 'psudolinksingle' }, 'Settings'),
+                React.createElement('li', { onClick: this.nav.bind(this, 'faqs'), key: 'faqs', className: 'psudolinksingle' }, 'FAQs'),
                 React.createElement('li', { onClick: this.nav.bind(this, 'credits'), key: 'credits', className: 'psudolinksingle' }, 'Credits')
             ];
         }
         return [
             //React.createElement('li', { onClick: this.nav.bind(this, 'deckedit'), key: 'deckedit', className: 'psudolinksingle' }, 'Deck Edit'),
-            React.createElement('li', { onClick: this.nav.bind(this, 'host'), key: 'host', className: 'psudolinksingle' }, 'Host'),
-            React.createElement('li', { onClick: this.nav.bind(this, 'gamelist'), key: 'gamelist', className: 'psudolinksingle' }, 'Game List'),
-            React.createElement('li', { onClick: this.nav.bind(this, 'ranking'), key: 'ranking', className: 'psudolinksingle' }, 'Rankings'),
+            //React.createElement('li', { onClick: this.nav.bind(this, 'host'), key: 'host', className: 'psudolinksingle' }, 'Host'),
+            //React.createElement('li', { onClick: this.nav.bind(this, 'gamelist'), key: 'gamelist', className: 'psudolinksingle' }, 'Game List'),
+            //React.createElement('li', { onClick: this.nav.bind(this, 'ranking'), key: 'ranking', className: 'psudolinksingle' }, 'Rankings'),
             //React.createElement('li', { onClick: this.nav.bind(this, 'tournament'), key: 'tournament', className: 'psudolinksingle' }, 'Tournaments'),
             //React.createElement('li', { onClick: this.nav.bind(this, 'forum'), key: 'forum', className: 'psudolinksingle' }, 'Forum'),
             //React.createElement('li', { onClick: this.nav.bind(this, 'chat'), key: 'chat', className: 'psudolinksingle' }, 'Chat'),
             //React.createElement('li', { onClick: this.nav.bind(this, 'inbox'), key: 'inbox', className: 'psudolinksingle' }, 'Inbox'),
             //React.createElement('li', { onClick: this.nav.bind(this, 'settings'), key: 'settings', className: 'psudolinksingle' }, 'Settings'),
+            React.createElement('li', { onClick: this.nav.bind(this, 'faqs'), key: 'faqs', className: 'psudolinksingle' }, 'FAQs'),
             React.createElement('li', { onClick: this.nav.bind(this, 'credits'), key: 'credits', className: 'psudolinksingle' }, 'Credits')
         ];
     }
