@@ -151,7 +151,7 @@ class ApplicationComponent extends React.Component {
         }
 
         if (data.error) {
-            this.alert(data.error.message);
+            this.alert(data.info.message);
             return;
         }
         const info = data.info || data.result;

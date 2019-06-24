@@ -4,15 +4,18 @@
 class ApplicationComponent extends React.Component {
     constructor(store) {
         super();
-        this.store = store;
-        this.chat = new SideChat(this.store);
-        this.duel = new DuelScreen(this.store, this.chat, databaseSystem);
-        this.choice = new ChoiceScreen(this.store, this.chat);
-        this.state = {
-            mode: 'lobby',
-            tick: 0
-        };
-        this.connect();
+
+        $.getJSON('/manifest/manifest_0-en-OCGTCG.json', (databaseSystem) => {
+            this.store = store;
+            this.chat = new SideChat(this.store);
+            this.duel = new DuelScreen(this.store, this.chat, databaseSystem);
+            this.choice = new ChoiceScreen(this.store, this.chat);
+            this.state = {
+                mode: 'lobby',
+                tick: 0
+            };
+            this.connect();
+        });
     }
 
     connect() {

@@ -59,7 +59,25 @@ class CreditsScreen extends React.Component {
                 }, {
                     name: 'Jamezs "AccessDenied" Gladney',
                     roles: ['Owner', 'Chief Architect', 'Principle Architect']
-                },]
+                }]
+            },
+            {
+                group: 'DevPro Collaborators',
+                people: [{
+                    name: '"Buttys"',
+                    roles: ['Senior Software Engineer']
+                },
+                {
+                    name: '"IceYGO"',
+                    roles: ['Creator of Windbot',
+                        'Senior Server Architect (YGOSharp)',
+                        'YGOPro']
+                },
+                {
+                    name: '"Rainbow Dashley"',
+                    roles: ['Community Leader',
+                        'Community Management']
+                }]
             },
             {
                 group: 'Special Thanks',
@@ -76,11 +94,6 @@ class CreditsScreen extends React.Component {
                         'Business Management']
                 },
                 {
-                    name: '"Rainbow Dashley"',
-                    roles: ['Community Leader',
-                        'Community Management']
-                },
-                {
                     name: 'Crimson Wind Acadamy',
                     roles: ['Emergency Funding']
                 },
@@ -95,12 +108,6 @@ class CreditsScreen extends React.Component {
                 {
                     name: '"Nhadala", "CounterstrikerGS"',
                     roles: ['Greek Translation']
-                },
-                {
-                    name: '"IceYGO"',
-                    roles: ['Creator of Windbot',
-                        'Senior Server Architect (YGOSharp)',
-                        'YGOPro']
                 },
                 {
                     name: 'Adam Parker',
@@ -124,11 +131,15 @@ class CreditsScreen extends React.Component {
                 }]
             },
             {
-                group: 'DevPro Collaborators',
+                group: 'Dedicated to',
                 people: [{
-                    name: '"Buttys"',
-                    roles: ['Senior Software Engineer']
-                }]
+                    name: 'Penelope "Allure`Queen`LV1"',
+                    roles: ['... rest in pease at an oasis of roses.']
+                }, {
+                    name: 'Bell "[-V-]Evangelion"',
+                    roles: ['... we promise to take care of the little ones.']
+                }
+                ]
             }];
     }
 

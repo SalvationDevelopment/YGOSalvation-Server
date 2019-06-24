@@ -1,8 +1,9 @@
 .marquee {
-    animation: marquee 210s linear infinite;
-    -webkit-animation: marquee 210s linear infinite;
+    animation: marquee 30s linear infinite;
+    -webkit-animation: marquee 30s linear infinite;
     width: 50%;
     margin: 0 auto;
+    padding-bottom: 30%;
 }
 
 .marquee:hover {
@@ -12,7 +13,7 @@
 
 keyframes marquee {
     0% {
-        transform: translate(0, 30%);
+        transform: translate(0, 100%);
     }
 
     100% {
@@ -71,4 +72,9 @@ h2.creditsfield {
     margin-bottom: 4vh;
     color: white;
     font-size: 5vh;
+}
+
+div#superheader {
+    z-index: 1;
+    position: relative;
 }
