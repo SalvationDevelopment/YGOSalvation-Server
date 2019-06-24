@@ -80,7 +80,7 @@ var crypto = require('crypto'),
     SparkPost = require('sparkpost'),
     uuidv4 = require('uuid/v4');
 
-process.env.SALT = process.env.SALT || function() {
+process.env.SALT = process.env.SALT || function () {
     console.log('');
 };
 
@@ -103,7 +103,7 @@ var db = mongoose.connect('mongodb://localhost/salvation', {
     socketTimeoutMS: 0,
     keepAlive: true,
     reconnectTries: 30
-}, function(error, connection) {
+}, function (error, connection) {
     if (error) {
         console.log(error);
         console.log('Make sure MongoDB is running and `salvation` collection exist.');
@@ -112,7 +112,7 @@ var db = mongoose.connect('mongodb://localhost/salvation', {
     console.log('Database online');
 });
 
-mongoose.connection.on('error', function(err) {
+mongoose.connection.on('error', function (err) {
     console.error('MongoDB error: %s', err);
 });
 
@@ -133,7 +133,7 @@ function hash(string, salt) {
 function validate(login, data, callback) {
     Users.findOne({
         'username': { $regex: new RegExp('^' + data.username.toLowerCase(), 'i') }
-    }, function(error, person) {
+    }, function (error, person) {
         if (error) {
             callback(error);
             return;
@@ -152,7 +152,7 @@ function validate(login, data, callback) {
                 person.session = uuidv4();
             }
             person.sessionExpiration = new Date();
-            person.save(function(saveError) {
+            person.save(function (saveError) {
                 callback(saveError, true, person);
             });
         } else {
@@ -164,7 +164,7 @@ function validate(login, data, callback) {
 function validateSession(data, callback) {
     Users.findOne({
         'session': data.session
-    }, function(error, person) {
+    }, function (error, person) {
         if (error) {
             callback(error, false);
             return;
@@ -179,14 +179,14 @@ function validateSession(data, callback) {
             return;
         }
         person.sessionExpiration = new Date();
-        person.save(function(saveError) {
+        person.save(function (saveError) {
             callback(saveError, true, person);
         });
     });
 }
 
 function updatePassword(data, callback) {
-    validate(data, function(error, result, person) {
+    validate(data, function (error, result, person) {
         var password = data.newPassword,
             salt = salter(),
             passwordHash = hash(password, salt),
@@ -229,7 +229,7 @@ function sendRecoveryEmail(address, username, salt) {
 
 function startRecoverPassword(data, callback) {
     var code = salter();
-    Users.findOneAndUpdate({ username: data.username }, { recoveryPass: code }, function(error, person) {
+    Users.findOneAndUpdate({ username: data.username }, { recoveryPass: code }, function (error, person) {
         callback(error, person, code);
         console.log('Attempting to recover', data.username);
         if (person) {
@@ -239,7 +239,7 @@ function startRecoverPassword(data, callback) {
 }
 
 function recoverPassword(data, id, callback) {
-    Users.findOne({ email: data.email, recoveryPass: id }, function(error, result, person) {
+    Users.findOne({ email: data.email, recoveryPass: id }, function (error, result, person) {
         var password = data.newPassword,
             salt = salter(),
             passwordHash = hash(password, salt);
@@ -277,7 +277,7 @@ function sendEmail(address, username, id) {
 
 
 function saveDeck(user, callback) {
-    Users.findOne({ 'username': user.username }, function(err, person) {
+    Users.findOne({ 'username': user.username }, function (err, person) {
         person.decks = user.decks;
         person.save(callback);
     });
@@ -286,14 +286,14 @@ function saveDeck(user, callback) {
 
 
 function getAllUsersDecks(callback) {
-    Users.find({}, function(error, users) {
+    Users.find({}, function (error, users) {
         if (error) {
             callback(error);
         }
         const decks = [];
-        users.forEach(function(user) {
+        users.forEach(function (user) {
 
-            user.decks.forEach(function(deck) {
+            user.decks.forEach(function (deck) {
                 delete deck.creator;
                 decks.push(deck);
             });
@@ -306,7 +306,7 @@ function getAllUsersDecks(callback) {
 }
 
 function getUserCount(callback) {
-    Users.find({}, function(error, users) {
+    Users.find({}, function (error, users) {
         if (error) {
             callback(error);
         }
@@ -341,7 +341,7 @@ function updateTournamentEntry(id, entry, callback) {
 }
 
 function queryTournament(id, callback) {
-    Tournaments.find({ _id: id }, function(error, tournament) {
+    Tournaments.find({ _id: id }, function (error, tournament) {
         if (error) {
             callback(error);
         }
@@ -350,7 +350,7 @@ function queryTournament(id, callback) {
 }
 
 function removeTournament(id, callback) {
-    Tournaments.delete({ _id: id }, function(error, tournament) {
+    Tournaments.delete({ _id: id }, function (error, tournament) {
         if (error) {
             callback(error);
         }
@@ -364,7 +364,7 @@ function getDuels(start, end, callback) {
             '$gte': new Date(start),
             '$lt': new Date(end)
         }
-    }, function(error, result) {
+    }, function (error, result) {
         if (error) {
             callback(error);
         }
@@ -373,17 +373,17 @@ function getDuels(start, end, callback) {
 }
 
 function getRanking(callback) {
-    Users.find({}, function(error, users) {
+    Users.find({}, function (error, users) {
         if (error) {
             callback(error);
         }
-        const ranks = users.map(function(user) {
+        const ranks = users.map(function (user) {
             return {
                 username: user.username,
                 points: user.ranking.rankPoints
             };
         });
-        ranks.sort(function(primary, secondary) {
+        ranks.sort(function (primary, secondary) {
             return primary.points > secondary.points;
         });
         callback(null, ranks.slice(0, 100));
@@ -392,7 +392,7 @@ function getRanking(callback) {
 
 function setupController(app) {
 
-    app.post('/register', function(request, response) {
+    app.post('/register', function (request, response) {
         var payload = request.body || {},
             user;
 
@@ -417,7 +417,7 @@ function setupController(app) {
             return;
         } else {
             // find each person with a last name matching 'Ghost', selecting the `name` and `occupation` fields
-            Users.findOne({ $or: [{ 'email': payload.email }, { 'username': payload.username }] }, 'username email', function(err, person) {
+            Users.findOne({ $or: [{ 'email': payload.email }, { 'username': payload.username }] }, 'username email', function (err, person) {
                 if (err) {
                     return console.log(err);
                 }
@@ -447,7 +447,11 @@ function setupController(app) {
                         rankedLosses: 0,
                         rankedTies: 0
                     };
-                    Users.create(newUser, function(error, resultingUser, numAffected) {
+                    Users.create(newUser, function (error, createdPerson, numAffected) {
+                        const resultingUser = JSON.parse(JSON.stringify(createdPerson));
+                        delete resultingUser.passwordHash;
+                        delete resultingUser.password;
+                        delete resultingUser.salt;
                         response.send({
                             info: resultingUser,
                             success: true,
@@ -462,13 +466,17 @@ function setupController(app) {
         }
     });
 
-    app.get('/verify/:id', function(request, response) {
+    app.get('/verify/:id', function (request, response) {
         var id = request.params.id;
 
-        Users.findByIdAndUpdate(id, { verified: true }, function(error, person) {
+        Users.findByIdAndUpdate(id, { verified: true }, function (error, person) {
+            const resultingUser = JSON.parse(JSON.stringify(person));
+            delete resultingUser.passwordHash;
+            delete resultingUser.password;
+            delete resultingUser.salt;
             response.send({
                 success: error,
-                result: person
+                result: resultingUser
             });
         });
     });
@@ -478,7 +486,7 @@ function setupController(app) {
         return db.getUserBySessionId(req.session.sessionid);
     }
 
-    app.post('/recover', function(request, response, next) {
+    app.post('/recover', function (request, response, next) {
         var payload = request.body || {},
             user;
 
@@ -501,7 +509,7 @@ function setupController(app) {
             return;
         }
 
-        Users.findOne({ 'email': payload.email }, 'username email', function(err, person) {
+        Users.findOne({ 'email': payload.email }, 'username email', function (err, person) {
             if (person) {
                 startRecoverPassword(person, callback);
             }
@@ -509,7 +517,7 @@ function setupController(app) {
 
     });
 
-    app.post('/recoverpassword', function(request, response, next) {
+    app.post('/recoverpassword', function (request, response, next) {
         var payload = request.body || {},
             user;
 
@@ -532,13 +540,13 @@ function setupController(app) {
             return;
         }
 
-        recoverPassword(payload, function(error) {});
+        recoverPassword(payload, function (error) { });
     });
 
 
-    app.get('/decks', function(req, res, next) {
+    app.get('/decks', function (req, res, next) {
 
-        getAllUsersDecks(function(error, decks) {
+        getAllUsersDecks(function (error, decks) {
             if (error) {
                 next();
             }
@@ -547,9 +555,9 @@ function setupController(app) {
         });
     });
 
-    app.get('/usercount', function(req, res, next) {
+    app.get('/usercount', function (req, res, next) {
 
-        getUserCount(function(error, count) {
+        getUserCount(function (error, count) {
             res.write(JSON.stringify({
                 usercount: count,
                 error: error
@@ -558,10 +566,10 @@ function setupController(app) {
         });
     });
 
-    app.get('/duelrecords', function(req, res, next) {
+    app.get('/duelrecords', function (req, res, next) {
         const start = req.params.start,
             end = req.params.end || Date.now();
-        getDuels(start, end, function(error, duels) {
+        getDuels(start, end, function (error, duels) {
             res.write(JSON.stringify({
                 duels: duels,
                 error: error
@@ -570,8 +578,8 @@ function setupController(app) {
         });
     });
 
-    app.get('/ranking', function(req, res, next) {
-        getRanking(function(error, ranks) {
+    app.get('/ranking', function (req, res, next) {
+        getRanking(function (error, ranks) {
             res.write(JSON.stringify({
                 ranks: ranks,
                 error: error
@@ -580,9 +588,9 @@ function setupController(app) {
         });
     });
 
-    app.post('/createtournament', function(req, res, next) {
+    app.post('/createtournament', function (req, res, next) {
         const banlist = JSON.parse(req.body);
-        createTournament(banlist, function(error, tournament) {
+        createTournament(banlist, function (error, tournament) {
             res.write(JSON.stringify({
                 tournament: tournament,
                 error: error
@@ -591,9 +599,9 @@ function setupController(app) {
         });
     });
 
-    app.post('/tournament', function(req, res, next) {
+    app.post('/tournament', function (req, res, next) {
         const id = req.params.id;
-        queryTournament(id, function(error, tournament) {
+        queryTournament(id, function (error, tournament) {
             res.write(JSON.stringify({
                 tournament: tournament,
                 error: error
@@ -602,10 +610,10 @@ function setupController(app) {
         });
     });
 
-    app.post('/addtournamententry', function(req, res, next) {
+    app.post('/addtournamententry', function (req, res, next) {
         const id = req.params.id,
             entry = JSON.parse(req.body);
-        addTournamentEntry(id, entry, function(error, result) {
+        addTournamentEntry(id, entry, function (error, result) {
             res.write(JSON.stringify({
                 sucess: Boolean(result),
                 error: error
@@ -614,10 +622,10 @@ function setupController(app) {
         });
     });
 
-    app.post('/updatetournamententry', function(req, res, next) {
+    app.post('/updatetournamententry', function (req, res, next) {
         const id = req.params.id,
             entry = JSON.parse(req.body);
-        updateTournamentEntry(id, entry, function(error, result) {
+        updateTournamentEntry(id, entry, function (error, result) {
             res.write(JSON.stringify({
                 sucess: Boolean(result),
                 error: error
