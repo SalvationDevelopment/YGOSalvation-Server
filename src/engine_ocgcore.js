@@ -24,10 +24,12 @@
  * @property {Number} startLP
  * @property {Object} player
  */
-const fastcall = require('fastcall'),
+const ffi = require('ffi'),
+    ref = require('ref'),
+    bytePointer = ref.refType(ref.types.byte),
+    voidPointer = ref.refType(ref.types.void),
+    StructType = require('ref-struct'),
     fs = require('fs'),
-    ref = fastcall.ref,
-    struct = fastcall.StructType,
     BufferStreamReader = require('./model_stream_reader'),
     POS_FACEDOWN_DEFENSE = 0x8,
     LOCATION_DECK = 0x01,
@@ -37,19 +39,19 @@ const fastcall = require('fastcall'),
     LOCATION_GRAVE = 0x10,
     LOCATION_HAND = 0x02,
     makeCard = require('./model_ygopro_card.js'),
-    cardData = struct({
-        code: ref.types.uint32,
-        alias: ref.types.uint32,
-        setcode: ref.types.uint64,
-        type: ref.types.uint32,
-        level: ref.types.uint32,
-        attribute: ref.types.uint32,
-        race: ref.types.uint32,
-        attack: ref.types.int32,
-        defense: ref.types.int32,
-        lscale: ref.types.uint32,
-        rscale: ref.types.uint32,
-        link: ref.types.uint32
+    cardData = new StructType({
+        code: 'uint',
+        alias: 'uint',
+        setcode: 'ulonglong',
+        type: 'uint',
+        level: 'uint',
+        attribute: 'uint',
+        race: 'uint',
+        attack: 'int',
+        defense: 'int',
+        lscale: 'uint',
+        rscale: 'uint',
+        link_marker: 'uint'
     }),
     queue = require('function-queue'),
     enums = require('./translate_ygopro_enums.js'),
@@ -59,26 +61,29 @@ const fastcall = require('fastcall'),
     DataStream = require('./model_data_stream.js'),
     ocgapi = require('./engine_ocgcore_interface'),
     database = require('../http/manifest/manifest_0-en-OCGTCG.json'),
-    scriptsFolder = '../../ygopro-scripts';
+    scriptsFolder = '../../ygopro-scripts',
+    gc_protected = [];
 
 /**
  * Read a card from file.
  * @param {String} scriptname filename of the script
- * @returns {Buffer} script
+ * @param {IntPointer} sizePointer Pointer to an int that is the size of the script.
+ * @returns {Pointer} script
  */
-function scriptReader(scriptname) {
-    scriptname = ref.readCString(scriptname, 0);
+function scriptReader(scriptname, sizePointer) {
     const file = scriptsFolder + '/' + scriptname.substr(20);
     if (fs.existsSync(file)) {
         try {
             const script = fs.readFileSync(file);
-            return script;
+            sizePointer = script.length;
+            gc_protected.push(script);
+            return ref.ref(script);
         } catch (e) {
             console.log(e);
-            return Buffer.alloc(0);
+            return ref.alloc('pointer');
         }
     } else {
-        return Buffer.alloc(0);
+        return ref.alloc('pointer');
     }
 }
 
@@ -95,41 +100,36 @@ function hasType(card, type) {
 /**
  * Callback function used by the core to get database information on a card
  * @param {Number} code unique card, usually 8 digit, passcode.
- * @returns {CardStructure} resulting card
+ * @returns {CardStructurePointer} pData pointer to ocgcore copy of the card.
  */
-function card_reader(code) {
-    //function used by the core to process DB
-    var dbEntry = database.find(function(cardEntry) {
+function card_reader(code, pData) {
+    const data = pData.deref(),
+        dbEntry = database.find(function (cardEntry) {
             return cardEntry.id === code;
-        }) || {
-            id: code,
-            alias: 0,
-            setcode: 0,
-            type: 0,
-            level: 0,
-            attribute: 0,
-            race: 0,
-            atk: 0,
-            def: 0,
-            defense: 0
-        },
-        card = {
-            code: dbEntry.id,
-            alias: dbEntry.alias,
-            setcode: dbEntry.setcode,
-            type: dbEntry.type,
-            level: dbEntry.level & 0xff,
-            attribute: dbEntry.attribute,
-            race: dbEntry.race,
-            attack: dbEntry.atk,
-            defence: (hasType(dbEntry, 0x4000000)) ? 0 : dbEntry.def,
-            lscale: (dbEntry.level >> 24) & 0xff,
-            rscale: (dbEntry.level >> 16) & 0xff,
-            link: (hasType(dbEntry, 0x4000000)) ? dbEntry.defense : 0
-        };
+        });
+    if (!dbEntry) {
+        return 0;
+    }
 
-    cardData(card);
-    return code;
+    const card = {
+        code: dbEntry.id,
+        alias: dbEntry.alias,
+        setcode: dbEntry.setcode,
+        type: dbEntry.type,
+        level: dbEntry.level & 0xff,
+        attribute: dbEntry.attribute,
+        race: dbEntry.race,
+        attack: dbEntry.atk,
+        defence: (hasType(dbEntry, 0x4000000)) ? 0 : dbEntry.def,
+        lscale: (dbEntry.level >> 24) & 0xff,
+        rscale: (dbEntry.level >> 16) & 0xff,
+        link_marker: (hasType(dbEntry, 0x4000000)) ? dbEntry.defense : 0
+    };
+
+    Object.keys(card).forEach((field) => {
+        data[field] = card[field];
+    });
+    return 0;
 }
 
 /**
@@ -188,9 +188,8 @@ function duelEndProcedure(players) {
  * @returns {Object} A game instance with manual controls.
  */
 function GameBoard(playerConnection, slot, masterRule) {
-    const board = manualControlEngine(function(view, stack, callback) {
+    const board = manualControlEngine(function (view, stack, callback) {
         try {
-            console.log('p' + slot);
             playerConnection.write((view['p' + slot]));
 
         } catch (error) {
@@ -275,28 +274,27 @@ function playerInstance(playerConnection, slot, game, settings) {
     }
 
     function queueGameActions(gameActions) {
-        gameActions.forEach(function(gameAction) {
-            console.log(gameAction);
+        gameActions.forEach(function (gameAction) {
             const pause = enums.timeout[gameAction.command] || 0;
-            gameQueue.push(function(next) {
-                setTimeout(function() {
+            gameQueue.push(function (next) {
+                setTimeout(function () {
                     try {
                         preformGameAction(gameAction);
                     } catch (e) {
                         console.log(e);
                     }
                     next();
-                }, pause);
+                }, 100);
             });
 
         });
     }
 
     return {
-        write: function(data) {
+        write: function (data) {
             queueGameActions([data]);
         },
-        read: function(message) {
+        read: function (message) {
             gameBoard.respond(message);
         }
     };
@@ -349,7 +347,7 @@ function makeGame(pduel, settings) {
     }
 
     function respond(message) {
-        players.forEach(function(player) {
+        players.forEach(function (player) {
             player.read(message);
         });
     }
@@ -375,7 +373,7 @@ function makeGame(pduel, settings) {
      * @returns {void}
      */
     function sendToObservers() {
-        observers.forEach(function(observer) {
+        observers.forEach(function (observer) {
             observer.write(lastMessage);
         });
     }
@@ -570,50 +568,55 @@ function duel(settings, errorHandler, players, observers) {
         ///errorHandler(messageBuffer.toString(), type);
     }
 
+    const card_reader_function = ffi.Callback('uint32', ['uint32', ref.refType(cardData)], card_reader);
+    const responsei_function = ffi.Callback('int32', ['pointer', 'uint32'], messageHandler);
+    const script_reader_function = ffi.Callback('pointer', ['string', 'uint32*'], scriptReader);
+    const message_handler_function = ffi.Callback('uint32', ['pointer', 'uint32'], console.log);
+
     pduel = ocgapi.create_duel(seed());
-    ocgapi.set_script_reader(scriptReader); // good
-    ocgapi.set_card_reader(card_reader); //bad
-    ocgapi.set_message_handler(messageHandler); //bad
+    ocgapi.set_script_reader(script_reader_function); // good
+    ocgapi.set_card_reader(card_reader_function); //bad
+    ocgapi.set_message_handler(responsei_function); //bad
     ocgapi.preload_script(pduel, './expansions/script/constant.lua', 0x10000000);
     ocgapi.preload_script(pduel, './expansions/script/utility.lua', 0x10000000);
-    ocgapi.set_responsei(pduel, console.log);
+    ocgapi.set_responsei(pduel, message_handler_function);
 
     ocgapi.set_player_info(pduel, 0, settings.start_lp, settings.start_hand_count, settings.draw_count);
     ocgapi.set_player_info(pduel, 1, settings.start_lp, settings.start_hand_count, settings.draw_count);
 
     console.log(1);
-    players[0].main.forEach(function(cardID, sequence) {
+    players[0].main.forEach(function (cardID, sequence) {
         ocgapi.new_card(pduel, cardID, 0, 0, LOCATION_DECK, 0, POS_FACEDOWN_DEFENSE);
     });
     console.log(2);
-    players[0].extra.forEach(function(cardID, sequence) {
+    players[0].extra.forEach(function (cardID, sequence) {
         ocgapi.new_card(pduel, cardID, 0, 0, LOCATION_EXTRA, 0, POS_FACEDOWN_DEFENSE);
     });
     console.log(3);
-    players[1].main.forEach(function(cardID, sequence) {
+    players[1].main.forEach(function (cardID, sequence) {
         ocgapi.new_card(pduel, cardID, 1, 1, LOCATION_DECK, 0, POS_FACEDOWN_DEFENSE);
     });
     console.log(4);
-    players[1].extra.forEach(function(cardID, sequence) {
+    players[1].extra.forEach(function (cardID, sequence) {
         ocgapi.new_card(pduel, cardID, 1, 1, LOCATION_EXTRA, 0, POS_FACEDOWN_DEFENSE);
     });
     //send start msg
     console.log('all cards loaded');
     game = makeGame(pduel, settings);
-    const playerConnections = players.map(function(playerConnection, slot) {
-            return playerInstance(playerConnection, slot, game, settings);
-        }),
-        observerConnections = players.map(function(playerConnection, slot) {
+    const playerConnections = players.map(function (playerConnection, slot) {
+        return playerInstance(playerConnection, slot, game, settings);
+    }),
+        observerConnections = players.map(function (playerConnection, slot) {
             return playerInstance(playerConnection, slot, game, settings);
         });
 
 
     game.setPlayers(playerConnections, observerConnections);
     game.refer = ref.deref(pduel);
-    setTimeout(function() {
+    setTimeout(function () {
         game.sendStartInfo(0);
         game.sendStartInfo(1);
-        setTimeout(function() {
+        setTimeout(function () {
             // game.refreshExtra(0);
             // game.refreshExtra(1);
             // game.refreshMzone(0);

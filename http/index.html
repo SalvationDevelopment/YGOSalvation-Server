@@ -12,56 +12,62 @@
     <!-- Schema.org markup for Google+ -->
     <meta itemprop="name" content="YGO Salvation Server - Online Dueling">
     <meta itemprop="description" content="">
-    <!--    <meta itemprop="image" content="http://www.example.com/image.jpg">-->
 
     <link rel="shortcut icon" href="/favicon.ico" />
 
     <meta name="viewport" content="width=device-width">
     <script src="js/vendor/jquery-1.11.0.min.js"></script>
     <script src="js/vendor/jquery.jfeed.pack.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/2.0.0/handlebars.min.js"></script>
     <link href="css/roboto.css" rel="stylesheet" type="text/css">
     <link href="https://fonts.googleapis.com/css?family=Lato:100,300,400,700,900" rel="stylesheet">
     <link href="css/normalize.css" rel="stylesheet" type="text/css">
     <link href="css/main.css" rel="stylesheet" type="text/css">
-    <link href="css/deck-edit.css" rel="stylesheet" type="text/css">
-
-    <script>
-        (adsbygoogle = window.adsbygoogle || []).push({
-            google_ad_client: "ca-pub-4030588625902392",
-            enable_page_level_ads: true
-        });
-    </script>
 </head>
+<main id="application">
+
+</main>
+
 <div style="z-index:40; position:relative;">
     <ul class="featurelist" style="font-size:2vh">
         <li class="logolink"><span class="psudolinksingle" onclick="singlesitenav('home')" id='psudologo'>
-            <h1 style="font-size:1.2em;" class="shine">
-                <span style="color:#e4a;text-shadow:none;">YGO</span>Salvation
-            </h1>
+                <h1 style="font-size:1.2em;" class="shine">
+                    <span style="color:#e4a;text-shadow:none;">YGO</span>Salvation
+                </h1>
         </li>
-        <li class="launcheronly"><span data-translation-deckedit class="psudolinksingle" onclick='singlesitenav("deckedit");deckEditor.doSearch();'>Deck Edit</span>
+        <li class="launcheronly"><span data-translation-deckedit class="psudolinksingle"
+                onclick='singlesitenav("deckedit2");deckEditor.doSearch();'>Deck Edit2</span>
         </li>
-        <li class="launcheronly"><span data-translation-host class="psudolinksingle" onclick="singlesitenav('host')">Host</span>
+        <li class="launcheronly"><span data-translation-deckedit class="psudolinksingle"
+                onclick='singlesitenav("deckedit");deckEditor.doSearch();'>Deck Edit</span>
+        </li>
+        <li class="launcheronly"><span data-translation-host class="psudolinksingle"
+                onclick="singlesitenav('host')">Host</span>
         </li>
 
-        <li class="launcheronly"><span data-translation-gamelist class="psudolinksingle" onclick="singlesitenav('gamelist');">Game List</span>
+        <li class="launcheronly"><span data-translation-gamelist class="psudolinksingle"
+                onclick="singlesitenav('gamelist');">Game List</span>
         </li>
 
 
-        <li><span data-translation-events class="psudolinksingle" onclick="singlesitenav('ranking');updateranking();">Ranking</span>
+        <li><span data-translation-events class="psudolinksingle"
+                onclick="singlesitenav('ranking');updateranking();">Ranking</span>
         </li>
-        <li><span data-translation-events class="psudolinksingle" onclick="singlesitenav('tournamentcp');">Tournament</span>
+        <li><span data-translation-events class="psudolinksingle"
+                onclick="singlesitenav('tournamentcp');">Tournament</span>
         </li>
         <li><span data-translation-faq class="psudolinksingle" onclick="singlesitenav('faq')">News</span>
         </li>
-        <li data-translation-forum class="psudolinksingle " style='text-decoration:none' onclick="singlesitenav('forum')">Forum
+        <li data-translation-forum class="psudolinksingle " style='text-decoration:none'
+            onclick="singlesitenav('forum')">Forum
         </li>
-        <li class="launcheronly chatlinker"><span data-translation-events class="psudolinksingle" id="onlinelisttogger" onclick="openusers()">Chat</span>
+        <li class="launcheronly chatlinker"><span data-translation-events class="psudolinksingle" id="onlinelisttogger"
+                onclick="openusers()">Chat</span>
         </li>
-        <li class="launcheronly"><span class="psudolinksingle" onclick="singlesitenav('inbox')" data-translation-inbox>Inbox</span>
+        <li class="launcheronly"><span class="psudolinksingle" onclick="singlesitenav('inbox')"
+                data-translation-inbox>Inbox</span>
         </li>
-        <li class="launcheronly"><span class="psudolinksingle" onclick="singlesitenav('settings')" data-translation-settings>Settings</span>
+        <li class="launcheronly"><span class="psudolinksingle" onclick="singlesitenav('settings')"
+                data-translation-settings>Settings</span>
         </li>
         <li><span class="psudolinksingle" onclick="singlesitenav('credits')" data-translation-credits>Credits</span>
         </li>
@@ -125,7 +131,9 @@
 </div>
 <footer class="superfooter">
     <div style='margin:0 auto '>
-        YGOPro Salvation Server is not affiliated with Konami, NAS, Shueisha, or Kazuki Takahashi. Salvation Server &copy; 2013-2017. Powered by Yu-Jo Friendship and fans of Yu-Gi-Oh! worldwide. Please support the offical release.</div>
+        YGOPro Salvation Server is not affiliated with Konami, NAS, Shueisha, or Kazuki Takahashi. Salvation Server
+        &copy; 2013-2017. Powered by Yu-Jo Friendship and fans of Yu-Gi-Oh! worldwide. Please support the offical
+        release.</div>
 </footer>
 
 
@@ -156,7 +164,7 @@
     _gaq.push(['_setAccount', 'UA-56840301-1']);
     _gaq.push(['_trackPageview']);
 
-    (function() {
+    (function () {
         var ga = document.createElement('script');
         ga.type = 'text/javascript';
         ga.async = true;
@@ -167,9 +175,9 @@
     })();
 </script>
 <script>
-    (function(i, s, o, g, r, a, m) {
+    (function (i, s, o, g, r, a, m) {
         i['GoogleAnalyticsObject'] = r;
-        i[r] = i[r] || function() {
+        i[r] = i[r] || function () {
             (i[r].q = i[r].q || []).push(arguments)
         }, i[r].l = 1 * new Date();
         a = s.createElement(o),
@@ -191,6 +199,5 @@
 <script src="js/http-ygopro.js"></script>
 <script src="js/deck-editor.js"></script>
 
-<!-- <script src=" js/vendor/html2canvas.js "></script> -->
 
 </html>

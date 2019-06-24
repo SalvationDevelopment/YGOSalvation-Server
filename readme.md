@@ -23,20 +23,21 @@ To run the system use `node server`. This will create a version of the system on
 - Install [Nodist](https://github.com/marcelklehr/nodist) for Windows Users, or [nvm](https://github.com/creationix/nvm) instead of Node JS. As nodejs versions increase we tend to stay with the latest releases. This helps simplify things.
 - For Windows users, open your PowerShell (not CMD) as Administrator (this is important), then `cd` to the root of the cloned repository to install the following. Non Windows users can skip this step.
   - `npm install --global windows-build-tools
-- [Install CMake](http://www.cmake.org/download/)
 - Install and setup MongoDB as a service
 - Create a collection in MongoDB called `salvation`
 
 - Run the following commands. It installs a package manager, and a testing harness, and then the dependencies. 
   - `nodist 8.11.4`
   - `npm install`
-
+- create a `.env` file in the top folder (beside this file). 
+  - Set `SSL=<path>` SSL isnt needed to work locally
+  - Set `SPARKPOST=<string>`
 To run the system use `node server`. This will create a version of the system on your desktop at http://localhost.
 
 ## Licensing
-**Do not use our software without our permission.** It is meant for use at http://ygosalvation.com if you want to use this software for something please leave open an issue explaining your intended use and we will write you a custom licence.
+**Do not use our software without our permission.** It is meant for use at http://ygosalvation.com if you want to use this software for something please leave open an issue explaining your intended use and we will write you a custom license.
 
-*This software was developed and designed to help the Yu-Gi-Oh! Online community which for years has been socially suffering. In line with that, to protect the community, this project is 'mostly open'. This software can not be used at scale without written permission. That means no more than 10 users. There is a very specific use case I have in mind where we will give out an a flexible licence if asked by companies and major community leaders. I've seen this software abused, and we do not want to see that happen again. Basically you are not allowed to use this without asking for its creator's permission first.*
+*This software was developed and designed to help the Yu-Gi-Oh! Online community which for years has been socially suffering. In line with that, to protect the community, this project is 'mostly open'. This software can not be used at scale without written permission. That means no more than 10 users. There is a very specific use case I have in mind where we will give out an a flexible license if asked by companies and major community leaders. I've seen this software abused, and we do not want to see that happen again. Basically you are not allowed to use this without asking for its creator's permission first.*
 
 ## Contributing
 Feel free to fork the project to change the code around and land patches back via pull request. For JavaScript please make sure it follows standard jslint rules on whitespace.

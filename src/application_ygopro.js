@@ -104,7 +104,7 @@ let lastInteraction = new Date();
  */
 function staticWebServer(request, response) {
     const server = new fileStream.Server('../http', { cache: 0 });
-    request.addListener('end', function() {
+    request.addListener('end', function () {
         server.serve(request, response);
     }).resume();
 }
@@ -167,7 +167,7 @@ function register(client, message) {
     }
 
     client.session = message.session;
-    verificationSystem.once(message.session, function(error, valid, person) {
+    verificationSystem.once(message.session, function (error, valid, person) {
         if (error) {
             throw error;
         }
@@ -270,7 +270,7 @@ function join(error, game, state, client, callback) {
 function attemptJoin(game, state, client, callback) {
     delete state.clients[client.slot];
     client.slot = undefined;
-    client.leave('spectators', function(error) {
+    client.leave('spectators', function (error) {
         join(error, game, state, client, callback);
     });
     client.join('chat');
@@ -295,14 +295,14 @@ function spectate(server, game, state, message, user) {
         action: 'leave',
         user: user
     }));
-    state.clients[slot].join('spectators', function(error) {
+    state.clients[slot].join('spectators', function (error) {
         if (error) {
             throw error;
         }
     });
     game.player.splice(slot, 1);
     state.clients.splice(slot, 1);
-    game.player.forEach(function(client, index) {
+    game.player.forEach(function (client, index) {
         state.clients.slot = index;
     });
     return;
@@ -466,10 +466,10 @@ function Duel() {
 }
 
 function startSiding(players, clients, duel) {
-    players.forEach(function(player, slot) {
+    players.forEach(function (player, slot) {
         updatePlayer(players, slot, false);
     });
-    clients.forEach(function(client) {
+    clients.forEach(function (client) {
         client.send({
             action: 'side',
             deck: client.deck
@@ -524,7 +524,7 @@ function PlayerAbstraction(server, state, room, client) {
     });
 
     return Object.assign({}, client.deck, {
-        write: function(data) {
+        write: function (data) {
             server.room(room).write({
                 action: 'ygopro',
                 message: data
@@ -593,12 +593,12 @@ function start(server, duel, game, state, message) {
     }
 
     const players = [
-            new PlayerAbstraction(server, state, 'player1', state.clients[0]),
-            new PlayerAbstraction(server, state, 'player2', state.clients[1])
-        ],
+        new PlayerAbstraction(server, state, 'player1', state.clients[0]),
+        new PlayerAbstraction(server, state, 'player2', state.clients[1])
+    ],
         spectators = [new PlayerAbstraction(server, state, 'spectators', {})];
 
-    duel.load(game, function(error, type) {
+    duel.load(game, function (error, type) {
         chat(server, state, {
             username: '[SYSTEM]'
         }, error, undefined);
@@ -657,13 +657,17 @@ function processMessage(server, duel, game, state, client, message) {
             broadcast(server, game);
             break;
         case 'join':
-            attemptJoin(game, state, client, function() {
+            attemptJoin(game, state, client, function () {
                 broadcast(server, game);
+                client.write({
+                    action: 'slot',
+                    slot : client.slot
+                });
             });
             break;
         case 'kick':
             if (client.slot === undefined) {
-                attemptJoin(game, state, client, function() {
+                attemptJoin(game, state, client, function () {
                     broadcast(server, game);
                 });
                 return;
@@ -785,7 +789,7 @@ function disconnectionHandler(server, duel, game, state, deadSpark) {
         slot: deadSpark.slot
     };
     if (deadSpark.session) {
-        verificationSystem.removeListener('client.session', function() {});
+        verificationSystem.removeListener('client.session', function () { });
     }
     if (!countClients(server)) {
         quit(server, game, state);
@@ -886,9 +890,9 @@ function LifeCycle(server, game, state) {
 function boot(httpserver, server, game, state) {
     state.lifeCycle = new LifeCycle(server, game, state);
 
-    httpserver.listen(game.port, function() {
+    httpserver.listen(game.port, function () {
 
-        process.on('message', function(message) {
+        process.on('message', function (message) {
             lastInteraction = new Date();
             try {
                 adminMessageHandler(server, game, message);
@@ -1003,14 +1007,14 @@ function main(callback) {
 
     server.plugin('rooms', Rooms);
     server.save(__dirname + '/../http/js/vendor/server.js');
-    server.on('connection', function(client) {
-        client.on('data', function(message) {
+    server.on('connection', function (client) {
+        client.on('data', function (message) {
             messageHandler(server, duel, game, state, client, message);
         });
         broadcast(server, game);
 
     });
-    server.on('disconnection', function(deadSpark) {
+    server.on('disconnection', function (deadSpark) {
         disconnectionHandler(server, duel, game, state, deadSpark);
     });
 

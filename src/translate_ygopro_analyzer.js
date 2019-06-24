@@ -22,9 +22,9 @@ function user_interface_only(message, pbuf, game) {
     game.refreshHand(1);
 }
 
-function unused() {}
+function unused() { }
 
-function incomplete() {}
+function incomplete() { }
 
 
 function getFieldCards(gameBoard, controller, location, pbuf) {
@@ -1453,7 +1453,8 @@ function analyze(coreMessage, length, game) {
         var message = {
             command: messageFunction
         };
-        output = translator[messageFunction](message, pbuf, game) || 0;
+        console.log(messageFunction);
+        output = (messageFunction) ? translator[messageFunction](message, pbuf, game) : 0;
         if (output) {
             return output;
         }
