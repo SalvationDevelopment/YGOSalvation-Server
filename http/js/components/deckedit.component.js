@@ -243,6 +243,28 @@ class DeckEditScreen extends React.Component {
     clearSearch() {
         this.searchFilter.clearFilter();
         this.state.search = this.searchFilter.renderSearch();
+        this.settings = {
+            cardtype: undefined,
+            cardname: undefined,
+            description: undefined,
+            banlist: undefined,
+            type: undefined,
+            type1: undefined,
+            type2: undefined,
+            attribute: undefined,
+            race: undefined,
+            release: undefined,
+            setcode: undefined,
+            atk: undefined,
+            atkop: 0,
+            def: undefined,
+            defop: 0,
+            level: undefined,
+            levelop: 0,
+            scale: undefined,
+            scaleop: 0,
+            limit: undefined
+        };
         this.store.dispatch({ action: 'RENDER' });
     }
 
@@ -479,6 +501,8 @@ class DeckEditScreen extends React.Component {
                 this.settings[id] = (event.target.value) ? event.target.value : undefined;
                 this.applyBanlist();
                 break;
+            case 'level':
+                this.settings[id] = (value === 0) ? undefined : value;
             default:
                 this.settings[id] = value;
         }

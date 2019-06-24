@@ -246,53 +246,59 @@ class SearchFilter {
     //OP =1 Is EQUALS lv.
     // Else is HIGHER THAN OR EQUAL
     fLevel(obj, lv, op) {
-
         var val = obj.level.toString(16);
-        lv = parseInt(lv.toString(16), 10);
-        if (op === 0) {
-            if (parseInt(val.substr(val.length - 2), 10) <= lv) {
-                return true;
-            } else {
-                return false;
+        if (val.length > 2) {
+            val = parseInt(val.substr(val.length - 2), 10);
+            lv = parseInt(lv.toString(16), 10);
+            switch (op) {
+                case -2:
+                    return val < lv;
+                case -1:
+                    return val <= lv;
+                case 0:
+                    return val === lv;
+                case -1:
+                    return val >= lv;
+                case -2:
+                    return val > lv;
+                default:
+                    return val === lv;
             }
-        } else if (op === 1) {
-            if (parseInt(val.substr(val.length - 2), 10) === lv) {
-                return true;
-            } else {
-                return false;
-            }
-        } else {
-            if (parseInt(val.substr(val.length - 2), 10) >= lv) {
-                return true;
-            } else {
-                return false;
-            }
+        }
+        val = Number(val);
+        switch (op) {
+            case -2:
+                return val < lv;
+            case -1:
+                return val <= lv;
+            case 0:
+                return val === lv;
+            case -1:
+                return val >= lv;
+            case -2:
+                return val > lv;
+            default:
+                return val === lv;
         }
     }
 
     // Same as Lv, but with SC as the Scale (Assumes Right=Left)
     fScale(obj, sc, op) {
 
-        var val = obj.level;
-        sc = parseInt(sc.toString(16), 0);
-        if (op === 0) {
-            if (parseInt((val >> 24).toString(16), 0) <= sc) {
-                return true;
-            } else {
-                return false;
-            }
-        } else if (op === 1) {
-            if (parseInt((val >> 24).toString(16), 0) === sc) {
-                return true;
-            } else {
-                return false;
-            }
-        } else {
-            if (parseInt((val >> 24).toString(16), 0) >= sc) {
-                return true;
-            } else {
-                return false;
-            }
+        var val = obj.level >> 24;
+        switch (op) {
+            case -2:
+                return val < sc;
+            case -1:
+                return val <= sc;
+            case 0:
+                return val === sc;
+            case -1:
+                return val >= sc;
+            case -2:
+                return val > sc;
+            default:
+                return val === sc;
         }
     }
 
@@ -313,7 +319,9 @@ class SearchFilter {
     //AD =1 is ATK, Else it's DEF being evaluated.
     // Num is the value to compare against.
     fAtkDef(obj, num, ad, op) {
-
+        if (!ad && cardIs('link', obj)) {
+            return false;
+        }
         var val = (ad === 1) ? obj.atk : obj.def;
         switch (op) {
             case -2:
