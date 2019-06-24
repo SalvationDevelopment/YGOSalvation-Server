@@ -79,6 +79,10 @@ class ApplicationComponent extends React.Component {
                 action: 'host',
                 info: action.settings
             });
+            this.alert('Requesting new game room,...');
+            setTimeout(() => {
+                this.closeModal();
+            }, 5000);
         });
 
         store.register('DUEL', (action) => {
@@ -93,6 +97,10 @@ class ApplicationComponent extends React.Component {
                 username: localStorage.nickname
             };
             this.primus.write(message);
+            app.alert('Saved Deck');
+            setTimeout(() => {
+                this.closeModal();
+            }, 1000);
         });
 
 
@@ -273,8 +281,6 @@ class ApplicationComponent extends React.Component {
                 this.state.modalMessage,
                 React.createElement('button', { id: 'modal-ok', onClick: this.closeModal.bind(this) }, 'OK')
             ])
-
-
         ]);
     }
 

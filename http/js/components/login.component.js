@@ -62,7 +62,9 @@ class LoginScreen extends React.Component {
 
     recoverAccount(login) {
         this.store.dispatch({ action: 'RECOVER_ACCOUNT' });
+        this.openRecover();
         this.nav();
+        app.alert('Please check your email for the recovery code, and then enter it here.');
     }
 
     registerAccount() {
@@ -119,7 +121,7 @@ class LoginScreen extends React.Component {
             case 'remember':
                 return element('div', { id: 'loginmodal' }, [
                     element('br'),
-                    element('input', { id: 'remember', type: 'text', className: 'loginsystem reg', tabIndex: '1', placeholder: 'Email Address' }),
+                    element('input', { id: 'remember', key: 'remember', type: 'text', className: 'loginsystem reg', tabIndex: '1', placeholder: 'Email Address' }),
                     element('br'),
 
                     element('button', { id: 'dolog', className: 'loginsystem', onClick: this.recoverAccount.bind(this) }, 'Remember'),
@@ -132,7 +134,7 @@ class LoginScreen extends React.Component {
             case 'recover':
                 return element('div', { id: 'loginmodal' }, [
                     element('br'),
-                    element('input', { id: 'recover', type: 'text', className: 'loginsystem reg', tabIndex: '1', placeholder: 'Recovery Code' }),
+                    element('input', { key: 'recovery', id: 'recover', type: 'text', className: 'loginsystem reg', tabIndex: '1', placeholder: 'Recovery Code' }),
                     element('br'),
 
                     element('button', { id: 'dolog', className: 'loginsystem', onClick: this.recoverAccount.bind(this) }, 'Recover'),
