@@ -27,6 +27,7 @@ class SuperHeaderComponent extends React.Component {
                 // React.createElement('li', { onClick: this.nav.bind(this, 'chat'), key: 'chat', className: 'psudolinksingle' }, 'Chat'),
                 // React.createElement('li', { onClick: this.nav.bind(this, 'inbox'), key: 'inbox', className: 'psudolinksingle' }, 'Inbox'),
                 React.createElement('li', { onClick: this.nav.bind(this, 'settings'), key: 'settings', className: 'psudolinksingle' }, 'Settings'),
+                React.createElement('li', { onClick: this.nav.bind(this, 'faqs'), key: 'faqs', className: 'psudolinksingle' }, 'FAQs'),
                 React.createElement('li', { onClick: this.nav.bind(this, 'credits'), key: 'credits', className: 'psudolinksingle' }, 'Credits')
             ];
         }
@@ -40,6 +41,7 @@ class SuperHeaderComponent extends React.Component {
             //React.createElement('li', { onClick: this.nav.bind(this, 'chat'), key: 'chat', className: 'psudolinksingle' }, 'Chat'),
             //React.createElement('li', { onClick: this.nav.bind(this, 'inbox'), key: 'inbox', className: 'psudolinksingle' }, 'Inbox'),
             //React.createElement('li', { onClick: this.nav.bind(this, 'settings'), key: 'settings', className: 'psudolinksingle' }, 'Settings'),
+            React.createElement('li', { onClick: this.nav.bind(this, 'faqs'), key: 'faqs', className: 'psudolinksingle' }, 'FAQs'),
             React.createElement('li', { onClick: this.nav.bind(this, 'credits'), key: 'credits', className: 'psudolinksingle' }, 'Credits')
         ];
     }
