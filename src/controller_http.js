@@ -55,9 +55,10 @@ function systemLoad(req, res, next) {
 }
 
 function gitRoute(req, res, next) {
-    child_process.spawn('git', ['pull'], {}, function() {
+    child_process.spawn('git', ['pull'], {}, function () {
         console.log('Finished running git');
     });
+    child_process.fork('./src/updater/banlist.js');
 }
 
 
@@ -72,7 +73,7 @@ function useSSL(primusServer) {
     // set up a route to redirect http to spdy
     openserver.use(helmet());
     //openserver.use(ddos.express);
-    openserver.get('*', function(req, res) {
+    openserver.get('*', function (req, res) {
         if (req.get('host') === 'ygopro.us') {
             res.redirect(301, 'https://ygosalvation.com' + req.url);
         } else {
@@ -84,7 +85,7 @@ function useSSL(primusServer) {
 }
 
 
-module.exports = function() {
+module.exports = function () {
 
     app.use(compression());
     app.use(helmet());
@@ -96,11 +97,11 @@ module.exports = function() {
 
     app.use(express.static(path.join(__dirname, '../http')));
 
-    app.post('/git', function(req, res, next) {
+    app.post('/git', function (req, res, next) {
         gitRoute(req, res, next);
     });
 
-    app.get('/git', function(req, res, next) {
+    app.get('/git', function (req, res, next) {
         gitRoute(req, res, next);
     });
     userController.setupController(app);

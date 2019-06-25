@@ -398,7 +398,7 @@ class DeckEditScreen extends React.Component {
             }).bind(this);
             r.readAsText(f);
         } else {
-            alertmodal('Failed to load file');
+            app.alert('Failed to load file');
         }
     }
 
