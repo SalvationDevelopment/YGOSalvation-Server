@@ -70,6 +70,7 @@ function askUser(gameBoard, slot, message, ygopro, command) {
         max: 1,
         min: 1
     }, function (answer) {
+        console.log('writing answer', answer.type, answer.i, command);
         ygopro.write(buttonName[answer.type](answer.i, command));
     });
 }

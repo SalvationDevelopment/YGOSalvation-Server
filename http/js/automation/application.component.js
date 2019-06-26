@@ -69,7 +69,8 @@ class ApplicationComponent extends React.Component {
         this.store.register('CONTROL_CLICK', (message, state) => {
             this.primus.write({
                 action: 'question',
-                answer: message
+                answer: message.card,
+                uuid: this.state.question
             });
             return state;
         });
@@ -95,6 +96,7 @@ class ApplicationComponent extends React.Component {
                 break;
             case 'question':
                 this.duel.idle(message.options);
+                this.state.question = message.uuid;
                 break;
             default:
                 throw (message.action);

@@ -1,3 +1,4 @@
+/*global React, ReactDOM */
 class PhaseIndicator extends React.Component {
     constructor(state) {
         super();
@@ -23,12 +24,12 @@ class PhaseIndicator extends React.Component {
     render() {
         console.log('phase', this.state.phase);
         const buttons = [
-            this.button(0, 'drawphi', 'Draw'),
-            this.button(1, 'standbyphi', 'Standby'),
-            this.button(2, 'main1phi', 'Main 1'),
-            this.button(3, 'battlephi', 'Battle'),
-            this.button(4, 'main2phi', 'Main 2'),
-            this.button(5, 'endphi', 'End'),
+            this.button(0, 'drawphi', 'DP'),
+            this.button(1, 'standbyphi', 'SP'),
+            this.button(2, 'main1phi', 'M1'),
+            this.button(3, 'battlephi', 'BP'),
+            this.button(4, 'main2phi', 'M2'),
+            this.button(5, 'endphi', 'EP'),
             this.button(6, 'nextturn', 'Opponent')
         ];
 

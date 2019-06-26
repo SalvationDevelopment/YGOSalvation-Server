@@ -265,7 +265,7 @@ function Responser(game, player) {
     function write(data) {
         console.log(data);
         const resb = Buffer.alloc(64);
-        data.copy(resb);
+        resb.writeInt32LE(data);
         player.lock = false;
         console.log('setting response', resb);
         ocgapi.set_responseb(game.pduel, resb);

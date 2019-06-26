@@ -3,7 +3,8 @@
 class GameplayControlButton extends React.Component {
 
     click() {
-        this.store.dispatch({ action: 'CONTROL_CLICK', card: this.state, uuid: this.uuid });
+        debugger;
+        this.store.dispatch({ action: 'CONTROL_CLICK', card: this.state.card, uuid: this.uuid });
     }
 
     render() {
@@ -11,7 +12,7 @@ class GameplayControlButton extends React.Component {
             key: this.state.info.text,
             onClick: this.click.bind(this),
             style: {
-                display: 'block',
+                display: 'flex',
                 width: 'auto'
             }
         }, this.state.info.text);
@@ -41,12 +42,12 @@ class ControlButtons {
 
     display(list) {
         const details = {
-            summonable_cards: { text: 'Summon', id: 1 },
+            activatable_cards: { text: 'Activate', id: 6 },
+            summonable_cards: { text: 'Normal Summon', id: 1 },
             spsummonable_cards: { text: 'Special Summon', id: 2 },
             repositionable_cards: { text: 'Flip', id: 3 },
-            msetable_cards: { text: 'Set', id: 4 },
-            ssetable_cards: { text: 'Set', id: 5 },
-            activatable_cards: { text: 'Activate', id: 6 },
+            msetable_cards: { text: 'Set MZ', id: 4 },
+            ssetable_cards: { text: 'Set ST', id: 5 },
             select_options: { text: 'Select', id: 7 },
             attackable_cards: { text: 'Attack', id: 8 }
         }, elements = list.map((card) => {
@@ -62,7 +63,10 @@ class ControlButtons {
             style: {
                 left: `${(this.info.coords.x - 15)}px`,
                 top: `${(this.info.coords.y - 15)}px`,
-                position: 'fixed'
+                position: 'fixed',
+                display: 'flex',
+                'flex-direction': 'column',
+                'text-align': 'center'
             }
         }, elements);
     }
@@ -73,11 +77,11 @@ class ControlButtons {
 
         Object.keys(this.state).forEach((type) => {
             const options = (Array.isArray(this.state[type])) ? this.state[type] : [],
-                selectable = options.some((option, i) => {
+                selectable = options.find((option, i) => {
                     option.i = i;
                     option.type = type;
                     const valid = Object.keys(option).every((prop) => {
-                        if (prop === 'i' || prop === 'type') {
+                        if (prop === 'i' || prop === 'type' || prop === 'description') {
                             return true;
                         }
                         return option[prop] === query[prop];
@@ -85,7 +89,7 @@ class ControlButtons {
                     return valid;
                 });
             if (selectable) {
-                list.push({ type, card: query });
+                list.push({ type, card: query, i: selectable.i });
             }
         });
         return this.display(list, this.state.uuid);

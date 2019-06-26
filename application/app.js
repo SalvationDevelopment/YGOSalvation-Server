@@ -5,18 +5,10 @@ const { app, BrowserWindow, Tray } = require('electron'),
 let window = null;
 let tray = null;
 
-app.dock.hide();
 
 // Wait until the app is ready
 app.once('ready', () => {
 
-  // Create a new tray
-  tray = new Tray(path.join('assets', 'electron-icon.png'));
-  tray.on('right-click', toggleWindow);
-  tray.on('double-click', toggleWindow);
-  tray.on('click', function (event) {
-    toggleWindow();
-  });
 
   // Create a new window
   window = new BrowserWindow({
@@ -30,7 +22,7 @@ app.once('ready', () => {
     }
   });
 
-  const url = 'https://electronjs.org';
+  const url = 'https://ygosalvation.com';
   window.loadURL(url);
 
   window.once('ready-to-show', () => {
@@ -44,6 +36,32 @@ app.once('ready', () => {
   window.on('blur', () => {
     window.hide();
   });
+
+
+  // Create a new tray
+  tray = new Tray(path.join('assets', 'electron-icon.png'));
+  // tray.on('right-click', toggleWindow);
+  // tray.on('double-click', toggleWindow);
+  // tray.on('click', function (event) {
+  //   toggleWindow();
+  // });
+
+  function showWindow() {
+    const position = getWindowPosition();
+    window.setPosition(position.x, position.y, false);
+    window.show();
+    window.focus();
+  }
+
+
+  // toggle window
+  function toggleWindow() {
+    // if (window.isVisible()) {
+    //   window.hide();
+    // } else {
+    //   showWindow();
+    // }
+  }
 });
 
 const getWindowPosition = () => {
@@ -59,18 +77,5 @@ const getWindowPosition = () => {
   return { x: x, y: y };
 };
 
-// toggle window
-const toggleWindow = () => {
-  if (window.isVisible()) {
-    window.hide();
-  } else {
-    showWindow();
-  }
-};
 
-const showWindow = () => {
-  const position = getWindowPosition();
-  window.setPosition(position.x, position.y, false);
-  window.show();
-  window.focus();
-};
+
