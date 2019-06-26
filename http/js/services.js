@@ -152,6 +152,7 @@ $.getJSON('/manifest/manifest_0-en-OCGTCG.json', function (data) {
         const banlist = [];
         let primary;
         Object.keys(bdata).forEach((list) => {
+            bdata[list].name = list;
             banlist.push(bdata[list]);
             if (bdata[list].primary) {
                 primary = bdata[list].name;

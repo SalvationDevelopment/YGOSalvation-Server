@@ -53,6 +53,9 @@ const ffi = require('ffi'),
         rscale: 'uint',
         link_marker: 'uint'
     }),
+    size_t = new StructType({
+        size: 'uint'
+    }),
     queue = require('function-queue'),
     enums = require('./translate_ygopro_enums.js'),
     analyze = require('./translate_ygopro_analyzer.js'),
@@ -61,8 +64,9 @@ const ffi = require('ffi'),
     DataStream = require('./model_data_stream.js'),
     ocgapi = require('./engine_ocgcore_interface'),
     database = require('../http/manifest/manifest_0-en-OCGTCG.json'),
-    scriptsFolder = '../../ygopro-scripts',
-    gc_protected = [];
+    scriptsFolder = '../../ygopro-scripts';
+
+global.gc_protected = [];
 
 /**
  * Read a card from file.
@@ -71,18 +75,30 @@ const ffi = require('ffi'),
  * @returns {Pointer} script
  */
 function scriptReader(scriptname, sizePointer) {
-    const file = scriptsFolder + '/' + scriptname.substr(20);
+    let file = scriptsFolder + '/' + scriptname.substr(9, 13);
+    const size = ref.reinterpret(sizePointer.deref()['ref.buffer'], 32);
+
+    if (scriptname === './expansions/script/constant.lua') {
+        file = scriptsFolder + '/constant.lua';
+    }
+    if (scriptname === './expansions/script/utility.lua') {
+        file = scriptsFolder + '/utility.lua';
+    }
     if (fs.existsSync(file)) {
         try {
             const script = fs.readFileSync(file);
-            sizePointer = script.length;
-            gc_protected.push(script);
+            console.log(file);
+            size.writeUInt32LE(script.length);
+            global.gc_protected.push(script);
+            return ref.readCString(script, 0);
+
             return ref.ref(script);
         } catch (e) {
             console.log(e);
             return ref.alloc('pointer');
         }
     } else {
+        console.log(scriptname, 'at', file, 'does not exist')
         return ref.alloc('pointer');
     }
 }
@@ -569,9 +585,15 @@ function duel(settings, errorHandler, players, observers) {
     }
 
     const card_reader_function = ffi.Callback('uint32', ['uint32', ref.refType(cardData)], card_reader);
-    const responsei_function = ffi.Callback('int32', ['pointer', 'uint32'], messageHandler);
-    const script_reader_function = ffi.Callback('pointer', ['string', 'uint32*'], scriptReader);
+    const responsei_function = ffi.Callback('int32', ['pointer', ref.refType(size_t)], messageHandler);
+    const script_reader_function = ffi.Callback('string', ['string', ref.refType(size_t)], scriptReader);
     const message_handler_function = ffi.Callback('uint32', ['pointer', 'uint32'], console.log);
+    global.gc_protected.push({
+        card_reader_function,
+        responsei_function,
+        script_reader_function,
+        message_handler_function
+    });
 
     pduel = ocgapi.create_duel(seed());
     ocgapi.set_script_reader(script_reader_function); // good
