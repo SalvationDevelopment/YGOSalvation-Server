@@ -1,3 +1,5 @@
+/* eslint-disable new-cap */
+/* eslint-disable one-var */
 /* eslint-disable no-sync */
 /*eslint no-plusplus: 0*/
 
@@ -87,18 +89,15 @@ function scriptReader(scriptname, sizePointer) {
     if (fs.existsSync(file)) {
         try {
             const script = fs.readFileSync(file);
-            console.log(file);
             size.writeUInt32LE(script.length);
             global.gc_protected.push(script);
             return ref.readCString(script, 0);
-
-            return ref.ref(script);
         } catch (e) {
             console.log(e);
             return ref.alloc('pointer');
         }
     } else {
-        console.log(scriptname, 'at', file, 'does not exist')
+        console.log(scriptname, 'at', file, 'does not exist');
         return ref.alloc('pointer');
     }
 }
@@ -116,6 +115,7 @@ function hasType(card, type) {
 /**
  * Callback function used by the core to get database information on a card
  * @param {Number} code unique card, usually 8 digit, passcode.
+ * @param {CardStructurePointer} pData pointer provided ocgcore
  * @returns {CardStructurePointer} pData pointer to ocgcore copy of the card.
  */
 function card_reader(code, pData) {
@@ -370,7 +370,7 @@ function makeGame(pduel, settings) {
 
     /**
      * Tell both players that ygopro-core is waiting on a message.
-     * @param {Player} player 
+     * @param {Player} player player waiting on.
      * @returns {void}
      */
     function waitforResponse(player) {
@@ -572,7 +572,7 @@ function makeGame(pduel, settings) {
 function duel(settings, errorHandler, players, observers) {
     var pduel,
         game = {};
-
+    console.log(settings);
     if (settings.shuffleDeck) {
         deepShuffle(players[0].main);
         deepShuffle(players[1].main);
@@ -584,10 +584,11 @@ function duel(settings, errorHandler, players, observers) {
         ///errorHandler(messageBuffer.toString(), type);
     }
 
-    const card_reader_function = ffi.Callback('uint32', ['uint32', ref.refType(cardData)], card_reader);
-    const responsei_function = ffi.Callback('int32', ['pointer', ref.refType(size_t)], messageHandler);
-    const script_reader_function = ffi.Callback('string', ['string', ref.refType(size_t)], scriptReader);
-    const message_handler_function = ffi.Callback('uint32', ['pointer', 'uint32'], console.log);
+    const card_reader_function = ffi.Callback('uint32', ['uint32', ref.refType(cardData)], card_reader),
+        responsei_function = ffi.Callback('int32', ['pointer', 'uint32'], messageHandler),
+        script_reader_function = ffi.Callback('string', ['string', ref.refType(size_t)], scriptReader),
+        message_handler_function = ffi.Callback('uint32', ['pointer', 'uint32'], console.log);
+
     global.gc_protected.push({
         card_reader_function,
         responsei_function,
