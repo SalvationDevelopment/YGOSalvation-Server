@@ -91,6 +91,7 @@ class ApplicationComponent extends React.Component {
     }
 
     duelAction(message) {
+        this.duel.disableSelection();
         switch (message.duelAction) {
             case 'start':
                 this.state.mode = 'duel';
@@ -120,6 +121,10 @@ class ApplicationComponent extends React.Component {
                 break;
             case 'MSG_SELECT_PLACE':
                 this.duel.select(message.options);
+                break;
+            case 'MSG_SELECT_CARD':
+            debugger;
+                this.duel.reveal(message.options.select_options);
                 break;
             default:
                 throw (message.action);

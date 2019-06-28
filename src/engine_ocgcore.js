@@ -519,13 +519,11 @@ function makeGame(pduel, settings) {
         sendToObservers();
     }
 
-    function refreshSingle(player, location, sequence, flag) {
-        flag = flag || 0;
-        const qbuf = Buffer.alloc(0x2000),
-            header = Buffer.alloc(3),
-            proto = enums.STOC.enums.STOC_GAME_MSG;
+    function refreshSingle(player, location, sequence, flag = 0xf81fff) {
+        return;
+        const qbuf = Buffer.alloc(0x2000);
         qbuf.type = ref.types.byte;
-        ocgapi.query_field_card(pduel, player, location, sequence, qbuf, flag);
+        ocgapi.query_card(pduel, player, location, sequence, flag, qbuf);
 
         var message = msg_update_card({
             player

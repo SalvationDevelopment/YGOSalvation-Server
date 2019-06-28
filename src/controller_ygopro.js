@@ -245,7 +245,6 @@ function boardController(gameBoard, slot, message, ygopro, player) {
             askUser(gameBoard, slot, message, ygopro, 'MSG_SELECT_IDLECMD');
             break;
         case ('MSG_MOVE'): // Good
-            console.log(message);
             gameBoard.setState({
                 player: message.pc,
                 clocation: message.pl,
@@ -344,17 +343,14 @@ function boardController(gameBoard, slot, message, ygopro, player) {
             askUser(gameBoard, slot, message, ygopro, 'MSG_SELECT_OPTION');
             break;
         case ('MSG_SELECT_CARD'):
-            // [number of cards selected, index of that card, etc...]
-            gameBoard.question(slot, message.command, message, { min: message.select_min, max: message.select_max }, function (answer) {
-                var messageBuffer = [answer.length].concat(answer.map(function (card) {
-                    return resolveCardIndex(message.select_options, card);
-                }));
-                ygopro.write(gameResponse('CTOS_RESPONSE', new Buffer(messageBuffer)));
-            });
-
+            askUser(gameBoard, slot, message, ygopro, 'MSG_SELECT_CARD');
             break;
         case ('MSG_SELECT_CHAIN'):
-            askUser(gameBoard, slot, message, ygopro, 'MSG_SELECT_CHAIN');
+            if (message.count) {
+                askUser(gameBoard, slot, message, ygopro, 'MSG_SELECT_CHAIN');
+            } else {
+                ygopro.write(-1);
+            }
             break;
         case ('MSG_SELECT_PLACE'):
             askUser(gameBoard, slot, message, ygopro, 'MSG_SELECT_PLACE');

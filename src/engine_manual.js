@@ -352,7 +352,7 @@ function init(callback) {
         if (uid) {
             return filterUID(stack, uid)[0];
         }
-        return filterOverlyIndex(filterIndex(filterlocation(filterPlayer(stack, player), clocation), index), overlayindex)[0];
+        return filterOverlyIndex(filterIndex(filterlocation(filterPlayer(stack, player), clocation), index), overlayindex)[0] || {};
     }
 
     function findUIDCollection(uid) {
@@ -588,9 +588,14 @@ function init(callback) {
             pointer = uidLookup(target.uid),
             zone;
 
+        if (!stack[pointer]) {
+            return;
+        }
+
         if (movelocation === 'GRAVE' || movelocation === 'REMOVED') {
             moveplayer = stack[pointer].originalcontroller;
         }
+
 
         stack[pointer].player = moveplayer;
         stack[pointer].location = movelocation;
