@@ -93,7 +93,6 @@ function scriptReader(scriptname, sizePointer) {
             global.gc_protected.push(script);
             return ref.readCString(script, 0);
         } catch (e) {
-            console.log(e);
             return ref.alloc('pointer');
         }
     } else {
@@ -263,11 +262,9 @@ function mainProcess(game) {
 function Responser(game, player) {
 
     function write(data) {
-        console.log(data);
         const resb = Buffer.alloc(64);
         resb.writeInt32LE(data);
         player.lock = false;
-        console.log('setting response', resb);
         ocgapi.set_responseb(game.pduel, resb);
         mainProcess(game);
     }
@@ -572,7 +569,6 @@ function makeGame(pduel, settings) {
 function duel(settings, errorHandler, players, observers) {
     var pduel,
         game = {};
-    console.log(settings);
     if (settings.shuffleDeck) {
         deepShuffle(players[0].main);
         deepShuffle(players[1].main);
@@ -606,25 +602,19 @@ function duel(settings, errorHandler, players, observers) {
 
     ocgapi.set_player_info(pduel, 0, settings.start_lp, settings.start_hand_count, settings.draw_count);
     ocgapi.set_player_info(pduel, 1, settings.start_lp, settings.start_hand_count, settings.draw_count);
-
-    console.log(1);
     players[0].main.forEach(function (cardID, sequence) {
         ocgapi.new_card(pduel, cardID, 0, 0, LOCATION_DECK, 0, POS_FACEDOWN_DEFENSE);
     });
-    console.log(2);
     players[0].extra.forEach(function (cardID, sequence) {
         ocgapi.new_card(pduel, cardID, 0, 0, LOCATION_EXTRA, 0, POS_FACEDOWN_DEFENSE);
     });
-    console.log(3);
     players[1].main.forEach(function (cardID, sequence) {
         ocgapi.new_card(pduel, cardID, 1, 1, LOCATION_DECK, 0, POS_FACEDOWN_DEFENSE);
     });
-    console.log(4);
     players[1].extra.forEach(function (cardID, sequence) {
         ocgapi.new_card(pduel, cardID, 1, 1, LOCATION_EXTRA, 0, POS_FACEDOWN_DEFENSE);
     });
     //send start msg
-    console.log('all cards loaded');
     game = makeGame(pduel, settings);
     const playerConnections = players.map(function (playerConnection, slot) {
         return playerInstance(playerConnection, slot, game, settings);

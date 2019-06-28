@@ -45,12 +45,9 @@ class FieldSelector {
     }
 
     select(query) {
-        Object.keys(this.state.zones).forEach((uid) => {
-            const zone = this.state.zones[uid].state,
-                active = Object.keys(query).every((prop) => {
-                    return zone[prop] === query[prop];
-                });
-            zone.active = active;
+        query.zones.forEach((zone) => {
+            const uuid = `selector-player_${zone.player}-${zone.location}-${zone.index}`;
+            this.state.zones[uuid].state.active = true;
         });
     }
 

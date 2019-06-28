@@ -55,7 +55,8 @@ const enums = require('./translate_ygopro_enums'),
                 default:
                     return Number(Boolean(i));
             }
-        }
+        },
+        zone: (i) => Buffer.from(i).readUIntLE(0, 3)
     };
 /**
  * Standardized way of sending a preformatted message to the user from YGOSharp. 
@@ -70,7 +71,6 @@ function askUser(gameBoard, slot, message, ygopro, command) {
         max: 1,
         min: 1
     }, function (answer) {
-        console.log('writing answer', answer.type, answer.i, command);
         ygopro.write(buttonName[answer.type](answer.i, command));
     });
 }
@@ -102,7 +102,6 @@ function boardController(gameBoard, slot, message, ygopro, player) {
         p1: {},
         spectators: {}
     };
-    //console.log(slot, message.command);
     player.lastData = message;
     switch (message.command) {
         case ('STOC_UNKNOWN'): // Good
@@ -127,6 +126,7 @@ function boardController(gameBoard, slot, message, ygopro, player) {
                 });
             break;
         case ('MSG_HINT'):
+            console.log(message);
             break;
         case 'HINT_EVENT':
             break;
@@ -245,6 +245,7 @@ function boardController(gameBoard, slot, message, ygopro, player) {
             askUser(gameBoard, slot, message, ygopro, 'MSG_SELECT_IDLECMD');
             break;
         case ('MSG_MOVE'): // Good
+            console.log(message);
             gameBoard.setState({
                 player: message.pc,
                 clocation: message.pl,

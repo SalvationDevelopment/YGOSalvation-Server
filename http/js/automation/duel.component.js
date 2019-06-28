@@ -96,4 +96,5 @@ class DuelScreen extends React.Component {
     select(query) {
         this.field.select(query);
     }
+
 }

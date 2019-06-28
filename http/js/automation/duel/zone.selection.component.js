@@ -3,7 +3,8 @@ class ZoneSelector extends React.Component {
         const player = (state.orientSlot) ? (state.player ? 0 : 1) : state.player,
             className = ['cardselectionzone', 'p' + player, state.location, 'i' + state.index],
             style = {
-                pointerEvents: (state.active) ? 'auto' : 'none'
+                pointerEvents: (state.active) ? 'auto' : 'none',
+                border: (state.active) ? '4px solid red' : 'none'
             };
 
 
@@ -40,8 +41,27 @@ class ZoneSelector extends React.Component {
     }
 
     click() {
-        console.log(this);
-        this.store.dispatch({ action: 'ZONE_CLICK', zone: this.state });
+        const enummap = {
+            DECK: 1,
+            EXTRA: 64,
+            GRAVE: 16,
+            HAND: 2,
+            MONSTERZONE: 4,
+            OVERLAY: 128,
+            REMOVED: 32,
+            SPELLZONE: 8
+        };
+        this.store.dispatch({
+            action: 'ZONE_CLICK', zone: {
+                type: 'zone',
+                i: [
+                    this.state.player,
+                    enummap[this.state.location],
+                    this.state.index
+                ]
+
+            }
+        });
     }
     render() {
         return React.createElement('div', this.getZoneProperties(this.state, this.hover));

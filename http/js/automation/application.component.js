@@ -75,6 +75,15 @@ class ApplicationComponent extends React.Component {
             return state;
         });
 
+        this.store.register('ZONE_CLICK', (message, state) => {
+            this.primus.write({
+                action: 'question',
+                answer: message.zone,
+                uuid: this.state.question
+            });
+            return state;
+        });
+
         this.store.register('RENDER', (message, state) => {
             ReactDOM.render(this.render(), document.getElementById('main'));
             return state;
@@ -95,8 +104,22 @@ class ApplicationComponent extends React.Component {
                 this.duel.updateField(message.field[1]);
                 break;
             case 'question':
+                this.setupQuestion(message);
+                break;
+            default:
+                throw (message.action);
+        }
+    }
+
+    setupQuestion(message) {
+        this.state.question = message.uuid;
+        this.duel.lifepoints.state.waiting = true;
+        switch (message.options.command) {
+            case 'MSG_SELECT_IDLECMD':
                 this.duel.idle(message.options);
-                this.state.question = message.uuid;
+                break;
+            case 'MSG_SELECT_PLACE':
+                this.duel.select(message.options);
                 break;
             default:
                 throw (message.action);

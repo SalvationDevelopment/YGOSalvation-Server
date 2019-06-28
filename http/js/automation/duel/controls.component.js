@@ -13,7 +13,8 @@ class GameplayControlButton extends React.Component {
             onClick: this.click.bind(this),
             style: {
                 display: 'flex',
-                width: 'auto'
+                width: 'auto',
+                'text-align': 'center'
             }
         }, this.state.info.text);
     }
