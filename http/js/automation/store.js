@@ -12,7 +12,7 @@ class Store {
     }
 
     dispatch(event) {
-        console.log(event);
+        //console.log(event);
         if (!this.reducers[event.action]) {
             return;
         }

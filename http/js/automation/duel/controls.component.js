@@ -3,7 +3,6 @@
 class GameplayControlButton extends React.Component {
 
     click() {
-        debugger;
         this.store.dispatch({ action: 'CONTROL_CLICK', card: this.state.card, uuid: this.uuid });
     }
 
@@ -82,7 +81,7 @@ class ControlButtons {
                     option.i = i;
                     option.type = type;
                     const valid = Object.keys(option).every((prop) => {
-                        if (prop === 'i' || prop === 'type' || prop === 'description') {
+                        if (prop === 'diratt' || prop === 'i' || prop === 'type' || prop === 'description') {
                             return true;
                         }
                         return option[prop] === query[prop];
@@ -99,12 +98,13 @@ class ControlButtons {
 
 
     update(newState) {
+        this.state = {};
         Object.assign(this.state, newState);
         this.store.dispatch({
             action: 'ENABLE_PHASE',
-            endphi: this.state.enableEndPhase,
-            battlephi: this.state.enableBattlePhase,
-            main2phi: this.state.enableMain2Phase
+            battlephase: (this.state.enableBattlePhase) ? 'enableBattlePhase' : false,
+            mainphase2: (this.state.enableMainPhase2) ? 'enableMainPhase2' : false,
+            endphase: (this.state.enableEndPhase) ? 'enableEndPhase' : false
         });
         this.store.dispatch({ action: 'RENDER' });
     }

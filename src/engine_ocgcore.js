@@ -259,9 +259,10 @@ function mainProcess(game) {
  * @param {Player} player Player inputer will be linked to
  * @returns {Requester} Player-Core connection
  */
-function Responser(game, player) {
+function Responser(game, player, slot) {
 
     function write(data) {
+        game.last(slot);
         const resb = Buffer.alloc(64);
         resb.writeInt32LE(data);
         player.lock = false;
@@ -278,7 +279,7 @@ function playerInstance(playerConnection, slot, game, settings) {
     const dataStream = new DataStream(),
         gameBoard = new GameBoard(playerConnection, slot, settings.masterRule),
         gameQueue = queue(),
-        responder = new Responser(game, playerConnection);
+        responder = new Responser(game, playerConnection, slot);
 
 
     function preformGameAction(gameAction) {
@@ -359,6 +360,19 @@ function makeGame(pduel, settings) {
         players[Math.abs(player)].write(lastMessage);
     }
 
+    /**
+     * Send the last send message from the system, to the last responding player.
+     * @param {Player} player Player to send to.
+     * @returns {void}
+     */
+    function retry() {
+        players[last_response].write(lastMessage);
+    }
+
+    function last(player) {
+        last_response = player;
+    }
+
     function respond(message) {
         players.forEach(function (player) {
             player.read(message);
@@ -386,6 +400,7 @@ function makeGame(pduel, settings) {
      * @returns {void}
      */
     function sendToObservers() {
+        return;
         observers.forEach(function (observer) {
             observer.write(lastMessage);
         });
@@ -545,6 +560,8 @@ function makeGame(pduel, settings) {
         refreshSingle,
         refreshGrave,
         respond,
+        last,
+        retry,
         setPlayers,
         waitforResponse,
         sendBufferToPlayer,

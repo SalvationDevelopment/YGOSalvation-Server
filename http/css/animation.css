@@ -33,6 +33,7 @@ div#selectionsystem {
         outline-color: white;
         background: rgba(255, 0, 0, .8);
     }
+
     100% {
         outline-color: transparent;
         box-shadow: 0 0 0 0px rgba(255, 0, 0, 0);
@@ -479,6 +480,11 @@ meter::-webkit-meter-optimum-value {
     height: 50px;
 }
 
+.phaseindicator.enabled {
+    background: white;
+    color: black;
+}
+
 #drawphi {
     top: 275px;
     left: 176px;
@@ -560,6 +566,7 @@ meter::-webkit-meter-optimum-value {
 
 
 }
+
 .revealedcard:hover {
     content: initial !important;
 }

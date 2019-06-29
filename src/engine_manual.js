@@ -1292,6 +1292,21 @@ function init(callback) {
         state.turnOfPlayer = (state.turnOfPlayer === 0) ? 1 : 0;
     }
 
+    function announcement(player, message) {
+        const slot = 'p' + player,
+            output = {
+                names: names,
+                p0: {},
+                p1: {},
+                spectators: {}
+            };
+        output[slot] = {
+            duelAction: 'announcement',
+            message
+        };
+        callback(output, stack);
+    }
+
     /**
      * Change lifepoints of a player
      * @param {Number} player player int 0,1, etcplayer to edit
@@ -1621,6 +1636,7 @@ function init(callback) {
      * @name Core
      */
     return {
+        announcement,
         stack,
         startSide,
         startDuel,

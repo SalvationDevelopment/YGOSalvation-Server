@@ -75,6 +75,15 @@ class ApplicationComponent extends React.Component {
             return state;
         });
 
+        this.store.register('PHASE_CLICK', (message, state) => {
+            this.primus.write({
+                action: 'question',
+                answer: message.phase,
+                uuid: this.state.question
+            });
+            return state;
+        });
+
         this.store.register('ZONE_CLICK', (message, state) => {
             this.primus.write({
                 action: 'question',
@@ -83,6 +92,36 @@ class ApplicationComponent extends React.Component {
             });
             return state;
         });
+
+        this.store.register('REVEAL_CARD_CLICK', (message, state) => {
+            this.state.question_selection.push(message.option);
+            if (this.state.question_selection.length === this.state.question_max) {
+                this.primus.write({
+                    action: 'question',
+                    answer: {
+                        type: 'list',
+                        i: this.state.question_selection
+                    },
+                    uuid: this.state.question
+                });
+            }
+            return state;
+        });
+
+        this.store.register('REVEALER_CLOSE', (message, state) => {
+            if (this.state.question_selection.length > this.state.question_min) {
+                this.primus.write({
+                    action: 'question',
+                    answer: {
+                        type: 'list',
+                        i: this.state.question_selection
+                    },
+                    uuid: this.state.question
+                });
+            }
+            return state;
+        });
+
 
         this.store.register('RENDER', (message, state) => {
             ReactDOM.render(this.render(), document.getElementById('main'));
@@ -107,6 +146,9 @@ class ApplicationComponent extends React.Component {
             case 'question':
                 this.setupQuestion(message);
                 break;
+            case 'announcement':
+                console.log('~~!', message);
+                this.announcement(message.message);
             default:
                 throw (message.action);
         }
@@ -114,16 +156,21 @@ class ApplicationComponent extends React.Component {
 
     setupQuestion(message) {
         this.state.question = message.uuid;
+        this.state.question_min = message.options.select_min;
+        this.state.question_max = message.options.select_max;
+        this.state.question_selection = [];
         this.duel.lifepoints.state.waiting = true;
         switch (message.options.command) {
             case 'MSG_SELECT_IDLECMD':
+                this.duel.idle(message.options);
+                break;
+            case 'MSG_SELECT_BATTLECMD':
                 this.duel.idle(message.options);
                 break;
             case 'MSG_SELECT_PLACE':
                 this.duel.select(message.options);
                 break;
             case 'MSG_SELECT_CARD':
-            debugger;
                 this.duel.reveal(message.options.select_options);
                 break;
             default:
@@ -131,16 +178,13 @@ class ApplicationComponent extends React.Component {
         }
     }
 
-    process(message) {
+    announcement(message) {
         if (message.command.indexOf('SELECT') > -1) {
             this.duel.lifepoints.state.waiting = true;
         }
         switch (message.command) {
-            case ('MSG_WAITING' || 'STOC_TIME_LIMIT' || 'STOC_WAITING_SIDE'):
+            case ('MSG_WAITING'):
                 this.duel.lifepoints.state.waiting = true;
-                break;
-            case ('STOC_TIME_LIMIT'):
-                this.duel.lifepoints.time({ player: message.player, time: message.time });
                 break;
             case ('MSG_SUMMONING'):
                 this.duel.flash({ id: message.id });

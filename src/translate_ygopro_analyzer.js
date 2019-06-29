@@ -122,7 +122,7 @@ function getIdleSet(pbuf, hasDescriptions) {
 
 function msg_retry(message, pbuf, game) {
     message.desc = 'Error Occurs.';
-    game.sendToPlayer(game.lastSentToPlayer, message.packet);
+    game.retry();
     return 1;
 }
 
