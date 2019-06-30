@@ -62,6 +62,7 @@ class DuelScreen extends React.Component {
             React.createElement('div', { id: 'ingamecardimage', key: 'ingamecardimage' }, this.info.render()),
             React.createElement('div', { id: 'lifepoints', key: 'lifepoints' }, this.lifepoints.render()),
             React.createElement('div', { id: 'revealer', key: 'revealer' }, this.revealer.render()),
+            React.createElement('div', { id: 'positionDialog', key: 'positionDialog' }, this.positionDialog.render()),
             React.createElement('div', { id: 'announcer', key: 'announcer' }, this.flasher.render()),
             React.createElement('div', { className: 'field newfield', key: 'field-newfield' }, [
                 React.createElement('div', {

@@ -613,7 +613,6 @@ function start(server, duel, game, state, message) {
  * @returns {void}
  */
 function question(duel, client, message) {
-    console.log('recieved question');
     duel.respond(message);
 }
 
@@ -661,7 +660,7 @@ function processMessage(server, duel, game, state, client, message) {
                 broadcast(server, game);
                 client.write({
                     action: 'slot',
-                    slot : client.slot
+                    slot: client.slot
                 });
             });
             break;

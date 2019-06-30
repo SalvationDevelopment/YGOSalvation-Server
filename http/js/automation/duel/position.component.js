@@ -11,13 +11,17 @@ class SelectPosition extends React.Component {
     }
 
     click(position) {
+        this.state.active = false;
+        this.store.dispatch({ action: 'RENDER' });
         this.store.dispatch({ action: 'POSITION_CARD_CLICK', position });
-        this.close();
+        this.state.cards = [];
+
+
     }
 
-    img(card, i) {
+    img(card) {
         const src = `http://127.0.0.1:8887/${card.id}.jpg`,
-            onClick = this.click.bind(this, i);
+            onClick = this.click.bind(this, card);
 
         return React.createElement('img', { className: card.position, src, onClick });
     }
@@ -36,13 +40,11 @@ class SelectPosition extends React.Component {
 
     trigger(state) {
         this.state.active = true;
-        this.state.card = state.map((position) => {
-
+        this.state.cards = state.positions.map((position) => {
+            return {
+                id: state.id,
+                position
+            };
         });
-    }
-
-    close() {
-        this.state.cards = [];
-        this.active = false;
     }
 }

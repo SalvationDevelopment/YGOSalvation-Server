@@ -78,7 +78,7 @@ function askUser(gameBoard, slot, message, ygopro, command) {
         max: 1,
         min: 1
     }, function (answer) {
-        console.log(answer.type, answer.i, command, buttonName[answer.type](answer.i, command));
+        console.log('  -->', answer.type, answer.i, command, buttonName[answer.type](answer.i, command));
         ygopro.write(buttonName[answer.type](answer.i, command));
     });
 }
@@ -385,10 +385,10 @@ function boardController(gameBoard, slot, message, ygopro, player) {
             askUser(gameBoard, slot, message, ygopro, 'MSG_SELECT_CARD');
             break;
         case ('MSG_SELECT_CHAIN'):
-            if (message.count) {
-                askUser(gameBoard, slot, message, ygopro, 'MSG_SELECT_CHAIN');
-            } else {
+            if (!message.count) {
                 ygopro.write(-1);
+            } else {
+                askUser(gameBoard, slot, message, ygopro, 'MSG_SELECT_CHAIN');
             }
             break;
         case ('MSG_SELECT_PLACE'):

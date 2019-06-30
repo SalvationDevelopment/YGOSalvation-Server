@@ -63,12 +63,7 @@ class LifepointDisplay extends React.Component {
 
     update(state) {
         if (state) {
-            if (!Number.isInteger(state.lifepoints[0])) {
-                return;
-            }
-            if (!Number.isInteger(state.lifepoints[1])) {
-                return;
-            }
+            console.log(state);
             this.state = state;
         }
     }

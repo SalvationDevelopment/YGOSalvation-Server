@@ -1,6 +1,11 @@
 /*global React, ReactDOM*/
 /*global Store, ChoiceScreen, DuelScreen, SideChat, LobbyScreen, databaseSystem*/
 
+let orientation = 0;
+function orient(player) {
+    return
+}
+
 class ApplicationComponent extends React.Component {
     constructor(store) {
         super();
@@ -183,12 +188,12 @@ class ApplicationComponent extends React.Component {
             case 'MSG_SELECT_CARD':
                 this.duel.reveal(message.options.select_options);
                 break;
-            case 'MSG_CONFIRM_CARDS ':
+            case 'MSG_CONFIRM_CARDS':
                 debugger;
                 this.duel.reveal(message.options.select_options);
                 break;
             case 'MSG_SELECT_POSITION':
-                this.duel.position.trigger(message.options);
+                this.duel.positionDialog.trigger(message.options);
                 break;
             default:
                 throw ('Unknown message');
