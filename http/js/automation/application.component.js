@@ -25,7 +25,7 @@ class ApplicationComponent extends React.Component {
         this.primus = window.Primus.connect(primusprotocol + location.host + ':' + urlParams.get('room'));
         this.lobby = new LobbyScreen(this.store, this.chat, this.primus);
         this.primus.on('data', (data) => {
-            console.log(data);
+            this.duel.lifepoints.state.waiting = false;
             if (data.action) {
                 this.action(data);
             }
@@ -93,6 +93,15 @@ class ApplicationComponent extends React.Component {
             return state;
         });
 
+        this.store.register('POSITION_CARD_CLICK', (message, state) => {
+            this.primus.write({
+                action: 'question',
+                answer: message.position,
+                uuid: this.state.question
+            });
+            return state;
+        });
+
         this.store.register('REVEAL_CARD_CLICK', (message, state) => {
             this.state.question_selection.push(message.option);
             if (this.state.question_selection.length === this.state.question_max) {
@@ -147,14 +156,15 @@ class ApplicationComponent extends React.Component {
                 this.setupQuestion(message);
                 break;
             case 'announcement':
-                console.log('~~!', message);
                 this.announcement(message.message);
+                break;
             default:
-                throw (message.action);
+                break;
         }
     }
 
     setupQuestion(message) {
+        console.log('???', message.options.command, message);
         this.state.question = message.uuid;
         this.state.question_min = message.options.select_min;
         this.state.question_max = message.options.select_max;
@@ -173,15 +183,20 @@ class ApplicationComponent extends React.Component {
             case 'MSG_SELECT_CARD':
                 this.duel.reveal(message.options.select_options);
                 break;
+            case 'MSG_CONFIRM_CARDS ':
+                debugger;
+                this.duel.reveal(message.options.select_options);
+                break;
+            case 'MSG_SELECT_POSITION':
+                this.duel.position.trigger(message.options);
+                break;
             default:
-                throw (message.action);
+                throw ('Unknown message');
         }
     }
 
     announcement(message) {
-        if (message.command.indexOf('SELECT') > -1) {
-            this.duel.lifepoints.state.waiting = true;
-        }
+        console.log('!!!', message.command, message);
         switch (message.command) {
             case ('MSG_WAITING'):
                 this.duel.lifepoints.state.waiting = true;
@@ -197,6 +212,7 @@ class ApplicationComponent extends React.Component {
                 break;
             case ('MSG_CHAINING'):
                 this.duel.flash({ id: message.id });
+                break;
             case ('MSG_SHUFFLE_DECK'):
                 doGuiShuffle(orient(message.player), 'DECK');
                 break;

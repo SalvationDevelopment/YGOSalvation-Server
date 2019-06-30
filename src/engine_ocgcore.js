@@ -263,10 +263,12 @@ function Responser(game, player, slot) {
 
     function write(data) {
         game.last(slot);
-        const resb = Buffer.alloc(64);
-        resb.writeInt32LE(data);
-        player.lock = false;
-        ocgapi.set_responseb(game.pduel, resb);
+        if (typeof data === 'number') {
+            ocgapi.set_responsei(game.pduel, data);
+        } else {
+            ocgapi.set_responseb(game.pduel, data);
+        }
+
         mainProcess(game);
     }
 
@@ -298,7 +300,7 @@ function playerInstance(playerConnection, slot, game, settings) {
                         console.log(e);
                     }
                     next();
-                }, 100);
+                }, 5);
             });
 
         });
@@ -329,7 +331,7 @@ function makeGame(pduel, settings) {
 
     function setPlayers(clients, additionalClients) {
         players = clients;
-        observers = additionalClients;
+        //observers = additionalClients;
     }
 
 
@@ -535,6 +537,9 @@ function makeGame(pduel, settings) {
     }
 
     function refreshSingle(player, location, sequence, flag = 0xf81fff) {
+        refreshHand(player);
+        refreshMzone(player);
+        refreshSzone(player);
         return;
         const qbuf = Buffer.alloc(0x2000);
         qbuf.type = ref.types.byte;
@@ -633,13 +638,9 @@ function duel(settings, errorHandler, players, observers) {
     game = makeGame(pduel, settings);
     const playerConnections = players.map(function (playerConnection, slot) {
         return playerInstance(playerConnection, slot, game, settings);
-    }),
-        observerConnections = players.map(function (playerConnection, slot) {
-            return playerInstance(playerConnection, slot, game, settings);
-        });
+    })
 
-
-    game.setPlayers(playerConnections, observerConnections);
+    game.setPlayers(playerConnections);
     game.refer = ref.deref(pduel);
     setTimeout(function () {
         game.sendStartInfo(0);

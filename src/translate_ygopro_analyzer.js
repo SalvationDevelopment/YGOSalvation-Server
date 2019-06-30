@@ -994,11 +994,13 @@ function msg_confirm_cards(message, pbuf, game) {
     const LOCATION_DECK = 0x01;
     message.player = pbuf.readInt8();
     message.count = pbuf.readInt8();
+    message.select_options = [];
     for (let i = 0; i < message.count; ++i) {
-        message.selections.push({
-            c: pbuf.readInt8(),
-            l: pbuf.readInt8(),
-            s: pbuf.readInt8()
+        message.select_options.push({
+            id: pbuf.readInt32(),
+            player: pbuf.readInt8(), // really controller
+            location: enums.locations[pbuf.readInt8()],
+            index: pbuf.readInt8()
         });
     }
     if (pbuf[5] !== LOCATION_DECK) {

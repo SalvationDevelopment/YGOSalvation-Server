@@ -1597,8 +1597,7 @@ div#lobbygameinfo {
 }
 
 div#ygowaiting {
-    position: absolute;
-    top: 20vh;
+    float: left;
     color: yellow;
     width: 100%;
     text-align: center;

@@ -80,13 +80,11 @@ class ControlButtons {
                 selectable = options.find((option, i) => {
                     option.i = i;
                     option.type = type;
-                    const valid = Object.keys(option).every((prop) => {
-                        if (prop === 'diratt' || prop === 'i' || prop === 'type' || prop === 'description') {
-                            return true;
-                        }
-                        return option[prop] === query[prop];
-                    });
-                    return valid;
+                    return (
+                        option.index === query.index &&
+                        option.location === query.location &&
+                        option.id === query.id
+                    );
                 });
             if (selectable) {
                 list.push({ type, card: query, i: selectable.i });
@@ -110,7 +108,11 @@ class ControlButtons {
     }
 
     enable(query, coords) {
-        this.info.target = query;
+        this.info.target = {
+            id: query.id,
+            index: query.index,
+            location: query.location
+        };
         this.info.coords = coords;
     }
 

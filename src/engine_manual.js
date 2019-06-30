@@ -1499,7 +1499,6 @@ function init(callback) {
         answerListener.once(uuid, function (data) {
             onAnswerFromUser(data);
         });
-        console.log('need answer from', uuid);
         callback(output, stack);
     }
 
@@ -1508,7 +1507,6 @@ function init(callback) {
      * @param {Object} message response message
      */
     function respond(message) {
-        console.log('seeing answer from', message);
         answerListener.emit(message.uuid, message.answer);
     }
 

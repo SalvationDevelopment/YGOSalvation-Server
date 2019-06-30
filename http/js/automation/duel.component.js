@@ -1,6 +1,6 @@
 /*global React */
 /*global Store, Field, CardInfo, SideChat, Flasher, Revealer, ControlButtons, LifepointDisplay */
-
+/*global SelectPosition*/
 class DuelScreen extends React.Component {
     constructor(store, chat, databaseSystem) {
         super();
@@ -11,11 +11,11 @@ class DuelScreen extends React.Component {
         this.field = new Field({ info: {}, field: {} }, this.store);
         this.info = new CardInfo(databaseSystem);
         this.sidechat = chat;
-        this.flasher = new Flasher({});
+        this.flasher = new Flasher(store, {});
         this.revealer = new Revealer(this.store);
         this.controls = new ControlButtons(this.store);
         this.lifepoints = new LifepointDisplay({ lifepoints: [8000, 8000] });
-
+        this.positionDialog = new SelectPosition(this.store);
         this.store.register('CARD_HOVER', this.onHover.bind(this));
         this.store.register('CARD_CLICK', this.onCardClick.bind(this));
 
@@ -43,7 +43,6 @@ class DuelScreen extends React.Component {
     }
 
     update(update) {
-        console.log(update);
         this.lifepoints.update({ lifepoints: update.lifepoints });
         this.field.phase(update.phase);
     }

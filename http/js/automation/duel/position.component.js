@@ -1,28 +1,25 @@
 /*global React, ReactDOM*/
 
-class Revealer extends React.Component {
+class SelectPosition extends React.Component {
 
     constructor(store) {
         super();
-        this.root = document.getElementById('revealer');
         this.store = store;
         this.state = {
             active: false
         };
     }
 
-    click(option) {
-        this.state.active = false;
-        this.store.dispatch({ action: 'REVEAL_CARD_CLICK', option });
-        this.store.dispatch({ action: 'RENDER', option });
-
+    click(position) {
+        this.store.dispatch({ action: 'POSITION_CARD_CLICK', position });
+        this.close();
     }
 
     img(card, i) {
         const src = `http://127.0.0.1:8887/${card.id}.jpg`,
             onClick = this.click.bind(this, i);
 
-        return React.createElement('img', { className: '', src, onClick });
+        return React.createElement('img', { className: card.position, src, onClick });
     }
     render() {
         if (this.state.active) {
@@ -30,14 +27,18 @@ class Revealer extends React.Component {
                 style: {
                     display: 'flex'
                 }, id: 'revealed'
-            }, this.state.cards.map((card, i) => this.img(card, i)));
+            }, this.state.cards.map((card, i) => this.img({
+                type: card.position
+            })));
         }
         return '';
     }
 
     trigger(state) {
-        Object.assign(this.state, state);
         this.state.active = true;
+        this.state.card = state.map((position) => {
+
+        });
     }
 
     close() {

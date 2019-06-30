@@ -58,7 +58,12 @@ const enums = require('./translate_ygopro_enums'),
             }
         },
         zone: (i) => Buffer.from(i).readUIntLE(0, 3),
-        list: (i) => Buffer.from(i)
+        list: (i) => Buffer.from([i.length].concat(i)),
+        number: (i) => i,
+        FaceUpAttack: () => 0x1,
+        FaceDownAttack: () => 0x2,
+        FaceUpDefence: () => 0x4,
+        FaceDownDefence: () => 0x8
     };
 /**
  * Standardized way of sending a preformatted message to the user from YGOSharp. 
@@ -73,6 +78,7 @@ function askUser(gameBoard, slot, message, ygopro, command) {
         max: 1,
         min: 1
     }, function (answer) {
+        console.log(answer.type, answer.i, command, buttonName[answer.type](answer.i, command));
         ygopro.write(buttonName[answer.type](answer.i, command));
     });
 }
@@ -115,6 +121,7 @@ function boardController(gameBoard, slot, message, ygopro, player) {
             gameBoard.retryLastQuestion();
             break;
         case ('MSG_START'): // Good
+            gameBoard.announcement(slot, { command: 'MSG_ORIENTATION', slot });
             gameBoard.startDuel({
                 main: Array(message.player1decksize).fill(0),
                 side: Array(0),
@@ -419,7 +426,7 @@ function boardController(gameBoard, slot, message, ygopro, player) {
             gameBoard.announcement(slot, message);
             break;
         case ('MSG_CONFIRM_CARDS'):
-            gameBoard.announcement(slot, message);
+            askUser(gameBoard, slot, message, ygopro, 'MSG_CONFIRM_CARDS');
             break;
         case ('MSG_UPDATE_DATA'): // inconsistent
             message.cards.forEach(function (card, index) {
