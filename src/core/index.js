@@ -75,22 +75,22 @@ const WARNING_COUNTDOWN = 300000,
     CLEANUP_LATENCY = 10000,
     MAX_GAME_TIME = 3300000,
     banlist = './http/manifest/banlist.json',
-    database = require('../http/manifest/manifest_0-en-OCGTCG.json'),
+    database = require('../../http/manifest/manifest_0-en-OCGTCG.json'),
     dotenv = require('dotenv'),
     EventEmitter = require('events'),
     fileStream = require('node-static'),
     fs = require('fs'),
     http = require('http'),
     https = require('https'),
-    manualEngine = require('./engine_manual.js'),
-    automaticEngine = require('./engine_ocgcore'),
-    manualController = require('./controller_dueling'),
+    manualEngine = require('./model_field.js'),
+    automaticEngine = require('./controller_core.js'),
+    manualController = require('./controller_manual.js'),
     path = require('path'),
     Primus = require('primus'),
     Rooms = require('primus-rooms'),
     sanitize = require('./lib_html_sanitizer.js'),
     uuid = require('uuid/v4'),
-    validateDeck = require('./validate_deck.js'),
+    validateDeck = require('./lib_validate_deck.js'),
     verificationSystem = new EventEmitter();
 
 let lastInteraction = new Date();
@@ -1005,7 +1005,7 @@ function main(callback) {
         state = new State(server, game);
 
     server.plugin('rooms', Rooms);
-    server.save(__dirname + '/../http/js/vendor/server.js');
+    server.save(__dirname + '/../../http/js/vendor/server.js');
     server.on('connection', function (client) {
         client.on('data', function (message) {
             messageHandler(server, duel, game, state, client, message);

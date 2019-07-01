@@ -29,7 +29,7 @@ class DeckDialog extends React.Component {
                 style: {
                     display: 'flex'
                 }, id: 'revealed'
-            }, this.state.cards.map((card, i) => this.img(card, i)));
+            }, this.state.cards.filter(this.filter).map((card, i) => this.img(card, i)));
         }
         return '';
     }
@@ -37,6 +37,14 @@ class DeckDialog extends React.Component {
     trigger(state) {
         Object.assign(this.state, state);
         this.state.active = true;
+    }
+
+    filter(card, i) {
+        return card.location === this.state.location;
+    }
+
+    updateContents() {
+
     }
 
     close() {

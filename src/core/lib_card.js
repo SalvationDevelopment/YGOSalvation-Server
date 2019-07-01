@@ -1,7 +1,7 @@
 /*eslint no-plusplus: 0*/
 'use strict';
 
-var enums = require('./translate_ygopro_enums.js');
+var enums = require('./enums.js');
 
 const TYPE_LINK = 0x4000000;
 

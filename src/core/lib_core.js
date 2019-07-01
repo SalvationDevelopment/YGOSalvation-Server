@@ -8,7 +8,7 @@ const ffi = require('ffi'),
     bytePointer = ref.refType(ref.types.byte),
     path = require('path'),
     os = require('os'),
-    core_location = path.resolve(__dirname, `../bin/${os.platform()}/${os.arch()}/ocgcore.dll`),
+    core_location = path.resolve(__dirname, `./bin/${os.platform()}/${os.arch()}/ocgcore.dll`),
     ocgcore = new ffi.Library(core_location, {
         'set_script_reader': [bytePointer, ['pointer']],
         'set_card_reader': ['void', ['pointer']],

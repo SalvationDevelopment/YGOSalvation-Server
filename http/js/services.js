@@ -162,34 +162,34 @@ $.getJSON('/manifest/manifest_0-en-OCGTCG.json', function (data) {
         store.dispatch({ action: 'DECK_EDITOR_BANLIST', banlist, primary });
         store.dispatch({ action: 'SYSTEM_LOADED', banlist, primary });
         store.dispatch({ action: 'LOAD_LOGIN', banlist, primary });
-        if (localStorage.remember === 'true') {
-            if (localStorage.session) {
-                $.getJSON('api/session/' + localStorage.session, (userInfo) => {
-                    console.log('Session Login', userInfo);
-                    if (userInfo.success) {
-                        app.login(userInfo);
-                    }
+        $.getJSON('./setcodes.json', 'utf-8', function (data) {
+            var raw = data,
+                setcodes = Object.keys(raw).map(function (arch) {
+                    return {
+                        num: arch,
+                        name: raw[arch]
+                    };
+                }).sort(function (a, b) {
+                    return (a.name.localeCompare(b.name, undefined, {
+                        numeric: true,
+                        sensitivity: 'base'
+                    }));
                 });
+            store.dispatch({ action: 'LOAD_SETCODES', data: setcodes });
+            if (localStorage.remember === 'true') {
+                if (localStorage.session) {
+                    $.getJSON('api/session/' + localStorage.session, (userInfo) => {
+                        console.log('Session Login', userInfo);
+                        if (userInfo.success) {
+                            app.login(userInfo);
+                        }
+                    });
+                }
             }
-        }
+        });
     });
 });
 
-$.getJSON('./setcodes.json', 'utf-8', function (data) {
-    var raw = data,
-        setcodes = Object.keys(raw).map(function (arch) {
-            return {
-                num: arch,
-                name: raw[arch]
-            };
-        }).sort(function (a, b) {
-            return (a.name.localeCompare(b.name, undefined, {
-                numeric: true,
-                sensitivity: 'base'
-            }));
-        });
-    store.dispatch({ action: 'LOAD_SETCODES', data: setcodes });
-});
 
 
 
