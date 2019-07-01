@@ -19,12 +19,23 @@ class DuelScreen extends React.Component {
         this.positionDialog = new SelectPosition(this.store);
         this.store.register('CARD_HOVER', this.onHover.bind(this));
         this.store.register('CARD_CLICK', this.onCardClick.bind(this));
-        this.store.register('DECK_CARD_CLICK', this.onCardClick.bind(this));
+        this.store.register('DECK_CARD_CLICK', this.onDeckCardClick.bind(this));
 
         console.log(this.controls.render());
     }
 
     onCardClick(event, state) {
+        const decks = ['EXTRA', 'GRAVE', 'EXTRA', 'REMOVED'];
+        if (decks.includes(event.card.location)) {
+            this.store.dispatch({ action: 'OPEN_DECK', deck: event.card.location });
+            return;
+        }
+        this.controls.enable(event.card, { x: event.x, y: event.y });
+        this.store.dispatch({ action: 'RENDER' });
+        return event;
+    }
+
+    onDeckCardClick(event, state) {
         this.controls.enable(event.card, { x: event.x, y: event.y });
         this.store.dispatch({ action: 'RENDER' });
         return event;
