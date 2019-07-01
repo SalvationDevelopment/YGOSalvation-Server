@@ -11,18 +11,18 @@ class Revealer extends React.Component {
         };
     }
 
-    click(option) {
+    click(selected, option) {
         this.state.active = false;
-        this.store.dispatch({ action: 'REVEAL_CARD_CLICK', option });
-        this.store.dispatch({ action: 'RENDER', option });
+        this.store.dispatch({ action: 'REVEAL_CARD_CLICK', option, selected });
+        this.store.dispatch({ action: 'RENDER' });
 
     }
 
     img(card, i) {
         const src = `http://127.0.0.1:8887/${card.id}.jpg`,
-            onClick = this.click.bind(this, i);
+            onClick = this.click.bind(this, card.selected, i);
 
-        return React.createElement('img', { className: '', src, onClick });
+        return React.createElement('img', { className: (card.selected) ? 'selected' : '', src, onClick });
     }
     render() {
         if (this.state.active) {

@@ -570,3 +570,7 @@ meter::-webkit-meter-optimum-value {
 .revealedcard:hover {
     content: initial !important;
 }
+
+#revealed img.FaceUpDefence {
+    transform: rotate(90deg) translate(0, -25%);
+}

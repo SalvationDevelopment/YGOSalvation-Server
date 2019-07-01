@@ -72,6 +72,11 @@
 
 #decksearchresults div img {
     height: 100%;
+    border: 1px solid black:
+}
+
+#decksearchresults div img:hover {
+    border: 1px solid white;
 }
 
 #decksearch {
@@ -269,6 +274,10 @@ control#linkmarkers {
 .deckmetainfo img {
     height: 100%;
     border: 1px solid black;
+}
+
+.deckmetainfo img:hover {
+    border: 1px solid white;
 }
 
 #deckareaextra .deckmetainfo div {

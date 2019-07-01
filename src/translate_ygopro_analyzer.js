@@ -563,6 +563,11 @@ function msg_announce_race(message, pbuf, game) {
     message.player = pbuf.readInt8();
     message.announce_count = pbuf.readInt8();
     message.avaliable = pbuf.readInt32();
+    message.chkRace = [];
+    for (let i = 0, filter = 0x1; i < 25; ++i, filter <<= 1) {
+        message.chkRace.push((filter & message.available) ? true : false);
+    }
+    console.log('donte', message);
     game.waitforResponse(message.player);
     game.sendBufferToPlayer(message.player, message);
     return 1;
@@ -787,7 +792,8 @@ function msg_select_battlecmd(message, pbuf, game) {
 function msg_select_effectyn(message, pbuf, game) {
     message.player = pbuf.readInt8();
     message.id = pbuf.readInt32();
-    message.location = pbuf.readInt8();
+    message.controller = pbuf.readInt8();
+    message.location = enums.locations[pbuf.readInt8()];
     message.index = pbuf.readInt8();
     pbuf.readInt8();
     message.desc = pbuf.readInt32();

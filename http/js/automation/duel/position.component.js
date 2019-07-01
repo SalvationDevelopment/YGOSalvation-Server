@@ -31,9 +31,7 @@ class SelectPosition extends React.Component {
                 style: {
                     display: 'flex'
                 }, id: 'revealed'
-            }, this.state.cards.map((card, i) => this.img({
-                type: card.position
-            })));
+            }, this.state.cards.map((card) => this.img(card)));
         }
         return '';
     }
@@ -43,8 +41,10 @@ class SelectPosition extends React.Component {
         this.state.cards = state.positions.map((position) => {
             return {
                 id: state.id,
-                position
+                position,
+                type: position
             };
         });
+        console.log(this.state.cards);
     }
 }

@@ -1,5 +1,21 @@
 /*global React, ReactDOM, SearchFilter, store, cardIs*/
 
+/**
+ * Shuffles an array in place, multiple times.
+ * @param {Array} array to shuffle
+ * @returns {void}
+ */
+function deepShuffle(array) {
+    for (var i = 0; i < array.length; i++) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1)),
+                temp = array[i];
+
+            array[i] = array[j];
+            array[j] = temp;
+        }
+    }
+}
 
 function checkLegality(card, zone, deck, banlist) {
     function checkCard(reference) {
@@ -351,6 +367,12 @@ class DeckEditScreen extends React.Component {
         this.state.activeDeck.extra.sort(cardEvaluate);
         this.state.activeDeck.side.sort(cardEvaluate);
     }
+
+    shuffle() {
+        deepShuffle(this.state.activeDeck.main);
+        this.store.dispatch({ action: 'RENDER' });
+    }
+
     export() {
         let file = '#Created by ' + this.state.activeDeck.creator + ' on ' + this.state.activeDeck.creationDate + '\r\n#main';
 
@@ -837,6 +859,7 @@ class DeckEditScreen extends React.Component {
                                 element('button', { onClick: this.clear.bind(this) }, 'Clear'),
 
                                 element('button', { onClick: this.sort.bind(this) }, 'Sort'),
+                                element('button', { onClick: this.shuffle.bind(this) }, 'Shuffle'),
                                 element('button', { onClick: this.export.bind(this) }, 'Export'),
                                 element('button', { onClick: this.saveAs.bind(this) }, 'Save As')
                             ])

@@ -107,7 +107,25 @@ class ApplicationComponent extends React.Component {
             return state;
         });
 
+
+        this.store.register('YESNO_CLICK', (message, state) => {
+            this.primus.write({
+                action: 'question',
+                answer: message.yesno,
+                uuid: this.state.question
+            });
+            return state;
+        });
+
         this.store.register('REVEAL_CARD_CLICK', (message, state) => {
+            if (message.selected) {
+                const remove = this.state.question_selection.indexOf(message.option);
+                this.state.question_selection.splice(remove, 1);
+                this.state.question_options.select_options[message.option].selected = false;
+                this.duel.reveal(this.state.question_options.select_options);
+                this.store.dispatch({ action: 'RENDER' });
+                return;
+            }
             this.state.question_selection.push(message.option);
             if (this.state.question_selection.length === this.state.question_max) {
                 this.primus.write({
@@ -118,7 +136,11 @@ class ApplicationComponent extends React.Component {
                     },
                     uuid: this.state.question
                 });
+                return state;
             }
+            console.log(this.state.question_options, message);
+            this.state.question_options.select_options[message.option].selected = true;
+            this.duel.reveal(this.state.question_options.select_options);
             return state;
         });
 
@@ -173,8 +195,10 @@ class ApplicationComponent extends React.Component {
         this.state.question = message.uuid;
         this.state.question_min = message.options.select_min;
         this.state.question_max = message.options.select_max;
+        this.state.question_options = message.options;
         this.state.question_selection = [];
         this.duel.lifepoints.state.waiting = true;
+        this.duel.idle({});
         switch (message.options.command) {
             case 'MSG_SELECT_IDLECMD':
                 this.duel.idle(message.options);
@@ -195,6 +219,8 @@ class ApplicationComponent extends React.Component {
             case 'MSG_SELECT_POSITION':
                 this.duel.positionDialog.trigger(message.options);
                 break;
+            case 'MSG_SELECT_EFFECTYN':
+                this.duel.yesnoDialog(message.options);
             default:
                 throw ('Unknown message');
         }

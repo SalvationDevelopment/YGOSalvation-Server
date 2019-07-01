@@ -481,6 +481,9 @@ function boardController(gameBoard, slot, message, ygopro, player) {
         case ('MSG_DECK_TOP'):
             gameBoard.announcement(slot, message);
             break;
+        case ('MSG_ANNOUNCE_ATTRIB'):
+            askUser(gameBoard, slot, message, ygopro, 'MSG_ANNOUNCE_ATTRIB');
+            break;
         default:
             console.log('FAILURE!', message);
             break;

@@ -63,7 +63,6 @@ class LifepointDisplay extends React.Component {
 
     update(state) {
         if (state) {
-            console.log(state);
             this.state = state;
         }
     }

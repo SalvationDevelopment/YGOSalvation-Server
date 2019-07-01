@@ -350,6 +350,7 @@ function makeGame(pduel, settings) {
      */
     function sendBufferToPlayer(player, message) {
         lastMessage = message;
+        console.log(players[player]);
         players[player].write(message);
     }
 
@@ -655,6 +656,7 @@ function duel(settings, errorHandler, players, observers) {
         }, 1000);
 
     }, 1000);
+    process.game = game;
     return game;
 
 }
