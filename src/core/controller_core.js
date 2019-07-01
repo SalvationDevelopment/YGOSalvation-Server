@@ -263,6 +263,7 @@ function Responser(game, player, slot) {
 
     function write(data) {
         game.last(slot);
+        console.log(typeof data === 'number');
         if (typeof data === 'number') {
             ocgapi.set_responsei(game.pduel, data);
         } else {

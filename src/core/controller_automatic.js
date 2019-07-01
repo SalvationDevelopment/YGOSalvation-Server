@@ -33,17 +33,17 @@ const enums = require('./translate_ygopro_enums'),
         },
         attackable_cards: (i) => (i << 16) + 1,
         enableBattlePhase: () => 6,
-        enableMainPhase2: () => 2,
         shuffle: () => 8,
+        enableMainPhase2: () => 2,
         enableEndPhase: (i, command) => {
-            console.log(command);
             switch (command) {
-                case 'MSG_SELECT_IDLECMD':
-                    return 7;
                 case 'MSG_SELECT_BATTLECMD':
                     return 3;
+                case 'MSG_SELECT_IDLECMD':
+                    return 7;
+
                 default:
-                    return i;
+                    return -1;
             }
         },
         yesno: (i, command) => {
@@ -385,6 +385,7 @@ function boardController(gameBoard, slot, message, ygopro, player) {
             askUser(gameBoard, slot, message, ygopro, 'MSG_SELECT_CARD');
             break;
         case ('MSG_SELECT_CHAIN'):
+            console.log(message);
             if (!message.count) {
                 ygopro.write(-1);
             } else {
