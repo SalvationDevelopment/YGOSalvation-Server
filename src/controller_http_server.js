@@ -6,8 +6,7 @@ const express = require('express'),
     toobusy = require('toobusy-js'),
     app = express(),
     compression = require('compression'),
-    userController = require('./controller_users.js'),
-    forumController = require('./controller_forum.js'),
+    userController = require('./model_controller_users.js'),
     // Ddos = require('ddos'),
     bodyParser = require('body-parser'),
     helmet = require('helmet'),
@@ -105,7 +104,6 @@ module.exports = function () {
         gitRoute(req, res, next);
     });
     userController.setupController(app);
-    forumController(app);
     let primusServer;
 
     try {

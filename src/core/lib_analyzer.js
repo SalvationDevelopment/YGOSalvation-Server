@@ -1,6 +1,6 @@
 /*eslint no-plusplus: 0*/
-const enums = require('./translate_ygopro_enums.js'),
-    makeCard = require('./model_ygopro_card.js'),
+const enums = require('./enums.js'),
+    makeCard = require('./lib_card.js'),
     BufferStreamReader = require('./model_stream_reader');
 
 

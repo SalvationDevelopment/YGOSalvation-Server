@@ -6,8 +6,7 @@
  * @property {Number} index sequence in the zone or deck.
  */
 
-const enums = require('./translate_ygopro_enums'),
-    gameResponse = require('./translate_ygopro_reply.js'),
+const enums = require('./enums'),
     cardMap = {
         0: 'rock',
         1: 'paper',
