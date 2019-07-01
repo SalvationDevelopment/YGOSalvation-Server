@@ -1,6 +1,6 @@
 /*global React */
 /*global Store, Field, CardInfo, SideChat, Flasher, Revealer, ControlButtons, LifepointDisplay */
-/*global SelectPosition*/
+/*global SelectPosition, DeckDialog*/
 class DuelScreen extends React.Component {
     constructor(store, chat, databaseSystem) {
         super();
@@ -13,11 +13,13 @@ class DuelScreen extends React.Component {
         this.sidechat = chat;
         this.flasher = new Flasher(store, {});
         this.revealer = new Revealer(this.store);
+        this.viewDecks = new DeckDialog(this.store);
         this.controls = new ControlButtons(this.store);
         this.lifepoints = new LifepointDisplay({ lifepoints: [8000, 8000] });
         this.positionDialog = new SelectPosition(this.store);
         this.store.register('CARD_HOVER', this.onHover.bind(this));
         this.store.register('CARD_CLICK', this.onCardClick.bind(this));
+        this.store.register('DECK_CARD_CLICK', this.onCardClick.bind(this));
 
         console.log(this.controls.render());
     }
@@ -63,6 +65,7 @@ class DuelScreen extends React.Component {
             React.createElement('div', { id: 'lifepoints', key: 'lifepoints' }, this.lifepoints.render()),
             React.createElement('div', { id: 'revealer', key: 'revealer' }, this.revealer.render()),
             React.createElement('div', { id: 'positionDialog', key: 'positionDialog' }, this.positionDialog.render()),
+            React.createElement('div', { id: 'viewDecks', key: 'viewDecks' }, this.viewDecks.render()),
             React.createElement('div', { id: 'announcer', key: 'announcer' }, this.flasher.render()),
             React.createElement('div', { className: 'field newfield', key: 'field-newfield' }, [
                 React.createElement('div', {

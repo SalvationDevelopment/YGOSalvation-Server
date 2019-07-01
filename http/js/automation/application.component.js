@@ -212,6 +212,9 @@ class ApplicationComponent extends React.Component {
             case 'MSG_SELECT_CARD':
                 this.duel.reveal(message.options.select_options);
                 break;
+            case 'MSG_SELECT_TRIBUTE':
+                this.duel.reveal(message.options.selectable_targets);
+                break;
             case 'MSG_CONFIRM_CARDS':
                 debugger;
                 this.duel.reveal(message.options.select_options);

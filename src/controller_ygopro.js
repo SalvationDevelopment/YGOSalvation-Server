@@ -398,14 +398,7 @@ function boardController(gameBoard, slot, message, ygopro, player) {
             askUser(gameBoard, slot, message, ygopro, 'MSG_SELECT_POSITION');
             break;
         case ('MSG_SELECT_TRIBUTE'):
-            gameBoard.question(slot, message.command, message, { min: message.select_min, max: message.select_max }, function (answer) {
-                var messageBuffer = [answer.length].concat(answer.map(function (card) {
-                    return resolveCardIndex(message.selectable_targets, card);
-                })).filter(function (card) {
-                    return (card !== undefined);
-                });
-                ygopro.write(gameResponse('CTOS_RESPONSE', new Buffer(messageBuffer)));
-            });
+            askUser(gameBoard, slot, message, ygopro, 'MSG_SELECT_TRIBUTE');
             break;
         case ('MSG_SORT_CHAIN'):
             gameBoard.announcement(slot, message);
