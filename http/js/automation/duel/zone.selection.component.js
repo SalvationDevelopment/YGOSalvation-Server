@@ -55,7 +55,7 @@ class ZoneSelector extends React.Component {
             action: 'ZONE_CLICK', zone: {
                 type: 'zone',
                 i: [
-                    this.state.player,
+                    (window.orientation) ? (this.state.player ? 0 : 1) : this.state.player,
                     enummap[this.state.location],
                     this.state.index
                 ]

@@ -1,7 +1,7 @@
 /*global React, ReactDOM*/
 /*global Store, ChoiceScreen, DuelScreen, SideChat, LobbyScreen, databaseSystem*/
 
-let orientation = 0;
+window.orientation = 0;
 function orient(player) {
     return
 }
@@ -229,6 +229,9 @@ class ApplicationComponent extends React.Component {
     announcement(message) {
         console.log('!!!', message.command, message);
         switch (message.command) {
+            case 'MSG_ORIENTATION':
+                window.orientation = message.slot;
+                break;
             case ('MSG_WAITING'):
                 this.duel.lifepoints.state.waiting = true;
                 break;

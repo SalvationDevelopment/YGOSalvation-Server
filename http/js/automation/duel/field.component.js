@@ -141,6 +141,7 @@ class Field {
         };
 
         this.cast(state.field, (card) => {
+            card.orientSlot = window.orientation;
             this.state.cards[card.uid] = new CardImage(card, store);
         });
     }
