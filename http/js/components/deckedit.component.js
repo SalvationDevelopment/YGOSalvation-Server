@@ -117,6 +117,7 @@ class DeckEditScreen extends React.Component {
             decks: [],
             last: '',
             activeDeck: {
+                name: 'New Deck',
                 main: [],
                 extra: [],
                 side: []
