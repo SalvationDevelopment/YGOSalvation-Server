@@ -556,7 +556,8 @@ class DeckEditScreen extends React.Component {
                 'data-limit': card.limit,
                 onDragOver: this.setIndex.bind(this, source, i),
                 onDragStart: this.onDragStart.bind(this, source, i),
-                onDragEnd: this.onDragEnd.bind(this)
+                onDragEnd: this.onDragEnd.bind(this),
+                onDoubleClick: this.onCardDoubleClick.bind(this, source, i)
             }, new CardImage(card, this.store).render());
         });
     }
@@ -726,6 +727,29 @@ class DeckEditScreen extends React.Component {
                 element('option', { value: 2 }, '>')
             ])
         ])];
+    }
+
+    onCardDoubleClick(source, index) {
+        if (source === 'search') {
+            const card = this.state.search[index];
+            let legal = checkLegality(card, 'main', this.state.activeDeck, banlist);
+            if (!legal) {
+                return;
+            }
+            if (isExtra(card)) {
+                legal = checkLegality(card, 'extra', this.state.activeDeck, banlist);
+                this.state.activeDeck.extra.push(card);
+                this.store.dispatch({ action: 'RENDER' });
+                return;
+            }
+            this.state.activeDeck.main.push(card);
+            this.store.dispatch({ action: 'RENDER' });
+            return;
+        }
+
+        this.state.activeDeck[source].splice(index, 1);
+        this.store.dispatch({ action: 'RENDER' });
+        event.preventDefault();
     }
 
     onDropExitZone(event) {
