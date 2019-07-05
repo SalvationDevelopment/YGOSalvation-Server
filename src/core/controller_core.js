@@ -292,18 +292,11 @@ function playerInstance(playerConnection, slot, game, settings) {
 
     function queueGameActions(gameActions) {
         gameActions.forEach(function (gameAction) {
-            const pause = enums.timeout[gameAction.command] || 0;
-            gameQueue.push(function (next) {
-                setTimeout(function () {
-                    try {
-                        preformGameAction(gameAction);
-                    } catch (e) {
-                        console.log(e);
-                    }
-                    next();
-                }, 5);
-            });
-
+            try {
+                preformGameAction(gameAction);
+            } catch (e) {
+                console.log(e);
+            }
         });
     }
 
@@ -369,7 +362,9 @@ function makeGame(pduel, settings) {
      * @returns {void}
      */
     function retry() {
-        players[last_response].write(lastMessage);
+        players[last_response].write({
+            command: 'MSG_RETRY'
+        });
     }
 
     function last(player) {

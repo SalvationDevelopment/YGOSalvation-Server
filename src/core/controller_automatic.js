@@ -77,7 +77,7 @@ function askUser(gameBoard, slot, message, ygopro, command) {
         max: 1,
         min: 1
     }, function (answer) {
-        console.log('  -->', answer.type, answer.i, command, buttonName[answer.type](answer.i, command));
+        console.log('p' + slot, '  -->', answer.type, answer.i, command, buttonName[answer.type](answer.i, command));
         ygopro.write(buttonName[answer.type](answer.i, command));
     });
 }
@@ -109,13 +109,7 @@ function boardController(gameBoard, slot, message, ygopro, player) {
         p1: {},
         spectators: {}
     };
-    player.lastData = message;
     switch (message.command) {
-        case ('STOC_UNKNOWN'): // Good
-            process.exit();
-            break;
-        case ('STOC_GAME_MSG'): // Good
-            break;
         case ('MSG_RETRY'): // Good
             gameBoard.retryLastQuestion();
             break;
