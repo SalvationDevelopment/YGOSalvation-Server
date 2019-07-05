@@ -180,7 +180,7 @@ class DeckEditScreen extends React.Component {
                 deck.side = deck.side.map(this.findcard.bind(this));
                 return deck;
             });
-            this.state.activeDeck = this.state.decks[this.settings.decklist];
+            this.state.activeDeck = this.state.decks[this.settings.decklist] || this.state.activeDeck;
             this.store.dispatch({ action: 'RENDER' });
         });
 
@@ -557,7 +557,8 @@ class DeckEditScreen extends React.Component {
                 onDragOver: this.setIndex.bind(this, source, i),
                 onDragStart: this.onDragStart.bind(this, source, i),
                 onDragEnd: this.onDragEnd.bind(this),
-                onDoubleClick: this.onCardDoubleClick.bind(this, source, i)
+                onDoubleClick: this.onCardDoubleClick.bind(this, source, i),
+                onContextMenu: this.onCardDoubleClick.bind(this, source, i)
             }, new CardImage(card, this.store).render());
         });
     }
@@ -730,6 +731,7 @@ class DeckEditScreen extends React.Component {
     }
 
     onCardDoubleClick(source, index) {
+        event.preventDefault();
         if (source === 'search') {
             const card = this.state.search[index];
             let legal = checkLegality(card, 'main', this.state.activeDeck, banlist);
@@ -749,7 +751,7 @@ class DeckEditScreen extends React.Component {
 
         this.state.activeDeck[source].splice(index, 1);
         this.store.dispatch({ action: 'RENDER' });
-        event.preventDefault();
+
     }
 
     onDropExitZone(event) {
