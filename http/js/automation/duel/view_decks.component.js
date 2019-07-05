@@ -8,6 +8,10 @@ class DeckDialog extends React.Component {
         this.state = {
             active: false
         };
+
+        this.store.register('', () => {
+            OPEN_DECK
+        });
     }
 
     click(selected, option) {

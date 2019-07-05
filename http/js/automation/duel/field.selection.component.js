@@ -51,6 +51,8 @@ class FieldSelector {
         });
     }
 
+
+
     constructor(store) {
         this.state = {
             zones: {}

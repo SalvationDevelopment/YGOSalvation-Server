@@ -847,6 +847,7 @@ function msg_select_chain(message, pbuf, game) {
     message.player = pbuf.readInt8();
     message.count = pbuf.readInt8();
     message.specount = pbuf.readInt8();
+    message.select_trigger = (message.specount == 0x7f);
     message.forced = pbuf.readInt8();
     message.hint0 = pbuf.readInt32();
     message.hint1 = pbuf.readInt32();

@@ -111,7 +111,7 @@ class ApplicationComponent extends React.Component {
         this.store.register('YESNO_CLICK', (message, state) => {
             this.primus.write({
                 action: 'question',
-                answer: message.yesno,
+                answer: message.option,
                 uuid: this.state.question
             });
             return state;
@@ -163,6 +163,36 @@ class ApplicationComponent extends React.Component {
             ReactDOM.render(this.render(), document.getElementById('main'));
             return state;
         });
+    }
+
+    chain(message) {
+        if (!message.select_trigger
+            && !message.forced
+            && (!message.count || !message.specount)
+            && !message.count) {
+            this.primus.write({
+                action: 'question',
+                answer: {
+                    type: 'number',
+                    i: -1
+                },
+                uuid: this.state.question
+            });
+            return;
+        }
+        if (message.forced) {
+            this.primus.write({
+                action: 'question',
+                answer: {
+                    type: 'number',
+                    i: 0
+                },
+                uuid: this.state.question
+            });
+            return;
+        }
+        console.log('solve', message);
+        this.duel.reveal(message.options.select_options);
     }
 
     duelAction(message) {
@@ -223,7 +253,12 @@ class ApplicationComponent extends React.Component {
                 this.duel.positionDialog.trigger(message.options);
                 break;
             case 'MSG_SELECT_EFFECTYN':
-                this.duel.yesnoDialog(message.options);
+                debugger;
+                this.duel.yesnoDialog.state.active = true;;
+                break;
+            case 'MSG_SELECT_CHAIN':
+                this.chain(message.options);
+                break;
             default:
                 throw ('Unknown message');
         }

@@ -48,7 +48,7 @@ const enums = require('./enums'),
         yesno: (i, command) => {
             switch (command) {
                 case 'MSG_SELECT_CHAIN':
-                    if (i === 0) {
+                    if (!i) {
                         return -1;
                     }
                     return 1;
@@ -384,12 +384,7 @@ function boardController(gameBoard, slot, message, ygopro, player) {
             askUser(gameBoard, slot, message, ygopro, 'MSG_SELECT_CARD');
             break;
         case ('MSG_SELECT_CHAIN'):
-            console.log(message);
-            if (!message.count) {
-                ygopro.write(-1);
-            } else {
-                askUser(gameBoard, slot, message, ygopro, 'MSG_SELECT_CHAIN');
-            }
+            askUser(gameBoard, slot, message, ygopro, 'MSG_SELECT_CHAIN');
             break;
         case ('MSG_SELECT_PLACE'):
             askUser(gameBoard, slot, message, ygopro, 'MSG_SELECT_PLACE');

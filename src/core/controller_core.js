@@ -351,7 +351,6 @@ function makeGame(pduel, settings) {
      */
     function sendBufferToPlayer(player, message) {
         lastMessage = message;
-        console.log(players[player]);
         players[player].write(message);
     }
 
@@ -463,6 +462,9 @@ function makeGame(pduel, settings) {
             const len = pbuf.readInt32();
             if (len > 8) {
                 const card = makeCard(pbuf, undefined, true);
+                if (card && card.location === 'EXTRA') {
+                    console.log('EXTRA', card);
+                }
                 cards.push(card);
             }
         }
@@ -542,6 +544,7 @@ function makeGame(pduel, settings) {
         refreshHand(player);
         refreshMzone(player);
         refreshSzone(player);
+        refreshExtra(player);
         return;
         const qbuf = Buffer.alloc(0x2000);
         qbuf.type = ref.types.byte;
@@ -644,19 +647,16 @@ function duel(settings, errorHandler, players, observers) {
 
     game.setPlayers(playerConnections);
     game.refer = ref.deref(pduel);
-    setTimeout(function () {
-        game.sendStartInfo(0);
-        game.sendStartInfo(1);
-        setTimeout(function () {
-            // game.refreshExtra(0);
-            // game.refreshExtra(1);
-            // game.refreshMzone(0);
-            // game.refreshMzone(1);
-            ocgapi.start_duel(pduel, settings.priority);
-            mainProcess(game);
-        }, 1000);
+    game.sendStartInfo(0);
+    game.sendStartInfo(1);
+    game.refreshExtra(0);
+    game.refreshExtra(1);
+    game.refreshMzone(0);
+    game.refreshMzone(1);
+    ocgapi.start_duel(pduel, settings.priority);
+    mainProcess(game);
 
-    }, 1000);
+
     process.game = game;
     return game;
 

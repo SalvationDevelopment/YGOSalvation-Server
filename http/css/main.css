@@ -1057,6 +1057,16 @@ div#selectwhogoesfirst {
     overflow: auto;
 }
 
+div#yesnobox {
+    position: absolute;
+    z-index: 40;
+    width: 100%;
+    text-align: center;
+    padding-top: 22%;
+    background: rgba(0, 0, 0, .85);
+    height: 100%;
+}
+
 #subreveal img,
 #revealed img {
     margin: 10px;

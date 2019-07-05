@@ -1,6 +1,6 @@
 /*global React */
 /*global Store, Field, CardInfo, SideChat, Flasher, Revealer, ControlButtons, LifepointDisplay */
-/*global SelectPosition, DeckDialog*/
+/*global SelectPosition, DeckDialog, YesNoDialog*/
 class DuelScreen extends React.Component {
     constructor(store, chat, databaseSystem) {
         super();
@@ -17,6 +17,7 @@ class DuelScreen extends React.Component {
         this.controls = new ControlButtons(this.store);
         this.lifepoints = new LifepointDisplay({ lifepoints: [8000, 8000] });
         this.positionDialog = new SelectPosition(this.store);
+        this.yesnoDialog = new YesNoDialog(this.store);
         this.store.register('CARD_HOVER', this.onHover.bind(this));
         this.store.register('CARD_CLICK', this.onCardClick.bind(this));
         this.store.register('DECK_CARD_CLICK', this.onDeckCardClick.bind(this));
@@ -26,8 +27,12 @@ class DuelScreen extends React.Component {
 
     onCardClick(event, state) {
         const decks = ['EXTRA', 'GRAVE', 'EXTRA', 'REMOVED'];
-        if (decks.includes(event.card.location)) {
-            this.store.dispatch({ action: 'OPEN_DECK', deck: event.card.location });
+        if (!event.viewDeck && decks.includes(event.card.location)) {
+            const cards = this.field.getDeck(event.card.player, event.card.location);
+            this.store.dispatch({ action: 'OPEN_DECK', cards });
+            return;
+        }
+        if (event.card.location === 'DECK') {
             return;
         }
         this.controls.enable(event.card, { x: event.x, y: event.y });
@@ -76,6 +81,7 @@ class DuelScreen extends React.Component {
             React.createElement('div', { id: 'lifepoints', key: 'lifepoints' }, this.lifepoints.render()),
             React.createElement('div', { id: 'revealer', key: 'revealer' }, this.revealer.render()),
             React.createElement('div', { id: 'positionDialog', key: 'positionDialog' }, this.positionDialog.render()),
+            React.createElement('div', { id: 'yesnoDialog', key: 'yesnoDialog' }, this.yesnoDialog.render()),
             React.createElement('div', { id: 'viewDecks', key: 'viewDecks' }, this.viewDecks.render()),
             React.createElement('div', { id: 'announcer', key: 'announcer' }, this.flasher.render()),
             React.createElement('div', { className: 'field newfield', key: 'field-newfield' }, [
