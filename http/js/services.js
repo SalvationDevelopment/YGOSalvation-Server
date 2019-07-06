@@ -158,6 +158,7 @@ $.getJSON('/manifest/manifest_0-en-OCGTCG.json', function (data) {
                 primary = bdata[list].name;
             }
         });
+        banlist.reverse();
         store.dispatch({ action: 'HOST_BANLIST', banlist, primary });
         store.dispatch({ action: 'DECK_EDITOR_BANLIST', banlist, primary });
 
