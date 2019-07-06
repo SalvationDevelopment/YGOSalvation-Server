@@ -189,6 +189,9 @@ $.getJSON('/manifest/manifest_0-en-OCGTCG.json', function (data) {
                     store.dispatch({ action: 'SYSTEM_LOADED', banlist, primary });
                     store.dispatch({ action: 'LOAD_LOGIN', banlist, primary });
                 }
+            } else {
+                store.dispatch({ action: 'SYSTEM_LOADED', banlist, primary });
+                store.dispatch({ action: 'LOAD_LOGIN', banlist, primary });
             }
         });
     });
