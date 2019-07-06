@@ -192,7 +192,9 @@ class ApplicationComponent extends React.Component {
             return;
         }
         console.log('solve', message);
-        this.duel.reveal(message.options.select_options);
+        this.state.question_max = message.count;
+        this.state.question_min = (message.forced) ? 1 : 1;
+        this.duel.chain(message.select_options);
     }
 
     duelAction(message) {

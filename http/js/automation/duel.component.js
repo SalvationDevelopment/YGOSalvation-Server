@@ -13,6 +13,7 @@ class DuelScreen extends React.Component {
         this.sidechat = chat;
         this.flasher = new Flasher(store, {});
         this.revealer = new Revealer(this.store);
+        this.chainer = new Chainer(this.store);
         this.viewDecks = new DeckDialog(this.store);
         this.controls = new ControlButtons(this.store);
         this.lifepoints = new LifepointDisplay({ lifepoints: [8000, 8000] });
@@ -80,6 +81,7 @@ class DuelScreen extends React.Component {
             React.createElement('div', { id: 'ingamecardimage', key: 'ingamecardimage' }, this.info.render()),
             React.createElement('div', { id: 'lifepoints', key: 'lifepoints' }, this.lifepoints.render()),
             React.createElement('div', { id: 'revealer', key: 'revealer' }, this.revealer.render()),
+            React.createElement('div', { id: 'chain', key: 'chain' }, this.chainer.render()),
             React.createElement('div', { id: 'positionDialog', key: 'positionDialog' }, this.positionDialog.render()),
             React.createElement('div', { id: 'yesnoDialog', key: 'yesnoDialog' }, this.yesnoDialog.render()),
             React.createElement('div', { id: 'viewDecks', key: 'viewDecks' }, this.viewDecks.render()),
@@ -103,6 +105,10 @@ class DuelScreen extends React.Component {
 
     reveal(cards) {
         this.revealer.trigger({ active: true, cards });
+    }
+
+    chain(cards) {
+        this.chainer.trigger({ active: true, cards });
     }
 
     closeRevealer() {

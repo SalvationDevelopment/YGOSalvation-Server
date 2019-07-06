@@ -109,7 +109,6 @@ var db = mongoose.connect('mongodb://localhost/salvation', {
         console.log('Make sure MongoDB is running and `salvation` collection exist.');
         return;
     }
-    console.log('Database online');
 });
 
 mongoose.connection.on('error', function (err) {
@@ -390,6 +389,109 @@ function getRanking(callback) {
     });
 }
 
+function sessionCheck(request, response, next) {
+    var session = request.get('Session') || '';
+
+    if (request.method === 'GET') {
+        next();
+        return;
+    }
+
+    Users.findOne({ session }, function (error, person) {
+        if (error) {
+            response.status(500);
+            response.json({ code: 500, error });
+            response.end();
+        }
+        if (!person) {
+            response.status(401);
+            response.json({ code: 401, error: '401 Unauthorized' });
+            response.end();
+            return;
+        } else if (sessionTimeout(person.sessionExpiration)) {
+            request.user = person;
+            next();
+            return;
+        } else {
+            response.json({ error, code: 401, message: '401 Unauthorized' });
+            response.end();
+            return;
+        }
+
+    });
+}
+
+function adminSessionCheck(request, response, next) {
+    var session = request.get('Session') || '';
+    Users.findOne({ session, admin: true }, function (error, person) {
+        if (error) {
+            response.status(500);
+            response.json({ code: 500, error });
+            response.end();
+        }
+        if (!person) {
+            response.status(401);
+            response.json({ code: 401, error: '401 Unauthorized' });
+            response.end();
+            return;
+        } else if (sessionTimeout(person.sessionExpiration)) {
+            next();
+            return;
+        } else {
+            response.json({ error, code: 401, message: '401 Unauthorized' });
+            response.end();
+            return;
+        }
+
+    });
+}
+
+function finalResponse(response) {
+    return function (error, result, numAffected) {
+        if (error) {
+            response.status(500);
+            response.send({
+                result,
+                success: false,
+                error,
+                numAffected
+            });
+            response.end();
+            return;
+        }
+        response.send({
+            result: result,
+            success: true,
+            error,
+            numAffected
+        });
+        response.end();
+    };
+}
+
+
+function getSession(request, response) {
+    var session = request.params.session;
+
+    Users.findOne({ session }, function (error, person) {
+        if (error) {
+            finalResponse(response)(error);
+        }
+        if (!person) {
+            finalResponse(response)(null, {
+                success: false
+            }, 0);
+            return;
+        } else if (sessionTimeout(person.sessionExpiration)) {
+            var result = JSON.parse(JSON.stringify(person));
+            delete result.passwordHash;
+            delete result.salt;
+            finalResponse(response)(null, result, 1);
+            return;
+        }
+    });
+}
+
 function setupController(app) {
 
     app.post('/register', function (request, response) {
@@ -633,6 +735,9 @@ function setupController(app) {
             next();
         });
     });
+
+    app.get('/api/session/:session', getSession);
+
 
 }
 
