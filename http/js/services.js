@@ -160,8 +160,7 @@ $.getJSON('/manifest/manifest_0-en-OCGTCG.json', function (data) {
         });
         store.dispatch({ action: 'HOST_BANLIST', banlist, primary });
         store.dispatch({ action: 'DECK_EDITOR_BANLIST', banlist, primary });
-        store.dispatch({ action: 'SYSTEM_LOADED', banlist, primary });
-        store.dispatch({ action: 'LOAD_LOGIN', banlist, primary });
+
         $.getJSON('./setcodes.json', 'utf-8', function (data) {
             var raw = data,
                 setcodes = Object.keys(raw).map(function (arch) {
@@ -180,10 +179,15 @@ $.getJSON('/manifest/manifest_0-en-OCGTCG.json', function (data) {
                 if (localStorage.session) {
                     $.getJSON('api/session/' + localStorage.session, (userInfo) => {
                         console.log('Session Login', userInfo);
+                        store.dispatch({ action: 'SYSTEM_LOADED', banlist, primary });
+                        store.dispatch({ action: 'LOAD_LOGIN', banlist, primary });
                         if (userInfo.success) {
                             app.login(userInfo);
                         }
                     });
+                } else {
+                    store.dispatch({ action: 'SYSTEM_LOADED', banlist, primary });
+                    store.dispatch({ action: 'LOAD_LOGIN', banlist, primary });
                 }
             }
         });
