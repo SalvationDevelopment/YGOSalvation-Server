@@ -277,8 +277,10 @@ function sendEmail(address, username, id) {
 
 function saveDeck(user, callback) {
     Users.findOne({ 'username': user.username }, function (err, person) {
-        person.decks = user.decks;
-        person.save(callback);
+        if (person) {
+            person.decks = user.decks;
+            person.save(callback);
+        }
     });
 }
 
