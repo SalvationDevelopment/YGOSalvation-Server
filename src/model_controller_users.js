@@ -476,6 +476,7 @@ function getSession(request, response) {
     var session = request.params.session;
 
     Users.findOne({ session }, function (error, person) {
+        let result = {};
         if (error) {
             finalResponse(response)(error);
         }
@@ -485,11 +486,13 @@ function getSession(request, response) {
             }, 0);
             return;
         } else if (sessionTimeout(person.sessionExpiration)) {
-            var result = JSON.parse(JSON.stringify(person));
+            result = JSON.parse(JSON.stringify(person));
             delete result.passwordHash;
             delete result.salt;
             finalResponse(response)(null, result, 1);
             return;
+        } else {
+            finalResponse(response)(null, result, 1);
         }
     });
 }
@@ -688,7 +691,7 @@ function setupController(app) {
                 ranks: ranks,
                 error: error
             }));
-            next();
+            res.end();
         });
     });
 

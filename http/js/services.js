@@ -132,6 +132,11 @@ store.register('REGISTER_ACCOUNT', (action) => {
     });
 });
 
+$.getJSON('/ranking', function (data) {
+    const ranks = data.ranks;
+    ranks.sort((user) => user.points);
+    store.dispatch({ action: 'LOAD_RANKING', ranks });
+});
 
 
 $.getJSON('/manifest/manifest_0-en-OCGTCG.json', function (data) {
@@ -176,6 +181,7 @@ $.getJSON('/manifest/manifest_0-en-OCGTCG.json', function (data) {
                     }));
                 });
             store.dispatch({ action: 'LOAD_SETCODES', data: setcodes });
+            store.dispatch({ action: 'SYSTEM_LOADED', banlist, primary });
             if (localStorage.remember === 'true') {
                 if (localStorage.session) {
                     $.getJSON('api/session/' + localStorage.session, (userInfo) => {
@@ -185,13 +191,15 @@ $.getJSON('/manifest/manifest_0-en-OCGTCG.json', function (data) {
                         if (userInfo.success) {
                             app.login(userInfo);
                         }
+                    }).fail(() => {
+                        alert('error')
+                        store.dispatch({ action: 'LOAD_LOGIN', banlist, primary });
                     });
                 } else {
-                    store.dispatch({ action: 'SYSTEM_LOADED', banlist, primary });
+                    alert();
                     store.dispatch({ action: 'LOAD_LOGIN', banlist, primary });
                 }
             } else {
-                store.dispatch({ action: 'SYSTEM_LOADED', banlist, primary });
                 store.dispatch({ action: 'LOAD_LOGIN', banlist, primary });
             }
         });

@@ -19,3 +19,17 @@ div#faqs {
     overflow-y: scroll;
     height: 89vh;
 }
+
+.rankinguser {
+    border: 1px solid white;
+    margin: 1vh 25vw;
+    text-align: center;
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+#rankings table {
+    width: 50%;
+    margin: 0 auto;
+    background: rgba(0, 0, 0, .5);
+}
