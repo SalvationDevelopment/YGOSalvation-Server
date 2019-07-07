@@ -20,7 +20,7 @@ class LobbyScreen extends React.Component {
         const tag = React.createElement,
             p = this.state.player[player - 1],
             username = (p) ? p.username : '',
-            rating = (p) ? p.ranking.rankPoints : '',
+            rating = (p) ? p.ranking.rankPoints : '\r\n',
             lock = (p) ? p.ready : false;
         return tag('div', { id: `slot${player}`, className: 'slot' }, [
             tag('div', { key: 'rating', className: 'lobbyrating' }, rating),
@@ -76,10 +76,6 @@ class LobbyScreen extends React.Component {
                     tag('span', { id: 'lobbylp', key: 'lobbylp' }, this.state.startLP)
                 ]),
                 this.currentDeckElement(),
-                tag('div', { id: 'lobbystartcancel', key: 'lobbystartcancel' }, [
-                    tag('button', { id: 'lobbystart', key: 'lobbystart', onClick: this.start.bind(this) }, 'Duel'),
-                    tag('button', { id: 'lobbycancel', key: 'lobbycancel', onClick: this.spectate.bind(this) }, 'Spectate')
-                ])
             ]),
             tag('div', { id: 'lobbychat', key: 'sidechat' }, this.sidechat.render())];
     }
