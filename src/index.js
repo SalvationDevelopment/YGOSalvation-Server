@@ -315,6 +315,18 @@ function childHandler(child, socket, message) {
                 userlist: userlist
             });
             break;
+        case 'win':
+            const duel = {
+                decks: message.decks,
+                banlist: message.banlist,
+                winner: message.players[message.winner],
+                loser: message.players[Math.abs(message.winnder - 1)],
+                players: message.players
+            };
+            userController.recordDuelResult(duel, function () {
+                console.log('Logged Duel', message.players.join(' vs '));
+            });
+            break;
     }
 }
 

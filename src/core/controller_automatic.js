@@ -150,6 +150,7 @@ function boardController(gameBoard, slot, message, ygopro, player) {
             break;
         case ('MSG_WIN'):
             gameBoard.announcement(slot, message);
+            process.recordOutcome(message);
             break;
         case ('MSG_NEW_PHASE'): // Good
             gameBoard.nextPhase(message.gui_phase);

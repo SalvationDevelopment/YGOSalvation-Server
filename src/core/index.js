@@ -502,7 +502,6 @@ function lock(game, client, message) {
         delete client.deck;
         throw error;
     }
-
 }
 
 /**
@@ -677,6 +676,7 @@ function processMessage(server, duel, game, state, client, message) {
         case 'lock':
             lock(game, client, message);
             broadcast(server, game);
+            state.decks[client.slot] = message.deck;
             break;
         case 'reconnect':
             reconnect(duel, state, client, message);
@@ -957,6 +957,7 @@ function State(server, game) {
     return {
         clients: [],
         chat: [],
+        decks: [],
         reconnection: {},
         verification: uuid()
     };
@@ -1003,6 +1004,15 @@ function main(callback) {
         httpserver = new HTTPServer(),
         server = new PrimusInstance(httpserver),
         state = new State(server, game);
+
+    process.recordOutcome = function (command) {
+        process.send({
+            winner: command.player,
+            players: game.players,
+            banlist: game.banlist,
+            decks: state.decks
+        });
+    };
 
     server.plugin('rooms', Rooms);
     server.save(__dirname + '/../../http/js/vendor/server.js');
