@@ -17,7 +17,7 @@ class RankingScreen extends React.Component {
 
 
     render() {
-        return React.createElement('div', { id: '#rankholder' },
+        return React.createElement('div', { id: 'rankholder' },
             React.createElement('table', {}, [
                 React.createElement('thead', { key: 'thead' }, [
                     React.createElement('th', { key: 'rank' }, 'Rank'),

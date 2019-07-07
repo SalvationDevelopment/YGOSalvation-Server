@@ -30,6 +30,7 @@ div#faqs {
 #rankholder {
     display: block;
     overflow-y: auto;
+    height: 89vh;
 }
 
 #rankings table {
