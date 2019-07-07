@@ -134,7 +134,7 @@ store.register('REGISTER_ACCOUNT', (action) => {
 
 $.getJSON('/ranking', function (data) {
     const ranks = data.ranks;
-    ranks.sort((user) => user.points);
+    // ranks.sort((user) => user.points);
     store.dispatch({ action: 'LOAD_RANKING', ranks });
 });
 

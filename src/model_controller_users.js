@@ -374,7 +374,7 @@ function getDuels(start, end, callback) {
 }
 
 function getRanking(callback) {
-    Users.find({}, function (error, users) {
+    Users.find({}).exec(function (error, users) {
         if (error) {
             callback(error);
         }
@@ -385,7 +385,7 @@ function getRanking(callback) {
             };
         });
         ranks.sort(function (primary, secondary) {
-            return primary.points > secondary.points;
+            return primary.points < secondary.points;
         });
         callback(null, ranks.slice(0, 100));
     });
