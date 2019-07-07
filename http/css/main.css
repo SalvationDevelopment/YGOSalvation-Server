@@ -1548,6 +1548,15 @@ div#gamelist {
     width: 50%
 }
 
+.lobbyrating {
+    display: inline-block;
+    color: white;
+    width: 4vw;
+    text-align: center;
+    border: 1px solid #444;
+    font-size: 1.5vh;
+}
+
 #lobbygotoduel,
 #lobbygotospectate,
 #lobbystart,

@@ -20,8 +20,11 @@ class LobbyScreen extends React.Component {
         const tag = React.createElement,
             p = this.state.player[player - 1],
             username = (p) ? p.username : '',
+            rating = (p) ? p.ranking.rankPoints : '',
             lock = (p) ? p.ready : false;
         return tag('div', { id: `slot${player}`, className: 'slot' }, [
+            tag('div', { key: 'rating', className: 'lobbyrating' }, rating),
+            '\r\n',
             tag('div', { key: 'kick', className: 'kickbutton', onClick: this.kickDuelist.bind(this, player) }, 'X'),
             '\r\n',
             tag('input', { key: 'slot', id: `player${player}lobbyslot`, placeholder: 'empty slot', value: username }),
