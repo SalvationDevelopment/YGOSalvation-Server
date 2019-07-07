@@ -21,15 +21,26 @@ div#faqs {
 }
 
 .rankinguser {
-    border: 1px solid white;
-    margin: 1vh 25vw;
+
     text-align: center;
     font-size: 1.5em;
     font-weight: bold;
 }
 
+#rankholder {
+    display: block;
+    overflow-y: auto;
+}
+
 #rankings table {
     width: 50%;
     margin: 0 auto;
+    background: rgba(0, 0, 0, .5);
+    border-spacing: 10px;
+    border-collapse: separate;
+}
+
+#rankings td {
+    border: 1px solid white;
     background: rgba(0, 0, 0, .5);
 }
