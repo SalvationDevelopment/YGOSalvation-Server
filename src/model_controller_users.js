@@ -318,8 +318,15 @@ function getUserCount(callback) {
 function recordDuelResult(duel, callback) {
     const input = new Duels(duel);
     Duels.create(input, callback);
-    Users.findOneAndUpdate({ username: duel.players[duel.winner] }, { $inc: { 'ranking.rankedPoints': 1 } });
-    callback();
+    Users.findOne({ username: duel.players[duel.winner] }, function (error, user) {
+        if (error) {
+            callback(error);
+        }
+        user.ranking.rankPoints = user.ranking.rankPoints + 10;
+        user.ranking.rankedWins = user.ranking.rankedWins + 1;
+        user.save(callback);
+    });
+
 }
 
 function createTournament(banlist, callback) {

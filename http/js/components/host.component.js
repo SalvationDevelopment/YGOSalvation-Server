@@ -18,7 +18,9 @@ class HostScreen extends React.Component {
             ot: 2,
             shuffledeck: true,
             startLP: 8000,
-            time: 180000
+            time: 180000,
+            ranked: false
+
         };
         this.store = store;
 
@@ -99,6 +101,8 @@ class HostScreen extends React.Component {
             React.createElement('input', { type: 'checkbox', id: 'deckcheck', checked: true, onChange: this.onChange.bind(this) }),
             React.createElement('label', {}, 'Shuffle Deck'),
             React.createElement('input', { type: 'checkbox', id: 'shuffleDeck', checked: true, onChange: this.onChange.bind(this) }),
+            React.createElement('label', {}, 'Ranked'),
+            React.createElement('input', { type: 'checkbox', id: 'locked', onChange: this.onChange.bind(this) }),
             React.createElement('label', {}, 'Use Password'),
             React.createElement('input', { type: 'checkbox', id: 'locked', onChange: this.onChange.bind(this) }),
             React.createElement('label', {}, 'Lifepoints'),

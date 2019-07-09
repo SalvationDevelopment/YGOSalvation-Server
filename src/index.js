@@ -319,12 +319,15 @@ function childHandler(child, socket, message) {
             const duel = {
                 decks: message.decks,
                 banlist: message.banlist,
-                winner: message.players[message.winner],
-                loser: message.players[Math.abs(message.winnder - 1)],
+                winner: message.winner,
+                loser: message.players[Math.abs(message.winner - 1)],
                 players: message.players
             };
             userController.recordDuelResult(duel, function () {
                 console.log('Logged Duel', message.players.join(' vs '));
+                child.send({
+                    action: 'kill'
+                });
             });
             break;
     }

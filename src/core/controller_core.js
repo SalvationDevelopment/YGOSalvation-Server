@@ -191,7 +191,6 @@ function deepShuffle(array) {
  */
 function duelEndProcedure(players) {
     console.log('game ended');
-    process.exit();
 }
 
 

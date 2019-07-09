@@ -446,7 +446,19 @@ function Duel() {
         throw ('Duel has not started');
     }
 
-    function load(game, players, spectators) {
+    function load(game, state, players, spectators) {
+        process.recordOutcome = new EventEmitter();
+        process.recordOutcome.once('win', function (command) {
+            process.send({
+                action: 'win',
+                winner: command.player,
+                players: game.player.map((player) => player.username),
+                banlist: game.banlist,
+                decks: state.decks,
+                game
+            });
+        });
+
         if (game.automatic) {
             const instance = automaticEngine.duel(game, players, spectators);
             duel.getField = instance.getField;
@@ -456,6 +468,8 @@ function Duel() {
         const clientBinding = manualController.clientBinding(players, spectators);
         Object.assign(duel, manualEngine(clientBinding));
         duel.startDuel(players[0], players[1], true, game);
+
+
     }
 
     duel.getField = failure;
@@ -597,7 +611,7 @@ function start(server, duel, game, state, message) {
     ],
         spectators = [new PlayerAbstraction(server, state, 'spectators', {})];
 
-    duel.load(game, function (error, type) {
+    duel.load(game, state, function (error, type) {
         chat(server, state, {
             username: '[SYSTEM]'
         }, error, undefined);
@@ -1004,15 +1018,6 @@ function main(callback) {
         httpserver = new HTTPServer(),
         server = new PrimusInstance(httpserver),
         state = new State(server, game);
-
-    process.recordOutcome = function (command) {
-        process.send({
-            winner: command.player,
-            players: game.players,
-            banlist: game.banlist,
-            decks: state.decks
-        });
-    };
 
     server.plugin('rooms', Rooms);
     server.save(__dirname + '/../../http/js/vendor/server.js');
