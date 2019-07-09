@@ -317,7 +317,6 @@ function childHandler(child, socket, message) {
             break;
         case 'win':
             userController.recordDuelResult(message, function () {
-                console.log('Logged Duel', message.players.join(' vs '));
                 child.send({
                     action: 'kill'
                 });

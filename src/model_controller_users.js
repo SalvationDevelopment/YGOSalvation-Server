@@ -340,447 +340,447 @@ function recordDuelResult(duel, callback) {
             loser.save();
             callback();
         });
-
-    }
+    });
+}
 
 function createTournament(banlist, callback) {
-            const input = new Tournaments({ banlist });
-            Tournaments.create(input, callback);
-        }
+    const input = new Tournaments({ banlist });
+    Tournaments.create(input, callback);
+}
 
 function addTournamentEntry(id, entry, callback) {
-            Tournaments.update({
-                _id: id,
-                'entires.username': { $ne: 'entires.username' }
-            }, { $push: { entries: entry } }, callback);
-        }
+    Tournaments.update({
+        _id: id,
+        'entires.username': { $ne: 'entires.username' }
+    }, { $push: { entries: entry } }, callback);
+}
 
 function updateTournamentEntry(id, entry, callback) {
-            Tournaments.update({
-                _id: id,
-                'entires.username': entry.username
-            }, entry, callback);
-        }
+    Tournaments.update({
+        _id: id,
+        'entires.username': entry.username
+    }, entry, callback);
+}
 
 function queryTournament(id, callback) {
-            Tournaments.find({ _id: id }, function (error, tournament) {
-                if (error) {
-                    callback(error);
-                }
-                callback(null, tournament);
-            });
+    Tournaments.find({ _id: id }, function (error, tournament) {
+        if (error) {
+            callback(error);
         }
+        callback(null, tournament);
+    });
+}
 
 function removeTournament(id, callback) {
-            Tournaments.delete({ _id: id }, function (error, tournament) {
-                if (error) {
-                    callback(error);
-                }
-                callback(null, tournament);
-            });
+    Tournaments.delete({ _id: id }, function (error, tournament) {
+        if (error) {
+            callback(error);
         }
+        callback(null, tournament);
+    });
+}
 
 function getDuels(start, end, callback) {
-            Duels.find({
-                created: {
-                    '$gte': new Date(start),
-                    '$lt': new Date(end)
-                }
-            }, function (error, result) {
-                if (error) {
-                    callback(error);
-                }
-                callback(null, result);
-            });
+    Duels.find({
+        created: {
+            '$gte': new Date(start),
+            '$lt': new Date(end)
         }
+    }, function (error, result) {
+        if (error) {
+            callback(error);
+        }
+        callback(null, result);
+    });
+}
 
 function getRanking(callback) {
-            Users.find({}).exec(function (error, users) {
-                if (error) {
-                    callback(error);
-                }
-                const ranks = users.map(function (user) {
-                    return {
-                        username: user.username,
-                        points: user.ranking.rankPoints
-                    };
-                });
-                ranks.sort(function (primary, secondary) {
-                    return primary.points < secondary.points;
-                });
-                callback(null, ranks.slice(0, 100));
-            });
+    Users.find({}).exec(function (error, users) {
+        if (error) {
+            callback(error);
         }
+        const ranks = users.map(function (user) {
+            return {
+                username: user.username,
+                points: user.ranking.rankPoints
+            };
+        });
+        ranks.sort(function (primary, secondary) {
+            return primary.points < secondary.points;
+        });
+        callback(null, ranks.slice(0, 100));
+    });
+}
 
 function sessionCheck(request, response, next) {
-            var session = request.get('Session') || '';
+    var session = request.get('Session') || '';
 
-            if (request.method === 'GET') {
-                next();
-                return;
-            }
+    if (request.method === 'GET') {
+        next();
+        return;
+    }
 
-            Users.findOne({ session }, function (error, person) {
-                if (error) {
-                    response.status(500);
-                    response.json({ code: 500, error });
-                    response.end();
-                }
-                if (!person) {
-                    response.status(401);
-                    response.json({ code: 401, error: '401 Unauthorized' });
-                    response.end();
-                    return;
-                } else if (sessionTimeout(person.sessionExpiration)) {
-                    request.user = person;
-                    next();
-                    return;
-                } else {
-                    response.json({ error, code: 401, message: '401 Unauthorized' });
-                    response.end();
-                    return;
-                }
-
-            });
+    Users.findOne({ session }, function (error, person) {
+        if (error) {
+            response.status(500);
+            response.json({ code: 500, error });
+            response.end();
         }
+        if (!person) {
+            response.status(401);
+            response.json({ code: 401, error: '401 Unauthorized' });
+            response.end();
+            return;
+        } else if (sessionTimeout(person.sessionExpiration)) {
+            request.user = person;
+            next();
+            return;
+        } else {
+            response.json({ error, code: 401, message: '401 Unauthorized' });
+            response.end();
+            return;
+        }
+
+    });
+}
 
 function adminSessionCheck(request, response, next) {
-            var session = request.get('Session') || '';
-            Users.findOne({ session, admin: true }, function (error, person) {
-                if (error) {
-                    response.status(500);
-                    response.json({ code: 500, error });
-                    response.end();
-                }
-                if (!person) {
-                    response.status(401);
-                    response.json({ code: 401, error: '401 Unauthorized' });
-                    response.end();
-                    return;
-                } else if (sessionTimeout(person.sessionExpiration)) {
-                    next();
-                    return;
-                } else {
-                    response.json({ error, code: 401, message: '401 Unauthorized' });
-                    response.end();
-                    return;
-                }
-
-            });
+    var session = request.get('Session') || '';
+    Users.findOne({ session, admin: true }, function (error, person) {
+        if (error) {
+            response.status(500);
+            response.json({ code: 500, error });
+            response.end();
         }
+        if (!person) {
+            response.status(401);
+            response.json({ code: 401, error: '401 Unauthorized' });
+            response.end();
+            return;
+        } else if (sessionTimeout(person.sessionExpiration)) {
+            next();
+            return;
+        } else {
+            response.json({ error, code: 401, message: '401 Unauthorized' });
+            response.end();
+            return;
+        }
+
+    });
+}
 
 function finalResponse(response) {
-            return function (error, result, numAffected) {
-                if (error) {
-                    response.status(500);
-                    response.send({
-                        result,
-                        success: false,
-                        error,
-                        numAffected
-                    });
-                    response.end();
-                    return;
-                }
-                response.send({
-                    result: result,
-                    success: true,
-                    error,
-                    numAffected
-                });
-                response.end();
-            };
+    return function (error, result, numAffected) {
+        if (error) {
+            response.status(500);
+            response.send({
+                result,
+                success: false,
+                error,
+                numAffected
+            });
+            response.end();
+            return;
         }
+        response.send({
+            result: result,
+            success: true,
+            error,
+            numAffected
+        });
+        response.end();
+    };
+}
 
 
 function getSession(request, response) {
-            var session = request.params.session;
+    var session = request.params.session;
 
-            Users.findOne({ session }, function (error, person) {
-                let result = {};
-                if (error) {
-                    finalResponse(response)(error);
-                }
-                if (!person) {
-                    finalResponse(response)(null, {
-                        success: false
-                    }, 0);
-                    return;
-                } else if (sessionTimeout(person.sessionExpiration)) {
-                    result = JSON.parse(JSON.stringify(person));
-                    delete result.passwordHash;
-                    delete result.salt;
-                    finalResponse(response)(null, result, 1);
-                    return;
-                } else {
-                    finalResponse(response)(null, result, 1);
-                }
-            });
+    Users.findOne({ session }, function (error, person) {
+        let result = {};
+        if (error) {
+            finalResponse(response)(error);
         }
+        if (!person) {
+            finalResponse(response)(null, {
+                success: false
+            }, 0);
+            return;
+        } else if (sessionTimeout(person.sessionExpiration)) {
+            result = JSON.parse(JSON.stringify(person));
+            delete result.passwordHash;
+            delete result.salt;
+            finalResponse(response)(null, result, 1);
+            return;
+        } else {
+            finalResponse(response)(null, result, 1);
+        }
+    });
+}
 
 function setupController(app) {
 
-            app.post('/register', function (request, response) {
-                var payload = request.body || {},
-                    user;
+    app.post('/register', function (request, response) {
+        var payload = request.body || {},
+            user;
 
-                if (!payload.password) {
-                    response.send({
-                        error: 'No Password'
-                    });
-                    return;
+        if (!payload.password) {
+            response.send({
+                error: 'No Password'
+            });
+            return;
+        }
+        payload.username = sanitizer.sanitize(payload.username);
+        if (!payload.username) {
+            response.send({
+                error: 'No username'
+            });
+            return;
+        }
+        if (zxcvbn(payload.password) < 3) {
+            response.send({
+                error: 'Password is to weak'
+            });
+            response.end();
+            return;
+        } else {
+            // find each person with a last name matching 'Ghost', selecting the `name` and `occupation` fields
+            Users.findOne({ $or: [{ 'email': payload.email }, { 'username': payload.username }] }, 'username email', function (err, person) {
+                if (err) {
+                    return console.log(err);
                 }
-                payload.username = sanitizer.sanitize(payload.username);
-                if (!payload.username) {
+                if (person) {
+                    // already exist
                     response.send({
-                        error: 'No username'
-                    });
-                    return;
-                }
-                if (zxcvbn(payload.password) < 3) {
-                    response.send({
-                        error: 'Password is to weak'
+                        error: 'Username or Email exist in system already'
                     });
                     response.end();
-                    return;
                 } else {
-                    // find each person with a last name matching 'Ghost', selecting the `name` and `occupation` fields
-                    Users.findOne({ $or: [{ 'email': payload.email }, { 'username': payload.username }] }, 'username email', function (err, person) {
-                        if (err) {
-                            return console.log(err);
-                        }
-                        if (person) {
-                            // already exist
-                            response.send({
-                                error: 'Username or Email exist in system already'
-                            });
-                            response.end();
-                        } else {
 
 
-                            var newUser = new Users();
-                            newUser.username = payload.username;
-                            newUser.salt = salter();
-                            newUser.passwordHash = hash(payload.password, newUser.salt);
-                            newUser.email = payload.email;
-                            newUser.creation = new Date();
-                            newUser.lastOnline = new Date();
-                            newUser.friends = [];
-                            newUser.admin = false;
-                            newUser.decks = [];
-                            newUser.rewards = [];
-                            newUser.ranking = {
-                                rankPoints: 0,
-                                rankedWins: 0,
-                                rankedLosses: 0,
-                                rankedTies: 0,
-                                elo: 1200
-                            };
-                            Users.create(newUser, function (error, createdPerson, numAffected) {
-                                const resultingUser = JSON.parse(JSON.stringify(createdPerson));
-                                delete resultingUser.passwordHash;
-                                delete resultingUser.password;
-                                delete resultingUser.salt;
-                                response.send({
-                                    info: resultingUser,
-                                    success: true,
-                                    error,
-                                    numAffected
-                                });
-                                sendEmail(payload.email, payload.username, resultingUser._id);
-                                response.end();
-                            });
-                        }
+                    var newUser = new Users();
+                    newUser.username = payload.username;
+                    newUser.salt = salter();
+                    newUser.passwordHash = hash(payload.password, newUser.salt);
+                    newUser.email = payload.email;
+                    newUser.creation = new Date();
+                    newUser.lastOnline = new Date();
+                    newUser.friends = [];
+                    newUser.admin = false;
+                    newUser.decks = [];
+                    newUser.rewards = [];
+                    newUser.ranking = {
+                        rankPoints: 0,
+                        rankedWins: 0,
+                        rankedLosses: 0,
+                        rankedTies: 0,
+                        elo: 1200
+                    };
+                    Users.create(newUser, function (error, createdPerson, numAffected) {
+                        const resultingUser = JSON.parse(JSON.stringify(createdPerson));
+                        delete resultingUser.passwordHash;
+                        delete resultingUser.password;
+                        delete resultingUser.salt;
+                        response.send({
+                            info: resultingUser,
+                            success: true,
+                            error,
+                            numAffected
+                        });
+                        sendEmail(payload.email, payload.username, resultingUser._id);
+                        response.end();
                     });
                 }
             });
+        }
+    });
 
-            app.get('/verify/:id', function (request, response) {
-                var id = request.params.id;
+    app.get('/verify/:id', function (request, response) {
+        var id = request.params.id;
 
-                Users.findByIdAndUpdate(id, { verified: true }, function (error, person) {
-                    const resultingUser = JSON.parse(JSON.stringify(person));
-                    delete resultingUser.passwordHash;
-                    delete resultingUser.password;
-                    delete resultingUser.salt;
-                    response.send({
-                        success: error,
-                        result: resultingUser
-                    });
-                });
+        Users.findByIdAndUpdate(id, { verified: true }, function (error, person) {
+            const resultingUser = JSON.parse(JSON.stringify(person));
+            delete resultingUser.passwordHash;
+            delete resultingUser.password;
+            delete resultingUser.salt;
+            response.send({
+                success: error,
+                result: resultingUser
             });
+        });
+    });
 
 
-            function loadCurrentUser(req) {
-                return db.getUserBySessionId(req.session.sessionid);
-            }
+    function loadCurrentUser(req) {
+        return db.getUserBySessionId(req.session.sessionid);
+    }
 
-            app.post('/recover', function (request, response, next) {
-                var payload = request.body || {},
-                    user;
+    app.post('/recover', function (request, response, next) {
+        var payload = request.body || {},
+            user;
 
-                function callback(error, person, code) {
-                    response.send({
-                        error: error
-                    });
-                }
-                // basic security practice dont tell the attacker which part was correct.
-                if (!payload.email) {
-                    response.send({
-                        error: 'No username or email address'
-                    });
-                    return;
-                }
-                if (!payload.username) {
-                    response.send({
-                        error: 'No username or email address'
-                    });
-                    return;
-                }
-
-                Users.findOne({ 'email': payload.email }, 'username email', function (err, person) {
-                    if (person) {
-                        startRecoverPassword(person, callback);
-                    }
-                });
-
+        function callback(error, person, code) {
+            response.send({
+                error: error
             });
-
-            app.post('/recoverpassword', function (request, response, next) {
-                var payload = request.body || {},
-                    user;
-
-                function callback(error, person, code) {
-                    response.send({
-                        error: error
-                    });
-                }
-                // basic security practice dont tell the attacker which part was correct.
-                if (!payload.email) {
-                    response.send({
-                        error: 'No username or email address'
-                    });
-                    return;
-                }
-                if (!payload.username) {
-                    response.send({
-                        error: 'No username or email address'
-                    });
-                    return;
-                }
-
-                recoverPassword(payload, function (error) { });
+        }
+        // basic security practice dont tell the attacker which part was correct.
+        if (!payload.email) {
+            response.send({
+                error: 'No username or email address'
             });
-
-
-            app.get('/decks', function (req, res, next) {
-
-                getAllUsersDecks(function (error, decks) {
-                    if (error) {
-                        next();
-                    }
-                    res.write(JSON.stringify(decks));
-                    next();
-                });
+            return;
+        }
+        if (!payload.username) {
+            response.send({
+                error: 'No username or email address'
             });
-
-            app.get('/usercount', function (req, res, next) {
-
-                getUserCount(function (error, count) {
-                    res.write(JSON.stringify({
-                        usercount: count,
-                        error: error
-                    }));
-                    next();
-                });
-            });
-
-            app.get('/duelrecords', function (req, res, next) {
-                const start = req.params.start,
-                    end = req.params.end || Date.now();
-                getDuels(start, end, function (error, duels) {
-                    res.write(JSON.stringify({
-                        duels: duels,
-                        error: error
-                    }));
-                    next();
-                });
-            });
-
-            app.get('/ranking', function (req, res, next) {
-                getRanking(function (error, ranks) {
-                    res.write(JSON.stringify({
-                        ranks: ranks,
-                        error: error
-                    }));
-                    res.end();
-                });
-            });
-
-            app.post('/createtournament', function (req, res, next) {
-                const banlist = JSON.parse(req.body);
-                createTournament(banlist, function (error, tournament) {
-                    res.write(JSON.stringify({
-                        tournament: tournament,
-                        error: error
-                    }));
-                    next();
-                });
-            });
-
-            app.post('/tournament', function (req, res, next) {
-                const id = req.params.id;
-                queryTournament(id, function (error, tournament) {
-                    res.write(JSON.stringify({
-                        tournament: tournament,
-                        error: error
-                    }));
-                    next();
-                });
-            });
-
-            app.post('/addtournamententry', function (req, res, next) {
-                const id = req.params.id,
-                    entry = JSON.parse(req.body);
-                addTournamentEntry(id, entry, function (error, result) {
-                    res.write(JSON.stringify({
-                        sucess: Boolean(result),
-                        error: error
-                    }));
-                    next();
-                });
-            });
-
-            app.post('/updatetournamententry', function (req, res, next) {
-                const id = req.params.id,
-                    entry = JSON.parse(req.body);
-                updateTournamentEntry(id, entry, function (error, result) {
-                    res.write(JSON.stringify({
-                        sucess: Boolean(result),
-                        error: error
-                    }));
-                    next();
-                });
-            });
-
-            app.get('/api/session/:session', getSession);
-
-
+            return;
         }
 
+        Users.findOne({ 'email': payload.email }, 'username email', function (err, person) {
+            if (person) {
+                startRecoverPassword(person, callback);
+            }
+        });
+
+    });
+
+    app.post('/recoverpassword', function (request, response, next) {
+        var payload = request.body || {},
+            user;
+
+        function callback(error, person, code) {
+            response.send({
+                error: error
+            });
+        }
+        // basic security practice dont tell the attacker which part was correct.
+        if (!payload.email) {
+            response.send({
+                error: 'No username or email address'
+            });
+            return;
+        }
+        if (!payload.username) {
+            response.send({
+                error: 'No username or email address'
+            });
+            return;
+        }
+
+        recoverPassword(payload, function (error) { });
+    });
+
+
+    app.get('/decks', function (req, res, next) {
+
+        getAllUsersDecks(function (error, decks) {
+            if (error) {
+                next();
+            }
+            res.write(JSON.stringify(decks));
+            next();
+        });
+    });
+
+    app.get('/usercount', function (req, res, next) {
+
+        getUserCount(function (error, count) {
+            res.write(JSON.stringify({
+                usercount: count,
+                error: error
+            }));
+            next();
+        });
+    });
+
+    app.get('/duelrecords', function (req, res, next) {
+        const start = req.params.start,
+            end = req.params.end || Date.now();
+        getDuels(start, end, function (error, duels) {
+            res.write(JSON.stringify({
+                duels: duels,
+                error: error
+            }));
+            next();
+        });
+    });
+
+    app.get('/ranking', function (req, res, next) {
+        getRanking(function (error, ranks) {
+            res.write(JSON.stringify({
+                ranks: ranks,
+                error: error
+            }));
+            res.end();
+        });
+    });
+
+    app.post('/createtournament', function (req, res, next) {
+        const banlist = JSON.parse(req.body);
+        createTournament(banlist, function (error, tournament) {
+            res.write(JSON.stringify({
+                tournament: tournament,
+                error: error
+            }));
+            next();
+        });
+    });
+
+    app.post('/tournament', function (req, res, next) {
+        const id = req.params.id;
+        queryTournament(id, function (error, tournament) {
+            res.write(JSON.stringify({
+                tournament: tournament,
+                error: error
+            }));
+            next();
+        });
+    });
+
+    app.post('/addtournamententry', function (req, res, next) {
+        const id = req.params.id,
+            entry = JSON.parse(req.body);
+        addTournamentEntry(id, entry, function (error, result) {
+            res.write(JSON.stringify({
+                sucess: Boolean(result),
+                error: error
+            }));
+            next();
+        });
+    });
+
+    app.post('/updatetournamententry', function (req, res, next) {
+        const id = req.params.id,
+            entry = JSON.parse(req.body);
+        updateTournamentEntry(id, entry, function (error, result) {
+            res.write(JSON.stringify({
+                sucess: Boolean(result),
+                error: error
+            }));
+            next();
+        });
+    });
+
+    app.get('/api/session/:session', getSession);
+
+
+}
+
 module.exports = {
-            getDuels,
-            recordDuelResult,
-            getRanking,
-            createTournament,
-            queryTournament,
-            addTournamentEntry,
-            updateTournamentEntry,
-            validate,
-            saveDeck,
-            setupController,
-            getAllUsersDecks,
-            getUserCount,
-            validateSession,
-            db
-        };
+    getDuels,
+    recordDuelResult,
+    getRanking,
+    createTournament,
+    queryTournament,
+    addTournamentEntry,
+    updateTournamentEntry,
+    validate,
+    saveDeck,
+    setupController,
+    getAllUsersDecks,
+    getUserCount,
+    validateSession,
+    db
+};

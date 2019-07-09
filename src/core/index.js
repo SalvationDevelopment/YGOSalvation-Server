@@ -456,12 +456,12 @@ function Duel() {
                 banlist: game.banlist,
                 decks: game.decks,
                 loser: {
-                    username: game.players[Math.abs(command.player - 1)].username,
-                    elo: game.players[Math.abs(command.player - 1)].ranking.elo
+                    username: game.player[Math.abs(command.player - 1)].username,
+                    elo: game.player[Math.abs(command.player - 1)].ranking.elo
                 },
                 winner: {
-                    username: game.players[command.player].username,
-                    elo: game.players[command.player].ranking.elo
+                    username: game.player[command.player].username,
+                    elo: game.player[command.player].ranking.elo
                 }
             });
         });
