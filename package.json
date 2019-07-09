@@ -19,6 +19,7 @@
         "compression": "^1.7.4",
         "ddos": "^0.1.37",
         "dotenv": "^4.0.0",
+        "elo-rank": "^1.0.3",
         "express": "^4.17.1",
         "ffi": "^2.3.0",
         "function-queue": "0.0.12",

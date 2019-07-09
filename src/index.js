@@ -316,14 +316,7 @@ function childHandler(child, socket, message) {
             });
             break;
         case 'win':
-            const duel = {
-                decks: message.decks,
-                banlist: message.banlist,
-                winner: message.winner,
-                loser: message.players[Math.abs(message.winner - 1)],
-                players: message.players
-            };
-            userController.recordDuelResult(duel, function () {
+            userController.recordDuelResult(message, function () {
                 console.log('Logged Duel', message.players.join(' vs '));
                 child.send({
                     action: 'kill'

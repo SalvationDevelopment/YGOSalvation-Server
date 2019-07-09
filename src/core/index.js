@@ -449,13 +449,20 @@ function Duel() {
     function load(game, state, players, spectators) {
         process.recordOutcome = new EventEmitter();
         process.recordOutcome.once('win', function (command) {
+
+
             process.send({
                 action: 'win',
-                winner: command.player,
-                players: game.player.map((player) => player.username),
                 banlist: game.banlist,
-                decks: state.decks,
-                game
+                decks: game.decks,
+                loser: {
+                    username: game.players[Math.abs(command.player - 1)].username,
+                    elo: game.players[Math.abs(command.player - 1)].ranking.elo
+                },
+                winner: {
+                    username: game.players[command.player].username,
+                    elo: game.players[command.player].ranking.elo
+                }
             });
         });
 
