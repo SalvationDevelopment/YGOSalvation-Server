@@ -40,7 +40,11 @@ class SettingsScreen extends React.Component {
             React.createElement('label', {}, 'Image URL'),
             React.createElement('input', { id: 'imageurl', placeholder: 'http://localhost:8887' }),
             React.createElement('label', {}, 'Hide Old Banlist'),
-            React.createElement('input', { id: 'imageurl', type: 'checkbox' })
+            React.createElement('input', { id: 'oldbanlist', type: 'checkbox' }),
+            React.createElement('label', {}, 'Play Assistance'),
+            React.createElement('input', { id: 'playassist', type: 'checkbox' }),
+            React.createElement('label', {}, 'Automatically Bluff'),
+            React.createElement('input', { id: 'bluff', type: 'checkbox' })
         ]);
     }
 }

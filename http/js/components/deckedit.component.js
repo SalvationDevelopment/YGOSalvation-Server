@@ -287,6 +287,9 @@ class DeckEditScreen extends React.Component {
 
     saveToServer() {
         const decks = JSON.parse(JSON.stringify(condenseDecks(this.state.decks)));
+        decks.sort((a, b) => {
+            return a.name > b.name;
+        });
         store.dispatch({ action: 'SAVE_DECKS', decks });
     }
     save() {

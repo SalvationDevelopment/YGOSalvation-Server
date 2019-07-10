@@ -333,8 +333,8 @@ function recordDuelResult(duel, callback) {
             //update score, 1 if won 0 if lost
             winner.ranking.elo = elo.updateRating(winnerScore, 1, winner.ranking.elo);
             loser.ranking.elo = elo.updateRating(loserScore, 0, winner.ranking.elo);
-            winner.ranking.rankedWins = user.ranking.rankedWins + 1;
-            loser.ranking.rankedLosses = user.ranking.rankedLosses + 1;
+            winner.ranking.rankedWins = winner.ranking.rankedWins + 1;
+            loser.ranking.rankedLosses = loser.ranking.rankedLosses + 1;
 
             winner.save();
             loser.save();
@@ -402,11 +402,17 @@ function getRanking(callback) {
         const ranks = users.map(function (user) {
             return {
                 username: user.username,
-                points: user.ranking.rankPoints
+                points: user.ranking.rankPoints,
+                elo: user.ranking.elo
             };
         });
         ranks.sort(function (primary, secondary) {
-            return primary.points < secondary.points;
+            if (primary.points !== secondary.points) {
+                return primary.points < secondary.points
+            }
+            if (primary.elo !== secondary.elo) {
+                return primary.points < secondary.points
+            }
         });
         callback(null, ranks.slice(0, 100));
     });

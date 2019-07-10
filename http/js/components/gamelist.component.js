@@ -8,7 +8,19 @@ class GamelistScreen extends React.Component {
             userlist: [],
             gamelist: {}
         };
+        this.settings = {
+            automatic: true,
+            locked: false,
+            mode: 'Match',
+            ranked: false
+        };
         this.store = store;
+    }
+
+    filter(list) {
+        return list.filer((game) => {
+
+        });
     }
 
     nav() {
@@ -59,9 +71,36 @@ class GamelistScreen extends React.Component {
     }
 
     render() {
-        return [React.createElement('div', { id: 'gamelistitems' }, this.renderGamelist()),
-        React.createElement('div', { className: 'gamelistcenter' },
-            `Active Duels : ${this.state.activeduels} | Duelist : ${this.state.duelist} | Connected : ${this.state.userlist.length}`)
+        const element = React.createElement;
+        return [
+            React.createElement('div', { id: 'gamelistitems' }, this.renderGamelist()),
+            React.createElement('div', { id: 'gamelistfilter', key: 'gamelistfilter' }, [
+                element('h2', {}, 'Filter'),
+                element('controls', {}, [
+                    element('div', { className: 'filtercol' }, [
+                        element('select', { id: 'rounds' }, [
+                            element('option', { value: 0 }, 'Single/Match'),
+                            element('option', { value: 1 }, 'Single'),
+                            element('option', { value: 2 }, 'Match')
+                        ]),
+                        element('select', { id: 'autofilter' }, [
+                            element('option', { value: 0 }, 'Automatic/Manual'),
+                            element('option', { value: 1 }, 'Automatic'),
+                            element('option', { value: 2 }, 'Manual')
+                        ]),
+                        element('select', { id: 'autofilter' }, [
+                            element('option', { value: 0 }, 'Ranked/Exhibition'),
+                            element('option', { value: 1 }, 'Ranked'),
+                            element('option', { value: 2 }, 'Exhibition')
+                        ]),
+                        element('input', { id: 'cardname', type: 'text', placeholder: 'Username' }),
+                        element('br'),
+                        element('button', {}, 'Reset')
+                    ])
+                ])
+            ]),
+            React.createElement('div', { className: 'gamelistcenter' },
+                `Active Duels : ${this.state.activeduels} | Duelist : ${this.state.duelist} | Connected : ${this.state.userlist.length}`)
         ];
     }
 }

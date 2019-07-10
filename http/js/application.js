@@ -195,7 +195,6 @@ class ApplicationComponent extends React.Component {
     }
 
     onData(data) {
-        console.log(data.clientEvent, data);
         switch (data.clientEvent) {
             case 'ack':
                 this.ack();

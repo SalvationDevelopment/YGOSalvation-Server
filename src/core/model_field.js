@@ -211,6 +211,7 @@ function shuffle(deck) {
  * @returns {Card[]} a collection of cards
  */
 function hideViewOfZone(view) {
+    return view;
     var output = [];
     view.forEach(function (card, index) {
         output[index] = {};
@@ -246,6 +247,7 @@ function cleanCounters(stack) {
  * @returns {Card[]} a collection of cards
  */
 function hideHand(view) {
+    return view;
     var output = [];
     view.forEach(function (card, index) {
         output[index] = {};
@@ -1511,6 +1513,7 @@ function init(callback) {
     }
 
     function retryLastQuestion() {
+        console.log('retrying', lastQuestion.slot, lastQuestion.type, lastQuestion.options, lastQuestion.answerLength, lastQuestion.onAnswerFromUser);
         question(lastQuestion.slot, lastQuestion.type, lastQuestion.options, lastQuestion.answerLength, lastQuestion.onAnswerFromUser);
     }
 

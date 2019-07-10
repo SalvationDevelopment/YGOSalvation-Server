@@ -20,7 +20,6 @@ class HostScreen extends React.Component {
             startLP: 8000,
             time: 180000,
             ranked: false
-
         };
         this.store = store;
 

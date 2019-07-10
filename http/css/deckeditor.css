@@ -46,8 +46,6 @@
 }
 
 #deckedit #prev {
-    margin-bottom: 40%;
-    margin-top: 21vh;
     margin-right: 1%;
 }
 
@@ -133,6 +131,10 @@
     margin-bottom: 1vh;
     clear: left;
     width: 45%;
+}
+
+img.imgContainer {
+    height: 100%;
 }
 
 .deckcontrols {
