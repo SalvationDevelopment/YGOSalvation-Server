@@ -17,6 +17,14 @@ class GamelistScreen extends React.Component {
         this.store = store;
     }
 
+    onChange(event) {
+        const id = event.target.id;
+        this.settings[id] = event.target.value;
+        if (event.target.value === 'on') {
+            this.settings[id] = event.target.checked;
+        }
+    }
+
     filter(list) {
         return list.filer((game) => {
 
@@ -41,6 +49,10 @@ class GamelistScreen extends React.Component {
 
     enter(room) {
         this.store.dispatch(Object.assign({ action: 'DUEL' }, room));
+    }
+
+    reset() {
+
     }
 
     names(room) {
@@ -78,24 +90,24 @@ class GamelistScreen extends React.Component {
                 element('h2', {}, 'Filter'),
                 element('controls', {}, [
                     element('div', { className: 'filtercol' }, [
-                        element('select', { id: 'rounds' }, [
+                        element('select', { id: 'rounds', onChange: this.onChange.bind(this) }, [
                             element('option', { value: 0 }, 'Single/Match'),
                             element('option', { value: 1 }, 'Single'),
                             element('option', { value: 2 }, 'Match')
                         ]),
-                        element('select', { id: 'autofilter' }, [
+                        element('select', { id: 'autofilter', onChange: this.onChange.bind(this) }, [
                             element('option', { value: 0 }, 'Automatic/Manual'),
                             element('option', { value: 1 }, 'Automatic'),
                             element('option', { value: 2 }, 'Manual')
                         ]),
-                        element('select', { id: 'autofilter' }, [
+                        element('select', { id: 'autofilter', onChange: this.onChange.bind(this) }, [
                             element('option', { value: 0 }, 'Ranked/Exhibition'),
                             element('option', { value: 1 }, 'Ranked'),
                             element('option', { value: 2 }, 'Exhibition')
                         ]),
-                        element('input', { id: 'cardname', type: 'text', placeholder: 'Username' }),
+                        element('input', { id: 'cardname', type: 'text', placeholder: 'Username', onChange: this.onChange.bind(this) }),
                         element('br'),
-                        element('button', {}, 'Reset')
+                        element('button', { onClick: this.reset.bind(this) }, 'Reset')
                     ])
                 ])
             ]),

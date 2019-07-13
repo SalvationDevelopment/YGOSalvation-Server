@@ -28,7 +28,9 @@ const express = require('express'),
 //     responseStatus: 429
 // });
 
+
 function systemLoad(req, res, next) {
+    toobusy.maxLag(300);
     var processing = toobusy();
     if (processing && req.headers['Content-Type'] !== 'application/json') {
         res.status(503).send(`<html><head>
