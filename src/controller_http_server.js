@@ -30,8 +30,8 @@ const express = require('express'),
 
 
 function systemLoad(req, res, next) {
-    toobusy.maxLag(300);
-    var processing = toobusy();
+    toobusy.maxLag(1000);
+    var processing = false;
     if (processing && req.headers['Content-Type'] !== 'application/json') {
         res.status(503).send(`<html><head>
         <title>YGOSalvation</title>
