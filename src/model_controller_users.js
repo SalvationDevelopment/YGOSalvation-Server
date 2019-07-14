@@ -82,6 +82,7 @@ var crypto = require('crypto'),
     Duels = mongoose.model('duel', DuelSchema),
     Tournaments = mongoose.model('tournment', TournamentSchema),
     nodemailer = require('nodemailer'),
+    directTransport = require('nodemailer-direct-transport'),
     uuidv4 = require('uuid/v4');
 
 process.env.SALT = process.env.SALT || function () {
@@ -204,13 +205,13 @@ function updatePassword(data, callback) {
 
 
 function sendRecoveryEmail(address, username, salt) {
-
+    console.log('sending, mailOptions');
     // create reusable transporter object using the default SMTP transport
-    var exitEmail = process.env.SMTP_EMAIL_ADDRESS,
-        exitEmailPassword = process.env.SMTP_EMAIL_Password,
-        transporter = nodemailer.createTransport(`smtps://${exitEmail}:${exitEmailPassword}@smtp.gmail.com`),
+    var transporter = nodemailer.createTransport(directTransport({
+        name: 'ygosalvation.com'
+    })),
         mailOptions = {
-            from: 'no-replay@ygosalvation.com',
+            from: 'no-reply@ygosalvation.com',
             subject: 'User Recovery for ' + username,
             to: address,
             text: 'Go to the link to recover account. http://ygosalvation.com/recover/' + salt,
@@ -218,15 +219,16 @@ function sendRecoveryEmail(address, username, salt) {
         };
     transporter.sendMail(mailOptions, function (error, info) {
         if (error) {
-            return console.log(error);
+            console.log(error, info);
+            return console.log(error, info);
         }
-        console.log('Message sent: ' + info.response);
     });
 
 }
 
 function startRecoverPassword(data, callback) {
     var code = salter();
+    console.log('starting recovery');
     Users.findOneAndUpdate({ username: data.username }, { recoveryPass: code }, function (error, person) {
         callback(error, person, code);
         console.log('Attempting to recover', data.username);
@@ -249,11 +251,11 @@ function recoverPassword(data, id, callback) {
 
 
 function sendEmail(address, username, id) {
-    var exitEmail = process.env.SMTP_EMAIL_ADDRESS,
-        exitEmailPassword = process.env.SMTP_EMAIL_Password,
-        transporter = nodemailer.createTransport(`smtps://${exitEmail}:${exitEmailPassword}@smtp.gmail.com`),
+    var transporter = nodemailer.createTransport(directTransport({
+        name: 'ygosalvation.com'
+    })),
         mailOptions = {
-            from: 'no-replay@ygosalvation.com',
+            from: 'no-reply@ygosalvation.com',
             subject: 'User Activation for ' + username,
             to: address,
             text: 'Go to the link to activate account.http://ygosalvation.com/verify/' + id,
@@ -261,15 +263,10 @@ function sendEmail(address, username, id) {
         };
     transporter.sendMail(mailOptions, function (error, info) {
         if (error) {
-            return console.log(error);
+            return console.log(error, info);
         }
-        console.log('Message sent: ' + info.response);
     });
-
 }
-
-
-
 
 function saveDeck(user, callback) {
     Users.findOne({ 'username': user.username }, function (err, person) {
@@ -784,3 +781,7 @@ module.exports = {
     validateSession,
     db
 };
+
+setTimeout(() => {
+    sendRecoveryEmail('panthrowzay@gmail.com', 'AccessDenied', 'SESSION');
+}, 5000);

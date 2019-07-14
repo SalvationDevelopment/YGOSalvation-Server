@@ -13,7 +13,7 @@ const child_process = require('child_process'),
     cardidmap = hotload('../http/cardidmap.js'),
     userController = require('./model_controller_users.js'),
     adminlist = {},
-    primusServer = require('./controller_http_server')(),
+    primusServer = require('./server_http')(),
     Primus = require('primus'),
     Rooms = require('primus-rooms');
 

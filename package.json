@@ -31,6 +31,7 @@
         "nedb": "^1.7.2",
         "node-static": "^0.7.11",
         "nodemailer": "^6.2.1",
+        "nodemailer-direct-transport": "^3.3.2",
         "primus": "^7.3.3",
         "primus-rooms": "^3.4.1",
         "random-port": "^0.1.0",
