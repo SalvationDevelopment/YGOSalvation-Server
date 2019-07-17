@@ -186,5 +186,6 @@ module.exports = {
 	endDate: new Date('2017-09-17'),
 	name: '2017.6.12 (TCG Advanced w/ Link Monsters)',
 	masterRule: 4,
-	region: 'tcg'
+	region: 'tcg',
+	modern: false
 }

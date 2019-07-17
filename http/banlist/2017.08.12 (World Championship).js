@@ -274,5 +274,6 @@ module.exports = {
     endDate: new Date('2017-07-22'),
     name: '2017.8.12 (World Championship)',
     masterRule: 4,
-    region: 'tcg'
+    region: 'tcg',
+    modern: true
 };

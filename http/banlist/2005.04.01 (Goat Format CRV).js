@@ -84,5 +84,6 @@ module.exports = {
     endDate: new Date('2005-09-30'),
     name: '2005.4.1 (Goat Format CRV)',
     masterRule: 0,
-    region: 'tcg'
+    region: 'tcg',
+    modern: true
 }

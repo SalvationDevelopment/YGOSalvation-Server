@@ -1,5 +1,5 @@
 module.exports = {
-    bannedCards: {
+	bannedCards: {
 		87910978: 0, //Brain Control
 		50321796: 0, //Brionac, Dragon of the Ice Barrier
 		69243953: 0, //Butterfly Dagger - Elma
@@ -143,13 +143,14 @@ module.exports = {
 		53582587: 2, //Torrential Tribute
 		10802915: 2, //Tour Guide From the Underworld
 		98777036: 2, //Tragoedia
-    },
-    bannedTypes: [],
-    exceptions: [],
-    startDate: new Date('2013-03-01'),
-    endDate: new Date('2013-08-02'),
-    name: '2013.3.1 (TCG Baby Dragon Rulers)',
-    masterRule: 2,
-    region: 'tcg'
+	},
+	bannedTypes: [],
+	exceptions: [],
+	startDate: new Date('2013-03-01'),
+	endDate: new Date('2013-08-02'),
+	name: '2013.3.1 (TCG Baby Dragon Rulers)',
+	masterRule: 2,
+	region: 'tcg',
+	modern: false
 
 }

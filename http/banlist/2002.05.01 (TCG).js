@@ -20,6 +20,6 @@ module.exports = {
     endDate: new Date('2002-06-25'),
     name: '2002.5.1 (TCG)',
     masterRule: 0,
-    region: 'tcg'
-
+    region: 'tcg',
+    modern: false
 }

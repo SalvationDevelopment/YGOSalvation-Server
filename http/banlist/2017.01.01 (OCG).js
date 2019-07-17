@@ -155,5 +155,6 @@ module.exports = {
     endDate: new Date('2017-03-31'),
     name: '2017.1.1 (OCG)',
     masterRule: 3,
-    region: 'ocg'
+    region: 'ocg',
+    modern: false
 }

@@ -190,5 +190,6 @@ module.exports = {
     startDate: new Date('2017-11-06'),
     name: '2017.11.6 (TCG Advanced)',
     masterRule: 4,
-    region: 'tcg'
+    region: 'tcg',
+    modern: false
 };

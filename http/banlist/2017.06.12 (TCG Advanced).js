@@ -186,5 +186,6 @@ module.exports = {
 	endDate: new Date('2017-07-19'),
 	name: '2017.6.12 (TCG Advanced)',
 	masterRule: 3,
-	region: 'tcg'
+	region: 'tcg',
+	modern: false
 }

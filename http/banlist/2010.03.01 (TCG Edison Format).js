@@ -140,12 +140,13 @@ module.exports = {
 		80604092: 2, //Ultimate Offering
 		56747793: 2, //United We Stand
 	},
-    bannedTypes: [],
-    exceptions: [],
-    startDate: new Date('2010-03-01'),
-    endDate: new Date('2010-04-30'),
-    name: '2010.3.1 (TCG Edison Format)',
-    masterRule: 1,
-    region: 'tcg'
+	bannedTypes: [],
+	exceptions: [],
+	startDate: new Date('2010-03-01'),
+	endDate: new Date('2010-04-30'),
+	name: '2010.3.1 (TCG Edison Format)',
+	masterRule: 1,
+	region: 'tcg',
+	modern: false
 
 }

@@ -1,5 +1,5 @@
 module.exports = {
-    bannedCards: {
+	bannedCards: {
 		72989439: 0, //Black Luster Soldier - Envoy of the Beginning
 		69243953: 0, //Butterfly Dagger - Elma
 		97077563: 0, //Call of the Haunted
@@ -113,13 +113,13 @@ module.exports = {
 		28297833: 2, //Necroface
 		71044499: 2, //Nobleman of Crossout
 		30312361: 2, //Phantom of Chaos
-    },
-    bannedTypes: [],
-    exceptions: [],
-    startDate: new Date('2008-09-01'),
-    endDate: new Date('2009-02-27'),
-    name: '2008.9.1 (TCG TeleDAD Format)',
-    masterRule: 1,
-    region: 'tcg'
-
+	},
+	bannedTypes: [],
+	exceptions: [],
+	startDate: new Date('2008-09-01'),
+	endDate: new Date('2009-02-27'),
+	name: '2008.9.1 (TCG TeleDAD Format)',
+	masterRule: 1,
+	region: 'tcg',
+	modern: false
 }

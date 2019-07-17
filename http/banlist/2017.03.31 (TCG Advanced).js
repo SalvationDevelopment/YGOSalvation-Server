@@ -32,7 +32,7 @@ module.exports = {
         85602018: 0, //Last Will
         34086406: 0, //Lavalval Chain
         34206604: 0, //Magical Scientist
-		31178212: 0, //Majespecter Unicorn - Kirin
+        31178212: 0, //Majespecter Unicorn - Kirin
         21593977: 0, //Makyura the Destructor
         34906152: 0, //Mass Driver
         46411259: 0, //Metamorphosis
@@ -65,7 +65,7 @@ module.exports = {
         18326736: 0, //Tellarknight Ptolemaeus
         89399912: 0, //Tempest, Dragon Ruler of Storms
         42829885: 0, //The Forceful Sentry
-		88071625: 0, //The Tyrant Neptune
+        88071625: 0, //The Tyrant Neptune
         26400609: 0, //Tidal, Dragon Ruler of Waterfalls
         35316708: 0, //Time Seal
         64697231: 0, //Trap Dustshoot
@@ -172,14 +172,14 @@ module.exports = {
         14943837: 2, //Debris Dragon
         62265044: 2, //Dragon Ravine
         37742478: 2, //Honest
-		99330325: 2, //Interrupted Kaiju Slumber
+        99330325: 2, //Interrupted Kaiju Slumber
         28297833: 2, //Necroface
         29843091: 2, //Ojama Trio
         423585: 2, //Summoner Monk
         71564252: 2, //Thunder King Rai-Oh
         59297550: 2, //Wind-Up Magician
         72714461: 2, //Wisdom-Eye Magician
-		78872731: 2, //Zoodiac Ratpier
+        78872731: 2, //Zoodiac Ratpier
     },
     bannedTypes: [],
     exceptions: [],
@@ -187,5 +187,6 @@ module.exports = {
     endDate: new Date('2017-06-11'),
     name: '2017.3.31 (TCG Advanced)',
     masterRule: 3,
-    region: 'tcg'
+    region: 'tcg',
+    modern: false
 }
