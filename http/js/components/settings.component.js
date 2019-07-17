@@ -7,8 +7,7 @@ class SettingsScreen extends React.Component {
         };
         this.settings = {
             theme: localStorage.theme || 0,
-            hide_banlist: localStorage.all_banlist,
-            default_deck: localStorage.default_deck || 0,
+            hide_banlist: Boolean(localStorage.all_banlist),
             language: localStorage.language || 'en'
 
         };
@@ -23,6 +22,10 @@ class SettingsScreen extends React.Component {
         if (event.target.value === 'on') {
             this.settings[id] = event.target.checked;
         }
+
+        localStorage.theme = this.settings.theme;
+        localStorage.all_banlist = this.settings.all_banlist;
+        localStorage.language = this.settings.language;
 
     }
 

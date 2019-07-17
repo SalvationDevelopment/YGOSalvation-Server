@@ -185,6 +185,7 @@ enums.STOC = {
         23: 'MSG_SELECT_SUM',
         24: 'MSG_SELECT_DISFIELD',
         25: 'MSG_SORT_CARD',
+        26: 'MSG_SELECT_UNSELECT_CARD',
         30: 'MSG_CONFIRM_DECKTOP',
         31: 'MSG_CONFIRM_CARDS',
         32: 'MSG_SHUFFLE_DECK',
@@ -356,7 +357,7 @@ enums.CTOS = {
     0x23: 'CTOS_HS_NOTREADY',
     0x24: 'CTOS_HS_KICK',
     0x25: 'CTOS_HS_START'
-        /*defunc 0x26: "DEVPRO_GAME_INFO" */
+    /*defunc 0x26: "DEVPRO_GAME_INFO" */
 
 };
 
@@ -453,7 +454,7 @@ enums.timeout = {
 
 function invert(target) {
     var output = {};
-    Object.keys(target).forEach(function(key) {
+    Object.keys(target).forEach(function (key) {
         output[target[key]] = key;
     });
     return output;

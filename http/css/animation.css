@@ -78,6 +78,7 @@ div#selectionsystem {
     bottom: -50px;
     left: 350px;
     transition-delay: 200ms;
+    transform: matrix3d(1, 0, 0, 0, 0, 1, -1.5, 0, 1, 0, 1, 0, 1, 0, 0, 1) !important
 }
 
 .p0.EXTRA {
@@ -227,9 +228,10 @@ div#selectionsystem {
 }
 
 .p1.HAND {
-    bottom: 560px;
+    bottom: 580px;
     left: 350px;
     transition-delay: 200ms;
+    transform: matrix3d(1, 0, 0, 0, 0, -1, 1, 0, 1, 0, 1, 0, 1, 0, 0, 1) !important;
 }
 
 .p1.EXTRA {

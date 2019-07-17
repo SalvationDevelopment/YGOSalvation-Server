@@ -343,6 +343,10 @@ function makeGame(pduel, settings) {
      */
     function sendBufferToPlayer(player, message) {
         lastMessage = message;
+        if (!players[player]) {
+            console.log('unknown player', player, message);
+            return;
+        }
         players[player].write(message);
     }
 

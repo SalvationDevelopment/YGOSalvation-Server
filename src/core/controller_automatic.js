@@ -378,6 +378,9 @@ function boardController(gameBoard, slot, message, ygopro, player) {
         case ('MSG_SELECT_CARD'):
             askUser(gameBoard, slot, message, ygopro, 'MSG_SELECT_CARD');
             break;
+        case ('MSG_SELECT_UNSELECT_CARD'):
+            askUser(gameBoard, slot, message, ygopro, 'MSG_SELECT_UNSELECT_CARD');
+            break;
         case ('MSG_SELECT_CHAIN'):
             askUser(gameBoard, slot, message, ygopro, 'MSG_SELECT_CHAIN');
             break;

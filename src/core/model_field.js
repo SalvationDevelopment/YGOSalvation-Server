@@ -247,7 +247,6 @@ function cleanCounters(stack) {
  * @returns {Card[]} a collection of cards
  */
 function hideHand(view) {
-    return view;
     var output = [];
     view.forEach(function (card, index) {
         output[index] = {};

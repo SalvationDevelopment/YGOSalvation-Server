@@ -764,9 +764,9 @@ function msg_flipsummoning(message, pbuf, game) {
 
 function msg_select_battlecmd(message, pbuf, game) {
     message.player = pbuf.readInt8(); // defunct in the code, just reading ahead.
+    message.count = pbuf.readInt8();
     message.activatable_cards = getIdleSet(pbuf, true);
     message.attackable_cards = [];
-    message.count = pbuf.readInt8();
     for (let i = 0; i < message.count; ++i) {
         message.attackable_cards.push({
             id: pbuf.readInt32(),
@@ -1322,7 +1322,7 @@ function msg_select_unselect_card(message, pbuf, game) {
     message.cards2 = [];
     for (let i = 0; i < message.count1; ++i) {
         message.cards1.push({
-            code: pbuf.readInt32(),
+            id: pbuf.readInt32(),
             player: pbuf.readInt8(),
             location: pbuf.readInt8(),
             index: pbuf.readInt8(),
@@ -1332,7 +1332,7 @@ function msg_select_unselect_card(message, pbuf, game) {
     message.count2 = pbuf.readInt8();
     for (let i = message.count1; i < message.count1 + message.count2; ++i) {
         message.cards2.push({
-            code: pbuf.readInt32(),
+            id: pbuf.readInt32(),
             player: pbuf.readInt8(),
             location: pbuf.readInt8(),
             index: pbuf.readInt8(),
@@ -1453,7 +1453,8 @@ function analyze(coreMessage, length, game) {
         pbuf = new BufferStreamReader(coreMessage);
 
     while (pbuf - msgbuffer < length) {
-        const messageFunction = enums.STOC.STOC_GAME_MSG[pbuf.readInt8()];
+        const commandEnum = pbuf.readInt8(),
+            messageFunction = enums.STOC.STOC_GAME_MSG[commandEnum];
         let output = 0;
         if (!translator[messageFunction]) {
             // there should always be a function to run. Otherwise is a bug in the BufferStreamReader step logic.
@@ -1462,7 +1463,12 @@ function analyze(coreMessage, length, game) {
         var message = {
             command: messageFunction
         };
-        console.log(messageFunction);
+        if (!messageFunction) {
+            console.log('Did not comprehend', commandEnum);
+        } else {
+            console.log(messageFunction);
+        }
+
         output = (messageFunction) ? translator[messageFunction](message, pbuf, game) : 0;
         if (output) {
             return output;

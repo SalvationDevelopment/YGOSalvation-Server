@@ -197,6 +197,9 @@ class CardInfo extends React.Component {
         if (!targetCard) {
             return '';
         }
+        if (!targetCard.id) {
+            return '';
+        }
         return [
             React.createElement('div', { className: 'descContainer', key: 'descContainer' },
                 React.createElement('div', { className: 'cardName', key: 'cardName' },

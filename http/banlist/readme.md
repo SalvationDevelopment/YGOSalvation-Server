@@ -10,6 +10,8 @@ module.exports =
      exceptions : [], //card IDs that ignore the bannedTypes array
      startDate : new Date('YYYY-MM-DD'), //legal start date
      endDate : new Date('YYYY-MM-DD'), //legal end date, or 'null' if date is unknown
+     primary : false, // if the banlist is the default of the host and deck editor
+     modern : true, // if the banlist is commonly planned and should be on the condensed ban list listings.
      name : ' ',
 }
 ```
