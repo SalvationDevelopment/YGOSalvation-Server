@@ -1,3 +1,5 @@
+/* eslint-disable no-underscore-dangle */
+/* eslint-disable no-plusplus */
 /*jslint node:true*/
 
 'use strict';
@@ -79,7 +81,8 @@ var crypto = require('crypto'),
     Users = mongoose.model('user', UserSchema),
     Duels = mongoose.model('duel', DuelSchema),
     Tournaments = mongoose.model('tournment', TournamentSchema),
-    SparkPost = require('sparkpost'),
+    nodemailer = require('nodemailer'),
+    directTransport = require('nodemailer-direct-transport'),
     uuidv4 = require('uuid/v4');
 
 process.env.SALT = process.env.SALT || function () {
@@ -92,13 +95,6 @@ mongoose.set('useFindAndModify', false);
 mongoose.set('useCreateIndex', true);
 
 
-function sessionTimeout(time) {
-    if (!time) {
-        return false;
-    }
-    const hour = 60 * 60 * 1000;
-    return ((time.getTime() + hour) > Date.now());
-}
 
 var db = mongoose.connect('mongodb://localhost/salvation', {
     useNewUrlParser: true,
@@ -113,6 +109,15 @@ var db = mongoose.connect('mongodb://localhost/salvation', {
     }
 });
 
+
+function sessionTimeout(time) {
+    if (!time) {
+        return false;
+    }
+    const hour = 60 * 60 * 1000;
+    return ((time.getTime() + hour) > Date.now());
+}
+
 mongoose.connection.on('error', function (err) {
     console.error('MongoDB error: %s', err);
 });
@@ -121,7 +126,7 @@ mongoose.connection.on('error', function (err) {
 
 function salter() {
     var text = '';
-    for (var i = 0; i < 8; i++) {
+    for (let i = 0; i < 8; i++) {
         text += uuidv4().split('-').join();
     }
     return text;
@@ -200,36 +205,30 @@ function updatePassword(data, callback) {
 
 
 function sendRecoveryEmail(address, username, salt) {
-    try {
-        var emailClient = new SparkPost(process.env.SPARKPOST),
-            emaildata = {
-                from: 'no-replay@ygosalvation.com',
-                subject: 'User Recovery for ' + username,
-                html: '<html><body><p>Click the link to recover account. <a href="http://ygosalvation.com/recover/' + salt + '" >http://ygosalvation.com/recover/' + salt + '</a></p></body></html>'
-            };
-        emailClient.transmissions.send({
-            content: {
-                from: 'no-replay@ygosalvation.com',
-                subject: 'User Recovery for ' + username,
-                html: '<html><body><p>Click the link to recover account. <a href="http://ygosalvation.com/recover/' + salt + '" >http://ygosalvation.com/recover/' + salt + '</a></p></body></html>'
-            },
-            recipients: [
-                { address }
-            ]
-        }).then(data => {
-            console.log(data, emaildata);
-        }).catch(err => {
-            console.log('Whoops! Something went wrong');
-            console.log(err, emaildata);
-        });
-    } catch (fatal) {
-        console.log(address, username, fatal, emaildata);
-    }
+    console.log('sending, mailOptions');
+    // create reusable transporter object using the default SMTP transport
+    var transporter = nodemailer.createTransport(directTransport({
+        name: 'ygosalvation.com'
+    })),
+        mailOptions = {
+            from: 'no-reply@ygosalvation.com',
+            subject: 'User Recovery for ' + username,
+            to: address,
+            text: 'Go to the link to recover account. http://ygosalvation.com/recover/' + salt,
+            html: '<html><body><p>Click the link to recover account. <a href="http://ygosalvation.com/recover/' + salt + '" >http://ygosalvation.com/recover/' + salt + '</a></p></body></html>'
+        };
+    transporter.sendMail(mailOptions, function (error, info) {
+        if (error) {
+            console.log(error, info);
+            return console.log(error, info);
+        }
+    });
 
 }
 
 function startRecoverPassword(data, callback) {
     var code = salter();
+    console.log('starting recovery');
     Users.findOneAndUpdate({ username: data.username }, { recoveryPass: code }, function (error, person) {
         callback(error, person, code);
         console.log('Attempting to recover', data.username);
@@ -240,7 +239,7 @@ function startRecoverPassword(data, callback) {
 }
 
 function recoverPassword(data, id, callback) {
-    Users.findOne({ email: data.email, recoveryPass: id }, function (error, result, person) {
+    Users.findOne({ recoveryPass: id }, function (error, result, person) {
         var password = data.newPassword,
             salt = salter(),
             passwordHash = hash(password, salt);
@@ -250,32 +249,24 @@ function recoverPassword(data, id, callback) {
     });
 }
 
+
 function sendEmail(address, username, id) {
-    try {
-        var emailClient = new SparkPost(process.env.SPARKPOST);
-        emailClient.transmissions.send({
-            content: {
-                from: 'no-replay@ygosalvation.com',
-                subject: 'User Validation for ' + username,
-                html: '<html><body><p>Click the link to activate account. <a href="http://ygosalvation.com/verify/' + id + '" >http://ygosalvation.com/verify/' + id + '</a></p></body></html>'
-            },
-            recipients: [
-                { address }
-            ]
-        }).then(data => {
-            console.log(data);
-        }).catch(err => {
-            console.log('Whoops! Something went wrong');
-            console.log(err);
-        });
-    } catch (fatal) {
-        console.log(address, username, id, fatal);
-    }
-
+    var transporter = nodemailer.createTransport(directTransport({
+        name: 'ygosalvation.com'
+    })),
+        mailOptions = {
+            from: 'no-reply@ygosalvation.com',
+            subject: 'User Activation for ' + username,
+            to: address,
+            text: 'Go to the link to activate account.http://ygosalvation.com/verify/' + id,
+            html: '<html><body><p>Click the link to activate account. <a href="http://ygosalvation.com/verify/' + id + '" >http://ygosalvation.com/verify/' + id + '</a></p></body></html>'
+        };
+    transporter.sendMail(mailOptions, function (error, info) {
+        if (error) {
+            return console.log(error, info);
+        }
+    });
 }
-
-
-
 
 function saveDeck(user, callback) {
     Users.findOne({ 'username': user.username }, function (err, person) {
@@ -322,7 +313,7 @@ function recordDuelResult(duel, callback) {
     Duels.create(input, callback);
     Users.findOne({ username: duel.winner.username }, function (errorWin, winner) {
         Users.findOne({ username: duel.winner.username }, function (errorError, loser) {
-            const error = errorWin || errorError;
+            var error = errorWin || errorError;
             if (error) {
                 callback(error);
             }
@@ -408,10 +399,10 @@ function getRanking(callback) {
         });
         ranks.sort(function (primary, secondary) {
             if (primary.points !== secondary.points) {
-                return primary.points < secondary.points
+                return primary.points < secondary.points;
             }
             if (primary.elo !== secondary.elo) {
-                return primary.points < secondary.points
+                return primary.points < secondary.points;
             }
         });
         callback(null, ranks.slice(0, 100));
@@ -519,7 +510,7 @@ function getSession(request, response) {
             finalResponse(response)(null, result, 1);
             return;
         } else {
-            finalResponse(response)(null, result, 1);
+            finalResponse(response)(new Error('Could not find Session'), result);
         }
     });
 }
@@ -632,12 +623,6 @@ function setupController(app) {
         }
         // basic security practice dont tell the attacker which part was correct.
         if (!payload.email) {
-            response.send({
-                error: 'No username or email address'
-            });
-            return;
-        }
-        if (!payload.username) {
             response.send({
                 error: 'No username or email address'
             });

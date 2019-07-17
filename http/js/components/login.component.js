@@ -64,7 +64,12 @@ class LoginScreen extends React.Component {
         this.store.dispatch({ action: 'RECOVER_ACCOUNT' });
         this.openRecover();
         this.nav();
-        app.alert('Please check your email for the recovery code, and then enter it here.');
+    }
+
+    useRecoverCode(login) {
+        this.store.dispatch({ action: 'RECOVER_CODE' });
+        this.openRecover();
+        this.nav();
     }
 
     registerAccount() {
@@ -91,7 +96,7 @@ class LoginScreen extends React.Component {
                     element('input', Object.assign({ id: 'ips_remember', type: 'checkbox' }, memory)),
                     element('span', {}, 'Remember Username & Password?'),
                     element('br'),
-                    element('a', { className: 'loginsystem', onClick: this.forgot.bind(this) }, 'Forgot Password?'),
+                    element('a', { className: 'loginsystem', style: { cursor: 'pointer' }, onClick: this.forgot.bind(this) }, 'Forgot Password?'),
                     element('br')
                 ]);
             case 'start':
