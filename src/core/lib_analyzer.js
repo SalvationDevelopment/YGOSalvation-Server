@@ -676,7 +676,8 @@ function msg_move(message, pbuf, game) {
     message.ps = pbuf.readInt8(); // original sequence (index)
     message.pp = pbuf.readInt8(); // padding??
     message.cc = pbuf.readInt8(); // current controller
-    message.cl = enums.locations[pbuf.readInt8()]; // current cLocation
+    message.locationEnum = pbuf.readInt8();
+    message.cl = enums.locations[message.locationEnum]; // current cLocation
     message.cs = pbuf.readInt8(); // current sequence (index)
     message.cp = enums.positions[pbuf.readInt8()]; // current position
     message.reason = pbuf.readInt32();
@@ -688,7 +689,7 @@ function msg_move(message, pbuf, game) {
     game.sendToObservers();
 
     if (message.cl !== 0 && (message.cl & 0x80) === 0 && (message.cl !== message.pl || message.pc !== message.cc)) {
-        game.refreshSingle(message.cc, message.cl, message.cs);
+        game.refreshSingle(message.cc, message.locationEnum, message.cs);
     }
 }
 
@@ -1463,8 +1464,8 @@ function analyze(coreMessage, length, game) {
         var message = {
             command: messageFunction
         };
-        if (!messageFunction) {
-            console.log('Did not comprehend', commandEnum);
+        if (!messageFunction && commandEnum) {
+            console.log('Did not comprehend enum:', commandEnum);
         } else {
             console.log(messageFunction);
         }

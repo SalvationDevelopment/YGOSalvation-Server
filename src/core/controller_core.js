@@ -478,8 +478,6 @@ function makeGame(pduel, settings) {
 
     function msg_update_card(message, pbuf, game, gameBoard) {
         message.command = 'MSG_UPDATE_CARD';
-        message.location = enums.locations[pbuf.readInt8()];
-        message.index = pbuf.readInt8();
         message.card = makeCard(pbuf, undefined, true);
         return message;
     }
@@ -539,17 +537,14 @@ function makeGame(pduel, settings) {
     }
 
     function refreshSingle(player, location, sequence, flag = 0xf81fff) {
-        refreshHand(player);
-        refreshMzone(player);
-        refreshSzone(player);
-        refreshExtra(player);
-        return;
-        const qbuf = Buffer.alloc(0x2000);
+        const qbuf = Buffer.alloc(0x40000);
         qbuf.type = ref.types.byte;
-        ocgapi.query_card(pduel, player, location, sequence, flag, qbuf);
-
+        console.log(pduel, player, location, sequence, flag, qbuf);
+        ocgapi.query_card(pduel, player, location, sequence, flag, qbuf, 0);
         var message = msg_update_card({
-            player
+            player,
+            location,
+            sequence
         }, new BufferStreamReader(qbuf));
         sendBufferToPlayer(player, message);
         reSendToPlayer(1 - player);

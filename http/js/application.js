@@ -81,7 +81,7 @@ class ApplicationComponent extends React.Component {
                 action: 'host',
                 info: action.settings
             });
-            this.alert('Requesting new game room,...');
+            this.alert('Requesting new game room...');
             setTimeout(() => {
                 this.closeModal();
             }, 5000);
