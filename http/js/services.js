@@ -132,62 +132,79 @@ store.register('REGISTER_ACCOUNT', (action) => {
     });
 });
 
+$.getJSON('/ranking', function (data) {
+    const ranks = data.ranks;
+    // ranks.sort((user) => user.points);
+    store.dispatch({ action: 'LOAD_RANKING', ranks });
 
 
-$.getJSON('/manifest/manifest_0-en-OCGTCG.json', function (data) {
-    data.sort(cardStackSort);
-    store.dispatch({ action: 'LOAD_DATABASE', data });
-    const cardsets = data.reduce((hash, item) => {
-        if (item.ocg) {
-            hash[item.ocg.pack] = 0;
-        }
-        if (item.tcg) {
-            hash[item.tcg.pack] = 0;
-        }
-        return hash;
-    }), sets = Object.keys(cardsets).sort();
 
-    store.dispatch({ action: 'LOAD_RELEASES', sets });
-    $.getJSON('/manifest/banlist.json', (bdata) => {
-        const banlist = [];
-        let primary;
-        Object.keys(bdata).forEach((list) => {
-            banlist.push(bdata[list]);
-            if (bdata[list].primary) {
-                primary = bdata[list].name;
+    $.getJSON('/manifest/manifest_0-en-OCGTCG.json', function (data) {
+        data.sort(cardStackSort);
+        store.dispatch({ action: 'LOAD_DATABASE', data });
+        const cardsets = data.reduce((hash, item) => {
+            if (item.ocg) {
+                hash[item.ocg.pack] = 0;
             }
-        });
-        store.dispatch({ action: 'HOST_BANLIST', banlist, primary });
-        store.dispatch({ action: 'DECK_EDITOR_BANLIST', banlist, primary });
-        store.dispatch({ action: 'SYSTEM_LOADED', banlist, primary });
-        store.dispatch({ action: 'LOAD_LOGIN', banlist, primary });
-        if (localStorage.remember === 'true') {
-            if (localStorage.session) {
-                $.getJSON('api/session/' + localStorage.session, (userInfo) => {
-                    console.log('Session Login', userInfo);
-                    if (userInfo.success) {
-                        app.login(userInfo);
+            if (item.tcg) {
+                hash[item.tcg.pack] = 0;
+            }
+            return hash;
+        }), sets = Object.keys(cardsets).sort();
+
+        store.dispatch({ action: 'LOAD_RELEASES', sets });
+        $.getJSON('/manifest/banlist.json', (bdata) => {
+            const banlist = [];
+            let primary;
+            Object.keys(bdata).forEach((list) => {
+                bdata[list].name = list;
+                banlist.push(bdata[list]);
+                if (bdata[list].primary) {
+                    primary = bdata[list].name;
+                }
+            });
+            banlist.reverse();
+            store.dispatch({ action: 'HOST_BANLIST', banlist, primary });
+            store.dispatch({ action: 'DECK_EDITOR_BANLIST', banlist, primary });
+
+            $.getJSON('./setcodes.json', 'utf-8', function (data) {
+                var raw = data,
+                    setcodes = Object.keys(raw).map(function (arch) {
+                        return {
+                            num: arch,
+                            name: raw[arch]
+                        };
+                    }).sort(function (a, b) {
+                        return (a.name.localeCompare(b.name, undefined, {
+                            numeric: true,
+                            sensitivity: 'base'
+                        }));
+                    });
+                store.dispatch({ action: 'LOAD_SETCODES', data: setcodes });
+                store.dispatch({ action: 'SYSTEM_LOADED', banlist, primary });
+                if (localStorage.remember === 'true') {
+                    if (localStorage.session) {
+                        $.getJSON('api/session/' + localStorage.session, (userInfo) => {
+                            console.log('Session Login', userInfo);
+                            store.dispatch({ action: 'SYSTEM_LOADED', banlist, primary });
+                            store.dispatch({ action: 'LOAD_LOGIN', banlist, primary });
+                            if (userInfo.success) {
+                                app.login(userInfo);
+                            }
+                        }).fail(() => {
+                            alert('error')
+                            store.dispatch({ action: 'LOAD_LOGIN', banlist, primary });
+                        });
+                    } else {
+                        alert();
+                        store.dispatch({ action: 'LOAD_LOGIN', banlist, primary });
                     }
-                });
-            }
-        }
-    });
-});
-
-$.getJSON('./setcodes.json', 'utf-8', function (data) {
-    var raw = data,
-        setcodes = Object.keys(raw).map(function (arch) {
-            return {
-                num: arch,
-                name: raw[arch]
-            };
-        }).sort(function (a, b) {
-            return (a.name.localeCompare(b.name, undefined, {
-                numeric: true,
-                sensitivity: 'base'
-            }));
+                } else {
+                    store.dispatch({ action: 'LOAD_LOGIN', banlist, primary });
+                }
+            });
         });
-    store.dispatch({ action: 'LOAD_SETCODES', data: setcodes });
+    });
 });
 
 

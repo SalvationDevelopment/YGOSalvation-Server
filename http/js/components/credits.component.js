@@ -148,9 +148,9 @@ class CreditsScreen extends React.Component {
         return this.credits.map((group, i) => {
             return [element('h2', { key: `group-${i}`, className: 'creditsfield' }, group.group)].concat(
                 group.people.map((person, l) => {
-                    return element('div', { key: `group-${l}`, className: 'credit' }, [
-                        element('span', { key: `group-${l}`, className: 'creditsname' }, person.name),
-                        element('span', { key: `roles-${l}`, className: 'creditsroles' }, person.roles.map((role, j) => {
+                    return element('div', { key: `group-${l}-c`, className: 'credit' }, [
+                        element('span', { key: `group-${l}-cn`, className: 'creditsname' }, person.name),
+                        element('span', { key: `roles-${l}-cr`, className: 'creditsroles' }, person.roles.map((role, j) => {
                             return element('span', { key: `role-${j}`, className: 'creditsrolename' }, role)
                         }))
                     ]);

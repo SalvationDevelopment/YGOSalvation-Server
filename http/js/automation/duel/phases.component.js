@@ -1,34 +1,51 @@
+/*global React, ReactDOM */
 class PhaseIndicator extends React.Component {
-    constructor(state) {
+    constructor(store, state) {
         super();
-        this.state = state;
+        this.state = state || {};
+        this.store = store;
+        this.store.register('ENABLE_PHASE', (message) => {
+            this.state.battlephase = message.battlephase;
+            this.state.mainphase2 = message.mainphase2;
+            this.state.endphase = message.endphase;
+            return this.state;
+        });
+
         return this;
     }
 
     update(phaseUpdate) {
         this.state.phase = phaseUpdate;
+        this.state.battlephase = undefined;
+        this.state.mainphase2 = undefined;
+        this.state.endphase = undefined;
     }
 
-    button(number, id, text) {
+    click(phase) {
+        this.store.dispatch({
+            action: 'PHASE_CLICK', phase: {
+                type: phase
+            }
+        });
+    }
+
+    button(number, id, text, enabled) {
         return React.createElement('button', {
-            className: 'phaseindicator',
+            className: (enabled) ? 'phaseindicator enabled' : 'phaseindicator',
             id: id,
             key: id,
-            onClick: function () {
-                manualNextPhase(number);
-            }
+            onClick: (enabled) ? this.click.bind(this, enabled) : () => { }
         }, text);
     }
 
     render() {
-        console.log('phase', this.state.phase);
         const buttons = [
-            this.button(0, 'drawphi', 'Draw'),
-            this.button(1, 'standbyphi', 'Standby'),
-            this.button(2, 'main1phi', 'Main 1'),
-            this.button(3, 'battlephi', 'Battle'),
-            this.button(4, 'main2phi', 'Main 2'),
-            this.button(5, 'endphi', 'End'),
+            this.button(0, 'drawphi', 'DP'),
+            this.button(1, 'standbyphi', 'SP'),
+            this.button(2, 'main1phi', 'M1'),
+            this.button(3, 'battlephi', 'BP', this.state.battlephase),
+            this.button(4, 'main2phi', 'M2', this.state.mainphase2),
+            this.button(5, 'endphi', 'EP', this.state.endphase),
             this.button(6, 'nextturn', 'Opponent')
         ];
 

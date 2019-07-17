@@ -46,8 +46,6 @@
 }
 
 #deckedit #prev {
-    margin-bottom: 40%;
-    margin-top: 21vh;
     margin-right: 1%;
 }
 
@@ -72,6 +70,11 @@
 
 #decksearchresults div img {
     height: 100%;
+    border: 1px solid black:
+}
+
+#decksearchresults div img:hover {
+    border: 1px solid white;
 }
 
 #decksearch {
@@ -128,6 +131,10 @@
     margin-bottom: 1vh;
     clear: left;
     width: 45%;
+}
+
+img.imgContainer {
+    height: 100%;
 }
 
 .deckcontrols {
@@ -269,6 +276,10 @@ control#linkmarkers {
 .deckmetainfo img {
     height: 100%;
     border: 1px solid black;
+}
+
+.deckmetainfo img:hover {
+    border: 1px solid white;
 }
 
 #deckareaextra .deckmetainfo div {

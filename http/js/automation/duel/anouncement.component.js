@@ -2,11 +2,12 @@
 
 class Flasher extends React.Component {
 
-    constructor() {
+    constructor(store) {
         super();
         this.state = {
             active: false
         };
+        this.store = store;
     }
 
     render() {
@@ -25,8 +26,11 @@ class Flasher extends React.Component {
     trigger(state) {
         Object.assign(this.state, state);
         this.state.active = true;
+        console.log('Flash active');
         setTimeout(() => {
             this.state.active = false;
+            console.log('closing flash');
+            this.store.dispatch({ action: 'RENDER' });
         }, 500);
     }
 }

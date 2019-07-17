@@ -15,23 +15,25 @@ module.exports = function getManifestFromAPI(callback) {
         method: 'GET'
     };
 
-    callback = callback || function() {};
+    callback = callback || function () { };
 
     var call;
 
 
-    call = http.request(options, function(res) {
+    call = http.request(options, function (res) {
+        console.log('Attempting to obtain new Card DB');
         var responseString = '';
-        res.on('data', function(chunk) {
+        res.on('data', function (chunk) {
             responseString += chunk;
         });
-        res.on('error', function(errorMessage) {
+        res.on('error', function (errorMessage) {
             console.log(errorMessage);
         });
-        res.on('end', function() {
+        res.on('end', function () {
             try {
                 var output = JSON.parse(responseString);
-                fs.writeFile('./http/manifest/manifest_0-en-OCGTCG.json', JSON.stringify(output), function() {
+                console.log('Obtained new Card DB, saving...');
+                fs.writeFile('./http/manifest/manifest_0-en-OCGTCG.json', JSON.stringify(output), function () {
                     callback(null, JSON.stringify(output));
                 });
             } catch (error) {
@@ -39,7 +41,7 @@ module.exports = function getManifestFromAPI(callback) {
             }
         });
     });
-    call.on('error', function() {
+    call.on('error', function () {
         console.log('Unable to contact YGO_DB Instance');
         callback(null, fs.readFileSync('./http/manifest/manifest_0-en-OCGTCG.json'));
     });

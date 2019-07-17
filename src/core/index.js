@@ -75,22 +75,22 @@ const WARNING_COUNTDOWN = 300000,
     CLEANUP_LATENCY = 10000,
     MAX_GAME_TIME = 3300000,
     banlist = './http/manifest/banlist.json',
-    database = require('../http/manifest/manifest_0-en-OCGTCG.json'),
+    database = require('../../http/manifest/manifest_0-en-OCGTCG.json'),
     dotenv = require('dotenv'),
     EventEmitter = require('events'),
     fileStream = require('node-static'),
     fs = require('fs'),
     http = require('http'),
     https = require('https'),
-    manualEngine = require('./engine_manual.js'),
-    automaticEngine = require('./engine_ocgcore'),
-    manualController = require('./controller_dueling'),
+    manualEngine = require('./model_field.js'),
+    automaticEngine = require('./controller_core.js'),
+    manualController = require('./controller_manual.js'),
     path = require('path'),
     Primus = require('primus'),
     Rooms = require('primus-rooms'),
     sanitize = require('./lib_html_sanitizer.js'),
     uuid = require('uuid/v4'),
-    validateDeck = require('./validate_deck.js'),
+    validateDeck = require('./lib_validate_deck.js'),
     verificationSystem = new EventEmitter();
 
 let lastInteraction = new Date();
@@ -446,7 +446,26 @@ function Duel() {
         throw ('Duel has not started');
     }
 
-    function load(game, players, spectators) {
+    function load(game, state, players, spectators) {
+        process.recordOutcome = new EventEmitter();
+        process.recordOutcome.once('win', function (command) {
+
+
+            process.send({
+                action: 'win',
+                banlist: game.banlist,
+                decks: game.decks,
+                loser: {
+                    username: game.player[Math.abs(command.player - 1)].username,
+                    elo: game.player[Math.abs(command.player - 1)].ranking.elo
+                },
+                winner: {
+                    username: game.player[command.player].username,
+                    elo: game.player[command.player].ranking.elo
+                }
+            });
+        });
+
         if (game.automatic) {
             const instance = automaticEngine.duel(game, players, spectators);
             duel.getField = instance.getField;
@@ -456,6 +475,8 @@ function Duel() {
         const clientBinding = manualController.clientBinding(players, spectators);
         Object.assign(duel, manualEngine(clientBinding));
         duel.startDuel(players[0], players[1], true, game);
+
+
     }
 
     duel.getField = failure;
@@ -502,7 +523,6 @@ function lock(game, client, message) {
         delete client.deck;
         throw error;
     }
-
 }
 
 /**
@@ -598,7 +618,7 @@ function start(server, duel, game, state, message) {
     ],
         spectators = [new PlayerAbstraction(server, state, 'spectators', {})];
 
-    duel.load(game, function (error, type) {
+    duel.load(game, state, function (error, type) {
         chat(server, state, {
             username: '[SYSTEM]'
         }, error, undefined);
@@ -613,7 +633,6 @@ function start(server, duel, game, state, message) {
  * @returns {void}
  */
 function question(duel, client, message) {
-    console.log('recieved question');
     duel.respond(message);
 }
 
@@ -661,7 +680,7 @@ function processMessage(server, duel, game, state, client, message) {
                 broadcast(server, game);
                 client.write({
                     action: 'slot',
-                    slot : client.slot
+                    slot: client.slot
                 });
             });
             break;
@@ -678,6 +697,7 @@ function processMessage(server, duel, game, state, client, message) {
         case 'lock':
             lock(game, client, message);
             broadcast(server, game);
+            state.decks[client.slot] = message.deck;
             break;
         case 'reconnect':
             reconnect(duel, state, client, message);
@@ -958,6 +978,7 @@ function State(server, game) {
     return {
         clients: [],
         chat: [],
+        decks: [],
         reconnection: {},
         verification: uuid()
     };
@@ -1006,7 +1027,7 @@ function main(callback) {
         state = new State(server, game);
 
     server.plugin('rooms', Rooms);
-    server.save(__dirname + '/../http/js/vendor/server.js');
+    server.save(__dirname + '/../../http/js/vendor/server.js');
     server.on('connection', function (client) {
         client.on('data', function (message) {
             messageHandler(server, duel, game, state, client, message);

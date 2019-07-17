@@ -1,6 +1,6 @@
 /*global React, ReactDOM*/
 
-class Revealer extends React.Component {
+class Chainer extends React.Component {
 
     constructor(store) {
         super();

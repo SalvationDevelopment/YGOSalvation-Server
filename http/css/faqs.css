@@ -19,3 +19,29 @@ div#faqs {
     overflow-y: scroll;
     height: 89vh;
 }
+
+.rankinguser {
+
+    text-align: center;
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+#rankholder {
+    display: block;
+    overflow-y: auto;
+    height: 89vh;
+}
+
+#rankings table {
+    width: 50%;
+    margin: 0 auto;
+    background: rgba(0, 0, 0, .5);
+    border-spacing: 10px;
+    border-collapse: separate;
+}
+
+#rankings td {
+    border: 1px solid white;
+    background: rgba(0, 0, 0, .5);
+}

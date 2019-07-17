@@ -1,19 +1,22 @@
 /*global React, ReactDOM*/
 
-class Revealer extends React.Component {
+class DeckDialog extends React.Component {
 
     constructor(store) {
         super();
-        this.root = document.getElementById('revealer');
         this.store = store;
         this.state = {
             active: false
         };
+
+        this.store.register('', () => {
+            OPEN_DECK
+        });
     }
 
     click(selected, option) {
         this.state.active = false;
-        this.store.dispatch({ action: 'REVEAL_CARD_CLICK', option, selected });
+        this.store.dispatch({ action: 'DECK_CARD_CLICK', option, selected });
         this.store.dispatch({ action: 'RENDER' });
 
     }
@@ -30,7 +33,7 @@ class Revealer extends React.Component {
                 style: {
                     display: 'flex'
                 }, id: 'revealed'
-            }, this.state.cards.map((card, i) => this.img(card, i)));
+            }, this.state.cards.filter(this.filter).map((card, i) => this.img(card, i)));
         }
         return '';
     }
@@ -38,6 +41,14 @@ class Revealer extends React.Component {
     trigger(state) {
         Object.assign(this.state, state);
         this.state.active = true;
+    }
+
+    filter(card, i) {
+        return card.location === this.state.location;
+    }
+
+    updateContents() {
+
     }
 
     close() {

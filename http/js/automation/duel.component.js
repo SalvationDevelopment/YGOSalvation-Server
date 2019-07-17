@@ -1,6 +1,6 @@
 /*global React */
 /*global Store, Field, CardInfo, SideChat, Flasher, Revealer, ControlButtons, LifepointDisplay */
-
+/*global SelectPosition, DeckDialog, YesNoDialog*/
 class DuelScreen extends React.Component {
     constructor(store, chat, databaseSystem) {
         super();
@@ -11,18 +11,37 @@ class DuelScreen extends React.Component {
         this.field = new Field({ info: {}, field: {} }, this.store);
         this.info = new CardInfo(databaseSystem);
         this.sidechat = chat;
-        this.flasher = new Flasher({});
+        this.flasher = new Flasher(store, {});
         this.revealer = new Revealer(this.store);
+        this.chainer = new Chainer(this.store);
+        this.viewDecks = new DeckDialog(this.store);
         this.controls = new ControlButtons(this.store);
         this.lifepoints = new LifepointDisplay({ lifepoints: [8000, 8000] });
-
+        this.positionDialog = new SelectPosition(this.store);
+        this.yesnoDialog = new YesNoDialog(this.store);
         this.store.register('CARD_HOVER', this.onHover.bind(this));
         this.store.register('CARD_CLICK', this.onCardClick.bind(this));
+        this.store.register('DECK_CARD_CLICK', this.onDeckCardClick.bind(this));
 
         console.log(this.controls.render());
     }
 
     onCardClick(event, state) {
+        const decks = ['EXTRA', 'GRAVE', 'EXTRA', 'REMOVED'];
+        if (!event.viewDeck && decks.includes(event.card.location)) {
+            const cards = this.field.getDeck(event.card.player, event.card.location);
+            this.store.dispatch({ action: 'OPEN_DECK', cards });
+            return;
+        }
+        if (event.card.location === 'DECK') {
+            return;
+        }
+        this.controls.enable(event.card, { x: event.x, y: event.y });
+        this.store.dispatch({ action: 'RENDER' });
+        return event;
+    }
+
+    onDeckCardClick(event, state) {
         this.controls.enable(event.card, { x: event.x, y: event.y });
         this.store.dispatch({ action: 'RENDER' });
         return event;
@@ -43,7 +62,6 @@ class DuelScreen extends React.Component {
     }
 
     update(update) {
-        console.log(update);
         this.lifepoints.update({ lifepoints: update.lifepoints });
         this.field.phase(update.phase);
     }
@@ -62,7 +80,11 @@ class DuelScreen extends React.Component {
             React.createElement('div', { id: 'actions', key: 'actions' }, this.controls.render()),
             React.createElement('div', { id: 'ingamecardimage', key: 'ingamecardimage' }, this.info.render()),
             React.createElement('div', { id: 'lifepoints', key: 'lifepoints' }, this.lifepoints.render()),
-            React.createElement('div', { id: 'revealer', key: 'revealer' }, this.flasher.render()),
+            React.createElement('div', { id: 'revealer', key: 'revealer' }, this.revealer.render()),
+            React.createElement('div', { id: 'chain', key: 'chain' }, this.chainer.render()),
+            React.createElement('div', { id: 'positionDialog', key: 'positionDialog' }, this.positionDialog.render()),
+            React.createElement('div', { id: 'yesnoDialog', key: 'yesnoDialog' }, this.yesnoDialog.render()),
+            React.createElement('div', { id: 'viewDecks', key: 'viewDecks' }, this.viewDecks.render()),
             React.createElement('div', { id: 'announcer', key: 'announcer' }, this.flasher.render()),
             React.createElement('div', { className: 'field newfield', key: 'field-newfield' }, [
                 React.createElement('div', {
@@ -85,6 +107,10 @@ class DuelScreen extends React.Component {
         this.revealer.trigger({ active: true, cards });
     }
 
+    chain(cards) {
+        this.chainer.trigger({ active: true, cards });
+    }
+
     closeRevealer() {
         this.revealer.trigger({ active: false });
     }
@@ -96,4 +122,5 @@ class DuelScreen extends React.Component {
     select(query) {
         this.field.select(query);
     }
+
 }

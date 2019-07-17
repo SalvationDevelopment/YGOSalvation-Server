@@ -1,3 +1,5 @@
+/* eslint-disable new-cap */
+/* eslint-disable one-var */
 /* eslint-disable no-sync */
 /*eslint no-plusplus: 0*/
 
@@ -38,7 +40,7 @@ const ffi = require('ffi'),
     LOCATION_EXTRA = 0x40,
     LOCATION_GRAVE = 0x10,
     LOCATION_HAND = 0x02,
-    makeCard = require('./model_ygopro_card.js'),
+    makeCard = require('./lib_card'),
     cardData = new StructType({
         code: 'uint',
         alias: 'uint',
@@ -53,16 +55,20 @@ const ffi = require('ffi'),
         rscale: 'uint',
         link_marker: 'uint'
     }),
+    size_t = new StructType({
+        size: 'uint'
+    }),
     queue = require('function-queue'),
-    enums = require('./translate_ygopro_enums.js'),
-    analyze = require('./translate_ygopro_analyzer.js'),
-    boardController = require('./controller_ygopro.js'),
-    manualControlEngine = require('./engine_manual.js'),
-    DataStream = require('./model_data_stream.js'),
-    ocgapi = require('./engine_ocgcore_interface'),
-    database = require('../http/manifest/manifest_0-en-OCGTCG.json'),
-    scriptsFolder = '../../ygopro-scripts',
-    gc_protected = [];
+    enums = require('./enums'),
+    analyze = require('./lib_analyzer'),
+    boardController = require('./controller_automatic'),
+    manualControlEngine = require('./model_field'),
+    DataStream = require('./model_stream'),
+    ocgapi = require('./lib_core'),
+    database = require('../../http/manifest/manifest_0-en-OCGTCG.json'),
+    scriptsFolder = '../../ygopro-scripts';
+
+global.gc_protected = [];
 
 /**
  * Read a card from file.
@@ -71,18 +77,26 @@ const ffi = require('ffi'),
  * @returns {Pointer} script
  */
 function scriptReader(scriptname, sizePointer) {
-    const file = scriptsFolder + '/' + scriptname.substr(20);
+    let file = scriptsFolder + '/' + scriptname.substr(9, 13);
+    const size = ref.reinterpret(sizePointer.deref()['ref.buffer'], 32);
+
+    if (scriptname === './expansions/script/constant.lua') {
+        file = scriptsFolder + '/constant.lua';
+    }
+    if (scriptname === './expansions/script/utility.lua') {
+        file = scriptsFolder + '/utility.lua';
+    }
     if (fs.existsSync(file)) {
         try {
             const script = fs.readFileSync(file);
-            sizePointer = script.length;
-            gc_protected.push(script);
-            return ref.ref(script);
+            size.writeUInt32LE(script.length);
+            global.gc_protected.push(script);
+            return ref.readCString(script, 0);
         } catch (e) {
-            console.log(e);
             return ref.alloc('pointer');
         }
     } else {
+        console.log(scriptname, 'at', file, 'does not exist');
         return ref.alloc('pointer');
     }
 }
@@ -100,6 +114,7 @@ function hasType(card, type) {
 /**
  * Callback function used by the core to get database information on a card
  * @param {Number} code unique card, usually 8 digit, passcode.
+ * @param {CardStructurePointer} pData pointer provided ocgcore
  * @returns {CardStructurePointer} pData pointer to ocgcore copy of the card.
  */
 function card_reader(code, pData) {
@@ -176,7 +191,6 @@ function deepShuffle(array) {
  */
 function duelEndProcedure(players) {
     console.log('game ended');
-    process.exit();
 }
 
 
@@ -244,15 +258,17 @@ function mainProcess(game) {
  * @param {Player} player Player inputer will be linked to
  * @returns {Requester} Player-Core connection
  */
-function Responser(game, player) {
+function Responser(game, player, slot) {
 
     function write(data) {
-        console.log(data);
-        const resb = Buffer.alloc(64);
-        data.copy(resb);
-        player.lock = false;
-        console.log('setting response', resb);
-        ocgapi.set_responseb(game.pduel, resb);
+        game.last(slot);
+        console.log(typeof data === 'number');
+        if (typeof data === 'number') {
+            ocgapi.set_responsei(game.pduel, data);
+        } else {
+            ocgapi.set_responseb(game.pduel, data);
+        }
+
         mainProcess(game);
     }
 
@@ -265,7 +281,7 @@ function playerInstance(playerConnection, slot, game, settings) {
     const dataStream = new DataStream(),
         gameBoard = new GameBoard(playerConnection, slot, settings.masterRule),
         gameQueue = queue(),
-        responder = new Responser(game, playerConnection);
+        responder = new Responser(game, playerConnection, slot);
 
 
     function preformGameAction(gameAction) {
@@ -275,18 +291,11 @@ function playerInstance(playerConnection, slot, game, settings) {
 
     function queueGameActions(gameActions) {
         gameActions.forEach(function (gameAction) {
-            const pause = enums.timeout[gameAction.command] || 0;
-            gameQueue.push(function (next) {
-                setTimeout(function () {
-                    try {
-                        preformGameAction(gameAction);
-                    } catch (e) {
-                        console.log(e);
-                    }
-                    next();
-                }, 100);
-            });
-
+            try {
+                preformGameAction(gameAction);
+            } catch (e) {
+                console.log(e);
+            }
         });
     }
 
@@ -315,7 +324,7 @@ function makeGame(pduel, settings) {
 
     function setPlayers(clients, additionalClients) {
         players = clients;
-        observers = additionalClients;
+        //observers = additionalClients;
     }
 
 
@@ -346,6 +355,21 @@ function makeGame(pduel, settings) {
         players[Math.abs(player)].write(lastMessage);
     }
 
+    /**
+     * Send the last send message from the system, to the last responding player.
+     * @param {Player} player Player to send to.
+     * @returns {void}
+     */
+    function retry() {
+        players[last_response].write({
+            command: 'MSG_RETRY'
+        });
+    }
+
+    function last(player) {
+        last_response = player;
+    }
+
     function respond(message) {
         players.forEach(function (player) {
             player.read(message);
@@ -354,7 +378,7 @@ function makeGame(pduel, settings) {
 
     /**
      * Tell both players that ygopro-core is waiting on a message.
-     * @param {Player} player 
+     * @param {Player} player player waiting on.
      * @returns {void}
      */
     function waitforResponse(player) {
@@ -373,6 +397,7 @@ function makeGame(pduel, settings) {
      * @returns {void}
      */
     function sendToObservers() {
+        return;
         observers.forEach(function (observer) {
             observer.write(lastMessage);
         });
@@ -431,6 +456,9 @@ function makeGame(pduel, settings) {
             const len = pbuf.readInt32();
             if (len > 8) {
                 const card = makeCard(pbuf, undefined, true);
+                if (card && card.location === 'EXTRA') {
+                    console.log('EXTRA', card);
+                }
                 cards.push(card);
             }
         }
@@ -506,13 +534,15 @@ function makeGame(pduel, settings) {
         sendToObservers();
     }
 
-    function refreshSingle(player, location, sequence, flag) {
-        flag = flag || 0;
-        const qbuf = Buffer.alloc(0x2000),
-            header = Buffer.alloc(3),
-            proto = enums.STOC.enums.STOC_GAME_MSG;
+    function refreshSingle(player, location, sequence, flag = 0xf81fff) {
+        refreshHand(player);
+        refreshMzone(player);
+        refreshSzone(player);
+        refreshExtra(player);
+        return;
+        const qbuf = Buffer.alloc(0x2000);
         qbuf.type = ref.types.byte;
-        ocgapi.query_field_card(pduel, player, location, sequence, qbuf, flag);
+        ocgapi.query_card(pduel, player, location, sequence, flag, qbuf);
 
         var message = msg_update_card({
             player
@@ -534,6 +564,8 @@ function makeGame(pduel, settings) {
         refreshSingle,
         refreshGrave,
         respond,
+        last,
+        retry,
         setPlayers,
         waitforResponse,
         sendBufferToPlayer,
@@ -556,7 +588,6 @@ function makeGame(pduel, settings) {
 function duel(settings, errorHandler, players, observers) {
     var pduel,
         game = {};
-
     if (settings.shuffleDeck) {
         deepShuffle(players[0].main);
         deepShuffle(players[1].main);
@@ -568,10 +599,17 @@ function duel(settings, errorHandler, players, observers) {
         ///errorHandler(messageBuffer.toString(), type);
     }
 
-    const card_reader_function = ffi.Callback('uint32', ['uint32', ref.refType(cardData)], card_reader);
-    const responsei_function = ffi.Callback('int32', ['pointer', 'uint32'], messageHandler);
-    const script_reader_function = ffi.Callback('pointer', ['string', 'uint32*'], scriptReader);
-    const message_handler_function = ffi.Callback('uint32', ['pointer', 'uint32'], console.log);
+    const card_reader_function = ffi.Callback('uint32', ['uint32', ref.refType(cardData)], card_reader),
+        responsei_function = ffi.Callback('int32', ['pointer', 'uint32'], messageHandler),
+        script_reader_function = ffi.Callback('string', ['string', ref.refType(size_t)], scriptReader),
+        message_handler_function = ffi.Callback('uint32', ['pointer', 'uint32'], console.log);
+
+    global.gc_protected.push({
+        card_reader_function,
+        responsei_function,
+        script_reader_function,
+        message_handler_function
+    });
 
     pduel = ocgapi.create_duel(seed());
     ocgapi.set_script_reader(script_reader_function); // good
@@ -583,49 +621,37 @@ function duel(settings, errorHandler, players, observers) {
 
     ocgapi.set_player_info(pduel, 0, settings.start_lp, settings.start_hand_count, settings.draw_count);
     ocgapi.set_player_info(pduel, 1, settings.start_lp, settings.start_hand_count, settings.draw_count);
-
-    console.log(1);
     players[0].main.forEach(function (cardID, sequence) {
         ocgapi.new_card(pduel, cardID, 0, 0, LOCATION_DECK, 0, POS_FACEDOWN_DEFENSE);
     });
-    console.log(2);
     players[0].extra.forEach(function (cardID, sequence) {
         ocgapi.new_card(pduel, cardID, 0, 0, LOCATION_EXTRA, 0, POS_FACEDOWN_DEFENSE);
     });
-    console.log(3);
     players[1].main.forEach(function (cardID, sequence) {
         ocgapi.new_card(pduel, cardID, 1, 1, LOCATION_DECK, 0, POS_FACEDOWN_DEFENSE);
     });
-    console.log(4);
     players[1].extra.forEach(function (cardID, sequence) {
         ocgapi.new_card(pduel, cardID, 1, 1, LOCATION_EXTRA, 0, POS_FACEDOWN_DEFENSE);
     });
     //send start msg
-    console.log('all cards loaded');
     game = makeGame(pduel, settings);
     const playerConnections = players.map(function (playerConnection, slot) {
         return playerInstance(playerConnection, slot, game, settings);
-    }),
-        observerConnections = players.map(function (playerConnection, slot) {
-            return playerInstance(playerConnection, slot, game, settings);
-        });
+    })
 
-
-    game.setPlayers(playerConnections, observerConnections);
+    game.setPlayers(playerConnections);
     game.refer = ref.deref(pduel);
-    setTimeout(function () {
-        game.sendStartInfo(0);
-        game.sendStartInfo(1);
-        setTimeout(function () {
-            // game.refreshExtra(0);
-            // game.refreshExtra(1);
-            // game.refreshMzone(0);
-            // game.refreshMzone(1);
-            ocgapi.start_duel(pduel, settings.priority);
-            mainProcess(game);
-        }, 1000);
+    game.sendStartInfo(0);
+    game.sendStartInfo(1);
+    game.refreshExtra(0);
+    game.refreshExtra(1);
+    game.refreshMzone(0);
+    game.refreshMzone(1);
+    ocgapi.start_duel(pduel, settings.priority);
+    mainProcess(game);
 
-    }, 1000);
+
+    process.game = game;
     return game;
 
 }

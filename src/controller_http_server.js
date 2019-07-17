@@ -6,8 +6,7 @@ const express = require('express'),
     toobusy = require('toobusy-js'),
     app = express(),
     compression = require('compression'),
-    userController = require('./controller_users.js'),
-    forumController = require('./controller_forum.js'),
+    userController = require('./model_controller_users.js'),
     // Ddos = require('ddos'),
     bodyParser = require('body-parser'),
     helmet = require('helmet'),
@@ -29,8 +28,10 @@ const express = require('express'),
 //     responseStatus: 429
 // });
 
+
 function systemLoad(req, res, next) {
-    var processing = toobusy();
+    toobusy.maxLag(1000);
+    var processing = false;
     if (processing && req.headers['Content-Type'] !== 'application/json') {
         res.status(503).send(`<html><head>
         <title>YGOSalvation</title>
@@ -105,13 +106,12 @@ module.exports = function () {
         gitRoute(req, res, next);
     });
     userController.setupController(app);
-    forumController(app);
     let primusServer;
 
     try {
         primusServer = useSSL(primusServer);
     } catch (nossl) {
-        console.log('Failed to apply SSL to HTTP server', nossl.code);
+        console.log('Failed to apply SSL to HTTP server. If working locally this is OK. Error:', nossl.code);
         primusServer = http.createServer(app);
         primusServer.listen(HTTP_PORT);
     }

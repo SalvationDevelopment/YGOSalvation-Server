@@ -6,8 +6,7 @@
  * @property {Number} index sequence in the zone or deck.
  */
 
-const enums = require('./translate_ygopro_enums'),
-    gameResponse = require('./translate_ygopro_reply.js'),
+const enums = require('./enums'),
     cardMap = {
         0: 'rock',
         1: 'paper',
@@ -33,29 +32,37 @@ const enums = require('./translate_ygopro_enums'),
         },
         attackable_cards: (i) => (i << 16) + 1,
         enableBattlePhase: () => 6,
-        enableMainPhase2: () => 2,
         shuffle: () => 8,
+        enableMainPhase2: () => 2,
         enableEndPhase: (i, command) => {
             switch (command) {
-                case 'MSG_SELECT_IDLECMD':
-                    return 3;
                 case 'MSG_SELECT_BATTLECMD':
+                    return 3;
+                case 'MSG_SELECT_IDLECMD':
                     return 7;
+
                 default:
-                    return i;
+                    return -1;
             }
         },
         yesno: (i, command) => {
             switch (command) {
                 case 'MSG_SELECT_CHAIN':
-                    if (i === 0) {
+                    if (!i) {
                         return -1;
                     }
                     return 1;
                 default:
                     return Number(Boolean(i));
             }
-        }
+        },
+        zone: (i) => Buffer.from(i).readUIntLE(0, 3),
+        list: (i) => Buffer.from([i.length].concat(i)),
+        number: (i) => i,
+        FaceUpAttack: () => 0x1,
+        FaceDownAttack: () => 0x2,
+        FaceUpDefence: () => 0x4,
+        FaceDownDefence: () => 0x8
     };
 /**
  * Standardized way of sending a preformatted message to the user from YGOSharp. 
@@ -70,6 +77,7 @@ function askUser(gameBoard, slot, message, ygopro, command) {
         max: 1,
         min: 1
     }, function (answer) {
+        console.log('p' + slot, '  -->', answer.type, answer.i, command, buttonName[answer.type](answer.i, command));
         ygopro.write(buttonName[answer.type](answer.i, command));
     });
 }
@@ -101,18 +109,12 @@ function boardController(gameBoard, slot, message, ygopro, player) {
         p1: {},
         spectators: {}
     };
-    //console.log(slot, message.command);
-    player.lastData = message;
     switch (message.command) {
-        case ('STOC_UNKNOWN'): // Good
-            process.exit();
-            break;
-        case ('STOC_GAME_MSG'): // Good
-            break;
         case ('MSG_RETRY'): // Good
             gameBoard.retryLastQuestion();
             break;
         case ('MSG_START'): // Good
+            gameBoard.announcement(slot, { command: 'MSG_ORIENTATION', slot });
             gameBoard.startDuel({
                 main: Array(message.player1decksize).fill(0),
                 side: Array(0),
@@ -126,21 +128,29 @@ function boardController(gameBoard, slot, message, ygopro, player) {
                 });
             break;
         case ('MSG_HINT'):
+            gameBoard.announcement(slot, message);
             break;
         case 'HINT_EVENT':
+            gameBoard.announcement(slot, message);
             break;
         case 'HINT_MESSAGE':
+            gameBoard.announcement(slot, message);
             break;
         case 'HINT_SELECTMSG':
+            gameBoard.announcement(slot, message);
             break;
         case 'HINT_OPSELECTED':
+            gameBoard.announcement(slot, message);
             break;
         case 'HINT_EFFECT':
+            gameBoard.announcement(slot, message);
             break;
         case ('MSG_NEW_TURN'): // Good
             gameBoard.nextTurn();
             break;
         case ('MSG_WIN'):
+            gameBoard.announcement(slot, message);
+            process.recordOutcome.emit('win', message);
             break;
         case ('MSG_NEW_PHASE'): // Good
             gameBoard.nextPhase(message.gui_phase);
@@ -149,28 +159,40 @@ function boardController(gameBoard, slot, message, ygopro, player) {
             gameBoard.drawCard(message.player, message.count, message.cards);
             break;
         case ('MSG_SHUFFLE_DECK'): // Good
+            gameBoard.announcement(slot, message);
             break;
         case ('MSG_SHUFFLE_HAND'):
+            gameBoard.announcement(slot, message);
             break;
         case ('MSG_CHAINING'):
+            gameBoard.announcement(slot, message);
             break;
         case ('MSG_CHAINED'):
+            gameBoard.announcement(slot, message);
             break;
         case ('MSG_CHAIN_SOLVING'):
+            gameBoard.announcement(slot, message);
             break;
         case ('MSG_CHAIN_SOLVED'):
+            gameBoard.announcement(slot, message);
             break;
         case ('MSG_CHAIN_END'):
+            gameBoard.announcement(slot, message);
             break;
         case ('MSG_CHAIN_NEGATED'):
+            gameBoard.announcement(slot, message);
             break;
         case ('MSG_CHAIN_DISABLED'):
+            gameBoard.announcement(slot, message);
             break;
         case ('MSG_CARD_SELECTED'):
+            gameBoard.announcement(slot, message);
             break;
         case ('MSG_RANDOM_SELECTED'):
+            gameBoard.announcement(slot, message);
             break;
         case ('MSG_BECOME_TARGET'):
+            gameBoard.announcement(slot, message);
             break;
         case ('MSG_PAY_LPCOST'): // Good
             gameBoard.changeLifepoints(message.player, (message.lp * message.multiplier));
@@ -210,14 +232,19 @@ function boardController(gameBoard, slot, message, ygopro, player) {
             gameBoard.callback(output);
             break;
         case ('MSG_EQUIP'):
+            gameBoard.announcement(slot, message);
             break;
         case ('MSG_UNEQUIP'):
+            gameBoard.announcement(slot, message);
             break;
         case ('MSG_CANCEL_TARGET'):
+            gameBoard.announcement(slot, message);
             break;
         case ('MSG_ADD_COUNTER'):
+            gameBoard.announcement(slot, message);
             break;
         case ('MSG_REMOVE_COUNTER'):
+            gameBoard.announcement(slot, message);
             break;
         case ('MSG_ATTACK'): // Good
             output[slot] = {
@@ -229,16 +256,20 @@ function boardController(gameBoard, slot, message, ygopro, player) {
             gameBoard.callback(output);
             break;
         case ('MSG_BATTLE'):
+            gameBoard.announcement(slot, message);
             break;
         case ('MSG_ATTACK_DISABLED'):
+            gameBoard.announcement(slot, message);
             break;
         case ('MSG_DAMAGE_STEP_START'): // Good
             break;
         case ('MSG_DAMAGE_STEP_END'): // Good
             break;
         case ('MSG_MISSED_EFFECT'):
+            gameBoard.announcement(slot, message);
             break;
         case ('MSG_TOSS_COIN'):
+            gameBoard.announcement(slot, message);
             break;
         case ('MSG_SELECT_IDLECMD'): // Good
             askUser(gameBoard, slot, message, ygopro, 'MSG_SELECT_IDLECMD');
@@ -268,14 +299,13 @@ function boardController(gameBoard, slot, message, ygopro, player) {
             });
             break;
         case ('MSG_SET'): // Good
-            output[slot] = {
-                duelAction: 'sound',
-                sound: 'soundsummonCard'
-            };
+            gameBoard.announcement(slot, message);
             break;
         case ('MSG_SWAP'):
+            gameBoard.announcement(slot, message);
             break;
         case ('MSG_FIELD_DISABLED'):
+            gameBoard.announcement(slot, message);
             break;
         case ('MSG_SUMMONING'): // Good
             gameBoard.setState({
@@ -322,12 +352,16 @@ function boardController(gameBoard, slot, message, ygopro, player) {
             });
             break;
         case ('MSG_SUMMONED'): // Good
+            gameBoard.announcement(slot, message);
             break;
         case ('MSG_SPSUMMONED'): // Good
+            gameBoard.announcement(slot, message);
             break;
         case ('MSG_FLIPSUMMONED'): // Good
+            gameBoard.announcement(slot, message);
             break;
         case ('MSG_REQUEST_DECK'):
+            gameBoard.announcement(slot, message);
             break;
         case ('MSG_SELECT_BATTLECMD'):
             askUser(gameBoard, slot, message, ygopro, 'MSG_SELECT_BATTLECMD');
@@ -342,14 +376,7 @@ function boardController(gameBoard, slot, message, ygopro, player) {
             askUser(gameBoard, slot, message, ygopro, 'MSG_SELECT_OPTION');
             break;
         case ('MSG_SELECT_CARD'):
-            // [number of cards selected, index of that card, etc...]
-            gameBoard.question(slot, message.command, message, { min: message.select_min, max: message.select_max }, function (answer) {
-                var messageBuffer = [answer.length].concat(answer.map(function (card) {
-                    return resolveCardIndex(message.select_options, card);
-                }));
-                ygopro.write(gameResponse('CTOS_RESPONSE', new Buffer(messageBuffer)));
-            });
-
+            askUser(gameBoard, slot, message, ygopro, 'MSG_SELECT_CARD');
             break;
         case ('MSG_SELECT_CHAIN'):
             askUser(gameBoard, slot, message, ygopro, 'MSG_SELECT_CHAIN');
@@ -361,16 +388,10 @@ function boardController(gameBoard, slot, message, ygopro, player) {
             askUser(gameBoard, slot, message, ygopro, 'MSG_SELECT_POSITION');
             break;
         case ('MSG_SELECT_TRIBUTE'):
-            gameBoard.question(slot, message.command, message, { min: message.select_min, max: message.select_max }, function (answer) {
-                var messageBuffer = [answer.length].concat(answer.map(function (card) {
-                    return resolveCardIndex(message.selectable_targets, card);
-                })).filter(function (card) {
-                    return (card !== undefined);
-                });
-                ygopro.write(gameResponse('CTOS_RESPONSE', new Buffer(messageBuffer)));
-            });
+            askUser(gameBoard, slot, message, ygopro, 'MSG_SELECT_TRIBUTE');
             break;
         case ('MSG_SORT_CHAIN'):
+            gameBoard.announcement(slot, message);
             break;
         case ('MSG_SELECT_COUNTER'):
             askUser(gameBoard, slot, message, ygopro, 'MSG_SELECT_COUNTER');
@@ -382,10 +403,13 @@ function boardController(gameBoard, slot, message, ygopro, player) {
             askUser(gameBoard, slot, message, ygopro, 'MSG_SELECT_DISFIELD');
             break;
         case ('MSG_SORT_CARD'):
+            gameBoard.announcement(slot, message);
             break;
         case ('MSG_CONFIRM_DECKTOP'):
+            gameBoard.announcement(slot, message);
             break;
         case ('MSG_CONFIRM_CARDS'):
+            askUser(gameBoard, slot, message, ygopro, 'MSG_CONFIRM_CARDS');
             break;
         case ('MSG_UPDATE_DATA'): // inconsistent
             message.cards.forEach(function (card, index) {
@@ -429,77 +453,19 @@ function boardController(gameBoard, slot, message, ygopro, player) {
             }
             break;
         case ('MSG_WAITING'): // Good
+            gameBoard.announcement(slot, message);
             break;
         case ('MSG_SWAP_GRAVE_DECK'):
+            gameBoard.announcement(slot, message);
             break;
         case ('MSG_REVERSE_DECK'):
+            gameBoard.announcement(slot, message);
             break;
         case ('MSG_DECK_TOP'):
+            gameBoard.announcement(slot, message);
             break;
-        case ('STOC_ERROR_MSG'): // Good (salvation takes care of)
-            break;
-        case ('ERRMSG_JOINERROR'): // Good (salvation takes care of)
-            break;
-        case ('ERRMSG_DECKERROR'): // Good (salvation takes care of)
-            break;
-        case ('ERRMSG_SIDEERROR'):
-            break;
-        case ('ERRMSG_VERERROR'): // Good (salvation takes care of)
-            break;
-        case ('STOC_SELECT_HAND'): // Good
-            gameBoard.question(slot, 'specialCards', [{
-                id: 'rock',
-                value: 0
-            }, {
-                id: 'paper',
-                value: 1
-            }, {
-                id: 'scissors',
-                value: 2
-            }], { min: 1, max: 1 }, function (answer) {
-                var choice = cardMap[answer[0]];
-                ygopro.write(gameResponse(choice));
-            });
-            break;
-        case ('STOC_SELECT_TP'): // Good
-            gameBoard.question(slot, 'STOC_SELECT_TP', [0, 1], { min: 1, max: 1 }, function (answer) {
-                ygopro.write(gameResponse('CTOS_TP_RESULT', answer[0]));
-            });
-            return {};
-        case ('STOC_HAND_RESULT'):
-            break;
-        case ('STOC_TP_RESULT'):
-            break;
-        case ('STOC_CHANGE_SIDE'):
-            break;
-        case ('STOC_WAITING_SIDE'): // Good
-            break;
-        case ('STOC_CREATE_GAME'): // Good
-            break;
-        case ('STOC_JOIN_GAME'): // Good
-            break;
-        case ('STOC_TYPE_CHANGE'): // Good
-            break;
-        case ('STOC_LEAVE_GAME'):
-            break;
-        case ('STOC_DUEL_START'): // Good
-            gameBoard.duelistChat('Gamelist', 'Duel has started.');
-            break;
-        case ('STOC_DUEL_END'):
-            gameBoard.duelistChat('Gamelist', 'Duel has ended.');
-            break;
-        case ('STOC_REPLAY'):
-            break;
-        case ('STOC_TIME_LIMIT'): // Good
-            break;
-        case ('STOC_CHAT'):
-            gameBoard.duelistChat(message.from, message.chat);
-            break;
-        case ('STOC_HS_PLAYER_ENTER'): // Good
-            break;
-        case ('STOC_HS_PLAYER_CHANGE'): // Good
-            break;
-        case ('STOC_HS_WATCH_CHANGE'): // Good
+        case ('MSG_ANNOUNCE_ATTRIB'):
+            askUser(gameBoard, slot, message, ygopro, 'MSG_ANNOUNCE_ATTRIB');
             break;
         default:
             console.log('FAILURE!', message);

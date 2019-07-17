@@ -1,6 +1,11 @@
 /*global React, ReactDOM*/
 /*global Store, ChoiceScreen, DuelScreen, SideChat, LobbyScreen, databaseSystem*/
 
+window.orientation = 0;
+function orient(player) {
+    return
+}
+
 class ApplicationComponent extends React.Component {
     constructor(store) {
         super();
@@ -25,7 +30,7 @@ class ApplicationComponent extends React.Component {
         this.primus = window.Primus.connect(primusprotocol + location.host + ':' + urlParams.get('room'));
         this.lobby = new LobbyScreen(this.store, this.chat, this.primus);
         this.primus.on('data', (data) => {
-            console.log(data);
+            this.duel.lifepoints.state.waiting = false;
             if (data.action) {
                 this.action(data);
             }
@@ -69,10 +74,90 @@ class ApplicationComponent extends React.Component {
         this.store.register('CONTROL_CLICK', (message, state) => {
             this.primus.write({
                 action: 'question',
-                answer: message
+                answer: message.card,
+                uuid: this.state.question
             });
             return state;
         });
+
+        this.store.register('PHASE_CLICK', (message, state) => {
+            this.primus.write({
+                action: 'question',
+                answer: message.phase,
+                uuid: this.state.question
+            });
+            return state;
+        });
+
+        this.store.register('ZONE_CLICK', (message, state) => {
+            this.primus.write({
+                action: 'question',
+                answer: message.zone,
+                uuid: this.state.question
+            });
+            return state;
+        });
+
+        this.store.register('POSITION_CARD_CLICK', (message, state) => {
+            this.primus.write({
+                action: 'question',
+                answer: message.position,
+                uuid: this.state.question
+            });
+            return state;
+        });
+
+
+        this.store.register('YESNO_CLICK', (message, state) => {
+            this.primus.write({
+                action: 'question',
+                answer: message.option,
+                uuid: this.state.question
+            });
+            return state;
+        });
+
+        this.store.register('REVEAL_CARD_CLICK', (message, state) => {
+            if (message.selected) {
+                const remove = this.state.question_selection.indexOf(message.option);
+                this.state.question_selection.splice(remove, 1);
+                this.state.question_options.select_options[message.option].selected = false;
+                this.duel.reveal(this.state.question_options.select_options);
+                this.store.dispatch({ action: 'RENDER' });
+                return;
+            }
+            this.state.question_selection.push(message.option);
+            if (this.state.question_selection.length === this.state.question_max) {
+                this.primus.write({
+                    action: 'question',
+                    answer: {
+                        type: 'list',
+                        i: this.state.question_selection
+                    },
+                    uuid: this.state.question
+                });
+                return state;
+            }
+            console.log(this.state.question_options, message);
+            this.state.question_options.select_options[message.option].selected = true;
+            this.duel.reveal(this.state.question_options.select_options);
+            return state;
+        });
+
+        this.store.register('REVEALER_CLOSE', (message, state) => {
+            if (this.state.question_selection.length > this.state.question_min) {
+                this.primus.write({
+                    action: 'question',
+                    answer: {
+                        type: 'list',
+                        i: this.state.question_selection
+                    },
+                    uuid: this.state.question
+                });
+            }
+            return state;
+        });
+
 
         this.store.register('RENDER', (message, state) => {
             ReactDOM.render(this.render(), document.getElementById('main'));
@@ -80,7 +165,40 @@ class ApplicationComponent extends React.Component {
         });
     }
 
+    chain(message) {
+        if (!message.select_trigger
+            && !message.forced
+            && (!message.count || !message.specount)
+            && !message.count) {
+            this.primus.write({
+                action: 'question',
+                answer: {
+                    type: 'number',
+                    i: -1
+                },
+                uuid: this.state.question
+            });
+            return;
+        }
+        if (message.forced) {
+            this.primus.write({
+                action: 'question',
+                answer: {
+                    type: 'number',
+                    i: 0
+                },
+                uuid: this.state.question
+            });
+            return;
+        }
+        console.log('solve', message);
+        this.state.question_max = message.count;
+        this.state.question_min = (message.forced) ? 1 : 1;
+        this.duel.chain(message.select_options);
+    }
+
     duelAction(message) {
+        this.duel.disableSelection();
         switch (message.duelAction) {
             case 'start':
                 this.state.mode = 'duel';
@@ -94,23 +212,68 @@ class ApplicationComponent extends React.Component {
                 this.duel.updateField(message.field[1]);
                 break;
             case 'question':
-                this.duel.idle(message.options);
+                this.setupQuestion(message);
+                break;
+            case 'announcement':
+                this.announcement(message.message);
                 break;
             default:
-                throw (message.action);
+                break;
         }
     }
 
-    process(message) {
-        if (message.command.indexOf('SELECT') > -1) {
-            this.duel.lifepoints.state.waiting = true;
-        }
-        switch (message.command) {
-            case ('MSG_WAITING' || 'STOC_TIME_LIMIT' || 'STOC_WAITING_SIDE'):
-                this.duel.lifepoints.state.waiting = true;
+    setupQuestion(message) {
+        console.log('???', message.options.command, message);
+        this.state.question = message.uuid;
+        this.state.question_min = message.options.select_min;
+        this.state.question_max = message.options.select_max;
+        this.state.question_options = message.options;
+        this.state.question_selection = [];
+        this.duel.lifepoints.state.waiting = true;
+        this.duel.idle({});
+        switch (message.options.command) {
+            case 'MSG_SELECT_IDLECMD':
+                this.duel.idle(message.options);
                 break;
-            case ('STOC_TIME_LIMIT'):
-                this.duel.lifepoints.time({ player: message.player, time: message.time });
+            case 'MSG_SELECT_BATTLECMD':
+                this.duel.idle(message.options);
+                break;
+            case 'MSG_SELECT_PLACE':
+                this.duel.select(message.options);
+                break;
+            case 'MSG_SELECT_CARD':
+                this.duel.reveal(message.options.select_options);
+                break;
+            case 'MSG_SELECT_TRIBUTE':
+                this.duel.reveal(message.options.selectable_targets);
+                break;
+            case 'MSG_CONFIRM_CARDS':
+                debugger;
+                this.duel.reveal(message.options.select_options);
+                break;
+            case 'MSG_SELECT_POSITION':
+                this.duel.positionDialog.trigger(message.options);
+                break;
+            case 'MSG_SELECT_EFFECTYN':
+                debugger;
+                this.duel.yesnoDialog.state.active = true;;
+                break;
+            case 'MSG_SELECT_CHAIN':
+                this.chain(message.options);
+                break;
+            default:
+                throw ('Unknown message');
+        }
+    }
+
+    announcement(message) {
+        console.log('!!!', message.command, message);
+        switch (message.command) {
+            case 'MSG_ORIENTATION':
+                window.orientation = message.slot;
+                break;
+            case ('MSG_WAITING'):
+                this.duel.lifepoints.state.waiting = true;
                 break;
             case ('MSG_SUMMONING'):
                 this.duel.flash({ id: message.id });
@@ -123,6 +286,7 @@ class ApplicationComponent extends React.Component {
                 break;
             case ('MSG_CHAINING'):
                 this.duel.flash({ id: message.id });
+                break;
             case ('MSG_SHUFFLE_DECK'):
                 doGuiShuffle(orient(message.player), 'DECK');
                 break;

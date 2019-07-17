@@ -36,6 +36,16 @@ class LifepointDisplay extends React.Component {
         }, value);
     }
 
+    flasher() {
+        if (!this.state.waiting) {
+            return '';
+        }
+        return React.createElement('div', {
+            key: 'span-x',
+            id: 'ygowaiting'
+        }, 'Waiting...');
+    }
+
 
     render() {
         return [
@@ -46,7 +56,8 @@ class LifepointDisplay extends React.Component {
             this.span('p0name', 'Player 1'),
             this.span('p1name', 'Player 2'),
             this.meter('p0time'),
-            this.meter('p1time')
+            this.meter('p1time'),
+            this.flasher()
         ];
     }
 

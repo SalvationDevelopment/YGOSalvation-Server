@@ -1,6 +1,6 @@
 /*eslint no-plusplus: 0*/
-const enums = require('./translate_ygopro_enums.js'),
-    makeCard = require('./model_ygopro_card.js'),
+const enums = require('./enums.js'),
+    makeCard = require('./lib_card.js'),
     BufferStreamReader = require('./model_stream_reader');
 
 
@@ -122,7 +122,7 @@ function getIdleSet(pbuf, hasDescriptions) {
 
 function msg_retry(message, pbuf, game) {
     message.desc = 'Error Occurs.';
-    game.sendToPlayer(game.lastSentToPlayer, message.packet);
+    game.retry();
     return 1;
 }
 
@@ -563,6 +563,11 @@ function msg_announce_race(message, pbuf, game) {
     message.player = pbuf.readInt8();
     message.announce_count = pbuf.readInt8();
     message.avaliable = pbuf.readInt32();
+    message.chkRace = [];
+    for (let i = 0, filter = 0x1; i < 25; ++i, filter <<= 1) {
+        message.chkRace.push((filter & message.available) ? true : false);
+    }
+    console.log('donte', message);
     game.waitforResponse(message.player);
     game.sendBufferToPlayer(message.player, message);
     return 1;
@@ -787,7 +792,8 @@ function msg_select_battlecmd(message, pbuf, game) {
 function msg_select_effectyn(message, pbuf, game) {
     message.player = pbuf.readInt8();
     message.id = pbuf.readInt32();
-    message.location = pbuf.readInt8();
+    message.controller = pbuf.readInt8();
+    message.location = enums.locations[pbuf.readInt8()];
     message.index = pbuf.readInt8();
     pbuf.readInt8();
     message.desc = pbuf.readInt32();
@@ -841,6 +847,7 @@ function msg_select_chain(message, pbuf, game) {
     message.player = pbuf.readInt8();
     message.count = pbuf.readInt8();
     message.specount = pbuf.readInt8();
+    message.select_trigger = (message.specount == 0x7f);
     message.forced = pbuf.readInt8();
     message.hint0 = pbuf.readInt32();
     message.hint1 = pbuf.readInt32();
@@ -994,11 +1001,13 @@ function msg_confirm_cards(message, pbuf, game) {
     const LOCATION_DECK = 0x01;
     message.player = pbuf.readInt8();
     message.count = pbuf.readInt8();
+    message.select_options = [];
     for (let i = 0; i < message.count; ++i) {
-        message.selections.push({
-            c: pbuf.readInt8(),
-            l: pbuf.readInt8(),
-            s: pbuf.readInt8()
+        message.select_options.push({
+            id: pbuf.readInt32(),
+            player: pbuf.readInt8(), // really controller
+            location: enums.locations[pbuf.readInt8()],
+            index: pbuf.readInt8()
         });
     }
     if (pbuf[5] !== LOCATION_DECK) {

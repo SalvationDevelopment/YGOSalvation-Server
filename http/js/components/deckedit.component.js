@@ -1,5 +1,21 @@
 /*global React, ReactDOM, SearchFilter, store, cardIs*/
 
+/**
+ * Shuffles an array in place, multiple times.
+ * @param {Array} array to shuffle
+ * @returns {void}
+ */
+function deepShuffle(array) {
+    for (var i = 0; i < array.length; i++) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1)),
+                temp = array[i];
+
+            array[i] = array[j];
+            array[j] = temp;
+        }
+    }
+}
 
 function checkLegality(card, zone, deck, banlist) {
     function checkCard(reference) {
@@ -101,6 +117,7 @@ class DeckEditScreen extends React.Component {
             decks: [],
             last: '',
             activeDeck: {
+                name: 'New Deck',
                 main: [],
                 extra: [],
                 side: []
@@ -164,7 +181,7 @@ class DeckEditScreen extends React.Component {
                 deck.side = deck.side.map(this.findcard.bind(this));
                 return deck;
             });
-            this.state.activeDeck = this.state.decks[this.settings.decklist];
+            this.state.activeDeck = this.state.decks[this.settings.decklist] || this.state.activeDeck;
             this.store.dispatch({ action: 'RENDER' });
         });
 
@@ -270,6 +287,9 @@ class DeckEditScreen extends React.Component {
 
     saveToServer() {
         const decks = JSON.parse(JSON.stringify(condenseDecks(this.state.decks)));
+        decks.sort((a, b) => {
+            return a.name > b.name;
+        });
         store.dispatch({ action: 'SAVE_DECKS', decks });
     }
     save() {
@@ -351,6 +371,12 @@ class DeckEditScreen extends React.Component {
         this.state.activeDeck.extra.sort(cardEvaluate);
         this.state.activeDeck.side.sort(cardEvaluate);
     }
+
+    shuffle() {
+        deepShuffle(this.state.activeDeck.main);
+        this.store.dispatch({ action: 'RENDER' });
+    }
+
     export() {
         let file = '#Created by ' + this.state.activeDeck.creator + ' on ' + this.state.activeDeck.creationDate + '\r\n#main';
 
@@ -534,7 +560,9 @@ class DeckEditScreen extends React.Component {
                 'data-limit': card.limit,
                 onDragOver: this.setIndex.bind(this, source, i),
                 onDragStart: this.onDragStart.bind(this, source, i),
-                onDragEnd: this.onDragEnd.bind(this)
+                onDragEnd: this.onDragEnd.bind(this),
+                onDoubleClick: this.onCardDoubleClick.bind(this, source, i),
+                onContextMenu: this.onCardDoubleClick.bind(this, source, i)
             }, new CardImage(card, this.store).render());
         });
     }
@@ -706,6 +734,30 @@ class DeckEditScreen extends React.Component {
         ])];
     }
 
+    onCardDoubleClick(source, index) {
+        event.preventDefault();
+        if (source === 'search') {
+            const card = this.state.search[index];
+            let legal = checkLegality(card, 'main', this.state.activeDeck, banlist);
+            if (!legal) {
+                return;
+            }
+            if (isExtra(card)) {
+                legal = checkLegality(card, 'extra', this.state.activeDeck, banlist);
+                this.state.activeDeck.extra.push(card);
+                this.store.dispatch({ action: 'RENDER' });
+                return;
+            }
+            this.state.activeDeck.main.push(card);
+            this.store.dispatch({ action: 'RENDER' });
+            return;
+        }
+
+        this.state.activeDeck[source].splice(index, 1);
+        this.store.dispatch({ action: 'RENDER' });
+
+    }
+
     onDropExitZone(event) {
         const index = event.dataTransfer.getData('index'),
             source = event.dataTransfer.getData('source');
@@ -837,6 +889,7 @@ class DeckEditScreen extends React.Component {
                                 element('button', { onClick: this.clear.bind(this) }, 'Clear'),
 
                                 element('button', { onClick: this.sort.bind(this) }, 'Sort'),
+                                element('button', { onClick: this.shuffle.bind(this) }, 'Shuffle'),
                                 element('button', { onClick: this.export.bind(this) }, 'Export'),
                                 element('button', { onClick: this.saveAs.bind(this) }, 'Save As')
                             ])

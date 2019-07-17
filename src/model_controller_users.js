@@ -3,6 +3,7 @@
 'use strict';
 var crypto = require('crypto'),
     zxcvbn = require('zxcvbn'),
+    EloRank = require('elo-rank'),
     mongoose = require('mongoose'),
     Schema = mongoose.Schema,
     sanitizer = require('sanitizer'),
@@ -64,7 +65,8 @@ var crypto = require('crypto'),
             rankPoints: Number,
             rankedWins: Number,
             rankedLosses: Number,
-            rankedTies: Number
+            rankedTies: Number,
+            elo: { type: String, default: 1200 }
         },
         settings: {
             sleeves: Buffer,
@@ -109,7 +111,6 @@ var db = mongoose.connect('mongodb://localhost/salvation', {
         console.log('Make sure MongoDB is running and `salvation` collection exist.');
         return;
     }
-    console.log('Database online');
 });
 
 mongoose.connection.on('error', function (err) {
@@ -278,8 +279,10 @@ function sendEmail(address, username, id) {
 
 function saveDeck(user, callback) {
     Users.findOne({ 'username': user.username }, function (err, person) {
-        person.decks = user.decks;
-        person.save(callback);
+        if (person) {
+            person.decks = user.decks;
+            person.save(callback);
+        }
     });
 }
 
@@ -317,8 +320,27 @@ function getUserCount(callback) {
 function recordDuelResult(duel, callback) {
     const input = new Duels(duel);
     Duels.create(input, callback);
-    Users.findOneAndUpdate({ username: duel.players[duel.winner] }, { $inc: { 'ranking.rankedPoints': 1 } });
-    callback();
+    Users.findOne({ username: duel.winner.username }, function (errorWin, winner) {
+        Users.findOne({ username: duel.winner.username }, function (errorError, loser) {
+            const error = errorWin || errorError;
+            if (error) {
+                callback(error);
+            }
+            const elo = new EloRank(15),
+                winnerScore = elo.getExpected(winner.ranking.elo, loser.ranking.elo),
+                loserScore = elo.getExpected(loser.ranking.elo, winner.ranking.elo);
+
+            //update score, 1 if won 0 if lost
+            winner.ranking.elo = elo.updateRating(winnerScore, 1, winner.ranking.elo);
+            loser.ranking.elo = elo.updateRating(loserScore, 0, winner.ranking.elo);
+            winner.ranking.rankedWins = winner.ranking.rankedWins + 1;
+            loser.ranking.rankedLosses = loser.ranking.rankedLosses + 1;
+
+            winner.save();
+            loser.save();
+            callback();
+        });
+    });
 }
 
 function createTournament(banlist, callback) {
@@ -373,20 +395,132 @@ function getDuels(start, end, callback) {
 }
 
 function getRanking(callback) {
-    Users.find({}, function (error, users) {
+    Users.find({}).exec(function (error, users) {
         if (error) {
             callback(error);
         }
         const ranks = users.map(function (user) {
             return {
                 username: user.username,
-                points: user.ranking.rankPoints
+                points: user.ranking.rankPoints,
+                elo: user.ranking.elo
             };
         });
         ranks.sort(function (primary, secondary) {
-            return primary.points > secondary.points;
+            if (primary.points !== secondary.points) {
+                return primary.points < secondary.points
+            }
+            if (primary.elo !== secondary.elo) {
+                return primary.points < secondary.points
+            }
         });
         callback(null, ranks.slice(0, 100));
+    });
+}
+
+function sessionCheck(request, response, next) {
+    var session = request.get('Session') || '';
+
+    if (request.method === 'GET') {
+        next();
+        return;
+    }
+
+    Users.findOne({ session }, function (error, person) {
+        if (error) {
+            response.status(500);
+            response.json({ code: 500, error });
+            response.end();
+        }
+        if (!person) {
+            response.status(401);
+            response.json({ code: 401, error: '401 Unauthorized' });
+            response.end();
+            return;
+        } else if (sessionTimeout(person.sessionExpiration)) {
+            request.user = person;
+            next();
+            return;
+        } else {
+            response.json({ error, code: 401, message: '401 Unauthorized' });
+            response.end();
+            return;
+        }
+
+    });
+}
+
+function adminSessionCheck(request, response, next) {
+    var session = request.get('Session') || '';
+    Users.findOne({ session, admin: true }, function (error, person) {
+        if (error) {
+            response.status(500);
+            response.json({ code: 500, error });
+            response.end();
+        }
+        if (!person) {
+            response.status(401);
+            response.json({ code: 401, error: '401 Unauthorized' });
+            response.end();
+            return;
+        } else if (sessionTimeout(person.sessionExpiration)) {
+            next();
+            return;
+        } else {
+            response.json({ error, code: 401, message: '401 Unauthorized' });
+            response.end();
+            return;
+        }
+
+    });
+}
+
+function finalResponse(response) {
+    return function (error, result, numAffected) {
+        if (error) {
+            response.status(500);
+            response.send({
+                result,
+                success: false,
+                error,
+                numAffected
+            });
+            response.end();
+            return;
+        }
+        response.send({
+            result: result,
+            success: true,
+            error,
+            numAffected
+        });
+        response.end();
+    };
+}
+
+
+function getSession(request, response) {
+    var session = request.params.session;
+
+    Users.findOne({ session }, function (error, person) {
+        let result = {};
+        if (error) {
+            finalResponse(response)(error);
+        }
+        if (!person) {
+            finalResponse(response)(null, {
+                success: false
+            }, 0);
+            return;
+        } else if (sessionTimeout(person.sessionExpiration)) {
+            result = JSON.parse(JSON.stringify(person));
+            delete result.passwordHash;
+            delete result.salt;
+            finalResponse(response)(null, result, 1);
+            return;
+        } else {
+            finalResponse(response)(null, result, 1);
+        }
     });
 }
 
@@ -445,7 +579,8 @@ function setupController(app) {
                         rankPoints: 0,
                         rankedWins: 0,
                         rankedLosses: 0,
-                        rankedTies: 0
+                        rankedTies: 0,
+                        elo: 1200
                     };
                     Users.create(newUser, function (error, createdPerson, numAffected) {
                         const resultingUser = JSON.parse(JSON.stringify(createdPerson));
@@ -584,7 +719,7 @@ function setupController(app) {
                 ranks: ranks,
                 error: error
             }));
-            next();
+            res.end();
         });
     });
 
@@ -633,6 +768,9 @@ function setupController(app) {
             next();
         });
     });
+
+    app.get('/api/session/:session', getSession);
+
 
 }
 

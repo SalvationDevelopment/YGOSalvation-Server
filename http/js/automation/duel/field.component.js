@@ -132,15 +132,30 @@ class Field {
         this.state.phase.update(value);
     }
 
+    getDeck(player, location) {
+        var result = this.state.cards.filter((cardImage) => {
+            return (cardImage.state.location === location) && (cardImage.state.player === player);
+        }).map((cardImage) => {
+            return {
+                id: cardImage.state.id,
+                location: cardImage.state.location,
+                index: cardImage.state.index
+            };
+        });
+        console.log(result);
+        return result;
+    }
+
     constructor(state, store) {
         this.store = store;
         this.state = {
             cards: [],
-            phase: new PhaseIndicator({ phase: state.info.phase }),
+            phase: new PhaseIndicator(store, { phase: state.info.phase }),
             selectors: new FieldSelector(store)
         };
 
         this.cast(state.field, (card) => {
+            card.orientSlot = window.orientation;
             this.state.cards[card.uid] = new CardImage(card, store);
         });
     }
