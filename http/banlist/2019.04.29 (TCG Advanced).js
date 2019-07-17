@@ -201,7 +201,7 @@ module.exports =
      bannedTypes : [],
      exceptions : [],
      startDate : new Date('2019-04-29'),
-     endDate : null,
+     endDate : new Date('2019-07-14'),
      masterRule: 4,
      region: 'tcg'
 };
