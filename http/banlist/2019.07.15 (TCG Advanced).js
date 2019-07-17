@@ -207,5 +207,6 @@ module.exports =
     startDate : new Date('2019-07-15'),
     endDate : null,
     masterRule: 4,
-    region: 'tcg'		
+    region: 'tcg',
+    primary: true
 };
