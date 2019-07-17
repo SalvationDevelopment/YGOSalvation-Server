@@ -239,7 +239,7 @@ function startRecoverPassword(data, callback) {
 }
 
 function recoverPassword(data, id, callback) {
-    Users.findOne({ email: data.email, recoveryPass: id }, function (error, result, person) {
+    Users.findOne({ recoveryPass: id }, function (error, result, person) {
         var password = data.newPassword,
             salt = salter(),
             passwordHash = hash(password, salt);
@@ -510,7 +510,7 @@ function getSession(request, response) {
             finalResponse(response)(null, result, 1);
             return;
         } else {
-            finalResponse(response)(null, result, 1);
+            finalResponse(response)(new Error('Could not find Session'), result);
         }
     });
 }
@@ -623,12 +623,6 @@ function setupController(app) {
         }
         // basic security practice dont tell the attacker which part was correct.
         if (!payload.email) {
-            response.send({
-                error: 'No username or email address'
-            });
-            return;
-        }
-        if (!payload.username) {
             response.send({
                 error: 'No username or email address'
             });
@@ -781,7 +775,3 @@ module.exports = {
     validateSession,
     db
 };
-
-setTimeout(() => {
-    sendRecoveryEmail('panthrowzay@gmail.com', 'AccessDenied', 'SESSION');
-}, 5000);

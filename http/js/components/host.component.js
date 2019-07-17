@@ -62,6 +62,7 @@ class HostScreen extends React.Component {
     render() {
         return React.createElement('section', { id: 'hostSettings' }, [
             React.createElement('h2', {}, 'Settings'),
+            React.createElement('br', {}),
             React.createElement('label', {}, 'Cardpool'),
             React.createElement('select', { id: 'creategamecardpool', onChange: this.onChange.bind(this) }, [
                 React.createElement('option', { value: 0 }, 'OCG'),
@@ -90,12 +91,14 @@ class HostScreen extends React.Component {
                 React.createElement('option', { value: 900000 }, '15 Minutes')
             ]),
             React.createElement('br', {}),
+            React.createElement('br', {}),
             React.createElement('h2', {}, 'Additional Options'),
-            React.createElement('label', {}, 'Use AI'),
-            React.createElement('input', { type: 'checkbox', id: 'useai', disabled: true, onChange: this.onChange.bind(this) }),
-            React.createElement('select', { id: 'aidecks', disabled: true, onChange: this.onChange.bind(this) }, []),
-            React.createElement('label', {}, 'Automatic Mode (In Development'),
-            React.createElement('input', { type: 'checkbox', id: 'useautomatic', checked: true, disabled: true, onChange: this.onChange.bind(this) }),
+            React.createElement('br', {}),
+            //React.createElement('label', {}, 'Use AI'),
+            //React.createElement('input', { type: 'checkbox', id: 'useai', disabled: true, onChange: this.onChange.bind(this) }),
+            //React.createElement('select', { id: 'aidecks', disabled: true, onChange: this.onChange.bind(this) }, []),
+            //React.createElement('label', {}, 'Automatic Mode (In Development'),
+            //React.createElement('input', { type: 'checkbox', id: 'useautomatic', checked: true, disabled: true, onChange: this.onChange.bind(this) }),
             React.createElement('label', {}, 'Validate Deck'),
             React.createElement('input', { type: 'checkbox', id: 'deckcheck', checked: true, onChange: this.onChange.bind(this) }),
             React.createElement('label', {}, 'Shuffle Deck'),
@@ -104,8 +107,8 @@ class HostScreen extends React.Component {
             React.createElement('input', { type: 'checkbox', id: 'locked', onChange: this.onChange.bind(this) }),
             React.createElement('label', {}, 'Use Password'),
             React.createElement('input', { type: 'checkbox', id: 'locked', onChange: this.onChange.bind(this) }),
-            React.createElement('label', {}, 'Lifepoints'),
-            React.createElement('input', { type: 'number', id: 'startLP', onChange: this.onChange.bind(this), value: 8000 }),
+            //React.createElement('label', {}, 'Lifepoints'),
+            //React.createElement('input', { type: 'number', id: 'startLP', onChange: this.onChange.bind(this), value: 8000 }),
             React.createElement('br', {}),
             React.createElement('div', { className: 'button', id: 'creategameok', onClick: this.host.bind(this) }, 'Host')
         ]);

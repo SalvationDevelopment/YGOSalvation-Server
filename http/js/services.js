@@ -132,6 +132,38 @@ store.register('REGISTER_ACCOUNT', (action) => {
     });
 });
 
+store.register('RECOVER_ACCOUNT', (action) => {
+    var email = $('#remember').val();
+
+
+    if (!validateEmail(email)) {
+        app.alert('Invalid Email address');
+        return false;
+    }
+
+    $.post('/recover', { email: email }, function (result, networkStatus) {
+        console.log(result);
+        if (result.error) {
+            app.alert(result.error);
+        } else {
+            app.alert('Recovery Code Sent.');
+        }
+    });
+});
+
+store.register('RECOVER_CODE', (action) => {
+    var recoveryPass = $('#remember').val();
+
+    $.post('/recoverpassword', { recoveryPass }, function (result, networkStatus) {
+        console.log(result);
+        if (result.error) {
+            app.alert(result.error);
+        } else {
+            app.alert('Account Password Updated.');
+        }
+    });
+});
+
 $.getJSON('/ranking', function (data) {
     const ranks = data.ranks;
     // ranks.sort((user) => user.points);
