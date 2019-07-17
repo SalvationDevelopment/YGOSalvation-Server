@@ -3,7 +3,7 @@
 
 window.orientation = 0;
 function orient(player) {
-    return
+    return;
 }
 
 class ApplicationComponent extends React.Component {
@@ -296,7 +296,7 @@ class ApplicationComponent extends React.Component {
                 doGuiShuffle(orient(message.player), 'DECK');
                 break;
             case ('MSG_SHUFFLE_HAND'):
-                doGuiShuffle(orient(message.player), 'DECK');
+                doGuiShuffle(orient(message.player), 'HAND');
                 break;
             default:
                 break;

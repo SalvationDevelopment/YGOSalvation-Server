@@ -848,7 +848,7 @@ function msg_select_chain(message, pbuf, game) {
     message.player = pbuf.readInt8();
     message.count = pbuf.readInt8();
     message.specount = pbuf.readInt8();
-    message.select_trigger = (message.specount == 0x7f);
+    message.select_trigger = (message.specount === 0x7f);
     message.forced = pbuf.readInt8();
     message.hint0 = pbuf.readInt32();
     message.hint1 = pbuf.readInt32();
@@ -1019,19 +1019,6 @@ function msg_confirm_cards(message, pbuf, game) {
     }
     game.sendBufferToPlayer(message.player, message);
     return;
-}
-
-function msg_update_data(message, pbuf, game, gameBoard) {
-    message.player = pbuf.readInt8();
-    message.location = enums.locations[pbuf.readInt8()];
-    message.cards = getFieldCards(gameBoard, message.player, message.location, pbuf);
-}
-
-function msg_update_card(message, pbuf, game, gameBoard) {
-    message.player = pbuf.readInt8();
-    message.location = enums.locations[pbuf.readInt8()];
-    message.index = pbuf.readInt8();
-    message.card = makeCard(pbuf, message.player, (gameBoard.masterRule === 4));
 }
 
 function msg_swap_grave_deck(message, pbuf, game) {
@@ -1352,8 +1339,6 @@ translator = {
     MSG_WAITING: msg_waiting,
     MSG_START: msg_start,
     MSG_WIN: msg_win,
-    MSG_UPDATE_DATA: msg_update_data,
-    MSG_UPDATE_CARD: msg_update_card,
     MSG_REQUEST_DECK: msg_request_deck,
     MSG_SELECT_BATTLECMD: msg_select_battlecmd,
     MSG_SELECT_IDLECMD: msg_select_idlecmd,
@@ -1448,6 +1433,7 @@ translator = {
  * @param {Buffer} coreMessage Message from ygopro-core
  * @param {Number} length Number of messages in the buffer
  * @param {Duel} game Duel Instance
+ * @returns {Number} action enum to take
  */
 function analyze(coreMessage, length, game) {
     const msgbuffer = new BufferStreamReader(coreMessage),

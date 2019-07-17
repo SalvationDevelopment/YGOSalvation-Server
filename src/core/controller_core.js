@@ -262,7 +262,6 @@ function Responser(game, player, slot) {
 
     function write(data) {
         game.last(slot);
-        console.log(typeof data === 'number');
         if (typeof data === 'number') {
             ocgapi.set_responsei(game.pduel, data);
         } else {
@@ -476,9 +475,12 @@ function makeGame(pduel, settings) {
         return message;
     }
 
-    function msg_update_card(message, pbuf, game, gameBoard) {
+    function msg_update_card(card, message, pbuf) {
         message.command = 'MSG_UPDATE_CARD';
+        pbuf.readInt32();
         message.card = makeCard(pbuf, undefined, true);
+        Object.assign(message.card, card);
+        console.log('MSG_UPDATE_CARD');
         return message;
     }
 
@@ -536,16 +538,11 @@ function makeGame(pduel, settings) {
         sendToObservers();
     }
 
-    function refreshSingle(player, location, sequence, flag = 0xf81fff) {
+    function refreshSingle(player, location, index, flag = 0xfffffff) {
         const qbuf = Buffer.alloc(0x40000);
         qbuf.type = ref.types.byte;
-        console.log(pduel, player, location, sequence, flag, qbuf);
-        ocgapi.query_card(pduel, player, location, sequence, flag, qbuf, 0);
-        var message = msg_update_card({
-            player,
-            location,
-            sequence
-        }, new BufferStreamReader(qbuf));
+        ocgapi.query_card(pduel, player, location, index, flag, qbuf, 0);
+        var message = msg_update_card({ player, location: enums.locations[location], index }, {}, new BufferStreamReader(qbuf));
         sendBufferToPlayer(player, message);
         reSendToPlayer(1 - player);
         sendToObservers();
@@ -636,7 +633,7 @@ function duel(settings, errorHandler, players, observers) {
     game = makeGame(pduel, settings);
     const playerConnections = players.map(function (playerConnection, slot) {
         return playerInstance(playerConnection, slot, game, settings);
-    })
+    });
 
     game.setPlayers(playerConnections);
     game.refer = ref.deref(pduel);

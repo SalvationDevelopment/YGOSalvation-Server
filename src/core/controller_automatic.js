@@ -441,18 +441,18 @@ function boardController(gameBoard, slot, message, ygopro, player) {
         case ('MSG_UPDATE_CARD'): // Inconsistent
             try {
                 gameBoard.setState({
-                    player: message.player,
-                    clocation: message.location,
-                    index: message.index,
-                    moveplayer: message.player,
-                    movelocation: message.location,
-                    moveindex: message.index,
-                    moveposition: message.card.Position,
+                    player: message.card.player,
+                    clocation: message.card.location,
+                    index: message.card.index,
+                    moveplayer: message.card.player,
+                    movelocation: message.card.location,
+                    moveindex: message.card.index,
+                    moveposition: message.card.location,
                     overlayindex: 0,
                     id: message.card.id
                 });
             } catch (e) {
-                console.log(e);
+                console.log(e, message);
             }
             break;
         case ('MSG_WAITING'): // Good

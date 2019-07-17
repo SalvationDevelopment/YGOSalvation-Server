@@ -24,7 +24,7 @@ function makeCard(BufferIO, controller, masterRule4) {
         card.Position = (card.Position >> 24) & 0xff;
     }
     if (flag & enums.query.Alias) {
-        card.Alias = BufferIO.readInt32();
+        card.id = BufferIO.readInt32();
     }
     if (flag & enums.query.Type) {
         card.TypeVal = BufferIO.readInt32();
