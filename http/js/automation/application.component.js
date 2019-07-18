@@ -144,6 +144,20 @@ class ApplicationComponent extends React.Component {
             return state;
         });
 
+        this.store.register('CHAIN_CARD_CLICK', (message, state) => {
+
+            this.primus.write({
+                action: 'question',
+                answer: {
+                    type: 'number',
+                    i: message.option
+                },
+                uuid: this.state.question
+            });
+            return state;
+
+        });
+
         this.store.register('REVEALER_CLOSE', (message, state) => {
             if (this.state.question_selection.length > this.state.question_min) {
                 this.primus.write({
@@ -192,7 +206,7 @@ class ApplicationComponent extends React.Component {
             return;
         }
         console.log('solve', message);
-        this.state.question_max = message.count;
+        //this.state.question_max = message.count;
         this.state.question_min = (message.forced) ? 1 : 1;
         this.duel.chain(message.select_options);
     }
@@ -264,6 +278,8 @@ class ApplicationComponent extends React.Component {
                 this.duel.yesnoDialog.state.active = true;;
                 break;
             case 'MSG_SELECT_CHAIN':
+                this.state.question_min = 1;
+                this.state.question_max = 1;
                 this.chain(message.options);
                 break;
             default:
@@ -304,7 +320,11 @@ class ApplicationComponent extends React.Component {
     }
 
     action(message) {
+        console.log(message);
         switch (message.action) {
+            case 'error':
+                alert(message.msg);
+                break;
             case 'lobby':
                 this.lobby.update(message.game);
                 break;

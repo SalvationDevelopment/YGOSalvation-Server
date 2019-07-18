@@ -164,6 +164,8 @@ function msg_new_turn(message, pbuf, game) {
     game.refreshSzone(1);
     game.refreshHand(0);
     game.refreshHand(1);
+    game.refreshExtra(0);
+    game.refreshExtra(1);
     message.player = pbuf.readInt8();
     game.sendBufferToPlayer(0, message);
     game.reSendToPlayer(1);

@@ -415,6 +415,9 @@ function boardController(gameBoard, slot, message, ygopro, player) {
             askUser(gameBoard, slot, message, ygopro, 'MSG_CONFIRM_CARDS');
             break;
         case ('MSG_UPDATE_DATA'): // inconsistent
+            if (message.cards.length) {
+                gameBoard.announcement(slot, message);
+            }
             message.cards.forEach(function (card, index) {
                 if (card) {
                     try {

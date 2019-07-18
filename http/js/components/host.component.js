@@ -53,6 +53,13 @@ class HostScreen extends React.Component {
                     break;
             }
         }
+        if (id === 'banlist') {
+            const banlist = this.state.banlist.find((list) => {
+                return list.name === event.target.value;
+            });
+            this.settings.masterRule = banlist.masterRule;
+            console.log(this.settings.masterRule);
+        }
     }
 
     host() {
