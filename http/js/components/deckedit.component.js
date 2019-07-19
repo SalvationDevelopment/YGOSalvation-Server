@@ -33,13 +33,13 @@ function checkLegality(card, zone, deck, banlist) {
     if (mainCount + extraCount + sideCount >= card.limit) {
         return false;
     }
-    if (zone === 'main' && deck[zone].length >= 60 && masterRule > 0) {
+    if (zone === 'main' && deck[zone].length >= 60) {
         return false;
     }
     if (zone === 'side' && deck[zone].length >= 15) {
         return false;
     }
-    if (zone === 'extra' && deck[zone].length >= 15 && masterRule > 0) {
+    if (zone === 'extra' && deck[zone].length >= 15) {
         return false;
     }
     return true;
@@ -471,6 +471,16 @@ class DeckEditScreen extends React.Component {
         this.searchFilter.pageForward();
         this.state.search = this.searchFilter.renderSearch();
         this.store.dispatch({ action: 'RENDER' });
+    }
+
+    marginClass(deck) {
+        if (deck.length <= 40) {
+            return '';
+        }
+        if (deck.length >= 40 && deck.length <= 48) {
+            return 'c48';
+        }
+        return 'c60';
     }
 
     onChange(event) {
@@ -921,7 +931,7 @@ class DeckEditScreen extends React.Component {
                 element('div', { id: 'deckareamain' }, [
                     element('h2', {}, 'Main Deck'),
                     element('div', {
-                        className: 'deckmetainfo',
+                        className: `deckmetainfo ${this.marginClass(this.state.activeDeck.main)}`,
                         onDragOver: function (event, x) {
                             event.preventDefault();
                         },

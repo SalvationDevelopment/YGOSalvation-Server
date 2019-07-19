@@ -112,6 +112,9 @@ class Field {
             }
         });
         this.cast(update, (card) => {
+            if (card.position === 'MONSTERZONE') {
+                console.log(card, new Error());
+            }
             if (card.location === 'HAND') {
                 Object.assign(this.state.cards[card.uid].state, {
                     handLocation: count[this.state.cards[card.uid].state.player]
@@ -133,7 +136,7 @@ class Field {
     }
 
     getDeck(player, location) {
-        var result = this.state.cards.filter((cardImage) => {
+        var deck = this.state.cards.filter((cardImage) => {
             return (cardImage.state.location === location) && (cardImage.state.player === player);
         }).map((cardImage) => {
             return {
@@ -142,8 +145,8 @@ class Field {
                 index: cardImage.state.index
             };
         });
-        console.log(result);
-        return result;
+        console.log(deck);
+        this.store.dispatch({ action: 'VIEW_DECK', deck });
     }
 
     constructor(state, store) {

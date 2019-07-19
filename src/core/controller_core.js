@@ -442,106 +442,55 @@ function makeGame(pduel, settings) {
         };
     }
 
-    /**
-     * Get Card Information for a certain location
-     * @param {Player} player Player side of the field to query
-     * @param {String} location Target field zone
-     * @param {Buffer} pbuf Duel pointer.
-     * @returns {Card[]} list of cards
-     */
-    function getFieldCards(player, location, pbuf) {
-        'use strict';
-        const cards = [],
-            values = queryFieldCount(player),
-            requiredIterations = values[location];
-
-        for (let i = 0; requiredIterations > i; ++i) {
-            const len = pbuf.readInt32();
-            if (len > 8) {
-                const card = makeCard(pbuf, undefined, true);
-                if (card && card.location === 'EXTRA') {
-                    console.log('EXTRA', card);
-                }
-                cards.push(card);
-            }
-        }
-        return cards;
-    }
-
-    function msg_update_data(message, pbuf) {
-        message.command = 'MSG_UPDATE_DATA';
-        message.location = enums.locations[pbuf.readInt8()];
-        console.log(message.location);
-        //pbuf.readInt8();
-        //pbuf.readInt8();
-        message.cards = getFieldCards(message.player, message.location, pbuf);
-        return message;
-    }
 
     function msg_update_card(card, message, pbuf) {
         message.command = 'MSG_UPDATE_CARD';
         pbuf.readInt32();
         message.card = makeCard(pbuf, undefined, true);
         Object.assign(message.card, card);
-        console.log('MSG_UPDATE_CARD');
         return message;
     }
 
+    function msg_update_data(player, location) {
+        const count = ocgapi.query_field_count(pduel, player, location),
+            cards = [],
+            message = {};
+        for (let index = 0; count > index; ++index) {
+            const qbuf = Buffer.alloc(0x40000);
+            qbuf.type = ref.types.byte;
+            ocgapi.query_card(pduel, player, location, index, 0xfffffff, qbuf, 0);
+            const pack = msg_update_card({ player, location: enums.locations[location], index }, {}, new BufferStreamReader(qbuf));
+            cards.push(pack.card);
+        }
+        message.command = 'MSG_UPDATE_DATA';
+        message.location = enums.locations[location];
+        message.cards = cards;
+        sendBufferToPlayer(0, message);
+        sendBufferToPlayer(1, message);
+        sendToObservers();
+    }
+
     function refreshExtra(player, flag, use_cache) {
-        return;
-        flag = flag || 0;
-        use_cache = use_cache || 0;
-        const qbuf = Buffer.alloc(0x4000);
-        qbuf.type = ref.types.byte;
-        ocgapi.query_field_card(pduel, player, LOCATION_EXTRA, 0x81fff, qbuf, use_cache);
-        console.log(qbuf);
-        var message = msg_update_data({}, new BufferStreamReader(qbuf));
-        console.log('!!!!!! EXTRA', message);
-        sendBufferToPlayer(player, message);
+        console.log('refreshing Extra');
+        msg_update_data(player, LOCATION_EXTRA);
+
     }
 
     function refreshMzone(player, flag, use_cache) {
-        const qbuf = Buffer.alloc(0x2000);
-        qbuf.type = ref.types.byte;
-        ocgapi.query_field_card(pduel, player, LOCATION_MZONE, 0xfffffff, qbuf, use_cache);
-        var message = msg_update_data({}, new BufferStreamReader(qbuf));
-        sendBufferToPlayer(player, message);
-        reSendToPlayer(1 - player);
-        sendToObservers();
+        msg_update_data(player, LOCATION_MZONE);
     }
 
     function refreshSzone(player, flag, use_cache) {
-        const qbuf = Buffer.alloc(0x2000);
-        qbuf.type = ref.types.byte;
-        ocgapi.query_field_card(pduel, player, LOCATION_SZONE, 0xfffffff, qbuf, use_cache);
-        var message = msg_update_data({}, new BufferStreamReader(qbuf));
-        sendBufferToPlayer(player, message);
-        reSendToPlayer(1 - player);
-        sendToObservers();
+        msg_update_data(player, LOCATION_SZONE);
     }
 
     function refreshHand(player, flag, use_cache) {
-
-        const qbuf = Buffer.alloc(0x2000);
-        qbuf.type = ref.types.byte;
-        ocgapi.query_field_card(pduel, player, LOCATION_HAND, 0xfffffff, qbuf, use_cache);
-        var message = msg_update_data({}, new BufferStreamReader(qbuf));
-        sendBufferToPlayer(player, message);
-        reSendToPlayer(1 - player);
-        sendToObservers();
+        msg_update_data(player, LOCATION_HAND);
     }
 
 
     function refreshGrave(player, flag, use_cache) {
-        const qbuf = Buffer.alloc(0x2000),
-            header = Buffer.alloc(3),
-            proto = enums.STOC.enums.STOC_GAME_MSG;
-        qbuf.type = ref.types.byte;
-        ocgapi.query_field_card(pduel, player, LOCATION_GRAVE, 0xfffffff, qbuf, use_cache);
-        var message = msg_update_data({}, new BufferStreamReader(qbuf));
-        sendBufferToPlayer(player, message);
-        reSendToPlayer(1 - player);
-        sendToObservers();
+        msg_update_data(player, LOCATION_GRAVE);
     }
 
     function refreshSingle(player, location, index, flag = 0xfffffff) {
@@ -639,15 +588,13 @@ function duel(settings, errorHandler, players, observers) {
     game = makeGame(pduel, settings);
     const playerConnections = players.map(function (playerConnection, slot) {
         return playerInstance(playerConnection, slot, game, settings);
-    }), rule = (settings.masterRule === 4) ? 0xfffff : 0;
+    }), rule = (settings.masterRule === 4) ? 0x040000 : 0;  //0xfffff (mr4 + tag)
     game.setPlayers(playerConnections);
     game.refer = ref.deref(pduel);
     game.sendStartInfo(0);
     game.sendStartInfo(1);
     game.refreshExtra(0);
     game.refreshExtra(1);
-    game.refreshMzone(0);
-    game.refreshMzone(1);
     ocgapi.start_duel(pduel, rule);
     mainProcess(game);
 

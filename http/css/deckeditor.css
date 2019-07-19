@@ -273,6 +273,16 @@ control#linkmarkers {
     width: 10%;
 }
 
+.deckmetainfo.c48 div {
+    height: 25%;
+    width: 8%;
+}
+
+.deckmetainfo.c60 div {
+    height: 25%;
+    width: 6.6%;
+}
+
 .deckmetainfo img {
     height: 100%;
     border: 1px solid black;

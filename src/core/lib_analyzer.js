@@ -1202,7 +1202,7 @@ function msg_sort_chain(message, pbuf, game) {
 
 function msg_select_sum(message, pbuf, game) {
     message.select_mode = pbuf.readInt8();
-    message.select_player = pbuf.readInt8();
+    message.player = pbuf.readInt8();
     message.select_sumval = pbuf.readInt32();
     message.select_min = pbuf.readInt8();
     message.select_max = pbuf.readInt8();
@@ -1212,9 +1212,9 @@ function msg_select_sum(message, pbuf, game) {
     message.can_select = [];
     for (let i = 0; i < message.must_select_count; ++i) {
         message.must_select.push({
-            code: pbuf.readInt32(),
+            id: pbuf.readInt32(),
             player: pbuf.readInt8(),
-            location: pbuf.readInt8(),
+            location: enums.locations[pbuf.readInt8()],
             index: pbuf.readInt8(),
             opParam: pbuf.readInt32()
         });
@@ -1223,9 +1223,9 @@ function msg_select_sum(message, pbuf, game) {
     const count = pbuf.readInt8();
     for (let i = 0; i < count; ++i) {
         message.can_select.push({
-            code: pbuf.readInt32(),
+            id: pbuf.readInt32(),
             player: pbuf.readInt8(),
-            location: pbuf.readInt8(),
+            location: enums.locations[pbuf.readInt8()],
             index: pbuf.readInt8(),
             opParam: pbuf.readInt32()
         });

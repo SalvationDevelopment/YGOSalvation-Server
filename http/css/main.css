@@ -539,7 +539,7 @@ div#actions {
     position: absolute;
     width: 66px;
     font-size: .7em;
-    z-index: 7
+    z-index: 700
 }
 
 div#actions button {
@@ -1010,8 +1010,9 @@ div#yesnobox {
 #subreveal img,
 #revealed img {
     margin: 10px;
-    height: 254px;
-    width: 177px;
+    height: 37vh;
+    width: 13vw;
+    display: inline-block;
 }
 
 #subreveal img.selected,

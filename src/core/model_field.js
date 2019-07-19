@@ -211,7 +211,6 @@ function shuffle(deck) {
  * @returns {Card[]} a collection of cards
  */
 function hideViewOfZone(view) {
-    return view;
     var output = [];
     view.forEach(function (card, index) {
         output[index] = {};
@@ -220,6 +219,24 @@ function hideViewOfZone(view) {
             output[index].id = 0;
             output[index].counters = 0;
             delete output[index].originalcontroller;
+        }
+    });
+
+    return output;
+}
+
+/**
+ * Changes a view of cards so the opponent can not see what they are.
+ * @param   {Card[]} view a collection of cards
+ * @returns {Card[]} a collection of cards
+ */
+function hideViewOfExtra(view, allowed) {
+    var output = [];
+    view.forEach(function (card, index) {
+        output[index] = {};
+        Object.assign(output[index], card);
+        if (output[index].position === 'FaceUpAttack') {
+            output[index].id = (allowed) ? output[index].id : 0;
         }
     });
 
@@ -353,6 +370,9 @@ function init(callback) {
         if (uid) {
             return filterUID(stack, uid)[0];
         }
+        if (overlayindex === undefined) {
+            return filterIndex(filterlocation(filterPlayer(stack, player), clocation), index)[0] || {};
+        }
         return filterOverlyIndex(filterIndex(filterlocation(filterPlayer(stack, player), clocation), index), overlayindex)[0] || {};
     }
 
@@ -444,7 +464,7 @@ function init(callback) {
             DECK: hideViewOfZone(deck),
             HAND: hand,
             GRAVE: grave,
-            EXTRA: hideViewOfZone(extra),
+            EXTRA: hideViewOfExtra(extra, true),
             REMOVED: removed,
             SPELLZONE: spellzone,
             MONSTERZONE: monsterzone,
@@ -474,7 +494,7 @@ function init(callback) {
             DECK: hideViewOfZone(deck),
             HAND: hideHand(hand),
             GRAVE: grave,
-            EXTRA: hideViewOfZone(extra),
+            EXTRA: hideViewOfExtra(extra, false),
             REMOVED: hideViewOfZone(removed),
             SPELLZONE: hideViewOfZone(spellzone),
             MONSTERZONE: hideViewOfZone(monsterzone),
@@ -575,7 +595,7 @@ function init(callback) {
      * @param {ChangeRequest} changeRequest Payload describing a query to find a card, and what to change it to.
      * @returns {undefined}
      */
-    function setState(changeRequest) {
+    function setState(changeRequest, card) {
         var player = changeRequest.player,
             clocation = changeRequest.clocation,
             index = changeRequest.index,
@@ -588,9 +608,12 @@ function init(callback) {
             target = queryCard(player, clocation, index, overlayindex, uid),
             pointer = uidLookup(target.uid),
             zone;
-
         if (!stack[pointer]) {
             return;
+        }
+
+        if (card) {
+            Object.assign(stack[pointer], card);
         }
 
         if (movelocation === 'GRAVE' || movelocation === 'REMOVED') {
@@ -603,10 +626,11 @@ function init(callback) {
         stack[pointer].index = moveindex;
         stack[pointer].position = moveposition;
         stack[pointer].overlayindex = overlayindex;
+
         if (changeRequest.id !== undefined) {
             stack[pointer].id = changeRequest.id;
         }
-        if (stack[pointer].position === 'HAND') {
+        if (stack[pointer].location === 'HAND') {
             stack[pointer].position = 'FaceUp';
         }
         reIndex(player, 'GRAVE');

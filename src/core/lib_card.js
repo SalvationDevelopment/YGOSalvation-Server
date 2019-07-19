@@ -13,39 +13,39 @@ function makeCard(BufferIO, controller, masterRule4) {
     const flag = BufferIO.readInt32(),
         card = {};
     if (flag === 0) {
-        return null;
+        return {};
     }
 
     if (flag & enums.query.Code) {
         card.id = BufferIO.readInt32();
     }
     if (flag & enums.query.Position) {
-        card.Position = enums.positions[BufferIO.readInt32()];
-        card.Position = (card.Position >> 24) & 0xff;
+        card.position = BufferIO.readInt32();
+        card.position = enums.positions[((card.position >> 24) & 0xff)];
     }
     if (flag & enums.query.Alias) {
         card.id = BufferIO.readInt32();
     }
     if (flag & enums.query.Type) {
-        card.TypeVal = BufferIO.readInt32();
-        card.Type = enums.textTypes[card.TypeVal];
+        card.typeVal = BufferIO.readInt32()
+        card.type = enums.textTypes[card.typeVal];
     }
     if (flag & enums.query.Level) {
-        card.Level = BufferIO.readInt32();
+        card.level = BufferIO.readInt32();
     }
     if (flag & enums.query.Rank) {
-        card.Rank = BufferIO.readInt32();
+        card.rank = BufferIO.readInt32();
     }
     if (flag & enums.query.Attribute) {
-        card.Attribute = enums.cardAttributes[BufferIO.readInt32()];
+        card.attribute = enums.cardAttributes[BufferIO.readInt32()];
     }
     if (flag & enums.query.Race) {
-        card.Race = enums.race[BufferIO.readInt32()];
+        card.race = enums.race[BufferIO.readInt32()];
     }
     if (flag & enums.query.Attack) {
-        card.Attack = BufferIO.readInt32();
+        card.attack = BufferIO.readInt32();
         card.atkstring = [];
-        if (card.Attack < 0) {
+        if (card.attack < 0) {
             card.atkstring[0] = '?';
             card.atkstring[1] = 0;
         } else {
@@ -54,9 +54,9 @@ function makeCard(BufferIO, controller, masterRule4) {
         }
     }
     if (flag & enums.query.Defence) {
-        card.Defence = BufferIO.readInt32();
+        card.defence = BufferIO.readInt32();
         card.defstring = [];
-        if (card.TypeVal & TYPE_LINK) {
+        if (card.typeVal & TYPE_LINK) {
             card.defstring[0] = '-';
             card.defstring[1] = 0;
         } else if (card.Defence < 0) {
@@ -68,47 +68,46 @@ function makeCard(BufferIO, controller, masterRule4) {
         }
     }
     if (flag & enums.query.BaseAttack) {
-        card.BaseAttack = BufferIO.readInt32();
+        card.baseAttack = BufferIO.readInt32();
     }
     if (flag & enums.query.BaseDefence) {
-        card.BaseDefence = BufferIO.readInt32();
+        card.baseDefence = BufferIO.readInt32();
     }
     if (flag & enums.query.Reason) {
-        card.Reason = BufferIO.readInt32();
+        card.reason = BufferIO.readInt32();
     }
     if (flag & enums.query.ReasonCard) {
-        card.ReasonCard = BufferIO.readInt32();
+        card.reasonCard = BufferIO.readInt32();
     }
     if (flag & enums.query.EquipCard) {
-        card.EquipCard = {
-            c: BufferIO.readInt8(),
-            l: BufferIO.readInt8(),
-            s: BufferIO.readInt8()
+        card.equipCard = {
+            player: BufferIO.readInt8(),
+            location: enums.locations[BufferIO.readInt8()],
+            index: BufferIO.readInt8()
         };
         BufferIO.readInt8(); //padding
     }
     if (flag & enums.query.TargetCard) {
-        card.TargetCard = [];
-        var ncount = BufferIO.readInt32();
+        card.targetCard = [];
+        const ncount = BufferIO.readInt32();
         for (i = 0; i < ncount; ++i) {
-            console.log(ncount);
-            card.TargetCard.push({
-                c: BufferIO.readInt8(),
-                l: BufferIO.readInt8(),
-                s: BufferIO.readInt8()
+            card.targetCard.push({
+                player: BufferIO.readInt8(),
+                location: enums.locations[BufferIO.readInt8()],
+                index: BufferIO.readInt8()
             });
             BufferIO.readInt8(); //padding
         }
     }
     if (flag & enums.query.OverlayCard) {
-        card.OverlayCard = [];
+        card.overlayCard = [];
         count = BufferIO.readInt32();
         for (i = 0; i < count; ++i) {
-            card.OverlayCard.push(BufferIO.readInt32());
+            card.overlayCard.push(BufferIO.readInt32());
         }
     }
     if (flag & enums.query.Counters) {
-        card.Counters = [];
+        card.counters = [];
         count = BufferIO.readInt32();
         for (i = 0; i < count; ++i) {
             card.Counters.push({
@@ -118,13 +117,13 @@ function makeCard(BufferIO, controller, masterRule4) {
         }
     }
     if (flag & enums.query.Owner) {
-        card.Owner = BufferIO.readInt32();
+        card.owner = BufferIO.readInt32();
     }
     if (flag & enums.query.IsDisabled) {
-        card.IsDisabled = BufferIO.readInt32();
+        card.isDisabled = BufferIO.readInt32();
     }
     if (flag & enums.query.IsPublic) {
-        card.IsPublic = BufferIO.readInt32();
+        card.isPublic = BufferIO.readInt32();
     }
     if (flag & enums.query.LScale) {
         card.LScale = BufferIO.readInt32();
@@ -134,8 +133,8 @@ function makeCard(BufferIO, controller, masterRule4) {
     }
     if (masterRule4) {
         if (flag & enums.query.Link) {
-            card.Link = BufferIO.readInt32();
-            card.Link_marker = BufferIO.readInt32();
+            card.link = BufferIO.readInt32();
+            card.linkMarker = BufferIO.readInt32();
         }
     }
     return card;

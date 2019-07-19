@@ -11,11 +11,11 @@ class Chainer extends React.Component {
         };
     }
 
-    click(selected, option) {
+    click(selected, option, event) {
         this.state.active = false;
         this.store.dispatch({ action: 'CHAIN_CARD_CLICK', option, selected });
         this.store.dispatch({ action: 'RENDER' });
-
+        event.preventDefault();
     }
 
     img(card, i) {
@@ -24,13 +24,15 @@ class Chainer extends React.Component {
 
         return React.createElement('img', { className: (card.selected) ? 'selected' : '', src, onClick });
     }
+
     render() {
         if (this.state.active) {
             return React.createElement('div', {
                 style: {
                     display: 'flex'
-                }, id: 'revealed'
-            }, this.state.cards.map((card, i) => this.img(card, i)));
+                }, id: 'revealed',
+                onClick: this.click.bind(this, {}, (-1))
+            }, this.state.cards.map((card, i) => this.img(card, i)))
         }
         return '';
     }

@@ -263,6 +263,11 @@ class ApplicationComponent extends React.Component {
                 this.state.question_max = 1;
                 this.duel.reveal(message.options.cards1, message.options.cards2);
                 break;
+            case 'MSG_SELECT_SUM':
+                this.state.question_max = 1;
+                this.state.question_selection.push(message.options.must_select_count);
+                this.duel.reveal(message.options.must_select.concat(message.options.can_select));
+                break;
             case 'MSG_SELECT_TRIBUTE':
                 this.duel.reveal(message.options.selectable_targets);
                 break;

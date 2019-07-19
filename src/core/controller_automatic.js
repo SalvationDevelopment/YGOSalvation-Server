@@ -419,19 +419,22 @@ function boardController(gameBoard, slot, message, ygopro, player) {
                 gameBoard.announcement(slot, message);
             }
             message.cards.forEach(function (card, index) {
+                if (card.position === 'MONSTERZONE') {
+                    throw Error('WRONG CARD POSITION');
+                }
                 if (card) {
                     try {
                         gameBoard.setState({
-                            id: message.id,
-                            player: message.player,
-                            clocation: message.location,
+                            id: card.id,
+                            player: card.player,
+                            clocation: card.location,
                             index: index,
-                            moveplayer: message.player,
-                            movelocation: message.location,
+                            moveplayer: card.player,
+                            movelocation: card.location,
                             moveindex: index,
-                            moveposition: card.Position,
+                            moveposition: card.position,
                             overlayindex: 0
-                        });
+                        }, card);
                     } catch (e) {
                         console.log(e);
                     }

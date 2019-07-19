@@ -74,7 +74,7 @@
 const WARNING_COUNTDOWN = 300000,
     CLEANUP_LATENCY = 10000,
     MAX_GAME_TIME = 3300000,
-    banlist = './http/manifest/banlist.json',
+    banlist = require('../../http/manifest/banlist.json'),
     database = require('../../http/manifest/manifest_0-en-OCGTCG.json'),
     dotenv = require('dotenv'),
     EventEmitter = require('events'),
@@ -345,9 +345,8 @@ function surrender(game, duel, message) {
  * @returns {Boolean} If the deck is valid or not.
  */
 function deckCheck(game, client, message) {
-
     const validation = validateDeck(message.deck,
-        banlist,
+        banlist[game.banlist],
         database,
         game.cardpool,
         game.prerelease);
