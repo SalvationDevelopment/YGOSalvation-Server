@@ -673,25 +673,26 @@ function msg_move(message, pbuf, game) {
     const pbufw = new BufferStreamReader(pbuf.packet);
     pbufw.readposition = pbuf.readposition;
     message.id = pbuf.readInt32();
-    message.pc = pbuf.readInt8(); // original controller
-    message.pl = enums.locations[pbuf.readInt8()]; // original cLocation
-    message.ps = pbuf.readInt8(); // original sequence (index)
-    message.pp = pbuf.readInt8(); // padding??
-    message.cc = pbuf.readInt8(); // current controller
-    message.locationEnum = pbuf.readInt8();
-    message.cl = enums.locations[message.locationEnum]; // current cLocation
-    message.cs = pbuf.readInt8(); // current sequence (index)
-    message.cp = enums.positions[pbuf.readInt8()]; // current position
+    message.previousController = pbuf.readInt8(); // original controller
+    message.pl = pbuf.readInt8()
+    message.previousLocation = enums.locations[message.pl]; // original cLocation
+    message.previousIndex = pbuf.readInt8(); // original sequence (index)
+    message.pp = pbuf.readInt8();
+    message.currentController = pbuf.readInt8(); // current controller
+    message.cl = pbuf.readInt8();
+    message.currentLocation = enums.locations[message.cl]; // current cLocation
+    message.currentIndex = pbuf.readInt8(); // current sequence (index)
+    message.currentPosition = enums.positions[pbuf.readInt8()]; // current position
     message.reason = pbuf.readInt32();
-    game.sendBufferToPlayer(message.cc, message);
+    game.sendBufferToPlayer(message.previousController, message);
     // need to implement this!!!
     // if (!(cl & (LOCATION_GRAVE + LOCATION_OVERLAY)) && ((cl & (LOCATION_DECK + LOCATION_HAND)) || (cp & POS_FACEDOWN)))
     // 			BufferIO::WriteInt32(pbufw, 0);
-    game.sendBufferToPlayer(1 - message.cc, message);
+    game.sendBufferToPlayer(1 - message.previousController, message);
     game.sendToObservers();
 
-    if (message.cl !== 0 && (message.cl & 0x80) === 0 && (message.cl !== message.pl || message.pc !== message.cc)) {
-        game.refreshSingle(message.cc, message.locationEnum, message.cs);
+    if (message.cl !== 0 && (message.cl & 0x80) === 0 && (message.cl !== message.pl || message.previousController !== message.currentController)) {
+        game.refreshSingle(message.previousController, message.locationEnum, message.cs);
     }
 }
 

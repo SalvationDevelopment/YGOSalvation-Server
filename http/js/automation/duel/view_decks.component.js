@@ -16,7 +16,7 @@ class DeckDialog extends React.Component {
     }
 
     click(card, event) {
-        this.state.active = false;
+        this.state.active = false; // create a real close button
         console.log({ action: 'DECK_CARD_CLICK', card, y: event.pageY, x: event.pageX });
         this.store.dispatch({ action: 'DECK_CARD_CLICK', card, y: event.pageY, x: event.pageX });
     }
@@ -41,6 +41,7 @@ class DeckDialog extends React.Component {
     trigger(state) {
         Object.assign(this.state, state);
         this.state.active = true;
+        this.store.dispatch({ action: 'RENDER' });
     }
 
     updateContents() {

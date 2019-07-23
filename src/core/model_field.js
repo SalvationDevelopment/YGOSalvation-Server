@@ -364,16 +364,13 @@ function init(callback) {
      * @param   {Number} index        sequence of the card in the stack group. Example, nth card of DECK.
      * @param   {Number} overlayindex Index of where a card is in an XYZ stack starting at 1
      * @param   {Number} uid          Unique identifier, optional.
-     * @returns {Object} The card you where looking for.
+     * @returns {Object[]} The card you where looking for.
      */
-    function queryCard(player, clocation, index, overlayindex, uid) {
+    function queryCard(player, clocation, index, uid) {
         if (uid) {
-            return filterUID(stack, uid)[0];
+            return filterUID(stack, uid) || [];
         }
-        if (overlayindex === undefined) {
-            return filterIndex(filterlocation(filterPlayer(stack, player), clocation), index)[0] || {};
-        }
-        return filterOverlyIndex(filterIndex(filterlocation(filterPlayer(stack, player), clocation), index), overlayindex)[0] || {};
+        return filterIndex(filterlocation(filterPlayer(stack, player), clocation), index) || [];
     }
 
     function findUIDCollection(uid) {
@@ -407,7 +404,8 @@ function init(callback) {
             extra = filterOverlyIndex(filterlocation(playersCards, 'EXTRA'), 0),
             removed = filterlocation(playersCards, 'REMOVED'),
             spellzone = filterlocation(playersCards, 'SPELLZONE'),
-            monsterzone = filterlocation(playersCards, 'MONSTERZONE');
+            monsterzone = filterlocation(playersCards, 'MONSTERZONE'),
+            onfield = filterlocation(playersCards, 'ONFIELD');
         return {
             DECK: deck.length,
             HAND: hand.length,
@@ -415,7 +413,8 @@ function init(callback) {
             EXTRA: extra.length,
             REMOVED: removed.length,
             SPELLZONE: spellzone.length,
-            MONSTERZONE: monsterzone.length
+            MONSTERZONE: monsterzone.length,
+            ONFIELD: onfield.length
         };
     }
     /**
@@ -431,7 +430,9 @@ function init(callback) {
             extra = filterOverlyIndex(filterlocation(playersCards, 'EXTRA'), 0),
             removed = filterlocation(playersCards, 'REMOVED'),
             spellzone = filterlocation(playersCards, 'SPELLZONE'),
-            monsterzone = filterlocation(playersCards, 'MONSTERZONE');
+            monsterzone = filterlocation(playersCards, 'MONSTERZONE'),
+            onfield = filterlocation(playersCards, 'ONFIELD');
+
         return {
             DECK: deck.sort(sortByIndex),
             HAND: hand.sort(sortByIndex),
@@ -439,7 +440,8 @@ function init(callback) {
             EXTRA: extra.sort(sortByIndex),
             REMOVED: removed.sort(sortByIndex),
             SPELLZONE: spellzone.sort(sortByIndex),
-            MONSTERZONE: monsterzone.sort(sortByIndex)
+            MONSTERZONE: monsterzone.sort(sortByIndex),
+            ONFIELD: onfield.sort(sortByIndex)
         };
     }
 
@@ -458,7 +460,8 @@ function init(callback) {
             spellzone = filterlocation(playersCards, 'SPELLZONE'),
             monsterzone = filterlocation(playersCards, 'MONSTERZONE'),
             excavated = filterlocation(playersCards, 'EXCAVATED'),
-            inmaterial = filterlocation(playersCards, 'INMATERIAL');
+            inmaterial = filterlocation(playersCards, 'INMATERIAL'),
+            onfield = filterlocation(playersCards, 'ONFIELD');
 
         return {
             DECK: hideViewOfZone(deck),
@@ -469,7 +472,8 @@ function init(callback) {
             SPELLZONE: spellzone,
             MONSTERZONE: monsterzone,
             EXCAVATED: excavated,
-            INMATERIAL: inmaterial
+            INMATERIAL: inmaterial,
+            ONFIELD: onfield
         };
     }
 
@@ -488,7 +492,8 @@ function init(callback) {
             spellzone = filterlocation(playersCards, 'SPELLZONE'),
             monsterzone = filterlocation(playersCards, 'MONSTERZONE'),
             excavated = filterlocation(playersCards, 'EXCAVATED'),
-            inmaterial = filterlocation(playersCards, 'INMATERIAL');
+            inmaterial = filterlocation(playersCards, 'INMATERIAL'),
+            onfield = filterlocation(playersCards, 'ONFIELD');
 
         return {
             DECK: hideViewOfZone(deck),
@@ -499,7 +504,8 @@ function init(callback) {
             SPELLZONE: hideViewOfZone(spellzone),
             MONSTERZONE: hideViewOfZone(monsterzone),
             EXCAVATED: hideViewOfZone(excavated),
-            INMATERIAL: inmaterial
+            INMATERIAL: inmaterial,
+            onfield: onfield
         };
     }
 
@@ -605,34 +611,37 @@ function init(callback) {
             moveposition = changeRequest.moveposition,
             overlayindex = changeRequest.overlayindex,
             uid = changeRequest.uid,
-            target = queryCard(player, clocation, index, overlayindex, uid),
-            pointer = uidLookup(target.uid),
-            zone;
-        if (!stack[pointer]) {
-            return;
-        }
+            targets = queryCard(player, clocation, index, uid);
 
-        if (card) {
-            Object.assign(stack[pointer], card);
-        }
+        targets.forEach(function (target) {
+            const pointer = uidLookup(target.uid);
 
-        if (movelocation === 'GRAVE' || movelocation === 'REMOVED') {
-            moveplayer = stack[pointer].originalcontroller;
-        }
+            if (!stack[pointer]) {
+                return;
+            }
+
+            if (card) {
+                Object.assign(stack[pointer], card);
+            }
+
+            if (movelocation === 'GRAVE' || movelocation === 'REMOVED') {
+                moveplayer = stack[pointer].originalcontroller;
+            }
 
 
-        stack[pointer].player = moveplayer;
-        stack[pointer].location = movelocation;
-        stack[pointer].index = moveindex;
-        stack[pointer].position = moveposition;
-        stack[pointer].overlayindex = overlayindex;
+            stack[pointer].player = moveplayer;
+            stack[pointer].location = movelocation;
+            stack[pointer].index = moveindex;
+            stack[pointer].position = moveposition;
+            stack[pointer].overlayindex = overlayindex;
 
-        if (changeRequest.id !== undefined) {
-            stack[pointer].id = changeRequest.id;
-        }
-        if (stack[pointer].location === 'HAND') {
-            stack[pointer].position = 'FaceUp';
-        }
+            if (changeRequest.id !== undefined) {
+                stack[pointer].id = changeRequest.id;
+            }
+            if (stack[pointer].location === 'HAND') {
+                stack[pointer].position = 'FaceUp';
+            }
+        });
         reIndex(player, 'GRAVE');
         reIndex(player, 'HAND');
         reIndex(player, 'EXTRA');
@@ -671,7 +680,7 @@ function init(callback) {
      * @returns {undefined}
      */
     function removeCard(uid) {
-        var target = queryCard(undefined, undefined, undefined, 0, uid),
+        var target = queryCard(undefined, undefined, undefined, uid),
             pointer = uidLookup(target.uid);
 
         stack[pointer].location = 'INMATERIAL';
@@ -685,7 +694,7 @@ function init(callback) {
      * @returns {undefined}
      */
     function addCounter(uid) {
-        var target = queryCard(undefined, undefined, undefined, 0, uid),
+        var target = queryCard(undefined, undefined, undefined, uid),
             pointer = uidLookup(target.uid);
 
         stack[pointer].counters += 1;
@@ -698,7 +707,7 @@ function init(callback) {
      * @return {undefined}
      */
     function removeCounter(uid) {
-        var target = queryCard(undefined, undefined, undefined, 0, uid),
+        var target = queryCard(undefined, undefined, undefined, uid),
             pointer = uidLookup(target.uid);
 
         stack[pointer].counters -= 1;
@@ -737,7 +746,7 @@ function init(callback) {
                 uid: topcard.uid,
                 id: cards[i].id || topcard.id
             });
-            target = queryCard(player, 'HAND', (currenthand + i), 0);
+            target = queryCard(player, 'HAND', (currenthand + i));
             pointer = uidLookup(target.uid);
             //stack[pointer].id = cards[i].Code;
         }
@@ -770,7 +779,7 @@ function init(callback) {
                 overlayindex: 0,
                 uid: undefined
             });
-            target = queryCard(player, 'EXCAVATED', (currenthand + i), 0);
+            target = queryCard(player, 'EXCAVATED', (currenthand + i));
             pointer = uidLookup(target.uid);
             //stack[pointer].id = cards[i].Code;
         }

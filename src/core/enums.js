@@ -1,13 +1,18 @@
 const enums = {
     locations: {
+        0x0: 'NONEXISTANT',
         0x01: 'DECK',
         0x02: 'HAND',
         0x04: 'MONSTERZONE',
         0x08: 'SPELLZONE',
         0x10: 'GRAVE',
+        0x16: 'MONSTERZONE', // (leaving xyz material)
         0x20: 'REMOVED',
         0x40: 'EXTRA',
-        0x80: 'OVERLAY'
+        0x80: 'OVERLAY',
+        0xc0: 'EXTRA',  // (becoming xyz material)
+        0x100: 'FZONE',
+        0x200: 'PZONE'
     },
     race: {
         0x1: 'Warrior',

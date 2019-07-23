@@ -275,15 +275,38 @@ function boardController(gameBoard, slot, message, ygopro, player) {
             askUser(gameBoard, slot, message, ygopro, 'MSG_SELECT_IDLECMD');
             break;
         case ('MSG_MOVE'): // Good
+            if (message.pl === 0) {
+                // remove card
+                break;
+            } else if (message.cl === 0) {
+                // add card
+                break;
+            }
+            if (!(message.pl & 0x80) && !(message.cl & 0x80)) {
+                gameBoard.setState({
+                    player: message.previousController,
+                    clocation: message.previousLocation,
+                    index: message.previousIndex,
+                    moveplayer: message.currentController,
+                    movelocation: message.currentLocation,
+                    moveindex: message.currentIndex,
+                    moveposition: message.currentPosition
+                });
+                break;
+            }
+            if (!(message.pl & 0x80)) {
+
+                console.log(message);
+                break;
+            }
             gameBoard.setState({
-                player: message.pc,
-                clocation: message.pl,
-                index: message.ps,
-                moveplayer: message.cc,
-                movelocation: message.cl,
-                moveindex: message.cs,
-                moveposition: message.cp,
-                overlayindex: 0
+                player: message.previousController,
+                clocation: message.previousLocation,
+                index: message.previousIndex,
+                moveplayer: message.currentController,
+                movelocation: message.currentLocation,
+                moveindex: message.currentIndex,
+                moveposition: message.currentPosition
             });
             break;
         case ('MSG_POS_CHANGE'):
