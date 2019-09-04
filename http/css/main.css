@@ -1007,6 +1007,14 @@ div#yesnobox {
     height: 100%;
 }
 
+
+#yesnobox button {
+    width: 50%;
+    display: block;
+    margin: 1%;
+}
+
+
 #subreveal img,
 #revealed img {
     margin: 10px;
