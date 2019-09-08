@@ -1,3 +1,4 @@
+
 /**
  * OCGCore, the YGOPro game engine, is very unstable. Its a C++ library that will cause
  * a crash if it sees improper logic in the Lua scripts it dynamically loads  in that
@@ -417,6 +418,13 @@ function checkSideDeck(oldDeck, newDeck) {
     return (JSON.stringify(oldStack) === JSON.stringify(newStack));
 }
 
+/**
+ * During siding, validate a requested deck and if valid lock in the player as ready, otherwise toggle it off.
+ * @param {GameState} game public gamelist state information.
+ * @param {Spark} client connected websocket and Primus user (spark in documentation).
+ * @param {ClientMessage} message JSON communication sent from client.
+ * @returns {void} 
+ */
 function sideLock(game, client, message) {
     if (isReady(game.player, client.slot)) {
         updatePlayer(game.player, client.slot, false);
@@ -635,6 +643,12 @@ function question(duel, client, message) {
     duel.respond(message);
 }
 
+/**
+ * Check if a message requires the manual engine or the automatic one.
+ * @param {GameState} game public gamelist state information.
+ * @param {Spark} client connected websocket and Primus user (spark in documentation).
+ * @returns {void} 
+ */
 function requiresManualEngine(game, client) {
     if (!game.automatic) {
         return;
@@ -983,10 +997,17 @@ function State(server, game) {
     };
 }
 
+/* eslint-disable no-sync */
+/**
+ * Construct server instance
+ */
 function HTTPServer() {
+    const keyFile = path.resolve(process.env.SSL + '\\private.key'),
+        certFile = path.resolve(process.env.SSL + '\\certificate.crt');
     try {
-        var privateKey = fs.readFileSync(path.resolve(process.env.SSL + '\\private.key')).toString(),
-            certificate = fs.readFileSync(path.resolve(process.env.SSL + '\\certificate.crt')).toString();
+        const privateKey = fs.readFileSync(keyFile).toString(),
+            certificate = fs.readFileSync(certFile).toString();
+
         return https.createServer({
             key: privateKey,
             cert: certificate

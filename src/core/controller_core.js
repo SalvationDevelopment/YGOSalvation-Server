@@ -355,7 +355,7 @@ function makeGame(pduel, settings) {
      * @returns {void}
      */
     function reSendToPlayer(player) {
-        players[Math.abs(player)].write(lastMessage);
+        players[Math.abs(Boolean(player))].write(lastMessage);
     }
 
     /**
@@ -425,22 +425,6 @@ function makeGame(pduel, settings) {
         sendBufferToPlayer(player, message);
     }
 
-    /**
-     * Queries the core for field information
-     * @param {Player} player player being queried.
-     * @returns {Field} current duel field counts.
-     */
-    function queryFieldCount(player) {
-        return {
-            DECK: ocgapi.query_field_count(pduel, player, 0x1),
-            HAND: ocgapi.query_field_count(pduel, player, 0x2),
-            GRAVE: ocgapi.query_field_count(pduel, player, 0x10),
-            EXTRA: ocgapi.query_field_count(pduel, player, 0x40),
-            REMOVED: ocgapi.query_field_count(pduel, player, 0x20),
-            SPELLZONE: ocgapi.query_field_count(pduel, player, 0x8),
-            MONSTERZONE: ocgapi.query_field_count(pduel, player, 0x4)
-        };
-    }
 
 
     function msg_update_card(card, message, pbuf) {

@@ -147,6 +147,7 @@ class DeckEditScreen extends React.Component {
         };
         this.filterKeys = Object.keys(this.settings);
         this.store = store;
+        this.debounce = false;
         this.store.register('CARD_HOVER', (event, state) => {
             if (!event.id) {
                 return;
@@ -466,11 +467,31 @@ class DeckEditScreen extends React.Component {
         this.searchFilter.pageBack();
         this.state.search = this.searchFilter.renderSearch();
         this.store.dispatch({ action: 'RENDER' });
+        const c = document.getElementById('decksearchresults');
+        [].forEach.call(c.children, (k) => {
+            k.classList = ['transitioning'];
+        });
+        setTimeout(() => {
+            [].forEach.call(c.children, (k) => {
+                k.classList = [''];
+            });
+        }, 1000);
     }
     next() {
+
         this.searchFilter.pageForward();
         this.state.search = this.searchFilter.renderSearch();
         this.store.dispatch({ action: 'RENDER' });
+        const c = document.getElementById('decksearchresults');
+        [].forEach.call(c.children, (k) => {
+            k.classList = ['transitioning'];
+        });
+        setTimeout(() => {
+            [].forEach.call(c.children, (k) => {
+                k.classList = [''];
+            });
+        }, 1000);
+
     }
 
     marginClass(deck) {

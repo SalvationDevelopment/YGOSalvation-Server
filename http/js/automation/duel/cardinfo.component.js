@@ -222,6 +222,9 @@ class CardInfo extends React.Component {
     }
 
     update(state) {
+        if (this.debounce) {
+            return;
+        }
         Object.assign(this.state, state);
         let card = (!state.id) ? {} : this.databaseSystem.find(function (entry) {
             if (state.id === entry.id) {
@@ -231,11 +234,14 @@ class CardInfo extends React.Component {
             }
         });
         card = card || {};
+        this.debounce = true;
+
         if (card.id) {
             this.state.id = card.id;
             this.state.cardInfo = card;
             return card;
         }
+
         return card;
     }
 }

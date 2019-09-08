@@ -31,8 +31,10 @@ class YesNoDialog extends React.Component {
                 }, id: 'yesnobox'
             }, [
                     React.createElement('p', {}, 'Use effect?'),
-                    React.createElement('button', { onClick: this.click.bind(this, true), key: 'yes' }, 'Yes'),
-                    React.createElement('button', { onCLick: this.click.bind(this, false), key: 'no' }, 'No')
+                    React.createElement('div', {}, [
+                        React.createElement('button', { onClick: this.click.bind(this, true), key: 'yes' }, 'Yes'),
+                        React.createElement('button', { onCLick: this.click.bind(this, false), key: 'no' }, 'No')
+                    ])
                 ]);
         }
         return '';

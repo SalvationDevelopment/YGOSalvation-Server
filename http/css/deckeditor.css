@@ -66,6 +66,11 @@
     flex: 1;
     height: 33%;
     padding: 1%;
+    transition: opacity 500ms
+}
+
+.transitioning {
+    opacity: 0;
 }
 
 #decksearchresults div img {

@@ -230,9 +230,12 @@ function msg_shuffle_deck(message, pbuf, game) {
 }
 
 function msg_shuffle_hand(message, pbuf, game) {
-    let i;
     message.player = pbuf.readInt8();
     message.count = pbuf.readInt8();
+    message.codes = [];
+    for (let i = 0; i < message.count; ++i) {
+        message.codes.push(pbuf.readInt32());
+    }
     game.sendBufferToPlayer(0, message);
     game.sendBufferToPlayer(1 - message.player, message);
     game.sendToObservers();
@@ -240,9 +243,12 @@ function msg_shuffle_hand(message, pbuf, game) {
 }
 
 function msg_shuffle_extra(message, pbuf, game) {
-    let i;
     message.player = pbuf.readInt8();
     message.count = pbuf.readInt8();
+    message.codes = []; // this is not correct, duelclient.cpp actually has it looking at the cards in the deck. (=_=#[n|m])
+    for (let i = 0; i < message.count; ++i) {
+        message.codes.push(pbuf.readInt32());
+    }
     game.sendBufferToPlayer(0, message);
     game.sendBufferToPlayer(1 - message.player, message);
     game.sendToObservers();
@@ -683,7 +689,9 @@ function msg_move(message, pbuf, game) {
     message.currentLocation = enums.locations[message.cl]; // current cLocation
     message.currentIndex = pbuf.readInt8(); // current sequence (index)
     message.currentPosition = enums.positions[pbuf.readInt8()]; // current position
-    message.reason = pbuf.readInt32();
+    message.r = pbuf.readInt32();
+    message.reason = enums.reasons[message.r];
+    console.log(message.reason);
     game.sendBufferToPlayer(message.previousController, message);
     // need to implement this!!!
     // if (!(cl & (LOCATION_GRAVE + LOCATION_OVERLAY)) && ((cl & (LOCATION_DECK + LOCATION_HAND)) || (cp & POS_FACEDOWN)))
@@ -768,8 +776,8 @@ function msg_flipsummoning(message, pbuf, game) {
 
 function msg_select_battlecmd(message, pbuf, game) {
     message.player = pbuf.readInt8(); // defunct in the code, just reading ahead.
-    message.count = pbuf.readInt8();
     message.activatable_cards = getIdleSet(pbuf, true);
+    message.count = pbuf.readInt8();
     message.attackable_cards = [];
     for (let i = 0; i < message.count; ++i) {
         message.attackable_cards.push({
