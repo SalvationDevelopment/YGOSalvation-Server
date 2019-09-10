@@ -72,9 +72,9 @@
  * @method respond respond to a ocgcore question
  */
 
-const WARNING_COUNTDOWN = 300000,
-    CLEANUP_LATENCY = 10000,
-    MAX_GAME_TIME = 3300000,
+const WARNING_COUNTDOWN = 3000000,
+    CLEANUP_LATENCY = 100000,
+    MAX_GAME_TIME = 33000000,
     banlist = require('../../http/manifest/banlist.json'),
     database = require('../../http/manifest/manifest_0-en-OCGTCG.json'),
     dotenv = require('dotenv'),

@@ -585,6 +585,13 @@ function msg_announce_attrib(message, pbuf, game) {
     message.player = pbuf.readInt8();
     message.announce_count = pbuf.readInt8();
     message.avaliable = pbuf.readInt32();
+    message.options = {};
+    for (let i = 0, filter = 0x1; i < 7; ++i, filter <<= 1) {
+        message.options[enums.cardAttributes[filter]] = {
+            active: Boolean(filter & message.available),
+            value: filter
+        };
+    }
     game.waitforResponse(message.player);
     game.sendBufferToPlayer(message.player, message);
     return 1;

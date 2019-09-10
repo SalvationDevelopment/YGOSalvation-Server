@@ -1,6 +1,6 @@
 /*global React */
 /*global Store, Field, CardInfo, SideChat, Flasher, Revealer, ControlButtons, LifepointDisplay */
-/*global SelectPosition, DeckDialog, YesNoDialog*/
+/*global SelectPosition, DeckDialog, YesNoDialog, SelectAttributes, Chainer*/
 class DuelScreen extends React.Component {
     constructor(store, chat, databaseSystem) {
         super();
@@ -18,6 +18,7 @@ class DuelScreen extends React.Component {
         this.controls = new ControlButtons(this.store);
         this.lifepoints = new LifepointDisplay({ lifepoints: [8000, 8000] });
         this.positionDialog = new SelectPosition(this.store);
+        this.pickAttribute = new SelectAttributes(this.store);
         this.yesnoDialog = new YesNoDialog(this.store);
         this.store.register('CARD_HOVER', this.onHover.bind(this));
         this.store.register('CARD_CLICK', this.onCardClick.bind(this));
@@ -86,6 +87,7 @@ class DuelScreen extends React.Component {
             React.createElement('div', { id: 'yesnoDialog', key: 'yesnoDialog' }, this.yesnoDialog.render()),
             React.createElement('div', { id: 'viewDecks', key: 'viewDecks' }, this.viewDecks.render()),
             React.createElement('div', { id: 'announcer', key: 'announcer' }, this.flasher.render()),
+            React.createElement('div', { id: 'attributes', key: 'attributes' }, this.pickAttribute.render()),
             React.createElement('div', { className: 'field newfield', key: 'field-newfield' }, [
                 React.createElement('div', {
                     id: 'automationduelfield',

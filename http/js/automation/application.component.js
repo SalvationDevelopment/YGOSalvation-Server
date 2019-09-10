@@ -255,6 +255,9 @@ class ApplicationComponent extends React.Component {
             case 'MSG_SELECT_PLACE':
                 this.duel.select(message.options);
                 break;
+            case 'MSG_SELECT_DISFIELD':
+                this.duel.select(message.options);
+                break;
             case 'MSG_SELECT_CARD':
                 this.duel.reveal(message.options.select_options);
                 break;
@@ -264,6 +267,11 @@ class ApplicationComponent extends React.Component {
                 this.duel.reveal(message.options.cards1, message.options.cards2);
                 break;
             case 'MSG_SELECT_SUM':
+                this.state.question_max = 1;
+                this.state.question_selection.push(message.options.must_select_count);
+                this.duel.reveal(message.options.must_select.concat(message.options.can_select));
+                break;
+            case 'MSG_COUNTER':
                 this.state.question_max = 1;
                 this.state.question_selection.push(message.options.must_select_count);
                 this.duel.reveal(message.options.must_select.concat(message.options.can_select));
@@ -280,12 +288,34 @@ class ApplicationComponent extends React.Component {
                 break;
             case 'MSG_SELECT_EFFECTYN':
                 debugger;
-                this.duel.yesnoDialog.state.active = true;;
+                this.duel.yesnoDialog.state.active = true;
+                break;
+            case 'MSG_SELECT_YESNO':
+                debugger;
+                this.duel.yesnoDialog.state.active = true;
                 break;
             case 'MSG_SELECT_CHAIN':
                 this.state.question_min = 1;
                 this.state.question_max = 1;
                 this.chain(message.options);
+                break;
+            case 'MSG_ANNOUNCE_ATTRIB':
+                this.duel.pickAttribute.state = {};
+                this.duel.pickAttribute.state.text = 'Attribute';
+                this.duel.pickAttribute.state.active = true;
+                this.duel.pickAttribute.state.options = message.options.options;
+                break;
+            case 'MSG_ANNOUNCE_RACE':
+                this.duel.pickAttribute.state = {};
+                this.duel.pickAttribute.state.text = 'Race';
+                this.duel.pickAttribute.state.active = true;
+                this.duel.pickAttribute.state.options = message.options.options;
+                break;
+            case 'MSG_ANNOUNCE_NUMBER':
+                this.duel.pickAttribute.state = {};
+                this.duel.pickAttribute.state.text = 'Number';
+                this.duel.pickAttribute.state.active = true;
+                this.duel.pickAttribute.state.options = message.options.options;
                 break;
             default:
                 throw ('Unknown message');
