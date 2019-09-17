@@ -690,7 +690,7 @@ function msg_move(message, pbuf, game) {
     message.pl = pbuf.readInt8()
     message.previousLocation = enums.locations[message.pl]; // original cLocation
     message.previousIndex = pbuf.readInt8(); // original sequence (index)
-    message.pp = pbuf.readInt8();
+    message.overlayindex = pbuf.readInt8();
     message.currentController = pbuf.readInt8(); // current controller
     message.cl = pbuf.readInt8();
     message.currentLocation = enums.locations[message.cl]; // current cLocation

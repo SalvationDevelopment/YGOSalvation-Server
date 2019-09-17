@@ -277,12 +277,29 @@ function boardController(gameBoard, slot, message, ygopro, player) {
         case ('MSG_MOVE'): // Good
             if (message.pl === 0) {
                 // remove card
+                gameBoard.setState({
+                    player: message.previousController,
+                    clocation: message.previousLocation,
+                    index: message.previousIndex,
+                    moveplayer: message.currentController,
+                    movelocation: 'INMATERIAL',
+                    moveindex: message.currentIndex,
+                    moveposition: message.currentPosition
+                });
                 break;
             } else if (message.cl === 0) {
                 // add card
+                gameBoard.makeNewCard(
+                    message.currentLocation,
+                    message.currentController,
+                    message.currentSequence,
+                    message.position,
+                    message.code,
+                    message.currentIndex);
                 break;
             }
             if (!(message.pl & 0x80) && !(message.cl & 0x80)) {
+                // move existing card
                 gameBoard.setState({
                     player: message.previousController,
                     clocation: message.previousLocation,
@@ -295,20 +312,32 @@ function boardController(gameBoard, slot, message, ygopro, player) {
                 break;
             }
             if (!(message.pl & 0x80)) {
-
-                console.log(message);
+                //convert to material
+                gameBoard.setState({
+                    player: message.previousController,
+                    clocation: message.previousLocation,
+                    index: message.previousIndex,
+                    moveplayer: message.currentController,
+                    movelocation: 'OVERLAY',
+                    moveindex: message.currentIndex,
+                    moveposition: message.currentPosition
+                });
                 break;
             }
-            gameBoard.setState({
-                player: message.previousController,
-                clocation: message.previousLocation,
-                index: message.previousIndex,
-                moveplayer: message.currentController,
-                movelocation: message.currentLocation,
-                moveindex: message.currentIndex,
-                moveposition: message.currentPosition
-            });
-            break;
+            if (!(message.cl & 0x80)) {
+                // detach from xyz
+                gameBoard.setState({
+                    player: message.previousController,
+                    clocation: message.previousLocation,
+                    index: message.previousIndex,
+                    moveplayer: message.currentController,
+                    movelocation: message.currentLocation,
+                    moveindex: message.currentIndex,
+                    moveposition: message.currentPosition,
+                    overlayindex: message.overlayindex
+                });
+                break;
+            }
         case ('MSG_POS_CHANGE'):
             gameBoard.setState({
                 player: message.player,

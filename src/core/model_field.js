@@ -596,6 +596,16 @@ function init(callback) {
         stack.sort(sortByIndex);
     }
 
+
+    function attachMaterials(target) {
+        const materials = filterlocation(stack, 'OVERLAY');
+        materials.forEach(function (material, sequence) {
+            material.location = target.movelocation;
+            material.index = target.moveindex;
+            material.overlayIndex = target.overlayIndex;
+        });
+    }
+
     /**
      * Finds a card, then moves it elsewhere. Crux of the engine.
      * @param {ChangeRequest} changeRequest Payload describing a query to find a card, and what to change it to.
@@ -646,6 +656,9 @@ function init(callback) {
         reIndex(player, 'HAND');
         reIndex(player, 'EXTRA');
         reIndex(player, 'EXCAVATED');
+        if (changeRequest.movelocation !== 'OVERLAY') {
+            attachMaterials(changeRequest);
+        }
         cleanCounters(stack);
         callback(generateView(), stack);
     }

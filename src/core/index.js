@@ -1036,6 +1036,10 @@ function main(callback) {
     // otherwise report to parent process if it exist,
     // if it does not, print to the console.
 
+    process.on('unhandledException', function (fatal) {
+        console.log(fatal);
+    });
+
     process.child = (process.send) ? true : false;
     process.send = (callback) ? callback : process.send;
     process.send = (process.send) ? process.send : console.log;

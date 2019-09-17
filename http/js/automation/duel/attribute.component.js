@@ -31,11 +31,11 @@ class SelectAttributes extends React.Component {
                     })
                 ]));
             }
-            return [
+            return React.createElement('div', {}, [
                 React.createElement('div', { key: `text` }, `Select ${this.state.text}`),
                 React.createElement('div', { key: `options` }, boxes),
                 React.createElement('button', { key: `button`, onClick: this.reply.bind(this) }, 'Select')
-            ];
+            ]);
         }
     }
 
