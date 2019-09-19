@@ -331,7 +331,7 @@ function boardController(gameBoard, slot, message, ygopro, player) {
                     clocation: message.previousLocation,
                     index: message.previousIndex,
                     moveplayer: message.currentController,
-                    movelocation: message.currentLocation,
+                    movelocation: 'MONSTERZONE',
                     moveindex: message.currentIndex,
                     moveposition: message.currentPosition,
                     overlayindex: message.overlayindex
