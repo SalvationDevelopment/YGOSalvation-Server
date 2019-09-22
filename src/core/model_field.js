@@ -24,7 +24,7 @@
  * @property {Pile[]} HAND Cards in the hand of one player.
  * @property {Pile[]} GRAVE Cards in the graveyard "GY" of one player.
  * @property {Pile[]} EXTRA Cards in the extra deck of one player.
- * @property {Pile[]} REMOVED Cards removed from play,"Banished" of one player.
+ * @property {Pile[]} BANISHED Cards BANISHED from play,"Banished" of one player.
  * @property {Pile[]} SPELLZONE Cards in the spell and pendulum zones of one player.
  * @property {Pile[]} MONSTERZONE Cards in the Main Monster zones and Extra Monster zone of one player.
  * @property {Pile[]} EXCAVATED Cards Excavated by one player atm, or held.
@@ -63,7 +63,7 @@
 
 
 /**
- * @typedef  {Object} Coordinate
+ * @typedef  {Object} FieldCoordinate
  * @property {Number} uid   Unique card identifier in this game
  * @property {Number} player current player int 0,1, etc of controlling player
  * @property {String} location current location of the target card 'DECK'/'EXTRA' etc, in caps. 
@@ -168,7 +168,7 @@ class Field {
 
         const pile = this.find(previous);
 
-        if (current.location === 'GRAVE' || current.location === 'REMOVED') {
+        if (current.location === 'GRAVE' || current.location === 'BANISHED') {
             current.player = pile.originalcontroller;
         }
 
@@ -241,7 +241,7 @@ class Field {
                 || pile.location === 'HAND'
                 || pile.location === 'EXTRA'
                 || pile.location === 'GRAVE'
-                || pile.location === 'REMOVED'
+                || pile.location === 'BANISHED'
             );
         });
         list.forEach((pile) => {
@@ -425,7 +425,7 @@ class Game {
             hand = filterlocation(playersCards, 'HAND'),
             grave = filterlocation(playersCards, 'GRAVE'),
             extra = filterlocation(playersCards, 'EXTRA'),
-            removed = filterlocation(playersCards, 'REMOVED'),
+            banished = filterlocation(playersCards, 'BANISHED'),
             spellzone = filterlocation(playersCards, 'SPELLZONE'),
             monsterzone = filterlocation(playersCards, 'MONSTERZONE'),
             onfield = filterlocation(playersCards, 'ONFIELD');
@@ -434,7 +434,7 @@ class Game {
             HAND: hand.length,
             GRAVE: grave.length,
             EXTRA: extra.length,
-            REMOVED: removed.length,
+            BANISHED: banished.length,
             SPELLZONE: spellzone.length,
             MONSTERZONE: monsterzone.length,
             ONFIELD: onfield.length
@@ -451,7 +451,7 @@ class Game {
             hand = filterlocation(playersCards, 'HAND'),
             grave = filterlocation(playersCards, 'GRAVE'),
             extra = filterlocation(playersCards, 'EXTRA'),
-            removed = filterlocation(playersCards, 'REMOVED'),
+            BANISHED = filterlocation(playersCards, 'BANISHED'),
             spellzone = filterlocation(playersCards, 'SPELLZONE'),
             monsterzone = filterlocation(playersCards, 'MONSTERZONE'),
             onfield = filterlocation(playersCards, 'ONFIELD');
@@ -461,7 +461,7 @@ class Game {
             HAND: hand.sort(sortByIndex),
             GRAVE: grave.sort(sortByIndex),
             EXTRA: extra.sort(sortByIndex),
-            REMOVED: removed.sort(sortByIndex),
+            BANISHED: BANISHED.sort(sortByIndex),
             SPELLZONE: spellzone.sort(sortByIndex),
             MONSTERZONE: monsterzone.sort(sortByIndex),
             ONFIELD: onfield.sort(sortByIndex)
@@ -479,7 +479,7 @@ class Game {
             hand = filterlocation(playersCards, 'HAND'),
             grave = filterlocation(playersCards, 'GRAVE'),
             extra = filterlocation(playersCards, 'EXTRA'),
-            removed = filterlocation(playersCards, 'REMOVED'),
+            banished = filterlocation(playersCards, 'BANISHED'),
             spellzone = filterlocation(playersCards, 'SPELLZONE'),
             monsterzone = filterlocation(playersCards, 'MONSTERZONE'),
             excavated = filterlocation(playersCards, 'EXCAVATED'),
@@ -491,7 +491,7 @@ class Game {
             HAND: hand,
             GRAVE: grave,
             EXTRA: hideViewOfExtra(extra, true),
-            REMOVED: removed,
+            BANISHED: banished,
             SPELLZONE: spellzone,
             MONSTERZONE: monsterzone,
             EXCAVATED: excavated,
@@ -511,7 +511,7 @@ class Game {
             hand = filterlocation(playersCards, 'HAND'),
             grave = filterlocation(playersCards, 'GRAVE'),
             extra = filterlocation(playersCards, 'EXTRA'),
-            removed = filterlocation(playersCards, 'REMOVED'),
+            banished = filterlocation(playersCards, 'BANISHED'),
             spellzone = filterlocation(playersCards, 'SPELLZONE'),
             monsterzone = filterlocation(playersCards, 'MONSTERZONE'),
             excavated = filterlocation(playersCards, 'EXCAVATED'),
@@ -523,7 +523,7 @@ class Game {
             HAND: hideHand(hand),
             GRAVE: grave,
             EXTRA: hideViewOfExtra(extra, false),
-            REMOVED: hideViewOfZone(removed),
+            BANISHED: hideViewOfZone(banished),
             SPELLZONE: hideViewOfZone(spellzone),
             MONSTERZONE: hideViewOfZone(monsterzone),
             EXCAVATED: hideViewOfZone(excavated),
@@ -627,7 +627,7 @@ class Game {
 
     /**
      * Finds a specific card and puts a counter on it.
-     * @param {Coordinate} query info to find the card
+     * @param {FieldCoordinate} query info to find the card
      * @param {String} type name of the counter
      * @param {Number} amount how many counters to add
      * @returns {undefined}
@@ -638,7 +638,7 @@ class Game {
 
     /**
      * Finds a specific card and remove a counter from it.
-     * @param {Coordinate} query info to find the card
+     * @param {FieldCoordinate} query info to find the card
      * @param {String} type name of the counter
      * @param {Number} amount how many counters to add
      * @return {undefined}

@@ -28,7 +28,7 @@ class DuelScreen extends React.Component {
     }
 
     onCardClick(event, state) {
-        const decks = ['EXTRA', 'GRAVE', 'EXTRA', 'REMOVED'];
+        const decks = ['EXTRA', 'GRAVE', 'EXTRA', 'BANISHED'];
         if (!event.viewDeck && decks.includes(event.card.location)) {
             const cards = this.field.getDeck(event.card.player, event.card.location);
             this.store.dispatch({ action: 'OPEN_DECK', cards });

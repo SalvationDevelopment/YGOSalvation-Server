@@ -91,7 +91,7 @@ div#selectionsystem {
     left: 633px;
 }
 
-.p0.REMOVED {
+.p0.BANISHED {
     bottom: 207px;
     left: 713px;
 }
@@ -109,7 +109,7 @@ div#selectionsystem {
 
 /*new grave*/
 
-.newfield .p0.REMOVED {
+.newfield .p0.BANISHED {
     bottom: 207px;
     left: 633px;
 }
@@ -244,7 +244,7 @@ div#selectionsystem {
     left: 98px;
 }
 
-.p1.REMOVED {
+.p1.BANISHED {
     bottom: 306px;
     left: 18px;
 }
@@ -259,7 +259,7 @@ div#selectionsystem {
     left: 97px;
 }
 
-.newfield .p1.REMOVED {
+.newfield .p1.BANISHED {
     bottom: 306px;
     left: 98px;
 }

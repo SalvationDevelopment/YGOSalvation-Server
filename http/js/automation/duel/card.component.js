@@ -27,7 +27,7 @@ class CardImage extends React.Component {
             style.left = String() + xCoord + 'px';
         }
 
-        if (state.location === 'DECK' || state.location === 'EXTRA' || state.location === 'GRAVE' || state.location === 'REMOVED') {
+        if (state.location === 'DECK' || state.location === 'EXTRA' || state.location === 'GRAVE' || state.location === 'BANISHED') {
             style.transform = 'translate3d(0, 0, ' + state.index + 'px)';
             style.zIndex = state.index;
         }

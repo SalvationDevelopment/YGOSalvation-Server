@@ -134,7 +134,7 @@ function generateField() {
             HAND: (new Array(7).fill(newCard('HAND'))).map(scramble).map(setup).map(setupHand),
             GRAVE: (new Array(40).fill(newCard('GRAVE'))).map(scramble).map(setup),
             EXTRA: (new Array(40).fill(newCard('EXTRA'))).map(scramble).map(setup),
-            REMOVED: (new Array(0).fill(newCard('REMOVED'))).map(scramble).map(setup),
+            BANISHED: (new Array(0).fill(newCard('BANISHED'))).map(scramble).map(setup),
             SPELLZONE: (new Array(7).fill(newCard('SPELLZONE'))).map(scramble).map(setup),
             MONSTERZONE: (new Array(7).fill(newCard('MONSTERZONE'))).map(scramble).map(setup),
             EXCAVATED: (new Array(0).fill(newCard('EXCAVATED'))).map(scramble).map(setup)
@@ -156,7 +156,7 @@ store.register('UPDATE_FIELD', (event, state) => {
             HAND: handShuffle(r.field.HAND.map(scramble).map(setupHand)),
             GRAVE: handShuffle(r.field.GRAVE.map(scramble)),
             EXTRA: handShuffle(r.field.EXTRA.map(scramble)),
-            REMOVED: handShuffle(r.field.REMOVED.map(scramble)),
+            BANISHED: handShuffle(r.field.BANISHED.map(scramble)),
             SPELLZONE: r.field.SPELLZONE.map(scramble),
             MONSTERZONE: r.field.MONSTERZONE.map(scramble),
             EXCAVATED: r.field.EXCAVATED.map(scramble)

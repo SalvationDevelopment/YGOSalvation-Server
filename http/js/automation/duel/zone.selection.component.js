@@ -48,7 +48,7 @@ class ZoneSelector extends React.Component {
             HAND: 2,
             MONSTERZONE: 4,
             OVERLAY: 128,
-            REMOVED: 32,
+            BANISHED: 32,
             SPELLZONE: 8
         };
         this.store.dispatch({

@@ -113,7 +113,7 @@ function field(stack) {
             HAND: filterlocation(filterPlayer(stack, 0), 'HAND'),
             EXTRA: filterlocation(filterPlayer(stack, 0), 'EXTRA'),
             GRAVE: filterlocation(filterPlayer(stack, 0), 'GRAVE'),
-            REMOVED: filterlocation(filterPlayer(stack, 0), 'REMOVED'),
+            BANISHED: filterlocation(filterPlayer(stack, 0), 'BANISHED'),
             EXCAVATED: filterlocation(filterPlayer(stack, 0), 'EXCAVATED'),
             SPELLZONE: filterlocation(filterPlayer(stack, 0), 'SPELLZONE'),
             MONSTERZONE: filterlocation(filterPlayer(stack, 0), 'MONSTERZONE')
@@ -123,7 +123,7 @@ function field(stack) {
             HAND: filterlocation(filterPlayer(stack, 1), 'HAND'),
             EXTRA: filterlocation(filterPlayer(stack, 1), 'EXTRA'),
             GRAVE: filterlocation(filterPlayer(stack, 1), 'GRAVE'),
-            REMOVED: filterlocation(filterPlayer(stack, 1), 'REMOVED'),
+            BANISHED: filterlocation(filterPlayer(stack, 1), 'BANISHED'),
             EXCAVATED: filterlocation(filterPlayer(stack, 1), 'EXCAVATED'),
             SPELLZONE: filterlocation(filterPlayer(stack, 1), 'SPELLZONE'),
             MONSTERZONE: filterlocation(filterPlayer(stack, 1), 'MONSTERZONE')

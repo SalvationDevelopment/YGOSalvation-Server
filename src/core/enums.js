@@ -7,7 +7,7 @@ const enums = {
         0x08: 'SPELLZONE',
         0x10: 'GRAVE',
         0x16: 'MONSTERZONE', // (leaving xyz material)
-        0x20: 'REMOVED',
+        0x20: 'BANISHED',
         0x40: 'EXTRA',
         0x80: 'OVERLAY',
         0xc0: 'EXTRA',  // (becoming xyz material)
