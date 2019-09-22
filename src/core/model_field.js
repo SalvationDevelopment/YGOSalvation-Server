@@ -13,7 +13,7 @@
  * @property {Number} index  sequence of the card in the stack group. Example, nth card of DECK.
  * @property {Number} unique unique ID of the card
  * @property {Number} id   passcode of the card
- * @property {Number} counters  counters on the card
+ * @property {Object} counters  counters on the card
  * @property {Number} overlayIndex  counters on the card
  * @property {String} position Faceup, Facedown, etc
  */
@@ -36,8 +36,6 @@
  * @property {Number} turn Current total turn count
  * @property {Number} turnOfPlayer player int, 0, 1, etc that is currently making moves
  * @property {Array.<Number>} lifepoints LP count of all players
- * @property {String} duelChat Chat and action log of all players
- * @property {String} spectatorChat Chat log of people not playing
  */
 
 /**
@@ -65,16 +63,12 @@
 
 
 /**
- * @typedef  {Object} ChangeRequest
+ * @typedef  {Object} Coordinate
  * @property {Number} uid   Unique card identifier in this game
  * @property {Number} player current player int 0,1, etc of controlling player
- * @property {String} clocation current location of the target card 'DECK'/'EXTRA' etc, in caps. 
+ * @property {String} location current location of the target card 'DECK'/'EXTRA' etc, in caps. 
  * @property {Number} index  current sequence of the card in the stack group. Example, nth card of DECK. in the current location
- * @property {Number} overlayindex  current overlay slot
- * @property {Number} moveplayer Requested end player int 0,1, etc of controlling player
- * @property {String} movelocation Requested end location of the target card 'DECK'/'EXTRA' etc, in caps. 
- * @property {Number} moveindex  Requested end sequence of the card in the stack group. Example, nth card of DECK. in the current location
- * @property {String} moveposition Requested Faceup, Facedown, etc
+ * @property {Number} code passcode of the card
  */
 
 const EventEmitter = require('events'), // a way to "notice" things occuring
@@ -113,19 +107,19 @@ class Pile {
         this.uid = uuid;
         this.originalcontroller = player;
         this.counters = 0;
-        this.cards = [{ code, uuid }];
+        this.list = [{ code, uuid }];
     }
 
     get render() {
-        return this.cards.map((card) => {
+        return this.list.map((card) => {
             const copy = Object.assign({}, this);
-            delete copy.cards;
+            delete copy.list;
             return Object.assign({}, copy, card);
         });
     }
 
     attach(card, sequence) {
-        this.cards.splice(sequence, 0, card);
+        this.list.splice(sequence, 0, card);
     }
 
     detatch(sequence) {
@@ -140,15 +134,15 @@ class Field {
         this.stack = [];
     }
 
-    get length() {
-        return this.stack.length;
-    }
-
-    get render() {
+    get cards() {
         return this.stack.reduce((output, pile) => {
             output.concat(pile.render);
             return output;
         }, []);
+    }
+
+    get length() {
+        return this.cards.length;
     }
 
     find(query) {
@@ -216,7 +210,7 @@ class Field {
         current.attach(card);
     }
 
-    trade(previous, sequence, current) {
+    take(previous, sequence, current) {
         const donor = this.find(previous),
             card = donor.detatch(sequence),
             recipient = this.find(current);
@@ -234,7 +228,25 @@ class Field {
 
     addCounter(query, type, amount) {
         const card = this.find(query);
+        if (!card.counters[type]) {
+            card.counters[type] = 0;
+        }
         card.counters[type] += amount;
+    }
+
+    cleanCounters() {
+        const list = this.stack.find((pile) => {
+            return (
+                pile.location === 'DECK'
+                || pile.location === 'HAND'
+                || pile.location === 'EXTRA'
+                || pile.location === 'GRAVE'
+                || pile.location === 'REMOVED'
+            );
+        });
+        list.forEach((pile) => {
+            pile.counters = {};
+        });
     }
 }
 
@@ -285,6 +297,7 @@ function hideViewOfZone(view) {
 /**
  * Changes a view of cards so the opponent can not see what they are.
  * @param   {Pile[]} view a collection of cards
+ * @param   {Boolean} allowed is the player allowed to see the card?
  * @returns {Pile[]} a collection of cards
  */
 function hideViewOfExtra(view, allowed) {
@@ -329,7 +342,7 @@ class Game {
         this.callback = callback;
         this.answerListener = new EventEmitter();
         this.lastQuestion = {};
-        this.stack = [];
+        this.stack = new Field();
         this.previousStack = [];
         this.outstack = [];
         this.names = ['', ''];
@@ -342,9 +355,7 @@ class Game {
             lifepoints: [
                 8000,
                 8000
-            ],
-            duelistChat: [],
-            spectatorChat: []
+            ]
         };
         this.decks = {
             0: {
@@ -379,7 +390,7 @@ class Game {
     }
 
     findUIDCollection(uid) {
-        return getByUID(this.stack.render, uid);
+        return getByUID(this.stack.cards, uid);
     }
 
     findUIDCollectionPrevious(uid) {
@@ -402,7 +413,7 @@ class Game {
      * @returns {Object} all the cards the given player can see on their side of the field.
      */
     generateViewCount(player) {
-        var playersCards = filterPlayer(this.stack.render, player),
+        var playersCards = filterPlayer(this.stack.cards, player),
             deck = filterlocation(playersCards, 'DECK'),
             hand = filterlocation(playersCards, 'HAND'),
             grave = filterlocation(playersCards, 'GRAVE'),
@@ -428,7 +439,7 @@ class Game {
      * @returns {Object} all the cards the given player can see on their side of the field.
      */
     generateUpdateView(player) {
-        var playersCards = filterPlayer(this.stack.render, player),
+        var playersCards = filterPlayer(this.stack.cards, player),
             deck = filterlocation(playersCards, 'DECK'),
             hand = filterlocation(playersCards, 'HAND'),
             grave = filterlocation(playersCards, 'GRAVE'),
@@ -456,7 +467,7 @@ class Game {
      * @returns {Object} all the cards the given player can see on their side of the field.
      */
     generateSinglePlayerView(player) {
-        var playersCards = this.filterEdited(filterPlayer(this.stack.render, player)),
+        var playersCards = this.filterEdited(filterPlayer(this.stack.cards, player)),
             deck = filterlocation(playersCards, 'DECK'),
             hand = filterlocation(playersCards, 'HAND'),
             grave = filterlocation(playersCards, 'GRAVE'),
@@ -488,7 +499,7 @@ class Game {
      * @returns {Object} all the cards the given spectator/opponent can see on that side of the field.
      */
     generateSinglePlayerSpectatorView(player) {
-        var playersCards = this.filterEdited(filterPlayer(this.stack.render, player)),
+        var playersCards = this.filterEdited(filterPlayer(this.stack.cards, player)),
             deck = filterlocation(playersCards, 'DECK'),
             hand = filterlocation(playersCards, 'HAND'),
             grave = filterlocation(playersCards, 'GRAVE'),
@@ -576,25 +587,25 @@ class Game {
                 field: this.generateSpectatorView()
             }
         };
-        this.previousStack = JSON.parse(JSON.stringify(this.stack.render));
+        this.previousStack = JSON.parse(JSON.stringify(this.stack.cards));
         return output;
     }
 
     ygoproUpdate() {
-        this.callback(this.generateView(), this.stack.render);
+        this.callback(this.generateView(), this.stack.cards);
     }
 
     /**
      * Creates a new card outside of initial start
-     * @param {String} currentLocation   zone the card can be found in.
-     * @param {Number} currentController player the card can be found under
-     * @param {Number} currentSequence   exact index of card in the zone
-     * @param {Number} position          position the card needs to be in   
-     * @param {Number} code              passcode
-     * @param {Number} index             index/sequence in the zone the card needs to become.
+     * @param {String} location     zone the card can be found in.
+     * @param {Number} controller   player the card can be found under
+     * @param {Number} sequence     exact index of card in the zone
+     * @param {Number} position     position the card needs to be in   
+     * @param {Number} code         passcode
+     * @param {Number} index        index/sequence in the zone the card needs to become.
      * @returns {undefined}            
      */
-    makeNewCard(location, controller, currentSequence, position, code, index) {
+    makeNewCard(location, controller, sequence, position, code, index) {
         this.stack.add({
             player: controller,
             location,
@@ -603,13 +614,13 @@ class Game {
             code,
             index
         });
-        this.callback(this.generateView('newCard'), this.stack.render);
+        this.callback(this.generateView('newCard'), this.stack.cards);
     }
 
 
     /**
      * Deletes a specific card from the stack.
-     * @param {Number} uid The unique identifier of the card, to quickly find it.
+     * @param {Coordinate} query info to find the card
      * @returns {undefined}
      */
     removeCard(query) {
@@ -618,7 +629,9 @@ class Game {
 
     /**
      * Finds a specific card and puts a counter on it.
-     * @param {Number} uid The unique identifier of the card, to quickly find it.
+     * @param {Coordinate} query info to find the card
+     * @param {String} type name of the counter
+     * @param {Number} amount how many counters to add
      * @returns {undefined}
      */
     addCounter(query, type, amount) {
@@ -627,37 +640,36 @@ class Game {
 
     /**
      * Finds a specific card and remove a counter from it.
-     * @param {Number} uid The unique identifier of the card, to quickly find it.
+     * @param {Coordinate} query info to find the card
+     * @param {String} type name of the counter
+     * @param {Number} amount how many counters to add
      * @return {undefined}
      */
     removeCounter(query, type, amount) {
         this.field.addCounter(query, type, (-1 * amount));
     }
 
-
     /**
      * Draws a card, updates state.
-     * @param {Number} player player int 0,1, etc       Player drawing the cards
-     * @param {Number} numberOfCards number of cards drawn
-     * @param {String} username      name of player drawing cards
-     * @param {Function} drawCallback callback used by automatic
+     * @param {Number} player           player indicator 0,1, etc       Player drawing the cards
+     * @param {Number} numberOfCards    number of cards drawn
+     * @param {Number[]} cards          passcodes of drawn cards
+     * @param {Function} drawCallback   callback used by automatic
      * @returns {undefined}
      */
     drawCard(player, numberOfCards, cards, drawCallback) {
         var currenthand = filterlocation(filterPlayer(this.stack.cards, player), 'HAND').length,
             topcard,
-            target,
             deck;
 
         for (let i = 0; i < numberOfCards; i += 1) {
-            deck = filterlocation(filterPlayer(this.stack.render, player), 'DECK');
+            deck = filterlocation(filterPlayer(this.stack.cards, player), 'DECK');
             topcard = deck[deck.length - 1];
             this.stack.move({
                 player: topcard.player,
                 clocation: 'DECK',
                 index: topcard.index
-            },
-                {
+            }, {
                     player,
                     location: 'HAND',
                     index: currenthand + i,
@@ -666,7 +678,7 @@ class Game {
                 });
         }
 
-        this.callback(this.generateView(), this.stack.render);
+        this.callback(this.generateView(), this.stack.cards);
         if (typeof drawCallback === 'function') {
             drawCallback();
         }
@@ -708,7 +720,7 @@ class Game {
                 call: call,
                 player: player
             }
-        }, this.stack.render);
+        }, this.stack.cards);
     }
 
     /**
@@ -767,7 +779,7 @@ class Game {
      * @param {Boolean} manual if using manual, or automatic
      * @returns {undefined}
      */
-    startDuel(player1, player2, manual, settings) {
+    startDuel(player1, player2, manual) {
         this.stack = [];
         if (manual && !this.lock[0] && !this.lock[1]) {
             return;
@@ -783,20 +795,20 @@ class Game {
         };
 
         player1.main.forEach(function (card, index) {
-            this.stack.push('DECK', 0, index, this.stack.length, card);
+            this.stack.add('DECK', 0, index, this.stack.length, card);
         });
         player2.main.forEach(function (card, index) {
-            this.stack.push('DECK', 1, index, this.stack.length, card);
+            this.stack.add('DECK', 1, index, this.stack.length, card);
         });
 
         player1.extra.forEach(function (card, index) {
-            this.stack.push('EXTRA', 0, index, this.stack.length, card);
+            this.stack.add('EXTRA', 0, index, this.stack.length, card);
         });
         player2.extra.forEach(function (card, index) {
-            this.stack.push('EXTRA', 1, index, this.stack.length, card);
+            this.stack.add('EXTRA', 1, index, this.stack.length, card);
         });
 
-        this.callback(this.generateView('start'), this.stack.render);
+        this.callback(this.generateView('start'), this.stack.cards);
     }
 
     /**
@@ -804,7 +816,7 @@ class Game {
      * @returns {Pile[]} collection of cards
      */
     getStack() {
-        return JSON.parse(JSON.stringify(this.stack.render));
+        return JSON.parse(JSON.stringify(this.stack.cards));
     }
 
 
@@ -815,7 +827,7 @@ class Game {
      */
     nextPhase(phase) {
         this.state.phase = phase;
-        this.callback(this.generateView(), this.stack.render);
+        this.callback(this.generateView(), this.stack.cards);
     }
 
     /**
@@ -826,15 +838,7 @@ class Game {
         this.state.turn += 1;
         this.state.phase = 0;
         this.state.turnOfPlayer = (this.state.turnOfPlayer === 0) ? 1 : 0;
-        this.callback(this.generateView(), this.stack.render);
-    }
-
-    /**
-     * Sets the current turn player.
-     * @returns {undefined}
-     */
-    setTurnPlayer() {
-        this.state.turnOfPlayer = (this.state.turnOfPlayer === 0) ? 1 : 0;
+        this.callback(this.generateView(), this.stack.cards);
     }
 
     announcement(player, message) {
@@ -849,7 +853,7 @@ class Game {
             duelAction: 'announcement',
             message
         };
-        this.callback(output, this.stack.render);
+        this.callback(output, this.stack.cards);
     }
 
     /**
@@ -861,43 +865,16 @@ class Game {
      */
     changeLifepoints(player, amount) {
         this.state.lifepoints[player] = this.state.lifepoints[player] + amount;
-        this.callback(this.generateView(), this.stack.render);
-    }
-
-    /**
-     * Record what a duelist said to another duelist.
-     * @param {Number} username  player saying the message.
-     * @param {String} message message to other spectators
-     * @returns {undefined}
-     */
-    duelistChat(username, message) {
-        if (username) {
-            this.state.duelistChat.push(username + ': ' + message);
-        } else {
-            this.state.duelistChat.push(message);
-        }
-
-        this.callback(this.generateView('chat'), this.stack.render);
-    }
-
-    /**
-     * Record what a spectator said to another spectator.
-     * @param {Number} username  player saying the message.
-     * @param {String} message message to other spectators
-     * @returns {undefined}
-     */
-    spectatorChat(username, message) {
-        this.state.spectatorChat.push(username + ': ' + message);
-        this.callback(this.generateView('chat'), this.stack.render);
+        this.callback(this.generateView(), this.stack.cards);
     }
 
     /**
      * Send a question to the player
-     * @param {Number} slot 
-     * @param {String} type 
-     * @param {Object[]} options 
-     * @param {Number} answerLength 
-     * @param {Function} onAnswerFromUser 
+     * @param {Number} slot player
+     * @param {String} type question typing
+     * @param {Object[]} options information about the question
+     * @param {Number} answerLength how many answers 
+     * @param {Function} onAnswerFromUser callback function
      * @return {undefined}
      */
     question(slot, type, options, answerLength, onAnswerFromUser) {
@@ -933,12 +910,13 @@ class Game {
         this.answerListener.once(uuid, function (data) {
             onAnswerFromUser(data);
         });
-        this.callback(output, this.stack.render);
+        this.callback(output, this.stack.cards);
     }
 
     /**
      * Answer a queued up question
      * @param {Object} message response message
+     * @returns {undefined}
      */
     respond(message) {
         this.answerListener.emit(message.uuid, message.answer);
