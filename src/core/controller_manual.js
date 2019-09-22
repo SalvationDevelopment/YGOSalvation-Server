@@ -118,7 +118,7 @@ function responseHandler(duel, players, client, message) {
             duel.revealCallback([message.card], client.slot, 'revealHandSingle');
             break;
         case 'rps':
-            duel.rps(function(result) {
+            duel.rps(function (result) {
                 var winner = 'Player ' + (1 + result);
                 duel.duelistChat('Server', players[client.slot].username + ' ' + winner + ' won.');
             });
