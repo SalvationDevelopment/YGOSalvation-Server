@@ -122,7 +122,7 @@ class Pile {
         this.list.splice(sequence, 0, card);
     }
 
-    detatch(sequence) {
+    detach(sequence) {
         const card = this.splice(sequence, 1)[0];
 
         return card;
@@ -196,7 +196,7 @@ class Field {
 
     detach(previous, sequence, current) {
         const parent = this.find(previous),
-            card = parent.detatch(sequence),
+            card = parent.detach(sequence),
             original = getByUID(this.stack.render, card.uid);
 
         original.attach(card);
@@ -205,14 +205,14 @@ class Field {
 
     attach(previous, current) {
         const parent = this.find(previous),
-            card = parent.detatch(0);
+            card = parent.detach(0);
 
         current.attach(card);
     }
 
     take(previous, sequence, current) {
         const donor = this.find(previous),
-            card = donor.detatch(sequence),
+            card = donor.detach(sequence),
             recipient = this.find(current);
 
         recipient.attach(card);
@@ -343,6 +343,13 @@ class Game {
         this.answerListener = new EventEmitter();
         this.lastQuestion = {};
         this.stack = new Field();
+        this.addCard = this.stack.add;
+        this.removeCard = this.stack.remove;
+        this.moveCard = this.stack.move;
+        this.attach = this.stack.attach;
+        this.detach = this.stack.detach;
+        this.take = this.stack.take;
+        this.rankUp = this.stack.rankUp;
         this.previousStack = [];
         this.outstack = [];
         this.names = ['', ''];
@@ -617,15 +624,6 @@ class Game {
         this.callback(this.generateView('newCard'), this.stack.cards);
     }
 
-
-    /**
-     * Deletes a specific card from the stack.
-     * @param {Coordinate} query info to find the card
-     * @returns {undefined}
-     */
-    removeCard(query) {
-        this.field.remove(query);
-    }
 
     /**
      * Finds a specific card and puts a counter on it.

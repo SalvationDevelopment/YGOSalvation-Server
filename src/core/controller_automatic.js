@@ -277,14 +277,10 @@ function boardController(gameBoard, slot, message, ygopro, player) {
         case ('MSG_MOVE'): // Good
             if (message.pl === 0) {
                 // remove card
-                gameBoard.setState({
+                gameBoard.removeCard({
                     player: message.previousController,
                     clocation: message.previousLocation,
-                    index: message.previousIndex,
-                    moveplayer: message.currentController,
-                    movelocation: 'INMATERIAL',
-                    moveindex: message.currentIndex,
-                    moveposition: message.currentPosition
+                    index: message.previousIndex
                 });
                 break;
             } else if (message.cl === 0) {
@@ -300,54 +296,42 @@ function boardController(gameBoard, slot, message, ygopro, player) {
             }
             if (!(message.pl & 0x80) && !(message.cl & 0x80)) {
                 // move existing card
-                gameBoard.setState({
-                    player: message.previousController,
-                    clocation: message.previousLocation,
-                    index: message.previousIndex,
-                    moveplayer: message.currentController,
-                    movelocation: message.currentLocation,
-                    moveindex: message.currentIndex,
-                    moveposition: message.currentPosition
+                const previous = {
+                    player: message.player,
+                    clocation: message.location,
+                    index: message.index
+                };
+                gameBoard.moveCard(previous, {
+                    player: message.player,
+                    location: message.location,
+                    index: message.index,
+                    position: message.position,
+                    code: message.id
                 });
                 break;
             }
             if (!(message.pl & 0x80)) {
                 //convert to material
-                gameBoard.setState({
-                    player: message.previousController,
-                    clocation: message.previousLocation,
-                    index: message.previousIndex,
-                    moveplayer: message.currentController,
-                    movelocation: 'OVERLAY',
-                    moveindex: message.currentIndex,
-                    moveposition: message.currentPosition
-                });
+
                 break;
             }
             if (!(message.cl & 0x80)) {
                 // detach from xyz
-                gameBoard.setState({
-                    player: message.previousController,
-                    clocation: message.previousLocation,
-                    index: message.previousIndex,
-                    moveplayer: message.currentController,
-                    movelocation: 'MONSTERZONE',
-                    moveindex: message.currentIndex,
-                    moveposition: message.currentPosition,
-                    overlayindex: message.overlayindex
-                });
+
                 break;
             }
+            break;
         case ('MSG_POS_CHANGE'):
-            gameBoard.setState({
+            const previous = {
                 player: message.player,
                 clocation: message.location,
+                index: message.index
+            };
+            gameBoard.moveCard(previous, {
+                player: message.player,
+                location: message.location,
                 index: message.index,
-                moveplayer: message.player,
-                movelocation: message.location,
-                moveindex: message.index,
-                moveposition: message.position,
-                overlayindex: 0
+                position: message.position
             });
             break;
         case ('MSG_SET'): // Good
@@ -360,17 +344,17 @@ function boardController(gameBoard, slot, message, ygopro, player) {
             gameBoard.announcement(slot, message);
             break;
         case ('MSG_SUMMONING'): // Good
-            gameBoard.setState({
+            gameBoard.moveCard({
                 player: message.player,
                 clocation: message.location,
-                index: message.index,
-                moveplayer: message.player,
-                movelocation: message.location,
-                moveindex: message.index,
-                moveposition: message.position,
-                overlayindex: 0,
-                id: message.id
-            });
+                index: message.index
+            }, {
+                    player: message.player,
+                    location: message.location,
+                    index: message.index,
+                    position: message.position,
+                    code: message.id
+                });
             output[slot] = {
                 duelAction: 'sound',
                 sound: 'soundsummonCard'
@@ -378,30 +362,30 @@ function boardController(gameBoard, slot, message, ygopro, player) {
             gameBoard.callback(output);
             break;
         case ('MSG_SPSUMMONING'): // Good
-            gameBoard.setState({
-                id: message.id,
+            gameBoard.moveCard({
                 player: message.player,
                 clocation: message.location,
-                index: message.index,
-                moveplayer: message.player,
-                movelocation: message.location,
-                moveindex: message.index,
-                moveposition: message.position,
-                overlayindex: 0
-            });
+                index: message.index
+            }, {
+                    player: message.player,
+                    location: message.location,
+                    index: message.index,
+                    position: message.position,
+                    code: message.id
+                });
             break;
         case ('MSG_FLIPSUMMONING'): // Good
-            gameBoard.setState({
-                id: message.id,
+            gameBoard.moveCard({
                 player: message.player,
                 clocation: message.location,
-                index: message.index,
-                moveplayer: message.player,
-                movelocation: message.location,
-                moveindex: message.index,
-                moveposition: message.position,
-                overlayindex: 0
-            });
+                index: message.index
+            }, {
+                    player: message.player,
+                    location: message.location,
+                    index: message.index,
+                    position: message.position,
+                    code: message.id
+                });
             break;
         case ('MSG_SUMMONED'): // Good
             gameBoard.announcement(slot, message);
@@ -476,17 +460,17 @@ function boardController(gameBoard, slot, message, ygopro, player) {
                 }
                 if (card) {
                     try {
-                        gameBoard.setState({
-                            id: card.id,
-                            player: card.player,
-                            clocation: card.location,
-                            index: index,
-                            moveplayer: card.player,
-                            movelocation: card.location,
-                            moveindex: index,
-                            moveposition: card.position,
-                            overlayindex: 0
-                        }, card);
+                        gameBoard.moveCard({
+                            player: message.player,
+                            clocation: message.location,
+                            index: message.index
+                        }, {
+                                player: message.player,
+                                location: message.location,
+                                index: message.index,
+                                position: message.position,
+                                code: message.id
+                            });
                     } catch (e) {
                         console.log(e);
                     }
@@ -498,17 +482,17 @@ function boardController(gameBoard, slot, message, ygopro, player) {
             return {};
         case ('MSG_UPDATE_CARD'): // Inconsistent
             try {
-                gameBoard.setState({
-                    player: message.card.player,
-                    clocation: message.card.location,
-                    index: message.card.index,
-                    moveplayer: message.card.player,
-                    movelocation: message.card.location,
-                    moveindex: message.card.index,
-                    moveposition: message.card.location,
-                    overlayindex: 0,
-                    id: message.card.id
-                });
+                gameBoard.moveCard({
+                    player: message.player,
+                    clocation: message.location,
+                    index: message.index
+                }, {
+                        player: message.player,
+                        location: message.location,
+                        index: message.index,
+                        position: message.position,
+                        code: message.id
+                    });
             } catch (e) {
                 console.log(e, message);
             }
