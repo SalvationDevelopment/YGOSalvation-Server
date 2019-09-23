@@ -279,7 +279,7 @@ function boardController(gameBoard, slot, message, ygopro, player) {
                 // remove card
                 gameBoard.removeCard({
                     player: message.previousController,
-                    clocation: message.previousLocation,
+                    location: message.previousLocation,
                     index: message.previousIndex
                 });
                 break;
@@ -298,7 +298,7 @@ function boardController(gameBoard, slot, message, ygopro, player) {
                 // move existing card
                 const previous = {
                     player: message.player,
-                    clocation: message.location,
+                    location: message.location,
                     index: message.index
                 };
                 gameBoard.moveCard(previous, {
@@ -324,7 +324,7 @@ function boardController(gameBoard, slot, message, ygopro, player) {
         case ('MSG_POS_CHANGE'):
             const previous = {
                 player: message.player,
-                clocation: message.location,
+                location: message.location,
                 index: message.index
             };
             gameBoard.moveCard(previous, {
@@ -346,7 +346,7 @@ function boardController(gameBoard, slot, message, ygopro, player) {
         case ('MSG_SUMMONING'): // Good
             gameBoard.moveCard({
                 player: message.player,
-                clocation: message.location,
+                location: message.location,
                 index: message.index
             }, {
                     player: message.player,
@@ -364,7 +364,7 @@ function boardController(gameBoard, slot, message, ygopro, player) {
         case ('MSG_SPSUMMONING'): // Good
             gameBoard.moveCard({
                 player: message.player,
-                clocation: message.location,
+                location: message.location,
                 index: message.index
             }, {
                     player: message.player,
@@ -377,7 +377,7 @@ function boardController(gameBoard, slot, message, ygopro, player) {
         case ('MSG_FLIPSUMMONING'): // Good
             gameBoard.moveCard({
                 player: message.player,
-                clocation: message.location,
+                location: message.location,
                 index: message.index
             }, {
                     player: message.player,
@@ -459,21 +459,7 @@ function boardController(gameBoard, slot, message, ygopro, player) {
                     throw Error('WRONG CARD POSITION');
                 }
                 if (card) {
-                    try {
-                        gameBoard.moveCard({
-                            player: message.player,
-                            clocation: message.location,
-                            index: message.index
-                        }, {
-                                player: message.player,
-                                location: message.location,
-                                index: message.index,
-                                position: message.position,
-                                code: message.id
-                            });
-                    } catch (e) {
-                        console.log(e);
-                    }
+                    gameBoard.update(card);
                 }
             });
             if (message.cards.length) {
@@ -484,7 +470,7 @@ function boardController(gameBoard, slot, message, ygopro, player) {
             try {
                 gameBoard.moveCard({
                     player: message.player,
-                    clocation: message.location,
+                    location: message.location,
                     index: message.index
                 }, {
                         player: message.player,

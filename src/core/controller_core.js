@@ -62,7 +62,7 @@ const ffi = require('ffi'),
     enums = require('./enums'),
     analyze = require('./lib_analyzer'),
     boardController = require('./controller_automatic'),
-    manualControlEngine = require('./model_field'),
+    ManualControlEngine = require('./model_field'),
     DataStream = require('./model_stream'),
     ocgapi = require('./lib_core'),
     database = require('../../http/manifest/manifest_0-en-OCGTCG.json'),
@@ -202,7 +202,7 @@ function duelEndProcedure(players) {
  * @returns {Object} A game instance with manual controls.
  */
 function GameBoard(playerConnection, slot, masterRule) {
-    const board = manualControlEngine(function (view, stack, callback) {
+    const board = new ManualControlEngine(function (view, stack, callback) {
         try {
             playerConnection.write((view['p' + slot]));
 

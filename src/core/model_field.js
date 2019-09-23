@@ -98,156 +98,214 @@ function getByUID(stack, uid) {
     });
 }
 
-class Pile {
-    constructor(movelocation, player, index, uuid, code) {
-        this.player = player;
-        this.location = movelocation;
-        this.index = index;
-        this.position = 'FaceDown';
-        this.uid = uuid;
-        this.originalcontroller = player;
-        this.counters = 0;
-        this.list = [{ code, uuid }];
-    }
+function Pile(movelocation, player, index, uuid, code) {
+    const state = {
+        player: player,
+        location: movelocation,
+        index: index,
+        position: 'FaceDown',
+        uid: uuid,
+        originalcontroller: player,
+        counters: 0,
+        list: [{ code, uuid }]
+    };
 
-    get render() {
-        return this.list.map((card) => {
+    function render() {
+        return state.list.map((card) => {
             const copy = Object.assign({}, this);
             delete copy.list;
             return Object.assign({}, copy, card);
         });
     }
 
-    attach(card, sequence) {
-        this.list.splice(sequence, 0, card);
+    function attach(card, sequence) {
+        state.list.splice(sequence, 0, card);
     }
 
-    detach(sequence) {
+    function detach(sequence) {
         const card = this.splice(sequence, 1)[0];
-
         return card;
     }
-}
 
-class Field {
-    constructor() {
-        this.stack = [];
+    function update(data) {
+        Object.assign(state, data);
     }
 
-    get cards() {
-        return this.stack.reduce((output, pile) => {
+    return {
+        attach,
+        detach,
+        render,
+        update,
+        state
+    };
+}
+
+function Field() {
+    const stack = [];
+
+    function cards() {
+        return stack.reduce((output, pile) => {
             output.concat(pile.render);
             return output;
         }, []);
     }
 
-    get length() {
-        return this.cards.length;
+    function length() {
+        return stack.length;
     }
 
-    find(query) {
-        return this.stack.find((pile) => {
+    function search(query) {
+        return stack.find((pile) => {
             return (
-                pile.player === query.player
-                && pile.location === query.location
-                && pile.index === query.index);
+                pile.state.player === query.player
+                && pile.state.location === query.location
+                && pile.state.index === query.index);
         });
     }
 
-    add(movelocation, player, index, code = 0) {
+    function add(movelocation, player, index, code = 0) {
         const uuid = uniqueIdenifier();
-        this.stack.push(new Pile(movelocation, player, index, uuid, code));
+        stack.push(new Pile(movelocation, player, index, uuid, code));
     }
 
-    remove(query) {
-        const card = this.find(query);
+    function remove(query) {
+        const card = search(query);
         card.location = 'INMATERIAL';
     }
 
-    move(previous, current) {
-
-        const pile = this.find(previous);
-
-        if (current.location === 'GRAVE' || current.location === 'BANISHED') {
-            current.player = pile.originalcontroller;
-        }
-
-
-        pile.player = current.player;
-        pile.location = current.location;
-        pile.index = current.index;
-        pile.position = current.position;
-
-        if (current.code !== undefined) {
-            pile.cards[0].code = current.code;
-        }
-
-        if (pile.location === 'HAND') {
-            pile.position = 'FaceUp';
-        }
-
-        this.reIndex(current.player, 'GRAVE');
-        this.reIndex(current.player, 'HAND');
-        this.reIndex(current.player, 'EXTRA');
-        this.reIndex(current.player, 'EXCAVATED');
-
-        this.cleanCounters();
+    function cleanCounters() {
+        const list = this.stack.filter((pile) => {
+            return (
+                pile.state.location === 'DECK'
+                || pile.state.location === 'HAND'
+                || pile.state.location === 'EXTRA'
+                || pile.state.location === 'GRAVE'
+                || pile.state.location === 'BANISHED'
+            );
+        });
+        list.forEach((pile) => {
+            pile.state.counters = {};
+        });
     }
 
-    detach(previous, sequence, current) {
-        const parent = this.find(previous),
+    function reIndex(player, location) {
+        const zone = this.stack.filter((pile) => {
+            return (pile.state.player === player && pile.state.location === location);
+        });
+
+        if (location === 'EXTRA') {
+            zone.sort(function (primary, secondary) {
+                if (primary.position === secondary.position) {
+                    return 0;
+                }
+                if (primary.position === 'FaceUp' && secondary.position !== 'FaceUp') {
+                    return 1;
+                }
+                if (secondary.position === 'FaceUp' && primary.position !== 'FaceUp') {
+                    return -1;
+                }
+            });
+        }
+
+        zone.sort(sortByIndex);
+
+        zone.forEach(function (pile, index) {
+            pile.state.index = index;
+        });
+
+        stack.sort(sortByIndex);
+    }
+
+
+
+    function move(previous, current) {
+        const pile = search(previous);
+        console.log(previous, current);
+        if (current.location === 'GRAVE' || current.location === 'BANISHED') {
+            current.player = pile.state.originalcontroller;
+        }
+
+
+        pile.state.player = current.player;
+        pile.state.location = current.location;
+        pile.state.index = current.index;
+        pile.state.position = current.position;
+
+        if (current.id !== undefined) {
+            pile.state.cards[0].id = current.id;
+        }
+
+        if (pile.state.location === 'HAND') {
+            pile.state.position = 'FaceUp';
+        }
+
+        reIndex(current.player, 'GRAVE');
+        reIndex(current.player, 'HAND');
+        reIndex(current.player, 'EXTRA');
+        reIndex(current.player, 'EXCAVATED');
+
+        cleanCounters();
+    }
+
+    function detach(previous, sequence, current) {
+        const parent = search(previous),
             card = parent.detach(sequence),
             original = getByUID(this.stack.render, card.uid);
 
         original.attach(card);
-        this.move(original, current);
+        move(original, current);
     }
 
-    attach(previous, current) {
-        const parent = this.find(previous),
+    function attach(previous, current) {
+        const parent = this.search(previous),
             card = parent.detach(0);
 
         current.attach(card);
     }
 
-    take(previous, sequence, current) {
-        const donor = this.find(previous),
+    function take(previous, sequence, current) {
+        const donor = this.search(previous),
             card = donor.detach(sequence),
-            recipient = this.find(current);
+            recipient = this.search(current);
 
         recipient.attach(card);
     }
 
-    rankUp(previous, current) {
-        const target = this.find(current),
-            materials = this.find(previous);
+    function rankUp(previous, current) {
+        const target = this.search(current),
+            materials = this.search(previous);
 
         target.cards = target.cards.concat(materials.cards);
         materials.cards = [];
     }
 
-    addCounter(query, type, amount) {
-        const card = this.find(query);
+    function addCounter(query, type, amount) {
+        const card = this.search(query);
         if (!card.counters[type]) {
             card.counters[type] = 0;
         }
         card.counters[type] += amount;
     }
 
-    cleanCounters() {
-        const list = this.stack.find((pile) => {
-            return (
-                pile.location === 'DECK'
-                || pile.location === 'HAND'
-                || pile.location === 'EXTRA'
-                || pile.location === 'GRAVE'
-                || pile.location === 'BANISHED'
-            );
-        });
-        list.forEach((pile) => {
-            pile.counters = {};
-        });
+    function update(data) {
+        console.log(data.player, data.location, data.index, stack.length);
+        const pile = search(data);
+        return;
+        pile.update(data);
     }
+
+    return {
+        add,
+        addCounter,
+        attach,
+        cards,
+        detach,
+        move,
+        rankUp,
+        remove,
+        take,
+        update
+    };
 }
 
 /**
@@ -344,17 +402,15 @@ class Game {
         this.lastQuestion = {};
         this.stack = new Field();
         this.addCard = this.stack.add;
-        this.removeCard = this.stack.remove;
-        this.moveCard = this.stack.move;
-        this.attach = this.stack.attach;
-        this.detach = this.stack.detach;
-        this.take = this.stack.take;
-        this.rankUp = this.stack.rankUp;
+        this.removeCard = this.stack.remove.bind(this.stack);
+        this.moveCard = this.stack.move.bind(this.stack);
+        this.attach = this.stack.attach.bind(this.stack);
+        this.detach = this.stack.detach.bind(this.stack);
+        this.take = this.stack.take.bind(this.stack);
+        this.rankUp = this.stack.rankUp.bind(this.stack);
+        this.update = this.stack.update.bind(this.stack);
         this.previousStack = [];
-        this.outstack = [];
         this.names = ['', ''];
-        this.lock = [false, false];
-        this.round = [];
         this.state = {
             turn: 0,
             turnOfPlayer: 0,
@@ -397,7 +453,7 @@ class Game {
     }
 
     findUIDCollection(uid) {
-        return getByUID(this.stack.cards, uid);
+        return getByUID(this.stack.cards(), uid);
     }
 
     findUIDCollectionPrevious(uid) {
@@ -420,7 +476,7 @@ class Game {
      * @returns {Object} all the cards the given player can see on their side of the field.
      */
     generateViewCount(player) {
-        var playersCards = filterPlayer(this.stack.cards, player),
+        var playersCards = filterPlayer(this.stack.cards(), player),
             deck = filterlocation(playersCards, 'DECK'),
             hand = filterlocation(playersCards, 'HAND'),
             grave = filterlocation(playersCards, 'GRAVE'),
@@ -446,7 +502,7 @@ class Game {
      * @returns {Object} all the cards the given player can see on their side of the field.
      */
     generateUpdateView(player) {
-        var playersCards = filterPlayer(this.stack.cards, player),
+        var playersCards = filterPlayer(this.stack.cards(), player),
             deck = filterlocation(playersCards, 'DECK'),
             hand = filterlocation(playersCards, 'HAND'),
             grave = filterlocation(playersCards, 'GRAVE'),
@@ -474,7 +530,7 @@ class Game {
      * @returns {Object} all the cards the given player can see on their side of the field.
      */
     generateSinglePlayerView(player) {
-        var playersCards = this.filterEdited(filterPlayer(this.stack.cards, player)),
+        var playersCards = this.filterEdited(filterPlayer(this.stack.cards(), player)),
             deck = filterlocation(playersCards, 'DECK'),
             hand = filterlocation(playersCards, 'HAND'),
             grave = filterlocation(playersCards, 'GRAVE'),
@@ -506,7 +562,7 @@ class Game {
      * @returns {Object} all the cards the given spectator/opponent can see on that side of the field.
      */
     generateSinglePlayerSpectatorView(player) {
-        var playersCards = this.filterEdited(filterPlayer(this.stack.cards, player)),
+        var playersCards = this.filterEdited(filterPlayer(this.stack.cards(), player)),
             deck = filterlocation(playersCards, 'DECK'),
             hand = filterlocation(playersCards, 'HAND'),
             grave = filterlocation(playersCards, 'GRAVE'),
@@ -594,12 +650,12 @@ class Game {
                 field: this.generateSpectatorView()
             }
         };
-        this.previousStack = JSON.parse(JSON.stringify(this.stack.cards));
+        this.previousStack = JSON.parse(JSON.stringify(this.stack.cards()));
         return output;
     }
 
     ygoproUpdate() {
-        this.callback(this.generateView(), this.stack.cards);
+        this.callback(this.generateView(), this.stack.cards());
     }
 
     /**
@@ -621,7 +677,7 @@ class Game {
             code,
             index
         });
-        this.callback(this.generateView('newCard'), this.stack.cards);
+        this.callback(this.generateView('newCard'), this.stack.cards());
     }
 
 
@@ -656,12 +712,12 @@ class Game {
      * @returns {undefined}
      */
     drawCard(player, numberOfCards, cards, drawCallback) {
-        var currenthand = filterlocation(filterPlayer(this.stack.cards, player), 'HAND').length,
+        var currenthand = filterlocation(filterPlayer(this.stack.cards(), player), 'HAND').length,
             topcard,
             deck;
 
         for (let i = 0; i < numberOfCards; i += 1) {
-            deck = filterlocation(filterPlayer(this.stack.cards, player), 'DECK');
+            deck = filterlocation(filterPlayer(this.stack.cards(), player), 'DECK');
             topcard = deck[deck.length - 1];
             this.stack.move({
                 player: topcard.player,
@@ -676,7 +732,7 @@ class Game {
                 });
         }
 
-        this.callback(this.generateView(), this.stack.cards);
+        this.callback(this.generateView(), this.stack.cards());
         if (typeof drawCallback === 'function') {
             drawCallback();
         }
@@ -718,57 +774,11 @@ class Game {
                 call: call,
                 player: player
             }
-        }, this.stack.cards);
+        }, this.stack.cards());
     }
 
-    /**
-     * Start side decking.
-     * @return {undefined}
-     */
-    startSide() {
-        this.stack = [];
-        this.decks = {
-            0: {
-                main: [],
-                extra: [],
-                side: []
-            },
-            1: {
-                main: [],
-                extra: [],
-                side: []
-            }
-        };
-    }
-
-    /**
-     * Validate that an incoming deck matches the existing deck based on the rules of siding.
-     * @param   {Number} player player int 0, 1, etc
-     * @param   {Object}   deck stack of cards
-     * @returns {boolean}  if the deck is valid.
-     */
-    validateDeckAgainstPrevious(player, deck) {
-        var previous = [],
-            current = [];
 
 
-        // If there is no deck, then this deck is ok to use, because we will need it.
-        if (this.decks[player].main.length === 0) {
-            return true;
-        }
-
-        previous.concat(
-            this.round[0][player].main,
-            this.round[0][player].extra,
-            this.round[0][player].side
-        );
-        current.concat(deck.main, deck.extra, deck.side);
-
-        previous.sort();
-        current.sort();
-
-        return (JSON.stringify(current) === JSON.stringify(previous));
-    }
 
     /**
      * Exposed method to initialize the field; You only run this once.
@@ -777,46 +787,28 @@ class Game {
      * @param {Boolean} manual if using manual, or automatic
      * @returns {undefined}
      */
-    startDuel(player1, player2, manual) {
-        this.stack = [];
-        if (manual && !this.lock[0] && !this.lock[1]) {
-            return;
-        }
-
-        this.round.push(player1, player2);
-        this.lock[0] = false;
-        this.lock[1] = false;
-
+    startDuel(player1, player2) {
         this.state.lifepoints = {
             0: 8000,
             1: 8000
         };
 
-        player1.main.forEach(function (card, index) {
-            this.stack.add('DECK', 0, index, this.stack.length, card);
+        player1.main.forEach((card, index) => {
+            this.addCard('DECK', 0, index, this.stack.length, card);
         });
-        player2.main.forEach(function (card, index) {
-            this.stack.add('DECK', 1, index, this.stack.length, card);
-        });
-
-        player1.extra.forEach(function (card, index) {
-            this.stack.add('EXTRA', 0, index, this.stack.length, card);
-        });
-        player2.extra.forEach(function (card, index) {
-            this.stack.add('EXTRA', 1, index, this.stack.length, card);
+        player2.main.forEach((card, index) => {
+            this.addCard('DECK', 1, index, this.stack.length, card);
         });
 
-        this.callback(this.generateView('start'), this.stack.cards);
+        player1.extra.forEach((card, index) => {
+            this.addCard('EXTRA', 0, index, this.stack.length, card);
+        });
+        player2.extra.forEach((card, index) => {
+            this.addCard('EXTRA', 1, index, this.stack.length, card);
+        });
+
+        this.callback(this.generateView('start'), this.stack.cards());
     }
-
-    /**
-     * Returns a COPY of all the cards in the game.
-     * @returns {Pile[]} collection of cards
-     */
-    getStack() {
-        return JSON.parse(JSON.stringify(this.stack.cards));
-    }
-
 
     /**
      * moves game to next phase.
@@ -825,7 +817,7 @@ class Game {
      */
     nextPhase(phase) {
         this.state.phase = phase;
-        this.callback(this.generateView(), this.stack.cards);
+        this.callback(this.generateView(), this.stack.cards());
     }
 
     /**
@@ -836,7 +828,7 @@ class Game {
         this.state.turn += 1;
         this.state.phase = 0;
         this.state.turnOfPlayer = (this.state.turnOfPlayer === 0) ? 1 : 0;
-        this.callback(this.generateView(), this.stack.cards);
+        this.callback(this.generateView(), this.stack.cards());
     }
 
     announcement(player, message) {
@@ -851,7 +843,7 @@ class Game {
             duelAction: 'announcement',
             message
         };
-        this.callback(output, this.stack.cards);
+        this.callback(output, this.stack.cards());
     }
 
     /**
@@ -863,7 +855,7 @@ class Game {
      */
     changeLifepoints(player, amount) {
         this.state.lifepoints[player] = this.state.lifepoints[player] + amount;
-        this.callback(this.generateView(), this.stack.cards);
+        this.callback(this.generateView(), this.stack.cards());
     }
 
     /**
@@ -908,7 +900,8 @@ class Game {
         this.answerListener.once(uuid, function (data) {
             onAnswerFromUser(data);
         });
-        this.callback(output, this.stack.cards);
+        console.log(this.stack);
+        this.callback(output, this.stack.cards());
     }
 
     /**
