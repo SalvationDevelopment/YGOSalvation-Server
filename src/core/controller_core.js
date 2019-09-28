@@ -455,7 +455,6 @@ function makeGame(pduel, settings) {
     }
 
     function refreshExtra(player, flag, use_cache) {
-        console.log('refreshing Extra');
         msg_update_data(player, LOCATION_EXTRA);
 
     }

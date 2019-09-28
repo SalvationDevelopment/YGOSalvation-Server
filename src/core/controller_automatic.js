@@ -344,17 +344,7 @@ function boardController(gameBoard, slot, message, ygopro, player) {
             gameBoard.announcement(slot, message);
             break;
         case ('MSG_SUMMONING'): // Good
-            gameBoard.moveCard({
-                player: message.player,
-                location: message.location,
-                index: message.index
-            }, {
-                    player: message.player,
-                    location: message.location,
-                    index: message.index,
-                    position: message.position,
-                    code: message.id
-                });
+            gameBoard.update(message);
             output[slot] = {
                 duelAction: 'sound',
                 sound: 'soundsummonCard'
@@ -362,30 +352,10 @@ function boardController(gameBoard, slot, message, ygopro, player) {
             gameBoard.callback(output);
             break;
         case ('MSG_SPSUMMONING'): // Good
-            gameBoard.moveCard({
-                player: message.player,
-                location: message.location,
-                index: message.index
-            }, {
-                    player: message.player,
-                    location: message.location,
-                    index: message.index,
-                    position: message.position,
-                    code: message.id
-                });
+            gameBoard.update(message);
             break;
         case ('MSG_FLIPSUMMONING'): // Good
-            gameBoard.moveCard({
-                player: message.player,
-                location: message.location,
-                index: message.index
-            }, {
-                    player: message.player,
-                    location: message.location,
-                    index: message.index,
-                    position: message.position,
-                    code: message.id
-                });
+            gameBoard.update(message);
             break;
         case ('MSG_SUMMONED'): // Good
             gameBoard.announcement(slot, message);
@@ -467,18 +437,15 @@ function boardController(gameBoard, slot, message, ygopro, player) {
             }
             return {};
         case ('MSG_UPDATE_CARD'): // Inconsistent
+            console.log(message);
             try {
-                gameBoard.moveCard({
-                    player: message.player,
-                    location: message.location,
-                    index: message.index
-                }, {
-                        player: message.player,
-                        location: message.location,
-                        index: message.index,
-                        position: message.position,
-                        code: message.id
-                    });
+                gameBoard.updateCard({
+                    player: message.card.player,
+                    location: message.card.location,
+                    index: message.card.index,
+                    position: message.card.position,
+                    id: message.card.id
+                });
             } catch (e) {
                 console.log(e, message);
             }

@@ -92,8 +92,7 @@ function sortByIndex(first, second) {
  * @returns {Boolean} if a card is that UID
  */
 function getByUID(stack, uid) {
-    const list = stack.render;
-    return list.filter(function (item) {
+    return stack.find(function (item) {
         return item.uid === uid;
     });
 }
@@ -107,12 +106,12 @@ function Pile(movelocation, player, index, uuid, code) {
         uid: uuid,
         originalcontroller: player,
         counters: 0,
-        list: [{ code, uuid }]
+        list: [{ id: code, uuid }]
     };
 
     function render() {
         return state.list.map((card) => {
-            const copy = Object.assign({}, this);
+            const copy = Object.assign({}, state);
             delete copy.list;
             return Object.assign({}, copy, card);
         });
@@ -128,6 +127,7 @@ function Pile(movelocation, player, index, uuid, code) {
     }
 
     function update(data) {
+        return;
         Object.assign(state, data);
     }
 
@@ -145,7 +145,7 @@ function Field() {
 
     function cards() {
         return stack.reduce((output, pile) => {
-            output.concat(pile.render);
+            output = output.concat(pile.render());
             return output;
         }, []);
     }
@@ -174,7 +174,7 @@ function Field() {
     }
 
     function cleanCounters() {
-        const list = this.stack.filter((pile) => {
+        const list = stack.filter((pile) => {
             return (
                 pile.state.location === 'DECK'
                 || pile.state.location === 'HAND'
@@ -189,7 +189,7 @@ function Field() {
     }
 
     function reIndex(player, location) {
-        const zone = this.stack.filter((pile) => {
+        const zone = stack.filter((pile) => {
             return (pile.state.player === player && pile.state.location === location);
         });
 
@@ -220,7 +220,9 @@ function Field() {
 
     function move(previous, current) {
         const pile = search(previous);
-        console.log(previous, current);
+        if (!pile) {
+            console.log('error', previous, current);
+        }
         if (current.location === 'GRAVE' || current.location === 'BANISHED') {
             current.player = pile.state.originalcontroller;
         }
@@ -232,7 +234,7 @@ function Field() {
         pile.state.position = current.position;
 
         if (current.id !== undefined) {
-            pile.state.cards[0].id = current.id;
+            pile.state.list[0].id = current.id;
         }
 
         if (pile.state.location === 'HAND') {
@@ -250,7 +252,7 @@ function Field() {
     function detach(previous, sequence, current) {
         const parent = search(previous),
             card = parent.detach(sequence),
-            original = getByUID(this.stack.render, card.uid);
+            original = getByUID(this.stack, card.uid);
 
         original.attach(card);
         move(original, current);
@@ -288,9 +290,8 @@ function Field() {
     }
 
     function update(data) {
-        console.log(data.player, data.location, data.index, stack.length);
+        //console.log(data.player, data.location, data.index, stack.length);
         const pile = search(data);
-        return;
         pile.update(data);
     }
 
@@ -315,6 +316,7 @@ function Field() {
  * @returns {Pile[]} a stack of cards that belong to only one specified player. 
  */
 function filterPlayer(stack, player) {
+
     return stack.filter(function (item) {
         return item.player === player;
     });
@@ -461,9 +463,9 @@ class Game {
     }
 
     filterEdited(cards) {
-        return cards.filter(function (card) {
-            var newCards = this.findUIDCollection(card.uid)[0],
-                oldCards = this.findUIDCollectionPrevious(card.uid)[0] || {};
+        return cards.filter((card) => {
+            var newCards = this.findUIDCollection(card.uid),
+                oldCards = this.findUIDCollectionPrevious(card.uid) || {};
             return !Object.keys(newCards).every(function (key) {
                 return newCards[key] === oldCards[key];
             });
@@ -721,7 +723,7 @@ class Game {
             topcard = deck[deck.length - 1];
             this.stack.move({
                 player: topcard.player,
-                clocation: 'DECK',
+                location: 'DECK',
                 index: topcard.index
             }, {
                     player,
@@ -900,7 +902,7 @@ class Game {
         this.answerListener.once(uuid, function (data) {
             onAnswerFromUser(data);
         });
-        console.log(this.stack);
+
         this.callback(output, this.stack.cards());
     }
 
@@ -921,3 +923,5 @@ class Game {
 }
 
 module.exports = Game;
+
+console.log('--------------------------');
