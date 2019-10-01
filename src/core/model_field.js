@@ -82,7 +82,7 @@ const EventEmitter = require('events'), // a way to "notice" things occuring
 * @returns {Number}  if it comes before or after
 */
 function sortByIndex(first, second) {
-    return first.index - second.index;
+    return first.state.index - second.state.index;
 }
 
 /**
@@ -292,7 +292,11 @@ function Field() {
     function update(data) {
         //console.log(data.player, data.location, data.index, stack.length);
         const pile = search(data);
-        pile.update(data);
+        if (pile) {
+            pile.update(data);
+            return;
+        }
+        console.log('error', data);
     }
 
     return {

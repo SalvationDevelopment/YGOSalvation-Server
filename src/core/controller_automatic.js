@@ -439,7 +439,7 @@ function boardController(gameBoard, slot, message, ygopro, player) {
         case ('MSG_UPDATE_CARD'): // Inconsistent
             console.log(message);
             try {
-                gameBoard.updateCard({
+                gameBoard.update({
                     player: message.card.player,
                     location: message.card.location,
                     index: message.card.index,
