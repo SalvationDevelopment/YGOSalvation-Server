@@ -109,6 +109,13 @@ function boardController(gameBoard, slot, message, ygopro, player) {
         p1: {},
         spectators: {}
     };
+
+    const previous = {
+        player: message.previousController,
+        location: message.previousLocation,
+        index: message.previousIndex
+    };
+
     switch (message.command) {
         case ('MSG_RETRY'): // Good
             gameBoard.retryLastQuestion();
@@ -277,11 +284,7 @@ function boardController(gameBoard, slot, message, ygopro, player) {
         case ('MSG_MOVE'): // Good
             if (message.pl === 0) {
                 // remove card
-                gameBoard.removeCard({
-                    player: message.previousController,
-                    location: message.previousLocation,
-                    index: message.previousIndex
-                });
+                gameBoard.removeCard(previous);
                 break;
             } else if (message.cl === 0) {
                 // add card
@@ -296,17 +299,13 @@ function boardController(gameBoard, slot, message, ygopro, player) {
             }
             if (!(message.pl & 0x80) && !(message.cl & 0x80)) {
                 // move existing card
-                const previous = {
-                    player: message.player,
-                    location: message.location,
-                    index: message.index
-                };
+
                 gameBoard.moveCard(previous, {
-                    player: message.player,
-                    location: message.location,
-                    index: message.index,
-                    position: message.position,
-                    code: message.id
+                    player: message.currentController,
+                    location: message.currentLocation,
+                    index: message.currentIndex,
+                    position: message.currentPosition,
+                    id: message.id
                 });
                 break;
             }
@@ -322,11 +321,6 @@ function boardController(gameBoard, slot, message, ygopro, player) {
             }
             break;
         case ('MSG_POS_CHANGE'):
-            const previous = {
-                player: message.player,
-                location: message.location,
-                index: message.index
-            };
             gameBoard.moveCard(previous, {
                 player: message.player,
                 location: message.location,
