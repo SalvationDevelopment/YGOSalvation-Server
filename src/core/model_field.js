@@ -410,9 +410,9 @@ class Game {
         this.addCard = this.stack.add;
         this.removeCard = this.stack.remove.bind(this.stack);
         this.moveCard = this.stack.move.bind(this.stack);
-        this.attach = this.stack.attach.bind(this.stack);
-        this.detach = this.stack.detach.bind(this.stack);
-        this.take = this.stack.take.bind(this.stack);
+        this.attachMaterial = this.stack.attach.bind(this.stack);
+        this.detachMaterial = this.stack.detach.bind(this.stack);
+        this.takeMaterial = this.stack.take.bind(this.stack);
         this.rankUp = this.stack.rankUp.bind(this.stack);
         this.update = this.stack.update.bind(this.stack);
         this.previousStack = [];

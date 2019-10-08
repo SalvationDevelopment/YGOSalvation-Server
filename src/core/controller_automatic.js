@@ -83,21 +83,44 @@ function askUser(gameBoard, slot, message, ygopro, command) {
 }
 
 
-/**
- * Return the Array Index of a matching card in a list of cards.
- * @param {FieldCoordinate[]} list list of cards the option appears in.
- * @param {Number[]} card card being searched for.
- * @returns {Number} Index of the card in the given options.
- */
-function resolveCardIndex(list, card) {
-    var number = list.findIndex(function (option) {
-        var index = (option.player === card[0]),
-            location = (option.location === enums.locations[card[1]]),
-            sequence = (option.index === card[2]);
-        return (index && location && sequence);
+function movment(message, gameBoard) {
+    const OVERLAY_UNIT = 0x80,
+        { code, pc, pl, ps, pp, cc, cl, cs,
+            previousLocation,
+            currentLocation,
+            currentPosition } = message,
+        previous = {
+            player: pc,
+            location: previousLocation,
+            index: ps
+        },
+        current = {
+            player: cc,
+            location: currentLocation,
+            index: cs
+        };
 
-    });
-    return number;
+    if (pl === 0) {
+        gameBoard.makeNewCard(cl, cc, cs, currentPosition, code, pp);
+        return;
+    }
+    if (cl === 0) {
+        gameBoard.removeCard(previous);
+        return;
+    }
+    if (!(pl & OVERLAY_UNIT) && !(cl & OVERLAY_UNIT)) {
+        gameBoard.moveCard(previous, current);
+        return;
+    }
+    if (!(pl & OVERLAY_UNIT)) {
+        gameBoard.attachMaterial(previous, current);
+        return;
+    }
+    if (!(cl & OVERLAY_UNIT)) {
+        gameBoard.detachMaterial(previous, pp, current);
+        return;
+    }
+    gameBoard.takeMaterial(previous, pp, current);
 }
 
 
@@ -282,43 +305,7 @@ function boardController(gameBoard, slot, message, ygopro, player) {
             askUser(gameBoard, slot, message, ygopro, 'MSG_SELECT_IDLECMD');
             break;
         case ('MSG_MOVE'): // Good
-            if (message.pl === 0) {
-                // remove card
-                gameBoard.removeCard(previous);
-                break;
-            } else if (message.cl === 0) {
-                // add card
-                gameBoard.makeNewCard(
-                    message.currentLocation,
-                    message.currentController,
-                    message.currentSequence,
-                    message.position,
-                    message.code,
-                    message.currentIndex);
-                break;
-            }
-            if (!(message.pl & 0x80) && !(message.cl & 0x80)) {
-                // move existing card
-
-                gameBoard.moveCard(previous, {
-                    player: message.currentController,
-                    location: message.currentLocation,
-                    index: message.currentIndex,
-                    position: message.currentPosition,
-                    id: message.id
-                });
-                break;
-            }
-            if (!(message.pl & 0x80)) {
-                //convert to material
-
-                break;
-            }
-            if (!(message.cl & 0x80)) {
-                // detach from xyz
-
-                break;
-            }
+            movment(message, gameBoard);
             break;
         case ('MSG_POS_CHANGE'):
             gameBoard.moveCard(previous, {

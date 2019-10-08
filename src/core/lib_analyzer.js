@@ -575,7 +575,7 @@ function msg_announce_race(message, pbuf, game) {
     for (let i = 0, filter = 0x1; i < 25; ++i, filter <<= 1) {
         message.chkRace.push((filter & message.available) ? true : false);
     }
-    console.log('donte', message);
+
     game.waitforResponse(message.player);
     game.sendBufferToPlayer(message.player, message);
     return 1;
@@ -698,7 +698,7 @@ function msg_move(message, pbuf, game) {
     message.currentPosition = enums.positions[pbuf.readInt8()]; // current position
     message.r = pbuf.readInt32();
     message.reason = enums.reasons[message.r];
-    console.log(message.reason);
+
     game.sendBufferToPlayer(message.previousController, message);
     // need to implement this!!!
     // if (!(cl & (LOCATION_GRAVE + LOCATION_OVERLAY)) && ((cl & (LOCATION_DECK + LOCATION_HAND)) || (cp & POS_FACEDOWN)))
