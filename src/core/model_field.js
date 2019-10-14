@@ -127,7 +127,6 @@ function Pile(movelocation, player, index, uuid, code) {
     }
 
     function update(data) {
-        return;
         Object.assign(state, data);
     }
 
@@ -141,7 +140,8 @@ function Pile(movelocation, player, index, uuid, code) {
 }
 
 function Field() {
-    const stack = [];
+    const stack = [],
+        lookup = {};
 
     function cards() {
         return stack.reduce((output, pile) => {
@@ -155,12 +155,14 @@ function Field() {
     }
 
     function search(query) {
-        return stack.find((pile) => {
-            return (
-                pile.state.player === query.player
-                && pile.state.location === query.location
-                && pile.state.index === query.index);
-        });
+        const code = query.player + query.location + query.index,
+            card = lookup[code] || stack.find((pile) => {
+                return (
+                    pile.state.player === query.player
+                    && pile.state.location === query.location
+                    && pile.state.index === query.index);
+            });
+        return card;
     }
 
     function add(movelocation, player, index, code = 0) {
@@ -188,6 +190,12 @@ function Field() {
         });
     }
 
+    function updateIndex() {
+        stack.forEach((card) => {
+            var code = card.state.player + card.state.location + card.state.index;
+            lookup[code] = (card.state.list.length) ? card : undefined;
+        });
+    }
     function reIndex(player, location) {
         const zone = stack.filter((pile) => {
             return (pile.state.player === player && pile.state.location === location);
@@ -214,6 +222,7 @@ function Field() {
         });
 
         stack.sort(sortByIndex);
+        updateIndex();
     }
 
 
@@ -292,6 +301,7 @@ function Field() {
     function update(data) {
         //console.log(data.player, data.location, data.index, stack.length);
         const pile = search(data);
+
         if (pile) {
             pile.update(data);
             return;
@@ -307,9 +317,11 @@ function Field() {
         detach,
         move,
         rankUp,
+        reIndex,
         remove,
         take,
-        update
+        update,
+        updateIndex
     };
 }
 
@@ -812,7 +824,7 @@ class Game {
         player2.extra.forEach((card, index) => {
             this.addCard('EXTRA', 1, index, this.stack.length, card);
         });
-
+        this.stack.updateIndex();
         this.callback(this.generateView('start'), this.stack.cards());
     }
 

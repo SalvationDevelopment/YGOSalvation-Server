@@ -85,23 +85,34 @@ function askUser(gameBoard, slot, message, ygopro, command) {
 
 function movment(message, gameBoard) {
     const OVERLAY_UNIT = 0x80,
-        { code, pc, pl, ps, pp, cc, cl, cs,
-            previousLocation,
+        {
+            code,
+            previousController,
+            previousLocation, pl,
+            previousIndex, pp,
+            currentController, cl,
+            currentIndex,
             currentLocation,
-            currentPosition } = message,
+            currentPosition
+        } = message,
         previous = {
-            player: pc,
+            player: previousController,
             location: previousLocation,
-            index: ps
+            index: previousIndex
         },
         current = {
-            player: cc,
+            player: currentController,
             location: currentLocation,
-            index: cs
+            index: currentIndex
         };
 
     if (pl === 0) {
-        gameBoard.makeNewCard(cl, cc, cs, currentPosition, code, pp);
+        gameBoard.makeNewCard(
+            currentLocation,
+            currentController,
+            currentIndex,
+            currentPosition,
+            code, pp);
         return;
     }
     if (cl === 0) {
@@ -418,6 +429,7 @@ function boardController(gameBoard, slot, message, ygopro, player) {
             }
             return {};
         case ('MSG_UPDATE_CARD'): // Inconsistent
+            break;
             console.log(message);
             try {
                 gameBoard.update({

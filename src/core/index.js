@@ -78,6 +78,7 @@ const WARNING_COUNTDOWN = 3000000,
     banlist = require('../../http/manifest/banlist.json'),
     database = require('../../http/manifest/manifest_0-en-OCGTCG.json'),
     dotenv = require('dotenv'),
+    defaultPlayer = require('./defaults'),
     EventEmitter = require('events'),
     fileStream = require('node-static'),
     fs = require('fs'),
@@ -159,7 +160,7 @@ function enableClient(client, person) {
 function register(client, message) {
 
     if (!process.child) {
-        enableClient(client, message);
+        enableClient(client, Object.assign(message, defaultPlayer));
         return;
     }
 
@@ -245,7 +246,7 @@ function join(error, game, state, client, callback) {
         client.slot = game.player.length;
         game.player.push({
             ready: Boolean(client.ready),
-            ranking: client.ranking,
+            ranking: client.ranking || {},
             slot: client.slot,
             settings: client.settings,
             username: client.username
@@ -763,6 +764,10 @@ function messageHandler(server, duel, game, state, client, message) {
     try {
         processMessage(server, duel, game, state, client, message);
     } catch (error) {
+        if (!process.child) {
+            // while using a direct debugger, kill the process and investigate.
+            throw error;
+        }
         console.log(error);
         client.write({
             error: error.message,

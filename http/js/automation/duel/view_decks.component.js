@@ -10,8 +10,10 @@ class DeckDialog extends React.Component {
             deck: []
         };
 
-        this.store.register('VIEW_DECK', (message) => {
-            this.trigger(message);
+        this.store.register('OPEN_DECK', (message) => {
+            this.state.deck = message.deck;
+            this.state.active = true;
+            this.store.dispatch({ action: 'RENDER' });
         });
     }
 
@@ -36,12 +38,6 @@ class DeckDialog extends React.Component {
             }, this.state.deck.map((card, i) => this.img(card, i)));
         }
         return '';
-    }
-
-    trigger(state) {
-        Object.assign(this.state, state);
-        this.state.active = true;
-        this.store.dispatch({ action: 'RENDER' });
     }
 
     updateContents() {

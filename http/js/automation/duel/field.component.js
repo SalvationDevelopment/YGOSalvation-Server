@@ -136,9 +136,12 @@ class Field {
     }
 
     getDeck(player, location) {
-        var deck = this.state.cards.filter((cardImage) => {
+        debugger;
+        var deck = Object.keys(this.state.cards).filter((guid) => {
+            var cardImage = this.state.cards[guid];
             return (cardImage.state.location === location) && (cardImage.state.player === player);
-        }).map((cardImage) => {
+        }).map((guid) => {
+            var cardImage = this.state.cards[guid];
             return {
                 id: cardImage.state.id,
                 location: cardImage.state.location,
@@ -146,7 +149,7 @@ class Field {
             };
         });
         console.log(deck);
-        this.store.dispatch({ action: 'VIEW_DECK', deck });
+        return deck;
     }
 
     constructor(state, store) {

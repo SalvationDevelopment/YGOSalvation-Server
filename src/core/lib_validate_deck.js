@@ -1,34 +1,17 @@
-/*jslint plusplus :true*/
-
+/* eslint-disable no-plusplus */
 function validateDeck(deck, banlist, database, cardpool, prerelease) {
     'use strict';
     //console.log(database[0], database.length);
+
     cardpool = cardpool || 'OCG/TCG';
     var main = {},
         side = {},
         extra = {},
-        region = banlist.region,
-        today = new Date(),
-        today_date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate(),
         validate = {
             error: false,
             msg: ''
         },
-        card,
-        packDB = database.filter(function (card) {
-            if (region && banlist.endDate) {
-                if (card[region]) {
-                    if (card[region].date) {
-                        return new Date(banlist.endDate).getTime() > card[region].date;
-                    } else {
-                        return false;
-                    }
-                } else {
-                    return false;
-                }
-            }
-            return true;
-        });
+        card;
 
 
     function getCardById(cardId) {
@@ -119,7 +102,7 @@ function validateDeck(deck, banlist, database, cardpool, prerelease) {
 
         for (card in main) {
             var reference = getCardById(card);
-            if (reference == null) {
+            if (reference === null) {
                 validate.error = true;
                 validate.msg = 'Error loading deck: check Deck Edit to verify that your deck looks fine';
                 return validate;
@@ -133,16 +116,15 @@ function validateDeck(deck, banlist, database, cardpool, prerelease) {
         }
         for (card in side) {
             var reference = getCardById(card);
-            if (reference == null) {
+            if (reference === null) {
                 validate.error = true;
                 validate.msg = 'Error loading deck: check Deck Edit to verify that your deck looks fine';
                 return validate;
-            } else {
-                if (side[card] > 3 || main[card] && main[card] + side[card] > 3) {
-                    validate.error = true;
-                    validate.msg = 'You can\'t have ' + cardAmount + ' copies of ' + '"' + reference.name + '"';
-                    return validate;
-                }
+            }
+            if (side[card] > 3 || main[card] && main[card] + side[card] > 3) {
+                validate.error = true;
+                validate.msg = 'You can\'t have ' + cardAmount + ' copies of ' + '"' + reference.name + '"';
+                return validate;
             }
         }
         for (card in extra) {
