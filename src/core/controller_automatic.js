@@ -6,64 +6,59 @@
  * @property {Number} index sequence in the zone or deck.
  */
 
-const enums = require('./enums'),
-    cardMap = {
-        0: 'rock',
-        1: 'paper',
-        2: 'scissors'
+const buttonName = {
+    summonable_cards: (i) => i << 16,
+    spsummonable_cards: (i) => (i << 16) + 1,
+    repositionable_cards: (i) => (i << 16) + 2,
+    msetable_cards: (i) => (i << 16) + 3,
+    ssetable_cards: (i) => (i << 16) + 4,
+    activatable_cards: (i, command) => (command === 'MSG_SELECT_IDLECMD') ? (i << 16) + 5 : (i << 16),
+    select_options: (i, command) => {
+        switch (command) {
+            case 'MSG_SELECT_IDLECMD':
+                return (i << 16) + 5;
+            case 'MSG_SELECT_BATTLECMD':
+                return i << 16;
+            default:
+                return i;
+        }
+
     },
-    buttonName = {
-        summonable_cards: (i) => i << 16,
-        spsummonable_cards: (i) => (i << 16) + 1,
-        repositionable_cards: (i) => (i << 16) + 2,
-        msetable_cards: (i) => (i << 16) + 3,
-        ssetable_cards: (i) => (i << 16) + 4,
-        activatable_cards: (i, command) => (command === 'MSG_SELECT_IDLECMD') ? (i << 16) + 5 : (i << 16),
-        select_options: (i, command) => {
-            switch (command) {
-                case 'MSG_SELECT_IDLECMD':
-                    return (i << 16) + 5;
-                case 'MSG_SELECT_BATTLECMD':
-                    return i << 16;
-                default:
-                    return i;
-            }
+    attackable_cards: (i) => (i << 16) + 1,
+    enableBattlePhase: () => 6,
+    shuffle: () => 8,
+    enableMainPhase2: () => 2,
+    enableEndPhase: (i, command) => {
+        switch (command) {
+            case 'MSG_SELECT_BATTLECMD':
+                return 3;
+            case 'MSG_SELECT_IDLECMD':
+                return 7;
 
-        },
-        attackable_cards: (i) => (i << 16) + 1,
-        enableBattlePhase: () => 6,
-        shuffle: () => 8,
-        enableMainPhase2: () => 2,
-        enableEndPhase: (i, command) => {
-            switch (command) {
-                case 'MSG_SELECT_BATTLECMD':
-                    return 3;
-                case 'MSG_SELECT_IDLECMD':
-                    return 7;
-
-                default:
+            default:
+                return -1;
+        }
+    },
+    yesno: (i, command) => {
+        switch (command) {
+            case 'MSG_SELECT_CHAIN':
+                if (!i) {
                     return -1;
-            }
-        },
-        yesno: (i, command) => {
-            switch (command) {
-                case 'MSG_SELECT_CHAIN':
-                    if (!i) {
-                        return -1;
-                    }
-                    return 1;
-                default:
-                    return Number(Boolean(i));
-            }
-        },
-        zone: (i) => Buffer.from(i).readUIntLE(0, 3),
-        list: (i) => Buffer.from([i.length].concat(i)),
-        number: (i) => i,
-        FaceUpAttack: () => 0x1,
-        FaceDownAttack: () => 0x2,
-        FaceUpDefence: () => 0x4,
-        FaceDownDefence: () => 0x8
-    };
+                }
+                return 1;
+            default:
+                return Number(Boolean(i));
+        }
+    },
+    zone: (i) => Buffer.from(i).readUIntLE(0, 3),
+    list: (i) => Buffer.from([i.length].concat(i)),
+    number: (i) => i,
+    FaceUpAttack: () => 0x1,
+    FaceDownAttack: () => 0x2,
+    FaceUpDefence: () => 0x4,
+    FaceDownDefence: () => 0x8
+};
+
 /**
  * Standardized way of sending a preformatted message to the user from YGOSharp. 
  * @param {Object} gameBoard Instance of the manual state engine
@@ -83,7 +78,7 @@ function askUser(gameBoard, slot, message, ygopro, command) {
 }
 
 
-function movment(message, gameBoard) {
+function movement(message, gameBoard) {
     const OVERLAY_UNIT = 0x80,
         {
             code,
@@ -103,10 +98,12 @@ function movment(message, gameBoard) {
         current = {
             player: currentController,
             location: currentLocation,
-            index: currentIndex
+            index: currentIndex,
+            position: currentPosition
         };
 
     if (pl === 0) {
+        console.log('make new card');
         gameBoard.makeNewCard(
             currentLocation,
             currentController,
@@ -116,21 +113,27 @@ function movment(message, gameBoard) {
         return;
     }
     if (cl === 0) {
+        console.log('remove card');
         gameBoard.removeCard(previous);
         return;
     }
     if (!(pl & OVERLAY_UNIT) && !(cl & OVERLAY_UNIT)) {
+        console.log('move card');
         gameBoard.moveCard(previous, current);
         return;
     }
     if (!(pl & OVERLAY_UNIT)) {
+        console.log('attach card');
+        console.log(message);
         gameBoard.attachMaterial(previous, current);
         return;
     }
     if (!(cl & OVERLAY_UNIT)) {
+        console.log('detach card');
         gameBoard.detachMaterial(previous, pp, current);
         return;
     }
+    console.log('take card');
     gameBoard.takeMaterial(previous, pp, current);
 }
 
@@ -316,7 +319,8 @@ function boardController(gameBoard, slot, message, ygopro, player) {
             askUser(gameBoard, slot, message, ygopro, 'MSG_SELECT_IDLECMD');
             break;
         case ('MSG_MOVE'): // Good
-            movment(message, gameBoard);
+            gameBoard.announcement(slot, message);
+            movement(message, gameBoard);
             break;
         case ('MSG_POS_CHANGE'):
             gameBoard.moveCard(previous, {
@@ -420,8 +424,12 @@ function boardController(gameBoard, slot, message, ygopro, player) {
                 if (card.position === 'MONSTERZONE') {
                     throw Error('WRONG CARD POSITION');
                 }
-                if (card) {
+                if (card.id) {
+
+                    card.location = message.location;
                     gameBoard.update(card);
+                } else {
+                    console.log(card.player + card.location + card.index);
                 }
             });
             if (message.cards.length) {
@@ -429,8 +437,11 @@ function boardController(gameBoard, slot, message, ygopro, player) {
             }
             return {};
         case ('MSG_UPDATE_CARD'): // Inconsistent
-            break;
-            console.log(message);
+            gameBoard.announcement(slot, message);
+            if (!message.card.id) {
+                throw '----';
+            }
+
             try {
                 gameBoard.update({
                     player: message.card.player,

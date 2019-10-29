@@ -12,6 +12,10 @@ class CardImage extends React.Component {
             facedown = (state.position === 'FaceDownDefence' || state.position === 'FaceDownAttack'),
             src = (state.id && !facedown) ? 'http://127.0.0.1:8887/' + state.id + '.jpg' : 'img/textures/cover.jpg',
             style = {};
+        if (!player && state.location === 'HAND') {
+            state.position = 'FaceUp';
+        }
+
 
         if (state.location !== 'HAND') {
             style.zIndex = state.index;

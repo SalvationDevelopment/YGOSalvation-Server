@@ -27,7 +27,7 @@ function makeCard(BufferIO, controller, masterRule4) {
         card.id = BufferIO.readInt32();
     }
     if (flag & enums.query.Type) {
-        card.typeVal = BufferIO.readInt32()
+        card.typeVal = BufferIO.readInt32();
         card.type = enums.textTypes[card.typeVal];
     }
     if (flag & enums.query.Level) {

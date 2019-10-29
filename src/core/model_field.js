@@ -71,8 +71,9 @@
  * @property {Number} code passcode of the card
  */
 
-const EventEmitter = require('events'), // a way to "notice" things occuring
-    uniqueIdenifier = require('uuid/v1'); // time based unique identifier, RFC4122 version 1
+const deckPiles = ['DECK', 'HAND', 'EXTRA', 'BANISHED'],
+    EventEmitter = require('events'), // a way to "notice" things occuring
+    uniqueIdenifier = require('uuid/v4'); // time based unique identifier, RFC4122 version 1
 
 
 /**
@@ -97,24 +98,21 @@ function getByUID(stack, uid) {
     });
 }
 
-function Pile(movelocation, player, index, uuid, code) {
+function Pile(movelocation, player, index, uid, id) {
     const state = {
         player: player,
         location: movelocation,
         index: index,
         position: 'FaceDown',
-        uid: uuid,
-        originalcontroller: player,
         counters: 0,
-        list: [{ id: code, uuid }]
+        list: [{ id, uid, list: [], originalcontroller: player }]
     };
 
     function render() {
-        return state.list.map((card) => {
-            const copy = Object.assign({}, state);
-            delete copy.list;
-            return Object.assign({}, copy, card);
-        });
+        return state.list.reduce((output, card, overlayindex) => {
+            output.push(Object.assign({overlayindex}, card, state));
+            return output;
+        }, []);
     }
 
     function attach(card, sequence) {
@@ -122,12 +120,12 @@ function Pile(movelocation, player, index, uuid, code) {
     }
 
     function detach(sequence) {
-        const card = this.splice(sequence, 1)[0];
+        const card = state.list.splice(sequence, 1)[0];
         return card;
     }
 
     function update(data) {
-        Object.assign(state, data);
+        Object.assign(state.list[0], data);
     }
 
     return {
@@ -165,7 +163,7 @@ function Field() {
         return card;
     }
 
-    function add(movelocation, player, index, code = 0) {
+    function add(movelocation, player, index, code = 'unknown') {
         const uuid = uniqueIdenifier();
         stack.push(new Pile(movelocation, player, index, uuid, code));
     }
@@ -233,7 +231,7 @@ function Field() {
             console.log('error', previous, current);
         }
         if (current.location === 'GRAVE' || current.location === 'BANISHED') {
-            current.player = pile.state.originalcontroller;
+            current.player = pile.state.list[0].originalcontroller;
         }
 
 
@@ -242,7 +240,7 @@ function Field() {
         pile.state.index = current.index;
         pile.state.position = current.position;
 
-        if (current.id !== undefined) {
+        if (pile.state.list[0].id !== undefined) {
             pile.state.list[0].id = current.id;
         }
 
@@ -268,30 +266,31 @@ function Field() {
     }
 
     function attach(previous, current) {
-        const parent = this.search(previous),
-            card = parent.detach(0);
+        const parent = search(previous),
+            adopter = search(current);
 
-        current.attach(card);
+        adopter.state.list.push(parent.state.list.shift());
+        console.log(parent.state);
     }
 
     function take(previous, sequence, current) {
-        const donor = this.search(previous),
+        const donor = search(previous),
             card = donor.detach(sequence),
-            recipient = this.search(current);
+            recipient = search(current);
 
         recipient.attach(card);
     }
 
     function rankUp(previous, current) {
-        const target = this.search(current),
-            materials = this.search(previous);
+        const target = search(current),
+            materials = search(previous);
 
         target.cards = target.cards.concat(materials.cards);
         materials.cards = [];
     }
 
     function addCounter(query, type, amount) {
-        const card = this.search(query);
+        const card = search(query);
         if (!card.counters[type]) {
             card.counters[type] = 0;
         }
@@ -301,7 +300,6 @@ function Field() {
     function update(data) {
         //console.log(data.player, data.location, data.index, stack.length);
         const pile = search(data);
-
         if (pile) {
             pile.update(data);
             return;
@@ -361,7 +359,7 @@ function hideViewOfZone(view) {
         output[index] = {};
         Object.assign(output[index], card);
         if (output[index].position === 'FaceDown' || output[index].position === 'FaceDownDefence' || output[index].position === 'FaceDownDefense') {
-            output[index].id = 0;
+            ///output[index].id = 0;
             output[index].counters = {};
             delete output[index].originalcontroller;
         }
@@ -381,9 +379,9 @@ function hideViewOfExtra(view, allowed) {
     view.forEach(function (card, index) {
         output[index] = {};
         Object.assign(output[index], card);
-        if (output[index].position === 'FaceUpAttack') {
-            output[index].id = (allowed) ? output[index].id : 0;
-        }
+        // if (output[index].position === 'FaceUpAttack') {
+        //     output[index].id = (allowed) ? output[index].id : 0;
+        // }
     });
 
     return output;
@@ -400,8 +398,8 @@ function hideHand(view) {
     view.forEach(function (card, index) {
         output[index] = {};
         Object.assign(output[index], card);
-        output[index].id = 0;
-        output[index].position = 'FaceDown';
+        //output[index].id = 0;
+        //output[index].position = 'FaceDown';
     });
 
     return output;
@@ -548,7 +546,7 @@ class Game {
      * @returns {Object} all the cards the given player can see on their side of the field.
      */
     generateSinglePlayerView(player) {
-        var playersCards = this.filterEdited(filterPlayer(this.stack.cards(), player)),
+        var playersCards = this.filterEdited(filterPlayer(JSON.parse(JSON.stringify(this.stack.cards())), player)),
             deck = filterlocation(playersCards, 'DECK'),
             hand = filterlocation(playersCards, 'HAND'),
             grave = filterlocation(playersCards, 'GRAVE'),
@@ -564,7 +562,7 @@ class Game {
             DECK: hideViewOfZone(deck),
             HAND: hand,
             GRAVE: grave,
-            EXTRA: hideViewOfExtra(extra, true),
+            EXTRA: extra, //hideViewOfExtra(extra, true),
             BANISHED: banished,
             SPELLZONE: spellzone,
             MONSTERZONE: monsterzone,
@@ -580,7 +578,7 @@ class Game {
      * @returns {Object} all the cards the given spectator/opponent can see on that side of the field.
      */
     generateSinglePlayerSpectatorView(player) {
-        var playersCards = this.filterEdited(filterPlayer(this.stack.cards(), player)),
+        var playersCards = this.filterEdited(filterPlayer(JSON.parse(JSON.stringify(this.stack.cards())), player)),
             deck = filterlocation(playersCards, 'DECK'),
             hand = filterlocation(playersCards, 'HAND'),
             grave = filterlocation(playersCards, 'GRAVE'),
@@ -665,7 +663,7 @@ class Game {
             spectators: {
                 duelAction: action || 'duel',
                 info: this.state,
-                field: this.generateSpectatorView()
+                field: this.generatePlayer1View()
             }
         };
         this.previousStack = JSON.parse(JSON.stringify(this.stack.cards()));

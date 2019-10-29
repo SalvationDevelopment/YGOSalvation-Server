@@ -441,7 +441,7 @@ function onData(data, socket) {
             mindcrushCall(data);
             break;
         case ('host'):
-            let port = unsafePort();
+            const port = unsafePort();
             const child = child_process.fork(
                 './core/index.js', process.argv, {
                     cwd: __dirname,

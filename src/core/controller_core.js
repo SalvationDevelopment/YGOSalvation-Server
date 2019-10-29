@@ -442,7 +442,7 @@ function makeGame(pduel, settings) {
         for (let index = 0; count > index; ++index) {
             const qbuf = Buffer.alloc(0x40000);
             qbuf.type = ref.types.byte;
-            ocgapi.query_card(pduel, player, location, index, 0xfffffff, qbuf, 0);
+            ocgapi.query_card(pduel, player, location, index, 0xf81fff, qbuf, 0);
             const pack = msg_update_card({ player, location: enums.locations[location], index }, {}, new BufferStreamReader(qbuf));
             cards.push(pack.card);
         }
