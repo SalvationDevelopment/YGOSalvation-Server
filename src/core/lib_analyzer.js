@@ -687,7 +687,7 @@ function msg_move(message, pbuf, game) {
     pbufw.readposition = pbuf.readposition;
     message.id = pbuf.readInt32();
     message.previousController = pbuf.readInt8(); // original controller
-    message.pl = pbuf.readInt8()
+    message.pl = pbuf.readInt8();
     message.previousLocation = enums.locations[message.pl]; // original cLocation
     message.previousIndex = pbuf.readInt8(); // original sequence (index)
     message.overlayindex = pbuf.readInt8();

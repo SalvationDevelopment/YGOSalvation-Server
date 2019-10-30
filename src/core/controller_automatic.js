@@ -103,38 +103,38 @@ function movement(message, gameBoard) {
         };
 
     if (pl === 0) {
-        console.log('make new card');
         gameBoard.makeNewCard(
             currentLocation,
             currentController,
             currentIndex,
             currentPosition,
             code, pp);
+        gameBoard.ygoproUpdate();
         return;
     }
     if (cl === 0) {
-        console.log('remove card');
         gameBoard.removeCard(previous);
+        gameBoard.ygoproUpdate();
         return;
     }
     if (!(pl & OVERLAY_UNIT) && !(cl & OVERLAY_UNIT)) {
-        console.log('move card');
         gameBoard.moveCard(previous, current);
+        gameBoard.ygoproUpdate();
         return;
     }
     if (!(pl & OVERLAY_UNIT)) {
-        console.log('attach card');
-        console.log(message);
         gameBoard.attachMaterial(previous, current);
         return;
     }
     if (!(cl & OVERLAY_UNIT)) {
-        console.log('detach card');
-        gameBoard.detachMaterial(previous, pp, current);
+        previous.location = 'MONSTERZONE';
+        gameBoard.detachMaterial(previous, message.overlayindex + 1, current);
+        gameBoard.ygoproUpdate();
         return;
     }
     console.log('take card');
     gameBoard.takeMaterial(previous, pp, current);
+    gameBoard.ygoproUpdate();
 }
 
 
@@ -433,11 +433,12 @@ function boardController(gameBoard, slot, message, ygopro, player) {
                 }
             });
             if (message.cards.length) {
-                gameBoard.ygoproUpdate();
+                //gameBoard.ygoproUpdate();
             }
             return {};
         case ('MSG_UPDATE_CARD'): // Inconsistent
             gameBoard.announcement(slot, message);
+            break;
             if (!message.card.id) {
                 throw '----';
             }
@@ -468,6 +469,9 @@ function boardController(gameBoard, slot, message, ygopro, player) {
             break;
         case ('MSG_ANNOUNCE_ATTRIB'):
             askUser(gameBoard, slot, message, ygopro, 'MSG_ANNOUNCE_ATTRIB');
+            break;
+        case ('MSG_ANNOUNCE_NUMBER'):
+            askUser(gameBoard, slot, message, ygopro, 'MSG_ANNOUNCE_NUMBER');
             break;
         default:
             console.log('FAILURE!', message);

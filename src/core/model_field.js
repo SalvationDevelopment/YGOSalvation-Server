@@ -98,6 +98,18 @@ function getByUID(stack, uid) {
     });
 }
 
+/**
+ * Filters out cards based on if they are a specific UID
+ * @param {Pile[]} stack a stack of cards attached to a single monster as overlay units.
+ * @param {Number} uid unique identifier
+ * @returns {Boolean} if a card is that UID
+ */
+function getByOrigin(stack, uid) {
+    return stack.find(function (item) {
+        return item.state.origin === uid;
+    });
+}
+
 function Pile(movelocation, player, index, uid, id) {
     const state = {
         player: player,
@@ -105,12 +117,13 @@ function Pile(movelocation, player, index, uid, id) {
         index: index,
         position: 'FaceDown',
         counters: 0,
+        origin: uid,
         list: [{ id, uid, list: [], originalcontroller: player }]
     };
 
     function render() {
         return state.list.reduce((output, card, overlayindex) => {
-            output.push(Object.assign({overlayindex}, card, state));
+            output.push(Object.assign({ overlayindex }, card, state));
             return output;
         }, []);
     }
@@ -230,10 +243,6 @@ function Field() {
         if (!pile) {
             console.log('error', previous, current);
         }
-        if (current.location === 'GRAVE' || current.location === 'BANISHED') {
-            current.player = pile.state.list[0].originalcontroller;
-        }
-
 
         pile.state.player = current.player;
         pile.state.location = current.location;
@@ -259,10 +268,10 @@ function Field() {
     function detach(previous, sequence, current) {
         const parent = search(previous),
             card = parent.detach(sequence),
-            original = getByUID(this.stack, card.uid);
+            original = getByOrigin(stack, card.uid);
 
-        original.attach(card);
-        move(original, current);
+        original.state.list = [card];
+        move(original.state, current);
     }
 
     function attach(previous, current) {
@@ -270,7 +279,6 @@ function Field() {
             adopter = search(current);
 
         adopter.state.list.push(parent.state.list.shift());
-        console.log(parent.state);
     }
 
     function take(previous, sequence, current) {
