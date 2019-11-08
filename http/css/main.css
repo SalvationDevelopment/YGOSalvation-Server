@@ -1031,7 +1031,7 @@ div#yesnobox {
     display: inline-block;
 }
 
-div#attributes {
+div#attributes>div {
     position: absolute;
     top: 0;
     left: 0;
@@ -1043,7 +1043,6 @@ div#attributes {
     display: flex;
     flex-direction: column;
     padding: 10% 25% 0 25%;
-    display: none;
 }
 
 div#attributes>div {
