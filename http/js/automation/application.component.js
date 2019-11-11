@@ -315,7 +315,7 @@ class ApplicationComponent extends React.Component {
                 this.duel.pickAttribute.state = {};
                 this.duel.pickAttribute.state.text = 'Number';
                 this.duel.pickAttribute.state.active = true;
-                this.duel.pickAttribute.state.options = message.options.options;
+                this.duel.pickAttribute.state.options = message.options.values;
                 break;
             default:
                 throw ('Unknown message');
@@ -358,7 +358,7 @@ class ApplicationComponent extends React.Component {
         console.log(message);
         switch (message.action) {
             case 'error':
-                alert(message.msg);
+                console.log(message.msg);
                 break;
             case 'lobby':
                 this.lobby.update(message.game);

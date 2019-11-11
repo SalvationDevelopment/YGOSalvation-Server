@@ -265,7 +265,8 @@ function Responser(game, player, slot) {
         if (typeof data === 'number') {
             ocgapi.set_responsei(game.pduel, data);
         } else {
-            ocgapi.set_responseb(game.pduel, data);
+            console.log(typeof data, game.pduel, data);
+            ocgapi.set_responseb(game.pduel, Buffer(data));
         }
 
         mainProcess(game);

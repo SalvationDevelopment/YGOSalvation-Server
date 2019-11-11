@@ -52,7 +52,7 @@ const buttonName = {
     },
     zone: (i) => Buffer.from(i).readUIntLE(0, 3),
     list: (i) => Buffer.from([i.length].concat(i)),
-    number: (i) => i,
+    number: (i) => Number(i),
     FaceUpAttack: () => 0x1,
     FaceDownAttack: () => 0x2,
     FaceUpDefence: () => 0x4,

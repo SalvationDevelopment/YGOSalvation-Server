@@ -223,12 +223,11 @@ $.getJSON('/ranking', function (data) {
                             if (userInfo.success) {
                                 app.login(userInfo);
                             }
-                        }).fail(() => {
-                            alert('error')
+                        }).fail((e) => {
+                            console.log(e);
                             store.dispatch({ action: 'LOAD_LOGIN', banlist, primary });
                         });
                     } else {
-                        alert();
                         store.dispatch({ action: 'LOAD_LOGIN', banlist, primary });
                     }
                 } else {
@@ -245,7 +244,7 @@ class SearchFilter {
     constructor(database) {
         this.currentSearch = [];
         this.currentSearchIndex = 0;
-        this.currentSearchPageSize = 27;
+        this.currentSearchPageSize = 24;
         this.currentSearchNumberOfPages = 1;
         this.maxPages = Math.ceil(this.currentSearchPageSize / this.currentSearch.length);
         this.currentFilter = this.getFilter();
