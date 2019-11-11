@@ -937,7 +937,7 @@ class Game {
         this.answerListener.emit(message.uuid, message.answer);
     }
 
-    retrylastQuestion() {
+    retryLastQuestion() {
         console.log('retrying', this.lastQuestion.slot, this.lastQuestion.type, this.lastQuestion.options, this.lastQuestion.answerLength, this.lastQuestion.onAnswerFromUser);
         this.question(this.lastQuestion.slot, this.lastQuestion.type, this.lastQuestion.options, this.lastQuestion.answerLength, this.lastQuestion.onAnswerFromUser);
     }

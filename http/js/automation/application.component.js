@@ -349,6 +349,9 @@ class ApplicationComponent extends React.Component {
             case ('MSG_SHUFFLE_HAND'):
                 doGuiShuffle(orient(message.player), 'HAND');
                 break;
+            case ('MSG_SHUFFLE_EXTRA'):
+                doGuiShuffle(orient(message.player), 'EXTRA');
+                break;
             default:
                 break;
         }

@@ -331,7 +331,12 @@ function boardController(gameBoard, slot, message, ygopro, player) {
             });
             break;
         case ('MSG_SET'): // Good
-            gameBoard.announcement(slot, message);
+            gameBoard.moveCard(previous, {
+                player: message.player,
+                location: message.location,
+                index: message.index,
+                position: message.position
+            });
             break;
         case ('MSG_SWAP'):
             gameBoard.announcement(slot, message);
