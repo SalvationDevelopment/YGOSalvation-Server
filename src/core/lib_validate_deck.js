@@ -1,5 +1,29 @@
 /* eslint-disable no-plusplus */
 
+/**
+ * @typedef {Object} Deck
+ * @property {Number[]} main Passcode/YGOPRO_ID of cards in the main deck.
+ * @property {Number[]} extra Passcode/YGOPRO_ID cards in the extra deck.
+ * @property {Number[]} side Passcode/YGOPRO_ID cards in the side deck.
+ */
+
+/**
+ * @typedef {Object} Banlist
+ * @property {Object} bannedCards 
+ * @property {Number[]} bannedTypes values banned in this F&L Lists, such as Fusions, Synchro, etc
+ * @property {Number[]} exceptions card IDs that ignore the bannedTypes array
+ * @property {Date} startDate new Date('YYYY-MM-DD'), //legal start date
+ * @property {Date} endDate new Date('YYYY-MM-DD'), //legal end date, or 'null' if date is unknown
+ * @property {Boolean} primary if the banlist is the default of the host and deck editor
+ * @property {Boolean} modern if the banlist is commonly planned and should be on the condensed ban list listings.
+ * @property {String} name Format shorthand name, or release date and region concated name of the banlist
+ */
+
+/**
+ * @typedef {Object} Validation
+ * @property {Error|null} error validation error message
+ */
+
 function checkSize(deck, banlist) {
     if (deck.main.length < 40) {
         throw new Error('Main Deck size below 40');
@@ -12,6 +36,9 @@ function checkSize(deck, banlist) {
     }
     if (deck.extra.length > 15 && banlist.masterRule > 0) {
         throw new Error('Extra Deck size above 15');
+    }
+    if (banlist.masterRule === 0 && deck.side.length && deck.side.length !== 15) {
+        throw new Error('Side Deck must be exactly 0 or 15 cards');
     }
     return true;
 }
@@ -27,10 +54,7 @@ function checkSubDeckAmounts(card, main, side, extra, getCardById) {
     if (totals > MAXIMUM_COPIES) {
         throw new Error(`You can\'t have ${MAXIMUM_COPIES} copies of "${reference.name}"`);
     }
-
-
 }
-
 
 function checkBanlist(main, side, extra, banlist, getCardById) {
     for (let card in banlist.bannedCards) {
@@ -102,7 +126,7 @@ function mapDecks(deck, getCardById) {
         !deck.main
         || !deck.side
         || !deck.extra
-        || !Array.isArray(deck.main.forEach)
+        || !Array.isArray(deck.main)
         || !Array.isArray(deck.side)
         || !Array.isArray(deck.extra)
     ) {
@@ -164,6 +188,14 @@ function checkRegion(main, side, extra, banlist, cardpool, getCardById, getFilte
     }
 }
 
+/**
+ * 
+ * @param {Deck} deck deck to compare against the banlist
+ * @param {Banlist} banlist banlist to validate the deck against
+ * @param {Card[]} database all the avaliable cards in the game
+ * @param {String} cardpool region of cards to use from the database
+ * @return {Validation} validation information
+ */
 function validateDeck(deck, banlist, database, cardpool = 'OCG/TCG') {
 
     const {
