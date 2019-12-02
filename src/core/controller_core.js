@@ -95,10 +95,11 @@ function scriptReader(scriptname, sizePointer) {
         } catch (e) {
             return ref.alloc('pointer');
         }
-    } else {
-        console.log(scriptname, 'at', file, 'does not exist');
-        return ref.alloc('pointer');
     }
+
+    console.log(scriptname, 'at', file, 'does not exist');
+    return ref.alloc('pointer');
+
 }
 
 /**
@@ -262,14 +263,13 @@ function Responser(game, player, slot) {
 
     function write(data) {
         game.last(slot);
-        if (typeof data === 'number') {
-            ocgapi.set_responsei(game.pduel, data);
-        } else {
-            console.log(typeof data, game.pduel, data);
-            ocgapi.set_responseb(game.pduel, Buffer(data));
-        }
+
+        const result = (typeof data === 'number')
+            ? ocgapi.set_responsei(game.pduel, data)
+            : ocgapi.set_responseb(game.pduel, Buffer(data));
 
         mainProcess(game);
+        return result;
     }
 
     return {

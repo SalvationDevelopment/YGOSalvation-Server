@@ -45,14 +45,17 @@ function systemLoad(req, res, next) {
                 setTimeout(window.location.reload.bind(window.location),5000);
             </script>
         </body></html>`);
-    } else {
-        if (req.get('host') === 'ygopro.us') {
-            res.redirect(301, 'https://ygosalvation.com' + req.url);
-            res.end();
-        } else {
-            next();
-        }
+        next();
+        return;
     }
+
+    if (req.get('host') === 'ygopro.us') {
+        res.redirect(301, 'https://ygosalvation.com' + req.url);
+        res.end();
+        return;
+    }
+
+    next();
 }
 
 function gitRoute(req, res, next) {
@@ -75,11 +78,10 @@ function useSSL(primusServer) {
     openserver.use(helmet());
     //openserver.use(ddos.express);
     openserver.get('*', function (req, res) {
-        if (req.get('host') === 'ygopro.us') {
-            res.redirect(301, 'https://ygosalvation.com' + req.url);
-        } else {
-            res.redirect(301, 'https://' + req.get('host') + req.url);
-        }
+        const direction = (req.get('host') === 'ygopro.us')
+            ? res.redirect(301, 'https://ygosalvation.com' + req.url)
+            : res.redirect(301, 'https://' + req.get('host') + req.url);
+        return;
     });
     openserver.listen(HTTP_PORT);
     return primusServer;

@@ -140,16 +140,18 @@ function parseLevelScales(card) {
     if (cardIs('link', card)) {
         output += ' LINK-' + level;
         //def = '-';
-    } else if (level > 0 && level <= 12) {
-        output += ranklevel + level;
-
-    } else {
-        // format: [0-9A-F]0[0-9A-F][0-9A-F]{4}
-        leftScale = (card.level >> 0x18) & 0xff; // first digit: left scale in hex (0-16)
-        rightScale = (card.level >> 0x10) & 0xff; // third digit: right scale in hex (0-16)
-        pendulumLevel = card.level & 0xff; // seventh digit: level of the monster in hex (technically, all 4 digits are levels, but here we only need the last char)
-        output += ranklevel + pendulumLevel + '</span> <span class="scales">⬖ Scale ' + leftScale;
+        return output;
     }
+    if (level > 0 && level <= 12) {
+        output += ranklevel + level;
+        return output;
+    }
+    // format: [0-9A-F]0[0-9A-F][0-9A-F]{4}
+    leftScale = (card.level >> 0x18) & 0xff; // first digit: left scale in hex (0-16)
+    rightScale = (card.level >> 0x10) & 0xff; // third digit: right scale in hex (0-16)
+    pendulumLevel = card.level & 0xff; // seventh digit: level of the monster in hex (technically, all 4 digits are levels, but here we only need the last char)
+    output += ranklevel + pendulumLevel + '</span> <span class="scales">⬖ Scale ' + leftScale;
+
     return output;
 }
 
@@ -182,14 +184,21 @@ class CardInfo extends React.Component {
             ${raceMap[targetCard.race]} / ${attributeMap[targetCard.attribute]}
             [ ${parseLevelScales(targetCard)}
             ${parseAtkDef(targetCard.atk, targetCard.def)}`;
+            return React.createElement('span', { className }, text);
+        }
 
-        } else if (isSpell) {
+        if (isSpell) {
             className = 'spellDesc';
             text = `[ Spell' ${(stMap[targetCard.type] || '')}]'`;
-        } else if (isTrap) {
+            return React.createElement('span', { className }, text);
+        }
+
+        if (isTrap) {
             className = 'trapDesc';
             text = `[Trap' ${(stMap[targetCard.type] || '')}]`;
+            return React.createElement('span', { className }, text);
         }
+
         return React.createElement('span', { className }, text);
     }
 
@@ -227,11 +236,7 @@ class CardInfo extends React.Component {
         }
         Object.assign(this.state, state);
         let card = (!state.id) ? {} : this.databaseSystem.find(function (entry) {
-            if (state.id === entry.id) {
-                return entry;
-            } else {
-                return false;
-            }
+            return (state.id === entry.id) ? entry : false;
         });
         card = card || {};
         this.debounce = true;

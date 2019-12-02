@@ -255,21 +255,21 @@ class ApplicationComponent extends React.Component {
     screen() {
         switch (this.state.screen) {
             case 'login':
-                return React.createElement('section', { id: 'login' }, this.loginScreen.render());
+                return React.createElement('section', { id: 'login', key: 'login' }, this.loginScreen.render());
             case 'deckedit':
-                return React.createElement('section', { id: 'deckedit' }, this.deckeditor.render());
+                return React.createElement('section', { id: 'deckedit', key: 'deckedit' }, this.deckeditor.render());
             case 'host':
-                return React.createElement('section', { id: 'host' }, this.host.render());
+                return React.createElement('section', { id: 'host', key: 'host' }, this.host.render());
             case 'gamelist':
-                return React.createElement('section', { id: 'gamelist' }, this.gamelist.render());
+                return React.createElement('section', { id: 'gamelist', key: 'gamelist' }, this.gamelist.render());
             case 'settings':
-                return React.createElement('section', { id: 'settings' }, this.settings.render());
+                return React.createElement('section', { id: 'settings', key: 'settings' }, this.settings.render());
             case 'rankings':
-                return React.createElement('section', { id: 'rankings' }, this.rankings.render());
+                return React.createElement('section', { id: 'rankings', key: 'rankings' }, this.rankings.render());
             case 'faqs':
-                return React.createElement('section', { id: 'faqs' }, this.faqs.render());
+                return React.createElement('section', { id: 'faqs', key: 'raqs' }, this.faqs.render());
             case 'credits':
-                return React.createElement('section', { id: 'credits' }, this.credits.render());
+                return React.createElement('section', { id: 'credits', key: 'credits' }, this.credits.render());
             default:
                 return React.createElement('section', { id: 'error' }, '');
         }
@@ -279,7 +279,7 @@ class ApplicationComponent extends React.Component {
         if (!this.state.modalActive) {
             return '';
         }
-        return React.createElement('div', { id: 'lightbox' }, [
+        return React.createElement('div', { id: 'lightbox', key: 'lightbox' }, [
             React.createElement('p', { id: 'error' }, [
                 this.state.modalMessage,
                 React.createElement('button', { id: 'modal-ok', onClick: this.closeModal.bind(this) }, 'OK')

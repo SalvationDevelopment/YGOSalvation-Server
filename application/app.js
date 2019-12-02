@@ -53,15 +53,6 @@ app.once('ready', () => {
     window.focus();
   }
 
-
-  // toggle window
-  function toggleWindow() {
-    // if (window.isVisible()) {
-    //   window.hide();
-    // } else {
-    //   showWindow();
-    // }
-  }
 });
 
 const getWindowPosition = () => {

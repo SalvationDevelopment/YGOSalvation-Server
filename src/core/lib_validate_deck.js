@@ -9,7 +9,6 @@
 
 /**
  * @typedef {Object} Banlist
- * @property {Object} bannedCards 
  * @property {Number[]} bannedTypes values banned in this F&L Lists, such as Fusions, Synchro, etc
  * @property {Number[]} exceptions card IDs that ignore the bannedTypes array
  * @property {Date} startDate new Date('YYYY-MM-DD'), //legal start date
@@ -43,37 +42,37 @@ function checkSize(deck, banlist) {
     return true;
 }
 
-function checkSubDeckAmounts(card, main, side, extra, getCardById) {
+function checkSubDeckAmounts(passcode, main, side, extra, getCardById) {
     const MAXIMUM_COPIES = 3,
-        reference = getCardById(card),
-        totals = main[card] + side[card] + extra[card];
+        reference = getCardById(passcode),
+        totals = main[passcode] + side[passcode] + extra[passcode];
 
     if (!reference) {
         throw new Error('Error loading deck: check Deck Edit to verify that your deck looks fine');
     }
     if (totals > MAXIMUM_COPIES) {
-        throw new Error(`You can\'t have ${MAXIMUM_COPIES} copies of "${reference.name}"`);
+        throw new Error(`You can\'t have ${totals} copies of "${reference.name}"`);
     }
 }
 
 function checkBanlist(main, side, extra, banlist, getCardById) {
-    for (let card in banlist.bannedCards) {
-        const reference = getCardById(card);
+    for (let passcode in banlist.bannedCards) {
+        const reference = getCardById(passcode);
         let cardAmount = 0;
 
         if (reference.alias) {
-            card = reference.alias;
+            passcode = reference.alias;
         }
-        if (main[card]) {
-            cardAmount += main[card];
+        if (main[passcode]) {
+            cardAmount += main[passcode];
         }
-        if (side[card]) {
-            cardAmount += side[card];
+        if (side[passcode]) {
+            cardAmount += side[passcode];
         }
-        if (extra[card]) {
-            cardAmount += extra[card];
+        if (extra[passcode]) {
+            cardAmount += extra[passcode];
         }
-        if (cardAmount > banlist.bannedCards[card]) {
+        if (cardAmount > banlist.bannedCards[passcode]) {
             throw new Error(`The number of copies of ${reference.name} exceeds the number permitted by the selected Forbidden/Limited Card List`);
         }
     }
@@ -82,22 +81,16 @@ function checkBanlist(main, side, extra, banlist, getCardById) {
 function CardSearcher(database) {
     function getCardById(cardId) {
         const result = database.find(function (card) {
-            if (card.id === parseInt(cardId, 10)) {
-                return true;
-            }
-            return false;
+            return (card.id === parseInt(cardId, 10));
         });
         return result || {};
     }
 
     function getFilteredCardById(cardId) {
         const result = database.find(function (card) {
-            if (card.id === parseInt(cardId, 10)) {
-                return true;
-            }
-            return false;
+            return (card.id === parseInt(cardId, 10));
         });
-        return result || null;
+        return result || {};
     }
 
     return {
@@ -107,16 +100,16 @@ function CardSearcher(database) {
 }
 
 function mapSubDeck(subDeck, getCardById) {
-    return subDeck.main.reduce(function (deck, card) {
-        const cardObject = getCardById(card);
+    return subDeck.main.reduce(function (deck, passcode) {
+        const cardObject = getCardById(passcode);
         if (cardObject.alias) {
-            card = cardObject.alias;
+            passcode = cardObject.alias;
         }
-        if (!deck[card]) {
-            deck[card] = 1;
+        if (!deck[passcode]) {
+            deck[passcode] = 1;
             return deck;
         }
-        deck[card]++;
+        deck[passcode]++;
         return deck;
     }, {});
 }

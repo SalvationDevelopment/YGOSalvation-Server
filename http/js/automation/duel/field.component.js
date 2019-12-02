@@ -1,5 +1,5 @@
 /*global React, ReactDOM,  */
-/*global  PhaseIndicator, FieldSelector, CardImage*/
+/*global  PhaseIndicator, FieldSelector, CardImage, $*/
 
 
 function layouthand(player) {
@@ -10,13 +10,10 @@ function layouthand(player) {
         sequence;
     //    console.log(count,f,xCoord);
     for (sequence = 0; sequence < count; sequence += 1) {
-        if (count < 6) {
-            xCoord = (5.5 * f - 0.8 * f * count) / 2 + 1.55 * f + sequence * 0.8 * f;
-        } else {
-            xCoord = 1.9 * f + sequence * 4.0 * f / (count - 1);
-        }
-        // console.log('.'+player+'.Hand.i'+sequence);
-        //console.log(xCoord);
+        xCoord = (count < 6)
+            ? (5.5 * f - 0.8 * f * count) / 2 + 1.55 * f + sequence * 0.8 * f
+            : xCoord = 1.9 * f + sequence * 4.0 * f / (count - 1);
+
         $('.p' + player + '.HAND.i' + sequence).css('left', String() + xCoord + 'px');
     }
 }
@@ -136,8 +133,8 @@ class Field {
     }
 
     getDeck(player, location) {
-        debugger;
-        var deck = Object.keys(this.state.cards).filter((guid) => {
+
+        const deck = Object.keys(this.state.cards).filter((guid) => {
             var cardImage = this.state.cards[guid];
             return (cardImage.state.location === location) && (cardImage.state.player === player);
         }).map((guid) => {

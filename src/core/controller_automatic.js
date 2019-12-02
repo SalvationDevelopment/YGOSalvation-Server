@@ -429,13 +429,13 @@ function boardController(gameBoard, slot, message, ygopro, player) {
                 if (card.position === 'MONSTERZONE') {
                     throw Error('WRONG CARD POSITION');
                 }
-                if (card.id) {
-
-                    card.location = message.location;
-                    gameBoard.update(card);
-                } else {
-                    console.log(card.player + card.location + card.index);
+                if (!card.id) {
+                    console.log('!!? :' + card.player + card.location + card.index);
                 }
+
+                card.location = message.location;
+                gameBoard.update(card);
+
             });
             if (message.cards.length) {
                 //gameBoard.ygoproUpdate();

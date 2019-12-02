@@ -20,15 +20,13 @@ class CardImage extends React.Component {
         if (state.location !== 'HAND') {
             style.zIndex = state.index;
         } else {
-            const f = 75 / 0.8;
-            let xCoord;
+            const f = 75 / 0.8,
+                xCoord = (state.handLocation < 6)
+                    ? (5.5 * f - 0.8 * f * state.handLocation) / 2 + 1.55 * f + state.index * 0.8 * f
+                    : 1.9 * f + state.index * 4.0 * f / (state.handLocation - 1);
 
-            if (state.handLocation < 6) {
-                xCoord = (5.5 * f - 0.8 * f * state.handLocation) / 2 + 1.55 * f + state.index * 0.8 * f;
-            } else {
-                xCoord = 1.9 * f + state.index * 4.0 * f / (state.handLocation - 1);
-            }
             style.left = String() + xCoord + 'px';
+
         }
 
         if (state.location === 'DECK' || state.location === 'EXTRA' || state.location === 'GRAVE' || state.location === 'BANISHED') {

@@ -161,9 +161,10 @@ function validate(login, data, callback) {
             person.save(function (saveError) {
                 callback(saveError, true, person);
             });
-        } else {
-            callback(new Error('Incorrect Login Information.'), false, {});
+            return;
         }
+        callback(new Error('Incorrect Login Information.'), false, {});
+
     });
 }
 
@@ -428,15 +429,16 @@ function sessionCheck(request, response, next) {
             response.json({ code: 401, error: '401 Unauthorized' });
             response.end();
             return;
-        } else if (sessionTimeout(person.sessionExpiration)) {
+        }
+        if (sessionTimeout(person.sessionExpiration)) {
             request.user = person;
             next();
             return;
-        } else {
-            response.json({ error, code: 401, message: '401 Unauthorized' });
-            response.end();
-            return;
         }
+        response.json({ error, code: 401, message: '401 Unauthorized' });
+        response.end();
+        return;
+
 
     });
 }
@@ -454,14 +456,15 @@ function adminSessionCheck(request, response, next) {
             response.json({ code: 401, error: '401 Unauthorized' });
             response.end();
             return;
-        } else if (sessionTimeout(person.sessionExpiration)) {
+        }
+        if (sessionTimeout(person.sessionExpiration)) {
             next();
             return;
-        } else {
-            response.json({ error, code: 401, message: '401 Unauthorized' });
-            response.end();
-            return;
         }
+        response.json({ error, code: 401, message: '401 Unauthorized' });
+        response.end();
+        return;
+
 
     });
 }
@@ -503,15 +506,16 @@ function getSession(request, response) {
                 success: false
             }, 0);
             return;
-        } else if (sessionTimeout(person.sessionExpiration)) {
+        }
+        if (sessionTimeout(person.sessionExpiration)) {
             result = JSON.parse(JSON.stringify(person));
             delete result.passwordHash;
             delete result.salt;
             finalResponse(response)(null, result, 1);
             return;
-        } else {
-            finalResponse(response)(new Error('Could not find Session'), result);
         }
+        finalResponse(response)(new Error('Could not find Session'), result);
+
     });
 }
 
@@ -540,56 +544,57 @@ function setupController(app) {
             });
             response.end();
             return;
-        } else {
-            // find each person with a last name matching 'Ghost', selecting the `name` and `occupation` fields
-            Users.findOne({ $or: [{ 'email': payload.email }, { 'username': payload.username }] }, 'username email', function (err, person) {
-                if (err) {
-                    return console.log(err);
-                }
-                if (person) {
-                    // already exist
-                    response.send({
-                        error: 'Username or Email exist in system already'
-                    });
-                    response.end();
-                } else {
-
-
-                    var newUser = new Users();
-                    newUser.username = payload.username;
-                    newUser.salt = salter();
-                    newUser.passwordHash = hash(payload.password, newUser.salt);
-                    newUser.email = payload.email;
-                    newUser.creation = new Date();
-                    newUser.lastOnline = new Date();
-                    newUser.friends = [];
-                    newUser.admin = false;
-                    newUser.decks = [];
-                    newUser.rewards = [];
-                    newUser.ranking = {
-                        rankPoints: 0,
-                        rankedWins: 0,
-                        rankedLosses: 0,
-                        rankedTies: 0,
-                        elo: 1200
-                    };
-                    Users.create(newUser, function (error, createdPerson, numAffected) {
-                        const resultingUser = JSON.parse(JSON.stringify(createdPerson));
-                        delete resultingUser.passwordHash;
-                        delete resultingUser.password;
-                        delete resultingUser.salt;
-                        response.send({
-                            info: resultingUser,
-                            success: true,
-                            error,
-                            numAffected
-                        });
-                        sendEmail(payload.email, payload.username, resultingUser._id);
-                        response.end();
-                    });
-                }
-            });
         }
+        // find each person with a last name matching 'Ghost', selecting the `name` and `occupation` fields
+        Users.findOne({ $or: [{ 'email': payload.email }, { 'username': payload.username }] }, 'username email', function (err, person) {
+            if (err) {
+                return console.log(err);
+            }
+            if (person) {
+                // already exist
+                response.send({
+                    error: 'Username or Email exist in system already'
+                });
+                response.end();
+                return;
+            }
+
+
+            var newUser = new Users();
+            newUser.username = payload.username;
+            newUser.salt = salter();
+            newUser.passwordHash = hash(payload.password, newUser.salt);
+            newUser.email = payload.email;
+            newUser.creation = new Date();
+            newUser.lastOnline = new Date();
+            newUser.friends = [];
+            newUser.admin = false;
+            newUser.decks = [];
+            newUser.rewards = [];
+            newUser.ranking = {
+                rankPoints: 0,
+                rankedWins: 0,
+                rankedLosses: 0,
+                rankedTies: 0,
+                elo: 1200
+            };
+            Users.create(newUser, function (error, createdPerson, numAffected) {
+                const resultingUser = JSON.parse(JSON.stringify(createdPerson));
+                delete resultingUser.passwordHash;
+                delete resultingUser.password;
+                delete resultingUser.salt;
+                response.send({
+                    info: resultingUser,
+                    success: true,
+                    error,
+                    numAffected
+                });
+                sendEmail(payload.email, payload.username, resultingUser._id);
+                response.end();
+            });
+
+        });
+
     });
 
     app.get('/verify/:id', function (request, response) {

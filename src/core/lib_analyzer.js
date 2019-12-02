@@ -179,17 +179,7 @@ function msg_win(message, pbuf, game) {
     game.sendBufferToPlayer(0, message);
     game.reSendToPlayer(1);
     game.sendToObservers();
-    // if (message.player > 1) {
-    //     game.match_result[game.duel_count++] = 2;
-    //     game.tp_player = 1 - game.tp_player;
-    // } else if (message.players[message.player] === game.pplayer[message.player]) { //pplayer is not a typo?
-    //     game.match_result[game.duel_count++] = message.player;
-    //     game.tp_player = 1 - message.player;
-    // } else {
-    //     game.match_result[game.duel_count++] = 1 - message.player;
-    //     game.tp_player = message.player;
-    // }
-    // game.endDuel();
+    // game ending logic goes here.
     return 2;
 }
 
@@ -1089,10 +1079,12 @@ function msg_shuffle_set_card(message, pbuf, game) {
     if (message.location === LOCATION_MZONE) {
         game.refreshMzone(0, 0x181fff, 0);
         game.refreshMzone(1, 0x181fff, 0);
-    } else {
-        game.refreshSzone(0, 0x181fff, 0);
-        game.refreshSzone(1, 0x181fff, 0);
+        return;
     }
+
+    game.refreshSzone(0, 0x181fff, 0);
+    game.refreshSzone(1, 0x181fff, 0);
+
 }
 
 function msg_tag_swap(message, pbuf, game) {
@@ -1463,16 +1455,16 @@ function analyze(coreMessage, length, game) {
         let output = 0;
         if (!translator[messageFunction]) {
             // there should always be a function to run. Otherwise is a bug in the BufferStreamReader step logic.
-            debugger;
+            throw new Error(`Missing translation function: ${commandEnum}`);
         }
         var message = {
             command: messageFunction
         };
         if (!messageFunction && commandEnum) {
-            console.log('Did not comprehend enum:', commandEnum);
-        } else {
-            console.log(messageFunction);
+            throw new Error(`Did not comprehend enum:, ${commandEnum}`);
         }
+
+        console.log(messageFunction);
 
         output = (messageFunction) ? translator[messageFunction](message, pbuf, game) : 0;
         if (output) {

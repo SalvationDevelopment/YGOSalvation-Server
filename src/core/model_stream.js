@@ -23,23 +23,30 @@ function DataStream() {
             output = [],
             recordOfBuffer,
             frameLength;
+
         memory = Buffer.concat([memory, buffer]);
+
         while (incomplete === true && memory.length > 2) {
             frameLength = memory.readUInt16LE(0);
+
             if ((memory.length - 2) < frameLength) {
                 incomplete = false;
-            } else {
-                recordOfBuffer = memory.slice(2).toJSON();
-                recordOfBuffer.frameLength = frameLength;
-                output.push(recordOfBuffer);
-                if (memory.length === (frameLength + 2)) {
-                    memory = new Buffer([]);
-                    incomplete = false;
-                } else {
-                    memory = memory.slice((frameLength + 2));
-                }
+                continue;
             }
+
+            recordOfBuffer = memory.slice(2).toJSON();
+            recordOfBuffer.frameLength = frameLength;
+            output.push(recordOfBuffer);
+
+            if (memory.length === (frameLength + 2)) {
+                memory = new Buffer([]);
+                incomplete = false;
+                continue;
+            }
+
+            memory = memory.slice((frameLength + 2));
         }
+
         return output;
     }
     return {

@@ -36,14 +36,12 @@ var userlist = [],
  */
 function mapCards(deck) {
     return deck.map(function (cardInDeck) {
-        if (cardidmap[cardInDeck.id]) {
-            return {
+        return (cardidmap[cardInDeck.id])
+            ? {
                 id: cardidmap[cardInDeck.id]
-            };
-        } else {
-            // else we just return out the old card object
-            return cardInDeck;
-        }
+            }
+            : cardInDeck;
+
     });
 }
 
@@ -120,16 +118,19 @@ function registrationCall(data, socket) {
                 ackresult: acklevel,
                 userlist: userlist
             });
-        } else {
-            socket.write({
-                clientEvent: 'servererror',
-                message: currentGlobalMessage
-            });
-            socket.write({
-                clientEvent: 'login',
-                info: info
-            });
+            return;
         }
+
+        socket.write({
+            clientEvent: 'servererror',
+            message: currentGlobalMessage
+        });
+
+        socket.write({
+            clientEvent: 'login',
+            info: info
+        });
+
 
     });
 }
@@ -146,9 +147,10 @@ function globalCall(data) {
                 message: data.message
             });
             currentGlobalMessage = data.message;
-        } else {
-            console.log(data, 'asked for global', 'Info Was', info.success, 'Is Admin was', adminlist[data.username]);
+            return;
         }
+
+        console.log(data, 'asked for global', 'Info Was', info.success, 'Is Admin was', adminlist[data.username]);
     });
 }
 
@@ -166,18 +168,15 @@ function genocideCall(data) {
         if (error) {
             return;
         }
-        if (info.data) {
-            if (info.success && info.data.g_access_cp === '1') {
-                announce({
-                    clientEvent: 'genocide',
-                    message: data.message
-                });
-            } else {
-                console.log(data, 'asked for genocide');
-            }
-        } else {
-            console.log(data, 'asked for genocide');
+        if (info.data && info.success && info.data.g_access_cp === '1') {
+            announce({
+                clientEvent: 'genocide',
+                message: data.message
+            });
+            return;
         }
+
+        console.log(data, 'asked for genocide');
     });
 }
 
@@ -186,17 +185,14 @@ function reviveCall(data) {
         if (error) {
             return;
         }
-
+        console.log(data, 'asked for murder');
         if (info.success && adminlist[data.username]) {
             announce({
                 clientEvent: 'revive',
                 target: data.target
             });
-
-        } else {
-            console.log(data, 'asked for murder');
+            return;
         }
-
     });
 }
 
@@ -206,15 +202,17 @@ function murderCall(data) {
         if (error) {
             return;
         }
-
+        console.log(data, 'asked for murder');
         if (info.success && adminlist[data.username]) {
             announce({
                 clientEvent: 'murder',
                 target: data.target
             });
-        } else {
-            console.log(data, 'asked for murder');
+            return;
         }
+
+
+
 
     });
 }
@@ -225,6 +223,7 @@ function censorCall(data) {
             return;
         }
 
+        console.log(data, 'asked for censor');
         if (info.success && adminlist[data.username]) {
             announce({
                 clientEvent: 'censor',
@@ -234,10 +233,7 @@ function censorCall(data) {
                 return message.uid !== Number(data.messageID);
             });
 
-        } else {
-            console.log(data, 'asked for censor');
         }
-
     });
 }
 
@@ -412,12 +408,13 @@ function onData(data, socket) {
                 setTimeout(function () {
                     socket.speak = true;
                 }, 500);
-            } else {
-                primus.room(socket.address.ip + data.uniqueID).write({
-                    clientEvent: 'slowchat',
-                    error: 'Exceeded 500ms chat timeout'
-                });
+                break;
             }
+            primus.room(socket.address.ip + data.uniqueID).write({
+                clientEvent: 'slowchat',
+                error: 'Exceeded 500ms chat timeout'
+            });
+
             break;
         case ('global'):
             globalCall(data);
