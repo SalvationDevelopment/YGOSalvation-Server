@@ -10,7 +10,7 @@
 // Mostly just stuff so that Express runs
 const child_process = require('child_process'),
     hotload = require('hotload'),
-    cardidmap = hotload('../http/cardidmap.js'),
+    cardidmap = require('../http/cardidmap.js'),
     userController = require('./model_controller_users.js'),
     adminlist = {},
     primusServer = require('./server_http')(),
@@ -504,6 +504,7 @@ function onPrimusConnection(socket) {
     });
 }
 
+require('json');
 primus = new Primus(primusServer, {
     parser: 'JSON'
 });
