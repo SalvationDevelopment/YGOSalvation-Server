@@ -10,7 +10,7 @@
 // Mostly just stuff so that Express runs
 const child_process = require('child_process'),
     hotload = require('hotload'),
-    cardidmap = hotload('../http/cardidmap.js'),
+    cardidmap = require('../http/cardidmap.js'),
     userController = require('./model_controller_users.js'),
     adminlist = {},
     primusServer = require('./server_http')(),
@@ -383,6 +383,44 @@ function onData(data, socket) {
 
             });
             break;
+        case 'loadSession':
+            userController.validateSession({
+                session: data.session
+            }, function (error, valid, info) {
+                if (error){
+                    return;
+                }
+                socket.username = info.username;
+                socket.write({
+                    clientEvent: 'global',
+                    message: currentGlobalMessage,
+                    admin: adminlist[data.username]
+                });
+                socket.write({
+                    clientEvent: 'ackresult',
+                    ackresult: acklevel,
+                    userlist: userlist
+                });
+                socket.speak = true;
+                socket.write({
+                    clientEvent: 'login',
+                    info: {
+                        username: info.username,
+                        decks: info.decks,
+                        friends: info.friends,
+                        session: info.session,
+                        sessionExpiration: info.sessionExpiration,
+                        ranking: info.ranking,
+                        admin: info.admin,
+                        rewards: info.rewards,
+                        settings: info.settings,
+                        bans: info.bans
+                    },
+                    chatbox: chatbox
+                });
+                socket.join(socket.username);
+            });
+            break;
         case ('chatline'):
             if (socket.username && socket.speak) {
                 const chatuuid = uuid();
@@ -441,9 +479,9 @@ function onData(data, socket) {
             const port = unsafePort();
             const child = child_process.fork(
                 './core/index.js', process.argv, {
-                    cwd: __dirname,
-                    env: Object.assign({}, process.env, data.info, { PORT: port })
-                }
+                cwd: __dirname,
+                env: Object.assign({}, process.env, data.info, { PORT: port })
+            }
             );
             child.on('message', function (message) {
                 childHandler(child, socket, message);
@@ -464,6 +502,10 @@ function onData(data, socket) {
                 data.decks[i].side = mapCards(data.decks[i].side); //further due to the abstract
                 data.decks[i].extra = mapCards(data.decks[i].extra); //of data.decks, afaik
             }); //unsure if loop should run through all decks for a single save; might be resource intensive
+            data.username = socket.username;
+            if (!socket.username) {
+                return;
+            }
             userController.saveDeck(data, function (error, docs) {
                 primus.room(socket.address.ip + data.uniqueID).write({
                     clientEvent: 'deckSaved',
@@ -501,6 +543,7 @@ function onPrimusConnection(socket) {
     });
 }
 
+require('json');
 primus = new Primus(primusServer, {
     parser: 'JSON'
 });

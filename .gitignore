@@ -72,7 +72,7 @@ documentation/~$ygopro id sheet.xlsx
 databases/deckStorage.nedb
 coverage
 .vscode
-bin/*.txt
+bin/*
 databases/*.nedb
 http/manifest/banlist.json
-bin/mr4/lua*.txt
+

@@ -1,7 +1,7 @@
 {
     "name": "ygopro-salvation-server",
     "description": "YGOPro US Server (Salvation) - Saving Yu-Gi-Oh!",
-    "main": "server.js",
+    "main": "bin.js",
     "version": "6.0.0",
     "private": true,
     "keywords": [
@@ -23,9 +23,10 @@
         "express": "^4.17.1",
         "ffi": "^2.3.0",
         "function-queue": "0.0.12",
-        "helmet": "^3.18.0",
+        "helmet": "^3.21.2",
         "hotload": "git+https://github.com/SalvationDevelopment/node-hotload.git",
         "hsts": "^2.2.0",
+        "json": "^9.0.6",
         "jsonfile": "^2.4.0",
         "mongoose": "^5.7.5",
         "nedb": "^1.7.2",
@@ -40,7 +41,6 @@
         "serve-index": "^1.9.1",
         "smtp-server": "^3.5.0",
         "sparkpost": "^2.1.3",
-        "sql.js": "^0.3.2",
         "toobusy-js": "*",
         "uuid": "https://registry.npmjs.org/uuid/-/uuid-3.0.1.tgz",
         "ws": "^6.2.1",
@@ -48,8 +48,8 @@
     },
     "devDependencies": {
         "chai": "^3.5.0",
-        "istanbul": "*",
-        "mocha": "^5.2.0"
+        "mocha": "^5.2.0",
+        "pkg": "^4.4.1"
     },
     "bugs": "https://github.com/salvationdevelopment/YGOPro-Salvation-Server/issues",
     "author": "panthrowzay@gmail.com",
@@ -59,6 +59,17 @@
         "start": "node ./src",
         "test": "istanbul cover node_modules/mocha/bin/_mocha -- -u exports -R spec test/test.js",
         "server": "node server",
-        "ygopro": "cd src && node application_ygopro"
+        "ygopro": "cd src && node application_ygopro",
+        "add-binaries": "npm run banlist && copy .\\node_modules\\ffi\\build\\Release\\ffi_bindings.node  .\\bin && copy .\\node_modules\\ref\\build\\Release\\binding.node .\\bin",
+        "build": "npm run add-binaries && pkg . --targets node10-win-x64 --out-path ./bin",
+        "banlist": "node ./src/updater/banlist.js"
+    },
+    "bin": "bin.js",
+    "pkg": {
+        "assets": [
+            "http/**/*",
+            "node_modules/**/*",
+            "src/core/bin/**/*"
+        ]
     }
 }
