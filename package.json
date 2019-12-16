@@ -60,8 +60,9 @@
         "test": "istanbul cover node_modules/mocha/bin/_mocha -- -u exports -R spec test/test.js",
         "server": "node server",
         "ygopro": "cd src && node application_ygopro",
-        "add-binaries" : "copy .\\node_modules\\ffi\\build\\Release\\ffi_bindings.node  .\\bin && copy .\\node_modules\\ref\\build\\Release\\binding.node .\\bin",
-        "build": "npm run add-binaries && pkg . --targets node10-win-x64 --out-path ./bin"
+        "add-binaries": "npm run banlist && copy .\\node_modules\\ffi\\build\\Release\\ffi_bindings.node  .\\bin && copy .\\node_modules\\ref\\build\\Release\\binding.node .\\bin",
+        "build": "npm run add-binaries && pkg . --targets node10-win-x64 --out-path ./bin",
+        "banlist": "node ./src/updater/banlist.js"
     },
     "bin": "bin.js",
     "pkg": {
