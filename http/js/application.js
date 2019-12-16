@@ -76,6 +76,15 @@ class ApplicationComponent extends React.Component {
             });
         });
 
+        store.register('LOAD_SESSION', (action) => {
+            const session = localStorage.session;
+
+            this.primus.write({
+                action: 'loadSession',
+                session
+            });
+        });
+
         store.register('HOST', (action) => {
             this.primus.write({
                 action: 'host',

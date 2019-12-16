@@ -128,6 +128,7 @@ store.register('REGISTER_ACCOUNT', (action) => {
             app.alert(result.error);
         } else {
             app.alert('Account Created. Please check your email.');
+            store.dispatch({ action: 'LOAD_LOGIN', banlist, primary });
         }
     });
 });
@@ -221,7 +222,7 @@ $.getJSON('/manifest/manifest_0-en-OCGTCG.json', function (data) {
                         store.dispatch({ action: 'SYSTEM_LOADED', banlist, primary });
                         store.dispatch({ action: 'LOAD_LOGIN', banlist, primary });
                         if (userInfo.success) {
-                            app.login(userInfo);
+                            store.dispatch({ action: 'LOAD_SESSION' });
                         }
                     }).fail((e) => {
                         console.log(e);
