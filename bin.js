@@ -1,3 +1,4 @@
+
 require('dotenv').config();
 const fs = require('fs');
 const controller = require('./src');
@@ -7,7 +8,7 @@ const controller = require('./src');
  * @returns {undefined}
  */
 function main() {
-
+    console.log('YGO Salvation Server - Saving Yu-Gi-Oh!'.bold.green);
     const banlist = './http/manifest/banlist.json';
 
 
@@ -18,10 +19,7 @@ function main() {
 
 
     process.title = 'YGOPro Salvation Server ' + new Date();
-    console.log('YGO Salvation Server - Saving Yu-Gi-Oh!'.bold.yellow);
-    //controller();
-
-
+    
 }
 
 main();

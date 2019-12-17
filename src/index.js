@@ -83,7 +83,7 @@ function registrationCall(data, socket) {
         }
         if (valid) {
             socket.username = info.username;
-
+            console.log(`${socket.username} has logged in`.bold);
             socket.write({
                 clientEvent: 'global',
                 message: currentGlobalMessage,
@@ -391,6 +391,7 @@ function onData(data, socket) {
                     return;
                 }
                 socket.username = info.username;
+                console.log(`${socket.username} has rejoined session`.bold);
                 socket.write({
                     clientEvent: 'global',
                     message: currentGlobalMessage,

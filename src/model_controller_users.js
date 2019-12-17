@@ -95,7 +95,7 @@ mongoose.set('useFindAndModify', false);
 mongoose.set('useCreateIndex', true);
 
 
-
+console.log('Connecting to MongoDB...'.bold.green);
 var db = mongoose.connect('mongodb://localhost/salvation', {
     useNewUrlParser: true,
     socketTimeoutMS: 0,
@@ -109,6 +109,7 @@ var db = mongoose.connect('mongodb://localhost/salvation', {
         console.log('Make sure MongoDB is running and `salvation` collection exist.');
         return;
     }
+    console.log('Connected to MongoDB'.bold.green);
 });
 
 

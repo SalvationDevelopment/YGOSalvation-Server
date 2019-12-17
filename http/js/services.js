@@ -124,9 +124,12 @@ store.register('REGISTER_ACCOUNT', (action) => {
 
     $.post('/register', { email: email, username: username, password: password }, function (result, networkStatus) {
         console.log(result);
-        return (result.error)
-            ? app.alert(result.error)
-            : app.alert('Account Created. Please check your email.');
+        if (result.error) {
+            app.alert(result.error);
+        } else {
+            app.alert('Account Created. Please check your email.');
+            store.dispatch({ action: 'LOAD_LOGIN', banlist, primary });
+        }
     });
 });
 
@@ -141,9 +144,11 @@ store.register('RECOVER_ACCOUNT', (action) => {
 
     $.post('/recover', { email: email }, function (result, networkStatus) {
         console.log(result);
-        return (result.error)
-            ? app.alert(result.error)
-            : app.alert('Recovery Code Sent.');
+        if (result.error) {
+            app.alert(result.error);
+        } else {
+            app.alert('Recovery Code Sent.');
+        }
     });
 });
 
@@ -152,9 +157,11 @@ store.register('RECOVER_CODE', (action) => {
 
     $.post('/recoverpassword', { recoveryPass }, function (result, networkStatus) {
         console.log(result);
-        return (result.error)
-            ? app.alert(result.error)
-            : app.alert('Account Password Updated.');
+        if (result.error) {
+            app.alert(result.error);
+        } else {
+            app.alert('Account Password Updated.');
+        }
     });
 });
 
@@ -215,7 +222,7 @@ $.getJSON('/manifest/manifest_0-en-OCGTCG.json', function (data) {
                         store.dispatch({ action: 'SYSTEM_LOADED', banlist, primary });
                         store.dispatch({ action: 'LOAD_LOGIN', banlist, primary });
                         if (userInfo.success) {
-                            store.dispatch({ action: 'LOAD_SESSION' });
+                            app.login(userInfo);
                         }
                     }).fail((e) => {
                         console.log(e);
@@ -223,17 +230,10 @@ $.getJSON('/manifest/manifest_0-en-OCGTCG.json', function (data) {
                     });
                 } else {
                     store.dispatch({ action: 'LOAD_LOGIN', banlist, primary });
-                    if (userInfo.success) {
-                        app.login(userInfo);
-                    }
-                }).fail((e) => {
-                    console.log(e);
-                    store.dispatch({ action: 'LOAD_LOGIN', banlist, primary });
-                });
-                return;
+                }
+            } else {
+                store.dispatch({ action: 'LOAD_LOGIN', banlist, primary });
             }
-
-            store.dispatch({ action: 'LOAD_LOGIN', banlist, primary });
         });
     });
 });
@@ -357,7 +357,11 @@ class SearchFilter {
     fType(obj, ty) {
 
         var val = obj.type;
-        return ((val & ty) > 0) ? true : false;
+        if ((val & ty) > 0) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     //As Level, but for ATK/DEF
@@ -480,15 +484,12 @@ class SearchFilter {
         var val = obj.setcode,
             hexA = val.toString(16),
             hexB = sc.toString(16);
-
-        return (
-            (val === sc)
-            || (parseInt(hexA.substr(hexA.length - 4), 16) === parseInt(hexB, 16))
-            || (parseInt(hexA.substr(hexA.length - 2), 16) === parseInt(hexB, 16))
-            || ((val >> 16).toString(16) === hexB)
-        );
+        if (val === sc || parseInt(hexA.substr(hexA.length - 4), 16) === parseInt(hexB, 16) || parseInt(hexA.substr(hexA.length - 2), 16) === parseInt(hexB, 16) || (val >> 16).toString(16) === hexB) {
+            return true;
+        } else {
+            return false;
+        }
     }
-
     //All cards that share at least 1 setcode with the arg.
     filteSetcode(cardsf, setcode) {
         if (setcode !== undefined) {
@@ -544,9 +545,9 @@ class SearchFilter {
             return result.filter((item) => {
                 return this.fSetcode(item, setcode);
             });
+        } else {
+            return result;
         }
-        return result;
-
 
     }
 
@@ -555,9 +556,9 @@ class SearchFilter {
             return result.filter((item) => {
                 return item.limit === limit;
             });
+        } else {
+            return result;
         }
-        return result;
-
     }
 
     filterScale(result, scale, op) {
@@ -565,9 +566,9 @@ class SearchFilter {
             return result.filter((item) => {
                 return this.fScale(item, scale, op);
             });
+        } else {
+            return result;
         }
-        return result;
-
     }
 
     filterExactType(result, type) {
@@ -575,9 +576,9 @@ class SearchFilter {
             return result.filter((item) => {
                 return item.type === type;
             });
+        } else {
+            return result;
         }
-        return result;
-
     }
 
     filterToken(result) {
