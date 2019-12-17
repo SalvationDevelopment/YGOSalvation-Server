@@ -100,7 +100,9 @@ var db = mongoose.connect('mongodb://localhost/salvation', {
     useNewUrlParser: true,
     socketTimeoutMS: 0,
     keepAlive: true,
-    reconnectTries: 30
+    reconnectTries: 30,
+    useNewUrlParser: true,
+    useUnifiedTopology: true
 }, function (error, connection) {
     if (error) {
         console.log(error);
