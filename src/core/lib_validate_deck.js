@@ -100,7 +100,7 @@ function CardSearcher(database) {
 }
 
 function mapSubDeck(subDeck, getCardById) {
-    return subDeck.main.reduce(function (deck, passcode) {
+    return subDeck.reduce(function (deck, passcode) {
         const cardObject = getCardById(passcode);
         if (cardObject.alias) {
             passcode = cardObject.alias;

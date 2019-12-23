@@ -8,7 +8,7 @@ const controller = require('./src');
  * @returns {undefined}
  */
 function main() {
-    console.log('YGO Salvation Server - Saving Yu-Gi-Oh!'.bold.green);
+    console.log('[SERVER] YGO Salvation Server - Saving Yu-Gi-Oh!'.bold.magenta);
     const banlist = './http/manifest/banlist.json';
 
 
@@ -18,7 +18,7 @@ function main() {
     }
 
 
-    process.title = 'YGOPro Salvation Server ' + new Date();
+    process.title = 'YGOSalvation Server ' + new Date();
     
 }
 

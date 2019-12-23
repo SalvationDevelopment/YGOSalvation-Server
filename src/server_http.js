@@ -113,7 +113,7 @@ module.exports = function () {
     try {
         primusServer = useSSL(primusServer);
     } catch (nossl) {
-        console.log('SSL (https protocol) not avaliable, using http protocol instead'.bold.red);
+        console.log('[HTTP] SSL (https protocol) not avaliable, using http protocol instead'.bold.red);
         primusServer = http.createServer(app);
         primusServer.listen(HTTP_PORT);
     }

@@ -929,7 +929,7 @@ function boot(httpserver, server, game, state) {
     state.lifeCycle = new LifeCycle(server, game, state);
 
     httpserver.listen(game.port, function () {
-
+        
         process.on('message', function (message) {
             lastInteraction = new Date();
             try {

@@ -387,7 +387,7 @@ function onData(data, socket) {
             userController.validateSession({
                 session: data.session
             }, function (error, valid, info) {
-                if (error){
+                if (error) {
                     return;
                 }
                 socket.username = info.username;
@@ -478,10 +478,12 @@ function onData(data, socket) {
             break;
         case ('host'):
             const port = unsafePort();
+            process.execArgv.push('--debug=' + (40894));
             const child = child_process.fork(
                 './core/index.js', process.argv, {
                 cwd: __dirname,
-                env: Object.assign({}, process.env, data.info, { PORT: port })
+                env: Object.assign({}, process.env, data.info, { PORT: port }),
+                execArgv: [`--inspect=${unsafePort()}`]
             }
             );
             child.on('message', function (message) {

@@ -95,7 +95,7 @@ mongoose.set('useFindAndModify', false);
 mongoose.set('useCreateIndex', true);
 
 
-console.log('Connecting to MongoDB...'.bold.green);
+console.log('[DATABASE] Connecting to MongoDB...'.bold.green);
 var db = mongoose.connect('mongodb://localhost/salvation', {
     useNewUrlParser: true,
     socketTimeoutMS: 0,
@@ -106,10 +106,10 @@ var db = mongoose.connect('mongodb://localhost/salvation', {
 }, function (error, connection) {
     if (error) {
         console.log(error);
-        console.log('Make sure MongoDB is running and `salvation` collection exist.');
+        console.log('[DATABASE] Make sure MongoDB is running and `salvation` collection exist.');
         return;
     }
-    console.log('Connected to MongoDB'.bold.green);
+    console.log('[DATABASE] Connected to MongoDB'.bold.green);
 });
 
 
@@ -122,7 +122,7 @@ function sessionTimeout(time) {
 }
 
 mongoose.connection.on('error', function (err) {
-    console.error('MongoDB error: %s', err);
+    console.error('[DATABASE] MongoDB error: %s', err);
 });
 
 
@@ -209,7 +209,7 @@ function updatePassword(data, callback) {
 
 
 function sendRecoveryEmail(address, username, salt) {
-    console.log('sending, mailOptions');
+    console.log('[DATABASE] sending, mailOptions');
     // create reusable transporter object using the default SMTP transport
     var transporter = nodemailer.createTransport(directTransport({
         name: 'ygosalvation.com'
@@ -232,10 +232,10 @@ function sendRecoveryEmail(address, username, salt) {
 
 function startRecoverPassword(data, callback) {
     var code = salter();
-    console.log('starting recovery');
+    console.log(`[DATABASE] Starting recovery for ${data.username}`);
     Users.findOneAndUpdate({ username: data.username }, { recoveryPass: code }, function (error, person) {
         callback(error, person, code);
-        console.log('Attempting to recover', data.username);
+        console.log('[DATABASE] Attempting to recover', data.username);
         if (person) {
             sendRecoveryEmail(person.email, person.username, code);
         }
