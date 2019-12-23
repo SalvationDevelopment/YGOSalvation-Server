@@ -221,9 +221,11 @@ $.getJSON('/manifest/manifest_0-en-OCGTCG.json', function (data) {
                         console.log('Session Login', userInfo);
                         store.dispatch({ action: 'SYSTEM_LOADED', banlist, primary });
                         store.dispatch({ action: 'LOAD_LOGIN', banlist, primary });
-                        if (userInfo.success) {
-                            app.login(userInfo);
-                        }
+                        console.log(userInfo.success);
+                        const state = (userInfo.success)
+                            ? store.dispatch({ action: 'LOAD_SESSION', banlist, primary })
+                            : store.dispatch({ action: 'LOAD_LOGIN', banlist, primary });
+
                     }).fail((e) => {
                         console.log(e);
                         store.dispatch({ action: 'LOAD_LOGIN', banlist, primary });
@@ -245,7 +247,7 @@ class SearchFilter {
     constructor(database) {
         this.currentSearch = [];
         this.currentSearchIndex = 0;
-        this.currentSearchPageSize = 24;
+        this.currentSearchPageSize = 21;
         this.currentSearchNumberOfPages = 1;
         this.maxPages = Math.ceil(this.currentSearchPageSize / this.currentSearch.length);
         this.currentFilter = this.getFilter();

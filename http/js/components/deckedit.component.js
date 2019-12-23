@@ -172,10 +172,13 @@ class DeckEditScreen extends React.Component {
 
 
         store.register('LOAD_DECKS', (action) => {
+            console.log(action);
             this.settings.decklist = '0';
             if (!action.decks) {
                 return;
             }
+            debugger;
+            this.state.search = [];
             this.state.decks = action.decks.map((deckIds) => {
                 const deck = Object.assign({}, deckIds);
                 deck.main = deck.main.map(this.findcard.bind(this));
@@ -222,9 +225,10 @@ class DeckEditScreen extends React.Component {
         }
 
         result = Object.keys(map).map(function (id) {
-            return (banlist.bannedCards[id] !== undefined)
+            map[id].limit = (banlist.bannedCards[id] !== undefined)
                 ? parseInt(banlist.bannedCards[id], 10)
                 : 3;
+            return map[id];
         });
 
         filteredCards = result.filter(function (card) {
@@ -248,7 +252,7 @@ class DeckEditScreen extends React.Component {
     }
 
     findcard(card) {
-        return this.searchFilter.database.find((item) => card.id === item.id);
+        return this.fullDatabase.find((item) => card.id === item.id);
     }
 
     search() {

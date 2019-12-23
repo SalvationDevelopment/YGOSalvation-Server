@@ -478,12 +478,12 @@ function onData(data, socket) {
             break;
         case ('host'):
             const port = unsafePort();
-            process.execArgv.push('--debug=' + (40894));
+            const execArgv =  (process.env.CORE_DEBUG) ?  [`--inspect=${unsafePort()}`] : undefined;
             const child = child_process.fork(
                 './core/index.js', process.argv, {
                 cwd: __dirname,
                 env: Object.assign({}, process.env, data.info, { PORT: port }),
-                execArgv: [`--inspect=${unsafePort()}`]
+                execArgv
             }
             );
             child.on('message', function (message) {

@@ -27,6 +27,7 @@ class ApplicationComponent extends React.Component {
         this.faqs = new FAQsScreen();
         this.credits = new CreditsScreen();
         this.settings = new SettingsScreen(store);
+        this.downloads = new DownloadsPage();
         this.root = document.getElementById('application');
 
         window.addEventListener('unload', function (event) {
@@ -188,6 +189,7 @@ class ApplicationComponent extends React.Component {
         });
         localStorage.session = info.session;
         localStorage.username = this.state.username;
+        console.log(info);
         this.store.dispatch({ action: 'LOAD_DECKS', decks: info.decks });
         this.store.dispatch({ action: 'LOGGEDIN' });
 
@@ -277,6 +279,8 @@ class ApplicationComponent extends React.Component {
                 return React.createElement('section', { id: 'rankings', key: 'rankings' }, this.rankings.render());
             case 'faqs':
                 return React.createElement('section', { id: 'faqs', key: 'raqs' }, this.faqs.render());
+            case 'downloads':
+                return React.createElement('section', { id: 'downloads', key: 'downloads' }, this.downloads.render());
             case 'credits':
                 return React.createElement('section', { id: 'credits', key: 'credits' }, this.credits.render());
             default:
