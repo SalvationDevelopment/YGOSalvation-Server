@@ -929,7 +929,7 @@ function boot(httpserver, server, game, state) {
     state.lifeCycle = new LifeCycle(server, game, state);
 
     httpserver.listen(game.port, function () {
-        
+
         process.on('message', function (message) {
             lastInteraction = new Date();
             try {
@@ -964,7 +964,7 @@ function Game(settings) {
         automatic: (settings.AUTOMATIC === 'true'),
         banlist: settings.BANLIST || 'No Banlist',
         banlistid: settings.BANLIST_ID,
-        cardpool: settings.CARD_POOL || 0,
+        cardpool: settings.CARD_POOL || 'OCG/TCG',
         deckcheck: (settings.DECK_CHECK === 'true'),
         draw_count: settings.DRAW_COUNT || 1,
         legacyfield: (settings.LEGACY === 'true'),

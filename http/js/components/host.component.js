@@ -72,9 +72,9 @@ class HostScreen extends React.Component {
             React.createElement('br', {}),
             React.createElement('label', {}, 'Cardpool'),
             React.createElement('select', { id: 'creategamecardpool', onChange: this.onChange.bind(this) }, [
-                React.createElement('option', { value: 0 }, 'OCG'),
-                React.createElement('option', { value: 1 }, 'TCG'),
-                React.createElement('option', { value: 2, selected: true }, 'OCG/TCG')
+                React.createElement('option', { value: 'OCG' }, 'OCG'),
+                React.createElement('option', { value: 'TCG' }, 'TCG'),
+                React.createElement('option', { value: 'OCG/TCG', selected: true }, 'OCG/TCG')
             ]),
             React.createElement('br', {}),
             React.createElement('label', {}, 'Ban list'),

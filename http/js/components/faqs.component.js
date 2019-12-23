@@ -22,7 +22,7 @@ class FAQsScreen extends React.Component {
                 {
                     q: 'Where do I get images from?',
                     a: 'No idea.'
-                }
+                },
                 {
                     q: 'Ranking?',
                     a: 'This is planned. After each unique competitive automated duel you gain a certain amount of points. When a banlist is released your points are halved and the users you\'ve dueled against reset. Participating in events will net you bonus points.'
@@ -35,7 +35,7 @@ class FAQsScreen extends React.Component {
                 },
                 {
                     q: 'Can I help out?',
-                    a: 'Sure. '
+                    a: 'Sure. We run a mentoring program; we will teach you how to code at our level as you help out, this is the equvilant as paid technical training. You have to follow directions and be polite.'
                 }
                 ]
             }

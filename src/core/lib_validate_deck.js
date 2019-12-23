@@ -137,8 +137,12 @@ function validateDeckToRegion(card, region, cardpool, banlist, getCardById, getF
     const reference = getFilteredCardById(card),
         subreference = getCardById(card);
 
-    if (!reference[region].date || !(reference && cardpool === 'OCG/TCG')) {
-        throw new Error(`${reference.name} does not exist in the TCG`);
+    if (cardpool === 'OCG/TCG') {
+        return true;
+    }
+
+    if (!reference[region].date) {
+        throw new Error(`${reference.name} does not exist in the ${cardpool} card pool`);
     }
 
     if (reference[region].date > new Date(banlist.endDate)) {
@@ -148,6 +152,8 @@ function validateDeckToRegion(card, region, cardpool, banlist, getCardById, getF
     if (banlist.masterRule < 4 && reference.type >= 33554433) {
         throw new Error('Link Monsters are not permitted by the selected Forbidden/Limited Card List');
     }
+
+    return true;
 }
 
 function checkAmounts(main, side, extra, getCardById) {
