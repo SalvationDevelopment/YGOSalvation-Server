@@ -172,7 +172,6 @@ class DeckEditScreen extends React.Component {
 
 
         store.register('LOAD_DECKS', (action) => {
-            console.log(action);
             this.settings.decklist = '0';
             if (!action.decks) {
                 return;
@@ -527,7 +526,7 @@ class DeckEditScreen extends React.Component {
         if (!event.target.id) {
             return;
         }
-        
+
         const id = event.target.id;
         let value = (isNaN(Number(event.target.value))) ? undefined : Number(event.target.value);
         if (!this.filterKeys.includes(id)) {
@@ -575,7 +574,6 @@ class DeckEditScreen extends React.Component {
 
     onDragStart(source, i, event) {
         var c = event.target.childNodes;
-        console.log(c, c[0]);
         event.dataTransfer.setData('index', i);
         event.dataTransfer.setData('source', source);
         event.target.style.opacity = '0';
@@ -589,7 +587,9 @@ class DeckEditScreen extends React.Component {
         const element = React.createElement;
         return input.map((card, i) => {
             card.uid = i;
+
             return element('div', {
+                key: `${card.uid}-${card.name}`,
                 draggable: true,
                 'data-limit': card.limit,
                 onDragOver: this.setIndex.bind(this, source, i),
@@ -701,7 +701,7 @@ class DeckEditScreen extends React.Component {
         if (this.settings.cardtype !== 1) {
             return element('br', {});
         }
-        return element('div', { className: 'filtercol' }, [
+        return element('div', { key : 'link-col', className: 'filtercol' }, [
             element('control', { id: 'linkmarkers' }, [
                 element('input', { id: 'link1', type: 'checkbox' }),
                 element('input', { id: 'link2', type: 'checkbox' }),
@@ -812,7 +812,7 @@ class DeckEditScreen extends React.Component {
             insert = this.state.overIndex,
             list = (source === 'search') ? this.state.search : this.state.activeDeck[source],
             card = list[index];
-        console.log(source, insert, card);
+        
         if (!card) {
             return;
         }
@@ -846,8 +846,8 @@ class DeckEditScreen extends React.Component {
 
     renderReleases() {
         const element = React.createElement,
-            list = this.state.releases.map((set) => {
-                return element('option', { value: set, id : set, ref: set , onSelect : ()=>{console.log(set)}}, set);
+            list = this.state.releases.map((set, i) => {
+                return element('option', { key: `release-${i}`, value: set }, set);
             });
         return [element('option', { value: 'undefined' }, 'Release Set')].concat(list);
     }
@@ -867,30 +867,30 @@ class DeckEditScreen extends React.Component {
                     element('br'),
                     element('h3', {}, 'Filter'),
                     element('controls', {}, [
-                        element('div', { className: 'filtercol' }, [
+                        element('div', { key : 'col-1', className: 'filtercol' }, [
                             element('select', { id: 'cardtype', onChange: this.onSearchChange.bind(this) }, [
-                                element('option', { value: 5 }, 'Monster/Spell/Trap'),
-                                element('option', { value: 1 }, 'Monster'),
-                                element('option', { value: 2 }, 'Spell'),
-                                element('option', { value: 4 }, 'Trap')
+                                element('option', { key: 'cardtype-1', value: 5 }, 'Monster/Spell/Trap'),
+                                element('option', { key: 'cardtype-2', value: 1 }, 'Monster'),
+                                element('option', { key: 'cardtype-3', value: 2 }, 'Spell'),
+                                element('option', { key: 'cardtype-4', value: 4 }, 'Trap')
                             ]),
                             element('div', { className: 'filtercol' }, this.cardTypes()),
 
                             element('select', { id: 'setcode', onChange: this.onSearchChange.bind(this) }, [
                                 element('option', { value: 'undefined' }, 'Archetype')
                             ].concat(this.state.setcodes.map((list, i) => {
-                                return React.createElement('option', { value: parseInt(list.num) }, list.name);
+                                return React.createElement('option', { key : `setcode-${i}`, value: parseInt(list.num) }, list.name);
                             }))),
                             element('select', { key: 'release', id: 'release', onChange: this.onSearchChange.bind(this) }, this.renderReleases()),
-                            element('select', { id: 'limit', onChange: this.onSearchChange.bind(this) }, [
-                                element('option', { value: 'undefined' }, 'Limit'),
+                            element('select', { key: 'limit', id: 'limit', onChange: this.onSearchChange.bind(this) }, [
+                                element('option', { value: 'null' }, 'Limit'),
                                 element('option', { value: 3 }, 'Unlimited'),
                                 element('option', { value: 2 }, 'Semi-Limited'),
                                 element('option', { value: 1 }, 'Limited'),
                                 element('option', { value: 0 }, 'Forbidden')
                             ]),
-                            element('input', { id: 'cardname', type: 'text', placeholder: 'Name', onChange: this.onSearchChange.bind(this) }),
-                            element('input', { id: 'description', type: 'text', placeholder: 'Card Text', onChange: this.onSearchChange.bind(this) }),
+                            element('input', { id: 'cardname', type: 'text', placeholder: 'Name', onBlur: this.onSearchChange.bind(this) }),
+                            element('input', { id: 'description', type: 'text', placeholder: 'Card Text', onBlur: this.onSearchChange.bind(this) }),
                             this.renderStats(),
                             element('button', { onClick: this.clearSearch.bind(this) }, 'Reset')
                         ]),

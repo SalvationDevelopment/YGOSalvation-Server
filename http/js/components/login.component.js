@@ -100,11 +100,11 @@ class LoginScreen extends React.Component {
                     element('br', {key : 'br-2'}),
                 ]);
             case 'start':
-                return element('div', { id: 'ipblogin', className: 'loginsystem',  key : 'modal-2' }, [
+                return element('div', { key : 'ipblogin', id: 'ipblogin', className: 'loginsystem',  key : 'modal-2' }, [
                     element('br', {key : 'br'}),
-                    element('button', { id: 'openlogin', className: 'loginsystem',  key : 'modal-openlogin', onClick: this.openLogin.bind(this) }, 'Login'),
+                    element('button', { key : 'openlogin',id: 'openlogin', className: 'loginsystem',  key : 'modal-openlogin', onClick: this.openLogin.bind(this) }, 'Login'),
                     '\r\n',
-                    element('button', { id: 'doregister', className: 'loginsystem',  key : 'modal-doregister', onClick: this.registration.bind(this) }, 'Register')
+                    element('button', { key : 'doregister',id: 'doregister', className: 'loginsystem',  key : 'modal-doregister', onClick: this.registration.bind(this) }, 'Register')
                 ]);
             case 'register':
                 return element('div', { id: 'loginmodal',  key : 'modal-3' }, [
@@ -148,9 +148,9 @@ class LoginScreen extends React.Component {
                     element('br', {key : 'br-3'}),
                 ]);
             case 'loggedin':
-                return element('div', { id: 'ipblogin', className: 'loginsystem', key : 'modal-6' }, [
+                return element('div', { key : 'ipblogin', id: 'ipblogin', className: 'loginsystem', key : 'modal-6' }, [
                     element('br', {key : 'br-1'}),,
-                    element('button', { id: 'logout', className: 'loginsystem', onClick: this.logout.bind(this) }, 'Logout')
+                    element('button', {key : 'logout',  id: 'logout', className: 'loginsystem', onClick: this.logout.bind(this) }, 'Logout')
                 ]);
             case 'loading':
                 return element('div', { id: 'ipblogin', className: 'loginsystem',  key : 'modal-7' }, 'Loading...');

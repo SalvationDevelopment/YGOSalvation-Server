@@ -176,6 +176,10 @@ $.getJSON('/manifest/manifest_0-en-OCGTCG.json', function (data) {
     data.sort(cardStackSort);
     store.dispatch({ action: 'LOAD_DATABASE', data });
     const cardsets = data.reduce((hash, item) => {
+        if (item.type === 16401) {
+            // no token packs
+            return hash;
+        }
         if (item.ocg && item.ocg.pack) {
             item.ocg.pack = item.ocg.pack.trim();
             hash[item.ocg.pack] = 0;
@@ -312,7 +316,7 @@ class SearchFilter {
                     return val === lv;
                 case -1:
                     return val >= lv;
-                case -2:
+                case 2:
                     return val > lv;
                 default:
                     return val === lv;
@@ -592,6 +596,7 @@ class SearchFilter {
 
     filterAll(cards, filter) {
         var cardsf = cards;
+        console.log(filter);
         cardsf = this.filterLimit(cardsf, filter.limit) || cardsf;
         cardsf = this.filterExactType(cardsf, filter.exacttype) || cardsf;
         cardsf = this.filterName(cardsf, filter.cardname) || cardsf;
