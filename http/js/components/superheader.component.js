@@ -52,9 +52,9 @@ class SuperHeaderComponent extends React.Component {
         return React.createElement('div', { key: 'header', className: 'superheader', id: 'superheader' },
             React.createElement('ul', { key: 'list', className: 'featurelist', id: 'featurelist' }, [
                 React.createElement('li', { onClick: this.nav.bind(this, 'login'), key: 'logo', className: 'psudolinksingle logolink', id: 'psudologo' },
-                    React.createElement('h1', { className: 'shine logolink' }, [
-                        React.createElement('span', { className: 'logopink' }, 'YGO'),
-                        React.createElement('span', {}, 'Salvation')
+                    React.createElement('h1', { key: 'h1-shine-logolink', className: 'shine logolink' }, [
+                        React.createElement('span', { key: 'span-1', className: 'logopink' }, 'YGO'),
+                        React.createElement('span', { key: 'span-2' }, 'Salvation')
                     ]))
             ].concat(this.links(loggedIn))));
     }

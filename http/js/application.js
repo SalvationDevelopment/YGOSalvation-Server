@@ -284,7 +284,7 @@ class ApplicationComponent extends React.Component {
             case 'credits':
                 return React.createElement('section', { id: 'credits', key: 'credits' }, this.credits.render());
             default:
-                return React.createElement('section', { id: 'error' }, '');
+                return React.createElement('section', { id: 'error', key :'error' }, '');
         }
     }
 
@@ -325,13 +325,13 @@ class ApplicationComponent extends React.Component {
     }
 
     render() {
-        return [
+        return React.createElement('div', {key : 'top'}, [
             this.superheader.render(this.state.loggedIn),
             this.screen(),
             this.language(),
             this.superfooter.render(),
             this.modalRender()
-        ];
+        ]);
     }
 }
 

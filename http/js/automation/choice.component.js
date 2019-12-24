@@ -13,8 +13,8 @@ class ChoiceScreen extends React.Component {
 
     render() {
         return [React.createElement('div', { id: 'selectwhogoesfirst' }, [
-            React.createElement('div', { id: 'gofirst', key: 1, onClick: this.goFirst.bind(this, 0) }, 'Go First'),
-            React.createElement('div', { id: 'gosecond', key: 2, onClick: this.goFirst.bind(this, 1) }, 'Go Second')
+            React.createElement('div', { id: 'gofirst', key: 'one', onClick: this.goFirst.bind(this, 0) }, 'Go First'),
+            React.createElement('div', { id: 'gosecond', key: 'two', onClick: this.goFirst.bind(this, 1) }, 'Go Second')
         ]), React.createElement('div', { id: 'lobbychat', key: 'sidechat' }, this.sidechat.render())];
     }
 }

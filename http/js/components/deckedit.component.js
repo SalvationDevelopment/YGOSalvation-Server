@@ -177,7 +177,6 @@ class DeckEditScreen extends React.Component {
             if (!action.decks) {
                 return;
             }
-            debugger;
             this.state.search = [];
             this.state.decks = action.decks.map((deckIds) => {
                 const deck = Object.assign({}, deckIds);
