@@ -231,9 +231,7 @@ class CardInfo extends React.Component {
     }
 
     update(state) {
-        if (this.debounce) {
-            return;
-        }
+
         Object.assign(this.state, state);
         let card = (!state.id) ? {} : this.databaseSystem.find(function (entry) {
             return (state.id === entry.id) ? entry : false;

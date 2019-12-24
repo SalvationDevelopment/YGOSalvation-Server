@@ -184,7 +184,7 @@ function msg_win(message, pbuf, game) {
 }
 
 function msg_new_phase(message, pbuf, game) {
-    message.phase = pbuf.readInt8();
+    message.phase = pbuf.readInt16();
     message.gui_phase = enums.phase[message.phase];
     game.refreshMzone(0);
     game.refreshMzone(1);

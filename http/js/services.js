@@ -247,7 +247,7 @@ class SearchFilter {
     constructor(database) {
         this.currentSearch = [];
         this.currentSearchIndex = 0;
-        this.currentSearchPageSize = 21;
+        this.currentSearchPageSize = 30;
         this.currentSearchNumberOfPages = 1;
         this.maxPages = Math.ceil(this.currentSearchPageSize / this.currentSearch.length);
         this.currentFilter = this.getFilter();

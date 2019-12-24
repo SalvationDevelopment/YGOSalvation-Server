@@ -87,7 +87,8 @@ class CardImage extends React.Component {
     }
 
     hover() {
-        this.state.hover = !Boolean(this.state.hover);
+        //this.state.hover = !Boolean(this.state.hover);
+        console.log(this.state.id);
         this.store.dispatch({
             action: 'CARD_HOVER',
             id: this.state.id

@@ -60,13 +60,15 @@
     float: left;
     display: flex;
     flex-wrap: wrap;
+    padding: .5vh .5vw;
 }
 
 #decksearchresults div {
     flex: 1;
     height: 33%;
     padding: 1%;
-    transition: opacity 500ms
+    transition: opacity 500ms;
+    width : 10%;
 }
 
 .transitioning {
