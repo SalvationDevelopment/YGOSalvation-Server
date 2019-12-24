@@ -176,10 +176,12 @@ $.getJSON('/manifest/manifest_0-en-OCGTCG.json', function (data) {
     data.sort(cardStackSort);
     store.dispatch({ action: 'LOAD_DATABASE', data });
     const cardsets = data.reduce((hash, item) => {
-        if (item.ocg) {
+        if (item.ocg && item.ocg.pack) {
+            item.ocg.pack = item.ocg.pack.trim();
             hash[item.ocg.pack] = 0;
         }
-        if (item.tcg) {
+        if (item.tcg && item.tcg.pack) {
+            item.tcg.pack = item.tcg.pack.trim();
             hash[item.tcg.pack] = 0;
         }
         return hash;
@@ -416,16 +418,14 @@ class SearchFilter {
         if (set === undefined) {
             return cardsf;
         }
-
+        
         function check(card, region) {
-            if (card[region]) {
-                if (card[region].pack_id) {
-                    var code = card[region].pack_id.split('-');
-                    return code[0];
-                }
-                return '';
+            if (!card[region]) {
+                return false;
             }
-            return '';
+            return card[region].pack;
+
+
         }
         return cardsf.filter((card) => {
             return (check(card, 'ocg') === set || check(card, 'tcg') === set);

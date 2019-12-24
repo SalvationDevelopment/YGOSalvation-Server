@@ -523,11 +523,11 @@ class DeckEditScreen extends React.Component {
         this.search();
     }
 
-    onSearchChange() {
+    onSearchChange(event) {
         if (!event.target.id) {
             return;
         }
-        console.log(event.target.id)
+        
         const id = event.target.id;
         let value = (isNaN(Number(event.target.value))) ? undefined : Number(event.target.value);
         if (!this.filterKeys.includes(id)) {
@@ -847,7 +847,7 @@ class DeckEditScreen extends React.Component {
     renderReleases() {
         const element = React.createElement,
             list = this.state.releases.map((set) => {
-                return element('option', { value: set }, set);
+                return element('option', { value: set, id : set, ref: set , onSelect : ()=>{console.log(set)}}, set);
             });
         return [element('option', { value: 'undefined' }, 'Release Set')].concat(list);
     }
