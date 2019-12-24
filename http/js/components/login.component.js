@@ -171,22 +171,22 @@ class LoginScreen extends React.Component {
 
             element('ul', { key: 'socialmediabuttons', id: 'socialmediabuttons' }, [
                 element('li', { key: 'facebook' },
-                    element('a', { target: '_blank', href: '' },
+                    element('a', { target: '_blank', href: 'https://www.facebook.com/ygoprosalvation' },
                         element('img', { 'src': 'img/social/Circle Color/Facebook.png' })
                     )
                 ),
                 element('li', { key: 'twitter' },
-                    element('a', { target: '_blank', href: '' },
+                    element('a', { target: '_blank', href: 'https://twitter.com/ygoprosalvation?lang=en' },
                         element('img', { 'src': 'img/social/Circle Color/Twitter.png' })
                     )
                 ),
                 element('li', { key: 'github' },
-                    element('a', { target: '_blank', href: '' },
+                    element('a', { target: '_blank', href: 'https://github.com/SalvationDevelopment' },
                         element('img', { 'src': 'img/social/Circle Color/Github.png' })
                     )
                 ),
                 element('li', { key: 'discord' },
-                    element('a', { target: '_blank', href: '' },
+                    element('a', { target: '_blank', href: 'https://discord.gg/DVJppsT' },
                         element('img', { 'src': 'img/social/Circle Color/Discord.png' })
                     )
                 )
