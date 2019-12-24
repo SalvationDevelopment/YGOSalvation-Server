@@ -626,7 +626,7 @@ class SearchFilter {
                 }
                 return list;
             }, []);
-
+            console.log(filter.banlist);
         cardsf = this.filterToken(cardsf) || cardsf;
         cardsf = this.filterLimit(cardsf, filter.limit) || cardsf;
         cardsf = this.filterExactType(cardsf, filter.exacttype) || cardsf;

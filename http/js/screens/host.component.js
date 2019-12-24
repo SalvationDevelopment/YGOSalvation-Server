@@ -16,7 +16,7 @@ class HostScreen extends React.Component {
             masterRule: 4,
             mode: 'Match',
             ot: 2,
-            shuffledeck: true,
+            shuffle: true,
             startLP: 8000,
             time: 180000,
             ranked: false
@@ -60,6 +60,7 @@ class HostScreen extends React.Component {
             this.settings.masterRule = banlist.masterRule;
             console.log(this.settings.masterRule);
         }
+        this.store.dispatch({ action: 'RENDER'});
     }
 
     host() {
@@ -107,9 +108,9 @@ class HostScreen extends React.Component {
             //React.createElement('label', {}, 'Automatic Mode (In Development'),
             //React.createElement('input', { type: 'checkbox', id: 'useautomatic', checked: true, disabled: true, onChange: this.onChange.bind(this) }),
             React.createElement('label', {}, 'Validate Deck'),
-            React.createElement('input', { type: 'checkbox', id: 'deckcheck', checked: true, onChange: this.onChange.bind(this) }),
+            React.createElement('input', { type: 'checkbox', id: 'deckcheck', checked: this.settings.deckcheck, onChange: this.onChange.bind(this) }),
             React.createElement('label', {}, 'Shuffle Deck'),
-            React.createElement('input', { type: 'checkbox', id: 'shuffleDeck', checked: true, onChange: this.onChange.bind(this) }),
+            React.createElement('input', { type: 'checkbox', id: 'shuffle', checked: this.settings.shuffle, onChange: this.onChange.bind(this) }),
             React.createElement('label', {}, 'Ranked'),
             React.createElement('input', { type: 'checkbox', id: 'locked', onChange: this.onChange.bind(this) }),
             React.createElement('label', {}, 'Use Password'),

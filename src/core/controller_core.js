@@ -9,7 +9,7 @@
  * @property {Number} draw_count
  * @property {Number} start_hand_count
  * @property {Number`} time Timelimit per turn in seconds
- * @property {Boolean} shuffleDeck
+ * @property {Boolean} shuffle
  * @property {Number} start_lp
  * @property {String} roompass
  * @property {Boolean} started
@@ -523,7 +523,7 @@ function makeGame(pduel, settings) {
 function duel(settings, errorHandler, players, observers) {
     var pduel,
         game = {};
-    if (settings.shuffleDeck) {
+    if (settings.suffle) {
         deepShuffle(players[0].main);
         deepShuffle(players[1].main);
     }

@@ -614,11 +614,11 @@ class DeckEditScreen extends React.Component {
             side = this.state.activeDeck.side.map((card) => element('div', {}, card.name)),
             extra = this.state.activeDeck.extra.map((card) => element('div', {}, card.name));
         return [
-            element('h4', {}, 'Main Deck'),
+            element('h4', {}, `Main Deck x${this.state.activeDeck.main.length}`),
             main,
-            element('h4', {}, 'Side Deck'),
+            element('h4', {}, `Side Deck x${this.state.activeDeck.side.length}`),
             side,
-            element('h4', {}, 'Extra Deck'),
+            element('h4', {}, `Extra Deck x${this.state.activeDeck.extra.length}`),
             extra];
     }
 

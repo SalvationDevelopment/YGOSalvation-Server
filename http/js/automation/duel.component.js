@@ -23,8 +23,6 @@ class DuelScreen extends React.Component {
         this.store.register('CARD_HOVER', this.onHover.bind(this));
         this.store.register('CARD_CLICK', this.onCardClick.bind(this));
         this.store.register('DECK_CARD_CLICK', this.onDeckCardClick.bind(this));
-
-        console.log(this.controls.render());
     }
 
     onCardClick(event, state) {
