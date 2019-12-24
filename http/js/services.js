@@ -176,6 +176,7 @@ $.getJSON('/manifest/manifest_0-en-OCGTCG.json', function (data) {
     data.sort(cardStackSort);
     store.dispatch({ action: 'LOAD_DATABASE', data });
     const cardsets = data.reduce((hash, item) => {
+        item.links = item.links || [];
         if (item.type === 16401) {
             // no token packs
             return hash;
@@ -268,15 +269,27 @@ class SearchFilter {
      */
     getFilter() {
         return {
+            cardtype: undefined,
             cardname: undefined,
             description: undefined,
+            banlist: undefined,
             type: undefined,
+            type1: undefined,
+            type2: undefined,
             attribute: undefined,
             race: undefined,
+            release: undefined,
             setcode: undefined,
             atk: undefined,
+            atkop: 0,
+            def: undefined,
+            defop: 0,
             level: undefined,
-            scale: undefined
+            levelop: 0,
+            scale: undefined,
+            scaleop: 0,
+            limit: undefined,
+            links : [null, null, null, null, null, null, null, null]
         };
     }
 
@@ -422,7 +435,7 @@ class SearchFilter {
         if (set === undefined) {
             return cardsf;
         }
-        
+
         function check(card, region) {
             if (!card[region]) {
                 return false;
@@ -525,7 +538,7 @@ class SearchFilter {
 
 
     //As above, but DEF
-    filterDef(cardsf, def, op) {
+    filterDef(cardsf, def, op, links) {
         if (def !== undefined) {
 
             var output = cardsf.filter((item) => {
@@ -533,7 +546,18 @@ class SearchFilter {
             });
             return output;
         }
-        return cardsf;
+
+        if (!links.length) {
+            return cardsf;
+        }
+
+        console.log('checking agaisnt links', links);
+        var output = cardsf.filter((item) => {
+            return links.every((pointer) => {
+                return item.links.includes(pointer);
+            });
+        });
+        return output;
     }
     //Just Level.. Zzz as Atk/Def
     filterLevel(cardsf, level, op) {
@@ -595,8 +619,15 @@ class SearchFilter {
     }
 
     filterAll(cards, filter) {
-        var cardsf = cards;
-        console.log(filter);
+        var cardsf = cards,
+            links = filter.links.reduce((list, item) => {
+                if (Number.isInteger(item)) {
+                    list.push(item);
+                }
+                return list;
+            }, []);
+
+        cardsf = this.filterToken(cardsf) || cardsf;
         cardsf = this.filterLimit(cardsf, filter.limit) || cardsf;
         cardsf = this.filterExactType(cardsf, filter.exacttype) || cardsf;
         cardsf = this.filterName(cardsf, filter.cardname) || cardsf;
@@ -608,11 +639,10 @@ class SearchFilter {
         cardsf = this.filterRace(cardsf, filter.race) || cardsf;
         cardsf = this.filterSetcode(cardsf, filter.setcode) || cardsf;
         cardsf = this.filterAtk(cardsf, filter.atk, filter.atkop) || cardsf;
-        cardsf = this.filterDef(cardsf, filter.def, filter.defop) || cardsf;
+        cardsf = this.filterDef(cardsf, filter.def, filter.defop, links) || cardsf;
         cardsf = this.filterLevel(cardsf, filter.level, filter.levelop) || cardsf;
         cardsf = this.filterScale(cardsf, filter.scale, filter.scaleop) || cardsf;
         cardsf = this.filterRelease(cardsf, filter.release) || cardsf;
-        cardsf = this.filterToken(cardsf) || cardsf;
         return cardsf;
     }
 

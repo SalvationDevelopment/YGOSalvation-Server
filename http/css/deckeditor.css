@@ -160,7 +160,7 @@ img.imgContainer {
 }
 
 control#linkmarkers {
-    height: 10vh;
+    height: 50px;
     display: block;
     float: right;
     position: absolute;
@@ -350,4 +350,114 @@ control#linkmarkers {
 
 [data-limit="2"]:before {
     content: "2";
+}
+
+#linkmarkers {
+    background : white;
+}
+
+#linkmarkers > input[type="checkbox"] {
+    visibility: hidden;
+}
+
+input[type="checkbox"]:after {
+    content: " ";
+    width: 0;
+    height: 0;
+    background: blue;
+    z-index: 50;
+    opacity: 1;
+    position: absolute;
+    visibility: visible;
+}
+
+input[type="checkbox"]:checked:after {
+    background: red;   
+}
+
+#link1:after {
+    border-right: 13px solid white;
+    border-top: 13px solid transparent;
+}
+
+#link3:after {
+    border-left: 13px solid white;
+    border-top: 13px solid transparent;
+}
+
+#link6:after {
+    border-right: 13px solid white;
+    border-bottom: 13px solid transparent;
+}
+#link8:after {
+    border-left: 13px solid white;
+    border-bottom: 13px solid transparent;
+}
+
+#link2:after {
+    border-left: 7px solid white;
+    border-right: 7px solid white;
+    border-bottom: 13px solid transparent;
+}
+
+#link4:after {
+    border-top: 7px solid white;
+    border-bottom: 7px solid white;
+    border-right: 13px solid transparent;
+}
+
+#link5:after {
+    border-top: 7px solid white;
+    border-bottom: 7px solid white;
+    border-left: 13px solid transparent;
+}
+#link7:after {
+    border-left: 7px solid white;
+    border-right: 7px solid white;
+    border-top: 13px solid transparent;
+}
+
+#link1 {
+    position: relative;
+    left : -5px;
+    top : -5px;
+}
+
+#link2 {
+    position: relative;
+    top : -5px;
+}
+
+#link3 {
+    position: relative;
+    left : 5px;
+    top : -5px;
+}
+
+#link4 {
+    position: relative;
+    left: -5px;
+}
+
+#link5 {
+    position: relative;
+    left: 5px;
+}
+
+#link6 {
+    position: relative;
+    left: -5px;
+    top: 5px;
+}
+
+
+#link7 {
+    position: relative;
+    top : 5px;
+}
+
+#link8 {
+    position: relative;
+    left: 5px;
+    top: 5px;
 }

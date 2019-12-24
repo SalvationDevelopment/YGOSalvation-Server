@@ -144,7 +144,8 @@ class DeckEditScreen extends React.Component {
             levelop: 0,
             scale: undefined,
             scaleop: 0,
-            limit: undefined
+            limit: undefined,
+            links : [null, null, null, null, null, null, null, null]
         };
         this.filterKeys = Object.keys(this.settings);
         this.store = store;
@@ -282,7 +283,8 @@ class DeckEditScreen extends React.Component {
             levelop: 0,
             scale: undefined,
             scaleop: 0,
-            limit: undefined
+            limit: undefined,
+            links : [null, null, null, null, null, null, null, null]
         };
         this.store.dispatch({ action: 'RENDER' });
     }
@@ -522,6 +524,11 @@ class DeckEditScreen extends React.Component {
         this.search();
     }
 
+    onLinkChange(pointer, event) {
+        this.settings.links[pointer] = (event.target.checked) ? pointer : null;
+        this.search();
+    }
+
     onSearchChange(event) {
         if (!event.target.id) {
             return;
@@ -701,23 +708,23 @@ class DeckEditScreen extends React.Component {
         if (this.settings.cardtype !== 1) {
             return element('br', {});
         }
-        return element('div', { key : 'link-col', className: 'filtercol' }, [
+        return element('div', { key: 'link-col', className: 'filtercol' }, [
             element('control', { id: 'linkmarkers' }, [
-                element('input', { id: 'link1', type: 'checkbox' }),
-                element('input', { id: 'link2', type: 'checkbox' }),
-                element('input', { id: 'link3', type: 'checkbox' }),
+                element('input', { id: 'link1', type: 'checkbox', onChange: this.onLinkChange.bind(this, 0) }),
+                element('input', { id: 'link2', type: 'checkbox', onChange: this.onLinkChange.bind(this, 1) }),
+                element('input', { id: 'link3', type: 'checkbox', onChange: this.onLinkChange.bind(this, 2) }),
                 element('br'),
-                element('input', { id: 'link4', type: 'checkbox' }),
+                element('input', { id: 'link4', type: 'checkbox', onChange: this.onLinkChange.bind(this, 3) }),
                 element('input', {
                     type: 'checkbox', style: {
                         visibility: 'hidden'
                     }
                 }),
-                element('input', { id: 'link5', type: 'checkbox' }),
+                element('input', { id: 'link5', type: 'checkbox', onChange: this.onLinkChange.bind(this, 4) }),
                 element('br'),
-                element('input', { id: 'link6', type: 'checkbox' }),
-                element('input', { id: 'link7', type: 'checkbox' }),
-                element('input', { id: 'link8', type: 'checkbox' })
+                element('input', { id: 'link6', type: 'checkbox', onChange: this.onLinkChange.bind(this, 5) }),
+                element('input', { id: 'link7', type: 'checkbox', onChange: this.onLinkChange.bind(this, 6) }),
+                element('input', { id: 'link8', type: 'checkbox', onChange: this.onLinkChange.bind(this, 7) })
             ])
         ]);
     }
@@ -812,7 +819,7 @@ class DeckEditScreen extends React.Component {
             insert = this.state.overIndex,
             list = (source === 'search') ? this.state.search : this.state.activeDeck[source],
             card = list[index];
-        
+
         if (!card) {
             return;
         }
@@ -867,7 +874,7 @@ class DeckEditScreen extends React.Component {
                     element('br'),
                     element('h3', {}, 'Filter'),
                     element('controls', {}, [
-                        element('div', { key : 'col-1', className: 'filtercol' }, [
+                        element('div', { key: 'col-1', className: 'filtercol' }, [
                             element('select', { id: 'cardtype', onChange: this.onSearchChange.bind(this) }, [
                                 element('option', { key: 'cardtype-1', value: 5 }, 'Monster/Spell/Trap'),
                                 element('option', { key: 'cardtype-2', value: 1 }, 'Monster'),
@@ -879,7 +886,7 @@ class DeckEditScreen extends React.Component {
                             element('select', { id: 'setcode', onChange: this.onSearchChange.bind(this) }, [
                                 element('option', { value: 'undefined' }, 'Archetype')
                             ].concat(this.state.setcodes.map((list, i) => {
-                                return React.createElement('option', { key : `setcode-${i}`, value: parseInt(list.num) }, list.name);
+                                return React.createElement('option', { key: `setcode-${i}`, value: parseInt(list.num) }, list.name);
                             }))),
                             element('select', { key: 'release', id: 'release', onChange: this.onSearchChange.bind(this) }, this.renderReleases()),
                             element('select', { key: 'limit', id: 'limit', onChange: this.onSearchChange.bind(this) }, [
