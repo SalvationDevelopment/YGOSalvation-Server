@@ -6,13 +6,14 @@ class GamelistScreen extends React.Component {
             duelist: 0,
             activeduels: 0,
             userlist: [],
-            gamelist: {}
+            gamelist: {},
+            filteredList: []
         };
         this.settings = {
-            automatic: true,
-            locked: false,
-            mode: 'Match',
-            ranked: false
+            automatic: null,
+            locked: null,
+            mode: null,
+            ranked: null
         };
         this.store = store;
     }
@@ -23,11 +24,25 @@ class GamelistScreen extends React.Component {
         if (event.target.value === 'on') {
             this.settings[id] = event.target.checked;
         }
+        this.filteredList = this.filter(this.state.userlist);
+        this.store.dispatch({ action: 'RENDER'});
     }
 
     filter(list) {
-        return list.filer((game) => {
-
+        console.log(this.settings);
+        const games = Object.keys(this.state.gamelist).map((key) => {
+            return this.state.gamelist[key];
+        });
+        return games.filter((game) => {
+            return Object.keys(this.settings).every((setting) => {
+                if (typeof this.settings[setting] === 'object') {
+                    return true;
+                }
+                if (!this.settings[setting]) {
+                    return true;
+                }
+                return this.settings[setting] === game[setting];
+            });
         });
     }
 
@@ -39,12 +54,13 @@ class GamelistScreen extends React.Component {
         this.state.userlist = data.userlist;
         this.state.gamelist = data.gamelist;
         this.state.activeduels = Object.keys(data.gamelist).length;
-        this.state.duelist = Object.keys(data.gamelist).reduce((key, usernames) => {
-            data.gamelist[key].players.forEach((player) => {
-                usernames.add(player.username);
+        this.state.duelist = Object.keys(data.gamelist).reduce((list, gameroomid) => {
+            data.gamelist[gameroomid].player.forEach((player) => {
+                list.add(player.username);
             });
-            return usernames;
+            return list;
         }, new Set()).size;
+        this.filteredList = this.filter(this.state.userlist);
     }
 
     enter(room) {
@@ -68,9 +84,8 @@ class GamelistScreen extends React.Component {
     }
 
     renderGamelist() {
-        return Object.keys(this.state.gamelist).map((key) => {
-            const room = this.state.gamelist[key],
-                status = (room.started) ? 'started' : 'avaliable',
+        return this.filteredList.map((room) => {
+            const status = (room.started) ? 'started' : 'avaliable',
                 info = Object.keys(room).reduce((hash, data) => {
                     hash['data-' + data] = room[data];
                     return hash;
@@ -90,20 +105,20 @@ class GamelistScreen extends React.Component {
                 element('h2', {}, 'Filter'),
                 element('controls', {}, [
                     element('div', { className: 'filtercol' }, [
-                        element('select', { id: 'rounds', onChange: this.onChange.bind(this) }, [
-                            element('option', { value: 0 }, 'Single/Match'),
-                            element('option', { value: 1 }, 'Single'),
-                            element('option', { value: 2 }, 'Match')
+                        element('select', { id: 'mode', onChange: this.onChange.bind(this), value: this.settings.mode }, [
+                            element('option', { value: '' }, 'Single/Match'),
+                            element('option', { value: 'Single' }, 'Single'),
+                            element('option', { value: 'Match' }, 'Match')
                         ]),
-                        element('select', { id: 'autofilter', onChange: this.onChange.bind(this) }, [
+                        element('select', { id: 'autofilter', onChange: this.onChange.bind(this), }, [
                             element('option', { value: 0 }, 'Automatic/Manual'),
                             element('option', { value: 1 }, 'Automatic'),
                             element('option', { value: 2 }, 'Manual')
                         ]),
                         element('select', { id: 'autofilter', onChange: this.onChange.bind(this) }, [
-                            element('option', { value: 0 }, 'Ranked/Exhibition'),
-                            element('option', { value: 1 }, 'Ranked'),
-                            element('option', { value: 2 }, 'Exhibition')
+                            element('option', { value: '' }, 'Ranked/Exhibition'),
+                            element('option', { value: 'Ranked' }, 'Ranked'),
+                            element('option', { value: 'Exhibition' }, 'Exhibition')
                         ]),
                         element('input', { id: 'cardname', type: 'text', placeholder: 'Username', onChange: this.onChange.bind(this) }),
                         element('br'),

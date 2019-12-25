@@ -975,12 +975,13 @@ function Game(settings) {
         priority: false,
         prerelease: settings.PRERELEASE || true,
         roompass: settings.ROOMPASS || uuid(),
+        ranked : (settings.ranked === 'true') ? 'Ranked' : 'Exhibition',
         rule: settings.RULE || 0,
         shuffle: (settings.SHUFFLE === 'true'),
         started: false,
         startLP: settings.LIFEPOINTS || 8000,
         start_hand_count: settings.STARTING_HAND || 5,
-        time: settings.TIME_LIMIT || 3000
+        time: settings.TIME_LIMIT || 3000,
     };
 }
 
