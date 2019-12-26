@@ -14,7 +14,9 @@ class GamelistScreen extends React.Component {
             locked: '',
             mode: '',
             ranked: '',
-            banlist: ''
+            banlist: '',
+            minelo: '',
+            maxelo: ''
         };
         this.store = store;
         this.store.register('GAMELIST_BANLIST', (action) => {
@@ -43,12 +45,23 @@ class GamelistScreen extends React.Component {
                 if (!this.settings[setting]) {
                     return true;
                 }
-                if (setting !== 'username') {
-                    return this.settings[setting] === game[setting];
+                if (setting === 'username') {
+                    return game.player.some((player) => {
+                        return player.username.indexOf(this.settings[setting]) > -1;
+                    });
                 }
-                return game.player.some((player) => {
-                    return player.username.indexOf(this.settings[setting]) > -1;
-                });
+                if (setting === 'minelo') {
+                    return game.player.some((player) => {
+                        return player.ranking.elo >= Number(this.settings[setting]);
+                    });
+                }
+                if (setting === 'maxlo') {
+                    return game.player.some((player) => {
+                        return player.ranking.elo <= Number(this.settings[setting]);
+                    });
+                }
+                return this.settings[setting] === game[setting];
+               
             });
         });
     }
@@ -80,7 +93,9 @@ class GamelistScreen extends React.Component {
             locked: '',
             mode: '',
             ranked: '',
-            banlist: ''
+            banlist: '',
+            minelo: '',
+            maxelo: ''
         };
         this.store.dispatch({ action: 'RENDER' });
     }
@@ -141,6 +156,9 @@ class GamelistScreen extends React.Component {
                         ]),
                         element('input', { key : 'username', id: 'username', type: 'text', placeholder: 'Username', onBlur: this.onChange.bind(this) }),
                         element('br', {key : 'br-1' }),
+                        element('input', { key : 'minelo', id: 'minelo', type: 'number', placeholder: 'Minimum Elo', onBlur: this.onChange.bind(this) }),
+                        element('input', { key : 'maxelo', id: 'maxelo', type: 'number', placeholder: 'Maximum Elo', onBlur: this.onChange.bind(this) }),
+                        element('br', {key : 'br-2' }),
                         element('button', { key : 'reset', onClick: this.reset.bind(this) }, 'Reset')
                     ])
                 ])
