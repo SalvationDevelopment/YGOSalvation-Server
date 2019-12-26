@@ -10,12 +10,17 @@ class GamelistScreen extends React.Component {
             filteredList: []
         };
         this.settings = {
-            automatic: null,
-            locked: null,
-            mode: null,
-            ranked: null
+            automatic: '',
+            locked: '',
+            mode: '',
+            ranked: '',
+            banlist: ''
         };
         this.store = store;
+        this.store.register('GAMELIST_BANLIST', (action) => {
+            this.state.primary = action.primary;
+            this.state.banlist = action.banlist;
+        });
     }
 
     onChange(event) {
@@ -25,7 +30,7 @@ class GamelistScreen extends React.Component {
             this.settings[id] = event.target.checked;
         }
         this.filteredList = this.filter(this.state.userlist);
-        this.store.dispatch({ action: 'RENDER'});
+        this.store.dispatch({ action: 'RENDER' });
     }
 
     filter(list) {
@@ -35,13 +40,15 @@ class GamelistScreen extends React.Component {
         });
         return games.filter((game) => {
             return Object.keys(this.settings).every((setting) => {
-                if (typeof this.settings[setting] === 'object') {
-                    return true;
-                }
                 if (!this.settings[setting]) {
                     return true;
                 }
-                return this.settings[setting] === game[setting];
+                if (setting !== 'username') {
+                    return this.settings[setting] === game[setting];
+                }
+                return game.player.some((player)=>{
+                    return player.username.indexOf(this.settings[setting]) > -1;
+                });
             });
         });
     }
@@ -68,7 +75,14 @@ class GamelistScreen extends React.Component {
     }
 
     reset() {
-
+        this.settings = {
+            automatic: '',
+            locked: '',
+            mode: '',
+            ranked: '',
+            banlist: ''
+        };
+        this.store.dispatch({ action: 'RENDER' });
     }
 
     names(room) {
@@ -120,7 +134,7 @@ class GamelistScreen extends React.Component {
                             element('option', { value: 'Ranked' }, 'Ranked'),
                             element('option', { value: 'Exhibition' }, 'Exhibition')
                         ]),
-                        element('input', { id: 'cardname', type: 'text', placeholder: 'Username', onChange: this.onChange.bind(this) }),
+                        element('input', { id: 'username', type: 'text', placeholder: 'Username', onBlur: this.onChange.bind(this) }),
                         element('br'),
                         element('button', { onClick: this.reset.bind(this) }, 'Reset')
                     ])
