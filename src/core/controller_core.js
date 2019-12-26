@@ -523,7 +523,8 @@ function makeGame(pduel, settings) {
 function duel(settings, errorHandler, players, observers) {
     var pduel,
         game = {};
-    if (settings.suffle) {
+        
+    if (settings.shuffle) {
         deepShuffle(players[0].main);
         deepShuffle(players[1].main);
     }

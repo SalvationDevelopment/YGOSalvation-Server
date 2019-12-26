@@ -886,7 +886,7 @@ meter.p1time {
 .fieldimage {
     width: 800px;
     height: 600px;
-    transform: rotate3d(1, 0, 0, 20deg);
+    transform: rotate3d(1, 0, 0, 30deg);
     perspective-origin: 0;
     margin: 0 auto;
     background-image: url(../img/textures/newfield.png);
@@ -1027,7 +1027,7 @@ div#yesnobox {
 #revealed img {
     margin: 10px;
     height: 37vh;
-    width: 13vw;
+    min-width: 13vw;
     display: inline-block;
 }
 

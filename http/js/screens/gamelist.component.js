@@ -61,7 +61,7 @@ class GamelistScreen extends React.Component {
                     });
                 }
                 return this.settings[setting] === game[setting];
-               
+
             });
         });
     }
@@ -126,40 +126,60 @@ class GamelistScreen extends React.Component {
         });
     }
 
+    isIllegal(game) {
+        if (!game.shuffle) {
+            return false;
+        }
+        if (game.banlist === 'No Banlist') {
+            return false;
+        }
+        if (game.banlist === 'No Banlist') {
+            return false;
+        }
+        if (game.draw_count !== 1) {
+            return false;
+        }
+        if (game.start_hand_count !== 5) {
+            return false;
+        }
+        return true;
+
+    }
+
     render() {
         const element = React.createElement;
         return [
             element('div', { id: 'gamelistitems' }, this.renderGamelist()),
             element('div', { id: 'gamelistfilter', key: 'gamelistfilter' }, [
-                element('h2', {key : 'h2-1'}, 'Filter'),
-                element('controls', {key : 'control-1'}, [
-                    element('div', {key : 'col-1', className: 'filtercol' }, [
-                        element('select', { key : 'banlist', id: 'banlist', onChange: this.onChange.bind(this) }, [
-                            element('option', { value: '', selected: true }, 'Banlist')
+                element('h2', { key: 'h2-1' }, 'Filter'),
+                element('controls', { key: 'control-1' }, [
+                    element('div', { key: 'col-1', className: 'filtercol' }, [
+                        element('select', { key: 'banlist', id: 'banlist', onChange: this.onChange.bind(this) }, [
+                            element('option', { key: 'empty', value: '', selected: true }, 'Banlist')
                         ].concat(this.state.banlist.map((list, i) => {
-                            return element('option', { value: list.name }, list.name);
+                            return element('option', { value: list.name, key: list.name }, list.name);
                         }))),
-                        element('select', { key : 'mode', id: 'mode', onChange: this.onChange.bind(this), value: this.settings.mode }, [
-                            element('option', { value: '' }, 'Single/Match'),
-                            element('option', { value: 'Single' }, 'Single'),
-                            element('option', { value: 'Match' }, 'Match')
+                        element('select', { key: 'mode', id: 'mode', onChange: this.onChange.bind(this), value: this.settings.mode }, [
+                            element('option', { key: 'sm', value: '' }, 'Single/Match'),
+                            element('option', { key: 's', value: 'Single' }, 'Single'),
+                            element('option', { key: 'm', value: 'Match' }, 'Match')
                         ]),
-                        element('select', {key : 'automatic',  id: 'automatic', onChange: this.onChange.bind(this), }, [
-                            element('option', { value: '' }, 'Automatic/Manual'),
-                            element('option', { value: 'Automatic' }, 'Automatic'),
-                            element('option', { value: 'Manual' }, 'Manual')
+                        element('select', { key: 'automatic', id: 'automatic', onChange: this.onChange.bind(this), }, [
+                            element('option', { key: 'am', value: '' }, 'Automatic/Manual'),
+                            element('option', { key: 'a', value: 'Automatic' }, 'Automatic'),
+                            element('option', { key: 'm', value: 'Manual' }, 'Manual')
                         ]),
-                        element('select', { key : 'ranked', id: 'ranked', onChange: this.onChange.bind(this) }, [
-                            element('option', { value: '' }, 'Ranked/Exhibition'),
-                            element('option', { value: 'Ranked' }, 'Ranked'),
-                            element('option', { value: 'Exhibition' }, 'Exhibition')
+                        element('select', { key: 'ranked', id: 'ranked', onChange: this.onChange.bind(this) }, [
+                            element('option', { key: 're', value: '' }, 'Ranked/Exhibition'),
+                            element('option', { key: 'r', value: 'Ranked' }, 'Ranked'),
+                            element('option', { key: 'e', value: 'Exhibition' }, 'Exhibition')
                         ]),
-                        element('input', { key : 'username', id: 'username', type: 'text', placeholder: 'Username', onBlur: this.onChange.bind(this) }),
-                        element('br', {key : 'br-1' }),
-                        element('input', { key : 'minelo', id: 'minelo', type: 'number', placeholder: 'Minimum Elo', onBlur: this.onChange.bind(this) }),
-                        element('input', { key : 'maxelo', id: 'maxelo', type: 'number', placeholder: 'Maximum Elo', onBlur: this.onChange.bind(this) }),
-                        element('br', {key : 'br-2' }),
-                        element('button', { key : 'reset', onClick: this.reset.bind(this) }, 'Reset')
+                        element('input', { key: 'username', id: 'username', type: 'text', placeholder: 'Username', onBlur: this.onChange.bind(this) }),
+                        element('br', { key: 'br-1' }),
+                        element('input', { key: 'minelo', id: 'minelo', type: 'number', placeholder: 'Minimum Elo', onBlur: this.onChange.bind(this) }),
+                        element('input', { key: 'maxelo', id: 'maxelo', type: 'number', placeholder: 'Maximum Elo', onBlur: this.onChange.bind(this) }),
+                        element('br', { key: 'br-2' }),
+                        element('button', { key: 'reset', onClick: this.reset.bind(this) }, 'Reset')
                     ])
                 ])
             ]),

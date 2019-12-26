@@ -10,7 +10,6 @@
  * @returns {DataStream} data stream with input method.
  */
 function DataStream() {
-    'use strict';
     var memory = new Buffer([]);
 
     /**

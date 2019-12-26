@@ -145,7 +145,7 @@ class DeckEditScreen extends React.Component {
             scale: undefined,
             scaleop: 0,
             limit: undefined,
-            links : [null, null, null, null, null, null, null, null]
+            links: [null, null, null, null, null, null, null, null]
         };
         this.filterKeys = Object.keys(this.settings);
         this.store = store;
@@ -284,7 +284,7 @@ class DeckEditScreen extends React.Component {
             scale: undefined,
             scaleop: 0,
             limit: undefined,
-            links : [null, null, null, null, null, null, null, null]
+            links: [null, null, null, null, null, null, null, null]
         };
         this.store.dispatch({ action: 'RENDER' });
     }
@@ -608,17 +608,33 @@ class DeckEditScreen extends React.Component {
         });
     }
 
+    listReduce(deck) {
+        const element = React.createElement,
+            hashMap = deck.reduce((list, card) => {
+                if (!list[card.name]) {
+                    list[card.name] = 1;
+                    return list;
+                }
+                list[card.name]++;
+                return list;
+            }, {});
+        return Object.keys(hashMap).map((name, i) => {
+            return element('div', { key: `x${i}${name}` }, `${hashMap[name]}x ${name}`)
+        });
+
+    }
+
     renderCardList() {
         const element = React.createElement,
-            main = this.state.activeDeck.main.map((card) => element('div', {}, card.name)),
-            side = this.state.activeDeck.side.map((card) => element('div', {}, card.name)),
-            extra = this.state.activeDeck.extra.map((card) => element('div', {}, card.name));
+            main = this.listReduce(this.state.activeDeck.main),
+            side = this.listReduce(this.state.activeDeck.side),
+            extra = this.listReduce(this.state.activeDeck.extra);
         return [
-            element('h4', {}, `Main Deck x${this.state.activeDeck.main.length}`),
+            element('h4', {}, `Main Deck - ${this.state.activeDeck.main.length}x`),
             main,
-            element('h4', {}, `Side Deck x${this.state.activeDeck.side.length}`),
+            element('h4', {}, `Side Deck - ${this.state.activeDeck.side.length}x`),
             side,
-            element('h4', {}, `Extra Deck x${this.state.activeDeck.extra.length}`),
+            element('h4', {}, `Extra Deck - ${this.state.activeDeck.extra.length}x`),
             extra];
     }
 
@@ -775,7 +791,7 @@ class DeckEditScreen extends React.Component {
         ])];
     }
 
-    onCardDoubleClick(source, index) {
+    onCardDoubleClick(source, index, event) {
         event.preventDefault();
         if (source === 'search') {
             const card = this.state.search[index];

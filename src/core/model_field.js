@@ -387,8 +387,8 @@ function hideViewOfExtra(view, allowed) {
     view.forEach(function (card, index) {
         output[index] = {};
         Object.assign(output[index], card);
-        // if (output[index].position === 'FaceUpAttack') {
-        //     output[index].id = (allowed) ? output[index].id : 0;
+        // if (card.position === 'FaceUpAttack') {
+        //     output[index].id = (allowed) ? card.id : 0;
         // }
     });
 
@@ -406,8 +406,7 @@ function hideHand(view) {
     view.forEach(function (card, index) {
         output[index] = {};
         Object.assign(output[index], card);
-        //output[index].id = 0;
-        //output[index].position = 'FaceDown';
+        output[index].position =  (card.isPublic) ? 'FaceUp' : 'FaceDown';
     });
 
     return output;

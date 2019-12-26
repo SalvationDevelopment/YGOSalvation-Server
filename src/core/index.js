@@ -353,6 +353,13 @@ function deckCheck(game, client, message) {
         game.cardpool,
         game.prerelease);
 
+    if (!game.deckcheck) {
+        client.write(({
+            action: 'lock',
+            result: 'success'
+        }));
+        return true;
+    }
 
     if (validation.error) {
         client.write(({
