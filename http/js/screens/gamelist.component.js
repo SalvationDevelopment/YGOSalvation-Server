@@ -46,7 +46,7 @@ class GamelistScreen extends React.Component {
                 if (setting !== 'username') {
                     return this.settings[setting] === game[setting];
                 }
-                return game.player.some((player)=>{
+                return game.player.some((player) => {
                     return player.username.indexOf(this.settings[setting]) > -1;
                 });
             });
@@ -114,29 +114,34 @@ class GamelistScreen extends React.Component {
     render() {
         const element = React.createElement;
         return [
-            React.createElement('div', { id: 'gamelistitems' }, this.renderGamelist()),
-            React.createElement('div', { id: 'gamelistfilter', key: 'gamelistfilter' }, [
-                element('h2', {}, 'Filter'),
-                element('controls', {}, [
-                    element('div', { className: 'filtercol' }, [
-                        element('select', { id: 'mode', onChange: this.onChange.bind(this), value: this.settings.mode }, [
+            element('div', { id: 'gamelistitems' }, this.renderGamelist()),
+            element('div', { id: 'gamelistfilter', key: 'gamelistfilter' }, [
+                element('h2', {key : 'h2-1'}, 'Filter'),
+                element('controls', {key : 'control-1'}, [
+                    element('div', {key : 'col-1', className: 'filtercol' }, [
+                        element('select', { key : 'banlist', id: 'banlist', onChange: this.onChange.bind(this) }, [
+                            element('option', { value: '', selected: true }, 'Banlist')
+                        ].concat(this.state.banlist.map((list, i) => {
+                            return element('option', { value: list.name }, list.name);
+                        }))),
+                        element('select', { key : 'mode', id: 'mode', onChange: this.onChange.bind(this), value: this.settings.mode }, [
                             element('option', { value: '' }, 'Single/Match'),
                             element('option', { value: 'Single' }, 'Single'),
                             element('option', { value: 'Match' }, 'Match')
                         ]),
-                        element('select', { id: 'autofilter', onChange: this.onChange.bind(this), }, [
-                            element('option', { value: 0 }, 'Automatic/Manual'),
-                            element('option', { value: 1 }, 'Automatic'),
-                            element('option', { value: 2 }, 'Manual')
+                        element('select', {key : 'automatic',  id: 'automatic', onChange: this.onChange.bind(this), }, [
+                            element('option', { value: '' }, 'Automatic/Manual'),
+                            element('option', { value: 'Automatic' }, 'Automatic'),
+                            element('option', { value: 'Manual' }, 'Manual')
                         ]),
-                        element('select', { id: 'autofilter', onChange: this.onChange.bind(this) }, [
+                        element('select', { key : 'ranked', id: 'ranked', onChange: this.onChange.bind(this) }, [
                             element('option', { value: '' }, 'Ranked/Exhibition'),
                             element('option', { value: 'Ranked' }, 'Ranked'),
                             element('option', { value: 'Exhibition' }, 'Exhibition')
                         ]),
-                        element('input', { id: 'username', type: 'text', placeholder: 'Username', onBlur: this.onChange.bind(this) }),
-                        element('br'),
-                        element('button', { onClick: this.reset.bind(this) }, 'Reset')
+                        element('input', { key : 'username', id: 'username', type: 'text', placeholder: 'Username', onBlur: this.onChange.bind(this) }),
+                        element('br', {key : 'br-1' }),
+                        element('button', { key : 'reset', onClick: this.reset.bind(this) }, 'Reset')
                     ])
                 ])
             ]),

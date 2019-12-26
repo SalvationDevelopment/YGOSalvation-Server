@@ -80,7 +80,7 @@ sction#gamelist {
 #gamelist input {
     display: inline-block;
     background: transparent;
-    color: white;
+    color: gray;
     margin: 1vh;
     border: 1px solid white;
     padding: 1%;

@@ -474,7 +474,7 @@ function Duel() {
             });
         });
 
-        if (game.automatic) {
+        if (game.automatic === 'Automatic') {
             const instance = automaticEngine.duel(game, players, spectators);
             duel.getField = instance.getField;
             duel.respond = instance.respond;
@@ -961,7 +961,7 @@ function boot(httpserver, server, game, state) {
  */
 function Game(settings) {
     return {
-        automatic: (settings.AUTOMATIC === 'true'),
+        automatic: (settings.AUTOMATIC === 'true') ? 'Automatic' : 'Manual',
         banlist: settings.BANLIST || 'No Banlist',
         cardpool: settings.CARD_POOL || 'OCG/TCG',
         deckcheck: (settings.DECK_CHECK === 'true'),
@@ -975,7 +975,7 @@ function Game(settings) {
         priority: false,
         prerelease: settings.PRERELEASE || true,
         roompass: settings.ROOMPASS || uuid(),
-        ranked : (settings.ranked === 'true') ? 'Ranked' : 'Exhibition',
+        ranked: (settings.ranked === 'true') ? 'Ranked' : 'Exhibition',
         rule: settings.RULE || 0,
         shuffle: (settings.SHUFFLE === 'true'),
         started: false,
@@ -1025,8 +1025,8 @@ function HTTPServer() {
 function PrimusInstance(httpserver) {
     return new Primus(
         httpserver, {
-            parser: 'JSON'
-        });
+        parser: 'JSON'
+    });
 }
 
 /**

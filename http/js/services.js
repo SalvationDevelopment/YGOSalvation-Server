@@ -205,6 +205,7 @@ $.getJSON('/manifest/manifest_0-en-OCGTCG.json', function (data) {
         });
         banlist.reverse();
         store.dispatch({ action: 'HOST_BANLIST', banlist, primary });
+        store.dispatch({ action: 'GAMELIST_BANLIST', banlist, primary });
         store.dispatch({ action: 'DECK_EDITOR_BANLIST', banlist, primary });
 
         $.getJSON('./setcodes.json', 'utf-8', function (data) {
