@@ -276,6 +276,10 @@ class ApplicationComponent extends React.Component {
                 this.state.question_selection.push(message.options.must_select_count);
                 this.duel.reveal(message.options.must_select.concat(message.options.can_select));
                 break;
+            case 'MSG_ADD_COUNTER':
+                debugger;
+                this.duel.select(message.options.select_options);
+                break;
             case 'MSG_SELECT_TRIBUTE':
                 this.duel.reveal(message.options.selectable_targets);
                 break;

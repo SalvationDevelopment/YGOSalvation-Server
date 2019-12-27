@@ -285,10 +285,10 @@ function boardController(gameBoard, slot, message, ygopro, player) {
             gameBoard.announcement(slot, message);
             break;
         case ('MSG_ADD_COUNTER'):
-            gameBoard.announcement(slot, message);
+            askUser(gameBoard, slot, message, ygopro, 'MSG_ADD_COUNTER');
             break;
         case ('MSG_REMOVE_COUNTER'):
-            gameBoard.announcement(slot, message);
+            askUser(gameBoard, slot, message, ygopro, 'MSG_REMOVE_COUNTER');
             break;
         case ('MSG_ATTACK'): // Good
             output[slot] = {

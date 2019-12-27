@@ -118,28 +118,29 @@ class GamelistScreen extends React.Component {
                 info = Object.keys(room).reduce((hash, data) => {
                     hash['data-' + data] = room[data];
                     return hash;
-                }, {});
+                }, {}),
+                illegal = this.isIllegal(room) ? 'illegal' : ''
             return React.createElement('div', Object.assign({
                 onClick: this.enter.bind(this, room),
-                className: `game ${room.mode} ${status}`
+                className: `game ${room.mode} ${status} ${illegal}`
             }, info), [this.names(room), React.createElement('span', {}, room.banlist)]);
         });
     }
 
-    isIllegal(game) {
-        if (!game.shuffle) {
+    isIllegal(room) {
+        if (!room.shuffle) {
             return false;
         }
-        if (game.banlist === 'No Banlist') {
+        if (room.banlist === 'No Banlist') {
             return false;
         }
-        if (game.banlist === 'No Banlist') {
+        if (room.banlist === 'No Banlist') {
             return false;
         }
-        if (game.draw_count !== 1) {
+        if (room.draw_count !== 1) {
             return false;
         }
-        if (game.start_hand_count !== 5) {
+        if (room.start_hand_count !== 5) {
             return false;
         }
         return true;

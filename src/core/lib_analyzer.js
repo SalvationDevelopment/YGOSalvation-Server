@@ -457,6 +457,13 @@ function msg_add_counter(message, pbuf, game) {
     message.location = enums.locations[pbuf.readInt8()];
     message.index = pbuf.readInt8();
     message.count = pbuf.readInt8();
+    message.select_options = {
+        zones: [{
+            player: message.player,
+            location: message.location,
+            index: message.index
+        }]
+    }
     game.sendBufferToPlayer(0, message);
     game.reSendToPlayer(1);
     game.sendToObservers();

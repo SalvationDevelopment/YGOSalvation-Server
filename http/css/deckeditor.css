@@ -329,13 +329,14 @@ control#linkmarkers {
     display: block;
     position: absolute;
     top: 0;
-    right: 0;
+    left: -5px;
     text-align: center;
     font-weight: bold;
     color: yellow;
     border-radius: 7vw;
     line-height: 1.2em;
     border: 3px solid red;
+    z-index: 1;
 }
 
 [data-limit="0"]:before {
