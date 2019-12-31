@@ -29,6 +29,7 @@
         "hsts": "^2.2.0",
         "json": "^9.0.6",
         "jsonfile": "^2.4.0",
+        "jsonwebtoken": "^8.5.1",
         "mongoose": "^5.7.5",
         "nedb": "^1.7.2",
         "node-static": "^0.7.11",

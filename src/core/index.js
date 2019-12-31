@@ -468,16 +468,9 @@ function Duel() {
 
             process.send({
                 action: 'win',
-                banlist: game.banlist,
-                decks: game.decks,
-                loser: {
-                    username: game.player[Math.abs(command.player - 1)].username,
-                    elo: game.player[Math.abs(command.player - 1)].ranking.elo
-                },
-                winner: {
-                    username: game.player[command.player].username,
-                    elo: game.player[command.player].ranking.elo
-                }
+                ranked : Boolean(game.ranked === "Ranked"),
+                loserID: game.player[Math.abs(command.player - 1)].id,
+                winnerID: game.player[command.player].id
             });
         });
 

@@ -3,7 +3,9 @@ require('dotenv').config();
 const axios = require('axios'),
     CMS_URL = process.env.CMS_URL,
     controller = require('./src'),
-    fs = require('fs');
+    fs = require('fs'),
+    SERVER_USERNAME = process.env.SERVER_USERNAME,
+    SERVER_PASSWORD = process.env.SERVER_PASSWORD;
 
 
 
@@ -15,8 +17,8 @@ async function main() {
     console.log('[SERVER] YGO Salvation Server - Saving Yu-Gi-Oh!'.bold.magenta);
     const banlist = './http/manifest/banlist.json';
 
-    if (!CMS_URL) {
-        console.error('Administrative Server URL is not configured, no database access, see README.MD for details.');
+    if (!CMS_URL || !SERVER_USERNAME || !SERVER_PASSWORD) {
+        console.error('Administrative Server and User are not configured, no database access, see README.MD for details.');
         process.exit();
     }
     try {

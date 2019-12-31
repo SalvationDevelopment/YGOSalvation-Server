@@ -16,7 +16,8 @@ const child_process = require('child_process'),
     adminlist = {},
     primusServer = require('./server_http')(),
     Primus = require('primus'),
-    Rooms = require('primus-rooms');
+    Rooms = require('primus-rooms'),
+    services = require('./endpoint_services');
 
 var userlist = [],
     chatbox = [],
@@ -320,7 +321,7 @@ function childHandler(child, socket, message) {
             });
             break;
         case 'win':
-            userController.recordDuelResult(message, function () {
+            services.logDuel(message, function () {
                 child.send({
                     action: 'kill'
                 });
@@ -419,7 +420,6 @@ function onData(data, socket) {
                         friends: info.friends,
                         session: info.session,
                         sessionExpiration: info.sessionExpiration,
-                        ranking: info.ranking,
                         admin: info.admin,
                         rewards: info.rewards,
                         settings: info.settings,
