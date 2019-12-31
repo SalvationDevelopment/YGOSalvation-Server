@@ -11,7 +11,7 @@
 const child_process = require('child_process'),
     hotload = require('hotload'),
     cardidmap = require('../http/cardidmap.js'),
-    userController = require('./model_controller_users.js'),
+    userController = require('./endpoint_users.js'),
     adminlist = {},
     primusServer = require('./server_http')(),
     Primus = require('primus'),
@@ -64,8 +64,8 @@ function unsafePort() {
 }
 
 function registrationCall(data, socket) {
-    userController.validate(true, data, function (error, valid, info) {
-
+    userController.validate(true, data, function (error, valid, responseData) {
+        const info = responseData.user;
         if (error) {
             console.log(error);
             socket.write({
@@ -82,12 +82,13 @@ function registrationCall(data, socket) {
             return;
         }
         if (valid) {
-            socket.username = info.username;
+            socket.username = info.user.username;
+            socket.admin = (info.role.name === Administrator);
             console.log(`${socket.username} has logged in`.bold);
             socket.write({
                 clientEvent: 'global',
                 message: currentGlobalMessage,
-                admin: adminlist[data.username]
+                admin: (info.role.name === Administrator)
             });
             socket.write({
                 clientEvent: 'ackresult',

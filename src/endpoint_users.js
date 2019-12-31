@@ -1,7 +1,17 @@
-const CMS_URL = process.env.CMS_URL
+const axios = require('axios'),
+    CMS_URL = process.env.CMS_URL
 
-function validate() {
 
+function validate(login, data, callback) {
+    axios.post(`${CMS_URL}/auth/local`, {
+        identifier: data.username,
+        password: data.password,
+    }).then(response => {
+        console.log(response.data);
+       callback(null, true, response.data)
+    }).catch(error => {
+        callback(error, false);
+    });
 }
 
 function validateSession() { }
@@ -44,12 +54,35 @@ async function register(request, response) {
     } catch (error) {
         return response.send(error);
     }
-
 }
+
+async function forgot(request, response) {
+    var payload = request.body || {};
+
+    if (!payload.email) {
+        response.send({
+            error: 'No Email Address'
+        });
+        return;
+    } 
+
+    try {
+        const registerResponse = await axios.post(`${CMS_URL}/auth/forgot-password`, {
+            email: payload.email,
+            url: 'http:/localhost:1337/admin/plugins/users-permissions/auth/reset-password',
+        });
+        response.send(registerResponse);
+    } catch (error) {
+        return response.send(error);
+    }
+}
+
 
 function setupController(app) {
 
     app.post('/register', register);
+    app.post('/forgot', register);
+    
 }
 
 module.exports = {
