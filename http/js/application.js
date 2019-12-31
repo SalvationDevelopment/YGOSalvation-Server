@@ -25,6 +25,7 @@ class ApplicationComponent extends React.Component {
         this.gamelist = new GamelistScreen(store, {});
         this.rankings = new RankingScreen(store);
         this.faqs = new FAQsScreen();
+        this.news = new NewsScreen(store);
         this.credits = new CreditsScreen();
         this.settings = new SettingsScreen(store);
         this.downloads = new DownloadsPage();
@@ -279,12 +280,14 @@ class ApplicationComponent extends React.Component {
                 return React.createElement('section', { id: 'rankings', key: 'rankings' }, this.rankings.render());
             case 'faqs':
                 return React.createElement('section', { id: 'faqs', key: 'raqs' }, this.faqs.render());
+            case 'news':
+                return React.createElement('section', { id: 'news', key: 'raqs' }, this.news.render());
             case 'downloads':
                 return React.createElement('section', { id: 'downloads', key: 'downloads' }, this.downloads.render());
             case 'credits':
                 return React.createElement('section', { id: 'credits', key: 'credits' }, this.credits.render());
             default:
-                return React.createElement('section', { id: 'error', key :'error' }, '');
+                return React.createElement('section', { id: 'error', key: 'error' }, '');
         }
     }
 
@@ -325,7 +328,7 @@ class ApplicationComponent extends React.Component {
     }
 
     render() {
-        return React.createElement('div', {key : 'top'}, [
+        return React.createElement('div', { key: 'top' }, [
             this.superheader.render(this.state.loggedIn),
             this.screen(),
             this.language(),

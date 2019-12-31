@@ -7,7 +7,7 @@ const express = require('express'),
     app = express(),
     compression = require('compression'),
     users = require('./endpoint_users.js'),
-    decks = require('./endpoint_decks.js'),
+    news = require('./endpoint_news.js'),
     // Ddos = require('ddos'),
     bodyParser = require('body-parser'),
     helmet = require('helmet'),
@@ -108,6 +108,7 @@ module.exports = function () {
         gitRoute(req, res, next);
     });
     users.setupEndpoints(app);
+    news.setupEndpoints(app);
     let primusServer;
 
     try {

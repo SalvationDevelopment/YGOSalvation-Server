@@ -18,6 +18,7 @@ class SuperHeaderComponent extends React.Component {
     links(loggedIn) {
         if (loggedIn) {
             return [
+                React.createElement('li', { onClick: this.nav.bind(this, 'news'), key: 'news', className: 'psudolinksingle' }, 'News'),
                 React.createElement('li', { onClick: this.nav.bind(this, 'deckedit'), key: 'deckedit', className: 'psudolinksingle' }, 'Deck Edit'),
                 React.createElement('li', { onClick: this.nav.bind(this, 'host'), key: 'host', className: 'psudolinksingle' }, 'Host'),
                 React.createElement('li', { onClick: this.nav.bind(this, 'gamelist'), key: 'gamelist', className: 'psudolinksingle' }, 'Game List'),
@@ -33,6 +34,7 @@ class SuperHeaderComponent extends React.Component {
             ];
         }
         return [
+            React.createElement('li', { onClick: this.nav.bind(this, 'news'), key: 'news', className: 'psudolinksingle' }, 'News'),
             //React.createElement('li', { onClick: this.nav.bind(this, 'deckedit'), key: 'deckedit', className: 'psudolinksingle' }, 'Deck Edit'),
             //React.createElement('li', { onClick: this.nav.bind(this, 'host'), key: 'host', className: 'psudolinksingle' }, 'Host'),
             //React.createElement('li', { onClick: this.nav.bind(this, 'gamelist'), key: 'gamelist', className: 'psudolinksingle' }, 'Game List'),
