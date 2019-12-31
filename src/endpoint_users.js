@@ -2,16 +2,26 @@ const axios = require('axios'),
     CMS_URL = process.env.CMS_URL
 
 
-function validate(login, data, callback) {
-    axios.post(`${CMS_URL}/auth/local`, {
+function validate(attempt, data, callback) {
+    login(data).then((response => {
+        callback(null, true, response)
+    })).catch((error) => {
+        callback(error, false, {});
+    });
+}
+
+async function login(data) {
+    const response = await axios.post(`${CMS_URL}/auth/local`, {
         identifier: data.username,
         password: data.password,
-    }).then(response => {
-        console.log(response.data);
-       callback(null, true, response.data)
-    }).catch(error => {
-        callback(error, false);
+    }), decks = await axios.get(`${CMS_URL}/decks`, {
+        headers: {
+            Authorization: `Bearer ${response.data.jwt}`
+        }
     });
+    console.log(decks);
+    response.data.decks = decks.data;
+    return response.data;
 }
 
 function validateSession() { }
@@ -64,7 +74,7 @@ async function forgot(request, response) {
             error: 'No Email Address'
         });
         return;
-    } 
+    }
 
     try {
         const registerResponse = await axios.post(`${CMS_URL}/auth/forgot-password`, {
@@ -78,17 +88,17 @@ async function forgot(request, response) {
 }
 
 
-function setupController(app) {
+function setupEndpoints(app) {
 
     app.post('/register', register);
     app.post('/forgot', register);
-    
+
 }
 
 module.exports = {
     recordDuelResult,
     saveDeck,
-    setupController,
+    setupEndpoints,
     validate,
     validateSession,
 

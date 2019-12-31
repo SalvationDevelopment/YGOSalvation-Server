@@ -65,6 +65,7 @@ function unsafePort() {
 
 function registrationCall(data, socket) {
     userController.validate(true, data, function (error, valid, responseData) {
+        console.log(error, valid, responseData);
         const info = responseData.user;
         if (error) {
             console.log(error);
@@ -82,13 +83,13 @@ function registrationCall(data, socket) {
             return;
         }
         if (valid) {
-            socket.username = info.user.username;
-            socket.admin = (info.role.name === Administrator);
+            socket.username = info.username;
+            socket.admin = (info.role.name === 'Administrator');
             console.log(`${socket.username} has logged in`.bold);
             socket.write({
                 clientEvent: 'global',
                 message: currentGlobalMessage,
-                admin: (info.role.name === Administrator)
+                admin: (info.role.name === 'Administrator')
             });
             socket.write({
                 clientEvent: 'ackresult',
