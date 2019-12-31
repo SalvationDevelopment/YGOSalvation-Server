@@ -1,5 +1,7 @@
 const axios = require('axios'),
-    CMS_URL = process.env.CMS_URL
+    CMS_URL = process.env.CMS_URL,
+    sanitizer = require('sanitizer'),
+    zxcvbn = require('zxcvbn');
 
 
 function validate(attempt, data, callback) {
@@ -59,9 +61,16 @@ async function register(request, response) {
             email: payload.email,
             password: payload.password,
         });
-        response.send(registerResponse);
+        response.send({
+            info: registerResponse.data,
+            success: true,
+            error: null
+        });
     } catch (error) {
-        return response.send(error);
+        return response.send({
+            success: false,
+            error: 'Unable to create Account.'
+        });
     }
 }
 
@@ -82,7 +91,10 @@ async function forgot(request, response) {
         });
         response.send(registerResponse);
     } catch (error) {
-        return response.send(error);
+        return response.send({
+            success: false,
+            error: error.message
+        });
     }
 }
 
