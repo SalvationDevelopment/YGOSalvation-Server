@@ -176,7 +176,7 @@ class ApplicationComponent extends React.Component {
         }
         const info = data.info || data.result;
 
-        if (info.session && info.bans.length) {
+        if (info.session && info.blocked) {
             return;
         }
 

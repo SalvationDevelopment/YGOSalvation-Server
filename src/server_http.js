@@ -108,7 +108,6 @@ module.exports = function () {
         gitRoute(req, res, next);
     });
     users.setupEndpoints(app);
-    decks.setupEndpoints(app);
     let primusServer;
 
     try {

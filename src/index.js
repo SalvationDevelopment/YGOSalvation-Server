@@ -12,6 +12,7 @@ const child_process = require('child_process'),
     hotload = require('hotload'),
     cardidmap = require('../http/cardidmap.js'),
     userController = require('./endpoint_users.js'),
+    decks = require('./endpoint_decks.js'),
     adminlist = {},
     primusServer = require('./server_http')(),
     Primus = require('primus'),
@@ -65,8 +66,7 @@ function unsafePort() {
 
 function registrationCall(data, socket) {
     userController.validate(true, data, function (error, valid, responseData) {
-        console.log(error, valid, responseData);
-        const info = responseData.user;
+       
         if (error) {
             console.log(error);
             socket.write({
@@ -82,8 +82,13 @@ function registrationCall(data, socket) {
             });
             return;
         }
+        const info = responseData.user;
+        info.session = responseData.jwt;
+        info.decks = responseData.decks;
         if (valid) {
             socket.username = info.username;
+            
+            socket.session = info.session;
             socket.admin = (info.role.name === 'Administrator');
             console.log(`${socket.username} has logged in`.bold);
             socket.write({
@@ -96,6 +101,7 @@ function registrationCall(data, socket) {
                 ackresult: acklevel,
                 userlist: userlist
             });
+
             socket.speak = true;
             socket.write({
                 clientEvent: 'login',
@@ -501,6 +507,9 @@ function onData(data, socket) {
             }
             break;
         case 'save':
+            if (!socket.username) {
+                return;
+            }
             delete data.action;
             data.decks.forEach(function (deck, i) { //cycles through the decks
                 data.decks[i].main = mapCards(data.decks[i].main); //This cannot be simplified 
@@ -508,10 +517,10 @@ function onData(data, socket) {
                 data.decks[i].extra = mapCards(data.decks[i].extra); //of data.decks, afaik
             }); //unsure if loop should run through all decks for a single save; might be resource intensive
             data.username = socket.username;
-            if (!socket.username) {
-                return;
-            }
-            userController.saveDeck(data, function (error, docs) {
+           
+            data.session = socket.session;
+            
+            decks.processDecks(data, function (error, docs) {
                 primus.room(socket.address.ip + data.uniqueID).write({
                     clientEvent: 'deckSaved',
                     error: error

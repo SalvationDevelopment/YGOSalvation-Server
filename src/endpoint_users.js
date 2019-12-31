@@ -14,12 +14,11 @@ async function login(data) {
     const response = await axios.post(`${CMS_URL}/auth/local`, {
         identifier: data.username,
         password: data.password,
-    }), decks = await axios.get(`${CMS_URL}/decks`, {
+    }), decks = await axios.get(`${CMS_URL}/decks?_sort=name:ASC`, {
         headers: {
             Authorization: `Bearer ${response.data.jwt}`
         }
     });
-    console.log(decks);
     response.data.decks = decks.data;
     return response.data;
 }

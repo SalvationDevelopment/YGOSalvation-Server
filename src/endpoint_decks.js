@@ -29,7 +29,7 @@ async function createDeck(id, deck) {
 }
 
 async function getDecks(id) {
-    const decks = await axios.get(`${CMS_URL}/decks`, {
+    const decks = await axios.get(`${CMS_URL}/decks?_sort=name:ASC`, {
         headers: {
             Authorization: `Bearer ${id}`
         }
@@ -47,12 +47,11 @@ async function updateDeck(id, deck) {
     return decks.data;
 }
 
-async function deleteDeck(id, deck) {
-    validateDeckType(id, deck);
+async function deleteDeck(id, guid) {
     if (typeof id !== 'string') {
         throw new Error('Authentication Information Missing');
     }
-    decks = await axios.delete(`${CMS_URL}/decks/${deck._id}`, {
+    decks = await axios.delete(`${CMS_URL}/decks/${guid}`, {
         headers: {
             Authorization: `Bearer ${id}`
         }
@@ -60,49 +59,43 @@ async function deleteDeck(id, deck) {
     return decks.data;
 }
 
-function setupEndpoints(app) {
-    app.route('/deck').post(async (request, response) => {
-        var payload = request.body || {};
-        try {
-            const result = await getDecks(payload.id, payload.deck);
-            response.send(result);
-        } catch (error) {
-            response.send(error.toString());
-        }
-    });
 
-    app.post('/deck/create', async (request, response) => {
-        var payload = request.body || {};
-        try {
-            const result = await createDeck(payload.id, payload.deck);
-            console.log('good');
-            response.send(result);
-        } catch (error) {
-            response.send(error.toString());
-        }
-    });
+async function processDecks(user, callback) {
+    const result = { error: null },
+        decks = user.decks,
+        id = user.session,
+        saved = [];
+    try {
+        for (const deck of decks) {
+            try {
+                const call = (deck.id) ? await updateDeck(id, deck) : await createDeck(id, deck);
+                saved.push(call.id);
+            } catch (e) {
+                console.log('throwing out deck at slot', n);
+            }
 
-    app.post('/deck/update', async (request, response) => {
-        var payload = request.body || {};
-        try {
-            const result = await updateDeck(payload.id, payload.deck);
-            response.send(result);
-        } catch (error) {
-            response.send(error.toString());
         }
-    });
+        result.decks = await getDecks(id);
 
-    app.post('/deck/delete', async (request, response) => {
-        var payload = request.body || {};
-        try {
-            const result = await deleteDeck(payload.id, payload.deck);
-            response.send(result);
-        } catch (error) {
-            response.send(error.toString());
+        const serverSaved = result.decks.map((deck) => {
+            return deck.id;
+        });
+        const deletions = serverSaved.filter((deck) => {
+            return !saved.includes(deck);
+        });
+        
+        for (const guid of deletions) {
+            await deleteDeck(id, guid);
         }
-    });
+        result.decks = await getDecks(id);
+    } catch (error) {
+        result.error = error;
+        result.decks = await getDecks(id);
+    }
+    callback(result.error, result.decks);
 }
 
+
 module.exports = {
-    setupEndpoints
+    processDecks
 }

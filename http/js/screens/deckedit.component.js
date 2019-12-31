@@ -64,7 +64,9 @@ function condenseDecks(decks) {
             side: deck.side.map(condenseDeck),
             name: deck.name,
             creator: deck.creator,
-            creationDate: deck.creationDate
+            creationDate: deck.creationDate,
+            id : deck.id,
+            _id : deck._id
         };
     });
 }
@@ -180,6 +182,7 @@ class DeckEditScreen extends React.Component {
             this.state.search = [];
             this.state.decks = action.decks.map((deckIds) => {
                 const deck = Object.assign({}, deckIds);
+                console.log(deck.id);
                 deck.main = deck.main.map(this.findcard.bind(this));
                 deck.extra = deck.extra.map(this.findcard.bind(this));
                 deck.side = deck.side.map(this.findcard.bind(this));
