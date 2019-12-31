@@ -58,7 +58,7 @@
     height: 40vh;
     background: rgba(255, 255, 255, .4);
     float: left;
-    display: flex;
+    display: block;
     flex-wrap: wrap;
     padding: .5vh .5vw;
 }
@@ -69,6 +69,7 @@
     padding: 1%;
     transition: opacity 500ms;
     width : 10%;
+    float : left;
 }
 
 .transitioning {
