@@ -49,7 +49,7 @@ async function logDuel(info, callback) {
             Authorization: `Bearer ${session}`
         }
     };
-    const { winnerID, loserID, ranked } = info;
+    const { winnerID, loserID, ranked, replay } = info;
     if (!ranked) {
         callback();
         return;
@@ -69,6 +69,9 @@ async function logDuel(info, callback) {
 
         await axios.put(`${CMS_URL}/users/${winnerID}`, settings, { elo: winner.elo, points: winner.points });
         await axios.put(`${CMS_URL}/users/${losserID}`, settings, { elo: loser.elo, points: loser.points });
+
+        await axios.post(`${CMS_URL}/replays/${winnerID}`, settings, { history: replay, creator: winnerID });
+        await axios.post(`${CMS_URL}/replays/${losserID}`, settings, { history: replay, creator: winnerID });
     } catch (error) {
         callback();
         return;

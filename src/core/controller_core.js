@@ -69,7 +69,7 @@ const ffi = require('ffi'),
     scriptsFolder = '../../ygopro-scripts';
 
 global.gc_protected = [];
-
+process.replay = [[], []];
 /**
  * Read a card from file.
  * @param {String} scriptname filename of the script
@@ -205,6 +205,7 @@ function duelEndProcedure(players) {
 function GameBoard(playerConnection, slot, masterRule) {
     const board = new ManualControlEngine(function (view, stack, callback) {
         try {
+            process.replay[slot].push(view['p' + slot]);
             playerConnection.write((view['p' + slot]));
 
         } catch (error) {

@@ -110,10 +110,6 @@ class ApplicationComponent extends React.Component {
                 username: localStorage.nickname
             };
             this.primus.write(message);
-            app.alert('Saved Deck');
-            setTimeout(() => {
-                this.closeModal();
-            }, 1000);
         });
 
 
@@ -232,6 +228,11 @@ class ApplicationComponent extends React.Component {
             case 'registrationRequest':
                 this.registrationRequest();
                 break;
+            case 'deckSaved':
+                app.alert('Saved Deck');
+                setTimeout(() => {
+                    this.closeModal();
+                }, 1000);
             default:
                 console.log('Error: Unknown Data', data);
                 return;

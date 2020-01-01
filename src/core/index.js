@@ -465,9 +465,10 @@ function Duel() {
         process.recordOutcome = new EventEmitter();
         process.recordOutcome.once('win', function (command) {
 
-
+            // process.replay requires filtering.
             process.send({
                 action: 'win',
+                replay: process.replay,
                 ranked : Boolean(game.ranked === "Ranked"),
                 loserID: game.player[Math.abs(command.player - 1)].id,
                 winnerID: game.player[command.player].id
