@@ -6,16 +6,18 @@ const axios = require('axios'),
 
 let session = '';
 
-users.validate(true, {
-    username: process.env.SERVER_USERNAME,
-    password: process.env.SERVER_PASSWORD
-}, function (error, valid, responseData) {
-    if (error) {
-        console.log(error);
-        process.exit();
-    }
-    session = responseData.jwt;
-});
+function setSession() {
+    users.validate(true, {
+        username: process.env.SERVER_USERNAME,
+        password: process.env.SERVER_PASSWORD
+    }, function (error, valid, responseData) {
+        if (error) {
+            setSession();
+            return;
+        }
+        session = responseData.jwt;
+    });
+}
 
 async function getNews() {
     const news = await axios.get(`${CMS_URL}/updates?_sort=createdAt:ASC`);
@@ -104,3 +106,6 @@ function setupEndpoints(app) {
 module.exports = {
     setupEndpoints
 }
+
+setSession();
+setInterval(setSession, 600000);

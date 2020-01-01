@@ -2,6 +2,7 @@
 require('dotenv').config();
 const axios = require('axios'),
     CMS_URL = process.env.CMS_URL,
+    child_process = require('child_process'),
     controller = require('./src'),
     fs = require('fs'),
     SERVER_USERNAME = process.env.SERVER_USERNAME,
@@ -21,18 +22,15 @@ async function main() {
         console.error('Administrative Server and User are not configured, no database access, see README.MD for details.');
         process.exit();
     }
-    try {
-        const status = await axios.get(`${CMS_URL}`);
-    } catch {
-        console.error(`Administrative Server is not online at ${CMS_URL}, no database access.`);
-        process.exit();
-    }
 
     if (!fs.existsSync(banlist)) {
         console.error('Error: Banlist not generated, run "npm run banlist"');
         process.exit();
     }
 
+    if (Boolean(process.env.LOCAL_ADMIN)) {
+        child_process.fork('../ygosalvation-admin/cms/server');
+    }
     process.title = 'YGOSalvation Server ' + new Date();
 
 }
