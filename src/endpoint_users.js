@@ -25,7 +25,29 @@ async function login(data) {
     return response.data;
 }
 
-function validateSession() { }
+async function validateSession(message, callback) {
+    let user = {};
+    try {
+        const response = await axios.get(`${CMS_URL}/users?username=${message.username}`, {
+            headers: {
+                Authorization: `Bearer ${message.session}`
+            }
+        }), decks = await axios.get(`${CMS_URL}/decks?_sort=name:ASC`, {
+            headers: {
+                Authorization: `Bearer ${message.session}`
+            }
+        });
+        if (!response.data[0]) {
+            throw new Error('User not found');
+        }
+        user = response.data[0];
+        user.decks = decks.data;
+    } catch (error) {
+        callback(error, false);
+        return;
+    }
+    callback(null, true, user);
+}
 
 function recordDuelResult() { }
 

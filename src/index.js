@@ -297,7 +297,8 @@ function childHandler(child, socket, message) {
             break;
         case 'register':
             userController.validateSession({
-                session: message.session
+                session: message.session,
+                username: message.username
             }, function (error, valid, person) {
                 child.send({
                     action: 'register',
@@ -385,18 +386,14 @@ function onData(data, socket) {
         case ('register'):
             registrationCall(data, socket);
             break;
-        case 'sessionUpdate':
-            userController.validateSession({
-                session: data.session
-            }, function (error, valid, person) {
-
-            });
-            break;
         case 'loadSession':
+            console.log('loadSession', data);
             userController.validateSession({
-                session: data.session
+                session: data.session,
+                username: data.username
             }, function (error, valid, info) {
-                if (error) {
+                console.log(info);
+                if (error || !valid) {
                     return;
                 }
                 socket.username = info.username;
@@ -418,8 +415,7 @@ function onData(data, socket) {
                         username: info.username,
                         decks: info.decks,
                         friends: info.friends,
-                        session: info.session,
-                        sessionExpiration: info.sessionExpiration,
+                        session: data.session,
                         admin: info.admin,
                         rewards: info.rewards,
                         settings: info.settings,

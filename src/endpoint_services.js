@@ -15,6 +15,7 @@ function setSession() {
             setSession();
             return;
         }
+        console.log('[SERVER] Server Permissions Aquired '.bold.green);
         session = responseData.jwt;
     });
 }

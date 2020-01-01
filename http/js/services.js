@@ -228,24 +228,22 @@ $.getJSON('/manifest/manifest_0-en-OCGTCG.json', function (data) {
                 });
             store.dispatch({ action: 'LOAD_SETCODES', data: setcodes });
             store.dispatch({ action: 'SYSTEM_LOADED', banlist, primary });
-            if (localStorage.remember === 'true') {
-                if (localStorage.session) {
-                    $.getJSON('api/session/' + localStorage.session, (userInfo) => {
-                        console.log('Session Login', userInfo);
-                        store.dispatch({ action: 'SYSTEM_LOADED', banlist, primary });
-                        store.dispatch({ action: 'LOAD_LOGIN' });
-                        console.log(userInfo.success);
-                        const state = (userInfo.success)
-                            ? store.dispatch({ action: 'LOAD_SESSION', banlist, primary })
-                            : store.dispatch({ action: 'LOAD_LOGIN' });
+            if (localStorage.remember === 'true' && localStorage.username && localStorage.session) {
 
-                    }).fail((e) => {
-                        console.log(e);
-                        store.dispatch({ action: 'LOAD_LOGIN' });
-                    });
-                } else {
+                store.dispatch({ action: 'LOAD_SESSION', banlist, primary });
+                $.getJSON('api/session/' + localStorage.session, (userInfo) => {
+                    console.log('Session Login', userInfo);
+                    store.dispatch({ action: 'SYSTEM_LOADED', banlist, primary });
                     store.dispatch({ action: 'LOAD_LOGIN' });
-                }
+                    console.log(userInfo.success);
+                    const state = (userInfo.success)
+                        ? store.dispatch({ action: 'LOAD_SESSION', banlist, primary })
+                        : store.dispatch({ action: 'LOAD_LOGIN' });
+
+                }).fail((e) => {
+                    console.log(e);
+                    store.dispatch({ action: 'LOAD_LOGIN' });
+                });
             } else {
                 store.dispatch({ action: 'LOAD_LOGIN' });
             }

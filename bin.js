@@ -15,7 +15,7 @@ const axios = require('axios'),
  * @returns {undefined}
  */
 async function main() {
-    console.log('[SERVER] YGO Salvation Server - Saving Yu-Gi-Oh!'.bold.magenta);
+    console.log('[SERVER] YGO Salvation Server - Saving Yu-Gi-Oh!'.bold.green);
     const banlist = './http/manifest/banlist.json';
 
     if (!CMS_URL || !SERVER_USERNAME || !SERVER_PASSWORD) {
@@ -29,8 +29,10 @@ async function main() {
     }
 
     if (Boolean(process.env.LOCAL_ADMIN)) {
-        child_process.fork('../ygosalvation-admin/cms/server');
+        console.log('[SERVER] Starting Admin Server'.bold.green);
+        var subserver = child_process.fork('../ygosalvation-admin/src/server.js');
     }
+    
     process.title = 'YGOSalvation Server ' + new Date();
 
 }

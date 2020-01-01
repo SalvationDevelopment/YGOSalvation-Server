@@ -80,10 +80,10 @@ class ApplicationComponent extends React.Component {
 
         store.register('LOAD_SESSION', (action) => {
             const session = localStorage.session;
-
             this.primus.write({
                 action: 'loadSession',
-                session
+                username : localStorage.username,
+                session : localStorage.session
             });
         });
 
@@ -185,7 +185,7 @@ class ApplicationComponent extends React.Component {
             action: 'load'
         });
         localStorage.session = info.session;
-        localStorage.username = this.state.username;
+        localStorage.username = info.username;
         console.log(info);
         this.store.dispatch({ action: 'LOAD_DECKS', decks: info.decks });
         this.store.dispatch({ action: 'LOGGEDIN' });
