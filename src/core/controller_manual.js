@@ -238,10 +238,10 @@ function clientBinding(clients, spectators) {
             if (!view) {
                 return;
             }
-            clients[0].write((view['p' + clients[0].slot]));
-            clients[1].write((view['p' + clients[1].slot]));
+            
+            clients[0].write((view.p0));
+            clients[1].write((view.p1));
             spectators.write((view.spectators));
-
         } catch (error) {
             console.log('failed messaging client', error);
         } finally {

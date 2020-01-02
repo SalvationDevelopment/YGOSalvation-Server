@@ -20,9 +20,10 @@ class LobbyScreen extends React.Component {
         const tag = React.createElement,
             p = this.state.player[player - 1],
             username = (p) ? p.username : '',
-            rating = (p) ? `${p.points} | ${p.elo}` : '\r\n',
+            rating = (p) ? `Points: ${p.points} | Rating: ${p.elo}` : '\r\n',
             lock = (p) ? p.ready : false;
         return tag('div', { id: `slot${player}`, className: 'slot' }, [
+            tag('img', { key: 'avatar', className: 'avatar', src: (p) ? p.avatar : '' }),
             tag('div', { key: 'rating', className: 'lobbyrating' }, rating),
             '\r\n',
             tag('div', { key: 'kick', className: 'kickbutton', onClick: this.kickDuelist.bind(this, player) }, 'X'),
@@ -63,15 +64,21 @@ class LobbyScreen extends React.Component {
                     this.slotElement(4)
                 ]),
                 tag('div', { id: 'lobbygameinfo', key: 'lobbygameinfo' }, [
+                    tag('span', { id: 'judgetxt', key: 'judgetxt' }, 'Judge'),
+                    tag('span', { id: 'lobbyauto', key: 'Judge' }, this.state.automatic),
+                    tag('br', { key: 'br0' }),
+                    tag('span', { id: 'competitiontxt', key: 'competitiontxt' }, 'Competition'),
+                    tag('span', { id: 'lobbyranked', key: 'competition' }, this.state.ranked),
+                    tag('br', { key: 'br1' }),
                     tag('span', { id: 'translatefl', key: 'translatefl' }, 'Forbidden List'),
                     tag('span', { id: 'lobbyflist', key: 'lobbyflist' }, this.state.banlist),
-                    tag('br', { key: 'br1' }),
+                    tag('br', { key: 'br2' }),
                     tag('span', { id: 'translateacp', key: 'translateacp' }, 'Allowed Card Pool'),
                     tag('span', { id: 'lobbyallowed', key: 'lobbyallowed' }, this.state.lobbyallowed),
-                    tag('br', { key: 'br2' }),
+                    tag('br', { key: 'br3' }),
                     tag('span', { id: 'translategamemode', key: 'translategamemode' }, 'Game Mode'),
                     tag('span', { id: 'lobbygamemode', key: 'lobbygamemode' }, this.state.mode),
-                    tag('br', { key: 'br3' }),
+                    tag('br', { key: 'br4' }),
                     tag('span', { id: 'translatestartinglifepoints', key: 'translatestartinglifepoints' }, 'Starting Lifepoints'),
                     tag('span', { id: 'lobbylp', key: 'lobbylp' }, this.state.startLP)
                 ]),

@@ -455,6 +455,7 @@ class Game {
                 side: []
             }
         }; // holds decks
+        return this;
     }
 
     getState() {
@@ -674,6 +675,7 @@ class Game {
             }
         };
         this.previousStack = JSON.parse(JSON.stringify(this.stack.cards()));
+        console.log(output.p0.duelAction);
         return output;
     }
 

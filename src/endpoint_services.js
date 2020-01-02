@@ -1,7 +1,18 @@
 const axios = require('axios'),
     CMS_URL = process.env.CMS_URL,
     users = require('./endpoint_users'),
-    EloRank = require('elo-rank');
+    EloRank = require('elo-rank'),
+    path = require('path'),
+    mime = {
+        html: 'text/html',
+        txt: 'text/plain',
+        css: 'text/css',
+        gif: 'image/gif',
+        jpg: 'image/jpeg',
+        png: 'image/png',
+        svg: 'image/svg+xml',
+        js: 'application/javascript'
+    };
 
 
 let session = '';
@@ -44,6 +55,15 @@ async function getRanking() {
     });
     ranks.sort((a, b) => b.elo - a.elo);
     return ranks;
+}
+
+async function getAvatar(request, response) {
+    const avatar = (await axios.get(`${CMS_URL}${request.path}`, {
+        responseType: 'arraybuffer'
+    })),
+        type = mime[path.extname(request.path).slice(1)] || 'text/plain';
+    response.set('Content-Type', type);
+    return avatar.data
 }
 
 async function logDuel(info, callback) {
@@ -100,6 +120,15 @@ function setupEndpoints(app) {
             response.send(news);
         } catch (error) {
             response.send(error.toJSON());
+        }
+    });
+
+    app.get('/uploads/*', async (request, response) => {
+        try {
+            const avatar = await getAvatar(request, response);
+            response.send(avatar);
+        } catch (error) {
+            response.send(error.toString());
         }
     });
 }

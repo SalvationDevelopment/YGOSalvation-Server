@@ -84,7 +84,7 @@ const WARNING_COUNTDOWN = 3000000,
     fs = require('fs'),
     http = require('http'),
     https = require('https'),
-    manualEngine = require('./model_field.js'),
+    ManualControlEngine = require('./model_field.js'),
     automaticEngine = require('./controller_core.js'),
     manualController = require('./controller_manual.js'),
     path = require('path'),
@@ -248,10 +248,11 @@ function join(error, game, state, client, callback) {
         game.player.push({
             ready: Boolean(client.ready),
             points: client.points,
-            elo : client.elo,
+            elo: client.elo,
             slot: client.slot,
             settings: client.settings,
-            username: client.username
+            username: client.username,
+            avatar: client.avatar.url
         });
         state.clients[client.slot] = client;
         callback();
@@ -457,13 +458,13 @@ function sideLock(game, client, message) {
  */
 function Duel() {
 
-    const duel = {};
+    let duel = {};
 
     function failure() {
         throw ('Duel has not started');
     }
 
-    function load(game, state, players, spectators) {
+    function load(game, state, alert, players, spectators) {
         process.recordOutcome = new EventEmitter();
         process.recordOutcome.once('win', function (command) {
 
@@ -471,7 +472,7 @@ function Duel() {
             process.send({
                 action: 'win',
                 replay: process.replay,
-                ranked : Boolean(game.ranked === "Ranked"),
+                ranked: Boolean(game.ranked === "Ranked"),
                 loserID: game.player[Math.abs(command.player - 1)].id,
                 winnerID: game.player[command.player].id
             });
@@ -484,8 +485,11 @@ function Duel() {
             return;
         }
         const clientBinding = manualController.clientBinding(players, spectators);
-        Object.assign(duel, manualEngine(clientBinding));
-        duel.startDuel(players[0], players[1], true, game);
+        duel = new ManualControlEngine(clientBinding);
+        duel.getField = failure;
+        duel.respond = failure;
+        duel.load = load;
+        duel.startDuel(state.clients[0].deck, state.clients[1].deck, true, game);
 
 
     }
