@@ -1,5 +1,5 @@
 const axios = require('axios'),
-    CMS_URL = process.env.CMS_URL;
+    ADMIN_SERVER_URL = process.env.ADMIN_SERVER_URL;
 
 
 function validateDeckType(id, deck) {
@@ -20,7 +20,7 @@ function validateDeckType(id, deck) {
 
 async function createDeck(id, deck) {
     validateDeckType(id, deck);
-    const decks = await axios.post(`${CMS_URL}/decks`, deck, {
+    const decks = await axios.post(`${ADMIN_SERVER_URL}/decks`, deck, {
         headers: {
             Authorization: `Bearer ${id}`
         }
@@ -29,7 +29,7 @@ async function createDeck(id, deck) {
 }
 
 async function getDecks(id) {
-    const decks = await axios.get(`${CMS_URL}/decks?_sort=name:ASC`, {
+    const decks = await axios.get(`${ADMIN_SERVER_URL}/decks?_sort=name:ASC`, {
         headers: {
             Authorization: `Bearer ${id}`
         }
@@ -39,7 +39,7 @@ async function getDecks(id) {
 
 async function updateDeck(id, deck) {
     validateDeckType(id, deck);
-    const decks = await axios.put(`${CMS_URL}/decks/${deck._id}`, deck, {
+    const decks = await axios.put(`${ADMIN_SERVER_URL}/decks/${deck._id}`, deck, {
         headers: {
             Authorization: `Bearer ${id}`
         }
@@ -51,7 +51,7 @@ async function deleteDeck(id, guid) {
     if (typeof id !== 'string') {
         throw new Error('Authentication Information Missing');
     }
-    decks = await axios.delete(`${CMS_URL}/decks/${guid}`, {
+    decks = await axios.delete(`${ADMIN_SERVER_URL}/decks/${guid}`, {
         headers: {
             Authorization: `Bearer ${id}`
         }

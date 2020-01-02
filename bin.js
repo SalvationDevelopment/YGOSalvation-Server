@@ -1,12 +1,12 @@
 
 require('dotenv').config();
 const axios = require('axios'),
-    CMS_URL = process.env.CMS_URL,
+    ADMIN_SERVER_URL = process.env.ADMIN_SERVER_URL,
     child_process = require('child_process'),
     controller = require('./src'),
     fs = require('fs'),
-    SERVER_USERNAME = process.env.SERVER_USERNAME,
-    SERVER_PASSWORD = process.env.SERVER_PASSWORD;
+    ADMIN_SERVER_USERNAME = process.env.ADMIN_SERVER_USERNAME,
+    ADMIN_SERVER_PASSWORD = process.env.ADMIN_SERVER_PASSWORD;
 
 
 
@@ -18,7 +18,7 @@ async function main() {
     console.log('[SERVER] YGO Salvation Server - Saving Yu-Gi-Oh!'.bold.green);
     const banlist = './http/manifest/banlist.json';
 
-    if (!CMS_URL || !SERVER_USERNAME || !SERVER_PASSWORD) {
+    if (!ADMIN_SERVER_URL || !ADMIN_SERVER_USERNAME || !ADMIN_SERVER_PASSWORD) {
         console.error('Administrative Server and User are not configured, no database access, see README.MD for details.');
         process.exit();
     }
@@ -28,9 +28,14 @@ async function main() {
         process.exit();
     }
 
-    if (Boolean(process.env.LOCAL_ADMIN)) {
+    if (Boolean(process.env.ADMIN_SERVER_LOCAL)) {
         console.log('[SERVER] Starting Admin Server'.bold.green);
         var subserver = child_process.fork('../ygosalvation-admin/src/server.js');
+    }
+
+    if (Boolean(process.env.DATABASE_SERVER_LOCAL)) {
+        console.log('[SERVER] Starting Database Server'.bold.green);
+        var subserver = child_process.fork('../ygosalvation-database/app.js');
     }
     
     process.title = 'YGOSalvation Server ' + new Date();

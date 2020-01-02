@@ -1,5 +1,5 @@
 const axios = require('axios'),
-    CMS_URL = process.env.CMS_URL,
+    ADMIN_SERVER_URL = process.env.ADMIN_SERVER_URL,
     sanitizer = require('sanitizer'),
     zxcvbn = require('zxcvbn');
 
@@ -13,10 +13,10 @@ function validate(attempt, data, callback) {
 }
 
 async function login(data) {
-    const response = await axios.post(`${CMS_URL}/auth/local`, {
+    const response = await axios.post(`${ADMIN_SERVER_URL}/auth/local`, {
         identifier: data.username,
         password: data.password,
-    }), decks = await axios.get(`${CMS_URL}/decks?_sort=name:ASC`, {
+    }), decks = await axios.get(`${ADMIN_SERVER_URL}/decks?_sort=name:ASC`, {
         headers: {
             Authorization: `Bearer ${response.data.jwt}`
         }
@@ -28,11 +28,11 @@ async function login(data) {
 async function validateSession(message, callback) {
     let user = {};
     try {
-        const response = await axios.get(`${CMS_URL}/users?username=${message.username}`, {
+        const response = await axios.get(`${ADMIN_SERVER_URL}/users?username=${message.username}`, {
             headers: {
                 Authorization: `Bearer ${message.session}`
             }
-        }), decks = await axios.get(`${CMS_URL}/decks?_sort=name:ASC`, {
+        }), decks = await axios.get(`${ADMIN_SERVER_URL}/decks?_sort=name:ASC`, {
             headers: {
                 Authorization: `Bearer ${message.session}`
             }
@@ -78,7 +78,7 @@ async function register(request, response) {
     }
 
     try {
-        const registerResponse = await axios.post(`${CMS_URL}/auth/local/register`, {
+        const registerResponse = await axios.post(`${ADMIN_SERVER_URL}/auth/local/register`, {
             username: payload.username,
             email: payload.email,
             password: payload.password,
@@ -107,7 +107,7 @@ async function forgot(request, response) {
     }
 
     try {
-        const registerResponse = await axios.post(`${CMS_URL}/auth/forgot-password`, {
+        const registerResponse = await axios.post(`${ADMIN_SERVER_URL}/auth/forgot-password`, {
             email: payload.email,
             url: 'http:/localhost:1337/admin/plugins/users-permissions/auth/reset-password',
         });
