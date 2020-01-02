@@ -464,7 +464,7 @@ function Duel() {
         throw ('Duel has not started');
     }
 
-    function load(game, state, alert, players, spectators) {
+    function load(game, state, errorHandler, players, spectators) {
         process.recordOutcome = new EventEmitter();
         process.recordOutcome.once('win', function (command) {
 
@@ -479,7 +479,7 @@ function Duel() {
         });
 
         if (game.automatic === 'Automatic') {
-            const instance = automaticEngine.duel(game, players, spectators);
+            const instance = automaticEngine.duel(game, state, errorHandler, players, spectators);
             duel.getField = instance.getField;
             duel.respond = instance.respond;
             return;
