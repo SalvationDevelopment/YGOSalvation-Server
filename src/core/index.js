@@ -138,7 +138,8 @@ function broadcast(server, game) {
 function enableClient(client, person) {
     client.username = person.username;
     client.avatar = person.avatar;
-    client.ranking = person.ranking;
+    client.points = person.points || 0;
+    client.elo = person.elo || 1200;
     client.write({
         action: 'registered'
     });
@@ -246,7 +247,8 @@ function join(error, game, state, client, callback) {
         client.slot = game.player.length;
         game.player.push({
             ready: Boolean(client.ready),
-            ranking: client.ranking || {},
+            points: client.points,
+            elo : client.elo,
             slot: client.slot,
             settings: client.settings,
             username: client.username
@@ -684,7 +686,7 @@ function processMessage(server, duel, game, state, client, message) {
     }
     switch (message.action) {
         case 'chat':
-            chat(server, state, client, message.chat, undefined);
+            chat(server, state, client, message.message, undefined);
             break;
         case 'determine':
             determine(server, game, state, client);
