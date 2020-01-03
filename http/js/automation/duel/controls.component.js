@@ -32,12 +32,85 @@ class GameplayControlButton extends React.Component {
     }
 }
 
+
 class ControlButtons {
 
     hide() {
         Object.keys(this.state.zones).forEach((uid) => {
             this.state.zones[uid].state.active = false;
         });
+    }
+
+
+    renderEnabledClasses(enabledClasses) {
+        const buttons = [
+            { text: 'Flip Deck Over', options: ['m-deck', 'm-convulse'] },
+            { text: 'Reveal Deck', options: ['m-deck'] },
+            { text: 'Reveal Top Card', options: ['m-deck'] },
+            { text: 'Reveal Bottom Card', options: ['m-deck'] },
+            { text: 'Banish Top Card', options: ['m-deck'] },
+            { text: 'Banish FaceDown', options: ['m-deck'] },
+            { text: 'Excavate', options: ['m-hand', 'm-deck', 'v-grave', 'v-removed', 'v-deck', 'non-excavate'] },
+            { text: 'Excavate Face-down', options: ['m-deck'] },
+            { text: 'Shuffle Deck', options: ['m-deck'] },
+            { text: 'View Deck', options: ['m-deck'] },
+            { text: 'Mill', options: ['m-deck'] },
+            { text: 'Draw', options: ['m-deck'] },
+        ]
+
+        const elements = buttons.filter((button) => {
+            return enabledClasses.some((prospect) => {
+                return button.options.includes(prospect);
+            });
+        }).map((button, i) => {
+            button.className = button.options;
+            button.key = 'mbutton' + i;
+            button.style = {
+                display: 'flex',
+                width: 'auto',
+                'text-align': 'center'
+            };
+            return React.createElement('button', button, button.text);
+        });
+
+        return React.createElement('div', {
+            style: {
+                left: `${(this.info.coords.x - 15)}px`,
+                top: `${(this.info.coords.y - 15)}px`,
+                position: 'fixed',
+                display: 'flex',
+                'flex-direction': 'column',
+                'text-align': 'center'
+            }
+        }, elements);
+    }
+
+    manualDisplay(query) {
+        // https://github.com/SalvationDevelopment/YGOSalvation-Server/blob/55e4f846c824d1718e9297de12ca46c6df9b6477/http/js/http-manual.js
+        const enabledClasses = [];
+        if (query.location === 'GRAVE') {
+            enabledClasses.push('m-grave');
+        }
+        if (query.location === 'MONSTERZONE') {
+            enabledClasses.push('m-opponent')
+        }
+        if (query.location === 'EXCAVATED') {
+            enabledClasses.push('m-excavated')
+        }
+        if (query.location === 'EXTRA') {
+            enabledClasses.push('m-extra-view')
+        }
+        if (query.location === 'REMOVED') {
+            enabledClasses.push('m-removed')
+        }
+        if (query.location === 'DECK') {
+            enabledClasses.push('m-deck')
+        }
+        if (query.player !== window.orientation) {
+            return;
+        }
+        return this.renderEnabledClasses(enabledClasses);
+
     }
 
     display(list) {
@@ -74,7 +147,9 @@ class ControlButtons {
     render() {
         const list = [],
             query = this.info.target;
-
+        if (app.manual) {
+            return this.manualDisplay(query);
+        }
         Object.keys(this.state).forEach((type) => {
             const options = (Array.isArray(this.state[type])) ? this.state[type] : [],
                 selectable = options.find((option, i) => {
@@ -111,7 +186,9 @@ class ControlButtons {
         this.info.target = {
             id: query.id,
             index: query.index,
-            location: query.location
+            location: query.location,
+            category: query.category,
+            player: query.player
         };
         this.info.coords = coords;
     }

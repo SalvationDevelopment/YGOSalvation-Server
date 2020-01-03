@@ -135,6 +135,7 @@ class LobbyScreen extends React.Component {
 
     update(update) {
         Object.assign(this.state, update);
+        app.manual = Boolean(this.state.automatic !== 'Automatic');
         console.log('lobby', this.state);
     }
 }

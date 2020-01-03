@@ -21,11 +21,18 @@ class DuelScreen extends React.Component {
         this.pickAttribute = new SelectAttributes(this.store);
         this.yesnoDialog = new YesNoDialog(this.store);
         this.store.register('CARD_HOVER', this.onHover.bind(this));
-        this.store.register('CARD_CLICK', this.onCardClick.bind(this));
         this.store.register('DECK_CARD_CLICK', this.onDeckCardClick.bind(this));
+        this.store.register('CARD_CLICK', this.onCardClick.bind(this));
+
     }
 
     onCardClick(event, state) {
+
+        if (app.manual) {
+            this.onManualCardClick(event, state);
+            return;
+        }
+
         const decks = ['EXTRA', 'GRAVE', 'EXTRA', 'BANISHED'];
         if (!event.viewDeck && decks.includes(event.card.location)) {
             const deck = this.field.getDeck(event.card.player, event.card.location);
@@ -35,6 +42,13 @@ class DuelScreen extends React.Component {
         if (event.card.location === 'DECK') {
             return;
         }
+        this.controls.enable(event.card, { x: event.x, y: event.y });
+        this.store.dispatch({ action: 'RENDER' });
+        return event;
+    }
+
+    onManualCardClick(event, state) {
+
         this.controls.enable(event.card, { x: event.x, y: event.y });
         this.store.dispatch({ action: 'RENDER' });
         return event;
