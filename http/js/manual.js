@@ -1,4 +1,4 @@
-class manualControls {
+class ManualControls {
     construtor(store, primus) {
         this.manualActionReference = {};
     }
