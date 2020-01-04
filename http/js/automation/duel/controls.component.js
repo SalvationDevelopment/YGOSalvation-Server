@@ -56,6 +56,67 @@ class ControlButtons {
             { text: 'View Deck', options: ['m-deck'] },
             { text: 'Mill', options: ['m-deck'] },
             { text: 'Draw', options: ['m-deck'] },
+
+            { text: 'View Graveyard', options: ['m-grave'] },
+            { text: 'View Banished', options: ['m-removed'] },
+
+            { text: 'View Extra Deck', options: ['m-extra', 'm-extra-view'] },
+            { text: 'Reveal Extra Deck', options: ['m-extra'] },
+            { text: 'Reveal Random Card', options: ['m-extra'] },
+
+            { text: 'View Excavated', options: ['m-excavated'] },
+            { text: 'Reveal Excavated Deck', options: ['m-excavated'] },
+            { text: 'Reveal Random Card', options: ['m-excavated'] },
+
+            { text: 'To Bottom of Deck', options: ['m-hand', 'm-field', 'st-field', 'non-extra', 'v-grave', 'v-removed', 'v-excavate', 'non-deck'] },
+            { text: 'To Top of Deck', options: ['m-hand', 'm-field', 'st-field', 'non-extra', 'v-grave', 'v-removed', 'v-excavate', 'non-deck'] },
+
+            { text: 'To Opponents Hand', options: ['m-hand', 'm-field', 'st-field', 'non-extra'] },
+            { text: 'To Opponents Field', options: ['m-hand', 'm-field', 'st-field', 'v-deck ', 'v-extra', 'v-grave', 'v-excavate', 'v-removed'] },
+            { text: 'Reveal', options: ['m-hand', 'v-extra', 'v-excavate'] },
+            { text: 'Banish', options: ['m-hand', 'm-field', 'st-field', 'v-deck', 'v-extra', 'v-grave', 'v-excavate'] },
+            { text: 'Banish Face-down', options: ['m-hand', 'm-field', 'st-field', 'v-deck', 'v-extra', 'v-grave', 'v-excavate'] },
+
+            { text: 'To GY', options: ['m-hand', 'm-field', 'st-field', 'v-deck', 'v-removed', 'v-extra', 'v-excavate', 'non-grave'] },
+
+            { text: 'Set in S/T', options: ['m-hand-st', 'm-monster-st', 'm-st-monster', 'non-deck', 'non-banished'] },
+            { text: 'Activate', options: ['m-hand-st'] },
+
+            { text: 'To Hand', options: ['m-field', 'st-field', 'non-extra'] },
+            { text: 'Reveal and Add to Hand', options: ['v-deck', 'v-grave', 'v-removed', 'v-excavate', 'v-extra-p non-extra'] },
+
+            { text: 'To Extra Deck Face-up', options: ['m-hand-p', 'm-monster-p', 'm-monster-to-extra-faceup'] },
+            { text: 'To Extra Deck', options: ['m-monster-extra', 'v-monster-extra'] },
+
+            { text: 'Special Summon in Defense', options: ['m-hand-m', 'v-extra'] },
+            { text: 'Special Summon in Attack', options: ['m-hand-m', 'v-extra'] },
+            { text: 'Set Monster', options: ['m-hand-m', 'non-grave non-excavate', 'non-banished', 'non-deck'] },
+            { text: 'Normal Summon', options: ['m-hand-m', 'non-grave', 'non-banished', 'non-deck'] },
+
+            { text: 'Activate Field Spell', options: ['m-hand-f'] },
+            { text: 'Set Field Spell', options: ['m-hand-f'] },
+
+            { text: 'Flip Face-down', options: ['m-st'] },
+            { text: 'Flip Face-up', options: ['m-st'] },
+            { text: 'Move', options: ['m-monster', 'm-st'] },
+
+            { text: 'Add Counter', options: ['m-monster', 'm-st', 'countercontroller'] },
+            { text: 'Remove Counter', options: ['m-monster', 'm-st', 'countercontroller'] },
+            { text: 'View Xyz Materials', options: [] },
+            { text: 'Overlay', options: ['m-monster', 'm-monster-xyz', 'v-monster-xyz'] },
+            { text: 'Flip Face-up', options: ['m-monster'] },
+            { text: 'Flip Face-down', options: ['m-monster'] },
+            { text: 'To Attack', options: ['m-monster'] },
+            { text: 'To Defense', options: ['m-field'] },
+            { text: 'Remove Token', options: ['m-monster-token'] },
+            { text: 'To Left Pendulumn Zone', options: ['m-hand-p', 'm-monster-p'] },
+            { text: 'To Right Pendulumn Zone', options: ['m-hand-p', 'm-monster-p'] },
+            { text: 'Send to Deck Face-up', options: ['m-parasite'] },
+
+            { text: 'Attack', options: ['a-field'] },
+            { text: 'Attack Directly', options: ['a-field'] },
+
+            { text: 'Signal Effect', options: ['m-field', 'st-field', 'm-hand-m', 'v-grave', 'v-removed'] },
         ]
 
         const elements = buttons.filter((button) => {

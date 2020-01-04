@@ -2,6 +2,7 @@
 /*global store, SideChat, SuperFooterComponent, SuperHeaderComponent*/
 /*global HostScreen, LoginScreen, DeckEditScreen, GamelistScreen, CreditsScreen, SettingsScreen*/
 /*global RankingScreen, FAQsScreen*/
+/*global ManualControls*/
 
 class ApplicationComponent extends React.Component {
     constructor(store) {
@@ -244,7 +245,7 @@ class ApplicationComponent extends React.Component {
     connect() {
         const primusprotocol = (location.protocol === 'https:') ? 'wss://' : 'ws://';
         this.primus = window.Primus.connect(primusprotocol + location.host);
-
+        this.manualControls = new ManualControls(this.primus, this.store);
         this.primus.on('open', () => {
             console.log('Connected to YGOSalvation Server');
         });
