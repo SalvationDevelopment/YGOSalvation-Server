@@ -622,6 +622,8 @@ function start(server, duel, game, state, message) {
     }
     if (message.turn_player) {
         state.clients = state.clients.reverse();
+        state.clients[0].slot = 0;
+        state.clients[1].slot = 1;
     }
 
     const players = [
