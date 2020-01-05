@@ -1,6 +1,21 @@
 /*global React, ReactDOM */
 /*global app */
 
+function checksetcode(obj, sc) {
+    'use strict';
+    var val = obj.setcode,
+        hexA = val.toString(16),
+        hexB = sc.toString(16);
+    if (val === sc
+        || parseInt(hexA.substr(hexA.length - 4), 16) === parseInt(hexB, 16)
+        || parseInt(hexA.substr(hexA.length - 2), 16) === parseInt(hexB, 16)
+        || (val >> 16).toString(16) === hexB) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
 class GameplayControlButton extends React.Component {
 
     click() {
@@ -45,82 +60,82 @@ class ControlButtons {
 
     renderEnabledClasses(enabledClasses) {
         const buttons = [
-            { text: 'Flip Deck Over', options: ['m-deck', 'm-convulse'], onClick: function () { app.manualcontrols.manualFlipDeck() } },
-            { text: 'Reveal Deck', options: ['m-deck'], onClick: function () { app.manualcontrols.manualRevealDeck() } },
-            { text: 'Reveal Top Card', options: ['m-deck'], onClick: function () { app.manualcontrols.manualRevealTop() } },
-            { text: 'Reveal Bottom Card', options: ['m-deck'], onClick: function () { app.manualcontrols.manualRevealBottom() } },
-            { text: 'Banish Top Card', options: ['m-deck'], onClick: function () { app.manualcontrols.manualMillRemovedCard() } },
-            { text: 'Banish FaceDown', options: ['m-deck'], onClick: function () { app.manualcontrols.manualMillRemovedCardFaceDown() } },
-            { text: 'Excavate', options: ['m-hand', 'm-deck', 'v-grave', 'v-removed', 'v-deck', 'non-excavate'], onClick: function () { app.manualcontrols.manualToExcavate() } },
-            { text: 'Excavate Face-down', options: ['m-deck'], onClick: function () { app.manualcontrols.manualExcavateTop() } },
-            { text: 'Shuffle Deck', options: ['m-deck'], onClick: function () { app.manualcontrols.manualShuffleDeck() } },
-            { text: 'View Deck', options: ['m-deck'], onClick: function () { app.manualcontrols.manualViewDeck() } },
-            { text: 'Mill', options: ['m-deck'], onClick: function () { app.manualcontrols.manualMill() } },
+            { text: 'Flip Deck Over', options: ['m-deck', 'm-convulse'], onClick: function () { app.manualControls.manualFlipDeck() } },
+            { text: 'Reveal Deck', options: ['m-deck'], onClick: function () { app.manualControls.manualRevealDeck() } },
+            { text: 'Reveal Top Card', options: ['m-deck'], onClick: function () { app.manualControls.manualRevealTop() } },
+            { text: 'Reveal Bottom Card', options: ['m-deck'], onClick: function () { app.manualControls.manualRevealBottom() } },
+            { text: 'Banish Top Card', options: ['m-deck'], onClick: function () { app.manualControls.manualMillRemovedCard() } },
+            { text: 'Banish FaceDown', options: ['m-deck'], onClick: function () { app.manualControls.manualMillRemovedCardFaceDown() } },
+            { text: 'Excavate', options: ['m-hand', 'm-deck', 'v-grave', 'v-removed', 'v-deck', 'non-excavate'], onClick: function () { app.manualControls.manualToExcavate() } },
+            { text: 'Excavate Face-down', options: ['m-deck'], onClick: function () { app.manualControls.manualExcavateTop() } },
+            { text: 'Shuffle Deck', options: ['m-deck'], onClick: function () { app.manualControls.manualShuffleDeck() } },
+            { text: 'View Deck', options: ['m-deck'], onClick: function () { app.manualControls.manualViewDeck() } },
+            { text: 'Mill', options: ['m-deck'], onClick: function () { app.manualControls.manualMill() } },
             { text: 'Draw', options: ['m-deck'], onClick: function () { app.manualControls.manualDraw() } },
 
-            { text: 'View Graveyard', options: ['m-grave'], onClick: function () { app.manualcontrols.manualViewGrave() } },
-            { text: 'View Banished', options: ['m-removed'], onClick: function () { app.manualcontrols.manualViewBanished() } },
+            { text: 'View Graveyard', options: ['m-grave'], onClick: function () { app.manualControls.manualViewGrave() } },
+            { text: 'View Banished', options: ['m-removed'], onClick: function () { app.manualControls.manualViewBanished() } },
 
-            { text: 'View Extra Deck', options: ['m-extra', 'm-extra-view'], onClick: function () { app.manualcontrols.manualViewExtra() } },
-            { text: 'Reveal Extra Deck', options: ['m-extra'], onClick: function () { app.manualcontrols.manualRevealExtra() } },
-            { text: 'Reveal Random Card', options: ['m-extra'], onClick: function () { app.manualcontrols.manualRevealExtraDeckRandom() } },
+            { text: 'View Extra Deck', options: ['m-extra', 'm-extra-view'], onClick: function () { app.manualControls.manualViewExtra() } },
+            { text: 'Reveal Extra Deck', options: ['m-extra'], onClick: function () { app.manualControls.manualRevealExtra() } },
+            { text: 'Reveal Random Card', options: ['m-extra'], onClick: function () { app.manualControls.manualRevealExtraDeckRandom() } },
 
-            { text: 'View Excavated', options: ['m-excavated'], onClick: function () { app.manualcontrols.manualViewExcavated() } },
-            { text: 'Reveal Excavated Deck', options: ['m-excavated'], onClick: function () { app.manualcontrols.manualRevealExcavated() } },
-            { text: 'Reveal Random Card', options: ['m-excavated'], onClick: function () { app.manualcontrols.manualRevealExcavatedRandom() } },
+            { text: 'View Excavated', options: ['m-excavated'], onClick: function () { app.manualControls.manualViewExcavated() } },
+            { text: 'Reveal Excavated Deck', options: ['m-excavated'], onClick: function () { app.manualControls.manualRevealExcavated() } },
+            { text: 'Reveal Random Card', options: ['m-excavated'], onClick: function () { app.manualControls.manualRevealExcavatedRandom() } },
 
-            { text: 'To Bottom of Deck', options: ['m-hand', 'm-field', 'st-field', 'non-extra', 'v-grave', 'v-removed', 'v-excavate', 'non-deck'], onClick: function () { app.manualcontrols.manualToBottomOfDeck() } },
-            { text: 'To Top of Deck', options: ['m-hand', 'm-field', 'st-field', 'non-extra', 'v-grave', 'v-removed', 'v-excavate', 'non-deck'], onClick: function () { app.manualcontrols.manualToTopOfDeck() } },
+            { text: 'To Bottom of Deck', options: ['m-hand', 'm-field', 'st-field', 'non-extra', 'v-grave', 'v-removed', 'v-excavate', 'non-deck'], onClick: function () { app.manualControls.manualToBottomOfDeck() } },
+            { text: 'To Top of Deck', options: ['m-hand', 'm-field', 'st-field', 'non-extra', 'v-grave', 'v-removed', 'v-excavate', 'non-deck'], onClick: function () { app.manualControls.manualToTopOfDeck() } },
 
-            { text: 'To Opponents Hand', options: ['m-hand', 'm-field', 'st-field', 'non-extra'], onClick: function () { app.manualcontrols.manualToOpponentsHand() } },
-            { text: 'To Opponents Field', options: ['m-hand', 'm-field', 'st-field', 'v-deck ', 'v-extra', 'v-grave', 'v-excavate', 'v-removed'], onClick: function () { app.manualcontrols.manualToOpponent() } },
-            { text: 'Reveal', options: ['m-hand', 'v-extra', 'v-excavate'], onClick: function () { app.manualcontrols.manualRevealHandSingle() } },
-            { text: 'Banish', options: ['m-hand', 'm-field', 'st-field', 'v-deck', 'v-extra', 'v-grave', 'v-excavate'], onClick: function () { app.manualcontrols.manualToRemoved() } },
-            { text: 'Banish Face-down', options: ['m-hand', 'm-field', 'st-field', 'v-deck', 'v-extra', 'v-grave', 'v-excavate'], onClick: function () { app.manualcontrols.manualToRemovedFacedown() } },
+            { text: 'To Opponents Hand', options: ['m-hand', 'm-field', 'st-field', 'non-extra'], onClick: function () { app.manualControls.manualToOpponentsHand() } },
+            { text: 'To Opponents Field', options: ['m-hand', 'm-field', 'st-field', 'v-deck ', 'v-extra', 'v-grave', 'v-excavate', 'v-removed'], onClick: function () { app.manualControls.manualToOpponent() } },
+            { text: 'Reveal', options: ['m-hand', 'v-extra', 'v-excavate'], onClick: function () { app.manualControls.manualRevealHandSingle() } },
+            { text: 'Banish', options: ['m-hand', 'm-field', 'st-field', 'v-deck', 'v-extra', 'v-grave', 'v-excavate'], onClick: function () { app.manualControls.manualToRemoved() } },
+            { text: 'Banish Face-down', options: ['m-hand', 'm-field', 'st-field', 'v-deck', 'v-extra', 'v-grave', 'v-excavate'], onClick: function () { app.manualControls.manualToRemovedFacedown() } },
 
-            { text: 'To GY', options: ['m-hand', 'm-field', 'st-field', 'v-deck', 'v-removed', 'v-extra', 'v-excavate', 'non-grave'], onClick: function () { app.manualcontrols.manualToGrave() } },
+            { text: 'To GY', options: ['m-hand', 'm-field', 'st-field', 'v-deck', 'v-removed', 'v-extra', 'v-excavate', 'non-grave'], onClick: function () { app.manualControls.manualToGrave() } },
 
-            { text: 'Set in S/T', options: ['m-hand-st', 'm-monster-st', 'm-st-monster', 'non-deck', 'non-banished'], onClick: function () { app.manualcontrols.startSpellTargeting('set') } },
-            { text: 'Activate', options: ['m-hand-st'], onClick: function () { app.manualcontrols.startSpellTargeting('activate') } },
+            { text: 'Set in S/T', options: ['m-hand-st', 'm-monster-st', 'm-st-monster', 'non-deck', 'non-banished'], onClick: function () { app.manualControls.startSpellTargeting('set') } },
+            { text: 'Activate', options: ['m-hand-st'], onClick: function () { app.manualControls.startSpellTargeting('activate') } },
 
-            { text: 'To Hand', options: ['m-field', 'st-field', 'non-extra'], onClick: function () { app.manualcontrols.manualToHand() } },
+            { text: 'To Hand', options: ['m-field', 'st-field', 'non-extra'], onClick: function () { app.manualControls.manualToHand() } },
             {
                 text: 'Reveal and Add to Hand', options: ['v-deck', 'v-grave', 'v-removed', 'v-excavate', 'v-extra-p non-extra'],
-                onClick: function () { app.manualcontrols.manualToHand(); app.manualcontrols.manualRevealHandSingle(); () }
+                onClick: function () { app.manualControls.manualToHand(); app.manualControls.manualRevealHandSingle(); }
             },
 
-            { text: 'To Extra Deck Face-up', options: ['m-hand-p', 'm-monster-p', 'm-monster-to-extra-faceup'], onClick: function () { app.manualcontrols.manualToExtraFaceUp() } },
-            { text: 'To Extra Deck', options: ['m-monster-extra', 'v-monster-extra'], onClick: function () { app.manualcontrols.manualToExtra() } },
+            { text: 'To Extra Deck Face-up', options: ['m-hand-p', 'm-monster-p', 'm-monster-to-extra-faceup'], onClick: function () { app.manualControls.manualToExtraFaceUp() } },
+            { text: 'To Extra Deck', options: ['m-monster-extra', 'v-monster-extra'], onClick: function () { app.manualControls.manualToExtra() } },
 
-            { text: 'Special Summon in Defense', options: ['m-hand-m', 'v-extra'], onClick: function () { app.manualcontrols.startSpecialSummon('def') } },
-            { text: 'Special Summon in Attack', options: ['m-hand-m', 'v-extra'], onClick: function () { app.manualcontrols.startSpecialSummon('atk') } },
-            { text: 'Set Monster', options: ['m-hand-m', 'non-grave non-excavate', 'non-banished', 'non-deck'], onClick: function () { app.manualcontrols.startSpecialSummon('normaldef') } },
-            { text: 'Normal Summon', options: ['m-hand-m', 'non-grave', 'non-banished', 'non-deck'], onClick: function () { app.manualcontrols.startSpecialSummon('normalatk') } },
+            { text: 'Special Summon in Defense', options: ['m-hand-m', 'v-extra'], onClick: function () { app.manualControls.startSpecialSummon('def') } },
+            { text: 'Special Summon in Attack', options: ['m-hand-m', 'v-extra'], onClick: function () { app.manualControls.startSpecialSummon('atk') } },
+            { text: 'Set Monster', options: ['m-hand-m', 'non-grave non-excavate', 'non-banished', 'non-deck'], onClick: function () { app.manualControls.startSpecialSummon('normaldef') } },
+            { text: 'Normal Summon', options: ['m-hand-m', 'non-grave', 'non-banished', 'non-deck'], onClick: function () { app.manualControls.startSpecialSummon('normalatk') } },
 
-            { text: 'Activate Field Spell', options: ['m-hand-f'], onClick: function () { app.manualcontrols.manualActivateFieldSpell() } },
-            { text: 'Set Field Spell', options: ['m-hand-f'], onClick: function () { app.manualcontrols.manualActivateFieldSpellFaceDown() } },
+            { text: 'Activate Field Spell', options: ['m-hand-f'], onClick: function () { app.manualControls.manualActivateFieldSpell() } },
+            { text: 'Set Field Spell', options: ['m-hand-f'], onClick: function () { app.manualControls.manualActivateFieldSpellFaceDown() } },
 
-            { text: 'Flip Face-down', options: ['m-st'], onClick: function () { app.manualcontrols.manualSTFlipDown() } },
-            { text: 'Flip Face-up', options: ['m-st'], onClick: function () { app.manualcontrols.manualActivate() } },
-            { text: 'Move', options: ['m-monster', 'm-st'], onClick: function () { app.manualcontrols.startSpecialSummon() } },
+            { text: 'Flip Face-down', options: ['m-st'], onClick: function () { app.manualControls.manualSTFlipDown() } },
+            { text: 'Flip Face-up', options: ['m-st'], onClick: function () { app.manualControls.manualActivate() } },
+            { text: 'Move', options: ['m-monster', 'm-st'], onClick: function () { app.manualControls.startSpecialSummon() } },
 
-            { text: 'Add Counter', options: ['m-monster', 'm-st', 'countercontroller'], onClick: function () { app.manualcontrols.manualAddCounter() } },
-            { text: 'Remove Counter', options: ['m-monster', 'm-st', 'countercontroller'], onClick: function () { app.manualcontrols.manualRemoveCounter() } },
-            { text: 'View Xyz Materials', options: [], onClick: function () { app.manualcontrols.manualViewXYZMaterials() } },
-            { text: 'Overlay', options: ['m-monster', 'm-monster-xyz', 'v-monster-xyz'], onClick: function () { app.manualcontrols.startXYZSummon() } },
-            { text: 'Flip Face-up', options: ['m-monster'], onClick: function () { app.manualcontrols.manualToFaceUpDefence() } },
-            { text: 'Flip Face-down', options: ['m-monster'], onClick: function () { app.manualcontrols.manualToFaceDownDefence() } },
-            { text: 'To Attack', options: ['m-monster'], onClick: function () { app.manualcontrols.manualToAttack() } },
-            { text: 'To Defense', options: ['m-field'], onClick: function () { app.manualcontrols.manualToDefence() } },
-            { text: 'Remove Token', options: ['m-monster-token'], onClick: function () { app.manualcontrols.manualRemoveToken() } },
-            { text: 'To Left Pendulumn Zone', options: ['m-hand-p', 'm-monster-p'], onClick: function () { app.manualcontrols.manualToPZoneL() } },
-            { text: 'To Right Pendulumn Zone', options: ['m-hand-p', 'm-monster-p'], onClick: function () { app.manualcontrols.manualToPZoneR() } },
-            { text: 'Send to Deck Face-up', options: ['m-parasite'], onClick: function () { app.manualcontrols.manualSendToDeckFaceup() } },
+            { text: 'Add Counter', options: ['m-monster', 'm-st', 'countercontroller'], onClick: function () { app.manualControls.manualAddCounter() } },
+            { text: 'Remove Counter', options: ['m-monster', 'm-st', 'countercontroller'], onClick: function () { app.manualControls.manualRemoveCounter() } },
+            { text: 'View Xyz Materials', options: [], onClick: function () { app.manualControls.manualViewXYZMaterials() } },
+            { text: 'Overlay', options: ['m-monster', 'm-monster-xyz', 'v-monster-xyz'], onClick: function () { app.manualControls.startXYZSummon() } },
+            { text: 'Flip Face-up', options: ['m-monster'], onClick: function () { app.manualControls.manualToFaceUpDefence() } },
+            { text: 'Flip Face-down', options: ['m-monster'], onClick: function () { app.manualControls.manualToFaceDownDefence() } },
+            { text: 'To Attack', options: ['m-monster'], onClick: function () { app.manualControls.manualToAttack() } },
+            { text: 'To Defense', options: ['m-field'], onClick: function () { app.manualControls.manualToDefence() } },
+            { text: 'Remove Token', options: ['m-monster-token'], onClick: function () { app.manualControls.manualRemoveToken() } },
+            { text: 'To Left Pendulumn Zone', options: ['m-hand-p', 'm-monster-p'], onClick: function () { app.manualControls.manualToPZoneL() } },
+            { text: 'To Right Pendulumn Zone', options: ['m-hand-p', 'm-monster-p'], onClick: function () { app.manualControls.manualToPZoneR() } },
+            { text: 'Send to Deck Face-up', options: ['m-parasite'], onClick: function () { app.manualControls.manualSendToDeckFaceup() } },
 
-            { text: 'Attack', options: ['a-field'], onClick: function () { app.manualcontrols.startAttack() } },
-            { text: 'Attack Directly', options: ['a-field'], onClick: function () { app.manualcontrols.manualAttackDirectly() } },
+            { text: 'Attack', options: ['a-field'], onClick: function () { app.manualControls.startAttack() } },
+            { text: 'Attack Directly', options: ['a-field'], onClick: function () { app.manualControls.manualAttackDirectly() } },
 
-            { text: 'Signal Effect', options: ['m-field', 'st-field', 'm-hand-m', 'v-grave', 'v-removed'], onClick: function () { app.manualcontrols.manualSignalEffect() } },
+            { text: 'Signal Effect', options: ['m-field', 'st-field', 'm-hand-m', 'v-grave', 'v-removed'], onClick: function () { app.manualControls.manualSignalEffect() } },
         ]
 
         const elements = buttons.filter((button) => {
@@ -174,6 +189,29 @@ class ControlButtons {
         if (query.player !== window.orientation) {
             return;
         }
+        if (query.location === 'HAND') {
+            enabledClasses.push('m-hand');
+            if (monsterMap[query.type]) {
+                enabledClasses.push('m-hand-m');
+            }
+            console.log(query);
+            if ((stMap[query.type]
+                || query.type === 2
+                || query.type === 4
+                // || checksetcode(query, 151)
+                || query.id === 9791914
+                || query.id === 58132856) && !fieldspell[query.type]) {
+                enabledClasses.push('m-hand-st');
+            }
+            if (fieldspell[query.type]) {
+                enabledClasses.push('m-hand-f');
+            }
+            if (pendulumMap[query.type]) {
+                enabledClasses.push('m-hand-p');
+                enabledClasses.push('m-monster-p');
+            }
+        }
+
         return this.renderEnabledClasses(enabledClasses);
 
     }
@@ -252,10 +290,12 @@ class ControlButtons {
             id: query.id,
             index: query.index,
             location: query.location,
-            category: query.category,
-            player: query.player
+            type: query.type,
+            player: query.player,
+            setcode: query.setcode
         };
         this.info.coords = coords;
+        app.manualControls.manualActionReference = this.info.target;
     }
 
     constructor(store) {

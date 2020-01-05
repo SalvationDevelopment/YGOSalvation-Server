@@ -166,11 +166,11 @@ function responseHandler(engine, players, client, message) {
     }
 
     if (client.slot !== undefined && message.sound) {
-        engine.players[0].write(({
+        players[0].write(({
             duelAction: 'sound',
             sound: message.sound
         }));
-        engine.players[1].write(({
+        players[1].write(({
             duelAction: 'sound',
             sound: message.sound
         }));

@@ -468,6 +468,20 @@ class Game {
         });
     }
 
+    setState(message) {
+        this.stack.move({
+            player: message.player,
+            location: message.location,
+            index: message.index
+        }, {
+            player: message.moveplayer,
+            location: message.movelocation,
+            index: message.moveindex,
+            position: message.moveposition
+        });
+        this.callback(this.generateView(), this.stack.cards());
+    }
+
     /**
      * Set a username to a specific slot on lock in.
      * @public
