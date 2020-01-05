@@ -485,11 +485,8 @@ function Duel() {
             return;
         }
         const clientBinding = manualController.clientBinding(players, spectators);
-        duel = new ManualControlEngine(clientBinding);
-        duel.getField = failure;
-        duel.respond = failure;
-        duel.load = load;
-        duel.startDuel(state.clients[0].deck, state.clients[1].deck, true, game);
+        duel.engine = new ManualControlEngine(clientBinding);
+        duel.engine.startDuel(state.clients[0].deck, state.clients[1].deck, true, game);
 
 
     }
@@ -658,15 +655,16 @@ function question(duel, client, message) {
  * @returns {void} 
  */
 function requiresManualEngine(game, client) {
-    if (!game.automatic) {
+    if (!game.automatic === 'Manual') {
         return;
     }
-    if (!game.start) {
+    if (!game.started) {
         return;
     }
     if (client.slot === undefined) {
         return;
     }
+    return true;
 }
 
 
@@ -754,7 +752,7 @@ function processMessage(server, duel, game, state, client, message) {
     if (!requiresManualEngine(game, client)) {
         return;
     }
-    manualController.responseHandler(duel, state.clients, client, message);
+    manualController.responseHandler(duel.engine, state.clients, client, message);
 }
 
 /**

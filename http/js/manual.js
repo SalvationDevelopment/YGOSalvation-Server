@@ -1,6 +1,9 @@
 class ManualControls {
-    construtor(store, primus) {
+    constructor(store, primus) {
+        this.store = store;
+        this.primus = primus;
         this.manualActionReference = {};
+        return this;
     }
 
     makeCardMovement(start, end) {
@@ -160,7 +163,7 @@ class ManualControls {
 
     manualNextPhase(phase) {
 
-        primus.write(({
+        this.primus.write(({
             action: 'nextPhase',
             phase: phase,
             sound: 'soundphase'
@@ -169,14 +172,14 @@ class ManualControls {
 
     manualNextTurn() {
 
-        primus.write({
+        this.primus.write({
             action: 'nextTurn'
         });
     }
 
     manualChangeLifepoints(amount) {
 
-        primus.write(({
+        this.primus.write(({
             action: 'changeLifepoints',
             amount: amount,
             sound: 'soundchangeLifePoints'
@@ -185,13 +188,13 @@ class ManualControls {
 
     manualMoveCard(movement) {
 
-        primus.write((movement));
+        this.primus.write((movement));
     }
 
     manualShuffleHand() {
 
         setTimeout(() => {
-            primus.write(({
+            this.primus.write(({
                 action: 'shuffleHand',
                 sound: 'soundcardShuffle'
             }));
@@ -203,7 +206,7 @@ class ManualControls {
 
     manualDraw() {
 
-        primus.write(({
+        this.primus.write(({
             action: 'draw',
             sound: 'sounddrawCard'
         }));
@@ -211,7 +214,7 @@ class ManualControls {
 
     manualExcavateTop() {
 
-        primus.write(({
+        this.primus.write(({
             action: 'excavate',
             sound: 'sounddrawCard'
         }));
@@ -219,7 +222,7 @@ class ManualControls {
 
     manualShuffleDeck() {
 
-        primus.write(({
+        this.primus.write(({
             action: 'shuffleDeck',
             sound: 'soundcardShuffle'
         }));
@@ -227,42 +230,42 @@ class ManualControls {
 
     manualRevealTop() {
 
-        primus.write(({
+        this.primus.write(({
             action: 'revealTop'
         }));
     }
 
     manualRevealBottom() {
 
-        primus.write(({
+        this.primus.write(({
             action: 'revealBottom'
         }));
     }
 
     manualRevealDeck() {
 
-        primus.write(({
+        this.primus.write(({
             action: 'revealDeck'
         }));
     }
 
     manualRevealExtra() {
 
-        primus.write(({
+        this.primus.write(({
             action: 'revealExtra'
         }));
     }
 
     manualRevealExcavated() {
 
-        primus.write(({
+        this.primus.write(({
             action: 'revealExcavated'
         }));
     }
 
     manualMill() {
 
-        primus.write(({
+        this.primus.write(({
             action: 'mill'
         }));
     }
@@ -270,28 +273,28 @@ class ManualControls {
 
     manualMillRemovedCard() {
 
-        primus.write(({
+        this.primus.write(({
             action: 'millRemovedCard'
         }));
     }
 
     manualMillRemovedCardFaceDown() {
 
-        primus.write(({
+        this.primus.write(({
             action: 'millRemovedCardFaceDown'
         }));
     }
 
     manualViewDeck() {
 
-        primus.write(({
+        this.primus.write(({
             action: 'viewDeck'
         }));
     }
 
     manualViewBanished() {
 
-        primus.write(({
+        this.primus.write(({
             action: 'viewBanished',
             player: this.manualActionReference.player
         }));
@@ -299,14 +302,14 @@ class ManualControls {
 
     manualFlipDeck() {
 
-        primus.write(({
+        this.primus.write(({
             action: 'flipDeck'
         }));
     }
 
     manualAddCounter() {
 
-        primus.write(({
+        this.primus.write(({
             action: 'addCounter',
             uid: this.manualActionReference.uid
         }));
@@ -314,7 +317,7 @@ class ManualControls {
 
     manualRemoveCounter() {
 
-        primus.write(({
+        this.primus.write(({
             action: 'removeCounter',
             uid: this.manualActionReference.uid
         }));
@@ -325,7 +328,7 @@ class ManualControls {
 
     manualAttack() {
 
-        primus.write(({
+        this.primus.write(({
             action: 'attack',
             source: this.manualActionReference,
             target: targetreference,
@@ -348,7 +351,7 @@ class ManualControls {
 
     manualTarget(target) {
 
-        primus.write(({
+        this.primus.write(({
             action: 'target',
             target: target
         }));
@@ -359,7 +362,7 @@ class ManualControls {
 
     manualRemoveToken() {
 
-        primus.write(({
+        this.primus.write(({
             action: 'removeToken',
             uid: this.manualActionReference.uid
         }));
@@ -367,7 +370,7 @@ class ManualControls {
 
     manualViewExtra() {
 
-        primus.write(({
+        this.primus.write(({
             action: 'viewExtra',
             player: this.manualActionReference.player
         }));
@@ -375,7 +378,7 @@ class ManualControls {
 
     manualViewExcavated() {
 
-        primus.write(({
+        this.primus.write(({
             action: 'viewExcavated',
             player: this.manualActionReference.player
         }));
@@ -383,7 +386,7 @@ class ManualControls {
 
     manualViewGrave() {
 
-        primus.write(({
+        this.primus.write(({
             action: 'viewGrave',
             player: this.manualActionReference.player
         }));
@@ -391,7 +394,7 @@ class ManualControls {
 
     manualViewXYZMaterials() {
 
-        primus.write(({
+        this.primus.write(({
             action: 'viewXYZ',
             index: this.manualActionReference.index,
             player: this.manualActionReference.player
@@ -401,7 +404,7 @@ class ManualControls {
     manualSignalEffect() {
 
 
-        primus.write(({
+        this.primus.write(({
             action: 'effect',
             id: this.manualActionReference.id,
             player: this.manualActionReference.player,
@@ -419,7 +422,7 @@ class ManualControls {
 
         message.action = 'moveCard';
         message.sound = 'soundspecialSummonFromExtra';
-        primus.write((message));
+        this.primus.write((message));
     }
 
     manualToAttack(index) {
@@ -431,7 +434,7 @@ class ManualControls {
 
         message.action = 'moveCard';
         message.sound = 'soundspecialSummonFromExtra';
-        primus.write((message));
+        this.primus.write((message));
     }
 
     manualsetMonster(index) {
@@ -443,7 +446,7 @@ class ManualControls {
 
         message.action = 'moveCard';
         message.sound = 'soundspecialSummonFromExtra';
-        primus.write((message));
+        this.primus.write((message));
     }
 
     manualToDefence() {
@@ -454,7 +457,7 @@ class ManualControls {
             message = this.makeCardMovement(this.manualActionReference, end);
 
         message.action = 'moveCard';
-        primus.write((message));
+        this.primus.write((message));
     }
 
     manualToFaceDownDefence() {
@@ -465,7 +468,7 @@ class ManualControls {
             message = this.makeCardMovement(this.manualActionReference, end);
 
         message.action = 'moveCard';
-        primus.write((message));
+        this.primus.write((message));
     }
 
     manualToFaceUpDefence() {
@@ -476,7 +479,7 @@ class ManualControls {
             message = this.makeCardMovement(this.manualActionReference, end);
 
         message.action = 'moveCard';
-        primus.write((message));
+        this.primus.write((message));
     }
 
     manualsetMonsterFaceUp(index) {
@@ -488,7 +491,7 @@ class ManualControls {
 
         message.action = 'moveCard';
         message.sound = 'soundspecialSummonFromExtra';
-        primus.write((message));
+        this.primus.write((message));
     }
 
     manualActivate(index) {
@@ -500,7 +503,7 @@ class ManualControls {
 
         message.action = 'moveCard';
         message.sound = 'soundactivateCard';
-        primus.write((message));
+        this.primus.write((message));
     }
 
     manualActivateFieldSpell() {
@@ -510,7 +513,7 @@ class ManualControls {
             message = this.makeCardMovement(this.manualActionReference, end);
         message.sound = 'soundactivateCard';
         message.action = 'moveCard';
-        primus.write((message));
+        this.primus.write((message));
     }
 
     manualActivateFieldSpellFaceDown() {
@@ -521,7 +524,7 @@ class ManualControls {
 
         message.action = 'moveCard';
         message.sound = 'soundsetCard';
-        primus.write((message));
+        this.primus.write((message));
     }
 
     manualsetSpell(index) {
@@ -533,7 +536,7 @@ class ManualControls {
 
         message.action = 'moveCard';
         message.sound = 'soundsetCard';
-        primus.write((message));
+        this.primus.write((message));
     }
 
     manualSTFlipDown() {
@@ -545,7 +548,7 @@ class ManualControls {
 
         message.action = 'moveCard';
         message.sound = 'soundflipSummon';
-        primus.write((message));
+        this.primus.write((message));
     }
 
     manualSTFlipUp() {
@@ -557,7 +560,7 @@ class ManualControls {
 
         message.action = 'moveCard';
         message.sound = 'soundflipSummon';
-        primus.write((message));
+        this.primus.write((message));
     }
 
     manualToExcavate() {
@@ -568,7 +571,7 @@ class ManualControls {
 
         message.movelocation = 'EXCAVATED';
         message.action = 'moveCard';
-        primus.write((message));
+        this.primus.write((message));
     }
 
     manualToExtra() {
@@ -580,12 +583,12 @@ class ManualControls {
         message.action = 'moveCard';
 
         message.moveposition = 'FaceDown';
-        primus.write((message));
+        this.primus.write((message));
     }
 
     manualToOpponent() {
 
-        primus.write(({
+        this.primus.write(({
             action: 'give',
             target: this.manualActionReference
         }));
@@ -593,7 +596,7 @@ class ManualControls {
 
     manualToOpponentsHand() {
 
-        primus.write(({
+        this.primus.write(({
             action: 'give',
             target: this.manualActionReference,
             choice: 'HAND'
@@ -615,13 +618,13 @@ class ManualControls {
             message = this.makeCardMovement(this.manualActionReference, end);
 
         message.action = 'moveCard';
-        primus.write((message));
+        this.primus.write((message));
     }
 
     manualToBottomOfDeck() {
 
 
-        primus.write(({
+        this.primus.write(({
             action: 'offsetDeck'
         }));
         var index = 0,
@@ -630,7 +633,7 @@ class ManualControls {
 
         message.action = 'moveCard';
         setTimeout(() => {
-            primus.write((message));
+            this.primus.write((message));
         }, 300);
 
     }
@@ -647,7 +650,7 @@ class ManualControls {
         }
         message.moveindex = index;
         message.action = 'moveCard';
-        primus.write((message));
+        this.primus.write((message));
     }
 
 
@@ -664,7 +667,7 @@ class ManualControls {
         }
         message.moveindex = index;
         message.action = 'moveCard';
-        primus.write((message));
+        this.primus.write((message));
     }
 
     manualOverlay() {
@@ -678,7 +681,7 @@ class ManualControls {
             var message = this.makeCardMovement(card, card);
             message.overlayindex = overlayindex;
             message.action = 'moveCard';
-            primus.write((message));
+            this.primus.write((message));
         });
     }
 
@@ -694,7 +697,7 @@ class ManualControls {
             message = this.makeCardMovement(this.manualActionReference, end);
 
         message.action = 'moveCard';
-        primus.write((message));
+        this.primus.write((message));
         setTimeout(() => {
             var overlayindex = 0;
             overlaylist.forEach((card, cindex) => {
@@ -703,7 +706,7 @@ class ManualControls {
                 message.overlayindex = overlayindex;
                 message.action = index;
                 message.action = 'moveCard';
-                primus.write((message));
+                this.primus.write((message));
             });
         }, 1000);
     }
@@ -716,7 +719,7 @@ class ManualControls {
             message = this.makeCardMovement(this.manualActionReference, end);
 
         message.action = 'moveCard';
-        primus.write((message));
+        this.primus.write((message));
     }
 
     manualToOpponentsGrave() {
@@ -728,7 +731,7 @@ class ManualControls {
 
         message.action = 'moveCard';
         message.moveplayer = moveplayer;
-        primus.write((message));
+        this.primus.write((message));
     }
 
     manualToRemoved() {
@@ -738,7 +741,7 @@ class ManualControls {
             message = this.makeCardMovement(this.manualActionReference, end);
 
         message.action = 'moveCard';
-        primus.write((message));
+        this.primus.write((message));
     }
 
 
@@ -751,7 +754,7 @@ class ManualControls {
 
         message.action = 'moveCard';
         message.moveposition = 'FaceUp';
-        primus.write((message));
+        this.primus.write((message));
     }
 
     manualToHand() {
@@ -765,7 +768,7 @@ class ManualControls {
             message = this.makeCardMovement(this.manualActionReference, end);
 
         message.action = 'moveCard';
-        primus.write((message));
+        this.primus.write((message));
     }
 
     manualToExtra() {
@@ -777,7 +780,7 @@ class ManualControls {
         message.action = 'moveCard';
 
         message.moveposition = 'FaceDown';
-        primus.write((message));
+        this.primus.write((message));
     }
 
     manualToRemovedFacedown() {
@@ -787,7 +790,7 @@ class ManualControls {
             message = this.makeCardMovement(this.manualActionReference, end);
         message.action = 'moveCard';
         message.moveposition = 'FaceDown';
-        primus.write((message));
+        this.primus.write((message));
     }
 
     manualActivateField() {
@@ -800,7 +803,7 @@ class ManualControls {
 
         message.action = 'moveCard';
         message.sound = 'soundsetCard';
-        primus.write((message));
+        this.primus.write((message));
     }
 
     manualToPZoneL() {
@@ -814,7 +817,7 @@ class ManualControls {
 
         message.action = 'moveCard';
         message.sound = 'soundsetCard';
-        primus.write((message));
+        this.primus.write((message));
     }
 
     manualToPZoneR() {
@@ -827,12 +830,12 @@ class ManualControls {
 
         message.action = 'moveCard';
         message.sound = 'soundsetCard';
-        primus.write((message));
+        this.primus.write((message));
     }
 
     manualRevealHandSingle() {
 
-        primus.write(({
+        this.primus.write(({
             action: 'revealHandSingle',
             card: this.manualActionReference
         }));
@@ -840,7 +843,7 @@ class ManualControls {
 
     manualRevealHand() {
 
-        primus.write(({
+        this.primus.write(({
             action: 'revealHand',
             card: this.manualActionReference
         }));
@@ -852,7 +855,7 @@ class ManualControls {
         var card = this.manualActionReference;
         card.index = Math.floor((Math.random() * $('#automationduelfield .p' + orient(this.manualActionReference.player) + '.EXTRA').length));
 
-        primus.write(({
+        this.primus.write(({
             action: 'reveal',
             card: card
         }));
@@ -864,7 +867,7 @@ class ManualControls {
         var card = this.manualActionReference;
         card.index = Math.floor((Math.random() * $('#automationduelfield .p' + orient(this.manualActionReference.player) + '.EXCAVATED').length));
 
-        primus.write(({
+        this.primus.write(({
             action: 'reveal',
             card: card
         }));
@@ -876,7 +879,7 @@ class ManualControls {
         var card = this.manualActionReference;
         card.index = Math.floor((Math.random() * $('#automationduelfield .p' + orient(this.manualActionReference.player) + '.DECK').length));
 
-        primus.write(({
+        this.primus.write(({
             action: 'reveal',
             card: card
         }));
@@ -892,12 +895,12 @@ class ManualControls {
         card.id = id;
         card.index = index;
         card.action = 'makeToken';
-        primus.write((card));
+        this.primus.write((card));
     }
 
      manualRoll() {
         
-        primus.write(({
+        this.primus.write(({
             action: 'rollDie',
             name: localStorage.nickname
         }));
@@ -905,7 +908,7 @@ class ManualControls {
     
      manualFlip() {
         
-        primus.write(({
+        this.primus.write(({
             action: 'flipCoin',
             name: localStorage.nickname
         }));
@@ -913,7 +916,7 @@ class ManualControls {
     
      manualRPS() {
         
-        primus.write(({
+        this.primus.write(({
             action: 'rps',
             name: localStorage.nickname
         }));

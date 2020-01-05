@@ -1,4 +1,5 @@
 /*global React, ReactDOM */
+/*global app */
 
 class GameplayControlButton extends React.Component {
 
@@ -54,8 +55,8 @@ class ControlButtons {
             { text: 'Excavate Face-down', options: ['m-deck'] },
             { text: 'Shuffle Deck', options: ['m-deck'] },
             { text: 'View Deck', options: ['m-deck'] },
-            { text: 'Mill', options: ['m-deck'] },
-            { text: 'Draw', options: ['m-deck'] },
+            { text: 'Mill', options: ['m-deck'], onClick: app.manualControls.manualMill },
+            { text: 'Draw', options: ['m-deck'], onClick: function () { app.manualControls.manualDraw() } },
 
             { text: 'View Graveyard', options: ['m-grave'] },
             { text: 'View Banished', options: ['m-removed'] },
