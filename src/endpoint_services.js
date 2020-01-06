@@ -23,7 +23,8 @@ function setSession() {
         password: process.env.ADMIN_SERVER_PASSWORD
     }, function (error, valid, responseData) {
         if (error) {
-            setSession();
+            setTimeout(setSession,10000);
+            console.log('[SERVER] Server Permissions Incorrect '.bold.error);
             return;
         }
         console.log('[SERVER] Server Permissions Aquired '.bold.green);
