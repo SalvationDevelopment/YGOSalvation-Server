@@ -24,6 +24,8 @@ function setSession() {
     }, function (error, valid, responseData) {
         if (error) {
             setTimeout(setSession,10000);
+
+            
             console.log('[SERVER] Server Permissions Incorrect '.bold.error);
             return;
         }
